@@ -49,11 +49,11 @@ bool parallel(vgl_vector_2d<T> const& a, vgl_vector_2d<T> const& b, double eps)
 }
 
 
-template <class T> 
+template <class T>
 vgl_vector_2d<T>  rotated(vgl_vector_2d<T> const& a, double angle)
-{ 
-  return vgl_vector_2d<T>( T(vcl_cos(angle)*a.x()-vcl_sin(angle)*a.y()), 
-           T(vcl_sin(angle)*a.x() + vcl_cos(angle)*a.y()) ); 
+{
+  return vgl_vector_2d<T>( T(vcl_cos(angle)*a.x()-vcl_sin(angle)*a.y()),
+                           T(vcl_sin(angle)*a.x() + vcl_cos(angle)*a.y()) );
 }
 
 
@@ -73,20 +73,20 @@ vcl_istream& vgl_vector_2d<T>::read(vcl_istream& is)
 {
   if (! is.good()) return is; // (TODO: should throw an exception)
   bool paren = false;
-  T x, y;
+  T tx, ty;
   is >> vcl_ws; // jump over any leading whitespace
   if (is.eof()) return is; // nothing to be set because of EOF (TODO: should throw an exception)
   if (is.peek() == '(') { is.ignore(); paren=true; }
-  is >> vcl_ws >> x >> vcl_ws;
+  is >> vcl_ws >> tx >> vcl_ws;
   if (is.eof()) return is;
   if (is.peek() == ',') is.ignore();
-  is >> vcl_ws >> y >> vcl_ws;
+  is >> vcl_ws >> ty >> vcl_ws;
   if (paren) {
     if (is.eof()) return is;
     if (is.peek() == ')') is.ignore();
     else                  return is; // closing parenthesis is missing (TODO: throw an exception)
   }
-  set(x,y);
+  set(tx,ty);
   return is;
 }
 

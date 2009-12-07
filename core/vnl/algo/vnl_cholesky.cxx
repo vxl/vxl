@@ -41,9 +41,10 @@ vnl_cholesky::vnl_cholesky(vnl_matrix<double> const & M, Operation mode):
     v3p_netlib_dpofa_(A_.data_block(), &n, &n, &num_dims_rank_def_);
     if (mode == verbose && num_dims_rank_def_ != 0)
       vcl_cerr << "vnl_cholesky: " << num_dims_rank_def_ << " dimensions of non-posdeffness\n";
-  } else {
-    vnl_vector<double> nullvector(n);
-    v3p_netlib_dpoco_(A_.data_block(), &n, &n, &rcond_, nullvector.data_block(), &num_dims_rank_def_);
+  }
+  else {
+    vnl_vector<double> nullvec(n);
+    v3p_netlib_dpoco_(A_.data_block(), &n, &n, &rcond_, nullvec.data_block(), &num_dims_rank_def_);
     if (num_dims_rank_def_ != 0)
       vcl_cerr << "vnl_cholesky: rcond=" << rcond_ << " so " << num_dims_rank_def_ << " dimensions of non-posdeffness\n";
   }

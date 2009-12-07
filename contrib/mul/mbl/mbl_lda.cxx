@@ -227,11 +227,10 @@ void mbl_lda::build(const vnl_vector<double>* v, const int * label, int n,
 
   wS_inv = wS_svd.inverse();
 
-  //vnl_matrix<double> B=withinS_*wS_inv;
-  //vcl_cout<<B<<vcl_endl;
+  vnl_matrix<double> B=withinS_*wS_inv;
+  vcl_cout<<B<<vcl_endl;
 
-  //vnl_matrix<double> A = betweenS_ * wS_inv;
-  vnl_matrix<double> A = wS_inv* betweenS_;
+  vnl_matrix<double> A = wS_inv* betweenS_; // was: betweenS_ * wS_inv;
 
   // Compute eigenvectors and eigenvalues (descending order)
   vnl_matrix<double> EVecs(A.rows(), A.columns());
@@ -252,19 +251,19 @@ void mbl_lda::build(const vnl_vector<double>* v, const int * label, int n,
     MBL_LOG(DEBUG, logger(), "eigen decomp in original order:");
     unsigned nvec = EVecs.cols();
     for (unsigned i=0; i<nvec; ++i)
-      MBL_LOG(DEBUG, logger(), "Col " << i << ": " << EVecs.get_column(i) 
-        << "(magn: " << EVecs.get_column(i).magnitude() << ")");
+      MBL_LOG(DEBUG, logger(), "Col " << i << ": " << EVecs.get_column(i)
+              << "(magn: " << EVecs.get_column(i).magnitude() << ')');
     for (unsigned i=0; i<nvec; ++i)
       MBL_LOG(DEBUG, logger(), "eval " << i << ": " << evals[i]);
   }
 
   // Re-arrange the eigenvector matrix (columns) and eigenvalue vector into descending order.
   // Assume they are in order of increasing eigenvalue magnitude.
-  // NB The output from vnl_generalized_eigensystem above will be in order of 
+  // NB The output from vnl_generalized_eigensystem above will be in order of
   // increasing (signed) eigenvalue, not magnitude. If we ever get negative eigenvalues,
   // then the simple reversal of flip() and fliplr() will not be correct.
   // Not sure whether we could get (significant) negative eigenvalues, but let's check.
-  for (unsigned i=0,n=evals.size(); i<n; ++i)
+  for (unsigned i=0; i<evals.size(); ++i)
   {
     if (evals[i]<-1e-12) // tolerance?
       throw mbl_exception_abort("mbl_lda::build(): found negative eigenvalue(s)");
@@ -278,8 +277,8 @@ void mbl_lda::build(const vnl_vector<double>* v, const int * label, int n,
     MBL_LOG(DEBUG, logger(), "eigen decomp in sorted order:");
     unsigned nvec = EVecs.cols();
     for (unsigned i=0; i<nvec; ++i)
-      MBL_LOG(DEBUG, logger(), "Col " << i << ": " << EVecs.get_column(i) 
-        << "(magn: " << EVecs.get_column(i).magnitude() << ")");
+      MBL_LOG(DEBUG, logger(), "Col " << i << ": " << EVecs.get_column(i)
+              << "(magn: " << EVecs.get_column(i).magnitude() << ')');
     for (unsigned i=0; i<nvec; ++i)
       MBL_LOG(DEBUG, logger(), "eval " << i << ": " << evals[i]);
   }
@@ -288,7 +287,7 @@ void mbl_lda::build(const vnl_vector<double>* v, const int * label, int n,
   int m = EVecs.rows();
   int t = n_used_classes-1;
   if (t>m) t=m;
-  
+
   // Copy first t eigenvectors to basis_
   basis_.set_size(m,t);
   double **E = EVecs.data_array();
@@ -494,7 +493,7 @@ void mbl_lda::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,d_m_mean_);
       break;
     default:
-      //CHECK FUNCTION SIGNATURE IS CORRECT
+      // CHECK FUNCTION SIGNATURE IS CORRECT
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, mbl_lda &)\n"
                << "           Unknown version number "<< version << vcl_endl;
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream

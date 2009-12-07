@@ -102,8 +102,8 @@ class vsol_conic_2d : public vsol_curve_2d, public vgl_conic<double>
   //: Constructor from coefficients of the cartesian equation
   //  `a'x^2+`b'xy+`c'y^2+`d'x+`e'y+`f'
   //---------------------------------------------------------------------------
-  vsol_conic_2d(double a, double b, double c, double d, double e, double f)
-    : vsol_curve_2d(), vgl_conic<double>(a, b, c, d, e, f) {}
+  vsol_conic_2d(double ta, double tb, double tc, double td, double te, double tf)
+    : vsol_curve_2d(), vgl_conic<double>(ta, tb, tc, td, te, tf) {}
 
   //---------------------------------------------------------------------------
   //: Ellipse/hyperbola constructor from centre, size and orientation.
@@ -115,7 +115,7 @@ class vsol_conic_2d : public vsol_curve_2d, public vgl_conic<double>
   //  one determines the distance from bots tops to the centre, and the other
   //  one specified the 'minor' axis length.
   //---------------------------------------------------------------------------
-  vsol_conic_2d(vsol_point_2d const& c, double rx, double ry, double theta);
+  vsol_conic_2d(vsol_point_2d const& cntr, double rx, double ry, double theta);
 
   //---------------------------------------------------------------------------
   //: Parabola constructor from direction, top and excentricity parameter.
@@ -135,7 +135,7 @@ class vsol_conic_2d : public vsol_curve_2d, public vgl_conic<double>
   //  one determines the distance from bots tops to the centre, and the other
   //  one specified the 'minor' axis length.
   //---------------------------------------------------------------------------
-  void set_central_parameters(vsol_point_2d const& c, double rx, double ry, double theta);
+  void set_central_parameters(vsol_point_2d const& cntr, double rx, double ry, double theta);
 
   //---------------------------------------------------------------------------
   //: Set parabola from direction, top and excentricity parameter.
@@ -150,12 +150,12 @@ class vsol_conic_2d : public vsol_curve_2d, public vgl_conic<double>
   //: Constructor from vgl_conic_segment_2d
   //---------------------------------------------------------------------------
   vsol_conic_2d(vgl_conic_segment_2d<double> & cs) : vsol_curve_2d(), vgl_conic<double>(cs.conic()),
-     p0_(new vsol_point_2d(cs.point1())), p1_(new vsol_point_2d(cs.point2())){}
+     p0_(new vsol_point_2d(cs.point1())), p1_(new vsol_point_2d(cs.point2())) {}
 
   //---------------------------------------------------------------------------
   //: Copy constructor
   //---------------------------------------------------------------------------
-  vsol_conic_2d(vsol_conic_2d const& c):vsol_curve_2d(c),vgl_conic<double>(c) {}
+  vsol_conic_2d(vsol_conic_2d const& co):vsol_curve_2d(co),vgl_conic<double>(co) {}
 
   //---------------------------------------------------------------------------
   //: Destructor
@@ -357,7 +357,7 @@ class vsol_conic_2d : public vsol_curve_2d, public vgl_conic<double>
   //---------------------------------------------------------------------------
   //: Return the set of (real) intersection points of two conics
   //---------------------------------------------------------------------------
-  vcl_list<vsol_point_2d_sptr> intersection(vsol_conic_2d const& c) const;
+  vcl_list<vsol_point_2d_sptr> intersection(vsol_conic_2d const& co) const;
 
   //---------------------------------------------------------------------------
   //: Return the point on the conic boundary which is closest to the given point
@@ -382,8 +382,8 @@ class vsol_conic_2d : public vsol_curve_2d, public vgl_conic<double>
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an conic, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vsol_conic_2d const*cast_to_conic()const{return this;}
-  virtual vsol_conic_2d *cast_to_conic() {return this;}
+  virtual vsol_conic_2d const*cast_to_conic() const { return this; }
+  virtual vsol_conic_2d *cast_to_conic() { return this; }
 
   // ==== Binary IO methods ======
 

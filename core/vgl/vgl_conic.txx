@@ -7,7 +7,6 @@
 
 #include "vgl_conic.h"
 
-//#include <vcl_cstdio.h>
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
 #include <vcl_compiler.h>
@@ -77,17 +76,17 @@ bool vgl_conic<T>::operator==(vgl_conic<T> const& that) const
 //-------------------------------------------------------------
 //: set values
 template <class T>
-void vgl_conic<T>::set(T a, T b, T c, T d, T e, T f)
+void vgl_conic<T>::set(T ta, T tb, T tc, T td, T te, T tf)
 {
-  a_ = a; b_ = b; c_ = c; d_ = d; e_ = e; f_ = f;
+  a_ = ta; b_ = tb; c_ = tc; d_ = td; e_ = te; f_ = tf;
   set_type_from_equation();
 }
 
 //-------------------------------------------------------------
 //: constructor using polynomial coefficients.
 template <class T>
-vgl_conic<T>::vgl_conic(T const c[])
-  : type_(no_type), a_(c[0]), b_(c[1]), c_(c[2]), d_(c[3]), e_(c[4]), f_(c[5])
+vgl_conic<T>::vgl_conic(T const co[])
+  : type_(no_type), a_(co[0]), b_(co[1]), c_(co[2]), d_(co[3]), e_(co[4]), f_(co[5])
 {
   set_type_from_equation();
 }
@@ -95,25 +94,25 @@ vgl_conic<T>::vgl_conic(T const c[])
 //-------------------------------------------------------------
 //: constructor using polynomial coefficients.
 template <class T>
-vgl_conic<T>::vgl_conic(T a, T b, T c, T d, T e, T f)
-  : type_(no_type), a_(a), b_(b), c_(c), d_(d), e_(e), f_(f)
+vgl_conic<T>::vgl_conic(T ta, T tb, T tc, T td, T te, T tf)
+  : type_(no_type), a_(ta), b_(tb), c_(tc), d_(td), e_(te), f_(tf)
 {
   set_type_from_equation();
 }
 
 //: ctor using centre, signed radii, and angle, or (for parabola) top + excentricity
 template <class T>
-vgl_conic<T>::vgl_conic(vgl_homg_point_2d<T> const& c, T rx, T ry, T theta)
+vgl_conic<T>::vgl_conic(vgl_homg_point_2d<T> const& co, T rx, T ry, T theta)
 {
-  if (c.w() == 0) { // This is a parabola
-    a_ = c.y()*c.y();
-    b_ = -2*c.x()*c.y();
-    c_ = c.x()*c.x();
-    // polar line of (rx,ry) must have direction (c.y(),-c.x()), hence
-    // 2*a_*rx + b_*ry + d_ = 2*t*c.x() and b_*rx + 2*c_*ry +e_ = 2*t*c.y() :
-    theta /= vcl_sqrt(c.x()*c.x()+c.y()*c.y()); // cannot be 0
-    d_ = -2*a_*rx - b_*ry + 2*theta*c.x();
-    e_ = -2*c_*ry - b_*rx + 2*theta*c.y();
+  if (co.w() == 0) { // This is a parabola
+    a_ = co.y()*co.y();
+    b_ = -2*co.x()*co.y();
+    c_ = co.x()*co.x();
+    // polar line of (rx,ry) must have direction (co.y(),-co.x()), hence
+    // 2*a_*rx + b_*ry + d_ = 2*t*co.x() and b_*rx + 2*c_*ry +e_ = 2*t*co.y() :
+    theta /= vcl_sqrt(co.x()*co.x()+co.y()*co.y()); // cannot be 0
+    d_ = -2*a_*rx - b_*ry + 2*theta*co.x();
+    e_ = -2*c_*ry - b_*rx + 2*theta*co.y();
     // conic must go through (rx,ry):
     f_ = -a_*rx*rx-b_*rx*ry-c_*ry*ry-d_*rx-e_*ry;
   }
@@ -123,8 +122,8 @@ vgl_conic<T>::vgl_conic(vgl_homg_point_2d<T> const& c, T rx, T ry, T theta)
 
     double ct = vcl_cos(-theta);
     double st = vcl_sin(-theta);
-    T u = c.x();
-    T v = c.y();
+    T u = co.x();
+    T v = co.y();
     a_ = T(rx*st*st + ry*ct*ct);
     b_ = T(2*(rx-ry)*ct*st);
     c_ = T(rx*ct*ct + ry*st*st);
@@ -224,7 +223,7 @@ ellipse_geometry(double& xc, double& yc, double& major_axis_length,
   minor_axis_length = 1.0/vcl_sqrt(cmaj>cmin?cmaj:cmin);
   major_axis_length = 1.0/vcl_sqrt(cmaj>cmin?cmin:cmaj);
 
-  //Find the angle that diagonalizes the upper 2x2 sub-matrix
+  // Find the angle that diagonalizes the upper 2x2 sub-matrix
   angle_in_radians  = -0.5 * vcl_atan2(2*B, C-A);
   //                  ^
   // and return the negative of this angle
@@ -257,21 +256,21 @@ vcl_list<vgl_homg_line_2d<T> > vgl_conic<T>::components() const
   }
 
   // Both component lines must pass through the centre of this conic
-  vgl_homg_point_2d<T> c = centre();
+  vgl_homg_point_2d<T> cntr = centre();
 
   if (type() == real_parallel_lines)
   {
     // In this case the centre lies at infinity.
     // Either these lines both intersect the X axis, or both intersect the Y axis:
     if (A!=0 || D!=0) { // X axis: intersections satisfy y=0 && Axx+2Dxw+Fww=0:
-      vgl_homg_line_2d<T> l1(c, vgl_homg_point_2d<T>(-D+vcl_sqrt(D*D-A*F),0,A)),
-                          l2(c, vgl_homg_point_2d<T>(-D-vcl_sqrt(D*D-A*F),0,A));
+      vgl_homg_line_2d<T> l1(cntr, vgl_homg_point_2d<T>(-D+vcl_sqrt(D*D-A*F),0,A)),
+                          l2(cntr, vgl_homg_point_2d<T>(-D-vcl_sqrt(D*D-A*F),0,A));
       vcl_list<vgl_homg_line_2d<T> > v(1,l1); v.push_back(l2);
       return v;
     }
     else { // Y axis: x=0 && Cyy+2Eyw+Fww=0:
-      vgl_homg_line_2d<T> l1(c, vgl_homg_point_2d<T>(0,-E+vcl_sqrt(E*E-C*F),C)),
-                          l2(c, vgl_homg_point_2d<T>(0,-E-vcl_sqrt(E*E-C*F),C));
+      vgl_homg_line_2d<T> l1(cntr, vgl_homg_point_2d<T>(0,-E+vcl_sqrt(E*E-C*F),C)),
+                          l2(cntr, vgl_homg_point_2d<T>(0,-E-vcl_sqrt(E*E-C*F),C));
       vcl_list<vgl_homg_line_2d<T> > v(1,l1); v.push_back(l2);
       return v;
     }
@@ -283,10 +282,10 @@ vcl_list<vgl_homg_line_2d<T> > vgl_conic<T>::components() const
     v.push_back(vgl_homg_line_2d<T>(d_,e_,f_));
     return v;
   }
-  // If not, the two component lines are determined by c and their direction,
+  // If not, the two component lines are determined by cntr and their direction,
   // i.e., they pass through one of the two pts satisfying w=0 && Axx+2Bxy+Cyy=0:
-  vgl_homg_line_2d<T> l1(c, vgl_homg_point_2d<T>(-B+vcl_sqrt(B*B-A*C),A,0)),
-                      l2(c, vgl_homg_point_2d<T>(-B-vcl_sqrt(B*B-A*C),A,0));
+  vgl_homg_line_2d<T> l1(cntr, vgl_homg_point_2d<T>(-B+vcl_sqrt(B*B-A*C),A,0)),
+                      l2(cntr, vgl_homg_point_2d<T>(-B-vcl_sqrt(B*B-A*C),A,0));
   vcl_list<vgl_homg_line_2d<T> > v(1,l1); v.push_back(l2);
   return v;
 }
@@ -333,10 +332,10 @@ template <class T>
 vgl_homg_point_2d<T> vgl_conic<T>::polar_point(vgl_homg_line_2d<T> const& l) const
 {
   if (!is_degenerate()) {
-    vgl_conic<T> c = this->dual_conic();
-    return vgl_homg_point_2d<T> (l.a()*c.a()  +l.b()*c.b()/2+l.c()*c.d()/2,
-                                 l.a()*c.b()/2+l.b()*c.c()  +l.c()*c.e()/2,
-                                 l.a()*c.d()/2+l.b()*c.e()/2+l.c()*c.f()  );
+    vgl_conic<T> co = this->dual_conic();
+    return vgl_homg_point_2d<T> (l.a()*co.a()  +l.b()*co.b()/2+l.c()*co.d()/2,
+                                 l.a()*co.b()/2+l.b()*co.c()  +l.c()*co.e()/2,
+                                 l.a()*co.d()/2+l.b()*co.e()/2+l.c()*co.f()  );
   }
   else // a degenerate conic has no dual; in this case, return the centre:
     if (a_==0 && b_==0 && d_==0) // two horizontal lines
@@ -379,41 +378,41 @@ double vgl_conic<T>::curvature_at(vgl_point_2d<T> const& p) const
 
 //: Write "<vgl_conic aX^2+bXY+cY^2+dXW+eYW+fW^2=0>" to stream
 template <class T>
-vcl_ostream& operator<<(vcl_ostream& s, vgl_conic<T> const& c)
+vcl_ostream& operator<<(vcl_ostream& s, vgl_conic<T> const& co)
 {
   s << "<vgl_conic ";
-  if (c.a() == 1) s << "X^2";
-  else if (c.a() == -1) s << "-X^2";
-  else if (c.a() != 0) s << c.a() << "X^2";
-  if (c.b() > 0) s << '+';
-  if (c.b() == 1) s << "XY";
-  else if (c.b() == -1) s << "-XY";
-  else if (c.b() != 0) s << c.b() << "XY";
-  if (c.c() > 0) s << '+';
-  if (c.c() == 1) s << "Y^2";
-  else if (c.c() == -1) s << "-Y^2";
-  else if (c.c() != 0) s << c.c() << "Y^2";
-  if (c.d() > 0) s << '+';
-  if (c.d() == 1) s << "XW";
-  else if (c.d() == -1) s << "-XW";
-  else if (c.d() != 0) s << c.d() << "XW";
-  if (c.e() > 0) s << '+';
-  if (c.e() == 1) s << "YW";
-  else if (c.e() == -1) s << "-YW";
-  else if (c.e() != 0) s << c.e() << "YW";
-  if (c.f() > 0) s << '+';
-  if (c.f() == 1) s << "W^2";
-  else if (c.f() == -1) s << "-W^2";
-  else if (c.f() != 0) s << c.f() << "W^2";
-  return s << "=0 " << c.real_type() << "> ";
+  if (co.a() == 1) s << "X^2";
+  else if (co.a() == -1) s << "-X^2";
+  else if (co.a() != 0) s << co.a() << "X^2";
+  if (co.b() > 0) s << '+';
+  if (co.b() == 1) s << "XY";
+  else if (co.b() == -1) s << "-XY";
+  else if (co.b() != 0) s << co.b() << "XY";
+  if (co.c() > 0) s << '+';
+  if (co.c() == 1) s << "Y^2";
+  else if (co.c() == -1) s << "-Y^2";
+  else if (co.c() != 0) s << co.c() << "Y^2";
+  if (co.d() > 0) s << '+';
+  if (co.d() == 1) s << "XW";
+  else if (co.d() == -1) s << "-XW";
+  else if (co.d() != 0) s << co.d() << "XW";
+  if (co.e() > 0) s << '+';
+  if (co.e() == 1) s << "YW";
+  else if (co.e() == -1) s << "-YW";
+  else if (co.e() != 0) s << co.e() << "YW";
+  if (co.f() > 0) s << '+';
+  if (co.f() == 1) s << "W^2";
+  else if (co.f() == -1) s << "-W^2";
+  else if (co.f() != 0) s << co.f() << "W^2";
+  return s << "=0 " << co.real_type() << "> ";
 }
 
 //: Read a b c d e f from stream
 template <class T>
-vcl_istream& operator>>(vcl_istream& is,  vgl_conic<T>& q)
+vcl_istream& operator>>(vcl_istream& is, vgl_conic<T>& co)
 {
-  T a, b, c, d, e, f; is >> a >> b >> c >> d >> e >> f;
-  q.set(a,b,c,d,e,f); return is;
+  T ta, tb, tc, td, te, tf; is >> ta >> tb >> tc >> td >> te >> tf;
+  co.set(ta,tb,tc,td,te,tf); return is;
 }
 
 #undef VGL_CONIC_INSTANTIATE

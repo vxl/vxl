@@ -39,7 +39,9 @@
 #include <xcv/xcv_picker_tableau.h>
 #include <xcv/xcv_axes_tableau.h>
 
-//vgui_roi_tableau_make_roi *xcv_display::roi_tableau_client_ = 0;
+#if 0
+vgui_roi_tableau_make_roi *xcv_display::roi_tableau_client_ = 0;
+#endif // 0
 extern void post_to_status_bar(const char*);
 extern void get_current(unsigned*, unsigned*);
 extern vcl_vector<xcv_image_tableau_sptr> get_image_list();
@@ -58,7 +60,7 @@ static bool is_magnifying = false;
 static bool is_enhancing = false;
 static vgui_composite_tableau_sptr comp;
 static vgui_enhance_tableau_sptr enhance;
-static xcv_image_tableau_sptr img;
+static xcv_image_tableau_sptr global_img;
 static vgui_easy2D_tableau_sptr easy;
 
 //-----------------------------------------------------------------------------
@@ -72,7 +74,9 @@ void xcv_display::centre_image()
 
   vil1_image image;
   if (get_image_at(&image, col, row))
-    //view->center_image(image.width(), image.height());
+#if 0
+    view->center_image(image.width(), image.height());
+#endif // 0
     view->center_event();
 }
 
@@ -89,8 +93,8 @@ void xcv_display::toggle_enhance()
   {
     unsigned col, row;
     get_current(&col, &row);
-    img = get_image_tableau_at(col, row);
-    if (!img) return;
+    global_img = get_image_tableau_at(col, row);
+    if (!global_img) return;
     easy = get_easy2D_at(col, row);
     if (!easy) return;
 
@@ -106,7 +110,7 @@ void xcv_display::toggle_enhance()
       return;
 
     // Replace the image with an enhance tableau containing the same image:
-    enhance = vgui_enhance_tableau_new(img, img_tabs[selected_image]);
+    enhance = vgui_enhance_tableau_new(global_img, img_tabs[selected_image]);
     easy->set_child(enhance);
 
     is_enhancing = true;
@@ -118,7 +122,7 @@ void xcv_display::toggle_enhance()
   {
     if (debug) vcl_cout << "removing enhance lens\n";
 
-    vgui_parent_child_link::replace_child_everywhere(enhance, img);
+    vgui_parent_child_link::replace_child_everywhere(enhance, global_img);
     is_enhancing = false;
   }
 }
@@ -153,7 +157,7 @@ void xcv_display::toggle_magnify()
 
     enhance->set_child(0);
     vgui_parent_child_link::replace_child_everywhere(enhance, comp);
-    enhance = vgui_enhance_tableau_sptr(); //0;
+    enhance = vgui_enhance_tableau_sptr(); // 0;
     is_magnifying = false;
   }
 }
@@ -170,7 +174,9 @@ void xcv_display::make_roi()
   if (!rubber)
     return;
 
-  //roi_tableau_client_ = new vgui_roi_tableau_make_roi(imt);
+#if 0
+  roi_tableau_client_ = new vgui_roi_tableau_make_roi(imt);
+#endif // 0
   vgui_roi_tableau_make_roi roi_tableau_client_(imt);
 
   vgui_event_server *es = new vgui_event_server(imt);
@@ -180,7 +186,9 @@ void xcv_display::make_roi()
   while (!roi_tableau_client_.is_done())
     es->next();
   rubber->set_client(old_client);
-  //roi_tableau_client_ = 0;
+#if 0
+  roi_tableau_client_ = 0;
+#endif // 0
 }
 
 //-----------------------------------------------------------------------------
@@ -227,7 +235,9 @@ void xcv_display::line_profile(const vil1_image& src, float x0, float y0, float 
   float y_step = (y1 - y0)/(num_points-1);
 
   // copy input image to byte buffer
-  //vil1_memory_image_of<vxl_byte> memimg(src);
+#if 0
+  vil1_memory_image_of<vxl_byte> memimg(src);
+#endif // 0
   vil1_memory_image_of<vxl_byte> memimg;
   memimg.resize(src.width(), src.height());
   vil1_image_as_byte(src).get_section(memimg.get_buffer(), 0, 0, src.width(), src.height());
@@ -306,8 +316,10 @@ void xcv_display::show_line_slice()
 vgui_menu xcv_display::create_display_menu()
 {
   vgui_menu display_menu;
-  //display_menu.add("Centre image", centre_image);
-  //display_menu.separator();
+#if 0
+  display_menu.add("Centre image", centre_image);
+  display_menu.separator();
+#endif // 0
   display_menu.add("Toggle magnify lens", toggle_magnify);
   display_menu.add("Toggle enhance lens", toggle_enhance);
   display_menu.separator();

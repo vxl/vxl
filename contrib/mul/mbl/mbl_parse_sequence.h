@@ -41,7 +41,7 @@ inline void mbl_parse_sequence(vcl_istream &afs, ITER insert_iter, T dummy)
   if ( brace1 == '{')
   {
     vcl_copy(vcl_istream_iterator<T>(afs),
-      vcl_istream_iterator<T>(), insert_iter);
+             vcl_istream_iterator<T>(), insert_iter);
 
     if (afs.fail())
       afs.clear();
@@ -60,16 +60,16 @@ inline void mbl_parse_sequence(vcl_istream &afs, ITER insert_iter, T dummy)
     afs.putback(brace1);
 
     vcl_copy(vcl_istream_iterator<T>(afs),
-      vcl_istream_iterator<T>(), insert_iter);
+             vcl_istream_iterator<T>(), insert_iter);
 
     if (afs.fail())
       afs.clear();
 
-    char dummy;
-    afs >> dummy;
+    char c;
+    afs >> c;
     if (!(!afs))
     {
-      afs.putback(dummy);
+      afs.putback(c);
       afs.clear(vcl_ios::failbit);
 
       throw mbl_exception_parse_error(

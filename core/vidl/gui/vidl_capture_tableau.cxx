@@ -6,7 +6,7 @@
 // \file
 // \brief  Tableau for capturing OpenGL rendering to a video
 // \author Matt Leotta
-// \date   21 Nov 08
+// \date   21 Nov 2008
 
 #include "vidl_capture_tableau.h"
 #include <vil/vil_image_view.h>
@@ -23,8 +23,8 @@ vcl_string vidl_capture_tableau::type_name() const
 
 
 // Default constructor
-vidl_capture_tableau::vidl_capture_tableau( vgui_tableau_sptr const& child)
-  : vgui_wrapper_tableau( child),
+vidl_capture_tableau::vidl_capture_tableau( vgui_tableau_sptr const& child_tableau)
+  : vgui_wrapper_tableau(child_tableau),
     ostream_(NULL)
 {
 }
@@ -33,17 +33,17 @@ vidl_capture_tableau::vidl_capture_tableau( vgui_tableau_sptr const& child)
 bool vidl_capture_tableau::handle( vgui_event const &e)
 {
   bool handled = false;
-  if(child)
+  if (child)
   {
     handled = child->handle(e);
-    
-    if(e.type == vgui_DRAW && ostream_)
+
+    if (e.type == vgui_DRAW && ostream_)
     {
       vil_image_view<vxl_byte> image = vgui_utils::colour_buffer_to_view();
       vil_image_view_base_sptr img_sptr = new vil_image_view<vxl_byte>(image);
       ostream_->write_frame(vidl_convert_to_frame(img_sptr));
     }
-    if(e.type == vgui_RESHAPE)
+    if (e.type == vgui_RESHAPE)
     {
       GLint vp[4]; // x,y,w,h
       glGetIntegerv(GL_VIEWPORT, vp);
@@ -64,7 +64,7 @@ void vidl_capture_tableau::prompt_for_ostream()
 //: Stop the video capture and close the ostream
 void vidl_capture_tableau::close_ostream()
 {
-  if(ostream_)
+  if (ostream_)
   {
     ostream_->close();
     ostream_ = NULL;

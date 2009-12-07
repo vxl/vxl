@@ -4,7 +4,7 @@
 //:
 // \file
 // \author awf@robots.ox.ac.uk
-// \date   02 Apr 00
+// \date   02 Apr 2000
 //
 // \verbatim
 //  Modifications
@@ -43,7 +43,7 @@ class vgl_polygon
   vgl_polygon() {}
 
   //: Construct an empty polygon, setting the number of (empty) sheets
-  explicit vgl_polygon(unsigned int num_sheets) : sheets_(num_sheets) {}
+  explicit vgl_polygon(unsigned int nr_sheets) : sheets_(nr_sheets) {}
 
   //: Construct a single-sheet polygon from a list of n points.
   //  More sheets can be added later with the add_contour method.
@@ -151,11 +151,11 @@ struct vgl_polygon_sheet_as_array
 // \returns three arrays \a e1, \a e2, and \a ip of equal size.
 // Corresponding elements from these arrays describe an intersection.
 // e1[k].first is the sheet index containing edge (e1[k].second, e1[k].second+1)
-// involved in the k-th intersection.  Similarly, e2[k] indexes the other 
+// involved in the k-th intersection.  Similarly, e2[k] indexes the other
 // edge involved in the k-th intersection.  The corresponding intersection
 // point is returned in ip[k].
 template <class T>
-void vgl_selfintersections(vgl_polygon<T> const& p, 
+void vgl_selfintersections(vgl_polygon<T> const& p,
                            vcl_vector<vcl_pair<unsigned,unsigned> >& e1,
                            vcl_vector<vcl_pair<unsigned,unsigned> >& e2,
                            vcl_vector<vgl_point_2d<T> >& ip);

@@ -254,7 +254,7 @@ inline void vil3d_math_mean(sumT& mean, const vil3d_image_view<imT>& im,
 // \relatesalso vil3d_image_view
 template <class imT, class sumT>
 inline void vil3d_math_sum_squares(sumT& sum, sumT& sum_sq,
-                              const vil3d_image_view<imT>& im, unsigned p)
+                                   const vil3d_image_view<imT>& im, unsigned p)
 {
   assert(p<im.nplanes());
   sum = 0; sum_sq=0;
@@ -275,9 +275,9 @@ inline void vil3d_math_sum_squares(sumT& sum, sumT& sum_sq,
     const imT* row = slice;
     for (unsigned int j=0;j<nj;++j, row += jstep)
     {
-      const imT* p = row;
-      for (unsigned int i=0;i<ni;++i, p+=istep)
-      { sum += *p; sum_sq+=sumT(*p)*sumT(*p); }
+      const imT* r = row;
+      for (unsigned int i=0;i<ni;++i, r+=istep)
+      { sum += *r; sum_sq+=sumT(*r)*sumT(*r); }
     }
   }
 }
@@ -289,8 +289,8 @@ template <class imT, class sumT>
 inline sumT vil3d_math_ssd(const vil3d_image_view<imT>& imA,
                            const vil3d_image_view<imT>& imB, sumT /*dummy*/)
 {
-  assert(imA.ni() == imB.ni() && imB.nj() == imB.nj()
-      && imB.nk() == imB.nk() && imA.nplanes() == imB.nplanes());
+  assert(imA.ni() == imB.ni() && imB.nj() == imB.nj() &&
+         imB.nk() == imB.nk() && imA.nplanes() == imB.nplanes());
   sumT ssd=0;
   for (unsigned p=0;p<imA.nplanes();++p)
     for (unsigned k=0;k<imA.nk();++k)
@@ -308,7 +308,7 @@ inline sumT vil3d_math_ssd(const vil3d_image_view<imT>& imA,
 // \relatesalso vil3d_image_view
 template<class imT, class offsetT>
 inline void vil3d_math_scale_and_offset_values(vil3d_image_view<imT>& image,
-double scale, offsetT offset)
+                                               double scale, offsetT offset)
 {
   unsigned ni = image.ni(), nj = image.nj(),
     nk = image.nk(), np = image.nplanes();
@@ -351,10 +351,10 @@ inline void vil3d_math_mean_and_variance(sumT& mean, sumT& var,
 // \relatesalso vil3d_image_view
 template <class imT, class sumT>
 inline sumT vil3d_math_dot_product(const vil3d_image_view<imT>& imA,
-                                  const vil3d_image_view<imT>& imB, sumT)
+                                   const vil3d_image_view<imT>& imB, sumT)
 {
-  assert(imA.ni() == imB.ni() && imB.nj() == imB.nj()
-      && imB.nk() == imB.nk() && imA.nplanes() == imB.nplanes());
+  assert(imA.ni() == imB.ni() && imB.nj() == imB.nj() &&
+         imB.nk() == imB.nk() && imA.nplanes() == imB.nplanes());
   sumT dp=0;
   for (unsigned p=0;p<imA.nplanes();++p)
     for (unsigned k=0;k<imA.nk();++k)
@@ -408,8 +408,8 @@ inline void vil3d_math_image_difference(const vil3d_image_view<aT>& imA,
 // \relatesalso vil_image_view
 template<class aT, class bT, class sumT>
 inline void vil3d_math_image_sum(const vil3d_image_view<aT>& imA,
-                                        const vil3d_image_view<bT>& imB,
-                                        vil3d_image_view<sumT>& im_sum)
+                                 const vil3d_image_view<bT>& imB,
+                                 vil3d_image_view<sumT>& im_sum)
 {
   unsigned ni = imA.ni(),nj = imA.nj(),nk = imA.nk(),np = imA.nplanes();
   assert(imB.ni()==ni && imB.nj()==nj && imB.nk()==nk && imB.nplanes()==np);
@@ -447,8 +447,8 @@ inline void vil3d_math_image_sum(const vil3d_image_view<aT>& imA,
 // \relatesalso vil_image_view
 template<class aT, class bT, class prodT>
 inline void vil3d_math_image_product(const vil3d_image_view<aT>& imA,
-                                        const vil3d_image_view<bT>& imB,
-                                        vil3d_image_view<prodT>& im_prod)
+                                     const vil3d_image_view<bT>& imB,
+                                     vil3d_image_view<prodT>& im_prod)
 {
   unsigned ni = imA.ni(),nj = imA.nj(),nk = imA.nk(),np = imA.nplanes();
   assert(imB.ni()==ni && imB.nj()==nj && imB.nk()==nk && imB.nplanes()==np);
@@ -489,7 +489,7 @@ inline void vil3d_math_image_product(const vil3d_image_view<aT>& imA,
 // \relatesalso vil_image_view
 template<class aT, class bT, class scaleT>
 inline void vil3d_math_add_image_fraction(vil3d_image_view<aT>& imA, scaleT fa,
-                                        const vil3d_image_view<bT>& imB, scaleT fb)
+                                          const vil3d_image_view<bT>& imB, scaleT fb)
 {
   unsigned ni = imA.ni(),nj = imA.nj(),nk = imA.nk(),np = imA.nplanes();
   assert(imB.ni()==ni && imB.nj()==nj && imB.nk()==nk && imB.nplanes()==np);
@@ -522,12 +522,12 @@ inline void vil3d_math_add_image_fraction(vil3d_image_view<aT>& imA, scaleT fa,
 //  If value > max_v value=max_v
 // \relatesalso vil3d_image_view
 template<class T>
-inline void vil3d_math_truncate_range(vil3d_image_view<T>& image, 
+inline void vil3d_math_truncate_range(vil3d_image_view<T>& image,
                                       T min_v, T max_v)
 {
   unsigned ni=image.ni(), nj=image.nj(), nk=image.nk(), np=image.nplanes();
-  vcl_ptrdiff_t istep=image.istep(), jstep=image.jstep(), 
-    kstep=image.kstep(), pstep=image.planestep();
+  vcl_ptrdiff_t istep=image.istep(), jstep=image.jstep(),
+                kstep=image.kstep(), pstep=image.planestep();
   T* plane = image.origin_ptr();
   for (unsigned p=0; p<np; ++p, plane+=pstep)
   {

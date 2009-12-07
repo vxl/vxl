@@ -18,9 +18,8 @@ bool bvxm_create_synth_lidar_data_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_create_synth_lidar_data_process_globals;
   vcl_vector<vcl_string> output_types_(n_outputs_);
-  //this process takes no input
-
-  //output:
+  // this process takes no input
+  // output:
   // 1. lidar image
   // 2. camera related to that image
   output_types_[0]= "vil_image_view_base_sptr";
@@ -42,14 +41,14 @@ bool gen_lidar_view(int x, int y, int z,
   // Place the heights of boxes on lidar
   for (unsigned int b=0; b<boxes.size(); b++) {
     vgl_box_3d<double> box = boxes[b];
-    double z = box.max_z(); // top face of the box
+    double maxz = box.max_z(); // top face of the box
     for (int i=0; i<x; i++)
       for (int j=0; j<y; j++) {
-        vgl_point_3d<double> p(i,j,z);
+        vgl_point_3d<double> p(i,j,maxz);
         if (box.contains(p)) {
           // check if there is already a higher d there
-          if (lv(i,j) < (float)z)
-            lv(i,j) = (float)z;
+          if (lv(i,j) < (float)maxz)
+            lv(i,j) = (float)maxz;
         }
       }
   }
@@ -67,10 +66,8 @@ bool gen_lidar_view(int x, int y, int z,
 //: Execute the process
 bool bvxm_create_synth_lidar_data_process(bprb_func_process& pro)
 {
-
   using namespace bvxm_create_synth_lidar_data_process_globals;
-
-  //define and read in the parameters
+  // define and read in the parameters
   // voxel world dimensions
   unsigned int v_dimx = 100, v_dimy=100, v_dimz=100;
   pro.parameters()->get_value(param_voxel_dim_x_, v_dimx);
@@ -89,7 +86,7 @@ bool bvxm_create_synth_lidar_data_process(bprb_func_process& pro)
   pro.parameters()->get_value(param_box_min_y_, miny);
   pro.parameters()->get_value(param_box_min_z_, minz);
 
-  //lvcs parameters
+  // lvcs parameters
   vcl_string lvcs_path;
   if (!pro.parameters()->get_value(param_lvcs_, lvcs_path)) {
     vcl_cout << "bvxm_create_voxel_world_process::execute() -- problem in retrieving parameter lvcs_path\n";

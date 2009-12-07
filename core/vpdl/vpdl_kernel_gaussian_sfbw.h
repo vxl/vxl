@@ -33,9 +33,9 @@ class vpdl_kernel_gaussian_sfbw : public vpdl_kernel_fbw_base<T,n>
   vpdl_kernel_gaussian_sfbw() {}
 
   //: Constructor - from sample centers and bandwidth (variance)
-  vpdl_kernel_gaussian_sfbw(const vcl_vector<vector>& samples,
-                            T bandwidth = T(1))
-  : vpdl_kernel_fbw_base<T,n>(samples,bandwidth) {}
+  vpdl_kernel_gaussian_sfbw(const vcl_vector<vector>& samplez,
+                            T bandwid = T(1))
+  : vpdl_kernel_fbw_base<T,n>(samplez,bandwid) {}
 
   //: Create a copy on the heap and return base class pointer
   virtual vpdl_distribution<T,n>* clone() const
@@ -99,9 +99,9 @@ class vpdl_kernel_gaussian_sfbw : public vpdl_kernel_fbw_base<T,n>
         vpdt_index(g_s,i) = tmp/this->bandwidth();
         ssd += tmp*tmp;
       }
-      T density = T(vcl_exp(-0.5*ssd));
-      g_s *= -density;
-      sum += density;
+      T dens = T(vcl_exp(-0.5*ssd));
+      g_s *= -dens;
+      sum += dens;
       g += g_s;
     }
 
@@ -148,7 +148,7 @@ class vpdl_kernel_gaussian_sfbw : public vpdl_kernel_fbw_base<T,n>
     typedef typename vcl_vector<vector>::const_iterator vitr;
     for (vitr s=this->samples().begin(); s!=this->samples().end(); ++s) {
       double prob = 1.0;
-      for (unsigned int i=0; i<dim; ++i){
+      for (unsigned int i=0; i<dim; ++i) {
         if (vpdt_index(max_pt,i)<=vpdt_index(min_pt,i))
           return T(0);
         prob *= (vnl_erf(s2*(vpdt_index(max_pt,i)-vpdt_index(*s,i))) -
@@ -158,7 +158,6 @@ class vpdl_kernel_gaussian_sfbw : public vpdl_kernel_fbw_base<T,n>
     }
     return static_cast<T>(sum/nc);
   }
-
 
   //: Compute the covariance of the distribution.
   virtual void compute_covar(matrix& covar) const
@@ -171,7 +170,7 @@ class vpdl_kernel_gaussian_sfbw : public vpdl_kernel_fbw_base<T,n>
     vpdt_set_size(mean,d);
     vpdt_fill(mean,T(0));
     typedef typename vcl_vector<vector>::const_iterator samp_itr;
-    for (samp_itr s = this->samples().begin(); s != this->samples().end(); ++s){
+    for (samp_itr s = this->samples().begin(); s != this->samples().end(); ++s) {
       covar += outer_product(*s,*s);
       mean += *s;
     }

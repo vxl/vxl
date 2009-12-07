@@ -4,7 +4,7 @@
 //:
 // \file
 // \author Andrew W. Fitzgibbon, Oxford RRG
-// \date   08 Dec 96
+// \date   08 Dec 1996
 
 #include "vnl_qr.h"
 #include <vcl_cassert.h>
@@ -93,7 +93,7 @@ vnl_matrix<T> const& vnl_qr<T>::Q() const
   bool verbose = false;
 
   if (!Q_) {
-    ((vnl_matrix<T>*&)Q_) = new vnl_matrix<T>(m,m);
+    Q_ = new vnl_matrix<T>(m,m);
     // extract Q.
     if (verbose) {
       vcl_cerr << __FILE__ ": vnl_qr<T>::Q()\n"
@@ -103,7 +103,7 @@ vnl_matrix<T> const& vnl_qr<T>::Q() const
     }
 
     Q_->set_identity();
-    vnl_matrix<T>& Q = *Q_;
+    vnl_matrix<T>& matrQ = *Q_;
 
     vnl_vector<T> v(m, T(0));
     vnl_vector<T> w(m, T(0));
@@ -133,14 +133,14 @@ vnl_matrix<T> const& vnl_qr<T>::Q() const
         for (int i = k; i < m; ++i) {
           w[i] = T(0);
           for (int j = k; j < m; ++j)
-            w[i] += scale * c(v[j]) * Q(j, i);
+            w[i] += scale * c(v[j]) * matrQ(j, i);
         }
         if (verbose) vnl_matlab_print(vcl_cerr, w, "w");
 
         // Q -= v w
         for (int i = k; i < m; ++i)
           for (int j = k; j < m; ++j)
-            Q(i,j) -= (v[i]) * (w[j]);
+            matrQ(i,j) -= (v[i]) * (w[j]);
       }
 #undef c
     }
@@ -155,15 +155,15 @@ vnl_matrix<T> const& vnl_qr<T>::R() const
   if (!R_) {
     int m = qrdc_out_.columns(); // column-major storage
     int n = qrdc_out_.rows();
-    ((vnl_matrix<T>*&)R_) = new vnl_matrix<T>(m,n);
-    vnl_matrix<T> & R = *R_;
+    R_ = new vnl_matrix<T>(m,n);
+    vnl_matrix<T> & Rmatr = *R_;
 
     for (int i = 0; i < m; ++i)
       for (int j = 0; j < n; ++j)
         if (i > j)
-          R(i, j) = T(0);
+          Rmatr(i, j) = T(0);
         else
-          R(i, j) = qrdc_out_(j,i);
+          Rmatr(i, j) = qrdc_out_(j,i);
   }
 
   return *R_;
@@ -188,7 +188,7 @@ vnl_vector<T> vnl_qr<T>::solve(const vnl_vector<T>& b) const
   long n = qrdc_out_.columns();
   long p = qrdc_out_.rows();
   const T* b_data = b.data_block();
-  vnl_vector<T> QtB(n);
+  vnl_vector<T> Qt_B(n);
   vnl_vector<T> x(p);
 
   // see comment above
@@ -198,7 +198,7 @@ vnl_vector<T> vnl_qr<T>::solve(const vnl_vector<T>& b) const
   vnl_linpack_qrsl(qrdc_out_.data_block(),
                    &n, &n, &p,
                    qraux_.data_block(),
-                   b_data, (T*)0, QtB.data_block(),
+                   b_data, (T*)0, Qt_B.data_block(),
                    x.data_block(),
                    (T*)0/*residual*/,
                    (T*)0/*Ax*/,
@@ -219,7 +219,7 @@ vnl_vector<T> vnl_qr<T>::QtB(const vnl_vector<T>& b) const
   long n = qrdc_out_.columns();
   long p = qrdc_out_.rows();
   const T* b_data = b.data_block();
-  vnl_vector<T> QtB(n);
+  vnl_vector<T> Qt_B(n);
 
   // see comment above
   long JOB = 1000;
@@ -230,7 +230,7 @@ vnl_vector<T> vnl_qr<T>::QtB(const vnl_vector<T>& b) const
                    qraux_.data_block(),
                    b_data,
                    (T*)0,               // A: Qb
-                   QtB.data_block(),    // B: Q'b
+                   Qt_B.data_block(),   // B: Q'b
                    (T*)0,               // C: x
                    (T*)0,               // D: residual
                    (T*)0,               // E: Ax
@@ -241,7 +241,7 @@ vnl_vector<T> vnl_qr<T>::QtB(const vnl_vector<T>& b) const
     vcl_cerr << __FILE__ ": vnl_qr<T>::QtB() -- matrix is rank-deficient by "
              << info << '\n';
 
-  return QtB;
+  return Qt_B;
 }
 
 template <class T>

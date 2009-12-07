@@ -50,9 +50,9 @@ static void print_lines(vcl_vector<vsol_line_2d_sptr>& lines)
 }
 
 
-//Gives a sort on signed distance of the
-//line from the origin along the line normal.
-//note that for line, hl, distance = -hl.c()
+// Gives a sort on signed distance of the
+// line from the origin along the line normal.
+// note that for line, hl, distance = -hl.c()
 static bool line_distance(const vsol_line_2d_sptr & l1,
                           const vsol_line_2d_sptr & l2)
 {
@@ -90,7 +90,7 @@ bool line_chamfer_1d::insert_lines(vcl_vector<vsol_line_2d_sptr> const& lines,
   {
     vgl_homg_line_2d<double> l = (*lit)->vgl_hline_2d();
     l.normalize();
-    double d = -l.c();//perpendicular distance
+    double d = -l.c(); // perpendicular distance
     distances_.push_back(d);
     dmin_ = vnl_math_min(d,dmin_);
     dmax_ = vnl_math_max(d,dmax_);
@@ -200,7 +200,7 @@ bool grid_profile_matcher::insert_lines(vcl_vector<vsol_line_2d_sptr> const& lin
 #ifdef USE_C_FOR_DISTANCE
     vgl_homg_line_2d<double> l = (*lit)->vgl_hline_2d();
     l.normalize();
-    d = -l.c();//perpendicular distance
+    d = -l.c(); // perpendicular distance
 #else
     vsol_point_2d_sptr mid = (*lit)->middle();
     if (horizontal_lines)
@@ -359,7 +359,7 @@ static void group_angle_stats(vcl_vector<vsol_line_2d_sptr> const & group,
     if (ang>max_angle)
       max_angle = ang;
   }
-  //See if we are on the 180-0 cut
+  // See if we are on the 180-0 cut
   double cut_thresh = 3.0*angle_tol + 15.0;
   bool on_cut = (max_angle-min_angle)>cut_thresh;
   if (on_cut)
@@ -432,10 +432,10 @@ get_vanishing_point(vcl_vector<vsol_line_2d_sptr> const & para_lines,
   int nlines =0;
   double tx = 0, ty =0;
   //
-  //convert the input lines to vgl_homg_line(s)
-  //and get the average distance of the intersection of the perpendiclar
-  //line from the origin with each line.  This point set defines the
-  //translation offset for the lines.
+  // convert the input lines to vgl_homg_line(s)
+  // and get the average distance of the intersection of the perpendiclar
+  // line from the origin with each line.  This point set defines the
+  // translation offset for the lines.
   //
   for (vcl_vector<vsol_line_2d_sptr>::const_iterator lit = para_lines.begin();
        lit != para_lines.end(); lit++)
@@ -456,7 +456,7 @@ get_vanishing_point(vcl_vector<vsol_line_2d_sptr> const & para_lines,
     return false;
   tx /=nlines;
   ty /=nlines;
-  //Offset the lines with the translation
+  // Offset the lines with the translation
   for (vcl_vector<vgl_homg_line_2d<double> >::iterator lit = vlines.begin();
        lit != vlines.end(); lit++)
   {
@@ -466,7 +466,7 @@ get_vanishing_point(vcl_vector<vsol_line_2d_sptr> const & para_lines,
     l.set(l.a(), l.b(), c);
     tvlines.push_back(l);
   }
-  //Scale the lines so that the mean squared distance from the origin is one.
+  // Scale the lines so that the mean squared distance from the origin is one.
   double c_sq = 0;
   for (vcl_vector<vgl_homg_line_2d<double> >::iterator lit = tvlines.begin();
        lit != tvlines.end(); lit++)
@@ -486,10 +486,10 @@ get_vanishing_point(vcl_vector<vsol_line_2d_sptr> const & para_lines,
     l.set(l.a(), l.b(), c);
     stvlines.push_back(l);
   }
-  //Compute the intersection of the normalized lines to define the vanishing point
+  // Compute the intersection of the normalized lines to define the vanishing point
   vp = vgl_homg_operators_2d<double>::lines_to_point(stvlines);
 
-  //restore normalizing transform
+  // restore normalizing transform
   // scale factor;
   double lambda = vp.w()/sigma_c;
   vp.set((vp.x()+lambda*tx), (vp.y()+lambda*ty), lambda);
@@ -508,8 +508,8 @@ bool sdet_grid_finder::compute_vanishing_points()
     return false;
   if (!get_vanishing_point(group1_, vp1))
     return false;
-  //if the x component of the first vanishing point is more horizontal then
-  //make it the horizontal vanishing point
+  // if the x component of the first vanishing point is more horizontal then
+  // make it the horizontal vanishing point
   if (vcl_fabs(vp0.x())>vcl_fabs(vp0.y()))
   {
     vp0_= vp0;
@@ -553,19 +553,19 @@ bool sdet_grid_finder::compute_projective_homography()
              << "VP90 " << vp90_ << '\n';
   }
 
-  //Keep the sense of the axes pointing to infinity
+  // Keep the sense of the axes pointing to infinity
   vgl_homg_point_2d<double> x_inf(1,0,0), x_minus_inf(-1,0,0);
   vgl_homg_point_2d<double> y_inf(0,1,0), y_minus_inf(0,-1,0);
   vgl_homg_point_2d<double> origin(0,0,1);
   vgl_homg_point_2d<double> x_finite(xmax_,0,1), y_finite(0,ymax_,1);
   vgl_homg_point_2d<double> max_corner(xmax_,ymax_,1);
 
-  //compute a point homography that maps the
-  //vanishing points to infinity and leaves the corners of the image invariant
+  // compute a point homography that maps the
+  // vanishing points to infinity and leaves the corners of the image invariant
   vcl_vector<vgl_homg_point_2d<double> > image;
   vcl_vector<vgl_homg_point_2d<double> > grid;
-  //First, if the vanishing points are already quite close to infinity
-  //then just form an identity transform, otherwise map to the vanishing pts
+  // First, if the vanishing points are already quite close to infinity
+  // then just form an identity transform, otherwise map to the vanishing pts
   double at_infinity = 1.0e-8;
   if (vcl_fabs(vp0_.w())<at_infinity)
   {
@@ -695,11 +695,11 @@ bool sdet_grid_finder::scale_transform(const double /* max_distance */,
              << "Horizontal Dist " << ph << '\n'
              << "Vertical Dist " << pv << '\n';
   }
-  //failed to find peaks
+  // failed to find peaks
   if (ph<0||pv<0)
     return false;
 
-  //adjust the spacing to be equal.
+  // adjust the spacing to be equal.
   S.put(0, 0, spacing_/pv); S.put(0,1, 0); S.put(0,2,0);
   S.put(1, 0, 0); S.put(1,1, spacing_/ph); S.put(1,2,0);
   S.put(2, 0, 0); S.put(2,1, 0); S.put(2,2,1);
@@ -712,10 +712,10 @@ bool sdet_grid_finder::compute_affine_homography()
     return false;
   if (affine_homography_valid_)
     return true;
-  float affine_angle_factor = 3.0;//more tolerance for line groups for affine processing
+  float affine_angle_factor = 3.0; // more tolerance for line groups for affine processing
 
-  //transform all the lines using the projective homography defined
-  //by vanishing points
+  // transform all the lines using the projective homography defined
+  // by vanishing points
   vcl_vector<vsol_line_2d_sptr> affine_lines;
   for (vcl_vector<vsol_line_2d_sptr>::const_iterator lit = lines_.begin();
        lit != lines_.end(); lit++)
@@ -737,7 +737,7 @@ bool sdet_grid_finder::compute_affine_homography()
     affine_lines.push_back(pline);
   }
 
-  //Get the bounds of the affine lines (lines with vpoints at infinity)
+  // Get the bounds of the affine lines (lines with vpoints at infinity)
   vbl_bounding_box<double, 2> b = bsol_algs::bounding_box(affine_lines);
   index_ = new bsol_hough_line_index(b);
 
@@ -749,7 +749,7 @@ bool sdet_grid_finder::compute_affine_homography()
   if (index_->dominant_line_groups(thresh_,
                                    affine_angle_factor*angle_tol_,
                                    groups)<2)
-    return false;//failed to find enough groups.
+    return false; // failed to find enough groups.
 
   afgroup0_ = groups[0];
   afgroup1_ = groups[1];
@@ -779,8 +779,8 @@ bool sdet_grid_finder::compute_affine_homography()
              << " min_angle = " << min_angle1 << " max_angle = "
              << max_angle1 << '\n';
   }
-  //Get the orientation of roughly vertical and horizontal lines
-  //ang0 is the horizontal direction and ang1 is the vertical direction
+  // Get the orientation of roughly vertical and horizontal lines
+  // ang0 is the horizontal direction and ang1 is the vertical direction
   double deg_to_rad = vnl_math::pi/180.0;
   double ang0 =0, ang90=0;
   bool zero_is_zero=true;;
@@ -796,13 +796,13 @@ bool sdet_grid_finder::compute_affine_homography()
     ang90 = avg_angle0*deg_to_rad;
     zero_is_zero = false;
   }
-  //lines should be along the positive x axis.
+  // lines should be along the positive x axis.
   if (ang0>vnl_math::pi_over_2)
     ang0-=vnl_math::pi;
-  //lines should be along the positive y axis.
+  // lines should be along the positive y axis.
   if (ang90<0)
     ang90+=vnl_math::pi;
-  //Need to have skew angle at least 60 deg.
+  // Need to have skew angle at least 60 deg.
   if ((vcl_fabs(ang90)-vcl_fabs(ang0))< vnl_math::pi/3.0)
   {
     vcl_cout << "In sdet_grid_finder::compute_affine_homography() -"
@@ -815,8 +815,8 @@ bool sdet_grid_finder::compute_affine_homography()
   if (verbose_)
     vcl_cout << "The skew transform\n" << Q << '\n';
 
-  //max distance for distance histogram
-  //the distance could be larger but unlikely
+  // max distance for distance histogram
+  // the distance could be larger but unlikely
   double dx = vcl_fabs(b.xmax()-b.xmin()), dy = vcl_fabs(b.ymax()-b.ymin());
   double max_distance = dx;
   if (dx<dy)
@@ -825,17 +825,17 @@ bool sdet_grid_finder::compute_affine_homography()
   if (zero_is_zero)
   {
     if (!scale_transform(max_distance, afgroup0_, afgroup1_, S))
-      return false;//failed to find a first distance peak
+      return false; // failed to find a first distance peak
   }
   else
     if (!scale_transform(max_distance, afgroup1_, afgroup0_, S))
-      return false;//failed to find a first distance peak
+      return false; // failed to find a first distance peak
   if (verbose_)
     vcl_cout << "The scale transform\n" << S << '\n';
 
   affine_homography_ = vgl_h_matrix_2d<double>(S*Q);
 
-  //Finally we translate until the first row and column of lines are at (0,0)
+  // Finally we translate until the first row and column of lines are at (0,0)
 #if 0 // Hack! needs to be removed JLM
   double length_threshold = 7.0;
 #endif
@@ -961,7 +961,7 @@ compute_homography_linear_chamfer(vgl_h_matrix_2d<double> & H)
   double min_y_offset = -10.0, max_y_offset =(n_lines_x_-1)*spacing_ + 10;
   vcl_vector<vgl_homg_line_2d<double> > lines_grid, lines_image;
   vcl_vector<double> weights;
-  //insert horizontal line correspondences
+  // insert horizontal line correspondences
   double length_sum = 0;
   for (int i0 = 0; i0< n_lines_x_; i0++)
   {
@@ -1055,12 +1055,12 @@ compute_homography_linear_chamfer(vgl_h_matrix_2d<double> & H)
     T.put(0, 0, 1); T.put(0,1, 0); T.put(0,2,-transx);
     T.put(1, 0, 0); T.put(1,1, 1); T.put(1,2,-transy);
     T.put(2, 0, 0); T.put(2,1, 0); T.put(2,2,1);
-    vgl_h_matrix_2d<double> H(T);
+    vgl_h_matrix_2d<double> h(T);
     vcl_vector<vsol_line_2d_sptr> temp;
     for (vcl_vector<vsol_line_2d_sptr>::iterator lit = debug_lines_.begin();
          lit != debug_lines_.end(); lit++)
     {
-      vsol_line_2d_sptr l = this->transform_line(H,*lit);
+      vsol_line_2d_sptr l = this->transform_line(h,*lit);
       temp.push_back(l);
     }
     debug_lines_.clear();
@@ -1374,7 +1374,7 @@ sdet_grid_finder::get_backprojected_grid(vcl_vector<vsol_line_2d_sptr> & lines)
   lines.clear();
   vgl_h_matrix_2d<double> grid_to_image = homography_.get_inverse();
 
-  //transform the vertical grid lines back to the image
+  // transform the vertical grid lines back to the image
   for (int y = 0; y<n_lines_y_; y++)
   {
     double xv = y*spacing_, maxy = (n_lines_x_-1)*spacing_;
@@ -1386,7 +1386,7 @@ sdet_grid_finder::get_backprojected_grid(vcl_vector<vsol_line_2d_sptr> & lines)
     vsol_line_2d_sptr lv= new vsol_line_2d(sp0, sp1);
     lines.push_back(lv);
   }
-  //transform the horizontal grid lines back to the image
+  // transform the horizontal grid lines back to the image
   for (int x = 0; x<n_lines_x_; x++)
   {
     double yv = x*spacing_, maxx = (n_lines_y_-1)*spacing_;
@@ -1451,7 +1451,7 @@ bool sdet_grid_finder::transform_grid_points(vnl_matrix_fixed<double,3,3> & K,
                                              vcl_vector<vsol_point_2d_sptr> & points)
 {
   vnl_matrix_fixed<double,3,4> grid_to_image_debug = K*M;
-  //transform the vertical grid lines back to the image
+  // transform the vertical grid lines back to the image
   for (int x = 0; x<n_lines_x_; x++)
   {
     for (int y = 0; y<n_lines_y_; y++)
@@ -1501,7 +1501,7 @@ bool sdet_grid_finder::check_grid_match(vil1_image img)
   square_max_mins[1][1] = 0;
 
   int category;
-  //check left row of grid squares
+  // check left row of grid squares
   for (int i = 0; i < n_lines_x_-1; i++)
   {
     if (!get_square_pixel_stats(img,0,i,mean_intensity,intensity_sigma))
@@ -1523,7 +1523,7 @@ bool sdet_grid_finder::check_grid_match(vil1_image img)
     if (mean_intensity > square_max_mins[category][1])
       square_max_mins[category][1] = mean_intensity;
   }
-  //check upper row of grid squares
+  // check upper row of grid squares
   for (int i = 0; i < n_lines_y_-1; i++)
   {
     if (!get_square_pixel_stats(img,i,0,mean_intensity,intensity_sigma))
@@ -1684,15 +1684,15 @@ bool sdet_grid_finder::get_square_pixel_stats(vil1_image img,
   int n_pix = 0;
   for (int i = 0; i < n_scan_rows; i++)
   {
-    for (int j = scan_rows[i][0]; j <= scan_rows[i][1]; j++)
+    for (int j = scan_rows[i][0]; j <= scan_rows[i][1]; ++j)
     {
-      int x = j, y = i + min_y;
-      if (x < 0 || x >= img_buff.GetSizeX())
+      int xx = j, yy = i + min_y;
+      if (xx < 0 || xx >= img_buff.GetSizeX())
         continue;
-      if (y < 0 || y >= img_buff.GetSizeY())
+      if (yy < 0 || yy >= img_buff.GetSizeY())
         continue;
-      intensity_total+= *((unsigned char*)(img_buff.GetElementAddr(x,y)));
-      n_pix++;
+      intensity_total+= *((unsigned char*)(img_buff.GetElementAddr(xx,yy)));
+      ++n_pix;
     }
   }
   if (!n_pix)

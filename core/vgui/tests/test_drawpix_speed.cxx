@@ -23,7 +23,7 @@ static int attribs[] = { GLX_RGBA,
                          GLX_DOUBLEBUFFER,
                          None};
 
-unsigned char data[512*512*4];
+unsigned char global_data[512*512*4];
 
 #if 0 // unused static function
 static Bool WaitForNotify(Display *d, XEvent *e, char *arg)
@@ -39,7 +39,7 @@ double fps_gl (GLenum pack_type, GLenum pix_type)
   vul_timer timer;
   timer.mark();
   do {
-    glDrawPixels(512,512,pack_type,pix_type,data);
+    glDrawPixels(512,512,pack_type,pix_type,global_data);
     ++draws;
     elapsed = timer.real();
   } while (elapsed < 3000);
@@ -61,7 +61,7 @@ double fps_hermes (float src_scale, float dest_scale, HermesFormat* src_format, 
   int bytes_per_pixel = src_format->bits / 8;
   int succeed;
   do {
-    succeed = Hermes_ConverterCopy(converter, data,
+    succeed = Hermes_ConverterCopy(converter, global_data,
                                    0, 0, (int)(src_scale*512), (int)(src_scale*512), 512*bytes_per_pixel, backbuffer->data,
                                    0, 0, (int)(dest_scale*512), (int)(dest_scale*512), backbuffer->bytes_per_line);
     if (!succeed) return 0;
@@ -89,7 +89,7 @@ double fps_hermes_grey (float src_scale, float dest_scale, XImage* backbuffer)
   vul_timer timer;
   int succeed;
   do {
-    succeed = Hermes_ConverterCopy(converter, data,
+    succeed = Hermes_ConverterCopy(converter, global_data,
                                    0, 0, (int)(src_scale*512), (int)(src_scale*512), 512*1, backbuffer->data,
                                    0, 0, (int)(dest_scale*512), (int)(dest_scale*512), backbuffer->bytes_per_line);
     if (!succeed) return 0;
@@ -158,7 +158,8 @@ void pattern_RGB32 (unsigned char* data, bool little_endian)
     r = 0x000000ff;
     g = 0x0000ff00;
     b = 0x00ff0000;
-  } else {
+  }
+  else {
     r = 0xff000000;
     g = 0x00ff0000;
     b = 0x0000ff00;
@@ -181,6 +182,7 @@ static struct
   char const *nfixed;
   char const *pretty;
 }
+
 ft_tab[] =
 {
   {GL_LUMINANCE,GL_UNSIGNED_BYTE, "LUM   ", "8bit greyscale"},
@@ -289,25 +291,25 @@ int main()
   XEvent event;
   XIfEvent(display, &event, WaitForNotify, (char*)window);
   vcl_cerr << "Rendering from 8-bit grey-level...\n";
-  pattern_grey(data);
-  glDrawPixels(512,512,GL_LUMINANCE,GL_UNSIGNED_BYTE,data);
+  pattern_grey(global_data);
+  glDrawPixels(512,512,GL_LUMINANCE,GL_UNSIGNED_BYTE,global_data);
   glXSwapBuffers(display, window);
   vpl_sleep(1);
 #if defined(GL_VERSION_1_2)
   vcl_cerr << "Rendering from 16-bit 565 RGB...\n";
-  pattern_RGB16(data, little_endian);
-  glDrawPixels(512,512,GL_RGB,GL_UNSIGNED_SHORT_5_6_5,data);
+  pattern_RGB16(global_data, little_endian);
+  glDrawPixels(512,512,GL_RGB,GL_UNSIGNED_SHORT_5_6_5,global_data);
   glXSwapBuffers(display, window);
   vpl_sleep(1);
 #endif
   vcl_cerr << "Rendering from 24-bit 888 RGB...\n";
-  pattern_RGB24(data, little_endian);
-  glDrawPixels(512,512,GL_RGB,GL_UNSIGNED_BYTE,data);
+  pattern_RGB24(global_data, little_endian);
+  glDrawPixels(512,512,GL_RGB,GL_UNSIGNED_BYTE,global_data);
   glXSwapBuffers(display, window);
   vpl_sleep(1);
   vcl_cerr << "Rendering from 32-bit 8888 RGBA...\n";
-  pattern_RGB32(data, little_endian);
-  glDrawPixels(512,512,GL_RGBA,GL_UNSIGNED_BYTE,data);
+  pattern_RGB32(global_data, little_endian);
+  glDrawPixels(512,512,GL_RGBA,GL_UNSIGNED_BYTE,global_data);
   glXSwapBuffers(display, window);
   vpl_sleep(1);
 #endif // end commented out

@@ -39,9 +39,9 @@ class vgl_infinite_line_3d
     : x0_(l.x0()), t_(l.direction()) {}
 
   //: Construct from x0 and direction
-  inline vgl_infinite_line_3d(vgl_vector_2d<Type> const& x0,
+  inline vgl_infinite_line_3d(vgl_vector_2d<Type> const& x_0,
                               vgl_vector_3d<Type> const& direction)
-    : x0_(x0), t_(direction) {}
+    : x0_(x_0), t_(direction) {}
 
   //: Construct from two points
   vgl_infinite_line_3d(vgl_point_3d<Type> const& p1,
@@ -81,8 +81,8 @@ class vgl_infinite_line_3d
   { return !operator==(other); }
 
   //: Assignment
-  inline void set(vgl_vector_2d<Type> const& x0, vgl_vector_3d<Type> const& direction)
-  { x0_ = x0; t_ = direction; }
+  inline void set(vgl_vector_2d<Type> const& x_0, vgl_vector_3d<Type> const& direction)
+  { x0_ = x_0; t_ = direction; }
 
   //: Return the point on the line closest to the origin
   vgl_point_3d<Type> point() const;
@@ -93,7 +93,6 @@ class vgl_infinite_line_3d
 
   //: Check if point \a p is on the line
   bool contains(const vgl_point_3d<Type>& p ) const;
-
 
   //: The unit vectors perpendicular to the line direction
   void compute_uv_vectors(vgl_vector_3d<Type>& u, vgl_vector_3d<Type>& v) const;

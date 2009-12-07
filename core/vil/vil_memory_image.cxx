@@ -21,18 +21,18 @@
 
 class vil_image_view_base;
 
-vil_memory_image::vil_memory_image():
-   view_(new vil_image_view<vxl_byte>()) {}
+vil_memory_image::vil_memory_image()
+: view_(new vil_image_view<vxl_byte>()) {}
 
 
 //: Create an in-memory image of given size and pixel type.
 // If not interleaved, pixel type must be scalar or nplanes must be 1.
 // If n_interleaved_planes is not 1, pixel type must be scalar, and n_planes must be 1.
-vil_memory_image::vil_memory_image(unsigned ni, unsigned nj, unsigned nplanes,
+vil_memory_image::vil_memory_image(unsigned n_i, unsigned n_j, unsigned n_planes,
                                    vil_pixel_format format, unsigned n_interleaved_planes/*=1*/)
 {
-  //Check that only once source of multiple planes is not 1.
-  assert( ( (nplanes==1?0:1) + (n_interleaved_planes==1?0:1) +
+  // Check that only once source of multiple planes is not 1.
+  assert( ( (n_planes==1?0:1) + (n_interleaved_planes==1?0:1) +
     (vil_pixel_format_num_components(format)==1?0:1) ) <= 1) ;
 
   if (vil_pixel_format_num_components(format)!=1)
@@ -41,7 +41,7 @@ vil_memory_image::vil_memory_image(unsigned ni, unsigned nj, unsigned nplanes,
   switch (vil_pixel_format_component_format(format))
   {
 #define macro( F , T  ) \
-   case F : view_ = new vil_image_view<T >(ni, nj, nplanes, n_interleaved_planes); \
+   case F : view_ = new vil_image_view<T >(n_i, n_j, n_planes, n_interleaved_planes); \
             break;
    macro(VIL_PIXEL_FORMAT_BYTE ,   vxl_byte)
    macro(VIL_PIXEL_FORMAT_SBYTE ,  vxl_sbyte)
@@ -102,10 +102,10 @@ vil_memory_image::vil_memory_image(vil_image_view_base const &view)
 //: Create a read/write view of a copy of this data.
 // Currently not yet implemented.
 // \return 0 if unable to get view of correct size.
-vil_image_view_base_sptr vil_memory_image::get_copy_view(unsigned i0, unsigned ni,
-                                                         unsigned j0, unsigned nj) const
+vil_image_view_base_sptr vil_memory_image::get_copy_view(unsigned i0, unsigned n_i,
+                                                         unsigned j0, unsigned n_j) const
 {
-  if (i0 + ni > view_->ni() || j0 + nj > view_->nj()) return 0;
+  if (i0 + n_i > view_->ni() || j0 + n_j > view_->nj()) return 0;
 
   switch (view_->pixel_format())
   {
@@ -113,7 +113,7 @@ vil_image_view_base_sptr vil_memory_image::get_copy_view(unsigned i0, unsigned n
    case  F : { \
     const vil_image_view< T > &v = static_cast<const vil_image_view< T > &>(*view_); \
     vil_image_view< T > w(v.memory_chunk(), &v(i0,j0), \
-                          ni, nj, v.nplanes(), \
+                          n_i, n_j, v.nplanes(), \
                           v.istep(), v.jstep(), v.planestep()); \
     return new vil_image_view< T >(vil_copy_deep(w)); }
    macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
@@ -139,10 +139,10 @@ vil_image_view_base_sptr vil_memory_image::get_copy_view(unsigned i0, unsigned n
 
 //: Create a read/write view of a copy of this data.
 // \return 0 if unable to get view of correct size.
-vil_image_view_base_sptr vil_memory_image::get_view(unsigned i0, unsigned ni,
-                                                    unsigned j0, unsigned nj) const
+vil_image_view_base_sptr vil_memory_image::get_view(unsigned i0, unsigned n_i,
+                                                    unsigned j0, unsigned n_j) const
 {
-  if (i0 + ni > view_->ni() || j0 + nj > view_->nj()) return 0;
+  if (i0 + n_i > view_->ni() || j0 + n_j > view_->nj()) return 0;
 
   switch (view_->pixel_format())
   {
@@ -150,7 +150,7 @@ vil_image_view_base_sptr vil_memory_image::get_view(unsigned i0, unsigned ni,
    case  F : { \
     const vil_image_view< T > &v = static_cast<const vil_image_view< T > &>(*view_); \
     return new vil_image_view< T >(v.memory_chunk(), &v(i0,j0), \
-                                   ni, nj, v.nplanes(), \
+                                   n_i, n_j, v.nplanes(), \
                                    v.istep(), v.jstep(), v.planestep()); }
    macro(VIL_PIXEL_FORMAT_BYTE , vxl_byte )
    macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )

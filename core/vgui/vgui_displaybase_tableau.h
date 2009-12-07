@@ -8,7 +8,7 @@
 // \file
 // \brief  Tableau with display list functionality, can use any type of soview.
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
-// \date   14 Sep 99
+// \date   14 Sep 1999
 //
 //  Contains classes  vgui_displaybase_tableau  vgui_displaybase_tableau_new
 //                    vgui_displaybase_tableau_selection_callback
@@ -35,14 +35,14 @@ class vgui_event;
 struct vgui_displaybase_tableau_selection_callback
 {
   virtual ~vgui_displaybase_tableau_selection_callback() {}
-  virtual bool select(unsigned id);
-  virtual bool deselect(unsigned id);
+  virtual bool select(unsigned iden);
+  virtual bool deselect(unsigned iden);
   virtual bool deselect_all();
 };
 
 //: Struct to maintain grouping information for soviews
-struct vgui_displaybase_tableau_grouping {
-
+struct vgui_displaybase_tableau_grouping
+{
   // list of objects belonging to this group
   // duplicates entry in main objects list
   vcl_vector<vgui_soview*> objects;
@@ -84,18 +84,18 @@ class vgui_displaybase_tableau : public vgui_tableau
   void draw_soviews_select();
 
   // selections
-  bool is_selected(unsigned id);
+  bool is_selected(unsigned iden);
   vcl_vector<unsigned> const & get_selected() const { return selections; }
   vcl_vector<vgui_soview*>     get_selected_soviews() const;
-  bool select(unsigned id);
-  bool deselect(unsigned id);
+  bool select(unsigned iden);
+  bool deselect(unsigned iden);
   bool deselect_all();
 
   // highlighting
-  bool is_highlighted(unsigned id) const { return id == highlighted; }
+  bool is_highlighted(unsigned iden) const { return iden == highlighted; }
   unsigned get_highlighted() const { return highlighted; }
   vgui_soview* get_highlighted_soview();
-  bool highlight(unsigned id) { highlighted = id; return true; }
+  bool highlight(unsigned iden) { highlighted = iden; return true; }
 
   // Add soview. The user is responsible for avoiding duplicates.
   // In a Debug mode build, a warning is issued when the soview has already been
@@ -109,9 +109,9 @@ class vgui_displaybase_tableau : public vgui_tableau
   virtual void clear();
 
   // grouping
-  void set_current_grouping(vcl_string name) { current_grouping = name; }
+  void set_current_grouping(vcl_string t_name) { current_grouping = t_name; }
   vcl_string get_current_grouping() const { return current_grouping; }
-  vgui_displaybase_tableau_grouping* get_grouping_ptr( vcl_string name );
+  vgui_displaybase_tableau_grouping* get_grouping_ptr( vcl_string t_name );
   vcl_vector< vcl_string > get_grouping_names();
 
   //: Attach your own selection callback.
@@ -131,12 +131,6 @@ class vgui_displaybase_tableau : public vgui_tableau
   vcl_map< vcl_string , vgui_displaybase_tableau_grouping > groupings;
 
   vcl_string current_grouping;
-
-  // This vector appears to be unused by other classes in VXL.
-  // Hopefully whatever functionality it was initially intended
-  // to provide will instead be satisfied by the new grouping system.
-  //
-  //vcl_vector<unsigned> groups;
 
   vcl_vector<unsigned> selections;
   unsigned highlighted;

@@ -40,8 +40,8 @@ class vpdl_gaussian_sphere : public vpdl_gaussian_base<T,n>
   : impl_(var_dim) {}
 
   //: Constructor - from mean and variance
-  vpdl_gaussian_sphere(const vector& mean, const covar_type& var)
-  : impl_(mean,var) {}
+  vpdl_gaussian_sphere(const vector& mean_val, const covar_type& var)
+  : impl_(mean_val,var) {}
 
   //: Destructor
   virtual ~vpdl_gaussian_sphere() {}
@@ -115,7 +115,7 @@ class vpdl_gaussian_sphere : public vpdl_gaussian_base<T,n>
     double s2 = 1/vcl_sqrt(2*impl_.covar);
     // return zero for ill-defined box
     double prob = T(1);
-    for (unsigned int i=0; i<dim; ++i){
+    for (unsigned int i=0; i<dim; ++i) {
       if (vpdt_index(max_pt,i)<=vpdt_index(min_pt,i))
         return T(0);
       prob *= (vnl_erf(s2*(vpdt_index(max_pt,i)-vpdt_index(impl_.mean,i))) -
@@ -128,17 +128,16 @@ class vpdl_gaussian_sphere : public vpdl_gaussian_base<T,n>
   virtual const vector& mean() const { return impl_.mean; }
 
   //: Set the mean
-  virtual void set_mean(const vector& mean) { impl_.mean = mean; }
+  virtual void set_mean(const vector& mean_val) { impl_.mean = mean_val; }
 
   //: Compute the mean of the distribution.
-  virtual void compute_mean(vector& mean) const { mean = impl_.mean; }
+  virtual void compute_mean(vector& mean_val) const { mean_val = impl_.mean; }
 
   //: Access the scalar variance
   const covar_type& covariance() const { return impl_.covar; }
 
   //: Set the scalar variance
   void set_covariance(const covar_type& var) { impl_.covar = var; }
-
 
   //: Compute the covariance of the distribution.
   // Should be the identity matrix times var_

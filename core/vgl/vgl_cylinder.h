@@ -33,16 +33,16 @@ class vgl_cylinder
   vgl_cylinder(const Type v[8])
     :center_(v[0], v[1], v[2]), radius_(v[3]), length_(v[5]), orient_(vgl_vector_3d<Type> (v[6], v[7], v[8])) {}
 
-  vgl_cylinder(Type cx, Type cy, Type cz, Type radius, Type length)
-    :center_(cx, cy, cz), radius_(radius), length_(length), orient_(vgl_vector_3d<Type> (0,0,1)) {}
+  vgl_cylinder(Type cx, Type cy, Type cz, Type rad, Type len)
+    :center_(cx, cy, cz), radius_(rad), length_(len), orient_(vgl_vector_3d<Type> (0,0,1)) {}
 
-  vgl_cylinder(vgl_point_3d<Type> center, Type radius, Type length)
-    :center_(center), radius_(radius), length_(length), orient_(vgl_vector_3d<Type> (0,0,1)) {}
+  vgl_cylinder(vgl_point_3d<Type> cntr, Type rad, Type len)
+    :center_(cntr), radius_(rad), length_(len), orient_(vgl_vector_3d<Type> (0,0,1)) {}
 
-  vgl_cylinder(vgl_point_3d<Type> center, Type radius, Type length, vgl_vector_3d<Type> orient)
-    :center_(center), radius_(radius), length_(length), orient_(orient) {}
+  vgl_cylinder(vgl_point_3d<Type> cntr, Type rad, Type len, vgl_vector_3d<Type> orient)
+    :center_(cntr), radius_(rad), length_(len), orient_(orient) {}
 
-  ~vgl_cylinder(void){}
+  ~vgl_cylinder(void) {}
 
   //: getters
   vgl_point_3d<Type> center() const { return center_; }
@@ -51,9 +51,9 @@ class vgl_cylinder
   vgl_vector_3d<Type> orientation() const { return orient_; }
 
   //: setters
-  void set_center(vgl_point_3d<Type> center) { center_ = center; }
-  void set_radius(Type radius) { radius_ = radius; }
-  void set_length(Type length) { length_ = length; }
+  void set_center(vgl_point_3d<Type> cntr) { center_ = cntr; }
+  void set_radius(Type rad) { radius_ = rad; }
+  void set_length(Type len) { length_ = len; }
   void set_orientation (vgl_vector_3d<Type> orient) { orient_ = orient; }
 
   //: operations

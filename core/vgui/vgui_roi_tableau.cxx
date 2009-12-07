@@ -27,9 +27,9 @@ vgui_roi_tableau::vgui_roi_tableau()
   cropped_image_ = 0;
 }
 
-vgui_roi_tableau::vgui_roi_tableau(vil1_image const &I,char const *name,
+vgui_roi_tableau::vgui_roi_tableau(vil1_image const &I,char const *t_name,
                                    float x,float y,float w,float h)
-  : vgui_tableau(),name_(name)
+  : vgui_tableau(),name_(t_name)
 {
   cropped_image_ = vil1_crop(I,int(x+0.5),int(y+0.5),int(w+0.5),int(h+0.5));
   roi_.sx = x;
@@ -113,12 +113,12 @@ bool vgui_roi_tableau::handle(vgui_event const &e)
   if (vgui_matrix_state::gl_matrices_are_cleared()) {
     GLint vp[4];
     glGetIntegerv(GL_VIEWPORT, vp);
-    int width = vp[2];
-    int height = vp[3];
+    int wdth = vp[2];
+    int hght = vp[3];
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluOrtho2D(0, width, height, 0);
+    gluOrtho2D(0, wdth, hght, 0);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();

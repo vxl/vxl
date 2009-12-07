@@ -154,7 +154,7 @@ vidl_ffmpeg_istream
 
 bool
 vidl_ffmpeg_istream
-::seek_frame(unsigned int frame_number)
+::seek_frame(unsigned int /* frame_nr */)
 {
   return false;
 }

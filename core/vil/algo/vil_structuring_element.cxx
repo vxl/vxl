@@ -9,22 +9,22 @@
 #include <vcl_iostream.h>
 
 //: Define elements { (p_i[k],p_j[k]) }
-void vil_structuring_element::set(const vcl_vector<int>& p_i,const vcl_vector<int>& p_j)
+void vil_structuring_element::set(const vcl_vector<int>& v_p_i,const vcl_vector<int>& v_p_j)
 {
-  assert(p_i.size()==p_j.size());
-  assert(p_i.size()>0);
-  p_i_ = p_i;
-  p_j_ = p_j;
+  assert(v_p_i.size()==v_p_j.size());
+  assert(v_p_i.size()>0);
+  p_i_ = v_p_i;
+  p_j_ = v_p_j;
 
-  max_i_=min_i_ = p_i[0];
-  max_j_=min_j_ = p_j[0];
-  for (unsigned int k=1;k<p_i.size();++k)
+  max_i_=min_i_ = v_p_i[0];
+  max_j_=min_j_ = v_p_j[0];
+  for (unsigned int k=1;k<v_p_i.size();++k)
   {
-    if (p_i[k]<min_i_) min_i_=p_i[k];
-    else if (p_i[k]>max_i_) max_i_=p_i[k];
+    if (v_p_i[k]<min_i_) min_i_=v_p_i[k];
+    else if (v_p_i[k]>max_i_) max_i_=v_p_i[k];
 
-    if (p_j[k]<min_j_) min_j_=p_j[k];
-    else if (p_j[k]>max_j_) max_j_=p_j[k];
+    if (v_p_j[k]<min_j_) min_j_=v_p_j[k];
+    else if (v_p_j[k]>max_j_) max_j_=v_p_j[k];
   }
 }
 

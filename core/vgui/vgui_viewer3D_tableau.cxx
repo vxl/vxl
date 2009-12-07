@@ -25,7 +25,8 @@
 #include <vgui/vgui.h>
 #include <vgui/vgui_event.h>
 
-struct vgui_viewer3D_tableau_spin {
+struct vgui_viewer3D_tableau_spin
+{
   vgui_viewer3D_tableau *viewer;
   float delta_r[4];
   double delay;
@@ -78,31 +79,40 @@ vgui_viewer3D_tableau::~vgui_viewer3D_tableau()
 
 vcl_string vgui_viewer3D_tableau::type_name() const {return "vgui_viewer3D_tableau";}
 
-static void draw_headlight() {
-  //glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
+static void draw_headlight()
+{
+#if 0
+  glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
+#endif // 0
   glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
   GLfloat light0_pos[4]   = {  0.0, 0.0, 1.0, 0.0 };
-  //GLfloat light0_dir[4]   = {  0.0, 0.0, -1.0, 0.0 };
+#if 0
+  GLfloat light0_dir[4]   = {  0.0, 0.0, -1.0, 0.0 };
+#endif // 0
   GLfloat light0_diff[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
   GLfloat light0_amb[4] = { 0.5f, 0.5f, 0.5f, 1.0f };
   GLfloat light0_spec[4] = { 0.1f, 0.1f, 0.1f, 1.0f };
 
   glLightfv(GL_LIGHT0, GL_POSITION, light0_pos);
-  //glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, light0_dir);
-  //glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, 1080.0);
+#if 0
+  glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, light0_dir);
+  glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, 1080.0);
+#endif // 0
   glLightfv(GL_LIGHT0, GL_AMBIENT,  light0_amb);
   glLightfv(GL_LIGHT0, GL_DIFFUSE,  light0_diff);
   glLightfv(GL_LIGHT0, GL_SPECULAR,  light0_spec);
-
-  //glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 0.1);
-  //glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.0);
-  //glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0.0);
+#if 0
+  glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 0.1);
+  glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.0);
+  glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0.0);
+#endif // 0
 
   glEnable(GL_LIGHT0);
 }
 
 
-void vgui_viewer3D_tableau::setup_gl_matrices() {
+void vgui_viewer3D_tableau::setup_gl_matrices()
+{
   GLdouble vp[4];
   glGetDoublev(GL_VIEWPORT, vp); // ok
   double width = vp[2];
@@ -111,7 +121,9 @@ void vgui_viewer3D_tableau::setup_gl_matrices() {
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   gluPerspective(token.fov, width / height, 1, 1000);
-  //glOrtho(-10,10,-10,10,-20000,10000);
+#if 0
+  glOrtho(-10,10,-10,10,-20000,10000);
+#endif // 0
 
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
@@ -141,8 +153,10 @@ void vgui_viewer3D_tableau::draw_before_child()
   glEnable(GL_CULL_FACE);
   glEnable(GL_DEPTH_TEST);
   glDisable(GL_TEXTURE_2D);
-  //glColorMaterial(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE);
-  //glEnable(GL_COLOR_MATERIAL);
+#if 0
+  glColorMaterial(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE);
+  glEnable(GL_COLOR_MATERIAL);
+#endif // 0
 
   glEnable(GL_NORMALIZE);
 
@@ -184,7 +198,9 @@ void vgui_viewer3D_tableau::draw_before_child()
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
   }
 
-  //glClear(GL_DEPTH_BUFFER_BIT);
+#if 0
+  glClear(GL_DEPTH_BUFFER_BIT);
+#endif // 0
   setup_gl_matrices();
 }
 
@@ -196,27 +212,29 @@ bool vgui_viewer3D_tableau::handle(const vgui_event& e)
 
   if (this->allow_spinning && this->spinning && event.user == &vgui_viewer3D_tableau::SPIN_EVENT)
   {
-    vgui_viewer3D_tableau_spin const* spin_data = (vgui_viewer3D_tableau_spin const*)event.data;
+    vgui_viewer3D_tableau_spin const* spindata = (vgui_viewer3D_tableau_spin const*)event.data;
 
-    if (spin_data->viewer == this)
+    if (spindata->viewer == this)
     {
 #ifdef DEBUG
       vcl_cerr << "spinning\n"
                << "spin_data->delta_r = "
-               << spin_data->delta_r[0] << ' '
-               << spin_data->delta_r[1] << ' '
-               << spin_data->delta_r[2] << ' '
-               << spin_data->delta_r[3] << '\n';
+               << spindata->delta_r[0] << ' '
+               << spindata->delta_r[1] << ' '
+               << spindata->delta_r[2] << ' '
+               << spindata->delta_r[3] << '\n';
 #endif
 
-      add_quats(spin_data->delta_r, lastpos.quat, this->token.quat);
+      add_quats(spindata->delta_r, lastpos.quat, this->token.quat);
 
       // lastpos.quat = this->token.quat; // SGI CC can't do this.
       for (unsigned i=0; i<4; ++i) lastpos.quat[i] = this->token.quat[i];
 
       this->post_redraw();
 
-      //Fl::add_idle(spin_callback,spin_data);
+#if 0
+      Fl::add_idle(spin_callback,spindata);
+#endif // 0
     }
   }
 
@@ -339,8 +357,8 @@ bool vgui_viewer3D_tableau::mouse_drag(int x, int y, vgui_button button, vgui_mo
   return false;
 }
 
-bool vgui_viewer3D_tableau::mouse_up(int x, int y, vgui_button button, vgui_modifier modifier) {
-
+bool vgui_viewer3D_tableau::mouse_up(int x, int y, vgui_button button, vgui_modifier modifier)
+{
   // SPINNING
   if (this->allow_spinning && c_mouse_rotate(button, modifier))
   {
@@ -401,7 +419,8 @@ bool vgui_viewer3D_tableau::help()
   return false;
 }
 
-bool vgui_viewer3D_tableau::key_press(int, int, vgui_key key, vgui_modifier modifier) {
+bool vgui_viewer3D_tableau::key_press(int, int, vgui_key key, vgui_modifier modifier)
+{
   if (c_lock_dolly(key, modifier)) {
     lock_dolly = !lock_dolly;
     vgui::out << "viewer3D : dolly lock " << vbl_bool_ostream::on_off(lock_dolly) << vcl_endl;

@@ -26,19 +26,18 @@ class vgl_sphere_3d
    inline vgl_sphere_3d (): c_(0.0, 0.0, 0.0), r_(-1) {}
 
   //: Construct from four scalars: centre and radius.
-  inline vgl_sphere_3d(Type px, Type py, Type pz, Type radius) : c_(px, py, pz), r_(radius) {}
+  inline vgl_sphere_3d(Type px, Type py, Type pz, Type rad) : c_(px, py, pz), r_(rad) {}
 
   //: Construct from a 4-array, representing centre and radius.
   inline vgl_sphere_3d (const Type v[4]): c_(v[0], v[1], v[2]), r_(v[3]) {}
 
   //: Construct from centre point and radius.
-  vgl_sphere_3d (vgl_point_3d<Type> const& centre, Type radius): c_(centre), r_(radius) {}
+  vgl_sphere_3d (vgl_point_3d<Type> const& cntr, Type rad): c_(cntr), r_(rad) {}
 
   //: Test for equality
-  inline bool operator==(const vgl_sphere_3d<Type> &s) const
-  { return this==&s || (c_==s.c_ && r_==s.r_); }
-  inline bool operator!=(vgl_sphere_3d<Type>const& s)const
-  { return !operator==(s); }
+  inline bool operator==(const vgl_sphere_3d<Type> &s) const { return this==&s || (c_==s.c_ && r_==s.r_); }
+  //: Test for inequality
+  inline bool operator!=(vgl_sphere_3d<Type>const& s) const { return !operator==(s); }
 
   // Data Access-------------------------------------------------------------
 

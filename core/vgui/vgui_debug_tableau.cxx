@@ -5,7 +5,7 @@
 //:
 // \file
 // \author Andrew W. Fitzgibbon, Oxford RRG
-// \date   08 Oct 99
+// \date   08 Oct 1999
 // \brief  See vgui_debug_tableau.cxx for a description of this file.
 
 #include "vgui_debug_tableau.h"
@@ -15,8 +15,8 @@
 //-----------------------------------------------------------------------------
 //: Constructor - don't use this, use vgui_debug_tableau_new.
 //  Takes the one and only child of this tableau.
-vgui_debug_tableau::vgui_debug_tableau(vgui_tableau_sptr const& child):
-  vgui_wrapper_tableau(child)
+vgui_debug_tableau::vgui_debug_tableau(vgui_tableau_sptr const& child_tableau):
+  vgui_wrapper_tableau(child_tableau)
 {
   verbosity = 1;
 }

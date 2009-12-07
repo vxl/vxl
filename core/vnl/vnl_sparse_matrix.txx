@@ -307,36 +307,36 @@ void vnl_sparse_matrix<T>::add(const vnl_sparse_matrix<T>& rhs,
   for (typename vcl_vector<row>::const_iterator row_iter = elements.begin();
        row_iter != elements.end();
        ++row_iter, ++row_id)
+  {
+    // Get the row from this matrix (lhs).
+    row const & this_row = *row_iter;
+
+    // Get the new row in the result matrix.
+    row& result_row = result.elements[row_id];
+
+    // Store this into result row.
+    result_row = this_row;
+
+    // If rhs row is empty, we are done.
+    if (rhs.empty_row(row_id))
+      continue;
+
+    // Get the rhs row.
+    row const& rhs_row = rhs.elements[row_id];
+
+    // Iterate over the rhs row.
+    for (typename row::const_iterator col_iter = rhs_row.begin();
+         col_iter != rhs_row.end();
+         ++col_iter)
     {
-      // Get the row from this matrix (lhs).
-      row const & this_row = *row_iter;
+      // Get the element from the row.
+      vnl_sparse_matrix_pair<T> const& entry = *col_iter;
+      unsigned const col_id = entry.first;
 
-      // Get the new row in the result matrix.
-      row& result_row = result.elements[row_id];
-
-      // Store this into result row.
-      result_row = this_row;
-
-      // If rhs row is empty, we are done.
-      if (rhs.empty_row(row_id))
-        continue;
-
-      // Get the rhs row.
-      row const& rhs_row = rhs.elements[row_id];
-
-      // Iterate over the rhs row.
-      for (typename row::const_iterator col_iter = rhs_row.begin();
-           col_iter != rhs_row.end();
-           ++col_iter)
-        {
-          // Get the element from the row.
-          vnl_sparse_matrix_pair<T> const& entry = *col_iter;
-          unsigned const col_id = entry.first;
-
-          // So we are at (row_id,col_id) in rhs matrix.
-          result(row_id,col_id) += entry.second;
-        }
+      // So we are at (row_id,col_id) in rhs matrix.
+      result(row_id,col_id) += entry.second;
     }
+  }
 }
 
 //------------------------------------------------------------
@@ -360,36 +360,36 @@ void vnl_sparse_matrix<T>::subtract(const vnl_sparse_matrix<T>& rhs,
   for (typename vcl_vector<row>::const_iterator row_iter = elements.begin();
        row_iter != elements.end();
        ++row_iter, ++row_id)
+  {
+    // Get the row from this matrix (lhs).
+    row const& this_row = *row_iter;
+
+    // Get the new row in the result matrix.
+    row& result_row = result.elements[row_id];
+
+    // Store this into result row.
+    result_row = this_row;
+
+    // If rhs row is empty, we are done.
+    if (rhs.empty_row(row_id))
+      continue;
+
+    // Get the rhs row.
+    row const& rhs_row = rhs.elements[row_id];
+
+    // Iterate over the rhs row.
+    for (typename row::const_iterator col_iter = rhs_row.begin();
+         col_iter != rhs_row.end();
+         ++col_iter)
     {
-      // Get the row from this matrix (lhs).
-      row const& this_row = *row_iter;
+      // Get the element from the row.
+      vnl_sparse_matrix_pair<T> const& entry = *col_iter;
+      unsigned const col_id = entry.first;
 
-      // Get the new row in the result matrix.
-      row& result_row = result.elements[row_id];
-
-      // Store this into result row.
-      result_row = this_row;
-
-      // If rhs row is empty, we are done.
-      if (rhs.empty_row(row_id))
-        continue;
-
-      // Get the rhs row.
-      row const& rhs_row = rhs.elements[row_id];
-
-      // Iterate over the rhs row.
-      for (typename row::const_iterator col_iter = rhs_row.begin();
-           col_iter != rhs_row.end();
-           ++col_iter)
-        {
-          // Get the element from the row.
-          vnl_sparse_matrix_pair<T> const& entry = *col_iter;
-          unsigned const col_id = entry.first;
-
-          // So we are at (row_id,col_id) in rhs matrix.
-          result(row_id,col_id) -= entry.second;
-        }
+      // So we are at (row_id,col_id) in rhs matrix.
+      result(row_id,col_id) -= entry.second;
     }
+  }
 }
 
 //------------------------------------------------------------
@@ -434,16 +434,16 @@ void vnl_sparse_matrix<T>::diag_AtA(vnl_vector<T> & result) const
 
 template <class T>
 void vnl_sparse_matrix<T>::set_row(unsigned int r,
-                                   vcl_vector<int> const& cols,
+                                   vcl_vector<int> const& colz,
                                    vcl_vector<T> const& vals)
 {
   assert (r < rows());
-  assert (cols.size() == vals.size());
+  assert (colz.size() == vals.size());
 
   row& rw = elements[r];
-  if (rw.size() != cols.size()) rw = row(cols.size());
-  for (unsigned int i=0; i < cols.size(); ++i)
-    rw[i] = vnl_sparse_matrix_pair<T>(cols[i], vals[i]);
+  if (rw.size() != colz.size()) rw = row(colz.size());
+  for (unsigned int i=0; i < colz.size(); ++i)
+    rw[i] = vnl_sparse_matrix_pair<T>(colz[i], vals[i]);
   typedef typename vnl_sparse_matrix_pair<T>::less less;
   vcl_sort(rw.begin(), rw.end(), less());
 }
@@ -520,9 +520,9 @@ void vnl_sparse_matrix<T>::resize( int r, int c)
   elements.resize(r);
 
   // If the array has fewer columns now, we also need to cut them out
-  if (oldCs > cs_){
-    for (unsigned int r = 0; r < elements.size(); r++){
-      row& rw = elements[r];
+  if (oldCs > cs_) {
+    for (unsigned int i = 0; i < elements.size(); ++i) {
+      row& rw = elements[i];
       typename row::iterator iter;
       for (iter = rw.begin(); iter != rw.end() && (*iter).first<cs_ ; ++iter)
         /*nothing*/;
@@ -557,7 +557,8 @@ bool vnl_sparse_matrix<T>::next() const
     // itr_cur is not pointing to a entry
     itr_row = 0;
     itr_isreset = false;
-  } else {
+  }
+  else {
     // itr_cur is pointing to an entry.
     // Try to move to next entry in current row.
     itr_cur++;

@@ -3,7 +3,7 @@
 //:
 // \file
 // \author David N. McKinnon, UQ I.R.I.S
-// \date   25 Nov 00
+// \date   25 Nov 2000
 //-----------------------------------------------------------------------------
 
 #include <vcl_vector.h>
@@ -69,7 +69,8 @@ bool FMatrixCompute7Point::compute (vcl_vector<vgl_homg_point_2d<double> >& poin
                                                             &conditioned2));
       delete oldF;
     }
-  } else
+  }
+  else
     if (!compute_preconditioned(points1, points2, F))
       return false;
 
@@ -104,11 +105,9 @@ bool FMatrixCompute7Point::compute(vcl_vector<HomgPoint2D>& points1,
                                                             &conditioned2));
       delete oldF;
     }
-  } else
-    if (!compute_preconditioned(points1, points2, F))
-      return false;
-
-  return true;
+    return true;
+  }
+  else return compute_preconditioned(points1, points2, F);
 }
 
 //-----------------------------------------------------------------------------
@@ -283,7 +282,7 @@ vcl_vector<double> FMatrixCompute7Point::solve_cubic(vcl_vector<double> v)
    // At this point, a, c and d are no longer needed (c and d will be reused).
 
    if (q == 0) {
-      vcl_vector<double> v; v.push_back(my_cbrt(-2*r) - b); return v;
+      vcl_vector<double> w; w.push_back(my_cbrt(-2*r) - b); return w;
    }
 
    // With the Vieta substitution y = z+q/z this becomes z^6+2rz^3+q^3 = 0
@@ -294,7 +293,7 @@ vcl_vector<double> FMatrixCompute7Point::solve_cubic(vcl_vector<double> v)
    {
       double z  = my_cbrt(-r + vcl_sqrt(d));
       // The case z=0 is excluded since this is q==0 which is handled above
-      vcl_vector<double> v; v.push_back(z + q/z - b); return v;
+      vcl_vector<double> w; w.push_back(z + q/z - b); return w;
    }
 
    // And finally the "irreducible case" (with 3 solutions):

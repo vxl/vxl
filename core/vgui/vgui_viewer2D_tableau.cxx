@@ -38,7 +38,9 @@ const void * const vgui_viewer2D_tableau::CENTER_EVENT="x";
 
 // this is what it always was. please leave it. -- fsm.
 vgui_event_condition c_pan(vgui_MIDDLE, vgui_CTRL);
-//vgui_event_condition c_pan(vgui_LEFT, vgui_modifier(vgui_CTRL + vgui_SHIFT));
+#if 0 // was:
+vgui_event_condition c_pan(vgui_LEFT, vgui_modifier(vgui_CTRL + vgui_SHIFT));
+#endif // 0
 
 vgui_viewer2D_tableau::vgui_viewer2D_tableau(vgui_tableau_sptr const& s) :
   vgui_wrapper_tableau(s),
@@ -91,28 +93,28 @@ void vgui_viewer2D_tableau::setup_gl_matrices()
 // this routine will modify the token in such a way as to
 // effect a zoom about the point (x, y) by the given factor.
 // (x, y) are in viewport coordinates.
-void vgui_viewer2D_tableau::zoomin(float zoom_factor, int x, int y)
+void vgui_viewer2D_tableau::zoomin(float zoom_fac, int x, int y)
 {
   // this bit is easy.
-  token.scaleX *= zoom_factor;
-  token.scaleY *= zoom_factor;
+  token.scaleX *= zoom_fac;
+  token.scaleY *= zoom_fac;
 
   // this bit is tricky.
   GLint vp[4]; glGetIntegerv(GL_VIEWPORT,vp);
   float dx = (        (x-vp[0])) - token.offsetX;
   float dy = (vp[3]-1-(y-vp[1])) - token.offsetY;
 
-  float tmpx = zoom_factor*dx - dx;
-  float tmpy = zoom_factor*dy - dy;
+  float tmpx = zoom_fac*dx - dx;
+  float tmpy = zoom_fac*dy - dy;
 
   token.offsetX -= tmpx;
   token.offsetY -= tmpy;
 }
 
 
-void vgui_viewer2D_tableau::zoomout(float zoom_factor, int x, int y)
+void vgui_viewer2D_tableau::zoomout(float zoom_fac, int x, int y)
 {
-  zoomin(1.0f / zoom_factor, x, y);
+  zoomin(1.0f / zoom_fac, x, y);
 }
 
 void vgui_viewer2D_tableau::center_image(int w, int h)
@@ -181,10 +183,10 @@ bool vgui_viewer2D_tableau::handle(const vgui_event& e)
 
     return child->handle(e);
   }
-  //center the scroll bars if the image is centered
-  //normally this would be in the key press event
-  //routine, but we need to get our hands on the window
-  //and the event is not passed into the key_press method.
+  // center the scroll bars if the image is centered
+  // normally this would be in the key press event
+  // routine, but we need to get our hands on the window
+  // and the event is not passed into the key_press method.
   if (e.type ==vgui_KEY_PRESS)
     if (e.key=='c')
     {
@@ -192,9 +194,9 @@ bool vgui_viewer2D_tableau::handle(const vgui_event& e)
       vgui_window* win = adap->get_window();
       if (win)
       {
-        //current scroll pos range is [0,100]
-        //eventually we would want to get the range
-        //from the window to insure consistency
+        // current scroll pos range is [0,100]
+        // eventually we would want to get the range
+        // from the window to insure consistency
         int cpos = 50;
         win->set_hscrollbar(cpos);
         win->set_vscrollbar(cpos);
@@ -202,10 +204,10 @@ bool vgui_viewer2D_tableau::handle(const vgui_event& e)
         npos_y = cpos;
       }
     }
-  //We really want to be able to scroll the entire
-  //image through the viewport.  The token offset should be
-  //adjusted proportionally to the size of the image
-  //added routine to get image size JLM
+  // We really want to be able to scroll the entire
+  // image through the viewport.  The token offset should be
+  // adjusted proportionally to the size of the image
+  // added routine to get image size JLM
   // This deals with horizontal scroll message
   if (e.type == vgui_HSCROLL)
   {

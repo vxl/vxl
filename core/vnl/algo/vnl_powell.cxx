@@ -30,8 +30,8 @@ class vnl_powell_1dfun : public vnl_cost_function
   vnl_vector<double> x0_;
   vnl_vector<double> dx_;
   vnl_vector<double> tmpx_;
-  vnl_powell_1dfun(int n, vnl_cost_function* f, vnl_powell* p)
-   : vnl_cost_function(1), powell_(p), f_(f), n_(n), x0_(n), dx_(n), tmpx_(n) {}
+  vnl_powell_1dfun(int n, vnl_cost_function* func, vnl_powell* p)
+   : vnl_cost_function(1), powell_(p), f_(func), n_(n), x0_(n), dx_(n), tmpx_(n) {}
 
   void init(vnl_vector<double> const& x0, vnl_vector<double> const& dx)
   {
@@ -58,7 +58,6 @@ class vnl_powell_1dfun : public vnl_cost_function
 
 vnl_nonlinear_minimizer::ReturnCodes
 vnl_powell::minimize(vnl_vector<double>& p)
-  //double p[], double **xi, int n
 {
  // verbose_ = true;
   int n = p.size();

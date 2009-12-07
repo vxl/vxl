@@ -39,8 +39,8 @@ class vpdl_gaussian_indep : public vpdl_gaussian_base<T,n>
   : impl_(var_dim) {}
 
   //: Constructor - from mean and variance
-  vpdl_gaussian_indep(const vector& mean, const covar_type& var)
-  : impl_(mean,var) {}
+  vpdl_gaussian_indep(const vector& mean_val, const covar_type& var)
+  : impl_(mean_val,var) {}
 
   //: Destructor
   virtual ~vpdl_gaussian_indep() {}
@@ -108,10 +108,10 @@ class vpdl_gaussian_indep : public vpdl_gaussian_base<T,n>
   virtual const vector& mean() const { return impl_.mean; }
 
   //: Set the mean
-  virtual void set_mean(const vector& mean) { impl_.mean = mean; }
+  virtual void set_mean(const vector& mean_val) { impl_.mean = mean_val; }
 
   //: Compute the mean of the distribution.
-  virtual void compute_mean(vector& mean) const { mean = impl_.mean; }
+  virtual void compute_mean(vector& mean_val) const { mean_val = impl_.mean; }
 
   //: Access the vector of variance
   const covar_type& covariance() const { return impl_.covar; }

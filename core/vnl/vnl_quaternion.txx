@@ -49,23 +49,23 @@
 // rotation axis.
 
 template <class T>
-vnl_quaternion<T>::vnl_quaternion (T x, T y, T z, T r)
+vnl_quaternion<T>::vnl_quaternion (T tx, T ty, T tz, T rea)
 {
-  this->operator[](0) = x;  // 3 first elements are
-  this->operator[](1) = y;  // imaginary parts
-  this->operator[](2) = z;
-  this->operator[](3) = r;  // last element is real part
+  this->operator[](0) = tx;  // 3 first elements are
+  this->operator[](1) = ty;  // imaginary parts
+  this->operator[](2) = tz;
+  this->operator[](3) = rea;  // last element is real part
 }
 
 //: Creates a quaternion from the normalized axis direction and the angle of rotation in radians.
 
 template <class T>
-vnl_quaternion<T>::vnl_quaternion(vnl_vector_fixed<T,3> const& axis, double angle)
+vnl_quaternion<T>::vnl_quaternion(vnl_vector_fixed<T,3> const& Axis, double Angle)
 {
-  double a = angle * 0.5;  // half angle
+  double a = Angle * 0.5;  // half angle
   T s = T(vcl_sin(a));
   for (int i = 0; i < 3; i++)            // imaginary vector is sine of
-    this->operator[](i) = T(s * axis(i));// half angle multiplied with axis
+    this->operator[](i) = T(s * Axis(i));// half angle multiplied with axis
   this->operator[](3) = T(vcl_cos(a));   // real part is cosine of half angle
 }
 
@@ -116,19 +116,22 @@ vnl_quaternion<T>::vnl_quaternion(vnl_matrix_fixed<T,3,3> const& rot)
     this->y() = (rot(2,0) - rot(0,2)) / r4;     // off diagonal terms of
     this->z() = (rot(0,1) - rot(1,0)) / r4;     // rotation matrix.
     this->r() = r4 / 4;
-  } else if (xx == max) {
+  }
+  else if (xx == max) {
     T x4 = T(vcl_sqrt(xx * 4.0));
     this->x() = x4 / 4;
     this->y() = (rot(0,1) + rot(1,0)) / x4;
     this->z() = (rot(0,2) + rot(2,0)) / x4;
     this->r() = (rot(1,2) - rot(2,1)) / x4;
-  } else if (yy == max) {
+  }
+  else if (yy == max) {
     T y4 = T(vcl_sqrt(yy * 4.0));
     this->x() = (rot(0,1) + rot(1,0)) / y4;
     this->y() =  y4 / 4;
     this->z() = (rot(1,2) + rot(2,1)) / y4;
     this->r() = (rot(2,0) - rot(0,2)) / y4;
-  } else {
+  }
+  else {
     T z4 = T(vcl_sqrt(zz * 4.0));
     this->x() = (rot(0,2) + rot(2,0)) / z4;
     this->y() = (rot(1,2) + rot(2,1)) / z4;
@@ -288,10 +291,10 @@ vnl_quaternion<T> vnl_quaternion<T>::operator* (vnl_quaternion<T> const& rhs) co
 template <class T>
 vnl_vector_fixed<T,3> vnl_quaternion<T>::rotate(vnl_vector_fixed<T,3> const& v) const
 {
-  T r = this->real();
+  T rea = this->real();
   vnl_vector_fixed<T,3> i = this->imaginary();
   vnl_vector_fixed<T,3> i_x_v(vnl_cross_3d(i, v));
-  return v + i_x_v * T(2*r) - vnl_cross_3d(i_x_v, i) * T(2);
+  return v + i_x_v * T(2*rea) - vnl_cross_3d(i_x_v, i) * T(2);
 }
 
 #undef VNL_QUATERNION_INSTANTIATE

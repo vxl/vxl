@@ -44,11 +44,11 @@ class vgl_line_2d
 
   //: Construct a vgl_line_2d from its equation, three Types.
   //  The values of a and b should not be both zero.
-  inline vgl_line_2d(Type a, Type b, Type c) :a_(a),b_(b),c_(c){assert(a||b);}
+  inline vgl_line_2d(Type ta, Type tb, Type tc) :a_(ta),b_(tb),c_(tc) { assert(ta||tb); }
 
   //: Construct from its equation, a 3-vector.
   //  The values v[0] and v[1] should not be both zero.
-  inline vgl_line_2d(const Type v[3]):a_(v[0]),b_(v[1]),c_(v[2]){assert(a_||b_);}
+  inline vgl_line_2d(const Type v[3]):a_(v[0]),b_(v[1]),c_(v[2]) { assert(a_||b_); }
 
   //: Construct from homogeneous description of line
   //  The line l should not be the line at infinity.
@@ -77,7 +77,7 @@ class vgl_line_2d
            (a()*l.c()==c()*l.a() && b()*l.c()==c()*l.b() && b()*l.a()==a()*l.b());
   }
 
-  inline bool operator!=(vgl_line_2d<Type>const& other)const{return !operator==(other);}
+  inline bool operator!=(vgl_line_2d<Type>const& other) const { return !operator==(other); }
 
   //: angle with the horizontal line y=0, measured in radians.
   //  Returns values between -pi and pi, i.e., the lines x-y=0 and y-x=0
@@ -114,7 +114,7 @@ class vgl_line_2d
   //: Set a b c.
   //  The values of a and b should not be both zero.
   //  Note that it does not make sense to set a, b or c separately
-  inline void set (Type a, Type b, Type c){ assert(a||b); a_=a; b_=b; c_=c; }
+  inline void set(Type ta, Type tb, Type tc) { assert(ta||tb); a_=ta; b_=tb; c_=tc; }
 
   //: Return true iff this line is the line at infinity
   //  This always returns "false"

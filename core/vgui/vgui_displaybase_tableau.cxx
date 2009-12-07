@@ -5,7 +5,7 @@
 //:
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
-// \date   14 Sep 99
+// \date   14 Sep 1999
 // \brief  See vgui_displaybase_tableau.h for a description of this file.
 
 #include "vgui_displaybase_tableau.h"
@@ -84,7 +84,8 @@ void vgui_displaybase_tableau::add(vgui_soview* object)
     else
       it->second.objects.push_back( object );
 #ifndef NDEBUG
-  } else
+  }
+  else
     vcl_cerr << "Warning: attempt to add an soview twice.\n";
 #endif
 }
@@ -117,7 +118,7 @@ void vgui_displaybase_tableau::remove(vgui_soview*& object)
         groupings.erase( it );
       }
       delete object;
-      break; //found obj, stop iterating
+      break; // found obj, stop iterating
     }
   }
 }
@@ -254,9 +255,9 @@ bool vgui_displaybase_tableau::handle(const vgui_event& e)
     return vgui_tableau::handle(e);
 }
 
-bool vgui_displaybase_tableau::is_selected(unsigned id)
+bool vgui_displaybase_tableau::is_selected(unsigned iden)
 {
-  vcl_vector<unsigned>::iterator result = vcl_find(selections.begin(), selections.end(), id);
+  vcl_vector<unsigned>::iterator result = vcl_find(selections.begin(), selections.end(), iden);
   return result != selections.end();
 }
 
@@ -279,47 +280,51 @@ vcl_vector<unsigned> vgui_displaybase_tableau::get_all_ids() const
   return ids;
 }
 
-bool vgui_displaybase_tableau::select(unsigned id)
+bool vgui_displaybase_tableau::select(unsigned iden)
 {
-  vcl_vector<unsigned>::iterator result = vcl_find(selections.begin(), selections.end(), id);
+  vcl_vector<unsigned>::iterator result = vcl_find(selections.begin(), selections.end(), iden);
   if (result == selections.end())
   {
     // add selection to vcl_list
-    selections.push_back(id);
+    selections.push_back(iden);
 
     // notify so's observers
-    vgui_soview* so = vgui_soview::id_to_object(id);
+    vgui_soview* so = vgui_soview::id_to_object(iden);
 
     if ( so->get_selectable())
     {
       vgui_message msg;
-      //msg.text = "soview select";
+#if 0
+      msg.text = "soview select";
+#endif // 0
       msg.user = (void const*) &vgui_soview::msg_select;
       so->notify(msg);
 
-      if (cb_) cb_->select(id);
+      if (cb_) cb_->select(iden);
     }
   }
 
   return true;
 }
 
-bool vgui_displaybase_tableau::deselect(unsigned id)
+bool vgui_displaybase_tableau::deselect(unsigned iden)
 {
-  vcl_vector<unsigned>::iterator result = vcl_find(selections.begin(), selections.end(), id);
+  vcl_vector<unsigned>::iterator result = vcl_find(selections.begin(), selections.end(), iden);
   if (result != selections.end())
   {
     // remove selection from vcl_list
     selections.erase(result);
 
     // notify so's observers
-    vgui_soview* so = vgui_soview::id_to_object(id);
+    vgui_soview* so = vgui_soview::id_to_object(iden);
     vgui_message msg;
-    //msg.text = "soview deselect";
+#if 0
+    msg.text = "soview deselect";
+#endif // 0
     msg.user = (void const*) &vgui_soview::msg_deselect;
     so->notify(msg);
 
-    if (cb_) cb_->deselect(id);
+    if (cb_) cb_->deselect(iden);
   }
 
   return true;
@@ -336,15 +341,15 @@ bool vgui_displaybase_tableau::deselect_all()
   for (vcl_vector<unsigned>::iterator s_iter = oldselections.begin();
        s_iter != oldselections.end(); ++s_iter )
   {
-    unsigned id = *s_iter;
+    unsigned iden = *s_iter;
 
     // notify so's observers
-    vgui_soview* so = vgui_soview::id_to_object(id);
+    vgui_soview* so = vgui_soview::id_to_object(iden);
     vgui_message msg;
     msg.user = (void const*)&vgui_soview::msg_deselect;
     so->notify(msg);
 
-    if (cb_) cb_->deselect(id);
+    if (cb_) cb_->deselect(iden);
   }
 
   selections.clear();
@@ -377,9 +382,9 @@ vgui_soview* vgui_displaybase_tableau::contains_hit(vcl_vector<unsigned> names)
   return 0;
 }
 
-vgui_displaybase_tableau_grouping* vgui_displaybase_tableau::get_grouping_ptr( vcl_string name )
+vgui_displaybase_tableau_grouping* vgui_displaybase_tableau::get_grouping_ptr( vcl_string t_name )
 {
-  vcl_map< vcl_string , vgui_displaybase_tableau_grouping >::iterator it = groupings.find( name );
+  vcl_map< vcl_string , vgui_displaybase_tableau_grouping >::iterator it = groupings.find( t_name );
   if ( it != groupings.end() )
     return & it->second;
   else

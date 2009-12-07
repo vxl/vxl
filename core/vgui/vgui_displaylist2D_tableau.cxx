@@ -5,7 +5,7 @@
 //:
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
-// \date   14 Sep 99
+// \date   14 Sep 1999
 // \brief  See vgui_displaylist2D_tableau.h for a description of this file.
 
 #include "vgui_displaylist2D_tableau.h"
@@ -35,12 +35,12 @@ bool vgui_displaylist2D_tableau::handle(const vgui_event& e)
 
   if (e.type == vgui_OVERLAY_DRAW)
   {
-    unsigned highlighted = this->get_highlighted();
-    if (highlighted)
+    unsigned hghlghted = this->get_highlighted();
+    if (hghlghted)
     {
-      vgui_soview* so = vgui_soview::id_to_object(highlighted);
+      vgui_soview* so = vgui_soview::id_to_object(hghlghted);
       vgui_style_sptr style = so->get_style();
-      if( style ) {
+      if ( style ) {
         style->apply_point_size();
         style->apply_line_width();
       }

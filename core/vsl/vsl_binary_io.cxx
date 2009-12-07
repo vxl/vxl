@@ -437,7 +437,7 @@ static const unsigned short vsl_magic_number_part_2=0x472b;
 // The stream (os) must be open (i.e. ready to be written to) so that the
 // IO version number can be written by this constructor.
 // User is responsible for deleting os after deleting the adaptor
-vsl_b_ostream::vsl_b_ostream(vcl_ostream *os): os_(os)
+vsl_b_ostream::vsl_b_ostream(vcl_ostream *o_s): os_(o_s)
 {
   assert(os_ != 0);
   vsl_b_write_uint_16(*this, version_no_);
@@ -557,7 +557,7 @@ void vsl_b_ofstream::close()
 // The stream (is) must be open (i.e. ready to be read from) so that the
 // IO version number can be read by this constructor.
 // User is responsible for deleting is after deleting the adaptor
-vsl_b_istream::vsl_b_istream(vcl_istream *is): is_(is)
+vsl_b_istream::vsl_b_istream(vcl_istream *i_s): is_(i_s)
 {
   assert(is_ != 0);
   if (!(*is_)) return;

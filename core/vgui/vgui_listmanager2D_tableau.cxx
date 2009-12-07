@@ -5,7 +5,7 @@
 //:
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
-// \date   21 Oct 99
+// \date   21 Oct 1999
 // \brief  See vgui_listmanager2D_tableau.h for a description of this file.
 
 #include "vgui_listmanager2D_tableau.h"
@@ -27,7 +27,9 @@
 
 
 vgui_listmanager2D_tableau::vgui_listmanager2D_tableau():
-  //highlight_list(0),
+#if 0
+  highlight_list(0),
+#endif // 0
   highlight_so(0)
 {
 }
@@ -263,7 +265,6 @@ bool vgui_listmanager2D_tableau::motion(int x, int y)
     so->draw();
   }
 
-
   if (closest_so)
   {
 #ifdef DEBUG
@@ -329,10 +330,10 @@ bool vgui_listmanager2D_tableau::key_press(int /*x*/, int /*y*/, vgui_key key, v
     text[0] = key;
     int num = atoi(text);
 
-    bool active = this->is_active(num-1);
-    bool visible = this->is_visible(num-1);
+    bool isactive = this->is_active(num-1);
+    bool isvisible = this->is_visible(num-1);
 
-    if (active)
+    if (isactive)
     {
       this->set_active(num-1, false);
       this->set_visible(num-1, false);
@@ -344,7 +345,7 @@ bool vgui_listmanager2D_tableau::key_press(int /*x*/, int /*y*/, vgui_key key, v
         highlight_so = 0;
       }
     }
-    else if (visible)
+    else if (isvisible)
     {
       this->set_active(num-1, true);
       this->set_visible(num-1, true);

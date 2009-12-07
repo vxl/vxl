@@ -34,8 +34,8 @@ class vpdl_kernel_base : public vpdl_multi_cmp_dist<T,n>
   vpdl_kernel_base()  {}
 
   // Constructor from sample points
-  vpdl_kernel_base(const vcl_vector<vector>& samples)
-  : samples_(samples) {}
+  vpdl_kernel_base(const vcl_vector<vector>& samplez)
+  : samples_(samplez) {}
 
   //: Return the number of components in the mixture
   unsigned int num_components() const { return samples_.size(); }
@@ -63,9 +63,9 @@ class vpdl_kernel_base : public vpdl_multi_cmp_dist<T,n>
   }
 
   //: Set the collection of sample points
-  virtual void set_samples(const vcl_vector<vector>& samples)
+  virtual void set_samples(const vcl_vector<vector>& samplez)
   {
-    samples_ = samples;
+    samples_ = samplez;
   }
 
   //: Access the sample points
@@ -84,7 +84,7 @@ class vpdl_kernel_base : public vpdl_multi_cmp_dist<T,n>
     if (samples_.empty())
       return;
     typedef typename vcl_vector<vector>::const_iterator samp_itr;
-    for (samp_itr s = samples_.begin(); s != samples_.end(); ++s){
+    for (samp_itr s = samples_.begin(); s != samples_.end(); ++s) {
       mean += *s;
     }
     mean /= T(samples_.size());
@@ -112,8 +112,8 @@ class vpdl_kernel_fbw_base : public vpdl_kernel_base<T,n>
   : bandwidth_(T(1)) {}
 
   // Constructor from sample points and a bandwidth
-  vpdl_kernel_fbw_base(const vcl_vector<vector>& samples, T bandwidth = T(1))
-  : vpdl_kernel_base<T,n>(samples), bandwidth_(bandwidth){}
+  vpdl_kernel_fbw_base(const vcl_vector<vector>& samplez, T bandwid = T(1))
+  : vpdl_kernel_base<T,n>(samplez), bandwidth_(bandwid) {}
 
   //: Access the bandwidth
   T bandwidth() const { return bandwidth_; }
@@ -154,9 +154,9 @@ class vpdl_kernel_vbw_base : public vpdl_kernel_base<T,n>
   : vpdl_kernel_base<T,n>(var_dim) {}
 
   // Constructor from sample points and bandwidths
-  vpdl_kernel_vbw_base(const vcl_vector<vector>& samples,
-                       const vcl_vector<T>& bandwidths)
-  : vpdl_kernel_base<T,n>(samples), bandwidths_(bandwidths){}
+  vpdl_kernel_vbw_base(const vcl_vector<vector>& samplez,
+                       const vcl_vector<T>& bandwidthz)
+  : vpdl_kernel_base<T,n>(samplez), bandwidths_(bandwidthz) {}
 
   //: Add a new sample point
   virtual void add_sample(const vector& s)
@@ -180,20 +180,20 @@ class vpdl_kernel_vbw_base : public vpdl_kernel_base<T,n>
   }
 
   //: Set the collection of sample points
-  virtual void set_samples(const vcl_vector<vector>& samples)
+  virtual void set_samples(const vcl_vector<vector>& samplez)
   {
-    vpdl_kernel_base<T,n>::set_samples(samples);
+    vpdl_kernel_base<T,n>::set_samples(samplez);
     bandwidths_.clear();
-    bandwidths.resize(samples.size(),T(1));
+    bandwidths_.resize(samplez.size(),T(1));
   }
 
   //: Set the collection of sample points and bandwidths
-  virtual void set_samples(const vcl_vector<vector>& samples,
-                           const vcl_vector<T>& bandwidths)
+  virtual void set_samples(const vcl_vector<vector>& samplez,
+                           const vcl_vector<T>& bandwidthz)
   {
-    assert(samples.size() == bandwidths.size());
-    vpdl_kernel_base<T,n>::set_samples(samples);
-    bandwidths_ = bandwidths;
+    assert(samplez.size() == bandwidthz.size());
+    vpdl_kernel_base<T,n>::set_samples(samplez);
+    bandwidths_ = bandwidthz;
   }
 
   //: Access the bandwidths

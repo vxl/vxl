@@ -210,33 +210,33 @@ class vpdt_mog_lee_updater : public vpdt_mog_updater<mog_type>
   {
     const unsigned int mix_nc = mix.num_components();
     double sum_p = 0.0;
-    vcl_vector<vcl_pair<unsigned int,double> > matches;
+    vcl_vector<vcl_pair<unsigned int,double> > matchez;
     // find the square distance to all components, count those below gt2_
     for (unsigned int i=0; i<mix_nc; ++i) {
       const gaussian_type& g = mix.distribution(i);
       double sqr_dist = g.sqr_mahal_dist(sample);
       if (sqr_dist < gt2_)
-        matches.push_back(vcl_pair<unsigned int,double>(i,sqr_dist));
+        matchez.push_back(vcl_pair<unsigned int,double>(i,sqr_dist));
     }
     // if only one match, it has prob 1
-    if (matches.size() == 1){
-      matches[0].second = 1.0;
+    if (matchez.size() == 1) {
+      matchez[0].second = 1.0;
     }
     // find the probability of each match
-    else if (matches.size() > 1) {
-      for (unsigned int j=0; j<matches.size(); ++j) {
-        unsigned int& i = matches[j].first;
-        double& p = matches[j].second;
+    else if (matchez.size() > 1) {
+      for (unsigned int j=0; j<matchez.size(); ++j) {
+        unsigned int& i = matchez[j].first;
+        double& p = matchez[j].second;
         const gaussian_type& g = mix.distribution(i);
         p = mix.weight(i) * g.norm_const() * vcl_exp(-p/2);
         sum_p += p;
       }
       // normalize
-      for (unsigned int j=0; j<matches.size(); ++j) {
-        matches[j].second /= sum_p;
+      for (unsigned int j=0; j<matchez.size(); ++j) {
+        matchez[j].second /= sum_p;
       }
     }
-    return matches;
+    return matchez;
   }
 
   //: Apply a winner-take-all strategy to the matches.
@@ -246,7 +246,7 @@ class vpdt_mog_lee_updater : public vpdt_mog_updater<mog_type>
     double max_p = m[0].second;
     unsigned int max_j = 0;
     for (unsigned int j=1; j<m.size(); ++j) {
-      if (m[j].second > max_p){
+      if (m[j].second > max_p) {
         max_p = m[j].second;
         max_j = j;
       }
@@ -260,7 +260,7 @@ class vpdt_mog_lee_updater : public vpdt_mog_updater<mog_type>
   void update( mog_type& mix, const F& sample, T alpha ) const
   {
     const unsigned int mix_nc = mix.num_components();
-    if (mix_nc == 0){
+    if (mix_nc == 0) {
       insert(mix,sample,alpha);
       return;
     }
@@ -272,7 +272,7 @@ class vpdt_mog_lee_updater : public vpdt_mog_updater<mog_type>
       if (use_winner_take_all_ && m.size() > 1)
         winner_take_all(m);
       T w_inc = alpha / ((T(1)-alpha)*mix.norm_const());
-      for (unsigned int j=0; j<m.size(); ++j){
+      for (unsigned int j=0; j<m.size(); ++j) {
         unsigned int i = m[j].first;
         double p = m[j].second;
         gaussian_type& g = mix.distribution(i);
@@ -376,7 +376,7 @@ class vpdt_mog_lm_updater : public vpdt_mog_updater<mog_type>
       insert(mix,sample,alpha);
     }
     // scale down weights for a moving window effect
-    if (tw > window_size_){
+    if (tw > window_size_) {
       T scale = window_size_ / tw;
       const unsigned int mix_nc = mix.num_components();
       for (unsigned int i=0; i<mix_nc; ++i) {

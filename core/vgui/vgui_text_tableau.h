@@ -8,7 +8,7 @@
 // \file
 // \brief  Tableau for rendering text.
 // \author Philip C. Pritchett, RRG, University of Oxford
-// \date   19 Oct 99
+// \date   19 Oct 1999
 //
 //  Contains classes  vgui_text_tableau  vgui_text_tableau_new
 //
@@ -64,25 +64,25 @@ class vgui_text_tableau : public vgui_tableau
   void set_size( unsigned sz );
 
   //: Return the x-coordinate of the text associated to given handle.
-  float get_posx(int handle) const;
+  float get_posx(int hndl) const;
 
   //: Return the y-coordinate of the text associated to given handle.
-  float get_posy(int handle) const;
+  float get_posy(int hndl) const;
 
   //: Return the text associated to the given handle.
-  vcl_string const &get_text(int handle) const;
+  vcl_string const &get_text(int hndl) const;
 
   //: Move text associated to given handle to the given x,y position.
-  void move(int handle, float nx, float ny);
+  void move(int hndl, float nx, float ny);
 
   //: Change the text associated to given handle to the given new text.
-  void change(int handle, char const *ntext);
+  void change(int hndl, char const *ntext);
 
   //: Change the text associated to given handle to the given new vcl_string.
-  void change(int handle, vcl_string const &ntext) { change(handle, ntext.c_str()); }
+  void change(int hndl, vcl_string const &ntext) { change(hndl, ntext.c_str()); }
 
   //: Delete text associated to given handle from the display.
-  void remove(int handle);
+  void remove(int hndl);
 
   //: Handles all events sent to this tableau.
   //  In particular, uses draw events to render the text.

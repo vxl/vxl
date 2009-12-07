@@ -72,11 +72,11 @@ struct example_polygon_tableau : public vgui_tableau
       glColor3f(0, 1, 0); // green
       glBegin(GL_POINTS);
       while (si.next()) {
-        int y = si.scany();
+        int yi = si.scany();
         int x0 = si.startx();
         int x1 = si.endx();
-        for (int x = x0; x<=x1; ++x)
-          glVertex2f(x, y);
+        for (int xi = x0; xi<=x1; ++xi)
+          glVertex2f(xi, yi);
       }
       glEnd();
 

@@ -41,7 +41,7 @@ void FManifoldProject::set_F(const FMatrix& Fobj)
   // Top left corner of F
   vnl_double_2x2 f22 = F_.extract(2,2);
 
-  // A = 0.5*[O f22'; f22 O];
+  // A := 0.5*[O f22'; f22 O];
   A_.fill(0.0);
   A_.update(0.5*f22.transpose(), 0, 2);
   A_.update(0.5*f22, 2, 0);
@@ -53,20 +53,23 @@ void FManifoldProject::set_F(const FMatrix& Fobj)
   // Compute eig(A) to translate and rotate the quadric
   vnl_symmetric_eigensystem<double>  eig(A_);
 
-  //vcl_cerr << vnl_svd<double>(F_);
-  //MATLABPRINT(F_);
-  //MATLABPRINT(eig.D);
+#ifdef DEBUG
+  vcl_cerr << vnl_svd<double>(F_);
+  MATLABPRINT(F_);
+  MATLABPRINT(eig.D);
+#endif // DEBUG
 
   // If all eigs are 0, had an affine F
   affine_F_ = eig.D(3,3) < 1e-6;
   if (affine_F_) {
-    ///vcl_cerr << "FManifoldProject: Affine F = " << F_ << vcl_endl;
+#ifdef DEBUG
+    vcl_cerr << "FManifoldProject: Affine F = " << F_ << vcl_endl;
+#endif // DEBUG
     double s = 1.0 / b.magnitude();
     t_ = b * s;
     d_[0] = c * s;
   }
   else {
-
     // Translate Quadric so that b = 0. (Translates to the epipoles)
     t_ = -0.5 * eig.solve(b);
 
@@ -164,9 +167,6 @@ double FManifoldProject::correct(double   x1, double   y1, double   x2, double  
     double d = d_[0];
 
     double distance = (dot_product(n, p) + d);
-    p -= n * distance;
-
-    /// p -= n * (dot_product(n, p) + d);
     *ox1 = p[0];
     *oy1 = p[1];
     *ox2 = p[2];
@@ -252,9 +252,9 @@ double FManifoldProject::correct(double   x1, double   y1, double   x2, double  
 
     // Paranoia check
     {
-      HomgPoint2D x1(X[0], X[1]);
-      HomgPoint2D x2(X[2], X[3]);
-      double EPIDIST = HomgOperator2D::perp_dist_squared(x2, HomgLine2D(F_*x1.get_vector()));
+      HomgPoint2D X1(X[0], X[1]);
+      HomgPoint2D X2(X[2], X[3]);
+      double EPIDIST = HomgOperator2D::perp_dist_squared(X2, HomgLine2D(F_*X1.get_vector()));
       if (0 && EPIDIST > 1e-12) {
         // This can happen in reasonable circumstances -- notably when one
         // epipole is at infinity.
@@ -282,7 +282,8 @@ double FManifoldProject::correct(double   x1, double   y1, double   x2, double  
     *oy1 = y1;
     *ox2 = x2;
     *oy2 = y2;
-  } else {
+  }
+  else {
     *ox1 = Xmin[0];
     *oy1 = Xmin[1];
     *ox2 = Xmin[2];

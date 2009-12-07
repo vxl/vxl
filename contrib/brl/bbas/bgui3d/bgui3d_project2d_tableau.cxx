@@ -116,12 +116,12 @@ bgui3d_project2d_tableau::set_camera(const vpgl_proj_camera<double>& cam)
     R[2][0] = r3[0];  R[2][1] = r3[1];  R[2][2] = r3[2];
   }
   // Code for perspective camera:
-  else{
+  else {
     // make the camera right-handed
-    vnl_double_3x4 cam = camera;
-    if (vnl_det(vnl_double_3x3(cam.extract(3,3))) < 0)
-      cam *= -1.0;
-    if (!bgui3d_decompose_camera(cam, K, R, t)){
+    vnl_double_3x4 cmr = camera;
+    if (vnl_det(vnl_double_3x3(cmr.extract(3,3))) < 0)
+      cmr *= -1.0;
+    if (!bgui3d_decompose_camera(cmr, K, R, t)) {
       vcl_cerr << "decomposition error\n\n";
       return false;
     }
@@ -166,7 +166,7 @@ bgui3d_project2d_tableau::camera() const
   vgl_rotation_3d<double> R(mm.extract(3,3).transpose());
   vgl_point_3d<double> t(-mm[3][0], -mm[3][1], -mm[3][2]);
   t = R.inverse()*t;
-  if (camera_z_[2][2] != 0){
+  if (camera_z_[2][2] != 0) {
     vpgl_calibration_matrix<double> K(camera_z_.extract(3,3));
     return vcl_auto_ptr<vpgl_proj_camera<double> >
         ( new vpgl_perspective_camera<double>(K,t,R) );
@@ -201,7 +201,7 @@ bool
 bgui3d_project2d_tableau::handle(const vgui_event& e)
 {
   // Handle draw events
-  if ( e.type == vgui_DRAW || e.type == vgui_DRAW_OVERLAY ){
+  if ( e.type == vgui_DRAW || e.type == vgui_DRAW_OVERLAY ) {
     // Store state, but don't rely on GL stacks since they might be full
     double P[16] , M[16];
     glGetDoublev(GL_PROJECTION_MATRIX, P);

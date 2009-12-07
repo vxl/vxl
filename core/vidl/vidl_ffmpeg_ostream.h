@@ -34,8 +34,8 @@ class vidl_ffmpeg_ostream
   vidl_ffmpeg_ostream();
 
   //: Constructor - opens a stream
-  vidl_ffmpeg_ostream(const vcl_string& filename,
-                      const vidl_ffmpeg_ostream_params& params);
+  vidl_ffmpeg_ostream(const vcl_string& filenam,
+                      const vidl_ffmpeg_ostream_params& parms);
 
   //: Destructor
   virtual ~vidl_ffmpeg_ostream();
@@ -54,17 +54,16 @@ class vidl_ffmpeg_ostream
   virtual bool write_frame(const vidl_frame_sptr& frame);
 
   //: Set the filename
-  void set_filename(const vcl_string& filename) { filename_ = filename; }
+  void set_filename(const vcl_string& filenam) { filename_ = filenam; }
 
   //: Set the parameters
-  void set_params(const vidl_ffmpeg_ostream_params& params) { params_ = params; }
+  void set_params(const vidl_ffmpeg_ostream_params& parms) { params_ = parms; }
 
   //: Access the filename
   vcl_string filename() const { return filename_; }
 
   //: Access the parameters
   const vidl_ffmpeg_ostream_params& params() const { return params_; }
-
 
  private:
   //: The private implementation (PIMPL) details

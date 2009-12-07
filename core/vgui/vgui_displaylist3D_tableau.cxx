@@ -5,7 +5,7 @@
 //:
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
-// \date   14 Sep 99
+// \date   14 Sep 1999
 // \brief  See vgui_displaylist3D_tableau.h for a description of this file.
 
 #include "vgui_displaylist3D_tableau.h"
@@ -50,12 +50,12 @@ void vgui_displaylist3D_tableau::get_hits(float x, float y, vcl_vector<unsigned>
 
     for (vcl_vector<unsigned>::iterator n_iter = names.begin();
          n_iter != names.end(); ++n_iter) {
-      unsigned name = *n_iter;
+      unsigned t_name = *n_iter;
 
       for (vcl_vector<vgui_soview*>::iterator so_iter = this->objects.begin();
            so_iter != this->objects.end(); ++so_iter) {
-        if ((*so_iter)->get_id() == name) {
-          my_hits.push_back(name);
+        if ((*so_iter)->get_id() == t_name) {
+          my_hits.push_back(t_name);
           break;
         }
       }// for  display

@@ -5,7 +5,7 @@
 //:
 // \file
 // \author Geoffrey Cross, Oxford RRG
-// \date   03 Nov 99
+// \date   03 Nov 1999
 // \brief  See vgui_loader_tableau.h for a description of this file.
 
 #include "vgui_loader_tableau.h"
@@ -19,12 +19,14 @@ vcl_string vgui_loader_tableau::type_name() const
 }
 
 // Default ctor
-vgui_loader_tableau::vgui_loader_tableau( vgui_tableau_sptr const&child)
-  : vgui_wrapper_tableau( child),
-    projectionmatrixloaded( false),
-    modelviewmatrixloaded( false)
-    //projectionmatrixt(4,4),
-    //modelviewmatrixt(4,4)
+vgui_loader_tableau::vgui_loader_tableau(vgui_tableau_sptr const& child_tableau)
+  : vgui_wrapper_tableau( child_tableau)
+  , projectionmatrixloaded(false)
+  , modelviewmatrixloaded(false)
+#if 0
+  , projectionmatrixt(4,4)
+  , modelviewmatrixt(4,4)
+#endif // 0
 {
 }
 

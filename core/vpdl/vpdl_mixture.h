@@ -27,13 +27,13 @@
 template<class T, unsigned int n=0>
 class vpdl_mixture : public vpdl_multi_cmp_dist<T,n>
 {
-public:
+ public:
   //: the data type used for vectors
   typedef typename vpdt_field_default<T,n>::type vector;
   //: the data type used for matrices
   typedef typename vpdt_field_traits<vector>::matrix_type matrix;
 
-private:
+ private:
   //: A struct to hold the component distributions and weights
   // This class is private and should not be used outside of the mixture.
   // Dynamic memory is used to allow for polymorphic distributions.
@@ -47,7 +47,7 @@ private:
     component(const vpdl_distribution<T,n>& d, const T& w = T(0) )
       : distribution(d.clone()), weight(w) {}
     //: Copy Constructor
-    component(const component& other) 
+    component(const component& other)
       : distribution(other.distribution->clone()), weight(other.weight) {}
 
     //: Used to sort by decreasing weight
@@ -85,7 +85,7 @@ private:
   //: The vector of components
   vcl_vector<component*> components_;
 
-public:
+ public:
 
   //: Default Constructor
   vpdl_mixture() {}
@@ -95,7 +95,7 @@ public:
     : components_(other.components_.size(),NULL)
   {
     // deep copy of the data
-    for (unsigned int i=0; i<components_.size(); ++i){
+    for (unsigned int i=0; i<components_.size(); ++i) {
       components_[i] = new component(*other.components_[i]);
     }
   }
@@ -103,7 +103,7 @@ public:
   // Destructor
   ~vpdl_mixture()
   {
-    for (unsigned int i=0; i<components_.size(); ++i){
+    for (unsigned int i=0; i<components_.size(); ++i) {
       delete components_[i];
     }
   }
@@ -111,18 +111,18 @@ public:
   //: Assignment operator
   vpdl_mixture<T,n>& operator= (const vpdl_mixture<T,n>& rhs)
   {
-    if (this != &rhs){
-      for (unsigned int i=0; i<components_.size(); ++i){
+    if (this != &rhs) {
+      for (unsigned int i=0; i<components_.size(); ++i) {
         delete components_[i];
       }
       components_.clear();
-      for (unsigned int i=0; i<rhs.components_.size(); ++i){
+      for (unsigned int i=0; i<rhs.components_.size(); ++i) {
         components_.push_back(new component(*rhs.components_[i]));
       }
     }
     return *this;
   }
-  
+
   //: Create a copy on the heap and return base class pointer
   virtual vpdl_distribution<T,n>* clone() const
   {
@@ -130,9 +130,9 @@ public:
   }
 
   //: Return the run time dimension, which does not equal \c n when \c n==0
-  virtual unsigned int dimension() const 
-  { 
-    if(n > 0 || num_components() == 0)
+  virtual unsigned int dimension() const
+  {
+    if (n > 0 || num_components() == 0)
       return n;
     return components_[0]->distribution->dimension();
   }
@@ -142,47 +142,47 @@ public:
 
   //: Access (const) a component distribution of the mixture
   const vpdl_distribution<T,n>& distribution(unsigned int index) const
-  { 
+  {
     assert(index < num_components());
-    return *(components_[index]->distribution); 
+    return *(components_[index]->distribution);
   }
 
   //: Access a component distribution of the mixture
   vpdl_distribution<T,n>& distribution(unsigned int index)
-  { 
+  {
     assert(index < num_components());
-    return *(components_[index]->distribution); 
+    return *(components_[index]->distribution);
   }
 
   //: Return the weight of a component in the mixture
-  T weight(unsigned int index) const 
-  { 
+  T weight(unsigned int index) const
+  {
     assert(index < num_components());
-    return components_[index]->weight; 
+    return components_[index]->weight;
   }
 
   //: Set the weight of a component in the mixture
   void set_weight(unsigned int index, const T& w)
-  { 
+  {
     assert(index < num_components());
     assert(w >= T(0));
-    components_[index]->weight = w; 
+    components_[index]->weight = w;
   }
 
   //: Insert a new component at the end of the vector
-  bool insert(const vpdl_distribution<T,n>& d, const T& weight = T(0))
-  { 
+  bool insert(const vpdl_distribution<T,n>& d, const T& wght = T(0))
+  {
     assert(d.dimension() == this->dimension() || num_components() == 0);
-    components_.push_back(new component(d, weight)); 
+    components_.push_back(new component(d, wght));
     return true;
   }
 
   //: Remove the last component in the vector
-  bool remove_last() 
-  { 
-    if(components_.empty())
+  bool remove_last()
+  {
+    if (components_.empty())
       return false;
-    delete components_.back(); 
+    delete components_.back();
     components_.pop_back();
     return true;
   }
@@ -191,12 +191,12 @@ public:
   virtual T density(const vector& pt) const
   {
     typedef typename vcl_vector<component*>::const_iterator comp_itr;
-    T density = 0;
-    for (comp_itr i = components_.begin(); i != components_.end(); ++i){
+    T dens = 0;
+    for (comp_itr i = components_.begin(); i != components_.end(); ++i) {
       // must use prob_density here to get meaningful results
-      density += (*i)->weight * (*i)->distribution->prob_density(pt);
+      dens += (*i)->weight * (*i)->distribution->prob_density(pt);
     }
-    return density;
+    return dens;
   }
 
   //: Compute the probability density at this point
@@ -205,7 +205,7 @@ public:
     typedef typename vcl_vector<component*>::const_iterator comp_itr;
     T prob = 0;
     T sum_w = 0;
-    for (comp_itr i = components_.begin(); i != components_.end(); ++i){
+    for (comp_itr i = components_.begin(); i != components_.end(); ++i) {
       prob += (*i)->weight * (*i)->distribution->prob_density(pt);
       sum_w += (*i)->weight;
     }
@@ -217,21 +217,21 @@ public:
   // \return the density at \a pt since it is usually needed as well, and
   //         is often trivial to compute while computing gradient
   // \retval g the gradient vector
-  virtual T gradient_density(const vector& pt, vector& g) const 
+  virtual T gradient_density(const vector& pt, vector& g) const
   {
     typedef typename vcl_vector<component*>::const_iterator comp_itr;
     const unsigned int d = this->dimension();
     vpdt_set_size(g,d);
     vpdt_fill(g,T(0));
-    T density = 0;
-    for (comp_itr i = components_.begin(); i != components_.end(); ++i){
+    T dens = 0;
+    for (comp_itr i = components_.begin(); i != components_.end(); ++i) {
       vector g_i;
       T w_i = (*i)->distribution->norm_const() * (*i)->weight;
-      density +=  w_i * (*i)->distribution->gradient_density(pt,g_i);
+      dens +=  w_i * (*i)->distribution->gradient_density(pt,g_i);
       g_i *= w_i;
       g += g_i;
     }
-    return density;
+    return dens;
   }
 
   //: The probability integrated over a box
@@ -240,14 +240,14 @@ public:
     typedef typename vcl_vector<component*>::const_iterator comp_itr;
     T prob = 0;
     T sum_w = 0;
-    for (comp_itr i = components_.begin(); i != components_.end(); ++i){
+    for (comp_itr i = components_.begin(); i != components_.end(); ++i) {
       prob += (*i)->weight * (*i)->distribution->box_prob(min_pt,max_pt);
       sum_w += (*i)->weight;
     }
     assert(sum_w > T(0));
     return prob/sum_w;
   }
-  
+
   //: Evaluate the cumulative distribution function at a point
   // This is the integral of the density function from negative infinity
   // (in all dimensions) to the point in question
@@ -256,14 +256,14 @@ public:
     typedef typename vcl_vector<component*>::const_iterator comp_itr;
     T prob = 0;
     T sum_w = 0;
-    for (comp_itr i = components_.begin(); i != components_.end(); ++i){
+    for (comp_itr i = components_.begin(); i != components_.end(); ++i) {
       prob += (*i)->weight * (*i)->distribution->cumulative_prob(pt);
       sum_w += (*i)->weight;
     }
     assert(sum_w > T(0));
     return prob/sum_w;
   }
-  
+
   //: Compute the mean of the distribution.
   // weighted average of the component means
   virtual void compute_mean(vector& mean) const
@@ -271,11 +271,11 @@ public:
     const unsigned int d = this->dimension();
     vpdt_set_size(mean,d);
     vpdt_fill(mean,T(0));
-    
+
     typedef typename vcl_vector<component*>::const_iterator comp_itr;
     vector cmp_mean;
     T sum_w = T(0);
-    for (comp_itr i = components_.begin(); i != components_.end(); ++i){
+    for (comp_itr i = components_.begin(); i != components_.end(); ++i) {
       (*i)->distribution->compute_mean(cmp_mean);
       cmp_mean *= (*i)->weight;
       sum_w += (*i)->weight;
@@ -284,7 +284,7 @@ public:
     assert(sum_w > 0);
     mean /= sum_w;
   }
-  
+
   //: Compute the covariance of the distribution.
   virtual void compute_covar(matrix& covar) const
   {
@@ -294,12 +294,12 @@ public:
     vpdt_fill(covar,T(0));
     vpdt_set_size(mean,d);
     vpdt_fill(mean,T(0));
-    
+
     typedef typename vcl_vector<component*>::const_iterator comp_itr;
     vector cmp_mean;
     matrix cmp_covar;
     T sum_w = T(0);
-    for (comp_itr i = components_.begin(); i != components_.end(); ++i){
+    for (comp_itr i = components_.begin(); i != components_.end(); ++i) {
       const T& wgt = (*i)->weight;
       (*i)->distribution->compute_covar(cmp_covar);
       (*i)->distribution->compute_mean(cmp_mean);
@@ -341,7 +341,7 @@ public:
   void sort() { vcl_sort(components_.begin(), components_.end(), sort_weight() ); }
 
   //: Sort the components in the range \a idx1 to \a idx2 in order of decreasing weight
-  void sort(unsigned int idx1, unsigned int idx2) 
+  void sort(unsigned int idx1, unsigned int idx2)
   { vcl_sort(components_.begin()+idx1, components_.begin()+idx2+1, sort_weight() ); }
 
   //: Sort the components using any StrictWeakOrdering function
@@ -353,21 +353,20 @@ public:
   // \endcode
   template <class comp_type_>
   void sort(comp_type_ comp)
-  { 
-    vcl_sort(components_.begin(), 
-             components_.end(), 
-             sort_adaptor<comp_type_>(comp)); 
+  {
+    vcl_sort(components_.begin(),
+             components_.end(),
+             sort_adaptor<comp_type_>(comp));
   }
 
   //: Sort the components in the range \a idx1 to \a idx2 using any StrictWeakOrdering function
   template <class comp_type_>
   void sort(comp_type_ comp, unsigned int idx1, unsigned int idx2)
-  { 
-    vcl_sort(components_.begin()+idx1, 
-             components_.begin()+idx2+1, 
-             sort_adaptor<comp_type_>(comp)); 
+  {
+    vcl_sort(components_.begin()+idx1,
+             components_.begin()+idx2+1,
+             sort_adaptor<comp_type_>(comp));
   }
-
 };
 
 

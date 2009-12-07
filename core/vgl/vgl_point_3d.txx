@@ -64,23 +64,23 @@ vcl_istream& vgl_point_3d<Type>::read(vcl_istream& is)
 {
   if (! is.good()) return is; // (TODO: should throw an exception)
   bool paren = false;
-  Type x, y, z;
+  Type tx, ty, tz;
   is >> vcl_ws; // jump over any leading whitespace
   if (is.eof()) return is; // nothing to be set because of EOF (TODO: should throw an exception)
   if (is.peek() == '(') { is.ignore(); paren=true; }
-  is >> vcl_ws >> x >> vcl_ws;
+  is >> vcl_ws >> tx >> vcl_ws;
   if (is.eof()) return is;
   if (is.peek() == ',') is.ignore();
-  is >> vcl_ws >> y >> vcl_ws;
+  is >> vcl_ws >> ty >> vcl_ws;
   if (is.eof()) return is;
   if (is.peek() == ',') is.ignore();
-  is >> vcl_ws >> z >> vcl_ws;
+  is >> vcl_ws >> tz >> vcl_ws;
   if (paren) {
     if (is.eof()) return is;
     if (is.peek() == ')') is.ignore();
     else                  return is; // closing parenthesis is missing (TODO: throw an exception)
   }
-  set(x,y,z);
+  set(tx,ty,tz);
   return is;
 }
 

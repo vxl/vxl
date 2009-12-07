@@ -35,49 +35,49 @@ struct vidl_v4l_params
     {}
 
     //: get the current resolution
-    vidl_v4l_params& resolution(unsigned int ni, unsigned int nj){
+    vidl_v4l_params& resolution(unsigned int ni, unsigned int nj) {
         ni_=ni;nj_=nj;
         return *this;
     }
 
     //: brightness
-    vidl_v4l_params& brightness(int brightness){
-        brightness_=brightness;
+    vidl_v4l_params& brightness(int brghtness) {
+        brightness_=brghtness;
         return *this;
     }
 
     //: hue
-    vidl_v4l_params& hue(int hue){
-        hue_=hue;
+    vidl_v4l_params& hue(int hu) {
+        hue_=hu;
         return *this;
     }
 
     //: colour
-    vidl_v4l_params& colour(int colour){
-        colour_=colour;
+    vidl_v4l_params& colour(int color) {
+        colour_=color;
         return *this;
     }
 
     //: contrast
-    vidl_v4l_params& contrast(int contrast){
-        contrast_=contrast;
+    vidl_v4l_params& contrast(int contrst) {
+        contrast_=contrst;
         return *this;
     }
 
     //: whiteness
-    vidl_v4l_params& whiteness(int whiteness){
-        whiteness_=whiteness;
+    vidl_v4l_params& whiteness(int whitenss) {
+        whiteness_=whitenss;
         return *this;
     }
 
     //: depth
-    vidl_v4l_params& depth(int depth){
-        depth_=depth;
+    vidl_v4l_params& depth(int dpth) {
+        depth_=dpth;
         return *this;
     }
 
     //: palette
-    vidl_v4l_params& pixel_format(vidl_pixel_format pf){
+    vidl_v4l_params& pixel_format(vidl_pixel_format pf) {
         pixel_format_=pf;
         return *this;
     }

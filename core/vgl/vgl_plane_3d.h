@@ -57,8 +57,8 @@ class vgl_plane_3d
 
   //: Construct a vgl_plane_3d from its equation $ax+by+cz+d=0$
   //  At least one of a, b or c should be nonzero.
-  inline vgl_plane_3d (T a,T b,T c,T d)
-    : a_(a), b_(b), c_(c), d_(d) { assert(a||b||c); }
+  inline vgl_plane_3d (T ta,T tb,T tc,T td)
+    : a_(ta), b_(tb), c_(tc), d_(td) { assert(ta||tb||tc); }
 
   //: Construct a vgl_plane_3d from its equation $v[0]x+v[1]y+v[2]z+v[3]=0$
   //  At least one of v[0], v[1] or v[2] should be nonzero.
@@ -94,12 +94,12 @@ class vgl_plane_3d
   inline T d()  const {return d_;}
 
   //: Set this vgl_plane_3d to have the equation $ax+by+cz+d=0$
-  inline void set(T a,T b,T c,T d) { assert(a||b||c); a_=a; b_=b; c_=c; d_=d; }
+  inline void set(T ta,T tb,T tc,T td) { assert(ta||tb||tc); a_=ta; b_=tb; c_=tc; d_=td; }
 
   //: the comparison operator
   //  The equations need not be identical, but just equivalent.
   bool operator==( vgl_plane_3d<T> const& p) const;
-  inline bool operator!=( vgl_plane_3d<T>const& p)const{return !operator==(p);}
+  inline bool operator!=( vgl_plane_3d<T>const& p) const { return !operator==(p); }
 
   //: Return true iff the plane is the plane at infinity.
   //  Always returns false
@@ -108,10 +108,9 @@ class vgl_plane_3d
   //: Return the normal direction, i.e., a unit vector orthogonal to this plane
   inline vgl_vector_3d<T> normal() const
   { return normalized(vgl_vector_3d<T>(a(),b(),c())); }
- 
+
   //: Return true if p is on the plane
   bool contains(vgl_point_3d<T> const& p, T tol = (T)0);
-
 };
 
 //: Return true iff p is the plane at infinity

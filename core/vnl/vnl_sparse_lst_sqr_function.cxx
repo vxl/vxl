@@ -12,13 +12,13 @@
 #include <vcl_cassert.h>
 #include <vnl/vnl_vector_ref.h>
 
-void vnl_sparse_lst_sqr_function::dim_warning(unsigned int number_of_unknowns,
-                                              unsigned int number_of_residuals)
+void vnl_sparse_lst_sqr_function::dim_warning(unsigned int nr_of_unknowns,
+                                              unsigned int nr_of_residuals)
 {
-  if (number_of_unknowns > number_of_residuals)
+  if (nr_of_unknowns > nr_of_residuals)
     vcl_cerr << "vnl_sparse_lst_sqr_function: WARNING: "
-             << "unknowns(" << number_of_unknowns << ") > "
-             << "residuals("<< number_of_residuals << ")\n";
+             << "unknowns(" << nr_of_unknowns << ") > "
+             << "residuals("<< nr_of_residuals << ")\n";
 }
 
 //: Construct vnl_sparse_lst_sqr_function.
@@ -237,7 +237,7 @@ vnl_sparse_lst_sqr_function::fd_jac_blocks(vnl_vector<double> const& a, vnl_vect
 //  fij has been sized appropriately before the call.
 void
 vnl_sparse_lst_sqr_function::fij(int i, int j, vnl_vector<double> const& ai,
-                                 vnl_vector<double> const& bj, vnl_vector<double>& fij)
+                                 vnl_vector<double> const& bj, vnl_vector<double>& f_i_j)
 {
   vcl_cerr << "Warning: fij() called but not implemented in derived class\n";
 }

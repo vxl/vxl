@@ -8,7 +8,6 @@
 #include <vil/vil_pyramid_image_resource.h>
 #include <vil/vil_load.h>
 
-//#define IL_DEBUG
 #if defined(como4301) && defined(__linux__)
 # ifndef S_IFMT
 #  define S_IFMT 0170000
@@ -34,7 +33,7 @@ vcl_vector<vcl_string> vil_image_list::files()
   vcl_vector<vcl_string> temp;
   if (!this->vil_is_directory(directory_.c_str()))
     return temp;
-  //This mess should go away soon.
+  // This mess should go away soon.
 # if defined VCL_VC_6 || defined VCL_VC_5 || defined VCL_BORLAND_55 || defined __MINGW32__
   typedef long handle_type;      // works with msvc6
 # else
@@ -169,11 +168,11 @@ bool vil_image_list::remove_file(vcl_string& filename)
 //:removes all files from the directory. sub-directories are not touched
 bool vil_image_list::clean_directory()
 {
-  vcl_vector<vcl_string> files = this->files();
+  vcl_vector<vcl_string> filez = this->files();
   bool good = true;
   vcl_cout << "starting to remove ..\n";
-  for (vcl_vector<vcl_string>::iterator fit = files.begin();
-       fit != files.end(); ++fit)
+  for (vcl_vector<vcl_string>::iterator fit = filez.begin();
+       fit != filez.end(); ++fit)
     if (!this->remove_file(*fit))
       good = false;
   vcl_cout << "finished remove ..\n";

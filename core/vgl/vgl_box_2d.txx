@@ -49,27 +49,27 @@ vgl_box_2d<Type>::vgl_box_2d(Type xmin, Type xmax, Type ymin, Type ymax)
 
 template <class Type>
 vgl_box_2d<Type>::vgl_box_2d(Type const ref_point[2],
-                             Type width, Type height,
+                             Type w, Type h,
                              typename vgl_box_2d<Type>::point_type t)
 {
   if (t == vgl_box_2d<Type>::centre)
   {
-    min_pos_[0]=Type(ref_point[0]-0.5*width);
-    min_pos_[1]=Type(ref_point[1]-0.5*height);
-    max_pos_[0]=Type(ref_point[0]+0.5*width);
-    max_pos_[1]=Type(ref_point[1]+0.5*height);
+    min_pos_[0]=Type(ref_point[0]-0.5*w);
+    min_pos_[1]=Type(ref_point[1]-0.5*h);
+    max_pos_[0]=Type(ref_point[0]+0.5*w);
+    max_pos_[1]=Type(ref_point[1]+0.5*h);
   }
   else if (t == vgl_box_2d<Type>::min_pos)
   {
     min_pos_[0]=ref_point[0];
     min_pos_[1]=ref_point[1];
-    max_pos_[0]=ref_point[0]+width;
-    max_pos_[1]=ref_point[1]+height;
+    max_pos_[0]=ref_point[0]+w;
+    max_pos_[1]=ref_point[1]+h;
   }
   else if (t == vgl_box_2d<Type>::max_pos)
   {
-    min_pos_[0]=ref_point[0]-width;
-    min_pos_[1]=ref_point[1]-height;
+    min_pos_[0]=ref_point[0]-w;
+    min_pos_[1]=ref_point[1]-h;
     max_pos_[0]=ref_point[0];
     max_pos_[1]=ref_point[1];
   }
@@ -79,27 +79,27 @@ vgl_box_2d<Type>::vgl_box_2d(Type const ref_point[2],
 
 template <class Type>
 vgl_box_2d<Type>::vgl_box_2d(vgl_point_2d<Type> const& ref_point,
-                             Type width, Type height,
+                             Type w, Type h,
                              typename vgl_box_2d<Type>::point_type t)
 {
   if (t == vgl_box_2d<Type>::centre)
   {
-    min_pos_[0]=Type(ref_point.x()-0.5*width);
-    min_pos_[1]=Type(ref_point.y()-0.5*height);
-    max_pos_[0]=Type(ref_point.x()+0.5*width);
-    max_pos_[1]=Type(ref_point.y()+0.5*height);
+    min_pos_[0]=Type(ref_point.x()-0.5*w);
+    min_pos_[1]=Type(ref_point.y()-0.5*h);
+    max_pos_[0]=Type(ref_point.x()+0.5*w);
+    max_pos_[1]=Type(ref_point.y()+0.5*h);
   }
   else if (t == vgl_box_2d<Type>::min_pos)
   {
     min_pos_[0]=ref_point.x();
     min_pos_[1]=ref_point.y();
-    max_pos_[0]=ref_point.x()+width;
-    max_pos_[1]=ref_point.y()+height;
+    max_pos_[0]=ref_point.x()+w;
+    max_pos_[1]=ref_point.y()+h;
   }
   else if (t == vgl_box_2d<Type>::max_pos)
   {
-    min_pos_[0]=ref_point.x()-width;
-    min_pos_[1]=ref_point.y()-height;
+    min_pos_[0]=ref_point.x()-w;
+    min_pos_[1]=ref_point.y()-h;
     max_pos_[0]=ref_point.x();
     max_pos_[1]=ref_point.y();
   }
@@ -180,7 +180,7 @@ VCL_DEFINE_SPECIALIZATION
 inline void set_dim(int & minv, int& maxv, int spread)
 {
   int sum = minv + maxv;
-  sum = sum | (spread&1); //if width is odd, then make sum odd
+  sum = sum | (spread&1); // if width is odd, then make sum odd
   minv = int(vcl_floor((sum-spread)/2.0));
   maxv = minv+spread;
 }
@@ -197,20 +197,20 @@ inline void set_dim(T & minv, T& maxv, T spread)
 // For integer types, centroid might change slightly, but
 // repeat calls to set_height will not cause centroid drift.
 template <class Type>
-void vgl_box_2d<Type>::set_width(Type width)
+void vgl_box_2d<Type>::set_width(Type w)
 {
   assert(!is_empty());
-  set_dim(min_pos_[0], max_pos_[0], width);
+  set_dim(min_pos_[0], max_pos_[0], w);
 }
 
 //: Modify height, retaining centroid at current position
 // For integer types, centroid might change slightly, but
 // repeat calls to set_height will not cause centroid drift.
 template <class Type>
-void vgl_box_2d<Type>::set_height(Type height)
+void vgl_box_2d<Type>::set_height(Type h)
 {
   assert(!is_empty());
-  set_dim(min_pos_[1], max_pos_[1], height);
+  set_dim(min_pos_[1], max_pos_[1], h);
 }
 
 
@@ -249,10 +249,10 @@ void vgl_box_2d<Type>::setmin_position(Type const min_position[2])
 {
   min_pos_[0]=min_position[0];
   min_pos_[1]=min_position[1];
-  if (max_pos_[0] < min_pos_[0]){
+  if (max_pos_[0] < min_pos_[0]) {
     max_pos_[0]=min_pos_[0];
   }
-  if (max_pos_[1] < min_pos_[1]){
+  if (max_pos_[1] < min_pos_[1]) {
     max_pos_[1]=min_pos_[1];
   }
 }

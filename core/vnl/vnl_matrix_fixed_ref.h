@@ -128,7 +128,7 @@
 //    such calls.
 //
 // \author Andrew W. Fitzgibbon, Oxford RRG
-// \date   04 Aug 96
+// \date   04 Aug 1996
 //
 // \verbatim
 //  Modifications:
@@ -229,20 +229,19 @@ class vnl_matrix_fixed_ref_const
   T const * operator[] (unsigned r) const { return data_ + num_cols * r; }
 
   //: Return number of rows
-  unsigned rows ()    const { return num_rows; }
+  unsigned rows()    const { return num_rows; }
 
   //: Return number of columns
   // A synonym for cols()
-  unsigned columns ()  const { return num_cols; }
+  unsigned columns()  const { return num_cols; }
 
   //: Return number of columns
   // A synonym for columns()
-  unsigned cols ()    const { return num_cols; }
+  unsigned cols()    const { return num_cols; }
 
   //: Return number of elements
   // This equals rows() * cols()
-  unsigned size ()    const { return num_rows*num_cols; }
-
+  unsigned size()    const { return num_rows*num_cols; }
 
   //: Print matrix to os in some hopefully sensible format
   void print(vcl_ostream& os) const;
@@ -265,7 +264,7 @@ class vnl_matrix_fixed_ref_const
 
   //: Extract a sub-matrix of size rows x cols, starting at (top,left)
   //  Thus it contains elements  [top,top+rows-1][left,left+cols-1]
-  vnl_matrix<T> extract (unsigned rows,  unsigned cols,
+  vnl_matrix<T> extract (unsigned rowz,  unsigned colz,
                          unsigned top=0, unsigned left=0) const;
 
   //: Get n rows beginning at rowstart
@@ -347,10 +346,10 @@ class vnl_matrix_fixed_ref_const
 
   //: abort if size is not as expected
   // This function does or tests nothing if NDEBUG is defined
-  void assert_size(unsigned rows, unsigned cols) const
+  void assert_size(unsigned rowz, unsigned colz) const
   {
 #ifndef NDEBUG
-    assert_size_internal(rows, cols);
+    assert_size_internal(rowz, colz);
 #endif
   }
   //: abort if matrix contains any INFs or NANs.
@@ -426,7 +425,6 @@ class vnl_matrix_fixed_ref : public vnl_matrix_fixed_ref_const<T,num_rows,num_co
   // No boundary checking here.
   T  * operator[] (unsigned r) const { return data_block() + num_cols * r; }
 
-
   //: Access an element for reading or writing
   // There are assert style boundary checks - #define NDEBUG to turn them off.
   T       & operator() (unsigned r, unsigned c) const
@@ -437,7 +435,6 @@ class vnl_matrix_fixed_ref : public vnl_matrix_fixed_ref_const<T,num_rows,num_co
 #endif
     return *(this->data_block() + num_cols * r + c);
   }
-
 
   // Filling and copying------------------------------------------------
 
@@ -463,7 +460,6 @@ class vnl_matrix_fixed_ref : public vnl_matrix_fixed_ref_const<T,num_rows,num_co
 
   //: Transpose this matrix efficiently, if it is a square matrix
   void inplace_transpose() const;
-
 
   // Arithmetic ----------------------------------------------------
   // note that these functions should not pass scalar as a const&.
@@ -556,7 +552,6 @@ class vnl_matrix_fixed_ref : public vnl_matrix_fixed_ref_const<T,num_rows,num_co
   }
 #endif
 
-
   //: Set values of this matrix to those of M, starting at [top,left]
   vnl_matrix_fixed_ref const & update (vnl_matrix<T> const&, unsigned top=0, unsigned left=0) const;
 
@@ -581,8 +576,7 @@ class vnl_matrix_fixed_ref : public vnl_matrix_fixed_ref_const<T,num_rows,num_co
   //: Set the i-th row
   void set_row   (unsigned i, vnl_vector<T> const&) const;
 
-
-  // mutators
+  // ==== mutators ====
 
   //: Set this matrix to an identity matrix
   //  Abort if the matrix is not square
@@ -608,12 +602,10 @@ class vnl_matrix_fixed_ref : public vnl_matrix_fixed_ref_const<T,num_rows,num_co
   //: Scale elements in given column by a factor of T
   void scale_column(unsigned col, T value) const;
 
-
   ////----------------------- Input/Output ----------------------------
 
   // : Read a vnl_matrix from an ascii vcl_istream, automatically determining file size if the input matrix has zero size.
   bool read_ascii(vcl_istream& s) const;
-
 
   //----------------------------------------------------------------------
   // Conversion to vnl_matrix_ref.
@@ -679,10 +671,8 @@ class vnl_matrix_fixed_ref : public vnl_matrix_fixed_ref_const<T,num_rows,num_co
   // the template parameters. The vector-vector operations are
   // element-wise.
 
-
 // Make the operators below inline because (1) they are small and
 // (2) we then have less explicit instantiation trouble.
-
 
 // --- Matrix-scalar -------------------------------------------------------------
 

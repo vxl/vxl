@@ -49,7 +49,6 @@ class bsta_gaussian_indep : public bsta_gaussian<T,n>
   void set_covar(const covar_type& covar)
   { diag_covar_ = covar; compute_det(); }
 
-
   //: The probability density at this sample given square mahalanobis distance
   T dist_prob_density(const T& sqr_mahal_dist) const
   {
@@ -76,12 +75,12 @@ class bsta_gaussian_indep : public bsta_gaussian<T,n>
   T det_covar() const { return det_covar_; }
 
   //: sample from the distribution
-  vector_ sample(vnl_random& rng) const
+  vector_ sample(vnl_random& ran_gen) const
   {
     vector_ d = bsta_gaussian<T,n>::mean_;
     covar_type v = diag_covar_;
     for (unsigned j = 0; j < n; j++) {
-      v[j] = (T)(vcl_sqrt(v[j])*rng.normal());
+      v[j] = (T)(vcl_sqrt(v[j])*ran_gen.normal());
     }
     vector_ sum = d+v;
     return sum;

@@ -63,7 +63,7 @@ open(const vcl_string& glob)
   }
 
   // no matching filenames
-  if (filenames.empty()){
+  if (filenames.empty()) {
     vcl_cerr << "In vidl_image_list_istream(.) - no files to open\n";
     return false;
   }
@@ -73,9 +73,9 @@ open(const vcl_string& glob)
 
   bool can_open = open(filenames);
 
-  if(!can_open){
+  if (!can_open) {
     vcl_cerr << "In vidl_image_list_istream(.) -can't open files as images\n";
-    for(vcl_vector<vcl_string>::iterator fit = filenames.begin();
+    for (vcl_vector<vcl_string>::iterator fit = filenames.begin();
         fit != filenames.end(); ++fit)
       vcl_cerr << *fit << '\n';
     return false;
@@ -97,14 +97,14 @@ open(const vcl_vector<vcl_string>& paths)
     vil_image_resource_sptr img = vil_load_image_resource(i->c_str());
     if (img)
     {
-      if(ni_ == 0 || nj_ == 0)
+      if (ni_ == 0 || nj_ == 0)
       {
         ni_ = img->ni();
         nj_ = img->nj();
         // convert the first frame to get the pixel format
         format_ = vidl_convert_to_frame(img->get_view())->pixel_format();
       }
-      else if(ni_ != img->ni() || nj_ != img->nj())
+      else if (ni_ != img->ni() || nj_ != img->nj())
         continue;
       image_paths_.push_back(*i);
     }
@@ -135,7 +135,7 @@ vidl_image_list_istream::
 advance()
 {
   current_frame_ = NULL;
-  if(index_ < image_paths_.size() || index_ == INIT_INDEX )
+  if (index_ < image_paths_.size() || index_ == INIT_INDEX )
     return ++index_ < image_paths_.size();
 
   return false;
@@ -155,8 +155,8 @@ vidl_image_list_istream::read_frame()
 vidl_frame_sptr
 vidl_image_list_istream::current_frame()
 {
-  if (is_valid()){
-    if(!current_frame_){
+  if (is_valid()) {
+    if (!current_frame_) {
       vil_image_resource_sptr img = vil_load_image_resource(image_paths_[index_].c_str());
       current_frame_ = vidl_convert_to_frame(img->get_view());
     }
@@ -170,7 +170,7 @@ vidl_image_list_istream::current_frame()
 vcl_string
 vidl_image_list_istream::current_path() const
 {
-  if (is_valid()){
+  if (is_valid()) {
     return image_paths_[index_];
   }
   return "";
@@ -181,12 +181,12 @@ vidl_image_list_istream::current_path() const
 // \returns true if successful
 bool
 vidl_image_list_istream::
-seek_frame(unsigned int frame_number)
+seek_frame(unsigned int frame_nr)
 {
-  if (is_open() && frame_number < image_paths_.size()){
-    if(index_ != frame_number)
+  if (is_open() && frame_nr < image_paths_.size()) {
+    if (index_ != frame_nr)
       current_frame_ = NULL;
-    index_ = frame_number;
+    index_ = frame_nr;
     return true;
   }
   return false;

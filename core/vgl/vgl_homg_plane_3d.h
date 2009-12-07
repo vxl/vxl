@@ -29,7 +29,7 @@
 template <class Type>
 class vgl_homg_plane_3d
 {
-  // the four homogenenous coordinates of the point.
+  // the four homogeneous coordinates of the plane (dual of a point).
   Type a_;
   Type b_;
   Type c_;
@@ -39,10 +39,10 @@ class vgl_homg_plane_3d
   inline vgl_homg_plane_3d () {}
 
   //: Construct from four Types.
-  inline vgl_homg_plane_3d (Type nx, Type ny, Type nz, Type d) : a_(nx), b_(ny), c_(nz), d_(d) {}
+  inline vgl_homg_plane_3d(Type ta, Type tb, Type tc, Type td) : a_(ta), b_(tb), c_(tc), d_(td) {}
 
   //: Construct from 4-vector.
-  inline vgl_homg_plane_3d (const Type v[4]) : a_(v[0]), b_(v[1]), c_(v[2]), d_(v[3]) {}
+  inline vgl_homg_plane_3d(const Type v[4]) : a_(v[0]), b_(v[1]), c_(v[2]), d_(v[3]) {}
 
   //: Construct from non-homogeneous plane.
   vgl_homg_plane_3d (vgl_plane_3d<Type> const& pl);
@@ -75,11 +75,11 @@ class vgl_homg_plane_3d
   inline Type d() const {return d_;}
 
   //: Set equation \a a*x+b*y+c*z+d*w=0
-  inline void set(Type a,Type b,Type c,Type d){assert(a||b||c||d);a_=a;b_=b;c_=c;d_=d;}
+  inline void set(Type ta,Type tb,Type tc,Type td) { assert(ta||tb||tc||td);a_=ta;b_=tb;c_=tc;d_=td; }
 
   //: the comparison operator
   bool operator==( vgl_homg_plane_3d<Type> const& pl) const;
-  inline bool operator!=( vgl_homg_plane_3d<Type>const& pl)const{return !operator==(pl);}
+  inline bool operator!=( vgl_homg_plane_3d<Type>const& pl) const { return !operator==(pl); }
 
   //: Return true iff the plane is the plane at infinity.
   // The method checks that max(|a|,|b|,|c|) <= tol * |d|
@@ -103,7 +103,7 @@ class vgl_homg_plane_3d
 // The method checks that max(|a|,|b|,|c|) <= tol * |d|
 // \relatesalso vgl_homg_plane_3d
 template <class Type>
-inline bool is_ideal(vgl_homg_plane_3d<Type> const& p, Type tol=(Type)0){return p.ideal(tol);}
+inline bool is_ideal(vgl_homg_plane_3d<Type> const& p, Type tol=(Type)0) { return p.ideal(tol); }
 
 // stream operators
 

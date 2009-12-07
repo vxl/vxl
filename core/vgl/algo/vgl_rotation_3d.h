@@ -84,22 +84,22 @@ class vgl_rotation_3d
         q_ = vnl_quaternion<T>(0, 0, 0, 1);
         return;
       }
-      else {// rotation axis not defined for rotation of pi
-        //construct a vector v along the min component axis of a
+      else { // rotation axis not defined for rotation of pi
+        // construct a vector v along the min component axis of a
         double ax = static_cast<double>(a[0]),ay = static_cast<double>(a[1]),
                az = static_cast<double>(a[2]);
         vnl_vector_fixed<T,3> v(T(0));
         double amin = ax; v[0]=T(1);
-        if (ay<amin){amin = ay; v[0]=T(0); v[1]=T(1);}
-        if (az<amin){v[0]=T(0); v[1]=T(0); v[2]=T(1);}
-        //define the pi rotation axis perpendicular to both v and a
+        if (ay<amin) { amin = ay; v[0]=T(0); v[1]=T(1); }
+        if (az<amin) { v[0]=T(0); v[1]=T(0); v[2]=T(1); }
+        // define the pi rotation axis perpendicular to both v and a
         vnl_vector_fixed<T,3> pi_axis = vnl_cross_3d(v, a);
         q_ = vnl_quaternion<T>(pi_axis/pi_axis.magnitude(), aa);
         return;
       }
     }
-    double angle = vcl_asin(cmag)+aa;
-    q_ = vnl_quaternion<T>(c/c.magnitude(), angle);
+    double angl = vcl_asin(cmag)+aa;
+    q_ = vnl_quaternion<T>(c/c.magnitude(), angl);
   }
 
   //: Construct to rotate (direction of) vector a to vector b
@@ -240,7 +240,6 @@ class vgl_rotation_3d
 
   //: comparison operator
   bool operator==(vgl_rotation_3d<T> const& r) const { return q_ == r.as_quaternion(); }
-
 
  protected:
   //: The internal representation of the rotation is a quaternion.

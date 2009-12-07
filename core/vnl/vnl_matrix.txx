@@ -754,7 +754,7 @@ vnl_matrix<T>& vnl_matrix<T>::update (vnl_matrix<T> const& m,
 
 template<class T>
 vnl_matrix<T> vnl_matrix<T>::extract (unsigned rowz, unsigned colz,
-                                      unsigned top, unsigned left) const{
+                                      unsigned top, unsigned left) const {
   vnl_matrix<T> result(rowz, colz);
   this->extract( result, top, left );
   return result;
@@ -762,7 +762,7 @@ vnl_matrix<T> vnl_matrix<T>::extract (unsigned rowz, unsigned colz,
 
 template<class T>
 void vnl_matrix<T>::extract( vnl_matrix<T>& submatrix,
-                             unsigned top, unsigned left) const{
+                             unsigned top, unsigned left) const {
   unsigned const rowz = submatrix.rows();
   unsigned const colz = submatrix.cols();
 #ifndef NDEBUG
@@ -812,12 +812,11 @@ T inner_product (vnl_matrix<T> const& m1, vnl_matrix<T> const& m2)
 template<class T>
 T cos_angle (vnl_matrix<T> const& a, vnl_matrix<T> const& b)
 {
-  typedef typename vnl_numeric_traits<T>::real_t real_t;
-  typedef typename vnl_numeric_traits<T>::abs_t abs_t;
-  typedef typename vnl_numeric_traits<abs_t>::real_t abs_r;
+  typedef typename vnl_numeric_traits<T>::abs_t Abs_t;
+  typedef typename vnl_numeric_traits<Abs_t>::real_t abs_r;
 
   T ab = inner_product(a,b);
-  abs_t a_b = (abs_t)vcl_sqrt( (abs_r)vnl_math_abs(inner_product(a,a) * inner_product(b,b)) );
+  Abs_t a_b = (Abs_t)vcl_sqrt( (abs_r)vnl_math_abs(inner_product(a,a) * inner_product(b,b)) );
 
   return T( ab / a_b);
 }
@@ -903,18 +902,18 @@ void vnl_matrix<T>::set_identity()
 template<class T>
 void vnl_matrix<T>::normalize_rows()
 {
-  typedef typename vnl_numeric_traits<T>::abs_t abs_t;
-  typedef typename vnl_numeric_traits<T>::real_t real_t;
-  typedef typename vnl_numeric_traits<real_t>::abs_t abs_real_t;
+  typedef typename vnl_numeric_traits<T>::abs_t Abs_t;
+  typedef typename vnl_numeric_traits<T>::real_t Real_t;
+  typedef typename vnl_numeric_traits<Real_t>::abs_t abs_real_t;
   for (unsigned int i = 0; i < this->num_rows; i++) {  // For each row in the Matrix
-    abs_t norm(0); // double will not do for all types.
+    Abs_t norm(0); // double will not do for all types.
     for (unsigned int j = 0; j < this->num_cols; j++)  // For each element in row
       norm += vnl_math_squared_magnitude(this->data[i][j]);
 
     if (norm != 0) {
       abs_real_t scale = abs_real_t(1)/(vcl_sqrt((abs_real_t)norm));
       for (unsigned int j = 0; j < this->num_cols; j++)
-        this->data[i][j] = T(real_t(this->data[i][j]) * scale);
+        this->data[i][j] = T(Real_t(this->data[i][j]) * scale);
     }
   }
 }
@@ -924,18 +923,18 @@ void vnl_matrix<T>::normalize_rows()
 template<class T>
 void vnl_matrix<T>::normalize_columns()
 {
-  typedef typename vnl_numeric_traits<T>::abs_t abs_t;
-  typedef typename vnl_numeric_traits<T>::real_t real_t;
-  typedef typename vnl_numeric_traits<real_t>::abs_t abs_real_t;
+  typedef typename vnl_numeric_traits<T>::abs_t Abs_t;
+  typedef typename vnl_numeric_traits<T>::real_t Real_t;
+  typedef typename vnl_numeric_traits<Real_t>::abs_t abs_real_t;
   for (unsigned int j = 0; j < this->num_cols; j++) {  // For each column in the Matrix
-    abs_t norm(0); // double will not do for all types.
+    Abs_t norm(0); // double will not do for all types.
     for (unsigned int i = 0; i < this->num_rows; i++)
       norm += vnl_math_squared_magnitude(this->data[i][j]);
 
     if (norm != 0) {
       abs_real_t scale = abs_real_t(1)/(vcl_sqrt((abs_real_t)norm));
       for (unsigned int i = 0; i < this->num_rows; i++)
-        this->data[i][j] = T(real_t(this->data[i][j]) * scale);
+        this->data[i][j] = T(Real_t(this->data[i][j]) * scale);
     }
   }
 }
@@ -1424,7 +1423,6 @@ void vnl_matrix<T>::fliplr()
 template <class T>
 typename vnl_matrix<T>::abs_t vnl_matrix<T>::operator_one_norm() const
 {
-  //typedef vnl_numeric_traits<T>::abs_t abs_t;
   abs_t max = 0;
   for (unsigned int j=0; j<this->num_cols; ++j) {
     abs_t tmp = 0;
@@ -1441,7 +1439,6 @@ typename vnl_matrix<T>::abs_t vnl_matrix<T>::operator_one_norm() const
 template <class T>
 typename vnl_matrix<T>::abs_t vnl_matrix<T>::operator_inf_norm() const
 {
-  //typedef vnl_numeric_traits<T>::abs_t abs_t;
   abs_t max = 0;
   for (unsigned int i=0; i<this->num_rows; ++i) {
     abs_t tmp = 0;

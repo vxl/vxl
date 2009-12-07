@@ -26,11 +26,11 @@ vil_stream_core::~vil_stream_core()
 
 //--------------------------------------------------------------------------------
 
-vil_streampos vil_stream_core::read (void *buf, vil_streampos n)
+vil_streampos vil_stream_core::read(void *buf, vil_streampos n)
 {
   assert(n>=0);
 
-  vil_streampos rv = m_transfer((char*)buf, curpos_, n, true );
+  vil_streampos rv = m_transfer((char*)buf, curpos_, n, true);
   curpos_ += rv;
   return rv;
 }
@@ -47,12 +47,12 @@ vil_streampos vil_stream_core::write(void const *buf, vil_streampos n)
 
 //--------------------------------------------------------------------------------
 
-vil_streampos vil_stream_core::m_transfer(char *buf, vil_streampos pos, vil_streampos n, bool read)
+vil_streampos vil_stream_core::m_transfer(char *buf, vil_streampos pos, vil_streampos n, bool read_into_buf)
 {
   assert(n>=0);
   assert(pos>=0);
 
-  if (read)
+  if (read_into_buf)
   {
     if (pos+n > tailpos_)
     {
@@ -77,11 +77,11 @@ vil_streampos vil_stream_core::m_transfer(char *buf, vil_streampos pos, vil_stre
       vil_streampos bl = tpos/(long)blocksize_;     // which block
       vil_streampos s = tpos - (long)blocksize_*bl; // start index in block_
       vil_streampos z = ((tn+s > (long)blocksize_) ? (long)blocksize_-s : tn); // number of bytes to write
-      //it would take a very large in-memory stream for this assert to fail (>2GB).
-      //That should not happen.  If it does, then we have to think of plan b.
+      // it would take a very large in-memory stream for this assert to fail (>2GB).
+      // That should not happen.  If it does, then we have to think of plan b.
       assert( (vcl_size_t)bl <= vcl_numeric_limits< vcl_size_t >::max() );
       char *tmp = block_[(vcl_size_t)bl];
-      if (read)
+      if (read_into_buf)
         for (vil_streampos k=0; k<z; ++k)
           tbuf[k] = tmp[s+k]; // prefer memcpy ?
       else

@@ -31,11 +31,11 @@ class vil_structuring_element
   vil_structuring_element() : min_i_(0),max_i_(-1),min_j_(0),max_j_(-1) {}
 
   //: Define elements { (p_i[k],p_j[k]) }
-  vil_structuring_element(const vcl_vector<int>& p_i,const vcl_vector<int>& p_j)
-  { set(p_i,p_j); }
+  vil_structuring_element(const vcl_vector<int>& v_p_i,const vcl_vector<int>& v_p_j)
+  { set(v_p_i,v_p_j); }
 
   //: Define elements { (p_i[k],p_j[k]) }
-  void set(const vcl_vector<int>& p_i,const vcl_vector<int>& p_j);
+  void set(const vcl_vector<int>& v_p_i,const vcl_vector<int>& v_p_j);
 
   //: Set to disk of radius r
   //  Select pixels in disk s.t. x^x+y^y<r^r

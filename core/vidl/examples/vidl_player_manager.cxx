@@ -20,10 +20,10 @@
 #include <vidl/gui/vidl_gui_param_dialog.h>
 
 
-//static manager instance
+// static manager instance
 vidl_player_manager *vidl_player_manager::instance_ = 0;
 
-//The vidl_player_manager is a singleton class
+// The vidl_player_manager is a singleton class
 vidl_player_manager *vidl_player_manager::instance()
 {
   if (!instance_)
@@ -173,31 +173,30 @@ void vidl_player_manager::pipe_streams()
     istream_->advance();
 
   vidl_frame_sptr frame;
-  if (num_frames < 0){
+  if (num_frames < 0) {
     vcl_cout <<"streaming all frames"<<vcl_endl;
     frame = istream_->current_frame();
-    while (bool(frame)){
-      if(!ostream_->write_frame(frame))
+    while (bool(frame)) {
+      if (!ostream_->write_frame(frame))
         break;
       if (!istream_->advance())
         break;
       frame = istream_->current_frame();
     }
   }
-  else{
+  else {
     vcl_cout <<"streaming "<<num_frames<<" frames"<<vcl_endl;
-    for (int i=0; i<num_frames; ++i){
+    for (int i=0; i<num_frames; ++i) {
       frame = istream_->current_frame();
-      if(!frame)
+      if (!frame)
         break;
-      if(!ostream_->write_frame(frame))
+      if (!ostream_->write_frame(frame))
         break;
       if (!istream_->advance())
         break;
     }
   }
 
- 
   ostream_->close();
 
   if (istream_->is_seekable())
@@ -224,7 +223,7 @@ void vidl_player_manager::redraw()
     vidl_frame_sptr frame = istream_->current_frame();
     if (!frame)
       itab_->set_image_resource(NULL);
-    else if (frame->pixel_format() == VIDL_PIXEL_FORMAT_MONO_16){
+    else if (frame->pixel_format() == VIDL_PIXEL_FORMAT_MONO_16) {
       static vil_image_view<vxl_uint_16> img;
       if (vidl_convert_to_view(*frame,img))
         itab_->set_image_view(img);
@@ -263,7 +262,7 @@ void vidl_player_manager::play_video()
   while (play_video_ && istream_->is_valid() && istream_->advance())
   {
     this->redraw();
-    //Delay until the time interval has passed
+    // Delay until the time interval has passed
     while (t.all()<time_interval_) ;
     t.mark();
     ++count;
@@ -277,7 +276,7 @@ void vidl_player_manager::play_video()
 }
 
 
-//Stop the video and return to the first frame
+// Stop the video and return to the first frame
 void vidl_player_manager::stop_video()
 {
   play_video_ = false;
@@ -287,13 +286,13 @@ void vidl_player_manager::stop_video()
   }
 }
 
-//Stop the video without returning to the first frame
+// Stop the video without returning to the first frame
 void vidl_player_manager::pause_video()
 {
   play_video_ = false;
 }
 
-//If the video is not playing bring up a dialog box
+// If the video is not playing bring up a dialog box
 // and prompt for the frame number to jump to.
 void vidl_player_manager::go_to_frame()
 {
@@ -317,7 +316,7 @@ void vidl_player_manager::go_to_frame()
   }
 }
 
-//If the video is not playing go to the next frame
+// If the video is not playing go to the next frame
 void vidl_player_manager::next_frame()
 {
   if (play_video_ || !istream_.get())
@@ -327,14 +326,14 @@ void vidl_player_manager::next_frame()
   }
 }
 
-//If the video is not playing go to the previous frame
+// If the video is not playing go to the previous frame
 void vidl_player_manager::prev_frame()
 {
   if (play_video_ || !istream_.get())
     return;
-  int prev_frame = istream_->frame_number() - 1;
-  if (prev_frame >= 0) {
-    istream_->seek_frame(prev_frame);
+  int previous_frame = istream_->frame_number() - 1;
+  if (previous_frame >= 0) {
+    istream_->seek_frame(previous_frame);
     this->redraw();
   }
 }

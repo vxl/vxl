@@ -5,7 +5,7 @@
 //:
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
-// \date   13 Sep 99
+// \date   13 Sep 1999
 // \brief  See vgui_deck_tableau.h for a description of this file.
 
 #include "vgui_deck_tableau.h"
@@ -262,13 +262,13 @@ vcl_string vgui_deck_tableau::file_name() const
 //: Returns a nice version of the name, with info on the currently active child.
 vcl_string vgui_deck_tableau::pretty_name() const
 {
-  vcl_string name;
+  vcl_string nice_name;
   if (index_ok(index_)) {
-    name += "[current = ";
-    name += children[index_]->pretty_name();
-    name += "]";
+    nice_name += "[current = ";
+    nice_name += children[index_]->pretty_name();
+    nice_name += "]";
   }
-  return name;
+  return nice_name;
 }
 
 //----------------------------------------------------------------------------

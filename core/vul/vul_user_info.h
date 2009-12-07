@@ -8,7 +8,7 @@
 // \file
 // \brief Reads information about a user from the password file.
 // \author Andrew W. Fitzgibbon, Oxford RRG
-// \date   08 Apr 99
+// \date   08 Apr 1999
 //
 // \verbatim
 //  Modifications
@@ -37,15 +37,15 @@ class vul_user_info
   // Constructors/Destructors--------------------------------------------------
 
   //: Lookup info from numeric user-id
-  vul_user_info(uid_type uid) { init(uid); }
+  vul_user_info(uid_type u_id) { init(u_id); }
   //: Lookup info from login name
-  vul_user_info(char const* name) { init(name); }
+  vul_user_info(char const* nam) { init(nam); }
   //: Lookup info from login name
-  vul_user_info(vcl_string const& name) { init(name.c_str()); }
+  vul_user_info(vcl_string const& nam) { init(nam.c_str()); }
   //: NYI
   void init(uid_type);
   //: initialise vul_user_info for given login name
-  void init(char const* name);
+  void init(char const* nam);
 };
 
 #endif // vul_user_info_h_

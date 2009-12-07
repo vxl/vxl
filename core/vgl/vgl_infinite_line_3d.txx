@@ -5,7 +5,7 @@
 #include "vgl_infinite_line_3d.h"
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
-#include <vcl_cmath.h> //for fabs
+#include <vcl_cmath.h> // for fabs
 template <class Type>
 vgl_infinite_line_3d<Type>::vgl_infinite_line_3d(vgl_point_3d<Type> const& p1,
                                                  vgl_point_3d<Type> const& p2)
@@ -33,8 +33,9 @@ compute_uv_vectors(vgl_vector_3d<Type>& u, vgl_vector_3d<Type>& v) const
     vmag = static_cast<Type>(v.length());
     assert(vmag>Type(0));
     v/=vmag;
-  }else v/=vmag;
-  //The other plane coordinate vector is perpendicular to both t and v
+  }
+  else v/=vmag;
+  // The other plane coordinate vector is perpendicular to both t and v
   u = cross_product(v,t_);
   Type umag = static_cast<Type>(u.length());
   u/=umag;
@@ -43,28 +44,26 @@ compute_uv_vectors(vgl_vector_3d<Type>& u, vgl_vector_3d<Type>& v) const
 template <class Type>
 vgl_infinite_line_3d<Type>::
 vgl_infinite_line_3d(vgl_point_3d<Type> const& p,
-                     vgl_vector_3d<Type> const& direction)
+                     vgl_vector_3d<Type> const& dir)
 {
-  vgl_vector_3d<Type> tt = direction;
-  //reconcile direction so that tangent is in the positive hemisphere
-  double ttx = vcl_fabs(static_cast<double>(tt.x()));
-  double tty = vcl_fabs(static_cast<double>(tt.y()));
-  double ttz = vcl_fabs(static_cast<double>(tt.z()));
+  // reconcile direction so that tangent is in the positive hemisphere
+  double ttx = vcl_fabs(static_cast<double>(dir.x()));
+  double tty = vcl_fabs(static_cast<double>(dir.y()));
+  double ttz = vcl_fabs(static_cast<double>(dir.z()));
   double max_comp = ttx;
-  double sign = static_cast<double>(tt.x());
-  if(max_comp < tty){
+  double sign = static_cast<double>(dir.x());
+  if (max_comp < tty) {
     max_comp = tty;
-    sign = static_cast<double>(tt.y());
+    sign = static_cast<double>(dir.y());
   }
-  if(max_comp < ttz){
+  if (max_comp < ttz) {
     max_comp = ttz;
-    sign = static_cast<double>(tt.z());
+    sign = static_cast<double>(dir.z());
   }
-  //switch sense if max component is negative
+  // switch sense if max component is negative
   Type sense = static_cast<Type>(sign/max_comp);
-  tt *= sense;
-  t_ = normalized(tt);
-  //Define the plane perpendicular to the line passing through the origin
+  t_ = normalized(dir*sense);
+  // Define the plane perpendicular to the line passing through the origin
   // the plane normal is t_ the distance of the plane from the origin is 0
   // it follows that the intersection of the line with the perpendicular plane
   // is as follows:
@@ -73,10 +72,10 @@ vgl_infinite_line_3d(vgl_point_3d<Type> const& p,
   vgl_vector_3d<Type> pv(p.x(), p.y(), p.z());
   Type dp = dot_product(pv, t_);
   Type k = -dp/(mag*mag);
-  //The intersection point
+  // The intersection point
   vgl_vector_3d<Type> p0 = pv + k*t_, u, v;
   this->compute_uv_vectors(u, v);
-  //The location of the itersection point in plane coordinates can now be computed
+  // The location of the itersection point in plane coordinates can now be computed
   Type u0 = dot_product(u, p0), v0 = dot_product(v, p0);
   x0_.set(u0, v0);
 }
@@ -85,7 +84,7 @@ vgl_infinite_line_3d(vgl_point_3d<Type> const& p,
 template <class Type>
 vgl_point_3d<Type> vgl_infinite_line_3d<Type>::point() const
 {
-  //u,v plane coordinate vectors
+  // u,v plane coordinate vectors
   vgl_vector_3d<Type> u, v, pv;
   this->compute_uv_vectors(u, v);
   pv = x0_.x()*u + x0_.y()*v;
@@ -118,10 +117,10 @@ vcl_ostream& operator<<(vcl_ostream& s, vgl_infinite_line_3d<Type> const & p)
 template <class Type>
 vcl_istream& operator>>(vcl_istream& s, vgl_infinite_line_3d<Type>& p)
 {
-  vgl_vector_2d<Type> x0;
+  vgl_vector_2d<Type> x_0;
   vgl_vector_3d<Type> dir;
-  s >> x0 >> dir;
-  p.set(x0, dir);
+  s >> x_0 >> dir;
+  p.set(x_0, dir);
   return s;
 }
 

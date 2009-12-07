@@ -152,7 +152,9 @@ template <class T, unsigned int R, unsigned int C>
 vcl_ostream& operator<<(vcl_ostream& s, const vnl_svd_fixed<T,R,C>& svd)
 {
   s << "vnl_svd_fixed<T,R,C>:\n"
-//  << "M = [\n" << M << "]\n"
+#if 0
+    << "M = [\n" << M << "]\n"
+#endif // 0
     << "U = [\n" << svd.U() << "]\n"
     << "W = " << svd.W() << '\n'
     << "V = [\n" << svd.V() << "]\n"
@@ -177,7 +179,8 @@ void vnl_svd_fixed<T,R,C>::zero_out_absolute(double tol)
       Winverse_(k,k) = 0;
       weight = 0;
       --rank_;
-    } else
+    }
+    else
     {
       Winverse_(k,k) = singval_t(1.0)/weight;
     }
@@ -219,11 +222,11 @@ template <class T, unsigned int R, unsigned int C>
 vnl_matrix_fixed<T,R,C> vnl_svd_fixed<T,R,C>::recompose(unsigned int rnk) const
 {
   if (rnk > rank_) rnk=rank_;
-  vnl_diag_matrix_fixed<T,C> W(W_);
+  vnl_diag_matrix_fixed<T,C> Wmatr(W_);
   for (unsigned int i=rnk;i<C;++i)
-    W(i,i)=0;
+    Wmatr(i,i)=0;
 
-  return U_*W*V_.conjugate_transpose();
+  return U_*Wmatr*V_.conjugate_transpose();
 }
 
 
@@ -232,11 +235,11 @@ template <class T, unsigned int R, unsigned int C>
 vnl_matrix_fixed<T,C,R> vnl_svd_fixed<T,R,C>::pinverse(unsigned int rnk) const
 {
   if (rnk > rank_) rnk=rank_;
-  vnl_diag_matrix_fixed<T,C> Winverse(Winverse_);
+  vnl_diag_matrix_fixed<T,C> W_inverse(Winverse_);
   for (unsigned int i=rnk;i<C;++i)
-    Winverse(i,i)=0;
+    W_inverse(i,i)=0;
 
-  return V_ * Winverse * U_.conjugate_transpose();
+  return V_ * W_inverse * U_.conjugate_transpose();
 }
 
 
@@ -245,11 +248,11 @@ template <class T, unsigned int R, unsigned int C>
 vnl_matrix_fixed<T,R,C> vnl_svd_fixed<T,R,C>::tinverse(unsigned int rnk) const
 {
   if (rnk > rank_) rnk=rank_;
-  vnl_diag_matrix_fixed<T,C> Winverse(Winverse_);
+  vnl_diag_matrix_fixed<T,C> W_inverse(Winverse_);
   for (unsigned int i=rnk;i<C;++i)
-    Winverse(i,i)=0;
+    W_inverse(i,i)=0;
 
-  return U_ * Winverse * V_.conjugate_transpose();
+  return U_ * W_inverse * V_.conjugate_transpose();
 }
 
 
@@ -262,11 +265,12 @@ vnl_matrix<T> vnl_svd_fixed<T,R,C>::solve(vnl_matrix<T> const& B)  const
     vnl_matrix<T> yy(U_.rows(), B.columns(), T(0));     // zeros, so that it matches
     yy.update(B);                                       // cols of u.transpose. ???
     x = U_.conjugate_transpose() * yy;
-  } else
+  }
+  else
     x = U_.conjugate_transpose() * B;
   for (unsigned long i = 0; i < x.rows(); ++i) {        // multiply with diagonal 1/W
     T weight = W_(i, i);
-    if (weight != T(0)) //vnl_numeric_traits<T>::zero)
+    if (weight != T(0)) // vnl_numeric_traits<T>::zero
       weight = T(1) / weight;
     for (unsigned long j = 0; j < x.columns(); ++j)
       x(i, j) *= weight;

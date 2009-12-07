@@ -17,13 +17,13 @@
 
 //------------------------------------------------------------------------------
 
-void vgui_projection_inspector::print(vcl_ostream& s) const
+void vgui_projection_inspector::print(vcl_ostream& strm) const
 {
-  s << "vgui_projection_inspector: {\n"
-    << "VP = " << vp[0] << ' ' << vp[1] << ' ' << vp[2] << ' ' << vp[3] << '\n';
-  vnl_matlab_print(s, P, "P");
-  vnl_matlab_print(s, M, "M");
-  s << "}\n";
+  strm << "vgui_projection_inspector: {\n"
+       << "VP = " << vp[0] << ' ' << vp[1] << ' ' << vp[2] << ' ' << vp[3] << '\n';
+  vnl_matlab_print(strm, P, "P");
+  vnl_matlab_print(strm, M, "M");
+  strm << "}\n";
 }
 
 //------------------------------------------------------------------------------
@@ -209,7 +209,9 @@ void vgui_projection_inspector::window_to_image_coordinates(int x,int y,
   //
   xi = ((winx-x)*x1 + (     x)*x2)/winx;
   yi = ((winy-y)*y1 + (     y)*y2)/winy;
-//yi = ((     y)*y1 + (winy-y)*y2)/winy;
+#if 0
+  yi = ((     y)*y1 + (winy-y)*y2)/winy;
+#endif // 0
 }
 
 // This method computes the viewport coordinates of the projection of the point (ix, iy, 0, 1).

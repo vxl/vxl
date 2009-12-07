@@ -126,34 +126,34 @@ class vgl_conic_segment_2d
   //: Construct from two end points (homogeneous) and a conic
   inline vgl_conic_segment_2d(vgl_homg_point_2d<Type> const& p1,
                               vgl_homg_point_2d<Type> const& p2,
-                              vgl_conic<Type> const& conic,
+                              vgl_conic<Type> const& co,
                               bool counterclockwise = true)
-  : p1_(p1), p2_(p2), conic_(conic),
+  : p1_(p1), p2_(p2), conic_(co),
     counterclockwise_(counterclockwise) {}
 
   //: Construct from two end points (Cartesian) and a conic
   inline vgl_conic_segment_2d(vgl_point_2d<Type> const& p1,
                               vgl_point_2d<Type> const& p2,
-                              vgl_conic<Type> const& conic,
+                              vgl_conic<Type> const& co,
                               bool counterclockwise = true)
   : p1_(p1.x(), p1.y(), (Type)1), p2_(p2.x(), p2.y(), (Type)1),
-    conic_(conic), counterclockwise_(counterclockwise) {}
+    conic_(co), counterclockwise_(counterclockwise) {}
 
   //: Construct from a conic and two end points (homogeneous)
-  inline vgl_conic_segment_2d(vgl_conic<Type> const& conic,
+  inline vgl_conic_segment_2d(vgl_conic<Type> const& co,
                               vgl_homg_point_2d<Type> const& p1,
                               vgl_homg_point_2d<Type> const& p2,
                               bool counterclockwise = true)
-  : p1_(p1), p2_(p2), conic_(conic),
+  : p1_(p1), p2_(p2), conic_(co),
     counterclockwise_(counterclockwise) {}
 
   //: Construct from a conic and two end points (Cartesian)
-  inline vgl_conic_segment_2d(vgl_conic<Type> const& conic,
+  inline vgl_conic_segment_2d(vgl_conic<Type> const& co,
                               vgl_point_2d<Type> const& p1,
                               vgl_point_2d<Type> const& p2,
                               bool counterclockwise = true)
   : p1_(p1.x(), p1.y(), (Type)1), p2_(p2.x(), p2.y(), (Type)1),
-    conic_(conic), counterclockwise_(counterclockwise) {}
+    conic_(co), counterclockwise_(counterclockwise) {}
 
   //: Destructor
   inline ~vgl_conic_segment_2d() {}
@@ -213,30 +213,30 @@ class vgl_conic_segment_2d
   }
 
   //: The inequality comparison operator.
-  inline bool operator!=(vgl_conic_segment_2d<Type>const& other)const{return !operator==(other);}
+  inline bool operator!=(vgl_conic_segment_2d<Type>const& other) const { return !operator==(other); }
 
   //: (Re)initialise the conic segment by passing it its three "constructors"
   inline void set(vgl_homg_point_2d<Type> const& p1, vgl_homg_point_2d<Type> const& p2,
-                  vgl_conic<Type> conic, bool counterclockwise = true)
-  { p1_ = p1; p2_ = p2; conic_ = conic; counterclockwise_ = counterclockwise; }
+                  vgl_conic<Type> co, bool counterclockwise = true)
+  { p1_ = p1; p2_ = p2; conic_ = co; counterclockwise_ = counterclockwise; }
 
   //: (Re)initialise the conic segment by passing it its three "constructors"
-  inline void set(vgl_conic<Type> conic,
+  inline void set(vgl_conic<Type> co,
                   vgl_homg_point_2d<Type> const& p1, vgl_homg_point_2d<Type> const& p2,
                   bool counterclockwise = true)
-  { p1_ = p1; p2_ = p2; conic_ = conic; counterclockwise_ = counterclockwise; }
+  { p1_ = p1; p2_ = p2; conic_ = co; counterclockwise_ = counterclockwise; }
 
   //: (Re)initialise the conic segment by passing it its three "constructors"
   inline void set(vgl_point_2d<Type> const& p1, vgl_point_2d<Type> const& p2,
-                  vgl_conic<Type> conic, bool counterclockwise = true)
-  { p1_.set(p1.x(), p1.y()); p2_.set(p2.x(), p2.y()); conic_ = conic;
+                  vgl_conic<Type> co, bool counterclockwise = true)
+  { p1_.set(p1.x(), p1.y()); p2_.set(p2.x(), p2.y()); conic_ = co;
     counterclockwise_ = counterclockwise; }
 
   //: (Re)initialise the conic segment by passing it its three "constructors"
-  inline void set(vgl_conic<Type> conic,
+  inline void set(vgl_conic<Type> co,
                   vgl_point_2d<Type> const& p1, vgl_point_2d<Type> const& p2,
                   bool counterclockwise = true)
-  { p1_.set(p1.x(), p1.y()); p2_.set(p2.x(), p2.y()); conic_ = conic;
+  { p1_.set(p1.x(), p1.y()); p2_.set(p2.x(), p2.y()); conic_ = co;
     counterclockwise_ = counterclockwise; }
 
   //: Finds out whether this curve has a finite length.

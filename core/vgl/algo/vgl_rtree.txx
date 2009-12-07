@@ -16,8 +16,8 @@
 //--------------------------------------------------------------------------------
 
 template <class V, class B, class C>
-vgl_rtree_node<V, B, C>::vgl_rtree_node(node *parent, V const &v)
-  : parent(parent)
+vgl_rtree_node<V, B, C>::vgl_rtree_node(node *parent_node, V const &v)
+  : parent(parent_node)
   //
   , total_vts(1)
   , local_vts(1)
@@ -269,8 +269,7 @@ void vgl_rtree_node<V, B, C>::compute_bounds()
       C::update(bounds, chs[i]->bounds );
   }
   else {
-    // it can happen. this node should be pruned.
-    //assert(false);
+    assert(!"This cannot happen. this node should be pruned.");
   }
 }
 
@@ -281,20 +280,26 @@ void vgl_rtree_node<V, B, C>::compute_bounds()
 template <class V, class B, class C>
 void vgl_rtree_node<V, B, C>::get(B const &region, vcl_vector<V> &vs) const
 {
-  //vcl_cout << " In get: " << region << vcl_endl;
+#ifdef DEBUG
+  vcl_cout << " In get: " << region << vcl_endl;
+#endif // DEBUG
   // get vertices from this node :
   for (unsigned int i=0; i<local_vts; ++i)
     if (C::meet(region, vts[i] )) {
-      //vcl_cout << " pushed " << vts[i] << vcl_endl;
+#ifdef DEBUG
+      vcl_cout << " pushed " << vts[i] << vcl_endl;
+#endif // DEBUG
       vs.push_back(vts[i]);
-      }
+    }
 
   // get vertices from children :
   for (unsigned int i=0; i<local_chs; ++i)
     if (C::meet(region, chs[i]->bounds )) {
-      //vcl_cout << "--- region of child: " << i << " :" << chs[i]->bounds << " met search region----\n";
+#ifdef DEBUG
+      vcl_cout << "--- region of child: " << i << " :" << chs[i]->bounds << " met search region----\n";
+#endif // DEBUG
       chs[i]->get(region, vs);
-      }
+    }
 }
 
 // calls only itself.

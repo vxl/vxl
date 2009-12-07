@@ -119,7 +119,7 @@ struct vgui_satellite_tableau_t : public vgui_tableau
   { return vcl_string("vgui_satellite_tableau_t[") + n + vcl_string("]"); }
 
   vgui_menu a_menu;
-  void add_popup(vgui_menu &m) { m.include(a_menu); }
+  void add_popup(vgui_menu &mnu) { mnu.include(a_menu); }
 
  protected:
   ~vgui_satellite_tableau_t() { p = 0; m = 0; }

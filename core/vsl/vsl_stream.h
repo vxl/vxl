@@ -7,14 +7,15 @@
 // \author Ian Scott
 // So instead of
 // \code
-// os << "Blah: ";
-// vsl_print_summary(os, blah);
+//   os << "Blah: ";
+//   vsl_print_summary(os, blah);
 // \endcode
 // you can use
-// \code os << "Blah: " << vsl_stream_summary(blah); \endcode
+// \code
+//   os << "Blah: " << vsl_stream_summary(blah);
+// \endcode
+
 #include <vcl_ostream.h>
-
-
 
 
 //: Convert a vsl_print_summary function call to a streamable object.
@@ -22,13 +23,13 @@ template <class T>
 struct vsl_stream_summary_t
 {
   const T& x;
-  vsl_stream_summary_t(const T& x): x(x) {}
+  vsl_stream_summary_t(const T& xx): x(xx) {}
 };
 
 template <class S>
-inline vsl_stream_summary_t<S> vsl_stream_summary(const S& x)
+inline vsl_stream_summary_t<S> vsl_stream_summary(const S& xx)
 {
-  return vsl_stream_summary_t<S>(x);
+  return vsl_stream_summary_t<S>(xx);
 }
 
 

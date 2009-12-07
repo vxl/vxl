@@ -19,14 +19,14 @@ vpgl_fm_compute_7_point::compute(
   vcl_vector< vpgl_fundamental_matrix<double>* >& fm )
 {
   // Check that there are at least 7 points.
-  if ( pr.size() < 7 || pl.size() < 7 ){
+  if ( pr.size() < 7 || pl.size() < 7 ) {
     vcl_cerr << "vpgl_fm_compute_7_point: Need at least 7 point pairs.\n"
              << "Number in each set: " << pr.size() << ", " << pl.size() << vcl_endl;
     return false;
   }
 
   // Check that the correspondence lists are the same size.
-  if ( pr.size() != pl.size() ){
+  if ( pr.size() != pl.size() ) {
     vcl_cerr << "vpgl_fm_compute_7_point: Need correspondence lists of same size.\n";
     return false;
   }
@@ -34,16 +34,16 @@ vpgl_fm_compute_7_point::compute(
   // Condition if necessary.
   vcl_vector< vgl_homg_point_2d<double> > pr_norm, pl_norm;
   vgl_norm_trans_2d<double> prnt, plnt;
-  if ( precondition_ ){
+  if ( precondition_ ) {
     prnt.compute_from_points(pr);
     plnt.compute_from_points(pl);
-    for ( unsigned i = 0; i < pl.size(); i++ ){
+    for ( unsigned i = 0; i < pl.size(); i++ ) {
       pr_norm.push_back( prnt*pr[i] );
       pl_norm.push_back( plnt*pl[i] );
     }
   }
-  else{
-    for ( unsigned i = 0; i < pl.size(); i++ ){
+  else {
+    for ( unsigned i = 0; i < pl.size(); i++ ) {
       pr_norm.push_back( pr[i] );
       pl_norm.push_back( pl[i] );
     }
@@ -51,7 +51,7 @@ vpgl_fm_compute_7_point::compute(
 
   // Construct the design matrix from the point correspondences.
   vnl_matrix<double> design_matrix(pr_norm.size(),9);
-  for ( unsigned r = 0; r < pr_norm.size(); r++ ){
+  for ( unsigned r = 0; r < pr_norm.size(); r++ ) {
     design_matrix(r,0) = pr_norm[r].x()*pl_norm[r].x();
     design_matrix(r,1) = pr_norm[r].y()*pl_norm[r].x();
     design_matrix(r,2) = pr_norm[r].w()*pl_norm[r].x();
@@ -157,24 +157,24 @@ vpgl_fm_compute_7_point::solve_cubic( vcl_vector<double> v )
   // At this point, a, c and d are no longer needed (c and d will be reused).
 
   if (q == 0) {
-    vcl_vector<double> v;
+    vcl_vector<double> w;
     double cbrt = (r<0) ? vcl_exp(vcl_log(-2*r)/3.0) : -vcl_exp(vcl_log(2*r)/3.0);
-    v.push_back(cbrt - b);
-    return v;
+    w.push_back(cbrt - b);
+    return w;
   }
 
   // With the Vieta substitution y = z+q/z this becomes z^6+2rz^3+q^3 = 0
   // which is essentially a quadratic equation:
 
   d = r*r - q*q*q;
-  if ( d >= 0.0 ){
+  if ( d >= 0.0 ) {
     // Compute a cube root
     double z;
     if ( -r + vcl_sqrt(d) >= 0 ) z = vcl_exp(vcl_log(-r + vcl_sqrt(d))/3.0);
     else z = -vcl_exp(vcl_log(-r + vcl_sqrt(d))/3.0);
 
     // The case z=0 is excluded since this is q==0 which is handled above
-    vcl_vector<double> v; v.push_back(z + q/z - b); return v;
+    vcl_vector<double> w; w.push_back(z + q/z - b); return w;
   }
 
   // And finally the "irreducible case" (with 3 solutions):

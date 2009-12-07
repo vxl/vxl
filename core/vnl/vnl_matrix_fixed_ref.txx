@@ -268,16 +268,16 @@ template<class T, unsigned nrows, unsigned ncols>
 void
 vnl_matrix_fixed_ref<T,nrows,ncols>::normalize_rows() const
 {
-  typedef typename vnl_numeric_traits<T>::abs_t abs_t;
+  typedef typename vnl_numeric_traits<T>::abs_t Abs_t;
   for (unsigned int i = 0; i < nrows; i++)
   {
-    abs_t norm(0); // double will not do for all types.
+    Abs_t norm(0); // double will not do for all types.
     for (unsigned int j = 0; j < ncols; j++)
       norm += vnl_math_squared_magnitude( (*this)(i,j) );
 
     if (norm != 0)
     {
-      typedef typename vnl_numeric_traits<abs_t>::real_t real_t;
+      typedef typename vnl_numeric_traits<Abs_t>::real_t real_t;
       real_t scale = real_t(1)/vcl_sqrt((real_t)norm);
       for (unsigned int j = 0; j < ncols; j++)
       {
@@ -293,15 +293,15 @@ template<class T, unsigned nrows, unsigned ncols>
 void
 vnl_matrix_fixed_ref<T,nrows,ncols>::normalize_columns() const
 {
-  typedef typename vnl_numeric_traits<T>::abs_t abs_t;
+  typedef typename vnl_numeric_traits<T>::abs_t Abs_t;
   for (unsigned int j = 0; j < ncols; j++) {  // For each column in the Matrix
-    abs_t norm(0); // double will not do for all types.
+    Abs_t norm(0); // double will not do for all types.
     for (unsigned int i = 0; i < nrows; i++)
       norm += vnl_math_squared_magnitude( (*this)(i,j) );
 
     if (norm != 0)
     {
-      typedef typename vnl_numeric_traits<abs_t>::real_t real_t;
+      typedef typename vnl_numeric_traits<Abs_t>::real_t real_t;
       real_t scale = real_t(1)/vcl_sqrt((real_t)norm);
       for (unsigned int i = 0; i < nrows; i++)
       {

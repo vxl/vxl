@@ -6,7 +6,7 @@
 // \file
 // \brief  See vgui_text_tableau.h for a description of this file.
 // \author Philip C. Pritchett, RRG, University of Oxford
-// \date   19 Oct 99
+// \date   19 Oct 1999
 //
 // \verbatim
 //  Modifications
@@ -30,14 +30,18 @@ vgui_text_tableau::vgui_text_tableau()
 
 vcl_string vgui_text_tableau::type_name() const { return "vgui_text_tableau"; }
 
-unsigned vgui_text_tableau::size() const {
+unsigned vgui_text_tableau::size() const
+{
   unsigned N=xs.size();
-//assert(N == ys.size()); // just to
-//assert(N == ts.size()); // make sure.
+#if 0
+  assert(N == ys.size()); // just to
+  assert(N == ts.size()); // make sure.
+#endif // 0
   return N;
 }
 
-void vgui_text_tableau::clear() {
+void vgui_text_tableau::clear()
+{
   if (size() > 0) {
     xs.clear();
     ys.clear();
@@ -47,7 +51,8 @@ void vgui_text_tableau::clear() {
   }
 }
 
-int vgui_text_tableau::add(float x, float y, char const *text) {
+int vgui_text_tableau::add(float x, float y, char const *text)
+{
   int return_val = first_empty;
   if (first_empty < size()) {
     xs[first_empty] = x;
@@ -75,15 +80,17 @@ int vgui_text_tableau::add(float x, float y, char const *text) {
   return return_val;
 }
 
-void vgui_text_tableau::move(int handle, float nx, float ny) {
-  assert(handle >= 0);
-  assert((unsigned int)handle < size());
-  xs[handle] = nx;
-  ys[handle] = ny;
+void vgui_text_tableau::move(int hndl, float nx, float ny)
+{
+  assert(hndl >= 0);
+  assert((unsigned int)hndl < size());
+  xs[hndl] = nx;
+  ys[hndl] = ny;
   post_redraw();
 }
 
-void vgui_text_tableau::set_colour(float r, float g, float b) {
+void vgui_text_tableau::set_colour(float r, float g, float b)
+{
   if (0 <= r && r <= 1 && 0 <= g && g <= 1 && 0 <= b && b <= 1)
   {
     cur_r_ = r;
@@ -92,52 +99,60 @@ void vgui_text_tableau::set_colour(float r, float g, float b) {
   }
 }
 
-void vgui_text_tableau::set_size( unsigned s ) {
+void vgui_text_tableau::set_size( unsigned s )
+{
   cur_sz_ = s;
 }
 
-float vgui_text_tableau::get_posx(int handle) const {
-  assert(handle >= 0);
-  assert((unsigned int)handle < size());
-  return xs[handle];
+float vgui_text_tableau::get_posx(int hndl) const
+{
+  assert(hndl >= 0);
+  assert((unsigned int)hndl < size());
+  return xs[hndl];
 }
 
-float vgui_text_tableau::get_posy(int handle) const {
-  assert(handle >= 0);
-  assert((unsigned int)handle < size());
-  return ys[handle];
+float vgui_text_tableau::get_posy(int hndl) const
+{
+  assert(hndl >= 0);
+  assert((unsigned int)hndl < size());
+  return ys[hndl];
 }
 
-vcl_string const &vgui_text_tableau::get_text(int handle) const {
-  assert(handle >= 0);
-  assert((unsigned int)handle < size());
-  return ts[handle];
+vcl_string const &vgui_text_tableau::get_text(int hndl) const
+{
+  assert(hndl >= 0);
+  assert((unsigned int)hndl < size());
+  return ts[hndl];
 }
 
-void vgui_text_tableau::remove(int handle) {
-  assert(handle >= 0);
-  assert((unsigned int)handle < size());
+void vgui_text_tableau::remove(int hndl)
+{
+  assert(hndl >= 0);
+  assert((unsigned int)hndl < size());
   // Using r_ to indicate empty is okay because valid values for r are in [0,1].
-  r_[handle] = -1;
+  r_[hndl] = -1;
 
-  // kym - don't do this because it changes handles of values remaining in list:
-  //xs.erase(xs.begin() + handle);
-  //ys.erase(ys.begin() + handle);
-  //ts.erase(ts.begin() + handle);
+#if 0 // kym - don't do this because it changes handles of values remaining in list:
+  xs.erase(xs.begin() + hndl);
+  ys.erase(ys.begin() + hndl);
+  ts.erase(ts.begin() + hndl);
+#endif // 0
 
   post_redraw();
-  if ((unsigned int)handle < first_empty)
-    first_empty = handle;
+  if ((unsigned int)hndl < first_empty)
+    first_empty = hndl;
 }
 
-void vgui_text_tableau::change(int handle, char const *ntext) {
-  assert(handle >= 0);
-  assert((unsigned int)handle < size());
-  ts[handle] = ntext;
+void vgui_text_tableau::change(int hndl, char const *ntext)
+{
+  assert(hndl >= 0);
+  assert((unsigned int)hndl < size());
+  ts[hndl] = ntext;
   post_redraw();
 }
 
-bool vgui_text_tableau::handle(vgui_event const &e) {
+bool vgui_text_tableau::handle(vgui_event const &e)
+{
   if (e.type != vgui_DRAW)
     return false;
 

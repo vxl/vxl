@@ -8,7 +8,7 @@
 // \file
 // \brief A parameters struct for IIDC 1394 camera streams
 //
-// \author Matt Leotta 
+// \author Matt Leotta
 // \date 10 Jan 2006
 //
 // These parameters are as described by the
@@ -176,8 +176,8 @@ struct vidl_iidc1394_params
   vidl_iidc1394_params();
 
   //: Set the guid
-  vidl_iidc1394_params& guid( vxl_uint_64 guid )
-  { guid_ = guid; return *this; }
+  vidl_iidc1394_params& guid( vxl_uint_64 the_guid )
+  { guid_ = the_guid; return *this; }
 
   //: Set the speed
   vidl_iidc1394_params& speed( speed_t s )
@@ -269,7 +269,6 @@ struct vidl_iidc1394_params::valid_options
   //: A vector of the valid cameras
   // one object for each camera detected on the bus
   vcl_vector<camera> cameras;
-
 };
 
 #endif // vidl_iidc1394_params_h_

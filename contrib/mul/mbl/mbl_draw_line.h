@@ -39,11 +39,11 @@ inline void mbl_draw_line(vil_image_view<T>& image,
     normal=normalized(normal);
     for (unsigned i=0;i<=n;++i,p1+=dp)
     {
-      vgl_point_2d<double> p2=p1-sw*normal;
-      for ( unsigned j=0;j<width;++j,p2+=normal)
+      vgl_point_2d<double> p3=p1-sw*normal;
+      for ( unsigned j=0;j<width;++j,p3+=normal)
       {
-        unsigned pi=unsigned(p2.x()+0.5); if (pi>=ni) continue;
-        unsigned pj=unsigned(p2.y()+0.5); if (pj>=nj) continue;
+        unsigned pi=unsigned(p3.x()+0.5); if (pi>=ni) continue;
+        unsigned pj=unsigned(p3.y()+0.5); if (pj>=nj) continue;
         image(pi,pj)=value;
       }
     }

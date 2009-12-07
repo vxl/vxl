@@ -12,27 +12,23 @@
 // \date 21 Feb 2006
 
 #include "vidl_istream.h"
-// not used? #include <vcl_iostream.h>//for printing to stdout via vcl
-// not used? #include <vcl_map.h>//for storage of the devices and if they're being used
-// not used? #include <vcl_fstream.h>//needed to probe for valid devices
-// not used? #include <vcl_sstream.h>//to convert from ints to strings
-#include <vcl_string.h>//this is for the strings scattered about the place
+#include <vcl_string.h> // this is for the strings scattered about the place
 
-//this is linux specific
+// this is linux specific
 using namespace std;
 
 extern "C" {
-#include <linux/videodev.h> //this is the video for linux stuff
+#include <linux/videodev.h> // this is the video for linux stuff
 
-#include <sys/ioctl.h> //this is to communicate with the device
-#include <sys/mman.h>//for mmap
+#include <sys/ioctl.h> // this is to communicate with the device
+#include <sys/mman.h>  // for mmap
 #include <sys/types.h>
 #include <sys/stat.h>
 
-#include <unistd.h>//for reading/writing to the camera
-#include <errno.h>//for errno
-#include <fcntl.h>//this is for the open, and O_RDWR
-#include <pthread.h>//for threaded approach to the asynch capture
+#include <unistd.h> // for reading/writing to the camera
+#include <errno.h> // for errno
+#include <fcntl.h> // this is for the open, and O_RDWR
+#include <pthread.h> // for threaded approach to the asynch capture
 };
 
 #include "vidl_v4l_params.h"
@@ -40,7 +36,7 @@ extern "C" {
 class vidl_v4l_istream:public vidl_istream
 {
   public:
-    //: Constructor
+    // Constructor
     vidl_v4l_istream():buf(NULL)
     {
         open("/dev/video0");
@@ -58,7 +54,7 @@ class vidl_v4l_istream:public vidl_istream
         set_params(p);
     }
 
-    //: Destructor
+    // Destructor
     virtual ~vidl_v4l_istream();
 
     //: Return true if the stream is open for reading
@@ -90,7 +86,7 @@ class vidl_v4l_istream:public vidl_istream
     virtual double duration() const { return 0.0; }
 
     //: Return the current frame number
-    virtual unsigned int frame_number() const{return frame_number_;}
+    virtual unsigned int frame_number() const { return frame_number_; }
 
     //: Open
     bool open(const vcl_string &device_name);
@@ -100,7 +96,7 @@ class vidl_v4l_istream:public vidl_istream
 
     //: set the params for the device
     bool set_params(const vidl_v4l_params &p);
-    vidl_v4l_params get_params(){return params_;}
+    vidl_v4l_params get_params() { return params_; }
 
     //: Advance to the next frame (but don't acquire an image)
     virtual bool advance();
@@ -109,11 +105,11 @@ class vidl_v4l_istream:public vidl_istream
     virtual vidl_frame_sptr read_frame();
 
     //: Return the current frame in the stream
-    virtual vidl_frame_sptr current_frame(){return cur_frame_;}
+    virtual vidl_frame_sptr current_frame() { return cur_frame_; }
 
     //: Seek to the given frame number
     // \returns true if successful
-    virtual bool seek_frame(unsigned int frame_number){return false;}
+    virtual bool seek_frame(unsigned int /*frame_nr*/) { return false; }
   private:
     struct video_capability vc;
     struct video_window vw;

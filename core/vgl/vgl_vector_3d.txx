@@ -24,7 +24,7 @@ vgl_vector_3d<T> vgl_vector_3d<T>::orthogonal_vectors(double s)
 {
   assert(this->length()>0.0);
 
-  //enforce parameter range
+  // enforce parameter range
   if (s<0.0) s=0.0;
   if (s>1.0) s = 1.0;
   double tol = static_cast<double>(vgl_tolerance<T>::position);
@@ -34,7 +34,7 @@ vgl_vector_3d<T> vgl_vector_3d<T>::orthogonal_vectors(double s)
   double two_pi = 2*3.14159265358979323846;
   double co = vcl_cos(two_pi*s);
   double si = vcl_sin(two_pi*s);
-  
+
   double mnz = vcl_fabs(nz);
   if (mnz>tol)  // General case
   {
@@ -48,7 +48,7 @@ vgl_vector_3d<T> vgl_vector_3d<T>::orthogonal_vectors(double s)
     return vgl_vector_3d<T>(vx, vy, vz);
   }
   else  // Special cases, nz ~ 0
-  {  
+  {
     double mny = vcl_fabs(ny);
     if (mny>tol)
     {
@@ -124,23 +124,23 @@ vcl_istream& vgl_vector_3d<T>::read(vcl_istream& is)
 {
   if (! is.good()) return is; // (TODO: should throw an exception)
   bool paren = false;
-  T x, y, z;
+  T tx, ty, tz;
   is >> vcl_ws; // jump over any leading whitespace
   if (is.eof()) return is; // nothing to be set because of EOF (TODO: should throw an exception)
   if (is.peek() == '(') { is.ignore(); paren=true; }
-  is >> vcl_ws >> x >> vcl_ws;
+  is >> vcl_ws >> tx >> vcl_ws;
   if (is.eof()) return is;
   if (is.peek() == ',') is.ignore();
-  is >> vcl_ws >> y >> vcl_ws;
+  is >> vcl_ws >> ty >> vcl_ws;
   if (is.eof()) return is;
   if (is.peek() == ',') is.ignore();
-  is >> vcl_ws >> z >> vcl_ws;
+  is >> vcl_ws >> tz >> vcl_ws;
   if (paren) {
     if (is.eof()) return is;
     if (is.peek() == ')') is.ignore();
     else                  return is; // closing parenthesis is missing (TODO: throw an exception)
   }
-  set(x,y,z);
+  set(tx,ty,tz);
   return is;
 }
 
