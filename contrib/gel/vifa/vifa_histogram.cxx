@@ -11,13 +11,7 @@
 static int MEAN_FLAG = 1;
 static int SD_FLAG = 2;
 
-// max & min inline functions
-// These functions return the max or min, respectively of the two arguments
-// passed in.  If they are equal, the return value will be the first agrument.
-// MPP 7/25/2003
-// Replaced w/ vcl_max & vcl_min template functions
-//static inline float max(float f1, float f2) {return (f1>f2) ? f1 : (f2>f1) ? f2 : f1 ;}
-//static inline float min(float f1, float f2) {return (f1<f2) ? f1 : (f2<f1) ? f2 : f1 ;}
+// MPP 7/25/2003  Replaced min & max inline functions w/ vcl_max & vcl_min template functions
 
 vifa_histogram::vifa_histogram()
 {
@@ -102,7 +96,7 @@ vifa_histogram::vifa_histogram(const vifa_histogram& h)
   // We know we really aren't changing h, but the array access to h isn't
   // strictly speaking const. JLM -Oct 2000
   stats_consistent = 0;
-  vifa_histogram& his = (vifa_histogram&)h;
+  vifa_histogram& his = (vifa_histogram&)h; // casting away const !!!
 
   num = his.GetRes();
 
@@ -362,7 +356,6 @@ vifa_histogram::vifa_histogram(vifa_histogram const* his, float width, bool pres
     }
   }
 
-
   if (org_delta < delta)
   {
     // Just accumulate samples from his into larger bins
@@ -529,21 +522,21 @@ void vifa_histogram::RemoveFlatPeaks(int nbins, float* cnts, bool cyclic)
 {
   int nbm = nbins-1;
 
-  //Here we define a small state machine - parsing for runs of peaks
-  //init is the state corresponding to an initial run (starting at i ==0)
+  // Here we define a small state machine - parsing for runs of peaks
+  // init is the state corresponding to an initial run (starting at i ==0)
   float init=GetExtendedCount(0, nbins, cnts, cyclic);
   int init_end =0;
 
-  //start is the state corresponding to any other run of peaks
+  // start is the state corresponding to any other run of peaks
   bool start=false;
   int start_index=0;
 
-  //The scan of the state machine
+  // The scan of the state machine
   for (int i = 0; i < nbins; i++)
   {
     float v = GetExtendedCount(i, nbins, cnts, cyclic);
 
-    //State init: a string of non-zeroes at the beginning.
+    // State init: a string of non-zeroes at the beginning.
     if (init&&v!=0)
       continue;
 
@@ -552,37 +545,37 @@ void vifa_histogram::RemoveFlatPeaks(int nbins, float* cnts, bool cyclic)
       init_end = i;
       // fix to eliminate compiler warning.
       // init used to be bool, but now is float.  It should still work.
-      //init = false;
+      // init = false;
       init = 0;
       continue;
     }
 
-    //State !init&&!start: a string of "0s"
+    // State !init&&!start: a string of "0s"
     if (!start&&v==0)
       continue;
 
-    //State !init&&start: the first non-zero value
+    // State !init&&start: the first non-zero value
     if (!start&&v!=0)
     {
       start_index = i;
       start = true;
       continue;
     }
-    //State ending flat peak: encountered a subsequent zero after starting
+    // State ending flat peak: encountered a subsequent zero after starting
     if (start&&v==0)
     {
-      int peak_location = (start_index+i-1)/2;//The middle of the run
+      int peak_location = (start_index+i-1)/2; // The middle of the run
       for (int k = start_index; k<=(i-1); k++)
         if (k!=peak_location)
           cnts[k] = 0;
       start = false;
     }
   }
-  //Now handle the boundary conditions
-  //The non-cyclic case
+  // Now handle the boundary conditions
+  // The non-cyclic case
   if (!cyclic)
   {
-    if (init_end!=0)  //Was there an initial run of peaks?
+    if (init_end!=0)  // Was there an initial run of peaks?
     {
       int init_location = (init_end-1)/2;
       for (int k = 0; k<init_end; k++)
@@ -597,14 +590,14 @@ void vifa_histogram::RemoveFlatPeaks(int nbins, float* cnts, bool cyclic)
           cnts[k] = 0;
     }
   }
-  else  //The cyclic case
+  else  // The cyclic case
   {
-    if (init_end!=0) { //Is there a run which crosses the cyclic cut?
+    if (init_end!=0) { // Is there a run which crosses the cyclic cut?
       if (start)
-      { //Yes, so define the peak location accordingly
+      { // Yes, so define the peak location accordingly
         int peak_location = (start_index + init_end - nbm -1)/2;
         int k;
-        if (peak_location < 0) //Is the peak to the left of the cut?
+        if (peak_location < 0) // Is the peak to the left of the cut?
         {// Yes, to the left
           peak_location += nbm;
           for ( k = 0; k< init_end; k++)
@@ -614,7 +607,7 @@ void vifa_histogram::RemoveFlatPeaks(int nbins, float* cnts, bool cyclic)
               cnts[k] = 0;
         }
         else
-        {//No, on the right.
+        { // No, on the right.
           for ( k = start_index; k< nbins; k++)
             cnts[k]=0;
           for ( k= 0; k < init_end; k++)
@@ -623,7 +616,7 @@ void vifa_histogram::RemoveFlatPeaks(int nbins, float* cnts, bool cyclic)
         }
       }
       else
-      {//There wasn't a final run so just clean up the initial run
+      { // There wasn't a final run so just clean up the initial run
         int init_location = (init_end-1)/2;
         for (int k = 0; k<=init_end; k++)
           if (k!=init_location)
@@ -648,21 +641,21 @@ vifa_histogram* vifa_histogram::NonMaximumSupress(int radius, bool cyclic)
     vcl_cerr << "In vifa_histogram::NonMaximumSupress(): radius is too large\n";
     return NULL;
   }
-  //Get the counts array of "this"
+  // Get the counts array of "this"
   vifa_histogram* h_new = new vifa_histogram(*this);
   int n_buckets = h_new->GetRes();
   float* counts_old = this->GetCounts();
 
-  //Make a new histogram for the suppressed version
+  // Make a new histogram for the suppressed version
   float* counts_new = h_new->GetCounts();
   int i;
   for ( i =0; i < n_buckets; i++)
     counts_new[i] = 0;
 
-  //Find local maxima
+  // Find local maxima
   for ( i = 0; i<  n_buckets; i++)
   {
-    //find the maximum value in the current kernel
+    // find the maximum value in the current kernel
     float max_count = counts_old[i];
     for (int k = -radius; k <= radius ;k++)
     {
@@ -671,9 +664,9 @@ vifa_histogram* vifa_histogram::NonMaximumSupress(int radius, bool cyclic)
       if ( c > max_count)
         max_count = c;
     }
-    //Is position i a local maximum?
+    // Is position i a local maximum?
     if (max_count == counts_old[i])
-      counts_new[i] = max_count;//Yes. So set the counts to the max value
+      counts_new[i] = max_count; // Yes. So set the counts to the max value
   }
   RemoveFlatPeaks(n_buckets, counts_new, cyclic);
   return h_new;
@@ -1155,9 +1148,9 @@ float vifa_histogram::CompareToHistogram(vifa_histogram* h)
   float v1 = this->GetStandardDev();
   float v2 = h->GetStandardDev();
 
-  //We don't like singular situations
+  // We don't like singular situations
   if ( vcl_fabs(v1) < 1e-6 || vcl_fabs(v2) < 1e-6 ) return 0.0f;
-  if (m1==0||m2==0) return 0.0f; //means exactly 0 indicate singular histogram
+  if (m1==0||m2==0) return 0.0f; // means exactly 0 indicate singular histogram
 
   // scale factor ln(2)/2 = 0.347 means M = 2 at exp = 0.5
   return (float)vcl_exp(- vcl_fabs( 0.693 * (m1 - m2) * vcl_sqrt(1.0/(v1*v1) + 1.0/(v2*v2))));

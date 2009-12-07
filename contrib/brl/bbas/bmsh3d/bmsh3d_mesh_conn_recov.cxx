@@ -16,7 +16,6 @@
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 #include <vcl_algorithm.h>
-#include <vul/vul_printf.h>
 #include "bmsh3d_mesh.h"
 
 // ###########################################################################
@@ -25,8 +24,8 @@
 
 void bmsh3d_mesh::IFS_to_MHE()
 {
-  //Loop through all face F and put F into its V's incident face list.
-  //This V-F incidence will be cleared after MHE is built.
+  // Loop through all face F and put F into its V's incident face list.
+  // This V-F incidence will be cleared after MHE is built.
   vcl_map<int, bmsh3d_face*>::iterator fit = facemap_.begin();
   for (; fit != facemap_.end(); fit++) {
     bmsh3d_face* F = (*fit).second;
@@ -47,7 +46,7 @@ void bmsh3d_mesh::IFS_to_MHE_build_edges(const bool skip_v0)
   vcl_cerr << "  IFS_to_MHE_build_edges():\n";
   assert (! is_MHE());
 
-  //For each V, try to locate the other V sharing an edge via F.
+  // For each V, try to locate the other V sharing an edge via F.
   vcl_cerr << "    Constructing mesh edges: ";
   int prev_per = 0;
   vcl_map<int, bmsh3d_vertex*>::iterator nit = vertexmap_.begin();
@@ -55,43 +54,43 @@ void bmsh3d_mesh::IFS_to_MHE_build_edges(const bool skip_v0)
     bmsh3d_vertex* V = (*nit).second;
     float percentage = count * 100.0f / vertexmap_.size();
     int per = static_cast<int>(vcl_ceil(percentage));
-    if (per % 10 ==0 && per != prev_per)
-      vul_printf(vcl_cerr, "%2d%% ", per);
+    if (per % 10 == 0 && per != prev_per)
+      vcl_cerr << per << "% ";
     prev_per = per;
 
     for (bmsh3d_ptr_node* cur = V->F_list(); cur != NULL; cur = cur->next()) {
       const bmsh3d_face* F = (const bmsh3d_face*) cur->ptr();
 
-      //1) The prev node
+      // 1) The prev node
       bmsh3d_vertex* prevV = F->_ifs_prev_V(V);
-      if (skip_v0 && prevV->id()==0) //ignore the infinity node
+      if (skip_v0 && prevV->id()==0) // ignore the infinity node
         continue;
 
-      //If link between prevV <-> v not exist, create one.
+      // If link between prevV <-> v not exist, create one.
       bmsh3d_edge* E = E_sharing_2V(prevV, V);
       if (E == NULL)
         E = add_new_edge(prevV, V);
 
-      //Connect the face to the edge through the half-edge
+      // Connect the face to the edge through the half-edge
       if (!E->is_F_incident(F))
-        _connect_F_E_end((bmsh3d_face*)F, E);
+        _connect_F_E_end((bmsh3d_face*)F, E); // casting away const !!!
 
-      //2) The next node, ignore the infinity node
+      // 2) The next node, ignore the infinity node
       bmsh3d_vertex* nextV = F->_ifs_next_V(V);
       if (skip_v0 && nextV->id()==0)
         continue;
 
-      //If link between v <-> nextV not exist, create one.
+      // If link between v <-> nextV not exist, create one.
       E = E_sharing_2V(V, nextV);
       if (E == NULL)
         E = add_new_edge(V, nextV);
 
-      //Connect the face to the edge through the half-edge
+      // Connect the face to the edge through the half-edge
       if (!E->is_F_incident(F))
-        _connect_F_E_end((bmsh3d_face*)F, E);
+        _connect_F_E_end((bmsh3d_face*)F, E); // casting away const !!!
     }
 
-    //Now clean up V's ptr's.
+    // Now clean up V's ptr's.
     V->clear_F_list();
   }
 
@@ -103,7 +102,7 @@ void bmsh3d_mesh::IFS_to_MHE_bf(const bool skip_v0)
 {
   vcl_cerr << "\n  IFS_to_MHE_bf():\n";
 
-  //For each V, try to locate the other V sharing an edge via F.
+  // For each V, try to locate the other V sharing an edge via F.
   vcl_cerr << "    Constructing mesh edges: ";
   int prev_per = 0;
   vcl_map<int, bmsh3d_vertex*>::iterator nit = vertexmap_.begin();
@@ -111,12 +110,11 @@ void bmsh3d_mesh::IFS_to_MHE_bf(const bool skip_v0)
     bmsh3d_vertex* V = (*nit).second;
     float percentage = count * 100.0f / vertexmap_.size();
     int per = static_cast<int>(vcl_ceil(percentage));
-    //if (per % 10 ==0 && per != prev_per)
-    if (per != prev_per)
-      vul_printf(vcl_cerr, "%2d%% ", per);
+    if (per != prev_per) // && per % 10 ==0
+      vcl_cerr << per << "% ";
     prev_per = per;
 
-    //Loop through each incident face for this V
+    // Loop through each incident face for this V
     vcl_set<void*> V_incident_Fs;
     V_incident_Fs.clear();
 
@@ -133,36 +131,36 @@ void bmsh3d_mesh::IFS_to_MHE_bf(const bool skip_v0)
     for (; it != V_incident_Fs.end(); it++) {
       bmsh3d_face* F = (bmsh3d_face*)(*it);
 
-      //1) The prev node
+      // 1) The prev node
       bmsh3d_vertex* prevV = F->_ifs_prev_V(V);
-      if (skip_v0 && prevV->id()==0) //ignore the infinity node
+      if (skip_v0 && prevV->id()==0) // ignore the infinity node
         continue;
 
-      //If link between prevV <-> v not exist, create one.
+      // If link between prevV <-> v not exist, create one.
       bmsh3d_edge* E = E_sharing_2V(prevV, V);
       if (E == NULL)
         E = add_new_edge(prevV, V);
 
-      //Connect the face to the edge through the half-edge
+      // Connect the face to the edge through the half-edge
       if (!E->is_F_incident(F))
         _connect_F_E_end((bmsh3d_face*)F, E);
 
-      //2) The next node, ignore the infinity node
+      // 2) The next node, ignore the infinity node
       bmsh3d_vertex* nextV = F->_ifs_next_V(V);
       if (skip_v0 && nextV->id()==0)
         continue;
 
-      //If link between v <-> nextV not exist, create one.
+      // If link between v <-> nextV not exist, create one.
       E = E_sharing_2V(V, nextV);
       if (E == NULL)
         E = add_new_edge(V, nextV);
 
-      //Connect the face to the edge through the half-edge
+      // Connect the face to the edge through the half-edge
       if (!E->is_F_incident(F))
         _connect_F_E_end((bmsh3d_face*)F, E);
     }
 
-    //Now clean up V's ptr's.
+    // Now clean up V's ptr's.
     V->clear_F_list();
   }
 
@@ -177,7 +175,7 @@ void bmsh3d_mesh::sort_halfedges_for_all_faces()
   vcl_cerr << "\n      sort_halfedges_for_all_faces(): " << facemap_.size() << " faces.\n";
   assert (is_MHE());
 
-  //Go through each face, re-sort the list of halfedges in a circular way
+  // Go through each face, re-sort the list of halfedges in a circular way
   vcl_map<int, bmsh3d_face*>::iterator pit = facemap_.begin();
   for (; pit != facemap_.end(); pit++) {
     bmsh3d_face* F = (*pit).second;
@@ -224,7 +222,7 @@ void bmsh3d_mesh::clean_IFS_mesh()
 {
   assert (is_MHE());
 
-  //Go through each face and clear the F.vertices[]
+  // Go through each face and clear the F.vertices[]
   vcl_map<int, bmsh3d_face*>::iterator pit = facemap_.begin();
   for (; pit != facemap_.end(); pit++) {
     bmsh3d_face* F = (*pit).second;
@@ -237,16 +235,16 @@ void bmsh3d_mesh::MHE_to_IFS()
   vcl_cerr << "  MHE_to_IFS().\n";
   build_face_IFS();
 
-  //Delete all mesh edges and halfedges.
+  // Delete all mesh edges and halfedges.
 
-  //Go through all mesh faces and
+  // Go through all mesh faces and
   vcl_map<int, bmsh3d_face*>::iterator pit = facemap_.begin();
   for (; pit != facemap_.end(); pit++) {
     bmsh3d_face* F = (*pit).second;
     _delete_HE_chain(F->halfedge());
   }
 
-  //Delete all mesh edges.
+  // Delete all mesh edges.
   vcl_map<int, bmsh3d_edge*>::iterator eit = edgemap_.begin();
   while (eit != edgemap_.end()) {
     bmsh3d_edge* E = (*eit).second;
@@ -254,7 +252,7 @@ void bmsh3d_mesh::MHE_to_IFS()
     eit = edgemap_.begin();
   }
 
-  //Delete all mesh vertex's pointer to edges.
+  // Delete all mesh vertex's pointer to edges.
   vcl_map<int, bmsh3d_vertex*>::iterator vit = vertexmap_.begin();
   for (; vit != vertexmap_.end(); vit++) {
     bmsh3d_vertex* V = (*vit).second;

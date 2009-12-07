@@ -13,7 +13,8 @@
 #include <vcl_algorithm.h>
 #include <testlib/testlib_test.h>
 
-char const * my_argv_1[] = {
+char const * my_argv_1[] =
+{
   "progname",
   "f",
   "-int", "3",
@@ -31,14 +32,9 @@ char const * my_argv_1[] = {
   0
 };
 
-int list1_contents[] = {
-  1,2,10,21,24,-1,-3,-5,-7
-};
+int list1_contents[] = { 1,2,10,21,24,-1,-3,-5,-7 };
 
-double list2_contents[] = {
-  1.5,-1.5,8.0
-};
-
+double list2_contents[] = { 1.5,-1.5,8.0 };
 
 int count_my_args(char const * const * my_argv)
 {
@@ -48,7 +44,7 @@ int count_my_args(char const * const * my_argv)
   return c;
 }
 
-void test_do_vul_arg()
+void test_arg()
 {
   vul_arg_info_list arglist;
 
@@ -71,7 +67,7 @@ void test_do_vul_arg()
            << ", list1 size = " << list1().size()
            << ", list2 size = " << list2().size()
            << vcl_endl;
-  char **my_argv = (char**) my_argv_1;
+  char **my_argv = (char**) my_argv_1; // casting away const !!!
 
   arglist.parse(my_argc, my_argv, true);
 
@@ -105,22 +101,6 @@ void test_do_vul_arg()
     }
     TEST("list2 contents", ok, true);
   }
-
-  
 }
 
-
-void test_arg()
-{
-  test_do_vul_arg();
-}
-
-//TESTMAIN(test_arg);
-int test_arg(int, char*[])
-{
-  testlib_test_start("test_arg");
-
-  test_arg();
-
-  return testlib_test_summary();
-}
+TEST_MAIN(test_arg);

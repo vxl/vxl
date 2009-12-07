@@ -117,7 +117,7 @@ void bsol_distance_histogram::up_count(const double value, const double count,
 //
 double bsol_distance_histogram::interpolate_peak(int initial_peak)
 {
-  //boundary conditions
+  // boundary conditions
   if (initial_peak<0)
     return 0;
   if (initial_peak==0)
@@ -131,24 +131,26 @@ double bsol_distance_histogram::interpolate_peak(int initial_peak)
   double fzero = bin_counts_[initial_peak];
   double fplus = bin_counts_[initial_peak+1];
 
-  double df = 0.5*(fplus-fminus);//first derivative
-  double d2f = 0.5*(fplus+fminus-2.0*fzero);//second derivative
+  double df = 0.5*(fplus-fminus); // first derivative
+  double d2f = 0.5*(fplus+fminus-2.0*fzero); // second derivative
   if (vcl_fabs(d2f)<1.0e-8)
     return bin_values_[initial_peak];
 
   double root = -0.5*df/d2f;
 
-  //interpolate the bin values within the appropriate interval
+  // interpolate the bin values within the appropriate interval
   double dminus = bin_values_[initial_peak-1];
   double dzero = bin_values_[initial_peak];
   double dplus = bin_values_[initial_peak+1];
 
   double result;
   if (root<0)
-   result = (dzero*(1+root)-dminus*root);
+    result = (dzero*(1+root)-dminus*root);
   else
-    result =  (dzero*(1-root)+dplus*root);
-  //  vcl_cout << "interpolated distance " << result << '\n';
+    result = (dzero*(1-root)+dplus*root);
+#ifdef DEBUG
+  vcl_cout << "interpolated distance " << result << '\n';
+#endif // DEBUG
   return result;
 }
 
@@ -160,10 +162,10 @@ bool bsol_distance_histogram::
 distance_peaks(double& peak1, double& peak2, double min_peak_height_ratio)
 {
   int nbins = bin_counts_.size();
-  //Peak search states
+  // Peak search states
   int init = 0, start = 1, down =2 , up=3, s_peak1= 4, down2 = 5, up2 = 6,
     s_peak2 = 7, fail=8;
-  //Initial state assignment
+  // Initial state assignment
   int state=init;
   int upi1=0, upi2=0;
   double v=0;
@@ -176,7 +178,7 @@ distance_peaks(double& peak1, double& peak2, double min_peak_height_ratio)
              << " C = "<< bin_counts_[i] << " srt_d = " << start_distance
              << " v = "<< v << '\n';
 #endif
-    //Begin the scan look for a value above 0
+    // Begin the scan look for a value above 0
     if (state==init)
       if (bin_counts_[i]>0)
       {
@@ -185,16 +187,16 @@ distance_peaks(double& peak1, double& peak2, double min_peak_height_ratio)
         start_distance = 0;
         continue;
       }
-    //If we are in the start state set the threshold and move down.
+    // If we are in the start state set the threshold and move down.
     if (state==start)
     {
       //        if (bin_counts_[i]>0)
       if (bin_counts_[i]<=v)
       {
         state = down;
-        //second peak should be a significant ratio of the starting value
+        // second peak should be a significant ratio of the starting value
         tr = min_peak_height_ratio*v;
-        v=bin_counts_[i];    //population
+        v=bin_counts_[i];    // population
         continue;
       }
       else
@@ -217,7 +219,7 @@ distance_peaks(double& peak1, double& peak2, double min_peak_height_ratio)
         else
         {
           state = up;
-          //upi1 is the location of the up state
+          // upi1 is the location of the up state
           upi1 = i;
         }
         v = bin_counts_[i];
@@ -262,7 +264,7 @@ distance_peaks(double& peak1, double& peak2, double min_peak_height_ratio)
         else
         {
           state = up2;
-          //upi2 is the location of the up state
+          // upi2 is the location of the up state
           upi2 = i;
         }
         v = bin_counts_[i];
@@ -338,14 +340,14 @@ double bsol_distance_histogram::max_count() const
 
 vcl_ostream& operator << (vcl_ostream& os, const bsol_distance_histogram& h)
 {
-  int nchars = 25;//display resolution
+  int nchars = 25; // display resolution
   vcl_cout << "Distance Histogram\n";
-  //get the maximum bin value
+  // get the maximum bin value
   double max_cnt = h.max_count();
   if (!max_cnt)
     return os;
   // forced to cast away const
-  bsol_distance_histogram & hh = (bsol_distance_histogram&)h;
+  bsol_distance_histogram & hh = (bsol_distance_histogram&)h; // casting away const !!!
   vcl_vector<double>& vals = hh.values();
   vcl_vector<double>& cnts = hh.counts();
   for (unsigned int i=0; i<vals.size(); i++)

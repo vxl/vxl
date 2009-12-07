@@ -44,7 +44,7 @@ bmsh3dvis_edge_SoLineSet::bmsh3dvis_edge_SoLineSet (const bmsh3d_edge* edge)
   SO_NODE_CONSTRUCTOR (bmsh3dvis_edge_SoLineSet);
   this->isBuiltIn = true;
 
-  _element = (bmsh3d_edge*) edge;
+  _element = (bmsh3d_edge*) edge; // casting away const !!!
   _element->set_vis_pointer ((void*)this);
 }
 
