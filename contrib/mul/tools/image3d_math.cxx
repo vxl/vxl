@@ -1583,10 +1583,10 @@ class operations
                   "image", "value", "Sum of all the voxel values.");
     add_operation("--voxel_sum", &voxel_sum__image_3d_of_float,
                   function_type_t() << operand::e_image_3d_of_float,
-                  "image", "value", "Sum of all the voxel values.");
+                  "image", "x_length y_length z_length", "Length of each side of a voxel.");
     add_operation("--voxel_sum", &voxel_sum__image_3d_of_int,
                   function_type_t() << operand::e_image_3d_of_int,
-                  "image", "value", "Sum of all the voxel values.");
+                  "image", "x_length y_length z_length", "Length of each side of a voxel.");
 
     // Check they are correctly sorted.
     vcl_vector<vcl_string>::iterator it=names_.begin(), end=names_.end();
