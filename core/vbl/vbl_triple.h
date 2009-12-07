@@ -53,10 +53,8 @@ inline bool operator!=(vbl_triple<T1, T2, T3> const &x, vbl_triple<T1, T2, T3> c
 template <class T1, class T2, class T3>
 inline bool operator< (vbl_triple<T1, T2, T3> const &x, vbl_triple<T1, T2, T3> const &y)
 {
-  return x.first  != y.first  ? x.first  < y.first  :
-         x.second != y.second ? x.second < y.second :
-         x.third  != y.third  ? x.third  < y.third  :
-         false;
+  return x.first!=y.first ? x.first<y.first :
+    (x.second!=y.second ? x.second<y.second : x.third<y.third);
 }
 
 template <class T1, class T2, class T3>
