@@ -26,5 +26,12 @@ ADD_TEST( vpgl_test_essential_matrix           ${EXECUTABLE_OUTPUT_PATH}/vpgl_te
 ADD_TEST( vpgl_test_rational_camera            ${EXECUTABLE_OUTPUT_PATH}/vpgl_test_all test_rational_camera)
 ADD_TEST( vpgl_test_local_rational_camera      ${EXECUTABLE_OUTPUT_PATH}/vpgl_test_all test_local_rational_camera)
 
+SET( HAS_GEOTIFF 0 )
+INCLUDE( ${MODULE_PATH}/FindGEOTIFF.cmake)
+IF(GEOTIFF_FOUND)
+  SET (HAS_GEOTIFF 1 )
+  INCLUDE_DIRECTORIES(${GEOTIFF_INCLUDE_DIR})
+ENDIF(GEOTIFF_FOUND)
+
 ADD_EXECUTABLE( vpgl_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vpgl_test_include vpgl )
