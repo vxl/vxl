@@ -3,7 +3,7 @@
 //:
 // \file
 #include <vcl_vector.h>
-#include "boxm_neighb_graph_node.h"
+//#include "boxm_neighb_graph_node.h"
 
 template <class T>
 class boxm_cell_vis_graph_node
