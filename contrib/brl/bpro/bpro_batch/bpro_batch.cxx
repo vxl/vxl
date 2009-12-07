@@ -63,12 +63,11 @@ PyMethodDef batch_methods[] =
     {pdb, print_db, METH_VARARGS,pdb_com },
     {clr, clear, METH_VARARGS, clr_com},
 #endif
-
-    {NULL, NULL},
-    {NULL, NULL}
+    {NULL, NULL, 0, NULL},
+    {NULL, NULL, 0, NULL}
   };
 
-PyObject *init_process(PyObject *self, PyObject *args)
+PyObject *init_process(PyObject * /*self*/, PyObject *args)
 {
   const char* name;
   if (!PyArg_ParseTuple(args, "s:init_process", &name))
@@ -79,7 +78,7 @@ PyObject *init_process(PyObject *self, PyObject *args)
   return Py_BuildValue("b", result);
 }
 
-PyObject *set_input_bool(PyObject *self, PyObject *args)
+PyObject *set_input_bool(PyObject * /*self*/, PyObject *args)
 {
   int input;
   bool value;
@@ -92,7 +91,7 @@ PyObject *set_input_bool(PyObject *self, PyObject *args)
 }
 
 PyObject *
-set_input_string(PyObject *self, PyObject *args)
+set_input_string(PyObject * /*self*/, PyObject *args)
 {
   int input;
   const char* value;
@@ -104,7 +103,7 @@ set_input_string(PyObject *self, PyObject *args)
   return Py_BuildValue("b", result);
 }
 
-PyObject *set_input_unsigned(PyObject *self, PyObject *args)
+PyObject *set_input_unsigned(PyObject * /*self*/, PyObject *args)
 {
   int input;
   unsigned ivalue;
@@ -116,7 +115,7 @@ PyObject *set_input_unsigned(PyObject *self, PyObject *args)
   return Py_BuildValue("b", result);
 }
 
-PyObject *set_input_int(PyObject *self, PyObject *args)
+PyObject *set_input_int(PyObject * /*self*/, PyObject *args)
 {
   int input;
   int ivalue;
@@ -128,7 +127,7 @@ PyObject *set_input_int(PyObject *self, PyObject *args)
   return Py_BuildValue("b", result);
 }
 
-PyObject *set_input_long(PyObject *self, PyObject *args)
+PyObject *set_input_long(PyObject * /*self*/, PyObject *args)
 {
   int input;
   long value;
@@ -140,7 +139,7 @@ PyObject *set_input_long(PyObject *self, PyObject *args)
   return Py_BuildValue("b", result);
 }
 
-PyObject *set_input_float(PyObject *self, PyObject *args)
+PyObject *set_input_float(PyObject * /*self*/, PyObject *args)
 {
   int input;
   float value;
@@ -152,7 +151,7 @@ PyObject *set_input_float(PyObject *self, PyObject *args)
   return Py_BuildValue("b", result);
 }
 
-PyObject *set_input_double(PyObject *self, PyObject *args)
+PyObject *set_input_double(PyObject * /*self*/, PyObject *args)
 {
   int input;
   double value;
@@ -165,7 +164,7 @@ PyObject *set_input_double(PyObject *self, PyObject *args)
 }
 
 // ozge added the following to access the process outputs while running experiments using Python
-PyObject *get_input_float(PyObject *self, PyObject *args)
+PyObject *get_input_float(PyObject * /*self*/, PyObject *args)
 {
   unsigned id;
   float value;
@@ -200,7 +199,7 @@ PyObject *get_input_float(PyObject *self, PyObject *args)
 }
 
 // ozge added the following to access the process outputs while running experiments using Python
-PyObject *get_input_unsigned(PyObject *self, PyObject *args)
+PyObject *get_input_unsigned(PyObject * /*self*/, PyObject *args)
 {
   unsigned id;
   unsigned value;
@@ -234,7 +233,7 @@ PyObject *get_input_unsigned(PyObject *self, PyObject *args)
   return Py_BuildValue("b", value);
 }
 
-PyObject *process_print_default_params(PyObject *self, PyObject *args)
+PyObject *process_print_default_params(PyObject * /*self*/, PyObject *args)
 {
   const char* name;
   const char* value;
@@ -248,13 +247,13 @@ PyObject *process_print_default_params(PyObject *self, PyObject *args)
   return Py_BuildValue("b", result);
 }
 
-PyObject *process_init(PyObject *self, PyObject *args)
+PyObject *process_init(PyObject * /*self*/, PyObject * /*args*/)
 {
   bool result = bprb_batch_process_manager::instance()->process_init();
   return Py_BuildValue("b", result);
 }
 
-PyObject *set_params_process(PyObject *self, PyObject *args)
+PyObject *set_params_process(PyObject * /*self*/, PyObject *args)
 {
   const char* value;
   if (!PyArg_ParseTuple(args, "s:set_params_process", &value))
@@ -266,13 +265,13 @@ PyObject *set_params_process(PyObject *self, PyObject *args)
   return Py_BuildValue("b", result);
 }
 
-PyObject *run_process(PyObject *self, PyObject *args)
+PyObject *run_process(PyObject * /*self*/, PyObject * /*args*/)
 {
   bool result = bprb_batch_process_manager::instance()->run_process();
   return Py_BuildValue("b", result);
 }
 
-PyObject *commit_output(PyObject *self, PyObject *args)
+PyObject *commit_output(PyObject * /*self*/, PyObject *args)
 {
   unsigned id;
   unsigned output;
@@ -286,7 +285,7 @@ PyObject *commit_output(PyObject *self, PyObject *args)
     return Py_BuildValue("is", id, type.c_str());
 }
 
-PyObject *set_input_from_db(PyObject *self, PyObject *args)
+PyObject *set_input_from_db(PyObject * /*self*/, PyObject *args)
 {
   unsigned input;
   bool result = false;
@@ -308,7 +307,7 @@ PyObject *set_input_from_db(PyObject *self, PyObject *args)
   return Py_BuildValue("b", result);
 }
 
-PyObject *remove_data(PyObject *self, PyObject *args)
+PyObject *remove_data(PyObject * /*self*/, PyObject *args)
 {
   unsigned id;
   if (!PyArg_ParseTuple(args, "i:set_input_from_db", &id))
@@ -318,7 +317,7 @@ PyObject *remove_data(PyObject *self, PyObject *args)
   return Py_BuildValue("b", result);
 }
 
-PyObject *remove_data_obj(PyObject *self, PyObject *args)
+PyObject *remove_data_obj(PyObject * /*self*/, PyObject *args)
 {
   PyObject* obj;
   if (!PyArg_ParseTuple(args, "O:set_input_from_db", &obj))
@@ -335,7 +334,7 @@ PyObject *remove_data_obj(PyObject *self, PyObject *args)
   return Py_BuildValue("b", result);
 }
 
-PyObject *print_db(PyObject *self, PyObject *args)
+PyObject *print_db(PyObject * /*self*/, PyObject * /*args*/)
 {
   bprb_batch_process_manager::instance()->print_db();
   Py_INCREF(Py_None);
@@ -343,7 +342,7 @@ PyObject *print_db(PyObject *self, PyObject *args)
 }
 
 PyObject *
-clear(PyObject *self, PyObject *args)
+clear(PyObject * /*self*/, PyObject * /*args*/)
 {
   bprb_batch_process_manager::instance()->clear();
   Py_INCREF(Py_None);
