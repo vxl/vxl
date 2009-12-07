@@ -100,7 +100,7 @@ IF( VIL_CONFIG_ENABLE_SSE2_ROUNDING )
       MESSAGE( ${VXL_SSE2_HARDWARE_SUPPORT_POSSIBLE_HELP} )
     ENDIF( VXL_SSE2_HARDWARE_SUPPORT_POSSIBLE )
     MESSAGE( SEND_ERROR "Cannot have VIL_CONFIG_ENABLE_SSE2_ROUNDING because"
-                        " there is no SSE2 hardware support" )
+                        " there is no SSE2 hardware or no compiler support enabled" )
     SET(VIL_CONFIG_ENABLE_SSE2_ROUNDING 0)
   ENDIF( NOT VXL_HAS_SSE2_HARDWARE_SUPPORT )
 ENDIF( VIL_CONFIG_ENABLE_SSE2_ROUNDING )
