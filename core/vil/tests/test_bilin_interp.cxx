@@ -16,7 +16,7 @@ static void test_bilin_interp_byte()
 
   for (unsigned int j=0;j<image0.nj();++j)
      for (unsigned int i=0;i<image0.ni();++i)
-       image0(i,j) = i+j*10;
+       image0(i,j) = vxl_byte(i+j*10);
 
   {
     double v1 = vil_bilin_interp(image0,3,3);

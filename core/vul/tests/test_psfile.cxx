@@ -21,7 +21,7 @@ static void write_greyscale(vul_psfile& f)
   vcl_cout << "writing a greyscale image\n";
   unsigned char buf[wd*ht];
   for (int x=0; x<wd; ++x) for (int y=0; y<ht; ++y)
-    buf[x+wd*y] = ((x-wd/2)*(y-ht/2)/16) & 0xff;
+    buf[x+wd*y] = (unsigned char)(((x-wd/2)*(y-ht/2)/16) & 0xff);
   f.print_greyscale_image(buf,wd,ht);
 }
 
@@ -30,9 +30,9 @@ static void write_colour(vul_psfile& f)
   vcl_cout << "writing a colour image\n";
   unsigned char buf[wd*ht*3];
   for (int x=0; x<wd; ++x) for (int y=0; y<ht; ++y) {
-    buf[3*(x+wd*y)  ] = x%(1<<8);
-    buf[3*(x+wd*y)+1] = ((x-wd/2)*(y-ht/2)/16) % (1<<8);
-    buf[3*(x+wd*y)+2] = (y/3)%(1<<8);
+    buf[3*(x+wd*y)  ] = (unsigned char)(x%(1<<8));
+    buf[3*(x+wd*y)+1] = (unsigned char)(((x-wd/2)*(y-ht/2)/16) % (1<<8));
+    buf[3*(x+wd*y)+2] = (unsigned char)((y/3)%(1<<8));
   }
   f.print_color_image(buf,wd,ht);
 }
@@ -242,12 +242,4 @@ static void test_psfile()
   test_psfile_combined();
 }
 
-//TESTMAIN(test_psfile);
-int test_psfile(int, char*[])
-{
-  testlib_test_start("test_psfile");
-
-  test_psfile();
-
-  return testlib_test_summary();
-}
+TEST_MAIN(test_psfile);

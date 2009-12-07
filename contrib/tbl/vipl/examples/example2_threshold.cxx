@@ -50,7 +50,7 @@ main(int argc, char** argv)
   int ys = in.nj();
 
   // The threshold value:
-  vxl_byte threshold = (argc < 4) ? 128 : vcl_atoi(argv[3]);
+  vxl_byte threshold = (argc < 4) ? 128 : vxl_byte(vcl_atoi(argv[3]));
 
   img_type src(xs,ys); // in-memory 2D image
 

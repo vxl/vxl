@@ -234,7 +234,6 @@ static void test_algo_convolve_1d_double()
   TEST_NEAR("No overrun start",dest[0],999,1e-6);
   TEST_NEAR("No overrun end",dest[n+1],999,1e-6);
 
-
   vcl_cout << "Test vil_convolve_trim end type with 5-tap filter\n";
   for (int i=0;i<n+2;++i) dest[i]=999;
   vil_convolve_1d(&src[0],n,1, &dest[1],1,
@@ -281,7 +280,7 @@ static void test_algo_convolve_1d_double()
   vil_image_view<vxl_byte> v(n,n,1), v_out(n,n,1);
   for (int j=0; j<n; ++j)
     for (int i=0; i<n; ++i)
-      v(i,j) = i+1;
+      v(i,j) = vxl_byte(i+1);
 
   TEST ("memory image.put_view()", mem->put_view(v,0,0), true);
 
@@ -290,7 +289,7 @@ static void test_algo_convolve_1d_double()
     vil_convolve_1d(mem, vxl_byte(), &kernel[2],-1,1, int(),
                     vil_convolve_constant_extend, vil_convolve_zero_extend);
 
-  //set up a convolved view.
+  // set up a convolved view.
   vil_convolve_1d(v, v_out, &kernel[2], -1, 1, int(),
                   vil_convolve_constant_extend, vil_convolve_zero_extend);
 

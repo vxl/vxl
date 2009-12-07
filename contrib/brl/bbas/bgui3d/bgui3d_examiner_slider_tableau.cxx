@@ -91,10 +91,10 @@ void bgui3d_examiner_slider_tableau::loadSliderImage()
     for (int j=0; j < slider_height_; j++) {
         k = (int)curr_offset;
         for (int i=0; i<slider_width_*4; i+=4) {
-            img[j*slider_width_*4+i] = (255 - k);
-            img[j*slider_width_*4+i+1] = (255 - k);
-            img[j*slider_width_*4+i+2] = (255 - k);
-            img[j*slider_width_*4+i+3] = (255 - k);
+            img[j*slider_width_*4+i] =
+            img[j*slider_width_*4+i+1] =
+            img[j*slider_width_*4+i+2] =
+            img[j*slider_width_*4+i+3] = (unsigned char)(255 - k);
         }
         curr_offset += slider_offset;
     }
@@ -106,14 +106,14 @@ void
 bgui3d_examiner_slider_tableau::positionSlider()
 {
 #if 1
-   //set up the view volume of the color map camera
+   // set up the view volume of the color map camera
    SbViewportRegion v = get_viewport_region();
    SbVec2s viewport = v.getViewportSizePixels();
 
    if (viewport != last_viewport_sz_)
    {
      float aspect = float(viewport[0]) / float(viewport[1]);
-     float factor = float(100) / float(viewport[1]) * 3.0f;
+     float factor = 300.f / float(viewport[1]);
      float wsx =1, wsy = 1;
      if ( aspect > 1.0f )
        wsx *= aspect;
@@ -125,7 +125,7 @@ bgui3d_examiner_slider_tableau::positionSlider()
      slider_transform->translation.setValue(SbVec3f(-0.5f * wsx, 0.5f*wsy, .0f));
 
      float wslider_width = wsx * slider_width_ / float( viewport[0]);
-     //unused variable float wslider_height = wsy * slider_height_ / float(viewport[1]);
+     // unused variable: float wslider_height = wsy * slider_height_ / float(viewport[1]);
 
      float min_height = wsy * slider_height_ / viewport[1] * this->min / 255;
      min_transform->translation.setValue(SbVec3f(wslider_width, -min_height, 0.f));
@@ -161,16 +161,16 @@ bgui3d_examiner_slider_tableau::handle(const vgui_event& e)
     const SbVec2f curr_pos_norm((float) curr_pos[0] / (float) vcl_max((int)(viewport_size[0] - 1), 1),
                               (float) curr_pos[1] / (float) vcl_max((int)(viewport_size[1] - 1), 1));
     const SbVec2f last_pos_norm = last_pos_;
-    //float aspect_ratio = get_viewport_region().getViewportAspectRatio();
+    // unused variable: float aspect_ratio = get_viewport_region().getViewportAspectRatio();
 
     // MOUSE DOWN HANDLING
-    //float factor = slider_height_/255.0;
+    // unused variable: float factor = slider_height_/255.f;
     switch (last_down_button_)
     {
       case vgui_LEFT:
         if (e.wx >= 0 && e.wx <= slider_width_*2) { // WON'T ROTATE WHEN YOUR MOUSE IS DOWN ON THE LEFT COLOR MAP REGION
           int mouse_pos = static_cast<int>((viewport_size[1] - e.wy)*255.0/slider_height_);
-          if (mouse_pos >= this->min-10 && mouse_pos <= this->min + 10){
+          if (mouse_pos >= this->min-10 && mouse_pos <= this->min + 10) {
             transfer_callback(true, mouse_pos, this->max);
             return true;
           }

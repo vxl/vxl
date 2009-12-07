@@ -210,7 +210,7 @@ macro( vxl_int_64 )
 macro( vxl_uint_64 )
 #endif
 #undef macro
-#endif //DOXYGEN_SHOULD_SKIP_THIS
+#endif // DOXYGEN_SHOULD_SKIP_THIS
 // declare general case in case anyone needs something weird.
 
 #if defined(VCL_VC)
@@ -418,7 +418,7 @@ macro( float , vxl_uint_64 )
 macro( double , vxl_uint_64 )
 #endif
 #undef macro
-#endif //DOXYGEN_SHOULD_SKIP_THIS
+#endif // DOXYGEN_SHOULD_SKIP_THIS
 
 // declare general case for scalars
 template <class In, class Out>
@@ -662,7 +662,7 @@ inline void vil_convert_stretch_range_limited(const vil_image_view<inP>& src,
       for (unsigned i = 0; i < src.ni(); ++i)
       {
         inP s = src(i,j,p);
-        dest(i,j,p) = s<=src_lo ? 0u :
+        dest(i,j,p) = s<=src_lo ? 0 :
                       static_cast<vxl_byte>( s>=src_hi ? 255 : (dds*(s-src_lo)+0.5) );
       }
 }
@@ -1149,7 +1149,6 @@ inline vil_image_view_base_sptr vil_convert_to_n_planes(
   if (!src || n_planes == 0)
     return vil_image_view_base_sptr();
 
-
   switch (vil_pixel_format_component_format(src->pixel_format()))
   {
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
@@ -1257,8 +1256,7 @@ inline vil_image_view_base_sptr vil_convert_stretch_range(
     vil_exception_warning(vil_exception_unsupported_pixel_format(
       src->pixel_format(), "vil_convert_stretch_range") );
 
-
-     dest_ref.clear();
+    dest_ref.clear();
   }
   return dest;
 }

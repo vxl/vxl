@@ -148,10 +148,12 @@ static void test_convert_stretch_range_limited()
   vil_math_value_range(b_image, min_b, max_b);
   TEST("Min. value", min_b, dlo);
   TEST("Max. value", max_b, dhi);
-  //vil_print_all(vcl_cout, b_image) ;
+#ifdef DEBUG
+  vil_print_all(vcl_cout, b_image) ;
+#endif // DEBUG
 
   float f55 = f_image(5,5);
-  vxl_byte b55 = dlo + vxl_byte((f55-slo)*(dhi-dlo)/(shi-slo) + 0.5);
+  vxl_byte b55 = vxl_byte(dlo + (f55-slo)*(dhi-dlo)/(shi-slo) + 0.5);
 #if 0
   vcl_cout << "f55= " << f55 << '\n'
            << "b55= " << (int)b55 << '\n'
@@ -180,8 +182,9 @@ static void test_convert_to_n_planes()
       u16_image_expected(i,j,2)= static_cast<vxl_uint_16>(i + 10*j + 5);
     }
 
-
-//  vil_print_all(vcl_cout, f_image);
+#ifdef DEBUG
+  vil_print_all(vcl_cout, f_image);
+#endif // DEBUG
 
   vil_image_view_base_sptr f_image_ref = new vil_image_view<float>(f_image);
 
@@ -202,7 +205,6 @@ static void test_convert_to_n_planes()
   vxl_uint_16 minp,maxp;
   vil_math_value_range(image_16_3_stretched,minp,maxp);
   testlib_test_perform( minp==0 && maxp==65535);
-
 
 #if !defined VXL_LEGACY_ERROR_REPORTING && VCL_HAS_EXCEPTIONS
   bool caught_exception = false;
@@ -239,11 +241,11 @@ static void test_convert_to_n_planes()
   TEST("implict vil_convert_to_component_order correct",
        vil_image_view_deep_equality(vil_image_view<float>(rgb_image), f_image_dest),
        true);
-#if 0
+#ifdef DEBUG
   vil_print_all(vcl_cout, image_16_3_stretched);
   vil_print_all(vcl_cout, image_16_3);
   vil_print_all(vcl_cout, u16_image_expected);
-#endif // 0
+#endif // DEBUG
 }
 
 static void test_simple_pixel_conversions()

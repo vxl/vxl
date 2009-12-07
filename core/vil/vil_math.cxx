@@ -24,7 +24,7 @@ void vil_math_median(vxl_byte& median, const vil_image_view<vxl_byte>& im, unsig
   unsigned nj = im.nj();
 
   // special case the empty image.
-  if( ni*nj == 0 ) {
+  if ( ni*nj == 0 ) {
     median = 0;
     return;
   }
@@ -41,20 +41,21 @@ void vil_math_median(vxl_byte& median, const vil_image_view<vxl_byte>& im, unsig
   unsigned tgt = (tot+1) / 2;
   unsigned cnt = 0;
   unsigned idx = 0;
-  while( cnt < tgt ) {
+  while ( cnt < tgt ) {
     cnt += hist[idx];
     ++idx;
   }
 
   // Test for halfway case
-  if( cnt == tgt && tot % 2 == 0 ) {
-    // idx is 
+  if ( cnt == tgt && tot % 2 == 0 ) {
+    // idx is
     unsigned lo = idx-1;
-    while( hist[idx] == 0 ) {
+    while ( hist[idx] == 0 ) {
       ++idx;
     }
-    median = (lo + idx)/2;
-  } else {
-    median = idx-1;
+    median = vxl_byte((lo+idx)/2);
+  }
+  else {
+    median = vxl_byte(idx-1);
   }
 }

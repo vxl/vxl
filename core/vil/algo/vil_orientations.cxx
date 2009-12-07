@@ -146,7 +146,7 @@ void vil_orientations_at_edges(const vil_image_view<float>& grad_i,
         // In order to ensure bins are centred at k*2pi/n_orientation points,
         // compute position in twice angle range, then adjust.
         int A2 = int((vcl_atan2(*pgj,*pgi)+3.14159)*scale);
-        *po  = 1+vxl_byte(((A2+1)/2)%n_orientations);
+        *po  = vxl_byte(1+((A2+1)/2)%n_orientations);
       }
     }
   }

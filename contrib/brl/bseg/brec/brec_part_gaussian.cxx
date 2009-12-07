@@ -26,7 +26,7 @@
 #include <vul/vul_file.h>
 #include <vul/vul_psfile.h>
 
-//strength_threshold in [0,1] - min strength to declare the part as detected
+//: strength_threshold in [0,1] - min strength to declare the part as detected
 bool extract_gaussian_primitives(vil_image_resource_sptr img, float lambda0, float lambda1, float theta, bool bright, float cutoff_percentage, float strength_threshold, unsigned type, vcl_vector<brec_part_instance_sptr>& parts)
 {
   vil_image_view<float> fimg = brip_vil_float_ops::convert_to_float(img);
@@ -55,15 +55,14 @@ bool extract_gaussian_primitives(vil_image_resource_sptr img, float lambda0, flo
   vil_save(res_o, "./temp.png");
 #endif
 
+  float val = max;
 #if 0
   // find the top 10 percentile of the output map and convert it into a prob map (scale to [0,1] range) accordingly
-  float val;
   vil_math_value_range_percentile(res, 1.0, val);
   vcl_cout << "res top 10 percentile value: " << val << vcl_endl;
 #endif // 0
   vil_image_view<float> strength_map(ni, nj);
-//vil_convert_stretch_range_limited(res, strength_map, 0.0f, val, 0.0f, 1.0f);
-  vil_convert_stretch_range_limited(res, strength_map, 0.0f, max, 0.0f, 1.0f);
+  vil_convert_stretch_range_limited(res, strength_map, 0.0f, val, 0.0f, 1.0f);
 #if 1
   vil_math_value_range(strength_map, min, max);
   vcl_cout << "strength_map min: " << min << " max: " << max << vcl_endl;
@@ -157,10 +156,9 @@ bool brec_part_gaussian::mark_receptive_field(vil_image_view<vxl_byte>& img, uns
       int mask_i = i - is;
       int mask_j = j - js;
       if (mask[mask_j][mask_i] && i >= 0 && j >= 0 && i < ni && j < nj) {
-        if (((int)img(i, j, plane) + strength_*255) > 255)
-          img(i, j, plane) = 255;
-        else
-          img(i, j, plane) += (vxl_byte)(strength_*255);
+        int nw = (int)img(i, j, plane) + int(strength_*255);
+        if (nw > 255) img(i, j, plane) = 255;
+        else          img(i, j, plane) = (vxl_byte)nw;
       }
     }
 
@@ -267,9 +265,10 @@ bxml_data_sptr brec_part_gaussian::xml_element()
   data->append_text("\n ");
   data->append_data(data_super);
   data->append_text("\n ");
-  //((bxml_element*)data_super.ptr())->append_data(data);
-  //((bxml_element*)data_super.ptr())->append_text("\n ");
-
+#if 0
+  ((bxml_element*)data_super.ptr())->append_data(data);
+  ((bxml_element*)data_super.ptr())->append_text("\n ");
+#endif // 0
   return data;
 }
 
@@ -281,9 +280,7 @@ bool brec_part_gaussian::xml_parse_element(bxml_data_sptr data)
   if (!g_root)
     return false;
 
-
   if (g_root->type() == bxml_data::ELEMENT) {
-
     ((bxml_element*)g_root.ptr())->get_attribute("lambda_nc", lambda_non_class_);
     ((bxml_element*)g_root.ptr())->get_attribute("k_nc", k_non_class_);
 
@@ -310,10 +307,9 @@ bool brec_part_gaussian::xml_parse_element(bxml_data_sptr data)
     initialize_mask();
 
     return brec_part_instance::xml_parse_element(g_root);
-  } else
+  }
+  else
     return false;
-
-  return true;
 }
 
 vcl_string brec_part_gaussian::string_identifier()
@@ -338,10 +334,10 @@ bool brec_part_gaussian::construct_bg_response_model(vil_image_view<float>& mean
   unsigned nj = mean_img.nj();
 
   // find the response img for this operator
-  vil_image_view<float> mean_res = brip_vil_float_ops::extrema(mean_img, lambda0_, lambda1_, theta_, bright_, true);
-  //was: vil_image_view<float> mean_res = brip_vil_float_ops::extrema(mean_img, lambda0_, lambda1_, theta_, bright_, false);
-
-  //vil_save(mean_res, "./mean_response_img.tiff");
+  vil_image_view<float> mean_res = brip_vil_float_ops::extrema(mean_img, lambda0_, lambda1_, theta_, bright_, true); // was "false"
+#if 0
+  vil_save(mean_res, "mean_response_img.tiff");
+#endif // 0
 
   if (mean_res.ni() != ni || mean_res.nj() != nj)
     return false;
@@ -352,11 +348,10 @@ bool brec_part_gaussian::construct_bg_response_model(vil_image_view<float>& mean
   for (unsigned j = 0; j<nj; ++j)
     for (unsigned i = 0; i<ni; ++i)
     {
-      //double m = mean_res(i,j);
       double m = mean_res(i,j,1);
       double s = std_dev_img(i,j);
-      //very weak response
-      if (m<1e-6||s<1e-7){
+      // very weak response
+      if (m<1e-6||s<1e-7) {
         k_img(i,j)=0.0f;
         lambda_img(i,j)= 0.0;
         continue;
@@ -397,11 +392,9 @@ bool brec_part_gaussian::construct_bg_response_model_gauss(vil_image_view<float>
       float m = mean_res(i,j,2);
       if (bright_)
         m = -m;
-
-      float s = std_dev_res(i,j);
-      //float s = std_dev_img(i,j);
-
       mu_img(i,j)= m;
+
+      float s = std_dev_res(i,j); // was: std_dev_img(i,j);
       sigma_img(i,j)= s;
     }
 
@@ -432,7 +425,6 @@ bool brec_part_gaussian::construct_class_response_models(vil_image_view<float>& 
     for (unsigned i = 0; i<ni; ++i)
     {
       if (mask_img(i,j)) {
-        //float op_res  = res(i,j,1);
         float op_res  = res(i,j,0);
         if (op_res < 1.0e-3f)
           continue;
@@ -455,11 +447,10 @@ bool brec_part_gaussian::construct_class_response_models(vil_image_view<float>& 
 
   // calculate class parameters
   double mean = x_sum/p_sum; // estimate of mean
-  double total_var = xsq_sum/p_sum; //estimate of total variance
+  double total_var = xsq_sum/p_sum; // estimate of total variance
   double var = total_var - mean*mean;
   double std_dev = vcl_sqrt(var);
   vcl_cout << "Class mean = " << mean << "  std_dev = " << std_dev << '\n';
-  //h.print();
   bsta_weibull_cost_function wcf(mean, std_dev);
   bsta_fit_weibull<double> fw(&wcf);
   k = 1.001;
@@ -472,11 +463,10 @@ bool brec_part_gaussian::construct_class_response_models(vil_image_view<float>& 
 
   // calculate non-class parameters
   mean = x_sum_non_class/p_sum_non_class; // estimate of mean
-  total_var = xsq_sum_non_class/p_sum_non_class; //estimate of total variance
+  total_var = xsq_sum_non_class/p_sum_non_class; // estimate of total variance
   var = total_var - mean*mean;
   std_dev = vcl_sqrt(var);
   vcl_cout << "Non-class mean = " << mean << "  std_dev = " << std_dev << '\n';
-  //h.print();
   bsta_weibull_cost_function wcfn(mean, std_dev);
   bsta_fit_weibull<double> fwn(&wcfn);
   k_non_class = 1.001;
@@ -504,12 +494,11 @@ bool brec_part_gaussian::fit_distribution_to_response_hist(bsta_histogram<float>
     vcl_cout << "k = " << k_ << "  lambda = " << lambda_ << '\n';
 
     fitted_weibull_ = true;
-  } else {  // weibull cannot be fit!
-    fitted_weibull_ = false;
-    return false;
   }
-
-  return true;
+  else {  // weibull cannot be fit!
+    fitted_weibull_ = false;
+  }
+  return fitted_weibull_;
 }
 
 
@@ -548,8 +537,7 @@ bool brec_part_gaussian::update_response_hist(vil_image_view<float>& img, vil_im
   unsigned nj = img.nj();
 
   // find the response img for this operator
-  vil_image_view<float> res = brip_vil_float_ops::extrema(img, lambda0_, lambda1_, theta_, bright_, false);
-  //vil_image_view<float> res = brip_vil_float_ops::extrema(img, lambda0_, lambda1_, theta_, bright_, true);
+  vil_image_view<float> res = brip_vil_float_ops::extrema(img, lambda0_, lambda1_, theta_, bright_, false); // was: "true"
   if (res.ni() != ni || res.nj() != nj)
     return false;
 
@@ -558,13 +546,11 @@ bool brec_part_gaussian::update_response_hist(vil_image_view<float>& img, vil_im
     {
       if (mask_img(i,j)) {
         float op_res  = res(i,j);
-        //float op_res  = res(i,j,1);
         if (op_res<=0)
           continue;
         float prob_fore = fg_prob_operator(fg_prob_img, i,j);
         if (prob_fore>0.9)
-          fg_h.upcount(op_res, 1.0f);
-          //fg_h.upcount(vcl_log10(op_res), 1.0f);
+          fg_h.upcount(op_res, 1.0f); // was: vcl_log10(op_res)
       }
     }
 
@@ -598,7 +584,6 @@ bool brec_part_gaussian::extract(vil_image_view<float>& img, vil_image_view<floa
   vil_save(fg_prob_image, name.c_str());
 #endif
 
-  //name = model_dir+str_id+"_bg_lambda_img.tiff";
   name = model_dir+str_id+"_bg_mu_img.tiff";
   if (!vul_file::exists(name)) {
     vcl_cerr << "In brec_part_gaussian::extract() -- Problem: Cannot find model parameter file: " << name << "\nNote: train the models and save model param directory in the hierarchy\n;\n";
@@ -606,7 +591,6 @@ bool brec_part_gaussian::extract(vil_image_view<float>& img, vil_image_view<floa
   }
   vil_image_view<float> mu_img = vil_load(name.c_str());
 
-  //name = model_dir+str_id+"_bg_k_img.tiff";
   name = model_dir+str_id+"_bg_sigma_img.tiff";
   if (!vul_file::exists(name)) {
     vcl_cerr << "In brec_part_gaussian::extract() -- Problem: Cannot find model parameter file: " << name << "\nNote: train the models and save model param directory in the hierarchy\n;\n";
@@ -619,7 +603,8 @@ bool brec_part_gaussian::extract(vil_image_view<float>& img, vil_image_view<floa
     vcl_cout << "using fitted weibull parameters lambda: " << lambda_ << " k: " << k_ << " lambda_nc: " << lambda_non_class_ << " k_nc: " << k_non_class_ << " of the part for the foreground response model!\n";
     lambda = lambda_;  lambda_non_class = lambda_non_class_;
     k = k_;  k_non_class = k_non_class_;
-  } else {
+  }
+  else {
     name = model_dir+str_id+"_fg_params.txt";
 
     vcl_cout << "using weibull parameters from the file: " << name << " for the foreground response model!\n";
@@ -643,13 +628,11 @@ bool brec_part_gaussian::extract(vil_image_view<float>& img, vil_image_view<floa
   for (unsigned j = 0; j<nj; ++j)
     for (unsigned i = 0; i<ni; ++i)
     {
-      //float k_bk = k_img(i,j);
-      //float lambda_bk = lambda_img(i,j);
       float mu_bk = mu_img(i,j);
       float sigma_bk = sigma_img(i,j);
 
       float res = op_res(i,j);
-      //if the operator response is small we can't tell
+      // if the operator response is small we can't tell
       if (res<1.0e-3f)
         continue;
 
@@ -661,8 +644,7 @@ bool brec_part_gaussian::extract(vil_image_view<float>& img, vil_image_view<floa
       if (i == 459 && j == 735)
         vcl_cout << "here!\n";
 
-      float pf = fg_prob_operator(fg_prob_image, i, j);
-      //float pf = fg_prob_image(i, j);
+      float pf = fg_prob_operator(fg_prob_image, i, j); // was: fg_prob_image(i, j);
 
       float pdb = 0.0f;
       bsta_gauss_f1 pdbg(mu_bk, sigma_bk*sigma_bk);
@@ -683,7 +665,11 @@ bool brec_part_gaussian::extract(vil_image_view<float>& img, vil_image_view<floa
 
       pos_c_f /= den; pos_nc_f /= den; pos_c_b /= den; pos_nc_b /= den;
 
-      //vcl_cout << "i: " << i << " j: " << j << " response: " << res << " pf: " << pf << " pdf: " << pdf << " pdb: " << pdb << " neu: " << neu << " den: " << den << " post: " << posterior << vcl_endl;
+#ifdef DEBUG
+      vcl_cout << "i: " << i << " j: " << j << " response: " << res
+               << " pf: " << pf << " pdf: " << pdf << " pdb: " << pdb
+               << " neu: " << neu << " den: " << den << " post: " << posterior << vcl_endl;
+#endif // DEBUG
       brec_part_gaussian_sptr dp = new brec_part_gaussian((float)i, (float)j, res, lambda0_, lambda1_, theta_+rot_angle, bright_, type_);
       dp->rho_c_f_ = pos_c_f;
       dp->rho_nc_f_ = pos_nc_f;
@@ -697,7 +683,6 @@ bool brec_part_gaussian::extract(vil_image_view<float>& img, vil_image_view<floa
           (i == 229 && j == 366) || (i == 223 && j == 358) || (i == 230 && j == 368) || (i == 227 && j == 364) ||
           (i == 239 && j == 370) || (i == 240 && j == 373) || (i == 235 && j == 369)
          ) {
-      //vcl_cout << " i == " << i << " && j == " << j << " \nk_fore: " << k_fore << " lam_fore: " << lambda_fore << " k_bk: " << k_bk << " lam_bk: " << lambda_bk << '\n';
         vcl_cout << " i == " << i << " && j == " << j << " \nk_fore: " << k_fore << " lam_fore: " << lambda_fore << " mu_bk: " << mu_bk << " sigma_bk: " << sigma_bk << '\n'
                  << " res: " << res << " pb: " << pb << " pdb: " << pdb << " pdf: " << pdf << " den: " << den << " neu: " << neu << " posterior: " << posterior << vcl_endl;
       }
@@ -732,7 +717,7 @@ bool brec_part_gaussian::extract(vil_image_view<float>& img, vil_image_view<floa
     for (unsigned i = 0; i<ni; ++i)
     {
       float res = op_res(i,j);
-      //if the operator response is small we can't tell
+      // if the operator response is small we can't tell
       if (res<1.0e-3f)
         continue;
 
@@ -767,8 +752,10 @@ bool brec_part_gaussian::update_foreground_posterior(vil_image_view<float>& img,
                                                      vil_image_view<float>& mean_img,
                                                      vil_image_view<float>& std_dev_img)
 {
-  //vcl_cout << "before update, instance rho_: " << rho_ << '\n';
-  //vcl_cout << "before update, instance cnt_: " << cnt_ << '\n';
+#if 0
+  vcl_cout << "before update, instance rho_: " << rho_ << '\n'
+           << "before update, instance cnt_: " << cnt_ << '\n';
+#endif // 0
 
   unsigned ni = img.ni();
   unsigned nj = img.nj();
@@ -785,7 +772,9 @@ bool brec_part_gaussian::update_foreground_posterior(vil_image_view<float>& img,
     return false;
   }
 
-  //bsta_weibull<float> pdfg(lambda_, k_);
+#if 0
+  bsta_weibull<float> pdfg(lambda_, k_);
+#endif // 0
 
   // extract all the parts from the responses
   for (unsigned j = 0; j<nj; ++j)
@@ -795,29 +784,29 @@ bool brec_part_gaussian::update_foreground_posterior(vil_image_view<float>& img,
       float sigma_bk = sigma_img(i,j);
 
       float res = op_res(i,j);
-      //if the operator response is small we can't tell
+      // if the operator response is small we can't tell
       if (res<1.0e-3f)
         continue;
 
-      //float prob_fore = fg_prob_operator(fg_prob_img, i,j);
-      //float prob_back = 1.0f-prob_fore;
+#if 0
+      float prob_fore = fg_prob_operator(fg_prob_img, i,j),
+            prob_back = 1.0f-prob_fore;
+#endif // 0
 
       bsta_gauss_f1 pdbg(mu_bk, sigma_bk*sigma_bk);
       float pdb = pdbg.prob_density(res);
 
-      //float pdf = pdfg.prob_density(res); // prob density foreground
-      float pdf = 0.0f;
+      float pdf = 0.0f; // was: = pdfg.prob_density(res); // prob density foreground
       if (fitted_weibull_) {
         bsta_weibull<float> pdfg(lambda_, k_);
         pdf = pdfg.prob_density(res);
-      } else {
+      }
+      else {
         return false;
       }
 
-      //float den = pdb*prob_back;
-      //float neu = pdf*prob_fore;
-      double den = pdb;
-      double neu = pdf;
+      double den = pdb; // was: = pdb*prob_back;
+      double neu = pdf; // was: = pdf*prob_fore;
       double rho = 0.0f;
       if (den > 0.0f)
         rho = vcl_log10(neu/den); // foreground and background posterior ratio
@@ -825,11 +814,16 @@ bool brec_part_gaussian::update_foreground_posterior(vil_image_view<float>& img,
       if (rho > 0.0f) {
         cnt_ = cnt_ + 1;
         rho_c_f_ = ((cnt_-1)*rho_c_f_ + rho)/cnt_;
-        //vcl_cout << "after update, instance rho_: " << rho_ << " cnt_: " << cnt_ << " rho: " << rho << " neu: " << neu << " den: " << den << '\n';
+#ifdef DEBUG
+        vcl_cout << "after update, instance rho_: " << rho_ << " cnt_: " << cnt_
+                 << " rho: " << rho << " neu: " << neu << " den: " << den << '\n';
+#endif // DEBUG
       }
     }
-  //vcl_cout << "after update, instance rho_: " << rho_ << '\n';
-  //vcl_cout << "after update, instance cnt_: " << cnt_ << '\n';
+#ifdef DEBUG
+  vcl_cout << "after update, instance rho_: " << rho_ << '\n'
+           << "after update, instance cnt_: " << cnt_ << '\n';
+#endif // DEBUG
   return true;
 }
 

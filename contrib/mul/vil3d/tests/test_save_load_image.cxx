@@ -77,7 +77,6 @@ bool test_image_equal(char const* type_name,
   TEST("retrieved pixels", !image2, false);
   if (!image2) return false;
 
-
   int bad = 0;
   for (int p=0; p < planes; ++p)
   {
@@ -140,16 +139,17 @@ void vil3d_test_image_type(char const* type_name, // type for image to read and 
   fname += ".";
   if (type_name) fname += type_name;
 
-  vcl_cout << "vil3d_test_image_type: Save " << image.is_a() <<
-              " to [" << fname << "]\n" << vcl_flush;
+  vcl_cout << "vil3d_test_image_type: Save " << image.is_a()
+           << " to [" << fname << "]\n" << vcl_flush;
   {
     // Write image to disk
     bool success = false;
     if (!voxel_size)
       success = vil3d_save(image, fname.c_str());
     else
-      success = vil3d_save(image, voxel_size[0],
-        voxel_size[1], voxel_size[2], fname.c_str());
+      success = vil3d_save(image,
+                           voxel_size[0], voxel_size[1], voxel_size[2],
+                           fname.c_str());
     TEST("save image", success, true);
   }
 
@@ -201,7 +201,7 @@ static vil3d_image_view<vxl_uint_16> CreateTestU16bitImage(int wd, int ht, int d
   for (int k = 0; k < dt; k++)
     for (int j = 0; j < ht; j++)
       for (int i = 0; i < wd; i++)
-        image(i, j, k) = ((i-wd/2)*(j-ht/2)/8*(k-dt/2)/64) & 0xffff;
+        image(i, j, k) = vxl_uint_16(((i-wd/2)*(j-ht/2)/8*(k-dt/2)/64)&0xffff);
   return image;
 }
 
@@ -212,7 +212,7 @@ static vil3d_image_view<vxl_int_16> CreateTest16bitImage(int wd, int ht, int dt)
   for (int k = 0; k < dt; k++)
     for (int j = 0; j < ht; j++)
       for (int i = 0; i < wd; i++)
-        image(i, j, k) = ((i-wd/2)*(j-ht/2)/8*(k-dt/2)/64) & 0xffff;
+        image(i, j, k) = vxl_int_16(((i-wd/2)*(j-ht/2)/8*(k-dt/2)/64)&0xffff);
   return image;
 }
 
@@ -273,7 +273,6 @@ static void test_save_load_image()
   vil3d_test_image_type("gipl", image32, voxel_size);
   vil3d_test_image_type("gipl", imageu32, voxel_size);
   vil3d_test_image_type("gipl", imagefloat, voxel_size);
-
 
   vil3d_test_image_type("hdr", image8, voxel_size);
   vil3d_test_image_type("hdr", image16, voxel_size);

@@ -20,7 +20,7 @@ void test_vector_io()
   vcl_vector<float> v_float_out(n);
   for (int i=0;i<n;++i) v_float_out[i]=0.1f*i;
   vcl_vector<unsigned char> v_uchar_out(n);
-  for (int i=0;i<n;++i) v_uchar_out[i]=i+'A';
+  for (int i=0;i<n;++i) v_uchar_out[i]=(unsigned char)(i+'A');
 
   vsl_b_ofstream bfs_out("vsl_vector_io_test.bvl.tmp");
   TEST("Created vsl_vector_io_test.bvl.tmp for writing", (!bfs_out), false);

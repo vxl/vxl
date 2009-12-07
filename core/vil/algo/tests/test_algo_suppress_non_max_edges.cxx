@@ -20,10 +20,10 @@ static void test_algo_suppress_non_max_edges()
 
   // Create white square on a slowly varying background
   for (unsigned j=0;j<nj;++j)
-    for (unsigned i=0;i<ni;++i) image0(i,j)=i+j;
+    for (unsigned i=0;i<ni;++i) image0(i,j) = vxl_byte(i+j);
 
   for (unsigned j=5;j<10;++j)
-    for (unsigned i=5;i<10;++i) image0(i,j)=250;
+    for (unsigned i=5;i<10;++i) image0(i,j) = vxl_byte(250);
 
   vil_image_view<float> gradi, gradj, grad_mag;
   vil_sobel_3x3(image0, gradi, gradj);

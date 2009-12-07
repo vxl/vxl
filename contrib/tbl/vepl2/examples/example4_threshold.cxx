@@ -18,7 +18,8 @@
 #include <vxl_config.h> // for vxl_byte
 
 int
-main(int argc, char** argv) {
+main(int argc, char** argv)
+{
   if (argc < 3) { vcl_cerr << "Syntax: example4_threshold file_in file_out [threshold]\n"; return 1; }
 
   // The input image:
@@ -26,7 +27,7 @@ main(int argc, char** argv) {
   if (!in) { vcl_cerr << "Please use a ubyte image as input\n"; return 2; }
 
   // The threshold value:
-  vxl_byte threshold = (argc < 4) ? 64 : vcl_atoi(argv[3]);
+  vxl_byte threshold = (argc < 4) ? 64 : vxl_byte(vcl_atoi(argv[3]));
 
   // perform thresholding:
   vil_image_resource_sptr out = vepl2_threshold(in,threshold,0,255);

@@ -14,11 +14,10 @@ static void test_algo_normalised_correlation_3d_byte()
 
   vil3d_image_view<vxl_byte> src_im(ni,nj,nk,1);
 
-
   for (unsigned int k=0;k<src_im.nk();++k)
    for (unsigned int j=0;j<src_im.nj();++j)
     for (unsigned int i=0;i<src_im.ni();++i)
-      src_im(i,j,k) = 1+i+j*ni+k*ni*nj;
+      src_im(i,j,k) = vxl_byte(1+i+j*ni+k*ni*nj);
 
       // Create kernel1 (all values equal to unity)
       // Note that really kernel should have mean zero and SD unity
@@ -36,9 +35,9 @@ static void test_algo_normalised_correlation_3d_byte()
   // Independent measure
   double sum=0.0,sum2=0.0;
   for (unsigned int k=0;k<m;++k)
-   for (unsigned int j=0;j<m;++j)
-    for (unsigned int i=0;i<m;++i)
-    {  sum+=src_im(i,j,k); sum2+=src_im(i,j,k)*src_im(i,j,k); }
+    for (unsigned int j=0;j<m;++j)
+      for (unsigned int i=0;i<m;++i)
+      {  sum+=src_im(i,j,k); sum2+=src_im(i,j,k)*src_im(i,j,k); }
 
   double mean=sum/(m*m*m);
   double var =sum2/(m*m*m)-mean*mean;

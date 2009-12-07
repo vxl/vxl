@@ -58,8 +58,10 @@ char const* vil_bmp_image::file_format() const
 vil_bmp_image::vil_bmp_image(vil_stream* is)
   : is_(is)
   , bit_map_start(-1L)
-  //, freds_colormap(0)
-  //, local_color_map_(0)
+#if 0
+  , freds_colormap(0)
+  , local_color_map_(0)
+#endif
 {
   is_->ref();
   if (!read_header())
@@ -269,10 +271,7 @@ bool vil_bmp_image::read_header()
 #ifdef DEBUG
   where << "bit_map_start = " << bit_map_start << '\n'; // blather
 #endif
-  //assert(bit_map_start == (int)file_hdr.bitmap_offset); // I think they're supposed to be the same -- fsm.
-  if (bit_map_start != (int)file_hdr.bitmap_offset) return false;
-
-  return true;
+  return bit_map_start == (int)file_hdr.bitmap_offset; // I think they're supposed to be the same -- fsm.
 }
 
 bool vil_bmp_image::write_header()
@@ -315,7 +314,7 @@ bool vil_bmp_image::write_header()
     for (int i=0; i<(1<<vil_pixel_format_sizeof_components(pixel_format())*8); ++i)
       for (int j=0; j<4; ++j)
       {
-        unsigned char c = i;
+        unsigned char c = (unsigned char)i;
         is_->write(&c,1L);
       }
 

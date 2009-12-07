@@ -25,9 +25,9 @@ static void test_deep_copy_3_plane()
    for (int j=0;j<4;++j)
     for (int p=0;p<3;++p)
     {
-      rgbrgb_im(i,j,p)=1+4*j+16*p;
-      rrggbb_im(i,j,p)=1+4*j+16*p;
-     }
+      rgbrgb_im(i,j,p) = vxl_byte(1+4*j+16*p);
+      rrggbb_im(i,j,p) = vxl_byte(1+4*j+16*p);
+    }
 
   vil_image_view< vxl_byte >  rgbrgb_im_new;
   vil_image_view< vxl_byte >  rrggbb_im_new;

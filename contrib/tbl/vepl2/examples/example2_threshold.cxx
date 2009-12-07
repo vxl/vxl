@@ -20,7 +20,8 @@
 #include <vcl_cstdlib.h> // for atoi()
 
 int
-main(int argc, char** argv) {
+main(int argc, char** argv)
+{
   if (argc < 3)
   {
     vcl_cerr << "Syntax: example2_threshold file_in file_out [threshold]\n";
@@ -32,7 +33,7 @@ main(int argc, char** argv) {
   if (!in) { vcl_cerr << "Please use a ubyte image as input\n"; return 2; }
 
   // The threshold value:
-  vxl_byte threshold = (argc < 4) ? 128 : vcl_atoi(argv[3]);
+  vxl_byte threshold = (argc < 4) ? 128 : vxl_byte(vcl_atoi(argv[3]));
 
   // perform thresholding:
   vil_image_resource_sptr out = vepl2_threshold(in,threshold,0,255);

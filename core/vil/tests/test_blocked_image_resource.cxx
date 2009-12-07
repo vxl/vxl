@@ -17,21 +17,21 @@ static void test_blocked_image_resource()
   vcl_cout << "************************************\n"
            << " Testing vil_blocked_image_resource\n"
            << "************************************\n";
-  //Test Resource
+  // Test Resource
   const unsigned int ni = 73;
   const unsigned int nj = 43;
   vil_image_view<unsigned short> image;
   image.set_size(ni,nj);
   for (unsigned i = 0; i<ni; ++i)
     for (unsigned j = 0; j<nj; ++j)
-      image(i,j) = i + ni*j;
+      image(i,j) = (unsigned short)(i + ni*j);
   vil_image_resource_sptr ir = vil_new_image_resource_of_view(image);
 
   vcl_string path("test_blocked_tiff.tif");
   unsigned sbi = 16, sbj = 32;
   unsigned nbi = (ni+sbi-1)/sbi, nbj = (nj+sbj-1)/sbj;
   vcl_cout << "Creating new blocked resource " << path << '\n';
-  {//scope for resource
+  { // scope for resource
     vil_blocked_image_resource_sptr bir =
       vil_new_blocked_image_resource(path.c_str(),
                                      ir->ni(), ir->nj(),
@@ -79,7 +79,7 @@ static void test_blocked_image_resource()
     }
     vcl_cout << '\n';
 #endif
-    //value in upper left corner of last block
+    // value in upper left corner of last block
     unsigned last_block_val = ni*(nbj-1)*sbj+(nbi-1)*sbi;
     TEST("Last Block Value", lview(0,0)==last_block_val, true);
   }
@@ -92,7 +92,7 @@ static void test_blocked_image_resource()
   vcl_cout << "Start test for copying blocks\n";
   vcl_string path2("test_blocked_tiff2.tif");
   bool good_copy = true;
-  {//scope to close bir2
+  { // scope to close bir2
     vil_blocked_image_resource_sptr bir2 =
       vil_new_blocked_image_resource(path2.c_str(),
                                      bir->ni(), bir->nj(),
@@ -132,7 +132,7 @@ static void test_blocked_image_resource()
     }
     else
       TEST("Copy blocks", false, true);
-  }//end of bir2 scope
+  } // end of bir2 scope
 
   vcl_cout << "Loading resource from " << path2 << '\n';
   vil_image_resource_sptr bir2 = vil_load_image_resource(path2.c_str());
@@ -223,7 +223,7 @@ static void test_blocked_image_resource()
       TEST("Full destination resource equality", false , true);
     }
   }
-  //test vil_new
+  // test vil_new
   vil_blocked_image_resource_sptr flbir = blocked_image_resource(lir);
   vil_blocked_image_resource_sptr fabir = vil_new_blocked_image_facade(ir,sbi, sbj);
   if (flbir&&fabir)
@@ -244,7 +244,7 @@ static void test_blocked_image_resource()
   //
   sbi = 16, sbj = 16;
   vil_block_cache cache(2);
-  //add two blocks
+  // add two blocks
   vil_image_view_base_sptr blk1;
   for (unsigned bi = 0; bi<3; ++bi)
   {
@@ -253,16 +253,16 @@ static void test_blocked_image_resource()
       blk1 = blk;
     cache.add_block(bi, 0, blk);
   }
-  //get block 1
+  // get block 1
   vil_image_view_base_sptr old_blk;
   bool got_b1 = cache.get_block(1, 0, old_blk);
   bool the_same = old_blk==blk1;
-  //get block 0//should not be in the queue
+  // get block 0 -- should not be in the queue
   bool got_b0 = cache.get_block(0, 0, old_blk);
   TEST("test store and retrieve", got_b1&&the_same&&!got_b0 , true);
-  //At this point the cache content (in age order)
+  // At this point the cache content (in age order)
   //  [1,0] [2,0] - since [1,0] was accessed and is now the youngest
-  //get a new block and put it in the cache
+  // get a new block and put it in the cache
   vil_image_view_base_sptr blk = ir->get_view(3*sbi, sbi, 0, sbj);
   cache.add_block(3, 0, blk);
   // now the cache content should be
@@ -297,9 +297,9 @@ static void test_blocked_image_resource()
   {
     TEST("Get block from cache", false , true);
   }
-  //set sptr's to 0 so the underlying objects are destructed and the
-  //temporary image files are closed.  Otherwise the unlink below will
-  //fail.
+  // set sptr's to 0 so the underlying objects are destructed and the
+  // temporary image files are closed.  Otherwise the unlink below will
+  // fail.
   ir = 0;
   bir = 0;
   lir = 0;
@@ -311,13 +311,12 @@ static void test_blocked_image_resource()
   fabir = 0;
   cflbir = 0;
   cfabir = 0;
-  //delete temporary files
+  // delete temporary files
   vpl_unlink(path.c_str());
   vpl_unlink(path2.c_str());
   //
   ///////--------------------- Test NITF Blocked Resource ---------------////
   vcl_string nitf_path = image_file + "ff_nitf_16bit.nitf";
-  //vcl_string nitf_path = "c:/vxl/vxl/core/vil/tests/file_read_data/ff_nitf_16bit.nitf";
   vil_image_resource_sptr imgr = vil_load_image_resource(nitf_path.c_str());
   if (imgr)
   {
@@ -351,16 +350,12 @@ test_blocked_image_resource_main( int argc, char* argv[] )
   vcl_cout << "test_blocked_image_resource main\n";
   if ( argc >= 2 ) {
     image_file = argv[1];
-#ifdef VCL_WIN32
-    image_file += "\\";
-#else
     image_file += "/";
-#endif
-    vcl_cout << image_file << '\n';
   }
+  else
+    image_file = "core/vil/tests/file_read_data/";
   vcl_cout << "Start test process\n";
   test_blocked_image_resource();
   return 0;
 }
 
-//TESTMAIN(test_blocked_image_resource);

@@ -19,9 +19,9 @@ int main()
     if (y<=190 || y>=210) continue;
     int c = 15 + 30*(x/30); // centre of most nearby circle
     if ((x-c)*(x-c)+(y-200)*(y-200) >= 100) continue;
-    buf[3*(x+300*y)  ] = x%256;
-    buf[3*(x+300*y)+1] = ((x-150)*(y-185)/16) % 256;
-    buf[3*(x+300*y)+2] = (y/3+5)%256;
+    buf[3*(x+300*y)  ] = (unsigned char)(x%256);
+    buf[3*(x+300*y)+1] = (unsigned char)(((x-150)*(y-185)/16) % 256);
+    buf[3*(x+300*y)+2] = (unsigned char)((y/3+5)%256);
   }
   f.print_color_image(buf,300,400);
 

@@ -16,7 +16,7 @@ static void test_4_plane_tiff()
   for (unsigned r = 0; r<32; r++)
     for (unsigned c = 0; c<32; c++)
       for (unsigned p = 0; p<4; p++)
-        v(c, r, p) = (r+1)*(c+1)*(p+1);
+        v(c, r, p) = (unsigned short)((r+1)*(c+1)*(p+1));
 
   {
     vil_stream* os = vil_open("four_plane.tiff", "w");

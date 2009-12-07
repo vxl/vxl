@@ -16,7 +16,7 @@
 
 struct Voxel
 {
-  Voxel( int d= 0, int xx= 0, int yx= 0, int zx= 0) : depth(d), x(xx), y(yx), z(zx) {}
+  Voxel( unsigned char d= 0, unsigned char xx= 0, unsigned char yx= 0, unsigned char zx= 0) : depth(d), x(xx), y(yx), z(zx) {}
 
   unsigned char depth;
   unsigned char x;
@@ -26,7 +26,10 @@ struct Voxel
   bool operator==( const Voxel &a) const { return a.depth==depth && a.x==x && a.y==y && a.z==z; }
 };
 
-//bool operator==( const Voxel &a, const Voxel &b);
+#if 0
+bool operator==( const Voxel &a, const Voxel &b) { return a.depth==b.depth && a.x==b.x && a.y==b.y && a.z==b.z; }
+#endif // 0
+
 vcl_ostream &operator<<( vcl_ostream &os, const Voxel &a);
 
 bool operator<( Voxel &v1, Voxel &v2);

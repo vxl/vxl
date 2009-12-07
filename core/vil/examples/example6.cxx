@@ -45,7 +45,7 @@ int main()
   // Slow fill
   for (unsigned j=0;j<nj;++j)
     for (unsigned i=0;i<ni;++i)
-      rgb_image(i,j) = vil_rgb<vxl_byte>(i+10*j,i+10*j+100,i+10*j+200);
+      rgb_image(i,j) = vil_rgb<vxl_byte>(vxl_byte(i+10*j),vxl_byte(i+10*j+100),vxl_byte(i+10*j+200));
 
   vcl_cout<<"Original image:\n";
   vil_print_all(vcl_cout,rgb_image);

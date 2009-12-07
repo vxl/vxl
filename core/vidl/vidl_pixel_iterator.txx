@@ -47,7 +47,7 @@ class vidl_pixel_iterator_arranged
   }
 
   //: Destructor
-  ~vidl_pixel_iterator_arranged(){}
+  ~vidl_pixel_iterator_arranged() {}
 
   //: Step to the next pixel
   vidl_pixel_iterator_arranged<AR,FMT>& next()
@@ -112,7 +112,7 @@ class vidl_pixel_iterator_arranged<VIDL_PIXEL_ARRANGE_PLANAR,FMT>
     const unsigned size = frame.ni()*frame.nj();
 
     ptr_[0] = (cmp_type*)frame.data();
-    for (unsigned int i=1; i<vidl_pixel_traits_of<FMT>::num_channels; ++i){
+    for (unsigned int i=1; i<vidl_pixel_traits_of<FMT>::num_channels; ++i) {
       if (i==1)
         ptr_[i] = ptr_[i-1] + size;
       else
@@ -121,16 +121,16 @@ class vidl_pixel_iterator_arranged<VIDL_PIXEL_ARRANGE_PLANAR,FMT>
   }
 
   //: Destructor
-  ~vidl_pixel_iterator_arranged(){}
+  ~vidl_pixel_iterator_arranged() {}
 
   //: Step to the next pixel
   vidl_pixel_iterator_arranged<VIDL_PIXEL_ARRANGE_PLANAR,FMT>& next()
   {
     ++ptr_[0];
-    if (vidl_pixel_traits_of<FMT>::num_channels > 1){
+    if (vidl_pixel_traits_of<FMT>::num_channels > 1) {
       // step only if the last csx+1 bits of step_x_ are set
       int chroma_step = ((step_x_&x_mask) == x_mask)?1:0;
-      if (++line_cnt_ < line_size_){
+      if (++line_cnt_ < line_size_) {
         step_x_ += 2;
       }
       else
@@ -143,7 +143,7 @@ class vidl_pixel_iterator_arranged<VIDL_PIXEL_ARRANGE_PLANAR,FMT>
           chroma_step -= (line_size_>>csx);
         step_y_ += 2;
       }
-      for (unsigned int i=1; i<vidl_pixel_traits_of<FMT>::num_channels; ++i){
+      for (unsigned int i=1; i<vidl_pixel_traits_of<FMT>::num_channels; ++i) {
         ptr_[i] += chroma_step;
       }
     }
@@ -197,12 +197,12 @@ class vidl_pixel_iterator_arranged<VIDL_PIXEL_ARRANGE_PACKED,FMT>
   }
 
   //: Destructor
-  ~vidl_pixel_iterator_arranged(){}
+  ~vidl_pixel_iterator_arranged() {}
 
   //: Step to the next pixel
   vidl_pixel_iterator_arranged<VIDL_PIXEL_ARRANGE_PACKED,FMT>& next()
   {
-    mode_ = (mode_+1)%macro_pix_size;
+    mode_ = vxl_byte((mode_+1)%macro_pix_size);
     if (mode_==0)
       ptr_ += pix_step_size;
     return *this;
@@ -253,10 +253,10 @@ class vidl_pixel_iterator_of : public vidl_pixel_iterator
   typedef typename vidl_pixel_traits_of<FMT>::type cmp_type;
  public:
   //: Constructor
-  vidl_pixel_iterator_of(const vidl_frame& frame) : itr_(frame){}
+  vidl_pixel_iterator_of(const vidl_frame& frame) : itr_(frame) {}
 
   //: Destructor
-  virtual ~vidl_pixel_iterator_of<FMT>(){}
+  virtual ~vidl_pixel_iterator_of<FMT>() {}
 
   //: Return the pixel format
   virtual vidl_pixel_format pixel_format() const
@@ -305,7 +305,7 @@ class vidl_pixel_iterator_of<VIDL_PIXEL_FORMAT_MONO_1>
   }
 
   //: Destructor
-  virtual ~vidl_pixel_iterator_of<VIDL_PIXEL_FORMAT_MONO_1>(){}
+  virtual ~vidl_pixel_iterator_of<VIDL_PIXEL_FORMAT_MONO_1>() {}
 
   //: Return the pixel format
   virtual vidl_pixel_format pixel_format() const
@@ -315,7 +315,7 @@ class vidl_pixel_iterator_of<VIDL_PIXEL_FORMAT_MONO_1>
   vidl_pixel_iterator_of<VIDL_PIXEL_FORMAT_MONO_1>& next()
   {
     bit_mask_ >>= 1;
-    if (!bit_mask_){
+    if (!bit_mask_) {
       bit_mask_ = 128;
       ++ptr_;
     }

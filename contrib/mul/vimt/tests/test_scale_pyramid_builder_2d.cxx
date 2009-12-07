@@ -32,7 +32,7 @@ static void test_scale_pyramid_builder_2d(unsigned int nx, unsigned int ny)
   // more difficult.
   for (unsigned int y=0;y<image0.image().nj();++y)
     for (unsigned int x=0;x<image0.image().ni();++x)
-      image0.image()(x,y) = x+y*2;
+      image0.image()(x,y) = vxl_byte(x+y*2);
 
   vimt_scale_pyramid_builder_2d<vxl_byte> builder;
   int default_n_levels = builder.max_levels();
@@ -82,11 +82,11 @@ static void test_scale_pyramid_builder_2d(unsigned int nx, unsigned int ny)
   bool all_less_than_256 = true;
   bool all_more_than_254 = true;
   for (unsigned int y=0;y<image2.image().nj();++y)
-     for (unsigned int x=0;x<image2.image().ni();++x)
-     {
-       if (image2.image()(x,y) > 255.01) all_less_than_256 = false;
-       if (image2.image()(x,y) < 254.99) all_more_than_254 = false;
-     }
+    for (unsigned int x=0;x<image2.image().ni();++x)
+    {
+      if (image2.image()(x,y) > 255.01) all_less_than_256 = false;
+      if (image2.image()(x,y) < 254.99) all_more_than_254 = false;
+    }
 
   TEST("No drift upwards in a float pyramid", all_less_than_256, true);
   TEST("No drift downwards in a float pyramid", all_more_than_254, true);

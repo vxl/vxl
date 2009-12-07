@@ -637,7 +637,7 @@ struct vidl_color_component<VIDL_PIXEL_FORMAT_RGB_555>
   vxl_byte get(const vxl_byte * ptr, unsigned int i)
   {
     const vxl_uint_16* p = reinterpret_cast<const vxl_uint_16*>(ptr);
-    return static_cast<vxl_byte>(*p >> (2-i)*5)<<3;
+    return static_cast<vxl_byte>((*p >> (2-i)*5)<<3);
   }
 
   static inline

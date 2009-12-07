@@ -8,7 +8,7 @@ static void test_histogram_byte()
   for (unsigned k=0;k<image.nk();++k)
     for (unsigned j=0;j<image.nj();++j)
       for (unsigned i=0;i<image.ni();++i)
-        image(i,j,k) = i+j+k;
+        image(i,j,k) = vxl_byte(i+j+k);
 
   vcl_vector<double> histo;
   vil3d_histogram_byte(image,histo);

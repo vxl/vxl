@@ -25,7 +25,7 @@ vil_image_view<vxl_byte> CreateTest8bitImage(int wd, int ht)
   vil_image_view<vxl_byte> image; image.set_size(wd, ht);
   for (int x = 0; x < wd; x++)
     for (int y = 0; y < ht; y++) {
-      vxl_byte data = ((x-wd/2)*(y-ht/2)/16) % (1<<8);
+      vxl_byte data = vxl_byte(((x-wd/2)*(y-ht/2)/16)%(1<<8));
       image(x,y) = data;
     }
   return image;
@@ -37,7 +37,7 @@ vil_image_view<short> CreateTest16bitImage(int wd, int ht)
   vil_image_view<short> image; image.set_size(wd, ht);
   for (int x = 0; x < wd; x++)
     for (int y = 0; y < ht; y++) {
-      short data = ((x-wd/2)*(y-ht/2)/16) % (1<<16);
+      short data = short(((x-wd/2)*(y-ht/2)/16)%(1<<16));
       image(x,y) = data;
   }
   return image;

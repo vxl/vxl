@@ -66,7 +66,6 @@ main( int argc, char ** argv )
   vil_image_view_base_sptr back_img;
   vil_image_view_base_sptr sprite_img;
 
-
   if ( background.set() )
   {
     back_img = vil_load( background() );
@@ -97,7 +96,7 @@ main( int argc, char ** argv )
         (*img)(i,j,0) = 255;
         (*img)(i,j,1) = 0;
         (*img)(i,j,2) = 0;
-        (*img)(i,j,3) = i*255 / img->ni();
+        (*img)(i,j,3) = vxl_byte(i*255/img->ni());
       }
     sprite_img = img;
   }

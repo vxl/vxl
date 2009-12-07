@@ -21,7 +21,8 @@
 #include <vxl_config.h> // for vxl_byte
 
 int
-main(int argc, char** argv) {
+main(int argc, char** argv)
+{
   if (argc < 3) { vcl_cerr << "Syntax: example1_threshold file_in file_out [threshold]\n"; return 1; }
 
   // The input image:
@@ -34,7 +35,7 @@ main(int argc, char** argv) {
 #endif
 
   // The threshold value:
-  vxl_byte threshold = (argc < 4) ? 127 : vcl_atoi(argv[3]);
+  vxl_byte threshold = (argc < 4) ? 127 : vxl_byte(vcl_atoi(argv[3]));
 
   // The filter:
   vil1_image out = vepl_threshold(in,threshold,0);

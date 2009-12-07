@@ -403,7 +403,7 @@ vil_image_view<vxl_byte> CreateTest8bitImage(int wd, int ht)
   vil_image_view<vxl_byte> image(wd, ht);
   for (int j = 0; j < ht; j++)
     for (int i = 0; i < wd; i++) {
-      image(i,j) = ((i-wd/2)*(j-ht/2)) & 0xff;
+      image(i,j) = vxl_byte(((i-wd/2)*(j-ht/2))&0xff);
     }
   return image;
 }
@@ -414,7 +414,7 @@ vil_image_view<vxl_uint_16> CreateTest16bitImage(int wd, int ht)
   vil_image_view<vxl_uint_16> image(wd, ht);
   for (int j = 0; j < ht; j++)
     for (int i = 0; i < wd; i++) {
-      image(i,j) = ((i-wd/2)*(j-ht/2)/16) & 0xffff;
+      image(i,j) = vxl_uint_16(((i-wd/2)*(j-ht/2)/16)&0xffff);
   }
   return image;
 }
@@ -436,9 +436,9 @@ vil_image_view<vil_rgb<vxl_byte> > CreateTest24bitImage(int wd, int ht)
   vil_image_view<vil_rgb<vxl_byte> > image(wd, ht);
   for (int i = 0; i < wd; i++)
     for (int j = 0; j < ht; j++)
-      image(i,j).r = i%(1<<8),
-      image(i,j).g = ((i-wd/2)*(j-ht/2)/16) % (1<<8),
-      image(i,j).b = ((j/3)%(1<<8));
+      image(i,j).r = vxl_byte(i%(1<<8)),
+      image(i,j).g = vxl_byte(((i-wd/2)*(j-ht/2)/16)%(1<<8)),
+      image(i,j).b = vxl_byte(((j/3)%(1<<8)));
   return image;
 }
 
@@ -448,9 +448,9 @@ vil_image_view<vxl_byte> CreateTest3planeImage(int wd, int ht)
   vil_image_view<vxl_byte> image( wd, ht, 3);
   for (int i = 0; i < wd; i++)
     for (int j = 0; j < ht; j++) {
-      image(i,j,0) = i%(1<<8);
-      image(i,j,1) = ((i-wd/2)*(j-ht/2)/16) % (1<<8);
-      image(i,j,2) = ((j/3)%(1<<8));
+      image(i,j,0) = vxl_byte(i%(1<<8));
+      image(i,j,1) = vxl_byte(((i-wd/2)*(j-ht/2)/16)%(1<<8));
+      image(i,j,2) = vxl_byte(((j/3)%(1<<8)));
     }
   return image;
 }
@@ -461,9 +461,9 @@ vil_image_view<vxl_byte> CreateTest3ComponentImage(int wd, int ht)
   vil_image_view<vxl_byte> image( wd, ht, 1, 3);
   for (int i = 0; i < wd; i++)
     for (int j = 0; j < ht; j++) {
-      image(i,j,0) = i%(1<<8);
-      image(i,j,1) = ((i-wd/2)*(j-ht/2)/16) % (1<<8);
-      image(i,j,2) = ((j/3)%(1<<8));
+      image(i,j,0) = vxl_byte(i%(1<<8));
+      image(i,j,1) = vxl_byte(((i-wd/2)*(j-ht/2)/16)%(1<<8));
+      image(i,j,2) = vxl_byte(((j/3)%(1<<8)));
     }
   return image;
 }
@@ -515,7 +515,7 @@ static void test_vil_save_image_resource_wchar()
     _wunlink(out_path);
 #endif
 }
-#endif //defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
+#endif // defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
 
 
 static void test_save_load_image()
@@ -566,7 +566,9 @@ static void test_save_load_image()
 
   // VIFF image (Khoros 1.0)
 #if 1
-//vil_test_image_type("viff", image1, false); // boolean doesn't work (yet)
+#ifdef BOOLEAN_VIFF_WORKS // boolean doesn't work (yet)
+  vil_test_image_type("viff", image1, false);
+#endif
   vil_test_image_type("viff", image8, false);
   vil_test_image_type("viff", image16, false);
   vil_test_image_type("viff", image32, false);
@@ -578,6 +580,9 @@ static void test_save_load_image()
 
   // TIFF
 #if 1
+#ifdef BOOLEAN_TIFF_WORKS // boolean doesn't work (yet)
+  vil_test_image_type("tiff", image1);
+#endif
   vil_test_image_type("tiff", image8);
   vil_test_image_type("tiff", image3p);
   vil_test_image_type("tiff", image1);
@@ -606,7 +611,9 @@ static void test_save_load_image()
 
   // mit
 #if 1
-//vil_test_image_type("mit", image1, false); // boolean doesn't work (yet)
+#ifdef BOOLEAN_MIT_WORKS // boolean doesn't work (yet)
+  vil_test_image_type("mit", image1, false);
+#endif
   vil_test_image_type("mit", image8, false);
   vil_test_image_type("mit", image16, false);
   vil_test_image_type("mit", image32, false);
@@ -642,7 +649,7 @@ static void test_save_load_image()
     unsigned ni =30, nj=29;
     vil_image_view<vxl_byte> small_greyscale_image(ni,nj);
     for (unsigned j=0;j<nj;++j)
-      for (unsigned i=0;i<ni;++i) small_greyscale_image(i,j)=(i+j)*4;
+      for (unsigned i=0;i<ni;++i) small_greyscale_image(i,j) = vxl_byte((i+j)*4);
 #ifdef DEBUG
     vil_print_all(vcl_cout, small_greyscale_image);
 #endif
@@ -677,9 +684,7 @@ static void test_save_load_image()
       _wunlink(out_wpath.c_str());
 #endif
     }
-#endif //defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
-
-
+#endif // defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
   }
 #endif
 
@@ -690,7 +695,7 @@ static void test_save_load_image()
 
 # if defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
   test_vil_save_image_resource_wchar();
-# endif //defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
+# endif // defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
 
 #endif
 }

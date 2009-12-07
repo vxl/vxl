@@ -16,7 +16,7 @@ static void test_algo_correlate_2d_byte()
 
   for (unsigned int j=0;j<src_im.nj();++j)
     for (unsigned int i=0;i<src_im.ni();++i)
-      src_im(i,j) = 1+i+j*n;
+      src_im(i,j) = vxl_byte(1+i+j*n);
 
       // Create kernel1 (all ones in a single row)
   vil_image_view<float> kernel1(m,1,1);

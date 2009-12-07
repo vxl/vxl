@@ -12,7 +12,7 @@ static vil_image_view<unsigned short> CreateTest16bitImage(int wd, int ht)
   vil_image_view<unsigned short> image(wd, ht);
   for (int j = 0; j < ht; j++)
     for (int i = 0; i < wd; i++)
-      image(i,j) = ((i-wd/2)*(j-ht/2)/16) & 0xffff;
+      image(i,j) = (unsigned short)(((i-wd/2)*(j-ht/2)/16)&0xffff);
   return image;
 }
 
@@ -31,7 +31,7 @@ static void test_histogram(int argc, char* argv[])
   vcl_cout << img.ni() << 'x' << img.nj() << '\n'
            << img(455,544) << '\n';
   vcl_vector<double> histogram;
-  int nbins = 1<< (8*sizeof(unsigned short)); 
+  int nbins = 1<< (8*sizeof(unsigned short));
   vil_histogram(img,histogram, vcl_numeric_limits<unsigned short>::min(),
                 vcl_numeric_limits<unsigned short>::max(), nbins);
 

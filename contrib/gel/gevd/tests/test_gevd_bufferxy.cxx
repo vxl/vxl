@@ -12,7 +12,7 @@
 void
 test_gevd_bufferxy()
 {
-  //test first type of constructor
+  // test first type of constructor
   gevd_bufferxy * gbxy1 = new gevd_bufferxy(3,5,8);
 
   TEST("GetBitsPixel",  gbxy1->GetBitsPixel(),  8);
@@ -22,7 +22,7 @@ test_gevd_bufferxy()
   TEST("GetArea",       gbxy1->GetArea(),      15);
   TEST("GetSize",       gbxy1->GetSize(),      15);
 
-  //GetBuffer tested in base class test
+  // GetBuffer tested in base class test
 
   for (int i=0;i<3;i++)
   {
@@ -34,7 +34,7 @@ test_gevd_bufferxy()
   vcl_string strdat = dat;
   TEST("GetElementAddr", strdat, "n");
 
-  //test second type of constructor
+  // test second type of constructor
   gevd_bufferxy * gbxy2 = new gevd_bufferxy(3,5,8,gbxy1->GetBuffer());
 
   TEST("GetBitsPixel2", gbxy2->GetBitsPixel(), 8);
@@ -48,7 +48,7 @@ test_gevd_bufferxy()
   strdat = dat;
   TEST("GetElementAddr2", strdat, "n");
 
-  //test third type of constructor
+  // test third type of constructor
   gevd_bufferxy * gbxy3 = new gevd_bufferxy(*gbxy2);
 
   TEST("GetBitsPixel3", gbxy3->GetBitsPixel(), 8);
@@ -73,13 +73,13 @@ test_gevd_bufferxy()
   delete gbxy3;
   vcl_cout << "Test vil buffer constructor\n";
 
-  //Test vil buffer constructor
-  //Test byte constructor
+  // Test vil buffer constructor
+  // Test byte constructor
   vil_image_resource_sptr rsb = vil_new_image_resource(3,4,1,VIL_PIXEL_FORMAT_BYTE);
   vil_image_view<unsigned char> bview = rsb->get_view(0,3,0,4);
   for (unsigned r  = 0; r<4; ++r)
     for (unsigned c = 0; c<3; ++c)
-      bview(c,r)= c*r;
+      bview(c,r)= (unsigned char)(c*r);
   gevd_bufferxy bbuf(rsb);
 
   bool good_buf = true;
@@ -90,12 +90,12 @@ test_gevd_bufferxy()
         good_buf = false;
   TEST("Unsigned char vil bufferxy constructor ", good_buf, true);
 
-  //Test unsigned short constructor
+  // Test unsigned short constructor
   vil_image_resource_sptr rs = vil_new_image_resource(3,4,1,VIL_PIXEL_FORMAT_UINT_16);
   vil_image_view<unsigned short> usview = rs->get_view(0,3,0,4);
   for (unsigned r  = 0; r<4; ++r)
     for (unsigned c = 0; c<3; ++c)
-      usview(c,r)= 1000+c*r;
+      usview(c,r)= (unsigned short)(1000+c*r);
   gevd_bufferxy buf(rs);
 
   good_buf = true;

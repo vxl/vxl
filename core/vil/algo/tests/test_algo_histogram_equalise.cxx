@@ -7,7 +7,7 @@ static void test_histogram_equalise_byte()
   vil_image_view<vxl_byte> image(10,10);
   for (unsigned j=0;j<image.nj();++j)
     for (unsigned i=0;i<image.ni();++i)
-      image(i,j) = i+j;
+      image(i,j) = vxl_byte(i+j);
 
   vil_histogram_equalise(image);
   TEST("Equalised pixel (0,0)", image(0,0), 0);
@@ -18,7 +18,7 @@ static void test_histogram_equalise_byte()
   image.set_size(9,9);
   for (unsigned j=0;j<image.nj();++j)
     for (unsigned i=0;i<image.ni();++i)
-      image(i,j) = i;
+      image(i,j) = vxl_byte(i);
 
   vil_histogram_equalise(image);
   TEST("Equalised pixel (0,0)", image(0,0), 0);

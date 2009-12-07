@@ -8,8 +8,8 @@ vil_image_view<unsigned char> make_image(int wd, int ht)
   vil_image_view<unsigned char> image(wd, ht);
   for (int x = 0; x < wd; x++)
     for (int y = 0; y < ht; y++)
-      image(x,y) = ((x-wd/2)*(y-ht/2)/16) % 256;
- 
+      image(x,y) = (unsigned char)(((x-wd/2)*(y-ht/2)/16) % 256);
+
   return image;
 }
 

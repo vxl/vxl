@@ -32,7 +32,7 @@ static void test_image_2d_byte_io()
   for (int p=0;p<2;++p)
     for (int j=0;j<6;++j)
       for (int i=0;i<5;++i)
-        image_out0.image()(i,j,p)=i+10*j+100*p;
+        image_out0.image()(i,j,p)=vxl_byte(i+10*j+100*p);
 
   image_out1 = image_out0;
 
@@ -69,7 +69,7 @@ static void test_image_2d_byte_functions()
   for (int p=0;p<2;++p)
     for (int j=0;j<6;++j)
       for (int i=0;i<5;++i)
-        image0.image()(i,j,p)=i+10*j+100*p;
+        image0.image()(i,j,p)=vxl_byte(i+10*j+100*p);
 
   // Test external functions
   vcl_cout<<"Testing vimt_crop\n";

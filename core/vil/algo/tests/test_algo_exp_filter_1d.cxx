@@ -50,7 +50,7 @@ static void test_algo_exp_filter_1d_byte_float()
   vil_image_view<float> dest_im;
   for (unsigned j=0;j<10;++j)
     for (unsigned i=0;i<10;++i)
-      src_im(i,j) = i+10*j;
+      src_im(i,j) = vxl_byte(i+10*j);
   vil_exp_filter_i(src_im,dest_im,double(0.1));
 
   TEST("Width", dest_im.ni(), src_im.ni());

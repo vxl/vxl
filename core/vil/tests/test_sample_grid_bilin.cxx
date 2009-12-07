@@ -19,7 +19,7 @@ static void test_sample_grid_bilin_byte()
 
   for (unsigned int j=0;j<image0.nj();++j)
      for (unsigned int i=0;i<image0.ni();++i)
-       image0(i,j) = i+j*10;
+       image0(i,j) = vxl_byte(i+j*10);
 
   double x0 = 5.0, y0= 5.0;
   double dx1 = 1.0, dy1 = 0.0;
@@ -49,7 +49,7 @@ static void test_sample_grid_bilin_byte()
   for (unsigned int j=0;j<image0.nj();++j)
     for (unsigned int i=0;i<image0.ni();++i)
       for (unsigned int p=0;p<2;++p)
-       image0(i,j,p) = i+j*10+p*100;
+       image0(i,j,p) = vxl_byte(i+j*10+p*100);
 
   vcl_vector<double> vec2(24);
 

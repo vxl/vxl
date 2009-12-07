@@ -28,25 +28,24 @@ static void test_gaussian_pyramid_builder_2d_general()
            << " Testing vimt_gaussian_pyramid_builder_2d_general (byte)(ni="<<ni<<")\n"
            << "****************************************************************\n";
 
-
   vimt_image_2d_of<vxl_byte> image0;
   image0.image().set_size(ni,nj);
 
 #if 0 // use 2x2 chessboard pattern
   for (unsigned y=0;y<nj/2;++y)
-     for (unsigned x=0;x<ni/2;++x)
-     {
-       image0.image()(x,y) = 100;
-       image0.image()(x+ni/2,y+nj/2) = 100;
-       image0.image()(x,y+nj/2) = 200;
-       image0.image()(x+ni/2,y) = 200;
-     }
+    for (unsigned x=0;x<ni/2;++x)
+    {
+      image0.image()(x,y) = 100;
+      image0.image()(x+ni/2,y+nj/2) = 100;
+      image0.image()(x,y+nj/2) = 200;
+      image0.image()(x+ni/2,y) = 200;
+    }
 #else // Use smooth plane pattern
   for (unsigned y=0;y<image0.image().nj();++y)
-     for (unsigned x=0;x<image0.image().ni();++x)
-     {
-       image0.image()(x,y) = x+y*10;
-     }
+    for (unsigned x=0;x<image0.image().ni();++x)
+    {
+      image0.image()(x,y) = vxl_byte(x+y*10);
+    }
 #endif
 
   vimt_gaussian_pyramid_builder_2d_general<vxl_byte> builder;
@@ -59,7 +58,6 @@ static void test_gaussian_pyramid_builder_2d_general()
 
   vcl_cout<<"Result:\n";
   image_pyr.print_all(vcl_cout);
-
 
   TEST("Found correct number of levels", image_pyr.n_levels(), 2);
 
@@ -75,7 +73,6 @@ static void test_gaussian_pyramid_builder_2d_general()
   vcl_cout<<"\n\n\nTesting builder.extend():\n";
   image_pyr.print_all(vcl_cout);
 
-
   TEST("Found correct number of levels", image_pyr.n_levels(), 9);
 
   vimt_image_2d_of<float> image2(200, 200, 1);
@@ -87,11 +84,11 @@ static void test_gaussian_pyramid_builder_2d_general()
   bool all_less_than_256 = true;
   bool all_more_than_254 = true;
   for (unsigned y=0;y<image0.image().nj();++y)
-     for (unsigned x=0;x<image0.image().ni();++x)
-     {
-       if (image0.image()(x,y) > 255.01) all_less_than_256 = false;
-       if (image0.image()(x,y) < 254.99) all_more_than_254 = false;
-     }
+    for (unsigned x=0;x<image0.image().ni();++x)
+    {
+      if (image0.image()(x,y) > 255.01) all_less_than_256 = false;
+      if (image0.image()(x,y) < 254.99) all_more_than_254 = false;
+    }
 
   TEST("No drift upwards in a float pyramid", all_less_than_256, true);
   TEST("No drift downwards in a float pyramid", all_more_than_254, false);

@@ -156,7 +156,6 @@ class vnl_vector
   //  Note: ptr[i] must be valid for i=0..size()-1
   void copy_out(T *) const; // from vector to array[].
 
-
   //: Sets elements to ptr[i]
   //  Note: ptr[i] must be valid for i=0..size()-1
   void set(T const *ptr) { copy_in(ptr); }
@@ -195,7 +194,7 @@ class vnl_vector
   vnl_vector<T>& operator+=(T );
 
   //: Subtract scalar value from all elements
-  vnl_vector<T>& operator-=(T value) { return *this += (-value); }
+  vnl_vector<T>& operator-=(T value) { return *this += T(-value); }
 
   //: Multiply all elements by scalar
   vnl_vector<T>& operator*=(T );
@@ -405,7 +404,6 @@ class vnl_vector
 
   //: Make the vector as if it had been default-constructed.
   void clear();
-
 
   //: Read from text stream
   bool read_ascii(vcl_istream& s);

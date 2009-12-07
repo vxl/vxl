@@ -116,7 +116,7 @@ bool vbl_bit_array_2d::operator() (unsigned int i, unsigned int j) const
   unsigned int bitindex;
   index( i, j, byteindex, bitindex);
 
-  unsigned char mask= (1<<bitindex);
+  unsigned char mask= (unsigned char)(1<<bitindex);
 
   return (data_[byteindex] & mask) != 0;
 }
@@ -127,7 +127,7 @@ bool vbl_bit_array_2d::operator() (unsigned int i, unsigned int j)
   unsigned int bitindex;
   index( i, j, byteindex, bitindex);
 
-  unsigned char mask= (1<<bitindex);
+  unsigned char mask= (unsigned char)(1<<bitindex);
 
   return (data_[byteindex] & mask) != 0;
 }
@@ -139,10 +139,10 @@ void vbl_bit_array_2d::put(unsigned int i, unsigned int j, bool const &x)
 
   index( i, j, byteindex, bitindex);
 
-  unsigned char mask= (((unsigned char )(x))<<bitindex);
-  unsigned char nmask= ~(((unsigned char )(1))<<bitindex);
+  unsigned char mask= (unsigned char)(x?(1<<bitindex):0);
+  unsigned char nmask= (unsigned char)(~(1<<bitindex));
 
-  data_[byteindex]= mask+(nmask & data_[byteindex]);
+  data_[byteindex]= mask|(nmask & data_[byteindex]);
 }
 
 bool vbl_bit_array_2d::get(unsigned int i, unsigned int j) const

@@ -18,9 +18,9 @@ vil_geotiff_header::vil_geotiff_header(TIFF* tif) : tif_(tif)
       // read the header of the GeoDirectoryKey Tag
       int version[3];
       GTIFDirectoryInfo(gtif_, version, &number_of_geokeys_);
-      key_directory_version_ = version[0];
-      key_revision_ = version[1];
-      minor_revision_ = version[2];
+      key_directory_version_ = (unsigned short)version[0];
+      key_revision_ =          (unsigned short)version[1];
+      minor_revision_ =        (unsigned short)version[2];
     }
   }
 }
@@ -116,7 +116,7 @@ bool vil_geotiff_header::geounits (geounits_t& units)
   }
 }
 
-bool vil_geotiff_header::PCS_WGS84_UTM_zone(int &zone, GTIF_HEMISPH &hemisph) //hemisph is O for N, 1 for S
+bool vil_geotiff_header::PCS_WGS84_UTM_zone(int &zone, GTIF_HEMISPH &hemisph) // hemisph is O for N, 1 for S
 {
   modeltype_t type;
   if (gtif_modeltype(type) && type == ModelTypeProjected)
@@ -138,8 +138,10 @@ bool vil_geotiff_header::PCS_WGS84_UTM_zone(int &zone, GTIF_HEMISPH &hemisph) //
       return false;
     }
 
-    // int zone;
-    // int hemisph; //O for N, 1 for S
+#if 0
+     int zone;
+     int hemisph; // O for N, 1 for S
+#endif // 0
     if ((*val >= PCS_WGS84_UTM_zone_1N) && (*val <= PCS_WGS84_UTM_zone_60N)) {
       zone = *val - 32600;
       hemisph = NORTH;

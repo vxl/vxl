@@ -18,7 +18,7 @@ static void test_sample_profile_bilin_byte()
 
   for (unsigned int j=0;j<image1.nj();++j)
      for (unsigned int i=0;i<image1.ni();++i)
-       image1(i,j) = i+j*10;
+       image1(i,j) = vxl_byte(i+j*10);
 
   double x0 = 5.0, y0 = 5.0;
   double dx = 1.0, dy = 0.0;

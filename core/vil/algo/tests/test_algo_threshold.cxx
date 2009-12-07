@@ -40,7 +40,7 @@ static void test_threshold_byte()
   vil_image_view<vxl_byte> image(15,15);
   for (unsigned j=0;j<image.nj();++j)
     for (unsigned i=0;i<image.ni();++i)
-      image(j,i) = i+10*j;
+      image(j,i) = vxl_byte(i+10*j);
 
   test_threshold_byte(image);
 
@@ -48,7 +48,7 @@ static void test_threshold_byte()
   vil_image_view<vxl_byte> crop_image = vil_crop(image,2,10,3,10);
   for (unsigned j=0;j<crop_image.nj();++j)
     for (unsigned i=0;i<crop_image.ni();++i)
-      crop_image(j,i) = i+10*j;
+      crop_image(j,i) = vxl_byte(i+10*j);
 
   test_threshold_byte(crop_image);
 }

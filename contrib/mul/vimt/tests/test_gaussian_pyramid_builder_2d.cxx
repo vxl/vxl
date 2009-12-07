@@ -23,7 +23,7 @@ static void test_gaussian_pyramid_builder_2d_build(vimt_gaussian_pyramid_builder
 
   for (unsigned y=0;y<image0.image().nj();++y)
     for (unsigned x=0;x<image0.image().ni();++x)
-      image0.image()(x,y) = x+y*10;
+      image0.image()(x,y) = vxl_byte(x+y*10);
 
   int default_n_levels = builder.max_levels();
   builder.set_max_levels(2);

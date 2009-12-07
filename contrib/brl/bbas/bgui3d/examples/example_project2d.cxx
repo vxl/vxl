@@ -55,7 +55,6 @@ void buildScene(SoGroup *root)
 
     root->addChild(group);
   }
-
   {
     SoSeparator *group = new SoSeparator;
 
@@ -83,9 +82,9 @@ make_image()
   vil_image_view<vxl_byte> image(400, 400, 3);
   for (int i=0; i<400; ++i) {
     for (int j=0; j<400; ++j) {
-      image(i,j,0) = ((i+j)%2)*255;
-      image(i,j,1) = ((i/2+j/2)%2)*255;
-      image(i,j,2) = ((i/4+j/4)%2)*255;
+      image(i,j,0) = (vxl_byte)(((i+j)%2)*255);
+      image(i,j,1) = (vxl_byte)(((i/2+j/2)%2)*255);
+      image(i,j,2) = (vxl_byte)(((i/4+j/4)%2)*255);
     }
   }
   return vil_new_image_resource_of_view(image);
@@ -134,8 +133,10 @@ int main(int argc, char** argv)
 
   vnl_double_3x4 camera = make_camera();
 
+#if 0
   // wrap the scene graph in a bgui3d tableau
-  //bgui3d_project2d_tableau_new tab3d(camera, root);
+  bgui3d_project2d_tableau_new tab3d(camera, root);
+#endif // 0
 
   bgui3d_project2d_tableau_sptr proj_tab = bgui3d_project2d_tableau_new(camera,root);
   bgui3d_examiner_tableau_sptr exam_tab = bgui3d_examiner_tableau_new(root);

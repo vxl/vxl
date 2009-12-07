@@ -22,7 +22,7 @@ static void test_algo_gaussian_filter_5tap_byte_float()
   vil_image_view<vxl_byte> src(n,n);
   for (int i=0;i<n;++i)
     for (int j=0;j<n;++j)
-      src(i,j) = j*10+i;
+      src(i,j) = vxl_byte(j*10+i);
   vil_image_view<float> dest;
   vil_gauss_filter_5tap_params params(1.0);
   vil_gauss_filter_5tap(src, dest, params);
@@ -30,7 +30,6 @@ static void test_algo_gaussian_filter_5tap_byte_float()
   vil_print_all(vcl_cout,  src);
   vcl_cout << "Destination\n";
   vil_print_all(vcl_cout,  dest);
-
 
   bool fail=false;
   for (int i=2;i<n-2;++i)
@@ -55,7 +54,6 @@ static void test_algo_gaussian_filter_5tap_byte_float()
   vcl_cout << "Destination\n";
   vil_print_all(vcl_cout,  dest);
 
-
   float sum = 0;
   bool fail1=false, fail2=false;
   for (int i=0;i<n;++i)
@@ -71,12 +69,11 @@ static void test_algo_gaussian_filter_5tap_byte_float()
   TEST("response is centre maximum", fail2, false);
   TEST_NEAR("impulse response sums to input", sum, 255.0f, 1e-3);
 
-
   vcl_cout << "**********Awkward cases***************\n";
 
   src.set_size(n,1);
   for (int i=0;i<n;++i)
-    src(i,0) = (i%2)*10+i;
+    src(i,0) = vxl_byte((i%2)*10+i);
   vil_gauss_filter_5tap(src,dest, params);
   vcl_cout << "Source\n";
   vil_print_all(vcl_cout,  src);
@@ -85,7 +82,7 @@ static void test_algo_gaussian_filter_5tap_byte_float()
 
   src.set_size(1,n);
   for (int i=0;i<n;++i)
-    src(0,i) = (i%2)*10+i;
+    src(0,i) = vxl_byte((i%2)*10+i);
   vil_gauss_filter_5tap(src,dest, params);
   vcl_cout << "Source\n";
   vil_print_all(vcl_cout,  src);
@@ -95,8 +92,8 @@ static void test_algo_gaussian_filter_5tap_byte_float()
   src.set_size(n,2);
   for (int i=0;i<n;++i)
   {
-    src(i,0) = (i%2)*10+i;
-    src(i,1) = ((i+1)%2)*10+i;
+    src(i,0) = vxl_byte((i%2)*10+i);
+    src(i,1) = vxl_byte(((i+1)%2)*10+i);
   }
   vil_gauss_filter_5tap(src,dest, params);
   vcl_cout << "Source\n";
@@ -107,8 +104,8 @@ static void test_algo_gaussian_filter_5tap_byte_float()
   src.set_size(2,n);
   for (int i=0;i<n;++i)
   {
-    src(0,i) = (i%2)*10+i;
-    src(1,i) = ((i+1)%2)*10+i;
+    src(0,i) = vxl_byte((i%2)*10+i);
+    src(1,i) = vxl_byte(((i+1)%2)*10+i);
   }
   vil_gauss_filter_5tap(src,dest, params);
   vcl_cout << "Source\n";
@@ -119,9 +116,9 @@ static void test_algo_gaussian_filter_5tap_byte_float()
   src.set_size(3,n);
   for (int i=0;i<n;++i)
   {
-    src(0,i) = (i%3)*10+i;
-    src(1,i) = ((i+1)%3)*10+i;
-    src(2,i) = ((i+2)%3)*10+i;
+    src(0,i) = vxl_byte((i%3)*10+i);
+    src(1,i) = vxl_byte(((i+1)%3)*10+i);
+    src(2,i) = vxl_byte(((i+2)%3)*10+i);
   }
   vil_gauss_filter_5tap(src,dest, params);
   vcl_cout << "Source\n";
@@ -132,8 +129,8 @@ static void test_algo_gaussian_filter_5tap_byte_float()
   src.set_size(n,2);
   for (int i=0;i<n;++i)
   {
-    src(i,0) = (i%2)*10+i;
-    src(i,1) = ((i+1)%2)*10+i;
+    src(i,0) = vxl_byte((i%2)*10+i);
+    src(i,1) = vxl_byte(((i+1)%2)*10+i);
   }
   vil_gauss_filter_5tap(src,dest, params);
   vcl_cout << "Source\n";
@@ -144,7 +141,7 @@ static void test_algo_gaussian_filter_5tap_byte_float()
   src.set_size(3,3);
   for (int j=0;j<3;++j)
     for (int i=0;i<3;++i)
-      src(i,j) = i*10+j;
+      src(i,j) = vxl_byte(i*10+j);
   vil_gauss_filter_5tap(src,dest, params);
   vcl_cout << "Source\n";
   vil_print_all(vcl_cout,  src);
@@ -154,7 +151,7 @@ static void test_algo_gaussian_filter_5tap_byte_float()
   src.set_size(4,4);
   for (int j=0;j<4;++j)
     for (int i=0;i<4;++i)
-      src(i,j) = i*10+j;
+      src(i,j) = vxl_byte(i*10+j);
   vil_gauss_filter_5tap(src,dest, params);
   vcl_cout << "Source\n";
   vil_print_all(vcl_cout,  src);
@@ -209,7 +206,6 @@ static void test_algo_vil_gauss_filter_gen_ntaps()
     // use log to get even tolerances
     TEST_NEAR("filter3", vcl_log(filter3[i]), vcl_log(correct_filter3[i]), 0.3);
   }
-
 
   const double correct_filter4[] = {0.18846314959135, 0.16222013702815,
     0.11021993712191, 0.03909677625858, -0.03909677625858, -0.11021993712191,

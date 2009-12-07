@@ -24,7 +24,7 @@ vil1_image CreateTest8bitImage(int wd, int ht)
   vil1_memory_image_of<vxl_byte> image(wd, ht);
   for (int x = 0; x < wd; x++)
     for (int y = 0; y < ht; y++) {
-      vxl_byte data = ((x-wd/2)*(y-ht/2)/16) % (1<<8);
+      vxl_byte data = vxl_byte(((x-wd/2)*(y-ht/2)/16)%(1<<8));
       image.put_section(&data, x, y, 1, 1);
     }
   return image;
@@ -36,7 +36,7 @@ vil1_image CreateTest16bitImage(int wd, int ht)
   vil1_memory_image_of<vxl_uint_16> image(wd, ht);
   for (int x = 0; x < wd; x++)
     for (int y = 0; y < ht; y++) {
-      vxl_uint_16 data = ((x-wd/2)*(y-ht/2)/16) % (1<<16);
+      vxl_uint_16 data = vxl_uint_16(((x-wd/2)*(y-ht/2)/16)%(1<<16));
       image.put_section(&data, x, y, 1, 1);
   }
   return image;
@@ -48,7 +48,7 @@ vil1_image CreateTest24bitImage(int wd, int ht)
   vil1_memory_image_of<vil1_rgb_byte> image(wd, ht);
   for (int x = 0; x < wd; x++)
     for (int y = 0; y < ht; y++) {
-      vxl_byte data[3] = { x%(1<<8), ((x-wd/2)*(y-ht/2)/16) % (1<<8), ((y/3)%(1<<8)) };
+      vxl_byte data[3] = { vxl_byte(x%(1<<8)), vxl_byte(((x-wd/2)*(y-ht/2)/16)%(1<<8)), vxl_byte(((y/3)%(1<<8))) };
       image.put_section(data, x, y, 1, 1);
     }
   return image;
@@ -60,7 +60,7 @@ vil1_image CreateTest3planeImage(int wd, int ht)
   vil1_memory_image image(3, wd, ht, 1, 8, VIL1_COMPONENT_FORMAT_UNSIGNED_INT);
   for (int x = 0; x < wd; x++)
     for (int y = 0; y < ht; y++) {
-      vxl_byte data[3] = { x%(1<<8), ((x-wd/2)*(y-ht/2)/16) % (1<<8), ((y/3)%(1<<8)) };
+      vxl_byte data[3] = { vxl_byte(x%(1<<8)), vxl_byte(((x-wd/2)*(y-ht/2)/16)%(1<<8)), vxl_byte(((y/3)%(1<<8))) };
       image.put_section(data, x, y, 1, 1);
     }
   return image;

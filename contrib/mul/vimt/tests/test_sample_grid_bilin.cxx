@@ -18,7 +18,7 @@ static void test_sample_grid_bilin_byte_affine()
 
   for (unsigned int j=0;j<image0.image().nj();++j)
      for (unsigned int i=0;i<image0.image().ni();++i)
-       image0.image()(i,j) = i+j*10;
+       image0.image()(i,j) = vxl_byte(i+j*10);
 
   vgl_point_2d<double> p0(5.0,5.0);
   vgl_vector_2d<double> u(1.0,0.0), v(0.0,1.0);
@@ -47,7 +47,7 @@ static void test_sample_grid_bilin_byte_affine()
   for (unsigned int j=0;j<image0.image().nj();++j)
     for (unsigned int i=0;i<image0.image().ni();++i)
       for (unsigned int p=0;p<2;++p)
-       image0.image()(i,j,p) = i+j*10+p*100;
+       image0.image()(i,j,p) = vxl_byte(i+j*10+p*100);
 
   vnl_vector<double> vec2;
 
@@ -83,12 +83,11 @@ static void test_sample_grid_bilin_byte_projective()
   TEST("Projective",trans.form(),vimt_transform_2d::Projective);
   image0.set_world2im(trans);
 
-
   vcl_cout<<"Testing one plane image\n";
 
   for (unsigned int j=0;j<image0.image().nj();++j)
      for (unsigned int i=0;i<image0.image().ni();++i)
-       image0.image()(i,j) = i+j*10;
+       image0.image()(i,j) = vxl_byte(i+j*10);
 
   vgl_point_2d<double> p0(5.0,5.0);
   vgl_vector_2d<double> u(1.0,0.0), v(0.0,1.0);
@@ -117,7 +116,7 @@ static void test_sample_grid_bilin_byte_projective()
   for (unsigned int j=0;j<image0.image().nj();++j)
     for (unsigned int i=0;i<image0.image().ni();++i)
       for (unsigned int p=0;p<2;++p)
-       image0.image()(i,j,p) = i+j*10+p*100;
+       image0.image()(i,j,p) = vxl_byte(i+j*10+p*100);
 
   vnl_vector<double> vec2;
 

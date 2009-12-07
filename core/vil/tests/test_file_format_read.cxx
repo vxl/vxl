@@ -17,12 +17,9 @@
 // For testing specific file formats
 #include <vil/vil_stream_fstream.h>
 
-//#define DEBUG
-
-
-// Amitha Perera
-// Apr 2002
-
+// \author Amitha Perera
+// \date Apr 2002
+//
 // Compare the results of loading different files with the true data
 // that's supposed to be in those files.
 
@@ -52,12 +49,12 @@ struct CompareRGB
   virtual bool operator() ( vil_image_view< vil_rgb<PixelType> > const& img,
                             int p, int i, int j,
                             const vcl_vector<PixelType>& pixel ) const
-    {
-      return p==0 && pixel.size() == 3 &&
-             img(i,j).r == pixel[0] &&
-             img(i,j).g == pixel[1] &&
-             img(i,j).b == pixel[2];
-    }
+  {
+    return p==0 && pixel.size() == 3 &&
+           img(i,j).r == pixel[0] &&
+           img(i,j).g == pixel[1] &&
+           img(i,j).b == pixel[2];
+  }
 };
 
 
@@ -68,13 +65,13 @@ struct CompareRGBA
   virtual bool operator() ( vil_image_view< vil_rgba<PixelType> > const& img,
                             int p, int i, int j,
                             const vcl_vector<PixelType>& pixel ) const
-    {
-      return p==0 && pixel.size() == 4 &&
-             img(i,j).r == pixel[0] &&
-             img(i,j).g == pixel[1] &&
-             img(i,j).b == pixel[2] &&
-             img(i,j).a == pixel[3];
-    }
+  {
+    return p==0 && pixel.size() == 4 &&
+           img(i,j).r == pixel[0] &&
+           img(i,j).g == pixel[1] &&
+           img(i,j).b == pixel[2] &&
+           img(i,j).a == pixel[3];
+  }
 };
 
 
@@ -98,7 +95,8 @@ struct CompareRGBNear
                              2 * pixel[1] * img(i,j).g + tol_sq_ +
                              2 * pixel[2] * img(i,j).b + tol_sq_ );
         return diff_A < diff_B;
-      } else {
+      }
+      else {
         return false;
       }
     }
@@ -118,9 +116,9 @@ struct ComparePlanes
   virtual bool operator() ( vil_image_view<PixelType> const& img,
                             int p, int i, int j,
                             const vcl_vector<PixelType>& pixel ) const
-    {
-      return 0 <= p && p < num_planes && pixel.size() == 1 && img(i,j,p) == pixel[0];
-    }
+  {
+    return 0 <= p && p < num_planes && pixel.size() == 1 && img(i,j,p) == pixel[0];
+  }
 };
 
 
@@ -139,10 +137,10 @@ struct CompareGreyFloat
   virtual bool operator() ( vil_image_view<PixelType> const& img,
                             int p, int i, int j,
                             const vcl_vector<PixelType>& pixel ) const
-    {
-      return p==0 && pixel.size() == 1 &&
-             vcl_fabs( pixel[0] - img(i,j) ) <= 1e-6 * vcl_fabs( pixel[0] );
-    }
+  {
+    return p==0 && pixel.size() == 1 &&
+           vcl_fabs( pixel[0] - img(i,j) ) <= 1e-6 * vcl_fabs( pixel[0] );
+  }
 };
 
 
@@ -159,7 +157,8 @@ struct CompareGreyNear
         PixelType diff_A = static_cast<PixelType>(pixel[0] * pixel[0] + img(i,j) * img(i,j));
         PixelType diff_B = static_cast<PixelType>(2 * pixel[0] * img(i,j) + tol_sq_);
         return diff_A <= diff_B;
-      } else {
+      }
+      else {
         return false;
       }
     }
@@ -226,7 +225,7 @@ read_value( vcl_istream& fin, signed char& pix )
   int x;
   // use operator! to test the stream to avoid compiler warnings
   bool bad = ! ( fin >> x );
-  if ( !bad ) pix = x;
+  if ( !bad ) pix = static_cast<signed char>(x);
   return bad;
 }
 
@@ -277,7 +276,6 @@ CheckPixels( Compare<TruePixelType,ImgPixelType> const& check,
     return false;
   }
 
-
   // Generate different views from the resource, including the full image.
   //
   vcl_vector< vil_image_view<ImgPixelType> > views;
@@ -315,7 +313,8 @@ CheckPixels( Compare<TruePixelType,ImgPixelType> const& check,
             if (img.size() < 100) {
               vcl_cout << "\nSubimage " << views.size() << " at ("<<dl<<','<<dt<<"):\n";
               vil_print_all(vcl_cout, img); vcl_cout.flush();
-            } else {
+            }
+            else {
               vcl_cout << "Subimage size = " << img.size() << ".  Too large to display all pixels." << vcl_endl;
             }
 #endif
@@ -328,7 +327,6 @@ CheckPixels( Compare<TruePixelType,ImgPixelType> const& check,
       }
     }
   }
-
 
   // Compare pixels
   //
@@ -394,7 +392,8 @@ CheckFile( Compare<TruePixelType,ImgPixelType> const& check,
   if ( !ir ) {
     vcl_cout << "[ couldn't load image file " << img_data_file << " ]" << vcl_endl;
     return false;
-  } else {
+  }
+  else {
     return CheckPixels( check, true_data_file, ir );
   }
 }
@@ -421,10 +420,12 @@ CheckFormat( Compare<TruePixelType,ImgPixelType> const& check,
     if ( !ir ) {
       vcl_cout << "[ couldn't load image file " << img_data_file << " ]" << vcl_endl;
       result = false;
-    } else {
+    }
+    else {
       result = CheckPixels( check, true_data_file, ir );
     }
-  } else {
+  }
+  else {
     vcl_cout << "[ couldn't open file " << img_data_file << " for reading ]" << vcl_endl;
     result = false;
   }
@@ -518,12 +519,12 @@ test_file_format_read_main( int argc, char* argv[] )
   testlib_test_begin( "  8-bit RGBA without RowsPerStrip" );
   testlib_test_perform(CheckFile(CompareRGBA<vxl_byte>(), "no_rowsperstrip_true.txt", "no_rowsperstrip.tif" ) );
 
-  //The following tests are targeted to the vil_nitf2_image class which can read NITF 2.1, NITF 2.0 and
-  //NSIF 1.0 files.  All three of these formats are covered here as well as all four different
-  //types of data layouts for uncompressed data (IMODE).  Also we test a fair number of different
-  //data types (eg. 8-bit unsigned, 16-bit unsigned, 32-bit signed, double, float, bool)
-  //TODO: Create NITF tests for the following cases:
-  //1) read second image test (ie. multiple images in one file)
+  // The following tests are targeted to the vil_nitf2_image class which can read NITF 2.1, NITF 2.0 and
+  // NSIF 1.0 files.  All three of these formats are covered here as well as all four different
+  // types of data layouts for uncompressed data (IMODE).  Also we test a fair number of different
+  // data types (eg. 8-bit unsigned, 16-bit unsigned, 32-bit signed, double, float, bool)
+  // TODO: Create NITF tests for the following cases:
+  // 1) read second image test (ie. multiple images in one file)
   vcl_cout << "NITF 2.1 [nitf] (uncompressed)\n";
   testlib_test_begin( "  8-bit unsigned int (IMODE=P)" );
   testlib_test_perform(CheckFile(ComparePlanes<vxl_byte,3>(), "ff_nitf_8bit_true.txt", "ff_nitf_8bit_p.nitf" ) );
@@ -554,7 +555,7 @@ test_file_format_read_main( int argc, char* argv[] )
   vcl_cout << "NITF 2.1 [nitf] (JPEG 2000 compressed)\n";
   testlib_test_begin( "p0_12 (3x5x1 x 8Bit)" );
   testlib_test_perform(CheckFile(CompareGrey<vxl_byte>(), "p0_12_true.txt", "p0_12a.ntf" ) );
-#endif //HAS_J2K
+#endif // HAS_J2K
 
   vcl_cout << "Sun raster [ras]\n";
   testlib_test_begin( "  8-bit grey, no colourmap" );

@@ -123,7 +123,7 @@ class bbgm_mask_pair_feature
  public:
   bbgm_mask_pair_feature(): mid_(brip_rect_mask::ntypes),
     ang0_(brip_rect_mask::nangles), ang1_(brip_rect_mask::nangles),
-    i0_(0),j0_(0),i1_(0),j1_(0),p_(0.0f){id_ = uid_++;}
+    i0_(0),j0_(0),i1_(0),j1_(0),p_(0.0f) { id_ = uid_++; }
 
   void set_prob(unsigned short i0, unsigned short j0,
                 unsigned short i1, unsigned short j1, float p)
@@ -132,17 +132,17 @@ class bbgm_mask_pair_feature
     i1_ = i1; j1_ = j1;
     p_=p;
   }
-  void set_mask_type(brip_rect_mask::mask_id mid){mid_ = mid;}
+  void set_mask_type(brip_rect_mask::mask_id mid) { mid_ = mid; }
   void set_angles(brip_rect_mask::ang_id ang0,
                   brip_rect_mask::ang_id ang1)
   {ang0_ = ang0; ang1_ = ang1;}
 
   //: set the unique id of each mask
-  void set_ids( unsigned id0, unsigned id1){id0_ = id0; id1_ = id1;}
+  void set_ids( unsigned id0, unsigned id1) { id0_ = id0; id1_ = id1; }
 
   //: location of each mask in the pair
-  void x0(unsigned short& i0, unsigned short& j0) const { i0 = i0_; j0 = j0_;}
-  void x1(unsigned short& i1, unsigned short& j1) const { i1 = i1_; j1 = j1_;}
+  void x0(unsigned short& i0, unsigned short& j0) const { i0 = i0_; j0 = j0_; }
+  void x1(unsigned short& i1, unsigned short& j1) const { i1 = i1_; j1 = j1_; }
 
   //: the type of the mask pair
   brip_rect_mask::mask_id mask_id() const {return mid_;}
@@ -161,8 +161,8 @@ class bbgm_mask_pair_feature
 
   void center(unsigned short& ic, unsigned short& jc) const
   {
-    ic  = (i0_+i1_)/2;
-    jc  = (j0_+j1_)/2;
+    ic  = (unsigned short)((i0_+i1_)/2);
+    jc  = (unsigned short)((j0_+j1_)/2);
   }
   //: probability for the mask pair
   float operator () () const { return p_;}
@@ -229,9 +229,9 @@ bool pair_intersect(bbgm_mask_pair_feature const& mp0,
 class fless
 {
  public:
-  fless(){}
+  fless() {}
   bool operator ()(bbgm_mask_pair_feature const& fa,
-                   bbgm_mask_pair_feature const& fb){
+                   bbgm_mask_pair_feature const& fb) {
     unsigned short ica, jca, icb, jcb;
     fa.center(ica, jca);
     fb.center(icb, jcb);
@@ -246,7 +246,7 @@ class fless
 class bbgm_pair_group_feature
 {
  public:
-  bbgm_pair_group_feature(): mid_(brip_rect_mask::ntypes), ci_(0), cj_(0), p_(0){id_ = uid_++;}
+  bbgm_pair_group_feature(): mid_(brip_rect_mask::ntypes), ci_(0), cj_(0), p_(0) { id_ = uid_++; }
   //: A group with a single pair
   bbgm_pair_group_feature(bbgm_mask_pair_feature const& mp);
   //: set probability and vertices
@@ -269,10 +269,10 @@ class bbgm_pair_group_feature
     p_=p;
   }
   //: set probability with existing vertices
-  void set_prob(float p){ p_ = p;}
+  void set_prob(float p) { p_ = p; }
 
   //: set the mask type of the group
-  void set_mask_id(brip_rect_mask::mask_id mid){mid_ = mid;}
+  void set_mask_id(brip_rect_mask::mask_id mid) { mid_ = mid; }
 
   unsigned n_pairs() const {return pairs_.size();}
 

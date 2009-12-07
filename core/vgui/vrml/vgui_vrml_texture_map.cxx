@@ -35,9 +35,10 @@ vgui_vrml_texture_map* vgui_vrml_texture_map::create(char const* filename)
 {
   if (filename == 0 || *filename == 0)
     return 0;
-
-  //if (gl_mode != MWinGLMode::textured)
-  //  return 0;
+#if 0
+  if (gl_mode != MWinGLMode::textured)
+    return 0;
+#endif // 0
 
   // Try some directory hilarity if file not found
   vcl_string fn;
@@ -81,15 +82,18 @@ vgui_vrml_texture_map* vgui_vrml_texture_map::create(char const* filename)
     }
     vcl_cerr << "Done.\n";
     return newmap;
-  } else if (vil1_pixel_format(fileimage) == VIL1_BYTE) {
+  }
+  else if (vil1_pixel_format(fileimage) == VIL1_BYTE) {
     vgui_vrml_texture_map* newmap = new vgui_vrml_texture_map(filename, tex_w, tex_h);
-    //vil1_memory_image_of<byte> gray( fileimage.get_image_ptr() ); //im8);
+#if 0
+    vil1_memory_image_of<vxl_byte> gray(fileimage.get_image_ptr() ); // im8
+#endif // 0
     vil1_memory_image_of<vxl_byte> gray(fileimage.width(), fileimage.height());
     fileimage.get_section(gray.get_buffer(), 0,0, fileimage.width(), fileimage.height());
     for (int y = 0; y < tex_h; ++y) {
       int orig_y = y * h / tex_h;
       for (int x = 0; x < tex_w; ++x) {
-        int v = gray(x * w / tex_w, orig_y);
+        vxl_byte v = gray(x * w / tex_w, orig_y);
         newmap->rgb(x,tex_h - y - 1).r = v;
         newmap->rgb(x,tex_h - y - 1).g = v;
         newmap->rgb(x,tex_h - y - 1).b = v;

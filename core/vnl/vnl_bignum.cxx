@@ -128,7 +128,8 @@ vnl_bignum::vnl_bignum(float f)
     this->count = 1;
     this->data = new Data[1];
     this->data[0] = 0;
-  } else if (d >= 1.0) {
+  }
+  else if (d >= 1.0) {
     // Note: 0x10000L == 1 >> 16: the (assumed) size of unsigned short is 16 bits.
     vcl_vector<Data> buf;
     while (d >= 1.0) {
@@ -137,7 +138,7 @@ vnl_bignum::vnl_bignum(float f)
     }
     // Allocate and copy into permanent buffer
     this->data = buf.size()>0 ? new Data[buf.size()] : 0;
-    this->count = buf.size();
+    this->count = (unsigned short)(buf.size());
     vcl_copy( buf.begin(), buf.end(), data );
   }
 }
@@ -158,7 +159,8 @@ vnl_bignum::vnl_bignum(double d)
     this->count = 1;
     this->data = new Data[1];
     this->data[0] = 0;
-  } else if (d >= 1.0) {
+  }
+  else if (d >= 1.0) {
     // Note: 0x10000L == 1 >> 16: the (assumed) size of unsigned short is 16 bits.
     vcl_vector<Data> buf;
     while (d >= 1.0) {
@@ -167,7 +169,7 @@ vnl_bignum::vnl_bignum(double d)
     }
     // Allocate and copy into permanent buffer
     this->data = buf.size()>0 ? new Data[buf.size()] : 0;
-    this->count = buf.size();
+    this->count = (unsigned short)(buf.size());
     vcl_copy( buf.begin(), buf.end(), data );
   }
 }
@@ -188,7 +190,8 @@ vnl_bignum::vnl_bignum(long double d)
     this->count = 1;
     this->data = new Data[1];
     this->data[0] = 0;
-  } else if (d >= 1.0) {
+  }
+  else if (d >= 1.0) {
     // Note: 0x10000L == 1 >> 16: the (assumed) size of unsigned short is 16 bits.
     vcl_vector<Data> buf;
     while (d >= 1.0) {
@@ -197,7 +200,7 @@ vnl_bignum::vnl_bignum(long double d)
     }
     // Allocate and copy into permanent buffer
     this->data = (buf.size()>0 ? new Data[buf.size()] : 0);
-    this->count = buf.size();
+    this->count = (unsigned short)(buf.size());
     vcl_copy( buf.begin(), buf.end(), data );
   }
 }

@@ -11,8 +11,8 @@ float abs_float(float const& a) { return (a<0) ? -a : a; }
 double abs_double(double const& a) { return vcl_fabs(a); }
 float sqrt_float(float const& a) { return (a<0) ? -vcl_sqrt(a) : vcl_sqrt(a); }
 double sqrt_double(double const& a) { return (a<0) ? -vcl_sqrt(a) : vcl_sqrt(a); }
-vxl_byte sqr_ubyte(vxl_byte const& a) { return a*a; }
-vxl_uint_16 sqr_ushort(vxl_uint_16 const& a) { return a*a; }
+vxl_byte sqr_ubyte(vxl_byte const& a) { return vxl_byte(a*a); }
+vxl_uint_16 sqr_ushort(vxl_uint_16 const& a) { return vxl_uint_16(a*a); }
 float sqr_float(float const& a) { return a*a; }
 double sqr_double(double const& a) { return a*a; }
 static double shift_=0.0, scale_=1.0;

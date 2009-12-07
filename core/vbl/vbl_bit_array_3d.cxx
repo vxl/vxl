@@ -24,8 +24,8 @@ void vbl_bit_array_3d::put(unsigned int i1, unsigned int i2, unsigned int i3, bo
 
   index(i1, i2, i3, byteindex, bitindex);
 
-  unsigned char mask = v ? (1<<bitindex) : 0;
-  unsigned char nmask = ~(1<<bitindex);
+  unsigned char mask = (unsigned char)(v?(1<<bitindex):0);
+  unsigned char nmask = (unsigned char)(~(1<<bitindex));
 
   data_[byteindex] = mask|(nmask & data_[byteindex]);
 }
@@ -37,8 +37,8 @@ void vbl_bit_array_3d::flip(unsigned int i1, unsigned int i2, unsigned int i3)
 
   index(i1, i2, i3, byteindex, bitindex);
 
-  unsigned char mask = (data_[byteindex] & (1<<bitindex)) ? 0 : (1<<bitindex);
-  unsigned char nmask = ~(1<<bitindex);
+  unsigned char mask = (unsigned char)((data_[byteindex] & (1<<bitindex)) ? 0 : (1<<bitindex));
+  unsigned char nmask = (unsigned char)(~(1<<bitindex));
 
   data_[byteindex] = mask|(nmask & data_[byteindex]);
 }
@@ -55,7 +55,7 @@ bool vbl_bit_array_3d::operator() (unsigned int i1, unsigned int i2, unsigned in
   unsigned char bitindex;
 
   index(i1, i2, i3, byteindex, bitindex);
-  unsigned char mask = (1<<bitindex);
+  unsigned char mask = (unsigned char)(1<<bitindex);
 
   return (data_[byteindex] & mask) != 0;
 }

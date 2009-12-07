@@ -72,9 +72,9 @@ void test_arbitrary_length_int_conversion_short()
   signed short  b[65540];
   signed short * c = &b[1];
 
-  int i;
-  for (i = 0; i < 65536; ++i)
-    a[i] = i-32768;
+  int i=0;
+  for (signed short j = -32768; i < 65536; ++i,++j)
+    a[i] = j;
   a[65536] = 0;
   a[65537] = 1;
 
@@ -120,9 +120,9 @@ void test_arbitrary_length_int_conversion_ushort()
   unsigned short  b[65540];
   unsigned short * c = &b[1];
 
-  int i;
-  for (i = 0; i < 65536; ++i)
-    a[i] = i;
+  int i=0;
+  for (unsigned short j = 0; i < 65536; ++i,++j)
+    a[i] = j;
   a[65536] = 0;
   a[65537] = 1;
 
@@ -181,19 +181,15 @@ void test_explicit_int_io()
     if (n != i) break;
   }
 
-// stringstream not yet properly supported on gcc-2.95.2 (see vcl/vcl_sstream.h) and SGI
-#if VCL_HAS_WORKING_STRINGSTREAM
   vcl_stringstream ss(vcl_ios_in | vcl_ios_out | vcl_ios_binary);
-  //const char *b= ss.str().c_str();
-  //Is the above simply to make a call to c_str? b is otherwise unused. Removing it
-  //to avoid compiler warnings.
-  ss.str().c_str();
+  const char *b= ss.str().c_str();
   {
     vsl_b_ostream bss(&ss);
     TEST("Created stringstream for writing", (!bss), false);
     for (i = 0; i < 65536; ++i)
       vsl_b_write_uint_16(bss, i);
   }
+  TEST("stringstream buffer is available (and empty)", b[0], '\0');
 
   vcl_stringstream ss2(ss.str());
   {
@@ -207,7 +203,6 @@ void test_explicit_int_io()
     }
     TEST("Finished reading file successfully", (!bss), false);
   }
-#endif
 
   TEST("Checking that the results are correct", i, 65536);
   if (i != 65536)
@@ -242,7 +237,6 @@ void test_extreme_int_io()
   long min_long_in = 77;
   long max_long_in = 77;
   unsigned long max_ulong_in = 77;
-
 
   vsl_b_ifstream bfs_in("vsl_extreme_int_io_test.bvl.tmp");
   TEST("Opened vsl_extreme_int_io_test.bvl.tmp for reading", (!bfs_in), false);

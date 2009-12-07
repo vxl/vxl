@@ -7,7 +7,7 @@ static void test_histogram_byte()
   vil_image_view<vxl_byte> image(10,10);
   for (unsigned j=0;j<image.nj();++j)
     for (unsigned i=0;i<image.ni();++i)
-      image(j,i) = i+j;
+      image(j,i) = vxl_byte(i+j);
 
   vcl_vector<double> histo;
   vil_histogram_byte(image,histo);

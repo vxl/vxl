@@ -30,14 +30,14 @@ vxl_uint_16 vil_stream_read_big_endian_uint_16(vil_stream *s)
 {
   vxl_uint_8 bytes[2];
   if (s->read(bytes, sizeof bytes) != sizeof bytes) return 0;
-  return vxl_uint_16(bytes[1]) + (vxl_uint_16(bytes[0])<<8);
+  return vxl_uint_16(bytes[1]) | vxl_uint_16(bytes[0]<<8);
 }
 
 vxl_uint_16 vil_stream_read_little_endian_uint_16(vil_stream *s)
 {
   vxl_uint_8 bytes[2];
   if (s->read(bytes, sizeof bytes) != sizeof bytes) return 0;
-  return vxl_uint_16(bytes[0]) + (vxl_uint_16(bytes[1])<<8);
+  return vxl_uint_16(bytes[0]) | vxl_uint_16(bytes[1]<<8);
 }
 
 #if VXL_HAS_INT_64
@@ -46,16 +46,16 @@ vxl_uint_64 vil_stream_read_big_endian_uint_64(vil_stream *s)
 {
   vxl_byte bytes[8];
   if (s->read(bytes, sizeof bytes) != sizeof bytes) return 0;
-  return (vxl_uint_64(bytes[0])<<56) + (vxl_uint_64(bytes[1])<<48) + (vxl_uint_64(bytes[2])<<40) + (vxl_uint_64(bytes[3])<<32)
-       + (vxl_uint_64(bytes[0])<<24) + (vxl_uint_64(bytes[1])<<16) + (vxl_uint_64(bytes[2])<< 8) +  vxl_uint_64(bytes[3]);
+  return (vxl_uint_64(bytes[0])<<56) | (vxl_uint_64(bytes[1])<<48) | (vxl_uint_64(bytes[2])<<40) | (vxl_uint_64(bytes[3])<<32)
+       | (vxl_uint_64(bytes[0])<<24) | (vxl_uint_64(bytes[1])<<16) | (vxl_uint_64(bytes[2])<< 8) |  vxl_uint_64(bytes[3]);
 }
 
 vxl_uint_64 vil_stream_read_little_endian_uint_64(vil_stream *s)
 {
   vxl_byte bytes[4];
   if (s->read(bytes, sizeof bytes) != sizeof bytes) return 0;
-  return (vxl_uint_64(bytes[3])<<56) + (vxl_uint_64(bytes[2])<<48) + (vxl_uint_64(bytes[1])<<40) + (vxl_uint_64(bytes[0])<<32)
-       + (vxl_uint_64(bytes[3])<<24) + (vxl_uint_64(bytes[2])<<16) + (vxl_uint_64(bytes[1])<< 8) +  vxl_uint_64(bytes[0]);
+  return (vxl_uint_64(bytes[3])<<56) | (vxl_uint_64(bytes[2])<<48) | (vxl_uint_64(bytes[1])<<40) | (vxl_uint_64(bytes[0])<<32)
+       | (vxl_uint_64(bytes[3])<<24) | (vxl_uint_64(bytes[2])<<16) | (vxl_uint_64(bytes[1])<< 8) |  vxl_uint_64(bytes[0]);
 }
 
 #endif // VXL_HAS_INT_64
@@ -64,14 +64,14 @@ vxl_uint_32 vil_stream_read_big_endian_uint_32(vil_stream *s)
 {
   vxl_byte bytes[4];
   if (s->read(bytes, sizeof bytes) != sizeof bytes) return 0;
-  return (vxl_uint_32(bytes[0])<<24) + (vxl_uint_32(bytes[1])<<16) + (vxl_uint_32(bytes[2])<<8) + (vxl_uint_32(bytes[3]));
+  return (vxl_uint_32(bytes[0])<<24) | (vxl_uint_32(bytes[1])<<16) | (vxl_uint_32(bytes[2])<<8) | (vxl_uint_32(bytes[3]));
 }
 
 vxl_uint_32 vil_stream_read_little_endian_uint_32(vil_stream *s)
 {
   vxl_byte bytes[4];
   if (s->read(bytes, sizeof bytes) != sizeof bytes) return 0;
-  return (vxl_uint_32(bytes[3])<<24) + (vxl_uint_32(bytes[2])<<16) + (vxl_uint_32(bytes[1])<<8) + (vxl_uint_32(bytes[0]));
+  return (vxl_uint_32(bytes[3])<<24) | (vxl_uint_32(bytes[2])<<16) | (vxl_uint_32(bytes[1])<<8) | (vxl_uint_32(bytes[0]));
 }
 
 

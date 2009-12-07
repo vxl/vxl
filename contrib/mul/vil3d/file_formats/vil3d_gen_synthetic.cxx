@@ -48,10 +48,10 @@ vil3d_image_resource_sptr vil3d_gen_synthetic_format::make_input_image(const cha
     pv.sbyte_value = static_cast<vxl_sbyte>(vul_string_atoi(re.match(5)));
     break;
    case VIL_PIXEL_FORMAT_INT_16:
-    pv.int_16_value = vul_string_atoi(re.match(5));
+    pv.int_16_value = static_cast<vxl_int_16>(vul_string_atoi(re.match(5)));
     break;
    case VIL_PIXEL_FORMAT_UINT_16:
-    pv.uint_16_value = vul_string_atoi(re.match(5));
+    pv.uint_16_value = static_cast<vxl_uint_16>(vul_string_atoi(re.match(5)));
     break;
    case VIL_PIXEL_FORMAT_INT_32:
     pv.int_32_value = vul_string_atoi(re.match(5));
@@ -79,9 +79,9 @@ vil3d_image_resource_sptr vil3d_gen_synthetic_format::make_input_image(const cha
 // The width/height etc are explicitly specified, so that file_format implementors
 // know what they need to do...
 vil3d_image_resource_sptr vil3d_gen_synthetic_format::make_output_image(const char* /*filename*/,
-                                 unsigned /*ni*/, unsigned /*nj*/,
-                                 unsigned /*nk*/, unsigned /*nplanes*/,
-                                 enum vil_pixel_format /*format*/) const
+                                                                        unsigned /*ni*/, unsigned /*nj*/,
+                                                                        unsigned /*nk*/, unsigned /*nplanes*/,
+                                                                        enum vil_pixel_format /*format*/) const
 {
   vcl_cerr << "ERROR: Cannot write to generated synthetic images.\n";
   return 0;
@@ -218,7 +218,7 @@ bool vil3d_gen_synthetic_image::get_property(char const *, void *) const
 
 //: Set the contents of the volume.
 bool vil3d_gen_synthetic_image::put_view(const vil3d_image_view_base&,
-  unsigned, unsigned, unsigned)
+                                         unsigned, unsigned, unsigned)
 {
   vcl_cerr << "ERROR: Cannot write to generated synthetic images.\n";
   return false;

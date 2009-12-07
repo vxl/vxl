@@ -22,7 +22,7 @@ static void test_sample_profile_bilin_byte_affine()
 
   for (unsigned int j=0;j<image1.image().nj();++j)
      for (unsigned int i=0;i<image1.image().ni();++i)
-       image1.image()(i,j) = i+j*10;
+       image1.image()(i,j) = vxl_byte(i+j*10);
 
   vgl_point_2d<double> p0(5.0, 5.0);
   vgl_vector_2d<double> u(1.0,0.0);
@@ -89,7 +89,7 @@ static void test_sample_profile_bilin_byte_projective()
 
   for (unsigned int j=0;j<image1.image().nj();++j)
      for (unsigned int i=0;i<image1.image().ni();++i)
-       image1.image()(i,j) = i+j*10;
+       image1.image()(i,j) = vxl_byte(i+j*10);
 
   vgl_point_2d<double> p0(5.0, 5.0);
   vgl_vector_2d<double> u(1.0,0.0);
