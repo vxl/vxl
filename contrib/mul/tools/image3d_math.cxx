@@ -208,31 +208,31 @@ class operand
     return vimt3d_image_3d_of<int>();
   }
 
-
-  void print_summary(vcl_ostream &ss) const
+  void print_summary(vcl_ostream &os) const
   {
     // Forward declaration.
-    vcl_ostream& operator <<( vcl_ostream&ss, const operand::operand_type_t& t);
+    vcl_ostream& operator <<( vcl_ostream&os, const operand::operand_type_t& t);
 
-    ss << operand_type_ << ": ";
+    os << operand_type_ << ": ";
     switch (operand_type_)
     {
      case e_string:
-      ss << string_;
+      os << string_;
       break;
      case e_image_3d_of_double:
-      ss << vsl_stream_summary(image_3d_of_double_);
+      os << vsl_stream_summary(image_3d_of_double_);
       break;
      case e_image_3d_of_float:
-      ss << vsl_stream_summary(image_3d_of_float_);
+      os << vsl_stream_summary(image_3d_of_float_);
       break;
      case e_image_3d_of_int:
-      ss << vsl_stream_summary(image_3d_of_int_);
+      os << vsl_stream_summary(image_3d_of_int_);
       break;
      case e_double:
-      ss << double_;
+      os << double_;
       break;
      default: {
+      os << "Unknown operand_type: " << operand_type_;
       vcl_ostringstream ss;
       ss << "Unknown operand_type: " << operand_type_;
       throw mbl_exception_abort(ss.str()); }
@@ -260,7 +260,6 @@ class operand
     }
     return false;
   }
-
 
   operand deep_copy() const
   {
@@ -298,8 +297,8 @@ class operand
   }
 };
 
-void vsl_print_summary( vcl_ostream&ss, const operand& p) { p.print_summary(ss); }
-vcl_ostream& operator <<( vcl_ostream&ss, const operand& p) { p.print_summary(ss); return ss; }
+void vsl_print_summary( vcl_ostream&os, const operand& p) { p.print_summary(os); }
+vcl_ostream& operator <<( vcl_ostream&os, const operand& p) { p.print_summary(os); return os; }
 
 void vsl_print_summary(vcl_ostream& os, const vcl_deque<operand> &v)
 {
@@ -314,26 +313,27 @@ void vsl_print_summary(vcl_ostream& os, const vcl_deque<operand> &v)
     os << " ...\n";
 }
 
-vcl_ostream& operator <<( vcl_ostream&ss, const operand::operand_type_t& t)
+vcl_ostream& operator <<( vcl_ostream&os, const operand::operand_type_t& t)
 {
   switch (t)
   {
     case operand::e_string:
-      ss << "string"; break;
+      os << "string"; break;
     case operand::e_image_3d_of_double:
-      ss << "image_3d_of_double"; break;
+      os << "image_3d_of_double"; break;
     case operand::e_image_3d_of_float:
-      ss << "image_3d_of_float"; break;
+      os << "image_3d_of_float"; break;
     case operand::e_image_3d_of_int:
-      ss << "image_3d_of_int"; break;
+      os << "image_3d_of_int"; break;
     case operand::e_double:
-      ss << "double"; break;
+      os << "double"; break;
     default: {
+      os << "Unknown operand_type: " << static_cast<int>(t);
       vcl_ostringstream ss;
       ss << "Unknown operand_type: " << static_cast<int>(t);
       throw mbl_exception_abort(ss.str()); }
   }
-  return ss;
+  return os;
 }
 
 typedef vcl_deque<operand> opstack_t;
@@ -713,7 +713,7 @@ void save_to_mat__image_3d_of_int__string(opstack_t& s)
   if (!output)
     mbl_exception_throw_os_error(o1);
 
-  //copy precision length from console to output file
+  // copy precision length from console to output file
   output.precision(vcl_cout.precision());
 
   output <<
@@ -746,7 +746,7 @@ void save_to_mat__image_3d_of_float__string(opstack_t& s)
   if (!output)
     mbl_exception_throw_os_error(o1);
 
-  //copy precision length from console to output file
+  // copy precision length from console to output file
   output.precision(vcl_cout.precision());
 
   output <<
@@ -780,7 +780,7 @@ void save_to_mat__image_3d_of_double__string(opstack_t& s)
   if (!output)
     mbl_exception_throw_os_error(o1);
 
-  //copy precision length from console to output file
+  // copy precision length from console to output file
   output.precision(vcl_cout.precision());
 
   output <<
@@ -1039,7 +1039,6 @@ void print_overlap__image_3d_of_float__image_3d_of_float(opstack_t& s)
         sum2 += p2;
       }
 
-
   vcl_cout << "Tanamoto: " << gTanamoto_num/gTanamoto_den <<
     " Volume Change: " << (sum2-sum1)/sum1 << vcl_endl;
 
@@ -1077,9 +1076,8 @@ void print_overlap__image_3d_of_int__image_3d_of_int(opstack_t& s)
         sum2 += p2;
       }
 
-  vcl_cout << "Tanamoto: " << static_cast<double>(Tanamoto_num)/Tanamoto_den <<
-    " Volume Change: " << (static_cast<double>(sum2)-sum1)/sum1 << vcl_endl;
-
+  vcl_cout << "Tanamoto: " << static_cast<double>(Tanamoto_num)/Tanamoto_den
+           << " Volume Change: " << (static_cast<double>(sum2)-sum1)/sum1 << vcl_endl;
 
   s.pop_front();
   s.pop_front();
@@ -1299,7 +1297,6 @@ void local_z_normalise__image_3d_of_float__double(opstack_t& s)
   assert(s.size() >= 1);
   double o1(s[0].as_double());
   vimt3d_image_3d_of<float> o2(s[1].as_image_3d_of_float());
-
 
   vgl_vector_3d<double> voxel_size=o2.world2im().inverse().delta(
     vgl_point_3d<double>(0,0,0), vgl_vector_3d<double>(1.0,1.0,1.0) );
@@ -1615,7 +1612,7 @@ class operations
     range_t range =
       vcl_equal_range(singleton_.names_.begin(), singleton_.names_.end(), name);
     for (unsigned i = distance(singleton_.names_.begin(), range.first),
-      end = distance(singleton_.names_.begin(), range.second); i!=end; ++i)
+         end = distance(singleton_.names_.begin(), range.second); i!=end; ++i)
     {
       if (operation_type_matches(singleton_.function_types_[i], stack))
       {
@@ -1628,30 +1625,30 @@ class operations
        << "\nStack is :\n" << vsl_stream_summary(stack);
     throw vcl_runtime_error(ss.str());
   }
-  static void print(vcl_ostream& ss)
+  static void print(vcl_ostream& os)
   {
     unsigned n = singleton_.names_.size();
 
     for (unsigned i=0; i<n; ++i)
     {
       vcl_string name = singleton_.names_[i].substr(2);
-      ss << vul_string_upcase(name) << ":  " <<
-        singleton_.help_desc_[i] << "\n    usage: " <<
-        singleton_.help_input_[i] << ' ' << singleton_.names_[i];
+      os << vul_string_upcase(name) << ":  "
+         << singleton_.help_desc_[i] << "\n    usage: "
+         << singleton_.help_input_[i] << ' ' << singleton_.names_[i];
       if (!singleton_.help_output_[i].empty())
-        ss << " => " << singleton_.help_output_[i];
-      ss << "\n    types: " ;
+        os << " => " << singleton_.help_output_[i];
+      os << "\n    types: " ;
       if (singleton_.function_types_[i].empty())
-        ss << "null";
+        os << "null";
       else for (unsigned j=0, nj=singleton_.function_types_[i].size(); j<nj; ++j)
-        ss << singleton_.function_types_[i][j] << ' ';
-      ss << "\n\n";
+        os << singleton_.function_types_[i][j] << ' ';
+      os << "\n\n";
     }
   }
 };
 
 operations operations::singleton_ = operations();
-void print_operations(vcl_ostream&ss) { operations::print(ss); }
+void print_operations(vcl_ostream&os) { operations::print(os); }
 
 //========================================================================
 // Actual main function
