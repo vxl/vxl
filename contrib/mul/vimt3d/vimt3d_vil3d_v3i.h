@@ -17,6 +17,13 @@
 // serialisation scheme. There is an extra v3i-specific magic number to
 // avoid confusion with other vsl data files, and a version number to allow
 // for a change in format.
+//
+// To use the v3i format with vil3d_load, vil3d_save, etc add
+// the following code at the start of your program
+// \verbatim
+//  vil3d_file_format::add_format(new vimt3d_vil3d_v3i_format);  
+// \endverbatim
+
 
 #include <vil3d/vil3d_file_format.h>
 #include <vimt3d/vimt3d_image_3d.h>
@@ -24,6 +31,12 @@
 #include <vcl_memory.h>
 
 //: Reader/Writer for v3i format images.
+//
+// To use the v3i format with vil3d_load, vil3d_save, etc add
+// the following code at the start of your program
+// \verbatim
+//  vil3d_file_format::add_format(new vimt3d_vil3d_v3i_format);  
+// \endverbatim
 class vimt3d_vil3d_v3i_format: public vil3d_file_format
 {
  public:
@@ -54,6 +67,12 @@ class vimt3d_vil3d_v3i_format: public vil3d_file_format
 
 // You can't create one of these yourself.
 // Use vimt3d_vil3d_v3i_format instead.
+//
+// To use the v3i format with vil3d_load, vil3d_save, etc add
+// the following code at the start of your program
+// \verbatim
+//  vil3d_file_format::add_format(new vimt3d_vil3d_v3i_format);  
+// \endverbatim
 class vimt3d_vil3d_v3i_image: public vil3d_image_resource
 {
   friend class vimt3d_vil3d_v3i_format;
