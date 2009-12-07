@@ -24,4 +24,5 @@ const int METHOD_NUM = 24;
 void register_basic_datatypes();
 extern PyMethodDef batch_methods[];
 
+
 #endif // bpro_batch_h_
