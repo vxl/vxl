@@ -38,7 +38,7 @@ template <class T>
 vgl_infinite_line_3d<T>
 vgl_intersection(const vcl_list<vgl_plane_3d<T> >& planes)
 {
-  //form the matrix of plane normal monomials
+  // form the matrix of plane normal monomials
   vnl_matrix<double> Q(3,3,0.0);
   vnl_vector<double> vd(3,0.0);
   unsigned n = planes.size();
@@ -59,7 +59,7 @@ vgl_intersection(const vcl_list<vgl_plane_3d<T> >& planes)
   // the direction of the resulting line
   vnl_vector<double> t = svd.nullvector();
   double tx = t[0], ty = t[1], tz = t[2];
-  //determine maximum component of t
+  // determine maximum component of t
   char component = 'x';
   if (ty>tx&&ty>tz)
     component = 'y';
@@ -92,6 +92,8 @@ vgl_intersection(const vcl_list<vgl_plane_3d<T> >& planes)
       p0d.set(neux/det, neuy/det, 0.0);
       break;
     }
+    default: // this cannot happen
+      break;
   }
   vgl_point_3d<T> pt(static_cast<T>(p0d.x()),
                      static_cast<T>(p0d.y()),

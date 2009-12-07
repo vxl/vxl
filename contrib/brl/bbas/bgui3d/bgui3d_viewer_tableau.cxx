@@ -78,7 +78,7 @@ bgui3d_viewer_tableau::set_scene_root(SoNode* scene_root)
   // Create a headlight if one does not exist
   // By inserting this before any scenegraph camera, the
   // light will always be pointing in the correct direction.
-  if (!headlight_){
+  if (!headlight_) {
     headlight_ = new SoDirectionalLight;
     headlight_->direction.setValue(1, -1, -10);
     headlight_->setName("headlight");
@@ -92,7 +92,7 @@ bgui3d_viewer_tableau::set_scene_root(SoNode* scene_root)
   super_root->addChild( trans );
 
   _text = new SoText2;
-  _text->string.deleteValues(0, -1); //empty the string
+  _text->string.deleteValues(0, -1); // empty the string
   super_root->addChild( _text );
 
   //: Make a group of all the cameras in the scene
@@ -115,11 +115,11 @@ bgui3d_viewer_tableau::set_scene_root(SoNode* scene_root)
 
   // find and used the first user scene camera (if it exists)
   vcl_vector<SoCamera*> user_cams = find_cameras(user_scene_root_);
-  if (!user_cams.empty()){
+  if (!user_cams.empty()) {
     camera_group_->whichChild.setValue(-1);
     this->set_camera(user_cams[0]);
   }
-  else{
+  else {
     // if not, use the first examiner camera
     assert(camera_group_->getChildren()->getLength() > 0);
 
@@ -148,7 +148,7 @@ bgui3d_viewer_tableau::set_scene_root(SoNode* scene_root)
 void
 bgui3d_viewer_tableau::set_camera(SoCamera *camera)
 {
-  if (scene_camera_){
+  if (scene_camera_) {
     scene_camera_->unref();
   }
 
@@ -181,9 +181,9 @@ bgui3d_viewer_tableau::set_camera(const vpgl_proj_camera<double>& camera)
   vnl_double_3x4 cam = camera.get_matrix();
   if (vnl_det(vnl_double_3x3(cam.extract(3,3))) < 0)
     cam *= -1.0;
-  if ( bgui3d_decompose_camera(cam, K, R, t) ){
-    new_cam->aspectRatio = K[0][2]/K[1][2];
-    new_cam->heightAngle = 2.0*vcl_atan(K[1][2]/K[1][1]);
+  if ( bgui3d_decompose_camera(cam, K, R, t) ) {
+    new_cam->aspectRatio = float(K[0][2]/K[1][2]);
+    new_cam->heightAngle = float(2*vcl_atan2(K[1][2],K[1][1]));
 
     vnl_double_3 C = -R.transpose()*t;
     new_cam->position.setValue( float(C[0]), float(C[1]), float(C[2]) );
@@ -198,7 +198,7 @@ bgui3d_viewer_tableau::set_camera(const vpgl_proj_camera<double>& camera)
 
     for (int i=0; i<3; ++i)
       for ( int j=0; j<3; ++j)
-        rot[j][i] = R[j][i];
+        rot[j][i] = float(R[j][i]);
 
     new_cam->orientation.setValue(SbRotation(rot));
 
@@ -206,7 +206,7 @@ bgui3d_viewer_tableau::set_camera(const vpgl_proj_camera<double>& camera)
     new_cam->farDistance = 1000.0f;
   }
 
-  if ( user_scene_root_ ){
+  if ( user_scene_root_ ) {
     camera_group_->addChild(new_cam);
     int num_cameras = camera_group_->getChildren()->getLength();
     this->select_camera(num_cameras -1);
@@ -232,12 +232,10 @@ bgui3d_viewer_tableau::camera() const
   const SbVec3f& t_vec = scene_camera_->position.getValue();
   vnl_double_3 t(t_vec[0], t_vec[1], t_vec[2]);
 
-
   float q1,q2,q3,q4;
   scene_camera_->orientation.getValue().getValue(q1,q2,q3,q4);
   // inverse and rotate 180 degrees around Z
   vgl_rotation_3d<double> R(vnl_quaternion<double>(q2,-q1,q4,q3));
-
 
   GLint vp[4];
   glGetIntegerv(GL_VIEWPORT, vp);
@@ -260,14 +258,17 @@ bgui3d_viewer_tableau::camera() const
     return vcl_auto_ptr<vpgl_proj_camera<double> >
            ( new vpgl_perspective_camera<double>(K,c,R) );
     }
-   case ORTHOGONAL: {
-    //SoOrthographicCamera* cam = (SoOrthographicCamera*)scene_camera_;
-    //double h = cam->height.getValue();
+   case ORTHOGONAL:
+#if 0
+    SoOrthographicCamera* cam = (SoOrthographicCamera*)scene_camera_;
+    double h = cam->height.getValue();
+#endif // 0
     vcl_cerr << "WARNING: not implemented yet\n";
     return vcl_auto_ptr<vpgl_proj_camera<double> >(NULL);
-    }
+   default:
+    vcl_cerr << "WARNING: no such camera_type_\n";
+    return vcl_auto_ptr<vpgl_proj_camera<double> >(NULL);
   }
-  return vcl_auto_ptr<vpgl_proj_camera<double> >(NULL);
 }
 
 
@@ -278,16 +279,16 @@ bgui3d_viewer_tableau::select_camera(int camera_index)
 {
   int num_cameras = camera_group_->getChildren()->getLength();
 
-  if (camera_index >= 0 && camera_index < num_cameras){
-    if (camera_index != camera_group_->whichChild.getValue()){
+  if (camera_index >= 0 && camera_index < num_cameras) {
+    if (camera_index != camera_group_->whichChild.getValue()) {
       camera_group_->whichChild.setValue(camera_index);
       SoChildList* list = camera_group_->getChildren();
       this->set_camera((SoCamera*)(*list)[camera_index]);
     }
   }
-  else{
+  else {
     vcl_vector<SoCamera*> user_cams = find_cameras(user_scene_root_);
-    if (!user_cams.empty()){
+    if (!user_cams.empty()) {
       camera_group_->whichChild.setValue(-1);
       this->set_camera(user_cams[0]);
     }
@@ -318,11 +319,13 @@ bgui3d_viewer_tableau::set_camera_type(camera_type_enum type)
       newCamera = (SoCamera *)otype.createInstance();
       convertPerspective2Ortho((SoPerspectiveCamera*)scene_camera_, (SoOrthographicCamera*)newCamera);
     }
-    else //if ( camera_type_ == ORTHOGONAL && type == PERSPECTIVE )
+    else if ( camera_type_ == ORTHOGONAL && type == PERSPECTIVE )
     {
       newCamera = (SoCamera *)ptype.createInstance();
       convertOrtho2Perspective((SoOrthographicCamera*)scene_camera_, (SoPerspectiveCamera*)newCamera);
     }
+    else
+      assert(!"This camera type is not supported");
 
     newCamera->ref();
     vcl_vector<SoGroup *> cameraparents = get_parents_of_node(this->scene_camera_);
@@ -563,11 +566,13 @@ bgui3d_viewer_tableau::set_clipping_planes()
     // Disallow negative and small near clipping plane distance.
 
     float nearlimit; // the smallest value allowed for nearval
-    //if (this->autoclipstrategy == SoWinViewer::CONSTANT_NEAR_PLANE) {
-      //nearlimit = this->autoclipvalue;
-    //}
-    //else {
-      //assert(this->autoclipstrategy == SoWinViewer::VARIABLE_NEAR_PLANE);
+#if 0
+    if (this->autoclipstrategy == SoWinViewer::CONSTANT_NEAR_PLANE) {
+      nearlimit = this->autoclipvalue;
+    }
+    else {
+      assert(this->autoclipstrategy == SoWinViewer::VARIABLE_NEAR_PLANE);
+#endif // 0
       // From glFrustum() documentation: Depth-buffer precision is
       // affected by the values specified for znear and zfar. The
       // greater the ratio of zfar to znear is, the less effective the
@@ -576,18 +581,21 @@ bgui3d_viewer_tableau::set_clipping_planes()
       // of depth buffer precision are lost. Because r approaches
       // infinity as znear approaches zero, you should never set znear
       // to zero.
-
       GLint depthbits[1];
       // assume 16-bit depth
       // it is unsafe to use GL functions here because a GL context
       // might not have been created yet.
       depthbits[0] = 16;
-      //glGetIntegerv(GL_DEPTH_BITS, depthbits);
+#if 0
+      glGetIntegerv(GL_DEPTH_BITS, depthbits);
+#endif // 0
 
       int use_bits = (int) (float(depthbits[0]) * (0.4f));
       float r = (float) vcl_pow(2.0, (double) use_bits);
       nearlimit = farval / r;
-    //}
+#if 0
+    }
+#endif // 0
 
     if (nearlimit >= farval) {
       // (The "5000" magic constant was found by fiddling around a bit

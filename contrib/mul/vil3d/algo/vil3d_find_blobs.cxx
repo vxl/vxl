@@ -1,19 +1,15 @@
-// This is contrib/mul/vil3d/algo/vil3d_find_blobs.cxx
-
-
+// This is mul/vil3d/algo/vil3d_find_blobs.cxx
+#include "vil3d_find_blobs.h"
 //:
 // \file
 // \brief Identify and enumerate all disjoint blobs in a binary image.
 // \author Ian Scott, Kevin de Souza
 
-
-#include "vil3d_find_blobs.h"
 #include <vcl_vector.h>
 #include <vcl_cassert.h>
 #include <vcl_algorithm.h>
 
 #include <vil3d/vil3d_image_view.h>
-
 
 
 // Identify and enumerate all disjoint blobs in a binary image.
@@ -33,12 +29,14 @@ void vil3d_find_blobs(const vil3d_image_view<bool>& src,
   unsigned n_neighbours;
   switch (conn)
   {
-  case vil3d_find_blob_connectivity_6_conn:
+   case vil3d_find_blob_connectivity_6_conn:
     n_neighbours=3;
     break;
-  case vil3d_find_blob_connectivity_26_conn:
+   case vil3d_find_blob_connectivity_26_conn:
     n_neighbours=13;
     break;
+   default:
+    n_neighbours=0; assert(!"unknown connectivity");
   }
 
   // The 3-prev-(6)-neighbourhood are the first three entries.
@@ -63,7 +61,6 @@ void vil3d_find_blobs(const vil3d_image_view<bool>& src,
           if (jj >= ni) continue;
           unsigned kk = k + neighbourhood_kk[l];
           if (kk >= nk) continue;
-          
           unsigned d = dst(ii,jj,kk);
           if (d==0) continue;
           neighbouring_labels.push_back(d);
@@ -124,6 +121,4 @@ void vil3d_find_blobs(const vil3d_image_view<bool>& src,
       for (unsigned i=0; i<ni; ++i)
         dst(i,j,k) = renumbering[dst(i,j,k)];
 }
-
-
 

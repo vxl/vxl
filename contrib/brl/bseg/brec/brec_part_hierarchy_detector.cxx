@@ -198,15 +198,17 @@ bool brec_part_hierarchy_detector::detect(vil_image_view<float>& img, vil_image_
 {
   switch (rho_calculation_method) {
       case brec_detector_methods::POSTERIOR_NUMERATOR :
-      case brec_detector_methods::POSTERIOR : {
+      case brec_detector_methods::POSTERIOR :
         if (!detect_primitives_using_trained_response_models(img, fg_prob_img, angle, prior_class))
           return false;
         break;
-                                              }
-      case brec_detector_methods::DENSITY_FOR_TRAINING : {
+      case brec_detector_methods::DENSITY_FOR_TRAINING :
         if (!detect_primitives_for_training(img, fg_prob_img, angle))
           return false;
-                                                         }
+        break;
+      default:
+        vcl_cout << "Warning: unknown brec_detector_method encountered: " << rho_calculation_method << vcl_endl;
+        break;
   }
 
   vcl_cout << "extracted " << map_instance_[0].size() << " primitive parts." << vcl_endl;
@@ -598,9 +600,10 @@ void brec_part_hierarchy_detector::extract_upper_layer(vcl_vector<brec_part_inst
 
         // p will be its central part and map will tell if all the other parts exist
         switch (rho_calculation_method) {
-          case brec_detector_methods::POSTERIOR_NUMERATOR : { hp_upper_instance = exists(hp_upper, p, extracted_parts_rtree); break; }
-          case brec_detector_methods::DENSITY_FOR_TRAINING : { hp_upper_instance = exists_for_training(hp_upper, p, extracted_parts_rtree); break; }
-          case brec_detector_methods::POSTERIOR : { hp_upper_instance = exists_using_hierarchies(hp_upper, p, extracted_parts_rtree, radius); break; }
+          case brec_detector_methods::POSTERIOR_NUMERATOR : hp_upper_instance = exists(hp_upper, p, extracted_parts_rtree); break;
+          case brec_detector_methods::DENSITY_FOR_TRAINING : hp_upper_instance = exists_for_training(hp_upper, p, extracted_parts_rtree); break;
+          case brec_detector_methods::POSTERIOR : hp_upper_instance = exists_using_hierarchies(hp_upper, p, extracted_parts_rtree, radius); break;
+          default: vcl_cout << "Warning: unknown brec_detector_method encountered: " << rho_calculation_method << vcl_endl; break;
         }
 
         if (!hp_upper_instance)

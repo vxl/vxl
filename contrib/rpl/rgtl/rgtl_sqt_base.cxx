@@ -306,6 +306,7 @@ rgtl_sqt_base::direction_to_parameters(double const d[3],
     case face_positive_y: DirectionToParametersPositiveY(d, u, v); return;
     case face_negative_z: DirectionToParametersNegativeZ(d, u, v); return;
     case face_positive_z: DirectionToParametersPositiveZ(d, u, v); return;
+    default: return;
   }
 }
 
@@ -322,6 +323,7 @@ rgtl_sqt_base::parameters_to_direction(face_index_type face,
     case face_positive_y: ParametersToDirectionPositiveY(u, v, d); return;
     case face_negative_z: ParametersToDirectionNegativeZ(u, v, d); return;
     case face_positive_z: ParametersToDirectionPositiveZ(u, v, d); return;
+    default: return;
   }
 }
 
@@ -337,6 +339,7 @@ void rgtl_sqt_base::plane_normal_u(face_index_type face, double u,
     case face_positive_y: PlaneNormalUPositiveY(u, n); return;
     case face_negative_z: PlaneNormalUNegativeZ(u, n); return;
     case face_positive_z: PlaneNormalUPositiveZ(u, n); return;
+    default: return;
   }
 }
 
@@ -352,6 +355,7 @@ void rgtl_sqt_base::plane_normal_v(face_index_type face, double v,
     case face_positive_y: PlaneNormalVPositiveY(v, n); return;
     case face_negative_z: PlaneNormalVNegativeZ(v, n); return;
     case face_positive_z: PlaneNormalVPositiveZ(v, n); return;
+    default: return;
   }
 }
 

@@ -25,7 +25,7 @@
 #include <vgl/vgl_lineseg_test.h>
 #include <vcl_vector.h>
 
-static double eps = 1.0e-8;//tolerance for intersections
+static double eps = 1.0e-8; // tolerance for intersections
 inline bool vgl_near_zero(double x) { return x < eps && x > -eps; }
 inline bool vgl_near_eq(double x, double y) { return vgl_near_zero(x-y); }
 
@@ -59,12 +59,12 @@ bool vgl_intersection(vgl_box_3d<T> const& box,
                             static_cast<double>(di.y()),
                             static_cast<double>(di.z()));
   vgl_infinite_line_3d<double> dline_3d(dpt, dir);
-  //expand box by epsilon tolerance
+  // expand box by epsilon tolerance
   double xmin = box.min_x()-eps, xmax = box.max_x()+eps,
          ymin = box.min_y()-eps, ymax = box.max_y()+eps,
          zmin = box.min_z()-eps, zmax = box.max_z()+eps;
   vgl_point_3d<double> minp(xmin, ymin, zmin), maxp(xmax, ymax, zmax);
-  //find intersection point of the line with each of the six box planes
+  // find intersection point of the line with each of the six box planes
   vgl_vector_3d<double> vxmin(-1.0, 0.0, 0.0), vxmax(1.0, 0.0, 0.0),
                         vymin(0.0, -1.0, 0.0), vymax(0.0, 1.0, 0.0),
                         vzmin(0.0, 0.0, -1.0), vzmax(0.0, 0.0, 1.0);
@@ -242,7 +242,7 @@ bool vgl_intersection(const vgl_box_2d<Type>& box,
   double xmin=box.min_x(), xmax=box.max_x();
   double ymin=box.min_y(), ymax=box.max_y();
 
-  //Run through the cases
+  // Run through the cases
   //
   if (vgl_near_zero(a))// The line is y = -c/b
   {
@@ -369,7 +369,7 @@ bool vgl_intersection(const vgl_box_2d<Type>& box,
     p1.set(static_cast<Type>(xmax), static_cast<Type>(y_xmax_int));
     return true;
   }
-  //Exactly passing through diagonal of BB
+  // Exactly passing through diagonal of BB
   if (inside_xmin && inside_xmax && inside_ymin && inside_ymax)
   {
     if (a>0) // 45 degrees
@@ -397,16 +397,16 @@ unsigned vgl_intersection(const vgl_box_2d<Type>& box,
 {
   vgl_line_2d<Type> line(line_seg.a(), line_seg.b(), line_seg.c());
   vgl_point_2d<Type> pi0, pi1;
-  //if no intersection just return
+  // if no intersection just return
   if (!vgl_intersection<Type>(box, line, pi0, pi1))
     return 0;
   unsigned nint = 0;
   // check if intersection points are interior to the line segment
-  if (vgl_lineseg_test_point<Type>(pi0, line_seg)){
+  if (vgl_lineseg_test_point<Type>(pi0, line_seg)) {
     p0 = pi0;
     nint++;
   }
-  if (vgl_lineseg_test_point<Type>(pi1, line_seg)){
+  if (vgl_lineseg_test_point<Type>(pi1, line_seg)) {
     p1 = pi1;
     nint++;
   }
@@ -541,7 +541,6 @@ bool vgl_intersection(vgl_line_segment_3d<T> const& line,
 {
   vgl_vector_3d<T> dir = line.direction();
 
-
   // The calculation of both denom and numerator are both very dodgy numerically, especially if
   // denom or numerator is small compared to the summands. It would be good to find a more
   // numerically stable solution. IMS.
@@ -651,16 +650,16 @@ bool vgl_intersection(vgl_plane_3d<T> const& plane0,
   double n1z = static_cast<double>(plane1.c());
   vgl_vector_3d<double> n0(n0x, n0y, n0z);
   vgl_vector_3d<double> n1(n1x, n1y, n1z);
-  //t is the direction vector of the line
+  // t is the direction vector of the line
   vgl_vector_3d<double> t = cross_product(n0, n1);
   double mag = t.length();
   if (vgl_near_zero(mag))
     return false;
-  t/=mag; //create unit vector
+  t/=mag; // create unit vector
   double tx = vcl_fabs(static_cast<double>(t.x_));
   double ty = vcl_fabs(static_cast<double>(t.y_));
   double tz = vcl_fabs(static_cast<double>(t.z_));
-  //determine maximum component of t
+  // determine maximum component of t
   char component = 'x';
   if (ty>tx&&ty>tz)
     component = 'y';
@@ -702,6 +701,8 @@ bool vgl_intersection(vgl_plane_3d<T> const& plane0,
       p0d.set(neux/det, neuy/det, 0.0);
       break;
     }
+    default: // this cannot happen
+      break;
   }
   vgl_point_3d<T> p0(static_cast<T>(p0d.x()),
                      static_cast<T>(p0d.y()),
@@ -826,24 +827,24 @@ bool vgl_intersection(const vgl_box_2d<T>& b,
                       const vgl_polygon<T>& poly)
 {
   // easy checks first
-  //check if any poly vertices are inside the box
+  // check if any poly vertices are inside the box
   unsigned ns = poly.num_sheets();
   bool hit = false;
-  for ( unsigned s = 0; s<ns&&!hit; ++s){
+  for ( unsigned s = 0; s<ns&&!hit; ++s) {
     unsigned n = poly[s].size();
-    for (unsigned i = 0; i<n&&!hit; ++i){
+    for (unsigned i = 0; i<n&&!hit; ++i) {
       vgl_point_2d<T> p = poly[s][i];
       hit = b.contains(p.x(), p.y());
     }
   }
   if (hit) return true;
-  //check if any box vertices are inside the polygon
+  // check if any box vertices are inside the polygon
   T minx = b.min_x(), maxx = b.max_x();
   T miny = b.min_y(), maxy = b.max_y();
   hit = poly.contains(minx, miny) || poly.contains(maxx, maxy) ||
     poly.contains(minx, maxy) || poly.contains(maxx, miny);
   if (hit) return true;
-  //check if any polygon edges intersect the box
+  // check if any polygon edges intersect the box
   for (unsigned s = 0; s<ns&&!hit; ++s)
   {
     unsigned n = poly[s].size();

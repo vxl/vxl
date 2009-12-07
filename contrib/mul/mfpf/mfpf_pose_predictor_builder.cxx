@@ -61,10 +61,11 @@ void mfpf_pose_predictor_builder::clear(unsigned n_egs)
   unsigned nd=2;
   switch (sampler_.pose_type())
   {
-    case (translation): nd=2; break;
-    case (rigid): nd=3; break;
-    case (zoom): nd=3; break;
-    case (similarity): nd=4; break;
+    case translation: nd=2; break;
+    case rigid:       nd=3; break;
+    case zoom:        nd=3; break;
+    case similarity:  nd=4; break;
+    default: assert(!"Unknown pose_type"); break;
   }
 
   poses_.set_size(n_egs*n_per_eg_,nd);
@@ -101,24 +102,27 @@ void mfpf_pose_predictor_builder::add_example(
 
     switch (sampler_.pose_type())
     {
-      case (translation): 
+      case translation:
         break;
-      case (rigid):
+      case rigid:
         if (i>0) A = rand_.drand64(-max_dA_,max_dA_);
         poses_(ci_,2)=A;
         break;
-      case (zoom):
+      case zoom:
         if (i>0) s = rand_.drand64(-max_ds,max_ds);
         poses_(ci_,2)=s;
         break;
-      case (similarity):
-        if (i>0) 
+      case similarity:
+        if (i>0)
         {
           A = rand_.drand64(-max_dA_,max_dA_);
           s = rand_.drand64(-max_ds,max_ds);
         }
         poses_(ci_,2)=s;
         poses_(ci_,3)=A;
+        break;
+      default:
+        assert(!"Unknown pose_type");
         break;
     }
 
@@ -167,7 +171,7 @@ void mfpf_pose_predictor_builder::build(mfpf_pose_predictor& p)
     unsigned np=R1.rows();
     p=sampler_;  // Define sampling
     // Define learned predictor
-    p.set_predictor(R1.extract(np-1,nv,1,0).transpose(),R1.get_row(0));  
+    p.set_predictor(R1.extract(np-1,nv,1,0).transpose(),R1.get_row(0));
   }
 }
 
@@ -193,9 +197,8 @@ mfpf_pose_predictor_builder* mfpf_pose_predictor_builder::clone() const
 
 void mfpf_pose_predictor_builder::print_summary(vcl_ostream& os) const
 {
-  os << "{  sampler: "<<sampler_<<"/n";
-
-  os<<vsl_indent()<<'}';
+  os << "{  sampler: "<<sampler_ << '\n'
+     << vsl_indent() << '}';
 }
 
 short mfpf_pose_predictor_builder::version_no() const

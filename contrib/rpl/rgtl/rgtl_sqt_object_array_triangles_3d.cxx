@@ -426,6 +426,7 @@ rgtl_sqt_object_array_triangles_3d::new_set(double const origin[3],
     case 3: sos.reset(new rgtl_sqt_object_set_triangles_3d<3>(origin, this->original_)); break;
     case 4: sos.reset(new rgtl_sqt_object_set_triangles_3d<4>(origin, this->original_)); break;
     case 5: sos.reset(new rgtl_sqt_object_set_triangles_3d<5>(origin, this->original_)); break;
+    default: assert(!"no such face"); break;
   }
   return sos;
 }

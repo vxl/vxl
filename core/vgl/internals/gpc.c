@@ -41,7 +41,7 @@ Copyright: (C) 1997-2004, Advanced Interfaces Group,
 #include <stdlib.h>
 #include <float.h>
 #include <math.h>
-
+#include <assert.h>
 
 /*
 ===========================================================================
@@ -702,7 +702,7 @@ static void build_intersection_table(it_node **it, edge_node *aet, double dy)
   for (edge= aet; edge; edge= edge->next)
   {
     if ((edge->bstate[ABOVE] == BUNDLE_HEAD) ||
-         edge->bundle[ABOVE][CLIP] || edge->bundle[ABOVE][SUBJ])
+        edge->bundle[ABOVE][CLIP] || edge->bundle[ABOVE][SUBJ])
       add_st_edge(&st, it, edge, dy);
   }
 
@@ -963,7 +963,7 @@ void gpc_free_polygon(gpc_polygon *p)
 {
   int c;
 
-  for (c= 0; c < p->num_contours; c++) 
+  for (c= 0; c < p->num_contours; c++)
   {
     FREE(p->contour[c].vertex); p->contour[c].vertex = 0;
   }
@@ -974,7 +974,7 @@ void gpc_free_polygon(gpc_polygon *p)
 
 
 int gpc_polygon_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
-                      gpc_polygon *result)
+                     gpc_polygon *result)
 {
   int my_nc;
   sb_tree       *sbtree= NULL;
@@ -1131,9 +1131,9 @@ int gpc_polygon_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
           contributing= (exists[CLIP] && (parity[SUBJ] || horiz[SUBJ]))
                      || (exists[SUBJ] && (parity[CLIP] || horiz[CLIP]))
                      || (exists[CLIP] && exists[SUBJ]
-                     && (parity[CLIP] == parity[SUBJ]));
-          br= (parity[CLIP])
-           && (parity[SUBJ]);
+                         && parity[CLIP] == parity[SUBJ]);
+          br= parity[CLIP]
+           && parity[SUBJ];
           bl= (parity[CLIP] ^ edge->bundle[ABOVE][CLIP])
            && (parity[SUBJ] ^ edge->bundle[ABOVE][SUBJ]);
           tr= (parity[CLIP] ^ (horiz[CLIP]!=NH))
@@ -1143,8 +1143,8 @@ int gpc_polygon_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
           break;
          case GPC_XOR:
           contributing= exists[CLIP] || exists[SUBJ];
-          br= (parity[CLIP])
-            ^ (parity[SUBJ]);
+          br= parity[CLIP]
+            ^ parity[SUBJ];
           bl= (parity[CLIP] ^ edge->bundle[ABOVE][CLIP])
             ^ (parity[SUBJ] ^ edge->bundle[ABOVE][SUBJ]);
           tr= (parity[CLIP] ^ (horiz[CLIP]!=NH))
@@ -1156,9 +1156,9 @@ int gpc_polygon_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
           contributing= (exists[CLIP] && (!parity[SUBJ] || horiz[SUBJ]))
                      || (exists[SUBJ] && (!parity[CLIP] || horiz[CLIP]))
                      || (exists[CLIP] && exists[SUBJ]
-                     && (parity[CLIP] == parity[SUBJ]));
-          br= (parity[CLIP])
-           || (parity[SUBJ]);
+                         && parity[CLIP] == parity[SUBJ]);
+          br= parity[CLIP]
+           || parity[SUBJ];
           bl= (parity[CLIP] ^ edge->bundle[ABOVE][CLIP])
            || (parity[SUBJ] ^ edge->bundle[ABOVE][SUBJ]);
           tr= (parity[CLIP] ^ (horiz[CLIP]!=NH))
@@ -1166,6 +1166,8 @@ int gpc_polygon_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
           tl= (parity[CLIP] ^ (horiz[CLIP]!=NH) ^ edge->bundle[BELOW][CLIP])
            || (parity[SUBJ] ^ (horiz[SUBJ]!=NH) ^ edge->bundle[BELOW][SUBJ]);
           break;
+         default:
+          assert(!"invalid gpc_op"); break;
         }
 
         /* Update parity */
@@ -1626,8 +1628,8 @@ int gpc_polygon_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
         e1= intersect->ie[1];
 
         /* Only generate output for contributing intersections */
-        if ((e0->bundle[ABOVE][CLIP] || e0->bundle[ABOVE][SUBJ])
-         && (e1->bundle[ABOVE][CLIP] || e1->bundle[ABOVE][SUBJ]))
+        if ((e0->bundle[ABOVE][CLIP] || e0->bundle[ABOVE][SUBJ]) &&
+            (e1->bundle[ABOVE][CLIP] || e1->bundle[ABOVE][SUBJ]))
         {
           p= e0->outp[ABOVE];
           q= e1->outp[ABOVE];
@@ -1677,6 +1679,8 @@ int gpc_polygon_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
             bl= (in[CLIP] ^ e1->bundle[ABOVE][CLIP] ^ e0->bundle[ABOVE][CLIP])
              || (in[SUBJ] ^ e1->bundle[ABOVE][SUBJ] ^ e0->bundle[ABOVE][SUBJ]);
             break;
+           default:
+            assert(!"invalid gpc_op"); break;
           }
 
           vclass= tr + (tl << 1) + (br << 2) + (bl << 3);
@@ -2005,7 +2009,7 @@ void gpc_write_polygon(FILE *fp, int write_hole_flags, gpc_polygon *p)
 
     if (write_hole_flags)
       fprintf(fp, "%d\n", p->hole[c]);
-    
+
     for (v= 0; v < p->contour[c].num_vertices; v++)
       fprintf(fp, "% .*lf % .*lf\n",
               DBL_DIG, p->contour[c].vertex[v].x,
@@ -2255,9 +2259,9 @@ void gpc_tristrip_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
           contributing= (exists[CLIP] && (parity[SUBJ] || horiz[SUBJ]))
                      || (exists[SUBJ] && (parity[CLIP] || horiz[CLIP]))
                      || (exists[CLIP] && exists[SUBJ]
-                     && (parity[CLIP] == parity[SUBJ]));
-          br= (parity[CLIP])
-           && (parity[SUBJ]);
+                         && parity[CLIP] == parity[SUBJ]);
+          br= parity[CLIP]
+           && parity[SUBJ];
           bl= (parity[CLIP] ^ edge->bundle[ABOVE][CLIP])
            && (parity[SUBJ] ^ edge->bundle[ABOVE][SUBJ]);
           tr= (parity[CLIP] ^ (horiz[CLIP]!=NH))
@@ -2267,8 +2271,8 @@ void gpc_tristrip_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
           break;
          case GPC_XOR:
           contributing= exists[CLIP] || exists[SUBJ];
-          br= (parity[CLIP])
-            ^ (parity[SUBJ]);
+          br= parity[CLIP]
+            ^ parity[SUBJ];
           bl= (parity[CLIP] ^ edge->bundle[ABOVE][CLIP])
             ^ (parity[SUBJ] ^ edge->bundle[ABOVE][SUBJ]);
           tr= (parity[CLIP] ^ (horiz[CLIP]!=NH))
@@ -2280,9 +2284,9 @@ void gpc_tristrip_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
           contributing= (exists[CLIP] && (!parity[SUBJ] || horiz[SUBJ]))
                      || (exists[SUBJ] && (!parity[CLIP] || horiz[CLIP]))
                      || (exists[CLIP] && exists[SUBJ]
-                     && (parity[CLIP] == parity[SUBJ]));
-          br= (parity[CLIP])
-           || (parity[SUBJ]);
+                         && parity[CLIP] == parity[SUBJ]);
+          br= parity[CLIP]
+           || parity[SUBJ];
           bl= (parity[CLIP] ^ edge->bundle[ABOVE][CLIP])
            || (parity[SUBJ] ^ edge->bundle[ABOVE][SUBJ]);
           tr= (parity[CLIP] ^ (horiz[CLIP]!=NH))
@@ -2465,8 +2469,8 @@ void gpc_tristrip_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
         e1= intersect->ie[1];
 
         /* Only generate output for contributing intersections */
-        if ((e0->bundle[ABOVE][CLIP] || e0->bundle[ABOVE][SUBJ])
-         && (e1->bundle[ABOVE][CLIP] || e1->bundle[ABOVE][SUBJ]))
+        if ((e0->bundle[ABOVE][CLIP] || e0->bundle[ABOVE][SUBJ]) &&
+            (e1->bundle[ABOVE][CLIP] || e1->bundle[ABOVE][SUBJ]))
         {
           p= e0->outp[ABOVE];
           q= e1->outp[ABOVE];
@@ -2656,9 +2660,9 @@ void gpc_tristrip_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
             prev_edge= prev_edge->prev;
             if (prev_edge)
             {
-              if (prev_edge->bundle[ABOVE][CLIP]
-               || prev_edge->bundle[ABOVE][SUBJ]
-               || (prev_edge->bstate[ABOVE] == BUNDLE_HEAD))
+              if (prev_edge->bundle[ABOVE][CLIP] ||
+                  prev_edge->bundle[ABOVE][SUBJ] ||
+                  prev_edge->bstate[ABOVE] == BUNDLE_HEAD)
                 search= FALSE;
             }
             else

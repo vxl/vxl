@@ -18,6 +18,8 @@
 #include <Inventor/SoSceneManager.h>
 #include <Inventor/misc/SoChildList.h>
 
+#include <vcl_cassert.h>
+
 //: Constructor
 bgui3d_fullviewer_tableau::bgui3d_fullviewer_tableau(SoNode * scene_root)
  : bgui3d_viewer_tableau(scene_root)
@@ -71,9 +73,10 @@ class bgui3d_export_command : public vgui_command
 
     switch (type)
     {
-     case 0: bgui3d_export_iv(root, file_name); break;
-     case 1: bgui3d_export_vrml(root, file_name); break;
-     case 2: bgui3d_export_vrml2(root, file_name); break;
+     case 0 : bgui3d_export_iv(root, file_name); break;
+     case 1 : bgui3d_export_vrml(root, file_name); break;
+     case 2 : bgui3d_export_vrml2(root, file_name); break;
+     default: assert(!"This should not happen"); break;
     }
   }
 
@@ -104,8 +107,9 @@ class bgui3d_import_command : public vgui_command
 
     if (overwrite)
     {
-      //bgui3d_fullviewer_tab->set_scene_root(new_scene);
-
+#if 0
+      bgui3d_fullviewer_tab->set_scene_root(new_scene);
+#endif // 0
       // get the old scene_root
       SoNode* old_scene = bgui3d_fullviewer_tab->user_scene_root();
       SoSeparator* scene_root = NULL;
@@ -199,8 +203,9 @@ class bgui3d_interaction_type_command : public vgui_command
 {
  public:
   bgui3d_interaction_type_command(bgui3d_fullviewer_tableau* tab,
-                             bgui3d_tableau::interaction_type_enum type)
-   : bgui3d_fullviewer_tab(tab), interaction_type(type) {}
+                                  bgui3d_tableau::interaction_type_enum type)
+  : bgui3d_fullviewer_tab(tab), interaction_type(type) {}
+
   void execute()
   {
     bgui3d_fullviewer_tab->set_interaction_type(interaction_type);
@@ -245,7 +250,6 @@ void bgui3d_fullviewer_tableau::get_popup(const vgui_popup_params& params,
   else
     headlight_item = "Enable Headlight";
 
-
   vcl_string check_on = "[x]";
   vcl_string check_off = "[ ]";
 
@@ -266,7 +270,6 @@ void bgui3d_fullviewer_tableau::get_popup(const vgui_popup_params& params,
       menu.add("Choose Camera",camera_list_menu);
   }
 
-
   vgui_menu camera_menu;
   camera_type_enum cam_type = this->camera_type();
 
@@ -282,7 +285,6 @@ void bgui3d_fullviewer_tableau::get_popup(const vgui_popup_params& params,
                        new bgui3d_interaction_type_command(this,bgui3d_tableau::CAMERA));
   interaction_menu.add(((interaction_type==bgui3d_tableau::SCENEGRAPH)?check_on:check_off) + " SceneGraph",
                        new bgui3d_interaction_type_command(this,bgui3d_tableau::SCENEGRAPH));
-
 
   menu.add("Export Scene", new bgui3d_export_command(this));
   menu.add("Import Scene", new bgui3d_import_command(this));

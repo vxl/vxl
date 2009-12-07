@@ -204,22 +204,23 @@ void mfpf_pose_predictor::new_pose(
 
   switch (pose_type_)
   {
-    case (translation):
+    case translation:
       dpose.p().set(dp[0],dp[1]);
       break;
-    case (rigid):
+    case rigid:
       dpose.p().set(dp[0],dp[1]);
       dpose.u().set(vcl_cos(dp[2]),vcl_sin(dp[2]));
       break;
-    case (zoom):
+    case zoom:
       dpose.p().set(dp[0],dp[1]);
       dpose.u().set(vcl_exp(dp[2]),0);
       break;
-    case (similarity):
+    case similarity:
       dpose.p().set(dp[0],dp[1]);
       s=vcl_exp(dp[2]);
       dpose.u().set(s*vcl_cos(dp[3]),s*vcl_sin(dp[3]));
       break;
+    default: assert(!"Invalid pose_type_"); break;
   }
 
   new_pose=pose0*dpose.inverse();
@@ -328,7 +329,7 @@ void mfpf_pose_predictor::b_read(vsl_b_istream& bfs)
   vsl_b_read(bfs,version);
   switch (version)
   {
-    case (1):
+    case 1:
       vsl_b_read(bfs,step_size_);
       vsl_b_read(bfs,i); pose_type_=mfpf_pose_type(i);
       vsl_b_read(bfs,roi_);
@@ -398,11 +399,11 @@ vcl_ostream& operator<<(vcl_ostream& os ,const mfpf_pose_type& pt)
 {
   switch (pt)
   {
-    case (translation): os<<"translation"; break;
-    case (rigid): os<<"rigid"; break;
-    case (zoom): os<<"zoom"; break;
-    case (similarity): os<<"similarity"; break;
-    default: os<<"Invalid";
+    case translation: os<<"translation"; break;
+    case rigid: os<<"rigid"; break;
+    case zoom: os<<"zoom"; break;
+    case similarity: os<<"similarity"; break;
+    default: os<<"Invalid"; break;
   }
   return os;
 }
