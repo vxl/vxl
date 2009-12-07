@@ -5,7 +5,9 @@
 #   ECW_INCLUDE_DIR
 #   ECW_LIBRARIES
 
-The original sponsorring website of this library appears to have vanished, but there are still traces at http://www.gdal.org/frmt_ecw.html and a distribution at https://svn.zib.de/lenne3d/lib/libecw/current
+# The original sponsorring website of this library appears to have vanished,
+# but there are still traces at http://www.gdal.org/frmt_ecw.html and a
+# distribution at https://svn.zib.de/lenne3d/lib/libecw/current - IMS  7-Dec-2009.
 
 SET( ECW_FOUND "NO" )
 
