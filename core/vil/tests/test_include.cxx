@@ -106,7 +106,7 @@
 #include <vil/file_formats/vil_viff_support.h>
 #include <vil/file_formats/vil_viffheader.h>
 // Only the following ones need library-specific #includes:
-#if HAS_JPEG2000
+#if HAS_J2K
 #include <vil/file_formats/vil_j2k_image.h>
 #include <vil/file_formats/vil_j2k_nitf2_pyramid_image_resource.h>
 #include <vil/file_formats/vil_j2k_pyramid_image_resource.h>
