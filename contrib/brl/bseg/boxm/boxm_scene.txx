@@ -266,7 +266,6 @@ bool boxm_scene<T>::load_block(unsigned i, unsigned j, unsigned k)
     }
     return false;
   }
-  vcl_cout<<"BLOCK READING OFF THE DISK"<<vcl_endl;
   blocks_(i,j,k)->b_read(os);
   os.close();
   return true;
