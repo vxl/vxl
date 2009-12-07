@@ -68,11 +68,11 @@ class gevd_float_operators
   static bool Read1dKernel(const char* filename,
                            float*& kernel, int& radius, bool& evenp);
 
-  static float Gaussian(gevd_bufferxy& img, gevd_bufferxy*& smooth, const float sigma=1.0,
+  static float Gaussian(gevd_bufferxy& img, gevd_bufferxy*& smooth, const float sigma=1.0f,
                         const bool xwrap=false, const bool ywrap=false);
   static bool Find1dGaussianKernel(const float sigma,
                                    float*& kernel, int& radius,
-                                   const float fuzz=0.02);
+                                   const float fuzz=0.02f);
 
   // detection
   static float Gradient(const gevd_bufferxy& smooth, // 1st-derivative
@@ -119,26 +119,26 @@ class gevd_float_operators
   static void SurfaceCurvature(const gevd_bufferxy& normal, gevd_bufferxy*& curvature);
 
   static void SurfaceNormalD(const gevd_bufferxy& range, gevd_bufferxy*& normal,
-                             float no_value, float pixel_distance=1.0);
-  // -rgc- : does SurfaceCurvature need to calculate the actual distances
-  // instead of deducing them from the grid?
-//static void SurfaceCurvatureD(const gevd_bufferxy& normal, gevd_bufferxy*& curvature,
-//                              float dflt, float pixel_distance=1.0);
+                             float no_value, float pixel_distance=1.0f);
+#if 0 // -rgc- : does SurfaceCurvature need to calculate the actual distances instead of deducing them from the grid?
+  static void SurfaceCurvatureD(const gevd_bufferxy& normal, gevd_bufferxy*& curvature,
+                                float dflt, float pixel_distance=1.0f);
+#endif // 0
   static void SurfaceCurvatureD(const gevd_bufferxy& normal, const gevd_bufferxy& surface,
-                                gevd_bufferxy*& curvature, float dflt, float pixel_distance=1.0);
+                                gevd_bufferxy*& curvature, float dflt, float pixel_distance=1.0f);
 
   // shrink/expand
   static float ShrinkBy2(const gevd_bufferxy& cfrom, gevd_bufferxy*& to,
-                         const float burt_ka=0.359375); // Burt filter coeft
+                         const float burt_ka=0.359375f); // Burt filter coeft
   static float ExpandBy2(const gevd_bufferxy& cfrom, gevd_bufferxy*& to,
-                         const float burt_ka=0.359375); // Burt filter coeft
+                         const float burt_ka=0.359375f); // Burt filter coeft
   static void ShrinkBy2_D (const gevd_bufferxy& from, gevd_bufferxy*& to,
-                           float no_value, float burt_ka=0.359375 );
+                           float no_value, float burt_ka=0.359375f );
   static int Pyramid(const float* from, const int length,
                      float*& to, int& nlevels, int trim=0,
-                     const float burt_ka=0.359375); // Burt filter coeft
+                     const float burt_ka=0.359375f); // Burt filter coeft
   static int ShrinkBy2(const float* from, const int length,
-                       float*& to, const float burt_ka=0.359375);
+                       float*& to, const float burt_ka=0.359375f);
 
   // wavelet transform
   static bool WaveletTransform(float* array, const int n, // 1d array
@@ -170,7 +170,7 @@ class gevd_float_operators
   static int TruncateHighFrequencies(float* wave,
                                      const int* dims, const int ndim,
                                      const int nlevels, // throw all small
-                                     const float threshold=0.1); // components
+                                     const float threshold=0.1f); // components
   static int TruncateLowestFrequency(float* wave,
                                      const int* dims, const int ndim,
                                      const int nlevels,
@@ -189,7 +189,7 @@ class gevd_float_operators
                                    const int nlevels);
   static int TruncateHighFrequencies(gevd_bufferxy& wave,
                                      const int nlevels,
-                                     const float threshold=0.1);
+                                     const float threshold=0.1f);
   static int TruncateLowestFrequency(gevd_bufferxy& wave, const int nlevels);
   static int DeleteBoundaryArtifacts(float* wave, const int n, const int nlevels);
   static int DeleteBoundaryArtifacts(gevd_bufferxy& wave, const int nlevels);
@@ -228,16 +228,16 @@ class gevd_float_operators
                                      float& shift, // pattern location in data
                                      const int coarse, const int fine, // level#
                                      const float cutoff=0, // early cutoff of search
-                                     const float overlap=0.75, // min overlap
+                                     const float overlap=0.75f, // min overlap
                                      float* matches=0); // trace correlations
 
 #if 0 // commented out
   static gevd_bufferxy* Correlations(const gevd_bufferxy& data, const gevd_bufferxy& pattern,
-                         const int* indexes, const int* search);
+                                     const int* indexes, const int* search);
   static float Correlate(const gevd_bufferxy& data, const gevd_bufferxy& pattern,
-                  const int* indexes);
+                         const int* indexes);
   static float Correlate(const gevd_bufferxy& data, const gevd_bufferxy& pattern,
-                  int*& shifts, const int* search);
+                         int*& shifts, const int* search);
 #endif
 
   static void Apply(gevd_bufferxy& buf, float (*func)(float));

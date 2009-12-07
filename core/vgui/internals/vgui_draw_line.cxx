@@ -112,7 +112,7 @@ bool vgui_draw_line(double const X[4], double const Y[4])
 }
 #define add3(a, b, c) { for (int i=0; i<3; ++i) (c)[i] = (a)[i] + (b)[i]; }
 #define sub3(a, b, c) { for (int i=0; i<3; ++i) (c)[i] = (a)[i] - (b)[i]; }
-#define trace(str) /*{ vcl_cerr << str << vcl_endl; }*/
+#define trace(str) /* { vcl_cerr << str << vcl_endl; } */
 
 bool vgui_draw_line(double const T[4][4], double a, double b, double c)
 {
@@ -142,9 +142,7 @@ bool vgui_draw_line(double const T[4][4], double a, double b, double c)
     }
     else if (w_dev<0) {
       if (-w_dev>=y_dev && y_dev>=w_dev) {
-        trace("x=-1"); glVertex4f(-tmp[0], -tmp[1],  0, -tmp[2]); }
-    }
-    else {
+        trace("x=-1"); glVertex4d(-tmp[0], -tmp[1],  0, -tmp[2]); }
     }
   }
 
@@ -159,9 +157,7 @@ bool vgui_draw_line(double const T[4][4], double a, double b, double c)
     }
     else if (w_dev<0) {
       if (-w_dev>=y_dev && y_dev>=w_dev) {
-        trace("x=+1"); glVertex4f(-tmp[0], -tmp[1],  0, -tmp[2]); }
-    }
-    else {
+        trace("x=+1"); glVertex4d(-tmp[0], -tmp[1],  0, -tmp[2]); }
     }
   }
 
@@ -176,9 +172,7 @@ bool vgui_draw_line(double const T[4][4], double a, double b, double c)
     }
     else if (w_dev<0) {
       if (-w_dev>=x_dev && x_dev>=w_dev) {
-        trace("y=-1"); glVertex4f(-tmp[0], -tmp[1],  0, -tmp[2]); }
-    }
-    else {
+        trace("y=-1"); glVertex4d(-tmp[0], -tmp[1],  0, -tmp[2]); }
     }
   }
 
@@ -193,9 +187,7 @@ bool vgui_draw_line(double const T[4][4], double a, double b, double c)
     }
     else if (w_dev<0) {
       if (-w_dev>=x_dev && x_dev>=w_dev) {
-        trace("y=+1"); glVertex4f(-tmp[0], -tmp[1],  0, -tmp[2]); }
-    }
-    else {
+        trace("y=+1"); glVertex4d(-tmp[0], -tmp[1],  0, -tmp[2]); }
     }
   }
 

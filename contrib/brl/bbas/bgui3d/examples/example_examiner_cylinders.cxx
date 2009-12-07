@@ -17,7 +17,7 @@
 #include <Inventor/nodes/SoPerspectiveCamera.h>
 #include <Inventor/SbLinear.h>
 
-//Add sphere
+// Add sphere
 void addSphere(SoGroup *root)
 {
   SoSeparator* sep = new SoSeparator;
@@ -32,7 +32,7 @@ void addSphere(SoGroup *root)
   sep->addChild(sph);
 }
 
-//Add a cylinder
+// Add a cylinder
 void addCylinder(SoGroup *root, vgl_vector_3d<double> p)
 {
   SoSeparator* sep = new SoSeparator;
@@ -43,7 +43,7 @@ void addCylinder(SoGroup *root, vgl_vector_3d<double> p)
 
   SoRotation *rot = new SoRotation;
   p /= p.length();
-  SbVec3f axis(p.z(), 0.0, -p.x());
+  SbVec3f axis(float(p.z()), 0.0f, -float(p.x()));
   rot->rotation.setValue(axis, float(vcl_acos(p.y())));
 
   SoMaterial *myMaterial = new SoMaterial;
@@ -58,13 +58,13 @@ void addCylinder(SoGroup *root, vgl_vector_3d<double> p)
 // Construct a simple scene
 void buildScene(SoGroup *root)
 {
-  //Add camera
+  // Add camera
   SoPerspectiveCamera *myCamera = new SoPerspectiveCamera;
   myCamera->position = SbVec3f(0, 0, 100);
   myCamera->nearDistance = 0.5f;
   myCamera->farDistance = 400.0f;
   myCamera->focalDistance = 100.0f;
-  myCamera->heightAngle = vnl_math::pi_over_2;
+  myCamera->heightAngle = (float)vnl_math::pi_over_2;
   root->addChild(myCamera);
 
   addSphere(root);

@@ -46,8 +46,8 @@ bool bsta_beta<T>::bsta_beta_from_moments(T mean, T var, T& alpha, T& beta)
 {
   if (var == 0)
     return false;
-    
-  T t = ((mean*(1-mean))/var)-1.0;
+
+  T t = mean*(1-mean)/var-1;
   alpha=mean*t;
   beta=(1-mean)*t;
   return true;
@@ -57,25 +57,24 @@ bool bsta_beta<T>::bsta_beta_from_moments(T mean, T var, T& alpha, T& beta)
 template <class T>
 T bsta_beta<T>::prob_density(T x) const
 {
- 
-    if(x<T(0)||x>T(1))
-        return 0;
-    else if (x == 0 && alpha_<T(1)){
-        return T(1e10);
-    } 
-    else if (x == 1 && beta_<T(1)) {
-        return T(1e10);
-    }
-    else
-    {
-        T a = vnl_log_beta(alpha_,beta_);
+  if (x<T(0)||x>T(1))
+      return 0;
+  else if (x == 0 && alpha_<T(1)) {
+      return T(1e10);
+  }
+  else if (x == 1 && beta_<T(1)) {
+      return T(1e10);
+  }
+  else
+  {
+    T a = (T)vnl_log_beta(alpha_,beta_);
 
-        T b = (alpha_-1)*vcl_log(x) ;
-        T c = (beta_-1)*vcl_log(1-x) ;
+    T b = (alpha_-1)*vcl_log(x) ;
+    T c = (beta_-1)*vcl_log(1-x) ;
 
-        T ans=vcl_exp(b+c-a);
-        return ans;
-    }
+    T ans=vcl_exp(b+c-a);
+    return ans;
+  }
 }
 
 // cumulative distribution function

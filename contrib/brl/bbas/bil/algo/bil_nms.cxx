@@ -69,48 +69,43 @@ void bil_nms::apply()
   for (unsigned x = margin_; x < grad_mag_.ni()-margin_; ++x) {
     for (unsigned y = margin_; y < grad_mag_.nj()-margin_; ++y)
     {
-
-      if (grad_mag_(x,y) < thresh_) //threshold by gradient magnitude
+      if (grad_mag_(x,y) < thresh_) // threshold by gradient magnitude
         continue;
       double gx = dir_x_(x,y);
       double gy = dir_y_(x,y);
       vgl_vector_2d<double> direction(gx,gy);
       normalize(direction);
 
-      //The gradient has to be non-degenerate
+      // The gradient has to be non-degenerate
       if (vcl_abs(direction.x()) < 10e-6 && vcl_abs(direction.y()) < 10e-6)
         continue;
 
-      //now compute the values orthogonal to the edge and fit a parabola
+      // now compute the values orthogonal to the edge and fit a parabola
       int face_num = intersected_face_number(direction); assert(face_num != -1);
       double s = intersection_parameter(direction, face_num); assert(s != -1000);
       f_values(x, y, direction, s, face_num, f);
       s_list[0] = -s; s_list[1] = 0.0; s_list[2] = s;
 
-      //Amir: removed this maximum check because, there can be a maxima between f- and f+ even when f<f- or f<f+
+      // Amir: removed this maximum check because there can be a max between f- and f+ even when f<f- or f<f+
 
-        //fit a parabola to the data
-        double max_val = f[1]; //default (should be updated by parabola fit)
-        double grad_val = 0.0; //should be updated by parabola fit
+      // fit a parabola to the data
+      double max_val = f[1]; // default (should be updated by parabola fit)
+      double grad_val = 0.0; // should be updated by parabola fit
 
-        //compute location of extrema
-        double s_star = (parabola_fit_type_ == bil_nms_params::PFIT_3_POINTS) ?
-                            subpixel_s(s_list, f, max_val, grad_val) : subpixel_s(x, y, direction, max_val);
-        if (vcl_fabs(s_star)< 0.7)
-        {
-          //record this edgel
-          x_(y,x) = x + s_star * direction.x();
-          y_(y,x) = y + s_star * direction.y();
-          dir_(y,x) = vcl_atan2(direction.x(), -direction.y());
-          mag_(x,y) = max_val; //the mag at the max of the parabola
-          deriv_(y,x) = grad_val;
-
-        }
+      // compute location of extrema
+      double s_star = (parabola_fit_type_ == bil_nms_params::PFIT_3_POINTS) ?
+                          subpixel_s(s_list, f, max_val, grad_val) : subpixel_s(x, y, direction, max_val);
+      if (vcl_fabs(s_star)< 0.7)
+      {
+        // record this edgel
+        x_(y,x) = x + s_star * direction.x();
+        y_(y,x) = y + s_star * direction.y();
+        dir_(y,x) = vcl_atan2(direction.x(), -direction.y());
+        mag_(x,y) = float(max_val); // the mag at the max of the parabola
+        deriv_(y,x) = grad_val;
+      }
     }
   }
-
-
-
 }
 
 int bil_nms::intersected_face_number(const vgl_vector_2d<double>& direction)
@@ -165,8 +160,8 @@ void bil_nms::f_values(int x, int y, const vgl_vector_2d<double>& direction, dou
   get_relative_corner_coordinates(face_num, corners);
 
   vgl_vector_2d<double> intersection_point = s * direction;
-  vgl_vector_2d<double> corner1(corners[0], corners[1]); //have to convert to double for subtraction
-  vgl_vector_2d<double> corner2(corners[2], corners[3]); //have to convert to double for subtraction
+  vgl_vector_2d<double> corner1(corners[0], corners[1]); // have to convert to double for subtraction
+  vgl_vector_2d<double> corner2(corners[2], corners[3]); // have to convert to double for subtraction
   double distance1 = length(intersection_point - corner1);
   double distance2 = length(intersection_point - corner2);
   double value1 = grad_mag_(x+corners[0], y+corners[1]);
@@ -174,8 +169,8 @@ void bil_nms::f_values(int x, int y, const vgl_vector_2d<double>& direction, dou
   double f_plus = value1 * distance2 + value2 * distance1;
 
   intersection_point = -s * direction;
-  corner1.set(-corners[0], -corners[1]); //have to convert to double for subtraction
-  corner2.set(-corners[2], -corners[3]); //have to convert to double for subtraction
+  corner1.set(-corners[0], -corners[1]); // have to convert to double for subtraction
+  corner2.set(-corners[2], -corners[3]); // have to convert to double for subtraction
   distance1 = length(intersection_point - corner1);
   distance2 = length(intersection_point - corner2);
   value1 = grad_mag_(x-corners[0], y-corners[1]);
@@ -249,7 +244,7 @@ void bil_nms::get_relative_corner_coordinates(int face_num, int *corners)
 
 double bil_nms::subpixel_s(double *s, double *f, double &max_f, double &max_d)
 {
-  //new version: assumes s[1]=0 and s[2]=-s[0]
+  // new version: assumes s[1]=0 and s[2]=-s[0]
   double A = -(f[1] - (f[0]+f[2])/2.0)/(s[2]*s[2]);
   double B = -(f[0]-f[2])/(2*s[2]);
   double C = f[1];
@@ -258,29 +253,29 @@ double bil_nms::subpixel_s(double *s, double *f, double &max_f, double &max_d)
 
   max_f = A*s_star*s_star + B*s_star + C;
 
-  //second derivative
+  // second derivative
   double d2f = 2*A;
   max_d = d2f;
 
-  if (A<0) { //make sure this is a maximum
+  if (A<0) { // make sure this is a maximum
     if (use_adaptive_thresh_) {
 #if 0
-      //derivatives at f+ and f-
+      // derivatives at f+ and f-
       double d2fp = 2*A*s[2] + B;
       double d2fm = 2*A*s[0] + B;
       if (vcl_fabs(d2fp)>rel_thresh_ || vcl_fabs(d2fm)>rel_thresh_)
         return s_star;
 #endif // 0
-      if (d2f<-rel_thresh_)//d2f is always negative at a maximum
+      if (d2f<-rel_thresh_) // d2f is always negative at a maximum
         return s_star;
       else
-        return 5.0; //not reliable
+        return 5.0; // not reliable
     }
     else
       return s_star;
   }
   else
-    return 5.0; //not a maxima
+    return 5.0; // not a maximum
 }
 
 double bil_nms::subpixel_s(int x, int y, const vgl_vector_2d<double>& direction, double &max_f)
@@ -291,7 +286,7 @@ double bil_nms::subpixel_s(int x, int y, const vgl_vector_2d<double>& direction,
   vgl_homg_point_2d<double> p1(0.0, 0.0);
   vgl_homg_point_2d<double> p2(direction.x(), direction.y());
   vgl_homg_line_2d<double> line1(p1,p2);
-  //construct the matrices
+  // construct the matrices
   vnl_matrix<double> A(9, 3);
   vnl_matrix<double> B(9, 1);
   vnl_matrix<double> P(3, 1);
@@ -324,7 +319,7 @@ double bil_nms::subpixel_s(int x, int y, const vgl_vector_2d<double>& direction,
   if (P(0,0)<0)
     return s_star;
   else
-    return 5.0; //not a maxima
+    return 5.0; // not a maximum
 }
 
 void bil_nms::find_distance_s_and_f_for_point(int x, int y, vgl_homg_line_2d<double> line,

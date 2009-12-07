@@ -63,15 +63,15 @@ void xcv_twoview_manager::set_tableau(vgui_tableau_sptr const& tab, unsigned tab
            << "] to tableau pointer: " << tab << vcl_endl;
 #endif
   tabs[tab_nb] = tab;
-  rubberbands[tab_nb].vertical_cast(vgui_find_below_by_type_name(tab, 
+  rubberbands[tab_nb].vertical_cast(vgui_find_below_by_type_name(tab,
     vcl_string("vgui_rubberband_tableau")));
   if (! rubberbands[tab_nb])
     vgui_macro_warning << "Unable to find rubberbander for tableau1\n";
-  easys[tab_nb].vertical_cast(vgui_find_below_by_type_name(tab, 
+  easys[tab_nb].vertical_cast(vgui_find_below_by_type_name(tab,
     vcl_string("vgui_easy2D_tableau")));
   if (!easys[tab_nb]) {
-    vgui_macro_warning << "Unable to find easy2D for tableau no. " << tab_nb 
-      << " \"" << tab << "\"\n";
+    vgui_macro_warning << "Unable to find easy2D for tableau no. " << tab_nb
+                       << " \"" << tab << "\"\n";
     vgui_text_graph(vcl_cerr);
   }
 }
@@ -113,7 +113,7 @@ void xcv_twoview_manager::toggle_corner_match_display()
 //: Draw a point and the transformed epipolar line on the display.
 //-----------------------------------------------------------------------------
 void xcv_twoview_manager::draw_f_matrix(vgui_event const& e, vgui_tableau_sptr const& child_tab,
-  bool make_permanent)
+                                        bool make_permanent)
 {
   // Get the address of the event and turn it into a HomgPoint2D:
   vgui_projection_inspector p_insp;
@@ -146,15 +146,15 @@ void xcv_twoview_manager::draw_f_matrix(vgui_event const& e, vgui_tableau_sptr c
              << hl[1] << "y + " << hl[2] << " = 0.\n";
 #endif
     if (easys[transfer_index])
-      easys[transfer_index]->add_infinite_line(hl[0], hl[1], hl[2]);
+      easys[transfer_index]->add_infinite_line(float(hl[0]), float(hl[1]), float(hl[2]));
     else
-      vgui_macro_warning << "no vgui_easy2D_tableau for transfer_index = " 
-      << transfer_index << vcl_endl;
+      vgui_macro_warning << "no vgui_easy2D_tableau for transfer_index = "
+                         << transfer_index << vcl_endl;
     if (easys[(transfer_index+1)%2])
       easys[(transfer_index+1)%2]->add_point(ix, iy);
     else
-      vgui_macro_warning << "no vgui_easy2D_tableau for transfer_index = " 
-      << (transfer_index+1)%2 << vcl_endl;
+      vgui_macro_warning << "no vgui_easy2D_tableau for transfer_index = "
+                         << (transfer_index+1)%2 << vcl_endl;
     if (easys[0])
       easys[0]->post_redraw();
     else
@@ -162,13 +162,13 @@ void xcv_twoview_manager::draw_f_matrix(vgui_event const& e, vgui_tableau_sptr c
   }
   else
   {
-    line_coord_a = hl[0];
-    line_coord_b = hl[1];
-    line_coord_c = hl[2];
+    line_coord_a = float(hl[0]);
+    line_coord_b = float(hl[1]);
+    line_coord_c = float(hl[2]);
     event_coord_x = ix; event_coord_y = iy;
-          if (use_overlays)
+    if (use_overlays)
       tabs[transfer_index]->post_overlay_redraw();
-          else
+    else
       tabs[transfer_index]->post_redraw();
   }
 }
@@ -188,7 +188,7 @@ void xcv_twoview_manager::draw_overlay_f_matrix(vgui_tableau_sptr const& child_t
       evt.type = vgui_DRAW_OVERLAY;
     easys[transfer_index]->handle(evt);
     rubberbands[transfer_index]->draw_infinite_line(line_coord_a,
-      line_coord_b, line_coord_c);
+                                                    line_coord_b, line_coord_c);
   }
 }
 
@@ -231,14 +231,14 @@ void xcv_twoview_manager::draw_h_matrix(
     vcl_cerr << "draw_h_matrix: Adding points at (" << px << ", " << py
              << ") and (" << ix << ", " << iy << ").\n";
 #endif
-    easys[transfer_index]->add_point(px, py);
+    easys[transfer_index]->add_point(float(px), float(py));
     easys[(transfer_index+1)%2]->add_point(ix, iy);
     easys[0]->post_redraw();
   }
   else
   {
     event_coord_x = ix; event_coord_y = iy;
-    point_coord_x = px; point_coord_y = py;
+    point_coord_x = float(px); point_coord_y = float(py);
     if (use_overlays)
       rubberbands[transfer_index]->post_overlay_redraw();
     else
@@ -263,13 +263,13 @@ void xcv_twoview_manager::draw_overlay_h_matrix(vgui_tableau_sptr const& child_t
 
     // Draw a cross-hair over the point:
     int crosshair_radius = 8;
-    rubberbands[transfer_index]->draw_line(point_coord_x-crosshair_radius, 
-      point_coord_y, point_coord_x+crosshair_radius, point_coord_y);
-    rubberbands[transfer_index]->draw_line(point_coord_x, 
-      point_coord_y+crosshair_radius, point_coord_x, 
-      point_coord_y-crosshair_radius);
-    rubberbands[transfer_index]->draw_circle(point_coord_x, point_coord_y, 
-      crosshair_radius);
+    rubberbands[transfer_index]->draw_line(point_coord_x-crosshair_radius,
+                                           point_coord_y, point_coord_x+crosshair_radius, point_coord_y);
+    rubberbands[transfer_index]->draw_line(point_coord_x,
+                                           point_coord_y+crosshair_radius, point_coord_x,
+                                           point_coord_y-crosshair_radius);
+    rubberbands[transfer_index]->draw_circle(point_coord_x, point_coord_y,
+                                             crosshair_radius);
   }
 }
 
@@ -365,8 +365,9 @@ void xcv_twoview_manager::handle_tjunction_event(vgui_event const& e, vgui_table
       draw_corner_matches(e, child_tab);
   }
 
-  if (e.type == vgui_BUTTON_DOWN && e.modifier == vgui_MODIFIER_NULL 
-  && e.button == vgui_MIDDLE)
+  if (e.type == vgui_BUTTON_DOWN &&
+      e.modifier == vgui_MODIFIER_NULL &&
+      e.button == vgui_MIDDLE)
   {
     if (f_matrix != 0 && f_matrix_is_displayed)
       draw_f_matrix(e, child_tab, true);
@@ -375,12 +376,13 @@ void xcv_twoview_manager::handle_tjunction_event(vgui_event const& e, vgui_table
   }
   if (dragging)
   {
-    if ((use_overlays && e.type == vgui_DRAW_OVERLAY) 
-      || (!use_overlays && e.type == vgui_DRAW))
+    if ((use_overlays && e.type == vgui_DRAW_OVERLAY) ||
+        (!use_overlays && e.type == vgui_DRAW))
     {
-      //awfawfxxx fix this.
-      //if (child_tab == tabs[transfer_index])
-      //  rubberbands[transfer_index]->child->handle(e);
+#if 0 // TODO awf fix this.
+      if (child_tab == tabs[transfer_index])
+        rubberbands[transfer_index]->child->handle(e);
+#endif // 0
 
       if (child_tab == tabs[transfer_index])
       {

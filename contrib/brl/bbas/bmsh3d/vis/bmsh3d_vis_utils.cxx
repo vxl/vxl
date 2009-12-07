@@ -33,8 +33,6 @@
 #include <Inventor/nodes/SoDirectionalLight.h>
 #include <Inventor/actions/SoSearchAction.h>
 
-///SbColor VIS_COLOR = SbColor (0.0f, 0.0f, 0.0f);
-
 SbColor color_from_code (const int colorcode)
 {
   switch (colorcode)
@@ -78,7 +76,7 @@ SoGroup* getParent (SoNode* node, SoNode* root)
   sa.setInterest(SoSearchAction::FIRST);
   sa.apply(root);
   SoPath * p = sa.getPath();
-  ///assert(p && "not found");
+  assert(p && "getPath() not found");
   if (p->getLength() < 2) {
     return NULL;
   } // no parent
@@ -123,13 +121,13 @@ SbColor get_color_tone (float cvalue)
 {
   SbColor color;
 
-  if (cvalue < 0.25f)      //From Blue to Aqua
+  if (cvalue < 0.25f)      // From Blue to Aqua
     color = SbColor (0.0f, cvalue*4, 1.0f);
-  else if (cvalue < 0.5f)  //From Aqua to Green
+  else if (cvalue < 0.5f)  // From Aqua to Green
     color = SbColor (0.0f, 1.0f, (0.5f-cvalue)*4);
-  else if (cvalue < 0.75f) //From Green to Yellow
+  else if (cvalue < 0.75f) // From Green to Yellow
     color = SbColor ((cvalue-0.5f)*4, 1.0f, 0.0f);
-  else                     //From Yellow to Red
+  else                     // From Yellow to Red
     color = SbColor (1.0f, (1.0f-cvalue)*4, 0.0f);
 
   return color;
@@ -180,7 +178,7 @@ SoSeparator* draw_cube (const float x, const float y, const float z,
 {
   SoSeparator* root = new SoSeparator;
 
-  //color
+  // color
   SoBaseColor *basecolor = new SoBaseColor;
   basecolor->rgb = color;
   root->addChild (basecolor);
@@ -260,19 +258,18 @@ SoSeparator* draw_cylinder(float x1, float y1, float z1,
                            float transparency)
 {
   SoSeparator* root = new SoSeparator;
-
-  ////color
-  //SoBaseColor *basecolor = new SoBaseColor;
-  //basecolor->rgb = color;
-  //root->addChild (basecolor);
-
+#if 0
+  // color
+  SoBaseColor *basecolor = new SoBaseColor;
+  basecolor->rgb = color;
+  root->addChild (basecolor);
+#endif // 0
   // Create a SoMaterial to draw color in detail.
   SoMaterial *material = new SoMaterial;
   material->diffuseColor.setValue (color);
   material->emissiveColor.setValue(color/2);
   material->transparency = transparency;
   root->addChild (material);
-
 
   // translation
   SoTranslation* trans = new SoTranslation;
@@ -329,7 +326,7 @@ SoSeparator* draw_polyline (vcl_vector<vgl_point_3d<double> >& vertices,
   basecolor->rgb = color;
   root->addChild (basecolor);
 
-  //Line width
+  // Line width
   SoDrawStyle*  drawStyle = new SoDrawStyle;
   drawStyle->lineWidth.setValue (width);
   root->addChild (drawStyle);
@@ -370,8 +367,8 @@ SoSeparator* draw_polyline (const float** vertices, const unsigned int nVertices
   basecolor->rgb = color;
   root->addChild (basecolor);
 
-  //Line width
-  root->addChild ((SoDrawStyle*) drawStyle);
+  // Line width
+  root->addChild ((SoDrawStyle*) drawStyle); // casting away const !!!
 
   SbVec3f* verts = new SbVec3f[nVertices];
   for (unsigned int i=0; i<nVertices; i++)
@@ -401,7 +398,7 @@ void draw_filled_polygon_geom_ (SoGroup* root, const vcl_vector<bmsh3d_vertex*>&
 {
   SbVec3f* verts = new SbVec3f[vertices.size()];
   for (unsigned int i=0; i<vertices.size(); i++)
-    verts[i] = SbVec3f (vertices[i]->pt().x(), vertices[i]->pt().y(), vertices[i]->pt().z());
+    verts[i] = SbVec3f(float(vertices[i]->pt().x()), float(vertices[i]->pt().y()), float(vertices[i]->pt().z()));
 
   draw_filled_polygon_geom_ (root, verts, vertices.size());
 
@@ -421,7 +418,7 @@ SoSeparator* draw_filled_polygon (SbVec3f* vertices, const unsigned int nVertice
 {
   SoSeparator* root = new SoSeparator;
 
-  //Create a SoMaterial to draw color in detail.
+  // Create a SoMaterial to draw color in detail.
   SoMaterial *material = new SoMaterial;
   material->diffuseColor.setValue (color);
   material->emissiveColor.setValue(color/2);
@@ -438,7 +435,7 @@ SoSeparator* draw_filled_polygon (float** vertices, const unsigned int nVertices
 {
   SoSeparator* root = new SoSeparator;
 
-  //Create a SoMaterial to draw color in detail.
+  // Create a SoMaterial to draw color in detail.
   SoMaterial *material = new SoMaterial;
   material->diffuseColor.setValue (color);
   material->emissiveColor.setValue(color/2);
@@ -471,7 +468,7 @@ SoSeparator* draw_line_set (const vcl_vector<vcl_pair<vgl_point_3d<double>, vgl_
                             const SbColor& color)
 {
   SoSeparator* root = new SoSeparator;
-  //color
+  // color
   SoBaseColor* basecolor = new SoBaseColor;
   basecolor->rgb = color;
   root->addChild (basecolor);
@@ -487,10 +484,10 @@ void draw_line_set_geom(SoSeparator* root,
 {
   unsigned int nVertices = lines.size() * 2;
   float (*xyz)[3] = new float[nVertices][3];
-  unsigned int nLinesIndices = lines.size() * 3; //sid : eid : -1
+  unsigned int nLinesIndices = lines.size() * 3; // sid : eid : -1
   int* ind = new int [nLinesIndices];
 
-  //Assign vertices and lines
+  // Assign vertices and lines
   for (unsigned int i=0; i < lines.size(); i++) {
     vgl_point_3d<double> Ps = lines[i].first;
     vgl_point_3d<double> Pe = lines[i].second;
@@ -558,13 +555,13 @@ SoSeparator* draw_line (const float x1, const float y1, const float z1,
 {
   SoSeparator* root = new SoSeparator;
 
-  //color
+  // color
   SoBaseColor *basecolor = new SoBaseColor;
   basecolor->rgb = color;
   root->addChild (basecolor);
 
   if (drawStyle)
-    root->addChild ((SoDrawStyle*) drawStyle);
+    root->addChild ((SoDrawStyle*) drawStyle); // casting away const !!!
 
   draw_line_geom (root, x1, y1, z1, x2, y2, z2);
   return root;
@@ -620,7 +617,7 @@ SoSeparator* draw_box (const double& min_x, const double& min_y, const double& m
 {
   SoSeparator* root = new SoSeparator;
 
-  //color
+  // color
   SoBaseColor* basecolor = new SoBaseColor;
   basecolor->rgb = color;
   root->addChild (basecolor);
@@ -629,23 +626,23 @@ SoSeparator* draw_box (const double& min_x, const double& min_y, const double& m
   drawStyle->lineWidth.setValue (width);
   root->addChild (drawStyle);
 
-  //side parallel to X
-  draw_line_geom (root, min_x, min_y, min_z, max_x, min_y, min_z);
-  draw_line_geom (root, min_x, min_y, max_z, max_x, min_y, max_z);
-  draw_line_geom (root, min_x, max_y, min_z, max_x, max_y, min_z);
-  draw_line_geom (root, min_x, max_y, max_z, max_x, max_y, max_z);
+  // side parallel to X
+  draw_line_geom (root, (float)min_x, (float)min_y, (float)min_z, (float)max_x, (float)min_y, (float)min_z);
+  draw_line_geom (root, (float)min_x, (float)min_y, (float)max_z, (float)max_x, (float)min_y, (float)max_z);
+  draw_line_geom (root, (float)min_x, (float)max_y, (float)min_z, (float)max_x, (float)max_y, (float)min_z);
+  draw_line_geom (root, (float)min_x, (float)max_y, (float)max_z, (float)max_x, (float)max_y, (float)max_z);
 
-  //side parallel to Y
-  draw_line_geom (root, min_x, min_y, min_z, min_x, max_y, min_z);
-  draw_line_geom (root, min_x, min_y, max_z, min_x, max_y, max_z);
-  draw_line_geom (root, max_x, min_y, min_z, max_x, max_y, min_z);
-  draw_line_geom (root, max_x, min_y, max_z, max_x, max_y, max_z);
+  // side parallel to Y
+  draw_line_geom (root, (float)min_x, (float)min_y, (float)min_z, (float)min_x, (float)max_y, (float)min_z);
+  draw_line_geom (root, (float)min_x, (float)min_y, (float)max_z, (float)min_x, (float)max_y, (float)max_z);
+  draw_line_geom (root, (float)max_x, (float)min_y, (float)min_z, (float)max_x, (float)max_y, (float)min_z);
+  draw_line_geom (root, (float)max_x, (float)min_y, (float)max_z, (float)max_x, (float)max_y, (float)max_z);
 
-  //side parallel to Z
-  draw_line_geom (root, min_x, min_y, min_z, min_x, min_y, max_z);
-  draw_line_geom (root, min_x, max_y, min_z, min_x, max_y, max_z);
-  draw_line_geom (root, max_x, min_y, min_z, max_x, min_y, max_z);
-  draw_line_geom (root, max_x, max_y, min_z, max_x, max_y, max_z);
+  // side parallel to Z
+  draw_line_geom (root, (float)min_x, (float)min_y, (float)min_z, (float)min_x, (float)min_y, (float)max_z);
+  draw_line_geom (root, (float)min_x, (float)max_y, (float)min_z, (float)min_x, (float)max_y, (float)max_z);
+  draw_line_geom (root, (float)max_x, (float)min_y, (float)min_z, (float)max_x, (float)min_y, (float)max_z);
+  draw_line_geom (root, (float)max_x, (float)max_y, (float)min_z, (float)max_x, (float)max_y, (float)max_z);
 
   return root;
 }
@@ -668,8 +665,8 @@ SoSeparator* draw_text2d (const char* text,
   instrTransf->translation.setValue (x, y, z);
   root->addChild(instrTransf);
 
-  //basecolor
-  root->addChild ((SoBaseColor*) basecolor);
+  // basecolor
+  root->addChild ((SoBaseColor*) basecolor); // casting away const !!!
 
   draw_text2d_geom (root, text);
 
@@ -768,23 +765,23 @@ void draw_text_test (SoSeparator* root)
 
 void draw_polyline_test (SoSeparator* root)
 {
-  int i;
-
-  //Points in N*3 float array.
+  // Points in N*3 float array.
   SoVertexProperty *vertexList = new SoVertexProperty();
   root->addChild(vertexList);
 
   int N = 3;
-  //for (i=0; i<N; i++)
-  //  vertexList->vertex.set1Value (i, 1.2*i, 1.3*i*i, 1.4*i);
+#if 0
+  for (int i=0; i<N; i++)
+    vertexList->vertex.set1Value (i, 1.2*i, 1.3*i*i, 1.4*i);
+#endif // 0
   vertexList->vertex.set1Value (0, 0, 0, 0);
   vertexList->vertex.set1Value (1, 1, 1, 1);
   vertexList->vertex.set1Value (2, 5, 1, 1);
 
-  //Line
+  // Line
   int N_LINE = N-1;
   int *lineindex = new int[N_LINE*3];
-  for (i=0; i<N_LINE; i++) {
+  for (int i=0; i<N_LINE; i++) {
     lineindex[i*3] = i;
     lineindex[i*3+1] = i+1;
     lineindex[i*3+2] = -1;
@@ -794,33 +791,33 @@ void draw_polyline_test (SoSeparator* root)
   vertIndex->coordIndex.setValues (0, N_LINE*3, lineindex);
   root->addChild(vertIndex);
 
-  delete []lineindex;
+  delete[] lineindex;
 }
 
 void draw_polygon_test (SoSeparator* root)
 {
-  int i;
-
-  //Points in N*3 float array.
+  // Points in N*3 float array.
   SoVertexProperty *vertexList = new SoVertexProperty();
   root->addChild(vertexList);
 
   int N = 3;
-  //for (i=0; i<N; i++)
-  //  vertexList->vertex.set1Value (i, 1.2*i, 1.3*i*i, 1.4*i);
+#if 0
+   for (int i=0; i<N; i++)
+    vertexList->vertex.set1Value (i, 1.2*i, 1.3*i*i, 1.4*i);
+#endif // 0
   vertexList->vertex.set1Value (0, 0, 0, 0);
   vertexList->vertex.set1Value (1, 1, 1, 1);
   vertexList->vertex.set1Value (2, 5, 1, 1);
 
-  //Line
+  // Line
   int N_LINE = N;
   int *lineindex = new int[N_LINE*3];
-  for (i=0; i<N_LINE-1; i++) {
+  for (int i=0; i<N_LINE-1; i++) {
     lineindex[i*3] = i;
     lineindex[i*3+1] = i+1;
     lineindex[i*3+2] = -1;
   }
-  i = N_LINE-1;
+  int i = N_LINE-1;
   lineindex[i*3] = i;
   lineindex[i*3+1] = 0;
   lineindex[i*3+2] = -1;
@@ -835,28 +832,28 @@ void draw_polygon_test (SoSeparator* root)
 
 void draw_filled_polygon_test (SoSeparator* root)
 {
-  int i;
-
-  //Points in N*3 float array.
+  // Points in N*3 float array.
   SoVertexProperty *vertexList = new SoVertexProperty();
   root->addChild(vertexList);
 
   int N = 3;
-  //for (i=0; i<N; i++)
-  //  vertexList->vertex.set1Value (i, 1.2*i, 1.3*i*i, 1.4*i);
+#if 0
+  for (int i=0; i<N; i++)
+    vertexList->vertex.set1Value (i, 1.2*i, 1.3*i*i, 1.4*i);
+#endif // 0
   vertexList->vertex.set1Value (0, 0, 0, 0);
   vertexList->vertex.set1Value (1, 1, 1, 1);
   vertexList->vertex.set1Value (2, 5, 1, 1);
 
-  //Face 1
+  // Face 1
   int N_VERTICES = (N+1)*2;
   int *faceindex = new int[N_VERTICES];
-  for (i=0; i<N; i++)
+  for (int i=0; i<N; i++)
     faceindex[i] = i;
   faceindex[N] = -1;
 
-  //Face 2
-  for (i=0; i<N; i++)
+  // Face 2
+  for (int i=0; i<N; i++)
     faceindex[N+1+i] = N-1-i;
   faceindex[N*2+1] = -1;
 
@@ -864,13 +861,12 @@ void draw_filled_polygon_test (SoSeparator* root)
   vertIndex->coordIndex.setValues (0, N_VERTICES, faceindex);
   root->addChild(vertIndex);
 
-
-   SoShapeHints * hints = new SoShapeHints;
-   hints->vertexOrdering = SoShapeHints::COUNTERCLOCKWISE;
-   hints->shapeType = SoShapeHints::SOLID;
+  SoShapeHints * hints = new SoShapeHints;
+  hints->vertexOrdering = SoShapeHints::COUNTERCLOCKWISE;
+  hints->shapeType = SoShapeHints::SOLID;
   root->addChild(hints);
 
-  delete []faceindex;
+  delete[] faceindex;
 }
 
 void draw_indexed_line_test (SoSeparator* root)
@@ -925,7 +921,6 @@ void draw_indexed_line_test (SoSeparator* root)
     { CubeMin[0],  CubeMax[1],  CubeMin[2] },  // vert  6
     { CubeMax[0],  CubeMax[1],  CubeMin[2] }   // vert  7
   };
-
 
   ////////////////////////////////////////////////////////////
   //

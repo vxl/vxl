@@ -30,7 +30,7 @@ class vil_line_filter
   void light_lines_3x3(vil_image_view<vxl_byte>& line_dir,
                        vil_image_view<float>& line_str,
                        const vil_image_view<Type>& image,
-                       float edge_thresh=0.1);
+                       float edge_thresh=0.1f);
 
   //: Find line like structures in image (dark lines on light backgrounds)
   //  On exit line_str contains line strength at each pixel,
@@ -40,7 +40,7 @@ class vil_line_filter
   void dark_lines_3x3(vil_image_view<vxl_byte>& line_dir,
                       vil_image_view<float>& line_str,
                       const vil_image_view<Type>& image,
-                      float edge_thresh=0.1);
+                      float edge_thresh=0.1f);
 
   //: Find line like structures in image (light lines on dark backgrounds)
   //  On exit line_str contains line strength at each pixel,
@@ -51,7 +51,7 @@ class vil_line_filter
   void light_lines_5x5(vil_image_view<vxl_byte>& line_dir,
                        vil_image_view<float>& line_str,
                        const vil_image_view<Type>& image,
-                       float edge_thresh=0.1);
+                       float edge_thresh=0.1f);
 
   //: Find line like structures in image (dark lines on light backgrounds)
   //  On exit line_str contains line strength at each pixel,
@@ -62,7 +62,7 @@ class vil_line_filter
   void dark_lines_5x5(vil_image_view<vxl_byte>& line_dir,
                       vil_image_view<float>& line_str,
                       const vil_image_view<Type>& image,
-                      float edge_thresh=0.1);
+                      float edge_thresh=0.1f);
 };
 
 #endif

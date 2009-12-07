@@ -42,7 +42,7 @@ SoSeparator* make_transparent_sphere(SbColor color, SoSFVec3f * draggerfield)
 
   SoMaterial * mat = new SoMaterial;
   sub->addChild(mat);
-  mat->transparency = 0.1;
+  mat->transparency = 0.1f;
   mat->diffuseColor.setValue(color);
   mat->emissiveColor.setValue(color / 2);
 
@@ -94,8 +94,8 @@ int main(int argc, char** argv)
 
   //###################################################################
 
-  //Run the specified cmd-line process with visualization in GUI Window.
-  //force option "--mfc-use-gl" to use gl in initializing vgui.
+  // Run the specified cmd-line process with visualization in GUI Window.
+  // force option "--mfc-use-gl" to use gl in initializing vgui.
   vcl_cout << "Starting bgui3d window...\n";
   int my_argc = argc+1;
   char** my_argv = new char*[argc+1];
@@ -107,12 +107,12 @@ int main(int argc, char** argv)
 
   delete[] my_argv;
 
-  //Wrap the scene graph in an examiner tableau
+  // Wrap the scene graph in an examiner tableau
   bgui3d_examiner_tableau_new tab3d(root);
   root->unref();
-  //Put a shell tableau at the top of our tableau tree.
+  // Put a shell tableau at the top of our tableau tree.
   vgui_shell_tableau_new shell(tab3d);
-  //Create a window, add the tableau and show it on screen.
+  // Create a window, add the tableau and show it on screen.
   int result = vgui::run(shell, 800, 600);
 
   return result;

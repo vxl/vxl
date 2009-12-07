@@ -36,16 +36,16 @@ SoCoordinate3* _draw_F_ifs_geom (SoGroup* group, const bmsh3d_face* F)
   unsigned int count = 0;
   for (unsigned int j=0; j<nVertices; j++) {
     const bmsh3d_vertex* V = (const bmsh3d_vertex*) F->vertices(j);
-    //Check if the vertex is too close to any previous vertex.
+    // Check if the vertex is too close to any previous vertex.
     if (_check_duplicate (verts, count, V->pt())) {
-      verts[count] = SbVec3f (V->pt().x(), V->pt().y(), V->pt().z());
-      count++;
+      verts[count] = SbVec3f(float(V->pt().x()), float(V->pt().y()), float(V->pt().z()));
+      ++count;
     }
   }
 
   // Ignore the polygon with fewer than 3 sides.
   if (count > 2) {
-    coords->point.setValues (0, count, verts); //nVertices
+    coords->point.setValues (0, count, verts); // nVertices
     group->addChild (coords);
   }
   else
@@ -71,16 +71,16 @@ SoCoordinate3* _draw_F_mhe_geom (SoGroup* group, const bmsh3d_face* F)
   unsigned int count = 0;
   for (unsigned int j=0; j<nVertices; j++) {
     const bmsh3d_vertex* V = (const bmsh3d_vertex*) vertices[j];
-    //Check if the vertex is too close to any previous vertex.
+    // Check if the vertex is too close to any previous vertex.
     if (_check_duplicate (verts, count, V->pt())) {
-      verts[count] = SbVec3f (V->pt().x(), V->pt().y(), V->pt().z());
+      verts[count] = SbVec3f(float(V->pt().x()), float(V->pt().y()), float(V->pt().z()));
       count++;
     }
   }
 
   // Ignore the polygon with fewer than 3 sides.
   if (count > 2) {
-    coords->point.setValues (0, count, verts); //nVertices
+    coords->point.setValues (0, count, verts); // nVertices
     group->addChild (coords);
   }
   else
@@ -147,7 +147,7 @@ SoSeparator* draw_F (const bmsh3d_face* F,
                      const bool user_defined_class)
 {
   SoSeparator* root = new SoSeparator;
-  root->addChild ((SoMaterial*) material);
+  root->addChild ((SoMaterial*) material); // casting away const !!!
 
   if (user_defined_class)
     draw_F_geom_vispt (root, F);
@@ -174,33 +174,33 @@ SoSeparator* draw_F_with_id (const bmsh3d_face* F, const SbColor& color,
   else
     draw_F_geom (root, F);
 
-  //show id
+  // show id
   char buf[64];
   vcl_sprintf (buf, "%d", F->id());
   vgl_point_3d<double> cen = F->compute_center_pt ();
-  root->addChild (draw_text2d (buf, cen.x(), cen.y(), cen.z(), idbasecolor));
+  root->addChild (draw_text2d (buf, float(cen.x()), float(cen.y()), float(cen.z()), idbasecolor));
 
   return root;
 }
 
 SoSeparator* draw_F_with_id (const bmsh3d_face* F,
-                                const SoMaterial* material,
-                                const SoBaseColor* idbasecolor,
-                                const bool user_defined_class)
+                             const SoMaterial* material,
+                             const SoBaseColor* idbasecolor,
+                             const bool user_defined_class)
 {
   SoSeparator* root = new SoSeparator;
-  root->addChild ((SoMaterial*) material);
+  root->addChild ((SoMaterial*) material); // casting away const !!!
 
   if (user_defined_class)
     draw_F_geom_vispt (root, F);
   else
     draw_F_geom (root, F);
 
-  //show id
+  // show id
   char buf[64];
   vcl_sprintf (buf, "%d", F->id());
   vgl_point_3d<double> cen = F->compute_center_pt ();
-  root->addChild (draw_text2d (buf, cen.x(), cen.y(), cen.z(), idbasecolor));
+  root->addChild (draw_text2d (buf, float(cen.x()), float(cen.y()), float(cen.z()), idbasecolor));
 
   return root;
 }

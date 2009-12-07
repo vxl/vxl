@@ -30,7 +30,7 @@ double CArea(double Xhigh, double Xlow, double Y, double r)
 // is inside each pixel.
 //
 // The pixels are in Quadrant I, listed in column-major order
-//(just as we would get by calling a MATLAB routine).
+// (just as we would get by calling a MATLAB routine).
 // This is admittedly a mess, as there are at least 27 different cases for a
 // circle and a radial line and a square to interact.
 //
@@ -38,13 +38,13 @@ double CArea(double Xhigh, double Xlow, double Y, double r)
 // I didn't wanna waste my time attempting to replicate it.
 double* MakeQtrMask(double r, int n_wedges)
 {
-  //size of the quadrant
+  // size of the quadrant
   int R = (int) vcl_ceil(r);
 
-  //allocate the array to hold the mask
+  // allocate the array to hold the mask
   double* mask = new double[R*R*n_wedges];
 
-  //iniitialize
+  // initialize
   for (int i=0; i<R*R*n_wedges; ++i)
     mask[i] = 0.0;
 
@@ -54,7 +54,7 @@ double* MakeQtrMask(double r, int n_wedges)
   double CA, BA, AA, LA, BXC=0, BXL, BXH, TXC=0, TXL, TXH, LYC, LYL=0, LYH;
   double RYC, RYL=0, RYH, AAC=0, BAC=0, AAN=0, BAN=0, XLC, YLC, XHC, YHC;
 
-  //Iterate over the lower left hand corner of each pixel
+  // Iterate over the lower left hand corner of each pixel
   for (int x = 0; x <= R - 1; ++x) {
     for (int y = R - 1; y >= 0; --y) {
       /* Start by computing the pixel's area in the circle */
@@ -258,14 +258,16 @@ double* MakeQtrMask(double r, int n_wedges)
           continue;
         }
         else {
-          //vcl_cout << "Big nasty horrible bug just happened\n";
+#ifdef DEBUG
+           vcl_cout << "Big nasty horrible bug just happened\n";
+#endif // DEBUG
           mask[i * R*R + x * R + R - 1 - y] = 0.0;
         }
       }
     }
   }
 
-  //finally the masks are ready
+  // finally the masks are ready
   return mask;
 }
 
@@ -275,8 +277,8 @@ double* MakeQtrMask(double r, int n_wedges)
 //
 double CreateMask(double sigma, int n_wedges, int masksz, int weight_type, double **mask, double **sum)
 {
-  //Create a normalized Gaussian mask in Quadrant I
-  //Note: this mask is in column order
+  // Create a normalized Gaussian mask in Quadrant I
+  // Note: this mask is in column order
   double* gauss = new double[masksz*masksz];
   for (int i = 0; i < masksz; ++i) {
     for (int j = 0; j < masksz; ++j)
@@ -285,24 +287,24 @@ double CreateMask(double sigma, int n_wedges, int masksz, int weight_type, doubl
 
       // Various pixel weighting masks
       if (weight_type==1)
-        gauss[j*masksz+i] = r * vcl_exp(-(r*r)/(2*sigma*sigma));  //RAYLEIGH
+        gauss[j*masksz+i] = r * vcl_exp(-(r*r)/(2*sigma*sigma));  // RAYLEIGH
       else if (weight_type==2)
-        gauss[j*masksz+i] = vcl_exp(-(r*r)/(2*sigma*sigma)); //GAUSSIAN
-
-      // gauss[j*masksz+i] = 1 - r / masksz;  // LINEAR
+        gauss[j*masksz+i] = vcl_exp(-(r*r)/(2*sigma*sigma)); // GAUSSIAN
+      else
+        gauss[j*masksz+i] = 1 - r / masksz;  // LINEAR
     }
   }
 
-  //compute a quarter mask for a compass operator with the given parameters
+  // compute a quarter mask for a compass operator with the given parameters
   *mask = MakeQtrMask(sigma * 3.0, n_wedges);
 
-  //also compute the mask sum over all the wedges
+  // also compute the mask sum over all the wedges
   *sum = new double[masksz*masksz];
-  for (int i=0; i<masksz*masksz; ++i) //initialize it
+  for (int i=0; i<masksz*masksz; ++i) // initialize it
     (*sum)[i] = 0.0;
 
   for (int i = 0; i < masksz*masksz*n_wedges; ++i) {
-    if (weight_type>0)//weight the wedge masks by the weighting function
+    if (weight_type>0) // weight the wedge masks by the weighting function
       (*mask)[i] *= gauss[i % (masksz*masksz)];
 
     // compute the sum
@@ -323,19 +325,19 @@ double CreateMask(double sigma, int n_wedges, int masksz, int weight_type, doubl
 void AddWeight(vil_image_view<vxl_byte>& image, double weight,
                int row, int col, bil_bin hist[])
 {
-  //read image intensity at this point
+  // read image intensity at this point
   vxl_byte intensity = image(col, row);
 
-  //quantize this intensity value to the specified bins
+  // quantize this intensity value to the specified bins
   int min_index = (int) vcl_floor(intensity*(NBINS - 1)/MAX_VAL);
 
-  //accumulate it at the correct bin
+  // accumulate it at the correct bin
   hist[min_index].weight += weight;
   hist[min_index].wsum += weight*intensity;
   // hist[min_index].value is not computed
 }
 
-//create the histograms for each wedge from the image intensities
+// create the histograms for each wedge from the image intensities
 void CreateWedgeHistograms(vil_image_view<vxl_byte>& image, double *mask,
                            int r, int c,
                            int masksz, int n_wedges, bil_bin* hist)
@@ -401,13 +403,13 @@ void compute_strength_and_orient(double* dist, int n_orient, float& strength, do
   double c = dist[(strindex+n_orient+1) % n_orient];
 
   double d = (b + c - 2 * a);
-  if (vcl_fabs(d) > 1e-3) { //not degenerate
+  if (vcl_fabs(d) > 1e-3) { // not degenerate
     double x = (wedgesize/2)*(b - c)/d;
-    strength = a + x*(c - b)/(2*wedgesize) + x*x*d/(2*wedgesize*wedgesize);
+    strength = float(a + x*(c - b)/(2*wedgesize) + x*x*d/(2*wedgesize*wedgesize));
     orientation = vcl_fmod(maxEMDori + x + 2*vnl_math::pi, vnl_math::pi);
   }
   else { // Uncertainty abounds
-    strength = a;
+    strength = float(a);
     orientation = maxEMDori;
   }
 }
@@ -420,7 +422,7 @@ void bil_compute_compass_gradient( vil_image_view<vxl_byte>& image, int spacing,
                                    vil_image_view<float>& hist_grad,
                                    vil_image_view<double>& hist_ori)
 {
-  //convert to grayscale
+  // convert to grayscale
   vil_image_view<vxl_byte> img;
   if (image.nplanes() == 3) {
     vil_convert_planes_to_grey(image, img );
@@ -430,8 +432,8 @@ void bil_compute_compass_gradient( vil_image_view<vxl_byte>& image, int spacing,
   }
 
   // determine some relevant parameters
-  int n_orient = 2*n_wedges; //number of orientations
-  int masksz = (int) vcl_ceil(3 * sigma); //mask size
+  int n_orient = 2*n_wedges; // number of orientations
+  int masksz = (int) vcl_ceil(3 * sigma); // mask size
 
   // allocate space for histogram gradients at various orientations
   vcl_vector<vil_image_view<double> > hist_dist(n_orient);
@@ -440,24 +442,24 @@ void bil_compute_compass_gradient( vil_image_view<vxl_byte>& image, int spacing,
     hist_dist[i].fill(0.0);
   }
 
-  //create the wedge masks
+  // create the wedge masks
   double *mask, *masksum;
   double wedge_wt = CreateMask(sigma, n_wedges, masksz, weight_type, &mask, &masksum);
 
-  //allocate space for the histograms
+  // allocate space for the histograms
   dbdet_bin* wHist = new dbdet_bin[4*n_wedges*NBINS];       // All wedge histograms
   dbdet_signature hist1, hist2;         // Semi-circle histograms
   dbdet_signature hist1norm, hist2norm; // normalized histograms
 
-  //loop over all the pixels in the image
+  // loop over all the pixels in the image
   for (unsigned x = masksz; x < img.ni()-masksz; x+= spacing) {
     for (unsigned y = masksz; y < img.nj()-masksz; y+=spacing)
     {
-      //Create wedge histograms (output in hist)
+      // Create wedge histograms (output in hist)
       CreateWedgeHistograms(img, mask, y, x, masksz, n_wedges, wHist);
 
-      //Compute initial histogram sums (i.e., or the first orientation)
-      //Note: half of the wedges contribute towards one histogram
+      // Compute initial histogram sums (i.e., or the first orientation)
+      // Note: half of the wedges contribute towards one histogram
       //      and the rest contribute towards the other
       for (int i = 0; i < NBINS; ++i)
       {
@@ -476,7 +478,7 @@ void bil_compute_compass_gradient( vil_image_view<vxl_byte>& image, int spacing,
         }
       }
 
-      //Loop over every orientation
+      // Loop over every orientation
       for (int i = 0; i < n_orient; ++i) {
         // Normalize the histograms
         for (int j = 0; j < NBINS; ++j) {
@@ -488,58 +490,58 @@ void bil_compute_compass_gradient( vil_image_view<vxl_byte>& image, int spacing,
           hist2norm.bins[j].weight = hist2.bins[j].weight / (wedge_wt * n_orient);
         }
 
-        //compute distance between the normalized histograms
+        // compute distance between the normalized histograms
         double d = 0.0;
         if (dist_op==0)
-          d = dbdet_chi_sq_dist(hist1norm.bins, hist2norm.bins); //compute chi^2 dist
+          d = dbdet_chi_sq_dist(hist1norm.bins, hist2norm.bins); // compute chi^2 dist
         else if (dist_op==1)
-          d = dbdet_bhat_dist(hist1norm.bins, hist2norm.bins);   //compute Bhattacharya dist
+          d = dbdet_bhat_dist(hist1norm.bins, hist2norm.bins);   // compute Bhattacharya dist
         else if (dist_op==2)
-          d = dbdet_gray_EMD(hist1norm.bins, hist2norm.bins);     //compute EMD
+          d = dbdet_gray_EMD(hist1norm.bins, hist2norm.bins);    // compute EMD
 
-        //record this distance as the contrast between the two halves of the compass
+        // record this distance as the contrast between the two halves of the compass
         hist_dist[i](x,y) = d;
 
-        //Update the histograms except for the last iteration
+        // Update the histograms except for the last iteration
         //
-        //Note: This is an optimized process for computing histograms at each of the orientations
-        //      Instead of accumulating the values for the entire semicircles at each orientation,
-        //      just add one wedge and remove another wedge to get the histogram for the next orientation
+        // Note: This is an optimized process for computing histograms at each of the orientations
+        //       Instead of accumulating the values for the entire semicircles at each orientation,
+        //       just add one wedge and remove another wedge to get the histogram for the next orientation
         if (i < n_orient - 1) {
           for (int j = 0; j < NBINS; ++j)
           {
-            hist1.bins[j].weight += - wHist[i * NBINS + j].weight                                //remove this wedge
-                                    + wHist[((i+n_orient) % (4*n_wedges)) * NBINS + j].weight;   //add this wedge
+            hist1.bins[j].weight += - wHist[i * NBINS + j].weight                                // remove this wedge
+                                    + wHist[((i+n_orient) % (4*n_wedges)) * NBINS + j].weight;   // add this wedge
 
-            hist1.bins[j].wsum   += - wHist[i * NBINS + j].wsum                                  //remove this wedge
-                                    + wHist[((i+n_orient) % (4*n_wedges)) * NBINS + j].wsum;     //add this wedge
+            hist1.bins[j].wsum   += - wHist[i * NBINS + j].wsum                                  // remove this wedge
+                                    + wHist[((i+n_orient) % (4*n_wedges)) * NBINS + j].wsum;     // add this wedge
 
-            hist2.bins[j].weight += - wHist[((i+n_orient) % (4*n_wedges)) * NBINS + j].weight    //remove this wedge
-                                    + wHist[i * NBINS + j].weight;                               //add this wedge
+            hist2.bins[j].weight += - wHist[((i+n_orient) % (4*n_wedges)) * NBINS + j].weight    // remove this wedge
+                                    + wHist[i * NBINS + j].weight;                               // add this wedge
 
-            hist2.bins[j].wsum   += - wHist[((i+n_orient) % (4*n_wedges)) * NBINS + j].wsum      //remove this wedge
-                                    + wHist[i * NBINS + j].wsum;                                 //add this wedge
+            hist2.bins[j].wsum   += - wHist[((i+n_orient) % (4*n_wedges)) * NBINS + j].wsum      // remove this wedge
+                                    + wHist[i * NBINS + j].wsum;                                 // add this wedge
           }
         }
       }
     }
   }
 
-  //garbage collection
+  // garbage collection
   delete mask, masksum;
   delete wHist;
 
-  //allocate space for computing the final contrast magnitude and orientation
+  // allocate space for computing the final contrast magnitude and orientation
   hist_ori.set_size(img.ni(), img.nj());
   hist_ori.fill(0.0);
   hist_grad.set_size(img.ni(), img.nj());
   hist_grad.fill(0.0);
 
-  //Filter the responses at each orientation using Savistzky-Golay filtering
+  // Filter the responses at each orientation using Savistzky-Golay filtering
   //  Allocate space for the filtered responses
   vcl_vector<vil_image_view<double> > filt_hist_dist(n_orient);
 
-  //loop over all the pixels in the image to compute NMS over orientations
+  // loop over all the pixels in the image to compute NMS over orientations
   double* dist = new double[n_orient];
 
   for (unsigned x = masksz; x < img.ni()-masksz; x+= spacing) {
@@ -565,7 +567,7 @@ vil_image_view<float> bil_detect_compass_edges(vil_image_view<vxl_byte>& image,
                                                double sigma,   double threshold,
                                                vil_image_view<float>& hist_grad)
 {
-  //convert to grayscale
+  // convert to grayscale
   vil_image_view<vxl_byte> img;
   if (image.nplanes() == 3) {
     vil_convert_planes_to_grey(image, img );
@@ -575,22 +577,22 @@ vil_image_view<float> bil_detect_compass_edges(vil_image_view<vxl_byte>& image,
   }
 
   // determine some relevant parameters
-  int n_orient = 2*n_wedges; //number of orientations
-  int masksz = (int) vcl_ceil(3 * sigma); //mask size
+  int n_orient = 2*n_wedges; // number of orientations
+  int masksz = (int) vcl_ceil(3 * sigma); // mask size
 
-  //allocate space for computing the final contrast magnitude and orientation
+  // allocate space for computing the final contrast magnitude and orientation
   vil_image_view<double> hist_ori(img.ni(), img.nj());
   hist_grad.set_size(img.ni(), img.nj());
   hist_grad.fill(0.0);
 
-  //loop over all the pixels in the image to compute NMS over orientations
+  // loop over all the pixels in the image to compute NMS over orientations
   double* dist = new double[n_orient];
 
-  //create the wedge masks
+  // create the wedge masks
   double *mask, *masksum;
   double wedge_wt = CreateMask(sigma, n_wedges, masksz, 0, &mask, &masksum);
 
-  //allocate space for the histograms
+  // allocate space for the histograms
   bil_bin* wHist = new bil_bin[4*n_wedges*NBINS];       // All wedge histograms
   bil_signature hist1, hist2;         // Semi-circle histograms
   bil_signature hist1norm, hist2norm; // normalized histograms
@@ -598,16 +600,16 @@ vil_image_view<float> bil_detect_compass_edges(vil_image_view<vxl_byte>& image,
   bil_signature qhist1, qhist2, qhist3, qhist4;
   bil_signature qhist1_norm, qhist2_norm, qhist3_norm, qhist4_norm;
 
-  //loop over all the pixels in the image
+  // loop over all the pixels in the image
   for (unsigned x = masksz; x < img.ni()-masksz; ++x) {
     for (unsigned y = masksz; y < img.nj()-masksz; ++y)
     {
-      //Create wedge histograms (output in hist)
+      // Create wedge histograms (output in hist)
       CreateWedgeHistograms(img, mask, y, x, masksz, n_wedges, wHist);
 
-      //Compute initial histogram sums (i.e., or the first orientation)
-      //Note: half of the wedges contribute towards one histogram
-      //      and the rest contribute towards the other
+      // Compute initial histogram sums (i.e., or the first orientation)
+      // Note: half of the wedges contribute towards one histogram
+      //       and the rest contribute towards the other
       for (int i = 0; i < NBINS; ++i)
       {
         hist1.bins[i].weight = 0.0;
@@ -625,8 +627,9 @@ vil_image_view<float> bil_detect_compass_edges(vil_image_view<vxl_byte>& image,
         }
       }
 
-        //Loop over every orientation
-      for (int i = 0; i < n_orient; ++i) {
+      // Loop over every orientation
+      for (int i = 0; i < n_orient; ++i)
+      {
         // Normalize the histograms
         for (int j = 0; j < NBINS; ++j) {
           hist1norm.bins[j].wsum  = hist1.bins[j].wsum;
@@ -640,38 +643,38 @@ vil_image_view<float> bil_detect_compass_edges(vil_image_view<vxl_byte>& image,
           hist2norm.bins[j].weight = hist2.bins[j].weight / (wedge_wt * n_orient);
         }
 
-        //compute distance between the normalized histograms
+        // compute distance between the normalized histograms
         double d = 0.0;
         // TO FIX: hardcoded
         int dist_op=2;
         if (dist_op==0)
-          d = bil_chi_sq_dist(hist1norm.bins, hist2norm.bins); //compute chi^2 dist
+          d = bil_chi_sq_dist(hist1norm.bins, hist2norm.bins); // compute chi^2 dist
         else if (dist_op==1)
-          d = bil_bhat_dist(hist1norm.bins, hist2norm.bins);   //compute Bhattacharya dist
+          d = bil_bhat_dist(hist1norm.bins, hist2norm.bins);   // compute Bhattacharya dist
         else if (dist_op==2)
-          d = bil_gray_EMD(hist1norm.bins, hist2norm.bins);     //compute EMD
+          d = bil_gray_EMD(hist1norm.bins, hist2norm.bins);    // compute EMD
 
         dist[i] = d;
 
-        //Update the histograms except for the last iteration
+        // Update the histograms except for the last iteration
         //
-        //Note: This is an optimized process for computing histograms at each of the orientations
-        //      Instead of accumulating the values for the entire semicircles at each orientation,
-        //      just add one wedge and remove another wedge to get the histogram for the next orientation
+        // Note: This is an optimized process for computing histograms at each of the orientations
+        //       Instead of accumulating the values for the entire semicircles at each orientation,
+        //       just add one wedge and remove another wedge to get the histogram for the next orientation
         if (i < n_orient - 1) {
           for (int j = 0; j < NBINS; ++j)
           {
-            hist1.bins[j].weight += - wHist[i * NBINS + j].weight                                //remove this wedge
-                                    + wHist[((i+n_orient) % (4*n_wedges)) * NBINS + j].weight;   //add this wedge
+            hist1.bins[j].weight += - wHist[i * NBINS + j].weight                                // remove this wedge
+                                    + wHist[((i+n_orient) % (4*n_wedges)) * NBINS + j].weight;   // add this wedge
 
-            hist1.bins[j].wsum   += - wHist[i * NBINS + j].wsum                                  //remove this wedge
-                                    + wHist[((i+n_orient) % (4*n_wedges)) * NBINS + j].wsum;     //add this wedge
+            hist1.bins[j].wsum   += - wHist[i * NBINS + j].wsum                                  // remove this wedge
+                                    + wHist[((i+n_orient) % (4*n_wedges)) * NBINS + j].wsum;     // add this wedge
 
-            hist2.bins[j].weight += - wHist[((i+n_orient) % (4*n_wedges)) * NBINS + j].weight    //remove this wedge
-                                    + wHist[i * NBINS + j].weight;                               //add this wedge
+            hist2.bins[j].weight += - wHist[((i+n_orient) % (4*n_wedges)) * NBINS + j].weight    // remove this wedge
+                                    + wHist[i * NBINS + j].weight;                               // add this wedge
 
-            hist2.bins[j].wsum   += - wHist[((i+n_orient) % (4*n_wedges)) * NBINS + j].wsum      //remove this wedge
-                                    + wHist[i * NBINS + j].wsum;                                 //add this wedge
+            hist2.bins[j].wsum   += - wHist[((i+n_orient) % (4*n_wedges)) * NBINS + j].wsum      // remove this wedge
+                                    + wHist[i * NBINS + j].wsum;                                 // add this wedge
           }
         }
       }
@@ -681,21 +684,21 @@ vil_image_view<float> bil_detect_compass_edges(vil_image_view<vxl_byte>& image,
     }
   }
 
-  //TODO: when spacing>1, the NMS has to be done on the coarser grid
+  // TODO: when spacing>1, the NMS has to be done on the coarser grid
   vil_image_view<double> dx(img.ni(), img.nj());
   vil_image_view<double> dy(img.ni(), img.nj());
     double* Ori = hist_ori.top_left_ptr();
   double* Gx = dx.top_left_ptr();
   double* Gy = dy.top_left_ptr();
 
-  for (unsigned long i=0; i<hist_ori.size(); i++){
+  for (unsigned long i=0; i<hist_ori.size(); i++) {
     Gx[i] = vcl_sin(Ori[i]);
     Gy[i] = vcl_cos(Ori[i]);
   }
   bil_nms NMS(bil_nms_params(threshold, bil_nms_params::PFIT_3_POINTS), dx, dy, hist_grad);
   NMS.apply();
 
-  //garbage collection
+  // garbage collection
   delete mask;
   delete masksum;
   delete wHist;
@@ -745,33 +748,33 @@ double bil_gray_EMD(const bil_bin dirt[], const bil_bin hole[])
     // been moved yet from the piles of dirt
     if (leftoverdirt == 0.0)
     {
-      //advance i to the next non-empty interval
+      // advance i to the next non-empty interval
       ++i;
       while (dirt[i].weight == 0.0 && i < NBINS) ++i;
 
-      //if no more intervals
+      // if no more intervals
       if (i == NBINS)
-        return work; //we're done
+        return work; // we're done
       else
         dirt_amt = dirt[i].weight;
     }
-    else //use the amount that was left over from the last move
+    else // use the amount that was left over from the last move
       dirt_amt = leftoverdirt;
 
     // Do the same for the holes
     if (leftoverhole == 0.0)
     {
-      //advance j to the next non-empty interval
+      // advance j to the next non-empty interval
       ++j;
       while (hole[j].weight == 0.0 && j < NBINS) ++j;
 
-      //if no more intervals
+      // if no more intervals
       if (j == NBINS)
-        return work; //we're done
+        return work; // we're done
       else
         hole_amt = hole[j].weight;
     }
-    else //use the amount that was left over from the last move
+    else // use the amount that was left over from the last move
       hole_amt = leftoverhole;
 
     // Compute the work done moving the smaller amount of mass and decide

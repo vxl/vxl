@@ -212,7 +212,7 @@ inline void vil_math_mean_over_planes(const vil_image_view<aT>& src,
       sumT sum=0;
       for (unsigned p=0;p<src.nplanes();++p)
         sum += (sumT) src(i,j,p);
-      dest(i,j) = sum / src.nplanes();
+      dest(i,j) = (sumT)( sum / src.nplanes() );
     }
 }
 
@@ -971,7 +971,6 @@ inline void vil_math_integral_image(const vil_image_view<aT>& imA,
   unsigned nj1=nj+1;
   im_sum.set_size(ni1,nj1,1);
 
-
   // Put zeros along first row of im_sum
   vcl_ptrdiff_t istepS=im_sum.istep(),jstepS=im_sum.jstep();
   sumT* rowS     = im_sum.top_left_ptr();
@@ -1022,7 +1021,6 @@ inline void vil_math_integral_sqr_image(const vil_image_view<aT>& imA,
   unsigned nj1=nj+1;
   im_sum.set_size(ni1,nj1,1);
   im_sum_sq.set_size(ni1,nj1,1);
-
 
   // Put zeros along first row of im_sum & im_sum_sq
   vcl_ptrdiff_t istepS=im_sum.istep(),jstepS=im_sum.jstep();

@@ -42,10 +42,11 @@ struct vgui_pixel_generates_no_code
 
 //: Clamp float to 0..255
 static inline
-unsigned int clamp(float f) {
+unsigned int clamp(double f)
+{
   if (f > 255) return 255u;
-  if (f < 0) return 0u;
-  return (unsigned int)f;
+  else if (f < 0) return 0u;
+  else return (unsigned int)f;
 }
 
 //: This macro is used to generate a "vgui_pixel_convert_span(S*, D*)" function with body "Code"

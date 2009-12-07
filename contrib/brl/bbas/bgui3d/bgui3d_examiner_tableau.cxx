@@ -85,7 +85,6 @@ bool bgui3d_examiner_tableau::handle(const vgui_event& e)
   // ALWAYS DO KEYPRESSES
   if ( e.type == vgui_KEY_PRESS )
   {
-    //float aspect_ratio = get_viewport_region().getViewportAspectRatio();
     SbVec2f middle(0.5f, 0.5f);
     SbVec2f left(0.4f, 0.5f);
     SbVec2f right(0.6f, 0.5f);
@@ -115,7 +114,7 @@ bool bgui3d_examiner_tableau::handle(const vgui_event& e)
 
      case 'p': {
       int prev = camera_group_->whichChild.getValue()-1;
-      if (prev>=0){
+      if (prev>=0) {
         camera_group_->whichChild.setValue(prev);
         set_camera((SoCamera*)(*camera_group_->getChildren())[prev]);
       }
@@ -155,7 +154,7 @@ bool bgui3d_examiner_tableau::handle(const vgui_event& e)
         SbRotation camrot = scene_camera_->orientation.getValue();
         SbVec3f lookat(0, 0, -1); // init to default view direction vector
         camrot.multVec(lookat, lookat);
-        lookat *= scale_*0.025;
+        lookat *= scale_*0.025f;
         SbVec3f pos = scene_camera_->position.getValue();
         pos += lookat;
         scene_camera_->position = pos;
@@ -246,7 +245,7 @@ bool bgui3d_examiner_tableau::handle(const vgui_event& e)
       if ( e.modifier == vgui_CTRL && last_down_button_ == vgui_LEFT)
       {
         interaction_type_ = SCENEGRAPH;
-        ///bool b =
+        //bool b =
         bgui3d_fullviewer_tableau::handle(e);
         interaction_type_ = CAMERA;
         //return b;
@@ -492,7 +491,7 @@ seeksensorCB(void * data, SoSensor * s)
   if ((t > 1.0f) || (t + sensor->getInterval().getValue() > 1.0f)) t = 1.0f;
   SbBool end = (t == 1.0f);
 
-  t = (float) ((1.0 - vcl_cos(M_PI*t)) * 0.5);
+  t = float(1 - vcl_cos(M_PI*t)) * 0.5f;
 
   thisp->camera_node()->position = thisp->_fromPos + (thisp->_toPos - thisp->_fromPos) * t;
   thisp->camera_node()->orientation = SbRotation::slerp( thisp->_fromRot, thisp->_toRot, t);
@@ -550,7 +549,7 @@ void bgui3d_examiner_tableau::seek_to_point( SbVec2s pos )
   _fromRot = camrot;
   _toRot = camrot*rot;
 
-  scene_camera_->focalDistance = diff.length()*(1.0-factor);
+  scene_camera_->focalDistance = diff.length()*(1.0f-factor);
   _seekSensor->setBaseTime( SbTime::getTimeOfDay() );
   _seekSensor->schedule();
 }
@@ -685,12 +684,14 @@ bgui3d_examiner_tableau::draw_axis_cross()
 
     for (int i=0; i < 3; i++) {
       glPushMatrix();
-      if (idx[i] == XAXIS) {                       // X axis.
+      if (idx[i] == XAXIS) {                     // X axis.
         glColor3f(0.500f, 0.125f, 0.125f);
-      } else if (idx[i] == YAXIS) {                // Y axis.
+      }
+      else if (idx[i] == YAXIS) {                // Y axis.
         glRotatef(90, 0, 0, 1);
         glColor3f(0.125f, 0.500f, 0.125f);
-      } else {                                     // Z axis.
+      }
+      else {                                     // Z axis.
         glRotatef(-90, 0, 1, 0);
         glColor3f(0.125f, 0.125f, 0.500f);
       }

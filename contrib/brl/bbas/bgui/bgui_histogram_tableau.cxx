@@ -55,8 +55,8 @@ void bgui_histogram_tableau::update(vil1_memory_image_of< vil1_rgb<unsigned char
   // scale and shift the data points
   vcl_vector<float> xscaled, yscaled;
   for (unsigned int i=0; i<data_.size(); ++i) {
-    xscaled.push_back(left_offset_ + i);
-    yscaled.push_back(top_offset_ + graph_height_ - data_[i]/max*graph_height_);
+    xscaled.push_back(float(left_offset_ + i));
+    yscaled.push_back(float(top_offset_ + graph_height_ - data_[i]/max*graph_height_));
   }
 
   if (plot_)
@@ -87,8 +87,8 @@ void bgui_histogram_tableau::update(vil_image_view< vxl_byte >& img_view)
   // scale and shift the data points
   vcl_vector<float> xscaled, yscaled;
   for (unsigned int i=0; i<data_.size(); ++i) {
-    xscaled.push_back(left_offset_ + i);
-    yscaled.push_back(top_offset_ + graph_height_ - data_[i]/max*graph_height_);
+    xscaled.push_back(float(left_offset_ + i));
+    yscaled.push_back(float(top_offset_ + graph_height_ - data_[i]/max*graph_height_));
   }
 
   if (plot_)

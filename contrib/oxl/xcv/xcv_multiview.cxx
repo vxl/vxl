@@ -417,13 +417,14 @@ void xcv_multiview::display_corner_matches()
     return;
 
   xcv_twoview_manager* mgr = get_twoview_manager(col_pos, row_pos);
-  //PairMatchSetCorner* corner_matches = mgr->get_corner_matches();
-  //if (corner_matches == NULL)
-  //{
-  //  vcl_cerr << "No corner matches exist between these two views.\n";
-  //  return;
-  //}
-
+#if 0
+  PairMatchSetCorner* corner_matches = mgr->get_corner_matches();
+  if (corner_matches == NULL)
+  {
+    vcl_cerr << "No corner matches exist between these two views.\n";
+    return;
+  }
+#endif // 0
   mgr->toggle_corner_match_display();
 }
 
@@ -455,13 +456,13 @@ void xcv_multiview::display_corner_tracks()
 
   easy0->set_foreground(1,1,0);  // Draw lines in yellow
   easy1->set_foreground(1,1,0);
-  for (unsigned i=0; i<points1.size(); i++)
+  for (unsigned i=0; i<points1.size(); ++i)
   {
     vnl_double_2 x0 = metric1->homg_to_image(points0[i]);
     vnl_double_2 x1 = metric2->homg_to_image(points1[i]);
 
-    easy0->add_line(x0[0], x0[1], x1[0], x1[1]);
-    easy1->add_line(x0[0], x0[1], x1[0], x1[1]);
+    easy0->add_line(float(x0[0]), float(x0[1]), float(x1[0]), float(x1[1]));
+    easy1->add_line(float(x0[0]), float(x0[1]), float(x1[0]), float(x1[1]));
   }
   easy0->set_foreground(0,1,0); // Back to green again!
   easy1->set_foreground(0,1,0);
@@ -633,8 +634,8 @@ void xcv_multiview::transfer_point()
     HomgPoint2D point1 = tten->image1_transfer(point2, point3);
     double x, y;
     point1.get_nonhomogeneous(x, y);
-    easys[0]->add_line(x+cw,y+cw,x-cw,y-cw);
-    easys[0]->add_line(x-cw,y+cw,x+cw,y-cw);
+    easys[0]->add_line(float(x+cw),float(y+cw),float(x-cw),float(y-cw));
+    easys[0]->add_line(float(x-cw),float(y+cw),float(x+cw),float(y-cw));
   }
   else if (points[1] == 0)
   {
@@ -643,8 +644,8 @@ void xcv_multiview::transfer_point()
     HomgPoint2D point2 = tten->image2_transfer(point1, point3);
     double x,y;
     point2.get_nonhomogeneous(x,y);
-    easys[1]->add_line(x+cw,y+cw,x-cw,y-cw);
-    easys[1]->add_line(x-cw,y+cw,x+cw,y-cw);
+    easys[1]->add_line(float(x+cw),float(y+cw),float(x-cw),float(y-cw));
+    easys[1]->add_line(float(x-cw),float(y+cw),float(x+cw),float(y-cw));
   }
   else if (points[2] == 0)
   {
@@ -653,8 +654,8 @@ void xcv_multiview::transfer_point()
     HomgPoint2D point3 = tten->image3_transfer(point1, point2);
     double x,y;
     point3.get_nonhomogeneous(x,y);
-    easys[2]->add_line(x+cw,y+cw,x-cw,y-cw);
-    easys[2]->add_line(x-cw,y+cw,x+cw,y-cw);
+    easys[2]->add_line(float(x+cw),float(y+cw),float(x-cw),float(y-cw));
+    easys[2]->add_line(float(x-cw),float(y+cw),float(x+cw),float(y-cw));
   }
   easys[0]->post_redraw();
 }
@@ -712,21 +713,21 @@ void xcv_multiview::transfer_line()
     HomgLineSeg2D line2(lines[1]->x0, lines[1]->y0, lines[1]->x1, lines[1]->y1);
     HomgLineSeg2D line3(lines[2]->x0, lines[2]->y0, lines[2]->x1, lines[2]->y1);
     HomgLine2D line1 = tten->image1_transfer(line2, line3);
-    easys[0]->add_infinite_line(line1[0], line1[1], line1[2]);
+    easys[0]->add_infinite_line(float(line1[0]), float(line1[1]), float(line1[2]));
   }
   else if (lines[1] == 0)
   {
     HomgLineSeg2D line1(lines[0]->x0, lines[0]->y0, lines[0]->x1, lines[0]->y1);
     HomgLineSeg2D line3(lines[2]->x0, lines[2]->y0, lines[2]->x1, lines[2]->y1);
     HomgLine2D line2 = tten->image2_transfer(line1, line3);
-    easys[1]->add_infinite_line(line2[0], line2[1], line2[2]);
+    easys[1]->add_infinite_line(float(line2[0]), float(line2[1]), float(line2[2]));
   }
   else
   {
     HomgLineSeg2D line1(lines[0]->x0, lines[0]->y0, lines[0]->x1, lines[0]->y1);
     HomgLineSeg2D line2(lines[1]->x0, lines[1]->y0, lines[1]->x1, lines[1]->y1);
     HomgLine2D line3 = tten->image3_transfer(line1, line2);
-    easys[2]->add_infinite_line(line3[0], line3[1], line3[2]);
+    easys[2]->add_infinite_line(float(line3[0]), float(line3[1]), float(line3[2]));
   }
   easys[0]->post_redraw();
 }

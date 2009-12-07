@@ -69,10 +69,10 @@ bool bgui_image_utils::init_histogram_from_data()
   bool pyr = image_->get_property(vil_property_pyramid, 0);
   if (pyr)
   {
-    //cast to pyramid resource
+    // cast to pyramid resource
     vil_pyramid_image_resource_sptr pir =
       (vil_pyramid_image_resource*)((vil_image_resource*)image_.ptr());
-    //highest resolution resource
+    // highest resolution resource
     image = pir->get_resource(0);
   }
   else
@@ -123,8 +123,8 @@ bool bgui_image_utils::init_histogram_from_data()
       unsigned short smax = static_cast<unsigned short>(maxr[p]);
       unsigned short nbins = static_cast<unsigned short>(smax-smin);
       if (nbins>bin_limit_) {
-        nbins = bin_limit_;
-        //increase max value to make bin delta an integer
+        nbins = static_cast<unsigned short>(bin_limit_);
+        // increase max value to make bin delta an integer
         double range = smax-smin;
         unsigned short del = static_cast<unsigned short>(vcl_ceil(range/nbins));
         smax = static_cast<unsigned short>(smin + nbins*del);
@@ -144,8 +144,8 @@ bool bgui_image_utils::init_histogram_from_data()
   return false;
 }
 
-//Determine the pixel format of the view and cast to appropriate type
-//Upcount the histogram with values from the view.
+// Determine the pixel format of the view and cast to appropriate type
+// Upcount the histogram with values from the view.
 bool bgui_image_utils::set_data_from_view(vil_image_view_base_sptr const& view,
                                           double fraction)
 {
@@ -163,7 +163,7 @@ bool bgui_image_utils::set_data_from_view(vil_image_view_base_sptr const& view,
    case  VIL_PIXEL_FORMAT_BYTE:
    {
     vil_image_view<unsigned char> v = view;
-    for (unsigned p = 0; p<np; ++p){
+    for (unsigned p = 0; p<np; ++p) {
       float cnt = 0.0f;
       while (cnt++<area_frac)
       {
@@ -178,7 +178,7 @@ bool bgui_image_utils::set_data_from_view(vil_image_view_base_sptr const& view,
    case  VIL_PIXEL_FORMAT_UINT_16:
    {
     vil_image_view<unsigned short> v = view;
-    for (unsigned p = 0; p<np; ++p){
+    for (unsigned p = 0; p<np; ++p) {
       float cnt = 0.0f;
       while (cnt++<area_frac)
       {
@@ -221,7 +221,7 @@ bool bgui_image_utils::construct_histogram()
     return false;
   }
   unsigned  np = image_->nplanes();
-  //zero out the bins of the histogram according to the skip parameters
+  // zero out the bins of the histogram according to the skip parameters
   for (unsigned p = 0; p<np; ++p)
     for (unsigned s = 0; s<n_skip_lower_bins_; ++s)
       hist_[p].set_count(s, 0.0);
@@ -251,7 +251,7 @@ double bgui_image_utils::compute_upper_bound( unsigned plane )
   return hist_[plane].value_with_area_above(percent_limit_);
 }
 
-//generate a graph tableau from the histogram
+// generate a graph tableau from the histogram
 bgui_graph_tableau_sptr bgui_image_utils::hist_graph()
 {
   unsigned n_planes = image_->nplanes();
@@ -268,11 +268,11 @@ bgui_graph_tableau_sptr bgui_image_utils::hist_graph()
   if (n_planes ==1)
   {
     unsigned lowbin =hist_[0].low_bin(), highbin = hist_[0].high_bin();
-    if (lowbin>highbin) return 0; //shouldn't happen
+    if (lowbin>highbin) return 0; // shouldn't happen
     vcl_vector<double> pos = hist_[0].value_array();
     vcl_vector<double> counts = hist_[0].count_array();
     vcl_vector<double> trim_pos, trim_counts;
-    //make sure the lowest sample starts at a multiple of 10
+    // make sure the lowest sample starts at a multiple of 10
     double p0 = pos[lowbin];
     double pten = 10.0*static_cast<int>(p0/10);
     trim_pos.push_back(pten);
@@ -286,9 +286,9 @@ bgui_graph_tableau_sptr bgui_image_utils::hist_graph()
     return g;
   }
 
-  //In order to create a multiplot for a color histogram
-  //all the plots have to have the same integral bin locations
-  //get the max min range of bin values
+  // In order to create a multiplot for a color histogram
+  // all the plots have to have the same integral bin locations
+  // get the max min range of bin values
   double minpos = vnl_numeric_traits<double>::maxval, maxpos = 0;
   double min_delta = vnl_numeric_traits<double>::maxval;
   for (unsigned p = 0; p<n_planes; ++p)
@@ -306,7 +306,7 @@ bgui_graph_tableau_sptr bgui_image_utils::hist_graph()
   double max_ten = 10.0*(static_cast<int>(maxpos/10)+1);
   double range = max_ten-min_ten;
 
-  //Insure at least a bin width of 1.0
+  // Insure at least a bin width of 1.0
   double delta_i = static_cast<int>(min_delta);
   if (delta_i==0) delta_i += 1.0;
   unsigned npos = static_cast<unsigned>(range/delta_i);
@@ -321,7 +321,7 @@ bgui_graph_tableau_sptr bgui_image_utils::hist_graph()
   for (unsigned p = 0; p<n_planes; ++p)
   {
     double area = hist_[p].area();
-    for (unsigned i = 0; i<npos; ++i){
+    for (unsigned i = 0; i<npos; ++i) {
       double v = area*hist_[p].p(dpos[i]);
       mcounts[p].push_back(v);
     }
@@ -336,14 +336,14 @@ bool bgui_image_utils::default_range_map(vgui_range_map_params_sptr& rmp,
                                          bool gl_map, bool cache)
 {
   if (!image_) return false;
-  //Allow only grey scale for now
+  // Allow only grey scale for now
   unsigned nc = image_->nplanes();
   if (!(nc == 1 || nc == 3 || nc == 4))
-    return false; //all available formats
-  //default values
-  static double minv = 0, maxv = 1500; //typical for uint_16
+    return false; // all available formats
+  // default values
+  static double minv = 0.0, maxv = 1500.0; // typical for uint_16
   if (image_->pixel_format()==VIL_PIXEL_FORMAT_BYTE)
-    maxv = 255;
+    maxv = 255.0;
   if (image_->pixel_format()==VIL_PIXEL_FORMAT_FLOAT)
     maxv = 1.0;
   if (image_->pixel_format()==VIL_PIXEL_FORMAT_DOUBLE)
@@ -351,18 +351,18 @@ bool bgui_image_utils::default_range_map(vgui_range_map_params_sptr& rmp,
   switch (nc)
   {
     case 1:
-      rmp=new vgui_range_map_params(minv, maxv, gamma, invert, gl_map, cache);
+      rmp=new vgui_range_map_params(minv, maxv, float(gamma), invert, gl_map, cache);
       return true;
     case 3:
       rmp = new vgui_range_map_params(minv, maxv, minv, maxv, minv, maxv,
-                                      gamma, gamma, gamma, invert,
+                                      float(gamma), float(gamma), float(gamma), invert,
                                       gl_map, cache);
       return true;
     case 4:
     {
-      int band_map = 1; //map RGB-InfraRed -> RGB
+      int band_map = 1; // map RGB-InfraRed -> RGB
       rmp = new vgui_range_map_params(minv, maxv, minv, maxv, minv, maxv,
-                                      minv, maxv, gamma, gamma, gamma, gamma,
+                                      minv, maxv, float(gamma), float(gamma), float(gamma), float(gamma),
                                       band_map, invert, gl_map, cache);
       return true;
     }

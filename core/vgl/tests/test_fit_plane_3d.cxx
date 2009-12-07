@@ -78,9 +78,9 @@ static void test_fit_plane_random()
   vgl_fit_plane_3d<double> fit_plane;
 
   for (int x=0; x<20; ++x) {
-    double r1 = vcl_rand()/(RAND_MAX+1.0f);
-    double r2 = vcl_rand()/(RAND_MAX+1.0f);
-    double r3 = vcl_rand()/(RAND_MAX+1.0f);
+    double r1 = vcl_rand()/(RAND_MAX+1.0);
+    double r2 = vcl_rand()/(RAND_MAX+1.0);
+    double r3 = vcl_rand()/(RAND_MAX+1.0);
     vgl_homg_point_3d<double> p(r1, r2, r3);
     fit_plane.add_point(p);
   }

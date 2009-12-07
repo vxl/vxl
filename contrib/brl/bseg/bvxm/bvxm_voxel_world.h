@@ -346,17 +346,15 @@ bvxm_voxel_grid_base_sptr bvxm_voxel_world::get_grid(unsigned bin_index, unsigne
 {
   assert(scale_idx <= params_->max_scale());
 
-
   vgl_vector_3d<unsigned int> grid_size = params_->num_voxels(scale_idx);
-  //retrieve map for current bvxm_voxel_type
-  //if no map found create a new one
+  // retrieve map for current bvxm_voxel_type
+  // if no map found create a new one
   if (grid_map_.find(VOX_T) == grid_map_.end())
   {
-    //create map
+    // create map
     vcl_map<unsigned, vcl_map<unsigned, bvxm_voxel_grid_base_sptr > > bin_map;
 
     // look for existing appearance model grids in the directory
-
 
     vcl_string storage_directory = params_->model_dir();
 
@@ -364,7 +362,7 @@ bvxm_voxel_grid_base_sptr bvxm_voxel_world::get_grid(unsigned bin_index, unsigne
     vcl_string fname_prefix = bvxm_voxel_traits<VOX_T>::filename_prefix();
     grid_glob << storage_directory << '/' << fname_prefix << "*.vox";
 
-    //insert grids
+    // insert grids
     for (vul_file_iterator file_it = grid_glob.str().c_str(); file_it; ++file_it)
     {
       vcl_string match_str = file_it.filename();
@@ -406,7 +404,7 @@ bvxm_voxel_grid_base_sptr bvxm_voxel_world::get_grid(unsigned bin_index, unsigne
     grid_map_.insert(vcl_make_pair(VOX_T, bin_map));
   }
 
-  //retrieve map containing voxel_grid
+  // retrieve map containing voxel_grid
   vcl_map<unsigned, vcl_map<unsigned, bvxm_voxel_grid_base_sptr> > voxel_map = grid_map_[VOX_T];
 
   /* retrieve voxel_grid for current bin
@@ -431,20 +429,21 @@ bvxm_voxel_grid_base_sptr bvxm_voxel_world::get_grid(unsigned bin_index, unsigne
       return bvxm_voxel_grid_base_sptr(0);
     }
 
-    //Insert voxel grid into map
-    //bvxm_voxel_grid_base_sptr grid_sptr = grid;
+    // Insert voxel grid into map
+    // bvxm_voxel_grid_base_sptr grid_sptr = grid;
     //
     scale_map.insert(vcl_make_pair(scale_idx, grid));
 
     grid_map_[VOX_T].insert(vcl_make_pair(bin_index,scale_map));
   }
 
-
   vcl_map<unsigned, bvxm_voxel_grid_base_sptr> scale_map = grid_map_[VOX_T][bin_index];
 
   if (scale_map.find(scale_idx) == scale_map.end())
   {
-    //vcl_cout<<"\n Scale not found ";
+#ifdef DEBUG
+    vcl_cout<<"\n Scale not found ";
+#endif // DEBUG
     vcl_string storage_directory = params_->model_dir();
 
     vcl_stringstream apm_fname;
@@ -460,9 +459,8 @@ bvxm_voxel_grid_base_sptr bvxm_voxel_world::get_grid(unsigned bin_index, unsigne
       return bvxm_voxel_grid_base_sptr(0);
     }
 
-    //Insert voxel grid into map
+    // Insert voxel grid into map
     bvxm_voxel_grid_base_sptr grid_sptr = grid;
-
 
     grid_map_[VOX_T][bin_index].insert(vcl_make_pair(scale_idx, grid_sptr));
   }
@@ -675,7 +673,7 @@ bool bvxm_voxel_world::update_impl(bvxm_image_metadata const& metadata,
       // if preX_sum is zero at the voxel, no ray passed through the voxel (out of image)
       if (*preX_sum_it > preX_sum_thresh) {
         float multiplier = (*PIvisX_it + *preX_it) / *preX_sum_it;
-        float ray_norm = 1 - *visX_sum_it; //normalize based on probability that a surface voxel is located along the ray. This was not part of the original Pollard + Mundy algorithm.
+        float ray_norm = 1 - *visX_sum_it; // normalize based on probability that a surface voxel is located along the ray. This was not part of the original Pollard + Mundy algorithm.
         *PX_it *= multiplier * ray_norm;
       }
       if (*PX_it < min_vox_prob)
@@ -755,7 +753,7 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
     vcl_cout << "Lidar Camera\n" << *lcam << vcl_endl;
     lidar_pixel_size = lcam->pixel_spacing();
   }
-  //typedef bvxm_voxel_traits<LIDAR>::lidar_processor lidar_processor;
+  // typedef bvxm_voxel_traits<LIDAR>::lidar_processor bvxm_lidar_processor;
   bvxm_lidar_processor lidar_processor(10);
 
   // parameters
@@ -817,14 +815,13 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
   bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<APM_T>(0,  scale);
   bvxm_voxel_grid<ocp_datatype> *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base.ptr());
 
-
   typename bvxm_voxel_grid<ocp_datatype>::const_iterator ocp_slab_it = ocp_grid->begin();
   typename bvxm_voxel_grid<float>::iterator preX_slab_it = preX.begin();
   typename bvxm_voxel_grid<float>::iterator PLvisX_slab_it = PLvisX.begin();
 #ifdef DEBUG
   double p_max = 0.0;
 #endif
-  //The default values for the LIDAR Gaussian error ellipsoid
+  // The default values for the LIDAR Gaussian error ellipsoid
   // X-Y standard deviation set to 1/Sqrt(2) pixel spacing (arbitrary)
   // standard deviation in z measured from actual Buckeye data (0.03 m)
   double pix_sd = lidar_pixel_size*0.7071;
@@ -903,7 +900,7 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
     // now multiply by visX
     bvxm_util::multiply_slabs(visX,PL,*PLvisX_slab_it);
 
-    //Is this needed?
+    // Is this needed? - FIXME
     // update appearance model, using PX*visX as the weights
     bvxm_util::multiply_slabs(*ocp_slab_it,visX,PXvisX);
 
@@ -916,8 +913,10 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
     ss3 << "PL_P" << k_idx <<".tiff";
     bvxm_util::write_slab_as_image(PL,ss1.str());
     bvxm_util::write_slab_as_image(*ocp_slab_it,ss2.str());
-    //bvxm_util::write_slab_as_image(PL_p,ss3.str());
-#endif
+#if 0
+    bvxm_util::write_slab_as_image(PL_p,ss3.str());
+#endif // 0
+#endif // DEBUG
     // warp PLPX back to image domain
     bvxm_util::warp_slab_bilinear(PLPX, H_img_to_plane[k_idx], PLPX_img);
 
@@ -950,7 +949,9 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
     typename bvxm_voxel_slab<float>::iterator PX_img_it = PX_img.begin();
     visX_accum_it = visX_accum.begin();
     for (; visX_accum_it != visX_accum.end(); ++visX_accum_it, ++PX_img_it) {
-      //ocp_datatype o = *PX_img_it;
+#if 0
+      ocp_datatype o = *PX_img_it;
+#endif // 0
       *visX_accum_it *= 1 - *PX_img_it; //-(o - 1);
     }
   }
@@ -993,8 +994,9 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
       // if preX_sum is zero at the voxel, no ray passed through the voxel (out of image)
       if (*preX_sum_it > preX_sum_thresh) {
         float multiplier = (*PLvisX_it + *preX_it) / *preX_sum_it;
-        // leave out normalization for now - results seem a little better without it.  -DEC
-        //float ray_norm = 1 - *visX_sum_it; //normalize based on probability that a surface voxel is located along the ray. This was not part of the original Pollard + Mundy algorithm.
+#if 0 // leave out normalization for now - results seem a little better without it.  -DEC
+        float ray_norm = 1 - *visX_sum_it; // normalize based on probability that a surface voxel is located along the ray. This was not part of the original Pollard + Mundy algorithm.
+#endif // 0
         *PX_it *= multiplier; // * ray_norm;
       }
       if (*PX_it < min_vox_prob)
@@ -1029,9 +1031,10 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
   bvxm_util::write_slab_as_image(preX_accum,"prob.tiff");
 #endif
 
-  //Check:
+#if 0 // Check:
   // increment the observation count
-  //this->increment_observations<APM_T>(bin_index);
+  this->increment_observations<APM_T>(bin_index);
+#endif // 0
 
   return true;
 }
@@ -1070,15 +1073,15 @@ bool bvxm_voxel_world::update_point_cloud(vcl_vector<vgl_point_3d<float> > & poi
     unsigned x=(unsigned)vcl_floor(index.x());
     unsigned y=(unsigned)vcl_floor(index.y());
 
-    if (k>=0 && k<grid_size.z()  && x>=0 && x<grid_size.x()  && y>=0 && y<grid_size.y()  )
+    if (k<grid_size.z() && x<grid_size.x() && y<grid_size.y()  )
     {
-      minz=k-kernel_size<0?0:k-kernel_size;
-      maxz=k+kernel_size>grid_size.z()-1?grid_size.z()-1:k+kernel_size;
+      minz=k<kernel_size?0:k-kernel_size;
+      maxz=k+kernel_size+1>grid_size.z()?grid_size.z()-1:k+kernel_size;
 
-      unsigned minx=x-kernel_size<0?0:x-kernel_size;
-      unsigned miny=y-kernel_size<0?0:y-kernel_size;
-      unsigned maxx=x+kernel_size>grid_size.x()-1?grid_size.x()-1:x+kernel_size;
-      unsigned maxy=y+kernel_size>grid_size.y()-1?grid_size.y()-1:y+kernel_size;
+      unsigned minx=x<kernel_size?0:x-kernel_size;
+      unsigned miny=y<kernel_size?0:y-kernel_size;
+      unsigned maxx=x+kernel_size+1>grid_size.x()?grid_size.x()-1:x+kernel_size;
+      unsigned maxy=y+kernel_size+1>grid_size.y()?grid_size.y()-1:y+kernel_size;
       //: go to the next slab
       if (z<k)
       {
@@ -1095,11 +1098,11 @@ bool bvxm_voxel_world::update_point_cloud(vcl_vector<vgl_point_3d<float> > & poi
         {
           for (unsigned ind_j=miny;ind_j<=maxy;ind_j++)
           {
-            vnl_vector_fixed<float,3> min_vec(ind_i-0.5,ind_j-0.5,ind_k-0.5);
-            vnl_vector_fixed<float,3> max_vec(ind_i+0.5,ind_j+0.5,ind_k+0.5);
+            vnl_vector_fixed<float,3> min_vec(ind_i-0.5f,ind_j-0.5f,ind_k-0.5f);
+            vnl_vector_fixed<float,3> max_vec(ind_i+0.5f,ind_j+0.5f,ind_k+0.5f);
 
             float p1 = gauss.probability(min_vec,max_vec);
-            (*ocp_slab_it)(ind_i,ind_j,ind_k-minz)*=1-p1;
+            (*ocp_slab_it)(ind_i,ind_j,ind_k-minz) *= 1-p1;
           }
         }
       }
@@ -1168,7 +1171,7 @@ bool bvxm_voxel_world::expected_image(bvxm_image_metadata const& camera,
   bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0,scale_idx);
   bvxm_voxel_grid<ocp_datatype> *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base.ptr());
 
-  //get appearance model grid
+  // get appearance model grid
   bvxm_voxel_grid_base_sptr apm_grid_base = this->get_grid<APM_T>(bin_index,scale_idx);
   bvxm_voxel_grid<apm_datatype> *apm_grid  = static_cast<bvxm_voxel_grid<apm_datatype>*>(apm_grid_base.ptr());
 
@@ -1289,7 +1292,7 @@ bool bvxm_voxel_world::inv_pixel_range_probability(bvxm_image_metadata const& ob
   bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0,scale_idx);
   bvxm_voxel_grid<ocp_datatype> *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype> >(ocp_grid_base.ptr());
 
-  //get appereance model grid
+  // get appereance model grid
   bvxm_voxel_grid_base_sptr apm_grid_base = this->get_grid<APM_T>(bin_index,scale_idx);
   bvxm_voxel_grid<apm_datatype> *apm_grid  = static_cast<bvxm_voxel_grid<apm_datatype> >(apm_grid_base.ptr());
 
@@ -1407,7 +1410,7 @@ bool bvxm_voxel_world::pixel_probability_density(bvxm_image_metadata const& obse
   bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0,scale_idx);
   bvxm_voxel_grid<ocp_datatype> *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base.ptr());
 
-  //get appereance model grid
+  // get appereance model grid
   bvxm_voxel_grid_base_sptr apm_grid_base = this->get_grid<APM_T>(bin_index,scale_idx);
   bvxm_voxel_grid<apm_datatype> *apm_grid  = static_cast<bvxm_voxel_grid<apm_datatype>*>(apm_grid_base.ptr());
 
@@ -1479,8 +1482,8 @@ bool bvxm_voxel_world::pixel_probability_density(bvxm_image_metadata const& obse
 
   for (; pix_prob_it != pixel_probability.end(); ++pix_prob_it, ++preX_accum_it, ++visX_accum_it)
   {
-    //avoid division by zero, the values in this region shouldn't matter size it
-    //belongs to voxels outside the mask
+    // avoid division by zero, the values in this region shouldn't matter size it
+    // belongs to voxels outside the mask
     float visX_a = *visX_accum_it;
     if (visX_a >= 1.0f) {
       visX_a = 0.5f;
@@ -1555,7 +1558,7 @@ bool bvxm_voxel_world::region_probability_density(bvxm_image_metadata const& obs
   bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0,scale_idx);
   bvxm_voxel_grid<ocp_datatype> *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base.ptr());
 
-  //get appereance model grid
+  // get appereance model grid
   bvxm_voxel_grid_base_sptr apm_grid_base = this->get_grid<APM_T>(bin_index,scale_idx);
   bvxm_voxel_grid<apm_datatype> *apm_grid  = static_cast<bvxm_voxel_grid<apm_datatype>*>(apm_grid_base.ptr());
 
@@ -1564,7 +1567,6 @@ bool bvxm_voxel_world::region_probability_density(bvxm_image_metadata const& obs
   bvxm_voxel_grid<float> *PI_grid = static_cast<bvxm_voxel_grid<float>* >(pixel_probability.ptr());
   PI_grid->initialize_data(0.0f);
   typename bvxm_voxel_grid<float>::iterator PI_slab_it = PI_grid->begin();
-
 
   for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++ocp_slab_it, ++apm_slab_it, ++PI_slab_it)
   {
@@ -1641,7 +1643,7 @@ bool bvxm_voxel_world::mixture_of_gaussians_image(bvxm_image_metadata const& obs
   bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0,scale_idx);
   bvxm_voxel_grid<ocp_datatype> *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base.ptr());
 
-  //get appereance model grid
+  // get appereance model grid
   bvxm_voxel_grid_base_sptr apm_grid_base = this->get_grid<APM_T>(bin_index,scale_idx);
   bvxm_voxel_grid<apm_datatype> *apm_grid  = static_cast<bvxm_voxel_grid<apm_datatype>*>(apm_grid_base.ptr());
 
@@ -1731,7 +1733,7 @@ bool bvxm_voxel_world::mog_most_probable_image(bvxm_image_metadata const& observ
   bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0,scale_idx);
   bvxm_voxel_grid<ocp_datatype> *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base.ptr());
 
-  //get appereance model grid
+  // get appereance model grid
   bvxm_voxel_grid_base_sptr apm_grid_base = this->get_grid<APM_T>(bin_index,scale_idx);
   bvxm_voxel_grid<apm_datatype> *apm_grid  = static_cast<bvxm_voxel_grid<apm_datatype>*>(apm_grid_base.ptr());
 
@@ -1824,7 +1826,7 @@ bool bvxm_voxel_world::mog_image_with_random_order_sampling(bvxm_image_metadata 
   bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0,scale_idx);
   bvxm_voxel_grid<ocp_datatype> *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base.ptr());
 
-  //get appereance model grid
+  // get appereance model grid
   bvxm_voxel_grid_base_sptr apm_grid_base = this->get_grid<APM_T>(bin_index,scale_idx);
   bvxm_voxel_grid<apm_datatype> *apm_grid  = static_cast<bvxm_voxel_grid<apm_datatype>*>(apm_grid_base.ptr());
 
@@ -2005,7 +2007,6 @@ bool bvxm_voxel_world::virtual_view(bvxm_image_metadata const& original_view,
   bvxm_voxel_slab<float> visX_accum_virtual(virtual_view->ni(), virtual_view->nj(),1);
   bvxm_voxel_slab<unsigned> heightmap(virtual_view->ni(),virtual_view->nj(),1);
   bvxm_voxel_slab<ocp_datatype> slice_prob_img(virtual_view->ni(),virtual_view->nj(),1);
-
 
   // get ocuppancy probability grid
   bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0,scale_idx);
@@ -2193,7 +2194,6 @@ bool bvxm_voxel_world::heightmap(bvxm_image_metadata const& virtual_camera, vil_
 
     for (; hmap_it != heightmap_rough.end(); ++hmap_it, ++PX_it, ++max_it, ++visX_it, ++PI_it) {
       float PIPXvisX = (*visX_it) * (*PX_it) * (*PI_it);
-      //float PXvisX = *PX_it;
       if (PIPXvisX > *max_it) {
         *max_it = PIPXvisX;
         *hmap_it = (float)z;
@@ -2204,9 +2204,9 @@ bool bvxm_voxel_world::heightmap(bvxm_image_metadata const& virtual_camera, vil_
   }
   vcl_cout << vcl_endl;
 
-  //#define HMAP_DEBUG
-#ifdef  HMAP_DEBUG
-  bvxm_util::write_slab_as_image(heightmap_rough,"c:/research/registration/output/heightmap_rough.tiff");
+#ifdef  DEBUG
+  bvxm_util::write_slab_as_image(heightmap_rough,"heightmap_rough.tiff");
+  vcl_cerr << "Wrote height map to TIFF file heightmap_rough.tiff\n";
 #endif
   // now clean up height map
   unsigned n_smooth_iterations = 70;

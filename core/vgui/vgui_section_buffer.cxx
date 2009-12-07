@@ -68,7 +68,7 @@ namespace
       vgui_range_map<InT> rm(*rmp);
       if (rm.table_mapable())
       {
-        //offset for signed types
+        // offset for signed types
         int O = rm.offset();
         switch ( in.nplanes() )
         {
@@ -102,7 +102,7 @@ namespace
             vbl_array_1d<vxl_byte> Xmap = rm.Xmap();
             if (rm.band_map_==vgui_range_map_params::RGBA_m)
             {
-              for ( unsigned j=0; j < in.nj(); ++j )//go here
+              for ( unsigned j=0; j < in.nj(); ++j ) // go here
                 for ( unsigned i=0; i < in.ni(); ++i )
                   vgui_pixel_convert( Rmap[(unsigned)(in(i,j,0)+O)],
                                       Gmap[(unsigned)(in(i,j,1)+O)],
@@ -243,7 +243,7 @@ namespace
       params_but_not_mappable = true;
     }
 
-    //otherwise, just clamp the values as originally done
+    // otherwise, just clamp the values as originally done
     if (params_but_not_mappable || !rmp || rmp->n_components_!=in.nplanes())
     {
       switch ( in.nplanes() )
@@ -525,7 +525,7 @@ bool
 vgui_section_buffer::
 draw_as_rectangle() const
 {
-  return draw_as_rectangle( x_, y_, x_+w_, y_+h_ );
+  return draw_as_rectangle( (float)x_, (float)y_, float(x_+w_), float(y_+h_) );
 }
 
 
@@ -551,15 +551,15 @@ bool
 vgui_section_buffer::
 draw_as_image() const
 {
-  return draw_as_image( x_, y_, x_+w_, y_+h_ );
+  return draw_as_image( (float)x_, (float)y_, float(x_+w_), float(y_+h_) );
 }
 
 bool
 vgui_section_buffer::draw_viewport_as_image() const
 {
-  //render visible viewport buffer
+  // render visible viewport buffer
   return vgui_view_render( buffer_,
                            w_, h_,
                            zoomx_, zoomy_,
-                           format_, type_ ,false); //no hardware map
+                           format_, type_ ,false); // no hardware map
 }

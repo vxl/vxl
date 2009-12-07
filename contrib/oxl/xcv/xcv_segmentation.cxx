@@ -75,7 +75,9 @@ void xcv_segmentation::perform_harris(osl_harris_params& params,
     return;
   }
 
-  //easy_tab->set_point_radius(3.0);
+#if 0
+  easy_tab->set_point_radius(3.0);
+#endif // 0
   xcv_image_tableau_sptr tableau = get_image_tableau_at(col,row);
   float low[3],high[3];
   tableau->get_bounding_box(low,high);
@@ -111,7 +113,7 @@ void xcv_segmentation::draw_edges(vcl_list<osl_edge*> lines, unsigned col,
   // Delete old edges and then add the new edges:
   vcl_vector<vgui_soview*> sel_edges = easy_tab->get_all();
   for (vcl_vector<vgui_soview*>::iterator i = sel_edges.begin();
-    i != sel_edges.end(); i++)
+       i != sel_edges.end(); i++)
   {
     if ((*i)->type_name() == "vgui_soview2D_linestrip")
       easy_tab->remove((vgui_soview*)(*i));
@@ -154,7 +156,7 @@ void xcv_segmentation::draw_straight_lines(vcl_vector<float> x1, vcl_vector<floa
   // Delete old edges and then add the new edges:
   vcl_vector<vgui_soview*> sel_edges = easy_tab->get_all();
   for (vcl_vector<vgui_soview*>::iterator i = sel_edges.begin();
-    i != sel_edges.end(); i++)
+       i != sel_edges.end(); i++)
   {
     if ((*i)->type_name() == "vgui_soview2D_linestrip")
       easy_tab->remove((vgui_soview*)(*i));
@@ -290,7 +292,7 @@ void xcv_segmentation::break_lines_ox()
 //: Get parameters from user required for detect_lines_ox.
 //-----------------------------------------------------------------------------
 bool xcv_segmentation::get_detect_lines_ox_params(float* high, int* edge_min,
-  int* min_length, int* min_fit_length)
+                                                  int* min_length, int* min_fit_length)
 {
   vgui_dialog dlg("");
   dlg.field("High threshold", *high);
@@ -321,7 +323,7 @@ void xcv_segmentation::detect_lines_ox()
   // Select straight edges only:
   vcl_vector<float> x1, y1, x2, y2;
   for (vcl_list<osl_edge*>::iterator iter = broken_edges.begin();
-    iter!= broken_edges.end(); iter++)
+       iter!= broken_edges.end(); iter++)
   {
     osl_edge* e = *iter;
     if (e->size() < (unsigned int)min_fit_length)  // Reject edges which are too short
@@ -348,10 +350,10 @@ void xcv_segmentation::detect_lines_ox()
     double X2 = e->GetEndX();
     double Y2 = e->GetEndY();
 
-    x1.push_back(lb*lb*X1 - la*lb*Y1 - la*lc);
-    y1.push_back(la*la*Y1 - la*lb*X1 - lb*lc);
-    x2.push_back(lb*lb*X2 - la*lb*Y2 - la*lc);
-    y2.push_back(la*la*Y2 - la*lb*X2 - lb*lc);
+    x1.push_back(float(lb*lb*X1 - la*lb*Y1 - la*lc));
+    y1.push_back(float(la*la*Y1 - la*lb*X1 - lb*lc));
+    x2.push_back(float(lb*lb*X2 - la*lb*Y2 - la*lc));
+    y2.push_back(float(la*la*Y2 - la*lb*X2 - lb*lc));
   }
 
   draw_straight_lines(y1, x1, y2, x2, col, row);
