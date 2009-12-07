@@ -233,9 +233,6 @@ class boxm_raytrace_function
             {
                 scene_.load_block(block_indices[i]);
                 boxm_block<tree_type> * curr_block=scene_.get_active_block();
-                boxm_block<aux_tree_type> * curr_aux_block=NULL;
-                if (step_functor.is_aux_)
-                    curr_aux_block=aux_scene_.get_block(block_indices[i]);
 
                 if (debug_lvl_ > 0)
                     vcl_cout << "processing block at index (" <<block_indices[i] << ')' << vcl_endl;
@@ -244,21 +241,21 @@ class boxm_raytrace_function
 
                 if (!boxm_utils::is_visible(block_bb,cam_,img_ni_,img_nj_))
                     continue;
-
-
                 vgl_box_2d<double> img_bb;
-
                 // initialize ray_origin() function for this block
                 if (!generate_ray_init(block_bb, img_bb)) {
                     continue;
                 }
+
                 tree_type * tree=curr_block->get_tree();
+
+                boxm_block<aux_tree_type> * curr_aux_block=NULL;
                 aux_tree_type * aux_tree=NULL;
                 if (step_functor.is_aux_)
                 {
-                    aux_tree=curr_aux_block->get_tree();
+                   curr_aux_block=aux_scene_.get_block(block_indices[i]);
+                   aux_tree=curr_aux_block->get_tree();
                 }
-
                 // for each image pixel
                 for (unsigned int i = int(img_bb.min_x()+0.99); i <= img_bb.max_x(); ++i)
                 {
@@ -273,7 +270,7 @@ class boxm_raytrace_function
                         }
                         // get direction of vector and enter point - this depends on which camera type we have
                         vgl_point_3d<double> ray_origin;
-                        vgl_vector_3d<double> direction;
+                        vgl_vector_3d<double>direction;
                         vgl_point_3d<double> enter_pt(0.0,0.0,0.0);
                         vgl_point_3d<double> exit_pt;
                         // add 0.5 to get center of pixel
