@@ -2,6 +2,7 @@ USES += contrib/brl contrib/brl/bbas contrib/brl/bseg core
 
 LIBRARY := bpro_batch
 
+MANPAGE_SOURCES += bpro_defs.h
 SOURCES += bpro_batch.cxx
 
 ################################

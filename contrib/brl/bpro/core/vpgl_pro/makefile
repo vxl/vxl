@@ -14,6 +14,7 @@ SOURCES += processes/vpgl_save_rational_camera_process.cxx
 SOURCES += processes/vpgl_nitf_camera_coverage_process.cxx
 SOURCES += processes/vpgl_load_local_rational_camera_process.cxx
 SOURCES += processes/vpgl_scale_perspective_camera_process.cxx
+SOURCES += processes/vpgl_projective_to_rational_camera_process.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk
