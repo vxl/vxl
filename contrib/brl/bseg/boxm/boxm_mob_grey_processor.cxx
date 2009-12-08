@@ -48,8 +48,7 @@ bool boxm_mob_grey_processor::update( apm_datatype &appear,
 {
   // the model
   float init_variance = 0.008f;
-  float g_thresh = 0.025; // number of std devs from mean sample must be
-  
+  float g_thresh = 0.025f; // number of std devs from mean sample must be
 
   float t_l_u = float(vcl_sqrt(1-4*init_variance)*0.5);
   float lower = 0.5f-t_l_u;
