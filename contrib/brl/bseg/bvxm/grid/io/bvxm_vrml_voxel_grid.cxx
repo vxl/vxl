@@ -217,7 +217,7 @@ void bvxm_vrml_voxel_grid::write_vrml_disk(vcl_ofstream& str,
     axis_x = -float(dir.y()/denom);
     axis_y = float(dir.x()/denom);
   }
-  float phi=vcl_acos(dir.z());
+  float phi = float(vcl_acos(dir.z()));
 
   double rad = radius;
   double height = 0.1;
@@ -228,7 +228,7 @@ void bvxm_vrml_voxel_grid::write_vrml_disk(vcl_ofstream& str,
       << "rotation 1 0 0 -1.570796\n"
       << "children [\n"
       << "Transform {\n"
-      << "rotation " << axis_x << ' ' <<0.0 << ' ' << axis_y <<' ' <<phi<< '\n'
+      << "rotation " << axis_x << " 0.0 " << axis_y <<' ' <<phi<< '\n'
       << "children [\n"
       << "Shape {\n"
       << " appearance Appearance{\n"
@@ -257,8 +257,7 @@ void bvxm_vrml_voxel_grid::write_vrml_line(vcl_ofstream& str,vgl_point_3d<double
                                            const float b)
 {
   str << "Transform {\n"
-      << "translation " << 0 << ' ' << 0 << ' '
-      << ' ' << 0 << '\n'
+      << "translation 0 0 0\n"
       << "children [\n"
       << "Shape {\n"
       << " appearance Appearance{\n"
@@ -276,9 +275,7 @@ void bvxm_vrml_voxel_grid::write_vrml_line(vcl_ofstream& str,vgl_point_3d<double
       << pt.x()+dir.x()*response*0.5 << ' ' << pt.y()+dir.y()*response*0.5 << ' ' << pt.z()+dir.z()*response*0.5 << '\n'
       << "   ]\n\n }"
       << "   coordIndex [\n"
-      << 0 << ','
-      << 1 << ','
-      << "   ]\n  }\n}"
+      << "     0,1  ]\n  }\n}"
       <<  " ]\n"
       << "}\n";
 }
