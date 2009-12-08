@@ -1,10 +1,9 @@
-// This is bvpl_scene_kernel_operator.h
+// This is brl/bseg/bvpl/bvpl_octree/bvpl_scene_kernel_operator.h
 #ifndef bvpl_scene_kernel_operator_h
 #define bvpl_scene_kernel_operator_h
-
 //:
 // \file
-// \brief: A class that operates a bvpl_kernel on a boxm_scene 
+// \brief: A class that operates a bvpl_kernel on a boxm_scene
 // \author Isabel Restrepo mir@lems.brown.edu
 // \date  November 18, 2009
 //
@@ -20,9 +19,8 @@
 
 class bvpl_scene_kernel_operator
 {
-public:
-  
-  // "Convolves" kernel with and input octree, storing the output in an output octree.
+ public:
+  // "Convolves" kernel with an input octree, storing the output in an output octree.
   template<class T_data, class F>
   void operate(boxm_scene<boct_tree<short, T_data > > &scene_in, F functor,
                bvpl_kernel_sptr kernel, boxm_scene<boct_tree<short, T_data > > &scene_out, short level, double cell_length)
@@ -43,7 +41,6 @@ public:
       scene_out.write_active_block();
     }
   }
-   
 };
 
-#endif
+#endif // bvpl_scene_kernel_operator_h
