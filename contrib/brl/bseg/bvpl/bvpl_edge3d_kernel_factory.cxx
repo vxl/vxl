@@ -62,11 +62,11 @@ void bvpl_edge3d_kernel_factory::create_canonical()
   typedef vgl_point_3d<float> point_3d;
   typedef bvpl_kernel_dispatch dispatch;
 
-  int min_x= -(length_/2);
+  int min_x= -1*(length_/2); // do not change into "-(length_/2)" since length_ is unsigned!
   int max_x = (length_+1)/2;
-  int min_y= -(width_/2);
+  int min_y= -1*(width_/2);
   int max_y = (width_+1)/2;
-  int min_z= -(height_/2);
+  int min_z= -1*(height_/2);
   int max_z = (height_+1)/2;
 
   for (int x=min_x; x< max_x; x++)
