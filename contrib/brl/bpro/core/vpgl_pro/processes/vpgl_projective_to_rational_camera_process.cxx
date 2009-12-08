@@ -1,7 +1,8 @@
 // This is brl/bpro/core/vpgl_pro/processes/vpgl_projective_to_rational_camera_process.cxx
 #include <bprb/bprb_func_process.h>
-//:A process to convert perspective camera to rational camera.
+//:
 // \file
+// \brief A process to convert perspective camera to rational camera.
 
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
@@ -40,18 +41,17 @@ bool vpgl_projective_to_rational_camera_process(bprb_func_process& pro)
 
   // get the inputs
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(0);
-  if(vpgl_proj_camera<double>* cam = dynamic_cast<vpgl_proj_camera<double>*>(camera.ptr()))
-  {     
-      vpgl_rational_camera<double> rat_cam=projective_to_rational(*cam);
+  if (vpgl_proj_camera<double>* cam = dynamic_cast<vpgl_proj_camera<double>*>(camera.ptr()))
+  {
+    vpgl_rational_camera<double> rat_cam=projective_to_rational(*cam);
 
-      vpgl_camera_double_sptr rat_cam_sptr=new vpgl_rational_camera<double>(rat_cam);
-      pro.set_output_val<vpgl_camera_double_sptr>(0, rat_cam_sptr);
+    vpgl_camera_double_sptr rat_cam_sptr=new vpgl_rational_camera<double>(rat_cam);
+    pro.set_output_val<vpgl_camera_double_sptr>(0, rat_cam_sptr);
   }
-  else{
-      vcl_cout<<"Wrong type of camera input"<<vcl_endl;
-      return false;
+  else {
+    vcl_cout<<"Wrong type of camera input"<<vcl_endl;
+    return false;
   }
-
 
   return true;
 }
