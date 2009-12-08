@@ -12,6 +12,10 @@
 #include <vgl/vgl_point_2d.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
 #include <vil/vil_save.h>
+#include <vcl_cassert.h>
+
+static const vil_image_view<double> img_d; // dummy local variables, used to initialise
+static const vil_image_view<float>  img_f; // the three "reference" data members -PVr
 
 //---------------------------------------------------------------
 // Constructors
@@ -24,9 +28,9 @@ bil_nms::bil_nms()
   margin_(1),
   rel_thresh_(2.5),
   use_adaptive_thresh_(true),
-  dir_x_(vil_image_view<double>(0,0,1)),
-  dir_y_(vil_image_view<double>(0,0,1)),
-  grad_mag_(vil_image_view<double>(0,0,1)),
+  dir_x_(img_d),   // do not initialise to "vil_image_view<double>(0,0,1)"
+  dir_y_(img_d),   // since these 3 members are "const&", i.e., they reference
+  grad_mag_(img_f),// data stored somewhere outside this class. -PVr
   x_(0,0, 0.0),
   y_(0,0, 0.0),
   dir_(0,0, 0.0),
@@ -61,16 +65,18 @@ void bil_nms::apply()
   double f[3], s_list[3];
   vcl_vector<vgl_point_2d<double> > loc;
   vcl_vector<double> orientation;
-  vcl_vector<double> mag;
   vcl_vector<double> d2f;
 
   vcl_vector<vgl_point_2d<int> > pix_loc;
   // run non-maximum suppression at every point inside the margins
+  assert(&grad_mag_ != &img_f); // should no longer be what it was initialised to
   for (unsigned x = margin_; x < grad_mag_.ni()-margin_; ++x) {
     for (unsigned y = margin_; y < grad_mag_.nj()-margin_; ++y)
     {
       if (grad_mag_(x,y) < thresh_) // threshold by gradient magnitude
         continue;
+      assert(&dir_x_ != &img_d); // should no longer be what it was initialised to
+      assert(&dir_y_ != &img_d); // should no longer be what it was initialised to
       double gx = dir_x_(x,y);
       double gy = dir_y_(x,y);
       vgl_vector_2d<double> direction(gx,gy);
