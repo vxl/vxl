@@ -4,6 +4,7 @@
  */
 
 #include <vcl_string.h>
+#include <vcl_cstddef.h> // for std::size_t
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vcl_sstream.h>
@@ -79,7 +80,7 @@ int main(int argc, char **argv)
 
 vcl_string trim(const vcl_string & s)
 {
-  unsigned start = s.find_first_not_of(" ");
+  vcl_size_t start = s.find_first_not_of(" ");
   if (start == vcl_string::npos) return "";
   unsigned end = s.find_last_not_of(" ");
   return s.substr(start, 1+end-start);
@@ -87,7 +88,7 @@ vcl_string trim(const vcl_string & s)
 
 void split_and_add(vcl_vector<vcl_string> & values, const vcl_string & string, const vcl_string & delim)
 {
-  unsigned start, next = -1;
+  vcl_size_t start, next = -1;
   while (start = next+1, next = string.find_first_of(delim, start), vcl_string::npos != next)
   {
     vcl_string token = string.substr(start, next-start);
