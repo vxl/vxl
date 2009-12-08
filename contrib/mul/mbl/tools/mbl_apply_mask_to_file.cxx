@@ -88,7 +88,7 @@ vcl_string trim(const vcl_string & s)
 
 void split_and_add(vcl_vector<vcl_string> & values, const vcl_string & string, const vcl_string & delim)
 {
-  vcl_size_t start, next = -1;
+  vcl_size_t start, next = vcl_string::npos; // == -1
   while (start = next+1, next = string.find_first_of(delim, start), vcl_string::npos != next)
   {
     vcl_string token = string.substr(start, next-start);
