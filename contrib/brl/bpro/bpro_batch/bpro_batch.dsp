@@ -99,6 +99,9 @@ SOURCE=.\bpro_batch.cxx
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
+SOURCE=.\bpro_defs.h
+# End Source File
+# Begin Source File
 SOURCE=.\bpro_batch.h
 # End Source File
 # End Group
