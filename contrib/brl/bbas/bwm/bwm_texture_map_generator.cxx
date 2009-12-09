@@ -1,6 +1,4 @@
 #include "bwm_texture_map_generator.h"
-//#include "bwm_observer.h"
-//#include "bwm_observable_mesh.h"
 
 #include <vil/vil_image_view.h>
 #include <vil/vil_image_resource.h>
@@ -29,10 +27,8 @@ bool bwm_texture_map_generator::generate_texture_map(bwm_observable_mesh_sptr ob
     return false;
   }
 
-
   // find best observer for each mesh face
 
-  //vcl_vector<vil_image_view_base_sptr> img_orig_view;
   vcl_vector<vgl_point_2d<int> > img_sizes;
   vcl_vector<vsol_box_2d> bounding_box;
 
@@ -40,7 +36,6 @@ bool bwm_texture_map_generator::generate_texture_map(bwm_observable_mesh_sptr ob
     vgui_image_tableau_sptr img_tab(observers_[obs_idx]->get_image_tableau());
     vgl_point_2d<int> img_size(img_tab->width(),img_tab->height());
     img_sizes.push_back(img_size);
-    //img_orig_view.push_back(img_tab->get_image_view());
     vsol_box_2d box;
     bounding_box.push_back(box);
   }
@@ -52,7 +47,6 @@ bool bwm_texture_map_generator::generate_texture_map(bwm_observable_mesh_sptr ob
   mesh->IFS_to_MHE();
   mesh->orient_face_normals();
   mesh->build_IFS_mesh();
-  //vcl_vector<bmsh3d_textured_face_mc*> tex_faces;
 
   vcl_map<int, int> best_face_observer_idx;
 
@@ -110,10 +104,11 @@ bool bwm_texture_map_generator::generate_texture_map(bwm_observable_mesh_sptr ob
         vgl_vector_3d<double> face_normal_global = compute_normal_ifs(face_vertices);
         vgl_vector_3d<double> face_normal_phe = tex_face->compute_normal();
 
-        //vcl_cout << "face normal local = " << face_normal << vcl_endl
-        //         << "face normal phe =    " << face_normal_phe << vcl_endl
-        //         << "face normal global = "<< face_normal_global << vcl_endl << vcl_endl;
-
+#ifdef DEBUG
+        vcl_cout << "face normal local = " << face_normal << vcl_endl
+                 << "face normal phe =    " << face_normal_phe << vcl_endl
+                 << "face normal global = "<< face_normal_global << vcl_endl << vcl_endl;
+#endif // DEBUG
 
         face_normal = face_normal / face_normal.length(); // not gauranteed to be normalized
         vgl_vector_3d<double> camera_direction = observers_[obs_idx]->camera_direction();//lvcs);
@@ -223,8 +218,8 @@ bool bwm_texture_map_generator::generate_texture_map(bwm_observable_mesh_sptr ob
         continue;
       }
       vil_image_resource_sptr img_orig_cropped = vil_crop(img_orig_res,
-                                                      crop_points[obs_idx].x(),crop_sizes[obs_idx].x(),
-                                                      crop_points[obs_idx].y(),crop_sizes[obs_idx].y());
+                                                          crop_points[obs_idx].x(),crop_sizes[obs_idx].x(),
+                                                          crop_points[obs_idx].y(),crop_sizes[obs_idx].y());
 
 
       vil_image_view<vxl_byte> cropped_view = img_orig_cropped->get_view();

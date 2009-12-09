@@ -9,7 +9,6 @@
 #else
 #include <vil/vil_stream_fstream.h>
 #endif
-//#include <vcl_fstream.h>
 #include <vgl/vgl_vector_3d.h>
 
 #include "bvxm_voxel_storage.h"

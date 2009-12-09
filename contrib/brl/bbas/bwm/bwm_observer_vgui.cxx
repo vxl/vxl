@@ -51,7 +51,6 @@ bwm_observer_vgui::bwm_observer_vgui(bgui_image_tableau_sptr const& img)
   vertex_style_->line_width = 2.0;
 
   terrain_style_ = vgui_style::new_style(0.6f, 0.6f, 0.0f, 5.0f, 1.0f);
-//#include "bwm_observer_mgr.h"
   vgui_style_sptr select_style_= vgui_style::new_style();
   select_style_->rgba[0] = 0.1f;
   select_style_->rgba[1] = 0.0f;
@@ -430,13 +429,13 @@ void bwm_observer_vgui::delete_object()
   vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
   vcl_cout << "Delete object works only at MESH mode!" << vcl_endl;
   if ((select_list.size() == 1) &&
-    (select_list[0]->type_name().compare("bgui_vsol_soview2D_polygon_set") == 0)) {
-      unsigned face_id;
-      bwm_observable_sptr obj = find_object(select_list[0]->get_id(), face_id);
-      if (obj) {
-        bwm_world::instance()->remove(obj);
-        obj->remove();
-      }
+      (select_list[0]->type_name().compare("bgui_vsol_soview2D_polygon_set") == 0)) {
+    unsigned face_id;
+    bwm_observable_sptr obj = find_object(select_list[0]->get_id(), face_id);
+    if (obj) {
+      bwm_world::instance()->remove(obj);
+      obj->remove();
+    }
   }
 }
 

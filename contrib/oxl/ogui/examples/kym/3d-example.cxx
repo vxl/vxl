@@ -3,7 +3,6 @@
 // This example displays a point with 3 lines radiating from it in different
 // non-coplanar directions (along the X, Y and Z axes).
 
-//#include <vbl/ArgParse.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_easy3D.h>
 #include <vgui/vgui_viewer3D.h>

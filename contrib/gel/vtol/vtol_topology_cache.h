@@ -13,7 +13,6 @@
 //-----------------------------------------------------------------------------
 
 #include <vtol/vtol_topology_object.h>
-//#include <vtol/vtol_topology_cache_sptr.h>
 #include <vcl_vector.h>
 #include <vul/vul_timestamp.h>
 

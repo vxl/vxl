@@ -5,7 +5,6 @@
 #include <vul/vul_file_iterator.h>
 #include <vul/vul_file.h>
 #include <vsl/vsl_binary_io.h>
-//#include <vsl/vsl_binary_loader.h>
 
 //: The initial camera index
 // \note the initial camera index is invalid until advance() is called

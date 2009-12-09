@@ -10,7 +10,6 @@
 #include <vnl/vnl_inverse.h>
 #include <vnl/algo/vnl_determinant.h>
 #include <vnl/vnl_vector.h>
-//#include <vcl_cmath.h>
 #include <mvl/FMatrix.h>
 #include <mvl/FMatrixComputeLinear.h>
 #include <mvl/FMatrixComputeRANSAC.h>

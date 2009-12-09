@@ -22,7 +22,6 @@
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <bmsh3d/bmsh3d_mesh.h>
-//#include <bmsh3d/bmsh3d_richmesh.h>
 
 //: List of supported mesh file formats
 typedef enum

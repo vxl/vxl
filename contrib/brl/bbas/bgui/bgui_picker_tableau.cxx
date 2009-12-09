@@ -1,6 +1,5 @@
 // This is brl/bbas/bgui/bgui_picker_tableau.cxx
 #include "bgui_picker_tableau.h"
-//#include "bgui_image_tableau.h"
 //:
 // \file
 // \author K.Y.McGaul
@@ -17,7 +16,7 @@
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_polygon_2d.h>
 #include <vsol/vsol_polyline_2d.h>
-//#define BGUI_DEBUG
+
 bgui_picker_tableau::object_type bgui_picker_tableau::obj_type = none_enum;
 
 //========================================================================
@@ -448,7 +447,7 @@ bool bgui_picker_tableau::handle(const vgui_event& e)
       point_set_list.push_back(vsol_point_2d_sptr( new vsol_point_2d(ix,iy) ));
       post_overlay_redraw();
       return true;
-#ifdef BGUI_DEBUG
+#ifdef DEBUG
       vcl_cout << "Left click returned " << ix << ",  " << iy  << vcl_endl;
       vcl_cout.flush();
 #endif
@@ -461,7 +460,7 @@ bool bgui_picker_tableau::handle(const vgui_event& e)
       if (gesture1(e)) {
         point_set_list.push_back(vsol_point_2d_sptr(new vsol_point_2d(ix,iy)));
         post_overlay_redraw();
-#ifdef BGUI_DEBUG
+#ifdef DEBUG
         vcl_cout << "Shift left returned " << ix << ",  " << iy << vcl_endl;
         vcl_cout.flush();
 #endif
@@ -470,7 +469,7 @@ bool bgui_picker_tableau::handle(const vgui_event& e)
       // either way, end of picking
       active = false;
       picking_completed = true;
-#ifdef BGUI_DEBUG
+#ifdef DEBUG
       vcl_cout << "Detected either middle or END key\n";
       vcl_cout.flush();
 #endif

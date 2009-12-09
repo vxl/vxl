@@ -6,7 +6,6 @@
 #include <vsl/vsl_binary_io.h>
 #include <vcl_iostream.h>
 #include <bvxm/grid/bvxm_voxel_grid_base.h>
-//#include <bvxm/bvxm_world_params.h>
 
 // Binary io, NOT IMPLEMENTED, signatures defined to use bvxm_voxel_grid_base as a brdb_value
 

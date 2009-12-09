@@ -1,6 +1,5 @@
 #include <vidl/vidl_dshow_live_istream.h>
 #include <vidl/vidl_dshow_istream_params.h>
-//#include <vidl/vidl_dshow_istream_params_esf.h>
 #include <vidl/vidl_image_list_ostream.h>
 
 #include <vidl/vidl_dshow.h>
@@ -8,9 +7,9 @@
 #include <vul/vul_timer.h>
 #include <vcl_fstream.h>
 
-const vcl_string config_file
-= "d:/cvs_root/vxl/core/vidl/examples/config.dshow.logitech";
-//= "d:/cvs_root/vxl/core/vidl/examples/config.euresys.vid1";
+#if 0 // Commented out
+const vcl_string config_file = "core/vidl/examples/config.dshow.logitech"; // config.euresys.vid1
+#endif
 
 int main()
 {

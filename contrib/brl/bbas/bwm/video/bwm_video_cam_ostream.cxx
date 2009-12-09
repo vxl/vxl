@@ -4,7 +4,6 @@
 #include <vul/vul_file.h>
 #include <vul/vul_sprintf.h>
 #include <vsl/vsl_binary_io.h>
-//#include <vsl/vsl_binary_loader.h>
 
 //------------------------------------------------------------------------------
 

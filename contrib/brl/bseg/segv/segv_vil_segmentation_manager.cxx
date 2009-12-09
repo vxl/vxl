@@ -44,8 +44,6 @@
 #include <sdet/sdet_fit_conics.h>
 #include <sdet/sdet_grid_finder_params.h>
 #include <sdet/sdet_grid_finder.h>
-//#include <sdet/sdet_read_mser_regions.h>
-//#include <sdet/sdet_vrml_display.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_find.h>
 #include <vgui/vgui_tableau.h>
@@ -1894,7 +1892,7 @@ void segv_vil_segmentation_manager::rot_extrema()
       res(i,j) = output(i,j,0);
       mask(i,j) = output(i,j,2);
     }
-    
+
   vil_image_resource_sptr res_resc = vil_new_image_resource_of_view(res);
   vil_image_resource_sptr msk_resc = vil_new_image_resource_of_view(mask);
   vil_image_view<vil_rgb<vxl_byte> > rgb = brip_vil_float_ops::combine_color_planes(img, res_resc, msk_resc);

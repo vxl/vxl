@@ -1,7 +1,7 @@
 // This is brl/bbas/bmsh3d/bmsh3d_mesh_mc.h
 //---------------------------------------------------------------------
-#ifndef _bmsh3d_mesh_mc_h_
-#define _bmsh3d_mesh_mc_h_
+#ifndef bmsh3d_mesh_mc_h_
+#define bmsh3d_mesh_mc_h_
 //:
 // \file
 // \brief multiple connected (mc) mesh for representing mesh face with internal holes or curves.
@@ -17,7 +17,6 @@
 //-------------------------------------------------------------------------
 
 #include <vcl_map.h>
-//#include <vcl_utility.h>
 
 #include "bmsh3d_mesh.h"
 #include "bmsh3d_face_mc.h"
@@ -61,4 +60,4 @@ void merge_mesh (bmsh3d_mesh_mc* M1, bmsh3d_mesh_mc* M2);
 bmsh3d_face* copy_inner_face(vcl_vector<bmsh3d_edge*> incident_edges,
                              bmsh3d_mesh_mc* mesh);
 
-#endif // _bmsh3d_mesh_mc_h_
+#endif // bmsh3d_mesh_mc_h_

@@ -1,4 +1,3 @@
-//#include "cm_expat_mangle.h"
 /*
 Copyright (c) 1998, 1999, 2000 Thai Open Source Software Center Ltd
 See the file COPYING for copying permission.
@@ -270,7 +269,7 @@ typedef void (*XML_EntityDeclHandler) (void *userData,
                                        const XML_Char *systemId,
                                        const XML_Char *publicId,
                                        const XML_Char *notationName);
-                                       
+
 XMLPARSEAPI(void)
 XML_SetEntityDeclHandler(XML_Parser parser,
                          XML_EntityDeclHandler handler);

@@ -13,7 +13,6 @@
 #include "wx_docview_doc.h"
 #include "wx_docview_frame.h"
 
-//#include <wx/app.h>
 #include <wx/frame.h>
 
 //-------------------------------------------------------------------------
@@ -45,7 +44,7 @@ bool wx_docview_view::OnCreate(wxDocument* doc, long flags)
 
   int width, height;
   frame_->GetClientSize(&width, &height);
-   
+
   canvas_ = new vgui_wx_adaptor(frame_,
                                 wxID_ANY,
                                 wxDefaultPosition,

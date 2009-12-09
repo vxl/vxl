@@ -28,7 +28,6 @@
 #if VIDL_HAS_VIDEODEV2
 #include <vidl/vidl_v4l2_devices.h>
 #include <vidl/vidl_v4l2_istream.h>
-//#include <vidl/vidl_v4l2_pixel_format.h>
 #endif
 
 //: Use vgui dialogs to prompt the user for parameters and open an istream

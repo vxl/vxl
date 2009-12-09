@@ -9,7 +9,6 @@
 #include <vil1/vil1_memory_image_of.h>
 #include <vil1/vil1_save.h>
 
-//#include <vcl_cstdio.h>
 #include <vcl_cmath.h>
 
 vmal_dense_matching::vmal_dense_matching(const vnl_double_3x3 & H0,

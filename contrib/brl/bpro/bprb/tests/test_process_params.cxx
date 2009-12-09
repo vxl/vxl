@@ -9,7 +9,6 @@
 #include "bprb_test_process.h"
 #include <bprb/bprb_parameters.h>
 #include <bprb/bprb_macros.h>
-//#include <bxml/bxml_write.h>
 
 int test_process_params_main(int argc, char* argv[] )
 {
@@ -17,7 +16,7 @@ int test_process_params_main(int argc, char* argv[] )
   REG_PROCESS(bprb_test_process, bprb_batch_process_manager);
   REGISTER_DATATYPE(float);
 
-  // set the inputs 
+  // set the inputs
   brdb_value_sptr v0 = new brdb_value_t<float>(1.0f);
   brdb_value_sptr v1 = new brdb_value_t<float>(2.0f);
   bool good = bprb_batch_process_manager::instance()->init_process("Process");
@@ -30,21 +29,21 @@ int test_process_params_main(int argc, char* argv[] )
   good = good && bprb_batch_process_manager::instance()->commit_output(0, id);
   TEST("run process", good ,true);
   //Check if result is in the database
-    // query to get the data 
+    // query to get the data
   brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id);
 
   brdb_selection_sptr selec = DATABASE->select("float_data", Q);
-  if(selec->size()!=1){
+  if (selec->size()!=1) {
     vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
-    << " no selections\n";
+             << " no selections\n";
   }
 
   brdb_value_sptr value;
-  if(!selec->get_value(vcl_string("value"), value)){
+  if (!selec->get_value(vcl_string("value"), value)) {
     vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
-     << " didn't get value\n";
+             << " didn't get value\n";
   }
-  brdb_value_t<float>* result = 
+  brdb_value_t<float>* result =
     static_cast<brdb_value_t<float>* >(value.ptr());
   float rv = result->value();
   TEST_NEAR("test result in DB", rv, 13.0f, 0.01);

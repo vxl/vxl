@@ -9,7 +9,6 @@
 #include <vgui/vgui.h>
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_window.h>
-//#include <vgui/vgui_adaptor.h>
 #include <vgui/vgui_pixel.h>
 #include <vgui/vgui_macro.h>
 

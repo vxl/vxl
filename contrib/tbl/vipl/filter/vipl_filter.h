@@ -1,6 +1,6 @@
 // This is tbl/vipl/filter/vipl_filter.h
-#ifndef _vipl_filter_h_
-#define _vipl_filter_h_
+#ifndef vipl_filter_h_
+#define vipl_filter_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
@@ -27,7 +27,6 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
 
 #include <vipl/section/vipl_section_descriptor.h>
 #include <vipl/section/vipl_section_container.h>
-//#include <vipl/section/vipl_section_iterator.h>
 
 #include <vcl_stlfwd.h> // forward declaration for vcl_vector
 

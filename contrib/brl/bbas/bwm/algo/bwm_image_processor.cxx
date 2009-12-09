@@ -18,7 +18,6 @@
 #include <vsol/vsol_line_2d_sptr.h>
 #include <vsol/vsol_digital_curve_2d_sptr.h>
 
-//#include <vil/vil_image_view_base.h>
 #include <vil/vil_image_resource.h>
 
 void bwm_image_processor::hist_plot(bgui_image_tableau_sptr img)

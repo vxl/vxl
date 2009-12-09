@@ -17,7 +17,6 @@
 //
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_box_2d.h>
-//#include <vgl/algo/vgl_rtree.h> // No need to be included here!
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_intersection.h>
 
@@ -53,14 +52,11 @@ class vgl_rtree_point_box_2d
     vgl_point_2d<T> b1max = b1.max_point();
     vgl_point_2d<T> max_of_mins(b0min.x() > b1min.x() ? b0min.x() : b1min.x(), b0min.y() > b1min.y() ? b0min.y() : b1min.y());
     vgl_point_2d<T> min_of_maxs(b0min.x() < b1min.x() ? b0min.x() : b1min.x(), b0min.y() < b1min.y() ? b0min.y() : b1min.y());
-    
+
     return ( b0.contains(b1min) || b0.contains(b1max) ||
              b1.contains(b0min) || b1.contains(b0max) ||
-           ( (b0.contains(max_of_mins) || b0.contains(min_of_maxs)) && 
-             (b1.contains(max_of_mins) || b1.contains(min_of_maxs)) ) );
-    //bool resultf =(b0.contains(b1.min_point()) || b0.contains(b1.max_point()));
-    //bool resultr =(b1.contains(b0.min_point()) || b1.contains(b0.max_point()));
-    //return resultf||resultr;
+             ( (b0.contains(max_of_mins) || b0.contains(min_of_maxs)) &&
+               (b1.contains(max_of_mins) || b1.contains(min_of_maxs)) ) );
   }
 
   static float volume(vgl_box_2d<T> const& b)

@@ -24,8 +24,6 @@
 #include <vgl/vgl_polygon.h>
 
 #include <vil/vil_image_view.h>
-//#include <vil/vil_blocked_image_resource.h> // unused?
-//#include <vil/vil_pyramid_image_resource.h> // unused?
 #include <vil/file_formats/vil_nitf2_image.h>
 
 #include <vcl_cmath.h>
@@ -846,7 +844,7 @@ void bwm_observer_img::set_change_type()
     return;
 
   if (type > choices.size()) {
-    vcl_cerr << "bwm_observer_img::set_change_type -- Invalid choice" << vcl_endl;
+    vcl_cerr << "bwm_observer_img::set_change_type -- Invalid choice\n";
     return;
   }
   change_type_ = choices[type];
