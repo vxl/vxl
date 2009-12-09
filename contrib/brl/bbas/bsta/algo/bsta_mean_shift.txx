@@ -113,7 +113,7 @@ bsta_mean_shift<T,n>::merge_modes(bsta_sample_set<T,n>& set, int cnt, T epsilon)
           // find a new mode using mean-shift procedure
           vnl_vector_fixed<T,n> dif(T(10e4));
           vect_t current = set.sample(i);
-          unsigned cnt = 0;
+          unsigned count = 0;
           while (dif.magnitude() > epsilon) {
             vect_t mean;
             if (set.mean(current, mean)) {
@@ -121,8 +121,8 @@ bsta_mean_shift<T,n>::merge_modes(bsta_sample_set<T,n>& set, int cnt, T epsilon)
               dif = vnl_vector_fixed<T,n>(v_dif);
               current = mean;
             }
-            cnt++;
-            if (cnt > max_iter_)
+            count++;
+            if (count > max_iter_)
               break;
           }
           // found a mode, check which other modes, this one is most closest to
