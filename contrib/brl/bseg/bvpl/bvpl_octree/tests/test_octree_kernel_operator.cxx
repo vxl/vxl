@@ -15,7 +15,7 @@
 
 #include <boct/boct_loc_code.h>
 
-bool debug =0;
+static bool debug = false;
 typedef boct_tree<short, float> tree_type;
 typedef boct_tree_cell<short, float> cell_type;
 
@@ -31,14 +31,13 @@ void fill_sample_octree(boct_tree<short,float>* tree)
     vcl_vector<boct_tree_cell<short,float>*> leaves = tree->leaf_cells();
     tree->init_cells(0.1f);
     leaves[1]->set_data(0.5);
-#if debug
-    for (unsigned i=0; i<leaves.size(); i++) {
-      vcl_cout<< leaves[i]->get_code().x_loc_ << ','
-              << leaves[i]->get_code().y_loc_ << ','
-              << leaves[i]->get_code().z_loc_ << ','
-              << leaves[i]->data() << vcl_endl;
-    }
-#endif
+    if (debug)
+      for (unsigned i=0; i<leaves.size(); i++) {
+        vcl_cout<< leaves[i]->get_code().x_loc_ << ','
+                << leaves[i]->get_code().y_loc_ << ','
+                << leaves[i]->get_code().z_loc_ << ','
+                << leaves[i]->data() << vcl_endl;
+      }
 
     leaves[1]->split();
     //leaves[1]->set_data(0.6);
