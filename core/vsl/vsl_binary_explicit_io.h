@@ -292,7 +292,7 @@ inline vcl_size_t vsl_convert_from_arbitrary_length_unsigned_impl(
     }
 
     // Now add the last 7 bits.
-    *(ints++) = v + ( ((T)(b & 127)) << bitsLoaded);
+    *(ints++) = T(v + ( ((T)(b & 127)) << bitsLoaded));
   }
   return static_cast<vcl_size_t>(ptr - buffer);
 }
