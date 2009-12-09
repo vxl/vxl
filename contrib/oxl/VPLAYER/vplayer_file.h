@@ -24,7 +24,6 @@ class vplayer_file
   static void save_geometry_sequence();
   static void exit_vplayer();
   static vgui_menu create_file_menu();
- private:
 };
 
 #endif // vplayer_file_h_
