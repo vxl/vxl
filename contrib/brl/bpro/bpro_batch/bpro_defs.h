@@ -1,8 +1,7 @@
 #ifndef BPRO_DEFS_H
 #define BPRO_DEFS_H
 
-
-#define py_funcs(name,process,arg,doc){name,process,arg,doc}
+#define py_funcs(name,process,arg,doc) {name,process,arg,doc}
 
 py_funcs("init_process",init_process,METH_VARARGS,"init_process(s) create a new process instance by name"),
 py_funcs("process_print_default_params",process_print_default_params,METH_VARARGS,"process_print_default_params(s,s) print the default values of the process by name"),
@@ -24,5 +23,7 @@ py_funcs("remove_data",remove_data,METH_VARARGS,"remove_data(i) remove data with
 py_funcs("remove_data_obj",remove_data_obj,METH_VARARGS,"remove_data_obj(i) remove data with obj.id from db"),
 py_funcs("print_db",print_db,METH_VARARGS,"print_db() print the database"),
 py_funcs("clear",clear,METH_VARARGS,"clear() clear the database tables"),
+
+#undef py_funcs
 
 #endif
