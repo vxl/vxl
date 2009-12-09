@@ -1380,7 +1380,7 @@ rgtl_sqt_objects<D>::query_closest(double const p[D], int k, int* ids,
 template <unsigned int D>
 double rgtl_sqt_objects<D>::origin(unsigned int a) const
 {
-  assert(0 <= a && a < D);
+  assert(a < D);
   return this->internal_->origin(a);
 }
 
