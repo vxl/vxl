@@ -110,9 +110,10 @@ void bvxm_vrml_voxel_grid::write_vrml_grid_as_spheres(vcl_ofstream& str, bvxm_vo
 #if 0
           vgl_sphere_3d<float> sphere((float)i,(float)j,(float)k,0.5f);
           write_vrml_sphere(str, sphere, (*grid_it)(i,j),(*grid_it)(i,j),(*grid_it)(i,j),1-(*grid_it)(i,j));
-#endif // 0
-          vgl_sphere_3d<float> sphere((float)i/s,(float)j/s,(float)k/s,0.25);
+#else // 0
+          vgl_sphere_3d<float> sphere((float)i/s,(float)j/s,(float)k/s,0.25f);
           write_vrml_sphere(str, sphere, 1,0,0,0);
+#endif // 0
         }
       }
     }
