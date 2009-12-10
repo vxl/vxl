@@ -51,7 +51,7 @@ void bvxm_vrml_voxel_grid::write_vrml_grid(vcl_ofstream& str, bvxm_voxel_grid<fl
     for (unsigned i=0; i<(*grid_it).nx(); ++i) {
       for (unsigned j=0; j < (*grid_it).ny(); ++j) {
         if ((*grid_it)(i,j) > threshold)
-         str<<"        " << i << ' ' <<j << ' ' << k <<  '\n';
+          str<<"        " << i << ' ' <<j << ' ' << k <<  '\n';
       }
     }
   }
@@ -103,22 +103,18 @@ void bvxm_vrml_voxel_grid::write_vrml_grid_as_spheres(vcl_ofstream& str, bvxm_vo
   unsigned s=3;
   // write the colors
   for (unsigned k=dim.z()-1; grid_it != grid->end(); ++grid_it, --k) {
-    if (k%1==0) // always true !?!
-    {
-    for (unsigned i=0; i<(*grid_it).nx(); ){
-      for (unsigned j=0; j < (*grid_it).ny(); ) {
+//  if (k%1==0) // always true !?!
+    for (unsigned i=0; i<(*grid_it).nx(); ++i) {
+      for (unsigned j=0; j < (*grid_it).ny(); ++j) {
         if (((*grid_it)(i,j) > threshold)){
-         //vgl_sphere_3d<float> sphere((float)i,(float)j,(float)k,0.5f);
-         // write_vrml_sphere(str, sphere, (*grid_it)(i,j),(*grid_it)(i,j),(*grid_it)(i,j),1-(*grid_it)(i,j));
-
-
+#if 0
+          vgl_sphere_3d<float> sphere((float)i,(float)j,(float)k,0.5f);
+          write_vrml_sphere(str, sphere, (*grid_it)(i,j),(*grid_it)(i,j),(*grid_it)(i,j),1-(*grid_it)(i,j));
+#endif // 0
           vgl_sphere_3d<float> sphere((float)i/s,(float)j/s,(float)k/s,0.25);
           write_vrml_sphere(str, sphere, 1,0,0,0);
-
         }
-        j+=1;
       }
-       i+=1;
     }
   }
 }
@@ -142,15 +138,15 @@ void bvxm_vrml_voxel_grid::write_vrml_grid_as_spheres(vcl_ofstream& str, bvxm_vo
 
 void bvxm_vrml_voxel_grid::write_vrml_grid_as_pointers(vcl_ofstream& str, bvxm_voxel_grid<vnl_float_4> *grid, float threshold, int s)
 {
-    s=1;
-    bvxm_voxel_grid<vnl_float_4>::iterator grid_it = grid->begin();
-    vgl_point_3d<double> origin(0.0,0.0,0.0);
-    vgl_vector_3d<double> dirx(1,0,0);
-    vgl_vector_3d<double> diry(0,1,0);
-    vgl_vector_3d<double> dirz(0,0,1);
-    write_vrml_line(str,origin,dirx,1,1,0,0);
-    write_vrml_line(str,origin,diry,1,0,1,0);
-    write_vrml_line(str,origin,dirz,1,0,0,1);
+  s=1;
+  bvxm_voxel_grid<vnl_float_4>::iterator grid_it = grid->begin();
+  vgl_point_3d<double> origin(0.0,0.0,0.0);
+  vgl_vector_3d<double> dirx(1,0,0);
+  vgl_vector_3d<double> diry(0,1,0);
+  vgl_vector_3d<double> dirz(0,0,1);
+  write_vrml_line(str,origin,dirx,1,1,0,0);
+  write_vrml_line(str,origin,diry,1,0,1,0);
+  write_vrml_line(str,origin,dirz,1,0,0,1);
 
   vgl_vector_3d<unsigned> dim=grid->grid_size();
   // write the colors
