@@ -150,7 +150,7 @@ vil_image_view_base_sptr vil_decimate(const vil_image_view_base_sptr im, unsigne
 #if 1
 bool vil_decimate_image_resource::put_view(const vil_image_view_base&, unsigned, unsigned)
 {
-    vil_exception_warning(vil_exception_unsupported_operation(
+  vil_exception_warning(vil_exception_unsupported_operation(
       "vil_decimate_image_resource::put_view") );
   return false;
 }
