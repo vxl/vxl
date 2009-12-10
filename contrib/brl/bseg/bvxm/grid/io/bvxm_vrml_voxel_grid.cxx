@@ -112,7 +112,7 @@ void bvxm_vrml_voxel_grid::write_vrml_grid_as_spheres(vcl_ofstream& str, bvxm_vo
           write_vrml_sphere(str, sphere, (*grid_it)(i,j),(*grid_it)(i,j),(*grid_it)(i,j),1-(*grid_it)(i,j));
 #else // 0
           vgl_sphere_3d<float> sphere((float)i/s,(float)j/s,(float)k/s,0.25f);
-          write_vrml_sphere(str, sphere, 1,0,0,0);
+          write_vrml_sphere(str, sphere, 1.f,0.f,0.f,0.f);
 #endif // 0
         }
       }
@@ -129,7 +129,7 @@ void bvxm_vrml_voxel_grid::write_vrml_grid_as_spheres(vcl_ofstream& str, bvxm_vo
       for (unsigned j=0; j < (*grid_it).ny(); ++j) {
         if ((*grid_it)(i,j)[3]/255.0f > threshold) {
           vgl_sphere_3d<float> sphere((float)i/s,(float)j/s,(float)k/s,0.5f);
-          write_vrml_sphere(str, sphere, 1,0,0,0);
+          write_vrml_sphere(str, sphere, 1.f,0.f,0.f,0.f);
         }
       }
     }
@@ -145,9 +145,9 @@ void bvxm_vrml_voxel_grid::write_vrml_grid_as_pointers(vcl_ofstream& str, bvxm_v
   vgl_vector_3d<double> dirx(1,0,0);
   vgl_vector_3d<double> diry(0,1,0);
   vgl_vector_3d<double> dirz(0,0,1);
-  write_vrml_line(str,origin,dirx,1,1,0,0);
-  write_vrml_line(str,origin,diry,1,0,1,0);
-  write_vrml_line(str,origin,dirz,1,0,0,1);
+  write_vrml_line(str,origin,dirx,1.f,1.f,0.f,0.f);
+  write_vrml_line(str,origin,diry,1.f,0.f,1.f,0.f);
+  write_vrml_line(str,origin,dirz,1.f,0.f,0.f,1.f);
 
   vgl_vector_3d<unsigned> dim=grid->grid_size();
   // write the colors
