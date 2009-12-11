@@ -69,22 +69,25 @@ bool bvpl_kernel_id_to_axis_process(bprb_func_process& pro)
     vcl_cerr << "In bvpl_kernel_id_to_axis_process -- input grid is not valid!\n";
     return false;
   }
-  bvxm_voxel_grid<unsigned > *grid
-  = dynamic_cast< bvxm_voxel_grid<unsigned>* >(grid_base.ptr());
+  bvxm_voxel_grid<int > *grid
+  = dynamic_cast< bvxm_voxel_grid<int>* >(grid_base.ptr());
   if (grid)
   {
     bvxm_voxel_grid<vnl_float_3> *axes_grid = new bvxm_voxel_grid<vnl_float_3>(output_world_dir, grid->grid_size());
 
     //iterate though grids
-    bvxm_voxel_grid<unsigned>::iterator grid_it = grid->begin();
+    bvxm_voxel_grid<int>::iterator grid_it = grid->begin();
     bvxm_voxel_grid<vnl_float_3>::iterator axes_grid_it = axes_grid->begin();
     for (; grid_it != grid->end(); ++grid_it, ++axes_grid_it)
     {
-      bvxm_voxel_slab<unsigned>::iterator slab_it = grid_it->begin();
+      bvxm_voxel_slab<int>::iterator slab_it = grid_it->begin();
       bvxm_voxel_slab<vnl_float_3>::iterator axes_slab_it = axes_grid_it->begin();
       for (; slab_it != grid_it->end(); ++slab_it, ++axes_slab_it)
       {
-        (*axes_slab_it) = kernel->kernels_[(*slab_it)]->axis();
+        if((*slab_it)>-1)
+          (*axes_slab_it) = kernel->kernels_[(*slab_it)]->axis();
+        else
+          (*axes_slab_it) =vnl_float_3(0,0,0);
       }
     }
     pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, axes_grid);
