@@ -40,6 +40,11 @@ SET(VXL_LIBRARY_DIR "@LIBRARY_OUTPUT_PATH@")
 # Clients projects should not use the Find*.cmake files in this directory.
 SET(VXL_CMAKE_DIR "@VXL_CMAKE_DIR@")
 
+# Doxygen Support
+SET(VXL_CMAKE_DOXYGEN_DIR "@VXL_CMAKE_DOXYGEN_DIR@")
+
+
+
 # VXL Configuration options. You don't have to build with the same options as VXL, but it often helps.
 SET(VXL_BUILD_SHARED_LIBS "@BUILD_SHARED_LIBS@")
 SET(VXL_BUILD_TESTS "@BUILD_TESTS@")
