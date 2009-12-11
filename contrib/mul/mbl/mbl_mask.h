@@ -71,8 +71,8 @@ void mbl_mask_logic_nand(const mbl_mask & A, mbl_mask & B);
 
 
     //: Apply a mask to a range of values. Result inserted at 'target'
-template <typename ForwardIterator, typename InputIterator>
-void mbl_apply_mask(const mbl_mask & mask, ForwardIterator first, ForwardIterator last, InputIterator target)
+template <typename ForwardIterator, typename OutputIterator>
+void mbl_apply_mask(const mbl_mask & mask, ForwardIterator first, ForwardIterator last, OutputIterator target)
 {
   if (vcl_distance(first, last) != (int)mask.size())
     throw vcl_runtime_error("Values and mask lengths differ");
