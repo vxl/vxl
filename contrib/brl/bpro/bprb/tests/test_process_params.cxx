@@ -10,9 +10,8 @@
 #include <bprb/bprb_parameters.h>
 #include <bprb/bprb_macros.h>
 
-int test_process_params_main(int argc, char* argv[] )
+void test_process_params()
 {
-  vcl_cout << "Start test process\n";
   REG_PROCESS(bprb_test_process, bprb_batch_process_manager);
   REGISTER_DATATYPE(float);
 
@@ -47,5 +46,6 @@ int test_process_params_main(int argc, char* argv[] )
     static_cast<brdb_value_t<float>* >(value.ptr());
   float rv = result->value();
   TEST_NEAR("test result in DB", rv, 13.0f, 0.01);
-  SUMMARY();
 }
+
+TESTMAIN(test_process_params);
