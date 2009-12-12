@@ -15,25 +15,25 @@
 //: Defines a binary mask
 class mbl_mask : public vcl_vector<bool>
 {
-public:
+ public:
   mbl_mask() : vcl_vector<bool>() {}
-  mbl_mask(unsigned n, bool val = false) : vcl_vector<bool>(n, false) {}
+  mbl_mask(unsigned n, bool val = false) : vcl_vector<bool>(n, val) {}
 };
 
-    //: Given a collection of indices, produce a collection of masks that isolate each indexed set
-    //    The input index set does not need to be zero based or continuous
-    //    The output vector of masks is sorted by corresponding index
-    //    for example: (1,4,2,1,2) will make three masks: (1,0,0,1,0), (0,0,1,0,1) and (0,1,0,0,0)
-    //    which correspond to the index sets 1,2,4
+//: Given a collection of indices, produce a collection of masks that isolate each indexed set
+//    The input index set does not need to be zero based or continuous
+//    The output vector of masks is sorted by corresponding index
+//    for example: (1,4,2,1,2) will make three masks: (1,0,0,1,0), (0,0,1,0,1) and (0,1,0,0,0)
+//    which correspond to the index sets 1,2,4
 void mbl_masks_from_index_set(const vcl_vector<unsigned> & indices,
                               vcl_vector<mbl_mask> & masks);
 
 
-    //: Replace 'true' values in B with values taken from A. size of A must match 'true' count in B
+//: Replace 'true' values in B with values taken from A. size of A must match 'true' count in B
 void mbl_mask_on_mask(const mbl_mask & A, mbl_mask & B);
 
 
-    //: Merge two input ranges according to a mask ('false' indicates element drawn from range 1, 'true' from range 2)
+//: Merge two input ranges according to a mask ('false' indicates element drawn from range 1, 'true' from range 2)
 template <typename ForwardIterator>
 void mbl_mask_merge_values(const mbl_mask & mask,
                            ForwardIterator first1, ForwardIterator last1,
@@ -47,30 +47,28 @@ void mbl_mask_merge_values(const mbl_mask & mask,
     *result++ = mask[n] ? *first2 : *first1;
 }
 
-    //: Apply a general logical operation between two masks
+//: Apply a general logical operation between two masks
 void mbl_mask_logic(const mbl_mask & A, mbl_mask & B, const vcl_string & operation);
 
-    //: Apply an "AND" (rule 0001) logical operation between two masks
+//: Apply an "AND" (rule 0001) logical operation between two masks
 void mbl_mask_logic_and(const mbl_mask & A, mbl_mask & B);
 
-    //: Apply an "OR" (rule 0111) logical operation between two masks
+//: Apply an "OR" (rule 0111) logical operation between two masks
 void mbl_mask_logic_or(const mbl_mask & A, mbl_mask & B);
 
-    //: Apply an "XOR" (rule 0110) logical operation between two masks
+//: Apply an "XOR" (rule 0110) logical operation between two masks
 void mbl_mask_logic_xor(const mbl_mask & A, mbl_mask & B);
 
-    //: Apply a "NOR" (rule 1000) logical operation between two masks
+//: Apply a "NOR" (rule 1000) logical operation between two masks
 void mbl_mask_logic_nor(const mbl_mask & A, mbl_mask & B);
 
-    //: Apply an "XNOR" (rule 1001) logical operation between two masks
+//: Apply an "XNOR" (rule 1001) logical operation between two masks
 void mbl_mask_logic_xnor(const mbl_mask & A, mbl_mask & B);
 
-    //: Apply an "NAND" (rule 1110) logical operation between two masks
+//: Apply an "NAND" (rule 1110) logical operation between two masks
 void mbl_mask_logic_nand(const mbl_mask & A, mbl_mask & B);
 
-
-
-    //: Apply a mask to a range of values. Result inserted at 'target'
+//: Apply a mask to a range of values. Result inserted at 'target'
 template <typename ForwardIterator, typename OutputIterator>
 void mbl_apply_mask(const mbl_mask & mask, ForwardIterator first, ForwardIterator last, OutputIterator target)
 {
@@ -81,7 +79,7 @@ void mbl_apply_mask(const mbl_mask & mask, ForwardIterator first, ForwardIterato
     if (mask[n]) *target++ = *first;
 }
 
-    //: Apply a mask to a vector, returning a new vector
+//: Apply a mask to a vector, returning a new vector
 template <typename T>
 vcl_vector<T> mbl_apply_mask(const mbl_mask & mask, const vcl_vector<T> & values)
 {
@@ -90,7 +88,7 @@ vcl_vector<T> mbl_apply_mask(const mbl_mask & mask, const vcl_vector<T> & values
   return retval;
 }
 
-    //: Apply a mask to a vector in-place
+//: Apply a mask to a vector in-place
 template <typename T>
 void mbl_apply_mask(const mbl_mask & mask, vcl_vector<T> & values)
 {
@@ -110,19 +108,17 @@ void mbl_apply_mask(const mbl_mask & mask, vcl_vector<T> & values)
   values.resize(n_out);
 }
 
-    //: Save to file
+//: Save to file
 void mbl_save_mask(const mbl_mask & mask, vcl_ostream & stream);
 
-    //: Save to file
+//: Save to file
 void mbl_save_mask(const mbl_mask & mask, const char * filename);
 
-    //: Load from file
+//: Load from file
 void mbl_load_mask(mbl_mask & mask, vcl_istream & stream);
 
-    //: Load from file
+//: Load from file
 void mbl_load_mask(mbl_mask & mask, const char * filename);
-
-
 
 
 #endif // mbl_mask_h_
