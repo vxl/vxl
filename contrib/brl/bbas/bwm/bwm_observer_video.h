@@ -11,7 +11,7 @@
 #include <vpgl/vpgl_camera.h>
 #include <vidl/vidl_istream_sptr.h>
 #include <bwm/video/bwm_video_cam_istream_sptr.h>
-
+#include <bsta/bsta_histogram.h>
 class vgui_soview2D_point;
 class bwm_soview2D_cross;
 
@@ -99,10 +99,14 @@ class bwm_observer_video : public bwm_observer_cam
   //: get the camera stream
   bwm_video_cam_istream_sptr camera_stream() {return  cam_istr_;}
 
-  //: extract two-class neigborhoods from a video stream
-  bool extract_neighborhoods(unsigned nbd_radius,
-                             vcl_vector<vnl_matrix<float> > & c0_nhd,
-                             vcl_vector<vnl_matrix<float> > & c1_nhd);
+  //: extract neigborhoods around correspondences for the stream
+  bool 
+    extract_neighborhoods(unsigned nbd_radius,
+                          vcl_vector<vcl_vector<vnl_matrix<float> > >& nhds);
+
+  //: extract histograms of each frame
+  bool extract_histograms(vcl_vector<bsta_histogram<float> >& hists);
+
 
   //Internals --------------------------------------- -------------------------
  protected:

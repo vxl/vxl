@@ -441,11 +441,18 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
     video_corr_submenu.add( "Extract World Plane",
                        new vgui_command_simple<bwm_tableau_video>(video_tab,
                        &bwm_tableau_video::extract_world_plane));
+
     video_corr_submenu.separator();
 
     video_corr_submenu.add( "Extract Neigborhoods",
                        new vgui_command_simple<bwm_tableau_video>(video_tab,
                        &bwm_tableau_video::extract_neighborhoods));
+
+    video_corr_submenu.separator();
+
+    video_corr_submenu.add( "Extract Histograms",
+                       new vgui_command_simple<bwm_tableau_video>(video_tab,
+                       &bwm_tableau_video::extract_histograms));
     menu.add("Video Correspondence", video_corr_submenu);
   }
 }

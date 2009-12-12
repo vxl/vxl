@@ -4,6 +4,8 @@
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_dialog_extensions.h>
 #include <vnl/vnl_double_4.h>
+#include <vsl/vsl_binary_io.h>
+#include <bsta/io/bsta_io_histogram.h>
 bool bwm_tableau_video::handle(const vgui_event &e)
 {
   return bwm_tableau_cam::handle(e);
@@ -133,12 +135,12 @@ void bwm_tableau_video::extract_neighborhoods()
   nbh_dlg.field("Nbhd radius", radius);
   if (!nbh_dlg.ask())
     return;
-  vcl_vector<vnl_matrix<float> > c0_nhd, c1_nhd;
-  if(!my_observer_->extract_neighborhoods(radius, c0_nhd, c1_nhd)){
+  vcl_vector<vcl_vector<vnl_matrix<float> > > nhds;
+  if(!my_observer_->extract_neighborhoods(radius,  nhds)){
     vcl_cerr << "extract neighborhoods failed \n";    
     return;
   }
-  unsigned n0 = c0_nhd.size(), n1 = c1_nhd.size();
+
   unsigned dim = 2*radius+1;
   vcl_ofstream os(path.c_str());
   if(!os.is_open()){
@@ -146,15 +148,36 @@ void bwm_tableau_video::extract_neighborhoods()
     return;
   }
   os << "dim: " << dim << '\n';
-  os << "n0: " << n0 << '\n';
-  os << "n1: " << n1 << '\n';
-  for(unsigned i = 0; i< n0; ++i)
-    os << c0_nhd[i] << '\n';
-  for(unsigned i = 0; i< n1; ++i)
-    os << c1_nhd[i] << '\n';
+  os << "n_tracks: " << nhds.size() << '\n';
+  for( unsigned c = 0; c<nhds.size(); ++c)
+    {    
+      os << "n_i: " << nhds[c].size() << '\n';
+      for(unsigned i = 0; i< nhds[c].size(); ++i)
+        os << nhds[c][i] << '\n';
+    }
   os.close();
 }
 
+void bwm_tableau_video::extract_histograms()
+{
+  vcl_string path = "";
+  vcl_string ext = "*.*";
+  vgui_dialog hist_dlg("Frame histograms");
+  hist_dlg.file("Histogram file (binary)", ext, path);
+  if (!hist_dlg.ask())
+    return;
+  vcl_vector<bsta_histogram<float>  > hists;
+  if(!my_observer_->extract_histograms(hists))
+    return;
+  unsigned n = hists.size();
+  if(!n) return;
+  vsl_b_ofstream os(path);
+  if(!os)
+    return;
+  vsl_b_write(os, n);
+  for(unsigned i = 0; i<n; ++i)
+    vsl_b_write(os, hists[i]);
+}
 void bwm_tableau_video::save_as_image_list()
 {
   vcl_string path = "";

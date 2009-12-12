@@ -4,6 +4,7 @@
 #include "bwm_observer_mgr.h"
 #include "video/bwm_video_corr.h"
 #include "algo/bwm_soview2D_cross.h"
+#include <bsta/bsta_histogram.h>
 #include <vcl_sstream.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
@@ -677,18 +678,18 @@ bool bwm_observer_video::extract_world_plane(vgl_plane_3d<double>&  plane)
 //: extract two-class neigborhoods from a video stream
 bool bwm_observer_video::
 extract_neighborhoods(unsigned nhd_radius,
-                      vcl_vector<vnl_matrix<float> >& c0_nhd,
-                      vcl_vector<vnl_matrix<float> >& c1_nhd)
+                      vcl_vector<vcl_vector<vnl_matrix<float> > >& nhds)
 {
   vcl_vector<vgui_soview2D*> selected =
     this->get_selected_objects("bwm_soview2D_cross");
-  if (selected.size()!=2) {
-    vcl_cerr << "Select exactly 2 correspondences to specify the c0 and c1"
+
+  if (selected.size()==0) {
+    vcl_cerr << "Select one or more correspondences to specify each"
              << " neighborhood center\n";
     return false;
   }
-  c0_nhd.clear();
-  c1_nhd.clear();
+
+  nhds.clear();
   int rd = nhd_radius;
   vcl_vector<bwm_video_corr_sptr> corrs;
   unsigned frame;
@@ -717,14 +718,15 @@ extract_neighborhoods(unsigned nhd_radius,
       return false;
     corrs.push_back(corr);
   }
-  if (corrs.size()!=2)
+  if (corrs.size()==0)
     return false;
   if (!video_istr_||!video_istr_->is_open()||!video_istr_->is_seekable())
     return false;
   unsigned dim = 2*nhd_radius +1;
 
-  for (unsigned i = 0; i<2; ++i)
+  for (unsigned i = 0; i<corrs.size(); ++i)
   {
+    vcl_vector<vnl_matrix<float> > temp;
     bwm_video_corr_sptr corr = corrs[i];
     video_istr_->seek_frame(0);
     unsigned index = 0;
@@ -746,19 +748,41 @@ extract_neighborhoods(unsigned nhd_radius,
           int r = nhd_radius+ir, c = nhd_radius+ic;
           nb[r][c]=fimg(u+ic, v+ir);
         }
-      if (i==0)
-        c0_nhd.push_back(nb);
-      else if (i==1)
-        c1_nhd.push_back(nb);
+      temp.push_back(nb);
     }
     if (!video_istr_->advance())
       break;
       index++;
     }
+    nhds.push_back(temp);
   }
   return true;
 }
 
+bool bwm_observer_video::
+extract_histograms(vcl_vector<bsta_histogram<float> >& hists)
+{
+  video_istr_->seek_frame(0);
+  while (true) {
+    vidl_frame_sptr frame = video_istr_->current_frame();
+    if (!frame)
+      return false;
+    bsta_histogram<float> h(0, 255.0f, 256);
+    vil_image_view_base_sptr fb = vidl_convert_wrap_in_view(*frame);
+    vil_image_view<float> fimg = *vil_convert_cast(float(), fb);
+    unsigned ni = fimg.ni(), nj = fimg.nj();
+    for(unsigned j = 0; j<nj; ++j)
+      for(unsigned i = 0; i<ni; ++i)
+        {
+          float v = fimg(i, j);
+          h.upcount(v, 1.0f);
+        }
+    hists.push_back(h);
+    if (!video_istr_->advance())
+      break;
+  }
+  return true;
+}
 bool bwm_observer_video::
 save_as_image_list(vcl_string const& path)
 {
