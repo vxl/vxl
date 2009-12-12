@@ -29,21 +29,19 @@ print <<EOF;
 // It is quite difficult to do anything out of the norm with the C preprocessor
 
 // quote() has the effect of preprocessor expansion of the argument
-// inner parenthesis are needed with quote() to protect empty definitions
+// Inner parentheses are needed with quote() to protect empty definitions
 // and definitions that have commas
 // quote0() protects (\") and quotes ("") the expanded argument
 #define quote0(x) #x
 #define quote(x) quote0((x))
 
-MAIN( test_config )
+void test_config()
 {
-  START("config");
-
   // This test does not test much.  Mostly, it prints configuration
   // macros so they can be viewed through Dart.  Some sanity checks are
   // at the end.
 
-  vcl_cout << "All macro definitions are shown inside parenthesis\\n";
+  vcl_cout << "All macro definitions are shown inside parentheses\\n";
 
 EOF
 
@@ -299,6 +297,7 @@ for $var_exp (
   'macintosh',          #
   'unix',               #
   '__unix',             #
+  '__unix__',           #
   '__linux',            # icc
   '__linux__',          # icc
 
@@ -308,7 +307,7 @@ for $var_exp (
 
   ) {
 $var_name = $var_exp;
-$var_name =~ s/\(.*\)//;        # remove the arguments and parenthesis
+$var_name =~ s/\(.*\)//;        # remove the arguments and parentheses
 print <<EOF;
   vcl_cout << "$var_exp ";
 #ifdef $var_name
@@ -418,9 +417,9 @@ EOF
 ############################################################################
 
 print <<EOF;
-
-  SUMMARY();
 }
+
+TESTMAIN(test_config);
 EOF
 
 ############################################################################

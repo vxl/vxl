@@ -8,21 +8,19 @@
 // It is quite difficult to do anything out of the norm with the C preprocessor
 
 // quote() has the effect of preprocessor expansion of the argument
-// inner parenthesis are needed with quote() to protect empty definitions
+// Inner parentheses are needed with quote() to protect empty definitions
 // and definitions that have commas
 // quote0() protects (") and quotes ("") the expanded argument
 #define quote0(x) #x
 #define quote(x) quote0((x))
 
-MAIN( test_config )
+void test_config()
 {
-  START("config");
-
   // This test does not test much.  Mostly, it prints configuration
   // macros so they can be viewed through Dart.  Some sanity checks are
   // at the end.
 
-  vcl_cout << "All macro definitions are shown inside parenthesis\n";
+  vcl_cout << "All macro definitions are shown inside parentheses\n";
 
   vcl_cout << "VCL_HAS_BOOL ";
 #ifdef VCL_HAS_BOOL
@@ -1966,6 +1964,6 @@ MAIN( test_config )
   vcl_cout << "sizeof(long) is " << sizeof(long) << vcl_endl;
   vcl_cout << "sizeof(float) is " << sizeof(float) << vcl_endl;
   vcl_cout << "sizeof(double) is " << sizeof(double) << vcl_endl;
-
-  SUMMARY();
 }
+
+TESTMAIN(test_config);
