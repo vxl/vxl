@@ -34,6 +34,7 @@ SET(bvxm_sources
     bvxm_edge_util.h                bvxm_edge_util.cxx
     bvxm_edge_ray_processor.h       bvxm_edge_ray_processor.cxx
     bvxm_von_mises_tangent_processor.h     bvxm_von_mises_tangent_processor.txx
+    bvxm_illum_util.h                     bvxm_illum_util.cxx	
 )
 AUX_SOURCE_DIRECTORY(Templates bvxm_sources)
 
