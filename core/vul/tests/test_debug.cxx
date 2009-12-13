@@ -1,5 +1,5 @@
 // This is core/vul/tests/test_debug.cxx
-
+#include <testlib/testlib_test.h>
 //:
 // \file
 // \brief Tests core dumping etc.
@@ -12,18 +12,12 @@
 #include <vul/vul_file.h>
 #include <vpl/vpl.h>
 
-
-#include <testlib/testlib_test.h>
-
-
 //=======================================================================
-int main()
+static void test_debug()
 {
   vcl_cout <<"\n*******************\n"
            <<  " Testing vul_debug\n"
            <<  "*******************\n\n";
-
-  testlib_test_start("Test Debug");
 
   const char * filetemplate = "test_core%.3d.dmp";
   {
@@ -70,7 +64,7 @@ int main()
   {
     vcl_cout << "Test out-out-memory coredump\n";
 
-    const char * filename = "test_core002.dmp";
+    const char * filename = "test_core001.dmp";
     vpl_unlink(filename);
 
     vul_debug_set_coredump_and_throw_on_out_of_memory(filetemplate);
@@ -91,7 +85,6 @@ int main()
     TEST("Core dump file is sensible size", vul_file_size(filename)>100, true);
   }
 #endif
-
-  return testlib_test_summary();
 }
 
+TEST_MAIN(test_debug);
