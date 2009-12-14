@@ -23,9 +23,8 @@ boct_tree_cell<short,vgl_point_3d<double> >* brute_force_locate_point(vcl_vector
 }
 
 
-MAIN( test_locate_point )
+static void test_locate_point()
 {
-  START ("Locate Point");
   short nlevels=10;
   boct_tree<short,vgl_point_3d<double> > * simpleblock=new boct_tree<short,vgl_point_3d<double> >(nlevels);
   vgl_point_3d<double> p1(0.1,0.1,0.1);
@@ -57,6 +56,6 @@ MAIN( test_locate_point )
       ++cnt;
   }
   TEST("Returns the correct Point for 100 points", cnt, 100);
-
-  SUMMARY();
 }
+
+TESTMAIN(test_locate_point);

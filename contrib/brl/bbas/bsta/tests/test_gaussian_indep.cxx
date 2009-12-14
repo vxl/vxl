@@ -12,7 +12,7 @@ void test_gaussian_indep_type(T epsilon, const vcl_string& type_name)
   bsta_gaussian_indep<T,3> df_gauss;
 
   TEST(("dimension <"+type_name+">").c_str(),
-        (bsta_gaussian_indep<T,3>::dimension), 3);
+       (bsta_gaussian_indep<T,3>::dimension), 3);
   TEST(("det(null covar) <"+type_name+">").c_str(),
        df_gauss.det_covar(), T(0));
 
@@ -42,33 +42,30 @@ void test_gaussian_indep_type(T epsilon, const vcl_string& type_name)
   T two_pi = static_cast<T>(2.0*vnl_math::pi);
   T prob = static_cast<T>(1.0/vcl_sqrt(two_pi*two_pi*two_pi*gauss.det_covar()) * vcl_exp(-sqr_mah_dist/2));
   TEST_NEAR(("probability density <"+type_name+">").c_str(),
-       gauss.prob_density(test_pt), prob, epsilon);
+            gauss.prob_density(test_pt), prob, epsilon);
 
   bsta_gaussian_indep<T,3> zero_var_gauss;
   TEST(("zero var mahalanobis dist <"+type_name+">").c_str(),
-        zero_var_gauss.sqr_mahalanobis_dist(test_pt),
-        vcl_numeric_limits<T>::infinity());
+       zero_var_gauss.sqr_mahalanobis_dist(test_pt),
+       vcl_numeric_limits<T>::infinity());
 
   TEST(("zero var probability density <"+type_name+">").c_str(),
-        zero_var_gauss.prob_density(test_pt), T(0));
+       zero_var_gauss.prob_density(test_pt), T(0));
 
   vnl_vector_fixed<T,3> delta(T(0.1), T(0.1), T(0.1));
   T prob_box = gauss.probability(mean-delta, mean+delta);
   TEST_NEAR(("box probability density <"+type_name+">").c_str(),prob_box,0.00100748,1e-07);
 
   // test stream
-  vcl_cout << "testing stream operator\n";
-  vcl_cout << gauss << '\n';
-
+  vcl_cout << "testing stream operator\n"
+           << gauss << '\n';
 }
 
 
-MAIN( test_gaussian_indep )
+static void test_gaussian_indep()
 {
-  START ("gaussian_indep");
-  test_gaussian_indep_type(float(1e-5),"float");
-  test_gaussian_indep_type(double(1e-14),"double");
-  SUMMARY();
+  test_gaussian_indep_type(1e-5f,"float");
+  test_gaussian_indep_type(1e-14,"double");
 }
 
-
+TESTMAIN(test_gaussian_indep);

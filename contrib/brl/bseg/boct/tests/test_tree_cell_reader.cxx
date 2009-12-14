@@ -7,9 +7,8 @@
 
 #include <vgl/io/vgl_io_box_3d.h>
 
-MAIN( test_tree_cell_reader )
+static void test_tree_cell_reader()
 {
-  START ("TREE CELL READER");
   short nlevels=5;
   boct_tree<short,float> * block=new boct_tree<short,float>(nlevels,3);
   TEST("No of Max levels of tree",nlevels, block->number_levels());
@@ -20,7 +19,7 @@ MAIN( test_tree_cell_reader )
   for (unsigned i=0; i<leaves.size(); i++) {
     leaves[i]->set_data((float)i);
   }
- 
+
   vsl_b_ofstream os("tree.bin");
   // mimic writing the block info first, then the tree
   vsl_b_write(os, 1);  //version
@@ -37,8 +36,9 @@ MAIN( test_tree_cell_reader )
   while (reader.next(cell)) {
     cells.push_back(cell);
   }
-  
+
   TEST("No of Leaf Cells after reading", cells.size(), leaves.size());
   delete block;
-  SUMMARY();
 }
+
+TESTMAIN(test_tree_cell_reader);

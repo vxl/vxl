@@ -4,10 +4,8 @@
 #include <brdb/brdb_relation.h>
 #include <vcl_iostream.h>
 
-MAIN( test_relation )
+static void test_relation()
 {
-  START ("DB Relation");
-
   vcl_vector<vcl_string> names(3);
   vcl_vector<vcl_string> types(3);
   vcl_vector<brdb_tuple_sptr> tuples(4);
@@ -137,6 +135,6 @@ MAIN( test_relation )
   my_relation2.clear();
   TEST("clear(): arity", my_relation2.arity(), 3);
   TEST("clear(): size",  my_relation2.size(),  0);
-
-  SUMMARY();
 }
+
+TESTMAIN(test_relation);

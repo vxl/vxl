@@ -24,7 +24,7 @@
 
 #include <vul/vul_file.h>
 
-MAIN( test_bvxm_create_voxel_world_process )
+static void test_bvxm_create_voxel_world_process()
 {
   DECLARE_FUNC_CONS(bvxm_create_voxel_world_process);
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_create_voxel_world_process, "bvxmCreateVoxelWorldProcess");
@@ -76,6 +76,6 @@ MAIN( test_bvxm_create_voxel_world_process )
   bgeo_lvcs lvcs(32.724233, -117.156105, 39.0, bgeo_lvcs::wgs84, 0.1, 0.1);
   comp = comp && (*(params->lvcs()) == lvcs);
   TEST("world parameters check", comp ,true);
-
-  SUMMARY();
 }
+
+TESTMAIN(test_bvxm_create_voxel_world_process);

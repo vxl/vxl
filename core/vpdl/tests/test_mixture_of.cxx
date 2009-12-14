@@ -352,11 +352,10 @@ void test_mixture_of_type(T epsilon, const vcl_string& type_name)
 }
 
 
-MAIN( test_mixture_of )
+static void test_mixture_of()
 {
-  START ("mixture_of");
-  test_mixture_of_type(float(1e-5),"float");
-  test_mixture_of_type(double(1e-13),"double");
-  SUMMARY();
+  test_mixture_of_type(1e-5f,"float");
+  test_mixture_of_type(1e-13,"double");
 }
 
+TESTMAIN(test_mixture_of);

@@ -12,7 +12,7 @@
 
 static void touch(char const* fn)
 {
-  vcl_ofstream f(fn); f << ".";
+  vcl_ofstream f(fn); f << '.';
 }
 
 void test_file_iterator_unix()
@@ -304,33 +304,17 @@ void test_file_iterator_dos()
   vpl_rmdir( tempdir.c_str() );
 }
 
-void test_file_iterator()
+static void test_file_iterator()
 {
 #ifndef VCL_WIN32
   test_file_iterator_unix();
 #else
   test_file_iterator_dos();
 #endif
-}
 
-static
-void test_non_existant_dir()
-{
   vcl_cout << "Testing non-existent directory" << vcl_endl;
   vul_file_iterator f("/some/directory/that/does/not/exist/*.blah");
   TEST( "Iterator is empty", bool(f), false );
 }
 
-
-
-
-//TESTMAIN(test_file_iterator);
-int test_file_iterator(int, char*[])
-{
-  testlib_test_start("test_file_iterator");
-
-  test_file_iterator();
-  test_non_existant_dir();
-
-  return testlib_test_summary();
-}
+TEST_MAIN(test_file_iterator);

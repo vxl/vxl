@@ -15,10 +15,8 @@
 #include <vcl_iostream.h>
 #include <vcl_cmath.h>
 
-MAIN( test_octree_objects )
+static void test_octree_objects()
 {
-  START("rgtl_octree_objects");
-
   // Default bounds are unit cube.
   rgtl_octree_cell_bounds<3> bounds;
 
@@ -74,6 +72,6 @@ MAIN( test_octree_objects )
 
   vcl_cout << "  octree construction took " << (ct_ms*0.001) << "s\n"
            << "  distance transform took " << (df_ms*0.001) << 's' << vcl_endl;
-
-  SUMMARY();
 }
+
+TESTMAIN(test_octree_objects);

@@ -251,11 +251,10 @@ void test_gaussian_sphere_type(T epsilon, const vcl_string& type_name)
 }
 
 
-MAIN( test_gaussian_sphere )
+static void test_gaussian_sphere()
 {
-  START ("gaussian_sphere");
-  test_gaussian_sphere_type(float(1e-5),"float");
-  test_gaussian_sphere_type(double(1e-14),"double");
-  SUMMARY();
+  test_gaussian_sphere_type(1e-5f,"float");
+  test_gaussian_sphere_type(1e-14,"double");
 }
 
+TESTMAIN(test_gaussian_sphere);

@@ -15,9 +15,8 @@
 #include <vpgl/vpgl_calibration_matrix.h>
 
 
-MAIN( test_render_image )
+static void test_render_image()
 {
-  START ("RENDER IMAGE");
   bgeo_lvcs lvcs(33.33,44.44,10.0, bgeo_lvcs::wgs84, bgeo_lvcs::DEG, bgeo_lvcs::METERS);
   vgl_point_3d<double> origin(0,0,0);
   vgl_vector_3d<double> block_dim(10,10,10);
@@ -101,8 +100,8 @@ MAIN( test_render_image )
   mask.fill(0.0);
 
   boxm_render_image_splatting<short,boxm_sample<BOXM_APM_MOG_GREY> >(scene,camera,expected,mask);
-  vpl_rmdir("./boxm_scene1");
-  vpl_unlink("./scene1.xml");
-
-  SUMMARY();
+  vpl_rmdir("boxm_scene1");
+  vpl_unlink("scene1.xml");
 }
+
+TESTMAIN(test_render_image);

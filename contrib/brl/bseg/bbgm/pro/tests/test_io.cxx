@@ -49,8 +49,8 @@ namespace
   }
 };
 
-void test_io_function_2(void) {
-
+void test_io_function_2(void)
+{
   vcl_cout << "Starting test_io2\n";
   const float window_size = 50.0;
   const unsigned int max_components = 3;
@@ -104,7 +104,7 @@ void test_io_function_2(void) {
   vpl_unlink("./background.md");
 }
 
-MAIN( test_io )
+static void test_io()
 {
   REGISTER_DATATYPE(vcl_string);
   REGISTER_DATATYPE( bbgm_image_sptr );
@@ -166,6 +166,6 @@ MAIN( test_io )
   TEST("test save and load image_of", good, true);
   vpl_unlink("./background.md");
   test_io_function_2();
-  SUMMARY();
 }
 
+TESTMAIN(test_io);

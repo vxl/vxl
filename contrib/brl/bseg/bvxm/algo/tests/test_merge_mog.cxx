@@ -1,10 +1,12 @@
 #include <testlib/testlib_test.h>
 #include "../bvxm_merge_mog.h"
 #include <bvxm/grid/bvxm_voxel_grid.h>
+#include <vcl_iostream.h>
 
-void merge()
+static void test_merge_mog()
 {
- //define some known mixtures
+  vcl_cout << "test l2 norm for mixtures of gaussians\n";
+  //define some known mixtures
   typedef bsta_num_obs<bsta_gauss_f1> gauss_type;
   typedef bsta_mixture_fixed<gauss_type, 3> mix_gauss;
   typedef bsta_num_obs<mix_gauss> mix_gauss_type;
@@ -98,10 +100,4 @@ void merge()
   }
 }
 
-
-MAIN( test_merge_mog)
-{
-  START ("test l2 norm for mixtures of gaussians");
-  merge();
-  SUMMARY();
-}
+TESTMAIN(test_merge_mog);

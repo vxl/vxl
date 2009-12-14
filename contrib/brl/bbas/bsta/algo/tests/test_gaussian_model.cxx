@@ -69,9 +69,8 @@ void test_gauss_indep_update()
 }
 
 
-MAIN( test_gaussian_model)
+static void test_gaussian_model()
 {
-  START ("test_gaussian_model");
   vcl_cout << "----------------------------------\n"
            << " float, 2-dimensional, 3-modal\n"
            << "-----------------------------------" <<vcl_endl;
@@ -84,6 +83,6 @@ MAIN( test_gaussian_model)
            << " float, 4-dimensional, 3-modal\n"
            << "-----------------------------------" <<vcl_endl;
   test_gauss_indep_update<float,4>();
-  SUMMARY();
 }
 
+TESTMAIN(test_gaussian_model);

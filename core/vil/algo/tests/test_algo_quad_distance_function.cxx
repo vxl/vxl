@@ -120,8 +120,8 @@ void test_algo_quad_distance_function_with_pos_float_float()
   TEST("pos(4,6)=(2,4)",pos(4,6,0)==2 && pos(4,6,1)==4,true);
   TEST_NEAR("d(0,1)",dest(0,1),1,1e-6);
   TEST("pos(0,1)=(0,1)",pos(0,1,0)==0 && pos(0,1,1)==1,true);
-  vcl_cout<<"pos(0,0)=("<<pos(0,0,0)<<','<<pos(0,0,1)<<')'<<vcl_endl
-          <<"pos(0,1)=("<<pos(0,1,0)<<','<<pos(0,1,1)<<')'<<vcl_endl
+  vcl_cout<<"pos(0,0)=("<<pos(0,0,0)<<','<<pos(0,0,1)<<")\n"
+          <<"pos(0,1)=("<<pos(0,1,0)<<','<<pos(0,1,1)<<")\n"
           <<"pos(0,2)=("<<pos(0,2,0)<<','<<pos(0,2,1)<<')'<<vcl_endl;
   TEST_NEAR("d(0,2)",dest(0,2),-2,1e-6);
   TEST("pos(0,2)=(2,4)",pos(0,2,0)==2 && pos(0,2,1)==4,true);
@@ -129,16 +129,16 @@ void test_algo_quad_distance_function_with_pos_float_float()
   vcl_cout<<"Extra minima."<<vcl_endl;
   src(1,2)=-10.0f;
   vil_quad_distance_function(src,1,1,dest,pos);
-  TEST_NEAR("d(1,2)",dest(1,2),-10,1e-6);
+  TEST_NEAR("d(1,2)=-10",dest(1,2),-10,1e-6);
   TEST("pos(1,2)=(1,2)",pos(1,2,0)==1 && pos(1,2,1)==2,true);
   TEST("pos(0,2)=(1,2)",pos(0,2,0)==1 && pos(0,2,1)==2,true);
 }
 
-MAIN( test_algo_quad_distance_function )
+static void test_algo_quad_distance_function()
 {
-  START( "vil_quad_distance_function" );
   test_algo_quad_envelope_float();
   test_algo_quad_distance_function_float_float();
   test_algo_quad_distance_function_with_pos_float_float();
-  SUMMARY();
 }
+
+TESTMAIN(test_algo_quad_distance_function);

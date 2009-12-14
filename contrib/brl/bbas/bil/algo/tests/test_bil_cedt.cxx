@@ -20,31 +20,27 @@ bool generate_random_circle(vil_image_view<unsigned char> &im, int seed);
 
 #define DATA(I) (I).top_left_ptr()
 
-MAIN( test_bil_cedt )
+static void test_bil_cedt()
 {
-  START ("Contour Euclidean Distance Transform Algorithms");
+  vcl_cout << "Contour Euclidean Distance Transform Algorithms\n";
 
-  {
   unsigned r=10,c=12;
-
   vil_image_view <unsigned char> image(r,c,1);
 
   image.fill(255);
 
-
   for (int i=0;i<5;i++)
-  generate_random_line(image,i);
+    generate_random_line(image,i);
   for (int i=0;i<5;i++)
-generate_random_circle(image,i);
+    generate_random_circle(image,i);
 
-  vcl_cout << "ORIGINAL IMAGE:\n" << vcl_endl;
+  vcl_cout << "ORIGINAL IMAGE:\n";
   vil_print_all(vcl_cout,image);
 
   bil_cedt_test(image,true);
-  }
-
-  SUMMARY();
 }
+
+TESTMAIN(test_bil_cedt);
 
 void
 bil_cedt_test(vil_image_view<unsigned char> &im, bool print)

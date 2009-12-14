@@ -20,10 +20,10 @@ spline_1d_value(double u, vnl_vector<double> c)
   if (u==0)  // this avoids access to nonexisting c[f+3] when u+3 == c.size()
     return (  c[ f ] + 4 * c[ f + 1 ] + c[ f + 2 ] ) / 6;
   else
-    return (  (1-u)*(1-u)*(1-u) * c[ f ]
-            + (3*u*u*u-6*u*u+4) * c[ f + 1 ]
-            + (-3*u*u*u+3*u*u+3*u+1) * c[ f + 2 ]
-            + u*u*u * c[ f + 3 ]
+    return ( (1-u)*(1-u)*(1-u) * c[ f ]
+           + (3*u*u*u-6*u*u+4) * c[ f + 1 ]
+           + (-3*u*u*u+3*u*u+3*u+1) * c[ f + 2 ]
+           + u*u*u * c[ f + 3 ]
            ) / 6;
 }
 
@@ -324,14 +324,14 @@ test_refine_3d_spline()
   }
 }
 
-MAIN( test_spline )
+static void test_spline()
 {
-  START(" spline objects " );
   test_1d_spline();
   test_2d_spline();
   test_3d_spline();
   test_refine_1d_spline();
   test_refine_2d_spline();
   test_refine_3d_spline();
-  SUMMARY();
 }
+
+TESTMAIN(test_spline);

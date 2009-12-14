@@ -48,17 +48,15 @@ check_have( rgrl_data_set const& ds,
 
 rgrl_feature_set_sptr
 get( rgrl_data_set const& ds,
-            const char* name,
-            unsigned res )
+     const char* name,
+     unsigned res )
 {
   return ds.get( rgrl_data_set::key_type( res, label(name) ) );
 }
 
 
-MAIN( test_data_set )
+static void test_data_set()
 {
-  START( "data set" );
-
   vcl_vector<rgrl_feature_sptr> points;
   points.push_back( pf( vec3d( 0.0, 0.0, 0.0 ) ) );
 
@@ -101,6 +99,6 @@ MAIN( test_data_set )
   TEST( "!Get boundaries,0", get( *ds, "boundaries", 0 ), rgrl_feature_set_sptr(0) );
   TEST( "!Get vessels,1", get( *ds, "vessels", 1 ), rgrl_feature_set_sptr(0) );
   TEST( "!Get blah,1", get( *ds, "blah", 1 ), rgrl_feature_set_sptr(0) );
-
-  SUMMARY();
 }
+
+TESTMAIN(test_data_set);

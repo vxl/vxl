@@ -39,46 +39,42 @@ void test_closest_point(const imesh_mesh& mesh, const vcl_vector<vgl_point_3d<do
 }
 
 
-MAIN( test_kd_tree )
+static void test_kd_tree()
 {
-  START ("KD tree");
+  vcl_vector<vgl_point_3d<double> > pts;
+  pts.push_back(vgl_point_3d<double>(0,0,0));
+  pts.push_back(vgl_point_3d<double>(1.5,0,0.5));
+  pts.push_back(vgl_point_3d<double>(0.1,.2,0));
+  pts.push_back(vgl_point_3d<double>(3,-3,3));
+  imesh_mesh cube;
+  make_cube(cube);
+  imesh_transform_inplace(cube, vgl_rotation_3d<double>(0,.1,.785398));
+  imesh_quad_subdivide(cube);
+  imesh_triangulate(cube);
 
-  {
-    vcl_vector<vgl_point_3d<double> > pts;
-    pts.push_back(vgl_point_3d<double>(0,0,0));
-    pts.push_back(vgl_point_3d<double>(1.5,0,0.5));
-    pts.push_back(vgl_point_3d<double>(0.1,.2,0));
-    pts.push_back(vgl_point_3d<double>(3,-3,3));
-    imesh_mesh cube;
-    make_cube(cube);
-    imesh_transform_inplace(cube, vgl_rotation_3d<double>(0,.1,.785398));
-    imesh_quad_subdivide(cube);
-    imesh_triangulate(cube);
+  test_closest_point(cube,pts);
 
-    test_closest_point(cube,pts);
-
-    vcl_vector<imesh_kd_tree_queue_entry> dists;
-    vcl_auto_ptr<imesh_kd_tree_node> kd_tree = imesh_build_kd_tree(cube);
-    vgl_point_3d<double> cp;
-    imesh_kd_tree_closest_point(pts[3],cube,kd_tree,cp,&dists);
-    unsigned int leaf_count = 0;
-    vcl_vector<imesh_kd_tree_node*> internals;
-    for (unsigned int i=0; i<dists.size(); ++i) {
-      if (dists[i].node_->is_leaf())
-        ++leaf_count;
-      else
-        internals.push_back(dists[i].node_);
-    }
-    for (unsigned int i=0; i<internals.size(); ++i) {
-      if (internals[i]->is_leaf())
-        ++leaf_count;
-      else {
-        internals.push_back(internals[i]->left_.get());
-        internals.push_back(internals[i]->right_.get());
-      }
-    }
-    TEST("Remainder covers all nodes",leaf_count,cube.num_faces());
+  vcl_vector<imesh_kd_tree_queue_entry> dists;
+  vcl_auto_ptr<imesh_kd_tree_node> kd_tree = imesh_build_kd_tree(cube);
+  vgl_point_3d<double> cp;
+  imesh_kd_tree_closest_point(pts[3],cube,kd_tree,cp,&dists);
+  unsigned int leaf_count = 0;
+  vcl_vector<imesh_kd_tree_node*> internals;
+  for (unsigned int i=0; i<dists.size(); ++i) {
+    if (dists[i].node_->is_leaf())
+      ++leaf_count;
+    else
+      internals.push_back(dists[i].node_);
   }
-
-  SUMMARY();
+  for (unsigned int i=0; i<internals.size(); ++i) {
+    if (internals[i]->is_leaf())
+      ++leaf_count;
+    else {
+      internals.push_back(internals[i]->left_.get());
+      internals.push_back(internals[i]->right_.get());
+    }
+  }
+  TEST("Remainder covers all nodes",leaf_count,cube.num_faces());
 }
+
+TESTMAIN(test_kd_tree);

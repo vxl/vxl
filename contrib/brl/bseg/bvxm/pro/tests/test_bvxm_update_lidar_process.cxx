@@ -22,7 +22,7 @@
 #include <bvxm/pro/processes/bvxm_update_lidar_process.h>
 #include <bvxm/pro/processes/bvxm_save_occupancy_raw_process.h>
 
-MAIN_ARGS( test_bvxm_update_lidar_process )
+static void test_bvxm_update_lidar_process()
 {
   //DECLARE_FUNC_CONS(bvxm_update_lidar_process);
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_update_lidar_process, "bvxmUpdateLidarProcess");
@@ -388,6 +388,6 @@ MAIN_ARGS( test_bvxm_update_lidar_process )
 #else
   // do nothing ...
 #endif // full function body commented out
-
-  SUMMARY();
 }
+
+TESTMAIN(test_bvxm_update_lidar_process);

@@ -1,4 +1,4 @@
-//: 
+//:
 //\file
 //\author Kongbin Kang
 //\date Dec. 22th, 2004
@@ -9,18 +9,14 @@
 #include <vnl/vnl_real_polynomial.h>
 #include <bnl/algo/bnl_legendre_polynomial.h>
 
-MAIN( test_legendre_polynomial )
+static void test_legendre_polynomial()
 {
-  START ("legendre_polynomial");
-
-  for(int i = 0; i< 8; i++){
+  for (int i = 0; i< 8; i++) {
     vcl_cout << " p"<< i <<" = ";
     vnl_real_polynomial p = bnl_legendre_polynomial(i);
     p.print(vcl_cout);
     vcl_cout << '\n';
   }
-
-  SUMMARY();
 }
 
-
+TESTMAIN(test_legendre_polynomial);

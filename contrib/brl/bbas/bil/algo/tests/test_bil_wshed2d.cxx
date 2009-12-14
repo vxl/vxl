@@ -1,8 +1,9 @@
 #include <testlib/testlib_test.h>
+#include <vcl_iostream.h>
 
-MAIN( test_bil_wshed2d )
+static void test_bil_wshed2d()
 {
-  START ("2D Watershed Transform");
-
-  SUMMARY();
+  vcl_cout << "2D Watershed Transform\n";
 }
+
+TESTMAIN(test_bil_wshed2d);

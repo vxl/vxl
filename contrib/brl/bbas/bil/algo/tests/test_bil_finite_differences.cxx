@@ -3,10 +3,8 @@
 #include <bil/algo/bil_finite_differences.h>
 
 
-MAIN( test_bil_finite_differences )
+static void test_bil_finite_differences()
 {
-  START ("2D Finite Differences");
-
   int dim = 6;
   vil_image_view<float> testim(dim,dim);
   vil_image_view<float> dxp,dxm,dxc,dyp,dym,dyc;
@@ -20,8 +18,8 @@ MAIN( test_bil_finite_differences )
   float dypsum=0;
   float dymsum=0;
   float dycsum=0;
-  for (unsigned j = 0 ; j < testim.nj(); j++){
-    for (unsigned i = 0 ; i < testim.ni(); i++){
+  for (unsigned j = 0 ; j < testim.nj(); j++) {
+    for (unsigned i = 0 ; i < testim.ni(); i++) {
       dxpsum += dxp(i,j);
       dxmsum += dxm(i,j);
       dxcsum += dxc(i,j);
@@ -38,12 +36,12 @@ MAIN( test_bil_finite_differences )
   TEST_NEAR("D_y_minus", dymsum,0, 0.001);
   TEST_NEAR("D_y_center", dycsum,0, 0.001);
 
-  for (unsigned j = 0 ; j < testim.nj(); j++){
-    for (unsigned i = 0 ; i < testim.ni(); i++){
-      if (i < static_cast<unsigned>(dim/2)){
+  for (unsigned j = 0 ; j < testim.nj(); j++) {
+    for (unsigned i = 0 ; i < testim.ni(); i++) {
+      if (i < static_cast<unsigned>(dim/2)) {
         testim(i,j) = 1;
       }
-      else{
+      else {
         testim(i,j) = 0;
       }
     }
@@ -55,7 +53,7 @@ MAIN( test_bil_finite_differences )
   vil_print_all(vcl_cout,dxm);
   vil_print_all(vcl_cout,dxc);
 #endif // 0
-  for (unsigned j = 0 ; j < testim.nj(); j++){
+  for (unsigned j = 0 ; j < testim.nj(); j++) {
     TEST_NEAR("D_x_plus"    ,     dxp(0,j)    ,    0    ,     0.001);
     TEST_NEAR("D_x_minus"   ,     dxm(0,j)    ,    0    ,     0.001);
     TEST_NEAR("D_x_center"  ,     dxc(0,j)    ,    0    ,     0.001);
@@ -78,12 +76,12 @@ MAIN( test_bil_finite_differences )
     TEST_NEAR("D_y_center"  ,     dyc(dim/2,j)    ,    0    ,     0.001);
   }
 
-  for (unsigned j = 0 ; j < testim.nj(); j++){
-    for (unsigned i = 0 ; i < testim.ni(); i++){
-      if (j < static_cast<unsigned>(dim/2)){
+  for (unsigned j = 0 ; j < testim.nj(); j++) {
+    for (unsigned i = 0 ; i < testim.ni(); i++) {
+      if (j < static_cast<unsigned>(dim/2)) {
         testim(i,j) = 1;
       }
-      else{
+      else {
         testim(i,j) = 0;
       }
     }
@@ -96,7 +94,7 @@ MAIN( test_bil_finite_differences )
   vil_print_all(vcl_cout,dym);
   vil_print_all(vcl_cout,dyc);
   */
-  for (unsigned i = 0 ; i < testim.ni(); i++){
+  for (unsigned i = 0 ; i < testim.ni(); i++) {
     TEST_NEAR("D_x_plus"    ,     dxp(i,0)    ,    0    ,     0.001);
     TEST_NEAR("D_x_minus"   ,     dxm(i,0)    ,    0    ,     0.001);
     TEST_NEAR("D_x_center"  ,     dxc(i,0)    ,    0    ,     0.001);
@@ -120,12 +118,12 @@ MAIN( test_bil_finite_differences )
   }
 
 
-  for (unsigned j = 0 ; j < testim.nj(); j++){
-  for (unsigned i = 0 ; i < testim.ni(); i++){
-    if (j == testim.nj()-1){
+  for (unsigned j = 0 ; j < testim.nj(); j++) {
+  for (unsigned i = 0 ; i < testim.ni(); i++) {
+    if (j == testim.nj()-1) {
       testim(i,j) = 1;
     }
-    else{
+    else {
       testim(i,j) = 0;
     }
   }
@@ -138,7 +136,7 @@ MAIN( test_bil_finite_differences )
   vil_print_all(vcl_cout,dym);
   vil_print_all(vcl_cout,dyc);
   */
-  for (unsigned i = 0 ; i < testim.ni(); i++){
+  for (unsigned i = 0 ; i < testim.ni(); i++) {
     TEST_NEAR("D_x_plus"    ,     dxp(i,0)    ,    0    ,     0.001);
     TEST_NEAR("D_x_minus"   ,     dxm(i,0)    ,    0    ,     0.001);
     TEST_NEAR("D_x_center"  ,     dxc(i,0)    ,    0    ,     0.001);
@@ -161,12 +159,12 @@ MAIN( test_bil_finite_differences )
     TEST_NEAR("D_y_center"  ,     dyc(i,testim.nj() - 1)    ,   0.5   ,     0.001);
   }
 
-  for (unsigned j = 0 ; j < testim.nj(); j++){
-    for (unsigned i = 0 ; i < testim.ni(); i++){
-      if (i == testim.ni()-1){
+  for (unsigned j = 0 ; j < testim.nj(); j++) {
+    for (unsigned i = 0 ; i < testim.ni(); i++) {
+      if (i == testim.ni()-1) {
         testim(i,j) = 1;
       }
-      else{
+      else {
         testim(i,j) = 0;
       }
     }
@@ -179,7 +177,7 @@ MAIN( test_bil_finite_differences )
   vil_print_all(vcl_cout,dxm);
   vil_print_all(vcl_cout,dxc);
 #endif // 0
-  for (unsigned j = 0 ; j < testim.nj(); j++){
+  for (unsigned j = 0 ; j < testim.nj(); j++) {
     TEST_NEAR("D_x_plus"    ,     dxp(0,j)    ,    0    ,     0.001);
     TEST_NEAR("D_x_minus"   ,     dxm(0,j)    ,    0    ,     0.001);
     TEST_NEAR("D_x_center"  ,     dxc(0,j)    ,    0    ,     0.001);
@@ -201,6 +199,6 @@ MAIN( test_bil_finite_differences )
     TEST_NEAR("D_y_minus"   ,     dym(testim.ni() - 1,j)    ,    0    ,     0.001);
     TEST_NEAR("D_y_center"  ,     dyc(testim.ni() - 1,j)    ,    0    ,     0.001);
   }
-
-  SUMMARY();
 }
+
+TESTMAIN(test_bil_finite_differences);

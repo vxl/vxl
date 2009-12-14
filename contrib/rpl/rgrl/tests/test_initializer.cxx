@@ -123,29 +123,23 @@ test_inv_indexing()
 
   vcl_vector<rgrl_invariant_match_sptr> matches = initializer->matches_for_moving_image(0);
 
-  testlib_test_begin( "Last (best) match is correct" );
   simple_invariant_feature* from = rgrl_cast<simple_invariant_feature*>(matches[3]->from());
   simple_invariant_feature* to = rgrl_cast<simple_invariant_feature*>(matches[3]->to());
-  testlib_test_perform(from->location() == location1+t &&
-                       to->location() == location1);
+  TEST("Last (best) match is correct", from->location() == location1+t &&
+                                       to->location() == location1, true);
 
   initializer->next_initial( v, s );
   rgrl_trans_translation* trans = rgrl_cast<rgrl_trans_translation*>(v->xform_estimate());
 
-  testlib_test_begin( "Transform is correct" );
-  testlib_test_perform(trans->t()==t);
+  TEST("Transform is correct", trans->t(), t);
 
-  testlib_test_begin( "Remaining number of matches is correct" );
   matches = initializer->matches_for_moving_image(0);
-  testlib_test_perform(matches.size() == 3);
+  TEST("Remaining number of matches is correct", matches.size(), 3);
 
-
-  testlib_test_begin( "2nd last (2nd best) match is correct" );
   from = rgrl_cast<simple_invariant_feature*>(matches[2]->from());
   to = rgrl_cast<simple_invariant_feature*>(matches[2]->to());
-  testlib_test_perform(from->location() == location2+t &&
-                       to->location() == location2);
-
+  TEST("2nd last (2nd best) match is correct", from->location() == location2+t &&
+                                               to->location() == location2, true);
   delete initializer;
 }
 
@@ -173,27 +167,21 @@ test_single_prior()
   rgrl_transformation_sptr t;
   rgrl_view_sptr v;
 
-  testlib_test_begin( "First get is good" );
   rgrl_scale_sptr s;
-  testlib_test_perform( init->next_initial( v, s ) && v->xform_estimate()==trans);
+  TEST("First get is good", init->next_initial( v, s ) && v->xform_estimate()==trans, true);
 
   // the view and transform shouldn't change
   //
-  testlib_test_begin( "No second" );
-  testlib_test_perform( !init->next_initial( v, s ) );
-
-  testlib_test_begin( "No third" );
-  testlib_test_perform( !init->next_initial( v, s ) );
+  TEST("No second", !init->next_initial(v,s), true);
+  TEST("No third" , !init->next_initial(v,s), true);
 }
 
 } //end anonymous namespace
 
-MAIN( test_initializer )
+static void test_initializer()
 {
-  START( "initializers" );
-
   test_single_prior();
   test_inv_indexing();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_initializer);

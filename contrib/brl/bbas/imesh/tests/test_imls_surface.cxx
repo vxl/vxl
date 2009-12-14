@@ -22,10 +22,8 @@ double approx_deriv(const imesh_imls_surface& f,
 }
 
 
-MAIN( test_imls_surface )
+static void test_imls_surface()
 {
-  START("IMLS Surface Interpolation");
-
   double I1,Ix;
   double k1 = 1.5, k2 = 4.0;
   imesh_imls_surface::line_integrals(k1,k2,I1,Ix);
@@ -229,5 +227,6 @@ MAIN( test_imls_surface )
     mfw.write(M,"M");
 #endif
   }
-  SUMMARY();
 }
+
+TESTMAIN(test_imls_surface);

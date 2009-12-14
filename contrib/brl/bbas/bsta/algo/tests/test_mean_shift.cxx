@@ -465,16 +465,13 @@ void test_mean_shift_algo(T epsilon, const vcl_string& type_name)
 }
 
 
-MAIN( test_mean_shift )
+static void test_mean_shift()
 {
-  START ("mean_shift");
-
   test_sample_set<float,2>(0.1f, "float_2");
   test_sample_set<float>(0.1f, "float_1");
 
   test_mean_shift_algo<float,2>(0.1f,"float_2");
   test_mean_shift_algo<float,3>(0.1f,"float_3");
-  SUMMARY();
 }
 
-
+TESTMAIN(test_mean_shift);

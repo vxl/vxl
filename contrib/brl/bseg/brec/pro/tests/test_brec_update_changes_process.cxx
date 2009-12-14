@@ -136,10 +136,9 @@ vpgl_camera_double_sptr create_syn_world_camera(bvxm_voxel_world_sptr vox_world)
   return rat_cam;
 }
 
-MAIN( test_brec_update_changes_process )
+static void test_brec_update_changes_process()
 {
-  unsigned ni = 200;
-  unsigned nj = 200;
+  unsigned ni = 200, nj = 200;
 
   typedef bvxm_voxel_traits<APM_MOG_RGB>::voxel_datatype mog_type_rgb;
   typedef bvxm_voxel_traits<APM_MOG_RGB>::obs_datatype obs_datatype_rgb;
@@ -261,8 +260,6 @@ MAIN( test_brec_update_changes_process )
   unsigned id_img2;
   good = good && bprb_batch_process_manager::instance()->commit_output(0, id_img2);
   TEST("run brec update changes process", good ,true);
-
-  SUMMARY();
 }
 
-
+TESTMAIN(test_brec_update_changes_process);

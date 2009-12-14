@@ -2,9 +2,11 @@
 #include "../bvxm_mog_norm.h"
 #include <bvxm/grid/bvxm_voxel_grid.h>
 #include <bvxm/grid/bvxm_voxel_grid_base.h>
+#include <vcl_iostream.h>
 
 void test_l2_mog_norm()
 {
+  vcl_cout << "test l2 norm for mixtures of gaussians\n";
   //define some known mixtures
   typedef bsta_num_obs<bsta_gauss_f1> gauss_type;
   typedef bsta_mixture_fixed<gauss_type, 3> mix_gauss;
@@ -90,7 +92,8 @@ void test_l2_mog_norm()
 
 void test_gauss2mix()
 {
- //define some known mixtures
+  vcl_cout << "test l2 norm from a gaussian to a mixture\n";
+  //define some known mixtures
   typedef bsta_num_obs<bsta_gauss_f1> gauss_type;
   typedef bsta_mixture<gauss_type> mix_gauss;
   typedef bsta_num_obs<mix_gauss> mix_gauss_type;
@@ -105,22 +108,18 @@ void test_gauss2mix()
   bsta_gauss_f1 fc3(15,1);
   f.insert(fc3,(1.0f/3.0f));
 
-
   bsta_gauss_f1 g(6.3333f,39.5556f);
 
   bvxm_mog_norm<float> measure;
 
   double dist1 = measure.l2_gauss2mix(g,f,0);
-
-
   TEST_NEAR("G-F",dist1, 0.2719,0.01);
 }
 
-MAIN( test_mog_norm)
+static void test_mog_norm()
 {
-  START ("test l2 norm for mixtures of gaussians");
   test_l2_mog_norm();
-  vcl_cout << "test l2 norm from a  gaussian to a mixture\n";
   test_gauss2mix();
-  SUMMARY();
 }
+
+TESTMAIN(test_mog_norm);

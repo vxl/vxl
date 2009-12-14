@@ -81,12 +81,12 @@ void save_grid()
     vpl_rmdir(dir.c_str());
 }
 
-MAIN( test_grid_to_image_stack )
+static void test_grid_to_image_stack()
 {
-  START("grid image stack test");
   vcl_cout << "Float\n";
   save_grid<float>();
   vcl_cout << "Vector Float\n";
   save_grid<float,3>();
-  SUMMARY();
 }
+
+TESTMAIN(test_grid_to_image_stack);

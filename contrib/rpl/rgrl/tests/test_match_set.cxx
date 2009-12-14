@@ -116,9 +116,8 @@ test_one_to_one_correspondence()
     wgts.            push_back( random_count( 10 ) );
   }
 
-  testlib_test_begin( "Constructing match set" );
   rgrl_match_set_sptr ms = new rgrl_match_set( rgrl_feature_point::type_id() );
-  testlib_test_perform( ms && ms->from_size() == 0 );
+  TEST( "Constructing match set" , ms && ms->from_size(), 0);
 
   testlib_test_begin( "Adding the features" );
   for ( unsigned i=0; i < from_pts.size(); ++i ) {
@@ -126,22 +125,20 @@ test_one_to_one_correspondence()
   }
   testlib_test_perform( true );
 
-  testlib_test_begin( "Iterating over all the data" );
-  testlib_test_perform( test_one_to_one_contents( ms.as_pointer(), (rgrl_match_set::from_iterator*)0,
-                                                  from_pts, to_pts, wgts ) );
+  TEST( "Iterating over all the data",
+        test_one_to_one_contents( ms.as_pointer(), (rgrl_match_set::from_iterator*)0,
+                                  from_pts, to_pts, wgts ), true);
 
-  testlib_test_begin( "Iterating over all the data (const iterator)" );
-  testlib_test_perform( test_one_to_one_contents( (rgrl_match_set const*)ms.as_pointer(), (rgrl_match_set::const_from_iterator*)0,
-                                                  from_pts, to_pts, wgts ) );
+  TEST( "Iterating over all the data (const iterator)",
+        test_one_to_one_contents( (rgrl_match_set const*)ms.as_pointer(), (rgrl_match_set::const_from_iterator*)0,
+                                  from_pts, to_pts, wgts ), true);
 }
 
 } // end anonymous namespace
 
-MAIN( test_match_set )
+static void test_match_set()
 {
-  START( "match set" );
-
   test_one_to_one_correspondence();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_match_set);

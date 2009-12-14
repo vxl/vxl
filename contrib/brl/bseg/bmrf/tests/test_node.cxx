@@ -30,16 +30,18 @@ void test_node()
   bmrf_node_sptr node_2 = new bmrf_node(NULL, 2, 0.7);
   bmrf_node_sptr node_3 = new bmrf_node(NULL, 2, 0.2);
 
-  testlib_test_begin("Testing frame_num() ");
-  testlib_test_perform( node_1->frame_num() == 1 &&
-                        node_2->frame_num() == 2 &&
-                        node_3->frame_num() == 2 );
+  TEST("Testing frame_num()",
+       node_1->frame_num() == 1 &&
+       node_2->frame_num() == 2 &&
+       node_3->frame_num() == 2, true);
 
-  testlib_test_begin("Testing probability()");
-  vcl_cout << node_1->probability() << ' ' << node_2->probability() << ' ' << node_3->probability() << ' ';
-  testlib_test_perform( node_1->probability() == 0.5 &&
-                        node_2->probability() == 0.7 &&
-                        node_3->probability() == 0.2 );
+  vcl_cout << node_1->probability() << ' '
+           << node_2->probability() << ' '
+           << node_3->probability() << '\n';
+  TEST("Testing probability()",
+       node_1->probability() == 0.5 &&
+       node_2->probability() == 0.7 &&
+       node_3->probability() == 0.2, true);
 
 //----------------------------------------------------------------------------------------
 // I/O Tests
@@ -75,9 +77,9 @@ void test_node()
 }
 
 
-MAIN( test_node )
+static void test_node()
 {
-  START( "bmrf_node" );
   test_node();
-  SUMMARY();
 }
+
+TESTMAIN(test_node);

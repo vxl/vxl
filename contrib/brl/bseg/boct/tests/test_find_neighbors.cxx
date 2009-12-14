@@ -69,9 +69,8 @@ void brute_force_test_neighbor(boct_tree_cell<short,vgl_point_3d<double> >* cell
     }
 }
 
-MAIN( test_find_neighbors )
+static void test_find_neighbors()
 {
-  START ("Find Neighbors");
   short nlevels=10;
   boct_tree<short,vgl_point_3d<double> > * block=new boct_tree<short,vgl_point_3d<double> >(nlevels);
 
@@ -130,5 +129,6 @@ MAIN( test_find_neighbors )
     }
   }
   TEST("Returns the Correct Neighbors",n.size(),cnt);
-  SUMMARY();
 }
+
+TESTMAIN(test_find_neighbors);

@@ -56,31 +56,23 @@ bxml_document make_long_doc()
   return doc;
 }
 
-};
+}; // namespace
 
 
-int
-test_find_main( int argc, char* argv[] )
+static void test_find(int argc, char* argv[])
 {
-  START ("XML Find");
+  bxml_document doc = make_simple_doc();
 
-  {
-    bxml_document doc = make_simple_doc();
+  bxml_element query("empty");
+  query.set_attribute("amount","2.3");
+  bxml_data_sptr result = bxml_find(doc.root_element(), query);
 
-    bxml_element query("empty");
-    query.set_attribute("amount","2.3");
-    bxml_data_sptr result = bxml_find(doc.root_element(), query);
+  TEST("find simple element", !result, false);
 
-    TEST("find simple element", !result, false);
+  query.set_attribute("amount","2.4");
+  result = bxml_find(doc.root_element(), query);
 
-    query.set_attribute("amount","2.4");
-    result = bxml_find(doc.root_element(), query);
-
-    TEST("find missing element", !result, true);
-  }
-
-
-  SUMMARY();
+  TEST("find missing element", !result, true);
 }
 
-
+TESTMAIN_ARGS(test_find);

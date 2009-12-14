@@ -16,7 +16,7 @@
 
 #include <bvxm/pro/processes/bvxm_synth_world_generator.h>
 
-MAIN( test_bvxm_create_synth_lidar_data_process)
+static void test_bvxm_create_synth_lidar_data_process()
 {
   DECLARE_FUNC_CONS(bvxm_create_synth_lidar_data_process);
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager,bvxm_create_synth_lidar_data_process, "bvxmCreateSynthLidarDataProcess");
@@ -71,7 +71,6 @@ MAIN( test_bvxm_create_synth_lidar_data_process)
   bool saved = vil_save(*img, "./lidar_img.tif");
 
   TEST("image saved", saved, true);
-
-
-  SUMMARY();
 }
+
+TESTMAIN(test_bvxm_create_synth_lidar_data_process);

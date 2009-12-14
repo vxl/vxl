@@ -3,7 +3,7 @@
 #include <testlib/testlib_test.h>
 //:
 // \file
-// \brief  Rudimentary testing of the vul_awk class 
+// \brief  Rudimentary testing of the vul_awk class
 // \author Eric Moyer (Wright State University)
 // \date   15 July 2009
 // \history built upon the shell of test_regexp, but has no tests in common
@@ -43,7 +43,7 @@ void test_awk()
       }
       for (int i = 0; i < 3; ++i) {
         vcl_stringstream msg;
-        msg << "easy:correct field content line:" << (line+1) 
+        msg << "easy:correct field content line:" << (line+1)
             << " field: " << i;
         vcl_stringstream expected;
         expected << (line+1) << letter[i];
@@ -96,7 +96,7 @@ void test_awk()
       ++awk;
       {
         vcl_stringstream msg;
-        msg << "comment:awk has correct line number after " 
+        msg << "comment:awk has correct line number after "
             << (numIncrements+1) << " increments.";
         TEST(msg.str().c_str(), awk.NR(), lineNum[numIncrements+1]);
       }
@@ -105,12 +105,4 @@ void test_awk()
   }
 }
 
-//TESTMAIN(test_awk);
-int test_awk(int, char*[])
-{
-  testlib_test_start("test_awk");
-
-  test_awk();
-
-  return testlib_test_summary();
-}
+TEST_MAIN(test_awk);

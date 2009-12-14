@@ -7,10 +7,8 @@
 #include <vpl/vpl.h>
 #include <vul/vul_file.h>
 
-MAIN( test_block_vis_graph )
+static void test_block_vis_graph()
 {
-  START ("CREATE SCENE");
-
   // create scene
   bgeo_lvcs lvcs(33.33,44.44,10.0, bgeo_lvcs::wgs84, bgeo_lvcs::DEG, bgeo_lvcs::METERS);
   vgl_point_3d<double> origin(0,0,0);
@@ -23,8 +21,8 @@ MAIN( test_block_vis_graph )
 
   vgl_box_3d<double> world;
   world.add(origin);
-  world.add(vgl_point_3d<double>(origin.x()+block_dim.x()*world_dim.x(), 
-                                 origin.y()+block_dim.y()*world_dim.y(), 
+  world.add(vgl_point_3d<double>(origin.x()+block_dim.x()*world_dim.x(),
+                                 origin.y()+block_dim.y()*world_dim.y(),
                                  origin.z()+block_dim.z()*world_dim.z()));
   vpgl_camera_double_sptr camera = generate_camera_top(world);
   boxm_block_vis_graph_iterator<tree_type> block_vis_iter(camera, &scene, IMAGE_U, IMAGE_V);
@@ -45,6 +43,6 @@ MAIN( test_block_vis_graph )
   }
   vpl_rmdir("boxm_scene");
   TEST("vis count", ++vis_count, 3);
-
-  SUMMARY();
 }
+
+TESTMAIN(test_block_vis_graph);

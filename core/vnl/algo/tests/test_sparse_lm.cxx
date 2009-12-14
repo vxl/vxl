@@ -9,7 +9,7 @@ static void normalize(vnl_vector<double>& a, vnl_vector<double>& b)
 {
   double x_mean=0.0, y_mean=0.0;
   unsigned int num_pts = b.size()/2;
-  for (unsigned int i=0; i<num_pts; ++i){
+  for (unsigned int i=0; i<num_pts; ++i) {
     x_mean += b[2*i];
     y_mean += b[2*i+1];
   }
@@ -17,28 +17,28 @@ static void normalize(vnl_vector<double>& a, vnl_vector<double>& b)
   y_mean /= num_pts;
 
   // translate points to the origin
-  for (unsigned int i=0; i<num_pts; ++i){
+  for (unsigned int i=0; i<num_pts; ++i) {
     b[2*i] -= x_mean;
     b[2*i+1] -= y_mean;
   }
   // translate cameras
-  for (unsigned int i=0; i<a.size()/2; ++i){
+  for (unsigned int i=0; i<a.size()/2; ++i) {
     a[2*i] -= x_mean;
     a[2*i+1] -= y_mean;
   }
 
   double mean_dist = 0.0;
-  for (unsigned int i=0; i<num_pts; ++i){
+  for (unsigned int i=0; i<num_pts; ++i) {
     mean_dist += vcl_sqrt(b[2*i]*b[2*i] + b[2*i+1]*b[2*i+1]);
   }
   mean_dist /= num_pts;
 
   // scale points
-  for (unsigned int i=0; i<b.size(); ++i){
+  for (unsigned int i=0; i<b.size(); ++i) {
     b[i] /= mean_dist;
   }
   // scale cameras
-  for (unsigned int i=0; i<a.size(); ++i){
+  for (unsigned int i=0; i<a.size(); ++i) {
     a[i] /= mean_dist;
   }
 }
@@ -80,10 +80,8 @@ class bundle_2d : public vnl_sparse_lst_sqr_function
 };
 
 
-MAIN( test_sparse_lm )
+static void test_sparse_lm()
 {
-   START ("sparse_lm");
-
    vcl_vector<bool> null_row(20,true);
    vcl_vector<vcl_vector<bool> > mask(3,null_row);
 
@@ -148,8 +146,8 @@ MAIN( test_sparse_lm )
    // create a subset of projections based on the mask
    vnl_crs_index crs(mask);
    vnl_vector<double> proj2(crs.num_non_zero());
-   for (int i=0; i<crs.num_rows(); ++i){
-     for (int j=0; j<crs.num_cols(); ++j){
+   for (int i=0; i<crs.num_rows(); ++i) {
+     for (int j=0; j<crs.num_cols(); ++j) {
        int k = crs(i,j);
        if (k >= 0)
          proj2[k]   = proj[i*crs.num_cols() + j];
@@ -180,7 +178,7 @@ MAIN( test_sparse_lm )
    vnl_random rnd;
 
    // add uniform random noise to each measurement
-   for (unsigned int i=0; i<proj2.size(); ++i){
+   for (unsigned int i=0; i<proj2.size(); ++i) {
      proj2[i] += (rnd.drand32()-0.5)*1e-6;
    }
 
@@ -206,8 +204,6 @@ MAIN( test_sparse_lm )
      TEST("convergence with missing projections and noise",
           rms_error_a <1e-4 && rms_error_b < 1e-4, true);
    }
-
-   SUMMARY();
 }
 
-
+TESTMAIN(test_sparse_lm);

@@ -26,7 +26,7 @@ void init_random_image(vil_image_view<float>& img)
         img(i,j,p) = static_cast<float>(rand.drand32());
 }
 
-MAIN( test_update_dist_image )
+static void test_update_dist_image()
 {
   REGISTER_DATATYPE( vil_image_view_base_sptr );
   REGISTER_DATATYPE( bbgm_image_sptr );
@@ -49,6 +49,7 @@ MAIN( test_update_dist_image )
   good = good && p1->init();
   good = good && p1->execute();
   TEST("update distribution image process", good, true);
-  SUMMARY();
 }
+
+TESTMAIN(test_update_dist_image);
 

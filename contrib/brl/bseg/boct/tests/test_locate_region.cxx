@@ -4,9 +4,8 @@
 #include <vgl/vgl_box_3d.h>
 
 
-MAIN( test_locate_region )
+static void test_locate_region()
 {
-  START ("Locate Region");
   short nlevels=10;
   boct_tree<short,vgl_point_3d<double> >* block=new boct_tree<short,vgl_point_3d<double> >(nlevels,5);
   vgl_box_3d<double> box(vgl_point_3d<double>(0.1,0.1,0.1),vgl_point_3d<double>(0.9,0.9,0.9));
@@ -18,6 +17,6 @@ MAIN( test_locate_region )
   vgl_box_3d<double> box1(vgl_point_3d<double>(0.05,0.05,0.05),vgl_point_3d<double>(0.1,0.1,0.1));
   cell=block->locate_region(box1);
   TEST("Returns the correct level",6, cell->level());
-
-  SUMMARY();
 }
+
+TESTMAIN(test_locate_region);

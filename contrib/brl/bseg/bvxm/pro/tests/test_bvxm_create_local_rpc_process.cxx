@@ -27,7 +27,7 @@
 
 #include <vul/vul_file.h>
 
-MAIN( test_bvxm_create_local_rpc_process )
+static void test_bvxm_create_local_rpc_process()
 {
   DECLARE_FUNC_CONS(bvxm_create_local_rpc_process);
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_create_local_rpc_process, "bvxmCreateLocalRpcProcess");
@@ -78,6 +78,6 @@ MAIN( test_bvxm_create_local_rpc_process )
   brdb_value_t<vpgl_camera_double_sptr>* result =
     static_cast<brdb_value_t<vpgl_camera_double_sptr>* >(value.ptr());
   vpgl_camera_double_sptr cam = result->value();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_bvxm_create_local_rpc_process);

@@ -21,7 +21,7 @@
 #include <vgl/vgl_vector_3d.h>
 #include <vpgl/file_formats/vpgl_nitf_rational_camera.h>
 
-MAIN( test_bvxm_roi_init_process )
+static void test_bvxm_roi_init_process()
 {
   DECLARE_FUNC_CONS(bvxm_roi_init_process);
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_roi_init_process, "bvxmRoiInitProcess");
@@ -109,5 +109,6 @@ MAIN( test_bvxm_roi_init_process )
   vil_image_view_base_sptr nitf_roi = result->value();
   bool saved = vil_save(*nitf_roi, "./roi.tif");
   TEST("saved", saved, true);
-  SUMMARY();
 }
+
+TESTMAIN(test_bvxm_roi_init_process);

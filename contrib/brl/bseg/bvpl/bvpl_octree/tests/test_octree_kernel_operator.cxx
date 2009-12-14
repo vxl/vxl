@@ -57,7 +57,6 @@ void fill_sample_octree(boct_tree<short,float>* tree)
     }
   }
 #endif
-  return;
 }
 
 void fill_edge3d_tree(boct_tree<short,float>* tree)
@@ -85,14 +84,14 @@ void fill_edge3d_tree(boct_tree<short,float>* tree)
   }
 }
 
-bool octree_kernel()
+void octree_kernel()
 {
   //Create kernel
   bvpl_edge3d_kernel_factory edge_factory(2,1,1);
   bvpl_kernel_sptr kernel = new bvpl_kernel(edge_factory.create());
-
-  //kernel->print();
-
+#ifdef DEBUG
+  kernel->print();
+#endif
   //Create functor
   bvpl_edge_geometric_mean_functor<float> functor;
 
@@ -104,17 +103,20 @@ bool octree_kernel()
   bvpl_octree_kernel_operator<float> oper(tree);
 
   boct_tree<short,float> *tree_out = tree->clone();
-
-  //tree_out -> print();
+#ifdef DEBUG
+  tree_out->print();
+#endif
   oper.operate(functor, kernel, tree_out, 1, 0.5);
-  // tree_out ->print();
+#ifdef DEBUG
+  tree_out->print();
+#endif
 
+  TEST("Octree kernel", true, true);
   delete tree;
   delete tree_out;
-  return true;
 }
 
-bool scene_kernel_operator()
+void scene_kernel_operator()
 {
   //Create kernel
   bvpl_edge3d_kernel_factory edge_factory(2,1,1);
@@ -184,11 +186,9 @@ bool scene_kernel_operator()
     }
   }
   TEST("tree operator == scene operator", eq, true);
-
-  return eq;
 }
 
-bool octree_vector_operator()
+void octree_vector_operator()
 {
   //Create the vector of kernels
   bvpl_edge3d_kernel_factory kernels_3d(5,5,5);
@@ -228,11 +228,10 @@ bool octree_vector_operator()
         result = result && id_tree->get_cell(loc_code)->data() == 0;
         vcl_cout << id_tree->get_cell(loc_code)->data();
       }
-
-  return result;
+  TEST("Octree vector operator", result, true);
 }
 
-bool scene_vector_operator()
+void scene_vector_operator()
 {
   //Create the vector of kernels
   bvpl_edge3d_kernel_factory kernels_3d(5,5,5);
@@ -311,19 +310,15 @@ bool scene_vector_operator()
       }
   }
   TEST("tree operator == scene operator", eq, true);
-
-  return true;
 }
 
 
-MAIN(test_octree_kernel_operator)
+static void test_octree_kernel_operator()
 {
-  bool result = octree_kernel();
-  TEST("Octree kernel", result, true);
-  result = octree_vector_operator();
-  TEST("Octree vector operator", result, true);
+  octree_kernel();
+  octree_vector_operator();
   scene_kernel_operator();
   scene_vector_operator();
-  SUMMARY();
-  return 0;
 }
+
+TESTMAIN(test_octree_kernel_operator);

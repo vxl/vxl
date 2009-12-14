@@ -41,7 +41,7 @@ void add_random_noise(vil_image_view<float>& img, float std)
 
 }; // namespace
 
-MAIN( test_bg_model_speed )
+static void test_bg_model_speed()
 {
   const float window_size = 50.0;
   const unsigned int max_components = 3;
@@ -90,7 +90,7 @@ MAIN( test_bg_model_speed )
     typedef bsta_num_obs<mix_gauss_type> obs_mix_gauss_type;
 
     bsta_gauss_if3 init_gauss( init_mean, init_covar );
-    bsta_mg_window_updater<mix_gauss_type> updater( init_gauss,
+    bsta_mg_window_updater<mix_gauss_type> updater(init_gauss,
                                                    max_components,
                                                    window_size);
 
@@ -103,7 +103,6 @@ MAIN( test_bg_model_speed )
       vcl_cout << " updated in " << up_time << " sec" <<vcl_endl;
     }
   }
-
-  SUMMARY();
 }
 
+TESTMAIN(test_bg_model_speed);

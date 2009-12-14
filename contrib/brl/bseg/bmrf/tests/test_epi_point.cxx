@@ -26,7 +26,6 @@ void test_epi_point()
        epi_point_1->tan_ang()==epi_point_2->tan_ang(),
        true);
 
-
 //-----------------------------------------------------------------------
 // I/O Tests
 //----------------------------------------------------------------------
@@ -62,9 +61,9 @@ void test_epi_point()
 }
 
 
-MAIN( test_epi_point )
+static void test_epi_point()
 {
-  START( "bmrf_epi_point" );
   test_epi_point();
-  SUMMARY();
 }
+
+TESTMAIN(test_epi_point);

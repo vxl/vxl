@@ -122,18 +122,16 @@ vcl_vector<vpgl_camera_double_sptr > generate_cameras_yz(vgl_box_3d<double>& wor
 }
 
 
-MAIN( test_update )
+static void test_update()
 {
-  START ("UPDATE WORLD");
-
   bgeo_lvcs lvcs(33.33,44.44,10.0, bgeo_lvcs::wgs84, bgeo_lvcs::DEG, bgeo_lvcs::METERS);
   vgl_point_3d<double> origin(0,0,0);
   vgl_vector_3d<double> block_dim(10,10,10);
   vgl_vector_3d<unsigned> world_dim(2,2,1);
   boxm_scene<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > > scene(lvcs, origin, block_dim, world_dim);
   scene.set_appearence_model(BOXM_APM_MOG_GREY);
-  scene.set_paths("./boxm_scene2", "block");
-  vul_file::make_directory("./boxm_scene2");
+  scene.set_paths("boxm_scene2", "block");
+  vul_file::make_directory("boxm_scene2");
   vcl_ofstream os("scene2.xml");
   x_write(os, scene, "scene");
   os.close();
@@ -248,8 +246,7 @@ MAIN( test_update )
 
   // regenerate the images from world
   for (unsigned i=0; i<cameras.size(); i++) {
-    vcl_stringstream ss;
-    ss << "./boxm_scene2/img_new" << i << ".tif";
+    vcl_stringstream ss; ss << "boxm_scene2/img_new" << i << ".tif";
     vil_image_view<float> expected_new(IMAGE_U,IMAGE_V);
     boxm_render_image_splatting<short,boxm_sample<BOXM_APM_MOG_GREY> >(scene_new,cameras[i],expected_new,mask);
     vil_image_view<unsigned char> expected_byte(expected_new.ni(),expected_new.nj(),expected_new.nplanes());
@@ -257,7 +254,6 @@ MAIN( test_update )
 
     vil_save(expected_byte, ss.str().data());
   }
-
-  SUMMARY();
 }
 
+TESTMAIN(test_update);

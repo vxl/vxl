@@ -44,7 +44,7 @@ bool get_image(unsigned int id, vil_image_view_base_sptr& image)
   return true;
 }
 
-MAIN( test_bmdl_classify_process )
+static void test_bmdl_classify_process()
 {
   REG_PROCESS_FUNC(bprb_func_process, bprb_batch_process_manager, bmdl_classify_process, "bmdlClassifyProcess");
   REGISTER_DATATYPE(vcl_string);
@@ -83,5 +83,6 @@ MAIN( test_bmdl_classify_process )
 
   saved = vil_save(*height_img, "height.tif");
   TEST("HEIGHTS saved", saved, true);
-  SUMMARY();
 }
+
+TESTMAIN(test_bmdl_classify_process);

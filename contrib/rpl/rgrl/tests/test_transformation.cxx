@@ -411,14 +411,13 @@ void test_trans_rigid()
 
 } // end anonymous namespace
 
-MAIN( test_transformation )
+static void test_transformation()
 {
-  START( "various transformation objects" );
-
   test_trans_affine();
   test_trans_quadratic();
   test_trans_spline();
   test_trans_rigid();
   test_trans_homography();
-  SUMMARY();
 }
+
+TESTMAIN(test_transformation);

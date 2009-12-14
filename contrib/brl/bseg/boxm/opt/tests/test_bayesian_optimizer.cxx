@@ -8,10 +8,8 @@
 #include <vpl/vpl.h>
 #include <vul/vul_file.h>
 
-MAIN( test_bayesian_optimizer )
+static void test_bayesian_optimizer()
 {
-  START ("CREATE SCENE");
-
   typedef boxm_sample<BOXM_APM_SIMPLE_GREY> data_type;
   typedef boxm_rt_sample<float> aux_type;
 
@@ -100,5 +98,6 @@ MAIN( test_bayesian_optimizer )
   for (unsigned i=0; i<image_names.size(); i++) {
     delete aux_scenes[i];
   }
-  SUMMARY();
 }
+
+TESTMAIN(test_bayesian_optimizer);

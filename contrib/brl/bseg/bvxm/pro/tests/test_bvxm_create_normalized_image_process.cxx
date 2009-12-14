@@ -25,10 +25,9 @@
 
 //namespace bvxm_normalize_image_process_globals;
 
-MAIN( test_bvxm_create_normalized_image_process )
+static void test_bvxm_create_normalized_image_process()
 {
-  unsigned ni = 640;
-  unsigned nj = 480;
+  unsigned ni = 640, nj = 480;
 
   //: first test various stages in the normalization process
   vil_image_view<vxl_byte> input_img(ni, nj, 1);
@@ -105,6 +104,6 @@ MAIN( test_bvxm_create_normalized_image_process )
   TEST_NEAR("image dif should sum to 0", sum, 0.0, 0.01);
   vil_math_sum(sum, im_dif, 2);
   TEST_NEAR("image dif should sum to 0", sum, 0.0, 0.01);
-
-  SUMMARY();
 }
+
+TESTMAIN(test_bvxm_create_normalized_image_process);

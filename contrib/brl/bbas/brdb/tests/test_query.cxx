@@ -7,10 +7,8 @@
 #include <brdb/brdb_relation_sptr.h>
 #include <brdb/brdb_selection_sptr.h>
 
-MAIN( test_query )
+static void test_query()
 {
-  START ("DB query");
-
   TEST("comparison complements", true,
        (brdb_query::NONE == ~brdb_query::ALL ) &&
        (brdb_query::ALL  == ~brdb_query::NONE) &&
@@ -24,6 +22,6 @@ MAIN( test_query )
   brdb_query_aptr q1 = brdb_query_comp_new("attr", brdb_query::EQ, 1);
   brdb_query_aptr q2 = brdb_query_comp_new("attr", brdb_query::EQ, 3);
   brdb_query_aptr q1or2 = q1 | q2;
-
-  SUMMARY();
 }
+
+TESTMAIN(test_query);

@@ -58,7 +58,7 @@ vil_image_view_base_sptr test_process(vil_image_view_base_sptr const &ref_img)
 // floating type image and a vxl_byte image. The images are converted from 4 planes
 // to 2 planes
 
-MAIN( test_vil_convert_to_n_planes_process )
+static void test_vil_convert_to_n_planes_process()
 {
   //Take care of database registration
   DECLARE_FUNC_CONS(vil_convert_to_n_planes_process);
@@ -116,6 +116,6 @@ MAIN( test_vil_convert_to_n_planes_process )
   TEST("Byte-Image as expected",vil_image_view_deep_equality(byte_observed,byte_expected), true);
 
   bprb_batch_process_manager::instance()->clear();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_vil_convert_to_n_planes_process);

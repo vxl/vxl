@@ -11,7 +11,7 @@
 //
 // This is a test of using the templatized graph class with
 // regular pointers (as opposed to smart pointers)
-void graph_test()
+static void graph_test()
 {
   test_node_sptr v1 = new test_node(1);
   test_node_sptr v2 = new test_node(2);
@@ -36,19 +36,19 @@ void graph_test()
        the_graph->exists(v4) &&
        the_graph->exists(v5),
        true);
-  
+
   TEST("Testing remove_vertex()",
        the_graph->remove_vertex(v3) &&
        the_graph->remove_vertex(v4),
        true);
-  
+
   TEST("Testing vertex existence",
        !the_graph->exists(v3) &&
        !the_graph->exists(v4),
        true);
-  
+
   // make the edges
-  TEST("Testing add_edge()",     
+  TEST("Testing add_edge()",
        the_graph->add_edge(v1, v2) &&
        the_graph->add_edge(v2, v1) &&
        the_graph->add_edge(v1, v3) && // v3 added back in
@@ -90,41 +90,35 @@ void graph_test()
   //testing iterators
   int num_edges=0;
   for (test_graph::edge_iterator  e_itr = the_graph->edges_begin();
-    e_itr != the_graph->edges_end(); ++e_itr)
+       e_itr != the_graph->edges_end(); ++e_itr)
   {
     num_edges++;
     //(*e_itr)->print_summary(vcl_cout);
   }
 
   TEST("Testing edge_iterator()",
-        num_edges==4, //there should be 4 edges remaining in the graph
-        true);
+       num_edges==4, //there should be 4 edges remaining in the graph
+       true);
 
   int num_vertices=0;
   for (test_graph::vertex_iterator  v_itr = the_graph->vertices_begin();
-    v_itr != the_graph->vertices_end(); ++v_itr)
+       v_itr != the_graph->vertices_end(); ++v_itr)
   {
     num_vertices++;
     //(*v_itr)->print_summary(vcl_cout);
   }
 
   TEST("Testing vertex_iterator()",
-        num_vertices==4, //there should be 4 nodes remaining in the graph
-        true);
+       num_vertices==4, //there should be 4 nodes remaining in the graph
+       true);
 
   //test graph clear function
   the_graph->clear();
 
   TEST("Testing clear()",
-        the_graph->number_of_edges()==0 &&  //there should be no edges remaining
-        the_graph->number_of_vertices()==0, //there should be no nodes remaining
-        true);
-
+       the_graph->number_of_edges()==0 &&  //there should be no edges remaining
+       the_graph->number_of_vertices()==0, //there should be no nodes remaining
+       true);
 }
 
-MAIN( graph_test )
-{
-  START( "bgrl2_graph" );
-  graph_test();
-  SUMMARY();
-}
+TESTMAIN(graph_test);

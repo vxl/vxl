@@ -70,18 +70,20 @@ static  void create_test_tree(vcl_string const& image_path,
   ray_mgr->write_rays(ray_path);
 }
 
-MAIN( test_ray_trace )
+static void test_ray_trace()
 {
   vcl_string root_dir = testlib_root_dir();
   boxm_ray_trace_manager* ray_mgr = boxm_ray_trace_manager::instance();
-    create_test_tree(root_dir + "/contrib/brl/bseg/boxm/opt/open_cl/tests/dalmation.tif", root_dir + "/contrib/brl/bseg/boxm/opt/open_cl/tests/dalmation_tree.vsl", root_dir + "/contrib/brl/bseg/boxm/opt/open_cl/tests/dalmation_rays.vsl");
+  create_test_tree(root_dir + "/contrib/brl/bseg/boxm/opt/open_cl/tests/dalmation.tif", root_dir + "/contrib/brl/bseg/boxm/opt/open_cl/tests/dalmation_tree.vsl", root_dir + "/contrib/brl/bseg/boxm/opt/open_cl/tests/dalmation_rays.vsl");
 
   octree_test_driver test_driver;
-  if (!test_driver.init())
-    return 0;
-  ray_trace_tests(test_driver);
-  test_driver.print_kernel_usage_info();
-   open_cl_test_data::save_expected_image(root_dir + "/contrib/brl/bseg/boxm/opt/open_cl/tests/expected_dalmation.tiff", ray_mgr->ray_cols(), ray_mgr->ray_rows(), ray_mgr->ray_results());
-
-  SUMMARY();
+  if (test_driver.init()) {
+    ray_trace_tests(test_driver);
+    test_driver.print_kernel_usage_info();
+    open_cl_test_data::save_expected_image(root_dir + "/contrib/brl/bseg/boxm/opt/open_cl/tests/expected_dalmation.tiff", ray_mgr->ray_cols(), ray_mgr->ray_rows(), ray_mgr->ray_results());
+  }
+  else
+  { TEST("octree_test_driver", true, false); }
 }
+
+TESTMAIN(test_ray_trace);

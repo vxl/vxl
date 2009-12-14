@@ -95,12 +95,4 @@ void test_url()
   }
 }
 
-//TESTMAIN(test_url);
-int test_url(int, char*[])
-{
-  testlib_test_start("test_url");
-
-  test_url();
-
-  return testlib_test_summary();
-}
+TEST_MAIN(test_url);

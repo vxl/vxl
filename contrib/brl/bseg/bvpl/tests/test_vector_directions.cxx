@@ -28,8 +28,8 @@ bool test_directions(FUNC dir)
   return result;
 }
 
-//: Test that directions created by functores are in fact stored in the kernels
-MAIN(test_vector_directions)
+//: Test that directions created by functors are in fact stored in the kernels
+static void test_vector_directions()
 {
   bvpl_create_directions_a dir1;
   TEST("Direction a", true, test_directions(dir1));
@@ -37,5 +37,6 @@ MAIN(test_vector_directions)
   TEST("Direction b", true, test_directions(dir2));
   bvpl_all_corner_dirs dir3;
   TEST("Direction c", true, test_directions(dir3));
-  SUMMARY();
 }
+
+TESTMAIN(test_vector_directions);

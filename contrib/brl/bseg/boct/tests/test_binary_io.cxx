@@ -6,10 +6,8 @@
 #include <vgl/vgl_point_3d.h>
 #include <vpl/vpl.h>
 
-MAIN( test_binary_io )
+static void test_binary_io()
 {
-  START ("Binary Write-Read");
-
   boct_tree<short,vgl_point_3d<double> > *tree_in=new boct_tree<short,vgl_point_3d<double> >(6,3);
   tree_in->split();
   vcl_vector<boct_tree_cell<short,vgl_point_3d<double> >*> leaves = tree_in->leaf_cells();
@@ -42,5 +40,6 @@ MAIN( test_binary_io )
   }
   TEST("The data at the leaf nodes are the same", same, true);
   vpl_unlink("tree.bin");
-  SUMMARY();
 }
+
+TESTMAIN(test_binary_io);

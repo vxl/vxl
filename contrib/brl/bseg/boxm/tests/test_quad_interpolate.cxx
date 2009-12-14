@@ -16,9 +16,8 @@
 #include <vgl/algo/vgl_rotation_3d.h>
 
 
-MAIN_ARGS( test_quad_interpolate )
+static void test_quad_interpolate(int argc, char* argv[])
 {
-  START ("QUAD INTERPOLATE");
   vcl_vector<vgl_point_2d<double> > points;
   points.push_back(vgl_point_2d<double>(10,10));
   points.push_back(vgl_point_2d<double>(10,12));
@@ -86,7 +85,8 @@ MAIN_ARGS( test_quad_interpolate )
   vcl_ifstream ifs((camera_input_path + "/frame_00000.txt").c_str());
   if (!ifs.is_open()) {
     vcl_cerr << "Failed to open file " << camera_input_path << "/frame_00000.txt\n";
-    return false;
+    TEST("Opening camera file", true, false);
+    return;
   }
   vpgl_perspective_camera<double>* cam = new vpgl_perspective_camera<double>();
   ifs >> *cam;
@@ -109,6 +109,6 @@ MAIN_ARGS( test_quad_interpolate )
   vcl_cout << "Saving two TIFF files to directory " << image_output_path << '\n';
   vil_save(vil_plane(front_xyz,0),(image_output_path + "/front.tiff").c_str());
   vil_save(vil_plane(back_xyz,0), (image_output_path + "/back.tiff").c_str());
-
-  SUMMARY();
 }
+
+TESTMAIN_ARGS(test_quad_interpolate);

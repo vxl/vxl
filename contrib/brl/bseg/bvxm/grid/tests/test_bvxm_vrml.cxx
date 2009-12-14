@@ -58,12 +58,12 @@ bool color_grid_to_vrml()
   return true;
 }
 
-MAIN( test_bvxm_vrml )
+static void test_bvxm_vrml()
 {
-  START("Test vrml");
   vcl_cout << "Grid to vrml\n";
-  //grid_to_vrml();
+  grid_to_vrml();
   vcl_cout << "Color Grid to vrml\n";
   color_grid_to_vrml();
-  SUMMARY();
 }
+
+TESTMAIN(test_bvxm_vrml);

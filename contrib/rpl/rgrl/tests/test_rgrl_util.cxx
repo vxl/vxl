@@ -140,6 +140,7 @@ generate_random_data( unsigned dim,
 void
 test_util_extract_region_locations()
 {
+  vcl_cout << " util extract region locations\n";
   {
     vcl_cout << " 1D case : " << vcl_endl;
     unsigned dim = 1;
@@ -305,11 +306,9 @@ test_util_extract_region_locations()
 
 } // end anonymous namespace
 
-MAIN( test_rgrl_util )
+static void test_rgrl_util()
 {
-  START( " util extract region locations" );
-
   test_util_extract_region_locations();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_rgrl_util);

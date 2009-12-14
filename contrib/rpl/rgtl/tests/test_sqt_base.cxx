@@ -183,10 +183,9 @@ test_sqt()
   return true;
 }
 
-MAIN( test_sqt_base )
+static void test_sqt_base()
 {
-  START("rgtl_sqt_base");
-  testlib_test_begin("sqt parameter/direction conversion");
-  testlib_test_perform(test_sqt());
-  SUMMARY();
+  TEST("sqt parameter/direction conversion", test_sqt(), true);
 }
+
+TESTMAIN(test_sqt_base);

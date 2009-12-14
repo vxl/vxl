@@ -77,9 +77,9 @@ void test_epi_seg()
 }
 
 
-MAIN( test_epi_seg )
+static void test_epi_seg()
 {
-  START( "bmrf_epi_seg" );
   test_epi_seg();
-  SUMMARY();
 }
+
+TESTMAIN(test_epi_seg);

@@ -37,12 +37,10 @@ void test_update_mog_type(T epsilon, const vcl_string& type_name, T inf)
 }
 
 
-MAIN( test_update_mog )
+static void test_update_mog()
 {
-  START ("update mixture of gaussians");
   test_update_mog_type(1e-5f,"float", 1e29f);
   test_update_mog_type(1e-13,"double",1e29);
-  SUMMARY();
 }
 
-
+TESTMAIN(test_update_mog);

@@ -58,7 +58,7 @@ class dual_counter
 };
 
 static void
-test_dual_visit()
+test_octree_dual_visit()
 {
   // Create a simple tree.
   typedef rgtl_octree_data_fixed<2, int> tree_type;
@@ -73,19 +73,13 @@ test_dual_visit()
   tree.set_leaf_data(greatgrandchild0, &ld);
 
   // Check the dual cell visitation counts.
-  testlib_test_begin("dual cell visit");
   dual_counter<tree_type> c(tree);
   rgtl_octree_dual_visit(c);
-  testlib_test_perform(c.count(0) == 10 &&
-                       c.count(1) == 18 &&
-                       c.count(2) == 9 &&
-                       c.hcount() == 9 &&
-                       c.vcount() == 9);
+  TEST("dual cell visit",c.count(0) == 10 &&
+                         c.count(1) == 18 &&
+                         c.count(2) == 9 &&
+                         c.hcount() == 9 &&
+                         c.vcount() == 9, true);
 }
 
-MAIN( test_octree_dual_visit )
-{
-  START("rgtl_octree_dual_visit");
-  test_dual_visit();
-  SUMMARY();
-}
+TESTMAIN(test_octree_dual_visit);

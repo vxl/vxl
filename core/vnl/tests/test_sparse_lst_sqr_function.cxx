@@ -41,10 +41,8 @@ class test_func1 : public vnl_sparse_lst_sqr_function
 };
 
 
-MAIN( test_sparse_lst_sqr_function )
+static void test_sparse_lst_sqr_function()
 {
-   START ("sparse_lst_sqr_function");
-
    vcl_vector<bool> null_row(4,false);
    vcl_vector<vcl_vector<bool> > mask(3,null_row);
 
@@ -113,6 +111,6 @@ MAIN( test_sparse_lst_sqr_function )
    vcl_cout << "Bij =\n" << Bij << vcl_endl
             << "fd Bij =\n" << fd_Bij << vcl_endl;
    TEST("finite difference Bij", (Bij-fd_Bij).absolute_value_max()<0.001,true);
-
-   SUMMARY();
 }
+
+TESTMAIN(test_sparse_lst_sqr_function);

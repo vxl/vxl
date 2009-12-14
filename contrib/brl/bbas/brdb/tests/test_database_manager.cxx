@@ -10,10 +10,8 @@
 #include <vcl_iostream.h>
 
 
-MAIN( test_database_manager )
+static void test_database_manager()
 {
-  START ("DB database manager");
-
   ////////////////////////////////////////////////////////////////////////////
   // example: creating values, tuples and relations
   ////////////////////////////////////////////////////////////////////////////
@@ -438,6 +436,6 @@ MAIN( test_database_manager )
   s17->print();
 
   TEST("selection by index()", true, true);
-
-  SUMMARY();
 }
+
+TESTMAIN(test_database_manager);

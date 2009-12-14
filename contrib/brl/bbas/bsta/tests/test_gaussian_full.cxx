@@ -57,10 +57,10 @@ void test_gaussian_full_type(T epsilon, const vcl_string& type_name)
            << gauss << '\n';
 }
 
-MAIN( test_gaussian_full )
+static void test_gaussian_full()
 {
-  test_gaussian_full_type(float(1e-5),"float");
-  test_gaussian_full_type(double(1e-14),"double");
-  SUMMARY();
+  test_gaussian_full_type(1e-5f,"float");
+  test_gaussian_full_type(1e-14,"double");
 }
 
+TESTMAIN(test_gaussian_full);

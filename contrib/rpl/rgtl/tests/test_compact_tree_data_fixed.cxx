@@ -99,10 +99,10 @@ test_data_fixed()
   testlib_test_perform(!tree.has_children(root));
 }
 
-MAIN( test_compact_tree_data_fixed )
+static void test_compact_tree_data_fixed()
 {
-  START("rgtl_compact_tree_data_fixed");
   test_data_empty();
   test_data_fixed();
-  SUMMARY();
 }
+
+TESTMAIN(test_compact_tree_data_fixed);

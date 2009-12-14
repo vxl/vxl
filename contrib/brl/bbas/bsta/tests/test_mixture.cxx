@@ -97,15 +97,12 @@ void test_sampling()
 #endif // 0
 }
 
-MAIN( test_mixture )
+static void test_mixture()
 {
-  START ("mixture");
-#if 0
   test_mixture_type(float(),"float");
   test_mixture_type(double(),"double");
-#endif
   test_probability_functor();
   test_sampling();
-  SUMMARY();
 }
 
+TESTMAIN(test_mixture);

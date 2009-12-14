@@ -17,10 +17,8 @@ static void save_and_display(const vil_image_view<float> img,
            << name << ".png </DartMeasurementFile>" << vcl_endl;
 }
 
-MAIN( test_bil_scale_image )
+static void test_bil_scale_image()
 {
-  START ("scale_image");
-
   float sigma = 64.0f;
   unsigned int img_size = 256;
   vil_image_view<float> gaussian(img_size,img_size);
@@ -71,14 +69,14 @@ MAIN( test_bil_scale_image )
       float expected = -sigma2*scale2*(k2-1)/(k2*scale2+sigma2)/(sigma2+scale2);
       float actual = image(int(x),int(y));
 
-      vcl_cout <<"  "<< scale <<"     \t" << actual << "\t"
-               << expected <<"\t" << (actual-expected) << "\t" << vcl_endl;
+      vcl_cout <<"  "<< scale <<"     \t" << actual << '\t'
+               << expected <<'\t' << (actual-expected) << '\t' << vcl_endl;
 
       good_approx = good_approx && vcl_fabs(actual-expected) < 1e-3;
     }
   }
 
   TEST("Value Test",good_approx,true);
-
-  SUMMARY();
 }
+
+TESTMAIN(test_bil_scale_image);

@@ -21,7 +21,7 @@
 //=======================================================================
 
 // The main control program
-void test_vector_normalisers1()
+static void test_vector_normalisers()
 {
     vcl_cout << '\n'
              << "*********************************\n"
@@ -333,9 +333,4 @@ void test_vector_normalisers1()
     vsl_delete_all_loaders();
 }
 
-MAIN( test_vector_normalisers )
-{
-    START( "test_vector_normalisers" );
-    test_vector_normalisers1();
-    SUMMARY();
-}
+TESTMAIN(test_vector_normalisers);

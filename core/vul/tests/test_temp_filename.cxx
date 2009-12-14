@@ -47,12 +47,4 @@ static void test_temp_filename()
   test_second();
 }
 
-//TESTMAIN(test_temp_filename);
-int test_temp_filename(int, char*[])
-{
-  testlib_test_start("test_temp_filename");
-
-  test_temp_filename();
-
-  return testlib_test_summary();
-}
+TEST_MAIN(test_temp_filename);

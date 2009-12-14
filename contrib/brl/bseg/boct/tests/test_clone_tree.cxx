@@ -3,9 +3,8 @@
 
 #include <boct/boct_tree.h>
 
-MAIN( test_clone_tree )
+static void test_clone_tree()
 {
-  START ("CLONE TREE");
   boct_tree<short,vgl_point_3d<double> > *tree = new boct_tree<short,vgl_point_3d<double> >(5, 3);
   vcl_vector<boct_tree_cell<short,vgl_point_3d<double> >*> leaves = tree->leaf_cells();
   TEST("No of Leaf Cells after 3 levels", 8*8, leaves.size());
@@ -18,14 +17,14 @@ MAIN( test_clone_tree )
 
   // compare the codes
   bool eq=true;
-  for (unsigned i=0; i<cloned_leaves.size(); i++) {
+  for (unsigned i=0; i<cloned_leaves.size(); ++i) {
     if (!cloned_leaves[i]->code_.isequal(&(leaves[i]->code_)))
       eq=false;
   }
-  TEST("Leaf nodes' Code equality", true, eq);
+  TEST("Leaf nodes' Code equality", eq, true);
 
   delete tree;
   delete cloned;
-  
-  SUMMARY();
 }
+
+TESTMAIN(test_clone_tree);

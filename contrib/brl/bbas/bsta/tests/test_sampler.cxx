@@ -66,12 +66,12 @@ void test_sampler_helper2(void)
 }
 
 
-MAIN( test_sampler )
+static void test_sampler()
 {
-  START ("testing sampler");
   test_sampler_helper();
   test_sampler_helper2();
-  SUMMARY();
 }
+
+TESTMAIN(test_sampler);
 
 

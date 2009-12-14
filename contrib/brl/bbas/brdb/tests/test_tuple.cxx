@@ -5,10 +5,8 @@
 #include <vcl_iostream.h>
 
 
-MAIN( test_tuple )
+static void test_tuple()
 {
-  START ("DB Tuple");
-
   brdb_tuple_sptr tup0 = new brdb_tuple();
   brdb_tuple_sptr tup1 = new brdb_tuple(10);
   brdb_tuple_sptr tup2 = new brdb_tuple(10, 11.4f);
@@ -113,7 +111,6 @@ MAIN( test_tuple )
   }
 
   TEST("binary io: b_read, b_write", type_check, true);
-
-
-  SUMMARY();
 }
+
+TESTMAIN(test_tuple);

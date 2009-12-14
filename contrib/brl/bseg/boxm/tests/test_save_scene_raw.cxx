@@ -15,17 +15,16 @@
 #include <vpgl/vpgl_calibration_matrix.h>
 
 
-MAIN( test_save_scene_raw )
+static void test_save_scene_raw()
 {
-  START ("SAVE SCENE RAW");
   bgeo_lvcs lvcs(33.33,44.44,10.0, bgeo_lvcs::wgs84, bgeo_lvcs::DEG, bgeo_lvcs::METERS);
   vgl_point_3d<double> origin(0,0,0);
   vgl_vector_3d<double> block_dim(10,10,10);
   vgl_vector_3d<unsigned> world_dim(3,3,3);
   boxm_scene<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > > scene(lvcs, origin, block_dim, world_dim);
   scene.set_appearence_model(BOXM_APM_MOG_GREY);
-  scene.set_paths("./boxm_scene1", "block");
-  vul_file::make_directory("./boxm_scene1");
+  scene.set_paths("boxm_scene1", "block");
+  vul_file::make_directory("boxm_scene1");
   vcl_ofstream os("scene1.xml");
   x_write(os, scene, "scene");
   os.close();
@@ -99,8 +98,8 @@ MAIN( test_save_scene_raw )
 
   boxm_save_scene_raw<short,boxm_sample<BOXM_APM_MOG_GREY> >(scene, "scene.raw", 0);
 
-  vpl_rmdir("./boxm_scene1");
-  vpl_unlink("./scene1.xml");
-
-  SUMMARY();
+  vpl_rmdir("boxm_scene1");
+  vpl_unlink("scene1.xml");
 }
+
+TESTMAIN(test_save_scene_raw);

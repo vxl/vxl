@@ -38,11 +38,10 @@ void test_weibull_type(T epsilon, const vcl_string& type_name)
 }
 
 
-MAIN( test_weibull )
+static void test_weibull()
 {
-  START ("weibull");
-  test_weibull_type(float(1e-5),"float");
-  test_weibull_type(double(1e-13),"double");
-  SUMMARY();
+  test_weibull_type(1e-5f,"float");
+  test_weibull_type(1e-13,"double");
 }
 
+TESTMAIN(test_weibull);

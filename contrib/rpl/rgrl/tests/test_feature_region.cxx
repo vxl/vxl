@@ -7,10 +7,10 @@
 #include <vnl/vnl_int_2.h>
 #include "test_util.h"
 
-typedef vnl_vector_fixed<double,2>              vector_2d;
+typedef vnl_vector_fixed<double,2> vector_2d;
 
-void
-test_region()
+static void
+test_feature_region()
 {
   // generate a point region feature
   vnl_vector<double> loc(2, 10.0);
@@ -44,11 +44,4 @@ test_region()
   TEST("Valid region", valid, true);
 }
 
-MAIN( test_feature_region )
-{
-  START( "rgrl_feature_region" );
-
-  test_region();
-
-  SUMMARY();
-}
+TESTMAIN(test_feature_region);

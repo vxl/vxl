@@ -29,7 +29,7 @@
 
 #include <vul/vul_file.h>
 
-MAIN_ARGS( test_bvxm_rpc_registration_process )
+static void test_bvxm_rpc_registration_process()
 {
   DECLARE_FUNC_CONS(bvxm_update_edges_process);
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_update_edges_process,"bvxmUpdateEdgesProcess");
@@ -122,7 +122,7 @@ MAIN_ARGS( test_bvxm_rpc_registration_process )
     brdb_value_sptr v4 = new brdb_value_t<float>(10.0);
     brdb_value_sptr v5 = new brdb_value_t<float>(0.5);
     brdb_value_sptr v6 = new brdb_value_t<unsigned>(0);
-    
+
     good = bprb_batch_process_manager::instance()->set_input(0, v0)
         && bprb_batch_process_manager::instance()->set_input(1, v1)
         && bprb_batch_process_manager::instance()->set_input(2, v2)
@@ -180,6 +180,6 @@ MAIN_ARGS( test_bvxm_rpc_registration_process )
     bool saved = vil_save(*expected_edge_img_out, "expected_edge_image.tif");
     TEST("image saved", saved ,true);
   }
-
-  SUMMARY();
 }
+
+TESTMAIN(test_bvxm_rpc_registration_process);

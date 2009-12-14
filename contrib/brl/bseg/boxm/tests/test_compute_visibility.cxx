@@ -10,10 +10,8 @@
 #include <vpl/vpl.h>
 #include <vul/vul_file.h>
 
-MAIN( test_compute_visibility )
+static void test_compute_visibility()
 {
-  START ("TEST VISIBILITY");
-
   bgeo_lvcs lvcs(33.33,44.44,10.0, bgeo_lvcs::wgs84, bgeo_lvcs::DEG, bgeo_lvcs::METERS);
   vgl_point_3d<double> origin(0,0,0);
   vgl_vector_3d<double> block_dim(10,10,10);
@@ -41,7 +39,6 @@ MAIN( test_compute_visibility )
   s1_sample.set_appearance(s1_simple_obs_mix_gauss_val_f1);
 
   boxm_block_iterator<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > > iter(&scene);
-
 
   while (!iter.end())
   {
@@ -77,8 +74,8 @@ MAIN( test_compute_visibility )
   }
   vgl_box_3d<double> world;
   world.add(origin);
-  world.add(vgl_point_3d<double>(origin.x()+block_dim.x()*world_dim.x(), 
-                                 origin.y()+block_dim.y()*world_dim.y(), 
+  world.add(vgl_point_3d<double>(origin.x()+block_dim.x()*world_dim.x(),
+                                 origin.y()+block_dim.y()*world_dim.y(),
                                  origin.z()+block_dim.z()*world_dim.z()));
   vpgl_camera_double_sptr camera = generate_camera_top(world);
 
@@ -89,6 +86,6 @@ MAIN( test_compute_visibility )
   }
   vpl_rmdir("./boxm_scene1");
   vpl_unlink("./scene1.xml");
-
-  SUMMARY();
 }
+
+TESTMAIN(test_compute_visibility);

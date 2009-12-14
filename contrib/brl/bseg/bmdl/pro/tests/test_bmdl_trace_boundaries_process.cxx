@@ -16,7 +16,7 @@
 
 #include <vil/vil_load.h>
 
-MAIN_ARGS( test_bmdl_trace_boundaries_process )
+static void test_bmdl_trace_boundaries_process(int argc, char* argv[])
 {
   REG_PROCESS_FUNC(bprb_func_process, bprb_batch_process_manager, bmdl_trace_boundaries_process, "bmdlTraceBoundariesProcess");
   REGISTER_DATATYPE(vcl_string);
@@ -60,5 +60,6 @@ MAIN_ARGS( test_bmdl_trace_boundaries_process )
 
   good = (boundaries.size()>0);
   TEST("polygons are read successfuly", good ,true);
-  SUMMARY();
 }
+
+TESTMAIN_ARGS(test_bmdl_trace_boundaries_process);

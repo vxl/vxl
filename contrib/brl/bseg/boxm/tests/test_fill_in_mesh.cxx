@@ -18,9 +18,8 @@
 #include <imesh/imesh_fileio.h>
 #include <vcl_limits.h>
 
-MAIN( test_fill_in_mesh )
+static void test_fill_in_mesh()
 {
-  START ("TEST FILL IN MESH");
   bgeo_lvcs lvcs(33.33,44.44,10.0, bgeo_lvcs::wgs84, bgeo_lvcs::DEG, bgeo_lvcs::METERS);
   vgl_point_3d<double> origin(0,0,0);
   vgl_vector_3d<double> block_dim(10,10,10);
@@ -107,7 +106,8 @@ MAIN( test_fill_in_mesh )
   TEST("Centroid of the mesh is in the octree", cell0->data().alpha, 0.0f);
 
 
-  vpl_rmdir("./boxm_fill_in");
-  vpl_unlink("./scene.xml");
-  SUMMARY();
+  vpl_rmdir("boxm_fill_in");
+  vpl_unlink("scene.xml");
 }
+
+TESTMAIN(test_fill_in_mesh);

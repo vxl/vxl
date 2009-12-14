@@ -4,10 +4,8 @@
 #include <bil/algo/bil_finite_second_differences.h>
 
 
-MAIN( test_bil_finite_second_differences )
+static void test_bil_finite_second_differences()
 {
-  START ("2D Finite Second Differences");
-
   int dim = 5;
   vil_image_view<float> testim(dim,dim);
   vil_image_view<float> dxp,dxm,dxc,dyp,dym,dyc;
@@ -20,8 +18,8 @@ MAIN( test_bil_finite_second_differences )
   float dxxsum=0;
   float dyysum=0;
   float dxysum=0;
-  for (unsigned j = 0 ; j < testim.nj(); j++){
-    for (unsigned i = 0 ; i < testim.ni(); i++){
+  for (unsigned j = 0 ; j < testim.nj(); j++) {
+    for (unsigned i = 0 ; i < testim.ni(); i++) {
       dxxsum+=dxx(i,j);
       dyysum+=dyy(i,j);
       dxysum+=dxy(i,j);
@@ -32,12 +30,12 @@ MAIN( test_bil_finite_second_differences )
   TEST_NEAR("D_yy constant image", dyysum,0, 0.001);
   TEST_NEAR("D_xy constant image", dxysum,0, 0.001);
 
-  for (unsigned j = 0 ; j < testim.nj(); j++){
-    for (unsigned i = 0 ; i < testim.ni(); i++){
-      if (i < static_cast<unsigned>(dim/2)){
+  for (unsigned j = 0 ; j < testim.nj(); j++) {
+    for (unsigned i = 0 ; i < testim.ni(); i++) {
+      if (i < static_cast<unsigned>(dim/2)) {
         testim(i,j) = 1;
       }
-      else{
+      else {
         testim(i,j) = 0;
       }
     }
@@ -51,7 +49,7 @@ MAIN( test_bil_finite_second_differences )
   vil_print_all(vcl_cout,dxy);
   */
   vcl_cout << "testing half-one half-zero (along i-axis) image" << vcl_endl;
-  for (unsigned j = 0 ; j < testim.nj(); j++){
+  for (unsigned j = 0 ; j < testim.nj(); j++) {
     TEST_NEAR("D_xx"  ,     dxx(0,j)    ,    0    ,     0.001);
     TEST_NEAR("D_yy"  ,     dyy(0,j)    ,    0    ,     0.001);
     TEST_NEAR("D_xy"  ,     dxy(0,j)    ,    0    ,     0.001);
@@ -69,12 +67,12 @@ MAIN( test_bil_finite_second_differences )
     TEST_NEAR("D_xy"  ,     dxy(dim/2,j)    ,    0  ,     0.001);
   }
 
-  for (unsigned j = 0 ; j < testim.nj(); j++){
-    for (unsigned i = 0 ; i < testim.ni(); i++){
-      if (j < static_cast<unsigned>(dim/2)){
+  for (unsigned j = 0 ; j < testim.nj(); j++) {
+    for (unsigned i = 0 ; i < testim.ni(); i++) {
+      if (j < static_cast<unsigned>(dim/2)) {
         testim(i,j) = 1;
       }
-      else{
+      else {
         testim(i,j) = 0;
       }
     }
@@ -90,7 +88,7 @@ MAIN( test_bil_finite_second_differences )
   vil_print_all(vcl_cout,testim);
   vil_print_all(vcl_cout,dyy);
   vcl_cout << "testing half-one half-zero (along j-axis) image" << vcl_endl;
-  for (unsigned i = 0 ; i < testim.nj(); i++){
+  for (unsigned i = 0 ; i < testim.nj(); i++) {
     TEST_NEAR("D_xx"  ,     dxx(i,0)    ,    0    ,     0.001);
     TEST_NEAR("D_yy"  ,     dyy(i,0)    ,    0    ,     0.001);
     TEST_NEAR("D_xy"  ,     dxy(i,0)    ,    0    ,     0.001);
@@ -108,12 +106,12 @@ MAIN( test_bil_finite_second_differences )
     TEST_NEAR("D_xy"  ,     dxy(i,dim/2)    ,    0  ,     0.001);
   }
 
-  for (unsigned j = 0 ; j < testim.nj(); j++){
-    for (unsigned i = 0 ; i < testim.ni(); i++){
-      if (i==j){
+  for (unsigned j = 0 ; j < testim.nj(); j++) {
+    for (unsigned i = 0 ; i < testim.ni(); i++) {
+      if (i==j) {
         testim(i,j) = 1;
       }
-      else{
+      else {
         testim(i,j) = 0;
       }
     }
@@ -156,33 +154,33 @@ MAIN( test_bil_finite_second_differences )
   {
     for (unsigned i = 0 ; i < testim.ni(); i++)
     {
-      if (i == j){
+      if (i == j) {
         vcl_cout << "corner on diagonal\n"
                  << '(' << i << ',' << j << ')' << vcl_endl;
         TEST_NEAR("D_xy"  ,     dxy(i,j)    ,    0.5   ,     0.001);
       }
-      else if (i == j - 2 || j == i- 2 ){
+      else if (i == j - 2 || j == i- 2 ) {
         vcl_cout << "second super/sub diagonals\n"
                  << '(' << i << ',' << j << ')' << vcl_endl;
         TEST_NEAR("D_xy"  ,     dxy(i,j)    ,    -0.25   ,     0.001);
       }
-      else if (i + j == 1 || i + j == testim.ni() + testim.nj() - 3 ){
+      else if (i + j == 1 || i + j == testim.ni() + testim.nj() - 3 ) {
         vcl_cout << "i + j == 1 || i + j == testim.ni() + testim.nj() - 1\n"
                  << '(' << i << ',' << j << ')' << vcl_endl;;
         TEST_NEAR("D_xy"  ,     dxy(i,j)    ,    0.25   ,     0.001);
       }
-      else if (i + j == 2 || i + j == testim.ni() + testim.nj() - 4 ){
+      else if (i + j == 2 || i + j == testim.ni() + testim.nj() - 4 ) {
         vcl_cout << "i + j == 1 || i + j == testim.ni() + testim.nj() - 2\n"
                  << '(' << i << ',' << j << ')' << vcl_endl;
         TEST_NEAR("D_xy"  ,     dxy(i,j)    ,    -0.25   ,     0.001);
       }
-      else{
+      else {
         vcl_cout << "elsewhere\n"
                  << '(' << i << ',' << j << ')' << vcl_endl;
         TEST_NEAR("D_xy"  ,     dxy(i,j)    ,    0   ,     0.001);
       }
     }
   }
-
-  SUMMARY();
 }
+
+TESTMAIN(test_bil_finite_second_differences);

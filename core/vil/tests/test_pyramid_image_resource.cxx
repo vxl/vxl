@@ -26,29 +26,19 @@
 #endif
 #define DEBUG
 
-int test_pyramid_image_resource_main( int argc, char* argv[] )
+static void test_pyramid_image_resource( int argc, char* argv[] )
 {
-  vcl_string image_base;
-#if 1
+  vcl_string image_base; // = "core/vil/tests/file_read_data/";
   if ( argc >= 2 ) {
     image_base = argv[1];
-#ifdef VCL_WIN32
-    image_base += "\\";
-#else
     image_base += "/";
-#endif
   }
-
-#endif
-#if 0
-  image_base = "C:/vxl/vxl/core/vil/tests/file_read_data/";
-#endif
   vcl_cout << "************************************\n"
            << " Testing vil_pyramid_image_resource\n"
            << "************************************\n";
   //Test Resource
-  const unsigned int ni = 73;
-  const unsigned int nj = 43;
+  const unsigned int ni = 73, nj = 43;
+
   vil_image_view<unsigned short> image;
   image.set_size(ni,nj);
   for (unsigned i = 0; i<ni; ++i)
@@ -189,7 +179,7 @@ int test_pyramid_image_resource_main( int argc, char* argv[] )
     vil_pyramid_image_resource_sptr rdpyr = vil_load_pyramid_resource(d.c_str());
     TEST("load of pyramid resource rdpyr", !rdpyr, false);
     if (!rdpyr)
-      return testlib_test_summary();
+      return;
     unsigned nlevels = rdpyr->nlevels();
     vcl_cout << "Read nlevels = " << nlevels << '\n';
     for (unsigned L = 0; L<nlevels; ++L)
@@ -392,5 +382,6 @@ int test_pyramid_image_resource_main( int argc, char* argv[] )
   vpl_unlink(uncomp_file.c_str());
   vpl_unlink(long_comp_file.c_str());
 #endif //HAS_J2K
-  return testlib_test_summary();
 }
+
+TESTMAIN_ARGS(test_pyramid_image_resource);

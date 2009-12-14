@@ -262,10 +262,11 @@ void test_gaussian_type(T epsilon, const vcl_string& type_name)
   }
 }
 
-MAIN( test_gaussian )
+static void test_gaussian()
 {
-  test_gaussian_type(float(1e-5),"float");
-  test_gaussian_type(double(1e-14),"double");
-  SUMMARY();
+  test_gaussian_type(1e-5f,"float");
+  test_gaussian_type(1e-14,"double");
 }
+
+TESTMAIN(test_gaussian);
 

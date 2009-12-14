@@ -21,8 +21,7 @@ test_feature_caster()
 
   rgrl_feature_point* pf2d = new rgrl_feature_point( loc2d );
   rgrl_feature_sptr fsptr = pf2d;
-  testlib_test_begin( "feature sptr cast to 2D point feature" );
-  testlib_test_perform( rgrl_feature_caster<rgrl_feature_point>(fsptr) == pf2d );
+  TEST("feature sptr cast to 2D point feature", rgrl_feature_caster<rgrl_feature_point>(fsptr), pf2d);
 }
 
 static
@@ -46,27 +45,25 @@ test_feature_point()
   loc4d[2] = -1.0;
   loc4d[3] =  3.0;
 
-  testlib_test_begin( "2D point feature" );
   rgrl_feature_sptr pf2d = new rgrl_feature_point( loc2d );
-  testlib_test_perform( pf2d->is_type( rgrl_feature_point::type_id() ) &&
-                        pf2d->location() == loc2d &&
-                        pf2d->error_projector().is_identity() );
+  TEST("2D point feature",
+       pf2d->is_type( rgrl_feature_point::type_id() ) &&
+       pf2d->location() == loc2d &&
+       pf2d->error_projector().is_identity(), true);
 
-  testlib_test_begin( "3D point feature" );
   rgrl_feature_sptr pf3d = new rgrl_feature_point( loc3d );
-  testlib_test_perform( pf3d->is_type( rgrl_feature_point::type_id() ) &&
-                        pf3d->location() == loc3d &&
-                        pf3d->error_projector().is_identity() );
+  TEST("3D point feature",
+       pf3d->is_type( rgrl_feature_point::type_id() ) &&
+       pf3d->location() == loc3d &&
+       pf3d->error_projector().is_identity(), true);
 
-  testlib_test_begin( "4D point feature" );
   rgrl_feature_sptr pf4d = new rgrl_feature_point( loc4d );
-  testlib_test_perform( pf4d->is_type( rgrl_feature_point::type_id() ) &&
-                        pf4d->location() == loc4d &&
-                        pf4d->error_projector().is_identity() );
+  TEST("4D point feature",
+       pf4d->is_type( rgrl_feature_point::type_id() ) &&
+       pf4d->location() == loc4d &&
+       pf4d->error_projector().is_identity(), true);
 
   {
-    testlib_test_begin( "Transform 2D point feature" );
-
     vnl_matrix<double> A( 2, 2 );
     vnl_vector<double> t( 2 );
     vnl_matrix<double> covar( 6, 6 );
@@ -79,14 +76,14 @@ test_feature_point()
 
     rgrl_trans_affine xform( A, t, covar );
     rgrl_feature_sptr result = pf2d->transform( xform );
-    TEST( "Transform 2D point feature (point location remains unchanged)", pf2d->location(), loc2d );
-    TEST( "Transform 2D point feature (feature is of point type)", result->is_type( rgrl_feature_point::type_id() ), true );
-    TEST( "Transform 2D point feature (mapped feature has location same as mapping location only)", result->location(), xform.map_location( loc2d ) );
+    TEST("Transform 2D point feature (point location remains unchanged)", pf2d->location(), loc2d );
+    TEST("Transform 2D point feature (feature is of point type)", result->is_type( rgrl_feature_point::type_id() ), true );
+    TEST("Transform 2D point feature (mapped feature has location same as mapping location only)", result->location(), xform.map_location( loc2d ) );
     // vcl_cout << "Error projector: " << result->error_projector() << vcl_endl;
     vnl_matrix<double> true_error_projector(2, 2);
     true_error_projector.set_identity();
     true_error_projector /= vnl_math_sqr(result->scale());
-    TEST( "Transform 2D point feature (Error projector is identity matrix)", result->error_projector(), true_error_projector );
+    TEST("Transform 2D point feature (Error projector is identity matrix)", result->error_projector(), true_error_projector );
   }
 }
 
@@ -128,28 +125,26 @@ test_feature_trace_pt()
   err4d[2] =  3.0;
   err4d[3] = -8.0;
 
-  testlib_test_begin( "2D trace point" );
   rgrl_feature_sptr pf2d = new rgrl_feature_trace_pt( loc2d, dir2d );
   rgrl_feature_caster<rgrl_feature_trace_pt> trace_ptr( pf2d );
 
-  testlib_test_perform( pf2d->is_type( rgrl_feature_trace_pt::type_id() ) &&
-                        pf2d->location() == loc2d &&
-                        !pf2d->error_projector().is_identity() &&
-                        ((rgrl_feature_trace_pt*) trace_ptr) -> length() == 0 &&
-                        ((rgrl_feature_trace_pt*) trace_ptr) -> radius() == 0 );
+  TEST("2D trace point",
+       pf2d->is_type( rgrl_feature_trace_pt::type_id() ) &&
+       pf2d->location() == loc2d &&
+       !pf2d->error_projector().is_identity() &&
+       ((rgrl_feature_trace_pt*) trace_ptr) -> length() == 0 &&
+       ((rgrl_feature_trace_pt*) trace_ptr) -> radius() == 0, true);
 
-  testlib_test_begin( "4D trace point feature" );
   rgrl_feature_sptr pf4d = new rgrl_feature_trace_pt( loc4d, dir4d );
-  testlib_test_perform( pf4d->is_type( rgrl_feature_trace_pt::type_id() ) &&
-                        pf4d->location() == loc4d &&
-                        !pf4d->error_projector().is_identity() );
+  TEST("4D trace point feature",
+       pf4d->is_type( rgrl_feature_trace_pt::type_id() ) &&
+       pf4d->location() == loc4d &&
+       !pf4d->error_projector().is_identity(), true);
 
   TEST_NEAR( "4D trace point feature error projector",
              dot_product( pf4d->error_projector() * err4d, dir4d ), 0.0, 1e-6 );
 
   {
-    testlib_test_begin( "Transform 2D trace point, location" );
-
     vnl_matrix<double> A( 2, 2 );
     vnl_vector<double> t( 2 );
     vnl_matrix<double> covar( 6, 6 );
@@ -162,10 +157,11 @@ test_feature_trace_pt()
 
     rgrl_trans_affine xform( A, t, covar );
     rgrl_feature_sptr result = pf2d->transform( xform );
-    testlib_test_perform( pf2d->location() == loc2d &&
-                          result->is_type( rgrl_feature_trace_pt::type_id() ) &&
-                          result->location() == xform.map_location( loc2d ) &&
-                          !result->error_projector().is_identity() );
+    TEST("Transform 2D trace point, location",
+         pf2d->location() == loc2d &&
+         result->is_type( rgrl_feature_trace_pt::type_id() ) &&
+         result->location() == xform.map_location( loc2d ) &&
+         !result->error_projector().is_identity(), true);
 
     // affine transforms do not preseve angles, calculate the
     // transformed normal by transforming the tangent and re-computing
@@ -199,15 +195,15 @@ test_feature_face()
   nor2d[1] = 1.0;
   nor2d.normalize();
 
-  testlib_test_begin( "2D face point" );
   rgrl_feature_sptr pf2d = new rgrl_feature_face_pt( loc2d, nor2d );
   rgrl_feature_face_pt* face_ptr = rgrl_feature_caster<rgrl_feature_face_pt>( pf2d );
 
   //  Basic constructor, type and normal first
 
-  testlib_test_perform( pf2d->is_type( rgrl_feature_face_pt::type_id() ) &&
-                        pf2d->location() == loc2d &&
-                        !pf2d->error_projector().is_identity() );
+  TEST("2D face point",
+       pf2d->is_type( rgrl_feature_face_pt::type_id() ) &&
+       pf2d->location() == loc2d &&
+       !pf2d->error_projector().is_identity(), true);
 
   TEST_NEAR( "2d face point normal",
              (face_ptr->normal() - nor2d).inf_norm(), 0.0, 1e-6 );   // need the downcast here
@@ -230,8 +226,6 @@ test_feature_face()
   //  Onto testing the transformation
 
   {
-    testlib_test_begin( "Transform 2D face point, location" );
-
     vnl_matrix<double> A( 2, 2 );
     vnl_vector<double> t( 2 );
     vnl_matrix<double> covar( 6, 6, vnl_matrix_identity );
@@ -244,10 +238,11 @@ test_feature_face()
 
     rgrl_trans_affine xform( A, t, covar );
     rgrl_feature_sptr result = pf2d->transform( xform );
-    testlib_test_perform( pf2d->location() == loc2d &&
-                          result->is_type( rgrl_feature_face_pt::type_id() ) &&
-                          result->location() == xform.map_location( loc2d ) &&
-                          !result->error_projector().is_identity() );
+    TEST("Transform 2D face point, location",
+         pf2d->location() == loc2d &&
+         result->is_type( rgrl_feature_face_pt::type_id() ) &&
+         result->location() == xform.map_location( loc2d ) &&
+         !result->error_projector().is_identity(), true);
 
     // This matrix convert normal to tangent
     vnl_matrix<double> B( 2, 2 );
@@ -283,14 +278,12 @@ test_feature_face()
   }
 }
 
-MAIN( test_feature )
+static void test_feature()
 {
-  START( "various feature types" );
-
   test_feature_caster();
   test_feature_point();
   test_feature_trace_pt();
   test_feature_face();
-
-  SUMMARY();
 }
+
+TESTMAIN(test_feature);

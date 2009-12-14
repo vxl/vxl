@@ -105,12 +105,4 @@ void test_string()
   }
 }
 
-//TESTMAIN(test_string);
-int test_string(int, char*[])
-{
-  testlib_test_start("test_string");
-
-  test_string();
-
-  return testlib_test_summary();
-}
+TEST_MAIN(test_string);

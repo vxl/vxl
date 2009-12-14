@@ -21,13 +21,10 @@
 
 #include "test_util.h"
 
-namespace {
-
-vnl_random rand;
-
-void
-test_est()
+static void test_scale_est()
 {
+  vnl_random rand;
+
   unsigned const num_pts = 100;
 
   // Create an identity transformation
@@ -74,10 +71,9 @@ test_est()
     }
     ms.remap_from_features( *trans );
 
-    testlib_test_begin( "Estimate scale from one-to-one" );
     rgrl_scale_sptr scale = closest_est.estimate_unweighted( ms, 0 );
-    testlib_test_perform( scale->has_geometric_scale() &&
-                          ! scale->has_signature_inv_covar() );
+    TEST( "Estimate scale from one-to-one",
+          scale->has_geometric_scale() && ! scale->has_signature_inv_covar(), true);
 
     TEST_NEAR( "Geometric scale is correct", scale->geometric_scale(), vcl_sqrt(var), 0.35 );
     one_to_one_scale = scale->geometric_scale();
@@ -99,10 +95,9 @@ test_est()
     }
     ms.remap_from_features( *trans );
 
-    testlib_test_begin( "Estimate scale from closest in one-to-many" );
     rgrl_scale_sptr scale = closest_est.estimate_unweighted( ms, 0 );
-    testlib_test_perform( scale->has_geometric_scale() &&
-                          ! scale->has_signature_inv_covar() );
+    TEST( "Estimate scale from closest in one-to-many",
+          scale->has_geometric_scale() && ! scale->has_signature_inv_covar(), true);
 
     TEST_NEAR( "Geometric scale is correct", scale->geometric_scale(), one_to_one_scale, 1e-8 );
   }
@@ -118,23 +113,12 @@ test_est()
     }
     ms.remap_from_features( *trans );
 
-    testlib_test_begin( "Estimate weighted scale from one-to-one, unit weight" );
     rgrl_scale_sptr scale = allwgt_est.estimate_weighted( ms, 0, false );
-    testlib_test_perform( scale->has_geometric_scale() &&
-                          ! scale->has_signature_inv_covar() );
+    TEST( "Estimate weighted scale from one-to-one, unit weight",
+          scale->has_geometric_scale() && ! scale->has_signature_inv_covar(), true);
 
     TEST_NEAR( "Geometric scale is correct", scale->geometric_scale(), vcl_sqrt(var), 1e-6 );
   }
 }
 
-} // end anonymous namespace
-
-
-MAIN( test_scale_est )
-{
-  START( "various scale estimators" );
-
-  test_est();
-
-  SUMMARY();
-}
+TESTMAIN(test_scale_est);

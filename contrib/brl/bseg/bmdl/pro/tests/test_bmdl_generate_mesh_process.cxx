@@ -17,7 +17,7 @@
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/file_formats/vpgl_geo_camera.h>
 
-MAIN_ARGS( test_bmdl_generate_mesh_process )
+static void test_bmdl_generate_mesh_process(int argc, char* argv[])
 {
   REG_PROCESS_FUNC(bprb_func_process, bprb_batch_process_manager, bmdl_generate_mesh_process, "bmdlGenerateMeshProcess");
   REGISTER_DATATYPE(vcl_string);
@@ -60,6 +60,6 @@ MAIN_ARGS( test_bmdl_generate_mesh_process )
   good = good && bprb_batch_process_manager::instance()->run_process();
 
   TEST("run generate mesh process", good ,true);
-
-  SUMMARY();
 }
+
+TESTMAIN_ARGS(test_bmdl_generate_mesh_process);

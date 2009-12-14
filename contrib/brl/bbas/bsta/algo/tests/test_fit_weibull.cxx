@@ -23,12 +23,10 @@ void test_fit_weibull_type(T epsilon, const vcl_string& type_name)
 }
 
 
-MAIN( test_fit_weibull )
+static void test_fit_weibull()
 {
-  START ("fit_weibull");
-  test_fit_weibull_type(float(1e-5),"float");
-  test_fit_weibull_type(double(1e-8),"double");
-  SUMMARY();
+  test_fit_weibull_type(1e-5f,"float");
+  test_fit_weibull_type(1e-8 ,"double");
 }
 
-
+TESTMAIN(test_fit_weibull);

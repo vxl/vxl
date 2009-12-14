@@ -60,7 +60,7 @@ vil_image_view_base_sptr test_process(vil_image_view_base_sptr const &ref_img, u
 }
 
 
-MAIN( test_vil_crop_image_process )
+static void test_vil_crop_image_process()
 {
   //Take care of database registration
   DECLARE_FUNC_CONS(vil_crop_image_process);
@@ -100,7 +100,6 @@ MAIN( test_vil_crop_image_process )
   TEST("Bool-Image as expected",vil_image_view_deep_equality(bool_observed,bool_expected), true);
 
   bprb_batch_process_manager::instance()->clear();
-
-
-  SUMMARY();
 }
+
+TESTMAIN(test_vil_crop_image_process);

@@ -15,12 +15,4 @@ void test_sprintf(void)
   TEST("buf1 == [awf]", buf1, "[awf]");
 }
 
-//TESTMAIN(test_sprintf);
-int test_sprintf(int, char*[])
-{
-  testlib_test_start("test_sprintf");
-
-  test_sprintf();
-
-  return testlib_test_summary();
-}
+TEST_MAIN(test_sprintf);

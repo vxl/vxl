@@ -45,13 +45,8 @@ void test_vul_file()
   vpl_rmdir((rootdir+"/test_make_dir_path").c_str());
   TEST("Directory doesn't exist", vul_file::exists(rootdir+"/test_make_dir_path"), false);
 
-}
-
-
 #if defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
 
-void test_vul_file_wchar_ext()
-{
   // vul_file::basename
   TEST("wide char basename 1", vul_file::basename(L"fred¨¢.txt"), L"fred¨¢.txt");
   TEST("wide char basename 2", vul_file::basename(L"/awf/fred¨¢.txt"), L"fred¨¢.txt");
@@ -90,20 +85,7 @@ void test_vul_file_wchar_ext()
   _wrmdir((rootdir+L"/test_make_dir_path").c_str());
   TEST("Directory doesn't exist", vul_file::exists(rootdir+L"/test_make_dir_path"), false);
 
+#endif // defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
 }
 
-#endif
-
-//TESTMAIN(test_vul_file);
-int test_vul_file(int, char*[])
-{
-  testlib_test_start("test_vul_file");
-
-  test_vul_file();
-
-#if defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
-  test_vul_file_wchar_ext();
-#endif
-
-  return testlib_test_summary();
-}
+TEST_MAIN(test_vul_file);

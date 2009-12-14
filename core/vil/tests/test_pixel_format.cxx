@@ -5,10 +5,8 @@
 #include <vil/vil_rgb.h>
 #include <vil/vil_pixel_format.h>
 
-int test_pixel_format_main( int /*argc*/, char* /*argv*/[] )
+static void test_pixel_format()
 {
-  testlib_test_start( "vil_pixel_format" );
-
   TEST("vil_pixel_format_of(bool)", vil_pixel_format_of(bool()), VIL_PIXEL_FORMAT_BOOL);
 
   TEST("vil_pixel_format_of(float)", vil_pixel_format_of(float()), VIL_PIXEL_FORMAT_FLOAT);
@@ -33,5 +31,6 @@ int test_pixel_format_main( int /*argc*/, char* /*argv*/[] )
               VIL_PIXEL_FORMAT_RGBA_SBYTE << '\n' <<
               VIL_PIXEL_FORMAT_RGBA_FLOAT << '\n' <<
               VIL_PIXEL_FORMAT_RGBA_DOUBLE << vcl_endl;
-  return testlib_test_summary();
 }
+
+TESTMAIN(test_pixel_format);

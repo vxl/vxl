@@ -75,8 +75,7 @@ namespace
     rgrl_matcher_sptr matcher = new rgrl_matcher_k_nearest_boundary(1);
     rgrl_match_set_sptr match_set =  matcher->compute_matches( *from_set, *to_set,
                                                                *view, *trans, *scale);
-    testlib_test_begin( "Correct number of matches" );
-    testlib_test_perform( match_set->from_size() == 4 );
+    TEST( "Correct number of matches" , match_set->from_size(), 4);
 
     vcl_vector<vnl_vector<double> > from_bd_locs;
     vcl_vector<vnl_vector<double> > to_bd_locs;
@@ -93,17 +92,17 @@ namespace
       }
     }
 
-    testlib_test_begin( "Correct boundary points" );
-    testlib_test_perform( close( from_bd_locs[0], vnl_double_2(5, 20)) &&
-                          close( from_bd_locs[1], vnl_double_2(15, 20)) );
+    TEST( "Correct boundary points",
+          close( from_bd_locs[0], vnl_double_2(5, 20)) &&
+          close( from_bd_locs[1], vnl_double_2(15, 20)), true);
 
-    testlib_test_begin( "Correct boundary matches, same side" );
-    testlib_test_perform( close( to_bd_locs[0], xformed_bd_locs[0]+diff1 ) &&
-                          close( to_bd_locs[1], xformed_bd_locs[1]+diff1 ));
+    TEST( "Correct boundary matches, same side",
+          close( to_bd_locs[0], xformed_bd_locs[0]+diff1 ) &&
+          close( to_bd_locs[1], xformed_bd_locs[1]+diff1 ), true);
 
-    testlib_test_begin( "Correct boundary matches, opposite side" );
-    testlib_test_perform( close( to_bd_locs[2], xformed_bd_locs[2]+diff2 ) &&
-                          close( to_bd_locs[3], xformed_bd_locs[3]+diff2 ));
+    TEST( "Correct boundary matches, opposite side",
+          close( to_bd_locs[2], xformed_bd_locs[2]+diff2 ) &&
+          close( to_bd_locs[3], xformed_bd_locs[3]+diff2 ), true);
   }
 
   struct dist_id
@@ -321,11 +320,11 @@ namespace
   }
 }
 
-MAIN( test_matcher )
+static void test_matcher()
 {
-  START( "various matcher" );
   test_matcher_k_nearest_boundary();
   test_matcher_k_nearest();
   test_matcher_k_nearest_pick_one();
-  SUMMARY();
 }
+
+TESTMAIN(test_matcher);

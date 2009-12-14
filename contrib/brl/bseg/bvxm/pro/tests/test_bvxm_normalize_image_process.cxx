@@ -147,7 +147,7 @@ bvxm_voxel_slab_base_sptr create_mog_image_using_grey_processor(vcl_string model
   return mog_image;
 }
 
-MAIN( test_bvxm_normalize_image_process )
+static void test_bvxm_normalize_image_process()
 {
   DECLARE_FUNC_CONS(bvxm_normalize_image_process);
   DECLARE_FUNC_CONS(bvxm_create_mog_image_process);
@@ -161,9 +161,7 @@ MAIN( test_bvxm_normalize_image_process )
   REGISTER_DATATYPE(float);
   REGISTER_DATATYPE(unsigned);
 
-
-  unsigned ni = 640;
-  unsigned nj = 480;
+  unsigned ni = 640, nj = 480;
 
   //: first test various stages in the normalization process
   vil_image_view<vxl_byte> input_img(ni, nj, 1);
@@ -320,7 +318,7 @@ MAIN( test_bvxm_normalize_image_process )
   good = good && bprb_batch_process_manager::instance()->set_input(0, v0);
   good = good && bprb_batch_process_manager::instance()->set_input(1, value_slab);
   good = good && bprb_batch_process_manager::instance()->set_input(2, v3);
-  
+
   good = good && bprb_batch_process_manager::instance()->run_process();
 
   unsigned id_img, id_a, id_b;
@@ -370,8 +368,6 @@ MAIN( test_bvxm_normalize_image_process )
 
   TEST_NEAR("testing a", result_a, 1.0f/aa, 0.1);
   TEST_NEAR("testing b", result_b, -bb, 7);
-
-  //
-
-  SUMMARY();
 }
+
+TESTMAIN(test_bvxm_normalize_image_process);

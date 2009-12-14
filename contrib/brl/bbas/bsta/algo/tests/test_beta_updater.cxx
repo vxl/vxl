@@ -45,9 +45,8 @@ float compare_betas(bsta_beta<float>& beta1, bsta_beta<float>& beta2)
   return total_diff;
 }
 
-MAIN( test_beta_updater)
+static void test_beta_updater()
 {
-  START ("test_beta_model");
   vcl_cout << "-------------------------------\n"
            << " float, 1-dimensional, 3-modal\n"
            << "-------------------------------" <<vcl_endl;
@@ -123,6 +122,6 @@ MAIN( test_beta_updater)
   float diff3 = compare_betas(d3, beta100_10);
   vcl_cout << d3;
   TEST("diff3", vnl_math_isnan(diff3), true);
-
-  SUMMARY();
 }
+
+TESTMAIN(test_beta_updater);

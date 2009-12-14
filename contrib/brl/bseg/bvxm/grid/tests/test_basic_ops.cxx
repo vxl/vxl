@@ -67,10 +67,10 @@ void threshold()
   }
 }
 
-MAIN( test_basic_ops )
+static void test_basic_ops()
 {
-  START("grid basic operations test");
   multiply();
   threshold();
-  SUMMARY();
 }
+
+TESTMAIN(test_basic_ops);

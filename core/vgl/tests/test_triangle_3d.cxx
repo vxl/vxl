@@ -590,10 +590,8 @@ inline void test_aspect_ratio()
 //==============================================================================
 // Main test function
 //==============================================================================
-MAIN( test_triangle_3d )
+static void test_triangle_3d()
 {
-  START( "test_triangle_3d" );
-
   test_non_intersecting();
 
   test_intersecting1();
@@ -618,6 +616,6 @@ MAIN( test_triangle_3d )
 #ifdef PERFORMANCE_TEST // Performance Test disabled by default - KOM
   test_point_containment_algo_perf();
 #endif
-
-  SUMMARY();
 }
+
+TESTMAIN(test_triangle_3d);

@@ -10,15 +10,15 @@
 # include <windows.h>
 #endif
 
-int
-test_stream_main( int argc, char* argv[] )
+static void
+test_stream( int argc, char* argv[] )
 {
   if ( argc < 2 ) {
     vcl_cerr << "Supply file_read_data directory as the first argument\n";
-    return 1;
+    TEST("vil_stream", true, false);
+    return;
   }
 
-  testlib_test_start(" stream");
   vcl_string dir = argv[1];
 
   {
@@ -37,11 +37,10 @@ test_stream_main( int argc, char* argv[] )
     fs->unref();
   }
 
-
 #if defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
   const unsigned int size = 4096;  // should be enough
   std::wstring wdir;
-  wdir.resize(size);  
+  wdir.resize(size);
   const int ret = MultiByteToWideChar(CP_ACP, 0, dir.c_str(), dir.size(), &wdir[0], size);
   TEST( "dir name converts to wchart_t type", ret>0, true );
   wdir.resize(ret);
@@ -61,8 +60,7 @@ test_stream_main( int argc, char* argv[] )
     TEST( "[wchar_t] Size file 2", fs->file_size(), 1069 );
     fs->unref();
   }
-  
 #endif //defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
-
-  return testlib_test_summary();
 }
+
+TESTMAIN_ARGS(test_stream);

@@ -27,7 +27,7 @@ void test_graph(const bgrl_vertex_sptr& vertex_1)
        the_graph->add_vertex(vertex_5) &&
        !the_graph->add_vertex(vertex_5), // can't add a vertex twice
        true);
-  
+
   TEST("Testing remove_vertex()",
        the_graph->remove_vertex(vertex_3) &&
        the_graph->remove_vertex(vertex_4) &&
@@ -35,7 +35,7 @@ void test_graph(const bgrl_vertex_sptr& vertex_1)
        true);
 
   // make the edges
-  TEST("Testing add_edge()",     
+  TEST("Testing add_edge()",
        the_graph->add_edge(vertex_1, vertex_2) &&
        the_graph->add_edge(vertex_2, vertex_1) &&
        the_graph->add_edge(vertex_1, vertex_3) && // vertex_3 added back in
@@ -73,14 +73,14 @@ void test_graph(const bgrl_vertex_sptr& vertex_1)
 //  bgrl_vertex_sptr depth_order[] = {vertex_4, vertex_5, vertex_3, vertex_2, vertex_1};
 //  bool depth_check = true;
 //  bgrl_graph::iterator d_itr = the_graph->depth_begin(vertex_4);
-//  for(int i=0; d_itr != the_graph->depth_end(); ++d_itr, ++i)
+//  for (int i=0; d_itr != the_graph->depth_end(); ++d_itr, ++i)
 //    depth_check = ((*d_itr) == depth_order[i]) && depth_check;
 //  TEST("Testing depth_iterator", depth_check, true);
 //
 //  bgrl_vertex_sptr breadth_order[] = {vertex_4, vertex_2, vertex_3, vertex_5, vertex_1};
 //  bool breadth_check = true;
 //  bgrl_graph::iterator b_itr = the_graph->breadth_begin(vertex_4);
-//  for(int i=0; b_itr != the_graph->breadth_end(); ++b_itr, ++i)
+//  for (int i=0; b_itr != the_graph->breadth_end(); ++b_itr, ++i)
 //    breadth_check = ((*b_itr) == breadth_order[i]) && breadth_check;
 //  TEST("Testing breadth_iterator", breadth_check, true);
 
@@ -90,7 +90,7 @@ void test_graph(const bgrl_vertex_sptr& vertex_1)
 
   vsl_add_to_binary_loader(bgrl_vertex());
   vsl_add_to_binary_loader(bgrl_edge());
-  
+
   // binary test output file stream
   vsl_b_ofstream bfs_out("test_graph_io.tmp");
   TEST("Created test_graph_io.tmp for writing",(!bfs_out), false);
@@ -121,12 +121,11 @@ void test_memory_leak(const bgrl_vertex_sptr& v1)
 }
 
 
-MAIN( test_graph )
+static void test_graph()
 {
-  START( "bgrl_graph" );
-
   bgrl_vertex_sptr v1 = new bgrl_vertex();
   test_graph(v1);
   test_memory_leak(v1);
-  SUMMARY();
 }
+
+TESTMAIN(test_graph);

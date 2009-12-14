@@ -137,7 +137,7 @@ void test_mog_mc_processor()
 }
 
 
-MAIN( test_apm_processors )
+static void test_apm_processors()
 {
   vcl_cout << "-----------------------------------\n"
            << " Starting mog_grey_processor TESTS\n"
@@ -159,5 +159,6 @@ MAIN( test_apm_processors )
            << " Starting mog_mc_4_3_processor TESTS\n"
            << "-------------------------------------" <<vcl_endl;
   test_mog_mc_processor<4,3>();
-  SUMMARY();
 }
+
+TESTMAIN(test_apm_processors);

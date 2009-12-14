@@ -9,18 +9,14 @@
 
 
 void bil_edt_test(vil_image_view<vxl_uint_32> &im, bool print, bool three_d=false);
-
-void
-bil_edt_test_3D(vil_image_view<vxl_uint_32> &im, bool print);
-
-void
-bil_edt_test_specific(const vil_image_view<vxl_uint_32> &im, const vil_image_view<vxl_uint_32> dt_brute, bool print, vcl_string algo);
+void bil_edt_test_3D(vil_image_view<vxl_uint_32> &im, bool print);
+void bil_edt_test_specific(const vil_image_view<vxl_uint_32> &im, const vil_image_view<vxl_uint_32> dt_brute, bool print, vcl_string algo);
 
 #define DATA(I) (I).top_left_ptr()
 
-MAIN( test_bil_edt )
+static void test_bil_edt()
 {
-  START ("Exact Euclidean Distance Transform Algorithms");
+  vcl_cout << "Exact Euclidean Distance Transform Algorithms\n";
 
   {
   unsigned r=5,c=7;
@@ -115,9 +111,9 @@ MAIN( test_bil_edt )
   image(4,3,2)=0;
   bil_edt_test(image,false,true);
   }
-
-  SUMMARY();
 }
+
+TESTMAIN(test_bil_edt);
 
 // test 2D EDT
 void

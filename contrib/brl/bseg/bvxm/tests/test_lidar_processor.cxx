@@ -20,14 +20,14 @@ namespace
 };
 
 
-MAIN( test_lidar_processor )
+static void test_lidar_processor()
 {
-   bvxm_voxel_slab<float> obs(5,6,1);
-   init_slab(obs);
+  bvxm_voxel_slab<float> obs(5,6,1);
+  init_slab(obs);
 
-   bvxm_lidar_processor processor(10);
+  bvxm_lidar_processor processor(10);
 
-   bvxm_voxel_slab<float> prob = processor.prob_density(150, obs);
-
-  SUMMARY();
+  bvxm_voxel_slab<float> prob = processor.prob_density(150, obs);
 }
+
+TESTMAIN(test_lidar_processor);

@@ -218,12 +218,12 @@ void test_kernel_gaussian_sfbw_type(T epsilon, const vcl_string& type_name)
 }
 
 
-MAIN( test_kernel_gaussian_sfbw )
+static void test_kernel_gaussian_sfbw()
 {
-  START ("kernel_gaussian_sfbw");
-  test_kernel_gaussian_sfbw_type(float(1e-5),"float");
-  test_kernel_gaussian_sfbw_type(double(1e-14),"double");
-  SUMMARY();
+  test_kernel_gaussian_sfbw_type(1e-5f,"float");
+  test_kernel_gaussian_sfbw_type(1e-14,"double");
 }
+
+TESTMAIN(test_kernel_gaussian_sfbw);
 
 

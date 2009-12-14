@@ -41,7 +41,7 @@
 #include <bbgm/bbgm_viewer.h>
 #include <bbgm/bbgm_viewer_sptr.h>
 
-MAIN( test_brec_create_mog_image_process )
+static void test_brec_create_mog_image_process()
 {
   typedef bvxm_voxel_traits<APM_MOG_RGB>::voxel_datatype mog_type_rgb;
   typedef bvxm_voxel_traits<APM_MOG_RGB>::obs_datatype obs_datatype_rgb;
@@ -60,7 +60,8 @@ MAIN( test_brec_create_mog_image_process )
   bvxm_voxel_slab<obs_datatype> image_slab(img.ni(), img.nj(), 1);
   if (!bvxm_util::img_to_slab(img_sptr,image_slab)) {
     vcl_cerr << "error converting image to voxel slab of observation type for bvxm_voxel_type: APM_MOG_GREY\n";
-    return false;
+    TEST("converting image to voxel slab of observation type", true, false);
+    return;
   }
   // create distribution slab
   float init_variance = 0.008f;
@@ -210,6 +211,6 @@ MAIN( test_brec_create_mog_image_process )
   #endif // 0
   }
 #endif
-
-  SUMMARY();
 }
+
+TESTMAIN(test_brec_create_mog_image_process);

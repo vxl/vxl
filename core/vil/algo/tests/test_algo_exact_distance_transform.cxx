@@ -9,22 +9,15 @@
 #include <vcl_cstdlib.h>
 
 void vil_exact_distance_transform_test(vil_image_view<vxl_uint_32> &im, bool print, bool three_d=false);
-
 void vil_exact_distance_transform_test_label(vil_image_view<vxl_uint_32> &im, bool print);
-
-void
-vil_exact_distance_transform_test_3D(vil_image_view<vxl_uint_32> &im, bool print);
-
-void
-vil_exact_distance_transform_test_specific(const vil_image_view<vxl_uint_32> &im, const vil_image_view<vxl_uint_32> dt_brute, bool print, vcl_string algo);
+void vil_exact_distance_transform_test_3D(vil_image_view<vxl_uint_32> &im, bool print);
+void vil_exact_distance_transform_test_specific(const vil_image_view<vxl_uint_32> &im, const vil_image_view<vxl_uint_32> dt_brute, bool print, vcl_string algo);
 
 #define DATA(I) (I).top_left_ptr()
 
-MAIN( test_algo_exact_distance_transform )
+static void test_algo_exact_distance_transform()
 {
-  START ("Exact Euclidean Distance Transform Algorithms");
-
-  {
+ {
   unsigned r=3,c=5;
 
   vil_image_view <vxl_uint_32> image(r,c,1);
@@ -37,9 +30,9 @@ MAIN( test_algo_exact_distance_transform )
 
   vil_exact_distance_transform_test(image,true);
   vil_exact_distance_transform_test_label(image,true);
-  }
+ }
 
-  {
+ {
   unsigned r=3,c=5;
 
   vil_image_view <vxl_uint_32> image(r,c,1);
@@ -54,9 +47,9 @@ MAIN( test_algo_exact_distance_transform )
 
   vil_exact_distance_transform_test(image,true);
   vil_exact_distance_transform_test_label(image,true);
-  }
+ }
 
-  {
+ {
   unsigned r=5,c=7;
 
   vil_image_view <vxl_uint_32> image(r,c,1);
@@ -74,41 +67,41 @@ MAIN( test_algo_exact_distance_transform )
 
   vil_exact_distance_transform_test(image,true);
   vil_exact_distance_transform_test_label(image,true);
-  }
+ }
 
-  {
+ {
   vil_image_view <vxl_uint_32> image(100,100,1);
   image.fill(1);
   image(0,0) = 0;
   vil_exact_distance_transform_test(image,false);
   vil_exact_distance_transform_test_label(image,false);
-  }
+ }
 
-  {
+ {
   vil_image_view <vxl_uint_32> image(100,100,1);
   image.fill(1);
   image(99,99) = 0;
   vil_exact_distance_transform_test(image,false);
   vil_exact_distance_transform_test_label(image,false);
-  }
+ }
 
-  {
+ {
   vil_image_view <vxl_uint_32> image(100,100,1);
   image.fill(1);
   image(0,99) = 0;
   vil_exact_distance_transform_test(image,false);
   vil_exact_distance_transform_test_label(image,false);
-  }
+ }
 
-  {
+ {
   vil_image_view <vxl_uint_32> image(100,100,1);
   image.fill(1);
   image(99,0) = 0;
   vil_exact_distance_transform_test(image,false);
   vil_exact_distance_transform_test_label(image,false);
-  }
+ }
 
-  { // 8-disconnected Voronoi region that breaks most DT algorithms that claim to be Euclidean
+ { // 8-disconnected Voronoi region that breaks most DT algorithms that claim to be Euclidean
   vil_image_view <vxl_uint_32> image(14,13,1);
   image.fill(1);
   image(0,2)  = 0;
@@ -116,11 +109,11 @@ MAIN( test_algo_exact_distance_transform )
   image(6,12) = 0;
   vil_exact_distance_transform_test(image,true);
   vil_exact_distance_transform_test_label(image,true);
-  }
+ }
 
   // ----- 3D -----
 
-  {
+ {
   unsigned r=7,c=5,p=3;
 
   vil_image_view <vxl_uint_32> image(c,r,p);
@@ -133,11 +126,11 @@ MAIN( test_algo_exact_distance_transform )
   vil_print_all(vcl_cout,image);
 
   vil_exact_distance_transform_test(image,true,true);
-  }
+ }
 
 
 #if 0
-  { //: just runs on big image
+ { //: just runs on big image
   unsigned r=200,c=300,p=400;
   vil_image_view <vxl_uint_32> image(c,r,p);
 
@@ -145,10 +138,10 @@ MAIN( test_algo_exact_distance_transform )
   image(2,3,1)=0;
   image(200,150,350)=0;
   vil_exact_distance_transform_saito(image);
-  }
+ }
 #endif // 0
 
-  {
+ {
   unsigned r=7,c=5,p=3;
   vil_image_view <vxl_uint_32> image(c,r,p);
   image.fill(1);
@@ -157,10 +150,10 @@ MAIN( test_algo_exact_distance_transform )
   image(0,0,0)=0;
   image(4,3,2)=0;
   vil_exact_distance_transform_test(image,false,true);
-  }
-
-  SUMMARY();
+ }
 }
+
+TESTMAIN(test_algo_exact_distance_transform);
 
 //: test 2D EDT
 void
@@ -261,7 +254,7 @@ vil_exact_distance_transform_test_label(vil_image_view<vxl_uint_32> &im, bool pr
     c = i % ni;
     rl = DATA(label_algo)[i] / ni;
     cl = DATA(label_algo)[i] % ni;
-    
+
     dst_from_label = (r-rl)*(r-rl) + (c-cl)*(c-cl);
 
     if (dst != dst_from_label) {

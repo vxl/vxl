@@ -339,48 +339,45 @@ test_on_matches(rgrl_transformation_sptr xform, rgrl_match_set_sptr matches, uns
   rgrl_view_sptr v;
   rgrl_scale_sptr s;
 
-  testlib_test_begin( "Generate the first view for not gen_all" );
-  testlib_test_perform( init->next_initial( v, s ) );
+  TEST("Generate the first view for not gen_all", init->next_initial(v,s), true);
 
-  testlib_test_begin( "Total number of samples for not gen_all" );
   int total_samples = gen_num_samples(total_matches, matches->from_size(), false);
-  testlib_test_perform( init->samples_tested() == total_samples );
+  TEST("Total number of samples for not gen_all", init->samples_tested(), total_samples);
 
-  testlib_test_begin( "Transformation for not gen_all" );
   rgrl_trans_affine* estimated_aff = dynamic_cast<rgrl_trans_affine*>(v->xform_estimate().as_pointer());
   rgrl_trans_affine* org_aff = dynamic_cast<rgrl_trans_affine*>(xform.as_pointer());
-  testlib_test_perform( estimated_aff&&
-                        close( org_aff->A(), estimated_aff->A() ) &&
-                        close( org_aff->t(), estimated_aff->t() ) );
+  TEST("Transformation for not gen_all",
+       estimated_aff &&
+       close( org_aff->A(), estimated_aff->A() ) &&
+       close( org_aff->t(), estimated_aff->t() ), true);
 
-  testlib_test_begin( "Update maximum overlap correctly" );
   rgrl_mask_box max_region = v->global_region();
-  testlib_test_perform(close(max_region.x0(), vnl_double_2(-50,-50)) &&
-                       close(max_region.x1(), vnl_double_2(98, 90)));
+  TEST("Update maximum overlap correctly",
+       close(max_region.x0(), vnl_double_2(-50,-50)) &&
+       close(max_region.x1(), vnl_double_2(98, 90)), true);
 
-  testlib_test_begin( "No second" );
-  testlib_test_perform( !init->next_initial( v, s ) );
+
+  TEST("No second", !init->next_initial(v,s), true);
 
   init->set_data(matches, scale_est, view);
   init-> set_gen_all_samples();
 
-  testlib_test_begin( "Generate the first view for gen_all" );
-  testlib_test_perform( init->next_initial( v,s  ) );
 
-  testlib_test_begin( "Total number of samples for gen_all" );
+  TEST("Generate the first view for gen_all", init->next_initial(v,s), true);
+
   total_samples = gen_num_samples(total_matches, matches->from_size(), true);
-  testlib_test_perform( init->samples_tested() == total_samples );
+  TEST("Total number of samples for gen_all", init->samples_tested(), total_samples);
 
-  testlib_test_begin( "Transformation for gen_all" );
   estimated_aff = dynamic_cast<rgrl_trans_affine*>(v->xform_estimate().as_pointer());
-  testlib_test_perform( estimated_aff&&
-                        close( org_aff->A(), estimated_aff->A() ) &&
-                        close( org_aff->t(), estimated_aff->t() ) );
+  TEST("Transformation for gen_all",
+       estimated_aff &&
+       close( org_aff->A(), estimated_aff->A() ) &&
+       close( org_aff->t(), estimated_aff->t() ), true);
 
   delete init;
 }
 
-MAIN( test_initializer_ran_sam )
+static void test_initializer_ran_sam()
 {
   rgrl_transformation_sptr trans =
     new rgrl_trans_affine( vnl_matrix<double>( 2, 2, vnl_matrix_identity ),
@@ -395,7 +392,6 @@ MAIN( test_initializer_ran_sam )
   START( "initializers_ran_sam w/ ambiguous matches" );
   rgrl_match_set_sptr ambiguous_matches = generate_ambiguous_match_set(trans);
   test_on_matches(trans, ambiguous_matches, total_matches);
-
-  SUMMARY();
 }
 
+TESTMAIN(test_initializer_ran_sam);

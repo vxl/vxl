@@ -25,7 +25,7 @@ template class rgtl_compact_tree_data_fixed<2, int, float>;
 template class rgtl_octree_data_fixed<2, int, float>;
 
 static void
-test_data_fixed()
+test_octree_data_fixed()
 {
   typedef rgtl_octree_data_fixed<2, int, float> tree_type;
   testlib_test_begin("fixed data construct");
@@ -72,9 +72,4 @@ test_data_fixed()
   testlib_test_perform(true);
 }
 
-MAIN( test_octree_data_fixed )
-{
-  START("rgtl_octree_data_fixed");
-  test_data_fixed();
-  SUMMARY();
-}
+TESTMAIN(test_octree_data_fixed);

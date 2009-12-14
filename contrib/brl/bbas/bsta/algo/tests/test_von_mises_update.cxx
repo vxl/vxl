@@ -62,8 +62,8 @@ void test_von_mises_update_type(T epsilon, const vcl_string& type_name)
   //without loss of generality it can be assumed that the mean
   //direction is (0, 0, 1)^t.
   unsigned n = 50;
-  vcl_cout << "Test parameter estimation for 3-d von mises distribution\n";
-  vcl_cout << "kappa" << ' ' << "est_kappa" << ' ' << "mean z, "<< n << " samples, type =" << type_name << '\n';
+  vcl_cout << "Test parameter estimation for 3-d von mises distribution\n"
+           << "kappa" << ' ' << "est_kappa" << ' ' << "mean z, "<< n << " samples, type =" << type_name << '\n';
   T ksum = T(0), msum = T(0);
   T norm = T(0);
   for (T kappa = T(1); kappa<=T(20); kappa+=2){
@@ -89,14 +89,12 @@ void test_von_mises_update_type(T epsilon, const vcl_string& type_name)
 }
 
 
-MAIN( test_von_mises_update )
+static void test_von_mises_update()
 {
-  START ("von_mises_update");
 #if VCL_CAN_DO_PARTIAL_SPECIALIZATION
-  test_von_mises_update_type(float(1e-5),"float");
-  test_von_mises_update_type(double(1e-8),"double");
+  test_von_mises_update_type(1e-5f,"float");
+  test_von_mises_update_type(1e-8 ,"double");
 #endif
-  SUMMARY();
 }
 
-
+TESTMAIN(test_von_mises_update);

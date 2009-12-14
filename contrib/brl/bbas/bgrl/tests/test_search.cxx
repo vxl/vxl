@@ -30,7 +30,7 @@ bool test_iterator( bgrl_graph::iterator& itr,
 }
 
 // Test the iterators
-void test_search()
+static void test_search()
 {
   // create vertices
   bgrl_vertex_sptr vertex_1 = new bgrl_vertex();
@@ -77,11 +77,4 @@ void test_search()
   TEST("Testing breadth_iterator", test_iterator(breadth_itr, breadth_order ), true);
 }
 
-MAIN( test_search )
-{
-  START( "bgrl_search" );
-
-  test_search();
-
-  SUMMARY();
-}
+TESTMAIN(test_search);

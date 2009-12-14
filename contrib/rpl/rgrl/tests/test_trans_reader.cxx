@@ -6,19 +6,17 @@
 #include <rgrl/rgrl_cast.h>
 #include <vcl_fstream.h>
 
-MAIN_ARGS( test_trans_reader )
+static void test_trans_reader(int argc, char* argv[])
 {
   if ( argc < 2 ) {
     vcl_cerr << "Please supply one transformation file.\n";
-    return 0;
+    return;
   }
-
-  START( "smart reader of transformation" );
 
   vcl_ifstream is( argv[1], vcl_ios_in|vcl_ios_binary );
   if ( !is ) {
     vcl_cerr << "Cannot open transformation file: " << argv[2] << vcl_endl;
-    return 0;
+    return;
   }
 
   // read transformation
@@ -42,6 +40,6 @@ MAIN_ARGS( test_trans_reader )
     // test
     affine->write( vcl_cout );
   }
-
-  SUMMARY();
 }
+
+TESTMAIN_ARGS(test_trans_reader);

@@ -13,10 +13,8 @@
 #include <bmsh3d/bmsh3d_mesh.h>
 
 
-MAIN (bmsh3d_test_face_geom)
+static void bmsh3d_test_face_geom()
 {
-  testlib_test_start("bmsh3d_test_face_geom.");
-
   //Create the test mesh.
   bmsh3d_mesh* M = new bmsh3d_mesh;
 
@@ -68,8 +66,7 @@ MAIN (bmsh3d_test_face_geom)
     TEST_NEAR ("d2, d3 of v[i], v[j]", d2, d3, 1E-10);
   }
 
-
   delete M;
-
-  return testlib_test_summary();
 }
+
+TESTMAIN(bmsh3d_test_face_geom);

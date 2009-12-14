@@ -7,10 +7,8 @@
 #include <vcl_iostream.h>
 #include <vcl_string.h>
 
-MAIN( test_database )
+static void test_database()
 {
-  START ("Database");
-
   brdb_database_sptr test_db1 = generate_sample_database();
 
   //////////////////////////////////////////////////////////////////////////////////
@@ -82,6 +80,6 @@ MAIN( test_database )
   TEST("clear()", (test_db->size() == 0), true);
 
   TEST("empty()", (test_db->empty()), true);
-
-  SUMMARY();
 }
+
+TESTMAIN(test_database);

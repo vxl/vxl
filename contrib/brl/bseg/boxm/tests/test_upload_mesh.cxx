@@ -18,9 +18,8 @@
 #include <imesh/imesh_fileio.h>
 #include <vcl_limits.h>
 
-MAIN( test_upload_mesh )
+static void test_upload_mesh()
 {
-  START ("TEST upload mesh");
   bgeo_lvcs lvcs(33.33,44.44,10.0, bgeo_lvcs::wgs84, bgeo_lvcs::DEG, bgeo_lvcs::METERS);
   vgl_point_3d<double> origin(0,0,0);
   vgl_vector_3d<double> block_dim(10,10,10);
@@ -116,5 +115,6 @@ MAIN( test_upload_mesh )
 
   vpl_rmdir("./boxm_upload");
   vpl_unlink("./scene.xml");
-  SUMMARY();
 }
+
+TESTMAIN(test_upload_mesh);

@@ -5,9 +5,8 @@
 
 typedef boct_tree<short,vgl_point_3d<double> > tree_type;
 
-MAIN( test_block_iter )
+static void test_block_iter()
 {
-  START ("CREATE SCENE");
   short nlevels=5;
   tree_type * block = new tree_type(nlevels);
   TEST("No of Max levels of tree",nlevels, block->number_levels());
@@ -32,5 +31,6 @@ MAIN( test_block_iter )
   int x,y,z;
   scene.block_num(x,y,z);
   TEST("Number of blocks iterator visits", num_blocks, x*y*z);
-  SUMMARY();
 }
+
+TESTMAIN(test_block_iter);

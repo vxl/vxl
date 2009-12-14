@@ -6,9 +6,8 @@
 #include <vpl/vpl.h>
 #include <vul/vul_file.h>
 
-MAIN( test_binary_io )
+static void test_binary_io()
 {
-  START ("CREATE SCENE");
 #ifdef DEBUG
   short nlevels=5;
   typedef vgl_point_3d<double> point_type;
@@ -71,5 +70,6 @@ MAIN( test_binary_io )
   vpl_rmdir("./boxm_scene");
   vpl_unlink("./scene.bin");
 #endif // DEBUG
-  SUMMARY();
 }
+
+TESTMAIN(test_binary_io);

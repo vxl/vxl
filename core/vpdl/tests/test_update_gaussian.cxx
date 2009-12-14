@@ -248,12 +248,10 @@ void test_update_gaussian_type(T epsilon, const vcl_string& type_name)
 }
 
 
-MAIN( test_update_gaussian )
+static void test_update_gaussian()
 {
-  START ("update gaussian");
-  test_update_gaussian_type(float(1e-5),"float");
-  test_update_gaussian_type(double(1e-13),"double");
-  SUMMARY();
+  test_update_gaussian_type(1e-5f,"float");
+  test_update_gaussian_type(1e-13,"double");
 }
 
-
+TESTMAIN(test_update_gaussian);

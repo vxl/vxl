@@ -179,9 +179,9 @@ void test_network_builder()
 }
 
 
-MAIN( test_network_builder )
+static void test_network_builder()
 {
-  START( "bmrf_network_builder" );
   test_network_builder();
-  SUMMARY();
 }
+
+TESTMAIN(test_network_builder);

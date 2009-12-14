@@ -28,7 +28,7 @@ void init_random_image(vil_image_view<float>& img)
 }
 
 
-MAIN( test_measure )
+static void test_measure()
 {
   const unsigned window_size = 50;
   const unsigned int max_components = 3;
@@ -77,7 +77,6 @@ MAIN( test_measure )
     vcl_cout << vcl_endl;
   }
   TEST_NEAR("measure probability", 1.60547e-005, result(0,0), 1.60547e-008);
-  SUMMARY();
 }
 
-
+TESTMAIN(test_measure);

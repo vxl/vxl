@@ -98,7 +98,7 @@ bool test_non_max_grid(bvxm_voxel_grid<gauss_f1> *grid)
 }
 
 
-MAIN(test_detect_corner)
+static void test_detect_corner()
 {
   //Create vector of kernels
   unsigned length = 2;
@@ -162,6 +162,6 @@ MAIN(test_detect_corner)
   vector_oper.non_maxima_suppression(grid_out,id_grid,kernel_vector);
   vcl_cout << vcl_endl;
   TEST("Number of corners after non_max", true, test_non_max_grid(grid_out));
-  SUMMARY();
-  return 0;
 }
+
+TESTMAIN(test_detect_corner);

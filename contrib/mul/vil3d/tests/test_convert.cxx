@@ -18,20 +18,16 @@ static void test_convert_diff_types(const char * golden_data_dir)
   vcl_string datadir = golden_data_dir;
   if (*golden_data_dir) datadir += "/";
 
-  testlib_test_begin( "Loading images" );
-
   vil3d_image_view<vxl_uint_16> image1 = vil3d_load((datadir + "ff_grey_cross.gipl").c_str());
   vil3d_image_view_base_sptr image_base1 = vil3d_load((datadir + "ff_grey_cross.gipl").c_str());
-  testlib_test_perform( bool(image1) && image_base1 );
+  TEST("Loading images" , image1 && image_base1, true);
 
-  testlib_test_begin( "Converting explicitly 16bit to 32bit" );
   vil3d_image_view<vxl_uint_32> image_32_1;
   vil3d_convert_cast( image1, image_32_1 );
-  testlib_test_perform( image_32_1 && image_32_1(4,0,3) == vxl_uint_32( image1(4,0,3) ) );
+  TEST("Converting explicitly 16bit to 32bit", image_32_1(4,0,3), vxl_uint_32( image1(4,0,3) ));
 
-  testlib_test_begin( "Converting implicitly 16bit to 32bit" );
   vil3d_image_view<vxl_uint_32> image_32_2 = vil3d_convert_cast(vxl_uint_32(), image_base1 );
-  testlib_test_perform( image_32_2 && image_32_2(4,0,3) == vxl_uint_32( image1(4,0,3) ) );
+  TEST("Converting implicitly 16bit to 32bit", image_32_2(4,0,3), vxl_uint_32( image1(4,0,3) ));
 #ifdef DEBUG
   if ( image_32_2 )
     vil3d_print_all(vcl_cout, image_32_2);
@@ -99,10 +95,9 @@ static void test_convert_to_n_planes()
 
   vil3d_math_scale_and_offset_values(f_image,1.0f,0.499f);
 
-  testlib_test_begin( "implicit vil3d_convert_round float to 16bit with rounding" );
   vil3d_image_view_base_sptr f_image_dest_sptr(new vil3d_image_view<float>(f_image_dest));
   vil3d_image_view<vxl_uint_16> image_16_3 = vil3d_convert_round(vxl_uint_16(), f_image_dest_sptr);
-  testlib_test_perform( vil3d_image_view_deep_equality(image_16_3, u16_image_expected) );
+  TEST("implicit vil3d_convert_round float to 16bit with rounding" , vil3d_image_view_deep_equality(image_16_3, u16_image_expected), true);
 
   { // print out values the function will use, because we are getting odd results on some platforms
     vcl_streamsize oldprec = vcl_cout.precision(18);
@@ -116,11 +111,10 @@ static void test_convert_to_n_planes()
              << "trans (a=" << a << ", b=" << b << ')' << vcl_endl;
     vcl_cout.precision(oldprec);
   }
-  testlib_test_begin( "implicit vil3d_convert_stretch_range float to 16bit with rounding" );
   vil3d_image_view<vxl_uint_16> image_16_3_stretched = vil3d_convert_stretch_range(vxl_uint_16(), f_image_dest_sptr);
   vxl_uint_16 minp,maxp;
   vil3d_math_value_range(image_16_3_stretched,minp,maxp);
-  testlib_test_perform( minp==0 && maxp==65535);
+  TEST("implicit vil3d_convert_stretch_range float to 16bit with rounding", minp==0 && maxp==65535, true);
   vcl_cout << "output (minp=" << minp << ", maxp=" << maxp << ')' << vcl_endl;
 #ifdef DEBUG
   vil3d_print_all(vcl_cout, image_16_3_stretched);
@@ -129,13 +123,11 @@ static void test_convert_to_n_planes()
 #endif
 }
 
-MAIN_ARGS( test_convert )
+static void test_convert(int argc, char* argv[])
 {
-  START( "vil_convert" );
-
   test_convert_to_n_planes();
   test_convert_stretch_range();
   test_convert_diff_types(argc>1 ? argv[1] : "file_read_data");
-
-  SUMMARY();
 }
+
+TESTMAIN_ARGS(test_convert);

@@ -21,12 +21,12 @@
 #include <bprb/bprb_func_process.h>
 
 
-MAIN( test_bvxm_illum_index_process )
+static void test_bvxm_illum_index_process()
 {
-  // This test conssist of two parts
+  // This test consists of two parts
   // 1. Run process using the process manager, checking that
   //    parameter, inputs and outputs are being set properly
-  // 2. Test the indexing algorithm for varios number of bins
+  // 2. Test the indexing algorithm for various number of bins
 
   // 1. Run process using Process Manager
   {
@@ -84,64 +84,65 @@ MAIN( test_bvxm_illum_index_process )
     }
   }
 
-  //2.Check indexing algorithm for a number of choises
+  // 2. Check indexing algorithm for a number of choices
   {
     using namespace bvxm_illum_index_process_globals;
-     unsigned idx;
-     idx = bin_index("eq_area",(180.0/8),0,2,0);
-       TEST("bin_idx", idx ,0);
+    unsigned idx;
 
-     idx = bin_index("eq_area",(180.0/8),90.0,2,0);
-       TEST("bin_idx", idx ,0);
+    idx = bin_index("eq_area",(180.0/8),0,2,0);
+    TEST("bin_idx", idx ,0);
 
-     idx = bin_index("eq_area",(180.0/8),180.0,2,0);
-       TEST("bin_idx", idx ,0);
+    idx = bin_index("eq_area",(180.0/8),90.0,2,0);
+    TEST("bin_idx", idx ,0);
 
-     idx = bin_index("eq_area",(180.0/8),270.0,2,0);
-       TEST("bin_idx", idx ,0);
+    idx = bin_index("eq_area",(180.0/8),180.0,2,0);
+    TEST("bin_idx", idx ,0);
+
+    idx = bin_index("eq_area",(180.0/8),270.0,2,0);
+    TEST("bin_idx", idx ,0);
 
      //----
 
-     idx = bin_index("eq_area",(90.0),0,2,0);
-       TEST("bin_idx", idx ,1);
+    idx = bin_index("eq_area",(90.0),0,2,0);
+    TEST("bin_idx", idx ,1);
 
-     idx = bin_index("eq_area",(90.0),90.0,2,0);
-       TEST("bin_idx", idx ,1);
+    idx = bin_index("eq_area",(90.0),90.0,2,0);
+    TEST("bin_idx", idx ,1);
 
-     idx = bin_index("eq_area",(90.0),180.0,2,0);
-       TEST("bin_idx", idx ,1);
+    idx = bin_index("eq_area",(90.0),180.0,2,0);
+    TEST("bin_idx", idx ,1);
 
-     idx = bin_index("eq_area",(90.0),270.0,2,0);
-       TEST("bin_idx", idx ,1);
-
-         //----
-
-     idx = bin_index("eq_area",(180.0/8),0,2,2);
-       TEST("bin_idx", idx ,0);
-
-     idx = bin_index("eq_area",(180.0/8),90.0,2,2);
-       TEST("bin_idx", idx ,0);
-
-     idx = bin_index("eq_area",(180.0/8),180.0,2,2);
-       TEST("bin_idx", idx ,1);
-
-     idx = bin_index("eq_area",(180.0/8),270.0,2,2);
-       TEST("bin_idx", idx ,1);
+    idx = bin_index("eq_area",(90.0),270.0,2,0);
+    TEST("bin_idx", idx ,1);
 
          //----
 
-     idx = bin_index("eq_area",90.0,0,2,2);
-       TEST("bin_idx", idx ,2);
+    idx = bin_index("eq_area",(180.0/8),0,2,2);
+    TEST("bin_idx", idx ,0);
 
-     idx = bin_index("eq_area",90.0,90.0,2,2);
-       TEST("bin_idx", idx ,2);
+    idx = bin_index("eq_area",(180.0/8),90.0,2,2);
+    TEST("bin_idx", idx ,0);
 
-     idx = bin_index("eq_area",90.0,180.0,2,2);
-       TEST("bin_idx", idx ,3);
+    idx = bin_index("eq_area",(180.0/8),180.0,2,2);
+    TEST("bin_idx", idx ,1);
 
-     idx = bin_index("eq_area",90.0,270.0,2,2);
-       TEST("bin_idx", idx ,3);
+    idx = bin_index("eq_area",(180.0/8),270.0,2,2);
+    TEST("bin_idx", idx ,1);
+
+         //----
+
+    idx = bin_index("eq_area",90.0,0,2,2);
+    TEST("bin_idx", idx ,2);
+
+    idx = bin_index("eq_area",90.0,90.0,2,2);
+    TEST("bin_idx", idx ,2);
+
+    idx = bin_index("eq_area",90.0,180.0,2,2);
+    TEST("bin_idx", idx ,3);
+
+    idx = bin_index("eq_area",90.0,270.0,2,2);
+    TEST("bin_idx", idx ,3);
   }
-
-  SUMMARY();
 }
+
+TESTMAIN(test_bvxm_illum_index_process);

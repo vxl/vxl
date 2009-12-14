@@ -22,14 +22,13 @@ vgl_point_3d<double> operator + (const vgl_point_3d<double>& p1, const vgl_point
 {
   return vgl_point_3d<double>(p1.x()+p2.x(), p1.y()+p2.y(), p1.z()+p2.z());
 }
-// end of namespace
-};
+
+}; // end of namespace
 
 
-MAIN( test_intersect )
+static void test_intersect()
 {
-  START ("Mesh Intersection");
-
+  vcl_cout << "Mesh Intersection\n";
   {
     vgl_point_3d<double> p(2,3,4);
     vgl_vector_3d<double> d(-2,-3,-4);
@@ -117,6 +116,6 @@ MAIN( test_intersect )
     TEST_NEAR("Edge ac location", ( imesh_triangle_closest_point(p7,a,b,c,dist)
                    - vgl_triangle_3d_closest_point(p7,a,b,c)).length(), 0.0,  1e-14);
   }
-
-  SUMMARY();
 }
+
+TESTMAIN(test_intersect);

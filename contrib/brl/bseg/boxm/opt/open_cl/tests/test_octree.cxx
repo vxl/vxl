@@ -444,7 +444,7 @@ void tree_tests(octree_test_driver& test_driver)
   test_driver.cleanup_tree_test();
 }
 
-MAIN( test_octree )
+static void test_octree()
 {
   vcl_string root_dir = testlib_root_dir();
   boxm_ray_trace_manager* ray_mgr = boxm_ray_trace_manager::instance();
@@ -453,8 +453,10 @@ MAIN( test_octree )
   ray_mgr->setup_tree();
   ray_mgr->setup_tree_processing();
   octree_test_driver test_driver;
-  if (!test_driver.init())
-    return 0;
-  tree_tests(test_driver);
-  SUMMARY();
+  if (test_driver.init())
+  { tree_tests(test_driver); }
+  else
+  { TEST("octree_test_driver", true, false); }
 }
+
+TESTMAIN(test_octree);

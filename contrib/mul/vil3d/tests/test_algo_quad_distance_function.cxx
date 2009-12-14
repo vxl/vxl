@@ -74,10 +74,10 @@ void test_algo_quad_distance_function_with_pos_float_float()
   TEST("pos(0,2,3)=(1,2,3)",pos(0,2,3,0)==1 && pos(0,2,3,1)==2 && pos(0,2,3,2)==3,true);
 }
 
-MAIN( test_algo_quad_distance_function )
+static void test_algo_quad_distance_function()
 {
-  START( "vil3d_quad_distance_function" );
   test_algo_quad_distance_function_float_float();
   test_algo_quad_distance_function_with_pos_float_float();
-  SUMMARY();
 }
+
+TESTMAIN(test_algo_quad_distance_function);

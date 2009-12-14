@@ -157,10 +157,10 @@ void test_distance_transform()
   TEST_EQUAL("The vectors are equal to ground truth vectors", result, true);
 }
 
-MAIN( test_algo_distance_transform )
+static void test_algo_distance_transform()
 {
-  START( "test_distance_transform" );
   test_signed_distance_transform();
   test_distance_transform();
-  SUMMARY();
 }
+
+TESTMAIN(test_algo_distance_transform);

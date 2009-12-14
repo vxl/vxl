@@ -2,10 +2,8 @@
 #include <imesh/imesh_detection.h>
 #include "test_share.h"
 
-MAIN( test_detect )
+static void test_detect()
 {
-  START ("Mesh Detection");
-
   imesh_mesh cube1, cube2, cube3;
   make_cube(cube1);
   make_cube(cube2);
@@ -31,6 +29,6 @@ MAIN( test_detect )
   TEST("Connected faces have correct number", group1.size(), 6);
   TEST("Connected faces different starting point", group1, group2);
   TEST("Connected faces finds two groups", group1 != group3, true);
-
-  SUMMARY();
 }
+
+TESTMAIN(test_detect);
