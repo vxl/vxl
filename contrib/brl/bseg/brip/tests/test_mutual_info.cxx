@@ -8,8 +8,6 @@
 
 static void test_mutual_info()
 {
-  START ("mutual info");
-
   // Generate some images
   //--------------------------------------------
   unsigned ni=256;
@@ -40,9 +38,7 @@ static void test_mutual_info()
   const double tol = 1e-12; // tolerance
 
   TEST("Mirror Entropy", entropy1, entropy2);
-
-  testlib_test_begin("Self Joint Entropy");
-  testlib_test_perform(vcl_abs(entropy1 - entropy3) <= tol);
+  TEST_NEAR("Self Joint Entropy", entropy1, entropy3, tol);
 
   // Test Mutual Information
   //---------------------------------------------------------
@@ -54,8 +50,7 @@ static void test_mutual_info()
   //vcl_cout << "MI1: " << mi1 <<  " MI2: " << mi2 << " MI3: " << mi3 << vcl_endl;
 
   TEST_NEAR("Mutual Information Commutative", mi2, mi3, 1e-9);
-  testlib_test_begin("Large Self Mutual Info");
-  testlib_test_perform(mi2 < mi1);
+  TEST("Large Self Mutual Info", mi2 < mi1, true);
 }
 
 TESTMAIN(test_mutual_info);

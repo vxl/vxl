@@ -23,8 +23,7 @@ void test_hist(const vil_image_view<T>& image,
 
   vcl_stringstream test_name;
   test_name << "Validate Sums (" << n_bins <<" bins)";
-  testlib_test_begin(test_name.str().c_str());
-  testlib_test_perform(test_sum == sum && sum == image.ni()*image.nj()*image.nplanes());
+  TEST(test_name.str().c_str(), test_sum == sum && sum == image.ni()*image.nj()*image.nplanes(), true);
 }
 
 template <class T>
@@ -47,13 +46,11 @@ void test_hist_weight(const vil_image_view<T>& image,
 
   vcl_stringstream test_name;
   test_name<<"Validate Weights ("<<n_bins<<" bins, range "<<min<<"--"<<max<<')';
-  testlib_test_begin(test_name.str().c_str());
-  testlib_test_assert_near("sum", sum, test_sum, 1e-9);
+  TEST_NEAR(test_name.str().c_str(), sum, test_sum, 1e-9);
 
   vcl_stringstream t;
   t<<"Validate histogram sum ("<<n_bins<<" bins, range "<<min<<"--"<<max<<')';
-  testlib_test_begin(test_name.str().c_str());
-  testlib_test_assert_near("sum", verify_sum, test_sum, 1e-9);
+  TEST_NEAR(test_name.str().c_str(), verify_sum, test_sum, 1e-9);
 }
 
 template <class T>
@@ -78,8 +75,7 @@ void test_hist_joint(const vil_image_view<T>& image1,
 
   vcl_stringstream test_name;
   test_name << "Validate Joint Sums (" << n_bins <<"^2 bins)";
-  testlib_test_begin(test_name.str().c_str());
-  testlib_test_perform(test_sum == sum);
+  TEST(test_name.str().c_str(),test_sum, sum);
 }
 
 static void test_histogram()

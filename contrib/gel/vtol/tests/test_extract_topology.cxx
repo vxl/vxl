@@ -158,7 +158,7 @@ test_image_1a()
   const unsigned D = 2;
   const unsigned L = 4;
   const unsigned U = 8;
-  const unsigned LD = L | D; 
+  const unsigned LD = L | D;
   const unsigned LR = L | R;
   const unsigned LU = L | U;
   const unsigned RD = R | D;
@@ -182,7 +182,6 @@ test_image_1a()
   vtol_extract_topology<TEST_LABEL_TYPE> te( img );
   testlib_test_perform( true );
 
-  testlib_test_begin( "Testing (internal) is_edge()" );
   bool good = true;
   for ( unsigned i = 0; i < 7; ++i ) {
     for ( unsigned j = 0; j < 7; ++j ) {
@@ -191,21 +190,21 @@ test_image_1a()
         if ( (edges[j][i] & d) != 0 ) {
           if ( ! te.is_edge( i, j, dir ) ) {
             good = false;
-            vcl_cout << "["<<edges[j][i]<<"] ("<<i<<","<<j<<", d="<<dir<<")  should be a boundary edge\n";
+            vcl_cout << '['<<edges[j][i]<<"] ("<<i<<','<<j<<", d="<<dir<<")  should be a boundary edge\n";
           }
         } else {
           if ( te.is_edge( i, j, dir ) ) {
             good = false;
-            vcl_cout << "["<<edges[j][i]<<"] ("<<i<<","<<j<<", d="<<dir<<")  should not be a boundary edge\n";
+            vcl_cout << '['<<edges[j][i]<<"] ("<<i<<','<<j<<", d="<<dir<<")  should not be a boundary edge\n";
           }
         }
       }
     }
   }
-  testlib_test_perform( good );
+  TEST("Testing (internal) is_edge()", good, true);
 
-  TEST_EQUAL( "Vertex count", te.vertices().size(), 19 );
-  TEST_EQUAL( "Face count", te.faces().size(), 13 );
+  TEST_EQUAL("Vertex count", te.vertices().size(), 19);
+  TEST_EQUAL("Face count", te.faces().size(), 13);
 }
 
 
@@ -222,7 +221,7 @@ test_image_1b()
   const unsigned D = 2;
   const unsigned L = 4;
   const unsigned U = 8;
-  const unsigned LD = L | D; 
+  const unsigned LD = L | D;
   const unsigned LR = L | R;
   const unsigned LU = L | U;
   const unsigned RD = R | D;
@@ -243,7 +242,6 @@ test_image_1b()
   vtol_extract_topology< TEST_LABEL_TYPE > te( img );
   testlib_test_perform( true );
 
-  testlib_test_begin( "Testing (internal) is_edge()" );
   bool good = true;
   for ( unsigned i = 0; i < 7; ++i )
     for ( unsigned j = 0; j < 7; ++j )
@@ -262,7 +260,7 @@ test_image_1b()
           }
         }
       }
-  testlib_test_perform( good );
+  TEST("Testing (internal) is_edge()", good, true);
 
   TEST_EQUAL( "Vertex count", te.vertices().size(), 5 );
   TEST_EQUAL( "Face count", te.faces().size(), 3 );
@@ -280,8 +278,7 @@ test_image_2()
   vtol_extract_topology< TEST_LABEL_TYPE > te( img );
   testlib_test_perform( true );
 
-  testlib_test_begin( "Vertex count" );
-  testlib_test_perform( te.vertices().size() >= 2 );
+  TEST( "Vertex count", te.vertices().size() >= 2, true);
   TEST_EQUAL( "Face count", te.faces().size(), 2 );
 }
 
@@ -297,8 +294,7 @@ test_image_3()
   vtol_extract_topology< TEST_LABEL_TYPE > te( img );
   testlib_test_perform( true );
 
-  testlib_test_begin( "Vertex count" );
-  testlib_test_perform( te.vertices().size() >= 3 );
+  TEST( "Vertex count", te.vertices().size() >= 3, true);
   TEST_EQUAL( "Face count", te.faces().size(), 4 );
 }
 
@@ -379,15 +375,11 @@ test_smoothing()
 
     TEST_EQUAL( "Face count", faces.size(), 2 );
 
-    testlib_test_begin( "Face 0, Vertex (0.5,-0.5)" );
-    testlib_test_perform( has_vertex( faces[0], 0.5, -0.5 ) );
-    testlib_test_begin( "Face 0, Vertex (5.5, 4.5)" );
-    testlib_test_perform( has_vertex( faces[0], 5.5,  4.5 ) );
+    TEST( "Face 0, Vertex (0.5,-0.5)" , has_vertex( faces[0], 0.5, -0.5 ), true);
+    TEST( "Face 0, Vertex (5.5, 4.5)" , has_vertex( faces[0], 5.5,  4.5 ), true);
 
-    testlib_test_begin( "Face 1, Vertex (0.5,-0.5)" );
-    testlib_test_perform( has_vertex( faces[1], 0.5, -0.5 ) );
-    testlib_test_begin( "Face 1, Vertex (5.5, 4.5)" );
-    testlib_test_perform( has_vertex( faces[1], 5.5,  4.5 ) );
+    TEST( "Face 1, Vertex (0.5,-0.5)" , has_vertex( faces[1], 0.5, -0.5 ), true);
+    TEST( "Face 1, Vertex (5.5, 4.5)" , has_vertex( faces[1], 5.5,  4.5 ), true);
   }
 
   {
@@ -395,23 +387,19 @@ test_smoothing()
     label_image_type img( image_to_label(image_5()) );
 
     testlib_test_begin( "Constructing extract object" );
-    vtol_extract_topology< TEST_LABEL_TYPE > te( img,
-                              vtol_extract_topology_params().set_smooth( 3 ) );
+    vtol_extract_topology< TEST_LABEL_TYPE >
+      te( img, vtol_extract_topology_params().set_smooth( 3 ) );
     testlib_test_perform( true );
 
     vcl_vector< vtol_intensity_face_sptr > const& faces = te.faces();
 
     TEST_EQUAL( "Face count", faces.size(), 2 );
 
-    testlib_test_begin( "Face 0, Vertex (0.5,-0.5)" );
-    testlib_test_perform( has_vertex( faces[0], 0.5, -0.5 ) );
-    testlib_test_begin( "Face 0, Vertex (5.5, 4.5)" );
-    testlib_test_perform( has_vertex( faces[0], 5.5,  4.5 ) );
+    TEST( "Face 0, Vertex (0.5,-0.5)" , has_vertex( faces[0], 0.5, -0.5 ), true);
+    TEST( "Face 0, Vertex (5.5, 4.5)" , has_vertex( faces[0], 5.5,  4.5 ), true);
 
-    testlib_test_begin( "Face 1, Vertex (0.5,-0.5)" );
-    testlib_test_perform( has_vertex( faces[1], 0.5, -0.5 ) );
-    testlib_test_begin( "Face 1, Vertex (5.5, 4.5)" );
-    testlib_test_perform( has_vertex( faces[1], 5.5,  4.5 ) );
+    TEST( "Face 1, Vertex (0.5,-0.5)" , has_vertex( faces[1], 0.5, -0.5 ), true);
+    TEST( "Face 1, Vertex (5.5, 4.5)" , has_vertex( faces[1], 5.5,  4.5 ), true);
   }
 
   {
@@ -419,7 +407,7 @@ test_smoothing()
     label_image_type img( image_to_label(image_5()) );
 
     testlib_test_begin( "Constructing extract object" );
-    vtol_extract_topology <TEST_LABEL_TYPE > 
+    vtol_extract_topology <TEST_LABEL_TYPE >
       te( img,vtol_extract_topology_params().set_smooth( 8 ) );
     testlib_test_perform( true );
 
@@ -427,15 +415,11 @@ test_smoothing()
 
     TEST_EQUAL( "Face count", faces.size(), 2 );
 
-    testlib_test_begin( "Face 0, Vertex (0.5,-0.5)" );
-    testlib_test_perform( has_vertex( faces[0], 0.5, -0.5 ) );
-    testlib_test_begin( "Face 0, Vertex (5.5, 4.5)" );
-    testlib_test_perform( has_vertex( faces[0], 5.5,  4.5 ) );
+    TEST( "Face 0, Vertex (0.5,-0.5)" , has_vertex( faces[0], 0.5, -0.5 ), true);
+    TEST( "Face 0, Vertex (5.5, 4.5)" , has_vertex( faces[0], 5.5,  4.5 ), true);
 
-    testlib_test_begin( "Face 1, Vertex (0.5,-0.5)" );
-    testlib_test_perform( has_vertex( faces[1], 0.5, -0.5 ) );
-    testlib_test_begin( "Face 1, Vertex (5.5, 4.5)" );
-    testlib_test_perform( has_vertex( faces[1], 5.5,  4.5 ) );
+    TEST( "Face 1, Vertex (0.5,-0.5)" , has_vertex( faces[1], 0.5, -0.5 ), true);
+    TEST( "Face 1, Vertex (5.5, 4.5)" , has_vertex( faces[1], 5.5,  4.5 ), true);
   }
 }
 
@@ -456,22 +440,20 @@ test_digital_region()
 
   vcl_vector< vtol_intensity_face_sptr > const& faces = te.faces( img );
 
-  testlib_test_begin( "Vertex count" );
-  testlib_test_perform( te.vertices().size() >= 2 );
+  TEST( "Vertex count" , te.vertices().size() >= 2, true);
   TEST_EQUAL( "Face count", te.faces().size(), 2 );
 
   vdgl_digital_region* reg1 = faces[0]->cast_to_digital_region();
   vdgl_digital_region* reg2 = faces[1]->cast_to_digital_region();
 
-  testlib_test_begin( "Faces have digital regions" );
-  testlib_test_perform( reg1 && reg2 );
+  TEST( "Faces have digital regions", reg1 && reg2, true);
 
   int num1 = reg1->Npix();
   int num2 = reg2->Npix();
 
-  testlib_test_begin( "Pixel counts" );
-  testlib_test_perform( ( num1 == 10 && num2 == 26 ) ||
-                        ( num2 == 10 && num1 == 26 ) );
+
+  TEST( "Pixel counts", ( num1 == 10 && num2 == 26 ) ||
+                        ( num2 == 10 && num1 == 26 ), true);
 }
 
 

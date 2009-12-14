@@ -11,8 +11,6 @@
 
 static void test_voxel_storage_disk()
 {
-  START("bvxm_voxel_storage_disk test");
-
   // we need temporary disk storage for this test.
   vcl_string storage_fname("bvxm_voxel_storage_test_temp.vox");
   if (vul_file::exists(storage_fname)) // accidentally left from an earlier run
@@ -78,8 +76,6 @@ static void test_voxel_storage_disk()
 
   // remove temporary file
   vul_file::delete_file_glob(storage_fname.c_str());
-  return;
 }
-
 
 TESTMAIN( test_voxel_storage_disk );

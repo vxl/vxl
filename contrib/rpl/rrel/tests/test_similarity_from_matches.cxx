@@ -68,39 +68,35 @@ static void test_similarity_from_matches()
   similarity_from_matches sim( matches );
   testlib_test_perform( true );
 
-  testlib_test_begin( "num to instantiate" );
-  testlib_test_perform( sim.num_samples_to_instantiate() == 2 );
+  TEST("num to instantiate", sim.num_samples_to_instantiate(), 2);
 
-  testlib_test_begin( "num_unique_samples" );
-  testlib_test_perform( sim.num_unique_samples() == 3 );
+  TEST("num_unique_samples" , sim.num_unique_samples(), 3);
 
   vcl_cout << " num = " << sim.num_samples() << vcl_endl;
-  testlib_test_begin( "num_samples" );
-  testlib_test_perform( sim.num_samples() == 6 );
+  TEST("num_samples" , sim.num_samples(), 6);
 
   vnl_vector<double> est_params(4);
-  testlib_test_begin( "fit_from_minimal_sample -- degenerate" );
   vcl_vector<int> indices(2);  indices[0] = 4;  indices[1] = 3;
-  testlib_test_perform( !sim.fit_from_minimal_set( indices, est_params ) );
+  TEST("fit_from_minimal_sample -- degenerate" , !sim.fit_from_minimal_set( indices, est_params ), true);
 
-  testlib_test_begin( "fit_from_minimal_sample -- exact" );
   indices[0] = 0;  indices[1] = 3;
-  testlib_test_perform( sim.fit_from_minimal_set( indices, est_params )
-                        && close( est_params[0], params[0] )
-                        && close( est_params[1], params[1] )
-                        && close( est_params[2], params[2] )
-                        && close( est_params[3], params[3] ) );
+  TEST("fit_from_minimal_sample -- exact",
+       sim.fit_from_minimal_set( indices, est_params )
+       && close( est_params[0], params[0] )
+       && close( est_params[1], params[1] )
+       && close( est_params[2], params[2] )
+       && close( est_params[3], params[3] ), true);
 
   vcl_vector<double> residuals;
-  testlib_test_begin( "compute_residuals" );
   sim.compute_residuals( params.as_ref(), residuals );
-  testlib_test_perform( residuals.size() == 6
-                        && close( residuals[0],  0 )
-                        && close( residuals[1],  5 )
-                        && close( residuals[2], 50 )
-                        && close( residuals[3],  0 )
-                        && close( residuals[4], 10 )
-                        && close( residuals[5],  0.5 ) );
+  TEST("compute_residuals",
+       residuals.size() == 6
+       && close( residuals[0],  0 )
+       && close( residuals[1],  5 )
+       && close( residuals[2], 50 )
+       && close( residuals[3],  0 )
+       && close( residuals[4], 10 )
+       && close( residuals[5],  0.5 ), true);
 
   vcl_vector<double> temp_res(6);
   vcl_vector<double> weights;
@@ -109,14 +105,14 @@ static void test_similarity_from_matches()
   temp_res[2] = 0.02; temp_res[3] = 1; temp_res[4] = 0.12;
   temp_res[5] = 0.9;
 
-  testlib_test_begin( "compute_weights" );
   sim.compute_weights( temp_res, &obj, 1.0, weights );
-  testlib_test_perform( close( weights[0], 1.0 * 1.0 / 1.1 ) &&
-                        close( weights[1], 0.1 * 0.1 / 1.1 ) &&
-                        close( weights[2], 0.02 * 0.02 / 1.14 ) &&
-                        close( weights[3], 1.0 * 1.0 / 1.14 ) &&
-                        close( weights[4], 0.12 * 0.12 / 1.14 ) &&
-                        close( weights[5], 0.9 ) );
+  TEST("compute_weights",
+       close( weights[0], 1.0 * 1.0 / 1.1 ) &&
+       close( weights[1], 0.1 * 0.1 / 1.1 ) &&
+       close( weights[2], 0.02 * 0.02 / 1.14 ) &&
+       close( weights[3], 1.0 * 1.0 / 1.14 ) &&
+       close( weights[4], 0.12 * 0.12 / 1.14 ) &&
+       close( weights[5], 0.9 ), true);
 }
 
 TESTMAIN(test_similarity_from_matches);

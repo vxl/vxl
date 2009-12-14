@@ -10,8 +10,6 @@
 
 static void test_voxel_storage_mem()
 {
-  START("bvxm_voxel_storage_mem test");
-
   vgl_vector_3d<unsigned int> grid_size(50,50,10);
   bvxm_voxel_storage_mem<float> storage(grid_size);
 
@@ -20,7 +18,7 @@ static void test_voxel_storage_mem()
   storage.initialize_data(init_val);
   bool init_check = true;
   bool write_read_check = true;
-  
+
   // read in each slice, check that init_val was set, and fill with new value
   unsigned count = 0;
   for (unsigned i=0; i < storage.nz(); i++) {
@@ -53,10 +51,6 @@ static void test_voxel_storage_mem()
   }
 
   TEST("Read in voxel values match written values?",write_read_check,true);
-
-
-  return;
 }
-
 
 TESTMAIN( test_voxel_storage_mem );

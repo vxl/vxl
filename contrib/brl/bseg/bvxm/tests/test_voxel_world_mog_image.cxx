@@ -17,15 +17,13 @@
 
 static void test_voxel_world_mog_image()
 {
-  START("bvxm_voxel_world_mog_image test");
-
   vcl_string model_dir("test_world_dir");
   if (vul_file::is_directory(model_dir))
     vpl_rmdir(model_dir.c_str());
   else if (vul_file::exists(model_dir))
       vpl_unlink(model_dir.c_str());
   vul_file::make_directory(model_dir);
-  
+
 
   unsigned nx = 200;
   unsigned ny = 200;
@@ -181,7 +179,6 @@ static void test_voxel_world_mog_image()
   bvxm_voxel_slab_base_sptr mog_image2;
   TEST("testing mixture of gaussian image with sampling", vox_world2->mog_image_with_random_order_sampling<APM_MOG_GREY>(meta3, 5, mog_image2, 0, 0), true);
 #endif
-  return;
 }
 
 TESTMAIN( test_voxel_world_mog_image );

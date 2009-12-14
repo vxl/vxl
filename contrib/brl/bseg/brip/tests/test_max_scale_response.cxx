@@ -42,7 +42,6 @@ static void print_pyramid(vcl_vector<vil_image_view<vxl_byte> > const& mask)
 
 static void test_max_scale_response()
 {
-  START("max_scale_response");
   vil_image_view<float> level0(32,32);
   level0.fill(0.0f);
   // fine scale

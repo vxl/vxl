@@ -63,18 +63,18 @@ static void test_ran_sam_residuals()
   rrel_ran_sam_search search( 1 ); // use deterministic seed
 
   bool success = search.estimate( &est_prob, &obj_fcn );
-  TEST( "Found estimate", success, true );
+  TEST("Found estimate", success, true );
   TEST_NEAR( "Accurate estimate", search.params()[0], 0, 0.005 );
   if ( success ) {
     vcl_vector<int> const& idx = search.index();
     assert( idx.size() == 1 );
     vcl_cout << "used sample = " << idx[0] << '\n';
-    TEST( "Used correct sample", idx[0], 2 );
+    TEST("Used correct sample", idx[0], 2 );
 
     vcl_vector<double> const& res = search.residuals();
     assert( res.size() == 4 );
     vcl_cout << "residuals = " << res[0] << ',' << res[1] << ',' << res[2] << ',' << res[3] << '\n';
-    TEST( "Residuals", res[0] == 0.1 && res[1] == -0.1 && res[2] == 0.0 && res[3] == 10, true );
+    TEST("Residuals", res[0] == 0.1 && res[1] == -0.1 && res[2] == 0.0 && res[3] == 10, true );
   }
 }
 
@@ -134,20 +134,18 @@ static void test_ran_sam_search()
   rrel_estimation_problem * lr = new rrel_linear_regression( pts, use_intercept );
   int dof = lr->num_samples_to_instantiate();
   rrel_objective* lms = new rrel_lms_obj( dof );
-  testlib_test_begin( "ctor");
   rrel_ran_sam_search * ransam = new rrel_ran_sam_search();
-  testlib_test_perform( ransam != 0 );
+  TEST("ctor", ransam, false);
 #if 0
   //  Test sampling by generating all parameters
   //
-  testlib_test_begin( "generation of all samples" );
   ransam->set_gen_all_samples();
   //  ransam->print_params();
 
   int num_points=5;
   vcl_vector<int> indices(dof);
   ransam->calc_num_samples( num_points, dof );
-  testlib_test_perform( ransam->samples_tested() == 10 );
+  TEST("generation of all samples" , ransam->samples_tested(), 10);
 
   testlib_test_begin( "samples generated in order" );
   ransam->next_sample( 0, num_points, indices, dof );
@@ -206,8 +204,7 @@ static void test_ran_sam_search()
   //
   bool ok;
 //int trace_level=0;
-  testlib_test_begin( "estimate succeed" );
-  testlib_test_perform( ransam->estimate( lr, lms ) );
+  TEST("estimate succeed", ransam->estimate( lr, lms ), true);
   vnl_vector<double> est_params = ransam->params();
 #ifdef DEBUG
   vcl_cout << "estimate = " << est_params
@@ -217,8 +214,7 @@ static void test_ran_sam_search()
   ok = vnl_math_abs( est_params[0] - true_params[0] ) < 0.2
     && vnl_math_abs( est_params[1] - true_params[1] ) < 0.025
     && vnl_math_abs( est_params[2] - true_params[2] ) < 0.025;
-  testlib_test_begin( "accurate estimate" );
-  testlib_test_perform( ok );
+  TEST("accurate estimate", ok, true);
 
   delete lr;
 
@@ -231,12 +227,10 @@ static void test_ran_sam_search()
   ransam->set_sampling_params( 0.5, 0.999, 1 );
   ransam->calc_num_samples( match_prob->num_data_points(), match_prob->num_correspondences_all(),
                             match_prob->num_points_to_instantiate() );
-  testlib_test_begin( "num samples for matching problem" );
-  testlib_test_perform( ransam->samples_tested() == 12 );
+  TEST("num samples for matching problem" , ransam->samples_tested(), 12);
 #endif
 //trace_level=0;
-  testlib_test_begin( "non-unique estimate succeed" );
-  testlib_test_perform( ransam->estimate( match_prob, lms ) );
+  TEST("non-unique estimate succeed", ransam->estimate( match_prob, lms ), true);
   est_params = ransam->params();
   vcl_cout << "similarity estimate = " << est_params
            << ", true similarity model = " << sim_params << vcl_endl
@@ -245,8 +239,7 @@ static void test_ran_sam_search()
     && vnl_math_abs( est_params[1] - sim_params[1] ) < 0.025
     && vnl_math_abs( est_params[2] - sim_params[2] ) < 1.0
     && vnl_math_abs( est_params[3] - sim_params[3] ) < 1.0;
-  testlib_test_begin( "non-unique estimate accurate" );
-  testlib_test_perform( ok );
+  TEST("non-unique estimate accurate", ok, true);
 
   delete ransam;
   delete lms;

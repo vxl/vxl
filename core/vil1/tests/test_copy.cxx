@@ -19,11 +19,8 @@ static void test_copy(int argc, char* argv[])
   }
 
   vil1_image img = vil1_load( filename );
-  if ( !img ) {
-    vcl_cerr << "Could not load image " << filename << vcl_endl;
-    testlib_test_perform(false);
-    return;
-  }
+  TEST("Load image square.pgm", !img, true);
+  if ( !img ) return;
   vil1_memory_image_of<vxl_uint_8> a( img );
   vil1_memory_image_of<vxl_uint_8> b( a.width(), a.height() );
   vil1_copy( a, b );
@@ -31,7 +28,7 @@ static void test_copy(int argc, char* argv[])
   a(0,0) = 0;
   b(0,0) = 1;
   c(0,0) = 2;
-  TEST("", a(0,0) != b(0,0) && a(0,0) != c(0,0) && b(0,0) != c(0,0) , true);
+  TEST("vil1_copy", a(0,0) != b(0,0) && a(0,0) != c(0,0) && b(0,0) != c(0,0) , true);
 }
 
 TESTMAIN_ARGS(test_copy);

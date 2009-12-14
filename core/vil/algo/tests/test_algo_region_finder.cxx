@@ -15,33 +15,29 @@ test_algo_region_finder()
   vil_region_finder<unsigned char> find( img );
 
   {
-    testlib_test_begin( "Extract region, 4 connected" );
     vcl_vector<unsigned> ri, rj;
     find.same_int_region( 1, 1, ri, rj );
-    testlib_test_perform( ri.size() == 13 && rj.size() == 13 );
+    TEST( "Extract region, 4 connected" , ri.size() == 13 && rj.size() == 13, true);
   }
 
   {
-    testlib_test_begin( "Extract same region again" );
     vcl_vector<unsigned> ri, rj;
     find.same_int_region( 4, 0, ri, rj );
-    testlib_test_perform( ri.size() == 0 && rj.size() == 0 );
+    TEST( "Extract same region again" , ri.size() == 0 && rj.size() == 0, true);
   }
 
   {
-    testlib_test_begin( "Extract another region, 4 connected" );
     vcl_vector<unsigned> ri, rj;
     find.same_int_region( 3, 2, ri, rj );
-    testlib_test_perform( ri.size() == 2 && rj.size() == 2 );
+    TEST( "Extract another region, 4 connected" , ri.size() == 2 && rj.size() == 2, true);
   }
 
   vil_region_finder<unsigned char> find2( img, vil_region_finder_8_conn );
 
   {
-    testlib_test_begin( "Extract region, 8 connected" );
     vcl_vector<unsigned> ri, rj;
     find2.same_int_region( 3, 2, ri, rj );
-    testlib_test_perform( ri.size() == 8 && rj.size() == 8 );
+    TEST( "Extract region, 8 connected" , ri.size() == 8 && rj.size() == 8, true);
   }
 }
 

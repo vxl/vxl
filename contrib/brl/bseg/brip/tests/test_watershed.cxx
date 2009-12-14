@@ -22,7 +22,6 @@ static float parabola(float r, float vmin, float vmax, float x0, float y0,
 
 static void test_watershed()
 {
-  START ("watershed");
   //Test region pixel
   vgl_point_2d<int> location(0, 0), nearest1(1, 1), nearest2(2,2);
 

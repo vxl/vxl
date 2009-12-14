@@ -70,7 +70,6 @@ bool tangent_image(vpgl_perspective_camera<double> const* cam, vgl_infinite_line
 
 static void test_tangent_update()
 {
-  START("bvxm_tangent_update test");
   //
   //============= test ray processor with perfect data ======================
   //

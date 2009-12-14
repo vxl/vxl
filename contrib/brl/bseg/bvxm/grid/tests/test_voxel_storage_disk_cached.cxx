@@ -11,8 +11,6 @@
 
 static void test_voxel_storage_disk_cached()
 {
-  START("bvxm_voxel_storage_disk_cached test");
-
   // we need temporary disk storage for this test.
   vcl_string storage_fname("bvxm_voxel_storage_cached_test_temp.vox");
   if (vul_file::exists(storage_fname)) // accidentally left from an earlier run
@@ -81,8 +79,6 @@ static void test_voxel_storage_disk_cached()
 
   // remove temporary file
   vul_file::delete_file_glob(storage_fname.c_str());
-  return;
 }
-
 
 TESTMAIN( test_voxel_storage_disk_cached );

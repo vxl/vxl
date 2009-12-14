@@ -28,24 +28,21 @@ static void test_bins_2D()
   bins.set_distance_tolerance( dist_tol );
   vnl_vector_fixed< double, 2 >  pt( 12.5, 3 );
   int added_value = 0, stored_value;
-  testlib_test_begin( "adding point inside range" );
   bins.add_point( pt, added_value );
-  testlib_test_perform( bins.get_value( pt, stored_value )
-                        && stored_value == added_value );
+  TEST( "adding point inside range", bins.get_value( pt, stored_value ) &&
+                                     stored_value == added_value, true);
 
   pt[0] = 100; pt[1] = -30;
   added_value = 24;
-  testlib_test_begin( "adding point outside range 1" );
   bins.add_point( pt, added_value );
-  testlib_test_perform( bins.get_value( pt, stored_value )
-                        && stored_value == added_value );
+  TEST( "adding point outside range 1", bins.get_value( pt, stored_value ) &&
+                                        stored_value == added_value, true);
 
   pt[0] = -50; pt[1] = 77.7;
   added_value = 13;
-  testlib_test_begin( "adding point outside range 2" );
   bins.add_point( pt, added_value );
-  testlib_test_perform( bins.get_value( pt, stored_value )
-                        && stored_value == added_value );
+  TEST( "adding point outside range 2", bins.get_value( pt, stored_value ) &&
+                                        stored_value == added_value, true);
 
   {
     //  Generate a bunch of points:
@@ -81,8 +78,7 @@ static void test_bins_2D()
         }
       }
 
-      testlib_test_begin( "is_any_point_within_radius" );
-      testlib_test_perform( bin_answer == (all_close_indices.size() > 0) );
+      TEST("is_any_point_within_radius" , bin_answer, (all_close_indices.size() > 0));
 
       vcl_vector< int > bin_close_indices;
       bins.points_within_radius( q, radius, bin_close_indices );
@@ -96,8 +92,7 @@ static void test_bins_2D()
             i < bin_close_indices.size(); ++i )
         correct = all_close_indices[ i ] == bin_close_indices[ i ];
 
-      testlib_test_begin( "points_within_radius" );
-      testlib_test_perform( correct );
+      TEST( "points_within_radius", correct, true);
     }
   }
 
@@ -111,8 +106,7 @@ static void test_bins_2D()
     vcl_vector<int> answer;
     bins.n_nearest(d, 1, answer);
 
-    testlib_test_begin( "Second bin test bin size 5,5" );
-    testlib_test_perform( answer.size() >= 1 && (answer[0] == 1 ||  answer[0] == 2) );
+    TEST("Second bin test bin size 5,5" , answer.size() >= 1 && (answer[0] == 1 ||  answer[0] == 2), true);
   }
 
   {//same as new test with bin size 2,2
@@ -125,36 +119,33 @@ static void test_bins_2D()
     vcl_vector<int> answer;
     bins.n_nearest(d, 1, answer);
 
-    testlib_test_begin( "Second bin test bin size 2,2" );
-    testlib_test_perform( answer.size() == 1 && (answer[0] == 1 ||  answer[0] == 2) );
+    TEST("Second bin test bin size 2,2" , answer.size() == 1 && (answer[0] == 1 ||  answer[0] == 2), true);
   }
 
   {
-      vnl_double_2 size(5,5), minv(0,0), maxv(640,480), query_pt(329.69, 241.57);
-      vnl_double_2 data_pt_1(343.10, 225.90), data_pt_2(344.94, 227.06);
-      bin_type  bins(minv,maxv,size);
+    vnl_double_2 size(5,5), minv(0,0), maxv(640,480), query_pt(329.69, 241.57);
+    vnl_double_2 data_pt_1(343.10, 225.90), data_pt_2(344.94, 227.06);
+    bin_type  bins(minv,maxv,size);
 
-      bins.add_point(data_pt_1, 1);
-      bins.add_point(data_pt_2, 2);
+    bins.add_point(data_pt_1, 1);
+    bins.add_point(data_pt_2, 2);
 
-      vcl_vector<int> answer;
-      bins.n_nearest(query_pt, 2, answer);
-      testlib_test_begin( "Nearest 2" );
-      testlib_test_perform( answer.size() == 2 && answer[0] == 1 && answer[1] == 2 );
+    vcl_vector<int> answer;
+    bins.n_nearest(query_pt, 2, answer);
+    TEST("Nearest 2" , answer.size() == 2 && answer[0] == 1 && answer[1] == 2, true);
   }
 
   {
-      vnl_double_2 size(5,5), minv(0,0), maxv(640,480), query_pt(329.69, 241.57);
-      vnl_double_2 data_pt_1(343.10, 225.90), data_pt_2(344.94, 227.06);
-      bin_type  bins(minv,maxv,size);
+    vnl_double_2 size(5,5), minv(0,0), maxv(640,480), query_pt(329.69, 241.57);
+    vnl_double_2 data_pt_1(343.10, 225.90), data_pt_2(344.94, 227.06);
+    bin_type  bins(minv,maxv,size);
 
-      bins.add_point(data_pt_1, 1);
-      bins.add_point(data_pt_2, 2);
+    bins.add_point(data_pt_1, 1);
+    bins.add_point(data_pt_2, 2);
 
-      vcl_vector<int> answer;
-      bins.n_nearest(query_pt, 5, answer);
-      testlib_test_begin( "Nearest 5 w/o enough data" );
-      testlib_test_perform( answer.size() == 2 && answer[0] == 1 && answer[1] == 2 );
+    vcl_vector<int> answer;
+    bins.n_nearest(query_pt, 5, answer);
+    TEST("Nearest 5 w/o enough data" , answer.size() == 2 && answer[0] == 1 && answer[1] == 2, true);
   }
 }
 
@@ -177,24 +168,21 @@ static void test_bins_3D()
     bins.set_distance_tolerance( dist_tol );
     vnl_double_3  pt( 12.5, 3.0, -5.0 );
     int added_value = 0, stored_value;
-    testlib_test_begin( "adding point inside range" );
     bins.add_point( pt, added_value );
-    testlib_test_perform( bins.get_value( pt, stored_value )
-                          && stored_value == added_value );
+    TEST("adding point inside range", bins.get_value( pt, stored_value ) &&
+                                      stored_value == added_value, true);
 
     pt[0] = 100; pt[1] = -30; pt[2] = -50;
     added_value = 24;
-    testlib_test_begin( "adding point outside range 1" );
     bins.add_point( pt, added_value );
-    testlib_test_perform( bins.get_value( pt, stored_value )
-                          && stored_value == added_value );
+    TEST("adding point outside range 1", bins.get_value( pt, stored_value ) &&
+                                         stored_value == added_value, true);
 
     pt[0] = -50; pt[1] = 77.7; pt[2] = 0;
     added_value = 13;
-    testlib_test_begin( "adding point outside range 2" );
     bins.add_point( pt, added_value );
-    testlib_test_perform( bins.get_value( pt, stored_value )
-                          && stored_value == added_value );
+    TEST("adding point outside range 2", bins.get_value( pt, stored_value ) &&
+                                         stored_value == added_value, true);
   }
 
   {
@@ -231,8 +219,7 @@ static void test_bins_3D()
         }
       }
 
-      testlib_test_begin( "is_any_point_within_radius" );
-      testlib_test_perform( bin_answer == (all_close_indices.size() > 0) );
+      TEST("is_any_point_within_radius", bin_answer, (all_close_indices.size() > 0));
 
       vcl_vector< int > bin_close_indices;
       bins.points_within_radius( q, radius, bin_close_indices );
@@ -246,8 +233,7 @@ static void test_bins_3D()
             i < bin_close_indices.size(); ++i )
         correct = all_close_indices[ i ] == bin_close_indices[ i ];
 
-      testlib_test_begin( "points_within_radius" );
-      testlib_test_perform( correct );
+      TEST("points_within_radius", correct, true);
     }
   }
 
@@ -263,12 +249,12 @@ static void test_bins_3D()
     bins.add_point( vnl_double_3(0.0,1.0,1.0), 3 );
     bins.add_point( vnl_double_3(4.0,3.0,6.0), 4 );
 
-    testlib_test_begin( "Retrieve nearest 2, large bins" );
     vcl_vector<int> nearest;
     bins.n_nearest( vnl_double_3(8.0,3.0,6.0), 2, nearest );
-    testlib_test_perform( nearest.size() == 2 &&
-                          ( ( nearest[0] == 4 && nearest[1] == 3 ) ||
-                            ( nearest[0] == 3 && nearest[1] == 4 ) ) );
+    TEST("Retrieve nearest 2, large bins",
+         nearest.size() == 2 &&
+         ( ( nearest[0] == 4 && nearest[1] == 3 ) ||
+           ( nearest[0] == 3 && nearest[1] == 4 ) ), true);
   }
 
   // same test with smaller bin sizes
@@ -284,12 +270,12 @@ static void test_bins_3D()
     bins.add_point( vnl_double_3(0.0,1.0,1.0), 3 );
     bins.add_point( vnl_double_3(4.0,3.0,6.0), 4 );
 
-    testlib_test_begin( "Retrieve nearest 2, small bins" );
     vcl_vector<int> nearest;
     bins.n_nearest( vnl_double_3(8.0,3.0,6.0), 2, nearest );
-    testlib_test_perform( nearest.size() == 2 &&
-                          ( ( nearest[0] == 4 && nearest[1] == 3 ) ||
-                            ( nearest[0] == 3 && nearest[1] == 4 ) ) );
+    TEST("Retrieve nearest 2, small bins",
+         nearest.size() == 2 &&
+         ( ( nearest[0] == 4 && nearest[1] == 3 ) ||
+           ( nearest[0] == 3 && nearest[1] == 4 ) ), true);
   }
 }
 

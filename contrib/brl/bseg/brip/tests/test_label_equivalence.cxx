@@ -4,7 +4,6 @@
 
 static void test_label_equivalence()
 {
-  START ("test label equivalence");
   unsigned a = 1, b =2, c = 3, d =4, e = 5, f = 6, g = 7;
   brip_label_equivalence le;
   le.add_label_pair(a,b);

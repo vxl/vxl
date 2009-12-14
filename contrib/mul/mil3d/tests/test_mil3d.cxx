@@ -11,8 +11,7 @@
 #include "test_gaussian_pyramid_builder_3d.cxx"
 
 #undef TESTLIB_DEFINE_MAIN
-#define TESTLIB_DEFINE_MAIN(x) int main() \
-  { testlib_test_start(#x); x(); return testlib_test_summary(); }
+#define TESTLIB_DEFINE_MAIN(x) int main() { RUN_TEST_FUNC(x); }
 
 void run_test_mil()
 {

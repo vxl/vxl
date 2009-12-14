@@ -41,10 +41,8 @@ class vil_math_abs_functor
   double operator()(double x)     const { return vcl_fabs(x); }
 };
 
-static void test_bil_detect_ridges(int argc, char** argv )
+static void test_bil_detect_ridges(int argc, char* argv[])
 {
-  START ("2D Ridge Detection");
-
   assert(argc > 1);
   vil_image_resource_sptr res = vil_load_image_resource((vcl_string(argv[1]) + "/c.20.tif").c_str());
   TEST("File loading", !res, false);

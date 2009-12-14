@@ -78,8 +78,7 @@ static void test_robust_util()
   rrel_util_intercept_adjustment( test_vect2.begin(), test_vect2.end(), center, half_width, 1 );
   TEST_NEAR("rrel_util_intercept_adjustment(pointer) --- correct?", center,corr_center, 1e-6);
   TEST_NEAR("rrel_util_intercept_adjustment(pointer) --- correct?", half_width, corr_half_width, 1e-6);
-  testlib_test_begin( "rrel_util_intercept_adjustment (pointer) --- sorted?");
-  testlib_test_perform( is_sorted( test_vect2.begin(), test_vect2.end() ) );
+  TEST( "rrel_util_intercept_adjustment (pointer) --- sorted?", is_sorted( test_vect2.begin(), test_vect2.end() ), true);
 
   //
   //  rrel_util_intercept_adjust_stats

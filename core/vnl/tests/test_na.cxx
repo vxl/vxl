@@ -22,26 +22,26 @@ void test_na()
            << "na_d   = " << na_d   << " = " << print_hex(na_d)   << vcl_endl
            << vcl_endl;
 
-  testlib_test_assert("isnan(NA)", vnl_math_isnan(vnl_na()));
-  testlib_test_assert("isnan(NA2)", vnl_math_isnan(na_d));
-  testlib_test_assert("isnan(1/NA2)", vnl_math_isnan(1.0/na_d));
-  testlib_test_assert("isna(NA)", vnl_na_isna(vnl_na()));
-  testlib_test_assert("isna(NA2)", vnl_na_isna(na_d));
-  testlib_test_assert("isna(1/NA2)", vnl_na_isna(1.0/na_d));
-  testlib_test_assert("!isfinite(NA)", !vnl_math_isfinite(na_d));
-  testlib_test_assert("!isinf(NA)", !vnl_math_isinf(na_d));
+  TEST("isnan(NA)", vnl_math_isnan(vnl_na()), true);
+  TEST("isnan(NA2)", vnl_math_isnan(na_d), true);
+  TEST("isnan(1/NA2)", vnl_math_isnan(1.0/na_d), true);
+  TEST("isna(NA)", vnl_na_isna(vnl_na()), true);
+  TEST("isna(NA2)", vnl_na_isna(na_d), true);
+  TEST("isna(1/NA2)", vnl_na_isna(1.0/na_d), true);
+  TEST("!isfinite(NA)", !vnl_math_isfinite(na_d), true);
+  TEST("!isinf(NA)", !vnl_math_isinf(na_d), true);
 
-  testlib_test_assert("!isna(0)", !vnl_na_isna(0));
-  testlib_test_assert("!isna(-0)", !vnl_na_isna(-0));
-  testlib_test_assert("!isna(-1.0)", !vnl_na_isna(-1.0));
-  testlib_test_assert("!isna(inf)", !vnl_na_isna(vcl_numeric_limits<double>::infinity()));
-  testlib_test_assert("!isna(NaN)", !vnl_na_isna(qnan_d));
+  TEST("!isna(0)", !vnl_na_isna(0), true);
+  TEST("!isna(-0)", !vnl_na_isna(-0), true);
+  TEST("!isna(-1.0)", !vnl_na_isna(-1.0), true);
+  TEST("!isna(inf)", !vnl_na_isna(vcl_numeric_limits<double>::infinity()), true);
+  TEST("!isna(NaN)", !vnl_na_isna(qnan_d), true);
 
   {
     double x=0.0;
     vcl_istringstream ss("NA");
     vnl_na_double_extract(ss, x);
-    testlib_test_assert("x=\"NA\"", vnl_na_isna(x));
+    TEST("x=\"NA\"", vnl_na_isna(x), true);
     vcl_cout << "x = " << x << " = " << print_hex(x) << vcl_endl;
   }
 
@@ -49,7 +49,7 @@ void test_na()
     double x=0.0;
     vcl_istringstream ss("NA  ");
     vnl_na_double_extract(ss, x);
-    testlib_test_assert("x=\"NA  \"", vnl_na_isna(x));
+    TEST("x=\"NA  \"", vnl_na_isna(x), true);
     vcl_cout << "x = " << x << " = " << print_hex(x) << vcl_endl;
   }
 
@@ -57,7 +57,7 @@ void test_na()
     double x=0.0;
     vcl_istringstream ss("1.0   ");
     vnl_na_double_extract(ss, x);
-    testlib_test_assert("x=\"1.0\"", x==1.0);
+    TEST("x=\"1.0\"", x, 1.0);
     vcl_cout << "x = " << x << " = " << print_hex(x) << vcl_endl;
   }
 
@@ -66,7 +66,7 @@ void test_na()
     vcl_istringstream ss("NA1.0");
     vnl_na_double_extract(ss, x);
     vnl_na_double_extract(ss, y);
-    testlib_test_assert("x,y=\"NA1.0\"", vnl_na_isna(x) && y==1.0);
+    TEST("x,y=\"NA1.0\"", vnl_na_isna(x) && y==1.0, true);
     vcl_cout << "x = " << x << " = " << print_hex(x) << vcl_endl;
   }
 
@@ -75,7 +75,7 @@ void test_na()
     vcl_istringstream ss("1.0NA");
     vnl_na_double_extract(ss, x);
     vnl_na_double_extract(ss, y);
-    testlib_test_assert("x,y=\"1.0NA\"", vnl_na_isna(y) && x==1.0);
+    TEST("x,y=\"1.0NA\"", vnl_na_isna(y) && x==1.0, true);
     vcl_cout << "y = " << x << " = " << print_hex(x) << vcl_endl;
   }
 
@@ -84,7 +84,7 @@ void test_na()
     vcl_istringstream ss("NANA");
     vnl_na_double_extract(ss, x);
     vnl_na_double_extract(ss, y);
-    testlib_test_assert("x,y=\"NANA\"", vnl_na_isna(x) && vnl_na_isna(y));
+    TEST("x,y=\"NANA\"", vnl_na_isna(x) && vnl_na_isna(y), true);
     vcl_cout << "x = " << x << " = " << print_hex(x) << vcl_endl;
   }
 
@@ -93,7 +93,7 @@ void test_na()
     vcl_istringstream ss("NA 1.0");
     vnl_na_double_extract(ss, x);
     vnl_na_double_extract(ss, y);
-    testlib_test_assert("x,y=\"NA 1.0\"", vnl_na_isna(x) && y==1.0);
+    TEST("x,y=\"NA 1.0\"", vnl_na_isna(x) && y==1.0, true);
     vcl_cout << "x = " << x << " = " << print_hex(x) << vcl_endl;
   }
 
@@ -102,7 +102,7 @@ void test_na()
     vcl_istringstream ss("1.0 NA");
     vnl_na_double_extract(ss, x);
     vnl_na_double_extract(ss, y);
-    testlib_test_assert("x,y=\"1.0 NA\"", vnl_na_isna(y) && x==1.0);
+    TEST("x,y=\"1.0 NA\"", vnl_na_isna(y) && x==1.0, true);
     vcl_cout << "y = " << y << " = " << print_hex(y) << vcl_endl;
   }
 
@@ -111,7 +111,7 @@ void test_na()
     vcl_istringstream ss("NA NA");
     vnl_na_double_extract(ss, x);
     vnl_na_double_extract(ss, y);
-    testlib_test_assert("x,y=\"NA NA\"", vnl_na_isna(x) && vnl_na_isna(y));
+    TEST("x,y=\"NA NA\"", vnl_na_isna(x) && vnl_na_isna(y), true);
     vcl_cout << "x = " << x << " = " << print_hex(x) << vcl_endl;
   }
 
@@ -120,16 +120,15 @@ void test_na()
     vcl_istringstream ss("-1.0-1.0");
     vnl_na_double_extract(ss, x);
     vnl_na_double_extract(ss, y);
-    testlib_test_assert("x,y=\"-1.0-1.0\"", x==-1.0 && y==-1.0);
+    TEST("x,y=\"-1.0-1.0\"", x==-1.0 && y==-1.0, true);
     vcl_cout << "x = " << x << " = " << print_hex(x) << vcl_endl;
   }
-
 
   {
     vcl_ostringstream ss;
     vnl_na_double_insert(ss, -1.5);
     vnl_na_double_insert(ss, vnl_na());
-    testlib_test_assert("output \"-1.5NA\"", ss.str()=="-1.5NA");
+    TEST("output \"-1.5NA\"", ss.str(), "-1.5NA");
     vcl_cout << "ss = " << ss.str() << vcl_endl;
   }
 
@@ -138,12 +137,11 @@ void test_na()
     ss << vnl_na_stream(-1.0) << ' ' << vnl_na_stream(vnl_na());
     double x=0.0, y=0.0;
     ss >> vnl_na_stream(x) >> vnl_na_stream(y);
-    testlib_test_assert("x,y=\"-1.0 NA\"", vnl_na_isna(y) && x==-1.0);
+    TEST("x,y=\"-1.0 NA\"", vnl_na_isna(y) && x==-1.0, true);
     vcl_cout << "y = " << y << " = " << print_hex(y) << vcl_endl;
     vcl_cout << "ss = " << ss.str() << vcl_endl;
   }
-
-}
 #undef print_hex
+}
 
 TESTMAIN(test_na);

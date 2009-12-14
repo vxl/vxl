@@ -4,8 +4,6 @@
 
 static void test_mask()
 {
-  START ("test mask");
-
   brip_rect_mask m10(brip_rect_mask::r10);
   brip_rect_mask m30(brip_rect_mask::r30);
   brip_rect_mask m31(brip_rect_mask::r31);
@@ -26,6 +24,7 @@ static void test_mask()
            << "c4_45_0\n" << c4_45_0 << '\n'
            << "c4_45_45\n" << c4_45_45 << '\n'
            << "e5\n" << e5 << '\n';
+  TEST("brip_rect_mask", true, false);
 }
 
 TESTMAIN(test_mask);

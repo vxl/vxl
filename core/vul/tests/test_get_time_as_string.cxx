@@ -4,7 +4,7 @@
 #include <testlib/testlib_test.h>
 
 
-void test_get_time_as_string()
+static void test_get_time_as_string()
 {
   vcl_string str0 = vul_get_time_as_string(vul_asc);
   vcl_cout << "vul_get_time_as_string(" << (int)vul_asc << "): \"" << str0 << '"' << vcl_endl;
@@ -13,12 +13,4 @@ void test_get_time_as_string()
   vcl_cout << "vul_get_time_as_string(" << (int)vul_numeric_msf << "): \"" << str1 << '"' << vcl_endl;
 }
 
-
-int test_get_time_as_string(int, char*[])
-{
-  testlib_test_start("test_get_time_as_string");
-
-  test_get_time_as_string();
-
-  return testlib_test_summary();
-}
+TEST_MAIN(test_get_time_as_string);

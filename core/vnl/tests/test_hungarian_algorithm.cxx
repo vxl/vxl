@@ -123,12 +123,9 @@ static void test_hungarian_algorithm( int, char*[] )
 
     vnl_matrix<double> cost( &cost_val[0][0], 3, 3 );
 
-    testlib_test_begin( "Test 3x3 cost matrix" );
     vcl_vector<unsigned> assign = vnl_hungarian_algorithm( cost );
-    testlib_test_perform( assign.size()==3 &&
-                          assign[0]==2 &&
-                          assign[1]==1 &&
-                          assign[2]==0 );
+    TEST( "Test 3x3 cost matrix" , assign.size()==3 &&
+          assign[0]==2 && assign[1]==1 && assign[2]==0, true);
   }
 
   {
@@ -138,13 +135,9 @@ static void test_hungarian_algorithm( int, char*[] )
                               { 7.0, 1.0, 3.0, 0.1 } };
     vnl_matrix<double> cost( &cost_val[0][0], 4, 4 );
 
-    testlib_test_begin( "Test 4x4 cost matrix" );
     vcl_vector<unsigned> assign = vnl_hungarian_algorithm( cost );
-    testlib_test_perform( assign.size()==4 &&
-                          assign[0]==1 &&
-                          assign[1]==0 &&
-                          assign[2]==2 &&
-                          assign[3]==3 );
+    TEST( "Test 4x4 cost matrix" , assign.size()==4 &&
+          assign[0]==1 && assign[1]==0 && assign[2]==2 && assign[3]==3, true);
   }
 
   {

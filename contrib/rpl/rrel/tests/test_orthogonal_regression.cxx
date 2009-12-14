@@ -67,15 +67,11 @@ static void test_orthogonal_regression()
   //
   //  The first set of tests are for the constructor, and parameter access methods.
   //
-  testlib_test_begin( "ctor 1" );
   rrel_estimation_problem * lr1 = new rrel_orthogonal_regression( pts );
-  testlib_test_perform( lr1 != 0 );
+  TEST("ctor 1" , !lr1, false);
 
-
-  testlib_test_begin( "num_points_to_instantiate (1)" );
-  testlib_test_perform( lr1->num_samples_to_instantiate() == 3 );
-  testlib_test_begin( "num_points_to_instantiate (3)" );
-  testlib_test_perform( lr1->num_samples() == num_pts );
+  TEST("num_points_to_instantiate (1)" , lr1->num_samples_to_instantiate(), 3);
+  TEST("num_points_to_instantiate (3)" , lr1->num_samples(), num_pts);
   testlib_test_begin( "dtor (1)" );
   delete lr1;
   testlib_test_perform( true );
@@ -87,12 +83,11 @@ static void test_orthogonal_regression()
   vcl_vector<double> residuals( pts.size() );
   lr1 = new rrel_orthogonal_regression( pts );
 
-  testlib_test_begin( "residuals" );
   lr1->compute_residuals( true_params.as_vector(), residuals );
   bool ok = (residuals.size() == num_pts);
   for ( unsigned int i=0; i<residuals.size() && ok; ++ i )
     ok = close( residuals[i], error[i] );
-  testlib_test_perform( ok );
+  TEST("residuals", ok, true);
 
   //
   //  Test the fit from minimal set function.
@@ -111,8 +106,7 @@ static void test_orthogonal_regression()
   else
     err = diff2.two_norm();
 
-  testlib_test_begin( "fit_from_minimal_set" );
-  testlib_test_perform( ok && err <1e-2 );
+  TEST("fit_from_minimal_set" , ok && err <1e-2, true);
 #if 0
   vcl_cout << " estimated params: " << params << vcl_endl
            << " true params: " << true_params << vcl_endl
@@ -128,8 +122,7 @@ static void test_orthogonal_regression()
   // Make weights so that the estimation is singular.
   wgts[0] = 0;   wgts[1] = 1;   wgts[2] = 0;    wgts[3] = 0;
   wgts[4] = 0;   wgts[5] = 0;   wgts[6] = 0;
-  testlib_test_begin( "weighted_least_squares_fit (singular)" );
-  testlib_test_perform( !lr1->weighted_least_squares_fit( par, cofact, &wgts ) );
+  TEST("weighted_least_squares_fit (singular)" , !lr1->weighted_least_squares_fit( par, cofact, &wgts ), true);
 
   // Ok.  This one should work.
   ok = lr1->weighted_least_squares_fit( par, cofact );
@@ -141,8 +134,7 @@ static void test_orthogonal_regression()
   else
     err = diff2.two_norm();
 
-  testlib_test_begin( "weighted_least_squares_fit (ok) ");
-  testlib_test_perform( ok && err <1e-2 );
+  TEST("weighted_least_squares_fit (ok) ", ok && err <1e-2, true);
 #if 0
   vcl_cout << " estimated params: " << par << vcl_endl
            << " true params: " << true_params << vcl_endl

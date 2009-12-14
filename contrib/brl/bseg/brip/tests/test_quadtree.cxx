@@ -8,7 +8,6 @@
 #include <vbl/vbl_array_2d.h>
 static void test_quadtree()
 {
-  START ("quadtree");
   brip_quadtree_node_base_sptr qnb
     = new brip_quadtree_node<float>(0,0,10,10, 1.1f);
   unsigned iul, jul, ilr, jlr;

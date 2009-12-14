@@ -143,7 +143,7 @@ static void test_build_info()
   {
     vcl_cout << "Error writing this information to file "
              << vxl_BUILD_INFO_NOTES << '\n';
-    testlib_test_perform(false);
+    TEST("ofstream", true, false);
   }
 }
 

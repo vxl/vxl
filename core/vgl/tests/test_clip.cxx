@@ -23,37 +23,32 @@ static void test_union()
   {
     vgl_polygon<double> poly2;
 
-    testlib_test_begin("union with null polygon 1");
     vgl_polygon<double> result = vgl_clip( poly1, poly2, vgl_clip_type_union );
-    testlib_test_perform( result.num_sheets() == 1 &&
-                          result.num_vertices() == 4 );
+    TEST("union with null polygon 1",
+         result.num_sheets() == 1 && result.num_vertices() == 4,  true);
 
-    testlib_test_begin("union with null polygon 2");
     vgl_polygon<double> result2 = vgl_clip( poly2, poly1, vgl_clip_type_union );
-    testlib_test_perform( result2.num_sheets() == 1 &&
-                          result2.num_vertices() == 4 );
+    TEST("union with null polygon 2",
+         result2.num_sheets() == 1 && result2.num_vertices() == 4, true);
   }
 
   {
     double cont2[] = { 6,0,  8,1,  6,2 };
     vgl_polygon<double> poly2(cont2, 3);
 
-    testlib_test_begin("disjoint union");
     vgl_polygon<double> result = vgl_clip( poly1, poly2, vgl_clip_type_union );
-    testlib_test_perform( result.num_sheets() == 2 &&
-                          result.num_vertices() == 7 );
+    TEST("disjoint union",
+         result.num_sheets() == 2 && result.num_vertices() == 7, true);
   }
 
   {
     double cont2[] = { 4,1,  8,1,  8,6,  4,6 };
     vgl_polygon<double> poly2(cont2, 4);
 
-    testlib_test_begin("overlapping union");
     vgl_polygon<double> result = vgl_clip( poly1, poly2, vgl_clip_type_union );
-    testlib_test_perform( result.num_sheets() == 1 &&
-                          result.num_vertices() == 8 &&
-                          is_vertex(result, 5.0,1.0) &&
-                          is_vertex(result, 4.0,6.0) );
+    TEST("overlapping union",
+         result.num_sheets() == 1 && result.num_vertices() == 8 &&
+         is_vertex(result, 5.0,1.0) && is_vertex(result, 4.0,6.0), true);
   }
 }
 
@@ -66,36 +61,33 @@ static void test_intersection()
   {
     vgl_polygon<float> poly2;
 
-    testlib_test_begin("intersection with null polygon 1");
     vgl_polygon<float> result = vgl_clip( poly1, poly2, vgl_clip_type_intersect );
-    testlib_test_perform( result.num_sheets() == 0 &&
-                          result.num_vertices() == 0);
+    TEST("intersection with null polygon 1",
+         result.num_sheets() == 0 && result.num_vertices() == 0, true);
+
 #if 0  //This test is identical to the previous.  Why?
-    testlib_test_begin("intersection with null polygon 2");
     vgl_polygon<float> result2 = vgl_clip( poly1, poly2, vgl_clip_type_intersect );
-    testlib_test_perform( result2.num_sheets() == 0 &&
-                          result2.num_vertices() == 0 );
-#endif 
+    TEST("intersection with null polygon 2",
+         result2.num_sheets() == 0 && result2.num_vertices() == 0, true);
+#endif
   }
   {
     float cont2[] = { 6,0,  8,1,  6,2 };
     vgl_polygon<float> poly2(cont2, 3);
 
-    testlib_test_begin("disjoint simple intersection");
     vgl_polygon<float> result = vgl_clip( poly1, poly2, vgl_clip_type_intersect );
-    testlib_test_perform( result.num_sheets() == 0 &&
-                          result.num_vertices() == 0 );
+    TEST("disjoint simple intersection",
+         result.num_sheets() == 0 && result.num_vertices() == 0, true);
   }
 
   {
     float cont2[] = { 4,1,  8,1,  8,6,  4,6 };
     vgl_polygon<float> poly2(cont2, 4);
 
-    testlib_test_begin("overlapping simple intersection");
     vgl_polygon<float> result = vgl_clip( poly1, poly2, vgl_clip_type_intersect );
-    testlib_test_perform( result.num_sheets() == 1 &&
-                          result.num_vertices() == 4 &&
-                          is_vertex(result, 4.f,1.f) );
+    TEST("overlapping simple intersection",
+         result.num_sheets() == 1 && result.num_vertices() == 4 &&
+         is_vertex(result, 4.f,1.f), true);
   }
 
   {
@@ -104,13 +96,11 @@ static void test_intersection()
     vgl_polygon<float> poly2(cont2, 4);
     poly2.add_contour(cont3, 4);
 
-    testlib_test_begin("disjoint holey intersection");
     vgl_polygon<float> result = vgl_clip( poly1, poly2, vgl_clip_type_intersect );
-    testlib_test_perform( result.num_sheets() == 0 &&
-                          result.num_vertices() == 0 );
+    TEST("disjoint holey intersection",
+         result.num_sheets() == 0 && result.num_vertices() == 0, true);
   }
 }
-
 
 static void test_clip()
 {

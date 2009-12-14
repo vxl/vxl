@@ -62,30 +62,24 @@ static void test_linear_reg()
   //
   //  The first set of tests are for the constructor, and parameter access methods.
   //
-  testlib_test_begin( "ctor 1" );
   rrel_linear_regression * lr1 = new rrel_linear_regression( pts, true );
-  testlib_test_perform( lr1 != 0 );
+  TEST( "ctor 1", lr1 != 0, true);
 #if 0
   vcl_cout << "\nPoints with intercept...\n";
   lr1->print_points();
 #endif
 
-  testlib_test_begin( "ctor 2" );
   rrel_linear_regression * lr2 = new rrel_linear_regression( pts, false );
-  testlib_test_perform( lr2 != 0 );
+  TEST( "ctor 2", lr2 != 0, true);
 #if 0
   vcl_cout << "\nPoints without intercept...\n";
   lr2->print_points();
 #endif
 
-  testlib_test_begin( "num_samples_to_instantiate (1)" );
-  testlib_test_perform( lr1->num_samples_to_instantiate() == 3 );
-  testlib_test_begin( "num_samples_to_instantiate (2)" );
-  testlib_test_perform( lr2->num_samples_to_instantiate() == 2 );
-  testlib_test_begin( "num_samples_to_instantiate (3)" );
-  testlib_test_perform( lr1->num_samples() == num_pts );
-  testlib_test_begin( "num_data_points" );
-  testlib_test_perform( lr2->num_samples() == num_pts );
+  TEST( "num_samples_to_instantiate (1)" , lr1->num_samples_to_instantiate(), 3);
+  TEST( "num_samples_to_instantiate (2)" , lr2->num_samples_to_instantiate(), 2);
+  TEST( "num_samples_to_instantiate (3)" , lr1->num_samples(), num_pts);
+  TEST( "num_data_points" , lr2->num_samples(), num_pts);
   testlib_test_begin( "dtor (1)" );
   delete lr1;
   testlib_test_perform( true );
@@ -98,7 +92,6 @@ static void test_linear_reg()
   testlib_test_perform( true );
   lr3 = new rrel_linear_regression( ind_vars, rand_vars );
 
-
   //
   //  The second set of tests uses just lr3 and tests FitFromMinimalSample
   //
@@ -107,25 +100,23 @@ static void test_linear_reg()
 
   // should return false because 1&4 have same loc
   point_indices[0] = 1;  point_indices[1] = 2;   point_indices[2] = 4;
-  testlib_test_begin( "fit_from_minimal_sample (1) " );
-  testlib_test_perform( !lr3->fit_from_minimal_set(point_indices,par) );
+
+  TEST( "fit_from_minimal_sample (1)", !lr3->fit_from_minimal_set(point_indices,par), true);
 
   // this one should work
   point_indices[2] = 5;
-  testlib_test_begin( "fit_from_minimal_sample (2) " );
-  testlib_test_perform( lr3->fit_from_minimal_set(point_indices,par) &&
-                        close( (par - true_params).magnitude(), 0 ) );
+  TEST("fit_from_minimal_sample (2)", lr3->fit_from_minimal_set(point_indices,par) &&
+                                      close( (par - true_params).magnitude(), 0 ), true);
 
   //
   //  Test the residuals function.
   //
   vcl_vector<double> residuals( num_pts );
-  testlib_test_begin( "residuals" );
   lr3->compute_residuals( par, residuals );
   bool ok = true;
   for ( unsigned int i=0; i<residuals.size() && ok; ++ i )
     ok = close( residuals[i], error[i] );
-  testlib_test_perform( ok );
+  TEST("residuals", ok, true);
 
   //
   //  Test the weighted least squares function.
@@ -136,15 +127,13 @@ static void test_linear_reg()
   // Make weights so that the estimation is singular.
   wgts[0] = 0;   wgts[1] = 1;   wgts[2] = 2;    wgts[3] = 0;
   wgts[4] = 1;   wgts[5] = 0;   wgts[6] = 0;
-  testlib_test_begin( "weighted_least_squares_fit (singular)" );
-  testlib_test_perform( !lr3->weighted_least_squares_fit( par, cofact, &wgts ) );
+  TEST( "weighted_least_squares_fit (singular)", !lr3->weighted_least_squares_fit( par, cofact, &wgts ), true);
 
   // Ok.  This one should work.
   ok = lr3->weighted_least_squares_fit( par, cofact );
   vnl_vector<double> diff( par - true_params );
   double scale = 0.003;  // rough hand guess
   vnl_svd<double> svd_cof( cofact*scale*scale );
-  testlib_test_begin( "weighted_least_squares_fit (ok) ");
   double err = vcl_sqrt(dot_product( diff * svd_cof.inverse(), diff )); // standardized error
 #if 0
   vcl_cout << "estimated params: " << par
@@ -152,7 +141,7 @@ static void test_linear_reg()
            << "cofactor matrix:\n" << cofact
            << " error : " << err << vcl_endl;
 #endif
-  testlib_test_perform( ok && err <2.5 );
+  TEST( "weighted_least_squares_fit (ok) ", ok && err <2.5, true);
 
   delete lr3;
 }

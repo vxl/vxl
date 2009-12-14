@@ -15,8 +15,6 @@
 
 static void test_voxel_world()
 {
-  START("bvxm_voxel_world test");
-
   vcl_string model_dir("test_world_dir");
   if (vul_file::is_directory(model_dir))
     vul_file::delete_file_glob(model_dir+"/*");
@@ -74,9 +72,6 @@ static void test_voxel_world()
   world.update<APM_MOG_GREY>(observation, prob_map);
   // TODO: cleanup files
 #endif // 0
-
-  return;
 }
-
 
 TESTMAIN( test_voxel_world );

@@ -25,22 +25,23 @@ static void test_resample(int argc, char* argv[])
   }
 
   vil1_image a = vil1_load(filename);
+  TEST("Load image", !a, false);
   if ( !a ) {
     vcl_cerr << "Could not load image " << filename << '\n';
-    testlib_test_perform(false);
     return;
   }
 
   int wd=a.width(), ht=a.height();
 
+  TEST("Image large enough", wd >= 25 && ht >= 31, true);
   if ( wd < 25 || ht < 31 ) {
     vcl_cerr << "Could not use this image " << filename << " since it is too small\n";
-    testlib_test_perform(false);
     return;
   }
+
+  TEST("Image of even size", wd%2==0 && ht%2==0, true);
   if ( wd%2 || ht%2 ) {
     vcl_cerr << "Could not use this image " << filename << " since it has odd width or height\n";
-    testlib_test_perform(false);
     return;
   }
 

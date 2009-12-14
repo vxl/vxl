@@ -63,15 +63,14 @@ test_multiply()
   vnl_matrix_fixed<double,2,4> m2( data_m2 );
   vnl_vector_fixed<double,2> v1( data_v1 );
 
-  testlib_test_begin( "Matrix-matrix multiply" );
   vnl_matrix_fixed<double,3,4> mr = m1*m2;
-  testlib_test_perform( mr(0,0) == 14 && mr(0,1) == 17 && mr(0,2) == 20 && mr(0,3) == 23 &&
-                        mr(1,0) == 30 && mr(1,1) == 37 && mr(1,2) == 44 && mr(1,3) == 51 &&
-                        mr(2,0) == 46 && mr(2,1) == 57 && mr(2,2) == 68 && mr(2,3) == 79 );
+  TEST("Matrix-matrix multiply",
+       mr(0,0) == 14 && mr(0,1) == 17 && mr(0,2) == 20 && mr(0,3) == 23 &&
+       mr(1,0) == 30 && mr(1,1) == 37 && mr(1,2) == 44 && mr(1,3) == 51 &&
+       mr(2,0) == 46 && mr(2,1) == 57 && mr(2,2) == 68 && mr(2,3) == 79, true);
 
-  testlib_test_begin( "Matrix-vector multiply" );
   vnl_vector_fixed<double,3> vr = m1*v1;
-  testlib_test_perform( vr(0) == 23 && vr(1) == 53 && vr(2) == 83 );
+  TEST("Matrix-vector multiply", vr(0) == 23 && vr(1) == 53 && vr(2) == 83, true);
 }
 
 static
@@ -401,11 +400,11 @@ test_extract( T* )
   vnl_matrix_fixed<T,2,6> m;
   m(0,0)=1; m(0,1)=2; m(0,2)=3; m(0,3)=4; m(0,4)=5; m(0,5) = 11;
   m(1,0)=6; m(1,1)=7; m(1,2)=8; m(1,3)=9; m(1,4)=0; m(1,5) = 12;
-  vcl_cout << "m=\n" << m.as_ref() << "\n";
+  vcl_cout << "m=\n" << m.as_ref() << '\n';
 
   vnl_matrix_fixed<T,1,3> r;
   m.extract( r.as_ref().non_const(), 1, 2 );
-  vcl_cout << "r=\n" << r.as_ref() << "\n";
+  vcl_cout << "r=\n" << r.as_ref() << '\n';
   TEST( "extract into existing matrix", r(0,0)==8 && r(0,1)==9 && r(0,2)==0, true );
 }
 

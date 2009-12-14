@@ -13,8 +13,6 @@
 
 static void test_voxel_grid()
 {
-  START("bvxm_voxel_grid test");
-
   // we need temporary disk storage for this test.
   vcl_string storage_fname("bvxm_voxel_grid_test_temp.vox");
   vcl_string storage_cached_fname("bvxm_voxel_grid_cached_test_temp.vox");
@@ -118,8 +116,6 @@ static void test_voxel_grid()
 
   // remove temporary file
   vul_file::delete_file_glob(storage_fname.c_str());
-  return;
 }
-
 
 TESTMAIN( test_voxel_grid );

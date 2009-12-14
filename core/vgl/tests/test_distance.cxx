@@ -19,23 +19,14 @@ static void test_point_to_polygon()
   p.push_back( 5.0f, 0.0f );
   p.push_back( 5.0f, 5.0f );
 
-  testlib_test_begin( "point to polygon 1" );
-  testlib_test_assert_near( "distance",
-                            vgl_distance( p, vgl_point_2d<float>( 6.0f, 1.0f ) ),
-                            1.0f, 1e-5 );
-  testlib_test_begin( "point to polygon 2" );
-  testlib_test_assert_near( "distance",
-                            vgl_distance( p, vgl_point_2d<float>( 6.0f, 6.0f ) ),
-                            vcl_sqrt(2.0f), 1e-5 );
-
-  testlib_test_begin( "point to polygon 3" );
-  testlib_test_assert_near( "distance",
-                            vgl_distance( p, vgl_point_2d<float>( 3.0f, 4.0f ) ),
-                            vcl_sqrt(0.5f), 1e-5 );
-
-  testlib_test_begin( "point to polygon argument swap" );
-  testlib_test_perform( vgl_distance( p, vgl_point_2d<float>( 3.0f, 4.0f ) ) ==
-                        vgl_distance( vgl_point_2d<float>( 3.0f, 4.0f ), p ) );
+  TEST_NEAR( "point to polygon 1 distance", vgl_distance( p, vgl_point_2d<float>( 6.0f, 1.0f ) ),
+                                            1.0, 1e-5 );
+  TEST_NEAR( "point to polygon 2 distance", vgl_distance( p, vgl_point_2d<float>( 6.0f, 6.0f ) ),
+                                            vcl_sqrt(2.0), 1e-5 );
+  TEST_NEAR( "point to polygon 3 distance", vgl_distance( p, vgl_point_2d<float>( 3.0f, 4.0f ) ),
+                                            vcl_sqrt(0.5), 1e-5 );
+  TEST( "point to polygon argument swap", vgl_distance( p, vgl_point_2d<float>( 3.0f, 4.0f ) ),
+                                          vgl_distance( vgl_point_2d<float>( 3.0f, 4.0f ), p ));
 }
 
 static void test_point_to_3D_line_segment()

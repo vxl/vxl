@@ -36,8 +36,7 @@ static void test_interpolate()
 {
   vil1_memory_image_of<double> I(10, 10);
 
-  double r = 4.6;
-  double c = 4.3;
+  double r = 4.6, c = 4.3;
 
   for (int d=0; d<=4; ++d)
   {
@@ -55,16 +54,13 @@ static void test_interpolate()
 #undef up
 
     double out = f(r, c, d);
-    vcl_cout << "  true    : " << out << "\t\t-->   ";
-    testlib_test_perform(vcl_fabs(out - avg[d]) < 1e-9);
+    TEST_NEAR("true", out, avg[d], 1e-9);
 
     vil1_interpolate_bilinear(I, c, r, &out);
-    vcl_cout << "  bilinear: " << out << "\t\t-->   ";
-    testlib_test_perform(vcl_fabs(out - avg[d]) < 0.005*avg[d]);
+    TEST_NEAR("bilinear", out, avg[d], 0.005*avg[d]);
 
     vil1_interpolate_bicubic (I, c, r, &out);
-    vcl_cout << "  bicubic : " << out << "\t\t-->   ";
-    testlib_test_perform(vcl_fabs(out - avg[d]) < 0.0005*avg[d]);
+    TEST_NEAR("bicubic", out, avg[d], 0.0005*avg[d]);
   }
 }
 
