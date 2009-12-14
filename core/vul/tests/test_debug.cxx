@@ -10,7 +10,9 @@
 #include <vcl_new.h>
 #include <vul/vul_debug.h>
 #include <vul/vul_file.h>
+#include <vul/vul_sprintf.h>
 #include <vpl/vpl.h>
+#include <vcl_string.h>
 
 //=======================================================================
 static void test_debug()
@@ -19,17 +21,21 @@ static void test_debug()
            <<  " Testing vul_debug\n"
            <<  "*******************\n\n";
 
+  unsigned int pid = vpl_getpid();
+
   const char * filetemplate = "test_core%.3d.dmp";
   {
     vcl_cout << "Test simple forced coredump\n";
 
-    const char * filename = "test_core000.dmp";
-    vpl_unlink(filename);
+    const char * base_filename = "test_core000.dmp";
+    vpl_unlink(base_filename);
+    vcl_string long_filename = vul_sprintf("%s.%d", base_filename, pid);
+    vpl_unlink(long_filename.c_str());
 
     vul_debug_core_dump(filetemplate);
 
-    TEST("Core dump file exists", vul_file_exists(filename), true);
-    TEST("Core dump file is sensible size", vul_file_size(filename) > 100, true);
+    TEST("Core dump file exists", vul_file_exists(base_filename) || vul_file_exists(long_filename), true);
+    TEST("Core dump file is sensible size", vul_file_size(base_filename)+vul_file_size(long_filename) > 100, true);
   }
 
 
@@ -37,8 +43,10 @@ static void test_debug()
   {
     vcl_cout << "Test Structured exception coredump\n";
 
-    const char * filename = "test_core001.dmp";
-    vpl_unlink(filename);
+    const char * base_filename = "test_core001.dmp";
+    vpl_unlink(base_filename);
+    vcl_string long_filename = vul_sprintf("%s.%d", base_filename, pid);
+    vpl_unlink(long_filename.c_str());
 
     vul_debug_set_coredump_and_throw_on_windows_se(filetemplate);
     bool caught_exception=false;
@@ -55,8 +63,8 @@ static void test_debug()
       caught_exception=true;
     }
     TEST("Exception caught", caught_exception, true);
-    TEST("Core dump file exists", vul_file_exists(filename), true);
-    TEST("Core dump file is sensible size", vul_file_size(filename) > 100, true);
+    TEST("Core dump file exists", vul_file_exists(base_filename) || vul_file_exists(long_filename), true);
+    TEST("Core dump file is sensible size", vul_file_size(base_filename)+vul_file_size(long_filename) > 100, true);
   }
 #endif
 
@@ -64,8 +72,10 @@ static void test_debug()
   {
     vcl_cout << "Test out-out-memory coredump\n";
 
-    const char * filename = "test_core001.dmp";
-    vpl_unlink(filename);
+    const char * base_filename = "test_core001.dmp";
+    vpl_unlink(base_filename);
+    vcl_string long_filename = vul_sprintf("%s.%d", base_filename, pid);
+    vpl_unlink(long_filename.c_str());
 
     vul_debug_set_coredump_and_throw_on_out_of_memory(filetemplate);
     bool caught_exception=false;
@@ -81,8 +91,8 @@ static void test_debug()
       caught_exception=true;
     }
     TEST("Exception caught", caught_exception, true);
-    TEST("Core dump file exists", vul_file_exists(filename), true);
-    TEST("Core dump file is sensible size", vul_file_size(filename)>100, true);
+    TEST("Core dump file exists", vul_file_exists(base_filename) || vul_file_exists(long_filename), true);
+    TEST("Core dump file is sensible size", vul_file_size(base_filename)+vul_file_size(long_filename) > 100, true);
   }
 #endif
 }
