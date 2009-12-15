@@ -194,6 +194,16 @@ bvxm_edge_util::detect_edge_tangent(vil_image_view<vxl_byte> img,
   return edge_img;
 }
 
+static double angle_0_360(double angle)
+{
+  double ang = angle;
+  while (ang<0)
+    ang += (2.0*vnl_math::pi);
+  while (ang > 2.0*vnl_math::pi)
+    ang -= (2.0*vnl_math::pi);
+  return ang;
+}
+
 void bvxm_edge_util::edge_distance_transform(vil_image_view<vxl_byte>& inp_image, vil_image_view<float>& out_edt)
 {
   vil_image_view<vxl_byte> edge_image_negated(inp_image);
@@ -224,7 +234,6 @@ void bvxm_edge_util::edge_distance_transform(vil_image_view<vxl_byte>& inp_image
 /* Functions related to estimating edge probability given an edge image */
 /************************************************************************/
 
-
 vil_image_view<float> bvxm_edge_util::multiply_image_with_gaussian_kernel(vil_image_view<float> img, double gaussian_sigma)
 {
   vil_image_view<float> ret_img(img.ni(),img.nj(),1);
@@ -238,30 +247,6 @@ vil_image_view<float> bvxm_edge_util::multiply_image_with_gaussian_kernel(vil_im
   }
 
   return ret_img;
-}
-
-static double angle_0_360(double angle)
-{
-  double ang = angle;
-  while (ang<0)
-    ang += (2.0*vnl_math::pi);
-  while (ang > 2.0*vnl_math::pi)
-    ang -= (2.0*vnl_math::pi);
-  return ang;
-}
-
-float bvxm_edge_util::convert_edge_statistics_to_probability(float edge_statistic, float n_normal, int dof)
-{
-  if (dof<1) {
-    return edge_statistic;
-  }
-
-  if ((edge_statistic-n_normal)>0.0f) {
-    double chi_sq_stat = (double)vnl_math_sqr((edge_statistic-n_normal))/n_normal;
-    return (float)vnl_chi_squared_cumulative(chi_sq_stat,dof);
-  }
-
-  return 0.0f;
 }
 
 vbl_array_2d<float> bvxm_edge_util::get_spherical_gaussian_kernel(const int size, const float sigma)
@@ -301,11 +286,8 @@ void bvxm_edge_util::estimate_edge_prob_image(const vil_image_view<vxl_byte>& im
     }
   }
 
-
   vil_convert_cast<vxl_byte,float>(img_edge,img_edgeness);
-
-  vil_math_scale_and_offset_values(img_edgeness,1.0,1.0f/255.0f);  
-  
+  vil_math_scale_and_offset_values(img_edgeness,1.0,1.0f/255.0f);
   img_edgeness = brip_vil_float_ops::convolve(img_edgeness,kernel);
 
   for (unsigned i=0; i<img_edgeness.ni(); i++) {
@@ -313,4 +295,19 @@ void bvxm_edge_util::estimate_edge_prob_image(const vil_image_view<vxl_byte>& im
       img_edgeness(i,j) = 1.0f - vcl_exp(img_edgeness(i,j));
     }
   }
+}
+
+
+float bvxm_edge_util::convert_edge_statistics_to_probability(float edge_statistic, float n_normal, int dof)
+{
+  if (dof<1) {
+    return edge_statistic;
+  }
+
+  if ((edge_statistic-n_normal)>0.0f) {
+    double chi_sq_stat = (double)vnl_math_sqr((edge_statistic-n_normal))/n_normal;
+    return (float)vnl_chi_squared_cumulative(chi_sq_stat,dof);
+  }
+
+  return 0.0f;
 }
