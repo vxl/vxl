@@ -96,7 +96,7 @@ bool bvxm_rpc_registration_process(bprb_func_process& pro)
   vcl_ifstream file_inp;
   vcl_ofstream file_out;
 
-  int offset_search_size = bvxm_edge_util::convert_uncertainty_from_meters_to_pixels(uncertainty, vox_world->get_params()->lvcs(), camera_inp);
+  int offset_search_size = bvxm_util::convert_uncertainty_from_meters_to_pixels(uncertainty, vox_world->get_params()->lvcs(), camera_inp);
 
   vcl_cout << "Offset search size is: " << offset_search_size << '\n';
 

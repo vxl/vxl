@@ -13,7 +13,6 @@
 //   Aug. 20, 2008 - Ibrahim Eden - Added the method static vil_image_view<float> multiply_image_with_gaussian_kernel(vil_image_view<float> img, double gaussian_sigma);
 //   Sept 03, 2008 - Ibrahim Eden - Added the method static vil_image_view<vxl_byte> detect_edges ...
 //   Sept 11, 2008 - Ibrahim Eden - Added the method static void edge_distance_transform ...
-//   Sept 12, 2008 - Ibrahim Eden - Added the method static int convert_uncertainty_from_meters_to_pixels ...
 //   Dec. 12, 2008 - Ozge C. Ozcanli - Added the method static void warp_slab_nearest_neighbor ...
 //   Febr 12, 2009 - Ibrahim Eden - Added the method static void convert_edge_statistics_to_probability ...
 //   July 14, 2009 - Ibrahim Eden - Moved edge related functions to bvxm_edge_util
@@ -140,6 +139,8 @@ class bvxm_util
   static vil_image_view_base_sptr downsample_image_by_two(vil_image_view_base_sptr img);
 
   static vpgl_camera_double_sptr downsample_camera(vpgl_camera_double_sptr camera,unsigned int scale);
+
+  static int convert_uncertainty_from_meters_to_pixels(float uncertainty, bgeo_lvcs_sptr lvcs, vpgl_camera_double_sptr camera);
 
   static vpgl_camera_double_sptr downsample_persp_camera(vpgl_camera_double_sptr camera,unsigned int scale);
 
