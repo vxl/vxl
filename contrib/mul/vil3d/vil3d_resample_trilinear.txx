@@ -222,40 +222,40 @@ void vil3d_resample_trilinear(const vil3d_image_view<S>& src_image,
                               double dx2, double dy2, double dz2,
                               double dx3, double dy3, double dz3,
                               int n1, int n2, int n3,
-                              T outval/*=0*/)
+                              T outval/*=0*/, double edge_tol/*=0*/)
 {
   bool all_in_image =
     vil3d_grid_corner_in_image(x0,
                                y0,
                                z0,
                                src_image) &&
-    vil3d_grid_corner_in_image(x0 + (n1-1)*dx1,
-                               y0 + (n1-1)*dy1,
-                               z0 + (n1-1)*dz1,
+    vil3d_grid_corner_in_image(x0 + (n1-1+edge_tol)*dx1,
+                               y0 + (n1-1+edge_tol)*dy1,
+                               z0 + (n1-1+edge_tol)*dz1,
                                src_image) &&
-    vil3d_grid_corner_in_image(x0 + (n2-1)*dx2,
-                               y0 + (n2-1)*dy2,
-                               z0 + (n2-1)*dz2,
+    vil3d_grid_corner_in_image(x0 + (n2-1+edge_tol)*dx2,
+                               y0 + (n2-1+edge_tol)*dy2,
+                               z0 + (n2-1+edge_tol)*dz2,
                                src_image) &&
-    vil3d_grid_corner_in_image(x0 + (n1-1)*dx1 + (n2-1)*dx2,
-                               y0 + (n1-1)*dy1 + (n2-1)*dy2,
-                               z0 + (n1-1)*dz1 + (n2-1)*dz2,
+    vil3d_grid_corner_in_image(x0 + (n1-1+edge_tol)*dx1 + (n2-1+edge_tol)*dx2,
+                               y0 + (n1-1+edge_tol)*dy1 + (n2-1+edge_tol)*dy2,
+                               z0 + (n1-1+edge_tol)*dz1 + (n2-1+edge_tol)*dz2,
                                src_image) &&
-    vil3d_grid_corner_in_image(x0 + (n3-1)*dx3,
-                               y0 + (n3-1)*dy3,
-                               z0 + (n3-1)*dz3,
+    vil3d_grid_corner_in_image(x0 + (n3-1+edge_tol)*dx3,
+                               y0 + (n3-1+edge_tol)*dy3,
+                               z0 + (n3-1+edge_tol)*dz3,
                                src_image) &&
-    vil3d_grid_corner_in_image(x0 + (n1-1)*dx1 + (n3-1)*dx3,
-                               y0 + (n1-1)*dy1 + (n3-1)*dy3,
-                               z0 + (n1-1)*dz1 + (n3-1)*dz3,
+    vil3d_grid_corner_in_image(x0 + (n1-1+edge_tol)*dx1 + (n3-1+edge_tol)*dx3,
+                               y0 + (n1-1+edge_tol)*dy1 + (n3-1+edge_tol)*dy3,
+                               z0 + (n1-1+edge_tol)*dz1 + (n3-1+edge_tol)*dz3,
                                src_image) &&
-    vil3d_grid_corner_in_image(x0 + (n2-1)*dx2 + (n3-1)*dx3,
-                               y0 + (n2-1)*dy2 + (n3-1)*dy3,
-                               z0 + (n2-1)*dz2 + (n3-1)*dz3,
+    vil3d_grid_corner_in_image(x0 + (n2-1+edge_tol)*dx2 + (n3-1+edge_tol)*dx3,
+                               y0 + (n2-1+edge_tol)*dy2 + (n3-1+edge_tol)*dy3,
+                               z0 + (n2-1+edge_tol)*dz2 + (n3-1+edge_tol)*dz3,
                                src_image) &&
-    vil3d_grid_corner_in_image(x0 + (n1-1)*dx1 + (n2-1)*dx2 + (n3-1)*dx3,
-                               y0 + (n1-1)*dy1 + (n2-1)*dy2 + (n3-1)*dy3,
-                               z0 + (n1-1)*dz1 + (n2-1)*dz2 + (n3-1)*dz3,
+    vil3d_grid_corner_in_image(x0 + (n1-1+edge_tol)*dx1 + (n2-1+edge_tol)*dx2 + (n3-1+edge_tol)*dx3,
+                               y0 + (n1-1+edge_tol)*dy1 + (n2-1+edge_tol)*dy2 + (n3-1+edge_tol)*dy3,
+                               z0 + (n1-1+edge_tol)*dz1 + (n2-1+edge_tol)*dz2 + (n3-1+edge_tol)*dz3,
                                src_image);
 #ifndef NDEBUG
   // corners
@@ -354,7 +354,7 @@ void vil3d_resample_trilinear(const vil3d_image_view<S>& src_image,
             cast_and_possibly_round( vil3d_trilin_interp_safe( x, y, z,
                                                                plane0,
                                                                ni, nj, nk,
-                                                               istep, jstep, kstep),
+                                                               istep, jstep, kstep, outval),
                                      *dpt);
         }
       }
@@ -377,7 +377,7 @@ void vil3d_resample_trilinear(const vil3d_image_view<S>& src_image,
               cast_and_possibly_round( vil3d_trilin_interp_safe( x, y, z,
                                                                  plane0+p*pstep,
                                                                  ni, nj, nk,
-                                                                 istep, jstep, kstep),
+                                                                 istep, jstep, kstep, outval),
                                        dpt[p*d_pstep]);
           }
         }
@@ -625,7 +625,7 @@ template void vil3d_resample_trilinear(const vil3d_image_view< S >& src_image, \
                                        double dx2, double dy2, double dz2, \
                                        double dx3, double dy3, double dz3, \
                                        int n1, int n2, int n3, \
-                                       T outval); \
+                                       T outval, double edge_tol); \
 template void vil3d_resample_trilinear_edge_extend(const vil3d_image_view< S >& src_image, \
                                                    vil3d_image_view< T >& dest_image, \
                                                    double x0, double y0, double z0, \

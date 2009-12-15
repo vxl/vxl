@@ -24,7 +24,7 @@ void vil3d_resample_trilinear(const vil3d_image_view<S>& src_image,
                               double dx2, double dy2, double dz2, 
                               double dx3, double dy3, double dz3, 
                               int n1, int n2, int n3,
-                              T outval=0);
+                              T outval=0, double edge_tol=0);
 
 
 //: Sample grid of points in one image and place in another, using trilinear interpolation and edge extension.

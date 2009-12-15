@@ -49,7 +49,7 @@ inline void vimt3d_resample_trilinear(
   const vgl_vector_3d<double>& v,
   const vgl_vector_3d<double>& w,
   int n1, int n2, int n3,
-  dType outval=0)
+  dType outval=0, double edge_tol=0)
 {
   const vimt3d_transform_3d& s_w2i = src_image.world2im();
   vgl_point_3d<double> im_p = s_w2i(p);
@@ -63,7 +63,7 @@ inline void vimt3d_resample_trilinear(
                            im_v.x(), im_v.y(), im_v.z(),
                            im_w.x(), im_w.y(), im_w.z(),
                            n1, n2, n3,
-                           outval);
+                           outval, edge_tol);
 
   // Point (i,j,k) in dest corresponds to p+i.u+j.v+k.w,
   // an affine transformation for image to world
