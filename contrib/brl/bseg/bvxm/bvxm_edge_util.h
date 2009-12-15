@@ -7,6 +7,8 @@
 // \date Jul 14,  2009
 //
 // \verbatim
+//  Modifications
+//   December 15, 2009 - Ibrahim Eden - removed convert_image_types
 // \endverbatim
 
 #include "bvxm_world_params.h"
@@ -52,24 +54,6 @@ class bvxm_edge_util
   static void estimate_edge_prob_image(const vil_image_view<vxl_byte>& img_edge, vil_image_view<float>& img_edgeness, const int mask_size, const float mask_sigma);
 
   static vbl_array_2d<float> get_spherical_gaussian_kernel(const int size, const float sigma);
-
-  template <class T_from,class T_to>
-  static void convert_image_types(const vil_image_view<T_from>& inp_image, vil_image_view<T_to>& out_image, float scale, float offset);
 };
-
-template <class T_from,class T_to>
-void bvxm_edge_util::convert_image_types(const vil_image_view<T_from>& inp_image, vil_image_view<T_to>& out_image, float scale, float offset)
-{
-  out_image.set_size(inp_image.ni(),inp_image.nj(),inp_image.nplanes());
-
-  for (unsigned i=0; i<inp_image.ni(); i++) {
-    for (unsigned j=0; j<inp_image.nj(); j++) {
-      for (unsigned k=0; k<inp_image.nplanes(); k++) {
-        float curr_pixel = (float)inp_image(i,j,k);
-        out_image(i,j,k) = (T_to)((curr_pixel*scale) + offset);
-      }
-    }
-  }
-}
 
 #endif // bvxm_edge_util_h_

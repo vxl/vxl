@@ -297,7 +297,11 @@ void bvxm_edge_util::estimate_edge_prob_image(const vil_image_view<vxl_byte>& im
     }
   }
 
-  convert_image_types(img_edge,img_edgeness,1.0f/255.0f,0.0);
+
+  vil_convert_cast<vxl_byte,float>(img_edge,img_edgeness);
+
+  vil_math_scale_and_offset_values(img_edgeness,1.0,1.0f/255.0f);  
+  
   img_edgeness = brip_vil_float_ops::convolve(img_edgeness,kernel);
 
   for (unsigned i=0; i<img_edgeness.ni(); i++) {
