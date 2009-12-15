@@ -28,21 +28,6 @@
 #include <vcl_vector.h>
 #include <vcl_cassert.h>
 
-vil_image_view<float> bvxm_edge_util::multiply_image_with_gaussian_kernel(vil_image_view<float> img, double gaussian_sigma)
-{
-  vil_image_view<float> ret_img(img.ni(),img.nj(),1);
-
-  vnl_gaussian_kernel_1d gaussian(gaussian_sigma);
-
-  for (unsigned i=0; i<img.ni(); i++) {
-    for (unsigned j=0; j<img.nj(); j++) {
-      ret_img(i,j) = (float)gaussian.G((double)img(i,j));
-    }
-  }
-
-  return ret_img;
-}
-
 vil_image_view<vxl_byte> bvxm_edge_util::detect_edges(vil_image_view<vxl_byte> img,
                                                       double noise_multiplier,
                                                       double smooth,
@@ -111,17 +96,6 @@ vil_image_view<vxl_byte> bvxm_edge_util::detect_edges(vil_image_view<vxl_byte> i
 
   return img_edge;
 }
-
-static double angle_0_360(double angle)
-{
-  double ang = angle;
-  while (ang<0)
-    ang += (2.0*vnl_math::pi);
-  while (ang > 2.0*vnl_math::pi)
-    ang -= (2.0*vnl_math::pi);
-  return ang;
-}
-
 
 vil_image_view<float>
 bvxm_edge_util::detect_edge_tangent(vil_image_view<vxl_byte> img,
@@ -220,11 +194,10 @@ bvxm_edge_util::detect_edge_tangent(vil_image_view<vxl_byte> img,
   return edge_img;
 }
 
-
 void bvxm_edge_util::edge_distance_transform(vil_image_view<vxl_byte>& inp_image, vil_image_view<float>& out_edt)
 {
   vil_image_view<vxl_byte> edge_image_negated(inp_image);
-  vil_math_scale_and_offset_values(edge_image_negated,-1.0,255);
+  vil_math_scale_and_offset_values<vxl_byte,double>(edge_image_negated,-1.0,255.0);
 
   unsigned ni = edge_image_negated.ni();
   unsigned nj = edge_image_negated.nj();
@@ -244,6 +217,37 @@ void bvxm_edge_util::edge_distance_transform(vil_image_view<vxl_byte>& inp_image
       out_edt(i,j) = vcl_sqrt((float)curr_image_edt(i,j));
     }
   }
+}
+
+
+/************************************************************************/
+/* Functions related to estimating edge probability given an edge image */
+/************************************************************************/
+
+
+vil_image_view<float> bvxm_edge_util::multiply_image_with_gaussian_kernel(vil_image_view<float> img, double gaussian_sigma)
+{
+  vil_image_view<float> ret_img(img.ni(),img.nj(),1);
+
+  vnl_gaussian_kernel_1d gaussian(gaussian_sigma);
+
+  for (unsigned i=0; i<img.ni(); i++) {
+    for (unsigned j=0; j<img.nj(); j++) {
+      ret_img(i,j) = (float)gaussian.G((double)img(i,j));
+    }
+  }
+
+  return ret_img;
+}
+
+static double angle_0_360(double angle)
+{
+  double ang = angle;
+  while (ang<0)
+    ang += (2.0*vnl_math::pi);
+  while (ang > 2.0*vnl_math::pi)
+    ang -= (2.0*vnl_math::pi);
+  return ang;
 }
 
 float bvxm_edge_util::convert_edge_statistics_to_probability(float edge_statistic, float n_normal, int dof)
