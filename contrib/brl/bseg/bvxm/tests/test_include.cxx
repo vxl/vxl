@@ -3,6 +3,7 @@
 #include <bvxm/bvxm_edge_ray_processor.h>
 #include <bvxm/bvxm_edge_util.h>
 #include <bvxm/bvxm_float_processor.h>
+#include <bvxm/bvxm_illum_util.h>
 #include <bvxm/bvxm_image_metadata.h>
 #include <bvxm/bvxm_lidar_processor.h>
 #include <bvxm/bvxm_mog_grey_processor.h>
