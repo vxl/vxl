@@ -38,6 +38,7 @@ static void test_debug()
     TEST("Core dump file is sensible size", vul_file_size(base_filename)+vul_file_size(long_filename) > 100, true);
   }
 
+#ifdef VCL_HAS_EXCEPTIONS
 
 #ifdef _WIN32
   {
@@ -52,7 +53,7 @@ static void test_debug()
     bool caught_exception=false;
     try
     {
-      // force an segmentation violation exception
+      // force a segmentation violation exception
       if (*static_cast<int *>(0)==0)
         vcl_cout << "*Null is false" << vcl_endl;
       else
@@ -62,15 +63,13 @@ static void test_debug()
     {
       caught_exception=true;
     }
-    TEST("Exception caught", caught_exception, true);
+    TEST("Windows SEGV exception caught", caught_exception, true);
     TEST("Core dump file exists", vul_file_exists(base_filename) || vul_file_exists(long_filename), true);
     TEST("Core dump file is sensible size", vul_file_size(base_filename)+vul_file_size(long_filename) > 100, true);
   }
-#endif
-
-#ifdef VCL_HAS_EXCEPTIONS
+#endif // _WIN32
   {
-    vcl_cout << "Test out-out-memory coredump\n";
+    vcl_cout << "Test out-of-memory coredump\n";
 
     const char * base_filename = "test_core001.dmp";
     vpl_unlink(base_filename);
@@ -90,11 +89,11 @@ static void test_debug()
     {
       caught_exception=true;
     }
-    TEST("Exception caught", caught_exception, true);
+    TEST("Out-of-memory exception caught", caught_exception, true);
     TEST("Core dump file exists", vul_file_exists(base_filename) || vul_file_exists(long_filename), true);
     TEST("Core dump file is sensible size", vul_file_size(base_filename)+vul_file_size(long_filename) > 100, true);
   }
-#endif
+#endif // VCL_HAS_EXCEPTIONS
 }
 
 TEST_MAIN(test_debug);
