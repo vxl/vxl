@@ -18,9 +18,9 @@ TESTS += test_get_time_as_string.cxx
 TESTS += test_ios_state.cxx
 TESTS += test_awk.cxx
 TESTS += test_expand_path.cxx
+TESTS += test_debug.cxx
 
 MINI_PROG_SOURCES += try_reg_exp.cxx
-MINI_PROG_SOURCES += test_debug.cxx
 MINI_PROG_SOURCES += test_include.cxx
 
 #########################################
