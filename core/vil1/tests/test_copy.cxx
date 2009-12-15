@@ -19,7 +19,7 @@ static void test_copy(int argc, char* argv[])
   }
 
   vil1_image img = vil1_load( filename );
-  TEST("Load image square.pgm", !img, true);
+  TEST("Load image square.pgm", !img, false);
   if ( !img ) return;
   vil1_memory_image_of<vxl_uint_8> a( img );
   vil1_memory_image_of<vxl_uint_8> b( a.width(), a.height() );
