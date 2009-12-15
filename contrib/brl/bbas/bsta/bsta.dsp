@@ -203,6 +203,12 @@ SOURCE=.\Templates/bsta_von_mises+float.2-.cxx
 # Begin Source File
 SOURCE=.\Templates/bsta_beta+float-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/bsta_parzen_sphere+double.1-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bsta_parzen_sphere+double.3-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

@@ -120,6 +120,9 @@ SOURCE=.\bvxm_edge_util.cxx
 SOURCE=.\bvxm_edge_ray_processor.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\bvxm_illum_util.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+bvxm_voxel_world-.cxx
 # End Source File
 # Begin Source File
@@ -192,6 +195,9 @@ SOURCE=.\bvxm_von_mises_tangent_processor.txx
 # End Source File
 # Begin Source File
 SOURCE=.\bvxm_von_mises_tangent_processor.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvxm_illum_util.h
 # End Source File
 # End Group
 # End Target
