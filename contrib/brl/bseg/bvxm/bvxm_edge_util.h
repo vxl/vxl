@@ -27,9 +27,6 @@
 class bvxm_edge_util
 {
  public:
-
-  static vil_image_view<float> multiply_image_with_gaussian_kernel(vil_image_view<float> img, double gaussian_sigma);
-
   //returns a binary map of edges with pixel resolution
   static vil_image_view<vxl_byte> detect_edges(vil_image_view<vxl_byte> img, double noise_multiplier, double smooth, bool automatic_threshold, bool junctionp, bool aggressive_junction_closure);
 
@@ -47,13 +44,14 @@ class bvxm_edge_util
                                                    bool junctionp,
                                                    bool aggressive_junction_closure);
 
+
   static void edge_distance_transform(vil_image_view<vxl_byte>& inp_image, vil_image_view<float>& out_edt);
 
-  static float convert_edge_statistics_to_probability(float edge_statistic, float n_normal, int dof);
-
+  static vil_image_view<float> multiply_image_with_gaussian_kernel(vil_image_view<float> img, double gaussian_sigma);
   static void estimate_edge_prob_image(const vil_image_view<vxl_byte>& img_edge, vil_image_view<float>& img_edgeness, const int mask_size, const float mask_sigma);
-
   static vbl_array_2d<float> get_spherical_gaussian_kernel(const int size, const float sigma);
+
+  static float convert_edge_statistics_to_probability(float edge_statistic, float n_normal, int dof);
 };
 
 #endif // bvxm_edge_util_h_
