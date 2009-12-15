@@ -97,6 +97,16 @@ vil_image_view<vxl_byte> bvxm_edge_util::detect_edges(vil_image_view<vxl_byte> i
   return img_edge;
 }
 
+static double angle_0_360(double angle)
+{
+  double ang = angle;
+  while (ang<0)
+    ang += (2.0*vnl_math::pi);
+  while (ang > 2.0*vnl_math::pi)
+    ang -= (2.0*vnl_math::pi);
+  return ang;
+}
+
 vil_image_view<float>
 bvxm_edge_util::detect_edge_tangent(vil_image_view<vxl_byte> img,
                                     double noise_multiplier,
@@ -192,16 +202,6 @@ bvxm_edge_util::detect_edge_tangent(vil_image_view<vxl_byte> img,
     edge_img(temp_index,j,1) = -1;
   }
   return edge_img;
-}
-
-static double angle_0_360(double angle)
-{
-  double ang = angle;
-  while (ang<0)
-    ang += (2.0*vnl_math::pi);
-  while (ang > 2.0*vnl_math::pi)
-    ang -= (2.0*vnl_math::pi);
-  return ang;
 }
 
 void bvxm_edge_util::edge_distance_transform(vil_image_view<vxl_byte>& inp_image, vil_image_view<float>& out_edt)
