@@ -74,11 +74,11 @@
 // Don't forget to fix all the code that calls vsl_swap_bytes.
 // Really should check anything that #includes this file.
 
+#if VXL_LITTLE_ENDIAN
+inline void vsl_swap_bytes(char*, int, int = 1) { return; }
+#else
 inline void vsl_swap_bytes( char * ptr, int nbyte, int nelem = 1)
 {
-#if VXL_LITTLE_ENDIAN
-  return;
-#else
   // If the byte order of the file
   // does not match the intel byte order
   // then the bytes should be swapped
@@ -96,8 +96,8 @@ inline void vsl_swap_bytes( char * ptr, int nbyte, int nelem = 1)
     }
     ptr += nbyte;
   }
-#endif
 }
+#endif
 
 //: Perform byte swapping to a buffer
 // Same as vsl_swap_bytes, but saves the results in a buffer.
