@@ -14,6 +14,7 @@
 #include <mbl/mbl_mask.h>
 
 // IO helpers - see below for definition
+bool load_vals(vcl_vector<vcl_string> & values, const vcl_string & filename);
 bool load_vals(vcl_vector<vcl_string> & values, const vcl_string & filename, const vcl_string & delim);
 void write_vals(const vcl_vector<vcl_string> & values, vcl_ostream & os);
 
@@ -37,8 +38,11 @@ int main(int argc, char **argv)
 
   vcl_vector<vcl_string> values;
   bool loaded_vals;
-  vcl_string del = delim.set() ? delim() : " ";
-  loaded_vals = load_vals(values, values_filename(), del);
+  if (delim.set())
+    loaded_vals = load_vals(values, values_filename(), delim());
+  else
+    loaded_vals = load_vals(values, values_filename());
+
   if (!loaded_vals)
   {
     vcl_cout << "Unable to load input data from " << values_filename() << vcl_endl;
@@ -106,12 +110,30 @@ bool load_vals(vcl_vector<vcl_string> & values, const vcl_string & filename, con
 
   values.clear();
 
-  vcl_string line, token;
+  vcl_string line;
   while (vcl_getline(fin, line))
   {
     line = trim(line);
     if (line.length() == 0) continue;
     split_and_add(values, line, delim);
+  }
+
+  return true;
+}
+
+bool load_vals(vcl_vector<vcl_string> & values, const vcl_string & filename)
+{
+  vcl_ifstream fin(filename.c_str());
+  if (!fin) return false;
+
+  values.clear();
+
+  vcl_string line;
+  while (vcl_getline(fin, line))
+  {
+    line = trim(line);
+    if (line.length() == 0) continue;
+    values.push_back(line);
   }
 
   return true;
