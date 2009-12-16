@@ -93,7 +93,7 @@ absolute_signature_weight( rgrl_feature_sptr other ) const
   const vcl_vector<vnl_vector<double> >& sig_P = this->outgoing_directions_;
   const vcl_vector<vnl_vector<double> >& sig_Q = other_ptr->outgoing_directions_;
 
-  int ones = vnl_math_min(sig_P.size(), sig_Q.size());
+  int ones = vnl_math_min((int)sig_P.size(), (int)sig_Q.size());
   double max;
   if (sig_P.size() < sig_Q.size()) {
     vbl_array_2d<bool> invalid(sig_P.size(), sig_Q.size(), false);
