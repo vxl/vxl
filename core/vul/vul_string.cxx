@@ -8,6 +8,8 @@
 #include <vcl_cstring.h>
 #include <vcl_cctype.h>
 #include <vcl_algorithm.h>
+#include <vcl_sstream.h>
+#include <vcl_cmath.h>
 
 #ifndef END_OF_STRING                           // If END_OF_STRING not defined
 #define END_OF_STRING (0)
@@ -214,6 +216,46 @@ int vul_string_atoi(vcl_string const& s)
 double vul_string_atof(vcl_string const& s)
 {
   return vcl_atof(s.c_str());
+}
+
+
+
+//: Reads an double from a string, with k, kb, M, etc suffix.
+// No space is allowed between the number and the suffix.
+// k=10^3, kb=2^10, M=10^6, Mb=2^20, G=10^9, Gb=2^30, T=10^12, Tb=2^40
+// If parse fails, return 0.0;
+double vul_string_atof_withsuffix(vcl_string const& s)
+{
+  vcl_istringstream ss(s);
+  double d;
+  ss >> d;
+  if (!ss) return 0.0;
+  if (ss.eof()) return d;
+
+  char c='A';
+  ss >> c;
+  if (ss.eof()) return d;
+
+  double e=0;
+  switch (c)
+  {
+    case 'k': e=1; break;
+    case 'M': e=2; break;
+    case 'G': e=3; break;
+    case 'T': e=4; break;
+    default: return 0.0;
+  }
+  if (ss.eof()) return d*vcl_pow(10.0,3.0*e);
+
+  c='A';
+  ss >> c;
+  if (ss.eof()) return d*vcl_pow(10.0,3.0*e);
+  if (!ss || c!='i') return 0.0;
+
+  ss >> c;
+  if (!ss.eof()) return 0.0;
+
+  return d*vcl_pow(2.0,10.0*e);
 }
 
 static bool NotSpace(char a)

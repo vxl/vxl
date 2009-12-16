@@ -58,6 +58,19 @@ void test_string()
   TEST("vul_string_atoi(\"0\")", vul_string_atoi("0"), 0);
   TEST("vul_string_atoi(\"nonsense\")", vul_string_atoi("nonsense"), 0);
 
+  TEST("vul_string_atof_withsuffix(\"123\")", vul_string_atof_withsuffix("123"), 123.0);
+  TEST("vul_string_atof_withsuffix(\"-123\")", vul_string_atof_withsuffix("-123"), -123.0);
+  TEST("vul_string_atof_withsuffix(\"0\")", vul_string_atof_withsuffix("0"), 0.0);
+  TEST("vul_string_atof_withsuffix(\"nonsense\")", vul_string_atof_withsuffix("nonsense"), 0.0);
+  TEST("vul_string_atof_withsuffix(\"123k\")", vul_string_atof_withsuffix("123k"), 123.0e3);
+  TEST("vul_string_atof_withsuffix(\"123kb\")", vul_string_atof_withsuffix("123ki"), 125952.0);
+  TEST("vul_string_atof_withsuffix(\"123kb\")", vul_string_atof_withsuffix("123.0e-3ki"), 125.9520);
+  TEST("vul_string_atof_withsuffix(\"3M\")", vul_string_atof_withsuffix("3M"), 3e6);
+  TEST("vul_string_atof_withsuffix(\"-123Mb\")", vul_string_atof_withsuffix("-123Mi"), -128974848.0);
+  TEST("vul_string_atof_withsuffix(\"-1G\")", vul_string_atof_withsuffix("-1G"), -1.0e9);
+  TEST("vul_string_atof_withsuffix(\"1T\")", vul_string_atof_withsuffix("1T"), 1.0e12);
+
+
   TEST("vul_string_to_bool(\"YES\")", vul_string_to_bool("YES"), true);
   TEST("vul_string_to_bool(\"trUe\")", vul_string_to_bool("trUe"), true);
   TEST("vul_string_to_bool(\" 1 \")", vul_string_to_bool(" 1 "), true);

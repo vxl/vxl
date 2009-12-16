@@ -49,6 +49,12 @@ extern int vul_string_atoi(vcl_string const&);
 //: Reads an double from a string
 extern double vul_string_atof(vcl_string const& s);
 
+//: Reads an double from a string, with k, kb, M, etc suffix.
+// No space is allowed between the number and the suffix.
+// k=10^3, ki=2^10, M=10^6, Mi=2^20, G=10^9, Gi=2^30, T=10^12, Ti=2^40
+// The i suffix is from the IEC 60027 standard.
+extern double vul_string_atof_withsuffix(vcl_string const& s);
+
 //: Convert a string to a boolean.
 // Looks for On, true, yes, 1 to mean true. everything else is false.
 // It ignores leading and trailing whitespace and capitalisation.
