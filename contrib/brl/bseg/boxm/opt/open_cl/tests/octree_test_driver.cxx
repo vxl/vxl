@@ -1,4 +1,3 @@
-
 #include "octree_test_driver.h"
 
 #include <vcl_fstream.h>
@@ -394,5 +393,5 @@ octree_test_driver::~octree_test_driver()
 void octree_test_driver::print_kernel_usage_info()
 {
   vcl_cout << "Used Local Memory: " << used_local_memory_ << '\n'
-           << "Kernel Vetted Work Group Size: " << kernel_work_group_size_/sizeof(size_t) << vcl_endl;
+           << "Kernel Vetted Work Group Size: " << kernel_work_group_size_/sizeof(vcl_size_t) << vcl_endl;
 }
