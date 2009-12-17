@@ -447,14 +447,14 @@ void boct_tree<T_loc,T_data>::b_read(vsl_b_istream & is)
      unsigned num_cells;
      vsl_b_read(is, num_cells);
      boct_loc_code<T_loc> code;
-     vcl_vector<boct_tree_cell<T_loc,T_data> > cells;
+     vcl_vector<boct_tree_cell<T_loc,T_data> > cells(num_cells);
      T_data data;
      for (unsigned i=0; i<num_cells; i++) {
        vsl_b_read(is, code);
        vsl_b_read(is, data);
        boct_tree_cell<T_loc,T_data> cell(code);
        cell.set_data(data);
-       cells.push_back(cell);
+       cells[i]=cell;
      }
      boct_tree_cell<T_loc,T_data>* root = construct_tree(cells,num_levels_);
      this->root_=root;
