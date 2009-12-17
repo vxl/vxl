@@ -293,18 +293,12 @@ class boxm_raytrace_function
                                 curr_aux_cell=aux_tree->get_cell(cell_code);
                             }
                             //: get the canonical bounding box
-                            vgl_box_3d<double> cell_bb = tree->cell_bounding_box_canonical(curr_cell);
+                            vgl_box_3d<double> cell_bb = tree->cell_bounding_box(curr_cell);
                             // find exit point of cell
 
                             double lambda=0;
                             boct_face_idx face_id=NONE;
-#ifdef DEBUG
-                            vcl_cout<<"Enter point "<<enter_pt<<vcl_endl;
-#endif
-                            bool found_exit =boxm_utils::cube_exit_point(cell_bb,enter_pt_norm,direction, exit_pt,lambda,face_id);
-#ifdef DEBUG
-                            vcl_cout<<"Exit point "<<exit_pt<<vcl_endl;
-#endif
+                            bool found_exit =boxm_utils::cube_exit_point(cell_bb,enter_pt,direction, exit_pt,lambda,face_id);
                             if (!found_exit) {
                                 vcl_cerr << "error: could not find cell exit point\n"
                                          << "   enter_pt = [" << enter_pt.x() << ", " << enter_pt.y() << ", " << enter_pt.z() << "]\n"
@@ -321,19 +315,22 @@ class boxm_raytrace_function
                                 aux_val=curr_aux_cell->data();
 
 
-                            continue_trace(i-img_i0_, j-img_j0_) = step_functor.step_cell(i,j, enter_pt_norm, exit_pt, cell_val,aux_val);
+                            continue_trace(i-img_i0_, j-img_j0_) = step_functor.step_cell(i,j, enter_pt, exit_pt, cell_val,aux_val);
                             curr_cell->set_data(cell_val);
                             if (step_functor.is_aux_)
                                 curr_aux_cell->set_data(aux_val);
+                             vgl_point_3d<double> exit_pt_norm((exit_pt.x()-block_bb.min_x())/block_bb.width(),
+                                                               (exit_pt.y()-block_bb.min_y())/block_bb.height(),
+                                                              (exit_pt.z()-block_bb.min_z())/block_bb.depth());
  
                             //: obtian the code for the exit point
-                            boct_loc_code<T_loc> exit_loc_code(exit_pt,tree->root_level(), tree->max_val());
+                            boct_loc_code<T_loc> exit_loc_code(exit_pt_norm,tree->root_level(), tree->max_val());
                             cell_type *neighborcell=NULL;
                             if (curr_cell->find_neighbor(face_id,neighborcell,tree->root_level()))
                                 curr_cell=neighborcell->traverse_force(exit_loc_code);
                             else
                                 break;
-                            enter_pt_norm=exit_pt;
+                            enter_pt=exit_pt;
                         }
                     }
                 }
