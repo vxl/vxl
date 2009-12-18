@@ -107,8 +107,37 @@ bool boxm_create_scene_process(bprb_func_process& pro)
       vcl_cout<<"Multi Bin set"<<vcl_endl;
       scene_ptr = scene;
     }
-#endif // 0
+#endif
   }
+    else if (scene_ptr->appearence_model() == FLOAT) {
+      if (!scene_ptr->multi_bin())
+      {
+        typedef boct_tree<short,float> tree_type;
+        boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
+        scene->load_scene(parser);
+        scene_ptr = scene;
+      }
+    }
+    else if (scene_ptr->appearence_model() == BSTA_MOG_F1) {
+      if (!scene_ptr->multi_bin())
+      {
+        typedef boct_tree<short,boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype > tree_type;
+        boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
+        scene->load_scene(parser);
+        scene_ptr = scene;
+      }
+    }
+    else if (scene_ptr->appearence_model() == BSTA_F1) {
+      if (!scene_ptr->multi_bin())
+      {
+        typedef boct_tree<short,bsta_num_obs<bsta_gauss_f1> > tree_type;
+        boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
+        scene->load_scene(parser);
+        scene_ptr = scene;
+      }
+    }
+  
+ 
   else {
     vcl_cout << "boxm_create_scene_process: undefined APM type" << vcl_endl;
     return false;

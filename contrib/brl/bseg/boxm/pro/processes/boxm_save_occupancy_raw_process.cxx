@@ -126,6 +126,39 @@ bool boxm_save_occupancy_raw_process(bprb_func_process& pro)
       } else { // write the whole scene
         boxm_save_scene_raw<short,boxm_sample<BOXM_APM_SIMPLE_GREY> >(*scene, filepath + ".raw", resolution);
       }
+  } else if ( boxm_scene< boct_tree<short, float> > *scene= dynamic_cast<boxm_scene< boct_tree<short, float > > * >(scene_ptr.as_pointer())){
+    if (!whole) {
+          boxm_block_iterator<boct_tree<short, float> > it(scene);
+          it.begin();
+          while (!it.end()) {
+            vcl_stringstream strm;
+            vgl_point_3d<int> index = it.index();
+            strm << index.x() << '_' << index.y() << '_' << index.z();
+            vcl_string str(strm.str());
+            vcl_string s = filepath + str + ".raw";
+            boxm_save_block_raw<short,float >(*scene, it.index(), s, resolution);
+            it++;
+          }
+        } else { // write the whole scene
+          boxm_save_scene_raw<short,float >(*scene, filepath + ".raw", resolution);
+        }
+  }
+  else if ( boxm_scene< boct_tree<short, bsta_num_obs<bsta_gauss_f1> > > *scene= dynamic_cast<boxm_scene< boct_tree<short, bsta_num_obs<bsta_gauss_f1> > > * >(scene_ptr.as_pointer())){
+    if (!whole) {
+      boxm_block_iterator<boct_tree<short, bsta_num_obs<bsta_gauss_f1> > > it(scene);
+      it.begin();
+      while (!it.end()) {
+        vcl_stringstream strm;
+        vgl_point_3d<int> index = it.index();
+        strm << index.x() << '_' << index.y() << '_' << index.z();
+        vcl_string str(strm.str());
+        vcl_string s = filepath + str + ".raw";
+        boxm_save_block_raw<short,bsta_num_obs<bsta_gauss_f1> >(*scene, it.index(), s, resolution);
+        it++;
+      }
+    } else { // write the whole scene
+      boxm_save_scene_raw<short,bsta_num_obs<bsta_gauss_f1> >(*scene, filepath + ".raw", resolution);
+    }
   }
    else if (scene_ptr->appearence_model() == BOXM_APM_MOB_GREY) {
       typedef boct_tree<short, boxm_sample<BOXM_APM_MOB_GREY> > type;
