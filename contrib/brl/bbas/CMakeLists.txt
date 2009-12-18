@@ -2,10 +2,10 @@
 # main package for basic operations common to all libraries
 # All libraries are mutually independent, except for bxml <-- bdgl
 
-# xml<->vxl conversion 
+# xml<->vxl conversion
 SUBDIRS(bxml)
 
-# uncertainty geometry library
+# Uncertainty geometry library
 SUBDIRS(bugl)
 
 # Additions to vnl
@@ -13,6 +13,7 @@ SUBDIRS(bnl)
 
 # Brown Graph Library
 SUBDIRS(bgrl)
+
 # Brown Templated Graph Library
 SUBDIRS(bgrl2)
 
@@ -22,16 +23,16 @@ SUBDIRS(bsta)
 # Brown dynamic programming library
 SUBDIRS(bdpg)
 
-#3D mesh library 
+# 3D mesh library
 SUBDIRS(bmsh3d)
 
-#In memory relational database
+# In memory relational database
 SUBDIRS(brdb)
 
-#Brown Imaging Library
+# Brown Imaging Library
 SUBDIRS(bil)
 
-#Brown VRML libraby
+# Brown VRML utilities library
 SUBDIRS(bvrml)
 
 IF( BUILD_GEL )
@@ -41,7 +42,7 @@ IF( BUILD_GEL )
   # topology algorithms
   SUBDIRS(btol)
 
-  # digital library algorithms
+  # digital geometry algorithms
   SUBDIRS(bdgl)
 
   # basic vgui classes
@@ -53,11 +54,10 @@ IF( BUILD_GEL )
   # staged vgl development area
   SUBDIRS(bvgl)
 
-  #3D modeling library
+  # 3D modeling library
   SUBDIRS(bwm)
 
-  #Indexed Mesh Library
+  # Indexed Mesh Library
   SUBDIRS(imesh)
+
 ENDIF( BUILD_GEL )
-
-
