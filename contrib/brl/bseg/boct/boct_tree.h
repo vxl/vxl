@@ -132,7 +132,16 @@ class boct_tree
   {
     return vgl_point_3d<double> (cell->code_.x_loc_/max_val_,cell->code_.y_loc_/max_val_,cell->code_.z_loc_/max_val_);
   }
-
+  
+  //: Return cell's global origin
+  vgl_point_3d<double> global_origin(boct_tree_cell<T_loc,T_data>* const cell) const
+  {
+    return vgl_point_3d<double> (global_bbox_.min_x()+ (cell->code_.x_loc_/max_val_)*global_bbox_.width(),
+                                 global_bbox_.min_y()+ (cell->code_.y_loc_/max_val_)*global_bbox_.height(),
+                                 global_bbox_.min_z()+ (cell->code_.z_loc_/max_val_)*global_bbox_.depth());
+  }
+  
+  
   //: Print tree
   void print();
 
