@@ -31,6 +31,9 @@ SUBDIRS(brdb)
 #Brown Imaging Library
 SUBDIRS(bil)
 
+#Brown VRML libraby
+SUBDIRS(bvrml)
+
 IF( BUILD_GEL )
   # spatial object algorithms
   SUBDIRS(bsol)
