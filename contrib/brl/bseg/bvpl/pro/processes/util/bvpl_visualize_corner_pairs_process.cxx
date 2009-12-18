@@ -17,7 +17,7 @@
 
 #include <bvpl/util/bvpl_corner_pair_finder.h>
 #include <bvxm/grid/bvxm_voxel_grid.h>
-#include <bvxm/grid/io/bvxm_vrml_voxel_grid.h>
+#include <bvrml/bvrml_write.h>
 
 #include <vul/vul_file.h>
 #include <vpl/vpl.h>
@@ -80,7 +80,7 @@ bool bvpl_visualize_corner_pairs_process(bprb_func_process& pro)
     if (vul_file::exists(vrml_path.c_str()))
       vpl_unlink(vrml_path.c_str());
     os.open(vrml_path.c_str(), vcl_ios::out);
-    bvxm_vrml_voxel_grid::write_vrml_header(os);
+    bvrml_write::write_vrml_header(os);
   }
   else {
     os.open(vrml_path.c_str(), vcl_ios::app);
@@ -89,7 +89,7 @@ bool bvpl_visualize_corner_pairs_process(bprb_func_process& pro)
    vil_colour_space_HSV_to_RGB<float>(hue,1.0f,255.0f,&r,&g,&b);
 #if 0
    for (unsigned j=0; j<pairs->pairs_[lines_id].size(); ++j)
-     bvxm_vrml_voxel_grid::write_vrml_line_segment(os, pairs->pairs_[lines_id][j],r/255.0,g/255.0,b/255.0,0);
+     bvrml_write::write_vrml_line_segment(os, pairs->pairs_[lines_id][j],r/255.0,g/255.0,b/255.0,0);
 
    for (unsigned j=0; j<pairs->boxes_[lines_id].size(); ++j)
      bvxm_vrml_voxel_grid::write_vrml_box(os, pairs->boxes_[lines_id][j],r/255.0,g/255.0,b/255.0,0.9);
