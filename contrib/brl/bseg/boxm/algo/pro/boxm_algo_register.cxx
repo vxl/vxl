@@ -13,5 +13,8 @@ void boxm_algo_register::register_datatype()
 
 void boxm_algo_register::register_process()
 {
-    REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_split_scene_process ,"boxmSplitSceneProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_split_scene_process ,"boxmSplitSceneProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_merge_mixtures_process ,"boxmMergeMixturesProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_save_scene_vrml_process ,"boxmSaveSceneVrmlProcess");
+
 }
