@@ -13,6 +13,7 @@
 // \endverbatim
 
 #include "bvpl_octree_kernel_operator.h"
+#include "bvpl_octree_sample.h"
 #include <bvpl/bvpl_kernel.h>
 #include <bvpl/bvpl_local_max_functor.h>
 #include <boct/boct_tree.h>
@@ -30,18 +31,18 @@ class bvpl_octree_vector_operator
   bool operate(boct_tree<short ,T_data>* tree_in,
                F functor,
                bvpl_kernel_vector_sptr kernel_vector,
-               boct_tree<short ,T_data>* response_tree,
-               boct_tree<short ,int>* id_tree, short level, double cell_length)
+               boct_tree<short ,bvpl_octree_sample<T_data> >* tree_out,
+               short level, double cell_length)
   {
     bvpl_local_max_functor<T_data> func_max;
-    boct_tree<short ,T_data>* temp_tree = response_tree->clone();
+    boct_tree<short ,T_data>* temp_tree = tree_in->clone();
     bvpl_octree_kernel_operator<T_data> oper(tree_in);
     for (unsigned int id = 0; id < kernel_vector->kernels_.size(); ++id)
     {
       temp_tree->init_cells(func_max.min_response());
       bvpl_kernel_sptr kernel = kernel_vector->kernels_[id];
       oper.operate(functor, kernel, temp_tree,level, cell_length);
-      combine_kernel_responses(response_tree, temp_tree, id_tree, id);
+      combine_kernel_responses(tree_out, temp_tree, id);
     }
 
     return true;
@@ -50,36 +51,34 @@ class bvpl_octree_vector_operator
  protected:
   //: Abstract function to be implemented on children on how to combine current kernel response with output response
 
-  virtual void combine_kernel_responses(boct_tree<short ,T_data>* tree_out, boct_tree<short ,T_data>* tree_curr,
-                                        boct_tree<short ,int>* id_out, int id_curr)=0;
+  virtual void combine_kernel_responses(boct_tree<short ,bvpl_octree_sample<T_data> >* tree_out, boct_tree<short ,T_data>* tree_curr,
+                                        int id_curr)=0;
 
   //: Compares response grids and stores in out, the maximum responses. This function gets called in subclasses when implementing combine_kernel_responses
 
-  void keep_max_response_tree(boct_tree<short ,T_data>* tree1, boct_tree<short ,T_data>* tree2,
-                              boct_tree<short ,int>* id1, int id2);
+  void keep_max_response_tree(boct_tree<short ,bvpl_octree_sample<T_data> >* tree_out, boct_tree<short ,T_data>* new_tree,
+                              int new_id);
 };
 
 
 //: Compares response grids and stores in grid1, the wining responses.
 template<class T_data>
-void bvpl_octree_vector_operator<T_data>::keep_max_response_tree(boct_tree<short ,T_data>* tree1, boct_tree<short ,T_data>* tree2,
-                                                                 boct_tree<short ,int>* id1, int id2)
+void bvpl_octree_vector_operator<T_data>::keep_max_response_tree(boct_tree<short ,bvpl_octree_sample<T_data> >* tree_out,
+                                                                 boct_tree<short ,T_data>* new_tree,
+                                                                 int new_id)
 {
   bvpl_local_max_functor<T_data> func_max;
 
-  vcl_vector<boct_tree_cell<short,T_data>*> leaves1 = tree1->leaf_cells();
-  vcl_vector<boct_tree_cell<short,T_data>*> leaves2 = tree2->leaf_cells();
-  vcl_vector<boct_tree_cell<short,int>*> id1_leaves = id1->leaf_cells();
+  vcl_vector<boct_tree_cell<short,T_data>*> new_leaves = new_tree->leaf_cells();
+  vcl_vector<boct_tree_cell<short,bvpl_octree_sample<T_data> >*> leaves_out = tree_out->leaf_cells();
 
-  for (unsigned i=0; i< leaves1.size(); i++)
+  for (unsigned i=0; i< new_leaves.size(); i++)
   {
-    T_data val1 = leaves2[i]->data();
-    T_data val2 = leaves1[i]->data();
+    T_data val1 = new_leaves[i]->data();
+    T_data val2 = leaves_out[i]->data().response_;
     if (func_max.greater_than(val1, val2))
-    {
-      leaves1[i]->set_data(leaves2[i]->data());
-      id1_leaves[i]->set_data(id2);
-    }
+      leaves_out[i]->set_data(bvpl_octree_sample<T_data>(new_leaves[i]->data(), new_id));
+
   }
   
 }

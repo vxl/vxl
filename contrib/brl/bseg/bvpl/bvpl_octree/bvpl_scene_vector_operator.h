@@ -27,16 +27,14 @@ class bvpl_scene_vector_operator
                bvpl_octree_vector_operator<T_data> * vec_opertor,
                F functor,
                bvpl_kernel_vector_sptr kernel_vector,
-               boxm_scene<boct_tree<short, T_data> > &scene_out,
-               boxm_scene<boct_tree<short ,int> >& id_scene, short level, double cell_length)
+               boxm_scene<boct_tree<short, bvpl_octree_sample<T_data> > > &scene_out,
+              short level)
   {
     // iterate through the scene
     boxm_block_iterator<boct_tree<short, T_data> > iter_in = scene_in.iterator();
-    boxm_block_iterator<boct_tree<short, T_data> > iter_out = scene_out.iterator();
-    boxm_block_iterator<boct_tree<short, int> > iter_id = id_scene.iterator();
+    boxm_block_iterator<boct_tree<short, bvpl_octree_sample<T_data> > > iter_out = scene_out.iterator();
     iter_in.begin();
     iter_out.begin();
-    iter_id.begin();
 
     bvpl_local_max_functor<T_data> func_max;
 
@@ -44,17 +42,13 @@ class bvpl_scene_vector_operator
       scene_in.load_block(iter_in.index());
       scene_out.load_block(iter_out.index());
       boct_tree<short, T_data>  *tree_in= (*iter_in)->get_tree();
-      boct_tree<short, T_data>  *tree_out = tree_in -> clone();
-      tree_out->init_cells(func_max.min_response());
-      boct_tree<short,int> *id_tree = tree_in->template clone_to_type<int>();
-      id_tree->init_cells(-1);
-
-      // at each tree, run the vector of kernels
-      vec_opertor->operate(tree_in, functor, kernel_vector, tree_out, id_tree, level, cell_length);
+      boct_tree<short, bvpl_octree_sample<T_data> >  *tree_out = tree_in ->template clone_to_type<bvpl_octree_sample<T_data> >();
+      tree_out->init_cells(bvpl_octree_sample<T_data>());
+      double cell_length = 1.0/(double)(1<<(tree_in->root_level() -level));
+      //at each tree, run the vector of kernels
+      vec_opertor->operate(tree_in, functor, kernel_vector, tree_out, level, cell_length);      
       (*iter_out)->init_tree(tree_out);
       scene_out.write_active_block();
-      (*iter_id)->init_tree(id_tree);
-      id_scene.write_active_block();
     }
     return true;
   }
