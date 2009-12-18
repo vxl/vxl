@@ -1,12 +1,25 @@
 #include "boxm_apm_traits.h"
 
-const char* boxm_apm_types::app_model_strings[]  = { "apm_mog_grey", "apm_mog_rgb", "apm_simple_grey", "apm_simple_rgb", "apm_mob_grey"};
+const char* boxm_apm_types::app_model_strings[]  = { "apm_mog_grey",
+                                                      "apm_mog_rgb", 
+                                                      "apm_simple_grey",
+                                                      "apm_simple_rgb", 
+                                                      "apm_mob_grey",
+                                                      "float",
+                                                      "bsta_mog_f1",
+                                                      "bsta_f1",
+                                                      "bvpl_sample_float",
+                                                      "bvpl_sample_gauss_f1",
+                                                      "apm_na"};
+
 
 boxm_apm_type boxm_apm_types::str_to_enum(const char* s)
 {
   for (int i=0; i < int(BOXM_APM_UNKNOWN); i++)
+  {
     if (vcl_strcmp(s, boxm_apm_types::app_model_strings[i]) == 0)
       return (boxm_apm_type) i;
+  }
   return BOXM_APM_UNKNOWN;
 }
 
