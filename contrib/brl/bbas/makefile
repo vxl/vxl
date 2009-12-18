@@ -58,6 +58,9 @@ SUBDIRS += bil
 # indexed mesh library
 SUBDIRS += imesh
 
+# vrml utilities library
+SUBDIRS += bvrml
+
 ################################
 include ${VXLROOT}/config/top.mk
 ################################
