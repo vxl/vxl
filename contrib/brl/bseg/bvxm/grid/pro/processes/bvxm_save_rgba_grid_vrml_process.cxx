@@ -57,14 +57,14 @@ bool bvxm_save_rgba_grid_vrml_process(bprb_func_process& pro)
   
   // create the grid from in memory file and save
   if ( bvxm_voxel_grid<vnl_float_4 > *grid = dynamic_cast<bvxm_voxel_grid<vnl_float_4 >* >(grid_base.ptr())) {    
-    bvxm_vrml_voxel_grid::write_vrml_header(os);
+    bvrml_write::write_vrml_header(os);
     //bvxm_vrml_voxel_grid::write_vrml_grid_as_spheres(os,grid,threshold);
     bvxm_vrml_voxel_grid::write_vrml_grid_as_pointers(os,grid,threshold);
     return true;
   }
   else if (bvxm_voxel_grid<float> *grid = dynamic_cast<bvxm_voxel_grid<float>* >(grid_base.ptr()))
   {
-    bvxm_vrml_voxel_grid::write_vrml_header(os);
+    bvrml_write::write_vrml_header(os);
     bvxm_vrml_voxel_grid::write_vrml_grid_as_spheres(os,grid,threshold);
     return true;
   }
