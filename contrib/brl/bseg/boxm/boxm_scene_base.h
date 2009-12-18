@@ -32,7 +32,7 @@ class boxm_scene_base : public vbl_ref_count
 
   boxm_apm_type appearence_model() { return app_model_; }
 
-  void set_appearence_model(boxm_apm_type model) { app_model_ = model; }
+  void set_appearance_model(boxm_apm_type model) { app_model_ = model; }
 
   void set_bin_option(bool multi_bin) { multi_bin_ = multi_bin; }
   void set_octree_levels(unsigned max, unsigned init, bool tree_level_set=true)
