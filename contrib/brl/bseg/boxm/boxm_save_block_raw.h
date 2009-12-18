@@ -11,7 +11,11 @@
 #include <boxm/boxm_block_vis_graph_iterator.h>
 #include <boxm/boxm_cell_vis_graph_iterator.h>
 #include <boxm/boxm_mog_grey_processor.h>
+#include <boxm/boxm_cell_data_traits.h>
 #include <vpgl/vpgl_camera.h>
+
+#include <bsta/bsta_attributes.h>
+#include <bsta/bsta_gauss_f1.h>
 
 #include <vcl_iostream.h>
 
@@ -65,7 +69,7 @@ void boxm_save_block_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   {
     vgl_point_3d<double> node = tree->cell_bounding_box_local(cells[i]).min_point();
 
-    float cell_val = cells[i]->data().alpha;
+    float cell_val = boxm_cell_to_float(cells[i]);
 
     unsigned int level = cells[i]->get_code().level;
 
