@@ -40,7 +40,8 @@ SET(boxm_sources
     boxm_fill_in_mesh.h
     boxm_vis_implicit_sample.h
     boxm_update_sample.h
-    boxm_mob_grey_processor.cxx            boxm_mob_grey_processor.h            
+    boxm_mob_grey_processor.cxx            boxm_mob_grey_processor.h  
+    boxm_cell_data_traits.h          
 
 )
 
