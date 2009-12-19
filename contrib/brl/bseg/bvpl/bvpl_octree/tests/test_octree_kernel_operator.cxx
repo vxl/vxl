@@ -197,10 +197,6 @@ void scene_kernel_operator()
     vpl_unlink(file_it());
     vul_file::delete_file_glob(file_it());
   }
-  
- 
-  return eq;
-
 }
 
 void octree_vector_operator()
@@ -238,7 +234,6 @@ void octree_vector_operator()
         loc_code.set_code(x,y,z);
         loc_code.set_level(0);
         result = result && tree_out->get_cell(loc_code)->data().id_ == 0;
-        
       }
   TEST("Octree vector operator", result, true);
 }
@@ -328,9 +323,6 @@ void scene_vector_operator()
     vpl_unlink(file_it());
     vul_file::delete_file_glob(file_it());
   }
-  
-  return true;
-
 }
 
 
