@@ -98,6 +98,12 @@ SOURCE=.\boxm_algo_register.cxx
 # Begin Source File
 SOURCE=.\processes/boxm_split_scene_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\processes/boxm_save_scene_vrml.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm_merge_mixtures_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

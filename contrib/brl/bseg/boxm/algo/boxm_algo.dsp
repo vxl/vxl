@@ -93,7 +93,7 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\dummy.cxx
+SOURCE=.\boxm_merge_mog.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -103,6 +103,12 @@ SOURCE=.\boxm_split_sample.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_merge_mog_functor.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_vrml_util.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_merge_mog.h
 # End Source File
 # End Group
 # End Target
