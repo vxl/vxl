@@ -59,7 +59,7 @@ bxml_document make_long_doc()
 }; // namespace
 
 
-static void test_find(int argc, char* argv[])
+static void test_find()
 {
   bxml_document doc = make_simple_doc();
 
@@ -75,4 +75,4 @@ static void test_find(int argc, char* argv[])
   TEST("find missing element", !result, true);
 }
 
-TESTMAIN_ARGS(test_find);
+TESTMAIN(test_find);
