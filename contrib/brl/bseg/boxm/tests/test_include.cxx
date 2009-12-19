@@ -2,6 +2,7 @@
 #include <boxm/boxm_block.h>
 #include <boxm/boxm_block_vis_graph_iterator.h>
 #include <boxm/boxm_block_vis_graph_node.h>
+#include <boxm/boxm_cell_data_traits.h>
 #include <boxm/boxm_cell_vis_graph_iterator.h>
 #include <boxm/boxm_cell_vis_graph_node.h>
 #include <boxm/boxm_compute_volume_visibility.h>
@@ -36,8 +37,10 @@
 #include <boxm/pro/boxm_processes.h>
 #include <boxm/pro/boxm_register.h>
 
+#include <boxm/algo/boxm_merge_mog.h>
 #include <boxm/algo/boxm_merge_mog_functor.h>
 #include <boxm/algo/boxm_split_sample.h>
+#include <boxm/algo/boxm_vrml_util.h>
 
 #include <boxm/io/boxm_io_scene_base.h>
 
