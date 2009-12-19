@@ -129,7 +129,9 @@ static void test_update_multi_bin()
   vgl_vector_3d<double> block_dim(10,10,10);
   vgl_vector_3d<unsigned> world_dim(2,2,1);
   boxm_scene<boct_tree<short,boxm_sample_multi_bin<BOXM_APM_MOG_GREY> > > scene(lvcs, origin, block_dim, world_dim);
+#ifdef SET_APPEARENCE_MODEL_EXISTS
   scene.set_appearence_model(BOXM_APM_MOG_GREY);
+#endif
   scene.set_paths("boxm_scene2_mb", "block");
   vul_file::make_directory("boxm_scene2_mb");
   vcl_ofstream os("scene2.xml");
@@ -230,7 +232,9 @@ static void test_update_multi_bin()
 #endif
   boxm_scene<boct_tree<short,boxm_sample_multi_bin<BOXM_APM_MOG_GREY> > > scene_new(lvcs, origin,
                                                                                     block_dim, world_dim, 4, 3);
+#ifdef SET_APPEARENCE_MODEL_EXISTS
   scene_new.set_appearence_model(BOXM_APM_MOG_GREY);
+#endif
   scene_new.set_paths("./boxm_scene_update", "block");
   vul_file::make_directory("./boxm_scene_update");
   vcl_ofstream os1("./boxm_scene_update/scene.xml");

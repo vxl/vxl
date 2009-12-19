@@ -25,7 +25,9 @@ static void test_upload_mesh()
   vgl_vector_3d<double> block_dim(10,10,10);
   vgl_vector_3d<unsigned> world_dim(2,2,1);
   boxm_scene<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY>  > > scene(lvcs, origin, block_dim, world_dim);
+#ifdef SET_APPEARENCE_MODEL_EXISTS
   scene.set_appearence_model(BOXM_APM_MOG_GREY);
+#endif
 
 #if 0
   if (vul_file_is_directory("./boxm_upload"))

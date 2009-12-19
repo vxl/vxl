@@ -22,7 +22,9 @@ static void test_render_image()
   vgl_vector_3d<double> block_dim(10,10,10);
   vgl_vector_3d<unsigned> world_dim(2,2,3);
   boxm_scene<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > > scene(lvcs, origin, block_dim, world_dim);
+#ifdef SET_APPEARENCE_MODEL_EXISTS
   scene.set_appearence_model(BOXM_APM_MOG_GREY);
+#endif
   scene.set_paths("./boxm_scene1", "block");
   vul_file::make_directory("./boxm_scene1");
   vcl_ofstream os("scene1.xml");
