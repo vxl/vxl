@@ -29,9 +29,9 @@ class boxm_sample
   static short version_no() { return 1; }
 
   //: bin is to imitate the bin number of multiple_bin case
-  apm_datatype & appearance(int bin=-1) {return appearance_;}
+  apm_datatype & appearance(int /*bin*/=-1) {return appearance_;}
 
-  void set_appearance(apm_datatype  app,int bin=-1) { appearance_=app; }
+  void set_appearance(apm_datatype  app,int /*bin*/=-1) { appearance_=app; }
 
   //: the occlusion density at the sample point
   float alpha;
