@@ -58,7 +58,12 @@ SUBDIRS += boxm_batch
 
 # voxel processing library
 SUBDIRS += bvpl
+
+# voxel processing library python interface
 SUBDIRS += bvpl_batch
+
+# voxel processing library python interface for octrees
+SUBDIRS += bvpl_octree_batch
 
 ################################
 include ${VXLROOT}/config/top.mk
