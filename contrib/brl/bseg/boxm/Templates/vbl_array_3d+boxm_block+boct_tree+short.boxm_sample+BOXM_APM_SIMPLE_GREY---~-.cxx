@@ -8,8 +8,7 @@
 typedef boct_tree<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > tree_type;
 VBL_ARRAY_3D_INSTANTIATE(boxm_block<tree_type>*);
 
-
-// scene with appearance 
+// scene with appearance
 typedef boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::apm_datatype apm_datatype;
 typedef boct_tree<short,apm_datatype >  apm_tree_type;
 VBL_ARRAY_3D_INSTANTIATE(boxm_block<apm_tree_type>*);
