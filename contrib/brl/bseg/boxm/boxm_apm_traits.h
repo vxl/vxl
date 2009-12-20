@@ -36,7 +36,7 @@ enum boxm_apm_type
   BVPL_SAMPLE_FLOAT,
   BVPL_SAMPLE_BSTA_GAUSS_F1,
   BOXM_APM_NA,
-  BOXM_APM_UNKNOWN  
+  BOXM_APM_UNKNOWN
 };
 
 class boxm_apm_types
@@ -94,12 +94,12 @@ class boxm_simple_grey
 {
  public:
   boxm_simple_grey() : color_(0.5f), one_over_sigma_(1.0f) {}
-  boxm_simple_grey(float color, float std_dev, float gauss_weight=1.0f) : color_(color), one_over_sigma_(1/std_dev)  { check_vals(); }
+  boxm_simple_grey(float colour, float std_dev, float gauss_wght=1.0f) : color_(colour), one_over_sigma_(1/std_dev), gauss_weight_(gauss_wght)  { check_vals(); }
   boxm_simple_grey(vnl_vector_fixed<float,3> const& params) : color_(params[0]), one_over_sigma_(1.0f/params[1])  { check_vals(); }
   static short version_no() { return 1; }
   inline float color() const {return color_;}
   inline float sigma() const {return 1.0f/one_over_sigma_;}
-  inline float gauss_weight() const {return 1.0f;}
+  inline float gauss_weight() const {return gauss_weight_;}
   inline float one_over_sigma() const {return one_over_sigma_;}
 
  protected:
@@ -118,6 +118,7 @@ class boxm_simple_grey
  public:
   float color_;
   float one_over_sigma_;
+  float gauss_weight_;
 };
 
 template<>
