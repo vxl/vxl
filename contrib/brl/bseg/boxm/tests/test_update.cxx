@@ -129,12 +129,8 @@ static void test_update()
   vgl_vector_3d<double> block_dim(10,10,10);
   vgl_vector_3d<unsigned> world_dim(2,2,1);
   boxm_scene<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > > scene(lvcs, origin, block_dim, world_dim);
-<<<<<<< .mine
-  scene.set_appearance_model(BOXM_APM_MOG_GREY);
-=======
 #ifdef SET_APPEARENCE_MODEL_EXISTS
   scene.set_appearence_model(BOXM_APM_MOG_GREY);
->>>>>>> .r27354
 #endif
   scene.set_paths("boxm_scene2", "block");
   vul_file::make_directory("boxm_scene2");
