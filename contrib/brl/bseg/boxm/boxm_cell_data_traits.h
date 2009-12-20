@@ -1,12 +1,11 @@
-// This is boxm_cell_data_traits.h
-#ifndef boxm_cell_data_traits_h
-#define boxm_cell_data_traits_h
-
+// This is brl/bseg/boxm/boxm_cell_data_traits.h
+#ifndef boxm_cell_data_traits_h_
+#define boxm_cell_data_traits_h_
 //:
 // \file
 // \brief  Set of accessors of cell's data, taking care of different datatypes
 // \author Isabel Restrepo mir@lems.brown.edu
-// \date  12/9/09
+// \date   December 9, 2009
 //
 // \verbatim
 //  Modifications
@@ -32,6 +31,6 @@ template <class T_loc, class T_data>
 float boxm_cell_to_float(boct_tree_cell<T_loc, T_data >* cell)
 {
   return cell->data().alpha;
-  
 }
+
 #endif
