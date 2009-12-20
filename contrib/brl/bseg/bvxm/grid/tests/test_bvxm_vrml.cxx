@@ -27,11 +27,11 @@ bool grid_to_vrml()
 
   //Write to VRML file
   vcl_ofstream os("point_set.wrl");
-  bvxm_vrml_voxel_grid::write_vrml_header(os);
+  bvrml_write::write_vrml_header(os);
   bvxm_vrml_voxel_grid::write_vrml_grid(os, grid, 0.2f);
 
   vcl_ofstream os2("spheres.wrl");
-  bvxm_vrml_voxel_grid::write_vrml_header(os2);
+  bvrml_write::write_vrml_header(os2);
   bvxm_vrml_voxel_grid::write_vrml_grid_as_spheres(os2, grid, 0.2f);
 
   return true;
@@ -52,7 +52,7 @@ bool color_grid_to_vrml()
         (*grid_it)(i,j)=vnl_float_4(255.0f, 0.0f, 0.0f, 255.0f);
 
   vcl_ofstream os("color_spheres.wrl");
-  bvxm_vrml_voxel_grid::write_vrml_header(os);
+  bvrml_write::write_vrml_header(os);
   bvxm_vrml_voxel_grid::write_vrml_grid_as_spheres(os, grid, 0.2f);
 
   return true;
