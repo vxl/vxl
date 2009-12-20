@@ -21,9 +21,7 @@ static void test_bayesian_optimizer()
   boxm_scene<boct_tree<short,data_type> > scene(lvcs, origin, block_dim, world_dim);
   scene.set_octree_levels(3,2);
   scene.set_paths("./boxm_scene", "block");
-#ifdef SET_APPEARENCE_MODEL_EXISTS
-  scene.set_appearence_model(BOXM_APM_SIMPLE_GREY);
-#endif
+  scene.set_appearance_model(BOXM_APM_SIMPLE_GREY);
   x_write(vcl_cout, scene, "scene");
   vul_file::make_directory("./boxm_scene");
   scene.write_scene();
