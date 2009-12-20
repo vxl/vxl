@@ -29,11 +29,8 @@ class boxm_vrml_util
 #if 0 // not yet working?
   static void write_vrml_scene(vcl_ofstream& str, bvxm_voxel_scene<bsta_num_obs<bsta_gauss_f1> > *scene,
                                const float threshold);
-
   static void write_vrml_scene_as_spheres(vcl_ofstream& str, bvxm_voxel_scene<float> *scene, float threshold);
-
   static void write_vrml_scene_as_spheres(vcl_ofstream& str, bvxm_voxel_scene<vnl_float_4> *scene, float threshold, int s=1);
-
   static void write_vrml_scene_as_pointers(vcl_ofstream& str, bvxm_voxel_scene<vnl_float_4> *scene, float threshold, int s=1);
 #endif // 0
 };
@@ -62,15 +59,13 @@ void boxm_vrml_util::write_vrml_scene(vcl_ofstream& str, boxm_scene<boct_tree<sh
     scene->load_block(iter.index());
     tree_type  *tree = (*iter)->get_tree();
 
-    //iterate trhough the tree
+    // iterate through the tree
     vcl_vector<cell_type*> cells = tree->leaf_cells();
 
     for (unsigned i = 0; i < cells.size(); i++)
     {
-      unsigned val = 255;//boxm_cell_to_float(cells[i]);
+      str <<"        0.5 0.2 0.8\n";
       vgl_point_3d<double> coord = tree->global_origin(cells[i]);
-
-      str <<"        " << 0.5 << ' '<<0.2 << ' '<< 0.8 << '\n';
       temp_stream <<"        " << (int)coord.x() << ' ' <<(int)coord.y() << ' ' << (int)coord.z() <<  '\n';
     }
   }
@@ -80,7 +75,7 @@ void boxm_vrml_util::write_vrml_scene(vcl_ofstream& str, boxm_scene<boct_tree<sh
       << "      coord Coordinate{\n"
       << "        point[\n";
 
-  //write the coordinates.
+  // write the coordinates.
   vcl_ifstream fin;  // file in
   vcl_filebuf *fb;   // file buffer
   fb = fin.rdbuf();
@@ -203,8 +198,8 @@ void bvxm_vrml_voxel_grid::write_vrml_grid_as_pointers(vcl_ofstream& str, bvxm_v
           if (((*grid_it)(i,j)[3] > threshold)){
             vgl_vector_3d<double> dir((*grid_it)(i,j)[0],(*grid_it)(i,j)[1],(*grid_it)(i,j)[2]);
             vgl_point_3d<double> pt((double)i/s,(double)j/s,(double)k/s);
-            bvrml_write::write_vrml_line(str, pt,dir,4*((*grid_it)(i,j)[3]-0.5),1,0,0);
-            bvrml_write::write_vrml_disk(str, pt,dir,2*((*grid_it)(i,j)[3]-0.5),0,0.5,0.0);
+            bvrml_write::write_vrml_line(str, pt,dir,4*((*grid_it)(i,j)[3]-0.5f),1,0,0);
+            bvrml_write::write_vrml_disk(str, pt,dir,2*((*grid_it)(i,j)[3]-0.5f),0,0.5f,0.0f);
           }
         }
       }
