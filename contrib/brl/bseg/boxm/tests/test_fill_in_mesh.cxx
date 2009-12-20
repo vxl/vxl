@@ -25,9 +25,7 @@ static void test_fill_in_mesh()
   vgl_vector_3d<double> block_dim(10,10,10);
   vgl_vector_3d<unsigned> world_dim(1,1,1);
   boxm_scene<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY>  > > scene(lvcs, origin, block_dim, world_dim);
-#ifdef SET_APPEARENCE_MODEL_EXISTS
-  scene.set_appearence_model(BOXM_APM_MOG_GREY);
-#endif
+  scene.set_appearance_model(BOXM_APM_MOG_GREY);
   scene.set_paths("./boxm_fill_in", "block");
   vul_file::make_directory("./boxm_fill_in");
   vcl_ofstream os("scene.xml");
