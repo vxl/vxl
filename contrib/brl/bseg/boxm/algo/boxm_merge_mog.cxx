@@ -2,40 +2,37 @@
 //:
 // \file
 
-#include <vcl_cmath.h>
 #include <vcl_vector.h>
 #include <boxm/boxm_scene.h>
 #include <vcl_cassert.h>
+#include <vnl/vnl_math.h> // for vnl_math_sqr()
 
 void boxm_merge_mog::kl_merge(mix_gauss_type const& mixture,bsta_gauss_f1 &gaussian)
 {
-  //When merging components of gaussian mixtures, we need to perform the followign calculations
-  //1. find the normalizing weight of the new component. In this case this value is 1 because
-  //   we are merging all the componets
+  //When merging components of gaussian mixtures, we need to perform the following calculations
+  //1. find the normalizing weight of the new component.
+  //   In this case this value is 1 because we are merging all the components
   //2. find the mean
   //3. find the variance
-  
-  
-  //Find mean and variance
+
   float mean = 0.0f;
   float var = 0.0f;
-  
-  //CAUTION: only mixtures of 3 modes are supported for now. 
-  
-  //unsigned num_components = mixture.num_components();
-  unsigned num_components = 3; 
-  
-  for (unsigned i = 0; i<num_components; i++) 
+
+  //CAUTION: only mixtures of 3 modes are supported for now.
+  assert(mixture.num_components() == 3);
+  unsigned num_components = mixture.num_components();
+
+  for (unsigned i = 0; i<num_components; ++i)
   {
-    //note these equations ommit the weight of the final distribution
-    // only becausee in this case it is 1
-    mean = mean + mixture.weight(i)*mixture.distribution(i).mean();
-    var = var +  mixture.weight(i)*mixture.distribution(i).var() +
-      mixture.weight(i)*vcl_pow(mixture.distribution(i).mean(),2);
+    // note: these equations omit the weight of the final distribution
+    // only because in this case it is 1
+    mean += mixture.weight(i) * mixture.distribution(i).mean();
+    var  += mixture.weight(i) *(mixture.distribution(i).var() +
+                                vnl_math_sqr(mixture.distribution(i).mean()));
   }
-  if(var <  vcl_pow(mean,2))
-    vcl_cout<< mixture <<vcl_endl;
-  var = var - vcl_pow(mean,2);
+  if (var <  vnl_math_sqr(mean))
+    vcl_cout<< "This should not happen: " << mixture << vcl_endl;
+  var -= vnl_math_sqr(mean);
   assert(var >= 0);
 
   gaussian.set_mean(mean);
@@ -46,50 +43,48 @@ void boxm_merge_mog::kl_merge(mix_gauss_type const& mixture,bsta_gauss_f1 &gauss
 //: Merges the components of the gaussian mixtures at each voxel into a single gaussian
 //  Thus the resulting grid contains unimodal gaussians
 bool boxm_merge_mog::kl_merge_scene(boxm_scene<boct_tree<short, mix_gauss_type> > &mog_scene,
-                                   boxm_scene<boct_tree<short, gauss_type> > &gauss_scene)
+                                    boxm_scene<boct_tree<short, gauss_type> > &gauss_scene)
 {
-    //iterate through the scene
+    // iterate through the scene
     boxm_block_iterator<mog_tree_type > mog_iter = mog_scene.iterator();
     boxm_block_iterator<gauss_tree_type > gauss_iter = gauss_scene.iterator();
-    mog_iter.begin();
-    gauss_iter.begin();
-    
-    for (; !mog_iter.end(); mog_iter++, gauss_iter++) {
+
+    for (mog_iter.begin(), gauss_iter.begin(); !mog_iter.end(); ++mog_iter, ++gauss_iter) {
       mog_scene.load_block(mog_iter.index());
       gauss_scene.load_block(gauss_iter.index());
       mog_tree_type  *mog_tree = (*mog_iter)->get_tree();
       gauss_tree_type  *gauss_tree = mog_tree->clone_to_type<gauss_type>();
-      //gauss_tree->init_cells(func_max.min_response());
-            
+#if 0
+      gauss_tree->init_cells(func_max.min_response());
+#endif
       this->kl_merge_octree(mog_tree,gauss_tree);
       (*gauss_iter)->init_tree(gauss_tree);
       gauss_scene.write_active_block();
     }
-    
+
     return true;
 }
-    
+
 //: Merges the components of the gaussian mixtures at each voxel into a single gaussian
 //  Thus the resulting grid contains unimodal gaussians
 bool boxm_merge_mog::kl_merge_octree(boct_tree<short, mix_gauss_type> *mog_tree,
                                      boct_tree<short, gauss_type> *gauss_tree)
 {
-  //iterate trhough the trees
+  // iterate through the trees
   vcl_vector<mog_cell_type*> mog_cells = mog_tree->all_cells();
   vcl_vector<gauss_cell_type*> gauss_cells = gauss_tree->all_cells();
-  
-  if(mog_cells.size()!=gauss_cells.size() ){
-    vcl_cerr << "Different size vectors in boxm_merge_mog::kl_merge_octree" << vcl_endl;
+
+  if (mog_cells.size()!=gauss_cells.size() ) {
+    vcl_cerr << "Different size vectors in boxm_merge_mog::kl_merge_octree\n";
     return false;
   }
-  
-  
-  for(unsigned i = 0; i < mog_cells.size(); i++)
+
+
+  for (unsigned i = 0; i < mog_cells.size(); ++i)
   {
     gauss_type result_gauss;
     this->kl_merge(mog_cells[i]->data(), result_gauss);
     gauss_cells[i]->set_data(result_gauss);
-    
-  }  
+  }
   return true;
-}  
+}
