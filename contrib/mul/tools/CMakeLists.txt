@@ -18,6 +18,9 @@ TARGET_LINK_LIBRARIES(print_image vimt3d mbl)
 ADD_EXECUTABLE( image3d_math image3d_math.cxx )
 TARGET_LINK_LIBRARIES(image3d_math vimt3d mbl)
 
+ADD_EXECUTABLE( image3d_split image3d_split.cxx )
+TARGET_LINK_LIBRARIES(image3d_split vimt3d mbl)
+
 ADD_EXECUTABLE( index_sort index_sort.cxx )
 TARGET_LINK_LIBRARIES(index_sort mbl)
 
