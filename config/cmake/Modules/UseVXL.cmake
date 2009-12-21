@@ -1,4 +1,4 @@
-# vxl/config/cmake/UseVXL.cmake
+# vxl/config/cmake/Modules/UseVXL.cmake
 # (also copied by CMake to the top-level of the vxl build tree)
 #
 # This CMake file may be included by projects outside VXL.  It
@@ -130,7 +130,10 @@ IF(VXL_CONFIG_CMAKE)
     SET(MODULE_PATH ${VXL_CMAKE_DIR})
     SET(VXL_LIBRARY_PATH ${VXL_LIBRARY_DIR})
   ENDIF(VXL_PROVIDE_OLD_CACHE_NAMES)
-  
+
+  # Allow use of VXL's cmake/doxygen framework
+  INCLUDE(${VXL_CMAKE_DOXYGEN_DIR}/doxygen.cmake)
+
   IF(VXL_PROVIDE_STANDARD_OPTIONS)
     # Provide the standard set of VXL CMake options to the project.
     INCLUDE(${VXL_CMAKE_DIR}/VXLStandardOptions.cmake)  
