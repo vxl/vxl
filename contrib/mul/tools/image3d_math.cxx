@@ -1568,22 +1568,22 @@ class operations
                   "im_A im_B", "im_A+B", "Add corresponding voxels of im_A and im_B");
     add_operation("--voxel_product", &voxel_product__image_3d_of_float,
                   function_type_t() << operand::e_image_3d_of_float,
-                  "image", "value", "Product of all the voxel values.");
+                  "image", "value", "Product over all the voxel values.");
     add_operation("--voxel_product", &voxel_product__image_3d_of_int,
                   function_type_t() << operand::e_image_3d_of_int,
-                  "image", "value", "Product of all the voxel values.");
+                  "image", "value", "Product over all the voxel values.");
     add_operation("--voxel_size", &voxel_size__image_3d_of_int,
                   function_type_t() << operand::e_image_3d_of_int,
-                  "image", "value", "Sum of all the voxel values.");
+                  "image", "x_length y_length z_length", "Length of each side of a voxel.");
     add_operation("--voxel_size", &voxel_size__image_3d_of_float,
                   function_type_t() << operand::e_image_3d_of_float,
-                  "image", "value", "Sum of all the voxel values.");
+                  "image", "x_length y_length z_length", "Length of each side of a voxel.");
     add_operation("--voxel_sum", &voxel_sum__image_3d_of_float,
                   function_type_t() << operand::e_image_3d_of_float,
-                  "image", "x_length y_length z_length", "Length of each side of a voxel.");
+                  "image", "value", "Sum over all the voxel values.");
     add_operation("--voxel_sum", &voxel_sum__image_3d_of_int,
                   function_type_t() << operand::e_image_3d_of_int,
-                  "image", "x_length y_length z_length", "Length of each side of a voxel.");
+                  "image", "value", "Sum over all the voxel values.");
 
     // Check they are correctly sorted.
     vcl_vector<vcl_string>::iterator it=names_.begin(), end=names_.end();
