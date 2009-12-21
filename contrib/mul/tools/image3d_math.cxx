@@ -708,15 +708,24 @@ void save_to_mat__image_3d_of_int__string(opstack_t& s)
   vimt3d_image_3d_of<int> o2(s[1].as_image_3d_of_int());
   const vil3d_image_view<int>& o2_image = o2.image();;
 
-  vcl_ofstream output(o1.c_str());
+  vcl_ofstream output_file;
+  vcl_ostream *output;
 
-  if (!output)
+  if (o1 == "-")
+    output = &vcl_cout;
+  else
+  {
+    output_file.open(o1.c_str());
+    output = &output_file;
+  }
+
+  if (!*output)
     mbl_exception_throw_os_error(o1);
 
   // copy precision length from console to output file
-  output.precision(vcl_cout.precision());
+  output->precision(vcl_cout.precision());
 
-  output <<
+  (*output) <<
     "# Created by vxl/image3d_math\n"
     "# name: image3d\n"
     "# type: matrix\n"
@@ -726,7 +735,7 @@ void save_to_mat__image_3d_of_int__string(opstack_t& s)
   for (unsigned k=0;k<o2_image.nk();++k)
     for (unsigned j=0;j<o2_image.nj();++j)
       for (unsigned i=0;i<o2_image.ni();++i)
-        output <<  o2_image(i,j,k) << '\n';
+        (*output) <<  o2_image(i,j,k) << '\n';
 
   s.pop_front();
   s.pop_front();
@@ -741,15 +750,25 @@ void save_to_mat__image_3d_of_float__string(opstack_t& s)
   vimt3d_image_3d_of<float> o2(s[1].as_image_3d_of_float());
   const vil3d_image_view<float>& o2_image = o2.image();;
 
-  vcl_ofstream output(o1.c_str());
 
-  if (!output)
+  vcl_ofstream output_file;
+  vcl_ostream *output;
+
+  if (o1 == "-")
+    output = &vcl_cout;
+  else
+  {
+    output_file.open(o1.c_str());
+    output = &output_file;
+  }
+
+  if (!*output)
     mbl_exception_throw_os_error(o1);
 
   // copy precision length from console to output file
-  output.precision(vcl_cout.precision());
+  output->precision(vcl_cout.precision());
 
-  output <<
+  (*output) <<
     "# Created by vxl/image3d_math\n"
     "# name: image3d\n"
     "# type: matrix\n"
@@ -759,7 +778,7 @@ void save_to_mat__image_3d_of_float__string(opstack_t& s)
   for (unsigned k=0;k<o2_image.nk();++k)
     for (unsigned j=0;j<o2_image.nj();++j)
       for (unsigned i=0;i<o2_image.ni();++i)
-        output <<  o2_image(i,j,k) << '\n';
+        (*output) <<  o2_image(i,j,k) << '\n';
 
   s.pop_front();
   s.pop_front();
@@ -775,15 +794,25 @@ void save_to_mat__image_3d_of_double__string(opstack_t& s)
   vimt3d_image_3d_of<double> o2(s[1].as_image_3d_of_double());
   const vil3d_image_view<double>& o2_image = o2.image();;
 
-  vcl_ofstream output(o1.c_str());
 
-  if (!output)
+  vcl_ofstream output_file;
+  vcl_ostream *output;
+
+  if (o1 == "-")
+    output = &vcl_cout;
+  else
+  {
+    output_file.open(o1.c_str());
+    output = &output_file;
+  }
+
+  if (!*output)
     mbl_exception_throw_os_error(o1);
 
   // copy precision length from console to output file
-  output.precision(vcl_cout.precision());
+  output->precision(vcl_cout.precision());
 
-  output <<
+  (*output) <<
     "# Created by vxl/image3d_math\n"
     "# name: image3d\n"
     "# type: matrix\n"
@@ -793,7 +822,7 @@ void save_to_mat__image_3d_of_double__string(opstack_t& s)
   for (unsigned k=0;k<o2_image.nk();++k)
     for (unsigned j=0;j<o2_image.nj();++j)
       for (unsigned i=0;i<o2_image.ni();++i)
-        output <<  o2_image(i,j,k) << '\n';
+        (*output) <<  o2_image(i,j,k) << '\n';
 
   s.pop_front();
   s.pop_front();
