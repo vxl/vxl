@@ -105,6 +105,7 @@ boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::construct_tree(vcl_vector
   return root;
 }
 
+
 //: Destructor. Deleted all cells
 template <class T_loc,class T_data>
 boct_tree<T_loc,T_data>::~boct_tree()
@@ -442,25 +443,56 @@ void boct_tree<T_loc,T_data>::b_read(vsl_b_istream & is)
      break;
    case 2:
    {
-     vsl_b_read(is, num_levels_);
-     vsl_b_read(is, global_bbox_);
-     unsigned num_cells;
-     vsl_b_read(is, num_cells);
-     boct_loc_code<T_loc> code;
-     vcl_vector<boct_tree_cell<T_loc,T_data> > cells(num_cells);
-     T_data data;
-     for (unsigned i=0; i<num_cells; i++) {
-       vsl_b_read(is, code);
-       vsl_b_read(is, data);
-       boct_tree_cell<T_loc,T_data> cell(code);
-       cell.set_data(data);
-       cells[i]=cell;
-     }
-     boct_tree_cell<T_loc,T_data>* root = construct_tree(cells,num_levels_);
+       vsl_b_read(is, num_levels_);
+       vsl_b_read(is, global_bbox_);
+       unsigned num_cells;
+       vsl_b_read(is, num_cells);
+
+       boct_loc_code<T_loc> code;
+       T_data data;
+       boct_tree_cell<T_loc,T_data>* root;
+       if (num_levels_>0) {
+           code.set_code(0,0,0);
+           code.set_level(num_levels_-1);
+           root=new boct_tree_cell<T_loc,T_data>( code);
+       }
+       else {
+           vcl_cerr << "boct_tree: the tree max level is 0, cannot create a tree!\n";
+           return ;
+       }
+
+       for (unsigned i=0; i<num_cells; i++) {
+           vsl_b_read(is, code);
+           vsl_b_read(is, data);
+
+           // temporary pointer to traverse
+           boct_tree_cell<T_loc,T_data>* curr_cell=root;
+           short curr_level=num_levels_-1;
+           short level=code.level;
+           while (curr_level>level)
+           {
+               if (curr_cell->is_leaf()) {
+                   curr_cell->split();
+               }
+               short child_index=code.child_index(curr_level);
+               if (child_index < 0)
+                   vcl_cout << "ERROR 1: child_index is " << child_index << vcl_endl;
+               curr_cell=curr_cell->children()+child_index;
+               --curr_level;
+           }
+
+           if (curr_cell->code_.isequal(&code))
+               // the place of the cell is found, put the data in
+               curr_cell->set_data(data);
+           else
+               vcl_cerr << "WRONG ERROR CODE OR CELL FOUND!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
+       }
+
      this->root_=root;
      this->root_level_ = num_levels_ -1;
      this->max_val_ = (double)(1<<root_level_);
      break;
+
    }
 
    default:
