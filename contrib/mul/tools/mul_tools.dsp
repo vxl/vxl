@@ -267,6 +267,9 @@ SOURCE=.\multiplane_image.cxx
 # Begin Source File
 SOURCE=.\tile_images_2d.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\image3d_split.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
