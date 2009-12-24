@@ -5,5 +5,6 @@
 
 #include <vpgl/bgeo/bgeo_lvcs_sptr.h>
 #include <vpgl/bgeo/bgeo_dll.h>
+#include <vpgl/bgeo/bgeo_sun_pos.h>
 
 int main() { return 0; }

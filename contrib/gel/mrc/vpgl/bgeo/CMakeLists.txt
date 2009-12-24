@@ -7,6 +7,7 @@ SET(bgeo_sources
                              bgeo_earth_constants.h
   bgeo_utm.cxx               bgeo_utm.h
   bgeo_dll.h
+  bgeo_sun_pos.h             bgeo_sun_pos.cxx
 )
 AUX_SOURCE_DIRECTORY(Templates bgeo_sources)
 
