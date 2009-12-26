@@ -38,28 +38,26 @@ namespace boxm_proj_local_cam_process_globals
 }
 
 //: set input and output types
+// this process takes 4 inputs:
+// the camera and the (x,y,z) input coordinates
+// this process takes 2 outputs:
+// the (u,v) output coordinates
 bool boxm_proj_local_cam_process_cons(bprb_func_process& pro)
 {
   using namespace boxm_proj_local_cam_process_globals;
-  //this process takes 3 input:
-  //the filename of the image, the camera and the voxel world
   vcl_vector<vcl_string> input_types_(n_inputs_);
   unsigned  i=0;
   input_types_[i++] = "vpgl_camera_double_sptr";   // rational camera
-  input_types_[i++] = "float";   // X
+  input_types_[i++] = "float";   // x
   input_types_[i++] = "float";   // y
   input_types_[i++] = "float";   // z
-
-  if (!pro.set_input_types(input_types_))
-    return false;
-
-  //output
-  unsigned j = 0;
+  unsigned j=0;
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[j++] = "float"; // u
   output_types_[j++] = "float"; // v
 
-  return pro.set_output_types(output_types_);
+  return pro.set_input_types(input_types_) &&
+         pro.set_output_types(output_types_);
 }
 
 
@@ -96,10 +94,10 @@ bool boxm_proj_local_cam_process(bprb_func_process& pro)
   //Store outputs
   unsigned j = 0;
   // update the camera and store
-  pro.set_output_val<float>(j++, u);
-  pro.set_output_val<float>(j++, v);
+  pro.set_output_val<float>(j++, float(u));
+  pro.set_output_val<float>(j++, float(v));
 
-  vcl_cout<<"(u,v):"<<u<<','<<v<<'\n';
+  vcl_cout<<"(u,v):"<<u<<','<<v<<vcl_endl;
   return true;
 }
 
