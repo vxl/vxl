@@ -21,7 +21,6 @@
 
 #include <bsta/bsta_von_mises.h>
 #include <bsta/bsta_attributes.h>
-#include <vnl/vnl_numeric_traits.h>
 #include <vcl_algorithm.h>
 #include <vcl_cmath.h>
 #include <vcl_vector.h>
@@ -40,7 +39,7 @@ class bsta_von_mises_updater
   enum { data_dimension = von_mises_dist_::data_dimension };
   //: for compatiblity with vpdl/vpdt
   typedef typename von_mises_dist_::field_type field_type;
-  
+
   // Constructor
   // initial_kappa_ is assigned when only one sample has been observed
   bsta_von_mises_updater(math_t kappa= math_t(10000)):
@@ -62,7 +61,6 @@ class bsta_von_mises_updater
   void update(obs_vm_dist_& pdist, const vect_t& vsum, math_t alpha) const;
   math_t initial_kappa_;
 };
-
 
 
 #endif // bsta_von_mises_updater_h_
