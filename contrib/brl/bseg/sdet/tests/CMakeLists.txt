@@ -9,7 +9,7 @@ ADD_EXECUTABLE(sdet_test_all
   test_region_proc.cxx
   test_gauss_fit.cxx
 )
-TARGET_LINK_LIBRARIES(sdet_test_all sdet vtol vil1 testlib)
+TARGET_LINK_LIBRARIES(sdet_test_all sdet vtol vil1 vnl_algo vnl testlib)
 
 ADD_TEST(sdet_test_detector    ${EXECUTABLE_OUTPUT_PATH}/sdet_test_all test_detector ${CMAKE_CURRENT_SOURCE_DIR}/jar-closeup.tif)
 ADD_TEST(sdet_test_region_proc ${EXECUTABLE_OUTPUT_PATH}/sdet_test_all test_region_proc ${CMAKE_CURRENT_SOURCE_DIR}/jar-closeup.tif)

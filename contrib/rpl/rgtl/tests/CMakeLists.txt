@@ -20,7 +20,7 @@ ENDFOREACH(name)
 
 # Create the test executable.
 ADD_EXECUTABLE(rgtl_test_all ${test_srcs})
-TARGET_LINK_LIBRARIES(rgtl_test_all rgtl vul testlib)
+TARGET_LINK_LIBRARIES(rgtl_test_all rgtl vnl vul testlib)
 
 # Add the tests.
 FOREACH(name ${test_names})

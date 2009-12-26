@@ -9,16 +9,9 @@ ADD_EXECUTABLE ( bnl_algo_test_all
    test_legendre_polynomial.cxx
 )
 
-TARGET_LINK_LIBRARIES( bnl_algo_test_all bnl_algo testlib )
-
+TARGET_LINK_LIBRARIES( bnl_algo_test_all bnl_algo vnl testlib )
 
 ADD_TEST( bnl_algo_test_legendre      bnl_algo_test_all test_legendre_polynomial)
 
-
 ADD_EXECUTABLE( bnl_algo_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( bnl_algo_test_include bnl_algo )
-
-
-
-
-

@@ -23,7 +23,7 @@ AUX_SOURCE_DIRECTORY(Templates gmvl_sources)
 ADD_LIBRARY(gmvl ${gmvl_sources})
 INSTALL_TARGETS(/lib gmvl)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/gel/gmvl ${gmvl_sources})
-TARGET_LINK_LIBRARIES(gmvl vtol vil1 vbl vcl)
+TARGET_LINK_LIBRARIES(gmvl vtol vil1 vnl vbl vcl)
 
 IF (BUILD_EXAMPLES)
   SUBDIRS(examples)

@@ -48,11 +48,10 @@ SET( vpdl_sources
 AUX_SOURCE_DIRECTORY(Templates vpdl_sources)
 
 ADD_LIBRARY(vpdl ${vpdl_sources})
-TARGET_LINK_LIBRARIES( vpdl vnl_algo )
+TARGET_LINK_LIBRARIES( vpdl vnl_algo vnl )
 
 INSTALL_TARGETS(/lib vpdl)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vpdl ${vpdl_sources})
-
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)

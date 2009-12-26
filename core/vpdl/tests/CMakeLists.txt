@@ -14,7 +14,7 @@ ADD_EXECUTABLE( vpdl_test_all
   test_kernel_gaussian_sfbw.cxx
 )
 
-TARGET_LINK_LIBRARIES( vpdl_test_all vpdl vnl_algo testlib)
+TARGET_LINK_LIBRARIES( vpdl_test_all vpdl vnl_algo vnl testlib)
 
 ADD_TEST( vpdl_test_eigen_sym_matrix      vpdl_test_all test_eigen_sym_matrix )
 ADD_TEST( vpdl_test_gaussian_sphere       vpdl_test_all test_gaussian_sphere )

@@ -6,7 +6,7 @@ ADD_EXECUTABLE( mcal_test_all
   test_trivial_ca.cxx
   test_general_ca.cxx
   )
-TARGET_LINK_LIBRARIES( mcal_test_all mcal testlib )
+TARGET_LINK_LIBRARIES( mcal_test_all mcal vnl testlib )
 
 ADD_TEST( mcal_test_pca ${EXECUTABLE_OUTPUT_PATH}/mcal_test_all test_pca)
 ADD_TEST( mcal_test_trivial_ca ${EXECUTABLE_OUTPUT_PATH}/mcal_test_all test_trivial_ca)

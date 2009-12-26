@@ -6,7 +6,7 @@ ADD_EXECUTABLE( mipa_test_all
   test_sample_histo_boxes.cxx
   test_vector_normalisers.cxx
 )
-TARGET_LINK_LIBRARIES( mipa_test_all mipa testlib )
+TARGET_LINK_LIBRARIES( mipa_test_all mipa vnl testlib )
 
 ADD_TEST( mipa_test_sample_histo_boxes ${EXECUTABLE_OUTPUT_PATH}/mipa_test_all
 test_sample_histo_boxes)

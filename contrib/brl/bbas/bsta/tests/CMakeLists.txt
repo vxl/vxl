@@ -17,7 +17,7 @@ ADD_EXECUTABLE( bsta_test_all
   test_beta.cxx
 )
 
-TARGET_LINK_LIBRARIES( bsta_test_all bsta vpl vsl vbl vbl_io testlib)
+TARGET_LINK_LIBRARIES( bsta_test_all bsta vnl vpl vbl_io vsl vbl testlib )
 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/beta_distr_2_2.txt ${CMAKE_CURRENT_BINARY_DIR}/beta_distr_2_2.txt COPYONLY )
 

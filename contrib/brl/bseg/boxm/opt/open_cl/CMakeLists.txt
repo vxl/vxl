@@ -16,7 +16,7 @@ IF(OPENCL_FOUND)
   AUX_SOURCE_DIRECTORY(Templates boxm_opt_opencl_sources)
   ADD_LIBRARY(boxm_opt_opencl ${boxm_opt_opencl_sources})
 
-  TARGET_LINK_LIBRARIES(boxm_opt_opencl boxm_opt boxm bprb bgeo vgl vbl vbl_io ${OPENCL_LIBRARIES})
+  TARGET_LINK_LIBRARIES(boxm_opt_opencl boxm_opt boxm bprb bgeo vnl vgl vbl vbl_io ${OPENCL_LIBRARIES})
 
 SUBDIRS(tests)
 ENDIF(OPENCL_FOUND)

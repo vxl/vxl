@@ -9,12 +9,8 @@ SET( bsta_vis_sources
 
 ADD_LIBRARY( bsta_vis  ${bsta_vis_sources} )
 
-TARGET_LINK_LIBRARIES( bsta_vis bsta bsvg)
+TARGET_LINK_LIBRARIES( bsta_vis bsta bsvg vnl )
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)
 ENDIF( BUILD_TESTING )
-
-
-
-
