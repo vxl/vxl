@@ -2,7 +2,6 @@
 // \file
 #include <testlib/testlib_test.h>
 #include <bsta/bsta_beta.h>
-#include <vnl/vnl_random.h>
 #include <bsta/bsta_histogram.h>
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
@@ -24,22 +23,22 @@ void test_beta()
   val = beta2.prob_density(1.0);
   TEST_NEAR("beta distribution of (2,5) at 1.0"   , val,  0.0 ,1e-06);
   val = beta2.prob_density(0.2);
-  TEST_NEAR("beta distribution of (2,5) at 0.2"   , val,  2.4576 ,1e-06);  
+  TEST_NEAR("beta distribution of (2,5) at 0.2"   , val,  2.4576 ,1e-06);
 
   // test cumulative distribution function
   bsta_beta<double> beta3(2,5);
   double v1 = beta3.cum_dist_funct(0);
-  TEST_NEAR("cumulative distribution function at x=0", v1, 0.0 ,1e-06);  
+  TEST_NEAR("cumulative distribution function at x=0", v1, 0.0 ,1e-06);
 
   double v2 = beta3.cum_dist_funct(1);
-  TEST_NEAR("cumulative distribution function at x=1", v2, 1.0 ,1e-06);  
+  TEST_NEAR("cumulative distribution function at x=1", v2, 1.0 ,1e-06);
 
   double ax = beta3.cum_dist_funct(0.2);
   bsta_beta<double> betat(5,2);
   double ay = 1 - betat.cum_dist_funct(0.8);
-  TEST_NEAR("cumulative distribution function  equal at x,(a,b) and (1-x),(b,a)", ax, ay ,1e-06);  
- 
-  // read the samples from a txt file, 
+  TEST_NEAR("cumulative distribution function  equal at x,(a,b) and (1-x),(b,a)", ax, ay ,1e-06);
+
+  // read the samples from a txt file,
   // extract the parameters from a set of data
   vcl_ifstream is("beta_distr_2_2.txt");
   double alpha=2, beta=2;
