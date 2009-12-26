@@ -9,7 +9,6 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_calibration_matrix.h>
 #include <vsl/vsl_binary_io.h>
-#include <vul/vul_file.h>
 
 //: Init function
 bool vpgl_scale_perspective_camera_process_cons(bprb_func_process& pro)
@@ -18,7 +17,7 @@ bool vpgl_scale_perspective_camera_process_cons(bprb_func_process& pro)
   vcl_vector<vcl_string> input_types(5);
   input_types[0] = "vpgl_camera_double_sptr";// input camera
   // the revised K matrix (no skew)
-  input_types[1] = "double";// K[0][0] - u scale 
+  input_types[1] = "double";// K[0][0] - u scale
   input_types[2] = "double";// K[0][2] - principal point (u)
   input_types[3] = "double";// K[1][1] - v scale
   input_types[4] = "double";// K[1][2] - principal point (v)
@@ -37,14 +36,14 @@ bool vpgl_scale_perspective_camera_process_cons(bprb_func_process& pro)
 bool vpgl_scale_perspective_camera_process(bprb_func_process& pro)
 {
    // Sanity check
-  if(!pro.verify_inputs()){
-    vcl_cerr << "vpgl_scale_perspective_camera_process: Invalid inputs" << vcl_endl;
+  if (!pro.verify_inputs()) {
+    vcl_cerr << "vpgl_scale_perspective_camera_process: Invalid inputs\n";
     return false;
   }
   // get the inputs
   vpgl_camera_double_sptr cam_ptr = pro.get_input<vpgl_camera_double_sptr>(0);
   vpgl_perspective_camera<double>* cam = dynamic_cast<vpgl_perspective_camera<double>*>(cam_ptr.ptr());
-  if(!cam){
+  if (!cam) {
     vcl_cerr << "vpgl_scale_perspective_camera_process: couldn't cast camera\n";
     return false;
   }

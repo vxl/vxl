@@ -19,7 +19,6 @@
 #include <vcl_iostream.h>
 #include <vcl_limits.h>
 #include <vpl/vpl.h>
-#include <vul/vul_file.h>
 
 class bvpl_vector_operator
 {
