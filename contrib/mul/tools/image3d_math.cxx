@@ -38,7 +38,8 @@
 #include <vimt3d/vimt3d_transform_3d.h>
 #include <vimt3d/vimt3d_add_all_loaders.h>
 #include <vimt3d/vimt3d_resample_trilinear.h>
-
+#include <vgl/vgl_vector_3d.h>
+#include <vgl/vgl_point_3d.h>
 
 //=========================================================================
 // Static function to create a static logger when first required
@@ -345,7 +346,7 @@ static named_store_t named_store;
 void print_operations(vcl_ostream&);
 
 //: Operation implementation
-void help(opstack_t& s)
+void help(opstack_t& )
 {
   vcl_cerr <<
     "usage: image3d_math [--operand | operation] [--operand | operation] ... --operand\n"
@@ -939,17 +940,17 @@ void convert_to_int__image_3d_of_double(opstack_t& s)
   s.push_front(operand(result));
 }
 
-void option_load_as_image_int(opstack_t& s)
+void option_load_as_image_int(opstack_t& )
 {
   global_option_load_as_image = image3d_int_t;
 }
 
-void option_load_as_image_double(opstack_t& s)
+void option_load_as_image_double(opstack_t& )
 {
   global_option_load_as_image = image3d_double_t;
 }
 
-void option_load_as_image_float(opstack_t& s)
+void option_load_as_image_float(opstack_t& )
 {
   global_option_load_as_image = image3d_float_t;
 }
@@ -1744,4 +1745,4 @@ int main(int argc, char*argv[])
 {
   vcl_cerr << "ERROR: image3d_math needs exception support to compile properly.\n";
 }
-#endif
+#endif // VCL_HAS_EXCEPTIONS

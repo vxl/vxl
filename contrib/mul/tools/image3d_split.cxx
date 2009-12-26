@@ -19,7 +19,6 @@
 #include <vul/vul_file.h>
 #include <vul/vul_string.h>
 #include <vimt3d/vimt3d_vil3d_v3i.h>
-#include <vgl/vgl_point_3d.h>
 
 //=========================================================================
 // Static function to create a static logger when first required
@@ -70,7 +69,7 @@ int main2(int argc, char*argv[])
     output_format = output_format_arg();
   MBL_LOG(INFO, logger(), "Output format: " << output_format);
 
- 
+
   // Load the image.
 
   vimt3d_add_all_loaders();
@@ -83,7 +82,7 @@ int main2(int argc, char*argv[])
   }
 
   MBL_LOG(INFO, logger(), "Loaded input image_resource: " << ir->ni() << " x " <<
-   ir->nj() << " x " << ir->nk() << " x " << ir->nplanes());
+          ir->nj() << " x " << ir->nk() << " x " << ir->nplanes());
 
   vimt3d_transform_3d w2i = vimt3d_load_transform(ir, use_millimeters);
 
@@ -113,39 +112,39 @@ int main2(int argc, char*argv[])
   }
   else
   {
-    blockwidth_k = vcl_min<unsigned long>(nk, 
-      vnl_math_rnd(vnl_math_cuberoot(static_cast<double>(max_voxels))) );
+    blockwidth_k = vcl_min<unsigned long>(nk,
+                                          vnl_math_rnd(vnl_math_cuberoot(static_cast<double>(max_voxels))) );
     blockcount_k = (nk+blockwidth_k-1) / blockwidth_k;
-    blockwidth_j = vcl_min<unsigned long>(nj, vnl_math_rnd(
-      vcl_sqrt(static_cast<double>(max_voxels/blockwidth_k)) ));
+    blockwidth_j = vcl_min<unsigned long>(nj,
+                                          vnl_math_rnd(vcl_sqrt(static_cast<double>(max_voxels/blockwidth_k))));
     blockcount_j = (nj+blockwidth_j-1) / blockwidth_j;
     blockwidth_i = vcl_min<unsigned long>(ni,  max_voxels / (blockwidth_k*blockwidth_j));
     blockcount_i = (ni+blockwidth_i-1) / blockwidth_i;
   }
 
-  MBL_LOG(INFO, logger(), "block sizes: " << blockwidth_i << ',' << blockwidth_i
-    << ',' << blockwidth_k << " block counts: " << blockcount_i << ',' << blockcount_i
-    << ',' << blockcount_k);
+  MBL_LOG(INFO, logger(), "block sizes: " << blockwidth_i << ',' << blockwidth_i <<
+          ',' << blockwidth_k << " block counts: " << blockcount_i << ',' << blockcount_i <<
+          ',' << blockcount_k);
 
 
   // Figure out output filename pattern.
 
   vcl_string filename_pattern;
-  
+
   if (label_seq())
     filename_pattern = vul_sprintf("%%0%dd",
-      vnl_math_floor( vcl_log10( static_cast<double>(
-        blockcount_i*blockcount_j*blockcount_k )))+1 );
+                                   vnl_math_floor( vcl_log10( static_cast<double>(
+                                     blockcount_i*blockcount_j*blockcount_k )))+1 );
   else
     filename_pattern = vul_sprintf("%%0%dd%%0%dd%%0%dd",
-      vnl_math_floor(vcl_log10(static_cast<double>(blockcount_i)))+1, 
-      vnl_math_floor(vcl_log10(static_cast<double>(blockcount_j)))+1,
-      vnl_math_floor(vcl_log10(static_cast<double>(blockcount_k)))+1 );
+                                   vnl_math_floor(vcl_log10(static_cast<double>(blockcount_i)))+1,
+                                   vnl_math_floor(vcl_log10(static_cast<double>(blockcount_j)))+1,
+                                   vnl_math_floor(vcl_log10(static_cast<double>(blockcount_k)))+1 );
 
   if (replace_str.set())
   {
     vcl_string::size_type n = img_dst().find(replace_str());
-    if (n==vcl_string::npos) 
+    if (n==vcl_string::npos)
     {
       vcl_cerr << "ERROR: Could not find replace string \"" << replace_str() <<
         "\" in \"" << img_dst() << "\"\n";
@@ -176,7 +175,7 @@ int main2(int argc, char*argv[])
         vcl_string filename;
         if (label_seq())
           filename = vul_sprintf(filename_pattern.c_str(),
-            i + j*blockcount_i + k*blockcount_i*blockcount_j );
+                                 i + j*blockcount_i + k*blockcount_i*blockcount_j );
         else
           filename = vul_sprintf(filename_pattern.c_str(), i, j, k);
 
@@ -191,7 +190,7 @@ int main2(int argc, char*argv[])
         vimt3d_transform_3d trans;
         trans.set_translation(-double(i0), -double(j0), -double(k0));
         vimt3d_save_transform(ir2, trans*w2i, use_millimeters);
-        
+
         vimt3d_vil3d_v3i_image* v3i_ir2 = dynamic_cast<vimt3d_vil3d_v3i_image *>(ir2.as_pointer());
         if (v3i_ir2)
           v3i_ir2->set_world2im(trans*w2i);
