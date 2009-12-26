@@ -22,5 +22,5 @@ IF(EXPAT_FOUND)
 
   ADD_LIBRARY(boxm_opt_pro ${boxm_opt_pro_sources} )
 
-  TARGET_LINK_LIBRARIES(boxm_opt_pro boxm_opt boxm_io bprb brdb brip vsol)
+  TARGET_LINK_LIBRARIES(boxm_opt_pro boxm_opt boxm_io bprb brdb brip vsol vil)
 ENDIF(EXPAT_FOUND)

@@ -8,7 +8,7 @@ ADD_EXECUTABLE( vidl_test_all
   test_color.cxx
   test_convert.cxx
 )
-TARGET_LINK_LIBRARIES( vidl_test_all vidl vul testlib )
+TARGET_LINK_LIBRARIES( vidl_test_all vidl vil vul testlib )
 
 ADD_TEST( vidl_test_pixel_format             ${EXECUTABLE_OUTPUT_PATH}/vidl_test_all  test_pixel_format )
 ADD_TEST( vidl_test_pixel_iterator           ${EXECUTABLE_OUTPUT_PATH}/vidl_test_all  test_pixel_iterator )

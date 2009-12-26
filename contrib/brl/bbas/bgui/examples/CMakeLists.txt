@@ -8,5 +8,5 @@ IF( HAS_VGUI )
  TARGET_LINK_LIBRARIES(basic02_graph_tableau bgui vgui)
 
  ADD_EXECUTABLE( basic03_image_tableau basic03_image_tableau.cxx)
- TARGET_LINK_LIBRARIES(basic03_image_tableau bgui vgui)
+ TARGET_LINK_LIBRARIES(basic03_image_tableau bgui vgui vil)
 ENDIF( HAS_VGUI )

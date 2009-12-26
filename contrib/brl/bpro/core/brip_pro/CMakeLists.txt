@@ -1,6 +1,5 @@
 # brl/bpro/core/brip_pro/CMakeLists.txt
 
-
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro/core )
@@ -14,4 +13,4 @@ AUX_SOURCE_DIRECTORY(Templates brip_pro_sources)
 AUX_SOURCE_DIRECTORY(processes brip_pro_sources)
 
 ADD_LIBRARY(brip_pro ${brip_pro_sources})
-TARGET_LINK_LIBRARIES(brip_pro bprb brdb brip vil_pro vsl)
+TARGET_LINK_LIBRARIES(brip_pro bprb brdb brip vil_pro vil vsl)
