@@ -1,6 +1,5 @@
 #ifndef bvxm_create_synth_lidar_data_process_h_
 #define bvxm_create_synth_lidar_data_process_h_
-
 //:
 // \file
 // \brief A process for creating synthetic lidar data for testing purposes
@@ -8,11 +7,11 @@
 //        and fills the lidar image with the height of the box
 //
 // \author Gamze Tunali
-// \date   04/04/2008
+// \date   April 4, 2008
 //
 // \verbatim
 //  Modifications
-// 
+//   <none yet>
 // \endverbatim
 
 
@@ -20,7 +19,6 @@
 #include <bprb/bprb_func_process.h>
 
 #include <vgl/vgl_box_3d.h>
-#include <vil/vil_image_view_base.h>
 #include <vpgl/vpgl_camera.h>
 
 #include "vpgl/file_formats/vpgl_geo_camera.h"

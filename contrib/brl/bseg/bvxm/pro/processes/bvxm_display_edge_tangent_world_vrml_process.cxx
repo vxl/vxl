@@ -4,8 +4,6 @@
 // \file
 #include <vul/vul_file.h>
 #include <bprb/bprb_func_process.h>
-#include <vil/vil_image_view_base.h>
-#include <vil/vil_image_view.h>
 #include <vpgl/vpgl_camera.h>
 
 #include <bvxm/bvxm_voxel_world.h>
@@ -39,7 +37,7 @@ bool bvxm_display_edge_tangent_world_vrml_process(bprb_func_process& pro)
   //check number of inputs
   if (!pro.verify_inputs())
   {
-    vcl_cerr << pro.name() << " invalid inputs " <<  vcl_endl;
+    vcl_cerr << pro.name() << " invalid inputs\n";
     return false;
   }
 
@@ -48,7 +46,7 @@ bool bvxm_display_edge_tangent_world_vrml_process(bprb_func_process& pro)
   vcl_string vrml_path = pro.get_input<vcl_string>(1);
   vcl_string gnd_truth_path = pro.get_input<vcl_string>(2);
   edge_proc.display_edge_tangent_world_vrml(vrml_path);
-  if(gnd_truth_path != ""){
+  if (gnd_truth_path != "") {
     vcl_string gnd_truth_path_vrml = vul_file::strip_extension(vrml_path);
     gnd_truth_path_vrml += "_gnd_truth.wrl";
     edge_proc.display_ground_truth(gnd_truth_path, gnd_truth_path_vrml);

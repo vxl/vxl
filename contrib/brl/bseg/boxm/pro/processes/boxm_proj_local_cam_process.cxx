@@ -24,8 +24,8 @@
 
 #include <brip/brip_roi.h>
 
-#include <vil/file_formats/vil_nitf2_image.h>
-#include <vil/vil_image_view_base.h>
+//#include <vil/file_formats/vil_nitf2_image.h> // unused?
+//#include <vil/vil_image_view_base.h> // unused?
 #include <vpgl/vpgl_local_rational_camera.h>
 
 #include <bprb/bprb_parameters.h>

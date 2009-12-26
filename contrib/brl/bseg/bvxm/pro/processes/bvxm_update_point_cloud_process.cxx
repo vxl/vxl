@@ -1,26 +1,26 @@
 //This is brl/bseg/bvxm/pro/processes/bvxm_update_point_cloud_process.cxx
-
+#include "bvxm_update_point_cloud_process.h"
 //:
 // \file
+
 #include <brdb/brdb_value.h>
 #include <bprb/bprb_parameters.h>
 
-#include <vil/vil_image_view_base.h>
 #include <vpgl/vpgl_camera.h>
 #include <vgl/vgl_point_3d.h>
 
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/bvxm_image_metadata.h>
 #include <bvxm/bvxm_mog_grey_processor.h>
-#include "bvxm_update_point_cloud_process.h"
 
 struct compare_point_3d
 {
-    bool operator()(const vgl_point_3d<float> &a, const vgl_point_3d<float>  &b) 
-    {
-        return a.z() > b.z();
-    }
+  bool operator()(const vgl_point_3d<float> &a, const vgl_point_3d<float>  &b)
+  {
+      return a.z() > b.z();
+  }
 };
+
 bool bvxm_update_point_cloud_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_update_point_cloud_process_globals;
@@ -37,11 +37,7 @@ bool bvxm_update_point_cloud_process_cons(bprb_func_process& pro)
   input_types_[2] = "float";
   input_types_[3] = "float";
   input_types_[4] = "bool";
-  if (!pro.set_input_types(input_types_))
-    return false;
-
-
-  return true;
+  return pro.set_input_types(input_types_);
 }
 
 bool bvxm_update_point_cloud_process(bprb_func_process& pro)
@@ -64,7 +60,7 @@ bool bvxm_update_point_cloud_process(bprb_func_process& pro)
   bool use_opinion = pro.get_input<bool>(i++);
 
   vcl_ifstream ifile(point_filename.c_str());
-  if(!ifile)
+  if (!ifile)
   {
     vcl_cout<<"Failed to open "<<point_filename<<vcl_endl;
     return false;
@@ -72,25 +68,24 @@ bool bvxm_update_point_cloud_process(bprb_func_process& pro)
 
   vcl_vector<vgl_point_3d<float> > point_cloud;
   float x,y,z;
-  
+
   //: read the file to obtain min, max
-  while(ifile)
+  while (ifile)
   {
-      
-      ifile>>x>>y>>z;
-      vgl_point_3d<float> p3d(x,y,z);
-      point_cloud.push_back(p3d);
+    ifile>>x>>y>>z;
+    vgl_point_3d<float> p3d(x,y,z);
+    point_cloud.push_back(p3d);
   }
   vcl_sort(point_cloud.begin(), point_cloud.end(), compare_point_3d());
   bool result=true;
   if (!use_opinion)
   {
-      result =result && world->update_point_cloud<OCCUPANCY>(point_cloud);
+    result =result && world->update_point_cloud<OCCUPANCY>(point_cloud);
   }
   else {
-      vcl_cout << "Working with opinion!" << vcl_endl;
-      result =result && world->update_point_cloud<OCCUPANCY_OPINION>(point_cloud);
-  } 
+    vcl_cout << "Working with opinion!" << vcl_endl;
+    result =result && world->update_point_cloud<OCCUPANCY_OPINION>(point_cloud);
+  }
 
   return result;
 }
