@@ -7,6 +7,7 @@
 #include <vgl/vgl_line_3d_2_points.h>
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_closest_point.h>
+#include <vil/algo/vil_colour_space.h>
 
 //: project a unit radius sphere onto the cube circumscribing it using gnomonic projection
 void bvpl_direction_to_color_map::project_sphereical_samples_to_cubes(vcl_vector<vgl_point_3d<double> > & proj_on_cube)
@@ -265,9 +266,9 @@ void bvpl_convert_grid_to_hsv_grid(bvxm_voxel_grid<vnl_float_4> *grid,
 
 
 void bvpl_convert_id_grid_to_hsv_grid(bvxm_voxel_grid<int> *id_grid,
-                                   bvxm_voxel_grid<float> *response_grid,
-                                   bvxm_voxel_grid<vnl_float_4> *out_grid,
-                                   vcl_vector<float> colors)
+                                      bvxm_voxel_grid<float> *response_grid,
+                                      bvxm_voxel_grid<vnl_float_4> *out_grid,
+                                      vcl_vector<float> colors)
 {
   bvxm_voxel_grid<float>::iterator response_grid_it = response_grid->begin();
    //calculate max response and normalize the range from 0-1
@@ -302,31 +303,30 @@ void bvpl_convert_id_grid_to_hsv_grid(bvxm_voxel_grid<int> *id_grid,
     bvxm_voxel_slab<vnl_float_4>::iterator out_slab_it = (*out_grid_it).begin();
     for (; id_slab_it!=(*id_grid_it).end(); ++id_slab_it ,++response_slab_it, ++ out_slab_it)
     {
-      if(*id_slab_it<0){//negative ids are unitialized voxels
+      if (*id_slab_it<0) {//negative ids are unitialized voxels
         (*out_slab_it)=vnl_float_4(0,0,0,0);
-      } 
-      else{
+      }
+      else {
          col=colors[*id_slab_it]*360.0f;
         vil_colour_space_HSV_to_RGB<float>(col,1.0f,255.0f,&r,&g,&b);
         float alpha;
-        if(max -min < 1e-15)
+        if (max -min < 1e-15)
           alpha = (*response_slab_it)/max *255.0;
         else
           alpha=(((*response_slab_it)-min)/(max - min))*255.0f;
-        
+
        //  alpha = (*response_slab_it) > 1e-15 ? 255.0f:0.0f;
         //vnl_float_4 this_feature(r,g,b,alpha);
         (*out_slab_it)=vnl_float_4(r,g,b,alpha);
       }
-      
     }
   }
 }
 
 void bvpl_convert_id_grid_to_hsv_grid(bvxm_voxel_grid<int> *id_grid,
-                                   bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1> > *response_grid,
-                                   bvxm_voxel_grid<vnl_float_4> *out_grid,
-                                   vcl_vector<float> colors)
+                                      bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1> > *response_grid,
+                                      bvxm_voxel_grid<vnl_float_4> *out_grid,
+                                      vcl_vector<float> colors)
 {
   bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1> >::iterator response_grid_it = response_grid->begin();
    //calculate max response and normalize the range from 0-1
@@ -374,7 +374,6 @@ void bvpl_convert_id_grid_to_hsv_grid(bvxm_voxel_grid<int> *id_grid,
 
 void bvpl_write_colors_to_svg(bvpl_kernel_vector_sptr kernel_vector, vcl_vector<float> hue_vector, vcl_string outfile)
 {
-  
   bsvg_document doc(600, hue_vector.size()*20);
 
   vcl_vector<float>::iterator iter = hue_vector.begin();
