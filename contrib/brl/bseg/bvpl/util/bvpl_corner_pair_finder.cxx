@@ -1,7 +1,7 @@
 #include "bvpl_corner_pair_finder.h"
 #include <bvpl/bvpl_subgrid_iterator.h>
 #include <vnl/vnl_math.h>
-
+#include <vil/algo/vil_colour_space.h>
 
 void bvpl_convert_pair_grid_to_hsv_grid(bvxm_voxel_grid<bvpl_pair> *pair_grid,
                                         bvxm_voxel_grid<vnl_float_4> *out_grid,
