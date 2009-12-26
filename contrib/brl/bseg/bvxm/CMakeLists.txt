@@ -34,13 +34,13 @@ SET(bvxm_sources
     bvxm_edge_util.h                bvxm_edge_util.cxx
     bvxm_edge_ray_processor.h       bvxm_edge_ray_processor.cxx
     bvxm_von_mises_tangent_processor.h     bvxm_von_mises_tangent_processor.txx
-    bvxm_illum_util.h                     bvxm_illum_util.cxx	
+    bvxm_illum_util.h                     bvxm_illum_util.cxx
 )
 AUX_SOURCE_DIRECTORY(Templates bvxm_sources)
 
 ADD_LIBRARY( bvxm ${bvxm_sources})
 
-TARGET_LINK_LIBRARIES( bvxm bvxm_grid bsta bsta_algo vcl vgl vgl_io vnl vil vgl_algo vil_algo vpgl vpgl_file_formats vul vbl vsl bgeo brip sdet bil_algo)
+TARGET_LINK_LIBRARIES( bvxm bvxm_grid bsta bsta_algo vpgl vpgl_file_formats bgeo brip sdet bil_algo vgl_io vgl_algo vil_algo vnl_algo vnl vgl vil vul vbl vsl vcl)
 
 SUBDIRS( grid )
 SUBDIRS( io )

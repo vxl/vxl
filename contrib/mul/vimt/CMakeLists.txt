@@ -35,14 +35,13 @@ AUX_SOURCE_DIRECTORY(Templates vimt_sources)
 ADD_LIBRARY(vimt ${vimt_sources})
 INSTALL_TARGETS(/lib vimt)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/mul/vimt ${vimt_sources})
-TARGET_LINK_LIBRARIES(vimt mbl vil_algo )
+TARGET_LINK_LIBRARIES(vimt mbl vil_algo vgl vnl vil )
 
 SUBDIRS(algo)
 
 IF(BUILD_EXAMPLES)
   SUBDIRS(examples)
 ENDIF(BUILD_EXAMPLES)
-
 
 IF (BUILD_TESTING)
   SUBDIRS(tests)

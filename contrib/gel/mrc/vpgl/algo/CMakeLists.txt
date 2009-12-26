@@ -38,8 +38,7 @@ SET( vpgl_algo_sources
 AUX_SOURCE_DIRECTORY(Templates vpgl_algo_sources)
 
 ADD_LIBRARY(vpgl_algo ${vpgl_algo_sources})
-TARGET_LINK_LIBRARIES( vpgl_algo vpgl vpgl_file_formats rrel vgl_algo vsol vnl_algo vnl bgeo )
-
+TARGET_LINK_LIBRARIES( vpgl_algo vpgl vpgl_file_formats rrel vsol bgeo vgl_algo vnl_algo vnl vgl vil vul )
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)
@@ -50,4 +49,3 @@ IF( BUILD_EXAMPLES )
 ENDIF( BUILD_EXAMPLES )
 
 ENDIF(BUILD_RPL)
-

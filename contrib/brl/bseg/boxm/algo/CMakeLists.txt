@@ -8,7 +8,7 @@ SET(boxm_algo_sources
 
 ADD_LIBRARY(boxm_algo ${boxm_algo_sources})
 
-TARGET_LINK_LIBRARIES(boxm_algo boxm bvrml)
+TARGET_LINK_LIBRARIES(boxm_algo boxm bvrml vnl vil)
 
 #processes
 SUBDIRS(pro)

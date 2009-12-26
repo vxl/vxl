@@ -45,13 +45,10 @@ AUX_SOURCE_DIRECTORY(Templates brec_sources)
 
 ADD_LIBRARY(brec ${brec_sources})
 
-TARGET_LINK_LIBRARIES(brec bvxm bbgm bsta_algo bgrl2 bsta bvgl bxml vil vul brip vgl_algo)
+TARGET_LINK_LIBRARIES(brec bvxm bbgm bsta_algo bgrl2 bsta bvgl bxml brip vil_algo vgl_algo vnl_algo vnl vgl vil vul vbl)
 
 SUBDIRS( pro )
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)
 ENDIF( BUILD_TESTING )
-
-
-

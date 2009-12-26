@@ -9,4 +9,4 @@ SET(awfmfc_sources
 )
 
 ADD_EXECUTABLE(awfmfc ${awfmfc_sources})
-TARGET_LINK_LIBRARIES( awfmfc vgui )
+TARGET_LINK_LIBRARIES( awfmfc vgui vnl vul )

@@ -13,7 +13,7 @@ INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
 INCLUDE( ${MODULE_PATH}/UseVGUI.cmake )
 
 IF (HAS_VGUI)
-  # Optionally Build this library 
+  # Optionally Build this library
   OPTION(BUILD_BGUI3D "Build VGUI wrapper for Coin3d" NO)
 
   SET (HAS_BGUI3D "NO")
@@ -61,7 +61,7 @@ SET(bgui3d_sources
 
 ADD_LIBRARY(bgui3d  ${bgui3d_sources})
 SET(BGUI3D_FOUND "YES" CACHE INTERNAL "Was bgui3d successfully built?" )
-TARGET_LINK_LIBRARIES(bgui3d ${COIN3D_LIBRARY} vgui vpgl vnl vnl_algo)
+TARGET_LINK_LIBRARIES(bgui3d ${COIN3D_LIBRARY} vgui vpgl vnl_algo vnl vgl_algo vgl vul)
 
 IF (SIMVOLEON_FOUND)
   TARGET_LINK_LIBRARIES(bgui3d ${SIMVOLEON_LIBRARY})

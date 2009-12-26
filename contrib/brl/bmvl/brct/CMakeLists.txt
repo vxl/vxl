@@ -42,7 +42,7 @@ ADD_LIBRARY(brct ${brct_sources})
 INSTALL_TARGETS(/lib brct)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bmvl/brct ${brct_sources})
 
-TARGET_LINK_LIBRARIES(brct sdet brip rrel bsol vpgl gevd vdgl vsol mvl vil vil1 vgl_algo vgl vnl vbl bdgl bugl)
+TARGET_LINK_LIBRARIES(brct sdet brip rrel bsol vpgl gevd vdgl vsol mvl bdgl bugl vil vil1 vgl_algo vgl vnl_algo vnl vbl)
 IF (BUILD_UNMAINTAINED_LIBRARIES OR BUILD_FOR_VXL_DASHBOARD)
   # vsrl is only used by brct_dense_reconstructor
   TARGET_LINK_LIBRARIES(brct vsrl)

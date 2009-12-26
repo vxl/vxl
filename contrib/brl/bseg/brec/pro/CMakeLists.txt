@@ -19,9 +19,8 @@ AUX_SOURCE_DIRECTORY(processes brec_pro_sources)
 
 ADD_LIBRARY(brec_pro ${brec_pro_sources})
 
-TARGET_LINK_LIBRARIES(brec_pro brec bvxm_grid_io bbgm_pro bprb sdet vpgl vpgl_io vpgl_algo vpgl_file_formats vpgl_pro vsol vil vil_io vil_pro vnl vnl_io bgeo vgl vgl_algo vul brip brdb)
+TARGET_LINK_LIBRARIES(brec_pro brec bvxm_grid_io bbgm_pro bprb brip brdb sdet vpgl vpgl_io vpgl_algo vpgl_file_formats vpgl_pro bgeo vsol vil_pro vil_algo vil vil_io vnl_io vnl vgl_algo vgl vul)
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)
 ENDIF( BUILD_TESTING )
-

@@ -16,7 +16,6 @@ CONFIGURE_FILE(
 )
 INCLUDE_DIRECTORIES( ${vxl_BINARY_DIR}/contrib/mul )
 
-
 SET(mbl_sources
   mbl_config.h.in
 
@@ -119,7 +118,7 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 ADD_LIBRARY(mbl ${mbl_sources})
-TARGET_LINK_LIBRARIES(mbl vul vnl_io vnl_algo vgl_io vbl_io vsl vil_io)
+TARGET_LINK_LIBRARIES(mbl vnl_io vnl_algo vgl_io vgl vbl_io vil_io vsl vnl vil vul vbl)
 
 INSTALL_TARGETS(/lib mbl)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/mul/mbl ${mbl_sources})

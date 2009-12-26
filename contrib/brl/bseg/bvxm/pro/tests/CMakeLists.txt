@@ -16,7 +16,7 @@ ADD_EXECUTABLE( bvxm_pro_test_all
   test_bvxm_update_lidar_process.cxx
 )
 
-TARGET_LINK_LIBRARIES( bvxm_pro_test_all testlib bvxm_pro bvxm bvxm_grid_io vcl vbl vpgl_algo vpgl vpgl_io vpgl_pro bprb brdb vul vil vil_io vil_pro)
+TARGET_LINK_LIBRARIES( bvxm_pro_test_all testlib bvxm_pro bvxm bvxm_grid_io vpgl_algo vpgl vpgl_io vpgl_pro bprb brdb vul vil vil_io vil_pro vgl_algo vnl vgl vbl vcl )
 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/roi_params.xml ${CMAKE_CURRENT_BINARY_DIR}/roi_params.xml COPYONLY )
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/world_model_params.xml ${CMAKE_CURRENT_BINARY_DIR}/world_model_params.xml COPYONLY )
@@ -41,7 +41,6 @@ ADD_TEST( bvxm_test_rpc_registration_process        ${EXECUTABLE_OUTPUT_PATH}/bv
 ADD_TEST( bvxm_test_create_local_rpc_process        ${EXECUTABLE_OUTPUT_PATH}/bvxm_pro_test_all   test_bvxm_create_local_rpc_process )
 ADD_TEST( bvxm_test_create_synth_lidar_data_process ${EXECUTABLE_OUTPUT_PATH}/bvxm_pro_test_all   test_bvxm_create_synth_lidar_data_process )
 ADD_TEST( bvxm_test_update_lidar_process            ${EXECUTABLE_OUTPUT_PATH}/bvxm_pro_test_all   test_bvxm_update_lidar_process ${CMAKE_CURRENT_SOURCE_DIR} )
-
 
 ADD_EXECUTABLE( bvxm_pro_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( bvxm_pro_test_include bvxm_pro )

@@ -12,4 +12,4 @@ SET(bvxm_grid_io_sources
 AUX_SOURCE_DIRECTORY(Templates bvxm_grid_io_sources)
 
 ADD_LIBRARY(bvxm_grid_io ${bvxm_grid_io_sources})
-TARGET_LINK_LIBRARIES(bvxm_grid_io bvxm_grid bvrml vsl vbl vil vil_io vul)
+TARGET_LINK_LIBRARIES(bvxm_grid_io bvxm_grid bvrml vsl vbl vil vil_io vnl vgl vul)

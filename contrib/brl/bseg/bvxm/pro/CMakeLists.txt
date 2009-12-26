@@ -70,16 +70,16 @@ SET(bvxm_pro_sources ${bvxm_pro_sources}
     processes/bvxm_mog_to_mpm_process.cxx
     processes/bvxm_display_edge_tangent_world_vrml_process.h
     processes/bvxm_display_edge_tangent_world_vrml_process.cxx
-    processes/bvxm_expected_edge_image_process.h 
+    processes/bvxm_expected_edge_image_process.h
     processes/bvxm_expected_edge_image_process.cxx
-    processes/bvxm_create_synth_lidar_data_process.h  processes/bvxm_create_synth_lidar_data_process.cxx 
+    processes/bvxm_create_synth_lidar_data_process.h  processes/bvxm_create_synth_lidar_data_process.cxx
     processes/bvxm_update_point_cloud_process.h       processes/bvxm_update_point_cloud_process.cxx
     processes/bvxm_report_statistics_point_cloud_process.h processes/bvxm_report_statistics_point_cloud_process.cxx
    )
 
 ADD_LIBRARY(bvxm_pro ${bvxm_pro_sources})
 
-TARGET_LINK_LIBRARIES(bvxm_pro bprb bvxm bvxm_algo bvxm_io bvxm_grid bvxm_grid_io sdet vpgl vpgl_io vpgl_algo vpgl_file_formats vpgl_pro vsol vil_io vil_pro vnl_io vul bgeo brdb)
+TARGET_LINK_LIBRARIES(bvxm_pro bprb bvxm bvxm_algo bvxm_io bvxm_grid bvxm_grid_io sdet vpgl vpgl_io vpgl_algo vpgl_file_formats vpgl_pro vsol vil_io vil_pro vnl_io vnl vil_algo vil vgl vul bgeo brdb)
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)

@@ -13,7 +13,7 @@ ADD_EXECUTABLE( imesh_test_all
   test_imls_surface.cxx
 )
 
-TARGET_LINK_LIBRARIES( imesh_test_all imesh imesh_algo testlib )
+TARGET_LINK_LIBRARIES( imesh_test_all imesh imesh_algo vnl vgl testlib )
 
 ADD_TEST( imesh_test_intersect            imesh_test_all test_intersect )
 ADD_TEST( imesh_test_detect               imesh_test_all test_detect )

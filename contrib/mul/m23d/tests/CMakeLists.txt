@@ -10,7 +10,7 @@ ADD_EXECUTABLE( m23d_test_all
   test_rotation_matrix.cxx
   test_correction_matrix_error.cxx
 )
-TARGET_LINK_LIBRARIES( m23d_test_all m23d testlib )
+TARGET_LINK_LIBRARIES( m23d_test_all m23d vnl_algo vnl testlib )
 
 ADD_TEST( m23d_test_make_ortho_projection  ${EXECUTABLE_OUTPUT_PATH}/m23d_test_all test_make_ortho_projection )
 ADD_TEST( m23d_test_rotation_from_ortho_projection  ${EXECUTABLE_OUTPUT_PATH}/m23d_test_all test_rotation_from_ortho_projection )

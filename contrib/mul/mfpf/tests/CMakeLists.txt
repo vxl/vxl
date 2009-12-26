@@ -15,7 +15,7 @@ ADD_EXECUTABLE( mfpf_test_all
   test_pose_predictor.cxx
   )
 
-TARGET_LINK_LIBRARIES( mfpf_test_all mfpf mipa testlib )
+TARGET_LINK_LIBRARIES( mfpf_test_all mfpf mipa vil_algo vil vgl testlib )
 
 ADD_TEST( mfpf_test_edge_finder ${EXECUTABLE_OUTPUT_PATH}/mfpf_test_all test_edge_finder)
 ADD_TEST( mfpf_test_norm_corr1d ${EXECUTABLE_OUTPUT_PATH}/mfpf_test_all test_norm_corr1d)

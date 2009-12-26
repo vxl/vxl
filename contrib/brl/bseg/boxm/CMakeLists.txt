@@ -14,7 +14,7 @@ SET(boxm_sources
     boxm_scene_parser.cxx                  boxm_scene_parser.h
     boxm_sample.txx                        boxm_sample.h
     boxm_sample_multi_bin.txx              boxm_sample_multi_bin.h
- 
+
     boxm_apm_traits.cxx                    boxm_apm_traits.h
     boxm_mog_grey_processor.cxx            boxm_mog_grey_processor.h
     boxm_simple_grey_processor.cxx         boxm_simple_grey_processor.h
@@ -40,16 +40,15 @@ SET(boxm_sources
     boxm_fill_in_mesh.h
     boxm_vis_implicit_sample.h
     boxm_update_sample.h
-    boxm_mob_grey_processor.cxx            boxm_mob_grey_processor.h  
-    boxm_cell_data_traits.h          
-
+    boxm_mob_grey_processor.cxx            boxm_mob_grey_processor.h
+    boxm_cell_data_traits.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates boxm_sources)
 
 ADD_LIBRARY(boxm  ${boxm_sources})
 
-TARGET_LINK_LIBRARIES(boxm boct vcl vgl vgl_io vgl_xio vbl vsl vpgl vpgl_algo vsol bgeo bsta bsta_algo vul vil imesh expatpp)
+TARGET_LINK_LIBRARIES(boxm boct vgl_io vgl_xio vpgl vpgl_algo vsol bgeo bsta bsta_algo imesh expatpp vgl_algo vnl_algo vnl vgl vul vil vbl vsl vcl)
 
 #processes
 SUBDIRS(pro)

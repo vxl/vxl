@@ -10,7 +10,7 @@ ADD_EXECUTABLE( bsta_algo_test_all
   test_beta_updater.cxx
 )
 
-TARGET_LINK_LIBRARIES( bsta_algo_test_all bsta_algo testlib)
+TARGET_LINK_LIBRARIES( bsta_algo_test_all bsta_algo vnl vgl testlib )
 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/beta_distr_100_100.txt ${CMAKE_CURRENT_BINARY_DIR}/beta_distr_100_100.txt COPYONLY )
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/beta_distr_10_100.txt ${CMAKE_CURRENT_BINARY_DIR}/beta_distr_10_100.txt COPYONLY )

@@ -1,4 +1,4 @@
-LINK_LIBRARIES( vgui )
+LINK_LIBRARIES( vgui vul vbl )
 
 ADD_EXECUTABLE(vgui_test_vrml test_vrml.cxx)
 ADD_EXECUTABLE(vgui_test_twowin test_twowin.cxx)

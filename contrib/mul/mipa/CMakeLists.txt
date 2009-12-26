@@ -23,7 +23,7 @@ SET(mipa_sources
 
 AUX_SOURCE_DIRECTORY(Templates mipa_sources)
 ADD_LIBRARY(mipa ${mipa_sources} )
-TARGET_LINK_LIBRARIES(mipa vimt vpdfl mbl)
+TARGET_LINK_LIBRARIES(mipa vimt vpdfl mbl vnl vil)
 
 SUBDIRS(tools)
 

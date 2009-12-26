@@ -18,4 +18,4 @@ AUX_SOURCE_DIRECTORY(Templates imesh_algo_sources)
 
 ADD_LIBRARY( imesh_algo ${imesh_algo_sources} )
 
-TARGET_LINK_LIBRARIES( imesh_algo imesh vgl_algo vpgl vil)
+TARGET_LINK_LIBRARIES( imesh_algo imesh vpgl vgl_algo vgl vnl_algo vnl vil )
