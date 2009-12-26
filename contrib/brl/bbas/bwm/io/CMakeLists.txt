@@ -15,9 +15,8 @@ AUX_SOURCE_DIRECTORY(Templates bwm_io_sources)
 
 ADD_LIBRARY(bwm_io ${bwm_io_sources})
 
-TARGET_LINK_LIBRARIES(bwm_io vgl vsl vsol ${EXPAT_LIBRARIES} expatpp)
+TARGET_LINK_LIBRARIES(bwm_io vsol vgl vsl vbl ${EXPAT_LIBRARIES} expatpp)
 IF ( APPLE )
   TARGET_LINK_LIBRARIES(bwm_io expat)
 ENDIF ( APPLE )
 ENDIF(EXPAT_FOUND)
-

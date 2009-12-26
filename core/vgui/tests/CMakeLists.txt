@@ -35,7 +35,7 @@ IF( HAS_VGUI )
     test_image_tableau.cxx
     test_range_map.cxx
   )
-  TARGET_LINK_LIBRARIES( vgui_test_all vgui vul testlib )
+  TARGET_LINK_LIBRARIES( vgui_test_all vgui vul vbl testlib )
 
   ADD_TEST( vgui_test_displaybase         ${EXECUTABLE_OUTPUT_PATH}/vgui_test_all test_displaybase )
   ADD_TEST( vgui_test_pixels              ${EXECUTABLE_OUTPUT_PATH}/vgui_test_all test_pixels )
