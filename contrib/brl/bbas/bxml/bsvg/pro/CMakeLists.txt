@@ -10,10 +10,7 @@ SET(bsvg_pro_sources
    )
 
 AUX_SOURCE_DIRECTORY(Templates bsvg_pro_sources)
-
 AUX_SOURCE_DIRECTORY(processes bsvg_pro_sources)
 
 ADD_LIBRARY(bsvg_pro ${bsvg_pro_sources})
-
-TARGET_LINK_LIBRARIES(bsvg_pro bsvg bprb brdb)
-
+TARGET_LINK_LIBRARIES(bsvg_pro bsvg bprb brdb vul)

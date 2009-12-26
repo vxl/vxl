@@ -16,7 +16,7 @@ SET(bwm_algo_sources
    bwm_delaunay_tri.cxx           bwm_delaunay_tri.h
 )
 
-IF(SHAPELIB_FOUND) 
+IF(SHAPELIB_FOUND)
 
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/b3p/shapelib)
   SET(bwm_algo_sources             ${bwm_algo_sources}
@@ -32,5 +32,4 @@ ENDIF(ECW_FOUND)
 
 ADD_LIBRARY(bwm_algo ${bwm_algo_sources})
 
-TARGET_LINK_LIBRARIES( bwm_algo sdet vtol vil vil_algo vgl vgl_algo vnl vnl_algo vsol vpgl vpgl_algo vpgl_file_formats bgui brip vdgl bsta vgui vcl shapelib)
-
+TARGET_LINK_LIBRARIES( bwm_algo sdet vtol vil vil_algo vgl vgl_algo vnl vnl_algo vsol vpgl vpgl_algo vpgl_file_formats bgui brip vdgl bsta vgui vul vcl shapelib )

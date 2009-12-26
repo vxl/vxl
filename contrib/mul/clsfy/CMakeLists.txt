@@ -41,7 +41,6 @@ SET(clsfy_sources
  clsfy_direct_boost_builder.cxx               clsfy_direct_boost_builder.h
  clsfy_binary_1d_wrapper.cxx                  clsfy_binary_1d_wrapper.h
  clsfy_binary_1d_wrapper_builder.cxx          clsfy_binary_1d_wrapper_builder.h
- 
 
  clsfy_logit_loss_function.cxx               clsfy_logit_loss_function.h
 )
@@ -51,7 +50,7 @@ AUX_SOURCE_DIRECTORY(Templates clsfy_sources)
 ADD_LIBRARY(clsfy ${clsfy_sources})
 INSTALL_TARGETS(/lib clsfy)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/mul/clsfy ${clsfy_sources})
-TARGET_LINK_LIBRARIES(clsfy vpdfl mbl vnl_algo vnl_io vnl vbl vsl)
+TARGET_LINK_LIBRARIES(clsfy vpdfl mbl vnl_algo vnl_io vnl vbl vsl vul)
 
 IF (BUILD_TESTING)
   SUBDIRS(tests)

@@ -3,7 +3,7 @@ INCLUDE_DIRECTORIES( ${VXL_MUL_INCLUDE_DIR} )
 ADD_EXECUTABLE( rgrl_test_all
   test_driver.cxx
   test_util.cxx            test_util.h
-  
+
   test_rgrl_util.cxx
   test_transformation.cxx
   test_trans_reader.cxx
@@ -20,7 +20,7 @@ ADD_EXECUTABLE( rgrl_test_all
   test_initializer_ran_sam.cxx
   test_matcher.cxx
 )
-TARGET_LINK_LIBRARIES( rgrl_test_all rgrl rrel testlib vnl_algo vnl vil )
+TARGET_LINK_LIBRARIES( rgrl_test_all rgrl rrel testlib vnl_algo vnl vil vul )
 
 ADD_TEST( rgrl_rgrl_util              ${EXECUTABLE_OUTPUT_PATH}/rgrl_test_all test_rgrl_util )
 ADD_TEST( rgrl_transformation         ${EXECUTABLE_OUTPUT_PATH}/rgrl_test_all test_transformation )

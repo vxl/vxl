@@ -1,14 +1,14 @@
 # brl/bpro/core/vidl_pro/CMakeLists.txt
 
-
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro/core )
 
 INCLUDE( ${MODULE_PATH}/NewCMake/FindDirectShow.cmake )
 
-
+SET (HAS_DIRECTSHOW 0)
 IF(DIRECTSHOW_FOUND)
+  SET (HAS_DIRECTSHOW 1)
   INCLUDE_DIRECTORIES(${DIRECTSHOW_INCLUDE_DIRS})
 ENDIF(DIRECTSHOW_FOUND)
 
@@ -20,14 +20,8 @@ SET(vidl_pro_sources
     vidl_processes.h
 )
 
-
-SET (HAS_DIRECTSHOW 0 )
-IF(DIRECTSHOW_FOUND)
-  SET (HAS_DIRECTSHOW 1 )
-ENDIF(DIRECTSHOW_FOUND)
-
 AUX_SOURCE_DIRECTORY(Templates vidl_pro_sources)
 AUX_SOURCE_DIRECTORY(processes vidl_pro_sources)
 
 ADD_LIBRARY(vidl_pro ${vidl_pro_sources})
-TARGET_LINK_LIBRARIES(vidl_pro bprb brdb vidl vsl)
+TARGET_LINK_LIBRARIES(vidl_pro bprb brdb vidl vsl vul)
