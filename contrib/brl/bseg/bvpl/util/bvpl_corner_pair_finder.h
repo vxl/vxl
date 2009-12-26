@@ -20,7 +20,6 @@
 
 #include <vnl/vnl_float_3.h>
 #include <vnl/vnl_float_4.h>
-#include <vil/algo/vil_colour_space.h>
 
 class bvpl_feature
 {

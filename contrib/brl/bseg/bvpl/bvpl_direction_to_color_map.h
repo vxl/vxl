@@ -17,7 +17,6 @@
 #include <bxml/bxml_write.h>
 
 #include <vgl/vgl_point_3d.h>
-#include <vil/algo/vil_colour_space.h>
 #include <vcl_iomanip.h>
 #include <vcl_limits.h>
 #include <vcl_iostream.h>
