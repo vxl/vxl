@@ -9,7 +9,7 @@ ADD_EXECUTABLE( boct_test_all
   test_tree_cell_reader.cxx
  )
 
-TARGET_LINK_LIBRARIES( boct_test_all boct testlib vnl vpl)
+TARGET_LINK_LIBRARIES( boct_test_all boct testlib vnl vgl vpl)
 
 ADD_TEST( boct_test_locate_point   ${EXECUTABLE_OUTPUT_PATH}/boct_test_all test_locate_point  )
 ADD_TEST( boct_test_create_tree    ${EXECUTABLE_OUTPUT_PATH}/boct_test_all test_create_tree   )

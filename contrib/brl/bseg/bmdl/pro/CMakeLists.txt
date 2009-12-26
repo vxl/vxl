@@ -20,32 +20,29 @@ IF(EXPAT_FOUND)
       INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
       INCLUDE_DIRECTORIES( ${TIFF_INCLUDE_DIR} )
       INCLUDE_DIRECTORIES( ${GEOTIFF_INCLUDE_DIR} )
-      
+
       SET(bmdl_pro_sources
         bmdl_processes.h
         bmdl_defs.h
-        bmdl_register.h                        bmdl_register.cxx 
+        bmdl_register.h                        bmdl_register.cxx
       )
 
-
       AUX_SOURCE_DIRECTORY(Templates bmdl_pro_sources)
-
       AUX_SOURCE_DIRECTORY(processes bmdl_pro_sources)
 
       ADD_LIBRARY(bmdl_pro ${bmdl_pro_sources})
 
       TARGET_LINK_LIBRARIES(bmdl_pro bmdl bprb vil vil_io vpgl_file_formats vgl_io
-                            bgeo vsol brip vpgl_pro vul vpl imesh_algo minizip)
+                            bgeo vsol brip vpgl_pro vgl vul vpl imesh_algo minizip)
 
-                            
       IF(ZLIB_FOUND)
-         TARGET_LINK_LIBRARIES( bmdl_pro minizip ) 
+         TARGET_LINK_LIBRARIES( bmdl_pro minizip )
       ENDIF(ZLIB_FOUND)
-         
+
       IF( BUILD_TESTING )
         SUBDIRS(tests)
       ENDIF( BUILD_TESTING )
-  
+
     ENDIF(GEOTIFF_FOUND)
   ENDIF(TIFF_FOUND)
 ENDIF(EXPAT_FOUND)

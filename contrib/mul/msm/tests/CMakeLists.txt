@@ -4,7 +4,7 @@ ADD_EXECUTABLE( msm_test_all
   test_driver.cxx
   test_points.cxx
   )
-TARGET_LINK_LIBRARIES( msm_test_all msm testlib )
+TARGET_LINK_LIBRARIES( msm_test_all msm vgl testlib )
 
 ADD_TEST( msm_test_points ${EXECUTABLE_OUTPUT_PATH}/msm_test_all test_points)
 

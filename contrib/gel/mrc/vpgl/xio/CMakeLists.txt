@@ -7,7 +7,7 @@ SET(vpgl_xio_sources
 AUX_SOURCE_DIRECTORY(Templates vpgl_xio_sources)
 
 ADD_LIBRARY(vpgl_xio ${vpgl_xio_sources})
-TARGET_LINK_LIBRARIES( vpgl_xio vpgl vsl vgl_xio)
+TARGET_LINK_LIBRARIES( vpgl_xio vpgl vgl_xio vgl vsl)
 
 INSTALL_TARGETS(/lib vpgl_xio)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/gel/mrc/vpgl/xio ${vpgl_xio_sources})

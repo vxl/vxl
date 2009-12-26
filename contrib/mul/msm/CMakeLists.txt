@@ -16,7 +16,7 @@ SET(msm_sources
 
 AUX_SOURCE_DIRECTORY(Templates msm_sources)
 ADD_LIBRARY(msm ${msm_sources} )
-TARGET_LINK_LIBRARIES(msm vimt vnl_io vnl vsl)
+TARGET_LINK_LIBRARIES(msm vimt vnl_io vnl vgl vsl)
 
 #SUBDIRS(tools)
 

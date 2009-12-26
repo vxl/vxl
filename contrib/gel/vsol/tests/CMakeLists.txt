@@ -20,7 +20,7 @@ ADD_EXECUTABLE( vsol_test_all
   test_vsol_tetrahedron.cxx
   test_vsol_io.cxx
 )
-TARGET_LINK_LIBRARIES( vsol_test_all vsol vnl vbl_io vsl vpl testlib )
+TARGET_LINK_LIBRARIES( vsol_test_all vsol vnl vgl vbl_io vsl vpl testlib )
 
 ADD_TEST(vsol_test_point_2d           ${EXECUTABLE_OUTPUT_PATH}/vsol_test_all test_vsol_point_2d)
 ADD_TEST(vsol_test_group_2d           ${EXECUTABLE_OUTPUT_PATH}/vsol_test_all test_vsol_group_2d)

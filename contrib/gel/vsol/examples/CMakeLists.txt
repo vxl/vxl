@@ -7,4 +7,4 @@ ADD_EXECUTABLE( vsol_point_example vsol_point_example.cxx )
 TARGET_LINK_LIBRARIES( vsol_point_example vsol )
 
 ADD_EXECUTABLE( vsol_conic_example vsol_conic_example.cxx )
-TARGET_LINK_LIBRARIES( vsol_conic_example vsol vgl_algo )
+TARGET_LINK_LIBRARIES( vsol_conic_example vsol vgl_algo vgl )
