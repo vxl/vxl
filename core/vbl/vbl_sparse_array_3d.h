@@ -15,10 +15,10 @@
 //
 // \verbatim
 //  Modifications
-//   26 March 01 cjb updated documentation
-//   10 April 01 IMS (Manchester ISBE) modified to use vbl_sparse_array_base
-//   11 April 01 Peter Vanroose - vbl_index_3d moved to separate file
-//   25 June 01 IMS - vbl_index_3d replaces with vbl_triple
+//   26 March 2001 cjb updated documentation
+//   10 April 2001 IMS (Manchester ISBE) modified to use vbl_sparse_array_base
+//   11 April 2001 Peter Vanroose - vbl_index_3d moved to separate file
+//   25 June  2001 IMS - vbl_index_3d replaced with vbl_triple
 // \endverbatim
 //---------------------------------------------------------------------------
 
@@ -29,13 +29,13 @@
 
 
 //: Sparse 3d array allowing space efficient access
-// You can use this as s(300,700,900) = 2.
+// You can use this as e.g. s(300,700,900) = T(2).
 template <class T>
 class vbl_sparse_array_3d : public vbl_sparse_array_base<T, vbl_triple<unsigned, unsigned, unsigned> >
 {
  public:
 
-  //: Put a value into location (i,j).
+  //: Put a value into location (i,j,k).
   bool put(unsigned i, unsigned j, unsigned k, const T& t)
   {
     return vbl_sparse_array_base<T,
