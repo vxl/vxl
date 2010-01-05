@@ -204,23 +204,128 @@ int common_ancestor(__global int4* cells, int cell_ptr, short4 cell_loc_code,
 //---------------------------------------------------------------------
 short4 cell_exit_face(float4 exit_point, float4 cell_min, float4 cell_max)
 {
-  short4 min_cmp = convert_short4(exit_point == cell_min);
-  short4 max_cmp = convert_short4(exit_point == cell_max);
-  min_cmp.w = 0;   max_cmp.w = 0; 
-  //min has priority over max in case of multiple hits
-  //X has priority over Y which has priority over Z in case of multiple hits
-  if(any(min_cmp)){
-    if(min_cmp.x){return X_MIN;}
-    if(min_cmp.y){return Y_MIN;}
-    if(min_cmp.z){return Z_MIN;}
-  }else if(any(max_cmp)){
-    if(max_cmp.x){return X_MAX;}
-    if(max_cmp.y){return Y_MAX;}
-    if(max_cmp.z){return Z_MAX;}
+  float4 min_diff = fabs(exit_point-cell_min);
+  float4 max_diff = fabs(exit_point-cell_max);
+
+  short4 faceid=(short4) -1;
+
+  float min=1.0;
+
+  if(min_diff.x<min)
+  {
+      min=min_diff.x;
+    faceid=X_MIN;
   }
+  if(min_diff.y<min)
+  {
+    min=min_diff.y;
+    faceid=Y_MIN;
+  }
+  if(min_diff.z<min)
+  {
+    min=min_diff.z;
+    faceid=Z_MIN;
+  }
+  if(max_diff.x<min)
+  {
+      min=max_diff.x;
+    faceid=X_MAX;
+  }
+  if(max_diff.y<min)
+  {
+    min=max_diff.y;
+    faceid=Y_MAX;
+  }
+  if(max_diff.z<min)
+  {
+    min=max_diff.z;
+    faceid=Z_MAX;
+  }
+
+
+  return faceid;
+  //short4 min_cmp = convert_short4(exit_point == cell_min);
+  //short4 max_cmp = convert_short4(exit_point == cell_max);
+  //min_cmp.w = 0;   max_cmp.w = 0; 
+  ////min has priority over max in case of multiple hits
+  ////X has priority over Y which has priority over Z in case of multiple hits
+  //if(any(min_cmp)){
+  //  if(min_cmp.x){return X_MIN;}
+  //  if(min_cmp.y){return Y_MIN;}
+  //  if(min_cmp.z){return Z_MIN;}
+  //}else if(any(max_cmp)){
+  //  if(max_cmp.x){return X_MAX;}
+  //  if(max_cmp.y){return Y_MAX;}
+  //  if(max_cmp.z){return Z_MAX;}
+  //}
   //exit point doesn't lie on any face of the cell
-  return (short4) -1;
+  //return (short4) -1;
 }
+short4 cell_exit_face_but_not_entry_face(float4 exit_point, float4 cell_min, float4 cell_max,short4 entry_face)
+{
+    float4 min_diff = fabs(exit_point-cell_min);
+    float4 max_diff = fabs(exit_point-cell_max);
+
+    short4 faceid=(short4) -1;
+
+    float min=1.0;
+
+    short4 temp;
+    if(min_diff.x<min)
+    {
+        if(!(entry_face.x==1 && entry_face.w==0 ))
+        {
+            min=min_diff.x;
+            faceid=X_MIN;
+        }
+    }
+    if(min_diff.y<min )
+    {
+        if(!(entry_face.y==1 && entry_face.w==0 ))
+        {
+            min=min_diff.y;
+            faceid=Y_MIN;
+        }
+    }
+    if(min_diff.z<min)
+    {
+        if(!(entry_face.z==1 && entry_face.w==0 ))
+        {
+
+            min=min_diff.z;
+            faceid=Z_MIN;
+        }
+    }
+    if(max_diff.x<min )
+    {
+        if(!(entry_face.x==1 && entry_face.w==1 ))
+        {
+            min=max_diff.x;
+            faceid=X_MAX;
+        }
+    }
+    if(max_diff.y<min )
+    {
+        if(!(entry_face.y==1 && entry_face.w==1 ))
+        {
+            min=max_diff.y;
+            faceid=Y_MAX;
+        }
+    }
+    if(max_diff.z<min )
+    {
+        if(!(entry_face.z==1 && entry_face.w==1 ))
+        {
+            min=max_diff.z;
+            faceid=Z_MAX;
+        }
+    }
+
+
+    return faceid;
+
+}
+
 //-------------------------------------------------------------------
 // Given the location code determine the bounding box for the
 // cell in local tree coordinates, i.e. the max bounds of the
@@ -325,14 +430,14 @@ int intersect_cell(float4 ray_o, float4 ray_d, float4 cell_min, float4 cell_max,
   // find the largest tmin and the smallest tmax
   float largest_tmin = max(max(tmin_s.x, tmin_s.y), max(tmin_s.x, tmin_s.z));
   float smallest_tmax = min(min(tmax_s.x, tmax_s.y), min(tmax_s.x, tmax_s.z));
-  if(fabs(smallest_tmax-largest_tmin)<1.0e-6f)
-    {
-      //advance along the ray 
-      smallest_tmax += 1.0e-6f;
-    }
+  //if(fabs(smallest_tmax-largest_tmin)<1.0e-5f)
+  //  {
+  //    //advance along the ray 
+  //    smallest_tmax += 1.0e-5f;
+  //  }
 	*tnear = largest_tmin;
 	*tfar = smallest_tmax;
-	return smallest_tmax > largest_tmin;
+	return 1;//smallest_tmax > largest_tmin;
 }
 
 //--------------------------------------------------------------------------

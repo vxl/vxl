@@ -8,7 +8,8 @@
 #include <boct/boct_loc_code.h>
 #include <vnl/vnl_vector_fixed.h>
 
-static void test_loc_code(octree_test_driver& driver)
+template <class T>
+static void test_loc_code(octree_test_driver<T>& driver)
 {
   if (driver.create_kernel("test_loc_code")!=SDK_SUCCESS) {
     TEST("Create Kernel test_loc_code", false, true);
@@ -40,8 +41,8 @@ static void test_loc_code(octree_test_driver& driver)
   }
   driver.release_kernel();
 }
-
-static void test_traverse(octree_test_driver& driver)
+template <class T>
+static void test_traverse(octree_test_driver<T> & driver)
 {
   if (driver.create_kernel("test_traverse")!=SDK_SUCCESS) {
     TEST("Create Kernel test_traverse", false, true);
@@ -86,8 +87,8 @@ static void test_traverse(octree_test_driver& driver)
   }
   driver.release_kernel();
 }
-
-static void test_traverse_to_level(octree_test_driver& driver)
+template <class T>
+static void test_traverse_to_level(octree_test_driver<T>& driver)
 {
   if (driver.create_kernel("test_traverse_to_level")!=SDK_SUCCESS) {
     TEST("Create Kernel test_traverse_to_level", false, true);
@@ -133,7 +134,8 @@ static void test_traverse_to_level(octree_test_driver& driver)
   driver.release_kernel();
 }
 
-static void test_traverse_force(octree_test_driver& driver)
+template <class T>
+static void test_traverse_force(octree_test_driver<T>& driver)
 {
   if (driver.create_kernel("test_traverse_force")!=SDK_SUCCESS) {
     TEST("Create Kernel test_traverse_force", false, true);
@@ -171,7 +173,8 @@ static void test_traverse_force(octree_test_driver& driver)
   driver.release_kernel();
 }
 
-static void test_cell_bounding_box(octree_test_driver& driver)
+template <class T>
+static void test_cell_bounding_box(octree_test_driver<T>& driver)
 {
   if (driver.create_kernel("test_cell_bounding_box")!=SDK_SUCCESS) {
     TEST("Create Kernel test_cell_bounding_box", false, true);
@@ -218,7 +221,8 @@ static void test_cell_bounding_box(octree_test_driver& driver)
   driver.release_kernel();
 }
 
-static void test_common_ancestor(octree_test_driver& driver)
+template <class T>
+static void test_common_ancestor(octree_test_driver<T>& driver)
 {
   if (driver.create_kernel("test_common_ancestor")!=SDK_SUCCESS) {
     TEST("Create Kernel test_common_ancestor", false, true);
@@ -265,7 +269,8 @@ static void test_common_ancestor(octree_test_driver& driver)
   driver.release_kernel();
 }
 
-static void test_cell_exit_face(octree_test_driver& driver)
+template <class T>
+static void test_cell_exit_face(octree_test_driver<T>& driver)
 {
   if (driver.create_kernel("test_cell_exit_face")!=SDK_SUCCESS) {
     TEST("Create Kernel test_cell_exit_face", false, true);
@@ -301,7 +306,8 @@ static void test_cell_exit_face(octree_test_driver& driver)
   driver.release_kernel();
 }
 
-static void test_neighbor(octree_test_driver& driver)
+template <class T>
+static void test_neighbor(octree_test_driver<T>& driver)
 {
   if (driver.create_kernel("test_neighbor")!=SDK_SUCCESS) {
     TEST("Create Kernel test_neighbor", false, true);
@@ -356,7 +362,8 @@ static void test_neighbor(octree_test_driver& driver)
   driver.release_kernel();
 }
 
-static void test_ray_trace(octree_test_driver& driver)
+template <class T>
+static void test_ray_trace(octree_test_driver<T>& driver)
 {
   if (driver.create_kernel("test_ray_trace")!=SDK_SUCCESS) {
     TEST("Create Kernel test_ray_trace", false, true);
@@ -368,7 +375,7 @@ static void test_ray_trace(octree_test_driver& driver)
   }
 
   cl_int* results = driver.tree_results();
-  vcl_size_t size = 59*4;
+  vcl_size_t size = 73*4;
   if (size>driver.tree_result_size_bytes())
     return;
   if (results)
@@ -417,9 +424,10 @@ static void test_ray_trace(octree_test_driver& driver)
   driver.release_kernel();
 }
 
-void tree_tests(octree_test_driver& test_driver)
+template <class T>
+void tree_tests(octree_test_driver<T>& test_driver)
 {
-  boxm_ray_trace_manager* ray_mgr = boxm_ray_trace_manager::instance();
+  boxm_ray_trace_manager<T>* ray_mgr = boxm_ray_trace_manager<T>::instance();
   vcl_string root_dir = testlib_root_dir();
   test_driver.set_buffers();
   if (!ray_mgr->load_kernel_source(root_dir + "/contrib/brl/bseg/boxm/opt/open_cl/octree_library_functions.cl"))
@@ -428,6 +436,9 @@ void tree_tests(octree_test_driver& test_driver)
     return;
   if (test_driver.build_program()!=SDK_SUCCESS)
     return;
+
+
+
   //START TESTS
   //================================================================
   test_loc_code(test_driver);
@@ -447,12 +458,12 @@ void tree_tests(octree_test_driver& test_driver)
 static void test_octree()
 {
   vcl_string root_dir = testlib_root_dir();
-  boxm_ray_trace_manager* ray_mgr = boxm_ray_trace_manager::instance();
-  ray_mgr->set_tree(open_cl_test_data::tree());
-  //  ray_mgr->load_tree(root_dir + "/contrib/brl/bseg/boxm/opt/open_cl/tests/test_tree_with_data.vsl");
+  boxm_ray_trace_manager<float >* ray_mgr = boxm_ray_trace_manager<float >::instance();
+  ray_mgr->set_tree(open_cl_test_data::tree<float>());
   ray_mgr->setup_tree();
+  ray_mgr->setup_tree_results();
   ray_mgr->setup_tree_processing();
-  octree_test_driver test_driver;
+  octree_test_driver<float > test_driver;
   if (test_driver.init())
   { tree_tests(test_driver); }
   else

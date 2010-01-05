@@ -51,7 +51,7 @@ bool boxm_opencl_manager<T>::initialize_cl()
 {
   cl_int status = CL_SUCCESS;
   context_ = clCreateContextFromType(0,
-                                     CL_DEVICE_TYPE_CPU,
+                                     CL_DEVICE_TYPE_GPU,
                                      NULL,
                                      NULL,
                                      &status);
@@ -93,8 +93,9 @@ bool boxm_opencl_manager<T>::initialize_cl()
                        "clGetGetContextInfo failed."))
     return false;
   vcl_size_t max_work_group_size = 0;
-  // Get Device specific Information
-  status = clGetDeviceInfo(devices_[0],
+  /* Get Device specific Information */
+  status = clGetDeviceInfo(
+                           devices_[0],
                            CL_DEVICE_MAX_WORK_GROUP_SIZE,
                            sizeof(vcl_size_t),
                            (void*)&max_work_group_size,
@@ -107,7 +108,8 @@ bool boxm_opencl_manager<T>::initialize_cl()
 
   max_work_group_size_ = max_work_group_size/sizeof(vcl_size_t);
 
-  status = clGetDeviceInfo(devices_[0],
+  status = clGetDeviceInfo(
+                           devices_[0],
                            CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS,
                            sizeof(cl_uint),
                            (void*)&max_dimensions_,
@@ -119,9 +121,10 @@ bool boxm_opencl_manager<T>::initialize_cl()
     return false;
 
 
-  max_work_item_sizes_ = (vcl_size_t*)malloc(max_dimensions_ * sizeof(vcl_size_t));
-
-  status = clGetDeviceInfo(devices_[0],
+  max_work_item_sizes_ = (size_t*)malloc(max_dimensions_ * sizeof(size_t));
+    
+  status = clGetDeviceInfo(
+                           devices_[0],
                            CL_DEVICE_MAX_WORK_ITEM_SIZES,
                            sizeof(vcl_size_t) * max_dimensions_,
                            (void*)max_work_item_sizes_,
@@ -133,7 +136,8 @@ bool boxm_opencl_manager<T>::initialize_cl()
     return false;
 
 
-  status = clGetDeviceInfo(devices_[0],
+  status = clGetDeviceInfo(
+                           devices_[0],
                            CL_DEVICE_LOCAL_MEM_SIZE,
                            sizeof(cl_ulong),
                            (void *)&total_local_memory_,
@@ -144,7 +148,8 @@ bool boxm_opencl_manager<T>::initialize_cl()
                        "clGetDeviceInfo CL_DEVICE_LOCAL_MEM_SIZE failed."))
     return false;
 
-  status = clGetDeviceInfo(devices_[0],
+  status = clGetDeviceInfo(
+                           devices_[0],
                            CL_DEVICE_GLOBAL_MEM_SIZE,
                            sizeof(cl_ulong),
                            (void *)&total_global_memory_,
@@ -155,7 +160,8 @@ bool boxm_opencl_manager<T>::initialize_cl()
                        "clGetDeviceInfo CL_DEVICE_GLOBAL_MEM_SIZE failed."))
     return false;
 
-  status = clGetDeviceInfo(devices_[0],
+  status = clGetDeviceInfo(
+                           devices_[0],
                            CL_DEVICE_MAX_COMPUTE_UNITS,
                            sizeof(cl_uint),
                            (void *)&max_compute_units_,
@@ -167,7 +173,8 @@ bool boxm_opencl_manager<T>::initialize_cl()
     return false;
 
 
-  status = clGetDeviceInfo(devices_[0],
+  status = clGetDeviceInfo(
+                           devices_[0],
                            CL_DEVICE_PREFERRED_VECTOR_WIDTH_SHORT,
                            sizeof(cl_uint),
                            (void *)&vector_width_short_,
@@ -178,7 +185,8 @@ bool boxm_opencl_manager<T>::initialize_cl()
                        "clGetDeviceInfo CL_DEVICE_PREFERRED_VECTOR_WIDTH_SHORT failed."))
     return false;
 
-  status = clGetDeviceInfo(devices_[0],
+  status = clGetDeviceInfo(
+                           devices_[0],
                            CL_DEVICE_PREFERRED_VECTOR_WIDTH_FLOAT,
                            sizeof(cl_uint),
                            (void *)&vector_width_float_,
@@ -202,7 +210,8 @@ bool boxm_opencl_manager<T>::initialize_cl()
     return false;
 
 
-  status = clGetDeviceInfo(devices_[0],
+  status = clGetDeviceInfo(
+                           devices_[0],
                            CL_DEVICE_IMAGE_SUPPORT,
                            sizeof(cl_bool),
                            (void *)&image_support_,
@@ -228,7 +237,6 @@ bool boxm_opencl_manager<T>::initialize_cl()
            << " image support " << image_support_ << '\n';
   for(unsigned id = 0; id<number_devices_; ++id)
     vcl_cout << " Device id [" << id << "]: " << devices_[id] << '\n';
-
   return true;
 }
 
@@ -237,5 +245,7 @@ bool boxm_opencl_manager<T>::initialize_cl()
 #define BOXM_OPENCL_MANAGER_INSTANTIATE(T) \
 template <class T > T* boxm_opencl_manager<T >::instance_ = 0; \
 template class boxm_opencl_manager<T >
+
+
 
 #endif // boxm_opencl_manager_txx_

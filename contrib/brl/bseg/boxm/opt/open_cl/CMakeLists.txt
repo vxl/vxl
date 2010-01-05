@@ -9,12 +9,18 @@ IF(OPENCL_FOUND)
   INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
 
   SET(boxm_opt_opencl_sources
-    boxm_ray_trace_manager.h  boxm_ray_trace_manager.cxx
-    boxm_opencl_manager.h     boxm_opencl_manager.txx
+
+  boxm_ray_trace_manager.h   boxm_ray_trace_manager.txx 
+  boxm_opencl_manager.h    boxm_opencl_manager.txx
+  
+  boxm_opt_opencl_utils.h	boxm_opt_opencl_utils.cxx
   )
 
-  AUX_SOURCE_DIRECTORY(Templates boxm_opt_opencl_sources)
-  ADD_LIBRARY(boxm_opt_opencl ${boxm_opt_opencl_sources})
+  SET(bomx_opt_opencl_source_files
+	octree_library_functions.cl
+  )
+  AUX_SOURCE_DIRECTORY(Templates boxm_opt_opencl_sources)	
+  ADD_LIBRARY(boxm_opt_opencl ${boxm_opt_opencl_sources} ${bomx_opt_opencl_source_files})
 
   TARGET_LINK_LIBRARIES(boxm_opt_opencl boxm_opt boxm bprb bgeo vnl vgl vbl vbl_io ${OPENCL_LIBRARIES})
 

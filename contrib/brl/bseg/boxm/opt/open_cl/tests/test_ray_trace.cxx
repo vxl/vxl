@@ -8,7 +8,10 @@
 #include <boct/boct_loc_code.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vul/vul_timer.h>
-static void test_ray_trace(octree_test_driver& driver, unsigned repeats = 1)
+#include <boxm/boxm_apm_traits.h>
+
+template <boxm_apm_type APM_MODEL>
+static void test_ray_trace(octree_test_driver<APM_MODEL> & driver, unsigned repeats = 1)
 {
   if (driver.create_kernel("test_ray_trace")!=SDK_SUCCESS) {
     TEST("Create Kernel test_ray_trace", false, true);
@@ -24,11 +27,11 @@ static void test_ray_trace(octree_test_driver& driver, unsigned repeats = 1)
   double nrays = driver.n_rays();
   vcl_cout << "Average ray trace of octree: " << time/(repeats*nrays) << " msecs/ray\n";
 }
-
-static void ray_trace_tests(octree_test_driver& test_driver)
+template <boxm_apm_type APM_MODEL>
+static void ray_trace_tests(octree_test_driver<APM_MODEL> & test_driver)
 {
   vcl_string root_dir = testlib_root_dir();
-  boxm_ray_trace_manager* ray_mgr = boxm_ray_trace_manager::instance();
+  boxm_ray_trace_manager<APM_MODEL>* ray_mgr = boxm_ray_trace_manager<APM_MODEL>::instance();
 #if 0
   vbl_array_2d<vnl_vector_fixed<float, 3> > ray_origin;
   vbl_array_2d<vnl_vector_fixed<float, 3> > ray_dir;
@@ -50,20 +53,21 @@ static void ray_trace_tests(octree_test_driver& test_driver)
     return;
   //START TESTS
   //================================================================
-  test_ray_trace(test_driver, 100);
+  test_ray_trace(test_driver, 1);
 }
-
+template <boxm_apm_type APM_MODEL>
 static  void create_test_tree(vcl_string const& image_path,
                               vcl_string const& tree_path,
                               vcl_string const& ray_path)
 {
-  boxm_ray_trace_manager* ray_mgr = boxm_ray_trace_manager::instance();
-  boct_tree<short, vnl_vector_fixed<float, 2> >* tree =0;
+  boxm_ray_trace_manager<APM_MODEL>* ray_mgr = boxm_ray_trace_manager<APM_MODEL>::instance();
+  boct_tree<short, boxm_sample<APM_MODEL> >* tree =0;
   vbl_array_2d<vnl_vector_fixed<float, 3> > ray_origin;
   vbl_array_2d<vnl_vector_fixed<float, 3> > ray_dir;
   vcl_size_t gsize = ray_mgr->group_size();
   open_cl_test_data::tree_and_rays_from_image(image_path, gsize, tree,
                                               ray_origin, ray_dir);
+
   ray_mgr->set_tree(tree);
   ray_mgr->write_tree(tree_path);
   ray_mgr->set_rays(ray_origin, ray_dir);
@@ -72,11 +76,13 @@ static  void create_test_tree(vcl_string const& image_path,
 
 static void test_ray_trace()
 {
-  vcl_string root_dir = testlib_root_dir();
-  boxm_ray_trace_manager* ray_mgr = boxm_ray_trace_manager::instance();
-  create_test_tree(root_dir + "/contrib/brl/bseg/boxm/opt/open_cl/tests/dalmation.tif", root_dir + "/contrib/brl/bseg/boxm/opt/open_cl/tests/dalmation_tree.vsl", root_dir + "/contrib/brl/bseg/boxm/opt/open_cl/tests/dalmation_rays.vsl");
 
-  octree_test_driver test_driver;
+  vcl_string root_dir = testlib_root_dir();
+  boxm_ray_trace_manager<BOXM_APM_SIMPLE_GREY>* ray_mgr = boxm_ray_trace_manager<BOXM_APM_SIMPLE_GREY>::instance();
+  create_test_tree<BOXM_APM_SIMPLE_GREY>(root_dir + "/contrib/brl/bseg/boxm/opt/open_cl/tests/dalmation.tif", root_dir + "/contrib/brl/bseg/boxm/opt/open_cl/tests/dalmation_tree.vsl", root_dir + "/contrib/brl/bseg/boxm/opt/open_cl/tests/dalmation_rays.vsl");
+
+
+  octree_test_driver<BOXM_APM_SIMPLE_GREY> test_driver;
   if (test_driver.init()) {
     ray_trace_tests(test_driver);
     test_driver.print_kernel_usage_info();

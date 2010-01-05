@@ -13,9 +13,10 @@
 #define SDK_FAILURE 1
 #define VECTOR_SIZE 4
 
+template <class T>
 class octree_test_driver
 {
-  boxm_ray_trace_manager* cl_manager_;
+  boxm_ray_trace_manager<T> * cl_manager_;
   cl_ulong used_local_memory_;      
   cl_ulong kernel_work_group_size_; 
   cl_command_queue command_queue_;  
@@ -23,7 +24,8 @@ class octree_test_driver
   cl_mem   input_data_buf_;
   cl_mem   input_ray_origin_buf_;
   cl_mem   input_ray_dir_buf_;
-
+  cl_mem   input_camera_buf_;
+  cl_mem input_imgdims_buf_;
   //output results
   cl_mem   tree_test_output_;
 
@@ -34,7 +36,7 @@ class octree_test_driver
    * @param name name of sample (string)
    */
   octree_test_driver()
-    {cl_manager_ = boxm_ray_trace_manager::instance();}
+    {cl_manager_ = boxm_ray_trace_manager<T>::instance();}
 
   ~octree_test_driver();
 
@@ -62,12 +64,14 @@ class octree_test_driver
   void set_buffers();
 
   int create_kernel(vcl_string const& name);
-
+  cl_float * ray_results(){return cl_manager_->ray_results();}
   int release_kernel();
 
   int run_tree_test_kernels();
 
   int run_ray_trace_test_kernels();
+  
+  int run_ray_creation_test_kernels();
 
   int build_program();
 
@@ -79,6 +83,9 @@ class octree_test_driver
 
   void print_kernel_usage_info();
  private:
+
+  int set_camera_args();
+
   int set_tree_args();
   int set_ray_trace_args();
   int setup_cl();

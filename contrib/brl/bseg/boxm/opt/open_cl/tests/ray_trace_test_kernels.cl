@@ -1,12 +1,14 @@
-void expected_image_funct(__global float2* cell_data, int data_ptr,
+void expected_image_funct(__global float16* cell_data, int data_ptr,
                           float d, float4* data_return)
 {
 
-  float2 data = cell_data[data_ptr];
-  float alpha = data.x;
+  float16 data = cell_data[data_ptr];
+  float alpha = data.s0;
+   
+
   if(alpha<0) return;
 
-  float expected_int_cell = data.y;
+  float expected_int_cell = data.s3;
   float alpha_integral = (*data_return).x;
   float vis            = (*data_return).y;
   float expected_int   = (*data_return).z;
@@ -25,7 +27,7 @@ void expected_image_funct(__global float2* cell_data, int data_ptr,
 
 __kernel 
 void 
-test_ray_trace(__global int4* cells, __global float2* cell_data,
+test_ray_trace(__global int4* cells, __global float16* cell_data,
                __global float4* origin, __global float4* dir,
                __global float4* results)
 {
@@ -139,7 +141,6 @@ test_ray_trace(__global int4* cells, __global float2* cell_data,
   else
     expected = 0.0f;
   results[gid] = (float4)expected;
-
   //end ray trace
 
 }
