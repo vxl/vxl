@@ -70,10 +70,11 @@ class vgl_line_3d_2_points
   //: Return true iff line is at infinity (which is always false)
   inline bool ideal(Type  /*tol*/ = (Type)0) const { return false; }
 
-  //: Return the direction vector of this line (not normalised)
+  //: Return the direction vector of this line (not normalised - but perhaps it should be, like other line classes?)
   inline vgl_vector_3d<Type> direction() const { return point2()-point1(); }
 
   //: Return a point on the line defined by a scalar parameter \a t such that \a t=0.0 at point1 and \a t=1.0 at point2.
+  //\note Assumes that direction() is not normalized.
   inline vgl_point_3d<Type> point_t(const double t) const { return point1() + t*direction(); }
 };
 

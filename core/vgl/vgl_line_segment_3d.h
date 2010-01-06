@@ -54,7 +54,7 @@ class vgl_line_segment_3d
   //: assignment
   inline void set(vgl_point_3d<Type> const& p1, vgl_point_3d<Type> const& p2) { point1_ = p1; point2_ = p2; }
 
-  //: Return the direction vector of this line (not normalised)
+  //: Return the direction vector of this line (not normalised - but perhaps it should be, like other line classes?)
   inline vgl_vector_3d<Type> direction() const { return point2()-point1(); }
   
   //: Return a point on the line defined by a scalar parameter \a t.
@@ -62,6 +62,7 @@ class vgl_line_segment_3d
   // 0<t<1 for points on the segment between point1 and point2.
   // t<0 for points on the (infinite) line, outside the segment, and closer to point1 than to point2.
   // t>1 for points on the (infinite) line, outside the segment, and closer to point2 than to point1.
+  //\note Assumes that direction() is not normalized.
   inline vgl_point_3d<Type> point_t(const double t) const { return point1() + t*direction(); }
   
   //: Check if point \a p is on the line segment

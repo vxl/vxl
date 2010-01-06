@@ -91,7 +91,7 @@ class vgl_line_segment_2d
   // 0<t<1 for points on the segment between point1 and point2.
   // t<0 for points on the (infinite) line, outside the segment, and closer to point1 than to point2.
   // t>1 for points on the (infinite) line, outside the segment, and closer to point2 than to point1.
-  inline vgl_point_2d<Type> point_t(const double t) const { return point1() + t*direction(); }
+  inline vgl_point_2d<Type> point_t(const double t) const { return point1() + t*(point2_-point1_); }
 };
 
 //: Write to stream
