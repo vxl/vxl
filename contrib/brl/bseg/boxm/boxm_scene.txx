@@ -14,6 +14,7 @@
 #include <vsl/vsl_binary_io.h>
 #include <vpgl/bgeo/bgeo_lvcs.h>
 
+#include <vpl/vpl.h>
 template <class T>
 boxm_scene<T>::boxm_scene(const bgeo_lvcs& lvcs, const vgl_point_3d<double>& origin,
                           const vgl_vector_3d<double>& block_dim, const vgl_vector_3d<unsigned>& world_dim)
@@ -431,7 +432,19 @@ bool boxm_scene<T>::parse_xml_string(vcl_string xml, boxm_scene_parser& parser)
   return true;
 }
 
-
+template <class T>
+void boxm_scene<T>::clean_scene()
+{
+  boxm_block_iterator<T > iter=this->iterator();
+  iter.begin();
+  while (!iter.end()) {
+    if (this->discover_block(iter.index().x(),iter.index().y(),iter.index().z())) {
+      vcl_string filename=this->gen_block_path(iter.index().x(),iter.index().y(),iter.index().z());
+      vpl_unlink(filename.c_str());
+    }
+    iter++;
+  }
+}
 template <class T>
 boxm_block_iterator<T>& boxm_block_iterator<T>::begin()
 {

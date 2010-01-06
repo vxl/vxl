@@ -98,6 +98,7 @@ class boxm_scene :public boxm_scene_base
 
   bool get_block_index(vgl_point_3d<double>& p, vgl_point_3d<int> & index);
 
+  //: what is the use of this?
   boxm_block<T>* get_block(unsigned i, unsigned j, unsigned k) { return blocks_(i,j,k); }
 
   boxm_block<T>* get_block(vgl_point_3d<int>& idx) { return blocks_(idx.x(), idx.y(), idx.z()); }
@@ -123,7 +124,8 @@ class boxm_scene :public boxm_scene_base
 
   //: generates a name for the block binary file based on the 3D vector index
   vcl_string gen_block_path(int x, int y, int z);
-
+ 
+  void clean_scene();
  protected:
   bgeo_lvcs lvcs_;
   vgl_point_3d<double> origin_;
