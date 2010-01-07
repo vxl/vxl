@@ -1,5 +1,5 @@
-#ifndef reg_bvpl_h_
-#define reg_bvpl_h_
+#ifndef reg_bvpl_octree_h_
+#define reg_bvpl_octree_h_
 
 #include <bpro/bpro_batch/bpro_batch.h>
 
