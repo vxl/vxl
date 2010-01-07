@@ -1,3 +1,5 @@
+#ifndef octree_test_driver_txx_
+#define octree_test_driver_txx_
 
 #include "octree_test_driver.h"
 
@@ -28,8 +30,8 @@ octree_test_driver<T>::setup_cl()
     return SDK_FAILURE;
   else
     return SDK_SUCCESS;
-
 }
+
 template <class T>
 void octree_test_driver<T>::set_buffers()
 {
@@ -40,6 +42,7 @@ void octree_test_driver<T>::set_buffers()
   input_camera_buf_  =cl_manager_->camera_buf();
   input_imgdims_buf_ =cl_manager_->imgdims_buf();
 }
+
 template <class T>
 int octree_test_driver<T>::create_kernel(vcl_string const& kernel_name)
 {
@@ -48,6 +51,7 @@ int octree_test_driver<T>::create_kernel(vcl_string const& kernel_name)
   else
     return SDK_SUCCESS;
 }
+
 template <class T>
 int octree_test_driver<T>::set_tree_args()
 {
@@ -74,6 +78,7 @@ int octree_test_driver<T>::set_tree_args()
   else
     return SDK_SUCCESS;
 }
+
 template <class T>
 int octree_test_driver<T>::set_ray_trace_args()
 {
@@ -100,6 +105,7 @@ int octree_test_driver<T>::set_ray_trace_args()
   else
     return SDK_SUCCESS;
 }
+
 template <class T>
 int octree_test_driver<T>::set_camera_args()
 {
@@ -258,6 +264,7 @@ int octree_test_driver<T>::run_tree_test_kernels()
   else
     return SDK_SUCCESS;
 }
+
 template <class T>
 int octree_test_driver<T>::run_ray_trace_test_kernels()
 {
@@ -384,6 +391,7 @@ int octree_test_driver<T>::run_ray_trace_test_kernels()
   else
     return SDK_SUCCESS;
 }
+
 template <class T>
 int octree_test_driver<T>::run_ray_creation_test_kernels()
 {
@@ -512,6 +520,7 @@ int octree_test_driver<T>::run_ray_creation_test_kernels()
   else
     return SDK_SUCCESS;
 }
+
 template <class T>
 int octree_test_driver<T>::build_program()
 {
@@ -520,11 +529,13 @@ int octree_test_driver<T>::build_program()
   else
     return SDK_SUCCESS;
 }
+
 template <class T>
 int octree_test_driver<T>::release_kernel()
 {
   return cl_manager_->release_kernel();
 }
+
 template <class T>
 int octree_test_driver<T>::cleanup_tree_test()
 {
@@ -540,6 +551,7 @@ int octree_test_driver<T>::cleanup_tree_test()
   else
     return SDK_SUCCESS;
 }
+
 template <class T>
 int octree_test_driver<T>::cleanup_ray_test()
 {
@@ -555,10 +567,12 @@ int octree_test_driver<T>::cleanup_ray_test()
   else
     return SDK_SUCCESS;
 }
+
 template <class T>
 octree_test_driver<T>::~octree_test_driver()
 {
 }
+
 template <class T>
 void octree_test_driver<T>::print_kernel_usage_info()
 {
@@ -570,3 +584,4 @@ void octree_test_driver<T>::print_kernel_usage_info()
 #define OCTREE_TEST_DRIVER_INSTANTIATE(T) \
 template class octree_test_driver<T >
 
+#endif // octree_test_driver_txx_
