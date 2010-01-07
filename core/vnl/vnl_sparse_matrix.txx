@@ -62,6 +62,8 @@ template <class T>
 void vnl_sparse_matrix<T>::mult(vnl_sparse_matrix<T> const& rhs, vnl_sparse_matrix<T>& result) const
 {
   assert(rhs.rows() == columns());
+  assert(this != &result); // make sure not to overwrite *this
+  assert(&rhs != &result); // make sure not to overwrite rhs
   unsigned int result_rows = rows();
   unsigned int result_cols = rhs.columns();
 
