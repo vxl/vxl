@@ -1,7 +1,6 @@
-// This is bvpl_cell_data_traits.h
+// This is brl/bseg/bvpl/bvpl_octree/bvpl_cell_data_traits.h
 #ifndef bvpl_cell_data_traits_h
 #define bvpl_cell_data_traits_h
-
 //:
 // \file
 // \brief  Set of accessors of cell's data, taking care of different datatypes
