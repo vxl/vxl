@@ -3,12 +3,10 @@ include ../config.mk
 include $(VXLROOT)/core/testlib/config.mk
 
 TESTMAIN := test_driver.cxx
-SOURCES += octree_test_driver.cxx
-MANPAGE_SOURCES += octree_test_driver.txx
 SOURCES += open_cl_test_data.cxx
+MANPAGE_SOURCES += octree_test_driver.txx
 
 TESTS += test_octree.cxx
-TESTS += test_ray_trace.cxx
 TESTS += test_expected_image.cxx
 TESTS += test_backproject_ray.cxx
 
