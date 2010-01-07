@@ -93,9 +93,6 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\boxm_ray_trace_manager.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\boxm_opt_opencl_utils.cxx
 # End Source File
 # Begin Source File
