@@ -9,7 +9,7 @@ IF(OPENCL_FOUND)
   INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
 
   SET(boxm_opt_opencl_sources
-      boxm_ray_trace_manager.h boxm_ray_trace_manager.cxx boxm_ray_trace_manager.txx
+      boxm_ray_trace_manager.h boxm_ray_trace_manager.txx
       boxm_opencl_manager.h    boxm_opencl_manager.txx
       boxm_opt_opencl_utils.h  boxm_opt_opencl_utils.cxx
      )
