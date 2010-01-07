@@ -21,6 +21,7 @@ IF(PYTHON_LIBRARY OR PYTHON_DEBUG_LIBRARY)
     PATHS
     ${PYTHON_INCLUDE_PATH}
     ${PYTHON_FRAMEWORK_INCLUDES}
+    [HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\2.6\\InstallPath]/PC
     [HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\2.5\\InstallPath]/PC
     [HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\2.4\\InstallPath]/PC
     [HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\2.3\\InstallPath]/PC
@@ -31,6 +32,7 @@ IF(PYTHON_LIBRARY OR PYTHON_DEBUG_LIBRARY)
     [HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\1.5\\InstallPath]/PC
 
     PATH_SUFFIXES
+     python2.6
      python2.5
      python2.4
      python2.3
