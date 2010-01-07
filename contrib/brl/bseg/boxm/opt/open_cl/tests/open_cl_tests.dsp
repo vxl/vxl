@@ -108,7 +108,22 @@ SOURCE=.\test_octree.cxx
 SOURCE=.\test_ray_trace.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_backproject_ray.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_expected_image.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/octree_test_driver+boxm_sample+BOXM_APM_MOG_GREY--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/octree_test_driver+boxm_sample+BOXM_APM_SIMPLE_GREY--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/octree_test_driver+float-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -118,6 +133,9 @@ SOURCE=.\open_cl_test_data.h
 # End Source File
 # Begin Source File
 SOURCE=.\octree_test_driver.h
+# End Source File
+# Begin Source File
+SOURCE=.\octree_test_driver.txx
 # End Source File
 # End Group
 # End Target

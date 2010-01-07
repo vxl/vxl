@@ -93,6 +93,9 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
+SOURCE=.\temp.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/bvpl_octree_sample+float-.cxx
 # End Source File
 # Begin Source File
