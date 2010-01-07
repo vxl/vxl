@@ -99,13 +99,7 @@ SOURCE=.\test_driver.cxx
 SOURCE=.\open_cl_test_data.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\octree_test_driver.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\test_octree.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\test_ray_trace.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_backproject_ray.cxx
