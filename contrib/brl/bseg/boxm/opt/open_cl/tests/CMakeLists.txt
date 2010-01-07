@@ -1,7 +1,7 @@
 
 SET(boxm_opt_opencl_test_sources 
   test_driver.cxx
-  octree_test_driver.h octree_test_driver.cxx octree_test_driver.txx
+  octree_test_driver.h octree_test_driver.txx
   open_cl_test_data.h  open_cl_test_data.cxx
   test_octree.cxx
   test_backproject_ray.cxx
