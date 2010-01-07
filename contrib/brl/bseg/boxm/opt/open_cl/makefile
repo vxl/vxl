@@ -2,7 +2,6 @@ USES += contrib/brl contrib/brl/bbas contrib/brl/bseg core
 
 LIBRARY := open_cl
 
-SOURCES += boxm_ray_trace_manager.cxx
 MANPAGE_SOURCES += boxm_ray_trace_manager.txx
 MANPAGE_SOURCES += boxm_opencl_manager.txx
 SOURCES += boxm_opt_opencl_utils.cxx
