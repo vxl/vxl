@@ -3,19 +3,19 @@
 
 #include <vcl_string.h>
 #include <vcl_iostream.h>
+#include <vcl_vector.h>
 #include <bcl/bcl_cl.h>
-#include <boct/boct_tree.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vbl/vbl_array_2d.h>
-#include <vcl_vector.h>
 #include "boxm_opencl_manager.h"
 #include <boxm/boxm_sample.h>
 #include <boxm/boxm_apm_traits.h>
 #include <boct/boct_tree.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include "boxm_opt_opencl_utils.h"
-//: T is the type of the data stored in the tree 
-template <class T> 
+
+// T is the type of the data stored in the tree
+template <class T>
 class boxm_ray_trace_manager : public boxm_opencl_manager<boxm_ray_trace_manager<T> >
 {
   vcl_string prog_;
