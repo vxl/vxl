@@ -99,19 +99,19 @@ SOURCE=.\temp.cxx
 SOURCE=.\Templates/bvpl_octree_sample+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boxm+bvpl_octree_sample+bsta_num_obs+bsta_gauss_f1---.cxx
+SOURCE=.\Templates/boxm_block+boct_tree+short.bvpl_octree_sample+bsta_num_obs+bsta_gauss_f1----.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/bvpl_octree_sample+bsta_num_obs+bsta_gauss_f1--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boxm+bvpl_octree_sample+float--.cxx
+SOURCE=.\Templates/boxm_block+boct_tree+short.bvpl_octree_sample+float---.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boct+bvpl_octree_sample+float--.cxx
+SOURCE=.\Templates/boct_tree+short.bvpl_octree_sample+float--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boct+bvpl_octree_sample+bsta_num_obs+bsta_gauss_f1---.cxx
+SOURCE=.\Templates/boct_tree+short.bvpl_octree_sample+bsta_num_obs+bsta_gauss_f1---.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -146,3 +146,4 @@ SOURCE=.\bvpl_cell_data_traits.h
 # End Group
 # End Target
 # End Project
+# Begin Source File

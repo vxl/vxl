@@ -96,13 +96,37 @@ LIB32=link.exe -lib
 SOURCE=.\boxm_ray_trace_manager.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boxm_opencl_manager+boxm_ray_trace_manager-.cxx
+SOURCE=.\boxm_opt_opencl_utils.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_opencl_manager+boxm_ray_trace_manager+float--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_io_array_2d+vnl_vector_fixed+float.3--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_array_2d+vnl_vector_fixed+float.3--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_ray_trace_manager+boxm_sample+BOXM_APM_MOG_GREY--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_opencl_manager+boxm_ray_trace_manager+boxm_sample+BOXM_APM_MOG_GREY---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_vector_fixed+float.16-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_opencl_manager+boxm_ray_trace_manager+boxm_sample+BOXM_APM_SIMPLE_GREY---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_ray_trace_manager+boxm_sample+BOXM_APM_SIMPLE_GREY--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_ray_trace_manager+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\octree_library_functions.cl
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -115,6 +139,12 @@ SOURCE=.\boxm_opencl_manager.txx
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_ray_trace_manager.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_opt_opencl_utils.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_ray_trace_manager.txx
 # End Source File
 # End Group
 # End Target
