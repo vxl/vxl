@@ -30,6 +30,7 @@ static void split(vcl_vector<vnl_vector_fixed<int, 4> >& cell_array,
     cell_array.push_back(cell);
   }
 }
+
 template<class T>
 static void
 copy_to_arrays(boct_tree_cell<short, T >* cell_ptr,
@@ -40,15 +41,15 @@ copy_to_arrays(boct_tree_cell<short, T >* cell_ptr,
   //cell_input_ptr is the array index for the cell being constructed
   //it already exists in the cell array but only has the parent index set
   //no data or child pointers
-  //: convert the data to 16 vector size
 
+  // convert the data to 16 vector size
   vnl_vector_fixed<float, 16> data(0.0f);
 
-  if(boct_tree_cell<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > * cell_ptr_simple_grey
+  if (boct_tree_cell<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > * cell_ptr_simple_grey
       =reinterpret_cast<boct_tree_cell<short, boxm_sample<BOXM_APM_SIMPLE_GREY> >* >(cell_ptr))
   {
     boxm_sample<BOXM_APM_SIMPLE_GREY> cell_data = cell_ptr_simple_grey->data();
-    data[0]=cell_data.alpha; //: alpha
+    data[0]=cell_data.alpha; // alpha
 
     boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::apm_datatype appear=cell_data.appearance_;
 
@@ -58,30 +59,28 @@ copy_to_arrays(boct_tree_cell<short, T >* cell_ptr,
     data[4]=appear.sigma();
     data[5]=appear.gauss_weight();
   }
-  else if(boct_tree_cell<short, boxm_sample<BOXM_APM_MOG_GREY> > * cell_ptr_mog_grey
-      =reinterpret_cast<boct_tree_cell<short, boxm_sample<BOXM_APM_MOG_GREY> >* >(cell_ptr))
+  else if (boct_tree_cell<short, boxm_sample<BOXM_APM_MOG_GREY> > * cell_ptr_mog_grey = // assignment, not comparison!
+           reinterpret_cast<boct_tree_cell<short, boxm_sample<BOXM_APM_MOG_GREY> >* >(cell_ptr))
   {
       boxm_sample<BOXM_APM_MOG_GREY> cell_data = cell_ptr_mog_grey->data();
-      data[0]=cell_data.alpha; //: alpha
+      data[0]=cell_data.alpha; // alpha
       boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype appear=cell_data.appearance_;
 
       data[1]=(float)appear.num_components(); // num of components
       data[2]=3; // size of component
       unsigned j=3;
-      for(unsigned i=0;i<data[1];i++)
+      for (unsigned i=0;i<data[1];i++)
       {
           data[j]=appear.distribution(i).mean();++j;
           data[j]=appear.distribution(i).var();++j;
           data[j]=appear.weight(i);++j;
       }
-
   }
-  else if(boct_tree_cell<short, float > * cell_ptr_float
-      =reinterpret_cast<boct_tree_cell<short, float >* >(cell_ptr))
+  else if (boct_tree_cell<short, float > * cell_ptr_float = // assignment, no comparison!
+           reinterpret_cast<boct_tree_cell<short, float >* >(cell_ptr))
   {
       float cell_data = cell_ptr_float->data();
-      data[0]=cell_data; //: alpha
-
+      data[0]=cell_data; // alpha
   }
   // data pointer will be at index == size after the push_back
   cell_array[cell_input_ptr][2] = data_array.size();
@@ -104,6 +103,7 @@ copy_to_arrays(boct_tree_cell<short, T >* cell_ptr,
     }
   }
 }
+
 template<class T>
 bool boxm_ray_trace_manager<T>::setup_tree()
 {
@@ -164,10 +164,10 @@ bool boxm_ray_trace_manager<T>::setup_tree()
 #else
   global_bbox_ = (cl_float*)memalign(16, sizeof(cl_float4));
 #endif
-    global_bbox_[0]=tree_->bounding_box().min_x();
-    global_bbox_[1]=tree_->bounding_box().min_y();
-    global_bbox_[2]=tree_->bounding_box().min_z();
-    global_bbox_[3]=tree_->bounding_box().width();
+  global_bbox_[0]=tree_->bounding_box().min_x();
+  global_bbox_[1]=tree_->bounding_box().min_y();
+  global_bbox_[2]=tree_->bounding_box().min_z();
+  global_bbox_[3]=tree_->bounding_box().width();
 
   return true;
 }
@@ -176,23 +176,23 @@ bool boxm_ray_trace_manager<T>::setup_tree()
 template<class T>
 bool boxm_ray_trace_manager<T>::setup_tree_results()
 {
-    if (!tree_)
-        return false;
+  if (!tree_)
+    return false;
 
 #if defined (_WIN32)
-    tree_results_ = (cl_int*)_aligned_malloc(this->tree_result_size()* sizeof(cl_int4), 16);
+  tree_results_ = (cl_int*)_aligned_malloc(this->tree_result_size()* sizeof(cl_int4), 16);
 #elif defined(__APPLE__)
-    tree_results_ = (cl_int*)malloc(this->tree_result_size() * sizeof(cl_int4));
+  tree_results_ = (cl_int*)malloc(this->tree_result_size() * sizeof(cl_int4));
 #else
-    tree_results_ = (cl_int*)memalign(16, this->tree_result_size() * sizeof(cl_int4));
+  tree_results_ = (cl_int*)memalign(16, this->tree_result_size() * sizeof(cl_int4));
 #endif
 
-    if (tree_results_ == NULL)
-    {
-        vcl_cout << "Failed to allocate host memory. (tree_results)\n";
-        return SDK_FAILURE;
-    }
-    this->clear_tree_results();
+  if (tree_results_ == NULL)
+  {
+    vcl_cout << "Failed to allocate host memory. (tree_results)\n";
+    return SDK_FAILURE;
+  }
+  this->clear_tree_results();
 
   return true;
 }
@@ -201,94 +201,95 @@ bool boxm_ray_trace_manager<T>::setup_tree_results()
 template<class T>
 bool boxm_ray_trace_manager<T>::setup_camera()
 {
-    if (!pcam)
-        return false;
+  if (!pcam)
+    return false;
 
-    vnl_svd<double>* svd=pcam->svd();
+  vnl_svd<double>* svd=pcam->svd();
 
-    vnl_matrix<double> Ut=svd->U().conjugate_transpose();
-    vnl_matrix<double> V=svd->V();
-    vnl_vector<double> Winv=svd->Winverse().diagonal();
+  vnl_matrix<double> Ut=svd->U().conjugate_transpose();
+  vnl_matrix<double> V=svd->V();
+  vnl_vector<double> Winv=svd->Winverse().diagonal();
 
-    svd_UtWV_=NULL;
+  svd_UtWV_=NULL;
 #if defined (_WIN32)
-    svd_UtWV_ =    (cl_float*)_aligned_malloc( sizeof(cl_float16)*3, 16);
+  svd_UtWV_ =  (cl_float*)_aligned_malloc( sizeof(cl_float16)*3, 16);
 #elif defined(__APPLE__)
-    svd_UtWV_ =    (cl_float*)malloc( sizeof(cl_float16)*3, 16);
+  svd_UtWV_ =  (cl_float*)malloc( sizeof(cl_float16)*3, 16);
 #else
-    svd_UtWV_ =    (cl_float*)memalign(16, sizeof(cl_float16)*3);
+  svd_UtWV_ =  (cl_float*)memalign(16, sizeof(cl_float16)*3);
 #endif
 
-    int cnt=0;
-    for(unsigned i=0;i<Ut.rows();i++)
+  int cnt=0;
+  for (unsigned i=0;i<Ut.rows();i++)
+  {
+    for (unsigned j=0;j<Ut.cols();j++)
     {
-        for(unsigned j=0;j<Ut.cols();j++)
-        {
-            svd_UtWV_[cnt]=Ut(i,j);
-            ++cnt;
-        }
-        svd_UtWV_[cnt]=0;
-        ++cnt;
+      svd_UtWV_[cnt]=Ut(i,j);
+      ++cnt;
     }
-    for(unsigned i=0;i<V.rows();i++)
-        for(unsigned j=0;j<V.cols();j++)
-        {
-            svd_UtWV_[cnt]=V(i,j);
-            ++cnt;
-        }
-    for(unsigned i=0;i<Winv.size();i++)
+    svd_UtWV_[cnt]=0;
+    ++cnt;
+  }
+  for (unsigned i=0;i<V.rows();i++)
+    for (unsigned j=0;j<V.cols();j++)
     {
-        svd_UtWV_[cnt]=Winv(i);
-        ++cnt;
+      svd_UtWV_[cnt]=V(i,j);
+      ++cnt;
     }
+  for (unsigned i=0;i<Winv.size();i++)
+  {
+    svd_UtWV_[cnt]=Winv(i);
+    ++cnt;
+  }
   return true;
 }
-
 
 
 template<class T>
 bool boxm_ray_trace_manager<T>::setup_img_dims(unsigned ni,unsigned nj)
 {
-    ni_=ni;
-    nj_=nj;
+  ni_=ni;
+  nj_=nj;
 #if defined (_WIN32)
-    imgdims_ =    (cl_uint*)_aligned_malloc( sizeof(cl_uint4), 16);
+  imgdims_ =  (cl_uint*)_aligned_malloc( sizeof(cl_uint4), 16);
 #elif defined(__APPLE__)
-    imgdims_ =    (cl_uint*)malloc( sizeof(cl_uint4), 16);
+  imgdims_ =  (cl_uint*)malloc( sizeof(cl_uint4), 16);
 #else
-    imgdims_ =    (cl_uint*)memalign(16, sizeof(cl_uint));
+  imgdims_ =  (cl_uint*)memalign(16, sizeof(cl_uint));
 #endif
 
-    imgdims_[0]=ni;
-    imgdims_[1]=nj;
-    imgdims_[2]=0;
-    imgdims_[3]=0;
+  imgdims_[0]=ni;
+  imgdims_[1]=nj;
+  imgdims_[2]=0;
+  imgdims_[3]=0;
 
-    return true;
+  return true;
 }
+
 template<class T>
 bool boxm_ray_trace_manager<T>::setup_roi_dims(unsigned min_i,unsigned max_i,unsigned min_j,unsigned max_j)
 {
 #if defined (_WIN32)
-    roidims_ =    (cl_uint*)_aligned_malloc( sizeof(cl_uint4), 16);
+  roidims_ =  (cl_uint*)_aligned_malloc( sizeof(cl_uint4), 16);
 #elif defined(__APPLE__)
-    roidims_ =    (cl_uint*)malloc( sizeof(cl_uint4), 16);
+  roidims_ =  (cl_uint*)malloc( sizeof(cl_uint4), 16);
 #else
-    roidims_ =    (cl_uint*)memalign(16, sizeof(cl_uint));
+  roidims_ =  (cl_uint*)memalign(16, sizeof(cl_uint));
 #endif
 
-    roidims_[0]=min_i;
-    roidims_[1]=max_i;
-    roidims_[2]=min_j;
-    roidims_[3]=max_j;
+  roidims_[0]=min_i;
+  roidims_[1]=max_i;
+  roidims_[2]=min_j;
+  roidims_[3]=max_j;
 
-    return true;
+  return true;
 }
+
 template<class T>
 bool boxm_ray_trace_manager<T>::setup_expected_image(unsigned ni,unsigned nj)
 {
-    ni_=ni;
-    nj_=nj;
+  ni_=ni;
+  nj_=nj;
 #if defined (_WIN32)
   ray_results_ = (cl_float*)_aligned_malloc(ni*nj*sizeof(cl_float4), 16);
 #elif defined(__APPLE__)
@@ -297,24 +298,25 @@ bool boxm_ray_trace_manager<T>::setup_expected_image(unsigned ni,unsigned nj)
   ray_results_ = (cl_float*)memalign(16, ni*nj* sizeof(cl_float4));
 #endif
 
-  for(unsigned i=0;i<ni*nj*4;)
+  for (unsigned i=0;i<ni*nj*4;)
   {
-      ray_results_[i]=0.0f;
-      ray_results_[i+1]=1.0f;
-      ray_results_[i+2]=0.0f;
-      ray_results_[i+3]=0.0f;
-      i+=4;
+    ray_results_[i]=0.0f;
+    ray_results_[i+1]=1.0f;
+    ray_results_[i+2]=0.0f;
+    ray_results_[i+3]=0.0f;
+    i+=4;
   }
   return true;
 }
+
 template<class T>
 bool boxm_ray_trace_manager<T>::setup_ray_origin()
 {
-    if (!pcam)
-        return false;
+  if (!pcam)
+    return false;
 
-    vgl_point_3d<double> camcenter=pcam->camera_center();
-    
+  vgl_point_3d<double> camcenter=pcam->camera_center();
+
 #if defined (_WIN32)
   ray_origin_ = (cl_float*)_aligned_malloc(sizeof(cl_float4), 16);
 #elif defined(__APPLE__)
@@ -323,17 +325,17 @@ bool boxm_ray_trace_manager<T>::setup_ray_origin()
   ray_origin_ = (cl_float*)memalign(16, sizeof(cl_float4));
 #endif
 
-    ray_origin_[0]=(float)camcenter.x();
-    ray_origin_[1]=(float)camcenter.y();
-    ray_origin_[2]=(float)camcenter.z();
-    ray_origin_[3]=1.0;
+  ray_origin_[0]=(float)camcenter.x();
+  ray_origin_[1]=(float)camcenter.y();
+  ray_origin_[2]=(float)camcenter.z();
+  ray_origin_[3]=1.0;
 
-    return true;
+  return true;
 }
+
 template<class T>
 bool boxm_ray_trace_manager<T>::setup_ray_results()
 {
-    
 #if defined (_WIN32)
   ray_results_ = (cl_float*)_aligned_malloc(sizeof(cl_float4)*this->n_rays(), 16);
 #elif defined(__APPLE__)
@@ -342,13 +344,13 @@ bool boxm_ray_trace_manager<T>::setup_ray_results()
   ray_results_ = (cl_float*)memalign(16, sizeof(cl_float4)*this->n_rays());
 #endif
 
-    for(unsigned i=0;i<this->n_rays();)
-        for(unsigned j=0;j<4;j++)
-            ray_results_[i++]=0.0;
-    
+  for (unsigned i=0;i<this->n_rays();)
+    for (unsigned j=0;j<4;j++)
+      ray_results_[i++]=0.0;
 
-    return true;
+  return true;
 }
+
 template<class T>
 int boxm_ray_trace_manager<T>::setup_tree_input_buffers()
 {
@@ -376,6 +378,7 @@ int boxm_ray_trace_manager<T>::setup_tree_input_buffers()
   else
     return SDK_SUCCESS;
 }
+
 template<class T>
 int boxm_ray_trace_manager<T>::setup_camera_input_buffer()
 {
@@ -387,6 +390,7 @@ int boxm_ray_trace_manager<T>::setup_camera_input_buffer()
   else
     return SDK_SUCCESS;
 }
+
 template<class T>
 int boxm_ray_trace_manager<T>::setup_roidims_input_buffer()
 {
@@ -397,8 +401,8 @@ int boxm_ray_trace_manager<T>::setup_roidims_input_buffer()
     return SDK_FAILURE;
   else
     return SDK_SUCCESS;
-
 }
+
 template<class T>
 int boxm_ray_trace_manager<T>::setup_ray_origin_buffer()
 {
@@ -410,6 +414,7 @@ int boxm_ray_trace_manager<T>::setup_ray_origin_buffer()
   else
     return SDK_SUCCESS;
 }
+
 template<class T>
 int boxm_ray_trace_manager<T>::setup_expected_img_buffer()
 {
@@ -419,12 +424,13 @@ int boxm_ray_trace_manager<T>::setup_expected_img_buffer()
   if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (expected image) failed."))
     return SDK_FAILURE;
   out_expected_image_buf_ = clCreateBuffer(context_,CL_MEM_WRITE_ONLY | CL_MEM_USE_HOST_PTR,
-                                       ni_*nj_* sizeof(cl_float4),ray_results_,&status);
+                                           ni_*nj_* sizeof(cl_float4),ray_results_,&status);
   if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (expected image) failed."))
     return SDK_FAILURE;
   else
     return SDK_SUCCESS;
 }
+
 template<class T>
 int boxm_ray_trace_manager<T>::setup_imgdims_buffer()
 {
@@ -435,7 +441,6 @@ int boxm_ray_trace_manager<T>::setup_imgdims_buffer()
     return SDK_FAILURE;
   else
     return SDK_SUCCESS;
-
 }
 
 template<class T>
@@ -498,6 +503,7 @@ int boxm_ray_trace_manager<T>::build_kernel_program()
   else
     return SDK_SUCCESS;
 }
+
 template<class T>
 int boxm_ray_trace_manager<T>::create_kernel(vcl_string const& kernel_name)
 {
@@ -523,6 +529,7 @@ int boxm_ray_trace_manager<T>::release_kernel()
   else
     return SDK_SUCCESS;
 }
+
 template<class T>
 void boxm_ray_trace_manager<T>::clear_tree_results()
 {
@@ -532,6 +539,7 @@ void boxm_ray_trace_manager<T>::clear_tree_results()
       tree_results_[i]=0;
   }
 }
+
 template<class T>
 void boxm_ray_trace_manager<T>::clear_ray_results()
 {
@@ -541,6 +549,7 @@ void boxm_ray_trace_manager<T>::clear_ray_results()
       ray_results_[i]=0.0f;
   }
 }
+
 template<class T>
 vcl_size_t boxm_ray_trace_manager<T>::n_ray_groups()
 {
@@ -550,26 +559,27 @@ vcl_size_t boxm_ray_trace_manager<T>::n_ray_groups()
     ng = 1;
   return ng;
 }
+
 template<class T>
 int boxm_ray_trace_manager<T>::setup_tree_processing()
 {
-  if (setup_tree_input_buffers()!=SDK_SUCCESS)
-    return SDK_FAILURE;
-  else if (build_kernel_program()!=SDK_SUCCESS)
+  if (setup_tree_input_buffers()  != SDK_SUCCESS ||
+      build_kernel_program()      != SDK_SUCCESS)
     return SDK_FAILURE;
   else
     return SDK_SUCCESS;
 }
+
 template<class T>
 int boxm_ray_trace_manager<T>::setup_ray_processing()
 {
-  //if (setup_tree_input_buffers()!=SDK_SUCCESS)
-  //  return SDK_FAILURE;
-  //else if (setup_ray_input_buffers()!=SDK_SUCCESS)
-  //  return SDK_FAILURE;
-  //else if (build_kernel_program()!=SDK_SUCCESS)
-  //  return SDK_FAILURE;
-  //else
+#if 0
+  if (setup_tree_input_buffers() != SDK_SUCCESS ||
+      setup_ray_input_buffers()  != SDK_SUCCESS ||
+      build_kernel_program()     != SDK_SUCCESS)
+    return SDK_FAILURE;
+  else
+#endif
     return SDK_SUCCESS;
 }
 
@@ -591,6 +601,7 @@ void boxm_ray_trace_manager<T>::print_tree_input()
       vcl_cout << ")\n";
     }
 }
+
 template<class T>
 void boxm_ray_trace_manager<T>::print_ray_input()
 {
@@ -607,6 +618,7 @@ void boxm_ray_trace_manager<T>::print_ray_input()
                << ray_dir_[i+2] << ' '
                << ray_dir_[i+3] << ")\n\n";
 }
+
 template<class T>
 void boxm_ray_trace_manager<T>::print_ray_results()
 {
@@ -620,6 +632,7 @@ void boxm_ray_trace_manager<T>::print_ray_results()
                << ray_results_[i+3] << ")\n";
   }
 }
+
 template<class T>
 int boxm_ray_trace_manager<T>::cleanup_tree_processing()
 {
@@ -646,6 +659,7 @@ int boxm_ray_trace_manager<T>::cleanup_tree_processing()
   else
     return SDK_SUCCESS;
 }
+
 template<class T>
 int boxm_ray_trace_manager<T>::cleanup_ray_processing()
 {
@@ -665,6 +679,7 @@ int boxm_ray_trace_manager<T>::cleanup_ray_processing()
   else
     return SDK_SUCCESS;
 }
+
 template<class T>
 void boxm_ray_trace_manager<T>::delete_memory()
 {
@@ -707,6 +722,7 @@ void boxm_ray_trace_manager<T>::delete_memory()
     ray_results_ = NULL;
   }
 }
+
 template<class T>
 boxm_ray_trace_manager<T>::~boxm_ray_trace_manager()
 {
@@ -714,6 +730,7 @@ boxm_ray_trace_manager<T>::~boxm_ray_trace_manager()
     clReleaseProgram(program_);
   this->delete_memory();
 }
+
 template<class T>
 bool boxm_ray_trace_manager<T>::load_kernel_source(vcl_string const& path)
 {
@@ -731,6 +748,7 @@ bool boxm_ray_trace_manager<T>::load_kernel_source(vcl_string const& path)
   prog_ =  ostr.str();
   return prog_.size() > 0;
 }
+
 template<class T>
 bool boxm_ray_trace_manager<T>::append_process_kernels(vcl_string const& path)
 {
@@ -747,6 +765,7 @@ bool boxm_ray_trace_manager<T>::append_process_kernels(vcl_string const& path)
   prog_ += ostr.str();
   return true;
 }
+
 template<class T>
 bool boxm_ray_trace_manager<T>::write_program(vcl_string const& path)
 {
@@ -756,6 +775,7 @@ bool boxm_ray_trace_manager<T>::write_program(vcl_string const& path)
   os << prog_;
   return true;
 }
+
 template<class T>
 bool boxm_ray_trace_manager<T>::load_tree(vcl_string const& path)
 {
@@ -768,6 +788,7 @@ bool boxm_ray_trace_manager<T>::load_tree(vcl_string const& path)
   tree_->b_read(is);
   return true;
 }
+
 template<class T>
 bool boxm_ray_trace_manager<T>::write_tree(vcl_string const& path)
 {
@@ -783,42 +804,42 @@ bool boxm_ray_trace_manager<T>::write_tree(vcl_string const& path)
 }
 
 
+#if 0
+template<boxm_apm_type APM_MODEL>
+bool boxm_ray_trace_manager<APM_MODEL>::load_perspective_camera(vcl_string filename)
+{
+  pcam =new vpgl_perspective_camera<double>;
+  vcl_ifstream ifs(filename.c_str());
+  if (!ifs)
+    return false;
+  else
+    ifs >> *pcam;
 
+   return true;
+}
+#endif // 0
 
-//template<boxm_apm_type APM_MODEL>
-//bool boxm_ray_trace_manager<APM_MODEL>::load_perspective_camera(vcl_string filename)
-//{
-//    pcam =new vpgl_perspective_camera<double>;
-//    vcl_ifstream ifs(filename.c_str());
-//    if(!ifs)
-//        return false;
-//    else
-//        ifs >> *pcam;
-//
-//     return true;
-//}
-//
 template<class T>
 bool boxm_ray_trace_manager<T>::run()
 {
   cl_int status = CL_SUCCESS;  cl_event events[2];
 
   vcl_string error_message="";
-  //: set up a command queue
+  // set up a command queue
   cl_command_queue command_queue = clCreateCommandQueue(this->context(),this->devices()[0],0,&status);
   if (!this->check_val(status,CL_SUCCESS,"Falied in command queue creation" + error_to_string(status)))
     return false;
 
-  if(!load_kernel_source(vcl_string(VCL_SOURCE_ROOT_DIR)
-      +"/contrib/brl/bseg/boxm/opt/open_cl/octree_library_functions.cl") ||
+  if (!load_kernel_source(vcl_string(VCL_SOURCE_ROOT_DIR)
+                          +"/contrib/brl/bseg/boxm/opt/open_cl/octree_library_functions.cl") ||
       !append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-      +"/contrib/brl/bseg/boxm/opt/open_cl/expected_functor.cl")||
+                              +"/contrib/brl/bseg/boxm/opt/open_cl/expected_functor.cl") ||
       !append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-      +"/contrib/brl/bseg/boxm/opt/open_cl/backproject.cl")||
+                              +"/contrib/brl/bseg/boxm/opt/open_cl/backproject.cl") ||
      !append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-      +"/contrib/brl/bseg/boxm/opt/open_cl/expected_ray_trace.cl") )
+                             +"/contrib/brl/bseg/boxm/opt/open_cl/expected_ray_trace.cl") )
      return false;
-  if(build_kernel_program())
+  if (build_kernel_program())
       return false;
 
   kernel_ = clCreateKernel(program_,"expected_ray_trace",&status);

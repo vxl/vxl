@@ -18,13 +18,11 @@ static void test_create_a_ray(octree_test_driver<T> & driver)
     return;
   }
   if (driver.run_ray_creation_test_kernels()!=SDK_SUCCESS) {
-      TEST("Run Kernel test_ray_trace", false, true);
-      return;
+    TEST("Run Kernel test_ray_trace", false, true);
+    return;
   }
-
-
-  
 }
+
 template <class T>
 static void ray_creation_tests(octree_test_driver<T> & test_driver)
 {
@@ -33,15 +31,15 @@ static void ray_creation_tests(octree_test_driver<T> & test_driver)
   ray_mgr->setup_camera();
   ray_mgr->setup_ray_origin();
   ray_mgr->setup_ray_results();
-  
+
   if (ray_mgr->setup_camera_input_buffer()!=SDK_SUCCESS)
-      return;
+    return;
 
   if (ray_mgr->setup_imgdims_buffer()!=SDK_SUCCESS)
-      return;
+    return;
 
   if (ray_mgr->setup_ray_origin_buffer()!=SDK_SUCCESS)
-      return;
+    return;
 
   test_driver.set_buffers();
 
@@ -59,60 +57,57 @@ static void ray_creation_tests(octree_test_driver<T> & test_driver)
 
 static void backproject_rays(vcl_string filename)
 {
-    vpgl_perspective_camera<double> pcam;
-    vcl_ifstream ifs(filename.c_str());
-    if(!ifs)
-        return ;
-    else
-        ifs >> pcam;
-
+  vpgl_perspective_camera<double> pcam;
+  vcl_ifstream ifs(filename.c_str());
+  if (!ifs)
+    return ;
+  else
+    ifs >> pcam;
 
   vgl_line_3d_2_points<double> line=pcam.backproject(vgl_point_2d<double>(1,1));
-
-
 }
 
-static void test_backproject_ray() 
+static void test_backproject_ray()
 {
+  vcl_string root_dir = testlib_root_dir();
+  boxm_ray_trace_manager<float >* ray_mgr = boxm_ray_trace_manager<float >::instance();
+  ray_mgr->setup_img_dims(64,64);
+  vpgl_perspective_camera<double> *pcam=new vpgl_perspective_camera<double> ();
+  vcl_string cam_filename=root_dir+"/contrib/brl/bseg/boxm/opt/open_cl/tests/cam_0.txt";
+  vcl_ifstream ifs(cam_filename.c_str());
+  if (!ifs)
+    return;
+  else
+    ifs >> (*pcam);
 
-    vcl_string root_dir = testlib_root_dir();
-    boxm_ray_trace_manager<float >* ray_mgr = boxm_ray_trace_manager<float >::instance();
-    ray_mgr->setup_img_dims(64,64);
-    vpgl_perspective_camera<double> *pcam=new vpgl_perspective_camera<double> ();
-    vcl_string cam_filename=root_dir+"/contrib/brl/bseg/boxm/opt/open_cl/tests/cam_0.txt";
-    vcl_ifstream ifs(cam_filename.c_str());
-    if(!ifs)
-        return ;
-    else
-        ifs >> (*pcam);
-
-
-    ray_mgr->set_perspective_camera(pcam);
-    octree_test_driver<float > test_driver;
-    bool flag=true;
-    if (test_driver.init())
-    { 
-        ray_creation_tests(test_driver);
-        float * ray_results=test_driver.ray_results();
-        unsigned inc=0;
-        for(unsigned i=0;i<64;i++)
-        {
-            for(unsigned j=0;j<64;j++)
-            {
-                vgl_line_3d_2_points<double> cam_ray = pcam->backproject(vgl_homg_point_2d<double>((double)i,(double)j));
-                vgl_vector_3d<double> norm_direction=normalize(cam_ray.direction());
-                float dist=vcl_sqrt((ray_results[inc]  -norm_direction.x())*(ray_results[inc]  -norm_direction.x())+
-                           (ray_results[++inc]-norm_direction.y())*(ray_results[inc]-norm_direction.y())+     
-                           (ray_results[++inc]-norm_direction.z())*(ray_results[inc]-norm_direction.z()));
-                ++inc;
-                if(dist<1e-4)
-                    flag=false;
-        
-            }
-        }
-        TEST("backproject_ray_test_driver", true, flag);
+  ray_mgr->set_perspective_camera(pcam);
+  octree_test_driver<float > test_driver;
+  bool flag=true;
+  if (test_driver.init())
+  {
+    ray_creation_tests(test_driver);
+    float * ray_results=test_driver.ray_results();
+    unsigned inc=0;
+    for (unsigned i=0;i<64;i++)
+    {
+      for (unsigned j=0;j<64;j++)
+      {
+        vgl_line_3d_2_points<double> cam_ray = pcam->backproject(vgl_homg_point_2d<double>((double)i,(double)j));
+        vgl_vector_3d<double> norm_direction=normalize(cam_ray.direction());
+        float dist=vcl_sqrt((ray_results[inc]  -norm_direction.x())*(ray_results[inc]  -norm_direction.x())+
+               (ray_results[++inc]-norm_direction.y())*(ray_results[inc]-norm_direction.y())+
+               (ray_results[++inc]-norm_direction.z())*(ray_results[inc]-norm_direction.z()));
+        ++inc;
+        if (dist<1e-4)
+          flag=false;
+      }
     }
-    else
-    { TEST("backproject_ray_test_driver", true, false); }
+    TEST("backproject_ray_test_driver", true, flag);
+  }
+  else
+  {
+    TEST("backproject_ray_test_driver", true, false);
+  }
 }
+
 TESTMAIN(test_backproject_ray);
