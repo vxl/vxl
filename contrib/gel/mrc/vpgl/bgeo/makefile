@@ -9,6 +9,7 @@ SOURCES += bgeo_lvcs.cxx
 MANPAGE_SOURCES += bgeo_lvcs_sptr.h
 MANPAGE_SOURCES += bgeo_earth_constants.h
 SOURCES += bgeo_utm.cxx
+SOURCES += bgeo_sun_pos.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
