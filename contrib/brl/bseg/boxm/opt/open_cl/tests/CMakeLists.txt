@@ -6,7 +6,6 @@ SET(boxm_opt_opencl_test_sources
   test_octree.cxx
   test_backproject_ray.cxx
   test_expected_image.cxx
-  test_ray_trace.cxx
 )
 
 
@@ -17,7 +16,7 @@ TARGET_LINK_LIBRARIES( boxm_opt_opencl_test_all boxm_opt_opencl boxm_opt boxm bo
 ADD_TEST( test_octree          ${EXECUTABLE_OUTPUT_PATH}/boxm_opt_opencl_test_all test_octree         )
 ADD_TEST( test_backproject_ray ${EXECUTABLE_OUTPUT_PATH}/boxm_opt_opencl_test_all test_backproject_ray)
 ADD_TEST( test_expected_image  ${EXECUTABLE_OUTPUT_PATH}/boxm_opt_opencl_test_all test_expected_image )
-ADD_TEST( test_ray_trace       ${EXECUTABLE_OUTPUT_PATH}/boxm_opt_opencl_test_all test_ray_trace      )
+
 
 ADD_EXECUTABLE( open_cl_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( open_cl_test_include boxm_opt_opencl )
