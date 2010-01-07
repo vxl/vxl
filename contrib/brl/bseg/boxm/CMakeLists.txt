@@ -48,7 +48,7 @@ AUX_SOURCE_DIRECTORY(Templates boxm_sources)
 
 ADD_LIBRARY(boxm  ${boxm_sources})
 
-TARGET_LINK_LIBRARIES(boxm boct vgl_io vgl_xio vpgl vpgl_algo vsol bgeo bsta bsta_algo imesh expatpp vgl_algo vnl_algo vnl vgl vul vil vbl vsl vcl)
+TARGET_LINK_LIBRARIES(boxm boct vgl_io vgl_xio vpgl vpgl_algo vsol bgeo bsta bsta_algo imesh expatpp vgl_algo vnl_algo vnl vgl vul vil vbl vsl vpl vcl)
 
 #processes
 SUBDIRS(pro)
