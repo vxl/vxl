@@ -23,7 +23,7 @@ IF( PYTHON_FOUND )
     SET_TARGET_PROPERTIES(bvpl_octree_batch PROPERTIES PREFIX "")
 
 
-    TARGET_LINK_LIBRARIES(bvpl_octree_batch bprb brdb bpro_batch vbl bvpl_octree_pro bvpl_pro bvpl_io boxm_pro boxm_opt_pro bvxm_grid_pro bvxm_grid_io)
+    TARGET_LINK_LIBRARIES(bvpl_octree_batch bprb brdb bpro_batch vbl bvpl_octree_pro bvpl_pro bvpl_io boxm_pro boxm_opt_pro bvxm_grid_pro bvxm_grid_io vpgl_io vpgl_pro vil_io vil_pro)
   
     IF (PYTHON_DEBUG_LIBRARIES)
       TARGET_LINK_LIBRARIES( bvpl_octree_batch debug ${PYTHON_DEBUG_LIBRARY})
