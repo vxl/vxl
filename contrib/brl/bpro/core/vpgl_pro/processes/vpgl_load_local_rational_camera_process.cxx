@@ -18,7 +18,6 @@ bool vpgl_load_local_rational_camera_process_cons(bprb_func_process& pro)
   bool ok=false;
   vcl_vector<vcl_string> input_types;
   input_types.push_back("vcl_string");
-  input_types.push_back("vcl_string");
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
@@ -34,21 +33,20 @@ bool vpgl_load_local_rational_camera_process_cons(bprb_func_process& pro)
 //: Execute the process
 bool vpgl_load_local_rational_camera_process(bprb_func_process& pro)
 {
-  if (pro.n_inputs()!= 2) {
-    vcl_cout << "vpgl_load_local_rational_camera_process: The input number should be 2" << vcl_endl;
+  if (pro.n_inputs()!= 1) {
+    vcl_cout << "vpgl_load_local_rational_camera_process: The input number should be 1" << vcl_endl;
     return false;
   }
 
   // get the inputs
   vcl_string camera_filename = pro.get_input<vcl_string>(0);
-  vcl_string lvcs_filename = pro.get_input<vcl_string>(1);
 
-  vpgl_rational_camera<double> *ratcam = read_rational_camera<double>(camera_filename);
+  vpgl_local_rational_camera<double> *ratcam = read_local_rational_camera<double>(camera_filename);
   if ( !ratcam ) {
     vcl_cerr << "Failed to load rational camera from file" << camera_filename << vcl_endl;
     return false;
   }
-
+#if 0   // local rational camera should have lvcs info in it, no need for separate file path for lvcs
   bgeo_lvcs_sptr lvcs = new bgeo_lvcs();
   vcl_ifstream is(lvcs_filename.c_str());
   if (!is){
@@ -60,6 +58,7 @@ bool vpgl_load_local_rational_camera_process(bprb_func_process& pro)
   vpgl_local_rational_camera<double> locratcam(*lvcs,*ratcam);
   vbl_smart_ptr<vpgl_camera<double> > locratcamptr = new vpgl_local_rational_camera<double>(locratcam);
   pro.set_output_val<vpgl_camera_double_sptr>(0, locratcamptr);
-
+#endif
+  pro.set_output_val<vpgl_camera_double_sptr>(0, ratcam);
   return true;
 }
