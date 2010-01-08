@@ -56,9 +56,9 @@ int mbl_lda::classify( const vnl_vector<double>& x )
   vnl_vector<double> d;
   x_to_d(d, x);
   int nc=n_classes();
-  double min_d=1000000;
-  int min_i=-1;
-  for (int i=0;i<nc; ++i)
+  double min_d=(d-d_class_mean(0)).squared_magnitude();
+  int min_i=0;
+  for (int i=1; i<nc; ++i)
   {
     double dist=(d-d_class_mean(i)).squared_magnitude();
     if (dist<min_d ) { min_d= dist; min_i=i; }
