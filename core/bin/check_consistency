@@ -1,6 +1,6 @@
 #! /bin/sh
 exec perl -w -l012 -x $0 ${1+"$@"}
-#!perl
+#! perl -w -l012
 #line 5
 
 # Purpose: list all files in the vxl source tree that have tab characters
@@ -27,17 +27,17 @@ $emacs = '';
 $vim = '';
 $check_includes = '';
 
-while (defined($ARGV[0]) && $ARGV[0] =~ m!^-!)
+while (@ARGV && $ARGV[0] =~ m!^-!)
 {
-  $_ = shift(@ARGV);
+  $_ = shift @ARGV;
   if (m/^-f$/) { $full = 1; }
   elsif (m/^-e$/) { $emacs = 1; }
   elsif (m/^-v$/) { $vim = 1; }
   elsif (m/^-i$/) { $check_includes = 1; }
-  else { print STDERR "Unrecognised command line option $_ ignored"; }
+  else { warn "Unrecognised command line option $_ ignored"; }
 }
 
-if (defined($ARGV[0]))
+if (@ARGV)
 {
   @FILES = @ARGV;
 }
@@ -52,8 +52,7 @@ else
   }
   else
   {
-    print STDERR "VXLROOT is not defined, and no command line arguments were given";
-    exit 0;
+    die "VXLROOT is not defined, and no command line arguments were given";
   }
   $FILES = `find $DIRS -type f \\\( -name \\\*.cxx -o -name \\\*.txx -o -name \\\*.cc -o -name \\\*.cpp -o -name \\\*.c -o -name \\\*.h \\\) -print`;
   @FILES = grep { ! m!/b3p/(minizip|shapelib|expatp*)/! } split /\s+/, $FILES;
@@ -65,12 +64,12 @@ foreach $f (@FILES)
   $f =~ s!\\!/!g; # directory delimiter
   if (-d $f)
   {
-    print STDERR "File $f is actually a directory";
+    warn "File $f is actually a directory";
     next;
   }
   unless (open(FILE, $f))
   {
-    print STDERR "File $f does not exist or cannot be opened for reading";
+    warn "File $f does not exist or cannot be opened for reading";
     next;
   }
   $file=<FILE>;
@@ -569,7 +568,7 @@ foreach $f (@FILES)
     next if ($j eq 'vsol/vsol_point_2d.h' && $f =~ m!Templates/vbl_smart_ptr\+vtol_edge_2d-\.cxx$!);
     next if ($j eq 'vsol/vsol_region_2d.h' && $f =~ m!Templates/vbl_smart_ptr\+vtol_face_2d-\.cxx$!);
     # FINALLY PRINT MESSAGE, IF APPLICABLE
-#   print STDERR "\$j=$j\t\$i=$i\t\$ii=$ii";
+#   warn "\$j=$j\t\$i=$i\t\$ii=$ii";
     &msg(1, "should not have #include <$j>", 1)
       unless ($fl =~ m!$j\>[^\003]*\b$i\b! ||
               $f =~ m!/$ii\.! ||
@@ -947,7 +946,6 @@ foreach $f (@FILES)
         $f !~ m!core/vsl/tests/test_polymorphic_io\.cxx$! &&
         $f !~ m!core/vbl/tests/vbl_test_classes\.cxx$! &&
         $f !~ m!core/vbl/examples/vbl_smart_ptr_example\.cxx$! &&
-        $f !~ m!oxl/ogui/examples/awf/glmovie\.cxx$! &&
         $f !~ m!oxl/apps/glmovie/glmovie.cxx$! &&
         $file_s =~ m!\n\s*(VCL_[_A-Z]*INSTANTIATE[_A-Z]*)! &&
         "$1" ne "VCL_INSTANTIATE_INLINE");

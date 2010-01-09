@@ -18,7 +18,7 @@ use strict;
 my $shell = '';
 while (@ARGV && substr($ARGV[0],0,1) eq '-') {
   if ($ARGV[0] eq '-s') { $shell = 1; shift @ARGV; }
-  else { print STDERR "Unrecognised command line option " . (shift @ARGV) . " ignored"; }
+  else { warn "Unrecognised command line option " . (shift @ARGV) . " ignored"; }
 }
 
 my @DIRS;
@@ -35,8 +35,7 @@ else {
   }
   else
   {
-    print STDERR "VXLROOT is not defined, no command line arguments were given, and current directory has no vcl, core, contrib";
-    exit 0;
+    die "VXLROOT is not defined, no command line arguments were given, and current directory has no vcl, core, contrib";
   }
   @DIRS = grep { ! m!(/\.|/CVS|awfmfc|vgui_example_mfc|v3p/netlib|b3p/minizip)$ !x } @DIRS;
 }
@@ -262,7 +261,7 @@ foreach my $dir (@DIRS)
     while ($l =~ m/\$\{(.*?)\}/) {
       my $a = $1;
       my $b = $names{$a};
-      unless (defined $b) { $b=''; print STDERR "$a is an undefined variable in $cmakef"; }
+      unless (defined $b) { $b=''; warn "$a is an undefined variable in $cmakef"; }
       if ($a eq 'QT_SRCS_DIR' && $b =~ m!impl/qt$ !x) { my $c = "${b}4"; $l =~ s/\$\{$a\}(\S*)/$b$1 $c$1/g; }
       else { $l =~ s/\$\{$a\}/$b/g; }
     }
