@@ -88,9 +88,6 @@ LINK32=link.exe
 SOURCE=.\test_driver.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_include.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\test_bignum.cxx
 # End Source File
 # Begin Source File
@@ -203,6 +200,12 @@ SOURCE=.\test_diag_matrix_fixed.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_na.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_sparse_matrix.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_include.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
