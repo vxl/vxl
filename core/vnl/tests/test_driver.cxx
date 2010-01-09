@@ -38,6 +38,7 @@ DECLARE( test_integrant );
 DECLARE( test_bessel );
 DECLARE( test_crs_index );
 DECLARE( test_sparse_lst_sqr_function );
+DECLARE( test_sparse_matrix );
 
 void
 register_tests()
@@ -79,6 +80,7 @@ register_tests()
   REGISTER( test_bessel );  
   REGISTER( test_crs_index );
   REGISTER( test_sparse_lst_sqr_function );
+  REGISTER( test_sparse_matrix );
 }
 
 DEFINE_MAIN;
