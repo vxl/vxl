@@ -47,8 +47,7 @@ void doTest1()
     vcl_cout << vcl_endl;
   }
 
-  vnl_sparse_matrix<double> sum;
-  m1.add(m2,sum);
+  vnl_sparse_matrix<double> sum = m1+m2;
 
   vcl_cout << "sum:\n";
   for (unsigned i=0; i<n; i++) {
@@ -57,8 +56,7 @@ void doTest1()
     vcl_cout << vcl_endl;
   }
 
-  vnl_sparse_matrix<double> diff;
-  m1.subtract(m2,diff);
+  vnl_sparse_matrix<double> diff = m1-m2;
 
   vcl_cout << "diff:\n";
   for (unsigned i=0; i<n; i++) {
