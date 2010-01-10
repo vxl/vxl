@@ -14,6 +14,7 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/algo/vpgl_backproject.h>
+#include <vpgl/algo/vpgl_ray.h>
 
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
@@ -381,15 +382,26 @@ class boxm_raytrace_function
 
     void generate_ray(float i, float j, vgl_box_3d<double> const& block_bb, vgl_point_3d<double> &ray_origin, vgl_vector_3d<double> &norm_direction)
     {
-        vpgl_perspective_camera<double> const* pcam = static_cast<vpgl_perspective_camera<double> const*>(cam_.ptr());
+      if(cam_->type_name() == "vpgl_perspective_camera"){
+        vpgl_perspective_camera<double> const* pcam = 
+          static_cast<vpgl_perspective_camera<double> const*>(cam_.ptr());
         // backproject image point to a ray
         ray_origin = pcam->camera_center();
         vgl_line_3d_2_points<double> cam_ray = pcam->backproject(vgl_homg_point_2d<double>((double)i,(double)j));
         norm_direction=cam_ray.direction();
         normalize(norm_direction);
+        return;
+      }
+      if(cam_->type_name() == "vpgl_local_rational_camera"){
+        vpgl_local_rational_camera<double> const* lrcam = 
+          static_cast<vpgl_local_rational_camera<double> const*>(cam_.ptr());
+        vpgl_ray::ray(*lrcam,(double)i, (double)j, ray_origin, norm_direction);
+        return;
+      }else{
+        vcl_cerr << "In boxm_raytrace_function: camera type not handled\n";
+        assert(false);
+      }
     }
-
-
     bool entry_point(vgl_box_3d<double> & block_bb, vgl_point_3d<double>  ray_origin, 
         vgl_vector_3d<double> direction, vgl_point_3d<double> & enter_pt){
             double lambda[6];
