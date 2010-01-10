@@ -13,10 +13,11 @@
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_point_3d.h>
-
+#if 0 // Remove dependency on oxl/mvl
 // Following are for comparison
 #include <mvl/FMatrix.h>
 #include <mvl/FMatrixCompute7Point.h>
+#endif
 
 static void test_fm_compute()
 {
@@ -94,7 +95,7 @@ static void test_fm_compute()
   fm1_vnl/=fm1_vnl(0,0);
   vnl_double_3x3 fm1est_vnl = fm1est.get_matrix();
   fm1est_vnl/=fm1est_vnl(0,0);
-
+#if 0 //remove dependency on oxl/mvl
   vcl_vector< FMatrix* > fm1est_mvl;
   FMatrixCompute7Point fmc_mvl;
   fmc_mvl.compute( p1r, p1l, fm1est_mvl );
@@ -102,10 +103,10 @@ static void test_fm_compute()
   vcl_cerr << "Break 3:\n" << fm1est_mvl_vnl; //DEBUG
   fm1est_mvl[1]->get( &fm1est_mvl_vnl );
   fm1est_mvl_vnl/=fm1est_mvl_vnl(0,0);
-
+#endif
   vcl_cerr << "\nTrue fundamental matrix:\n" << fm1_vnl << '\n'
-           << "\nEstimated fundamental matrix:\n" << fm1est_vnl << '\n'
-           << "\nMVL estimated fundamental_matrix:\n" << fm1est_mvl_vnl << '\n';
+           << "\nEstimated fundamental matrix:\n" << fm1est_vnl << '\n';
+           //<< "\nMVL estimated fundamental_matrix:\n" << fm1est_mvl_vnl << '\n';
   TEST_NEAR( "fm compute 8 point from perfect correspondences with outliers",
              (fm1_vnl-fm1est_vnl).frobenius_norm(), 0, 1 );
 

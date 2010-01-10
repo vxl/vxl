@@ -3,6 +3,7 @@
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vpgl/vpgl_rational_camera.h>
+#include <vpgl/bgeo/bgeo_lvcs.h>
 #include <vpgl/algo/vpgl_ray.h>
 
 static void test_ray()
@@ -52,6 +53,20 @@ static void test_ray()
   double x_y = v.x()/v.y();
 
   TEST_NEAR("test ray_direction", x_y,-0.16767109029721888, 0.001);
+
+  // test ray for local rational camera
+  bgeo_lvcs lvcs(33.1855, 44.3542, 32, bgeo_lvcs::wgs84, bgeo_lvcs::DEG, bgeo_lvcs::METERS);
+
+  vpgl_local_rational_camera<double> lrcam(lvcs, rcam);
+
+  vgl_point_3d<double> orig;
+  vgl_vector_3d<double> dir;
+
+  bool good = vpgl_ray::ray(lrcam, ou, ov, orig, dir);
+  vcl_cout << "Orig: " << orig << "\n Dir: " << dir << '\n';
+  vgl_vector_3d<double> tdir(0.0689725,-0.487625,-0.870325);
+  double err = (tdir-dir).length();
+  TEST_NEAR("test local rational ray_direction", err, 0.0, 0.001);
 }
 
 TESTMAIN(test_ray);
