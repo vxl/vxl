@@ -125,6 +125,7 @@ template<>
 class boxm_apm_traits<BOXM_APM_SIMPLE_GREY>
 {
  public:
+  static const unsigned int n_gaussian_modes_ = 1;
   static const unsigned int obs_dim = 1;
   static const unsigned int n_params = 3;
   typedef boxm_simple_grey apm_datatype;
