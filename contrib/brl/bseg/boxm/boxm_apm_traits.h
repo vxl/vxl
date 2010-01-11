@@ -93,7 +93,7 @@ class boxm_apm_traits<BOXM_APM_MOG_RGB>
 class boxm_simple_grey
 {
  public:
-  boxm_simple_grey() : color_(0.5f), one_over_sigma_(1.0f) {}
+  boxm_simple_grey() : color_(0.5f), one_over_sigma_(1.0f),gauss_weight_(1.0f) {}
   boxm_simple_grey(float colour, float std_dev, float gauss_wght=1.0f) : color_(colour), one_over_sigma_(1/std_dev), gauss_weight_(gauss_wght)  { check_vals(); }
   boxm_simple_grey(vnl_vector_fixed<float,3> const& params) : color_(params[0]), one_over_sigma_(1.0f/params[1])  { check_vals(); }
   static short version_no() { return 1; }
