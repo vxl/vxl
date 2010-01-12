@@ -249,10 +249,11 @@ void
 test_ray_trace(__global int4* cells, __global float2* cell_data,
                __global int4* results)
 {
-  float tnear = 0, tfar =0;
   int n_rays = 6;
   float4 origin[6];
   float4 dir[6];
+
+  float tnear = 0, tfar =0;
   //rays normal to cell faces
   origin[0]= (float4)(0.125f, 0.125f, 10.0f, 0.0f);
   origin[1]= (float4)(-10.0f, 0.125f, 0.125f, 0.0f);
@@ -263,7 +264,7 @@ test_ray_trace(__global int4* cells, __global float2* cell_data,
   origin[5]= (float4)(11.0f, -10.0f, 11.0f, 0.0f);
   //rays normal to cell faces
   dir[0]=(float4)(0.0f, 0.0f, -1.0f, 0.0f);
-  dir[1]=(float4)(10.0f, 0.0f, 0.0f, 0.0f);
+  dir[1]=(float4)(1.0f, 0.0f, 0.0f, 0.0f);
   dir[2]=(float4)(0.0f, 1.0f, 0.0f, 0.0f);
   //diagonal rays
   dir[3]=(float4)(-0.577350f, -0.577350f,  -0.577350f, 0.0f);
@@ -274,6 +275,8 @@ test_ray_trace(__global int4* cells, __global float2* cell_data,
   short4 neighbor_code = (short4)-1;
   int root_ptr = 0;
   int n_levels = 3;
+    float cellsize=(float)(1<<n_levels-1);
+ cellsize=1/cellsize;
   float4 cell_min, cell_max;
   float4 entry_pt, exit_pt;
   int result_ptr = 0;
@@ -295,55 +298,75 @@ test_ray_trace(__global int4* cells, __global float2* cell_data,
     while(count<1000){
       //current cell bounding box
       cell_bounding_box(curr_loc_code, n_levels, &cell_min, &cell_max);
-      //exit point of ray
-      if(!cell_exit_point(origin[i], dir[i],cell_min, cell_max, &exit_pt)){
-#if 0
-        results[result_ptr++]=convert_int4(1000.0f*exit_pt);
-        results[result_ptr++]=convert_int4(1000.0f*cell_min);
-        results[result_ptr++]=convert_int4(1000.0f*cell_max);
-#endif
+
+    int hit = intersect_cell(origin[i], dir[i], cell_min, cell_max,&tnear, &tfar);
+
+    if(fabs(tfar-tnear)<cellsize/100)
+    {
+        entry_pt=entry_pt+dir[i]*cellsize/2;
+        entry_loc_code = loc_code(entry_pt, root.w);
+        ////traverse to leaf cell that contains the entry point
+        curr_cell_ptr = traverse_force(cells, root_ptr, root, entry_loc_code,&curr_loc_code);
+
+        if(curr_cell_ptr<0)
+        {
+             break;
+        }
+
+        cell_bounding_box(curr_loc_code, n_levels, &cell_min, &cell_max);
+        hit = intersect_cell(origin[i], dir[i], cell_min, cell_max,&tnear, &tfar);
+
+        if(tnear>tfar)
+        {
+            break;
+        }
+        entry_pt=origin[i] + tnear*dir[i];
+        
+    }
+    else if (tnear>tfar)
         break;
-      }
+    //// exit point
+    exit_pt=origin[i] + tfar*dir[i];
+
       ////////////////////////////////////////////////////////
       // the place where the ray trace function can be applied
-      results[result_ptr++]=convert_int4(curr_loc_code);
-      float d = distance(entry_pt, exit_pt);
-      d = d+0.001f;
-      results[result_ptr++]=convert_int4(1000.0f*(float4)d);
-      ////////////////////////////////////////////////////////
-      if(exit_pt.x>=1.0f||exit_pt.y>=1.0f||exit_pt.z>=1.0f)
+    results[result_ptr++]=convert_int4(curr_loc_code);
+    float d = distance(entry_pt, exit_pt);
+    results[result_ptr++]=convert_int4(1000.0f*(float4)d);
+    ////////////////////////////////////////////////////////
+    if(exit_pt.x>=1.0f||exit_pt.y>=1.0f||exit_pt.z>=1.0f)
         break;
-      if(exit_pt.x<=0.0f||exit_pt.y<=0.0f||exit_pt.z<=0.0f)
+    if(exit_pt.x<=0.0f||exit_pt.y<=0.0f||exit_pt.z<=0.0f)
         break;
-      entry_pt = exit_pt;
-      //location code of exit point
-      short4 exit_loc_code = loc_code(exit_pt, root.w);
-      //the exit face mask
-      short4 exit_face = cell_exit_face(exit_pt, cell_min, cell_max);
-      if(exit_face.x<0)
-        {
-          //need to traverse from root to get to exit_pt
-          curr_cell_ptr = traverse(cells, root_ptr, root, 
-                                   exit_loc_code, &curr_loc_code);
+    entry_pt = exit_pt;
+    //location code of exit point
+    short4 exit_loc_code = loc_code(exit_pt, root.w);
+    //the exit face mask
+    short4 exit_face = cell_exit_face(exit_pt, cell_min, cell_max);
+    if(exit_face.x<0)
+    {
+        //need to traverse from root to get to exit_pt
+        curr_cell_ptr = traverse(cells, root_ptr, root, 
+            exit_loc_code, &curr_loc_code);
 #if 0
-          results[result_ptr++]=convert_int4(curr_loc_code);
+        results[result_ptr++]=convert_int4(curr_loc_code);
 #endif
-          goto done; 
-        }
-      //find the neighboring cell at the exit face
-      int neighbor_ptr =  neighbor(cells, curr_cell_ptr, curr_loc_code,
-                                   exit_face, n_levels, &neighbor_code);
-      if(neighbor_ptr<0)
+        goto done; 
+    }
+    //find the neighboring cell at the exit face
+    int neighbor_ptr =  neighbor(cells, curr_cell_ptr, curr_loc_code,
+        exit_face, n_levels, &neighbor_code);
+    if(neighbor_ptr<0)
         break;
 
-      //traverse from the neighbor to the cell having the 
-      //required exit location code
-      curr_cell_ptr = traverse_force(cells, neighbor_ptr, neighbor_code,
-                                     exit_loc_code, &curr_loc_code);
-      
-      //the current cell is now the cell reached by the neighbor's traverse
-    done:
-      count++;
+    //traverse from the neighbor to the cell having the 
+    //required exit location code
+    curr_cell_ptr = traverse_force(cells, neighbor_ptr, neighbor_code,
+        exit_loc_code, &curr_loc_code);
+
+    //the current cell is now the cell reached by the neighbor's traverse
+done:
+    count++;
     }
   }
 }
