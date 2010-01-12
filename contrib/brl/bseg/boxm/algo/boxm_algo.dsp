@@ -110,6 +110,9 @@ SOURCE=.\boxm_vrml_util.h
 # Begin Source File
 SOURCE=.\boxm_merge_mog.h
 # End Source File
+# Begin Source File
+SOURCE=.\boxm_crop_scene.h
+# End Source File
 # End Group
 # End Target
 # End Project
