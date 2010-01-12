@@ -49,6 +49,9 @@ class boct_tree_cell
   //: Creates a new cell with the same data
   boct_tree_cell<T_loc,T_data>* clone(boct_tree_cell<T_loc,T_data>* parent);
 
+  //Clones a cell, shifting its location code according to shift_code. This is useful when creating subtrees.
+   boct_tree_cell<T_loc,T_data>* clone(boct_tree_cell<T_loc,T_data>* parent, boct_loc_code<T_loc> *shift_code);
+  
   template <class T_data_to>
   boct_tree_cell<T_loc,T_data_to>*  clone_to_type(boct_tree_cell<T_loc,T_data_to>* parent)
   {

@@ -58,6 +58,29 @@ boct_tree_cell<T_loc,T_data>* boct_tree_cell<T_loc,T_data>::clone(boct_tree_cell
   return cell;
 }
 
+//Clones a cell, shifting its location code according to shift_code. This is useful when creating subtrees.
+template<class T_loc,class T_data>
+boct_tree_cell<T_loc,T_data>* boct_tree_cell<T_loc,T_data>::clone(boct_tree_cell<T_loc,T_data>* parent, boct_loc_code<T_loc> *shift_code)
+{
+  boct_loc_code<T_loc>  *cell_loc_code = (this->code_).AND(shift_code);
+  cell_loc_code->set_level(this->code_.level);
+  boct_tree_cell<T_loc,T_data>* cell = new boct_tree_cell<T_loc,T_data>(*cell_loc_code);
+  cell->data_ = this->data();
+  cell->parent_ = parent;
+  if (this->is_leaf())
+    cell->children_=NULL;
+  else {
+    cell->split();
+    for (unsigned i=0; i<8; i++) {
+      boct_tree_cell<T_loc,T_data>* c=this->children_[i].clone(cell, shift_code);
+      cell->children_[i] = *c;
+      c->children_=NULL;
+      delete c;
+    }
+  }
+  return cell;
+}
+
 template<class T_loc,class T_data>
 void boct_tree_cell<T_loc,T_data>::delete_children()
 {
