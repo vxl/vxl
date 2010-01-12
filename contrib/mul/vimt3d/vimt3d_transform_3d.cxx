@@ -237,7 +237,7 @@ void vimt3d_transform_3d::simplify(double tol /*=1e-10*/)
     simplify();
     return;
    case ZoomOnly:
-    if (vnl_math_sqr(xx_-1.0) + vnl_math_sqr(yy_-1.0) || vnl_math_sqr(zz_-1.0) >= tol*tol)
+    if (vnl_math_sqr(xx_-1.0) + vnl_math_sqr(yy_-1.0) + vnl_math_sqr(zz_-1.0) >= tol*tol)
       return;
     set_translation(xt_, yt_, zt_);
    case Translation:
