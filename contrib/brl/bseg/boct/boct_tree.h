@@ -41,12 +41,15 @@ class boct_tree
     num_levels_ = num_levels;
     max_val_ = (double)(1 << root_level_);
   }
-
+  
   //: Destructor
   ~boct_tree();
 
   //: Clones with the same data
   boct_tree<T_loc,T_data>* clone();
+  
+  //: Clone a subtree determined by the root
+  boct_tree<T_loc, T_data>* clone_subtree(boct_tree_cell<T_loc, T_data>* root, short num_levels);
 
   //: Dlones the tree structure with a different data type
   template <class T_data_to>
@@ -71,9 +74,21 @@ class boct_tree
   //: Returns the cell at a particular level(not necessarly a leaf) containing the 3d point in octree-coordinates i.e. [0,1)x[0,1)x[0,1),with optional safe check for out of bounds
   boct_tree_cell<T_loc,T_data>* locate_point_at_level(const vgl_point_3d<double>& p, short level, bool check_out_of_bounds = false);
 
+  //: Returns the smallest cell that entirely contains a 3d region in global coordinates
+  boct_tree_cell<T_loc,T_data>* locate_region_global(const vgl_box_3d<double>& r);
+  
   //: Returns the smallest cell that entirely contains a 3d region in octree coordinates [0,1)x[0,1)x[0,1)
   boct_tree_cell<T_loc,T_data>* locate_region(const vgl_box_3d<double>& r);
-
+  
+  //: Returns all leaf cells entirely contained in 3d region (in octree coordinates [0,1)x[0,1)x[0,1)) 
+  vcl_vector<boct_tree_cell<T_loc,T_data>*> locate_region_leaves(const vgl_box_3d<double>& r)
+  {
+    boct_tree_cell<T_loc,T_data>* root = locate_region(r);
+    vcl_vector<boct_tree_cell<T_loc,T_data>*> leaves;
+    root->leaf_children(leaves);
+    return leaves;
+  }
+  
   //: Return cell with a partcular locational code
   boct_tree_cell<T_loc,T_data>* get_cell(  boct_loc_code<T_loc>& code) { return root_->traverse(code); }
 

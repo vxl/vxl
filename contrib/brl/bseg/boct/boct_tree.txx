@@ -73,7 +73,8 @@ boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::construct_tree(vcl_vector
     vcl_cerr << "boct_tree: the tree max level is 0, cannot create a tree!\n";
     return 0;
   }
-
+  
+  
   for (unsigned i=0; i<leaf_nodes.size(); i++)
   {
     boct_tree_cell<T_loc, T_data>& cell = leaf_nodes[i];
@@ -130,6 +131,21 @@ boct_tree<T_loc,T_data>* boct_tree<T_loc,T_data>::clone()
   boct_tree<T_loc,T_data>* tree = new boct_tree<T_loc,T_data>(root,num_levels_);
   return tree;
 }
+
+//: Clone a subtree determined by the root
+template <class T_loc,class T_data>
+boct_tree<T_loc, T_data>* boct_tree<T_loc,T_data>::clone_subtree(boct_tree_cell<T_loc, T_data>* subtree_root, short parent_tree_root_level)
+{
+  //Create root cell with location code corresponding to the subtree
+  boct_loc_code<T_loc> shift_code;
+  shift_code.set_code(((1<<(parent_tree_root_level - subtree_root->level()) )-1), ((1<<(parent_tree_root_level - subtree_root->level()) )-1), ((1<<(parent_tree_root_level - subtree_root->level()) )-1)); 
+  
+  boct_tree_cell<T_loc, T_data>* root = subtree_root->clone(0, &shift_code);
+  boct_tree<T_loc,T_data>* tree = new boct_tree<T_loc,T_data>(root, subtree_root->level() +1 );
+  return tree;
+  
+}
+
 
 //: Initialize all cells with a value
 template <class T_loc,class T_data>
@@ -258,6 +274,24 @@ boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_region(const vgl_b
 
   level_z++;
   return locate_point_at_level(r.min_point(),level_z);
+}
+
+//: Returns the smallest cell that entirely contains a 3d region in global coordinates
+template <class T_loc,class T_data>
+boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_region_global(const vgl_box_3d<double>& r)
+{
+  
+  vgl_point_3d<double> min_point((r.min_x()-global_bbox_.min_x())/global_bbox_.width(),
+                                 (r.min_y()-global_bbox_.min_y())/global_bbox_.height(),
+                                 (r.min_z()-global_bbox_.min_z())/global_bbox_.depth());
+  
+  vgl_point_3d<double> max_point((r.max_x()-global_bbox_.min_x())/global_bbox_.width(),
+                                 (r.max_y()-global_bbox_.min_y())/global_bbox_.height(),
+                                 (r.max_z()-global_bbox_.min_z())/global_bbox_.depth());
+  
+  vgl_box_3d<double> r_local(min_point, max_point);
+  return locate_region(r_local);
+  
 }
 
 //: Split the tree
