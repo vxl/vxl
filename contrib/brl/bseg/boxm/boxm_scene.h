@@ -32,25 +32,28 @@ class boxm_scene :public boxm_scene_base
 {
  public:
   //: Default constructor
-  boxm_scene() : active_block_(vgl_point_3d<int>(-1,-1,-1)) {}
+  boxm_scene() : active_block_(vgl_point_3d<int>(-1,-1,-1)), save_internal_nodes_(false) {}
 
   //: Constructor from lvcs, world origin, dimension of the block (in world coordinates) and number of blocks(world_dim)
   boxm_scene(const bgeo_lvcs& lvcs,
              const vgl_point_3d<double>& origin,
              const vgl_vector_3d<double>& block_dim,
-             const vgl_vector_3d<unsigned>& world_dim);
+             const vgl_vector_3d<unsigned>& world_dim,
+             const bool save_internal_nodes_ = false);
 
   //: Constructor from lvcs, world origin, dimension of the block, number of blocks and initialization level
   boxm_scene(const bgeo_lvcs& lvcs,
              const vgl_point_3d<double>& origin,
              const vgl_vector_3d<double>& block_dim,
              const vgl_vector_3d<unsigned>& world_dim,
-             unsigned max_level, unsigned init_level);
+             unsigned max_level, unsigned init_level,
+             const bool save_internal_nodes_ = false);
 
   //: Constructor when lvcs is not avialable. World origin, block dimensions and number of blocks
   boxm_scene( const vgl_point_3d<double>& origin,
               const vgl_vector_3d<double>& block_dim,
-              const vgl_vector_3d<unsigned>& world_dim);
+              const vgl_vector_3d<unsigned>& world_dim,
+              const bool save_internal_nodes_ = false);
 
   //: Destructor
   ~boxm_scene();
@@ -70,6 +73,8 @@ class boxm_scene :public boxm_scene_base
   vgl_point_3d<double> origin() const { return origin_; }
 
   vgl_vector_3d<double> block_dim() const { return block_dim_; }
+  
+  bool save_internal_nodes() const {return save_internal_nodes_;}
 
   void block_num(int &x, int &y, int &z) {
     x=(int) blocks_.get_row1_count();
@@ -137,6 +142,8 @@ class boxm_scene :public boxm_scene_base
   //: index of the blocks (3D array) that is active; only one active block at a time
   vgl_point_3d<int> active_block_;
 
+  //: Flag that indicates whether internal nodes of the trees should be saved
+  bool save_internal_nodes_;
   //************** private methods
   void create_block(unsigned i, unsigned j, unsigned k);
 

@@ -430,10 +430,14 @@ void boct_tree<T_loc,T_data>::print()
 }
 
 template <class T_loc,class T_data>
-void boct_tree<T_loc,T_data>::b_write(vsl_b_ostream & os)
+void boct_tree<T_loc,T_data>::b_write(vsl_b_ostream & os, bool save_internal_nodes)
 {
   //new version where we only save the leaf nodes
-  short v = version_no();
+  short v = version_no(save_internal_nodes);
+  vcl_cout << "Internal Nodes 1: " << save_internal_nodes << vcl_endl;
+
+  vcl_cout << "Writing tree binary version: " << v << vcl_endl;
+  
   if (v == 2) {
     vsl_b_write(os, v);
     vsl_b_write(os, num_levels_);
@@ -539,7 +543,7 @@ void boct_tree<T_loc,T_data>::b_read(vsl_b_istream & is)
 
 #define BOCT_TREE_INSTANTIATE(T_loc,T_data) \
 template class boct_tree<T_loc,T_data >; \
-template void vsl_b_write(vsl_b_ostream & os, boct_tree<T_loc,T_data >&); \
+template void vsl_b_write(vsl_b_ostream & os,const bool save_internal_nodes, boct_tree<T_loc,T_data >&); \
 template void vsl_b_read(vsl_b_istream & is, boct_tree<T_loc,T_data >&)
 
 #endif

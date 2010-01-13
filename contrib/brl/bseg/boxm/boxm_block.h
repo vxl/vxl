@@ -29,7 +29,7 @@ class boxm_block
   T* get_tree() { return octree_; }
   void delete_tree() { delete octree_; octree_ = 0; }
   void b_read(vsl_b_istream &s);
-  void b_write(vsl_b_ostream &s);
+  void b_write(vsl_b_ostream &s, const bool save_internal_nodes_);
   static short version_no() { return 1; }
 
  private:

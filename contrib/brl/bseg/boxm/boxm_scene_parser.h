@@ -17,6 +17,7 @@
 #define SCENE_PATHS_TAG "scene_paths"
 #define APP_MODEL_TAG "appearence_model"
 #define MULTI_BIN_TAG "multi_bin"
+#define SAVE_INTERNAL_NODES_TAG "save_internal_nodes"
 
 class boxm_scene_parser : public expatpp
 {
@@ -33,6 +34,7 @@ class boxm_scene_parser : public expatpp
    vcl_string app_model() const { return app_model_; }
    bool multi_bin() const { return multi_bin_; }
    void levels(unsigned& max, unsigned& init) { max = max_tree_level_; init=init_tree_level_; }
+   bool save_internal_nodes() {return save_internal_nodes_;}
 
  private:
   virtual void startElement(const XML_Char* name, const XML_Char** atts);
@@ -76,6 +78,7 @@ class boxm_scene_parser : public expatpp
   bool multi_bin_;
   unsigned max_tree_level_;
   unsigned init_tree_level_;
+  bool save_internal_nodes_;
 };
 
 #endif

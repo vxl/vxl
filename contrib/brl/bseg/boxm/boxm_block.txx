@@ -41,11 +41,13 @@ void boxm_block<T>::b_read(vsl_b_istream &is)
 
 
 template <class T>
-void boxm_block<T>::b_write(vsl_b_ostream &os)
+void boxm_block<T>::b_write(vsl_b_ostream &os, const bool save_internal_nodes)
 {
   vsl_b_write(os, version_no());
   vsl_b_write(os, bbox_);
-  octree_->b_write(os);
+  vcl_cout << "Internal Nodes 3: " << save_internal_nodes << vcl_endl;
+
+  octree_->b_write(os, save_internal_nodes);
 }
 
 #define BOXM_BLOCK_INSTANTIATE(T) \

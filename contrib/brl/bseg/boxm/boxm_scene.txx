@@ -16,9 +16,12 @@
 
 #include <vpl/vpl.h>
 template <class T>
-boxm_scene<T>::boxm_scene(const bgeo_lvcs& lvcs, const vgl_point_3d<double>& origin,
-                          const vgl_vector_3d<double>& block_dim, const vgl_vector_3d<unsigned>& world_dim)
-: lvcs_(lvcs), origin_(origin), block_dim_(block_dim), active_block_(vgl_point_3d<int>(-1,-1,-1))
+boxm_scene<T>::boxm_scene(const bgeo_lvcs& lvcs, 
+                          const vgl_point_3d<double>& origin,
+                          const vgl_vector_3d<double>& block_dim,
+                          const vgl_vector_3d<unsigned>& world_dim,
+                          const bool save_internal_nodes)
+: lvcs_(lvcs), origin_(origin), block_dim_(block_dim), active_block_(vgl_point_3d<int>(-1,-1,-1)),save_internal_nodes_(save_internal_nodes)
 {
   create_blocks(block_dim, world_dim);
 }
@@ -26,8 +29,9 @@ boxm_scene<T>::boxm_scene(const bgeo_lvcs& lvcs, const vgl_point_3d<double>& ori
 template <class T>
 boxm_scene<T>::boxm_scene( const vgl_point_3d<double>& origin,
                            const vgl_vector_3d<double>& block_dim,
-                           const vgl_vector_3d<unsigned>& world_dim)
-: origin_(origin), block_dim_(block_dim), active_block_(vgl_point_3d<int>(-1,-1,-1))
+                           const vgl_vector_3d<unsigned>& world_dim,
+                           const bool save_internal_nodes)
+: origin_(origin), block_dim_(block_dim), active_block_(vgl_point_3d<int>(-1,-1,-1)), save_internal_nodes_(save_internal_nodes)
 {
   create_blocks(block_dim, world_dim);
 }
@@ -79,8 +83,9 @@ boxm_scene<T>::boxm_scene(const bgeo_lvcs& lvcs,
                           const vgl_point_3d<double>& origin,
                           const vgl_vector_3d<double>& block_dim,
                           const vgl_vector_3d<unsigned>& world_dim,
-                          unsigned max_level, unsigned init_level)
-: lvcs_(lvcs), origin_(origin), block_dim_(block_dim), active_block_(vgl_point_3d<int>(-1,-1,-1))
+                          unsigned max_level, unsigned init_level,
+                          const bool save_internal_nodes)
+: lvcs_(lvcs), origin_(origin), block_dim_(block_dim), active_block_(vgl_point_3d<int>(-1,-1,-1)),save_internal_nodes_(save_internal_nodes)
 {
   create_blocks(block_dim, world_dim);
   set_octree_levels(max_level, init_level);
@@ -119,7 +124,9 @@ void boxm_scene<T>::write_active_block()
     int x=active_block_.x(), y=active_block_.y(), z=active_block_.z();
     vcl_string path = gen_block_path(x,y,z);
     vsl_b_ofstream os(path);
-    blocks_(x,y,z)->b_write(os);
+    vcl_cout << "Internal Nodes 2: " << save_internal_nodes_ << vcl_endl;
+
+    blocks_(x,y,z)->b_write(os, save_internal_nodes_);
     // delete the block's data
     boxm_block<T>* block = blocks_(x,y,z);
     block->delete_tree();
@@ -397,6 +404,8 @@ bool boxm_scene<T>::parse_config(boxm_scene_parser& parser)
   parser.paths(scene_path_, block_pref_);
   app_model_ = boxm_apm_types::str_to_enum(parser.app_model().data());
   multi_bin_ = parser.multi_bin();
+  save_internal_nodes_ =parser.save_internal_nodes();
+  vcl_cout << "Internal Nodes 1: " << save_internal_nodes_ << vcl_endl;
   parser.levels(max_tree_level_, init_tree_level_);
   return true;
 }

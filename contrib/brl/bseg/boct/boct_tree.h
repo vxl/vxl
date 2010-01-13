@@ -161,9 +161,16 @@ class boct_tree
   void print();
 
   // Binary I/O
-  void b_write(vsl_b_ostream & os);
+  void b_write(vsl_b_ostream & os, const bool save_internal_nodes);
   void b_read(vsl_b_istream & is);
-  static short version_no() { return 2; }
+  static short version_no(bool save_internal_nodes) 
+  { 
+    if(save_internal_nodes)
+     return 1;
+    else 
+      return 2;
+  }
+
 
  private:
   //: Maximum number of levels in the octree
@@ -188,7 +195,7 @@ class boct_tree
 
 //: Binary write
 template <class T_loc,class T_data>
-void vsl_b_write(vsl_b_ostream & os, boct_tree<T_loc,T_data>& tree) { tree.b_write(os); }
+void vsl_b_write(vsl_b_ostream & os, const bool save_internal_nodes, boct_tree<T_loc,T_data>& tree) { tree.b_write(os, save_internal_nodes); }
 
 //: Binary read
 template <class T_loc,class T_data>
