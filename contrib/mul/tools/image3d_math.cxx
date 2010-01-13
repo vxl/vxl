@@ -1031,6 +1031,41 @@ void copy__image_3d_of_int(opstack_t& s)
   s.push_front(operand(result));
 }
 
+void copy_coordinate_frame__image_3d_of_float__image_3d_of_float(opstack_t& s)
+{
+  assert(s.size() >= 2);
+  vimt3d_image_3d_of<float> o1(s[1].as_image_3d_of_float());
+  vimt3d_image_3d_of<float> o2(s[0].as_image_3d_of_float());
+  const vil3d_image_view<float>& i_vox = o1.image();
+  const vimt3d_transform_3d& i_w2i = o2.world2im();
+
+  vimt3d_image_3d_of<float> result;
+  result.image().deep_copy(i_vox);
+  result.world2im() = i_w2i;
+ 
+  s.pop_front();
+  s.pop_front();
+
+  s.push_front(operand(result));
+}
+
+void copy_coordinate_frame__image_3d_of_int__image_3d_of_int(opstack_t& s)
+{
+  assert(s.size() >= 2);
+  vimt3d_image_3d_of<int> o1(s[1].as_image_3d_of_int());
+  vimt3d_image_3d_of<int> o2(s[0].as_image_3d_of_int());
+  const vil3d_image_view<int>& i_vox = o1.image();
+  const vimt3d_transform_3d& i_w2i = o2.world2im();
+
+  vimt3d_image_3d_of<int> result;
+  result.image().deep_copy(i_vox);
+  result.world2im() = i_w2i;
+
+  s.pop_front();
+  s.pop_front();
+
+  s.push_front(operand(result));
+}
 
 void copy__double(opstack_t& s)
 {
@@ -1473,6 +1508,12 @@ class operations
     add_operation("--copy", &copy__image_3d_of_float,
                   function_type_t() << operand::e_image_3d_of_float,
                   "image", "image image", "Duplicate image onto stack");
+    add_operation("--copy_coordinate_frame", &copy_coordinate_frame__image_3d_of_int__image_3d_of_int,
+                  function_type_t() << operand::e_image_3d_of_int << operand::e_image_3d_of_int,
+                  "image_v image_c", "image", "create image that is voxels of image_v and the world to image transform of image_c");
+    add_operation("--copy_coordinate_frame", &copy_coordinate_frame__image_3d_of_float__image_3d_of_float,
+                  function_type_t() << operand::e_image_3d_of_float << operand::e_image_3d_of_float,
+                  "image_v image_c", "image", "create image that is voxels of image_v and the world to image transform of image_c");
     add_operation("--diff", &diff__double__double,
                   function_type_t() << operand::e_double << operand::e_double,
                   "A B", "A-B", "Subtract values A minus B");
