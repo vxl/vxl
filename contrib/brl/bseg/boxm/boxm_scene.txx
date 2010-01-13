@@ -212,10 +212,9 @@ vcl_string boxm_scene<T>::gen_block_path(int x, int y, int z)
 {
   vcl_stringstream strm;
 
-  strm << x << '_' << y << '_' << z;
-  vcl_string str(strm.str());
-  vcl_string s = scene_path_ + '/' + block_pref_+ '_' + str + ".bin";
-  return s;
+  strm << scene_path_ << '/' << block_pref_ << '_' <<  x << '_' << y << '_' << z << ".bin";
+
+  return strm.str();
 }
 template <class T>
 bool boxm_scene<T>::discover_block(unsigned i, unsigned j, unsigned k)
