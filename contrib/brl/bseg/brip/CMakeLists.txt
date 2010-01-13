@@ -10,6 +10,7 @@ doxygen_add_library(contrib/brl/bseg/brip
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bseg )
 INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR})
+INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
 
 SET(brip_sources
    brip_histogram.h          brip_histogram.txx
@@ -29,6 +30,7 @@ SET(brip_sources
    brip_rect_mask.h          brip_rect_mask.cxx
    brip_line_generator.h     brip_line_generator.cxx
    brip_label_equivalence.h  brip_label_equivalence.cxx
+   brip_edge.h               brip_edge.cxx
 )
 AUX_SOURCE_DIRECTORY(Templates brip_sources)
 
@@ -36,7 +38,7 @@ ADD_LIBRARY(brip ${brip_sources})
 INSTALL_TARGETS(/lib brip)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/brip ${brip_sources})
 
-TARGET_LINK_LIBRARIES(brip gevd bsta bsol vsol vil1 vil_algo vil vgl_algo vgl vnl_algo vnl vbl vul)
+TARGET_LINK_LIBRARIES(brip gevd bsta bsol vsol vil1 vil_algo vil vgl_algo vgl vnl_algo vnl vbl vul vpgl)
 
 IF(BUILD_TESTING)
   SUBDIRS(tests)
