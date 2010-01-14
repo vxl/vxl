@@ -138,12 +138,24 @@ boct_tree<T_loc, T_data>* boct_tree<T_loc,T_data>::clone_subtree(boct_tree_cell<
 {
   //Create root cell with location code corresponding to the subtree
   boct_loc_code<T_loc> shift_code;
-  shift_code.set_code(((1<<(parent_tree_root_level - subtree_root->level()) )-1), ((1<<(parent_tree_root_level - subtree_root->level()) )-1), ((1<<(parent_tree_root_level - subtree_root->level()) )-1)); 
   
-  boct_tree_cell<T_loc, T_data>* root = subtree_root->clone(0, &shift_code);
-  boct_tree<T_loc,T_data>* tree = new boct_tree<T_loc,T_data>(root, subtree_root->level() +1 );
-  return tree;
-  
+  short shift_level = parent_tree_root_level - subtree_root->level();
+  if (shift_level>0)
+  {
+    shift_code.set_code(((1<<(parent_tree_root_level - subtree_root->level()) )-1), ((1<<(parent_tree_root_level - subtree_root->level()) )-1), ((1<<(parent_tree_root_level - subtree_root->level()) )-1)); 
+    boct_tree_cell<T_loc, T_data>* root = subtree_root->clone(0, &shift_code);
+    boct_tree<T_loc,T_data>* tree = new boct_tree<T_loc,T_data>(root, subtree_root->level() +1 );
+    return tree;
+  } else if(shift_level == 0)
+  {
+    boct_tree_cell<T_loc, T_data>* root = subtree_root->clone(0);
+    boct_tree<T_loc,T_data>* tree = new boct_tree<T_loc,T_data>(root, subtree_root->level() +1 );
+    return tree;
+  }
+  else {
+    vcl_cerr << "Error in boct_tree<T_loc,T_data>::clone_subtree \n";
+    return NULL;
+  }  
 }
 
 
@@ -258,7 +270,7 @@ boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_point_at_level(con
 
 //: Returns the smallest cell that entirely contains a 3d regionin octree coordinates [0,1)x[0,1)x[0,1)
 template <class T_loc,class T_data>
-boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_region(const vgl_box_3d<double>& r)
+boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_region(const vgl_box_3d<double>& r, bool check_out_of_bounds)
 {
   boct_loc_code<T_loc>* mincode=new boct_loc_code<T_loc>(r.min_point(), root_level_, max_val_);
   boct_loc_code<T_loc>* maxcode=new boct_loc_code<T_loc>(r.max_point(), root_level_, max_val_);
@@ -273,12 +285,12 @@ boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_region(const vgl_b
   while (!(xorcode->z_loc_&(1<<level_z))&& level_z>level_y) level_z--;
 
   level_z++;
-  return locate_point_at_level(r.min_point(),level_z);
+  return locate_point_at_level(r.min_point(),level_z, check_out_of_bounds);
 }
 
 //: Returns the smallest cell that entirely contains a 3d region in global coordinates
 template <class T_loc,class T_data>
-boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_region_global(const vgl_box_3d<double>& r)
+boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_region_global(const vgl_box_3d<double>& r, bool check_out_of_bounds)
 {
   
   vgl_point_3d<double> min_point((r.min_x()-global_bbox_.min_x())/global_bbox_.width(),
@@ -290,7 +302,7 @@ boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_region_global(cons
                                  (r.max_z()-global_bbox_.min_z())/global_bbox_.depth());
   
   vgl_box_3d<double> r_local(min_point, max_point);
-  return locate_region(r_local);
+  return locate_region(r_local, check_out_of_bounds);
   
 }
 
