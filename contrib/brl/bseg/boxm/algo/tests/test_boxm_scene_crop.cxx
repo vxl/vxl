@@ -7,7 +7,7 @@
 #include <boxm/algo/boxm_crop_scene.h>
 #include <boxm/boxm_apm_traits.h>
 
-const bool debug = false;
+const bool debug = true;
 
 void fill_sample_octree(boct_tree<short,float>* tree)
 {
@@ -81,7 +81,7 @@ static void test_boxm_scene_crop()
   //number of blocks in a scene
   vgl_vector_3d<unsigned> world_dim(1,1,1);
  
-  boxm_scene<tree_type> *scene= new boxm_scene<tree_type>(lvcs, origin, block_dim, world_dim);
+  boxm_scene<tree_type> *scene= new boxm_scene<tree_type>(lvcs, origin, block_dim, world_dim,true);
   vcl_string scene_path=".";
   scene->set_paths(scene_path, "in_block");
   scene->set_appearance_model(FLOAT);
@@ -111,7 +111,7 @@ static void test_boxm_scene_crop()
   bool result = true;
   for (unsigned i=0; i<leaves_out.size(); i++)
   {
-    result = result && (leaves_out[i]->data() - 0.9 < 1e-5);
+    result = result && (vcl_abs(leaves_out[i]->data() - 0.9)< 1e-5);
                         
   }
   
