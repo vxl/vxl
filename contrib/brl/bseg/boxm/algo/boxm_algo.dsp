@@ -102,9 +102,6 @@ SOURCE=.\boxm_merge_mog.cxx
 SOURCE=.\boxm_split_sample.h
 # End Source File
 # Begin Source File
-SOURCE=.\boxm_merge_mog_functor.h
-# End Source File
-# Begin Source File
 SOURCE=.\boxm_vrml_util.h
 # End Source File
 # Begin Source File
