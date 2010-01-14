@@ -25,7 +25,8 @@ static void test_tree_cell_reader()
   vsl_b_write(os, 1);  //version
   vgl_box_3d<double> bbox;
   vsl_b_write(os, bbox);  //global bbox of the block
-  vsl_b_write(os, *block);
+  bool save_internal_nodes = false;
+  vsl_b_write(os,save_internal_nodes, *block);
   os.close();
 
   vsl_b_ifstream is("tree.bin", vcl_ios_binary);

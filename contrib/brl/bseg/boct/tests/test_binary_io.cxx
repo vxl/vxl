@@ -19,7 +19,8 @@ static void test_binary_io()
 
   //tree_in->print();
   vsl_b_ofstream os("tree.bin");
-  tree_in->b_write(os);
+  bool save_internal_nodes = false;
+  tree_in->b_write(os, save_internal_nodes);
   os.close();
 
   boct_tree<short,vgl_point_3d<double> > *tree_out=new boct_tree<short,vgl_point_3d<double> >();
