@@ -154,8 +154,7 @@ SET( vil_sources ${vil_sources}
 
 
   file_formats/vil_viff.cxx             file_formats/vil_viff.h
-  file_formats/vil_viff_support.c       file_formats/vil_viff_support.h
-  file_formats/vil_viffheader.h
+  file_formats/vil_viffheader.cxx       file_formats/vil_viffheader.h
 
   ################################
   # NITF 2.0 and 2.1 reading code

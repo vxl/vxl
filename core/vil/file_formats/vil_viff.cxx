@@ -199,7 +199,7 @@ bool vil_viff_image::read_header()
 bool vil_viff_image::write_header()
 {
   is_->seek(0L);
-  int type = 0;
+  vil_viff_data_storage type;
 
   if (format_==VIL_PIXEL_FORMAT_UINT_32 ||
       format_==VIL_PIXEL_FORMAT_INT_32)
@@ -223,21 +223,16 @@ bool vil_viff_image::write_header()
   else
   {
     vcl_cout << "vil_viff: non supported data type: " << (short)format_ << '\n';
-    return type!=0; // == false
+    return false;
   }
 
   //create header
-  vil_viff_xvimage *imagep = vil_viff_createimage(nj_, ni_,
-                                                  type, 1, nplanes_,
-                                                  "vil_viff image writer output",0,0,
-                                                  VFF_MS_NONE,VFF_MAPTYP_NONE,VFF_LOC_IMPLICIT,0);
+  vil_viff_xvimage image(nj_, ni_, type, nplanes_);
 
   //make local copy of header
-  vcl_memcpy(&header_, imagep, sizeof(header_));
+  vcl_memcpy(&header_, &image, sizeof(header_));
   start_of_data_ = sizeof(header_);
 
-  // release xv header from createimage
-  vil_viff_freeimage(imagep);
 
   is_->write((void*)(&header_), start_of_data_);
   start_of_data_ = is_->tell();
