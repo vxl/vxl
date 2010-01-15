@@ -107,7 +107,6 @@ static void test_boxm_scene_crop()
   boct_tree<short, float>  *tree_out= (*iter_out)->get_tree();
 
   vcl_vector<boct_tree_cell<short,float>*> leaves_out = tree_out->leaf_cells();
-  vcl_cout << "Checking loc codes" << vcl_endl;
   bool result = true;
   for (unsigned i=0; i<leaves_out.size(); i++)
   {
@@ -117,9 +116,9 @@ static void test_boxm_scene_crop()
   
   TEST("Valid cropped tree", result, true);
   
-  vcl_cout << "Checking loc codes" << vcl_endl;
   vcl_vector<boct_tree_cell<short,float>*> leaves = tree_out->all_cells();
   if (debug)
+    vcl_cout << "Printing Output Tree" << vcl_endl;
     for (unsigned i=0; i<leaves.size(); i++) {
       vcl_cout<< leaves[i]->get_code().x_loc_ << ','
       << leaves[i]->get_code().y_loc_ << ','
