@@ -158,6 +158,34 @@ boct_tree<T_loc, T_data>* boct_tree<T_loc,T_data>::clone_subtree(boct_tree_cell<
   }  
 }
 
+//: Clones(from a root) the part of the subtree that intesects the bounding region
+template <class T_loc,class T_data>
+boct_tree<T_loc, T_data>* boct_tree<T_loc,T_data>::clone_and_intersect(boct_tree_cell<T_loc, T_data>* subtree_root,
+                                                                       short parent_tree_root_level,
+                                                                       vgl_box_3d<double> local_crop_box)
+{
+  //Create root cell with location code corresponding to the subtree
+  boct_loc_code<T_loc> shift_code;
+  
+  short shift_level = parent_tree_root_level - subtree_root->level();
+  if (shift_level>0)
+  {
+    shift_code.set_code(((1<<(parent_tree_root_level - subtree_root->level()) )-1), ((1<<(parent_tree_root_level - subtree_root->level()) )-1), ((1<<(parent_tree_root_level - subtree_root->level()) )-1)); 
+    boct_tree_cell<T_loc, T_data>* root = subtree_root->clone_and_intersect(0, &shift_code,local_crop_box, parent_tree_root_level);
+    boct_tree<T_loc,T_data>* tree = new boct_tree<T_loc,T_data>(root, subtree_root->level() +1 );
+    return tree;
+  } else if(shift_level == 0)
+  {
+    boct_tree_cell<T_loc, T_data>* root = subtree_root->clone_and_intersect(0,local_crop_box, parent_tree_root_level);
+    boct_tree<T_loc,T_data>* tree = new boct_tree<T_loc,T_data>(root, subtree_root->level() +1 );
+    return tree;
+  }
+  else {
+    vcl_cerr << "Error in boct_tree<T_loc,T_data>::clone_subtree \n";
+    return NULL;
+  }  
+}
+
 
 //: Initialize all cells with a value
 template <class T_loc,class T_data>

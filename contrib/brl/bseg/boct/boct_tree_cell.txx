@@ -5,6 +5,7 @@
 #include "boct_tree_cell.h"
 
 #include <vcl_iostream.h>
+#include <vgl/vgl_intersection.h>
 
 template<class T_loc,class T_data>
 boct_tree_cell<T_loc,T_data>::boct_tree_cell(const boct_loc_code<T_loc>& code)
@@ -19,6 +20,20 @@ template<class T_loc,class T_data>
 bool boct_tree_cell<T_loc,T_data>::is_leaf()
 {
   return children_== NULL;
+}
+
+template<class T_loc,class T_data>
+vgl_box_3d<double> boct_tree_cell<T_loc,T_data>::local_bounding_box(short root_level)
+{
+  double cell_length = 1.0/(double)(1<<(root_level - code_.level));
+  double cell_origin_x = (double)(code_.x_loc_)/(double)(1<<(root_level));
+  double cell_origin_y = (double)(code_.y_loc_)/(double)(1<<(root_level));
+  double cell_origin_z = (double)(code_.z_loc_)/(double)(1<<(root_level));
+  vgl_point_3d<double> cell_min_corner(cell_origin_x, cell_origin_y, cell_origin_z);
+  vgl_point_3d<double> cell_max_corner(cell_origin_x + cell_length, cell_origin_y+cell_length, cell_origin_z+cell_length);
+  
+  return vgl_box_3d<double>(cell_min_corner,cell_max_corner);
+  
 }
 
 template<class T_loc,class T_data>
@@ -79,6 +94,91 @@ boct_tree_cell<T_loc,T_data>* boct_tree_cell<T_loc,T_data>::clone(boct_tree_cell
     }
   }
   return cell;
+}
+
+
+
+//: Clones a cell if it intesects a region
+template<class T_loc,class T_data>
+boct_tree_cell<T_loc,T_data>* boct_tree_cell<T_loc,T_data>::clone_and_intersect(boct_tree_cell<T_loc,T_data>* parent,
+                                                                                vgl_box_3d<double> local_crop_box,
+                                                                                short root_level)
+{
+  
+  boct_tree_cell<T_loc,T_data>* cell = new boct_tree_cell<T_loc,T_data>(this->code_);
+  //Check whether the cell intersects the region
+  vgl_box_3d<double> cell_box = local_bounding_box(root_level);
+  vgl_box_3d<double> inters = vgl_intersection(cell_box,local_crop_box);
+  
+  if (!inters.is_empty())
+  {
+    cell->data_ = this->data();
+    cell->parent_ = parent;
+    if (this->is_leaf())
+      cell->children_=NULL;
+    else {
+      cell->split();
+      for (unsigned i=0; i<8; i++) {
+        boct_tree_cell<T_loc,T_data>* c=this->children_[i].clone_and_intersect(cell, local_crop_box,root_level);
+        cell->children_[i] = *c;
+        c->children_=NULL;
+        delete c;
+      }
+    }
+  } else{
+    cell->data_ = T_data();
+    cell->parent_ = parent;
+    cell->children_ = NULL;
+  }
+  return cell;
+  
+}
+
+//: Clones and shifts a cell if it intesects a region
+template<class T_loc,class T_data>
+boct_tree_cell<T_loc,T_data>* boct_tree_cell<T_loc,T_data>::clone_and_intersect(boct_tree_cell<T_loc,T_data>* parent,
+                                                                                 boct_loc_code<T_loc> *shift_code,
+                                                                                 vgl_box_3d<double> local_crop_box,
+                                                                                 short root_level)
+{
+  boct_loc_code<T_loc>  *cell_loc_code = (this->code_).AND(shift_code);
+  cell_loc_code->set_level(this->code_.level);
+  boct_tree_cell<T_loc,T_data>* cell = new boct_tree_cell<T_loc,T_data>(*cell_loc_code);
+  
+  //Check whether the cell intersects the region
+  vgl_box_3d<double> cell_box = local_bounding_box(root_level);
+  vgl_box_3d<double> inters = vgl_intersection(cell_box,local_crop_box);
+  
+
+  if (!inters.is_empty())
+  {
+    boct_loc_code<T_loc>  *cell_loc_code = (this->code_).AND(shift_code);
+    cell_loc_code->set_level(this->code_.level);
+    boct_tree_cell<T_loc,T_data>* cell = new boct_tree_cell<T_loc,T_data>(*cell_loc_code);
+    cell->data_ = this->data();
+    cell->parent_ = parent;
+    if (this->is_leaf())
+      cell->children_=NULL;
+    else {
+      cell->split();
+      for (unsigned i=0; i<8; i++) {
+        boct_tree_cell<T_loc,T_data>* c=this->children_[i].clone_and_intersect(cell, shift_code, local_crop_box, root_level);
+        cell->children_[i] = *c;
+        c->children_=NULL;
+        delete c;
+      }
+    }
+  }
+  else
+  {
+    //Set the cell to be empty and be a leaf
+    cell->parent_ = parent;
+    cell->data_ = T_data();
+    cell->children_=NULL;    
+  }
+
+  return cell;
+
 }
 
 template<class T_loc,class T_data>

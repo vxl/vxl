@@ -50,6 +50,11 @@ class boct_tree
   
   //: Clone a subtree determined by the root
   boct_tree<T_loc, T_data>* clone_subtree(boct_tree_cell<T_loc, T_data>* root, short num_levels);
+  
+  //: Clones(from a root) the part of the subtree that intesects the bounding region
+  boct_tree<T_loc, T_data>* clone_and_intersect(boct_tree_cell<T_loc, T_data>* subtree_root,
+                                                short parent_tree_root_level,
+                                                vgl_box_3d<double> local_crop_box);
 
   //: Dlones the tree structure with a different data type
   template <class T_data_to>

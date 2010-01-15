@@ -14,6 +14,7 @@
 
 #include <vsl/vsl_binary_io.h>
 #include "boct_loc_code.h"
+#include <vgl/vgl_box_3d.h>
 
 enum boct_cell_face {NONE = 0x00,
                      Z_LOW = 0x01,
@@ -52,6 +53,15 @@ class boct_tree_cell
   //Clones a cell, shifting its location code according to shift_code. This is useful when creating subtrees.
    boct_tree_cell<T_loc,T_data>* clone(boct_tree_cell<T_loc,T_data>* parent, boct_loc_code<T_loc> *shift_code);
   
+  //: Clones a cell if it intesects a region
+  boct_tree_cell<T_loc,T_data>* clone_and_intersect(boct_tree_cell<T_loc,T_data>* parent,
+                                                     vgl_box_3d<double> local_crop_box, short root_level);
+  
+  //: Clones and shifts a cell if it intesects a region
+  boct_tree_cell<T_loc,T_data>* clone_and_intersect(boct_tree_cell<T_loc,T_data>* parent,
+                                                     boct_loc_code<T_loc> *shift_code,
+                                                     vgl_box_3d<double> local_crop_box, short root_level);
+  
   template <class T_data_to>
   boct_tree_cell<T_loc,T_data_to>*  clone_to_type(boct_tree_cell<T_loc,T_data_to>* parent)
   {
@@ -75,6 +85,9 @@ class boct_tree_cell
   void set_children(unsigned i, boct_tree_cell<T_loc,T_data>* p) {if (children_) children_[i] = *p; else vcl_cout << "Children should be allocated first" << vcl_endl;}
   void set_children_null() { children_=0; }
   bool is_leaf();
+  
+  //: Returns the bounting box of this cell in local coordinates i.e [0,1)x[0,1)x[0,1)
+  vgl_box_3d<double> local_bounding_box(short root_level);
 
   //: adds a pointer for each leaf children to v
   void leaf_children(vcl_vector<boct_tree_cell<T_loc,T_data>*>& v);
