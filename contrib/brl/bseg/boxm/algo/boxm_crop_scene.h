@@ -66,9 +66,19 @@ boxm_scene<boct_tree<short, T_data> > *  boxm_crop_scene(boxm_scene<boct_tree<sh
   iter_out.begin();
   scene_out->load_block(iter_out.index());
 
-  //output tree is created from leaves and root level (This may need to change to that non-leaf cells get copied as well)
-  boct_tree<short, T_data >  *tree_out = tree_in->clone_subtree(root, tree_in->root_level());
 
+  //Region of interest in [0,1)x[0,1)x[0,1) coordinates
+  vgl_point_3d<double> norm_bbox_min((bbox.min_x()-global_bbox.min_x())/global_bbox.width(),
+                                     (bbox.min_y()-global_bbox.min_y())/global_bbox.height(),
+                                     (bbox.min_z()-global_bbox.min_z())/global_bbox.depth());
+  vgl_point_3d<double> norm_bbox_max((bbox.max_x()-global_bbox.min_x())/global_bbox.width(),
+                                     (bbox.max_y()-global_bbox.min_y())/global_bbox.height(),
+                                     (bbox.max_z()-global_bbox.min_z())/global_bbox.depth());
+  
+  
+  //output tree
+  boct_tree<short, T_data >  *tree_out = tree_in->clone_and_intersect(root, tree_in->root_level(), vgl_box_3d<double>(norm_bbox_min,norm_bbox_max));
+  
   //write the output tree
   (*iter_out)->init_tree(tree_out);
   scene_out->write_active_block();
