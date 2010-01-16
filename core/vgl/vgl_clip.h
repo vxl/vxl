@@ -70,6 +70,9 @@ vgl_line_segment_2d<T> vgl_clip_line_to_box(vgl_line_2d<T> const& l,
 // library (http://www.cs.man.ac.uk/aig/staff/alan/software/gpc.html)
 // which is free for non-commercial use.
 //
+// In order to be able to use it, make sure to satisfy the copyright notice,
+// then activate the "BUILD_NONCOMMERCIAL" compiler option.
+//
 // \relatesalso vgl_polygon
 template <class T>
 vgl_polygon<T>

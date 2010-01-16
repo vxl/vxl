@@ -56,10 +56,14 @@ SET( vgl_sources
   vgl_window_scan_iterator.h     vgl_window_scan_iterator.txx
   vgl_polygon_scan_iterator.h    vgl_polygon_scan_iterator.txx
   vgl_ellipse_scan_iterator.h    vgl_ellipse_scan_iterator.txx
+)
 
+IF( BUILD_NONCOMMERCIAL )
+SET( vgl_sources ${vgl_sources}
   # internals
   internals/gpc.h                internals/gpc.c
 )
+ENDIF( BUILD_NONCOMMERCIAL )
 
 AUX_SOURCE_DIRECTORY(Templates vgl_sources)
 

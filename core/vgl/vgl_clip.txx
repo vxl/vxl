@@ -84,6 +84,8 @@ bool vgl_clip_line_to_box(T a, T b, T c, // line coefficients.
 }
 
 
+#ifdef BUILD_NONCOMMERCIAL
+
 extern "C" {
 #include "internals/gpc.h"
 }
@@ -132,16 +134,6 @@ namespace {
       }
     }
   }
-}
-
-template <class T>
-vgl_polygon<T>
-vgl_clip(vgl_polygon<T> const& poly1, vgl_polygon<T> const& poly2, vgl_clip_type op )
-{
-  int retval;
-  return vgl_clip(poly1, poly2, op, &retval);
-  vcl_fprintf(stdout,"WARNING: Degeneracy bug in gpc library -- returning empty polygon.\n");
-  vcl_fprintf(stderr,"WARNING: Degeneracy bug in gpc library -- returning empty polygon.\n");
 }
 
 template <class T>
@@ -200,6 +192,28 @@ vgl_clip(vgl_polygon<T> const& poly1, vgl_polygon<T> const& poly2, vgl_clip_type
   gpc_free_polygon( &p3 );
 
   return result;
+}
+
+#else // BUILD_NONCOMMERCIAL
+
+template <class T>
+vgl_polygon<T>
+vgl_clip(vgl_polygon<T> const& poly1, vgl_polygon<T> const& poly2, vgl_clip_type op, int *p_retval)
+{
+  vgl_polygon<T> result;
+  vcl_fprintf(stdout,"WARNING: GPC is only free for non-commercial use -- returning empty polygon.\n");
+  vcl_fprintf(stderr,"WARNING: GPC is only free for non-commercial use -- returning empty polygon.\n");
+  return result;
+}
+
+#endif // BUILD_NONCOMMERCIAL
+
+template <class T>
+vgl_polygon<T>
+vgl_clip(vgl_polygon<T> const& poly1, vgl_polygon<T> const& poly2, vgl_clip_type op )
+{
+  int retval;
+  return vgl_clip(poly1, poly2, op, &retval);
 }
 
 #undef VGL_CLIP_INSTANTIATE
