@@ -94,49 +94,55 @@ vnl_quaternion<T>::vnl_quaternion(vnl_vector_fixed<T,4> const& vec)
 
 
 //: Creates a quaternion from a rotation matrix.
-// Its orthonormal basis vectors are row-wise.
-// WARNING: Takes the transpose of the rotation matrix...
+// Its orthonormal basis vectors are the matrix rows.
+// NOTE: this matrix *must* have determinant +1; this is not verified!
+// WARNING: Takes the transpose of the rotation matrix, i.e.,
+// the orthonormal vectors must be the rows of the matrix, not the columns.
 template <class T>
 vnl_quaternion<T>::vnl_quaternion(vnl_matrix_fixed<T,3,3> const& rot)
 {
   double d0 = rot(0,0), d1 = rot(1,1), d2 = rot(2,2);
-  double xx = 1.0 + d0 - d1 - d2;               // from the diagonal of rotation
-  double yy = 1.0 - d0 + d1 - d2;               // matrix, find the terms in
-  double zz = 1.0 - d0 - d1 + d2;               // each Quaternion component
-  double rr = 1.0 + d0 + d1 + d2;
+  double xx = 1.0 + d0 - d1 - d2;      // from the diagonal of the rotation
+  double yy = 1.0 - d0 + d1 - d2;      // matrix, find the terms in
+  double zz = 1.0 - d0 - d1 + d2;      // each Quaternion component
+  double rr = 1.0 + d0 + d1 + d2;      // (using the fact that rr+xx+yy+zz=4)
 
-  double max = rr;                              // find the maximum of all
-  if (xx > max) max = xx;                       // diagonal terms.
-  if (yy > max) max = yy;
-  if (zz > max) max = zz;
+  double max = rr;                     // find the maximum of all terms;
+  if (xx > max) max = xx;              // dividing by the maximum makes
+  if (yy > max) max = yy;              // the computations more stable
+  if (zz > max) max = zz;              // and avoid division by zero
 
   if (rr == max) {
-    T r4 = T(vcl_sqrt(rr * 4.0));
-    this->x() = (rot(1,2) - rot(2,1)) / r4;     // find other components from
-    this->y() = (rot(2,0) - rot(0,2)) / r4;     // off diagonal terms of
-    this->z() = (rot(0,1) - rot(1,0)) / r4;     // rotation matrix.
+    T r4 = T(vcl_sqrt(rr)*2);
     this->r() = r4 / 4;
+    r4 = T(1) / r4;
+    this->x() = (rot(1,2) - rot(2,1)) * r4;     // find other components from
+    this->y() = (rot(2,0) - rot(0,2)) * r4;     // off diagonal terms of
+    this->z() = (rot(0,1) - rot(1,0)) * r4;     // rotation matrix.
   }
   else if (xx == max) {
-    T x4 = T(vcl_sqrt(xx * 4.0));
+    T x4 = T(vcl_sqrt(xx)*2);
     this->x() = x4 / 4;
-    this->y() = (rot(0,1) + rot(1,0)) / x4;
-    this->z() = (rot(0,2) + rot(2,0)) / x4;
-    this->r() = (rot(1,2) - rot(2,1)) / x4;
+    x4 = T(1) / x4;
+    this->y() = (rot(0,1) + rot(1,0)) * x4;
+    this->z() = (rot(0,2) + rot(2,0)) * x4;
+    this->r() = (rot(1,2) - rot(2,1)) * x4;
   }
   else if (yy == max) {
-    T y4 = T(vcl_sqrt(yy * 4.0));
-    this->x() = (rot(0,1) + rot(1,0)) / y4;
+    T y4 = T(vcl_sqrt(yy)*2);
     this->y() =  y4 / 4;
-    this->z() = (rot(1,2) + rot(2,1)) / y4;
-    this->r() = (rot(2,0) - rot(0,2)) / y4;
+    y4 = T(1) / y4;
+    this->x() = (rot(0,1) + rot(1,0)) * y4;
+    this->z() = (rot(1,2) + rot(2,1)) * y4;
+    this->r() = (rot(2,0) - rot(0,2)) * y4;
   }
   else {
-    T z4 = T(vcl_sqrt(zz * 4.0));
-    this->x() = (rot(0,2) + rot(2,0)) / z4;
-    this->y() = (rot(1,2) + rot(2,1)) / z4;
+    T z4 = T(vcl_sqrt(zz)*2);
     this->z() =  z4 / 4;
-    this->r() = (rot(0,1) - rot(1,0)) / z4;
+    z4 = T(1) / z4;
+    this->x() = (rot(0,2) + rot(2,0)) * z4;
+    this->y() = (rot(1,2) + rot(2,1)) * z4;
+    this->r() = (rot(0,1) - rot(1,0)) * z4;
   }
 }
 

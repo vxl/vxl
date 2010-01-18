@@ -34,12 +34,14 @@
 //    (x, y, z) = sin(theta/2) (kx, ky, kz)
 // \endcode
 // where theta and k are respectively the angle and axis of rotation.
-// 3D vectors can be thought of as imaginary quaternions, and so a
+//
+// 3D vectors can be thought of as pure imaginary quaternions, and so a
 // quaternion is represented as a vnl_vector_fixed<T,4> with the imaginary
 // part before the real part for 1-1 alignment.
 //
-// Unit quaternions provide a more efficient representation for
-// rotation, than the usual orthonormal matrix that has nine
+// Unit quaternions (i.e., for which $x^2 + y^2 + z^2 + r^2 = 1$)
+// provide a more efficient representation for rotation
+// than the usual orthonormal matrix that has nine
 // parameters and six orthonormal constraints.  The unit
 // quaternion has only one unit magnitude constraint.  Composing
 // rotations with quaternions results in fewer multiplications
@@ -139,6 +141,7 @@ class vnl_quaternion : public vnl_vector_fixed<T, 4>
   double angle() const;
 
   //: 3x3 rotation matrix
+  // The orthonormal vectors are the rows of the matrix, not its columns
   vnl_matrix_fixed<T,3,3> rotation_matrix_transpose() const;
 
   //: 4x4 rotation matrix
