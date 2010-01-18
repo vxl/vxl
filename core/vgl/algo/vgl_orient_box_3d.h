@@ -9,6 +9,11 @@
 //  box by keeping a regular axis aligned box and a
 //  rotation direction. It keeps a bounding box of
 //  the rotated box which is an axis aligned box.
+//
+// \verbatim
+//  Modifications
+//   2010-01-18 Peter Vanroose - added constructor from 4 corner points
+// \endverbatim
 
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_point_3d.h>
@@ -27,6 +32,10 @@ class vgl_orient_box_3d
 
   //: constructor with box and the orientation
   vgl_orient_box_3d(vgl_box_3d<Type> box, vnl_quaternion<double> orient);
+
+  //: constructor from four corner points.
+  //  The three directions from the first of these to the three other points must be mutually orthogonal.
+  vgl_orient_box_3d(vgl_point_3d<Type> const& p0, vgl_point_3d<Type> const& px, vgl_point_3d<Type> const& py, vgl_point_3d<Type> const& pz);
 
   virtual ~vgl_orient_box_3d(void) {}
 
