@@ -117,6 +117,13 @@ modifications:  Scott R. Wilson 1/13/88
 //  with the image origin in the upper left hand corner.     
 //                       
 //******************************************************************
+//
+// Modified 2010 for use with VXL for loading and saving viff images.
+// Derived from appropriately licensed copy found in archive of old
+// file formats stored in ./viffheader.original.h and found at
+// http://www.redwoodsoft.com/~dru/museum/gfx/gff/vendspec/viff/viff.h
+//
+// Ian Scott 15 Jan 2010
 // \endverbatim
 */
 

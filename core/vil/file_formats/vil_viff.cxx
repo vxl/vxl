@@ -1,8 +1,5 @@
 // This is core/vil/file_formats/vil_viff.cxx
 #include "vil_viff.h"
-extern "C" {
-#include "vil_viff_support.h"
-}
 #include <vcl_cassert.h>
 #include <vcl_complex.h>
 
