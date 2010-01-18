@@ -1,7 +1,7 @@
-
+//:
+// \file
 #include "vil_viffheader.h"
 #include <string.h>
-
 
 
 //: Construct an image header
@@ -14,7 +14,6 @@ vil_viff_xvimage::vil_viff_xvimage(
   vil_viff_data_storage storage_type,
   unsigned num_bands)
 {
-
   const unsigned VIL_VIFF_COMMENT_LENGTH = 512L;
 
   identifier = (char)XV_FILE_MAGIC_NUM;
@@ -67,7 +66,6 @@ vil_viff_xvimage::vil_viff_xvimage(
     default:                image_data_n_bytes = ncols*255; break;
   }
   image_data_n_bytes *= nrows*num_data_bands;
-
 
 
   imagedata = 0;
