@@ -103,7 +103,6 @@
 #include <vil/file_formats/vil_pyramid_image_list.h>
 #include <vil/file_formats/vil_ras.h>
 #include <vil/file_formats/vil_viff.h>
-#include <vil/file_formats/vil_viff_support.h>
 #include <vil/file_formats/vil_viffheader.h>
 // Only the following ones need library-specific #includes:
 #if HAS_J2K
