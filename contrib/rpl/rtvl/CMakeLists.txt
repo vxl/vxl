@@ -45,3 +45,7 @@ TARGET_LINK_LIBRARIES(rtvl rgtl vnl_algo vnl)
 
 INSTALL_TARGETS(/lib rtvl)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/rpl/rtvl ${rtvl_sources})
+
+IF (BUILD_EXAMPLES)
+  SUBDIRS(examples)
+ENDIF (BUILD_EXAMPLES)
