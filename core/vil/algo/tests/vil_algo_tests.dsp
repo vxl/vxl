@@ -123,9 +123,6 @@ SOURCE=.\test_algo_suppress_non_plateau.cxx
 # Begin Source File
 SOURCE=.\test_algo_flood_fill.cxx
 # End Source File
-# Begin Source File
-SOURCE=.\test_algo_exact_distance_transform.cxx
-# End Source File
 # End Group
 # End Target
 # End Project

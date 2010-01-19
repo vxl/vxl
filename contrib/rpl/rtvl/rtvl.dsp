@@ -1,31 +1,31 @@
-# Microsoft Developer Studio Project File - Name="brip" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="rtvl" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
 # variables to REPLACE
-# 
-# /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl/bseg" == include path
+#
+# /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/rpl" == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
 #  == override in output directory
-# brip  == name of output library
+# rtvl  == name of output library
 
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
 
-CFG=brip - Win32 Debug
+CFG=rtvl - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
-!MESSAGE 
-!MESSAGE NMAKE /f "brip.mak".
-!MESSAGE 
+!MESSAGE
+!MESSAGE NMAKE /f "rtvl.mak".
+!MESSAGE
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
-!MESSAGE 
-!MESSAGE NMAKE /f "brip.mak" CFG="brip - Win32 Debug"
-!MESSAGE 
+!MESSAGE
+!MESSAGE NMAKE /f "rtvl.mak" CFG="rtvl - Win32 Debug"
+!MESSAGE
 !MESSAGE Possible choices for configuration are:
-!MESSAGE 
-!MESSAGE "brip - Win32 Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "brip - Win32 Release" (based on "Win32 (x86) Static Library")
+!MESSAGE
+!MESSAGE "rtvl - Win32 Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "rtvl - Win32 Release" (based on "Win32 (x86) Static Library")
 # Begin Project
 # PROP AllowPerConfigDependencies 0
 # PROP Scc_ProjName ""
@@ -33,7 +33,7 @@ CFG=brip - Win32 Debug
 CPP=cl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "brip - Win32 Release"
+!IF  "$(CFG)" == "rtvl - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -47,7 +47,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /FD /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl/bseg" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "brip_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/rpl" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "rtvl_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -59,7 +59,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo
 
-!ELSEIF  "$(CFG)" == "brip - Win32 Debug"
+!ELSEIF  "$(CFG)" == "rtvl - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -73,7 +73,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FD /c
 # ADD CPP /nologo /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /FD /GZ /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl/bseg" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "brip_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/rpl" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "rtvl_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -83,155 +83,137 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-!ENDIF 
+!ENDIF
 
 # Begin Target
 
-# Name "brip - Win32 Release"
-# Name "brip - Win32 Debug"
+# Name "rtvl - Win32 Release"
+# Name "rtvl - Win32 Debug"
 
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\brip_vil1_float_ops.cxx
+SOURCE=.\Templates/rtvl_tensor+2-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\brip_vil_float_ops.cxx
+SOURCE=.\Templates/rtvl_tensor+3-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\brip_para_cvrg.cxx
+SOURCE=.\Templates/rtvl_weight_original+2-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\brip_para_cvrg_params.cxx
+SOURCE=.\Templates/rtvl_refine+3-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\brip_region_pixel.cxx
+SOURCE=.\Templates/rtvl_weight_smooth+2-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\brip_roi.cxx
+SOURCE=.\Templates/rtvl_voter+3-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\brip_watershed.cxx
+SOURCE=.\Templates/rtvl_voter+2-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\brip_watershed_params.cxx
+SOURCE=.\Templates/rtvl_vote+3-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\brip_label_equivalence.cxx
+SOURCE=.\Templates/rtvl_votee_d+2-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\brip_line_generator.cxx
+SOURCE=.\Templates/rtvl_refine+2-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\brip_rect_mask.cxx
+SOURCE=.\Templates/rtvl_weight_smooth+3-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\brip_edge.cxx
+SOURCE=.\Templates/rtvl_tensor_d+3-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/brip_histogram+double-.cxx
+SOURCE=.\Templates/rtvl_vote+2-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/brip_histogram+vxl_byte-.cxx
+SOURCE=.\Templates/rtvl_votee+2-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/brip_mutual_info+double-.cxx
+SOURCE=.\Templates/rtvl_weight_original+3-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/brip_mutual_info+vxl_byte-.cxx
+SOURCE=.\Templates/rtvl_tensor_d+2-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+brip_region_pixel-.cxx
+SOURCE=.\Templates/rtvl_votee_d+3-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+brip_roi-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/brip_max_scale_response+float-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/brip_quadtree_utils+float-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+brip_quadtree_node_base-.cxx
+SOURCE=.\Templates/rtvl_votee+3-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
-SOURCE=.\brip_vil_ops.h
+SOURCE=.\rtvl_refine.hxx
 # End Source File
 # Begin Source File
-SOURCE=.\brip_histogram.h
+SOURCE=.\rtvl_votee.hxx
 # End Source File
 # Begin Source File
-SOURCE=.\brip_histogram.txx
+SOURCE=.\rtvl_weight_smooth.txx
 # End Source File
 # Begin Source File
-SOURCE=.\brip_mutual_info.h
+SOURCE=.\rtvl_tensor_d.hxx
 # End Source File
 # Begin Source File
-SOURCE=.\brip_mutual_info.txx
+SOURCE=.\rtvl_voter.txx
 # End Source File
 # Begin Source File
-SOURCE=.\brip_vil1_float_ops.h
+SOURCE=.\rtvl_vote.hxx
 # End Source File
 # Begin Source File
-SOURCE=.\brip_vil_float_ops.h
+SOURCE=.\rtvl_intpow.hxx
 # End Source File
 # Begin Source File
-SOURCE=.\brip_para_cvrg.h
+SOURCE=.\rtvl_weight_original.txx
 # End Source File
 # Begin Source File
-SOURCE=.\brip_para_cvrg_params.h
+SOURCE=.\rtvl_votee.txx
 # End Source File
 # Begin Source File
-SOURCE=.\brip_region_pixel.h
+SOURCE=.\rtvl_weight.hxx
 # End Source File
 # Begin Source File
-SOURCE=.\brip_region_pixel_sptr.h
+SOURCE=.\rtvl_voter.hxx
 # End Source File
 # Begin Source File
-SOURCE=.\brip_roi.h
+SOURCE=.\rtvl_tensor.txx
 # End Source File
 # Begin Source File
-SOURCE=.\brip_roi_sptr.h
+SOURCE=.\rtvl_votee_d.hxx
 # End Source File
 # Begin Source File
-SOURCE=.\brip_watershed.h
+SOURCE=.\rtvl_terms.hxx
 # End Source File
 # Begin Source File
-SOURCE=.\brip_watershed_params.h
+SOURCE=.\rtvl_tensor_d.txx
 # End Source File
 # Begin Source File
-SOURCE=.\brip_max_scale_response.h
+SOURCE=.\rtvl_refine.txx
 # End Source File
 # Begin Source File
-SOURCE=.\brip_max_scale_response.txx
+SOURCE=.\rtvl_weight_smooth.hxx
 # End Source File
 # Begin Source File
-SOURCE=.\brip_quadtree_node.h
+SOURCE=.\rtvl_tensor.hxx
 # End Source File
 # Begin Source File
-SOURCE=.\brip_quadtree_node_base_sptr.h
+SOURCE=.\rtvl_vote.txx
 # End Source File
 # Begin Source File
-SOURCE=.\brip_quadtree_utils.h
+SOURCE=.\rtvl_votee_d.txx
 # End Source File
 # Begin Source File
-SOURCE=.\brip_quadtree_utils.txx
+SOURCE=.\rtvl_tokens.hxx
 # End Source File
 # Begin Source File
-SOURCE=.\brip_label_equivalence.h
-# End Source File
-# Begin Source File
-SOURCE=.\brip_line_generator.h
-# End Source File
-# Begin Source File
-SOURCE=.\brip_rect_mask.h
-# End Source File
-# Begin Source File
-SOURCE=.\brip_edge.h
+SOURCE=.\rtvl_weight_original.hxx
 # End Source File
 # End Group
 # End Target

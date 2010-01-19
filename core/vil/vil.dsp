@@ -114,6 +114,9 @@ SOURCE=.\file_formats/vil_png.cxx
 SOURCE=.\file_formats/vil_tiff.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\file_formats/vil_viffheader.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vil_image_view+bool-.cxx
 # End Source File
 # Begin Source File
@@ -445,9 +448,6 @@ SOURCE=.\file_formats/vil_mit.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\file_formats/vil_viff.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\file_formats/vil_viff_support.c
 # End Source File
 # Begin Source File
 SOURCE=.\file_formats/vil_nitf2_array_field.cxx
@@ -946,9 +946,6 @@ SOURCE=.\file_formats/vil_mit.h
 # End Source File
 # Begin Source File
 SOURCE=.\file_formats/vil_viff.h
-# End Source File
-# Begin Source File
-SOURCE=.\file_formats/vil_viff_support.h
 # End Source File
 # Begin Source File
 SOURCE=.\file_formats/vil_viffheader.h
