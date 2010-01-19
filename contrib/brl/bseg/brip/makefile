@@ -23,6 +23,7 @@ MANPAGE_SOURCES += brip_quadtree_utils.txx
 SOURCES += brip_label_equivalence.cxx
 SOURCES += brip_line_generator.cxx
 SOURCES += brip_rect_mask.cxx
+SOURCES += brip_edge.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

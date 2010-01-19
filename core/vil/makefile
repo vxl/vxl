@@ -40,8 +40,7 @@ SOURCES += file_formats/vil_ras.cxx
 SOURCES += file_formats/vil_iris.cxx
 SOURCES += file_formats/vil_mit.cxx
 SOURCES += file_formats/vil_viff.cxx
-SOURCES += file_formats/vil_viff_support.c
-MANPAGE_SOURCES += file_formats/vil_viffheader.h
+SOURCES += file_formats/vil_viffheader.cxx
 ifeq ($(HAS_DCMTK),1)
 USE_DCMTK := 1
 SOURCES += file_formats/vil_dicom.cxx
