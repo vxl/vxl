@@ -1,3 +1,4 @@
+#include <brip/brip_edge.h>
 #include <brip/brip_histogram.h>
 #include <brip/brip_label_equivalence.h>
 #include <brip/brip_line_generator.h>
