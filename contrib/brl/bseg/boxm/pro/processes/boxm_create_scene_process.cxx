@@ -137,11 +137,19 @@ bool boxm_create_scene_process(bprb_func_process& pro)
       }
     }
   
- 
-  else {
-    vcl_cout << "boxm_create_scene_process: undefined APM type" << vcl_endl;
-    return false;
-  }
+    else if (scene_ptr->appearence_model() == BOXM_EDGE_FLOAT) {
+      if (!scene_ptr->multi_bin())
+      {
+        typedef boct_tree<short,boxm_edge_sample<float> > tree_type;
+        boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
+        scene->load_scene(parser);
+        scene_ptr = scene;
+      }
+    }
+    else {
+      vcl_cout << "boxm_create_scene_process: undefined APM type" << vcl_endl;
+      return false;
+    }
 
   //store output
   pro.set_output_val<boxm_scene_base_sptr>(0, scene_ptr);
