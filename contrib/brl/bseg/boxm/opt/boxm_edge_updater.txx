@@ -31,7 +31,7 @@ bool boxm_edge_updater<T_loc,APM,AUX>::add_cells()
 
   vcl_vector<boxm_aux_scene<T_loc,  boxm_edge_sample<APM>, boxm_aux_edge_sample<AUX> > > aux_scenes;
   for (unsigned int i=0; i<image_ids_.size(); ++i) {
-    boxm_aux_scene<T_loc, boxm_edge_sample<APM>, boxm_aux_edge_sample<AUX>> aux_scene(&scene_,image_ids_[i],boxm_aux_scene<T_loc, boxm_edge_sample<APM>, boxm_aux_edge_sample<AUX>>::LOAD);
+    boxm_aux_scene<T_loc, boxm_edge_sample<APM>, boxm_aux_edge_sample<AUX> > aux_scene(&scene_,image_ids_[i],boxm_aux_scene<T_loc, boxm_edge_sample<APM>, boxm_aux_edge_sample<AUX> >::LOAD);
     aux_scenes.push_back(aux_scene);
   }
 
