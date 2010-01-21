@@ -90,7 +90,7 @@ bool boxm_crop_scene_process(bprb_func_process& pro)
       pro.set_output_val<boxm_scene_base_sptr>(0, boxm_crop_scene<boxm_sample<BOXM_APM_MOG_GREY> >(scene_in, bbox));
       
     }
-  } 
-  
+  }
+  return true;
   
  }
