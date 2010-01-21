@@ -30,7 +30,7 @@ float boxm_cell_to_float(boct_tree_cell<T_loc, bsta_num_obs<bsta_gauss_f1> >* ce
 template <class T_loc, class T_data>
 float boxm_cell_to_float(boct_tree_cell<T_loc, T_data >* cell)
 {
-  return cell->data().alpha;
+  return cell->data().basic_val();
 }
 
 #endif
