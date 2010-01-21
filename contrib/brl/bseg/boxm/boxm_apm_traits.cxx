@@ -10,6 +10,7 @@ const char* boxm_apm_types::app_model_strings[]  = { "apm_mog_grey",
                                                       "bsta_f1",
                                                       "bvpl_sample_float",
                                                       "bvpl_sample_gauss_f1",
+                                                      "edge_float",
                                                       "apm_na"};
 
 

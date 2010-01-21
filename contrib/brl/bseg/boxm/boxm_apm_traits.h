@@ -17,11 +17,13 @@
 #include <vil/vil_rgb.h>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_ostream.h>
+#include <boxm/boxm_edge_sample.h>
 
 class boxm_mog_grey_processor;
 class boxm_mog_rgb_processor;
 class boxm_simple_grey_processor;
 class boxm_mob_grey_processor;
+
 
 enum boxm_apm_type
 {
@@ -35,6 +37,7 @@ enum boxm_apm_type
   BSTA_F1,
   BVPL_SAMPLE_FLOAT,
   BVPL_SAMPLE_BSTA_GAUSS_F1,
+  BOXM_EDGE_FLOAT,
   BOXM_APM_NA,
   BOXM_APM_UNKNOWN
 };
@@ -149,6 +152,18 @@ class boxm_apm_traits<BOXM_APM_MOB_GREY>
   typedef float obs_datatype;
   typedef float obs_mathtype;
   typedef boxm_mob_grey_processor apm_processor;
+};
+
+template<>
+class boxm_apm_traits<BOXM_EDGE_FLOAT>
+{
+ public:
+  static const unsigned int obs_dim = 1;
+  static const unsigned int n_params = 2;
+  typedef boxm_edge_sample<float> apm_datatype;
+  typedef float obs_datatype;
+  typedef float obs_mathtype;
+  //typedef boxm_edge_processor apm_processor;
 };
 
 void vsl_b_write(vsl_b_ostream & os, boxm_simple_grey const &sample);
