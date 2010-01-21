@@ -11,8 +11,13 @@ SET(boxm_opt_sources
    boxm_generate_opt_sample_functor.h
    boxm_render_expected_depth_functor.h
    boxm_render_expected_image_functor.h
+   boxm_seg_length_functor.h
+   boxm_pre_infinity_functor.h
    boxm_rt_sample.h                     boxm_rt_sample.txx
    boxm_update_image_functor.h
+   boxm_edge_updater.h                  boxm_edge_updater.txx
+   boxm_generate_edge_sample_functor.h
+   boxm_render_expected_edge_image_functor.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates boxm_opt_sources)
