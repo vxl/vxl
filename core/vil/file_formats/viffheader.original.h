@@ -4,30 +4,36 @@ All rights reserved.
 
 The viff.h file is a plain ascii C include file.  It is a copy of the
 file in KHOROS_HOME/include/viff.h, but with a less restrictive
-copyright.  The purpose of this file is allow others to build in
+copyright.  The purpose of this file is allow others to build in 
 interoperability to their software, without having to get a Khoros license to
 distribute their software.   Redistribution of any other component of
 Khoros still needs a separate license that is available via the Khoros
 Consortium.
 
-For further information, contact:
+For further information, contact: 
 
-khoros-request@khoros.unm.edu
+khoros-request@khoros.unm.edu 
+
 
 /*
-  * Khoros:
- */
+  * Khoros: Id
+  */
+
+ /*
+  * $Log$
+  */ 
+
 /*
  *----------------------------------------------------------------------
  *
  * Copyright 1990, University of New Mexico.  All rights reserved.
- *
+ * 
  * Permission to copy, modify, and use this include file is hereby
  * granted, provided that this notice is retained thereon and
  * on all copies.  UNM makes no representations as too the sui-
  * tability and operability of this software for any purpose.
  * It is provided "as is" without express or implied warranty.
- *
+ * 
  * UNM DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE,
  * INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FIT-
  * NESS.  IN NO EVENT SHALL UNM BE LIABLE FOR ANY SPECIAL,
@@ -36,7 +42,7 @@ khoros-request@khoros.unm.edu
  * IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS
  * ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PER-
  * FORMANCE OF THIS SOFTWARE.
- *
+ * 
  *----------------------------------------------------------------------
  */
 
@@ -73,49 +79,49 @@ khoros-request@khoros.unm.edu
 
 /*
 ******************************************************************
-	Khoros Visualization/Image File Format		
-							
-	A Khoros data file is organized as a 1Kbyte header
-	followed by additional information.  The first two
-	bytes of the header tell what kind of stuff the
-	additional information is.  For Khoros image files,
-	the additional information consists of the maps,
-	the location data, and then the image or vector data.
-
-	There is a supporting document for this file called
-	"The Khoros Visualization/Image File Format" that will help to
+	Khoros Visualization/Image File Format		         
+							         
+	A Khoros data file is organized as a 1Kbyte header     
+	followed by additional information.  The first two       
+	bytes of the header tell what kind of stuff the          
+	additional information is.  For Khoros image files,     
+	the additional information consists of the maps,   
+	the location data, and then the image or vector data.    
+                                                                
+	There is a supporting document for this file called      
+	"The Khoros Visualization/Image File Format" that will help to        
 	expalin the various fields, see $KHOROS_HOME/manual/viff_format.
 
-	The header fields where carefully selected to
-	prevent contradictions between categories, i.e. they
+	The header fields where carefully selected to            
+	prevent contradictions between categories, i.e. they     
 	were chosen to be orthogonal to each other.  However,
 	in several situations this causes the fields to supply
 	redundant information.
-								
-	Note that the structure contains pointers to the various
-	chunks of data.  These will make sense ONLY when the
-	data is in memory.
+								 
+	Note that the structure contains pointers to the various 
+	chunks of data.  These will make sense ONLY when the 
+	data is in memory.  
 
 	*imagedata - points to a sequence of images, an image is
 	made up of bands, and the bands are in a sequence; or
 	it can point to vectors, where the vector dimension is
 	the number of bands.
 
-	*maps - points to a sequence of 2-dimensional maps, a map
+	*maps - points to a sequence of 2-dimensional maps, a map 
 	is organized as stacked columns.  A data value indexes map rows.
 
 	*location - points to bands of coordinate values, ie if
 	two dimensional locations, then there would be a band
 	of x's followed by a band of y's.
-								
-	The Khoros convention for the image orientarion is	
-	with the image origin in the upper left hand corner.
-							
+								 
+	The Khoros convention for the image orientarion is	 
+	with the image origin in the upper left hand corner.     
+							         
 ******************************************************************
 */
 
 
-/*
+/* 
  * The VIFF header size for a Cray is 4096 because of the
  * word size on a cray. So, set the headersize to be 4096
  * for the cray and 1024 of all other machines.
@@ -171,7 +177,7 @@ struct xvimage	{
                                            by routines that need the 2D
                                            interpretation. */
 
-/* The product of row_size and col_size is used to indicate
+/* The product of row_size and col_size is used to indicate 
    the number of locations when the location type is explicit,
    the product also indicates the number of pixels in a band,
    or the number of vectors.  */
@@ -205,7 +211,7 @@ struct xvimage	{
 
 	unsigned long	data_encode_scheme; /* encoding scheme of disk data */
 
-/* Things that determine how the mapping (if any) of data bands is
+/* Things that determine how the mapping (if any) of data bands is 
    to be done to obtain the actual "image" or data.  */
 
         unsigned long	map_scheme;	 /* How mapping (if any) is to occur */
@@ -251,21 +257,21 @@ struct xvimage	{
 
 /* Pointers to the actual data - these are valid only when in memory! */
 
-	char	reserve[VIFF_HEADERSIZE - (21*sizeof(long))
-			     - (520*sizeof(char))
+	char	reserve[VIFF_HEADERSIZE - (21*sizeof(long))  
+			     - (520*sizeof(char)) 
 		             - (2*sizeof(char *)) - (4*sizeof(float))
 		             - (sizeof(float *))];
-				/* maximum header information is
+				/* maximum header information is 
 				   1024 bytes, what is not currently
 				   used is saved in reserve */
 
-	char *maps;		/* a pointer to the maps, must be cast into
+	char *maps;		/* a pointer to the maps, must be cast into 
 				   the proper type */
 
 	float *location;	/* a pointer to the location data (for
 				   explicit locations, each location is
-				   paired with data pointed to by
-				   *imagedata,  all locations are
+				   paired with data pointed to by 
+				   *imagedata,  all locations are 
 				   in float  */
 
 	char *imagedata;	/* a pointer to the input data (straight off
@@ -300,7 +306,7 @@ struct xvimage	{
 /* definitions for data storage type,
    unsigned long data_storage_type; */
 #define	VFF_TYP_BIT		0	/* pixels are on or off (binary image)*/
-                                        /* Note: This is an X11 XBitmap
+                                        /* Note: This is an X11 XBitmap 
 					   with bits packed into a byte and
 					   padded to a byte */
 #define	VFF_TYP_1_BYTE		1	/* pixels are byte (unsigned char) */
@@ -342,13 +348,13 @@ struct xvimage	{
 					   by groups of maps_per_cycle, allowing
 					   "rotating the color map" */
 #define	VFF_MS_SHARED		3	/* All data band share the same map */
-#define VFF_MS_GROUP		4	/* All data bands are "grouped"
+#define VFF_MS_GROUP		4	/* All data bands are "grouped" 
 					   together to point into one map */
 /* definitions for enabling the map,
    unsigned long map_enable; */
 #define VFF_MAP_OPTIONAL	1	/* The data is valid without being
 					   sent thru the color map. If a
-					   map is defined, the data may
+					   map is defined, the data may 
 					   optionally be sent thru it. */
 #define	VFF_MAP_FORCE		2	/* The data MUST be sent thru the map
 					   to be interpreted */
@@ -366,8 +372,8 @@ struct xvimage	{
     HSV:  hue, saturation, value
     IHS:  intensity, hue, saturation
     XYZ:
-    UVW:
-    SOW:
+    UVW:  
+    SOW:  
     Lab:
     Luv:
 
