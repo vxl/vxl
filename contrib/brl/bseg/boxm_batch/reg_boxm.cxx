@@ -6,6 +6,7 @@
 #include <vil_pro/vil_register.h>
 #include <vpgl_pro/vpgl_register.h>
 #include <boxm/pro/boxm_register.h>
+#include <brip_pro/brip_register.h>
 #include <boxm/opt/pro/boxm_opt_register.h>
 #include <boxm/algo/pro/boxm_algo_register.h>
 
@@ -17,7 +18,7 @@ register_processes(PyObject *self, PyObject *args)
   boxm_register::register_process();
   boxm_opt_register::register_process();
   boxm_algo_register::register_process();
-
+  brip_register::register_process();
   Py_INCREF(Py_None);
   return Py_None;
 }

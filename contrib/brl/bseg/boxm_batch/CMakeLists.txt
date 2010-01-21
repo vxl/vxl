@@ -29,7 +29,7 @@ IF( PYTHON_FOUND )
     SET_TARGET_PROPERTIES(boxm_batch PROPERTIES PREFIX "")
 
 
-    TARGET_LINK_LIBRARIES(boxm_batch bpro_batch boxm_pro boxm_opt_pro boxm_algo_pro vpgl_io vpgl_pro vil_io vil_pro)
+    TARGET_LINK_LIBRARIES(boxm_batch bpro_batch boxm_pro boxm_opt_pro boxm_algo_pro vpgl_io vpgl_pro vil_io vil_pro brip_pro)
   
     IF (PYTHON_DEBUG_LIBRARIES)
       TARGET_LINK_LIBRARIES( boxm_batch debug ${PYTHON_DEBUG_LIBRARY})
