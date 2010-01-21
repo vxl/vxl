@@ -23,7 +23,7 @@ SET(boxm_sources
     boxm_cell_vis_graph_iterator.txx       boxm_cell_vis_graph_iterator.h
     boxm_neighb_graph_node.h
     boxm_utils.cxx                         boxm_utils.h
-    boxm_render_image.h                      boxm_render_image_triangle.h
+    boxm_render_image.h                    boxm_render_image_triangle.h
     boxm_depth_image_triangle.h
     boxm_update_triangle.h
     boxm_refine.h
@@ -42,6 +42,7 @@ SET(boxm_sources
     boxm_update_sample.h
     boxm_mob_grey_processor.cxx            boxm_mob_grey_processor.h
     boxm_cell_data_traits.h
+    boxm_edge_sample.h                   boxm_edge_sample.txx
 )
 
 AUX_SOURCE_DIRECTORY(Templates boxm_sources)
