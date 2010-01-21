@@ -96,7 +96,7 @@ bool boxm_roi_init_process(bprb_func_process& pro)
     return false;
   }
   // uncertainity (meters) -- SHOULD BE A PARAM
-  float uncertainty=0;
+  float uncertainty=10.0;
   if ( !pro.parameters()->get_value(error, uncertainty) ) {
       vcl_cout << pro.name() << ": error in retrieving parameters\n";
     return false;
@@ -122,7 +122,7 @@ bool boxm_roi_init_process(bprb_func_process& pro)
   }
 
   vpgl_local_rational_camera<double> local_camera;
-  if (scene->appearence_model() == BOXM_APM_MOG_GREY) {
+  if (scene->appearence_model() == BOXM_APM_MOG_GREY || scene->appearence_model() == BOXM_EDGE_FLOAT) {
     typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
     boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
 

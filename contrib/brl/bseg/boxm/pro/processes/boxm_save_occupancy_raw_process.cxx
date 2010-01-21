@@ -178,7 +178,11 @@ bool boxm_save_occupancy_raw_process(bprb_func_process& pro)
       } else { // write the whole scene
         boxm_save_scene_raw<short,boxm_sample<BOXM_APM_MOB_GREY> >(*scene, filepath + ".raw", resolution);
       }
-  }
+   } else if (scene_ptr->appearence_model() == BOXM_EDGE_FLOAT) {
+      typedef boct_tree<short, boxm_edge_sample<float> > type;
+      boxm_scene<type>* scene = static_cast<boxm_scene<type>*>(scene_ptr.as_pointer());
+      boxm_save_scene_raw<short,boxm_edge_sample<float> >(*scene, filepath + ".raw", resolution);
+   }
   else {
     vcl_cout << "boxm_save_occupancy_raw_process: undefined APM type" << vcl_endl;
     return false;
