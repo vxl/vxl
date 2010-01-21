@@ -13,10 +13,6 @@
 //   January 13, 2010 - Gamze Tunali - moved from bvxm/bvxm_edge_util.h to brip/brip_edge.h
 // \endverbatim
 
-
-#include <vpgl/vpgl_camera.h>
-#include <vpgl/vpgl_rational_camera.h>
-#include <vpgl/vpgl_perspective_camera.h>
 #include <vil/vil_image_view.h>
 #include <vbl/vbl_array_2d.h>
 
