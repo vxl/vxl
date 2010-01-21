@@ -33,6 +33,9 @@ class boxm_sample
 
   void set_appearance(apm_datatype  app,int /*bin*/=-1) { appearance_=app; }
 
+  //: returns a basic value that represents this sample (mostly for raw file creation purposes)
+  float basic_val() { return alpha; }
+
   //: the occlusion density at the sample point
   float alpha;
 
