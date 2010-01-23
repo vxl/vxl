@@ -131,6 +131,42 @@ SOURCE=.\Templates/boxm_aux_scene+short.boxm_sample+BOXM_APM_MOB_GREY-.boxm_rt_s
 # Begin Source File
 SOURCE=.\Templates/boct_tree_cell_reader+short.boxm_sample+BOXM_APM_MOB_GREY--.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_aux_scene+short.boxm_edge_sample+float-.boxm_aux_edge_sample+float--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_edge_sample+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boct_tree_cell+short.boxm_edge_sample+float--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_opt_edge_updater+short.float.float---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boct_tree+short.boxm_edge_sample+float--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_block_iterator+boct_tree+short.boxm_edge_sample+float---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_block+boct_tree+short.boxm_edge_sample+float---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boct_tree_cell_reader+short.boxm_edge_sample+float--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_cell_vis_graph_iterator+short.boxm_edge_sample+float--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_block_vis_graph_iterator+boct_tree+short.boxm_edge_sample+float---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_array_3d+boxm_block+boct_tree+short.boxm_edge_sample+float---~-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_scene+boct_tree+short.boxm_edge_sample+float---.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -172,6 +208,24 @@ SOURCE=.\boxm_render_expected_depth_functor.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_generate_opt_sample_functor.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_edge_updater.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_seg_length_functor.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_generate_edge_sample_functor.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_pre_infinity_functor.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_render_expected_edge_image_functor.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_edge_updater.txx
 # End Source File
 # End Group
 # End Target

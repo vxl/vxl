@@ -98,6 +98,9 @@ SOURCE=.\brip_register.cxx
 # Begin Source File
 SOURCE=.\processes/brip_extrema_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\processes/brip_detect_edges_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -106,6 +109,9 @@ SOURCE=.\brip_register.h
 # End Source File
 # Begin Source File
 SOURCE=.\brip_processes.h
+# End Source File
+# Begin Source File
+SOURCE=.\processes/brip_detect_edges_process.h
 # End Source File
 # End Group
 # End Target

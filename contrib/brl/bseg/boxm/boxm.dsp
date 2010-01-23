@@ -437,6 +437,12 @@ SOURCE=.\boxm_mob_grey_processor.h
 # Begin Source File
 SOURCE=.\boxm_cell_data_traits.h
 # End Source File
+# Begin Source File
+SOURCE=.\boxm_edge_sample.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_edge_sample.txx
+# End Source File
 # End Group
 # End Target
 # End Project

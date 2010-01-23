@@ -110,6 +110,15 @@ SOURCE=.\processes/boxm_render_expected_rt_process.cxx
 # Begin Source File
 SOURCE=.\processes/boxm_generate_opt_samples_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\processes/boxm_render_expected_edge_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm_generate_edge_samples_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm_edge_update_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
