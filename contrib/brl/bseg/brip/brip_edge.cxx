@@ -11,7 +11,6 @@
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_interpolator.h>
 #include <vtol/vtol_edge_2d.h>
-#include <sdet/sdet_detector.h>
 #include <bil/algo/bil_edt.h>
 #include <vil/vil_convert.h>
 #include <vnl/algo/vnl_gaussian_kernel_1d.h>
@@ -28,6 +27,10 @@
 #include <vcl_string.h>
 #include <vcl_vector.h>
 #include <vcl_cassert.h>
+
+#ifdef BUILD_SHARED_LIB // contains cyclic dependency brip --> sdet --> brip
+                        // hence this will not work when building static libs
+#include <sdet/sdet_detector.h>
 
 vil_image_view<vxl_byte> brip_edge::detect_edges(vil_image_view<vxl_byte> img,
                                                       double noise_multiplier,
@@ -204,6 +207,32 @@ brip_edge::detect_edge_tangent(vil_image_view<vxl_byte> img,
   }
   return edge_img;
 }
+
+#else // BUILD_SHARED_LIB
+vil_image_view<vxl_byte>
+brip_edge::detect_edges(vil_image_view<vxl_byte> img,
+                        double noise_multiplier,
+                        double smooth,
+                        bool automatic_threshold,
+                        bool junctionp,
+                        bool aggressive_junction_closure)
+{
+  assert(!"Because it requires a cyclic dependency brip -> sdet -> brip, brip_edge::detect_edges() cannot work in a static build");
+  return vil_image_view<vxl_byte>();
+}
+
+vil_image_view<float>
+brip_edge::detect_edge_tangent(vil_image_view<vxl_byte> img,
+                               double noise_multiplier,
+                               double smooth,
+                               bool automatic_threshold,
+                               bool junctionp,
+                               bool aggressive_junction_closure)
+{
+  assert(!"Because it requires a cyclic dependency brip -> sdet -> brip, brip_edge::detect_edge_tangent() cannot work in a static build");
+  return vil_image_view<float>();
+}
+#endif // BUILD_SHARED_LIB
 
 void brip_edge::edge_distance_transform(vil_image_view<vxl_byte>& inp_image, vil_image_view<float>& out_edt)
 {
