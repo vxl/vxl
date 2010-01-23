@@ -43,7 +43,7 @@ vpgl_proj_camera<T>::vpgl_proj_camera( const T* camera_matrix ) :
 //------------------------------------
 template <class T>
 vpgl_proj_camera<T>::vpgl_proj_camera( const vpgl_proj_camera& cam ) :
-  vpgl_camera<double>(),
+  vpgl_camera<T>(),
   P_( cam.get_matrix() ),
   cached_svd_(NULL)
 {
@@ -403,7 +403,7 @@ image_jacobians(const vpgl_proj_camera<T>& camera,
   const unsigned int num_pts = pts.size();
   vcl_vector<vnl_matrix_fixed<T,2,3> > img_jac(num_pts);
 
-  for(unsigned int i=0; i<num_pts; ++i)
+  for (unsigned int i=0; i<num_pts; ++i)
   {
     const vgl_point_3d<T>& pt = pts[i];
     vnl_matrix_fixed<double,2,3>& J = img_jac[i];
