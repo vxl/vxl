@@ -104,6 +104,7 @@
 #include <vil/file_formats/vil_ras.h>
 #include <vil/file_formats/vil_viff.h>
 #include <vil/file_formats/vil_viffheader.h>
+#include <vil/file_formats/viffheader.original.h>
 // Only the following ones need library-specific #includes:
 #if HAS_J2K
 #include <vil/file_formats/vil_j2k_image.h>
