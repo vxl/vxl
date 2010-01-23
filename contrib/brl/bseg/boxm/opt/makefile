@@ -12,6 +12,12 @@ MANPAGE_SOURCES += boxm_render_expected_image_functor.h
 MANPAGE_SOURCES += boxm_raytrace_function.h
 MANPAGE_SOURCES += boxm_render_expected_depth_functor.h
 MANPAGE_SOURCES += boxm_generate_opt_sample_functor.h
+MANPAGE_SOURCES += boxm_edge_updater.h
+MANPAGE_SOURCES += boxm_seg_length_functor.h
+MANPAGE_SOURCES += boxm_generate_edge_sample_functor.h
+MANPAGE_SOURCES += boxm_pre_infinity_functor.h
+MANPAGE_SOURCES += boxm_render_expected_edge_image_functor.h
+MANPAGE_SOURCES += boxm_edge_updater.txx
 
 SUBDIRS += pro open_cl
 

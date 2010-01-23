@@ -7,6 +7,7 @@ SOURCES += brip_register.cxx
 
 MANPAGE_SOURCES += brip_processes.h
 SOURCES += processes/brip_extrema_process.cxx
+SOURCES += processes/brip_detect_edges_process.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk
