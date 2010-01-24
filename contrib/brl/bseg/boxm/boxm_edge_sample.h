@@ -36,7 +36,8 @@ class boxm_aux_edge_sample
   float seg_len_;
 };
 
-/*
+#if 0 // two classes commented out
+
 //: traits for a grey optimization sample
 template<>
 class boxm_aux_traits<BOXM_AUX_OPT_RT_GREY>
@@ -55,7 +56,9 @@ class boxm_aux_traits<BOXM_AUX_OPT_RT_RGB>
   typedef boxm_edge_sample<vil_rgb<float> > sample_datatype;
 
   static vcl_string storage_subdir() { return "opt_rt_rgb_work"; }
-};*/
+};
+
+#endif // 0
 
 template <class T>
 void vsl_b_write(vsl_b_ostream & os, boxm_edge_sample<T> const &sample);
