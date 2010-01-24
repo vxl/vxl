@@ -136,36 +136,42 @@ namespace {
   }
 }
 
+#endif // BUILD_NONCOMMERCIAL
+
 template <class T>
 vgl_polygon<T>
 vgl_clip(vgl_polygon<T> const& poly1, vgl_polygon<T> const& poly2, vgl_clip_type op, int *p_retval)
 {
   // Check for the null case
   if ( poly1.num_sheets() == 0 ) {
+    *p_retval = 1;
     switch ( op )
     {
       case vgl_clip_type_intersect:    return poly1;
       case vgl_clip_type_difference:   return poly1;
       case vgl_clip_type_union:        return poly2;
       case vgl_clip_type_xor:          return poly2;
-      default:                         break;
+      default:                         *p_retval = -1; return vgl_polygon<T>(); // this should not happen...
     }
   }
   if ( poly2.num_sheets() == 0 ) {
+    *p_retval = 1;
     switch ( op )
     {
       case vgl_clip_type_intersect:    return poly2;
       case vgl_clip_type_difference:   return poly1;
       case vgl_clip_type_union:        return poly1;
       case vgl_clip_type_xor:          return poly1;
-      default:                         break;
+      default:                         *p_retval = -1; return vgl_polygon<T>(); // this should not happen...
     }
   }
 
+  vgl_polygon<T> result;
+
+#ifdef BUILD_NONCOMMERCIAL
   gpc_polygon p1 = vgl_to_gpc( poly1 );
   gpc_polygon p2 = vgl_to_gpc( poly2 );
   gpc_polygon p3;
-  vgl_polygon<T> result;
 
   gpc_op g_op = GPC_INT;
   switch ( op )
@@ -191,22 +197,27 @@ vgl_clip(vgl_polygon<T> const& poly1, vgl_polygon<T> const& poly2, vgl_clip_type
   gpc_free_polygon( &p2 );
   gpc_free_polygon( &p3 );
 
-  return result;
-}
-
 #else // BUILD_NONCOMMERCIAL
+  *p_retval = -1;
+  vcl_fprintf(stdout,"WARNING: GPC is only free for non-commercial use -- assuming disjoint polygons.\n");
+  vcl_fprintf(stderr,"WARNING: GPC is only free for non-commercial use -- assuming disjoint polygons.\n");
+  switch ( op )
+  {
+    default:
+    case vgl_clip_type_intersect:    result = vgl_polygon<T>(); break; // empty
+    case vgl_clip_type_difference:   result = poly1; break;
+    case vgl_clip_type_union:
+    case vgl_clip_type_xor:
+      result = poly1;
+      for (unsigned int i=0; i<poly2.num_sheets(); ++i)
+        result.push_back(poly2[i]);
+      break;
+  }
+  
+#endif // BUILD_NONCOMMERCIAL
 
-template <class T>
-vgl_polygon<T>
-vgl_clip(vgl_polygon<T> const& poly1, vgl_polygon<T> const& poly2, vgl_clip_type op, int *p_retval)
-{
-  vgl_polygon<T> result;
-  vcl_fprintf(stdout,"WARNING: GPC is only free for non-commercial use -- returning empty polygon.\n");
-  vcl_fprintf(stderr,"WARNING: GPC is only free for non-commercial use -- returning empty polygon.\n");
   return result;
 }
-
-#endif // BUILD_NONCOMMERCIAL
 
 template <class T>
 vgl_polygon<T>
