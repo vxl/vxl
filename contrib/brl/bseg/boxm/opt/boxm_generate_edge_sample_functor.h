@@ -23,7 +23,7 @@ class boxm_generate_edge_sample_functor
     is_aux_=true;
   }
 
-  inline bool step_cell(unsigned int i, unsigned int j, 
+  inline bool step_cell(unsigned int i, unsigned int j,
                         vgl_point_3d<double> s0, vgl_point_3d<double> s1,
                         T &cell_value,// delete?
                         T_aux &aux_val)
@@ -44,9 +44,9 @@ class boxm_generate_edge_sample_functor
 
 template <class T_loc, class T_data>
 void boxm_generate_edge_sample_rt(boxm_scene<boct_tree<T_loc, T_data > > &scene,
-                                 vpgl_camera_double_sptr cam,
-                                 vil_image_view<float> &obs,
-                                 vcl_string iname)
+                                  vpgl_camera_double_sptr cam,
+                                  vil_image_view<float> &obs,
+                                  vcl_string iname)
 {
     typedef boxm_aux_edge_sample<float> aux_datatype;
     boxm_aux_scene<T_loc, T_data, aux_datatype> aux_scene(&scene,iname, boxm_aux_scene<T_loc,T_data,aux_datatype>::CLONE);
@@ -60,4 +60,4 @@ void boxm_generate_edge_sample_rt(boxm_scene<boct_tree<T_loc, T_data > > &scene,
     vcl_cout<<"DONE."<<vcl_endl;
 }
 
-#endif // boxm_generate_opt_sample_functor_h
+#endif // boxm_generate_edge_sample_functor_h
