@@ -13,9 +13,9 @@
 #include <vcl_string.h>
 
 template <class T_loc, class APM, class AUX>
-boxm_edge_updater<T_loc,APM,AUX>::boxm_edge_updater(boxm_scene<boct_tree<T_loc, 
-                                                            boxm_edge_sample<APM> > > &scene,
-                                                            vcl_vector<vcl_string> const& image_ids)
+boxm_edge_updater<T_loc,APM,AUX>::boxm_edge_updater(boxm_scene<boct_tree<T_loc,
+                                                    boxm_edge_sample<APM> > > &scene,
+                                                    vcl_vector<vcl_string> const& image_ids)
 : image_ids_(image_ids), scene_(scene), max_cell_P_(0.995f), min_cell_P_(0.0001f)
 {}
 
@@ -66,7 +66,7 @@ bool boxm_edge_updater<T_loc,APM,AUX>::add_cells()
           vcl_cerr << "error: incremental reader returned false.\n";
             return false;
         }
-  
+
         if (!temp_cell.code_.isequal(&(cell->code_))) {
           vcl_cerr << "error: temp_cell idx does not match cell idx.\n";
           return false;
@@ -80,7 +80,7 @@ bool boxm_edge_updater<T_loc,APM,AUX>::add_cells()
       for (unsigned int s=0; s<aux_samples.size(); ++s) {
         data.edge_prob_ += aux_samples[s].obs_/aux_samples[s].seg_len_;
       }
-      data.num_obs_ += 1; 
+      data.num_obs_ += 1;
       cell->set_data(data);
     }
     scene_.write_active_block();
@@ -96,12 +96,12 @@ bool boxm_edge_updater<T_loc,APM,AUX>::add_cells()
   for (unsigned i=0; i<aux_scenes.size(); i++) {
     aux_scenes[i].clean_scene();
   }
-  
+
   return true;
 }
 
 
 #define BOXM_EDGE_UPDATER_INSTANTIATE(T1,T2,T3) \
-template class boxm_edge_updater<T1,T2,T3>
+template class boxm_edge_updater<T1,T2,T3 >
 
-#endif // boxm_opt_edge_updater_txx_
+#endif // boxm_edge_updater_txx_
