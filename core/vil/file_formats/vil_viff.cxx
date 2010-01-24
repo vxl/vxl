@@ -166,8 +166,8 @@ bool vil_viff_image::read_header()
     swap(&fspare2,sizeof(fspare2));
   }
 
-  ni_ = rs;
-  nj_ = cs;
+  ni_ = cs;
+  nj_ = rs;
   nplanes_ = (int)ndb; // number of colour bands
 
   // decide on data storage type
