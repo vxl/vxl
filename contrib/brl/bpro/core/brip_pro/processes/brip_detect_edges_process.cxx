@@ -1,4 +1,4 @@
-// This is brl/bpro/core/brip_pro/brip_detect_edges_process.h
+// This is brl/bpro/core/brip_pro/processes/brip_detect_edges_process.cxx
 #include "brip_detect_edges_process.h"
 //:
 // \file
