@@ -166,8 +166,8 @@ bool vil_viff_image::read_header()
     swap(&fspare2,sizeof(fspare2));
   }
 
-  ni_ = cs;
-  nj_ = rs;
+  ni_ = rs;
+  nj_ = cs;
   nplanes_ = (int)ndb; // number of colour bands
 
   // decide on data storage type
@@ -224,7 +224,7 @@ bool vil_viff_image::write_header()
   }
 
   //create header
-  vil_viff_xvimage image(nj_, ni_, type, nplanes_);
+  vil_viff_xvimage image(ni_, nj_, type, nplanes_);
 
   //make local copy of header
   vcl_memcpy(&header_, &image, sizeof(header_));
