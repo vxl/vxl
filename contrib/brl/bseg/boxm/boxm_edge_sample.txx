@@ -17,7 +17,6 @@ void vsl_b_write(vsl_b_ostream & os, boxm_edge_sample<T> const &sample)
   vsl_b_write(os, sample.version_no());
   vsl_b_write(os, sample.edge_prob_);
   vsl_b_write(os, sample.num_obs_);
-  
 }
 
 template <class T>
@@ -62,7 +61,7 @@ vcl_ostream& operator << (vcl_ostream& os, const boxm_edge_sample<T>& sample)
   return os;
 }
 
-// Auxilary Edge Sample Methods
+// Auxiliary Edge Sample Methods
 template <class OBS_T>
 void boxm_aux_edge_sample<OBS_T>::print(vcl_ostream& os) const
 {
