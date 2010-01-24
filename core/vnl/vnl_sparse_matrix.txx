@@ -758,7 +758,7 @@ vnl_sparse_matrix<T> vnl_sparse_matrix<T>::operator-(vnl_sparse_matrix<T> const&
 template <class T>
 vnl_sparse_matrix<T> vnl_sparse_matrix<T>::operator*(vnl_sparse_matrix<T> const& rhs) const
 {
-  vnl_sparse_matrix<T> result(rows(), columns());
+  vnl_sparse_matrix<T> result(rows(), rhs.columns());
   mult(rhs, result);
   return result;
 }
