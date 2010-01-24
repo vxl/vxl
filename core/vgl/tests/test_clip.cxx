@@ -41,6 +41,7 @@ static void test_union()
          result.num_sheets() == 2 && result.num_vertices() == 7, true);
   }
 
+#ifdef BUILD_NONCOMMERCIAL
   {
     double cont2[] = { 4,1,  8,1,  8,6,  4,6 };
     vgl_polygon<double> poly2(cont2, 4);
@@ -50,6 +51,7 @@ static void test_union()
          result.num_sheets() == 1 && result.num_vertices() == 8 &&
          is_vertex(result, 5.0,1.0) && is_vertex(result, 4.0,6.0), true);
   }
+#endif // BUILD_NONCOMMERCIAL
 }
 
 
@@ -80,6 +82,7 @@ static void test_intersection()
          result.num_sheets() == 0 && result.num_vertices() == 0, true);
   }
 
+#ifdef BUILD_NONCOMMERCIAL
   {
     float cont2[] = { 4,1,  8,1,  8,6,  4,6 };
     vgl_polygon<float> poly2(cont2, 4);
@@ -89,6 +92,7 @@ static void test_intersection()
          result.num_sheets() == 1 && result.num_vertices() == 4 &&
          is_vertex(result, 4.f,1.f), true);
   }
+#endif // BUILD_NONCOMMERCIAL
 
   {
     float cont2[] = { -3,-3,  8,-3,  8,8,  -3,8 };
