@@ -76,8 +76,8 @@ vil_print_declare_specialization( vil_rgba<double> );
 template<class T>
 inline void vil_print_all(vcl_ostream& os,const vil_image_view<T>& view)
 {
-  std::streamsize width = os.width();
-  os<<view.is_a()<<" "<<view.nplanes()<<" planes, each "<<view.ni()<<" x "<<view.nj()
+  vcl_streamsize width = os.width();
+  os<<view.is_a()<<' '<<view.nplanes()<<" planes, each "<<view.ni()<<" x "<<view.nj()
     <<" istep: "<<(int)view.istep()<<' '
     <<" jstep: "<<(int)view.jstep()<<' '
     <<" planestep: "<<(int)view.planestep()<<'\n' << vcl_flush;

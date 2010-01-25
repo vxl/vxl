@@ -12,7 +12,7 @@
 #include <vcl_cmath.h>
 #include <vcl_vector.h>
 #include <vcl_algorithm.h>
-
+#include <vcl_cstddef.h> // for std::size_t
 
 //:
 // This class is used in n_nearest_impl. It stores a pointer to an
@@ -335,31 +335,32 @@ closest_face ( point_type const& pt,
   coord_type best_dist=0;       // need local copy of best distance since face_dist might be NULL
 
   // for each dimension
-  for( unsigned dim=0; dim<N; ++dim ) {
+  for ( unsigned dim=0; dim<N; ++dim )
+  {
     // for each direction
-    for( unsigned dir=0; dir<2; ++dir ) {
-
+    for ( unsigned dir=0; dir<2; ++dir )
+    {
       // faces at the extremes are treated as faces with infinite distance
       // since they cannot be closer than infinity, we just skip them
-      if( dir == 0 )
-        if( bin_lo[dim] == 0 )
+      if ( dir == 0 )
+        if ( bin_lo[dim] == 0 )
           continue;
-      if( dir == 1 )
-        if( bin_hi[dim] == ( size_[dim] - 1 ) )
+      if ( dir == 1 )
+        if ( bin_hi[dim] == ( size_[dim] - 1 ) )
           continue;
 
       coord_type face_x;  // coordinate of the this face in this dimension
 
-      if( dir == 0 )
+      if ( dir == 0 )
         face_x = bin_lo[dim] * bin_size_[dim] + min_pt_[dim];
       else
         face_x = ( bin_hi[dim] + 1 ) * bin_size_[dim] + min_pt_[dim];
 
       coord_type dist = vcl_fabs ( pt[dim] - face_x );
       if ( face_inf_dist || dist < best_dist ) {
-        if(face_dim) *face_dim = dim;
-        if(face_dir) *face_dir = dir;
-        if(face_dist) *face_dist = dist;
+        if (face_dim) *face_dim = dim;
+        if (face_dir) *face_dir = dir;
+        if (face_dist) *face_dist = dist;
         face_inf_dist = false;
         best_dist = dist;
       }
@@ -400,8 +401,8 @@ n_nearest_impl( point_type const& pt,
   vcl_vector< point_dist_entry > distances;
 
   bool done = false;
-  while( ! done ) {
-
+  while ( ! done )
+  {
     // STEP 1: Determine whether we need to search more bins, either
     // because we have not yet found enough points or there are still
     // bins that may contain points closer than the nth closest point
@@ -410,12 +411,9 @@ n_nearest_impl( point_type const& pt,
     bool add_new_bins = false;
 
     if ( distances.size() < n ) {
-
       add_new_bins = true;
-
     }
     else {
-
       // sort the points we have found so far
       // we only need the closest n points
       vcl_nth_element( distances.begin(),
@@ -423,7 +421,7 @@ n_nearest_impl( point_type const& pt,
                        distances.end() );
 
       // remove all points that are further away than the nth closest point
-      if( distances.size() > n )
+      if ( distances.size() > n )
         distances.erase( distances.begin() + n, distances.end() );
       assert ( distances.size() == n );
 
@@ -435,11 +433,10 @@ n_nearest_impl( point_type const& pt,
       closest_face (pt, bin_rng_lo, bin_rng_hi,
                     0, 0, &face_dist, face_inf_dist);
 
-      if( face_inf_dist || nth_dist_sqr <= face_dist*face_dist )
+      if ( face_inf_dist || nth_dist_sqr <= face_dist*face_dist )
         done = true;
       else
         add_new_bins = true;
-
     }
 
     // STEP 2: Add new bins.  If the search range is empty add a
@@ -448,10 +445,10 @@ n_nearest_impl( point_type const& pt,
 
     bool found_new_bins = false; // were we able to add new bins to the search region?
 
-    if( add_new_bins ) {
-
-      if( bin_rng_empty ) {
-
+    if ( add_new_bins )
+    {
+      if ( bin_rng_empty )
+      {
         // the bin search range is empty, so initialize to single bin
         point_to_bin( pt, bin_rng_lo );
         for (unsigned i=0; i<N; ++i) bin_rng_hi[i] = bin_rng_lo[i];
@@ -461,10 +458,9 @@ n_nearest_impl( point_type const& pt,
         for (unsigned i=0; i<N; ++i) bin_new_lo[i] = bin_rng_lo[i];
         for (unsigned i=0; i<N; ++i) bin_new_hi[i] = bin_rng_hi[i];
         found_new_bins = true;
-
       }
-      else {
-
+      else
+      {
         // add bins to search region by extending the closest face
 
         unsigned face_dim = 0;
@@ -474,8 +470,8 @@ n_nearest_impl( point_type const& pt,
         closest_face (pt, bin_rng_lo, bin_rng_hi,
                       &face_dim, &face_dir, 0, face_inf_dist);
 
-        if( ! face_inf_dist ) {
-
+        if ( ! face_inf_dist )
+        {
           // We have found the closest face.  Expand the bin search
           // range and keep tabs on what is the newly added part of
           // the search range.
@@ -485,7 +481,7 @@ n_nearest_impl( point_type const& pt,
 
           assert( face_dim < N );
 
-          if( face_dir == 0 ) {
+          if ( face_dir == 0 ) {
             bin_rng_lo[face_dim] -= 1;
             bin_new_lo[face_dim] = bin_rng_lo[face_dim];
             bin_new_hi[face_dim] = bin_rng_lo[face_dim];
@@ -497,16 +493,14 @@ n_nearest_impl( point_type const& pt,
           }
 
           found_new_bins = true;
-
         }
-
       }
     }
 
     // STEP 3: Add new points if we added new bins.
 
-    if( found_new_bins ) {
-
+    if ( found_new_bins )
+    {
       // Get the list of points in the new candidate bins and
       // compute their distance from the query point.
 
@@ -525,7 +519,6 @@ n_nearest_impl( point_type const& pt,
           distances.push_back( point_dist_entry( pt, &(*ei) ) );
         }
       }
-
     }
 
     // STEP 4: If we wanted to add new bins to the search range, but
@@ -534,10 +527,9 @@ n_nearest_impl( point_type const& pt,
     // structure.  (It could also happen when there are n or more
     // points, depending on the point distribution.)
 
-    if( add_new_bins && ! found_new_bins ) {
+    if ( add_new_bins && ! found_new_bins ) {
       done = true;
     }
-
   }
 
   // sort the points by distance
@@ -556,7 +548,6 @@ n_nearest_impl( point_type const& pt,
       points->push_back( i->entry_->point_ );
     }
   }
-
 }
 
 #if 0
@@ -596,9 +587,9 @@ n_nearest_impl( point_type const& pt,
   // There might be more optimal solution to this fix.
 
   static bool rsdl_bins_bug_warning_s = false;
-  if( rsdl_bins_bug_warning_s ) {
-    vcl_cerr << "Warning: results from current rsdl_bins<N,C,V>::n_nearest_impl"
-      << "may be inaccurate.  Please contact developers for details. " << vcl_endl;
+  if ( rsdl_bins_bug_warning_s ) {
+    vcl_cerr << "Warning: results from current rsdl_bins<N,C,V>::n_nearest_impl "
+             << "may be inaccurate.  Please contact developers for details.\n";
     rsdl_bins_bug_warning_s = false;
   }
 
@@ -766,8 +757,8 @@ n_nearest_exhaustive_impl( point_type const& pt,
       // if we don't yet have the requested n points, or this point is
       // closer than the nth closest point found so far
       if ( distances.size() < n
-           || vnl_vector_ssd( pt, entry.point_ ) < nth_dist_sqr ) {
-
+           || vnl_vector_ssd( pt, entry.point_ ) < nth_dist_sqr )
+      {
         distances.push_back( point_dist_entry( pt, &entry ) );
 
         if ( distances.size() >= n )
@@ -803,7 +794,6 @@ n_nearest_exhaustive_impl( point_type const& pt,
       points->push_back( i->entry_->point_ );
     }
   }
-
 }
 
 template<unsigned N, typename C, typename V>
@@ -926,12 +916,12 @@ points_in_bounding_box_impl( point_type const& min_pt,
 // \endverbatim
 //
 template<unsigned N, typename C, typename V>
-size_t
+vcl_size_t
 rsdl_bins<N,C,V>::
 scan_region( int lo[N], int hi[N], int cur[N], unsigned dim,
              bin_index_vector& indices ) const
 {
-  size_t found = 0;
+  vcl_size_t found = 0;
 
   if ( dim==N ) {
     // 0d region is a point, so just check this point.

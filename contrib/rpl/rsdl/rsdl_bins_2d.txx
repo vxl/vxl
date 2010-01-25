@@ -7,6 +7,7 @@
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
+#include <vcl_cstddef.h> // for std::size_t
 
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_vector_fixed.h>
@@ -35,8 +36,8 @@ rsdl_bins_2d( const vnl_vector_fixed< COORD_T, 2 > & min_pt,
   num_bins_y_ = int( vcl_ceil( double( max_pt_[1] - min_pt_[1] ) / bin_sizes_[1] ) );
 
   // make sure the number is at least 1
-  if( num_bins_x_ <=0 )  num_bins_x_ = 1;
-  if( num_bins_y_ <=0 )  num_bins_y_ = 1;
+  if ( num_bins_x_ <=0 )  num_bins_x_ = 1;
+  if ( num_bins_y_ <=0 )  num_bins_y_ = 1;
 
   bins_.resize( num_bins_x_, num_bins_y_ );
 }
@@ -284,10 +285,10 @@ n_nearest( const vnl_vector_fixed< COORD_T, 2 > & query_pt,
     for ( unsigned int i=0; i<bin_xs.size(); ++ i ) {
       if ( num_found < n ||
            this->min_sq_distance_to_bin( query_pt[0], query_pt[1], bin_xs[i], bin_ys[i] )
-             < sq_distances[ num_found - 1 ] ) {
+           < sq_distances[ num_found - 1 ] ) {
         still_testing = true;
         for (typename bin_vector_type_::const_iterator p = bins_( bin_xs[i], bin_ys[i] ).begin();
-               p != bins_( bin_xs[i], bin_ys[i] ).end(); ++p )
+             p != bins_( bin_xs[i], bin_ys[i] ).end(); ++p )
         {
           COORD_T sq_d = vnl_vector_ssd( query_pt, p->point_ );
 
@@ -577,11 +578,11 @@ change_value( const VALUE_T& old_val, const VALUE_T& new_val )
 }
 
 template < class COORD_T, class VALUE_T >
-size_t
+vcl_size_t
 rsdl_bins_2d< COORD_T, VALUE_T > ::
 num_pts() const
 {
-  size_t num = 0;
+  vcl_size_t num = 0;
   for ( int bin_x = 0; bin_x < num_bins_x_; ++ bin_x )
     for ( int bin_y = 0; bin_y < num_bins_y_; ++ bin_y )
       num += bins_( bin_x, bin_y).size();

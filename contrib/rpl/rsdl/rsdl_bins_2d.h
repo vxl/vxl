@@ -4,8 +4,9 @@
 #include <vcl_iosfwd.h>
 #include <vnl/vnl_vector_fixed.h>
 
-#include <vcl_vector.h>
 #include <vbl/vbl_array_2d.h>
+#include <vcl_vector.h>
+#include <vcl_cstddef.h> // for std::size_t
 
 template < class COORD_T, class VALUE_T >
 class rsdl_bins_2d_entry
@@ -96,7 +97,7 @@ class rsdl_bins_2d
 
   point_type bin_sizes() const {return bin_sizes_;}
 
-  size_t num_pts() const;
+  vcl_size_t num_pts() const;
 
  private:
   void point_to_bin( COORD_T x, COORD_T y, int& bin_x, int& bin_y ) const;

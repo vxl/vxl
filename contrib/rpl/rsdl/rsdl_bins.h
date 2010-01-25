@@ -9,6 +9,7 @@
 
 #include <vcl_vector.h>
 #include <vnl/vnl_vector_fixed.h>
+#include <vcl_cstddef.h> // for std::size_t
 
 // these two classes are helper classes for rsdl_bins, and should ideally
 // be declared in rsdl_bins and defined only in the .txx, but MSVC6 and 7
@@ -282,8 +283,8 @@ class rsdl_bins
                                     vcl_vector< point_type >* points ) const;
 
   // documentation in .txx
-  size_t scan_region( int lo[N], int hi[N], int cur[N], unsigned dim,
-                        bin_index_vector& indices ) const;
+  vcl_size_t scan_region( int lo[N], int hi[N], int cur[N], unsigned dim,
+                          bin_index_vector& indices ) const;
 
 #if 0
   // documentation in .txx

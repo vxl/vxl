@@ -91,8 +91,8 @@ inline void vil_math_value_range_percentiles(const vil_image_view<T>& im,
   {
     return;
   }
-  const size_t nfrac = fraction.size();
-  for (size_t f=0; f<nfrac; ++f)
+  const vcl_size_t nfrac = fraction.size();
+  for (vcl_size_t f=0; f<nfrac; ++f)
   {
     if (fraction[f]<0.0 || fraction[f]>1.0)
       return;
