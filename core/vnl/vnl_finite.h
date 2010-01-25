@@ -34,6 +34,7 @@
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 #include <vcl_vector.h>
+#include <vcl_cstddef.h>
 
 //: finite modulo-N arithmetic
 //
@@ -443,7 +444,7 @@ class vnl_finite_int_poly
   inline ~vnl_finite_int_poly() {}
 
   //: Formal degree of this polynomial
-  inline unsigned int deg() const { return val_.size() - 1; }
+  inline vcl_size_t deg() const { return val_.size() - 1; }
 
   //: Effective degree of this polynomial; equals -1 when this polynomial is 0.
   int degree() const { for (int i=deg(); i>=0; --i) if (val_[i]!=0) return i; return -1; }

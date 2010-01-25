@@ -7,6 +7,7 @@
 // \date   Feb 2003
 
 #include <vcl_vector.h>
+#include <vcl_cstddef.h>
 
 //: A collection of objects
 //
@@ -28,7 +29,7 @@ public:
   push_back( T const& item );
 
   //: The number of match sets in the collection.
-  unsigned
+  vcl_size_t
   size() const;
 
   //:

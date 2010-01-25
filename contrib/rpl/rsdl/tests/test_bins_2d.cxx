@@ -111,7 +111,7 @@ static void test_bins_2d()
     vcl_sort( bin_close_indices.begin(), bin_close_indices.end() );
 
     for ( unsigned int i=0; correct &&
-          i < vnl_math_min(all_close_indices.size(), bin_close_indices.size()); ++i )
+          i < vcl_min(all_close_indices.size(), bin_close_indices.size()); ++i )
       correct = all_close_indices[ i ] == bin_close_indices[ i ];
 
     TEST("points_within_radius", correct, true);

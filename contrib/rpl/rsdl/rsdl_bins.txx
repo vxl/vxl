@@ -926,12 +926,12 @@ points_in_bounding_box_impl( point_type const& min_pt,
 // \endverbatim
 //
 template<unsigned N, typename C, typename V>
-unsigned
+size_t
 rsdl_bins<N,C,V>::
 scan_region( int lo[N], int hi[N], int cur[N], unsigned dim,
              bin_index_vector& indices ) const
 {
-  unsigned found = 0;
+  size_t found = 0;
 
   if ( dim==N ) {
     // 0d region is a point, so just check this point.

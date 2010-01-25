@@ -96,7 +96,7 @@ class rsdl_bins_2d
 
   point_type bin_sizes() const {return bin_sizes_;}
 
-  unsigned num_pts() const;
+  size_t num_pts() const;
 
  private:
   void point_to_bin( COORD_T x, COORD_T y, int& bin_x, int& bin_y ) const;

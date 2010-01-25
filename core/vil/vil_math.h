@@ -91,8 +91,8 @@ inline void vil_math_value_range_percentiles(const vil_image_view<T>& im,
   {
     return;
   }
-  const unsigned nfrac = fraction.size();
-  for (unsigned f=0; f<nfrac; ++f)
+  const size_t nfrac = fraction.size();
+  for (size_t f=0; f<nfrac; ++f)
   {
     if (fraction[f]<0.0 || fraction[f]>1.0)
       return;
@@ -122,7 +122,7 @@ inline void vil_math_value_range_percentiles(const vil_image_view<T>& im,
       }
     }
   }
-  const unsigned npix = data.size();
+  const vcl_size_t npix = data.size();
 
   // Get the nth_element corresponding to the specified fractions
   value.resize(nfrac);

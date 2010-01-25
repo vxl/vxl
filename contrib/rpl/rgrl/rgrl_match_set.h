@@ -7,6 +7,7 @@
 // \date 14 Nov 2002
 
 #include <vcl_vector.h>
+#include <vcl_cstddef.h>
 
 #include <rgrl/rgrl_feature_sptr.h>
 #include <rgrl/rgrl_feature_set.h>
@@ -45,7 +46,7 @@ class rgrl_match_set
   : public rgrl_object
 {
  public:
-  typedef unsigned int                        size_type;
+  typedef vcl_size_t                          size_type;
   typedef rgrl_match_set_from_iterator        from_iterator;
   typedef rgrl_match_set_const_from_iterator  const_from_iterator;
 

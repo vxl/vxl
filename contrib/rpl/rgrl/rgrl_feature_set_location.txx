@@ -93,8 +93,8 @@ features_in_region( feature_vector& results, rgrl_mask_box const& roi ) const
 
   // transfer the closest_pts to result
   //
-  unsigned int num_pts = temp_point_indices_.size();
-  for (unsigned int i = 0; i<num_pts; i++ )
+  vcl_size_t num_pts = temp_point_indices_.size();
+  for (vcl_size_t i = 0; i<num_pts; i++ )
     results.push_back( fea_vec_[temp_point_indices_[i]] );
 }
 
@@ -109,9 +109,9 @@ features_within_radius( feature_vector& results, vnl_vector<double> const& cente
 
   // transfer the closest_pts to result
   //
-  unsigned int num_pts = temp_point_indices_.size();
+  vcl_size_t num_pts = temp_point_indices_.size();
   results.reserve( num_pts );
-  for (unsigned int i = 0; i<num_pts; i++ )
+  for (vcl_size_t i = 0; i<num_pts; i++ )
     results.push_back( fea_vec_[temp_point_indices_[i]] );
 }
 
@@ -150,8 +150,8 @@ features_within_radius( feature_vector& results, rgrl_feature_sptr const& featur
 
   // transfer the closest_pts to result
   //
-  unsigned int num_pts = temp_point_indices_.size();
-  for (unsigned int i = 0; i<num_pts; i++ )
+  vcl_size_t num_pts = temp_point_indices_.size();
+  for (vcl_size_t i = 0; i<num_pts; i++ )
     results.push_back( fea_vec_[temp_point_indices_[i]] );
 }
 
@@ -167,8 +167,8 @@ k_nearest_features( feature_vector& results, rgrl_feature_sptr const& feature, u
 
   // transfer the closest_pts to result
   //
-  unsigned int num_pts = temp_point_indices_.size();
-  for (unsigned int i = 0; i<num_pts; i++ )
+  vcl_size_t num_pts = temp_point_indices_.size();
+  for (vcl_size_t i = 0; i<num_pts; i++ )
     results.push_back( fea_vec_[temp_point_indices_[i]] );
 }
 
@@ -184,8 +184,8 @@ k_nearest_features( feature_vector& results, const vnl_vector<double> & loc, uns
 
   // transfer the closest_pts to result
   //
-  unsigned int num_pts = temp_point_indices_.size();
-  for (unsigned int i = 0; i<num_pts; i++ )
+  vcl_size_t num_pts = temp_point_indices_.size();
+  for (vcl_size_t i = 0; i<num_pts; i++ )
     results.push_back( fea_vec_[temp_point_indices_[i]] );
 }
 

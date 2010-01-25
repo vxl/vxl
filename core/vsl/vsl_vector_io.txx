@@ -19,7 +19,7 @@
 template <class T>
 void vsl_b_write(vsl_b_ostream& s, const vcl_vector<T>& v)
 {
-  unsigned n = v.size();
+  vcl_size_t n = v.size();
   // There is nothing in the STL standard that says that vector<> has
   // to store its data in a contiguous memory block. However, most
   // implementations do store data this way.

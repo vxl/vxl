@@ -46,11 +46,11 @@ void test_array_2d_io()
     test_result = false;
   else
   {
-    unsigned array_rows = v_out.rows();
-    unsigned array_cols = v_out.cols();
-    for (unsigned i=0; i<array_rows; i++)
+    vcl_size_t array_rows = v_out.rows();
+    vcl_size_t array_cols = v_out.cols();
+    for (vcl_size_t i=0; i<array_rows; i++)
     {
-      for (unsigned j=0; j<array_cols; j++)
+      for (vcl_size_t j=0; j<array_cols; j++)
         if (v_out(i,j) != v_in(i,j))
           test_result = false;
     }

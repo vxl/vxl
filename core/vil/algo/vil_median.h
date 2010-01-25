@@ -35,17 +35,17 @@ inline T vil_sorted_value(const vil_image_view<T>& image, unsigned plane,
                           vcl_vector<T>& values, double r)
 {
   values.clear();
-  unsigned n = element.p_i().size();
-  for (unsigned int k=0;k<n;++k)
+  vcl_size_t n = element.p_i().size();
+  for (vcl_size_t k=0;k<n;++k)
   {
     unsigned int i = i0+element.p_i()[k];
     unsigned int j = j0+element.p_j()[k];
     if (i<image.ni() && j<image.nj())
       values.push_back(image(i,j,plane));
   }
-  vcl_nth_element(values.begin(),values.begin()+unsigned(r*(values.size()-1)),
+  vcl_nth_element(values.begin(),values.begin()+vcl_size_t(r*(values.size()-1)),
     values.end());
-  return values[unsigned(r*(values.size()-1))];
+  return values[vcl_size_t(r*(values.size()-1))];
 }
 
 //: Computes median value of pixels under structuring element.

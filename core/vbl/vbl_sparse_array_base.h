@@ -12,7 +12,7 @@
 
 #include <vcl_functional.h>
 #include <vcl_map.h>
-
+#include <vcl_cstddef.h>
 
 //: A fully featured sparse array which devolves indexing to its templated type
 // If you just want an ordinary sparse array use vbl_sparse_array_1d,
@@ -43,6 +43,8 @@ class vbl_sparse_array_base
   Map storage_;
 
  public:
+  
+  typedef vcl_size_t size_type;
 
   //: Return contents at (i)
   T      & operator () (Index i) { return storage_[i]; }
@@ -69,7 +71,7 @@ class vbl_sparse_array_base
   typedef typename Map::const_iterator const_iterator;
 
   //: Return number of locations that have been assigned a value using "put".
-  unsigned count_nonempty() const { return storage_.size(); }
+  size_type count_nonempty() const { return storage_.size(); }
 
   //: The type of objects used to index the sparse array
   typedef Index Index_type;

@@ -577,11 +577,11 @@ change_value( const VALUE_T& old_val, const VALUE_T& new_val )
 }
 
 template < class COORD_T, class VALUE_T >
-unsigned
+size_t
 rsdl_bins_2d< COORD_T, VALUE_T > ::
 num_pts() const
 {
-  unsigned num = 0;
+  size_t num = 0;
   for ( int bin_x = 0; bin_x < num_bins_x_; ++ bin_x )
     for ( int bin_y = 0; bin_y < num_bins_y_; ++ bin_y )
       num += bins_( bin_x, bin_y).size();

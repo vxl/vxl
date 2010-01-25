@@ -43,7 +43,7 @@ static void test_unistd()
     vcl_FILE * fp = vcl_fopen ("file", "w");
     TEST("fopen non-NULL FILE", fp != NULL, true);
     int data[1] = { 99 };
-    int n = vcl_fwrite (data, sizeof(data[0]), 1, fp);
+    vcl_size_t n = vcl_fwrite (data, sizeof(data[0]), 1, fp);
     vcl_cout << "fwrite return value: " << n << vcl_endl;
     TEST("fwrite return value", n, 1);
     vcl_fclose (fp);
@@ -59,7 +59,7 @@ static void test_unistd()
     vcl_FILE * fp2 = vpl_fdopen (fd, "r");
     TEST("fdopen non-NULL FILE", fp2 != NULL, true);
     int data[1] = { 0 };
-    int n = vcl_fread (data, sizeof(data[0]), 1, fp2);
+    vcl_size_t n = vcl_fread (data, sizeof(data[0]), 1, fp2);
     TEST("fread return value", n, 1);
     vcl_cout << "fread return value: " << n << vcl_endl
              << "data[0]: " << data[0] << vcl_endl;

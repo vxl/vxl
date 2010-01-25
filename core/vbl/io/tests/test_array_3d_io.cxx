@@ -48,12 +48,12 @@ void test_array_3d_io()
     test_result = false;
   else
   {
-    unsigned array_row1 = v_out.get_row1_count();
-    unsigned array_row2 = v_out.get_row2_count();
-    unsigned array_row3 = v_out.get_row3_count();
-    for (unsigned i=0; i<array_row1; i++)
-      for (unsigned j=0; j<array_row2; j++)
-        for (unsigned k=0; k<array_row3; k++)
+    vcl_size_t array_row1 = v_out.get_row1_count();
+    vcl_size_t array_row2 = v_out.get_row2_count();
+    vcl_size_t array_row3 = v_out.get_row3_count();
+    for (vcl_size_t i=0; i<array_row1; i++)
+      for (vcl_size_t j=0; j<array_row2; j++)
+        for (vcl_size_t k=0; k<array_row3; k++)
           if (v_out(i,j,k) != v_in(i,j,k))
             test_result = false;
   }

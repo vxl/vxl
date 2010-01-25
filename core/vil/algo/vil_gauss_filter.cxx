@@ -65,7 +65,7 @@ vil_gauss_filter_5tap_params::vil_gauss_filter_5tap_params(double val_sigma)
 void vil_gauss_filter_gen_ntap(double sd, unsigned diff,
                                vcl_vector<double> &filter)
 {
-  unsigned centre = filter.size()/2; // or just past centre if even length
+  vcl_size_t centre = filter.size()/2; // or just past centre if even length
   double sum=0.0; // area under sampled curve.
   double tap; // workspace
 

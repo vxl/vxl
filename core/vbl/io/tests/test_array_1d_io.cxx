@@ -45,8 +45,8 @@ void test_array_1d_io()
     test_result = false;
   else
   {
-    unsigned array_size = v_out.size();
-    for (unsigned i=0; i<array_size; i++)
+    vcl_size_t array_size = v_out.size();
+    for (vcl_size_t i=0; i<array_size; i++)
     {
       if (v_out[i] != v_in[i])
         test_result = false;

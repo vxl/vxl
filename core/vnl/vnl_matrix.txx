@@ -1290,7 +1290,7 @@ bool vnl_matrix<T>::read_ascii(vcl_istream& s)
       goto loademup;
   }
  loademup:
-  unsigned int colz = first_row_vals.size();
+  vcl_size_t colz = first_row_vals.size();
 
   if (debug) vcl_cerr << colz << " cols, ";
 
@@ -1340,7 +1340,7 @@ bool vnl_matrix<T>::read_ascii(vcl_istream& s)
     row_vals.push_back(row);
   }
 
-  unsigned int rowz = row_vals.size();
+  vcl_size_t rowz = row_vals.size();
 
   if (debug)
     vcl_cerr << rowz << " rows.\n";

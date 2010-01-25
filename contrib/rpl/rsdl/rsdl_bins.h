@@ -282,7 +282,7 @@ class rsdl_bins
                                     vcl_vector< point_type >* points ) const;
 
   // documentation in .txx
-  unsigned scan_region( int lo[N], int hi[N], int cur[N], unsigned dim,
+  size_t scan_region( int lo[N], int hi[N], int cur[N], unsigned dim,
                         bin_index_vector& indices ) const;
 
 #if 0

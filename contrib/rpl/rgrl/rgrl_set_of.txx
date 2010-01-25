@@ -25,7 +25,7 @@ push_back( T const& item )
 
 
 template<typename T>
-unsigned
+vcl_size_t
 rgrl_set_of<T>::
 size() const
 {

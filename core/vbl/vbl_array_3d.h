@@ -94,20 +94,20 @@ class vbl_array_3d
 
   // Data Access---------------------------------------------------------------
 
-  T      & operator() (unsigned i1, unsigned i2, unsigned i3)
+  T      & operator() (size_type i1, size_type i2, size_type i3)
   {
     RANGECHECK(i1,i2,i3);
     return element_ [i1][i2][i3];
   }
 
-  T const& operator() (unsigned i1, unsigned i2, unsigned i3) const
+  T const& operator() (size_type i1, size_type i2, size_type i3) const
   {
     RANGECHECK(i1,i2,i3);
     return element_ [i1][i2][i3];
   }
 
-  T      * const* operator[](unsigned i1) { return element_[i1]; }
-  T const* const* operator[](unsigned i1) const { return element_[i1]; }
+  T      * const* operator[](size_type i1) { return element_[i1]; }
+  T const* const* operator[](size_type i1) const { return element_[i1]; }
 
   // dimensions
   size_type get_row1_count () const { return row1_count_; }
@@ -115,7 +115,7 @@ class vbl_array_3d
   size_type get_row3_count () const { return row3_count_; }
 
   // iterators
-  unsigned size() const
+  size_type size() const
   {
     return row1_count_ * row2_count_ * row3_count_;
   }
