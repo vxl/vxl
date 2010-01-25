@@ -48,12 +48,6 @@ SET( vul_network_sources
 )
 
 
-# Signal to build the overloading functions that support wide 
-# char strings on Windows platform?
-IF(VXL_SUPPORT_WIN_UNICODE)
-  ADD_DEFINITIONS(-DVXL_SUPPORT_WIN_UNICODE)
-ENDIF(VXL_SUPPORT_WIN_UNICODE)
-
 IF(CMAKE_COMPILER_IS_GNUCXX)
   SET_SOURCE_FILES_PROPERTIES(vul_sequence_filename_map.cxx PROPERTIES COMPILE_FLAGS -O0)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
