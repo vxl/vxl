@@ -65,13 +65,17 @@ void vnl_sparse_matrix<T>::mult(vnl_sparse_matrix<T> const& rhs, vnl_sparse_matr
   unsigned int result_rows = rows();
   unsigned int result_cols = rhs.columns();
 
-  // Clear result matrix.
-  result.elements.clear();
-
-  // Now give the result matrix enough rows.
-  result.elements.resize(result_rows);
-  result.rs_ = result_rows;
   result.cs_ = result_cols;
+  if (result.rows() != result_rows)
+  {
+    // Clear result matrix.
+    result.elements.clear();
+    // give the result matrix enough rows (but only if not yet correct).
+    result.elements.resize(result_rows);
+    result.rs_ = result_rows;
+    for (unsigned row_id=0; row_id<result_rows; ++row_id)
+      result.elements[row_id] = row();
+  }
 
   // Now, iterate over non-zero rows of this.
   for (unsigned row_id=0; row_id<elements.size(); ++row_id) {
