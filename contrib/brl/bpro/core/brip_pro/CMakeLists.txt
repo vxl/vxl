@@ -8,7 +8,6 @@ INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR})
 SET(brip_pro_sources
     brip_processes.h
     brip_register.h             brip_register.cxx
-    processes/brip_detect_edges_process.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates brip_pro_sources)
