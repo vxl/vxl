@@ -104,10 +104,7 @@ bool boxm_crop_scene_process(bprb_func_process& pro)
       return true;
     }
   } 
-  
-}
-
-vcl_cerr<< "Scene type not supported in boxm_crop_scene_process" << vcl_endl;
-return false;
+ vcl_cerr<< "Scene type not supported in boxm_crop_scene_process" << vcl_endl;
+ return false;
 
 }
