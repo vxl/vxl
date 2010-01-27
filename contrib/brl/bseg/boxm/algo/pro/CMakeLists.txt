@@ -17,5 +17,5 @@ IF(EXPAT_FOUND)
 
   ADD_LIBRARY(boxm_algo_pro ${boxm_algo_pro_sources} )
 
-  TARGET_LINK_LIBRARIES(boxm_algo_pro boxm_algo boxm_io bprb brdb)
+  TARGET_LINK_LIBRARIES(boxm_algo_pro boxm_algo boxm_io bprb brdb bvxm_grid_pro)
 ENDIF(EXPAT_FOUND)
