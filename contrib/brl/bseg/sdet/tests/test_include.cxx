@@ -22,5 +22,6 @@
 #include <sdet/sdet_region_sptr.h>
 #include <sdet/sdet_watershed_region_proc.h>
 #include <sdet/sdet_watershed_region_proc_params.h>
+#include <sdet/sdet_img_edge.h>
 
 int main() { return 0; }
