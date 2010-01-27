@@ -469,7 +469,7 @@ S(2,1)=-0.5; S(2,2)= 0.99;
 S(3,3)=0.99; S(3,4)=-0.5;
 S(4,3)=-0.5; S(4,4)=0.99; S(4,5)=-0.5;
 S(5,4)=-0.5; S(5,5)=0.99;
-vnl_vector<double> b(6,0),x6);
+vnl_vector<double> b(6,0), x(6);
 b[2]=0.5; b[3]=0.5
 vnl_sparse_lu linear_solver(S, vnl_sparse_lu::estimate_condition);
 linear_solver.solve(b,&x);
