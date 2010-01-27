@@ -7,7 +7,9 @@
 #include <boxm/opt/boxm_rt_sample.h>
 #include <boxm/boxm_simple_grey_processor.h>
 #include <boxm/boxm_mob_grey_processor.h>
+#include <vnl/vnl_math.h>
 #include <vil/vil_transform.h>
+#include <sdet/sdet_img_edge.h>
 
 template <boxm_apm_type APM, class T_aux>
 class boxm_render_expected_edge_image_functor
@@ -40,8 +42,8 @@ class boxm_render_expected_edge_image_functor
     const float exp  = cell_value.edge_prob_;
 
     // keep the max value in expected image
-    if (expected_(i,j) < exp)
-      expected_(i,j) =  exp;
+   // if (expected_(i,j) < exp)
+    expected_(i,j) =  vnl_math_max(expected_(i,j), exp);
 
     return true;
   }
@@ -56,38 +58,39 @@ class boxm_render_expected_edge_image_functor
 
 //: Functor class to normalize expected image
 template<class T_data>
-class normalize_expected_edge_functor_rt
+class normalize_expected_functor_edge
 {
  public:
-  normalize_expected_edge_functor_rt(bool use_black_background) : use_black_background_(use_black_background) {}
+   normalize_expected_functor_edge(float n_normal) : n_normal_(n_normal) {}
 
-  void operator()(float mask, typename T_data::obs_datatype &pix) const
-  {
-    if (!use_black_background_) {
-      pix += mask*0.5f;
-    }
-  }
-  bool use_black_background_;
+   void operator()(float mask, float &pix) const
+   {
+    int dof = 4;//(int)world_->num_observations<EDGES>(0,scale)-1;
+    pix = sdet_img_edge::convert_edge_statistics_to_probability(pix,n_normal_,dof);
+   }
+  
+   float n_normal_;
 };
 
 
 template <class T_loc, class T_data>
 void boxm_render_edge_image_rt(boxm_scene<boct_tree<T_loc, T_data > > &scene,
-                               vpgl_camera_double_sptr cam,
-                               vil_image_view<float> &expected,
-                               vil_image_view<float> & mask,
-                               int bin = -1)
-                             //bool use_black_background = false)
+                          vpgl_camera_double_sptr cam,
+                          vil_image_view<float> &expected,
+                          vil_image_view<float> & mask,
+                          float n_normal, 
+                          int bin = -1)
+                          
 {
-  typedef float sample_datatype;
-  boxm_aux_scene<T_loc, T_data,boxm_edge_sample<sample_datatype> > aux_scene(&scene,boxm_aux_traits<BOXM_AUX_NULL>::storage_subdir(), boxm_aux_scene<T_loc, T_data,boxm_edge_sample<sample_datatype> >::LOAD);
-  typedef boxm_render_expected_edge_image_functor<BOXM_EDGE_FLOAT,boxm_edge_sample<sample_datatype> > expfunctor;
-  boxm_raytrace_function<expfunctor,T_loc, T_data,boxm_edge_sample<sample_datatype> > raytracer(scene,aux_scene,cam.ptr(),expected.ni(),expected.nj());
+  typedef boxm_aux_traits<BOXM_AUX_NULL>::sample_datatype sample_datatype;
+  boxm_aux_scene<T_loc, T_data,boxm_aux_edge_sample<sample_datatype> > aux_scene(&scene,boxm_aux_traits<BOXM_AUX_NULL>::storage_subdir(), boxm_aux_scene<T_loc, T_data,boxm_aux_edge_sample<sample_datatype> >::LOAD);
+  typedef boxm_render_expected_edge_image_functor<BOXM_EDGE_FLOAT,boxm_aux_edge_sample<sample_datatype> > expfunctor;
+  boxm_raytrace_function<expfunctor,T_loc, T_data, boxm_aux_edge_sample<sample_datatype> > raytracer(scene,aux_scene,cam.ptr(),expected.ni(),expected.nj());
   expfunctor exp_functor(expected,mask,expected.ni(),expected.nj(),true,false);
   raytracer.run(exp_functor);
 
-  //normalize_expected_edge_functor_rt<T_data> norm_fn(use_black_background);
-  //vil_transform2<float,typename T_data::obs_datatype, normalize_expected_edge_functor_rt<T_data> >(mask,expected,norm_fn);
+  normalize_expected_functor_edge<T_data> norm_fn(n_normal);
+  vil_transform2<float,float, normalize_expected_functor_edge<T_data> >(mask,expected,norm_fn);
 }
 
 #endif
