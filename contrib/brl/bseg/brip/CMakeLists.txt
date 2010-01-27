@@ -30,7 +30,6 @@ SET(brip_sources
    brip_rect_mask.h          brip_rect_mask.cxx
    brip_line_generator.h     brip_line_generator.cxx
    brip_label_equivalence.h  brip_label_equivalence.cxx
-   brip_edge.h               brip_edge.cxx
 )
 AUX_SOURCE_DIRECTORY(Templates brip_sources)
 
@@ -39,9 +38,6 @@ INSTALL_TARGETS(/lib brip)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/brip ${brip_sources})
 
 TARGET_LINK_LIBRARIES(brip gevd bsta bsol vsol vil1 vil_algo vil vgl_algo vgl vnl_algo vnl vbl vul vpgl)
-IF (BUILD_SHARED_LIB)
-TARGET_LINK_LIBRARIES(brip sdet)
-ENDIF (BUILD_SHARED_LIB)
 
 IF(BUILD_TESTING)
   SUBDIRS(tests)
