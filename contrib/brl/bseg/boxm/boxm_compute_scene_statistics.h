@@ -7,8 +7,8 @@
 template <class T_loc, class T_data>
 bool compute_scene_statistics(boxm_scene<boct_tree<T_loc, T_data > >& scene, bsta_histogram<float>& omega_hist, bsta_histogram<float>& sigma_hist, bsta_histogram<float>& level_hist, unsigned& n_leaves)
 {
-  typedef typename boct_tree<T_loc, T_data> tree_type;
-  typedef typename boct_tree_cell<T_loc,T_data> cell_type;
+  typedef boct_tree<T_loc, T_data> tree_type;
+  typedef boct_tree_cell<T_loc,T_data> cell_type;
 
   omega_hist = bsta_histogram<float>(0.0f, 1.0f, 20);
   sigma_hist = bsta_histogram<float>(0.0f, 1.0f, 20);
