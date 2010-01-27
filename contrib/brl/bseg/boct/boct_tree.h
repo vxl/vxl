@@ -140,9 +140,9 @@ class boct_tree
   vgl_box_3d<double> cell_bounding_box_canonical(boct_tree_cell<T_loc,T_data>* const cell);
   //: Returns bounding box of the tree
   vgl_box_3d<double> bounding_box() const { return global_bbox_; }
-
+  
   //: Returns the length of a cell, assuming cell is cubical
-  double cell_size(boct_tree_cell<T_loc,T_data>* const cell) const
+  double cell_length(boct_tree_cell<T_loc,T_data>* const cell) const
   {
     return 1.0/(double)(1<<(root_level_-cell->level()));
   }
