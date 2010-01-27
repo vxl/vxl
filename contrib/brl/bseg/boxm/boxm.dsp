@@ -443,6 +443,9 @@ SOURCE=.\boxm_edge_sample.h
 # Begin Source File
 SOURCE=.\boxm_edge_sample.txx
 # End Source File
+# Begin Source File
+SOURCE=.\boxm_compute_scene_statistics.h
+# End Source File
 # End Group
 # End Target
 # End Project

@@ -141,7 +141,7 @@ SOURCE=.\Templates/boxm_edge_sample+float-.cxx
 SOURCE=.\Templates/boct_tree_cell+short.boxm_edge_sample+float--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boxm_opt_edge_updater+short.float.float---.cxx
+SOURCE=.\Templates/boxm_edge_updater+short.float.float-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/boct_tree+short.boxm_edge_sample+float--.cxx

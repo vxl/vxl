@@ -126,9 +126,6 @@ SOURCE=.\brip_line_generator.cxx
 SOURCE=.\brip_rect_mask.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\brip_edge.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/brip_histogram+double-.cxx
 # End Source File
 # Begin Source File
@@ -229,9 +226,6 @@ SOURCE=.\brip_line_generator.h
 # End Source File
 # Begin Source File
 SOURCE=.\brip_rect_mask.h
-# End Source File
-# Begin Source File
-SOURCE=.\brip_edge.h
 # End Source File
 # End Group
 # End Target
