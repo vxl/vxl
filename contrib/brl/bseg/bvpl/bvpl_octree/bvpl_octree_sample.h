@@ -3,7 +3,7 @@
 #define bvpl_octree_sample_h
 //:
 // \file
-// \brief  A data structture to contain- bvpl_kernel response, axis of rotations and rotation around axis
+// \brief  A data structture to contain- bvpl_kernel response, and id corresponding to axis of rotations and rotation around axis
 // \author Isabel Restrepo mir@lems.brown.edu
 // \date  December 9, 2009
 //
@@ -19,7 +19,7 @@ template<class T_data>
 class bvpl_octree_sample
 {
  public:
-  //: Default Constructor. Becareful when using default constructor, the value of response may be nonsense
+  //: Default Constructor. Be careful when using default constructor, the value of response may be nonsense
   //  This is indicated by the negative id.
   bvpl_octree_sample():response_(),id_(-1){}
 
