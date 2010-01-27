@@ -17,6 +17,7 @@
 #include <bvxm/grid/bvxm_voxel_grid.h>
 #include <bvxm/grid/bvxm_voxel_grid_basic_ops.h>
 
+
 template <class T_loc, class T_data>
 bvxm_voxel_grid<T_data>* boxm_scene_to_bvxm_grid(boxm_scene<boct_tree<T_loc, T_data > > &scene,
                          vcl_string input_path,
@@ -84,7 +85,7 @@ bvxm_voxel_grid<T_data>* boxm_scene_to_bvxm_grid(boxm_scene<boct_tree<T_loc, T_d
   unsigned dimy = dim.y()*ncells;
   unsigned dimz = dim.z()*ncells;
   bvxm_voxel_grid<T_data> *grid = new bvxm_voxel_grid<T_data>(input_path,vgl_vector_3d<unsigned>(dimx,dimy,dimz));
-  //grid->initialize_data(T_data(0));
+  grid->initialize_data(T_data(0));
   
   
   //iterate through grid, locate corresponding position in the octree
@@ -101,7 +102,6 @@ bvxm_voxel_grid<T_data>* boxm_scene_to_bvxm_grid(boxm_scene<boct_tree<T_loc, T_d
   // assume that bounding box is a cube
   const double step_len = ((block_bb.max_x() - block_bb.min_x())/double(ncells));
   
-  
   for(unsigned z=0; z<dimz; ++grid_it, ++z)
   {
     bvxm_voxel_slab<T_data> slab = (*grid_it);
@@ -113,7 +113,7 @@ bvxm_voxel_grid<T_data>* boxm_scene_to_bvxm_grid(boxm_scene<boct_tree<T_loc, T_d
         vgl_point_3d<double> p(((double)x/(double)dimx), ((double)y/(double)dimy), ((double)z/(double)dimz));
         boct_tree_cell<T_loc,T_data>* this_cell = tree->locate_point(p, true);
         if(!this_cell){
-          vcl_cout << "oob" << vcl_endl;
+          vcl_cout << "In boxm_scene_to_bvxm_grid: cell out of bounds" << vcl_endl;
           continue;
         }
         unsigned int level = this_cell->get_code().level;
@@ -122,24 +122,18 @@ bvxm_voxel_grid<T_data>* boxm_scene_to_bvxm_grid(boxm_scene<boct_tree<T_loc, T_d
         if (level == resolution_level)
         {
           // just copy value to output grid
-          double P = 1.0 - vcl_exp(-cell_val*step_len);
-          if(P<0.0 || P >1.0){
-            vcl_cout << "poob" << vcl_endl;
-            continue;
-          }
-          slab(x,y) = P;
+          //double P = 1.0 - vcl_exp(-cell_val*step_len);
+          //slab(x,y) = P;
+          slab(x,y) = cell_val;
         }
         else if (level > resolution_level) {
           // cell is bigger than output cells.  copy value.
-          double P = 1.0 - vcl_exp(-cell_val*step_len);
-          if(P<0.0 || P >1.0){
-            vcl_cout << "poob" << vcl_endl;
-            continue;
-          }
-          slab(x,y) = P;          
+          //double P = 1.0 - vcl_exp(-cell_val*step_len);
+          //slab(x,y) = P;
+          slab(x,y) = cell_val;
         }
         else {
-          vcl_cout << " In converting scen to grid, resolution level case not inplemented yet" << vcl_endl;
+          vcl_cout << " In converting scene to grid, resolution level case not inplemented yet" << vcl_endl;
         }
       }
     }
@@ -147,8 +141,6 @@ bvxm_voxel_grid<T_data>* boxm_scene_to_bvxm_grid(boxm_scene<boct_tree<T_loc, T_d
   vcl_cout << "\n" ;
   return grid;
 }
-
-
 
 
 #endif
