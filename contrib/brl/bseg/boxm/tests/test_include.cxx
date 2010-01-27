@@ -5,6 +5,7 @@
 #include <boxm/boxm_cell_data_traits.h>
 #include <boxm/boxm_cell_vis_graph_iterator.h>
 #include <boxm/boxm_cell_vis_graph_node.h>
+#include <boxm/boxm_compute_scene_statistics.h>
 #include <boxm/boxm_compute_volume_visibility.h>
 #include <boxm/boxm_depth_image_triangle.h>
 #include <boxm/boxm_edge_sample.h>
