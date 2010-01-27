@@ -12,6 +12,6 @@ DECLARE_FUNC_CONS(boxm_render_expected_depth_rt_process);
 DECLARE_FUNC_CONS(boxm_generate_opt_samples_process);
 DECLARE_FUNC_CONS(boxm_generate_edge_samples_process);
 DECLARE_FUNC_CONS(boxm_edge_update_process);
-DECLARE_FUNC_CONS(boxm_render_edge_process);
+DECLARE_FUNC_CONS(boxm_render_expected_edge_process);
 
 #endif

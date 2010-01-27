@@ -11,6 +11,7 @@
 // \endverbatim
 
 #include <bprb/bprb_func_process.h>
+#include <bprb/bprb_parameters.h>
 
 #include <vcl_fstream.h>
 
@@ -21,11 +22,12 @@
 #include <vil/vil_convert.h>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_image_view.h>
-#include <boxm/boxm_sample.h>
+
+#include <sdet/sdet_img_edge.h>
 
 namespace boxm_generate_edge_samples_process_globals
 {
-  const unsigned n_inputs_ = 4;
+  const unsigned n_inputs_ = 5;
   const unsigned n_outputs_ = 1;
 }
 
@@ -37,15 +39,22 @@ bool boxm_generate_edge_samples_process_cons(bprb_func_process& pro)
   //input[1]: The camera of the observation
   //input[2]: The scene
   //input[3]: image name for saving scene
+  //input[4]: n_normal
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "vil_image_view_base_sptr";
   input_types_[1] = "vpgl_camera_double_sptr";
   input_types_[2] = "boxm_scene_base_sptr";
   input_types_[3] = "vcl_string";
+  input_types_[4] = "float";
   if (!pro.set_input_types(input_types_))
     return false;
 
-  //no output
+  //output
+  unsigned j = 0;
+  vcl_vector<vcl_string> output_types_(n_outputs_);
+  output_types_[j++] = "float"; // new n_normal value
+  if (!pro.set_output_types(output_types_))
+    return false;
   return true;
 }
 
@@ -64,6 +73,13 @@ bool boxm_generate_edge_samples_process(bprb_func_process& pro)
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(i++);
   boxm_scene_base_sptr scene = pro.get_input<boxm_scene_base_sptr>(i++);
   vcl_string img_name =  pro.get_input<vcl_string>(i++); 
+  float n_normal = pro.get_input<float>(i++); 
+
+  // get parameters
+  int edge_prob_mask_size = 21;
+  pro.parameters()->get_value("edge_prob_mask_size",edge_prob_mask_size);
+  float edge_prob_mask_sigma = 1.0f;
+  pro.parameters()->get_value("edge_prob_mask_sigma",edge_prob_mask_sigma);
 
   // check the input validity
   if ((edge_image == 0) || (camera == 0) || (scene == 0)) {
@@ -71,11 +87,21 @@ bool boxm_generate_edge_samples_process(bprb_func_process& pro)
      return false;
   }
 
+  float new_n_normal = n_normal;
+  vil_image_view<float> edge_prob_image;
+  sdet_img_edge::estimate_edge_prob_image(edge_image, edge_prob_image, edge_prob_mask_size, edge_prob_mask_sigma);
+  float edge_prob_image_mean;
+  vil_math_mean(edge_prob_image_mean,edge_prob_image,0);
+
+  new_n_normal = n_normal + edge_prob_image_mean;
+
+  //vil_image_view_base_sptr edge_prob_image_sptr = new vil_image_view<float>(edge_prob_image);
+  vil_image_view<float> img(edge_prob_image);
   // edge image is always float??
   if (scene->appearence_model() == BOXM_EDGE_FLOAT) {
-    vil_image_view<vxl_byte> *img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(edge_image.ptr());
-    vil_image_view<float> img(img_byte->ni(), img_byte->nj(), 1);
-    vil_convert_stretch_range_limited(*img_byte ,img, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
+    //vil_image_view<vxl_byte> *img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(edge_image.ptr());
+    //vil_image_view<float> img(img_byte->ni(), img_byte->nj(), 1);
+    //vil_convert_stretch_range_limited(*img_byte ,img, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
     if (!scene->multi_bin())
     {
       typedef boct_tree<short, boxm_edge_sample<float> > tree_type;
@@ -91,6 +117,7 @@ bool boxm_generate_edge_samples_process(bprb_func_process& pro)
     vcl_cout << "boxm_generate_edge_samples_process: undefined APM type" << vcl_endl;
     return false;
   }
-
+  vcl_cout << " New n_normal======>" << new_n_normal << vcl_endl;
+  pro.set_output_val<float>(0, float(new_n_normal));
   return true;
 }
