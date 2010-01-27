@@ -12,7 +12,7 @@
 
 template <class T>
 bsta_histogram<T>::bsta_histogram()
-  : area_valid_(false), area_(0), nbins_(1), range_(0),
+  : area_valid_(false), area_(0), nbins_(0), range_(0),
     delta_(0),min_prob_(0), min_(0), max_(0)
 {
 }
@@ -150,6 +150,26 @@ T bsta_histogram<T>::mean(const unsigned int lowbin, const unsigned int highbin)
   return result;
 }
 
+template <class T>
+T bsta_histogram<T>::mean_vals(const T low, const T high) const
+{
+  //find bin indices
+  T tlow=low, thigh=high;
+  if(tlow<min_) tlow = min_; if(thigh>max_) thigh = max_;
+  unsigned low_bin=0, high_bin = 0;
+  for (unsigned int i = 0; i<nbins_; i++)
+    if ((i+1)*delta_>=(tlow-min_)){
+      low_bin = i;
+      break;
+      }
+  for (unsigned int i = 0; i<nbins_; i++)
+    if ((i+1)*delta_>=(thigh-min_)){
+      high_bin = i;
+      break;
+      }
+  return this->mean(low_bin, high_bin);
+}
+
   //: Variance of distribution
 template <class T>
 T bsta_histogram<T>::variance() const
@@ -179,6 +199,26 @@ variance(const unsigned int lowbin, const unsigned int highbin) const
   return result;
 }
 
+template <class T>
+T bsta_histogram<T>::
+variance_vals(const T low, const T high) const
+{
+//find bin indices
+  T tlow=low, thigh=high;
+  if(tlow<min_) tlow = min_; if(thigh>max_) thigh = max_;
+  unsigned low_bin=0, high_bin = 0;
+  for (unsigned int i = 0; i<nbins_; i++)
+    if ((i+1)*delta_>=(tlow-min_)){
+      low_bin = i;
+      break;
+      }
+  for (unsigned int i = 0; i<nbins_; i++)
+    if ((i+1)*delta_>=(thigh-min_)){
+      high_bin = i;
+      break;
+      }
+    return this->variance(low_bin, high_bin);
+}
 template <class T>
 T bsta_histogram<T>::entropy() const
 {
@@ -336,6 +376,13 @@ void bsta_histogram<T>::print_to_m(vcl_ostream& os) const
     os << ", " << p(i);
   os << "];\n";
   os << "bar(x,y,'r')\n";
+}
+
+template <class T>
+void bsta_histogram<T>::print_vals_prob(vcl_ostream& os) const
+{
+  for(unsigned i = 0; i<nbins_; ++i)
+    os << avg_bin_value(i) << ' ' << p(i) << '\n';
 }
 
 template <class T>

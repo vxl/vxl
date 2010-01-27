@@ -77,11 +77,17 @@ template <class T> class bsta_histogram : public bsta_histogram_base
   //: Mean of distribution between bin indices
   T mean(const unsigned int lowbin, const unsigned int highbin) const;
 
+  //: Mean of distribution between values
+  T mean_vals(const T low, const T high) const;
+
   //: Variance of distribution
   T variance() const;
 
   //: Variance of distribution between bin indices
   T variance(const unsigned int lowbin, const unsigned int highbin) const;
+
+  //: Mean of distribution between values
+  T variance_vals(const T low, const T high) const;
 
   //: First non-zero bin from below
   unsigned low_bin();
@@ -137,6 +143,9 @@ template <class T> class bsta_histogram : public bsta_histogram_base
 
   //: print as a matlab plot command
   void print_to_m(vcl_ostream& os = vcl_cout) const;
+
+  //: print values and bin probability in full (even if counts ==0)
+  void print_vals_prob(vcl_ostream& os = vcl_cout) const;
 
  private:
   void compute_area() const; // mutable const
