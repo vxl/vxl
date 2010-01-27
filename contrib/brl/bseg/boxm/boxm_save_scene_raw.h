@@ -107,7 +107,7 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
     {
       vgl_point_3d<double> node = tree->cell_bounding_box_local(cells[i]).min_point();
 
-      float cell_val = boxm_cell_to_float(cells[i]);
+      float cell_val = boxm_cell_to_float(cells[i], step_len);
 
       unsigned int level = cells[i]->get_code().level;
 
@@ -165,9 +165,9 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
 
     float* dp = data;
     for (; dp < data + data_size; ++dp) {
-      double P = 1.0 - vcl_exp(-*dp*step_len);
+      //double P = 1.0 - vcl_exp(-*dp*step_len);
       // always positive so this is an ok way to round
-      unsigned char c = (unsigned char)(vcl_floor((255.0 * P) + 0.5));
+      unsigned char c = (unsigned char)(vcl_floor((255.0 * (*dp)) + 0.5));
       vsl_b_write(os, (char) c);
     }
     delete[] data;
