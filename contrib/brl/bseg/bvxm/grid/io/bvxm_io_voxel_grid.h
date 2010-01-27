@@ -109,11 +109,6 @@ bool bvxm_grid_save_raw(bvxm_voxel_grid<T> *grid,  vcl_string filename)
     ofs.write(reinterpret_cast<char*>(&ny),sizeof(ny));
     ofs.write(reinterpret_cast<char*>(&nz),sizeof(nz));
 
-    // write data
-    // iterate through slabs and fill in memory array
-    typedef typename bvxm_dristhi_traits<T>::datatype DataType;
-    DataType *data_array = new DataType[nx*ny*nz];
-
     //get the range
     typename bvxm_voxel_grid<T>::iterator grid_it = grid->begin();
     T max = vcl_numeric_limits<T>::min();
@@ -129,22 +124,26 @@ bool bvxm_grid_save_raw(bvxm_voxel_grid<T> *grid,  vcl_string filename)
       }
     }
     vcl_cout << "max =  " << max << " min= " <<min << vcl_endl;
-
-    grid_it = grid->begin();
+  
+   // write data
+   // iterate through slabs and fill in memory array
+   typedef typename bvxm_dristhi_traits<T>::datatype DataType;
+   grid_it = grid->begin();
+   DataType *data_array = new DataType[nx*ny];
     for (unsigned k=0; grid_it != grid->end(); ++grid_it, ++k) {
-      vcl_cout << '.';
+      vcl_cout << '.' <<vcl_flush;
       for (unsigned i=0; i<(*grid_it).nx(); ++i) {
         for (unsigned j=0; j < (*grid_it).ny(); ++j) {
-          data_array[i*ny*nz + j*nz + k] =(*grid_it)(i,j)-DataType(0);  // +0 is needed for bvxm_opinion, do not delete
+          data_array[i*ny + j] =(*grid_it)(i,j)-DataType(0);  // +0 is needed for bvxm_opinion, do not delete
         }
       }
+      ofs.write(reinterpret_cast<char*>(data_array),sizeof(DataType)*nx*ny);
     }
     vcl_cout << vcl_endl;
-    ofs.write(reinterpret_cast<char*>(data_array),sizeof(DataType)*nx*ny*nz);
-
+    delete [] data_array;
     ofs.close();
 
-    delete[] data_array;
+    
 
     return true;
 }
