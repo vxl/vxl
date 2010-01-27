@@ -170,7 +170,7 @@ boct_tree<T_loc, T_data>* boct_tree<T_loc,T_data>::clone_and_intersect(boct_tree
   short shift_level = parent_tree_root_level - subtree_root->level();
   if (shift_level>0)
   {
-    shift_code.set_code(((1<<(parent_tree_root_level - subtree_root->level()) )-1), ((1<<(parent_tree_root_level - subtree_root->level()) )-1), ((1<<(parent_tree_root_level - subtree_root->level()) )-1)); 
+    shift_code.set_code(((1<<(subtree_root->level()))-1), ((1<<(subtree_root->level()))-1), ((1<<(subtree_root->level()))-1)); 
     boct_tree_cell<T_loc, T_data>* root = subtree_root->clone_and_intersect(0, &shift_code,local_crop_box, parent_tree_root_level);
     boct_tree<T_loc,T_data>* tree = new boct_tree<T_loc,T_data>(root, subtree_root->level() +1 );
     return tree;
@@ -204,11 +204,23 @@ boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_point(const vgl_po
   short curr_level=root_level_;
   // convert point to location code.
   boct_loc_code<T_loc>* loccode_=new boct_loc_code<T_loc>(p, root_level_,max_val_);
+  
+  if (check_out_of_bounds)
+  {
+    if ((loccode_->x_loc_ >> root_level_)^ 0)
+      return 0;
+    if ((loccode_->y_loc_ >> root_level_)^ 0)
+      return 0;
+    if ((loccode_->y_loc_ >> root_level_)^ 0)
+      return 0;
+  }  
+  
 #if 0
   // check to see if point is contained in the octree
   if (!root_->code_.isequal(loccode_,curr_level))
     return 0;
 #endif
+  
   // temporary pointer to traverse
   boct_tree_cell<T_loc,T_data>* curr_cell=root_;
 
