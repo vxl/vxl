@@ -42,6 +42,7 @@ SOURCES += boxm_scene_parser.cxx
 SOURCES += boxm_mob_grey_processor.cxx
 MANPAGE_SOURCES += boxm_cell_data_traits.h
 MANPAGE_SOURCES += boxm_edge_sample.txx
+MANPAGE_SOURCES += boxm_compute_scene_statistics.h
 
 SUBDIRS += io pro opt algo
 

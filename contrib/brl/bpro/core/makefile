@@ -15,6 +15,9 @@ SUBDIRS += brip_pro
 # vgl and bvgl process classes 
 SUBDIRS += bvgl_pro
 
+# sdet process classes
+SUBDIRS += sdet_pro
+
 ################################
 include ${VXLROOT}/config/top.mk
 ################################

@@ -28,6 +28,7 @@ SOURCES += sdet_watershed_region_proc_params.cxx
 SOURCES += sdet_nonmax_suppression.cxx
 SOURCES += sdet_nonmax_suppression_params.cxx
 SOURCES += sdet_gauss_fit.cxx
+SOURCES += sdet_img_edge.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
