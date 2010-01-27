@@ -33,6 +33,7 @@ SET(sdet_sources
     sdet_nonmax_suppression_params.cxx sdet_nonmax_suppression_params.h
     sdet_nonmax_suppression.cxx     sdet_nonmax_suppression.h
     sdet_gauss_fit.cxx              sdet_gauss_fit.h
+    sdet_img_edge.cxx               sdet_img_edge.h
 )
 AUX_SOURCE_DIRECTORY(Templates sdet_sources)
 
