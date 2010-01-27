@@ -152,9 +152,6 @@ boct_tree_cell<T_loc,T_data>* boct_tree_cell<T_loc,T_data>::clone_and_intersect(
 
   if (!inters.is_empty())
   {
-    boct_loc_code<T_loc>  *cell_loc_code = (this->code_).AND(shift_code);
-    cell_loc_code->set_level(this->code_.level);
-    boct_tree_cell<T_loc,T_data>* cell = new boct_tree_cell<T_loc,T_data>(*cell_loc_code);
     cell->data_ = this->data();
     cell->parent_ = parent;
     if (this->is_leaf())
