@@ -121,7 +121,7 @@ class boxm_scene :public boxm_scene_base
 
   boxm_block_iterator<T> iterator() { boxm_block_iterator<T> iter(this); return iter; }
 
-  vgl_box_3d<double> get_world_bbox();
+  virtual vgl_box_3d<double> get_world_bbox();
 
   bool valid_index(vgl_point_3d<int> idx);
 

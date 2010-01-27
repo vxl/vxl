@@ -14,6 +14,7 @@
 #include <vbl/vbl_ref_count.h>
 #include <vsl/vsl_binary_io.h>
 #include <vbl/vbl_smart_ptr.h>
+#include <vgl/vgl_box_3d.h>
 
 #include "boxm_sample.h"
 
@@ -48,6 +49,8 @@ class boxm_scene_base : public vbl_ref_count
   unsigned max_level() const { return max_tree_level_; }
 
   unsigned init_level() const { return init_tree_level_; }
+  
+  virtual vgl_box_3d<double> get_world_bbox() {return vgl_box_3d<double>();}
  protected:
   boxm_apm_type app_model_;
 

@@ -124,8 +124,9 @@ void boxm_scene<T>::write_active_block()
     int x=active_block_.x(), y=active_block_.y(), z=active_block_.z();
     vcl_string path = gen_block_path(x,y,z);
     vsl_b_ofstream os(path);
+#if 0
     vcl_cout << "Internal Nodes 2: " << save_internal_nodes_ << vcl_endl;
-
+#endif
     blocks_(x,y,z)->b_write(os, save_internal_nodes_);
     // delete the block's data
     boxm_block<T>* block = blocks_(x,y,z);
@@ -405,7 +406,9 @@ bool boxm_scene<T>::parse_config(boxm_scene_parser& parser)
   app_model_ = boxm_apm_types::str_to_enum(parser.app_model().data());
   multi_bin_ = parser.multi_bin();
   save_internal_nodes_ =parser.save_internal_nodes();
+#if 0
   vcl_cout << "Internal Nodes 1: " << save_internal_nodes_ << vcl_endl;
+#endif
   parser.levels(max_tree_level_, init_tree_level_);
   return true;
 }

@@ -45,8 +45,9 @@ void boxm_block<T>::b_write(vsl_b_ostream &os, const bool save_internal_nodes)
 {
   vsl_b_write(os, version_no());
   vsl_b_write(os, bbox_);
+#if 0
   vcl_cout << "Internal Nodes 3: " << save_internal_nodes << vcl_endl;
-
+#endif
   octree_->b_write(os, save_internal_nodes);
 }
 
