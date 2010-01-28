@@ -64,7 +64,7 @@ bool boxm_render_expected_edge_process(bprb_func_process& pro)
   using namespace boxm_render_expected_edge_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    vcl_cerr << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
     return false;
   }
 
@@ -91,22 +91,24 @@ bool boxm_render_expected_edge_process(bprb_func_process& pro)
     }
     else
     {
-       vcl_cout<<"Ray tracing version not yet implemented"<<vcl_endl;
+       vcl_cerr << "Ray tracing version not yet implemented\n";
        return false;
     }
     img_mask = new vil_image_view<float>(mask);
     vil_save(expected, "ef.tif");
     vil_image_view<unsigned char> *expected_byte = new vil_image_view<unsigned char>(ni,nj,expected.nplanes());
     vil_convert_stretch_range(expected,*expected_byte);
-    /*for (unsigned i=0; i<ni; i++) {
+#if 0 // commented out ...
+    for (unsigned i=0; i<ni; i++) {
       for (unsigned j=0; j<nj; j++) {
        (*expected_byte)(i,j) = static_cast<unsigned char>(255.0*(expected(i,j)));
       }
     }
-    vil_convert_stretch_range_limited(*expected_byte,*expected_byte, (unsigned char)0, (unsigned char)255);*/
+    vil_convert_stretch_range_limited(*expected_byte,*expected_byte, (unsigned char)0, (unsigned char)255);
+#endif // 0
     img = expected_byte;
   } else {
-    vcl_cout << "boxm_render_expected_process: undefined APM type" << vcl_endl;
+    vcl_cerr << "boxm_render_expected_process: undefined APM type\n";
     return false;
   }
 
