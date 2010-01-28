@@ -80,12 +80,35 @@ void mbl_apply_mask(const mbl_mask & mask, ForwardIterator first, ForwardIterato
 }
 
 //: Apply a mask to a vector, returning a new vector
+// This can be inefficient. See mbl_apply_mask(mask, src, dst)  for an alternative.
 template <typename T>
 vcl_vector<T> mbl_apply_mask(const mbl_mask & mask, const vcl_vector<T> & values)
 {
   vcl_vector<T> retval(values);
   mbl_apply_mask(mask, retval);
   return retval;
+}
+
+//: Apply a mask to a vector, returning a new vector
+// \param mask The mask to apply.
+// \param src The source vector.
+// \retval dst The destination vector (existing contents will be lost).
+template <typename T>
+void mbl_apply_mask(const mbl_mask & mask, const vcl_vector<T> & src, vcl_vector<T> & dst)
+{
+  const unsigned n_in = src.size();
+  if (mask.size() != n_in)
+    throw vcl_runtime_error("src and mask lengths differ");
+
+  dst.clear();
+  dst.reserve(n_in); // this is the maximum size we might need
+  for (unsigned i=0; i<n_in; ++i)
+  {
+    if (mask[i])
+    {
+      dst.push_back(src[i]);
+    }
+  }
 }
 
 //: Apply a mask to a vector in-place

@@ -50,8 +50,6 @@ void test_mask()
   mbl_mask m1, m2, m_op;
 
 
-
-
   // Test mask IO
   vcl_cout << "\nTesting mbl_mask IO" << vcl_endl;
   setup_default_masks(m1, m2);
@@ -71,10 +69,12 @@ void test_mask()
   TEST("Expected fail to load badly formatted file", failed_load, true);
   TEST("Mask empty after file load fail", m2.empty(), true);
 
-  // Test mbl_apply_mask
-  vcl_cout << "\nTesting mbl_apply_mask vector version" << vcl_endl;
+
+  // Test mbl_apply_mask(mask,vector)
+  vcl_cout << "\nTesting mbl_apply_mask(mask,vector) version" << vcl_endl;
   setup_default_masks(m1, m2);
   setup_default_values(v1, v2);
+  v_tgt.clear();
   v_tgt.push_back(0); // see definition of m1 above for relationship values->target
   v_tgt.push_back(3);
   v_tgt.push_back(4);
@@ -94,6 +94,32 @@ void test_mask()
   TEST("Expected fail of apply mask where lengths differ", failed_application, true);
   TEST("Values invariant on failure of mask application", (v1 == v_tgt), true);
 
+
+  // Test mbl_apply_mask(mask,vector,vector)
+  vcl_cout << "\nTesting mbl_apply_mask(mask,vector,vector) version" << vcl_endl;
+  setup_default_masks(m1, m2);
+  setup_default_values(v1, v2);
+  v_tgt.clear();
+  v_tgt.push_back(0); // see definition of m1 above for relationship values->target
+  v_tgt.push_back(3);
+  v_tgt.push_back(4);
+
+  // Test application of mask to a values vector using src,dst version  
+  mbl_apply_mask(m1, v1, v2);
+  TEST("Application of mask to vector of values", (v2 == v_tgt), true);
+
+  // Test proper failure of mismatched lengths
+  setup_default_masks(m1, m2);
+  setup_default_values(v1, v2);
+  m1.resize(3);
+  v_tgt = v1;
+  failed_application = false;
+  try         { mbl_apply_mask(m1, v1); }
+  catch (...) { failed_application = true; }
+  TEST("Expected fail of apply mask where lengths differ", failed_application, true);
+  TEST("Values invariant on failure of mask application", (v1 == v_tgt), true);
+
+
   // Test iterator version
   vcl_cout << "\nTesting mbl_apply_mask iterator version" << vcl_endl;
   setup_default_masks(m1, m2);
@@ -112,8 +138,6 @@ void test_mask()
   catch (...) { failed_application = true; }
   TEST("Expected fail of apply mask where lengths differ", failed_application, true);
   TEST("Values invariant on failure of mask application", result.empty(), true);
-
-
 
 
   // Test mbl_mask_logic
@@ -154,8 +178,6 @@ void test_mask()
   TEST("Result invariant on failure of mask logic", (m2 == m_op), true);
 
 
-
-
   // Test merging of value vectors
   vcl_cout << "\nTesting mbl_mask_merge_values" << vcl_endl;
   setup_default_masks(m1, m2);
@@ -178,8 +200,6 @@ void test_mask()
   catch (...) { merge_failed = true; }
   TEST("Expected fail of merge values where lengths differ", merge_failed, true);
   TEST("Values invariant on failure of merge operation", v2 == v_tgt, true);
-
-
 
 
   // Test mbl_mask_on_mask
@@ -208,8 +228,6 @@ void test_mask()
   catch (...) { mask_mask_failure = true; }
   TEST("Expected fail of mask-on-mask due to count mismatch", mask_mask_failure, true);
   TEST("Result invariant on failure of mask-on-mask operation", (m2 == m_op), true);
-
-
 
 
   // Test mbl_masks_from_index_set
