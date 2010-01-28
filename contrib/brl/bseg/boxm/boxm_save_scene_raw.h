@@ -113,7 +113,8 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
 
       if (level == resolution_level) {
         // just copy value to output array
-        int out_index = static_cast<int>((node.x()/step_len)*ncells*ncells + (node.y()/step_len)*ncells + (node.z()/step_len));
+        //int out_index = static_cast<int>((node.x()/step_len)*ncells*ncells + (node.y()/step_len)*ncells + (node.z()/step_len));
+        int out_index=static_cast<int>((node.x()/step_len) + (node.y()/step_len)*ncells + (node.z()/step_len)*ncells*ncells);
         if (out_index >= data_size)
           vcl_cout << "boxm_save_block_raw, array out of index! " << out_index << " -- " << data_size << vcl_endl;
         else
@@ -128,7 +129,8 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
         for (unsigned int z=node_z_start; z<node_z_start+us_factor; ++z) {
           for (unsigned int y=node_y_start; y<node_y_start+us_factor; ++y) {
             for (unsigned int x=node_x_start; x<node_x_start+us_factor; ++x) {
-              int out_index=x*y_size + y*ncells + z;
+              //int out_index=x*y_size + y*ncells + z;
+              int out_index=x + y*ncells + z*ncells*ncells;
               if (out_index >= data_size)
                 vcl_cout << "boxm_save_block_raw, array out of index! " << out_index << " -- " << data_size << vcl_endl;
               else
@@ -144,7 +146,8 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
         const unsigned int node_x = static_cast<unsigned int>(node.x()/step_len);
         const unsigned int node_y = static_cast<unsigned int>(node.y()/step_len);
         const unsigned int node_z = static_cast<unsigned int>(node.z()/step_len);
-        unsigned int out_index=node_x*y_size + node_y*ncells + node_z;
+        //unsigned int out_index=node_x*y_size + node_y*ncells + node_z;
+        int out_index=node_x + node_y*ncells + node_z*ncells*ncells;
         data[out_index] += float(cell_val*update_weight);
       }
     }
@@ -224,23 +227,25 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   os.write(reinterpret_cast<char*>(&nz_uint),sizeof(nz_uint));
 
   // combine the column from streams to generate one raw file
-  for (unsigned x=0; x<dim.x(); x++) {
-    unsigned i=0;
-    while (i<dim.z()*dim.y()*ncells*ncells*ncells) {
+  for (unsigned z=0; z<dim.z(); z++) {
+    unsigned k=0;
+    while (k<dim.x()*dim.y()*ncells*ncells*ncells) {
       for (unsigned y=0; y<dim.y(); y++) {
-        unsigned count=0;
-        while (count < ncells*ncells*dim.z()) {
-          for (unsigned z=0; z<dim.z(); z++) {
+        unsigned j=0;
+        while (j < ncells*ncells*dim.x()) {
+          for (unsigned x=0; x<dim.x(); x++) {
             vsl_b_ifstream* s=streams(x,y,z);
             s->is().read(byte_data, ncells);
             os.write((char*)byte_data,ncells);
-            count+=ncells;
-            i+=ncells;
+            j+=ncells;
+            k+=ncells;
           }
         }
       }
     }
   }
+  
+  
   os.close();
   delete[] byte_data;
 
