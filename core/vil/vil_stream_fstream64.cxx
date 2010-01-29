@@ -68,9 +68,24 @@ vil_stream_fstream64::vil_stream_fstream64(char const* fn, char const* mode) :
     fd_ = _open( fn, mode_ | _O_CREAT | _O_BINARY, _S_IREAD | _S_IWRITE );
   }
   if ( fd_ == -1 ){
-    vcl_cerr << "vil_stream_fstream::Could not open [" << fn << "]\n";
+    vcl_cerr << "vil_stream_fstream64::Could not open [" << fn << "]\n";
   }
 }
+
+#if defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
+vil_stream_fstream64::vil_stream_fstream64(wchar_t const* fn, char const* mode):
+  mode_(modeflags(mode))
+{
+  if ( mode_ == O_RDONLY )
+    fd_ = _wopen( fn, mode_ | _O_BINARY  );
+  else
+    fd_ = _wopen( fn, mode_ | _O_CREAT | _O_BINARY, _S_IREAD | _S_IWRITE );
+  if ( fd_ == -1 )
+  {
+    vcl_cerr << "vil_stream_fstream64::Could not open [" << fn << "]\n";
+  }
+}
+#endif //defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
 
 vil_stream_fstream64::~vil_stream_fstream64()
 {
