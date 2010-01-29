@@ -278,9 +278,14 @@ static void test_the_transform(vimt3d_transform_3d& t)
 
 static void test_simplify(const vimt3d_transform_3d& input, const vimt3d_transform_3d& expected)
 {
+  vcl_cout << "Testing Simplify\n";
+  
   vimt3d_transform_3d copy(input);
   copy.simplify();
-  TEST("Simplify()", copy, expected);
+
+  TEST("Expected form", copy.form(), expected.form());
+  TEST_NEAR("Expected matrix", (copy.matrix()-expected.matrix()).fro_norm(), 0, 1e-12);
+
 }
 
 //=========================================================================

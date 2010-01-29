@@ -9,7 +9,9 @@
 #include <vcl_cstdlib.h>
 #include <vcl_sstream.h>
 #include <vsl/vsl_indent.h>
+#include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_vector.h>
+#include <vnl/algo/vnl_determinant.h>
 #include <vnl/vnl_math.h>
 #include <vul/vul_string.h>
 #include <vul/vul_sprintf.h>
@@ -51,8 +53,8 @@ void vimt3d_transform_3d::angles(double& phi_x, double& phi_y, double& phi_z) co
   double det=+xx_*yy_*zz_-xx_*zy_*yz_-yx_*xy_*zz_+yx_*zy_*xz_+zx_*xy_*yz_-zx_*yy_*xz_;
 
   double xlen = vcl_sqrt(xx_*xx_ + yx_*yx_ + zx_*zx_)* vnl_math_sgn(det);
-  double ylen = vcl_sqrt(xy_*xy_ + yy_*yy_ + zy_*zy_);
-  double zlen = vcl_sqrt(xz_*xz_ + yz_*yz_ + zz_*zz_);
+  double ylen = vcl_sqrt(xy_*xy_ + yy_*yy_ + zy_*zy_)* vnl_math_sgn(det);
+  double zlen = vcl_sqrt(xz_*xz_ + yz_*yz_ + zz_*zz_)* vnl_math_sgn(det);
 
   double xx3 = xx_ / xlen;
   double xy3 = xy_ / ylen;
@@ -71,7 +73,12 @@ void vimt3d_transform_3d::angles(double& phi_x, double& phi_y, double& phi_z) co
   // ie assuming similarity transform here
   // assume s is always positive
   // to recover original angle
-  double s= vcl_fabs( xz3/ (-1*vcl_sin(phi_y) ) );
+  double s;
+  if (vcl_sin(phi_y) < 1e-20)
+    s = 1.0;
+  else
+    s = vcl_fabs( xz3/ (-1*vcl_sin(phi_y) ) );
+
 #ifdef DEBUG
   vcl_cout<<"s= "<<s<<vcl_endl;
 #endif
@@ -178,8 +185,8 @@ void vimt3d_transform_3d::params(vnl_vector<double>& v) const
       // try to compute scaling factors
       double det=+xx_*yy_*zz_-xx_*zy_*yz_-yx_*xy_*zz_+yx_*zy_*xz_+zx_*xy_*yz_-zx_*yy_*xz_;
       v[0]=vcl_sqrt(xx_*xx_ + yx_*yx_ + zx_*zx_)* vnl_math_sgn(det);
-      v[1]=vcl_sqrt(xy_*xy_ + yy_*yy_ + zy_*zy_);
-      v[2]=vcl_sqrt(xz_*xz_ + yz_*yz_ + zz_*zz_);
+      v[1]=vcl_sqrt(xy_*xy_ + yy_*yy_ + zy_*zy_)* vnl_math_sgn(det);
+      v[2]=vcl_sqrt(xz_*xz_ + yz_*yz_ + zz_*zz_)* vnl_math_sgn(det);
       v[6]=xt_; v[7]=yt_; v[8]=zt_;
       break;
     }
@@ -201,10 +208,21 @@ void vimt3d_transform_3d::simplify(double tol /*=1e-10*/)
    case Affine:
     { // Not really true affine, because shear is forbidden.
       angles(rx, ry, rz);
-      det=+xx_*yy_*zz_-xx_*zy_*yz_-yx_*xy_*zz_+yx_*zy_*xz_+zx_*xy_*yz_-zx_*yy_*xz_;
-      sx = vcl_sqrt(xx_*xx_ + yx_*yx_ + zx_*zx_)* vnl_math_sgn(det);
-      sy = vcl_sqrt(xy_*xy_ + yy_*yy_ + zy_*zy_)* vnl_math_sgn(det);
-      sz = vcl_sqrt(xz_*xz_ + yz_*yz_ + zz_*zz_)* vnl_math_sgn(det);
+      double matrix_form[]= {xx_, yx_, zx_, xy_, yy_, zy_, xz_, yz_, zz_};
+      vnl_matrix_fixed<double, 3, 3> X(matrix_form);
+      vnl_matrix_fixed<double, 3, 3> S2 = X.transpose() * X;
+      // if X=R*S then X'X = S'*R'*R*S
+      // if R is a rotation matrix then R'*R=I and so X'X = S'*S = [s_x^2 0 0; 0 s_y^2 0; 0 0 s_z^2]
+      if (S2(0,1)*S2(0,1) + S2(0,2)*S2(0,2) + S2(1,0)*S2(1,0) + 
+          S2(1,2)*S2(1,2) + S2(2,0)*S2(2,0) + S2(2,1)*S2(2,1) >= tol*tol*6)
+        return;
+
+      // mirroring if det is negative;
+      double mirror=vnl_math_sgn(vnl_determinant(X[0], X[1], X[2]));
+
+      sx = vcl_sqrt(vcl_abs(S2(0,0))) * mirror;
+      sy = vcl_sqrt(vcl_abs(S2(1,1))) * mirror;
+      sz = vcl_sqrt(vcl_abs(S2(2,2))) * mirror;
       if (vnl_math_sqr(sx-sy) +  vnl_math_sqr(sx-sz) < tol*tol)
         this->set_similarity(sx, rx, ry, rz,
                              xt_, yt_, zt_ );
