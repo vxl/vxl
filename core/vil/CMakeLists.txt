@@ -251,12 +251,12 @@ SET( vil_sources ${vil_sources}
   vil_image_resource_plugin.cxx         vil_image_resource_plugin.h
 )
 
-IF (WIN32 AND VXL_USE_LFS)
+IF (WIN32 AND VXL_USE_LFS AND NOT CMAKE_CL_64)
 #This is a hack since win32 doesn't have transparent Large File Support.
   ADD_DEFINITIONS( -DVIL_USE_FSTREAM64 )
   SET( vil_sources ${vil_sources}
     vil_stream_fstream64.cxx        vil_stream_fstream64.h )
-ENDIF (WIN32 AND VXL_USE_LFS)
+ENDIF (WIN32 AND VXL_USE_LFS AND NOT CMAKE_CL_64)
 
 AUX_SOURCE_DIRECTORY(Templates vil_sources)
 
