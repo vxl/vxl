@@ -1,6 +1,6 @@
 #include "brip_register.h"
 #include "brip_processes.h"
-#include "processes/brip_detect_edges_process.h"
+
 
 #include <bprb/bprb_macros.h>
 #include <bprb/bprb_func_process.h>
