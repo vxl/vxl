@@ -83,7 +83,7 @@ inline void vimt3d_sample_transformed_blob_safe(
     for (;s!=s_end;++s,p+=dp)
     {
       *s = vil3d_trilin_interp_safe(p.x(),p.y(),p.z(),
-                                    ni,nj,nk,im_data,
+                                    im_data,ni,nj,nk,
                                     istep,jstep,kstep,outval);
     }
   }
