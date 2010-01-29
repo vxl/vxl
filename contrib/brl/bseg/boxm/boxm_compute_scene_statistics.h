@@ -13,7 +13,7 @@ bool compute_scene_statistics(boxm_scene<boct_tree<T_loc, T_data > >& scene, bst
   omega_hist = bsta_histogram<float>(0.0f, 1.0f, 20);
   sigma_hist = bsta_histogram<float>(0.0f, 1.0f, 20);
   level_hist = bsta_histogram<float>(0.0f, 10.0f, 10);
-  typename boxm_block_iterator<tree_type> bit = scene.iterator();
+  boxm_block_iterator<tree_type> bit = scene.iterator();
   for (;!bit.end(); ++bit)
   {
     vgl_point_3d<int> block_index = bit.index();
