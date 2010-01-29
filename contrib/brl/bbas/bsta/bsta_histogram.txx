@@ -15,6 +15,7 @@ bsta_histogram<T>::bsta_histogram()
   : area_valid_(false), area_(0), nbins_(0), range_(0),
     delta_(0),min_prob_(0), min_(0), max_(0)
 {
+  bsta_histogram_base::type_ = bsta_histogram_traits<T>::type();
 }
 
 template <class T>
@@ -23,6 +24,7 @@ bsta_histogram<T>::bsta_histogram(const T range, const unsigned int nbins,
   : area_valid_(false), area_(0), nbins_(nbins), range_(range),
     delta_(0),min_prob_(min_prob), min_(0), max_(range)
 {
+  bsta_histogram_base::type_ = bsta_histogram_traits<T>::type();
   if (nbins>0)
   {
     delta_ = range_/nbins;
@@ -37,6 +39,7 @@ bsta_histogram<T>::bsta_histogram(const T min, const T max,
   : area_valid_(false), area_(0), nbins_(nbins), delta_(0),
     min_prob_(min_prob), min_ (min), max_(max)
 {
+  bsta_histogram_base::type_ = bsta_histogram_traits<T>::type();
   if (nbins>0)
   {
     range_ = max-min;
@@ -56,6 +59,7 @@ bsta_histogram<T>::bsta_histogram(const T min, const T max,
   : area_valid_(false), area_(0), delta_(0), min_prob_(min_prob),
     min_ (min), max_(max), counts_(data)
 {
+  bsta_histogram_base::type_ = bsta_histogram_traits<T>::type();
   nbins_ = data.size();
   range_ = max-min;
   if (nbins_>0)

@@ -25,12 +25,17 @@ template <class T>
 void
 vsl_b_write(vsl_b_ostream &os, const bsta_histogram<T>& h)
 {
+  const short io_version_no = 1;
+  vsl_b_write(os, io_version_no);
+  bsta_histogram_base::bsta_hist_type type = h.type_;
+  int itype = static_cast<int>(type);
   int nbins = h.nbins();
   T min = h.min();
   T max = h.max();
   T min_prob = h.min_prob();
   vcl_vector<T> values = h.value_array();
   vcl_vector<T> counts = h.count_array();
+  vsl_b_write(os, itype);
   vsl_b_write(os, nbins);
   vsl_b_write(os, min);
   vsl_b_write(os, max);
@@ -42,8 +47,16 @@ vsl_b_write(vsl_b_ostream &os, const bsta_histogram<T>& h)
 //: Binary load bsta_histogram from stream.
 template <class T>
 void
-vsl_b_read(vsl_b_istream &is, bsta_histogram<T>& h)
+vsl_b_read(vsl_b_istream &is, bsta_histogram<T>& h, bool skip = false)
 {
+  short ver;
+  int itype = 0;
+  if(!skip){
+  vsl_b_read(is, ver);
+  if(ver != 1)
+    return;
+  vsl_b_read(is, itype);
+  }
   int nbins;
   T min, max, min_prob;
   vcl_vector<T> values, counts;
@@ -81,6 +94,8 @@ vsl_b_write(vsl_b_ostream &os, const bsta_joint_histogram<T>& h)
   T max_b = h.max_b();
   T min_prob = h.min_prob();
   vbl_array_2d<T> counts = h.counts();
+  const short io_version_no = 1;
+  vsl_b_write(os, io_version_no);
   vsl_b_write(os, nbins_a);
   vsl_b_write(os, min_a);
   vsl_b_write(os, max_a);
@@ -96,6 +111,10 @@ template <class T>
 void
 vsl_b_read(vsl_b_istream &is, bsta_joint_histogram<T>& h)
 {
+  short ver;
+  vsl_b_read(is, ver);
+  if(ver != 1)
+    return;
   int nbins_a, nbins_b;
   T min_a, max_a, min_b, max_b, min_prob;
   vbl_array_2d<T> counts;
@@ -123,12 +142,41 @@ vsl_print_summary(vcl_ostream &os, const bsta_joint_histogram<T>& h)
   os << "bsta_joint_histogram\n";
   h.print(os);
 }
-//: not implemented, requires binary loader mechanism
-void vsl_b_write(vsl_b_ostream &os, const bsta_histogram_sptr& /*hptr*/);
-
-
-void vsl_b_read(vsl_b_istream &is, bsta_histogram_sptr& /*hptr*/);
-
+//: Implement for key basic types
+void vsl_b_write(vsl_b_ostream &os, const bsta_histogram_sptr& hptr)
+{
+  bsta_histogram<float>* hf = dynamic_cast<bsta_histogram<float>*>(hptr.ptr());
+  if(hf){ vsl_b_write(os, *hf); return;}
+  bsta_histogram<double>* hd=dynamic_cast<bsta_histogram<double>*>(hptr.ptr());
+  if(hd){ vsl_b_write(os, *hd); return;}
+}
+void vsl_b_read(vsl_b_istream &is, bsta_histogram_sptr& hptr){
+  short ver;
+  vsl_b_read(is, ver);
+  if(ver != 1)
+    return;
+  hptr = 0;
+  int itype = 0;
+  vsl_b_read(is, itype);
+  bsta_histogram_base::bsta_hist_type type = 
+	  static_cast<bsta_histogram_base::bsta_hist_type>(itype);
+  if(type == bsta_histogram_base::HIST_TYPE_UNKNOWN) return;
+  if(type == bsta_histogram_base::HIST_TYPE_FLOAT)
+    {
+      bsta_histogram<float> h;
+      vsl_b_read(is, h, true);
+      hptr = new bsta_histogram<float>(h);
+      return;
+    }
+  if(type == bsta_histogram_base::HIST_TYPE_DOUBLE)
+    {
+      bsta_histogram<double> h;
+      vsl_b_read(is, h, true);
+      hptr = new bsta_histogram<double>(h);
+      return;
+    }
+}
+      
 
 void vsl_b_write(vsl_b_ostream &os, const bsta_joint_histogram_sptr& /*hptr*/);
 

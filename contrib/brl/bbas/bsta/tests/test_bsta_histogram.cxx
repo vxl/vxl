@@ -3,6 +3,7 @@
 #include <testlib/testlib_test.h>
 #include <vcl_cmath.h>
 #include <bsta/bsta_histogram.h>
+#include <bsta/bsta_histogram_sptr.h>
 #include <bsta/bsta_joint_histogram.h>
 #include <bsta/bsta_int_histogram_1d.h>
 #include <bsta/bsta_int_histogram_2d.h>
@@ -136,6 +137,25 @@ void test_bsta_histogram()
   TEST_NEAR("histogram binary io", error, 0.0, 0.001);
   vpl_unlink("./temp.bin");
 
+  vsl_b_ofstream sos("./sptr_temp.bin");
+  bsta_histogram_sptr hptr = new bsta_histogram<double>(h);
+  vsl_b_write(sos, hptr);
+  sos.close();
+  vsl_b_ifstream sis("./sptr_temp.bin");
+  bsta_histogram_sptr hptr_in = 0;
+  vsl_b_read(sis, hptr_in);
+  TEST("histogram sptr read", hptr_in!=0, true);
+  if(hptr_in!=0){
+    bsta_histogram<double>* hp = 
+      static_cast<bsta_histogram<double>*>(hptr_in.ptr());
+    nbins_in = hp->nbins();
+    max_in = hp->max();
+    cn_in = hp->counts(3);
+    error = vcl_fabs(nbins_in-nbinsd)+
+      vcl_fabs(max-max_in)+vcl_fabs(cn-cn_in);
+    TEST_NEAR("histogram pointer binary io", error, 0.0, 0.001);
+  }
+  vpl_unlink("./sptr_temp.bin");
   // joint histogram
   double nbinsjd = jh.nbins();
   unsigned ia= 1, ib = 1;
@@ -161,9 +181,10 @@ void test_bsta_histogram()
   vcl_ofstream jos_vrml("./temp.wrl");
   jh.print_to_vrml(jos_vrml);
   jos_vrml.close();
+  vpl_unlink("./temp.wrl");
 
   //Test smart pointer
-  bsta_histogram_sptr hptr = new bsta_histogram<double>(10.0, 10);
+  hptr = new bsta_histogram<double>(10.0, 10);
   bsta_histogram<double>* dcast = dynamic_cast<bsta_histogram<double>*>(hptr.ptr());
   bsta_histogram<float>* fcast = dynamic_cast<bsta_histogram<float>*>(hptr.ptr());
   TEST("dynamic cast histogram", dcast&&!fcast, true);
