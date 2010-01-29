@@ -164,11 +164,13 @@ static const int sz_l = sizeof(long double)/sizeof(int) -1;
 # endif
 // Assume IEEE floating point number representation
 bool vnl_math_isnan( float x){return bMe(&x,0x7f800000L,sz_f)&&bMp(&x,0x007fffffL,sz_f);}
-bool vnl_math_isnan(double x){return bMe(&x,0x7ff00000L,sz_d)&&bMp(&x,0x000fffffL,sz_d);}
+bool vnl_math_isnan(double x){return bMe(&x,0x7ff00000L,sz_d)&&(bMp(&x,0x000fffffL,sz_d)||bMp(&x,0xffffffffL,1-sz_d));}
 bool vnl_math_isnan(long double x)
 {
-  if (sizeof(long double) == 8) return bMe(&x,0x7ff00000L,sz_l) && bMp(&x,0x000fffffL,sz_l);
-  else if (sizeof(long double) <= 12)
+  if (sizeof(long double) == 8) return bMe(&x,0x7ff00000L,sz_l) && (bMp(&x,0x000fffffL,sz_l)||bMp(&x,0xffffffffL,1-sz_d));
+  else if (sizeof(long double) <= 12) // This code doesn't properly check the less significant
+                                      // bytes for non-zero ness to distinguish inf from nan
+                                      // see http://babbage.cs.qc.cuny.edu/IEEE-754/References.xhtml#tables
 # if defined LDBL_MANT_DIG && LDBL_MANT_DIG<=53
     return bMe(&x,0x4001ffffL,sz_l) && bMp(&x,0x40000000,sz_l-4);
 # else
