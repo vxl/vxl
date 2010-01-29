@@ -164,7 +164,7 @@ class vil3d_image_view : public vil3d_image_view_base
     { return (top_left_ != (T*)0)? false : true; }
 
   //: The number of bytes in the data
-  inline unsigned size_bytes() const { return size() * sizeof(T); }
+  inline vcl_size_t size_bytes() const { return size() * sizeof(T); }
 
   //: Smart pointer to the object holding the data for this view
   // Will be a null pointer if this view looks at `third-party' data,

@@ -130,13 +130,13 @@ bool test_image_equal(char const* type_name,
 #endif
   vcl_cout << "istep()=" << image2.istep() << ", jstep()=" << image2.jstep()
            << ", planestep()=" << image2.planestep() << vcl_endl;
-  int i = image2.istep(); if (i<0) i = -i;
+  vcl_ptrdiff_t i = image2.istep(); if (i<0) i = -i;
   TEST("|istep| is either 1, or np or height or np*height", i==1||i==planes2||i==sizey2||i==planes2*sizey2, true);
-  int j = image2.jstep(); if (j<0) j = -j;
+  vcl_ptrdiff_t j = image2.jstep(); if (j<0) j = -j;
   TEST("|jstep| is either 1, or np or width or np*width",
        j==1||j==planes2||j==sizex2||j==4*((sizex2+3)/4)||j==planes2*sizex2||j==4*((planes2*sizex2+3)/4), true);
   // The "+3" is there to allow for "row word alignment", e.g. with the BMP format.
-  int p = image2.planestep(); if (p<0) p = -p;
+  vcl_ptrdiff_t p = image2.planestep(); if (p<0) p = -p;
   TEST("|planestep| is either 1 or width or height or width x height", p==1||p==sizex2||p==sizey2||p==sizex2*sizey2, true);
 
   if (100*sizex2+image2.jstep()<0 || 100*sizex2-image2.jstep()<0)

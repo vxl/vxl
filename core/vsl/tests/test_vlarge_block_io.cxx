@@ -59,7 +59,7 @@ void test_vlarge_block(void * block, vcl_size_t s, T scale)
     if (numbers[i] != static_cast<T>(vcl_numeric_limits<T>::max() - T(i)) )
       errors++;
 
-  TEST_NEAR("No errors in stored numbers", errors, 0, 0);
+  TEST_NEAR("No errors in stored numbers", static_cast<double>(errors), 0, 0);
 }
 
 

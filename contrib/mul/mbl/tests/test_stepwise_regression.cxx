@@ -1,4 +1,5 @@
 // This is mul/mbl/tests/test_stepwise_regression.cxx
+#include <vcl_cstddef.h>
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vcl_algorithm.h>
@@ -138,7 +139,7 @@ void test_stepwise_regression()
         if (seekIter != signifIndices.end())
         {
             //If the basis variable is significant
-            unsigned kprime=vcl_distance(signifIndices.begin(),seekIter);
+            vcl_ptrdiff_t kprime=vcl_distance(signifIndices.begin(),seekIter);
             delta[k]=weights[k] - coeffs[kprime];
         }
         else

@@ -66,13 +66,13 @@ struct vul_redirector_data
 
 int vul_redirector_streambuf::sync ()
 {
-  long n = pptr () - pbase ();
+  vcl_ptrdiff_t n = pptr () - pbase ();
   return (n && p->owner->putchunk ( pbase (), n) != n) ? EOF : 0;
 }
 
 int vul_redirector_streambuf::overflow (int ch)
 {
-  long n = pptr () - pbase ();
+  int n = static_cast<int>(pptr () - pbase ());
   if (n && sync ())
     return EOF;
   if (ch != EOF)
@@ -137,13 +137,13 @@ int vul_redirector::sync_passthru()
 #endif
 }
 
-int vul_redirector::put_passthru(char const* buf, int n)
+vcl_streamsize vul_redirector::put_passthru(char const* buf, vcl_streamsize n)
 {
   return p->old_cerrbuf->sputn(buf, n);
 }
 
 //: Default action is just to pass text on the the old stream.
-int vul_redirector::putchunk(char const* buf, int n)
+vcl_streamsize vul_redirector::putchunk(char const* buf, vcl_streamsize n)
 {
   return put_passthru(buf, n);
 }

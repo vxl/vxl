@@ -16,7 +16,7 @@
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 
-#include <vcl_iosfwd.h>
+#include <vcl_iostream.h>
 
 struct vul_redirector_data;
 
@@ -34,12 +34,12 @@ class vul_redirector
 
   //: The filter function
   // Called with `n' characters in `buf', do with as you like.
-  virtual int putchunk(char const* buf, int n);
+  virtual vcl_streamsize putchunk(char const* buf, vcl_streamsize n);
 
  protected:
   //: Put characters to original stream.
   // Useful for derived classes which wish to filter a stream.
-  int put_passthru(char const* buf, int n);
+  vcl_streamsize put_passthru(char const* buf, vcl_streamsize n);
 
   //: Sync original stream.
   int sync_passthru();

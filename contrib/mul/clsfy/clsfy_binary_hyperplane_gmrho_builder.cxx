@@ -15,6 +15,7 @@
 #include <vcl_cmath.h>
 #include <vcl_algorithm.h>
 #include <vcl_numeric.h>
+#include <vcl_cstddef.h>
 #include <vnl/vnl_vector_ref.h>
 #include <vnl/algo/vnl_lbfgs.h>
 
@@ -72,12 +73,13 @@ namespace clsfy_binary_hyperplane_gmrho_builder_helpers
     //: Given the class category variable, return the associated regression value (e.g. 1 for class 1, -1 for class 0)
     class category_value
     {
-        const double y0;
-        const double y1;
+//        const double y0;
+//        const double y1;
       public:
-        category_value(unsigned num_category1,unsigned num_total):
-            y0(-1.0*double(num_total-num_category1)/double(num_total)),
-            y1(double(num_category1)/double(num_total)) {}
+        category_value(vcl_size_t /*num_category1*/, vcl_size_t /*num_total*/)
+//          : y0(-1.0*double(num_total-num_category1)/double(num_total)),
+//            y1(double(num_category1)/double(num_total))
+        {}
 
         double operator()(const unsigned& classNum)
         {

@@ -71,7 +71,7 @@ void mbl_stochastic_data_collector<T>::record(const T& v)
   }
   else
   {
-    double nSamples = samples_.size();
+    double nSamples = static_cast<double>(samples_.size());
     // recalculate probability from scratch each time to avoid accumulation of rounding errors.
     double prob = nSamples * nSamples / (nPresented_ * (nSamples+1));
     nPresented_ ++;
@@ -109,7 +109,7 @@ bool mbl_stochastic_data_collector<T>::store_next()
   }
   else
   {
-    double nSamples = samples_.size();
+    double nSamples = static_cast<double>(samples_.size());
     // recalculate probability from scratch each time
     //   to avoid accumulation of rounding errors.
     double prob = nSamples * nSamples / (nPresented_ * (nSamples+1));

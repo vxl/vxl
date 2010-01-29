@@ -77,7 +77,7 @@ int mbl_log_streambuf::sync()
 {
 #ifndef MBL_LOG_DISABLE_ALL_LOGGING
 
-  vcl_ptrdiff_t n = pptr() - pbase();
+  int n = static_cast<int>(pptr() - pbase()); // has to be int because pbump only takes int
 
   if (n)
     logger_->output_->append(pbase(), n);
@@ -91,7 +91,7 @@ int mbl_log_streambuf::sync()
 int mbl_log_streambuf::overflow(int ch)
 {
 #ifndef MBL_LOG_DISABLE_ALL_LOGGING
-  vcl_ptrdiff_t n = pptr() - pbase();
+  int n = static_cast<int>(pptr() - pbase()); // has to be int because pbump only takes int
 
   if (n)
     logger_->output_->append(pbase(), n);
@@ -113,7 +113,7 @@ vcl_streamsize mbl_log_streambuf::xsputn( const char *ptr, vcl_streamsize nchar)
 #ifndef MBL_LOG_DISABLE_ALL_LOGGING
 
   // Output anything already in buffer
-  long n = pptr() - pbase();
+  int n = static_cast<int>(pptr() - pbase()); // has to be int because pbump only takes int
   if (n)
     logger_->output_->append(pbase(), n);
   pbump(-n);  // Reset pptr().

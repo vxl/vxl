@@ -33,7 +33,7 @@ inflate_blocks_statef *s;
 z_streamp z;
 {
   inflate_huft *t;      /* temporary pointer */
-  uInt e;               /* extra bits or operation */
+  size_t e;               /* extra bits or operation */
   uLong b;              /* bit buffer */
   uInt k;               /* bits in bit buffer */
   Bytef *p;             /* input data pointer */

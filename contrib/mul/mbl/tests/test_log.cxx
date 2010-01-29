@@ -22,7 +22,7 @@ namespace
     test_streambuf(): messages(1) {}
     virtual int sync ()
     {
-      vcl_ptrdiff_t n = pptr() - pbase();
+      int n = static_cast<int>(pptr() - pbase()); // Can't be larger than int. See pbump in c++ standard
 
       if (n)
         messages.back().append(pbase(), n);
@@ -35,7 +35,7 @@ namespace
 
     virtual int overflow (int ch)
     {
-      vcl_ptrdiff_t n = pptr() - pbase();
+      int n = static_cast<int>(pptr() - pbase()); // Can't be larger than int. See pbump in c++ standard
 
       if (n)
         messages.back().append(pbase(), n);
@@ -52,7 +52,7 @@ namespace
     virtual vcl_streamsize xsputn(const char *ptr, vcl_streamsize nchar)
     {
       // Output anything already in buffer
-      long n = pptr() - pbase();
+      int n = static_cast<int>(pptr() - pbase()); // Can't be larger than int. See pbump in c++ standard
       if (n)
         messages.back().append(pbase(), n);
       pbump(-n);  // Reset pptr().

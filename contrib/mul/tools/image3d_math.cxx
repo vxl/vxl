@@ -1682,7 +1682,7 @@ class operations
     typedef vcl_pair<vcl_vector<vcl_string>::iterator, vcl_vector<vcl_string>::iterator> range_t;
     range_t range =
       vcl_equal_range(singleton_.names_.begin(), singleton_.names_.end(), name);
-    for (unsigned i = distance(singleton_.names_.begin(), range.first),
+    for (vcl_ptrdiff_t i = distance(singleton_.names_.begin(), range.first),
          end = distance(singleton_.names_.begin(), range.second); i!=end; ++i)
     {
       if (operation_type_matches(singleton_.function_types_[i], stack))

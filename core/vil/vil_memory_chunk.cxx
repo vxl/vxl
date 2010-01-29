@@ -14,7 +14,7 @@ vil_memory_chunk::vil_memory_chunk()
 }
 
 //: Allocate n bytes of memory
-vil_memory_chunk::vil_memory_chunk(unsigned long n, vil_pixel_format pixel_form)
+vil_memory_chunk::vil_memory_chunk(vcl_size_t n, vil_pixel_format pixel_form)
 : data_(new char[n]), size_(n), pixel_format_(pixel_form), ref_count_(0)
 {
   assert(vil_pixel_format_num_components(pixel_form)==1

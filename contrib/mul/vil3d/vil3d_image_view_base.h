@@ -17,6 +17,7 @@
 #include <vcl_iosfwd.h>
 #include <vcl_string.h>
 #include <vcl_cassert.h>
+#include <vcl_cstddef.h>
 #include <vil/vil_pixel_format.h>
 #include <vil/vil_smart_ptr.h>
 
@@ -56,7 +57,7 @@ class vil3d_image_view_base
   unsigned nplanes() const {return nplanes_;}
 
   //: The number of pixels.
-  unsigned long size() const { return ni_ * nj_ * nk_ * nplanes_; }
+  vcl_size_t size() const { return static_cast<vcl_size_t>(ni_) * nj_ * nk_ * nplanes_; }
 
   //: resize current planes to ni x nj * nk
   // If already correct size, this function returns quickly

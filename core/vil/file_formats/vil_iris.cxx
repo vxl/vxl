@@ -366,9 +366,9 @@ bool vil_iris_generic_image::put_view( vil_image_view_base const& buf, unsigned 
   const unsigned char* ob = buff.top_left_ptr();
   unsigned int pix_size = vil_pixel_format_sizeof_components(format_);
 
-  vxl_uint_32 rowsize = pix_size*buf.ni();
-  vxl_uint_32 rowskip = pix_size*buff.jstep();
-  vxl_uint_32 planeskip = pix_size*buff.planestep();
+  vcl_size_t rowsize = pix_size*buf.ni();
+  vcl_ptrdiff_t rowskip = pix_size*buff.jstep();
+  vcl_size_t planeskip = pix_size*buff.planestep();
 
   if (VXL_LITTLE_ENDIAN && pix_size > 1) // IRIS image data is big-endian
   {

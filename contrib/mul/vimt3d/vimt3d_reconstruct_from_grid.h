@@ -25,7 +25,7 @@ inline void vimt3d_reconstruct_ic_safe(double val, double x, double y, double z,
   int ix=vnl_math_rnd(x);
   int iy=vnl_math_rnd(y);
   int iz=vnl_math_rnd(z);
-  int index = (ix  *xstep) + (iy  *ystep) + (iz  *zstep);
+  vcl_ptrdiff_t index = (ix  *xstep) + (iy  *ystep) + (iz  *zstep);
 
   // now add or set the image values
   if (add_data)
@@ -65,7 +65,7 @@ inline void vimt3d_reconstruct_ic_no_checks(double val, double x, double y, doub
   assert (ix >= 0 && ix < ni);
   assert (iy >= 0 && iy < nj);
   assert (iz >= 0 && iz < nk);
-  int index = (ix  *xstep) + (iy  *ystep) + (iz  *zstep);
+  vcl_ptrdiff_t index = (ix  *xstep) + (iy  *ystep) + (iz  *zstep);
 
   // now add or set the image values
   double new_val = add_data ? data[index]+val : val;

@@ -112,15 +112,15 @@ vil1_streampos vil1_stream_fstream::tell() const
   assert(id > 0);
   if (flags_ & vcl_ios_in) {
     xerr << "tellg\n";
-    return f_.tellg();
+    return static_cast<vil1_streampos>(f_.tellg());
   }
   if (flags_ & vcl_ios_out) {
     xerr << "tellp\n";
-    return f_.tellp();
+    return static_cast<vil1_streampos>(f_.tellp());
   }
 
   assert(false); // did you get here? use at least one of vcl_ios_in, vcl_ios_out.
-  return (vil1_streampos)(-1L);
+  return static_cast<vil1_streampos>(-1L);
 }
 
 void vil1_stream_fstream::seek(vil1_streampos position)
@@ -146,7 +146,7 @@ void vil1_stream_fstream::seek(vil1_streampos position)
   }
   else if (fo) {
     xerr << "seekp to " << position << vcl_endl;
-    int at = f_.tellp();
+    int at = static_cast<vil1_streampos>(f_.tellp());
     if (position != at) {
       xerr << "seekp to " << position << ", at " << (long)f_.tellp() << vcl_endl;
       f_.seekp(position);
