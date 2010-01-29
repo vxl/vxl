@@ -15,6 +15,7 @@
 // \author  rob@stellarscience.com
 // \date 28 Jun 05
 
+#include "vcl_compiler.h"
 #include <vil/vil_stream.h>
 
 //: A vil_stream implementation using vcl_fstream
@@ -22,6 +23,10 @@ class vil_stream_fstream64 : public vil_stream
 {
  public:
   vil_stream_fstream64(char const* filename, char const* mode);
+
+#if defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
+  vil_stream_fstream64(wchar_t const* filename, char const* mode);
+#endif
 
   // implement virtual vil_stream interface:
   bool ok() const { return fd_ != -1; }
