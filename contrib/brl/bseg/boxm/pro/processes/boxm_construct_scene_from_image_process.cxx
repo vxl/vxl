@@ -15,7 +15,9 @@
 
 #include <boxm/boxm_scene_base.h>
 #include <boxm/boxm_scene.h>
-#include <boxm/opt/boxm_generate_shadow_sample_functor.h>
+#include <boxm/boxm_apm_traits.h>
+#include <boxm/boxm_mog_grey_processor.h>
+#include <boxm/boxm_simple_grey_processor.h>
 #include <vil/vil_convert.h>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_image_view.h>
@@ -89,7 +91,8 @@ namespace boxm_construct_scene_from_image_process_globals
     vcl_vector<boct_tree_cell<short, T >* > tleaves;
     tleaves = tree->leaf_cells();
     vcl_size_t i = 0;
-    vcl_vector<boct_tree_cell<short, T >* >::iterator lit = tleaves.begin();
+    typename vcl_vector<boct_tree_cell<short, T >* >::iterator lit =
+      tleaves.begin();
     for (; lit!= tleaves.end(); ++lit, ++i)
       {
         boct_loc_code<short> code = (*lit)->get_code();
@@ -114,7 +117,8 @@ namespace boxm_construct_scene_from_image_process_globals
           {
             if (found) {
               boxm_sample<BOXM_APM_MOG_GREY> data(1.0f);
-              boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_processor::update(data.appearance(),image_int[found_k],1.0);
+              typedef boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_processor aproc;
+              aproc::update(data.appearance(),image_int[found_k],1.0);
               cell_mog_grey_ptr->set_data(data);
             }else{
               boxm_sample<BOXM_APM_MOG_GREY> data(0.0f);               
