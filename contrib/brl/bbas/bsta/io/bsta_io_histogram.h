@@ -51,9 +51,9 @@ vsl_b_read(vsl_b_istream &is, bsta_histogram<T>& h, bool skip = false)
 {
   short ver;
   int itype = 0;
-  if(!skip){
+  if (!skip){
   vsl_b_read(is, ver);
-  if(ver != 1)
+  if (ver != 1)
     return;
   vsl_b_read(is, itype);
   }
@@ -113,7 +113,7 @@ vsl_b_read(vsl_b_istream &is, bsta_joint_histogram<T>& h)
 {
   short ver;
   vsl_b_read(is, ver);
-  if(ver != 1)
+  if (ver != 1)
     return;
   int nbins_a, nbins_b;
   T min_a, max_a, min_b, max_b, min_prob;
@@ -142,44 +142,45 @@ vsl_print_summary(vcl_ostream &os, const bsta_joint_histogram<T>& h)
   os << "bsta_joint_histogram\n";
   h.print(os);
 }
+
 //: Implement for key basic types
 void vsl_b_write(vsl_b_ostream &os, const bsta_histogram_sptr& hptr)
 {
   bsta_histogram<float>* hf = dynamic_cast<bsta_histogram<float>*>(hptr.ptr());
-  if(hf){ vsl_b_write(os, *hf); return;}
+  if (hf) { vsl_b_write(os, *hf); return; }
   bsta_histogram<double>* hd=dynamic_cast<bsta_histogram<double>*>(hptr.ptr());
-  if(hd){ vsl_b_write(os, *hd); return;}
+  if (hd) { vsl_b_write(os, *hd); return; }
 }
-void vsl_b_read(vsl_b_istream &is, bsta_histogram_sptr& hptr){
+
+void vsl_b_read(vsl_b_istream &is, bsta_histogram_sptr& hptr)
+{
   short ver;
   vsl_b_read(is, ver);
-  if(ver != 1)
+  if (ver != 1)
     return;
   hptr = 0;
   int itype = 0;
   vsl_b_read(is, itype);
-  bsta_histogram_base::bsta_hist_type type = 
-	  static_cast<bsta_histogram_base::bsta_hist_type>(itype);
-  if(type == bsta_histogram_base::HIST_TYPE_UNKNOWN) return;
-  if(type == bsta_histogram_base::HIST_TYPE_FLOAT)
-    {
-      bsta_histogram<float> h;
-      vsl_b_read(is, h, true);
-      hptr = new bsta_histogram<float>(h);
-      return;
-    }
-  if(type == bsta_histogram_base::HIST_TYPE_DOUBLE)
-    {
-      bsta_histogram<double> h;
-      vsl_b_read(is, h, true);
-      hptr = new bsta_histogram<double>(h);
-      return;
-    }
+  bsta_histogram_base::bsta_hist_type type =
+    static_cast<bsta_histogram_base::bsta_hist_type>(itype);
+  if (type == bsta_histogram_base::HIST_TYPE_UNKNOWN) return;
+  if (type == bsta_histogram_base::HIST_TYPE_FLOAT)
+  {
+    bsta_histogram<float> h;
+    vsl_b_read(is, h, true);
+    hptr = new bsta_histogram<float>(h);
+    return;
+  }
+  if (type == bsta_histogram_base::HIST_TYPE_DOUBLE)
+  {
+    bsta_histogram<double> h;
+    vsl_b_read(is, h, true);
+    hptr = new bsta_histogram<double>(h);
+    return;
+  }
 }
-      
 
 void vsl_b_write(vsl_b_ostream &os, const bsta_joint_histogram_sptr& /*hptr*/);
-
 
 void vsl_b_read(vsl_b_istream &is, bsta_joint_histogram_sptr& /*hptr*/);
 
