@@ -3,7 +3,6 @@
 #include <testlib/testlib_test.h>
 #include <vcl_cmath.h>
 #include <bsta/bsta_histogram.h>
-#include <bsta/bsta_histogram_sptr.h>
 #include <bsta/bsta_joint_histogram.h>
 #include <bsta/bsta_int_histogram_1d.h>
 #include <bsta/bsta_int_histogram_2d.h>
@@ -11,6 +10,7 @@
 #include <vcl_iostream.h>
 #include <bsta/io/bsta_io_histogram.h>
 #include <vsl/vsl_binary_io.h>
+
 #include <bsta/bsta_histogram_sptr.h>
 #include <bsta/bsta_joint_histogram_sptr.h>
 
@@ -110,7 +110,7 @@ void test_bsta_histogram()
   // Test joint histogram with different range and granularity in a and b
   double min_a = -10.0, max_a = 10.0, min_b = -20.0, max_b = 20.0;
   unsigned nbins_a = 11, nbins_b = 21, r0 = 5, c0 = 10;
-  bsta_joint_histogram<double> jh_m(min_a, max_a, nbins_a, 
+  bsta_joint_histogram<double> jh_m(min_a, max_a, nbins_a,
                                     min_b, max_b, nbins_b);
   jh_m.upcount(0.0, 0.5, 0.0, 0.5);
   double vol = jh_m.volume();
@@ -145,8 +145,8 @@ void test_bsta_histogram()
   bsta_histogram_sptr hptr_in = 0;
   vsl_b_read(sis, hptr_in);
   TEST("histogram sptr read", hptr_in!=0, true);
-  if(hptr_in!=0){
-    bsta_histogram<double>* hp = 
+  if (hptr_in!=0) {
+    bsta_histogram<double>* hp =
       static_cast<bsta_histogram<double>*>(hptr_in.ptr());
     nbins_in = hp->nbins();
     max_in = hp->max();
