@@ -73,7 +73,24 @@ static void test_proj_camera()
   vgl_homg_line_3d_2_points<double> l3 = P1.backproject( y3 );
   vgl_homg_point_2d<double> y3b = P1.project( l3.point_finite() );
   TEST_NEAR( "point backprojection", y3.x() * y3b.w(), y3b.x() * y3.w(), 1e-06 );
-
+  //Point backprojection - ray direction
+  double actual_cam_list[12] ={437.5, 128.5575, -153.20889, 20153.20898,
+                               0.0,  -206.5869, -434.42847, 20434.42968,
+                               0.0,     0.642787, -0.76604,   100.7660};
+  vnl_matrix_fixed<double,3,4> act_cam_matrix(actual_cam_list);
+  vpgl_proj_camera<double> Pact(act_cam_matrix);
+  vgl_homg_point_3d<double> xc = Pact.camera_center();
+  double u=0, v=0;
+  Pact.project(0.0, 0.0, 0.0, u, v);
+  vgl_homg_point_2d<double> img_pt(u, v, 1.0);
+  vgl_homg_line_3d_2_points<double> line = Pact.backproject(img_pt);
+  vgl_homg_point_3d<double> inf_pt = line.point_infinite();
+  vgl_vector_3d<double> dir(inf_pt.x(), inf_pt.y(), inf_pt.z());
+  normalize(dir);
+  vgl_vector_3d<double> act_dir(-xc.x(), -xc.y(), -xc.z());
+  normalize(act_dir);
+  double er = (dir-act_dir).length();
+  TEST_NEAR("Ray direction actual", er, 0.0, 1.0e-6);
   // Plane backprojection.
   P2.set_matrix( random_matrix );
   vgl_homg_line_2d<double> l4(1,-2,3);
@@ -139,7 +156,7 @@ static void test_proj_camera()
   // Test basic projection method
   vpgl_proj_camera<double> Pb;
   Pb.set_matrix( random_matrix );
-  double u = 0, v = 0;
+  u = 0, v = 0;
   double X = x1.x(), Y = x1.y(), Z = x1.z();
   Pb.project(X, Y, Z, u, v);
   TEST_NEAR( "base class point projection", y2(0)/u - y2(1)/v, 0.0, 0.001);
