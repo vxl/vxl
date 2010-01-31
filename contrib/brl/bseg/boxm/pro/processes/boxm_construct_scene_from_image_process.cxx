@@ -1,4 +1,5 @@
-// This is brl/bseg/boxm/opt/pro/processes/boxm_construct_scene_from_image_process.cxx
+// This is brl/bseg/boxm/pro/processes/boxm_construct_scene_from_image_process.cxx
+#include <bprb/bprb_func_process.h>
 //:
 // \file
 // \brief Process to construct an ideal scene for testing
@@ -8,8 +9,6 @@
 // \verbatim
 //  Modifications
 // \endverbatim
-
-#include <bprb/bprb_func_process.h>
 
 #include <vcl_fstream.h>
 
@@ -27,7 +26,7 @@ namespace boxm_construct_scene_from_image_process_globals
 {
   // The image area should be a multiple of area unit, e.g. 64.
   // This granularity is useful for parallel implementation
-  template <class T> 
+  template <class T>
   void tree_from_image(vil_image_view<float> const& image,
                        unsigned area_unit,
                        unsigned& base_ni, unsigned& base_nj,
@@ -56,14 +55,14 @@ namespace boxm_construct_scene_from_image_process_globals
     float upper_v=(mnj-1)*rnj;
     for (unsigned j=0; j<mnj; ++j)
       for (unsigned i=0; i<mni; ++i)
-        {
-          float u = static_cast<float>(i)*rni;
-          float v = upper_v-static_cast<float>(j)*rnj;
-          vgl_point_3d<double> p(u, v, 0.0f);
-          boct_loc_code<short> loc(p, n_levels-1);
-          leaf_codes.push_back(loc);
-          image_int.push_back(image(i,j));
-        }
+      {
+        float u = static_cast<float>(i)*rni;
+        float v = upper_v-static_cast<float>(j)*rnj;
+        vgl_point_3d<double> p(u, v, 0.0f);
+        boct_loc_code<short> loc(p, n_levels-1);
+        leaf_codes.push_back(loc);
+        image_int.push_back(image(i,j));
+      }
     //construct leaves
     vcl_vector<boct_tree_cell<short, T > > leaves;
     for (unsigned i = 0; i<leaf_codes.size(); ++i) {
@@ -94,49 +93,46 @@ namespace boxm_construct_scene_from_image_process_globals
     typename vcl_vector<boct_tree_cell<short, T >* >::iterator lit =
       tleaves.begin();
     for (; lit!= tleaves.end(); ++lit, ++i)
+    {
+      boct_loc_code<short> code = (*lit)->get_code();
+      bool found = false;
+      unsigned found_k = 0;
+      for (unsigned k = 0; k<leaf_codes.size()&&!found; ++k)
+        if (code == leaf_codes[k]) {
+          found = true;
+          found_k = k;
+        }
+      if (boct_tree_cell<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > * cell_grey_ptr = reinterpret_cast<boct_tree_cell<short, boxm_sample<BOXM_APM_SIMPLE_GREY> >* >(*lit))
       {
-        boct_loc_code<short> code = (*lit)->get_code();
-        bool found = false;
-        unsigned found_k = 0;
-        for (unsigned k = 0; k<leaf_codes.size()&&!found; ++k)
-          if (code == leaf_codes[k]) {
-            found = true;
-            found_k = k;
-          }
-        if(boct_tree_cell<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > * cell_grey_ptr = reinterpret_cast<boct_tree_cell<short, boxm_sample<BOXM_APM_SIMPLE_GREY> >* >(*lit))
-          {
-            if (found) {
-              boxm_sample<BOXM_APM_SIMPLE_GREY> data(1.0f,boxm_sample<BOXM_APM_SIMPLE_GREY>::apm_datatype(image_int[found_k],0.0008f));
-              cell_grey_ptr->set_data(data);
-            }else{
-              boxm_sample<BOXM_APM_SIMPLE_GREY> data(0.0f,boxm_sample<BOXM_APM_SIMPLE_GREY>::apm_datatype(0.0f,0.0008f));
-              cell_grey_ptr->set_data(data);
-            }
-          }
-        else if(boct_tree_cell<short, boxm_sample<BOXM_APM_MOG_GREY> > * cell_mog_grey_ptr = reinterpret_cast<boct_tree_cell<short, boxm_sample<BOXM_APM_MOG_GREY> >* >(*lit))
-          {
-            if (found) {
-              boxm_sample<BOXM_APM_MOG_GREY> data(1.0f);
-              typedef boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_processor aproc;
-              aproc::update(data.appearance(),image_int[found_k],1.0);
-              cell_mog_grey_ptr->set_data(data);
-            }else{
-              boxm_sample<BOXM_APM_MOG_GREY> data(0.0f);               
-              cell_mog_grey_ptr->set_data(data);
-            }
-          }
-        else if(boct_tree_cell<short, float > * cell_float_ptr
-                =reinterpret_cast<boct_tree_cell<short, float >* >(*lit))
-          {
-            if (found) {
-
-              float data(1.0f);
-              cell_float_ptr->set_data(data);
-
-            }
-          }
+        if (found) {
+          boxm_sample<BOXM_APM_SIMPLE_GREY> data(1.0f,boxm_sample<BOXM_APM_SIMPLE_GREY>::apm_datatype(image_int[found_k],0.0008f));
+          cell_grey_ptr->set_data(data);
+        }else{
+          boxm_sample<BOXM_APM_SIMPLE_GREY> data(0.0f,boxm_sample<BOXM_APM_SIMPLE_GREY>::apm_datatype(0.0f,0.0008f));
+          cell_grey_ptr->set_data(data);
+        }
       }
-
+      else if (boct_tree_cell<short, boxm_sample<BOXM_APM_MOG_GREY> > * cell_mog_grey_ptr = reinterpret_cast<boct_tree_cell<short, boxm_sample<BOXM_APM_MOG_GREY> >* >(*lit))
+      {
+        if (found) {
+          boxm_sample<BOXM_APM_MOG_GREY> data(1.0f);
+          typedef boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_processor aproc;
+          aproc::update(data.appearance(),image_int[found_k],1.0);
+          cell_mog_grey_ptr->set_data(data);
+        }else{
+          boxm_sample<BOXM_APM_MOG_GREY> data(0.0f);
+          cell_mog_grey_ptr->set_data(data);
+        }
+      }
+      else if (boct_tree_cell<short, float > * cell_float_ptr
+               =reinterpret_cast<boct_tree_cell<short, float >* >(*lit))
+      {
+        if (found) {
+          float data(1.0f);
+          cell_float_ptr->set_data(data);
+        }
+      }
+    }
   }
   const unsigned n_inputs_ = 4;
   const unsigned n_outputs_ = 1;
@@ -171,10 +167,10 @@ bool boxm_construct_scene_from_image_process(bprb_func_process& pro)
   using namespace boxm_construct_scene_from_image_process_globals;
 
   if ( !pro.verify_inputs()){
-    vcl_cout << pro.name() << "boxm_construct_scene_from_image_process: invalid inputs" << vcl_endl;
+    vcl_cerr << pro.name() << "boxm_construct_scene_from_image_process: invalid inputs\n";
     return false;
   }
-  
+
   //get inputs:
   unsigned i = 0;
   vil_image_view_base_sptr image = pro.get_input<vil_image_view_base_sptr>(i++);
@@ -182,38 +178,38 @@ bool boxm_construct_scene_from_image_process(bprb_func_process& pro)
   vcl_string scene_dir =  pro.get_input<vcl_string>(i++);
   vcl_string xml_path =  pro.get_input<vcl_string>(i++);
   if (image == 0) {
-    vcl_cout << "boxm_construct_scene_from_image_process: null image value, cannot run" << vcl_endl;
+    vcl_cerr << "boxm_construct_scene_from_image_process: null image value, cannot run\n";
     return false;
   }
   unsigned ni = image->ni(), nj = image->nj();
   vil_image_view<float> img = *vil_convert_cast(float(), image);
   if (image->pixel_format() == VIL_PIXEL_FORMAT_BYTE)
     vil_math_scale_values(img,1.0/255.0);
-  
+
   unsigned base_ni =0, base_nj=0;
   vcl_string block_prefix = "ideal";
   boxm_scene_base_sptr scene_base = 0;
-  if(app_type == "simple_grey")
-    {
-      typedef boxm_sample<BOXM_APM_SIMPLE_GREY> data_type;
-      boct_tree<short, data_type>* tree = 0;
-      tree_from_image<data_type>(img, 16, base_ni, base_nj,tree);
-      if(tree == 0) return false;
-      boxm_block<boct_tree<short, data_type> >* blk = 
-        new boxm_block<boct_tree<short, data_type> >(tree->bounding_box(), tree);
-      vgl_box_3d<double> bb = blk->bounding_box();
-      vgl_point_3d<double> origin(0,0,0);
-      vgl_vector_3d<double> block_dim(bb.width(),bb.height(),bb.depth());
-      vgl_vector_3d<unsigned> world_dim(1,1,1);
-      boxm_scene<boct_tree<short, data_type> >* scene
-        = new boxm_scene<boct_tree<short, data_type> >(origin, block_dim, world_dim);
-      scene->set_appearance_model(BOXM_APM_SIMPLE_GREY);
-      scene->set_block(vgl_point_3d<int>(0,0,0), blk);
-      scene->set_path(scene_dir, block_prefix);
-      scene->write_scene(xml_path);
-      scene->write_active_block();
-      scene_base = scene;
-    }
+  if (app_type == "simple_grey")
+  {
+    typedef boxm_sample<BOXM_APM_SIMPLE_GREY> data_type;
+    boct_tree<short, data_type>* tree = 0;
+    tree_from_image<data_type>(img, 16, base_ni, base_nj,tree);
+    if (tree == 0) return false;
+    boxm_block<boct_tree<short, data_type> >* blk =
+      new boxm_block<boct_tree<short, data_type> >(tree->bounding_box(), tree);
+    vgl_box_3d<double> bb = blk->bounding_box();
+    vgl_point_3d<double> origin(0,0,0);
+    vgl_vector_3d<double> block_dim(bb.width(),bb.height(),bb.depth());
+    vgl_vector_3d<unsigned> world_dim(1,1,1);
+    boxm_scene<boct_tree<short, data_type> >* scene
+      = new boxm_scene<boct_tree<short, data_type> >(origin, block_dim, world_dim);
+    scene->set_appearance_model(BOXM_APM_SIMPLE_GREY);
+    scene->set_block(vgl_point_3d<int>(0,0,0), blk);
+    scene->set_path(scene_dir, block_prefix);
+    scene->write_scene(xml_path);
+    scene->write_active_block();
+    scene_base = scene;
+  }
   pro.set_output(0, new brdb_value_t<boxm_scene_base_sptr>(scene_base));
   return true;
 }
