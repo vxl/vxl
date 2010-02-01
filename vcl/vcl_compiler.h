@@ -124,15 +124,15 @@
 #  if _MSC_VER >= 1300
 #   define VCL_VC_DOTNET 1 // VC is at least version >= 7.0
 #  endif
-#  if _MSC_VER >= 1400     // .NET 2005 = Version 8.x
-#   ifndef _CRT_SECURE_NO_DEPRECATE
-#    define _CRT_SECURE_NO_DEPRECATE 1
-#   endif
+
+// In future use VCL_VC_13_1 for 13.1, etc.
+#  if _MSC_VER >= 1600     // Visual Studio 2010 = Version 10.x
+#   define VCL_VC_10
+#  elif _MSC_VER >= 1500     // Visual Studio 2008 = Version 9.x
+#   define VCL_VC_9
+#  elif _MSC_VER >= 1400   // .NET 2005 = Version 8.x
 #   define VCL_VC_8
-#   if _MSC_VER >= 1400
-#    define VCL_VC_80 1    // version 8.0
-#    define VCL_VC80       // (deprecated)
-#   endif
+#   define VCL_VC80 1      // (deprecated)
 #  elif _MSC_VER >= 1300   // .NET 2003 = Version 7.x
 #   define VCL_VC_7
 #   if _MSC_VER >= 1310
@@ -179,6 +179,13 @@
 // 4267: conversion related to size_t
 // 4355: 'this' : used in base member initializer list
 #    pragma warning(disable:4786 4355)
+#  endif
+
+// Disable warnings about C standard library functions.
+#  if _MSC_VER >= 1400   // .NET 2005 = Version 8.x
+#   ifndef _CRT_SECURE_NO_DEPRECATE
+#    define _CRT_SECURE_NO_DEPRECATE 1
+#   endif
 #  endif
 #endif
 
