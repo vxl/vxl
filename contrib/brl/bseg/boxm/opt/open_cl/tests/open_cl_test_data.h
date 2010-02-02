@@ -39,8 +39,7 @@ class open_cl_test_data
 
 };
 template <class T> 
-boct_tree<short,T > *
-open_cl_test_data::tree()
+boct_tree<short,T > * open_cl_test_data::tree()
 {
   vcl_vector<boct_tree_cell<short, T > > leaves;
   vcl_vector<vgl_point_3d<double> > pts;
@@ -75,7 +74,7 @@ open_cl_test_data::tree()
   vcl_vector<boct_tree_cell<short, T >* > tleaves;
   tleaves = ret_tree->leaf_cells();
   vcl_size_t i = 0;
-  vcl_vector<boct_tree_cell<short, T >* >::iterator lit = tleaves.begin();
+  typename vcl_vector<boct_tree_cell<short, T >* >::iterator lit = tleaves.begin();
   for (; lit!= tleaves.end(); ++lit, ++i)
   {
     T v((float)1.0*i);
@@ -154,7 +153,7 @@ tree_and_rays_from_image(vcl_string const& image_path,
   vcl_vector<boct_tree_cell<short, T >* > tleaves;
   tleaves = tree->leaf_cells();
   vcl_size_t i = 0;
-  vcl_vector<boct_tree_cell<short, T >* >::iterator lit = tleaves.begin();
+  typename vcl_vector<boct_tree_cell<short, T >* >::iterator lit = tleaves.begin();
 
   for (; lit!= tleaves.end(); ++lit, ++i)
   {
@@ -212,8 +211,8 @@ tree_and_rays_from_image(vcl_string const& image_path,
 template <class T> 
 void open_cl_test_data::save_tree(vcl_string const& tree_path)
 {
-  boxm_ray_trace_manager<T>* ray_mgr = boxm_ray_trace_manager<T>::instance();
-  boct_tree<short,T >* tree = open_cl_test_data<T>::tree();
+  boxm_ray_trace_manager<T>* ray_mgr = typename boxm_ray_trace_manager<T>::instance();
+  boct_tree<short,T >* tree = typename open_cl_test_data::tree<T>();
   ray_mgr->set_tree(tree);
   ray_mgr->write_tree(tree_path);
   ray_mgr->set_tree(0);

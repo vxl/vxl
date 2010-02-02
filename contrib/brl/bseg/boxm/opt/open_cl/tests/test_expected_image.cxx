@@ -173,6 +173,7 @@ bool update_world(vcl_string scene_name,vcl_string camname,vcl_string imgname)
     boxm_update_image_rt<short, boxm_sample<BOXM_APM_MOG_GREY> >(s,pcam,img,true);
     return true;
 }
+
 vil_image_view<float> render_image(vcl_string scene_name,vcl_string camname,unsigned ni,unsigned nj)
 {
     boxm_scene<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY > > > s;
@@ -180,7 +181,7 @@ vil_image_view<float> render_image(vcl_string scene_name,vcl_string camname,unsi
     vpgl_perspective_camera<double> *pcam=new vpgl_perspective_camera<double> ();
     vcl_ifstream ifs(camname.c_str());
     if(!ifs)
-        return false;
+        return vil_image_view<float>();
     else
         ifs >> (*pcam);
 
