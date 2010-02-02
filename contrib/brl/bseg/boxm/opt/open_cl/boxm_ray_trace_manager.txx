@@ -214,7 +214,7 @@ bool boxm_ray_trace_manager<T>::setup_camera()
 #if defined (_WIN32)
   svd_UtWV_ =  (cl_float*)_aligned_malloc( sizeof(cl_float16)*3, 16);
 #elif defined(__APPLE__)
-  svd_UtWV_ =  (cl_float*)malloc( sizeof(cl_float16)*3, 16);
+  svd_UtWV_ =  (cl_float*)malloc( sizeof(cl_float16)*3);
 #else
   svd_UtWV_ =  (cl_float*)memalign(16, sizeof(cl_float16)*3);
 #endif
@@ -253,7 +253,7 @@ bool boxm_ray_trace_manager<T>::setup_img_dims(unsigned ni,unsigned nj)
 #if defined (_WIN32)
   imgdims_ =  (cl_uint*)_aligned_malloc( sizeof(cl_uint4), 16);
 #elif defined(__APPLE__)
-  imgdims_ =  (cl_uint*)malloc( sizeof(cl_uint4), 16);
+  imgdims_ =  (cl_uint*)malloc( sizeof(cl_uint4));
 #else
   imgdims_ =  (cl_uint*)memalign(16, sizeof(cl_uint));
 #endif
@@ -272,7 +272,7 @@ bool boxm_ray_trace_manager<T>::setup_roi_dims(unsigned min_i,unsigned max_i,uns
 #if defined (_WIN32)
   roidims_ =  (cl_uint*)_aligned_malloc( sizeof(cl_uint4), 16);
 #elif defined(__APPLE__)
-  roidims_ =  (cl_uint*)malloc( sizeof(cl_uint4), 16);
+  roidims_ =  (cl_uint*)malloc( sizeof(cl_uint4));
 #else
   roidims_ =  (cl_uint*)memalign(16, sizeof(cl_uint));
 #endif
@@ -356,7 +356,7 @@ int boxm_ray_trace_manager<T>::setup_tree_input_buffers()
 {
   cl_int status = CL_SUCCESS;
   // Create and initialize memory objects
-  input_cell_buf_ = clCreateBuffer(context_,
+  input_cell_buf_ = clCreateBuffer(this->context_,
                                    CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                    cell_input_.size() * sizeof(cl_int4),
                                    cells_,
@@ -366,7 +366,7 @@ int boxm_ray_trace_manager<T>::setup_tree_input_buffers()
                        "clCreateBuffer (cell_array) failed."))
     return SDK_FAILURE;
 
-  input_data_buf_ = clCreateBuffer(context_,
+  input_data_buf_ = clCreateBuffer(this->context_,
                                    CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                    data_input_.size() * sizeof(cl_float16),
                                    cell_data_,
@@ -384,7 +384,7 @@ int boxm_ray_trace_manager<T>::setup_camera_input_buffer()
 {
   cl_int status = CL_SUCCESS;
   // Create and initialize memory objects
-  camera_buf_ = clCreateBuffer(context_,CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,sizeof(cl_float16)*3,svd_UtWV_,&status);
+  camera_buf_ = clCreateBuffer(this->context_,CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,sizeof(cl_float16)*3,svd_UtWV_,&status);
   if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (cell_array) failed."))
     return SDK_FAILURE;
   else
@@ -395,7 +395,7 @@ template<class T>
 int boxm_ray_trace_manager<T>::setup_roidims_input_buffer()
 {
   cl_int status = CL_SUCCESS;
-  roidims_buf_ = clCreateBuffer(context_,CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
+  roidims_buf_ = clCreateBuffer(this->context_,CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                 sizeof(cl_uint4),roidims_,&status);
   if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (cell_array) failed."))
     return SDK_FAILURE;
@@ -408,7 +408,7 @@ int boxm_ray_trace_manager<T>::setup_ray_origin_buffer()
 {
   cl_int status = CL_SUCCESS;
   // Create and initialize memory objects
-  ray_origin_buf_ = clCreateBuffer(context_,CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,sizeof(cl_float4),ray_origin_,&status);
+  ray_origin_buf_ = clCreateBuffer(this->context_,CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,sizeof(cl_float4),ray_origin_,&status);
   if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (ray origin) failed."))
     return SDK_FAILURE;
   else
@@ -419,11 +419,11 @@ template<class T>
 int boxm_ray_trace_manager<T>::setup_expected_img_buffer()
 {
   cl_int status = CL_SUCCESS;
-  expected_image_buf_ = clCreateBuffer(context_,CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
+  expected_image_buf_ = clCreateBuffer(this->context_,CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                        ni_*nj_* sizeof(cl_float4),ray_results_,&status);
   if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (expected image) failed."))
     return SDK_FAILURE;
-  out_expected_image_buf_ = clCreateBuffer(context_,CL_MEM_WRITE_ONLY | CL_MEM_USE_HOST_PTR,
+  out_expected_image_buf_ = clCreateBuffer(this->context_,CL_MEM_WRITE_ONLY | CL_MEM_USE_HOST_PTR,
                                            ni_*nj_* sizeof(cl_float4),ray_results_,&status);
   if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (expected image) failed."))
     return SDK_FAILURE;
@@ -435,7 +435,7 @@ template<class T>
 int boxm_ray_trace_manager<T>::setup_imgdims_buffer()
 {
   cl_int status = CL_SUCCESS;
-  imgdims_buf_ = clCreateBuffer(context_,CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
+  imgdims_buf_ = clCreateBuffer(this->context_,CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                 sizeof(cl_uint4),imgdims_,&status);
   if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (cell_array) failed."))
     return SDK_FAILURE;
@@ -448,7 +448,7 @@ int boxm_ray_trace_manager<T>::setup_tree_global_bbox_buffer()
 {
   cl_int status = CL_SUCCESS;
   // Create and initialize memory objects
-  global_bbox_buf_ = clCreateBuffer(context_,CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,sizeof(cl_float4),global_bbox_,&status);
+  global_bbox_buf_ = clCreateBuffer(this->context_,CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,sizeof(cl_float4),global_bbox_,&status);
   if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (ray origin) failed."))
     return SDK_FAILURE;
   else
@@ -472,7 +472,7 @@ int boxm_ray_trace_manager<T>::build_kernel_program()
   }
   const char * source = prog_.c_str();
 
-  program_ = clCreateProgramWithSource(context_,
+  program_ = clCreateProgramWithSource(this->context_,
                                        1,
                                        &source,
                                        sourceSize,
@@ -485,7 +485,7 @@ int boxm_ray_trace_manager<T>::build_kernel_program()
   // create a cl program executable for all the devices specified
   status = clBuildProgram(program_,
                           1,
-                          devices_,
+                          this->devices_,
                           NULL,
                           NULL,
                           NULL);
@@ -495,7 +495,7 @@ int boxm_ray_trace_manager<T>::build_kernel_program()
   {
     vcl_size_t len;
     char buffer[2048];
-    clGetProgramBuildInfo(program_, devices_[0],
+    clGetProgramBuildInfo(program_, this->devices_[0],
                           CL_PROGRAM_BUILD_LOG, sizeof(buffer), buffer, &len);
     vcl_printf("%s\n", buffer);
     return SDK_FAILURE;
@@ -798,7 +798,7 @@ bool boxm_ray_trace_manager<T>::write_tree(vcl_string const& path)
   vsl_b_ofstream os(path.c_str());
   if (!os)
     return false;
-  tree_->b_write(os);
+  tree_->b_write(os, false);
   os.close();
   return true;
 }
