@@ -72,6 +72,8 @@ class boxm_scene :public boxm_scene_base
 
   vgl_point_3d<double> origin() const { return origin_; }
 
+  void set_origin(vgl_point_3d<double> o) { origin_=o; }
+
   vgl_vector_3d<double> block_dim() const { return block_dim_; }
   
   bool save_internal_nodes() const {return save_internal_nodes_;}
@@ -131,11 +133,24 @@ class boxm_scene :public boxm_scene_base
   vcl_string gen_block_path(int x, int y, int z);
  
   void clean_scene();
+
+  vgl_point_3d<double> rpc_origin() const { return rpc_origin_; }
+
+  void set_rpc_origin(vgl_point_3d<double>& new_rpc_origin) {
+    vgl_point_3d<double> old_origin = origin();
+    vgl_point_3d<double> new_origin(
+      old_origin.x() + new_rpc_origin.x() - rpc_origin_.x(),
+      old_origin.y() + new_rpc_origin.y() - rpc_origin_.y(),
+      old_origin.z() + new_rpc_origin.z() - rpc_origin_.z());
+    set_origin(new_origin);
+    rpc_origin_ = new_rpc_origin;
+  }
+
  protected:
   bgeo_lvcs lvcs_;
   vgl_point_3d<double> origin_;
-
-  //: World dimensions of a block .e.g 1 meter x 1 metere x 1 meter
+  vgl_point_3d<double> rpc_origin_;
+  //: World dimensions of a block .e.g 1 meter x 1 meter x 1 meter
   vgl_vector_3d<double> block_dim_;
   vbl_array_3d<boxm_block<T>*> blocks_;
 
