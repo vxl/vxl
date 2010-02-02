@@ -20,4 +20,5 @@ void boxm_opt_register::register_process()
     REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_generate_edge_samples_process, "boxmGenerateEdgeSamplesProcess");
     REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_edge_update_process, "boxmEdgeUpdateProcess");
     REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_render_expected_edge_process, "boxmRenderExpectedEdgeProcess");
+    REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_rpc_registration_process, "boxmRPCRegistrationProcess");
 }
