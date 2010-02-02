@@ -6,6 +6,7 @@ SOURCES += boxm_merge_mog.cxx
 MANPAGE_SOURCES += boxm_split_sample.h
 MANPAGE_SOURCES += boxm_vrml_util.h
 MANPAGE_SOURCES += boxm_crop_scene.h
+MANPAGE_SOURCES += boxm_scene_to_bvxm_grid.h
 
 SUBDIRS += pro
 

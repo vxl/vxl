@@ -17,6 +17,9 @@ SOURCES += processes/boxm_roi_init_process.cxx
 SOURCES += processes/boxm_proj_local_cam_process.cxx
 SOURCES += processes/boxm_upload_mesh_process.cxx
 SOURCES += processes/boxm_replace_const_app_process.cxx
+SOURCES += processes/boxm_construct_scene_from_image_process.cxx
+SOURCES += processes/boxm_describe_scene_process.cxx
+SOURCES += processes/boxm_camera_viewing_scene_process.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk

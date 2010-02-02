@@ -5,6 +5,7 @@ include ${VXLROOT}/core/testlib/config.mk
 TESTMAIN := test_driver.cxx
 
 TESTS += test_boxm_scene_crop.cxx
+TESTS += test_boxm_scene_to_bvxm_grid.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
