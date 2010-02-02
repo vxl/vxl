@@ -172,7 +172,7 @@ void scene_kernel_operator()
 
   //operate on scene
   bvpl_scene_kernel_operator scene_oper;
-  scene_oper.operate(scene,functor, kernel, scene_out, 1, 0.5);
+  scene_oper.operate(scene,functor, kernel, scene_out, 1);
 
   //compare blocks of scene with single tree, result should be the same
   vcl_vector<boct_tree_cell<short,float>* > leaves_out = tree_out->leaf_cells();

@@ -22,8 +22,11 @@ class bvpl_scene_kernel_operator
  public:
   // "Convolves" kernel with an input octree, storing the output in an output octree.
   template<class T_data, class F>
-  void operate(boxm_scene<boct_tree<short, T_data > > &scene_in, F functor,
-               bvpl_kernel_sptr kernel, boxm_scene<boct_tree<short, T_data > > &scene_out, short level, double cell_length)
+  void operate(boxm_scene<boct_tree<short, T_data > > &scene_in,
+               F functor,
+               bvpl_kernel_sptr kernel,
+               boxm_scene<boct_tree<short, T_data > > &scene_out,
+               short level)
   {
     typedef boct_tree<short, T_data > tree_type;
     boxm_block_iterator<tree_type> iter_in = scene_in.iterator();
@@ -36,6 +39,7 @@ class bvpl_scene_kernel_operator
       tree_type *tree_in= (*iter_in)->get_tree();
       tree_type *tree_out = tree_in->clone();
       bvpl_octree_kernel_operator<T_data> oper(tree_in);
+      double cell_length = 1.0/(double)(1<<(tree_in->root_level() -level));
       oper.operate(functor, kernel, tree_out, level, cell_length);
       (*iter_out)->init_tree(tree_out);
       scene_out.write_active_block();
