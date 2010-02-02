@@ -129,6 +129,15 @@ SOURCE=.\processes/boxm_upload_mesh_process.cxx
 SOURCE=.\processes/boxm_replace_const_app_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/boxm_construct_scene_from_image_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm_describe_scene_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm_camera_viewing_scene_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+boxm_scene_base_sptr-.cxx
 # End Source File
 # End Group

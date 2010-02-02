@@ -218,6 +218,9 @@ SOURCE=.\test_driver.cxx
 SOURCE=.\test_boxm_scene_crop.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_boxm_scene_to_bvxm_grid.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

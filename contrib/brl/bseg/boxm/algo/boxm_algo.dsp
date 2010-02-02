@@ -110,6 +110,9 @@ SOURCE=.\boxm_merge_mog.h
 # Begin Source File
 SOURCE=.\boxm_crop_scene.h
 # End Source File
+# Begin Source File
+SOURCE=.\boxm_scene_to_bvxm_grid.h
+# End Source File
 # End Group
 # End Target
 # End Project
