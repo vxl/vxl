@@ -127,7 +127,7 @@ bool boxm_create_scene_process(bprb_func_process& pro)
         scene_ptr = scene;
       }
     }
-    else if (scene_ptr->appearence_model() == BSTA_F1) {
+    else if (scene_ptr->appearence_model() == BSTA_GAUSS_F1) {
       if (!scene_ptr->multi_bin())
       {
         typedef boct_tree<short,bsta_num_obs<bsta_gauss_f1> > tree_type;
