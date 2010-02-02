@@ -18,6 +18,7 @@ SET(boxm_opt_sources
    boxm_edge_updater.h                  boxm_edge_updater.txx
    boxm_generate_edge_sample_functor.h
    boxm_render_expected_edge_image_functor.h
+   boxm_rpc_registration.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates boxm_opt_sources)

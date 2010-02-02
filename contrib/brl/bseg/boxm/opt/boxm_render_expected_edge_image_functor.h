@@ -61,15 +61,15 @@ template<class T_data>
 class normalize_expected_functor_edge
 {
  public:
-   normalize_expected_functor_edge(float n_normal) : n_normal_(n_normal) {}
+   normalize_expected_functor_edge(float n_normal, unsigned int dof) : n_normal_(n_normal), dof_(dof) {vcl_cout << "Degree of freedom " << dof << vcl_endl; }
 
    void operator()(float mask, float &pix) const
    {
-    int dof = 4;//(int)world_->num_observations<EDGES>(0,scale)-1;
-    pix = sdet_img_edge::convert_edge_statistics_to_probability(pix,n_normal_,dof);
+    pix = sdet_img_edge::convert_edge_statistics_to_probability(pix,n_normal_,dof_);
    }
   
    float n_normal_;
+   unsigned int dof_;
 };
 
 
@@ -79,6 +79,7 @@ void boxm_render_edge_image_rt(boxm_scene<boct_tree<T_loc, T_data > > &scene,
                           vil_image_view<float> &expected,
                           vil_image_view<float> & mask,
                           float n_normal, 
+                          unsigned int num_samples, //degree of freedom
                           int bin = -1)
                           
 {
@@ -89,7 +90,7 @@ void boxm_render_edge_image_rt(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   expfunctor exp_functor(expected,mask,expected.ni(),expected.nj(),true,false);
   raytracer.run(exp_functor);
 
-  normalize_expected_functor_edge<T_data> norm_fn(n_normal);
+  normalize_expected_functor_edge<T_data> norm_fn(n_normal,num_samples-1);
   vil_transform2<float,float, normalize_expected_functor_edge<T_data> >(mask,expected,norm_fn);
 }
 
