@@ -25,7 +25,7 @@ AUX_SOURCE_DIRECTORY(Templates boxm_opt_sources)
 
 ADD_LIBRARY(boxm_opt ${boxm_opt_sources})
 
-TARGET_LINK_LIBRARIES(boxm_opt boxm vil vgl vpl vbl)
+TARGET_LINK_LIBRARIES(boxm_opt boxm vil vgl vpl vbl sdet)
 
 #processes
 SUBDIRS(pro)
