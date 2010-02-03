@@ -75,19 +75,7 @@ void vil3d_resample_trilinear_edge_extend(const vil3d_image_view<S>& src_image,
                                y0 + (n1-1)*dy1 + (n2-1)*dy2 + (n3-1)*dy3,
                                z0 + (n1-1)*dz1 + (n2-1)*dz2 + (n3-1)*dz3,
                                src_image);
-#ifndef NDEBUG
-  // corners
-  vcl_cout<<"src_image= "<<src_image<<vcl_endl
-          <<"x0="<<x0<<vcl_endl
-          <<"y0="<<y0<<vcl_endl
-          <<"z0="<<z0<<vcl_endl
-          <<"x0 + (n1-1)*dx1 + (n2-1)*dx2 + (n3-1)*dx3="
-          <<x0 + (n1-1)*dx1 + (n2-1)*dx2 + (n3-1)*dx3<<vcl_endl
-          <<"y0 + (n1-1)*dy1 + (n2-1)*dy2 + (n3-1)*dy3="
-          <<y0 + (n1-1)*dy1 + (n2-1)*dy2 + (n3-1)*dy3<<vcl_endl
-          <<"z0 + (n1-1)*dz1 + (n2-1)*dz2 + (n3-1)*dz3="
-          <<z0 + (n1-1)*dz1 + (n2-1)*dz2 + (n3-1)*dz3<<vcl_endl;
-#endif
+
   vil_convert_round_pixel<double, T> cast_and_possibly_round;
   // Rounds only if T is int, unsigned or kind of. Doesn't round if T
   // is float, double or kind of.
@@ -257,19 +245,7 @@ void vil3d_resample_trilinear(const vil3d_image_view<S>& src_image,
                                y0 + (n1-1+edge_tol)*dy1 + (n2-1+edge_tol)*dy2 + (n3-1+edge_tol)*dy3,
                                z0 + (n1-1+edge_tol)*dz1 + (n2-1+edge_tol)*dz2 + (n3-1+edge_tol)*dz3,
                                src_image);
-#ifndef NDEBUG
-  // corners
-  vcl_cout<<"src_image= "<<src_image<<vcl_endl
-          <<"x0="<<x0<<vcl_endl
-          <<"y0="<<y0<<vcl_endl
-          <<"z0="<<z0<<vcl_endl
-          <<"x0 + (n1-1)*dx1 + (n2-1)*dx2 + (n3-1)*dx3="
-          <<x0 + (n1-1)*dx1 + (n2-1)*dx2 + (n3-1)*dx3<<vcl_endl
-          <<"y0 + (n1-1)*dy1 + (n2-1)*dy2 + (n3-1)*dy3="
-          <<y0 + (n1-1)*dy1 + (n2-1)*dy2 + (n3-1)*dy3<<vcl_endl
-          <<"z0 + (n1-1)*dz1 + (n2-1)*dz2 + (n3-1)*dz3="
-          <<z0 + (n1-1)*dz1 + (n2-1)*dz2 + (n3-1)*dz3<<vcl_endl;
-#endif
+
   vil_convert_round_pixel<double, T> cast_and_possibly_round;
 
   const unsigned ni = src_image.ni();
