@@ -9,6 +9,7 @@ SOURCES += bvpl_octree_register.cxx
 SOURCES += processes/bvpl_save_vrml_process.cxx
 SOURCES += processes/bvpl_scene_vector_operator_process.cxx
 SOURCES += processes/bvpl_create_scene_process.cxx
+SOURCES += processes/bvpl_scene_kernel_operator_process.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk
