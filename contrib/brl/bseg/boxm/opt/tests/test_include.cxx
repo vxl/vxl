@@ -10,6 +10,7 @@
 #include <boxm/opt/boxm_render_expected_depth_functor.h>
 #include <boxm/opt/boxm_render_expected_edge_image_functor.h>
 #include <boxm/opt/boxm_render_expected_image_functor.h>
+#include <boxm/opt/boxm_rpc_registration.h>
 #include <boxm/opt/boxm_rt_sample.h>
 #include <boxm/opt/boxm_seg_length_functor.h>
 #include <boxm/opt/boxm_update_image_functor.h>
