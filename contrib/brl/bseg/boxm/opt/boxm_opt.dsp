@@ -227,6 +227,9 @@ SOURCE=.\boxm_render_expected_edge_image_functor.h
 # Begin Source File
 SOURCE=.\boxm_edge_updater.txx
 # End Source File
+# Begin Source File
+SOURCE=.\boxm_rpc_registration.h
+# End Source File
 # End Group
 # End Target
 # End Project

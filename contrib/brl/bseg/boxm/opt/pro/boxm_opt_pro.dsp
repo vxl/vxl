@@ -119,6 +119,9 @@ SOURCE=.\processes/boxm_generate_edge_samples_process.cxx
 # Begin Source File
 SOURCE=.\processes/boxm_edge_update_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\processes/boxm_rpc_registration_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
