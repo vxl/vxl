@@ -72,8 +72,8 @@ bool boxm_generate_edge_samples_process(bprb_func_process& pro)
   vil_image_view_base_sptr edge_image = pro.get_input<vil_image_view_base_sptr>(i++);
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(i++);
   boxm_scene_base_sptr scene = pro.get_input<boxm_scene_base_sptr>(i++);
-  vcl_string img_name =  pro.get_input<vcl_string>(i++); 
-  float n_normal = pro.get_input<float>(i++); 
+  vcl_string img_name =  pro.get_input<vcl_string>(i++);
+  float n_normal = pro.get_input<float>(i++);
 
   // get parameters
   int edge_prob_mask_size = 21;
@@ -87,13 +87,12 @@ bool boxm_generate_edge_samples_process(bprb_func_process& pro)
      return false;
   }
 
-  float new_n_normal = n_normal;
   vil_image_view<float> edge_prob_image;
   sdet_img_edge::estimate_edge_prob_image(edge_image, edge_prob_image, edge_prob_mask_size, edge_prob_mask_sigma);
   float edge_prob_image_mean;
   vil_math_mean(edge_prob_image_mean,edge_prob_image,0);
 
-  new_n_normal = n_normal + edge_prob_image_mean;
+  float new_n_normal = n_normal + edge_prob_image_mean;
 
   //vil_image_view_base_sptr edge_prob_image_sptr = new vil_image_view<float>(edge_prob_image);
   vil_image_view<float> img(edge_prob_image);
