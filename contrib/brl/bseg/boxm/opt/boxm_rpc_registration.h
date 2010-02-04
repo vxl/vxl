@@ -31,7 +31,7 @@
 #include <vgl/vgl_plane_3d.h>
 #include <boxm/boxm_scene.h>
 #include <boxm/boxm_utils.h>
-#include <bgeo/bgeo_lvcs_sptr.h>
+#include <vpgl/bgeo/bgeo_lvcs_sptr.h>
 
 #include <vcl_cstdio.h>
 #include <vcl_limits.h>
