@@ -369,6 +369,10 @@ void x_write(vcl_ostream &os, boxm_scene<T>& scene, vcl_string name)
   vsl_basic_xml_element bin(MULTI_BIN_TAG);
   bin.add_attribute("value", scene.multi_bin()? 1 : 0);
   bin.x_write(os);
+  
+  vsl_basic_xml_element save_nodes(SAVE_INTERNAL_NODES_TAG);
+  save_nodes.add_attribute("value", scene.save_internal_nodes()? 1 : 0);
+  save_nodes.x_write(os);
 
   bgeo_lvcs lvcs=scene.lvcs();
   lvcs.x_write(os, LVCS_TAG);
