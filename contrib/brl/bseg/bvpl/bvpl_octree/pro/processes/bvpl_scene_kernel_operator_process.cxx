@@ -13,6 +13,7 @@
 #include <bvpl/bvpl_octree/bvpl_scene_kernel_operator.h>
 #include <bvpl/bvpl_octree/bvpl_octree_sample.h>
 #include <bvpl/bvpl_edge_geometric_mean_functor.h>
+#include <bvpl/bvpl_edge_algebraic_mean_functor.h>
 #include <bvpl/bvpl_gauss_convolution_functor.h>
 #include <bprb/bprb_parameters.h>
 #include <brdb/brdb_value.h>
@@ -77,6 +78,13 @@ bool bvpl_scene_kernel_operator_process(bprb_func_process& pro)
   vcl_string output_path = pro.get_input<vcl_string>(i++);
   short level = 0;
   
+  
+  //print inputs
+  vcl_cout<<"In bvpl_scene_kernel_operator: " 
+  << "Datatype: " << datatype << vcl_endl
+  << "Functor Name: "<< functor_name << vcl_endl
+  << "Resolution: " << level << vcl_endl;
+  
   //check input's validity
   if (!scene_base.ptr()) {
     vcl_cout <<  " :-- Grid is not valid!\n";
@@ -112,8 +120,31 @@ bool bvpl_scene_kernel_operator_process(bprb_func_process& pro)
       pro.set_output_val<boxm_scene_base_sptr>(0, scene_ptr);
       return true;
     }
+  }
+  if (datatype == "float")
+  {
+    typedef boct_tree<short, float > tree_type;
+    boxm_scene<tree_type> *scene_in = static_cast<boxm_scene<tree_type>* > (scene_base.as_pointer());
+    
+    //parameters of the output scene are the same as those of the input scene
+    boxm_scene<tree_type> *scene_out = 
+    new boxm_scene<tree_type>(scene_in->lvcs(), scene_in->origin(), scene_in->block_dim(), scene_in->world_dim());
+    scene_out->set_paths(output_path, "response_scene");
+    scene_out->set_appearance_model(FLOAT);
+    scene_out->write_scene("/float_response_scene.xml");
+    
+    if (functor_name == "edge_algebraic_mean") {
+      bvpl_edge_algebraic_mean_functor<float> functor;
+      bvpl_scene_kernel_operator scene_oper;
+      //operate on scene
+      scene_oper.operate(*scene_in, functor, kernel, *scene_out, level);
+      scene_ptr = scene_out;
+      pro.set_output_val<boxm_scene_base_sptr>(0, scene_ptr);
+      return true;
+    }
     
   }
+	
   
   else
     return false;
