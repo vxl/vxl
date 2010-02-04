@@ -2,18 +2,18 @@
 #define boxm_rpc_registration_h_
 //:
 // \file
-// \brief  this part contains the correction rpc camera parameters using the expected 
-//         edge image obtained from the world (scene) and edge map of the current image.
-//         if the camera parameters are manually corrected by the user, this part should
-//         be omitted by setting the "rpc_correction_flag" parameter to 0 (false) in the
-//         boxm_rpc_registration_process.
+// This part contains the correction rpc camera parameters using the expected
+// edge image obtained from the world (scene) and edge map of the current image.
+// if the camera parameters are manually corrected by the user, this part should
+// be omitted by setting the "rpc_correction_flag" parameter to 0 (false) in the
+// boxm_rpc_registration_process.
 //
 // \author Ibrahim Eden
 // \date   Jan, 2009
 //
 // \verbatim
 //  Modifications
-//     Feb 1st, 2010 Gamze Tunali 
+//     Feb 1st, 2010 Gamze Tunali
 //         This piece of code is moved from bvxm_rpc_registration process to this file
 //         as a standalone function to be used in boxm/opt/boxm_rpc_registration_process
 // \endverbatim
@@ -33,12 +33,13 @@
 #include <boxm/boxm_utils.h>
 #include <vpgl/bgeo/bgeo_lvcs_sptr.h>
 
-#include <vcl_cstdio.h>
+#include <vcl_iostream.h>
+#include <vcl_fstream.h>
 #include <vcl_limits.h>
 #include <vil/vil_save.h>
 
-int convert_uncertainty_from_meters_to_pixels(float uncertainty, 
-                                              bgeo_lvcs lvcs, 
+int convert_uncertainty_from_meters_to_pixels(float uncertainty,
+                                              bgeo_lvcs lvcs,
                                               vpgl_camera_double_sptr camera)
 {
   // estimate the offset search size in the image space
@@ -55,7 +56,7 @@ int convert_uncertainty_from_meters_to_pixels(float uncertainty,
     else if (camera->type_name()=="vpgl_rational_camera") {
       double lon, lat, gz;
       lvcs.local_to_global(curr_corner.x(), curr_corner.y(), curr_corner.z(),
-                            bgeo_lvcs::wgs84, lon, lat, gz, bgeo_lvcs::DEG, bgeo_lvcs::METERS);
+                           bgeo_lvcs::wgs84, lon, lat, gz, bgeo_lvcs::DEG, bgeo_lvcs::METERS);
       curr_pt.set(lon, lat, gz);
     }
     else // dummy initialisation, to avoid compiler warning
@@ -81,7 +82,6 @@ bool boxm_rpc_registration(boxm_scene_base_sptr scene_base,//<boct_tree<T_loc, T
                            float n_normal,
                            unsigned num_observations)
 {
-
   double max_prob = vcl_numeric_limits<double>::min();
   double best_offset_u = 0.0, best_offset_v = 0.0;
 
@@ -114,7 +114,7 @@ bool boxm_rpc_registration(boxm_scene_base_sptr scene_base,//<boct_tree<T_loc, T
         }
       }
 
-      if(norm>0.0)
+      if (norm>0.0)
           prob/=norm;
 
       // if maximum is found
@@ -198,7 +198,7 @@ bool boxm_rpc_registration(boxm_scene_base_sptr scene_base,//<boct_tree<T_loc, T
   if (!(cam_inp_rational = dynamic_cast<vpgl_rational_camera<double>*>(camera.ptr()))) {
     is_rational_cam = false;
   }
-  
+
   if (is_local_cam) {
     vpgl_local_rational_camera<double> cam_out_local(*cam_inp_local);
     double offset_u,offset_v;
@@ -221,9 +221,8 @@ bool boxm_rpc_registration(boxm_scene_base_sptr scene_base,//<boct_tree<T_loc, T
     vcl_cerr << "error: process expects camera to be a vpgl_rational_camera or vpgl_local_rational_camera.\n";
     return false;
   }
-  
-  return true;
 
+  return true;
 }
 
 #endif
