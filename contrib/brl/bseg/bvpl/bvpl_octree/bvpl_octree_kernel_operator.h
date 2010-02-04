@@ -32,8 +32,10 @@ class bvpl_octree_kernel_operator
   void operate(F functor, bvpl_kernel_sptr kernel, tree_type* out_tree, short level, double cell_length)
   {
     //get all cells at given scale
-    vcl_vector<cell_type* > cells = tree_in_->cells_at_level(level);
-    vcl_vector<cell_type* > out_cells = out_tree->cells_at_level(level);
+    // vcl_vector<cell_type* > cells = tree_in_->cells_at_level(level);
+    // vcl_vector<cell_type* > out_cells = out_tree->cells_at_level(level);
+    vcl_vector<cell_type* > cells = tree_in_->leaf_cells_at_level(level);
+    vcl_vector<cell_type* > out_cells = out_tree->leaf_cells_at_level(level);
 
     bvpl_kernel_iterator kernel_iter = kernel->iterator();
 
@@ -42,6 +44,13 @@ class bvpl_octree_kernel_operator
     {
       // iterate through vector an compute result
       cell_type* center_cell = cells[i];
+      
+      if(center_cell->level()!=level)
+        vcl_cerr << "Error in bvpl_octree_kernel_operator: Cell is not at the right level\n";
+      
+      if(!center_cell->is_leaf())
+        vcl_cerr << "Error in bvpl_octree_kernel_operator: Cell is a leaf\n";
+      
       vgl_point_3d<double> this_cell_origin = tree_in_->local_origin(center_cell);
 
       // TODO: check bounds. Is it more efficient to check bounds for every kernel or to let is run and store a dummy value in it?
