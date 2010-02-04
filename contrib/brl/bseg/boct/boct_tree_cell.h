@@ -98,8 +98,11 @@ class boct_tree_cell
   //: adds a pointer to vector v, for each children at a particular level
   void children_at_level(vcl_vector<boct_tree_cell<T_loc,T_data>*>& v, short level);
   
-    //: adds a pointer to vector v, for each children in a recursive fashion
+  //: adds a pointer to vector v, for each children in a recursive fashion
   void all_children(vcl_vector<boct_tree_cell<T_loc,T_data>*>& v);
+  
+  //: Fills a cells with the average value of the 8 children in a dynamic programming manner
+  void set_data_to_avg_children();
 
   const boct_loc_code<T_loc> get_code();
 
@@ -142,12 +145,18 @@ class boct_tree_cell
   static short version_no() { return 1; }
 
   boct_loc_code<T_loc> code_;
+  
   boct_tree_cell<T_loc,T_data>* children_;
 
  protected:
+  
   boct_tree_cell<T_loc,T_data>* parent_;
+  
   T_data data_;
+  
   boct_cell_vis_graph_node<T_loc,T_data>* vis_node_;
+  
+   
 };
 
 template<class T_loc,class T_data>
@@ -173,5 +182,9 @@ class boct_cell_vis_graph_node
   vcl_vector<boct_tree_cell<T_loc,T_data> * > outgoing_links;
   bool visible;
 };
+
+// Forward declaration of template specialization
+template<>
+void boct_tree_cell<short,float>::set_data_to_avg_children();
 
 #endif // boct_tree_cell_h_

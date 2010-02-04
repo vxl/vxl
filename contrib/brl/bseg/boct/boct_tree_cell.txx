@@ -703,26 +703,26 @@ void boct_tree_cell<T_loc,T_data>::leaf_children_at_level(vcl_vector<boct_tree_c
 {
   short curr_level = code_.level;
 
-  if (curr_level == target_level) {
-    v.push_back(this);
-    return;
-  }
-
-  if (curr_level > target_level+1) {
-    for (unsigned i=0; i<8; i++) {
-      if (!children_[i].is_leaf())
+  if(curr_level > target_level) 
+  {
+    if(!this->is_leaf())
+    {
+      for (unsigned i=0; i<8; i++)
         children_[i].leaf_children_at_level(v,target_level);
+      
     }
+  }else if(curr_level == target_level)
+  {
+    if(this->is_leaf())
+      v.push_back(this);
   }
+  else 
+    return;
+  
+  return;
+  
 
-  if (curr_level == target_level+1) {
-    if (!this->is_leaf()) {
-      for (unsigned i=0; i<8; i++) {
-        if (children_[i].is_leaf())
-          v.push_back(&children_[i]);
-      }
-    }
-  }
+
 }
 
 //: adds a pointer to vector v, for each children at a particular level
@@ -731,25 +731,24 @@ void boct_tree_cell<T_loc,T_data>::children_at_level(vcl_vector<boct_tree_cell<T
 {
   short curr_level = code_.level;
 
-  if (curr_level == target_level) {
+  if (curr_level == target_level)
+  {
     v.push_back(this);
     return;
   }
 
-  if (curr_level > target_level+1) {
-    for (unsigned i=0; i<8; i++) {
-      if (!children_[i].is_leaf())
-        children_[i].children_at_level(v,target_level);
+  else if (curr_level > target_level) 
+  {
+    if (!this->is_leaf()) 
+    {
+      for (unsigned i=0; i<8; i++)
+         children_[i].children_at_level(v, target_level);
+      
     }
+    return;
   }
-  else if (curr_level == target_level+1) {
-    if (!this->is_leaf()) {
-      for (unsigned i=0; i<8; i++) {
-        v.push_back(&children_[i]);
-      }
-    }
-  }
-  else{
+  else
+  {
     vcl_cerr << "Inconsintent case in cell::children_at_level\n";
     return;
   }
@@ -770,6 +769,13 @@ void boct_tree_cell<T_loc,T_data>::all_children(vcl_vector<boct_tree_cell<T_loc,
 
 }
 
+//:Averages the value of the 8 children in a dynamic programming manner
+template<class T_loc, class T_data> 
+void boct_tree_cell<T_loc,T_data>::set_data_to_avg_children()
+{
+  //empty on the general case
+  return;
+}
 
 
 template<class T_loc,class T_data>
