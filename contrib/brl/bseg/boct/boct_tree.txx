@@ -278,6 +278,7 @@ boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_point_global(const
   return curr_cell;
 }
 
+//: Returns the cell containing "p", at the closest level available to "level"
 template <class T_loc,class T_data>
 boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_point_at_level(const vgl_point_3d<double>& p, short level, bool check_out_of_bounds)
 {
@@ -380,8 +381,6 @@ vcl_vector<boct_tree_cell<T_loc,T_data>*> boct_tree<T_loc,T_data>::leaf_cells_at
     if (root_->is_leaf()) {
       if (root_->level() == level)
         v.push_back(root_);
-      else
-        return v;
     }
     else {
       root_->leaf_children_at_level(v, level);
@@ -417,6 +416,17 @@ vcl_vector<boct_tree_cell<T_loc,T_data>*>  boct_tree<T_loc,T_data>::all_cells()
      root_->all_children(v);
   }
   return v;
+
+}
+
+//: Fills inetermediade cells with the average of the children
+template<class T_loc, class T_data>
+void boct_tree<T_loc,T_data>::fill_with_average()
+{
+  if(root_)
+    if(!root_->is_leaf())
+      root_->set_data_to_avg_children();
+  return;
 
 }
 

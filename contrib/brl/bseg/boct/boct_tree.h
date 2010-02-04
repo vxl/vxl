@@ -114,6 +114,9 @@ class boct_tree
   
   //: Returns all cells on the tree
   vcl_vector<boct_tree_cell<T_loc,T_data>*> all_cells();
+  
+  //: Fills cells with the average of the children
+  void fill_with_average();
 
   //: Return the maximum number of levels, which is root_level+1
   short number_levels() const { return num_levels_; }
