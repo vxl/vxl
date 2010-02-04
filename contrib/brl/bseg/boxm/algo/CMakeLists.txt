@@ -6,6 +6,7 @@ SET(boxm_algo_sources
     boxm_vrml_util.h
     boxm_crop_scene.h
     boxm_scene_to_bvxm_grid.h
+    boxm_fill_internal_cells.h
    )
 
 ADD_LIBRARY(boxm_algo ${boxm_algo_sources})
