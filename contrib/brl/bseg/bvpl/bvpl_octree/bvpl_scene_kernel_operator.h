@@ -38,6 +38,12 @@ class bvpl_scene_kernel_operator
       scene_out.load_block(iter_out.index());
       tree_type *tree_in= (*iter_in)->get_tree();
       tree_type *tree_out = tree_in->clone();
+      
+      //output tree has the same  shape but is is initialized to have response zero
+      T_data zero_val = T_data();
+      vcl_cout << "Response tree is initialized to: " << zero_val << vcl_endl;
+      tree_out->init_cells(zero_val);
+      
       bvpl_octree_kernel_operator<T_data> oper(tree_in);
       double cell_length = 1.0/(double)(1<<(tree_in->root_level() -level));
       oper.operate(functor, kernel, tree_out, level, cell_length);
