@@ -36,7 +36,7 @@ class boxm_merge_mog
 
  public:
 
-  // === Grid operations ===
+  // === Scene operations ===
 
   //: Merges the components of the gaussian mixtures at each voxel into a single gaussian, that minimizes KL divergence.
   //  The resulting scene contains unimodal Gaussians.
