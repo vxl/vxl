@@ -56,7 +56,6 @@ SET(bvxm_pro_sources ${bvxm_pro_sources}
     processes/bvxm_render_virtual_view_process.h      processes/bvxm_render_virtual_view_process.cxx
     processes/bvxm_update_edges_lidar_process.h       processes/bvxm_update_edges_lidar_process.cxx
     processes/bvxm_lidar_init_process.h               processes/bvxm_lidar_init_process.cxx
-    processes/bvxm_detect_edges_process.h             processes/bvxm_detect_edges_process.cxx
     processes/bvxm_detect_edge_tangent_process.h      processes/bvxm_detect_edge_tangent_process.cxx
     processes/bvxm_update_edge_tangent_process.h      processes/bvxm_update_edge_tangent_process.cxx
     processes/bvxm_compare_rpc_process.h              processes/bvxm_compare_rpc_process.cxx

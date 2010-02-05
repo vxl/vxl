@@ -27,7 +27,6 @@ void bvxm_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_create_voxel_world_process, "bvxmCreateVoxelWorldProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_detect_changes_process, "bvxmDetectChangesProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_change_detection_display_process, "bvxmChangeDetectionDisplayProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_detect_edges_process, "bvxmDetectEdgesProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_expected_edge_image_process, "bvxmExpectedEdgeImageProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_detect_edge_tangent_process, "bvxmDetectEdgeTangentProcess");
   REG_PROCESS_FUNC_CONS_INIT(bprb_func_process, bprb_batch_process_manager, bvxm_update_edge_tangent_process, "bvxmUpdateEdgeTangentProcess");
