@@ -9,6 +9,7 @@ MANPAGE_SOURCES += boct_tree.txx
 MANPAGE_SOURCES += boct_tree_cell.h
 MANPAGE_SOURCES += boct_tree_cell.txx
 MANPAGE_SOURCES += boct_tree_cell_reader.txx
+SOURCES += boct_tree_cell.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
