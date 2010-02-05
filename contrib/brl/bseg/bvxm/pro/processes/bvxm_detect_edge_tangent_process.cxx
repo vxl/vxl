@@ -4,7 +4,6 @@
 // \file
 
 #include <sdet/sdet_img_edge.h>
-#include <bvxm/bvxm_edge_util.h>
 
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>

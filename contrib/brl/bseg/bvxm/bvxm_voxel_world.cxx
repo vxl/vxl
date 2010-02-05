@@ -36,7 +36,6 @@
 #include "grid/bvxm_voxel_slab.h"
 #include "bvxm_image_metadata.h"
 #include "bvxm_util.h"
-#include "bvxm_edge_util.h"
 #include <vpgl/file_formats/vpgl_geo_camera.h>
 //#define DEBUG
 

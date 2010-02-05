@@ -11,7 +11,6 @@
 
 #include <brdb/brdb_value.h>
 
-#include <bvxm/bvxm_edge_util.h>
 #include <bvxm/bvxm_edge_ray_processor.h>
 
 #include <bvxm/bvxm_voxel_world.h>

@@ -31,7 +31,6 @@ SET(bvxm_sources
     bvxm_voxel_world.h              bvxm_voxel_world.cxx
     bvxm_image_metadata.h           bvxm_image_metadata.cxx
     bvxm_util.h                     bvxm_util.cxx
-    bvxm_edge_util.h                bvxm_edge_util.cxx
     bvxm_edge_ray_processor.h       bvxm_edge_ray_processor.cxx
     bvxm_von_mises_tangent_processor.h     bvxm_von_mises_tangent_processor.txx
     bvxm_illum_util.h                     bvxm_illum_util.cxx

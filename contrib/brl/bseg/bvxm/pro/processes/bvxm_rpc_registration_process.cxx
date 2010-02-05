@@ -7,7 +7,6 @@
 
 #include <brdb/brdb_value.h>
 
-#include <bvxm/bvxm_edge_util.h>
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/bvxm_image_metadata.h>
 

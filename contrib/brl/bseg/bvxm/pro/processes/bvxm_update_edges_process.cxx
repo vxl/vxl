@@ -11,7 +11,6 @@
 
 #include <brdb/brdb_value.h>
 
-#include <bvxm/bvxm_edge_util.h>
 #include <bvxm/bvxm_edge_ray_processor.h>
 
 #include <bvxm/bvxm_voxel_world.h>
@@ -19,6 +18,8 @@
 
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/vpgl_local_rational_camera.h>
+
+#include <sdet/sdet_img_edge.h>
 
 #include <brip/brip_vil_float_ops.h>
 
@@ -96,7 +97,7 @@ bool bvxm_update_edges_process(bprb_func_process& pro)
   float new_n_normal = n_normal;
   bvxm_edge_ray_processor edge_ray_proc(vox_world);
   vil_image_view<float> edge_prob_image;
-  bvxm_edge_util::estimate_edge_prob_image(edge_image, edge_prob_image, edge_prob_mask_size, edge_prob_mask_sigma);
+  sdet_img_edge::estimate_edge_prob_image(edge_image, edge_prob_image, edge_prob_mask_size, edge_prob_mask_sigma);
   float edge_prob_image_mean;
   vil_math_mean(edge_prob_image_mean,edge_prob_image,0);
 

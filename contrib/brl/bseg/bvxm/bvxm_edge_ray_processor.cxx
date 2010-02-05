@@ -1,6 +1,7 @@
 #include "bvxm_edge_ray_processor.h"
 //:
 // \file
+#include <sdet/sdet_img_edge.h>
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/bvxm_voxel_traits.h>
 #include <bvxm/bvxm_world_params.h>
@@ -8,7 +9,6 @@
 #include <bvxm/grid/bvxm_voxel_slab.h>
 #include <bvxm/bvxm_image_metadata.h>
 #include <bvxm/bvxm_util.h>
-#include <bvxm/bvxm_edge_util.h>
 #include <bsta/bsta_histogram.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vgl/vgl_homg_line_2d.h>
@@ -246,7 +246,7 @@ bool bvxm_edge_ray_processor::expected_edge_image(bvxm_image_metadata const& cam
   int dof = (int)world_->num_observations<EDGES>(0,scale)-1;
   bvxm_voxel_slab<edges_datatype>::iterator expected_edge_image_it = expected_edge_image.begin();
   for (; expected_edge_image_it != expected_edge_image.end(); ++expected_edge_image_it) {
-    (*expected_edge_image_it) = bvxm_edge_util::convert_edge_statistics_to_probability((*expected_edge_image_it),n_normal,dof);
+    (*expected_edge_image_it) = sdet_img_edge::convert_edge_statistics_to_probability((*expected_edge_image_it),n_normal,dof);
   }
 
   // convert back to vil_image_view
@@ -355,7 +355,7 @@ bool bvxm_edge_ray_processor::save_edges_raw(vcl_string filename, float n_normal
     vcl_cout << '.';
     for (unsigned i=0; i<(*edges_it).nx(); ++i) {
       for (unsigned j=0; j < (*edges_it).ny(); ++j) {
-        edges_array[i*ny*nz + j*nz + k] = (unsigned char)(255.0*bvxm_edge_util::convert_edge_statistics_to_probability((*edges_it)(i,j),n_normal,dof));
+        edges_array[i*ny*nz + j*nz + k] = (unsigned char)(255.0*sdet_img_edge::convert_edge_statistics_to_probability((*edges_it)(i,j),n_normal,dof));
       }
     }
   }
