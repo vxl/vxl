@@ -221,6 +221,9 @@ SOURCE=.\test_boxm_scene_crop.cxx
 SOURCE=.\test_boxm_scene_to_bvxm_grid.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_boxm_fill_internal_cells.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

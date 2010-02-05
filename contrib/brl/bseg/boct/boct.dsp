@@ -93,6 +93,9 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
+SOURCE=.\boct_tree_cell.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/boct_loc_code+short-.cxx
 # End Source File
 # Begin Source File

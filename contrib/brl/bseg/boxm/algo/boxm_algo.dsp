@@ -113,6 +113,9 @@ SOURCE=.\boxm_crop_scene.h
 # Begin Source File
 SOURCE=.\boxm_scene_to_bvxm_grid.h
 # End Source File
+# Begin Source File
+SOURCE=.\boxm_fill_internal_cells.h
+# End Source File
 # End Group
 # End Target
 # End Project
