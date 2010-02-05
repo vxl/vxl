@@ -3,6 +3,7 @@
 //:
 // \file
 
+#include <sdet/sdet_img_edge.h>
 #include <bvxm/bvxm_edge_util.h>
 
 #include <bprb/bprb_func_process.h>
@@ -97,7 +98,7 @@ bool bvxm_detect_edge_tangent_process(bprb_func_process& pro)
   pro.parameters()->print_all(vcl_cout);
 #endif
   vil_image_view<float> edge_image =
-    bvxm_edge_util::detect_edge_tangent(input_image,
+    sdet_img_edge::detect_edge_tangent(input_image,
                                         noise_multiplier,
                                         smooth,
                                         automatic_threshold,
