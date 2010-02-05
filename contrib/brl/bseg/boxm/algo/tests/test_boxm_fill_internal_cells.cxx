@@ -79,7 +79,7 @@ static void test_boxm_fill_internal_cells()
   iter_out.begin();
   scene_out->load_block(iter_out.index());
   boxm_block<tree_type> *block_out = scene_out->get_active_block();
-  boct_tree<short, float>  *tree_out= (*iter_out)->get_tree();
+  boct_tree<short, float>  *tree_out= block_out->get_tree();
   
   
   vcl_vector<boct_tree_cell<short,float>*> leaves = tree_out->all_cells();

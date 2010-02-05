@@ -102,7 +102,7 @@ bvxm_voxel_grid<T_data>* boxm_scene_to_bvxm_grid(boxm_scene<boct_tree<T_loc, T_d
   tree_type* tree = block->get_tree();
 
   // assume that bounding box is a cube
-  const double step_len = ((block_bb.max_x() - block_bb.min_x())/double(ncells));
+  //const double step_len = ((block_bb.max_x() - block_bb.min_x())/double(ncells));
 
   for (unsigned z=0; z<dimz; ++grid_it, ++z)
   {

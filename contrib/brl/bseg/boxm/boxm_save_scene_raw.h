@@ -85,7 +85,6 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
     vgl_point_3d<double> data_og(min.x() + (step_len/2.0), min.y() + (step_len/2.0), min.z() + (step_len/2.0));
 
     int data_size = ncells*ncells*ncells;
-    int y_size = ncells*ncells;
     float *data = 0;
     vcl_cout << "Data Size=" << data_size << vcl_endl;
     data = new (std::nothrow)float[data_size];

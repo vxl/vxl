@@ -79,7 +79,7 @@ bool boxm_edge_update_process(bprb_func_process& pro)
 
   // get the inputs
   boxm_scene_base_sptr scene_base = pro.get_input<boxm_scene_base_sptr>(0);
-  boxm_apm_type apm_type = scene_base->appearence_model();
+  //boxm_apm_type apm_type = scene_base->appearence_model();
   vcl_string image_list_fname = pro.get_input<vcl_string>(1);
  // float n_normal=pro.get_input<float>(2);
 

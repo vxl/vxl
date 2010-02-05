@@ -67,8 +67,6 @@ bool boxm_describe_scene_process(bprb_func_process& pro)
   if (scene_ptr->appearence_model() == BOXM_APM_MOG_GREY) {
     if (!scene_ptr->multi_bin())
     {
-      typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
-      boxm_scene<tree_type>* scene = dynamic_cast<boxm_scene<tree_type>*> (scene_ptr.as_pointer());
       vcl_cerr<<"boxm_describe_scene_process not yet implemented for Gaussian mixture\n";
       return false;//not implemented
     }
