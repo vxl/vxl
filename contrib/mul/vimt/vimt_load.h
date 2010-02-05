@@ -6,6 +6,7 @@
 // \author Martin Roberts, Ian Scott
 
 #include <vil/vil_image_resource.h>
+#include <vil/vil_convert.h>
 #include <vil/vil_load.h>
 #include <vimt/vimt_image_2d_of.h>
 
