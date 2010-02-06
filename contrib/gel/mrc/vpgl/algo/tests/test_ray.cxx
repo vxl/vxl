@@ -1,6 +1,8 @@
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
+#include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/bgeo/bgeo_lvcs.h>
@@ -67,6 +69,17 @@ static void test_ray()
   vgl_vector_3d<double> tdir(0.0689725,-0.487625,-0.870325);
   double err = (tdir-dir).length();
   TEST_NEAR("test local rational ray_direction", err, 0.0, 0.001);
+
+  vgl_point_2d<double> impt1(ou,ov);
+  vgl_point_2d<double> impt2(ou+1,ov);
+
+  vgl_plane_3d<double> outp;
+
+  vpgl_ray::plane_ray(lrcam,impt1,impt2,outp); 
+  err=dot_product<double>(outp.normal(),dir);
+  TEST_NEAR("test local rational plane", err, 0.0, 0.001);
+
+
 }
 
 TESTMAIN(test_ray);
