@@ -107,6 +107,83 @@ vgl_intersection(const vcl_list<vgl_plane_3d<T> >& planes)
 }
 
 template <class T>
+vgl_infinite_line_3d<T>
+vgl_intersection(const vcl_list<vgl_plane_3d<T> >& planes, vcl_vector<T> ws)
+{
+  // form the matrix of plane normal monomials
+  vnl_matrix<double> Q(3,3,0.0);
+  vnl_vector<double> vd(3,0.0);
+  unsigned n = planes.size();
+  unsigned cnt=0;
+  T sum_ws=0;
+  for (typename vcl_list<vgl_plane_3d<T> >::const_iterator pit = planes.begin();
+       pit != planes.end(); ++pit)
+  {
+    double a = (*pit).a(), b = (*pit).b(), c = (*pit).c(),
+      d = (*pit).d();
+    Q[0][0] += ws[cnt]*a*a; Q[0][1] += ws[cnt]*a*b; Q[0][2] += ws[cnt]*a*c;
+    Q[1][1] += ws[cnt]*b*b; Q[1][2] += ws[cnt]*b*c;
+    Q[2][2] += ws[cnt]*c*c;
+    vd[0]-=ws[cnt]*a*d; vd[1]-=ws[cnt]*b*d; vd[2]-=ws[cnt]*c*d;
+    sum_ws+=ws[cnt];
+    ++cnt;
+  }
+  Q[1][0]=  Q[0][1];   Q[2][0]= Q[0][2];   Q[2][1]=  Q[1][2];
+  Q/=sum_ws;
+  vd/=sum_ws;
+  vnl_svd<double> svd(Q);
+  // the direction of the resulting line
+  vnl_vector<double> t = svd.nullvector();
+  double tx = t[0], ty = t[1], tz = t[2];
+  // determine maximum component of t
+  char component = 'x';
+  if (ty>tx&&ty>tz)
+    component = 'y';
+  if (tz>tx&&tz>ty)
+    component = 'z';
+  vgl_point_3d<double> p0d;
+  switch (component)
+  {
+    case 'x':
+    {
+      double det = Q[1][1]*Q[2][2] - Q[1][2]*Q[2][1];
+      double neuy = vd[1]*Q[2][2]  - Q[1][2]*vd[2];
+      double neuz = Q[1][1]*vd[2]  - vd[1]*Q[2][1];
+      p0d.set(0.0, neuy/det, neuz/det);
+      break;
+    }
+    case 'y':
+    {
+      double det = Q[0][0]*Q[2][2] - Q[0][2]*Q[2][0];
+      double neux = vd[0]*Q[2][2]  - Q[0][2]*vd[2];
+      double neuz = Q[0][0]*vd[2]  - vd[0]*Q[2][0];
+      p0d.set(neux/det, 0.0, neuz/det);
+      break;
+    }
+    case 'z':
+    {
+      double det = Q[0][0]*Q[1][1] - Q[0][1]*Q[1][0];
+      double neux = vd[0]*Q[1][1]  - Q[0][1]*vd[1];
+      double neuy = Q[0][0]*vd[1]  - vd[0]*Q[1][0];
+      p0d.set(neux/det, neuy/det, 0.0);
+      break;
+    }
+    default: // this cannot happen
+      break;
+  }
+  vgl_point_3d<T> pt(static_cast<T>(p0d.x()),
+                     static_cast<T>(p0d.y()),
+                     static_cast<T>(p0d.z()));
+
+  vgl_vector_3d<T> tv(static_cast<T>(tx),
+                      static_cast<T>(ty),
+                      static_cast<T>(tz));
+
+  return vgl_infinite_line_3d<T>(pt, tv);
+}
+
+
+template <class T>
 bool vgl_intersection(vgl_box_3d<T> const& b, vcl_list<vgl_point_3d<T> >& poly)
 {
   // check if two bounding boxes intersect
@@ -184,6 +261,7 @@ bool vgl_intersection(vgl_box_3d<T> const& b, vcl_list<vgl_point_3d<T> >& poly)
 #define VGL_ALGO_INTERSECTION_INSTANTIATE(T) \
 template vgl_point_3d<T > vgl_intersection(const vcl_vector<vgl_plane_3d<T > >&); \
 template bool vgl_intersection(vgl_box_3d<T > const&, vcl_list<vgl_point_3d<T > >&); \
-template vgl_infinite_line_3d<T > vgl_intersection(const vcl_list<vgl_plane_3d<T > >& planes)
+template vgl_infinite_line_3d<T > vgl_intersection(const vcl_list<vgl_plane_3d<T > >& planes);\
+template vgl_infinite_line_3d<T > vgl_intersection(const vcl_list<vgl_plane_3d<T > >& planes, vcl_vector<T> ws)
 
 #endif // vgl_algo_intersection_txx_

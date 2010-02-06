@@ -34,6 +34,14 @@ template <class T>
 vgl_infinite_line_3d<T> 
 vgl_intersection(const vcl_list<vgl_plane_3d<T> >& planes);
 
+//: Return the intersection line of a set of weighted planes, use list to distinguish from point return
+// \relatesalso vgl_plane_3d
+// \relatesalso vgl_infinite_line_3d
+
+template <class T>
+vgl_infinite_line_3d<T>
+vgl_intersection(const vcl_list<vgl_plane_3d<T> >& planes, vcl_vector<T> ws);
+
 //: Return true if the box and polygon intersect in 3-d, regions include boundaries
 // Polygon is represented as an ordered vector of 3-d points
 // \relatesalso vgl_point_3d
