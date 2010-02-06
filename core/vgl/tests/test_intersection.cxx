@@ -114,6 +114,20 @@ static void test_multiple_planes()
   vgl_point_3d<double> p0(2, 1, 1);
   bool is_on = line.contains(p0);
   TEST("intersection of multiple planes -> line", is_on, true );
+
+  vgl_plane_3d<double> wpl0(0,1,0,0.0);
+  vgl_plane_3d<double> wpl1(1,0,0, 0.0);
+  vgl_plane_3d<double> wpl2(0.707,0.707,0,1);
+  vcl_list<vgl_plane_3d<double> > wplanes;
+  wplanes.push_back(wpl0);   wplanes.push_back(wpl1); wplanes.push_back(wpl2);
+
+  vcl_vector<double> ws;
+  ws.push_back(1.0);ws.push_back(1.0);ws.push_back(10.0);
+  vgl_infinite_line_3d<double> weightedline = vgl_intersection(wplanes,ws);
+  vgl_point_3d<double> wp0(weightedline.x0().x(), weightedline.x0().y(),0);
+  is_on =is_on && weightedline.contains(wp0);
+  TEST("intersection of multiple planes -> line", is_on, true );
+
 }
 
 static void test_lines_intersection()
