@@ -39,7 +39,8 @@ class bsta_beta : public bsta_distribution<T,1>
   T beta() const { return beta_; }
 
   void set_alpha_beta(T alpha, T beta)
-  { alpha_=alpha; beta_=beta;
+  { 
+    alpha_=alpha; beta_=beta;
     if (alpha_ < 0)
       alpha_=T(0.00001);
     if (beta_ <0)
@@ -51,6 +52,7 @@ class bsta_beta : public bsta_distribution<T,1>
 
   T cum_dist_funct(T x) const;
 
+  T distance(T x) const;
   T mean() const { return alpha_/(alpha_+beta_); }
 
   T var() const { T t=alpha_+beta_; return (alpha_*beta_)/(t*t*(t+1)); }
@@ -65,7 +67,7 @@ inline vcl_ostream& operator<< (vcl_ostream& os,
                                 bsta_beta<T> const& b)
 {
   return
-  os << "beta: (alpha,beta) = (" << b.alpha() << "  " << b.beta() << ")\n";
+  os << "beta: (alpha,beta) = (" << b.alpha() << "  " << b.beta() <<" "<<b.mean()<<" "<<b.var()<< ")\n";
 }
 
 #endif
