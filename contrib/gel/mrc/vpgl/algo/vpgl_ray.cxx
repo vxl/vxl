@@ -102,3 +102,43 @@ bool vpgl_ray::ray(vpgl_local_rational_camera<double> const& lrcam,
 
   return true;
 }
+// compute a ray in local Cartesian coordinates for a local rational cam
+bool vpgl_ray::plane_ray(vpgl_local_rational_camera<double> const& lrcam,
+                   const vgl_point_2d<double> image_point1,
+                   const vgl_point_2d<double> image_point2,
+                   vgl_plane_3d<double>& plane)
+{
+  // find the horizontal plane at the top of the 3-d region
+  // of valid RPC projection
+  double z_off = lrcam.offset(vpgl_rational_camera<double>::Z_INDX);
+  double z_scale = lrcam.scale(vpgl_rational_camera<double>::Z_INDX);
+  double zmax = z_off + z_scale;
+
+  // find the point of intersection of the back-projected ray with zmax
+  vgl_plane_3d<double> top_plane(0.0, 0.0, 1.0, -zmax);
+  //vgl_point_2d<double> image_point(u, v);
+  vgl_point_3d<double> initial_guess(0.0, 0.0, zmax);
+  vgl_point_3d<double> point1,point2;
+  vpgl_local_rational_camera<double>* lrcam_ptr =
+    const_cast<vpgl_local_rational_camera<double>*>(&lrcam);
+  vpgl_camera<double>* cam = static_cast<vpgl_camera<double>*>(lrcam_ptr);
+  if (!vpgl_backproject::bproj_plane(cam, image_point1, top_plane,
+                                     initial_guess, point1))
+    return false;
+  if (!vpgl_backproject::bproj_plane(cam, image_point2, top_plane,
+                                     initial_guess, point2))
+    return false;
+
+  // find the point of intersection of the back-projected ray with the
+  // plane at mid elevation.
+  //
+  vgl_plane_3d<double> mid_plane(0.0, 0.0, 1.0, -z_off);
+  vgl_point_3d<double> mid_initial_guess(0.0, 0.0, z_off), mid_point1;
+  if (!vpgl_backproject::bproj_plane(cam, image_point1, mid_plane,
+                                     mid_initial_guess, mid_point1))
+    return false;
+
+  plane=vgl_plane_3d<double>(point1,point2,mid_point1);
+
+  return true;
+}

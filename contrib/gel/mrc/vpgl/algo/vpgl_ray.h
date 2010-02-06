@@ -59,6 +59,11 @@ class vpgl_ray
                   const double u, const double v, 
                   vgl_point_3d<double>& origin, vgl_vector_3d<double>& dir);
 
+// compute a ray in local Cartesian coordinates for a local rational cam
+  static bool plane_ray(vpgl_local_rational_camera<double> const& lrcam,
+                        const vgl_point_2d<double> image_point1,
+                        const vgl_point_2d<double> image_point2,
+                        vgl_plane_3d<double>& plane);
 
  private:
   //: constructor private - static methods only
