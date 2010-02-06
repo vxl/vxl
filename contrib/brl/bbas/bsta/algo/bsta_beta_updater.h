@@ -11,6 +11,18 @@
 //  Modifications
 // \endverbatim
 
+/*
+In this implementation \alpha>=1 and \beta>=1. 
+In order to ensure this 
+
+\mu(\mu(1-\mu)/var-1)>1 
+(1-\mu)(\mu(1-\mu)/var-1)>1 
+
+The distance of beta distribution is given as
+
+-(\alpha-1)log(x/\mu)-(\beta-1)log((1-x)/(1-\mu))>3
+
+*/
 #include <bsta/bsta_beta.h>
 #include <bsta/bsta_attributes.h>
 #include <vcl_algorithm.h>
@@ -23,8 +35,14 @@ void bsta_update_beta(bsta_beta<T>& beta_dist, T rho, const T& sample )
 {
   // the complement of rho (i.e. rho+rho_comp=1.0)
   T rho_comp = 1.0f - rho;
-  // compute the updated mean
-  const T& old_mean = beta_dist.mean();
+
+  T old_mean;
+  //if(beta_dist.alpha()<1)
+  //  old_mean=2*(beta_dist.alpha()-0.5);
+  //else if(beta_dist.beta()<1)
+  //  old_mean=1-2*(beta_dist.beta()-0.5);
+  //else
+    old_mean = beta_dist.mean();
 
   T diff = sample - old_mean;
   T new_var = rho_comp * beta_dist.var();
@@ -32,12 +50,44 @@ void bsta_update_beta(bsta_beta<T>& beta_dist, T rho, const T& sample )
 
   T new_mean = (old_mean) +  (rho * diff);
 
-  T t = (new_mean*(1-new_mean)/new_var)-1;
-  T alpha=new_mean*t;
-  T beta=(1-new_mean)*t;
+  T alpha,beta;
+  if(!bsta_beta<T>::bsta_beta_from_moments(new_mean,new_var,alpha,beta))
+      return;
+  //T t = (new_mean*(1-new_mean)/new_var)-1;
+  //T alpha=new_mean*t;
+  //T beta=(1-new_mean)*t;
+
+  if(alpha<1 && beta <1)
+      vcl_cout<<"Mean : "<<new_mean<< "  Var: "<<new_var<<"\n";
   beta_dist.set_alpha_beta(alpha, beta);
 }
+template <class T>
+void bsta_update_beta(bsta_beta<T>& beta_dist, T rho, const T& sample , const T & min_var)
+{
+  // the complement of rho (i.e. rho+rho_comp=1.0)
+  T rho_comp = 1.0f - rho;
 
+  T old_mean;
+  if(beta_dist.alpha()<1)
+    old_mean=2*(beta_dist.alpha()-0.5);
+  else if(beta_dist.beta()<1)
+    old_mean=1-2*(beta_dist.beta()-0.5);
+  else
+    old_mean = beta_dist.mean();
+
+  T diff = sample - old_mean;
+  T new_var = rho_comp * beta_dist.var();
+  new_var += (rho * rho_comp) * diff*diff;
+
+  new_var=vnl_math_max(new_var,min_var);
+  T new_mean = (old_mean) +  (rho * diff);
+
+  T alpha,beta;
+  if(!bsta_beta<T>::bsta_beta_from_moments(new_mean,new_var,alpha,beta))
+      return;
+
+  beta_dist.set_alpha_beta(alpha, beta);
+}
 template <class beta_>
 struct bsta_beta_fitness
 {
@@ -132,17 +182,17 @@ class bsta_mix_beta_updater
     T beta=(1-sample)*t;
     init_dist_.set_alpha_beta(alpha,beta); ///??? this was setting mean
 #endif
-    T lower = T(0.5-vcl_sqrt(1-4*var_)/2);
-    T upper = T(0.5+vcl_sqrt(1-4*var_)/2);
+    //T lower = T(0.5-vcl_sqrt(1-4*var_)/2);
+    //T upper = T(0.5+vcl_sqrt(1-4*var_)/2);
 
-    vector_ val = sample;
-    if (sample < lower)
-      val = lower+T(1e-6);
-    else if (sample > upper)
-      val = upper-T(1e-6);
+    //vector_ val = sample;
+    //if (sample < lower)
+    //    val = lower+T(1e-6);
+    //else if (sample > upper)
+    //    val = upper-T(1e-6);
 
     T alpha, beta;
-    bsta_beta<T>::bsta_beta_from_moments(val, var_,alpha, beta);
+    bsta_beta<T>::bsta_beta_from_moments(sample, var_,alpha, beta);
     init_dist_.set_alpha_beta(alpha,beta);
     mixture.insert(init_dist_,init_weight);
   }

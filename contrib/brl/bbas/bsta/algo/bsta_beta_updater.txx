@@ -22,7 +22,8 @@ bsta_mix_beta_updater<mix_dist_>::update( mix_dist_& mix, const vector_& sample,
   for (unsigned int i=0; i<num_components; ++i) {
     obs_dist_& d = mix.distribution(i);
     T p = d.prob_density(sample);
-    if (p > p_thresh_){
+    T dist_p=d.distance(sample);
+    if (dist_p > -p_thresh_){
       matched.push_back(i);
       probs[i] = p; // ???? SHOULD BE p ?? initially these are distances, not probabilities
     }
