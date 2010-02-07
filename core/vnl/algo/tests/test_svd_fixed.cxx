@@ -7,7 +7,7 @@
 #include <vcl_complex.h>
 
 #include <vnl/vnl_matrix.h>
-#include <vnl/vnl_double_3.h>
+#include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_random.h>
 #include <vnl/vnl_inverse.h>
 #include <vnl/algo/vnl_svd_fixed.h>
