@@ -50,7 +50,7 @@ static void test_ray()
                                     su, ou, sv, ov);
   vgl_point_3d<double> p3d(ox, oy, oz);
   vgl_vector_3d<double> v;
-  vpgl_ray::ray(rcam, p3d, v); 
+  vpgl_ray::ray(rcam, p3d, v);
   vcl_cout << "Ray Direction " << v << '\n';
   double x_y = v.x()/v.y();
 
@@ -65,6 +65,7 @@ static void test_ray()
   vgl_vector_3d<double> dir;
 
   bool good = vpgl_ray::ray(lrcam, ou, ov, orig, dir);
+  TEST("ray()", good, true);
   vcl_cout << "Orig: " << orig << "\n Dir: " << dir << '\n';
   vgl_vector_3d<double> tdir(0.0689725,-0.487625,-0.870325);
   double err = (tdir-dir).length();
