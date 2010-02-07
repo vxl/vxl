@@ -113,20 +113,18 @@ vgl_intersection(const vcl_list<vgl_plane_3d<T> >& planes, vcl_vector<T> ws)
   // form the matrix of plane normal monomials
   vnl_matrix<double> Q(3,3,0.0);
   vnl_vector<double> vd(3,0.0);
-  unsigned n = planes.size();
   unsigned cnt=0;
   T sum_ws=0;
   for (typename vcl_list<vgl_plane_3d<T> >::const_iterator pit = planes.begin();
        pit != planes.end(); ++pit)
   {
-    double a = (*pit).a(), b = (*pit).b(), c = (*pit).c(),
-      d = (*pit).d();
-    Q[0][0] += ws[cnt]*a*a; Q[0][1] += ws[cnt]*a*b; Q[0][2] += ws[cnt]*a*c;
-    Q[1][1] += ws[cnt]*b*b; Q[1][2] += ws[cnt]*b*c;
-    Q[2][2] += ws[cnt]*c*c;
-    vd[0]-=ws[cnt]*a*d; vd[1]-=ws[cnt]*b*d; vd[2]-=ws[cnt]*c*d;
-    sum_ws+=ws[cnt];
-    ++cnt;
+    double a = (*pit).a(), b = (*pit).b(), c = (*pit).c(), d = (*pit).d();
+    T w=ws[cnt++];
+    Q[0][0] += w*a*a;
+    Q[0][1] += w*a*b; Q[1][1] += w*b*b;
+    Q[0][2] += w*a*c; Q[1][2] += w*b*c; Q[2][2] += w*c*c;
+    vd[0]-=w*a*d; vd[1]-=w*b*d; vd[2]-=w*c*d;
+    sum_ws+=w;
   }
   Q[1][0]=  Q[0][1];   Q[2][0]= Q[0][2];   Q[2][1]=  Q[1][2];
   Q/=sum_ws;
@@ -262,6 +260,6 @@ bool vgl_intersection(vgl_box_3d<T> const& b, vcl_list<vgl_point_3d<T> >& poly)
 template vgl_point_3d<T > vgl_intersection(const vcl_vector<vgl_plane_3d<T > >&); \
 template bool vgl_intersection(vgl_box_3d<T > const&, vcl_list<vgl_point_3d<T > >&); \
 template vgl_infinite_line_3d<T > vgl_intersection(const vcl_list<vgl_plane_3d<T > >& planes);\
-template vgl_infinite_line_3d<T > vgl_intersection(const vcl_list<vgl_plane_3d<T > >& planes, vcl_vector<T> ws)
+template vgl_infinite_line_3d<T > vgl_intersection(const vcl_list<vgl_plane_3d<T > >& planes, vcl_vector<T > ws)
 
 #endif // vgl_algo_intersection_txx_
