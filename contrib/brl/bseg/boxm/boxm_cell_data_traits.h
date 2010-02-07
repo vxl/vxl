@@ -31,9 +31,7 @@ float boxm_cell_to_float(boct_tree_cell<T_loc, bsta_num_obs<bsta_gauss_f1> >* ce
 template <class T_loc, class T_data>
 float boxm_cell_to_float(boct_tree_cell<T_loc, T_data >* cell, double step_len)
 {
-
-  return 1.0 - vcl_exp(-cell->data().basic_val()*step_len);
-
+  return 1.f - float(vcl_exp(-cell->data().basic_val()*step_len));
 }
 
 #endif
