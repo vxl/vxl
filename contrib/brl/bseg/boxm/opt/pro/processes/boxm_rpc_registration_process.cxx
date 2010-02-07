@@ -1,25 +1,17 @@
-// This is brl/bseg/boxm/pro/processes/boxm_rpc_registration_process.cxx
+// This is brl/bseg/boxm/opt/pro/processes/boxm_rpc_registration_process.cxx
+#include <bprb/bprb_func_process.h>
 //:
 // \file
 // \brief  A process for registering the RPC camera based on the edges in the world
 // \author Gamze Tunali
 // \date   Feb 1st, 2010
-//
-// \verbatim
-//  Modifications
-//
-// \endverbatim
 
-// \file
-#include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
-
 #include <brdb/brdb_value.h>
-
 #include <boxm/opt/boxm_rpc_registration.h>
-
 #include <vcl_cstdio.h>
-#include <vil/vil_save.h>
+#include <vil/vil_image_view.h>
+//UNUSED: #include <vil/vil_save.h>
 
 //: globals
 namespace boxm_rpc_registration_process_globals
@@ -33,14 +25,14 @@ bool boxm_rpc_registration_process_cons(bprb_func_process& pro)
 {
   using namespace boxm_rpc_registration_process_globals;
   // process takes 8 inputs:
-  //input[0]: The scene
-  //input[1]: The current camera
-  //input[2]: The current edge image
-  //input[3]: The expected edge image 
-  //input[4]: The flag indicating whether to align the 3D voxel world along with image
-  //input[5]: Uncertainty in meters
-  //input[6]: n_normal
-  //input[7]: num_observation
+  // input[0]: The scene
+  // input[1]: The current camera
+  // input[2]: The current edge image
+  // input[3]: The expected edge image
+  // input[4]: The flag indicating whether to align the 3D voxel world along with image
+  // input[5]: Uncertainty in meters
+  // input[6]: n_normal
+  // input[7]: num_observation
   vcl_vector<vcl_string> input_types_(n_inputs_);
   unsigned i = 0;
   input_types_[i++] = "boxm_scene_base_sptr";
@@ -101,7 +93,7 @@ bool boxm_rpc_registration_process(bprb_func_process& pro)
 
   // number of observations
   unsigned num_observation = pro.get_input<unsigned>(i++);
-  
+
   vpgl_camera_double_sptr camera_out;
   boxm_rpc_registration<short,boxm_edge_sample<float> >(scene,edge_image,expected_edge_image,camera_inp, camera_out, rpc_shift_3d_flag,uncertainty,n_normal, num_observation);
   // output
