@@ -3,7 +3,7 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_blocked_image_resource.h>
 #include <vil/vil_pyramid_image_resource.h>
-#include <vil/vil_pixel_format.h>
+//UNUSED: #include <vil/vil_pixel_format.h>
 #include <vil/vil_open.h>
 #include <vil/vil_stream.h>
 #include <vil/vil_new.h>

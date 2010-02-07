@@ -5,7 +5,7 @@
 // \author Tim Cootes
 
 #include <mbl/mbl_exception.h>
-#include <mbl/mbl_parse_block.h>
+//UNUSED: #include <mbl/mbl_parse_block.h>
 #include <vcl_sstream.h>
 #include <vsl/vsl_indent.h>
 #include <vcl_cassert.h>

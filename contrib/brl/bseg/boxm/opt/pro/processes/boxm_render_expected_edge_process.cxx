@@ -20,8 +20,9 @@
 #include <boxm/boxm_sample.h>
 #include <boxm/boxm_sample_multi_bin.h>
 
-#include <vil/vil_convert.h>
-#include <vil/vil_save.h>
+#include <vil/vil_image_view.h>
+//UNUSED: #include <vil/vil_convert.h>
+//UNUSED: #include <vil/vil_save.h>
 
 namespace boxm_render_expected_edge_process_globals
 {

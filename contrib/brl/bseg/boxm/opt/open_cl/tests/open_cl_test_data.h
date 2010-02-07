@@ -9,7 +9,7 @@
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_vector.h>
 #include <vil/vil_load.h>
-#include <vil/vil_save.h>
+//UNUSED: #include <vil/vil_save.h>
 #include <vil/vil_image_view.h>
 
 #include <boxm/boxm_mog_grey_processor.h>

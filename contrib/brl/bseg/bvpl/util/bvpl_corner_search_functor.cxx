@@ -4,7 +4,7 @@
 
 #include <bvpl/bvpl_corner2d_kernel_factory.h>
 #include <vnl/vnl_math.h>
-#include <vnl/vnl_float_3.h>
+//UNUSED: #include <vnl/vnl_float_3.h>
 #include <vcl_algorithm.h>
 
 // Default Constructor

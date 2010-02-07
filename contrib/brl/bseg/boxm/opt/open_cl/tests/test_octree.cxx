@@ -6,7 +6,7 @@
 #include <boct/boct_tree.h>
 #include <boct/boct_tree_cell.h>
 #include <boct/boct_loc_code.h>
-#include <vnl/vnl_vector_fixed.h>
+//UNUSED: #include <vnl/vnl_vector_fixed.h>
 
 template <class T>
 static void test_loc_code(octree_test_driver<T>& driver)

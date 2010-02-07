@@ -30,7 +30,7 @@
 #include <vbl/vbl_array_3d.txx>
 #include <vsl/vsl_binary_io.h>
 #include <vpl/vpl.h>
-#include <vul/vul_file.h>
+//UNUSED: #include <vul/vul_file.h>
 
 template <class T_loc, class T_data>
 void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,

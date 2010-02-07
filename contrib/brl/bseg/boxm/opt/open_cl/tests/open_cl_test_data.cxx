@@ -1,13 +1,9 @@
+#include "open_cl_test_data.h"
 #include <vcl_cmath.h>
 #include <boxm/opt/open_cl/boxm_ray_trace_manager.h>
 #include <boct/boct_tree_cell.h>
 #include <boct/boct_loc_code.h>
-#include <vgl/vgl_point_3d.h>
-
-#include "open_cl_test_data.h"
-
-
-
+//UNUSED: #include <vgl/vgl_point_3d.h>
 
 void open_cl_test_data::
 test_rays(vbl_array_2d<vnl_vector_fixed<float, 3> >& ray_origin,

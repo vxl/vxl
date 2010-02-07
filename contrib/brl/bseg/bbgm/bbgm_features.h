@@ -12,13 +12,13 @@
 //   <none yet>
 // \endverbatim
 
-#include <vbl/vbl_array_2d.h>
-#include <vbl/vbl_ref_count.h>
+//UNUSED: #include <vbl/vbl_array_2d.h>
+//UNUSED: #include <vbl/vbl_ref_count.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_set_io.h>
 #include <vcl_vector.h>
 #include <vcl_set.h>
-#include <vnl/vnl_vector_fixed.h>
+//UNUSED: #include <vnl/vnl_vector_fixed.h>
 #include <brip/brip_rect_mask.h>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_polygon.h>

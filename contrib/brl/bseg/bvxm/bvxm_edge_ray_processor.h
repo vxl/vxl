@@ -53,9 +53,9 @@ class  bvxm_edge_ray_processor
                                     double initial_kappa = 10000.0,
                                     unsigned scale=0);
 
-  //: update a von_mises edge tangent world. 
-  //  x0 interval is a radius in voxel units. cone angle (in radians) describes 
-  //  a region around the new tangent vector sample. Together these intervals 
+  //: update a von_mises edge tangent world.
+  //  x0 interval is a radius in voxel units. cone angle (in radians) describes
+  //  a region around the new tangent vector sample. Together these intervals
   //  are used to compute the probability of the sample.
   bool update_von_mises_edge_tangents(bvxm_image_metadata const& metadata,
                                       double x0_interval = 1.0,

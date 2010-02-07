@@ -7,10 +7,10 @@
 #include <boxm/boxm_block_vis_graph_iterator.h>
 #include <boxm/boxm_scene.h>
 #include <boxm/boxm_utils.h>
-#include <vnl/vnl_vector_fixed.h>
-#include <vul/vul_timer.h>
+//UNUSED: #include <vnl/vnl_vector_fixed.h>
+//UNUSED: #include <vul/vul_timer.h>
 #include <vgl/vgl_intersection.h>
-#include <vgl/vgl_line_3d_2_points.h>
+//UNUSED: #include <vgl/vgl_line_3d_2_points.h>
 #include <boxm/opt/boxm_update_image_functor.h>
 #include <boxm/opt/boxm_render_expected_image_functor.h>
 

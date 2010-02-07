@@ -14,9 +14,9 @@
 
 #include "../bvxm_voxel_grid.h"
 #include <vcl_fstream.h>
-#include <vgl/vgl_sphere_3d.h>
-#include <vgl/vgl_box_3d.h>
-#include <vgl/vgl_line_segment_3d.h>
+//UNUSED: #include <vgl/vgl_sphere_3d.h>
+//UNUSED: #include <vgl/vgl_box_3d.h>
+//UNUSED: #include <vgl/vgl_line_segment_3d.h>
 #include <vnl/vnl_float_4.h>
 #include <bvrml/bvrml_write.h>
 

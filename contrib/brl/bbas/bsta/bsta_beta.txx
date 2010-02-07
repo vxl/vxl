@@ -4,6 +4,7 @@
 //:
 // \file
 #include "bsta_beta.h"
+#include <vnl/vnl_beta.h>
 #include <vnl/vnl_bignum.h>
 #include <vnl/algo/vnl_rpoly_roots.h>
 // Factorial

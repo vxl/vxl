@@ -16,7 +16,7 @@
 #include <vil3d/vil3d_save.h>
 #include <vil3d/vil3d_new.h>
 #include <vil3d/vil3d_crop.h>
-#include <vul/vul_file.h>
+//UNUSED: #include <vul/vul_file.h>
 #include <vul/vul_string.h>
 #include <vimt3d/vimt3d_vil3d_v3i.h>
 

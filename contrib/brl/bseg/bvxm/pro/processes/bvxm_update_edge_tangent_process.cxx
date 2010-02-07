@@ -22,12 +22,13 @@
 #include <brip/brip_vil_float_ops.h>
 
 #include <vpgl/algo/vpgl_backproject.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_plane_3d.h>
+//UNUSED: #include <vgl/vgl_point_2d.h>
+//UNUSED: #include <vgl/vgl_point_3d.h>
+//UNUSED: #include <vgl/vgl_vector_3d.h>
+//UNUSED: #include <vgl/vgl_plane_3d.h>
 
-#include <vil/vil_load.h>
+#include <vil/vil_image_view.h>
+//UNUSED: #include <vil/vil_load.h>
 #include <vcl_cstdio.h>
 
 //: set input and output types

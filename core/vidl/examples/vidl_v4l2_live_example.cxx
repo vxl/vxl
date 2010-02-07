@@ -2,11 +2,9 @@
 
 #include <vcl_iostream.h>
 #include <vidl/vidl_v4l2_devices.h>
-#include <vidl/vidl_v4l2_pixel_format.h>
 #include <vidl/vidl_v4l2_istream.h>
-
-
 #include <vidl/vidl_image_list_ostream.h>
+//UNUSED: #include <vidl/vidl_v4l2_pixel_format.h>
 #include <vul/vul_timer.h>
 
 int select_device(vidl_v4l2_devices& devs)

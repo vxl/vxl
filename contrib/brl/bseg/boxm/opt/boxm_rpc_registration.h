@@ -36,7 +36,8 @@
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vcl_limits.h>
-#include <vil/vil_save.h>
+#include <vil/vil_image_view.h>
+//UNUSED: #include <vil/vil_save.h>
 
 int convert_uncertainty_from_meters_to_pixels(float uncertainty,
                                               bgeo_lvcs lvcs,

@@ -9,7 +9,8 @@
 #include <vcl_iostream.h>
 #include <vgl/vgl_homg_plane_3d.h>
 #include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_intersection.h>
+//UNUSED: #include <vgl/vgl_intersection.h>
+
 //: Construct from homogeneous plane
 template <class T>
 vgl_plane_3d<T>::vgl_plane_3d(vgl_homg_plane_3d<T> const& p)

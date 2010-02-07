@@ -1,14 +1,12 @@
 #include <testlib/testlib_test.h>
-#include <vul/vul_file.h>
+//UNUSED: #include <vul/vul_file.h>
 #include <vpl/vpl.h>
 #include <vcl_cstdlib.h> // for rand()
 #include <bvxm/bvxm_illum_util.h>
 #include <bsta/bsta_histogram.h>
 #include <bsta/io/bsta_io_histogram.h>
 #include <vsl/vsl_binary_io.h>
-#include <vnl/vnl_math.h>
-
-
+//UNUSED: #include <vnl/vnl_math.h>
 
 static void test_illum()
 {

@@ -17,7 +17,7 @@
 #include <boxm/boxm_scene.h>
 #include <boxm/boxm_compute_scene_statistics.h>
 #include <boxm/boxm_apm_traits.h>
-#include <vil/vil_convert.h>
+//UNUSED: #include <vil/vil_convert.h>
 #include <bsta/bsta_histogram_sptr.h>
 #include <bsta/io/bsta_io_histogram.h>
 

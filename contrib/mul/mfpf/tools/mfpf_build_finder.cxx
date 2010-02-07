@@ -19,7 +19,7 @@
 // }
 // \endcode
 
-#include <mbl/mbl_parse_block.h>
+//UNUSED: #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_parse_colon_pairs_list.h>
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_exception.h>

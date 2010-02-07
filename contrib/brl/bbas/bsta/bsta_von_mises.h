@@ -17,7 +17,7 @@
 //
 
 #include "bsta_distribution.h"
-#include <vnl/vnl_math.h>
+//UNUSED: #include <vnl/vnl_math.h>
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
 

@@ -19,7 +19,7 @@
 #include <bvpl/bvpl_kernel.h>
 
 #include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_plane_3d.h>
+//UNUSED: #include <vgl/vgl_plane_3d.h>
 
 #include <vcl_iostream.h>
 

@@ -17,7 +17,7 @@
 #include <mfpf/mfpf_sample_region.h>
 #include <mfpf/mfpf_norm_vec.h>
 #include <vnl/vnl_vector.h>
-#include <vnl/vnl_c_vector.h>
+//UNUSED: #include <vnl/vnl_c_vector.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <vnl/io/vnl_io_matrix.h>
 

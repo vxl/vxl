@@ -8,7 +8,7 @@
 
 #include "rtvl_tensor.hxx"
 
-#include <vnl/vnl_vector_fixed.h>
+//UNUSED: #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 

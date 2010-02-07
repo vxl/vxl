@@ -7,8 +7,9 @@
 #include <boxm/opt/boxm_rt_sample.h>
 #include <boxm/boxm_mog_grey_processor.h>
 #include <boxm/boxm_simple_grey_processor.h>
-#include <vil/vil_math.h>
-#include <vil/vil_save.h>
+#include <vil/vil_image_view.h>
+//UNUSED: #include <vil/vil_math.h>
+//UNUSED: #include <vil/vil_save.h>
 #include <vcl_iostream.h>
 
 template <boxm_apm_type APM, class T_aux>

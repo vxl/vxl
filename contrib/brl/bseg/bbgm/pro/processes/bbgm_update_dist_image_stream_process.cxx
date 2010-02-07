@@ -17,7 +17,7 @@
 #include <vil/vil_math.h>
 #include <vil/vil_convert.h>
 #include <vidl/vidl_istream_sptr.h>
-#include <vidl/vidl_image_list_istream.h>
+//UNUSED: #include <vidl/vidl_image_list_istream.h>
 #include <vidl/vidl_frame.h>
 #include <vidl/vidl_convert.h>
 

@@ -18,7 +18,7 @@
 #include <vcl_string.h>
 #include <bprb/bprb_func_process.h>
 
-#include <vgl/vgl_box_3d.h>
+//UNUSED: #include <vgl/vgl_box_3d.h>
 #include <vpgl/vpgl_camera.h>
 
 #include "vpgl/file_formats/vpgl_geo_camera.h"

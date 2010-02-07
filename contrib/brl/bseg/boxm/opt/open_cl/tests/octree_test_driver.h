@@ -6,7 +6,7 @@
 #include <vcl_iostream.h>
 #include <bcl/bcl_cl.h>
 #include <boct/boct_tree.h>
-#include <vnl/vnl_vector_fixed.h>
+//UNUSED: #include <vnl/vnl_vector_fixed.h>
 #include <vcl_vector.h>
 #include <boxm/opt/open_cl/boxm_ray_trace_manager.h>
 #define SDK_SUCCESS 0

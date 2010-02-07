@@ -14,10 +14,10 @@
 #include <vnl/algo/vnl_gaussian_kernel_1d.h>
 #include <vnl/algo/vnl_chi_squared.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vil/vil_resample_bilin.h>
+//UNUSED: #include <vil/vil_resample_bilin.h>
 #include <vil/vil_new.h>
-#include <vgl/vgl_box_2d.h>
-#include <vgl/vgl_box_3d.h>
+//UNUSED: #include <vgl/vgl_box_2d.h>
+//UNUSED: #include <vgl/vgl_box_3d.h>
 #include <vnl/vnl_math.h>
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>

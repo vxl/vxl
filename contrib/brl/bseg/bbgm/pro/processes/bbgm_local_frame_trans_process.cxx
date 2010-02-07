@@ -15,9 +15,9 @@
 #include <vbl/io/vbl_io_smart_ptr.h>
 #include <vil/vil_convert.h>
 #include <vil/vil_math.h>
-#include <vidl/vidl_image_list_istream.h>
-#include <vidl/vidl_frame.h>
-#include <vidl/vidl_convert.h>
+//UNUSED: #include <vidl/vidl_image_list_istream.h>
+//UNUSED: #include <vidl/vidl_frame.h>
+//UNUSED: #include <vidl/vidl_convert.h>
 #include <core/vidl_pro/vidl_pro_utils.h>
 
 static void eigenvalues(double B, double C, double E, double& la,

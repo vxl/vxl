@@ -35,7 +35,7 @@
 
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_box_3d.h>
-#include <vgl/vgl_vector_3d.h>
+//UNUSED: #include <vgl/vgl_vector_3d.h>
 
 
 class bvpl_subgrid_base

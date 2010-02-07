@@ -4,7 +4,7 @@
 
 #include <vcl_algorithm.h>
 #include <vnl/vnl_math.h>
-#include <vnl/vnl_float_3.h>
+//UNUSED: #include <vnl/vnl_float_3.h>
 
 // Default Constructor
 bvpl_weighted_cube_kernel_factory::bvpl_weighted_cube_kernel_factory()

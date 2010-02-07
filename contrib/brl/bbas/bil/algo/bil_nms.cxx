@@ -11,7 +11,7 @@
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
-#include <vil/vil_save.h>
+//UNUSED: #include <vil/vil_save.h>
 #include <vcl_cassert.h>
 
 static const vil_image_view<double> img_d; // dummy local variables, used to initialise

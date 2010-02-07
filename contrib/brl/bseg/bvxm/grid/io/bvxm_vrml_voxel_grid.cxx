@@ -1,6 +1,6 @@
 #include "bvxm_vrml_voxel_grid.h"
-#include <vnl/vnl_math.h>
-
+//UNUSED: #include <vnl/vnl_math.h>
+#include <vnl/vnl_float_4.h>
 
 void bvxm_vrml_voxel_grid::write_vrml_grid(vcl_ofstream& str, bvxm_voxel_grid<float> *grid, float threshold)
 {

@@ -10,7 +10,7 @@
 #include <vcl_iostream.h>
 #include <vcl_iterator.h>
 #include <vcl_algorithm.h>
-#include <vul/vul_file.h>
+//UNUSED: #include <vul/vul_file.h>
 #include <mbl/mbl_exception.h>
 
 

@@ -12,7 +12,7 @@
 
 void test_gauss_fit()
 {
-#if 0 // commented out
+#if 0 // commented out: needs work
   // Create 15x15 vector of image points with known parameters
   vcl_vector<vgl_point_3d<double> > img_pts;
 
