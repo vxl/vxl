@@ -6,8 +6,8 @@
 #include <boct/boct_tree.h>
 #include <boct/boct_tree_cell.h>
 #include <boct/boct_loc_code.h>
-#include <vnl/vnl_vector_fixed.h>
-#include <vul/vul_timer.h>
+//UNUSED: #include <vnl/vnl_vector_fixed.h>
+//UNUSED: #include <vul/vul_timer.h>
 #include <vgl/vgl_line_3d_2_points.h>
 #include <vgl/vgl_vector_3d.h>
 
@@ -94,11 +94,11 @@ static void test_backproject_ray()
       for (unsigned j=0;j<64;j++)
       {
         vgl_line_3d_2_points<double> cam_ray = pcam->backproject(vgl_homg_point_2d<double>((double)i,(double)j));
-		vgl_vector_3d<double> norm_direction = cam_ray.direction();
-		normalize(norm_direction);
-        float dist=vcl_sqrt((ray_results[inc]  -norm_direction.x())*(ray_results[inc]  -norm_direction.x())+
-               (ray_results[++inc]-norm_direction.y())*(ray_results[inc]-norm_direction.y())+
-               (ray_results[++inc]-norm_direction.z())*(ray_results[inc]-norm_direction.z()));
+        vgl_vector_3d<double> norm_direction = cam_ray.direction();
+        normalize(norm_direction);
+        float dist=vcl_sqrt((ray_results[inc]  -norm_direction.x())*(ray_results[inc]-norm_direction.x())+
+                            (ray_results[++inc]-norm_direction.y())*(ray_results[inc]-norm_direction.y())+
+                            (ray_results[++inc]-norm_direction.z())*(ray_results[inc]-norm_direction.z()));
         ++inc;
         if (dist<1e-4)
           flag=false;
