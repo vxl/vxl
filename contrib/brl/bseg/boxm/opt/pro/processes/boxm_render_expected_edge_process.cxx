@@ -11,7 +11,6 @@
 //   <none yet>
 // \endverbatim
 
-#include <vcl_fstream.h>
 #include <boxm/boxm_scene_base.h>
 #include <boxm/boxm_scene.h>
 #include <boxm/boxm_render_image.h>
@@ -19,10 +18,8 @@
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/boxm_sample.h>
 #include <boxm/boxm_sample_multi_bin.h>
-
 #include <vil/vil_image_view.h>
-//UNUSED: #include <vil/vil_convert.h>
-//UNUSED: #include <vil/vil_save.h>
+#include <vcl_fstream.h>
 
 namespace boxm_render_expected_edge_process_globals
 {
@@ -66,7 +63,7 @@ bool boxm_render_expected_edge_process(bprb_func_process& pro)
 {
   using namespace boxm_render_expected_edge_process_globals;
 
-  if ( pro.n_inputs() < n_inputs_ ){
+  if ( pro.n_inputs() < n_inputs_ ) {
     vcl_cerr << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
     return false;
   }
@@ -95,15 +92,15 @@ bool boxm_render_expected_edge_process(bprb_func_process& pro)
     }
     else
     {
-       vcl_cerr << "Ray tracing version not yet implemented\n";
-       return false;
+      vcl_cerr << "Ray tracing version not yet implemented\n";
+      return false;
     }
     img_mask = new vil_image_view<float>(mask);
 
     vil_image_view<vxl_byte> *expected_byte = new vil_image_view<vxl_byte>(ni,nj,expected.nplanes());
     for (unsigned i=0; i<ni; i++) {
       for (unsigned j=0; j<nj; j++) {
-       (*expected_byte)(i,j) = static_cast<unsigned char>(255.0*(expected(i,j)));
+        (*expected_byte)(i,j) = static_cast<unsigned char>(255.0*(expected(i,j)));
       }
     }
     img = expected_byte;

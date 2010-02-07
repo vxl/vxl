@@ -3,15 +3,14 @@
 //:
 // \file
 
-#include <vcl_cstdio.h>
-#include <vcl_cmath.h>   // for vcl_abs(double)
 #include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_matrix_inverse.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
-//UNUSED: #include <vil/vil_save.h>
+#include <vcl_cstdio.h>
+#include <vcl_cmath.h>   // for vcl_abs(double)
 #include <vcl_cassert.h>
 
 static const vil_image_view<double> img_d; // dummy local variables, used to initialise
@@ -193,58 +192,59 @@ void bil_nms::get_relative_corner_coordinates(int face_num, int *corners)
   switch (face_num)
   {
    case 1:
-     corners[0] = 1;
-     corners[1] = 0;
-     corners[2] = 1;
-     corners[3] = 1;
-     break;
+    corners[0] = 1;
+    corners[1] = 0;
+    corners[2] = 1;
+    corners[3] = 1;
+    break;
    case 2:
-     corners[0] = 1;
-     corners[1] = 1;
-     corners[2] = 0;
-     corners[3] = 1;
-     break;
+    corners[0] = 1;
+    corners[1] = 1;
+    corners[2] = 0;
+    corners[3] = 1;
+    break;
    case 3:
-     corners[0] = 0;
-     corners[1] = 1;
-     corners[2] = -1;
-     corners[3] = 1;
+    corners[0] = 0;
+    corners[1] = 1;
+    corners[2] = -1;
+    corners[3] = 1;
     break;
    case 4:
-     corners[0] = -1;
-     corners[1] = 1;
-     corners[2] = -1;
-     corners[3] = 0;
+    corners[0] = -1;
+    corners[1] = 1;
+    corners[2] = -1;
+    corners[3] = 0;
     break;
    case 5:
-     corners[0] = -1;
-     corners[1] = 0;
-     corners[2] = -1;
-     corners[3] = -1;
+    corners[0] = -1;
+    corners[1] = 0;
+    corners[2] = -1;
+    corners[3] = -1;
     break;
    case 6:
-     corners[0] = -1;
-     corners[1] = -1;
-     corners[2] = 0;
-     corners[3] = -1;
+    corners[0] = -1;
+    corners[1] = -1;
+    corners[2] = 0;
+    corners[3] = -1;
     break;
    case 7:
-     corners[0] = 0;
-     corners[1] = -1;
-     corners[2] = 1;
-     corners[3] = -1;
+    corners[0] = 0;
+    corners[1] = -1;
+    corners[2] = 1;
+    corners[3] = -1;
     break;
    case 8:
-     corners[0] = 1;
-     corners[1] = -1;
-     corners[2] = 1;
-     corners[3] = 0;
+    corners[0] = 1;
+    corners[1] = -1;
+    corners[2] = 1;
+    corners[3] = 0;
     break;
    default:
-     corners[0] = 0;
-     corners[1] = 0;
-     corners[2] = 0;
-     corners[3] = 0;
+    corners[0] = 0;
+    corners[1] = 0;
+    corners[2] = 0;
+    corners[3] = 0;
+    break;
   }
 }
 

@@ -1,9 +1,9 @@
 // This is brl/bseg/bbgm/pro/processes/bbgm_local_frame_trans_process.cxx
 //:
 // \file
+
+#include <core/vidl_pro/vidl_pro_utils.h>
 #include <bprb/bprb_func_process.h>
-#include <vcl_iostream.h>
-#include <vcl_cmath.h>
 #include <brip/brip_vil_float_ops.h>
 #include <bbgm/bbgm_image_of.h>
 #include <bbgm/bbgm_image_sptr.h>
@@ -15,10 +15,8 @@
 #include <vbl/io/vbl_io_smart_ptr.h>
 #include <vil/vil_convert.h>
 #include <vil/vil_math.h>
-//UNUSED: #include <vidl/vidl_image_list_istream.h>
-//UNUSED: #include <vidl/vidl_frame.h>
-//UNUSED: #include <vidl/vidl_convert.h>
-#include <core/vidl_pro/vidl_pro_utils.h>
+#include <vcl_iostream.h>
+#include <vcl_cmath.h>
 
 static void eigenvalues(double B, double C, double E, double& la,
                         double& lb)
@@ -47,11 +45,12 @@ bool bbgm_local_frame_trans_process_cons(bprb_func_process& pro)
   pro.set_output_types(out_types);
   return true;
 }
+
 //: Execute the process function
 bool bbgm_local_frame_trans_process(bprb_func_process& pro)
 {
   // Sanity check
-  if (!pro.verify_inputs()){
+  if (!pro.verify_inputs()) {
     vcl_cerr << "In bbgm_local_frame_trans_process::execute() -"
              << " invalid inputs\n";
     return false;
@@ -59,7 +58,7 @@ bool bbgm_local_frame_trans_process(bprb_func_process& pro)
 
   // Retrieve background image
   bbgm_image_sptr bgm = pro.get_input<bbgm_image_sptr>(0);
-  if(!bgm)
+  if (!bgm)
   {
     vcl_cerr << "In bbgm_measure_process::execute() -"
              << " null background distribution image\n";
@@ -104,16 +103,15 @@ bool bbgm_local_frame_trans_process(bprb_func_process& pro)
   vil_image_view<float>* trans_frame = new vil_image_view<float>(frame);
 
   double min_eigenvalue =  pro.get_input<double>(5);
-
   double max_condition_number =  pro.get_input<double>(6);
-
   double max_translation =  pro.get_input<double>(7);
 
   float total = 0;
   float n_translate = 0;
   double du = 0, dv = 0;
   //compute translation on a 5x5 window
-  for (int j = 2; j<static_cast<int>(nj-2); ++j){
+  for (int j = 2; j<static_cast<int>(nj-2); ++j)
+  {
     for (int i = 2; i<static_cast<int>(ni-2); ++i)
     {
       total += 1.0f;
@@ -157,11 +155,11 @@ bool bbgm_local_frame_trans_process(bprb_func_process& pro)
         double inv10 = -C*rdet, inv11 = B*rdet;
         double tu = -(A*inv00 + D*inv01);
         double tv = -(A*inv10 + D*inv11);
-        if (vcl_fabs(tu)<max_translation && vcl_fabs(tv)<max_translation){
+        if (vcl_fabs(tu)<max_translation && vcl_fabs(tv)<max_translation) {
           n_translate += 1.0f;
           du += vcl_fabs(tu);
           dv += vcl_fabs(tv);
-          for (unsigned p = 0; p<3; ++p){
+          for (unsigned p = 0; p<3; ++p) {
             double itrans = gauss_smooth(i,j,p)+
               tu*Ix(i,j,p)+tv*Iy(i,j,p);
             (*trans_frame)(i,j,p) = static_cast<float>(itrans);

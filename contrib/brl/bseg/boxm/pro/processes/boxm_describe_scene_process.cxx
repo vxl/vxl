@@ -17,7 +17,6 @@
 #include <boxm/boxm_scene.h>
 #include <boxm/boxm_compute_scene_statistics.h>
 #include <boxm/boxm_apm_traits.h>
-//UNUSED: #include <vil/vil_convert.h>
 #include <bsta/bsta_histogram_sptr.h>
 #include <bsta/io/bsta_io_histogram.h>
 
@@ -57,7 +56,7 @@ bool boxm_describe_scene_process(bprb_func_process& pro)
 {
   using namespace boxm_describe_scene_process_globals;
 
-  if ( !pro.verify_inputs() ){
+  if ( !pro.verify_inputs() ) {
     vcl_cerr << pro.name() << ": invalid inputs\n";
     return false;
   }
@@ -72,8 +71,8 @@ bool boxm_describe_scene_process(bprb_func_process& pro)
     }
     else
     {
-       vcl_cerr<<"boxm_describe_scene_process not yet implemented for multi-bin/Gaussian mixture\n";
-       return false;
+      vcl_cerr<<"boxm_describe_scene_process not yet implemented for multi-bin/Gaussian mixture\n";
+      return false;
     }
   }
   else if (scene_ptr->appearence_model() == BOXM_APM_SIMPLE_GREY)

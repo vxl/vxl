@@ -5,9 +5,8 @@
 // \author Tim Cootes
 
 #include <mbl/mbl_exception.h>
-//UNUSED: #include <mbl/mbl_parse_block.h>
-#include <vcl_sstream.h>
 #include <vsl/vsl_indent.h>
+#include <vcl_sstream.h>
 #include <vcl_cassert.h>
 
 //: Parse list of string pairs separated by colons
@@ -82,7 +81,7 @@ void mbl_parse_colon_pairs_list(vcl_istream& is,
 
     // Read second item
     is >> string2;
-    if (string2=="}") 
+    if (string2=="}")
     {
       is.clear(vcl_ios::failbit);  // Set error flag
       vcl_string error_msg("Expecting a string after ");

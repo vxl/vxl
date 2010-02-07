@@ -2,6 +2,7 @@
 
 #include "sdet_img_edge.h"
 
+#include <sdet/sdet_detector.h>
 #include <bsta/bsta_gaussian_sphere.h>
 #include <brip/brip_vil_float_ops.h>
 #include <vdgl/vdgl_digital_curve.h>
@@ -14,10 +15,7 @@
 #include <vnl/algo/vnl_gaussian_kernel_1d.h>
 #include <vnl/algo/vnl_chi_squared.h>
 #include <vnl/vnl_vector_fixed.h>
-//UNUSED: #include <vil/vil_resample_bilin.h>
 #include <vil/vil_new.h>
-//UNUSED: #include <vgl/vgl_box_2d.h>
-//UNUSED: #include <vgl/vgl_box_3d.h>
 #include <vnl/vnl_math.h>
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
@@ -25,14 +23,13 @@
 #include <vcl_string.h>
 #include <vcl_vector.h>
 #include <vcl_cassert.h>
-#include <sdet/sdet_detector.h>
 
 vil_image_view<vxl_byte> sdet_img_edge::detect_edges(vil_image_view<vxl_byte> img,
-                                                      double noise_multiplier,
-                                                      double smooth,
-                                                      bool automatic_threshold,
-                                                      bool junctionp,
-                                                      bool aggressive_junction_closure)
+                                                     double noise_multiplier,
+                                                     double smooth,
+                                                     bool automatic_threshold,
+                                                     bool junctionp,
+                                                     bool aggressive_junction_closure)
 {
   if ( img.nplanes() >= 3 )
   {
@@ -108,11 +105,11 @@ static double angle_0_360(double angle)
 
 vil_image_view<float>
 sdet_img_edge::detect_edge_tangent(vil_image_view<vxl_byte> img,
-                                    double noise_multiplier,
-                                    double smooth,
-                                    bool automatic_threshold,
-                                    bool junctionp,
-                                    bool aggressive_junction_closure)
+                                   double noise_multiplier,
+                                   double smooth,
+                                   bool automatic_threshold,
+                                   bool junctionp,
+                                   bool aggressive_junction_closure)
 {
   // set parameters for the edge detector
   sdet_detector_params dp;

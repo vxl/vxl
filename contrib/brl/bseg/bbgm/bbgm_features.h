@@ -12,16 +12,14 @@
 //   <none yet>
 // \endverbatim
 
-//UNUSED: #include <vbl/vbl_array_2d.h>
-//UNUSED: #include <vbl/vbl_ref_count.h>
+#include <brip/brip_rect_mask.h>
+#include <vgl/vgl_box_2d.h>
+#include <vgl/vgl_polygon.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_set_io.h>
 #include <vcl_vector.h>
 #include <vcl_set.h>
-//UNUSED: #include <vnl/vnl_vector_fixed.h>
-#include <brip/brip_rect_mask.h>
-#include <vgl/vgl_box_2d.h>
-#include <vgl/vgl_polygon.h>
+
 //================================================================
 //=======================  mask feature ===========================
 //================================================================
@@ -175,6 +173,7 @@ class bbgm_mask_pair_feature
 
   //======================================================================
   // Binary I/O Methods
+  //======================================================================
 
   //: Return a string name
   // \note this is probably not portable
@@ -222,7 +221,7 @@ bool pair_intersect(bbgm_mask_pair_feature const& mp0,
                     bool plus_intersect_only = true);
 
 //================================================================
-//=======================  pair group feature =====================
+//=======================  pair group feature ====================
 //================================================================
 
 //: functor to order the bbgm_pair_group_feature set
@@ -301,6 +300,7 @@ class bbgm_pair_group_feature
 
   //===========================================================================
   // Binary I/O Methods
+  //===========================================================================
 
   //: Return a string name
   // \note this is probably not portable

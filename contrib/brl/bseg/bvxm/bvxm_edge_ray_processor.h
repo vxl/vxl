@@ -11,10 +11,12 @@
 //  Modifications
 //   <none yet>
 // \endverbatim
+
 #include <bvxm/bvxm_voxel_world_sptr.h>
 #include <bvxm/bvxm_image_metadata.h>
 #include <bvxm/bvxm_von_mises_tangent_processor.h>
 #include <vcl_string.h>
+
 class  bvxm_edge_ray_processor
 {
  public:
@@ -23,10 +25,10 @@ class  bvxm_edge_ray_processor
   typedef bvxm_von_mises_tangent_processor<float>::pos_t pos_t;
   typedef bvxm_von_mises_tangent_processor<float>::dir_t dir_t;
 
-  bvxm_edge_ray_processor(): world_(0){}
-  bvxm_edge_ray_processor(bvxm_voxel_world_sptr& world): world_(world){}
+  bvxm_edge_ray_processor(): world_(0) {}
+  bvxm_edge_ray_processor(bvxm_voxel_world_sptr& world): world_(world) {}
 
-  void set_voxel_world(bvxm_voxel_world_sptr& world){world_ = world;}
+  void set_voxel_world(bvxm_voxel_world_sptr& world) { world_ = world; }
 
   // initialize the voxel grid for edges
   bool init_edges(unsigned scale_idx=0);

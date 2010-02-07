@@ -1,18 +1,15 @@
 #include <testlib/testlib_test.h>
 #include <testlib/testlib_root_dir.h>
 #include <boxm/opt/open_cl/boxm_ray_trace_manager.h>
+#include <boxm/opt/boxm_update_image_functor.h>
+#include <boxm/opt/boxm_render_expected_image_functor.h>
 #include <boct/boct_tree.h>
 #include <boct/boct_tree_cell.h>
 #include <boct/boct_loc_code.h>
 #include <boxm/boxm_block_vis_graph_iterator.h>
 #include <boxm/boxm_scene.h>
 #include <boxm/boxm_utils.h>
-//UNUSED: #include <vnl/vnl_vector_fixed.h>
-//UNUSED: #include <vul/vul_timer.h>
 #include <vgl/vgl_intersection.h>
-//UNUSED: #include <vgl/vgl_line_3d_2_points.h>
-#include <boxm/opt/boxm_update_image_functor.h>
-#include <boxm/opt/boxm_render_expected_image_functor.h>
 
 #include <vil/vil_save.h>
 #include <vil/vil_load.h>
@@ -57,7 +54,6 @@ void save_expected_image(vcl_string const& image_path,
                          unsigned ni, unsigned nj,
                          float* expected_img)
 {
-
     if (!expected_img)
         return;
     vil_image_view<float> out0(ni, nj);
@@ -66,7 +62,7 @@ void save_expected_image(vcl_string const& image_path,
     vil_image_view<float> out3(ni, nj);
 
     unsigned expt_ptr = 0;
-    for (unsigned i = 0; i<ni; ++i){
+    for (unsigned i = 0; i<ni; ++i) {
         for (unsigned j = 0; j<nj; ++j)  {
             out0(i,j) = expected_img[expt_ptr];++expt_ptr;
             out1(i,j) = expected_img[expt_ptr];++expt_ptr;
@@ -79,16 +75,16 @@ void save_expected_image(vcl_string const& image_path,
     vil_save(out2, (image_path+"2.tiff").c_str());
     vil_save(out3, (image_path+"3.tiff").c_str());
 }
-vil_image_view<float> expected_image(unsigned ni, unsigned nj,
-                         float* expected_img)
-{
 
+vil_image_view<float> expected_image(unsigned ni, unsigned nj,
+                                     float* expected_img)
+{
     vil_image_view<float> out(ni, nj);
     if (!expected_img)
         return out;
 
     unsigned expt_ptr = 0;
-    for (unsigned i = 0; i<ni; ++i){
+    for (unsigned i = 0; i<ni; ++i) {
         for (unsigned j = 0; j<nj; ++j)  {
             ++expt_ptr;
             ++expt_ptr;
@@ -98,9 +94,9 @@ vil_image_view<float> expected_image(unsigned ni, unsigned nj,
     }
     return out;
 }
+
 vil_image_view<float> run_expected_image(boxm_scene<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY > > > * s,vpgl_perspective_camera<double> * pcam,unsigned ni, unsigned nj)
 {
-
     boxm_ray_trace_manager<boxm_sample<BOXM_APM_MOG_GREY> >* ray_mgr = boxm_ray_trace_manager<boxm_sample<BOXM_APM_MOG_GREY> >::instance();
     ray_mgr->set_perspective_camera(pcam);
     ray_mgr->setup_ray_origin();
@@ -147,7 +143,6 @@ vil_image_view<float> run_expected_image(boxm_scene<boct_tree<short,boxm_sample<
             ray_mgr->run();
 
             //save_expected_image("./gpuexpected",250,250,ray_mgr->ray_results());
-
         }
     }
     return expected_image(250,250,ray_mgr->ray_results());
@@ -159,7 +154,7 @@ bool update_world(vcl_string scene_name,vcl_string camname,vcl_string imgname)
     s.load_scene(scene_name);
     vpgl_perspective_camera<double> *pcam=new vpgl_perspective_camera<double> ();
     vcl_ifstream ifs(camname.c_str());
-    if(!ifs)
+    if (!ifs)
         return false;
     else
         ifs >> (*pcam);
@@ -180,7 +175,7 @@ vil_image_view<float> render_image(vcl_string scene_name,vcl_string camname,unsi
     s.load_scene(scene_name);
     vpgl_perspective_camera<double> *pcam=new vpgl_perspective_camera<double> ();
     vcl_ifstream ifs(camname.c_str());
-    if(!ifs)
+    if (!ifs)
         return vil_image_view<float>();
     else
         ifs >> (*pcam);
@@ -190,7 +185,6 @@ vil_image_view<float> render_image(vcl_string scene_name,vcl_string camname,unsi
     boxm_render_image_rt<short, boxm_sample<BOXM_APM_MOG_GREY> >(s,pcam,expected_img,mask,-1,true);
 
     return expected_img;
-
 }
 
 static void test_expected_image()
@@ -205,7 +199,7 @@ static void test_expected_image()
 
     vpgl_perspective_camera<double> *pcam=new vpgl_perspective_camera<double> ();
     vcl_ifstream ifs(camname.c_str());
-    if(!ifs)
+    if (!ifs)
         return ;
     else
         ifs >> (*pcam);
@@ -214,16 +208,16 @@ static void test_expected_image()
     vil_image_view<float> im_gpu=run_expected_image(&s,pcam,250,250);
 
     float dist=0;
-    for(unsigned i=0;i<im_nongpu.ni();i++)
+    for (unsigned i=0;i<im_nongpu.ni();i++)
     {
-        for(unsigned j=0;j<im_nongpu.nj();j++)
+        for (unsigned j=0;j<im_nongpu.nj();j++)
         {
             dist+=vcl_fabs(im_nongpu(i,j)-im_gpu(i,j));
         }
     }
     s.clean_scene();
 
-    if(dist<1e2)
+    if (dist<1e2)
         TEST("test_expected_image_driver", true, true);
     else
         TEST("test_expected_image_driver", true, false);

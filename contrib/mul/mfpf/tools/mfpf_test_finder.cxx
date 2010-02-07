@@ -20,7 +20,6 @@
 // }
 // \endcode
 
-//UNUSED: #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_parse_colon_pairs_list.h>
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_exception.h>
@@ -102,7 +101,6 @@ void tool_params::read_from_file(const vcl_string& path)
 
   mbl_parse_colon_pairs_list(props.get_required_property("images"),
                              points_names,image_names);
-
 
   res_level = vul_string_atoi(props.get_optional_property("res_level","0"));
   pt_index = vul_string_atoi(props.get_optional_property("pt_index","0"));

@@ -19,8 +19,6 @@
 #include <bvpl/bvpl_kernel.h>
 
 #include <vgl/vgl_point_3d.h>
-//UNUSED: #include <vgl/vgl_plane_3d.h>
-
 #include <vcl_iostream.h>
 
 class bvpl_susan_opinion_operator

@@ -1,14 +1,13 @@
-
 #ifndef octree_test_driver_h_
 #define octree_test_driver_h_
 
+#include <boxm/opt/open_cl/boxm_ray_trace_manager.h>
+#include <boct/boct_tree.h>
+#include <bcl/bcl_cl.h>
+#include <vcl_vector.h>
 #include <vcl_string.h>
 #include <vcl_iostream.h>
-#include <bcl/bcl_cl.h>
-#include <boct/boct_tree.h>
-//UNUSED: #include <vnl/vnl_vector_fixed.h>
-#include <vcl_vector.h>
-#include <boxm/opt/open_cl/boxm_ray_trace_manager.h>
+
 #define SDK_SUCCESS 0
 #define SDK_FAILURE 1
 #define VECTOR_SIZE 4
@@ -17,9 +16,9 @@ template <class T>
 class octree_test_driver
 {
   boxm_ray_trace_manager<T> * cl_manager_;
-  cl_ulong used_local_memory_;      
-  cl_ulong kernel_work_group_size_; 
-  cl_command_queue command_queue_;  
+  cl_ulong used_local_memory_;
+  cl_ulong kernel_work_group_size_;
+  cl_command_queue command_queue_;
   cl_mem   input_cell_buf_;
   cl_mem   input_data_buf_;
   cl_mem   input_ray_origin_buf_;
@@ -30,13 +29,7 @@ class octree_test_driver
   cl_mem   tree_test_output_;
 
  public:
-  /**
-   * Constructor
-   * Initialize member variables
-   * @param name name of sample (string)
-   */
-  octree_test_driver()
-    {cl_manager_ = boxm_ray_trace_manager<T>::instance();}
+  octree_test_driver() { cl_manager_ = boxm_ray_trace_manager<T>::instance(); }
 
   ~octree_test_driver();
 
@@ -58,19 +51,19 @@ class octree_test_driver
     else
       return 1;
   }
-  cl_int* tree_results() {return cl_manager_->tree_results();}
-  vcl_size_t tree_result_size_bytes() const {return 4*cl_manager_->tree_result_size();}
+  cl_int* tree_results() { return cl_manager_->tree_results(); }
+  vcl_size_t tree_result_size_bytes() const { return 4*cl_manager_->tree_result_size(); }
 
   void set_buffers();
 
   int create_kernel(vcl_string const& name);
-  cl_float * ray_results(){return cl_manager_->ray_results();}
+  cl_float * ray_results() { return cl_manager_->ray_results(); }
   int release_kernel();
 
   int run_tree_test_kernels();
 
   int run_ray_trace_test_kernels();
-  
+
   int run_ray_creation_test_kernels();
 
   int build_program();

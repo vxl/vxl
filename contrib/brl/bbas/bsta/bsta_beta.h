@@ -13,8 +13,6 @@
 // \endverbatim
 
 #include "bsta_distribution.h"
-//UNUSED: #include <vnl/vnl_math.h>
-//UNUSED: #include <vnl/vnl_beta.h>
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
 
@@ -27,7 +25,7 @@ class bsta_beta : public bsta_distribution<T,1>
 
   //: pre: alpha>0 and beta>0
   bsta_beta(T alpha, T beta) : alpha_(alpha), beta_(beta)
-     { if (alpha_< 0) alpha_=T(0.00001); if (beta_<0) beta_=T(0.00001); }
+  { if (alpha_< 0) alpha_=T(0.00001); if (beta_<0) beta_=T(0.00001); }
 
   //: constructs from a set of sample values
   bsta_beta(vcl_vector<T> x);
@@ -39,7 +37,7 @@ class bsta_beta : public bsta_distribution<T,1>
   T beta() const { return beta_; }
 
   void set_alpha_beta(T alpha, T beta)
-  { 
+  {
     alpha_=alpha; beta_=beta;
     if (alpha_ < 0)
       alpha_=T(0.00001);
@@ -67,7 +65,7 @@ inline vcl_ostream& operator<< (vcl_ostream& os,
                                 bsta_beta<T> const& b)
 {
   return
-  os << "beta: (alpha,beta) = (" << b.alpha() << "  " << b.beta() <<" "<<b.mean()<<" "<<b.var()<< ")\n";
+  os << "beta: (alpha,beta) = (" << b.alpha() << "  " << b.beta() <<' '<<b.mean()<<' '<<b.var()<< ")\n";
 }
 
 #endif

@@ -13,15 +13,11 @@
 // \endverbatim
 
 #include "../bvxm_voxel_grid.h"
-#include <vcl_fstream.h>
-//UNUSED: #include <vgl/vgl_sphere_3d.h>
-//UNUSED: #include <vgl/vgl_box_3d.h>
-//UNUSED: #include <vgl/vgl_line_segment_3d.h>
-#include <vnl/vnl_float_4.h>
 #include <bvrml/bvrml_write.h>
-
 #include <bsta/bsta_attributes.h>
 #include <bsta/bsta_gauss_f1.h>
+#include <vnl/vnl_float_4.h>
+#include <vcl_fstream.h>
 
 class bvxm_vrml_voxel_grid
 {

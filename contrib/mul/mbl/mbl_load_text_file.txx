@@ -6,13 +6,11 @@
 // \author dac
 
 #include "mbl_load_text_file.h"
+#include <mbl/mbl_exception.h>
 #include <vcl_fstream.h>
 #include <vcl_iostream.h>
 #include <vcl_iterator.h>
 #include <vcl_algorithm.h>
-//UNUSED: #include <vul/vul_file.h>
-#include <mbl/mbl_exception.h>
-
 
 //: Load vector from file with format "v1 v2 .. vn"
 template <class T>

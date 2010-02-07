@@ -2,9 +2,8 @@
 //:
 // \file
 
-#include <vcl_algorithm.h>
 #include <vnl/vnl_math.h>
-//UNUSED: #include <vnl/vnl_float_3.h>
+#include <vcl_algorithm.h>
 
 // Default Constructor
 bvpl_neighborhood_kernel_factory::bvpl_neighborhood_kernel_factory()

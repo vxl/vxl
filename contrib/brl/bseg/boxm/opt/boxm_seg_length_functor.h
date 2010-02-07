@@ -8,8 +8,6 @@
 #include <boxm/boxm_mog_grey_processor.h>
 #include <boxm/boxm_simple_grey_processor.h>
 #include <vil/vil_image_view.h>
-//UNUSED: #include <vil/vil_math.h>
-//UNUSED: #include <vil/vil_save.h>
 #include <vcl_iostream.h>
 
 template <boxm_apm_type APM, class T_aux>
@@ -17,7 +15,7 @@ class boxm_seg_length_functor
 {
  public:
   boxm_seg_length_functor(vil_image_view<typename boxm_apm_traits<APM>::obs_datatype> &observation,
-                                          unsigned int ni,unsigned nj)
+                          unsigned int ni,unsigned nj)
     : obs_(observation)
   {
     scene_read_only_=true;

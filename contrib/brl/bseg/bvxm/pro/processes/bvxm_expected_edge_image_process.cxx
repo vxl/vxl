@@ -2,23 +2,15 @@
 #include "bvxm_expected_edge_image_process.h"
 //:
 // \file
+
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
-
 #include <brdb/brdb_value.h>
-
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/bvxm_image_metadata.h>
-
-#include <brip/brip_vil_float_ops.h>
-
-#include <vpgl/algo/vpgl_backproject.h>
-//UNUSED: #include <vgl/vgl_point_2d.h>
-//UNUSED: #include <vgl/vgl_point_3d.h>
-//UNUSED: #include <vgl/vgl_vector_3d.h>
-//UNUSED: #include <vgl/vgl_plane_3d.h>
 #include <bvxm/bvxm_edge_ray_processor.h>
-
+#include <brip/brip_vil_float_ops.h>
+#include <vpgl/algo/vpgl_backproject.h>
 #include <vcl_cstdio.h>
 
 //: set input and output types

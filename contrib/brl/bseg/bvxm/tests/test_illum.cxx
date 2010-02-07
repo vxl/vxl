@@ -1,12 +1,10 @@
 #include <testlib/testlib_test.h>
-//UNUSED: #include <vul/vul_file.h>
-#include <vpl/vpl.h>
-#include <vcl_cstdlib.h> // for rand()
 #include <bvxm/bvxm_illum_util.h>
 #include <bsta/bsta_histogram.h>
 #include <bsta/io/bsta_io_histogram.h>
 #include <vsl/vsl_binary_io.h>
-//UNUSED: #include <vnl/vnl_math.h>
+#include <vpl/vpl.h>
+#include <vcl_cstdlib.h> // for rand()
 
 static void test_illum()
 {
@@ -19,43 +17,43 @@ static void test_illum()
   unsigned n_images = nhds[0].size();
   unsigned n_surf_pts = nhds.size();
   vcl_vector<vcl_vector<float> > mean_intensities(n_images);
-  for(unsigned i = 0; i<n_images; ++i){
+  for (unsigned i = 0; i<n_images; ++i) {
     vcl_vector<float> ints(n_surf_pts);
-    for(unsigned s = 0; s<n_surf_pts; ++s){
+    for (unsigned s = 0; s<n_surf_pts; ++s) {
       vnl_matrix<float> mat = nhds[s][i];
       float mean = mat.mean();
       ints[s]=mean;
     }
     mean_intensities[i]=ints;
   }
-  for(unsigned i = 0; i<n_images; ++i){
-    for(unsigned s = 0; s<n_surf_pts; ++s)
+  for (unsigned i = 0; i<n_images; ++i) {
+    for (unsigned s = 0; s<n_surf_pts; ++s)
       vcl_cout << mean_intensities[i][s] << ' ';
     vcl_cout << '\n';
   }
 #endif
 #if 0
   vsl_b_ifstream is("e:/BaghdadIlum/bag_hists.vsl");
-  if(!is)
+  if (!is)
     return;
   unsigned n = 0;
   vsl_b_read(is, n);
-  if(!n)
+  if (!n)
     return;
   vcl_vector<bsta_histogram<float> > hists;
-  for(unsigned i = 0; i<n; ++i){
+  for (unsigned i = 0; i<n; ++i) {
     bsta_histogram<float> hist;
     vsl_b_read(is, hist);
     hists.push_back(hist);
   }
   float frac = 0.005f;
-  for(unsigned i = 0; i<n; ++i)
-    {
-      float vmin = hists[i].avg_bin_value(hists[i].low_bin());
-      float vlow = hists[i].value_with_area_below(frac);
-      float vhigh = hists[i].value_with_area_above(3*frac);
-      vcl_cout << vmin << ' ' << vlow << ' ' << vhigh << ' ' << '\n';
-    }
+  for (unsigned i = 0; i<n; ++i)
+  {
+    float vmin = hists[i].avg_bin_value(hists[i].low_bin());
+    float vlow = hists[i].value_with_area_below(frac);
+    float vhigh = hists[i].value_with_area_above(3*frac);
+    vcl_cout << vmin << ' ' << vlow << ' ' << vhigh << ' ' << '\n';
+  }
 #endif
   // test model fitting
   double inten[] ={0.596473568,0.632584074,0.583595386,0.923219624,
@@ -84,7 +82,7 @@ static void test_illum()
   };
   vcl_vector<vnl_double_3> illumination_dirs(ill_dirs, ill_dirs+16);
 #if 0
-   bvxm_illum_util::load_illumination_dirs("c:/vxl/vxl/contrib/brl/bseg/bvxm/tests/illum_dirs.txt", illumination_dirs);
+  bvxm_illum_util::load_illumination_dirs("c:/vxl/vxl/contrib/brl/bseg/bvxm/tests/illum_dirs.txt", illumination_dirs);
 #endif
   vnl_double_4 model_params;
   double fitting_error;
@@ -92,8 +90,8 @@ static void test_illum()
                                           intensities,
                                           model_params,
                                           fitting_error);
-  vcl_cout << "Model Params: " << model_params << '\n';
-  vcl_cout << "Fitting Error: " << fitting_error << '\n';
+  vcl_cout << "Model Params: " << model_params << '\n'
+           << "Fitting Error: " << fitting_error << '\n';
   TEST_NEAR("test lambertian model", fitting_error , 0.137807, 1.0e-6);
 }
 

@@ -5,11 +5,10 @@
 // \file
 
 #include "vgl_plane_3d.h"
-#include <vcl_cassert.h>
-#include <vcl_iostream.h>
 #include <vgl/vgl_homg_plane_3d.h>
 #include <vgl/vgl_point_3d.h>
-//UNUSED: #include <vgl/vgl_intersection.h>
+#include <vcl_cassert.h>
+#include <vcl_iostream.h>
 
 //: Construct from homogeneous plane
 template <class T>

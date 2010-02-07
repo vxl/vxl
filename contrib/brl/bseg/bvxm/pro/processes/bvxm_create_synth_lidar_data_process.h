@@ -14,14 +14,10 @@
 //   <none yet>
 // \endverbatim
 
-
-#include <vcl_string.h>
 #include <bprb/bprb_func_process.h>
-
-//UNUSED: #include <vgl/vgl_box_3d.h>
 #include <vpgl/vpgl_camera.h>
-
-#include "vpgl/file_formats/vpgl_geo_camera.h"
+#include <vpgl/file_formats/vpgl_geo_camera.h>
+#include <vcl_string.h>
 
 //: global variables
 namespace bvxm_create_synth_lidar_data_process_globals

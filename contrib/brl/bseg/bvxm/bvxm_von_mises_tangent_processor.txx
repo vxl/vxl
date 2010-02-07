@@ -1,6 +1,8 @@
 #ifndef bvxm_von_mises_tangent_processor_txx_
 #define bvxm_von_mises_tangent_processor_txx_
-#include <bvxm/bvxm_von_mises_tangent_processor.h>
+
+#include "bvxm_von_mises_tangent_processor.h"
+
 #include <bsta/algo/bsta_von_mises_updater.h>
 #include <bsta/algo/bsta_gaussian_updater.h>
 #include <vpgl/vpgl_camera.h>
@@ -8,8 +10,6 @@
 #include <vgl/vgl_intersection.h>
 #include <vgl/vgl_closest_point.h>
 #include <vgl/vgl_infinite_line_3d.h>
-//UNUSED: #include <vgl/vgl_homg_point_2d.h>
-//UNUSED: #include <vgl/vgl_homg_line_3d_2_points.h>
 #include <vgl/vgl_homg_line_2d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
@@ -69,7 +69,7 @@ pos_dir_from_tangent_plane(vgl_plane_3d<T> const& plane,
   vgl_point_3d<T> p0 = tan_line0.point();
   vgl_point_3d<T> close_pt = vgl_closest_point(plane, p0);
   // construct a new line representing the new sample tangent line
-   line_3d = vgl_infinite_line_3d<T>(close_pt, dirv);
+  line_3d = vgl_infinite_line_3d<T>(close_pt, dirv);
   return true;
 }
 
@@ -96,11 +96,11 @@ pos_dir_from_image_tangent(T img_a, T img_b, T img_c,
 
 template <class T>
 bool bvxm_von_mises_tangent_processor<T>::
-update(  bvxm_voxel_slab<dir_dist_t> & dir_dist,
-         bvxm_voxel_slab<pos_dist_t> & pos_dist,
-         bvxm_voxel_slab<dir_t> const& dir,
-         bvxm_voxel_slab<pos_t> const& pos,
-         bvxm_voxel_slab<bool> const& flag)
+update(bvxm_voxel_slab<dir_dist_t> & dir_dist,
+       bvxm_voxel_slab<pos_dist_t> & pos_dist,
+       bvxm_voxel_slab<dir_t> const& dir,
+       bvxm_voxel_slab<pos_t> const& pos,
+       bvxm_voxel_slab<bool> const& flag)
 {
   //the updater
   bsta_von_mises_updater<bsta_von_mises<T, 3> > vm_3d_updater;
@@ -190,8 +190,10 @@ update(  bvxm_voxel_slab<dir_dist_t> & dir_dist,
       pos_t adj_mean_pos, adj_samp_pos;
       adj_mean_pos[0]=adj_mean_posv.x(); adj_mean_pos[1]=adj_mean_posv.y();
       adj_samp_pos[0]=adj_samp_posv.x(); adj_samp_pos[1]=adj_samp_posv.y();
+#if 0
       //update the position distribution
-     //(*pos_dist_it).set_mean(adj_mean_pos);
+      (*pos_dist_it).set_mean(adj_mean_pos);
+#endif
       bsta_update_gaussian<T, 2>(*pos_dist_it, alpha, adj_samp_pos);
       pos_t diff = mean_pos-(*pos_dist_it).mean();
       double dist = diff.magnitude();

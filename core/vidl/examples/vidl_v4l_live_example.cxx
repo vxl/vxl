@@ -1,6 +1,5 @@
 #include <vidl/vidl_v4l_ulong_fix.h> // include first to fix linux/videodev.h ulong problem
 #include <vidl/vidl_v4l_istream.h>
-//UNUSED: #include <vidl/vidl_v4l_params.h>
 #include <vidl/vidl_image_list_ostream.h>
 
 #include <vul/vul_timer.h>

@@ -1,9 +1,8 @@
 // This is brl/bseg/bbgm/pro/processes/bbgm_update_dist_image_stream_process.cxx
-
+#include <bprb/bprb_func_process.h>
 //:
 // \file
-#include <bprb/bprb_func_process.h>
-#include <vcl_iostream.h>
+
 #include <bbgm/bbgm_image_of.h>
 #include <bbgm/bbgm_image_sptr.h>
 #include <bbgm/bbgm_update.h>
@@ -17,9 +16,9 @@
 #include <vil/vil_math.h>
 #include <vil/vil_convert.h>
 #include <vidl/vidl_istream_sptr.h>
-//UNUSED: #include <vidl/vidl_image_list_istream.h>
 #include <vidl/vidl_frame.h>
 #include <vidl/vidl_convert.h>
+#include <vcl_iostream.h>
 
 namespace {
   vidl_istream_sptr istr = 0;
@@ -29,7 +28,6 @@ namespace {
 
 bool bbgm_update_dist_image_stream_process_cons(bprb_func_process& pro)
 {
-  
   vcl_vector<vcl_string> in_types(9), out_types(1);
   in_types[0]= "bbgm_image_sptr";//pointer to initial distribution image (typically null)
   in_types[1]= "vidl_istream_sptr";//the video stream
@@ -46,11 +44,12 @@ bool bbgm_update_dist_image_stream_process_cons(bprb_func_process& pro)
   pro.set_output_types(out_types);
   return true;
 }
+
 bool bbgm_update_dist_image_stream_process_init(bprb_func_process& pro)
 {
   //extract the stream
   istr = pro.get_input<vidl_istream_sptr>(1);
-  if (!(istr && istr->is_open())){
+  if (!(istr && istr->is_open())) {
     vcl_cerr << "In bbgm_update_dist_image_stream_process::init() -"
              << " invalid input stream\n";
     return false;
@@ -58,7 +57,7 @@ bool bbgm_update_dist_image_stream_process_init(bprb_func_process& pro)
   if (istr->is_seekable())
     istr->seek_frame(0);
   vidl_frame_sptr f = istr->current_frame();
-  if (!f){
+  if (!f) {
     vcl_cerr << "In bbgm_update_dist_image_stream_process::init() -"
              << " invalid initial frame\n";
     return false;
@@ -76,7 +75,7 @@ bool bbgm_update_dist_image_stream_process_init(bprb_func_process& pro)
 bool bbgm_update_dist_image_stream_process(bprb_func_process& pro)
 {
   // Sanity check
-  if (!pro.verify_inputs()){
+  if (!pro.verify_inputs()) {
     vcl_cerr << "In bbgm_update_dist_image_stream_process::execute() -"
              << " invalid inputs\n";
     return false;
@@ -120,7 +119,6 @@ bool bbgm_update_dist_image_stream_process(bprb_func_process& pro)
     model_sptr = new bbgm_image_of<obs_mix_gauss_type>(ni, nj, obs_mix_gauss_type());
     vcl_cout << " Initialized the bbgm image\n";
     vcl_cout.flush();
-
   }
   else model_sptr = bgm;
   bbgm_image_of<obs_mix_gauss_type> *model =

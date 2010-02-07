@@ -4,22 +4,19 @@
 // \brief Uses regression to predict new pose from current sample.
 // \author Tim Cootes
 
-#include <vsl/vsl_binary_loader.h>
-#include <vcl_cmath.h>
-#include <vcl_cassert.h>
-
-#include <vil/vil_resample_bilin.h>
-#include <vsl/vsl_vector_io.h>
-#include <vsl/vsl_indent.h>
-
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_vector_2d.h>
 #include <mfpf/mfpf_sample_region.h>
 #include <mfpf/mfpf_norm_vec.h>
+#include <vil/vil_resample_bilin.h>
+#include <vsl/vsl_binary_loader.h>
+#include <vsl/vsl_vector_io.h>
+#include <vsl/vsl_indent.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
 #include <vnl/vnl_vector.h>
-//UNUSED: #include <vnl/vnl_c_vector.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <vnl/io/vnl_io_matrix.h>
+#include <vcl_cmath.h>
+#include <vcl_cassert.h>
 
 //=======================================================================
 // Dflt ctor
@@ -132,9 +129,8 @@ void mfpf_pose_predictor::set(const vcl_vector<mbl_chord>& roi,
 }
 
 //: Set regression matrices
-void mfpf_pose_predictor::set_predictor(
-                     const vnl_matrix<double>& R,
-                     const vnl_vector<double>& dp0)
+void mfpf_pose_predictor::set_predictor(const vnl_matrix<double>& R,
+                                        const vnl_vector<double>& dp0)
 {
   assert(R.rows()==dp0.size());
   R_=R;
@@ -189,10 +185,9 @@ void mfpf_pose_predictor::get_sample_vector(const vimt_image_2d_of<float>& image
 }
 
 //: Sample at pose0 and predict a better pose (new_pose)
-void mfpf_pose_predictor::new_pose(
-                       const vimt_image_2d_of<float>& image,
-                       const mfpf_pose& pose0,
-                       mfpf_pose& new_pose)
+void mfpf_pose_predictor::new_pose(const vimt_image_2d_of<float>& image,
+                                   const mfpf_pose& pose0,
+                                   mfpf_pose& new_pose)
 {
   vnl_vector<double> v;
   get_sample_vector(image,pose0.p(),pose0.u(),v);
@@ -223,8 +218,7 @@ void mfpf_pose_predictor::new_pose(
     default: assert(!"Invalid pose_type_"); break;
   }
 
-  new_pose=pose0*dpose.inverse();
-   // ie Apply inverse of dpose, then pose0
+  new_pose=pose0*dpose.inverse(); // i.e., apply inverse of dpose, then pose0
 }
 
 

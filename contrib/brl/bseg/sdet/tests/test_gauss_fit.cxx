@@ -1,14 +1,14 @@
 // This is brl/bseg/sdet/tests/test_gauss_fit.cxx
-#include <vcl_iostream.h>
-#include <sdet/sdet_gauss_fit.h>
 #include <testlib/testlib_test.h>
+#if 0 // commented out: see below
+#include <sdet/sdet_gauss_fit.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_determinant.h>
 #include <vnl/algo/vnl_matrix_inverse.h>
-#if 0 // commented out
 #include <vgl/vgl_point_3d.h>
-#endif
+#include <vcl_iostream.h>
+#endif // 0
 
 void test_gauss_fit()
 {

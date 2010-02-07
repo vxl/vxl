@@ -24,20 +24,20 @@
 
 #include <brip/brip_vil_float_ops.h>
 
+#include <boxm/boxm_scene.h>
+#include <boxm/boxm_utils.h>
 #include <vpgl/algo/vpgl_backproject.h>
+#include <vpgl/bgeo/bgeo_lvcs_sptr.h>
+
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_plane_3d.h>
-#include <boxm/boxm_scene.h>
-#include <boxm/boxm_utils.h>
-#include <vpgl/bgeo/bgeo_lvcs_sptr.h>
+#include <vil/vil_image_view.h>
 
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vcl_limits.h>
-#include <vil/vil_image_view.h>
-//UNUSED: #include <vil/vil_save.h>
 
 int convert_uncertainty_from_meters_to_pixels(float uncertainty,
                                               bgeo_lvcs lvcs,
@@ -129,7 +129,7 @@ bool boxm_rpc_registration(boxm_scene_base_sptr scene_base,//<boct_tree<T_loc, T
   vcl_cout << vcl_endl;
 
   vcl_cout << "Estimated changes in offsets (u,v)=(" << best_offset_u << ',' << best_offset_v << ')' << vcl_endl;
-   //local variables
+  // local variables
   vcl_ifstream file_inp;
   vcl_ofstream file_out;
   file_out.clear();

@@ -17,7 +17,6 @@
 //
 
 #include "bsta_distribution.h"
-//UNUSED: #include <vnl/vnl_math.h>
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
 
@@ -30,12 +29,12 @@ class bsta_von_mises : public bsta_distribution<T,n>
   typedef typename bsta_distribution<T,n>::math_type math_type;
   typedef typename bsta_distribution<T,n>::field_type field_type;
   enum { data_dimension = n };
-  bsta_von_mises(): mean_(vector_type(T(0))), kappa_(T(1)){}
-  bsta_von_mises(vector_type const& mean, T kappa): mean_(mean), kappa_(kappa){}
+  bsta_von_mises(): mean_(vector_type(T(0))), kappa_(T(1)) {}
+  bsta_von_mises(vector_type const& mean, T kappa): mean_(mean), kappa_(kappa) {}
   virtual ~bsta_von_mises() {}
   //: The mean vector
   const vector_type& mean() const {return mean_;}
-  void set_mean(const vector_type& mean){mean_ = mean;}
+  void set_mean(const vector_type& mean) {mean_ = mean;}
 
   //: the concentration parameter (kappa)
   T kappa() const {return kappa_;}
@@ -64,12 +63,12 @@ class bsta_von_mises<T,3>
   typedef typename bsta_distribution<T,3>::vector_type vector_type;
   typedef typename bsta_distribution<T,3>::field_type field_type;
   enum { data_dimension = 3 };
-  bsta_von_mises(): mean_(vector_type(T(0))), kappa_(T(1)){mean_[2]=T(1);}
-  bsta_von_mises(vector_type const& mean, T kappa): mean_(mean), kappa_(kappa){}
+  bsta_von_mises(): mean_(vector_type(T(0))), kappa_(T(1)) {mean_[2]=T(1);}
+  bsta_von_mises(vector_type const& mean, T kappa): mean_(mean), kappa_(kappa) {}
   virtual ~bsta_von_mises() {}
   //: The mean vector
   const vector_type& mean() const {return mean_;}
-  void set_mean(const vector_type& mean){mean_ = mean;}
+  void set_mean(const vector_type& mean) { mean_ = mean; }
 
   //: the concentration parameter (kappa)
   T kappa() const {return kappa_;}
@@ -97,12 +96,12 @@ class bsta_von_mises<T,2>
   typedef typename bsta_distribution<T,2>::vector_type vector_type;
   typedef typename bsta_distribution<T,2>::field_type field_type;
   enum { data_dimension = 2 };
-  bsta_von_mises(): mean_(vector_type(T(0))), kappa_(T(1)){mean_[1]=T(1);}
-  bsta_von_mises(vector_type const& mean, T kappa): mean_(mean), kappa_(kappa){}
+  bsta_von_mises(): mean_(vector_type(T(0))), kappa_(T(1)) { mean_[1]=T(1); }
+  bsta_von_mises(vector_type const& mean, T kappa): mean_(mean), kappa_(kappa) {}
   virtual ~bsta_von_mises() {}
   //: The mean vector
   const vector_type& mean() const {return mean_;}
-  void set_mean(const vector_type& mean){mean_ = mean;}
+  void set_mean(const vector_type& mean) {mean_ = mean;}
 
   //: the concentration parameter (kappa)
   T kappa() const {return kappa_;}

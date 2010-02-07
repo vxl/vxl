@@ -1,44 +1,42 @@
-
 #ifndef open_cl_test_data_h_
 #define open_cl_test_data_h_
-
-#include <vcl_string.h>
-#include <vcl_iostream.h>
-#include <boct/boct_tree.h>
-#include <vbl/vbl_array_2d.h>
-#include <vnl/vnl_vector_fixed.h>
-#include <vcl_vector.h>
-#include <vil/vil_load.h>
-//UNUSED: #include <vil/vil_save.h>
-#include <vil/vil_image_view.h>
 
 #include <boxm/boxm_mog_grey_processor.h>
 #include <boxm/boxm_simple_grey_processor.h>
 
-class open_cl_test_data 
+#include <boct/boct_tree.h>
+#include <vbl/vbl_array_2d.h>
+#include <vnl/vnl_vector_fixed.h>
+#include <vil/vil_load.h>
+#include <vil/vil_image_view.h>
+#include <vcl_vector.h>
+#include <vcl_string.h>
+#include <vcl_iostream.h>
+
+class open_cl_test_data
 {
  public:
-  template <class T> 
+  template <class T>
   static boct_tree<short, T >* tree();
-  template <class T> 
+  template <class T>
   static void save_tree(vcl_string const& tree_path);
 
   static void test_rays(vbl_array_2d<vnl_vector_fixed<float, 3> >& ray_origin,
                         vbl_array_2d<vnl_vector_fixed<float, 3> >& ray_dir);
-  
-  template <class T> 
+
+  template <class T>
   static  void tree_and_rays_from_image(vcl_string const& image_path,
-                         unsigned group_size,
-                         boct_tree<short, T >*& tree,
-                         vbl_array_2d<vnl_vector_fixed<float, 3> >& ray_origin,
-                         vbl_array_2d<vnl_vector_fixed<float, 3> >& ray_dir);
+                                        unsigned group_size,
+                                        boct_tree<short, T >*& tree,
+                                        vbl_array_2d<vnl_vector_fixed<float, 3> >& ray_origin,
+                                        vbl_array_2d<vnl_vector_fixed<float, 3> >& ray_dir);
 
   static void save_expected_image(vcl_string const& image_path,
                                   unsigned cols, unsigned rows,
                                   float* expected_img);
-
 };
-template <class T> 
+
+template <class T>
 boct_tree<short,T > * open_cl_test_data::tree()
 {
   vcl_vector<boct_tree_cell<short, T > > leaves;
@@ -84,7 +82,7 @@ boct_tree<short,T > * open_cl_test_data::tree()
   return ret_tree;
 }
 
-template <class T> 
+template <class T>
 void open_cl_test_data::
 tree_and_rays_from_image(vcl_string const& image_path,
                          unsigned group_size,
@@ -157,58 +155,54 @@ tree_and_rays_from_image(vcl_string const& image_path,
 
   for (; lit!= tleaves.end(); ++lit, ++i)
   {
-      boct_loc_code<short> code = (*lit)->get_code();
-      bool found = false;
-      unsigned found_k = 0;
-      for (unsigned k = 0; k<leaf_codes.size()&&!found; ++k)
-          if (code == leaf_codes[k]) {
-              found = true;
-              found_k = k;
-          }
-          if(boct_tree_cell<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > * cell_grey_ptr
-              =reinterpret_cast<boct_tree_cell<short, boxm_sample<BOXM_APM_SIMPLE_GREY> >* >(*lit))
-          {
-              if (found) {
-                  boxm_sample<BOXM_APM_SIMPLE_GREY> data(1.0f,boxm_sample<BOXM_APM_SIMPLE_GREY>::apm_datatype(image_int[found_k],0.0008));
-                  cell_grey_ptr->set_data(data);
-
-              }
-              else{
-                  boxm_sample<BOXM_APM_SIMPLE_GREY> data(0.0f,boxm_sample<BOXM_APM_SIMPLE_GREY>::apm_datatype(0.0,0.0008));
-                  cell_grey_ptr->set_data(data);
-              }
-          }
-          else if(boct_tree_cell<short, boxm_sample<BOXM_APM_MOG_GREY> > * cell_mog_grey_ptr
-              =reinterpret_cast<boct_tree_cell<short, boxm_sample<BOXM_APM_MOG_GREY> >* >(*lit))
-          {
-              if (found) {
-
-                  boxm_sample<BOXM_APM_MOG_GREY> data(1.0f);
-                  boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_processor::update(data.appearance(),image_int[found_k],1.0);
-                  cell_mog_grey_ptr->set_data(data);
-
-              }
-              else{
-                  boxm_sample<BOXM_APM_MOG_GREY> data(0.0f);               
-                  cell_mog_grey_ptr->set_data(data);
-              }
-
-          }
-         else if(boct_tree_cell<short, float > * cell_float_ptr
-              =reinterpret_cast<boct_tree_cell<short, float >* >(*lit))
-          {
-              if (found) {
-
-                  float data(1.0f);
-                  cell_float_ptr->set_data(data);
-
-              }
-          }
+    boct_loc_code<short> code = (*lit)->get_code();
+    bool found = false;
+    unsigned found_k = 0;
+    for (unsigned k = 0; k<leaf_codes.size()&&!found; ++k)
+    {
+      if (code == leaf_codes[k]) {
+        found = true;
+        found_k = k;
+      }
+      if (boct_tree_cell<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > * cell_grey_ptr
+          = reinterpret_cast<boct_tree_cell<short, boxm_sample<BOXM_APM_SIMPLE_GREY> >* >(*lit))
+      {
+        if (found) {
+          boxm_sample<BOXM_APM_SIMPLE_GREY> data(1.0f,boxm_sample<BOXM_APM_SIMPLE_GREY>::apm_datatype(image_int[found_k],0.0008));
+          cell_grey_ptr->set_data(data);
+        }
+        else {
+          boxm_sample<BOXM_APM_SIMPLE_GREY> data(0.0f,boxm_sample<BOXM_APM_SIMPLE_GREY>::apm_datatype(0.0,0.0008));
+          cell_grey_ptr->set_data(data);
+        }
+      }
+      else if (boct_tree_cell<short, boxm_sample<BOXM_APM_MOG_GREY> > * cell_mog_grey_ptr
+               = reinterpret_cast<boct_tree_cell<short, boxm_sample<BOXM_APM_MOG_GREY> >* >(*lit))
+      {
+        if (found) {
+          boxm_sample<BOXM_APM_MOG_GREY> data(1.0f);
+          boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_processor::update(data.appearance(),image_int[found_k],1.0);
+          cell_mog_grey_ptr->set_data(data);
+        }
+        else {
+          boxm_sample<BOXM_APM_MOG_GREY> data(0.0f);
+          cell_mog_grey_ptr->set_data(data);
+        }
+      }
+      else if (boct_tree_cell<short, float > * cell_float_ptr
+               = reinterpret_cast<boct_tree_cell<short, float >* >(*lit))
+      {
+        if (found) {
+          float data(1.0f);
+          cell_float_ptr->set_data(data);
+        }
+      }
+    }
   }
 }
 
 
-template <class T> 
+template <class T>
 void open_cl_test_data::save_tree(vcl_string const& tree_path)
 {
   boxm_ray_trace_manager<T>* ray_mgr = typename boxm_ray_trace_manager<T>::instance();
@@ -218,4 +212,5 @@ void open_cl_test_data::save_tree(vcl_string const& tree_path)
   ray_mgr->set_tree(0);
   delete tree;
 }
+
 #endif // open_cl_test_data_h_

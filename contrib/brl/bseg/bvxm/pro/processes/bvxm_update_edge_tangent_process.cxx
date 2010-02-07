@@ -8,27 +8,15 @@
 
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
-
 #include <brdb/brdb_value.h>
-
 #include <bvxm/bvxm_edge_ray_processor.h>
-
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/bvxm_image_metadata.h>
-
+#include <brip/brip_vil_float_ops.h>
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/vpgl_local_rational_camera.h>
-
-#include <brip/brip_vil_float_ops.h>
-
 #include <vpgl/algo/vpgl_backproject.h>
-//UNUSED: #include <vgl/vgl_point_2d.h>
-//UNUSED: #include <vgl/vgl_point_3d.h>
-//UNUSED: #include <vgl/vgl_vector_3d.h>
-//UNUSED: #include <vgl/vgl_plane_3d.h>
-
 #include <vil/vil_image_view.h>
-//UNUSED: #include <vil/vil_load.h>
 #include <vcl_cstdio.h>
 
 //: set input and output types
@@ -63,7 +51,7 @@ bool bvxm_update_edge_tangent_process_init(bprb_func_process& pro)
     return false;
   }
   // voxel world
-  bvxm_voxel_world_sptr vox_world = 
+  bvxm_voxel_world_sptr vox_world =
     pro.get_input<bvxm_voxel_world_sptr>(0);
   bvxm_edge_ray_processor edge_proc(vox_world);
   // camera0
@@ -81,7 +69,7 @@ bool bvxm_update_edge_tangent_process_init(bprb_func_process& pro)
     pro.get_input<vil_image_view_base_sptr>(4);
     bvxm_image_metadata obs1(image_sptr1, cam1_ptr);
 
-    return edge_proc.init_von_mises_edge_tangents(obs0, obs1);  
+    return edge_proc.init_von_mises_edge_tangents(obs0, obs1);
 }
 
 //:  updates 3-d edge position and tangent orientation
@@ -95,7 +83,7 @@ bool bvxm_update_edge_tangent_process(bprb_func_process& pro)
     return false;
   }
   // voxel world
-  bvxm_voxel_world_sptr vox_world = 
+  bvxm_voxel_world_sptr vox_world =
     pro.get_input<bvxm_voxel_world_sptr>(0);
   bvxm_edge_ray_processor edge_proc(vox_world);
   // camera0

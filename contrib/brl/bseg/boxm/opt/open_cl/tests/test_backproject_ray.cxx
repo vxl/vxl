@@ -6,8 +6,6 @@
 #include <boct/boct_tree.h>
 #include <boct/boct_tree_cell.h>
 #include <boct/boct_loc_code.h>
-//UNUSED: #include <vnl/vnl_vector_fixed.h>
-//UNUSED: #include <vul/vul_timer.h>
 #include <vgl/vgl_line_3d_2_points.h>
 #include <vgl/vgl_vector_3d.h>
 

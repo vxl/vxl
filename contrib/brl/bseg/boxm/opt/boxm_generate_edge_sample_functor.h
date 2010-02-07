@@ -8,8 +8,6 @@
 #include <boxm/boxm_mog_grey_processor.h>
 #include <boxm/boxm_simple_grey_processor.h>
 #include <vil/vil_image_view.h>
-//UNUSED: #include <vil/vil_math.h>
-//UNUSED: #include <vil/vil_save.h>
 #include <vcl_iostream.h>
 
 template <class T, class T_aux>

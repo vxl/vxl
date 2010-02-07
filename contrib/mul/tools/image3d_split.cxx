@@ -3,8 +3,6 @@
 //  \date 16 Dec 2009
 //  \brief Program to split a 3d image into blocks.
 
-#include <vcl_exception.h>
-#include <vcl_iostream.h>
 #include <vul/vul_arg.h>
 #include <vul/vul_reg_exp.h>
 #include <vul/vul_sprintf.h>
@@ -13,12 +11,13 @@
 #include <vimt3d/vimt3d_add_all_loaders.h>
 #include <vimt3d/vimt3d_load.h>
 #include <vimt3d/vimt3d_save.h>
+#include <vimt3d/vimt3d_vil3d_v3i.h>
 #include <vil3d/vil3d_save.h>
 #include <vil3d/vil3d_new.h>
 #include <vil3d/vil3d_crop.h>
-//UNUSED: #include <vul/vul_file.h>
 #include <vul/vul_string.h>
-#include <vimt3d/vimt3d_vil3d_v3i.h>
+#include <vcl_exception.h>
+#include <vcl_iostream.h>
 
 //=========================================================================
 // Static function to create a static logger when first required
@@ -146,8 +145,8 @@ int main2(int argc, char*argv[])
     vcl_string::size_type n = img_dst().find(replace_str());
     if (n==vcl_string::npos)
     {
-      vcl_cerr << "ERROR: Could not find replace string \"" << replace_str() <<
-        "\" in \"" << img_dst() << "\"\n";
+      vcl_cerr << "ERROR: Could not find replace string \"" << replace_str()
+               << "\" in \"" << img_dst() << "\"\n";
       return 3;
     }
     filename_pattern = img_dst().substr(0, n) + filename_pattern +

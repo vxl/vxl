@@ -1,6 +1,5 @@
 #ifndef bvpl_voxel_subgrid_h
 #define bvpl_voxel_subgrid_h
-
 //:
 // \file
 // \brief A class to retrieve a subgrid withing a bigger grid
@@ -32,19 +31,16 @@
 // \endverbatim
 
 #include <bvxm/grid/bvxm_voxel_slab.h>
-
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_box_3d.h>
-//UNUSED: #include <vgl/vgl_vector_3d.h>
-
 
 class bvpl_subgrid_base
 {
  public:
   bvpl_subgrid_base(vgl_point_3d<int> center)
-    : center_(center){}
+    : center_(center) {}
 
-  virtual ~bvpl_subgrid_base(){}
+  virtual ~bvpl_subgrid_base() {}
 
   vgl_point_3d<int> center() const { return center_; }
 
@@ -61,7 +57,7 @@ class bvpl_voxel_subgrid : public bvpl_subgrid_base
                      vgl_point_3d<int> max_point,
                      vgl_point_3d<int> min_point);
 
-  virtual ~bvpl_voxel_subgrid(){}
+  virtual ~bvpl_voxel_subgrid() {}
 
   bool voxel(int x, int y, int z, T& v);
   bool voxel(vgl_point_3d<int> p, T& v) { return voxel(p.x(), p.y(), p.z(), v); }

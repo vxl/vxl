@@ -8,8 +8,6 @@
 #include <boxm/boxm_mog_grey_processor.h>
 #include <boxm/boxm_simple_grey_processor.h>
 #include <vil/vil_image_view.h>
-//UNUSED: #include <vil/vil_math.h>
-//UNUSED: #include <vil/vil_save.h>
 #include <vcl_iostream.h>
 
 template <boxm_apm_type APM, class T_aux>
@@ -18,7 +16,7 @@ class boxm_pre_infinity_functor
  public:
   //: "default" constructor
   boxm_pre_infinity_functor(vil_image_view<typename boxm_apm_traits<APM>::obs_datatype> const& image,
-                                          vil_image_view<float> &pre_inf, vil_image_view<float> &vis_inf)
+                            vil_image_view<float> &pre_inf, vil_image_view<float> &vis_inf)
     : alpha_integral_(image.ni(),image.nj(),1), obs_(image), vis_img_(vis_inf), pre_img_(pre_inf)
   {
     alpha_integral_.fill(0.0f);

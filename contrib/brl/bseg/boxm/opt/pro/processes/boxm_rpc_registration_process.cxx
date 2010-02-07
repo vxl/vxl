@@ -9,9 +9,8 @@
 #include <bprb/bprb_parameters.h>
 #include <brdb/brdb_value.h>
 #include <boxm/opt/boxm_rpc_registration.h>
-#include <vcl_cstdio.h>
 #include <vil/vil_image_view.h>
-//UNUSED: #include <vil/vil_save.h>
+#include <vcl_cstdio.h>
 
 //: globals
 namespace boxm_rpc_registration_process_globals
@@ -61,7 +60,7 @@ bool boxm_rpc_registration_process(bprb_func_process& pro)
   using namespace boxm_rpc_registration_process_globals;
 
   //check number of inputs
-  if ( pro.n_inputs() < n_inputs_ ){
+  if ( pro.n_inputs() < n_inputs_ ) {
     vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
     return false;
   }
