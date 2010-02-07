@@ -48,12 +48,11 @@ static void find_properties_file()
   if (find_file("C:\\mbl_log.properties")) return;
 }
 
-int main(int argc, char** argv)
+int main()
 {
-  // This code needs to be kept manually in sync with 
+  // This code needs to be kept manually in sync
 
   find_properties_file();
-
 
   // Initialize the logger
   mbl_logger::root().load_log_config_file();
