@@ -2,9 +2,8 @@
 #include <vcl_iomanip.h>
 #include <vcl_limits.h> // for infinity()
 #include <vnl/vnl_math.h>
-#include <vnl/vnl_complex.h>
+#include <vnl/vnl_complex.h> // for vnl_math_abs(std::complex)
 #include <testlib/testlib_test.h>
-
 
 static
 void check_pointer( const void * )
