@@ -10,6 +10,7 @@ SOURCES += processes/boxm_save_scene_vrml.cxx
 SOURCES += processes/boxm_merge_mixtures_process.cxx
 SOURCES += processes/boxm_crop_scene_process.cxx
 SOURCES += processes/boxm_scene_to_bvxm_grid_process.cxx
+SOURCES += processes/boxm_fill_internal_cells_process.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk

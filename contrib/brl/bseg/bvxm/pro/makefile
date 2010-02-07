@@ -36,7 +36,6 @@ SOURCES += processes/bvxm_roi_init_process.cxx
 SOURCES += processes/bvxm_normalization_util.cxx
 SOURCES += processes/bvxm_update_edges_process.cxx
 SOURCES += processes/bvxm_create_mog_image_process.cxx
-SOURCES += processes/bvxm_detect_edges_process.cxx
 SOURCES += processes/bvxm_compare_3d_voxels_process.cxx # multiscale_pro/bvxm_compare_3d_voxels_process.cxx
 SOURCES += processes/bvxm_detect_scale_process.cxx      # multiscale_pro/bvxm_detect_scale_process.cxx
 SOURCES += processes/bvxm_synth_world_generator.cxx

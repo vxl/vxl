@@ -13,7 +13,6 @@ SOURCES += bvxm_lidar_processor.cxx
 MANPAGE_SOURCES += bvxm_voxel_traits.h
 MANPAGE_SOURCES += bvxm_mog_mc_processor.txx
 MANPAGE_SOURCES += bvxm_float_processor.h
-SOURCES += bvxm_edge_util.cxx
 SOURCES += bvxm_edge_ray_processor.cxx
 MANPAGE_SOURCES += bvxm_voxel_world_sptr.h
 MANPAGE_SOURCES += bvxm_von_mises_tangent_processor.txx
