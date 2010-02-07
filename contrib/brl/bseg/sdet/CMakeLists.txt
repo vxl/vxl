@@ -41,7 +41,7 @@ ADD_LIBRARY(sdet ${sdet_sources})
 INSTALL_TARGETS(/lib sdet)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/sdet ${sdet_sources})
 
-TARGET_LINK_LIBRARIES(sdet brip bsol btol bdgl gevd vdgl vtol vsol vil vil_algo vil1 vgl_algo vgl vnl_algo vnl vul vbl)
+TARGET_LINK_LIBRARIES(sdet brip bsol btol bdgl gevd vdgl vtol vsol bil_algo vil vil_algo vil1 vgl_algo vgl vnl_algo vnl vul vbl)
 
 IF(BUILD_TESTING)
   SUBDIRS(tests)
