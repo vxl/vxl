@@ -114,9 +114,6 @@ SOURCE=.\bvxm_world_params.cxx
 SOURCE=.\bvxm_lidar_processor.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\bvxm_edge_util.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\bvxm_edge_ray_processor.cxx
 # End Source File
 # Begin Source File
@@ -180,9 +177,6 @@ SOURCE=.\bvxm_mog_mc_processor.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvxm_float_processor.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_edge_util.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvxm_edge_ray_processor.h

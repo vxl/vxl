@@ -110,6 +110,9 @@ SOURCE=.\processes/boxm_crop_scene_process.cxx
 # Begin Source File
 SOURCE=.\processes/boxm_scene_to_bvxm_grid_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\processes/boxm_fill_internal_cells_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

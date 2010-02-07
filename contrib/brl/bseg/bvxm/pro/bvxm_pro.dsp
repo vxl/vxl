@@ -195,9 +195,6 @@ SOURCE=.\processes/bvxm_update_edges_process.cxx
 SOURCE=.\processes/bvxm_create_mog_image_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\processes/bvxm_detect_edges_process.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\processes/bvxm_synth_world_generator.cxx
 # End Source File
 # Begin Source File
@@ -346,9 +343,6 @@ SOURCE=.\processes/bvxm_update_edges_process.h
 # End Source File
 # Begin Source File
 SOURCE=.\processes/bvxm_roi_init_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\processes/bvxm_detect_edges_process.h
 # End Source File
 # Begin Source File
 SOURCE=.\processes/bvxm_merge_mog_process.h
