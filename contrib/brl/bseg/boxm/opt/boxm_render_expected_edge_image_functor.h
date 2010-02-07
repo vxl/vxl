@@ -10,6 +10,9 @@
 #include <vnl/vnl_math.h>
 #include <vil/vil_transform.h>
 #include <sdet/sdet_img_edge.h>
+#ifdef DEBUG
+#include <vcl_iostream.h>
+#endif
 
 template <boxm_apm_type APM, class T_aux>
 class boxm_render_expected_edge_image_functor
@@ -42,7 +45,7 @@ class boxm_render_expected_edge_image_functor
     const float exp  = cell_value.edge_prob_;
 
     // keep the max value in expected image
-   // if (expected_(i,j) < exp)
+    // if (expected_(i,j) < exp)
     expected_(i,j) =  vnl_math_max(expected_(i,j), exp);
 
     return true;
@@ -61,27 +64,31 @@ template<class T_data>
 class normalize_expected_functor_edge
 {
  public:
-   normalize_expected_functor_edge(float n_normal, unsigned int dof) : n_normal_(n_normal), dof_(dof) {vcl_cout << "Degree of freedom " << dof << vcl_endl; }
+  normalize_expected_functor_edge(float n_normal, unsigned int dof) : n_normal_(n_normal), dof_(dof)
+  {
+#ifdef DEBUG
+    vcl_cout << "Degrees of freedom: " << dof << vcl_endl;
+#endif
+  }
 
-   void operator()(float mask, float &pix) const
-   {
+  void operator()(float mask, float &pix) const
+  {
     pix = sdet_img_edge::convert_edge_statistics_to_probability(pix,n_normal_,dof_);
-   }
-  
-   float n_normal_;
-   unsigned int dof_;
+  }
+
+  float n_normal_;
+  unsigned int dof_;
 };
 
 
 template <class T_loc, class T_data>
 void boxm_render_edge_image_rt(boxm_scene<boct_tree<T_loc, T_data > > &scene,
-                          vpgl_camera_double_sptr cam,
-                          vil_image_view<float> &expected,
-                          vil_image_view<float> & mask,
-                          float n_normal, 
-                          unsigned int num_samples, //degree of freedom
-                          int bin = -1)
-                          
+                               vpgl_camera_double_sptr cam,
+                               vil_image_view<float> &expected,
+                               vil_image_view<float> & mask,
+                               float n_normal,
+                               unsigned int num_samples, //degree of freedom
+                               int bin = -1)
 {
   typedef boxm_aux_traits<BOXM_AUX_NULL>::sample_datatype sample_datatype;
   boxm_aux_scene<T_loc, T_data,boxm_aux_edge_sample<sample_datatype> > aux_scene(&scene,boxm_aux_traits<BOXM_AUX_NULL>::storage_subdir(), boxm_aux_scene<T_loc, T_data,boxm_aux_edge_sample<sample_datatype> >::LOAD);

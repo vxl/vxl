@@ -15,7 +15,7 @@
 #include <bvpl/bvpl_kernel.h>
 #include <boct/boct_tree.h>
 #include <boxm/boxm_scene.h>
-
+#include <vcl_iostream.h>
 
 template<class T_data>
 class bvpl_octree_kernel_operator
@@ -44,13 +44,13 @@ class bvpl_octree_kernel_operator
     {
       // iterate through vector an compute result
       cell_type* center_cell = cells[i];
-      
-      if(center_cell->level()!=level)
+
+      if (center_cell->level()!=level)
         vcl_cerr << "Error in bvpl_octree_kernel_operator: Cell is not at the right level\n";
-      
-      if(!center_cell->is_leaf())
+
+      if (!center_cell->is_leaf())
         vcl_cerr << "Error in bvpl_octree_kernel_operator: Cell is a leaf\n";
-      
+
       vgl_point_3d<double> this_cell_origin = tree_in_->local_origin(center_cell);
 
       // TODO: check bounds. Is it more efficient to check bounds for every kernel or to let is run and store a dummy value in it?
