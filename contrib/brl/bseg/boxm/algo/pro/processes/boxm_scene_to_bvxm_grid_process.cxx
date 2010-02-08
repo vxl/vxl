@@ -18,7 +18,7 @@
 
 namespace boxm_scene_to_bvxm_grid_process_globals
 {
-  const unsigned n_inputs_ = 3;
+  const unsigned n_inputs_ = 4;
   const unsigned n_outputs_ = 1;
 }
 
@@ -26,7 +26,8 @@ namespace boxm_scene_to_bvxm_grid_process_globals
 // input[0]: The scene
 // input[1]: Path to output grid
 // input[2]: Resolution level
-// input[3]: Bool: have full bvxm_grid in memory?
+// input[3]: Bool: Enforce only cells at the resolution leve? 
+//           If true, there is no interpolation
 // output[0]: The output grid
 
 bool boxm_scene_to_bvxm_grid_process_cons(bprb_func_process& pro)
@@ -36,6 +37,7 @@ bool boxm_scene_to_bvxm_grid_process_cons(bprb_func_process& pro)
   input_types_[0] = "boxm_scene_base_sptr";
   input_types_[1] = "vcl_string";
   input_types_[2] = "unsigned";
+  input_types_[3] = "bool";
 
   vcl_vector<vcl_string> output_types_(n_outputs_);
 
@@ -59,6 +61,7 @@ bool boxm_scene_to_bvxm_grid_process(bprb_func_process& pro)
   boxm_scene_base_sptr scene_base = pro.get_input<boxm_scene_base_sptr>(0);
   vcl_string filepath = pro.get_input<vcl_string>(1);
   unsigned resolution_level = pro.get_input<short>(2);
+  bool enforce_level = pro.get_input<bool>(3);
 
   //check input's validity
   if (!scene_base.ptr())
@@ -69,14 +72,14 @@ bool boxm_scene_to_bvxm_grid_process(bprb_func_process& pro)
 
   if ( boxm_scene< boct_tree<short, float> > *scene= dynamic_cast<boxm_scene< boct_tree<short, float > > * >(scene_base.as_pointer()))
   {
-    bvxm_voxel_grid<float> *grid = boxm_scene_to_bvxm_grid(*scene, filepath, resolution_level);
+    bvxm_voxel_grid<float> *grid = boxm_scene_to_bvxm_grid(*scene, filepath, resolution_level,enforce_level);
     pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid);
     return true;
   }
 #if 0 // this case is not supported yet
   else if ( boxm_scene< boct_tree<short, bsta_num_obs<bsta_gauss_f1> > > *scene= dynamic_cast<boxm_scene< boct_tree<short, bsta_num_obs<bsta_gauss_f1> > > * >(scene_base.as_pointer()))
   {
-    bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1> > *grid = boxm_scene_to_bvxm_grid(*scene, filepath, resolution_level);
+    bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1> > *grid = boxm_scene_to_bvxm_grid(*scene, filepath, resolution_level, enforce_level);
     pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid);
     return true;
   }
