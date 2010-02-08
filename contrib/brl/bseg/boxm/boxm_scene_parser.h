@@ -18,6 +18,7 @@
 #define APP_MODEL_TAG "appearence_model"
 #define MULTI_BIN_TAG "multi_bin"
 #define SAVE_INTERNAL_NODES_TAG "save_internal_nodes"
+#define P_INIT_TAG "p_init"
 
 class boxm_scene_parser : public expatpp
 {
@@ -79,6 +80,7 @@ class boxm_scene_parser : public expatpp
   unsigned max_tree_level_;
   unsigned init_tree_level_;
   bool save_internal_nodes_;
+  float p_init_;
 };
 
 #endif

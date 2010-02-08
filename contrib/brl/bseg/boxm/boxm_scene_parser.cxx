@@ -84,6 +84,7 @@ void boxm_scene_parser::init_params()
   path_="";
   block_pref_="";
   save_internal_nodes_ = false;
+  p_init=0.001;
 }
 
 void
@@ -188,6 +189,13 @@ boxm_scene_parser::startElement(const char* name, const char** atts)
         convert(atts[i+1], max_tree_level_);
       else if (vcl_strcmp(atts[i], "init") == 0)
         convert(atts[i+1], init_tree_level_);
+    }
+  } 
+  else if (vcl_strcmp(name, "p_init")==0) {
+    for (int i=0; atts[i]; i+=2) {
+      vcl_cout << "  Attr=" << atts[i] << "->" << atts[i+1] << vcl_endl;
+    if (vcl_strcmp(atts[i], "val") == 0)
+        convert(atts[i+1], p_init_); 
     }
   }
 }
