@@ -137,6 +137,9 @@ void mbl_save_mask(const mbl_mask & mask, vcl_ostream & stream);
 //: Save to file
 void mbl_save_mask(const mbl_mask & mask, const char * filename);
 
+//: Save to file
+void mbl_save_mask(const mbl_mask & mask, const vcl_string &filename);
+
 //: Load from file
 void mbl_load_mask(mbl_mask & mask, vcl_istream & stream);
 

@@ -16,7 +16,7 @@
 
     //: Given a collection of indices, produce a collection of masks that isolate each indexed set
     //    The input index set does not need to be zero based or continuous
-    //    The output vector of masks is sorted such that 
+    //    The output vector of masks is sorted such that
     //    for example: (1,4,2,1,2) will make three masks: (1,0,0,1,0), (0,0,1,0,1) and (0,1,0,0,0)
     //    which correspond to the sorted index sets 1,2,4
 void mbl_masks_from_index_set(const vcl_vector<unsigned> & indices,
@@ -51,7 +51,7 @@ void mbl_mask_on_mask(const mbl_mask & A, mbl_mask & B)
   for (unsigned i = 0 ; i < B.size() ; ++i) nB += B[i];
   if (nA != nB)
     throw vcl_runtime_error("Length of A mismatch with number of true elements of B");
-  
+
   for (unsigned i = 0, j = 0 ; i < B.size() ; ++i)
     if (B[i]) B[i] = A[j++];
 }
@@ -131,6 +131,15 @@ void mbl_save_mask(const mbl_mask & mask, vcl_ostream & stream)
 void mbl_save_mask(const mbl_mask & mask, const char * filename)
 {
   vcl_ofstream stream(filename);
+  if (!stream)
+    mbl_exception_throw_os_error(filename);
+  mbl_save_mask(mask, stream);
+}
+
+    //: Save to file
+void mbl_save_mask(const mbl_mask & mask, const vcl_string &filename)
+{
+  vcl_ofstream stream(filename.c_str());
   if (!stream)
     mbl_exception_throw_os_error(filename);
   mbl_save_mask(mask, stream);
