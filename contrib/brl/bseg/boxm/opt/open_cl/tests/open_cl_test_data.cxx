@@ -4,6 +4,7 @@
 #include <boct/boct_tree_cell.h>
 #include <boct/boct_loc_code.h>
 #include <vcl_cmath.h>
+#include <vil/vil_save.h>
 
 void open_cl_test_data::
 test_rays(vbl_array_2d<vnl_vector_fixed<float, 3> >& ray_origin,

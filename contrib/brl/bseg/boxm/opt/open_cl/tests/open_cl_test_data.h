@@ -3,6 +3,7 @@
 
 #include <boxm/boxm_mog_grey_processor.h>
 #include <boxm/boxm_simple_grey_processor.h>
+#include <boxm/boxm_sample.h>
 
 #include <boct/boct_tree.h>
 #include <vbl/vbl_array_2d.h>
@@ -12,6 +13,8 @@
 #include <vcl_vector.h>
 #include <vcl_string.h>
 #include <vcl_iostream.h>
+
+#include <boxm/opt/open_cl/boxm_ray_trace_manager.h>
 
 class open_cl_test_data
 {

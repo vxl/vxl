@@ -53,7 +53,7 @@ static void ray_creation_tests(octree_test_driver<T> & test_driver)
   test_create_a_ray(test_driver);
 }
 
-
+#if 0
 static void backproject_rays(vcl_string filename)
 {
   vpgl_perspective_camera<double> pcam;
@@ -65,6 +65,7 @@ static void backproject_rays(vcl_string filename)
 
   vgl_line_3d_2_points<double> line=pcam.backproject(vgl_point_2d<double>(1,1));
 }
+#endif
 
 static void test_backproject_ray()
 {
@@ -86,7 +87,7 @@ static void test_backproject_ray()
   {
     ray_creation_tests(test_driver);
     float * ray_results=test_driver.ray_results();
-    unsigned inc=0;
+    unsigned int inc=0;
     for (unsigned i=0;i<64;i++)
     {
       for (unsigned j=0;j<64;j++)
@@ -94,9 +95,10 @@ static void test_backproject_ray()
         vgl_line_3d_2_points<double> cam_ray = pcam->backproject(vgl_homg_point_2d<double>((double)i,(double)j));
         vgl_vector_3d<double> norm_direction = cam_ray.direction();
         normalize(norm_direction);
+        unsigned temp = ++inc;
         float dist=vcl_sqrt((ray_results[inc]  -norm_direction.x())*(ray_results[inc]-norm_direction.x())+
-                            (ray_results[++inc]-norm_direction.y())*(ray_results[inc]-norm_direction.y())+
-                            (ray_results[++inc]-norm_direction.z())*(ray_results[inc]-norm_direction.z()));
+                            (ray_results[temp]-norm_direction.y())*(ray_results[inc]-norm_direction.y())+
+                            (ray_results[temp]-norm_direction.z())*(ray_results[inc]-norm_direction.z()));
         ++inc;
         if (dist<1e-4)
           flag=false;
