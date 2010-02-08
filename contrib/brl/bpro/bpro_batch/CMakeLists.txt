@@ -11,7 +11,7 @@ IF( PYTHON_FOUND )
     bpro_batch.h              bpro_batch.cxx
   )
 
-  ADD_LIBRARY(bpro_batch ${bpro_batch_sources})
+  ADD_LIBRARY(bpro_batch MODULE ${bpro_batch_sources})
   TARGET_LINK_LIBRARIES(bpro_batch bprb brdb )
   
 ENDIF( PYTHON_FOUND )
