@@ -34,6 +34,8 @@ public:
     scene_out->set_paths(scene_in->path(), block_pref);
     scene_out->set_appearance_model(scene_in->appearence_model());
     
+    scene_out->write_scene(block_pref + ".xml");
+    
     //Iterate through the blocks
     boxm_block_iterator<tree_type> iter_in = scene_in->iterator();
     boxm_block_iterator<tree_type> iter_out = scene_out->iterator();
