@@ -18,5 +18,6 @@ void boxm_algo_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_save_scene_vrml_process ,"boxmSaveSceneVrmlProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_crop_scene_process, "boxmCropSceneProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_scene_to_bvxm_grid_process, "boxmSceneToBvxmGridProcess");
-
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_fill_internal_cells_process, "boxmFillInternalCellsProcess");
+  
 }
