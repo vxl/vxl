@@ -36,6 +36,7 @@ class boxm_scene_parser : public expatpp
    bool multi_bin() const { return multi_bin_; }
    void levels(unsigned& max, unsigned& init) { max = max_tree_level_; init=init_tree_level_; }
    bool save_internal_nodes() {return save_internal_nodes_;}
+   float p_init(){return p_init_;}
 
  private:
   virtual void startElement(const XML_Char* name, const XML_Char** atts);

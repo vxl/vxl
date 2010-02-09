@@ -58,6 +58,8 @@ class boxm_scene :public boxm_scene_base
   //: Destructor
   ~boxm_scene();
 
+  bool discover_block(vgl_point_3d<unsigned> index){ return discover_block(index.x(),index.y(),index.z()); }
+
   bool discover_block(unsigned i, unsigned j, unsigned k);
 
   bool load_block(unsigned i, unsigned j, unsigned k);
@@ -127,6 +129,10 @@ class boxm_scene :public boxm_scene_base
 
   bool valid_index(vgl_point_3d<int> idx);
 
+  float pinit(){return pinit_;}
+
+  vgl_box_3d<double> get_block_bbox(vgl_point_3d<int>& idx){return get_block_bbox(idx.x(), idx.y(), idx.z());}
+
   vgl_box_3d<double> get_block_bbox(int x, int y, int z);
 
   //: generates a name for the block binary file based on the 3D vector index
@@ -156,6 +162,8 @@ class boxm_scene :public boxm_scene_base
 
   //: index of the blocks (3D array) that is active; only one active block at a time
   vgl_point_3d<int> active_block_;
+
+  float pinit_;
 
   //: Flag that indicates whether internal nodes of the trees should be saved
   bool save_internal_nodes_;

@@ -410,6 +410,7 @@ bool boxm_scene<T>::parse_config(boxm_scene_parser& parser)
   app_model_ = boxm_apm_types::str_to_enum(parser.app_model().data());
   multi_bin_ = parser.multi_bin();
   save_internal_nodes_ =parser.save_internal_nodes();
+  pinit_=parser.p_init();
 #if 0
   vcl_cout << "Internal Nodes 1: " << save_internal_nodes_ << vcl_endl;
 #endif
@@ -444,6 +445,7 @@ bool boxm_scene<T>::parse_xml_string(vcl_string xml, boxm_scene_parser& parser)
   parser.paths(scene_path_, block_pref_);
   app_model_ = boxm_apm_types::str_to_enum(parser.app_model().data());
   multi_bin_ = parser.multi_bin();
+  pinit_=parser.p_init();
   return true;
 }
 
