@@ -22,7 +22,7 @@ class boxm_block
   boxm_block(): octree_(0) {}
   ~boxm_block() { if (octree_) delete octree_; }
   boxm_block(vgl_box_3d<double> bbox): bbox_(bbox), octree_(0) {}
-  boxm_block(vgl_box_3d<double> bbox, T* tree) : bbox_(bbox), octree_(tree) {}
+  boxm_block(vgl_box_3d<double> bbox, T* tree) : bbox_(bbox), octree_(tree) {octree_->set_bbox(bbox_);}
   void init_tree(T * octree);
   void set_tree(T * octree) { octree_=octree; }
   vgl_box_3d<double> bounding_box() const { return bbox_; }
