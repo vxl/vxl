@@ -123,7 +123,7 @@ void vsl_b_read(vsl_b_istream &is, bbgm_mask_feature& b)
   b = temp;
 }
 
-void vsl_print_summary(vcl_ostream& os, const bbgm_mask_feature & b)
+void vsl_print_summary(vcl_ostream& /*os*/, const bbgm_mask_feature & /*b*/)
 {
   vcl_cerr << "bbgm_mask_feature::vsl_print_summary not implemented\n";
 }
@@ -240,26 +240,27 @@ void bbgm_mask_pair_feature::b_read(vsl_b_istream &is)
   short ver;
   vsl_b_read(is, ver);
   switch (ver)
-    {
-    case 1:
-      unsigned temp0, temp1, temp2;
-      vsl_b_read(is, temp0);
-      vsl_b_read(is, temp1);
-      vsl_b_read(is, temp2);
-      vsl_b_read(is, i0_);
-      vsl_b_read(is, j0_);
-      vsl_b_read(is, i1_);
-      vsl_b_read(is, j1_);
-      vsl_b_read(is, id0_);
-      vsl_b_read(is, id1_);
-      vsl_b_read(is, p_);
-      mid_ = static_cast<brip_rect_mask::mask_id>(temp0);
-      ang0_ = static_cast<brip_rect_mask::ang_id>(temp1);
-      ang1_ = static_cast<brip_rect_mask::ang_id>(temp2);
-      break;
-    default:
-      vcl_cerr << "bbgm_mask_pair_feature: unknown I/O version " << ver << '\n';
-    }
+  {
+   case 1:
+    unsigned temp0, temp1, temp2;
+    vsl_b_read(is, temp0);
+    vsl_b_read(is, temp1);
+    vsl_b_read(is, temp2);
+    vsl_b_read(is, i0_);
+    vsl_b_read(is, j0_);
+    vsl_b_read(is, i1_);
+    vsl_b_read(is, j1_);
+    vsl_b_read(is, id0_);
+    vsl_b_read(is, id1_);
+    vsl_b_read(is, p_);
+    mid_ = static_cast<brip_rect_mask::mask_id>(temp0);
+    ang0_ = static_cast<brip_rect_mask::ang_id>(temp1);
+    ang1_ = static_cast<brip_rect_mask::ang_id>(temp2);
+    break;
+   default:
+    vcl_cerr << "bbgm_mask_pair_feature: unknown I/O version " << ver << '\n';
+    break;
+  }
 }
 
 // public methods
@@ -276,7 +277,7 @@ void vsl_b_read(vsl_b_istream &is, bbgm_mask_pair_feature& b)
   b = temp;
 }
 
-void vsl_print_summary(vcl_ostream& os, const bbgm_mask_pair_feature & b)
+void vsl_print_summary(vcl_ostream& /*os*/, const bbgm_mask_pair_feature& /*b*/)
 {
   vcl_cerr << "bbgm_mask_pair_feature::vsl_print_summary not implemented\n";
 }
@@ -437,25 +438,26 @@ void bbgm_pair_group_feature::b_read(vsl_b_istream &is)
   short ver;
   vsl_b_read(is, ver);
   switch (ver)
-    {
-    case 1:
-      unsigned temp;
-      vsl_b_read(is, temp);
-      vsl_b_read(is, ci_);
-      vsl_b_read(is, cj_);
-      unsigned n;
-      vsl_b_read(is, n);
-      for (unsigned i = 0; i<n; ++i) {
-        bbgm_mask_pair_feature mpf;
-        vsl_b_read(is, mpf);
-        pairs_.insert(mpf);
-      }
-      vsl_b_read(is, p_);
-      mid_ = static_cast<brip_rect_mask::mask_id>(temp);
-      break;
-    default:
-      vcl_cerr << "bbgm_pair_group_feature: unknown I/O version " << ver << '\n';
+  {
+   case 1:
+    unsigned temp;
+    vsl_b_read(is, temp);
+    vsl_b_read(is, ci_);
+    vsl_b_read(is, cj_);
+    unsigned n;
+    vsl_b_read(is, n);
+    for (unsigned i = 0; i<n; ++i) {
+      bbgm_mask_pair_feature mpf;
+      vsl_b_read(is, mpf);
+      pairs_.insert(mpf);
     }
+    vsl_b_read(is, p_);
+    mid_ = static_cast<brip_rect_mask::mask_id>(temp);
+    break;
+   default:
+    vcl_cerr << "bbgm_pair_group_feature: unknown I/O version " << ver << '\n';
+    break;
+  }
 }
 
 // public methods
@@ -472,7 +474,7 @@ void vsl_b_read(vsl_b_istream &is, bbgm_pair_group_feature& b)
   b = temp;
 }
 
-void vsl_print_summary(vcl_ostream& os, const bbgm_pair_group_feature & b)
+void vsl_print_summary(vcl_ostream& /*os*/, const bbgm_pair_group_feature& /*b*/)
 {
   vcl_cerr << "bbgm_pair_group_feature::vsl_print_summary not implemented\n";
 }

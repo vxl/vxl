@@ -39,11 +39,12 @@ class image_exp_functor
 
 
 template <class T_loc, class T_data>
-void boxm_render_image_splatting(boxm_scene<boct_tree<T_loc, T_data > > &scene,
+void boxm_render_image_splatting(boxm_scene<boct_tree<T_loc,T_data> >& scene,
                                  vpgl_camera_double_sptr cam,
-                                 vil_image_view<typename T_data::obs_datatype> &expected,
-                                 vil_image_view<float> &mask,int bin=-1,
-                                 bool use_black_background = false)
+                                 vil_image_view<typename T_data::obs_datatype>& expected,
+                                 vil_image_view<float>& mask,           // TODO: use this param
+                                 int bin=-1,
+                                 bool /*use_black_background*/ = false) // TODO: use this param
 {
   unsigned ni=expected.ni();
   unsigned nj=expected.nj();

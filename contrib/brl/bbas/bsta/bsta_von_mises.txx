@@ -27,12 +27,12 @@ namespace
   };
 
   //: base case
-  // this is partial specialization: expect MSVC6 to complain
+  // this is a partial specialization: expect MSVC6 to complain
   template <class T, unsigned n>
   struct compute_dot<T,n,0>
   {
-    static inline T value(const vnl_vector_fixed<T,n>& v0,
-                          const vnl_vector_fixed<T,n>& v1)
+    static inline T value(const vnl_vector_fixed<T,n>& /*v0*/,
+                          const vnl_vector_fixed<T,n>& /*v1*/)
     { return 0; }
   };
 

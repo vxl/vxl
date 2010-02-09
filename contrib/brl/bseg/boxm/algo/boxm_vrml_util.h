@@ -37,7 +37,7 @@ class boxm_vrml_util
 
 
 template <class T_data>
-void boxm_vrml_util::write_vrml_scene(vcl_ofstream& str, boxm_scene<boct_tree<short,T_data> > *scene, float threshold)
+void boxm_vrml_util::write_vrml_scene(vcl_ofstream& str, boxm_scene<boct_tree<short,T_data> > *scene, float /*threshold*/)
 {
   typedef boct_tree<short, T_data> tree_type;
   typedef boct_tree_cell<short, T_data> cell_type;

@@ -40,8 +40,8 @@ class boxm_scene_parser : public expatpp
 
  private:
   virtual void startElement(const XML_Char* name, const XML_Char** atts);
-  virtual void endElement(const XML_Char* name){}
-  virtual void charData(const XML_Char* s, int len){}
+  virtual void endElement(const XML_Char* /*name*/) {}
+  virtual void charData(const XML_Char* /*s*/, int /*len*/) {}
 
   void init_params();
 

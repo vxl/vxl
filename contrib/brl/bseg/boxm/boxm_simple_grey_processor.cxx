@@ -49,7 +49,7 @@ float boxm_simple_grey_processor::total_prob(apm_datatype const& appear)
 
 
 //: Update with a new sample image
-bool boxm_simple_grey_processor::update( apm_datatype &appear, obs_datatype const& obs, float const& weight)
+bool boxm_simple_grey_processor::update( apm_datatype &appear, obs_datatype const& obs, float const& /*weight*/)
 {
   appear = boxm_simple_grey(vnl_vector_fixed<float,3>(obs, appear.sigma(), appear.gauss_weight()));
   return true;

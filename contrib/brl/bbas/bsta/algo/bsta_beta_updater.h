@@ -7,41 +7,38 @@
 // \author Gamze Tunali (gtunali@brown.edu)
 // \date   Nov 17, 2009
 //
+// In this implementation \alpha>=1 and \beta>=1.
+// In order to ensure this
+// $ \mu(\mu(1-\mu)/var-1)>1 $ and
+// $ (1-\mu)(\mu(1-\mu)/var-1)>1 $
+//
+// The distance of beta distribution is given as
+// $$  -(\alpha-1)log(x/\mu)-(\beta-1)log((1-x)/(1-\mu))>3  $$
+//
 // \verbatim
 //  Modifications
 // \endverbatim
 
-/*
-In this implementation \alpha>=1 and \beta>=1. 
-In order to ensure this 
-
-\mu(\mu(1-\mu)/var-1)>1 
-(1-\mu)(\mu(1-\mu)/var-1)>1 
-
-The distance of beta distribution is given as
-
--(\alpha-1)log(x/\mu)-(\beta-1)log((1-x)/(1-\mu))>3
-
-*/
 #include <bsta/bsta_beta.h>
 #include <bsta/bsta_attributes.h>
 #include <vcl_algorithm.h>
 #include <vcl_iostream.h>
 
 //: Update the statistics given a 1D beta distribution and a learning rate
-// \note if rho = 1/(num observations) then this just an online cumulative average
+// \note if rho = 1/(num observations) then this is just an online cumulative average
 template <class T>
 void bsta_update_beta(bsta_beta<T>& beta_dist, T rho, const T& sample )
 {
-  // the complement of rho (i.e. rho+rho_comp=1.0)
-  T rho_comp = 1.0f - rho;
-
+  // the complement of rho (i.e. rho+rho_comp=1)
+  T rho_comp = 1 - rho;
   T old_mean;
-  //if(beta_dist.alpha()<1)
-  //  old_mean=2*(beta_dist.alpha()-0.5);
-  //else if(beta_dist.beta()<1)
-  //  old_mean=1-2*(beta_dist.beta()-0.5);
-  //else
+#if 0
+  if (beta_dist.alpha()<1)
+    old_mean=2*(beta_dist.alpha()-0.5);
+  else if (beta_dist.beta()<1)
+    old_mean=1-2*(beta_dist.beta()-0.5);
+  else
+#endif // 0
     old_mean = beta_dist.mean();
 
   T diff = sample - old_mean;
@@ -51,16 +48,17 @@ void bsta_update_beta(bsta_beta<T>& beta_dist, T rho, const T& sample )
   T new_mean = (old_mean) +  (rho * diff);
 
   T alpha,beta;
-  if(!bsta_beta<T>::bsta_beta_from_moments(new_mean,new_var,alpha,beta))
-      return;
+  if (!bsta_beta<T>::bsta_beta_from_moments(new_mean,new_var,alpha,beta))
+    return;
   //T t = (new_mean*(1-new_mean)/new_var)-1;
   //T alpha=new_mean*t;
   //T beta=(1-new_mean)*t;
 
-  if(alpha<1 && beta <1)
-      vcl_cout<<"Mean : "<<new_mean<< "  Var: "<<new_var<<"\n";
+  if (alpha<1 && beta <1)
+    vcl_cout<<"Mean : "<<new_mean<< "  Var: "<<new_var<<"\n";
   beta_dist.set_alpha_beta(alpha, beta);
 }
+
 template <class T>
 void bsta_update_beta(bsta_beta<T>& beta_dist, T rho, const T& sample , const T & min_var)
 {
@@ -68,9 +66,9 @@ void bsta_update_beta(bsta_beta<T>& beta_dist, T rho, const T& sample , const T 
   T rho_comp = 1.0f - rho;
 
   T old_mean;
-  if(beta_dist.alpha()<1)
+  if (beta_dist.alpha()<1)
     old_mean=2*(beta_dist.alpha()-0.5);
-  else if(beta_dist.beta()<1)
+  else if (beta_dist.beta()<1)
     old_mean=1-2*(beta_dist.beta()-0.5);
   else
     old_mean = beta_dist.mean();
@@ -83,11 +81,12 @@ void bsta_update_beta(bsta_beta<T>& beta_dist, T rho, const T& sample , const T 
   T new_mean = (old_mean) +  (rho * diff);
 
   T alpha,beta;
-  if(!bsta_beta<T>::bsta_beta_from_moments(new_mean,new_var,alpha,beta))
-      return;
+  if (!bsta_beta<T>::bsta_beta_from_moments(new_mean,new_var,alpha,beta))
+    return;
 
   beta_dist.set_alpha_beta(alpha, beta);
 }
+
 template <class beta_>
 struct bsta_beta_fitness
 {
@@ -95,8 +94,8 @@ struct bsta_beta_fitness
   typedef typename beta_::math_type T;
   enum { n = beta_::dimension };
  public:
-  static bool order (const beta_& d1, const T& w1,
-                     const beta_& d2, const T& w2)
+  static bool order (const beta_& /*d1*/, const T& w1,
+                     const beta_& /*d2*/, const T& w2)
   {
     return w1>w2;
   }
@@ -128,13 +127,11 @@ class bsta_beta_updater
 template <class mix_dist_>
 class bsta_mix_beta_updater
 {
- private:
   typedef typename mix_dist_::dist_type obs_dist_; //mixture comp type
   typedef typename obs_dist_::contained_type dist_; //num_obs parent
   typedef typename dist_::math_type T;//the field type, e.g. float
   typedef typename dist_::vector_type vector_;// the vector type
   typedef bsta_num_obs<mix_dist_> obs_mix_dist_;
-
 
  public:
   //: Constructor

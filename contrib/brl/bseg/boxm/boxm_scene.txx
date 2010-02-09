@@ -6,8 +6,6 @@
 #include "boxm_apm_traits.h"
 #include "boxm_scene_parser.h"
 
-#include <vcl_cmath.h>
-#include <vcl_cstdio.h>
 #include <vgl/xio/vgl_xio_point_3d.h>
 #include <vgl/xio/vgl_xio_vector_3d.h>
 #include <vsl/vsl_basic_xml_element.h>
@@ -15,13 +13,20 @@
 #include <vpgl/bgeo/bgeo_lvcs.h>
 
 #include <vpl/vpl.h>
+#include <vcl_cmath.h>
+#include <vcl_cstdio.h>
+
 template <class T>
-boxm_scene<T>::boxm_scene(const bgeo_lvcs& lvcs, 
+boxm_scene<T>::boxm_scene(const bgeo_lvcs& lvcs,
                           const vgl_point_3d<double>& origin,
                           const vgl_vector_3d<double>& block_dim,
                           const vgl_vector_3d<unsigned>& world_dim,
                           const bool save_internal_nodes)
-: lvcs_(lvcs), origin_(origin), block_dim_(block_dim), active_block_(vgl_point_3d<int>(-1,-1,-1)),save_internal_nodes_(save_internal_nodes)
+: lvcs_(lvcs),
+  origin_(origin),
+  block_dim_(block_dim),
+  active_block_(vgl_point_3d<int>(-1,-1,-1)),
+  save_internal_nodes_(save_internal_nodes)
 {
   create_blocks(block_dim, world_dim);
 }
@@ -31,52 +36,33 @@ boxm_scene<T>::boxm_scene( const vgl_point_3d<double>& origin,
                            const vgl_vector_3d<double>& block_dim,
                            const vgl_vector_3d<unsigned>& world_dim,
                            const bool save_internal_nodes)
-: origin_(origin), block_dim_(block_dim), active_block_(vgl_point_3d<int>(-1,-1,-1)), save_internal_nodes_(save_internal_nodes)
+: origin_(origin),
+  block_dim_(block_dim),
+  active_block_(vgl_point_3d<int>(-1,-1,-1)),
+  save_internal_nodes_(save_internal_nodes)
 {
   create_blocks(block_dim, world_dim);
 }
 
 template <class T>
-void boxm_scene<T>::create_blocks(const vgl_vector_3d<double>& block_dim,
+void boxm_scene<T>::create_blocks(const vgl_vector_3d<double>& /*block_dim*/,
                                   const vgl_vector_3d<unsigned>& world_dim)
 {
   // compute the dimensions of 3D array
-  unsigned x_dim = world_dim.x();
-  unsigned y_dim = world_dim.y();
-  unsigned z_dim = world_dim.z();
+  unsigned x_dim = world_dim.x(); // = static_cast<int>(vcl_floor(world_dim.x()/block_dim.x()));
+  unsigned y_dim = world_dim.y(); // = static_cast<int>(vcl_floor(world_dim.y()/block_dim.y()));
+  unsigned z_dim = world_dim.z(); // = static_cast<int>(vcl_floor(world_dim.z()/block_dim.z()));
 
   // pointers are initialized to NULL
   blocks_ =  vbl_array_3d<boxm_block<T>*>(x_dim, y_dim, z_dim, (boxm_block<T>*)NULL);
-  for (unsigned i=0; i<x_dim; i++) {
-    for (unsigned j=0; j<y_dim; j++) {
-      for (unsigned k=0; k<z_dim; k++) {
+  for (unsigned i=0; i<x_dim; ++i) {
+    for (unsigned j=0; j<y_dim; ++j) {
+      for (unsigned k=0; k<z_dim; ++k) {
         create_block(i,j,k);
       }
     }
   }
 }
-
-#if 0 // commented out
-template <class T>
-void boxm_scene<T>::create_blocks(const vgl_vector_3d<double>& block_dim,
-                                  const vgl_vector_3d<int>& world_dim)
-{
-  // compute the dimensions of 3D array
-  //int x_dim = static_cast<int>(vcl_floor(world_dim.x()/block_dim.x()));
-  //int y_dim = static_cast<int>(vcl_floor(world_dim.y()/block_dim.y()));
-  //int z_dim = static_cast<int>(vcl_floor(world_dim.z()/block_dim.z()));
-
-  // pointers are initialized to NULL
-  blocks_ =  vbl_array_3d<boxm_block<T>*>(world_dim.x(),world_dim.y(),world_dim.z(), (boxm_block<T>*)NULL);
-  for (int i=0; i<world_dim.x(); i++) {
-    for (int j=0; j<world_dim.y(); j++) {
-      for (int k=0; k<world_dim.z(); k++) {
-        create_block(i,j,k);
-      }
-    }
-  }
-}
-#endif // 0
 
 template <class T>
 boxm_scene<T>::boxm_scene(const bgeo_lvcs& lvcs,
@@ -236,8 +222,8 @@ bool boxm_scene<T>::discover_block(unsigned i, unsigned j, unsigned k)
   if (!os) {
     return false;
   }
-  
-  return true;;
+
+  return true;
 
 }
 //: returns true if the block bin file is found on disc, false otherwise.
@@ -369,7 +355,7 @@ void x_write(vcl_ostream &os, boxm_scene<T>& scene, vcl_string name)
   vsl_basic_xml_element bin(MULTI_BIN_TAG);
   bin.add_attribute("value", scene.multi_bin()? 1 : 0);
   bin.x_write(os);
-  
+
   vsl_basic_xml_element save_nodes(SAVE_INTERNAL_NODES_TAG);
   save_nodes.add_attribute("value", scene.save_internal_nodes()? 1 : 0);
   save_nodes.x_write(os);

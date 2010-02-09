@@ -111,7 +111,7 @@ class bsta_von_mises<T,2>
   T prob_density(vector_type const& v) const;
 
   //:Probability of an angular range of vectors about v, which defines a cone.
-  T probability(vector_type const& v,const T theta_max) const {vcl_cerr << "not implemented\n"; return 0;}
+  T probability(vector_type const& /*v*/,const T /*theta_max*/) const {vcl_cerr << "not implemented\n"; return 0;}
 
  protected:
   //: The mean vector

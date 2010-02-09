@@ -166,7 +166,7 @@ class bsta_mean_functor<dist_, typename vpdt_enable_if<vpdt_is_mixture<dist_> >:
   };
 
   //: The main function
-  bool operator() ( const dist_& d, return_type& retval ) const
+  bool operator() ( const dist_& /*d*/, return_type& /*retval*/ ) const
   {
     return false;
   }
@@ -214,7 +214,7 @@ class bsta_var_functor
 template <class T>
 class bsta_var_functor<bsta_num_obs<bsta_gaussian_sphere<T,1> > >
 {
-public:
+ public:
   typedef bsta_gaussian_sphere<T,1> dist_;
   typedef typename dist_::vector_type vector_;
   typedef vector_ return_T;
@@ -222,13 +222,13 @@ public:
   enum { return_dim = dist_::dimension };
   //: is this functor valid for its distribution type
   static const bool valid_functor = true;
-  
+
   //: rebind this functor to another distribution type
-  template <class other_dist> 
+  template <class other_dist>
   struct rebind {
     typedef bsta_var_functor<other_dist> other;
   };
-  
+
   //: The main function
   bool operator() ( const dist_& d, return_T& retval ) const
   {
@@ -252,9 +252,9 @@ class bsta_diag_covar_functor
   enum { return_dim = dist_::dimension };
   //: is this functor valid for its distribution type
   static const bool valid_functor = false;
-  
+
   //: rebind this functor to another distribution type
-  template <class other_dist> 
+  template <class other_dist>
   struct rebind {
     typedef bsta_diag_covar_functor<other_dist> other;
   };
@@ -276,7 +276,7 @@ class bsta_diag_covar_functor
 template <class T, unsigned n>
 class bsta_diag_covar_functor<bsta_num_obs<bsta_gaussian_indep<T,n> > >
 {
-public:
+ public:
   typedef bsta_gaussian_indep<T,n> dist_;
   typedef typename dist_::vector_type vector_;
   typedef vector_ return_T;
@@ -284,13 +284,13 @@ public:
   enum { return_dim = dist_::dimension };
   //: is this functor valid for its distribution type
   static const bool valid_functor = true;
-  
+
   //: rebind this functor to another distribution type
-  template <class other_dist> 
+  template <class other_dist>
   struct rebind {
     typedef bsta_diag_covar_functor<other_dist> other;
   };
-  
+
   //: The main function
   bool operator() ( const dist_& d, return_T& retval ) const
   {
@@ -326,23 +326,23 @@ class bsta_det_covar_functor
 template <class mixture_, class Disambiguate=void>
 class bsta_weight_functor
 {
-public:
+ public:
   typedef typename mixture_::math_type T;
   typedef T return_T;
   typedef return_T return_type; // for compatiblity with vpdl/vdpt
   enum { return_dim = 1 };
   //: is this functor valid for its distribution type
   static const bool valid_functor = false;
-  
+
   //: rebind this functor to another distribution type
-  template <class other_dist> 
+  template <class other_dist>
   struct rebind {
     typedef bsta_weight_functor<other_dist> other;
   };
-  
+
   //: Constructor
   bsta_weight_functor(unsigned int index = 0) {}
-  
+
   //: The main function
   bool operator() ( const mixture_& mix, return_T& retval ) const
   {
@@ -364,9 +364,9 @@ class bsta_weight_functor<mixture_,
   enum { return_dim = 1 };
   //: is this functor valid for its distribution type
   static const bool valid_functor = true;
-  
+
   //: rebind this functor to another distribution type
-  template <class other_dist> 
+  template <class other_dist>
   struct rebind {
     typedef bsta_weight_functor<other_dist> other;
   };
@@ -392,11 +392,11 @@ class bsta_weight_functor<mixture_,
 // This is needed because weight is not a property of the mixture component,
 // it is a property on the mixture itself that is defined for each component.
 template <class mixture_>
-class vpdt_mixture_accessor<mixture_, 
+class vpdt_mixture_accessor<mixture_,
           bsta_weight_functor<typename mixture_::component_type>,
           typename vpdt_enable_if<vpdt_is_mixture<mixture_> >::type>
 {
-public:
+ public:
   //: the accessor type
   typedef bsta_weight_functor<typename mixture_::component_type> accessor_type;
   //: the functor return type
@@ -405,19 +405,19 @@ public:
   typedef mixture_ distribution_type;
   //: is this functor valid for its distribution type
   static const bool valid_functor = true;
-  
+
   //: rebind this functor to another distribution type
-  template <class other_dist, class other_accessor = accessor_type> 
+  template <class other_dist, class other_accessor = accessor_type>
   struct rebind {
     typedef vpdt_mixture_accessor<other_dist,other_accessor> other;
   };
 
   //: Constructor
-  vpdt_mixture_accessor(unsigned int index = 0) 
+  vpdt_mixture_accessor(unsigned int index = 0)
   : idx(index) {}
 
   //: Constructor
-  vpdt_mixture_accessor(const accessor_type& a, unsigned int index = 0) 
+  vpdt_mixture_accessor(const accessor_type& a, unsigned int index = 0)
   : idx(index) {}
 
   //: The main function

@@ -14,7 +14,7 @@
 
 //: Float to float
 template <class T_loc>
-float boxm_cell_to_float(boct_tree_cell<T_loc, float >* cell,  double step_len)
+float boxm_cell_to_float(boct_tree_cell<T_loc, float >* cell,  double /*step_len*/)
 {
   //return 1.0 - vcl_exp(-cell->data()*step_len);
   return cell->data();
@@ -22,7 +22,7 @@ float boxm_cell_to_float(boct_tree_cell<T_loc, float >* cell,  double step_len)
 
 //: Mixture of gaussians to float; return the mean
 template <class T_loc>
-float boxm_cell_to_float(boct_tree_cell<T_loc, bsta_num_obs<bsta_gauss_f1> >* cell, double step_len)
+float boxm_cell_to_float(boct_tree_cell<T_loc, bsta_num_obs<bsta_gauss_f1> >* cell, double /*step_len*/)
 {
   return cell->data().mean();
 }

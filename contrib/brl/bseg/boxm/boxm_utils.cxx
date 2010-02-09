@@ -928,7 +928,7 @@ bool boxm_utils::project_cube_xyz(vcl_vector< vgl_point_3d<double> > & corners,
 }
 
 
-bool boxm_utils::project_cube_xyz(vcl_vector< vgl_point_3d<double> > & corners,
+bool boxm_utils::project_cube_xyz(vcl_vector< vgl_point_3d<double> > & /*corners*/,
                                   boct_face_idx & vis_face_ids,
                                   vil_image_view<float> &front_xyz,
                                   vil_image_view<float> &back_xyz,
@@ -941,13 +941,8 @@ bool boxm_utils::project_cube_xyz(vcl_vector< vgl_point_3d<double> > & corners,
     double ds[]={vertdist[1],vertdist[0],vertdist[3],vertdist[2]};
     boxm_quad_scan_iterator poly_it(xs,ys);
     vgl_polygon<double> p(xs,ys,4);
-    if (vis_face_ids & Z_LOW){
-      quad_interpolate(poly_it,xs,ys,ds,front_xyz,0);
-    }
-    else
-    {
-      quad_interpolate(poly_it,xs,ys,ds,back_xyz,0);
-    }
+    if (vis_face_ids & Z_LOW){ quad_interpolate(poly_it,xs,ys,ds,front_xyz,0); }
+    else                     { quad_interpolate(poly_it,xs,ys,ds,back_xyz,0); }
   }
   {
     double xs[]={xverts[4],xverts[5],xverts[6],xverts[7]};
@@ -956,13 +951,8 @@ bool boxm_utils::project_cube_xyz(vcl_vector< vgl_point_3d<double> > & corners,
 
     boxm_quad_scan_iterator poly_it(xs,ys);
     vgl_polygon<double> p(xs,ys,4);
-    if (vis_face_ids & Z_HIGH){
-      quad_interpolate(poly_it,xs,ys,ds,front_xyz,0);
-    }
-    else
-    {
-      quad_interpolate(poly_it,xs,ys,ds,back_xyz,0);
-    }
+    if (vis_face_ids & Z_HIGH){ quad_interpolate(poly_it,xs,ys,ds,front_xyz,0); }
+    else                      { quad_interpolate(poly_it,xs,ys,ds,back_xyz,0); }
   }
   {
     double xs[]={xverts[7],xverts[3],xverts[0],xverts[4]};
@@ -970,13 +960,8 @@ bool boxm_utils::project_cube_xyz(vcl_vector< vgl_point_3d<double> > & corners,
     double ds[]={vertdist[7],vertdist[3],vertdist[0],vertdist[4]};
 
     boxm_quad_scan_iterator poly_it(xs,ys);
-    if (vis_face_ids & X_LOW){
-      quad_interpolate(poly_it,xs,ys,ds,front_xyz,0);
-    }
-    else
-    {
-      quad_interpolate(poly_it,xs,ys,ds,back_xyz,0);
-    }
+    if (vis_face_ids & X_LOW){ quad_interpolate(poly_it,xs,ys,ds,front_xyz,0); }
+    else                     { quad_interpolate(poly_it,xs,ys,ds,back_xyz,0); }
   }
   {
     double xs[]={xverts[1],xverts[2],xverts[6],xverts[5]};
@@ -984,13 +969,8 @@ bool boxm_utils::project_cube_xyz(vcl_vector< vgl_point_3d<double> > & corners,
     double ds[]={vertdist[1],vertdist[2],vertdist[6],vertdist[5]};
 
     boxm_quad_scan_iterator poly_it(xs,ys);
-    if (vis_face_ids & X_HIGH){
-      quad_interpolate(poly_it,xs,ys,ds,front_xyz,0);
-    }
-    else
-    {
-      quad_interpolate(poly_it,xs,ys,ds,back_xyz,0);
-    }
+    if (vis_face_ids & X_HIGH){ quad_interpolate(poly_it,xs,ys,ds,front_xyz,0); }
+    else                      { quad_interpolate(poly_it,xs,ys,ds,back_xyz,0); }
   }
   {
     double xs[]={xverts[0],xverts[1],xverts[5],xverts[4]};
@@ -999,14 +979,8 @@ bool boxm_utils::project_cube_xyz(vcl_vector< vgl_point_3d<double> > & corners,
 
     boxm_quad_scan_iterator poly_it(xs,ys);
     vgl_polygon<double> p(xs,ys,4);
-
-    if (vis_face_ids & Y_LOW){
-      quad_interpolate(poly_it,xs,ys,ds,front_xyz,0);
-    }
-    else
-    {
-      quad_interpolate(poly_it,xs,ys,ds,back_xyz,0);
-    }
+    if (vis_face_ids & Y_LOW){ quad_interpolate(poly_it,xs,ys,ds,front_xyz,0); }
+    else                     { quad_interpolate(poly_it,xs,ys,ds,back_xyz,0); }
   }
   {
     double xs[]={xverts[2],xverts[3],xverts[7],xverts[6]};
@@ -1015,14 +989,8 @@ bool boxm_utils::project_cube_xyz(vcl_vector< vgl_point_3d<double> > & corners,
 
     boxm_quad_scan_iterator poly_it(xs,ys);
     vgl_polygon<double> p(xs,ys,4);
-
-    if (vis_face_ids & Y_HIGH){
-      quad_interpolate(poly_it,xs,ys,ds,front_xyz,0);
-    }
-    else
-    {
-      quad_interpolate(poly_it,xs,ys,ds,back_xyz,0);
-    }
+    if (vis_face_ids & Y_HIGH){ quad_interpolate(poly_it,xs,ys,ds,front_xyz,0); }
+    else                      { quad_interpolate(poly_it,xs,ys,ds,back_xyz,0); }
   }
 
   return true;
@@ -1035,8 +1003,8 @@ bool boxm_utils::project_cube_fill_val( vcl_map<boct_face_idx,vcl_vector< vgl_po
                                         float val, vpgl_camera_double_sptr cam)
 {
 #if 0
-  vcl_map<boct_face_idx, vcl_vector<vgl_point_3d<double> > >::iterator face_it=faces.begin();
-  for (;face_it!=faces.end();++face_it)
+  for (vcl_map<boct_face_idx, vcl_vector<vgl_point_3d<double> > >::iterator face_it=faces.begin();
+       face_it!=faces.end(); ++face_it)
   {
     vcl_vector<vgl_point_3d<double> > face_corners=face_it->second;
     vcl_vector<vgl_point_2d<double> > face_projected=project_face(face_corners,cam);
