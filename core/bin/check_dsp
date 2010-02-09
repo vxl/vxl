@@ -228,7 +228,7 @@ foreach my $dir (@DIRS)
   my %source_files = ();
   my %test_files = ();
   my %hsource_files = ();
-  my %names = qw(MAKECOMMAND make CMAKE_CURRENT_SOURCE_DIR $dir DIRECTSHOW_ESF_INCLUDE_DIR _);
+  my %names = qw(MAKECOMMAND make CMAKE_CURRENT_SOURCE_DIR $dir DIRECTSHOW_ESF_INCLUDE_DIR _ CMAKE_SYSTEM_PROCESSOR x86_64);
   if (open(CMAKEFILE, $cmakef)) {
     $cmakefile = join '',<CMAKEFILE>;
     close CMAKEFILE;
