@@ -32,6 +32,32 @@ boct_tree<T_loc,T_data>::boct_tree(short num_levels, short init_levels): num_lev
   }
 }
 
+template <class T_loc,class T_data>
+boct_tree<T_loc,T_data>::boct_tree(T_data data,short num_levels, short init_levels): num_levels_(num_levels), root_level_(num_levels-1), max_val_((double)(1 << root_level_)), root_(0)
+{
+  // root is allocated at (max_level_-1) with code [0,0,0]
+  boct_loc_code<T_loc> code;
+  if (init_levels>0)
+  {
+    code.set_code(0,0,0);
+    code.set_level(root_level_);
+    root_=new boct_tree_cell<T_loc,T_data>( code);
+  }
+  init_levels--;
+  while (init_levels > 0) {
+    vcl_vector<boct_tree_cell<T_loc,T_data>*> cells;
+    cells = leaf_cells();
+    for (unsigned i=0; i<cells.size(); i++) {
+      boct_tree_cell<T_loc,T_data>* c = static_cast<boct_tree_cell<T_loc,T_data>*>(cells[i]);
+      //T_data newdata=data;
+      //c->set_data(newdata);
+      c->split();
+    }
+    init_levels--;
+  }
+}
+
+
 //: Construct from bounding box, maximum number of levels and levels to initialize
 template <class T_loc,class T_data>
 boct_tree<T_loc,T_data>::boct_tree(vgl_box_3d<double>  bbox,short num_levels, short init_levels)

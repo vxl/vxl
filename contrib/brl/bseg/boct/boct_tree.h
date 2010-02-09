@@ -30,6 +30,9 @@ class boct_tree
   //: Construct an empty tree from maximum number of levels and levels, to initialize
   boct_tree(short num_levels, short init_levels=1);
 
+  //: Construct an empty tree from maximum number of levels and levels and initial T_data, to initialize
+  boct_tree(T_data data,short num_levels, short init_levels);
+
   //: Construct from bounding box, maximum number of levels and levels to initialize
   boct_tree(vgl_box_3d<double>  bbox,short num_levels, short init_levels=1);
 
