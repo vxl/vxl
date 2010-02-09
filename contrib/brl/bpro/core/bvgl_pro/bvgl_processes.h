@@ -6,5 +6,7 @@
 
 // execute and const functions
 DECLARE_FUNC_CONS(bvgl_generate_mask_process);
+DECLARE_FUNC_CONS(bvgl_generate_mask_process2);
+DECLARE_FUNC_CONS(bvgl_set_change_type_process);
 
 #endif
