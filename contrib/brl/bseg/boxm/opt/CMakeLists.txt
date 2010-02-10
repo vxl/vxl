@@ -19,6 +19,8 @@ SET(boxm_opt_sources
    boxm_generate_edge_sample_functor.h
    boxm_render_expected_edge_image_functor.h
    boxm_rpc_registration.h
+   boxm_generate_edge_tangent_sample_functor.h
+   boxm_edge_tangent_updater.h          boxm_edge_tangent_updater.txx
 )
 
 AUX_SOURCE_DIRECTORY(Templates boxm_opt_sources)
