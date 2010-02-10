@@ -122,7 +122,9 @@ bool boxm_roi_init_process(bprb_func_process& pro)
   }
 
   vpgl_local_rational_camera<double> local_camera;
-  if (scene->appearence_model() == BOXM_APM_MOG_GREY || scene->appearence_model() == BOXM_EDGE_FLOAT) {
+  if (scene->appearence_model() == BOXM_APM_MOG_GREY || 
+    scene->appearence_model() == BOXM_EDGE_FLOAT || 
+    scene->appearence_model() == BOXM_EDGE_LINE) {
     typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
     boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
 
