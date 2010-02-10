@@ -22,6 +22,7 @@ SET(vgl_io_sources
   vgl_io_vector_2d.txx vgl_io_vector_2d.h
   vgl_io_vector_3d.txx vgl_io_vector_3d.h
   vgl_io_cylinder.txx vgl_io_cylinder.h
+  vgl_io_infinite_line_3d.txx vgl_io_infinite_line_3d.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates vgl_io_sources)
