@@ -18,6 +18,9 @@
 #include <boxm/boxm_scene_base.h>
 #include <boxm/boxm_scene.h>
 #include <boxm/opt/boxm_generate_edge_sample_functor.h>
+#include <boxm/opt/boxm_generate_edge_tangent_sample_functor.h>
+#include <boxm/boxm_edge_sample.h>
+#include <boxm/boxm_edge_tangent_sample.h>
 
 #include <vil/vil_convert.h>
 #include <vil/vil_image_view_base.h>
@@ -87,25 +90,37 @@ bool boxm_generate_edge_samples_process(bprb_func_process& pro)
      return false;
   }
 
-  vil_image_view<float> edge_prob_image;
-  sdet_img_edge::estimate_edge_prob_image(edge_image, edge_prob_image, edge_prob_mask_size, edge_prob_mask_sigma);
-  float edge_prob_image_mean;
-  vil_math_mean(edge_prob_image_mean,edge_prob_image,0);
+  float new_n_normal;
+  
 
-  float new_n_normal = n_normal + edge_prob_image_mean;
-
-  //vil_image_view_base_sptr edge_prob_image_sptr = new vil_image_view<float>(edge_prob_image);
-  vil_image_view<float> img(edge_prob_image);
-  // edge image is always float??
   if (scene->appearence_model() == BOXM_EDGE_FLOAT) {
-    //vil_image_view<vxl_byte> *img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(edge_image.ptr());
-    //vil_image_view<float> img(img_byte->ni(), img_byte->nj(), 1);
-    //vil_convert_stretch_range_limited(*img_byte ,img, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
+    vil_image_view<float> edge_prob_image;
+    sdet_img_edge::estimate_edge_prob_image(edge_image, edge_prob_image, edge_prob_mask_size, edge_prob_mask_sigma);
+    float edge_prob_image_mean;
+    vil_math_mean(edge_prob_image_mean,edge_prob_image,0);
+    vil_image_view<float> img(edge_prob_image);
+    new_n_normal = n_normal + edge_prob_image_mean;
     if (!scene->multi_bin())
     {
       typedef boct_tree<short, boxm_edge_sample<float> > tree_type;
       boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
       boxm_generate_edge_sample_rt<short,boxm_edge_sample<float> > (*s, camera, img, img_name);
+    }
+    else
+    {
+      vcl_cout<<"boxm_generate_edge_samples_process: Multibin -- Not yet implemented"<<vcl_endl;
+    }
+  }
+  if (scene->appearence_model() == BOXM_EDGE_LINE) {
+    // get the edges as an image with 3 planes (a,b,c)
+    if (!scene->multi_bin())
+    {
+      typedef boxm_inf_line_sample<float> sample_type;
+      typedef boct_tree<short, sample_type> tree_type;
+      boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
+      // for this case, the image should be with 4 planes, representing plane definitions
+      vil_image_view<float> img(edge_image);
+      boxm_generate_edge_tangent_sample_rt<short,sample_type> (*s, camera, img, img_name);
     }
     else
     {

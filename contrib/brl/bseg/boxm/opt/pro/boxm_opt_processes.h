@@ -14,5 +14,6 @@ DECLARE_FUNC_CONS(boxm_generate_edge_samples_process);
 DECLARE_FUNC_CONS(boxm_edge_update_process);
 DECLARE_FUNC_CONS(boxm_render_expected_edge_process);
 DECLARE_FUNC_CONS(boxm_rpc_registration_process);
+DECLARE_FUNC_CONS(boxm_line_backproject_process);
 
 #endif

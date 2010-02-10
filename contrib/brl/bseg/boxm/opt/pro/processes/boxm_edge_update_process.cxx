@@ -26,7 +26,8 @@
 #include <boxm/boxm_scene.h>
 
 #include <boxm/boxm_edge_sample.h>
-//#include <boxm/opt/boxm_aux_traits.h>
+#include <boxm/boxm_edge_tangent_sample.h>
+#include <boxm/opt/boxm_edge_tangent_updater.h>
 #include <boxm/opt/boxm_edge_updater.h>
 
 namespace boxm_edge_update_process_globals
@@ -44,12 +45,11 @@ bool boxm_edge_update_process_cons(bprb_func_process& pro)
 
   // process takes 3 inputs:
   //input[0]: The scene
-  //input[1]: The damping value
-  //input[2]: n_normal
+  //input[1]: Image list filename
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm_scene_base_sptr";
   input_types_[1] = "vcl_string";
- // input_types_[2] = "float";
+ 
   // process has 0 outputs:
   vcl_vector<vcl_string> output_types_(n_outputs_);
 
@@ -99,15 +99,27 @@ bool boxm_edge_update_process(bprb_func_process& pro)
   }
   ifs.close();
 
-  typedef boct_tree<short,boxm_edge_sample<float> > tree_type;
-  boxm_scene<tree_type> *scene = dynamic_cast<boxm_scene<tree_type>*>(scene_base.ptr());
-  if (!scene) {
-     vcl_cerr << "error casting scene_base to scene\n";
-      return false;
+  if (scene_base->appearence_model() == BOXM_EDGE_FLOAT) {
+    typedef boct_tree<short,boxm_edge_sample<float> > tree_type;
+    boxm_scene<tree_type> *scene = dynamic_cast<boxm_scene<tree_type>*>(scene_base.ptr());
+    if (!scene) {
+       vcl_cerr << "error casting scene_base to scene\n";
+        return false;
+    }
+    boxm_edge_updater<short,float,float> updater(*scene, image_ids);
+    updater.add_cells();
   }
-  boxm_edge_updater<short,float,float> updater(*scene, image_ids);
-  updater.add_cells();
+  if (scene_base->appearence_model() == BOXM_EDGE_LINE) {
+    typedef boct_tree<short,boxm_inf_line_sample<float> > tree_type;
+    boxm_scene<tree_type> *scene = dynamic_cast<boxm_scene<tree_type>*>(scene_base.ptr());
+    if (!scene) {
+       vcl_cerr << "error casting scene_base to scene\n";
+        return false;
+    }
 
+    boxm_edge_tangent_updater<short,float,float> updater(*scene, image_ids);
+    updater.add_cells();
+  }
   //store output
   // (none)
 
