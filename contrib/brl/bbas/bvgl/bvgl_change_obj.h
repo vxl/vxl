@@ -19,8 +19,8 @@
 class bvgl_change_obj: public vbl_ref_count
 {
  public:
-  bvgl_change_obj(vgl_polygon<double>& poly) : class_("unknown"), poly_(poly) {}
-  bvgl_change_obj(vgl_polygon<double>& poly, vcl_string cls) : class_(cls), poly_(poly) {}
+  bvgl_change_obj(vgl_polygon<double> const& poly) : class_("unknown"), poly_(poly) {}
+  bvgl_change_obj(vgl_polygon<double> const& poly, vcl_string cls) : class_(cls), poly_(poly) {}
   bvgl_change_obj(const bvgl_change_obj& other);
   bvgl_change_obj() {}
   ~bvgl_change_obj() {}
