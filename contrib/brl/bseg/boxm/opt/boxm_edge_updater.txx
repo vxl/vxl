@@ -2,7 +2,6 @@
 #define boxm_edge_updater_txx_
 
 #include "boxm_edge_updater.h"
-#include "boxm_opt_appearance_estimator.h"
 
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/opt/boxm_aux_traits.h>
@@ -16,7 +15,7 @@ template <class T_loc, class APM, class AUX>
 boxm_edge_updater<T_loc,APM,AUX>::boxm_edge_updater(boxm_scene<boct_tree<T_loc,
                                                     boxm_edge_sample<APM> > > &scene,
                                                     vcl_vector<vcl_string> const& image_ids)
-: image_ids_(image_ids), scene_(scene), max_cell_P_(0.995f), min_cell_P_(0.0001f)
+: image_ids_(image_ids), scene_(scene)
 {}
 
 

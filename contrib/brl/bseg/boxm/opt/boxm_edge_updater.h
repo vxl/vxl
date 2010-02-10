@@ -28,9 +28,6 @@ protected:
 
   boxm_scene<boct_tree<T_loc, boxm_edge_sample<APM> > > &scene_;
 
-  const float max_cell_P_;
-  const float min_cell_P_;
-
 };
 
 
