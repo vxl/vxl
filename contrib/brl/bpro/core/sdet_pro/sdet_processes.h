@@ -6,5 +6,6 @@
 
 // execute and const functions
 DECLARE_FUNC_CONS(sdet_detect_edges_process);
+DECLARE_FUNC_CONS(sdet_detect_edge_tangent_process);
 
 #endif
