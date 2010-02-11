@@ -44,6 +44,12 @@ static void test_resample_bicub_byte()
   TEST_NEAR("dest_im(0,0)",dest_im(0,0),58,1e-6);
   TEST_NEAR("dest_im(3,2)",dest_im(3,2),0,1e-6);
 
+  vcl_cout<<"Beyond edge of image with edge_extend\n";
+  x0 = 8;
+  vil_resample_bicub_edge_extend(image0,dest_im,x0,y0,dx1,dy1,dx2,dy2,4,3);
+  TEST_NEAR("dest_im(0,0)",dest_im(0,0),58,1e-6);
+  TEST_NEAR("dest_im(3,2)",dest_im(3,2),79,1e-6);
+
   vcl_cout<<"Testing three plane image\n";
 
   image0.set_size(10,10,2);
@@ -78,6 +84,12 @@ static void test_resample_bicub_byte()
   vil_resample_bicub(image0,dest_im,x0,y0,dx1,dy1,dx2,dy2,4,3);
   TEST_NEAR("dest_im(0,0,0)",dest_im(0,0,0),58,1e-6);
   TEST_NEAR("dest_im(3,2,1)",dest_im(3,2,1),0,1e-6);
+
+  vcl_cout<<"Beyond edge of image with edge_extend\n";
+  x0 = 8;
+  vil_resample_bicub_edge_extend(image0,dest_im,x0,y0,dx1,dy1,dx2,dy2,4,3);
+  TEST_NEAR("dest_im(0,0,0)",dest_im(0,0,0),58,1e-6);
+  TEST_NEAR("dest_im(3,2,1)",dest_im(3,2,1),179,1e-6);
 }
 
 static void test_resample_bicub()
