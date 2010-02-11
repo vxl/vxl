@@ -7,7 +7,6 @@
 #include <boxm/boxm_edge_tangent_sample.h>
 #include <boxm/boxm_mog_grey_processor.h>
 #include <boxm/boxm_simple_grey_processor.h>
-#include <boxm/boxm_edge_tangent_sample.h>
 #include <vgl/vgl_homg_plane_3d.h>
 #include <vil/vil_math.h>
 #include <vil/vil_save.h>
@@ -25,7 +24,7 @@ class boxm_generate_edge_tangent_sample_functor
     is_aux_=true;
     // make sure that the image has 4 planes ((a,b,c,d) params of a plane ax+by+cz=d )
     if (observation.nplanes() != 4)
-      vcl_cerr << "boxm_generate_edge_tangent_sample_functor: the image does not have 4 planes" << vcl_endl;
+      vcl_cerr << "boxm_generate_edge_tangent_sample_functor: the image does not have 4 planes\n";
   }
 
   inline bool step_cell(unsigned int i, unsigned int j,
@@ -39,7 +38,7 @@ class boxm_generate_edge_tangent_sample_functor
     float c = obs_(i,j,2);
     float d = obs_(i,j,3);
     if (a==0 && b==0 && c==0 && d==0)
-      vcl_cout << i << "," << j << "reading plane 0!!!!!!!!!!!!!!!!!!!!!" << vcl_endl;
+      vcl_cout << i << ',' << j << "reading plane 0!!!!!!!!!!!!!!!!!!!!!" << vcl_endl;
     else {
       vgl_homg_plane_3d<float> p(a,b,c,d);
       boxm_plane_obs<float> observation(p,seg_len);
