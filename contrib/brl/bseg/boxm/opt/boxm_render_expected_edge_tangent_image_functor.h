@@ -7,6 +7,7 @@
 #include <boxm/opt/boxm_rt_sample.h>
 #include <boxm/boxm_simple_grey_processor.h>
 #include <boxm/boxm_mob_grey_processor.h>
+#include <boxm/boxm_edge_tangent_sample.h> // for class boxm_inf_line_sample
 #include <vnl/vnl_math.h>
 #include <vil/vil_transform.h>
 #include <sdet/sdet_img_edge.h>
@@ -88,9 +89,10 @@ void boxm_render_edge_tangent_image_rt(boxm_scene<boct_tree<T_loc, T_data > > &s
   boxm_raytrace_function<expfunctor,T_loc, T_data, boxm_edge_tangent_sample<sample_datatype> > raytracer(scene,aux_scene,cam.ptr(),expected.ni(),expected.nj());
   expfunctor exp_functor(expected,mask,expected.ni(),expected.nj(),true,false);
   raytracer.run(exp_functor);
-
- // normalize_expected_functor_edge<T_data> norm_fn(n_normal,num_samples-1);
-  //vil_transform2<float,float, normalize_expected_functor_edge<T_data> >(mask,expected,norm_fn);
+#if 0
+  normalize_expected_functor_edge<T_data> norm_fn(n_normal,num_samples-1);
+  vil_transform2<float,float, normalize_expected_functor_edge<T_data> >(mask,expected,norm_fn);
+#endif // 0
 }
 
 #endif
