@@ -23,12 +23,10 @@ namespace boxm_split_scene_process_globals
   const unsigned n_outputs_ = 2;
 }
 
-//: process takes 1 inputs and has no outputs.
+//: process takes 1 input and two outputs.
 // input[0]: The sample scene
-
-// output[0]: The appeaance scene
-// outout[1]: The alpha scene
-
+// output[0]: The appearance scene
+// output[1]: The alpha scene
 
 bool boxm_split_scene_process_cons(bprb_func_process& pro)
 {
@@ -38,7 +36,7 @@ bool boxm_split_scene_process_cons(bprb_func_process& pro)
 
   vcl_vector<vcl_string> output_types_(n_outputs_);
 
-  output_types_[0] = "boxm_scene_base_sptr";  
+  output_types_[0] = "boxm_scene_base_sptr";
   output_types_[1] = "boxm_scene_base_sptr";
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -89,10 +87,9 @@ bool boxm_split_scene_process(bprb_func_process& pro)
 
   apm_scene->write_scene("apm_scene.xml");
   alpha_scene->write_scene("/alpha_scene.xml");
-  
+
   pro.set_output_val<boxm_scene_base_sptr>(0, apm_scene);
   pro.set_output_val<boxm_scene_base_sptr>(1, alpha_scene);
-
 
   return true;
 }

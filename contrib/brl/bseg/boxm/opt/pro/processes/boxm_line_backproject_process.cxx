@@ -1,23 +1,21 @@
-// This is brl/bseg/boxm/pro/processes/boxm_line_backproject_process.cxx
+// This is brl/bseg/boxm/opt/pro/processes/boxm_line_backproject_process.cxx
+#include <bprb/bprb_func_process.h>
 //:
 // \file
-// \brief  A process for computing the backprojection of lines represented 
-//         as an image with 3 plane images (plane 0=a, plane1=b, plane2=c, 
-//         line is defined as ax+by=c). The backprojection, which is a plane
-//         is stored as an other image with 4 planes (ax+by+cz=d) as the output
+// \brief  A process for computing the backprojection of lines.
+// Lines are represented as an image with 3 plane images (plane 0=a, plane1=b,
+// plane2=c, line is defined as ax+by=c). The backprojection, which is a plane
+// is stored as an other image with 4 planes (ax+by+cz=d) as the output.
 //
 // \author Gamze Tunali
 // \date   Feb 4, 2010
 //
 // \verbatim
 //  Modifications
-//
+//   <none yet>
 // \endverbatim
 
-// \file
-#include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
-
 #include <brdb/brdb_value.h>
 
 #include <vpgl/vpgl_proj_camera.h>
@@ -25,7 +23,6 @@
 #include <vpgl/algo/vpgl_ray.h>
 
 #include <vgl/vgl_plane_3d.h>
-
 
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_image_view.h>
@@ -40,22 +37,21 @@ namespace boxm_line_backproject_process_globals
 }
 
 //: set input and output types
+// process takes 2 inputs and has 1 output:
+// input[0]: The edge image (vil_image_view<float> with three planes for (a,b,c))
+// input[1]: camera
+// output[0]: The plane image
 bool boxm_line_backproject_process_cons(bprb_func_process& pro)
 {
   using namespace boxm_line_backproject_process_globals;
-  // process takes 2 input:
-  // input[0]: The edge image (vil_image_view<float> with three planes for (a,b,c))
-  // input[1]: camera
   vcl_vector<vcl_string> input_types_(n_inputs_);
   unsigned i = 0;
   input_types_[i++] = "vil_image_view_base_sptr";
-  input_types_[i++] = "vpgl_camera_double_sptr"; 
+  input_types_[i++] = "vpgl_camera_double_sptr";
 
   if (!pro.set_input_types(input_types_))
     return false;
 
-  // process has 1 output:
-  // output[0]: The plane image
   vcl_vector<vcl_string> output_types_(n_outputs_);
   unsigned j = 0;
   output_types_[j++] = "vil_image_view_base_sptr";
@@ -68,13 +64,13 @@ bool boxm_line_backproject_process(bprb_func_process& pro)
   using namespace boxm_line_backproject_process_globals;
 
   //check number of inputs
-  if ( pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
+  if ( pro.n_inputs() < n_inputs_ ) {
+    vcl_cout << pro.name() << " The number of inputs should be " << n_inputs_<< vcl_endl;
     return false;
   }
 
   // get the inputs
-  unsigned i = 0;  
+  unsigned i = 0;
 
   // image
   vil_image_view_base_sptr edge_image_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
@@ -84,10 +80,10 @@ bool boxm_line_backproject_process(bprb_func_process& pro)
 
   // make sure that image has 3 planes
   if (edge_image_sptr->nplanes() != 3) {
-    vcl_cerr << "boxm_line_backproject_process: The edge image is expected to have 3 planes!" << vcl_endl;
+    vcl_cerr << "boxm_line_backproject_process: The edge image is expected to have 3 planes!\n";
     return false;
   }
-  
+
   vil_image_view<float> *plane_image;
   if (edge_image_sptr->pixel_format() == VIL_PIXEL_FORMAT_FLOAT) {
     vil_image_view<float> edge_image(edge_image_sptr);
@@ -97,7 +93,7 @@ bool boxm_line_backproject_process(bprb_func_process& pro)
     // the output image
     plane_image = new vil_image_view<float>(ni,nj,4);
     float a,b,c;
-    
+
     if (camera->type_name() == "vpgl_proj_camera") {
       vpgl_proj_camera<double>* cam = dynamic_cast<vpgl_proj_camera<double>*>(camera.ptr());
 
@@ -125,7 +121,7 @@ bool boxm_line_backproject_process(bprb_func_process& pro)
             b=edge_image(i,j,1);
             c=edge_image(i,j,2);
             //create a line and backproject it
-            vgl_homg_line_2d<double> image_line(a,b,c); 
+            vgl_homg_line_2d<double> image_line(a,b,c);
             vgl_homg_point_2d<double> p1,p2;
             vgl_plane_3d<double> plane;
             image_line.get_two_points(p1,p2);
@@ -138,11 +134,11 @@ bool boxm_line_backproject_process(bprb_func_process& pro)
           }
         }
     } else {
-        vcl_cerr << "boxm_line_backproject_process: The camera type [" << camera->type_name() << "]is not defined yet!" << vcl_endl;
+        vcl_cerr << "boxm_line_backproject_process: The camera type [" << camera->type_name() << "]is not defined yet!\n";
         return false;
     }
   } else {
-    vcl_cerr << "boxm_line_backproject_process: This pixel format is not supported yet!" << vcl_endl;
+    vcl_cerr << "boxm_line_backproject_process: This pixel format is not supported yet!\n";
     return false;
   }
   // output
