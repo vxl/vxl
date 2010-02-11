@@ -18,28 +18,28 @@ bool bvxm_expected_edge_image_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_expected_edge_image_process_globals;
 
-  // process takes 6 inputs:
+  // process takes 5 inputs:
   //input[0]: The voxel world
   //input[1]: The current camera
-  //input[2]: Expected image ni()
-  //input[3]: Expected image nj()
-  //input[4]: n_normal
-  //input[5]: Scale of the image
+  //input[2]: An image specifying the size of the expected edge image
+  //input[3]: n_normal
+  //input[4]: Scale of the image
 
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "bvxm_voxel_world_sptr";
   input_types_[1] = "vpgl_camera_double_sptr";
-  input_types_[2] = "unsigned";
-  input_types_[3] = "unsigned";
-  input_types_[4] = "float";
-  input_types_[5] = "unsigned";
+  input_types_[2] = "vil_image_view_base_sptr";
+  input_types_[3] = "float";
+  input_types_[4] = "unsigned";
   if (!pro.set_input_types(input_types_))
     return false;
 
   // process has 1 outputs:
-  // output[0]: Expected edge image
+  // output[0]: Expected edge image (probabilities between 0 and 1, float)
+  // output[1]: Expected edge image (normalized for display purposes, vxl_byte)
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";
+  output_types_[1] = "vil_image_view_base_sptr";
   return pro.set_output_types(output_types_);
 }
 
@@ -61,13 +61,14 @@ bool bvxm_expected_edge_image_process(bprb_func_process& pro)
   vpgl_camera_double_sptr camera_inp = pro.get_input<vpgl_camera_double_sptr>(1);
   bvxm_edge_ray_processor edge_proc(vox_world);
 
-  unsigned ni = pro.get_input<unsigned>(2);
-  unsigned nj = pro.get_input<unsigned>(3);
+  vil_image_view_base_sptr size_image_sptr = pro.get_input<vil_image_view_base_sptr>(2);
+  unsigned ni = size_image_sptr->ni();
+  unsigned nj = size_image_sptr->nj();
 
   // n_normal
-  float n_normal = pro.get_input<float>(4);
+  float n_normal = pro.get_input<float>(3);
   // scale of image
-  unsigned scale = pro.get_input<unsigned>(5);
+  unsigned scale = pro.get_input<unsigned>(4);
 
   int num_observations = vox_world->num_observations<EDGES>(0,scale);
   vcl_cout << "Number of observations in curren edge world: " << num_observations << '\n';
@@ -75,21 +76,21 @@ bool bvxm_expected_edge_image_process(bprb_func_process& pro)
   // render the expected edge image
   vil_image_view_base_sptr dummy_img;
   bvxm_image_metadata camera_metadata_inp(dummy_img,camera_inp);
-  vil_image_view<float>* fimg = new vil_image_view<float>(ni,nj,1);
-  fimg->fill(0.0f);
-  vil_image_view_base_sptr expected_edge_image_sptr = fimg;
+  vil_image_view<float> *img_eei_f = new vil_image_view<float>(ni,nj,1);
+  vil_image_view_base_sptr img_eei_f_sptr = img_eei_f;
 
-  edge_proc.expected_edge_image(camera_metadata_inp,
-                                expected_edge_image_sptr,
-                                n_normal,scale);
+  edge_proc.expected_edge_image(camera_metadata_inp,img_eei_f_sptr,n_normal,scale);
+
+  vil_image_view<vxl_byte> *img_eei_b = new vil_image_view<vxl_byte>(ni,nj,1);
 
   for (unsigned i=0; i<ni; i++) {
     for (unsigned j=0; j<nj; j++) {
-      (*fimg)(i,j) = static_cast<unsigned char>(255.0*((*fimg)(i,j)));
+      (*img_eei_b)(i,j) = static_cast<unsigned char>(255.0*((*img_eei_f)(i,j)));
     }
   }
 
-  pro.set_output_val<vil_image_view_base_sptr>(0, fimg);
+  pro.set_output_val<vil_image_view_base_sptr>(0, img_eei_f);
+  pro.set_output_val<vil_image_view_base_sptr>(1, img_eei_b);
 
   return true;
 }
