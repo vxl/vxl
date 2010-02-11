@@ -149,7 +149,7 @@ bool boxm_create_scene_process(bprb_func_process& pro)
     else if (scene_ptr->appearence_model() == BOXM_EDGE_LINE) {
       if (!scene_ptr->multi_bin())
       {
-        typedef boct_tree<short,boxm_edge_sample<float> > tree_type;
+        typedef boct_tree<short,boxm_inf_line_sample<float> > tree_type;
         boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
         scene->load_scene(parser);
         scene_ptr = scene;
