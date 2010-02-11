@@ -35,15 +35,15 @@ class boxm_edge_tangent_sample
   boxm_edge_tangent_sample() {}
   ~boxm_edge_tangent_sample() {}
   static short version_no() { return 1; }
-  void print(vcl_ostream& os);
+  void print(vcl_ostream& os) const;
 
   //: adds observations
   void insert(boxm_plane_obs<T> obs) { obs_.push_back(obs); /*vcl_cout << obs_.size() << vcl_endl;*/ }
 
   //: returns the number of observations
-  unsigned num_obs() { return obs_.size(); }
+  unsigned num_obs() const { return obs_.size(); }
 
-  boxm_plane_obs<T> obs(unsigned int i) { if (i < obs_.size()) return obs_[i]; vcl_cout << i << "is out of index - " << obs_.size(); }
+  boxm_plane_obs<T> obs(unsigned int i) const { if (i < obs_.size()) return obs_[i]; vcl_cout << i << "is out of index - " << obs_.size(); }
 
   //: returns a basic value that represents this sample (mostly for raw file creation purposes)
   float basic_val(unsigned int i) { if (i < obs_.size()) return obs_[i].seg_len_; vcl_cout << i << "is out of index - " << obs_.size(); }
@@ -80,13 +80,13 @@ template <class T>
 void vsl_b_read(vsl_b_istream & is, boxm_plane_obs<T> *&sample);
 
 template <class T>
-vcl_ostream& operator << (vcl_ostream& os, boxm_plane_obs<T>& sample);
+vcl_ostream& operator << (vcl_ostream& os, const boxm_plane_obs<T>& sample);
 
 template <class T>
-void vsl_b_write(vsl_b_ostream & os, boxm_edge_tangent_sample<T>& sample);
+void vsl_b_write(vsl_b_ostream & os, boxm_edge_tangent_sample<T> const &sample);
 
 template <class T>
-void vsl_b_write(vsl_b_ostream & os, boxm_edge_tangent_sample<T>* &sample);
+void vsl_b_write(vsl_b_ostream & os, boxm_edge_tangent_sample<T> const * &sample);
 
 template <class T>
 void vsl_b_read(vsl_b_istream & is, boxm_edge_tangent_sample<T> &sample);
@@ -95,7 +95,7 @@ template <class T>
 void vsl_b_read(vsl_b_istream & is, boxm_edge_tangent_sample<T> *&sample);
 
 template <class T>
-vcl_ostream& operator << (vcl_ostream& os, boxm_edge_tangent_sample<T> sample);
+vcl_ostream& operator << (vcl_ostream& os, const boxm_edge_tangent_sample<T>& sample);
 
 template <class T>
 void vsl_b_write(vsl_b_ostream & os, boxm_inf_line_sample<T> const &sample);

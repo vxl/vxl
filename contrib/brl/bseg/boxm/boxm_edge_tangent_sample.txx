@@ -58,14 +58,14 @@ vcl_ostream& operator << (vcl_ostream& os, boxm_plane_obs<T>& sample)
 
 // Edge Tangent Sample Methods
 template <class OBS_T>
-void boxm_edge_tangent_sample<OBS_T>::print(vcl_ostream& os)
+void boxm_edge_tangent_sample<OBS_T>::print(vcl_ostream& os) const
 {
   for (unsigned i=0; i<obs_.size(); i++) 
     os << i << "(obs=" << this->obs(i) << " num_obs=" << this->num_obs() << ")\n" ;
 }
 
 template <class T>
-void vsl_b_write(vsl_b_ostream & os, boxm_edge_tangent_sample<T> & sample)
+void vsl_b_write(vsl_b_ostream & os, boxm_edge_tangent_sample<T> const & sample)
 {
   vsl_b_write(os, sample.version_no());
   vsl_b_write(os, sample.num_obs());
@@ -74,7 +74,7 @@ void vsl_b_write(vsl_b_ostream & os, boxm_edge_tangent_sample<T> & sample)
 }
 
 template <class T>
-void vsl_b_write(vsl_b_ostream & os, boxm_edge_tangent_sample<T>* &sample)
+void vsl_b_write(vsl_b_ostream & os, boxm_edge_tangent_sample<T> const * &sample)
 {
   if (sample) {
     vsl_b_write(os, *sample);
@@ -114,7 +114,7 @@ void vsl_b_read(vsl_b_istream & is, boxm_edge_tangent_sample<T> *&sample)
 }
 
 template <class T>
-vcl_ostream& operator << (vcl_ostream& os, boxm_edge_tangent_sample<T> sample)
+vcl_ostream& operator << (vcl_ostream& os, boxm_edge_tangent_sample<T> &sample)
 {
   sample.print(os);
   return os;
@@ -178,11 +178,11 @@ template vcl_ostream& operator << (vcl_ostream&, boxm_plane_obs<T >&)
 
 #define BOXM_EDGE_TANGENT_SAMPLE_INSTANTIATE(T) \
 template class boxm_edge_tangent_sample<T >; \
-template void vsl_b_write(vsl_b_ostream &, boxm_edge_tangent_sample<T >&); \
-template void vsl_b_write(vsl_b_ostream &, boxm_edge_tangent_sample<T >*&); \
+template void vsl_b_write(vsl_b_ostream &, boxm_edge_tangent_sample<T > const &); \
+template void vsl_b_write(vsl_b_ostream &, boxm_edge_tangent_sample<T > const *&); \
 template void vsl_b_read(vsl_b_istream &, boxm_edge_tangent_sample<T > &); \
 template void vsl_b_read(vsl_b_istream &, boxm_edge_tangent_sample<T > *&); \
-template vcl_ostream& operator << (vcl_ostream&, boxm_edge_tangent_sample<T >)
+template vcl_ostream& operator << (vcl_ostream&, boxm_edge_tangent_sample<T >&)
 
 #define BOXM_INF_LINE_SAMPLE_INSTANTIATE(T) \
 template class boxm_inf_line_sample<T >; \
