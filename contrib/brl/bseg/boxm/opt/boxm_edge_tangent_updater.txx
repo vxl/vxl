@@ -17,8 +17,8 @@
 
 template <class T_loc, class APM, class AUX>
 boxm_edge_tangent_updater<T_loc,APM,AUX>::boxm_edge_tangent_updater(boxm_scene<boct_tree<T_loc,
-                                                    boxm_inf_line_sample<APM> > > &scene,
-                                                    vcl_vector<vcl_string> const& image_ids)
+                                                                    boxm_inf_line_sample<APM> > > &scene,
+                                                                    vcl_vector<vcl_string> const& image_ids)
 : image_ids_(image_ids), scene_(scene)
 {}
 
@@ -27,8 +27,8 @@ template <class T_loc, class APM, class AUX>
 bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
 {
   // get auxiliary scenes associated with each input image
-  
-  
+
+
   typedef boct_tree<T_loc, boxm_inf_line_sample<APM> > tree_type;
   typedef boct_tree<T_loc, boxm_edge_tangent_sample<AUX> > aux_tree_type;
 
@@ -60,40 +60,42 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
     {
       aux_samples.clear();
       boct_tree_cell<T_loc,boxm_inf_line_sample<APM> >* cell = cells[i];
-     // boxm_inf_line_sample<APM> data = cell->data();
-      //vcl_cout << "cell IN " << data.alpha << data.appearence_<< vcl_endl;
+#if 0
+      boxm_inf_line_sample<APM> data = cell->data();
+      vcl_cout << "cell IN " << data.alpha << data.appearence_<< vcl_endl;
+#endif // 0
       for (unsigned j=0; j<aux_readers.size(); j++) {
         boct_tree_cell<T_loc, boxm_edge_tangent_sample<AUX> > temp_cell;
 
         if (!aux_readers[j]->next(temp_cell)) {
           vcl_cerr << "error: incremental reader returned false.\n";
-            return false;
+          return false;
         }
 
         if (!temp_cell.code_.isequal(&(cell->code_))) {
           vcl_cerr << "error: temp_cell idx does not match cell idx.\n";
           return false;
         }
-        //if (temp_cell.data().seg_len_ > 0.0f) {
+//      if (temp_cell.data().seg_len_ > 0.0f) {
           aux_samples.push_back(temp_cell.data());
-        //}
+//      }
       }
-      
-	   vcl_list<vgl_plane_3d<AUX> > planes;
-	   vcl_vector<AUX> weights;
-	   for (unsigned int i=0; i<aux_samples.size(); ++i) {
-		  boxm_edge_tangent_sample<APM> s = aux_samples[i];
-		  for (unsigned int j=0; j<s.num_obs(); j++) {
-			boxm_plane_obs<AUX> obs = s.obs(j);
-			weights.push_back(obs.seg_len_);
-			vgl_plane_3d<AUX> plane(obs.plane_);
-			planes.push_back(plane);
-		  }
-	   }
-        
-	  vgl_infinite_line_3d<AUX> line = vgl_intersection(planes, weights);
-	  boxm_inf_line_sample<AUX> data(line);
-	  cell->set_data(data);
+
+      vcl_list<vgl_plane_3d<AUX> > planes;
+      vcl_vector<AUX> weights;
+      for (unsigned int i=0; i<aux_samples.size(); ++i) {
+        boxm_edge_tangent_sample<APM> s = aux_samples[i];
+        for (unsigned int j=0; j<s.num_obs(); j++) {
+          boxm_plane_obs<AUX> obs = s.obs(j);
+          weights.push_back(obs.seg_len_);
+          vgl_plane_3d<AUX> plane(obs.plane_);
+          planes.push_back(plane);
+        }
+      }
+
+      vgl_infinite_line_3d<AUX> line = vgl_intersection(planes, weights);
+      boxm_inf_line_sample<AUX> data(line);
+      cell->set_data(data);
     }
     scene_.write_active_block();
     for (unsigned int i=0; i<aux_readers.size(); ++i) {
@@ -116,4 +118,4 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
 #define BOXM_EDGE_TANGENT_UPDATER_INSTANTIATE(T1,T2,T3) \
 template class boxm_edge_tangent_updater<T1,T2,T3 >
 
-#endif // boxm_edge_updater_txx_
+#endif // boxm_edge_tangent_updater_txx_
