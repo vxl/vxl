@@ -98,6 +98,9 @@ SOURCE=.\sdet_register.cxx
 # Begin Source File
 SOURCE=.\processes/sdet_detect_edges_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\processes/sdet_detect_edge_tangent_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -109,6 +112,9 @@ SOURCE=.\sdet_processes.h
 # End Source File
 # Begin Source File
 SOURCE=.\processes/sdet_detect_edges_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\processes/sdet_detect_edge_tangent_process.h
 # End Source File
 # End Group
 # End Target
