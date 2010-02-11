@@ -38,9 +38,13 @@ class boxm_generate_edge_tangent_sample_functor
     float b = obs_(i,j,1);
     float c = obs_(i,j,2);
     float d = obs_(i,j,3);
-    vgl_homg_plane_3d<float> p(a,b,c,d);
-    boxm_plane_obs<float> observation(p,seg_len);
-    aux_val.insert(observation);
+    if (a==0 && b==0 && c==0 && d==0)
+      vcl_cout << i << "," << j << "reading plane 0!!!!!!!!!!!!!!!!!!!!!" << vcl_endl;
+    else {
+      vgl_homg_plane_3d<float> p(a,b,c,d);
+      boxm_plane_obs<float> observation(p,seg_len);
+      aux_val.insert(observation);
+    }
     return true;
   }
 
