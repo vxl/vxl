@@ -9,6 +9,7 @@
 #include <boxm/boxm_compute_volume_visibility.h>
 #include <boxm/boxm_depth_image_triangle.h>
 #include <boxm/boxm_edge_sample.h>
+#include <boxm/boxm_edge_tangent_sample.h>
 #include <boxm/boxm_fill_in_mesh.h>
 #include <boxm/boxm_init_scene.h>
 #include <boxm/boxm_mob_grey_processor.h>
