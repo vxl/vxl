@@ -24,6 +24,7 @@ MANPAGE_SOURCES += vgl_io_vector_3d.txx
 MANPAGE_SOURCES += vgl_io_conic.txx
 MANPAGE_SOURCES += vgl_io_plane_3d.txx
 MANPAGE_SOURCES += vgl_io_cylinder.txx
+MANPAGE_SOURCES += vgl_io_infinite_line_3d.txx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

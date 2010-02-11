@@ -44,6 +44,7 @@ MANPAGE_SOURCES += boxm_cell_data_traits.h
 MANPAGE_SOURCES += boxm_edge_sample.txx
 MANPAGE_SOURCES += boxm_compute_scene_statistics.h
 MANPAGE_SOURCES += boxm_init_scene.h
+MANPAGE_SOURCES += boxm_edge_tangent_sample.txx
 
 SUBDIRS += io pro opt algo
 

@@ -19,6 +19,9 @@ MANPAGE_SOURCES += boxm_pre_infinity_functor.h
 MANPAGE_SOURCES += boxm_render_expected_edge_image_functor.h
 MANPAGE_SOURCES += boxm_edge_updater.txx
 MANPAGE_SOURCES += boxm_rpc_registration.h
+MANPAGE_SOURCES += boxm_generate_edge_tangent_sample_functor.h
+MANPAGE_SOURCES += boxm_render_expected_edge_tangent_image_functor.h
+MANPAGE_SOURCES += boxm_edge_tangent_updater.txx
 
 SUBDIRS += pro open_cl
 
