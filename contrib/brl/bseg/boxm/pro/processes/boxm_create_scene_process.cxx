@@ -28,6 +28,7 @@
 
 #include <boxm/boxm_sample_multi_bin.h>
 #include <boxm/boxm_scene_parser.h>
+#include <boxm/boxm_edge_tangent_sample.h> // for class boxm_inf_line_sample
 
 //:global variables
 namespace boxm_create_scene_process_globals
@@ -47,7 +48,7 @@ bool boxm_create_scene_process_cons(bprb_func_process& pro)
   input_types_[0] = "vcl_string";
   if (!pro.set_input_types(input_types_))
     return false;
-  
+
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "boxm_scene_base_sptr";
   if (!pro.set_output_types(output_types_))
@@ -136,7 +137,6 @@ bool boxm_create_scene_process(bprb_func_process& pro)
         scene_ptr = scene;
       }
     }
-  
     else if (scene_ptr->appearence_model() == BOXM_EDGE_FLOAT) {
       if (!scene_ptr->multi_bin())
       {
@@ -156,7 +156,7 @@ bool boxm_create_scene_process(bprb_func_process& pro)
       }
     }
     else {
-      vcl_cout << "boxm_create_scene_process: undefined APM type" << vcl_endl;
+      vcl_cerr << "boxm_create_scene_process: undefined APM type\n";
       return false;
     }
 
