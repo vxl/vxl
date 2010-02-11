@@ -45,7 +45,6 @@ SET(boxm_sources
     boxm_compute_scene_statistics.h
     boxm_edge_tangent_sample.txx           boxm_edge_tangent_sample.h
     boxm_init_scene.h
->>>>>>> .r27747
 )
 
 AUX_SOURCE_DIRECTORY(Templates boxm_sources)
