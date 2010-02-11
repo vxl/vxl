@@ -90,7 +90,7 @@ bool boxm_generate_edge_samples_process(bprb_func_process& pro)
      return false;
   }
 
-  float new_n_normal;
+  float new_n_normal=0.0;
   
 
   if (scene->appearence_model() == BOXM_EDGE_FLOAT) {

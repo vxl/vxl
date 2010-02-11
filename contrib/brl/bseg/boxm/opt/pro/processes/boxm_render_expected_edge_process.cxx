@@ -15,6 +15,7 @@
 #include <boxm/boxm_scene.h>
 #include <boxm/boxm_render_image.h>
 #include <boxm/opt/boxm_render_expected_edge_image_functor.h>
+#include <boxm/opt/boxm_render_expected_edge_tangent_image_functor.h>
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/boxm_sample.h>
 #include <boxm/boxm_sample_multi_bin.h>
@@ -88,6 +89,10 @@ bool boxm_render_expected_edge_process(bprb_func_process& pro)
     {
       typedef boct_tree<short, boxm_edge_sample<float> > type;
       boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
+      if (!scene) {
+        vcl_cout << "boxm_render_expected_edge_process: the scene is not of expected type" << vcl_endl;
+        return false;
+      }
       boxm_render_edge_image_rt<short, boxm_edge_sample<float> >(*scene, camera, expected, mask,n_normal,num_updates);
     }
     else
@@ -104,8 +109,36 @@ bool boxm_render_expected_edge_process(bprb_func_process& pro)
       }
     }
     img = expected_byte;
+  }
+  if (scene_ptr->appearence_model() == BOXM_EDGE_LINE) {
+    vil_image_view<boxm_apm_traits<BOXM_EDGE_LINE>::obs_datatype> expected(ni,nj,3);
+    vil_image_view<float> mask(ni,nj);
+    if (!scene_ptr->multi_bin())
+    {
+      typedef boct_tree<short, boxm_inf_line_sample<float> > type;
+      boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
+      if (!scene) {
+        vcl_cout << "boxm_render_expected_edge_process: the scene is not of expected type" << vcl_endl;
+        return false;
+      }
+      boxm_render_edge_tangent_image_rt<short, boxm_inf_line_sample<float> >(*scene, camera, expected, mask,n_normal,num_updates);
+    }
+    else
+    {
+      vcl_cerr << "Ray tracing version not yet implemented\n";
+      return false;
+    }
+    img_mask = new vil_image_view<float>(mask);
+
+    vil_image_view<float> *ex = new vil_image_view<float>(ni,nj,expected.nplanes());
+    for (unsigned i=0; i<ni; i++) {
+      for (unsigned j=0; j<nj; j++) {
+        (*ex)(i,j) = expected(i,j);//static_cast<unsigned char>(255.0*(expected(i,j)));
+      }
+    }
+    img = ex;
   } else {
-    vcl_cerr << "boxm_render_expected_process: undefined APM type\n";
+    vcl_cerr << "boxm_render_expected_edge_process: undefined APM type\n";
     return false;
   }
 

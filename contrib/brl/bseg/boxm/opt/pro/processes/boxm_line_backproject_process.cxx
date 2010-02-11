@@ -88,16 +88,16 @@ bool boxm_line_backproject_process(bprb_func_process& pro)
     return false;
   }
   
-  vil_image_view<float> *plain_image;
+  vil_image_view<float> *plane_image;
   if (edge_image_sptr->pixel_format() == VIL_PIXEL_FORMAT_FLOAT) {
     vil_image_view<float> edge_image(edge_image_sptr);
     unsigned ni=edge_image.ni();
     unsigned nj=edge_image.nj();
 
     // the output image
-    plain_image = new vil_image_view<float>(ni,nj,4);
+    plane_image = new vil_image_view<float>(ni,nj,4);
     float a,b,c;
-
+    
     if (camera->type_name() == "vpgl_proj_camera") {
       vpgl_proj_camera<double>* cam = dynamic_cast<vpgl_proj_camera<double>*>(camera.ptr());
 
@@ -111,10 +111,10 @@ bool boxm_line_backproject_process(bprb_func_process& pro)
           vgl_homg_plane_3d<double> plane = cam->backproject(image_line);
           if (plane.a()==0 || plane.b()==0 || plane.c()==0 || plane.d()==0)
             vcl_cout << "ZERO a,b,c,d " << vcl_endl;
-          (*plain_image)(i,j,0)=plane.a();
-          (*plain_image)(i,j,1)=plane.b();
-          (*plain_image)(i,j,2)=plane.c();
-          (*plain_image)(i,j,3)=plane.d();
+          (*plane_image)(i,j,0)=plane.a();
+          (*plane_image)(i,j,1)=plane.b();
+          (*plane_image)(i,j,2)=plane.c();
+          (*plane_image)(i,j,3)=plane.d();
         }
       }
     } else if (camera->type_name() == "vpgl_local_rational_camera") {
@@ -130,10 +130,10 @@ bool boxm_line_backproject_process(bprb_func_process& pro)
             vgl_plane_3d<double> plane;
             image_line.get_two_points(p1,p2);
             if (vpgl_ray::plane_ray(*cam, vgl_point_2d<double>(p1), vgl_point_2d<double>(p2),plane)) {
-              (*plain_image)(i,j,0)=plane.a();
-              (*plain_image)(i,j,1)=plane.b();
-              (*plain_image)(i,j,2)=plane.c();
-              (*plain_image)(i,j,3)=plane.d();
+              (*plane_image)(i,j,0)=plane.a();
+              (*plane_image)(i,j,1)=plane.b();
+              (*plane_image)(i,j,2)=plane.c();
+              (*plane_image)(i,j,3)=plane.d();
             }
           }
         }
@@ -148,7 +148,7 @@ bool boxm_line_backproject_process(bprb_func_process& pro)
   // output
   unsigned j = 0;
   // update the camera and store
-  pro.set_output_val<vil_image_view_base_sptr>(j++, plain_image);
+  pro.set_output_val<vil_image_view_base_sptr>(j++, plane_image);
 
   return true;
 }
