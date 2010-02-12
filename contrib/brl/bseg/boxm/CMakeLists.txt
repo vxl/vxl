@@ -30,7 +30,7 @@ SET(boxm_sources
     boxm_save_scene_raw.h
     boxm_quad_scan_iterator.h              boxm_quad_scan_iterator.cxx
     boxm_compute_volume_visibility.h
-    boxm_triangle_interpolation_iterator.h boxm_triangle_interpolation_iterator.txx
+    boxm_triangle_interpolation_iterator.h  boxm_triangle_interpolation_iterator.txx
     boxm_triangle_scan_iterator.h          boxm_triangle_scan_iterator.cxx
     boxm_raytrace_operations.h             boxm_raytrace_operations.cxx
 
@@ -40,7 +40,7 @@ SET(boxm_sources
     boxm_vis_implicit_sample.h
     boxm_update_sample.h
     boxm_mob_grey_processor.cxx            boxm_mob_grey_processor.h
-    boxm_cell_data_traits.h
+    boxm_cell_data_traits.h                boxm_cell_data_traits.cxx
     boxm_edge_sample.h                     boxm_edge_sample.txx
     boxm_compute_scene_statistics.h
     boxm_edge_tangent_sample.txx           boxm_edge_tangent_sample.h

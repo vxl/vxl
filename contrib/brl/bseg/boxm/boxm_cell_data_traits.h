@@ -12,6 +12,10 @@
 //   <none yet>
 // \endverbatim
 
+#include <boct/boct_tree_cell.h>
+#include <bsta/bsta_attributes.h>
+#include <bsta/bsta_gauss_f1.h>
+
 //: Float to float
 template <class T_loc>
 float boxm_cell_to_float(boct_tree_cell<T_loc, float >* cell,  double /*step_len*/)
@@ -27,11 +31,25 @@ float boxm_cell_to_float(boct_tree_cell<T_loc, bsta_num_obs<bsta_gauss_f1> >* ce
   return cell->data().mean();
 }
 
-//: boxm_sample to float. Return the alpha values
+//: boxm_sample to float. Return the probability values
 template <class T_loc, class T_data>
 float boxm_cell_to_float(boct_tree_cell<T_loc, T_data >* cell, double step_len)
 {
   return 1.f - float(vcl_exp(-cell->data().basic_val()*step_len));
 }
+
+
+template <class T_loc, class T_data>
+T_data boxm_zero_val()
+{
+  return T_data(0);
+}
+
+template <>
+bsta_num_obs<bsta_gauss_f1> boxm_zero_val<short, bsta_num_obs<bsta_gauss_f1> >();
+
+template <>
+float boxm_zero_val<short, float >();
+
 
 #endif
