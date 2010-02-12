@@ -15,10 +15,14 @@
 #include <bvpl/bvpl_edge_geometric_mean_functor.h>
 #include <bvpl/bvpl_edge_algebraic_mean_functor.h>
 #include <bvpl/bvpl_gauss_convolution_functor.h>
+#include <bvpl/bvpl_positive_gauss_conv_functor.h>
+
 #include <bprb/bprb_parameters.h>
+
 #include <brdb/brdb_value.h>
 
 #include <boxm/boxm_scene.h>
+
 #include <bsta/bsta_gauss_f1.h>
 #include <bsta/bsta_attributes.h>
 
@@ -117,7 +121,15 @@ bool bvpl_scene_kernel_operator_process(bprb_func_process& pro)
       pro.set_output_val<boxm_scene_base_sptr>(0, scene_ptr);
       return true;
     }
-    else
+    else if(functor_name == "positive_gauss_convolution"){
+      bvpl_positive_gauss_conv_functor functor;
+      bvpl_scene_kernel_operator scene_oper;
+      //operate on scene
+      scene_oper.operate(*scene_in, functor, kernel, *scene_out, level);
+      scene_ptr = scene_out;
+      pro.set_output_val<boxm_scene_base_sptr>(0, scene_ptr);
+      return true;
+    }
       return false;
   }
   else if (datatype == "float")
