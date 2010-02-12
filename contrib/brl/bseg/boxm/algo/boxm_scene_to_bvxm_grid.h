@@ -16,6 +16,7 @@
 #include <bvxm/grid/bvxm_voxel_grid.h>
 #include <bvxm/grid/bvxm_voxel_grid_basic_ops.h>
 #include <vcl_iostream.h>
+#include <boxm/boxm_cell_data_traits.h>
 
 template <class T_loc, class T_data>
 bvxm_voxel_grid<T_data>* boxm_scene_to_bvxm_grid(boxm_scene<boct_tree<T_loc, T_data > > &scene,
@@ -89,7 +90,7 @@ bvxm_voxel_grid<T_data>* boxm_scene_to_bvxm_grid(boxm_scene<boct_tree<T_loc, T_d
   unsigned dimy = dim.y()*ncells;
   unsigned dimz = dim.z()*ncells;
   bvxm_voxel_grid<T_data> *grid = new bvxm_voxel_grid<T_data>(input_path,vgl_vector_3d<unsigned>(dimx,dimy,dimz));
-  T_data data_init(0);
+  T_data data_init(boxm_zero_val<T_loc, T_data>());
   grid->initialize_data(data_init);
   
   vcl_cout << "Grid Size: " << vgl_vector_3d<unsigned>(dimx,dimy,dimz) << "\n";

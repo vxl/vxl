@@ -76,14 +76,17 @@ bool boxm_scene_to_bvxm_grid_process(bprb_func_process& pro)
     pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid);
     return true;
   }
-#if 0 // this case is not supported yet
-  else if ( boxm_scene< boct_tree<short, bsta_num_obs<bsta_gauss_f1> > > *scene= dynamic_cast<boxm_scene< boct_tree<short, bsta_num_obs<bsta_gauss_f1> > > * >(scene_base.as_pointer()))
+  else if ( scene_base->appearence_model() == BSTA_GAUSS_F1)
   {
+    boxm_scene< boct_tree<short, bsta_num_obs<bsta_gauss_f1> > > *scene= dynamic_cast<boxm_scene< boct_tree<short, bsta_num_obs<bsta_gauss_f1> > > * >(scene_base.as_pointer());
+    if (!scene)
+      vcl_cerr << "what's going on\n";
+
     bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1> > *grid = boxm_scene_to_bvxm_grid(*scene, filepath, resolution_level, enforce_level);
     pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid);
     return true;
   }
-#endif
+
   else
   {
     vcl_cerr << "It's not possible to convert input scene to a bvxm grid\n";
