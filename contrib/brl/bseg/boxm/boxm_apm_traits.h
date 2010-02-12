@@ -18,6 +18,7 @@
 #include <vsl/vsl_binary_io.h>
 #include <vcl_ostream.h>
 #include <boxm/boxm_edge_sample.h>
+#include <boxm/boxm_edge_tangent_sample.h> // for class boxm_inf_line_sample
 
 class boxm_mog_grey_processor;
 class boxm_mog_rgb_processor;
@@ -165,6 +166,17 @@ class boxm_apm_traits<BOXM_EDGE_FLOAT>
   typedef float obs_datatype;
   typedef float obs_mathtype;
   //typedef boxm_edge_processor apm_processor;
+};
+
+template<>
+class boxm_apm_traits<BOXM_EDGE_LINE>
+{
+ public:
+  static const unsigned int obs_dim = 1;
+  static const unsigned int n_params = 2;
+  typedef boxm_inf_line_sample<float> apm_datatype;
+  typedef float obs_datatype;
+  typedef float obs_mathtype;
 };
 
 void vsl_b_write(vsl_b_ostream & os, boxm_simple_grey const &sample);
