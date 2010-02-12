@@ -28,7 +28,10 @@ class boxm_render_expected_image_functor
     is_aux_=is_aux;
   }
 
-  inline bool step_cell(unsigned int i, unsigned int j, vgl_point_3d<double> s0, vgl_point_3d<double> s1, boxm_sample<APM> &cell_value, T_aux aux_val)
+  inline bool step_cell(unsigned int i, unsigned int j,
+                        vgl_point_3d<double> s0, vgl_point_3d<double> s1,
+                        boxm_sample<APM> &cell_value,
+                        T_aux /*aux_val*/)
   {
     // compute segment length
     const float seg_len = (float)(s1 - s0).length();

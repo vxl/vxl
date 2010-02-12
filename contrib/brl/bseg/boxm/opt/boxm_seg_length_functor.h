@@ -15,7 +15,7 @@ class boxm_seg_length_functor
 {
  public:
   boxm_seg_length_functor(vil_image_view<typename boxm_apm_traits<APM>::obs_datatype> &observation,
-                          unsigned int ni,unsigned nj)
+                          unsigned int /*ni*/=0, unsigned /*nj*/=0)
     : obs_(observation)
   {
     scene_read_only_=true;
@@ -23,7 +23,8 @@ class boxm_seg_length_functor
   }
 
   inline bool step_cell(unsigned int i, unsigned int j, vgl_point_3d<double> s0, vgl_point_3d<double> s1,
-                        boxm_sample<APM> &cell_value,T_aux &aux_val)
+                        boxm_sample<APM> &cell_value, // FIXME: unused...
+                        T_aux &aux_val)
   {
     const float seg_len = (float)(s1 - s0).length();
     aux_val.obs_ += obs_(i,j) * seg_len;

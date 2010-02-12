@@ -20,8 +20,8 @@ class boxm_render_expected_edge_image_functor
  public:
   //: "default" constructor
   boxm_render_expected_edge_image_functor(vil_image_view<typename boxm_apm_traits<APM>::obs_datatype> &expected,
-                                          vil_image_view<float> &mask_vis,
-                                          unsigned int ni,unsigned nj,
+                                          vil_image_view<float> &mask_vis, // FIXME: unused...
+                                          unsigned int /*ni*/=0, unsigned /*nj*/=0,
                                           bool scene_read_only=false,
                                           bool is_aux=true)
     : expected_(expected)
@@ -36,10 +36,10 @@ class boxm_render_expected_edge_image_functor
                         vgl_point_3d<double> s0,
                         vgl_point_3d<double> s1,
                         boxm_edge_sample<typename boxm_apm_traits<APM>::obs_datatype> &cell_value,
-                        T_aux aux_val)
+                        T_aux /*aux_val*/)
   {
     // compute segment length
-    // const float seg_len = (float)(s1 - s0).length();
+    const float seg_len = (float)(s1-s0).length(); // FIXME: unused...
 
     // TODO: revise with segment length
     const float exp  = cell_value.edge_prob_;
