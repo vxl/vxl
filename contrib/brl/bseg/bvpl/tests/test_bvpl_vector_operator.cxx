@@ -154,7 +154,7 @@ void test_vector_operator()
 
   bvxm_grid_save_raw<float>(surface_grid_expectation,"grid_plane_expectation.raw");
   // get vector of kernel
-  bvpl_edge3d_kernel_factory kernels_3d(5,5,5);
+  bvpl_edge3d_kernel_factory kernels_3d(-2,2,-2,2,-2,2);
   bvpl_create_directions_a dir;
   bvpl_kernel_vector_sptr kernel_vec = kernels_3d.create_kernel_vector(dir);
 
@@ -179,7 +179,7 @@ void test_vector_operator()
 void test_non_max_suppression()
 {
   //Create vector of kernels
-  bvpl_edge3d_kernel_factory kernels_3d(2,2,2);
+  bvpl_edge3d_kernel_factory kernels_3d(-1,0,-1,0,-1,0);
   bvpl_create_directions_a dir;
   bvpl_kernel_vector_sptr kernel_vec = kernels_3d.create_kernel_vector(dir);
 

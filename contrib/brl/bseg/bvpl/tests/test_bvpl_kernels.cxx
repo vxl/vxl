@@ -59,8 +59,8 @@ bool test_edge2d()
 
 bool test_edge3d()
 {
-  unsigned h=31;
-  bvpl_edge3d_kernel_factory kernel_3d(h,h,h);
+ 
+  bvpl_edge3d_kernel_factory kernel_3d(-15,15,-15,15,-15,15);
   bvpl_create_directions_b dir;
   bvpl_kernel_vector_sptr kernel_3d_vecs = kernel_3d.create_kernel_vector(dir);
 

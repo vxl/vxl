@@ -214,7 +214,7 @@ void test_edge_functors()
 
   float max_val=0.0f;
 
-  bvpl_edge3d_kernel_factory kernels_3d(5,5,5);
+  bvpl_edge3d_kernel_factory kernels_3d(-2,2,-2,2,-2,2);
   // get vector of kernel
   bvpl_create_directions_a dir;
   bvpl_kernel_vector_sptr kernel_vec = kernels_3d.create_kernel_vector(dir);

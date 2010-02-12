@@ -10,7 +10,7 @@
 template <class FUNC>
 bool test_directions(FUNC dir)
 {
-  bvpl_edge3d_kernel_factory kernels_3d(3,3,3);
+  bvpl_edge3d_kernel_factory kernels_3d(-1,1,-1,1,-1,1);
   bvpl_kernel_vector_sptr kernel_vec = kernels_3d.create_kernel_vector(dir);
 
   vcl_vector<vnl_float_3> axes1= dir.get_axes();
