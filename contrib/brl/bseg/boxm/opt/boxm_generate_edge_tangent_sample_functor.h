@@ -5,6 +5,8 @@
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/opt/boxm_raytrace_function.h>
 #include <boxm/boxm_edge_tangent_sample.h>
+#include <boxm/boxm_inf_line_sample.h>
+#include <boxm/boxm_plane_obs.h>
 #include <boxm/boxm_mog_grey_processor.h>
 #include <boxm/boxm_simple_grey_processor.h>
 #include <vgl/vgl_homg_plane_3d.h>

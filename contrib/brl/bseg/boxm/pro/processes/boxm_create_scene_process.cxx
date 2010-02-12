@@ -28,7 +28,7 @@
 
 #include <boxm/boxm_sample_multi_bin.h>
 #include <boxm/boxm_scene_parser.h>
-#include <boxm/boxm_edge_tangent_sample.h> // for class boxm_inf_line_sample
+#include <boxm/boxm_inf_line_sample.h>
 
 //:global variables
 namespace boxm_create_scene_process_globals

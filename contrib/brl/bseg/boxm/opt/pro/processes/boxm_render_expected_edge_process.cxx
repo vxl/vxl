@@ -19,6 +19,7 @@
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/boxm_sample.h>
 #include <boxm/boxm_sample_multi_bin.h>
+#include <boxm/boxm_inf_line_sample.h>
 #include <vil/vil_image_view.h>
 #include <vcl_fstream.h>
 

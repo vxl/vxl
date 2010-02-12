@@ -8,7 +8,7 @@
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/boxm_scene.h>
 
-#include <boxm/boxm_edge_tangent_sample.h>
+#include <boxm/boxm_inf_line_sample.h>
 
 template<class T_loc, class APM, class AUX>
 class boxm_edge_tangent_updater

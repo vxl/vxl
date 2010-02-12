@@ -18,13 +18,12 @@
 #include <vsl/vsl_binary_io.h>
 #include <vcl_ostream.h>
 #include <boxm/boxm_edge_sample.h>
-#include <boxm/boxm_edge_tangent_sample.h> // for class boxm_inf_line_sample
+#include <boxm/boxm_inf_line_sample.h>
 
 class boxm_mog_grey_processor;
 class boxm_mog_rgb_processor;
 class boxm_simple_grey_processor;
 class boxm_mob_grey_processor;
-
 
 enum boxm_apm_type
 {

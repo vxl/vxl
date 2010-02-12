@@ -2,6 +2,8 @@
 #define boxm_edge_tangent_sample_txx_
 
 #include "boxm_edge_tangent_sample.h"
+#include <boxm/boxm_inf_line_sample.h>
+#include <boxm/boxm_plane_obs.h>
 
 #include <vgl/io/vgl_io_homg_plane_3d.h>
 #include <vgl/io/vgl_io_infinite_line_3d.h>

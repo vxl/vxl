@@ -26,7 +26,7 @@
 #include <boxm/boxm_scene.h>
 
 #include <boxm/boxm_edge_sample.h>
-#include <boxm/boxm_edge_tangent_sample.h>
+#include <boxm/boxm_inf_line_sample.h>
 #include <boxm/opt/boxm_edge_tangent_updater.h>
 #include <boxm/opt/boxm_edge_updater.h>
 

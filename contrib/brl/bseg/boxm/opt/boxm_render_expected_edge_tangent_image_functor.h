@@ -7,7 +7,8 @@
 #include <boxm/opt/boxm_rt_sample.h>
 #include <boxm/boxm_simple_grey_processor.h>
 #include <boxm/boxm_mob_grey_processor.h>
-#include <boxm/boxm_edge_tangent_sample.h> // for class boxm_inf_line_sample
+#include <boxm/boxm_edge_tangent_sample.h>
+#include <boxm/boxm_inf_line_sample.h>
 #include <vnl/vnl_math.h>
 #include <vil/vil_transform.h>
 #include <sdet/sdet_img_edge.h>

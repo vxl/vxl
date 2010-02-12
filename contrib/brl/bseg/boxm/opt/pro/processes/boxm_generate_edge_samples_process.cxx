@@ -20,7 +20,7 @@
 #include <boxm/opt/boxm_generate_edge_sample_functor.h>
 #include <boxm/opt/boxm_generate_edge_tangent_sample_functor.h>
 #include <boxm/boxm_edge_sample.h>
-#include <boxm/boxm_edge_tangent_sample.h>
+#include <boxm/boxm_inf_line_sample.h>
 
 #include <vil/vil_convert.h>
 #include <vil/vil_image_view_base.h>

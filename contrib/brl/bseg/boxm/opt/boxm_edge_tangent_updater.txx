@@ -7,6 +7,9 @@
 #include <boxm/opt/boxm_aux_traits.h>
 #include <boxm/boxm_scene.h>
 #include <boxm/opt/boxm_aux_scene.h>
+#include <boxm/boxm_edge_tangent_sample.h>
+#include <boxm/boxm_inf_line_sample.h>
+#include <boxm/boxm_plane_obs.h>
 
 #include <vgl/vgl_infinite_line_3d.h>
 #include <vgl/vgl_plane_3d.h>
