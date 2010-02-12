@@ -14,8 +14,6 @@ bvpl_gauss3d_xx_kernel_factory::bvpl_gauss3d_xx_kernel_factory()
   sigma2_ = 0.0f;
   sigma3_ = 0.0f;
   angular_resolution_ = 0;
-  canonical_rotation_axis_[0] = 0.0f; canonical_rotation_axis_[1] = 0.0f; canonical_rotation_axis_[2] = 0.0f;
-  canonical_parallel_axis_[0] = 0.0f; canonical_parallel_axis_[1] = 0.0f; canonical_parallel_axis_[2] = 0.0f;
   rotation_axis_ = canonical_rotation_axis_;
   angle_ = 0.0f;
 }
@@ -31,13 +29,7 @@ bvpl_gauss3d_xx_kernel_factory::bvpl_gauss3d_xx_kernel_factory(float s1, float s
   //this skernel is symmetric around main axis
   angular_resolution_=0;
 
-  //set canonical axis to x-axis
-  canonical_rotation_axis_[0] = 1.0f; canonical_rotation_axis_[1] = 0.0f; canonical_rotation_axis_[2] = 0.0f;
-
-  //since rotation around x-axis is symmetric, the parallel axis is of non importance
-  canonical_parallel_axis_[0] = 0.0f; canonical_parallel_axis_[1] = 0.0f; canonical_parallel_axis_[2] = 0.0f;
-
-  //initialize variables
+   //initialize variables
   angle_ = 0.0f;
   rotation_axis_ = canonical_rotation_axis_;
 
@@ -55,12 +47,6 @@ bvpl_gauss3d_xx_kernel_factory::bvpl_gauss3d_xx_kernel_factory(float s1, float s
 
   //this value is a meant as a limit there is not theoretical meaning to it
   angular_resolution_= float(vnl_math::pi/16.0);
-
-  //set canonical axis to x-axis
-  canonical_rotation_axis_[0] = 1.0f; canonical_rotation_axis_[1] = 0.0f; canonical_rotation_axis_[2] = 0.0f;
-
-  //parallel axis is the y-axis
-  canonical_parallel_axis_[0] = 0.0f; canonical_parallel_axis_[1] = 1.0f; canonical_parallel_axis_[2] = 0.0f;
 
   //initialize variables
   angle_ = 0.0f;

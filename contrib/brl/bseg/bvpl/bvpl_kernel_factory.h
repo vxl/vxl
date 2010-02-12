@@ -40,6 +40,9 @@
 class bvpl_kernel_factory
 {
  public:
+  //Default constructor. Initialize constant member variables
+  bvpl_kernel_factory(): canonical_rotation_axis_(vnl_float_3(1,0,0)), canonical_parallel_axis_(vnl_float_3(0,1,0)){}
+  
   virtual ~bvpl_kernel_factory() {}
 
   //: Returns a kernel described by class variables rotation_axis_, \p angle_
@@ -90,7 +93,7 @@ class bvpl_kernel_factory
   vcl_vector<vcl_pair<vgl_point_3d<float>, bvpl_kernel_dispatch> > canonical_kernel_;
 
   //:The rotation axis for canonical edge
-  vnl_float_3 canonical_rotation_axis_;
+  const vnl_float_3 canonical_rotation_axis_;//(1,0,0);
 
   //:Rotation axis of kernel_
   vnl_float_3 rotation_axis_;
@@ -98,7 +101,7 @@ class bvpl_kernel_factory
   // parallel_axis_ define a coordinate system for each kernel.
   // The vector (parallel_axis_ - rotation_axis_) defines the direction of the minor axis of the kernel
   // The zero-rotation for any rotation axis is that for which parallel_axis_ and rotation_axis_ have constant polar angle
-  vnl_float_3 canonical_parallel_axis_;
+  const vnl_float_3 canonical_parallel_axis_;//(0,1,0);
 
   //: Amounts rotation around rotation_axis_
   float angle_;

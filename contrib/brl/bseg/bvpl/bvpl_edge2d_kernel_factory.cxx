@@ -11,8 +11,6 @@ bvpl_edge2d_kernel_factory::bvpl_edge2d_kernel_factory()
   height_=0;
   width_=0;
   angular_resolution_ = 0;
-  canonical_rotation_axis_[0] = 0.0; canonical_rotation_axis_[1] = 0.0; canonical_rotation_axis_[2] = 0.0;
-  canonical_parallel_axis_[0] = 0.0; canonical_parallel_axis_[1] = 0.0; canonical_parallel_axis_[2] = 0.0;
   rotation_axis_ = canonical_rotation_axis_;
   //parallel_axis_ = canonical_parallel_axis_;
   angle_ = 0.0f;
@@ -34,8 +32,6 @@ bvpl_edge2d_kernel_factory::bvpl_edge2d_kernel_factory(unsigned height, unsigned
   //If this was 2D, then the angular resolution would be 180/(2l -2) (Recusive Binary Dilation... Desikachari Nadadur)
   angular_resolution_=float( vnl_math::pi) / (2.0f * float(width) - 2.0f);
   //set canonical axis to x-axis
-  canonical_rotation_axis_[0] = 1.0; canonical_rotation_axis_[1] = 0.0; canonical_rotation_axis_[2] = 0.0;
-  canonical_parallel_axis_[0] = 0.0; canonical_parallel_axis_[1] = 1.0; canonical_parallel_axis_[2] = 0.0;
   angle_ = 0.0f;
   rotation_axis_ = canonical_rotation_axis_;
   //parallel_axis_ = canonical_paralell_axis_;

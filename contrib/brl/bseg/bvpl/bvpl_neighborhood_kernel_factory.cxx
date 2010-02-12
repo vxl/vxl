@@ -15,8 +15,6 @@ bvpl_neighborhood_kernel_factory::bvpl_neighborhood_kernel_factory()
   min_thickness_ = 0;
   max_thickness_ = 0;
   angular_resolution_ = 0;
-  canonical_rotation_axis_[0] = 0.0f; canonical_rotation_axis_[1] = 0.0f; canonical_rotation_axis_[2] = 0.0f;
-  canonical_parallel_axis_[0] = 0.0f; canonical_parallel_axis_[1] = 0.0f; canonical_parallel_axis_[2] = 0.0f;
   rotation_axis_ = canonical_rotation_axis_;
   angle_ = 0.0f;
 }
@@ -37,12 +35,6 @@ bvpl_neighborhood_kernel_factory::bvpl_neighborhood_kernel_factory(int min_lengt
 
   //this kernel is not symmetric around main axis
   angular_resolution_= float(vnl_math::pi_over_4);
-
-  //set canonical axis to x-axis. The rotation axis is normal to the plane containing the edge
-  canonical_rotation_axis_[0] = 1.0f; canonical_rotation_axis_[1] = 0.0f; canonical_rotation_axis_[2] = 0.0f;
-
-  //used to define 0-rotation
-  canonical_parallel_axis_[0] = 0.0f; canonical_parallel_axis_[1] = 1.0f; canonical_parallel_axis_[2] = 0.0f;
 
   //initialize variables
   angle_ = 0.0f;
