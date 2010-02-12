@@ -90,7 +90,7 @@ void fill_edge3d_tree(boct_tree<short,float>* tree)
 void octree_kernel()
 {
   //Create kernel
-  bvpl_edge3d_kernel_factory edge_factory(2,1,1);
+  bvpl_edge3d_kernel_factory edge_factory(-1,1,-1,0,-1,0);
   bvpl_kernel_sptr kernel = new bvpl_kernel(edge_factory.create());
 #ifdef DEBUG
   kernel->print();
@@ -122,7 +122,7 @@ void octree_kernel()
 void scene_kernel_operator()
 {
   //Create kernel
-  bvpl_edge3d_kernel_factory edge_factory(2,1,1);
+  bvpl_edge3d_kernel_factory edge_factory(-1,0,-1,0,-1,0);
   bvpl_kernel_sptr kernel = new bvpl_kernel(edge_factory.create());
 
   //kernel->print();
@@ -202,7 +202,7 @@ void scene_kernel_operator()
 void octree_vector_operator()
 {
   //Create the vector of kernels
-  bvpl_edge3d_kernel_factory kernels_3d(5,5,5);
+  bvpl_edge3d_kernel_factory kernels_3d(-3,2, -3,2,-3,2);
   bvpl_create_directions_a dir;
   bvpl_kernel_vector_sptr kernel_vec = kernels_3d.create_kernel_vector(dir);
 
@@ -241,7 +241,7 @@ void octree_vector_operator()
 void scene_vector_operator()
 {
   //Create the vector of kernels
-  bvpl_edge3d_kernel_factory kernels_3d(5,5,5);
+  bvpl_edge3d_kernel_factory kernels_3d(-3,2,-3,2,-3,2);
   bvpl_create_directions_a dir;
   bvpl_kernel_vector_sptr kernel_vec = kernels_3d.create_kernel_vector(dir);
 
