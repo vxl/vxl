@@ -16,7 +16,7 @@ class boxm_plane_obs
   boxm_plane_obs(vgl_homg_plane_3d<T> plane, float seg_len) : seg_len_(seg_len), plane_(plane) {}
   ~boxm_plane_obs() {}
   static short version_no() { return 1; }
-  void print(vcl_ostream& os) { os << "(plane=" << plane_ << " seg_len=" << seg_len_ << ')'; }
+  void print(vcl_ostream& os) const { os << "(plane=" << plane_ << " seg_len=" << seg_len_ << ')'; }
 
   // public members
   float seg_len_;
