@@ -44,6 +44,8 @@ SET(boxm_sources
     boxm_edge_sample.h                     boxm_edge_sample.txx
     boxm_compute_scene_statistics.h
     boxm_edge_tangent_sample.txx           boxm_edge_tangent_sample.h
+    boxm_plane_obs.txx                     boxm_plane_obs.h
+    boxm_inf_line_sample.txx               boxm_inf_line_sample.h
     boxm_init_scene.h
 )
 
