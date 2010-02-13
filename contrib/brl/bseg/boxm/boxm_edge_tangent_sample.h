@@ -25,10 +25,18 @@ class boxm_edge_tangent_sample
   //: returns the number of observations
   unsigned num_obs() const { return obs_.size(); }
 
-  boxm_plane_obs<T> obs(unsigned int i) const { if (i < obs_.size()) return obs_[i]; vcl_cout << i << "is out of index - " << obs_.size(); }
+  boxm_plane_obs<T> obs(unsigned int i) const {
+    if (i < obs_.size()) return obs_[i];
+    vcl_cerr << "boxm_edge_tangent_sample: " << i << " is out of index - size is " << obs_.size() << vcl_endl;
+    return boxm_plane_obs<T>();
+  }
 
   //: returns a basic value that represents this sample (mostly for raw file creation purposes)
-  float basic_val(unsigned int i) { if (i < obs_.size()) return obs_[i].seg_len_; vcl_cout << i << "is out of index - " << obs_.size(); }
+  float basic_val(unsigned int i) {
+    if (i < obs_.size()) return obs_[i].seg_len_;
+    vcl_cerr << "boxm_edge_tangent_sample: " << i << "is out of index - size is " << obs_.size() << vcl_endl;
+    return -1.0f;
+  }
 
  private:
   vcl_vector<boxm_plane_obs<T> > obs_;
