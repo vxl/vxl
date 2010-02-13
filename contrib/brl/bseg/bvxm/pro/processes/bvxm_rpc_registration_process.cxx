@@ -29,14 +29,13 @@ bool bvxm_rpc_registration_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_rpc_registration_process_globals;
 
-  // process takes 7 inputs:
+  // process takes 6 inputs:
   //input[0]: The voxel world
   //input[1]: The current camera
   //input[2]: The current image
   //input[3]: The flag indicating whether to align the 3D voxel world along with image
   //input[4]: Uncertainty in meters
-  //input[5]: n_normal
-  //input[6]: Scale of the image
+  //input[5]: Scale of the image
 
   vcl_vector<vcl_string> input_types_(n_inputs_);
   unsigned i = 0;
@@ -86,10 +85,10 @@ bool bvxm_rpc_registration_process(bprb_func_process& pro)
   bool rpc_shift_3d_flag = pro.get_input<bool>(i++);
   // uncertainty in meters
   float uncertainty = pro.get_input<float>(i++);
-  // n_normal
-  float n_normal = pro.get_input<float>(i++);
   // scale of image
   unsigned scale = pro.get_input<unsigned>(i++);
+
+  float n_normal = vox_world->get_params()->edges_n_normal();
 
   //local variables
   vcl_ifstream file_inp;

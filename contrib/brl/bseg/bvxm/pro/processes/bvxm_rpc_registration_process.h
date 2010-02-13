@@ -18,7 +18,7 @@
 //: globals
 namespace bvxm_rpc_registration_process_globals
 {
-  const unsigned n_inputs_ = 7;
+  const unsigned n_inputs_ = 6;
   const unsigned n_outputs_ = 2;
 }
 

@@ -16,6 +16,7 @@ bvxm_world_params::bvxm_world_params()
   base_y_ = vgl_vector_3d<float>(0.0f,1.0f,0.0f);
   base_z_ = vgl_vector_3d<float>(0.0f,0.0f,1.0f);
   rpc_origin_ = vgl_point_3d<float>(0.0,0.0,0.0);
+  edges_n_normal_ = 0.0f;
 };
 
 

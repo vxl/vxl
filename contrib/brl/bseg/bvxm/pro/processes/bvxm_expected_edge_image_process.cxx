@@ -18,23 +18,21 @@ bool bvxm_expected_edge_image_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_expected_edge_image_process_globals;
 
-  // process takes 5 inputs:
+  // process takes 4 inputs:
   //input[0]: The voxel world
   //input[1]: The current camera
   //input[2]: An image specifying the size of the expected edge image
-  //input[3]: n_normal
-  //input[4]: Scale of the image
+  //input[3]: Scale of the image
 
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "bvxm_voxel_world_sptr";
   input_types_[1] = "vpgl_camera_double_sptr";
   input_types_[2] = "vil_image_view_base_sptr";
-  input_types_[3] = "float";
-  input_types_[4] = "unsigned";
+  input_types_[3] = "unsigned";
   if (!pro.set_input_types(input_types_))
     return false;
 
-  // process has 1 outputs:
+  // process has 2 outputs:
   // output[0]: Expected edge image (probabilities between 0 and 1, float)
   // output[1]: Expected edge image (normalized for display purposes, vxl_byte)
   vcl_vector<vcl_string> output_types_(n_outputs_);
@@ -65,13 +63,13 @@ bool bvxm_expected_edge_image_process(bprb_func_process& pro)
   unsigned ni = size_image_sptr->ni();
   unsigned nj = size_image_sptr->nj();
 
-  // n_normal
-  float n_normal = pro.get_input<float>(3);
   // scale of image
   unsigned scale = pro.get_input<unsigned>(4);
 
   int num_observations = vox_world->num_observations<EDGES>(0,scale);
   vcl_cout << "Number of observations in curren edge world: " << num_observations << '\n';
+
+  float n_normal = vox_world->get_params()->edges_n_normal();
 
   // render the expected edge image
   vil_image_view_base_sptr dummy_img;

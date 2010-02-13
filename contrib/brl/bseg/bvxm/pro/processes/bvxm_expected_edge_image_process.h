@@ -16,7 +16,7 @@
 //: globals
 namespace bvxm_expected_edge_image_process_globals
 {
-  const unsigned n_inputs_ = 5;
+  const unsigned n_inputs_ = 4;
   const unsigned n_outputs_ = 2;
 }
 

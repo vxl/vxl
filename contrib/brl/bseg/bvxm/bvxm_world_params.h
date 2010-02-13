@@ -93,6 +93,9 @@ class bvxm_world_params : public vbl_ref_count
   inline float max_occupancy_prob() const { return max_occupancy_prob_; }
   inline bgeo_lvcs_sptr lvcs() { return lvcs_; }
 
+  inline float edges_n_normal() const { return edges_n_normal_; }
+  inline void increment_edges_n_normal(float increment) { edges_n_normal_ += increment; }
+
   inline unsigned max_scale() const { return max_scale_; }
   vgl_box_3d<double> world_box_local();
 
@@ -117,6 +120,7 @@ class bvxm_world_params : public vbl_ref_count
   bgeo_lvcs_sptr lvcs_;
   float min_occupancy_prob_;
   float max_occupancy_prob_;
+  float edges_n_normal_;
 
   vgl_vector_3d<float> base_x_;
   vgl_vector_3d<float> base_y_;

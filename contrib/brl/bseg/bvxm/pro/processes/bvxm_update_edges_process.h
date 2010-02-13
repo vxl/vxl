@@ -18,8 +18,8 @@
 //: globals
 namespace bvxm_update_edges_process_globals
 {
-  const unsigned n_inputs_ = 5;
-  const unsigned n_outputs_ = 1;
+  const unsigned n_inputs_ = 4;
+  const unsigned n_outputs_ = 0;
 
   // parameter strings
   const vcl_string param_edge_prob_mask_size_ =  "edge_prob_mask_size";
