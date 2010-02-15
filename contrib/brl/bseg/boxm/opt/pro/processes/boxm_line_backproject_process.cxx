@@ -92,44 +92,78 @@ bool boxm_line_backproject_process(bprb_func_process& pro)
 
     // the output image
     plane_image = new vil_image_view<float>(ni,nj,4);
-    float a,b,c;
+    float col, row, theta;
 
     if (camera->type_name() == "vpgl_proj_camera") {
       vpgl_proj_camera<double>* cam = dynamic_cast<vpgl_proj_camera<double>*>(camera.ptr());
 
       for (unsigned i=0; i<ni; i++) {
         for (unsigned j=0; j<nj; j++) {
-          a=edge_image(i,j,0);
-          b=edge_image(i,j,1);
-          c=edge_image(i,j,2);
-          //create a line and backproject it
-          vgl_homg_line_2d<double> image_line(a,b,c); // Camera should be projective!!
-          vgl_homg_plane_3d<double> plane = cam->backproject(image_line);
-          if (plane.a()==0 || plane.b()==0 || plane.c()==0 || plane.d()==0)
-            vcl_cout << "ZERO a,b,c,d " << vcl_endl;
-          (*plane_image)(i,j,0)=plane.a();
-          (*plane_image)(i,j,1)=plane.b();
-          (*plane_image)(i,j,2)=plane.c();
-          (*plane_image)(i,j,3)=plane.d();
+          col =edge_image(i,j,0); // sub-pixel column
+          row =edge_image(i,j,1); // sub_pixel row
+          theta=edge_image(i,j,2); // orientation in radians
+
+          if (col<0 || row<0) // no edge is present, check sdet_pro/sdet_detect_edge_tangent_process.h
+              (*plane_image)(i,j) = 0.0f;
+          else {
+            // get two points on the line
+            vgl_point_2d<double> p1(row, col);
+
+            float x = row + 0.5f*vcl_cos(theta);
+            float y = col + 0.5f*vcl_sin(theta);
+            vgl_point_2d<double> p2(x,y);
+
+            vgl_line_2d<double> line(p1,p2);
+
+            //create a line and backproject it
+            vgl_homg_line_2d<double> image_line(line); // Camera should be projective!!
+            vgl_homg_plane_3d<double> plane = cam->backproject(image_line);
+            if (plane.a()==0 || plane.b()==0 || plane.c()==0 || plane.d()==0)
+              vcl_cout << "ZERO a,b,c,d " << vcl_endl;
+            (*plane_image)(i,j,0)=plane.a();
+            (*plane_image)(i,j,1)=plane.b();
+            (*plane_image)(i,j,2)=plane.c();
+            (*plane_image)(i,j,3)=plane.d();
+          }
         }
       }
     } else if (camera->type_name() == "vpgl_local_rational_camera") {
         vpgl_local_rational_camera<double>* cam = dynamic_cast<vpgl_local_rational_camera<double>*>(camera.ptr());
         for (unsigned i=0; i<ni; i++) {
           for (unsigned j=0; j<nj; j++) {
-            a=edge_image(i,j,0);
-            b=edge_image(i,j,1);
-            c=edge_image(i,j,2);
-            //create a line and backproject it
-            vgl_homg_line_2d<double> image_line(a,b,c);
-            vgl_homg_point_2d<double> p1,p2;
-            vgl_plane_3d<double> plane;
-            image_line.get_two_points(p1,p2);
-            if (vpgl_ray::plane_ray(*cam, vgl_point_2d<double>(p1), vgl_point_2d<double>(p2),plane)) {
-              (*plane_image)(i,j,0)=plane.a();
-              (*plane_image)(i,j,1)=plane.b();
-              (*plane_image)(i,j,2)=plane.c();
-              (*plane_image)(i,j,3)=plane.d();
+            col =edge_image(i,j,0); // sub-pixel column
+            row =edge_image(i,j,1); // sub_pixel row
+            theta=edge_image(i,j,2); // orientation in radians
+
+            if (col<0 || row<0) { // no edge is present, check sdet_pro/sdet_detect_edge_tangent_process.h
+              (*plane_image)(i,j,0) = 0.0f;
+              (*plane_image)(i,j,1) = 0.0f;
+              (*plane_image)(i,j,2) = 0.0f;
+              (*plane_image)(i,j,3) = 0.0f;
+            } else {
+              // get two point on the line
+              vgl_point_2d<double> p1(row, col);
+
+              float x = row + 0.5*vcl_cos(theta);
+              float y = col + 0.5*vcl_sin(theta);
+              vgl_point_2d<double> p2(x,y);
+
+              
+              //backproject it
+              vgl_plane_3d<double> plane;
+              if (vpgl_ray::plane_ray(*cam, p1, p2, plane)) {
+                (*plane_image)(i,j,0)=plane.a();
+                (*plane_image)(i,j,1)=plane.b();
+                (*plane_image)(i,j,2)=plane.c();
+                (*plane_image)(i,j,3)=plane.d();
+              }
+              else { // the backprojection was unsuccessfull
+                vcl_cout << i << "," << j << "NO PLANE!!!!! " << vcl_endl;
+                (*plane_image)(i,j,0) = 0.0f;
+                (*plane_image)(i,j,1) = 0.0f;
+                (*plane_image)(i,j,2) = 0.0f;
+                (*plane_image)(i,j,3) = 0.0f;
+              }
             }
           }
         }
