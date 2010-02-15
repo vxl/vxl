@@ -44,7 +44,6 @@ bool bvxm_rpc_registration_process_cons(bprb_func_process& pro)
   input_types_[i++] = "vil_image_view_base_sptr";
   input_types_[i++] = "bool";
   input_types_[i++] = "float";
-  input_types_[i++] = "float";
   input_types_[i++] = "unsigned";
   if (!pro.set_input_types(input_types_))
     return false;
