@@ -86,6 +86,7 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
 
       vcl_list<vgl_plane_3d<AUX> > planes;
       vcl_vector<AUX> weights;
+      
       for (unsigned int i=0; i<aux_samples.size(); ++i) {
         boxm_edge_tangent_sample<APM> s = aux_samples[i];
         for (unsigned int j=0; j<s.num_obs(); j++) {
@@ -95,10 +96,11 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
           planes.push_back(plane);
         }
       }
-
-      vgl_infinite_line_3d<AUX> line = vgl_intersection(planes, weights);
-      boxm_inf_line_sample<AUX> data(line);
-      cell->set_data(data);
+      if (planes.size() > 0) {
+		vgl_infinite_line_3d<AUX> line = vgl_intersection(planes, weights);
+		boxm_inf_line_sample<AUX> data(line);
+		cell->set_data(data);
+	  } 
     }
     scene_.write_active_block();
     for (unsigned int i=0; i<aux_readers.size(); ++i) {
