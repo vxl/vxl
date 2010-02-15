@@ -46,7 +46,7 @@ int convert_uncertainty_from_meters_to_pixels(float uncertainty,
   // estimate the offset search size in the image space
   vgl_box_3d<double> box_uncertainty(-uncertainty,-uncertainty,-uncertainty,uncertainty,uncertainty,uncertainty);
   vcl_vector<vgl_point_3d<double> > box_uncertainty_corners = boxm_utils::corners_of_box_3d(box_uncertainty);
-  vgl_box_2d<double>* roi_uncertainty = new vgl_box_2d<double>();
+  vgl_box_2d<double> roi_uncertainty;
 
   for (unsigned i=0; i<box_uncertainty_corners.size(); i++) {
     vgl_point_3d<double> curr_corner = box_uncertainty_corners[i];
@@ -66,10 +66,10 @@ int convert_uncertainty_from_meters_to_pixels(float uncertainty,
     double curr_u,curr_v;
     camera->project(curr_pt.x(),curr_pt.y(),curr_pt.z(),curr_u,curr_v);
     vgl_point_2d<double> p2d_uncertainty(curr_u,curr_v);
-    roi_uncertainty->add(p2d_uncertainty);
+    roi_uncertainty.add(p2d_uncertainty);
   }
 
-  return vnl_math_ceil(0.5*vnl_math_max(roi_uncertainty->width(),roi_uncertainty->height()));
+  return vnl_math_ceil(0.5*vnl_math_max(roi_uncertainty.width(),roi_uncertainty.height()));
 }
 
 template<class T_loc, class T_data>
