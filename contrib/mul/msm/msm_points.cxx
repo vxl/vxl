@@ -43,7 +43,7 @@ void msm_points::set_points(const vcl_vector<vgl_point_2d<double> >& pts)
 }
 
 //: Copy points into pts
-void msm_points::get_points(vcl_vector<vgl_point_2d<double> >& pts)
+void msm_points::get_points(vcl_vector<vgl_point_2d<double> >& pts) const
 {
   pts.resize(size());
   const double* v=v_.data_block();

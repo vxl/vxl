@@ -48,7 +48,7 @@ class msm_points
   void set_points(const vcl_vector<vgl_point_2d<double> >& pts);
 
   //: Copy points into pts
-  void get_points(vcl_vector<vgl_point_2d<double> >& pts);
+  void get_points(vcl_vector<vgl_point_2d<double> >& pts) const;
 
   //: Return centre of gravity of points
   vgl_point_2d<double> cog() const;
