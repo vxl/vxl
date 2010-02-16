@@ -14,6 +14,7 @@ SET( bsta_algo_sources
    bsta_mean_shift.txx        bsta_mean_shift.h
    bsta_sample_set.txx        bsta_sample_set.h
    bsta_beta_updater.txx      bsta_beta_updater.h
+   bsta_fit_gaussian.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates bsta_algo_sources)
