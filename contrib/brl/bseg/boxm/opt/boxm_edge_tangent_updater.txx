@@ -42,7 +42,7 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
   }
 
   vcl_vector<boxm_edge_tangent_sample<APM> > aux_samples;
-
+  
   // for each block
   boxm_block_iterator<tree_type> iter(&scene_);
   iter.begin();
@@ -52,11 +52,13 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
     boxm_block<tree_type>* block = *iter;
     boct_tree<T_loc, boxm_inf_line_sample<APM> >* tree = block->get_tree();
     vcl_vector<boct_tree_cell<T_loc,boxm_inf_line_sample<APM> >*> cells = tree->leaf_cells();
-
+    int nums=0;
     // get a vector of incremental readers for each aux scene.
     vcl_vector<boct_tree_cell_reader<T_loc, boxm_edge_tangent_sample<AUX> > *> aux_readers(aux_scenes.size());
+    vcl_vector<unsigned> aux_samples_num(aux_scenes.size());
     for (unsigned int i=0; i<aux_scenes.size(); ++i) {
       aux_readers[i] = aux_scenes[i].get_block_incremental(iter.index());
+      aux_samples_num[i] = 0;
     }
     // iterate over cells
     for (unsigned i=0; i<cells.size(); ++i)
@@ -79,29 +81,43 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
           vcl_cerr << "error: temp_cell idx does not match cell idx.\n";
           return false;
         }
-//      if (temp_cell.data().seg_len_ > 0.0f) {
-          aux_samples.push_back(temp_cell.data());
-//      }
+        aux_samples.push_back(temp_cell.data());
+        aux_samples_num[j]++;
       }
-
-      vcl_list<vgl_plane_3d<AUX> > planes;
-      vcl_vector<AUX> weights;
+      unsigned num=0;
+      // count how many different aux scenes contributed to this set of samples
+      for (unsigned j=0; j<aux_samples_num.size(); j++) {
+        if (aux_samples_num[j] > 0)
+          num++;
+        aux_samples_num[j]=0;
+      }
       
-      for (unsigned int i=0; i<aux_samples.size(); ++i) {
-        boxm_edge_tangent_sample<APM> s = aux_samples[i];
-        for (unsigned int j=0; j<s.num_obs(); j++) {
-          boxm_plane_obs<AUX> obs = s.obs(j);
-          weights.push_back(obs.seg_len_);
-          vgl_plane_3d<AUX> plane(obs.plane_);
-          planes.push_back(plane);
-        }
-      }
-      if (planes.size() > 0) {
-		vgl_infinite_line_3d<AUX> line = vgl_intersection(planes, weights);
-		boxm_inf_line_sample<AUX> data(line);
-		cell->set_data(data);
-	  } 
-    }
+      if (num >= 0) {
+		  vcl_list<vgl_plane_3d<AUX> > planes;
+		  vcl_vector<AUX> weights;
+	      
+		  for (unsigned int i=0; i<aux_samples.size(); ++i) {
+			boxm_edge_tangent_sample<APM> s = aux_samples[i];
+			for (unsigned int j=0; j<s.num_obs(); j++) {
+			  boxm_plane_obs<AUX> obs = s.obs(j);
+			  weights.push_back(obs.seg_len_);
+			  vgl_plane_3d<AUX> plane(obs.plane_);
+			  planes.push_back(plane);
+			}
+		  }
+	      nums+=planes.size();
+		  if (planes.size() > 1) {
+			vgl_infinite_line_3d<AUX> line = vgl_intersection(planes, weights);
+			boxm_inf_line_sample<AUX> data(line);
+			cell->set_data(data);
+		  } else
+			cell->set_data(vgl_infinite_line_3d<AUX>(vgl_vector_2d<AUX>(0,0),vgl_vector_3d<AUX>(10,10,10)));
+		
+	} else
+	  cell->set_data(vgl_infinite_line_3d<AUX>(vgl_vector_2d<AUX>(0,0),vgl_vector_3d<AUX>(10,10,10)));
+	}
+	nums/=cells.size();
+	vcl_cout << "AVERAGE PLANE NUMS=" << nums << vcl_endl;
     scene_.write_active_block();
     for (unsigned int i=0; i<aux_readers.size(); ++i) {
       aux_readers[i]->close();
