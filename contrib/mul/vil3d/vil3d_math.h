@@ -548,4 +548,236 @@ inline void vil3d_math_truncate_range(vil3d_image_view<T>& image,
   }
 }
 
+//: Calc integral image im_sum(i+1,j+1,k+1)= sum (x<=i,y<=j,z<=k) imA(x,y,z)
+//  Useful thing for quickly computing mean over large regions,
+//  as demonstrated in Viola and Jones (CVPR01).
+// The sum of elements in the ni x nj x nk volume with corner (i,j,k)
+// is given by
+// im_sum(i,j,k+nk)+im_sum(i+ni,j+nj,j+nk)+im_sum(i,j+nj,k)+im_sum(i+ni,j,k)
+// -im_sum(i,j,k)-im_sum(i+ni,j+nj,k)-im_sum(i+ni,n,k_nk)-im_sum(i,j+nj,k+nk
+// \relatesalso vil_image_view
+template<class aT, class sumT>
+inline void vil3d_math_integral_image(const vil3d_image_view<aT>& imA,
+                                    vil3d_image_view<sumT>& im_sum)
+{
+  assert(imA.nplanes()==1);
+  unsigned ni = imA.ni(),nj = imA.nj(),nk = imA.nk();
+  unsigned ni1=ni+1;
+  unsigned nj1=nj+1;
+  unsigned nk1=nk+1;
+  im_sum.set_size(ni1,nj1,nk1,1);
+
+  // Put zeros along first plane of im_sum
+  vcl_ptrdiff_t istepS=im_sum.istep();
+  vcl_ptrdiff_t jstepS=im_sum.jstep();
+  vcl_ptrdiff_t kstepS=im_sum.kstep();
+  sumT* planeS = im_sum.origin_ptr();
+  sumT* rowS = planeS;
+  sumT* voxelS;
+  for (unsigned j=0;j<nj1;++j,rowS += jstepS)
+  {
+    voxelS = rowS;
+    for (unsigned i=0;i<ni1;++i,voxelS+=istepS)
+      *voxelS=0;
+  }
+
+  // Now sum from original image (imA)
+  vcl_ptrdiff_t istepA=imA.istep();
+  vcl_ptrdiff_t jstepA=imA.jstep();
+  vcl_ptrdiff_t kstepA=imA.kstep();
+
+  const aT* planeA = imA.origin_ptr();
+
+  sumT sum;
+  vcl_ptrdiff_t prev_j = -jstepS;
+  vcl_ptrdiff_t prev_k = -kstepS;
+  planeS += kstepS;
+
+  // for each plane, do a 2D integral image first
+  for (unsigned k=0;k<nk;++k,planeA += kstepA,planeS += kstepS)
+  {
+    const aT* rowA = planeA;
+    rowS = planeS;
+
+    // Put zeros along first row in plane
+    voxelS = rowS;
+    for (unsigned i=0;i<ni;++i,voxelS += istepS)
+      *voxelS = 0;
+    rowS += jstepS;
+
+    // Compute integral sums for rest of plane
+    for (unsigned j=0;j<nj;++j,rowA += jstepA,rowS += jstepS)
+    {
+      const aT* voxelA = rowA;
+      voxelS = rowS;
+      sum = 0;
+
+      // set value at first column of each row to zero!
+      *voxelS = 0;
+      voxelS += istepS;
+
+      // compute the 2D integral image
+      for (unsigned i=1; i<ni1;++i,voxelA+=istepA,voxelS+=istepS)
+      {
+        sum += *voxelA;
+        *voxelS = sum + voxelS[prev_j];
+      }
+    }    
+  }
+ 
+  // Go through from plane 2 to end and add values of voxels in plane
+  // above to get the 3D integral image
+  planeS = im_sum.origin_ptr() + 2*kstepS;
+  for (unsigned k=2;k<nk1;k++,planeS += kstepS)
+  {
+    // Skip first row in each plane
+    rowS = planeS+jstepS;
+    for (unsigned j=1;j<nj1;j++,rowS += jstepS)
+    {
+      // Skip first col in each row
+      voxelS = rowS+istepS;
+      for (unsigned i=1;i<ni1;i++,voxelS += istepS)
+        *voxelS += voxelS[prev_k];
+    }
+  }
+
+}
+
+
+//: Calc integral image im_sum_sq(i+1,j+1,k+1) = sum (x<=i,y<=j,z<=k) imA^2
+//  Also calcs integral image, im_sum(i+1,j+1,k+1 = sum (x=i,y<=j,z<=kk) imA
+//  Useful thing for quickly computing mean and variance over large regions,
+//  as demonstrated in Viola and Jones (CVPR01).
+// The sum of elements in the ni x nj x nk volume with corner (i,j,k)
+// is given by:
+// im_sum(i,j,k+nk)+im_sum(i+ni,j+nj,j+nk)+im_sum(i,j+nj,k)+im_sum(i+ni,j,k)
+// -im_sum(i,j,k)-im_sum(i+ni,j+nj,k)-im_sum(i+ni,n,k_nk)-im_sum(i,j+nj,k+nk
+// \relatesalso vil_image_view
+template<class aT, class sumT>
+inline void vil3d_math_integral_sqr_image(const vil3d_image_view<aT>& imA,
+                                    vil3d_image_view<sumT>& im_sum,
+                                    vil3d_image_view<sumT>& im_sum_sq)
+{
+  assert(imA.nplanes()==1);
+  unsigned ni = imA.ni(),nj = imA.nj(),nk = imA.nk();
+  unsigned ni1=ni+1;
+  unsigned nj1=nj+1;
+  unsigned nk1=nk+1;
+  im_sum.set_size(ni1,nj1,nk1,1);
+  im_sum_sq.set_size(ni1,nj1,nk1,1);
+
+  // Put zeros along first plane of im_sum & im_sum_sq
+  vcl_ptrdiff_t istepS=im_sum.istep();
+  vcl_ptrdiff_t istepS2=im_sum_sq.istep();
+  vcl_ptrdiff_t jstepS=im_sum.jstep();
+  vcl_ptrdiff_t jstepS2=im_sum_sq.jstep();
+  vcl_ptrdiff_t kstepS=im_sum.kstep();
+  vcl_ptrdiff_t kstepS2=im_sum_sq.kstep();
+  sumT* planeS = im_sum.origin_ptr();
+  sumT* planeS2 = im_sum_sq.origin_ptr();
+  sumT* rowS = planeS;
+  sumT* rowS2 = planeS2;
+  sumT *voxelS, *voxelS2;
+
+  // im_sum
+  for (unsigned j=0;j<nj1;++j,rowS += jstepS)
+  {
+    voxelS = rowS;
+    for (unsigned i=0;i<ni1;++i,voxelS+=istepS)
+      *voxelS=0;
+  }
+
+  // im_sum_sq
+  for (unsigned j=0;j<nj1;++j,rowS2 += jstepS2)
+  {
+    voxelS2 = rowS2;
+    for (unsigned i=0;i<ni1;++i,voxelS2+=istepS2)
+      *voxelS2=0;
+  }
+
+  // Now sum from original image (imA)
+  vcl_ptrdiff_t istepA=imA.istep();
+  vcl_ptrdiff_t jstepA=imA.jstep();
+  vcl_ptrdiff_t kstepA=imA.kstep();
+
+  const aT* planeA = imA.origin_ptr();
+
+  sumT sum, sum2;
+  vcl_ptrdiff_t prev_j = -jstepS;
+  vcl_ptrdiff_t prev_k = -kstepS;
+  vcl_ptrdiff_t prev_j2 = -jstepS2;
+  vcl_ptrdiff_t prev_k2 = -kstepS2;
+  planeS += kstepS;
+  planeS2 += kstepS2;
+
+  // for each plane, do a 2D integral image first
+  for (unsigned k=0;k<nk;++k,planeA+=kstepA,planeS+=kstepS,planeS2+=kstepS2)
+  {
+    const aT* rowA = planeA;
+    rowS = planeS;
+    rowS2 = planeS2;
+
+    // Put zeros along first row in plane
+    voxelS = rowS;
+    voxelS2 = rowS2;
+    for (unsigned i=0;i<ni;++i,voxelS += istepS, voxelS2 += istepS2)
+    {
+      *voxelS = 0;
+      *voxelS2 = 0;
+    }
+    rowS += jstepS;
+    rowS2 += jstepS2;
+
+    // Compute integral sums for rest of plane
+    for (unsigned j=0;j<nj;++j,rowA += jstepA,rowS += jstepS,rowS2+=jstepS2)
+    {
+      const aT* voxelA = rowA;
+      voxelS = rowS;
+      voxelS2 = rowS2;
+      sum = 0;
+      sum2 = 0;
+
+      // set value at first column of each row to zero!
+      *voxelS = 0;
+      *voxelS2 = 0;
+      voxelS += istepS;
+      voxelS2 += istepS2;
+
+      // compute the 2D integral image
+      for (unsigned i=1;i<ni1;++i,voxelA+=istepA,
+                                  voxelS+=istepS,voxelS2+=istepS2)
+      {
+        sum += *voxelA;
+        *voxelS = sum + voxelS[prev_j];
+        sum2 += sumT(*voxelA)*sumT(*voxelA);
+        *voxelS2 = sum2 + voxelS2[prev_j2];
+      }
+    }    
+  }
+ 
+  // Go through from plane 2 to end and add values of voxels in plane
+  // above to get the 3D integral image
+  planeS = im_sum.origin_ptr() + 2*kstepS;
+  planeS2 = im_sum_sq.origin_ptr() + 2*kstepS2;
+  for (unsigned k=2;k<nk1;k++,planeS += kstepS, planeS2 += kstepS2)
+  {
+    // Skip first row in each plane
+    rowS = planeS+jstepS;
+    rowS2 = planeS2+jstepS2;
+    for (unsigned j=1;j<nj1;j++,rowS += jstepS,rowS2 += jstepS2)
+    {
+      // Skip first col in each row
+      voxelS = rowS+istepS;
+      voxelS2 = rowS2+istepS2;
+      for (unsigned i=1;i<ni1;i++,voxelS += istepS,voxelS2 += istepS2)
+      {
+        *voxelS += voxelS[prev_k];
+        *voxelS2 += voxelS2[prev_k2];
+      }
+    }
+  }
+
+}
+
+
 #endif
