@@ -12,11 +12,12 @@ template<class T>
 class boxm_inf_line_sample
 {
  public:
-  boxm_inf_line_sample() : line_(vgl_infinite_line_3d<T>()) {}
+  boxm_inf_line_sample() : 
+       line_(vgl_infinite_line_3d<T>(vgl_vector_2d<T>(0,0),vgl_vector_3d<T>(10,10,10))) {}
   boxm_inf_line_sample(vgl_infinite_line_3d<T> line) : line_(line) {}
   ~boxm_inf_line_sample() {}
   static short version_no() { return 1; }
-  void print(vcl_ostream& os) { os << "(line=" << line_ << ')'; }
+  void print(vcl_ostream& os) { os << "(line=" << line_ << ')';  }
 
   // public members
   vgl_infinite_line_3d<T> line_;
