@@ -107,10 +107,10 @@ bool boxm_line_backproject_process(bprb_func_process& pro)
               (*plane_image)(i,j) = 0.0f;
           else {
             // get two points on the line
-            vgl_point_2d<double> p1(row, col);
+            vgl_point_2d<double> p1(col,row);
 
-            float x = row + 0.5f*vcl_cos(theta);
-            float y = col + 0.5f*vcl_sin(theta);
+            float x = col + 0.5f*vcl_cos(theta);
+            float y = row + 0.5f*vcl_sin(theta);
             vgl_point_2d<double> p2(x,y);
 
             vgl_line_2d<double> line(p1,p2);
