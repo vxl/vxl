@@ -112,11 +112,182 @@ static void test_math_value_range()
   TEST("vil3d_math_value_range_percentiles(): all correct", all_correct, true);
 }
 
+static void test_math_integral_image()
+{
+  vcl_cout << "***********************************\n"
+           << " Testing vil3d_math_integral_image \n"
+           << "***********************************\n";
+  // create a 3x3x3 image 
+  unsigned n = 3;
+  vil3d_image_view<vxl_byte> im(n,n,n,1);
+  im(0,0,0)=3 ; im(1,0,0)=5 ; im(2,0,0)=2 ;
+  im(0,1,0)=1 ; im(1,1,0)=10; im(2,1,0)=7 ;
+  im(0,2,0)=15; im(1,2,0)=3 ; im(2,2,0)=8 ;
+  im(0,0,1)=2 ; im(1,0,1)=7 ; im(2,0,1)=8 ;
+  im(0,1,1)=9 ; im(1,1,1)=3 ; im(2,1,1)=5 ;
+  im(0,2,1)=4 ; im(1,2,1)=1 ; im(2,2,1)=7 ;
+  im(0,0,2)=5 ; im(1,0,2)=8 ; im(2,0,2)=2 ;
+  im(0,1,2)=2 ; im(1,1,2)=7 ; im(2,1,2)=3 ;
+  im(0,2,2)=4 ; im(1,2,2)=5 ; im(2,2,2)=8 ;
+
+  // explicitly define the integral image
+  unsigned n1 = n+1;
+  vil3d_image_view<vxl_int_16> im_sum1(n1,n1,n1,1);
+  im_sum1.fill(0);
+  im_sum1(1,1,1)=3  ; im_sum1(2,1,1)=8  ; im_sum1(3,1,1)=10 ;
+  im_sum1(1,2,1)=4  ; im_sum1(2,2,1)=19 ; im_sum1(3,2,1)=28 ;
+  im_sum1(1,3,1)=19 ; im_sum1(2,3,1)=37 ; im_sum1(3,3,1)=54 ;
+  im_sum1(1,1,2)=5  ; im_sum1(2,1,2)=17 ; im_sum1(3,1,2)=27 ;
+  im_sum1(1,2,2)=15 ; im_sum1(2,2,2)=40 ; im_sum1(3,2,2)=62 ;
+  im_sum1(1,3,2)=34 ; im_sum1(2,3,2)=63 ; im_sum1(3,3,2)=100;
+  im_sum1(1,1,3)=10 ; im_sum1(2,1,3)=30 ; im_sum1(3,1,3)=42 ;
+  im_sum1(1,2,3)=22 ; im_sum1(2,2,3)=62 ; im_sum1(3,2,3)=89 ;
+  im_sum1(1,3,3)=45 ; im_sum1(2,3,3)=94 ; im_sum1(3,3,3)=144;
+  
+  // do voxel-wise comparison with value returned from integral_image fn
+  vil3d_image_view<vxl_int_16> im_sum2;
+  vil3d_math_integral_image(im,im_sum2);
+  bool all_correct = true;
+  for(unsigned k=0; k<n1; k++)
+    for(unsigned j=0; j<n1; j++)
+      for(unsigned i=0; i<n1; i++)
+        if(im_sum1(i,j,k) != im_sum2(i,j,k))
+          all_correct = false;
+  TEST("vil3d_math_integral_image(): all correct", all_correct, true);     
+  
+  // print out values if test failed
+  if(!all_correct)
+  {
+    vcl_cout << "Expected and obtained values for integral image\n";
+    for(unsigned k=0; k<n1; k++)
+    {
+      for(unsigned j=0; j<n1; j++)
+      {
+        for(unsigned i=0; i<n1; i++)
+          vcl_cout << im_sum1(i,j,k) << " ";
+        vcl_cout << "\t\t";
+        for(unsigned i=0; i<n1; i++)
+          vcl_cout << im_sum2(i,j,k) << " ";
+        vcl_cout << vcl_endl;
+      }
+    }
+  }
+
+}
+
+static void test_math_integral_image_sqr()
+{
+  vcl_cout << "***************************************\n"
+           << " Testing vil3d_math_integral_image_sqr \n"
+           << "***************************************\n";
+  // create a 3x3x3 image 
+  unsigned n = 3;
+  vil3d_image_view<vxl_byte> im(n,n,n,1);
+  im(0,0,0)=3 ; im(1,0,0)=5 ; im(2,0,0)=2 ;
+  im(0,1,0)=1 ; im(1,1,0)=10; im(2,1,0)=7 ;
+  im(0,2,0)=15; im(1,2,0)=3 ; im(2,2,0)=8 ;
+  im(0,0,1)=2 ; im(1,0,1)=7 ; im(2,0,1)=8 ;
+  im(0,1,1)=9 ; im(1,1,1)=3 ; im(2,1,1)=5 ;
+  im(0,2,1)=4 ; im(1,2,1)=1 ; im(2,2,1)=7 ;
+  im(0,0,2)=5 ; im(1,0,2)=8 ; im(2,0,2)=2 ;
+  im(0,1,2)=2 ; im(1,1,2)=7 ; im(2,1,2)=3 ;
+  im(0,2,2)=4 ; im(1,2,2)=5 ; im(2,2,2)=8 ;
+
+  // explicitly define the integral image
+  unsigned n1 = n+1;
+  vil3d_image_view<vxl_int_16> im_sum1(n1,n1,n1,1);
+  im_sum1.fill(0);
+  im_sum1(1,1,1)=3  ; im_sum1(2,1,1)=8  ; im_sum1(3,1,1)=10 ;
+  im_sum1(1,2,1)=4  ; im_sum1(2,2,1)=19 ; im_sum1(3,2,1)=28 ;
+  im_sum1(1,3,1)=19 ; im_sum1(2,3,1)=37 ; im_sum1(3,3,1)=54 ;
+  im_sum1(1,1,2)=5  ; im_sum1(2,1,2)=17 ; im_sum1(3,1,2)=27 ;
+  im_sum1(1,2,2)=15 ; im_sum1(2,2,2)=40 ; im_sum1(3,2,2)=62 ;
+  im_sum1(1,3,2)=34 ; im_sum1(2,3,2)=63 ; im_sum1(3,3,2)=100;
+  im_sum1(1,1,3)=10 ; im_sum1(2,1,3)=30 ; im_sum1(3,1,3)=42 ;
+  im_sum1(1,2,3)=22 ; im_sum1(2,2,3)=62 ; im_sum1(3,2,3)=89 ;
+  im_sum1(1,3,3)=45 ; im_sum1(2,3,3)=94 ; im_sum1(3,3,3)=144;
+ 
+  // explicitly define the integral square image
+  vil3d_image_view<vxl_int_16> im_sum1_sq(n1,n1,n1,1);
+  im_sum1_sq.fill(0);
+  im_sum1_sq(1,1,1)=9  ; im_sum1_sq(2,1,1)=34 ; im_sum1_sq(3,1,1)=38 ;
+  im_sum1_sq(1,2,1)=10 ; im_sum1_sq(2,2,1)=135; im_sum1_sq(3,2,1)=188;
+  im_sum1_sq(1,3,1)=235; im_sum1_sq(2,3,1)=369; im_sum1_sq(3,3,1)=486;
+  im_sum1_sq(1,1,2)=13 ; im_sum1_sq(2,1,2)=87 ; im_sum1_sq(3,1,2)=155;
+  im_sum1_sq(1,2,2)=95 ; im_sum1_sq(2,2,2)=278; im_sum1_sq(3,2,2)=420;
+  im_sum1_sq(1,3,2)=336; im_sum1_sq(2,3,2)=529; im_sum1_sq(3,3,2)=784;
+  im_sum1_sq(1,1,3)=38 ; im_sum1_sq(2,1,3)=176; im_sum1_sq(3,1,3)=248;
+  im_sum1_sq(1,2,3)=124; im_sum1_sq(2,2,3)=420; im_sum1_sq(3,2,3)=575;
+  im_sum1_sq(1,3,3)=381; im_sum1_sq(2,3,3)=712; im_sum1_sq(3,3,3)=1044;
+
+  // Compute sum and sum_sq integral images
+  vil3d_image_view<vxl_int_16> im_sum2, im_sum2_sq;
+  vil3d_math_integral_sqr_image(im,im_sum2,im_sum2_sq);
+
+  // do voxel-wise comparison with value returned from integral_image fn
+  bool all_correct = true;
+  for(unsigned k=0; k<n1; k++)
+    for(unsigned j=0; j<n1; j++)
+      for(unsigned i=0; i<n1; i++)
+        if(im_sum1(i,j,k) != im_sum2(i,j,k))
+          all_correct = false;
+  TEST("vil3d_math_integral_image_sqr(): all correct for sum",
+       all_correct, true);     
+  
+  // print out values if test failed
+  if (!all_correct)
+  {
+    vcl_cout << "Expected and obtained values for sum integral image\n";
+    for(unsigned k=0; k<n1; k++)
+    {
+      for(unsigned j=0; j<n1; j++)
+      {
+        for(unsigned i=0; i<n1; i++)
+          vcl_cout << im_sum1(i,j,k) << " ";
+        vcl_cout << "\t\t";
+        for(unsigned i=0; i<n1; i++)
+          vcl_cout << im_sum2(i,j,k) << " ";
+        vcl_cout << vcl_endl;
+      }
+    }
+  }
+
+  // ditto for sum_sq
+  all_correct = true;
+  for(unsigned k=0; k<n1; k++)
+    for(unsigned j=0; j<n1; j++)
+      for(unsigned i=0; i<n1; i++)
+        if(im_sum1_sq(i,j,k) != im_sum2_sq(i,j,k))
+          all_correct = false;
+  TEST("vil3d_math_integral_image_sqr(): all correct for sqr",
+       all_correct, true);     
+  
+  // print out values if test failed
+  if (!all_correct)
+  {
+    vcl_cout << "Expected and obtained values for sum_sq integral image\n";
+    for(unsigned k=0; k<n1; k++)
+    {
+      for(unsigned j=0; j<n1; j++)
+      {
+        for(unsigned i=0; i<n1; i++)
+          vcl_cout << im_sum1_sq(i,j,k) << " ";
+        vcl_cout << "\t\t";
+        for(unsigned i=0; i<n1; i++)
+          vcl_cout << im_sum2_sq(i,j,k) << " ";
+        vcl_cout << vcl_endl;
+      }
+    }
+  }
+
+}
 
 static void test_math()
 {
   test_image_view_maths_float();
   test_math_value_range();
+  test_math_integral_image();
+  test_math_integral_image_sqr();
 }
 
 TESTMAIN(test_math);
