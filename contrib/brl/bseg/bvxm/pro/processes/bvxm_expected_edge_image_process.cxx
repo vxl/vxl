@@ -64,7 +64,7 @@ bool bvxm_expected_edge_image_process(bprb_func_process& pro)
   unsigned nj = size_image_sptr->nj();
 
   // scale of image
-  unsigned scale = pro.get_input<unsigned>(4);
+  unsigned scale = pro.get_input<unsigned>(3);
 
   int num_observations = vox_world->num_observations<EDGES>(0,scale);
   vcl_cout << "Number of observations in curren edge world: " << num_observations << '\n';
@@ -79,16 +79,20 @@ bool bvxm_expected_edge_image_process(bprb_func_process& pro)
 
   edge_proc.expected_edge_image(camera_metadata_inp,img_eei_f_sptr,n_normal,scale);
 
-  vil_image_view<vxl_byte> *img_eei_b = new vil_image_view<vxl_byte>(ni,nj,1);
-
-  for (unsigned i=0; i<ni; i++) {
-    for (unsigned j=0; j<nj; j++) {
-      (*img_eei_b)(i,j) = static_cast<unsigned char>(255.0*((*img_eei_f)(i,j)));
+  vil_image_view<vxl_byte> *img_eei_vb = new vil_image_view<vxl_byte>(ni,nj,1);
+  float min_val, max_val;
+  vil_math_value_range(*img_eei_f, min_val, max_val);
+  float min_max_diff = max_val - min_val;
+  if(min_max_diff > 0.0f){
+    for(unsigned i=0; i<ni; i++){
+      for(unsigned j=0; j<nj; j++){
+        (*img_eei_vb)(i,j) = (vxl_byte)(255.0f*((*img_eei_f)(i,j)-min_val)/(min_max_diff));
+      }
     }
   }
 
   pro.set_output_val<vil_image_view_base_sptr>(0, img_eei_f);
-  pro.set_output_val<vil_image_view_base_sptr>(1, img_eei_b);
+  pro.set_output_val<vil_image_view_base_sptr>(1, img_eei_vb);
 
   return true;
 }
