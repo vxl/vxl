@@ -14,6 +14,7 @@ MANPAGE_SOURCES += bsta_mean_shift.txx
 MANPAGE_SOURCES += bsta_sample_set.txx
 MANPAGE_SOURCES += bsta_beta_updater.txx
 MANPAGE_SOURCES += bsta_von_mises_updater.txx
+MANPAGE_SOURCES += bsta_fit_gaussian.h
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

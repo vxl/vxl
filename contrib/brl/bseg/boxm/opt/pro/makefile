@@ -15,6 +15,7 @@ SOURCES += processes/boxm_generate_edge_samples_process.cxx
 SOURCES += processes/boxm_edge_update_process.cxx
 SOURCES += processes/boxm_rpc_registration_process.cxx
 SOURCES += processes/boxm_line_backproject_process.cxx
+SOURCES += processes/boxm_render_expected_edge_vrml_process.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk
