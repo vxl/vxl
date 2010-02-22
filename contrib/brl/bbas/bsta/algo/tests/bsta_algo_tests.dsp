@@ -190,6 +190,9 @@ SOURCE=.\test_beta_updater.cxx
 SOURCE=.\test_von_mises_update.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_fit_gaussian.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

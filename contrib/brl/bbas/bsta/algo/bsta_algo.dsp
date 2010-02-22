@@ -234,6 +234,9 @@ SOURCE=.\bsta_von_mises_updater.h
 # Begin Source File
 SOURCE=.\bsta_von_mises_updater.txx
 # End Source File
+# Begin Source File
+SOURCE=.\bsta_fit_gaussian.h
+# End Source File
 # End Group
 # End Target
 # End Project

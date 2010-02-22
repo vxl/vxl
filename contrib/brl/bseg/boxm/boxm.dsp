@@ -126,6 +126,9 @@ SOURCE=.\boxm_scene_parser.cxx
 SOURCE=.\boxm_mob_grey_processor.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\boxm_cell_data_traits.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/boxm_cell_vis_graph_iterator+short.boxm_sample+BOXM_APM_MOG_GREY--.cxx
 # End Source File
 # Begin Source File
@@ -454,6 +457,18 @@ SOURCE=.\boxm_edge_tangent_sample.txx
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_edge_tangent_sample.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_plane_obs.txx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_plane_obs.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_inf_line_sample.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_inf_line_sample.txx
 # End Source File
 # End Group
 # End Target

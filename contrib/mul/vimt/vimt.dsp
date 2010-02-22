@@ -120,6 +120,9 @@ SOURCE=.\vimt_vil_v2i.cxx
 SOURCE=.\vimt_load.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vimt_save.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vimt_sample_grid_bilin+byte.double-.cxx
 # End Source File
 # Begin Source File
@@ -322,6 +325,9 @@ SOURCE=.\vimt_convert.h
 # End Source File
 # Begin Source File
 SOURCE=.\vimt_load.h
+# End Source File
+# Begin Source File
+SOURCE=.\vimt_save.h
 # End Source File
 # End Group
 # End Target
