@@ -22,6 +22,7 @@
 #include <vimt/vimt_sample_grid_bilin.h>
 #include <vimt/vimt_sample_grid_bicub.h>
 #include <vimt/vimt_sample_profile_bilin.h>
+#include <vimt/vimt_save.h>
 #include <vimt/vimt_scale_pyramid_builder_2d.h>
 #include <vimt/vimt_transform_2d.h>
 #include <vimt/vimt_transform_util_2d.h>
