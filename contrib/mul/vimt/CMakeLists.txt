@@ -26,6 +26,7 @@ SET(vimt_sources
     vimt_bilin_interp.h
     vimt_resample_bilin.h
     vimt_load.h                                   vimt_load.cxx
+    vimt_save.h                                   vimt_save.cxx
     vimt_vil_v2i.h                                vimt_vil_v2i.cxx
     vimt_add_all_binary_loaders.h                 vimt_add_all_binary_loaders.cxx
     vimt_fwd.h

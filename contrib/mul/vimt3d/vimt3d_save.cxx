@@ -15,19 +15,20 @@
 
 static mbl_logger& logger()
 {
-  static mbl_logger l("im_algo.m32.comparator.drr_projection_4");
+  static mbl_logger l("contrib.mul.vimt3d.save");
   return l;
 }
 
 //: Create a transform from the properties of image resource.
 // The transform will be from world co-ordinates in metres to image co-ordinates (or mm if requested).
 void vimt3d_save_transform(vil3d_image_resource_sptr &ir,
-                           const vimt3d_transform_3d& trans, bool use_millimetres /*=false*/)
+                           const vimt3d_transform_3d& trans, 
+                           bool use_millimetres /*=false*/)
 {
   if (dynamic_cast<vimt3d_vil3d_v3i_image *>(ir.ptr()))
   {
-    vgl_vector_3d<double> vox_per_mm = trans.
-      delta(vgl_point_3d<double> (0,0,0), vgl_vector_3d<double> (1.0, 1.0, 1.0));
+    vgl_vector_3d<double> vox_per_mm = trans.delta(vgl_point_3d<double>(0,0,0), 
+                                                   vgl_vector_3d<double>(1.0, 1.0, 1.0));
 
     // get the translation component
     double tx =  trans.matrix()(0,3);
@@ -48,7 +49,7 @@ void vimt3d_save_transform(vil3d_image_resource_sptr &ir,
     vgl_vector_3d<double> dp = i2w.delta(vgl_point_3d<double> (0,0,0),
                                          vgl_vector_3d<double> (1.0, 1.0, 1.0));
     if (!ir->set_voxel_size(float(dp.x()),float(dp.y()),float(dp.z())))
-      MBL_LOG(WARN, logger(), "sm3d_image_io_3d::saveImage(): Unable to include voxel sizes:"
+      MBL_LOG(WARN, logger(), "vimt3d_save_transform(): Unable to include voxel sizes:"
               <<dp.x()<<','<<dp.y()<<','<<dp.z() );
   }
 }
