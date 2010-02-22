@@ -232,7 +232,7 @@ class bsta_mixture_fixed : public bsta_distribution<typename dist_::math_type,
       ids.push_back(i);
     }
     vcl_vector<unsigned> out;
-    bsta_sampler<unsigned>::sample(ids, ps, 1, out);
+    bsta_sampler<unsigned>::sample(ids, ps, 1, out, rng);
     assert(out.size() == 1);
 
     return components_[out[0]].distribution.sample(rng);

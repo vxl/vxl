@@ -25,11 +25,21 @@ class first_less
   }
 };
 
+//: wrapper around version with user-provided random generator
+template <class T>
+bool bsta_sampler<T>::sample(vcl_vector<T>& samples, vcl_vector<float>& p,
+                             unsigned cnt, vcl_vector<T>& out) 
+{
+  vnl_random rand;
+  return sample(samples,p,cnt,out,rand);
+}
+
+
 //: put cnt samples into output vector wrt given probabilities
 //  The sum of probabilities should sum to (approx.) 1; otherwise return false
 template <class T>
 bool bsta_sampler<T>::sample(vcl_vector<T>& samples, vcl_vector<float>& p,
-                             unsigned cnt, vcl_vector<T>& out) {
+                             unsigned cnt, vcl_vector<T>& out, vnl_random &rng) {
   if (p.size() != samples.size())
     return false;
   if (!p.size())
@@ -47,9 +57,8 @@ bool bsta_sampler<T>::sample(vcl_vector<T>& samples, vcl_vector<float>& p,
   if (last_val > 1.015625f || last_val < 0.984375f)
     return false;
 
-  vnl_random rand;
   for (unsigned i = 0; i < cnt; i++) {
-    float r = (float)(rand.drand32());
+    float r = (float)(rng.drand32());
     if (r >= last_val) {
       out.push_back(samples[last_id]);
     } else {
@@ -65,6 +74,15 @@ bool bsta_sampler<T>::sample(vcl_vector<T>& samples, vcl_vector<float>& p,
 //: sample from a joint histogram treating it as a discrete prob distribution
 template <class T>
 bool bsta_sampler<T>::sample(const bsta_joint_histogram<float>& jh, unsigned cnt, vcl_vector<vcl_pair<float, float> >& out)
+{
+  vnl_random rng;
+  return sample(jh, cnt, out, rng);
+}
+
+//: sample from a joint histogram treating it as a discrete prob distribution
+// user provided vnl_random
+template <class T>
+bool bsta_sampler<T>::sample(const bsta_joint_histogram<float>& jh, unsigned cnt, vcl_vector<vcl_pair<float, float> >& out, vnl_random &rng)
 {
   unsigned int na = jh.nbins_a();
   unsigned int nb = jh.nbins_b();
@@ -97,9 +115,8 @@ bool bsta_sampler<T>::sample(const bsta_joint_histogram<float>& jh, unsigned cnt
   if (last_val > 1.015625f || last_val < 0.984375f)
     return false;
 
-  vnl_random rand;
   for (unsigned i = 0; i < cnt; i++) {
-    float r = (float)(rand.drand32());
+    float r = (float)(rng.drand32());
     if (r >= last_val) {
       //: push the last sample in the histogram
       vcl_pair<float, float> out_sample(jh.min_a() + na*jh.delta_a(), jh.min_b() + nb*jh.delta_b());
@@ -120,6 +137,7 @@ bool first_greater(const vcl_pair<float,vcl_pair<unsigned, unsigned> >& left_pai
 {
   return left_pair.first > right_pair.first;
 }
+
 
 //: sample in the decreasing order of likelihood (i.e. the most likely bin will be returned as the first sample)
 template <class T>
