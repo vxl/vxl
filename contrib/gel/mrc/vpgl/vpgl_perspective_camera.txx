@@ -89,7 +89,6 @@ vgl_line_3d_2_points<T> vpgl_perspective_camera<T>::backproject(
             camera_center_.z()+wp_homg.z() );
   if ( is_behind_camera( vgl_homg_point_3d<T>( wp ) ) )
     wp = camera_center_ + ( camera_center_-wp );
-
   // The ray is then defined by that point and the camera center.
   return vgl_line_3d_2_points<T>( camera_center_, wp );
 }
@@ -179,6 +178,29 @@ void vpgl_perspective_camera<T>::look_at(const vgl_homg_point_3d<T>& point,
   bool singularity = vcl_fabs(vcl_fabs(static_cast<double>(dp))-1.0)<1e-08;
   assert(!singularity);
   vgl_vector_3d<T> z = look;
+  if(vcl_fabs(dot_product<T>(u,z)-T(1))<1e-5)
+  {
+  
+    T r[] = { 1, 0, 0,
+              0, 1, 0,
+              0, 0, 1 };
+
+  vnl_matrix_fixed<T,3,3> R(r);
+  set_rotation(vgl_rotation_3d<T>(R));
+
+  }
+  else if(vcl_fabs(dot_product<T>(u,z)-T(-1))<1e-5)
+  {
+      T r[] = { 1, 0, 0,
+              0, 1, 0,
+              0, 0, -1 };
+
+  vnl_matrix_fixed<T,3,3> R(r);
+  set_rotation(vgl_rotation_3d<T>(R));
+
+  }
+  else
+  {
   vgl_vector_3d<T> x = cross_product(-u,z);
   vgl_vector_3d<T> y = cross_product(z,x);
   normalize(x);
@@ -191,6 +213,7 @@ void vpgl_perspective_camera<T>::look_at(const vgl_homg_point_3d<T>& point,
 
   vnl_matrix_fixed<T,3,3> R(r);
   set_rotation(vgl_rotation_3d<T>(R));
+  }
 }
 
 
