@@ -19,6 +19,7 @@
 #include <brdb/brdb_value.h>
 
 #include <vpgl/vpgl_proj_camera.h>
+#include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_local_rational_camera.h>
 #include <vpgl/algo/vpgl_ray.h>
 
@@ -56,6 +57,44 @@ bool boxm_line_backproject_process_cons(bprb_func_process& pro)
   unsigned j = 0;
   output_types_[j++] = "vil_image_view_base_sptr";
   return pro.set_output_types(output_types_);
+}
+
+vpgl_rational_camera<double>
+perspective_to_rational(vpgl_perspective_camera<double>& cam_pers)
+{
+  vnl_matrix_fixed<double,3,4> cam_pers_matrix = cam_pers.get_matrix();
+  vcl_vector<double> neu_u,den_u,neu_v,den_v;
+  double x_scale = 1.0,
+        x_off = 0.0,
+        y_scale = 1.0,
+        y_off = 0.0,
+        z_scale = 1.0,
+        z_off = 0.0,
+        u_scale = 1.0,
+        u_off = 0.0,
+        v_scale = 1.0,
+        v_off = 0.0;
+
+  for (int i=0; i<20; i++) {
+    neu_u.push_back(0.0);
+    neu_v.push_back(0.0);
+    den_u.push_back(0.0);
+    den_v.push_back(0.0);
+  }
+
+  int vector_map[] = {9,15,18,19};
+
+  for (int i=0; i<4; i++) {
+    neu_u[vector_map[i]] = cam_pers_matrix(0,i);
+    neu_v[vector_map[i]] = cam_pers_matrix(1,i);
+    den_u[vector_map[i]] = cam_pers_matrix(2,i);
+    den_v[vector_map[i]] = cam_pers_matrix(2,i);
+  }
+
+  vpgl_rational_camera<double> cam_rat(neu_u,den_u,neu_v,den_v,
+                                       x_scale,x_off,y_scale,y_off,z_scale,z_off,
+                                       u_scale,u_off,v_scale,v_off);
+  return cam_rat;
 }
 
 //:  optimizes rpc camera parameters based on edges
@@ -116,9 +155,9 @@ bool boxm_line_backproject_process(bprb_func_process& pro)
             vgl_line_2d<double> line(p1,p2);
 
             //create a line and backproject it
-            vgl_homg_line_2d<double> image_line(line); // Camera should be projective!!
+            vgl_homg_line_2d<double> image_line(line);
             vgl_homg_plane_3d<double> plane = cam->backproject(image_line);
-            if (plane.a()==0 || plane.b()==0 || plane.c()==0 || plane.d()==0)
+            if (plane.a()==0 && plane.b()==0 && plane.c()==0 && plane.d()==0)
               vcl_cout << "ZERO a,b,c,d " << vcl_endl;
             (*plane_image)(i,j,0)=plane.a();
             (*plane_image)(i,j,1)=plane.b();
@@ -142,10 +181,10 @@ bool boxm_line_backproject_process(bprb_func_process& pro)
               (*plane_image)(i,j,3) = 0.0f;
             } else {
               // get two point on the line
-              vgl_point_2d<double> p1(row, col);
+              vgl_point_2d<double> p1(col, row);
 
-              float x = row + 0.5*vcl_cos(theta);
-              float y = col + 0.5*vcl_sin(theta);
+              float x = col + 0.5*vcl_cos(theta);
+              float y = row + 0.5*vcl_sin(theta);
               vgl_point_2d<double> p2(x,y);
 
               
@@ -167,6 +206,44 @@ bool boxm_line_backproject_process(bprb_func_process& pro)
             }
           }
         }
+    } 
+    else if (camera->type_name() == "vpgl_perspective_camera") {
+      vpgl_perspective_camera<double>* cam = dynamic_cast<vpgl_perspective_camera<double>*>(camera.ptr());
+     vpgl_proj_camera<double>* proj_cam = static_cast<vpgl_proj_camera<double>*>(cam);
+      for (unsigned i=0; i<ni; i++) {
+          for (unsigned j=0; j<nj; j++) {
+            col =edge_image(i,j,0); // sub-pixel column
+            row =edge_image(i,j,1); // sub_pixel row
+            theta=edge_image(i,j,2); // orientation in radians
+
+            if (col<0 || row<0) { // no edge is present, check sdet_pro/sdet_detect_edge_tangent_process.h
+              (*plane_image)(i,j,0) = 0.0f;
+              (*plane_image)(i,j,1) = 0.0f;
+              (*plane_image)(i,j,2) = 0.0f;
+              (*plane_image)(i,j,3) = 0.0f;
+            } else {
+              // get two point on the line
+              vgl_point_2d<double> p1(col, row);
+
+              float x = col + 0.5*vcl_cos(theta);
+              float y = row + 0.5*vcl_sin(theta);
+              vgl_point_2d<double> p2(x,y);
+
+              vgl_line_2d<double> line(p1,p2);
+
+              //create a line and backproject it
+              vgl_homg_line_2d<double> image_line(line);
+
+              vgl_homg_plane_3d<double> plane = proj_cam->backproject(image_line);
+              if (plane.a()==0 && plane.b()==0 && plane.c()==0 && plane.d()==0)
+                vcl_cout << "ZERO a,b,c,d " << vcl_endl;
+              (*plane_image)(i,j,0)=plane.a();
+              (*plane_image)(i,j,1)=plane.b();
+              (*plane_image)(i,j,2)=plane.c();
+              (*plane_image)(i,j,3)=plane.d();
+            }
+          }
+      }
     } else {
         vcl_cerr << "boxm_line_backproject_process: The camera type [" << camera->type_name() << "]is not defined yet!\n";
         return false;
