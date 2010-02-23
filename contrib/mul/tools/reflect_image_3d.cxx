@@ -39,11 +39,14 @@ int main2(int argc, char *argv[])
     "  2. The existing transform is composed with a translation so that the image centre\n"
     "     is reflected through the world origin.\n"
     "Step 2 is not performed if you specify the -c (image_centre) option.\n"
-    "The output image is written in v3i format (vimt3d_image_3d_of<float>).\n");
+    "The output image is written in v3i format (vimt3d_image_3d_of<float>).\n"
+    "NB. Default units are metres.\n"
+  );
   vul_arg<vcl_string> src_file(0, "Input image file");
   vul_arg<vcl_string> dst_file(0, "Output image file");
   vul_arg<vcl_string> axis("-a", "Axis along which to reflect, i.e. X means reflect in X direction (through YZ plane)", "X");
   vul_arg<bool> image_centre("-c", "Reflect about image centre if set, otherwise about world origin", false);
+  vul_arg<bool> use_mm("-mm", "World coords in units of mm", false);
 	vul_arg_parse(argc, argv);
 
 	MBL_LOG(INFO, logger(), "Program arguments:");
@@ -69,7 +72,7 @@ int main2(int argc, char *argv[])
     throw mbl_exception_abort("input image file does not exist: " + src_file());
   }
   vimt3d_image_3d_of<float> img;
-  vimt3d_load(src_file(), img, true);
+  vimt3d_load(src_file(), img, use_mm());
   MBL_LOG(INFO, logger(), "Loaded image file: " << src_file());
 
   if (axis()=="X" || axis()=="x")
@@ -120,7 +123,7 @@ int main2(int argc, char *argv[])
   }
 
   // Save the reflected image to the destination file
-  vimt3d_save(dst_file(), img, true);
+  vimt3d_save(dst_file(), img, use_mm());
   MBL_LOG(INFO, logger(), "Saved image file: " << dst_file());
 
 	return 0;
