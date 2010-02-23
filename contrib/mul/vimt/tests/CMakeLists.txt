@@ -17,6 +17,7 @@ ADD_EXECUTABLE( vimt_test_all
   test_resample_bilin.cxx
   test_image_bounds_and_centre_2d.cxx
   test_v2i.cxx
+  test_reflect.cxx
 )
 TARGET_LINK_LIBRARIES( vimt_test_all vimt_algo vgl vnl vil vpl vsl vul testlib )
 
@@ -34,6 +35,7 @@ ADD_TEST( vimt_test_correlate_2d                 ${EXECUTABLE_OUTPUT_PATH}/vimt_
 ADD_TEST( vimt_test_resample_bilin               ${EXECUTABLE_OUTPUT_PATH}/vimt_test_all test_resample_bilin )
 ADD_TEST( vimt_test_image_bounds_and_centre_2d   ${EXECUTABLE_OUTPUT_PATH}/vimt_test_all test_image_bounds_and_centre_2d )
 ADD_TEST( vimt_test_v2i   ${EXECUTABLE_OUTPUT_PATH}/vimt_test_all test_v2i )
+ADD_TEST( vimt_test_reflect                      ${EXECUTABLE_OUTPUT_PATH}/vimt_test_all test_reflect )
 
 ADD_EXECUTABLE( vimt_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vimt_test_include vimt_algo vimt )
