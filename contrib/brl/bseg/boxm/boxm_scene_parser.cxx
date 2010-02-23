@@ -84,7 +84,7 @@ void boxm_scene_parser::init_params()
   path_="";
   block_pref_="";
   save_internal_nodes_ = false;
-  p_init_=0.01;
+  p_init_=0.01f;
 }
 
 void
