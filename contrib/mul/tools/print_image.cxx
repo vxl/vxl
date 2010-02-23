@@ -36,8 +36,23 @@ static void get_intensity_range_3d(const vil3d_image_resource_sptr& ir, double& 
   vil3d_math_value_range(iv_double, min, max);
 }
 
+
+//: Calculate pixel size from transform of any form
+// Adapted from vimt_image_2d.cxx
+vgl_vector_2d<double> pixel_size_from_transform(const vimt_transform_2d& w2i)
+{
+  const vimt_transform_2d& i2w = w2i.inverse();
+  vgl_point_2d<double> p(0,0);
+  vgl_vector_2d<double> i(1,0);
+  vgl_vector_2d<double> j(0,1);
+  double dx = i2w.delta(p, i).length();
+  double dy = i2w.delta(p, j).length();
+  return vgl_vector_2d<double>(dx, dy);
+}
+
+
 //: Calculate voxel size from transform of any form
-// Copied from vimt3d_image_3d.cxx
+// Adapted from vimt3d_image_3d.cxx
 static vgl_vector_3d<double> voxel_size_from_transform(const vimt3d_transform_3d& w2i)
 {
   const vimt3d_transform_3d& i2w = w2i.inverse();
@@ -51,6 +66,7 @@ static vgl_vector_3d<double> voxel_size_from_transform(const vimt3d_transform_3d
   return vgl_vector_3d<double>(dx, dy, dz);
 }
 
+
 //: Try to load a 3D image
 static unsigned try_3d_image(const char * filename, float unit_scaling, bool range)
 {
@@ -58,7 +74,6 @@ static unsigned try_3d_image(const char * filename, float unit_scaling, bool ran
   if (!ir) return 1;
 
   vimt3d_transform_3d w2i;
-
   if (unit_scaling == 1000.0)
     w2i = vimt3d_load_transform(ir, true);
   else if (unit_scaling == 1.0)
@@ -72,6 +87,7 @@ static unsigned try_3d_image(const char * filename, float unit_scaling, bool ran
   vgl_vector_3d<double> voxel = voxel_size_from_transform(w2i);
   vgl_point_3d<double> world_min_point = w2i.inverse().origin();
   vgl_point_3d<double> world_max_point = w2i.inverse()(ir->ni()+0.999, ir->nj()+0.999, ir->nk()+0.999);
+  vgl_point_3d<double> world_centre = world_min_point + (world_max_point-world_min_point)/2.0;
   vcl_cout << "size: " << ir->ni() << 'x' << ir->nj() << 'x' << ir->nk() << " voxels x " << ir->nplanes() << "planes\n"
            << "size: " << ir->ni()*voxel.x() << 'x' << ir->nj()*voxel.y() << 'x' << ir->nk()*voxel.z()
            << " in units of " << 1.0/unit_scaling << "m\n"
@@ -80,8 +96,10 @@ static unsigned try_3d_image(const char * filename, float unit_scaling, bool ran
            << "world_origin: " << w2i.origin().x() << 'x' << w2i.origin().y() << 'x' << w2i.origin().z() << " voxels\n"
            << "world bounds: [" << world_min_point.x() << ',' << world_min_point.y() << ',' << world_min_point.z() << "] -> ["
            << world_max_point.x() << ',' << world_max_point.y() << ',' << world_max_point.z() << "]\n"
-           << "voxel_type: " << ir->pixel_format() << '\n'
-           << "transform: " << w2i;
+           << "world centre: " << world_centre.x() << ',' << world_centre.y() << ',' << world_centre.z() << "\n"
+           << "voxel_type: " << ir->pixel_format() << "\n"
+           << "transform: " << w2i
+           << vcl_endl;
 
   if (range)
   {
@@ -100,14 +118,23 @@ static unsigned try_2d_image(const char * filename, float unit_scaling, bool ran
   if (!ir) return 1;
 
   vimt_transform_2d w2i = vimt_load_transform(ir, unit_scaling);
-  vgl_vector_2d<double> pixel = w2i.inverse().delta(vgl_point_2d<double>(0,0), vgl_vector_2d<double>(1,1));
+  //vgl_vector_2d<double> pixel = w2i.inverse().delta(vgl_point_2d<double>(0,0), vgl_vector_2d<double>(1,1));
+  vgl_vector_2d<double> pixel = pixel_size_from_transform(w2i);
+  vgl_point_2d<double> world_min_point = w2i.inverse().origin();
+  vgl_point_2d<double> world_max_point = w2i.inverse()(ir->ni()+0.999, ir->nj()+0.999);
+  vgl_point_2d<double> world_centre = world_min_point + (world_max_point-world_min_point)/2.0;
   vcl_cout << "size: " << ir->ni() << 'x' << ir->nj() << " pixels x " << ir->nplanes() << "planes\n"
            << "size: " << ir->ni()*pixel.x() << 'x' << ir->nj()*pixel.y()
            << " in units of " << 1.0/unit_scaling << "m\n"
            << "pixel size: " << pixel.x() << 'x' << pixel.y()
            << " in units of " << 1.0/unit_scaling << "m\n"
            << "world_origin: " << w2i.origin().x() << 'x' << w2i.origin().y() << " pixels\n"
-           << "pixel_type: " << ir->pixel_format() << '\n';
+           << "world bounds: [" << world_min_point.x() << ',' << world_min_point.y() << "] -> ["
+           << world_max_point.x() << ',' << world_max_point.y() << "]\n"
+           << "world centre: " << world_centre.x() << ',' << world_centre.y() << "\n"
+           << "pixel_type: " << ir->pixel_format() << "\n"
+           << "transform: " << w2i
+           << vcl_endl;
 
   if (range)
   {

@@ -10,6 +10,7 @@ DECLARE( test_from_image_2d );
 DECLARE( test_resample );
 DECLARE( test_gauss_reduce );
 DECLARE( test_image_bounds_and_centre_3d );
+DECLARE( test_reflect );
 
 void
 register_tests()
@@ -24,6 +25,7 @@ register_tests()
   REGISTER( test_resample );
   REGISTER( test_gauss_reduce );
   REGISTER( test_image_bounds_and_centre_3d );
+  REGISTER( test_reflect );
 }
 
 DEFINE_MAIN;

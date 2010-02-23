@@ -17,6 +17,7 @@ SET(vimt3d_sources
                                          vimt3d_slice.h
   vimt3d_load.cxx                        vimt3d_load.h
   vimt3d_save.cxx                        vimt3d_save.h
+                                         vimt3d_reflect.h
 
   vimt3d_gaussian_pyramid_builder_3d.txx vimt3d_gaussian_pyramid_builder_3d.h
                                          vimt3d_crop.h
