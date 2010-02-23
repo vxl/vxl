@@ -329,6 +329,9 @@ SOURCE=.\vimt_load.h
 # Begin Source File
 SOURCE=.\vimt_save.h
 # End Source File
+# Begin Source File
+SOURCE=.\vimt_reflect.h
+# End Source File
 # End Group
 # End Target
 # End Project

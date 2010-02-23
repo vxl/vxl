@@ -251,9 +251,6 @@ LINK32=link.exe
 SOURCE=.\test_driver.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_include.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\test_correlate_2d.cxx
 # End Source File
 # Begin Source File
@@ -294,6 +291,12 @@ SOURCE=.\test_image_bounds_and_centre_2d.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_v2i.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_reflect.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_include.cxx
 # End Source File
 # End Group
 # End Target

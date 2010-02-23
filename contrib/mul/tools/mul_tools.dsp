@@ -270,6 +270,12 @@ SOURCE=.\tile_images_2d.cxx
 # Begin Source File
 SOURCE=.\image3d_split.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\reflect_image_2d.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\reflect_image_3d.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

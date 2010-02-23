@@ -236,6 +236,9 @@ SOURCE=.\vimt3d_resample_tricubic.h
 # Begin Source File
 SOURCE=.\vimt3d_sample_transformed_blob.h
 # End Source File
+# Begin Source File
+SOURCE=.\vimt3d_reflect.h
+# End Source File
 # End Group
 # End Target
 # End Project
