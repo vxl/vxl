@@ -47,6 +47,7 @@ MANPAGE_SOURCES += boxm_init_scene.h
 MANPAGE_SOURCES += boxm_edge_tangent_sample.txx
 MANPAGE_SOURCES += boxm_plane_obs.txx
 MANPAGE_SOURCES += boxm_inf_line_sample.txx
+SOURCES += boxm_sigma_normalizer.cxx
 
 SUBDIRS += io pro opt algo
 

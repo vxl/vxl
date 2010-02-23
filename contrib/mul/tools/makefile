@@ -14,6 +14,8 @@ MINI_PROG_SOURCES += index_sort.cxx
 MINI_PROG_SOURCES += multiplane_image.cxx
 MINI_PROG_SOURCES += tile_images_2d.cxx
 MINI_PROG_SOURCES += image3d_split.cxx
+MINI_PROG_SOURCES += reflect_image_2d.cxx
+MINI_PROG_SOURCES += reflect_image_3d.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk

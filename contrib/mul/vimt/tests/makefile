@@ -24,6 +24,7 @@ TESTS += test_find_peaks.cxx
 TESTS += test_resample_bilin.cxx
 TESTS += test_image_bounds_and_centre_2d.cxx
 TESTS += test_v2i.cxx
+TESTS += test_reflect.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 

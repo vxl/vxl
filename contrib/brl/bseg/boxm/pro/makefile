@@ -21,6 +21,7 @@ SOURCES += processes/boxm_construct_scene_from_image_process.cxx
 SOURCES += processes/boxm_describe_scene_process.cxx
 SOURCES += processes/boxm_camera_viewing_scene_process.cxx
 SOURCES += processes/boxm_init_scene_process.cxx
+SOURCES += processes/boxm_clean_scene_process.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk
