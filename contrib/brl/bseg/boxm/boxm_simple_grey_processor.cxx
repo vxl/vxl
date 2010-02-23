@@ -3,6 +3,10 @@
 // \file
 
 #include <vnl/vnl_erf.h>
+#include <bsta/bsta_gauss_f1.h>
+#include <bsta/algo/bsta_fit_gaussian.h>
+
+#include "boxm_sigma_normalizer.h"
 
 //const float boxm_simple_grey_processor::one_over_sigma_ = 25.0f;
 const static bool USE_UNIFORM_COMPONENT = false;
@@ -68,6 +72,22 @@ boxm_simple_grey_processor::obs_datatype boxm_simple_grey_processor::most_probab
   return appear.color();
 }
 
+void boxm_simple_grey_processor::compute_appearance(vcl_vector<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype> const& obs, vcl_vector<float> const& pre, vcl_vector<float> const& vis, boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::apm_datatype &model, float min_sigma)
+{
+  bsta_gauss_f1 model_bsta(model.color(),model.sigma()*model.sigma());
+  const float min_var = min_sigma*min_sigma;
+  //vcl_cout << "nobs = " << obs.size() << vcl_endl;
+  //for (unsigned int i=0; i<obs.size(); ++i) {
+  //  vcl_cout << "obs=" << obs[i] << " vis=" << vis[i] << "pre=" << pre[i] << vcl_endl;
+  //}
+  bsta_fit_gaussian(obs,vis,pre,model_bsta,min_var);
+  // normalize sigma
+  boxm_sigma_normalizer sigma_norm(0.25f);
+  const float sigma = vcl_sqrt(model_bsta.var());// * sigma_norm.normalization_factor_int(obs.size());
+
+  model = boxm_simple_grey(model_bsta.mean(),sigma);
+  return;
+}
 
 void boxm_simple_grey_processor::compute_appearance(vcl_vector<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype> const& obs, vcl_vector<float> const& weights, boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::apm_datatype &model, float min_sigma)
 {

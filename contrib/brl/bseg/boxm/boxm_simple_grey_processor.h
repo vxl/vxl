@@ -43,6 +43,9 @@ class  boxm_simple_grey_processor
   static boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_mathtype most_probable_color(boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::apm_datatype const& appear);
 
   static void compute_appearance(vcl_vector<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype> const& obs, vcl_vector<float> const& weights, boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::apm_datatype &model, float min_sigma = 0.01f);
+  static void compute_appearance(vcl_vector<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype> const& obs, vcl_vector<float> const& pre, vcl_vector<float> const& vis, boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::apm_datatype &model, float min_sigma=0.01f);
+
+
 
   static void update_appearance(vcl_vector<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype> const& obs, vcl_vector<float> const& weights, boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::apm_datatype &model, float min_sigma = 0.01f);
 
