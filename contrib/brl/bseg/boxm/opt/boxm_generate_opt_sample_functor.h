@@ -55,7 +55,7 @@ class boxm_generate_opt_sample_functor_pass_2
     vis_img_(i,j) = vis_prob_end;
     // accumulate aux sample values
     aux_val.pre_ += pre * seg_len;
-    aux_val.vis_ = vis * seg_len;
+    aux_val.vis_ += vis * seg_len;
 
     const float Beta_num = pre + vis*PI;
     float Beta = 1.0f;
