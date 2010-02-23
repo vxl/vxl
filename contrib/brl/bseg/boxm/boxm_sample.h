@@ -16,6 +16,7 @@ class boxm_sample
   typedef typename boxm_apm_traits<APM_MODEL>::obs_datatype obs_datatype;
   typedef typename boxm_apm_traits<APM_MODEL>::obs_mathtype obs_mathtype;
   typedef typename boxm_apm_traits<APM_MODEL>::apm_processor apm_processor;
+  static const unsigned int obs_dim = boxm_apm_traits<APM_MODEL>::obs_dim;
 
   //: default constructor: alpha is set to 0.0015.
   boxm_sample() : alpha(0.0015f), appearance_() {}
