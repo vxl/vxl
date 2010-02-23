@@ -29,3 +29,9 @@ TARGET_LINK_LIBRARIES(multiplane_image vimt3d mbl vil)
 
 ADD_EXECUTABLE( tile_images_2d tile_images_2d.cxx )
 TARGET_LINK_LIBRARIES(tile_images_2d vil_algo vimt mbl vil)
+
+ADD_EXECUTABLE( reflect_image_2d reflect_image_2d.cxx )
+TARGET_LINK_LIBRARIES(reflect_image_2d vimt mbl)
+
+ADD_EXECUTABLE( reflect_image_3d reflect_image_3d.cxx )
+TARGET_LINK_LIBRARIES(reflect_image_3d vimt3d mbl)
