@@ -30,6 +30,7 @@
 #include <boxm/boxm_scene.h>
 #include <boxm/boxm_scene_base.h>
 #include <boxm/boxm_scene_parser.h>
+#include <boxm/boxm_sigma_normalizer.h>
 #include <boxm/boxm_simple_grey_processor.h>
 #include <boxm/boxm_triangle_interpolation_iterator.h>
 #include <boxm/boxm_triangle_scan_iterator.h>
