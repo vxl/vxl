@@ -108,11 +108,13 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
       float cell_val = boxm_cell_to_float(cells[i], step_len);
 
       unsigned int level = cells[i]->get_code().level;
-
       if (level == resolution_level) {
         // just copy value to output array
         //int out_index = static_cast<int>((node.x()/step_len)*ncells*ncells + (node.y()/step_len)*ncells + (node.z()/step_len));
-        int out_index=static_cast<int>((node.x()/step_len) + (node.y()/step_len)*ncells + (node.z()/step_len)*ncells*ncells);
+        int out_index=static_cast<int>(ncells-1-(node.z()/step_len) + (node.y()/step_len)*ncells + (node.x()/step_len)*ncells*ncells);
+        //////int out_index=static_cast<int>((node.z()/step_len) + (node.y()/step_len)*ncells + (node.x()/step_len)*ncells*ncells);
+        //////int out_index=static_cast<int>(ncells-(node.z()/step_len)-1 + (node.x()/step_len)*ncells + (node.y()/step_len)*ncells*ncells);
+
         if (out_index >= data_size)
           vcl_cout << "boxm_save_block_raw, array out of index! " << out_index << " -- " << data_size << vcl_endl;
         else
@@ -128,7 +130,10 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
           for (unsigned int y=node_y_start; y<node_y_start+us_factor; ++y) {
             for (unsigned int x=node_x_start; x<node_x_start+us_factor; ++x) {
               //int out_index=x*y_size + y*ncells + z;
-              int out_index=x + y*ncells + z*ncells*ncells;
+              int out_index=ncells-1-z + y*ncells + x*ncells*ncells;
+              //////int out_index=z + y*ncells + x*ncells*ncells;
+               //////int out_index=ncells-1-z + x*ncells + y*ncells*ncells;
+
               if (out_index >= data_size)
                 vcl_cout << "boxm_save_block_raw, array out of index! " << out_index << " -- " << data_size << vcl_endl;
               else
@@ -145,7 +150,10 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
         const unsigned int node_y = static_cast<unsigned int>(node.y()/step_len);
         const unsigned int node_z = static_cast<unsigned int>(node.z()/step_len);
         //unsigned int out_index=node_x*y_size + node_y*ncells + node_z;
-        int out_index=node_x + node_y*ncells + node_z*ncells*ncells;
+        int out_index=ncells-1-node_z + node_y*ncells + node_x*ncells*ncells;
+        //////int out_index=node_z + node_y*ncells + node_x*ncells*ncells;
+        //////int out_index=ncells-1-node_z + node_x*ncells + node_y*ncells*ncells;
+
         data[out_index] += float(cell_val*update_weight);
       }
     }
@@ -174,6 +182,7 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
     delete[] data;
     os.close();
     iter++;
+    
   }
   assert(ncells > 0);
 
@@ -183,8 +192,8 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   unsigned dimy = dim.y()*ncells;
   unsigned dimz = dim.z()*ncells;
   // we will read the data a column at a time and this is enough
-  int data_size = ncells;
-  char* byte_data = new (std::nothrow) char[data_size];
+  int row_data_size = ncells;
+  char* byte_data = new (std::nothrow) char[row_data_size];
   if (byte_data == 0) {
     vcl_cout << "boxm_save_block_raw: Could not allocate byte data!" << vcl_endl;
     return;
@@ -192,7 +201,7 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
 
   // open the binary files streams, saved earlier
   unsigned int nx,ny,nz;
-  vbl_array_3d<vsl_b_ifstream*> streams(dim.x(), dim.y(), dim.z ());
+  vbl_array_3d<vsl_b_ifstream*> streams(dim.x(), dim.y(), dim.z());
   for (unsigned z=0; z<dim.z(); z++) {
     for (unsigned y=0; y<dim.y(); y++) {
       for (unsigned x=0; x<dim.x(); x++) {
@@ -225,14 +234,14 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   os.write(reinterpret_cast<char*>(&nz_uint),sizeof(nz_uint));
 
   // combine the column from streams to generate one raw file
-  for (unsigned z=0; z<dim.z(); z++) {
+  for (unsigned x=0; x<dim.x(); x++) {
     unsigned k=0;
-    while (k<dim.x()*dim.y()*ncells*ncells*ncells) {
+    while (k<dim.y()*dim.z()*ncells*ncells*ncells) {
       for (unsigned y=0; y<dim.y(); y++) {
         unsigned j=0;
-        while (j < ncells*ncells*dim.x()) {
-          for (unsigned x=0; x<dim.x(); x++) {
-            vsl_b_ifstream* s=streams(x,y,z);
+        while (j < ncells*ncells*dim.z()) {
+          for (unsigned z=dim.z();z>0; z--) {
+            vsl_b_ifstream* s=streams(x,y,z-1);
             s->is().read(byte_data, ncells);
             os.write((char*)byte_data,ncells);
             j+=ncells;
