@@ -601,7 +601,7 @@ inline void vil3d_math_integral_image(const vil3d_image_view<aT>& imA,
 
     // Put zeros along first row in plane
     voxelS = rowS;
-    for (unsigned i=0;i<ni;++i,voxelS += istepS)
+    for (unsigned i=0;i<ni1;++i,voxelS += istepS)
       *voxelS = 0;
     rowS += jstepS;
 
@@ -720,7 +720,7 @@ inline void vil3d_math_integral_sqr_image(const vil3d_image_view<aT>& imA,
     // Put zeros along first row in plane
     voxelS = rowS;
     voxelS2 = rowS2;
-    for (unsigned i=0;i<ni;++i,voxelS += istepS, voxelS2 += istepS2)
+    for (unsigned i=0;i<ni1;++i,voxelS += istepS, voxelS2 += istepS2)
     {
       *voxelS = 0;
       *voxelS2 = 0;
