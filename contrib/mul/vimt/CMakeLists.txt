@@ -24,6 +24,7 @@ SET(vimt_sources
     vimt_sample_grid_bilin.txx                    vimt_sample_grid_bilin.h
     vimt_sample_grid_bicub.txx                    vimt_sample_grid_bicub.h
     vimt_bilin_interp.h
+    vimt_reflect.h
     vimt_resample_bilin.h
     vimt_load.h                                   vimt_load.cxx
     vimt_save.h                                   vimt_save.cxx
