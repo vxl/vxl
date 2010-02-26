@@ -1,6 +1,7 @@
-//: A class for adjusting sample standard deviation values such that 
-//: the probability of underestimation of the true std. dev. is fixed.
+//:
 // \file
+// \brief A class for adjusting sample standard deviation values such that the probability of underestimation of the true std. dev. is fixed.
+
 #include <vcl_iostream.h>
 
 #include <vnl/vnl_vector_fixed.h>
@@ -14,7 +15,7 @@ boxm_sigma_normalizer::boxm_sigma_normalizer(float under_estimation_probability)
 {
   class gammainc_error_fn : public vnl_least_squares_function
   {
-  public:
+   public:
     gammainc_error_fn(unsigned int ndof, float under_estimation_prob) : vnl_least_squares_function(1,1,no_gradient), ndof_(ndof), p_(under_estimation_prob) {}
 
     virtual void f(vnl_vector<double> const& x, vnl_vector<double>& fx)
@@ -28,10 +29,9 @@ boxm_sigma_normalizer::boxm_sigma_normalizer(float under_estimation_probability)
       fx[0] = cdf_prob - p_;
       return;
     }
-  private:
+   private:
     unsigned int ndof_;
     float p_;
-
   };
 
   // sanity check on probability
@@ -44,7 +44,7 @@ boxm_sigma_normalizer::boxm_sigma_normalizer(float under_estimation_probability)
     return;
   }
 
-  // populate array of normalization factors for easy lookup 
+  // populate array of normalization factors for easy lookup
   // sigma is undefined for sample sizes of 0 and 1, just fill with large values.
   unbias_const_[0] = 1e3f;
   unbias_const_[1] = 1e3f;
@@ -59,7 +59,6 @@ boxm_sigma_normalizer::boxm_sigma_normalizer(float under_estimation_probability)
     float unbias_constant = (float)vcl_sqrt((float)(n-1) / x[0]);
 
     unbias_const_[n] = unbias_constant;
-
   }
 }
 
@@ -85,7 +84,7 @@ float boxm_sigma_normalizer::normalization_factor_int(unsigned int number_of_obs
   if (number_of_observations < 2) {
     return unbias_const_[1];
   }
-  
+
   if (number_of_observations <= N_PRECOMPUTED_) {
     return unbias_const_[number_of_observations];
   }
