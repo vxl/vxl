@@ -3,7 +3,7 @@
 // \file
 
 
-// Template specialization of zero_val for floating point case
+//: Template specialization of zero_val for floating point case
 template <>
 float boxm_zero_val<short, float>()
 {
@@ -11,9 +11,9 @@ float boxm_zero_val<short, float>()
 }
 
 
-// Template specialization of zero_val for unimodal gaussian
+//: Template specialization of zero_val for unimodal gaussian
 template <>
 bsta_num_obs<bsta_gauss_f1> boxm_zero_val<short, bsta_num_obs<bsta_gauss_f1> >()
 {
   return bsta_num_obs<bsta_gauss_f1>();
-} 
+}
