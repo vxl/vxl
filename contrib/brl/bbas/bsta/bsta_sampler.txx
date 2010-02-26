@@ -28,7 +28,7 @@ class first_less
 //: wrapper around version with user-provided random generator
 template <class T>
 bool bsta_sampler<T>::sample(vcl_vector<T>& samples, vcl_vector<float>& p,
-                             unsigned cnt, vcl_vector<T>& out) 
+                             unsigned cnt, vcl_vector<T>& out)
 {
   vnl_random rand;
   return sample(samples,p,cnt,out,rand);
@@ -80,7 +80,7 @@ bool bsta_sampler<T>::sample(const bsta_joint_histogram<float>& jh, unsigned cnt
 }
 
 //: sample from a joint histogram treating it as a discrete prob distribution
-// user provided vnl_random
+// User provided vnl_random
 template <class T>
 bool bsta_sampler<T>::sample(const bsta_joint_histogram<float>& jh, unsigned cnt, vcl_vector<vcl_pair<float, float> >& out, vnl_random &rng)
 {
@@ -92,7 +92,7 @@ bool bsta_sampler<T>::sample(const bsta_joint_histogram<float>& jh, unsigned cnt
   float p_0 = jh.p((unsigned)0,(unsigned)0);
   accum_p.insert(vcl_pair<float, vcl_pair<unsigned, unsigned> >(p_0, pi));  // put the id of the sample
 
-  //: first scan the first row
+  // first scan the first row
   for (unsigned ib = 1; ib < nb; ib++) {
     vcl_pair<unsigned, unsigned> pi(0,ib);
 
@@ -100,7 +100,7 @@ bool bsta_sampler<T>::sample(const bsta_joint_histogram<float>& jh, unsigned cnt
     accum_p.insert(vcl_pair<float, vcl_pair<unsigned, unsigned> >(accum, pi));
   }
 
-  //: now do the rest of the rows
+  // now do the rest of the rows
   for (unsigned ia = 1; ia < na; ia++)
     for (unsigned ib = 0; ib < nb; ib++) {
       vcl_pair<unsigned, unsigned> pi(ia,ib);
@@ -118,7 +118,7 @@ bool bsta_sampler<T>::sample(const bsta_joint_histogram<float>& jh, unsigned cnt
   for (unsigned i = 0; i < cnt; i++) {
     float r = (float)(rng.drand32());
     if (r >= last_val) {
-      //: push the last sample in the histogram
+      // push the last sample in the histogram
       vcl_pair<float, float> out_sample(jh.min_a() + na*jh.delta_a(), jh.min_b() + nb*jh.delta_b());
       out.push_back(out_sample);
     } else {
