@@ -1,4 +1,4 @@
-// This is contrib/mul/tools/reflect_image_3d.cxx
+// This is mul/tools/reflect_image_3d.cxx
 
 #include <vul/vul_arg.h>
 #include <vul/vul_file.h>
@@ -17,17 +17,17 @@
 //=========================================================================
 static mbl_logger& logger()
 {
-	static mbl_logger l("contrib.mul.tools.reflect_image_3d");
-	return l;
+  static mbl_logger l("contrib.mul.tools.reflect_image_3d");
+  return l;
 }
 
 
 //=========================================================================
 // Main function
 //=========================================================================
-int main2(int argc, char *argv[])   
-{ 
-	// Parse command line arguments
+int main2(int argc, char *argv[])
+{
+  // Parse command line arguments
   vul_arg_base::set_help_description(
     "DESCRIPTION:\n"
     "Reflect an image along one of the Cartesian axes (X, Y or Z).\n"
@@ -47,9 +47,9 @@ int main2(int argc, char *argv[])
   vul_arg<vcl_string> axis("-a", "Axis along which to reflect, i.e. X means reflect in X direction (through YZ plane)", "X");
   vul_arg<bool> image_centre("-c", "Reflect about image centre if set, otherwise about world origin", false);
   vul_arg<bool> use_mm("-mm", "World coords in units of mm", false);
-	vul_arg_parse(argc, argv);
+  vul_arg_parse(argc, argv);
 
-	MBL_LOG(INFO, logger(), "Program arguments:");
+  MBL_LOG(INFO, logger(), "Program arguments:");
   MBL_LOG(INFO, logger(), "  src_file: " << src_file());
   MBL_LOG(INFO, logger(), "  dst_file: " << dst_file());
   MBL_LOG(INFO, logger(), "  axis    : " << axis());
@@ -65,7 +65,7 @@ int main2(int argc, char *argv[])
   // Add all loaders
   vimt3d_add_all_loaders();
 
-	// Load image
+  // Load image
   if (!vul_file::exists(src_file()))
   {
     MBL_LOG(ERR, logger(), "input image file does not exist: " << src_file());
@@ -126,45 +126,45 @@ int main2(int argc, char *argv[])
   vimt3d_save(dst_file(), img, use_mm());
   MBL_LOG(INFO, logger(), "Saved image file: " << dst_file());
 
-	return 0;
+  return 0;
 }
 
 
 //=========================================================================
 // Main function with exception-handling wrapper and logging
 //=========================================================================
-int main(int argc, char *argv[])   
+int main(int argc, char *argv[])
 {
-	int retcode = 0;
+  int retcode = 0;
 
-	try
-	{
-		mbl_logger::root().load_log_config_file();
-		MBL_LOG(INFO, logger(), "BEGIN");
+  try
+  {
+    mbl_logger::root().load_log_config_file();
+    MBL_LOG(INFO, logger(), "BEGIN");
 
-		retcode = main2(argc, argv);
-	}
-	catch (const vcl_runtime_error &e) 
-	{
-		vcl_cout << "\n";
-		vcl_cout << "====================================\n";
-		vcl_cout << "Caught vcl_runtime_error: " << e.what() << "\n";
-		vcl_cout << "Ending program.\n";
-		vcl_cout << "====================================\n" << vcl_endl;
-		MBL_LOG(ERR, logger(), "Caught exception: " << e.what());
-		retcode = 1;
-	}
-	catch (...)
-	{
-		vcl_cout << "\n";
-		vcl_cout << "====================================\n";
-		vcl_cout << "Caught unknown exception.\n";
-		vcl_cout << "Ending program.\n";
-		vcl_cout << "====================================\n" << vcl_endl;
-		MBL_LOG(ERR, logger(), "Caught unknown exception");
-		retcode = 2;
-	}
+    retcode = main2(argc, argv);
+  }
+  catch (const vcl_runtime_error &e)
+  {
+    vcl_cout << '\n'
+             << "====================================\n"
+             << "Caught vcl_runtime_error: " << e.what() << '\n'
+             << "Ending program.\n"
+             << "====================================\n" << vcl_endl;
+    MBL_LOG(ERR, logger(), "Caught exception: " << e.what());
+    retcode = 1;
+  }
+  catch (...)
+  {
+    vcl_cout << '\n'
+             << "====================================\n"
+             << "Caught unknown exception.\n"
+             << "Ending program.\n"
+             << "====================================\n" << vcl_endl;
+    MBL_LOG(ERR, logger(), "Caught unknown exception");
+    retcode = 2;
+  }
 
-	MBL_LOG(INFO, logger(), "END");
-	return retcode;
+  MBL_LOG(INFO, logger(), "END");
+  return retcode;
 }

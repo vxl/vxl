@@ -15,22 +15,22 @@
 //           of retrieving the appropiate index of the big grid (where z is inverted).
 // \endverbatim
 //  \verbatim
-//                            Canonical Axis       
+//                            Canonical Axis
 //                                  (max_x, max_y, max_z)
-//                       O-----------O  
-//                      /___________/|   
-//                     /           /||---->"-" Minus region 
-//                    O-----------O || 
-//                    |           | ||   
+//                       O-----------O
+//                      /___________/|
+//                     /           /||---->"-" Minus region
+//                    O-----------O ||
+//                    |           | ||
 //                    |  +    +   |---->"+" Plus region (including Z=0 plane)   |
-//                    |  +    +   | |O 
-//     Z              |  +    +   | /   
-//     |              |           |/  
-//     |              O-----------O 
+//                    |  +    +   | |O
+//     Z              |  +    +   | /
+//     |              |           |/
+//     |              O-----------O
 //     |       (min_x,min_y,min_z)
 //     O-----Y
-//		/
-//	 /
+//    /
+//   /
 //  X - Canonical Axis
 // \endverbatim
 
@@ -60,7 +60,7 @@ class bvpl_edge3d_kernel_factory : public bvpl_kernel_factory
   int max_y_;
   int min_z_;
   int max_z_;
-  
+
   static const unsigned max_size_ = 71;
 };
 
