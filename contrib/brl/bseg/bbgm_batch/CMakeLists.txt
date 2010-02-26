@@ -35,8 +35,11 @@ IF( PYTHON_FOUND )
           #library has to have different name depending on debug or release version.
           SET_TARGET_PROPERTIES(bbgm_batch PROPERTIES OUTPUT_NAME bbgm_batch DEBUG_POSTFIX _d SUFFIX .pyd)
         ENDIF(WIN32)
-        SET_TARGET_PROPERTIES(bbgm_batch PROPERTIES PREFIX "")
-
+		SET_TARGET_PROPERTIES(bbgm_batch PROPERTIES PREFIX "")
+		IF(NOT WIN32)
+        SET_TARGET_PROPERTIES(bbgm_batch PROPERTIES COMPILE_FLAGS "-fPIC")
+		MESSAGE("NOT LINUX")
+		ENDIF(NOT WIN32)
         TARGET_LINK_LIBRARIES(bbgm_batch bprb brdb bpro_batch bbgm_pro vbl vidl_pro vil_io vil_pro) 
       
         IF (PYTHON_DEBUG_LIBRARIES)
