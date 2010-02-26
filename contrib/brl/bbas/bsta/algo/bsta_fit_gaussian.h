@@ -9,7 +9,7 @@
 //
 // \verbatim
 //  Modifications
-//   
+//
 // \endverbatim
 
 #include <bsta/bsta_gaussian.h>
@@ -18,7 +18,7 @@
 #include <bsta/bsta_gaussian_full.h>
 #include <bsta/bsta_mixture.h>
 #include <bsta/bsta_attributes.h>
-//#include <vcl_algorithm.h>
+#include <vcl_iostream.h>
 
 //: fit a 1D Gaussian distribution to a set of weighted samples
 template <class T>
@@ -26,15 +26,15 @@ void bsta_fit_gaussian(vcl_vector<T> const& samples, vcl_vector<T> const& sample
 {
   // sanity check
   if (samples.size() != sample_weights.size()) {
-    vcl_cerr << "bsta_fit_gaussian : error - samples.size == " << samples.size();
-    vcl_cerr << ", sample_weights.size == " << sample_weights.size() << vcl_endl;
+    vcl_cerr << "bsta_fit_gaussian : error - samples.size == " << samples.size()
+             << ", sample_weights.size == " << sample_weights.size() << vcl_endl;
     return;
   }
 
  const unsigned int nobs = samples.size();
   T weight_sum = 0;
- 
-  // compute mean 
+
+  // compute mean
   T mean = 0;
   for (unsigned int i=0; i<nobs; ++i) {
     mean += samples[i]*sample_weights[i];
@@ -42,7 +42,7 @@ void bsta_fit_gaussian(vcl_vector<T> const& samples, vcl_vector<T> const& sample
   }
   if (weight_sum > 0) {
     mean /= weight_sum;
-  } 
+  }
   else {
     // error: no samples with non-zero weight!
     return;
@@ -66,20 +66,20 @@ void bsta_fit_gaussian(vcl_vector<T> const& samples, vcl_vector<T> const& sample
 
 //: fit a N-D spherical Gaussian distribution to a set of weighted samples
 template <class T, unsigned n>
-void bsta_fit_gaussian(vcl_vector<vnl_vector_fixed<T,n> > const& samples, vcl_vector<T> const& sample_weights, 
+void bsta_fit_gaussian(vcl_vector<vnl_vector_fixed<T,n> > const& samples, vcl_vector<T> const& sample_weights,
                        bsta_gaussian_sphere<T,n>& gaussian )
 {
   // sanity check
   if (samples.size() != sample_weights.size()) {
-    vcl_cerr << "bsta_fit_gaussian : error - samples.size == " << samples.size();
-    vcl_cerr << ", sample_weights.size == " << sample_weights.size() << vcl_endl;
+    vcl_cerr << "bsta_fit_gaussian : error - samples.size == " << samples.size()
+             << ", sample_weights.size == " << sample_weights.size() << vcl_endl;
     return;
   }
 
  const unsigned int nobs = samples.size();
   T weight_sum = 0;
- 
-  // compute mean 
+
+  // compute mean
   vnl_vector_fixed<T,n> mean((T)0);
   for (unsigned int i=0; i<nobs; ++i) {
     mean += samples[i]*sample_weights[i];
@@ -87,7 +87,7 @@ void bsta_fit_gaussian(vcl_vector<vnl_vector_fixed<T,n> > const& samples, vcl_ve
   }
   if (weight_sum > 0) {
     mean /= weight_sum;
-  } 
+  }
   else {
     // error: no samples with non-zero weight!
     return;
@@ -112,18 +112,18 @@ void bsta_fit_gaussian(vcl_vector<vnl_vector_fixed<T,n> > const& samples, vcl_ve
 
 //: fit a N-D independent Gaussian distribution to a set of weighted samples
 template <class T, unsigned n>
-void bsta_fit_gaussian(vcl_vector<vnl_vector_fixed<T,n> > const& samples, vcl_vector<T> const& sample_weights, 
+void bsta_fit_gaussian(vcl_vector<vnl_vector_fixed<T,n> > const& samples, vcl_vector<T> const& sample_weights,
                        bsta_gaussian_indep<T,n>& gaussian)
 {
   const unsigned int nobs = samples.size();
   // sanity check
   if (nobs != sample_weights.size()) {
-    vcl_cerr << "bsta_fit_gaussian : error - samples.size == " << samples.size();
-    vcl_cerr << ", sample_weights.size == " << sample_weights.size() << vcl_endl;
+    vcl_cerr << "bsta_fit_gaussian : error - samples.size == " << samples.size()
+             << ", sample_weights.size == " << sample_weights.size() << vcl_endl;
     return;
   }
 
-  // compute mean 
+  // compute mean
   T weight_sum = 0;
   vnl_vector_fixed<T,n> mean((T)0);
   for (unsigned int i=0; i<nobs; ++i) {
@@ -132,7 +132,7 @@ void bsta_fit_gaussian(vcl_vector<vnl_vector_fixed<T,n> > const& samples, vcl_ve
   }
   if (weight_sum > 0) {
     mean /= weight_sum;
-  } 
+  }
   else {
     // error: no samples with non-zero weight!
     return;
@@ -163,12 +163,12 @@ void bsta_fit_gaussian(vcl_vector<vnl_vector_fixed<T,n> > const& samples, vcl_ve
   const unsigned int nobs = samples.size();
   // sanity check
   if (nobs != sample_weights.size()) {
-    vcl_cerr << "bsta_fit_gaussian : error - samples.size == " << samples.size();
-    vcl_cerr << ", sample_weights.size == " << sample_weights.size() << vcl_endl;
+    vcl_cerr << "bsta_fit_gaussian : error - samples.size == " << samples.size()
+             << ", sample_weights.size == " << sample_weights.size() << vcl_endl;
     return;
   }
 
-  // compute mean 
+  // compute mean
   T weight_sum = 0;
   vnl_vector_fixed<T,n> mean((T)0);
   for (unsigned int i=0; i<nobs; ++i) {
@@ -177,7 +177,7 @@ void bsta_fit_gaussian(vcl_vector<vnl_vector_fixed<T,n> > const& samples, vcl_ve
   }
   if (weight_sum > 0) {
     mean /= weight_sum;
-  } 
+  }
   else {
     // error: no samples with non-zero weight!
     return;
@@ -207,7 +207,7 @@ T clip_covar(T var, T min_var)
 // Helper function for clipping covariance matrix
 template<class T, unsigned n>
 vnl_vector_fixed<T,n> clip_covar(vnl_vector_fixed<T,n> covar, vnl_vector_fixed<T,n> min_covar)
-{ 
+{
   vnl_vector_fixed<T,n> maxval;
   for (unsigned int i=0; i<n; ++i) {
     maxval[i] = vcl_max(covar[i],min_covar[i]);
@@ -218,7 +218,7 @@ vnl_vector_fixed<T,n> clip_covar(vnl_vector_fixed<T,n> covar, vnl_vector_fixed<T
 // Helper function for clipping covariance matrix
 template<class T, unsigned n>
 vnl_matrix_fixed<T,n,n> clip_covar(vnl_matrix_fixed<T,n,n> covar, vnl_matrix_fixed<T,n,n> min_covar)
-{ 
+{
   vnl_matrix_fixed<T,n,n> maxval;
   for (unsigned int i=0; i<n; ++i) {
     for (unsigned int j=0; j<n; ++j) {
@@ -229,24 +229,24 @@ vnl_matrix_fixed<T,n,n> clip_covar(vnl_matrix_fixed<T,n,n> covar, vnl_matrix_fix
 }
 
 
-// Uses EM to compute mean and sigma. 
+// Uses EM to compute mean and sigma.
 // min_var prevents EM from converging to degenerate distribution centered around a single sample
 template <class gauss_type>
-void bsta_fit_gaussian(vcl_vector<typename gauss_type::vector_type> const& samples, 
-                       vcl_vector<typename gauss_type::math_type> const& sample_probs, 
-                       vcl_vector<typename gauss_type::math_type> const& prob_densities_other,  
+void bsta_fit_gaussian(vcl_vector<typename gauss_type::vector_type> const& samples,
+                       vcl_vector<typename gauss_type::math_type> const& sample_probs,
+                       vcl_vector<typename gauss_type::math_type> const& prob_densities_other,
                        gauss_type& gaussian, typename gauss_type::covar_type min_covar)
 {
   // sanity checks
   const unsigned int nobs = samples.size();
   if (nobs != sample_probs.size()) {
-    vcl_cerr << "bsta_fit_gaussian : error - samples.size == " << samples.size();
-    vcl_cerr << ", sample_probs.size == " << sample_probs.size() << vcl_endl;
+    vcl_cerr << "bsta_fit_gaussian : error - samples.size == " << samples.size()
+             << ", sample_probs.size == " << sample_probs.size() << vcl_endl;
     return;
   }
   if (nobs != prob_densities_other.size()) {
-    vcl_cerr << "bsta_fit_gaussian : error - samples.size == " << samples.size();
-    vcl_cerr << ", prob_densities_other.size == " << prob_densities_other.size() << vcl_endl;
+    vcl_cerr << "bsta_fit_gaussian : error - samples.size == " << samples.size()
+             << ", prob_densities_other.size == " << prob_densities_other.size() << vcl_endl;
     return;
   }
   if (nobs == 0) {
@@ -256,13 +256,14 @@ void bsta_fit_gaussian(vcl_vector<typename gauss_type::vector_type> const& sampl
 
   // initialize with estimate of gaussian parameters
   typedef typename gauss_type::math_type T;
- 
+
   vcl_vector<T> sample_weights = sample_probs;
   bsta_fit_gaussian(samples, sample_weights, gaussian);
 
-  const unsigned int max_its = 100; 
+  const unsigned int max_its = 100;
   const T max_converged_weight_change = 1e-4f;
-  for (unsigned int i=0; i<max_its; ++i) {
+  for (unsigned int i=0; i<max_its; ++i)
+  {
     T max_weight_change = 0;
     T sample_weight_sum = 0;
     // EXPECTATION
@@ -295,7 +296,5 @@ void bsta_fit_gaussian(vcl_vector<typename gauss_type::vector_type> const& sampl
     gaussian.set_covar(clip_covar(gaussian.covar(),min_covar));
   }
 }
-
-
 
 #endif // bsta_fit_gaussian_h_
