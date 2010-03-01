@@ -1,7 +1,6 @@
 # mul/clsfy/tests/CMakeLists.txt
 
-LINK_LIBRARIES( vul vpl vnl mbl clsfy testlib vpdfl pdf1d vsl)
-
+LINK_LIBRARIES( vul vpl vnl mbl clsfy testlib vpdfl pdf1d vimt vsl)
 ADD_EXECUTABLE (clsfy_test_all
   test_driver.cxx
 
@@ -17,6 +16,8 @@ ADD_EXECUTABLE (clsfy_test_all
   test_logit_loss_function.cxx
   test_binary_hyperplane_logit.cxx
   test_binary_1d_wrapper.cxx
+  test_binary_tree.cxx
+  test_random_forest.cxx
 )
 
 ADD_TEST (clsfy_test_binary_hyperplane     ${EXECUTABLE_OUTPUT_PATH}/clsfy_test_all test_binary_hyperplane)
@@ -31,6 +32,9 @@ ADD_TEST (clsfy_test_mean_square_1d        ${EXECUTABLE_OUTPUT_PATH}/clsfy_test_
 ADD_TEST (clsfy_test_logit_loss_function   ${EXECUTABLE_OUTPUT_PATH}/clsfy_test_all test_logit_loss_function)
 ADD_TEST (clsfy_test_binary_hyperplane_logit       ${EXECUTABLE_OUTPUT_PATH}/clsfy_test_all test_binary_hyperplane_logit)
 ADD_TEST (clsfy_test_binary_1d_wrapper     ${EXECUTABLE_OUTPUT_PATH}/clsfy_test_all test_binary_1d_wrapper)
+ADD_TEST (clsfy_test_binary_tree     ${EXECUTABLE_OUTPUT_PATH}/clsfy_test_all test_binary_tree)
+ADD_TEST (clsfy_test_random_forest     ${EXECUTABLE_OUTPUT_PATH}/clsfy_test_all test_random_forest)
+
 
 ADD_EXECUTABLE( clsfy_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( clsfy_test_include clsfy )

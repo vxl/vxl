@@ -43,6 +43,11 @@ SET(clsfy_sources
  clsfy_binary_1d_wrapper_builder.cxx          clsfy_binary_1d_wrapper_builder.h
 
  clsfy_logit_loss_function.cxx               clsfy_logit_loss_function.h
+ clsfy_binary_threshold_1d_gini_builder.cxx        clsfy_binary_threshold_1d_gini_builder.h
+ clsfy_binary_tree.cxx                clsfy_binary_tree.h
+ clsfy_binary_tree_builder.cxx                clsfy_binary_tree_builder.h
+ clsfy_random_forest.cxx                clsfy_random_forest.h
+ clsfy_random_forest_builder.cxx                clsfy_random_forest_builder.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates clsfy_sources)

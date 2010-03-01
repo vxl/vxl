@@ -32,5 +32,7 @@
 #include <clsfy/clsfy_simple_adaboost.h>
 #include <clsfy/clsfy_smo_1.h>
 #include <clsfy/clsfy_smo_base.h>
+#include <clsfy/clsfy_binary_tree.h>
+#include <clsfy/clsfy_binary_tree_builder.h>
 
 int main() { return 0; }
