@@ -14,6 +14,7 @@ DECLARE( test_boxm_rational_camera_utils);
 DECLARE( test_upload_mesh );
 DECLARE( test_fill_in_mesh );
 DECLARE( test_save_scene_raw );
+DECLARE( test_sigma_normalizer );
 
 void register_tests()
 {
@@ -31,6 +32,7 @@ void register_tests()
   REGISTER( test_upload_mesh );
   REGISTER( test_fill_in_mesh );
   REGISTER( test_save_scene_raw );
+  REGISTER( test_sigma_normalizer );
 }
 
 
