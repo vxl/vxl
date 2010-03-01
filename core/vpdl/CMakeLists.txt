@@ -3,7 +3,7 @@
 
 doxygen_add_library(core/vpdl
   DEPENDS core/vnl/algo core/vnl
-  PACKAGE core-L2
+  PACKAGE core-L2E
   DESCRIPTION "Probability Distribution Library"
   )
 
