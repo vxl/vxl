@@ -11,7 +11,16 @@ void boxm_block<T>::init_tree(T * octree)
   octree->set_bbox(bbox_);
 }
 
-
+template <class T>
+unsigned int boxm_block<T>::size()
+{
+  if (octree_) {
+    return octree_->size();
+  }
+  else {
+    return 0;
+  }
+}
 
 template <class T>
 void boxm_block<T>::b_read(vsl_b_istream &is)
