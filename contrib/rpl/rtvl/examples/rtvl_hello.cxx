@@ -34,7 +34,7 @@ int main()
   vnl_vector_fixed<double, 2> votee_location;
   votee_location[0] = 1;
   votee_location[1] = 0;
-  vnl_matrix_fixed<double, 2, 2> votee_matrix;
+  vnl_matrix_fixed<double, 2, 2> votee_matrix(0.0);
 
   // Use "rtvl_votee" to encapsulate a site (location + output tensor).
   rtvl_votee<2> votee(votee_location, votee_matrix);
