@@ -45,25 +45,31 @@ boxm_sigma_normalizer::boxm_sigma_normalizer(float under_estimation_probability)
   }
 
   // populate array of normalization factors for easy lookup
-  // sigma is undefined for sample sizes of 0 and 1, just fill with large values.
-  unbias_const_[0] = 1e3f;
-  unbias_const_[1] = 1e3f;
+  vnl_vector_fixed<double,1> x(1.0);
 
   for (unsigned int n=2; n<= N_PRECOMPUTED_; ++n) {
     gammainc_error_fn f(n-1, under_estimation_probability);
     vnl_levenberg_marquardt minimizer(f);
+    minimizer.set_f_tolerance(1e-8);
+    minimizer.set_x_tolerance(1e-8);
 
-    vnl_vector_fixed<double,1> x(1.0f);
     minimizer.minimize(x);
-
+    //minimizer.diagnose_outcome();
+    double end_error = minimizer.get_end_error();
+    if (end_error > 1e-3) {
+      vcl_cerr << "error: boxm_sigma_normalizer: levenberg_marquardt final error = " << end_error << vcl_endl;
+    }
     float unbias_constant = (float)vcl_sqrt((float)(n-1) / x[0]);
 
     unbias_const_[n] = unbias_constant;
   }
+  // sigma is undefined for samples sizes of 0 and 1, but we can linearly interpolate to get values anyway
+  unbias_const_[1] = unbias_const_[2] - (unbias_const_[3] - unbias_const_[2]);
+  unbias_const_[0] = unbias_const_[1] - (unbias_const_[2] - unbias_const_[1]);
 }
 
 
-float boxm_sigma_normalizer::normalization_factor(float number_of_observations)
+float boxm_sigma_normalizer::normalization_factor(float number_of_observations) const
 {
   if (number_of_observations <= 1.0f) {
     return normalization_factor_int((unsigned int)1);
@@ -79,7 +85,7 @@ float boxm_sigma_normalizer::normalization_factor(float number_of_observations)
 }
 
 
-float boxm_sigma_normalizer::normalization_factor_int(unsigned int number_of_observations)
+float boxm_sigma_normalizer::normalization_factor_int(unsigned int number_of_observations) const
 {
   if (number_of_observations < 2) {
     return unbias_const_[1];

@@ -22,11 +22,11 @@ class boxm_sigma_normalizer
 
   //: compute the normalization factor for a sample distribution computing with N observations
   // \a sigma_norm = sample_sigma * normalization_factor(N);
-  float normalization_factor(float number_of_observations);
+  float normalization_factor(float number_of_observations) const;
 
   //: compute the normalization factor for a sample distribution computed with N observations
   // \a sigma_norm = sample_sigma * normalization_factor(N);
-  float normalization_factor_int(unsigned int number_of_observations);
+  float normalization_factor_int(unsigned int number_of_observations) const;
 
  private:
   // do not allow default constructor - under-estimation param is necessary
