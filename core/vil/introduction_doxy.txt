@@ -317,6 +317,73 @@ vil_image_view<vxl_byte> filtered_image = vil_transpose(tmp_image2);
 * \subsection utils General utilities
 * - vil_tile_images : Generate single image by tiling together a set of images
 *
+*
+* \htmlonly
+* <hr/>
+* \endhtmlonly
+* \section vil_algo vil_algo : Computational Imaging Library
+* A core level 2 library containing some simple algorithms for manipulating images.
+* Note that the argument order is typically of the form vil_f(src_im,dest_im,params).
+* Examples include
+* - vil_convolve_1d   - Convolve with 1D filter - all manner of edge effects catered for
+* - vil_convolve_2d   - Convolve with 2D filter (no edge effects catered for yet!)
+* - vil_correlate_1d   - Similar to vil_convolve_1d but with reversing the kernel
+* - vil_correlate_2d   - Similar to vil_convolve_2d but with reversing the kernel
+* - vil_gauss_filter_gen_ntap - Generate an n-tap FIR filter from a Gaussian function
+* - vil_gauss_filter_5tap - Apply 1d Gaussian filter using 5 element kernel
+* - vil_gauss_filter_1d - Apply 1d Gaussian filter of arbitrary SD and kernel width
+* - vil_gauss_filter_2d - Apply 2d Gaussian filter of arbitrary SD and kernel width
+* - vil_exp_filter_i - Apply exponential filter along i axis (fast recursive method)
+* - vil_exp_filter_j - Apply exponential filter along j axis (fast recursive method)
+* - vil_exp_filter_2d - Apply exponential filter along i and j (fast recursive method)
+* - vil_exp_grad_filter_i - Apply exponential gradient filter along i axis (fast recursive method)
+* - vil_exp_grad_filter_j - Apply exponential gradient filter along j axis (fast recursive method)
+* - vil_sobel_3x3     - to generate X/Y gradient images using 3x3 Sobel operators
+* - vil_gauss_reduce  - smooth and sub-sample to produce half sized image
+* - vil_median        - Compute median over area described by vil_structuring_element
+* - vil_fft_2d_fwd,bwd - Perform in-place 2D FFT on an image of a complex type
+* - vil_suppress_non_max_3x3 - Zero all pixels which are not local maxima
+* - vil_corners        - Harris cornerness operator
+* - vil_find_peaks     - Locate local peaks in an image
+* - vil_orientations   - Compute angle and edge magnitude at each pixel
+* - vil_distance_transform - Apply distance transform to images
+* - vil_histogram_equalise - Replace every pixel by its intensity rank
+* - vil_suppress_non_max_edges - Compute gradient magnitude and zero any non-maximal values
+*
+* See also the vipl library for a more generic image processing interface and
+* more image processing algorithms.
+*
+* Morphological functions  (using vil_structuring_element)
+* - vil_binary_erode
+* - vil_binary_dilate
+* - vil_binary_opening
+* - vil_binary_closing
+* - vil_greyscale_erode
+* - vil_greyscale_dilate
+* - vil_greyscale_opening
+* - vil_greyscale_closing
+* - vil_median
+*
+* Other related maths functions
+* - vil_histogram(image,hist,min,max,nbins)           : Compute histogram of image values
+* - vil_histogram_byte(image,histo)                   : Compute histogram from byte image
+*
+*
+* \subsection regions Region finding
+* The boundaries of thresholded regions can be found using
+* - vil_find_4con_boundary_above_threshold
+* - vil_find_4con_boundary_below_threshold
+* (Given a point inside a closed, 4-connected region defined by a threshold,
+*  these functions find the 4-connected boundary pixels of the region)
+*
+* - vil_trace_4con_boundary : Traces around 4 connected regions in bool image
+* - vil_trace_8con_boundary : Traces around 8 connected regions in bool image
+* - vil_blob_finder : Class to find all connected regions in an image
+*
+* \subsection utils General utilities
+* - vil_tile_images : Generate single image by tiling together a set of images
+*
+*
 * \subsection conventions Parameter Conventions
 * For your ease of use, all vil functions and methods adhere to the following
 * parameter conventions:

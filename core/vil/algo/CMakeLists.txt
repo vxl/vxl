@@ -2,11 +2,6 @@
 
 PROJECT(vil_algo)
 
-doxygen_add_library(core/vil/algo
-  DEPENDS core/vil core/vnl/algo core/vnl
-  PACKAGE core-L2
-  DESCRIPTION "Computational Imaging Library"
-  )
 
 SET( vil_algo_sources
   vil_sobel_1x3.cxx                vil_sobel_1x3.h    vil_sobel_1x3.txx

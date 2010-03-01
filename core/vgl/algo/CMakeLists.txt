@@ -2,11 +2,6 @@
 
 PROJECT(vgl_algo)
 
-doxygen_add_library(core/vgl/algo
-  DEPENDS core/vgl core/vnl/algo core/vnl
-  PACKAGE core-L2
-  DESCRIPTION "Computational Geometry Library"
-  )
 
 SET( vgl_algo_sources
   vgl_algo_fwd.h

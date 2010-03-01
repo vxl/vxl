@@ -2,11 +2,6 @@
 
 PROJECT(vnl_algo)
 
-doxygen_add_library(core/vnl/algo
-  DEPENDS core/vnl
-  PACKAGE core-L2
-  DESCRIPTION "Computational Numerics Library"
-  )
 
 INCLUDE( ${MODULE_PATH}/FindNetlib.cmake )
 
