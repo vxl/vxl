@@ -9,7 +9,11 @@ BOXM_BLOCK_INSTANTIATE(aux_tree);
 typedef boct_tree<short,boxm_inf_line_sample<float> > tree;
 BOXM_BLOCK_INSTANTIATE(tree);
 
+typedef boct_tree<short,float> tree2;
+BOXM_BLOCK_INSTANTIATE(tree2);
+
 #include <boxm/boxm_scene.txx>
 BOXM_BLOCK_ITERATOR_INSTANTIATE(tree);
+BOXM_BLOCK_ITERATOR_INSTANTIATE(tree2);
 BOXM_BLOCK_ITERATOR_INSTANTIATE(aux_tree);
 
