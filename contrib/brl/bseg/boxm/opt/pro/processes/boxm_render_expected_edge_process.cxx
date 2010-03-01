@@ -112,7 +112,7 @@ bool boxm_render_expected_edge_process(bprb_func_process& pro)
     img = expected_byte;
   }
   if (scene_ptr->appearence_model() == BOXM_EDGE_LINE) {
-    vil_image_view<boxm_apm_traits<BOXM_EDGE_LINE>::obs_datatype> expected(ni,nj,3);
+    vil_image_view<boxm_apm_traits<BOXM_EDGE_LINE>::obs_datatype> expected(ni,nj,1);
     vil_image_view<float> mask(ni,nj);
     if (!scene_ptr->multi_bin())
     {
