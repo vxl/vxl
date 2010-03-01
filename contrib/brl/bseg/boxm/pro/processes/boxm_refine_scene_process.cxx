@@ -22,6 +22,7 @@
 namespace boxm_refine_scene_process_globals
 {
   const unsigned n_inputs_ = 3;
+  const unsigned n_outputs_ = 1;
 }
 
 bool boxm_refine_scene_process_cons(bprb_func_process& pro)
@@ -38,7 +39,13 @@ bool boxm_refine_scene_process_cons(bprb_func_process& pro)
   if (!pro.set_input_types(input_types_))
     return false;
 
-  //no output
+  //process has 1 output
+  //output[0]: The number of leaf cells in the refined scene
+  vcl_vector<vcl_string> output_types_(n_outputs_);
+  output_types_[0] = "unsigned";
+  if (!pro.set_output_types(output_types_))
+    return false;
+
   return true;
 }
 
@@ -63,16 +70,18 @@ bool boxm_refine_scene_process(bprb_func_process& pro)
      return false;
   }
 
+  unsigned int ncells = 0;
+
   if (scene->appearence_model() == BOXM_APM_MOG_GREY) {
     if (scene->multi_bin()) {
       typedef boct_tree<short, boxm_sample_multi_bin<BOXM_APM_MOG_GREY> > tree_type;
       boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
-      boxm_refine_scene<short, boxm_sample_multi_bin<BOXM_APM_MOG_GREY> >(*s, thresh, reset);
+      ncells = boxm_refine_scene<short, boxm_sample_multi_bin<BOXM_APM_MOG_GREY> >(*s, thresh, reset);
     }
     else {
       typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
       boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
-      boxm_refine_scene<short, boxm_sample<BOXM_APM_MOG_GREY> >(*s, thresh, reset);
+      ncells = boxm_refine_scene<short, boxm_sample<BOXM_APM_MOG_GREY> >(*s, thresh, reset);
     }
   } else if (scene->appearence_model() == BOXM_APM_SIMPLE_GREY) {
     if (scene->multi_bin()) {
@@ -82,7 +91,7 @@ bool boxm_refine_scene_process(bprb_func_process& pro)
     else {
       typedef boct_tree<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > tree_type;
       boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
-      boxm_refine_scene<short, boxm_sample<BOXM_APM_SIMPLE_GREY> >(*s, thresh, reset);
+      ncells = boxm_refine_scene<short, boxm_sample<BOXM_APM_SIMPLE_GREY> >(*s, thresh, reset);
     }
   }else if (scene->appearence_model() == BOXM_APM_MOB_GREY) {
     if (scene->multi_bin()) {
@@ -92,13 +101,16 @@ bool boxm_refine_scene_process(bprb_func_process& pro)
     else {
       typedef boct_tree<short, boxm_sample<BOXM_APM_MOB_GREY> > tree_type;
       boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
-      boxm_refine_scene<short, boxm_sample<BOXM_APM_MOB_GREY> >(*s, thresh, reset);
+      ncells = boxm_refine_scene<short, boxm_sample<BOXM_APM_MOB_GREY> >(*s, thresh, reset);
     }
   }
   else {
     vcl_cout << "boxm_refine_scene_process: undefined APM type" << vcl_endl;
     return false;
   }
+
+  // set output
+  pro.set_output_val<unsigned int>(0,ncells);
 
   return true;
 }
