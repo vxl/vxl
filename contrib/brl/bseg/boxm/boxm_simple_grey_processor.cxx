@@ -75,16 +75,43 @@ boxm_simple_grey_processor::obs_datatype boxm_simple_grey_processor::most_probab
 void boxm_simple_grey_processor::compute_appearance(vcl_vector<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype> const& obs, vcl_vector<float> const& pre, vcl_vector<float> const& vis, boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::apm_datatype &model, float min_sigma)
 {
   bsta_gauss_f1 model_bsta(model.color(),model.sigma()*model.sigma());
-  const float min_var = min_sigma*min_sigma;
+  const float big_sigma = (float)vnl_math::sqrt1_2; // maximum possible std. dev for set of samples drawn from [0 1]
+  unsigned int nobs = obs.size();
+  // check for some simple cases first
+  if (nobs == 0) {
+    // zero observations. nothing to do here.
+    model = boxm_simple_grey(0.5f, big_sigma);
+    return;
+  }
+  if (nobs == 1) {
+    // one observation: Just return the value as the mean, and a big sigma.
+    model = boxm_simple_grey(obs[0], big_sigma);
+    return;
+  } 
   //vcl_cout << "nobs = " << obs.size() << vcl_endl;
   //for (unsigned int i=0; i<obs.size(); ++i) {
   //  vcl_cout << "obs=" << obs[i] << " vis=" << vis[i] << "pre=" << pre[i] << vcl_endl;
   //}
-  bsta_fit_gaussian(obs,vis,pre,model_bsta,min_var);
+  const float min_var_EM = 1.5e-5f; // to prevent degenerate solution (corresponds roughly to sigma = 1/255)
+  bsta_fit_gaussian(obs,vis,pre,model_bsta,min_var_EM);
   // normalize sigma
-  boxm_sigma_normalizer sigma_norm(0.25f);
-  const float sigma = vcl_sqrt(model_bsta.var());// * sigma_norm.normalization_factor_int(obs.size());
+  static const boxm_sigma_normalizer sigma_norm(0.10f);
+  const float norm_factor = sigma_norm.normalization_factor_int(obs.size());
+  //const float norm_factor = 1.0f;
+  float sigma = vcl_sqrt(model_bsta.var()) * norm_factor;
 
+  // bounds check on std. deviation value
+  if (sigma < min_sigma) {
+    sigma = min_sigma;
+  }
+  if (sigma > big_sigma) {
+    sigma = big_sigma;
+  }
+  if (!(sigma < big_sigma) && !(sigma > min_sigma)) {
+    vcl_cerr << "error: sigma = " << sigma << " model_bsta.var() = " << model_bsta.var() << vcl_endl;
+    sigma = big_sigma;
+  }
+  // convert back to a boxm_simple_grey model
   model = boxm_simple_grey(model_bsta.mean(),sigma);
   return;
 }
