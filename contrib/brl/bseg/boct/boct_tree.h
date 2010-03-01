@@ -17,8 +17,8 @@
 #include "boct_loc_code.h"
 
 #include <vgl/vgl_point_3d.h>
-#include <vsl/vsl_binary_io.h>
 #include <vgl/vgl_box_3d.h>
+#include <vsl/vsl_binary_io.h>
 
 template <class T_loc, class T_data>
 class boct_tree
@@ -59,14 +59,18 @@ class boct_tree
                                                 short parent_tree_root_level,
                                                 vgl_box_3d<double> local_crop_box);
 
-  //: Dlones the tree structure with a different data type
   template <class T_data_to>
   boct_tree<T_loc,T_data_to>* clone_to_type() {
-    // clone the tree
-    boct_tree_cell<T_loc, T_data_to>* root = root_->clone_to_type<T_data_to>(0);
-    // create a new tree tree only with the root node
-    boct_tree<T_loc,T_data_to>* tree = new boct_tree<T_loc,T_data_to>(root,num_levels_);
-
+    
+    vcl_vector<boct_tree_cell<T_loc, T_data>*> cells = leaf_cells();
+    vcl_vector<boct_tree_cell<T_loc, T_data_to> > cloned_cells;
+    for (unsigned i=0; i<cells.size(); i++) {
+      cloned_cells.push_back(boct_tree_cell<T_loc, T_data_to>(cells[i]->code_));
+    }
+    boct_tree<T_loc,T_data_to> temp_tree;
+    boct_tree_cell<T_loc, T_data_to>* cloned_root = temp_tree.construct_tree(cloned_cells, this->number_levels());
+    boct_tree<T_loc,T_data_to>* tree = new boct_tree<T_loc,T_data_to>(cloned_root,  this->number_levels());
+    tree->set_bbox(this->bounding_box());
     return tree;
   }
 
@@ -168,6 +172,9 @@ class boct_tree
   }
   
   
+  //: prunes the tree by deleting the nodes outside of the bounding box
+  void prune_tree(vgl_box_3d<double> bb) { root_->prune(bb, max_val_); }
+
   //: Print tree
   void print();
 
