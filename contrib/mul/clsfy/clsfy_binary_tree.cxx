@@ -74,7 +74,7 @@ unsigned clsfy_binary_tree::classify(const vnl_vector<double> &input) const
     clsfy_binary_tree_node* pNode=root_;
     if (!pNode)
     {
-        vcl_cerr<<"WARNING - empty tree in clsfy_binary_tree::classify\n";
+        vcl_cerr<<"WARNING - empty tree in clsfy_binary_tree::classify\n"
                 <<"Return default classification zero\n";
         return 0;
     }
