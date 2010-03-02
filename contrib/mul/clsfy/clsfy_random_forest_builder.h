@@ -15,18 +15,15 @@
 #include <vcl_set.h>
 #include <vcl_string.h>
 #include <vcl_iosfwd.h>
-#include <vnl/vnl_vector.h>                     
+#include <vnl/vnl_vector.h>
 #include <vnl/vnl_random.h>
 
 #include <mbl/mbl_data_wrapper.h>
-#include <vnl/vnl_vector.h>
 
 
 //: Builds clsfy_random_forest classifiers
 class clsfy_random_forest_builder : public clsfy_builder_base
 {
-
-
   public:
     // Dflt ctor
     clsfy_random_forest_builder();
@@ -83,13 +80,13 @@ class clsfy_random_forest_builder : public clsfy_builder_base
     // node less than this, then the split does not occur and the branch is
     // terminated
     void set_min_node_size(int min_node_size) {min_node_size_=min_node_size;}
- 
-    
+
+
     //: set number of trees in forest
     //Note this must be set before calling build
     //Default is 100
     void set_ntrees(unsigned ntrees) {ntrees_=ntrees;}
-    
+
     unsigned ntrees() const {return ntrees_;}
 
     virtual void seed_sampler(unsigned long seed);
@@ -103,7 +100,6 @@ class clsfy_random_forest_builder : public clsfy_builder_base
     //: Save a pointer to storage for out of bag indices
     void set_oob_indices( vcl_vector<vcl_vector<unsigned > >* poobIndices)
     {poob_indices_=poobIndices;}
- 
 
   protected:
     //:Pick the number of parameters that the tree builder branches on
@@ -118,7 +114,7 @@ class clsfy_random_forest_builder : public clsfy_builder_base
 
     virtual unsigned long get_tree_builder_seed() const;
 
-        //: Number of trees
+    //: Number of trees
     unsigned ntrees_;
     //: The max depth of any child tree
     //If negative no max is applied, and all final leaf nodes are pure
@@ -133,18 +129,16 @@ class clsfy_random_forest_builder : public clsfy_builder_base
     int min_node_size_;
 
     //: Uniform sampler on 0,1 (for bootsrapping)
-   mutable  vnl_random random_sampler_;
+    mutable  vnl_random random_sampler_;
 
-   //: Pointer to storeage of point indices for each bootstrapped tree
-   // Can be used for out of bag estimates
-   // Saves for tree i the indices of all points used in its training
-   //Note the storeage is supplied from outside this class, as this is a kind of bolt-on
-   vcl_vector<vcl_vector<unsigned > >* poob_indices_;
+    //: Pointer to storeage of point indices for each bootstrapped tree
+    // Can be used for out of bag estimates
+    // Saves for tree i the indices of all points used in its training
+    //Note the storeage is supplied from outside this class, as this is a kind of bolt-on
+    vcl_vector<vcl_vector<unsigned > >* poob_indices_;
   private:
-   //: Does the builder calculate the error on the training set?
+    //: Does the builder calculate the error on the training set?
     bool calc_test_error_;
-
-
 };
 
 
