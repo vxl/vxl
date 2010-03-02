@@ -56,9 +56,7 @@ double clsfy_binary_threshold_1d_gini_builder::build_gini(clsfy_classifier_1d& c
                                                           const vnl_vector<double>&  inputs,
                                                           const vcl_vector<unsigned> &outputs) const
 {
-
     assert(classifier.is_class("clsfy_binary_threshold_1d"));
-    
 
     unsigned n = inputs.size();
     assert ( outputs.size() == n );
@@ -73,22 +71,19 @@ double clsfy_binary_threshold_1d_gini_builder::build_gini(clsfy_classifier_1d& c
     vnl_vector<double  >::const_iterator inputIterEnd=inputs.end();
     vbl_triple<double,int,int> t;
     unsigned i=0;
-    while(inputIter != inputIterEnd)
+    while (inputIter != inputIterEnd)
     {
         t.first = *inputIter++;
         t.second=*classIter++;
         t.third = i++;
         data.push_back(t);
-
-    } 
+    }
 
     assert(i==inputs.size());
-    
+
     vcl_sort(data.begin(),data.end());
     return build_gini_from_sorted_data(static_cast<clsfy_classifier_1d&>(classifier), data);
 }
-
-
 
 
 //: Train classifier, returning weighted error
@@ -99,17 +94,16 @@ double clsfy_binary_threshold_1d_gini_builder::build_gini_from_sorted_data(
     clsfy_classifier_1d& classifier,
     const vcl_vector<vbl_triple<double,int,int> >& data) const
 {
-
     // here the triple consists of (value, class number, example index)
     // the example index specifies the weight of each example
     //
     // NB DATA must be sorted for this to work!!!!
-    
-    //Validate that the data is not homogenous
+
+    //Validate that the data is not homogeneous
     const double epsilon=1.0E-20;
-    if(vcl_fabs(data.front().first-data.back().first)<epsilon)
+    if (vcl_fabs(data.front().first-data.back().first)<epsilon)
     {
-        vcl_cerr<<"WARNING - clsfy_binary_threshold_1d_gini_builder::build_from_sorted_data - homogenous data - cannot split"<<vcl_endl;
+        vcl_cerr<<"WARNING - clsfy_binary_threshold_1d_gini_builder::build_from_sorted_data - homogeneous data - cannot split\n";
         int polarity=1;
         double threshold=data[0].first;
         vnl_double_2 params(polarity, threshold*polarity);
@@ -117,16 +111,15 @@ double clsfy_binary_threshold_1d_gini_builder::build_gini_from_sorted_data(
         return 1.0;
     }
 
-    
     unsigned int ntot=data.size();
     double dntot=double (ntot);
     vcl_vector<vbl_triple<double,int,int> >::const_iterator dataIter=data.begin();
     vcl_vector<vbl_triple<double,int,int> >::const_iterator dataIterEnd=data.end();
     unsigned n0Tot=0;
     unsigned n1Tot=0;
-    while(dataIter != dataIterEnd)
+    while (dataIter != dataIterEnd)
     {
-        if(dataIter->second==0)
+        if (dataIter->second==0)
             ++n0Tot;
         else
             ++n1Tot;
@@ -139,7 +132,6 @@ double clsfy_binary_threshold_1d_gini_builder::build_gini_from_sorted_data(
     double p=double (n0Tot)/dntot;
     parentImp=2.0*p*(1-p);
 
-    
     dataIter=data.begin();
     double s=dataIter->first-epsilon;
     double deltaImpBest= -1.0; //initialise to split makes it worse
@@ -151,15 +143,15 @@ double clsfy_binary_threshold_1d_gini_builder::build_gini_from_sorted_data(
     unsigned nR0=n0Tot;
     unsigned nR1=n1Tot;
     double parity=1.0;
-    while(dataIter != dataIterEnd)
+    while (dataIter != dataIterEnd)
     {
         s=dataIter->first;
         vcl_vector<vbl_triple<double,int,int> >::const_iterator dataIterNext=dataIter;
 
         //Increment till threshold increases (may have some same data values)
-        while(dataIterNext != dataIterEnd && (dataIterNext->first-s)<epsilon)
+        while (dataIterNext != dataIterEnd && (dataIterNext->first-s)<epsilon)
         {
-            if(dataIterNext->second==0)
+            if (dataIterNext->second==0)
             {
                 ++nL0;
                 --nR0;
@@ -180,25 +172,23 @@ double clsfy_binary_threshold_1d_gini_builder::build_gini_from_sorted_data(
         double impL=2.0*probL*(1-probL);
         double impR=2.0*probR*(1-probR);
 
-        //Proportional weights 
+        //Proportional weights
         double pL=double (nLTot)/dntot;
         double pR=1.0-pL;
 
         double deltaImp=parentImp-(pL*impL + pR*impR);
-        if(deltaImp>deltaImpBest)
+        if (deltaImp>deltaImpBest)
         {
             deltaImpBest=deltaImp;
             sbest=s;
-            if(nR1>=nL1) //More class 1 are going above thresh
+            if (nR1>=nL1) //More class 1 are going above thresh
                 parity=1;
             else
                 parity=-1; //Reverse sign as more class one are going below thresh
         }
 
-        
         dataIter=dataIterNext;
     }
-
 
     double threshold=sbest;
 
@@ -220,7 +210,7 @@ bool clsfy_binary_threshold_1d_gini_builder::is_class(vcl_string const& s) const
   return s == clsfy_binary_threshold_1d_gini_builder::is_a() || clsfy_builder_1d::is_class(s);
 }
 
-# if 0 
+# if 0
 //=======================================================================
 
 
@@ -239,10 +229,10 @@ clsfy_binary_threshold_1d_gini_builder&
 clsfy_binary_threshold_1d_gini_builder::operator=(const clsfy_binary_threshold_1d_gini_builder& new_b)
 {
     if (&new_b==this) return *this;
-  
+
     static_cast<clsfy_binary_threshold_1d_builder&>(*this)=
         static_cast<const clsfy_binary_threshold_1d_builder&> (new_b);
-    
+
     return *this;
 }
 #endif
@@ -255,7 +245,6 @@ void clsfy_binary_threshold_1d_gini_builder::print_summary(vcl_ostream& os) cons
 }
 
 //=======================================================================
-
 
 
 clsfy_builder_1d* clsfy_binary_threshold_1d_gini_builder::clone() const
@@ -276,7 +265,6 @@ void clsfy_binary_threshold_1d_gini_builder::b_write(vsl_b_ostream& bfs) const
   // required if data is present in this base class
 void clsfy_binary_threshold_1d_gini_builder::b_read(vsl_b_istream& bfs)
 {
-
     if (!bfs) return;
 
     short version;
