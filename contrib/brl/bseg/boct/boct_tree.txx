@@ -49,7 +49,7 @@ boct_tree<T_loc,T_data>::boct_tree(T_data data,short num_levels, short init_leve
     cells = leaf_cells();
     for (unsigned i=0; i<cells.size(); i++) {
       boct_tree_cell<T_loc,T_data>* c = static_cast<boct_tree_cell<T_loc,T_data>*>(cells[i]);
-#if 0 // temporarily commented out? Now, "data" is an unused parameter!
+#if 1 // temporarily commented out? Now, "data" is an unused parameter!
       T_data newdata=data;
       c->set_data(newdata);
 #endif
@@ -394,6 +394,15 @@ vcl_vector<boct_tree_cell<T_loc,T_data>*> boct_tree<T_loc,T_data>::leaf_cells()
     }
   }
   return v;
+}
+
+//: Returns the total number of leaf nodes in the tree
+template <class T_loc, class T_data>
+unsigned int boct_tree<T_loc, T_data>::size()
+{
+  // Note: There should be a more efficient way to do this -DEC
+  vcl_vector<boct_tree_cell<T_loc, T_data>*> leaves = leaf_cells();
+  return leaves.size();
 }
 
 //: Returns all leaf cells at a specified level of the tree

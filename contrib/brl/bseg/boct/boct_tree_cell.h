@@ -51,7 +51,7 @@ class boct_tree_cell
   boct_tree_cell<T_loc,T_data>* clone(boct_tree_cell<T_loc,T_data>* parent);
 
   //Clones a cell, shifting its location code according to shift_code. This is useful when creating subtrees.
-   boct_tree_cell<T_loc,T_data>* clone(boct_tree_cell<T_loc,T_data>* parent, boct_loc_code<T_loc> *shift_code);
+  boct_tree_cell<T_loc,T_data>* clone(boct_tree_cell<T_loc,T_data>* parent, boct_loc_code<T_loc> *shift_code);
   
   //: Clones a cell if it intesects a region
   boct_tree_cell<T_loc,T_data>* clone_and_intersect(boct_tree_cell<T_loc,T_data>* parent,

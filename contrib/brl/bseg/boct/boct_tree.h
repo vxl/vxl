@@ -113,6 +113,9 @@ class boct_tree
   //: Returns a vector of all leaf cells of the tree
   vcl_vector<boct_tree_cell<T_loc,T_data>*> leaf_cells();
 
+  //: Returns the number of leaf nodes in the tree
+  unsigned int size();
+
   //: Returns all leaf cells at a specified level of the tree
   vcl_vector<boct_tree_cell<T_loc,T_data>*> leaf_cells_at_level(short l);
 
