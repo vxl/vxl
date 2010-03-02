@@ -174,9 +174,10 @@ class boct_tree
                                  global_bbox_.min_z()+ (cell->code_.z_loc_/max_val_)*global_bbox_.depth());
   }
   
-  
+#if 0
   //: prunes the tree by deleting the nodes outside of the bounding box
   void prune_tree(vgl_box_3d<double> bb) { root_->prune(bb, max_val_); }
+#endif 
 
   //: Print tree
   void print();
