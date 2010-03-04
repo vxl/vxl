@@ -101,7 +101,7 @@ inline void vil_transform(const vil_image_view<inP >&src, vil_image_view<outP >&
 // \param functor should take two parameters (inP src, outP &dest);
 // \relatesalso vil_image_view
 template <class inP, class outP, class Op >
-inline void vil_transform2(const vil_image_view<inP >&src, vil_image_view<outP >&dest, Op functor)
+inline void vil_transform2(const vil_image_view<inP >&src, vil_image_view<outP >&dest, Op &functor)
 {
   const unsigned ni = src.ni(), nj= src.nj(), np = src.nplanes();
 
