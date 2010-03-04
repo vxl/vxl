@@ -15,6 +15,8 @@ TESTS += test_mean_square_1d.cxx
 TESTS += test_binary_hyperplane_logit.cxx
 TESTS += test_logit_loss_function.cxx
 TESTS += test_binary_1d_wrapper.cxx
+TESTS += test_random_forest.cxx
+TESTS += test_binary_tree.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 

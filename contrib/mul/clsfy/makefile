@@ -37,6 +37,11 @@ SOURCES += clsfy_add_all_loaders.cxx
 SOURCES += clsfy_null_builder.cxx
 SOURCES += clsfy_binary_1d_wrapper_builder.cxx
 SOURCES += clsfy_binary_1d_wrapper.cxx
+SOURCES += clsfy_random_forest_builder.cxx
+SOURCES += clsfy_binary_threshold_1d_gini_builder.cxx
+SOURCES += clsfy_binary_tree_builder.cxx
+SOURCES += clsfy_random_forest.cxx
+SOURCES += clsfy_binary_tree.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
