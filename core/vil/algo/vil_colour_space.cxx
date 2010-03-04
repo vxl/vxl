@@ -15,8 +15,16 @@ template <class T>
 void vil_colour_space_RGB_to_YIQ(T const in[3], T out[3])
 {
   out[0] = T(0.299) * in[0] + T(0.587) * in[1] + T(0.114) * in[2];
-  out[1] = T(0.596) * in[0] - T(0.275) * in[1] - T(0.321) * in[2];
-  out[2] = T(0.212) * in[0] - T(0.523) * in[1] + T(0.311) * in[2];
+  out[1] = T(0.595716) * in[0] - T(0.274453) * in[1] - T(0.321263) * in[2];
+  out[2] = T(0.211456) * in[0] - T(0.522591) * in[1] + T(0.311135) * in[2];
+}
+
+template <class T>
+void vil_colour_space_YIQ_to_RGB(T const in[3], T out[3])
+{
+  out[0] = in[0] + T(0.956296) * in[1] + T(0.621024) * in[2];
+  out[1] = in[0] - T(0.272122) * in[1] - T(0.647381) * in[2];
+  out[2] = in[0] - T(1.106989) * in[1] + T(1.704615) * in[2];
 }
 
 //:
@@ -231,6 +239,7 @@ void vil_colour_space_YCbCr_601_to_RGB(const unsigned char YCbCr[3], unsigned ch
 
 #define inst(T) \
 template void vil_colour_space_RGB_to_YIQ(T const [3], T [3]); \
+template void vil_colour_space_YIQ_to_RGB(T const [3], T [3]); \
 template void vil_colour_space_RGB_to_HSV(T, T, T, T *, T *, T *); \
 template void vil_colour_space_HSV_to_RGB(T, T, T, T *, T *, T *); \
 template void vil_colour_space_RGB_to_YUV(T const [3], T [3]); \

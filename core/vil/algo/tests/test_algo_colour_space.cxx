@@ -62,6 +62,30 @@ static void test_algo_colour_space()
        vcl_abs(blue_rgb[1]-color2[1])<1e-6 &&
        vcl_abs(blue_rgb[2]-color2[2])<1e-6, true);
 
+  // Test YIQ
+  // test on red
+  vil_colour_space_RGB_to_YIQ(red_rgb, color1);
+  vil_colour_space_YIQ_to_RGB(color1, color2);
+  TEST("Test RGB/YIQ on red",
+       vcl_abs(red_rgb[0]-color2[0])<1e-6 &&
+       vcl_abs(red_rgb[1]-color2[1])<1e-6 &&
+       vcl_abs(red_rgb[2]-color2[2])<1e-6, true);
+
+  // test on green
+  vil_colour_space_RGB_to_YIQ(green_rgb, color1);
+  vil_colour_space_YIQ_to_RGB(color1, color2);
+  TEST("Test RGB/YIQ on green",
+       vcl_abs(green_rgb[0]-color2[0])<1e-6 &&
+       vcl_abs(green_rgb[1]-color2[1])<1e-6 &&
+       vcl_abs(green_rgb[2]-color2[2])<1e-6, true);
+
+  // test on blue
+  vil_colour_space_RGB_to_YIQ(blue_rgb, color1);
+  vil_colour_space_YIQ_to_RGB(color1, color2);
+  TEST("Test RGB/YIQ on blue",
+       vcl_abs(blue_rgb[0]-color2[0])<1e-6 &&
+       vcl_abs(blue_rgb[1]-color2[1])<1e-6 &&
+       vcl_abs(blue_rgb[2]-color2[2])<1e-6, true);
 
   //// Test YCbCr ////
 

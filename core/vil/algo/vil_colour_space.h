@@ -17,6 +17,10 @@
 template <class T>
 void vil_colour_space_RGB_to_YIQ(T const in[3], T out[3]);
 
+//: Linear transformation from YIQ to RGB colour spaces
+template <class T>
+void vil_colour_space_YIQ_to_RGB(T const in[3], T out[3]);
+
 
 //: Transform from RGB to HSV colour spaces
 // The input RGB values must lie in [0, L], for some positive L. Usually
