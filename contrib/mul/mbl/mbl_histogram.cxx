@@ -158,7 +158,8 @@ bool mbl_histogram::write_probabilities(const char* path)
   if (!ofs) return false;
   for (int i=0;i<n_bins();++i)
   {
-    ofs<<0.5*(bins_[i]+bins_[i+1])<<"  "<<double(freq_[i])/n_obs_<<'\n';
+    double dx=vcl_fabs(bins_[i+1]-bins_[i]);
+    ofs<<0.5*(bins_[i]+bins_[i+1])<<"  "<<double(freq_[i])/(dx*n_obs_)<<'\n';
   }
   ofs.close();
   return true;
