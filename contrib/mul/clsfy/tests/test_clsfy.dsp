@@ -126,6 +126,12 @@ SOURCE=.\test_binary_threshold_1d.cxx
 # Begin Source File
 SOURCE=.\test_binary_hyperplane_logit.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_random_forest.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_binary_tree.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

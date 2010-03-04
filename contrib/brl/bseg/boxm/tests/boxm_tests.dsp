@@ -260,6 +260,9 @@ SOURCE=.\test_fill_in_mesh.cxx
 SOURCE=.\test_save_scene_raw.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_sigma_normalizer.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

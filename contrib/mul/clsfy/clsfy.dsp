@@ -195,6 +195,21 @@ SOURCE=.\clsfy_binary_1d_wrapper_builder.cxx
 SOURCE=.\clsfy_binary_1d_wrapper.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\clsfy_random_forest_builder.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\clsfy_binary_threshold_1d_gini_builder.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\clsfy_binary_tree_builder.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\clsfy_random_forest.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\clsfy_binary_tree.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vsl_binary_loader+clsfy_builder_base-.cxx
 # End Source File
 # Begin Source File
@@ -323,6 +338,21 @@ SOURCE=.\clsfy_binary_1d_wrapper_builder.h
 # End Source File
 # Begin Source File
 SOURCE=.\clsfy_binary_1d_wrapper.h
+# End Source File
+# Begin Source File
+SOURCE=.\clsfy_random_forest.h
+# End Source File
+# Begin Source File
+SOURCE=.\clsfy_binary_tree_builder.h
+# End Source File
+# Begin Source File
+SOURCE=.\clsfy_binary_threshold_1d_gini_builder.h
+# End Source File
+# Begin Source File
+SOURCE=.\clsfy_binary_tree.h
+# End Source File
+# Begin Source File
+SOURCE=.\clsfy_random_forest_builder.h
 # End Source File
 # End Group
 # End Target

@@ -215,6 +215,9 @@ SOURCE=.\Templates/boct_tree_cell_reader+short.boxm_inf_line_sample+float--.cxx
 # Begin Source File
 SOURCE=.\Templates/boxm_cell_vis_graph_iterator+short.boxm_inf_line_sample+float--.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_aux_scene+short.float.boxm_edge_tangent_sample+float--.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
