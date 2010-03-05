@@ -41,18 +41,25 @@ vimt3d_image_3d_of<T> vimt3d_crop(const vimt3d_image_3d_of<T>& im,
 //  \param im The input image.
 //  \param bbox Bounding box of desired crop region in world coords.
 //  \return A cropped view of the original image.
-//  \note The crop region is expanded slightly to fit the voxel grid.
+//  \note The crop region may be expanded slightly as required to fit the voxel grid.
 //  \note If the crop region extends outside the image, it is truncated to fit the image.
 template<class T>
 vimt3d_image_3d_of<T> vimt3d_crop(const vimt3d_image_3d_of<T>& im,
                                   const vgl_box_3d<double>& bbox)
 {
-  // Get cropping bbox corners p,q in image coords and round down and up respectively
+  // Compute the bounding box in image coords.
   vgl_point_3d<double> pi = im.world2im()(bbox.min_point());
   vgl_point_3d<double> qi = im.world2im()(bbox.max_point());    
+  vgl_box_3d<double> bbox_img;
+  bbox_img.add(pi);
+  bbox_img.add(qi);
+
+  // Get the lower and upper corner points, rounding down and up respectively.
+  pi = bbox_img.min_point();
+  qi = bbox_img.max_point();    
   pi.set(vcl_floor(pi.x()), vcl_floor(pi.y()), vcl_floor(pi.z()));
   qi.set(vcl_ceil(qi.x()),  vcl_ceil(qi.y()),  vcl_ceil(qi.z()));
-
+ 
   // Restrict to image bounds - perhaps we could use vgl_box intersection instead?
   unsigned ni = im.image().ni();
   unsigned nj = im.image().nj();
@@ -65,6 +72,7 @@ vimt3d_image_3d_of<T> vimt3d_crop(const vimt3d_image_3d_of<T>& im,
   unsigned qiz = qi.z()>nk-1 ? nk-1 : static_cast<unsigned>(qi.z());
 
   // Crop image
+  assert (qix>=pix && qiy>=piy && qiz>=piz);
   unsigned nx = qix - pix + 1;
   unsigned ny = qiy - piy + 1;
   unsigned nz = qiz - piz + 1;
