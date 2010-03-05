@@ -7,8 +7,11 @@
 //  \brief Create windows into vimt_images.
 //  \author Tim Cootes, Ian Scott
 
+
+#include <vcl_cmath.h>
 #include <vimt/vimt_image_2d_of.h>
 #include <vil/vil_crop.h>
+
 
 //: Create windowed view of given image
 //  The parameters should be in image co-ords.
