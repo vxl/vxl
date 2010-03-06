@@ -8,6 +8,7 @@
 // \author Martin Roberts
 
 #include "clsfy_random_forest_builder.h"
+#include <vxl_config.h>
 #include <vcl_iostream.h>
 #include <vcl_string.h>
 #include <vcl_algorithm.h>
@@ -267,7 +268,7 @@ unsigned long clsfy_random_forest_builder::get_tree_builder_seed() const
     //generate some bytes from the original seeded random number generator
     unsigned long N=256;
     unsigned nbytes=sizeof(unsigned long);
-    vcl_vector<unsigned vxl_byte> seedAsBytes(nbytes,1);
+    vcl_vector<vxl_byte> seedAsBytes(nbytes,1);
 
     for(unsigned ib=0;ib<nbytes;++ib)
     {
