@@ -1,24 +1,22 @@
 // This is mul/vimt/vimt_crop.h
 #ifndef vimt_crop_h_
 #define vimt_crop_h_
-
 //:
 //  \file
 //  \brief Create windows into vimt_images.
 //  \author Tim Cootes, Ian Scott
 
-
-#include <vcl_cmath.h>
 #include <vimt/vimt_image_2d_of.h>
 #include <vil/vil_crop.h>
-
+#include <vcl_cmath.h>
+#include <vcl_cassert.h>
 
 //: Create windowed view of given image
 //  The parameters should be in image co-ords.
 //  The world2im transform is set to match
 //  so this appears identical to im when addressed
 //  in world co-ords. O(1).
-template<class T>
+template <class T>
 vimt_image_2d_of<T> vimt_crop(const vimt_image_2d_of<T>& im,
                               unsigned x0, unsigned nx,
                               unsigned y0, unsigned ny)
@@ -36,20 +34,20 @@ vimt_image_2d_of<T> vimt_crop(const vimt_image_2d_of<T>& im,
 //  \return A cropped view of the original image.
 //  \note The crop region may be expanded slightly as required to fit the voxel grid.
 //  \note If the crop region extends outside the image, it is truncated to fit the image.
-template<class T>
+template <class T>
 vimt_image_2d_of<T> vimt_crop(const vimt_image_2d_of<T>& im,
                               const vgl_box_2d<double>& bbox)
 {
   // Compute the bounding box in image coords.
   vgl_point_2d<double> pi = im.world2im()(bbox.min_point());
-  vgl_point_2d<double> qi = im.world2im()(bbox.max_point());    
+  vgl_point_2d<double> qi = im.world2im()(bbox.max_point());
   vgl_box_2d<double> bbox_img;
   bbox_img.add(pi);
   bbox_img.add(qi);
-  
+
   // Get the lower and upper corner points, rounding down and up respectively.
   pi = bbox_img.min_point();
-  qi = bbox_img.max_point();    
+  qi = bbox_img.max_point();
   pi.set(vcl_floor(pi.x()), vcl_floor(pi.y()));
   qi.set(vcl_ceil(qi.x()),  vcl_ceil(qi.y()));
 
@@ -58,8 +56,8 @@ vimt_image_2d_of<T> vimt_crop(const vimt_image_2d_of<T>& im,
   unsigned nj = im.image().nj();
   unsigned pix = pi.x()<0 ? 0 : static_cast<unsigned>(pi.x());
   unsigned piy = pi.y()<0 ? 0 : static_cast<unsigned>(pi.y());
-  unsigned qix = qi.x()>ni-1 ? ni-1 : static_cast<unsigned>(qi.x());
-  unsigned qiy = qi.y()>nj-1 ? nj-1 : static_cast<unsigned>(qi.y());
+  unsigned qix = qi.x()+1>ni ? ni-1 : static_cast<unsigned>(qi.x());
+  unsigned qiy = qi.y()+1>nj ? nj-1 : static_cast<unsigned>(qi.y());
 
   // Crop image
   assert (qix>=pix && qiy>=piy);
