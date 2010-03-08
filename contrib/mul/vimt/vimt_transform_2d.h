@@ -77,7 +77,9 @@ class vimt_transform_2d
     void matrix(vnl_matrix<double>&) const;
 
     //: Fills v with parameters
-    void params(vnl_vector<double>& v) const;
+    void params(vnl_vector<double>& v) const { params_of(v,form_); }
+    //: Fills v with parameters of transform of type Form
+    void params_of(vnl_vector<double>& v, Form) const;
     //: Sets transform using v (converse of params(v))
     void set(const vnl_vector<double>& v, Form); // Sets transform using v
     //: Set to identity transformation

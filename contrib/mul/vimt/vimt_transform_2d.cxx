@@ -30,10 +30,10 @@ void vimt_transform_2d::matrix(vnl_matrix<double>& M) const
     m_data[2][0]=tx_;   m_data[2][1]=ty_;   m_data[2][2]=tt_;
 }
 
-void vimt_transform_2d::params(vnl_vector<double>& v) const
+void vimt_transform_2d::params_of(vnl_vector<double>& v, Form form) const
 {
     double *v_data;
-    switch (form_)
+    switch (form)
     {
         case (Identity):
             v.set_size(0);
@@ -78,7 +78,7 @@ void vimt_transform_2d::params(vnl_vector<double>& v) const
             v_data[6]=tx_; v_data[7]=ty_; v_data[8]=tt_;
             break;
         default:
-            vcl_cerr<<"vimt_transform_2d::params() Unexpected form: "<<int(form_)<<vcl_endl;
+            vcl_cerr<<"vimt_transform_2d::params() Unexpected form: "<<int(form)<<vcl_endl;
             vcl_abort();
     }
 }
