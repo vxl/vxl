@@ -58,7 +58,7 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/bsta ${bsta_sources})
 
 
 
-TARGET_LINK_LIBRARIES(bsta vnl_algo vbl vnl)
+TARGET_LINK_LIBRARIES(bsta vnl_algo vbl vnl vgl)
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)
