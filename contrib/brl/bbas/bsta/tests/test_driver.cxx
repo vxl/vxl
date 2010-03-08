@@ -12,6 +12,7 @@ DECLARE( test_k_medoid );
 DECLARE( test_otsu_threshold );
 DECLARE( test_sampler );
 DECLARE( test_beta );
+DECLARE( test_kent );
 
 void
 register_tests()
@@ -28,6 +29,7 @@ register_tests()
   REGISTER( test_otsu_threshold );
   REGISTER( test_sampler );
   REGISTER( test_beta );
+  REGISTER( test_kent );
 }
 
 DEFINE_MAIN;
