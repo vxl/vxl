@@ -272,7 +272,7 @@ unsigned long clsfy_random_forest_builder::get_tree_builder_seed() const
 
     for(unsigned ib=0;ib<nbytes;++ib)
     {
-        seedAsBytes[ib]=random_sampler_(N);
+        seedAsBytes[ib]=static_cast<vxl_byte>(random_sampler_(N));
     }
 
     unsigned long* pSeed=reinterpret_cast<unsigned long*>(&seedAsBytes[0]);

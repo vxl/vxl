@@ -16,6 +16,7 @@
 #include <vcl_numeric.h>
 #include <vcl_iterator.h>
 #include <vcl_cassert.h>
+#include <vcl_cstddef.h>
 #include <vsl/vsl_binary_loader.h>
 #include <mbl/mbl_stl.h>
 #include <clsfy/clsfy_k_nearest_neighbour.h>
@@ -248,8 +249,8 @@ void clsfy_binary_tree_builder::build_children(
     // May need to check min dataset size in next generation children
     if (min_node_size_>0)
     {
-        if (pChild->subIndicesL.size()<min_node_size_ ||
-            pChild->subIndicesR.size()<min_node_size_ )
+        if (pChild->subIndicesL.size() < static_cast<vcl_size_t>(min_node_size_) ||
+            pChild->subIndicesR.size() < static_cast<vcl_size_t>(min_node_size_) )
         {
             // We should not have added this child as it's based on too small a split
             // Backtrack
