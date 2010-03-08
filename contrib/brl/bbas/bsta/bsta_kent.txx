@@ -81,7 +81,7 @@ T bsta_kent<T>::normalizing_const(T kappa, T beta)
   T denom = vcl_pow(2*vnl_math::pi, 1.5);
   denom*=vcl_pow(kappa_, -0.5);
   T sum=0;
-  for (unsigned r=0; r<15; r++) {
+  for (int r=0; r<15; r++) {
     T f = factorial(r);
     T x = vcl_pow(beta_/kappa_,2*r)*vnl_bessel(2*r/*+T(0.5)*/,kappa_);
     sum += static_cast<T>(factorial(2*r)/(f*f))* x;
