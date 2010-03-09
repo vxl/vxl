@@ -128,6 +128,18 @@ SOURCE=.\processes/boxm_line_backproject_process.cxx
 # Begin Source File
 SOURCE=.\processes/boxm_render_expected_edge_vrml_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\processes/boxm_generate_opt3_samples_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm_opt3_update_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm_generate_opt2_samples_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm_opt2_update_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

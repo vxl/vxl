@@ -218,6 +218,84 @@ SOURCE=.\Templates/boxm_cell_vis_graph_iterator+short.boxm_inf_line_sample+float
 # Begin Source File
 SOURCE=.\Templates/boxm_aux_scene+short.float.boxm_edge_tangent_sample+float--.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_opt3_optimizer+short.BOXM_APM_MOG_GREY.BOXM_AUX_OPT3_MOG_GREY-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_block+boct_tree+short.boxm_opt2_sample+float---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boct_tree+short.boxm_opt2_sample+float--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boct_tree_cell+short.boxm_opt3_sample+BOXM_APM_MOG_GREY--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_scene+boct_tree+short.boxm_opt3_sample+BOXM_APM_MOG_GREY---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_opt2_optimizer+short.BOXM_APM_SIMPLE_GREY.BOXM_AUX_OPT2_GREY-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boct_tree_cell_reader+short.boxm_opt2_sample+float--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_block+boct_tree+short.float--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_aux_scene+short.boxm_sample+BOXM_APM_MOG_GREY-.boxm_opt2_sample+float--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_aux_scene+short.boxm_sample+BOXM_APM_SIMPLE_GREY-.boxm_opt2_sample+float--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_opt3_optimizer+short.BOXM_APM_SIMPLE_GREY.BOXM_AUX_OPT3_MOG_GREY-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_array_3d+boxm_block+boct_tree+short.boxm_opt3_sample+BOXM_APM_MOG_GREY---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boct_tree_cell+short.boxm_opt2_sample+float--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_array_3d+boxm_block+boct_tree+short.boxm_opt2_sample+float---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_opt3_sample+BOXM_APM_MOG_GREY-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_block+boct_tree+short.boxm_opt3_sample+BOXM_APM_MOG_GREY---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_scene+boct_tree+short.boxm_opt2_sample+float---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_aux_scene+short.boxm_sample+BOXM_APM_MOG_GREY-.boxm_opt3_sample+BOXM_APM_MOG_GREY--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_aux_scene+short.boxm_sample+BOXM_APM_SIMPLE_GREY-.float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_opt2_optimizer+short.BOXM_APM_MOG_GREY.BOXM_AUX_OPT2_GREY-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_opt2_sample+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_aux_scene+short.boxm_sample+BOXM_APM_SIMPLE_GREY-.boxm_opt3_sample+BOXM_APM_MOG_GREY--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_opt_rt_bayesian_optimizer+short.BOXM_APM_MOG_GREY.BOXM_AUX_OPT_RT_GREY.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_aux_scene+short.boxm_sample+BOXM_APM_MOG_GREY-.float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boct_tree_cell_reader+short.boxm_opt3_sample+BOXM_APM_MOG_GREY--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boct_tree+short.boxm_opt3_sample+BOXM_APM_MOG_GREY--.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -292,6 +370,36 @@ SOURCE=.\boxm_render_expected_edge_tangent_image_functor.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_edge_tangent_updater.txx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_opt3_sample.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_generate_opt2_sample_functor.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_opt3_sample.txx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_opt2_sample.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_opt3_optimizer.txx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_opt2_sample.txx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_opt2_optimizer.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_opt3_optimizer.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_opt2_optimizer.txx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_generate_opt3_sample_functor.h
 # End Source File
 # End Group
 # End Target
