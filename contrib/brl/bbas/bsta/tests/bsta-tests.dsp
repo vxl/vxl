@@ -211,6 +211,9 @@ SOURCE=.\test_beta.cxx
 SOURCE=.\test_von_mises.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_kent.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

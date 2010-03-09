@@ -204,7 +204,7 @@ SOURCE=.\Templates/vbl_array_3d+boxm_block+boct_tree+short.boxm_edge_tangent_sam
 SOURCE=.\Templates/boxm_aux_scene+short.boxm_inf_line_sample+float-.boxm_edge_tangent_sample+float--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boxm_inf_line_sample+float-.cxx
+SOURCE=.\Templates/vil_image_view+boxm_inf_line_sample+float--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/boxm_plane_obs+float-.cxx

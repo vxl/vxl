@@ -209,6 +209,9 @@ SOURCE=.\Templates/bsta_parzen_sphere+double.1-.cxx
 # Begin Source File
 SOURCE=.\Templates/bsta_parzen_sphere+double.3-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/bsta_kent+double-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -364,6 +367,12 @@ SOURCE=.\bsta_von_mises.txx
 # End Source File
 # Begin Source File
 SOURCE=.\bsta_beta_f1.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_kent.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_kent.txx
 # End Source File
 # End Group
 # End Target
