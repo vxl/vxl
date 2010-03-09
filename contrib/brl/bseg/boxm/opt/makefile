@@ -22,6 +22,12 @@ MANPAGE_SOURCES += boxm_rpc_registration.h
 MANPAGE_SOURCES += boxm_generate_edge_tangent_sample_functor.h
 MANPAGE_SOURCES += boxm_render_expected_edge_tangent_image_functor.h
 MANPAGE_SOURCES += boxm_edge_tangent_updater.txx
+MANPAGE_SOURCES += boxm_opt2_sample.txx
+MANPAGE_SOURCES += boxm_opt3_sample.txx
+MANPAGE_SOURCES += boxm_opt2_optimizer.txx
+MANPAGE_SOURCES += boxm_opt3_optimizer.txx
+MANPAGE_SOURCES += boxm_generate_opt2_sample_functor.h
+MANPAGE_SOURCES += boxm_generate_opt3_sample_functor.h
 
 SUBDIRS += pro open_cl
 
