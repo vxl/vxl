@@ -13,6 +13,7 @@
 
 #include <vgl/vgl_infinite_line_3d.h>
 #include <vgl/vgl_plane_3d.h>
+#include <vgl/vgl_intersection.h>
 #include <vgl/algo/vgl_intersection.h>
 
 #include <vcl_vector.h>
@@ -65,10 +66,7 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
     {
       aux_samples.clear();
       boct_tree_cell<T_loc,boxm_inf_line_sample<APM> >* cell = cells[i];
-#if 0
-      boxm_inf_line_sample<APM> data = cell->data();
-      vcl_cout << "cell IN " << data.alpha << data.appearence_<< vcl_endl;
-#endif // 0
+
       for (unsigned j=0; j<aux_readers.size(); j++) {
         boct_tree_cell<T_loc, boxm_edge_tangent_sample<AUX> > temp_cell;
 
@@ -81,18 +79,17 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
           vcl_cerr << "error: temp_cell idx does not match cell idx.\n";
           return false;
         }
-        aux_samples.push_back(temp_cell.data());
-        aux_samples_num[j]++;
+        if(temp_cell.data().num_obs()>0)
+        {
+            aux_samples.push_back(temp_cell.data());
+            //aux_samples_num[j]++;
+        }
       }
       unsigned num=0;
-      // count how many different aux scenes contributed to this set of samples
-      for (unsigned j=0; j<aux_samples_num.size(); j++) {
-        if (aux_samples_num[j] > 0)
-          num++;
-        aux_samples_num[j]=0;
-      }
 
-      if (num >= 0) {
+
+      if (aux_samples.size() > 1) {
+
         vcl_list<vgl_plane_3d<AUX> > planes;
         vcl_vector<AUX> weights;
 
@@ -108,7 +105,16 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
         nums+=planes.size();
         if (planes.size() > 1) {
           vgl_infinite_line_3d<AUX> line = vgl_intersection(planes, weights);
-          boxm_inf_line_sample<AUX> data(line);
+          boxm_inf_line_sample<AUX> data(line,aux_samples.size());
+          vgl_box_3d<double> bb = tree->cell_bounding_box(cell);
+          // convert to line type (from float to double)
+          vgl_vector_2d<double> x0(line.x0().x(), line.x0().y());
+          vgl_vector_3d<double> dir(line.direction().x(), line.direction().y(), line.direction().z());
+          vgl_infinite_line_3d<double> dline(x0,dir);
+          vgl_point_3d<double> p0,p1;
+
+          if (vgl_intersection<double>(bb, dline, p0, p1)) 
+            data.line_clipped_=vgl_line_3d_2_points<float>(vgl_point_3d<float>(p0.x(),p0.y(),p0.z()),vgl_point_3d<float>(p1.x(),p1.y(),p0.z()));
           cell->set_data(data);
         }
         else
@@ -119,6 +125,7 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
     }
     nums/=cells.size();
     vcl_cout << "AVERAGE PLANE NUMS=" << nums << vcl_endl;
+
     scene_.write_active_block();
     for (unsigned int i=0; i<aux_readers.size(); ++i) {
       aux_readers[i]->close();
