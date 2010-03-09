@@ -9,6 +9,7 @@
 #include <vgl/vgl_line_3d_2_points.h>
 
 #include <boxm/opt/boxm_aux_traits.h>
+#include <bsta/bsta_kent.h>
 
 template<class T>
 class boxm_inf_line_sample
@@ -20,7 +21,8 @@ class boxm_inf_line_sample
   ~boxm_inf_line_sample() {}
   static short version_no() { return 1; }
   void print(vcl_ostream& os) { os << "(line=" << line_ << ')';  }
-
+  bool operator==(const boxm_inf_line_sample &rhs) const;
+  typedef boxm_inf_line_sample<T> value_type;
   // public members
    
   vgl_infinite_line_3d<T> line_;

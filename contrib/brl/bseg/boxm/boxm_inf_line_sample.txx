@@ -6,6 +6,15 @@
 #include <vgl/io/vgl_io_line_3d_2_points.h> // for vsl_b_write(os, sample.line_clipped_);
 
 template <class T>
+bool boxm_inf_line_sample<T>::operator==(const boxm_inf_line_sample<T> &rhs) const
+{ 
+  if ((this==&rhs) || (line_==rhs.line_ && line_clipped_==rhs.line_clipped_ && num_obs_==rhs.num_obs_)) 
+    return true;
+  else
+    return false;
+}
+
+template <class T>
 void vsl_b_write(vsl_b_ostream & os, boxm_inf_line_sample<T> const &sample)
 {
   vsl_b_write(os, sample.version_no());
