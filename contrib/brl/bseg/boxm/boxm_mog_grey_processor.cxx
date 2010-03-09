@@ -11,7 +11,7 @@
 
 #include <vnl/vnl_random.h>
 
-//#include "boxm_sigma_normalizer.h"
+#include "boxm_sigma_normalizer.h"
 
 #include <vcl_cassert.h>
 
@@ -79,10 +79,47 @@ bool boxm_mog_grey_processor::update( apm_datatype &appear, obs_datatype const& 
   return true;
 }
 
+void boxm_mog_grey_processor::update_appearance(vcl_vector<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> const& obs, vcl_vector<float> const& obs_weights, boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype &model, float min_sigma)
+{
+  vcl_vector<float> pre(obs.size(),0.0f);
+  compute_appearance(obs,pre,obs_weights,model,min_sigma);
+  return;
+}
+
 void boxm_mog_grey_processor::compute_appearance(vcl_vector<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> const& obs, vcl_vector<float> const& obs_weights, boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype &model, float min_sigma)
 {
   vcl_vector<float> pre(obs.size(),0.0f);
   compute_appearance(obs,pre,obs_weights,model,min_sigma);
+  return;
+}
+
+void boxm_mog_grey_processor::finalize_appearance(vcl_vector<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> const& obs, vcl_vector<float> const& obs_weights, boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype &model, float min_sigma)
+{
+  static const unsigned int nmodes = boxm_apm_traits<BOXM_APM_MOG_GREY>::n_gaussian_modes_;
+  const unsigned int nobs = obs.size();
+  const float min_var = min_sigma*min_sigma;
+  const float big_sigma = (float)vnl_math::sqrt1_2; // maximum possible std. dev for set of samples drawn from [0 1]
+  const float big_var = big_sigma * big_sigma;
+
+  static boxm_sigma_normalizer sigma_norm(0.1f);
+  for (unsigned int m=0; m<nmodes; ++m) {
+    //float unbias_factor = sigma_norm.normalization_factor(mode_weight_sum[m]);
+    float unbias_factor = sigma_norm.normalization_factor(model.weight(m) * nobs);
+
+    //float unbias_factor = sigma_norm.normalization_factor_int(nobs);
+    float mode_var = model.distribution(m).var();
+    mode_var *= (unbias_factor*unbias_factor);
+
+    // make sure variance does not get too big
+    if (!(mode_var < big_var)) {
+      mode_var = big_var;
+    }
+    // or too small
+    if (!(mode_var > min_var)) {
+      mode_var = min_var;
+    }
+    model.distribution(m).set_var(mode_var);
+  }
   return;
 }
 
