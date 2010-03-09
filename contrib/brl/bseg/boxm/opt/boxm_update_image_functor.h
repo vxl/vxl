@@ -13,6 +13,7 @@
 template <boxm_apm_type APM, class T_aux>
 class boxm_update_image_functor_pass_0
 {
+
  public:
   boxm_update_image_functor_pass_0(vil_image_view<typename boxm_apm_traits<APM>::obs_datatype> &observation,
                                    unsigned int /*ni*/=0, unsigned /*nj*/=0)
@@ -23,8 +24,7 @@ class boxm_update_image_functor_pass_0
   }
 
   inline bool step_cell(unsigned int i, unsigned int j, vgl_point_3d<double> s0, vgl_point_3d<double> s1,
-                        boxm_sample<APM> &cell_value, // FIXME: unused...
-                        T_aux &aux_val)
+                        boxm_sample<APM> &cell_value , T_aux &aux_val)
   {
     const float seg_len = (float)(s1 - s0).length();
     aux_val.obs_ += obs_(i,j) * seg_len;
@@ -130,6 +130,7 @@ class boxm_update_image_functor_pass_2
     vis_img_(i,j) = vis_prob_end;
 
     aux_val.updatefactor_+=(((pre_img_(i,j)+vis_img_(i,j)*PI)/norm_(i,j))* seg_len);
+
     return true;
   }
 
@@ -189,8 +190,8 @@ void boxm_update_image_rt(boxm_scene<boct_tree<T_loc, T_data > > &scene,
 {
     typedef boxm_aux_traits<BOXM_AUX_OPT_RT_GREY>::sample_datatype sample_datatype;
     boxm_aux_scene<T_loc, T_data, sample_datatype > aux_scene(&scene,boxm_aux_traits<BOXM_AUX_OPT_RT_GREY>::storage_subdir(), boxm_aux_scene<T_loc, T_data, sample_datatype>::CLONE);
-    typedef boxm_update_image_functor_pass_0<T_data::apm_type,sample_datatype>  pass_0;
-    boxm_raytrace_function<pass_0,T_loc, T_data,sample_datatype> raytracer_0(scene,aux_scene,cam.ptr(),obs.ni(),obs.nj());
+    typedef boxm_update_image_functor_pass_0<T_data::apm_type, sample_datatype>  pass_0;
+    boxm_raytrace_function<pass_0, T_loc, T_data, sample_datatype> raytracer_0(scene, aux_scene, cam.ptr(),obs.ni(),obs.nj());
     vcl_cerr << "PASS 0\n";
     pass_0 pass_0_functor(obs,obs.ni(),obs.nj());
     raytracer_0.run(pass_0_functor);

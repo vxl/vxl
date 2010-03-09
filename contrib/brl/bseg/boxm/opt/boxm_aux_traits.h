@@ -16,7 +16,11 @@ enum boxm_aux_type
   BOXM_AUX_OPT_RGB,
   BOXM_AUX_OPT_RT_RGB,
   BOXM_AUX_NULL,
-  BOXM_AUX_UNKNOWN
+  BOXM_AUX_UNKNOWN,
+  BOXM_AUX_OPT2_GREY,
+  BOXM_AUX_OPT2_RGB,
+  BOXM_AUX_OPT3_MOG_GREY,
+  BOXM_AUX_OPT3_MOG_RGB
 };
 
 //: sample properties for templates.

@@ -4,6 +4,7 @@
 #include <vcl_vector.h>
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/boxm_simple_grey_processor.h>
+#include <boxm/boxm_mog_grey_processor.h>
 #if 0
 #include <vcl_iostream.h>
 #endif

@@ -9,6 +9,7 @@
 #include <boxm/boxm_raytrace_operations.h>
 #include <boxm/boxm_block_vis_graph_iterator.h>
 #include <boxm/opt/boxm_aux_scene.h>
+#include <boxm/opt/boxm_aux_traits.h>
 
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
@@ -28,20 +29,26 @@
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 
-template<class F, class T_loc, class T_data, class T_aux>
+template<class F, class T_loc, class T_data, class T_aux = typename boxm_aux_traits<BOXM_AUX_NULL>::sample_datatype>
 class boxm_raytrace_function
 {
+  // null scene used as placeholder for operations that don't require an auxillary scene
+  boxm_aux_scene<T_loc, T_data, boxm_aux_traits<BOXM_AUX_NULL>::sample_datatype> null_scene_;
+
  public:
     typedef boct_tree<T_loc,T_data> tree_type;
     typedef boct_tree<T_loc,T_aux> aux_tree_type;
     typedef boct_tree_cell<T_loc,T_data> cell_type;
-    //: constructor
+
+    //: constructor for functions with no auxillary scene needed
     boxm_raytrace_function(boxm_scene<tree_type> &scene,
                            vpgl_camera_double_sptr cam,
                            unsigned int ni, unsigned int nj,
                            bool reverse_traversal = false,
                            unsigned int i0 = 0, unsigned int j0 = 0)
-    : scene_(scene), aux_scene_(boxm_aux_scene<T_loc,T_data,T_aux>()), reverse_traversal_(reverse_traversal), cam_(cam), img_i0_(i0), img_j0_(j0), img_ni_(ni), img_nj_(nj), debug_lvl_(2) {}
+    : scene_(scene), aux_scene_(null_scene_), reverse_traversal_(reverse_traversal), cam_(cam), img_i0_(i0), img_j0_(j0), img_ni_(ni), img_nj_(nj), debug_lvl_(2) {}
+
+    //: constructor for functions using an auxillary scene
     boxm_raytrace_function(boxm_scene<tree_type> &scene,
                            boxm_aux_scene<T_loc, T_data,  T_aux> &aux_scene,
                            vpgl_camera_double_sptr cam,
@@ -284,9 +291,11 @@ class boxm_raytrace_function
                         boct_loc_code<T_loc> curr_cell_code(enter_pt_norm,tree->root_level());
                         boct_tree_cell<T_loc,T_data > * curr_cell=tree->root()->traverse_force(curr_cell_code);
 
+                        boct_tree_cell<T_loc, boxm_aux_traits<BOXM_AUX_NULL>::sample_datatype> aux_cell_null;
+
                         while (continue_trace(i-img_i0_, j-img_j0_))
                         {
-                            boct_tree_cell<T_loc,T_aux > * curr_aux_cell=NULL;
+                            boct_tree_cell<T_loc,T_aux > *curr_aux_cell= reinterpret_cast<boct_tree_cell<T_loc,T_aux>*>(&aux_cell_null);
                             if (step_functor.is_aux_)
                             {
                                 boct_loc_code<T_loc> cell_code(curr_cell->get_code());
@@ -309,13 +318,11 @@ class boxm_raytrace_function
                                 break;
                             }
                             T_data cell_val=curr_cell->data();
-                            T_aux aux_val;
-
-                            if (step_functor.is_aux_)
-                                aux_val=curr_aux_cell->data();
-
-
+                            T_aux aux_val=curr_aux_cell->data();
+                              
+                       
                             continue_trace(i-img_i0_, j-img_j0_) = step_functor.step_cell(i,j, enter_pt, exit_pt, cell_val,aux_val);
+                            
                             curr_cell->set_data(cell_val);
                             if (step_functor.is_aux_)
                                 curr_aux_cell->set_data(aux_val);
