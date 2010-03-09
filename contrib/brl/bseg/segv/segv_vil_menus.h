@@ -64,6 +64,7 @@ class segv_vil_menus
   //JIM METHOD
   SEGV_VIL_DLL_DATA static void project_points_callback();
   //--JIM METHOD
+  SEGV_VIL_DLL_DATA static void line_image_callback();
 
   SEGV_VIL_DLL_DATA static vgui_menu get_menu();
 };

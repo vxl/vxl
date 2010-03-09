@@ -1946,3 +1946,47 @@ void segv_vil_segmentation_manager::parallel_coverage()
     cov_res = vil_new_image_resource_of_view(pc.get_detection_image());
   this->add_image(cov_res);
 }
+
+//: it recives and image of line definitions and draws the lines on the tableau.
+// The image is expected having three planes to save (x,y,theta) of each line. 
+// (x,y) is the position of the edge and theta is the direction angle in radians
+void segv_vil_segmentation_manager::draw_line_image()
+{
+  vgui_dialog file_dlg("Edge File");
+  static vcl_string filename = "";
+  static vcl_string ext = "*.*";
+  file_dlg.file("Edge filename:", ext, filename);
+  if (!file_dlg.ask())
+    return;
+  vil_image_view_base_sptr img_sptr = vil_load(filename.c_str());
+  if (img_sptr->pixel_format() == VIL_PIXEL_FORMAT_FLOAT) {
+    vil_image_view<float> edge_image(img_sptr);
+    if (edge_image.nplanes() < 3) {
+      vcl_cout << "The image should have at least 3 planes" << vcl_endl;
+      return;
+    }
+    bgui_vtol2D_tableau_sptr t2D = this->selected_vtol2D_tab();
+    if (!t2D)
+      return;
+
+    for (unsigned i=0; i<edge_image.ni(); i++) {
+      for (unsigned j=0; j<edge_image.nj(); j++) {
+        double x = edge_image(i,j,0);
+        double y = edge_image(i,j,1);
+        double theta = edge_image(i,j,2);
+        double a,b;
+        a = x-0.5*vcl_cos(theta);
+        b = y-0.5*vcl_sin(theta);
+        vgl_point_2d<double> p0(a,b);
+        a = x+0.5*vcl_cos(theta); 
+        b = y+0.5*vcl_sin(theta);
+        vgl_point_2d<double> p1(a,b);
+        // define a line
+        vsol_line_2d_sptr line = new vsol_line_2d(p0,p1);
+        t2D->add_vsol_line_2d(line);
+      }
+    }
+  } else 
+    vcl_cout << "Pixel format: " << img_sptr->pixel_format() << " is not implemented yet" << vcl_endl;
+  
+}

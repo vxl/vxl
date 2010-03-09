@@ -87,6 +87,7 @@ class segv_vil_segmentation_manager : public vgui_wrapper_tableau
   void fit_overlay_conics();
   void regions();
   void mser_conics();
+  void draw_line_image();
   // ############### New method to project 3D points ##################
   void project_points();
   // ##################################################################

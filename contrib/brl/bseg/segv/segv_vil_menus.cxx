@@ -213,6 +213,10 @@ void segv_vil_menus::image_as_vrml_points_callback()
   segv_vil_segmentation_manager::instance()->image_as_vrml_points();
 }
 
+void segv_vil_menus::line_image_callback()
+{
+  segv_vil_segmentation_manager::instance()->draw_line_image();
+}
 
 //segv_vil_menus definition
 vgui_menu segv_vil_menus::get_menu()
@@ -259,6 +263,7 @@ vgui_menu segv_vil_menus::get_menu()
   menuedit.add("MSER Conic Regions", mser_conics_callback);
   menuedit.add("Edgel Regions", regions_callback);
   menuedit.add("Non-Maximal Suppression", nonmaximal_suppression_callback);
+  menuedit.add("Load Line Image", line_image_callback);
 
   //operation menu entries
   menuops.add("Convert To Greyscale:", convert_to_grey_callback);
