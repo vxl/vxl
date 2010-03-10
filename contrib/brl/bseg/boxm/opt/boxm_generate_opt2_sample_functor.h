@@ -112,7 +112,7 @@ void boxm_generate_opt2_samples(boxm_scene<boct_tree<T_loc, T_data > > &scene,
                                vcl_vector<typename T_data::apm_datatype> const& alt_appearance_models,
                                bool black_background = false)
 {
-  typedef boxm_aux_traits<AUX_T>::sample_datatype sample_datatype;
+  typedef typename boxm_aux_traits<AUX_T>::sample_datatype sample_datatype;
   boxm_aux_scene<T_loc, T_data,  sample_datatype> aux_scene(&scene,iname, boxm_aux_scene<T_loc, T_data,  sample_datatype>::CLONE);
   typedef boxm_seg_length_functor<T_data::apm_type,sample_datatype>  pass_0;
   boxm_raytrace_function<pass_0,T_loc, T_data, sample_datatype> raytracer_0(scene,aux_scene,cam.ptr(),obs.ni(),obs.nj());
