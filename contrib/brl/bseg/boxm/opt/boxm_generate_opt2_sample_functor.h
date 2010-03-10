@@ -19,9 +19,12 @@ class boxm_generate_opt2_sample_functor_pass_2
 {
 public:
   //: "default" constructor
-  boxm_generate_opt2_sample_functor_pass_2(vil_image_view<typename boxm_apm_traits<APM>::obs_datatype> const& image,
-    vil_image_view<float> const& Beta_denom)
-    : obs_(image), Beta_denom_(Beta_denom), vis_img_(image.ni(),image.nj(),1), pre_img_(image.ni(),image.nj(),1), alpha_integral_(image.ni(),image.nj(),1)
+  boxm_generate_opt2_sample_functor_pass_2(vil_image_view<typename boxm_apm_traits<APM>::obs_datatype> const& image, 
+                                           vil_image_view<float> const& beta_denom, 
+                                           float model_prior, 
+                                           vil_image_view<float> const& alt_prob_img)
+
+    : obs_(image), beta_denom_(beta_denom), vis_img_(image.ni(),image.nj(),1), pre_img_(image.ni(),image.nj(),1), alpha_integral_(image.ni(),image.nj(),1), model_prior_(model_prior), alt_prob_img_(alt_prob_img)
   {
     alpha_integral_.fill(0.0f);
     pre_img_.fill(0.0f);
@@ -30,6 +33,7 @@ public:
     scene_read_only_=true;
     //needs to write aux
     is_aux_=true;
+
   }
 
   inline bool step_cell(unsigned int i, unsigned int j, vgl_point_3d<double> s0, vgl_point_3d<double> s1, boxm_sample<APM> &cell_value, T_aux & aux_val)
@@ -54,13 +58,17 @@ public:
     pre_img_(i,j) +=  PI * Omega;
     vis_img_(i,j) = vis_prob_end;
     // accumulate aux sample values
-    aux_val.pre_ += pre * seg_len;
-    aux_val.vis_ += vis * seg_len;
+    aux_val.pre_ += (pre * model_prior_ + alt_prob_img_(i,j)) * seg_len;
+    aux_val.vis_ += vis * model_prior_ * seg_len;
 
+    const float beta_num = pre + vis*PI;
+    const float beta_num_expanded = (beta_num  * model_prior_) + alt_prob_img_(i,j);
+    const float beta_denom = beta_denom_(i,j);
+    const float beta_denom_expanded = (beta_denom * model_prior_) + alt_prob_img_(i,j);
 
     float beta = 1.0f;
-    if (Beta_denom_(i,j) > 1e-6f) {
-      beta = (pre + vis*PI) / Beta_denom_(i,j);
+    if (beta_denom_expanded > 1e-5f) {
+      beta =  beta_num_expanded / beta_denom_expanded;
     }
     const float old_PQ = (float)(1.0 - vcl_exp(-cell_value.alpha*seg_len));
     const float new_PQ = old_PQ * beta;
@@ -84,8 +92,10 @@ public:
   bool is_aux_;
 
 private:
+  float model_prior_;
+  vil_image_view<float> const& alt_prob_img_;
   vil_image_view<typename boxm_apm_traits<APM>::obs_datatype> const& obs_;
-  vil_image_view<float> const& Beta_denom_;
+  vil_image_view<float> const& beta_denom_;
 
   //vil_image_view<float> const& pre_inf_;
   vil_image_view<float> vis_img_;
@@ -93,14 +103,16 @@ private:
   vil_image_view<float> alpha_integral_;
 };
 
-template <class T_loc, class T_data>
+template <class T_loc, class T_data, boxm_aux_type AUX_T>
 void boxm_generate_opt2_samples(boxm_scene<boct_tree<T_loc, T_data > > &scene,
                                vpgl_camera_double_sptr cam,
                                vil_image_view<typename T_data::obs_datatype> &obs,
-                               vcl_string iname,
+                               vcl_string iname, 
+                               vcl_vector<float> const& alt_appearance_priors,
+                               vcl_vector<typename T_data::apm_datatype> const& alt_appearance_models,
                                bool black_background = false)
 {
-  typedef boxm_aux_traits<BOXM_AUX_OPT2_GREY>::sample_datatype sample_datatype;
+  typedef boxm_aux_traits<AUX_T>::sample_datatype sample_datatype;
   boxm_aux_scene<T_loc, T_data,  sample_datatype> aux_scene(&scene,iname, boxm_aux_scene<T_loc, T_data,  sample_datatype>::CLONE);
   typedef boxm_seg_length_functor<T_data::apm_type,sample_datatype>  pass_0;
   boxm_raytrace_function<pass_0,T_loc, T_data, sample_datatype> raytracer_0(scene,aux_scene,cam.ptr(),obs.ni(),obs.nj());
@@ -125,7 +137,7 @@ void boxm_generate_opt2_samples(boxm_scene<boct_tree<T_loc, T_data > > &scene,
     typedef bsta_gaussian_sphere<typename T_data::obs_mathtype, T_data::obs_dim> gauss_type;
     typename T_data::obs_mathtype black(0);
     const float black_std_dev = 8.0f/255;
-    const gauss_type appearance_dist(black, black_std_dev);
+    const gauss_type appearance_dist(black, black_std_dev*black_std_dev);
 
     //float peak=T_data::apm_processor::expected_color(background_apm);
     //vcl_cout<<"Peak: "<<peak<<vcl_endl;
@@ -146,11 +158,37 @@ void boxm_generate_opt2_samples(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   vil_image_view<float> beta_denom_img(obs.ni(), obs.nj());
   vil_math_image_sum<float,float,float>(pre_inf,inf_term,beta_denom_img);
 
+  // compute model prior
+  float model_prior = 1.0f;
+  for (unsigned int a=0; a<alt_appearance_priors.size(); ++a) {
+    model_prior -= alt_appearance_priors[a];
+  }
+  // sanity check
+  if (model_prior <= 0.0f) {
+    vcl_cerr << "error: boxm_generate_opt2_samples : alt_appearance_priors sum to " << 1.0f - model_prior << " >= 1.0! " << vcl_endl;
+  }
 
+  // compute alternate appearance probability for each pixel in the image
+  vil_image_view<float> alt_prob_img(obs.ni(), obs.nj());
+  alt_prob_img.fill(0.0f);
+  const unsigned int n_alt = alt_appearance_priors.size();
+  if (n_alt > 0) {
+    typename vil_image_view<typename T_data::obs_datatype>::const_iterator img_it = obs.begin();
+    typename vil_image_view<float>::iterator alt_prob_it = alt_prob_img.begin();
+    for (; img_it != obs.end(); ++img_it, ++alt_prob_it) {
+      for (unsigned int a=0; a< n_alt; ++a) {
+        const float alt_prob_density = boxm_apm_traits<T_data::apm_type>::apm_processor::prob_density(alt_appearance_models[a],*img_it);
+        *alt_prob_it +=  alt_prob_density * alt_appearance_priors[a];
+      }
+    }
+  }
+  vil_save(alt_prob_img,"c:/research/boxm/output/alt_prob_img.tiff");
+
+  // run the raytrace function
   vcl_cout<<"PASS 2"<<vcl_endl;
   typedef boxm_generate_opt2_sample_functor_pass_2<T_data::apm_type, sample_datatype> pass_2;
   boxm_raytrace_function<pass_2,T_loc, T_data, sample_datatype> raytracer_2(scene,aux_scene,cam.ptr(),obs.ni(),obs.nj());
-  pass_2 pass_2_functor(obs,beta_denom_img);
+  pass_2 pass_2_functor(obs,beta_denom_img, model_prior, alt_prob_img);
   raytracer_2.run(pass_2_functor);
 
   //aux_scene.clean_scene();
