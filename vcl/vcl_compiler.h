@@ -53,6 +53,13 @@
 # endif
 #endif
 
+#if defined(__FreeBSD__)
+# define VCL_FREEBSD
+# ifndef _GLIBCXX_USE_C99
+#  define _GLIBCXX_USE_C99 1
+# endif
+#endif
+
 #if defined(__SUNPRO_CC)
 # define VCL_SUNPRO_CC
 # if (__SUNPRO_CC>=0x500)
