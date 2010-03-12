@@ -182,7 +182,6 @@ void boxm_generate_opt2_samples(boxm_scene<boct_tree<T_loc, T_data > > &scene,
       }
     }
   }
-  vil_save(alt_prob_img,"c:/research/boxm/output/alt_prob_img.tiff");
 
   // run the raytrace function
   vcl_cout<<"PASS 2"<<vcl_endl;
