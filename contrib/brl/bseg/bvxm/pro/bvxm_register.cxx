@@ -66,4 +66,5 @@ void bvxm_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_display_edge_tangent_world_vrml_process,"bvxmDisplayEdgeTangentWorldVRMLProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_update_point_cloud_process,"bvxmUpdatePointCloudProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_report_statistics_point_cloud_process,"bvxmReportStatisticsPointCloudProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_estimate_camera_process,"bvxmEstimateCameraProcess");
 }
