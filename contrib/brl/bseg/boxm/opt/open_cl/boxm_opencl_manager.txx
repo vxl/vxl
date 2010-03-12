@@ -50,6 +50,44 @@ template <class T>
 bool boxm_opencl_manager<T>::initialize_cl()
 {
   cl_int status = CL_SUCCESS;
+  cl_uint num_platforms = 0;
+  // Check the number of  available platforms
+  status = clGetPlatformIDs(0,NULL,&num_platforms);
+  if (status != CL_SUCCESS) {
+    vcl_cerr << "boxm_opencl_manager: clGetPlatformIDs (call 1) returned " << status << vcl_endl;
+    return false;
+  }
+  if (num_platforms == 0) {
+    vcl_cerr << "boxm_opencl_manager: 0 OpenCL platforms found!" << vcl_endl;
+    return false;
+  }
+  if (num_platforms > 1) {
+    vcl_cout << "boxm_opencl_manager: warning: found " << num_platforms << "OpenCL platforms. Using the first" << vcl_endl;
+  }
+  // Get the first platform ID
+  cl_platform_id platform_id;
+  status = clGetPlatformIDs (1, &platform_id, NULL);
+  if (status != CL_SUCCESS) {
+    vcl_cerr << "boxm_opencl_manager: clGetPlatformIDs (call 2) returned " << status << vcl_endl;
+    return false;
+  }
+  cl_device_id gpu_device;
+  // get an available GPU device from the the platform
+  // should we be using all if more than one avaiable?
+  status = clGetDeviceIDs(platform_id, CL_DEVICE_TYPE_GPU, 1, &gpu_device, NULL);
+  if (status != CL_SUCCESS) {
+    vcl_cerr << "boxm_opencl_manager: clGetDeviceIDs returned " << status << vcl_endl;
+    return false;
+  }
+
+  //Create a context from the device ID
+  context_ = clCreateContext(0, 1, &gpu_device, NULL, NULL, &status);
+  if (!this->check_val(status,CL_SUCCESS,"clCreateContextFromType failed.")) {
+    return false;
+  }
+
+
+#if 0
   context_ = clCreateContextFromType(0,
                                      CL_DEVICE_TYPE_GPU,
                                      NULL,
@@ -62,6 +100,7 @@ bool boxm_opencl_manager<T>::initialize_cl()
   {
     return false;
   }
+#endif
   vcl_size_t device_list_size = 0;
   // First, get the size of device list data
   status = clGetContextInfo(context_,
@@ -214,8 +253,8 @@ bool boxm_opencl_manager<T>::initialize_cl()
            << " Number of devices: " << number_devices_ << '\n'
            << " Number of compute units: " << max_compute_units_ << '\n'
            << " Maximum clock frequency: " << max_clock_freq_/1000.0 << " GHz\n"
-           <<" Total global memory: "<<total_global_memory_/1.0e9 << " GBytes\n"
-           <<" Total local memory: "<< total_local_memory_/1000.0 << " KBytes\n"
+           <<" Total global memory: "<<total_global_memory_/ 1073741824.0 /* 2^30 */ << " GBytes\n"
+           <<" Total local memory: "<< total_local_memory_/1024.0 << " KBytes\n"
            << " Maximum work group size: " << max_work_group_size_ << '\n'
            << " Maximum work item sizes: (" << (cl_uint)max_work_item_sizes_[0]/size << ','
            << (cl_uint)max_work_item_sizes_[1]/size << ','
