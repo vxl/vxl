@@ -14,6 +14,7 @@
 #include <vil/vil_save.h>
 #include <vil/vil_load.h>
 #include <vil/vil_convert.h>
+#include <vil/vil_math.h>
 
 bool generate_ray_init(vpgl_perspective_camera<double> *cam_,vgl_box_3d<double> const& block_bb, vgl_box_2d<double> &img_bb,unsigned ni,unsigned nj)
 {
@@ -130,7 +131,7 @@ vil_image_view<float> run_expected_image(boxm_scene<boct_tree<short,boxm_sample<
             ray_mgr->set_tree(tree);
             ray_mgr->setup_tree();
 
-            ray_mgr->setup_roi_dims(img_bb.min_x(),img_bb.max_x(),img_bb.min_y(),img_bb.max_y());
+            ray_mgr->setup_roi_dims((unsigned int)img_bb.min_x(),(unsigned int)img_bb.max_x(),(unsigned int)img_bb.min_y(),(unsigned int)img_bb.max_y());
 
             ray_mgr->setup_tree_input_buffers();
             ray_mgr->setup_camera_input_buffer();
@@ -206,21 +207,14 @@ static void test_expected_image()
     update_world(root_dir+"/contrib/brl/bseg/boxm/opt/open_cl/tests/scene.xml",camname,imgname);
     vil_image_view<float> im_nongpu=render_image(root_dir+"/contrib/brl/bseg/boxm/opt/open_cl/tests/scene.xml",camname,250,250);
     vil_image_view<float> im_gpu=run_expected_image(&s,pcam,250,250);
-
-    float dist=0;
-    for (unsigned i=0;i<im_nongpu.ni();i++)
-    {
-        for (unsigned j=0;j<im_nongpu.nj();j++)
-        {
-            dist+=vcl_fabs(im_nongpu(i,j)-im_gpu(i,j));
-        }
-    }
     s.clean_scene();
 
-    if (dist<1e2)
-        TEST("test_expected_image_driver", true, true);
-    else
-        TEST("test_expected_image_driver", true, false);
+    float ssd = vil_math_ssd(im_gpu, im_nongpu, float());
+    float rms_error = vcl_sqrt(ssd / im_gpu.size());
+
+
+    TEST_NEAR("GPU/Non-GPU Expected Image RMS difference", rms_error, 0.0, 1e-2);
+
 }
 
 TESTMAIN(test_expected_image);

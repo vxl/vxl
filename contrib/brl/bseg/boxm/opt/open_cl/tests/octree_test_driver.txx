@@ -19,14 +19,20 @@ octree_test_driver<T>::setup_cl()
   // Create command queue
   cl_int status = CL_SUCCESS;
 
-  command_queue_ = clCreateCommandQueue(cl_manager_->context(),
-                                        cl_manager_->devices()[0],
-                                        0,
-                                        &status);
+  cl_device_id* device_p = cl_manager_->devices();
+  if (device_p) {
+    command_queue_ = clCreateCommandQueue(cl_manager_->context(),
+      device_p[0],
+      0,
+      &status);
+  }
+  else {
+    return SDK_FAILURE;
+  }
 
   if (!this->check_val(status,
-                       CL_SUCCESS,
-                       "clCreateCommandQueue failed."))
+    CL_SUCCESS,
+    "clCreateCommandQueue failed."))
     return SDK_FAILURE;
   else
     return SDK_SUCCESS;

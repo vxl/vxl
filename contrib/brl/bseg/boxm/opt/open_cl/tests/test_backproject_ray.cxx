@@ -95,12 +95,12 @@ static void test_backproject_ray()
         vgl_line_3d_2_points<double> cam_ray = pcam->backproject(vgl_homg_point_2d<double>((double)i,(double)j));
         vgl_vector_3d<double> norm_direction = cam_ray.direction();
         normalize(norm_direction);
-        float dist=vcl_sqrt((ray_results[inc]  -norm_direction.x())*(ray_results[inc]-norm_direction.x())+
+        float dist=(float)vcl_sqrt((ray_results[inc]  -norm_direction.x())*(ray_results[inc]-norm_direction.x())+
                             (ray_results[inc+1]-norm_direction.y())*(ray_results[inc+1]-norm_direction.y())+
                             (ray_results[inc+2]-norm_direction.z())*(ray_results[inc+2]-norm_direction.z()));
 
         inc+=4;
-        if (dist<1e-4)
+        if (dist>1e-4)
           flag=false;
       }
     }
