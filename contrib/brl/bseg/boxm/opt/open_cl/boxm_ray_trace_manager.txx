@@ -15,6 +15,8 @@
 #include <vnl/algo/vnl_svd.h>
 #include <vcl_where_root_dir.h>
 
+#include "boxm_opt_opencl_utils.h"
+
 //allocate child cells on the array
 template<class T>
 static void split(vcl_vector<vnl_vector_fixed<int, 4> >& cell_array,
@@ -43,45 +45,9 @@ copy_to_arrays(boct_tree_cell<short, T >* cell_ptr,
   //no data or child pointers
 
   // convert the data to 16 vector size
-  vnl_vector_fixed<float, 16> data(0.0f);
+  vnl_vector_fixed<float, 16> data;
+  pack_cell_data(cell_ptr,data);
 
-  if (boct_tree_cell<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > * cell_ptr_simple_grey
-      =reinterpret_cast<boct_tree_cell<short, boxm_sample<BOXM_APM_SIMPLE_GREY> >* >(cell_ptr))
-  {
-    boxm_sample<BOXM_APM_SIMPLE_GREY> cell_data = cell_ptr_simple_grey->data();
-    data[0]=cell_data.alpha; // alpha
-
-    boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::apm_datatype appear=cell_data.appearance_;
-
-    data[1]=1; // num of components
-    data[2]=3; // size of component
-    data[3]=appear.color();
-    data[4]=appear.sigma();
-    data[5]=appear.gauss_weight();
-  }
-  else if (boct_tree_cell<short, boxm_sample<BOXM_APM_MOG_GREY> > * cell_ptr_mog_grey = // assignment, not comparison!
-           reinterpret_cast<boct_tree_cell<short, boxm_sample<BOXM_APM_MOG_GREY> >* >(cell_ptr))
-  {
-      boxm_sample<BOXM_APM_MOG_GREY> cell_data = cell_ptr_mog_grey->data();
-      data[0]=cell_data.alpha; // alpha
-      boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype appear=cell_data.appearance_;
-
-      data[1]=(float)appear.num_components(); // num of components
-      data[2]=3; // size of component
-      unsigned j=3;
-      for (unsigned i=0;i<data[1];i++)
-      {
-          data[j]=appear.distribution(i).mean();++j;
-          data[j]=appear.distribution(i).var();++j;
-          data[j]=appear.weight(i);++j;
-      }
-  }
-  else if (boct_tree_cell<short, float > * cell_ptr_float = // assignment, no comparison!
-           reinterpret_cast<boct_tree_cell<short, float >* >(cell_ptr))
-  {
-      float cell_data = cell_ptr_float->data();
-      data[0]=cell_data; // alpha
-  }
   // data pointer will be at index == size after the push_back
   cell_array[cell_input_ptr][2] = data_array.size();
   data_array.push_back(data);
@@ -164,10 +130,10 @@ bool boxm_ray_trace_manager<T>::setup_tree()
 #else
   global_bbox_ = (cl_float*)memalign(16, sizeof(cl_float4));
 #endif
-  global_bbox_[0]=tree_->bounding_box().min_x();
-  global_bbox_[1]=tree_->bounding_box().min_y();
-  global_bbox_[2]=tree_->bounding_box().min_z();
-  global_bbox_[3]=tree_->bounding_box().width();
+  global_bbox_[0] = (cl_float)tree_->bounding_box().min_x();
+  global_bbox_[1] = (cl_float)tree_->bounding_box().min_y();
+  global_bbox_[2] = (cl_float)tree_->bounding_box().min_z();
+  global_bbox_[3] = (cl_float)tree_->bounding_box().width();
 
   return true;
 }
@@ -224,7 +190,7 @@ bool boxm_ray_trace_manager<T>::setup_camera()
   {
     for (unsigned j=0;j<Ut.cols();j++)
     {
-      svd_UtWV_[cnt]=Ut(i,j);
+      svd_UtWV_[cnt]=(cl_float)Ut(i,j);
       ++cnt;
     }
     svd_UtWV_[cnt]=0;
@@ -233,12 +199,12 @@ bool boxm_ray_trace_manager<T>::setup_camera()
   for (unsigned i=0;i<V.rows();i++)
     for (unsigned j=0;j<V.cols();j++)
     {
-      svd_UtWV_[cnt]=V(i,j);
+      svd_UtWV_[cnt]=(cl_float)V(i,j);
       ++cnt;
     }
   for (unsigned i=0;i<Winv.size();i++)
   {
-    svd_UtWV_[cnt]=Winv(i);
+    svd_UtWV_[cnt]=(cl_float)Winv(i);
     ++cnt;
   }
   return true;
@@ -520,8 +486,10 @@ template<class T>
 int boxm_ray_trace_manager<T>::release_kernel()
 {
   cl_int status = SDK_SUCCESS;
-
-  status = clReleaseKernel(kernel_);
+  if (kernel_)  {
+    status = clReleaseKernel(kernel_);
+  }
+  kernel_ = NULL;
   if (!this->check_val(status,
                        CL_SUCCESS,
                        "clReleaseKernel failed."))
@@ -639,11 +607,13 @@ int boxm_ray_trace_manager<T>::cleanup_tree_processing()
   // Releases OpenCL resources (Context, Memory etc.)
   cl_int status;
 
-  status = clReleaseKernel(kernel_);
-  if (!this->check_val(status,
-                       CL_SUCCESS,
-                       "clReleaseKernel failed."))
-    return SDK_FAILURE;
+  if (kernel_) {
+    status = clReleaseKernel(kernel_);
+    if (!this->check_val(status,
+      CL_SUCCESS,
+      "clReleaseKernel failed."))
+      return SDK_FAILURE;
+  }
 
   status = clReleaseMemObject(input_cell_buf_);
   if (!this->check_val(status,
