@@ -7,7 +7,10 @@ void expected_image_funct(__global float16* cell_data, int data_ptr,
   
   //: TODO fix it
   float expected_int_cell = data.s3*data.s5+data.s6*data.s8+data.s9*data.sb;
-
+  float total_weight_model = data.s5 + data.s8 + data.sb;
+  if (total_weight_model > 0) {
+    expected_int_cell /= total_weight_model;
+  }
   
   if(alpha<0) return;
 
