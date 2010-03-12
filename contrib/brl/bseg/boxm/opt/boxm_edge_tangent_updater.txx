@@ -104,8 +104,10 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
         }
         nums+=planes.size();
         if (planes.size() > 1) {
-          vgl_infinite_line_3d<AUX> line = vgl_intersection(planes, weights);
+          float residual=0;
+          vgl_infinite_line_3d<AUX> line = vgl_intersection(planes, weights,residual);
           boxm_inf_line_sample<AUX> data(line,aux_samples.size());
+          data.residual_=residual;
           vgl_box_3d<double> bb = tree->cell_bounding_box(cell);
           // convert to line type (from float to double)
           vgl_vector_2d<double> x0(line.x0().x(), line.x0().y());
