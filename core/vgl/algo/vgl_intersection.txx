@@ -17,9 +17,11 @@
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>
+#include <vnl/vnl_inverse.h>
 #include <vnl/algo/vnl_matrix_inverse.h>
 #include <vnl/algo/vnl_svd.h>
 
+#include <vcl_iostream.h>
 #include <vcl_cassert.h>
 
 template <class T>
@@ -45,8 +47,7 @@ vgl_intersection(const vcl_list<vgl_plane_3d<T> >& planes)
   for (typename vcl_list<vgl_plane_3d<T> >::const_iterator pit = planes.begin();
        pit != planes.end(); ++pit)
   {
-    double a = (*pit).a(), b = (*pit).b(), c = (*pit).c(),
-      d = (*pit).d();
+    double a = (*pit).a(), b = (*pit).b(), c = (*pit).c(),d = (*pit).d();
     Q[0][0] += a*a; Q[0][1] += a*b; Q[0][2] += a*c;
     Q[1][1] += b*b; Q[1][2] += b*c;
     Q[2][2] += c*c;
@@ -56,9 +57,12 @@ vgl_intersection(const vcl_list<vgl_plane_3d<T> >& planes)
   Q/=n;
   vd/=n;
   vnl_svd<double> svd(Q);
+
   // the direction of the resulting line
   vnl_vector<double> t = svd.nullvector();
+
   double tx = t[0], ty = t[1], tz = t[2];
+
   // determine maximum component of t
   char component = 'x';
   if (ty>tx&&ty>tz)
@@ -108,7 +112,7 @@ vgl_intersection(const vcl_list<vgl_plane_3d<T> >& planes)
 
 template <class T>
 vgl_infinite_line_3d<T>
-vgl_intersection(const vcl_list<vgl_plane_3d<T> >& planes, vcl_vector<T> ws)
+vgl_intersection(const vcl_list<vgl_plane_3d<T> >& planes, vcl_vector<T> ws, T &residual)
 {
   // form the matrix of plane normal monomials
   vnl_matrix<double> Q(3,3,0.0);
@@ -133,6 +137,7 @@ vgl_intersection(const vcl_list<vgl_plane_3d<T> >& planes, vcl_vector<T> ws)
   // the direction of the resulting line
   vnl_vector<double> t = svd.nullvector();
   double tx = t[0], ty = t[1], tz = t[2];
+  vnl_matrix<double> Qinv=vnl_inverse(Q);
   // determine maximum component of t
   char component = 'x';
   if (ty>tx&&ty>tz)
@@ -176,7 +181,19 @@ vgl_intersection(const vcl_list<vgl_plane_3d<T> >& planes, vcl_vector<T> ws)
   vgl_vector_3d<T> tv(static_cast<T>(tx),
                       static_cast<T>(ty),
                       static_cast<T>(tz));
+  residual=T(0);
+  cnt=0;
+  for (typename vcl_list<vgl_plane_3d<T> >::const_iterator pit = planes.begin();
+       pit != planes.end(); ++pit)
+  {
+    double a = pit->normal().x(), b = pit->normal().y(), c = pit->normal().z();
+    residual+=ws[cnt]*(a*tx+b*ty+c*tz)*(a*tx+b*ty+c*tz);
+    cnt++;
+  }
 
+  residual/=sum_ws;
+  if(cnt>0)
+      residual=vcl_sqrt(residual);
   return vgl_infinite_line_3d<T>(pt, tv);
 }
 
@@ -259,7 +276,7 @@ bool vgl_intersection(vgl_box_3d<T> const& b, vcl_list<vgl_point_3d<T> >& poly)
 #define VGL_ALGO_INTERSECTION_INSTANTIATE(T) \
 template vgl_point_3d<T > vgl_intersection(const vcl_vector<vgl_plane_3d<T > >&); \
 template bool vgl_intersection(vgl_box_3d<T > const&, vcl_list<vgl_point_3d<T > >&); \
-template vgl_infinite_line_3d<T > vgl_intersection(const vcl_list<vgl_plane_3d<T > >& planes);\
-template vgl_infinite_line_3d<T > vgl_intersection(const vcl_list<vgl_plane_3d<T > >& planes, vcl_vector<T > ws)
+template vgl_infinite_line_3d<T > vgl_intersection(const vcl_list<vgl_plane_3d<T > >& planes,T & residual);\
+template vgl_infinite_line_3d<T > vgl_intersection(const vcl_list<vgl_plane_3d<T > >& planes, vcl_vector<T > ws,T & residual)
 
 #endif // vgl_algo_intersection_txx_
