@@ -276,7 +276,7 @@ bool vgl_intersection(vgl_box_3d<T> const& b, vcl_list<vgl_point_3d<T> >& poly)
 #define VGL_ALGO_INTERSECTION_INSTANTIATE(T) \
 template vgl_point_3d<T > vgl_intersection(const vcl_vector<vgl_plane_3d<T > >&); \
 template bool vgl_intersection(vgl_box_3d<T > const&, vcl_list<vgl_point_3d<T > >&); \
-template vgl_infinite_line_3d<T > vgl_intersection(const vcl_list<vgl_plane_3d<T > >& planes,T & residual);\
+template vgl_infinite_line_3d<T > vgl_intersection(const vcl_list<vgl_plane_3d<T > >& planes);\
 template vgl_infinite_line_3d<T > vgl_intersection(const vcl_list<vgl_plane_3d<T > >& planes, vcl_vector<T > ws,T & residual)
 
 #endif // vgl_algo_intersection_txx_
