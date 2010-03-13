@@ -296,6 +296,9 @@ SOURCE=.\Templates/boct_tree_cell_reader+short.boxm_opt3_sample+BOXM_APM_MOG_GRE
 # Begin Source File
 SOURCE=.\Templates/boct_tree+short.boxm_opt3_sample+BOXM_APM_MOG_GREY--.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_image_view+boxm_line_samples+float--.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
