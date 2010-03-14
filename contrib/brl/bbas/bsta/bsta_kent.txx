@@ -9,6 +9,7 @@
 #include <vnl/vnl_bessel.h>
 #include <vnl/vnl_math.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
+#include <vcl_cassert.h>
 
 // Factorial
 static inline vnl_bignum factorial(int n)
@@ -34,19 +35,19 @@ bsta_kent<T>::bsta_kent(vcl_vector<vgl_plane_3d<T> > planes)
     X += nt*n;
   }
   X/=planes.size();
-  
+
   vnl_matrix<T> X_inv = vnl_inverse(X);
   vnl_symmetric_eigensystem<T> E(X_inv);
   T t3 = E.get_eigenvalue(0); // smallest ??
   T t2 = E.get_eigenvalue(1);
   T t1 = E.get_eigenvalue(2); // largest??
-  
+
   assert(t1 > t3);
-  
+
   gamma3_ = E.get_eigenvector(0);  // check if this is the smallest values's vector
   gamma2_ = E.get_eigenvector(1);
   gamma1_ = E.get_eigenvector(2);
-  
+
   // compute the kent distr. parameters
   vnl_matrix<T> g3(3,1);
   g3.put(0,0,gamma3_.get(0));
@@ -57,7 +58,7 @@ bsta_kent<T>::bsta_kent(vcl_vector<vgl_plane_3d<T> > planes)
   // make sure that res is 1x1
   T R = 1 - res.get(0,0);
   T Q = vcl_abs(t1-t2);
-  
+
   kappa_= (1./(2.-2.*R-Q))+(1./(2.-2.*R+Q));
   beta_= ((1./(2.-2.*R-Q))-(1./(2.-2.*R+Q)))/2.0;
 }
@@ -87,7 +88,7 @@ T bsta_kent<T>::normalizing_const(T kappa, T beta)
     sum += static_cast<T>(factorial(2*r)/(f*f))* x;
   }
   denom*=sum;
-  return (T(1.0)/denom);  
+  return T(1.0)/denom;
 }
 
 #undef BSTA_KENT_INSTANTIATE

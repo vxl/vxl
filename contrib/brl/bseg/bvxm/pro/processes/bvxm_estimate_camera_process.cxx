@@ -22,6 +22,7 @@
 #include <vgl/algo/vgl_homg_operators_3d.h>
 
 #include <vcl_cstdio.h>
+#include <vcl_cassert.h>
 
 #include <vul/vul_timer.h>
 #include <vnl/vnl_inverse.h>
@@ -76,8 +77,8 @@ vil_image_view<T> convert_to_spherical_coordinates(
   R(2,1) = -vcl_sin(rotate);
   R(2,2) = vcl_cos(rotate);
 
-  for(unsigned i=0; i<imgs.ni(); i++){
-    for(unsigned j=0; j<imgs.nj(); j++){
+  for (unsigned i=0; i<imgs.ni(); i++) {
+    for (unsigned j=0; j<imgs.nj(); j++) {
       double curr_theta = (0.5*vnl_math::pi) - theta_range + (theta_step*(double)i);
       double curr_phi = -phi_range + (phi_step*(double)j);
 
@@ -105,7 +106,7 @@ vil_image_view<T> convert_to_spherical_coordinates(
       int u = vnl_math_rnd(curr_pixel[0]/curr_pixel[2]);
       int v = vnl_math_rnd(curr_pixel[1]/curr_pixel[2]);
 
-      if(img.in_range(u,v)){
+      if (img.in_range(u,v)) {
         imgs(i,j) = img(u,v);
       }
     }
@@ -136,13 +137,13 @@ vcl_vector<vgl_point_3d<double> > convert_3d_box_to_3d_points(const vgl_box_3d<d
   return box_pts_3d;
 }
 
-vgl_polygon<double> convert_3d_box_to_2d_polygon(const vgl_box_3d<double> box_3d, 
-                                                 const vpgl_perspective_camera<double> *cam){
+vgl_polygon<double> convert_3d_box_to_2d_polygon(const vgl_box_3d<double> box_3d,
+                                                 const vpgl_perspective_camera<double> *cam) {
   vcl_vector<vgl_point_3d<double> > box_pts_3d = convert_3d_box_to_3d_points(box_3d);
 
   vcl_vector<vgl_point_2d<double> > box_pts_2d;
   for (unsigned i=0; i<box_pts_3d.size(); i++) {
-    double u,v;    
+    double u,v;
     cam->project(box_pts_3d[i].x(),box_pts_3d[i].y(),box_pts_3d[i].z(),u,v);
     vgl_point_2d<double> curr_pt_2d(u,v);
     box_pts_2d.push_back(curr_pt_2d);
@@ -154,15 +155,15 @@ vgl_polygon<double> convert_3d_box_to_2d_polygon(const vgl_box_3d<double> box_3d
   return polygon_2d;
 }
 
-void get_expected_edge_image(const bvxm_voxel_slab<float> &data, 
-                             const vpgl_perspective_camera<double> *cam, 
+void get_expected_edge_image(const bvxm_voxel_slab<float> &data,
+                             const vpgl_perspective_camera<double> *cam,
                              vil_image_view<float> *img_eei)
 {
   img_eei->fill(0.0f);
 
   int ni = img_eei->ni();
   int nj = img_eei->nj();
-  
+
   // Layer version of expected edge image
   vgl_box_3d<double> box_3d(sx,sy,(sz+((double)nz)*dz),(sx+((double)nx)*dx),(sy+((double)ny)*dy),sz);
   vgl_polygon<double> poly_2d = convert_3d_box_to_2d_polygon(box_3d,cam);
@@ -170,9 +171,9 @@ void get_expected_edge_image(const bvxm_voxel_slab<float> &data,
   vgl_homg_plane_3d<double> plane_0(0.0,0.0,1.0,-sz);
   vgl_homg_plane_3d<double> plane_1(0.0,0.0,1.0,-sz-dz);
 
-  for(int i=0; i<ni; i++){
-    for(int j=0; j<nj; j++){
-      if(poly_2d.contains(double(i),(double)j)){
+  for (int i=0; i<ni; i++) {
+    for (int j=0; j<nj; j++) {
+      if (poly_2d.contains(double(i),(double)j)) {
         // following line 640 milliseconds
         vgl_line_3d_2_points<double> bp = cam->backproject(vgl_point_2d<double>((double)i,(double)j));
         vgl_homg_line_3d_2_points<double> bp_h(vgl_homg_point_3d<double>(bp.point1()),vgl_homg_point_3d<double>(bp.point2()));
@@ -189,14 +190,14 @@ void get_expected_edge_image(const bvxm_voxel_slab<float> &data,
         double diff_y = diff.y();
         double diff_z = diff.z();
 
-        for(int vz=0; vz<nz; vz++){
+        for (int vz=0; vz<nz; vz++) {
           int vx = (int)((((start_x + (diff_x*vz)) - sx)/dx) + 0.5f);
-          if(vx<0 || vx>=nx){
+          if (vx<0 || vx>=nx) {
             continue;
           }
 
           int vy = (int)((((start_y + (diff_y*vz)) - sy)/dy) + 0.5f);
-          if(vy<0 || vy>=ny){
+          if (vy<0 || vy>=ny) {
             continue;
           }
 
@@ -212,9 +213,9 @@ void get_expected_edge_image(const bvxm_voxel_slab<float> &data,
 }
 
 template <class T_from,class T_to>
-void normalize_to_interval(const vil_image_view<T_from>& img_inp, 
-                           vil_image_view<T_to>& img_out, 
-                           float min, 
+void normalize_to_interval(const vil_image_view<T_from>& img_inp,
+                           vil_image_view<T_to>& img_out,
+                           float min,
                            float max)
 {
   assert(min<max);
@@ -273,8 +274,8 @@ static vil_image_view<TR> estimate_offsets_fd(const vil_image_view<T1> &img1,
   vil_image_view<float> img_cc_mag(img_1_n.ni(),img_1_n.nj(),1);
   vil_image_view<float> img_cc_phase(img_1_n.ni(),img_1_n.nj(),1);
 
-  for(unsigned i=0; i<img_cc_mag.ni(); i++){
-    for(unsigned j=0; j<img_cc_mag.nj(); j++){
+  for (unsigned i=0; i<img_cc_mag.ni(); i++) {
+    for (unsigned j=0; j<img_cc_mag.nj(); j++) {
       float a = img_1_mag(i,j)*vcl_cos(img_1_phase(i,j));
       float b = img_1_mag(i,j)*vcl_sin(img_1_phase(i,j));
       float c = img_2_mag(i,j)*vcl_cos(img_2_phase(i,j));
@@ -282,7 +283,7 @@ static vil_image_view<TR> estimate_offsets_fd(const vil_image_view<T1> &img1,
       float res_real = (a*c)-(b*d);
       float res_img = (b*c)+(a*d);
       float res_mag = vcl_sqrt((res_real*res_real)+(res_img*res_img));
-      float res_phase = vcl_atan2(res_img, res_real);         
+      float res_phase = vcl_atan2(res_img, res_real);
 
       img_cc_mag(i,j) = res_mag;
       img_cc_phase(i,j) = res_phase;
@@ -293,30 +294,30 @@ static vil_image_view<TR> estimate_offsets_fd(const vil_image_view<T1> &img1,
 
   score = vcl_numeric_limits<float>::min();
 
-  for(unsigned i=0; i<img_cc.ni(); i++){
-    for(unsigned j=0; j<img_cc.nj(); j++){
-      if(img_cc(i,j)>score){
+  for (unsigned i=0; i<img_cc.ni(); i++) {
+    for (unsigned j=0; j<img_cc.nj(); j++) {
+      if (img_cc(i,j)>score) {
         score = img_cc(i,j);
         offset_x = i;
         offset_y = j;
       }
     }
   }
-  if(offset_x > (int)img_1_mag.ni()/2){
+  if (offset_x > (int)img_1_mag.ni()/2) {
     offset_x = offset_x - (int)img_1_mag.ni();
   }
-  if(offset_y > (int)img_1_mag.nj()/2){
+  if (offset_y > (int)img_1_mag.nj()/2) {
     offset_y = offset_y - (int)img_1_mag.nj();
   }
 
   vil_image_view<TR> img_2_to_1(img_2.ni(),img_2.nj(),1);
   img_2_to_1.fill((TR)0);
 
-  for(unsigned i=0; i<img_2_to_1.ni(); i++){
-    for(unsigned j=0; j<img_2_to_1.nj(); j++){
+  for (unsigned i=0; i<img_2_to_1.ni(); i++) {
+    for (unsigned j=0; j<img_2_to_1.nj(); j++) {
       int curr_i = (int)i + offset_x;
       int curr_j = (int)j + offset_y;
-      if(img_2_to_1.in_range(curr_i,curr_j)){
+      if (img_2_to_1.in_range(curr_i,curr_j)) {
         img_2_to_1(curr_i,curr_j) = img_2(i,j);
       }
     }
@@ -336,7 +337,8 @@ void convert_angles_to_vector(const double theta,
   vz = vcl_cos(theta);
 }
 
-static double edge_prob_cross_correlation(const vil_image_view<float> &img1, const vil_image_view<float> &img2){
+static double edge_prob_cross_correlation(const vil_image_view<float> &img1, const vil_image_view<float> &img2)
+{
   vil_image_view<float> img1n; img1n.deep_copy(img1);
   vil_image_view<float> img2n; img2n.deep_copy(img2);
 
@@ -371,14 +373,14 @@ static double estimate_rotation_angle(const vil_image_view<float> &img1c,
   double best_score = 0.0;
   double best_rot = 0.0;
 
-  for(int r=-rot_size; r<rot_size+1; r++){
+  for (int r=-rot_size; r<rot_size+1; r++) {
     double curr_rot = rot_step*(double)r;
 
     vgl_h_matrix_2d<double> H;
     vgl_h_matrix_2d<double> H_temp;
 
     H.set_identity();
-    
+
     H_temp.set_identity();
     H_temp.set_translation(-center_x,-center_y);
     H = H_temp*H;
@@ -397,7 +399,7 @@ static double estimate_rotation_angle(const vil_image_view<float> &img1c,
 
     double curr_score = edge_prob_cross_correlation(img1,img2_rot);
 
-    if(curr_score > best_score){
+    if (curr_score > best_score) {
       best_score = curr_score;
       best_rot = curr_rot;
     }
@@ -413,8 +415,8 @@ void estimate_rotation_iterative(const bvxm_voxel_slab<float> &data,
   int ni = img_e.ni();
   int nj = img_e.nj();
 
-  for(int iter=0; iter<max_iter_rot_angle; iter++){
-    vcl_cout << ".";
+  for (int iter=0; iter<max_iter_rot_angle; iter++) {
+    vcl_cout << '.';
     vil_image_view<float> img_eei(ni,nj,1);
     vil_image_view<vxl_byte> img_temp(ni,nj,1);
 
@@ -428,7 +430,7 @@ void estimate_rotation_iterative(const bvxm_voxel_slab<float> &data,
     float offset_score;
     estimate_offsets_fd<float,float,float>(img_e_s,img_eei_s,offset_x,offset_y,offset_score);
 
-    if(offset_x==0 && offset_y==0){
+    if (offset_x==0 && offset_y==0) {
       break;
     }
 
@@ -445,8 +447,6 @@ void estimate_rotation_iterative(const bvxm_voxel_slab<float> &data,
 
     cam->set_rotation(rot_offsets*cam->get_rotation());
 
-
-
     // Estimating the rotation angle around the axis
 
     get_expected_edge_image(data,cam,&img_eei);
@@ -454,7 +454,7 @@ void estimate_rotation_iterative(const bvxm_voxel_slab<float> &data,
     // todo : use optimal size images here
     double rot_ang = estimate_rotation_angle(img_e,img_eei);
 
-    if(rot_ang==0.0){
+    if (rot_ang==0.0) {
       break;
     }
 
@@ -468,17 +468,17 @@ void estimate_rotation_iterative(const bvxm_voxel_slab<float> &data,
 
 class cam_est_amoeba : public vnl_cost_function
 {
-public:
-  cam_est_amoeba(const bvxm_voxel_slab<float> &data, 
-                 const vil_image_view<float> &img_e, 
+ public:
+  cam_est_amoeba(const bvxm_voxel_slab<float> &data,
+                 const vil_image_view<float> &img_e,
                  const vpgl_perspective_camera<double> *cam)
-                 : data_(data), cam_(cam), img_e_(img_e), vnl_cost_function(2) 
+                 : data_(data), cam_(cam), img_e_(img_e), vnl_cost_function(2)
   {
     best_score = 0.0;
     best_camera.set_calibration(cam->get_calibration());
     best_camera.set_rotation(cam->get_rotation());
     best_camera.set_camera_center(cam->get_camera_center());
-    
+
     vpgl_perspective_camera<double> cam_centered(cam->get_calibration(),vgl_point_3d<double>(0.0,0.0,0.0),cam->get_rotation());
     double im_center_x = 0.5*(double)img_e.ni();
     double im_center_y = 0.5*(double)img_e.nj();
@@ -498,7 +498,7 @@ public:
     cam_center = cam_center - 2.0*vec_y;
   }
 
-  double get_result(vnl_vector<double>& x, vpgl_perspective_camera<double> *cam){
+  double get_result(vnl_vector<double>& x, vpgl_perspective_camera<double> *cam) {
     cam->set_calibration(best_camera.get_calibration());
     cam->set_camera_center(best_camera.get_camera_center());
     cam->set_rotation(best_camera.get_rotation());
@@ -517,7 +517,7 @@ public:
 
     double curr_score = edge_prob_cross_correlation(img_e_,img_eei);
 
-    if(curr_score > best_score){
+    if (curr_score > best_score) {
       best_score = curr_score;
       best_camera.set_camera_center(curr_cam.get_camera_center());
       best_camera.set_rotation(curr_cam.get_rotation());
@@ -591,26 +591,26 @@ bool bvxm_estimate_camera_process(bprb_func_process& pro)
   using namespace bvxm_estimate_camera_process_globals;
 
   //check number of inputs
-  if ( pro.n_inputs() < n_inputs_ ){
+  if ( pro.n_inputs() < n_inputs_ ) {
     vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
     return false;
   }
 
   // get the inputs
   unsigned i = 0;
-  
+
   // voxel world
   bvxm_voxel_world_sptr vox_world = pro.get_input<bvxm_voxel_world_sptr>(i++);
   bvxm_edge_ray_processor edge_proc(vox_world);
-  
+
   // camera
   vpgl_camera_double_sptr cam_inp = pro.get_input<vpgl_camera_double_sptr>(i++);
   vpgl_perspective_camera<double> *cam_init = dynamic_cast<vpgl_perspective_camera<double>*>(cam_inp.ptr());
-  
+
   // image
   vil_image_view_base_sptr img_e_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view<vxl_byte> img_e_vb(img_e_sptr);
-  
+
   vil_image_view<float> img_e;
   normalize_to_interval<vxl_byte,float>(img_e_vb,img_e,0.0f,1.0f);
 
@@ -651,28 +651,28 @@ bool bvxm_estimate_camera_process(bprb_func_process& pro)
 
   bvxm_voxel_grid<edges_datatype>::iterator edges_grid_it(edges_grid->begin());
 
-  for (int z=0; z<nz; z++, ++edges_grid_it){
-    for (int x=0; x<nx; x++){
-      for (int y=0; y<ny; y++){
+  for (int z=0; z<nz; z++, ++edges_grid_it) {
+    for (int x=0; x<nx; x++) {
+      for (int y=0; y<ny; y++) {
         data(x,y,z) = (*edges_grid_it)(x,y);
       }
     }
   }
 
   vpgl_perspective_camera<double> *cam_est = new vpgl_perspective_camera<double>(*cam_init);
-  
+
   get_expected_edge_image(data,cam_est,img_eei);
 
-  vil_image_view<vxl_byte> *img_eei_before_correction = new vil_image_view<vxl_byte>(ni,nj,1);  
+  vil_image_view<vxl_byte> *img_eei_before_correction = new vil_image_view<vxl_byte>(ni,nj,1);
   normalize_to_interval<float,vxl_byte>(*img_eei,*img_eei_before_correction,0.0f,255.0f);
 
   vcl_cout << "Estimating correct camera parameters\n";
   estimate_camera_amoeba(data,img_e,cam_est);
-  vcl_cout << "\n";
+  vcl_cout << '\n';
 
   get_expected_edge_image(data,cam_est,img_eei);
-  
-  vil_image_view<vxl_byte> *img_eei_vb = new vil_image_view<vxl_byte>(ni,nj,1);  
+
+  vil_image_view<vxl_byte> *img_eei_vb = new vil_image_view<vxl_byte>(ni,nj,1);
   normalize_to_interval<float,vxl_byte>(*img_eei,*img_eei_vb,0.0f,255.0f);
 
   // output
