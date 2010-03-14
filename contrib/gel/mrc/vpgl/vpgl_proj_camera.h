@@ -11,6 +11,7 @@
 // \verbatim
 //  Modifications
 //  May 6, 2005  Ricardo Fabbri   Added binary I/O
+//  March 14, 2010 J.L. Mundy made some methods virtual to handle affine case
 // \endverbatim
 //
 // This is the most general camera class based around the 3x4 matrix camera model.
@@ -121,20 +122,20 @@ class vpgl_proj_camera : public vpgl_camera<T>
   { return project( world_line ); }
 
   //: Find the 3d ray that goes through the camera center and the provided image point.
-  vgl_homg_line_3d_2_points<T> backproject( const vgl_homg_point_2d<T>& image_point ) const;
+virtual  vgl_homg_line_3d_2_points<T> backproject( const vgl_homg_point_2d<T>& image_point ) const;
 
 
   //: Find the 3d plane that contains the camera center and the provided line in the image plane.
-  vgl_homg_plane_3d<T> backproject( const vgl_homg_line_2d<T>& image_line ) const;
+ vgl_homg_plane_3d<T> backproject( const vgl_homg_line_2d<T>& image_line ) const;
 
 
   // Misc Camera Functions:-------------------
 
   //: Find the 3d coordinates of the center of the camera.
-  virtual vgl_homg_point_3d<T> camera_center() const;
+ vgl_homg_point_3d<T> camera_center() const;
 
   //: Find the world plane parallel to the image plane intersecting the camera center.
-  vgl_homg_plane_3d<T> principal_plane() const{
+virtual  vgl_homg_plane_3d<T> principal_plane() const{
     return vgl_homg_plane_3d<T>( P_[2] ); }
 
   //: Find the image coordinates of the vanishing points of the world coordinate axes.

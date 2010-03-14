@@ -15,6 +15,15 @@ project_bounding_box(vpgl_perspective_camera<double>   cam,
   return vpgl_project::project_bounding_box(pcam, box);
 }
 
+vgl_box_2d<double> vpgl_project::
+project_bounding_box(vpgl_affine_camera<double>  cam,
+                     vgl_box_3d<double> const & box){
+
+  vpgl_proj_camera<double> pcam = static_cast<vpgl_proj_camera<double> >(cam);
+  return vpgl_project::project_bounding_box(pcam, box);
+
+}
+
 vgl_box_2d<double> vpgl_project::project_bounding_box(vpgl_proj_camera<double>  cam,
                                                       vgl_box_3d<double> const & box)
 {

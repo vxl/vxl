@@ -17,7 +17,7 @@ DECLARE( test_rational_geo_adjust );
 DECLARE( test_bundle_adjust );
 DECLARE( test_interpolate );
 DECLARE( test_camera_homographies);
-
+DECLARE( test_camera_from_box );
 
 void register_tests()
 {
@@ -37,6 +37,7 @@ void register_tests()
   REGISTER( test_bundle_adjust );
   REGISTER( test_interpolate );
   REGISTER( test_camera_homographies );
+  REGISTER( test_camera_from_box );
 }
 
 DEFINE_MAIN;

@@ -33,6 +33,7 @@ SET( vpgl_algo_sources
   vpgl_interpolate.h               vpgl_interpolate.cxx
   vpgl_camera_homographies.h       vpgl_camera_homographies.cxx
   vpgl_nitf_camera_coverage.h      vpgl_nitf_camera_coverage.cxx
+  vpgl_camera_from_box.h           vpgl_camera_from_box.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates vpgl_algo_sources)
