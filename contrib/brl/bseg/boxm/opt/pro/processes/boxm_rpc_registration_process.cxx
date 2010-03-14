@@ -9,6 +9,7 @@
 #include <bprb/bprb_parameters.h>
 #include <brdb/brdb_value.h>
 #include <boxm/opt/boxm_rpc_registration.h>
+#include <boxm/boxm_line_samples.h>
 #include <vil/vil_image_view.h>
 #include <vcl_cstdio.h>
 
@@ -42,6 +43,7 @@ bool boxm_rpc_registration_process_cons(bprb_func_process& pro)
   input_types_[i++] = "float";
   input_types_[i++] = "float";
   input_types_[i++] = "unsigned";
+  //input_types_[i++] = "vcl_string";
 
   if (!pro.set_input_types(input_types_))
     return false;
@@ -76,10 +78,8 @@ bool boxm_rpc_registration_process(bprb_func_process& pro)
 
   // image
   vil_image_view_base_sptr edge_image_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
-  vil_image_view<vxl_byte> edge_image(edge_image_sptr);
 
   vil_image_view_base_sptr expected_edge_image_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
-  vil_image_view<vxl_byte> expected_edge_image(expected_edge_image_sptr);
 
   // boolean parameter specifying the voxel world alignment state
   bool rpc_shift_3d_flag = pro.get_input<bool>(i++);
@@ -93,8 +93,22 @@ bool boxm_rpc_registration_process(bprb_func_process& pro)
   // number of observations
   unsigned num_observation = pro.get_input<unsigned>(i++);
 
+  vcl_string edge_type="subpixel";//pro.get_input<vcl_string>(i++);
+
   vpgl_camera_double_sptr camera_out;
-  boxm_rpc_registration<short,boxm_edge_sample<float> >(scene,edge_image,expected_edge_image,camera_inp, camera_out, rpc_shift_3d_flag,uncertainty,n_normal, num_observation);
+
+  if(edge_type=="subpixel")
+  {
+      vil_image_view<float > expected_edge_image(expected_edge_image_sptr);
+      vil_image_view<float> edge_image(edge_image_sptr);
+      boxm_rpc_registration<short,boxm_inf_line_sample<float> >(scene,edge_image,expected_edge_image,camera_inp, camera_out, rpc_shift_3d_flag,uncertainty, num_observation);
+  }
+  else{
+      vil_image_view<vxl_byte> expected_edge_image(expected_edge_image_sptr);
+      vil_image_view<vxl_byte> edge_image(edge_image_sptr);
+      boxm_rpc_registration<short,boxm_edge_sample<float> >(scene,edge_image,expected_edge_image,camera_inp, camera_out, rpc_shift_3d_flag,uncertainty,n_normal, num_observation);
+  }
+
   // output
   unsigned j = 0;
   // update the camera and store
