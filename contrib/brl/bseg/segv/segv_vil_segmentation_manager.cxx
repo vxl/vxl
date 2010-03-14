@@ -82,7 +82,6 @@
 #include <strk/strk_region_info.h>
 #include <strk/strk_io.h>
 
-;
 segv_vil_segmentation_manager *segv_vil_segmentation_manager::instance_ = 0;
 
 segv_vil_segmentation_manager *segv_vil_segmentation_manager::instance()
@@ -1948,7 +1947,7 @@ void segv_vil_segmentation_manager::parallel_coverage()
 }
 
 //: it recives and image of line definitions and draws the lines on the tableau.
-// The image is expected having three planes to save (x,y,theta) of each line. 
+// The image is expected having three planes to save (x,y,theta) of each line.
 // (x,y) is the position of the edge and theta is the direction angle in radians
 void segv_vil_segmentation_manager::draw_line_image()
 {
@@ -1978,7 +1977,7 @@ void segv_vil_segmentation_manager::draw_line_image()
         a = x-0.5*vcl_cos(theta);
         b = y-0.5*vcl_sin(theta);
         vgl_point_2d<double> p0(a,b);
-        a = x+0.5*vcl_cos(theta); 
+        a = x+0.5*vcl_cos(theta);
         b = y+0.5*vcl_sin(theta);
         vgl_point_2d<double> p1(a,b);
         // define a line
@@ -1986,7 +1985,7 @@ void segv_vil_segmentation_manager::draw_line_image()
         t2D->add_vsol_line_2d(line);
       }
     }
-  } else 
+  }
+  else
     vcl_cout << "Pixel format: " << img_sptr->pixel_format() << " is not implemented yet" << vcl_endl;
-  
 }
