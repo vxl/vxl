@@ -102,9 +102,6 @@ SOURCE=.\test_driver.cxx
 SOURCE=.\test_fm_compute.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_include.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\test_lens_warp_mapper.cxx
 # End Source File
 # Begin Source File
@@ -142,6 +139,12 @@ SOURCE=.\test_ray.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_ray_intersect.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_camera_from_box.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_include.cxx
 # End Source File
 # End Group
 # End Target

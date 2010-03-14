@@ -159,6 +159,9 @@ SOURCE=.\vpgl_ray_intersect.cxx
 SOURCE=.\vpgl_nitf_camera_coverage.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vpgl_camera_from_box.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vpgl_list+vgl_h_matrix_2d+double--.cxx
 # End Source File
 # Begin Source File
@@ -241,6 +244,9 @@ SOURCE=.\vpgl_ray_intersect.h
 # End Source File
 # Begin Source File
 SOURCE=.\vpgl_nitf_camera_coverage.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_camera_from_box.h
 # End Source File
 # End Group
 # End Target
