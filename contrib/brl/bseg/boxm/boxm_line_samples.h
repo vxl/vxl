@@ -7,11 +7,6 @@
 #include <vcl_vector.h>
 #include <vsl/vsl_binary_io.h>
 
-//#include <vgl/vgl_infinite_line_3d.h>
-//#include <vgl/vgl_line_3d_2_points.h>
-
-//#include <boxm/opt/boxm_aux_traits.h>
-//#include <bsta/bsta_kent.h>
 
 #define SIZE 5
 
