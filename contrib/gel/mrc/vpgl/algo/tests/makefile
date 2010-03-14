@@ -21,6 +21,7 @@ TESTS += test_interpolate.cxx
 TESTS += test_rational_geo_adjust.cxx
 TESTS += test_ray.cxx
 TESTS += test_ray_intersect.cxx
+TESTS += test_camera_from_box.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
