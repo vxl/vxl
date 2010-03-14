@@ -10,13 +10,13 @@
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/opt/boxm_aux_traits.h>
 
-//: class for holding auxillary information for opt3 process
-// note that APM is not necessarily appearance model type of world,
+//: class for holding auxiliary information for opt3 process.
+// Note that APM is not necessarily appearance model type of world,
 // but observation types of the two models should be the same.
 template<boxm_apm_type APM>
 class boxm_opt3_sample
 {
-public:
+ public:
   typedef typename boxm_apm_traits<APM>::obs_datatype obs_datatype;
   typedef typename boxm_apm_traits<APM>::apm_datatype apm_datatype;
 
@@ -32,7 +32,6 @@ public:
   float weighted_vis_sum_; // sum of visibility probabilitys * corresponding seg_lens
   float seg_len_sum_; // sum of sample segment lengths
   float log_pass_prob_sum_; // sum of log of updated (1 - PQ)
-
 };
 
 //: traits for a grey optimization sample

@@ -32,7 +32,7 @@
 template<class F, class T_loc, class T_data, class T_aux = typename boxm_aux_traits<BOXM_AUX_NULL>::sample_datatype>
 class boxm_raytrace_function
 {
-  // null scene used as placeholder for operations that don't require an auxillary scene
+  // null scene used as placeholder for operations that don't require an auxiliary scene
   boxm_aux_scene<T_loc, T_data, boxm_aux_traits<BOXM_AUX_NULL>::sample_datatype> null_scene_;
 
  public:
@@ -40,7 +40,7 @@ class boxm_raytrace_function
     typedef boct_tree<T_loc,T_aux> aux_tree_type;
     typedef boct_tree_cell<T_loc,T_data> cell_type;
 
-    //: constructor for functions with no auxillary scene needed
+    //: constructor for functions with no auxiliary scene needed
     boxm_raytrace_function(boxm_scene<tree_type> &scene,
                            vpgl_camera_double_sptr cam,
                            unsigned int ni, unsigned int nj,
@@ -48,7 +48,7 @@ class boxm_raytrace_function
                            unsigned int i0 = 0, unsigned int j0 = 0)
     : scene_(scene), aux_scene_(null_scene_), reverse_traversal_(reverse_traversal), cam_(cam), img_i0_(i0), img_j0_(j0), img_ni_(ni), img_nj_(nj), debug_lvl_(2) {}
 
-    //: constructor for functions using an auxillary scene
+    //: constructor for functions using an auxiliary scene
     boxm_raytrace_function(boxm_scene<tree_type> &scene,
                            boxm_aux_scene<T_loc, T_data,  T_aux> &aux_scene,
                            vpgl_camera_double_sptr cam,
@@ -319,10 +319,10 @@ class boxm_raytrace_function
                             }
                             T_data cell_val=curr_cell->data();
                             T_aux aux_val=curr_aux_cell->data();
-                              
-                       
+
+
                             continue_trace(i-img_i0_, j-img_j0_) = step_functor.step_cell(i,j, enter_pt, exit_pt, cell_val,aux_val);
-                            
+
                             curr_cell->set_data(cell_val);
                             if (step_functor.is_aux_)
                                 curr_aux_cell->set_data(aux_val);
