@@ -2,6 +2,7 @@
 #include <vpgl/algo/vpgl_backproject.h>
 #include <vpgl/algo/vpgl_bundle_adjust.h>
 #include <vpgl/algo/vpgl_camera_compute.h>
+#include <vpgl/algo/vpgl_camera_from_box.h>
 #include <vpgl/algo/vpgl_camera_homographies.h>
 #include <vpgl/algo/vpgl_construct_cameras.h>
 #include <vpgl/algo/vpgl_fm_compute_2_point.h>
