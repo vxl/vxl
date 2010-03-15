@@ -16,8 +16,8 @@ class boxm_inf_line_sample
 {
  public:
   boxm_inf_line_sample() : 
-       line_(vgl_infinite_line_3d<T>(vgl_vector_2d<T>(0,0),vgl_vector_3d<T>(10,10,10))),residual_(0),line_clipped_(vgl_point_3d<T>(0,0,0),vgl_point_3d<T>(0,0,0)), num_obs_(0){}
-  boxm_inf_line_sample(vgl_infinite_line_3d<T> line,unsigned num_obs=0) : line_(line),num_obs_(num_obs),line_clipped_(vgl_point_3d<T>(0,0,0),vgl_point_3d<T>(0,0,0)) {}
+       line_(vgl_infinite_line_3d<T>(vgl_vector_2d<T>(0,0),vgl_vector_3d<T>(10,10,10))),residual_(0), num_obs_(0){}
+  boxm_inf_line_sample(vgl_infinite_line_3d<T> line,unsigned num_obs=0) : line_(line),num_obs_(num_obs) {}
   ~boxm_inf_line_sample() {}
   static short version_no() { return 1; }
   void print(vcl_ostream& os) { os << "(line=" << line_ << ')';  }
