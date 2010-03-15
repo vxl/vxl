@@ -132,7 +132,7 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
         cell->set_data(vgl_infinite_line_3d<AUX>(vgl_vector_2d<AUX>(0,0),vgl_vector_3d<AUX>(10,10,10)));
     }
     nums/=cells.size();
-    vcl_cout << "AVERAGE PLANE NUMS=" << nums << vcl_endl;
+
 
     scene_.write_active_block();
     for (unsigned int i=0; i<aux_readers.size(); ++i) {
