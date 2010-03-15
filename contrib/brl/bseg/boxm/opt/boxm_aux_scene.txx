@@ -51,12 +51,7 @@ boxm_aux_scene<T_loc,T,T_AUX>::boxm_aux_scene(boxm_scene<tree_type>* scene,
   }
 }
 
-template <class T_loc, class T, class T_AUX>
-boxm_block<boct_tree<T_loc,T_AUX> > *  boxm_aux_scene<T_loc,T,T_AUX>::get_block(vgl_point_3d<int> index)
-{
-  aux_scene_->load_block(index);
-  return aux_scene_->get_active_block();
-}
+
 
 template <class T_loc, class T, class T_AUX>
 boct_tree_cell_reader<T_loc, T_AUX>* boxm_aux_scene<T_loc,T,T_AUX>::get_block_incremental(vgl_point_3d<int> block_idx)

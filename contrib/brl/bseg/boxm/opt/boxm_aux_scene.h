@@ -35,7 +35,10 @@ class boxm_aux_scene
    void init_scene(){}
 
 
-   boxm_block<boct_tree<T_loc,T_AUX> > * get_block(vgl_point_3d<int> index);
+   boxm_block<boct_tree<T_loc,T_AUX> > * get_block(vgl_point_3d<int> index){  
+       aux_scene_->load_block(index);
+       return aux_scene_->get_active_block();
+   }
 
    //: get an incremental reader for a scene block
    boct_tree_cell_reader<T_loc, T_AUX >* get_block_incremental(vgl_point_3d<int> block_idx);
