@@ -18,6 +18,16 @@ namespace bvxm_estimate_camera_process_globals
 {
   const unsigned n_inputs_ = 4;
   const unsigned n_outputs_ = 3;
+
+  // parameter strings
+  const vcl_string theta_range_ =  "theta_range";
+  const vcl_string theta_step_ =  "theta_step";
+  const vcl_string phi_range_ =  "phi_range";
+  const vcl_string phi_step_ =  "phi_step";
+  const vcl_string rot_range_ =  "rot_range";
+  const vcl_string rot_step_ =  "rot_step";
+  const vcl_string max_iter_rot_angle_ =  "max_iter_rot_angle";
+  const vcl_string max_iter_cam_center_ =  "max_iter_cam_center";
 }
 
 //: set input and output types

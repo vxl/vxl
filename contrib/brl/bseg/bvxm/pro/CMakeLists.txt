@@ -75,6 +75,7 @@ SET(bvxm_pro_sources ${bvxm_pro_sources}
     processes/bvxm_update_point_cloud_process.h       processes/bvxm_update_point_cloud_process.cxx
     processes/bvxm_report_statistics_point_cloud_process.h processes/bvxm_report_statistics_point_cloud_process.cxx
     processes/bvxm_estimate_camera_process.h  processes/bvxm_estimate_camera_process.cxx
+    processes/bvxm_estimate_camera_utils.h  processes/bvxm_estimate_camera_utils.cxx
    )
 
 ADD_LIBRARY(bvxm_pro ${bvxm_pro_sources})
