@@ -92,9 +92,8 @@ void boxm_render_edge_tangent_image_rt(boxm_scene<boct_tree<T_loc, T_data > > &s
   
   typedef boxm_aux_traits<BOXM_AUX_NULL>::sample_datatype sample_datatype;
   boxm_aux_scene<T_loc, T_data,boxm_edge_tangent_sample<sample_datatype> > aux_scene(&scene,boxm_aux_traits<BOXM_AUX_NULL>::storage_subdir(), boxm_aux_scene<T_loc, T_data,boxm_edge_tangent_sample<sample_datatype> >::LOAD);
-  typedef boxm_render_expected_edge_tangent_image_functor<BOXM_EDGE_LINE,boxm_edge_tangent_sample<sample_datatype> > expfunctor;
-  boxm_raytrace_function<expfunctor,T_loc, T_data, boxm_edge_tangent_sample<sample_datatype> > raytracer
-    (scene,aux_scene, cam.ptr(),expected.ni(),expected.nj());
+  typedef boxm_render_expected_edge_tangent_image_functor<BOXM_EDGE_LINE,sample_datatype > expfunctor;
+  boxm_raytrace_function<expfunctor,T_loc, T_data> raytracer(scene, cam.ptr(),expected.ni(),expected.nj());
   expfunctor exp_functor(expected,cam,threshold,expected.ni(),expected.nj(),true,false);
   raytracer.run(exp_functor);
 
