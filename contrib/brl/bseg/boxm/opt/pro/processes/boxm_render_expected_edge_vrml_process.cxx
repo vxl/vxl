@@ -108,7 +108,6 @@ bool boxm_render_expected_edge_vrml_process(bprb_func_process& pro)
           vgl_infinite_line_3d<float> line = data.line_;
                       vgl_vector_2d<double> x0(line.x0().x(), line.x0().y());
           // TODO: revise with segment length
-          vgl_vector_3d<double> ldir(line.unnormalized_direction().x(), line.unnormalized_direction().y(), line.unnormalized_direction().z());
           if (!(line.x0().x()==0 && line.x0().y()==0)) {
               if(data.num_obs_ > threshold)
               {
