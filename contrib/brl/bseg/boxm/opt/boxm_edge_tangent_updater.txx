@@ -116,7 +116,13 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
           vgl_point_3d<double> p0,p1;
 
           if (vgl_intersection<double>(bb, dline, p0, p1)) 
+          {
             data.line_clipped_=vgl_line_3d_2_points<float>(vgl_point_3d<float>(p0.x(),p0.y(),p0.z()),vgl_point_3d<float>(p1.x(),p1.y(),p0.z()));
+          }
+          else
+          {
+             data.num_obs_=0;
+          }
           cell->set_data(data);
         }
         else
