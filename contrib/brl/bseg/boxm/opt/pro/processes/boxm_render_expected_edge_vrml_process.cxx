@@ -26,7 +26,7 @@
 
 namespace boxm_render_expected_edge_vrml_process_globals
 {
-  const unsigned n_inputs_ = 5;
+  const unsigned n_inputs_ = 4;
   const unsigned n_outputs_ = 0;
 }
 
@@ -35,16 +35,14 @@ bool boxm_render_expected_edge_vrml_process_cons(bprb_func_process& pro)
   using namespace boxm_render_expected_edge_vrml_process_globals;
   //process takes 5 inputs
   //input[0]: scene binary file
-  //input[1]: camera
-  //input[2]: the path for vrml file
-  //input[3]: threshold
-  //input[4]: s (to write every s cell)
+  //input[1]: the path for vrml file
+  //input[2]: threshold
+  //input[3]: s (to write every s cell)
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm_scene_base_sptr";
-  input_types_[1] = "vpgl_camera_double_sptr";
-  input_types_[2] = "vcl_string";
-  input_types_[3] = "float";
-  input_types_[4] = "int";
+  input_types_[1] = "vcl_string";
+  input_types_[2] = "float";
+  input_types_[3] = "int";
   if (!pro.set_input_types(input_types_))
     return false;
 
@@ -66,7 +64,7 @@ bool boxm_render_expected_edge_vrml_process(bprb_func_process& pro)
   //get the inputs
   unsigned i = 0;
   boxm_scene_base_sptr scene_ptr = pro.get_input<boxm_scene_base_sptr>(i++);
-  vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(i++);
+  //vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(i++);
   vcl_string path = pro.get_input<vcl_string>(i++);
   float threshold = pro.get_input<float>(i++);
   int s = pro.get_input<int>(i++);
@@ -83,14 +81,15 @@ bool boxm_render_expected_edge_vrml_process(bprb_func_process& pro)
         return false;
       }
       bvrml_write::write_vrml_header(stream);
-      vgl_point_3d<double> origin(450.0,450.0,0.0);
+#if 0
+      vgl_point_3d<double> origin(0.0,0.0,0.0);
       vgl_vector_3d<double> dirx(1,0,0);
       vgl_vector_3d<double> diry(0,1,0);
       vgl_vector_3d<double> dirz(0,0,1);
       bvrml_write::write_vrml_line(stream,origin,dirx,3,1,0,0);
       bvrml_write::write_vrml_line(stream,origin,diry,3,0,1,0);
       bvrml_write::write_vrml_line(stream,origin,dirz,3,0,0,1);
-
+#endif
       // for each block
       boxm_block_iterator<type> iter(scene);
       iter.begin();
@@ -107,20 +106,29 @@ bool boxm_render_expected_edge_vrml_process(bprb_func_process& pro)
           boct_tree_cell<short,boxm_inf_line_sample<float> >* cell = cells[i];
           boxm_inf_line_sample<float> data = cell->data();
           vgl_infinite_line_3d<float> line = data.line_;
+                      vgl_vector_2d<double> x0(line.x0().x(), line.x0().y());
           // TODO: revise with segment length
-          vgl_vector_3d<double> dir(line.direction().x(), line.direction().y(), line.direction().z());
-          if (line.x0().x()!=0 && line.x0().y()!=0) {
-            vgl_point_3d<double> p0,p1;
-            vgl_box_3d<double> bb = tree->cell_bounding_box(cell);
-            // convert to line type (from float to double)
-            vgl_vector_2d<double> x0(line.x0().x(), line.x0().y());
-            vgl_infinite_line_3d<double> dline(x0,dir);
-            if (vgl_intersection<double>(bb, dline, p0, p1)) {
-              vgl_vector_3d<double> dir(p1-p0);
-              double length=dir.length();
-              dir/=length;
-              bvrml_write::write_vrml_line(stream, p0,dir,length,1.f,0.f,0.f);
-            }
+          vgl_vector_3d<double> ldir(line.unnormalized_direction().x(), line.unnormalized_direction().y(), line.unnormalized_direction().z());
+          if (!(line.x0().x()==0 && line.x0().y()==0)) {
+              if(data.num_obs_ > threshold)
+              {
+                  vgl_point_3d<double> p0,p1;
+                  vgl_box_3d<double> bb = tree->cell_bounding_box(cell);
+                  // convert to line type (from float to double)
+                  vgl_vector_3d<double> dir(line.direction().x(), line.direction().y(), line.direction().z());
+
+                  vgl_infinite_line_3d<double> dline(x0,dir);
+                  if (vgl_intersection<double>(bb, dline, p0, p1)) {
+                      vgl_vector_3d<double> dir(p1-p0);
+                      double length=dir.length();
+                      dir/=length;
+                      if(data.residual_<0.2)
+                      {
+                      bvrml_write::write_vrml_line(stream, p0,dir,length,1.f,0.f,0.f);
+                      bvrml_write::write_vrml_disk(stream,p0,dir,data.residual_,0.f,1.0f,0.f);
+                      }
+                  }
+              }
           }
         }
         iter++;
