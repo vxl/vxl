@@ -5,6 +5,7 @@
 // \file
 
 #include "vgl_homg_line_3d_2_points.h"
+#include "vgl_tolerance.h"
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 
@@ -39,8 +40,10 @@ bool vgl_homg_line_3d_2_points<Type>::operator==(vgl_homg_line_3d_2_points<Type>
 template <class Type>
 void vgl_homg_line_3d_2_points<Type>::force_point2_infinite(void) const
 {
-  if (point_infinite_.w() == 0) return; // already OK
-  else if (point_finite_.w() == 0) // interchange the points
+  //Require tolerance on ideal point
+  Type tol = vgl_tolerance<Type>::position;
+  if (point_infinite_.w() < tol && point_infinite_.w()>-tol) return; // already OK
+  else if (point_finite_.w() < tol && point_finite_.w()>-tol) // interchange the points
   {
     vgl_homg_point_3d<Type> t=point_infinite_;
     point_infinite_=point_finite_;
