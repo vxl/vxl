@@ -123,6 +123,22 @@ bool boxm_upload_mesh_process(bprb_func_process& pro)
     else
       vcl_cout << "boxm_upload_mesh_process: multi bin is not implemented yet" << vcl_endl;
   }
+  if (scene->appearence_model() == BOXM_APM_SIMPLE_GREY) {
+    if (!scene->multi_bin())
+    {
+      typedef boct_tree<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > tree_type;
+      boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
+      boxm_simple_grey simplegrey(1.0,0.1,1);
+      boxm_sample<BOXM_APM_SIMPLE_GREY> val(1,simplegrey);
+      if (draw_or_fill=="draw")
+        vcl_cout<<"Not yet";
+        //boxm_upload_mesh_into_scene<short, boxm_sample<BOXM_APM_MOG_GREY> >(*s, mesh, use_lvcs, val);
+      else if (draw_or_fill=="fill")
+        boxm_fill_in_mesh_into_scene<short, boxm_sample<BOXM_APM_SIMPLE_GREY> >(*s, meshes, use_lvcs, val);
+    }
+    else
+      vcl_cout << "boxm_upload_mesh_process: multi bin is not implemented yet" << vcl_endl;
+  }
   else {
     vcl_cout << "boxm_upload_mesh_process: undefined APM type" << vcl_endl;
     return false;

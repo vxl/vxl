@@ -14,6 +14,7 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vcl_where_root_dir.h>
+#include <vul/vul_timer.h>
 
 #include "boxm_opt_opencl_utils.h"
 
@@ -794,9 +795,13 @@ bool boxm_ray_trace_manager<T>::run()
 {
   cl_int status = CL_SUCCESS;  cl_event events[2];
 
+  vul_timer t;       
+
   vcl_string error_message="";
   // set up a command queue
-  cl_command_queue command_queue = clCreateCommandQueue(this->context(),this->devices()[0],0,&status);
+  cl_command_queue command_queue = clCreateCommandQueue(this->context(),this->devices()[0],CL_QUEUE_PROFILING_ENABLE,&status);
+  clSetCommandQueueProperty(command_queue, CL_QUEUE_PROFILING_ENABLE, CL_TRUE, NULL);
+
   if (!this->check_val(status,CL_SUCCESS,"Falied in command queue creation" + error_to_string(status)))
     return false;
 
@@ -812,6 +817,7 @@ bool boxm_ray_trace_manager<T>::run()
   if (build_kernel_program())
       return false;
 
+  t.mark();
   kernel_ = clCreateKernel(program_,"expected_ray_trace",&status);
   if (!this->check_val(status,CL_SUCCESS,error_to_string(status)))
       return false;
@@ -826,17 +832,19 @@ bool boxm_ray_trace_manager<T>::run()
   status = clSetKernelArg(kernel_,1,sizeof(cl_mem),(void *)&camera_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (ray_dir_array)"))
                        return SDK_FAILURE;
+
   // tree buffer
   status = clSetKernelArg(kernel_,2,sizeof(cl_mem),(void *)&input_cell_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (ray_dir_array)"))
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (octree)"))
                        return SDK_FAILURE;
   // tree buffer
   status = clSetKernelArg(kernel_,3,sizeof(cl_mem),(void *)&input_data_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (ray_dir_array)"))
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (data)"))
                        return SDK_FAILURE;
+
   // roi dimensions
   status = clSetKernelArg(kernel_,4,sizeof(cl_mem),(void *)&imgdims_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (ray_dir_array)"))
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (Img dimensions)"))
                        return SDK_FAILURE;
   status = clSetKernelArg(kernel_,5,sizeof(cl_mem),(void *)&roidims_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (ROI dimensions)"))
@@ -850,7 +858,7 @@ bool boxm_ray_trace_manager<T>::run()
                        return SDK_FAILURE;
   // output image buffer
   status = clSetKernelArg(kernel_,8,sizeof(cl_mem),(void *)&out_expected_image_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (ray_dir_array)"))
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output_expected_image)"))
                        return SDK_FAILURE;
 
   // check the local memeory
@@ -867,16 +875,19 @@ bool boxm_ray_trace_manager<T>::run()
   if (!this->check_val(status,CL_SUCCESS,"clGetKernelWorkGroupInfo CL_KERNEL_WORK_GROUP_SIZE, failed."))
    return SDK_FAILURE;
 
-  vcl_size_t globalThreads[]= {RoundUp((imgdims_[0])*(imgdims_[1]),64)};
-  vcl_size_t localThreads[] = {64};
+  vcl_size_t globalThreads[]= {RoundUp((imgdims_[0])*(imgdims_[1]),128)};
+  vcl_size_t localThreads[] = {128};
 
   if (used_local_memory > this->total_local_memory())
   {
     vcl_cout << "Unsupported: Insufficient local memory on device.\n";
     return SDK_FAILURE;
   }
+
   cl_event ceEvent;
   status = clEnqueueNDRangeKernel(command_queue,this->kernel_, 1,NULL,globalThreads,localThreads,0,NULL,&ceEvent);
+
+
 
   if (!this->check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed."+error_to_string(status)))
     return SDK_FAILURE;
@@ -884,6 +895,10 @@ bool boxm_ray_trace_manager<T>::run()
   status = clFinish(command_queue);
   if (!this->check_val(status,CL_SUCCESS,"clFinish failed."))
     return SDK_FAILURE;
+  cl_ulong tstart,tend;
+  status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
+  status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
+
 
   // Enqueue readBuffers
   status = clEnqueueReadBuffer(command_queue,out_expected_image_buf_,CL_TRUE,
@@ -900,6 +915,7 @@ bool boxm_ray_trace_manager<T>::run()
     return SDK_FAILURE;
 
   clReleaseEvent(events[0]);
+  vcl_cout<<"Time taken is "<<t.all()<<vcl_endl;
 
   if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed."))
     return SDK_FAILURE;

@@ -18,19 +18,19 @@ DECLARE( test_sigma_normalizer );
 
 void register_tests()
 {
-  REGISTER( test_boxm_rational_camera_utils);
-  REGISTER( test_binary_io );
-  REGISTER( test_block_iter );
-  REGISTER( test_block_vis_graph );
-  REGISTER( test_cell_vis_graph );
-  REGISTER( test_quad_interpolate );
-  REGISTER( test_save_raw );
+  //REGISTER( test_boxm_rational_camera_utils);
+  //REGISTER( test_binary_io );
+  //REGISTER( test_block_iter );
+  //REGISTER( test_block_vis_graph );
+  //REGISTER( test_cell_vis_graph );
+  //REGISTER( test_quad_interpolate );
+  //REGISTER( test_save_raw );
   REGISTER( test_render_image );
-  REGISTER( test_update );
-  REGISTER( test_compute_visibility );
-  REGISTER( test_update_multi_bin );
-  REGISTER( test_upload_mesh );
-  REGISTER( test_fill_in_mesh );
+  //REGISTER( test_update );
+  //REGISTER( test_compute_visibility );
+  //REGISTER( test_update_multi_bin );
+  //REGISTER( test_upload_mesh );
+  //REGISTER( test_fill_in_mesh );
   REGISTER( test_save_scene_raw );
   REGISTER( test_sigma_normalizer );
 }

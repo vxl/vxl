@@ -20,7 +20,7 @@ static void test_save_scene_raw()
   bgeo_lvcs lvcs(33.33,44.44,10.0, bgeo_lvcs::wgs84, bgeo_lvcs::DEG, bgeo_lvcs::METERS);
   vgl_point_3d<double> origin(0,0,0);
   vgl_vector_3d<double> block_dim(10,10,10);
-  vgl_vector_3d<unsigned> world_dim(3,3,3);
+  vgl_vector_3d<unsigned> world_dim(1,1,2);
   boxm_scene<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > > scene(lvcs, origin, block_dim, world_dim);
   scene.set_appearance_model(BOXM_APM_MOG_GREY);
   scene.set_paths("boxm_scene1", "block");
@@ -79,18 +79,22 @@ static void test_save_scene_raw()
 
   typedef boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
 
+  float count=0.1;
   while (!iter.end())
   {
     scene.load_block(iter.index().x(),iter.index().y(),iter.index().z());
     boxm_block<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> >  > * block=scene.get_active_block();
     boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > * tree=new boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> >(3,2);
-    boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> >* cel11=tree->locate_point(vgl_point_3d<double>(0.01,0.01,0.01));
+    boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> >* cel11=tree->locate_point(vgl_point_3d<double>(0.01,0.01,0.9));
+    s2_sample.alpha=count;
+
     cel11->set_data(s2_sample);
-    boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> >* cell2=tree->locate_point(vgl_point_3d<double>(0.51,0.51,0.51));
-    cell2->set_data(s1_sample);
+    //boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> >* cell2=tree->locate_point(vgl_point_3d<double>(0.51,0.51,0.51));
+    //cell2->set_data(s2_sample);
     block->init_tree(tree);
     scene.write_active_block();
     iter++;
+    count+=0.1;
   }
   vgl_box_3d<double> world;
   world.add(origin);

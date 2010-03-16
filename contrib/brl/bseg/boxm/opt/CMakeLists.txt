@@ -15,6 +15,9 @@ SET(boxm_opt_sources
    boxm_pre_infinity_functor.h
    boxm_rt_sample.h                     boxm_rt_sample.txx
    boxm_update_image_functor.h
+   boxm_compute_visibility_functor.h
+   boxm_pre_infinity_functor.h
+   boxm_seg_length_functor.h
    boxm_edge_updater.h                  boxm_edge_updater.txx
    boxm_generate_edge_sample_functor.h
    boxm_render_expected_edge_image_functor.h

@@ -50,15 +50,15 @@ bool boxm_mob_grey_processor::update( apm_datatype &appear,
   float init_variance = 0.008f;
   float g_thresh = 0.025f; // number of std devs from mean sample must be
 
-  float t_l_u = float(vcl_sqrt(1-4*init_variance)*0.5);
-  float lower = 0.5f-t_l_u;
-  float upper = 0.5f+t_l_u;
+  //float t_l_u = float(vcl_sqrt(1-4*init_variance)*0.5);
+  //float lower = 0.5f-t_l_u;
+  //float upper = 0.5f+t_l_u;
 
   obs_datatype val = obs;
-  if (obs < lower)
-    val = lower+0.000001f;
-  else if (obs > upper)
-    val = upper-0.000001f;
+  //if (obs < lower)
+  //  val = lower+0.000001f;
+  //else if (obs > upper)
+  //  val = upper-0.000001f;
 
   float alpha, beta;
   bsta_beta<float>::bsta_beta_from_moments(val, init_variance,alpha,beta);

@@ -17,6 +17,8 @@
 
 void boxm_replace_constant_app(boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > > &scene,
                                float mean);
+void boxm_replace_constant_app(boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > > &scene,
+                               float mean);
 namespace boxm_replace_const_app_process_globals
 {
   const unsigned n_inputs_ = 2;
@@ -64,13 +66,38 @@ bool boxm_replace_const_app_process(bprb_func_process& pro)
       boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
       boxm_replace_constant_app(*s,meanval );
   }
-  else {
+  else   if (scene->appearence_model() == BOXM_APM_SIMPLE_GREY) {
+      typedef boct_tree<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > tree_type;
+      boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
+      boxm_replace_constant_app(*s,meanval );
+  }
+  else{
     vcl_cout << "boxm_replace_const_app_process: undefined APM type" << vcl_endl;
     return false;
   }
 
   return true;
 }
+void boxm_replace_constant_app(boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > > &scene,
+                               float mean)
+{
+  boxm_block_iterator<boct_tree<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > > iter(&scene);
+  boxm_simple_grey app(mean,0.1,1.0);
+  for (; !iter.end(); iter++) {
+    scene.load_block(iter.index());
+    boxm_block<boct_tree<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > >* block = *iter;
+    boct_tree<short, boxm_sample<BOXM_APM_SIMPLE_GREY> >* tree = block->get_tree();
+
+    vcl_vector<boct_tree_cell<short,boxm_sample<BOXM_APM_SIMPLE_GREY> >*> leaf_cells=tree->leaf_cells();
+    for (unsigned i=0;i<leaf_cells.size();i++)
+    {
+      boxm_sample<BOXM_APM_SIMPLE_GREY> new_data(leaf_cells[i]->data().alpha,app);
+      leaf_cells[i]->set_data(new_data);
+    }
+    scene.write_active_block();
+  }
+}
+
 
 void boxm_replace_constant_app(boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > > &scene,
                                float mean)

@@ -17,7 +17,7 @@ void boxm_opt_compute_appearance(vcl_vector<typename boxm_apm_traits<APM>::obs_d
 { 
   const float min_sigma=0.1f;
   // initialize appearance model estimate using visibility probabilities as weights.
-  boxm_apm_traits<APM>::apm_processor::compute_appearance(obs,pre,model,min_sigma);
+  boxm_apm_traits<APM>::apm_processor::compute_appearance(obs,vis,model,min_sigma);
 #if 1
   // use EM to refine estimate until convergence.
   unsigned int nobs= obs.size();

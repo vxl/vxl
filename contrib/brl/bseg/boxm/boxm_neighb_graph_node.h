@@ -5,7 +5,7 @@
 #include <vcl_map.h>
 #include <boct/boct_tree_cell.h>
 
-#include "boxm_neighb_graph_node.h"
+//#include "boxm_neighb_graph_node.h"
 #include <vgl/vgl_point_3d.h>
 
 class boxm_neighb_graph_node

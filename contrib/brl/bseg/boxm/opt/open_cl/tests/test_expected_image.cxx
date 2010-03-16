@@ -14,6 +14,8 @@
 #include <vil/vil_save.h>
 #include <vil/vil_load.h>
 #include <vil/vil_convert.h>
+#include <vcl_where_root_dir.h>
+
 #include <vil/vil_math.h>
 
 bool generate_ray_init(vpgl_perspective_camera<double> *cam_,vgl_box_3d<double> const& block_bb, vgl_box_2d<double> &img_bb,unsigned ni,unsigned nj)
@@ -104,6 +106,18 @@ vil_image_view<float> run_expected_image(boxm_scene<boct_tree<short,boxm_sample<
     ray_mgr->setup_expected_image(ni,nj);
     ray_mgr->setup_camera();
     ray_mgr->setup_img_dims(ni,nj);
+    ray_mgr->load_kernel_source(vcl_string(VCL_SOURCE_ROOT_DIR)
+        +"/contrib/brl/bseg/boxm/opt/open_cl/octree_library_functions.cl");
+
+    ray_mgr->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
+        +"/contrib/brl/bseg/boxm/opt/open_cl/expected_functor.cl");
+    ray_mgr->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
+        +"/contrib/brl/bseg/boxm/opt/open_cl/backproject.cl");
+    ray_mgr->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
+        +"/contrib/brl/bseg/boxm/opt/open_cl/expected_ray_trace.cl");
+
+    ray_mgr->build_kernel_program();
+    
     typedef  boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY > > tree_type;
     boxm_block_vis_graph_iterator<tree_type > block_vis_iter(pcam, s, ni,nj);
 

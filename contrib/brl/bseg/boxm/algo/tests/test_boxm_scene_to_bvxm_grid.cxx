@@ -7,7 +7,7 @@
 #include <boxm/algo/boxm_scene_to_bvxm_grid.h>
 #include <boxm/boxm_apm_traits.h>
 
-const bool debug = false;
+const bool debug = true;
 
 void fill_octree(boct_tree<short,float>* tree)
 {

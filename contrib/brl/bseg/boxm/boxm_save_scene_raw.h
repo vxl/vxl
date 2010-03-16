@@ -188,7 +188,7 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
 
   // combine the blocks
   vgl_vector_3d<unsigned> dim = scene.world_dim();
-  unsigned dimx = dim.x()*ncells;
+  unsigned dimx = dim.x()*ncells;  
   unsigned dimy = dim.y()*ncells;
   unsigned dimz = dim.z()*ncells;
   // we will read the data a column at a time and this is enough
