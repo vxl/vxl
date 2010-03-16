@@ -9,7 +9,6 @@
 #include <boxm/boxm_mob_grey_processor.h>
 #include <boxm/boxm_edge_tangent_sample.h>
 #include <boxm/boxm_inf_line_sample.h>
-#include <boxm/boxm_line_samples.h>
 #include <vnl/vnl_math.h>
 #include <vil/vil_transform.h>
 #include <vbl/vbl_array_2d.h>
@@ -31,7 +30,6 @@ class boxm_render_expected_edge_tangent_image_functor
                                                   bool is_aux=true)
                                                   : cam_(cam),residual(threshold),expected_(expected), num_obs_(expected.ni(),expected.nj())
   {
-    //boxm_line_samples<float>  nil;
     expected_.fill(-1);
     num_obs_.fill(0);
     scene_read_only_=scene_read_only;
