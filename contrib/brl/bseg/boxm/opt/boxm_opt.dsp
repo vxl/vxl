@@ -219,7 +219,7 @@ SOURCE=.\Templates/boxm_cell_vis_graph_iterator+short.boxm_inf_line_sample+float
 SOURCE=.\Templates/boxm_aux_scene+short.float.boxm_edge_tangent_sample+float--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boxm_opt3_optimizer+short.BOXM_APM_MOG_GREY.BOXM_AUX_OPT3_MOG_GREY-.cxx
+SOURCE=.\Templates/boxm_opt3_optimizer+short.BOXM_APM_MOG_GREY.BOXM_APM_MOG_GREY-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/boxm_block+boct_tree+short.boxm_opt2_sample+float---.cxx
@@ -249,16 +249,16 @@ SOURCE=.\Templates/boxm_aux_scene+short.boxm_sample+BOXM_APM_MOG_GREY-.boxm_opt2
 SOURCE=.\Templates/boxm_aux_scene+short.boxm_sample+BOXM_APM_SIMPLE_GREY-.boxm_opt2_sample+float--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boxm_opt3_optimizer+short.BOXM_APM_SIMPLE_GREY.BOXM_AUX_OPT3_MOG_GREY-.cxx
+SOURCE=.\Templates/boxm_opt3_optimizer+short.BOXM_APM_SIMPLE_GREY.BOXM_APM_MOG_GREY-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_array_3d+boxm_block+boct_tree+short.boxm_opt3_sample+BOXM_APM_MOG_GREY---.cxx
+SOURCE=.\Templates/vbl_array_3d+boxm_block+boct_tree+short.boxm_opt3_sample+BOXM_APM_MOG_GREY---~-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/boct_tree_cell+short.boxm_opt2_sample+float--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_array_3d+boxm_block+boct_tree+short.boxm_opt2_sample+float---.cxx
+SOURCE=.\Templates/vbl_array_3d+boxm_block+boct_tree+short.boxm_opt2_sample+float---~-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/boxm_opt3_sample+BOXM_APM_MOG_GREY-.cxx
@@ -285,7 +285,7 @@ SOURCE=.\Templates/boxm_opt2_sample+float-.cxx
 SOURCE=.\Templates/boxm_aux_scene+short.boxm_sample+BOXM_APM_SIMPLE_GREY-.boxm_opt3_sample+BOXM_APM_MOG_GREY--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boxm_opt_rt_bayesian_optimizer+short.BOXM_APM_MOG_GREY.BOXM_AUX_OPT_RT_GREY.cxx
+SOURCE=.\Templates/boxm_opt_rt_bayesian_optimizer+short.BOXM_APM_MOG_GREY.BOXM_AUX_OPT_RT_GREY-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/boxm_aux_scene+short.boxm_sample+BOXM_APM_MOG_GREY-.float-.cxx
@@ -295,9 +295,6 @@ SOURCE=.\Templates/boct_tree_cell_reader+short.boxm_opt3_sample+BOXM_APM_MOG_GRE
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/boct_tree+short.boxm_opt3_sample+BOXM_APM_MOG_GREY--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_image_view+boxm_line_samples+float--.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"

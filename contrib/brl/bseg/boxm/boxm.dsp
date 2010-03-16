@@ -314,9 +314,6 @@ SOURCE=.\Templates/boct_tree+short.bsta_num_obs+bsta_gauss_f1--.cxx
 # Begin Source File
 SOURCE=.\Templates/boxm_inf_line_sample+float-.cxx
 # End Source File
-# Begin Source File
-SOURCE=.\Templates/boxm_line_samples+float-.cxx
-# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -331,9 +328,6 @@ SOURCE=.\boxm_block_vis_graph_node.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_block.h
-# End Source File
-# Begin Source File
-SOURCE=.\boxm_neighb_graph_node.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_utils.h
@@ -481,12 +475,6 @@ SOURCE=.\boxm_inf_line_sample.txx
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_sigma_normalizer.h
-# End Source File
-# Begin Source File
-SOURCE=.\boxm_line_samples.txx
-# End Source File
-# Begin Source File
-SOURCE=.\boxm_line_samples.h
 # End Source File
 # End Group
 # End Target

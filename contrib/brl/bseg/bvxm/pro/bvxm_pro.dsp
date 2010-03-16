@@ -237,6 +237,9 @@ SOURCE=.\processes/bvxm_detect_edge_tangent_process.cxx
 SOURCE=.\processes/bvxm_estimate_camera_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/bvxm_estimate_camera_utils.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+bvxm_voxel_world_sptr-.cxx
 # End Source File
 # Begin Source File
@@ -391,6 +394,9 @@ SOURCE=.\processes/bvxm_detect_edge_tangent_process.h
 # End Source File
 # Begin Source File
 SOURCE=.\processes/bvxm_estimate_camera_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_estimate_camera_utils.h
 # End Source File
 # End Group
 # End Target
