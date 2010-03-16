@@ -126,12 +126,12 @@ backproject( const vgl_homg_point_2d<T>& image_point ) const
     vpgl_proj_camera::backproject(image_point);
   vgl_homg_point_3d<T> cph = vgl_closest_point_origin(line);
   vgl_point_3d<T> cp(cph);
-  vgl_homg_point_3d<T> pt_inf = line.point_infinite();
-  vgl_vector_3d<T> dir(pt_inf.x(), pt_inf.y(), pt_inf.z());
+  vgl_homg_point_3d<T> pi = line.point_infinite();
+  vgl_vector_3d<T> dir(pi.x(), pi.y(), pi.z());
   dir = normalize(dir);
   vgl_point_3d<T> eye_pt = cp-(view_distance_*dir);
   vgl_homg_point_3d<T> pt_fin(eye_pt.x(), eye_pt.y(), eye_pt.z());
-  vgl_homg_line_3d_2_points<T> ret(pt_fin, pt_inf);
+  vgl_homg_line_3d_2_points<T> ret(pt_fin, pi);
   return ret;
 }
 

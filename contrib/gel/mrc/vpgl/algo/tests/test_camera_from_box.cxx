@@ -5,6 +5,7 @@
 #include <vpgl/vpgl_affine_camera.h>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_box_3d.h>
+#include <vgl/vgl_homg_point_3d.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vpgl/algo/vpgl_project.h>
 #include <vpgl/algo/vpgl_camera_from_box.h>
@@ -35,6 +36,22 @@ static void test_camera_from_box()
   pmin = b2dp.min_point(); pmax = b2dp.max_point();
   len = (pmin-imin).length() + (pmax-imax).length() + (c2d-vgl_point_2d<double>(ni/2.0, nj/2.0)).length();
   TEST_NEAR("Test perspective cam from box", len, 0.0, 0.005);
+
+  vgl_point_3d<double> bmin(350, 350, 0), bmax(550, 550, 100);
+  vgl_box_3d<double> sun_box;
+  sun_box.add(bmin); sun_box.add(bmax);
+  vgl_vector_3d<double> sun_ray(-0.29355871677398682, 0.76474428176879883, -0.57357603311538696);
+  ni = 256; nj = 256;
+  vpgl_affine_camera<double> sun_cam = vpgl_camera_from_box::affine_camera_from_box(sun_box, sun_ray, ni, nj);
+  sun_cam.set_viewing_distance(300000);
+  vgl_box_2d<double> sun_b2d = 
+    vpgl_project::project_bounding_box(sun_cam, sun_box);
+  vgl_homg_point_2d<double> sun_ph(ni/2.0, nj/2.0);
+  vgl_homg_line_3d_2_points<double> sun_line = sun_cam.backproject(sun_ph);
+  vgl_homg_point_3d<double> pi = sun_line.point_infinite();
+  vgl_vector_3d<double> vpi(pi.x(), pi.y(), pi.z());
+  len = (sun_ray-vpi).length();
+  TEST_NEAR("Affine camera from sun", len, 0.0, 1e-6);
 }
 
 TESTMAIN(test_camera_from_box);
