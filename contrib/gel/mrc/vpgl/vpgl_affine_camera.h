@@ -61,6 +61,9 @@ class vpgl_affine_camera : public vpgl_proj_camera<T>
   //: set a finite viewing distance to allow the methods below to return finite objects
   void set_viewing_distance(T dist){view_distance_ = dist;}
 
+//: Find the 3d coordinates of the center of the camera. Will be an ideal point with the sense of the ray direction.
+  virtual vgl_homg_point_3d<T> camera_center() const;
+
   //: Find the 3d ray that goes through the camera center.
   // The finite point of the ray is at the viewing distance from the origin
   virtual  vgl_homg_line_3d_2_points<T> backproject( const vgl_homg_point_2d<T>& image_point ) const;
@@ -70,6 +73,7 @@ class vpgl_affine_camera : public vpgl_proj_camera<T>
 
  private:
   T view_distance_; // distance from origin along rays
+  vgl_vector_3d<T> ray_dir_;//needed to assign a consistent sense to the ray 
 };
 
 #endif // vpgl_affine_camera_h_

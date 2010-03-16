@@ -19,6 +19,9 @@ vpgl_affine_camera<T>::vpgl_affine_camera()
   C(0,0) = C(1,1) = C(2,3) = (T)1;
   set_matrix( C );
   view_distance_ = (T)0;
+  vgl_homg_point_3d<T> cc = vpgl_proj_camera<T>::camera_center();
+  ray_dir_.set(cc.x(), cc.y(), cc.z());
+  ray_dir_ = normalize(ray_dir_);
 }
 
 
@@ -29,6 +32,9 @@ vpgl_affine_camera<T>::vpgl_affine_camera( const vnl_vector_fixed<T,4>& row1,
 {
   set_rows( row1, row2 );
   view_distance_ = (T)0;
+  vgl_homg_point_3d<T> cc = vpgl_proj_camera<T>::camera_center();
+  ray_dir_.set(cc.x(), cc.y(), cc.z());
+  ray_dir_ = normalize(ray_dir_);
 }
 
 
@@ -42,6 +48,9 @@ vpgl_affine_camera<T>::vpgl_affine_camera( const vnl_matrix_fixed<T,3,4>& camera
   C(2,0) = (T)0; C(2,1) = (T)0; C(2,2) = (T)0;
   set_matrix( C );
   view_distance_ = (T)0;
+  vgl_homg_point_3d<T> cc = vpgl_proj_camera<T>::camera_center();
+  ray_dir_.set(cc.x(), cc.y(), cc.z());
+  ray_dir_ = normalize(ray_dir_);
 }
 
 template <class T>
@@ -98,6 +107,7 @@ vpgl_affine_camera(vgl_vector_3d<T> ray, vgl_vector_3d<T> up,
   r0[3]=tu; r1[3]=tv;
   this->set_rows(r0, r1);
   view_distance_ = (T)0;
+  ray_dir_.set(rvec.x(), rvec.y(), rvec.z());
 }
 
 
@@ -115,6 +125,13 @@ void vpgl_affine_camera<T>::set_rows(
   C(2,3) = (T)1;
   set_matrix( C );
  }
+//: Find the 3d coordinates of the center of the camera. Will be an ideal point with the sense of the ray direction.
+template <class T>
+vgl_homg_point_3d<T> vpgl_affine_camera<T>::camera_center() const
+{
+  vgl_homg_point_3d<T> temp(ray_dir_.x(), ray_dir_.y(), ray_dir_.z(), (T)0);
+  return temp;
+}
 
   //: Find the 3d ray that goes through the camera center and the provided image point.
 template <class T>
@@ -126,12 +143,10 @@ backproject( const vgl_homg_point_2d<T>& image_point ) const
     vpgl_proj_camera::backproject(image_point);
   vgl_homg_point_3d<T> cph = vgl_closest_point_origin(line);
   vgl_point_3d<T> cp(cph);
-  vgl_homg_point_3d<T> pi = line.point_infinite();
-  vgl_vector_3d<T> dir(pi.x(), pi.y(), pi.z());
-  dir = normalize(dir);
-  vgl_point_3d<T> eye_pt = cp-(view_distance_*dir);
+  vgl_point_3d<T> eye_pt = cp-(view_distance_*ray_dir_);
   vgl_homg_point_3d<T> pt_fin(eye_pt.x(), eye_pt.y(), eye_pt.z());
-  vgl_homg_line_3d_2_points<T> ret(pt_fin, pi);
+  vgl_homg_point_3d<T> pinf(ray_dir_.x(), ray_dir_.y(), ray_dir_.z(), (T)0);
+  vgl_homg_line_3d_2_points<T> ret(pt_fin, pinf);
   return ret;
 }
 
@@ -143,13 +158,11 @@ principal_plane() const
   //get line from projective camera
   vgl_homg_line_3d_2_points<T> line = 
     vpgl_proj_camera::backproject(vgl_homg_point_2d<T>((T)0,(T)0));
-  //get the ray direction which is the plane normal
-  vgl_homg_point_3d<T> pt_inf = line.point_infinite();
-  vgl_vector_3d<T> dir(pt_inf.x(), pt_inf.y(), pt_inf.z());
-  dir = normalize(dir);
+
   //note that d = view_distance_ not -view_distance_,
   //since dir points towards the origin
-  vgl_homg_plane_3d<T> ret(dir.x(), dir.y(), dir.z(), view_distance_);
+  vgl_homg_plane_3d<T> ret(ray_dir_.x(), ray_dir_.y(),
+                           ray_dir_.z(), view_distance_);
   return ret;
 }
 

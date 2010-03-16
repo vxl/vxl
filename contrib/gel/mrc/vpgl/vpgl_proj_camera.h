@@ -132,7 +132,7 @@ virtual  vgl_homg_line_3d_2_points<T> backproject( const vgl_homg_point_2d<T>& i
   // Misc Camera Functions:-------------------
 
   //: Find the 3d coordinates of the center of the camera.
- vgl_homg_point_3d<T> camera_center() const;
+ virtual vgl_homg_point_3d<T> camera_center() const;
 
   //: Find the world plane parallel to the image plane intersecting the camera center.
 virtual  vgl_homg_plane_3d<T> principal_plane() const{

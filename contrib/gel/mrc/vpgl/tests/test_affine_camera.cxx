@@ -25,10 +25,14 @@ static void test_affine_camera()
   TEST_NEAR("test du, dv", v1+u2+u3,49.5917517+ 49.2928932+ 50.70710678,1e-5); 
   vgl_homg_point_2d<double> p0(u0, v0);
   C.set_viewing_distance(1000);
+  vgl_homg_point_3d<double> cam_center = C.camera_center();
+  vgl_vector_3d<double> cc_dir(cam_center.x(), cam_center.y(), cam_center.z());
+  double len = (ray-cc_dir).length();
+  TEST_NEAR("Camera center", len, 0.0, 1e-3);
   vgl_homg_line_3d_2_points<double> l3d = C.backproject(p0);
   vgl_homg_point_3d<double> hpf = l3d.point_finite();
   vgl_point_3d<double> pf(hpf);
-  double len = (pf-vgl_point_3d<double>(577.35,577.35,577.35)).length();
+  len = (pf-vgl_point_3d<double>(577.35,577.35,577.35)).length();
   TEST_NEAR("Backproject", len, 0.0, 1.0);
   vgl_homg_plane_3d<double> pp = C.principal_plane();
   double algd = pp.a()*577.350+pp.b()*577.350+pp.c()*577.350+pp.d();
