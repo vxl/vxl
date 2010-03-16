@@ -13,10 +13,8 @@
 #include <boxm/boxm_fill_in_mesh.h>
 #include <boxm/boxm_inf_line_sample.h>
 #include <boxm/boxm_init_scene.h>
-#include <boxm/boxm_line_samples.h>
 #include <boxm/boxm_mob_grey_processor.h>
 #include <boxm/boxm_mog_grey_processor.h>
-#include <boxm/boxm_neighb_graph_node.h>
 #include <boxm/boxm_plane_obs.h>
 #include <boxm/boxm_quad_scan_iterator.h>
 #include <boxm/boxm_rational_camera_utils.h>
