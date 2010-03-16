@@ -8,7 +8,6 @@ MANPAGE_SOURCES += boxm_cell_vis_graph_node.h
 MANPAGE_SOURCES += boxm_block_vis_graph_iterator.txx
 MANPAGE_SOURCES += boxm_block_vis_graph_node.h
 MANPAGE_SOURCES += boxm_block.h
-MANPAGE_SOURCES += boxm_neighb_graph_node.h
 MANPAGE_SOURCES += boxm_scene.txx
 MANPAGE_SOURCES += boxm_sample.h
 MANPAGE_SOURCES += boxm_cell_vis_graph_iterator.h
@@ -48,7 +47,6 @@ MANPAGE_SOURCES += boxm_edge_tangent_sample.txx
 MANPAGE_SOURCES += boxm_plane_obs.txx
 MANPAGE_SOURCES += boxm_inf_line_sample.txx
 SOURCES += boxm_sigma_normalizer.cxx
-MANPAGE_SOURCES += boxm_line_samples.txx
 
 SUBDIRS += io pro opt algo
 

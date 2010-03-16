@@ -52,6 +52,7 @@ SOURCES += processes/bvxm_expected_edge_image_process.cxx
 SOURCES += processes/bvxm_update_edge_tangent_process.cxx
 SOURCES += processes/bvxm_detect_edge_tangent_process.cxx
 SOURCES += processes/bvxm_estimate_camera_process.cxx
+SOURCES += processes/bvxm_estimate_camera_utils.cxx
 
 MANPAGE_SOURCES += bvxm_processes.h
 
