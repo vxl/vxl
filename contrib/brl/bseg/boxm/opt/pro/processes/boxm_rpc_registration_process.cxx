@@ -9,7 +9,6 @@
 #include <bprb/bprb_parameters.h>
 #include <brdb/brdb_value.h>
 #include <boxm/opt/boxm_rpc_registration.h>
-#include <boxm/boxm_line_samples.h>
 #include <vil/vil_image_view.h>
 #include <vcl_cstdio.h>
 
