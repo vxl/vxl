@@ -82,7 +82,7 @@ bool bvpl_susan_opinion_operator_process(bprb_func_process& pro)
   bvxm_voxel_grid<bvxm_opinion> * in_opn_grid
       =dynamic_cast<bvxm_voxel_grid<bvxm_opinion> *>(in_opn_grid_base.ptr());
 
-  if(in_dir_grid)
+  if(in_opn_grid)
     vcl_cout<<"Successful cast"<<vcl_endl;
   bvxm_voxel_grid<bvxm_opinion> * output_grid=new bvxm_voxel_grid<bvxm_opinion>(out_grid_path,in_dir_grid->grid_size());
   bvpl_susan_opinion_operator oper;
