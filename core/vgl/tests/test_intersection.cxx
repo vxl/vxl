@@ -117,7 +117,7 @@ static void test_multiple_planes()
 
   vgl_plane_3d<double> wpl0(0,1,0,0.0);
   vgl_plane_3d<double> wpl1(1,0,0, 0.0);
-  vgl_plane_3d<double> wpl2(0.707,0.707,0.0,1);
+  vgl_plane_3d<double> wpl2(0.707,0.707,0.1,1);
   vcl_list<vgl_plane_3d<double> > wplanes;
   wplanes.push_back(wpl0);   wplanes.push_back(wpl1); wplanes.push_back(wpl2);
 
