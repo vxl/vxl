@@ -137,7 +137,6 @@ vgl_intersection(const vcl_list<vgl_plane_3d<T> >& planes, vcl_vector<T> ws, T &
   // the direction of the resulting line
   vnl_vector<double> t = svd.nullvector();
   double tx = t[0], ty = t[1], tz = t[2];
-  vnl_matrix<double> Qinv=vnl_inverse(Q);
   // determine maximum component of t
   char component = 'x';
   if (ty>tx&&ty>tz)
