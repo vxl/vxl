@@ -1,6 +1,6 @@
-//This is brl/bseg/bvxm/pro/processes/bvxm_camera_estimator.h
-#ifndef bvxm_camera_estimator_h_
-#define bvxm_camera_estimator_h_
+//This is brl/bseg/bvxm/pro/processes/bvxm_estimate_camera_utils.h
+#ifndef bvxm_estimate_camera_utils_h_
+#define bvxm_estimate_camera_utils_h_
 //:
 // \file
 // \brief A class for estimating perspective camera models
@@ -70,10 +70,10 @@ class bvxm_camera_estimator
 
   template <class T1,class T2,class TR>
   vil_image_view<TR> estimate_offsets_fd(const vil_image_view<T1> &img1,
-                                                const vil_image_view<T2> &img2,
-                                                int &offset_x,
-                                                int &offset_y,
-                                                float &score);
+                                         const vil_image_view<T2> &img2,
+                                         int &offset_x,
+                                         int &offset_y,
+                                         float &score);
 
   double estimate_rotation_angle(const vil_image_view<float> &img1c,
                                  const vil_image_view<float> &img2c);
@@ -81,36 +81,34 @@ class bvxm_camera_estimator
   void estimate_rotation_iterative(const bvxm_voxel_slab<float> &data,
                                    const vil_image_view<float>& img_e,
                                    vpgl_perspective_camera<double> *cam);
-
-private:
-
+ private:
   //store parameters as global variables to be used across functions
-   int nx_;
-   int ny_;
-   int nz_;
-   double sx_;
-   double sy_;
-   double sz_;
-   double dx_;
-   double dy_;
-   double dz_;
-   bool world_params_set_;
+  int nx_;
+  int ny_;
+  int nz_;
+  double sx_;
+  double sy_;
+  double sz_;
+  double dx_;
+  double dy_;
+  double dz_;
+  bool world_params_set_;
 
-   double theta_range_;
-   double theta_step_;
-   double phi_range_;
-   double phi_step_;
-   double rot_range_;
-   double rot_step_;
-   int max_iter_rot_angle_;
-   bool estimation_params_set_;
+  double theta_range_;
+  double theta_step_;
+  double phi_range_;
+  double phi_step_;
+  double rot_range_;
+  double rot_step_;
+  int max_iter_rot_angle_;
+  bool estimation_params_set_;
 };
 
 template <class T_from,class T_to>
 void bvxm_camera_estimator::normalize_to_interval(const vil_image_view<T_from>& img_inp,
-                           vil_image_view<T_to>& img_out,
-                           float min,
-                           float max)
+                                                  vil_image_view<T_to>& img_out,
+                                                  float min,
+                                                  float max)
 {
   assert(min<max);
   vil_image_view<float> img_temp;
@@ -131,10 +129,10 @@ void bvxm_camera_estimator::normalize_to_interval(const vil_image_view<T_from>& 
 //   img1(i,j) = img2(i+offset_x,j+offset_y)
 template <class T1,class T2,class TR>
 vil_image_view<TR> bvxm_camera_estimator::estimate_offsets_fd(const vil_image_view<T1> &img1,
-                                              const vil_image_view<T2> &img2,
-                                              int &offset_x,
-                                              int &offset_y,
-                                              float &score)
+                                                              const vil_image_view<T2> &img2,
+                                                              int &offset_x,
+                                                              int &offset_y,
+                                                              float &score)
 {
   vil_image_view<float> img_1;
   bvxm_camera_estimator::normalize_to_interval<T1,float>(img1,img_1,0.0f,1.0f);
@@ -224,10 +222,10 @@ class bvxm_camera_estimator_amoeba : public vnl_cost_function
 {
  public:
   bvxm_camera_estimator_amoeba(const bvxm_voxel_slab<float> &data,
-                 bvxm_camera_estimator &cest,
-                 const vil_image_view<float> &img_e,
-                 const vpgl_perspective_camera<double> *cam)
-                 : data_(data), cest_(cest), cam_(cam), img_e_(img_e), vnl_cost_function(2)
+                               bvxm_camera_estimator &cest,
+                               const vil_image_view<float> &img_e,
+                               const vpgl_perspective_camera<double> *cam)
+  : data_(data), cest_(cest), cam_(cam), img_e_(img_e), vnl_cost_function(2)
   {
     best_score = 0.0;
     best_camera.set_calibration(cam->get_calibration());
@@ -253,7 +251,8 @@ class bvxm_camera_estimator_amoeba : public vnl_cost_function
     cam_center = cam_center - 2.0*vec_y;
   }
 
-  double get_result(vnl_vector<double>& x, vpgl_perspective_camera<double> *cam) {
+  double get_result(vnl_vector<double>& x, vpgl_perspective_camera<double> *cam)
+  {
     cam->set_calibration(best_camera.get_calibration());
     cam->set_camera_center(best_camera.get_camera_center());
     cam->set_rotation(best_camera.get_rotation());
@@ -278,7 +277,6 @@ class bvxm_camera_estimator_amoeba : public vnl_cost_function
       best_camera.set_camera_center(curr_cam.get_camera_center());
       best_camera.set_rotation(curr_cam.get_rotation());
     }
-
     return -curr_score;
   }
 
@@ -293,4 +291,4 @@ class bvxm_camera_estimator_amoeba : public vnl_cost_function
   vgl_point_3d<double> cam_center;
 };
 
-#endif
+#endif // bvxm_estimate_camera_utils_h_
