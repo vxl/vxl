@@ -125,24 +125,43 @@ void boxm_mog_grey_processor::finalize_appearance(vcl_vector<boxm_apm_traits<BOX
 
 void boxm_mog_grey_processor::compute_appearance(vcl_vector<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> const& obs, vcl_vector<float> const& pre, vcl_vector<float> const& vis, boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype &model, float min_sigma)
 {
-  static const unsigned int nmodes = boxm_apm_traits<BOXM_APM_MOG_GREY>::n_gaussian_modes_;
+  static const unsigned int max_nmodes = boxm_apm_traits<BOXM_APM_MOG_GREY>::n_gaussian_modes_;
   const float min_var = min_sigma*min_sigma;
   const float big_sigma = (float)vnl_math::sqrt1_2; // maximum possible std. dev for set of samples drawn from [0 1]
   const float big_var = big_sigma * big_sigma;
-
-  model = bsta_num_obs<bsta_mixture_fixed<bsta_num_obs<bsta_gauss_f1>, nmodes> >();
 
   unsigned int nobs = obs.size();
   if (nobs == 0) {
     // nothing to do.
     return;
   }
-  if (obs.size() == 1) {
+  if (nobs == 1) {
+    model = bsta_num_obs<bsta_mixture_fixed<bsta_num_obs<bsta_gauss_f1>, max_nmodes> >();
     bsta_gauss_f1 mode(obs[0], big_sigma*big_sigma);
     model.insert(bsta_num_obs<bsta_gauss_f1>(mode), 1.0f);
     return;
   }
-  // use EM to refine estimate until convergence.
+
+  unsigned int nmodes = model.num_components();
+
+  if (nmodes == 0) {
+    // if initial model is "blank", create an arbitrary starting point for the optimization with max number of modes
+    model = bsta_num_obs<bsta_mixture_fixed<bsta_num_obs<bsta_gauss_f1>, max_nmodes> >();
+    nmodes = max_nmodes;
+    // no need for model to have more modes than observations
+    if (nobs < nmodes) {
+      nmodes = nobs;
+    }
+    // initialize parameters
+    for (unsigned int m=0; m<nmodes; ++m) {
+      float mean = (float(m) + 0.5f) / float(nmodes);
+      float sigma = 0.3f;
+      float mode_weight = 1.0f / float(nmodes);
+      bsta_gauss_f1 mode(mean, sigma*sigma);
+      model.insert(bsta_num_obs<bsta_gauss_f1>(mode), mode_weight);
+    }
+  }
+
   vcl_vector<vcl_vector<float> > mode_probs(nobs);
   for (unsigned int n=0; n<nobs; ++n) {
     for (unsigned int m=0; m<nmodes; ++m) {
@@ -151,14 +170,6 @@ void boxm_mog_grey_processor::compute_appearance(vcl_vector<boxm_apm_traits<BOXM
   }
   vcl_vector<float> mode_weight_sum(nmodes,0.0f);
 
-  // initialize parameters
-  for (unsigned int m=0; m<nmodes; ++m) {
-    float mean = (float(m) + 0.5f) / float(nmodes);
-    float sigma = 0.3f;
-    float mode_weight = 1.0f / float(nmodes);
-    bsta_gauss_f1 mode(mean, sigma*sigma);
-    model.insert(bsta_num_obs<bsta_gauss_f1>(mode), mode_weight);
-  }
   // run EM algorithm to maximize expected probability of observations
   const unsigned int max_its = 50;
   const float max_converged_weight_change = 1e-3f;
@@ -201,8 +212,8 @@ void boxm_mog_grey_processor::compute_appearance(vcl_vector<boxm_apm_traits<BOXM
     // update the mode parameters
     for (unsigned int m=0; m<nmodes; ++m) {
       mode_weight_sum[m] = 0.0f;
-      vcl_vector<float> obs_weights(obs.size());
-      for (unsigned int n=0; n<obs.size(); ++n) {
+      vcl_vector<float> obs_weights(nobs);
+      for (unsigned int n=0; n<nobs; ++n) {
         obs_weights[n] = mode_probs[n][m];
         mode_weight_sum[m] += obs_weights[n];
       }
@@ -213,10 +224,10 @@ void boxm_mog_grey_processor::compute_appearance(vcl_vector<boxm_apm_traits<BOXM
       bsta_fit_gaussian(obs, obs_weights, single_gauss);
       mode_mean = single_gauss.mean();
       mode_var = single_gauss.var();
-      
+
       // unbias variance based on number of observations
       //float unbias_factor = sigma_norm_factor(mode_weight_sum[m]);
-     // mode_var *= (unbias_factor*unbias_factor);
+      // mode_var *= (unbias_factor*unbias_factor);
 
       // make sure variance does not get too big
       if (!(mode_var < big_var)) {
