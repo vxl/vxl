@@ -319,7 +319,7 @@ boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_point_at_level(con
       return 0;
     if ((loccode_->y_loc_ >> root_level_)^ 0)
       return 0;
-    if ((loccode_->y_loc_ >> root_level_)^ 0)
+    if ((loccode_->z_loc_ >> root_level_)^ 0)
       return 0;
   }
   // temporary pointer to traverse
@@ -569,7 +569,7 @@ void boct_tree<T_loc,T_data>::b_read(vsl_b_istream & is)
 
   switch (v)
   {
-   case 1:
+   case 1:  // the whole tree, internal+leaf nodes
     vsl_b_read(is, num_levels_);
     vsl_b_read(is, global_bbox_);
     root_ = new boct_tree_cell<T_loc,T_data>();
@@ -577,7 +577,7 @@ void boct_tree<T_loc,T_data>::b_read(vsl_b_istream & is)
     this->root_level_ = num_levels_ -1;
     this->max_val_ = (double)(1<<root_level_);
     break;
-   case 2:
+   case 2:  // only leaf nodes
     {
       vsl_b_read(is, num_levels_);
       vsl_b_read(is, global_bbox_);
@@ -637,7 +637,32 @@ void boct_tree<T_loc,T_data>::b_read(vsl_b_istream & is)
     return;
   }
 }
+/*
+//: Only reads a tree partially for memory reasons. It forms a tree with 
+// only taking the nodes in a given boundary box
+template <class T_loc,class T_data>
+void boct_tree<T_loc,T_data>::b_read_partial(vsl_b_istream & is, 
+                                             vgl_box_3d<float> bb)
+{
+  // read header info
+  if (!is) return;
+  short v;
+  vsl_b_read(is, v);
 
+  switch (v)
+  {
+   case 1:
+     vsl_b_read(is, num_levels_);
+     vsl_b_read(is, global_bbox_);
+     root_ = new boct_tree_cell<T_loc,T_data>();
+     vsl_b_read_partial(is, *root_, (boct_tree_cell<T_loc,T_data>*)0, bb);
+     this->root_level_ = num_levels_ -1;
+     this->max_val_ = (double)(1<<root_level_);
+     break;
+   }
+ }
+ 
+ */
 #define BOCT_TREE_INSTANTIATE(T_loc,T_data) \
 template class boct_tree<T_loc,T_data >; \
 template void vsl_b_write(vsl_b_ostream & os,const bool save_internal_nodes, boct_tree<T_loc,T_data >&); \
