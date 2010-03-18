@@ -5,6 +5,10 @@ aren't documented here, unless the bug-fix has a major observable
 effect.  If you change something in VXL, please document it here.
 
 ---------------------------------------------------------------------------
+******************************
+VXL 1.15.0      - September 2010
+******************************
+
 
 ******************************
 VXL 1.14.0      - January 2010
