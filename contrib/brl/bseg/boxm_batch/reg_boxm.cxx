@@ -8,6 +8,7 @@
 #include <boxm/pro/boxm_register.h>
 #include <sdet_pro/sdet_register.h>
 #include <boxm/opt/pro/boxm_opt_register.h>
+#include <boxm/opt/open_cl/pro/boxm_opt_opencl_register.h>
 #include <boxm/algo/pro/boxm_algo_register.h>
 #include <bvxm/grid/pro/bvxm_grid_register.h>
 
@@ -21,6 +22,7 @@ register_processes(PyObject *self, PyObject *args)
   boxm_algo_register::register_process();
   sdet_register::register_process();
   bvxm_grid_register::register_process();
+  boxm_opt_opencl_register::register_process();
 
   Py_INCREF(Py_None);
   return Py_None;
@@ -36,6 +38,7 @@ register_datatypes(PyObject *self, PyObject *args)
   boxm_opt_register::register_datatype();
   boxm_algo_register::register_datatype();
   bvxm_grid_register::register_datatype();
+  boxm_opt_opencl_register::register_datatype();
   Py_INCREF(Py_None);
   return Py_None;
 }

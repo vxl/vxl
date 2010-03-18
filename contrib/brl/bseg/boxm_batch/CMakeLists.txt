@@ -1,4 +1,5 @@
 # contrib/brl/bseg/boxm_batch/CMakeLists.txt
+INCLUDE( ${BRL_MODULE_PATH}/find_open_cl.cmake ) # so we know whether to include gpu optimized processes
 INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindPython.cmake )
 IF( PYTHON_FOUND )
   INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
@@ -30,6 +31,10 @@ IF( PYTHON_FOUND )
 
 
     TARGET_LINK_LIBRARIES(boxm_batch bpro_batch boxm_pro boxm_opt_pro boxm_algo_pro vpgl_io vpgl_pro vil_io vil_pro sdet_pro)
+
+    IF(OPENCL_FOUND)
+      TARGET_LINK_LIBRARIES(boxm_batch boxm_opt_opencl_pro)
+    ENDIF(OPENCL_FOUND)
   
     IF (PYTHON_DEBUG_LIBRARIES)
       TARGET_LINK_LIBRARIES( boxm_batch debug ${PYTHON_DEBUG_LIBRARY})
