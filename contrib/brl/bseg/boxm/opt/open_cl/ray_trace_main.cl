@@ -1,15 +1,15 @@
 
 __kernel 
 void 
-expected_ray_trace(__global float4  *origin,
-                   __global float16 *svd_UtVW,
-                   __global int4    *cells, 
-                   __global float16 *cell_data, 
-                   __global uint4   *imgdims,
-                   __global uint4   *roidims,
-                   __global float4  *global_bbox,
-                   __global float4  *inp,
-                   __global float4  *results)
+ray_trace_main(__global float4  *origin,
+               __global float16 *svd_UtVW,
+               __global int4    *cells, 
+               __global float16 *cell_data, 
+               __global uint4   *imgdims,
+               __global uint4   *roidims,
+               __global float4  *global_bbox,
+               __global float4  *inp,
+               __global float4  *results)
 {
   float tnear = 0, tfar =0;
 
@@ -122,10 +122,11 @@ expected_ray_trace(__global float4  *origin,
     data_ptr = cells[curr_cell_ptr].z;
     if(data_ptr>=0)
     {
-      float d = distance(entry_pt, exit_pt);
-      //data_return.x+=d;
-      // multiply distance by the dimension of the bounding box
-      expected_image_funct(cell_data, data_ptr, d*bbox.w, &data_return);
+      //distance must be multiplied by the dimension of the bounding box
+      float d = distance(entry_pt, exit_pt);      
+      // no function pointers in OpenCL (spec 8.6a)
+      // instead, user must provide source with a function named "step_cell"
+      step_cell(cell_data, data_ptr, d*bbox.w, &data_return);
     }
     else break; 
     //////////////////////////////////////////////////////////

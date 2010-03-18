@@ -44,7 +44,7 @@ void octree_test_driver<T>::set_buffers()
   input_cell_buf_ = cl_manager_->cell_buf();
   input_data_buf_ = cl_manager_->data_buf();
   input_ray_origin_buf_ = cl_manager_->ray_origin_buf();
-  input_ray_dir_buf_ = cl_manager_->ray_dir_buf();
+  //input_ray_dir_buf_ = cl_manager_->ray_dir_buf();
   input_camera_buf_  =cl_manager_->camera_buf();
   input_imgdims_buf_ =cl_manager_->imgdims_buf();
 }
@@ -547,7 +547,7 @@ int octree_test_driver<T>::cleanup_tree_test()
 {
  cl_int status = SDK_SUCCESS;
 
- cl_manager_->cleanup_tree_processing();
+ //cl_manager_->cleanup_tree_processing();
 
  status = clReleaseCommandQueue(command_queue_);
   if (!this->check_val(status,
@@ -563,7 +563,7 @@ int octree_test_driver<T>::cleanup_ray_test()
 {
   cl_int status = SDK_SUCCESS;
 
-  cl_manager_->cleanup_ray_processing();
+  //cl_manager_->cleanup_ray_processing();
 
   status = clReleaseCommandQueue(command_queue_);
   if (!this->check_val(status,

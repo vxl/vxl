@@ -267,6 +267,18 @@ bool boxm_opencl_manager<T>::initialize_cl()
   return true;
 }
 
+template <class T>
+void* boxm_opencl_manager<T>::allocate_host_mem(size_t size)
+{
+#if defined (_WIN32)
+  return _aligned_malloc(size, 16);
+#elif defined(__APPLE__)
+  return malloc(size);
+#else
+  return memalign(16, size);
+#endif
+}
+
 
 #undef BOXM_OPENCL_MANAGER_INSTANTIATE
 #define BOXM_OPENCL_MANAGER_INSTANTIATE(T) \

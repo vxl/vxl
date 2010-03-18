@@ -29,7 +29,7 @@ static void ray_creation_tests(octree_test_driver<T> & test_driver)
   boxm_ray_trace_manager<T>* ray_mgr = boxm_ray_trace_manager<T>::instance();
   ray_mgr->setup_camera();
   ray_mgr->setup_ray_origin();
-  ray_mgr->setup_ray_results();
+  ray_mgr->setup_work_image(1,1);
 
   if (ray_mgr->setup_camera_input_buffer()!=SDK_SUCCESS)
     return;
@@ -80,7 +80,7 @@ static void test_backproject_ray()
   else
     ifs >> (*pcam);
 
-  ray_mgr->set_perspective_camera(pcam);
+  ray_mgr->set_camera(pcam);
   octree_test_driver<float > test_driver;
   bool flag=true;
   if (test_driver.init())

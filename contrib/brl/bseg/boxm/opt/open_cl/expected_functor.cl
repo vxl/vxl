@@ -1,4 +1,4 @@
-void expected_image_funct(__global float16* cell_data, int data_ptr,
+void step_cell(__global float16* cell_data, int data_ptr,
                           float d, float4 * data_return)
 {
 

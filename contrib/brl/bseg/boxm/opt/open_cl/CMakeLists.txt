@@ -12,6 +12,7 @@ IF(OPENCL_FOUND)
       boxm_ray_trace_manager.h boxm_ray_trace_manager.txx
       boxm_opencl_manager.h    boxm_opencl_manager.txx
       boxm_opt_opencl_utils.h  boxm_opt_opencl_utils.cxx
+      boxm_opt_opencl_render_expected.h
      )
 
   SET(bomx_opt_opencl_source_files
@@ -23,4 +24,7 @@ IF(OPENCL_FOUND)
   TARGET_LINK_LIBRARIES(boxm_opt_opencl boxm_opt boxm bprb bgeo vnl vgl vbl vbl_io ${OPENCL_LIBRARIES})
 
 SUBDIRS(tests)
+
+SUBDIRS(pro)
+
 ENDIF(OPENCL_FOUND)

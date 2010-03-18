@@ -22,7 +22,7 @@
 #include <vcl_cstddef.h>
 #define SDK_SUCCESS 0
 #define SDK_FAILURE 1
-#define GROUP_SIZE 64
+//#define GROUP_SIZE 64
 #define VECTOR_SIZE 4
 
 
@@ -66,10 +66,13 @@ class boxm_opencl_manager
     }
     return 1;
   }
-  vcl_size_t group_size() const {return GROUP_SIZE;}
+  vcl_size_t group_size() const {return max_work_group_size_;}
   cl_ulong total_local_memory() const {return total_local_memory_;}
   cl_context context() {return context_;}
   cl_device_id * devices() {return devices_;}
+
+  //: Allocate host memory for use with clCreateBuffer (aligned if necessary)
+  void* boxm_opencl_manager<T>::allocate_host_mem(size_t size);
 
  protected:
 

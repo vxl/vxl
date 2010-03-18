@@ -6,10 +6,11 @@
 #include <boct/boct_tree.h>
 #include <boct/boct_tree_cell.h>
 #include <boct/boct_loc_code.h>
-#include <boxm/boxm_block_vis_graph_iterator.h>
+
 #include <boxm/boxm_scene.h>
 #include <boxm/boxm_utils.h>
-#include <vgl/vgl_intersection.h>
+
+#include <vcl_where_root_dir.h>
 
 #include <vil/vil_save.h>
 #include <vil/vil_load.h>
@@ -18,39 +19,7 @@
 
 #include <vil/vil_math.h>
 
-bool generate_ray_init(vpgl_perspective_camera<double> *cam_,vgl_box_3d<double> const& block_bb, vgl_box_2d<double> &img_bb,unsigned ni,unsigned nj)
-{
-    // determine intersection of block bounding box projection and image bounds
-    vgl_box_2d<double> img_bounds;
-    img_bounds.add(vgl_point_2d<double>(0,0));
-    img_bounds.add(vgl_point_2d<double>(0 + ni - 1, 0 + nj - 1));
 
-    vgl_box_2d<double> block_projection;
-    double u,v;
-    cam_->project(block_bb.min_x(),block_bb.min_y(),block_bb.min_z(),u,v);
-    block_projection.add(vgl_point_2d<double>(u,v));
-    cam_->project(block_bb.min_x(),block_bb.min_y(),block_bb.max_z(),u,v);
-    block_projection.add(vgl_point_2d<double>(u,v));
-    cam_->project(block_bb.min_x(),block_bb.max_y(),block_bb.min_z(),u,v);
-    block_projection.add(vgl_point_2d<double>(u,v));
-    cam_->project(block_bb.min_x(),block_bb.max_y(),block_bb.max_z(),u,v);
-    block_projection.add(vgl_point_2d<double>(u,v));
-    cam_->project(block_bb.max_x(),block_bb.min_y(),block_bb.min_z(),u,v);
-    block_projection.add(vgl_point_2d<double>(u,v));
-    cam_->project(block_bb.max_x(),block_bb.min_y(),block_bb.max_z(),u,v);
-    block_projection.add(vgl_point_2d<double>(u,v));
-    cam_->project(block_bb.max_x(),block_bb.max_y(),block_bb.min_z(),u,v);
-    block_projection.add(vgl_point_2d<double>(u,v));
-    cam_->project(block_bb.max_x(),block_bb.max_y(),block_bb.max_z(),u,v);
-    block_projection.add(vgl_point_2d<double>(u,v));
-
-    img_bb=vgl_intersection(img_bounds,block_projection);
-
-    if (img_bb.is_empty())
-        return false;
-    else
-        return true;
-}
 
 
 void save_expected_image(vcl_string const& image_path,
@@ -98,68 +67,20 @@ vil_image_view<float> expected_image(unsigned ni, unsigned nj,
     return out;
 }
 
-vil_image_view<float> run_expected_image(boxm_scene<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY > > > * s,vpgl_perspective_camera<double> * pcam,unsigned ni, unsigned nj)
+vil_image_view<float> run_expected_image(boxm_scene<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY > > > * scene, vpgl_perspective_camera<double> * pcam,unsigned ni, unsigned nj)
 {
+  // set up the application-specific function to be called at every cell along a ray
+  vcl_string expected_img_functor_fname = vcl_string(VCL_SOURCE_ROOT_DIR)
+    +"/contrib/brl/bseg/boxm/opt/open_cl/expected_functor.cl";
+
+  vcl_vector<vcl_string> source_fnames;
+  source_fnames.push_back(expected_img_functor_fname);
+
     boxm_ray_trace_manager<boxm_sample<BOXM_APM_MOG_GREY> >* ray_mgr = boxm_ray_trace_manager<boxm_sample<BOXM_APM_MOG_GREY> >::instance();
-    ray_mgr->set_perspective_camera(pcam);
-    ray_mgr->setup_ray_origin();
-    ray_mgr->setup_expected_image(ni,nj);
-    ray_mgr->setup_camera();
-    ray_mgr->setup_img_dims(ni,nj);
-    ray_mgr->load_kernel_source(vcl_string(VCL_SOURCE_ROOT_DIR)
-        +"/contrib/brl/bseg/boxm/opt/open_cl/octree_library_functions.cl");
+    ray_mgr->init_raytrace(scene, pcam, ni, nj, source_fnames);
 
-    ray_mgr->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-        +"/contrib/brl/bseg/boxm/opt/open_cl/expected_functor.cl");
-    ray_mgr->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-        +"/contrib/brl/bseg/boxm/opt/open_cl/backproject.cl");
-    ray_mgr->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-        +"/contrib/brl/bseg/boxm/opt/open_cl/expected_ray_trace.cl");
-
-    ray_mgr->build_kernel_program();
-    
-    typedef  boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY > > tree_type;
-    boxm_block_vis_graph_iterator<tree_type > block_vis_iter(pcam, s, ni,nj);
-
-    while (block_vis_iter.next())
-    {
-        vcl_vector<vgl_point_3d<int> > block_indices = block_vis_iter.frontier_indices();
-        for (unsigned i=0; i<block_indices.size(); i++) // code for each block
-        {
-            s->load_block(block_indices[i]);
-            boxm_block<tree_type> * curr_block=s->get_active_block();
-            vcl_cout << "processing block at index (" <<block_indices[i] << ')' << vcl_endl;
-            // make sure block projects to inside of image
-            vgl_box_3d<double> block_bb = curr_block->bounding_box();
-
-            if (!boxm_utils::is_visible(block_bb,pcam,ni,nj))
-                continue;
-            vgl_box_2d<double> img_bb;
-            // initialize ray_origin() function for this block
-            if (!generate_ray_init(pcam,block_bb, img_bb,ni,nj)) {
-                continue;
-            }
-
-            tree_type * tree=curr_block->get_tree();
-
-            ray_mgr->set_tree(tree);
-            ray_mgr->setup_tree();
-
-            ray_mgr->setup_roi_dims((unsigned int)img_bb.min_x(),(unsigned int)img_bb.max_x(),(unsigned int)img_bb.min_y(),(unsigned int)img_bb.max_y());
-
-            ray_mgr->setup_tree_input_buffers();
-            ray_mgr->setup_camera_input_buffer();
-            ray_mgr->setup_roidims_input_buffer();
-            ray_mgr->setup_ray_origin_buffer();
-            ray_mgr->setup_expected_img_buffer();
-            ray_mgr->setup_tree_global_bbox_buffer();
-            ray_mgr->setup_imgdims_buffer();
-
-            ray_mgr->run();
-
-            //save_expected_image("./gpuexpected",250,250,ray_mgr->ray_results());
-        }
-    }
+    ray_mgr->run();
+ 
     return expected_image(250,250,ray_mgr->ray_results());
 }
 
@@ -211,24 +132,24 @@ static void test_expected_image()
     vcl_string camname=root_dir+"/contrib/brl/bseg/boxm/opt/open_cl/tests/cam_0.txt";
     vcl_string imgname=root_dir+"/contrib/brl/bseg/boxm/opt/open_cl/tests/test_img0.tif";
 
-
     vpgl_perspective_camera<double> *pcam=new vpgl_perspective_camera<double> ();
     vcl_ifstream ifs(camname.c_str());
     if (!ifs)
         return ;
     else
         ifs >> (*pcam);
+#if 1
     update_world(root_dir+"/contrib/brl/bseg/boxm/opt/open_cl/tests/scene.xml",camname,imgname);
     vil_image_view<float> im_nongpu=render_image(root_dir+"/contrib/brl/bseg/boxm/opt/open_cl/tests/scene.xml",camname,250,250);
+#endif
     vil_image_view<float> im_gpu=run_expected_image(&s,pcam,250,250);
     s.clean_scene();
-
+#if 1
     float ssd = vil_math_ssd(im_gpu, im_nongpu, float());
     float rms_error = vcl_sqrt(ssd / im_gpu.size());
 
-
     TEST_NEAR("GPU/Non-GPU Expected Image RMS difference", rms_error, 0.0, 1e-2);
-
+#endif
 }
 
 TESTMAIN(test_expected_image);

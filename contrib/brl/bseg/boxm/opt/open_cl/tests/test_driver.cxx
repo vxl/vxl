@@ -6,8 +6,8 @@ DECLARE( test_expected_image );
 
 void register_tests()
 {
-  REGISTER( test_octree );
-  REGISTER( test_backproject_ray );
+  //REGISTER( test_octree );
+  //REGISTER( test_backproject_ray );
   REGISTER( test_expected_image );
 
 }

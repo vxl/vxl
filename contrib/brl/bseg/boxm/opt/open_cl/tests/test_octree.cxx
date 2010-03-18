@@ -455,7 +455,7 @@ static void test_octree()
   ray_mgr->set_tree(open_cl_test_data::tree<float>());
   ray_mgr->setup_tree();
   ray_mgr->setup_tree_results();
-  ray_mgr->setup_tree_processing();
+  //ray_mgr->setup_tree_processing();
   octree_test_driver<float > test_driver;
   if (test_driver.init())
   { tree_tests(test_driver); }
