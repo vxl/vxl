@@ -238,7 +238,7 @@ boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_point(const vgl_po
       return 0;
     if ((loccode_->y_loc_ >> root_level_)^ 0)
       return 0;
-    if ((loccode_->Z_loc_ >> root_level_)^ 0)
+    if ((loccode_->z_loc_ >> root_level_)^ 0)
       return 0;
   }
 
