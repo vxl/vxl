@@ -173,19 +173,20 @@ boct_tree<T_loc, T_data>* boct_tree<T_loc,T_data>::clone_subtree(boct_tree_cell<
     boct_tree_cell<T_loc, T_data>* root = subtree_root->clone(0, &shift_code);
     boct_tree<T_loc,T_data>* tree = new boct_tree<T_loc,T_data>(root, subtree_root->level() +1 );
     return tree;
-  } else if(shift_level == 0)
+  }
+  else if (shift_level == 0)
   {
     boct_tree_cell<T_loc, T_data>* root = subtree_root->clone(0);
     boct_tree<T_loc,T_data>* tree = new boct_tree<T_loc,T_data>(root, subtree_root->level() +1 );
     return tree;
   }
   else {
-    vcl_cerr << "Error in boct_tree<T_loc,T_data>::clone_subtree \n";
+    vcl_cerr << "Error in boct_tree<T_loc,T_data>::clone_subtree\n";
     return NULL;
   }
 }
 
-//: Clones(from a root) the part of the subtree that intesects the bounding region
+//: Clones (from a root) the part of the subtree that intesects the bounding region
 template <class T_loc,class T_data>
 boct_tree<T_loc, T_data>* boct_tree<T_loc,T_data>::clone_and_intersect(boct_tree_cell<T_loc, T_data>* subtree_root,
                                                                        short parent_tree_root_level,
@@ -201,14 +202,15 @@ boct_tree<T_loc, T_data>* boct_tree<T_loc,T_data>::clone_and_intersect(boct_tree
     boct_tree_cell<T_loc, T_data>* root = subtree_root->clone_and_intersect(0, &shift_code,local_crop_box, parent_tree_root_level);
     boct_tree<T_loc,T_data>* tree = new boct_tree<T_loc,T_data>(root, subtree_root->level() +1 );
     return tree;
-  } else if(shift_level == 0)
+  }
+  else if (shift_level == 0)
   {
     boct_tree_cell<T_loc, T_data>* root = subtree_root->clone_and_intersect(0,local_crop_box, parent_tree_root_level);
     boct_tree<T_loc,T_data>* tree = new boct_tree<T_loc,T_data>(root, subtree_root->level() +1 );
     return tree;
   }
   else {
-    vcl_cerr << "Error in boct_tree<T_loc,T_data>::clone_subtree \n";
+    vcl_cerr << "Error in boct_tree<T_loc,T_data>::clone_subtree\n";
     return NULL;
   }
 }
@@ -450,18 +452,15 @@ vcl_vector<boct_tree_cell<T_loc,T_data>*>  boct_tree<T_loc,T_data>::all_cells()
       root_->all_children(v);
   }
   return v;
-
 }
 
 //: Fills inetermediade cells with the average of the children
 template<class T_loc, class T_data>
 void boct_tree<T_loc,T_data>::fill_with_average()
 {
-  if(root_)
-    if(!root_->is_leaf())
+  if (root_ && !root_->is_leaf())
       root_->set_data_to_avg_children();
   return;
-
 }
 
 //: Return the finest level the tree has been split down to (not necessarly 0)
@@ -578,57 +577,57 @@ void boct_tree<T_loc,T_data>::b_read(vsl_b_istream & is)
     this->max_val_ = (double)(1<<root_level_);
     break;
    case 2:  // only leaf nodes
-    {
-      vsl_b_read(is, num_levels_);
-      vsl_b_read(is, global_bbox_);
-      unsigned num_cells;
-      vsl_b_read(is, num_cells);
+   {
+    vsl_b_read(is, num_levels_);
+    vsl_b_read(is, global_bbox_);
+    unsigned num_cells;
+    vsl_b_read(is, num_cells);
 
-      boct_loc_code<T_loc> code;
-      T_data data;
-      boct_tree_cell<T_loc,T_data>* root;
-      if (num_levels_>0) {
-          code.set_code(0,0,0);
-          code.set_level(num_levels_-1);
-          root=new boct_tree_cell<T_loc,T_data>( code);
-      }
-      else {
-          vcl_cerr << "boct_tree: the tree max level is 0, cannot create a tree!\n";
-          return ;
-      }
-
-      for (unsigned i=0; i<num_cells; i++) {
-          vsl_b_read(is, code);
-          vsl_b_read(is, data);
-
-          // temporary pointer to traverse
-          boct_tree_cell<T_loc,T_data>* curr_cell=root;
-          short curr_level=num_levels_-1;
-          short level=code.level;
-          while (curr_level>level)
-          {
-              if (curr_cell->is_leaf()) {
-                  curr_cell->split();
-              }
-              short child_index=code.child_index(curr_level);
-              if (child_index < 0)
-                  vcl_cout << "ERROR 1: child_index is " << child_index << vcl_endl;
-              curr_cell=curr_cell->children()+child_index;
-              --curr_level;
-          }
-
-          if (curr_cell->code_.isequal(&code))
-              // the place of the cell is found, put the data in
-              curr_cell->set_data(data);
-          else
-              vcl_cerr << "WRONG ERROR CODE OR CELL FOUND!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
-      }
-
-      this->root_=root;
-      this->root_level_ = num_levels_ -1;
-      this->max_val_ = (double)(1<<root_level_);
-      break;
+    boct_loc_code<T_loc> code;
+    T_data data;
+    boct_tree_cell<T_loc,T_data>* root;
+    if (num_levels_>0) {
+      code.set_code(0,0,0);
+      code.set_level(num_levels_-1);
+      root=new boct_tree_cell<T_loc,T_data>( code);
     }
+    else {
+      vcl_cerr << "boct_tree: the tree max level is 0, cannot create a tree!\n";
+      return ;
+    }
+
+    for (unsigned i=0; i<num_cells; i++) {
+      vsl_b_read(is, code);
+      vsl_b_read(is, data);
+
+      // temporary pointer to traverse
+      boct_tree_cell<T_loc,T_data>* curr_cell=root;
+      short curr_level=num_levels_-1;
+      short level=code.level;
+      while (curr_level>level)
+      {
+        if (curr_cell->is_leaf()) {
+          curr_cell->split();
+        }
+        short child_index=code.child_index(curr_level);
+        if (child_index < 0)
+          vcl_cout << "ERROR 1: child_index is " << child_index << vcl_endl;
+        curr_cell=curr_cell->children()+child_index;
+        --curr_level;
+      }
+
+      if (curr_cell->code_.isequal(&code))
+        // the place of the cell is found, put the data in
+        curr_cell->set_data(data);
+      else
+        vcl_cerr << "WRONG ERROR CODE OR CELL FOUND!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
+    }
+
+    this->root_=root;
+    this->root_level_ = num_levels_ -1;
+    this->max_val_ = (double)(1<<root_level_);
+    break;
+   }
 
    default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boct_tree<T_loc,T_data>&)\n"
@@ -637,11 +636,12 @@ void boct_tree<T_loc,T_data>::b_read(vsl_b_istream & is)
     return;
   }
 }
-/*
-//: Only reads a tree partially for memory reasons. It forms a tree with 
-// only taking the nodes in a given boundary box
+
+#if 0
+//: Only reads a tree partially for memory reasons.
+// It forms a tree with only taking the nodes in a given boundary box
 template <class T_loc,class T_data>
-void boct_tree<T_loc,T_data>::b_read_partial(vsl_b_istream & is, 
+void boct_tree<T_loc,T_data>::b_read_partial(vsl_b_istream & is,
                                              vgl_box_3d<float> bb)
 {
   // read header info
@@ -652,17 +652,17 @@ void boct_tree<T_loc,T_data>::b_read_partial(vsl_b_istream & is,
   switch (v)
   {
    case 1:
-     vsl_b_read(is, num_levels_);
-     vsl_b_read(is, global_bbox_);
-     root_ = new boct_tree_cell<T_loc,T_data>();
-     vsl_b_read_partial(is, *root_, (boct_tree_cell<T_loc,T_data>*)0, bb);
-     this->root_level_ = num_levels_ -1;
-     this->max_val_ = (double)(1<<root_level_);
-     break;
-   }
- }
- 
- */
+    vsl_b_read(is, num_levels_);
+    vsl_b_read(is, global_bbox_);
+    root_ = new boct_tree_cell<T_loc,T_data>();
+    vsl_b_read_partial(is, *root_, (boct_tree_cell<T_loc,T_data>*)0, bb);
+    this->root_level_ = num_levels_ -1;
+    this->max_val_ = (double)(1<<root_level_);
+    break;
+  }
+}
+#endif // 0
+
 #define BOCT_TREE_INSTANTIATE(T_loc,T_data) \
 template class boct_tree<T_loc,T_data >; \
 template void vsl_b_write(vsl_b_ostream & os,const bool save_internal_nodes, boct_tree<T_loc,T_data >&); \
