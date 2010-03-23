@@ -1,0 +1,3 @@
+// Instantiation of vgl_fit_lines_2d<float>
+#include <vgl/algo/vgl_fit_lines_2d.txx>
+VGL_FIT_LINES_2D_INSTANTIATE(float);
