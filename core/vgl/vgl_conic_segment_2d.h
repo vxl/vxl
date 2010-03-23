@@ -92,10 +92,11 @@
 //   2009-06-06 Peter Vanroose - Added the contains() method (not yet implem.)
 // \endverbatim
 
-#include <vcl_iosfwd.h>
 #include <vgl/vgl_homg_point_2d.h> // data member of this class
 #include <vgl/vgl_conic.h>         // data member of this class
 #include <vgl/vgl_point_2d.h>      // return type of some methods
+#include <vcl_iosfwd.h>
+#include <vcl_cassert.h>
 
 //: Represents a 2D conic segment using two points.
 template <class Type>
@@ -246,14 +247,14 @@ class vgl_conic_segment_2d
   //  Note that the methods swap_endpoints() and swap_direction() always swaps
   //  finiteness of a parabolic segment (unless the endpoints coincide). For
   //  hyperbolic segments this is not necessarily the case: both can be infinite.
-  bool is_finite() const { return true; } // TODO: NYI
+  bool is_finite() const { assert(!"Not yet implemented"); return true; } // TODO: NYI
 
   //: Finds out whether the given point lies on the conic segment.
   //  More specifically, lying on the segment implies lying on the conic.
   //  Moreover, the two endpoints (if effectively on the conic) will always
   //  lie on the segment. All other points of the conic lie either on this
   //  segment, or on the "swapped" segment, but never on both.
-  bool contains(vgl_homg_point_2d<Type> const& pt) const { return true; } // TODO: NYI
+  bool contains(vgl_homg_point_2d<Type> const& /*pt*/) const { assert(!"Not yet implemented"); return false; } // TODO: NYI
 };
 
 //: Write to stream
