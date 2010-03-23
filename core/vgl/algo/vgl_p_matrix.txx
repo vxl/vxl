@@ -118,8 +118,7 @@ vgl_line_segment_2d<T> vgl_p_matrix<T>::operator()(vgl_line_segment_3d<T> const&
 template <class T>
 vgl_homg_point_3d<T> vgl_p_matrix<T>::backproject_pseudoinverse(const vgl_homg_point_2d<T>& x) const
 {
-  //compute with double precision but cast back to type T
-  vnl_vector_fixed<double,4> p = svd()->solve(vnl_vector_fixed<double,3>(x.x(),x.y(),x.w()));
+  vnl_vector_fixed<T,4> p = svd()->solve(vnl_vector_fixed<T,3>(x.x(),x.y(),x.w()));
   return vgl_homg_point_3d<T>(p[0],p[1],p[2],p[3]);
 }
 
@@ -227,7 +226,7 @@ vgl_homg_point_3d<T> vgl_p_matrix<T>::get_focal() const
     return vgl_homg_point_3d<T>(0,0,0,0);
   }
 
-  vnl_matrix<double> ns = svd()->nullspace();
+  vnl_matrix<T> ns = svd()->nullspace();
 
   return vgl_homg_point_3d<T>(ns(0,0), ns(1,0), ns(2,0), ns(3,0));
 }
@@ -246,7 +245,7 @@ bool vgl_p_matrix<T>::is_canonical(T tol) const
 {
   for (int r = 0; r < 3; ++r)
     for (int c = 0; c < 4; ++c) {
-      double d = r==c ? p_matrix_(r,c)-1 : p_matrix_(r,c);
+      T d = r==c ? p_matrix_(r,c)-1 : p_matrix_(r,c);
       if (vcl_fabs(d) > tol)
         return false;
     }
@@ -474,9 +473,9 @@ vgl_p_matrix<T>::fix_cheirality()
   vnl_matrix_fixed<T,3,3> A;
   vnl_vector_fixed<T,3> a;
   this->get(&A, &a);
-  double det = vnl_qr<double>(A).determinant();
+  T det = vnl_qr<T>(A).determinant();
 
-  double scale = 1;
+  T scale = 1;
 #if 0 // Used to scale by 1/det, but it's a bad idea if det is small
   if (vcl_fabs(det - 1) > 1e-8) {
     vcl_cerr << "vgl_p_matrix::fix_cheirality: Flipping, determinant is " << det << vcl_endl;
@@ -496,7 +495,7 @@ template <class T>
 bool vgl_p_matrix<T>::is_behind_camera(const vgl_homg_point_3d<T>& hX)
 {
   vnl_vector_fixed<T,4> p = p_matrix_.get_row(2);
-  double dot = hX.x()*p[0]+hX.y()*p[1]+hX.z()*p[2]+hX.w()*p[3];
+  T dot = hX.x()*p[0]+hX.y()*p[1]+hX.z()*p[2]+hX.w()*p[3];
   if (hX.w() < 0) dot = -dot;
 
   return dot < 0;
@@ -513,7 +512,7 @@ void vgl_p_matrix<T>::flip_sign()
 template <class T>
 bool vgl_p_matrix<T>::looks_conditioned()
 {
-  double cond = svd()->W(0) / svd()->W(2);
+  T cond = svd()->W(0) / svd()->W(2);
 #ifdef DEBUG
   vcl_cerr << "vgl_p_matrix::looks_conditioned: cond = " << cond << '\n';
 #endif
