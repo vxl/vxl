@@ -227,10 +227,10 @@ compute_pl(vcl_vector<vgl_homg_point_2d<double> > const& points1,
 }
 
 bool vgl_h_matrix_2d_compute_rigid_body::
-compute_l(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
-          vcl_vector<vgl_homg_line_2d<double> > const& lines2,
-          vcl_vector<double> const& weights,
-          vgl_h_matrix_2d<double>& H)
+compute_l(vcl_vector<vgl_homg_line_2d<double> > const& /* lines1 */,
+          vcl_vector<vgl_homg_line_2d<double> > const& /* lines2 */,
+          vcl_vector<double> const& /* weights */,
+          vgl_h_matrix_2d<double>& /* H */)
 {
   return false;
 }
