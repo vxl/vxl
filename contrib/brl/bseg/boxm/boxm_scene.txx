@@ -45,6 +45,20 @@ boxm_scene<T>::boxm_scene( const vgl_point_3d<double>& origin,
 }
 
 template <class T>
+boxm_scene<T>::boxm_scene(const boxm_scene& scene)
+: boxm_scene_base(scene),
+  lvcs_(scene.lvcs()),
+  origin_(scene.origin()),
+  block_dim_(scene.block_dim()),
+  active_block_(vgl_point_3d<int>(-1,-1,-1)),
+  save_internal_nodes_(scene.save_internal_nodes())
+{
+  int x,y,z;
+  scene.block_num(x,y,z);
+  create_blocks(block_dim_, vgl_vector_3d<unsigned>(x,y,z));
+}
+
+template <class T>
 void boxm_scene<T>::create_blocks(const vgl_vector_3d<double>& /*block_dim*/,
                                   const vgl_vector_3d<unsigned>& world_dim)
 {

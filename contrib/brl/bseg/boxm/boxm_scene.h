@@ -55,6 +55,9 @@ class boxm_scene :public boxm_scene_base
               const vgl_vector_3d<unsigned>& world_dim,
               const bool save_internal_nodes_ = false);
 
+  //: copy constructor
+  boxm_scene(const boxm_scene& scene);
+
   //: Destructor
   ~boxm_scene();
 
@@ -80,7 +83,7 @@ class boxm_scene :public boxm_scene_base
   
   bool save_internal_nodes() const {return save_internal_nodes_;}
 
-  void block_num(int &x, int &y, int &z) {
+  void block_num(int &x, int &y, int &z) const {
     x=(int) blocks_.get_row1_count();
     y=(int) blocks_.get_row2_count();
     z=(int) blocks_.get_row3_count();
