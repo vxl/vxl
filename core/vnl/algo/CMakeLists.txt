@@ -50,7 +50,7 @@ IF(NETLIB_FOUND)
     vnl_sparse_lu.cxx vnl_sparse_lu.h
     vnl_real_eigensystem.cxx vnl_real_eigensystem.h
     vnl_complex_eigensystem.cxx vnl_complex_eigensystem.h
-    vnl_symmetric_eigensystem.cxx vnl_symmetric_eigensystem.h
+    vnl_symmetric_eigensystem.txx vnl_symmetric_eigensystem.h
     vnl_generalized_eigensystem.cxx vnl_generalized_eigensystem.h
     vnl_sparse_symmetric_eigensystem.cxx vnl_sparse_symmetric_eigensystem.h
     vnl_generalized_schur.cxx vnl_generalized_schur.h
@@ -86,7 +86,7 @@ IF(NETLIB_FOUND)
     # stuff
     vnl_convolve.txx vnl_convolve.h
     vnl_determinant.cxx vnl_determinant.txx vnl_determinant.h
-    vnl_chi_squared.cxx vnl_chi_squared.h
+    vnl_chi_squared.txx vnl_chi_squared.h
     vnl_gaussian_kernel_1d.cxx vnl_gaussian_kernel_1d.h
     vnl_adjugate.txx vnl_adjugate.h
     vnl_orthogonal_complement.txx vnl_orthogonal_complement.h
