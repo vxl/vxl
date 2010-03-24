@@ -93,9 +93,12 @@ bool boct_loc_code<T>::isequal(const boct_loc_code<T> * test)
   if (test->level != level)
     return false;
   T relevantbit = 1 << (test->level-1);
+  #if 0  // this was not working right..
   if ( (x_loc_ & relevantbit) == (test->x_loc_ & relevantbit)&&
        (y_loc_ & relevantbit) == (test->y_loc_ & relevantbit)&&
        (z_loc_ & relevantbit) == (test->z_loc_ & relevantbit) )
+  #endif
+  if ((x_loc_==test->x_loc_) && (y_loc_==test->y_loc_) && (z_loc_==test->z_loc_)) 
     return true;
   else
     return false;
