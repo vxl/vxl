@@ -61,16 +61,15 @@ vpgl_affine_camera(vgl_vector_3d<T> ray, vgl_vector_3d<T> up,
 
   vgl_vector_3d<T> uvec = normalized(up), rvec = normalized(ray);
   vnl_matrix_fixed<T,3,3> R;
-  if(vcl_fabs(dot_product<T>(uvec,rvec)-T(1))<1e-5)
+  if (vcl_fabs(dot_product<T>(uvec,rvec)-T(1))<1e-5)
   {
-  
     T r[] = { 1, 0, 0,
               0, 1, 0,
               0, 0, 1 };
 
     R = vnl_matrix_fixed<T,3,3>(r);
   }
-  else if(vcl_fabs(dot_product<T>(uvec,rvec)-T(-1))<1e-5)
+  else if (vcl_fabs(dot_product<T>(uvec,rvec)-T(-1))<1e-5)
   {
       T r[] = { 1, 0, 0,
               0, 1, 0,
@@ -80,21 +79,21 @@ vpgl_affine_camera(vgl_vector_3d<T> ray, vgl_vector_3d<T> up,
   }
   else
   {
-  vgl_vector_3d<T> x = cross_product(-uvec,rvec);
-  vgl_vector_3d<T> y = cross_product(rvec,x);
-  normalize(x);
-  normalize(y);
+    vgl_vector_3d<T> x = cross_product(-uvec,rvec);
+    vgl_vector_3d<T> y = cross_product(rvec,x);
+    normalize(x);
+    normalize(y);
 
-  T r[] = { x.x(), x.y(), x.z(),
-            y.x(), y.y(), y.z(),
-            rvec.x(), rvec.y(), rvec.z() };
+    T r[] = { x.x(), x.y(), x.z(),
+              y.x(), y.y(), y.z(),
+              rvec.x(), rvec.y(), rvec.z() };
 
-  R = vnl_matrix_fixed<T,3,3>(r);
+    R = vnl_matrix_fixed<T,3,3>(r);
   }
 
   //form affine camera
   vnl_vector_fixed<T, 4> r0, r1;
-  for(unsigned i = 0; i<3; ++i){
+  for (unsigned i = 0; i<3; ++i){
     r0[i] = su*R[0][i];
     r1[i] = sv*R[1][i];
   }
@@ -116,7 +115,7 @@ template <class T>
 void vpgl_affine_camera<T>::set_rows(
   const vnl_vector_fixed<T,4>& row1,
   const vnl_vector_fixed<T,4>& row2 )
- {
+{
   vnl_matrix_fixed<T,3,4> C( (T)0 );
   for ( unsigned int i = 0; i < 4; i++ ) {
     C(0,i) = row1(i);
@@ -124,7 +123,8 @@ void vpgl_affine_camera<T>::set_rows(
   }
   C(2,3) = (T)1;
   set_matrix( C );
- }
+}
+
 //: Find the 3d coordinates of the center of the camera. Will be an ideal point with the sense of the ray direction.
 template <class T>
 vgl_homg_point_3d<T> vpgl_affine_camera<T>::camera_center() const
@@ -139,8 +139,8 @@ vgl_homg_line_3d_2_points<T> vpgl_affine_camera<T>::
 backproject( const vgl_homg_point_2d<T>& image_point ) const
 {
   //get line from projective camera
-  vgl_homg_line_3d_2_points<T> line = 
-    vpgl_proj_camera::backproject(image_point);
+  vgl_homg_line_3d_2_points<T> line =
+    vpgl_proj_camera<T>::backproject(image_point);
   vgl_homg_point_3d<T> cph = vgl_closest_point_origin(line);
   vgl_point_3d<T> cp(cph);
   vgl_point_3d<T> eye_pt = cp-(view_distance_*ray_dir_);
@@ -156,8 +156,8 @@ vgl_homg_plane_3d<T> vpgl_affine_camera<T>::
 principal_plane() const
 {
   //get line from projective camera
-  vgl_homg_line_3d_2_points<T> line = 
-    vpgl_proj_camera::backproject(vgl_homg_point_2d<T>((T)0,(T)0));
+  vgl_homg_line_3d_2_points<T> line =
+    vpgl_proj_camera<T>::backproject(vgl_homg_point_2d<T>((T)0,(T)0));
 
   //note that d = view_distance_ not -view_distance_,
   //since dir points towards the origin
