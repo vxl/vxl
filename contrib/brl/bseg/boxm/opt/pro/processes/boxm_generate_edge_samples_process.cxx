@@ -131,7 +131,7 @@ bool boxm_generate_edge_samples_process(bprb_func_process& pro)
     vcl_cout << "boxm_generate_edge_samples_process: undefined APM type" << vcl_endl;
     return false;
   }
-  vcl_cout << " New n_normal======>" << new_n_normal << vcl_endl;
+
   pro.set_output_val<float>(0, float(new_n_normal));
   return true;
 }
