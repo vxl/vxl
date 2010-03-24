@@ -8,10 +8,10 @@
 // \brief A pyramid image resource based on multiple file-based image resources
 // \author J.L. Mundy March 20, 2006
 // \verbatim
-//   Modifications:
-//     Nhon Trinh  07/11/2009  Changed definition of difference in scale to be log-based
-//                             New definition: diff(a,b) = abs(log(a/b))
-// \endverbatim 
+//  Modifications:
+//   Nhon Trinh  07/11/2009  Changed definition of difference in scale to be log-based
+//                           New definition: diff(a,b) = abs(log(a/b))
+// \endverbatim
 
 #include <vcl_string.h>
 #include <vcl_iostream.h>
@@ -30,7 +30,7 @@ class vil_pyramid_image_list_format : public vil_file_format
   virtual char const* tag() const {return "pyil";}//pyramid image list
 
   //: should return 0 so that no attempt is made to create a single image resource
-  virtual vil_image_resource_sptr make_input_image(vil_stream* vs)
+  virtual vil_image_resource_sptr make_input_image(vil_stream* /*vs*/)
   { return 0; }
 
   //: Read a pyramid resource. Image list files are stored in directory.
@@ -53,10 +53,10 @@ class vil_pyramid_image_list_format : public vil_file_format
                                char const* filename);
 
   //: A non-pyramid output image doesn't make sense here
-  virtual vil_image_resource_sptr make_output_image(vil_stream* vs,
-                                                    unsigned ni,
-                                                    unsigned nj,
-                                                    unsigned nplanes,
+  virtual vil_image_resource_sptr make_output_image(vil_stream* /*vs*/,
+                                                    unsigned /*ni*/,
+                                                    unsigned /*nj*/,
+                                                    unsigned /*nplanes*/,
                                                     enum vil_pixel_format)
   { return 0; }
 

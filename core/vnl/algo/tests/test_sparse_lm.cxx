@@ -60,7 +60,7 @@ class bundle_2d : public vnl_sparse_lst_sqr_function
     fxij[0] = (bj[0]-ai[0])/(bj[1]-ai[1]) - data_[residual_indices_(i,j)];
   }
 
-  void jac_Aij(int i, int j, vnl_vector<double> const& ai,
+  void jac_Aij(int /*i*/, int /*j*/, vnl_vector<double> const& ai,
                vnl_vector<double> const& bj, vnl_matrix<double>& Aij)
   {
     Aij[0][0] = 1.0/(ai[1]-bj[1]);
@@ -68,7 +68,7 @@ class bundle_2d : public vnl_sparse_lst_sqr_function
     Aij[0][1] = -(ai[0]-bj[0])/(tmp*tmp);
   }
 
-  void jac_Bij(int i, int j, vnl_vector<double> const& ai,
+  void jac_Bij(int /*i*/, int /*j*/, vnl_vector<double> const& ai,
                vnl_vector<double> const& bj, vnl_matrix<double>& Bij)
   {
     Bij[0][0] = 1.0/(bj[1]-ai[1]);

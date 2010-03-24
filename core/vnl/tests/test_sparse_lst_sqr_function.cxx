@@ -12,14 +12,14 @@ class test_func1 : public vnl_sparse_lst_sqr_function
              UseGradient g = use_gradient)
    : vnl_sparse_lst_sqr_function(num_a,2,num_b,3,xmask,2,g) {}
 
-  void fij(int i, int j, vnl_vector<double> const& ai,
+  void fij(int /*i*/, int /*j*/, vnl_vector<double> const& ai,
            vnl_vector<double> const& bj, vnl_vector<double>& eij)
   {
     eij[0] = (ai[0]*ai[0]-bj[0]*ai[1])*bj[2]*bj[2]*bj[2];
     eij[1] = (ai[1]*ai[1]-bj[1]*ai[0])*bj[2]*bj[2]*bj[2];
   }
 
-  void jac_Aij(int i, int j, vnl_vector<double> const& ai,
+  void jac_Aij(int /*i*/, int /*j*/, vnl_vector<double> const& ai,
                vnl_vector<double> const& bj, vnl_matrix<double>& Aij)
   {
     Aij[0][0] = 2.0*ai[0]*bj[2]*bj[2]*bj[2];
@@ -28,7 +28,7 @@ class test_func1 : public vnl_sparse_lst_sqr_function
     Aij[1][1] = 2.0*ai[1]*bj[2]*bj[2]*bj[2];
   }
 
-  void jac_Bij(int i, int j, vnl_vector<double> const& ai,
+  void jac_Bij(int /*i*/, int /*j*/, vnl_vector<double> const& ai,
                vnl_vector<double> const& bj, vnl_matrix<double>& Bij)
   {
     Bij[0][0] = -ai[1]*bj[2]*bj[2]*bj[2];

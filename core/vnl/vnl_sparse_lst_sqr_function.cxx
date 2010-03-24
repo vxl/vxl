@@ -236,25 +236,28 @@ vnl_sparse_lst_sqr_function::fd_jac_blocks(vnl_vector<double> const& a, vnl_vect
 //  Given the parameter vectors ai and bj, compute the vector of residuals fij.
 //  fij has been sized appropriately before the call.
 void
-vnl_sparse_lst_sqr_function::fij(int i, int j, vnl_vector<double> const& ai,
-                                 vnl_vector<double> const& bj, vnl_vector<double>& f_i_j)
+vnl_sparse_lst_sqr_function::fij(int /*i*/, int /*j*/, vnl_vector<double> const& /*ai*/,
+                                 vnl_vector<double> const& /*bj*/, vnl_vector<double>& /*f_i_j*/)
 {
+  // This default implementation is empty; overloaded in derived class.
   vcl_cerr << "Warning: fij() called but not implemented in derived class\n";
 }
 
 //: Calculate the Jacobian A_ij, given the parameter vectors a_j and b_i.
 void
-vnl_sparse_lst_sqr_function::jac_Aij(int i, int j, vnl_vector<double> const& ai,
-                                     vnl_vector<double> const& bj, vnl_matrix<double>& Aij)
+vnl_sparse_lst_sqr_function::jac_Aij(int /*i*/, int /*j*/, vnl_vector<double> const& /*ai*/,
+                                     vnl_vector<double> const& /*bj*/, vnl_matrix<double>& /*Aij*/)
 {
+  // This default implementation is empty; overloaded in derived class.
   vcl_cerr << "Warning: jac_Aij() called but not implemented in derived class\n";
 }
 
 //: Calculate the Jacobian B_ij, given the parameter vectors a_j and b_i.
 void
-vnl_sparse_lst_sqr_function::jac_Bij(int i, int j, vnl_vector<double> const& ai,
-                                     vnl_vector<double> const& bj, vnl_matrix<double>& Bij)
+vnl_sparse_lst_sqr_function::jac_Bij(int /*i*/, int /*j*/, vnl_vector<double> const& /*ai*/,
+                                     vnl_vector<double> const& /*bj*/, vnl_matrix<double>& /*Bij*/)
 {
+  // This default implementation is empty; overloaded in derived class.
   vcl_cerr << "Warning: jac_Bij() called but not implemented in derived class\n";
 }
 
@@ -338,6 +341,6 @@ void vnl_sparse_lst_sqr_function::trace(int /* iteration */,
                                         vcl_vector<vnl_vector<double> > const& /*e*/)
 {
   // This default implementation is empty; overloaded in derived class.
+  vcl_cerr << "Warning: trace() called but not implemented in derived class\n";
 }
-
 
