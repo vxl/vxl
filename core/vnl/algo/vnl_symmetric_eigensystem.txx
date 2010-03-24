@@ -38,7 +38,7 @@ void vnl_symmetric_eigensystem_compute_eigenvals(
   // x^3 + b x^2 + c x + d = 0
   const T b = -M11-M22-M33;
   const T c =  M11*M22 +M11*M33 +M22*M33  -M12*M12 -M13*M13 -M23*M23;
-  const T d = M11*M23*M23 +M12*M12*M33 +M13*M13*M22 -2.0*M12*M13*M23 -M11*M22*M33;
+  const T d = M11*M23*M23 +M12*M12*M33 +M13*M13*M22 -2*M12*M13*M23 -M11*M22*M33;
 
   // Using a numerically tweaked version of the real cubic solver http://www.1728.com/cubic2.htm
   const T b_3 = b/3;
