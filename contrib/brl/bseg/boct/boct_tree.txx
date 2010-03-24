@@ -569,36 +569,35 @@ void boct_tree<T_loc,T_data>::b_read(vsl_b_istream & is)
   switch (v)
   {
    case 1:  // the whole tree, internal+leaf nodes
-    vsl_b_read(is, num_levels_);
-    vsl_b_read(is, global_bbox_);
-    root_ = new boct_tree_cell<T_loc,T_data>();
-    vsl_b_read(is, *root_, (boct_tree_cell<T_loc,T_data>*)0);
-    this->root_level_ = num_levels_ -1;
-    this->max_val_ = (double)(1<<root_level_);
-    break;
+     vsl_b_read(is, num_levels_);
+     vsl_b_read(is, global_bbox_);
+     root_ = new boct_tree_cell<T_loc,T_data>();
+     vsl_b_read(is, *root_, (boct_tree_cell<T_loc,T_data>*)0);
+     this->root_level_ = num_levels_ -1;
+     this->max_val_ = (double)(1<<root_level_);
+     break;
    case 2:  // only leaf nodes
    {
-    vsl_b_read(is, num_levels_);
-    vsl_b_read(is, global_bbox_);
-    unsigned num_cells;
-    vsl_b_read(is, num_cells);
+      vsl_b_read(is, num_levels_);
+      vsl_b_read(is, global_bbox_);
+      unsigned num_cells;
+      vsl_b_read(is, num_cells);
+      boct_loc_code<T_loc> code;
+      boct_tree_cell<T_loc,T_data>* root;
+      if (num_levels_>0) {
+          code.set_code(0,0,0);
+          code.set_level(num_levels_-1);
+          root=new boct_tree_cell<T_loc,T_data>( code);
+      }
+      else {
+          vcl_cerr << "boct_tree: the tree max level is 0, cannot create a tree!\n";
+          return ;
+      }
 
-    boct_loc_code<T_loc> code;
-    T_data data;
-    boct_tree_cell<T_loc,T_data>* root;
-    if (num_levels_>0) {
-      code.set_code(0,0,0);
-      code.set_level(num_levels_-1);
-      root=new boct_tree_cell<T_loc,T_data>( code);
-    }
-    else {
-      vcl_cerr << "boct_tree: the tree max level is 0, cannot create a tree!\n";
-      return ;
-    }
-
-    for (unsigned i=0; i<num_cells; i++) {
-      vsl_b_read(is, code);
-      vsl_b_read(is, data);
+      for (unsigned i=0; i<num_cells; i++) {
+          T_data data;
+          vsl_b_read(is, code);
+          vsl_b_read(is, data);
 
       // temporary pointer to traverse
       boct_tree_cell<T_loc,T_data>* curr_cell=root;
