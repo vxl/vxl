@@ -386,6 +386,12 @@ SOURCE=.\Templates/vgl_infinite_line_3d+float-.cxx
 # Begin Source File
 SOURCE=.\Templates/vgl_infinite_line_3d+double-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_sphere_3d+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_cylinder+float-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
