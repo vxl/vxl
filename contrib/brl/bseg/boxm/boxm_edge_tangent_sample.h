@@ -20,7 +20,10 @@ class boxm_edge_tangent_sample
   void print(vcl_ostream& os) const;
 
   //: adds observations
-  void insert(boxm_plane_obs<T> const& obs) { obs_.push_back(obs); /*vcl_cout << obs_.size() << vcl_endl;*/ }
+  void insert(boxm_plane_obs<T> const& obs) { obs_.push_back(obs); }
+
+  //: insert a lis of observations
+  void insert(vcl_vector<boxm_plane_obs<T> > const& obs) {obs_.insert(obs_.end(),obs.begin(),obs.end()); } 
 
   //: returns the number of observations
   unsigned num_obs() const { return obs_.size(); }
@@ -37,6 +40,8 @@ class boxm_edge_tangent_sample
     vcl_cerr << "boxm_edge_tangent_sample: " << i << "is out of index - size is " << obs_.size() << vcl_endl;
     return -1.0f;
   }
+  
+  vcl_vector<boxm_plane_obs<T> > obs_list() { return obs_; }
 
  private:
   vcl_vector<boxm_plane_obs<T> > obs_;
@@ -55,7 +60,7 @@ template <class T>
 void vsl_b_read(vsl_b_istream & is, boxm_edge_tangent_sample<T> *&sample);
 
 template <class T>
-vcl_ostream& operator << (vcl_ostream& os, const boxm_edge_tangent_sample<T>& sample);
+vcl_ostream& operator << (vcl_ostream& os, boxm_edge_tangent_sample<T>& sample);
 
 
 #endif // boxm_edge_tangent_sample_h_

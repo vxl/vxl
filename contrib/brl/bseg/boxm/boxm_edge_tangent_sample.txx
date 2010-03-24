@@ -7,8 +7,9 @@
 template <class OBS_T>
 void boxm_edge_tangent_sample<OBS_T>::print(vcl_ostream& os) const
 {
+  os << " num_obs=" << this->num_obs() << vcl_endl;
   for (unsigned i=0; i<obs_.size(); i++) 
-    os << i << "(obs=" << this->obs(i) << " num_obs=" << this->num_obs() << ")\n" ;
+    os << "    " << i << "- (obs=" << this->obs(i) << ")\n" ;
 }
 
 template <class T>
