@@ -93,6 +93,90 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
+SOURCE=.\vnl_amoeba.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_brent.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_cholesky.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_complex_eigensystem.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_conjugate_gradient.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_cpoly_roots.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_discrete_diff.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_fft.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_gaussian_kernel_1d.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_generalized_eigensystem.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_generalized_schur.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_lbfgs.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_levenberg_marquardt.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_lsqr.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_powell.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_real_eigensystem.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_rnpoly_solve.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_rpoly_roots.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_sparse_symmetric_eigensystem.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_adaptsimpson_integral.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_simpson_integral.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_solve_qp.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_ldl_cholesky.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_sparse_lu.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_bracket_minimum.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_brent_minimizer.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_lbfgsb.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_sparse_lm.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vnl_adjugate+double-.cxx
 # End Source File
 # Begin Source File
@@ -198,96 +282,6 @@ SOURCE=.\Templates/vnl_svd+vcl_complex+double--.cxx
 SOURCE=.\Templates/vnl_svd+vcl_complex+float--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vnl_amoeba.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_brent.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_chi_squared.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_cholesky.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_complex_eigensystem.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_conjugate_gradient.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_cpoly_roots.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_discrete_diff.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_fft.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_gaussian_kernel_1d.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_generalized_eigensystem.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_generalized_schur.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_lbfgs.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_levenberg_marquardt.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_lsqr.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_powell.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_real_eigensystem.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_rnpoly_solve.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_rpoly_roots.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_sparse_symmetric_eigensystem.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_symmetric_eigensystem.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_adaptsimpson_integral.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_simpson_integral.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_solve_qp.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_ldl_cholesky.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_sparse_lu.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_bracket_minimum.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_brent_minimizer.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_lbfgsb.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_sparse_lm.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vnl_svd_economy+double-.cxx
 # End Source File
 # Begin Source File
@@ -304,6 +298,42 @@ SOURCE=.\Templates/vnl_svd_fixed+double.3.4-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vnl_svd_fixed+double.3.3-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_symmetric_eigensystem+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_chi_squared+int-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_chi_squared+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_svd_fixed+float.3.4-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_matrix_inverse+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_convolve+int.float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_svd_fixed+float.3.3-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_adjugate+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_chi_squared+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_symmetric_eigensystem+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_orthogonal_complement+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_convolve+float.float-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -325,6 +355,9 @@ SOURCE=.\vnl_brent.h
 # End Source File
 # Begin Source File
 SOURCE=.\vnl_chi_squared.h
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_chi_squared.txx
 # End Source File
 # Begin Source File
 SOURCE=.\vnl_cholesky.h
@@ -445,6 +478,9 @@ SOURCE=.\vnl_svd.txx
 # End Source File
 # Begin Source File
 SOURCE=.\vnl_symmetric_eigensystem.h
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_symmetric_eigensystem.txx
 # End Source File
 # Begin Source File
 SOURCE=.\vnl_algo_fwd.h
