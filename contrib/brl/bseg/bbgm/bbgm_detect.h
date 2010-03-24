@@ -63,7 +63,8 @@ void detect(bbgm_image_of<dist_>& dimg,
       for (unsigned int k=0; k<size_se; ++k){
         int ri = static_cast<int>(i)+se.p_i()[k];
         int rj = static_cast<int>(j)+se.p_j()[k];
-        if (ri < 0 || ri >= ni || rj < 0 || rj >= nj)
+        if (ri < 0 || ri >= static_cast<int>(ni) || 
+            rj < 0 || rj >= static_cast<int>(nj) )
           continue;
         if (detector(dimg(ri,rj), sample, temp_val) && temp_val){
           detected = true;
