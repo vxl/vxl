@@ -1,6 +1,7 @@
 #ifndef boxm_ray_trace_manager_h_
 #define boxm_ray_trace_manager_h_
-
+//:
+// \file
 #include <vcl_string.h>
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
@@ -19,7 +20,7 @@
 template <class T_data>
 class boxm_ray_trace_manager : public boxm_opencl_manager<boxm_ray_trace_manager<T_data> >
 {
-public:
+ public:
   typedef boct_tree<short,T_data> tree_type;
   //typedef boct_tree<short,T_aux> aux_tree_type;
   typedef boct_tree_cell<short,T_data> cell_type;
@@ -52,7 +53,7 @@ public:
   //: run the raytrace
   bool run();
 
-  //: clean up allocated memory 
+  //: clean up allocated memory
   // (call after run has completed and results have been retrieved)
   bool clean_raytrace();
 
@@ -92,7 +93,6 @@ public:
 
   // does not do any allocation
   bool setup_img_bb(vpgl_camera_double_sptr cam, vgl_box_3d<double> const& block_bb, vgl_box_2d<double> &img_bb, unsigned ni,unsigned nj);
- 
 
   void clear_tree_results();
   void set_dims(int ni,int nj){ni_=ni;nj_=nj;imgdims_[0]=ni_;imgdims_[1]=nj_;imgdims_[2]=0;imgdims_[3]=0;}
@@ -154,7 +154,7 @@ public:
   bool load_tree(vcl_string const& path);
   bool write_tree(vcl_string const& path);
 
-protected:
+ protected:
 
   bool run_block();
 
@@ -193,8 +193,6 @@ protected:
   cl_mem   imgdims_buf_;
   cl_mem   roidims_buf_;
   cl_mem   global_bbox_buf_;
-
-
 };
 
 #endif // boxm_ray_trace_manager_h_
