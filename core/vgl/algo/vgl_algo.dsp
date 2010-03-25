@@ -194,6 +194,27 @@ SOURCE=.\Templates/vgl_rtree+vgl_point_2d+float-.vgl_box_2d+float-.vgl_rtree_poi
 SOURCE=.\Templates/vgl_ellipsoid_3d+double-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vgl_fit_lines_2d+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_convex_hull_2d+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_fit_plane_3d+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_p_matrix+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_norm_trans_3d+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_line_2d_regression+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_ellipsoid_3d+float-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vgl_h_matrix_1d_compute_3point.cxx
 # End Source File
 # Begin Source File

@@ -140,6 +140,9 @@ SOURCE=.\processes/boxm_generate_opt2_samples_process.cxx
 # Begin Source File
 SOURCE=.\processes/boxm_opt2_update_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\processes/boxm_plane_propagate_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
