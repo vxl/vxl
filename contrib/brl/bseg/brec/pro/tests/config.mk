@@ -1,0 +1,13 @@
+include ${VXLROOT}/contrib/brl/bseg/bvxm/pro/config.mk
+include ${VXLROOT}/contrib/brl/bseg/bbgm/pro/config.mk
+include ${VXLROOT}/contrib/brl/bseg/bvxm/io/config.mk
+include ${VXLROOT}/contrib/brl/bpro/core/vil_pro/config.mk
+include ${VXLROOT}/contrib/brl/bpro/bprb/config.mk
+include ${VXLROOT}/contrib/brl/bbas/brdb/config.mk
+include ${VXLROOT}/contrib/gel/mrc/vpgl_algo/config.mk
+include ${VXLROOT}/contrib/gel/mrc/vpgl/config.mk
+include ${VXLROOT}/contrib/gel/mrc/vpgl_io/config.mk
+include ${VXLROOT}/contrib/gel/mrc/vpgl_pro/config.mk
+include ${VXLROOT}/core/vil_io/config.mk
+include ${VXLROOT}/core/vil/config.mk
+include ${VXLROOT}/core/vbl/config.mk
