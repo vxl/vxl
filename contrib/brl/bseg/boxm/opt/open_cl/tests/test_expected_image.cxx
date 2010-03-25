@@ -15,11 +15,7 @@
 #include <vil/vil_save.h>
 #include <vil/vil_load.h>
 #include <vil/vil_convert.h>
-#include <vcl_where_root_dir.h>
-
 #include <vil/vil_math.h>
-
-
 
 
 void save_expected_image(vcl_string const& image_path,
@@ -69,18 +65,18 @@ vil_image_view<float> expected_image(unsigned ni, unsigned nj,
 
 vil_image_view<float> run_expected_image(boxm_scene<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY > > > * scene, vpgl_perspective_camera<double> * pcam,unsigned ni, unsigned nj)
 {
-  // set up the application-specific function to be called at every cell along a ray
-  vcl_string expected_img_functor_fname = vcl_string(VCL_SOURCE_ROOT_DIR)
-    +"/contrib/brl/bseg/boxm/opt/open_cl/expected_functor.cl";
+    // set up the application-specific function to be called at every cell along a ray
+    vcl_string expected_img_functor_fname = vcl_string(VCL_SOURCE_ROOT_DIR)
+        +"/contrib/brl/bseg/boxm/opt/open_cl/expected_functor.cl";
 
-  vcl_vector<vcl_string> source_fnames;
-  source_fnames.push_back(expected_img_functor_fname);
+    vcl_vector<vcl_string> source_fnames;
+    source_fnames.push_back(expected_img_functor_fname);
 
     boxm_ray_trace_manager<boxm_sample<BOXM_APM_MOG_GREY> >* ray_mgr = boxm_ray_trace_manager<boxm_sample<BOXM_APM_MOG_GREY> >::instance();
     ray_mgr->init_raytrace(scene, pcam, ni, nj, source_fnames);
 
     ray_mgr->run();
- 
+
     return expected_image(250,250,ray_mgr->ray_results());
 }
 
