@@ -1,4 +1,4 @@
-// This is brl/bseg/boxm/opt/opencl/pro/processes/boxm_opt_opencl_render_expected_process.cxx
+// This is brl/bseg/boxm/opt/open_cl/pro/processes/boxm_opt_opencl_render_expected_process.cxx
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -80,7 +80,7 @@ bool boxm_opt_opencl_render_expected_process(bprb_func_process& pro)
   // check the scene's appearance model
   switch (scene_ptr->appearence_model())
   {
-  case BOXM_APM_MOG_GREY:
+    case BOXM_APM_MOG_GREY:
     {
       vil_image_view<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> expected(ni,nj);
       vil_image_view<float> mask(ni,nj);
@@ -102,7 +102,7 @@ bool boxm_opt_opencl_render_expected_process(bprb_func_process& pro)
       img = expected_byte;
       break;
     }
-  case BOXM_APM_SIMPLE_GREY:
+    case BOXM_APM_SIMPLE_GREY:
     {
       vil_image_view<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype> expected(ni,nj);
       vil_image_view<float> mask(ni,nj);
@@ -125,7 +125,7 @@ bool boxm_opt_opencl_render_expected_process(bprb_func_process& pro)
       img = expected_byte;
       break;
     }
-  default:
+    default:
     {
       vcl_cout << "boxm_opt_opencl_render_expected_process: unsupported APM type" << vcl_endl;
       return false;
