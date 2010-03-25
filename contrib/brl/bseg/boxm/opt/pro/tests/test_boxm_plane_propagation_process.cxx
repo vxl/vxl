@@ -1,11 +1,11 @@
 #include <testlib/testlib_test.h>
-
+//:
 // \file
-// \brief  This test creates a tree with 8 leaf cells and inserts only one plane to each 
-//         After the boxm_plane_propagation_process is applied, each cell will insert their 
-//         neighbors' observation planes and insert into itself. At the end each cell should 
-//         have 8 planes in the observation list since each cell has 7 neighbors (all the 
-//         other cells in the tree) 
+// \brief  This test creates a tree with 8 leaf cells and inserts only one plane to each
+//         After the boxm_plane_propagation_process is applied, each cell will insert their
+//         neighbors' observation planes and insert into itself. At the end each cell should
+//         have 8 planes in the observation list since each cell has 7 neighbors (all the
+//         other cells in the tree)
 //
 // \author Gamze Tunali
 // \date   March 24, 2010
@@ -28,14 +28,11 @@
 
 #include <boxm/boxm_scene.h>
 #include <boxm/boxm_edge_tangent_sample.h>
-#include <boct/boct_tree.h>
 #include <boxm/opt/pro/boxm_opt_processes.h>
 #include <vpl/vpl.h>
 #include <vul/vul_file.h>
 
 #include <vcl_vector.h>
-
-
 
 static void test_boxm_plane_propagation_process()
 {
@@ -62,7 +59,7 @@ static void test_boxm_plane_propagation_process()
     scene.load_block(iter.index().x(),iter.index().y(),iter.index().z());
     boxm_block<boct_tree<short,data_type > > * block=scene.get_active_block();
     boct_tree<short,data_type > * tree= block->get_tree();
-    
+
     // get the leaf nodes and insert one plane to each
     vcl_vector<boct_tree_cell<short,data_type >*> cells=tree->leaf_cells();
     for (unsigned i=0; i<cells.size(); i++) {
@@ -119,12 +116,12 @@ static void test_boxm_plane_propagation_process()
     scene2->load_block(iter2.index().x(),iter2.index().y(),iter2.index().z());
     boxm_block<tree_type > * block=scene2->get_active_block();
     tree_type * tree= block->get_tree();
-    
+
     // get the leaf nodes and insert one plane to each
     vcl_vector<boct_tree_cell<short,data_type >*> nodes=tree->leaf_cells();
     for (unsigned i=0; i<nodes.size(); i++) {
       unsigned num=nodes[i]->data().num_obs();
-      // each node has 8 neigbors in the 3x3 neighborhood including itself 
+      // each node has 8 neigbors in the 3x3 neighborhood including itself
       if (num != 8)
         obs_num_ok = false;
     }
