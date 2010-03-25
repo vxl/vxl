@@ -72,7 +72,7 @@ class boxm_opencl_manager
   cl_device_id * devices() {return devices_;}
 
   //: Allocate host memory for use with clCreateBuffer (aligned if necessary)
-  void* boxm_opencl_manager<T>::allocate_host_mem(size_t size);
+  void* boxm_opencl_manager<T>::allocate_host_mem(vcl_size_t size);
 
  protected:
 
