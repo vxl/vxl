@@ -1,9 +1,7 @@
 #ifndef boxm_opt_opencl_render_expected_h_
 #define boxm_opt_opencl_render_expected_h_
-
 //:
 // \file
-#include <vcl_where_root_dir.h>
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/opt/boxm_rt_sample.h>
 #include <boxm/boxm_simple_grey_processor.h>
@@ -13,11 +11,14 @@
 #include <bcl/bcl_cl.h>
 #include <boxm/opt/open_cl/boxm_ray_trace_manager.h>
 
+#include <vcl_where_root_dir.h>
+#include <vcl_iostream.h>
+
 //: Functor class to normalize expected image
 template<class T_obs>
 class normalize_expected_functor
 {
-public:
+ public:
   normalize_expected_functor(bool use_black_background) : use_black_background_(use_black_background) {}
 
   void operator()(float mask, typename T_obs &pix) const
@@ -53,7 +54,7 @@ void boxm_opencl_render_expected(boxm_scene<boct_tree<short, boxm_sample<APM> > 
   // extract expected image and mask from OpenCL output data
   cl_float* results = ray_mgr->ray_results();
   if (!results) {
-    vcl_cerr << "Error : boxm_opencl_render_expected : ray_mgr->ray_results() returned NULL " << vcl_endl;
+    vcl_cerr << "Error : boxm_opencl_render_expected : ray_mgr->ray_results() returned NULL\n";
     return;
   }
   cl_float *results_p = results;
