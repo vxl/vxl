@@ -527,15 +527,44 @@ void boct_tree<T_loc,T_data>::print()
 }
 
 template <class T_loc,class T_data>
-void boct_tree<T_loc,T_data>::b_write(vsl_b_ostream & os, bool save_internal_nodes)
+void boct_tree<T_loc,T_data>::b_write(vsl_b_ostream & os, bool save_internal_nodes, bool platform_independent)
 {
-  //new version where we only save the leaf nodes
-  short v = version_no(save_internal_nodes);
-  vcl_cout << "Internal Nodes 1: " << save_internal_nodes << vcl_endl;
+  short v = version_no(save_internal_nodes, platform_independent);
+  //vcl_cout << "Internal Nodes 1: " << save_internal_nodes << " save_platform_independent: " << platform_independent << vcl_endl;
 
   vcl_cout << "Writing tree binary version: " << v << vcl_endl;
 
-  if (v == 2) {
+  if (v == 3) {
+    // save the cells and data in an efficient (but platform-dependent) way
+    vsl_b_write(os, v);
+    vsl_b_write(os, num_levels_);
+    vsl_b_write(os, global_bbox_);
+    vcl_vector<boct_tree_cell<T_loc,T_data>*> cells = leaf_cells();
+    const unsigned int ncells = cells.size();
+    vsl_b_write(os, ncells);
+    //boct_loc_code<T_loc> *loc_code_array = new boct_loc_code<T_loc>[ncells];
+    //boct_loc_code<T_loc> *loc_p = loc_code_array;
+    //T_data *data_array = new T_data[ncells];
+    //T_data *data_p = data_array;
+    struct store_struct { boct_loc_code<T_loc> code; T_data data; };
+    store_struct *write_buff = new store_struct[ncells];
+    store_struct *buff_p = write_buff;
+    vcl_vector<boct_tree_cell<T_loc,T_data>*>::const_iterator cell_it = cells.begin();
+    for (; cell_it != cells.end(); ++cell_it, ++buff_p) {
+      //*loc_p++ = (*cell_it)->code_;
+      //*data_p++ = (*cell_it)->data();
+      buff_p->code = (*cell_it)->code_;
+      buff_p->data = (*cell_it)->data();
+    }
+    //os.os().write(reinterpret_cast<const char*>(loc_code_array),sizeof(boct_loc_code<T_loc>)*ncells);
+    //os.os().write(reinterpret_cast<const char*>(data_array),sizeof(T_data)*ncells);
+    os.os().write(reinterpret_cast<const char*>(write_buff),sizeof(store_struct)*ncells);
+    //delete[] loc_code_array;
+    //delete[] data_array;
+    delete[] write_buff;
+  }
+  else if (v == 2) {
+    //new version where we only save the leaf nodes
     vsl_b_write(os, v);
     vsl_b_write(os, num_levels_);
     vsl_b_write(os, global_bbox_);
@@ -569,20 +598,22 @@ void boct_tree<T_loc,T_data>::b_read(vsl_b_istream & is)
   switch (v)
   {
    case 1:  // the whole tree, internal+leaf nodes
-     vsl_b_read(is, num_levels_);
-     vsl_b_read(is, global_bbox_);
-     root_ = new boct_tree_cell<T_loc,T_data>();
-     vsl_b_read(is, *root_, (boct_tree_cell<T_loc,T_data>*)0);
-     this->root_level_ = num_levels_ -1;
-     this->max_val_ = (double)(1<<root_level_);
-     break;
+    vsl_b_read(is, num_levels_);
+    vsl_b_read(is, global_bbox_);
+    root_ = new boct_tree_cell<T_loc,T_data>();
+    vsl_b_read(is, *root_, (boct_tree_cell<T_loc,T_data>*)0);
+    this->root_level_ = num_levels_ -1;
+    this->max_val_ = (double)(1<<root_level_);
+    break;
    case 2:  // only leaf nodes
-   {
+    {
       vsl_b_read(is, num_levels_);
       vsl_b_read(is, global_bbox_);
       unsigned num_cells;
       vsl_b_read(is, num_cells);
+
       boct_loc_code<T_loc> code;
+      T_data data;
       boct_tree_cell<T_loc,T_data>* root;
       if (num_levels_>0) {
           code.set_code(0,0,0);
@@ -595,39 +626,101 @@ void boct_tree<T_loc,T_data>::b_read(vsl_b_istream & is)
       }
 
       for (unsigned i=0; i<num_cells; i++) {
-          T_data data;
           vsl_b_read(is, code);
           vsl_b_read(is, data);
 
-      // temporary pointer to traverse
-      boct_tree_cell<T_loc,T_data>* curr_cell=root;
-      short curr_level=num_levels_-1;
-      short level=code.level;
-      while (curr_level>level)
-      {
-        if (curr_cell->is_leaf()) {
-          curr_cell->split();
-        }
-        short child_index=code.child_index(curr_level);
-        if (child_index < 0)
-          vcl_cout << "ERROR 1: child_index is " << child_index << vcl_endl;
-        curr_cell=curr_cell->children()+child_index;
-        --curr_level;
+          // temporary pointer to traverse
+          boct_tree_cell<T_loc,T_data>* curr_cell=root;
+          short curr_level=num_levels_-1;
+          short level=code.level;
+          while (curr_level>level)
+          {
+              if (curr_cell->is_leaf()) {
+                  curr_cell->split();
+              }
+              short child_index=code.child_index(curr_level);
+              if (child_index < 0)
+                  vcl_cout << "ERROR 1: child_index is " << child_index << vcl_endl;
+              curr_cell=curr_cell->children()+child_index;
+              --curr_level;
+          }
+
+          if (curr_cell->code_.isequal(&code))
+              // the place of the cell is found, put the data in
+              curr_cell->set_data(data);
+          else
+              vcl_cerr << "WRONG ERROR CODE OR CELL FOUND!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
       }
 
-      if (curr_cell->code_.isequal(&code))
-        // the place of the cell is found, put the data in
-        curr_cell->set_data(data);
-      else
-        vcl_cerr << "WRONG ERROR CODE OR CELL FOUND!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
+      this->root_=root;
+      this->root_level_ = num_levels_ -1;
+      this->max_val_ = (double)(1<<root_level_);
+      break;
     }
+   case 3:
+     {
+      vsl_b_read(is, num_levels_);
+      vsl_b_read(is, global_bbox_);
+      unsigned int num_cells;
+      vsl_b_read(is, num_cells);
 
-    this->root_=root;
-    this->root_level_ = num_levels_ -1;
-    this->max_val_ = (double)(1<<root_level_);
-    break;
-   }
+      boct_loc_code<T_loc> code;
+      T_data data;
+      boct_tree_cell<T_loc,T_data>* root;
+      if (num_levels_>0) {
+          code.set_code(0,0,0);
+          code.set_level(num_levels_-1);
+          root=new boct_tree_cell<T_loc,T_data>( code);
+      }
+      else {
+          vcl_cerr << "boct_tree: the tree max level is 0, cannot create a tree!\n";
+          return ;
+      }
+      struct store_struct {boct_loc_code<T_loc> code; T_data data;};
+      store_struct* read_buff = new store_struct[num_cells];
+      //boct_loc_code<T_loc> *code_array = new boct_loc_code<T_loc>[num_cells];
+      //T_data *data_array = new T_data[num_cells];
+      //is.is().read(reinterpret_cast<char*>(code_array),sizeof(boct_loc_code<T_loc>)*num_cells);
+      //is.is().read(reinterpret_cast<char*>(data_array),sizeof(T_data)*num_cells);
+      is.is().read(reinterpret_cast<char*>(read_buff),sizeof(store_struct)*num_cells);
 
+      for (unsigned i=0; i<num_cells; i++) {
+          //code = code_array[i];
+          //data = data_array[i];
+          code = read_buff[i].code;
+          data = read_buff[i].data;
+      
+          // temporary pointer to traverse
+          boct_tree_cell<T_loc,T_data>* curr_cell=root;
+          short curr_level=num_levels_-1;
+          short level=code.level;
+          while (curr_level>level)
+          {
+              if (curr_cell->is_leaf()) {
+                  curr_cell->split();
+              }
+              short child_index=code.child_index(curr_level);
+              if (child_index < 0)
+                  vcl_cout << "ERROR 1: child_index is " << child_index << vcl_endl;
+              curr_cell=curr_cell->children()+child_index;
+              --curr_level;
+          }
+
+          if (curr_cell->code_.isequal(&code))
+              // the place of the cell is found, put the data in
+              curr_cell->set_data(data);
+          else
+              vcl_cerr << "WRONG ERROR CODE OR CELL FOUND!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
+      }
+      //delete[] code_array;
+      //delete[] data_array;
+      delete[] read_buff;
+
+      this->root_=root;
+      this->root_level_ = num_levels_ -1;
+      this->max_val_ = (double)(1<<root_level_);
+      break;
+     }
    default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boct_tree<T_loc,T_data>&)\n"
              << "           Unknown version number "<< v << '\n';
@@ -658,6 +751,11 @@ void boct_tree<T_loc,T_data>::b_read_partial(vsl_b_istream & is,
     this->root_level_ = num_levels_ -1;
     this->max_val_ = (double)(1<<root_level_);
     break;
+   default:
+     {
+       vcl_cerr << "error: boct_tree::b_read_partial() : unsupported version number " << v << vcl_endl;
+       break;
+     }
   }
 }
 #endif // 0

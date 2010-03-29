@@ -42,6 +42,14 @@ void boct_tree_cell_reader<T_loc,T_data>::begin()
           version_=2;
           break;
         }
+        case (3):
+          {
+            vsl_b_read(*is_, max_level);
+            vsl_b_read(*is_, tree_bb);
+            vsl_b_read(*is_, num_cells_);
+            version_ = 3;
+            break;
+          }
         default:
           vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boct_tree<T_loc,T_data>&)\n"
                    << "           Unknown version number of the tree "<< v << '\n';
@@ -96,7 +104,25 @@ bool boct_tree_cell_reader<T_loc,T_data>::next(boct_tree_cell<T_loc,T_data>& c)
       return true;
     }
     else {
-        is_->close();
+      is_->close();
+    }
+  }
+  else if (version_ ==3) {
+    struct store_struct {boct_loc_code<T_loc> code; T_data data;};
+    if (num_cells_-- > 0) {
+      //is_->is().read(reinterpret_cast<char*>(&c.code_),sizeof(boct_loc_code<T_loc>));
+      //T_data data;
+      //is_->is().read(reinterpret_cast<char*>(&data),sizeof(T_data));
+      //c.set_data(data);
+      store_struct read_cell;
+      is_->is().read(reinterpret_cast<char*>(&read_cell),sizeof(store_struct));
+      c.code_ = read_cell.code;
+      c.set_data(read_cell.data);
+      c.set_vis_node(NULL);
+      return true;
+    }
+    else {
+      is_->close();
     }
   }
   else

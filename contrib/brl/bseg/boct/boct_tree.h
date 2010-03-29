@@ -183,15 +183,29 @@ class boct_tree
   void print();
 
   // Binary I/O
-  void b_write(vsl_b_ostream & os, const bool save_internal_nodes);
+  void b_write(vsl_b_ostream & os, const bool save_internal_nodes, const bool platform_independent = true);
   void b_read(vsl_b_istream & is);
-  static short version_no(bool save_internal_nodes)
+  static short version_no(bool save_internal_nodes, bool platform_independent = true)
   {
-    if (save_internal_nodes)
-      return 1;
-    else
-      return 2;
+    if (save_internal_nodes) {
+      if (platform_independent) {
+        return 1;
+      }
+      else {
+        vcl_cerr << "warning: boct_tree::version_no : no platform_dependent method for writing internal nodes" << vcl_endl;
+        return 1;
+      }
+    }
+    else {
+      if (platform_independent) {
+        return 2;
+      }
+      else {
+        return 3;
+      }
+    }
   }
+
 
  private:
   //: Maximum number of levels in the octree
