@@ -182,7 +182,7 @@ foreach $f (@FILES)
                       grep {!m!_traits\.h$! && m!^$pref/${pref}_([^/]+)\.h$! && $1 ne 'fwd' } @class_list)
       {
         my $x = $class; $x =~ s!_sptr$!!;
-        &msg(1,"unnecessary #include <$pref/$class.h>")
+        &msg(1,"maybe unnecessary #include <$pref/$class.h>")
           unless ($class =~ m!^${pref}_config$! || $f =~ m!/test_include\.cxx$! || $f =~ m!/Templates/! || $file =~ m!\b$class! || $f =~ m!$x\.h$!);
       }
     }
@@ -561,12 +561,12 @@ foreach $f (@FILES)
     elsif ($j eq 'bgui/bgui_vsol_soview2D_point.h') { $i.='(|_[a-z_]+)'; }
     # SPECIAL CASES
     if ($j =~ m'(vsl/vsl_[a-z]+_io|v[bginu]l1?/io/v[bginu]l1?_io_[a-z123_]+)\.h') { $i.='|vsl_(b_(read|write)|print_summary)'; }
-    next if ($j eq 'vsol/vsol_curve.h' && $f =~ m!Templates/vbl_smart_ptr\+vtol_edge-\.cxx$!);
-    next if ($j eq 'vsol/vsol_point.h' && $f =~ m!Templates/vbl_smart_ptr\+vtol_edge-\.cxx$!);
-    next if ($j eq 'vsol/vsol_region.h' && $f =~ m!Templates/vbl_smart_ptr\+vtol_face-\.cxx$!);
-    next if ($j eq 'vsol/vsol_curve_2d.h' && $f =~ m!Templates/vbl_smart_ptr\+vtol_edge_2d-\.cxx$!);
-    next if ($j eq 'vsol/vsol_point_2d.h' && $f =~ m!Templates/vbl_smart_ptr\+vtol_edge_2d-\.cxx$!);
-    next if ($j eq 'vsol/vsol_region_2d.h' && $f =~ m!Templates/vbl_smart_ptr\+vtol_face_2d-\.cxx$!);
+    next if ($j eq 'vsol/vsol_curve.h' && $f =~ m'Templates/vbl_smart_ptr\+vtol_edge-\.cxx$');
+    next if ($j eq 'vsol/vsol_point.h' && $f =~ m'Templates/vbl_smart_ptr\+vtol_edge-\.cxx$');
+    next if ($j eq 'vsol/vsol_region.h' && $f =~ m'Templates/vbl_smart_ptr\+vtol_face-\.cxx$');
+    next if ($j eq 'vsol/vsol_curve_2d.h' && $f =~ m'Templates/vbl_smart_ptr\+vtol_edge_2d-\.cxx$');
+    next if ($j eq 'vsol/vsol_point_2d.h' && $f =~ m'Templates/vbl_smart_ptr\+vtol_edge_2d-\.cxx$');
+    next if ($j eq 'vsol/vsol_region_2d.h' && $f =~ m'Templates/vbl_smart_ptr\+vtol_face_2d-\.cxx$');
     # FINALLY PRINT MESSAGE, IF APPLICABLE
 #   warn "\$j=$j\t\$i=$i\t\$ii=$ii";
     &msg(1, "should not have #include <$j>", 1)
@@ -853,7 +853,7 @@ foreach $f (@FILES)
                     | yei\S*
                     | [a-z]*([a-z])\1\1[a-z]*\b
                     )!ix
-        && $1 ne 'valush' && $1 ne 'appicon' && $1 ne 'IntInfo' && $1 ne 'InitInstance' && $1 ne 'posinf,' && $1 ne 'ssss' && $1 ne 'sss' && $1 ne 'ttt' && $1 ne 'sssHdddmmss' && $1 ne 'sampNumCoef' && $1 !~ m!ClassSel|classSo|\bcorrs_!);
+        && $1 ne 'valush' && $1 ne 'appicon' && $1 ne 'IntInfo' && $1 ne 'InitInstance' && $1 ne 'posinf,' && $1 ne 'ssss' && $1 ne 'sss' && $1 ne 'ttt' && $1 ne 'sssHdddmmss' && $1 ne 'sampNumCoef' && $1 ne 'vlow' && $1 !~ m!ClassSel|classSo|\bcorrs_!);
 
 # 10. spurious #pragma interface or #pragma implementation
   &msg(1, "contains $1 without #ifdef VCL_NEEDS_PRAGMA_INTERFACE")
