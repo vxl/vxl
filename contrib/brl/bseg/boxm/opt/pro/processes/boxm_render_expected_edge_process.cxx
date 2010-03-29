@@ -32,7 +32,7 @@ namespace boxm_render_expected_edge_process_globals
 bool boxm_render_expected_edge_process_cons(bprb_func_process& pro)
 {
   using namespace boxm_render_expected_edge_process_globals;
-  //process takes 4 inputs
+  //process takes 7 inputs
   //input[0]: scene binary file
   //input[1]: camera
   //input[2]: ni of the expected image
@@ -51,26 +51,16 @@ bool boxm_render_expected_edge_process_cons(bprb_func_process& pro)
   if (!pro.set_input_types(input_types_))
     return false;
 
-  // process has 1 output:
+  // process has 2 outputs:
   // output[0]: rendered image
-  // output[0]: mask
+  // output[1]: mask
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";
   output_types_[1] = "vil_image_view_base_sptr";
-  if (!pro.set_output_types(output_types_))
-    return false;
 
-  return true;
+  return bool(pro.set_output_types(output_types_));
 }
-double angle_0_360(double angle)
-{
-  double ang = angle;
-  while (ang<0)
-    ang += (2.0*vnl_math::pi);
-  while (ang > 2.0*vnl_math::pi)
-    ang -= (2.0*vnl_math::pi);
-  return ang;
-}
+
 bool boxm_render_expected_edge_process(bprb_func_process& pro)
 {
   using namespace boxm_render_expected_edge_process_globals;
@@ -102,7 +92,7 @@ bool boxm_render_expected_edge_process(bprb_func_process& pro)
       typedef boct_tree<short, boxm_edge_sample<float> > type;
       boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
       if (!scene) {
-        vcl_cout << "boxm_render_expected_edge_process: the scene is not of expected type" << vcl_endl;
+        vcl_cerr << "boxm_render_expected_edge_process: the scene is not of expected type\n";
         return false;
       }
       boxm_render_edge_image_rt<short, boxm_edge_sample<float> >(*scene, camera, expected, mask,n_normal,num_updates);
@@ -131,41 +121,40 @@ bool boxm_render_expected_edge_process(bprb_func_process& pro)
     }
     img = ex;
       unsigned j = 0;
-  pro.set_output_val<vil_image_view_base_sptr>(j++, img);
-  pro.set_output_val<vil_image_view_base_sptr>(j++, img_mask);
-  return true;
-
+    pro.set_output_val<vil_image_view_base_sptr>(j++, img);
+    pro.set_output_val<vil_image_view_base_sptr>(j++, img_mask);
+    return true;
   }
+
   if (scene_ptr->appearence_model() == BOXM_EDGE_LINE) {
-      vil_image_view<float > expected(ni,nj,3);
-      vil_image_view<float> mask(ni,nj);
-      if (!scene_ptr->multi_bin())
-      {
-          typedef boct_tree<short, boxm_inf_line_sample<float> > type;
-          boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
-          if (!scene) {
-              vcl_cout << "boxm_render_expected_edge_process: the scene is not of expected type" << vcl_endl;
-              return false;
-          }
-          boxm_render_edge_tangent_image_rt<short, boxm_inf_line_sample<float> >(*scene, camera, expected, n_normal,num_updates, threshold);
-
-          vil_image_view<float > *edge_image=new  vil_image_view<float >(ni,nj,3);
-          *edge_image=expected;
-
-
-          unsigned j = 0;
-          pro.set_output_val<vil_image_view_base_sptr>(j++,edge_image);
-          pro.set_output_val<vil_image_view_base_sptr>(j++,edge_image);
-          return true;
+    vil_image_view<float > expected(ni,nj,3);
+    vil_image_view<float> mask(ni,nj);
+    if (!scene_ptr->multi_bin())
+    {
+      typedef boct_tree<short, boxm_inf_line_sample<float> > type;
+      boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
+      if (!scene) {
+        vcl_cerr << "boxm_render_expected_edge_process: the scene is not of expected type\n";
+        return false;
       }
-      else
-      {
-          vcl_cerr << "Ray tracing version not yet implemented\n";
-          return false;
-      }
-  } else {
-      vcl_cerr << "boxm_render_expected_edge_process: undefined APM type\n";
+      boxm_render_edge_tangent_image_rt<short, boxm_inf_line_sample<float> >(*scene, camera, expected, n_normal,num_updates, threshold);
+
+      vil_image_view<float > *edge_image=new  vil_image_view<float >(ni,nj,3);
+      *edge_image=expected;
+
+      unsigned j = 0;
+      pro.set_output_val<vil_image_view_base_sptr>(j++,edge_image);
+      pro.set_output_val<vil_image_view_base_sptr>(j++,edge_image);
+      return true;
+    }
+    else
+    {
+      vcl_cerr << "Ray tracing version not yet implemented\n";
       return false;
+    }
   }
-
+  else {
+    vcl_cerr << "boxm_render_expected_edge_process: undefined APM type\n";
+    return false;
+  }
 }
