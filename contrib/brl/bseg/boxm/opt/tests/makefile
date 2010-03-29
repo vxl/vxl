@@ -4,6 +4,7 @@ include $(VXLROOT)/core/testlib/config.mk
 
 TESTMAIN := test_driver.cxx
 TESTS += test_bayesian_optimizer.cxx
+TESTS += test_edges.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 

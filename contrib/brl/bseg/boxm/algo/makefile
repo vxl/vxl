@@ -8,6 +8,7 @@ MANPAGE_SOURCES += boxm_vrml_util.h
 MANPAGE_SOURCES += boxm_crop_scene.h
 MANPAGE_SOURCES += boxm_scene_to_bvxm_grid.h
 MANPAGE_SOURCES += boxm_fill_internal_cells.h
+MANPAGE_SOURCES += boxm_plane_ransac.h
 
 SUBDIRS += pro
 

@@ -7,6 +7,7 @@ TESTMAIN := test_driver.cxx
 TESTS += test_boxm_scene_crop.cxx
 TESTS += test_boxm_scene_to_bvxm_grid.cxx
 TESTS += test_boxm_fill_internal_cells.cxx
+TESTS += test_boxm_plane_ransac.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
