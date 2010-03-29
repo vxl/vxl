@@ -10,7 +10,7 @@
 #include <vcl_iostream.h>
 
 template <class T>
-void boxm_plane_ransac(vcl_vector<vgl_plane_3d<T> >& planes, 
+void boxm_plane_ransac(vcl_vector<vgl_plane_3d<T> > const& planes,
                        //vcl_vector<vgl_plane_3d<T> >& fit_planes,
                        vcl_vector<unsigned>& indices,
                        int threshold)
@@ -40,14 +40,14 @@ void boxm_plane_ransac(vcl_vector<vgl_plane_3d<T> >& planes,
         if (res < 0.0001)  {
           vgl_point_3d<T> p=line.point();
           if (plane.contains(p,0.0001)) {
-            vcl_cout << "Adding " << i << "th plane!" << vcl_endl;
+            vcl_cerr << "Adding " << i << "th plane!\n";
             //fit_planes.push_back(plane);
             indices.push_back(i);
           }
         }
       }
     }
-    vcl_cout << "the number of fit planes=" << indices.size() << vcl_endl;
+    vcl_cerr << "The number of fit planes=" << indices.size() << vcl_endl;
   }
 }
 
