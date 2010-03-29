@@ -31,7 +31,7 @@
 
 namespace boxm_plane_propagate_process_globals
 {
-  const unsigned int n_inputs_ = 1;
+  const unsigned int n_inputs_ = 4;
   const unsigned int n_outputs_ = 1;
   //Define parameters here
 }
@@ -44,8 +44,14 @@ bool boxm_plane_propagate_process_cons(bprb_func_process& pro)
 
   // process takes 1 inputs:
   //input[0]: The scene
+  //input[1]: the scene path for the output scene
+  //input[2]: block prefix for the output scene 
+  //input[3]: the filename for the new scene xml file
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm_scene_base_sptr";
+  input_types_[1] = "vcl_string";
+  input_types_[2] = "vcl_string";
+  input_types_[3] = "vcl_string";
  
   // process has 0 outputs:
   // output[0]: the new scene with updated cell information  
@@ -75,7 +81,10 @@ bool boxm_plane_propagate_process(bprb_func_process& pro)
 
   // get the inputs
   boxm_scene_base_sptr scene_base = pro.get_input<boxm_scene_base_sptr>(0);
-  
+  vcl_string scene_path = pro.get_input<vcl_string>(1);
+  vcl_string block_prefix = pro.get_input<vcl_string>(2);
+  vcl_string scene_filename = pro.get_input<vcl_string>(3);
+
   boxm_scene_base_sptr output_scene_sptr;
 
   // only applies to the edge_line type of scenes
@@ -89,7 +98,7 @@ bool boxm_plane_propagate_process(bprb_func_process& pro)
     }
 
     boxm_scene<tree_type> *output_scene=new boxm_scene<tree_type>(*scene);
-    output_scene->set_paths(scene->path(), "new_scene");
+    output_scene->set_paths(scene_path, block_prefix);
     output_scene_sptr = output_scene;
     // create a kernel for 3x3 neighborhood
     bvpl_kernel_iterator k_iter;
@@ -147,7 +156,9 @@ bool boxm_plane_propagate_process(bprb_func_process& pro)
       output_scene->write_active_block();
       iter++;
     }
+    output_scene->write_scene(scene_filename);
   }
+  
   //store output
   pro.set_output_val<boxm_scene_base_sptr>(0, output_scene_sptr);
   return true;

@@ -10,6 +10,7 @@
 #include <boxm/boxm_edge_tangent_sample.h>
 #include <boxm/boxm_inf_line_sample.h>
 #include <boxm/boxm_plane_obs.h>
+#include <boxm/algo/boxm_plane_ransac.h>
 
 #include <vgl/vgl_infinite_line_3d.h>
 #include <vgl/vgl_plane_3d.h>
@@ -90,7 +91,7 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
 
       if (aux_samples.size() > 1) {
 
-        vcl_list<vgl_plane_3d<AUX> > planes;
+        vcl_vector<vgl_plane_3d<AUX> > planes;
         vcl_vector<AUX> weights;
 
         for (unsigned int i=0; i<aux_samples.size(); ++i) {
@@ -105,7 +106,19 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
         nums+=planes.size();
         if (planes.size() > 1) {
           float residual=0;
-          vgl_infinite_line_3d<AUX> line = vgl_intersection(planes, weights,residual);
+          ////////////////
+          vcl_list<vgl_plane_3d<AUX> > fit_planes;
+          vcl_vector<AUX> fit_weights;
+          vcl_vector<unsigned> indices;
+          boxm_plane_ransac<AUX>(planes, indices, planes.size()/2); 
+          
+          for (unsigned i=0; i<indices.size(); i++) {
+            unsigned idx = indices[i];
+            fit_planes.push_back(planes[idx]);
+            fit_weights.push_back(weights[idx]);
+          }
+          ////////////////
+          vgl_infinite_line_3d<AUX> line = vgl_intersection(fit_planes, fit_weights,residual);
           boxm_inf_line_sample<AUX> data(line,aux_samples.size());
           data.residual_=residual;
           vgl_box_3d<double> bb = tree->cell_bounding_box(cell);

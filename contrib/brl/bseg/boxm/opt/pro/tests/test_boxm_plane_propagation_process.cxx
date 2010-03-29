@@ -78,6 +78,9 @@ static void test_boxm_plane_propagation_process()
 
   //: set the inputs
   brdb_value_sptr v0 = new brdb_value_t<boxm_scene_base_sptr>(new boxm_scene<boct_tree<short,data_type > >(scene));
+  brdb_value_sptr v1 = new brdb_value_t<vcl_string>(scene.path());
+  brdb_value_sptr v2 = new brdb_value_t<vcl_string>("new_scene");
+  brdb_value_sptr v3 = new brdb_value_t<vcl_string>("new_scene.xml");
 
   //: inits with the default params
   bool good = bprb_batch_process_manager::instance()->init_process("boxmPlanePropagationProcess");
