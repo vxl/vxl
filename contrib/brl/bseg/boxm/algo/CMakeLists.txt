@@ -7,6 +7,7 @@ SET(boxm_algo_sources
     boxm_crop_scene.h
     boxm_scene_to_bvxm_grid.h
     boxm_fill_internal_cells.h
+    boxm_plane_ransac.h
    )
 
 ADD_LIBRARY(boxm_algo ${boxm_algo_sources})
