@@ -42,19 +42,19 @@ bool boxm_plane_propagate_process_cons(bprb_func_process& pro)
 {
   using namespace boxm_plane_propagate_process_globals;
 
-  // process takes 1 inputs:
+  // process takes 4 inputs:
   //input[0]: The scene
   //input[1]: the scene path for the output scene
-  //input[2]: block prefix for the output scene 
+  //input[2]: block prefix for the output scene
   //input[3]: the filename for the new scene xml file
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm_scene_base_sptr";
   input_types_[1] = "vcl_string";
   input_types_[2] = "vcl_string";
   input_types_[3] = "vcl_string";
- 
-  // process has 0 outputs:
-  // output[0]: the new scene with updated cell information  
+
+  // process has 1 output:
+  // output[0]: the new scene with updated cell information
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "boxm_scene_base_sptr";
 
@@ -102,16 +102,16 @@ bool boxm_plane_propagate_process(bprb_func_process& pro)
     output_scene_sptr = output_scene;
     // create a kernel for 3x3 neighborhood
     bvpl_kernel_iterator k_iter;
-    vgl_point_3d<int> min(-1,-1,-1);
-    vgl_point_3d<int> max(1,1,1);
-    for (int i=min.x(); i<=max.x(); i++) {
-      for (int j=min.y(); j<=max.y(); j++) {
-        for (int k=min.z(); k<=max.z(); k++) {
+    vgl_point_3d<int> min_pt(-1,-1,-1);
+    vgl_point_3d<int> max_pt(1,1,1);
+    for (int i=min_pt.x(); i<=max_pt.x(); i++) {
+      for (int j=min_pt.y(); j<=max_pt.y(); j++) {
+        for (int k=min_pt.z(); k<=max_pt.z(); k++) {
           k_iter.insert(vgl_point_3d<int>(i,j,k),bvpl_kernel_dispatch(1.0f));
         }
       }
     }
-    bvpl_kernel_sptr kernel= new bvpl_kernel(k_iter, vnl_float_3(0,0,1), 0.0f, vgl_vector_3d<int>(3,3,3),min,max);
+    bvpl_kernel_sptr kernel= new bvpl_kernel(k_iter, vnl_float_3(0,0,1), 0.0f, vgl_vector_3d<int>(3,3,3),min_pt,max_pt);
 
     boxm_block_iterator<tree_type> iter(scene);
     boxm_block_iterator<tree_type> output_iter(output_scene);
@@ -128,7 +128,7 @@ bool boxm_plane_propagate_process(bprb_func_process& pro)
       tree_type* tree = block->get_tree();
       tree->print();
       vcl_vector<cell_type *> cells = tree->leaf_cells();
-     
+
       tree_type* output_tree=tree->clone();
       vcl_vector<cell_type *> output_cells = output_tree->leaf_cells();
 
@@ -138,7 +138,7 @@ bool boxm_plane_propagate_process(bprb_func_process& pro)
         cell_type *output_cell=output_cells[i];
         vcl_vector<cell_type *> neighb_cells;
         oper.neighbors(kernel, cells[i], neighb_cells);
-        
+
         for (unsigned n=0; n<neighb_cells.size(); n++) {
           cell_type *neighbor = neighb_cells[n];
           boct_loc_code<short> cell_code=cell->code_;
@@ -158,7 +158,7 @@ bool boxm_plane_propagate_process(bprb_func_process& pro)
     }
     output_scene->write_scene(scene_filename);
   }
-  
+
   //store output
   pro.set_output_val<boxm_scene_base_sptr>(0, output_scene_sptr);
   return true;
