@@ -1,6 +1,5 @@
 ADD_EXECUTABLE( boxm_opt_test_all
   test_driver.cxx
-  test_include.cxx
   test_bayesian_optimizer.cxx
   test_edges.cxx
  )
