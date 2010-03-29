@@ -19,6 +19,7 @@ SET(bvpl_octree_sources
     bvpl_octree_sample.h              bvpl_octree_sample.txx
     bvpl_octree_vrml_util.h
     bvpl_cell_data_traits.h
+    bvpl_octree_neighbors.h
     temp.cxx
    )
 
