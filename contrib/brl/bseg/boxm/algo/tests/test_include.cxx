@@ -1,6 +1,7 @@
 #include <boxm/algo/boxm_crop_scene.h>
 #include <boxm/algo/boxm_fill_internal_cells.h>
 #include <boxm/algo/boxm_merge_mog.h>
+#include <boxm/algo/boxm_plane_ransac.h>
 #include <boxm/algo/boxm_scene_to_bvxm_grid.h>
 #include <boxm/algo/boxm_split_sample.h>
 #include <boxm/algo/boxm_vrml_util.h>
