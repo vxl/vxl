@@ -11,6 +11,11 @@
 
 int main(int argc, char **argv)
 {
+  vul_arg_base::set_help_description(
+    "DESCRIPTION:\n"
+    "Input mask B has n elements (of which m are TRUE) and thus transforms a vector X of n elements to a vector Y of m elements.\n"
+    "Input mask A has m elements (of which l are TRUE) and thus transforms a vector Y of m elements to a vector Z of l elements.\n"
+    "Output mask C has n elements (of which l are TRUE) and thus transforms a vector X of n elements to a vector Z of l elements.\n");
   vul_arg<vcl_string> maskA_filename(0,"Filename of mask A");
   vul_arg<vcl_string> maskB_filename(0,"Filename of mask B");
   vul_arg<vcl_string> maskout_filename(0,"Filename of the output mask");
