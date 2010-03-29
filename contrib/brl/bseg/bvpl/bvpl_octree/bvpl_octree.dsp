@@ -143,6 +143,9 @@ SOURCE=.\bvpl_octree_vrml_util.h
 # Begin Source File
 SOURCE=.\bvpl_cell_data_traits.h
 # End Source File
+# Begin Source File
+SOURCE=.\bvpl_octree_neighbors.h
+# End Source File
 # End Group
 # End Target
 # End Project

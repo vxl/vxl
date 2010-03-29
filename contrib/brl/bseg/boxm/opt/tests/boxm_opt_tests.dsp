@@ -99,6 +99,9 @@ SOURCE=.\test_driver.cxx
 SOURCE=.\test_bayesian_optimizer.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_edges.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group
