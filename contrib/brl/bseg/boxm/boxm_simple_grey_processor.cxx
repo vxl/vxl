@@ -94,9 +94,14 @@ void boxm_simple_grey_processor::compute_appearance(vcl_vector<boxm_apm_traits<B
   //}
   const float min_var_EM = 1.5e-5f; // to prevent degenerate solution (corresponds roughly to sigma = 1/255)
   bsta_fit_gaussian(obs,vis,pre,model_bsta,min_var_EM);
+  // compute expected number of observations
+  float expected_nobs = 0.0f;
+  for (unsigned int i=0; i<vis.size(); ++i) {
+    expected_nobs += vis[i];
+  }
   // normalize sigma
-  static const boxm_sigma_normalizer sigma_norm(0.10f);
-  const float norm_factor = sigma_norm.normalization_factor_int(obs.size());
+  static const boxm_sigma_normalizer sigma_norm(0.20f);
+  const float norm_factor = sigma_norm.normalization_factor(expected_nobs);
   //const float norm_factor = 1.0f;
   float sigma = vcl_sqrt(model_bsta.var()) * norm_factor;
 

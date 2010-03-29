@@ -253,14 +253,14 @@ void boxm_mog_grey_processor::compute_appearance(vcl_vector<boxm_apm_traits<BOXM
   }
 
   // unbias variance based on number of observations
-  //boxm_sigma_normalizer sigma_norm(0.25);
+  static const boxm_sigma_normalizer sigma_norm(0.20f);
   for (unsigned int m=0; m<nmodes; ++m) {
-    //float unbias_factor = sigma_norm.normalization_factor(mode_weight_sum[m]);
+    float unbias_factor = sigma_norm.normalization_factor(mode_weight_sum[m]);
     //float unbias_factor = sigma_norm.normalization_factor(model.weight(m) * nobs);
     //float unbias_factor = sigma_norm.normalization_factor_int(nobs);
 
     float mode_var = model.distribution(m).var();
-    //mode_var *= (unbias_factor*unbias_factor);
+    mode_var *= (unbias_factor*unbias_factor);
 
     // make sure variance does not get too big
     if (!(mode_var < big_var)) {
