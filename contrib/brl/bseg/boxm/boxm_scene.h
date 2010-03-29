@@ -32,14 +32,15 @@ class boxm_scene :public boxm_scene_base
 {
  public:
   //: Default constructor
-  boxm_scene() : active_block_(vgl_point_3d<int>(-1,-1,-1)), save_internal_nodes_(false) {}
+  boxm_scene() : active_block_(vgl_point_3d<int>(-1,-1,-1)), save_internal_nodes_(false), save_platform_independent_(true) {}
 
   //: Constructor from lvcs, world origin, dimension of the block (in world coordinates) and number of blocks(world_dim)
   boxm_scene(const bgeo_lvcs& lvcs,
              const vgl_point_3d<double>& origin,
              const vgl_vector_3d<double>& block_dim,
              const vgl_vector_3d<unsigned>& world_dim,
-             const bool save_internal_nodes_ = false);
+             const bool save_internal_nodes_ = false,
+             const bool save_platform_independent_ = true);
 
   //: Constructor from lvcs, world origin, dimension of the block, number of blocks and initialization level
   boxm_scene(const bgeo_lvcs& lvcs,
@@ -47,13 +48,15 @@ class boxm_scene :public boxm_scene_base
              const vgl_vector_3d<double>& block_dim,
              const vgl_vector_3d<unsigned>& world_dim,
              unsigned max_level, unsigned init_level,
-             const bool save_internal_nodes_ = false);
+             const bool save_internal_nodes_ = false,
+             const bool save_platform_independent_ = true);
 
   //: Constructor when lvcs is not avialable. World origin, block dimensions and number of blocks
   boxm_scene( const vgl_point_3d<double>& origin,
               const vgl_vector_3d<double>& block_dim,
               const vgl_vector_3d<unsigned>& world_dim,
-              const bool save_internal_nodes_ = false);
+              const bool save_internal_nodes_ = false,
+              const bool save_platform_independent_ = true);
 
   //: copy constructor
   boxm_scene(const boxm_scene& scene);
@@ -82,6 +85,8 @@ class boxm_scene :public boxm_scene_base
   vgl_vector_3d<double> block_dim() const { return block_dim_; }
   
   bool save_internal_nodes() const {return save_internal_nodes_;}
+
+  bool save_platform_independent() const {return save_platform_independent_;}
 
   void block_num(int &x, int &y, int &z) const {
     x=(int) blocks_.get_row1_count();
@@ -170,6 +175,8 @@ class boxm_scene :public boxm_scene_base
 
   //: Flag that indicates whether internal nodes of the trees should be saved
   bool save_internal_nodes_;
+  //: Flag that indicates whether the octree data should be saved in a platform-indepenent way (slower)
+  bool save_platform_independent_;
   //************** private methods
   void create_block(unsigned i, unsigned j, unsigned k);
 

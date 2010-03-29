@@ -15,7 +15,7 @@ boxm_aux_scene<T_loc,T,T_AUX>::boxm_aux_scene(boxm_scene<tree_type>* scene,
 {
   vcl_string aux_storage_dir;
   aux_storage_dir_ = scene->path();
-  aux_scene_ = new boxm_scene<aux_tree_type >(scene->lvcs(), scene->origin(), scene->block_dim(), scene->world_dim(), scene->save_internal_nodes());
+  aux_scene_ = new boxm_scene<aux_tree_type >(scene->lvcs(), scene->origin(), scene->block_dim(), scene->world_dim(), scene->save_internal_nodes(), scene->save_platform_independent());
   aux_scene_->set_path(aux_storage_dir_,  storage_suffix);
 
   aux_scene_->set_octree_levels(scene->max_level(),scene->init_level());

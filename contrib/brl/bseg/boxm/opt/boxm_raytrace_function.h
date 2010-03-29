@@ -26,6 +26,8 @@
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_line_3d_2_points.h>
 
+#include <vul/vul_timer.h>
+
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 
@@ -229,6 +231,10 @@ class boxm_raytrace_function
 
     bool run(F& step_functor)
     {
+        vul_timer timer;
+        float total_load_time = 0.0f;
+        float total_compute_time = 0.0f;
+        float total_save_time = 0.0f;
         vil_image_view<bool> continue_trace(img_ni_, img_nj_);
         continue_trace.fill(true);
         // code to iterate over the blocks in order of visibility
@@ -238,6 +244,7 @@ class boxm_raytrace_function
             vcl_vector<vgl_point_3d<int> > block_indices = block_vis_iter.frontier_indices();
             for (unsigned i=0; i<block_indices.size(); i++) // code for each block
             {
+                timer.mark();
                 scene_.load_block(block_indices[i]);
                 boxm_block<tree_type> * curr_block=scene_.get_active_block();
 
@@ -263,6 +270,9 @@ class boxm_raytrace_function
                    curr_aux_block=aux_scene_.get_block(block_indices[i]);
                    aux_tree=curr_aux_block->get_tree();
                 }
+                float load_time = (float)timer.all() / 1e3f;
+                total_load_time += load_time;
+                timer.mark();
                 // for each image pixel
                 for (unsigned int i = int(img_bb.min_x()+0.99); i <= img_bb.max_x(); ++i)
                 {
@@ -341,12 +351,21 @@ class boxm_raytrace_function
                         }
                     }
                 }
+                float compute_time = (float)timer.all() / 1e3f;
+                total_compute_time += compute_time;
+                timer.mark();
+
                 if (!step_functor.scene_read_only_)
                     scene_.write_active_block();
                 if (step_functor.is_aux_)
                     aux_scene_.write_active_block();
+
+                float save_time = (float)timer.all() /  1e3f;
+                total_save_time += save_time;
+                vcl_cout << "load: " << load_time << "s  compute: " << compute_time << "s  save: " << save_time << "s" << vcl_endl;
             }
         }
+        vcl_cout << "total load: " << total_load_time << "s  total compute: " << total_compute_time << "s  total save: " << total_save_time << "s" << vcl_endl;
         return true;
     }
 

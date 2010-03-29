@@ -84,6 +84,7 @@ void boxm_scene_parser::init_params()
   path_="";
   block_pref_="";
   save_internal_nodes_ = false;
+  save_platform_independent_ = true;
   p_init_=0.01f;
 }
 
@@ -181,6 +182,14 @@ boxm_scene_parser::startElement(const char* name, const char** atts)
       if (vcl_strcmp(atts[i], "value") == 0)
         convert(atts[i+1], save_internal_nodes_);
     }
+  }
+  else if (vcl_strcmp(name,SAVE_PLATFORM_INDEPENDENT_TAG)== 0) {
+    for (int i=0; atts[i]; i+=2) {
+      vcl_cout << "  Attr=" << atts[i] << "->" << atts[i+1] << vcl_endl;
+      if (vcl_strcmp(atts[i], "value") == 0)
+        convert(atts[i+1], save_platform_independent_);
+    }
+    //vcl_cout << "parser: save_platform_independent_ = " << save_platform_independent_ << vcl_endl;
   }
   else if (vcl_strcmp(name, "octree_level")==0) {
     for (int i=0; atts[i]; i+=2) {

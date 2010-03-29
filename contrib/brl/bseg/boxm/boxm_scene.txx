@@ -21,12 +21,14 @@ boxm_scene<T>::boxm_scene(const bgeo_lvcs& lvcs,
                           const vgl_point_3d<double>& origin,
                           const vgl_vector_3d<double>& block_dim,
                           const vgl_vector_3d<unsigned>& world_dim,
-                          const bool save_internal_nodes)
+                          const bool save_internal_nodes,
+                          const bool save_platform_independent)
 : lvcs_(lvcs),
   origin_(origin),
   block_dim_(block_dim),
   active_block_(vgl_point_3d<int>(-1,-1,-1)),
-  save_internal_nodes_(save_internal_nodes)
+  save_internal_nodes_(save_internal_nodes),
+  save_platform_independent_(save_platform_independent)
 {
   create_blocks(block_dim, world_dim);
 }
@@ -35,11 +37,13 @@ template <class T>
 boxm_scene<T>::boxm_scene( const vgl_point_3d<double>& origin,
                            const vgl_vector_3d<double>& block_dim,
                            const vgl_vector_3d<unsigned>& world_dim,
-                           const bool save_internal_nodes)
+                           const bool save_internal_nodes,
+                           const bool save_platform_independent)
 : origin_(origin),
   block_dim_(block_dim),
   active_block_(vgl_point_3d<int>(-1,-1,-1)),
-  save_internal_nodes_(save_internal_nodes)
+  save_internal_nodes_(save_internal_nodes),
+  save_platform_independent_(save_platform_independent)
 {
   create_blocks(block_dim, world_dim);
 }
@@ -51,7 +55,8 @@ boxm_scene<T>::boxm_scene(const boxm_scene& scene)
   origin_(scene.origin()),
   block_dim_(scene.block_dim()),
   active_block_(vgl_point_3d<int>(-1,-1,-1)),
-  save_internal_nodes_(scene.save_internal_nodes())
+  save_internal_nodes_(scene.save_internal_nodes()),
+  save_platform_independent_(scene.save_platform_independent())
 {
   int x,y,z;
   scene.block_num(x,y,z);
@@ -84,8 +89,9 @@ boxm_scene<T>::boxm_scene(const bgeo_lvcs& lvcs,
                           const vgl_vector_3d<double>& block_dim,
                           const vgl_vector_3d<unsigned>& world_dim,
                           unsigned max_level, unsigned init_level,
-                          const bool save_internal_nodes)
-: lvcs_(lvcs), origin_(origin), block_dim_(block_dim), active_block_(vgl_point_3d<int>(-1,-1,-1)),save_internal_nodes_(save_internal_nodes)
+                          const bool save_internal_nodes,
+                          const bool save_platform_independent)
+: lvcs_(lvcs), origin_(origin), block_dim_(block_dim), active_block_(vgl_point_3d<int>(-1,-1,-1)),save_internal_nodes_(save_internal_nodes), save_platform_independent_(save_platform_independent)
 {
   create_blocks(block_dim, world_dim);
   set_octree_levels(max_level, init_level);
@@ -125,9 +131,9 @@ void boxm_scene<T>::write_active_block()
     vcl_string path = gen_block_path(x,y,z);
     vsl_b_ofstream os(path);
 #if 0
-    vcl_cout << "Internal Nodes 2: " << save_internal_nodes_ << vcl_endl;
+    vcl_cout << "Internal Nodes 2: " << save_internal_nodes_ << " save_platform_independent_ " << save_platform_independent_ << vcl_endl;
 #endif
-    blocks_(x,y,z)->b_write(os, save_internal_nodes_);
+    blocks_(x,y,z)->b_write(os, save_internal_nodes_, save_platform_independent_);
     // delete the block's data
     boxm_block<T>* block = blocks_(x,y,z);
     block->delete_tree();
@@ -374,6 +380,10 @@ void x_write(vcl_ostream &os, boxm_scene<T>& scene, vcl_string name)
   save_nodes.add_attribute("value", scene.save_internal_nodes()? 1 : 0);
   save_nodes.x_write(os);
 
+  vsl_basic_xml_element save_platform_independent(SAVE_PLATFORM_INDEPENDENT_TAG);
+  save_nodes.add_attribute("value", scene.save_platform_independent()? 1 : 0);
+  save_nodes.x_write(os);
+
   bgeo_lvcs lvcs=scene.lvcs();
   lvcs.x_write(os, LVCS_TAG);
   x_write(os, scene.origin(), LOCAL_ORIGIN_TAG);
@@ -410,6 +420,7 @@ bool boxm_scene<T>::parse_config(boxm_scene_parser& parser)
   app_model_ = boxm_apm_types::str_to_enum(parser.app_model().data());
   multi_bin_ = parser.multi_bin();
   save_internal_nodes_ =parser.save_internal_nodes();
+  save_platform_independent_ = parser.save_platform_independent();
   pinit_=parser.p_init();
 #if 0
   vcl_cout << "Internal Nodes 1: " << save_internal_nodes_ << vcl_endl;

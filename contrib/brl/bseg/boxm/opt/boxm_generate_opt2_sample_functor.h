@@ -81,8 +81,8 @@ public:
     if (pass_prob < 1e-5f) {
       pass_prob = 1e-5f;
     }
-    aux_val.log_pass_prob_sum_ += vcl_log(pass_prob) * weight;
-    aux_val.weighted_seg_len_sum_ += seg_len * weight;
+    aux_val.log_pass_prob_sum_ += vcl_log(pass_prob) * weight/seg_len;
+    aux_val.weighted_seg_len_sum_ += weight; // += seg_len * weight/seg_len;
 
     return true;
   }
@@ -113,6 +113,7 @@ void boxm_generate_opt2_samples(boxm_scene<boct_tree<T_loc, T_data > > &scene,
                                bool black_background = false)
 {
   typedef typename boxm_aux_traits<AUX_T>::sample_datatype sample_datatype;
+  //vcl_cout << "scene.save_platform_independent() = " << scene.save_platform_independent() << vcl_endl;
   boxm_aux_scene<T_loc, T_data,  sample_datatype> aux_scene(&scene,iname, boxm_aux_scene<T_loc, T_data,  sample_datatype>::CLONE);
   typedef boxm_seg_length_functor<T_data::apm_type,sample_datatype>  pass_0;
   boxm_raytrace_function<pass_0,T_loc, T_data, sample_datatype> raytracer_0(scene,aux_scene,cam.ptr(),obs.ni(),obs.nj());
