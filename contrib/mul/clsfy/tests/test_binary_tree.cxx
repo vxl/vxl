@@ -331,7 +331,7 @@ void test_binary_tree()
                   training_outputs);
 
     {
-        const int NPOINTS=500.0;
+        const int NPOINTS=500;
         unsigned tp=vcl_count(test_outputs.begin(),test_outputs.end(),1);
         unsigned tpr=0;
         unsigned tnr=0;
