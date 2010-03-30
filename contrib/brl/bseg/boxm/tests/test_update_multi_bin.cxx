@@ -231,7 +231,7 @@ static void test_update_multi_bin()
   vpl_unlink("./scene1.xml");
 #endif
   boxm_scene<boct_tree<short,boxm_sample_multi_bin<BOXM_APM_MOG_GREY> > > scene_new(lvcs, origin,
-                                                                                    block_dim, world_dim, 4, 3);
+                                                                                    block_dim, world_dim, 4U, 3U);
   scene_new.set_appearance_model(BOXM_APM_MOG_GREY);
   scene_new.set_paths("./boxm_scene_update", "block");
   vul_file::make_directory("./boxm_scene_update");
