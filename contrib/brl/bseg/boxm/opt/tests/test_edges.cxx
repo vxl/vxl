@@ -8,7 +8,7 @@
 
 static void test_edges()
 {
-  typedef boxm_inf_line_sample<BOXM_APM_SIMPLE_GREY> data_type;
+  typedef boxm_inf_line_sample<float> data_type;
   typedef boxm_rt_sample<float> aux_type;
   // create the main scene
   bgeo_lvcs lvcs(33.33,44.44,10.0, bgeo_lvcs::wgs84, bgeo_lvcs::DEG, bgeo_lvcs::METERS);
@@ -21,7 +21,7 @@ static void test_edges()
   image_names.push_back("image1");
   image_names.push_back("image2");
   image_names.push_back("image3");
-  boxm_edge_tangent_updater<short, BOXM_APM_SIMPLE_GREY, aux_type> u(scene,imgs);
+  //boxm_edge_tangent_updater<short, float, aux_type> u(scene,imgs);
 }
 
 TESTMAIN(test_edges);
