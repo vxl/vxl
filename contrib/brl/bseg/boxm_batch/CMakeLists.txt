@@ -30,7 +30,7 @@ IF( PYTHON_FOUND )
     SET_TARGET_PROPERTIES(boxm_batch PROPERTIES PREFIX "")
 
 
-    TARGET_LINK_LIBRARIES(boxm_batch bpro_batch boxm_pro boxm_opt_pro boxm_algo_pro vpgl_io vpgl_pro vil_io vil_pro sdet_pro)
+    TARGET_LINK_LIBRARIES(boxm_batch bpro_batch boxm_pro boxm_opt_pro boxm_algo_pro bvpl_octree_pro vpgl_io vpgl_pro vil_io vil_pro sdet_pro)
 
     IF(OPENCL_FOUND)
       TARGET_LINK_LIBRARIES(boxm_batch boxm_opt_opencl_pro)
