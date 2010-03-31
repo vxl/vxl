@@ -1,4 +1,4 @@
-//This is brl/bseg/boxm/opt/pro/processes/boxm_plane_propagate_process.cxx
+//This is brl/bseg/bvpl/bvpl_octree/pro/processes/bvpl_plane_propagate_process.cxx
 #include <bprb/bprb_func_process.h>
 //:
 // \file
