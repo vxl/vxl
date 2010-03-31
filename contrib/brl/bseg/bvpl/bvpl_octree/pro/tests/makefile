@@ -3,7 +3,7 @@ include ../config.mk
 include $(VXLROOT)/core/testlib/config.mk
 
 TESTMAIN := test_driver.cxx
-TESTS += test_boxm_plane_propagation_process.cxx
+TESTS += test_bvpl_plane_propagation_process.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
