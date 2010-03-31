@@ -12,7 +12,7 @@
 #include <boxm/opt/open_cl/pro/boxm_opt_opencl_register.h>
 #endif
 #include <boxm/algo/pro/boxm_algo_register.h>
-#include <boxm/bvpl_octree/pro/bvpl_octree_register.h>
+#include <bvpl/bvpl_octree/pro/bvpl_octree_register.h>
 #include <bvxm/grid/pro/bvxm_grid_register.h>
 
 PyObject *
