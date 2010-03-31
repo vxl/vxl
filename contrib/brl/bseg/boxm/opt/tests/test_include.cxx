@@ -24,4 +24,7 @@
 #include <boxm/opt/boxm_seg_length_functor.h>
 #include <boxm/opt/boxm_update_image_functor.h>
 
+#include <boxm/opt/pro/boxm_opt_processes.h>
+#include <boxm/opt/pro/boxm_opt_register.h>
+
 int main() { return 0; }
