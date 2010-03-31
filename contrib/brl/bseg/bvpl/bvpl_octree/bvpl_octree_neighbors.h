@@ -3,9 +3,7 @@
 #define bvpl_octree_neighbors_h
 //:
 // \file
-// \brief  A class that operates a bvpl_kernel on a octree or boxm scene
-//         to find all the neighbor cells corresponds to that kernel, and 
-//         returns a list of pointers to those neighbors
+// \brief  A class that operates a bvpl_kernel on a octree or boxm scene to find all the neighbor cells that correspond to that kernel, and returns a list of pointers to those neighbors
 // \author Gamze Tunali Gamze_Tunali@brown.edu
 // \date   March 18, 2010
 //
