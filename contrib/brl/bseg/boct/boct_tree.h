@@ -183,6 +183,14 @@ class boct_tree
   void print();
 
   // Binary I/O
+
+  //: data structure saved to disk for each cell in tree
+  struct plat_dep_cell_store 
+  { 
+    boct_loc_code<T_loc> code; 
+    T_data data; 
+  };
+
   void b_write(vsl_b_ostream & os, const bool save_internal_nodes, const bool platform_independent = true);
   void b_read(vsl_b_istream & is);
   static short version_no(bool save_internal_nodes, bool platform_independent = true)

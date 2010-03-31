@@ -546,9 +546,9 @@ void boct_tree<T_loc,T_data>::b_write(vsl_b_ostream & os, bool save_internal_nod
     //boct_loc_code<T_loc> *loc_p = loc_code_array;
     //T_data *data_array = new T_data[ncells];
     //T_data *data_p = data_array;
-    struct store_struct { boct_loc_code<T_loc> code; T_data data; };
-    store_struct *write_buff = new store_struct[ncells];
-    store_struct *buff_p = write_buff;
+ 
+    plat_dep_cell_store *write_buff = new plat_dep_cell_store[ncells];
+    plat_dep_cell_store *buff_p = write_buff;
     typename vcl_vector<boct_tree_cell<T_loc,T_data>*>::const_iterator cell_it = cells.begin();
     for (; cell_it != cells.end(); ++cell_it, ++buff_p) {
       //*loc_p++ = (*cell_it)->code_;
@@ -558,7 +558,7 @@ void boct_tree<T_loc,T_data>::b_write(vsl_b_ostream & os, bool save_internal_nod
     }
     //os.os().write(reinterpret_cast<const char*>(loc_code_array),sizeof(boct_loc_code<T_loc>)*ncells);
     //os.os().write(reinterpret_cast<const char*>(data_array),sizeof(T_data)*ncells);
-    os.os().write(reinterpret_cast<const char*>(write_buff),sizeof(store_struct)*ncells);
+    os.os().write(reinterpret_cast<const char*>(write_buff),sizeof(plat_dep_cell_store)*ncells);
     //delete[] loc_code_array;
     //delete[] data_array;
     delete[] write_buff;
@@ -676,13 +676,13 @@ void boct_tree<T_loc,T_data>::b_read(vsl_b_istream & is)
         vcl_cerr << "boct_tree: the tree max level is 0, cannot create a tree!\n";
         return ;
     }
-    struct store_struct {boct_loc_code<T_loc> code; T_data data;};
-    store_struct* read_buff = new store_struct[num_cells];
+  
+    plat_dep_cell_store* read_buff = new plat_dep_cell_store[num_cells];
     //boct_loc_code<T_loc> *code_array = new boct_loc_code<T_loc>[num_cells];
     //T_data *data_array = new T_data[num_cells];
     //is.is().read(reinterpret_cast<char*>(code_array),sizeof(boct_loc_code<T_loc>)*num_cells);
     //is.is().read(reinterpret_cast<char*>(data_array),sizeof(T_data)*num_cells);
-    is.is().read(reinterpret_cast<char*>(read_buff),sizeof(store_struct)*num_cells);
+    is.is().read(reinterpret_cast<char*>(read_buff),sizeof(plat_dep_cell_store)*num_cells);
 
     for (unsigned i=0; i<num_cells; i++) {
       //code = code_array[i];
