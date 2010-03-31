@@ -67,24 +67,23 @@ static void test_octree_neighbors()
   boct_tree<short,float>* tree = new boct_tree<short,float>(4,3);
   fill_octree(tree);
   bvpl_kernel_iterator iter;
-  vgl_point_3d<int> min(-1,-1,-1);
-  vgl_point_3d<int> max(1,1,1);
-  for (int i=min.x(); i<=max.x(); i++) {
-    for (int j=min.y(); j<=max.y(); j++) {
-      for (int k=min.z(); k<=max.z(); k++) {
+  vgl_point_3d<int> min_pt(-1,-1,-1);
+  vgl_point_3d<int> max_pt(1,1,1);
+  for (int i=min_pt.x(); i<=max_pt.x(); i++) {
+    for (int j=min_pt.y(); j<=max_pt.y(); j++) {
+      for (int k=min_pt.z(); k<=max_pt.z(); k++) {
         iter.insert(vgl_point_3d<int>(i,j,k),bvpl_kernel_dispatch(1.0f));
       }
     }
   }
-  bvpl_kernel_sptr kernel= new bvpl_kernel(iter, vnl_float_3(0,0,1), 0.0f, vgl_vector_3d<int>(3,3,3),
-    min,max);
+  bvpl_kernel_sptr kernel= new bvpl_kernel(iter, vnl_float_3(0,0,1), 0.0f, vgl_vector_3d<int>(3,3,3), min_pt,max_pt);
 
   vcl_vector<boct_tree_cell<short,float>*> leaves = tree->leaf_cells();
   bvpl_octree_neighbors<float> neighb(tree);
   for (unsigned i=0; i<leaves.size(); i++) {
     boct_tree_cell<short,float>* cell=leaves[i];
-    vcl_cout << cell->code_;
-    vcl_cout << "THIS   " << tree->local_origin(cell) << vcl_endl;
+    vcl_cout << cell->code_
+             << "THIS   " << tree->local_origin(cell) << vcl_endl;
     vcl_vector<boct_tree_cell<short,float> *> neighb_cells;
     neighb.neighbors(kernel, cell, neighb_cells);
     vcl_cout << "Number of neighbors: " << neighb_cells.size() << vcl_endl;
@@ -92,7 +91,6 @@ static void test_octree_neighbors()
       vcl_cout << "  " << tree->local_origin(neighb_cells[n]) << vcl_endl;
     }
   }
- 
 }
 
 TESTMAIN(test_octree_neighbors);
