@@ -21,7 +21,7 @@ class normalize_expected_functor
  public:
   normalize_expected_functor(bool use_black_background) : use_black_background_(use_black_background) {}
 
-  void operator()(float mask, typename T_obs &pix) const
+  void operator()(float mask, T_obs &pix) const
   {
     if (!use_black_background_) {
       pix += (1.0f - mask)*0.5f;
