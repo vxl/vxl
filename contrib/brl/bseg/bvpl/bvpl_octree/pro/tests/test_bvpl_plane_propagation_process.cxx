@@ -83,7 +83,7 @@ static void test_bvpl_plane_propagation_process()
   brdb_value_sptr v3 = new brdb_value_t<vcl_string>("new_scene.xml");
 
   //: inits with the default params
-  bool good = bprb_batch_process_manager::instance()->init_process("boxmPlanePropagationProcess");
+  bool good = bprb_batch_process_manager::instance()->init_process("bvplPlanePropagationProcess");
   good = good && bprb_batch_process_manager::instance()->set_input(0, v0);
   good = good && bprb_batch_process_manager::instance()->run_process();
 
