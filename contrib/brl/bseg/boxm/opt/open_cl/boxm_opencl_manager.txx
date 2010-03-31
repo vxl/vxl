@@ -3,7 +3,6 @@
 #define boxm_opencl_manager_txx_
 
 #include "boxm_opencl_manager.h"
-
 //:
 // \file
 
@@ -54,21 +53,21 @@ bool boxm_opencl_manager<T>::initialize_cl()
   // Check the number of  available platforms
   status = clGetPlatformIDs(0,NULL,&num_platforms);
   if (status != CL_SUCCESS) {
-    vcl_cerr << "boxm_opencl_manager: clGetPlatformIDs (call 1) returned " << status << vcl_endl;
+    vcl_cerr << "boxm_opencl_manager: clGetPlatformIDs (call 1) returned " << status << '\n';
     return false;
   }
   if (num_platforms == 0) {
-    vcl_cerr << "boxm_opencl_manager: 0 OpenCL platforms found!" << vcl_endl;
+    vcl_cerr << "boxm_opencl_manager: 0 OpenCL platforms found!\n";
     return false;
   }
   if (num_platforms > 1) {
-    vcl_cout << "boxm_opencl_manager: warning: found " << num_platforms << "OpenCL platforms. Using the first" << vcl_endl;
+    vcl_cerr << "boxm_opencl_manager: warning: found " << num_platforms << "OpenCL platforms. Using the first\n";
   }
   // Get the first platform ID
   cl_platform_id platform_id;
   status = clGetPlatformIDs (1, &platform_id, NULL);
   if (status != CL_SUCCESS) {
-    vcl_cerr << "boxm_opencl_manager: clGetPlatformIDs (call 2) returned " << status << vcl_endl;
+    vcl_cerr << "boxm_opencl_manager: clGetPlatformIDs (call 2) returned " << status << '\n';
     return false;
   }
   cl_device_id gpu_device;
@@ -76,7 +75,7 @@ bool boxm_opencl_manager<T>::initialize_cl()
   // should we be using all if more than one avaiable?
   status = clGetDeviceIDs(platform_id, CL_DEVICE_TYPE_GPU, 1, &gpu_device, NULL);
   if (status != CL_SUCCESS) {
-    vcl_cerr << "boxm_opencl_manager: clGetDeviceIDs returned " << status << vcl_endl;
+    vcl_cerr << "boxm_opencl_manager: clGetDeviceIDs returned " << status << '\n';
     return false;
   }
 
@@ -85,7 +84,6 @@ bool boxm_opencl_manager<T>::initialize_cl()
   if (!this->check_val(status,CL_SUCCESS,"clCreateContextFromType failed.")) {
     return false;
   }
-
 
 #if 0
   context_ = clCreateContextFromType(0,
@@ -268,7 +266,7 @@ bool boxm_opencl_manager<T>::initialize_cl()
 }
 
 template <class T>
-void* boxm_opencl_manager<T>::allocate_host_mem(size_t size)
+void* boxm_opencl_manager<T>::allocate_host_mem(vcl_size_t size)
 {
 #if defined (_WIN32)
   return _aligned_malloc(size, 16);
