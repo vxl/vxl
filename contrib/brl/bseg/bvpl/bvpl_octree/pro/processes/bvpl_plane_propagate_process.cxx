@@ -29,7 +29,7 @@
 #include <bvpl/bvpl_kernel.h>
 #include <bvpl/bvpl_octree/bvpl_octree_neighbors.h>
 
-namespace boxm_plane_propagate_process_globals
+namespace bvpl_plane_propagate_process_globals
 {
   const unsigned int n_inputs_ = 4;
   const unsigned int n_outputs_ = 1;
@@ -38,9 +38,9 @@ namespace boxm_plane_propagate_process_globals
 
 
 //: set input and output types
-bool boxm_plane_propagate_process_cons(bprb_func_process& pro)
+bool bvpl_plane_propagate_process_cons(bprb_func_process& pro)
 {
-  using namespace boxm_plane_propagate_process_globals;
+  using namespace bvpl_plane_propagate_process_globals;
 
   // process takes 4 inputs:
   //input[0]: The scene
@@ -68,9 +68,9 @@ bool boxm_plane_propagate_process_cons(bprb_func_process& pro)
 }
 
 //: Execute the process
-bool boxm_plane_propagate_process(bprb_func_process& pro)
+bool bvpl_plane_propagate_process(bprb_func_process& pro)
 {
-  using namespace boxm_plane_propagate_process_globals;
+  using namespace bvpl_plane_propagate_process_globals;
 
   // check number of inputs
   if (pro.n_inputs() != n_inputs_)
