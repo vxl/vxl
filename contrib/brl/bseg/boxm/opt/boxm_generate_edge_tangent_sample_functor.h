@@ -63,13 +63,12 @@ void boxm_generate_edge_tangent_sample_rt(boxm_scene<boct_tree<T_loc, T_data > >
                                           vcl_string iname)
 {
     typedef boxm_edge_tangent_sample<float> aux_datatype;
-    boxm_aux_scene<T_loc, T_data, aux_datatype> aux_scene(&scene,iname, boxm_aux_scene<T_loc,T_data,aux_datatype>::CLONE);
+    boxm_aux_scene<T_loc, T_data, aux_datatype> aux_scene(&scene,iname, boxm_aux_scene<T_loc,T_data,aux_datatype>::CLONE, BOXM_EDGE_TANGENT_LINE);
     typedef boxm_generate_edge_tangent_sample_functor<boxm_inf_line_sample<float>,aux_datatype> func;
     boxm_raytrace_function<func,T_loc, T_data, aux_datatype> raytracer(scene,aux_scene,cam.ptr(),obs.ni(),obs.nj());
     vcl_cerr << "PROCESSING EDGE IMAGE\n";
     func functor(obs,obs.ni(),obs.nj());
     raytracer.run(functor);
-
     //aux_scene.clean_scene();
     vcl_cerr << "DONE.\n";
 }

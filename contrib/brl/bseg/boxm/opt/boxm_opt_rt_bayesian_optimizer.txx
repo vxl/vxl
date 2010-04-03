@@ -30,7 +30,7 @@ bool boxm_opt_rt_bayesian_optimizer<T_loc,APM,AUX>::optimize_cells(double dampin
 
   vcl_vector<boxm_aux_scene<T_loc,  boxm_sample<APM>, aux_type> > aux_scenes;
   for (unsigned int i=0; i<image_ids_.size(); ++i) {
-    boxm_aux_scene<T_loc, boxm_sample<APM>, aux_type> aux_scene(&scene_,image_ids_[i],boxm_aux_scene<T_loc, boxm_sample<APM>, aux_type>::LOAD);
+    boxm_aux_scene<T_loc, boxm_sample<APM>, aux_type> aux_scene(&scene_,image_ids_[i],boxm_aux_scene<T_loc, boxm_sample<APM>, aux_type>::LOAD, APM);
     aux_scenes.push_back(aux_scene);
   }
 

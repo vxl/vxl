@@ -39,7 +39,9 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
 
   vcl_vector<boxm_aux_scene<T_loc,  boxm_inf_line_sample<APM>, boxm_edge_tangent_sample<AUX> > > aux_scenes;
   for (unsigned int i=0; i<image_ids_.size(); ++i) {
-    boxm_aux_scene<T_loc, boxm_inf_line_sample<APM>, boxm_edge_tangent_sample<AUX> > aux_scene(&scene_,image_ids_[i],boxm_aux_scene<T_loc, boxm_inf_line_sample<APM>, boxm_edge_tangent_sample<AUX> >::LOAD);
+    boxm_aux_scene<T_loc, boxm_inf_line_sample<APM>, boxm_edge_tangent_sample<AUX> > 
+    aux_scene(&scene_,image_ids_[i],boxm_aux_scene<T_loc, boxm_inf_line_sample<APM>, 
+    boxm_edge_tangent_sample<AUX> >::LOAD, BOXM_EDGE_TANGENT_LINE);
     aux_scenes.push_back(aux_scene);
   }
 
@@ -110,7 +112,7 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
           vcl_list<vgl_plane_3d<AUX> > fit_planes;
           vcl_vector<AUX> fit_weights;
           vcl_vector<unsigned> indices;
-          boxm_plane_ransac<AUX>(planes, indices, planes.size()/2); 
+          boxm_plane_ransac<AUX>(planes, indices, planes.size()); 
           
           for (unsigned i=0; i<indices.size(); i++) {
             unsigned idx = indices[i];
