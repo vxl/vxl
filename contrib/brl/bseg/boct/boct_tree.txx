@@ -546,7 +546,7 @@ void boct_tree<T_loc,T_data>::b_write(vsl_b_ostream & os, bool save_internal_nod
     //boct_loc_code<T_loc> *loc_p = loc_code_array;
     //T_data *data_array = new T_data[ncells];
     //T_data *data_p = data_array;
- 
+
     plat_dep_cell_store *write_buff = new plat_dep_cell_store[ncells];
     plat_dep_cell_store *buff_p = write_buff;
     typename vcl_vector<boct_tree_cell<T_loc,T_data>*>::const_iterator cell_it = cells.begin();
@@ -613,7 +613,6 @@ void boct_tree<T_loc,T_data>::b_read(vsl_b_istream & is)
     vsl_b_read(is, num_cells);
 
     boct_loc_code<T_loc> code;
-    T_data data;
     boct_tree_cell<T_loc,T_data>* root;
     if (num_levels_>0) {
       code.set_code(0,0,0);
@@ -677,7 +676,7 @@ void boct_tree<T_loc,T_data>::b_read(vsl_b_istream & is)
         vcl_cerr << "boct_tree: the tree max level is 0, cannot create a tree!\n";
         return ;
     }
-  
+
     plat_dep_cell_store* read_buff = new plat_dep_cell_store[num_cells];
     //boct_loc_code<T_loc> *code_array = new boct_loc_code<T_loc>[num_cells];
     //T_data *data_array = new T_data[num_cells];
