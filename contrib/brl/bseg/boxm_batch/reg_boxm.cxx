@@ -43,6 +43,7 @@ register_datatypes(PyObject *self, PyObject *args)
   boxm_opt_register::register_datatype();
   boxm_algo_register::register_datatype();
   bvxm_grid_register::register_datatype();
+  bvpl_octree_register::register_datatype();
 #if (HAS_OPENGL)
   boxm_opt_opencl_register::register_datatype();
 #endif
