@@ -12,9 +12,9 @@
 template <class T>
 void boxm_plane_ransac(vcl_vector<vgl_plane_3d<T> > const& planes,
                        vcl_vector<unsigned>& indices,
-                       int threshold)
+                       unsigned int threshold)
 {
-  int num_planes = planes.size();
+  unsigned int num_planes = planes.size();
 
   while (indices.size() < threshold) {
     indices.resize(0);
@@ -30,7 +30,7 @@ void boxm_plane_ransac(vcl_vector<vgl_plane_3d<T> > const& planes,
       vgl_vector_3d<T> line_dir = line.direction();
 
       // test the line on each plane
-      for (unsigned i=0; i<num_planes; i++) {
+      for (unsigned i=0; i<num_planes; ++i) {
         vgl_plane_3d<T> plane = planes[i];
         vgl_vector_3d<T> normal = plane.normal();
         // see if the line direction and plane normal is perpendicular
