@@ -626,8 +626,9 @@ void boct_tree<T_loc,T_data>::b_read(vsl_b_istream & is)
     }
 
     for (unsigned i=0; i<num_cells; i++) {
+      T_data cell_data;
       vsl_b_read(is, code);
-      vsl_b_read(is, data);
+      vsl_b_read(is, cell_data);
 
       // temporary pointer to traverse
       boct_tree_cell<T_loc,T_data>* curr_cell=root;
@@ -647,7 +648,7 @@ void boct_tree<T_loc,T_data>::b_read(vsl_b_istream & is)
 
       // the place of the cell is found, put the data in
       if (curr_cell->code_.isequal(&code))
-        curr_cell->set_data(data);
+        curr_cell->set_data(cell_data);
       else
         vcl_cerr << "WRONG ERROR CODE OR CELL FOUND!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
     }
