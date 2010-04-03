@@ -11,14 +11,12 @@
 
 template <class T>
 void boxm_plane_ransac(vcl_vector<vgl_plane_3d<T> > const& planes,
-                       //vcl_vector<vgl_plane_3d<T> >& fit_planes,
                        vcl_vector<unsigned>& indices,
                        int threshold)
 {
   int num_planes = planes.size();
 
   while (indices.size() < threshold) {
-    //fit_planes.resize(0);
     indices.resize(0);
     // select two planes randomly
     int index1 = vcl_rand() % num_planes;
@@ -40,15 +38,13 @@ void boxm_plane_ransac(vcl_vector<vgl_plane_3d<T> > const& planes,
         if (res < 0.0001)  {
           vgl_point_3d<T> p=line.point();
           if (plane.contains(p,0.0001)) {
-            vcl_cerr << "Adding " << i << "th plane!\n";
-            //fit_planes.push_back(plane);
             indices.push_back(i);
           }
         }
       }
     }
-    vcl_cerr << "The number of fit planes=" << indices.size() << vcl_endl;
   }
+  vcl_cerr << "The number of fit planes=" << indices.size() << " out of " << planes.size() << vcl_endl;
 }
 
 #endif
