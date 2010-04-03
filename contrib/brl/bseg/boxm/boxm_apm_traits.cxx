@@ -12,6 +12,7 @@ const char* boxm_apm_types::app_model_strings[]  = { "apm_mog_grey",
                                                       "bvpl_sample_gauss_f1",
                                                       "edge_float",
                                                       "edge_line",
+                                                      "edge_tangent_line",
                                                       "apm_na"};
 
 
