@@ -33,15 +33,14 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
 {
   // get auxiliary scenes associated with each input image
 
-
   typedef boct_tree<T_loc, boxm_inf_line_sample<APM> > tree_type;
   typedef boct_tree<T_loc, boxm_edge_tangent_sample<AUX> > aux_tree_type;
 
   vcl_vector<boxm_aux_scene<T_loc,  boxm_inf_line_sample<APM>, boxm_edge_tangent_sample<AUX> > > aux_scenes;
   for (unsigned int i=0; i<image_ids_.size(); ++i) {
-    boxm_aux_scene<T_loc, boxm_inf_line_sample<APM>, boxm_edge_tangent_sample<AUX> > 
-    aux_scene(&scene_,image_ids_[i],boxm_aux_scene<T_loc, boxm_inf_line_sample<APM>, 
-    boxm_edge_tangent_sample<AUX> >::LOAD, BOXM_EDGE_TANGENT_LINE);
+    boxm_aux_scene<T_loc, boxm_inf_line_sample<APM>, boxm_edge_tangent_sample<AUX> >
+    aux_scene(&scene_,image_ids_[i],boxm_aux_scene<T_loc, boxm_inf_line_sample<APM>,
+              boxm_edge_tangent_sample<AUX> >::LOAD, BOXM_EDGE_TANGENT_LINE);
     aux_scenes.push_back(aux_scene);
   }
 
@@ -82,17 +81,15 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
           vcl_cerr << "error: temp_cell idx does not match cell idx.\n";
           return false;
         }
-        if(temp_cell.data().num_obs()>0)
+        if (temp_cell.data().num_obs()>0)
         {
             aux_samples.push_back(temp_cell.data());
             //aux_samples_num[j]++;
         }
       }
-      unsigned num=0;
 
-
-      if (aux_samples.size() > 1) {
-
+      if (aux_samples.size() > 1)
+      {
         vcl_vector<vgl_plane_3d<AUX> > planes;
         vcl_vector<AUX> weights;
 
@@ -112,8 +109,8 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
           vcl_list<vgl_plane_3d<AUX> > fit_planes;
           vcl_vector<AUX> fit_weights;
           vcl_vector<unsigned> indices;
-          boxm_plane_ransac<AUX>(planes, indices, planes.size()); 
-          
+          boxm_plane_ransac<AUX>(planes, indices, planes.size());
+
           for (unsigned i=0; i<indices.size(); i++) {
             unsigned idx = indices[i];
             fit_planes.push_back(planes[idx]);
@@ -130,7 +127,7 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
           vgl_infinite_line_3d<double> dline(x0,dir);
           vgl_point_3d<double> p0,p1;
 
-          if (vgl_intersection<double>(bb, dline, p0, p1)) 
+          if (vgl_intersection<double>(bb, dline, p0, p1))
           {
             data.line_clipped_=vgl_line_3d_2_points<float>(vgl_point_3d<float>(p0.x(),p0.y(),p0.z()),vgl_point_3d<float>(p1.x(),p1.y(),p0.z()));
           }
@@ -147,7 +144,6 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
         cell->set_data(vgl_infinite_line_3d<AUX>(vgl_vector_2d<AUX>(0,0),vgl_vector_3d<AUX>(10,10,10)));
     }
     nums/=cells.size();
-
 
     scene_.write_active_block();
     for (unsigned int i=0; i<aux_readers.size(); ++i) {
