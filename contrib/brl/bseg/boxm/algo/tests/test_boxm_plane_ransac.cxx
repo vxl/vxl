@@ -1,10 +1,10 @@
 //:
 // \file
 // \author Gamze Tunali
-// \brief  this code tests the function boxm_plane_ransac. Creates 10 planes that 
-//         the same line goes through and 10 random planes which do not contain 
-//         the plane. It makes sure it returns only the the first 10 planes as the 
-//         fittest ones.
+// \brief  this code tests the function boxm_plane_ransac.
+//  Creates 10 planes that the same line goes through and 10 random planes
+//  which do not contain the plane. It makes sure it returns only the the
+//  first 10 planes as the fittest ones.
 //
 // \date   March 25, 2010
 
@@ -24,7 +24,7 @@ static void test_boxm_plane_ransac()
   vgl_point_3d<float> p1(20,20,10);
   vgl_point_3d<float> p2(30,20,10);
   vgl_infinite_line_3d<float> line(p1,p2);
-  
+
   vcl_vector<vgl_plane_3d<float> > planes;
   vnl_random rand;
   // get two points from the line, and create a random 3rd point to define a plane
@@ -47,7 +47,7 @@ static void test_boxm_plane_ransac()
     vgl_plane_3d<float> plane(a,b,c,d);
     planes.push_back(plane);
   }
-  
+
   //vcl_vector<vgl_plane_3d<float> > fit_planes;
   vcl_vector<unsigned int> indices;
   int threshold=10;
@@ -62,7 +62,7 @@ static void test_boxm_plane_ransac()
         good=false;
     }
   }
-  
+
   TEST("test_boxm_plane_ransac: found the right plane set", good, true);
 }
 
