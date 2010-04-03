@@ -381,8 +381,8 @@ void x_write(vcl_ostream &os, boxm_scene<T>& scene, vcl_string name)
   save_nodes.x_write(os);
 
   vsl_basic_xml_element save_platform_independent(SAVE_PLATFORM_INDEPENDENT_TAG);
-  save_nodes.add_attribute("value", scene.save_platform_independent()? 1 : 0);
-  save_nodes.x_write(os);
+  save_platform_independent.add_attribute("value", scene.save_platform_independent()? 1 : 0);
+  save_platform_independent.x_write(os);
 
   bgeo_lvcs lvcs=scene.lvcs();
   lvcs.x_write(os, LVCS_TAG);
