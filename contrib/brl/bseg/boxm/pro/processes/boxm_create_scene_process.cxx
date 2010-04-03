@@ -29,6 +29,7 @@
 #include <boxm/boxm_sample_multi_bin.h>
 #include <boxm/boxm_scene_parser.h>
 #include <boxm/boxm_inf_line_sample.h>
+#include <boxm/boxm_edge_tangent_sample.h>
 
 //:global variables
 namespace boxm_create_scene_process_globals
@@ -150,6 +151,15 @@ bool boxm_create_scene_process(bprb_func_process& pro)
       if (!scene_ptr->multi_bin())
       {
         typedef boct_tree<short,boxm_inf_line_sample<float> > tree_type;
+        boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
+        scene->load_scene(parser);
+        scene_ptr = scene;
+      }
+    }
+    else if (scene_ptr->appearence_model() == BOXM_EDGE_TANGENT_LINE) {
+      if (!scene_ptr->multi_bin())
+      {
+        typedef boct_tree<short,boxm_edge_tangent_sample<float> > tree_type;
         boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
         scene->load_scene(parser);
         scene_ptr = scene;
