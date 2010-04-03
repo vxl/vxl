@@ -15,8 +15,8 @@
 #include <vnl/vnl_random.h>
 #include <vcl_vector.h>
 
-static const int test_num=10;
-static const int test_set=20;
+static const unsigned int test_num=10;
+static const unsigned int test_set=20;
 
 static void test_boxm_plane_ransac()
 {
