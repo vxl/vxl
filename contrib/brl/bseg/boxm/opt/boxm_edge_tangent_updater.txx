@@ -25,7 +25,7 @@ boxm_edge_tangent_updater<T_loc,APM,AUX>::boxm_edge_tangent_updater(boxm_scene<b
                                                                     boxm_inf_line_sample<APM> > > &scene,
                                                                     vcl_vector<vcl_string> const& image_ids,
                                                                     bool use_ransac)
-: image_ids_(image_ids), scene_(scene), use_ransac_(use_ransac)
+: image_ids_(image_ids), use_ransac_(use_ransac), scene_(scene)
 {}
 
 
