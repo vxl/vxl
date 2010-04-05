@@ -117,7 +117,7 @@ bool boxm_edge_update_process(bprb_func_process& pro)
         return false;
     }
 
-    boxm_edge_tangent_updater<short,float,float> updater(*scene, image_ids);
+    boxm_edge_tangent_updater<short,float,float> updater(*scene, image_ids, true);
     updater.add_cells();
   }
   //store output
