@@ -39,8 +39,8 @@ vgl_intersection(const vcl_list<vgl_plane_3d<T> >& planes);
 // \relatesalso vgl_infinite_line_3d
 
 template <class T>
-vgl_infinite_line_3d<T>
-vgl_intersection(const vcl_list<vgl_plane_3d<T> >& planes, vcl_vector<T> ws, T & residual);
+bool
+vgl_intersection(const vcl_list<vgl_plane_3d<T> >& planes, vcl_vector<T> ws, vgl_infinite_line_3d<T>& line, T & residual);
 
 //: Return true if the box and polygon intersect in 3-d, regions include boundaries
 // Polygon is represented as an ordered vector of 3-d points
