@@ -21,7 +21,6 @@
 #include <vnl/algo/vnl_matrix_inverse.h>
 #include <vnl/algo/vnl_svd.h>
 
-#include <vcl_iostream.h>
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 
@@ -43,7 +42,7 @@ vgl_intersection(const vcl_list<vgl_plane_3d<T> >& planes)
 {
   if (planes.size() == 0)
     return vgl_infinite_line_3d<T>(vgl_vector_2d<T>(0,0),vgl_vector_3d<T>(0,0,0));
-    
+
   // form the matrix of plane normal monomials
   vnl_matrix<double> Q(3,3,0.0);
   vnl_vector<double> vd(3,0.0);
@@ -116,12 +115,11 @@ vgl_intersection(const vcl_list<vgl_plane_3d<T> >& planes)
 
 template <class T>
 bool
-vgl_intersection(const vcl_list<vgl_plane_3d<T> >& planes, vcl_vector<T> ws, 
+vgl_intersection(const vcl_list<vgl_plane_3d<T> >& planes, vcl_vector<T> ws,
                  vgl_infinite_line_3d<T>& line, T &residual)
 {
-  if(planes.size()< 2) {
+  if (planes.size() < 2)
     return false;
-  }
   // form the matrix of plane normal monomials
   vnl_matrix<double> Q(3,3,0.0);
   vnl_vector<double> vd(3,0.0);
@@ -205,9 +203,9 @@ vgl_intersection(const vcl_list<vgl_plane_3d<T> >& planes, vcl_vector<T> ws,
   }
 
   residual/=sum_ws;
-  if(cnt>0)
-      residual=vcl_sqrt(residual);
-  line=vgl_infinite_line_3d<T>(pt, tv);  
+  if (cnt>0)
+    residual=vcl_sqrt(residual);
+  line=vgl_infinite_line_3d<T>(pt, tv);
   return true;
 }
 
@@ -290,7 +288,7 @@ bool vgl_intersection(vgl_box_3d<T> const& b, vcl_list<vgl_point_3d<T> >& poly)
 #define VGL_ALGO_INTERSECTION_INSTANTIATE(T) \
 template vgl_point_3d<T > vgl_intersection(const vcl_vector<vgl_plane_3d<T > >&); \
 template bool vgl_intersection(vgl_box_3d<T > const&, vcl_list<vgl_point_3d<T > >&); \
-template vgl_infinite_line_3d<T > vgl_intersection(const vcl_list<vgl_plane_3d<T > >& planes);\
-template bool vgl_intersection(const vcl_list<vgl_plane_3d<T > >& planes, vcl_vector<T > ws,vgl_infinite_line_3d<T>&,T & residual)
+template vgl_infinite_line_3d<T > vgl_intersection(const vcl_list<vgl_plane_3d<T > >& planes); \
+template bool vgl_intersection(const vcl_list<vgl_plane_3d<T > >& planes, vcl_vector<T > ws,vgl_infinite_line_3d<T >&,T& residual)
 
 #endif // vgl_algo_intersection_txx_
