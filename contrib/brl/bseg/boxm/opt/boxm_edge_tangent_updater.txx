@@ -23,8 +23,9 @@
 template <class T_loc, class APM, class AUX>
 boxm_edge_tangent_updater<T_loc,APM,AUX>::boxm_edge_tangent_updater(boxm_scene<boct_tree<T_loc,
                                                                     boxm_inf_line_sample<APM> > > &scene,
-                                                                    vcl_vector<vcl_string> const& image_ids)
-: image_ids_(image_ids), scene_(scene)
+                                                                    vcl_vector<vcl_string> const& image_ids,
+                                                                    bool use_ransac)
+: image_ids_(image_ids), scene_(scene), use_ransac_(use_ransac)
 {}
 
 
@@ -105,18 +106,28 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
         nums+=planes.size();
         if (planes.size() > 1) {
           float residual=0;
-          ////////////////
           vcl_list<vgl_plane_3d<AUX> > fit_planes;
           vcl_vector<AUX> fit_weights;
-          vcl_vector<unsigned> indices;
-          boxm_plane_ransac<AUX>(planes, indices, planes.size());
-
-          for (unsigned i=0; i<indices.size(); i++) {
-            unsigned idx = indices[i];
-            fit_planes.push_back(planes[idx]);
-            fit_weights.push_back(weights[idx]);
+          if (use_ransac_) {
+			vcl_vector<unsigned> indices;
+		    boxm_plane_ransac<AUX>(planes, indices, planes.size()/2);
+            
+			for (unsigned i=0; i<indices.size(); i++) {
+		      unsigned idx = indices[i];
+			  fit_planes.push_back(planes[idx]);
+			  fit_weights.push_back(weights[idx]);
+			}
+			if (indices.size() == 0) {
+			  for (unsigned i=0; i<planes.size(); i++) 
+			    fit_planes.push_back(planes[i]);
+			  fit_weights=weights;
+			}
+		  }
+          else {
+            for (unsigned i=0; i<planes.size(); i++) 
+			  fit_planes.push_back(planes[i]);
+			fit_weights=weights;
           }
-          ////////////////
           vgl_infinite_line_3d<AUX> line = vgl_intersection(fit_planes, fit_weights,residual);
           boxm_inf_line_sample<AUX> data(line,aux_samples.size());
           data.residual_=residual;
