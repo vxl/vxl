@@ -109,19 +109,19 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
           vcl_list<vgl_plane_3d<AUX> > fit_planes;
           vcl_vector<AUX> fit_weights;
           if (use_ransac_) {
-			vcl_vector<unsigned> indices;
-		    boxm_plane_ransac<AUX>(planes, indices, planes.size()/2);
-            
-			for (unsigned i=0; i<indices.size(); i++) {
-		      unsigned idx = indices[i];
-			  fit_planes.push_back(planes[idx]);
-			  fit_weights.push_back(weights[idx]);
-			}
-		  }
+            vcl_vector<unsigned> indices;
+            boxm_plane_ransac<AUX>(planes, indices, planes.size()/2);
+
+            for (unsigned i=0; i<indices.size(); i++) {
+              unsigned idx = indices[i];
+              fit_planes.push_back(planes[idx]);
+              fit_weights.push_back(weights[idx]);
+            }
+          }
           else {
-            for (unsigned i=0; i<planes.size(); i++) 
-			  fit_planes.push_back(planes[i]);
-			fit_weights=weights;
+            for (unsigned i=0; i<planes.size(); i++)
+              fit_planes.push_back(planes[i]);
+            fit_weights=weights;
           }
           vgl_infinite_line_3d<AUX> line;
           if (vgl_intersection(fit_planes, fit_weights,line,residual)) {
@@ -140,10 +140,11 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
             }
             else
             {
-               data.num_obs_=0;
+              data.num_obs_=0;
             }
             cell->set_data(data);
-          } else
+          }
+          else
             cell->set_data(vgl_infinite_line_3d<AUX>(vgl_vector_2d<AUX>(0,0),vgl_vector_3d<AUX>(10,10,10)));
         }
         else
@@ -159,7 +160,7 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
       aux_readers[i]->close();
     }
     iter++;
- }
+  }
 #ifdef DEBUG
   vcl_cout << "done with all cells" << vcl_endl;
 #endif
