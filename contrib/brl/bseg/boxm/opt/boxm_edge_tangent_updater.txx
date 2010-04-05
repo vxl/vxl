@@ -117,36 +117,34 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
 			  fit_planes.push_back(planes[idx]);
 			  fit_weights.push_back(weights[idx]);
 			}
-			if (indices.size() == 0) {
-			  for (unsigned i=0; i<planes.size(); i++) 
-			    fit_planes.push_back(planes[i]);
-			  fit_weights=weights;
-			}
 		  }
           else {
             for (unsigned i=0; i<planes.size(); i++) 
 			  fit_planes.push_back(planes[i]);
 			fit_weights=weights;
           }
-          vgl_infinite_line_3d<AUX> line = vgl_intersection(fit_planes, fit_weights,residual);
-          boxm_inf_line_sample<AUX> data(line,aux_samples.size());
-          data.residual_=residual;
-          vgl_box_3d<double> bb = tree->cell_bounding_box(cell);
-          // convert to line type (from float to double)
-          vgl_vector_2d<double> x0(line.x0().x(), line.x0().y());
-          vgl_vector_3d<double> dir(line.direction().x(), line.direction().y(), line.direction().z());
-          vgl_infinite_line_3d<double> dline(x0,dir);
-          vgl_point_3d<double> p0,p1;
+          vgl_infinite_line_3d<AUX> line;
+          if (vgl_intersection(fit_planes, fit_weights,line,residual)) {
+            boxm_inf_line_sample<AUX> data(line,aux_samples.size());
+            data.residual_=residual;
+            vgl_box_3d<double> bb = tree->cell_bounding_box(cell);
+            // convert to line type (from float to double)
+            vgl_vector_2d<double> x0(line.x0().x(), line.x0().y());
+            vgl_vector_3d<double> dir(line.direction().x(), line.direction().y(), line.direction().z());
+            vgl_infinite_line_3d<double> dline(x0,dir);
+            vgl_point_3d<double> p0,p1;
 
-          if (vgl_intersection<double>(bb, dline, p0, p1))
-          {
-            data.line_clipped_=vgl_line_3d_2_points<float>(vgl_point_3d<float>(p0.x(),p0.y(),p0.z()),vgl_point_3d<float>(p1.x(),p1.y(),p0.z()));
-          }
-          else
-          {
-             data.num_obs_=0;
-          }
-          cell->set_data(data);
+            if (vgl_intersection<double>(bb, dline, p0, p1))
+            {
+              data.line_clipped_=vgl_line_3d_2_points<float>(vgl_point_3d<float>(p0.x(),p0.y(),p0.z()),vgl_point_3d<float>(p1.x(),p1.y(),p0.z()));
+            }
+            else
+            {
+               data.num_obs_=0;
+            }
+            cell->set_data(data);
+          } else
+            cell->set_data(vgl_infinite_line_3d<AUX>(vgl_vector_2d<AUX>(0,0),vgl_vector_3d<AUX>(10,10,10)));
         }
         else
           cell->set_data(vgl_infinite_line_3d<AUX>(vgl_vector_2d<AUX>(0,0),vgl_vector_3d<AUX>(10,10,10)));
