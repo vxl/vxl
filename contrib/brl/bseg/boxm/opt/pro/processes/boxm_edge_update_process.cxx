@@ -32,7 +32,7 @@
 
 namespace boxm_edge_update_process_globals
 {
-  const unsigned int n_inputs_ = 2;
+  const unsigned int n_inputs_ = 3;
   const unsigned int n_outputs_ = 0;
   //Define parameters here
 }
@@ -46,10 +46,11 @@ bool boxm_edge_update_process_cons(bprb_func_process& pro)
   // process takes 3 inputs:
   //input[0]: The scene
   //input[1]: Image list filename
+  //input[2]: Use ransac?
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm_scene_base_sptr";
   input_types_[1] = "vcl_string";
- 
+  input_types_[2] = "bool";
   // process has 0 outputs:
   vcl_vector<vcl_string> output_types_(n_outputs_);
 
@@ -79,9 +80,8 @@ bool boxm_edge_update_process(bprb_func_process& pro)
 
   // get the inputs
   boxm_scene_base_sptr scene_base = pro.get_input<boxm_scene_base_sptr>(0);
-  //boxm_apm_type apm_type = scene_base->appearence_model();
   vcl_string image_list_fname = pro.get_input<vcl_string>(1);
- // float n_normal=pro.get_input<float>(2);
+  bool use_ransac=pro.get_input<bool>(2);
 
   // extract list of image_ids from file
   vcl_ifstream ifs(image_list_fname.c_str());
@@ -117,7 +117,7 @@ bool boxm_edge_update_process(bprb_func_process& pro)
         return false;
     }
 
-    boxm_edge_tangent_updater<short,float,float> updater(*scene, image_ids, true);
+    boxm_edge_tangent_updater<short,float,float> updater(*scene, image_ids, use_ransac);
     updater.add_cells();
   }
   //store output
