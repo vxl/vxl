@@ -9,14 +9,16 @@
 #include <vcl_cstdlib.h> // for rand()
 #include <vcl_iostream.h>
 
+#define ITER_MAX 100
+
 template <class T>
 void boxm_plane_ransac(vcl_vector<vgl_plane_3d<T> > const& planes,
                        vcl_vector<unsigned>& indices,
                        unsigned int threshold)
 {
   unsigned int num_planes = planes.size();
-
-  while (indices.size() < threshold) {
+  unsigned iter=0;
+  while ((indices.size() < threshold) && (iter<ITER_MAX)) {
     indices.resize(0);
     // select two planes randomly
     int index1 = vcl_rand() % num_planes;
@@ -43,8 +45,13 @@ void boxm_plane_ransac(vcl_vector<vgl_plane_3d<T> > const& planes,
         }
       }
     }
+    iter++;
   }
-  vcl_cerr << "The number of fit planes=" << indices.size() << " out of " << planes.size() << vcl_endl;
+  if (iter == ITER_MAX) {  // NO SOLUTION
+    vcl_cerr << "NO SOLUTION\n";
+    indices.resize(0);
+  }
+  vcl_cerr << "The number of fit planes=" << indices.size() << " out of " << planes.size() << " in " << iter << vcl_endl;
 }
 
 #endif
