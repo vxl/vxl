@@ -154,8 +154,15 @@ boct_tree<T_loc,T_data>::~boct_tree()
 template <class T_loc,class T_data>
 boct_tree<T_loc,T_data>* boct_tree<T_loc,T_data>::clone()
 {
-  boct_tree_cell<T_loc, T_data>* root = root_->clone(0);
-  boct_tree<T_loc,T_data>* tree = new boct_tree<T_loc,T_data>(root,num_levels_);
+  vcl_vector<boct_tree_cell<T_loc, T_data>*> cells = leaf_cells();
+  vcl_vector<boct_tree_cell<T_loc, T_data> > cloned_cells;
+  for (unsigned i=0; i<cells.size(); i++) {
+    cloned_cells.push_back(boct_tree_cell<T_loc, T_data>(cells[i]->code_));
+  }
+  boct_tree<T_loc,T_data> temp_tree;
+  boct_tree_cell<T_loc, T_data>* cloned_root = temp_tree.construct_tree(cloned_cells, this->number_levels());
+  boct_tree<T_loc,T_data>* tree = new boct_tree<T_loc,T_data>(cloned_root,  this->number_levels());
+  tree->set_bbox(this->bounding_box());
   return tree;
 }
 
