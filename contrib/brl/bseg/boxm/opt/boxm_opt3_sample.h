@@ -21,7 +21,7 @@ class boxm_opt3_sample
   typedef typename boxm_apm_traits<APM>::apm_datatype apm_datatype;
 
   boxm_opt3_sample()
-    : seg_len_sum_(0.0f), log_pass_prob_sum_(0.0f), weighted_vis_sum_(0.0f) { }
+    : weighted_vis_sum_(0.0f), seg_len_sum_(0.0f), log_pass_prob_sum_(0.0f) { }
   ~boxm_opt3_sample() {}
   static short version_no() { return 1; }
   void print(vcl_ostream& os) const;
