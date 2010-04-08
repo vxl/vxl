@@ -71,6 +71,7 @@ bool bvpl_plane_propagate_process_cons(bprb_func_process& pro)
 bool bvpl_plane_propagate_process(bprb_func_process& pro)
 {
   using namespace bvpl_plane_propagate_process_globals;
+  
 
   // check number of inputs
   if (pro.n_inputs() != n_inputs_)
@@ -84,9 +85,8 @@ bool bvpl_plane_propagate_process(bprb_func_process& pro)
   vcl_string scene_path = pro.get_input<vcl_string>(1);
   vcl_string block_prefix = pro.get_input<vcl_string>(2);
   vcl_string scene_filename = pro.get_input<vcl_string>(3);
-
   boxm_scene_base_sptr output_scene_sptr;
-
+  
   // only applies to the edge_line type of scenes
   if (scene_base->appearence_model() == BOXM_EDGE_LINE) {
     typedef boct_tree<short,boxm_edge_tangent_sample<float> > tree_type;
@@ -96,7 +96,7 @@ bool bvpl_plane_propagate_process(bprb_func_process& pro)
        vcl_cerr << "error casting scene_base to scene\n";
        return false;
     }
-
+    
     boxm_scene<tree_type> *output_scene=new boxm_scene<tree_type>(*scene);
     output_scene->set_paths(scene_path, block_prefix);
     output_scene_sptr = output_scene;
@@ -112,7 +112,7 @@ bool bvpl_plane_propagate_process(bprb_func_process& pro)
       }
     }
     bvpl_kernel_sptr kernel= new bvpl_kernel(k_iter, vnl_float_3(0,0,1), 0.0f, vgl_vector_3d<int>(3,3,3),min_pt,max_pt);
-
+    
     boxm_block_iterator<tree_type> iter(scene);
     boxm_block_iterator<tree_type> output_iter(output_scene);
     iter.begin();
@@ -147,7 +147,9 @@ bool bvpl_plane_propagate_process(bprb_func_process& pro)
           // do not include itself in the list
           if (!itself) {
             vcl_vector<boxm_plane_obs<float> > observations = neighbor->data().obs_list();
-            output_cell->data().insert(observations);
+            boxm_edge_tangent_sample<float> data=output_cell->data();
+            data.insert(observations);
+            output_cell->set_data(data);
           }
         }
       }
