@@ -17,23 +17,19 @@
 template <boxm_apm_type APM, class T_aux>
 class boxm_generate_opt2_sample_functor_pass_2
 {
-public:
+ public:
   //: "default" constructor
   boxm_generate_opt2_sample_functor_pass_2(vil_image_view<typename boxm_apm_traits<APM>::obs_datatype> const& image, 
                                            vil_image_view<float> const& beta_denom, 
                                            float model_prior, 
                                            vil_image_view<float> const& alt_prob_img)
-
-    : obs_(image), beta_denom_(beta_denom), vis_img_(image.ni(),image.nj(),1), pre_img_(image.ni(),image.nj(),1), alpha_integral_(image.ni(),image.nj(),1), model_prior_(model_prior), alt_prob_img_(alt_prob_img)
+    : scene_read_only_(true) /*only reads info from the scene*/, is_aux_(true) /*needs to write aux*/,
+      model_prior_(model_prior), alt_prob_img_(alt_prob_img), obs_(image), beta_denom_(beta_denom),
+      vis_img_(image.ni(),image.nj(),1), pre_img_(image.ni(),image.nj(),1), alpha_integral_(image.ni(),image.nj(),1)
   {
-    alpha_integral_.fill(0.0f);
-    pre_img_.fill(0.0f);
     vis_img_.fill(1.0f);
-    //only reads info from the scene
-    scene_read_only_=true;
-    //needs to write aux
-    is_aux_=true;
-
+    pre_img_.fill(0.0f);
+    alpha_integral_.fill(0.0f);
   }
 
   inline bool step_cell(unsigned int i, unsigned int j, vgl_point_3d<double> s0, vgl_point_3d<double> s1, boxm_sample<APM> &cell_value, T_aux & aux_val)
@@ -87,11 +83,11 @@ public:
     return true;
   }
 
-public:
+ public:
   bool scene_read_only_;
   bool is_aux_;
 
-private:
+ private:
   float model_prior_;
   vil_image_view<float> const& alt_prob_img_;
   vil_image_view<typename boxm_apm_traits<APM>::obs_datatype> const& obs_;
@@ -105,12 +101,12 @@ private:
 
 template <class T_loc, class T_data, boxm_aux_type AUX_T>
 void boxm_generate_opt2_samples(boxm_scene<boct_tree<T_loc, T_data > > &scene,
-                               vpgl_camera_double_sptr cam,
-                               vil_image_view<typename T_data::obs_datatype> &obs,
-                               vcl_string iname, 
-                               vcl_vector<float> const& alt_appearance_priors,
-                               vcl_vector<typename T_data::apm_datatype> const& alt_appearance_models,
-                               bool black_background = false)
+                                vpgl_camera_double_sptr cam,
+                                vil_image_view<typename T_data::obs_datatype> &obs,
+                                vcl_string iname, 
+                                vcl_vector<float> const& alt_appearance_priors,
+                                vcl_vector<typename T_data::apm_datatype> const& alt_appearance_models,
+                                bool black_background = false)
 {
   typedef typename boxm_aux_traits<AUX_T>::sample_datatype sample_datatype;
   //vcl_cout << "scene.save_platform_independent() = " << scene.save_platform_independent() << vcl_endl;
@@ -166,7 +162,7 @@ void boxm_generate_opt2_samples(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   }
   // sanity check
   if (model_prior <= 0.0f) {
-    vcl_cerr << "error: boxm_generate_opt2_samples : alt_appearance_priors sum to " << 1.0f - model_prior << " >= 1.0! " << vcl_endl;
+    vcl_cerr << "error: boxm_generate_opt2_samples : alt_appearance_priors sum to " << 1.0f - model_prior << " >= 1.0!\n";
   }
 
   // compute alternate appearance probability for each pixel in the image
