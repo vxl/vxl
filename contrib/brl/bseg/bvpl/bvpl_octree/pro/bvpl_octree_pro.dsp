@@ -110,6 +110,9 @@ SOURCE=.\processes/bvpl_scene_kernel_operator_process.cxx
 # Begin Source File
 SOURCE=.\processes/bvpl_plane_propagate_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\processes/bvpl_nonmax_supp_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
