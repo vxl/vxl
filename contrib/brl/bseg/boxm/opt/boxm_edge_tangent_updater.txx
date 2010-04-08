@@ -20,6 +20,8 @@
 #include <vcl_vector.h>
 #include <vcl_string.h>
 
+#include <bsta/bsta_histogram.h>
+
 template <class T_loc, class APM, class AUX>
 boxm_edge_tangent_updater<T_loc,APM,AUX>::boxm_edge_tangent_updater(boxm_scene<boct_tree<T_loc,
                                                                     boxm_inf_line_sample<APM> > > &scene,
@@ -44,7 +46,7 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
               boxm_edge_tangent_sample<AUX> >::LOAD, BOXM_EDGE_TANGENT_LINE);
     aux_scenes.push_back(aux_scene);
   }
-
+  
   vcl_vector<boxm_edge_tangent_sample<APM> > aux_samples;
 
   // for each block
@@ -109,15 +111,15 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
           vcl_list<vgl_plane_3d<AUX> > fit_planes;
           vcl_vector<AUX> fit_weights;
           if (use_ransac_) {
-            vcl_vector<unsigned> indices;
-            boxm_plane_ransac<AUX>(planes, indices, planes.size()/2);
-
-            for (unsigned i=0; i<indices.size(); i++) {
-              unsigned idx = indices[i];
-              fit_planes.push_back(planes[idx]);
-              fit_weights.push_back(weights[idx]);
-            }
-          }
+			vcl_vector<unsigned> indices;
+		    boxm_plane_ransac<AUX>(planes, indices, 3*planes.size()/4);
+            
+			for (unsigned i=0; i<indices.size(); i++) {
+		      unsigned idx = indices[i];
+			  fit_planes.push_back(planes[idx]);
+			  fit_weights.push_back(weights[idx]);
+			}
+		  }
           else {
             for (unsigned i=0; i<planes.size(); i++)
               fit_planes.push_back(planes[i]);
@@ -164,6 +166,7 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
 #ifdef DEBUG
   vcl_cout << "done with all cells" << vcl_endl;
 #endif
+  
   // clear the aux scenes so that its starts with the refined scene next time
   for (unsigned i=0; i<aux_scenes.size(); i++) {
     aux_scenes[i].clean_scene();
