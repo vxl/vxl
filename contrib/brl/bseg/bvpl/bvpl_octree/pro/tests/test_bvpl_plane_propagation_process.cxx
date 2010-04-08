@@ -64,7 +64,10 @@ static void test_bvpl_plane_propagation_process()
     vcl_vector<boct_tree_cell<short,data_type >*> cells=tree->leaf_cells();
     for (unsigned i=0; i<cells.size(); i++) {
       boxm_plane_obs<float> p(vgl_homg_plane_3d<float>(i+1,0,0,1), 1.0f);
-      cells[i]->data().insert(p);
+      data_type data = cells[i]->data();
+      data.insert(p);
+      cells[i]->set_data(data);
+
     }
     block->init_tree(tree);
     block->get_tree()->print();
@@ -72,8 +75,8 @@ static void test_bvpl_plane_propagation_process()
     iter++;
   }
 
-  DECLARE_FUNC_CONS(boxm_plane_propagate_process);
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_plane_propagate_process, "bvplPlanePropagationProcess");
+  DECLARE_FUNC_CONS(bvpl_plane_propagate_process);
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_plane_propagate_process, "bvplPlanePropagateProcess");
   REGISTER_DATATYPE(boxm_scene_base_sptr);
 
   //: set the inputs
@@ -83,8 +86,11 @@ static void test_bvpl_plane_propagation_process()
   brdb_value_sptr v3 = new brdb_value_t<vcl_string>("new_scene.xml");
 
   //: inits with the default params
-  bool good = bprb_batch_process_manager::instance()->init_process("bvplPlanePropagationProcess");
+  bool good = bprb_batch_process_manager::instance()->init_process("bvplPlanePropagateProcess");
   good = good && bprb_batch_process_manager::instance()->set_input(0, v0);
+  good = good && bprb_batch_process_manager::instance()->set_input(1, v1);
+  good = good && bprb_batch_process_manager::instance()->set_input(2, v2);
+  good = good && bprb_batch_process_manager::instance()->set_input(3, v3);
   good = good && bprb_batch_process_manager::instance()->run_process();
 
   unsigned id;
