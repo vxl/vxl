@@ -63,11 +63,10 @@ static void test_bvpl_plane_propagation_process()
     // get the leaf nodes and insert one plane to each
     vcl_vector<boct_tree_cell<short,data_type >*> cells=tree->leaf_cells();
     for (unsigned i=0; i<cells.size(); i++) {
-      boxm_plane_obs<float> p(vgl_homg_plane_3d<float>(i+1,0,0,1), 1.0f);
+      boxm_plane_obs<float> p(vgl_homg_plane_3d<float>(float(i+1),0.f,0.f,1.f), 1.0f);
       data_type data = cells[i]->data();
       data.insert(p);
       cells[i]->set_data(data);
-
     }
     block->init_tree(tree);
     block->get_tree()->print();

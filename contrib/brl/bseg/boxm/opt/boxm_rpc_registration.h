@@ -84,7 +84,7 @@ bool boxm_rpc_registration(boxm_scene_base_sptr scene_base,//<boct_tree<T_loc, T
                            unsigned num_observations)
 {
   double max_prob = vcl_numeric_limits<double>::min();
-  double best_offset_u = 0.0, best_offset_v = 0.0;
+  unsigned int best_offset_u = 0, best_offset_v = 0;
 
   typedef boct_tree<T_loc,T_data> tree_type;
   boxm_scene<tree_type> *scene = dynamic_cast<boxm_scene<tree_type>*>(scene_base.ptr());
@@ -121,8 +121,8 @@ bool boxm_rpc_registration(boxm_scene_base_sptr scene_base,//<boct_tree<T_loc, T
       // if maximum is found
       if (prob > max_prob) {
         max_prob = prob;
-        best_offset_u = (double)u;
-        best_offset_v = (double)v;
+        best_offset_u = u;
+        best_offset_v = v;
       }
     }
   }
@@ -227,7 +227,6 @@ bool boxm_rpc_registration(boxm_scene_base_sptr scene_base,//<boct_tree<T_loc, T
 }
 
 
-
 template<class T_loc, class T_data>
 bool boxm_rpc_registration(boxm_scene_base_sptr scene_base,//<boct_tree<T_loc, T_data > &scene,
                            vil_image_view<float> edge_image,
@@ -239,7 +238,7 @@ bool boxm_rpc_registration(boxm_scene_base_sptr scene_base,//<boct_tree<T_loc, T
                            unsigned num_observations)
 {
   double max_cost = vcl_numeric_limits<double>::max();
-  double best_offset_u = 0.0, best_offset_v = 0.0;
+  unsigned int best_offset_u = 0, best_offset_v = 0;
   double subpixel_best_offset_u = 0.0, subpixel_best_offset_v = 0.0;
 
   typedef boct_tree<T_loc,T_data> tree_type;
@@ -249,7 +248,7 @@ bool boxm_rpc_registration(boxm_scene_base_sptr scene_base,//<boct_tree<T_loc, T
   int ni = edge_image.ni();
   int nj = edge_image.nj();
 
-  vcl_cout<<ni<<","<<nj<<","<<expected_edge_image.ni()<<","<<expected_edge_image.nj();
+  vcl_cout<<ni<<','<<nj<<','<<expected_edge_image.ni()<<','<<expected_edge_image.nj();
   // this is the two level offset search algorithm
   int offset_lower_limit_u = -offset_search_size;
   int offset_lower_limit_v = -offset_search_size;
@@ -261,59 +260,56 @@ bool boxm_rpc_registration(boxm_scene_base_sptr scene_base,//<boct_tree<T_loc, T
     for (int v=offset_lower_limit_v; v<=offset_upper_limit_v; v++) {
       // for each offset pair (u,v)
       double cost = 0.0;
-      double norm =0.0;
+      double norm = 0.0;
       // find the total probability of the edge image given the expected edge image
       for (int m=offset_search_size+1; m<ni-offset_search_size-1; m++) {
-          for (int n=offset_search_size+1; n<nj-offset_search_size-1; n++) {
-              if (edge_image(m,n,0)>-1 && edge_image(m,n,1)>-1 && edge_image(m,n,2)>-1) {
+        for (int n=offset_search_size+1; n<nj-offset_search_size-1; n++) {
+          if (edge_image(m,n,0)>-1 && edge_image(m,n,1)>-1 && edge_image(m,n,2)>-1) {
+            if (expected_edge_image(m-u,n-v,0)>0 && expected_edge_image(m-u,n-v,1)>0 && expected_edge_image(m-u,n-v,2)>0) {
+            //vcl_cout<<'.';
+            float dx=expected_edge_image(m-u,n-v,0)+u-edge_image(m,n,0);
+            float dy=expected_edge_image(m-u,n-v,1)+v-edge_image(m,n,1);
 
-                  if (expected_edge_image(m-u,n-v,0)>0 && expected_edge_image(m-u,n-v,1)>0 && expected_edge_image(m-u,n-v,2)>0) {
-                  //vcl_cout<<".";
-                  float dx=expected_edge_image(m-u,n-v,0)+u-edge_image(m,n,0);
-                  float dy=expected_edge_image(m-u,n-v,1)+v-edge_image(m,n,1);
+            float sintheta1=vcl_sin(edge_image(m,n,2));
+            float costheta1=vcl_cos(edge_image(m,n,2));
 
-                  float sintheta1=vcl_sin(edge_image(m,n,2));
-                  float costheta1=vcl_cos(edge_image(m,n,2));
+            float sintheta2=vcl_sin(expected_edge_image(m-u,n-v,2));
+            float costheta2=vcl_cos(expected_edge_image(m-u,n-v,2));
+#if 0
+            float dist=vcl_sqrt(dx*dx+dy*dy);
+            if (dist<min_dist)
+              min_dist=dist;
+#endif // 0
+            float dist=(1-vcl_fabs(sintheta1*sintheta2+costheta2*costheta1));//+vcl_sqrt(dx*dx+dy*dy);
 
-                  float sintheta2=vcl_sin(expected_edge_image(m-u,n-v,2));
-                  float costheta2=vcl_cos(expected_edge_image(m-u,n-v,2));
-
-                  //float dist=vcl_sqrt(dx*dx+dy*dy);
-                  //if(dist<min_dist)
-                  //    min_dist=dist;
-
-                  float dist=(1-vcl_fabs(sintheta1*sintheta2+costheta2*costheta1));//+vcl_sqrt(dx*dx+dy*dy);
-
-                  float dist1=vcl_sqrt((dx*sintheta1*sintheta1+dy*sintheta1*costheta1)*(dx*sintheta1*sintheta1+dy*sintheta1*costheta1)+
-                      (dy*costheta1*costheta1+dx*sintheta1*costheta1)*(dy*costheta1*costheta1+dx*sintheta1*costheta1));
-                  float dist2=vcl_sqrt((dx*sintheta2*sintheta2+dy*sintheta2*costheta2)*(dx*sintheta2*sintheta2+dy*sintheta2*costheta2)+
-                      (dy*costheta2*costheta2+dx*sintheta2*costheta2)*(dy*costheta2*costheta2+dx*sintheta2*costheta2));
-
-                  //if((dist1+dist2)/2<min_dist)
-                  //    min_dist=(dist1+dist2)/2;
-
-
-                  cost += dist;//(dist1+dist2)/2;
-              }
-              else 
-              {
-                  cost+=0.5;
-              }
+            float dist1=vcl_sqrt((dx*sintheta1*sintheta1+dy*sintheta1*costheta1)*(dx*sintheta1*sintheta1+dy*sintheta1*costheta1)+
+                                 (dy*costheta1*costheta1+dx*sintheta1*costheta1)*(dy*costheta1*costheta1+dx*sintheta1*costheta1));
+            float dist2=vcl_sqrt((dx*sintheta2*sintheta2+dy*sintheta2*costheta2)*(dx*sintheta2*sintheta2+dy*sintheta2*costheta2)+
+                                 (dy*costheta2*costheta2+dx*sintheta2*costheta2)*(dy*costheta2*costheta2+dx*sintheta2*costheta2));
+#if 0
+            if ((dist1+dist2)/2<min_dist)
+              min_dist=(dist1+dist2)/2;
+#endif // 0
+            cost += dist;//(dist1+dist2)/2;
+          }
+          else
+          {
+            cost+=0.5;
+          }
           norm += 1;
-                        }
-
+        }
       }
     }
 
     if (norm>0.0)
         cost/=norm;
 
-      //vcl_cout<<cost<<"u "<<u<<" v"<<v<<"\n";
+      //vcl_cout<<cost<<"u "<<u<<" v"<<v<<'\n';
       // if maximum is found
       if (cost < max_cost) {
         max_cost = cost;
-        best_offset_u = (double)u;
-        best_offset_v = (double)v;
+        best_offset_u = u;
+        best_offset_v = v;
       }
     }
   }
@@ -329,18 +325,16 @@ bool boxm_rpc_registration(boxm_scene_base_sptr scene_base,//<boct_tree<T_loc, T
       for (int m=offset_search_size; m<ni-offset_search_size; m++) {
         for (int n=offset_search_size; n<nj-offset_search_size; n++) {
           if (edge_image(m,n,0)!=-1 || edge_image(m,n,1)!=-1 || edge_image(m,n,2)!=-1) {
-              if (expected_edge_image(m-best_offset_u,n-best_offset_v,0)>0 && expected_edge_image(m-best_offset_u,n-best_offset_v,1)>0 && expected_edge_image(m-best_offset_u,n-best_offset_v,2)>0) {
-                        float dx=expected_edge_image(m-best_offset_u,n-best_offset_v,0)+best_offset_u+u-edge_image(m,n,0);
-                        float dy=expected_edge_image(m-best_offset_u,n-best_offset_v,1)+best_offset_v+v-edge_image(m,n,1);
-
-                        
-                        float dist=vcl_sqrt(dx*dx+dy*dy);
-                        cost += dist;
-              }
+            if (expected_edge_image(m-best_offset_u,n-best_offset_v,0)>0 && expected_edge_image(m-best_offset_u,n-best_offset_v,1)>0 && expected_edge_image(m-best_offset_u,n-best_offset_v,2)>0) {
+              float dx=expected_edge_image(m-best_offset_u,n-best_offset_v,0)+best_offset_u+u-edge_image(m,n,0);
+              float dy=expected_edge_image(m-best_offset_u,n-best_offset_v,1)+best_offset_v+v-edge_image(m,n,1);
+              float dist=vcl_sqrt(dx*dx+dy*dy);
+              cost += dist;
+            }
           }
         }
       }
-      //vcl_cout<<cost<<" ";
+      //vcl_cout<<cost<<' ';
       if (cost < max_cost) {
           max_cost = cost;
           subpixel_best_offset_u = (double)u;
