@@ -44,7 +44,7 @@ bool bvxm_mog_norm<T>::mog_l2_grid(bvxm_voxel_grid_base_sptr apm_base,
     }
   }
 
-  vcl_cout << "Measuring distances: " << vcl_endl;
+  vcl_cout << "Measuring distances:" << vcl_endl;
   for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++apm_slab_it, ++mask_slab_it, ++dist_slab_it)
   {
     vcl_cout << '.';
@@ -53,9 +53,8 @@ bool bvxm_mog_norm<T>::mog_l2_grid(bvxm_voxel_grid_base_sptr apm_base,
     typename bvxm_voxel_slab<mix_gauss_type>::iterator apm_it = (*apm_slab_it).begin();
     bvxm_voxel_slab<bool>::iterator mask_it = (*mask_slab_it).begin();
     typename bvxm_voxel_slab<T>::iterator dist_it = (*dist_slab_it).begin();
-    bvxm_mog_norm<T> measure;
 
-    //If the reference is not given then it is the one in the first voxel
+    // If the reference is not given then it is the one in the first voxel
     if (!reference_given) {
       reference = *((*apm_slab_it).first_voxel());
       vcl_cout << "Reference Mixture:\n";
@@ -69,7 +68,7 @@ bool bvxm_mog_norm<T>::mog_l2_grid(bvxm_voxel_grid_base_sptr apm_base,
 
     for (; apm_it!= (*apm_slab_it).end(); ++apm_it, ++mask_it, ++dist_it)
     {
-      T distance = measure.mog_l2(*apm_it, reference);
+      T distance = bvxm_mog_norm<T>::mog_l2(*apm_it, reference);
       if (*mask_it)
         ( *dist_it) = distance;
     }
@@ -215,7 +214,7 @@ T bvxm_mog_norm<T>::kl_distance(gauss_type const&g1, gauss_type const& g2)
   T t2 = T(g1.var()/g2.var());
   T t3 = T(vcl_pow(g2.mean() - g1.mean(),2));
   if (t1+t2+t3 < T(1.0))
-    vcl_cout << "smaller than 0: " << (t1+t2+t3-1)/2 << "\n";
+    vcl_cout << "smaller than 0: " << (t1+t2+t3-1)/2 << '\n';
   return T(0.5*(t1+t2+t3 -1.0));
 }
 
