@@ -66,9 +66,9 @@ class boxm_render_expected_edge_tangent_image_functor
       }
       else
       {
-        expected_(i,j,0)=(u1+u2)/2;
-        expected_(i,j,1)=(v1+v2)/2;
-        expected_(i,j,2)=angle_0_360(vcl_atan2(v2-v1,u2-u1));
+        expected_(i,j,0)=float(u1+u2)/2;
+        expected_(i,j,1)=float(v1+v2)/2;
+        expected_(i,j,2)=float(angle_0_360(vcl_atan2(v2-v1,u2-u1)));
       }
     }
     return true;

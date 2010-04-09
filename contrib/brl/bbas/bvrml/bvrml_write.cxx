@@ -61,15 +61,15 @@ void bvrml_write::write_vrml_disk(vcl_ofstream& str,
 
   if (denom==0.0)
   {
-        axis_x=1.0;
-        axis_y=0.0;
+        axis_x=1.0f;
+        axis_y=0.0f;
   }
   else
   {
-      axis_x=-dir.y()/denom;
-      axis_y=dir.x()/denom;
+      axis_x=-float(dir.y()/denom);
+      axis_y=float(dir.x()/denom);
   }
-  float phi=vcl_acos(dir.z());
+  float phi=float(vcl_acos(dir.z()));
 
   double rad = radius;
   double height = 0.1;

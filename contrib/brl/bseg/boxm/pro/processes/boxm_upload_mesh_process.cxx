@@ -128,7 +128,7 @@ bool boxm_upload_mesh_process(bprb_func_process& pro)
     {
       typedef boct_tree<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > tree_type;
       boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
-      boxm_simple_grey simplegrey(1.0,0.1,1);
+      boxm_simple_grey simplegrey(1.0f,0.1f,1.0f);
       boxm_sample<BOXM_APM_SIMPLE_GREY> val(1,simplegrey);
       if (draw_or_fill=="draw")
         vcl_cout<<"Not yet";

@@ -59,7 +59,6 @@ bool test_edge2d()
 
 bool test_edge3d()
 {
- 
   bvpl_edge3d_kernel_factory kernel_3d(-15,15,-15,15,-15,15);
   bvpl_create_directions_b dir;
   bvpl_kernel_vector_sptr kernel_3d_vecs = kernel_3d.create_kernel_vector(dir);
@@ -112,7 +111,7 @@ void print_kernels()
 
   {
     factory.set_rotation_axis( vnl_float_3(0, 0, 1));
-    factory.set_angle(vnl_math::pi/2.0);
+    factory.set_angle(float(vnl_math::pi_over_2));
     bvpl_kernel kernel = factory.create();
     kernel.save_raw("gauss_001_90_kernel.raw");
     //kernel.print_to_file("gauss_001_90_kernel.txt");
@@ -127,7 +126,7 @@ void print_directions( bvpl_kernel_vector_sptr kernel_vector)
 {
   bvpl_kernel_vector::iterator vit = kernel_vector->kernels_.begin();
 
-  vcl_cout <<"Writing to file axes in vector: " << vcl_endl;
+  vcl_cout <<"Writing to file axes in vector:" << vcl_endl;
 
   vcl_string filename  = "kernel_axes.txt";
   vcl_fstream ofs(filename.c_str(), vcl_ios::out);
@@ -179,7 +178,7 @@ bool test_gaussian()
   bvpl_kernel kernel1 = factory2.create();
 
   factory2.set_rotation_axis( vnl_float_3(1, 0, 0));
-  factory2.set_angle(vnl_math::pi_over_2);
+  factory2.set_angle(float(vnl_math::pi_over_2));
   bvpl_kernel kernel2 = factory2.create();
 
   factory2.set_rotation_axis( vnl_float_3(-1, 0, 0));
@@ -254,7 +253,7 @@ bool test_corner2d()
 
   {
     bvpl_corner2d_kernel_factory factory(length, width, thickness);
-    factory.set_angle(vnl_math::pi_over_4);
+    factory.set_angle(float(vnl_math::pi_over_4));
     bvpl_kernel kernel = factory.create();
     vcl_cout << "Canonical kernel " ;
     kernel.cum_sum();

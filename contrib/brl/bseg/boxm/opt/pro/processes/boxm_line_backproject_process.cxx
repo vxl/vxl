@@ -158,55 +158,56 @@ bool boxm_line_backproject_process(bprb_func_process& pro)
             vgl_homg_line_2d<double> image_line(line);
             vgl_homg_plane_3d<double> plane = cam->backproject(image_line);
             if (plane.a()==0 && plane.b()==0 && plane.c()==0 && plane.d()==0)
-              vcl_cout << "ZERO a,b,c,d " << vcl_endl;
-            (*plane_image)(i,j,0)=plane.a();
-            (*plane_image)(i,j,1)=plane.b();
-            (*plane_image)(i,j,2)=plane.c();
-            (*plane_image)(i,j,3)=plane.d();
+              vcl_cout << "ZERO a,b,c,d" << vcl_endl;
+            (*plane_image)(i,j,0)=float(plane.a());
+            (*plane_image)(i,j,1)=float(plane.b());
+            (*plane_image)(i,j,2)=float(plane.c());
+            (*plane_image)(i,j,3)=float(plane.d());
           }
         }
       }
-    } else if (camera->type_name() == "vpgl_local_rational_camera") {
-        vpgl_local_rational_camera<double>* cam = dynamic_cast<vpgl_local_rational_camera<double>*>(camera.ptr());
-        for (unsigned i=0; i<ni; i++) {
-          for (unsigned j=0; j<nj; j++) {
-            col =edge_image(i,j,0); // sub-pixel column
-            row =edge_image(i,j,1); // sub_pixel row
-            theta=edge_image(i,j,2); // orientation in radians
+    }
+    else if (camera->type_name() == "vpgl_local_rational_camera") {
+      vpgl_local_rational_camera<double>* cam = dynamic_cast<vpgl_local_rational_camera<double>*>(camera.ptr());
+      for (unsigned i=0; i<ni; i++) {
+        for (unsigned j=0; j<nj; j++) {
+          col =edge_image(i,j,0); // sub-pixel column
+          row =edge_image(i,j,1); // sub_pixel row
+          theta=edge_image(i,j,2); // orientation in radians
 
-            if (col<0 || row<0) { // no edge is present, check sdet_pro/sdet_detect_edge_tangent_process.h
+          if (col<0 || row<0) { // no edge is present, check sdet_pro/sdet_detect_edge_tangent_process.h
+            (*plane_image)(i,j,0) = 0.0f;
+            (*plane_image)(i,j,1) = 0.0f;
+            (*plane_image)(i,j,2) = 0.0f;
+            (*plane_image)(i,j,3) = 0.0f;
+          }
+          else {
+            // get two point on the line
+            vgl_point_2d<double> p1(col, row);
+
+            float x = col + 0.5f*vcl_cos(theta);
+            float y = row + 0.5f*vcl_sin(theta);
+            vgl_point_2d<double> p2(x,y);
+
+            //backproject it
+            vgl_plane_3d<double> plane;
+            if (vpgl_ray::plane_ray(*cam, p1, p2, plane)) {
+              (*plane_image)(i,j,0)=float(plane.a());
+              (*plane_image)(i,j,1)=float(plane.b());
+              (*plane_image)(i,j,2)=float(plane.c());
+              (*plane_image)(i,j,3)=float(plane.d());
+            }
+            else { // the backprojection was unsuccessfull
+              vcl_cout << i << ',' << j << "NO PLANE!!!!!" << vcl_endl;
               (*plane_image)(i,j,0) = 0.0f;
               (*plane_image)(i,j,1) = 0.0f;
               (*plane_image)(i,j,2) = 0.0f;
               (*plane_image)(i,j,3) = 0.0f;
-            } else {
-              // get two point on the line
-              vgl_point_2d<double> p1(col, row);
-
-              float x = col + 0.5*vcl_cos(theta);
-              float y = row + 0.5*vcl_sin(theta);
-              vgl_point_2d<double> p2(x,y);
-
-              
-              //backproject it
-              vgl_plane_3d<double> plane;
-              if (vpgl_ray::plane_ray(*cam, p1, p2, plane)) {
-                (*plane_image)(i,j,0)=plane.a();
-                (*plane_image)(i,j,1)=plane.b();
-                (*plane_image)(i,j,2)=plane.c();
-                (*plane_image)(i,j,3)=plane.d();
-              }
-              else { // the backprojection was unsuccessfull
-                vcl_cout << i << "," << j << "NO PLANE!!!!! " << vcl_endl;
-                (*plane_image)(i,j,0) = 0.0f;
-                (*plane_image)(i,j,1) = 0.0f;
-                (*plane_image)(i,j,2) = 0.0f;
-                (*plane_image)(i,j,3) = 0.0f;
-              }
             }
           }
         }
-    } 
+      }
+    }
     else if (camera->type_name() == "vpgl_perspective_camera") {
       vpgl_perspective_camera<double>* cam = dynamic_cast<vpgl_perspective_camera<double>*>(camera.ptr());
      vpgl_proj_camera<double>* proj_cam = static_cast<vpgl_proj_camera<double>*>(cam);
@@ -221,12 +222,13 @@ bool boxm_line_backproject_process(bprb_func_process& pro)
               (*plane_image)(i,j,1) = 0.0f;
               (*plane_image)(i,j,2) = 0.0f;
               (*plane_image)(i,j,3) = 0.0f;
-            } else {
+            }
+            else {
               // get two point on the line
               vgl_point_2d<double> p1(col, row);
 
-              float x = col + 0.5*vcl_cos(theta);
-              float y = row + 0.5*vcl_sin(theta);
+              float x = col + 0.5f*vcl_cos(theta);
+              float y = row + 0.5f*vcl_sin(theta);
               vgl_point_2d<double> p2(x,y);
 
               vgl_line_2d<double> line(p1,p2);
@@ -236,19 +238,21 @@ bool boxm_line_backproject_process(bprb_func_process& pro)
 
               vgl_homg_plane_3d<double> plane = proj_cam->backproject(image_line);
               if (plane.a()==0 && plane.b()==0 && plane.c()==0 && plane.d()==0)
-                vcl_cout << "ZERO a,b,c,d " << vcl_endl;
-              (*plane_image)(i,j,0)=plane.a();
-              (*plane_image)(i,j,1)=plane.b();
-              (*plane_image)(i,j,2)=plane.c();
-              (*plane_image)(i,j,3)=plane.d();
+                vcl_cout << "ZERO a,b,c,d" << vcl_endl;
+              (*plane_image)(i,j,0)=float(plane.a());
+              (*plane_image)(i,j,1)=float(plane.b());
+              (*plane_image)(i,j,2)=float(plane.c());
+              (*plane_image)(i,j,3)=float(plane.d());
             }
           }
       }
-    } else {
+    }
+    else {
         vcl_cerr << "boxm_line_backproject_process: The camera type [" << camera->type_name() << "]is not defined yet!\n";
         return false;
     }
-  } else {
+  }
+  else {
     vcl_cerr << "boxm_line_backproject_process: This pixel format is not supported yet!\n";
     return false;
   }

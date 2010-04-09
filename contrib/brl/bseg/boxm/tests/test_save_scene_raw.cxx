@@ -79,7 +79,7 @@ static void test_save_scene_raw()
 
   typedef boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
 
-  float count=0.1;
+  float count=0.1f;
   while (!iter.end())
   {
     scene.load_block(iter.index().x(),iter.index().y(),iter.index().z());
@@ -94,7 +94,7 @@ static void test_save_scene_raw()
     block->init_tree(tree);
     scene.write_active_block();
     iter++;
-    count+=0.1;
+    count+=0.1f;
   }
   vgl_box_3d<double> world;
   world.add(origin);

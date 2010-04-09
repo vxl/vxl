@@ -310,8 +310,8 @@ void bvpl_convert_id_grid_to_hsv_grid(bvxm_voxel_grid<int> *id_grid,
          col=colors[*id_slab_it]*360.0f;
         vil_colour_space_HSV_to_RGB<float>(col,1.0f,255.0f,&r,&g,&b);
         float alpha;
-        if (max -min < 1e-15)
-          alpha = (*response_slab_it)/max *255.0;
+        if (max - min < 1e-15f)
+          alpha = (*response_slab_it)/max *255.0f;
         else
           alpha=(((*response_slab_it)-min)/(max - min))*255.0f;
 
@@ -374,7 +374,7 @@ void bvpl_convert_id_grid_to_hsv_grid(bvxm_voxel_grid<int> *id_grid,
 
 void bvpl_write_colors_to_svg(bvpl_kernel_vector_sptr kernel_vector, vcl_vector<float> hue_vector, vcl_string outfile)
 {
-  bsvg_document doc(600, hue_vector.size()*20);
+  bsvg_document doc(600.f, hue_vector.size()*20.f);
 
   vcl_vector<float>::iterator iter = hue_vector.begin();
 

@@ -18,7 +18,7 @@ void boct_tree_cell<short,float>::set_data_to_avg_children()
   data_=0; //remove previous data
   for (unsigned i=0; i<8; i++) {
     children_[i].set_data_to_avg_children();
-    data_+= children_[i].data()/8.0;
+    data_ += children_[i].data()/8.0f;
   }
 
   return;

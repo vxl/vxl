@@ -39,7 +39,7 @@ void boxm_plane_ransac(vcl_vector<vgl_plane_3d<T> > const& planes,
         T res = dot_product(normal,line_dir);
         if (res < 0.0001)  {
           vgl_point_3d<T> p=line.point();
-          if (plane.contains(p,0.0001)) {
+          if (plane.contains(p,0.0001f)) {
             indices.push_back(i);
           }
         }

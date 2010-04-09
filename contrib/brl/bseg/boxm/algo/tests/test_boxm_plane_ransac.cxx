@@ -30,9 +30,9 @@ static void test_boxm_plane_ransac()
   // get two points from the line, and create a random 3rd point to define a plane
   unsigned i;
   for (i=0; i<test_num; i++) {
-    float x=rand.drand32()*100;
-    float y=rand.drand32()*100;
-    float z=rand.drand32()*100;
+    float x=float(rand.drand32()*100);
+    float y=float(rand.drand32()*100);
+    float z=float(rand.drand32()*100);
     vgl_point_3d<float> p3(x,y,z);
     vgl_plane_3d<float> plane(p1,p2,p3);
     planes.push_back(plane);
@@ -40,10 +40,10 @@ static void test_boxm_plane_ransac()
 
   // add the random planes
   for (; i<test_set; i++) {
-    float a=rand.drand32()*100;
-    float b=rand.drand32()*100;
-    float c=rand.drand32()*100;
-    float d=rand.drand32()*100;
+    float a=float(rand.drand32()*100);
+    float b=float(rand.drand32()*100);
+    float c=float(rand.drand32()*100);
+    float d=float(rand.drand32()*100);
     vgl_plane_3d<float> plane(a,b,c,d);
     planes.push_back(plane);
   }
