@@ -33,7 +33,7 @@ bool bvxm_update_edges_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_update_edges_process_globals;
 
-  // process takes 4 inputs:
+  // this process takes 4 inputs and has no outputs
   //input[0]: The voxel world
   //input[1]: The current camera
   //input[2]: The current image
@@ -44,10 +44,7 @@ bool bvxm_update_edges_process_cons(bprb_func_process& pro)
   input_types_[i++] = "vpgl_camera_double_sptr";
   input_types_[i++] = "vil_image_view_base_sptr";
   input_types_[i++] = "unsigned";
-  if (!pro.set_input_types(input_types_))
-    return false;
-
-  // this process process has no outputs
+  return pro.set_input_types(input_types_);
 }
 
 //:  optimizes rpc camera parameters based on edges
