@@ -282,11 +282,11 @@ bool boxm_rpc_registration(boxm_scene_base_sptr scene_base,//<boct_tree<T_loc, T
 #endif // 0
             float dist=(1-vcl_fabs(sintheta1*sintheta2+costheta2*costheta1));//+vcl_sqrt(dx*dx+dy*dy);
 
+#if 0
             float dist1=vcl_sqrt((dx*sintheta1*sintheta1+dy*sintheta1*costheta1)*(dx*sintheta1*sintheta1+dy*sintheta1*costheta1)+
                                  (dy*costheta1*costheta1+dx*sintheta1*costheta1)*(dy*costheta1*costheta1+dx*sintheta1*costheta1));
             float dist2=vcl_sqrt((dx*sintheta2*sintheta2+dy*sintheta2*costheta2)*(dx*sintheta2*sintheta2+dy*sintheta2*costheta2)+
                                  (dy*costheta2*costheta2+dx*sintheta2*costheta2)*(dy*costheta2*costheta2+dx*sintheta2*costheta2));
-#if 0
             if ((dist1+dist2)/2<min_dist)
               min_dist=(dist1+dist2)/2;
 #endif // 0
