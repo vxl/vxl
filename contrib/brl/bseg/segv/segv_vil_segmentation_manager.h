@@ -77,6 +77,7 @@ class segv_vil_segmentation_manager : public vgui_wrapper_tableau
   void rot_extrema();
   void beaudet();
   void parallel_coverage();
+  void gradient_mag_angle();
   //: segmentation
   void threshold_image();
   void harris_corners();

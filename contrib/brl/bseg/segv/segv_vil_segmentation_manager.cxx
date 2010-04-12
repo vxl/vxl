@@ -1989,3 +1989,87 @@ void segv_vil_segmentation_manager::draw_line_image()
   else
     vcl_cout << "Pixel format: " << img_sptr->pixel_format() << " is not implemented yet" << vcl_endl;
 }
+void segv_vil_segmentation_manager::gradient_mag_angle()
+{
+  static vgui_style_sptr style = 
+    vgui_style::new_style(0.8f, 0.2f, 0.9f, 1.0f, 3.0f);
+  
+  static float sigma = 1.0f;
+  static bool sep_mag_displ = false;
+  static bool display_on_image = true;
+  static unsigned display_interval = 4;
+  static double vector_scale = 0.7;
+  vgui_dialog grad_mag_ang_dialog("grad_mag_ang");
+  grad_mag_ang_dialog.field("sigma", sigma);
+  grad_mag_ang_dialog.field("DisplayInterval", display_interval);
+  grad_mag_ang_dialog.field("VectorScale", vector_scale);
+  grad_mag_ang_dialog.checkbox("Display Mag as Separate Img", sep_mag_displ);
+  grad_mag_ang_dialog.checkbox("Display Vectors on Img", display_on_image);
+  grad_mag_ang_dialog.field("Red", style->rgba[0]);
+  grad_mag_ang_dialog.field("Green", style->rgba[1]);
+  grad_mag_ang_dialog.field("Blue", style->rgba[2]);
+  if (!grad_mag_ang_dialog.ask())
+    return;
+
+  this->clear_display();
+  vil_image_resource_sptr img = selected_image();
+  if (!img||!img->ni()||!img->nj())
+    {
+      vcl_cout << "In segv_vil_segmentation_manager::gradient_mag_angle() - "
+               << " no image\n";
+      return;
+    }
+  unsigned ni = img->ni(), nj = img->nj();
+  vil_image_view<float> fview = brip_vil_float_ops::convert_to_float(img);
+  vil_image_view<float> smooth = brip_vil_float_ops::gaussian(fview, sigma);
+  vil_image_view<float> mag(ni, nj), gx(ni, nj), gy(ni, nj); 
+  brip_vil_float_ops::gradient_mag_comp_3x3(smooth, mag, gx, gy);
+  vcl_vector<vsol_line_2d_sptr > lines;
+  if(sep_mag_displ){
+    for(unsigned j = 2; j<nj-2; j+=display_interval)
+      for(unsigned i = 2; i<ni-2; i+=display_interval){
+        double cx =  i, cy = j;
+        vsol_point_2d_sptr c = new vsol_point_2d(cx, cy);
+        double dx = 0, dy = 0;
+        float m = mag(i,j);
+        float ggx = gx(i,j), ggy = gy(i,j);
+        if(m>0.1){
+          dx = ggx/m; dy = ggy/m;
+        }
+        vsol_point_2d_sptr e = new vsol_point_2d(cx+vector_scale*dx,
+                                                 cy+vector_scale*dy);
+        vsol_line_2d_sptr l = new vsol_line_2d(c, e);
+        lines.push_back(l);
+      }
+    if(!display_on_image){
+      vil_image_view<float> blank(ni, nj);
+      blank.fill(0.0f);
+      this->add_image(vil_new_image_resource_of_view(blank));
+    }
+    this->draw_lines(lines, style);  
+    this->add_image(vil_new_image_resource_of_view(mag));
+    return;
+  }
+  double gmax = 0.0;
+  for(unsigned j = 2; j<nj-2; j+=display_interval)
+    for(unsigned i = 2; i<ni-2; i+=display_interval)
+      if(mag(i,j)>gmax) gmax = mag(i,j);
+
+  for(unsigned j = 2; j<nj-2; j+=display_interval)
+    for(unsigned i = 2; i<ni-2; i+=display_interval)
+      {
+        double cx =  i, cy = j;
+        vsol_point_2d_sptr c = new vsol_point_2d(cx, cy);
+        double dx = gx(i,j)/gmax, dy = gy(i,j)/gmax;
+        vsol_point_2d_sptr e = new vsol_point_2d(cx+vector_scale*dx,
+                                                 cy+vector_scale*dy);
+        vsol_line_2d_sptr l = new vsol_line_2d(c, e);
+        lines.push_back(l);
+      }
+  if(!display_on_image){
+    vil_image_view<float> blank(ni, nj);
+    blank.fill(0.0f);
+    this->add_image(vil_new_image_resource_of_view(blank));
+  }
+  this->draw_lines(lines, style);  
+}
