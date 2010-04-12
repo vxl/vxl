@@ -48,7 +48,8 @@ class segv_vil_segmentation_manager : public vgui_wrapper_tableau
   void save_nitf_camera();
   void save_mask();
 
-  //: visualization
+  // -- visualization --
+
   void set_range_params();
   void inline_viewer();
   void intensity_profile();
@@ -56,7 +57,8 @@ class segv_vil_segmentation_manager : public vgui_wrapper_tableau
   void display_images_as_color();
   void image_as_vrml_points();
 
-  //: image transformation
+  // -- image transformation --
+
   void flip_image_lr();
   void rotate_image();
   void reduce_image();
@@ -64,11 +66,14 @@ class segv_vil_segmentation_manager : public vgui_wrapper_tableau
   void expand_image();
   void expand_image_bicubic();
 
-  //: image arithmetic
+  // -- image arithmetic --
+
   void add_images();
   void subtract_images();
   void negate_image();
-  //: image processing
+
+  // -- image processing --
+
   void entropy();
   void minfo();
   void max_trace_scale();
@@ -78,7 +83,9 @@ class segv_vil_segmentation_manager : public vgui_wrapper_tableau
   void beaudet();
   void parallel_coverage();
   void gradient_mag_angle();
-  //: segmentation
+
+  // -- segmentation --
+
   void threshold_image();
   void harris_corners();
   void nonmaximal_suppression();
@@ -89,11 +96,12 @@ class segv_vil_segmentation_manager : public vgui_wrapper_tableau
   void regions();
   void mser_conics();
   void draw_line_image();
-  // ############### New method to project 3D points ##################
+  //: ############## New method to project 3D points ##################
   void project_points();
   // ##################################################################
-  
- //:utilities
+
+  // -- utilities --
+
   void clear_display();
   void clear_all();
   void init();
@@ -102,10 +110,11 @@ class segv_vil_segmentation_manager : public vgui_wrapper_tableau
   void clear_mask();
   void add_poly_to_mask();
   void load_image_nomenu(vcl_string const& path);
- //:drawing
+  //: drawing
   void create_polygon();
   //: access to the window
   vgui_window* get_window(){return win_;}
+  //: access to the window
   void set_window(vgui_window* win){win_=win;}
 
  protected:
@@ -114,7 +123,7 @@ class segv_vil_segmentation_manager : public vgui_wrapper_tableau
                   const vgui_style_sptr& style = NULL);
 
   void draw_conics(vcl_vector<vsol_conic_2d_sptr> const & conic_segs,
-                  const vgui_style_sptr& style = NULL);
+                   const vgui_style_sptr& style = NULL);
 
   void draw_polylines(vcl_vector<vsol_polyline_2d_sptr> const & polys);
   void draw_regions(vcl_vector<vtol_intensity_face_sptr>& regions,
@@ -124,14 +133,14 @@ class segv_vil_segmentation_manager : public vgui_wrapper_tableau
 
   void set_selected_grid_image(vil_image_resource_sptr const& image,
                                vgui_range_map_params_sptr const& rmps =0);
-                               
+
   void add_image_at(vil_image_resource_sptr const& image,
                     const unsigned col, const unsigned row,
                     vgui_range_map_params_sptr const& rmps = 0);
-                    
+
   void add_image(vil_image_resource_sptr const& image,
                  vgui_range_map_params_sptr const& rmps =0);
-                 
+
   vil_image_resource_sptr selected_image();
   vil_image_resource_sptr image_at(const unsigned col, const unsigned row);
   bool
@@ -143,8 +152,8 @@ class segv_vil_segmentation_manager : public vgui_wrapper_tableau
   vtol_face_2d_sptr face_at(const int col, const int row);
   vgui_range_map_params_sptr range_params(vil_image_resource_sptr const& image);
  private:
-  //flags
-  bool first_; //first image load
+  // -- flags --
+  bool first_; //: first image load
   vgui_window* win_;
   vgui_grid_tableau_sptr grid_;
   vtol_face_2d_sptr foreground_face_;
@@ -152,7 +161,6 @@ class segv_vil_segmentation_manager : public vgui_wrapper_tableau
   bgui_bargraph_clipon_tableau_sptr bargraph_;
   vcl_vector<vsol_polygon_2d_sptr> mask_;
   static segv_vil_segmentation_manager *instance_;
-  
 };
 
 #endif // segv_vil_segmentation_manager_h_

@@ -101,7 +101,7 @@ class brip_vil_float_ops
                                vil_image_view<float>& mag);
 
   static void gradient_mag_comp_3x3(vil_image_view<float> const& input,
-                                   vil_image_view<float>& mag,
+                                    vil_image_view<float>& mag,
                                     vil_image_view<float>& gx,
                                     vil_image_view<float>& gy);
 
@@ -117,19 +117,19 @@ class brip_vil_float_ops
             bool determinant = true);
 
   static void extrema_kernel_mask(float lambda0, float lambda1, float theta,
-                                  vbl_array_2d<float>& kernel, 
+                                  vbl_array_2d<float>& kernel,
                                   vbl_array_2d<bool>& mask,
                                   float cutoff_percentage = 0.01f);
 
 
   //: Compute the standard deviation of an operator response, given the image intensity standard deviation at each pixel
-  static  vil_image_view<float> 
+  static  vil_image_view<float>
     std_dev_operator(vil_image_view<float> const& sd_image,
                      vbl_array_2d<float> const& kernel);
 
   //: Compute the standard deviation of an operator response, given the image intensity standard deviation at each pixel
   //  Uses a modified formula to compute std_dev
-  static vil_image_view<float> 
+  static vil_image_view<float>
     std_dev_operator_method2(vil_image_view<float> const& sd_image,
                              vbl_array_2d<float> const& kernel);
 

@@ -3,7 +3,6 @@
 
 #include "boxm_scalar_sample.h"
 
-
 template <class OBS_T>
 void boxm_scalar_sample<OBS_T>::print(vcl_ostream& os) const
 {
@@ -35,13 +34,13 @@ void vsl_b_read(vsl_b_istream & is, boxm_scalar_sample<T> &sample)
   vsl_b_read(is,version);
   switch (version)
   {
-  case 1:
+   case 1:
     vsl_b_read(is, sample.scalar_sum_);
     vsl_b_read(is, sample.seg_len_);
     break;
-  default:
+   default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boxm_scalar_sample<T>&)\n"
-      << "           Unknown version number "<< version << '\n';
+             << "           Unknown version number "<< version << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     break;
   }
