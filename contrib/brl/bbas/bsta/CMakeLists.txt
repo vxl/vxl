@@ -45,7 +45,7 @@ SET(bsta_sources
   bsta_detector_mixture.h
   bsta_weibull.h   bsta_weibull.txx
   bsta_sampler.h   bsta_sampler.txx
-  bsta_von_mises.h
+  bsta_von_mises.h bsta_von_mises.txx
   bsta_beta.h      bsta_beta.txx
   bsta_beta_f1.h
   bsta_kent.h      bsta_kent.txx
@@ -58,7 +58,7 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/bsta ${bsta_sources})
 
 
 
-TARGET_LINK_LIBRARIES(bsta vnl_algo vbl vnl vgl)
+TARGET_LINK_LIBRARIES(bsta vnl_algo vbl vnl vnl_io)
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)
@@ -73,4 +73,7 @@ SUBDIRS( io )
 
 # Visualization Tools for various bsta constructs
 SUBDIRS( vis )
+
+# process library
+SUBDIRS(pro)
 

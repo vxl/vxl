@@ -144,7 +144,7 @@ vsl_print_summary(vcl_ostream &os, const bsta_joint_histogram<T>& h)
 }
 
 //: Implement for key basic types
-void vsl_b_write(vsl_b_ostream &os, const bsta_histogram_sptr& hptr)
+void vsl_b_write(vsl_b_ostream &os, bsta_histogram_sptr const& hptr)
 {
   bsta_histogram<float>* hf = dynamic_cast<bsta_histogram<float>*>(hptr.ptr());
   if (hf) { vsl_b_write(os, *hf); return; }
