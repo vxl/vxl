@@ -8,4 +8,4 @@ class bsta_register
   static void register_process();
 };
 
-#endif // boxm_register_h_
+#endif // bsta_register_h_
