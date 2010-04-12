@@ -47,8 +47,9 @@ MANPAGE_SOURCES += boxm_edge_tangent_sample.txx
 MANPAGE_SOURCES += boxm_plane_obs.txx
 MANPAGE_SOURCES += boxm_inf_line_sample.txx
 SOURCES += boxm_sigma_normalizer.cxx
+MANPAGE_SOURCES += boxm_scalar_sample.txx
 
-SUBDIRS += io pro opt algo
+SUBDIRS += algo pro io opt
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

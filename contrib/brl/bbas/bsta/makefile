@@ -50,7 +50,7 @@ MANPAGE_SOURCES += bsta_von_mises.txx
 MANPAGE_SOURCES += bsta_beta_f1.h
 MANPAGE_SOURCES += bsta_kent.txx
 
-SUBDIRS += algo io vis
+SUBDIRS += algo pro io vis
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
