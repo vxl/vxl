@@ -210,6 +210,6 @@ bool boxm_construct_scene_from_image_process(bprb_func_process& pro)
     scene->write_active_block();
     scene_base = scene;
   }
-  pro.set_output(0, new brdb_value_t<boxm_scene_base_sptr>(scene_base));
+  pro.set_output_val<boxm_scene_base_sptr>(0, scene_base);
   return true;
 }

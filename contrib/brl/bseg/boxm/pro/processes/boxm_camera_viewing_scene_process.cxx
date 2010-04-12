@@ -122,6 +122,6 @@ bool boxm_camera_viewing_scene_process(bprb_func_process& pro)
   K.set_focal_length(f);
   cam->set_calibration(K);
 
-  pro.set_output(0, new brdb_value_t<vpgl_camera_double_sptr>(cam));
+  pro.set_output_val<vpgl_camera_double_sptr>(0, cam);
   return true;
 }
