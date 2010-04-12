@@ -48,6 +48,7 @@ SET(boxm_sources
     boxm_inf_line_sample.txx               boxm_inf_line_sample.h
     boxm_init_scene.h
     boxm_sigma_normalizer.cxx              boxm_sigma_normalizer.h
+    boxm_scalar_sample.h                   boxm_scalar_sample.txx
 )
 
 AUX_SOURCE_DIRECTORY(Templates boxm_sources)
