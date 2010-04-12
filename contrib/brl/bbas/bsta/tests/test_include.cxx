@@ -42,6 +42,9 @@
 #include <bsta/bsta_von_mises.h>
 #include <bsta/bsta_weibull.h>
 
+#include <bsta/pro/bsta_processes.h>
+#include <bsta/pro/bsta_register.h>
+
 #include <bsta/io/bsta_io_attributes.h>
 #include <bsta/io/bsta_io_beta.h>
 #include <bsta/io/bsta_io_gaussian_full.h>
