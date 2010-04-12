@@ -30,7 +30,7 @@
 #include <boxm/boxm_scene_parser.h>
 #include <boxm/boxm_inf_line_sample.h>
 #include <boxm/boxm_edge_tangent_sample.h>
-
+#include <boxm/boxm_scalar_sample.h>
 //:global variables
 namespace boxm_create_scene_process_globals
 {
@@ -164,8 +164,12 @@ bool boxm_create_scene_process(bprb_func_process& pro)
         scene->load_scene(parser);
         scene_ptr = scene;
       }
-    }
-    else {
+    }else if (scene_ptr->appearence_model() == BOXM_SCALAR_FLOAT) {
+      typedef boct_tree<short, boxm_scalar_sample<float> > tree_type;
+      boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
+      scene->load_scene(parser);
+      scene_ptr = scene;
+    }else {
       vcl_cerr << "boxm_create_scene_process: undefined APM type\n";
       return false;
     }

@@ -21,7 +21,7 @@
 #include <boxm/boxm_save_scene_raw.h>
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/boxm_sample_multi_bin.h>
-
+#include <boxm/boxm_scalar_sample.h>
 namespace boxm_save_occupancy_raw_process_globals
 {
   const unsigned n_inputs_ = 4;
@@ -182,8 +182,11 @@ bool boxm_save_occupancy_raw_process(bprb_func_process& pro)
       typedef boct_tree<short, boxm_edge_sample<float> > type;
       boxm_scene<type>* scene = static_cast<boxm_scene<type>*>(scene_ptr.as_pointer());
       boxm_save_scene_raw<short,boxm_edge_sample<float> >(*scene, filepath + ".raw", resolution);
-   }
-  else {
+   }else if (scene_ptr->appearence_model() == BOXM_SCALAR_FLOAT) {
+      typedef boct_tree<short, boxm_scalar_sample<float> > type;
+      boxm_scene<type>* scene = static_cast<boxm_scene<type>*>(scene_ptr.as_pointer());
+      boxm_save_scene_raw<short,boxm_scalar_sample<float> >(*scene, filepath + ".raw", resolution);
+   } else {
     vcl_cout << "boxm_save_occupancy_raw_process: undefined APM type" << vcl_endl;
     return false;
   }
