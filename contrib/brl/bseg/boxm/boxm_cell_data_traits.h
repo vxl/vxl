@@ -15,7 +15,7 @@
 #include <boct/boct_tree_cell.h>
 #include <bsta/bsta_attributes.h>
 #include <bsta/bsta_gauss_f1.h>
-
+#include <boxm/boxm_scalar_sample.h>
 //: Float to float
 template <class T_loc>
 float boxm_cell_to_float(boct_tree_cell<T_loc, float >* cell,  double /*step_len*/)
@@ -51,5 +51,10 @@ bsta_num_obs<bsta_gauss_f1> boxm_zero_val<short, bsta_num_obs<bsta_gauss_f1> >()
 template <>
 float boxm_zero_val<short, float >();
 
-
+//: boxm_scalar_sample to float. Return the normalized scalar value
+template <class T_loc>
+float boxm_cell_to_float(boct_tree_cell<T_loc, boxm_scalar_sample<float>  >* cell, double /*step_len*/)
+{
+  return cell->data().basic_val();
+}
 #endif

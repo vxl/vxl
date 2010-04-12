@@ -31,11 +31,14 @@
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 
+#include <bsta/bsta_histogram.h>
 template <class T_loc, class T_data>
 void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
                          vcl_string filename,
                          unsigned int resolution_level)
 {
+  float minv = 1.0e10, maxv = 0.0;
+  bsta_histogram<float> h(0.0f, 1.0f, 20);
   typedef boct_tree<T_loc, T_data > tree_type;
 
   // create an array for each block, and save in a binary file
@@ -106,7 +109,7 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
       vgl_point_3d<double> node = tree->cell_bounding_box_local(cells[i]).min_point();
 
       float cell_val = boxm_cell_to_float(cells[i], step_len);
-
+     
       unsigned int level = cells[i]->get_code().level;
       if (level == resolution_level) {
         // just copy value to output array
@@ -176,6 +179,10 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
     for (; dp < data + data_size; ++dp) {
       //double P = 1.0 - vcl_exp(-*dp*step_len);
       // always positive so this is an ok way to round
+      float fv = *dp;
+      h.upcount(fv, 1.0f);
+      if(fv<minv) minv = fv;
+      if(fv>maxv) maxv = fv;
       unsigned char c = (unsigned char)(vcl_floor((255.0 * (*dp)) + 0.5));
       vsl_b_write(os, (char) c);
     }
@@ -271,7 +278,8 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
       }
     }
   }
-
+  vcl_cout << "Volume Histogram(" << minv << ' ' << maxv << "):[0->1]20bins\n";
+  h.print();
   return;
 }
 
