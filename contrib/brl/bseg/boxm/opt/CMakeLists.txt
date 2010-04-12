@@ -28,6 +28,10 @@ SET(boxm_opt_sources
    boxm_opt3_sample.h  boxm_opt3_sample.txx
    boxm_opt3_optimizer.h  boxm_opt3_optimizer.txx
    boxm_generate_opt3_sample_functor.h
+   boxm_sun_vis_prob_functor.h
+   boxm_render_expected_shadow_image_functor.h
+   boxm_change_probability_functor.h
+   boxm_change_3d_functor.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates boxm_opt_sources)

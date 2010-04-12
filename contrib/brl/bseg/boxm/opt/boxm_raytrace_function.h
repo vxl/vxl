@@ -13,6 +13,7 @@
 
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
+#include <vpgl/vpgl_affine_camera.h>
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/algo/vpgl_backproject.h>
 #include <vpgl/algo/vpgl_ray.h>
@@ -47,7 +48,8 @@ class boxm_raytrace_function
                            vpgl_camera_double_sptr cam,
                            unsigned int ni, unsigned int nj,
                            bool reverse_traversal = false,
-                           unsigned int i0 = 0, unsigned int j0 = 0)
+                           unsigned int i0 = 0, unsigned int j0 = 0
+                           )
     : scene_(scene), aux_scene_(null_scene_), reverse_traversal_(reverse_traversal), cam_(cam), img_i0_(i0), img_j0_(j0), img_ni_(ni), img_nj_(nj), debug_lvl_(2) {}
 
     //: constructor for functions using an auxiliary scene
@@ -92,6 +94,7 @@ class boxm_raytrace_function
                     continue;
                 }
                 tree_type * tree=curr_block->get_tree();
+               
                 aux_tree_type * aux_tree=NULL;
                 if (step_functor.is_aux_)
                 {
@@ -262,7 +265,7 @@ class boxm_raytrace_function
                 }
 
                 tree_type * tree=curr_block->get_tree();
-
+                
                 boxm_block<aux_tree_type> * curr_aux_block=NULL;
                 aux_tree_type * aux_tree=NULL;
                 if (step_functor.is_aux_)
@@ -417,8 +420,35 @@ class boxm_raytrace_function
         normalize(norm_direction);
         return;
       }
-      if (cam_->type_name() == "vpgl_local_rational_camera") {
-        vpgl_local_rational_camera<double> const* lrcam =
+      if(cam_->type_name() == "vpgl_proj_camera"){
+        vpgl_proj_camera<double> const* prcam = 
+          static_cast<vpgl_proj_camera<double> const*>(cam_.ptr());
+        ray_origin = prcam->camera_center();
+        vgl_homg_line_3d_2_points<double>  cam_ray = 
+          prcam->backproject(vgl_homg_point_2d<double>((double)i,(double)j));
+        vgl_homg_point_3d<double> hp = cam_ray.point_infinite();
+        vgl_vector_3d<double> direction(hp.x(), hp.y(), hp.z());
+        norm_direction=direction;
+        normalize(norm_direction);
+        return;
+      }
+      if(cam_->type_name() == "vpgl_affine_camera"){
+        vgl_homg_point_2d<double> ph(i, j);
+        vpgl_affine_camera<double> const * afcam = 
+          static_cast<vpgl_affine_camera<double> const*>(cam_.ptr());
+        vgl_homg_line_3d_2_points<double>  cam_ray = 
+          afcam->backproject(ph);
+        vgl_homg_point_3d<double> hpinf = cam_ray.point_infinite();
+        vgl_homg_point_3d<double> hpfin = cam_ray.point_finite();
+        vgl_vector_3d<double> direction(hpinf.x(), hpinf.y(), hpinf.z());
+        norm_direction=direction;
+        normalize(norm_direction);
+        vgl_point_3d<double> temp(hpfin);
+        ray_origin = temp;
+        return;
+      }
+      if(cam_->type_name() == "vpgl_local_rational_camera"){
+        vpgl_local_rational_camera<double> const* lrcam = 
           static_cast<vpgl_local_rational_camera<double> const*>(cam_.ptr());
         vpgl_ray::ray(*lrcam,(double)i, (double)j, ray_origin, norm_direction);
         return;
@@ -513,8 +543,9 @@ class boxm_raytrace_function
     unsigned int img_j0_;
     unsigned int img_ni_;
     unsigned int img_nj_;
-
+  
     unsigned int debug_lvl_;
+
 };
 
 template<class F, class T_loc, class T_data, class T_aux>
