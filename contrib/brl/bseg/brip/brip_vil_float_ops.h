@@ -100,6 +100,11 @@ class brip_vil_float_ops
   static void gradient_mag_3x3(vil_image_view<float> const& input,
                                vil_image_view<float>& mag);
 
+  static void gradient_mag_comp_3x3(vil_image_view<float> const& input,
+                                   vil_image_view<float>& mag,
+                                    vil_image_view<float>& gx,
+                                    vil_image_view<float>& gy);
+
   static void hessian_3x3(vil_image_view<float> const& input,
                           vil_image_view<float>& Ixx,
                           vil_image_view<float>& Ixy,

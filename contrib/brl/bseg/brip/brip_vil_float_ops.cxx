@@ -660,7 +660,31 @@ void brip_vil_float_ops::gradient_mag_3x3(vil_image_view<float> const& input,
   brip_vil_float_ops::fill_x_border(mag, 1, 0.0f);
   brip_vil_float_ops::fill_y_border(mag, 1, 0.0f);
 }
-
+void brip_vil_float_ops::
+gradient_mag_comp_3x3(vil_image_view<float> const& input,
+                      vil_image_view<float>& mag,
+                      vil_image_view<float>& gx,
+                      vil_image_view<float>& gy)
+{
+  unsigned w = input.ni(), h = input.nj();
+  float scale = 1.0f/6.0f;
+  float pi = static_cast<float>(vnl_math::pi);
+  for (unsigned y = 1; y+1<h; ++y)
+    for (unsigned x = 1; x+1<w; ++x)
+    {
+      float ggx = input(x+1,y-1)+input(x+1,y)+input(x+1,y-1)
+                -input(x-1,y-1)-input(x-1,y)-input(x-1,y-1);
+      float ggy = input(x+1,y+1)+input(x,y+1)+input(x-1,y+1)
+                -input(x+1,y-1)-input(x,y-1)-input(x-1,y-1);
+      mag(x,y) = scale*vcl_sqrt(ggx*ggx+ggy*ggy);
+      gx(x,y) = ggx*scale;
+      gy(x,y) = ggy*scale;
+    }
+  brip_vil_float_ops::fill_x_border(mag, 1, 0.0f);
+  brip_vil_float_ops::fill_y_border(mag, 1, 0.0f);
+  brip_vil_float_ops::fill_x_border(gx, 1, 0.0f);
+  brip_vil_float_ops::fill_y_border(gy, 1, 0.0f);
+}
 //----------------------------------------------------------------
 //: Compute the Hessian of the input, use a 3x3 mask
 // \verbatim
