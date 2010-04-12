@@ -3,6 +3,7 @@
 #include <testlib/testlib_test.h>
 #include <bsta/bsta_kent.h>
 #include <vgl/vgl_plane_3d.h>
+#include <vnl/vnl_inverse.h>
 
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
@@ -19,7 +20,28 @@ void test_kent()
   planes.push_back(wpl1);
   planes.push_back(wpl2);
 
-  bsta_kent<double> kent(planes);
+  vnl_matrix<double> X(3,3,0);
+  for (unsigned i=0; i<planes.size(); i++) {
+    vgl_plane_3d<double> plane = planes[i];
+    vgl_vector_3d<double> normal = plane.normal();
+    vnl_matrix<double> n(1,3);
+    n.put(0,0,normal.x());
+    n.put(0,1,normal.y());
+    n.put(0,2,normal.z());
+    vnl_matrix<double> nt = n.transpose();
+    X += nt*n;
+  }
+  X/=planes.size();
+  vcl_cout << X << vcl_endl;
+  vnl_matrix<double> X_inv = vnl_inverse(X);
+
+  bsta_kent<double> kent(X_inv);
+
+  // test the probability distribution
+  bsta_kent<double> kent2(1.0, 0.0, vnl_vector_fixed<double,3>(0,0,1), 
+    vnl_vector_fixed<double,3>(0,0,1), vnl_vector_fixed<double,3>(0,0,1));
+  vnl_vector_fixed<double,3> v(0,0,1);
+  double r = kent2.prob_density(v);
 }
 
 TESTMAIN(test_kent);
