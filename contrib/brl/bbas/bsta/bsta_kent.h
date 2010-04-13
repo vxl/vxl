@@ -15,6 +15,7 @@
 #include "bsta_distribution.h"
 #include <vnl/vnl_vector_fixed.h>
 #include <vgl/vgl_plane_3d.h>
+#include <vsl/vsl_binary_io.h>
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
 
@@ -23,28 +24,37 @@ class bsta_kent// : public bsta_distribution<T,1>
 {
  public:
   //: default construtor
+   bsta_kent() 
+     : kappa_(0), beta_(0), gamma1_(vnl_vector_fixed<T,3>(0,0,0)), 
+     gamma2_(vnl_vector_fixed<T,3>(0,0,0)), gamma3_(vnl_vector_fixed<T,3>(0,0,0)) {}
+
   bsta_kent(T kappa, T beta, vnl_vector_fixed<T,3> gamma1, 
     vnl_vector_fixed<T,3> gamma2, vnl_vector_fixed<T,3> gamma3) 
     : kappa_(kappa), beta_(beta), gamma1_(gamma1), gamma2_(gamma2), gamma3_(gamma3) {}
 
+  int version() const { return 1; }
+
   //: constructs kent distr. from a set of planes
-  bsta_kent(vcl_vector<vgl_plane_3d<T> > planes);
+  //bsta_kent(vcl_vector<vgl_plane_3d<T> > planes);
+
+  // construct from a matrix, 3x3 matrix
+  bsta_kent(vnl_matrix<T> m);
 
   ~bsta_kent() {}
 
-  T kappa() { return kappa_; }
-  T beta() { return beta_; }
+  T kappa() const { return kappa_; }
+  T beta() const { return beta_; }
+  vnl_vector_fixed<T,3> minor_axis() const { return gamma1_; }
+  vnl_vector_fixed<T,3> major_axis() const { return gamma2_; } 
+  vnl_vector_fixed<T,3> mean_direction() const { return gamma3_; } 
 
   //: true if unimodal, false if bimodal
-  bool unimodal() { if ((kappa_/beta_) >= T(2))
-                      return true; 
-                    else 
-                      return false; }
+  bool unimodal() { if ((kappa_/beta_) >= T(2)) return true; else return false; }
 
   //: pre: 
   T prob_density(vnl_vector_fixed<T,3> x);
 
-  vnl_vector_fixed<T,3> mean() const { return gamma1_;  }
+  vnl_vector_fixed<T,3> mean() const { return gamma1_; vcl_pow(kappa_,beta_); }
 
 
 private:
@@ -55,15 +65,22 @@ private:
   vnl_vector_fixed<T,3> gamma3_;
 
   //: normalizing constant method
-  //vnl_vector_fixed<T,3>
   T  normalizing_const(T kappa, T beta);
 };
 
 template <class T>
-inline vcl_ostream& operator<< (vcl_ostream& os,
-                                bsta_kent<T> const& b)
-{
-  return os << "kent: (kappa,beta) = (" << b.kappa() << "  " << b.beta() << ")\n";
-}
+void vsl_b_write(vsl_b_ostream & os, bsta_kent<T> const& b);
+
+template <class T>
+void vsl_b_write(vsl_b_ostream & os, bsta_kent<T> const* &b);
+
+template <class T>
+void vsl_b_read(vsl_b_istream & is, bsta_kent<T> &b);
+
+template <class T>
+void vsl_b_read(vsl_b_istream & is, bsta_kent<T> *&b);
+
+template <class T>
+vcl_ostream& operator<< (vcl_ostream& os, bsta_kent<T> & b);
 
 #endif
