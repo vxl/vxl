@@ -28,6 +28,10 @@ MANPAGE_SOURCES += boxm_opt2_optimizer.txx
 MANPAGE_SOURCES += boxm_opt3_optimizer.txx
 MANPAGE_SOURCES += boxm_generate_opt2_sample_functor.h
 MANPAGE_SOURCES += boxm_generate_opt3_sample_functor.h
+MANPAGE_SOURCES += boxm_change_3d_functor.h
+MANPAGE_SOURCES += boxm_change_probability_functor.h
+MANPAGE_SOURCES += boxm_sun_vis_prob_functor.h
+MANPAGE_SOURCES += boxm_render_expected_shadow_image_functor.h
 
 SUBDIRS += pro open_cl
 
