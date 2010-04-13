@@ -296,6 +296,9 @@ SOURCE=.\Templates/boct_tree_cell_reader+short.boxm_opt3_sample+BOXM_APM_MOG_GRE
 # Begin Source File
 SOURCE=.\Templates/boct_tree+short.boxm_opt3_sample+BOXM_APM_MOG_GREY--.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_aux_scene+short.boxm_sample+BOXM_APM_SIMPLE_GREY-.boxm_scalar_sample+float--.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -400,6 +403,18 @@ SOURCE=.\boxm_opt2_optimizer.txx
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_generate_opt3_sample_functor.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_change_3d_functor.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_change_probability_functor.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_sun_vis_prob_functor.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_render_expected_shadow_image_functor.h
 # End Source File
 # End Group
 # End Target
