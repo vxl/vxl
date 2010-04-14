@@ -48,20 +48,13 @@ static void test_boxm_plane_ransac()
     planes.push_back(plane);
   }
 
-  //vcl_vector<vgl_plane_3d<float> > fit_planes;
-  vcl_vector<unsigned int> indices;
-  int threshold=10;
-  boxm_plane_ransac(planes, indices, threshold);
+  vcl_vector<float> weights(test_set,1);
+  int threshold=2;
+  float residual;
+  vgl_infinite_line_3d<float> l;
+  boxm_plane_ransac(planes, weights, l, residual, threshold);
 
-  bool good=true;
-  if (indices.size() < test_num)
-    good=false;
-  else {
-    for (i=0; i<test_num; i++) {
-      if (indices[i] != i)
-        good=false;
-    }
-  }
+  bool good=(line==l);
 
   TEST("test_boxm_plane_ransac: found the right plane set", good, true);
 }
