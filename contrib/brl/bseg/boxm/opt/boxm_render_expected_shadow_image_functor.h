@@ -75,7 +75,7 @@ class boxm_render_expected_shadow_image_functor
 
 //: Functor class to normalize expected image
 template<class T_data>
-class normalize_expected_functor_rt
+class normalize_expected_shadow_functor_rt
 {
  public:
 
@@ -111,7 +111,7 @@ void boxm_render_shadow_image_rt(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > 
   exp_funct expf(expected,mask,expected.ni(),expected.nj(),true,true);
   raytracer.run(expf);
 
-  normalize_expected_functor_rt<T_data> norm_fn(use_black_background);
+  normalize_expected_shadow_functor_rt<T_data> norm_fn(use_black_background);
   vil_transform2<float,typename T_data::obs_datatype, normalize_expected_functor_rt<T_data> >(mask,expected,norm_fn);
 
   //  aux_scene.clean_scene();
