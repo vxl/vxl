@@ -90,7 +90,7 @@ vul_temp_filename( )
     return "";
   return file;
 #else
-#if defined(unix) || defined(__unix) || defined(__APPLE__)
+#if defined(unix) || defined(__unix) || defined(__unix__) || defined(__APPLE__)
   // Don't use tmpnam, since it causes linker warnings (and sometimes
   // linker errors). Instead reimplement. Sigh.
   const unsigned int num_char_in_filename = 7+1; // should always be at least 1
