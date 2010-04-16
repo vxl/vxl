@@ -46,7 +46,7 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
               boxm_edge_tangent_sample<AUX> >::LOAD, BOXM_EDGE_TANGENT_LINE);
     aux_scenes.push_back(aux_scene);
   }
-  
+
   vcl_vector<boxm_edge_tangent_sample<APM> > aux_samples;
 
   // for each block
@@ -108,31 +108,30 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
         nums+=planes.size();
         if (planes.size() > 1) {
           if (use_ransac_) {
-			vgl_infinite_line_3d<AUX> line;
-			float residual=0;
-		    if (boxm_plane_ransac<AUX>(planes, weights, line, residual, 2)) {
-				boxm_inf_line_sample<AUX> data(line,aux_samples.size());
-				data.residual_=residual;
-				vgl_box_3d<double> bb = tree->cell_bounding_box(cell);
-				// convert to line type (from float to double)
-				vgl_vector_2d<double> x0(line.x0().x(), line.x0().y());
-				vgl_vector_3d<double> dir(line.direction().x(), line.direction().y(), line.direction().z());
-				vgl_infinite_line_3d<double> dline(x0,dir);
-				vgl_point_3d<double> p0,p1;
+            vgl_infinite_line_3d<AUX> line;
+            float residual=0;
+            if (boxm_plane_ransac<AUX>(planes, weights, line, residual, 2)) {
+              boxm_inf_line_sample<AUX> data(line,aux_samples.size());
+              data.residual_=residual;
+              vgl_box_3d<double> bb = tree->cell_bounding_box(cell);
+              // convert to line type (from float to double)
+              vgl_vector_2d<double> x0(line.x0().x(), line.x0().y());
+              vgl_vector_3d<double> dir(line.direction().x(), line.direction().y(), line.direction().z());
+              vgl_infinite_line_3d<double> dline(x0,dir);
+              vgl_point_3d<double> p0,p1;
 
-				if (vgl_intersection<double>(bb, dline, p0, p1))
-				{
-				  data.line_clipped_=vgl_line_3d_2_points<float>(vgl_point_3d<float>(p0.x(),p0.y(),p0.z()),vgl_point_3d<float>(p1.x(),p1.y(),p0.z()));
-				}
-				else
-				{
-				  data.num_obs_=0;
-				}
-			
-                cell->set_data(data);
-             }
-             else 
-               cell->set_data(vgl_infinite_line_3d<AUX>(vgl_vector_2d<AUX>(0,0),vgl_vector_3d<AUX>(1,1,1)));
+              if (vgl_intersection<double>(bb, dline, p0, p1))
+              {
+                data.line_clipped_=vgl_line_3d_2_points<float>(vgl_point_3d<float>(p0.x(),p0.y(),p0.z()),vgl_point_3d<float>(p1.x(),p1.y(),p0.z()));
+              }
+              else
+              {
+                data.num_obs_=0;
+              }
+              cell->set_data(data);
+            }
+            else
+              cell->set_data(vgl_infinite_line_3d<AUX>(vgl_vector_2d<AUX>(0,0),vgl_vector_3d<AUX>(1,1,1)));
           }
           else
             cell->set_data(vgl_infinite_line_3d<AUX>(vgl_vector_2d<AUX>(0,0),vgl_vector_3d<AUX>(1,1,1)));
@@ -154,7 +153,7 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
 #ifdef DEBUG
   vcl_cout << "done with all cells" << vcl_endl;
 #endif
-  
+
   // clear the aux scenes so that its starts with the refined scene next time
   for (unsigned i=0; i<aux_scenes.size(); i++) {
     aux_scenes[i].clean_scene();
