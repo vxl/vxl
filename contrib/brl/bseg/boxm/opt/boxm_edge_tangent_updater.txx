@@ -71,6 +71,9 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
     {
       aux_samples.clear();
       boct_tree_cell<T_loc,boxm_inf_line_sample<APM> >* cell = cells[i];
+      // initialize the cell
+      boxm_inf_line_sample<AUX> data(vgl_infinite_line_3d<AUX>(vgl_vector_2d<AUX>(0,0),vgl_vector_3d<AUX>(1,1,1)));
+      cell->set_data(data);
 
       for (unsigned j=0; j<aux_readers.size(); j++) {
         boct_tree_cell<T_loc, boxm_edge_tangent_sample<AUX> > temp_cell;
@@ -110,7 +113,7 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
           if (use_ransac_) {
             vgl_infinite_line_3d<AUX> line;
             float residual=0;
-            if (boxm_plane_ransac<AUX>(planes, weights, line, residual, 2)) {
+            if (boxm_plane_ransac<AUX>(planes, weights, line, residual, 9)) {
               boxm_inf_line_sample<AUX> data(line,aux_samples.size());
               data.residual_=residual;
               vgl_box_3d<double> bb = tree->cell_bounding_box(cell);
@@ -130,17 +133,9 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
               }
               cell->set_data(data);
             }
-            else
-              cell->set_data(vgl_infinite_line_3d<AUX>(vgl_vector_2d<AUX>(0,0),vgl_vector_3d<AUX>(1,1,1)));
           }
-          else
-            cell->set_data(vgl_infinite_line_3d<AUX>(vgl_vector_2d<AUX>(0,0),vgl_vector_3d<AUX>(1,1,1)));
         }
-        else
-          cell->set_data(vgl_infinite_line_3d<AUX>(vgl_vector_2d<AUX>(0,0),vgl_vector_3d<AUX>(1,1,1)));
       }
-      else
-        cell->set_data(vgl_infinite_line_3d<AUX>(vgl_vector_2d<AUX>(0,0),vgl_vector_3d<AUX>(1,1,1)));
     }
     nums/=cells.size();
 
