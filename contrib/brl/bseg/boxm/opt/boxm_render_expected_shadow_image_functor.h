@@ -75,11 +75,12 @@ class boxm_render_expected_shadow_image_functor
 
 //: Functor class to normalize expected image
 template<class T_data>
-class normalize_expected_shadow_functor_rt
+class normalize_shadow_functor
 {
  public:
 
-  normalize_expected_functor_rt(bool use_black_background) : use_black_background_(use_black_background) {}
+  normalize_shadow_functor(bool use_black_background)
+    {use_black_background_ = use_black_background;}
 
   void operator()(float mask, typename T_data::obs_datatype &pix) const
   {
@@ -111,8 +112,8 @@ void boxm_render_shadow_image_rt(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > 
   exp_funct expf(expected,mask,expected.ni(),expected.nj(),true,true);
   raytracer.run(expf);
 
-  normalize_expected_shadow_functor_rt<T_data> norm_fn(use_black_background);
-  vil_transform2<float,typename T_data::obs_datatype, normalize_expected_functor_rt<T_data> >(mask,expected,norm_fn);
+  normalize_shadow_functor<T_data> norm_fn(use_black_background);
+  vil_transform2<float,typename T_data::obs_datatype, normalize_shadow_functor<T_data> >(mask,expected,norm_fn);
 
   //  aux_scene.clean_scene();
 }
