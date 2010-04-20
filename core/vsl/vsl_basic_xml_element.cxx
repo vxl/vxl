@@ -58,8 +58,9 @@ void vsl_basic_xml_element::append_cdata(int cdata)
   cdata_.append(toString(cdata));
 }
 
-bool vsl_basic_xml_element::delete_attribute(vcl_string attr_name)
+bool vsl_basic_xml_element::delete_attribute(vcl_string /*attr_name*/)
 {
+  vcl_cerr << "vsl_basic_xml_element::delete_attribute() not yet implemented\n";
   return false;
 }
 
