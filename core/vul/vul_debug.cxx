@@ -1,10 +1,9 @@
 // This is core/vul/vul_debug.cxx
-
+#include "vul_debug.h"
 //: \file
 //  \brief Get debug related information like core dumps, and stack traces
 //  \author Ian Scott
 
-#include "vul_debug.h"
 #include <vcl_iostream.h>
 #include <vxl_config.h>
 #include <vcl_new.h>
@@ -202,7 +201,7 @@ void vul_debug_core_dump(const char * filename)
 
 //: Setup the system to core dump and throw a C++ exception on detection of a Structured Exception
 // \throws vul_debug_windows_structured_exception.
-void vul_debug_set_coredump_and_throw_on_windows_se(const char * filename)
+void vul_debug_set_coredump_and_throw_on_windows_se(const char * /*filename*/)
 {
 // Do nothing on non-windows box.
 }
@@ -210,7 +209,7 @@ void vul_debug_set_coredump_and_throw_on_windows_se(const char * filename)
 #endif // _WIN32
 
 
-static const char* out_out_memory_coredump_filename = 0;
+static const char* out_of_memory_coredump_filename = 0;
 
 void
 #ifdef _WIN32
@@ -218,7 +217,7 @@ void
 #endif
   vul_debug_set_coredump_and_throw_on_out_of_memory_handler()
 {
-  vul_debug_core_dump(out_out_memory_coredump_filename);
+  vul_debug_core_dump(out_of_memory_coredump_filename);
 #if VCL_HAS_EXCEPTIONS
   throw vcl_bad_alloc();
 #else
@@ -231,6 +230,6 @@ void
 // The system will throw vcl_bad_alloc.
 void vul_debug_set_coredump_and_throw_on_out_of_memory(const char * filename)
 {
-  out_out_memory_coredump_filename = filename;
+  out_of_memory_coredump_filename = filename;
   vcl_set_new_handler(vul_debug_set_coredump_and_throw_on_out_of_memory_handler);
 }
