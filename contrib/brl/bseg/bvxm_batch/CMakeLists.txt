@@ -23,7 +23,9 @@ IF( PYTHON_FOUND )
 
     #library has to have different name depending on debug or release version.
     IF(WIN32)
-      SET_TARGET_PROPERTIES(bvxm_batch PROPERTIES OUTPUT_NAME bvxm_batch DEBUG_POSTFIX _d SUFFIX .pyd)
+      IF (NOT CYGWIN)
+        SET_TARGET_PROPERTIES(bvxm_batch PROPERTIES OUTPUT_NAME bvxm_batch DEBUG_POSTFIX _d SUFFIX .pyd)
+      ENDIF (NOT CYGWIN)
     ENDIF(WIN32)
     SET_TARGET_PROPERTIES(bvxm_batch PROPERTIES PREFIX "")
 
