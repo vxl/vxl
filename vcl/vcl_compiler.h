@@ -200,6 +200,10 @@
 # define VCL_KAI
 #endif
 
+#if defined(__CYGWIN__) // Cygwin GCC Compiler
+# define VCL_CYGWIN_GCC
+#endif
+
 #if defined(__ICC) ||defined(__ECC) // Intel compiler?
 # define VCL_ICC
 #  if __ICC >= 800
