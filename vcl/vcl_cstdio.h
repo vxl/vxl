@@ -17,6 +17,10 @@
 # include <stdio.h>
 # define vcl_generic_cstdio_STD /* */
 # include "generic/vcl_cstdio.h"
+#elif defined(VCL_CYGWIN_GCC)
+# define vcl_snprintf snprintf
+# include "vcl_cstddef.h" // for size_t
+# include "iso/vcl_cstdio.h"
 #elif defined(VCL_VC60)
 # include <cstdio>
 # define vcl_generic_cstdio_STD /**/
