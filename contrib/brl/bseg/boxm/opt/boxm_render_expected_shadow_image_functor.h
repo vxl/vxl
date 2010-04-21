@@ -100,7 +100,7 @@ void boxm_render_shadow_image_rt(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > 
                                  vil_image_view<float> & mask,
                                  bool use_black_background = false)
 {
-  typedef typename boxm_sample<APM> T_data;
+  typedef boxm_sample<APM> T_data;
   typedef typename boxm_aux_traits<AUX>::sample_datatype T_aux;
   typedef boct_tree<T_loc, T_data > tree_type;
   typedef boct_tree<T_loc, T_aux > aux_tree_type;
