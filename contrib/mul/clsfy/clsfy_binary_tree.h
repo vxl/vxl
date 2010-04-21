@@ -22,20 +22,18 @@ class clsfy_binary_tree_op
     int data_index_;
     const vnl_vector<double>* data_ptr_;
     clsfy_binary_threshold_1d classifier_;
-    
-      
+
  public:
 
-  clsfy_binary_tree_op():data_index_(-1),data_ptr_(0) {}
-    clsfy_binary_tree_op(const vnl_vector<double>* data_ptr,
-                         int data_index=-1):
-    data_ptr_(data_ptr),data_index_(data_index) {}
+  clsfy_binary_tree_op() : data_index_(-1), data_ptr_(0) {}
+  clsfy_binary_tree_op(const vnl_vector<double>* data_ptr,
+                       int data_index=-1)
+    : data_index_(data_index), data_ptr_(data_ptr) {}
 
   clsfy_binary_threshold_1d& classifier() {return classifier_;}
   unsigned data_index() const {return data_index_;}
   void set_data_index(unsigned index) {data_index_=index;}
-  void set_data_ptr(const vnl_vector<double>* data_ptr)
-  {data_ptr_= data_ptr;}
+  void set_data_ptr(const vnl_vector<double>* data_ptr) {data_ptr_= data_ptr;}
 
   //: Return reference to data - NB throws std::bad_cast if null
   const vnl_vector<double >& data() const {return *data_ptr_;}
@@ -47,8 +45,8 @@ class clsfy_binary_tree_op
   //: Classify
   unsigned classify() {return classifier_.classify(val());}
 
-  unsigned ndims() {return (data_ptr_ ? data_ptr_->size() : 0 );} 
-      
+  unsigned ndims() {return data_ptr_ ? data_ptr_->size() : 0;}
+
   //: Save class to a binary File Stream
   void b_write(vsl_b_ostream& bfs) const;
 
@@ -56,42 +54,39 @@ class clsfy_binary_tree_op
   void b_read(vsl_b_istream& bfs);
 
   short version_no() const {return 1;}
-
 };
 
 
-class clsfy_binary_tree_node {
-    int nodeId_;
-    clsfy_binary_tree_node* parent_;
-    clsfy_binary_tree_node* left_child_;
-    clsfy_binary_tree_node* right_child_;
-    clsfy_binary_tree_op op_;
-    double prob_; //Only used on terminal nodes
-  public:
-    
+class clsfy_binary_tree_node
+{
+  int nodeId_;
+  clsfy_binary_tree_node* parent_;
+  clsfy_binary_tree_node* left_child_;
+  clsfy_binary_tree_node* right_child_;
+  clsfy_binary_tree_op op_;
+  double prob_; //Only used on terminal nodes
+ public:
+
   clsfy_binary_tree_node(clsfy_binary_tree_node* parent,
-                         const clsfy_binary_tree_op& op):
-    nodeId_(-1),parent_(parent),left_child_(0),right_child_(0),op_(op),prob_(0.5)
-    {
-    }
-    
+                         const clsfy_binary_tree_op& op)
+  : nodeId_(-1),parent_(parent),left_child_(0),right_child_(0),op_(op),prob_(0.5) {}
 
-    virtual clsfy_binary_tree_node* create_child(const clsfy_binary_tree_op& op);
-    void add_child(const clsfy_binary_tree_op& op,bool bLeft)
-    {
-        clsfy_binary_tree_node* child=create_child(op);
-        if(bLeft)
-            left_child_=child;
-        else
-            right_child_=child;                
-    }
+  virtual clsfy_binary_tree_node* create_child(const clsfy_binary_tree_op& op);
+  void add_child(const clsfy_binary_tree_op& op,bool bLeft)
+  {
+    clsfy_binary_tree_node* child=create_child(op);
+    if (bLeft)
+      left_child_=child;
+    else
+      right_child_=child;
+  }
 
-    //Note the owning classifier removes the tree - beware as once deleted its children
-    //may be inaccessible for deletion
-    virtual ~clsfy_binary_tree_node() {}
-    
-    friend class clsfy_binary_tree;
-    friend class clsfy_binary_tree_builder;
+  //Note the owning classifier removes the tree - beware as once deleted its children
+  //may be inaccessible for deletion
+  virtual ~clsfy_binary_tree_node() {}
+
+  friend class clsfy_binary_tree;
+  friend class clsfy_binary_tree_builder;
 };
 
 
@@ -103,34 +98,31 @@ class clsfy_binary_tree_node {
 
 class clsfy_binary_tree : public clsfy_classifier_base
 {
+ public:
 
-  public:
+  struct graph_rep
+  {
+      int me;
+      int left_child;
+      int right_child;
+  };
 
-    struct graph_rep
-    {
-        int me;
-        int left_child;
-        int right_child;
-    };
-
-    
   //: Constructor
   clsfy_binary_tree(): root_(0),cache_node_(0) {}
 
-    virtual ~clsfy_binary_tree();
-    
-    clsfy_binary_tree(const clsfy_binary_tree& srcTree);
-    
-    clsfy_binary_tree& operator=(const clsfy_binary_tree& srcTree);
-    
-    static void remove_tree(clsfy_binary_tree_node* root);
+  virtual ~clsfy_binary_tree();
+
+  clsfy_binary_tree(const clsfy_binary_tree& srcTree);
+
+  clsfy_binary_tree& operator=(const clsfy_binary_tree& srcTree);
+
+  static void remove_tree(clsfy_binary_tree_node* root);
   //: Return the classification of the given probe vector.
   virtual unsigned classify(const vnl_vector<double> &input) const;
 
   //: Provides a probability-like value that the input being in each class.
   // output(i) i<nClasses, contains the probability that the input is in class i
   virtual void class_probabilities(vcl_vector<double> &outputs, const vnl_vector<double> &input) const;
-
 
   //: This value has properties of a Log likelihood of being in class (binary classifiers only)
   // class probability = exp(logL) / (1+exp(logL))
@@ -165,14 +157,12 @@ class clsfy_binary_tree : public clsfy_classifier_base
 
   //: Normally only the builder uses this
   void set_root(  clsfy_binary_tree_node* root);
-  private:
+ private:
   clsfy_binary_tree_node* root_;
   mutable clsfy_binary_tree_node* cache_node_;
-  private:
-    void copy(const clsfy_binary_tree& srcTree);
-    void copy_children(clsfy_binary_tree_node* pSrcNode,clsfy_binary_tree_node* pNode);
-
-
+ private:
+  void copy(const clsfy_binary_tree& srcTree);
+  void copy_children(clsfy_binary_tree_node* pSrcNode,clsfy_binary_tree_node* pNode);
 };
 
 #endif // clsfy_binary_tree_h_
