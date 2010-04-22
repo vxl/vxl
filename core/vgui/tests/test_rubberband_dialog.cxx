@@ -22,9 +22,9 @@ struct pick_client
 
     static int count = 0;
 
-    vcl_cout << "Add point with count=" << count << vcl_endl;
+    vcl_cout << "Add point (" << x << ',' << y << ") with count=" << count << vcl_endl;
 
-    if( count == 0 )
+    if ( count == 0 )
     {
       dlg.message( "Move the dialog over the main window, and\n"
                    "click on the dialog so that the\n"
@@ -32,7 +32,7 @@ struct pick_client
       int i;
       dlg.field( "Integer", i );
     }
-    else if( count == 1 )
+    else if ( count == 1 )
     {
       dlg.message( "This is a second dialog caused by the mouse\n"
                    "click.  It shouldn't have happened, if you\n"
