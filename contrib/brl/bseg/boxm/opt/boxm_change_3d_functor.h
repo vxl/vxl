@@ -11,26 +11,25 @@
 template <boxm_apm_type APM>
 class boxm_change_3d_functor
 {
-public:
+ public:
   //: "default" constructor
-  boxm_change_3d_functor(vil_image_view<float> &change_image, float prob_ratio)
+  boxm_change_3d_functor(vil_image_view<float> const& change_image, float prob_ratio)
     : change_image_(change_image),
-    vis_img_(change_image.ni(),change_image.nj(), 1),
-    alpha_integral_(change_image.ni(),change_image.nj(), 1), 
-    prob_ratio_(prob_ratio)
-    {
-      vis_img_.fill(1.0f);
-      alpha_integral_.fill(0.0f);
-    
-      //only reads info from the scene
-      scene_read_only_=true;
-      //needs to write aux
-      is_aux_=true;
+      vis_img_(change_image.ni(),change_image.nj(), 1),
+      alpha_integral_(change_image.ni(),change_image.nj(), 1),
+      prob_ratio_(prob_ratio)
+  {
+    vis_img_.fill(1.0f);
+    alpha_integral_.fill(0.0f);
+
+    //only reads info from the scene
+    scene_read_only_=true;
+    //needs to write aux
+    is_aux_=true;
   }
 
   inline bool step_cell(unsigned int i, unsigned int j, vgl_point_3d<double> s0, vgl_point_3d<double> s1, boxm_sample<APM>& cell_value, boxm_scalar_sample<float>& scalar)
   {
-
     // compute segment length
     const float seg_len = (float)(s1 - s0).length();
 
@@ -49,21 +48,21 @@ public:
     float back_prob = change_image_(i,j);
     float fore_prob = 1.0f/(1.0f + prob_ratio_*back_prob);
 
-    // set change prob in auxillary voxel
+    // set change prob in auxiliary voxel
     scalar.scalar_sum_ += Omega * fore_prob * seg_len;
 
-    // update visibility probabilty
+    // update visibility probability
     vis_img_(i,j) = vis_prob_end;
 
     return true;
   }
 
-public:
+ public:
   bool scene_read_only_;
   bool is_aux_;
 
-private:
-  vil_image_view<float>& change_image_; 
+ private:
+  vil_image_view<float> change_image_;
   vil_image_view<float> alpha_integral_;
   vil_image_view<float> vis_img_;
   float prob_ratio_;
@@ -86,7 +85,7 @@ void boxm_change_3d(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   // set up the raytrace function
   boxm_raytrace_function<change_functor,T_loc, T_data, sample_datatype> raytracer_chng(scene,aux_scene,cam.ptr(),change_image.ni(),change_image.nj());
 
-  // construct the change probability functor 
+  // construct the change probability functor
   change_functor chng_func(change_image, prob_ratio);
 
   // run the functor over the octree
