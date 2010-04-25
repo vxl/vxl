@@ -9,23 +9,6 @@
 #include <vnl/vnl_det.h>
 #include <vcl_iostream.h>
 
-template <class Type>
-vgl_orient_box_3d<Type>::vgl_orient_box_3d(vgl_box_3d<Type> box)
-: box_(box)
-{
-  vnl_vector_fixed<double,3> axis;
-  axis[0] = 0.0; axis[1] = 0.0; axis[2]=1.0;
-  double angle = 0.0;
-
-  orient_ = vnl_quaternion<double> (axis, angle);
-}
-
-template <class Type>
-vgl_orient_box_3d<Type>::vgl_orient_box_3d(vgl_box_3d<Type> box, vnl_quaternion<double> orient)
-: box_(box), orient_(orient)
-{
-}
-
 //: constructor from four corner points.
 //  The three directions from the first of these to the three other points must be mutually orthogonal.
 template <class Type>

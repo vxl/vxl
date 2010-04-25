@@ -28,10 +28,13 @@ class vgl_orient_box_3d
   vgl_orient_box_3d() {}
 
   //: constructor with only box definition, the direction will be set to (0,0,1) with no rotation
-  vgl_orient_box_3d(vgl_box_3d<Type> box);
+  vgl_orient_box_3d(vgl_box_3d<Type> const& box)
+  : box_(box), orient_(vnl_quaternion<double>(vnl_vector_fixed<double,3>(0.0,0.0,1.0), 0.0)) {}
 
   //: constructor with box and the orientation
-  vgl_orient_box_3d(vgl_box_3d<Type> box, vnl_quaternion<double> orient);
+  vgl_orient_box_3d(vgl_box_3d<Type> const& box, vnl_quaternion<double> const& orient)
+  : box_(box), orient_(orient) {}
+
 
   //: constructor from four corner points.
   //  The three directions from the first of these to the three other points must be mutually orthogonal.
@@ -54,8 +57,7 @@ class vgl_orient_box_3d
   bool contains(Type const& x, Type const& y, Type const& z) const;
 
   //: Return true if point is inside this box
-  bool contains(vgl_point_3d<Type> const& p) const
-    {return contains(p.x(), p.y(), p.z());}
+  bool contains(vgl_point_3d<Type> const& p) const {return contains(p.x(), p.y(), p.z());}
 
   vcl_ostream& print(vcl_ostream& s) const;
 
