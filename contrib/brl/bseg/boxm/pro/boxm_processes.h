@@ -12,6 +12,7 @@ DECLARE_FUNC_CONS(boxm_create_scene_process);
 DECLARE_FUNC_CONS(boxm_update_process);
 DECLARE_FUNC_CONS(boxm_refine_scene_process);
 DECLARE_FUNC_CONS(boxm_roi_init_process);
+DECLARE_FUNC_CONS(boxm_roi_init_rational_camera_process);
 DECLARE_FUNC_CONS(boxm_volume_visibility_process);
 DECLARE_FUNC_CONS(boxm_proj_local_cam_process);
 DECLARE_FUNC_CONS(boxm_camera_viewing_scene_process);
