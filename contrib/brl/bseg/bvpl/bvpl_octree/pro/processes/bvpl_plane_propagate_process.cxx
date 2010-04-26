@@ -28,6 +28,39 @@
 #include <bvpl/bvpl_kernel_iterator.h>
 #include <bvpl/bvpl_kernel.h>
 #include <bvpl/bvpl_octree/bvpl_octree_neighbors.h>
+#include <vcl_set.h>
+
+struct ltstr
+{
+  bool operator()(const boxm_plane_obs<float> & p1, const boxm_plane_obs<float> & p2) const
+  {
+      if(p1.plane_.a()<p2.plane_.a())
+          return true;
+      else if(p1.plane_.a()>p2.plane_.a())
+          return false;
+      else 
+      {
+          if(p1.plane_.b()<p2.plane_.b())
+              return true;
+          else if(p1.plane_.b()>p2.plane_.b())
+              return false;
+          else 
+          {
+              if(p1.plane_.c()<p2.plane_.c())
+                  return true;
+              else if(p1.plane_.c()>p2.plane_.c())
+                  return false;
+              else 
+              {
+                  if(p1.plane_.d()<p2.plane_.d())
+                      return true;
+                  else 
+                      return false;
+              }
+          }
+      }
+  }
+};
 
 namespace bvpl_plane_propagate_process_globals
 {
@@ -86,9 +119,8 @@ bool bvpl_plane_propagate_process(bprb_func_process& pro)
   vcl_string block_prefix = pro.get_input<vcl_string>(2);
   vcl_string scene_filename = pro.get_input<vcl_string>(3);
   boxm_scene_base_sptr output_scene_sptr;
-  
   // only applies to the edge_line type of scenes
-  if (scene_base->appearence_model() == BOXM_EDGE_LINE) {
+  if (scene_base->appearence_model() == BOXM_EDGE_TANGENT_LINE) {
     typedef boct_tree<short,boxm_edge_tangent_sample<float> > tree_type;
     typedef boct_tree_cell<short,boxm_edge_tangent_sample<float> > cell_type;
     boxm_scene<tree_type> *scene=dynamic_cast<boxm_scene<tree_type>*>(scene_base.ptr());
@@ -126,7 +158,6 @@ bool bvpl_plane_propagate_process(bprb_func_process& pro)
       boxm_block<tree_type>* output_block = *output_iter;
 
       tree_type* tree = block->get_tree();
-      tree->print();
       vcl_vector<cell_type *> cells = tree->leaf_cells();
 
       tree_type* output_tree=tree->clone();
@@ -138,21 +169,29 @@ bool bvpl_plane_propagate_process(bprb_func_process& pro)
         cell_type *output_cell=output_cells[i];
         vcl_vector<cell_type *> neighb_cells;
         oper.neighbors(kernel, cells[i], neighb_cells);
+        vcl_set<boxm_plane_obs<float>,ltstr> planes;
 
         for (unsigned n=0; n<neighb_cells.size(); n++) {
           cell_type *neighbor = neighb_cells[n];
           boct_loc_code<short> cell_code=cell->code_;
           boct_loc_code<short> n_code = neighbor->code_;
           bool itself = n_code.isequal(&cell_code);
-          // do not include itself in the list
-          if (!itself) {
-            vcl_vector<boxm_plane_obs<float> > observations = neighbor->data().obs_list();
-            boxm_edge_tangent_sample<float> data=output_cell->data();
-            data.insert(observations);
-            output_cell->set_data(data);
-          }
+         if (!itself) {
+             vcl_vector<boxm_plane_obs<float> > observations = neighbor->data().obs_list();
+             boxm_edge_tangent_sample<float> data=output_cell->data();
+             data.insert(observations);
+             output_cell->set_data(data);
+            }
         }
       }
+      //  vcl_set<boxm_plane_obs<float>,ltstr >::iterator iter1=planes.begin();
+      //  boxm_edge_tangent_sample<float> data;
+      //  for(;iter1!=planes.end();iter1++)
+      //  {
+      //      data.insert(*iter1);
+      //  }
+      //  output_cell->set_data(data);
+      //}
       output_block->delete_tree();
       output_block->set_tree(output_tree);
       output_scene->write_active_block();
