@@ -16,7 +16,7 @@ class boxm_edge_tangent_updater
 public:
 
   boxm_edge_tangent_updater(boxm_scene<boct_tree<T_loc, boxm_inf_line_sample<APM> > > &scene, 
-                            vcl_vector<vcl_string> const& image_ids, bool use_ransac);
+                            vcl_vector<vcl_string> const& image_ids, bool use_ransac=false);
 
   ~boxm_edge_tangent_updater(){}
 
