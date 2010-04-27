@@ -10,6 +10,8 @@
 
 #include <testlib/testlib_test.h>
 #include <boxm/algo/boxm_plane_ransac.h>
+#include <boxm/boxm_plane_obs.h>
+#include <boxm/boxm_edge_tangent_sample.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_infinite_line_3d.h>
 #include <vnl/vnl_random.h>
@@ -25,7 +27,7 @@ static void test_boxm_plane_ransac()
   vgl_point_3d<float> p2(30,20,10);
   vgl_infinite_line_3d<float> line(p1,p2);
 
-  vcl_vector<vgl_plane_3d<float> > planes;
+  vcl_vector<boxm_edge_tangent_sample<float> > planes;
   vnl_random rand;
   // get two points from the line, and create a random 3rd point to define a plane
   unsigned i;
@@ -35,7 +37,10 @@ static void test_boxm_plane_ransac()
     float z=float(rand.drand32()*100);
     vgl_point_3d<float> p3(x,y,z);
     vgl_plane_3d<float> plane(p1,p2,p3);
-    planes.push_back(plane);
+    boxm_plane_obs<float> obs(plane,1);
+    boxm_edge_tangent_sample<float> sample;
+    sample.insert(obs);
+    planes.push_back(sample);
   }
 
   // add the random planes
@@ -45,14 +50,18 @@ static void test_boxm_plane_ransac()
     float c=float(rand.drand32()*100);
     float d=float(rand.drand32()*100);
     vgl_plane_3d<float> plane(a,b,c,d);
-    planes.push_back(plane);
+    boxm_plane_obs<float> obs(plane,1);
+    boxm_edge_tangent_sample<float> sample;
+    sample.insert(obs);
+    planes.push_back(sample);
   }
 
   vcl_vector<float> weights(test_set,1);
   int threshold=2;
   float residual;
   vgl_infinite_line_3d<float> l;
-  boxm_plane_ransac(planes, weights, l, residual, threshold);
+  vgl_box_3d<double> cell_global_box(0,0,0,1,1,1);
+  boxm_plane_ransac<float>(planes, weights, l, residual, cell_global_box, threshold);
 
   bool good=(line==l);
 
