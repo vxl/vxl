@@ -275,6 +275,11 @@ MANPAGE_SOURCES += win32-vc70/vcl_complex.h
 MANPAGE_SOURCES += win32-vc70/vcl_cstdlib.h
 MANPAGE_SOURCES += win32-vc70/vcl_valarray.h
 
+MANPAGE_SOURCES += win32-vc8/vcl_cstdlib.h
+MANPAGE_SOURCES += win32-vc8/vcl_valarray.h
+MANPAGE_SOURCES += win32-vc8/vcl_complex.h
+MANPAGE_SOURCES += win32-vc8/vcl_cmath.h
+
 MANPAGE_SOURCES += borland55/vcl_cfloat.h
 MANPAGE_SOURCES += borland55/vcl_cmath.h
 MANPAGE_SOURCES += borland55/vcl_complex.h
