@@ -35,7 +35,6 @@
 #include <vil/vil_crop.h>
 #include <vil/file_formats/vil_nitf2_image.h>
 #include <vil/vil_image_view_base.h>
-#include <vil/vil_load.h>
 #include <vpgl/vpgl_local_rational_camera.h>
 #include <vpgl/bgeo/bgeo_lvcs_sptr.h>
 
@@ -49,9 +48,9 @@ namespace boxm_roi_init_process_globals
 
   //functions
   bool roi_init(vcl_string img_path,
-                 vpgl_camera_double_sptr camera,
-                 vgl_box_3d<double> box,
-                 vil_image_view<unsigned char> & roi_img);
+                vpgl_camera_double_sptr camera,
+                vgl_box_3d<double> box,
+                vil_image_view<unsigned char> & roi_img);
 
   //: projects the box on the image by taking the union of all the projected corners
   vgl_box_2d<double>* project_box(vpgl_camera_double_sptr cam,
@@ -93,7 +92,6 @@ bool boxm_roi_init_process(bprb_func_process& pro)
     return false;
   }
 
-
   // get the inputs:
   unsigned i = 0;
   // image
@@ -105,9 +103,9 @@ bool boxm_roi_init_process(bprb_func_process& pro)
 
   vil_image_view_base_sptr img_ptr=vil_load(image_path.c_str());
   vil_image_view<unsigned char> *temp=new vil_image_view<unsigned char>();
-  if(img_ptr->pixel_format()==VIL_PIXEL_FORMAT_BYTE)
+  if (img_ptr->pixel_format()==VIL_PIXEL_FORMAT_BYTE)
   {
-    if(vil_image_view<unsigned char> *img=dynamic_cast<vil_image_view<unsigned char> * > (img_ptr.ptr()))
+    if (vil_image_view<unsigned char> *img=dynamic_cast<vil_image_view<unsigned char> * > (img_ptr.ptr()))
     {
         vgl_box_2d<double>* roi_box = project_box(camera, scene->get_world_bbox());
         brip_roi broi(img->ni(), img->nj());
@@ -127,7 +125,7 @@ bool boxm_roi_init_process(bprb_func_process& pro)
     }
   }
   if (temp->ni() == 0 || temp->nj() == 0)
-      return false;
+    return false;
 
   //Store outputs
   unsigned j = 0;
@@ -136,21 +134,21 @@ bool boxm_roi_init_process(bprb_func_process& pro)
   // store image output
   pro.set_output_val<vil_image_view_base_sptr>(j++, temp);
   // store uncertainty
-  pro.set_output_val<float>(j++, 0);  
+  pro.set_output_val<float>(j++, 0);
 
   return true;
 }
+
 //: roi_init function
 bool boxm_roi_init_process_globals::roi_init(vcl_string  img_path,
                                              vpgl_camera_double_sptr camera,
                                              vgl_box_3d<double> box,
                                              vil_image_view<unsigned char> & roi_img)
 {
-
   vil_image_view_base_sptr img_ptr=vil_load(img_path.c_str());
-  if(img_ptr->pixel_format()==VIL_PIXEL_FORMAT_BYTE)
+  if (img_ptr->pixel_format()==VIL_PIXEL_FORMAT_BYTE)
   {
-    if(vil_image_view<unsigned char> *img=dynamic_cast<vil_image_view<unsigned char> * > (img_ptr.ptr()))
+    if (vil_image_view<unsigned char> *img=dynamic_cast<vil_image_view<unsigned char> * > (img_ptr.ptr()))
     {
         vgl_box_2d<double>* roi_box = project_box(camera, box);
         brip_roi broi(img->ni(), img->nj());
@@ -163,19 +161,19 @@ bool boxm_roi_init_process_globals::roi_init(vcl_string  img_path,
             return false;
         }
 
-         vil_image_view<unsigned char> temp=vil_crop(*img,(unsigned int)bb->get_min_x(),
-                                                            (unsigned int)bb->width(),
-                                                            (unsigned int)bb->get_min_y(),
-                                                            (unsigned int)bb->height());
+         vil_image_view<unsigned char> temp=vil_crop(*img,
+                                                     (unsigned int)bb->get_min_x(),
+                                                     (unsigned int)bb->width(),
+                                                     (unsigned int)bb->get_min_y(),
+                                                     (unsigned int)bb->height());
         roi_img=temp;
         return true;
     }
-    else 
-    return false;
-
+    else
+      return false;
   }
-
 }
+
 //: project_box function
 vgl_box_2d<double>* boxm_roi_init_process_globals::project_box( vpgl_camera_double_sptr cam,
                                                                 vgl_box_3d<double> box)
@@ -189,7 +187,7 @@ vgl_box_2d<double>* boxm_roi_init_process_globals::project_box( vpgl_camera_doub
       double u,v;
       cam->project(box_corners[i].x(),box_corners[i].y(),box_corners[i].z(),u,v);
       vgl_point_2d<double> p2d(u,v);
-      vcl_cout<<u<<" "<<v<<"\n";
+      vcl_cout<<u<<' '<<v<<'\n';
       roi->add(p2d);
   }
   return roi;
