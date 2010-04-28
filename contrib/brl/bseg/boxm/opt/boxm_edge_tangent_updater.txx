@@ -66,6 +66,8 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
       aux_readers[i] = aux_scenes[i].get_block_incremental(iter.index());
       aux_samples_num[i] = 0;
     }
+    //int a;
+    //vcl_cin>>a;
     // iterate over cells
     for (unsigned i=0; i<cells.size(); ++i)
     {
@@ -110,29 +112,15 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
         }
         nums+=planes.size();
         if (planes.size() > 1) {
+          
           if (use_ransac_) {
 			vgl_infinite_line_3d<AUX> line;
 			float residual=1e5;
 			vgl_box_3d<double> bb = tree->cell_bounding_box(cell);
 
-		    if (boxm_plane_ransac<AUX>(aux_samples, weights, line, residual,bb, 2)) {
+		    if (boxm_plane_ransac<AUX>(aux_samples, weights, line, residual,bb, 3)) {
 				boxm_inf_line_sample<AUX> data(line,aux_samples.size());
 				data.residual_=residual;
-				// convert to line type (from float to double)
-				vgl_vector_2d<double> x0(line.x0().x(), line.x0().y());
-				vgl_vector_3d<double> dir(line.direction().x(), line.direction().y(), line.direction().z());
-				vgl_infinite_line_3d<double> dline(x0,dir);
-				vgl_point_3d<double> p0,p1;
-
-				if (vgl_intersection<double>(bb, dline, p0, p1))
-				{
-				  data.line_clipped_=vgl_line_3d_2_points<float>(vgl_point_3d<float>(p0.x(),p0.y(),p0.z()),vgl_point_3d<float>(p1.x(),p1.y(),p1.z()));
-				}
-				else
-				{
-				  data.num_obs_=0;
-				}
-			
                 cell->set_data(data);
              }
              else 
