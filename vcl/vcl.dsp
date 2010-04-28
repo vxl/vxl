@@ -1146,6 +1146,18 @@ SOURCE=.\win32-vc70/vcl_cstdlib.h
 SOURCE=.\win32-vc70/vcl_valarray.h
 # End Source File
 # Begin Source File
+SOURCE=.\win32-vc8/vcl_cstdlib.h
+# End Source File
+# Begin Source File
+SOURCE=.\win32-vc8/vcl_valarray.h
+# End Source File
+# Begin Source File
+SOURCE=.\win32-vc8/vcl_complex.h
+# End Source File
+# Begin Source File
+SOURCE=.\win32-vc8/vcl_cmath.h
+# End Source File
+# Begin Source File
 SOURCE=.\borland55/vcl_cfloat.h
 # End Source File
 # Begin Source File
