@@ -109,7 +109,7 @@ bool boxm_render_expected_edge_vrml_process(bprb_func_process& pro)
                       vgl_vector_2d<double> x0(line.x0().x(), line.x0().y());
           // TODO: revise with segment length
           if (!(line.x0().x()==0 && line.x0().y()==0)) {
-              if(data.num_obs_ > threshold)
+              //if(data.num_obs_ > threshold)
               {
                   vgl_point_3d<double> p0,p1;
                   vgl_box_3d<double> bb = tree->cell_bounding_box(cell);
@@ -123,8 +123,9 @@ bool boxm_render_expected_edge_vrml_process(bprb_func_process& pro)
                       dir/=length;
                       if(data.residual_<0.2)
                       {
+                          vcl_cout<<data.residual_<<" ";
                       bvrml_write::write_vrml_line(stream, p0,dir,length,1.f,0.f,0.f);
-                      bvrml_write::write_vrml_disk(stream,p0,dir,data.residual_,0.f,1.0f,0.f);
+                      //bvrml_write::write_vrml_disk(stream,p0,dir,data.residual_,0.f,1.0f,0.f);
                       }
                   }
               }
