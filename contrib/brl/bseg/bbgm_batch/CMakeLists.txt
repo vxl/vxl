@@ -35,12 +35,15 @@ IF( PYTHON_FOUND )
           #library has to have different name depending on debug or release version.
           SET_TARGET_PROPERTIES(bbgm_batch PROPERTIES OUTPUT_NAME bbgm_batch DEBUG_POSTFIX _d SUFFIX .pyd)
         ENDIF(WIN32)
-		SET_TARGET_PROPERTIES(bbgm_batch PROPERTIES PREFIX "")
-		IF(NOT WIN32)
-        SET_TARGET_PROPERTIES(bbgm_batch PROPERTIES COMPILE_FLAGS "-fPIC")
-		MESSAGE("NOT LINUX")
-		ENDIF(NOT WIN32)
-        TARGET_LINK_LIBRARIES(bbgm_batch bprb brdb bpro_batch bbgm_pro vbl vidl_pro vil_io vil_pro) 
+
+        SET_TARGET_PROPERTIES(bbgm_batch PROPERTIES PREFIX "")
+        IF(NOT WIN32)
+          SET_TARGET_PROPERTIES(bbgm_batch PROPERTIES COMPILE_FLAGS "-fPIC")
+        ENDIF(NOT WIN32)
+        TARGET_LINK_LIBRARIES(bbgm_batch 
+                              bprb brdb bpro_batch bbgm_pro 
+                              vidl_pro vil_pro 
+                              vbl vil_io vil_io) 
       
         IF (PYTHON_DEBUG_LIBRARIES)
           TARGET_LINK_LIBRARIES( bbgm_batch debug ${PYTHON_DEBUG_LIBRARY})
@@ -49,8 +52,7 @@ IF( PYTHON_FOUND )
         IF(PYTHON_LIBRARIES)
           TARGET_LINK_LIBRARIES( bbgm_batch optimized ${PYTHON_LIBRARY})
         ENDIF(PYTHON_LIBRARIES)
-    ENDIF(GEOTIFF_FOUND )
-      ENDIF(TIFF_FOUND ) 
-
+      ENDIF(GEOTIFF_FOUND )
+    ENDIF(TIFF_FOUND ) 
   ENDIF( EXPAT_FOUND ) 
 ENDIF( PYTHON_FOUND )
