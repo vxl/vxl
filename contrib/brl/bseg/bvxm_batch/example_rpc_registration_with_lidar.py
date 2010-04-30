@@ -174,8 +174,7 @@ for i in range(0,len(image_fnames),1):
     bvxm_batch.set_input_from_db(2,cropped_edge_image);
     bvxm_batch.set_input_bool(3,0);
     bvxm_batch.set_input_from_db(4,uncertainty);
-    bvxm_batch.set_input_float(5,0);
-    bvxm_batch.set_input_unsigned(6,0);
+    bvxm_batch.set_input_unsigned(5,0);
     bvxm_batch.run_process();
     (cam_id,cam_type) = bvxm_batch.commit_output(0);
     cam = dbvalue(cam_id,cam_type);

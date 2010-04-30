@@ -121,15 +121,9 @@ for i in range(0,len(image_fnames),1):
       bvxm_batch.set_input_from_db(0,world);
       bvxm_batch.set_input_from_db(1,cropped_cam);
       bvxm_batch.set_input_from_db(2,cropped_edge_image);
-      if i==0:
-        bvxm_batch.set_input_float(3,0);
-      else:
-        bvxm_batch.set_input_from_db(3,n_normal);
-      bvxm_batch.set_input_unsigned(4,0);
+      bvxm_batch.set_input_unsigned(3,0);
       bvxm_batch.set_params_process("./bvxmUpdateEdgesProcess.xml");
       bvxm_batch.run_process();
-      (n_normal_id,n_normal_type) = bvxm_batch.commit_output(0);
-      n_normal = dbvalue(n_normal_id,n_normal_type);
     else:
       bvxm_batch.init_process("bvxmRpcRegistrationProcess");
       bvxm_batch.set_input_from_db(0,world);
@@ -137,8 +131,7 @@ for i in range(0,len(image_fnames),1):
       bvxm_batch.set_input_from_db(2,cropped_edge_image);
       bvxm_batch.set_input_bool(3,0);
       bvxm_batch.set_input_from_db(4,uncertainty);
-      bvxm_batch.set_input_from_db(5,n_normal);
-      bvxm_batch.set_input_unsigned(6,0);
+      bvxm_batch.set_input_unsigned(5,0);
       bvxm_batch.run_process();
       (cam_id,cam_type) = bvxm_batch.commit_output(0);
       cam = dbvalue(cam_id,cam_type);
