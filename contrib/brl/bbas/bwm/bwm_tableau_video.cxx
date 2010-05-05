@@ -102,6 +102,11 @@ void bwm_tableau_video::toggle_world_pt_display()
 {
   my_observer_->toggle_world_pt_display();
 }
+void bwm_tableau_video::display_selected_world_pt()
+{
+  my_observer_->display_selected_world_pt();
+}
+
 void bwm_tableau_video::extract_world_plane()
 {
   vcl_string path = "";

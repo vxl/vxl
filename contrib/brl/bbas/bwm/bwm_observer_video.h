@@ -90,6 +90,8 @@ class bwm_observer_video : public bwm_observer_cam
   //: turn on/off world point display
   void toggle_world_pt_display(){display_world_pts_ = !display_world_pts_;}
 
+  void display_selected_world_pt();
+
   //: extract a 3-d plane from three selected correspondences with world pts
   bool extract_world_plane(vgl_plane_3d<double>&  plane);
 

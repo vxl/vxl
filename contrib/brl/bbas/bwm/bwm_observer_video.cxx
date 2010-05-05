@@ -195,6 +195,7 @@ void bwm_observer_video::display_current_frame()
     this->clear_video_corrs_display();
       this->display_corr_track();
   }
+
   this->display_corr_index();
 }
 
@@ -591,7 +592,42 @@ void bwm_observer_video::display_corr_track()
       this->display_projected_3d_point(c);
   }
 }
-
+void bwm_observer_video::display_selected_world_pt()
+{
+	vcl_vector<vgui_soview2D*> selected =
+		this->get_selected_objects("bwm_soview2D_cross");
+  if (selected.size()<1) {
+    vcl_cerr << "Select 2-d points\n";
+    return ;
+  }
+  vcl_vector<bwm_video_corr_sptr> corrs;
+  unsigned frame;
+  unsigned corr_index;
+  for (vcl_vector<vgui_soview2D*>::iterator cit = selected.begin();
+       cit != selected.end(); ++cit)
+  {
+    bwm_soview2D_cross* cross = static_cast<bwm_soview2D_cross*>(*cit);
+    if (!cross) return ;
+   vcl_map<unsigned, vcl_map<unsigned, bwm_soview2D_cross*> >::iterator fit=
+     corr_soview_map_.begin();
+    bool found = false;
+    for (; fit != corr_soview_map_.end()&&!found; ++fit)
+      for (vcl_map<unsigned, bwm_soview2D_cross*>::iterator mit = (*fit).second.begin();
+           mit != (*fit).second.end()&&!found; ++mit)
+    if ((*mit).second == cross)
+    {
+      found = true;
+      frame = (*fit).first;
+      corr_index = (*mit).first;
+    }
+    if (!found)
+      return ;
+    bwm_video_corr_sptr corr = video_corrs_[corr_index];
+    if (!corr)
+      return ;
+    this->display_projected_3d_point(corr);
+  }
+}
 
 // clear the entire display map
 void bwm_observer_video::clear_display_map()

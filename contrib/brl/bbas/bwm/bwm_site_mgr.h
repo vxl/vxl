@@ -54,6 +54,11 @@ class bwm_site_mgr
   vcl_string camera_path_, video_path_;
   vul_timer timer_;
 
+  double xmin_;   double ymin_;   double zmin_;  double res_;
+  double xmax_;   double ymax_;   double zmax_;	 bool defaultparam_;
+	
+
+
   void create_site_dialog(vgui_dialog_extensions &site_dialog,
                           vcl_string &site_name,
                           vcl_string &site_dir,

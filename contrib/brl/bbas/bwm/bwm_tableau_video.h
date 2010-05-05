@@ -40,6 +40,7 @@ class bwm_tableau_video : public bwm_tableau_cam
   void display_current_video_corrs();
   void clear_video_corrs_display();
   void toggle_world_pt_display();
+  void display_selected_world_pt();
   void extract_world_plane();
   void extract_neighborhoods();
   void extract_histograms();

@@ -28,6 +28,7 @@
 #include <vul/vul_string.h>
 
 #include <vgui/vgui_tableau_sptr.h>
+#include <vgl/vgl_box_3d.h>
 
 bwm_site_mgr* bwm_site_mgr::instance_ = 0;
 
@@ -136,6 +137,8 @@ void bwm_site_mgr::create_site_dialog(vgui_dialog_extensions &site_dialog,
   site_dialog.line_break();
   site_dialog.set_ok_button("CREATE");
 }
+
+
 
 //: create a dialog box to create site to add images, objects, etc..
 void bwm_site_mgr::create_site()
@@ -920,7 +923,7 @@ static void write_vrml_header(vcl_ofstream& str)
 }
 
 static void write_vrml_points(vcl_ofstream& str,
-                              vcl_vector<vgl_point_3d<double> > const& pts3d)
+                              vcl_vector<vgl_point_3d<double> > const& pts3d, double rad=2.0)
 {
   int n = pts3d.size();
   for (int i =0; i<n; i++)
@@ -938,7 +941,7 @@ static void write_vrml_points(vcl_ofstream& str,
       << "  }\n"
       << " geometry Sphere\n"
       <<   "{\n"
-      << "  radius " << 2.0 << '\n'
+      << "  radius " << rad << '\n'
       <<  "   }\n"
       <<  "  }\n"
       <<  " ]\n"
@@ -947,7 +950,7 @@ static void write_vrml_points(vcl_ofstream& str,
 
 static void
 write_vrml_cameras(vcl_ofstream& str,
-                   vcl_vector<vpgl_perspective_camera<double> > const& cams)
+                   vcl_vector<vpgl_perspective_camera<double> > const& cams, double rad=2.0)
 {
   str << "#VRML V2.0 utf8\n"
       << "Background {\n"
@@ -965,27 +968,30 @@ write_vrml_cameras(vcl_ofstream& str,
       << " appearance Appearance{\n"
       << "   material Material\n"
       << "    {\n"
-      << "      diffuseColor " << 0 << ' ' << 1.0 << ' ' << 0.0 << '\n'
+      << "      diffuseColor " << 1 << ' ' << 1.0 << ' ' << 0.0 << '\n'
       << "      transparency " << 0.0 << '\n'
       << "    }\n"
       << "  }\n"
       << " geometry Sphere\n"
       <<   "{\n"
-      << "  radius " << 3.0 << '\n'
+      << "  radius " << rad << '\n'
       <<  "   }\n"
       <<  "  }\n"
       <<  " ]\n"
       << "}\n";
   vgl_vector_3d<double> r = cams[i].principal_axis();
+  vcl_cout<<"principal axis :" <<r<<vcl_endl;
   vnl_double_3 yaxis(0.0, 1.0, 0.0), pvec(r.x(), r.y(), r.z());
   vgl_rotation_3d<double> rot(yaxis, pvec);
   vnl_quaternion<double> q = rot.as_quaternion();
+  
   vnl_double_3 axis = q.axis();
+  vcl_cout<<"quaternion "<<axis<< " angle "<<q.angle()<<vcl_endl;
+  vcl_cout<<"\n";
   double ang = q.angle();
-  double rad = 15.0;
   str <<  "Transform {\n"
-      << " translation " << cent.x()+ rad*r.x() << ' ' << cent.y()+rad*r.y()
-      << ' ' << cent.z()+rad*r.z() << '\n'
+      << " translation " << cent.x()+6*rad*r.x() << ' ' << cent.y()+6*rad*r.y()
+      << ' ' << cent.z()+6*rad*r.z() << '\n'
       << " rotation " << axis[0] << ' ' << axis[1] << ' ' << axis[2] << ' ' <<  ang << '\n'
       << "children [\n"
       << " Shape {\n"
@@ -998,15 +1004,45 @@ write_vrml_cameras(vcl_ofstream& str,
       << "  }\n"
       << " geometry Cylinder\n"
       << "{\n"
-      << " radius 1.00000\n"
-      << " height " << 2*rad << '\n'
+      << " radius "<<rad/3<<"\n"
+      << " height " << 12*rad << '\n'
       << " }\n"
       << " }\n"
       << "]\n"
       << "}\n";
     }
+ 
 }
-
+static void
+write_vrml_box(vcl_ofstream& str,vgl_box_3d<double> box)
+{
+  str << "#VRML V2.0 utf8\n"
+      << "Background {\n"
+      << "  skyColor [ 0 0 0 ]\n"
+      << "  groundColor [ 0 0 0 ]\n"
+      << "}\n"
+      << "Transform {\n"
+      << "translation " << box.centroid_x() << ' ' << box.centroid_y() << ' '
+      << ' ' << box.centroid_z() << '\n'
+      << "children [\n"
+      << "Shape {\n"
+      << " appearance Appearance{\n"
+      << "   material Material\n"
+      << "    {\n"
+      << "      diffuseColor " << 1 << ' ' << 1.0 << ' ' << 0.0 << '\n'
+      << "      transparency " << 0.0 << '\n'
+      //<< "		filled FALSE \n"
+	  << "    }\n"
+      << "  }\n"
+      << " geometry Box\n"
+      <<   "{\n"
+      << "  size " << box.width() <<' '<<box.depth()<<' '<<box.height()<< '\n'
+      <<  "   }\n"
+      <<  "  }\n"
+      <<  " ]\n"
+      << "}\n";
+ 
+}
 static void save_video_world_points_vrml_impl(vcl_ofstream& os)
 {
   bool found = false;
@@ -1043,7 +1079,43 @@ static void save_video_world_points_vrml_impl(vcl_ofstream& os)
   write_vrml_header(os);
   write_vrml_points(os, pts);
 }
+static void save_video_world_points_vrml_impl(vcl_ofstream& os, vgl_box_3d<double> & box, double res)
+{
+  bool found = false;
+  vcl_vector<bwm_observer_cam*> obsvs =
+    bwm_observer_mgr::instance()->observers_cam();
+  bwm_observer_video* obv = 0;
 
+  for (vcl_vector<bwm_observer_cam*>::iterator oit = obsvs.begin();
+       oit != obsvs.end()&&!found; ++oit)
+    if ((*oit)->type_name()=="bwm_observer_video")
+    {
+      obv = static_cast<bwm_observer_video*>(*oit);
+      found =true;
+    }
+
+  if (!found)
+  {
+    vcl_cerr << "In bwm_site_mgr::save_video_world_points_vrml() - "
+             << " no observer of type video\n";
+    return;
+  }
+  vcl_vector<vgl_point_3d<double> > pts;
+  vcl_vector<bwm_video_corr_sptr> corrs = obv->corrs();
+  for (vcl_vector<bwm_video_corr_sptr>::iterator cit = corrs.begin();
+       cit!= corrs.end(); ++cit)
+  {
+    bwm_video_corr_sptr corr = *cit;
+    if (!corr || !corr->world_pt_valid()) continue;
+    vgl_point_3d<double> pt = corr->world_pt();
+	if(box.contains(pt))
+		pts.push_back(pt);
+  }
+  if (!pts.size())
+    return;
+  write_vrml_header(os);
+  write_vrml_points(os, pts,res);
+}
 void bwm_site_mgr::save_video_world_points_vrml()
 {
   vcl_string ext = ".wrl";
@@ -1099,6 +1171,52 @@ static void save_video_cameras_vrml_impl(vcl_ofstream& os)
   write_vrml_cameras(os, cams);
 }
 
+static void save_video_cameras_vrml_impl(vcl_ofstream& os, vgl_box_3d<double> box, double res)
+{
+  bool found = false;
+  vcl_vector<bwm_observer_cam*> obsvs =
+    bwm_observer_mgr::instance()->observers_cam();
+  bwm_observer_video* obv = 0;
+
+  for (vcl_vector<bwm_observer_cam*>::iterator oit = obsvs.begin();
+       oit != obsvs.end()&&!found; ++oit)
+    if ((*oit)->type_name()=="bwm_observer_video")
+    {
+      obv = static_cast<bwm_observer_video*>(*oit);
+      found =true;
+    }
+
+  if (!found)
+  {
+    vcl_cerr << "In bwm_site_mgr::save_video_cameras_vrml() - "
+             << " no observer of type video\n";
+    return;
+  }
+  bwm_video_cam_istream_sptr cam_istr = obv->camera_stream();
+  if (!cam_istr||!cam_istr->is_valid()||!cam_istr->is_seekable()) {
+    vcl_cerr << "Invalid or non-seekable camera stream\n";
+    return;
+  }
+  //to return to starting state
+  unsigned cam_number = cam_istr->camera_number();
+  cam_istr->seek_camera(0);
+  vcl_vector<vpgl_perspective_camera<double> > cams;
+  while (true) {
+    vpgl_perspective_camera<double>* cam = cam_istr->current_camera();
+	vcl_cout<<cam->get_camera_center();
+	if(box.contains(cam->get_camera_center()))
+		    cams.push_back(*cam);
+
+    if (!cam_istr->advance())
+      break;
+	
+  }
+  //restore the camera stream to initial position
+  cam_istr->seek_camera(cam_number);
+  if (!cams.size())
+    return;
+  write_vrml_cameras(os, cams, res);
+}
 void bwm_site_mgr::save_video_cameras_vrml()
 {
   vcl_string ext = ".wrl";
@@ -1118,12 +1236,31 @@ void bwm_site_mgr::save_video_cams_and_world_pts_vrml()
   vcl_string path;
   vgui_dialog vrml_dialog("Write World Points");
   vrml_dialog.file("VRML file", ext, path);
+  vrml_dialog.checkbox("Default Params for saving ", defaultparam_);
+  vrml_dialog.field("X min:", xmin_);
+  vrml_dialog.field("X max:", xmax_);
+  vrml_dialog.field("Y min:", ymin_);
+  vrml_dialog.field("Y max:", ymax_);
+  vrml_dialog.field("Z min:", zmin_);
+  vrml_dialog.field("Z max:", zmax_);
+  vrml_dialog.field("Resolution", res_);
+
   if (!vrml_dialog.ask())
     return;
+  vgl_box_3d<double> box(xmin_,ymin_,zmin_,xmax_,ymax_,zmax_);
   vcl_ofstream os(path.c_str());
   write_vrml_header(os);
+  if(defaultparam_)
+  {
   save_video_world_points_vrml_impl(os);
   save_video_cameras_vrml_impl(os);
+  }
+  else
+  {
+	  save_video_world_points_vrml_impl(os,box,res_);
+	  save_video_cameras_vrml_impl(os,box,res_*5);
+	  //write_vrml_box(os, box);
+  }
 }
 //: compute 3-d parameters, site bounding box and GSD
 void bwm_site_mgr::compute_3d_world_params()

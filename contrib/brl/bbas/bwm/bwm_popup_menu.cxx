@@ -437,6 +437,10 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
                        new vgui_command_simple<bwm_tableau_video>(video_tab,
                        &bwm_tableau_video::toggle_world_pt_display));
     video_corr_submenu.separator();
+    video_corr_submenu.add( "Project Selected World Point",
+                       new vgui_command_simple<bwm_tableau_video>(video_tab,
+                       &bwm_tableau_video::display_selected_world_pt));
+    video_corr_submenu.separator();
 
     video_corr_submenu.add( "Extract World Plane",
                        new vgui_command_simple<bwm_tableau_video>(video_tab,
