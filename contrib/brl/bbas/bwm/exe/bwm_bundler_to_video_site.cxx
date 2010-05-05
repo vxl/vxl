@@ -170,6 +170,8 @@ int main(int argc, char** argv)
   vul_arg<vcl_string> img_dir   ("-img_dir",     "list of images filenames", "");
   vul_arg<vcl_string> site_name  ("-site_name",    "Name of the site", "");
   vul_arg<vcl_string> site_directory("-site_dir", "Directory for the site", "");
+  vul_arg<vcl_string> cam_txt_dir    ("-cam_txt_dir",      "directory to store txt cams", "");
+
   vul_arg_parse(argc, argv);
 
   //: open the bundler file
@@ -311,6 +313,25 @@ int main(int argc, char** argv)
 	  camstream.write_camera(&cams[i]);
   camstream.close();
 
+  char filename[1024];
+  if(vul_file::is_directory(cam_txt_dir().c_str()))
+  {
+	  for(unsigned i=0;i<num_cams;i++)
+	  {
+
+		  vcl_sprintf(filename,"%s/camera%05d.txt",cam_txt_dir().c_str(),i);
+		  vcl_ofstream ofile(filename);
+		  if(ofile)
+		  {
+			  ofile<<cams[i].get_calibration().get_matrix()<<"\n";
+
+			  ofile<<cams[i].get_rotation().as_matrix()<<"\n";
+
+			  ofile<<cams[i].get_translation().x()<<" "<<cams[i].get_translation().y()<<" "<<cams[i].get_translation().z()<<"\n";
+
+		  }
+	  }
+  }
   bwm_video_site_io site;
   site.set_name(site_name());
   site.set_corrs(corrs);
