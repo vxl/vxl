@@ -10,6 +10,7 @@ include ${VXLROOT}/core/vil/config.mk
 MINI_PROG_SOURCES += bwm_main.cxx
 MINI_PROG_SOURCES += bwm_batch_project.cxx
 MINI_PROG_SOURCES += bwm_batch_project_meshes_to_perspective_video.cxx
+MINI_PROG_SOURCES += bwm_bundler_to_video_site.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk
