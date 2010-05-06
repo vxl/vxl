@@ -1,4 +1,4 @@
-# Microsoft Developer Studio Project File - Name="bwm_exe" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="boxm2_util" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
@@ -7,25 +7,25 @@
 # /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl/bseg" == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
 #  == override in output directory
-# bwm_exe  == name of output library
+# boxm2_util  == name of output library
 
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
 
-CFG=bwm_exe - Win32 Debug
+CFG=boxm2_util - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "bwm_exe.mak".
+!MESSAGE NMAKE /f "boxm2_util.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "bwm_exe.mak" CFG="bmrf - Win32 Debug"
+!MESSAGE NMAKE /f "boxm2_util.mak" CFG="bmrf - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "bwm_exe - Win32 Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "bwm_exe - Win32 Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "boxm2_util - Win32 Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "boxm2_util - Win32 Release" (based on "Win32 (x86) Static Library")
 # Begin Project
 # PROP AllowPerConfigDependencies 0
 # PROP Scc_ProjName ""
@@ -33,7 +33,7 @@ CFG=bwm_exe - Win32 Debug
 CPP=cl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "bwm_exe - Win32 Release"
+!IF  "$(CFG)" == "boxm2_util - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -47,7 +47,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /FD /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl/bseg" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "bwm_exe_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl/bseg" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "boxm2_util_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -59,7 +59,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo
 
-!ELSEIF  "$(CFG)" == "bwm_exe - Win32 Debug"
+!ELSEIF  "$(CFG)" == "boxm2_util - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -73,7 +73,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FD /c
 # ADD CPP /nologo /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /FD /GZ /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl/bseg" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "bwm_exe_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl/bseg" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "boxm2_util_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -87,24 +87,75 @@ LIB32=link.exe -lib
 
 # Begin Target
 
-# Name "bwm_exe - Win32 Release"
-# Name "bwm_exe - Win32 Debug"
+# Name "boxm2_util - Win32 Release"
+# Name "boxm2_util - Win32 Debug"
 
 # Begin Project
 # Begin Target
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\bwm_main.cxx
+SOURCE=.\boxm_raytrace_operations.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\bwm_batch_project.cxx
+SOURCE=.\boxm_triangle_scan_iterator.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\bwm_batch_project_meshes_to_perspective_video.cxx
+SOURCE=.\boxm_rational_camera_utils.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\bwm_bundler_to_video_site.cxx
+SOURCE=.\boxm_quad_scan_iterator.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_utils.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_sigma_normalizer.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_merge_mog.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_triangle_interpolation_iterator+float-.cxx
+# End Source File
+# End Group
+# Begin Group "Header Files"
+# PROP Default_Filter "h;txx"
+# Begin Source File
+SOURCE=.\boxm_quad_scan_iterator.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_triangle_interpolation_iterator.txx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_utils.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_vrml_util.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_triangle_interpolation_iterator.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_merge_mog.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_plane_ransac.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_triangle_scan_iterator.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_rational_camera_utils.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_sigma_normalizer.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_raytrace_operations.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_cell_data_traits.h
 # End Source File
 # End Group
 # End Target
