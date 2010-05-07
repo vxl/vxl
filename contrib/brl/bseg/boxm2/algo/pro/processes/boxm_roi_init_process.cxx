@@ -1,4 +1,4 @@
-// This is brl/bseg/boxm/pro/processes/boxm_roi_init_process.cxx
+// This is brl/bseg/boxm2/algo/pro/processes/boxm_roi_init_process.cxx
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -172,6 +172,8 @@ bool boxm_roi_init_process_globals::roi_init(vcl_string  img_path,
     else
       return false;
   }
+  else // non-supported pixel format
+    return false;
 }
 
 //: project_box function
