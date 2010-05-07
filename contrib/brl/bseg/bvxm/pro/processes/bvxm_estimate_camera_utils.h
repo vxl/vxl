@@ -225,7 +225,7 @@ class bvxm_camera_estimator_amoeba : public vnl_cost_function
                                bvxm_camera_estimator &cest,
                                const vil_image_view<float> &img_e,
                                const vpgl_perspective_camera<double> *cam)
-  : data_(data), cest_(cest), cam_(cam), img_e_(img_e), vnl_cost_function(2)
+  : vnl_cost_function(2), data_(data), cest_(cest), img_e_(img_e), cam_(cam)
   {
     best_score = 0.0;
     best_camera.set_calibration(cam->get_calibration());
