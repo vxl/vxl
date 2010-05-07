@@ -28,7 +28,6 @@
 #include <vul/vul_string.h>
 
 #include <vgui/vgui_tableau_sptr.h>
-#include <vgl/vgl_box_3d.h>
 
 bwm_site_mgr* bwm_site_mgr::instance_ = 0;
 
@@ -137,7 +136,6 @@ void bwm_site_mgr::create_site_dialog(vgui_dialog_extensions &site_dialog,
   site_dialog.line_break();
   site_dialog.set_ok_button("CREATE");
 }
-
 
 
 //: create a dialog box to create site to add images, objects, etc..
@@ -372,7 +370,9 @@ void bwm_site_mgr::edit_site()
   site_edit_dialog.set_ok_button("EDIT");
   if (!site_edit_dialog.ask()) {
     return;
-  } else {
+  }
+  else
+  {
     // check if the level values are integer
 
     // create a removal list for the tableaux that are marked for removal
@@ -688,16 +688,14 @@ void bwm_site_mgr::load_video_site()
   vcl_string site_path = bwm_utils::select_file();
   if (!site_path.size())
   {
-    vcl_cerr << "In bwm_site_mgr::load_video_site() -"
-             << " no site path specified\n";
+    vcl_cerr << "In bwm_site_mgr::load_video_site() - no site path specified\n";
     return;
   }
 
   bwm_video_site_io cio;
   if (!cio.open(site_path))
   {
-    vcl_cerr << "In bwm_site_mgr::load_video_site() -"
-             << " load failed in XML parse\n";
+    vcl_cerr << "In bwm_site_mgr::load_video_site() - load failed in XML parse\n";
     return;
   }
   site_name_ = cio.name();
@@ -736,8 +734,7 @@ void bwm_site_mgr::save_video_site()
 
   if (!found)
   {
-    vcl_cerr << "In bwm_site_mgr::save_video_site() - "
-             << " no observer of type video\n";
+    vcl_cerr << "In bwm_site_mgr::save_video_site() - no observer of type video\n";
     return;
   }
 
@@ -904,7 +901,7 @@ bwm_io_config_parser* bwm_site_mgr::parse_config()
   }
   if (!parser->parseFile(xmlFile)) {
     vcl_cerr << XML_ErrorString(parser->XML_GetErrorCode()) << " at line "
-             << parser->XML_GetCurrentLineNumber() << vcl_endl;
+             << parser->XML_GetCurrentLineNumber() << '\n';
 
     delete parser;
     return 0;
@@ -958,61 +955,60 @@ write_vrml_cameras(vcl_ofstream& str,
       << "  groundColor [ 0 0 0 ]\n"
       << "}\n";
   int n = cams.size();
-  for (int i =0; i<n; i++){
-  vgl_point_3d<double> cent =  cams[i].get_camera_center();
-  str << "Transform {\n"
-      << "translation " << cent.x() << ' ' << cent.y() << ' '
-      << ' ' << cent.z() << '\n'
-      << "children [\n"
-      << "Shape {\n"
-      << " appearance Appearance{\n"
-      << "   material Material\n"
-      << "    {\n"
-      << "      diffuseColor " << 1 << ' ' << 1.0 << ' ' << 0.0 << '\n'
-      << "      transparency " << 0.0 << '\n'
-      << "    }\n"
-      << "  }\n"
-      << " geometry Sphere\n"
-      <<   "{\n"
-      << "  radius " << rad << '\n'
-      <<  "   }\n"
-      <<  "  }\n"
-      <<  " ]\n"
-      << "}\n";
-  vgl_vector_3d<double> r = cams[i].principal_axis();
-  vcl_cout<<"principal axis :" <<r<<vcl_endl;
-  vnl_double_3 yaxis(0.0, 1.0, 0.0), pvec(r.x(), r.y(), r.z());
-  vgl_rotation_3d<double> rot(yaxis, pvec);
-  vnl_quaternion<double> q = rot.as_quaternion();
-  
-  vnl_double_3 axis = q.axis();
-  vcl_cout<<"quaternion "<<axis<< " angle "<<q.angle()<<vcl_endl;
-  vcl_cout<<"\n";
-  double ang = q.angle();
-  str <<  "Transform {\n"
-      << " translation " << cent.x()+6*rad*r.x() << ' ' << cent.y()+6*rad*r.y()
-      << ' ' << cent.z()+6*rad*r.z() << '\n'
-      << " rotation " << axis[0] << ' ' << axis[1] << ' ' << axis[2] << ' ' <<  ang << '\n'
-      << "children [\n"
-      << " Shape {\n"
-      << " appearance Appearance{\n"
-      << "  material Material\n"
-      << "   {\n"
-      << "     diffuseColor 1 0 0\n"
-      << "     transparency 0\n"
-      << "    }\n"
-      << "  }\n"
-      << " geometry Cylinder\n"
-      << "{\n"
-      << " radius "<<rad/3<<"\n"
-      << " height " << 12*rad << '\n'
-      << " }\n"
-      << " }\n"
-      << "]\n"
-      << "}\n";
-    }
- 
+  for (int i =0; i<n; i++) {
+    vgl_point_3d<double> cent =  cams[i].get_camera_center();
+    str << "Transform {\n"
+        << "translation " << cent.x() << ' ' << cent.y() << ' '
+        << ' ' << cent.z() << '\n'
+        << "children [\n"
+        << "Shape {\n"
+        << " appearance Appearance{\n"
+        << "   material Material\n"
+        << "    {\n"
+        << "      diffuseColor " << 1 << ' ' << 1.0 << ' ' << 0.0 << '\n'
+        << "      transparency " << 0.0 << '\n'
+        << "    }\n"
+        << "  }\n"
+        << " geometry Sphere\n"
+        <<   "{\n"
+        << "  radius " << rad << '\n'
+        <<  "   }\n"
+        <<  "  }\n"
+        <<  " ]\n"
+        << "}\n";
+    vgl_vector_3d<double> r = cams[i].principal_axis();
+    vcl_cout<<"principal axis :" <<r<<vcl_endl;
+    vnl_double_3 yaxis(0.0, 1.0, 0.0), pvec(r.x(), r.y(), r.z());
+    vgl_rotation_3d<double> rot(yaxis, pvec);
+    vnl_quaternion<double> q = rot.as_quaternion();
+
+    vnl_double_3 axis = q.axis();
+    vcl_cout<<"quaternion "<<axis<< " angle "<<q.angle()<<"\n\n";
+    double ang = q.angle();
+    str <<  "Transform {\n"
+        << " translation " << cent.x()+6*rad*r.x() << ' ' << cent.y()+6*rad*r.y()
+        << ' ' << cent.z()+6*rad*r.z() << '\n'
+        << " rotation " << axis[0] << ' ' << axis[1] << ' ' << axis[2] << ' ' <<  ang << '\n'
+        << "children [\n"
+        << " Shape {\n"
+        << " appearance Appearance{\n"
+        << "  material Material\n"
+        << "   {\n"
+        << "     diffuseColor 1 0 0\n"
+        << "     transparency 0\n"
+        << "    }\n"
+        << "  }\n"
+        << " geometry Cylinder\n"
+        << "{\n"
+        << " radius "<<rad/3<<'\n'
+        << " height " << 12*rad << '\n'
+        << " }\n"
+        << " }\n"
+        << "]\n"
+        << "}\n";
+  }
 }
+
 static void
 write_vrml_box(vcl_ofstream& str,vgl_box_3d<double> box)
 {
@@ -1031,8 +1027,8 @@ write_vrml_box(vcl_ofstream& str,vgl_box_3d<double> box)
       << "    {\n"
       << "      diffuseColor " << 1 << ' ' << 1.0 << ' ' << 0.0 << '\n'
       << "      transparency " << 0.0 << '\n'
-      //<< "		filled FALSE \n"
-	  << "    }\n"
+      //<< "\t\tfilled FALSE\n"
+      << "    }\n"
       << "  }\n"
       << " geometry Box\n"
       <<   "{\n"
@@ -1041,8 +1037,8 @@ write_vrml_box(vcl_ofstream& str,vgl_box_3d<double> box)
       <<  "  }\n"
       <<  " ]\n"
       << "}\n";
- 
 }
+
 static void save_video_world_points_vrml_impl(vcl_ofstream& os)
 {
   bool found = false;
@@ -1060,8 +1056,7 @@ static void save_video_world_points_vrml_impl(vcl_ofstream& os)
 
   if (!found)
   {
-    vcl_cerr << "In bwm_site_mgr::save_video_world_points_vrml() - "
-             << " no observer of type video\n";
+    vcl_cerr << "In bwm_site_mgr::save_video_world_points_vrml() - no observer of type video\n";
     return;
   }
   vcl_vector<vgl_point_3d<double> > pts;
@@ -1079,6 +1074,7 @@ static void save_video_world_points_vrml_impl(vcl_ofstream& os)
   write_vrml_header(os);
   write_vrml_points(os, pts);
 }
+
 static void save_video_world_points_vrml_impl(vcl_ofstream& os, vgl_box_3d<double> & box, double res)
 {
   bool found = false;
@@ -1096,8 +1092,7 @@ static void save_video_world_points_vrml_impl(vcl_ofstream& os, vgl_box_3d<doubl
 
   if (!found)
   {
-    vcl_cerr << "In bwm_site_mgr::save_video_world_points_vrml() - "
-             << " no observer of type video\n";
+    vcl_cerr << "In bwm_site_mgr::save_video_world_points_vrml() - no observer of type video\n";
     return;
   }
   vcl_vector<vgl_point_3d<double> > pts;
@@ -1108,14 +1103,15 @@ static void save_video_world_points_vrml_impl(vcl_ofstream& os, vgl_box_3d<doubl
     bwm_video_corr_sptr corr = *cit;
     if (!corr || !corr->world_pt_valid()) continue;
     vgl_point_3d<double> pt = corr->world_pt();
-	if(box.contains(pt))
-		pts.push_back(pt);
+    if (box.contains(pt))
+      pts.push_back(pt);
   }
   if (!pts.size())
     return;
   write_vrml_header(os);
   write_vrml_points(os, pts,res);
 }
+
 void bwm_site_mgr::save_video_world_points_vrml()
 {
   vcl_string ext = ".wrl";
@@ -1145,8 +1141,7 @@ static void save_video_cameras_vrml_impl(vcl_ofstream& os)
 
   if (!found)
   {
-    vcl_cerr << "In bwm_site_mgr::save_video_cameras_vrml() - "
-             << " no observer of type video\n";
+    vcl_cerr << "In bwm_site_mgr::save_video_cameras_vrml() - no observer of type video\n";
     return;
   }
   bwm_video_cam_istream_sptr cam_istr = obv->camera_stream();
@@ -1188,8 +1183,7 @@ static void save_video_cameras_vrml_impl(vcl_ofstream& os, vgl_box_3d<double> bo
 
   if (!found)
   {
-    vcl_cerr << "In bwm_site_mgr::save_video_cameras_vrml() - "
-             << " no observer of type video\n";
+    vcl_cerr << "In bwm_site_mgr::save_video_cameras_vrml() - no observer of type video\n";
     return;
   }
   bwm_video_cam_istream_sptr cam_istr = obv->camera_stream();
@@ -1203,13 +1197,12 @@ static void save_video_cameras_vrml_impl(vcl_ofstream& os, vgl_box_3d<double> bo
   vcl_vector<vpgl_perspective_camera<double> > cams;
   while (true) {
     vpgl_perspective_camera<double>* cam = cam_istr->current_camera();
-	vcl_cout<<cam->get_camera_center();
-	if(box.contains(cam->get_camera_center()))
-		    cams.push_back(*cam);
+    vcl_cout<<cam->get_camera_center();
+    if (box.contains(cam->get_camera_center()))
+      cams.push_back(*cam);
 
     if (!cam_istr->advance())
       break;
-	
   }
   //restore the camera stream to initial position
   cam_istr->seek_camera(cam_number);
@@ -1217,6 +1210,7 @@ static void save_video_cameras_vrml_impl(vcl_ofstream& os, vgl_box_3d<double> bo
     return;
   write_vrml_cameras(os, cams, res);
 }
+
 void bwm_site_mgr::save_video_cameras_vrml()
 {
   vcl_string ext = ".wrl";
@@ -1250,18 +1244,19 @@ void bwm_site_mgr::save_video_cams_and_world_pts_vrml()
   vgl_box_3d<double> box(xmin_,ymin_,zmin_,xmax_,ymax_,zmax_);
   vcl_ofstream os(path.c_str());
   write_vrml_header(os);
-  if(defaultparam_)
+  if (defaultparam_)
   {
-  save_video_world_points_vrml_impl(os);
-  save_video_cameras_vrml_impl(os);
+    save_video_world_points_vrml_impl(os);
+    save_video_cameras_vrml_impl(os);
   }
   else
   {
-	  save_video_world_points_vrml_impl(os,box,res_);
-	  save_video_cameras_vrml_impl(os,box,res_*5);
-	  //write_vrml_box(os, box);
+    save_video_world_points_vrml_impl(os,box,res_);
+    save_video_cameras_vrml_impl(os,box,res_*5);
+    //write_vrml_box(os, box);
   }
 }
+
 //: compute 3-d parameters, site bounding box and GSD
 void bwm_site_mgr::compute_3d_world_params()
 {
@@ -1289,20 +1284,17 @@ void bwm_site_mgr::compute_3d_world_params()
 
   if (!found)
   {
-    vcl_cerr << "In bwm_site_mgr::compute_world_params() - "
-             << " no observer of type video\n";
+    vcl_cerr << "In bwm_site_mgr::compute_world_params() - no observer of type video\n";
     return;
   }
   vcl_vector<bwm_video_corr_sptr> corrs = obv->corrs();
    if (!corrs.size()) {
-     vcl_cerr << "In bwm_site_mgr::compute_world_params() - "
-              << "no correspondences\n";
+     vcl_cerr << "In bwm_site_mgr::compute_world_params() - no correspondences\n";
      return;
    }
    bwm_video_cam_istream_sptr cam_istr = obv->camera_stream();
    if (!cam_istr || !cam_istr->is_valid() || !cam_istr->is_seekable()) {
-     vcl_cerr << "In bwm_site_mgr::compute_world_params() - "
-              << "no correspondences\n";
+     vcl_cerr << "In bwm_site_mgr::compute_world_params() - no correspondences\n";
      return;
    }
   //Add world points to bounding box
@@ -1329,8 +1321,7 @@ void bwm_site_mgr::compute_3d_world_params()
   gsd = diag3/diag2;
   vcl_ofstream os(path.c_str());
   if (!os.is_open()) {
-     vcl_cerr << "In bwm_site_mgr::compute_world_params() - "
-              << "invalid parameter output path\n";
+     vcl_cerr << "In bwm_site_mgr::compute_world_params() - invalid parameter output path\n";
      return;
   }
   os << "World Bounding Box\n"

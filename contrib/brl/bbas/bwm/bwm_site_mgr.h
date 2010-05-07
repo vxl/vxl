@@ -55,8 +55,7 @@ class bwm_site_mgr
   vul_timer timer_;
 
   double xmin_;   double ymin_;   double zmin_;  double res_;
-  double xmax_;   double ymax_;   double zmax_;	 bool defaultparam_;
-	
+  double xmax_;   double ymax_;   double zmax_;  bool defaultparam_;
 
 
   void create_site_dialog(vgui_dialog_extensions &site_dialog,

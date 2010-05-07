@@ -79,13 +79,13 @@ bool bwm_observer_video::open_video_stream(vcl_string const& video_path)
   bool glob = false;
   if (vul_file::is_directory(video_path)) glob = true;
   else
-    for (vcl_string::const_iterator cit = video_path.begin(); 
+    for (vcl_string::const_iterator cit = video_path.begin();
          cit != video_path.end()&&!glob; ++cit) {
       char x = *cit;
       if (x=='*')
         glob = true;
     }
-  //try to open the path as an image 
+  //try to open the path as an image
   //if successful, then open the directory as an image list
   if (!glob) {
     vil_image_resource_sptr resc = vil_load_image_resource(video_path.c_str());
@@ -561,6 +561,7 @@ void bwm_observer_video::display_video_corrs(unsigned frame_index)
     this->display_video_corr(c, frame_index, style);
   }
 }
+
 // display correspondences defined for current frame
 void bwm_observer_video::display_current_video_corrs()
 {
@@ -592,10 +593,11 @@ void bwm_observer_video::display_corr_track()
       this->display_projected_3d_point(c);
   }
 }
+
 void bwm_observer_video::display_selected_world_pt()
 {
-	vcl_vector<vgui_soview2D*> selected =
-		this->get_selected_objects("bwm_soview2D_cross");
+  vcl_vector<vgui_soview2D*> selected =
+    this->get_selected_objects("bwm_soview2D_cross");
   if (selected.size()<1) {
     vcl_cerr << "Select 2-d points\n";
     return ;
@@ -720,8 +722,7 @@ extract_neighborhoods(unsigned nhd_radius,
     this->get_selected_objects("bwm_soview2D_cross");
 
   if (selected.size()==0) {
-    vcl_cerr << "Select one or more correspondences to specify each"
-             << " neighborhood center\n";
+    vcl_cerr << "Select one or more correspondences to specify each neighborhood center\n";
     return false;
   }
 
@@ -807,18 +808,19 @@ extract_histograms(vcl_vector<bsta_histogram<float> >& hists)
     vil_image_view_base_sptr fb = vidl_convert_wrap_in_view(*frame);
     vil_image_view<float> fimg = *vil_convert_cast(float(), fb);
     unsigned ni = fimg.ni(), nj = fimg.nj();
-    for(unsigned j = 0; j<nj; ++j)
-      for(unsigned i = 0; i<ni; ++i)
-        {
-          float v = fimg(i, j);
-          h.upcount(v, 1.0f);
-        }
+    for (unsigned j = 0; j<nj; ++j)
+      for (unsigned i = 0; i<ni; ++i)
+      {
+        float v = fimg(i, j);
+        h.upcount(v, 1.0f);
+      }
     hists.push_back(h);
     if (!video_istr_->advance())
       break;
   }
   return true;
 }
+
 bool bwm_observer_video::
 save_as_image_list(vcl_string const& path)
 {
