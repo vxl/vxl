@@ -27,13 +27,13 @@ namespace bvpl_create_gauss3d_xx_kernel_process_globals
 bool bvpl_create_gauss3d_xx_kernel_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_create_gauss3d_xx_kernel_process_globals;
-  
+
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0]="bvpl_kernel_sptr";
-  
+
   if (!pro.set_output_types(output_types_))
     return false;
-  
+
   //output has no output
   return true;
 }
@@ -41,13 +41,13 @@ bool bvpl_create_gauss3d_xx_kernel_process_cons(bprb_func_process& pro)
 bool bvpl_create_gauss3d_xx_kernel_process(bprb_func_process& pro)
 {
   using namespace bvpl_create_gauss3d_xx_kernel_process_globals;
-  
-  if (pro.n_inputs() < n_inputs_)
+
+  if (pro.n_inputs() != n_inputs_)
   {
     vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
     return false;
   }
-  
+
   //get inputs:
   float sigma1 = 1;
   pro.parameters()->get_value("sigma1", sigma1);
@@ -55,7 +55,7 @@ bool bvpl_create_gauss3d_xx_kernel_process(bprb_func_process& pro)
   pro.parameters()->get_value("sigma2", sigma2);
   float sigma3 = 1.5;
   pro.parameters()->get_value("sigma3", sigma3);
-  
+
   float axis_x = 1.0f;
   pro.parameters()->get_value("axis_x", axis_x);
   float axis_y = 0.0f;
@@ -64,18 +64,18 @@ bool bvpl_create_gauss3d_xx_kernel_process(bprb_func_process& pro)
   pro.parameters()->get_value("axis_z", axis_z);
   float angle= 0.0f;
   pro.parameters()->get_value("angle", angle);
-  
+
   vnl_float_3 axis(axis_x,axis_y, axis_z);
-  
+
   //Create the factory
   bvpl_gauss3d_xx_kernel_factory factory(sigma1, sigma2, sigma3);
   factory.set_rotation_axis(axis);
   factory.set_angle(angle);
-  
+
   bvpl_kernel_sptr kernel_sptr = new bvpl_kernel(factory.create());
   kernel_sptr->print();
   pro.set_output_val<bvpl_kernel_sptr>(0, kernel_sptr);
-  
+
   return true;
 }
 
