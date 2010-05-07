@@ -12,12 +12,14 @@ SET(boxm2_sample_sources
     boxm_sample_multi_bin.h                   boxm_sample_multi_bin.txx
     boxm_scalar_sample.h                      boxm_scalar_sample.txx
     boxm_vis_implicit_sample.h
+    boxm_update_sample.h
     dummy.cxx
    )
 
+AUX_SOURCE_DIRECTORY(Templates boxm2_sample_sources)
+
 ADD_LIBRARY(boxm2_sample ${boxm2_sample_sources})
 
-AUX_SOURCE_DIRECTORY(Templates boxm2_sample_sources)
 
 IF( BUILD_TESTING )
 #  SUBDIRS(tests)

@@ -1,9 +1,9 @@
 #include <vcl_string.h>
 #include <vbl/vbl_array_3d.txx>
 #include <vgl/io/vgl_io_point_3d.h>
-#include <boxm/boxm_block.txx>
-#include <boxm/boxm_edge_tangent_sample.h>
-#include <boxm/boxm_inf_line_sample.h>
+#include <boxm2/boxm_block.txx>
+#include <boxm2/sample/boxm_edge_tangent_sample.h>
+#include <boxm2/sample/boxm_inf_line_sample.h>
 #include <boct/boct_tree.h>
 
 typedef boct_tree<short, boxm_edge_tangent_sample<float> > aux_tree_type;

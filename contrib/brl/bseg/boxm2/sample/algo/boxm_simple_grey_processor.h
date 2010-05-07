@@ -1,4 +1,4 @@
-// This is brl/bseg/boxm/boxm_simple_grey_processor.h
+// This is brl/bseg/boxm2/sample/algo/boxm_simple_grey_processor.h
 #ifndef boxm_simple_grey_processor_h_
 #define boxm_simple_grey_processor_h_
 //:

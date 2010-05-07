@@ -5,7 +5,7 @@
 typedef boct_tree<short,boxm_scalar_sample<float> > tree;
 BOXM_BLOCK_INSTANTIATE(tree);
 
-#include <boxm/boxm_scene.txx>
+#include <boxm2/boxm_scene.txx>
 BOXM_BLOCK_ITERATOR_INSTANTIATE(tree);
 
 
