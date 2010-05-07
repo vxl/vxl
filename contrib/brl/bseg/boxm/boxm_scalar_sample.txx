@@ -6,7 +6,7 @@
 template <class OBS_T>
 void boxm_scalar_sample<OBS_T>::print(vcl_ostream& os) const
 {
-  os << "(scalar=" << scalar_sum_ << " seg_len=" << seg_len_ << ')\n';
+  os << "(scalar=" << scalar_sum_ << " seg_len=" << seg_len_ << ")\n";
 }
 
 template <class T>
