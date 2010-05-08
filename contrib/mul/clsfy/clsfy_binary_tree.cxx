@@ -110,7 +110,7 @@ void clsfy_binary_tree::class_probabilities(vcl_vector<double>& outputs,
                                             vnl_vector<double>const& input) const
 {
     outputs.resize(1);
-    unsigned dummy=classify(input);
+    classify(input);
     outputs[0] = cache_node_->prob_;
 }
 
@@ -173,7 +173,7 @@ clsfy_classifier_base* clsfy_binary_tree::clone() const
 
 //=======================================================================
 
-void clsfy_binary_tree::print_summary(vcl_ostream& os) const
+void clsfy_binary_tree::print_summary(vcl_ostream& /*os*/) const
 {
 }
 
@@ -266,7 +266,6 @@ void clsfy_binary_tree::b_read(vsl_b_istream& bfs)
         {
             vcl_map<int,clsfy_binary_tree_node*> workmap;
             vcl_vector<graph_rep> arcs;
-            clsfy_binary_tree_node* pNode=0;
 
             clsfy_binary_tree_node* pNull=0;
             unsigned N;

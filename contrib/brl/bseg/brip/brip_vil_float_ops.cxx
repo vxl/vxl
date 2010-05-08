@@ -376,6 +376,7 @@ brip_vil_float_ops::gaussian(vil_image_view<float> const& input,
   delete ker;
   return dest;
 }
+
 #endif // VIL_CONVOLVE_WITH_MASK_EXISTS
 
 //-------------------------------------------------------------------
@@ -660,6 +661,7 @@ void brip_vil_float_ops::gradient_mag_3x3(vil_image_view<float> const& input,
   brip_vil_float_ops::fill_x_border(mag, 1, 0.0f);
   brip_vil_float_ops::fill_y_border(mag, 1, 0.0f);
 }
+
 void brip_vil_float_ops::
 gradient_mag_comp_3x3(vil_image_view<float> const& input,
                       vil_image_view<float>& mag,
@@ -668,7 +670,6 @@ gradient_mag_comp_3x3(vil_image_view<float> const& input,
 {
   unsigned w = input.ni(), h = input.nj();
   float scale = 1.0f/6.0f;
-  float pi = static_cast<float>(vnl_math::pi);
   for (unsigned y = 1; y+1<h; ++y)
     for (unsigned x = 1; x+1<w; ++x)
     {
@@ -685,6 +686,7 @@ gradient_mag_comp_3x3(vil_image_view<float> const& input,
   brip_vil_float_ops::fill_x_border(gx, 1, 0.0f);
   brip_vil_float_ops::fill_y_border(gy, 1, 0.0f);
 }
+
 //----------------------------------------------------------------
 //: Compute the Hessian of the input, use a 3x3 mask
 // \verbatim

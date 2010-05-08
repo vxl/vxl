@@ -96,7 +96,7 @@ bool bvxm_estimate_camera_process(bprb_func_process& pro)
   unsigned scale = pro.get_input<unsigned>(i++);
 
   double deg2rad = vnl_math::pi/180.0;
-  
+
   double theta_range = 12.0*deg2rad, theta_step = 0.05*deg2rad, phi_range = 12.0*deg2rad, phi_step = 0.05*deg2rad, rot_range = 10.0*deg2rad, rot_step = 1.0*deg2rad;
   int max_iter_rot_angle = 5, max_iter_cam_center = 50;
 
@@ -111,17 +111,17 @@ bool bvxm_estimate_camera_process(bprb_func_process& pro)
 
 #if 0
   vcl_cout << "printing bvxm_estimate_camera_process parameters:\n"
-    << "theta_range: " << theta_range << "\n"
-    << "theta_step: " << theta_step << "\n"
-    << "phi_range: " << phi_range << "\n"
-    << "phi_step: " << phi_step << "\n"
-    << "rot_range: " << rot_range << "\n"
-    << "rot_step: " << rot_step << "\n"
-    << "max_iter_rot_angle: " << max_iter_rot_angle << "\n"
-    << "max_iter_cam_center: " << max_iter_cam_center << "\n";
+           << "theta_range: " << theta_range << '\n'
+           << "theta_step: " << theta_step << '\n'
+           << "phi_range: " << phi_range << '\n'
+           << "phi_step: " << phi_step << '\n'
+           << "rot_range: " << rot_range << '\n'
+           << "rot_step: " << rot_step << '\n'
+           << "max_iter_rot_angle: " << max_iter_rot_angle << '\n'
+           << "max_iter_cam_center: " << max_iter_cam_center << '\n';
 #endif
 
-  float n_normal = vox_world->get_params()->edges_n_normal();
+  //float n_normal = vox_world->get_params()->edges_n_normal();
 
   int num_obs = vox_world->num_observations<EDGES>(0,scale);
   vcl_cout << "Number of observations in the voxel world: " << num_obs << '\n';

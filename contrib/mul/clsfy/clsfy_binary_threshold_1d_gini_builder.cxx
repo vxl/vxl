@@ -136,7 +136,6 @@ double clsfy_binary_threshold_1d_gini_builder::build_gini_from_sorted_data(
     double s=dataIter->first-epsilon;
     double deltaImpBest= -1.0; //initialise to split makes it worse
     double  sbest=s;
-    double ibest=0;
     //Put none into left bin, all else go right
     unsigned nL0=0;
     unsigned nL1=0;

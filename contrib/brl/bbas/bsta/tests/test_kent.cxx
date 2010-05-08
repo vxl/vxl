@@ -38,10 +38,13 @@ void test_kent()
   bsta_kent<double> kent(X_inv);
 
   // test the probability distribution
-  bsta_kent<double> kent2(1.0, 0.0, vnl_vector_fixed<double,3>(0,0,1), 
-    vnl_vector_fixed<double,3>(0,0,1), vnl_vector_fixed<double,3>(0,0,1));
+  bsta_kent<double> kent2(1.0, 0.0,
+                          vnl_vector_fixed<double,3>(0,0,1),
+                          vnl_vector_fixed<double,3>(0,0,1),
+                          vnl_vector_fixed<double,3>(0,0,1));
   vnl_vector_fixed<double,3> v(0,0,1);
   double r = kent2.prob_density(v);
+  TEST_NEAR("r", r, 0.5, 0.5);
 }
 
 TESTMAIN(test_kent);

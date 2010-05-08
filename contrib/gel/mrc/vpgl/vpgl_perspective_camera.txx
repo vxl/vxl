@@ -174,49 +174,46 @@ void vpgl_perspective_camera<T>::look_at(const vgl_homg_point_3d<T>& point,
   vgl_vector_3d<T> u = normalized(up);
   vgl_vector_3d<T> look = point - camera_center();
   normalize(look);
-  T dp = dot_product(look, up);
 
 #if 0
+  T dp = dot_product(look, up);
   bool singularity = vcl_fabs(vcl_fabs(static_cast<double>(dp))-1.0)<1e-08;
   assert(!singularity);
 #endif
   vgl_vector_3d<T> z = look;
 
-  if(vcl_fabs(dot_product<T>(u,z)-T(1))<1e-5)
+  if (vcl_fabs(dot_product<T>(u,z)-T(1))<1e-5)
   {
-  
     T r[] = { 1, 0, 0,
               0, 1, 0,
               0, 0, 1 };
 
-  vnl_matrix_fixed<T,3,3> R(r);
-  set_rotation(vgl_rotation_3d<T>(R));
-
+    vnl_matrix_fixed<T,3,3> R(r);
+    set_rotation(vgl_rotation_3d<T>(R));
   }
-  else if(vcl_fabs(dot_product<T>(u,z)-T(-1))<1e-5)
+  else if (vcl_fabs(dot_product<T>(u,z)-T(-1))<1e-5)
   {
-      T r[] = { 1, 0, 0,
-              0, 1, 0,
-              0, 0, -1 };
+    T r[] = { 1, 0, 0,
+            0, 1, 0,
+            0, 0, -1 };
 
-  vnl_matrix_fixed<T,3,3> R(r);
-  set_rotation(vgl_rotation_3d<T>(R));
-
+    vnl_matrix_fixed<T,3,3> R(r);
+    set_rotation(vgl_rotation_3d<T>(R));
   }
   else
   {
-  vgl_vector_3d<T> x = cross_product(-u,z);
-  vgl_vector_3d<T> y = cross_product(z,x);
-  normalize(x);
-  normalize(y);
-  normalize(z);
+    vgl_vector_3d<T> x = cross_product(-u,z);
+    vgl_vector_3d<T> y = cross_product(z,x);
+    normalize(x);
+    normalize(y);
+    normalize(z);
 
-  T r[] = { x.x(), x.y(), x.z(),
-            y.x(), y.y(), y.z(),
-            z.x(), z.y(), z.z() };
+    T r[] = { x.x(), x.y(), x.z(),
+              y.x(), y.y(), y.z(),
+              z.x(), z.y(), z.z() };
 
-  vnl_matrix_fixed<T,3,3> R(r);
-  set_rotation(vgl_rotation_3d<T>(R));
+    vnl_matrix_fixed<T,3,3> R(r);
+    set_rotation(vgl_rotation_3d<T>(R));
   }
 }
 
@@ -225,7 +222,7 @@ void vpgl_perspective_camera<T>::look_at(const vgl_homg_point_3d<T>& point,
 template <class T>
 void vpgl_perspective_camera<T>::recompute_matrix()
 {
-    vnl_matrix_fixed<T,3,4> Pnew( (T)0 );
+   vnl_matrix_fixed<T,3,4> Pnew( (T)0 );
 
    // Set new projection matrix to [ I | -C ].
    for ( int i = 0; i < 3; i++ )

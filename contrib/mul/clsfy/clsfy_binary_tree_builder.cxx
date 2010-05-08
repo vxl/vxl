@@ -416,7 +416,6 @@ void clsfy_binary_tree_builder::build_a_node(
         vcl_set<unsigned >::const_iterator indIterEnd=subIndices.end();
         vcl_set<unsigned >& subIndicesL=pNode->subIndicesL;
         vcl_set<unsigned >& subIndicesR=pNode->subIndicesR;
-        unsigned ipt=0;
         while (indIter != indIterEnd)
         {
             double x = vin[*indIter][param_indices[ibest]];
@@ -440,9 +439,8 @@ bool clsfy_binary_tree_builder::isNodePure(const vcl_set<unsigned >& subIndices,
     vcl_set<unsigned >::const_iterator indIter=subIndices.begin();
     vcl_set<unsigned >::const_iterator indIterEnd=subIndices.end();
 
-    unsigned i0=*indIter;
+    unsigned i0=*indIter; // FIXME - unused!
     unsigned class0=outputs[*indIter];
-    bool allSame=true;
     while (indIter != indIterEnd)
     {
         if (outputs[*indIter] != class0)

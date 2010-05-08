@@ -64,7 +64,6 @@ void clsfy_random_forest::class_probabilities(vcl_vector<double>& outputs,
 
     vcl_vector<double > classProbs(1,0.0);
     vcl_vector<double > meanProbs(1,0.0);
-    unsigned i=0;
     while (treeIter != treeIterEnd)
     {
         const clsfy_classifier_base* pTree=(*treeIter).ptr();

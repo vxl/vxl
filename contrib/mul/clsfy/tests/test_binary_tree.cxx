@@ -61,7 +61,7 @@ void test_binary_tree()
 
     pdfz_sampler = pdfz.new_sampler();
     unsigned long izseed = 56789123;
-    pdfy_sampler->reseed(iyseed);
+    pdfz_sampler->reseed(izseed);
 
     pdferror_sampler = pdferror.new_sampler();
 
@@ -179,7 +179,6 @@ void test_binary_tree()
                 ++fnr;
         }
     }
-    double dN=double(NPOINTS);
     double dtp=double (tp);
     double dtn=double (NPOINTS-tp);
     double testTPR=double (tpr)/dtp;
@@ -245,7 +244,6 @@ void test_binary_tree()
                     ++fnr;
             }
         }
-        double dN=double(NPOINTS);
         double dtp=double (tp);
         double dtn=double (NPOINTS-tp);
         vcl_cout<<"True Positive Rate "<<double (tpr)/dtp<<vcl_endl
@@ -289,7 +287,6 @@ void test_binary_tree()
                     ++fnr;
             }
         }
-        double dN=double(NPOINTS);
         double dtp=double (tp);
         double dtn=double (NPOINTS-tp);
         vcl_cout<<"True Positive Rate "<<double (tpr)/dtp<<vcl_endl
@@ -337,7 +334,7 @@ void test_binary_tree()
         unsigned tnr=0;
         unsigned fpr=0;
         unsigned fnr=0;
-        for (unsigned i=0; i<NPOINTS;++i)
+        for (int i=0; i<NPOINTS; ++i)
         {
             unsigned label=pClassifier2->classify(testData[i]);
             if (test_outputs[i]==0)
@@ -355,7 +352,6 @@ void test_binary_tree()
                     ++fnr;
             }
         }
-        double dN=double(NPOINTS);
         double dtp=double (tp);
         double dtn=double (NPOINTS-tp);
         vcl_cout<<"True Positive Rate "<<double (tpr)/dtp<<vcl_endl
@@ -391,7 +387,7 @@ void test_binary_tree()
         vcl_vector<unsigned > training_outputs(NPOINTS,0);
         unsigned label=0;
         vnl_vector<double > data1d(NPOINTS);
-        for (unsigned i=0; i<NPOINTS;++i)
+        for (int i=0; i<NPOINTS;++i)
         {
             data[i].set_size(3);
             pdfx_sampler->get_samples(xerr);
@@ -442,10 +438,9 @@ void test_binary_tree()
         vcl_vector<vnl_vector<double > > testData(NPOINTS);
 
         vcl_vector<unsigned > test_outputs(NPOINTS,0);
-        const double epsilon=0.02;
         vnl_vector<double > error(1);
         unsigned tp=0;
-        for (unsigned i=0; i<NPOINTS;++i)
+        for (int i=0; i<NPOINTS;++i)
         {
             testData[i].set_size(3);
             pdfx_sampler->get_samples(xerr);
@@ -484,7 +479,7 @@ void test_binary_tree()
         unsigned tnr=0;
         unsigned fpr=0;
         unsigned fnr=0;
-        for (unsigned i=0; i<NPOINTS;++i)
+        for (int i=0; i<NPOINTS; ++i)
         {
             unsigned label=pClassifier->classify(testData[i]);
             if (test_outputs[i]==0)
@@ -502,7 +497,6 @@ void test_binary_tree()
                     ++fnr;
             }
         }
-        double dN=double(NPOINTS);
         double dtp=double (tp);
         double dtn=double (NPOINTS-tp);
         double testTPR=double (tpr)/dtp;
@@ -510,14 +504,14 @@ void test_binary_tree()
         double testTNR=double (tnr)/dtn;
         double testFNR=double (fnr)/dtp;
 
-        vcl_cout<<"True Positive Rate "<<double (tpr)/dtp<<vcl_endl
-                <<"False Positive Rate "<<double (fpr)/dtn<<vcl_endl
-                <<"True Negative Rate "<<double (tnr)/dtn<<vcl_endl
-                <<"False Negative Rate "<<double (fnr)/dtp<<vcl_endl;
+        vcl_cout<<"True Positive Rate " <<testTPR<<vcl_endl
+                <<"False Positive Rate "<<testFPR<<vcl_endl
+                <<"True Negative Rate " <<testTNR<<vcl_endl
+                <<"False Negative Rate "<<testFNR<<vcl_endl;
 
         // simple test for binary threshold
-        TEST("tpr>0.9", double (tpr)/dtp>0.9, true);
-        TEST("fpr<0.1", double (fpr)/dtn<0.15, true);
+        TEST("tpr>0.9", testTPR>0.9, true);
+        TEST("fpr<0.15",testFPR<0.15,true);
     }
 
 #if 0 // 85 lines commented out
