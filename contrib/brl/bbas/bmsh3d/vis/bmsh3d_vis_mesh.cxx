@@ -905,7 +905,7 @@ SoSeparator* draw_M_bnd_faces_cost_col(bmsh3d_mesh* M, const bool draw_idv,
     }
     root->addChild(draw_M_ifs_visited(M, COLOR_LIGHTGRAY, false, transp));
   }
-  else
+  else if (draw_idv)
   {
     //id text color
     SoBaseColor* idbasecolor = new SoBaseColor;

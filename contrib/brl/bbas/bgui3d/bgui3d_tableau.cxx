@@ -282,8 +282,9 @@ bgui3d_tableau::set_overlay_scene_root(SoNode* scene_root)
 //: Set the scene camera
 // creates a graphics camera from a vpgl camera (either perspective or affine)
 bool
-bgui3d_tableau::set_camera(const vpgl_proj_camera<double>& camera)
+bgui3d_tableau::set_camera(const vpgl_proj_camera<double>& /*camera*/)
 {
+  // FIXME - not yet implemented
   return false;
 }
 

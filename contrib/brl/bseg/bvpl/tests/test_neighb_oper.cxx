@@ -152,7 +152,7 @@ void diagonal_grid_z(bvxm_voxel_grid<float>* grid, unsigned grid_x, unsigned gri
   for (slab_it = grid->begin(); slab_it != grid->end() ; ++slab_it) {
     vcl_cout << '.';
     bvxm_voxel_slab<float> vit=*slab_it;
-    for (unsigned i=0; i<x; i++) {
+    for (unsigned i=0; i<x && i<grid_x; i++) {
       for (unsigned j=0; j<grid_y; j++) {
         float &v = vit(i,j);
         v = 0.1f;

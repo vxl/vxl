@@ -6,7 +6,7 @@
 
 
 //: Binary save parameters to stream.
-void vsl_b_write(vsl_b_ostream & os, bvpl_corner_pairs const &kernel)
+void vsl_b_write(vsl_b_ostream & /*os*/, bvpl_corner_pairs const & /*kernel*/)
 {
   vcl_cerr << "Error: Trying to save but binary io not implemented\n";
   return;
@@ -14,13 +14,13 @@ void vsl_b_write(vsl_b_ostream & os, bvpl_corner_pairs const &kernel)
 
 
 //: Binary load parameters from stream.
-void vsl_b_read(vsl_b_istream & is, bvpl_corner_pairs &kernel)
+void vsl_b_read(vsl_b_istream & /*is*/, bvpl_corner_pairs & /*kernel*/)
 {
   vcl_cerr << "Error: Trying to save but binary io not implemented\n";
   return;
 }
 
-void vsl_print_summary(vcl_ostream &os, const bvpl_corner_pairs &kernel)
+void vsl_print_summary(vcl_ostream & /*os*/, const bvpl_corner_pairs & /*kernel*/)
 {
   vcl_cerr << "Error: Trying to save but binary io not implemented\n";
   return;

@@ -34,8 +34,8 @@ struct compute_sqr_mahalanobis_helper
 template <class T, unsigned n, unsigned i>
 struct compute_sqr_mahalanobis_helper<T,n,i,0>
 {
-  static inline T value(const vnl_vector_fixed<T,n>& d,
-                        const vnl_matrix_fixed<T,n,n>& inv_covar)
+  static inline T value(const vnl_vector_fixed<T,n>& /*d*/,
+                        const vnl_matrix_fixed<T,n,n>& /*inv_covar*/)
   { return 0; }
 };
 
@@ -57,8 +57,8 @@ static inline T value(const vnl_vector_fixed<T,n>& d,
 template <class T, unsigned n>
 struct compute_sqr_mahalanobis<T,n,0>
 {
-  static inline T value(const vnl_vector_fixed<T,n>& d,
-                        const vnl_matrix_fixed<T,n,n>& inv_covar)
+  static inline T value(const vnl_vector_fixed<T,n>& /*d*/,
+                        const vnl_matrix_fixed<T,n,n>& /*inv_covar*/)
   { return 0; }
 };
 

@@ -27,8 +27,8 @@ namespace
   template <class T, unsigned n>
   struct compute_sqr_mahalanobis<T,n,0>
   {
-    static inline T value(const vnl_vector_fixed<T,n>& d,
-                          const vnl_vector_fixed<T,n>& covar)
+    static inline T value(const vnl_vector_fixed<T,n>& /*d*/,
+                          const vnl_vector_fixed<T,n>& /*covar*/)
     { return 0; }
   };
 

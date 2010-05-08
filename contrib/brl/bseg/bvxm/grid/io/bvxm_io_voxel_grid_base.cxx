@@ -19,11 +19,11 @@ void vsl_b_read(vsl_b_istream & /*is*/, bvxm_voxel_grid_base & /*ph*/)
   return;
 }
 
-void vsl_b_read(vsl_b_istream& is, bvxm_voxel_grid_base* ph)
+void vsl_b_read(vsl_b_istream& /*is*/, bvxm_voxel_grid_base* /*ph*/)
 {
 }
 
-void vsl_b_write(vsl_b_ostream& os, const bvxm_voxel_grid_base* &ph)
+void vsl_b_write(vsl_b_ostream& /*os*/, const bvxm_voxel_grid_base* & /*ph*/)
 {
 }
 

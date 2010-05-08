@@ -215,7 +215,7 @@ brec_part_instance_sptr brec_part_hierarchy::get_node_instance(unsigned layer, u
 }
 
 //: draw the nodes of the given layer side by side to the output image
-bool brec_part_hierarchy::draw_to_image(unsigned N, unsigned layer_id, float drawing_radius, vcl_string output_img)
+bool brec_part_hierarchy::draw_to_image(unsigned /*N*/, unsigned layer_id, float /*drawing_radius*/, vcl_string /*output_img*/)
 {
   vcl_vector<brec_part_instance_sptr> ins_to_draw;
   for (vertex_iterator it = this->vertices_begin(); it != this->vertices_end(); it++) {
@@ -223,7 +223,7 @@ bool brec_part_hierarchy::draw_to_image(unsigned N, unsigned layer_id, float dra
       break;
   }
 
-  return false; // not implemented
+  return false; // not implemented - TODO
 }
 
 unsigned brec_part_hierarchy::highest_layer_id()
@@ -715,13 +715,13 @@ bool brec_part_hierarchy::get_score(brec_part_instance_sptr upper_p, vcl_vector<
 #endif // 0
 
 //: Binary io, NOT IMPLEMENTED, signatures defined to use brec_part_hierarchy as a brdb_value
-void vsl_b_write(vsl_b_ostream & os, brec_part_hierarchy const &ph)
+void vsl_b_write(vsl_b_ostream & /*os*/, brec_part_hierarchy const & /*ph*/)
 {
   vcl_cerr << "vsl_b_write() -- Binary io, NOT IMPLEMENTED, signatures defined to use brec_part_hierarchy as a brdb_value\n";
   return;
 }
 
-void vsl_b_read(vsl_b_istream & is, brec_part_hierarchy &ph)
+void vsl_b_read(vsl_b_istream & /*is*/, brec_part_hierarchy & /*ph*/)
 {
   vcl_cerr << "vsl_b_read() -- Binary io, NOT IMPLEMENTED, signatures defined to use brec_part_hierarchy as a brdb_value\n";
   return;

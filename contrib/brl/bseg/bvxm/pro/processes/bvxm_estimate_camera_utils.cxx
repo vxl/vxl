@@ -9,7 +9,8 @@ bvxm_camera_estimator::bvxm_camera_estimator()
   estimation_params_set_ = false;
 }
 
-void bvxm_camera_estimator::set_world_params(int nx, int ny, int nz, double sx, double sy, double sz, double dx, double dy, double dz){
+void bvxm_camera_estimator::set_world_params(int nx, int ny, int nz, double sx, double sy, double sz, double dx, double dy, double dz)
+{
   nx_ = nx;
   ny_ = ny;
   nz_ = nz;
@@ -22,7 +23,8 @@ void bvxm_camera_estimator::set_world_params(int nx, int ny, int nz, double sx, 
   world_params_set_ = true;
 }
 
-void bvxm_camera_estimator::set_estimation_params(double theta_range, double theta_step, double phi_range, double phi_step, double rot_range, double rot_step, int max_iter_rot_angle){
+void bvxm_camera_estimator::set_estimation_params(double theta_range, double theta_step, double phi_range, double phi_step, double rot_range, double rot_step, int max_iter_rot_angle)
+{
    theta_range_ = theta_range;
    theta_step_ = theta_step;
    phi_range_ = phi_range;
@@ -114,7 +116,8 @@ vcl_vector<vgl_point_3d<double> > bvxm_camera_estimator::convert_3d_box_to_3d_po
 }
 
 vgl_polygon<double> bvxm_camera_estimator::convert_3d_box_to_2d_polygon(const vgl_box_3d<double> box_3d,
-                                                 const vpgl_perspective_camera<double> *cam) {
+                                                                        const vpgl_perspective_camera<double> *cam)
+{
   vcl_vector<vgl_point_3d<double> > box_pts_3d = convert_3d_box_to_3d_points(box_3d);
 
   vcl_vector<vgl_point_2d<double> > box_pts_2d;
@@ -132,10 +135,10 @@ vgl_polygon<double> bvxm_camera_estimator::convert_3d_box_to_2d_polygon(const vg
 }
 
 void bvxm_camera_estimator::convert_angles_to_vector(const double theta,
-                              const double phi,
-                              double &vx,
-                              double &vy,
-                              double &vz)
+                                                     const double phi,
+                                                     double &vx,
+                                                     double &vy,
+                                                     double &vz)
 {
   vx = vcl_sin(theta)*vcl_cos(phi);
   vy = vcl_sin(theta)*vcl_sin(phi);
@@ -160,8 +163,8 @@ double bvxm_camera_estimator::edge_prob_cross_correlation(const vil_image_view<f
 }
 
 void bvxm_camera_estimator::get_expected_edge_image(const bvxm_voxel_slab<float> &data,
-                             const vpgl_perspective_camera<double> *cam,
-                             vil_image_view<float> *img_eei)
+                                                    const vpgl_perspective_camera<double> *cam,
+                                                    vil_image_view<float> *img_eei)
 {
   img_eei->fill(0.0f);
 
@@ -188,11 +191,11 @@ void bvxm_camera_estimator::get_expected_edge_image(const bvxm_voxel_slab<float>
 
         double start_x = pt_0.x();
         double start_y = pt_0.y();
-        double start_z = pt_0.z();
+        //double start_z = pt_0.z();
 
         double diff_x = diff.x();
         double diff_y = diff.y();
-        double diff_z = diff.z();
+        //double diff_z = diff.z();
 
         for (int vz=0; vz<nz_; vz++) {
           int vx = (int)((((start_x + (diff_x*vz)) - sx_)/dx_) + 0.5f);
@@ -215,7 +218,7 @@ void bvxm_camera_estimator::get_expected_edge_image(const bvxm_voxel_slab<float>
 }
 
 double bvxm_camera_estimator::estimate_rotation_angle(const vil_image_view<float> &img1c,
-                               const vil_image_view<float> &img2c)
+                                                      const vil_image_view<float> &img2c)
 {
   assert(img1c.ni()==img2c.ni());
   assert(img1c.nj()==img2c.nj());
@@ -272,7 +275,7 @@ void bvxm_camera_estimator::estimate_rotation_iterative(const bvxm_voxel_slab<fl
                                                         const vil_image_view<float>& img_e,
                                                         vpgl_perspective_camera<double> *cam)
 {
-  if((!estimation_params_set_) || (!world_params_set_)){
+  if ((!estimation_params_set_) || (!world_params_set_)){
     vcl_cerr << "Error: world and estimation parameters are not set\n";
     return;
   }

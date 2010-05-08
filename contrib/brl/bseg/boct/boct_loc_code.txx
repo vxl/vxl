@@ -16,27 +16,20 @@ boct_loc_code<T>::boct_loc_code(const boct_loc_code<T>& rhs)
 template <class T>
 boct_loc_code<T>::boct_loc_code(vgl_point_3d<double> p, short root_level)
 {
-  double max_val = 1 << (root_level);
-
+  double max_val = 1 << root_level;
   x_loc_ = (T) (p.x()* max_val);
-    
   y_loc_ = (T) (p.y()* max_val);
-
   z_loc_ = (T) (p.z()* max_val);
-   
   level=0;
 }
 
 template <class T>
 boct_loc_code<T>::boct_loc_code(vgl_point_3d<double> p, short root_level, double max_val)
 {
- 
+  if (max_val <= 0) max_val = 1 << root_level;
   x_loc_ = (T) (p.x()* max_val);
-  
   y_loc_ = (T) (p.y()* max_val);
-  
   z_loc_ = (T) (p.z()* max_val);
-  
   level=0;
 }
 
@@ -92,13 +85,13 @@ bool boct_loc_code<T>::isequal(const boct_loc_code<T> * test)
 {
   if (test->level != level)
     return false;
+#if 0  // this was not working right..
   T relevantbit = 1 << (test->level-1);
-  #if 0  // this was not working right..
   if ( (x_loc_ & relevantbit) == (test->x_loc_ & relevantbit)&&
        (y_loc_ & relevantbit) == (test->y_loc_ & relevantbit)&&
        (z_loc_ & relevantbit) == (test->z_loc_ & relevantbit) )
-  #endif
-  if ((x_loc_==test->x_loc_) && (y_loc_==test->y_loc_) && (z_loc_==test->z_loc_)) 
+#endif
+  if ((x_loc_==test->x_loc_) && (y_loc_==test->y_loc_) && (z_loc_==test->z_loc_))
     return true;
   else
     return false;
@@ -123,7 +116,7 @@ boct_loc_code<T> * boct_loc_code<T>::AND(boct_loc_code *b)
   xorcode->x_loc_=this->x_loc_&b->x_loc_;
   xorcode->y_loc_=this->y_loc_&b->y_loc_;
   xorcode->z_loc_=this->z_loc_&b->z_loc_;
-  
+
   return xorcode;
 }
 

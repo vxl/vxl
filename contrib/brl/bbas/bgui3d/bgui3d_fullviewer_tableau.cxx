@@ -235,7 +235,7 @@ class bgui3d_select_camera_command : public vgui_command
 
 //----------------------------------------------------------------------------
 //: Builds a popup menu
-void bgui3d_fullviewer_tableau::get_popup(const vgui_popup_params& params,
+void bgui3d_fullviewer_tableau::get_popup(const vgui_popup_params& /*params*/, // unused - FIXME
                                           vgui_menu &menu)
 {
   vcl_string animation_item;

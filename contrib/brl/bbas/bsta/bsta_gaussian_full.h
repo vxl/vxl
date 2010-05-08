@@ -61,11 +61,11 @@ class bsta_gaussian_full : public bsta_gaussian<T,n>
   }
 
   //: The probability integrated over a box
-  T probability(const vnl_vector_fixed<T,n>& min_pt,
-                const vnl_vector_fixed<T,n>& max_pt) const
+  T probability(const vnl_vector_fixed<T,n>& /*min_pt*/,
+                const vnl_vector_fixed<T,n>& /*max_pt*/) const
   {
-    // This stub needs implementation
-    return 0.0;
+    // TODO - This stub needs implementation
+    return -1;
   }
 
   //: The squared Mahalanobis distance to this point

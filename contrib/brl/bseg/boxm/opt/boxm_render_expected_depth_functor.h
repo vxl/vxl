@@ -87,7 +87,7 @@ void boxm_render_depth_rt(boxm_scene<boct_tree<T_loc, T_data > > &scene,
                           vil_image_view<float> &expected,
                           vil_image_view<float> &mask,
                           int bin = -1,
-                          bool use_black_background = false)
+                          bool /*use_black_background*/ = false) // TODO - currently unused
 {
   if (vpgl_perspective_camera<double> *pcam=dynamic_cast<vpgl_perspective_camera<double> *>(cam.ptr()))
   {

@@ -21,10 +21,8 @@ void write_svg(const bsta_histogram<T>& h, const vcl_string& outfile,
                float width = 600.0f, float height = 600.0f, float margin = 40.0f, int font_size = 30)
 {
   bsvg_plot pl(width, height);
-#if 0
-  pl.set_margin(margin);
-  pl.set_font_size(font_size);
-#endif
+  if (false) pl.set_margin(margin); // TODO
+  if (false) pl.set_font_size(font_size); // TODO
 
   float min = float(h.min());
   float delta = float(h.delta());

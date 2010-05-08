@@ -23,18 +23,22 @@ bool bgrl2_hg_hypergraph::_internal_del_edge(bgrl2_hg_edge* edge)
 
 void bgrl2_hg_hypergraph::_internal_add_hyperedge(bgrl2_hg_hyperedge* hyperedge)
 {
-  ///assert (hyperedge->id() > 0);
-  ///hyperedges_.insert(vcl_pair<int, bgrl2_hg_hyperedge*>(hyperedge->id(), hyperedge));
+  assert (hyperedge && hyperedge->id() > 0);
+#if 0 // TODO
+  hyperedges_.insert(vcl_pair<int, bgrl2_hg_hyperedge*>(hyperedge->id(), hyperedge));
+#endif
 }
 
 bool bgrl2_hg_hypergraph::_internal_del_hyperedge(bgrl2_hg_hyperedge* hyperedge)
 {
   assert (hyperedge->connecting_edges().size() == 0);
   assert (hyperedge->connecting_vertices().size() == 0);
-
-  ///int n_removed = hyperedges_.erase(hyperedge->id());
-  ///return n_removed == 1;
+#if 0
+  int n_removed = hyperedges_.erase(hyperedge->id());
+  return n_removed == 1;
+#else
   return true;
+#endif
 }
 
 ////////////////////////////////////////////////////////////////////

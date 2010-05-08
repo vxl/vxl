@@ -234,9 +234,9 @@ void test_mean_shift_algo(T epsilon, const vcl_string& type_name)
   typedef typename bsta_gaussian_indep<T,n>::vector_type vect_t;
 
   // initialize 3 gaussian distributions
-  T mean1 = T(0.504); T std_dev1 = T(0.005);
-  T mean2 = T(0.004); T std_dev2 = T(0.005);
-  T mean3 = T(1.004); T std_dev3 = T(0.005);
+  T mean1 = T(0.504); T std_dev1 = T(0.05*epsilon);
+  T mean2 = T(0.004); T std_dev2 = T(0.05*epsilon);
+  T mean3 = T(1.004); T std_dev3 = T(0.05*epsilon);
 
   vect_t m1(mean1);
   vect_t m2(mean2);

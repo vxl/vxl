@@ -193,16 +193,18 @@ class bsta_var_functor
   };
 
   //: The main function
-  //bool operator() ( const dist_& d, return_T& retval ) const
-  //{
-  //  retval = d.var();
-  //  return true;
-  //}
-  //: The main function
-  bool operator() ( const dist_& d, return_type& retval ) const
+#if 0
+  bool operator() (dist_ const& d, return_T& retval) const
+  {
+    retval = d.var();
+    return true;
+  }
+#else
+  bool operator() (dist_ const&, return_T&) const
   {
     return false;
   }
+#endif
 };
 
 //: A functor to return the variance of the Gaussian
@@ -260,10 +262,18 @@ class bsta_diag_covar_functor
   };
 
   //: The main function
-  bool operator() ( const dist_& d, return_T& retval ) const
+#if 0
+  bool operator() (dist_ const& d, return_T& retval) const
+  {
+    retval = d.var();
+    return true;
+  }
+#else
+  bool operator() (dist_ const&, return_T&) const
   {
     return false;
   }
+#endif
 };
 
 

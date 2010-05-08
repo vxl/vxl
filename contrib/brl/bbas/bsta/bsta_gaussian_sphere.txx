@@ -27,7 +27,7 @@ namespace
   template <class T, unsigned n>
   struct compute_dot<T,n,0>
   {
-    static inline T value(const vnl_vector_fixed<T,n>& d)
+    static inline T value(const vnl_vector_fixed<T,n>& /*d*/)
     { return 0; }
   };
 

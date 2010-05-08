@@ -22,8 +22,8 @@ class pre_inf_functor
  public:
   //: "default" constructor
   pre_inf_functor(vil_image_view<typename boxm_apm_traits<APM>::obs_datatype> const& image,
-    vil_image_view<float> &pre_inf, vil_image_view<float> &vis_inf)
-    : alpha_integral_(image.ni(),image.nj(),1), obs_(image), vis_img_(vis_inf), pre_img_(pre_inf)
+                  vil_image_view<float> &pre_inf, vil_image_view<float> &vis_inf)
+  : alpha_integral_(image.ni(),image.nj(),1), obs_(image), vis_img_(vis_inf), pre_img_(pre_inf)
   {
     alpha_integral_.fill(0.0f);
     pre_img_.fill(0.0f);
@@ -36,7 +36,7 @@ class pre_inf_functor
 
   inline bool step_cell(unsigned int i, unsigned int j,
                         vgl_point_3d<double> s0, vgl_point_3d<double> s1,
-                        boxm_sample<APM> &cell_value, aux_null_t &aux_val)
+                        boxm_sample<APM> &cell_value, aux_null_t & /*aux_val*/)
   {
     // compute segment length
     const float seg_len = (float)(s1 - s0).length();
@@ -66,15 +66,14 @@ class pre_inf_functor
 };
 
 
-
 template <boxm_apm_type APM, class T_aux>
 class boxm_generate_opt3_sample_functor
 {
-public:
+ public:
   //: "default" constructor
   boxm_generate_opt3_sample_functor(vil_image_view<typename boxm_apm_traits<APM>::obs_datatype> const& image,
-    vil_image_view<float> const& beta_denom)
-    : obs_(image), beta_denom_(beta_denom), vis_img_(image.ni(),image.nj(),1), pre_img_(image.ni(),image.nj(),1), alpha_integral_(image.ni(),image.nj(),1)
+                                    vil_image_view<float> const& beta_denom)
+  : obs_(image), beta_denom_(beta_denom), vis_img_(image.ni(),image.nj(),1), pre_img_(image.ni(),image.nj(),1), alpha_integral_(image.ni(),image.nj(),1)
   {
     alpha_integral_.fill(0.0f);
     pre_img_.fill(0.0f);
@@ -105,7 +104,7 @@ public:
     pre_img_(i,j) +=  PI * Omega;
     vis_img_(i,j) = vis_prob_end;
 
-    // update observation distribution 
+    // update observation distribution
     aux_val.update_obs_dist(obs_(i,j),vis);
     aux_val.weighted_vis_sum_ += vis*seg_len;
 
@@ -127,18 +126,17 @@ public:
     return true;
   }
 
-public:
+ public:
   bool scene_read_only_;
   bool is_aux_;
 
-private:
+ private:
   vil_image_view<typename boxm_apm_traits<APM>::obs_datatype> const& obs_;
   vil_image_view<float> const& beta_denom_;
 
   vil_image_view<float> vis_img_;
   vil_image_view<float> pre_img_;
   vil_image_view<float> alpha_integral_;
-
 };
 
 template <class T_loc, class T_data, boxm_aux_type AUX_T>

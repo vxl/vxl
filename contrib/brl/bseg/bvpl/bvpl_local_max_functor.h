@@ -17,7 +17,7 @@
 #include <bvxm/grid/bvxm_opinion.h>
 #include <bsta/bsta_gauss_f1.h>
 #include <bsta/bsta_attributes.h>
-#include <vcl_limits.h> 
+#include <vcl_limits.h>
 
 template <class T>
 class bvpl_local_max_functor
@@ -30,7 +30,7 @@ class bvpl_local_max_functor
   ~bvpl_local_max_functor() {}
 
    //: Apply a given operation to value val, depending on the dispatch character
-  void apply(T& val, bvpl_kernel_dispatch& d);
+  void apply(T& /*val*/, bvpl_kernel_dispatch& /*d*/);
 
   //: Returns the final operation of this functor
   T result(T cur_val);
@@ -85,13 +85,12 @@ void bvpl_local_max_functor<T>::init()
 
 //: Apply functor
 template <class T>
-void bvpl_local_max_functor<T>::apply(T& val, bvpl_kernel_dispatch& d)
+void bvpl_local_max_functor<T>::apply(T& val, bvpl_kernel_dispatch& d) // TODO - d unused!!
 {
   if (greater_than(val,max_)){
     max_=val;
     //    vcl_cout << "New Max" << max_;
   }
-    
 }
 
 //: Retrieve result
@@ -99,11 +98,11 @@ template <class T>
 T bvpl_local_max_functor<T>::result( T cur_val)
 {
   T result;
-  
+
   if (greater_than(cur_val, max_)) {
     result = cur_val;
   }
-  else 
+  else
     result = min_response();
 
   //reset all variables

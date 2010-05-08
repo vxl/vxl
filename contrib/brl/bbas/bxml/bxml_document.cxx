@@ -113,13 +113,13 @@ bool operator==(const bxml_document& d1, const bxml_document& d2)
 }
 
 //: Binary io, NOT IMPLEMENTED, signatures defined to use bxml_document as a brdb_value
-void vsl_b_write(vsl_b_ostream & os, bxml_document const &ph)
+void vsl_b_write(vsl_b_ostream & /*os*/, bxml_document const & /*ph*/)
 {
   vcl_cerr << "vsl_b_write() -- Binary io, NOT IMPLEMENTED, signatures defined to use bxml_document as a brdb_value\n";
   return;
 }
 
-void vsl_b_read(vsl_b_istream & is, bxml_document &ph)
+void vsl_b_read(vsl_b_istream & /*is*/, bxml_document & /*ph*/)
 {
   vcl_cerr << "vsl_b_read() -- Binary io, NOT IMPLEMENTED, signatures defined to use bxml_document as a brdb_value\n";
   return;
