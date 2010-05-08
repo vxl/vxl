@@ -312,7 +312,7 @@ brec_bayesian_propagation::run(brec_fg_pair_density& fgp, brec_fg_bg_pair_densit
 }
 
 bool helper_function2(double p_b_current, double p_f_current,
-                      double p_b_current1, double p_f_current1,
+                      double p_b_current1, double p_f_current1, // both unused - FIXME
                       double p_bb, double p_bf, double p_fb, double p_ff,
                       double& out1, double& out2, double& out3, double& out4) {
   //: now compute 4 multipliers

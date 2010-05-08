@@ -66,8 +66,8 @@ bool boxm_render_expected_edge_vrml_process(bprb_func_process& pro)
   boxm_scene_base_sptr scene_ptr = pro.get_input<boxm_scene_base_sptr>(i++);
   //vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(i++);
   vcl_string path = pro.get_input<vcl_string>(i++);
-  float threshold = pro.get_input<float>(i++);
-  int s = pro.get_input<int>(i++);
+  float threshold = pro.get_input<float>(i++); // FIXME - currently unused!
+  int s = pro.get_input<int>(i++); // FIXME - unused!
 
   vcl_ofstream stream(path.c_str());
 
@@ -99,7 +99,7 @@ bool boxm_render_expected_edge_vrml_process(bprb_func_process& pro)
         boxm_block<type>* block = *iter;
         type* tree = block->get_tree();
         vcl_vector<boct_tree_cell<short,boxm_inf_line_sample<float> >*> cells = tree->leaf_cells();
-        
+
         // iterate over cells
         for (unsigned i=0; i<cells.size(); ++i)
         {
@@ -109,7 +109,7 @@ bool boxm_render_expected_edge_vrml_process(bprb_func_process& pro)
                       vgl_vector_2d<double> x0(line.x0().x(), line.x0().y());
           // TODO: revise with segment length
           if (!(line.x0().x()==0 && line.x0().y()==0)) {
-              //if(data.num_obs_ > threshold)
+              //if (data.num_obs_ > threshold)
               {
                   vgl_point_3d<double> p0,p1;
                   vgl_box_3d<double> bb = tree->cell_bounding_box(cell);
@@ -121,11 +121,11 @@ bool boxm_render_expected_edge_vrml_process(bprb_func_process& pro)
                       vgl_vector_3d<double> dir(p1-p0);
                       double length=dir.length();
                       dir/=length;
-                      if(data.residual_<0.2)
+                      if (data.residual_<0.2)
                       {
-                          vcl_cout<<data.residual_<<" ";
-                      bvrml_write::write_vrml_line(stream, p0,dir,length,1.f,0.f,0.f);
-                      //bvrml_write::write_vrml_disk(stream,p0,dir,data.residual_,0.f,1.0f,0.f);
+                          vcl_cout<<data.residual_<<' ';
+                          bvrml_write::write_vrml_line(stream, p0,dir,length,1.f,0.f,0.f);
+                          //bvrml_write::write_vrml_disk(stream,p0,dir,data.residual_,0.f,1.0f,0.f);
                       }
                   }
               }

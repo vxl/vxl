@@ -37,8 +37,8 @@ bool boxm_generate_opt2_samples_process_cons(bprb_func_process& pro)
   //input[1]: The camera of the observation
   //input[2]: The scene
   //input[3]: image name for saving scene
-  //input[4]: shadow prior 
-  //input[5]: shadow sigma 
+  //input[4]: shadow prior
+  //input[5]: shadow sigma
   //input[6]: use black background
 
   vcl_vector<vcl_string> input_types_(n_inputs_);
@@ -66,11 +66,10 @@ bool boxm_generate_opt2_samples_process(bprb_func_process& pro)
   }
 
   //get inputs:
-  unsigned i = 0;
   vil_image_view_base_sptr input_image = pro.get_input<vil_image_view_base_sptr>(0);
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(1);
   boxm_scene_base_sptr scene = pro.get_input<boxm_scene_base_sptr>(2);
-  vcl_string img_name =  pro.get_input<vcl_string>(3); // TODO - unused!!
+  vcl_string img_name =  pro.get_input<vcl_string>(3);
   float shadow_prior = pro.get_input<float>(4);
   float shadow_sigma = pro.get_input<float>(5);
   bool use_black_background =  pro.get_input<bool>(6);
@@ -83,7 +82,7 @@ bool boxm_generate_opt2_samples_process(bprb_func_process& pro)
 
   switch (scene->appearence_model())
   {
-  case BOXM_APM_SIMPLE_GREY:
+   case BOXM_APM_SIMPLE_GREY:
     {
       vil_image_view<vxl_byte> *img_byte
         = dynamic_cast<vil_image_view<vxl_byte>*>(input_image.ptr());
@@ -107,7 +106,7 @@ bool boxm_generate_opt2_samples_process(bprb_func_process& pro)
       }
       break;
     }
-  case BOXM_APM_MOG_GREY:
+   case BOXM_APM_MOG_GREY:
     {
       vil_image_view<vxl_byte> *img_byte
         = dynamic_cast<vil_image_view<vxl_byte>*>(input_image.ptr());
@@ -130,15 +129,13 @@ bool boxm_generate_opt2_samples_process(bprb_func_process& pro)
         boxm_generate_opt2_samples<short, boxm_sample<BOXM_APM_MOG_GREY>, BOXM_AUX_OPT2_GREY >(*s, camera, img, img_name, alt_appearance_priors, alt_appearance_models, use_black_background);
       }
       else {
-        vcl_cerr << "error: multi-bin scenes not supported" << vcl_endl;
+        vcl_cerr << "error: multi-bin scenes not supported\n";
       }
       break;
     }
-  default:
-    {
-      vcl_cout << "boxm_generate_opt2_samples_process: unsupported APM type" << vcl_endl;
-      return false;
-    }
+   default:
+    vcl_cout << "boxm_generate_opt2_samples_process: unsupported APM type" << vcl_endl;
+    return false;
   }
 
   return true;

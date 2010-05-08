@@ -748,7 +748,7 @@ bool brec_part_gaussian::extract(vil_image_view<float>& img, vil_image_view<floa
 //  Assumes that k_ and lambda_ for the foreground response model has already been set
 bool brec_part_gaussian::update_foreground_posterior(vil_image_view<float>& img,
                                                      vil_image_view<float>& fg_prob_img,
-                                                     vil_image_view<bool>& mask,
+                                                     vil_image_view<bool>& mask, // FIXME - unused
                                                      vil_image_view<float>& mean_img,
                                                      vil_image_view<float>& std_dev_img)
 {

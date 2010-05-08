@@ -1970,7 +1970,8 @@ bool bvxm_voxel_world::virtual_view(bvxm_image_metadata const& original_view,
                                     const vpgl_camera_double_sptr virtual_camera,
                                     vil_image_view_base_sptr &virtual_view,
                                     vil_image_view<float> &vis_prob,
-                                    unsigned bin_index,unsigned scale_idx)
+                                    unsigned bin_index, // FIXME - unused
+                                    unsigned scale_idx)
 {
   typedef bvxm_voxel_traits<OCCUPANCY>::voxel_datatype ocp_datatype;
   typedef typename bvxm_voxel_traits<APM_T>::obs_datatype obs_datatype;

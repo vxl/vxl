@@ -87,8 +87,8 @@ void boxm_render_edge_image_rt(boxm_scene<boct_tree<T_loc, T_data > > &scene,
                                vil_image_view<float> &expected,
                                vil_image_view<float> & mask,
                                float n_normal,
-                               unsigned int num_samples, //degree of freedom
-                               int bin = -1)
+                               unsigned int num_samples, // degrees of freedom
+                               int bin = -1) // FIXME - unused
 {
   typedef boxm_aux_traits<BOXM_AUX_NULL>::sample_datatype sample_datatype;
   boxm_aux_scene<T_loc, T_data,boxm_aux_edge_sample<sample_datatype> > aux_scene(&scene,boxm_aux_traits<BOXM_AUX_NULL>::storage_subdir(), boxm_aux_scene<T_loc, T_data,boxm_aux_edge_sample<sample_datatype> >::LOAD);

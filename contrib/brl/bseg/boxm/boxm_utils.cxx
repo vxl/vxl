@@ -140,9 +140,8 @@ boxm_utils::project_point3d(vgl_point_3d<double> const& point,
 
 //: corners of the input face: visible?
 bool boxm_utils::is_face_visible(double * xverts, double *yverts,
-                                 unsigned id1,unsigned id2,unsigned id3,unsigned id4)
+                                 unsigned id1,unsigned id2,unsigned id3,unsigned id4) // id4 unused ?!? - FIXME
 {
-
   double normal=(xverts[id2]-xverts[id1])*(yverts[id3]-yverts[id2])-(yverts[id2]-yverts[id1])*(xverts[id3]-xverts[id2]);
   return normal < 0;
 }
@@ -163,7 +162,7 @@ bool boxm_utils::is_face_visible(vcl_vector<vgl_point_3d<double> > &face,
   vgl_vector_2d<double> v0 = vs[1] - vs[0];
   vgl_vector_2d<double> v1 = vs[2] - vs[1];
   double normal = cross_product<double>(v0,v1);
-  //if(normal>-1e-4 && normal<0.0)
+  //if (normal>-1e-4 && normal<0.0)
   //    vcl_cout<<"+";
   return normal < -1e-5;
 }

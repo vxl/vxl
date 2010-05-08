@@ -93,7 +93,10 @@ void boxm_mog_grey_processor::compute_appearance(vcl_vector<boxm_apm_traits<BOXM
   return;
 }
 
-void boxm_mog_grey_processor::finalize_appearance(vcl_vector<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> const& obs, vcl_vector<float> const& obs_weights, boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype &model, float min_sigma)
+void boxm_mog_grey_processor::finalize_appearance(vcl_vector<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> const& obs,
+                                                  vcl_vector<float> const& obs_weights, // FIXME - unused
+                                                  boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype &model,
+                                                  float min_sigma)
 {
   static const unsigned int nmodes = boxm_apm_traits<BOXM_APM_MOG_GREY>::n_gaussian_modes_;
   const unsigned int nobs = obs.size();
@@ -184,7 +187,7 @@ void boxm_mog_grey_processor::compute_appearance(vcl_vector<boxm_apm_traits<BOXM
       for (unsigned int m=0; m<nmodes; ++m) {
         // compute probability that nth data point was produced by mth mode
         const float new_mode_prob = vis[n] * model.distribution(m).prob_density(obs[n]) * model.weight(m);
-        new_mode_probs[m] = new_mode_prob; 
+        new_mode_probs[m] = new_mode_prob;
         total_prob += new_mode_prob;
       }
       // compute the probability the observation came from an occluding cell
