@@ -117,7 +117,7 @@ bool boxm_roi_init_process(bprb_func_process& pro)
             vcl_cerr << "boxm_roi_init_process::roi_init()-- clipping box is out of image boundaries\n";
             return false;
         }
-        temp->set_size(bb->width(),bb->height());
+        temp->set_size(int(bb->width()),int(bb->height()));
         temp->deep_copy(vil_crop(*img,(unsigned int)bb->get_min_x(),
                             (unsigned int)bb->width(),
                             (unsigned int)bb->get_min_y(),
