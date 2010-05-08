@@ -2,4 +2,4 @@
 #include <boct/boct_tree.txx>
 
 typedef boct_tree<short,int > tree;
-BOXM_SCENE_INSTANTIATE(tree);
+BOXM2_SCENE_INSTANTIATE(tree);

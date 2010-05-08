@@ -4,7 +4,7 @@
 #include <boxm2/sample/boxm_inf_line_sample.h>
 
 typedef boct_tree<short,boxm_edge_tangent_sample<float> > aux_tree;
-BOXM_SCENE_INSTANTIATE(aux_tree);
+BOXM2_SCENE_INSTANTIATE(aux_tree);
 
 typedef boct_tree<short,boxm_inf_line_sample<float> > tree;
-BOXM_SCENE_INSTANTIATE(tree);
+BOXM2_SCENE_INSTANTIATE(tree);

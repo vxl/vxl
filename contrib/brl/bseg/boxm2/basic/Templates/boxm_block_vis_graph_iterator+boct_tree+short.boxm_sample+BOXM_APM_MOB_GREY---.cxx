@@ -4,4 +4,4 @@
 #include <vgl/io/vgl_io_point_3d.h>
 
 typedef boct_tree<short, boxm_sample<BOXM_APM_MOB_GREY> > tree_type;
-BOXM_BLOCK_VIS_GRAPH_ITERATOR_INSTANTIATE(tree_type);
+BOXM2_BLOCK_VIS_GRAPH_ITERATOR_INSTANTIATE(tree_type);

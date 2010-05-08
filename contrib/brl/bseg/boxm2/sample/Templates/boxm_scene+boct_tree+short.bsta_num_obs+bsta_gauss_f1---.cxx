@@ -5,4 +5,4 @@
 typedef bsta_num_obs<bsta_gauss_f1> gauss_type;
 typedef boct_tree<short,gauss_type> tree_type;
 
-BOXM_SCENE_INSTANTIATE(tree_type);
+BOXM2_SCENE_INSTANTIATE(tree_type);

@@ -4,16 +4,15 @@
 #include <boxm2/sample/boxm_inf_line_sample.h>
 
 typedef boct_tree<short,boxm_edge_tangent_sample<float> > aux_tree;
-BOXM_BLOCK_INSTANTIATE(aux_tree);
+BOXM2_BLOCK_INSTANTIATE(aux_tree);
 
 typedef boct_tree<short,boxm_inf_line_sample<float> > tree;
-BOXM_BLOCK_INSTANTIATE(tree);
+BOXM2_BLOCK_INSTANTIATE(tree);
 
 typedef boct_tree<short,float> tree2;
-BOXM_BLOCK_INSTANTIATE(tree2);
+BOXM2_BLOCK_INSTANTIATE(tree2);
 
 #include <boxm2/boxm_scene.txx>
-BOXM_BLOCK_ITERATOR_INSTANTIATE(tree);
-BOXM_BLOCK_ITERATOR_INSTANTIATE(tree2);
-BOXM_BLOCK_ITERATOR_INSTANTIATE(aux_tree);
-
+BOXM2_BLOCK_ITERATOR_INSTANTIATE(tree);
+BOXM2_BLOCK_ITERATOR_INSTANTIATE(tree2);
+BOXM2_BLOCK_ITERATOR_INSTANTIATE(aux_tree);

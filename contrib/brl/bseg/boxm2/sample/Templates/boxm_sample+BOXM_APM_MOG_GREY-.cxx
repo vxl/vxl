@@ -7,5 +7,4 @@
 #include <bsta/bsta_gauss_f1.h>
 #include <bsta/bsta_mixture_fixed.h>
 
-BOXM_SAMPLE_INSTANTIATE(BOXM_APM_MOG_GREY);
-
+BOXM2_SAMPLE_INSTANTIATE(BOXM_APM_MOG_GREY);
