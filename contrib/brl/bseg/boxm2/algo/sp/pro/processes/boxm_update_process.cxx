@@ -1,4 +1,4 @@
-// This is brl/bseg/boxm/pro/processes/boxm_update_process.cxx
+// This is brl/bseg/boxm2/algo/sp/pro/processes/boxm_update_process.cxx
 //:
 // \file
 // \brief Process to update the scene from an image and camera pair
@@ -26,13 +26,13 @@
 namespace boxm_update_process_globals
 {
   const unsigned n_inputs_ = 5;
-  const unsigned n_outputs_ = 1;
+  const unsigned n_outputs_ = 0;
 }
 
 bool boxm_update_process_cons(bprb_func_process& pro)
 {
   using namespace boxm_update_process_globals;
-  //process takes 4inputs
+  //process takes 5 inputs and no output
   //input[0]: The observation image
   //input[1]: The camera of the observation
   //input[2]: The scene
@@ -43,11 +43,7 @@ bool boxm_update_process_cons(bprb_func_process& pro)
   input_types_[2] = "boxm_scene_base_sptr";
   input_types_[3] = "unsigned";
   input_types_[4] = "bool";
-  if (!pro.set_input_types(input_types_))
-    return false;
-
-  //no output
-  return true;
+  return pro.set_input_types(input_types_);
 }
 
 bool boxm_update_process(bprb_func_process& pro)
@@ -69,13 +65,13 @@ bool boxm_update_process(bprb_func_process& pro)
 
   // check the input validity
   if ((input_image == 0) || (camera == 0) || (scene == 0)) {
-     vcl_cout << "boxm_update_process: null input value, cannot run" << vcl_endl;
-     return false;
+    vcl_cout << "boxm_update_process: null input value, cannot run" << vcl_endl;
+    return false;
   }
 
   if (scene->appearence_model() == BOXM_APM_MOG_GREY) {
     vil_image_view<vxl_byte> *img_byte
-        = dynamic_cast<vil_image_view<vxl_byte>*>(input_image.ptr());
+    = dynamic_cast<vil_image_view<vxl_byte>*>(input_image.ptr());
     vil_image_view<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> img(img_byte->ni(), img_byte->nj(), 1);
     vil_convert_stretch_range_limited(*img_byte ,img, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
     if (!scene->multi_bin())

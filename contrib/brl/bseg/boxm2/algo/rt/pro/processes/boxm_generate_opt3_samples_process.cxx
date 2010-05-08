@@ -1,4 +1,4 @@
-// This is brl/bseg/boxm/opt/pro/processes/boxm_generate_opt3_samples_process.cxx
+// This is brl/bseg/boxm2/algo/rt/pro/processes/boxm_generate_opt3_samples_process.cxx
 //:
 // \file
 // \brief Process to generate samples needed for boxm_opt3_optimizer_process from a given image/camera pair
@@ -76,10 +76,9 @@ bool boxm_generate_opt3_samples_process(bprb_func_process& pro)
 
   switch (scene->appearence_model())
   {
-  case BOXM_APM_SIMPLE_GREY:
+   case BOXM_APM_SIMPLE_GREY:
     {
-      vil_image_view<vxl_byte> *img_byte
-        = dynamic_cast<vil_image_view<vxl_byte>*>(input_image.ptr());
+      vil_image_view<vxl_byte> *img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(input_image.ptr());
       vil_image_view<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype> img(img_byte->ni(), img_byte->nj(), 1);
       vil_convert_stretch_range_limited(*img_byte ,img, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
       if (!scene->multi_bin())
@@ -90,10 +89,9 @@ bool boxm_generate_opt3_samples_process(bprb_func_process& pro)
       }
       break;
     }
-  case BOXM_APM_MOG_GREY:
+   case BOXM_APM_MOG_GREY:
     {
-      vil_image_view<vxl_byte> *img_byte
-        = dynamic_cast<vil_image_view<vxl_byte>*>(input_image.ptr());
+      vil_image_view<vxl_byte> *img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(input_image.ptr());
       vil_image_view<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> img(img_byte->ni(), img_byte->nj(), 1);
       vil_convert_stretch_range_limited(*img_byte ,img, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
       if (!scene->multi_bin())
@@ -104,11 +102,9 @@ bool boxm_generate_opt3_samples_process(bprb_func_process& pro)
       }
       break;
     }
-  default:
-    {
-      vcl_cout << "boxm_generate_opt3_samples_process: unsupported APM type" << vcl_endl;
-      return false;
-    }
+   default:
+    vcl_cout << "boxm_generate_opt3_samples_process: unsupported APM type" << vcl_endl;
+    return false;
   }
 
   return true;

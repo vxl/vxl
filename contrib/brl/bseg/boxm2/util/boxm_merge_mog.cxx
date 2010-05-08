@@ -3,7 +3,7 @@
 // \file
 
 #include <vcl_vector.h>
-#include <boxm/boxm_scene.h>
+#include <boxm2/boxm_scene.h>
 #include <vcl_cassert.h>
 #include <vnl/vnl_math.h> // for vnl_math_sqr()
 

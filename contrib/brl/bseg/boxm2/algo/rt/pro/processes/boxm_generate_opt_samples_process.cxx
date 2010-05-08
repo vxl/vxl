@@ -1,4 +1,4 @@
-// This is brl/bseg/boxm/opt/pro/processes/boxm_generate_opt_samples_process.cxx
+// This is brl/bseg/boxm2/algo/rt/pro/processes/boxm_generate_opt_samples_process.cxx
 //:
 // \file
 // \brief Process to update the scene from an image and camera pair

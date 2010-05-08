@@ -1,4 +1,4 @@
-//This is brl/bseg/boxm/pro/processes/boxm_upload_mesh_process.cxx
+//This is brl/bseg/boxm2/pro/processes/boxm_upload_mesh_process.cxx
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -16,12 +16,12 @@
 #include <vcl_string.h>
 #include <bprb/bprb_parameters.h>
 
-#include <boxm/boxm_apm_traits.h>
+#include <boxm2/boxm_apm_traits.h>
 
-#include <boxm/boxm_scene_base.h>
-#include <boxm/boxm_upload_mesh.h>
-#include <boxm/boxm_fill_in_mesh.h>
-#include <boxm/boxm_scene.h>
+#include <boxm2/boxm_scene_base.h>
+#include <boxm2/algo/boxm_upload_mesh.h>
+#include <boxm2/algo/boxm_fill_in_mesh.h>
+#include <boxm2/boxm_scene.h>
 #include <boct/boct_tree.h>
 #include <vul/vul_file_iterator.h>
 #include <vul/vul_file.h>

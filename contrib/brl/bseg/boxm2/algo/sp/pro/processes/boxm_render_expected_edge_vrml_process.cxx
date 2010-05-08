@@ -1,4 +1,4 @@
-// This is brl/bseg/boxm/opt/pro/processes/boxm_render_expected_edge_vrml_process.cxx
+// This is brl/bseg/boxm2/algo/sp/pro/processes/boxm_render_expected_edge_vrml_process.cxx
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -44,7 +44,7 @@ bool boxm_render_expected_edge_vrml_process_cons(bprb_func_process& pro)
   input_types_[2] = "float";
   input_types_[3] = "int";
   if (!pro.set_input_types(input_types_))
-    return false;
+  return false;
 
   // process has no output:
   vcl_vector<vcl_string>  output_types_(n_outputs_);
@@ -57,7 +57,7 @@ bool boxm_render_expected_edge_vrml_process(bprb_func_process& pro)
   using namespace boxm_render_expected_edge_vrml_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cerr << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    vcl_cerr << pro.name() << ": The input number should be " << n_inputs_<< '\n';
     return false;
   }
 
@@ -67,11 +67,12 @@ bool boxm_render_expected_edge_vrml_process(bprb_func_process& pro)
   //vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(i++);
   vcl_string path = pro.get_input<vcl_string>(i++);
   float threshold = pro.get_input<float>(i++);
-  int s = pro.get_input<int>(i++);
+  int s = pro.get_input<int>(i++); // FIXME: unused!
 
   vcl_ofstream stream(path.c_str());
 
-  if (scene_ptr->appearence_model() == BOXM_EDGE_LINE) {
+  if (scene_ptr->appearence_model() == BOXM_EDGE_LINE)
+  {
     if (!scene_ptr->multi_bin())
     {
       typedef boct_tree<short, boxm_inf_line_sample<float> > type;
@@ -99,36 +100,36 @@ bool boxm_render_expected_edge_vrml_process(bprb_func_process& pro)
         boxm_block<type>* block = *iter;
         type* tree = block->get_tree();
         vcl_vector<boct_tree_cell<short,boxm_inf_line_sample<float> >*> cells = tree->leaf_cells();
-        
+
         // iterate over cells
         for (unsigned i=0; i<cells.size(); ++i)
         {
           boct_tree_cell<short,boxm_inf_line_sample<float> >* cell = cells[i];
           boxm_inf_line_sample<float> data = cell->data();
           vgl_infinite_line_3d<float> line = data.line_;
-                      vgl_vector_2d<double> x0(line.x0().x(), line.x0().y());
+          vgl_vector_2d<double> x0(line.x0().x(), line.x0().y());
           // TODO: revise with segment length
           if (!(line.x0().x()==0 && line.x0().y()==0)) {
-              //if(data.num_obs_ > threshold)
-              {
-                  vgl_point_3d<double> p0,p1;
-                  vgl_box_3d<double> bb = tree->cell_bounding_box(cell);
-                  // convert to line type (from float to double)
-                  vgl_vector_3d<double> dir(line.direction().x(), line.direction().y(), line.direction().z());
+            //if (data.num_obs_ > threshold)
+            {
+              vgl_point_3d<double> p0,p1;
+              vgl_box_3d<double> bb = tree->cell_bounding_box(cell);
+              // convert to line type (from float to double)
+              vgl_vector_3d<double> dir(line.direction().x(), line.direction().y(), line.direction().z());
 
-                  vgl_infinite_line_3d<double> dline(x0,dir);
-                  if (vgl_intersection<double>(bb, dline, p0, p1)) {
-                      vgl_vector_3d<double> dir(p1-p0);
-                      double length=dir.length();
-                      dir/=length;
-                      if(data.residual_<0.2)
-                      {
-                          vcl_cout<<data.residual_<<" ";
-                      bvrml_write::write_vrml_line(stream, p0,dir,length,1.f,0.f,0.f);
-                      //bvrml_write::write_vrml_disk(stream,p0,dir,data.residual_,0.f,1.0f,0.f);
-                      }
-                  }
+              vgl_infinite_line_3d<double> dline(x0,dir);
+              if (vgl_intersection<double>(bb, dline, p0, p1)) {
+                vgl_vector_3d<double> dir(p1-p0);
+                double length=dir.length();
+                dir/=length;
+                if (data.residual_<0.2)
+                {
+                  vcl_cout<<data.residual_<<' ';
+                  bvrml_write::write_vrml_line(stream, p0,dir,length,1.f,0.f,0.f);
+                  //bvrml_write::write_vrml_disk(stream,p0,dir,data.residual_,0.f,1.0f,0.f);
+                }
               }
+            }
           }
         }
         iter++;
@@ -139,7 +140,8 @@ bool boxm_render_expected_edge_vrml_process(bprb_func_process& pro)
       vcl_cerr << "Ray tracing version not yet implemented\n";
       return false;
     }
-  } else {
+  }
+  else {
     vcl_cerr << "boxm_render_expected_edge_vrml_process: undefined APM type\n";
     return false;
   }

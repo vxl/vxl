@@ -1,4 +1,4 @@
-//This is brl/bseg/boxm/pro/processes/boxm_clean_scene_process.cxx
+//This is brl/bseg/boxm2/pro/processes/boxm_clean_scene_process.cxx
 #include <boxm2/boxm_scene_base.h>
 #include <boxm2/boxm_scene.h>
 //:
@@ -27,7 +27,7 @@
 
 #include <boxm2/sample/boxm_sample_multi_bin.h>
 #include <boxm2/boxm_scene_parser.h>
-//#include <boxm/boxm_init_scene.h>
+//#include <boxm2/boxm_init_scene.h>
 
 //:global variables
 namespace boxm_clean_scene_process_globals
@@ -74,32 +74,30 @@ bool boxm_clean_scene_process(bprb_func_process& pro)
 
   switch (scene->appearence_model())
   {
-  case BOXM_APM_MOG_GREY:
+   case BOXM_APM_MOG_GREY:
     {
       typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
       boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
       s->clean_scene();
       break;
     }
-  case BOXM_APM_SIMPLE_GREY:
+   case BOXM_APM_SIMPLE_GREY:
     {
       typedef boct_tree<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > tree_type;
       boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
       s->clean_scene();
       break;
     }
-  case BOXM_APM_MOB_GREY:
+   case BOXM_APM_MOB_GREY:
     {
       typedef boct_tree<short, boxm_sample<BOXM_APM_MOB_GREY> > tree_type;
       boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
       s->clean_scene();
       break;
     }
-  default:
-    {
-      vcl_cout << "boxm_clean_scene_process: undefined APM type" << vcl_endl;
-      return false;
-    }
+   default:
+    vcl_cout << "boxm_clean_scene_process: undefined APM type" << vcl_endl;
+    return false;
   }
   return true;
 }

@@ -1,4 +1,4 @@
-// This is brl/bseg/boxm/pro/processes/boxm_load_scene_process.cxx
+// This is brl/bseg/boxm2/pro/processes/boxm_load_scene_process.cxx
 //:
 // \file
 // \brief A class for obtaining roc curve from change detection results.
@@ -52,7 +52,7 @@ bool boxm_load_scene_process(bprb_func_process& pro)
   //get the inputs
   unsigned i = 0;
   vcl_string scene_file = pro.get_input<vcl_string>(i++);
-  
+
   boxm_scene_base_sptr scene= new boxm_scene_base();
   boxm_scene_parser parser;
   scene->load_scene(scene_file, parser);

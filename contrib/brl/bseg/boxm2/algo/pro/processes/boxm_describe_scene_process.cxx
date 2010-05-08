@@ -1,4 +1,4 @@
-// This is brl/bseg/boxm/pro/processes/boxm_describe_scene_process.cxx
+// This is brl/bseg/boxm2/algo/pro/processes/boxm_describe_scene_process.cxx
 #include <bprb/bprb_func_process.h>
 //:
 // \file

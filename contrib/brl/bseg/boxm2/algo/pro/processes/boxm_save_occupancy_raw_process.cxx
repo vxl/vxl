@@ -1,4 +1,4 @@
-// This is brl/bseg/boxm/pro/processes/boxm_save_occupancy_raw_process.cxx
+// This is brl/bseg/boxm2/algo/pro/processes/boxm_save_occupancy_raw_process.cxx
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -8,10 +8,10 @@
 // \date Apr 14, 2009
 // \verbatim
 //  Modifications
-//    Sep 11, 2009   Gamze Tunali 
-//         Added scene writing option, input number is increased to 4 and if 4th
-//         input is 0, blocks saved as raw files seperately, if 1, then blocks 
-//         combined to generate 1 raw file for the whole scene
+//   Sep 11, 2009   Gamze Tunali
+//                  Added scene writing option, input number is increased to 4 and if 4th
+//                  input is 0, blocks saved as raw files seperately, if 1, then blocks
+//                  combined to generate 1 raw file for the whole scene
 // \endverbatim
 
 #include <vcl_fstream.h>
@@ -42,18 +42,15 @@ bool boxm_save_occupancy_raw_process_cons(bprb_func_process& pro)
   input_types_[1] = "vcl_string";
   input_types_[2] = "unsigned";
   input_types_[3] = "unsigned";
-  if (!pro.set_input_types(input_types_))
-    return false;
-
+  return pro.set_input_types(input_types_);
   // process has no output
-  return true;
 }
 
 bool boxm_save_occupancy_raw_process(bprb_func_process& pro)
 {
   using namespace boxm_save_occupancy_raw_process_globals;
 
-  if ( pro.n_inputs() < n_inputs_ ){
+  if ( pro.n_inputs() < n_inputs_) {
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
     return false;
   }
@@ -84,10 +81,10 @@ bool boxm_save_occupancy_raw_process(bprb_func_process& pro)
           boxm_save_block_raw<short, boxm_sample_multi_bin<BOXM_APM_MOG_GREY> >(*scene, it.index(), s, resolution);
           it++;
         }
-      } else { // write the whole scene
+      }
+      else { // write the whole scene
         boxm_save_scene_raw<short, boxm_sample_multi_bin<BOXM_APM_MOG_GREY> >(*scene, filepath + ".raw", resolution);
       }
-
     }
     else
     {
@@ -105,46 +102,51 @@ bool boxm_save_occupancy_raw_process(bprb_func_process& pro)
           boxm_save_block_raw<short,boxm_sample<BOXM_APM_MOG_GREY> >(*scene, it.index(), s, resolution);
           it++;
         }
-      } else { // write the whole scene
+      }
+      else { // write the whole scene
         boxm_save_scene_raw<short,boxm_sample<BOXM_APM_MOG_GREY> >(*scene, filepath + ".raw", resolution);
       }
     }
-  } else if (scene_ptr->appearence_model() == BOXM_APM_SIMPLE_GREY) {
-      typedef boct_tree<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > type;
-      boxm_scene<type>* scene = static_cast<boxm_scene<type>*>(scene_ptr.as_pointer());
-      if (!whole) {
-        boxm_block_iterator<type> it(scene);
-        it.begin();
-        while (!it.end()) {
-          vcl_stringstream strm;
-          vgl_point_3d<int> index = it.index();
-          strm << index.x() << '_' << index.y() << '_' << index.z();
-          vcl_string str(strm.str());
-          vcl_string s = filepath + str + ".raw";
-          boxm_save_block_raw<short,boxm_sample<BOXM_APM_SIMPLE_GREY> >(*scene, it.index(), s, resolution);
-          it++;
-        }
-      } else { // write the whole scene
-        boxm_save_scene_raw<short,boxm_sample<BOXM_APM_SIMPLE_GREY> >(*scene, filepath + ".raw", resolution);
-      }
-  } else if ( boxm_scene< boct_tree<short, float> > *scene= dynamic_cast<boxm_scene< boct_tree<short, float > > * >(scene_ptr.as_pointer())){
-    if (!whole) {
-          boxm_block_iterator<boct_tree<short, float> > it(scene);
-          it.begin();
-          while (!it.end()) {
-            vcl_stringstream strm;
-            vgl_point_3d<int> index = it.index();
-            strm << index.x() << '_' << index.y() << '_' << index.z();
-            vcl_string str(strm.str());
-            vcl_string s = filepath + str + ".raw";
-            boxm_save_block_raw<short,float >(*scene, it.index(), s, resolution);
-            it++;
-          }
-        } else { // write the whole scene
-          boxm_save_scene_raw<short,float >(*scene, filepath + ".raw", resolution);
-        }
   }
-  else if ( boxm_scene< boct_tree<short, bsta_num_obs<bsta_gauss_f1> > > *scene= dynamic_cast<boxm_scene< boct_tree<short, bsta_num_obs<bsta_gauss_f1> > > * >(scene_ptr.as_pointer())){
+  else if (scene_ptr->appearence_model() == BOXM_APM_SIMPLE_GREY) {
+    typedef boct_tree<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > type;
+    boxm_scene<type>* scene = static_cast<boxm_scene<type>*>(scene_ptr.as_pointer());
+    if (!whole) {
+      boxm_block_iterator<type> it(scene);
+      it.begin();
+      while (!it.end()) {
+        vcl_stringstream strm;
+        vgl_point_3d<int> index = it.index();
+        strm << index.x() << '_' << index.y() << '_' << index.z();
+        vcl_string str(strm.str());
+        vcl_string s = filepath + str + ".raw";
+        boxm_save_block_raw<short,boxm_sample<BOXM_APM_SIMPLE_GREY> >(*scene, it.index(), s, resolution);
+        it++;
+      }
+    }
+    else { // write the whole scene
+      boxm_save_scene_raw<short,boxm_sample<BOXM_APM_SIMPLE_GREY> >(*scene, filepath + ".raw", resolution);
+    }
+  }
+  else if ( boxm_scene< boct_tree<short, float> > *scene= dynamic_cast<boxm_scene< boct_tree<short, float > > * >(scene_ptr.as_pointer())) {
+    if (!whole) {
+      boxm_block_iterator<boct_tree<short, float> > it(scene);
+      it.begin();
+      while (!it.end()) {
+        vcl_stringstream strm;
+        vgl_point_3d<int> index = it.index();
+        strm << index.x() << '_' << index.y() << '_' << index.z();
+        vcl_string str(strm.str());
+        vcl_string s = filepath + str + ".raw";
+        boxm_save_block_raw<short,float >(*scene, it.index(), s, resolution);
+        it++;
+      }
+    }
+    else { // write the whole scene
+      boxm_save_scene_raw<short,float >(*scene, filepath + ".raw", resolution);
+    }
+  }
+  else if ( boxm_scene< boct_tree<short, bsta_num_obs<bsta_gauss_f1> > > *scene= dynamic_cast<boxm_scene< boct_tree<short, bsta_num_obs<bsta_gauss_f1> > > * >(scene_ptr.as_pointer())) {
     if (!whole) {
       boxm_block_iterator<boct_tree<short, bsta_num_obs<bsta_gauss_f1> > > it(scene);
       it.begin();
@@ -157,37 +159,42 @@ bool boxm_save_occupancy_raw_process(bprb_func_process& pro)
         boxm_save_block_raw<short,bsta_num_obs<bsta_gauss_f1> >(*scene, it.index(), s, resolution);
         it++;
       }
-    } else { // write the whole scene
+    }
+    else { // write the whole scene
       boxm_save_scene_raw<short,bsta_num_obs<bsta_gauss_f1> >(*scene, filepath + ".raw", resolution);
     }
   }
-   else if (scene_ptr->appearence_model() == BOXM_APM_MOB_GREY) {
-      typedef boct_tree<short, boxm_sample<BOXM_APM_MOB_GREY> > type;
-      boxm_scene<type>* scene = static_cast<boxm_scene<type>*>(scene_ptr.as_pointer());
-      if (!whole) {
-        boxm_block_iterator<type> it(scene);
-        it.begin();
-        while (!it.end()) {
-          vcl_stringstream strm;
-          vgl_point_3d<int> index = it.index();
-          strm << index.x() << '_' << index.y() << '_' << index.z();
-          vcl_string str(strm.str());
-          vcl_string s = filepath + str + ".raw";
-          boxm_save_block_raw<short,boxm_sample<BOXM_APM_MOB_GREY> >(*scene, it.index(), s, resolution);
-          it++;
-        }
-      } else { // write the whole scene
-        boxm_save_scene_raw<short,boxm_sample<BOXM_APM_MOB_GREY> >(*scene, filepath + ".raw", resolution);
+  else if (scene_ptr->appearence_model() == BOXM_APM_MOB_GREY) {
+    typedef boct_tree<short, boxm_sample<BOXM_APM_MOB_GREY> > type;
+    boxm_scene<type>* scene = static_cast<boxm_scene<type>*>(scene_ptr.as_pointer());
+    if (!whole) {
+      boxm_block_iterator<type> it(scene);
+      it.begin();
+      while (!it.end()) {
+        vcl_stringstream strm;
+        vgl_point_3d<int> index = it.index();
+        strm << index.x() << '_' << index.y() << '_' << index.z();
+        vcl_string str(strm.str());
+        vcl_string s = filepath + str + ".raw";
+        boxm_save_block_raw<short,boxm_sample<BOXM_APM_MOB_GREY> >(*scene, it.index(), s, resolution);
+        it++;
       }
-   } else if (scene_ptr->appearence_model() == BOXM_EDGE_FLOAT) {
-      typedef boct_tree<short, boxm_edge_sample<float> > type;
-      boxm_scene<type>* scene = static_cast<boxm_scene<type>*>(scene_ptr.as_pointer());
-      boxm_save_scene_raw<short,boxm_edge_sample<float> >(*scene, filepath + ".raw", resolution);
-   }else if (scene_ptr->appearence_model() == BOXM_SCALAR_FLOAT) {
-      typedef boct_tree<short, boxm_scalar_sample<float> > type;
-      boxm_scene<type>* scene = static_cast<boxm_scene<type>*>(scene_ptr.as_pointer());
-      boxm_save_scene_raw<short,boxm_scalar_sample<float> >(*scene, filepath + ".raw", resolution);
-   } else {
+    }
+    else { // write the whole scene
+      boxm_save_scene_raw<short,boxm_sample<BOXM_APM_MOB_GREY> >(*scene, filepath + ".raw", resolution);
+    }
+  }
+  else if (scene_ptr->appearence_model() == BOXM_EDGE_FLOAT) {
+    typedef boct_tree<short, boxm_edge_sample<float> > type;
+    boxm_scene<type>* scene = static_cast<boxm_scene<type>*>(scene_ptr.as_pointer());
+    boxm_save_scene_raw<short,boxm_edge_sample<float> >(*scene, filepath + ".raw", resolution);
+  }
+  else if (scene_ptr->appearence_model() == BOXM_SCALAR_FLOAT) {
+    typedef boct_tree<short, boxm_scalar_sample<float> > type;
+    boxm_scene<type>* scene = static_cast<boxm_scene<type>*>(scene_ptr.as_pointer());
+    boxm_save_scene_raw<short,boxm_scalar_sample<float> >(*scene, filepath + ".raw", resolution);
+  }
+  else {
     vcl_cout << "boxm_save_occupancy_raw_process: undefined APM type" << vcl_endl;
     return false;
   }

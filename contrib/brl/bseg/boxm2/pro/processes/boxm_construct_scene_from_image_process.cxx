@@ -1,4 +1,4 @@
-// This is brl/bseg/boxm/pro/processes/boxm_construct_scene_from_image_process.cxx
+// This is brl/bseg/boxm2/pro/processes/boxm_construct_scene_from_image_process.cxx
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -182,7 +182,7 @@ bool boxm_construct_scene_from_image_process(bprb_func_process& pro)
     vcl_cerr << "boxm_construct_scene_from_image_process: null image value, cannot run\n";
     return false;
   }
-  
+
   vil_image_view<float> img = *vil_convert_cast(float(), image);
   if (image->pixel_format() == VIL_PIXEL_FORMAT_BYTE)
     vil_math_scale_values(img,1.0/255.0);

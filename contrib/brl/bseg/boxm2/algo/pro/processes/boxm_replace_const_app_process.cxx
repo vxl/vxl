@@ -1,4 +1,4 @@
-// This is brl/bseg/boxm/pro/processes/boxm_replace_const_app_process.cxx
+// This is brl/bseg/boxm2/algo/pro/processes/boxm_replace_const_app_process.cxx
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -15,8 +15,8 @@
 #include <boxm2/sample/boxm_sample_multi_bin.h>
 #include <boxm2/util/boxm_utils.h>
 
-void boxm_replace_constant_app(boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > > &scene,
-                               float mean);
+void boxm_replace_constant_app(boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > > &scene, float mean);
+
 namespace boxm_replace_const_app_process_globals
 {
   const unsigned n_inputs_ = 2;
@@ -26,17 +26,13 @@ namespace boxm_replace_const_app_process_globals
 bool boxm_replace_const_app_process_cons(bprb_func_process& pro)
 {
   using namespace boxm_replace_const_app_process_globals;
-  //process takes 2 inputs
+  //process takes 2 inputs and no output
   //input[0]: The scene
   //input[1]: mean value for appearance
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm_scene_base_sptr";
   input_types_[1] = "float";
-  if (!pro.set_input_types(input_types_))
-    return false;
-
-  //no output
-  return true;
+  return !pro.set_input_types(input_types_);
 }
 
 bool boxm_replace_const_app_process(bprb_func_process& pro)
@@ -55,14 +51,14 @@ bool boxm_replace_const_app_process(bprb_func_process& pro)
 
   // check the input validity
   if (scene == 0) {
-     vcl_cout << "boxm_replace_const_app_process: scene is null, cannot run" << vcl_endl;
-     return false;
+    vcl_cout << "boxm_replace_const_app_process: scene is null, cannot run" << vcl_endl;
+    return false;
   }
 
   if (scene->appearence_model() == BOXM_APM_MOG_GREY) {
-      typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
-      boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
-      boxm_replace_constant_app(*s,meanval );
+    typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
+    boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
+    boxm_replace_constant_app(*s,meanval );
   }
   else {
     vcl_cout << "boxm_replace_const_app_process: undefined APM type" << vcl_endl;
@@ -72,8 +68,7 @@ bool boxm_replace_const_app_process(bprb_func_process& pro)
   return true;
 }
 
-void boxm_replace_constant_app(boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > > &scene,
-                               float mean)
+void boxm_replace_constant_app(boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > > &scene, float mean)
 {
   boxm_block_iterator<boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > > iter(&scene);
   boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype app=boxm_utils::obtain_mog_grey_single_mode(mean);

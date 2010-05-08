@@ -1,4 +1,4 @@
-// This is brl/bseg/boxm/pro/processes/boxm_proj_local_cam_process.cxx
+// This is brl/bseg/boxm2/pro/processes/boxm_proj_local_cam_process.cxx
 #include <bprb/bprb_func_process.h>
 //:
 // \file

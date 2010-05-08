@@ -1,23 +1,21 @@
-// This is brl/bseg/boxm/pro/processes/boxm_roi_init_rational_camera_process.cxx
+//This is brl/bseg/boxm2/algo/pro/processes/boxm_roi_init_rational_camera_process.cxx
 #include <bprb/bprb_func_process.h>
 //:
 // \file
 // \brief A class for clipping and image based on a 3D bounding box.
-//        -  Input:
-//             - Image path (string)
-//             - boxm_voxel_world_sptr
+// *  Input:
+//   - Image path (string)
+//   - boxm_voxel_world_sptr
 //
-//        -  Output:
-//             - modified rational camera "vpgl_camera_double_sptr"
-//             - clipped image area (NITF) "vil_image_view_base_sptr"
+// *  Output:
+//   - modified rational camera "vpgl_camera_double_sptr"
+//   - clipped image area (NITF) "vil_image_view_base_sptr"
 //
-//        -  Params:
-//             -geographic uncertainty (error) in meters
+// *  Params:
+//   - geographic uncertainty (error) in meters
 //
 // \author  Copied from boxm/pro
 // \date    May 5, 2008
-// \verbatim
-// \endverbatim
 
 #include <boxm2/boxm_scene.h>
 #include <boxm2/util/boxm_utils.h>
@@ -45,7 +43,7 @@ namespace boxm_roi_init_rational_camera_process_globals
   const unsigned n_inputs_ = 3;
   const unsigned n_outputs_ = 3;
 
-  //functions
+  // functions
   bool roi_init(vcl_string const& image_path,
                 vpgl_rational_camera<double>* camera,
                 vgl_box_3d<double> box,
@@ -61,7 +59,7 @@ namespace boxm_roi_init_rational_camera_process_globals
                                   float r);
 }
 
-//: set input and output types
+//:set input and output types
 bool boxm_roi_init_rational_camera_process_cons(bprb_func_process& pro)
 {
   using namespace boxm_roi_init_rational_camera_process_globals;
@@ -98,7 +96,7 @@ bool boxm_roi_init_rational_camera_process(bprb_func_process& pro)
   // uncertainity (meters) -- SHOULD BE A PARAM
   float uncertainty=10.0;
   if ( !pro.parameters()->get_value(error, uncertainty) ) {
-      vcl_cout << pro.name() << ": error in retrieving parameters\n";
+    vcl_cout << pro.name() << ": error in retrieving parameters\n";
     return false;
   }
 
@@ -111,11 +109,9 @@ bool boxm_roi_init_rational_camera_process(bprb_func_process& pro)
   //voxel_world
   boxm_scene_base_sptr scene = pro.get_input<boxm_scene_base_sptr>(i++);
 
-
   vil_image_view<unsigned char>* img_ptr = new vil_image_view<unsigned char>();
   vpgl_rational_camera<double>* rat_camera =
-    dynamic_cast<vpgl_rational_camera<double>*> (camera.as_pointer());
-  
+  dynamic_cast<vpgl_rational_camera<double>*> (camera.as_pointer());
 
   if (!rat_camera) {
     vcl_cerr << "The camera input is not a rational camera\n";
@@ -126,17 +122,17 @@ bool boxm_roi_init_rational_camera_process(bprb_func_process& pro)
   if (scene->appearence_model() == BOXM_APM_MOG_GREY ||
       scene->appearence_model() == BOXM_EDGE_FLOAT ||
       scene->appearence_model() == BOXM_EDGE_LINE) {
-      typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
-  boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
+    typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
+    boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
 
-  if (!roi_init(image_path, rat_camera, s->get_world_bbox(),(s->lvcs()), uncertainty, img_ptr, local_camera)) {
+    if (!roi_init(image_path, rat_camera, s->get_world_bbox(),(s->lvcs()), uncertainty, img_ptr, local_camera)) {
       vcl_cerr << "The process has failed!\n";
       return false;
     }
 
     if (img_ptr->ni() == 0 || img_ptr->nj() == 0)
       return false;
-  
+
     //Store outputs
     unsigned j = 0;
     // update the camera and store
@@ -146,20 +142,21 @@ bool boxm_roi_init_rational_camera_process(bprb_func_process& pro)
     // store uncertainty
     pro.set_output_val<float>(j++, uncertainty);
   }
- else {
-      vcl_cout << "boxm_refine_scene_process: undefined APM type" << vcl_endl;
-      return false;
-    }
+  else {
+    vcl_cout << "boxm_refine_scene_process: undefined APM type" << vcl_endl;
+    return false;
+  }
   return true;
 }
+
 //: roi_init function
 bool boxm_roi_init_rational_camera_process_globals::roi_init(vcl_string const& image_path,
-                                             vpgl_rational_camera<double>* camera,
-                                             vgl_box_3d<double> box,
-                                             bgeo_lvcs lvcs,
-                                             float uncertainty,
-                                             vil_image_view<unsigned char>* nitf_image_unsigned_char,
-                                             vpgl_local_rational_camera<double>& local_camera)
+                                                             vpgl_rational_camera<double>* camera,
+                                                             vgl_box_3d<double> box,
+                                                             bgeo_lvcs lvcs,
+                                                             float uncertainty,
+                                                             vil_image_view<unsigned char>* nitf_image_unsigned_char,
+                                                             vpgl_local_rational_camera<double>& local_camera)
 {
   // read the image and extract the camera
   vil_image_resource_sptr img = vil_load_image_resource(image_path.c_str());
@@ -211,7 +208,7 @@ bool boxm_roi_init_rational_camera_process_globals::roi_init(vcl_string const& i
       {
         for (unsigned p=0; p<nitf_image_unsigned_char->nplanes(); ++p)
         {
-        // we will ignore the most significant 5 bits and less significant 3 bits
+          // we will ignore the most significant 5 bits and less significant 3 bits
           vxl_uint_16 curr_pixel_val = nitf_image_vxl_uint_16(m,n,p);
 
           if (bigendian) {
@@ -236,7 +233,7 @@ bool boxm_roi_init_rational_camera_process_globals::roi_init(vcl_string const& i
           unsigned char pixel_val = static_cast<unsigned char> (curr_pixel_val);
 
 #if 0
-          //This is how Thom use to get the region
+          //This is how Thom uses to get the region
           int temp_pix_val = int(int(curr_pixel_val)*255.0/1500.0);
           if (temp_pix_val > 255)
             temp_pix_val =255;
@@ -266,11 +263,11 @@ bool boxm_roi_init_rational_camera_process_globals::roi_init(vcl_string const& i
   return true;
 }
 
-//: project_box function
-vgl_box_2d<double>* boxm_roi_init_rational_camera_process_globals::project_box( vpgl_rational_camera<double>* cam,
-                                                                bgeo_lvcs lvcs,
-                                                                vgl_box_3d<double> box,
-                                                                float r)
+//:project_box function
+vgl_box_2d<double>*boxm_roi_init_rational_camera_process_globals::project_box( vpgl_rational_camera<double>* cam,
+                                                                               bgeo_lvcs lvcs,
+                                                                               vgl_box_3d<double> box,
+                                                                               float r)
 {
   double xoff, yoff, zoff;
   xoff = cam->offset(vpgl_rational_camera<double>::X_INDX);

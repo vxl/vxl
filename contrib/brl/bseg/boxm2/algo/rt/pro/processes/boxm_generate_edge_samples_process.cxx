@@ -1,4 +1,4 @@
-// This is brl/bseg/boxm/opt/pro/processes/boxm_generate_edge_samples_process.cxx
+// This is brl/bseg/boxm2/algo/rt/pro/processes/boxm_generate_edge_samples_process.cxx
 //:
 // \file
 // \brief Process to update the scene from an image and camera pair
@@ -91,7 +91,7 @@ bool boxm_generate_edge_samples_process(bprb_func_process& pro)
   }
 
   float new_n_normal=0.0;
-  
+
 
   if (scene->appearence_model() == BOXM_EDGE_FLOAT) {
     vil_image_view<float> edge_prob_image;

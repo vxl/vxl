@@ -1,4 +1,4 @@
-// This is brl/bseg/boxm/opt/pro/processes/boxm_rpc_registration_process.cxx
+// This is brl/bseg/boxm2/algo/rt/pro/processes/boxm_rpc_registration_process.cxx
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -96,16 +96,16 @@ bool boxm_rpc_registration_process(bprb_func_process& pro)
 
   vpgl_camera_double_sptr camera_out;
 
-  if(edge_type=="subpixel")
+  if (edge_type=="subpixel")
   {
-      vil_image_view<float > expected_edge_image(expected_edge_image_sptr);
-      vil_image_view<float> edge_image(edge_image_sptr);
-      boxm_rpc_registration<short,boxm_inf_line_sample<float> >(scene,edge_image,expected_edge_image,camera_inp, camera_out, rpc_shift_3d_flag,uncertainty, num_observation);
+    vil_image_view<float > expected_edge_image(expected_edge_image_sptr);
+    vil_image_view<float> edge_image(edge_image_sptr);
+    boxm_rpc_registration<short,boxm_inf_line_sample<float> >(scene,edge_image,expected_edge_image,camera_inp, camera_out, rpc_shift_3d_flag,uncertainty, num_observation);
   }
-  else{
-      vil_image_view<vxl_byte> expected_edge_image(expected_edge_image_sptr);
-      vil_image_view<vxl_byte> edge_image(edge_image_sptr);
-      boxm_rpc_registration<short,boxm_edge_sample<float> >(scene,edge_image,expected_edge_image,camera_inp, camera_out, rpc_shift_3d_flag,uncertainty,n_normal, num_observation);
+  else {
+    vil_image_view<vxl_byte> expected_edge_image(expected_edge_image_sptr);
+    vil_image_view<vxl_byte> edge_image(edge_image_sptr);
+    boxm_rpc_registration<short,boxm_edge_sample<float> >(scene,edge_image,expected_edge_image,camera_inp, camera_out, rpc_shift_3d_flag,uncertainty,n_normal, num_observation);
   }
 
   // output

@@ -1,4 +1,4 @@
-//This is brl/bseg/boxm/opt/pro/processes/boxm_opt2_update_process.cxx
+//This is brl/bseg/boxm2/algo/rt/pro/processes/boxm_opt2_update_process.cxx
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -85,7 +85,7 @@ bool boxm_opt2_update_process(bprb_func_process& pro)
   // extract list of image_ids from file
   vcl_ifstream ifs(image_list_fname.c_str());
   if (!ifs.good()) {
-    vcl_cerr << "error opening file " << image_list_fname << vcl_endl;
+    vcl_cerr << "error opening file " << image_list_fname << '\n';
     return false;
   }
   vcl_vector<vcl_string> image_ids;
@@ -100,7 +100,7 @@ bool boxm_opt2_update_process(bprb_func_process& pro)
 
   switch (apm_type)
   {
-  case BOXM_APM_SIMPLE_GREY:
+   case BOXM_APM_SIMPLE_GREY:
     {
       typedef boct_tree<short,boxm_sample<BOXM_APM_SIMPLE_GREY> > tree_type;
       boxm_scene<tree_type> *scene = dynamic_cast<boxm_scene<tree_type>*>(scene_base.ptr());
@@ -113,7 +113,7 @@ bool boxm_opt2_update_process(bprb_func_process& pro)
 
       break;
     }
-  case BOXM_APM_MOG_GREY:
+   case BOXM_APM_MOG_GREY:
     {
       typedef boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
       boxm_scene<tree_type> *scene = dynamic_cast<boxm_scene<tree_type>*>(scene_base.ptr());
@@ -127,7 +127,7 @@ bool boxm_opt2_update_process(bprb_func_process& pro)
       break;
     }
 #if 0 // commented out
-  case BOXM_APM_SIMPLE_RGB:
+   case BOXM_APM_SIMPLE_RGB:
     {
       boxm_scene<BOXM_APM_SIMPLE_RGB> *scene = dynamic_cast<boxm_scene<BOXM_APM_SIMPLE_RGB>*>(scene_base.ptr());
       if (!scene) {
@@ -140,8 +140,8 @@ bool boxm_opt2_update_process(bprb_func_process& pro)
       break;
     }
 #endif // 0
-  default:
-    vcl_cerr << "error - boxm_opt2_update_process: unsupported appearance model type " << apm_type << vcl_endl;
+   default:
+    vcl_cerr << "error - boxm_opt2_update_process: unsupported appearance model type " << apm_type << '\n';
     return false;
   }
 

@@ -1,4 +1,4 @@
-// This is brl/bseg/boxm/opt/pro/processes/boxm_update_rt_process.cxx
+// This is brl/bseg/boxm2/algo/rt/pro/processes/boxm_update_rt_process.cxx
 #include <bprb/bprb_func_process.h>
 //:
 // \file

@@ -1,4 +1,4 @@
-//This is brl/bseg/boxm/pro/processes/boxm_create_scene_process.cxx
+//This is brl/bseg/boxm2/pro/processes/boxm_create_scene_process.cxx
 #include <boxm2/boxm_scene_base.h>
 #include <boxm2/boxm_scene.h>
 //:
