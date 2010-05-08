@@ -1,5 +1,5 @@
-#ifndef boxm_update_sample_h_
-#define boxm_update_sample_h_
+#ifndef boxm2_update_sample_h_
+#define boxm2_update_sample_h_
 //:
 // \file
 
@@ -14,4 +14,4 @@ class boxm_update_sample
   bool do_update;
 };
 
-#endif // boxm_update_sample_h_
+#endif // boxm2_update_sample_h_
