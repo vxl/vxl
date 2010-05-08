@@ -358,6 +358,33 @@ SOURCE=.\Templates/boxm_block+boct_tree+short.boxm_sample+BOXM_APM_SIMPLE_GREY--
 # Begin Source File
 SOURCE=.\Templates/boxm_scene+boct_tree+short.boxm_edge_sample+float---.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_scene+boct_tree+short.int--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_scene+boct_tree+short.boxm_scalar_sample+float---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_scene+boct_tree+short.boxm_sample+BOXM_APM_MOB_GREY---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_scene+boct_tree+short.boxm_sample_multi_bin+BOXM_APM_MOG_GREY---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_scene+boct_tree+short.float--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_scene+boct_tree+short.boxm_sample+BOXM_APM_MOG_GREY---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_scene+boct_tree+short.boxm_sample+BOXM_APM_SIMPLE_GREY---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_scene+boct_tree+short.bsta_num_obs+bsta_gauss_f1---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_scene+boct_tree+short.vgl_point_3d+double---.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -423,6 +450,9 @@ SOURCE=.\boxm_sample_multi_bin.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_scalar_sample.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_update_sample.h
 # End Source File
 # End Group
 # End Target

@@ -101,9 +101,6 @@ SOURCE=.\dummy.cxx
 # Begin Group "Header Files"
 # PROP Default_Filter "h"
 # Begin Source File
-SOURCE=.\boxm_update_sample.h
-# End Source File
-# Begin Source File
 SOURCE=.\boxm_update_triangle.h
 # End Source File
 # Begin Source File
