@@ -4,7 +4,6 @@ LIBRARY := boxm
 
 SOURCES += dummy.cxx
 
-MANPAGE_SOURCES += boxm_update_sample.h
 MANPAGE_SOURCES += boxm_update_triangle.h
 MANPAGE_SOURCES += boxm_compute_volume_visibility.h
 MANPAGE_SOURCES += boxm_render_image_triangle.h

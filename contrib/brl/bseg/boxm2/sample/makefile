@@ -16,6 +16,7 @@ MANPAGE_SOURCES += boxm_edge_tangent_sample.txx
 MANPAGE_SOURCES += boxm_edge_sample.txx
 MANPAGE_SOURCES += boxm_scalar_sample.txx
 MANPAGE_SOURCES += boxm_inf_line_sample.txx
+MANPAGE_SOURCES += boxm_update_sample.h
 
 SUBDIRS += algo
 
