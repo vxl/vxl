@@ -6,7 +6,6 @@ SET(boxm2_algo_sp_sources
     boxm_render_image.h
     boxm_render_image_triangle.h
     boxm_update.h
-    boxm_update_sample.h
     boxm_update_triangle.h
     dummy.cxx
    )
