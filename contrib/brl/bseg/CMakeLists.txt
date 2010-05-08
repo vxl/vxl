@@ -32,10 +32,10 @@ SUBDIRS(bbgm)
 # background modeling python interface
 SUBDIRS(bbgm_batch)
 
-#voxel world modeling
+# voxel world modeling
 SUBDIRS(bvxm)
 
-#voxel world modeling python interface
+# voxel world modeling python interface
 SUBDIRS(bvxm_batch)
 
 # Lidar modeling (segmentation and meshing)
@@ -53,17 +53,19 @@ SUBDIRS(brec_batch)
 # octree
 SUBDIRS(boct)
 
-#octree based modeling 
+# octree based modeling
 SUBDIRS(boxm)
+SUBDIRS(boxm2)
 
-#octree based modeling python interface
+# octree based modeling python interface
 SUBDIRS(boxm_batch)
+SUBDIRS(boxm2_batch)
 
-#voxel processing library
+# voxel processing library
 SUBDIRS(bvpl)
 
-#voxel processing library python interface
+# voxel processing library python interface
 SUBDIRS(bvpl_batch)
 
-#voxel processing library python interface for octrees
+# voxel processing library python interface for octrees
 SUBDIRS(bvpl_octree_batch)
