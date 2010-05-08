@@ -1,5 +1,5 @@
-#ifndef boxm_render_expected_image_functor_h
-#define boxm_render_expected_image_functor_h
+#ifndef boxm2_render_expected_image_functor_h
+#define boxm2_render_expected_image_functor_h
 //:
 // \file
 #include <boxm2/boxm_apm_traits.h>
@@ -85,7 +85,7 @@ void boxm_render_image_rt(boxm_scene<boct_tree<T_loc, T_data > > &scene,
                           vpgl_camera_double_sptr cam,
                           vil_image_view<typename T_data::obs_datatype> &expected,
                           vil_image_view<float> & mask,
-                          int bin = -1,
+                          int bin = -1, // FIXME - unused
                           bool use_black_background = false)
 {
   typedef boxm_aux_traits<BOXM_AUX_NULL>::sample_datatype sample_datatype;

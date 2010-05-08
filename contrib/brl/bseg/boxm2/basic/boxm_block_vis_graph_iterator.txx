@@ -1,5 +1,5 @@
-#ifndef boxm_block_vis_graph_iterator_txx_
-#define boxm_block_vis_graph_iterator_txx_
+#ifndef boxm2_block_vis_graph_iterator_txx_
+#define boxm2_block_vis_graph_iterator_txx_
 
 #include "boxm_block_vis_graph_iterator.h"
 #include "boxm_block_vis_graph_node.h"
@@ -168,7 +168,7 @@ vcl_vector<boxm_block<T>*> boxm_block_vis_graph_iterator<T>::frontier_blocks()
   return frontier;
 }
 
-#define BOXM_BLOCK_VIS_GRAPH_ITERATOR_INSTANTIATE(T) \
+#define BOXM2_BLOCK_VIS_GRAPH_ITERATOR_INSTANTIATE(T) \
 template class boxm_block_vis_graph_iterator<T >
 
 #endif

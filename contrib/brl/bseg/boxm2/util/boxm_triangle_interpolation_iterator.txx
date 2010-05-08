@@ -1,5 +1,5 @@
-#ifndef boxm_triangle_interpolation_iterator_txx_
-#define boxm_triangle_interpolation_iterator_txx_
+#ifndef boxm2_triangle_interpolation_iterator_txx_
+#define boxm2_triangle_interpolation_iterator_txx_
 //:
 // \file
 
@@ -90,7 +90,7 @@ T boxm_triangle_interpolation_iterator<T>::value_at(int x)
 }
 
 
-#define BOXM_TRIANGLE_INTERPOLATION_ITERATOR_INSTANTIATE(T) \
+#define BOXM2_TRIANGLE_INTERPOLATION_ITERATOR_INSTANTIATE(T) \
   template class boxm_triangle_interpolation_iterator<T >
 
 

@@ -1,5 +1,5 @@
-#ifndef boxm_init_h_
-#define boxm_init_h_
+#ifndef boxm2_init_scene_h_
+#define boxm2_init_scene_h_
 //:
 // \file
 #include <boct/boct_tree.h>
@@ -23,15 +23,15 @@ void boxm_init_scene(boxm_scene<boct_tree<short, boxm_sample<APM_TYPE> > > &scen
   float alpha_init=-vcl_log(1-pinit)*numbercells/dimx;
   for (; !iter.end(); iter++) {
        vgl_point_3d<int> index=iter.index();
-      if(!scene.discover_block(index.x(),index.y(),index.z()))
-      {
-          boxm_sample<APM_TYPE> initsample(alpha_init);
-          tree_type* tree= new tree_type(initsample,scene.max_level(),scene.init_level());
-          boxm_block<tree_type> * block=new boxm_block<tree_type>(scene.get_block_bbox(index.x(),index.y(),index.z()),tree);
-          scene.set_block(index,block);
-          scene.write_active_block();
-      }
+    if (!scene.discover_block(index.x(),index.y(),index.z()))
+    {
+      boxm_sample<APM_TYPE> initsample(alpha_init);
+      tree_type* tree= new tree_type(initsample,scene.max_level(),scene.init_level());
+      boxm_block<tree_type> * block=new boxm_block<tree_type>(scene.get_block_bbox(index.x(),index.y(),index.z()),tree);
+      scene.set_block(index,block);
+      scene.write_active_block();
+    }
   }
 }
 
-#endif // boxm_init_h_
+#endif // boxm2_init_scene_h_

@@ -1,5 +1,5 @@
-#ifndef boxm_block_h_
-#define boxm_block_h_
+#ifndef boxm2_block_h_
+#define boxm2_block_h_
 //:
 // \file
 // \brief  a block is a smallest area that is going to be processed with an octree

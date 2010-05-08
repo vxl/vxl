@@ -1,5 +1,5 @@
-#ifndef boxm_opt3_sample_h_
-#define boxm_opt3_sample_h_
+#ifndef boxm2_opt3_sample_h_
+#define boxm2_opt3_sample_h_
 //:
 // \file
 
@@ -71,4 +71,4 @@ void vsl_b_read(vsl_b_istream & is, boxm_opt3_sample<APM> *&sample);
 template <boxm_apm_type APM>
 vcl_ostream& operator << (vcl_ostream& os, const boxm_opt3_sample<APM>& sample);
 
-#endif // boxm_opt3_sample_h_
+#endif // boxm2_opt3_sample_h_

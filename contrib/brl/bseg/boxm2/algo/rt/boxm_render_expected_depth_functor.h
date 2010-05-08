@@ -1,5 +1,5 @@
-#ifndef boxm_render_expected_depth_functor_h
-#define boxm_render_expected_depth_functor_h
+#ifndef boxm2_render_expected_depth_functor_h
+#define boxm2_render_expected_depth_functor_h
 //:
 // \file
 #include <boxm2/boxm_apm_traits.h>
@@ -88,7 +88,7 @@ void boxm_render_depth_rt(boxm_scene<boct_tree<T_loc, T_data > > &scene,
                           vil_image_view<float> &expected,
                           vil_image_view<float> &mask,
                           int bin = -1,
-                          bool use_black_background = false)
+                          bool use_black_background = false) // FIXME - unused
 {
   if (vpgl_perspective_camera<double> *pcam=dynamic_cast<vpgl_perspective_camera<double> *>(cam.ptr()))
   {
@@ -107,4 +107,4 @@ void boxm_render_depth_rt(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   }
 }
 
-#endif // boxm_render_expected_depth_functor_h
+#endif // boxm2_render_expected_depth_functor_h

@@ -1,5 +1,5 @@
-#ifndef boxm_pre_infinity_functor_h
-#define boxm_pre_infinity_functor_h
+#ifndef boxm2_pre_infinity_functor_h
+#define boxm2_pre_infinity_functor_h
 //:
 // \file
 #include <boxm2/boxm_apm_traits.h>
@@ -61,4 +61,4 @@ class boxm_pre_infinity_functor
   vil_image_view<float> &pre_img_;
 };
 
-#endif // boxm_pre_infinity_functor_h
+#endif // boxm2_pre_infinity_functor_h

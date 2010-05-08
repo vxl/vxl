@@ -1,5 +1,5 @@
-#ifndef boxm_raytrace_operations_h_
-#define boxm_raytrace_operations_h_
+#ifndef boxm2_raytrace_operations_h_
+#define boxm2_raytrace_operations_h_
 //:
 // \file
 
@@ -8,7 +8,7 @@
 #include <vgl/vgl_triangle_scan_iterator.h>
 
 #include <boct/boct_tree.h>
-#include <boxm/boxm_apm_traits.h>
+#include <boxm2/boxm_apm_traits.h>
 #include <vil/vil_image_view.h>
 #include <vpgl/vpgl_perspective_camera.h>
 
@@ -21,7 +21,7 @@
 bool cube_fill_value(double* xverts_2d, double* yverts_2d, boct_face_idx visible_faces, vil_image_view<float> &img, float const& val);
 
 bool boxm_alpha_seg_len(double *xverts_2d, double* yverts_2d, float* vert_distances, boct_face_idx visible_faces, float alpha, vil_image_view<float> &alpha_distance);
-bool boxm_depth_fill(double *xverts_2d, double* yverts_2d, 
+bool boxm_depth_fill(double *xverts_2d, double* yverts_2d,
                      float* vert_distances, boct_face_idx visible_faces,
                      vil_image_view<float> &depth_image);
 template<class T, class tri_int_it_t>

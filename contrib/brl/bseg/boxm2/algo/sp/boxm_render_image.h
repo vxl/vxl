@@ -1,5 +1,5 @@
-#ifndef boxm_render_image_h_
-#define boxm_render_image_h_
+#ifndef boxm2_render_image_h_
+#define boxm2_render_image_h_
 
 #include <vcl_vector.h>
 

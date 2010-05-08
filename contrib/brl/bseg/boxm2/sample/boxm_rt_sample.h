@@ -1,5 +1,5 @@
-#ifndef boxm_rt_sample_h_
-#define boxm_rt_sample_h_
+#ifndef boxm2_rt_sample_h_
+#define boxm2_rt_sample_h_
 //:
 // \file
 
@@ -63,4 +63,4 @@ void vsl_b_read(vsl_b_istream & is, boxm_rt_sample<T> *&sample);
 template <class T>
 vcl_ostream& operator << (vcl_ostream& os, const boxm_rt_sample<T>& sample);
 
-#endif // boxm_rt_sample_h_
+#endif // boxm2_rt_sample_h_

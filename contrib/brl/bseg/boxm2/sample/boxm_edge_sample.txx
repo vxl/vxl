@@ -1,5 +1,5 @@
-#ifndef boxm_edge_sample_txx_
-#define boxm_edge_sample_txx_
+#ifndef boxm2_edge_sample_txx_
+#define boxm2_edge_sample_txx_
 
 #include "boxm_edge_sample.h"
 
@@ -118,7 +118,7 @@ vcl_ostream& operator << (vcl_ostream& os, const boxm_aux_edge_sample<T>& sample
   return os;
 }
 
-#define BOXM_EDGE_SAMPLE_INSTANTIATE(T) \
+#define BOXM2_EDGE_SAMPLE_INSTANTIATE(T) \
 template class boxm_edge_sample<T >; \
 template void vsl_b_write(vsl_b_ostream &, boxm_edge_sample<T > const &); \
 template void vsl_b_write(vsl_b_ostream &, boxm_edge_sample<T > const *&); \
@@ -126,7 +126,7 @@ template void vsl_b_read(vsl_b_istream &, boxm_edge_sample<T > &); \
 template void vsl_b_read(vsl_b_istream &, boxm_edge_sample<T > *&); \
 template vcl_ostream& operator << (vcl_ostream&, const boxm_edge_sample<T >&)
 
-#define BOXM_AUX_EDGE_SAMPLE_INSTANTIATE(T) \
+#define BOXM2_AUX_EDGE_SAMPLE_INSTANTIATE(T) \
 template class boxm_aux_edge_sample<T >; \
 template void vsl_b_write(vsl_b_ostream &, boxm_aux_edge_sample<T > const &); \
 template void vsl_b_write(vsl_b_ostream &, boxm_aux_edge_sample<T > const *&); \

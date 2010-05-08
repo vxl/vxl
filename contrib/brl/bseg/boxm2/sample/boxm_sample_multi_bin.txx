@@ -1,5 +1,5 @@
-#ifndef boxm_sample_multi_bin_txx_
-#define boxm_sample_multi_bin_txx_
+#ifndef boxm2_sample_multi_bin_txx_
+#define boxm2_sample_multi_bin_txx_
 
 #include "boxm_sample_multi_bin.h"
 #include <bsta/bsta_mixture_fixed.h>
@@ -87,7 +87,7 @@ vcl_ostream& operator << (vcl_ostream& os, const boxm_sample_multi_bin<APM_MODEL
   return os;
 }
 
-#define BOXM_SAMPLE_MULTI_BIN_INSTANTIATE(T) \
+#define BOXM2_SAMPLE_MULTI_BIN_INSTANTIATE(T) \
 template class boxm_sample_multi_bin<T >; \
 template void vsl_b_write(vsl_b_ostream &, boxm_sample_multi_bin<T > const &); \
 template void vsl_b_write(vsl_b_ostream &, boxm_sample_multi_bin<T > const *&); \

@@ -1,5 +1,5 @@
-#ifndef boxm_sample_txx_
-#define boxm_sample_txx_
+#ifndef boxm2_sample_txx_
+#define boxm2_sample_txx_
 
 #include "boxm_sample.h"
 #include <bsta/bsta_mixture_fixed.h>
@@ -60,7 +60,7 @@ vcl_ostream& operator << (vcl_ostream& os, const boxm_sample<APM_MODEL>& sample)
   return os;
 }
 
-#define BOXM_SAMPLE_INSTANTIATE(T) \
+#define BOXM2_SAMPLE_INSTANTIATE(T) \
 template class boxm_sample<T >; \
 template void vsl_b_write(vsl_b_ostream &, boxm_sample<T > const &); \
 template void vsl_b_write(vsl_b_ostream &, boxm_sample<T > const *&); \

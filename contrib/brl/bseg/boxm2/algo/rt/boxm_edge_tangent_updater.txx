@@ -1,5 +1,5 @@
-#ifndef boxm_edge_tangent_updater_txx_
-#define boxm_edge_tangent_updater_txx_
+#ifndef boxm2_edge_tangent_updater_txx_
+#define boxm2_edge_tangent_updater_txx_
 
 #include "boxm_edge_tangent_updater.h"
 
@@ -112,46 +112,39 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
         }
         nums+=planes.size();
         if (planes.size() > 1) {
-          
+
           if (use_ransac_) {
-			vgl_infinite_line_3d<AUX> line;
-			float residual=1e5;
-			vgl_box_3d<double> bb = tree->cell_bounding_box(cell);
+            vgl_infinite_line_3d<AUX> line;
+            float residual=1e5;
+            vgl_box_3d<double> bb = tree->cell_bounding_box(cell);
 
-		    if (boxm_plane_ransac<AUX>(aux_samples, weights, line, residual,bb, 5)) {
-				boxm_inf_line_sample<AUX> data(line,aux_samples.size());
-				data.residual_=residual;
-                cell->set_data(data);
-             }
-             else 
-             {
-             boxm_inf_line_sample<AUX> sample(vgl_infinite_line_3d<AUX>(vgl_vector_2d<AUX>(-10000,-10000),vgl_vector_3d<AUX>(0,0,1)));
-               cell->set_data(sample);
+            if (boxm_plane_ransac<AUX>(aux_samples, weights, line, residual,bb, 5)) {
+              boxm_inf_line_sample<AUX> data(line,aux_samples.size());
+              data.residual_=residual;
+              cell->set_data(data);
             }
-
+            else
+            {
+              boxm_inf_line_sample<AUX> sample(vgl_infinite_line_3d<AUX>(vgl_vector_2d<AUX>(-10000,-10000),vgl_vector_3d<AUX>(0,0,1)));
+              cell->set_data(sample);
+            }
           }
           else
           {
-             boxm_inf_line_sample<AUX> sample(vgl_infinite_line_3d<AUX>(vgl_vector_2d<AUX>(-10000,-10000),vgl_vector_3d<AUX>(0,0,1)));
-               cell->set_data(sample);
-        
+            boxm_inf_line_sample<AUX> sample(vgl_infinite_line_3d<AUX>(vgl_vector_2d<AUX>(-10000,-10000),vgl_vector_3d<AUX>(0,0,1)));
+            cell->set_data(sample);
           }
-
         }
         else
         {
-             boxm_inf_line_sample<AUX> sample(vgl_infinite_line_3d<AUX>(vgl_vector_2d<AUX>(-10000,-10000),vgl_vector_3d<AUX>(0,0,1)));
-               cell->set_data(sample);
-
+          boxm_inf_line_sample<AUX> sample(vgl_infinite_line_3d<AUX>(vgl_vector_2d<AUX>(-10000,-10000),vgl_vector_3d<AUX>(0,0,1)));
+          cell->set_data(sample);
         }
-
       }
       else
       {
-       
-             boxm_inf_line_sample<AUX> sample(vgl_infinite_line_3d<AUX>(vgl_vector_2d<AUX>(-10000,-10000),vgl_vector_3d<AUX>(0,0,1)));
-               cell->set_data(sample);
-
+        boxm_inf_line_sample<AUX> sample(vgl_infinite_line_3d<AUX>(vgl_vector_2d<AUX>(-10000,-10000),vgl_vector_3d<AUX>(0,0,1)));
+        cell->set_data(sample);
       }
     }
     nums/=cells.size();
@@ -175,7 +168,7 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
 }
 
 
-#define BOXM_EDGE_TANGENT_UPDATER_INSTANTIATE(T1,T2,T3) \
+#define BOXM2_EDGE_TANGENT_UPDATER_INSTANTIATE(T1,T2,T3) \
 template class boxm_edge_tangent_updater<T1,T2,T3 >
 
-#endif // boxm_edge_tangent_updater_txx_
+#endif // boxm2_edge_tangent_updater_txx_

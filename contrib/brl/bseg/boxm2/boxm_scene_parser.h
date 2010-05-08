@@ -1,7 +1,7 @@
-#ifndef boxm_scene_parser_h_
-#define boxm_scene_parser_h_
+#ifndef boxm2_scene_parser_h_
+#define boxm2_scene_parser_h_
 
-#include <boxm/boxm_scene.h>
+#include <boxm2/boxm_scene.h>
 
 #include <expatpplib.h>
 #include <vcl_string.h>

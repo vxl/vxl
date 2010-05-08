@@ -1,5 +1,5 @@
-#ifndef boxm_render_expected_edge_tangent_image_functor_h
-#define boxm_render_expected_edge_tangent_image_functor_h
+#ifndef boxm2_render_expected_edge_tangent_image_functor_h
+#define boxm2_render_expected_edge_tangent_image_functor_h
 //:
 // \file
 #include <boxm2/boxm_apm_traits.h>
@@ -35,7 +35,7 @@ class boxm_render_expected_edge_tangent_image_functor
                                                   unsigned int /*ni*/=0, unsigned /*nj*/=0,
                                                   bool scene_read_only=false,
                                                   bool is_aux=true)
-                                                  : cam_(cam),residual(threshold),expected_(expected), num_obs_(expected.ni(),expected.nj())
+  : expected_(expected), num_obs_(expected.ni(),expected.nj()), cam_(cam), residual(threshold)
   {
     expected_.fill(-1);
     num_obs_.fill(0);
@@ -44,10 +44,10 @@ class boxm_render_expected_edge_tangent_image_functor
   }
 
   inline bool step_cell(unsigned int i, unsigned int j,
-                        vgl_point_3d<double> s0,
-                        vgl_point_3d<double> s1,
+                        vgl_point_3d<double> s0, // FIXME - unused
+                        vgl_point_3d<double> s1, // FIXME - unused
                         boxm_inf_line_sample<typename boxm_apm_traits<APM>::obs_datatype> &cell_value,
-                        T_aux aux_val)
+                        T_aux /*aux_val*/)
   {
     //vcl_cout<< cell_value.residual_<<' ';
     if (cell_value.num_obs_>2 && cell_value.residual_<residual && cell_value.num_obs_>num_obs_(i,j))
@@ -88,9 +88,9 @@ template <class T_loc, class T_data>
 void boxm_render_edge_tangent_image_rt(boxm_scene<boct_tree<T_loc, T_data > > &scene,
                                        vpgl_camera_double_sptr cam,
                                        vil_image_view<float> &expected,
-                                       float n_normal,
-                                       unsigned int num_samples,
-                                       float threshold) //degree of freedom
+                                       float n_normal, // FIXME - unused
+                                       unsigned int num_samples, // FIXME - unused
+                                       float threshold) // degrees of freedom
 {
   typedef boxm_aux_traits<BOXM_AUX_NULL>::sample_datatype sample_datatype;
   boxm_aux_scene<T_loc, T_data,boxm_edge_tangent_sample<sample_datatype> > aux_scene(&scene,boxm_aux_traits<BOXM_AUX_NULL>::storage_subdir(), boxm_aux_scene<T_loc, T_data,boxm_edge_tangent_sample<sample_datatype> >::LOAD);

@@ -1,5 +1,5 @@
-#ifndef boxm_register_h_
-#define boxm_register_h_
+#ifndef boxm2_register_h_
+#define boxm2_register_h_
 
 class boxm_register
 {
@@ -8,4 +8,4 @@ class boxm_register
   static void register_process();
 };
 
-#endif // boxm_register_h_
+#endif // boxm2_register_h_

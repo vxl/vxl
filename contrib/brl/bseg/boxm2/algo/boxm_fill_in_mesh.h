@@ -1,5 +1,5 @@
-#ifndef boxm_fill_in_mesh_h_
-#define boxm_fill_in_mesh_h_
+#ifndef boxm2_fill_in_mesh_h_
+#define boxm2_fill_in_mesh_h_
 //:
 // \file
 #include <boct/boct_tree.h>
@@ -313,4 +313,4 @@ void boxm_fill_in_mesh_into_scene(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   }
 }
 
-#endif // boxm_fill_in_mesh_h_
+#endif // boxm2_fill_in_mesh_h_

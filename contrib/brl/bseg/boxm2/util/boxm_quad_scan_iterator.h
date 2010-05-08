@@ -1,5 +1,5 @@
-#ifndef boxm_quad_scan_iterator_h_
-#define boxm_quad_scan_iterator_h_
+#ifndef boxm2_quad_scan_iterator_h_
+#define boxm2_quad_scan_iterator_h_
 //:
 // \file
 #include <vcl_vector.h>

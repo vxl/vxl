@@ -1,5 +1,5 @@
-#ifndef boxm_compute_scene_statistics_h
-#define boxm_compute_scene_statistics_h
+#ifndef boxm2_compute_scene_statistics_h
+#define boxm2_compute_scene_statistics_h
 
 #include <boxm2/boxm_scene.h>
 #include <vcl_iostream.h>

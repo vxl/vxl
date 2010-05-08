@@ -1,5 +1,5 @@
-#ifndef boxm_save_block_raw_h_
-#define boxm_save_block_raw_h_
+#ifndef boxm2_save_block_raw_h_
+#define boxm2_save_block_raw_h_
 
 #include <vcl_vector.h>
 #include <vcl_new.h>

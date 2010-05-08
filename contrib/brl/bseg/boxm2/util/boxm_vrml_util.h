@@ -1,6 +1,6 @@
-// This is brl/bseg/boxm/algo/boxm_vrml_util.h
-#ifndef boxm_vrml_util_h
-#define boxm_vrml_util_h
+// This is brl/bseg/boxm2/util/boxm_vrml_util.h
+#ifndef boxm2_vrml_util_h
+#define boxm2_vrml_util_h
 //:
 // \file
 // \brief  Set of utilities to save a boxm_scene as vrml files
@@ -207,4 +207,4 @@ void bvxm_vrml_voxel_grid::write_vrml_grid_as_pointers(vcl_ofstream& str, bvxm_v
 }
 #endif // 0
 
-#endif // boxm_vrml_util_h
+#endif // boxm2_vrml_util_h

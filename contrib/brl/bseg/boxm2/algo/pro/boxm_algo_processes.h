@@ -1,5 +1,5 @@
-#ifndef boxm_algo_processes_h_
-#define boxm_algo_processes_h_
+#ifndef boxm2_algo_processes_h_
+#define boxm2_algo_processes_h_
 
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_macros.h>

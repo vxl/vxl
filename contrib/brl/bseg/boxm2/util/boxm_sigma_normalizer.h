@@ -1,6 +1,6 @@
-// this is contrib/brl/bseg/boxm/boxm_sigma_normalizer.h
-#ifndef boxm_sigma_normalizer_h_
-#define boxm_sigma_normalizer_h_
+// this is contrib/brl/bseg/boxm2/boxm_sigma_normalizer.h
+#ifndef boxm2_sigma_normalizer_h_
+#define boxm2_sigma_normalizer_h_
 //:
 // \file
 // \brief A class for adjusting sample standard deviation values such that the probability of underestimation of the true std. dev. is fixed.
@@ -14,10 +14,10 @@
 
 #include <vcl_vector.h>
 
-class boxm_sigma_normalizer 
+class boxm_sigma_normalizer
 {
  public:
-  //: create a sigma_normalizer object. 
+  //: create a sigma_normalizer object.
   boxm_sigma_normalizer(float under_estimation_probability);
 
   //: compute the normalization factor for a sample distribution computing with N observations

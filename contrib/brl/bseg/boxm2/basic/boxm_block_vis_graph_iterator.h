@@ -1,5 +1,5 @@
-#ifndef boxm_block_vis_graph_iterator_h_
-#define boxm_block_vis_graph_iterator_h_
+#ifndef boxm2_block_vis_graph_iterator_h_
+#define boxm2_block_vis_graph_iterator_h_
 //:
 // \file
 #include "boxm_block_vis_graph_node.h"

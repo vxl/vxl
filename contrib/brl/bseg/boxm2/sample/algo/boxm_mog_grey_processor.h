@@ -1,6 +1,6 @@
 // This is brl/bseg/boxm2/sample/algo/boxm_mog_grey_processor.h
-#ifndef boxm_mog_grey_processor_h_
-#define boxm_mog_grey_processor_h_
+#ifndef boxm2_mog_grey_processor_h_
+#define boxm2_mog_grey_processor_h_
 //:
 // \file
 // \brief A class for a grey-scale-mixture-of-gaussian processor
@@ -45,11 +45,7 @@ class  boxm_mog_grey_processor
   static void update_appearance(vcl_vector<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> const& obs, vcl_vector<float> const& obs_weights, boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype &model, float min_sigma = 0.01f);
   static void finalize_appearance(vcl_vector<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> const& obs, vcl_vector<float> const& obs_weights, boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype &model, float min_sigma = 0.01f);
 
-
-
   static void compute_appearance(vcl_vector<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> const& obs, vcl_vector<float> const& pre, vcl_vector<float> const& vis, boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype &model, float min_sigma = 0.01f);
-
-
 };
 
-#endif // boxm_mog_grey_processor_h_
+#endif // boxm2_mog_grey_processor_h_

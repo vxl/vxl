@@ -1,12 +1,12 @@
-#ifndef boxm_scalar_sample_txx_
-#define boxm_scalar_sample_txx_
+#ifndef boxm2_scalar_sample_txx_
+#define boxm2_scalar_sample_txx_
 
 #include "boxm_scalar_sample.h"
 
 template <class OBS_T>
 void boxm_scalar_sample<OBS_T>::print(vcl_ostream& os) const
 {
-  os << "(scalar=" << scalar_sum_ << " seg_len=" << seg_len_ << ')\n';
+  os << "(scalar=" << scalar_sum_ << " seg_len=" << seg_len_ << ")\n";
 }
 
 template <class T>
@@ -59,7 +59,7 @@ vcl_ostream& operator << (vcl_ostream& os, const boxm_scalar_sample<T>& sample)
   return os;
 }
 
-#define BOXM_SCALAR_SAMPLE_INSTANTIATE(T) \
+#define BOXM2_SCALAR_SAMPLE_INSTANTIATE(T) \
   template class boxm_scalar_sample<T >; \
   template void vsl_b_write(vsl_b_ostream &, boxm_scalar_sample<T > const &); \
   template void vsl_b_write(vsl_b_ostream &, boxm_scalar_sample<T > const *&); \

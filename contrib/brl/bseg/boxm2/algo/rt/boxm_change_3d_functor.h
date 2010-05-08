@@ -1,5 +1,5 @@
-#ifndef boxm_change_3d_functor_h
-#define boxm_change_3d_functor_h
+#ifndef boxm2_change_3d_functor_h
+#define boxm2_change_3d_functor_h
 //:
 // \file
 #include <boxm2/boxm_apm_traits.h>
@@ -94,4 +94,4 @@ void boxm_change_3d(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   vcl_cout<<"Change 3-d Done."<<vcl_endl;
 }
 
-#endif // boxm_change_3d_functor_h
+#endif // boxm2_change_3d_functor_h

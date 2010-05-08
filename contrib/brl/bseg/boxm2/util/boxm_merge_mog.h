@@ -1,6 +1,6 @@
-// This is brl/bseg/boxm/algo/boxm_merge_mog.h
-#ifndef boxm_merge_mog_h_
-#define boxm_merge_mog_h_
+// This is brl/bseg/boxm2/util/boxm_merge_mog.h
+#ifndef boxm2_merge_mog_h_
+#define boxm2_merge_mog_h_
 //:
 // \file
 // \brief class with methods to merge gaussian mixtures.
@@ -18,7 +18,7 @@
 #include <bsta/bsta_mixture_fixed.h>
 #include <bsta/bsta_gaussian_indep.h>
 
-#include <boxm/boxm_scene.h>
+#include <boxm2/boxm_scene.h>
 
 //:
 // Only floating point are supported for now and mixtures with 3 components.

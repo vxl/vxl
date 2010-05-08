@@ -1,5 +1,5 @@
-#ifndef boxm_sample_multi_bin_h_
-#define boxm_sample_multi_bin_h_
+#ifndef boxm2_sample_multi_bin_h_
+#define boxm2_sample_multi_bin_h_
 //:
 // \file
 #include <boxm2/boxm_apm_traits.h>

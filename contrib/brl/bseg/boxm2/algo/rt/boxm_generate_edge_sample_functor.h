@@ -1,5 +1,5 @@
-#ifndef boxm_generate_edge_sample_functor_h
-#define boxm_generate_edge_sample_functor_h
+#ifndef boxm2_generate_edge_sample_functor_h
+#define boxm2_generate_edge_sample_functor_h
 //:
 // \file
 #include <boxm2/boxm_apm_traits.h>
@@ -59,4 +59,4 @@ void boxm_generate_edge_sample_rt(boxm_scene<boct_tree<T_loc, T_data > > &scene,
     vcl_cerr << "DONE.\n";
 }
 
-#endif // boxm_generate_edge_sample_functor_h
+#endif // boxm2_generate_edge_sample_functor_h

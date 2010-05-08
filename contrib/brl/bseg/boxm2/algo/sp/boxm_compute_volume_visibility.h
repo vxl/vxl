@@ -1,5 +1,5 @@
-#ifndef boxm_compute_volume_visibility_h
-#define boxm_compute_volume_visibility_h
+#ifndef boxm2_compute_volume_visibility_h
+#define boxm2_compute_volume_visibility_h
 #include <vgl/vgl_box_3d.h>
 #include <boxm2/boxm_scene.h>
 #include <boxm2/util/boxm_utils.h>
@@ -19,7 +19,7 @@ float boxm_compute_point_visibility(vgl_point_3d<double> point,
 
     vcl_cout<<"The point is "<<point;
     if (cam->is_behind_camera(vgl_homg_point_3d<double>(point)))
-      return 1.0f;
+    return 1.0f;
     // first block of intersection
 
     // case 1 : when the camera lies inside the scene
@@ -41,9 +41,9 @@ float boxm_compute_point_visibility(vgl_point_3d<double> point,
       vgl_box_3d<double> world_bb=scene.get_world_bbox();
       boct_face_idx face_id;
       if (!boxm_utils::cube_entry_point(world_bb,cam_center,dir,entry_point,lambda,face_id))
-        return 1.0f;
+      return 1.0f;
       if (!scene.get_block_index(entry_point,curr_block_index))
-        return 1.0f;
+      return 1.0f;
     }
     else
     {
@@ -66,10 +66,10 @@ float boxm_compute_point_visibility(vgl_point_3d<double> point,
       if (curr_cell)
       {
         if (boxm_utils::cube_exit_point(tree->cell_bounding_box(curr_cell),
-                                        cam_center,dir,exit_point,lambda,face_id))
+        cam_center,dir,exit_point,lambda,face_id))
         {
           if (lambda>lambda0)
-            continue_flag=false;
+          continue_flag=false;
           else
           {
             vcl_vector<boct_tree_cell<T_loc,T_data > * > neighbors;
@@ -151,8 +151,8 @@ float boxm_compute_point_visibility(vgl_point_3d<double> point,
   }
   else
   {
-    vcl_cout<<"Not a perspective camera"<<vcl_endl;
-    return -1.0f;
+  vcl_cout<<"Not a perspective camera"<<vcl_endl;
+  return -1.0f;
   }
 }
 

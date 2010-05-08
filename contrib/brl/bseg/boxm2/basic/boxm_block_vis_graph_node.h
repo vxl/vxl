@@ -1,5 +1,5 @@
-#ifndef boxm_block_vis_graph_node_h_
-#define boxm_block_vis_graph_node_h_
+#ifndef boxm2_block_vis_graph_node_h_
+#define boxm2_block_vis_graph_node_h_
 //:
 // \file
 #include <vcl_vector.h>
@@ -42,7 +42,7 @@ class boxm_block_vis_graph_node
   vcl_vector<typename vis_graph_type::iterator> out_links;
 };
 
-#define BOXM_BLOCK_VIS_GRAPH_NODE_INSTANTIATE(T) \
+#define BOXM2_BLOCK_VIS_GRAPH_NODE_INSTANTIATE(T) \
 template class boxm_block_vis_graph_node<T >
 
 #endif

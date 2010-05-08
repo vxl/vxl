@@ -1,5 +1,5 @@
-#ifndef boxm_aux_scene_txx_
-#define boxm_aux_scene_txx_
+#ifndef boxm2_aux_scene_txx_
+#define boxm2_aux_scene_txx_
 
 #include <boxm2/boxm_aux_scene.h>
 #include <boxm2/boxm_aux_traits.h>
@@ -9,7 +9,7 @@
 
 template <class T_loc, class T, class T_AUX>
 boxm_aux_scene<T_loc,T,T_AUX>::boxm_aux_scene(boxm_scene<tree_type>* scene,
-                                              vcl_string storage_suffix, 
+                                              vcl_string storage_suffix,
                                               tree_creation_type type,
                                               boxm_apm_type app_model)
 : aux_scene_(0)
@@ -54,7 +54,6 @@ boxm_aux_scene<T_loc,T,T_AUX>::boxm_aux_scene(boxm_scene<tree_type>* scene,
 }
 
 
-
 template <class T_loc, class T, class T_AUX>
 boct_tree_cell_reader<T_loc, T_AUX>* boxm_aux_scene<T_loc,T,T_AUX>::get_block_incremental(vgl_point_3d<int> block_idx)
 {
@@ -95,7 +94,7 @@ boct_tree_cell_reader<T_loc, T_AUX>* boxm_aux_scene<T_loc,T,T_AUX>::save_scene()
 }
 #endif // 0
 
-#define BOXM_AUX_SCENE_INSTANTIATE(T1,T2,T3) \
+#define BOXM2_AUX_SCENE_INSTANTIATE(T1,T2,T3) \
 template class boxm_aux_scene<T1,T2,T3 >
 
 #endif

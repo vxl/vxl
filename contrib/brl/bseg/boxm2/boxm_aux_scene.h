@@ -1,5 +1,5 @@
-#ifndef boxm_aux_scene_h_
-#define boxm_aux_scene_h_
+#ifndef boxm2_aux_scene_h_
+#define boxm2_aux_scene_h_
 //:
 // \file
 // \brief  an auxiliary scene keeps a set of octrees for a given main scene
@@ -15,7 +15,7 @@
 #include <boct/boct_tree_cell_reader.h>
 #include <boxm2/boxm_scene.h>
 #include <boxm2/boxm_block.h>
-//#include <boxm/opt/boxm_rt_sample.h>
+//#include <boxm2/opt/boxm_rt_sample.h>
 
 #include <vgl/vgl_point_3d.h>
 
@@ -27,15 +27,15 @@ class boxm_aux_scene
    typedef  boct_tree<T_loc, T> tree_type;
    typedef  boct_tree<T_loc, T_AUX> aux_tree_type;
    boxm_aux_scene() : aux_scene_(NULL), aux_storage_dir_("") {}
-   boxm_aux_scene(boxm_scene<tree_type>* scene, vcl_string suffix, 
-     tree_creation_type type, boxm_apm_type app_model=BOXM_APM_UNKNOWN);
+   boxm_aux_scene(boxm_scene<tree_type>* scene, vcl_string suffix,
+                  tree_creation_type type, boxm_apm_type app_model=BOXM_APM_UNKNOWN);
 
    ~boxm_aux_scene(){ /*delete aux_scene_;*/ }
 
    void init_scene(){}
 
 
-   boxm_block<boct_tree<T_loc,T_AUX> > * get_block(vgl_point_3d<int> index){  
+   boxm_block<boct_tree<T_loc,T_AUX> > * get_block(vgl_point_3d<int> index){
        aux_scene_->load_block(index);
        return aux_scene_->get_active_block();
    }

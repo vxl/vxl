@@ -1,5 +1,5 @@
-#ifndef boxm_utils_h_
-#define boxm_utils_h_
+#ifndef boxm2_utils_h_
+#define boxm2_utils_h_
 //:
 // \file
 // \brief  The utility methods for the boxm project
@@ -18,6 +18,7 @@
 #include <boct/boct_tree_cell.h>
 #include <boxm2/boxm_apm_traits.h>
 #include <vil/vil_image_view.h>
+
 class safe_inverse_functor
 {
  public:
@@ -27,6 +28,7 @@ class safe_inverse_functor
 
   float tol_;
 };
+
 class boxm_utils
 {
  public:
@@ -53,7 +55,7 @@ class boxm_utils
   static boct_face_idx visible_faces(vgl_box_3d<double> const& bbox,
                                      vpgl_camera_double_sptr camera,
                                      double *xverts, double *yerts);
-  static boct_face_idx visible_faces_cell(vgl_box_3d<double> const& bbox, 
+  static boct_face_idx visible_faces_cell(vgl_box_3d<double> const& bbox,
                                           vpgl_camera_double_sptr camera,
                                           double *xverts, double *yverts);
 
@@ -161,7 +163,6 @@ class boxm_utils
   static boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype obtain_mog_grey_zero_mode();
 
   static boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype obtain_mog_grey_single_mode(float  mean);
-
 };
 
 #endif

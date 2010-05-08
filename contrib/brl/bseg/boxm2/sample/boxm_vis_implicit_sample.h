@@ -1,5 +1,5 @@
-#ifndef boxm_vis_implicit_sample_h_
-#define boxm_vis_implicit_sample_h_
+#ifndef boxm2_vis_implicit_sample_h_
+#define boxm2_vis_implicit_sample_h_
 //:
 // \file
 
@@ -13,4 +13,4 @@ class boxm_vis_implicit_sample
   unsigned int n_obs;
 };
 
-#endif // boxm_vis_implicit_sample_h_
+#endif // boxm2_vis_implicit_sample_h_

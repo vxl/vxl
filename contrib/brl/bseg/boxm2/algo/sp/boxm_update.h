@@ -1,7 +1,7 @@
-#ifndef boxm_update_h_
-#define boxm_update_h_
+#ifndef boxm2_update_h_
+#define boxm2_update_h_
 //:
-// \file
+//\file
 #include <boct/boct_tree.h>
 #include <boct/boct_tree_cell.h>
 #include <boxm2/util/boxm_utils.h>
@@ -17,8 +17,6 @@
 #include <vcl_iostream.h>
 
 //: functor used for normalizing cell_expected image
-
-
 template <class T_loc, class T_data>
 void boxm_update_pass1(boxm_scene<boct_tree<T_loc, T_data > > &scene,
                        vpgl_camera_double_sptr cam,
@@ -40,7 +38,7 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   vil_image_view<float> PI_img(ni,nj,1); PI_img.fill(0.0f);
 
 #if 0 // TODO: vgl_plane_3d<double> has no constructor with 3 double params....???!!!
-      //       and projection_plane is unused ..!!
+  //       and projection_plane is unused ..!!
   if (vpgl_rational_camera<double> const* rcam = dynamic_cast<vpgl_rational_camera<double> const*>(cam.as_pointer())) {
     vgl_box_3d<double> bbox=scene.get_world_bbox();
     vgl_plane_3d<double> top(bbox.min_x(),bbox.min_y(),bbox.max_z());
@@ -87,7 +85,7 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, T_data > > &scene,
           vcl_vector<vgl_point_3d<double> > corners=boxm_utils::corners_of_box_3d(cell_bb);
           if (vpgl_perspective_camera<double>* pcam = dynamic_cast<vpgl_perspective_camera<double>*>(cam.as_pointer()))
           {
-              boxm_utils::project_corners(corners,pcam,xverts,yverts,vertdists);
+            boxm_utils::project_corners(corners,pcam,xverts,yverts,vertdists);
           }
           else if (vpgl_rational_camera<double>* rcam = dynamic_cast<vpgl_rational_camera<double>*>(cam.as_pointer())) {
             boxm_rational_camera_utils::project_corners_rational_camera(corners,rcam,vgl_plane_3d<double>(),xverts,yverts,vertdists);
@@ -321,10 +319,10 @@ void boxm_update_pass2(boxm_scene<boct_tree<T_loc, T_data > > &scene,
             float max_alpha = -vcl_log(1.0f - max_cell_P)/cell_len;
             float min_alpha = -vcl_log(1.0f - min_cell_P)/cell_len;
             if (sample.alpha > max_alpha)
-              sample.alpha = max_alpha;
+            sample.alpha = max_alpha;
 
             if (sample.alpha < min_alpha)
-              sample.alpha = min_alpha;
+            sample.alpha = min_alpha;
 
             if (!((sample.alpha >= min_alpha) && (sample.alpha <= max_alpha))) {
               vcl_cerr << "\nerror: cell.alpha = " << sample.alpha << '\n'
@@ -370,4 +368,4 @@ void boxm_update(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   return;
 }
 
-#endif // boxm_update_h_
+#endif // boxm2_update_h_

@@ -1,5 +1,5 @@
-#ifndef boxm_opt3_optimizer_txx_
-#define boxm_opt3_optimizer_txx_
+#ifndef boxm2_opt3_optimizer_txx_
+#define boxm2_opt3_optimizer_txx_
 
 #include "boxm_opt3_optimizer.h"
 
@@ -7,7 +7,7 @@
 #include <boxm2/boxm_aux_traits.h>
 #include <boxm2/boxm_scene.h>
 #include <boxm2/boxm_aux_scene.h>
-#include <boxm2/sample/boxm_opt3_sample.h"
+#include <boxm2/sample/boxm_opt3_sample.h>
 #include <boxm2/sample/algo/boxm_simple_grey_processor.h>
 #include <boxm2/sample/algo/boxm_mog_grey_processor.h>
 
@@ -68,7 +68,7 @@ bool boxm_opt3_optimizer<T_loc,APM,AUX_APM>::optimize_cells()
       aux_samples.clear();
       boct_tree_cell<T_loc,boxm_sample<APM> >* cell = cells[i];
       boxm_sample<APM> data = cell->data();
-      
+
       for (unsigned j=0; j<aux_readers.size(); j++) {
         boct_tree_cell<T_loc, aux_type> temp_cell;
 
@@ -107,12 +107,12 @@ bool boxm_opt3_optimizer<T_loc,APM,AUX_APM>::optimize_cells()
           }
           double alpha_s = -aux_samples[s].log_pass_prob_sum_ / total_seg_len;
           log_alpha_sum += vcl_log(alpha_s);
-        }         
+        }
       }
       float alpha_new = 0.0f;
       if (n_actual_observations > 0) {
-        //vcl_cout << "cell IN " << data.alpha << " " << data.appearance_<< vcl_endl;
-        // compute new alpha value 
+        //vcl_cout << "cell IN " << data.alpha << ' ' << data.appearance_<< vcl_endl;
+        // compute new alpha value
         alpha_new = (float)vcl_exp(log_alpha_sum / n_actual_observations);
 
         // do bounds check on new alpha value
@@ -127,17 +127,17 @@ bool boxm_opt3_optimizer<T_loc,APM,AUX_APM>::optimize_cells()
           alpha_new = min_alpha;
         }
         if (!((alpha_new >= min_alpha) && (alpha_new <= max_alpha)) ){
-          vcl_cerr << vcl_endl << "error: alpha_new = " << alpha_new << vcl_endl;
-          vcl_cerr << "n_actual_observations = " << n_actual_observations << " log_alpha_sum = " << log_alpha_sum << vcl_endl;
+          vcl_cerr << vcl_endl << "error: alpha_new = " << alpha_new << '\n'
+                   << "n_actual_observations = " << n_actual_observations << " log_alpha_sum = " << log_alpha_sum << '\n';
           alpha_new = min_alpha;
         }
         else {
           data.alpha = alpha_new;
         }
         // update with new appearance
-        //vcl_cout << obs_vector.size() << " " << vcl_endl;
+        //vcl_cout << obs_vector.size() << ' ' << vcl_endl;
         if (obs_vector.size() != n_samples_per_obs * n_actual_observations) {
-          vcl_cerr << "error: n_samples_per_obs = " << n_samples_per_obs << " n_actual_observations = " << n_actual_observations << " obs_vector.size() " << obs_vector.size() << vcl_endl;
+          vcl_cerr << "error: n_samples_per_obs = " << n_samples_per_obs << " n_actual_observations = " << n_actual_observations << " obs_vector.size() " << obs_vector.size() << '\n';
         }
         boxm_apm_traits<APM>::apm_processor::compute_appearance(obs_vector, vis_vector, data.appearance_, 0.025f);
         //vcl_cout << "cell OUT " << data.alpha << data.appearance_ << vcl_endl << vcl_endl;
@@ -162,7 +162,7 @@ bool boxm_opt3_optimizer<T_loc,APM,AUX_APM>::optimize_cells()
 }
 
 
-#define BOXM_OPT3_OPTIMIZER_INSTANTIATE(T1,T2,T3) \
+#define BOXM2_OPT3_OPTIMIZER_INSTANTIATE(T1,T2,T3) \
   template class boxm_opt3_optimizer<T1,T2,T3 >
 
-#endif // boxm_opt3_optimizer_txx_
+#endif // boxm2_opt3_optimizer_txx_

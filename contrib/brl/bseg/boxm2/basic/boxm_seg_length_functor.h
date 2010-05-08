@@ -1,5 +1,5 @@
-#ifndef boxm_seg_length_functor_h
-#define boxm_seg_length_functor_h
+#ifndef boxm2_seg_length_functor_h
+#define boxm2_seg_length_functor_h
 //:
 // \file
 #include <boxm2/boxm_apm_traits.h>
@@ -40,4 +40,4 @@ class boxm_seg_length_functor
   vil_image_view<typename boxm_apm_traits<APM>::obs_datatype> &obs_;
 };
 
-#endif // boxm_seg_length_functor_h
+#endif // boxm2_seg_length_functor_h

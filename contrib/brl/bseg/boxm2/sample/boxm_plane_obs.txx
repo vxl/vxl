@@ -1,5 +1,5 @@
-#ifndef boxm_plane_obs_txx_
-#define boxm_plane_obs_txx_
+#ifndef boxm2_plane_obs_txx_
+#define boxm2_plane_obs_txx_
 
 #include "boxm_edge_tangent_sample.h"
 #include "boxm_inf_line_sample.h"
@@ -58,7 +58,7 @@ vcl_ostream& operator<< (vcl_ostream& os, boxm_plane_obs<T> const& sample)
   return os;
 }
 
-#define BOXM_PLANE_OBS_INSTANTIATE(T) \
+#define BOXM2_PLANE_OBS_INSTANTIATE(T) \
 template class boxm_plane_obs<T >; \
 template void vsl_b_write(vsl_b_ostream &, boxm_plane_obs<T > const &); \
 template void vsl_b_write(vsl_b_ostream &, boxm_plane_obs<T > const *&); \

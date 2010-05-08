@@ -1,5 +1,5 @@
-#ifndef boxm_triangle_interpolation_iterator_h_
-#define boxm_triangle_interpolation_iterator_h_
+#ifndef boxm2_triangle_interpolation_iterator_h_
+#define boxm2_triangle_interpolation_iterator_h_
 //:
 // \file
 #include <vcl_vector.h>

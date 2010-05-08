@@ -1,5 +1,5 @@
-#ifndef boxm_rpc_registration_h_
-#define boxm_rpc_registration_h_
+#ifndef boxm2_rpc_registration_h_
+#define boxm2_rpc_registration_h_
 //:
 // \file
 // This part contains the correction rpc camera parameters using the expected
@@ -15,7 +15,7 @@
 //  Modifications
 //     Feb 1st, 2010 Gamze Tunali
 //         This piece of code is moved from bvxm_rpc_registration process to this file
-//         as a standalone function to be used in boxm/opt/boxm_rpc_registration_process
+//         as a standalone function to be used in boxm2/opt/boxm_rpc_registration_process
 // \endverbatim
 
 
@@ -80,7 +80,7 @@ bool boxm_rpc_registration(boxm_scene_base_sptr scene_base,//<boct_tree<T_loc, T
                            vpgl_camera_double_sptr camera_out,
                            bool rpc_shift_3d_flag,
                            float uncertainty,
-                           float n_normal,
+                           float n_normal, // FIXME - unused
                            unsigned num_observations)
 {
   double max_prob = vcl_numeric_limits<double>::min();
@@ -267,29 +267,27 @@ bool boxm_rpc_registration(boxm_scene_base_sptr scene_base,//<boct_tree<T_loc, T
           if (edge_image(m,n,0)>-1 && edge_image(m,n,1)>-1 && edge_image(m,n,2)>-1) {
             if (expected_edge_image(m-u,n-v,0)>0 && expected_edge_image(m-u,n-v,1)>0 && expected_edge_image(m-u,n-v,2)>0) {
             //vcl_cout<<'.';
-            float dx=expected_edge_image(m-u,n-v,0)+u-edge_image(m,n,0);
-            float dy=expected_edge_image(m-u,n-v,1)+v-edge_image(m,n,1);
-
             float sintheta1=vcl_sin(edge_image(m,n,2));
             float costheta1=vcl_cos(edge_image(m,n,2));
 
             float sintheta2=vcl_sin(expected_edge_image(m-u,n-v,2));
             float costheta2=vcl_cos(expected_edge_image(m-u,n-v,2));
 #if 0
+            float dx=expected_edge_image(m-u,n-v,0)+u-edge_image(m,n,0);
+            float dy=expected_edge_image(m-u,n-v,1)+v-edge_image(m,n,1);
+
             float dist=vcl_sqrt(dx*dx+dy*dy);
             if (dist<min_dist)
               min_dist=dist;
-#endif // 0
-            float dist=(1-vcl_fabs(sintheta1*sintheta2+costheta2*costheta1));//+vcl_sqrt(dx*dx+dy*dy);
 
-#if 0
-            float dist1=vcl_sqrt((dx*sintheta1*sintheta1+dy*sintheta1*costheta1)*(dx*sintheta1*sintheta1+dy*sintheta1*costheta1)+
-                                 (dy*costheta1*costheta1+dx*sintheta1*costheta1)*(dy*costheta1*costheta1+dx*sintheta1*costheta1));
-            float dist2=vcl_sqrt((dx*sintheta2*sintheta2+dy*sintheta2*costheta2)*(dx*sintheta2*sintheta2+dy*sintheta2*costheta2)+
-                                 (dy*costheta2*costheta2+dx*sintheta2*costheta2)*(dy*costheta2*costheta2+dx*sintheta2*costheta2));
+            float dist1=vcl_sqrt((dx*sintheta1*sintheta1+dy*sintheta1*costheta1)*(dx*sintheta1*sintheta1+dy*sintheta1*costheta1)
+                                +(dy*costheta1*costheta1+dx*sintheta1*costheta1)*(dy*costheta1*costheta1+dx*sintheta1*costheta1));
+            float dist2=vcl_sqrt((dx*sintheta2*sintheta2+dy*sintheta2*costheta2)*(dx*sintheta2*sintheta2+dy*sintheta2*costheta2)
+                                +(dy*costheta2*costheta2+dx*sintheta2*costheta2)*(dy*costheta2*costheta2+dx*sintheta2*costheta2));
             if ((dist1+dist2)/2<min_dist)
               min_dist=(dist1+dist2)/2;
 #endif // 0
+            float dist=(1-vcl_fabs(sintheta1*sintheta2+costheta2*costheta1));//+vcl_sqrt(dx*dx+dy*dy);
             cost += dist;//(dist1+dist2)/2;
           }
           else

@@ -1,5 +1,5 @@
-#ifndef boxm_depth_image_triangle_h_
-#define boxm_depth_image_triangle_h_
+#ifndef boxm2_depth_image_triangle_h_
+#define boxm2_depth_image_triangle_h_
 //:
 // \file
 #include <vcl_vector.h>
@@ -25,9 +25,9 @@
 
 template <class T_loc, class T_data>
 void boxm_depth_image_splatting_triangle(boxm_scene<boct_tree<T_loc, T_data > > &scene,
-                                          vpgl_camera_double_sptr cam,
-                                          vil_image_view<float> &expected,
-                                          vil_image_view<float> &mask)
+                                         vpgl_camera_double_sptr cam,
+                                         vil_image_view<float> &expected,
+                                         vil_image_view<float> &mask)
 {
   unsigned ni=expected.ni();
   unsigned nj=expected.nj();
@@ -66,8 +66,8 @@ void boxm_depth_image_splatting_triangle(boxm_scene<boct_tree<T_loc, T_data > > 
       vil_image_view<float> pix_weights_(expected.ni(),expected.nj(),1);
       normalize_expected_functor norm_fn;
 
-      double  xverts[8];
-      double  yverts[8];
+      double xverts[8];
+      double yverts[8];
       float vertdists[8];
       while (frontier_it.next())
       {
@@ -90,12 +90,11 @@ void boxm_depth_image_splatting_triangle(boxm_scene<boct_tree<T_loc, T_data > > 
             vgl_box_3d<double> cell_bb = tree->cell_bounding_box(*cell_it);
             vcl_vector<vgl_point_3d<double> > corners=boxm_utils::corners_of_box_3d(cell_bb);
             if (dynamic_cast<vpgl_perspective_camera<double> *>(cam.ptr()))
-              boxm_utils::project_corners(corners,cam,xverts,yverts,vertdists);
+            boxm_utils::project_corners(corners,cam,xverts,yverts,vertdists);
             boct_face_idx  vis_face_ids=boxm_utils::visible_faces(cell_bb,cam,xverts,yverts);
             // get  alpha
             boxm_alpha_seg_len(xverts, yverts, vertdists, vis_face_ids, sample.alpha, alpha_img_);
             boxm_depth_fill(xverts, yverts, vertdists, vis_face_ids,temp_depth);
-
           }
         }
         abs_functor abs_fun;

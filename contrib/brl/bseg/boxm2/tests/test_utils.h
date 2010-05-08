@@ -1,5 +1,5 @@
-#ifndef test_utils_h
-#define test_utils_h
+#ifndef boxm2_test_utils_h_
+#define boxm2_test_utils_h_
 //:
 // \file
 #include <boct/boct_tree.h>
@@ -34,4 +34,4 @@ vpgl_camera_double_sptr generate_camera_top_persp(vgl_box_3d<double>& world);
 vcl_vector<vpgl_camera_double_sptr> generate_cameras_diagonal(vgl_box_3d<double>& world);
 
 vcl_vector<vpgl_camera_double_sptr> generate_cameras_circular(vgl_box_3d<double>& world);
-#endif // test_utils_h
+#endif // boxm2_test_utils_h_

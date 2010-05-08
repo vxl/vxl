@@ -1,5 +1,5 @@
-#ifndef boxm_opt_rt_bayesian_optimizer_txx_
-#define boxm_opt_rt_bayesian_optimizer_txx_
+#ifndef boxm2_opt_rt_bayesian_optimizer_txx_
+#define boxm2_opt_rt_bayesian_optimizer_txx_
 
 #include "boxm_opt_rt_bayesian_optimizer.h"
 #include "boxm_opt_appearance_estimator.h"
@@ -63,7 +63,7 @@ bool boxm_opt_rt_bayesian_optimizer<T_loc,APM,AUX>::optimize_cells(double dampin
 
         if (!aux_readers[j]->next(temp_cell)) {
           vcl_cerr << "error: incremental reader returned false.\n";
-            return false;
+          return false;
         }
         //boxm_opt_sample<typename boxm_apm_traits<APM>::obs_datatype> aux_cell = temp_cell.data();
         if (!temp_cell.code_.isequal(&(cell->code_))) {
@@ -98,10 +98,10 @@ bool boxm_opt_rt_bayesian_optimizer<T_loc,APM,AUX>::optimize_cells(double dampin
         }
       }
       double damped_Beta = (Beta + damping_factor)/(damping_factor*Beta + 1.0);
-      
+
       if ((damped_Beta < 0.00000001) && (damped_Beta > -0.00000001))
         vcl_cout << "ERROR: damped_Beta is:" << damped_Beta << vcl_endl;
-        
+
       data.alpha *= (float)damped_Beta;
       // do bounds check on new alpha value
       vgl_box_3d<double> cell_bb = tree->cell_bounding_box(cell);
@@ -115,8 +115,8 @@ bool boxm_opt_rt_bayesian_optimizer<T_loc,APM,AUX>::optimize_cells(double dampin
         data.alpha = min_alpha;
       }
       if (!((data.alpha >= min_alpha) && (data.alpha <= max_alpha)) ){
-        vcl_cerr << "\nerror: data.alpha = " << data.alpha << vcl_endl
-                 << "damped_Beta = " << damped_Beta << vcl_endl;
+        vcl_cerr << "\nerror: data.alpha = " << data.alpha << '\n'
+                 << "damped_Beta = " << damped_Beta << '\n';
       }
       // update with new appearance
       boxm_opt_compute_appearance<APM>(obs_vector, pre_vector, vis_vector, data.appearance_);
@@ -136,12 +136,12 @@ bool boxm_opt_rt_bayesian_optimizer<T_loc,APM,AUX>::optimize_cells(double dampin
   for (unsigned i=0; i<aux_scenes.size(); i++) {
     aux_scenes[i].clean_scene();
   }
-  
+
   return true;
 }
 
 
-#define BOXM_OPT_RT_BAYESIAN_OPTIMIZER_INSTANTIATE(T1,T2,T3) \
+#define BOXM2_OPT_RT_BAYESIAN_OPTIMIZER_INSTANTIATE(T1,T2,T3) \
 template class boxm_opt_rt_bayesian_optimizer<T1,T2,T3 >
 
-#endif // boxm_opt_rt_bayesian_optimizer_txx_
+#endif // boxm2_opt_rt_bayesian_optimizer_txx_

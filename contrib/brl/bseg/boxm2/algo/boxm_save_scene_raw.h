@@ -1,5 +1,5 @@
-#ifndef boxm_save_scene_raw_h_
-#define boxm_save_scene_raw_h_
+#ifndef boxm2_save_scene_raw_h_
+#define boxm2_save_scene_raw_h_
 //:
 // \file
 // \brief  Writes the 3D scene into a raw file by combining all the spatial data in a set of octrees.
@@ -14,13 +14,13 @@
 // \endverbatim
 
 #include <boct/boct_tree.h>
-#include <boxm/boxm_scene.h>
-#include <boxm/boxm_sample.h>
-#include <boxm/boxm_utils.h>
-#include <boxm/boxm_cell_data_traits.h>
-#include <boxm/boxm_block_vis_graph_iterator.h>
-#include <boxm/boxm_cell_vis_graph_iterator.h>
-#include <boxm/boxm_mog_grey_processor.h>
+#include <boxm2/boxm_scene.h>
+#include <boxm2/sample/boxm_sample.h>
+#include <boxm2/util/boxm_utils.h>
+#include <boxm2/util/boxm_cell_data_traits.h>
+#include <boxm2/basic/boxm_block_vis_graph_iterator.h>
+#include <boxm2/basic/boxm_cell_vis_graph_iterator.h>
+#include <boxm2/sample/algo/boxm_mog_grey_processor.h>
 #include <vpgl/vpgl_camera.h>
 #include <vbl/vbl_array_3d.txx>
 #include <vsl/vsl_binary_io.h>
@@ -32,6 +32,7 @@
 #include <vcl_cassert.h>
 
 #include <bsta/bsta_histogram.h>
+
 template <class T_loc, class T_data>
 void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
                          vcl_string filename,
@@ -65,7 +66,7 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   // query the finest level of the tree and do not make the resolution
   // smaller than that
   if (resolution_level < finest_level)
-    resolution_level=finest_level;
+  resolution_level=finest_level;
 
   iter.begin();
   while (!iter.end()) {
@@ -109,7 +110,7 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
       vgl_point_3d<double> node = tree->cell_bounding_box_local(cells[i]).min_point();
 
       float cell_val = boxm_cell_to_float(cells[i], step_len);
-     
+
       unsigned int level = cells[i]->get_code().level;
       if (level == resolution_level) {
         // just copy value to output array
@@ -135,13 +136,13 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
               //int out_index=x*y_size + y*ncells + z;
               int out_index=ncells-1-z + y*ncells + x*ncells*ncells;
               //////int out_index=z + y*ncells + x*ncells*ncells;
-               //////int out_index=ncells-1-z + x*ncells + y*ncells*ncells;
+              //////int out_index=ncells-1-z + x*ncells + y*ncells*ncells;
 
               if (out_index >= data_size)
                 vcl_cout << "boxm_save_block_raw, array out of index! " << out_index << " -- " << data_size << vcl_endl;
               else
                 data[out_index] = cell_val;
-              }
+            }
           }
         }
       }
@@ -181,21 +182,20 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
       // always positive so this is an ok way to round
       float fv = *dp;
       h.upcount(fv, 1.0f);
-      if(fv<minv) minv = fv;
-      if(fv>maxv) maxv = fv;
+      if (fv<minv) minv = fv;
+      if (fv>maxv) maxv = fv;
       unsigned char c = (unsigned char)(vcl_floor((255.0 * (*dp)) + 0.5));
       vsl_b_write(os, (char) c);
     }
     delete[] data;
     os.close();
     iter++;
-    
   }
   assert(ncells > 0);
 
   // combine the blocks
   vgl_vector_3d<unsigned> dim = scene.world_dim();
-  unsigned dimx = dim.x()*ncells;  
+  unsigned dimx = dim.x()*ncells;
   unsigned dimy = dim.y()*ncells;
   unsigned dimz = dim.z()*ncells;
   // we will read the data a column at a time and this is enough
@@ -259,7 +259,6 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
     }
   }
 
-
   os.close();
   delete[] byte_data;
 
@@ -283,4 +282,4 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   return;
 }
 
-#endif // boxm_save_scene_raw_h_
+#endif // boxm2_save_scene_raw_h_

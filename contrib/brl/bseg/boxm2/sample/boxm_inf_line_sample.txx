@@ -1,5 +1,5 @@
-#ifndef boxm_inf_line_sample_txx_
-#define boxm_inf_line_sample_txx_
+#ifndef boxm2_inf_line_sample_txx_
+#define boxm2_inf_line_sample_txx_
 
 #include "boxm_inf_line_sample.h"
 #include <vgl/io/vgl_io_infinite_line_3d.h> // for vsl_b_write(os, sample.line_);
@@ -7,8 +7,8 @@
 
 template <class T>
 bool boxm_inf_line_sample<T>::operator==(const boxm_inf_line_sample<T> &rhs) const
-{ 
-  if ((this==&rhs) || (line_==rhs.line_ && line_clipped_==rhs.line_clipped_ && num_obs_==rhs.num_obs_)) 
+{
+  if ((this==&rhs) || (line_==rhs.line_ && line_clipped_==rhs.line_clipped_ && num_obs_==rhs.num_obs_))
     return true;
   else
     return false;
@@ -68,7 +68,7 @@ vcl_ostream& operator << (vcl_ostream& os, boxm_inf_line_sample<T>& sample)
   return os;
 }
 
-#define BOXM_INF_LINE_SAMPLE_INSTANTIATE(T) \
+#define BOXM2_INF_LINE_SAMPLE_INSTANTIATE(T) \
 template class boxm_inf_line_sample<T >; \
 template void vsl_b_write(vsl_b_ostream &, boxm_inf_line_sample<T > const &); \
 template void vsl_b_write(vsl_b_ostream &, boxm_inf_line_sample<T > const *&); \

@@ -1,6 +1,6 @@
 // This is brl/bseg/boxm2/sample/algo/boxm_simple_grey_processor.h
-#ifndef boxm_simple_grey_processor_h_
-#define boxm_simple_grey_processor_h_
+#ifndef boxm2_simple_grey_processor_h_
+#define boxm2_simple_grey_processor_h_
 //:
 // \file
 // \brief A class for processing simple, single valued grey-scale appearance models.
@@ -45,8 +45,6 @@ class  boxm_simple_grey_processor
   static void compute_appearance(vcl_vector<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype> const& obs, vcl_vector<float> const& weights, boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::apm_datatype &model, float min_sigma = 0.01f);
   static void compute_appearance(vcl_vector<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype> const& obs, vcl_vector<float> const& pre, vcl_vector<float> const& vis, boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::apm_datatype &model, float min_sigma=0.01f);
 
-
-
   static void update_appearance(vcl_vector<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype> const& obs, vcl_vector<float> const& weights, boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::apm_datatype &model, float min_sigma = 0.01f);
 
   static void finalize_appearance(vcl_vector<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype> const& obs, vcl_vector<float> const& weights, boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::apm_datatype &model);
@@ -61,4 +59,4 @@ class  boxm_simple_grey_processor
 
 //vcl_ostream& operator<<(vcl_ostream &os, boxm_simple_grey const& apm);
 
-#endif // boxm_simple_grey_processor_h_
+#endif // boxm2_simple_grey_processor_h_

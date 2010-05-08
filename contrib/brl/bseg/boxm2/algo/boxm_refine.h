@@ -1,5 +1,5 @@
-#ifndef boxm_refine_h_
-#define boxm_refine_h_
+#ifndef boxm2_refine_h_
+#define boxm2_refine_h_
 //:
 // \file
 #include <boct/boct_tree.h>
@@ -10,7 +10,7 @@
 
 template <class T_loc, class T_data>
 void boxm_refine_block(boxm_block<boct_tree<T_loc, T_data> > *block,
-                               float occlusion_prob_thresh, bool reset_appearance = true)
+                       float occlusion_prob_thresh, bool reset_appearance = true)
 {
   typedef boct_tree<T_loc, T_data> tree_type;
   tree_type* tree = block->get_tree();
@@ -71,8 +71,8 @@ void boxm_refine_block(boxm_block<boct_tree<T_loc, T_data> > *block,
 // returns the number of leaf nodes in the refined octree
 template <class T_loc, class T_data>
 unsigned int boxm_refine_scene(boxm_scene<boct_tree<T_loc, T_data > > &scene,
-                 float occlusion_prob_thresh,
-                 bool reset_appearance = true)
+                               float occlusion_prob_thresh,
+                               bool reset_appearance = true)
 {
   typedef boct_tree<T_loc, T_data > tree_type;
 
@@ -90,4 +90,4 @@ unsigned int boxm_refine_scene(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   return nleaves;
 }
 
-#endif // boxm_refine_h_
+#endif // boxm2_refine_h_

@@ -1,5 +1,5 @@
-#ifndef boxm_generate_edge_tangent_sample_functor_h
-#define boxm_generate_edge_tangent_sample_functor_h
+#ifndef boxm2_generate_edge_tangent_sample_functor_h
+#define boxm2_generate_edge_tangent_sample_functor_h
 //:
 // \file
 #include <boxm2/boxm_apm_traits.h>
@@ -31,7 +31,7 @@ class boxm_generate_edge_tangent_sample_functor
 
   inline bool step_cell(unsigned int i, unsigned int j,
                         vgl_point_3d<double> s0, vgl_point_3d<double> s1,
-                        T &cell_value,
+                        T &cell_value, // FIXME - unused
                         T_aux &aux_val)
   {
     const float seg_len = (float)(s1 - s0).length();
@@ -39,7 +39,7 @@ class boxm_generate_edge_tangent_sample_functor
     float b = obs_(i,j,1);
     float c = obs_(i,j,2);
     float d = obs_(i,j,3);
-  
+
     if (a||b||c||d){
       vgl_homg_plane_3d<float> p(a,b,c,d);
       boxm_plane_obs<float> observation(p,seg_len);
@@ -73,4 +73,4 @@ void boxm_generate_edge_tangent_sample_rt(boxm_scene<boct_tree<T_loc, T_data > >
     vcl_cerr << "DONE.\n";
 }
 
-#endif // boxm_generate_edge_tangent_sample_functor_h
+#endif // boxm2_generate_edge_tangent_sample_functor_h

@@ -1,5 +1,5 @@
-#ifndef boxm_edge_updater_txx_
-#define boxm_edge_updater_txx_
+#ifndef boxm2_edge_updater_txx_
+#define boxm2_edge_updater_txx_
 
 #include "boxm_edge_updater.h"
 
@@ -63,7 +63,7 @@ bool boxm_edge_updater<T_loc,APM,AUX>::add_cells()
 
         if (!aux_readers[j]->next(temp_cell)) {
           vcl_cerr << "error: incremental reader returned false.\n";
-            return false;
+          return false;
         }
 
         if (!temp_cell.code_.isequal(&(cell->code_))) {
@@ -100,7 +100,7 @@ bool boxm_edge_updater<T_loc,APM,AUX>::add_cells()
 }
 
 
-#define BOXM_EDGE_UPDATER_INSTANTIATE(T1,T2,T3) \
+#define BOXM2_EDGE_UPDATER_INSTANTIATE(T1,T2,T3) \
 template class boxm_edge_updater<T1,T2,T3 >
 
-#endif // boxm_edge_updater_txx_
+#endif // boxm2_edge_updater_txx_

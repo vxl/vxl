@@ -1,5 +1,5 @@
-#ifndef boxm_scene_txx_
-#define boxm_scene_txx_
+#ifndef boxm2_scene_txx_
+#define boxm2_scene_txx_
 //:
 // \file
 #include "boxm_scene.h"
@@ -230,6 +230,7 @@ vcl_string boxm_scene<T>::gen_block_path(int x, int y, int z)
 
   return strm.str();
 }
+
 template <class T>
 bool boxm_scene<T>::discover_block(unsigned i, unsigned j, unsigned k)
 {
@@ -244,8 +245,8 @@ bool boxm_scene<T>::discover_block(unsigned i, unsigned j, unsigned k)
   }
 
   return true;
-
 }
+
 //: returns true if the block bin file is found on disc, false otherwise.
 // If false, a new tree is create for the block
 template <class T>
@@ -473,6 +474,7 @@ void boxm_scene<T>::clean_scene()
     iter++;
   }
 }
+
 template <class T>
 boxm_block_iterator<T>& boxm_block_iterator<T>::begin()
 {
@@ -598,7 +600,7 @@ void vsl_b_read(vsl_b_istream & is, boxm_scene<T> *&scene)
   scene->b_read(is);
 }
 
-#define BOXM_SCENE_INSTANTIATE(T) \
+#define BOXM2_SCENE_INSTANTIATE(T) \
 template class boxm_scene<T >; \
 template void x_write(vcl_ostream&, boxm_scene<T >&, vcl_string); \
 template void vsl_b_write(vsl_b_ostream & os, boxm_scene<T > const &scene); \
@@ -606,7 +608,7 @@ template void vsl_b_write(vsl_b_ostream & os, boxm_scene<T > const * &scene); \
 template void vsl_b_read(vsl_b_istream & is, boxm_scene<T >  &scene); \
 template void vsl_b_read(vsl_b_istream & is, boxm_scene<T > * &scene)
 
-#define BOXM_BLOCK_ITERATOR_INSTANTIATE(T) \
+#define BOXM2_BLOCK_ITERATOR_INSTANTIATE(T) \
 template class boxm_block_iterator<T >
 
 #endif

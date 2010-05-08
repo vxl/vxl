@@ -1,17 +1,20 @@
-#ifndef boxm_opt_appearance_estimator_h_
-#define boxm_opt_appearance_estimator_h_
+#ifndef boxm2_opt_appearance_estimator_h_
+#define boxm2_opt_appearance_estimator_h_
 
 #include <vcl_vector.h>
 #include <boxm2/boxm_apm_traits.h>
 #include <boxm2/sample/algo/boxm_simple_grey_processor.h>
 #include <boxm2/sample/algo/boxm_mog_grey_processor.h>
+#if 0
+#include <vcl_iostream.h>
+#endif
 
 template <boxm_apm_type APM>
-void boxm_opt_compute_appearance(vcl_vector<typename boxm_apm_traits<APM>::obs_datatype> const& obs, 
-                                 vcl_vector<float> const& pre, 
+void boxm_opt_compute_appearance(vcl_vector<typename boxm_apm_traits<APM>::obs_datatype> const& obs,
+                                 vcl_vector<float> const& pre,
                                  vcl_vector<float> const& vis,
                                  typename boxm_apm_traits<APM>::apm_datatype &model)
-{ 
+{
   const float min_sigma=0.1f;
   // initialize appearance model estimate using visibility probabilities as weights.
   boxm_apm_traits<APM>::apm_processor::compute_appearance(obs,vis,model,min_sigma);
@@ -60,8 +63,8 @@ void boxm_opt_compute_appearance(vcl_vector<typename boxm_apm_traits<APM>::obs_d
       for (unsigned int n=0; n<nobs; ++n) {
         total_prob += obs_weights[n];
       }
-      vcl_cout << "total prob for " << nobs << " observations = " << total_prob << vcl_endl;
-      vcl_cout << "sigma = " << model.sigma() << ",  gauss_weight = " << model.gauss_weight() << vcl_endl;
+      vcl_cout << "total prob for " << nobs << " observations = " << total_prob << vcl_endl
+               << "sigma = " << model.sigma() << ",  gauss_weight = " << model.gauss_weight() << vcl_endl;
     }
 #endif
       break;
@@ -76,4 +79,4 @@ void boxm_opt_compute_appearance(vcl_vector<typename boxm_apm_traits<APM>::obs_d
   return;
 }
 
-#endif // boxm_opt_appearance_estimator_h_
+#endif // boxm2_opt_appearance_estimator_h_

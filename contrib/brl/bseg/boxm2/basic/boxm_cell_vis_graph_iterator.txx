@@ -1,5 +1,5 @@
-#ifndef boxm_cell_vis_graph_iterator_txx_
-#define boxm_cell_vis_graph_iterator_txx_
+#ifndef boxm2_cell_vis_graph_iterator_txx_
+#define boxm2_cell_vis_graph_iterator_txx_
 
 #include "boxm_cell_vis_graph_iterator.h"
 #include <boxm2/util/boxm_utils.h>
@@ -125,7 +125,7 @@ void boxm_cell_vis_graph_iterator<T_loc,T_data>::form_graph_per_cell(boct_tree_c
   }
 }
 
-#define BOXM_CELL_VIS_GRAPH_ITERATOR_INSTANTIATE(T1,T2) \
+#define BOXM2_CELL_VIS_GRAPH_ITERATOR_INSTANTIATE(T1,T2) \
 template class boxm_cell_vis_graph_iterator<T1,T2 >
 
-#endif // boxm_cell_vis_graph_iterator_txx_
+#endif // boxm2_cell_vis_graph_iterator_txx_

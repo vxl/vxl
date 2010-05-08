@@ -1,5 +1,5 @@
-#ifndef boxm_scene_base_h_
-#define boxm_scene_base_h_
+#ifndef boxm2_scene_base_h_
+#define boxm2_scene_base_h_
 //:
 // \file
 // \brief  The main class to keep the 3D world data and pieces
@@ -49,7 +49,7 @@ class boxm_scene_base : public vbl_ref_count
   unsigned max_level() const { return max_tree_level_; }
 
   unsigned init_level() const { return init_tree_level_; }
-  
+
   virtual vgl_box_3d<double> get_world_bbox() {return vgl_box_3d<double>();}
  protected:
   boxm_apm_type app_model_;
@@ -72,4 +72,4 @@ class boxm_scene_base : public vbl_ref_count
 
 typedef vbl_smart_ptr<boxm_scene_base> boxm_scene_base_sptr;
 
-#endif // boxm_scene_base_h_
+#endif // boxm2_scene_base_h_

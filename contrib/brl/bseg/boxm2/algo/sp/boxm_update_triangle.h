@@ -1,5 +1,5 @@
-#ifndef boxm_update_triangle_h_
-#define boxm_update_triangle_h_
+#ifndef boxm2_update_triangle_h_
+#define boxm2_update_triangle_h_
 //:
 // \file
 #include <boct/boct_tree.h>
@@ -15,10 +15,7 @@
 #include <boxm2/util/boxm_raytrace_operations.h>
 #include <boxm2/util/boxm_rational_camera_utils.h>
 
-
 //: functor used for normalizing cell_expected image
-
-
 template <class T_loc, class T_data>
 void boxm_update_triangle_pass1(boxm_scene<boct_tree<T_loc, T_data > > &scene,
                                 vpgl_camera_double_sptr cam,
@@ -287,10 +284,10 @@ void boxm_update_triangle_pass2(boxm_scene<boct_tree<T_loc, T_data > > &scene,
           vcl_vector<vgl_point_3d<double> > corners=boxm_utils::corners_of_box_3d(cell_bb);
           if (dynamic_cast<vpgl_perspective_camera<double> *>(cam.ptr()))
           {
-              boxm_utils::project_corners(corners,cam,xverts,yverts,vertdists);
+            boxm_utils::project_corners(corners,cam,xverts,yverts,vertdists);
           }
           else if (vpgl_rational_camera<double> * rcam = dynamic_cast<vpgl_rational_camera<double> *>(cam.ptr())) {
-              boxm_rational_camera_utils::project_corners_rational_camera(corners,rcam,projection_plane,xverts,yverts,vertdists);
+            boxm_rational_camera_utils::project_corners_rational_camera(corners,rcam,projection_plane,xverts,yverts,vertdists);
           }
           boct_face_idx  vis_face_ids=boxm_utils::visible_faces(cell_bb,cam,xverts,yverts);
 
@@ -304,10 +301,10 @@ void boxm_update_triangle_pass2(boxm_scene<boct_tree<T_loc, T_data > > &scene,
             float max_alpha = -vcl_log(1.0f - max_cell_P)/cell_len;
             float min_alpha = -vcl_log(1.0f - min_cell_P)/cell_len;
             if (sample.alpha > max_alpha)
-              sample.alpha = max_alpha;
+            sample.alpha = max_alpha;
 
             if (sample.alpha < min_alpha)
-              sample.alpha = min_alpha;
+            sample.alpha = min_alpha;
 
             if (!((sample.alpha >= min_alpha) && (sample.alpha <= max_alpha))) {
               vcl_cerr << "\nerror: cell.alpha = " << sample.alpha << '\n'

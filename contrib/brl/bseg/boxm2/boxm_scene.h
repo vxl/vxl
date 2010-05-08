@@ -1,5 +1,5 @@
-#ifndef boxm_scene_h_
-#define boxm_scene_h_
+#ifndef boxm2_scene_h_
+#define boxm2_scene_h_
 //:
 // \file
 // \brief  The main class to keep the 3D world data and pieces
@@ -83,7 +83,7 @@ class boxm_scene :public boxm_scene_base
   void set_origin(vgl_point_3d<double> o) { origin_=o; }
 
   vgl_vector_3d<double> block_dim() const { return block_dim_; }
-  
+
   bool save_internal_nodes() const {return save_internal_nodes_;}
 
   bool save_platform_independent() const {return save_platform_independent_;}
@@ -145,7 +145,7 @@ class boxm_scene :public boxm_scene_base
 
   //: generates a name for the block binary file based on the 3D vector index
   vcl_string gen_block_path(int x, int y, int z);
- 
+
   void clean_scene();
 
   vgl_point_3d<double> rpc_origin() const { return rpc_origin_; }
@@ -241,4 +241,4 @@ template <class T>
 void vsl_b_read(vsl_b_istream & is, boxm_scene<T> *&scene);
 
 
-#endif // boxm_scene_h_
+#endif // boxm2_scene_h_

@@ -1,7 +1,7 @@
-#ifndef boxm_sun_vis_prob_functor_h
-#define boxm_sun_vis_prob_functor_h
+#ifndef boxm2_sun_vis_prob_functor_h
+#define boxm2_sun_vis_prob_functor_h
 //:
-// \file
+//\file
 #include <boxm2/boxm_apm_traits.h>
 #include <boxm2/basic/boxm_raytrace_function.h>
 #include <boxm2/sample/boxm_opt2_sample.h>
@@ -19,24 +19,22 @@
 template <boxm_apm_type APM, class T_aux>
 class boxm_sun_vis_prob_functor
 {
-public:
+ public:
   //: "default" constructor
   boxm_sun_vis_prob_functor(unsigned sun_ni, unsigned sun_nj)
-    : sun_ni_(sun_ni), sun_nj_(sun_nj)
-    {
+  : sun_ni_(sun_ni), sun_nj_(sun_nj)
+  {
     alpha_integral_ = vil_image_view<float>(sun_ni_, sun_nj_);
     alpha_integral_.fill(0.0f);
-    
+
     //only reads info from the scene
     scene_read_only_=true;
     //needs to write aux
     is_aux_=true;
-
   }
 
   inline bool step_cell(unsigned int i, unsigned int j, vgl_point_3d<double> s0, vgl_point_3d<double> s1, boxm_sample<APM> &cell_value, T_aux & aux_val)
   {
-
     // compute segment length
     const float seg_len = (float)(s1 - s0).length();
 
@@ -55,11 +53,11 @@ public:
     return true;
   }
 
-public:
+ public:
   bool scene_read_only_;
   bool is_aux_;
 
-private:
+ private:
   unsigned sun_ni_;
   unsigned sun_nj_;
   vil_image_view<float> alpha_integral_;
@@ -75,17 +73,16 @@ void boxm_sun_vis_prob(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   unsigned max_level = scene.max_level();
   unsigned sun_ni = 1<<max_level;//twice as many
   unsigned sun_nj = sun_ni;
-  vpgl_affine_camera<double> sun_cam = 
-    vpgl_camera_from_box::affine_camera_from_box(world_bb, -sun_angle, sun_ni,
-                                                 sun_nj);
+  vpgl_affine_camera<double> sun_cam =
+  vpgl_camera_from_box::affine_camera_from_box(world_bb, -sun_angle, sun_ni, sun_nj);
 
   vpgl_camera_double_sptr cam = new vpgl_affine_camera<double> (sun_cam);
-  
+
   typedef typename boxm_aux_traits<AUX_T>::sample_datatype sample_datatype;
   boxm_aux_scene<T_loc, T_data,  sample_datatype> aux_scene(&scene,sun_occ_name, boxm_aux_scene<T_loc, T_data,  sample_datatype>::CLONE);
 
   vcl_cout<<"Sun visibility"<<vcl_endl;
-  // functor to accumulate sun visiblity 
+  // functor to accumulate sun visiblity
   typedef boxm_sun_vis_prob_functor<T_data::apm_type, sample_datatype> sun_vis;
 
   // set up the raytrace function
@@ -99,4 +96,4 @@ void boxm_sun_vis_prob(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   vcl_cout<<"Sun Occlusion Done."<<vcl_endl;
 }
 
-#endif // boxm_sun_vis_prob_functor_h
+#endif // boxm2_sun_vis_prob_functor_h

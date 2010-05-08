@@ -1,5 +1,5 @@
-#ifndef boxm_raytrace_function_h_
-#define boxm_raytrace_function_h_
+#ifndef boxm2_raytrace_function_h_
+#define boxm2_raytrace_function_h_
 //:
 // \file
 
@@ -49,7 +49,7 @@ class boxm_raytrace_function
                            unsigned int ni, unsigned int nj,
                            bool reverse_traversal = false,
                            unsigned int i0 = 0, unsigned int j0 = 0
-                           )
+                          )
     : scene_(scene), aux_scene_(null_scene_), reverse_traversal_(reverse_traversal), cam_(cam), img_i0_(i0), img_j0_(j0), img_ni_(ni), img_nj_(nj), debug_lvl_(2) {}
 
     //: constructor for functions using an auxiliary scene
@@ -94,7 +94,7 @@ class boxm_raytrace_function
                     continue;
                 }
                 tree_type * tree=curr_block->get_tree();
-               
+
                 aux_tree_type * aux_tree=NULL;
                 if (step_functor.is_aux_)
                 {
@@ -265,7 +265,7 @@ class boxm_raytrace_function
                 }
 
                 tree_type * tree=curr_block->get_tree();
-                
+
                 boxm_block<aux_tree_type> * curr_aux_block=NULL;
                 aux_tree_type * aux_tree=NULL;
                 if (step_functor.is_aux_)
@@ -365,10 +365,10 @@ class boxm_raytrace_function
 
                 float save_time = (float)timer.all() /  1e3f;
                 total_save_time += save_time;
-                vcl_cout << "load: " << load_time << "s  compute: " << compute_time << "s  save: " << save_time << "s" << vcl_endl;
+                vcl_cout << "load: " << load_time << "s  compute: " << compute_time << "s  save: " << save_time << 's' << vcl_endl;
             }
         }
-        vcl_cout << "total load: " << total_load_time << "s  total compute: " << total_compute_time << "s  total save: " << total_save_time << "s" << vcl_endl;
+        vcl_cout << "total load: " << total_load_time << "s  total compute: " << total_compute_time << "s  total save: " << total_save_time << 's' << vcl_endl;
         return true;
     }
 
@@ -420,11 +420,11 @@ class boxm_raytrace_function
         normalize(norm_direction);
         return;
       }
-      if(cam_->type_name() == "vpgl_proj_camera"){
-        vpgl_proj_camera<double> const* prcam = 
+      if (cam_->type_name() == "vpgl_proj_camera") {
+        vpgl_proj_camera<double> const* prcam =
           static_cast<vpgl_proj_camera<double> const*>(cam_.ptr());
         ray_origin = prcam->camera_center();
-        vgl_homg_line_3d_2_points<double>  cam_ray = 
+        vgl_homg_line_3d_2_points<double>  cam_ray =
           prcam->backproject(vgl_homg_point_2d<double>((double)i,(double)j));
         vgl_homg_point_3d<double> hp = cam_ray.point_infinite();
         vgl_vector_3d<double> direction(hp.x(), hp.y(), hp.z());
@@ -432,11 +432,11 @@ class boxm_raytrace_function
         normalize(norm_direction);
         return;
       }
-      if(cam_->type_name() == "vpgl_affine_camera"){
+      if (cam_->type_name() == "vpgl_affine_camera") {
         vgl_homg_point_2d<double> ph(i, j);
-        vpgl_affine_camera<double> const * afcam = 
+        vpgl_affine_camera<double> const * afcam =
           static_cast<vpgl_affine_camera<double> const*>(cam_.ptr());
-        vgl_homg_line_3d_2_points<double>  cam_ray = 
+        vgl_homg_line_3d_2_points<double>  cam_ray =
           afcam->backproject(ph);
         vgl_homg_point_3d<double> hpinf = cam_ray.point_infinite();
         vgl_homg_point_3d<double> hpfin = cam_ray.point_finite();
@@ -447,8 +447,8 @@ class boxm_raytrace_function
         ray_origin = temp;
         return;
       }
-      if(cam_->type_name() == "vpgl_local_rational_camera"){
-        vpgl_local_rational_camera<double> const* lrcam = 
+      if (cam_->type_name() == "vpgl_local_rational_camera") {
+        vpgl_local_rational_camera<double> const* lrcam =
           static_cast<vpgl_local_rational_camera<double> const*>(cam_.ptr());
         vpgl_ray::ray(*lrcam,(double)i, (double)j, ray_origin, norm_direction);
         return;
@@ -543,9 +543,8 @@ class boxm_raytrace_function
     unsigned int img_j0_;
     unsigned int img_ni_;
     unsigned int img_nj_;
-  
-    unsigned int debug_lvl_;
 
+    unsigned int debug_lvl_;
 };
 
 template<class F, class T_loc, class T_data, class T_aux>
@@ -609,4 +608,4 @@ class boxm_iterate_cells_function
     const vpgl_camera_double_sptr cam_;
 };
 
-#endif // boxm_raytrace_function_h_
+#endif // boxm2_raytrace_function_h_

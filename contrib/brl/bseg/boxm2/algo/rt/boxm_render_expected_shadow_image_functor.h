@@ -1,5 +1,5 @@
-#ifndef boxm_render_expected_shadow_image_functor_h
-#define boxm_render_expected_shadow_image_functor_h
+#ifndef boxm2_render_expected_shadow_image_functor_h
+#define boxm2_render_expected_shadow_image_functor_h
 //:
 // \file
 #include <boxm2/boxm_apm_traits.h>
@@ -21,9 +21,9 @@ class boxm_render_expected_shadow_image_functor
   typedef typename boxm_aux_traits<AUX>::sample_datatype T_aux;
   //: "default" constructor
   boxm_render_expected_shadow_image_functor(vil_image_view<typename boxm_apm_traits<APM>::obs_datatype> &expected,
-                                     vil_image_view<float> &mask_vis,
-                                     unsigned int ni,unsigned nj,
-                                     bool scene_read_only=false,bool is_aux=true)
+                                            vil_image_view<float> &mask_vis,
+                                            unsigned int ni,unsigned nj,
+                                            bool scene_read_only=false,bool is_aux=true)
     : expected_(expected), vis_img_(mask_vis), alpha_integral_(ni,nj, 1)
   {
     alpha_integral_.fill(0.0f);
@@ -39,7 +39,6 @@ class boxm_render_expected_shadow_image_functor
                         boxm_sample<APM> &cell_value,
                         T_aux& aux_val)
   {
-
     // compute segment length
     const float seg_len = (float)(s1 - s0).length();
     // compute appearance probability of observation
@@ -48,7 +47,7 @@ class boxm_render_expected_shadow_image_functor
     //compute sun visibility
     float length_sum = aux_val.seg_len_;
     float avg_sun_vis = 1.0f;
-    if(length_sum>0.0f)
+    if (length_sum>0.0f)
       avg_sun_vis = aux_val.vis_/length_sum;
 
     // update alpha integral

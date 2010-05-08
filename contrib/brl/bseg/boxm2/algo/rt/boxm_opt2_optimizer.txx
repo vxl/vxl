@@ -1,5 +1,5 @@
-#ifndef boxm_opt2_optimizer_txx_
-#define boxm_opt2_optimizer_txx_
+#ifndef boxm2_opt2_optimizer_txx_
+#define boxm2_opt2_optimizer_txx_
 
 #include "boxm_opt2_optimizer.h"
 
@@ -97,10 +97,10 @@ bool boxm_opt2_optimizer<T_loc,APM,AUX>::update()
           vis_vector.push_back(aux_samples[s].vis_ / obs_seg_len);
         }
       }
-      // update the occlusion density 
+      // update the occlusion density
       if (weighted_seg_len_sum > 1e-6) {
         data.alpha = (float)(-log_pass_prob_sum / weighted_seg_len_sum);
-      } 
+      }
 
       // do bounds check on new alpha value
       vgl_box_3d<double> cell_bb = tree->cell_bounding_box(cell);
@@ -114,8 +114,8 @@ bool boxm_opt2_optimizer<T_loc,APM,AUX>::update()
         data.alpha = min_alpha;
       }
       if (!((data.alpha >= min_alpha) && (data.alpha <= max_alpha)) ){
-        vcl_cerr << "\nerror: data.alpha = " << data.alpha << vcl_endl;
-        //vcl_cerr << " log_alpha_sum = " << log_alpha_sum << ", n_actual_samples = " << n_actual_samples << vcl_endl;
+        vcl_cerr << "\nerror: data.alpha = " << data.alpha << '\n';
+        //vcl_cerr << " log_alpha_sum = " << log_alpha_sum << ", n_actual_samples = " << n_actual_samples << '\n';
       }
       // update with new appearance
       const float min_sigma = 0.02f;
@@ -142,7 +142,7 @@ bool boxm_opt2_optimizer<T_loc,APM,AUX>::update()
 }
 
 
-#define BOXM_OPT2_OPTIMIZER_INSTANTIATE(T1,T2,T3) \
+#define BOXM2_OPT2_OPTIMIZER_INSTANTIATE(T1,T2,T3) \
   template class boxm_opt2_optimizer<T1,T2,T3 >
 
-#endif // boxm_opt2_optimizer_txx_
+#endif // boxm2_opt2_optimizer_txx_

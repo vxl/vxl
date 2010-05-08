@@ -1,5 +1,5 @@
-#ifndef boxm_inf_line_sample_h_
-#define boxm_inf_line_sample_h_
+#ifndef boxm2_inf_line_sample_h_
+#define boxm2_inf_line_sample_h_
 //:
 // \file
 
@@ -16,7 +16,7 @@ class boxm_inf_line_sample
 {
  public:
   //: initially the residual is very big, it means the solution to this inf line is not found yet
-  boxm_inf_line_sample() : 
+  boxm_inf_line_sample() :
        residual_(1e6), line_(vgl_infinite_line_3d<T>(vgl_vector_2d<T>(0,0),
        vgl_vector_3d<T>(10,10,10))), num_obs_(0){}
 
@@ -27,7 +27,7 @@ class boxm_inf_line_sample
   bool operator==(const boxm_inf_line_sample &rhs) const;
   typedef boxm_inf_line_sample<T> value_type;
   // public members
-  T residual_; 
+  T residual_;
   vgl_infinite_line_3d<T> line_;
   vgl_line_3d_2_points<T> line_clipped_;
   unsigned num_obs_;
@@ -49,4 +49,4 @@ template <class T>
 vcl_ostream& operator << (vcl_ostream& os, boxm_inf_line_sample<T>& sample);
 
 
-#endif // boxm_inf_line_sample_h_
+#endif // boxm2_inf_line_sample_h_

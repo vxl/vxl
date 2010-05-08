@@ -1,5 +1,5 @@
-#ifndef boxm_edge_sample_h_
-#define boxm_edge_sample_h_
+#ifndef boxm2_edge_sample_h_
+#define boxm2_edge_sample_h_
 //:
 // \file
 
@@ -91,4 +91,4 @@ template <class T>
 vcl_ostream& operator << (vcl_ostream& os, const boxm_aux_edge_sample<T>& sample);
 
 
-#endif // boxm_edge_sample_h_
+#endif // boxm2_edge_sample_h_

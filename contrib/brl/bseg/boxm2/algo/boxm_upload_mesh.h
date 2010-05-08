@@ -1,12 +1,12 @@
-#ifndef boxm_render_mesh_h_
-#define boxm_render_mesh_h_
+#ifndef boxm2_render_mesh_h_
+#define boxm2_render_mesh_h_
 //:
 // \file
 #include <boct/boct_tree.h>
 #include <boct/boct_tree_cell.h>
-#include <boxm/boxm_block.h>
-#include <boxm/boxm_scene.h>
-#include <boxm/boxm_utils.h>
+#include <boxm2/boxm_block.h>
+#include <boxm2/boxm_scene.h>
+#include <boxm2/util/boxm_utils.h>
 #include <imesh/imesh_mesh.h>
 #include <vpgl/bgeo/bgeo_lvcs.h>
 #include <vgl/vgl_box_3d.h>
@@ -149,4 +149,4 @@ void boxm_upload_mesh_into_scene(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   }
 }
 
-#endif // boxm_render_mesh_h_
+#endif // boxm2_render_mesh_h_

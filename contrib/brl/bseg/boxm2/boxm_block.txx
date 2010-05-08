@@ -1,5 +1,5 @@
-#ifndef boxm_block_txx_
-#define boxm_block_txx_
+#ifndef boxm2_block_txx_
+#define boxm2_block_txx_
 
 #include "boxm_block.h"
 
@@ -60,7 +60,7 @@ void boxm_block<T>::b_write(vsl_b_ostream &os, const bool save_internal_nodes, c
   octree_->b_write(os, save_internal_nodes, platform_independent);
 }
 
-#define BOXM_BLOCK_INSTANTIATE(T) \
+#define BOXM2_BLOCK_INSTANTIATE(T) \
 template class boxm_block<T >
 
 #endif

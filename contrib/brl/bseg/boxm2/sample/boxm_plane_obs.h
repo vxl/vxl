@@ -1,5 +1,5 @@
-#ifndef boxm_plane_obs_h_
-#define boxm_plane_obs_h_
+#ifndef boxm2_plane_obs_h_
+#define boxm2_plane_obs_h_
 //:
 // \file
 
@@ -39,4 +39,4 @@ template <class T>
 vcl_ostream& operator << (vcl_ostream& os, const boxm_plane_obs<T>& sample);
 
 
-#endif // boxm_plane_obs_h_
+#endif // boxm2_plane_obs_h_

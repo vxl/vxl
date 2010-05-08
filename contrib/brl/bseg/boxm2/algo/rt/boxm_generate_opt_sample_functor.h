@@ -1,5 +1,5 @@
-#ifndef boxm_generate_opt_sample_functor_h
-#define boxm_generate_opt_sample_functor_h
+#ifndef boxm2_generate_opt_sample_functor_h
+#define boxm2_generate_opt_sample_functor_h
 //:
 // \file
 #include "boxm_pre_infinity_functor.h"
@@ -69,7 +69,7 @@ class boxm_generate_opt_sample_functor_pass_2
     }
     if (Beta < 0) {
       if (Beta < -1e-5) {
-        vcl_cerr << " error: beta = " << Beta << "  setting to 0. " << vcl_endl;
+        vcl_cerr << " error: beta = " << Beta << "  setting to 0. " << '\n';
       }
       Beta = 0;
     }
@@ -157,4 +157,4 @@ void boxm_generate_opt_sample_rt(boxm_scene<boct_tree<T_loc, T_data > > &scene,
     vcl_cout<<"DONE."<<vcl_endl;
 }
 
-#endif // boxm_generate_opt_sample_functor_h
+#endif // boxm2_generate_opt_sample_functor_h

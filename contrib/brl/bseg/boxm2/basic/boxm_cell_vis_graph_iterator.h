@@ -1,5 +1,5 @@
-#ifndef boxm_cell_vis_graph_iterator_h_
-#define boxm_cell_vis_graph_iterator_h_
+#ifndef boxm2_cell_vis_graph_iterator_h_
+#define boxm2_cell_vis_graph_iterator_h_
 //:
 // \file
 #include <boct/boct_tree_cell.h>

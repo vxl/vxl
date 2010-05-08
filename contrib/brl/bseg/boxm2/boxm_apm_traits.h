@@ -1,5 +1,5 @@
-#ifndef boxm_appearance_model_traits_h_
-#define boxm_appearance_model_traits_h_
+#ifndef boxm2_appearance_model_traits_h_
+#define boxm2_appearance_model_traits_h_
 //:
 // \file
 // \brief A class for appearance model traits

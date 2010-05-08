@@ -1,5 +1,5 @@
-#ifndef boxm_rational_camera_utils_h
-#define boxm_rational_camera_utils_h
+#ifndef boxm2_rational_camera_utils_h
+#define boxm2_rational_camera_utils_h
 
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_point_3d.h>

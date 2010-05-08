@@ -1,5 +1,5 @@
-#ifndef boxm_rt_sample_txx_
-#define boxm_rt_sample_txx_
+#ifndef boxm2_rt_sample_txx_
+#define boxm2_rt_sample_txx_
 
 #include "boxm_rt_sample.h"
 
@@ -21,7 +21,6 @@ void vsl_b_write(vsl_b_ostream & os, boxm_rt_sample<T> const &sample)
   vsl_b_write(os, sample.seg_len_);
   vsl_b_write(os, sample.updatefactor_);
   vsl_b_write(os, sample.Beta_);
-  
 }
 
 template <class T>
@@ -41,20 +40,20 @@ void vsl_b_read(vsl_b_istream & is, boxm_rt_sample<T> &sample)
   vsl_b_read(is,version);
   switch (version)
   {
-    case 1:
-      vsl_b_read(is, sample.obs_);
-      vsl_b_read(is, sample.pre_);
-      vsl_b_read(is, sample.vis_);
-      vsl_b_read(is, sample.PI_);
-      vsl_b_read(is, sample.seg_len_);
-      vsl_b_read(is, sample.updatefactor_);
-      vsl_b_read(is, sample.Beta_);
-      break;
-    default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boxm_rt_sample<T>&)\n"
-               << "           Unknown version number "<< version << '\n';
-      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
-      break;
+   case 1:
+    vsl_b_read(is, sample.obs_);
+    vsl_b_read(is, sample.pre_);
+    vsl_b_read(is, sample.vis_);
+    vsl_b_read(is, sample.PI_);
+    vsl_b_read(is, sample.seg_len_);
+    vsl_b_read(is, sample.updatefactor_);
+    vsl_b_read(is, sample.Beta_);
+    break;
+   default:
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boxm_rt_sample<T>&)\n"
+             << "           Unknown version number "<< version << '\n';
+    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    break;
   }
 }
 
@@ -65,13 +64,13 @@ void vsl_b_read(vsl_b_istream & is, boxm_rt_sample<T> *&sample)
 }
 
 template <class T>
-vcl_ostream& operator << (vcl_ostream& os, const boxm_rt_sample<T>& sample)
+vcl_ostream &operator << (vcl_ostream& os, const boxm_rt_sample<T>& sample)
 {
   sample.print(os);
   return os;
 }
 
-#define BOXM_RT_SAMPLE_INSTANTIATE(T) \
+#define BOXM2_RT_SAMPLE_INSTANTIATE(T) \
 template class boxm_rt_sample<T >; \
 template void vsl_b_write(vsl_b_ostream &, boxm_rt_sample<T > const &); \
 template void vsl_b_write(vsl_b_ostream &, boxm_rt_sample<T > const *&); \

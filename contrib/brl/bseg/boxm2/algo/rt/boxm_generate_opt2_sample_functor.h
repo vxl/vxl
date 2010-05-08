@@ -1,5 +1,5 @@
-#ifndef boxm_generate_opt2_sample_functor_h
-#define boxm_generate_opt2_sample_functor_h
+#ifndef boxm2_generate_opt2_sample_functor_h
+#define boxm2_generate_opt2_sample_functor_h
 //:
 // \file
 #include "boxm_pre_infinity_functor.h"
@@ -19,9 +19,9 @@ class boxm_generate_opt2_sample_functor_pass_2
 {
  public:
   //: "default" constructor
-  boxm_generate_opt2_sample_functor_pass_2(vil_image_view<typename boxm_apm_traits<APM>::obs_datatype> const& image, 
-                                           vil_image_view<float> const& beta_denom, 
-                                           float model_prior, 
+  boxm_generate_opt2_sample_functor_pass_2(vil_image_view<typename boxm_apm_traits<APM>::obs_datatype> const& image,
+                                           vil_image_view<float> const& beta_denom,
+                                           float model_prior,
                                            vil_image_view<float> const& alt_prob_img)
     : scene_read_only_(true) /*only reads info from the scene*/, is_aux_(true) /*needs to write aux*/,
       model_prior_(model_prior), alt_prob_img_(alt_prob_img), obs_(image), beta_denom_(beta_denom),
@@ -103,7 +103,7 @@ template <class T_loc, class T_data, boxm_aux_type AUX_T>
 void boxm_generate_opt2_samples(boxm_scene<boct_tree<T_loc, T_data > > &scene,
                                 vpgl_camera_double_sptr cam,
                                 vil_image_view<typename T_data::obs_datatype> &obs,
-                                vcl_string iname, 
+                                vcl_string iname,
                                 vcl_vector<float> const& alt_appearance_priors,
                                 vcl_vector<typename T_data::apm_datatype> const& alt_appearance_models,
                                 bool black_background = false)
@@ -191,4 +191,4 @@ void boxm_generate_opt2_samples(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   vcl_cout<<"DONE."<<vcl_endl;
 }
 
-#endif // boxm_generate_opt2_sample_functor_h
+#endif // boxm2_generate_opt2_sample_functor_h
