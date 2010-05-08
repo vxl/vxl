@@ -1,4 +1,4 @@
-// This is brl/bseg/boxm/pro/processes/boxm_refine_scene_process.cxx
+// This is brl/bseg/boxm2/algo/pro/processes/boxm_refine_scene_process.cxx
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -28,7 +28,7 @@ namespace boxm_refine_scene_process_globals
 bool boxm_refine_scene_process_cons(bprb_func_process& pro)
 {
   using namespace boxm_refine_scene_process_globals;
-  //process takes 2 inputs
+  //process takes 3 inputs
   //input[0]: The scene
   //input[1]: The threshold for splitting
   //input[2]: bool for resetting the appearence model
@@ -43,10 +43,7 @@ bool boxm_refine_scene_process_cons(bprb_func_process& pro)
   //output[0]: The number of leaf cells in the refined scene
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "unsigned";
-  if (!pro.set_output_types(output_types_))
-    return false;
-
-  return true;
+  return pro.set_output_types(output_types_);
 }
 
 bool boxm_refine_scene_process(bprb_func_process& pro)
@@ -66,8 +63,8 @@ bool boxm_refine_scene_process(bprb_func_process& pro)
 
   // check the input validity
   if (scene == 0) {
-     vcl_cout << "boxm_refine_scene_process: scene is null, cannot run" << vcl_endl;
-     return false;
+    vcl_cout << "boxm_refine_scene_process: scene is null, cannot run" << vcl_endl;
+    return false;
   }
 
   unsigned int ncells = 0;
@@ -83,7 +80,8 @@ bool boxm_refine_scene_process(bprb_func_process& pro)
       boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
       ncells = boxm_refine_scene<short, boxm_sample<BOXM_APM_MOG_GREY> >(*s, thresh, reset);
     }
-  } else if (scene->appearence_model() == BOXM_APM_SIMPLE_GREY) {
+  }
+  else if (scene->appearence_model() == BOXM_APM_SIMPLE_GREY) {
     if (scene->multi_bin()) {
       vcl_cout << "boxm_refine_scene_process: multibin case is not implemented for BOXM_APM_SIMPLE_GREY yet" << vcl_endl;
       return false;
@@ -93,7 +91,8 @@ bool boxm_refine_scene_process(bprb_func_process& pro)
       boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
       ncells = boxm_refine_scene<short, boxm_sample<BOXM_APM_SIMPLE_GREY> >(*s, thresh, reset);
     }
-  }else if (scene->appearence_model() == BOXM_APM_MOB_GREY) {
+  }
+  else if (scene->appearence_model() == BOXM_APM_MOB_GREY) {
     if (scene->multi_bin()) {
       vcl_cout << "boxm_refine_scene_process: multibin case is not implemented for BOXM_APM_SIMPLE_GREY yet" << vcl_endl;
       return false;

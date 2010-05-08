@@ -1,4 +1,4 @@
-// This is brl/bseg/boxm/pro/processes/boxm_volume_visibility_process.cxx
+// This is brl/bseg/boxm2/algo/sp/pro/processes/boxm_volume_visibility_process.cxx
 //:
 // \file
 // \brief A class for obtaining visibility of a volume
@@ -30,11 +30,12 @@ namespace boxm_volume_visibility_process_globals
 bool boxm_volume_visibility_process_cons(bprb_func_process& pro)
 {
   using namespace boxm_volume_visibility_process_globals;
-  //process takes 4 inputs
+  //process takes 10 inputs
   //input[0]: scene binary file
   //input[1]: camera
   //input[2]: ni of the expected image
   //input[3]: nj of the expected image
+  //input[4-9]: bounding box
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm_scene_base_sptr";
   input_types_[1] = "vpgl_camera_double_sptr";
@@ -51,16 +52,10 @@ bool boxm_volume_visibility_process_cons(bprb_func_process& pro)
 
   // process has 1 output:
   // output[0]: rendered image
-  // output[0]: mask
   vcl_vector<vcl_string>  output_types_(n_outputs_);
-  //output_types_[0] = "vil_image_view_base_sptr";
-  //output_types_[1] = "vil_image_view_base_sptr";
   output_types_[0] = "vil_image_view_base_sptr";
 
-  if (!pro.set_output_types(output_types_))
-    return false;
-
-  return true;
+  return pro.set_output_types(output_types_);
 }
 
 bool boxm_volume_visibility_process(bprb_func_process& pro)
@@ -79,7 +74,6 @@ bool boxm_volume_visibility_process(bprb_func_process& pro)
   unsigned ni = pro.get_input<unsigned>(i++);
   unsigned nj = pro.get_input<unsigned>(i++);
 
-
   float min_x=pro.get_input<float>(i++);
   float min_y=pro.get_input<float>(i++);
   float min_z=pro.get_input<float>(i++);
@@ -97,7 +91,6 @@ bool boxm_volume_visibility_process(bprb_func_process& pro)
   boxm_utils::project_corners(boxm_utils::corners_of_box_3d(query),camera,xverts,yverts);
   boct_face_idx face_id=boxm_utils::visible_faces(query,camera,xverts,yverts);
   vil_image_view_base_sptr img;
-
 
   // check the scene's app model
   if (scene_ptr->appearence_model() == BOXM_APM_MOG_GREY) {
