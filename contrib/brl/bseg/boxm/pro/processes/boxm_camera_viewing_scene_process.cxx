@@ -30,8 +30,8 @@
 namespace boxm_camera_viewing_scene_process_globals
 {
   //this process takes no inputs
-  const unsigned n_inputs_ = 6;
-  const unsigned n_outputs_ = 1;
+  const unsigned n_inputs_ = 8;
+  const unsigned n_outputs_ = 2;
 }
 
 //:sets input and output types
@@ -43,15 +43,19 @@ bool boxm_camera_viewing_scene_process_cons(bprb_func_process& pro)
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm_scene_base_sptr";// the scene
   input_types_[1] = "vcl_string";//the camera type, e.g. perspective
-  input_types_[2] = "double";//camera elevation degrees
-  input_types_[3] = "double";//camera azimuth degrees
-  input_types_[4] = "unsigned";//image ni
-  input_types_[5] = "unsigned";//image nj
+  input_types_[2] = "double";    //camera elevation degrees
+  input_types_[3] = "double";    //camera azimuth degrees
+  input_types_[4] = "unsigned";  //image ni
+  input_types_[5] = "unsigned";  //image nj
+  input_types_[6] = "bool";      // force focal length
+  input_types_[7] = "double";     // force focal length
   if (!pro.set_input_types(input_types_))
     return false;
   
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "vpgl_camera_double_sptr";
+    output_types_[1] = "double";
+
   if (!pro.set_output_types(output_types_))
     return false;
   return true;
@@ -76,7 +80,13 @@ bool boxm_camera_viewing_scene_process(bprb_func_process& pro)
   double azimuth = pro.get_input<double>(3);
   unsigned ni = pro.get_input<unsigned>(4);
   unsigned nj = pro.get_input<unsigned>(5);
+  bool  force_focal_length =false;
+  force_focal_length=pro.get_input<bool>(6);
+  double  focal_length=1.0f;
+  focal_length=pro.get_input<double>(7);
+
   double dni = static_cast<double>(ni), dnj = static_cast<double>(nj);
+
   //
   //find a camera that will project the scene bounding box 
   //entirely inside the image
@@ -88,8 +98,7 @@ bool boxm_camera_viewing_scene_process(bprb_func_process& pro)
   // 2) determine camera center
   // the viewsphere radius is set to 10x the bounding box diameter
   double w = bb.width(), h = bb.height(), d = bb.depth();
-  double r = vcl_sqrt(w*w + h*h + d*d);
-  r *=10;
+  double r = vcl_sqrt(w*w + h*h + d*d);r *=3;
   double deg_to_rad = vnl_math::pi/180.0;
   double el = elevation*deg_to_rad, az = azimuth*deg_to_rad;
   double cx = r*vcl_sin(el)*vcl_cos(az);
@@ -97,8 +106,10 @@ bool boxm_camera_viewing_scene_process(bprb_func_process& pro)
   double cz = r*vcl_cos(el);
   vgl_point_3d<double> cent(cx+cn.x(), cy+cn.y(), cz);
 
+  if(!force_focal_length)
+	  focal_length=1.0f;
   // 3) start with a unit focal length and position the camera
-  vpgl_calibration_matrix<double> K(1.0, vgl_point_2d<double>(ni/2, nj/2));
+  vpgl_calibration_matrix<double> K(focal_length, vgl_point_2d<double>(ni/2, nj/2));
   vgl_rotation_3d<double> R;
   vpgl_perspective_camera<double>* cam = 
     new vpgl_perspective_camera<double>(K, cent, R);
@@ -110,18 +121,22 @@ bool boxm_camera_viewing_scene_process(bprb_func_process& pro)
   else
     cam->look_at(stpt);
 
-  //4) Adjust the focal length so that the box projects into the image
-  // project the bounding box
-  vgl_box_2d<double> image_bb = vpgl_project::project_bounding_box(*cam, bb);
-  // get 2-d box diameter and image diameter
-  double bw = image_bb.width(), bh = image_bb.height();
-  double bd = vcl_sqrt(bw*bw + bh*bh);
-  double id = vcl_sqrt(dni*dni + dnj*dnj);
-  //find the adjusted focal length
-  double f = id/bd;
-  K.set_focal_length(f);
-  cam->set_calibration(K);
-
+  if(!force_focal_length)
+  {
+	  //4) Adjust the focal length so that the box projects into the image
+	  // project the bounding box
+	  vgl_box_2d<double> image_bb = vpgl_project::project_bounding_box(*cam, bb);
+	  // get 2-d box diameter and image diameter
+	  double bw = image_bb.width(), bh = image_bb.height();
+	  double bd = vcl_sqrt(bw*bw + bh*bh);
+	  double id = vcl_sqrt(dni*dni + dnj*dnj);
+	  //find the adjusted focal length
+	  focal_length = id/bd;
+	  K.set_focal_length(focal_length);
+	  cam->set_calibration(K);
+  }
   pro.set_output_val<vpgl_camera_double_sptr>(0, cam);
+  pro.set_output_val<double>(1, (double)focal_length);
+
   return true;
 }
