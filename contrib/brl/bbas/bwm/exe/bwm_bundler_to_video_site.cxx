@@ -99,7 +99,13 @@ bool axis_align_scene(vcl_vector<bwm_video_corr_sptr> & corrs,
   vgl_rotation_3d<double> rot_scene(plane.normal(),vgl_vector_3d<double>(0,0,1));
 
   double sumx=0,sumy=0,sumz=0;
+<<<<<<< .mine
+  double u,v;
+  
+  for(unsigned i=0;i<corrs.size();i++)
+=======
   for (unsigned i=0;i<corrs.size();i++)
+>>>>>>> .r28239
   {
     vgl_homg_point_3d<double> p(corrs[i]->world_pt());
     vgl_homg_point_3d<double> pnew=rot_scene*p;
@@ -133,9 +139,30 @@ bool axis_align_scene(vcl_vector<bwm_video_corr_sptr> & corrs,
       up++;
   }
 
-
   if (up<cams.size()-up)// flip the world
   {
+<<<<<<< .mine
+	  vcl_cout<<"Fliping the world"<<vcl_endl;
+	  vnl_quaternion<double> q(vnl_math::pi,0,0);
+	  vgl_rotation_3d<double> rotx_pi(q);
+	  for(unsigned i=0;i<corrs.size();i++)
+	  {
+		  vgl_homg_point_3d<double> p(corrs[i]->world_pt());
+		  vgl_homg_point_3d<double> pnew=rotx_pi*p;
+		  if(!pnew.ideal())
+		  {
+			  vgl_point_3d<double> pnew_nonhomg(pnew.x()/pnew.w(),pnew.y()/pnew.w(),pnew.z()/pnew.w());
+			  corrs[i]->set_world_pt(pnew_nonhomg);
+		  }
+	  }
+	  for(unsigned i=0;i<cams.size();i++)
+	  { 
+		  //: new rotation
+		  vgl_rotation_3d<double> rot_cami=new_cams[i].get_rotation()*rotx_pi.inverse();
+		  cams[i]=vpgl_perspective_camera<double>(new_cams[i].get_calibration(),rot_cami,new_cams[i].get_translation());
+	  }
+
+=======
     vnl_quaternion<double> q(vnl_math::pi,0,0);
     vgl_rotation_3d<double> rotx_pi(q);
     for (unsigned i=0;i<corrs.size();i++)
@@ -154,8 +181,8 @@ bool axis_align_scene(vcl_vector<bwm_video_corr_sptr> & corrs,
       vgl_rotation_3d<double> rot_cami=new_cams[i].get_rotation()*rotx_pi.inverse();
       new_cams[i]=vpgl_perspective_camera<double>(new_cams[i].get_calibration(),rot_cami,new_cams[i].get_translation());
     }
+>>>>>>> .r28239
   }
-  cams=new_cams;
   return true;
 }
 
@@ -300,7 +327,6 @@ int main(int argc, char** argv)
   for (;iter!=bad_cams.end();iter++)
     vcl_cout<<*iter<<' ';
   vcl_cout<<vcl_endl;
-
   vcl_cout<<"Error per projection"<<err/cnt<<vcl_endl;
   if (!axis_align_scene(corrs,cams))
     return -1;
@@ -309,21 +335,26 @@ int main(int argc, char** argv)
     camstream.write_camera(&cams[i]);
   camstream.close();
 
+
   char filename[1024];
   if (vul_file::is_directory(cam_txt_dir().c_str()))
   {
-    for (unsigned i=0;i<num_cams;i++)
-    {
-      vcl_sprintf(filename,"%s/camera%05d.txt",cam_txt_dir().c_str(),i);
-      vcl_ofstream ofile(filename);
-      if (ofile)
-      {
-        ofile<<cams[i].get_calibration().get_matrix()<<'\n'
-             <<cams[i].get_rotation().as_matrix()<<'\n'
-             <<cams[i].get_translation().x()<<' '<<cams[i].get_translation().y()<<' '<<cams[i].get_translation().z()<<'\n';
-      }
-    }
+	  for(unsigned i=0;i<num_cams;i++)
+	  {
+		  vcl_sprintf(filename,"%s/camera%05d.txt",cam_txt_dir().c_str(),i);
+		  vcl_ofstream ofile(filename);
+		  if(ofile)
+		  {
+			  ofile<<cams[i].get_calibration().get_matrix()<<"\n";
+			  ofile<<cams[i].get_rotation().as_matrix()<<"\n";
+			  ofile<<cams[i].get_translation().x()<<" "<<cams[i].get_translation().y()<<" "<<cams[i].get_translation().z()<<"\n";
+		  }
+	  }
   }
+  vgl_box_3d<double> bounding_box;
+  for(unsigned i=0;i<corrs.size();i++)
+  	  bounding_box.add(corrs[i]->world_pt());
+  vcl_cout<<"Bounding Box "<<bounding_box<<vcl_endl;
   bwm_video_site_io site;
   site.set_name(site_name());
   site.set_corrs(corrs);
