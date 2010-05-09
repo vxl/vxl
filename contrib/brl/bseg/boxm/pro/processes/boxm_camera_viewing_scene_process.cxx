@@ -51,7 +51,7 @@ bool boxm_camera_viewing_scene_process_cons(bprb_func_process& pro)
   input_types_[7] = "double";     // force focal length
   if (!pro.set_input_types(input_types_))
     return false;
-  
+
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "vpgl_camera_double_sptr";
     output_types_[1] = "double";
@@ -70,11 +70,11 @@ bool boxm_camera_viewing_scene_process(bprb_func_process& pro)
   }
   using namespace boxm_camera_viewing_scene_process_globals;
   boxm_scene_base_sptr scene_ptr = pro.get_input<boxm_scene_base_sptr>(0);
-  if(!scene_ptr) return false;
+  if (!scene_ptr) return false;
   vgl_box_3d<double> bb =  scene_ptr->get_world_bbox();
 
   vcl_string cam_type = pro.get_input<vcl_string>(1);
-  if(cam_type!="vpgl_perspective_camera")
+  if (cam_type!="vpgl_perspective_camera")
     return false; //later other camera types
   double elevation = pro.get_input<double>(2);
   double azimuth = pro.get_input<double>(3);
@@ -88,12 +88,12 @@ bool boxm_camera_viewing_scene_process(bprb_func_process& pro)
   double dni = static_cast<double>(ni), dnj = static_cast<double>(nj);
 
   //
-  //find a camera that will project the scene bounding box 
+  //find a camera that will project the scene bounding box
   //entirely inside the image
   //
   // 1) determine the stare point (center of bounding box)
   vgl_point_3d<double> cn = bb.centroid();
-  vgl_homg_point_3d<double> stpt(cn.x(), cn.y(), cn.z()); 
+  vgl_homg_point_3d<double> stpt(cn.x(), cn.y(), cn.z());
 
   // 2) determine camera center
   // the viewsphere radius is set to 10x the bounding box diameter
@@ -106,34 +106,33 @@ bool boxm_camera_viewing_scene_process(bprb_func_process& pro)
   double cz = r*vcl_cos(el);
   vgl_point_3d<double> cent(cx+cn.x(), cy+cn.y(), cz);
 
-  if(!force_focal_length)
-	  focal_length=1.0f;
+  if (!force_focal_length)
+    focal_length=1.0f;
   // 3) start with a unit focal length and position the camera
   vpgl_calibration_matrix<double> K(focal_length, vgl_point_2d<double>(ni/2, nj/2));
   vgl_rotation_3d<double> R;
-  vpgl_perspective_camera<double>* cam = 
-    new vpgl_perspective_camera<double>(K, cent, R);
+  vpgl_perspective_camera<double>* cam = new vpgl_perspective_camera<double>(K, cent, R);
 
   //stare at the center of the scene
   vgl_vector_3d<double> up(0.0, 1.0, 0.0);
-  if(vcl_fabs(el)<1.0e-3)
+  if (vcl_fabs(el)<1.0e-3)
     cam->look_at(stpt, up);
   else
     cam->look_at(stpt);
 
-  if(!force_focal_length)
+  // 4) Adjust the focal length so that the box projects into the image
+  if (!force_focal_length)
   {
-	  //4) Adjust the focal length so that the box projects into the image
-	  // project the bounding box
-	  vgl_box_2d<double> image_bb = vpgl_project::project_bounding_box(*cam, bb);
-	  // get 2-d box diameter and image diameter
-	  double bw = image_bb.width(), bh = image_bb.height();
-	  double bd = vcl_sqrt(bw*bw + bh*bh);
-	  double id = vcl_sqrt(dni*dni + dnj*dnj);
-	  //find the adjusted focal length
-	  focal_length = id/bd;
-	  K.set_focal_length(focal_length);
-	  cam->set_calibration(K);
+    // project the bounding box
+    vgl_box_2d<double> image_bb = vpgl_project::project_bounding_box(*cam, bb);
+    // get 2-d box diameter and image diameter
+    double bw = image_bb.width(), bh = image_bb.height();
+    double bd = vcl_sqrt(bw*bw + bh*bh);
+    double id = vcl_sqrt(dni*dni + dnj*dnj);
+    //find the adjusted focal length
+    focal_length = id/bd;
+    K.set_focal_length(focal_length);
+    cam->set_calibration(K);
   }
   pro.set_output_val<vpgl_camera_double_sptr>(0, cam);
   pro.set_output_val<double>(1, (double)focal_length);
