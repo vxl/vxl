@@ -207,7 +207,7 @@ struct vil_viff_xvimage  {
   vxl_uint_32  location_type;  /* implied or explicit location
                                   data  (implied locations are
                                   derived from row_size and
-                                  col_size */
+                                  col_size) */
 
   vxl_uint_32  location_dim;  /* explicit locations can be of
                                  any dimension  */
@@ -254,7 +254,7 @@ struct vil_viff_xvimage  {
                                valid. */
 
   vxl_uint_32  maps_per_cycle;  /* number of maps to constitue a "cycle"
-                              for VFF_MS_CYCLE */
+                                   for VFF_MS_CYCLE */
 
   /* Specification of the particular color model in use when working with a
      color image. This just tells what the coordinate system and axis orientation
@@ -286,11 +286,11 @@ struct vil_viff_xvimage  {
   float *location;  /* a pointer to the location data (for
                        explicit locations, each location is
                        paired with data pointed to by
-                       *imagedata,  all locations are
-                       in float  */
+                       *imagedata); all locations are
+                       in float */
 
   char *imagedata;  /* a pointer to the input data (straight off
-                       of disk, must be cast into the proper type */
+                       of disk), must be cast into the proper type */
 
 } ;
 
@@ -359,7 +359,7 @@ char machine_dep; */
                                map is defined, the data may
                                optionally be sent thru it. */
 #define  VFF_MAP_FORCE    2  /* The data MUST be sent thru the map
-                             to be interpreted */
+                                to be interpreted */
 
 /* definitions for color map models, vxl_uint_32 color_space_model; */
 
