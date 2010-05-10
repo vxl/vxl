@@ -25,15 +25,16 @@ SET(boxm2_algo_rt_sources
     dummy.cxx
    )
 
-ADD_LIBRARY(boxm2_algo_rt ${boxm2_algo_rt_sources})
 
 AUX_SOURCE_DIRECTORY(Templates boxm2_algo_rt_sources)
+
+ADD_LIBRARY(boxm2_algo_rt ${boxm2_algo_rt_sources})
 
 #processes
 SUBDIRS(pro)
 
 IF( BUILD_TESTING )
-#  SUBDIRS(tests)
+  SUBDIRS(tests)
 ENDIF( BUILD_TESTING )
  
 TARGET_LINK_LIBRARIES(boxm2_algo_rt boxm2 boxm2_sample boxm2_sample_algo boxm2_basic boxm2_util vil vcl vgl vbl vgl_algo bsta vnl sdet brip vpgl vpgl_algo bgeo)

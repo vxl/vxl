@@ -1,6 +1,6 @@
 // This is brl/bseg/boxm2/util/boxm_vrml_util.h
-#ifndef boxm2_vrml_util_h
-#define boxm2_vrml_util_h
+#ifndef boxm_vrml_util_h
+#define boxm_vrml_util_h
 //:
 // \file
 // \brief  Set of utilities to save a boxm_scene as vrml files

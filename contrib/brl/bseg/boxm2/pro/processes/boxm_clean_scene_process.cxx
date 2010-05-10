@@ -27,7 +27,6 @@
 
 #include <boxm2/sample/boxm_sample_multi_bin.h>
 #include <boxm2/boxm_scene_parser.h>
-//#include <boxm2/boxm_init_scene.h>
 
 //:global variables
 namespace boxm_clean_scene_process_globals

@@ -40,6 +40,8 @@ SUBDIRS(algo)
 SUBDIRS(basic)
 
 #tests
-#SUBDIRS(tests)
+IF( BUILD_TESTING )
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTING )
 
 ENDIF(EXPAT_FOUND)

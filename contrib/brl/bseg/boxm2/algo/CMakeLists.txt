@@ -16,7 +16,7 @@ SET(boxm2_algo_sources
 ADD_LIBRARY(boxm2_algo ${boxm2_algo_sources})
 
 IF( BUILD_TESTING )
-#  SUBDIRS(tests)
+  SUBDIRS(tests)
 ENDIF( BUILD_TESTING )
 
 TARGET_LINK_LIBRARIES(boxm2_algo boxm2 boxm2_util boxm2_sample boxm2_sample_algo boxm2_basic vcl vgl bsta imesh vpgl bgeo vgl vgl_algo)

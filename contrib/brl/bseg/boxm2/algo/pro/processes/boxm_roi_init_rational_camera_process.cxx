@@ -1,4 +1,4 @@
-//This is brl/bseg/boxm2/algo/pro/processes/boxm_roi_init_rational_camera_process.cxx
+// This is brl/bseg/boxm2/algo/pro/processes/boxm_roi_init_rational_camera_process.cxx
 #include <bprb/bprb_func_process.h>
 //:
 // \file

@@ -11,18 +11,18 @@ SET(boxm2_util_sources
     boxm_triangle_scan_iterator.h           boxm_triangle_scan_iterator.cxx
     boxm_utils.h                            boxm_utils.cxx
     boxm_vrml_util.h
+    boxm_test_util.h                        boxm_test_util.cxx
    )
 
-ADD_LIBRARY(boxm2_util ${boxm2_util_sources})
 
 AUX_SOURCE_DIRECTORY(Templates boxm2_util_sources)
 
+ADD_LIBRARY(boxm2_util ${boxm2_util_sources})
+
+
 IF( BUILD_TESTING )
-#  SUBDIRS(tests)
+  SUBDIRS(tests)
 ENDIF( BUILD_TESTING )
 
 TARGET_LINK_LIBRARIES(boxm2_util boxm2 boxm2_sample boct bsta vil vnl vnl_algo vcl vbl vgl vpgl vpgl_algo bvrml)
 
-
-#processes
-#SUBDIRS(pro)

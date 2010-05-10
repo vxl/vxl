@@ -1,4 +1,5 @@
 // This is brl/bseg/boxm2/algo/sp/pro/processes/boxm_render_expected_process.cxx
+
 //:
 // \file
 // \brief A class for obtaining roc curve from change detection results.

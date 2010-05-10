@@ -2,13 +2,13 @@
 #define boxm2_update_h_
 //:
 //\file
+#include "boxm_render_image.h"
 #include <boct/boct_tree.h>
 #include <boct/boct_tree_cell.h>
 #include <boxm2/util/boxm_utils.h>
 #include <boxm2/boxm_block.h>
 #include <boxm2/basic/boxm_cell_vis_graph_iterator.h>
 #include <boxm2/basic/boxm_block_vis_graph_iterator.h>
-#include "boxm_render_image.h"
 #include <boxm2/util/boxm_rational_camera_utils.h>
 #include <vil/vil_math.h>
 #include <vil/vil_save.h>

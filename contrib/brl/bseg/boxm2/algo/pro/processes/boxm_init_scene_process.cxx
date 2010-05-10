@@ -1,4 +1,5 @@
 // This is brl/bseg/boxm2/algo/pro/processes/boxm_init_scene_process.cxx
+
 #include <boxm2/boxm_scene_base.h>
 #include <boxm2/boxm_scene.h>
 //:

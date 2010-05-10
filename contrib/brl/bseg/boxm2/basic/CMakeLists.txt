@@ -9,16 +9,14 @@ SET(boxm2_basic_sources
    dummy.cxx
    )
 
-ADD_LIBRARY(boxm2_basic ${boxm2_basic_sources})
 
 AUX_SOURCE_DIRECTORY(Templates boxm2_basic_sources)
 
+ADD_LIBRARY(boxm2_basic ${boxm2_basic_sources})
+
 IF( BUILD_TESTING )
-#  SUBDIRS(tests)
+  SUBDIRS(tests)
 ENDIF( BUILD_TESTING )
 
 TARGET_LINK_LIBRARIES(boxm2_basic boxm2 boxm2_util boxm2_sample boxm2_sample_algo boct vgl vpgl vpgl_algo vgl vul vcl)
 
-
-#processes
-#SUBDIRS(pro)

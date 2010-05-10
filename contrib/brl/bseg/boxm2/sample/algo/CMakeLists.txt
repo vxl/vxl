@@ -8,5 +8,5 @@ SET(boxm2_sample_algo_sources
 
 ADD_LIBRARY(boxm2_sample_algo ${boxm2_sample_algo_sources})
 
-TARGET_LINK_LIBRARIES(boxm2_sample_algo boxm2 boxm2_util bsta vnl )
+TARGET_LINK_LIBRARIES(boxm2_sample_algo boxm2 boxm2_util bsta bsta_algo vnl )
 

@@ -1,6 +1,7 @@
 // This is brl/bseg/boxm2/algo/boxm_crop_scene.h
-#ifndef boxm2_crop_scene_h
-#define boxm2_crop_scene_h
+#ifndef boxm_crop_scene_h
+#define boxm_crop_scene_h
+
 //:
 // \file
 // \brief  Template functions to create a new scene that is a cropped portion of another

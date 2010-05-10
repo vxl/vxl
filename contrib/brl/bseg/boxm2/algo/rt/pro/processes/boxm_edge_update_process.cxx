@@ -17,9 +17,6 @@
 #include <brdb/brdb_value.h>
 #include <bprb/bprb_parameters.h>
 
-//#include <vpgl/vpgl_camera.h>
-//#include <vpgl/vpgl_perspective_camera.h>
-
 #include <boct/boct_tree.h>
 
 #include <boxm2/boxm_scene_base.h>

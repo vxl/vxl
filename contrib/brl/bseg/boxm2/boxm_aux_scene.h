@@ -15,7 +15,6 @@
 #include <boct/boct_tree_cell_reader.h>
 #include <boxm2/boxm_scene.h>
 #include <boxm2/boxm_block.h>
-//#include <boxm2/opt/boxm_rt_sample.h>
 
 #include <vgl/vgl_point_3d.h>
 
