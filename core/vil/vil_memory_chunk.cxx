@@ -18,7 +18,7 @@ vil_memory_chunk::vil_memory_chunk(vcl_size_t n, vil_pixel_format pixel_form)
 : data_(new char[n]), size_(n), pixel_format_(pixel_form), ref_count_(0)
 {
   assert(vil_pixel_format_num_components(pixel_form)==1
-    || pixel_form==VIL_PIXEL_FORMAT_UNKNOWN );
+         || pixel_form==VIL_PIXEL_FORMAT_UNKNOWN );
 }
 
 //: Destructor

@@ -76,7 +76,7 @@ open(const vcl_string& glob)
   if (!can_open) {
     vcl_cerr << "In vidl_image_list_istream(.) -can't open files as images\n";
     for (vcl_vector<vcl_string>::iterator fit = filenames.begin();
-        fit != filenames.end(); ++fit)
+         fit != filenames.end(); ++fit)
       vcl_cerr << *fit << '\n';
     return false;
   }
