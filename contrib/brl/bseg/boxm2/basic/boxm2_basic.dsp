@@ -154,6 +154,15 @@ SOURCE=.\Templates/boxm_block_iterator+boct_tree+short.int--.cxx
 # Begin Source File
 SOURCE=.\Templates/boxm_block_iterator+boct_tree+short.float--.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_cell_vis_graph_iterator+short.boxm_edge_tangent_sample+float--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_cell_vis_graph_iterator+short.boxm_inf_line_sample+float--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_cell_vis_graph_iterator+short.boxm_edge_sample+float--.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

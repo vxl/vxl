@@ -116,6 +116,9 @@ SOURCE=.\boxm_sigma_normalizer.cxx
 SOURCE=.\boxm_merge_mog.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\boxm_test_util.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/boxm_triangle_interpolation_iterator+float-.cxx
 # End Source File
 # End Group
@@ -156,6 +159,9 @@ SOURCE=.\boxm_raytrace_operations.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_cell_data_traits.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_test_util.h
 # End Source File
 # End Group
 # End Target
