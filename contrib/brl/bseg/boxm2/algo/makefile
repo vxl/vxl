@@ -16,6 +16,14 @@ MANPAGE_SOURCES += boxm_save_scene_raw.h
 
 SUBDIRS += pro sp rt
 
-################################
-include ${VXLROOT}/config/top.mk
-################################
+#######################################
+include ${VXLROOT}/config/top-params.mk
+#######################################
+
+ifndef NOTEST
+SUBDIRS += tests
+endif
+
+######################################
+include ${VXLROOT}/config/top-rules.mk
+######################################

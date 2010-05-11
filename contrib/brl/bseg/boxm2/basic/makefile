@@ -11,6 +11,14 @@ MANPAGE_SOURCES += boxm_seg_length_functor.h
 MANPAGE_SOURCES += boxm_raytrace_function.h
 MANPAGE_SOURCES += boxm_cell_vis_graph_iterator.txx
 
-################################
-include ${VXLROOT}/config/top.mk
-################################
+#######################################
+include ${VXLROOT}/config/top-params.mk
+#######################################
+
+ifndef NOTEST
+SUBDIRS += tests
+endif
+
+######################################
+include ${VXLROOT}/config/top-rules.mk
+######################################

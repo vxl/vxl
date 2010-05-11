@@ -13,6 +13,14 @@ MANPAGE_SOURCES += boxm_aux_scene.txx
 
 SUBDIRS += basic algo pro sample util
 
-################################
-include ${VXLROOT}/config/top.mk
-################################
+#######################################
+include ${VXLROOT}/config/top-params.mk
+#######################################
+
+ifndef NOTEST
+SUBDIRS += tests
+endif
+
+######################################
+include ${VXLROOT}/config/top-rules.mk
+######################################
