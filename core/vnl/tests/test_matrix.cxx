@@ -1,6 +1,7 @@
 // This is core/vnl/tests/test_matrix.cxx
 #include <vcl_iostream.h>
 #include <vnl/vnl_matrix.h>
+#include <vnl/vnl_copy.h>
 #include <testlib/testlib_test.h>
 #include <vcl_cmath.h> // sqrt()
 
@@ -431,6 +432,16 @@ void test_double()
   TEST_NEAR("normalize_rows()", d8[1][1], 0.8, 1e-12);
   d8.normalize_columns();
   TEST("normalize_columns()", d8[0][0]==0 && d8[1][0]==1, true);
+
+  vnl_matrix<double> d9(2,2);
+  vnl_copy(d2, d9);
+  TEST("vnl_copy(S, S)", d9==d2, true);
+  vnl_matrix<float> d10(2,2);
+  vnl_copy(d2, d10);
+  d9.fill(-15.0);
+  vnl_copy(d10, d9);
+  TEST("vnl_copy(T, S)", d9==d2, true);
+
 }
 
 #ifdef LEAK
