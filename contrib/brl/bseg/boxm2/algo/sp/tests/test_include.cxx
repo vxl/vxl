@@ -5,6 +5,7 @@
 #include <boxm2/algo/sp/boxm_update.h>
 #include <boxm2/algo/sp/boxm_update_triangle.h>
 
+#include <boxm2/algo/sp/pro/boxm_algo_sp_processes.h>
 #include <boxm2/algo/sp/pro/boxm_algo_sp_register.h>
 
 int main() { return 0; }

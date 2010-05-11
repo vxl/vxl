@@ -21,6 +21,7 @@
 #include <boxm2/algo/rt/boxm_sun_vis_prob_functor.h>
 #include <boxm2/algo/rt/boxm_update_image_functor.h>
 
+#include <boxm2/algo/rt/pro/boxm_algo_rt_processes.h>
 #include <boxm2/algo/rt/pro/boxm_algo_rt_register.h>
 
 int main() { return 0; }

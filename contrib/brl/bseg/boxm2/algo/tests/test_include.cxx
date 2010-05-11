@@ -8,6 +8,7 @@
 #include <boxm2/algo/boxm_save_scene_raw.h>
 #include <boxm2/algo/boxm_upload_mesh.h>
 
+#include <boxm2/algo/pro/boxm_algo_processes.h>
 #include <boxm2/algo/pro/boxm_algo_register.h>
 
 int main() { return 0; }
