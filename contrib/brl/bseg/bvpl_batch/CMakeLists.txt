@@ -26,7 +26,9 @@ IF( PYTHON_FOUND )
       SET_TARGET_PROPERTIES(bvpl_batch PROPERTIES OUTPUT_NAME bvpl_batch DEBUG_POSTFIX _d SUFFIX .pyd)
     ENDIF(WIN32)
     SET_TARGET_PROPERTIES(bvpl_batch PROPERTIES PREFIX "")
-
+    IF(NOT WIN32)
+      SET_TARGET_PROPERTIES(bbgm_batch PROPERTIES COMPILE_FLAGS "-fPIC")
+    ENDIF(NOT WIN32)
 
     TARGET_LINK_LIBRARIES(bvpl_batch bprb brdb bpro_batch vbl bvpl bvpl_pro bvpl_io bvxm_grid_pro bvxm_grid_io)
   
