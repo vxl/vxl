@@ -27,7 +27,10 @@ IF( PYTHON_FOUND )
       SET_TARGET_PROPERTIES(brec_batch PROPERTIES OUTPUT_NAME brec_batch DEBUG_POSTFIX _d SUFFIX .pyd)
     ENDIF(WIN32)
     SET_TARGET_PROPERTIES(brec_batch PROPERTIES PREFIX "")
-
+    IF(NOT WIN32)
+      SET_TARGET_PROPERTIES(bbgm_batch PROPERTIES COMPILE_FLAGS "-fPIC")
+    ENDIF(NOT WIN32)
+        
     TARGET_LINK_LIBRARIES(brec_batch bprb brdb bpro_batch bmdl_pro bvxm_pro bvxm_io bvxm_grid_io brec_pro bbgm_pro bvgl_pro brip_pro bsvg_pro vbl vpgl_io vidl_pro vpgl_pro vil_io vil_pro) 
       
     IF (PYTHON_DEBUG_LIBRARIES)
