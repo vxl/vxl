@@ -28,8 +28,9 @@ IF( PYTHON_FOUND )
       ENDIF (NOT CYGWIN)
     ENDIF(WIN32)
     SET_TARGET_PROPERTIES(bvxm_batch PROPERTIES PREFIX "")
-
-
+    IF(NOT WIN32)
+       SET_TARGET_PROPERTIES(bvxm_batch PROPERTIES COMPILE_FLAGS "-fPIC")
+    ENDIF(NOT WIN32)
     TARGET_LINK_LIBRARIES(bvxm_batch bprb brdb bpro_batch vbl bvxm bvxm_pro bvxm_io bvxm_grid_io bvxm_grid_pro vpgl_io vpgl_pro vil_io vil_pro sdet_pro)
   
     IF (PYTHON_DEBUG_LIBRARIES)
