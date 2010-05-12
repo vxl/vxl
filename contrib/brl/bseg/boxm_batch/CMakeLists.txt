@@ -29,8 +29,10 @@ IF( PYTHON_FOUND )
       SET_TARGET_PROPERTIES(boxm_batch PROPERTIES OUTPUT_NAME boxm_batch DEBUG_POSTFIX _d SUFFIX .pyd)
     ENDIF(WIN32)
     SET_TARGET_PROPERTIES(boxm_batch PROPERTIES PREFIX "")
-
-
+    IF(NOT WIN32)
+      SET_TARGET_PROPERTIES(boxm_batch PROPERTIES COMPILE_FLAGS "-fPIC")
+    ENDIF(NOT WIN32)
+    
     TARGET_LINK_LIBRARIES(boxm_batch bpro_batch boxm_pro boxm_opt_pro boxm_algo_pro vpgl_io vpgl_pro vil_io vil_pro sdet_pro bvpl_octree_pro bsta_pro)
 
     IF(OPENCL_FOUND)
