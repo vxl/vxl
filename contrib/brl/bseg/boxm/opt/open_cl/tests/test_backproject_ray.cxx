@@ -29,7 +29,7 @@ static void ray_creation_tests(octree_test_driver<T> & test_driver)
   boxm_ray_trace_manager<T>* ray_mgr = boxm_ray_trace_manager<T>::instance();
   ray_mgr->setup_camera();
   ray_mgr->setup_ray_origin();
-  ray_mgr->setup_work_image(1,1);
+  ray_mgr->setup_work_image();
 
   if (ray_mgr->setup_camera_input_buffer()!=SDK_SUCCESS)
     return;
@@ -70,6 +70,9 @@ static void backproject_rays(vcl_string filename)
 static void test_backproject_ray()
 {
   vcl_string root_dir = testlib_root_dir();
+    octree_test_driver<float > test_driver;
+  if (!test_driver.init())
+	return;
   boxm_ray_trace_manager<float >* ray_mgr = boxm_ray_trace_manager<float >::instance();
   ray_mgr->setup_img_dims(64,64);
   vpgl_perspective_camera<double> *pcam=new vpgl_perspective_camera<double> ();
@@ -81,9 +84,7 @@ static void test_backproject_ray()
     ifs >> (*pcam);
 
   ray_mgr->set_camera(pcam);
-  octree_test_driver<float > test_driver;
   bool flag=true;
-  if (test_driver.init())
   {
     ray_creation_tests(test_driver);
     float * ray_results=test_driver.ray_results();
@@ -106,10 +107,7 @@ static void test_backproject_ray()
     }
     TEST("backproject_ray_test_driver", true, flag);
   }
-  else
-  {
-    TEST("backproject_ray_test_driver", true, false);
-  }
+
 }
 
 TESTMAIN(test_backproject_ray);
