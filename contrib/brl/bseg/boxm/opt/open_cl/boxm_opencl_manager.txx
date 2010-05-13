@@ -1,10 +1,9 @@
 // This is brl/bseg/boxm/opt/open_cl/boxm_opencl_manager.txx
 #ifndef boxm_opencl_manager_txx_
 #define boxm_opencl_manager_txx_
-
-#include "boxm_opencl_manager.h"
 //:
 // \file
+#include "boxm_opencl_manager.h"
 
 #include <vcl_utility.h>
 
@@ -74,34 +73,32 @@ bool boxm_opencl_manager<T>::initialize_cl()
   bool cpu_found=false;
 
   cl_device_id device;
-  //: First checking for GPU
-  for(unsigned i=0;i<num_platforms;i++)
+  // First checking for GPU
+  for (unsigned i=0;i<num_platforms;i++)
   {
-	  if( clGetDeviceIDs(platform_id[i], CL_DEVICE_TYPE_GPU, 1, &device, NULL)== CL_SUCCESS)
-	  {
-		gpu_found=true;
-		break;
-	  }
-
+    if (clGetDeviceIDs(platform_id[i], CL_DEVICE_TYPE_GPU, 1, &device, NULL)== CL_SUCCESS)
+    {
+      gpu_found=true;
+      break;
+    }
   }
-  //: If GPU not found then look for CPU
-  if(!gpu_found)
+  // If GPU not found then look for CPU
+  if (!gpu_found)
   {
-    for(unsigned i=0;i<num_platforms;i++)
-  {
-	  if( clGetDeviceIDs(platform_id[i], CL_DEVICE_TYPE_CPU, 1, &device, NULL)== CL_SUCCESS)
-	  {
-	  cpu_found=true;
-		break;
-	  }
-
-  }
+    for (unsigned i=0;i<num_platforms;i++)
+    {
+      if (clGetDeviceIDs(platform_id[i], CL_DEVICE_TYPE_CPU, 1, &device, NULL)== CL_SUCCESS)
+      {
+        cpu_found=true;
+        break;
+      }
+    }
   }
   // get an available GPU device from the the platform
   // should we be using all if more than one avaiable?
 
-   if(!gpu_found && !cpu_found)
-	return false;
+  if (!gpu_found && !cpu_found)
+  return false;
   //Create a context from the device ID
   context_ = clCreateContext(0, 1, &device, NULL, NULL, &status);
   if (!this->check_val(status,CL_SUCCESS,"clCreateContextFromType failed.")) {

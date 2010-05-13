@@ -72,7 +72,7 @@ static void test_backproject_ray()
   vcl_string root_dir = testlib_root_dir();
     octree_test_driver<float > test_driver;
   if (!test_driver.init())
-	return;
+    return;
   boxm_ray_trace_manager<float >* ray_mgr = boxm_ray_trace_manager<float >::instance();
   ray_mgr->setup_img_dims(64,64);
   vpgl_perspective_camera<double> *pcam=new vpgl_perspective_camera<double> ();
@@ -107,7 +107,6 @@ static void test_backproject_ray()
     }
     TEST("backproject_ray_test_driver", true, flag);
   }
-
 }
 
 TESTMAIN(test_backproject_ray);
