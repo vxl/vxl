@@ -158,6 +158,7 @@ boct_tree<T_loc,T_data>* boct_tree<T_loc,T_data>::clone()
   vcl_vector<boct_tree_cell<T_loc, T_data> > cloned_cells;
   for (unsigned i=0; i<cells.size(); i++) {
     cloned_cells.push_back(boct_tree_cell<T_loc, T_data>(cells[i]->code_));
+    cloned_cells[i].set_data(cells[i]->data());
   }
   boct_tree<T_loc,T_data> temp_tree;
   boct_tree_cell<T_loc, T_data>* cloned_root = temp_tree.construct_tree(cloned_cells, this->number_levels());
@@ -537,8 +538,6 @@ template <class T_loc,class T_data>
 void boct_tree<T_loc,T_data>::b_write(vsl_b_ostream & os, bool save_internal_nodes, bool platform_independent)
 {
   short v = version_no(save_internal_nodes, platform_independent);
-  //vcl_cout << "Internal Nodes 1: " << save_internal_nodes << " save_platform_independent: " << platform_independent << vcl_endl;
-
   vcl_cout << "Writing tree binary version: " << v << vcl_endl;
 
   if (v == 3) {
@@ -549,10 +548,6 @@ void boct_tree<T_loc,T_data>::b_write(vsl_b_ostream & os, bool save_internal_nod
     vcl_vector<boct_tree_cell<T_loc,T_data>*> cells = leaf_cells();
     const unsigned int ncells = cells.size();
     vsl_b_write(os, ncells);
-    //boct_loc_code<T_loc> *loc_code_array = new boct_loc_code<T_loc>[ncells];
-    //boct_loc_code<T_loc> *loc_p = loc_code_array;
-    //T_data *data_array = new T_data[ncells];
-    //T_data *data_p = data_array;
 
     plat_dep_cell_store *write_buff = new plat_dep_cell_store[ncells];
     plat_dep_cell_store *buff_p = write_buff;
@@ -563,11 +558,7 @@ void boct_tree<T_loc,T_data>::b_write(vsl_b_ostream & os, bool save_internal_nod
       buff_p->code = (*cell_it)->code_;
       buff_p->data = (*cell_it)->data();
     }
-    //os.os().write(reinterpret_cast<const char*>(loc_code_array),sizeof(boct_loc_code<T_loc>)*ncells);
-    //os.os().write(reinterpret_cast<const char*>(data_array),sizeof(T_data)*ncells);
     os.os().write(reinterpret_cast<const char*>(write_buff),sizeof(plat_dep_cell_store)*ncells);
-    //delete[] loc_code_array;
-    //delete[] data_array;
     delete[] write_buff;
   }
   else if (v == 2) {
@@ -685,15 +676,9 @@ void boct_tree<T_loc,T_data>::b_read(vsl_b_istream & is)
     }
 
     plat_dep_cell_store* read_buff = new plat_dep_cell_store[num_cells];
-    //boct_loc_code<T_loc> *code_array = new boct_loc_code<T_loc>[num_cells];
-    //T_data *data_array = new T_data[num_cells];
-    //is.is().read(reinterpret_cast<char*>(code_array),sizeof(boct_loc_code<T_loc>)*num_cells);
-    //is.is().read(reinterpret_cast<char*>(data_array),sizeof(T_data)*num_cells);
     is.is().read(reinterpret_cast<char*>(read_buff),sizeof(plat_dep_cell_store)*num_cells);
 
     for (unsigned i=0; i<num_cells; i++) {
-      //code = code_array[i];
-      //data = data_array[i];
       code = read_buff[i].code;
       data = read_buff[i].data;
 
@@ -719,8 +704,6 @@ void boct_tree<T_loc,T_data>::b_read(vsl_b_istream & is)
       else
         vcl_cerr << "WRONG ERROR CODE OR CELL FOUND!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
     }
-    //delete[] code_array;
-    //delete[] data_array;
     delete[] read_buff;
 
     this->root_=root;
