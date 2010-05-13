@@ -41,7 +41,7 @@ octree_test_driver<T>::setup_cl()
 template <class T>
 void octree_test_driver<T>::set_buffers()
 {
-  input_cell_buf_ = cl_manager_->cell_buf();
+  input_cell_buf_ =cl_manager_->cell_buf();
   input_data_buf_ = cl_manager_->data_buf();
   input_ray_origin_buf_ = cl_manager_->ray_origin_buf();
   //input_ray_dir_buf_ = cl_manager_->ray_dir_buf();
