@@ -134,18 +134,15 @@ static void test_expected_image()
         return ;
     else
         ifs >> (*pcam);
-#if 1
+
     update_world(root_dir+"/contrib/brl/bseg/boxm/opt/open_cl/tests/scene.xml",camname,imgname);
     vil_image_view<float> im_nongpu=render_image(root_dir+"/contrib/brl/bseg/boxm/opt/open_cl/tests/scene.xml",camname,250,250);
-#endif
     vil_image_view<float> im_gpu=run_expected_image(&s,pcam,250,250);
     s.clean_scene();
-#if 1
     float ssd = vil_math_ssd(im_gpu, im_nongpu, float());
     float rms_error = vcl_sqrt(ssd / im_gpu.size());
 
     TEST_NEAR("GPU/Non-GPU Expected Image RMS difference", rms_error, 0.0, 1e-2);
-#endif
 }
 
 TESTMAIN(test_expected_image);
