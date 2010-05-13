@@ -64,41 +64,51 @@ bool boxm_opencl_manager<T>::initialize_cl()
     vcl_cerr << "boxm_opencl_manager: warning: found " << num_platforms << "OpenCL platforms. Using the first\n";
   }
   // Get the first platform ID
-  cl_platform_id platform_id;
-  status = clGetPlatformIDs (1, &platform_id, NULL);
+  cl_platform_id platform_id[2];
+  status = clGetPlatformIDs (2, platform_id, NULL);
   if (status != CL_SUCCESS) {
     vcl_cerr << "boxm_opencl_manager: clGetPlatformIDs (call 2) returned " << status << '\n';
     return false;
   }
-  cl_device_id gpu_device;
+  bool gpu_found=false;
+  bool cpu_found=false;
+
+  cl_device_id device;
+  //: First checking for GPU
+  for(unsigned i=0;i<num_platforms;i++)
+  {
+	  if( clGetDeviceIDs(platform_id[i], CL_DEVICE_TYPE_GPU, 1, &device, NULL)== CL_SUCCESS)
+	  {
+		gpu_found=true;
+		break;
+	  }
+
+  }
+  //: If GPU not found then look for CPU
+  if(!gpu_found)
+  {
+    for(unsigned i=0;i<num_platforms;i++)
+  {
+	  if( clGetDeviceIDs(platform_id[i], CL_DEVICE_TYPE_CPU, 1, &device, NULL)== CL_SUCCESS)
+	  {
+	  cpu_found=true;
+		break;
+	  }
+
+  }
+  }
   // get an available GPU device from the the platform
   // should we be using all if more than one avaiable?
-  status = clGetDeviceIDs(platform_id, CL_DEVICE_TYPE_GPU, 1, &gpu_device, NULL);
-  if (status != CL_SUCCESS) {
-    vcl_cerr << "boxm_opencl_manager: clGetDeviceIDs returned " << status << '\n';
-    return false;
-  }
 
+   if(!gpu_found && !cpu_found)
+	return false;
   //Create a context from the device ID
-  context_ = clCreateContext(0, 1, &gpu_device, NULL, NULL, &status);
+  context_ = clCreateContext(0, 1, &device, NULL, NULL, &status);
   if (!this->check_val(status,CL_SUCCESS,"clCreateContextFromType failed.")) {
     return false;
   }
 
-#if 0
-  context_ = clCreateContextFromType(0,
-                                     CL_DEVICE_TYPE_GPU,
-                                     NULL,
-                                     NULL,
-                                     &status);
 
-  if (!this->check_val(status,
-                       CL_SUCCESS,
-                       "clCreateContextFromType failed."))
-  {
-    return false;
-  }
-#endif
   vcl_size_t device_list_size = 0;
   // First, get the size of device list data
   status = clGetContextInfo(context_,
