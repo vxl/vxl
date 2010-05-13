@@ -123,11 +123,10 @@ bool boxm_ray_trace_manager<T>::init_raytrace(boxm_scene<boct_tree<short,T > > *
   if (!this->check_val(status,CL_SUCCESS,error_to_string(status))) {
     return false;
   }
-
   setup_ray_origin();
-  setup_work_image(ni,nj);
-  setup_camera();
   setup_img_dims(ni,nj);
+  setup_work_image();
+  setup_camera();
 
   return true;
 }
@@ -136,7 +135,6 @@ template<class T>
 bool boxm_ray_trace_manager<T>::clean_raytrace()
 {
   
-
   clean_img_dims();
   clean_camera();
   clean_work_image();
@@ -473,19 +471,17 @@ bool boxm_ray_trace_manager<T>::clean_roi_dims()
 
 
 template<class T>
-bool boxm_ray_trace_manager<T>::setup_work_image(unsigned ni,unsigned nj)
+bool boxm_ray_trace_manager<T>::setup_work_image()
 {
-  ni_=ni;
-  nj_=nj;
 #if defined (_WIN32)
-  ray_results_ = (cl_float*)_aligned_malloc(ni*nj*sizeof(cl_float4), 16);
+  ray_results_ = (cl_float*)_aligned_malloc(ni_*nj_*sizeof(cl_float4), 16);
 #elif defined(__APPLE__)
-  ray_results_ = (cl_float*)malloc(ni*nj*sizeof(cl_float4));
+  ray_results_ = (cl_float*)malloc(ni_*nj_*sizeof(cl_float4));
 #else
-  ray_results_ = (cl_float*)memalign(16, ni*nj* sizeof(cl_float4));
+  ray_results_ = (cl_float*)memalign(16, ni_*nj_* sizeof(cl_float4));
 #endif
 
-  for (unsigned i=0;i<ni*nj*4;)
+  for (unsigned i=0;i<ni_*nj_*4;)
   {
     ray_results_[i]=0.0f;
     ray_results_[i+1]=1.0f;
@@ -629,7 +625,6 @@ int boxm_ray_trace_manager<T>::clean_camera_input_buffer()
   else
     return SDK_SUCCESS;
 }
-
 
 template<class T>
 int boxm_ray_trace_manager<T>::setup_roidims_input_buffer()
@@ -1070,8 +1065,13 @@ template<class T>
 bool boxm_ray_trace_manager<T>::run_block()
 {
   // -- Set appropriate arguments to the kernel --
-  // the ray origin buffer
   cl_int status = CL_SUCCESS;
+ // status = clSetKernelArg(kernel_,0,sizeof(cl_mem),(void *)&nlevels_buf_);
+ // if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (nlevels_buf_)"))
+ //   return SDK_FAILURE;
+
+  // the ray origin buffer
+  status = CL_SUCCESS;
   status = clSetKernelArg(kernel_,0,sizeof(cl_mem),(void *)&ray_origin_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (ray_origin_array)"))
     return SDK_FAILURE;
@@ -1107,6 +1107,20 @@ bool boxm_ray_trace_manager<T>::run_block()
   // output image buffer
   status = clSetKernelArg(kernel_,8,sizeof(cl_mem),(void *)&out_work_image_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output_expected_image)"))
+    return SDK_FAILURE;
+    
+  //  set local variable
+  status = clSetKernelArg(kernel_,9,sizeof(cl_float16)*3,0);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local cam)"))
+    return SDK_FAILURE;
+  status = clSetKernelArg(kernel_,10,sizeof(cl_float4),0);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local origin)"))
+    return SDK_FAILURE;
+  status = clSetKernelArg(kernel_,11,sizeof(cl_float4),0);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local box)"))
+    return SDK_FAILURE;
+  status = clSetKernelArg(kernel_,12,sizeof(cl_uint4),0);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local roi)"))
     return SDK_FAILURE;
 
   // check the local memeory

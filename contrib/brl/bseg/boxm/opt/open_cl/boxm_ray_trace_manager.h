@@ -114,7 +114,7 @@ class boxm_ray_trace_manager : public boxm_opencl_manager<boxm_ray_trace_manager
   bool setup_roi_dims(unsigned min_i,unsigned max_i,unsigned min_j,unsigned max_j);
   bool clean_roi_dims();
 
-  bool setup_work_image(unsigned ni,unsigned nj);
+  bool setup_work_image();
   bool clean_work_image();
 
   bool setup_ray_origin();
