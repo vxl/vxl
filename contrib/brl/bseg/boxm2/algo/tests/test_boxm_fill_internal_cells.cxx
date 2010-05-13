@@ -17,9 +17,9 @@ void build_tree(boct_tree<short,float>* tree)
   tree->split();
   {
     vcl_vector<boct_tree_cell<short,float>*> leaves = tree->leaf_cells();
-    leaves[1]->set_data(0.5f);
+    leaves[1]->set_data(0.1f);
     leaves[1]->split();
-    for (unsigned i=1; i<leaves.size(); i++)
+    for (unsigned i=0; i<leaves.size(); i++)
       leaves[i]->set_data(0.1f);
   }
 
@@ -77,32 +77,32 @@ static void test_boxm_fill_internal_cells()
   scene_out->load_block(iter_out.index());
   boxm_block<tree_type> *block_out = scene_out->get_active_block();
   boct_tree<short, float>  *tree_out= block_out->get_tree();
-
-  vcl_vector<boct_tree_cell<short,float>*> leaves = tree_out->all_cells();
+  vcl_vector<boct_tree_cell<short,float>*> cells = tree_out->all_cells();
   bool result = true;
-  for (unsigned i=0; i<leaves.size(); i++)
+  for (unsigned i=0; i<cells.size(); i++)
   {
-    if (!leaves[i]->is_leaf())
+    if (!cells[i]->is_leaf())
     {
-      boct_tree_cell<short,float>* children = leaves[i]->children();
+      boct_tree_cell<short,float>* children = cells[i]->children();
       float avg =0;
       for (unsigned c=0; c<8; c++)
       {
         avg+=children[c].data();
       }
-      result = result && (leaves[i]->data()==(avg/8.f));
+      result = result && (cells[i]->data()==(avg/8.f));
     }
   }
   TEST("Valid average cells", result, true);
 
-  if (debug)
+  if (debug) {
     vcl_cout << "Printing Output Tree" << vcl_endl;
-  for (unsigned i=0; i<leaves.size(); i++) {
-    vcl_cout<< leaves[i]->get_code().x_loc_ << ','
-            << leaves[i]->get_code().y_loc_ << ','
-            << leaves[i]->get_code().z_loc_ << ','
-            << leaves[i]->get_code().level << ','
-            << leaves[i]->data() << vcl_endl;
+    for (unsigned i=0; i<cells.size(); i++) {
+      vcl_cout<< cells[i]->get_code().x_loc_ << ','
+              << cells[i]->get_code().y_loc_ << ','
+              << cells[i]->get_code().z_loc_ << ','
+              << cells[i]->get_code().level << ','
+              << cells[i]->data() << vcl_endl;
+    }
   }
 
   scene->clean_scene();
