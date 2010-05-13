@@ -207,15 +207,18 @@ short4 cell_exit_face(float4 exit_point, float4 cell_min, float4 cell_max)
   float4 min_diff = fabs(exit_point-cell_min);
   float4 max_diff = fabs(exit_point-cell_max);
 
-  short4 faceid=(short4) -1;
+  //short4 faceid=(short4) -1;
 
-  float min=1.0;
+ /* float min=1.0;
 
   if(min_diff.x<min)
   {
       min=min_diff.x;
     faceid=X_MIN;
-  }
+  }*/
+  float min=min_diff.x;
+  short4 faceid=X_MIN;
+
   if(min_diff.y<min)
   {
     min=min_diff.y;
@@ -366,7 +369,8 @@ int neighbor(__global int4* cells, int cell_ptr, short4 cell_loc_code,
         (*neighbor_code) = error;
         return neighbor_ptr;
       }
-    }else{
+    }
+    else{
       short4 largest = (short4)(1<<(n_levels-1));
       short4 csize = (short4)cell_size;
       csize.w = 0;
@@ -430,14 +434,9 @@ int intersect_cell(float4 ray_o, float4 ray_d, float4 cell_min, float4 cell_max,
   // find the largest tmin and the smallest tmax
   float largest_tmin = max(max(tmin_s.x, tmin_s.y), max(tmin_s.x, tmin_s.z));
   float smallest_tmax = min(min(tmax_s.x, tmax_s.y), min(tmax_s.x, tmax_s.z));
-  //if(fabs(smallest_tmax-largest_tmin)<1.0e-5f)
-  //  {
-  //    //advance along the ray 
-  //    smallest_tmax += 1.0e-5f;
-  //  }
-	*tnear = largest_tmin;
-	*tfar = smallest_tmax;
-	return 1;//smallest_tmax > largest_tmin;
+  *tnear = largest_tmin;
+  *tfar = smallest_tmax;
+  return smallest_tmax > largest_tmin;
 }
 
 //--------------------------------------------------------------------------
