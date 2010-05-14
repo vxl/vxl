@@ -81,7 +81,8 @@ class vgl_vector_3d
   // \note This function is not continuous near z==0. (Under the Hairy Ball
   // theorem no such smooth function can exist.)
   // \note This vector need not be normalized but it should have non-zero length.
-  vgl_vector_3d<T> orthogonal_vectors(double s);
+  // \deprecated Use global function orthogonal_vectors(vgl_vector_3d<T > const& a, double s) instead.
+  vgl_vector_3d<T> orthogonal_vectors(double s) const;
 
   //: Read from stream, possibly with formatting
   //  Either just reads three blank-separated numbers,
@@ -213,6 +214,15 @@ template <class T> inline v&     normalize(v& a) { double l=a.length(); return l
 //  If a is zero length, return (0,0).
 // \relatesalso vgl_vector_3d
 template <class T> inline v      normalized(v const& a) { double l=a.length(); return l?a/l:a; }
+
+//: One-parameter family of unit vectors that are orthogonal to \a a, v(s).
+// To get two orthogonal vectors call this function twice with s=0 and
+// s=0.25 for example.
+// \param s 0<=s<=1, v(0)==v(1)
+// \note This function is not continuous near z==0. (Under the Hairy Ball
+// theorem no such smooth function can exist.)
+// \note This vector need not be normalized but it should have non-zero length.
+template <class T> v             orthogonal_vectors(v const& a, double s);
 
 #undef v
 
