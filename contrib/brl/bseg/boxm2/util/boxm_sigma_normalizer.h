@@ -1,7 +1,6 @@
-// this is contrib/brl/bseg/boxm2/util/boxm_sigma_normalizer.h
-#ifndef boxm_sigma_normalizer_h_
-#define boxm_sigma_normalizer_h_
-
+// this is brl/bseg/boxm2/util/boxm_sigma_normalizer.h
+#ifndef boxm2_sigma_normalizer_h_
+#define boxm2_sigma_normalizer_h_
 //:
 // \file
 // \brief A class for adjusting sample standard deviation values such that the probability of underestimation of the true std. dev. is fixed.

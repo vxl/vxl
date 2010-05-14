@@ -1,6 +1,6 @@
 // This is brl/bseg/boxm2/algo/boxm_crop_scene.h
-#ifndef boxm_crop_scene_h
-#define boxm_crop_scene_h
+#ifndef boxm2_crop_scene_h
+#define boxm2_crop_scene_h
 
 //:
 // \file

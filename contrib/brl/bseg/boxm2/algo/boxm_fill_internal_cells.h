@@ -1,7 +1,6 @@
-// This is contrib/brl/bseg/boxm2/algo/boxm_fill_internal_cells.h
-#ifndef boxm_fill_internal_cells_h
-#define boxm_fill_internal_cells_h
-
+// This is brl/bseg/boxm2/algo/boxm_fill_internal_cells.h
+#ifndef boxm2_fill_internal_cells_h
+#define boxm2_fill_internal_cells_h
 //:
 // \file
 // \brief Class in charged of filling the intermediate nodes of a tree.

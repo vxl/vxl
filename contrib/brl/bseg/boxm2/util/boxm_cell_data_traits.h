@@ -1,7 +1,6 @@
 // This is brl/bseg/boxm2/util/boxm_cell_data_traits.h
-#ifndef boxm_cell_data_traits_h_
-#define boxm_cell_data_traits_h_
-
+#ifndef boxm2_cell_data_traits_h_
+#define boxm2_cell_data_traits_h_
 //:
 // \file
 // \brief  Set of accessors of cell's data, taking care of different datatypes
