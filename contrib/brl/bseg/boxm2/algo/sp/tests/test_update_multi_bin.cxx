@@ -7,7 +7,6 @@
 #include <boxm2/util/boxm_test_util.h>
 #include <boxm2/sample/boxm_sample_multi_bin.h>
 #include <boxm2/boxm_scene.h>
-#include <boxm2/util/boxm_test_util.h>
 #include <boct/boct_tree_cell.h>
 #include <boxm2/algo/sp/boxm_update_triangle.h>
 #include <boxm2/algo/sp/boxm_render_image_triangle.h>
@@ -19,7 +18,7 @@
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <vil/vil_convert.h>
-#if 0
+#ifdef CLEANUP
 #include <vpl/vpl.h>
 #endif
 
@@ -113,7 +112,7 @@ vcl_vector<vpgl_camera_double_sptr > generate_cameras_yz_multi_bin(vgl_box_3d<do
         double u,v;
         persp_cam.project(c.x(), c.y() ,c.z(), u, v);
         bb.add(vgl_point_2d<double> (u,v));
-        vcl_cout << "Perspective [" << u << ',' << v << "]\n"<< vcl_endl;
+        vcl_cout << "Perspective [" << u << ',' << v << ']' << vcl_endl << vcl_endl;
       }
       vcl_cout << bb << vcl_endl;
     }
@@ -226,7 +225,7 @@ static void test_update_multi_bin()
     ss1 << "./boxm_scene2_mb/img5" << i << ".tif";
     vil_save(expected, ss1.str().data());
   }
-#if 0
+#ifdef CLEANUP
   vpl_rmdir("./boxm_scene1");
   vpl_unlink("./scene1.xml");
 #endif
