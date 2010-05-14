@@ -24,55 +24,7 @@ template <class T>
 vgl_vector_3d<T> vgl_vector_3d<T>::orthogonal_vectors(double s) const
 {
   VXL_DEPRECATED("vgl_vector_3d<T>::orthogonal_vectors(double s)");
-
-  assert(this->length()>0.0);
-
-  // enforce parameter range
-  if (s<0.0) s=0.0;
-  if (s>1.0) s = 1.0;
-  double tol = static_cast<double>(vgl_tolerance<T>::position);
-  double nx = static_cast<double>(x_);
-  double ny = static_cast<double>(y_);
-  double nz = static_cast<double>(z_);
-  double two_pi = 2*3.14159265358979323846;
-  double co = vcl_cos(two_pi*s);
-  double si = vcl_sin(two_pi*s);
-
-  double mnz = vcl_fabs(nz);
-  if (mnz>tol)  // General case
-  {
-    double rx = nx/nz;
-    double ry = ny/nz;
-    double q = co*rx +si*ry;
-    double a = 1.0/vcl_sqrt(1+q*q);
-    T vx = static_cast<T>(a*co);
-    T vy = static_cast<T>(a*si);
-    T vz = -static_cast<T>(rx*vx + ry*vy);
-    return vgl_vector_3d<T>(vx, vy, vz);
-  }
-  else  // Special cases, nz ~ 0
-  {
-    double mny = vcl_fabs(ny);
-    if (mny>tol)
-    {
-      double r = nx/ny;
-      double a = 1/vcl_sqrt(1+co*co*r*r);
-      T vx = static_cast<T>(a*co);
-      T vz = static_cast<T>(a*si);
-      T vy = -static_cast<T>(a*co*r);
-      return vgl_vector_3d<T>(vx, vy, vz);
-    }
-    else
-    {
-      // assume mnx>tol provided that input vector was not null
-      double r = ny/nx;
-      double a = 1/vcl_sqrt(1+co*co*r*r);
-      T vy = static_cast<T>(a*co);
-      T vz = static_cast<T>(a*si);
-      T vx = -static_cast<T>(a*co*r);
-      return vgl_vector_3d<T>(vx, vy, vz);
-    }
-  }
+  return ::orthogonal_vectors(*this, s);
 }
 
 template<class T>
