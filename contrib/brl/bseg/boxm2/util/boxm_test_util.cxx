@@ -2,6 +2,7 @@
 #include <vgl/vgl_line_3d_2_points.h>
 #include <vnl/io/vnl_io_matrix_fixed.h>
 #include <vgl/algo/vgl_rotation_3d.h>
+
 void generate_persp_camera(double focal_length,
                            vgl_point_2d<double>& pp,  //principal point
                            double x_scale, double y_scale,
@@ -73,6 +74,7 @@ vpgl_camera_double_sptr generate_camera_top(vgl_box_3d<double>& world)
   vpgl_rational_camera<double>* rat_cam = new vpgl_rational_camera<double>(perspective_to_rational(persp_cam));
   return rat_cam;
 }
+
 vpgl_camera_double_sptr generate_camera_top_persp(vgl_box_3d<double>& world)
 {
   vgl_point_2d<double> principal_point(IMAGE_U*0.5, IMAGE_V*0.5);
