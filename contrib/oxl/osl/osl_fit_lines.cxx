@@ -75,7 +75,7 @@ void osl_fit_lines::simple_fit_to_list(vcl_list<osl_edge *> *myedges,
           }
         }
         data_->Reset();
-        double angle = 0.7853981;
+        double angle = vnl_math::pi_over_4;
         int  orient0 = int((dc->GetTheta(0) * using_degrees + angle/2.0) / angle);
         for (unsigned int ii=0;ii<dc->size();ii++)
         {
