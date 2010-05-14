@@ -54,7 +54,7 @@ bool boxm_plane_ransac(vcl_vector<boxm_edge_tangent_sample<T> > aux_samples,
       // test the line on each plane
       for (unsigned i=0; i<aux_samples.size(); ++i) {
         bool flag=false;
-        T accu_weights_per_image=T(0);
+        //T accu_weights_per_image=T(0);
         vcl_vector<T> weights_per_image;
         for (unsigned j=0;j<aux_samples[i].num_obs();j++)
         {
@@ -85,7 +85,7 @@ bool boxm_plane_ransac(vcl_vector<boxm_edge_tangent_sample<T> > aux_samples,
 
 
         // intersect the selected planes
-      if (cnt_imgs > threshold ) {
+      if (cnt_imgs > (int)threshold ) {
         T res=0;
         vgl_infinite_line_3d<T> l;
         bool good = vgl_intersection(fit_planes, ws, l, res);
