@@ -10,8 +10,7 @@
 #include <vil/vil_image_view.h>
 #include <vcl_vector.h>
 #include <vcl_cmath.h>
-
-#define LN_2 0.69314718056
+#include <vnl/vnl_math.h>
 
 
 //: Calculate the Mutual Information between the images.
@@ -31,7 +30,7 @@ double brip_hist_entropy(const vcl_vector<double>& histogram, double mag)
     double prob = (*h_itr)/mag;
     entropy += -(prob?prob*vcl_log(prob):0); // if prob=0 this value is defined as 0
   }
-  return entropy/LN_2; // divide by ln(2) to convert this measure to base 2
+  return entropy/vnl_math::ln2; // divide by ln(2) to convert this measure to base 2
 }
 
 

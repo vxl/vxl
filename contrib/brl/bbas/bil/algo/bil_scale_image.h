@@ -28,7 +28,7 @@
 #include <vcl_vector.h>
 #include <vcl_cmath.h>
 #include <vil/vil_image_view.h>
-
+#include <vnl/vnl_math.h>
 
 template< class T >
 class bil_scale_image
@@ -36,11 +36,11 @@ class bil_scale_image
  public:
   //: Constructor
   bil_scale_image(unsigned int num_levels=3, unsigned int num_octaves=0,
-                   float init_scale=1.0f, int first_octave=0);
+                  float init_scale=1.0f, int first_octave=0);
 
   //: Constructor - Make a Gaussian scale space from this image
   bil_scale_image(const vil_image_view<T>& image, unsigned int num_levels=3,
-                   unsigned int num_octaves=0, float init_scale=1.0f, int first_octave=0);
+                  unsigned int num_octaves=0, float init_scale=1.0f, int first_octave=0);
 
   //: Produce two new scale images by applying vil_orientations_from_sobel to each scale.
   //  The results are gradient magnitude and orientation scale images
@@ -66,7 +66,7 @@ class bil_scale_image
   //: Find the closest scale to \p scale that is represented by an image
   float closest_scale(float scale) const
   {
-    double log2_scale = vcl_log(scale/init_scale_) / 0.69314718056; // divide by log(2) to get base 2 log
+    double log2_scale = vcl_log(scale/init_scale_) / vnl_math::ln2; // divide by log(2) to get base 2 log
     int s = int(log2_scale*num_levels_ +0.5);
     return (float) vcl_pow(2.0, double(s)/num_levels_) * init_scale_;
   }
