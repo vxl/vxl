@@ -10,7 +10,7 @@
 #include <testlib/testlib_test.h>
 
 
-static void test_save(int argc, char* argv[])
+static void test_save()
 {
   vcl_cout << "*********************\n"
            << " Testing vimt3d_save\n"
@@ -38,4 +38,4 @@ static void test_save(int argc, char* argv[])
        mbl_test_summaries_are_equal(tr_in1, tr_gold1 ), true);
 }
 
-TESTMAIN_ARGS(test_save);
+TESTMAIN(test_save);
