@@ -80,6 +80,8 @@
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/algo/vgl_h_matrix_2d.h>
 
+#include <vnl/vnl_math.h>
+
 #include <vil/vil_image_view.h>
 #include <vpgl/vpgl_camera.h>
 
@@ -824,7 +826,7 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
   // The default values for the LIDAR Gaussian error ellipsoid
   // X-Y standard deviation set to 1/Sqrt(2) pixel spacing (arbitrary)
   // standard deviation in z measured from actual Buckeye data (0.03 m)
-  double pix_sd = lidar_pixel_size*0.7071;
+  double pix_sd = lidar_pixel_size*vnl_math::sqrt1_2;
   float xy_var = static_cast<float>(pix_sd*pix_sd);
   // The vector of spherical Gaussian variances
   vnl_vector_fixed<float,3> vars(xy_var, xy_var, 0.0009f);

@@ -1,4 +1,5 @@
 #include <testlib/testlib_test.h>
+#include <vnl/vnl_math.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_quaternion.h>
@@ -24,7 +25,7 @@ static void test_camera_homographies()
   vgl_h_matrix_2d<double> Ht =vpgl_camera_homographies::homography_to_camera(pc, pl);
 
   TEST_NEAR("test plane to image",Ht.get(2,2), 3.0, 0.001);
-  vgl_plane_3d<double> p2(0.707107,0, 0.707107, -1.414);
+  vgl_plane_3d<double> p2(vnl_math::sqrt1_2, 0, vnl_math::sqrt1_2, -vnl_math::sqrt2);
   vgl_h_matrix_2d<double> Ht2 =
     vpgl_camera_homographies::homography_to_camera(pc, p2);
   vgl_homg_point_2d<double> pt1(-1.414, 0,1), pt2(0,1,1), pt3(0,0,1);
