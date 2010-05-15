@@ -300,7 +300,6 @@ boxm_utils::visible_faces(vgl_box_3d<double> const& bbox, vpgl_camera_double_spt
 #if 0
     vcl_map<boct_face_idx, vcl_vector<vgl_point_3d<double> > > faces;
     faces_of_box_3d(bbox, faces);
-    double * xverts; double *yverts;
     project_corners(bbox,camera,xverts,yverts);
 #endif // 0
     if (is_face_visible(xverts,yverts,1,0,3,2)) {
@@ -996,12 +995,12 @@ bool boxm_utils::project_cube_xyz(vcl_vector< vgl_point_3d<double> > & /*corners
 }
 
 
+#if 0
 bool boxm_utils::project_cube_fill_val( vcl_map<boct_face_idx,vcl_vector< vgl_point_3d<double> > > & faces,
                                         boct_face_idx & vis_face_ids,
                                         vil_image_view<float> &fill_img,
                                         float val, vpgl_camera_double_sptr cam)
 {
-#if 0
   for (vcl_map<boct_face_idx, vcl_vector<vgl_point_3d<double> > >::iterator face_it=faces.begin();
        face_it!=faces.end(); ++face_it)
   {
@@ -1015,10 +1014,12 @@ bool boxm_utils::project_cube_fill_val( vcl_map<boct_face_idx,vcl_vector< vgl_po
       quad_fill(poly_it,fill_img,val,0);
     }
   }
-#else
-  return true;
-#endif // 0
 }
+#else
+bool boxm_utils::project_cube_fill_val( vcl_map<boct_face_idx,vcl_vector< vgl_point_3d<double> > > &,
+                                        boct_face_idx &, vil_image_view<float> &, float, vpgl_camera_double_sptr)
+{ return false; }
+#endif // 0
 
 bool boxm_utils::project_cube_fill_val(boct_face_idx & vis_face_ids,
                                        vil_image_view<float> &fill_img,
