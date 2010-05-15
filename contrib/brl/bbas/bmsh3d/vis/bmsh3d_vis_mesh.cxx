@@ -36,7 +36,7 @@ int count_faces_indices_(const vcl_vector<vcl_vector<int> >& faces)
 {
   unsigned int total = 0;
   for (unsigned int i=0; i<faces.size(); i++)
-    total += (faces[i].size() + 1); //the '-1' field
+    total += (faces[i].size() + 1); // the '-1' field
   return total;
 }
 
@@ -44,7 +44,7 @@ void draw_ifs_geom(SoGroup* root,
                    const vcl_vector<vgl_point_3d<double> >& pts,
                    const vcl_vector<vcl_vector<int> >& faces)
 {
-  //Assign vertices
+  // Assign vertices
   int nVertices = pts.size();
   float (*xyz)[3] = new float[nVertices][3];
   for (unsigned int i=0; i<pts.size(); i++) {
@@ -53,7 +53,7 @@ void draw_ifs_geom(SoGroup* root,
     xyz[i][2] = (float) pts[i].z();
   }
 
-  //Assign faces
+  // Assign faces
   SoVertexProperty* vp = new SoVertexProperty;
   unsigned int n_ind = count_faces_indices_(faces);
   int* ind = new int [n_ind];
@@ -64,7 +64,7 @@ void draw_ifs_geom(SoGroup* root,
       ind[k] = faces[i][j];
       k++;
     }
-    ind[k] = -1; //Add the final '-1'
+    ind[k] = -1; // Add the final '-1'
     k++;
   }
   assert (k == n_ind);
@@ -81,7 +81,7 @@ void draw_ifs_geom(SoGroup* root,
 void draw_ifs_geom(SoGroup* root, vcl_set<bmsh3d_vertex*>& pts,
                    vcl_set<bmsh3d_face*>& faces)
 {
-  //convert to vcl_vector and draw.
+  // convert to vcl_vector and draw.
   vcl_vector<vgl_point_3d<double> > pts_vector(pts.size());
   vcl_vector<vcl_vector<int> > faces_vector(faces.size());
 
@@ -112,17 +112,17 @@ SoSeparator* draw_ifs(const vcl_vector<vgl_point_3d<double> >& pts,
 {
   SoSeparator* root = new SoSeparator;
 
-  //Assign Material for search and change interactively...
+  // Assign Material for search and change interactively...
   SoMaterial* material = new SoMaterial;
   material->setName(SbName("mesh_material"));
 
-  if (colorcode == COLOR_GOLD) { //gold
+  if (colorcode == COLOR_GOLD) { // gold
     material->ambientColor.setValue(.3f, .1f, .1f);
     material->diffuseColor.setValue(.8f, .7f, .2f);
     material->specularColor.setValue(.4f, .3f, .1f);
     material->shininess = .4f;
   }
-  else if (colorcode == COLOR_SILVER) { //silver
+  else if (colorcode == COLOR_SILVER) { // silver
     material->ambientColor.setValue(.2f, .2f, .2f);
     material->diffuseColor.setValue(.5f, .5f, .5f);
     material->specularColor.setValue(.4f, .4f, .4f);
@@ -134,17 +134,19 @@ SoSeparator* draw_ifs(const vcl_vector<vgl_point_3d<double> >& pts,
   material->transparency = transp;
   root->addChild(material);
 
-  //Put the SoShapeHints,
-  //see http://doc.coin3d.org/Coin/classSoShapeHints.html
+  // Put the SoShapeHints,
+  // see http://doc.coin3d.org/Coin/classSoShapeHints.html
   if (b_shape_hints) {
     SoShapeHints* hints = new SoShapeHints();
     hints->vertexOrdering = SoShapeHints::COUNTERCLOCKWISE;
-    ///hints->shapeType = SoShapeHints::UNKNOWN_SHAPE_TYPE;
-    hints->faceType = SoShapeHints::UNKNOWN_FACE_TYPE; //this may slow down the rendering!
+#if 0
+    hints->shapeType = SoShapeHints::UNKNOWN_SHAPE_TYPE;
+#endif
+    hints->faceType = SoShapeHints::UNKNOWN_FACE_TYPE; // this may slow down the rendering!
     root->addChild(hints);
   }
 
-  //Assign Style for search and change interactively...
+  // Assign Style for search and change interactively...
   SoDrawStyle* ds = new SoDrawStyle;
   ds->setName( SbName("boundary_mesh_style") );
   root->addChild(ds);
@@ -161,24 +163,26 @@ SoSeparator* draw_ifs(const vcl_vector<vgl_point_3d<double> >& pts,
 {
   SoSeparator* root = new SoSeparator;
 
-  //Assign Material for search and change interactively...
+  // Assign Material for search and change interactively...
   SoMaterial* material = new SoMaterial;
   material->setName(SbName("mesh_material"));
   material->diffuseColor = color;
   material->transparency = transp;
   root->addChild(material);
 
-  //Put the SoShapeHints,
-  //see http://doc.coin3d.org/Coin/classSoShapeHints.html
+  // Put the SoShapeHints,
+  // see http://doc.coin3d.org/Coin/classSoShapeHints.html
   if (b_shape_hints) {
     SoShapeHints* hints = new SoShapeHints();
     hints->vertexOrdering = SoShapeHints::COUNTERCLOCKWISE;
-    ///hints->shapeType = SoShapeHints::UNKNOWN_SHAPE_TYPE;
-    hints->faceType = SoShapeHints::UNKNOWN_FACE_TYPE; //this may slow down the rendering!
+#if 0
+    hints->shapeType = SoShapeHints::UNKNOWN_SHAPE_TYPE;
+#endif
+    hints->faceType = SoShapeHints::UNKNOWN_FACE_TYPE; // this may slow down the rendering!
     root->addChild(hints);
   }
 
-  //Assign Style for search and change interactively...
+  // Assign Style for search and change interactively...
   SoDrawStyle* ds = new SoDrawStyle;
   ds->setName( SbName("boundary_mesh_style") );
   root->addChild(ds);
@@ -193,17 +197,17 @@ SoSeparator* draw_ifs(vcl_set<bmsh3d_vertex*>& pts, vcl_set<bmsh3d_face*>& faces
 {
   SoSeparator* root = new SoSeparator;
 
-  //Assign Material for search and change interactively...
+  // Assign Material for search and change interactively...
   SoMaterial* material = new SoMaterial;
   material->setName(SbName("mesh_material"));
 
-  if (colorcode == COLOR_GOLD) { //gold
+  if (colorcode == COLOR_GOLD) { // gold
     material->ambientColor.setValue(.3f, .1f, .1f);
     material->diffuseColor.setValue(.8f, .7f, .2f);
     material->specularColor.setValue(.4f, .3f, .1f);
     material->shininess = .4f;
   }
-  else if (colorcode == COLOR_SILVER) { //silver
+  else if (colorcode == COLOR_SILVER) { // silver
     material->ambientColor.setValue(.2f, .2f, .2f);
     material->diffuseColor.setValue(.5f, .5f, .5f);
     material->specularColor.setValue(.4f, .4f, .4f);
@@ -215,17 +219,19 @@ SoSeparator* draw_ifs(vcl_set<bmsh3d_vertex*>& pts, vcl_set<bmsh3d_face*>& faces
   material->transparency = transp;
   root->addChild(material);
 
-  //Put the SoShapeHints,
-  //see http://doc.coin3d.org/Coin/classSoShapeHints.html
+  // Put the SoShapeHints,
+  // see http://doc.coin3d.org/Coin/classSoShapeHints.html
   if (b_shape_hints) {
     SoShapeHints* hints = new SoShapeHints();
     hints->vertexOrdering = SoShapeHints::COUNTERCLOCKWISE;
-    ///hints->shapeType = SoShapeHints::UNKNOWN_SHAPE_TYPE;
-    hints->faceType = SoShapeHints::UNKNOWN_FACE_TYPE; //this may slow down the rendering!
+#if 0
+    hints->shapeType = SoShapeHints::UNKNOWN_SHAPE_TYPE;
+#endif
+    hints->faceType = SoShapeHints::UNKNOWN_FACE_TYPE; // this may slow down the rendering!
     root->addChild(hints);
   }
 
-  //Assign Style for search and change interactively...
+  // Assign Style for search and change interactively...
   SoDrawStyle* ds = new SoDrawStyle;
   ds->setName( SbName("boundary_mesh_style") );
   root->addChild(ds);
@@ -240,24 +246,26 @@ SoSeparator* draw_ifs(vcl_set<bmsh3d_vertex*>& pts, vcl_set<bmsh3d_face*>& faces
 {
   SoSeparator* root = new SoSeparator;
 
-  //Assign Material for search and change interactively...
+  // Assign Material for search and change interactively...
   SoMaterial* material = new SoMaterial;
   material->setName(SbName("mesh_material"));
   material->diffuseColor = color;
   material->transparency = transp;
   root->addChild(material);
 
-  //Put the SoShapeHints,
-  //see http://doc.coin3d.org/Coin/classSoShapeHints.html
+  // Put the SoShapeHints,
+  // see http://doc.coin3d.org/Coin/classSoShapeHints.html
   if (b_shape_hints) {
     SoShapeHints* hints = new SoShapeHints();
     hints->vertexOrdering = SoShapeHints::COUNTERCLOCKWISE;
-    ///hints->shapeType = SoShapeHints::UNKNOWN_SHAPE_TYPE;
-    hints->faceType = SoShapeHints::UNKNOWN_FACE_TYPE; //this may slow down the rendering!
+#if 0
+    hints->shapeType = SoShapeHints::UNKNOWN_SHAPE_TYPE;
+#endif
+    hints->faceType = SoShapeHints::UNKNOWN_FACE_TYPE; // this may slow down the rendering!
     root->addChild(hints);
   }
 
-  //Assign Style for search and change interactively...
+  // Assign Style for search and change interactively...
   SoDrawStyle* ds = new SoDrawStyle;
   ds->setName( SbName("boundary_mesh_style") );
   root->addChild(ds);
@@ -268,7 +276,8 @@ SoSeparator* draw_ifs(vcl_set<bmsh3d_vertex*>& pts, vcl_set<bmsh3d_face*>& faces
 }
 
 //: input:
-//    const bmsh3d_mesh* M
+//     const bmsh3d_mesh* M
+//     int n_ind
 //
 //  return:
 //     SoVertexProperty* vp,
@@ -278,7 +287,7 @@ void draw_M_ifs_geom_(bmsh3d_mesh* M, SoVertexProperty* vp, int n_ind, int* ind)
   int nVertices = M->vertexmap().size();
   float (*xyz)[3] = new float[nVertices][3];
 
-  //Assign vertices
+  // Assign vertices
   vcl_map<int, bmsh3d_vertex*>::iterator it = M->vertexmap().begin();
   for (int i=0; it != M->vertexmap().end(); it++, i++) {
     bmsh3d_vertex* v = (*it).second;
@@ -289,7 +298,7 @@ void draw_M_ifs_geom_(bmsh3d_mesh* M, SoVertexProperty* vp, int n_ind, int* ind)
     v->set_vid(i);
   }
 
-  //Assign faces
+  // Assign faces
   int k = 0;
 
   vcl_map<int, bmsh3d_face*>::iterator fit = M->facemap().begin();
@@ -298,12 +307,12 @@ void draw_M_ifs_geom_(bmsh3d_mesh* M, SoVertexProperty* vp, int n_ind, int* ind)
     assert (F->vertices().size() > 2);
 
     for (unsigned int j=0; j<F->vertices().size(); j++) {
-      //Note the asssumption about the vid
+      // Note the asssumption about the vid
       const bmsh3d_vertex* v = (const bmsh3d_vertex*) F->vertices(j);
       ind[k] = v->vid();
       ++k;
     }
-    //Add the final '-1'
+    // Add the final '-1'
     ind[k] = -1;
     ++k;
   }
@@ -319,7 +328,7 @@ void draw_M_mhe_geom_(bmsh3d_mesh* M, SoVertexProperty* vp, int n_ind, int* ind)
   int nVertices = M->vertexmap().size();
   float (*xyz)[3] = new float[nVertices][3];
 
-  //Assign vertices
+  // Assign vertices
   vcl_map<int, bmsh3d_vertex*>::iterator it = M->vertexmap().begin();
   for (int i=0; it != M->vertexmap().end(); it++, i++) {
     bmsh3d_vertex* v = (*it).second;
@@ -330,7 +339,7 @@ void draw_M_mhe_geom_(bmsh3d_mesh* M, SoVertexProperty* vp, int n_ind, int* ind)
     v->set_vid(i);
   }
 
-  //Assign faces
+  // Assign faces
   int k = 0;
 
   vcl_map<int, bmsh3d_face*>::iterator fit = M->facemap().begin();
@@ -341,12 +350,12 @@ void draw_M_mhe_geom_(bmsh3d_mesh* M, SoVertexProperty* vp, int n_ind, int* ind)
     assert (vertices.size() > 2);
 
     for (unsigned int j=0; j<vertices.size(); j++) {
-      //Note the asssumption about the vid
+      // Note the asssumption about the vid
       const bmsh3d_vertex* v = (const bmsh3d_vertex*) vertices[j];
       ind[k] = v->vid();
       ++k;
     }
-    //Add the final '-1'
+    // Add the final '-1'
     ind[k] = -1;
     ++k;
   }
@@ -396,17 +405,17 @@ SoSeparator* draw_M(bmsh3d_mesh* M, const bool b_shape_hints,
 {
   SoSeparator* root = new SoSeparator;
 
-  //Assign Material for search and change interactively...
+  // Assign Material for search and change interactively...
   SoMaterial* material = new SoMaterial;
   material->setName(SbName("boundary_mesh_material"));
 
-  if (colorcode == COLOR_GOLD) { //gold
+  if (colorcode == COLOR_GOLD) { // gold
     material->ambientColor.setValue(.3f, .1f, .1f);
     material->diffuseColor.setValue(.8f, .7f, .2f);
     material->specularColor.setValue(.4f, .3f, .1f);
     material->shininess = .4f;
   }
-  else if (colorcode == COLOR_SILVER) { //silver
+  else if (colorcode == COLOR_SILVER) { // silver
     material->ambientColor.setValue(.2f, .2f, .2f);
     material->diffuseColor.setValue(.5f, .5f, .5f);
     material->specularColor.setValue(.4f, .4f, .4f);
@@ -418,17 +427,19 @@ SoSeparator* draw_M(bmsh3d_mesh* M, const bool b_shape_hints,
   material->transparency = transp;
   root->addChild(material);
 
-  //Put the SoShapeHints,
-  //see http://doc.coin3d.org/Coin/classSoShapeHints.html
+  // Put the SoShapeHints,
+  // see http://doc.coin3d.org/Coin/classSoShapeHints.html
   if (b_shape_hints) {
     SoShapeHints* hints = new SoShapeHints();
     hints->vertexOrdering = SoShapeHints::COUNTERCLOCKWISE;
-    ///hints->shapeType = SoShapeHints::UNKNOWN_SHAPE_TYPE;
-    hints->faceType = SoShapeHints::UNKNOWN_FACE_TYPE; //this may slow down the rendering!
+#if 0
+    hints->shapeType = SoShapeHints::UNKNOWN_SHAPE_TYPE;
+#endif
+    hints->faceType = SoShapeHints::UNKNOWN_FACE_TYPE; // this may slow down the rendering!
     root->addChild(hints);
   }
 
-  //Assign Style for search and change interactively...
+  // Assign Style for search and change interactively...
   SoDrawStyle* ds = new SoDrawStyle;
   ds->setName( SbName("boundary_mesh_style") );
   root->addChild(ds);
@@ -449,7 +460,7 @@ void _draw_M_visited_ifs_geom(bmsh3d_mesh* M, SoVertexProperty* vp, int* ind)
   int nVertices = M->vertexmap().size();
   float (*xyz)[3] = new float[nVertices][3];
 
-  //Assign vertices
+  // Assign vertices
   vcl_map<int, bmsh3d_vertex*>::iterator it = M->vertexmap().begin();
   for (int i=0; it != M->vertexmap().end(); it++, i++) {
     bmsh3d_vertex* v = (*it).second;
@@ -460,23 +471,23 @@ void _draw_M_visited_ifs_geom(bmsh3d_mesh* M, SoVertexProperty* vp, int* ind)
     v->set_vid(i);
   }
 
-  //Assign faces
+  // Assign faces
   unsigned int k = 0;
 
   vcl_map<int, bmsh3d_face*>::iterator fit = M->facemap().begin();
   for (; fit != M->facemap().end(); fit++) {
     bmsh3d_face* F = (*fit).second;
     if (! F->b_visited())
-      continue; //skip the unmarked F.
+      continue; // skip the unmarked F.
     assert (F->vertices().size() > 2);
 
     for (unsigned int j=0; j<F->vertices().size(); j++) {
-      //Note the asssumption about the vid
+      // Note the asssumption about the vid
       const bmsh3d_vertex* v = (const bmsh3d_vertex*) F->vertices(j);
       ind[k] = v->vid();
       k++;
     }
-    //Add the final '-1'
+    // Add the final '-1'
     ind[k] = -1;
     k++;
   }
@@ -509,17 +520,17 @@ SoSeparator* draw_M_ifs_visited(bmsh3d_mesh* M, const int colorcode,
 {
   SoSeparator* root = new SoSeparator;
 
-  //Assign Material for search and change interactively...
+  // Assign Material for search and change interactively...
   SoMaterial* material = new SoMaterial;
   material->setName(SbName("boundary_mesh_material"));
 
-  if (colorcode == COLOR_GOLD) { //gold
+  if (colorcode == COLOR_GOLD) { // gold
     material->ambientColor.setValue(.3f, .1f, .1f);
     material->diffuseColor.setValue(.8f, .7f, .2f);
     material->specularColor.setValue(.4f, .3f, .1f);
     material->shininess = .4f;
   }
-  else if (colorcode == COLOR_SILVER) { //silver
+  else if (colorcode == COLOR_SILVER) { // silver
     material->ambientColor.setValue(.2f, .2f, .2f);
     material->diffuseColor.setValue(.8f, .8f, .8f);
   }
@@ -530,17 +541,19 @@ SoSeparator* draw_M_ifs_visited(bmsh3d_mesh* M, const int colorcode,
   material->transparency = transp;
   root->addChild(material);
 
-  //Put the SoShapeHints,
-  //see http://doc.coin3d.org/Coin/classSoShapeHints.html
+  // Put the SoShapeHints,
+  // see http://doc.coin3d.org/Coin/classSoShapeHints.html
   if (b_shape_hints) {
     SoShapeHints* hints = new SoShapeHints();
     hints->vertexOrdering = SoShapeHints::COUNTERCLOCKWISE;
-    ///hints->shapeType = SoShapeHints::UNKNOWN_SHAPE_TYPE;
-    hints->faceType = SoShapeHints::UNKNOWN_FACE_TYPE; //this may slow down the rendering!
+#if 0
+    hints->shapeType = SoShapeHints::UNKNOWN_SHAPE_TYPE;
+#endif
+    hints->faceType = SoShapeHints::UNKNOWN_FACE_TYPE; // this may slow down the rendering!
     root->addChild(hints);
   }
 
-  //Assign Style for search and change interactively...
+  // Assign Style for search and change interactively...
   SoDrawStyle* ds = new SoDrawStyle;
   ds->setName( SbName("boundary_mesh_style") );
   root->addChild(ds);
@@ -552,8 +565,8 @@ SoSeparator* draw_M_ifs_visited(bmsh3d_mesh* M, const int colorcode,
 
 // ##################################################################
 
-#define NON_M_1RING_COLOR   SbColor(1.0f, 0.0f, 0.0f) //Red
-#define NON_1RING_COLOR     SbColor(0.0f, 0.7f, 0.0f) //Green
+#define NON_M_1RING_COLOR   SbColor(1.0f, 0.0f, 0.0f) // Red
+#define NON_1RING_COLOR     SbColor(0.0f, 0.7f, 0.0f) // Green
 
 //: option 1: draw non-manifold-1-ring ones in RED.
 //  option 2: draw non-1-ring vertices in BLUE.
@@ -600,12 +613,12 @@ SoSeparator* draw_M_edges_idv(bmsh3d_mesh* M, const SbColor& color,
 {
   SoSeparator* root = new SoSeparator;
 
-  //color
+  // color
   SoBaseColor *basecolor = new SoBaseColor;
   basecolor->rgb = color;
   root->addChild(basecolor);
 
-  //line width
+  // line width
   SoDrawStyle* ds = new SoDrawStyle;
   ds->setName(SbName("mesh_edge_style"));
   ds->lineWidth.setValue(width);
@@ -634,12 +647,12 @@ SoSeparator* draw_M_edges(bmsh3d_mesh* M, const SbColor& color, const float widt
 {
   SoSeparator* root = new SoSeparator;
 
-  //color
+  // color
   SoBaseColor *basecolor = new SoBaseColor;
   basecolor->rgb = color;
   root->addChild(basecolor);
 
-  //line width
+  // line width
   SoDrawStyle* ds = new SoDrawStyle;
   ds->setName(SbName("mesh_edge_style"));
   ds->lineWidth.setValue(width);
@@ -659,10 +672,10 @@ void draw_M_mhe_edges_geom(SoSeparator* root, bmsh3d_mesh* M)
 {
   unsigned int nVertices = M->edgemap().size() * 2;
   float (*xyz)[3] = new float[nVertices][3];
-  unsigned int nLinesIndices = M->edgemap().size() * 3; //sid : eid : -1
+  unsigned int nLinesIndices = M->edgemap().size() * 3; // sid : eid : -1
   int* ind = new int [nLinesIndices];
 
-  //Assign vertices and lines
+  // Assign vertices and lines
   vcl_map<int, bmsh3d_edge*>::iterator eit = M->edgemap().begin();
   for (unsigned int i=0; eit != M->edgemap().end(); eit++, i++) {
     bmsh3d_edge* E = (*eit).second;
@@ -697,15 +710,15 @@ void draw_M_ifs_edges_geom(SoSeparator* root, bmsh3d_mesh* M)
   unsigned nEdges = M->count_ifs_dup_edges();
   unsigned int nVertices = nEdges * 2;
   float (*xyz)[3] = new float[nVertices][3];
-  unsigned int nLinesIndices = nEdges * 3; //sid : eid : -1
+  unsigned int nLinesIndices = nEdges * 3; // sid : eid : -1
   int* ind = new int [nLinesIndices];
 
-  //Assign vertices and lines
+  // Assign vertices and lines
   unsigned int i=0;
   vcl_map<int, bmsh3d_face*>::iterator fit = M->facemap().begin();
   for (; fit != M->facemap().end(); fit++) {
     bmsh3d_face* F = (*fit).second;
-    //Go through each implicit incident E and draw it.
+    // Go through each implicit incident E and draw it.
     for (int j=0; j<int(F->vertices().size()); j++) {
       int k = (j+1) % F->vertices().size();
       bmsh3d_vertex* sV = F->vertices(j);
@@ -742,12 +755,12 @@ void draw_M_ifs_edges_geom(SoSeparator* root, bmsh3d_mesh* M)
 SoSeparator* draw_M_bndcurve(bmsh3d_mesh* M, const int colorcode, const float width)
 {
   SoSeparator* root = new SoSeparator;
-  //Color
+  // Color
   SoBaseColor *basecolor = new SoBaseColor;
   basecolor->rgb = color_from_code(colorcode);
   root->addChild(basecolor);
 
-  //Line width
+  // Line width
   SoDrawStyle*  drawStyle = new SoDrawStyle;
   drawStyle->lineWidth.setValue(width);
   root->addChild(drawStyle);
@@ -755,13 +768,13 @@ SoSeparator* draw_M_bndcurve(bmsh3d_mesh* M, const int colorcode, const float wi
   bmsh3d_bnd_chain_set* bnd_chain_set = new bmsh3d_bnd_chain_set(M);
   bnd_chain_set->detect_bnd_chains();
 
-  //Draw each bnd_chain in polyline
+  // Draw each bnd_chain in polyline
   vcl_vector<bmsh3d_bnd_chain*>::iterator bit = bnd_chain_set->chainset().begin();
   for (; bit != bnd_chain_set->chainset().end(); bit++) {
     bmsh3d_bnd_chain* BC = (*bit);
 
     vcl_vector<vgl_point_3d<double> > polyline_vertices;
-    //Trace each bnd_chain to a vector of points.
+    // Trace each bnd_chain to a vector of points.
     BC->trace_polyline(polyline_vertices);
     draw_polyline_geom(root, polyline_vertices);
   }
@@ -779,20 +792,20 @@ SoSeparator* draw_M_faces_idv(bmsh3d_mesh* M,
   SoMaterial* material = new SoMaterial;
   material->setName(SbName("boundary_mesh_material"));
 
-  if (colorcode != 0) //if the color is non-black, assign it
+  if (colorcode != 0) // if the color is non-black, assign it
     material->diffuseColor = color_from_code(colorcode);
   material->transparency = trans;
   root->addChild(material);
 
-  //: put the SoShapeHints,
-  //  see http://doc.coin3d.org/Coin/classSoShapeHints.html
+  // put the SoShapeHints,
+  // see http://doc.coin3d.org/Coin/classSoShapeHints.html
   if (b_shape_hints) {
     SoShapeHints* hints = new SoShapeHints();
     hints->vertexOrdering = SoShapeHints::COUNTERCLOCKWISE;
     root->addChild(hints);
   }
 
-  //: Assign Style for search and change interactively...
+  // Assign Style for search and change interactively...
   SoDrawStyle* ds = new SoDrawStyle;
   ds->setName( SbName("boundary_mesh_style") );
   root->addChild(ds);
@@ -825,7 +838,7 @@ SoSeparator* draw_M_color(bmsh3d_mesh* M,
   SoMaterial* material = new SoMaterial;
   material->setName(SbName("boundary_mesh_material"));
 
-  //Put the SoShapeHints, http://doc.coin3d.org/Coin/classSoShapeHints.html
+  // Put the SoShapeHints, http://doc.coin3d.org/Coin/classSoShapeHints.html
   if (b_shape_hints) {
     SoShapeHints* hints = new SoShapeHints();
     hints->vertexOrdering = SoShapeHints::COUNTERCLOCKWISE;
@@ -844,7 +857,7 @@ SoSeparator* draw_M_color(bmsh3d_mesh* M,
 //######################################################################
 //       Visualize Mesh Geometry & Topology Info
 
-#define FACE_ID_COLOR SbColor(0.0f, 1.0f, 0.0f); //Green
+#define FACE_ID_COLOR SbColor(0.0f, 1.0f, 0.0f); // Green
 
 SoSeparator* draw_M_bnd_faces_cost_col(bmsh3d_mesh* M, const bool draw_idv,
                                        const bool showid, const float transp)
@@ -865,7 +878,7 @@ SoSeparator* draw_M_bnd_faces_cost_col(bmsh3d_mesh* M, const bool draw_idv,
   acuteMaterial->diffuseColor.setValue(color_from_code(COLOR_LIGHTGRAY));
   acuteMaterial->transparency = transp;
 
-  //Make displpay non-orientable.
+  // Make displpay non-orientable.
   SoShapeHints* hints = new SoShapeHints();
   hints->vertexOrdering = SoShapeHints::COUNTERCLOCKWISE;
   root->addChild(hints);
@@ -875,7 +888,7 @@ SoSeparator* draw_M_bnd_faces_cost_col(bmsh3d_mesh* M, const bool draw_idv,
 
   if (!showid)
   {
-    //draw all obtuse triangles in a batch.
+    // draw all obtuse triangles in a batch.
     vcl_map<int, bmsh3d_face*>::iterator it = M->facemap().begin();
     for (; it != M->facemap().end(); it++) {
       bmsh3d_face* F = (*it).second;
@@ -890,7 +903,7 @@ SoSeparator* draw_M_bnd_faces_cost_col(bmsh3d_mesh* M, const bool draw_idv,
     }
     root->addChild(draw_M_ifs_visited(M, COLOR_GRAYBLUE, false, transp));
 
-    //draw all acute triangles in a batch.
+    // draw all acute triangles in a batch.
     it = M->facemap().begin();
     for (; it != M->facemap().end(); it++) {
       bmsh3d_face* F = (*it).second;
@@ -907,7 +920,7 @@ SoSeparator* draw_M_bnd_faces_cost_col(bmsh3d_mesh* M, const bool draw_idv,
   }
   else if (draw_idv)
   {
-    //id text color
+    // id text color
     SoBaseColor* idbasecolor = new SoBaseColor;
     idbasecolor->rgb = FACE_ID_COLOR;
 
@@ -916,7 +929,7 @@ SoSeparator* draw_M_bnd_faces_cost_col(bmsh3d_mesh* M, const bool draw_idv,
       bmsh3d_face* F = (*it).second;
       vcl_vector<bmsh3d_vertex*> vertices;
       F->get_ordered_Vs(vertices);
-      //Determine color according to its cost type.
+      // Determine color according to its cost type.
       if (is_tri_non_acute(vertices)) {
         root->addChild(draw_F_with_id(F, obtuseMaterial, idbasecolor, transp));
         n_obtuse++;
@@ -943,12 +956,12 @@ SoSeparator* draw_M_bnd_faces_topo_col(bmsh3d_mesh* M, const bool draw_idv,
   ds->setName(SbName("boundary_mesh_style"));
   root->addChild(ds);
 
-  //Make displpay non-orientable.
+  // Make displpay non-orientable.
   SoShapeHints* hints = new SoShapeHints();
   hints->vertexOrdering = SoShapeHints::COUNTERCLOCKWISE;
   root->addChild(hints);
 
-  //id text color
+  // id text color
   SoBaseColor* idbasecolor = new SoBaseColor;
   idbasecolor->rgb = FACE_ID_COLOR;
 
@@ -965,7 +978,7 @@ SoSeparator* draw_M_bnd_faces_topo_col(bmsh3d_mesh* M, const bool draw_idv,
     bmsh3d_face* F = (*it).second;
     TRIFACE_TYPE type = F->tri_get_topo_type();
 
-    //Determine color according to its topological type.
+    // Determine color according to its topological type.
     colorcode = get_M_face_topo_color(type);
     switch (type)
     {
@@ -983,7 +996,7 @@ SoSeparator* draw_M_bnd_faces_topo_col(bmsh3d_mesh* M, const bool draw_idv,
      default: assert(0);  n_error++; break;
     }
 
-    //Skip drawing individual 222 triangles
+    // Skip drawing individual 222 triangles
     if (!draw_idv && type == TRIFACE_222) {
       F->set_i_visited(1);
     }
@@ -997,7 +1010,7 @@ SoSeparator* draw_M_bnd_faces_topo_col(bmsh3d_mesh* M, const bool draw_idv,
     }
   }
 
-  //draw all 2-2-2 triangles in a batch.
+  // draw all 2-2-2 triangles in a batch.
   if (!draw_idv) {
     colorcode = get_M_face_topo_color(TRIFACE_222);
     root->addChild(draw_M_ifs_visited(M, colorcode, false, transp));
@@ -1043,14 +1056,15 @@ VIS_COLOR_CODE get_M_face_topo_color(const TRIFACE_TYPE type)
 static int timer_num_counter = 0;
 
 //: for each timer event, turn on one more SoSwitch.
-static void timerCallback(void *data, SoSensor* sensor)
+//  Second argument might just be 0, since it's not used
+static void timerCallback(void *data, SoSensor* /*sensor*/)
 {
-  //Animation parameters.
-  //-n2: Delay time before animation starts: def. 100 (around 3 secs).
+  // Animation parameters.
+  // -n2: Delay time before animation starts: def. 100 (around 3 secs).
   int N_DELAY = bmsh3d_cmd_n2();
   if (N_DELAY == 1)
     N_DELAY = 100;
-  //-n3: Re-iterate delay time: def. 100 (around 3 secs).
+  // -n3: Re-iterate delay time: def. 100 (around 3 secs).
   int N_RESET_ITER = bmsh3d_cmd_n3();
   if (N_RESET_ITER == 1)
     N_RESET_ITER = 100;
@@ -1061,19 +1075,18 @@ static void timerCallback(void *data, SoSensor* sensor)
 
   int counter = timer_num_counter - N_DELAY;
 
-  // int show_iter = int(counter / total_iters) % 2 == 0;
+  // int show_iter = int(counter / total_iters + 1) % N_RESET_ITER == 0;
 
   int reset_iter = (counter-total_iters) % N_RESET_ITER == N_RESET_ITER-1;
-    //int(counter / total_iters) % N_RESET_ITER == N_RESET_ITER-1;
 
-  if (counter >=0 && counter < total_iters) { //show_iter) { //
-    //If haven't gone through all the iterations show the next one
+  if (counter >=0 && counter < total_iters) { // && show_iter
+    // If haven't gone through all the iterations show the next one
     SoSwitch* curSwitch = (SoSwitch*) animRoot->getChild( counter );
     curSwitch->whichChild = SO_SWITCH_ALL;
   }
   timer_num_counter++;
 
-  if (reset_iter) { //All the iterations have been shown, hide them all
+  if (reset_iter) { // All the iterations have been shown, hide them all
     for (int i=0; i<total_iters; i++) {
       SoSwitch* curSwitch = (SoSwitch*) animRoot->getChild(i);
       curSwitch->whichChild = SO_SWITCH_NONE;
@@ -1111,7 +1124,7 @@ SoSeparator* draw_M_bnd_faces_anim(bmsh3d_mesh* M, const int nF_batch)
       frame++;
     }
   }
-  //draw the last remaining faces
+  // draw the last remaining faces
   draw_faces_in_switch(animRoot, faces);
   faces.clear();
   frame++;
@@ -1130,7 +1143,7 @@ void draw_faces_in_switch(SoSeparator* root, const vcl_vector<bmsh3d_face*>& fac
   sw->whichChild = SO_SWITCH_NONE;
   root->addChild(sw);
 
-  //Prepare the set of all vertices for the input faces.
+  // Prepare the set of all vertices for the input faces.
   vcl_set<bmsh3d_vertex*> vertex_set;
   for (unsigned int i=0; i<faces.size(); i++) {
     bmsh3d_face* F = faces[i];
@@ -1140,7 +1153,7 @@ void draw_faces_in_switch(SoSeparator* root, const vcl_vector<bmsh3d_face*>& fac
       vertex_set.insert(vs[j]);
   }
 
-  //Put all points into a vector.
+  // Put all points into a vector.
   vcl_vector<vgl_point_3d<double> > ifs_pts;
   vcl_set<bmsh3d_vertex*>::iterator vit = vertex_set.begin();
   for (unsigned int i=0; vit != vertex_set.end(); vit++, i++) {
@@ -1150,7 +1163,7 @@ void draw_faces_in_switch(SoSeparator* root, const vcl_vector<bmsh3d_face*>& fac
   }
   vertex_set.clear();
 
-  //Put all faces into the IFS.
+  // Put all faces into the IFS.
   vcl_vector<vcl_vector<int> > ifs_faces;
   for (unsigned int i=0; i<faces.size(); i++) {
     bmsh3d_face* F = faces[i];
