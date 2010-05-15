@@ -29,7 +29,8 @@ namespace bvpl_convert_direction_to_hue_process_globals
 bool bvpl_convert_direction_to_hue_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_convert_direction_to_hue_process_globals;
-  //This process has no inputs nor outputs only parameters
+
+  // This process has 5 inputs and 1 output
   vcl_vector<vcl_string> input_types_(n_inputs_);
   unsigned i=0;
   input_types_[i++]="bvxm_voxel_grid_base_sptr"; //the inpud grid
@@ -38,15 +39,11 @@ bool bvpl_convert_direction_to_hue_process_cons(bprb_func_process& pro)
   input_types_[i++]="vcl_string"; //output file for map
   input_types_[i++]="vcl_string"; //"peano" or "random"
 
-  if (!pro.set_input_types(input_types_))
-    return false;
   vcl_vector<vcl_string> output_types_(n_outputs_);
   i=0;
   output_types_[i++]="bvxm_voxel_grid_base_sptr"; //the output grid
-  if (!pro.set_output_types(output_types_))
-    return false;
 
-  return true;
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
 

@@ -36,7 +36,8 @@ namespace bvxm_fill_mesh_grid_process_globals
 bool bvxm_fill_mesh_grid_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_fill_mesh_grid_process_globals;
-  //This process has no inputs nor outputs only parameters
+
+  // process takes 5 inputs and has 1 output.
   vcl_vector<vcl_string> input_types_(n_inputs_);
   unsigned i=0;
   input_types_[i++]="vcl_string"; //the input path, the directory for ply files
@@ -44,18 +45,11 @@ bool bvxm_fill_mesh_grid_process_cons(bprb_func_process& pro)
   input_types_[i++]="vcl_string"; //: path for lvcs file
   input_types_[i++]="bool"; //: use lvcs file
   input_types_[i++]="vcl_string"; //: type of grid
+
   vcl_vector<vcl_string> output_types_(n_outputs_);
-  i=0;
-  output_types_[i++]="bvxm_voxel_grid_base_sptr";  // The resulting grid
+  output_types_[0]="bvxm_voxel_grid_base_sptr";  // The resulting grid
 
-  vcl_cout << input_types_.size();
-  if (!pro.set_input_types(input_types_))
-    return false;
-
-  if (!pro.set_output_types(output_types_))
-    return false;
-
-  return true;
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
 
@@ -92,9 +86,9 @@ bool bvxm_fill_mesh_grid_process(bprb_func_process& pro)
   glob << input_path << "/*.ply*";
 
   //insert grids
-  if(grid_type=="float")
+  if (grid_type=="float")
   {
-      if(bvxm_voxel_grid<float>* g = dynamic_cast<bvxm_voxel_grid<float>*>(grid.as_pointer()))
+      if (bvxm_voxel_grid<float>* g = dynamic_cast<bvxm_voxel_grid<float>*>(grid.as_pointer()))
       {
           //g->initialize_data(vcl_numeric_limits<float>::max());
           g->initialize_data(0.0f);
@@ -110,12 +104,11 @@ bool bvxm_fill_mesh_grid_process(bprb_func_process& pro)
               // call appropriate load functions to load the M
               imesh_mesh mesh;
               imesh_read(file, mesh);
-              if(use_lvcs)
+              if (use_lvcs)
                 covert_global_mesh_to_local(mesh,lvcs);
               float val=1.0f;
               bvxm_voxel_grid<float>* g = static_cast<bvxm_voxel_grid<float>*>(grid.as_pointer());
               bvxm_load_mesh_into_grid<float>(g,mesh,val);
-
           }
 
           pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, g);
@@ -127,9 +120,9 @@ bool bvxm_fill_mesh_grid_process(bprb_func_process& pro)
           return false;
       }
   }
-  else if(grid_type=="opinion")
+  else if (grid_type=="opinion")
   {
-      if(bvxm_voxel_grid<bvxm_opinion>* g = dynamic_cast<bvxm_voxel_grid<bvxm_opinion>*>(grid.as_pointer()))
+      if (bvxm_voxel_grid<bvxm_opinion>* g = dynamic_cast<bvxm_voxel_grid<bvxm_opinion>*>(grid.as_pointer()))
       {
           //g->initialize_data(vcl_numeric_limits<float>::max());
           g->initialize_data(bvxm_opinion(0.0f));
@@ -144,7 +137,7 @@ bool bvxm_fill_mesh_grid_process(bprb_func_process& pro)
               // call appropriate load functions to load the M
               imesh_mesh mesh;
               imesh_read(file, mesh);
-              if(use_lvcs)
+              if (use_lvcs)
                 covert_global_mesh_to_local(mesh,lvcs);
               bvxm_opinion val(1.0f);
               bvxm_load_mesh_into_grid<bvxm_opinion>(g,mesh,val);

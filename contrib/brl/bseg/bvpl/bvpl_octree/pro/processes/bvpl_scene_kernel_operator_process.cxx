@@ -47,6 +47,7 @@ namespace bvpl_scene_kernel_operator_process_globals
 bool bvpl_scene_kernel_operator_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_scene_kernel_operator_process_globals;
+
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm_scene_base_sptr";
   input_types_[1] = "bvpl_kernel_sptr";
@@ -121,7 +122,7 @@ bool bvpl_scene_kernel_operator_process(bprb_func_process& pro)
       pro.set_output_val<boxm_scene_base_sptr>(0, scene_ptr);
       return true;
     }
-    else if(functor_name == "positive_gauss_convolution"){
+    else if (functor_name == "positive_gauss_convolution") {
       bvpl_positive_gauss_conv_functor functor;
       bvpl_scene_kernel_operator scene_oper;
       //operate on scene

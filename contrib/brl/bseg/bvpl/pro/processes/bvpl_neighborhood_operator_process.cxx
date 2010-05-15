@@ -39,30 +39,25 @@ namespace bvpl_neighborhood_operator_process_globals
 bool bvpl_neighborhood_operator_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_neighborhood_operator_process_globals;
-  //process takes 4inputs
+  //process takes 5 inputs
   //input[0]: The grid
   //input[1]: The kernel
   //input[2]: The occupancy type:
   //          -float
   //          -opinion
-  //input[4]: The functor type
-  //input[5]: Output grid path
+  //input[3]: The functor type
+  //input[4]: Output grid path
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "bvxm_voxel_grid_base_sptr";
   input_types_[1] = "bvpl_kernel_sptr";
   input_types_[2] = "vcl_string";
   input_types_[3] = "vcl_string";
   input_types_[4] = "vcl_string";
-  if (!pro.set_input_types(input_types_))
-    return false;
 
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "bvxm_voxel_grid_base_sptr";
-  if (!pro.set_output_types(output_types_))
-    return false;
 
-  //output has no output
-  return true;
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
 bool bvpl_neighborhood_operator_process(bprb_func_process& pro)
@@ -120,12 +115,12 @@ bool bvpl_neighborhood_operator_process(bprb_func_process& pro)
         pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
         return true;
       }
-      else{
-        vcl_cout << "Unsupported data type or functor type \n";
-        return false;        
+      else {
+        vcl_cout << "Unsupported data type or functor type\n";
+        return false;
       }
     }
-    vcl_cout << "Input grid is invalid \n";
+    vcl_cout << "Input grid is invalid\n";
     return false;
   }
   else if (ocp_type == "opinion") {
@@ -139,35 +134,35 @@ bool bvpl_neighborhood_operator_process(bprb_func_process& pro)
       pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
       return true;
     }
-    vcl_cout << "Input grid is invalid \n";
+    vcl_cout << "Input grid is invalid\n";
     return false;
   }
-  else if(ocp_type == "bsta_gauss_f1"){
+  else if (ocp_type == "bsta_gauss_f1") {
     typedef bsta_num_obs<bsta_gauss_f1> gauss_type;
     bvxm_voxel_grid<gauss_type> *grid_out= new bvxm_voxel_grid<gauss_type>(out_grid_path, input_grid->grid_size());
     if (bvxm_voxel_grid<gauss_type> * gauss_input_grid=dynamic_cast<bvxm_voxel_grid<gauss_type> *>(input_grid.ptr())){
-      if(functor_name == "gauss_convolution"){
+      if (functor_name == "gauss_convolution") {
         bvpl_gauss_convolution_functor func;
         bvpl_neighb_operator<gauss_type, bvpl_gauss_convolution_functor> oper(func);
         oper.operate(gauss_input_grid, kernel, grid_out);
         pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
         return true;
       }
-      if(functor_name == "positive_gauss_convolution"){
+      if (functor_name == "positive_gauss_convolution") {
         bvpl_positive_gauss_conv_functor func;
         bvpl_neighb_operator<gauss_type, bvpl_positive_gauss_conv_functor> oper(func);
         oper.operate(gauss_input_grid, kernel, grid_out);
         pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
         return true;
       }
-      else{
-        vcl_cout << "Unsupported functor \n";
+      else {
+        vcl_cout << "Unsupported functor\n";
         return false;
       }
     }
-    vcl_cout << "Input grid is invalid \n";
+    vcl_cout << "Input grid is invalid\n";
     return false;
   }
-  vcl_cout << "Unsupported data type or functor type \n";
+  vcl_cout << "Unsupported data type or functor type\n";
   return false;
 }

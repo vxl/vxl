@@ -37,7 +37,8 @@ namespace boxm_generate_edge_samples_process_globals
 bool boxm_generate_edge_samples_process_cons(bprb_func_process& pro)
 {
   using namespace boxm_generate_edge_samples_process_globals;
-  //process takes 4 inputs
+
+  //process takes 5 inputs
   //input[0]: The cropped edge image
   //input[1]: The camera of the observation
   //input[2]: The scene
@@ -49,16 +50,14 @@ bool boxm_generate_edge_samples_process_cons(bprb_func_process& pro)
   input_types_[2] = "boxm_scene_base_sptr";
   input_types_[3] = "vcl_string";
   input_types_[4] = "float";
-  if (!pro.set_input_types(input_types_))
-    return false;
 
-  //output
+  //one output:
+  //output[0]: new n_normal
   unsigned j = 0;
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[j++] = "float"; // new n_normal value
-  if (!pro.set_output_types(output_types_))
-    return false;
-  return true;
+
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
 bool boxm_generate_edge_samples_process(bprb_func_process& pro)
@@ -91,7 +90,6 @@ bool boxm_generate_edge_samples_process(bprb_func_process& pro)
   }
 
   float new_n_normal=0.0;
-  
 
   if (scene->appearence_model() == BOXM_EDGE_FLOAT) {
     vil_image_view<float> edge_prob_image;
@@ -108,7 +106,7 @@ bool boxm_generate_edge_samples_process(bprb_func_process& pro)
     }
     else
     {
-      vcl_cout<<"boxm_generate_edge_samples_process: Multibin -- Not yet implemented"<<vcl_endl;
+      vcl_cerr<<"boxm_generate_edge_samples_process: Multibin -- Not yet implemented\n";
     }
   }
   if (scene->appearence_model() == BOXM_EDGE_LINE) {
@@ -124,11 +122,11 @@ bool boxm_generate_edge_samples_process(bprb_func_process& pro)
     }
     else
     {
-      vcl_cout<<"boxm_generate_edge_samples_process: Multibin -- Not yet implemented"<<vcl_endl;
+      vcl_cerr<<"boxm_generate_edge_samples_process: Multibin -- Not yet implemented\n";
     }
   }
   else {
-    vcl_cout << "boxm_generate_edge_samples_process: undefined APM type" << vcl_endl;
+    vcl_cerr << "boxm_generate_edge_samples_process: undefined APM type\n";
     return false;
   }
 

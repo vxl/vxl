@@ -41,24 +41,17 @@ namespace boxm_upload_mesh_process_globals
 bool boxm_upload_mesh_process_cons(bprb_func_process& pro)
 {
   using namespace boxm_upload_mesh_process_globals;
-  //This process has no inputs nor outputs only parameters
+
+  // process takes 4 inputs and no output
   vcl_vector<vcl_string> input_types_(n_inputs_);
   unsigned i=0;
   input_types_[i++]="vcl_string";           //the directory for ply files
   input_types_[i++]="boxm_scene_base_sptr"; //scene to be uploaded
   input_types_[i++]="bool";                 //true, if mesh vertices are in geo coordinates
   input_types_[i++]="vcl_string";                 //true, if mesh vertices are in geo coordinates
+
   vcl_vector<vcl_string> output_types_(n_outputs_);
-  i=0;
-
-  vcl_cout << input_types_.size();
-  if (!pro.set_input_types(input_types_))
-    return false;
-
-  if (!pro.set_output_types(output_types_))
-    return false;
-
-  return true;
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
 

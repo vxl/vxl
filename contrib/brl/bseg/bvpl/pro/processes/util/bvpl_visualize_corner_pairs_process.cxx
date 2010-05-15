@@ -41,14 +41,15 @@ namespace bvpl_visualize_corner_pairs_process_globals
 bool bvpl_visualize_corner_pairs_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_visualize_corner_pairs_process_globals;
+
+  //process takes 5 inputs but has no outputs
   vcl_vector<vcl_string> input_types_(n_inputs_);
+  vcl_vector<vcl_string> output_types_(n_outputs_);
   input_types_[0] = "bvpl_corner_pairs_sptr";
   input_types_[1] = "unsigned";
   input_types_[2] = "vcl_string";
   input_types_[3] = "bool";
   input_types_[4] = "float";
-
-  vcl_vector<vcl_string> output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }

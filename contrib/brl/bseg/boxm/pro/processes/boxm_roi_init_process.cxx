@@ -61,23 +61,23 @@ namespace boxm_roi_init_process_globals
 bool boxm_roi_init_process_cons(bprb_func_process& pro)
 {
   using namespace boxm_roi_init_process_globals;
-  //this process takes 3 input:
+
+  //this process takes 3 inputs:
   //the filename of the image, the camera and the voxel world
   vcl_vector<vcl_string> input_types_(n_inputs_);
   unsigned  i=0;
   input_types_[i++] = "vcl_string";                // image path
   input_types_[i++] = "vpgl_camera_double_sptr";   //  camera
   input_types_[i++] = "boxm_scene_base_sptr";     // voxel world spec
-  if (!pro.set_input_types(input_types_))
-    return false;
 
-  //output
+  // 3 outputs
   unsigned j = 0;
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[j++] = "vpgl_camera_double_sptr"; // unadjusted local rational camera
   output_types_[j++] = "vil_image_view_base_sptr";  // image ROI
   output_types_[j++] = "float"; // uncertainty
-  return pro.set_output_types(output_types_);
+
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
 

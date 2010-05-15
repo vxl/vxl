@@ -26,7 +26,8 @@ namespace bvxm_save_rgba_grid_vrml_process_globals
 bool bvxm_save_rgba_grid_vrml_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_save_rgba_grid_vrml_process_globals;
-  // process takes 2 inputs:
+
+  // process takes 3 inputs but has no outputs
   //input[0]: The voxel_grid
   //input[1]: Threshold - voxels with alpha bellow this value are ignored
   //input[2]: The filename to write to
@@ -34,16 +35,15 @@ bool bvxm_save_rgba_grid_vrml_process_cons(bprb_func_process& pro)
   input_types_[0] = "bvxm_voxel_grid_base_sptr";
   input_types_[1] = "float";
   input_types_[2] = "vcl_string";
-  if (!pro.set_input_types(input_types_))
-    return false;
-  
-  return true;
+
+  vcl_vector<vcl_string> output_types_(n_outputs_);
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
 bool bvxm_save_rgba_grid_vrml_process(bprb_func_process& pro)
 {
   using namespace bvxm_save_rgba_grid_vrml_process_globals;
-  
+
   // check number of inputs
   if (pro.n_inputs() != n_inputs_)
   {
@@ -54,9 +54,9 @@ bool bvxm_save_rgba_grid_vrml_process(bprb_func_process& pro)
   float threshold = pro.get_input<float>(1);
   vcl_string volume_path = pro.get_input<vcl_string>(2);
   vcl_ofstream os(volume_path.c_str());
-  
+
   // create the grid from in memory file and save
-  if ( bvxm_voxel_grid<vnl_float_4 > *grid = dynamic_cast<bvxm_voxel_grid<vnl_float_4 >* >(grid_base.ptr())) {    
+  if ( bvxm_voxel_grid<vnl_float_4 > *grid = dynamic_cast<bvxm_voxel_grid<vnl_float_4 >* >(grid_base.ptr())) {
     bvrml_write::write_vrml_header(os);
     //bvxm_vrml_voxel_grid::write_vrml_grid_as_spheres(os,grid,threshold);
     bvxm_vrml_voxel_grid::write_vrml_grid_as_pointers(os,grid,threshold);

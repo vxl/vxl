@@ -23,6 +23,7 @@ namespace boxm_rpc_registration_process_globals
 bool boxm_rpc_registration_process_cons(bprb_func_process& pro)
 {
   using namespace boxm_rpc_registration_process_globals;
+
   // process takes 8 inputs:
   // input[0]: The scene
   // input[1]: The current camera
@@ -42,17 +43,14 @@ bool boxm_rpc_registration_process_cons(bprb_func_process& pro)
   input_types_[i++] = "float";
   input_types_[i++] = "float";
   input_types_[i++] = "unsigned";
-  //input_types_[i++] = "vcl_string";
-
-  if (!pro.set_input_types(input_types_))
-    return false;
 
   // process has 1 output:
   // output[0]: The optimized camera
   vcl_vector<vcl_string> output_types_(n_outputs_);
   unsigned j = 0;
   output_types_[j++] = "vpgl_camera_double_sptr";
-  return pro.set_output_types(output_types_);
+
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
 //:  optimizes rpc camera parameters based on edges

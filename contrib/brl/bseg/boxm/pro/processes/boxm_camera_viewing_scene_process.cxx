@@ -37,7 +37,6 @@ namespace boxm_camera_viewing_scene_process_globals
 //:sets input and output types
 bool boxm_camera_viewing_scene_process_cons(bprb_func_process& pro)
 {
-  //set output types
   using namespace boxm_camera_viewing_scene_process_globals;
 
   vcl_vector<vcl_string> input_types_(n_inputs_);
@@ -49,16 +48,12 @@ bool boxm_camera_viewing_scene_process_cons(bprb_func_process& pro)
   input_types_[5] = "unsigned";  //image nj
   input_types_[6] = "bool";      // force focal length
   input_types_[7] = "double";     // force focal length
-  if (!pro.set_input_types(input_types_))
-    return false;
 
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "vpgl_camera_double_sptr";
-    output_types_[1] = "double";
+  output_types_[1] = "double";
 
-  if (!pro.set_output_types(output_types_))
-    return false;
-  return true;
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
 //:creates a scene from parameters

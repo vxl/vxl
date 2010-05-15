@@ -26,11 +26,11 @@ namespace boxm_save_scene_vrml_process_globals
 //: process takes 2 inputs and has no outputs.
 // input[0]: The scene
 // input[1]: Path to output vrml file
-// No outputs
 
 bool boxm_save_scene_vrml_process_cons(bprb_func_process& pro)
 {
   using namespace boxm_save_scene_vrml_process_globals;
+
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm_scene_base_sptr";
   input_types_[1] = "vcl_string";

@@ -34,12 +34,13 @@ namespace bvpl_save_vrml_process_globals
 bool bvpl_save_vrml_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_save_vrml_process_globals;
+
+  //process takes 3 inputs but has no outputs
+  vcl_vector<vcl_string> output_types_(n_outputs_);
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm_scene_base_sptr";
   input_types_[1] = "bvpl_kernel_vector_sptr";
   input_types_[2] = "vcl_string";
-
-  vcl_vector<vcl_string> output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }

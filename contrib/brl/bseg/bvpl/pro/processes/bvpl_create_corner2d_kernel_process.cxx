@@ -29,15 +29,13 @@ namespace bvpl_create_corner2d_kernel_process_globals
 bool bvpl_create_corner2d_kernel_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_create_corner2d_kernel_process_globals;
-  //process takes 0 inputs
-  vcl_vector<vcl_string> input_types_(n_inputs_);
 
+  //process takes 0 inputs and 1 output
+  vcl_vector<vcl_string> input_types_(n_inputs_);
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] ="bvpl_kernel_sptr";
-  if (!pro.set_output_types(output_types_))
-    return false;
 
-  return true;
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
 bool bvpl_create_corner2d_kernel_process(bprb_func_process& pro)

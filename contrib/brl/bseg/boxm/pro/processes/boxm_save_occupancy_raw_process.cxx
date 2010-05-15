@@ -31,21 +31,20 @@ namespace boxm_save_occupancy_raw_process_globals
 bool boxm_save_occupancy_raw_process_cons(bprb_func_process& pro)
 {
   using namespace boxm_save_occupancy_raw_process_globals;
-  //process takes 4 inputs
+
+  //process takes 4 inputs but has no outputs
   //input[0]: scene binary file
   //input[1]: output file (raw) path
   //input[2]: the resolution level wanted.. 0 is the most detailed (lowest possible level)
   //input[3]: 0 for writing blocks individually, 1 for writing the scene into one file
   vcl_vector<vcl_string> input_types_(n_inputs_);
+  vcl_vector<vcl_string> output_types_(n_outputs_);
   input_types_[0] = "boxm_scene_base_sptr";
   input_types_[1] = "vcl_string";
   input_types_[2] = "unsigned";
   input_types_[3] = "unsigned";
-  if (!pro.set_input_types(input_types_))
-    return false;
 
-  // process has no output
-  return true;
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
 bool boxm_save_occupancy_raw_process(bprb_func_process& pro)
@@ -83,10 +82,10 @@ bool boxm_save_occupancy_raw_process(bprb_func_process& pro)
           boxm_save_block_raw<short, boxm_sample_multi_bin<BOXM_APM_MOG_GREY> >(*scene, it.index(), s, resolution);
           it++;
         }
-      } else { // write the whole scene
+      }
+      else { // write the whole scene
         boxm_save_scene_raw<short, boxm_sample_multi_bin<BOXM_APM_MOG_GREY> >(*scene, filepath + ".raw", resolution);
       }
-
     }
     else
     {

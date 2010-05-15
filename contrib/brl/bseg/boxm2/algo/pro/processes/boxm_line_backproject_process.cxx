@@ -45,18 +45,17 @@ namespace boxm_line_backproject_process_globals
 bool boxm_line_backproject_process_cons(bprb_func_process& pro)
 {
   using namespace boxm_line_backproject_process_globals;
+
   vcl_vector<vcl_string> input_types_(n_inputs_);
   unsigned i = 0;
   input_types_[i++] = "vil_image_view_base_sptr";
   input_types_[i++] = "vpgl_camera_double_sptr";
 
-  if (!pro.set_input_types(input_types_))
-    return false;
-
   vcl_vector<vcl_string> output_types_(n_outputs_);
   unsigned j = 0;
   output_types_[j++] = "vil_image_view_base_sptr";
-  return pro.set_output_types(output_types_);
+
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
 vpgl_rational_camera<double>

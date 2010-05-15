@@ -30,7 +30,8 @@ namespace bvxm_grid_distance_transform_process_globals
 bool bvxm_grid_distance_transform_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_grid_distance_transform_process_globals;
-  //This process has no inputs nor outputs only parameters
+
+  // process takes 3 inputs and has 2 outputs.
   vcl_vector<vcl_string> input_types_(n_inputs_);
   unsigned i=0;
   input_types_[i++]="bvxm_voxel_grid_base_sptr"; // the grid, it will be updtaed with distance values
@@ -42,14 +43,7 @@ bool bvxm_grid_distance_transform_process_cons(bprb_func_process& pro)
   output_types_[i++]="bvxm_voxel_grid_base_sptr";  // The resulting direction grid
   output_types_[i++]="bvxm_voxel_grid_base_sptr";  // The resulting distance transform as magnitude of direciton grid
 
-  vcl_cout << input_types_.size();
-  if (!pro.set_input_types(input_types_))
-    return false;
-
-  if (!pro.set_output_types(output_types_))
-    return false;
-
-  return true;
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
 //: Execute the process

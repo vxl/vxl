@@ -31,11 +31,11 @@ namespace boxm_split_scene_process_globals
 bool boxm_split_scene_process_cons(bprb_func_process& pro)
 {
   using namespace boxm_split_scene_process_globals;
+
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm_scene_base_sptr";
 
   vcl_vector<vcl_string> output_types_(n_outputs_);
-
   output_types_[0] = "boxm_scene_base_sptr";
   output_types_[1] = "boxm_scene_base_sptr";
 

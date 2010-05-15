@@ -32,7 +32,8 @@ namespace boxm_generate_opt2_samples_process_globals
 bool boxm_generate_opt2_samples_process_cons(bprb_func_process& pro)
 {
   using namespace boxm_generate_opt2_samples_process_globals;
-  //process takes 6 inputs
+
+  // process takes 7 inputs and no output
   //input[0]: The observation image
   //input[1]: The camera of the observation
   //input[2]: The scene
@@ -40,7 +41,6 @@ bool boxm_generate_opt2_samples_process_cons(bprb_func_process& pro)
   //input[4]: shadow prior
   //input[5]: shadow sigma
   //input[6]: use black background
-
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "vil_image_view_base_sptr";
   input_types_[1] = "vpgl_camera_double_sptr";
@@ -49,11 +49,9 @@ bool boxm_generate_opt2_samples_process_cons(bprb_func_process& pro)
   input_types_[4] = "float";
   input_types_[5] = "float";
   input_types_[6] = "bool";
-  if (!pro.set_input_types(input_types_))
-    return false;
 
-  //no output
-  return true;
+  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
 bool boxm_generate_opt2_samples_process(bprb_func_process& pro)

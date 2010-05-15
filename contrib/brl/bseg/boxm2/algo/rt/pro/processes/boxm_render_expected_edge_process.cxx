@@ -32,6 +32,7 @@ namespace boxm_render_expected_edge_process_globals
 bool boxm_render_expected_edge_process_cons(bprb_func_process& pro)
 {
   using namespace boxm_render_expected_edge_process_globals;
+
   //process takes 7 inputs
   //input[0]: scene binary file
   //input[1]: camera
@@ -48,8 +49,6 @@ bool boxm_render_expected_edge_process_cons(bprb_func_process& pro)
   input_types_[4] = "float";
   input_types_[5] = "unsigned";
   input_types_[6] = "float";
-  if (!pro.set_input_types(input_types_))
-    return false;
 
   // process has 2 outputs:
   // output[0]: rendered image
@@ -58,7 +57,7 @@ bool boxm_render_expected_edge_process_cons(bprb_func_process& pro)
   output_types_[0] = "vil_image_view_base_sptr";
   output_types_[1] = "vil_image_view_base_sptr";
 
-  return bool(pro.set_output_types(output_types_));
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
 bool boxm_render_expected_edge_process(bprb_func_process& pro)

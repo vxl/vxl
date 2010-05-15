@@ -33,7 +33,8 @@ namespace boxm_render_expected_edge_vrml_process_globals
 bool boxm_render_expected_edge_vrml_process_cons(bprb_func_process& pro)
 {
   using namespace boxm_render_expected_edge_vrml_process_globals;
-  //process takes 4 inputs
+
+  // process takes 4 inputs and no output
   //input[0]: scene binary file
   //input[1]: the path for vrml file
   //input[2]: threshold
@@ -43,13 +44,9 @@ bool boxm_render_expected_edge_vrml_process_cons(bprb_func_process& pro)
   input_types_[1] = "vcl_string";
   input_types_[2] = "float";
   input_types_[3] = "int";
-  if (!pro.set_input_types(input_types_))
-  return false;
 
-  // process has no output:
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
-
-  return true;
+  vcl_vector<vcl_string> output_types_(n_outputs_);
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
 bool boxm_render_expected_edge_vrml_process(bprb_func_process& pro)

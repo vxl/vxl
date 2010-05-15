@@ -10,7 +10,7 @@
 // \verbatim
 //  Modifications
 //   Jun 25, 2009  Gamze Tunali
-//       Added the type bvxm_opinion for grid  
+//       Added the type bvxm_opinion for grid
 // \endverbatim
 
 
@@ -29,16 +29,16 @@ namespace bvxm_save_grid_raw_process_globals
 bool bvxm_save_grid_raw_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_save_grid_raw_process_globals;
-  // process takes 2 inputs:
+
+  // process takes 2 inputs but has no outputs
   //input[0]: The voxel_grid
   //input[1]: The filename to write to
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "bvxm_voxel_grid_base_sptr";
   input_types_[1] = "vcl_string";
-  if (!pro.set_input_types(input_types_))
-    return false;
 
-  return true;
+  vcl_vector<vcl_string> output_types_(n_outputs_);
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
 bool bvxm_save_grid_raw_process(bprb_func_process& pro)
@@ -53,9 +53,9 @@ bool bvxm_save_grid_raw_process(bprb_func_process& pro)
   }
   bvxm_voxel_grid_base_sptr grid_base = pro.get_input<bvxm_voxel_grid_base_sptr>(0);
   vcl_string volume_path = pro.get_input<vcl_string>(1);
-  
+
   // create the grid from in memory file and save
-  if ( bvxm_voxel_grid<float > *grid = dynamic_cast<bvxm_voxel_grid<float >* >(grid_base.ptr())) {    
+  if ( bvxm_voxel_grid<float > *grid = dynamic_cast<bvxm_voxel_grid<float >* >(grid_base.ptr())) {
     bvxm_grid_save_raw(grid,volume_path);
     return true;
   }

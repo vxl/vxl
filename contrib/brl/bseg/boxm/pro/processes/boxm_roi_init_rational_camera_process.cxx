@@ -65,15 +65,14 @@ namespace boxm_roi_init_rational_camera_process_globals
 bool boxm_roi_init_rational_camera_process_cons(bprb_func_process& pro)
 {
   using namespace boxm_roi_init_rational_camera_process_globals;
-  //this process takes 3 input:
+
+  //this process takes 3 inputs:
   //the filename of the image, the camera and the voxel world
   vcl_vector<vcl_string> input_types_(n_inputs_);
   unsigned  i=0;
   input_types_[i++] = "vcl_string";                // NITF image path
   input_types_[i++] = "vpgl_camera_double_sptr";   // rational camera
   input_types_[i++] = "boxm_scene_base_sptr";     // voxel world spec
-  if (!pro.set_input_types(input_types_))
-    return false;
 
   //output
   unsigned j = 0;
@@ -81,7 +80,8 @@ bool boxm_roi_init_rational_camera_process_cons(bprb_func_process& pro)
   output_types_[j++] = "vpgl_camera_double_sptr"; // unadjusted local rational camera
   output_types_[j++] = "vil_image_view_base_sptr";  // image ROI
   output_types_[j++] = "float"; // uncertainty
-  return pro.set_output_types(output_types_);
+
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
 
@@ -115,7 +115,7 @@ bool boxm_roi_init_rational_camera_process(bprb_func_process& pro)
   vil_image_view<unsigned char>* img_ptr = new vil_image_view<unsigned char>();
   vpgl_rational_camera<double>* rat_camera =
     dynamic_cast<vpgl_rational_camera<double>*> (camera.as_pointer());
-  
+
 
   if (!rat_camera) {
     vcl_cerr << "The camera input is not a rational camera\n";
@@ -136,7 +136,7 @@ bool boxm_roi_init_rational_camera_process(bprb_func_process& pro)
 
     if (img_ptr->ni() == 0 || img_ptr->nj() == 0)
       return false;
-  
+
     //Store outputs
     unsigned j = 0;
     // update the camera and store
@@ -154,12 +154,12 @@ bool boxm_roi_init_rational_camera_process(bprb_func_process& pro)
 }
 //: roi_init function
 bool boxm_roi_init_rational_camera_process_globals::roi_init(vcl_string const& image_path,
-                                             vpgl_rational_camera<double>* camera,
-                                             vgl_box_3d<double> box,
-                                             bgeo_lvcs lvcs,
-                                             float uncertainty,
-                                             vil_image_view<unsigned char>* nitf_image_unsigned_char,
-                                             vpgl_local_rational_camera<double>& local_camera)
+                                                             vpgl_rational_camera<double>* camera,
+                                                             vgl_box_3d<double> box,
+                                                             bgeo_lvcs lvcs,
+                                                             float uncertainty,
+                                                             vil_image_view<unsigned char>* nitf_image_unsigned_char,
+                                                             vpgl_local_rational_camera<double>& local_camera)
 {
   // read the image and extract the camera
   vil_image_resource_sptr img = vil_load_image_resource(image_path.c_str());
@@ -268,9 +268,9 @@ bool boxm_roi_init_rational_camera_process_globals::roi_init(vcl_string const& i
 
 //: project_box function
 vgl_box_2d<double>* boxm_roi_init_rational_camera_process_globals::project_box( vpgl_rational_camera<double>* cam,
-                                                                bgeo_lvcs lvcs,
-                                                                vgl_box_3d<double> box,
-                                                                float r)
+                                                                                bgeo_lvcs lvcs,
+                                                                                vgl_box_3d<double> box,
+                                                                                float r)
 {
   double xoff, yoff, zoff;
   xoff = cam->offset(vpgl_rational_camera<double>::X_INDX);

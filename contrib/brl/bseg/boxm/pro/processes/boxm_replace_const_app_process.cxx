@@ -26,17 +26,16 @@ namespace boxm_replace_const_app_process_globals
 bool boxm_replace_const_app_process_cons(bprb_func_process& pro)
 {
   using namespace boxm_replace_const_app_process_globals;
-  //process takes 2 inputs
+
+  //process takes 2 inputs but has no outputs
   //input[0]: The scene
   //input[1]: mean value for appearance
   vcl_vector<vcl_string> input_types_(n_inputs_);
+  vcl_vector<vcl_string> output_types_(n_outputs_);
   input_types_[0] = "boxm_scene_base_sptr";
   input_types_[1] = "float";
-  if (!pro.set_input_types(input_types_))
-    return false;
 
-  //no output
-  return true;
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
 bool boxm_replace_const_app_process(bprb_func_process& pro)

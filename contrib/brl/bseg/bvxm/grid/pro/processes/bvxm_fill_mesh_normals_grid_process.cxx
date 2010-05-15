@@ -36,25 +36,19 @@ namespace bvxm_fill_mesh_normals_grid_process_globals
 bool bvxm_fill_mesh_normals_grid_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_fill_mesh_normals_grid_process_globals;
-  //This process has no inputs nor outputs only parameters
+
+  // process takes 4 inputs and has 1 output.
   vcl_vector<vcl_string> input_types_(n_inputs_);
   unsigned i=0;
   input_types_[i++]="vcl_string"; //the input path, the directory for ply files
   input_types_[i++]="bvxm_voxel_grid_base_sptr"; //: input grid
   input_types_[i++]="vcl_string"; //: path for lvcs file
   input_types_[i++]="bool"; //: use lvcs file
+
   vcl_vector<vcl_string> output_types_(n_outputs_);
-  i=0;
-  output_types_[i++]="bvxm_voxel_grid_base_sptr";  // The resulting grid
+  output_types_[0]="bvxm_voxel_grid_base_sptr";  // The resulting grid
 
-  vcl_cout << input_types_.size();
-  if (!pro.set_input_types(input_types_))
-    return false;
-
-  if (!pro.set_output_types(output_types_))
-    return false;
-
-  return true;
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
 
@@ -89,7 +83,7 @@ bool bvxm_fill_mesh_normals_grid_process(bprb_func_process& pro)
   glob << input_path << "/*.ply*";
 
   //insert grids
-  if(bvxm_voxel_grid<vnl_vector_fixed<float,3> >* g = dynamic_cast<bvxm_voxel_grid<vnl_vector_fixed<float,3> >*>(grid.as_pointer()))
+  if (bvxm_voxel_grid<vnl_vector_fixed<float,3> >* g = dynamic_cast<bvxm_voxel_grid<vnl_vector_fixed<float,3> >*>(grid.as_pointer()))
   {
       g->initialize_data(vnl_vector_fixed<float,3>(0.0f,0.0f,0.0f));
       for (vul_file_iterator file_it = glob.str().c_str(); file_it; ++file_it)
@@ -103,12 +97,11 @@ bool bvxm_fill_mesh_normals_grid_process(bprb_func_process& pro)
           // call appropriate load functions to load the M
           imesh_mesh mesh;
           imesh_read(file, mesh);
-          if(use_lvcs)
+          if (use_lvcs)
               covert_global_mesh_to_local(mesh,lvcs);
           mesh.compute_face_normals(true);
 
           bvxm_load_mesh_normals_into_grid(g, mesh);
-
       }
 
       pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, g);
@@ -119,5 +112,4 @@ bool bvxm_fill_mesh_normals_grid_process(bprb_func_process& pro)
       vcl_cout<<"Grid Type Mismatch"<<vcl_endl;
       return false;
   }
-
 }

@@ -26,13 +26,14 @@ namespace boxm_scene_to_bvxm_grid_process_globals
 // input[0]: The scene
 // input[1]: Path to output grid
 // input[2]: Resolution level
-// input[3]: Bool: Enforce only cells at the resolution leve? 
+// input[3]: Bool: Enforce only cells at the resolution leve?
 //           If true, there is no interpolation
 // output[0]: The output grid
 
 bool boxm_scene_to_bvxm_grid_process_cons(bprb_func_process& pro)
 {
   using namespace boxm_scene_to_bvxm_grid_process_globals;
+
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm_scene_base_sptr";
   input_types_[1] = "vcl_string";
@@ -40,7 +41,6 @@ bool boxm_scene_to_bvxm_grid_process_cons(bprb_func_process& pro)
   input_types_[3] = "bool";
 
   vcl_vector<vcl_string> output_types_(n_outputs_);
-
   output_types_[0] = "bvxm_voxel_grid_base_sptr";
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);

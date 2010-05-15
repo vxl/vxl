@@ -4,7 +4,7 @@
 // \file
 // \brief A class for creating an volume edge kernel
 //
-// \author Vishal Jain 
+// \author Vishal Jain
 // \date June 26, 2009
 // \verbatim
 //  Modifications
@@ -28,9 +28,8 @@ bool bvpl_create_edge3d_kernel_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_create_edge3d_kernel_process_globals;
 
-  //process takes 3inputs
+  //process takes 10 inputs
   //input[0]-input[5]: Min and max coordinates of kernel
-   
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "int";
   input_types_[1] = "int";
@@ -42,18 +41,11 @@ bool bvpl_create_edge3d_kernel_process_cons(bprb_func_process& pro)
   input_types_[7] = "float";
   input_types_[8] = "float";
   input_types_[9] = "float";
-  
-  if (!pro.set_input_types(input_types_))
-    return false;
-  
+
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0]="bvpl_kernel_sptr";
 
-  if (!pro.set_output_types(output_types_))
-    return false;
-
-  //output has no output
-  return true;
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
 bool bvpl_create_edge3d_kernel_process(bprb_func_process& pro)

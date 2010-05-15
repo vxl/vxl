@@ -35,6 +35,7 @@ namespace bvpl_non_max_suppression_process_globals
 bool bvpl_non_max_suppression_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_non_max_suppression_process_globals;
+
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "bvxm_voxel_grid_base_sptr";
   input_types_[1] = "bvxm_voxel_grid_base_sptr";
@@ -43,7 +44,6 @@ bool bvpl_non_max_suppression_process_cons(bprb_func_process& pro)
 
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "bvxm_voxel_grid_base_sptr";
-
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }

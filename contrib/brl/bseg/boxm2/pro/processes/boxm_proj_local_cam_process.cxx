@@ -45,19 +45,20 @@ namespace boxm_proj_local_cam_process_globals
 bool boxm_proj_local_cam_process_cons(bprb_func_process& pro)
 {
   using namespace boxm_proj_local_cam_process_globals;
+
   vcl_vector<vcl_string> input_types_(n_inputs_);
   unsigned  i=0;
   input_types_[i++] = "vpgl_camera_double_sptr";   // rational camera
   input_types_[i++] = "float";   // x
   input_types_[i++] = "float";   // y
   input_types_[i++] = "float";   // z
-  unsigned j=0;
+
   vcl_vector<vcl_string> output_types_(n_outputs_);
+  unsigned j=0;
   output_types_[j++] = "float"; // u
   output_types_[j++] = "float"; // v
 
-  return pro.set_input_types(input_types_) &&
-         pro.set_output_types(output_types_);
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
 

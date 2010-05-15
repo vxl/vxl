@@ -141,25 +141,22 @@ namespace boxm_construct_scene_from_image_process_globals
 bool boxm_construct_scene_from_image_process_cons(bprb_func_process& pro)
 {
   using namespace boxm_construct_scene_from_image_process_globals;
+
+  vcl_vector<vcl_string> input_types_(n_inputs_);
   //input[0]: The image view
   //input[1]: appearance model type
   //input[2]: scene directory
   //input[3]: scene xml path
-  vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "vil_image_view_base_sptr";
   input_types_[1] = "vcl_string";
   input_types_[2] = "vcl_string";
   input_types_[3] = "vcl_string";
-  if (!pro.set_input_types(input_types_))
-    return false;
 
   vcl_vector<vcl_string> output_types_(n_outputs_);
   //output[0]: The scene
   output_types_[0]=  "boxm_scene_base_sptr";
-  if (!pro.set_output_types(output_types_))
-    return false;
 
-  return true;
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
 bool boxm_construct_scene_from_image_process(bprb_func_process& pro)
@@ -181,7 +178,7 @@ bool boxm_construct_scene_from_image_process(bprb_func_process& pro)
     vcl_cerr << "boxm_construct_scene_from_image_process: null image value, cannot run\n";
     return false;
   }
-  
+
   vil_image_view<float> img = *vil_convert_cast(float(), image);
   if (image->pixel_format() == VIL_PIXEL_FORMAT_BYTE)
     vil_math_scale_values(img,1.0/255.0);

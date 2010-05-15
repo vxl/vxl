@@ -34,19 +34,15 @@ namespace bvpl_create_scene_process_globals
 //:sets input and output types
 bool bvpl_create_scene_process_cons(bprb_func_process& pro)
 {
-  //set output types
   using namespace bvpl_create_scene_process_globals;
 
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "vcl_string";
-  if (!pro.set_input_types(input_types_))
-    return false;
 
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "boxm_scene_base_sptr";
-  if (!pro.set_output_types(output_types_))
-    return false;
-  return true;
+
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
 //:creates a scene from parameters

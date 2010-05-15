@@ -32,23 +32,22 @@ namespace boxm_generate_opt3_samples_process_globals
 bool boxm_generate_opt3_samples_process_cons(bprb_func_process& pro)
 {
   using namespace boxm_generate_opt3_samples_process_globals;
-  //process takes 4inputs
+
+  //process takes 5 inputs but has no outputs
   //input[0]: The observation image
   //input[1]: The camera of the observation
   //input[2]: The scene
   //input[3]: image name for saving scene
   //input[4]: use black background
   vcl_vector<vcl_string> input_types_(n_inputs_);
+  vcl_vector<vcl_string> output_types_(n_outputs_);
   input_types_[0] = "vil_image_view_base_sptr";
   input_types_[1] = "vpgl_camera_double_sptr";
   input_types_[2] = "boxm_scene_base_sptr";
   input_types_[3] = "vcl_string";
   input_types_[4] = "bool";
-  if (!pro.set_input_types(input_types_))
-    return false;
 
-  //no output
-  return true;
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
 bool boxm_generate_opt3_samples_process(bprb_func_process& pro)
@@ -76,7 +75,7 @@ bool boxm_generate_opt3_samples_process(bprb_func_process& pro)
 
   switch (scene->appearence_model())
   {
-  case BOXM_APM_SIMPLE_GREY:
+   case BOXM_APM_SIMPLE_GREY:
     {
       vil_image_view<vxl_byte> *img_byte
         = dynamic_cast<vil_image_view<vxl_byte>*>(input_image.ptr());
@@ -90,10 +89,9 @@ bool boxm_generate_opt3_samples_process(bprb_func_process& pro)
       }
       break;
     }
-  case BOXM_APM_MOG_GREY:
+   case BOXM_APM_MOG_GREY:
     {
-      vil_image_view<vxl_byte> *img_byte
-        = dynamic_cast<vil_image_view<vxl_byte>*>(input_image.ptr());
+      vil_image_view<vxl_byte> *img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(input_image.ptr());
       vil_image_view<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> img(img_byte->ni(), img_byte->nj(), 1);
       vil_convert_stretch_range_limited(*img_byte ,img, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
       if (!scene->multi_bin())
@@ -104,7 +102,7 @@ bool boxm_generate_opt3_samples_process(bprb_func_process& pro)
       }
       break;
     }
-  default:
+   default:
     {
       vcl_cout << "boxm_generate_opt3_samples_process: unsupported APM type" << vcl_endl;
       return false;

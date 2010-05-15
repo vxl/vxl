@@ -27,8 +27,9 @@ namespace bvxm_expectation_opinion_grid_process_globals
 //: set input and output types
 bool bvxm_expectation_opinion_grid_process_cons(bprb_func_process& pro)
 {
-    using namespace bvxm_expectation_opinion_grid_process_globals;
-  //This process has no inputs nor outputs only parameters
+  using namespace bvxm_expectation_opinion_grid_process_globals;
+
+  // process takes 3 inputs and has 1 output.
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0]="bvxm_voxel_grid_base_sptr";
   input_types_[1]="vcl_string"; //: output path for output grid
@@ -37,13 +38,8 @@ bool bvxm_expectation_opinion_grid_process_cons(bprb_func_process& pro)
   // No outputs to the database. The resulting grid is stored on disk
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0]="bvxm_voxel_grid_base_sptr";
-  if (!pro.set_input_types(input_types_))
-    return false;
 
-  if (!pro.set_output_types(output_types_))
-    return false;
-
-  return true;
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
 
@@ -64,23 +60,23 @@ bool bvxm_expectation_opinion_grid_process(bprb_func_process& pro)
 
   if (bvxm_voxel_grid<bvxm_opinion> * opinion_input_grid=dynamic_cast<bvxm_voxel_grid<bvxm_opinion> *>(input_grid.ptr()))
   {
-      bvxm_voxel_grid<float> * grid_out=new bvxm_voxel_grid<float>(output_path, opinion_input_grid->grid_size());
-      
-      if(output_type=="expectation")
-        bvxm_expectation_opinion_voxel_grid(opinion_input_grid, grid_out);
-      else if(output_type=="belief")
-        bvxm_belief_opinion_voxel_grid(opinion_input_grid, grid_out);
-      else
-      {
-          vcl_cout<<"Type Unexpected "<<vcl_endl;
-          return false;
-      }
-      vcl_cout<<"Expectation/Belief computed done."<<vcl_endl;
-      pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
+    bvxm_voxel_grid<float> * grid_out=new bvxm_voxel_grid<float>(output_path, opinion_input_grid->grid_size());
+
+    if (output_type=="expectation")
+      bvxm_expectation_opinion_voxel_grid(opinion_input_grid, grid_out);
+    else if (output_type=="belief")
+      bvxm_belief_opinion_voxel_grid(opinion_input_grid, grid_out);
+    else
+    {
+      vcl_cout<<"Type Unexpected"<<vcl_endl;
+      return false;
+    }
+    vcl_cout<<"Expectation/Belief computed done."<<vcl_endl;
+    pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
   }
   else
   {
-  vcl_cout<<"Error! Input grid type is Wrong!"<<vcl_endl;
+    vcl_cout<<"Error! Input grid type is Wrong!"<<vcl_endl;
   }
   return true;
 }

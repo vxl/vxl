@@ -28,12 +28,11 @@ namespace boxm_describe_scene_process_globals
 bool boxm_describe_scene_process_cons(bprb_func_process& pro)
 {
   using namespace boxm_describe_scene_process_globals;
+
   //process takes 1 input
   //input[0]: scene binary file
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm_scene_base_sptr";
-  if (!pro.set_input_types(input_types_))
-    return false;
 
   // process has 4 outputs:
   vcl_vector<vcl_string>  output_types_(n_outputs_);
@@ -41,9 +40,10 @@ bool boxm_describe_scene_process_cons(bprb_func_process& pro)
   output_types_[1] = "bsta_histogram_sptr"; // Sigma Histogram
   output_types_[2] = "bsta_histogram_sptr"; // Level Histogram
   output_types_[3] = "unsigned";            // Number of leaves
-  return true;
+
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
-//
+
 // This process produces four outputs
 //  1) The distribution of "Omega" values where Omega = 1-e^( alpha x length )
 //  2) The distribution of "Sigma" values where Sigma is the std_dev of

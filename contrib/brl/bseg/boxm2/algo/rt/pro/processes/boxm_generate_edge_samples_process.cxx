@@ -37,7 +37,8 @@ namespace boxm_generate_edge_samples_process_globals
 bool boxm_generate_edge_samples_process_cons(bprb_func_process& pro)
 {
   using namespace boxm_generate_edge_samples_process_globals;
-  //process takes 4 inputs
+
+  //process takes 5 inputs
   //input[0]: The cropped edge image
   //input[1]: The camera of the observation
   //input[2]: The scene
@@ -49,16 +50,13 @@ bool boxm_generate_edge_samples_process_cons(bprb_func_process& pro)
   input_types_[2] = "boxm_scene_base_sptr";
   input_types_[3] = "vcl_string";
   input_types_[4] = "float";
-  if (!pro.set_input_types(input_types_))
-    return false;
 
   //output
   unsigned j = 0;
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[j++] = "float"; // new n_normal value
-  if (!pro.set_output_types(output_types_))
-    return false;
-  return true;
+
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
 bool boxm_generate_edge_samples_process(bprb_func_process& pro)

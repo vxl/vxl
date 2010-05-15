@@ -29,6 +29,7 @@ namespace boxm_render_expected_depth_rt_process_globals
 bool boxm_render_expected_depth_rt_process_cons(bprb_func_process& pro)
 {
   using namespace boxm_render_expected_depth_rt_process_globals;
+
   //process takes 4 inputs
   //input[0]: scene binary file
   //input[1]: camera
@@ -39,19 +40,15 @@ bool boxm_render_expected_depth_rt_process_cons(bprb_func_process& pro)
   input_types_[1] = "vpgl_camera_double_sptr";
   input_types_[2] = "unsigned";
   input_types_[3] = "unsigned";
-  if (!pro.set_input_types(input_types_))
-    return false;
 
-  // process has 1 output:
+  // process has 2 outputs:
   // output[0]: rendered image
   // output[0]: mask
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";
   output_types_[1] = "vil_image_view_base_sptr";
-  if (!pro.set_output_types(output_types_))
-    return false;
 
-  return true;
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
 bool boxm_render_expected_depth_rt_process(bprb_func_process& pro)

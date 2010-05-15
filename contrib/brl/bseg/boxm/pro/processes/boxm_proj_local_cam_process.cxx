@@ -3,15 +3,15 @@
 //:
 // \file
 // \brief A class for clipping and image based on a 3D bounding box.
-//        -  Input:
+//        *  Input:
 //             - Image path (string)
 //             - boxm_voxel_world_sptr
 //
-//        -  Output:
+//        *  Output:
 //             - modified rational camera "vpgl_camera_double_sptr"
 //             - clipped image area (NITF) "vil_image_view_base_sptr"
 //
-//        -  Params:
+//        *  Params:
 //             -geographic uncertainty (error) in meters
 //
 // \author  Gamze D. Tunali
@@ -20,7 +20,6 @@
 //  Modifications
 //   Brandon Mayer - Jan 28, 2009 - converted process-class to function to conform with new boxm_process architecture.
 // \endverbatim
-
 
 #include <brip/brip_roi.h>
 
@@ -45,19 +44,20 @@ namespace boxm_proj_local_cam_process_globals
 bool boxm_proj_local_cam_process_cons(bprb_func_process& pro)
 {
   using namespace boxm_proj_local_cam_process_globals;
+
   vcl_vector<vcl_string> input_types_(n_inputs_);
   unsigned  i=0;
   input_types_[i++] = "vpgl_camera_double_sptr";   // rational camera
   input_types_[i++] = "float";   // x
   input_types_[i++] = "float";   // y
   input_types_[i++] = "float";   // z
-  unsigned j=0;
+
   vcl_vector<vcl_string> output_types_(n_outputs_);
+  unsigned j=0;
   output_types_[j++] = "float"; // u
   output_types_[j++] = "float"; // v
 
-  return pro.set_input_types(input_types_) &&
-         pro.set_output_types(output_types_);
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
 

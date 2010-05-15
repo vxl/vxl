@@ -38,24 +38,17 @@ namespace bvxm_load_grid_process_globals
 bool bvxm_load_grid_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_load_grid_process_globals;
-  //This process has no inputs nor outputs only parameters
+
+  // process takes 2 inputs and has 1 output.
   vcl_vector<vcl_string> input_types_(n_inputs_);
   unsigned i=0;
   input_types_[i++]="vcl_string"; //the input path
   input_types_[i++]="vcl_string";//the type e.g. "float","double"...
 
   vcl_vector<vcl_string> output_types_(n_outputs_);
-  i=0;
-  output_types_[i++]="bvxm_voxel_grid_base_sptr";  // The resulting grid
+  output_types_[0]="bvxm_voxel_grid_base_sptr";  // The resulting grid
 
-  vcl_cout<<input_types_.size();
-  if (!pro.set_input_types(input_types_))
-    return false;
-
-  if (!pro.set_output_types(output_types_))
-    return false;
-
-  return true;
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
 

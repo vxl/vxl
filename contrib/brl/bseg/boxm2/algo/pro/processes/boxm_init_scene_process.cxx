@@ -34,20 +34,23 @@
 //: global variables
 namespace boxm_init_scene_process_globals
 {
-  //this process takes no inputs
+  //this process takes no outputs
   const unsigned n_inputs_ = 1;
+  const unsigned n_outputs_ = 0;
 }
 
 //: sets input and output types
 bool boxm_init_scene_process_cons(bprb_func_process& pro)
 {
-  //set output types
   using namespace boxm_init_scene_process_globals;
-  //process takes 1 input and no outputs
+
+  // process takes 1 input and no outputs
   //input[0]: The scene
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm_scene_base_sptr";
-  return pro.set_input_types(input_types_);
+
+  vcl_vector<vcl_string> output_types_(n_outputs_);
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
 //: creates a scene from parameters

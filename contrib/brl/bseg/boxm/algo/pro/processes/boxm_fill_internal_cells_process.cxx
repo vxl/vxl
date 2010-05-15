@@ -30,6 +30,7 @@ namespace boxm_fill_internal_cells_process_globals
 bool boxm_fill_internal_cells_process_cons(bprb_func_process& pro)
 {
   using namespace boxm_fill_internal_cells_process_globals;
+
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm_scene_base_sptr";
 

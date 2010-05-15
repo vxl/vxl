@@ -28,7 +28,8 @@ namespace bvpl_create_wc_kernel_vector_process_globals
 bool bvpl_create_wc_kernel_vector_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_create_wc_kernel_vector_process_globals;
-  //process takes 3inputs
+
+  //process takes 7 inputs and 1 output
   // *input[0]: min length
   // *input[1]: max length
   // *input[2]: min width
@@ -46,15 +47,10 @@ bool bvpl_create_wc_kernel_vector_process_cons(bprb_func_process& pro)
   input_types_[5] = "int";
   input_types_[6] = "vcl_string";
 
-  if (!pro.set_input_types(input_types_))
-    return false;
-
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "bvpl_kernel_vector_sptr";
-  if (!pro.set_output_types(output_types_))
-    return false;
 
-  return true;
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
 bool bvpl_create_wc_kernel_vector_process(bprb_func_process& pro)
@@ -83,7 +79,7 @@ bool bvpl_create_wc_kernel_vector_process(bprb_func_process& pro)
   bvpl_neighborhood_kernel_factory factory(min_length, max_length,
                                            min_width, max_width,
                                            min_thickness, max_thickness);
-  
+
   if (dir_type == "main_corners") {
     bvpl_main_corner_dirs dir;
     bvpl_kernel_vector_sptr kernels = factory.create_kernel_vector(dir);
@@ -99,7 +95,7 @@ bool bvpl_create_wc_kernel_vector_process(bprb_func_process& pro)
     bvpl_kernel_vector_sptr kernels = factory.create_kernel_vector(dir);
     pro.set_output_val<bvpl_kernel_vector_sptr>(0, kernels);
   }
-  if(dir_type == "pi_over_2_corners"){
+  if (dir_type == "pi_over_2_corners") {
     bvpl_pi_over_2_corner_dirs dir;
     bvpl_kernel_vector_sptr kernels = factory.create_kernel_vector(dir);
     pro.set_output_val<bvpl_kernel_vector_sptr>(0, kernels);

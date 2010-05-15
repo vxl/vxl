@@ -31,7 +31,8 @@ namespace bvpl_crop_grid_process_globals
 bool bvxm_crop_grid_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_crop_grid_process_globals;
-  //This process has no inputs nor outputs only parameters
+
+  // process takes 2 inputs and has 1 output.
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0]="bvxm_voxel_grid_base_sptr"; //the input grid
   input_types_[1]="vcl_string"; //the path for output grid
@@ -39,13 +40,8 @@ bool bvxm_crop_grid_process_cons(bprb_func_process& pro)
   //The output grid
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0]="bvxm_voxel_grid_base_sptr";
-  if (!pro.set_input_types(input_types_))
-    return false;
 
-  if (!pro.set_output_types(output_types_))
-    return false;
-
-  return true;
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
 
@@ -173,14 +169,14 @@ bool bvxm_crop_grid_process(bprb_func_process& pro)
     unsigned slab_idx = corner_z;
     bvxm_voxel_grid<vnl_float_4>::iterator grid_in_it = four_input_grid->slab_iterator(slab_idx);
     bvxm_voxel_grid<vnl_float_4>::iterator grid_out_it = grid_out->slab_iterator(slab_idx - corner_z);
-    
+
     for (; slab_idx < (corner_z + dimz); ++grid_in_it, ++grid_out_it, ++slab_idx)
     {
       for (unsigned x = corner_x; x < corner_x + dimx; x++)
         for (unsigned y = corner_y; y < corner_y + dimy; y++)
           (*grid_out_it)(x-corner_x, y-corner_y) = (* grid_in_it)(x,y);
     }
-    
+
     vcl_cout<<"Cropping done."<<vcl_endl;
     pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
     return true;

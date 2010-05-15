@@ -52,6 +52,7 @@ namespace bvpl_vector_operator_process_globals
 bool bvpl_vector_operator_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_vector_operator_process_globals;
+
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "bvxm_voxel_grid_base_sptr";
   input_types_[1] = "bvpl_kernel_vector_sptr";

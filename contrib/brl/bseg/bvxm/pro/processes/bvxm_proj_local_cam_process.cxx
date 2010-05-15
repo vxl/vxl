@@ -45,17 +45,14 @@ namespace bvxm_proj_local_cam_process_globals
 bool bvxm_proj_local_cam_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_proj_local_cam_process_globals;
-  //this process takes 3 input:
-  //the filename of the image, the camera and the voxel world
+
+  //this process takes 4 inputs:
   vcl_vector<vcl_string> input_types_(n_inputs_);
   unsigned  i=0;
   input_types_[i++] = "vpgl_camera_double_sptr";   // rational camera
-  input_types_[i++] = "float";   // X
+  input_types_[i++] = "float";   // x
   input_types_[i++] = "float";   // y
   input_types_[i++] = "float";   // z
-
-  if (!pro.set_input_types(input_types_))
-    return false;
 
   //output
   unsigned j = 0;
@@ -63,7 +60,7 @@ bool bvxm_proj_local_cam_process_cons(bprb_func_process& pro)
   output_types_[j++] = "float"; // u
   output_types_[j++] = "float"; // v
 
-  return pro.set_output_types(output_types_);
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
 

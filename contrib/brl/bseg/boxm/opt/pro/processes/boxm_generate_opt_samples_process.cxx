@@ -26,13 +26,14 @@
 namespace boxm_generate_opt_samples_process_globals
 {
   const unsigned n_inputs_ = 5;
-  const unsigned n_outputs_ = 1;
+  const unsigned n_outputs_ = 0;
 }
 
 bool boxm_generate_opt_samples_process_cons(bprb_func_process& pro)
 {
   using namespace boxm_generate_opt_samples_process_globals;
-  //process takes 4inputs
+
+  //process takes 5 inputs and has no outputs
   //input[0]: The observation image
   //input[1]: The camera of the observation
   //input[2]: The scene
@@ -44,11 +45,9 @@ bool boxm_generate_opt_samples_process_cons(bprb_func_process& pro)
   input_types_[2] = "boxm_scene_base_sptr";
   input_types_[3] = "vcl_string";
   input_types_[4] = "bool";
-  if (!pro.set_input_types(input_types_))
-    return false;
 
-  //no output
-  return true;
+  vcl_vector<vcl_string> output_types_(n_outputs_);
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
 bool boxm_generate_opt_samples_process(bprb_func_process& pro)

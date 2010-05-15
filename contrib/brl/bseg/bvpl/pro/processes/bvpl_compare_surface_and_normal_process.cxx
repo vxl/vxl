@@ -29,30 +29,18 @@ namespace bvpl_compare_surface_and_normal_process_globals
 bool bvpl_compare_surface_and_normal_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_compare_surface_and_normal_process_globals;
-  //process takes 4inputs
-  //input[0]: The grid
-  //input[1]: The kernel vector
-  //input[2]: The grid type:
-  //          -float
-  //          -opinion
-  //          ....
-  //input[4]: The functor type
-  //input[5]: Output grid path to hold response
-  //input[6]: Output grid path to hold orientations
+
+  //process takes 3 inputs
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "bvxm_voxel_grid_base_sptr"; // distance transform of the gt
   input_types_[1] = "bvxm_voxel_grid_base_sptr"; // estimated response
   input_types_[2] = "vcl_string"; // path for the output grid
 
-  if (!pro.set_input_types(input_types_))
-    return false;
-
   //output
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "bvxm_voxel_grid_base_sptr";
-  if (!pro.set_output_types(output_types_))
-    return false;
-  return true;
+
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
 bool bvpl_compare_surface_and_normal_process(bprb_func_process& pro)

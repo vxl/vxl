@@ -29,18 +29,16 @@ namespace bvxm_grid_to_image_stack_process_globals
 bool bvxm_grid_to_image_stack_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_grid_to_image_stack_process_globals;
-  //This process has no inputs nor outputs only parameters
+
+  //process takes 3 inputs but has no outputs
   vcl_vector<vcl_string> input_types_(n_inputs_);
   unsigned i=0;
   input_types_[i++]="bvxm_voxel_grid_base_sptr"; //the inpud grid
   input_types_[i++]="vcl_string"; //the datatype e.g. "float","double", "vnl_vector_fixed_float_3"...
   input_types_[i++]="vcl_string"; //output directory
 
-  vcl_cout<<input_types_.size();
-  if (!pro.set_input_types(input_types_))
-    return false;
-
-  return true;
+  vcl_vector<vcl_string> output_types_(n_outputs_);
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
 

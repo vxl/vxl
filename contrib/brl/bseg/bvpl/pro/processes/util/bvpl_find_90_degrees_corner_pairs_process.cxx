@@ -37,6 +37,7 @@ namespace bvpl_find_corner_pairs_globals
 bool bvpl_find_corner_pairs_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_find_corner_pairs_globals;
+
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "bvxm_voxel_grid_base_sptr";
   input_types_[1] = "bvxm_voxel_grid_base_sptr";
@@ -67,7 +68,7 @@ bool bvpl_find_corner_pairs_process(bprb_func_process& pro)
   bvpl_kernel_vector_sptr search_kernels = pro.get_input<bvpl_kernel_vector_sptr>(2);
   bvpl_kernel_vector_sptr corner_kernels = pro.get_input<bvpl_kernel_vector_sptr>(3);
   vcl_string out_path = pro.get_input<vcl_string>(4);
- 
+
   vcl_cout << "No of Corner Kernels : " << corner_kernels->kernels_.size() << vcl_endl;
   if (!id_grid_base.ptr() || !response_grid_base.ptr() || !search_kernels.ptr() || !corner_kernels.ptr()) {
     vcl_cout <<  " :-- Grid is not valid!\n";
