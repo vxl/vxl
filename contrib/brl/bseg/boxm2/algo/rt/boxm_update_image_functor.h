@@ -165,4 +165,4 @@ void boxm_update_image_rt(boxm_scene<boct_tree<T_loc, T_data > > &scene,
     vcl_cerr << "DONE.\n";
 }
 
-#endif // boxm_update_image_functor_h
+#endif // boxm2_update_image_functor_h
