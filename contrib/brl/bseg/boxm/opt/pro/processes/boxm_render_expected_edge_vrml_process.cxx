@@ -33,7 +33,9 @@ namespace boxm_render_expected_edge_vrml_process_globals
 bool boxm_render_expected_edge_vrml_process_cons(bprb_func_process& pro)
 {
   using namespace boxm_render_expected_edge_vrml_process_globals;
-  //process takes 5 inputs
+  // process has no output:
+  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  //process takes 4 inputs:
   //input[0]: scene binary file
   //input[1]: the path for vrml file
   //input[2]: threshold
@@ -43,13 +45,7 @@ bool boxm_render_expected_edge_vrml_process_cons(bprb_func_process& pro)
   input_types_[1] = "vcl_string";
   input_types_[2] = "float";
   input_types_[3] = "int";
-  if (!pro.set_input_types(input_types_))
-    return false;
-
-  // process has no output:
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
-
-  return true;
+  return pro.set_input_types(input_types_);
 }
 
 bool boxm_render_expected_edge_vrml_process(bprb_func_process& pro)
@@ -57,7 +53,7 @@ bool boxm_render_expected_edge_vrml_process(bprb_func_process& pro)
   using namespace boxm_render_expected_edge_vrml_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cerr << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    vcl_cerr << pro.name() << ": The input number should be " << n_inputs_<< '\n';
     return false;
   }
 
@@ -65,7 +61,7 @@ bool boxm_render_expected_edge_vrml_process(bprb_func_process& pro)
   unsigned i = 0;
   boxm_scene_base_sptr scene_ptr = pro.get_input<boxm_scene_base_sptr>(i++);
   vcl_string path = pro.get_input<vcl_string>(i++);
-  float threshold = pro.get_input<float>(i++); 
+  float threshold = pro.get_input<float>(i++);
   int s = pro.get_input<int>(i++); // FIXME - unused!
 
   vcl_ofstream stream(path.c_str());
@@ -120,7 +116,7 @@ bool boxm_render_expected_edge_vrml_process(bprb_func_process& pro)
                       vgl_vector_3d<double> dir(p1-p0);
                       double length=dir.length();
                       dir/=length;
-					  vcl_cout<<data.residual_<<' ';
+                      vcl_cout<<data.residual_<<' ';
 
                       if (data.residual_<threshold)
                       {
