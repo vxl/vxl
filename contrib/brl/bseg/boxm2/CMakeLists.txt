@@ -22,7 +22,7 @@ AUX_SOURCE_DIRECTORY(Templates boxm2_sources)
 
 ADD_LIBRARY(boxm2  ${boxm2_sources})
 
-TARGET_LINK_LIBRARIES(boxm2 boct vgl_io vgl_xio vpgl vpgl_algo vsol expatpp vgl_algo vnl_algo vnl vgl vul vil vbl vsl vpl vcl)
+TARGET_LINK_LIBRARIES(boxm2 boct bsta vgl_io vgl_xio vpgl vpgl_algo vsol expatpp vgl_algo vnl_algo vnl vgl vul vil vbl vsl vpl vcl)
 
 #processes
 SUBDIRS(pro)
