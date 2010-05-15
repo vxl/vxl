@@ -64,9 +64,8 @@ bool boxm_render_expected_edge_vrml_process(bprb_func_process& pro)
   //get the inputs
   unsigned i = 0;
   boxm_scene_base_sptr scene_ptr = pro.get_input<boxm_scene_base_sptr>(i++);
-  //vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(i++);
   vcl_string path = pro.get_input<vcl_string>(i++);
-  float threshold = pro.get_input<float>(i++); // FIXME - currently unused!
+  float threshold = pro.get_input<float>(i++); 
   int s = pro.get_input<int>(i++); // FIXME - unused!
 
   vcl_ofstream stream(path.c_str());
@@ -121,7 +120,9 @@ bool boxm_render_expected_edge_vrml_process(bprb_func_process& pro)
                       vgl_vector_3d<double> dir(p1-p0);
                       double length=dir.length();
                       dir/=length;
-                      if (data.residual_<0.2)
+					  vcl_cout<<data.residual_<<' ';
+
+                      if (data.residual_<threshold)
                       {
                           vcl_cout<<data.residual_<<' ';
                           bvrml_write::write_vrml_line(stream, p0,dir,length,1.f,0.f,0.f);
