@@ -248,13 +248,13 @@ bool brec_part_hierarchy_detector::detect(vil_image_view<float>& img, vil_image_
 // check for existence of upper_p with central_p as its central part and map will tell if all the other parts exist
 brec_part_instance_sptr
 brec_part_hierarchy_detector::exists(brec_part_base_sptr upper_p,
-                                     brec_part_instance_sptr central_p, unsigned ni, unsigned nj,
+                                     brec_part_instance_sptr central_p, unsigned /*ni*/, unsigned /*nj*/, // FIXME - ni and nj unused
                                      Rtree_type* lower_rtree,
                                      float det_threshold)
 {
   // first check if types and layers of central_p instance matches with upper_p's info
   if (upper_p->central_part()->type_ != central_p->type_ || upper_p->layer_ != central_p->layer_ + 1) {
-    vcl_cout << "central_p instance passed is not compatible with the upper layer part passes\n";
+    vcl_cout << "central_p instance passed is not compatible with the upper layer part passed\n";
     return 0;
   }
 
