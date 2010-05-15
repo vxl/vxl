@@ -193,18 +193,20 @@ vgl_intersection(const vcl_list<vgl_plane_3d<T> >& planes, vcl_vector<T> ws,
                       static_cast<T>(ty),
                       static_cast<T>(tz));
   residual=T(0);
+  sum_ws=0;
   cnt=0;
   for (typename vcl_list<vgl_plane_3d<T> >::const_iterator pit = planes.begin();
        pit != planes.end(); ++pit)
   {
     double a = pit->normal().x(), b = pit->normal().y(), c = pit->normal().z();
-    residual+=ws[cnt]*(a*tx+b*ty+c*tz)*(a*tx+b*ty+c*tz);
+    residual+=ws[cnt]*ws[cnt]*(a*tx+b*ty+c*tz)*(a*tx+b*ty+c*tz);
+    sum_ws+=ws[cnt]*ws[cnt];
     cnt++;
   }
 
+if(cnt>0)
   residual/=sum_ws;
-  if (cnt>0)
-    residual=vcl_sqrt(residual);
+  residual=vcl_sqrt(residual);
   line=vgl_infinite_line_3d<T>(pt, tv);
   return true;
 }
