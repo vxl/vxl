@@ -54,7 +54,7 @@ else
   {
     die "VXLROOT is not defined, and no command line arguments were given";
   }
-  $FILES = `find $DIRS -type f \\\( -name \\\*.cxx -o -name \\\*.txx -o -name \\\*.cc -o -name \\\*.cpp -o -name \\\*.c -o -name \\\*.h \\\) -print`;
+  $FILES = qx(find $DIRS -type f \\\( -name \\\*.cxx -o -name \\\*.txx -o -name \\\*.cc -o -name \\\*.cpp -o -name \\\*.c -o -name \\\*.h -o -name \\\*.cl \\\) -print);
   @FILES = grep { ! m!/b3p/(minizip|shapelib|expatp*)/! } split /\s+/, $FILES;
 }
 
@@ -911,7 +911,7 @@ foreach $f (@FILES)
 
   if ($file =~ m!//\s*This\s+is\s+([^\s]+)\n!)
   {
-    $filename = $1; $pwd = `pwd`; chop($pwd);
+    $filename = $1; chop($pwd = `pwd`);
     $file_ = $f; $file_ = "$pwd/$f" unless $f =~ m!^/!;
     while ($file_ =~ m!/\.\./!) { $file_ =~ s![^/]+/\.\./!!g; }
     while ($file_ =~ m!/\./!) { $file_ =~ s!/\./!/!g; }
@@ -923,13 +923,32 @@ foreach $f (@FILES)
               ("$filename" eq "contrib/$file_" && !$printed));
   }
 
-# 13. Constant pi written as 3.1415...
-  &msg(1, "should maybe use vnl_math::pi instead of $1")
-    if ($f !~ m!\b(v[cuibg]l|v3p|vidl)\b/! && $f !~ m!\bcore/vnl/vnl_math\.! &&
-        $cpp_file && $file_s =~ m!\b(3\.14159\d*)!);
-  &msg(1, "should maybe use vnl_math::euler instead of $1")
-    if ($f !~ m!\b(v[cuibg]l|v3p|vidl)\b/! && $f !~ m!\bcore/vnl/vnl_math\.! &&
-        $cpp_file && $file_s =~ m!(0?\.5772[12]\d*)!);
+# 13. Constants pi, e, euler written as 3.1415..., 2.71828..., 0.5772...
+  %math_cst = ('3\.141[56]' => 'pi',
+               '1\.570[78]' => 'pi_over_2',
+               '0\.785[34]' => 'pi_over_4',
+               '0\.3183'    => 'one_over_pi',
+               '0\.6366'    => 'two_over_pi',
+               '1\.128[34]' => 'two_over_sqrtpi',
+               '0\.3989'    => 'one_over_sqrt2pi',
+               '0\.5772'    => 'euler',
+               '2\.718[23]' => 'e',
+               '1\.442[67]' => 'log2e',
+               '0\.434[23]' => 'log10e',
+               '0\.6931'    => 'ln2',
+               '2\.302[56]' => 'ln10',
+               '1\.4142'    => 'sqrt2',
+               '0\.7071'    => 'sqrt1_2');
+  foreach $cst (keys %math_cst) {
+    $name = $math_cst{$cst};
+    if (substr($cst,0,1) eq '0') { substr($cst,0,1) = '((\B|\b0)'; } else { $cst = '\b(' . $cst; }
+    $cst .= '\d*)\b';
+    &msg(1, "should maybe use vnl_math::$name instead of $1")
+      if ($f !~ m!\b(v[cuibg]l|v3p|vidl)\b/! && $f !~ m!\bcore/vnl/vnl_math\.! &&
+          $cpp_file && $file_s =~ m!$cst! &&
+          $f . $name !~ m!vnl/algo/vnl_rnpoly_solve.cxxlog10e$! &&
+          $f . $name !~ m!bbas/bsta/bsta_von_mises.txxone_over_sqrt2pi$!);
+  }
 
 # 14. Instantiation macro stuff
   &msg(1, "definition of $1 ends with ;")
@@ -1188,8 +1207,8 @@ foreach $f (@FILES)
     if ($cpp_file && $printed && $file_s =~ m!([^\"\# ] *\b|^)(_[a-z]\w*)(.)! && "$2$3" ne "_fmemset(" && "$2$3" ne "_declspec(" && $2 ne "_finddata_t");
 
 # 17. too long { ... } section with the "{" not on the start of a line
-  &msg(1, "has a block of more than 24 lines with the opening brace not on a line by itself")
-    if ($printed && $file =~ m!\S *\{ *\n( +)\S.*\n(\1.*\n){24}!);
+  &msg(1, "has a block of more than 52 lines with the opening brace not on a line by itself")
+    if ($printed && $file =~ m!\S *\{ *\n( +)\S.*\n(\1.*\n){52}!);
 }
 
 sub msg
