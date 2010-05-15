@@ -18,7 +18,6 @@ DECLARE_FUNC_CONS(boxm_proj_local_cam_process);
 DECLARE_FUNC_CONS(boxm_camera_viewing_scene_process);
 DECLARE_FUNC_CONS(boxm_upload_mesh_process);
 DECLARE_FUNC_CONS(boxm_replace_const_app_process);
-DECLARE_FUNC_CONS(boxm_opt_bayesian_update_process);
 DECLARE_FUNC_CONS(boxm_describe_scene_process);
 DECLARE_FUNC_CONS(boxm_construct_scene_from_image_process);
 DECLARE_FUNC_CONS(boxm_init_scene_process);
