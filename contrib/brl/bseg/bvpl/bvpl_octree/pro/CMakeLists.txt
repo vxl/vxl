@@ -12,7 +12,7 @@ SET(bvpl_octree_pro_sources
     bvpl_octree_register.h    bvpl_octree_register.cxx
    )
 
-#AUX_SOURCE_DIRECTORY(Templates bvpl_pro_sources)
+AUX_SOURCE_DIRECTORY(Templates bvpl_octree_pro_sources)
 AUX_SOURCE_DIRECTORY(processes bvpl_octree_pro_sources)
 
 ADD_LIBRARY(bvpl_octree_pro ${bvpl_octree_pro_sources})
