@@ -16,16 +16,18 @@
 
 
 //: The callback called by the scene manager to initiate a redraw
+//  Second argument might just be 0, since it's not used
 static void
-bgui3d_render_callback(void *tableau, SoSceneManager *mgr)
+bgui3d_render_callback(void *tableau, SoSceneManager* /*mgr*/)
 {
   bgui3d_tableau * tab = (bgui3d_tableau *) tableau;
   tab->request_render();
 }
 
 //: The callback called by the overlay scene manager to initiate a redraw
+//  Second argument might just be 0, since it's not used
 static void
-bgui3d_render_overlay_callback(void *tableau, SoSceneManager *mgr)
+bgui3d_render_overlay_callback(void *tableau, SoSceneManager * /*mgr*/)
 {
   bgui3d_tableau * tab = (bgui3d_tableau *) tableau;
   tab->request_render_overlay();
@@ -53,13 +55,10 @@ bgui3d_tableau::~bgui3d_tableau()
   if (overlay_scene_root_)
     overlay_scene_root_->unref();
 
-  //: Ming: no need to release memory of the SoSceneManager* scene_manager_
-  ///if (scene_manager_)
-  ///  delete scene_manager_;
-
-  //: Ming: no need to release memory of the SoSceneManager* overlay_scene_manager_
-  ///if (overlay_scene_manager_)
-  ///  delete overlay_scene_manager_;
+#if 0 // Ming: no need to release memory of the SoSceneManager* scene_manager_ & overlay_scene_manager_
+  if (scene_manager_)         delete scene_manager_;
+  if (overlay_scene_manager_) delete overlay_scene_manager_;
+#endif // 0
 }
 
 
