@@ -28,7 +28,8 @@ bool boxm_plane_ransac(vcl_vector<boxm_edge_tangent_sample<T> > aux_samples,
   line=vgl_infinite_line_3d<T>(vgl_vector_2d<T>(-10000,-10000),vgl_vector_3d<T>(0,0,1));
   vcl_vector<T> ws;
   bool set=false;
-  for (unsigned iter=0; iter<ITER_MAX; iter++) {
+  for (unsigned iter=0; iter<ITER_MAX; ++iter)
+  {
       fit_planes.clear();
       ws.clear();
       // select two imgs randomly
@@ -46,7 +47,8 @@ bool boxm_plane_ransac(vcl_vector<boxm_edge_tangent_sample<T> > aux_samples,
       vgl_plane_3d<T> plane2 = aux_samples[index2].obs(index2_1).plane_;
 
       vgl_infinite_line_3d<T> inters_line;
-      if (vgl_intersection(plane1, plane2, inters_line)) {
+      if (vgl_intersection(plane1, plane2, inters_line))
+      {
           vgl_vector_3d<T> line_dir = inters_line.direction();
           //vcl_cout<<"Line dir "<<line_dir;
           int cnt_imgs=0;
@@ -84,7 +86,7 @@ bool boxm_plane_ransac(vcl_vector<boxm_edge_tangent_sample<T> > aux_samples,
 
 
           // intersect the selected planes
-       if (cnt_imgs > threshold ) {
+          if (cnt_imgs > (int)threshold ) {
               T res=0;
               vgl_infinite_line_3d<T> l;
               bool good = vgl_intersection(fit_planes, ws, l, res);
