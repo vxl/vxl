@@ -156,8 +156,8 @@ class bmsh3d_ifs_mesh : public bmsh3d_pt_set
   virtual bmsh3d_face_mc* _new_mc_face() { return new bmsh3d_face_mc(face_id_counter_++); }
 
   virtual void _del_face(bmsh3d_face* F) { delete F; }
-  void _add_face(const bmsh3d_face* F) {
-    facemap_.insert(vcl_pair<int, bmsh3d_face*>(F->id(), (bmsh3d_face*)F)); // casting away const!
+  void _add_face(bmsh3d_face* F) {
+    facemap_.insert(vcl_pair<int, bmsh3d_face*>(F->id(), (bmsh3d_face*)F));
   }
 
   //###### Other functions ######
