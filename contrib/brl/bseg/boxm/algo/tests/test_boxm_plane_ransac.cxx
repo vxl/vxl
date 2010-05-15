@@ -60,10 +60,13 @@ static void test_boxm_plane_ransac()
   int threshold=2;
   float residual;
   vgl_infinite_line_3d<float> l;
-  vgl_box_3d<double> cell_global_box(0,0,0,1,1,1);
+  vgl_box_3d<double> cell_global_box(18,15,5,32,25,15);
   boxm_plane_ransac<float>(planes, weights, l, residual, cell_global_box, threshold);
 
-  bool good=(line==l);
+  bool good=false;
+
+  if((l.x0()-line.x0()).sqr_length()<1e-4 && (l.direction()-line.direction()).sqr_length()<1e-4 )
+	  good=true;
 
   TEST("test_boxm_plane_ransac: found the right plane set", good, true);
 }

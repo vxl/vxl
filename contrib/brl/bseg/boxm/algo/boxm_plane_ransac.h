@@ -78,11 +78,8 @@ bool boxm_plane_ransac(vcl_vector<boxm_edge_tangent_sample<T> > aux_samples,
 							}
 						}
 					}
-
 					if (flag)
-					{
 						cnt_imgs++;
-					}
 				}
 			}
 
