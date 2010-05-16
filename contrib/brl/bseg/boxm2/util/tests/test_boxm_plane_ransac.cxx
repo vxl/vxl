@@ -9,9 +9,9 @@
 // \date   March 25, 2010
 
 #include <testlib/testlib_test.h>
-#include <boxm/algo/boxm_plane_ransac.h>
-#include <boxm/boxm_plane_obs.h>
-#include <boxm/boxm_edge_tangent_sample.h>
+#include <boxm2/util/boxm_plane_ransac.h>
+#include <boxm2/sample/boxm_plane_obs.h>
+#include <boxm2/sample/boxm_edge_tangent_sample.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_infinite_line_3d.h>
 #include <vnl/vnl_random.h>
@@ -63,10 +63,7 @@ static void test_boxm_plane_ransac()
   vgl_box_3d<double> cell_global_box(18,15,5,32,25,15);
   boxm_plane_ransac<float>(planes, weights, l, residual, cell_global_box, threshold);
 
-  bool good=false;
-
-  if((l.x0()-line.x0()).sqr_length()<1e-4 && (l.direction()-line.direction()).sqr_length()<1e-4 )
-	  good=true;
+  bool good= (l.x0()-line.x0()).sqr_length()<1e-4 && (l.direction()-line.direction()).sqr_length()<1e-4;
 
   TEST("test_boxm_plane_ransac: found the right plane set", good, true);
 }
