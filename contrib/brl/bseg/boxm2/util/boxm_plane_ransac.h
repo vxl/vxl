@@ -8,8 +8,8 @@
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_closest_point.h>
-#include <boxm/boxm_apm_traits.h>
-#include <boxm/boxm_edge_tangent_sample.h>
+#include <boxm2/boxm_apm_traits.h>
+#include <boxm2/sample/boxm_edge_tangent_sample.h>
 #include <vcl_cstdlib.h> // for rand()
 #include <vcl_iostream.h>
 #include <vcl_list.h>
