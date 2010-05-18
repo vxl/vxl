@@ -35,6 +35,9 @@ SUBDIRS(bil)
 # Brown VRML utilities library
 SUBDIRS(bvrml)
 
+# Brown opencl library
+#SUBDIRS(bocl)
+
 IF( BUILD_GEL )
   # spatial object algorithms
   SUBDIRS(bsol)
