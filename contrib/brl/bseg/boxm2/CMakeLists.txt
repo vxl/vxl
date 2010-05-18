@@ -39,6 +39,9 @@ SUBDIRS(algo)
 #basic structures
 SUBDIRS(basic)
 
+#openCL
+SUBDIRS(ocl)
+
 #tests
 IF( BUILD_TESTING )
   SUBDIRS(tests)
