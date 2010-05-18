@@ -1,17 +1,13 @@
 USES += contrib/brl contrib/brl/bbas contrib/brl/bseg core
 
-LIBRARY := boxm
+LIBRARY := boxm2-ocl
 
-MANPAGE_SOURCES += boxm_aux_traits.h
-SOURCES += boxm_scene_base.cxx
-SOURCES += boxm_scene_parser.cxx
-SOURCES += boxm_io_scene_base.cxx
-SOURCES += boxm_apm_traits.cxx
-MANPAGE_SOURCES += boxm_scene.txx
-MANPAGE_SOURCES += boxm_block.txx
-MANPAGE_SOURCES += boxm_aux_scene.txx
+SOURCES += boxm_ocl_utils.cxx
+SOURCES += octree_library_functions.cl
+MANPAGE_SOURCES += boxm_ray_trace_manager.txx
+MANPAGE_SOURCES += boxm_ocl_render_expected.h
 
-SUBDIRS += basic algo pro sample util ocl
+SUBDIRS += pro
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
