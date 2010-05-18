@@ -149,6 +149,9 @@ SOURCE=.\processes/boxm_roi_init_rational_camera_process.cxx
 # Begin Source File
 SOURCE=.\Templates/brdb_value_t+boxm_scene_base_sptr-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/brdb_value_t+vil_image_view_base_sptr-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

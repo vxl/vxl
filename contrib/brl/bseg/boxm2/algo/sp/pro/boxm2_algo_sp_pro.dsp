@@ -106,9 +106,6 @@ SOURCE=.\processes/boxm_volume_visibility_process.cxx
 # Begin Source File
 SOURCE=.\processes/boxm_render_expected_process.cxx
 # End Source File
-# Begin Source File
-SOURCE=.\processes/boxm_render_expected_edge_vrml_process.cxx
-# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h"
