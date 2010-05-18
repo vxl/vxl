@@ -10,6 +10,9 @@
 #include <boxm2/algo/pro/boxm_algo_register.h>
 #include <boxm2/algo/rt/pro/boxm_algo_rt_register.h>
 #include <boxm2/algo/sp/pro/boxm_algo_sp_register.h>
+#if (HAS_OPENGL)
+#include <boxm2/ocl/pro/boxm_ocl_register.h>
+#endif
 #include <bvpl/bvpl_octree/pro/bvpl_octree_register.h>
 #include <bsta/pro/bsta_register.h>
 
@@ -22,7 +25,9 @@ register_processes(PyObject *self, PyObject *args)
   boxm_algo_rt_register::register_process();
   boxm_algo_sp_register::register_process();
   sdet_register::register_process();
-  //bvxm_grid_register::register_process();
+#if (HAS_OPENGL)
+  boxm_ocl_register::register_process();
+#endif
   bvpl_octree_register::register_process();
   Py_INCREF(Py_None);
   return Py_None;
@@ -37,6 +42,9 @@ register_datatypes(PyObject *self, PyObject *args)
   boxm_register::register_datatype();
   boxm_algo_rt_register::register_datatype();
   boxm_algo_sp_register::register_datatype();
+#if (HAS_OPENGL)
+  boxm_ocl_register::register_datatype();
+#endif
   bvpl_octree_register::register_datatype();
   bsta_register::register_datatype();
   Py_INCREF(Py_None);

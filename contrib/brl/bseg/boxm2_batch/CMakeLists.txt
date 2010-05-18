@@ -35,9 +35,9 @@ IF( PYTHON_FOUND )
 
     TARGET_LINK_LIBRARIES(boxm2_batch bpro_batch boxm2_pro boxm2_algo_rt_pro boxm2_algo_sp_pro boxm2_algo_pro vpgl_io vpgl_pro vil_io vil_pro sdet_pro bvpl_octree_pro bsta_pro)
 
-    #IF(OPENCL_FOUND)
-    #  TARGET_LINK_LIBRARIES(boxm2_batch boxm2_opt_opencl_pro)
-    #ENDIF(OPENCL_FOUND)
+    IF(OPENCL_FOUND)
+      TARGET_LINK_LIBRARIES(boxm2_batch boxm2_ocl_pro)
+    ENDIF(OPENCL_FOUND)
   
     IF (PYTHON_DEBUG_LIBRARIES)
       TARGET_LINK_LIBRARIES( boxm2_batch debug ${PYTHON_DEBUG_LIBRARY})
