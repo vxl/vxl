@@ -27,7 +27,7 @@ AUX_SOURCE_DIRECTORY(Templates bvpl_octree_sources)
 
 ADD_LIBRARY(bvpl_octree ${bvpl_octree_sources})
 
-TARGET_LINK_LIBRARIES(bvpl_octree bvpl bvrml boxm boct boxm_io vbl)
+TARGET_LINK_LIBRARIES(bvpl_octree bvpl bvrml boxm boct vbl)
 
 #Directory with python/c++ processes
 SUBDIRS(pro)
