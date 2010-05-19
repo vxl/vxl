@@ -22,7 +22,7 @@
 #include <boxm/boxm_scene_base.h>
 #include <boxm/boxm_scene.h>
 
-#include <boxm/boxm_inf_line_sample.h>
+#include <boxm/sample/boxm_inf_line_sample.h>
 
 #include <bvpl/bvpl_neighb_operator.h>
 #include <bvpl/bvpl_kernel_iterator.h>
