@@ -6,12 +6,12 @@
 #include <vil_pro/vil_register.h>
 #include <vpgl_pro/vpgl_register.h>
 #include <sdet_pro/sdet_register.h>
-#include <boxm2/pro/boxm_register.h>
-#include <boxm2/algo/pro/boxm_algo_register.h>
-#include <boxm2/algo/rt/pro/boxm_algo_rt_register.h>
-#include <boxm2/algo/sp/pro/boxm_algo_sp_register.h>
+#include <boxm/pro/boxm_register.h>
+#include <boxm/algo/pro/boxm_algo_register.h>
+#include <boxm/algo/rt/pro/boxm_algo_rt_register.h>
+#include <boxm/algo/sp/pro/boxm_algo_sp_register.h>
 #if (HAS_OPENGL)
-#include <boxm2/ocl/pro/boxm_ocl_register.h>
+#include <boxm/ocl/pro/boxm_ocl_register.h>
 #endif
 #include <bvpl/bvpl_octree/pro/bvpl_octree_register.h>
 #include <bsta/pro/bsta_register.h>
@@ -52,7 +52,7 @@ register_datatypes(PyObject *self, PyObject *args)
 }
 
 PyMODINIT_FUNC
-initboxm2_batch(void)
+initboxm_batch(void)
 {
   PyMethodDef reg_pro;
   reg_pro.ml_name = "register_processes";
@@ -67,12 +67,12 @@ initboxm2_batch(void)
   reg_data.ml_doc = "register_datatypes() insert tables in the database for each type";
   reg_data.ml_flags = METH_VARARGS;
 
-  boxm2_batch_methods[0]=reg_pro;
-  boxm2_batch_methods[1]=reg_data;
+  boxm_batch_methods[0]=reg_pro;
+  boxm_batch_methods[1]=reg_data;
 
   for (int i=0; i<METHOD_NUM; ++i) {
-    boxm2_batch_methods[i+2]=batch_methods[i];
+    boxm_batch_methods[i+2]=batch_methods[i];
   }
 
-  Py_InitModule("boxm2_batch", boxm2_batch_methods);
+  Py_InitModule("boxm_batch", boxm_batch_methods);
 }
