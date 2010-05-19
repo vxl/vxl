@@ -15,7 +15,7 @@
 #include <boct/boct_tree_cell.h>
 #include <bsta/bsta_attributes.h>
 #include <bsta/bsta_gauss_f1.h>
-#include <boxm2/sample/boxm_scalar_sample.h>
+#include <boxm/sample/boxm_scalar_sample.h>
 
 //: Float to float
 template <class T_loc>
