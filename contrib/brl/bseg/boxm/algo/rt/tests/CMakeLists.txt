@@ -1,0 +1,13 @@
+ADD_EXECUTABLE( boxm_algo_rt_test_all
+  test_driver.cxx
+  test_bayesian_optimizer.cxx
+  test_edges.cxx
+ )
+
+TARGET_LINK_LIBRARIES( boxm_algo_rt_test_all boxm_algo_rt boxm boxm_util boxm_sample boct testlib vpl vul)
+
+ADD_TEST( boxm_test_bayesian_optimizer ${EXECUTABLE_OUTPUT_PATH}/boxm_algo_rt_test_all test_bayesian_optimizer  )
+ADD_TEST( boxm_test_edges              ${EXECUTABLE_OUTPUT_PATH}/boxm_algo_rt_test_all test_edges  )
+
+ADD_EXECUTABLE( boxm_algo_rt_test_include test_include.cxx )
+TARGET_LINK_LIBRARIES( boxm_algo_rt_test_include boxm_algo_rt)
