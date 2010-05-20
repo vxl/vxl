@@ -6,8 +6,7 @@
 #include <bvpl/pro/bvpl_register.h>
 #include <bvpl/bvpl_octree/pro/bvpl_octree_register.h>
 #include <boxm/pro/boxm_register.h>
-#include <boxm/opt/pro/boxm_opt_register.h>
-#include <boxm/algo/pro/boxm_algo_register.h>
+#include <boxm/algo/rt/pro/boxm_opt_register.h>
 #include <bvxm/grid/pro/bvxm_grid_register.h>
 #include <vpgl_pro/vpgl_register.h>
 
@@ -17,7 +16,7 @@ register_processes(PyObject *self, PyObject *args)
   bvpl_register::register_process();
   bvpl_octree_register::register_process();
   boxm_register::register_process();
-  boxm_opt_register::register_process();
+  boxm_algo_rt_register::register_process();
   boxm_algo_register::register_process();
   bvxm_grid_register::register_process();
   vpgl_register::register_process();
@@ -32,7 +31,7 @@ register_datatypes(PyObject *self, PyObject *args)
   bvpl_register::register_datatype();
   bvpl_octree_register::register_datatype();
   boxm_register::register_datatype();
-  boxm_opt_register::register_datatype();
+  boxm_algo_rt_register::register_datatype();
   boxm_algo_register::register_datatype();
   bvxm_grid_register::register_datatype();
   vpgl_register::register_datatype();
