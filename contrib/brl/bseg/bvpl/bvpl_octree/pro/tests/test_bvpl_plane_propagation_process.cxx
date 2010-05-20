@@ -27,7 +27,7 @@
 #include <boct/boct_tree.h>
 
 #include <boxm/boxm_scene.h>
-#include <boxm/boxm_edge_tangent_sample.h>
+#include <boxm/sample/boxm_edge_tangent_sample.h>
 #include <bvpl/bvpl_octree/pro/bvpl_octree_processes.h>
 #include <vpl/vpl.h>
 #include <vul/vul_file.h>
