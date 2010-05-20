@@ -1,10 +1,10 @@
-#ifndef boxm2_change_3d_functor_h
-#define boxm2_change_3d_functor_h
+#ifndef boxm_change_3d_functor_h
+#define boxm_change_3d_functor_h
 //:
 // \file
-#include <boxm2/boxm_apm_traits.h>
-#include <boxm2/basic/boxm_raytrace_function.h>
-#include <boxm2/sample/boxm_scalar_sample.h>
+#include <boxm/boxm_apm_traits.h>
+#include <boxm/basic/boxm_raytrace_function.h>
+#include <boxm/sample/boxm_scalar_sample.h>
 #include <vcl_iostream.h>
 
 
@@ -94,4 +94,4 @@ void boxm_change_3d(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   vcl_cout<<"Change 3-d Done."<<vcl_endl;
 }
 
-#endif // boxm2_change_3d_functor_h
+#endif // boxm_change_3d_functor_h
