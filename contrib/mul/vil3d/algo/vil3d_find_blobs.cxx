@@ -58,7 +58,7 @@ void vil3d_find_blobs(const vil3d_image_view<bool>& src,
           unsigned ii = i + neighbourhood_ii[l];
           if (ii >= ni) continue; // rely on wraparound to find -ne overruns.
           unsigned jj = j + neighbourhood_jj[l];
-          if (jj >= ni) continue;
+          if (jj >= nj) continue;
           unsigned kk = k + neighbourhood_kk[l];
           if (kk >= nk) continue;
           unsigned d = dst(ii,jj,kk);
