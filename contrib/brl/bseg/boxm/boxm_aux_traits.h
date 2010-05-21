@@ -20,7 +20,8 @@ enum boxm_aux_type
   BOXM_AUX_OPT2_GREY,
   BOXM_AUX_OPT2_RGB,
   BOXM_AUX_OPT3_MOG_GREY,
-  BOXM_AUX_OPT3_MOG_RGB
+  BOXM_AUX_OPT3_MOG_RGB,
+  BOXM_AUX_SCALAR_SAMPLE
 };
 
 //: sample properties for templates.
@@ -55,5 +56,14 @@ class boxm_aux_traits<BOXM_AUX_NULL>
 
   static vcl_string storage_subdir() { return "null"; }
 };
+template<>
+class boxm_aux_traits<BOXM_AUX_SCALAR_SAMPLE>
+{
+ public:
+  typedef float sample_datatype;
+
+  static vcl_string storage_subdir() { return "scalar"; }
+};
+
 
 #endif // boxm_aux_traits_h_
