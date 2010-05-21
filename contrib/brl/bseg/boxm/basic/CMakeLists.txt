@@ -6,6 +6,7 @@ SET(boxm_basic_sources
    boxm_cell_vis_graph_iterator.h      boxm_cell_vis_graph_iterator.txx
    boxm_raytrace_function.h
    boxm_seg_length_functor.h
+   boxm_num_rays_functor.h
    dummy.cxx
    )
 
