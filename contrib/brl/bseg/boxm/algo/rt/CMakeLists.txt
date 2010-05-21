@@ -22,6 +22,7 @@ SET(boxm_algo_rt_sources
     boxm_rpc_registration.h
     boxm_sun_vis_prob_functor.h
     boxm_update_image_functor.h
+    boxm_compute_num_rays_statistics.h
     dummy.cxx
    )
 
