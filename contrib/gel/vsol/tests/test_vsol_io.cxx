@@ -40,6 +40,8 @@
 #include <vsol/vsol_digital_curve_2d_sptr.h>
 #include <vsol/vsol_digital_curve_2d.h>
 
+#include <vnl/vnl_math.h>
+
 void test_vsol_io()
 {
   vsl_add_to_binary_loader(vsol_point_2d());
@@ -415,7 +417,7 @@ void test_vsol_io()
   vsl_b_ofstream cc_out("test_conic_2d_io.tmp");
   TEST("Created test_conic_2d_io.tmp for writing",(!cc_out), false);
   vsol_point_2d_sptr pc0 = new vsol_point_2d(0, 1);
-  vsol_point_2d_sptr pc1 = new vsol_point_2d(0.707107,0.707107);
+  vsol_point_2d_sptr pc1 = new vsol_point_2d(vnl_math::sqrt1_2,vnl_math::sqrt1_2);
   vsol_conic_2d_sptr conic = new vsol_conic_2d(1, 0, 1, 0, 0, -1);
   conic->set_p0(pc0); conic->set_p1(pc1);
   vcl_cout << "Writing conic " << *conic << '\n';
