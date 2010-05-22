@@ -105,7 +105,7 @@ SOURCE=.\processes/boxm_generate_opt3_samples_process.cxx
 SOURCE=.\processes/boxm_render_expected_depth_rt_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\processes/boxm_ray_statisitcs_process.cxx
+SOURCE=.\processes/boxm_ray_statistics_process.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\processes/boxm_generate_edge_samples_process.cxx
