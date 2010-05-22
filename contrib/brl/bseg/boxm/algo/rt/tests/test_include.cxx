@@ -1,5 +1,6 @@
 #include <boxm/algo/rt/boxm_change_3d_functor.h>
 #include <boxm/algo/rt/boxm_change_probability_functor.h>
+#include <boxm/algo/rt/boxm_compute_num_rays_statistics.h>
 #include <boxm/algo/rt/boxm_edge_tangent_updater.h>
 #include <boxm/algo/rt/boxm_edge_updater.h>
 #include <boxm/algo/rt/boxm_generate_edge_sample_functor.h>
