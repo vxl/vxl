@@ -947,6 +947,10 @@ foreach $f (@FILES)
       if ($f !~ m!\b(v[cuibg]l|v3p|vidl)\b/! && $f !~ m!\bcore/vnl/vnl_math\.! &&
           $cpp_file && $file_s =~ m!$cst! &&
           $f . $name !~ m!vnl/algo/vnl_rnpoly_solve.cxxlog10e$! &&
+          $f . $name !~ m!vgui/tests/test_popup.cxxe$! &&
+          $f . $name !~ m!vnl/algo/vnl_rnpoly_solve.cxxlog10e$! &&
+          $f . $name !~ m!bbas/bsta/algo/tests/test_von_mises_update.cxxpi$! &&
+          $f . $name !~ m!bbas/bsta/bsta_von_mises.txxone_over_sqrt2pi$! &&
           $f . $name !~ m!bbas/bsta/bsta_von_mises.txxone_over_sqrt2pi$!);
   }
 
