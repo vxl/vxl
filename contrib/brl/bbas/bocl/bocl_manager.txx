@@ -75,39 +75,37 @@ bool bocl_manager<T>::initialize_cl()
 
   cl_device_id device;
   //: First checking for GPU
-  for(unsigned i=0;i<num_platforms;i++)
+  for (unsigned i=0;i<num_platforms;i++)
   {
-	  if( clGetDeviceIDs(platform_id[i], CL_DEVICE_TYPE_GPU, 1, &device, NULL)== CL_SUCCESS)
-	  {
-		gpu_found=true;
-		break;
-	  }
-
+    if ( clGetDeviceIDs(platform_id[i], CL_DEVICE_TYPE_GPU, 1, &device, NULL)== CL_SUCCESS)
+    {
+      gpu_found=true;
+      break;
+    }
   }
   //: If GPU not found then look for CPU
-  if(!gpu_found)
+  if (!gpu_found)
   {
-    for(unsigned i=0;i<num_platforms;i++)
-  {
-	  if( clGetDeviceIDs(platform_id[i], CL_DEVICE_TYPE_CPU, 1, &device, NULL)== CL_SUCCESS)
-	  {
-	  cpu_found=true;
-		break;
-	  }
-
-  }
+    for (unsigned i=0;i<num_platforms;i++)
+    {
+      if ( clGetDeviceIDs(platform_id[i], CL_DEVICE_TYPE_CPU, 1, &device, NULL)== CL_SUCCESS)
+      {
+        cpu_found=true;
+        break;
+      }
+    }
   }
   // get an available GPU device from the the platform
   // should we be using all if more than one avaiable?
 
-   if(!gpu_found && !cpu_found)
-	return false;
+  if (!gpu_found && !cpu_found)
+    return false;
+
   //Create a context from the device ID
   context_ = clCreateContext(0, 1, &device, NULL, NULL, &status);
   if (!this->check_val(status,CL_SUCCESS,"clCreateContextFromType failed.")) {
     return false;
   }
-
 
   vcl_size_t device_list_size = 0;
   // First, get the size of device list data
@@ -261,8 +259,8 @@ bool bocl_manager<T>::initialize_cl()
            << " Number of devices: " << number_devices_ << '\n'
            << " Number of compute units: " << max_compute_units_ << '\n'
            << " Maximum clock frequency: " << max_clock_freq_/1000.0 << " GHz\n"
-           <<" Total global memory: "<<total_global_memory_/ 1073741824.0 /* 2^30 */ << " GBytes\n"
-           <<" Total local memory: "<< total_local_memory_/1024.0 << " KBytes\n"
+           << " Total global memory: "<<total_global_memory_/ 1073741824.0 /* 2^30 */ << " GBytes\n"
+           << " Total local memory: "<< total_local_memory_/1024.0 << " KBytes\n"
            << " Maximum work group size: " << max_work_group_size_ << '\n'
            << " Maximum work item sizes: (" << (cl_uint)max_work_item_sizes_[0]/size << ','
            << (cl_uint)max_work_item_sizes_[1]/size << ','
