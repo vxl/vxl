@@ -7,16 +7,15 @@
 #include <boxm/basic/boxm_num_rays_functor.h>
 #include <boxm/sample/boxm_scalar_sample.h>
 
-
 template <class T_loc, class T_data>
 bool compute_ray_statistics(boxm_scene<boct_tree<T_loc, T_data > >& scene,
-							vpgl_camera_double_sptr cam, 
-							bsta_histogram<float>& num_rays_hist,
-							unsigned ni, unsigned nj)
+                            vpgl_camera_double_sptr cam,
+                            bsta_histogram<float>& num_rays_hist,
+                            unsigned ni, unsigned nj)
 {
   typedef boxm_aux_traits<BOXM_AUX_SCALAR_SAMPLE>::sample_datatype sample_datatype;
   boxm_aux_scene<T_loc, T_data,boxm_scalar_sample<sample_datatype> > aux_scene(&scene,boxm_aux_traits<BOXM_AUX_SCALAR_SAMPLE>::storage_subdir(), boxm_aux_scene<T_loc, T_data,boxm_scalar_sample<sample_datatype> >::CLONE);
- 
+
   typedef boxm_num_rays_functor<T_data::apm_type,boxm_scalar_sample<sample_datatype> > functor_type;
   boxm_raytrace_function<functor_type,T_loc, T_data,boxm_scalar_sample<sample_datatype> > raytracer(scene,aux_scene,cam.ptr(),ni,nj);
   functor_type num_rays_functor;
@@ -32,7 +31,7 @@ bool compute_ray_statistics(boxm_scene<boct_tree<T_loc, T_data > >& scene,
   boxm_block_iterator<tree_type> bit = scene.iterator();
   float avg_rays=0;
   float num_cells=0;
-  for (;!bit.end(); ++bit)
+  for (; !bit.end(); ++bit)
   {
     vgl_point_3d<int> block_index = bit.index();
     //aux_scene.load_block(block_index);
@@ -44,26 +43,21 @@ bool compute_ray_statistics(boxm_scene<boct_tree<T_loc, T_data > >& scene,
     {
       boxm_scalar_sample<sample_datatype>  data = (*cit)->data();
       num_rays_hist.upcount(static_cast<float>(data.scalar_sum_), 1.0f);
-	  avg_rays+=data.scalar_sum_;
-	  num_cells++;
+      avg_rays+=data.scalar_sum_;
+      num_cells++;
     }
   }
 
   //aux_scene.clean_scene();
-  vcl_cout<<"Avg num of rays per cell "<<avg_rays/num_cells<<vcl_endl;
-  vcl_cout<< "[" << "#rays" << "]=" << "Frequency" << '\n';
+  vcl_cout<<"Avg num of rays per cell "<<avg_rays/num_cells<<vcl_endl
+          << "[#rays]=Frequency" << '\n';
 
   for (unsigned int i=0; i<num_rays_hist.nbins(); i++)
   {
-	  vcl_cout<< "[" << num_rays_hist.avg_bin_value(i) << "]=" << num_rays_hist.counts(i) << '\n';
-
+      vcl_cout<< '[' << num_rays_hist.avg_bin_value(i) << "]=" << num_rays_hist.counts(i) << '\n';
   }
 
   return true;
 }
 
-
 #endif
-
-
-

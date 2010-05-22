@@ -1,13 +1,15 @@
 #ifndef boxm_num_rays_functor_h
 #define boxm_num_rays_functor_h
-
+//:
+// \file
 #include <boxm/boxm_scene.h>
 #include <vcl_iostream.h>
 #include <bsta/bsta_histogram.h>
 #include <boxm/boxm_apm_traits.h>
 #include "boxm_raytrace_function.h"
-//: this functor is to compute no of rays passing through a cell 
-//: works for boxm_scalar_sample
+
+//: this functor is to compute no of rays passing through a cell
+// Works for boxm_scalar_sample
 template <boxm_apm_type APM, class T_aux>
 class boxm_num_rays_functor
 {
@@ -25,7 +27,7 @@ class boxm_num_rays_functor
     const float seg_len = (float)(s1 - s0).length();
 
     aux_val.scalar_sum_+=1;
-	//vcl_cout<<aux_val.scalar_sum_<<" ";
+    //vcl_cout<<aux_val.scalar_sum_<<' ';
     aux_val.seg_len_ += seg_len;
     return true;
   }
@@ -33,8 +35,6 @@ class boxm_num_rays_functor
  public:
   bool scene_read_only_;
   bool is_aux_;
-
 };
-
 
 #endif

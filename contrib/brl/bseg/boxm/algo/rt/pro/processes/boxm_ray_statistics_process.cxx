@@ -1,4 +1,4 @@
-// This is brl/bseg/boxm/algo/pro/processes/boxm_ray_statistics_process.cxx
+// This is brl/bseg/boxm/algo/rt/pro/processes/boxm_ray_statistics_process.cxx
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -36,7 +36,7 @@ bool boxm_ray_statistics_process_cons(bprb_func_process& pro)
   input_types_[0] = "boxm_scene_base_sptr";
   input_types_[1] = "vpgl_camera_double_sptr";
   input_types_[2] = "unsigned";  //ni
-  input_types_[3] = "unsigned";	 //nj
+  input_types_[3] = "unsigned";  //nj
 
   // process has 1 outputs:
   vcl_vector<vcl_string>  output_types_(n_outputs_);
