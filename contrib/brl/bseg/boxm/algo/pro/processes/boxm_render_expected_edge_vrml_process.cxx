@@ -1,4 +1,4 @@
-// This is brl/bseg/boxm/algo/sp/pro/processes/boxm_render_expected_edge_vrml_process.cxx
+// This is brl/bseg/boxm/algo/pro/processes/boxm_render_expected_edge_vrml_process.cxx
 #include <bprb/bprb_func_process.h>
 //:
 // \file
