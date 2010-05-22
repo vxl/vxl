@@ -1,4 +1,4 @@
-# Microsoft Developer Studio Project File - Name="boxm" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="boxm_algo_sp" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
@@ -7,25 +7,25 @@
 # /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl/bseg" == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
 #  == override in output directory
-# boxm  == name of output library
+# boxm_algo_sp  == name of output library
 
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
 
-CFG=boxm - Win32 Debug
+CFG=boxm_algo_sp - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "boxm.mak".
+!MESSAGE NMAKE /f "boxm_algo_sp.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "boxm.mak" CFG="bmrf - Win32 Debug"
+!MESSAGE NMAKE /f "boxm_algo_sp.mak" CFG="bmrf - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "boxm - Win32 Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "boxm - Win32 Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "boxm_algo_sp - Win32 Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "boxm_algo_sp - Win32 Release" (based on "Win32 (x86) Static Library")
 # Begin Project
 # PROP AllowPerConfigDependencies 0
 # PROP Scc_ProjName ""
@@ -33,7 +33,7 @@ CFG=boxm - Win32 Debug
 CPP=cl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "boxm - Win32 Release"
+!IF  "$(CFG)" == "boxm_algo_sp - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -47,7 +47,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /FD /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl/bseg" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "boxm_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl/bseg" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "boxm_algo_sp_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -59,7 +59,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo
 
-!ELSEIF  "$(CFG)" == "boxm - Win32 Debug"
+!ELSEIF  "$(CFG)" == "boxm_algo_sp - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -73,7 +73,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FD /c
 # ADD CPP /nologo /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /FD /GZ /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl/bseg" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "boxm_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl/bseg" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "boxm_algo_sp_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -87,126 +87,124 @@ LIB32=link.exe -lib
 
 # Begin Target
 
-# Name "boxm - Win32 Release"
-# Name "boxm - Win32 Debug"
+# Name "boxm_algo_sp - Win32 Release"
+# Name "boxm_algo_sp - Win32 Debug"
 
-# Begin Project
-# Begin Target
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\boxm_io_scene_base.cxx
+SOURCE=.\dummy.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\boxm_scene_parser.cxx
+SOURCE=.\Templates/boxm_opt_rt_bayesian_optimizer+short.BOXM_APM_MOG_GREY.BOXM_AUX_OPT_RT_GREY-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\boxm_scene_base.cxx
+SOURCE=.\Templates/boxm_edge_tangent_updater+short.float.float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\boxm_apm_traits.cxx
+SOURCE=.\Templates/boxm_edge_updater+short.float.float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boxm_scene+boct_tree+short.int--.cxx
+SOURCE=.\Templates/boxm_opt3_optimizer+short.BOXM_APM_MOG_GREY.BOXM_APM_MOG_GREY-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boxm_block+boct_tree+short.bsta_num_obs+bsta_gauss_f1---.cxx
+SOURCE=.\Templates/boxm_opt2_optimizer+short.BOXM_APM_SIMPLE_GREY.BOXM_AUX_OPT2_GREY-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boct_tree_cell+short.bsta_num_obs+bsta_gauss_f1--.cxx
+SOURCE=.\Templates/boxm_opt_rt_bayesian_optimizer+short.BOXM_APM_SIMPLE_GREY.BOXM_AUX_OPT_RT_GREY-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_io_smart_ptr+boxm_scene_base-.cxx
+SOURCE=.\Templates/boxm_opt2_optimizer+short.BOXM_APM_MOG_GREY.BOXM_AUX_OPT2_GREY-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boct_tree+short.bsta_num_obs+bsta_gauss_f1--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vbl_array_3d+boxm_block+boct_tree+short.float--~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/boxm_block+boct_tree+short.float--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/boxm_scene+boct_tree+short.float--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vbl_array_3d+vsl_b_ifstream~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vbl_array_3d+boxm_block+boct_tree+short.int--~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+boxm_scene_base-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vbl_array_3d+boxm_block+boct_tree+short.bsta_num_obs+bsta_gauss_f1---~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/boxm_scene+boct_tree+short.bsta_num_obs+bsta_gauss_f1---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/boxm_block+boct_tree+short.vgl_point_3d+double---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/boxm_block+boct_tree+short.int--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/brdb_value_t+boxm_scene_base_sptr-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/boxm_scene+boct_tree+short.vgl_point_3d+double---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vbl_array_3d+boxm_block+boct_tree+short.vgl_point_3d+double---~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/boxm_block_iterator+boct_tree+short.bsta_num_obs+bsta_gauss_f1---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/boxm_block_iterator+boct_tree+short.vgl_point_3d+double---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/boxm_block_iterator+boct_tree+short.int--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/boxm_block_iterator+boct_tree+short.float--.cxx
+SOURCE=.\Templates/boxm_opt3_optimizer+short.BOXM_APM_SIMPLE_GREY.BOXM_APM_MOG_GREY-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
-SOURCE=.\boxm_aux_scene.h
+SOURCE=.\boxm_render_expected_shadow_image_functor.h
 # End Source File
 # Begin Source File
-SOURCE=.\boxm_block.h
+SOURCE=.\boxm_generate_edge_tangent_sample_functor.h
 # End Source File
 # Begin Source File
-SOURCE=.\boxm_scene.txx
+SOURCE=.\boxm_generate_opt2_sample_functor.h
 # End Source File
 # Begin Source File
-SOURCE=.\boxm_scene_base.h
+SOURCE=.\boxm_change_probability_functor.h
 # End Source File
 # Begin Source File
-SOURCE=.\boxm_block.txx
+SOURCE=.\boxm_opt3_optimizer.txx
 # End Source File
 # Begin Source File
-SOURCE=.\boxm_apm_traits.h
+SOURCE=.\boxm_opt_appearance_estimator.h
 # End Source File
 # Begin Source File
-SOURCE=.\boxm_io_scene_base.h
+SOURCE=.\boxm_update_image_functor.h
 # End Source File
 # Begin Source File
-SOURCE=.\boxm_aux_traits.h
+SOURCE=.\boxm_rpc_registration.h
 # End Source File
 # Begin Source File
-SOURCE=.\boxm_scene.h
+SOURCE=.\boxm_edge_tangent_updater.h
 # End Source File
 # Begin Source File
-SOURCE=.\boxm_scene_parser.h
+SOURCE=.\boxm_edge_updater.h
 # End Source File
 # Begin Source File
-SOURCE=.\boxm_aux_scene.txx
+SOURCE=.\boxm_opt_rt_bayesian_optimizer.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_sun_vis_prob_functor.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_opt2_optimizer.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_generate_edge_sample_functor.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_render_expected_image_functor.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_generate_opt_sample_functor.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_pre_infinity_functor.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_render_expected_edge_tangent_image_functor.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_render_expected_edge_image_functor.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_render_expected_depth_functor.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_edge_tangent_updater.txx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_opt_rt_bayesian_optimizer.txx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_opt3_optimizer.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_opt2_optimizer.txx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_compute_num_rays_statistics.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_edge_updater.txx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_generate_opt3_sample_functor.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_change_3d_functor.h
 # End Source File
 # End Group
 # End Target

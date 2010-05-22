@@ -1,4 +1,4 @@
-# Microsoft Developer Studio Project File - Name="boxm_batch" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="boxm_algo_sp" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
@@ -7,25 +7,25 @@
 # /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl/bseg" == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
 #  == override in output directory
-# boxm_batch  == name of output library
+# boxm_algo_sp  == name of output library
 
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
 
-CFG=boxm_batch - Win32 Debug
+CFG=boxm_algo_sp - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "boxm_batch.mak".
+!MESSAGE NMAKE /f "boxm_algo_sp.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "boxm_batch.mak" CFG="bmrf - Win32 Debug"
+!MESSAGE NMAKE /f "boxm_algo_sp.mak" CFG="bmrf - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "boxm_batch - Win32 Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "boxm_batch - Win32 Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "boxm_algo_sp - Win32 Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "boxm_algo_sp - Win32 Release" (based on "Win32 (x86) Static Library")
 # Begin Project
 # PROP AllowPerConfigDependencies 0
 # PROP Scc_ProjName ""
@@ -33,7 +33,7 @@ CFG=boxm_batch - Win32 Debug
 CPP=cl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "boxm_batch - Win32 Release"
+!IF  "$(CFG)" == "boxm_algo_sp - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -47,7 +47,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /FD /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl/bseg" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "boxm_batch_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl/bseg" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "boxm_algo_sp_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -59,7 +59,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo
 
-!ELSEIF  "$(CFG)" == "boxm_batch - Win32 Debug"
+!ELSEIF  "$(CFG)" == "boxm_algo_sp - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -73,7 +73,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FD /c
 # ADD CPP /nologo /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /FD /GZ /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl/bseg" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "boxm_batch_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl/bseg" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "boxm_algo_sp_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -87,21 +87,34 @@ LIB32=link.exe -lib
 
 # Begin Target
 
-# Name "boxm_batch - Win32 Release"
-# Name "boxm_batch - Win32 Debug"
+# Name "boxm_algo_sp - Win32 Release"
+# Name "boxm_algo_sp - Win32 Debug"
 
-# Begin Project
-# Begin Target
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\reg_boxm.cxx
+SOURCE=.\dummy.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
-# PROP Default_Filter "h"
+# PROP Default_Filter "h;txx"
 # Begin Source File
-SOURCE=.\reg_boxm.h
+SOURCE=.\boxm_update_triangle.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_compute_volume_visibility.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_render_image_triangle.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_update.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_render_image.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_depth_image_triangle.h
 # End Source File
 # End Group
 # End Target

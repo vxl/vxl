@@ -218,13 +218,16 @@ SOURCE=.\test_driver.cxx
 SOURCE=.\test_boxm_scene_crop.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_boxm_scene_to_bvxm_grid.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\test_boxm_fill_internal_cells.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_boxm_plane_ransac.cxx
+SOURCE=.\test_upload_mesh.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_save_scene_raw.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_fill_in_mesh.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_include.cxx

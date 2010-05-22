@@ -93,31 +93,37 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\boxm_merge_mog.cxx
+SOURCE=.\dummy.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
-SOURCE=.\boxm_split_sample.h
-# End Source File
-# Begin Source File
-SOURCE=.\boxm_vrml_util.h
-# End Source File
-# Begin Source File
-SOURCE=.\boxm_merge_mog.h
-# End Source File
-# Begin Source File
 SOURCE=.\boxm_crop_scene.h
-# End Source File
-# Begin Source File
-SOURCE=.\boxm_scene_to_bvxm_grid.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_fill_internal_cells.h
 # End Source File
 # Begin Source File
-SOURCE=.\boxm_plane_ransac.h
+SOURCE=.\boxm_fill_in_mesh.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_save_block_raw.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_compute_scene_statistics.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_upload_mesh.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_refine.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_init_scene.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_save_scene_raw.h
 # End Source File
 # End Group
 # End Target

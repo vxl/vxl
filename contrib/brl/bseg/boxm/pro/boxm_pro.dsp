@@ -99,25 +99,7 @@ SOURCE=.\boxm_register.cxx
 SOURCE=.\processes/boxm_load_scene_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\processes/boxm_render_expected_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\processes/boxm_save_occupancy_raw_process.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\processes/boxm_create_scene_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\processes/boxm_update_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\processes/boxm_refine_scene_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\processes/boxm_volume_visibility_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\processes/boxm_roi_init_process.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\processes/boxm_proj_local_cam_process.cxx
@@ -126,31 +108,16 @@ SOURCE=.\processes/boxm_proj_local_cam_process.cxx
 SOURCE=.\processes/boxm_upload_mesh_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\processes/boxm_replace_const_app_process.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\processes/boxm_construct_scene_from_image_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\processes/boxm_describe_scene_process.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\processes/boxm_camera_viewing_scene_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\processes/boxm_init_scene_process.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\processes/boxm_clean_scene_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\processes/boxm_roi_init_rational_camera_process.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/brdb_value_t+boxm_scene_base_sptr-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/brdb_value_t+vil_image_view_base_sptr-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
