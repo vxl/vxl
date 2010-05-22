@@ -6,7 +6,7 @@
 #include "test_share.h"
 #include <imesh/algo/imesh_transform.h>
 #include <vcl_iostream.h>
-
+#include <vnl/vnl_math.h>
 
 void test_closest_point(const imesh_mesh& mesh, const vcl_vector<vgl_point_3d<double> >& pts)
 {
@@ -48,7 +48,7 @@ static void test_kd_tree()
   pts.push_back(vgl_point_3d<double>(3,-3,3));
   imesh_mesh cube;
   make_cube(cube);
-  imesh_transform_inplace(cube, vgl_rotation_3d<double>(0,.1,.785398));
+  imesh_transform_inplace(cube, vgl_rotation_3d<double>(0,.1,vnl_math::pi_over_4));
   imesh_quad_subdivide(cube);
   imesh_triangulate(cube);
 

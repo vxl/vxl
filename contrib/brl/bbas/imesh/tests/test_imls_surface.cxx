@@ -8,6 +8,7 @@
 #include <imesh/imesh_operations.h>
 #include <vnl/vnl_matlab_filewrite.h>
 #include <vnl/vnl_matrix.h>
+#include <vnl/vnl_math.h>
 
 double approx_deriv(const imesh_imls_surface& f,
                     const vgl_point_3d<double>& p,
@@ -196,7 +197,7 @@ static void test_imls_surface()
   {
     imesh_mesh cube;
     make_cube(cube);
-    imesh_transform_inplace(cube, vgl_rotation_3d<double>(0,0,.785398));
+    imesh_transform_inplace(cube, vgl_rotation_3d<double>(0,0,vnl_math::pi_over_4));
     imesh_quad_subdivide(cube);
     imesh_quad_subdivide(cube);
     vcl_set<unsigned int> no_normals;
