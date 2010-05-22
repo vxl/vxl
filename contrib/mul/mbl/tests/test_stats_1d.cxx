@@ -2,6 +2,7 @@
 #include <vcl_iostream.h>
 #include <mbl/mbl_stats_1d.h>
 #include <testlib/testlib_test.h>
+#include <vnl/vnl_math.h>
 
 void test_stats_1d()
 {
@@ -20,7 +21,7 @@ void test_stats_1d()
   TEST("nObs()",stats.nObs()==5,true);
   vcl_cout<<stats<<vcl_endl;
   TEST_NEAR("mean()", stats.mean(),  2, 1e-9);
-  TEST_NEAR("sd()"  , stats.sd()  , 1.414213562, 1e-9);
+  TEST_NEAR("sd()"  , stats.sd()  , vnl_math::sqrt2, 1e-9);
   TEST_NEAR("sum()" , stats.sum() , 10, 1e-9);
   TEST_NEAR("sumSq()",stats.sumSq(),30, 1e-9);
 
@@ -39,10 +40,6 @@ void test_stats_1d()
   TEST_NEAR("weights", stats.wObs(), stats_slow.wObs(), 1e-9);
   TEST_NEAR("mean", stats.mean(), stats_slow.mean(), 1e-9);
   TEST_NEAR("std error", stats.stdError(), stats_slow.stdError(), 1e-9);
-
-
-
-
 }
 
 TESTMAIN(test_stats_1d);
