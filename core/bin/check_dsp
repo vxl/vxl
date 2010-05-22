@@ -37,7 +37,7 @@ else {
   {
     die "VXLROOT is not defined, no command line arguments were given, and current directory has no vcl, core, contrib";
   }
-  @DIRS = grep { ! m!(/\.|/CVS|awfmfc|vgui_example_mfc|v3p/netlib|b3p/minizip)$ !x } @DIRS;
+  @DIRS = grep { ! m!(/\.|/CVS|awfmfc|vgui_example_mfc|v3p/netlib|b3p/minizip|\.old)$ !x } @DIRS;
 }
 
 foreach my $dir (@DIRS)
@@ -47,9 +47,11 @@ foreach my $dir (@DIRS)
   # remove possible slash at end of directory name:
   $dir =~ s![\\/]+$ !!x;
   # Now read directory content and open relevant files (like CMakeLists.txt, makefile and *.dsp)
-  next unless opendir TMP,$dir;
-  my @file_list = grep {! m/^(\..*|CVS)$/} readdir(TMP);
-  closedir(TMP);
+  # Possibly, makefile is located in  the parallel source tree, viz. in "makefiles/$dir", instead of directly in $dir
+  # and similarly for *.dsp, in "dsps/$dir"; moreover, this is the first place to look. 
+  next unless opendir BASEDIR,$dir;
+  my @file_list = grep {! m/^(\..*|CVS)$/} readdir(BASEDIR);
+  closedir(BASEDIR);
   my @sd = ();
   if    ($dir =~ m/\bvcl$/)   { @sd = qw(vcl_sys iso generic gcc egcs gcc-295 gcc-libstdcxx-v3 sgi sunpro win32-vc60 win32-vc70 win32-vc8 emulation borland55 borland56 mwerks stlport internal); }
   elsif ($dir =~ m/\bvil1?$/) { @sd = qw(file_formats); }
@@ -63,9 +65,9 @@ foreach my $dir (@DIRS)
   elsif ($dir =~ m/\bbwm$/)   { @sd = qw(process); }
   elsif ($dir =~ m/\b(brip_pro|vidl_pro|vil_pro|vpgl_pro|bbgm\/pro|bmdl\/pro|brec\/pro|bvxm\/pro)$/) { @sd = qw(processes); }
   foreach my $sd (@sd) {
-    opendir TMP,"$dir/$sd";
-    push @file_list, map { "$sd/$_" } grep {! m/^(\..*|CVS)$/} readdir(TMP);
-    closedir(TMP);
+    opendir SUBDIR,"$dir/$sd";
+    push @file_list, map { "$sd/$_" } grep {! m/^(\..*|CVS)$/} readdir(SUBDIR);
+    closedir(SUBDIR);
   }
 
   # verify #includes in test_include.cxx
@@ -120,10 +122,12 @@ foreach my $dir (@DIRS)
   my %source = ();
   my %hsource = ();
   my $f = '';
-  foreach my $fx (grep {m/\.dsp$/} @file_list)
+  my $prefix = (-d "dsps/$dir" ? "dsps/$dir" : $dir);
+  opendir DSPDIR,$prefix;
+  foreach my $fx (map { "$prefix/$_" } grep {m/\.dsp$/} readdir(DSPDIR))
   {
-    next unless open(FILE, "$dir/$fx");
-    $f .= " $dir/$fx";
+    next unless open(FILE, $fx);
+    $f .= " $fx";
     my $start = '';
     binmode FILE;
     while (<FILE>)
@@ -150,7 +154,9 @@ foreach my $dir (@DIRS)
   }
   $f =~ s/^ //;
 
-  my $makef = $dir . '/makefile';
+  my $makef = 'makefiles/' . $dir . '/makefile';
+  -f $makef or $makef = $dir . '/makefile';
+  -f $makef or $makef = 'makefiles/' . $dir . '/makefile';
   my %sources = ();
   my %tests = ();
   my %subdirs = ();
@@ -379,7 +385,7 @@ foreach my $dir (@DIRS)
     while ($cmakefile =~ s/\bSUBDIRS\s*\(\s*([^\s\)]+)/SUBDIRS(/);
 
   next unless ($f || -f $makef || -f $cmakef);
-  $f = "$dir/*.dsp" unless ($f);
+  $f = "dsps/$dir/*.dsp" unless ($f);
   print $shell ? '# ' : '' . "File $makef does not exist" unless (-f $makef);
   print $shell ? '# ' : '' . "File $cmakef does not exist" unless (-f $cmakef || $cmakef =~ m!/doc/book/CMakeLists\.txt$ !x);
 
