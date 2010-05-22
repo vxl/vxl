@@ -12,6 +12,7 @@
 *.tif           -crlf
 *.tiff          -crlf
 check_consistency  crlf=input
+check_dependencies  crlf=input
 check_dsp        crlf=input
 configure        crlf=input
 install-sh       crlf=input
