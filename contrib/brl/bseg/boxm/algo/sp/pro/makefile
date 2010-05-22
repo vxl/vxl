@@ -1,6 +1,6 @@
 USES += contrib/brl contrib/brl/bbas contrib/brl/bseg core
 
-LIBRARY := boxm
+LIBRARY := boxm-algo-sp-pro
 
 SOURCES += boxm_algo_sp_register.cxx
 MANPAGE_SOURCES += boxm_algo_sp_processes.h

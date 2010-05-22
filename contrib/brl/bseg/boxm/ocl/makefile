@@ -1,6 +1,6 @@
 USES += contrib/brl contrib/brl/bbas contrib/brl/bseg core
 
-LIBRARY := boxm2-ocl
+LIBRARY := boxm-ocl
 
 SOURCES += boxm_ocl_utils.cxx
 SOURCES += octree_library_functions.cl

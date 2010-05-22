@@ -1,7 +1,6 @@
-USES += contrib/brl contrib/brl/bseg core
+USES += contrib/brl contrib/brl/bbas contrib/brl/bseg core
 
-LIBRARY := boxm_batch
-VERSION := 1.0
+LIBRARY := boxm
 
 SOURCES += reg_boxm.cxx
 

@@ -1,5 +1,4 @@
 IULIBS += -lboxm
-include ${VXLROOT}/contrib/brl/bseg/boxm/io/config.mk
 include ${VXLROOT}/contrib/brl/bseg/boct/config.mk
 include ${VXLROOT}/contrib/brl/bbas/bsta/config.mk
 include ${VXLROOT}/contrib/gel/mrc/vpgl/config.mk

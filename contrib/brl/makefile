@@ -19,9 +19,6 @@ SUBDIRS += bpro
 # 3rd party libraries
 SUBDIRS += b3p
 
-# platform-independent includes for brl
-SUBDIRS += bcl
- 
 ################################
 include ${VXLROOT}/config/top.mk
 ################################

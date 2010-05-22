@@ -1,6 +1,6 @@
 USES += contrib/brl contrib/brl/bbas contrib/brl/bseg core
 
-LIBRARY := boxm
+LIBRARY := boxm-algo-rt-pro
 
 SOURCES += boxm_algo_rt_register.cxx
 MANPAGE_SOURCES += boxm_algo_rt_processes.h
@@ -8,6 +8,7 @@ MANPAGE_SOURCES += boxm_algo_rt_processes.h
 SOURCES += processes/boxm_render_expected_edge_process.cxx
 SOURCES += processes/boxm_generate_opt3_samples_process.cxx
 SOURCES += processes/boxm_render_expected_depth_rt_process.cxx
+SOURCES += processes/boxm_ray_statisitcs_process.cxx
 SOURCES += processes/boxm_generate_edge_samples_process.cxx
 SOURCES += processes/boxm_update_rt_process.cxx
 SOURCES += processes/boxm_opt_bayesian_update_process.cxx

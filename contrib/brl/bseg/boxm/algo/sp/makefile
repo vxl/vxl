@@ -1,12 +1,14 @@
 USES += contrib/brl contrib/brl/bbas contrib/brl/bseg core
 
-LIBRARY := open_cl
+LIBRARY := boxm-algo-sp
 
-MANPAGE_SOURCES += boxm_ray_trace_manager.txx
-MANPAGE_SOURCES += boxm_opencl_manager.txx
-SOURCES += boxm_opt_opencl_utils.cxx
-SOURCES += octree_library_functions.cl
-MANPAGE_SOURCES += boxm_opt_opencl_render_expected.h
+SOURCES += dummy.cxx
+MANPAGE_SOURCES += boxm_update_triangle.h
+MANPAGE_SOURCES += boxm_compute_volume_visibility.h
+MANPAGE_SOURCES += boxm_render_image_triangle.h
+MANPAGE_SOURCES += boxm_update.h
+MANPAGE_SOURCES += boxm_render_image.h
+MANPAGE_SOURCES += boxm_depth_image_triangle.h
 
 SUBDIRS += pro
 

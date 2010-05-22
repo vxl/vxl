@@ -51,10 +51,10 @@ SUBDIRS += brec_batch
 SUBDIRS += boct
 
 # octree based modeling 
-SUBDIRS += boxm boxm2
+SUBDIRS += boxm
 
 # octree based modeling python interface
-SUBDIRS += boxm_batch boxm2_batch
+SUBDIRS += boxm_batch
 
 # voxel processing library
 SUBDIRS += bvpl

@@ -1,6 +1,6 @@
 USES += contrib/brl contrib/brl/bbas contrib/brl/bseg core
 
-LIBRARY := boxm2-ocl-pro
+LIBRARY := boxm-ocl-pro
 
 SOURCES += boxm_ocl_register.cxx
 MANPAGE_SOURCES += boxm_ocl_processes.h
