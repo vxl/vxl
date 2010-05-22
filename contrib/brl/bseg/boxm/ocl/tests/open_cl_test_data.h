@@ -216,4 +216,4 @@ void open_cl_test_data::save_tree(vcl_string const& tree_path)
   delete tree;
 }
 
-#endif // open_cl_test_data_h_
+#endif // boxm_ocl_test_data_h_

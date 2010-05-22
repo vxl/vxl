@@ -8,4 +8,4 @@ class boxm_ocl_register
   static void register_process();
 };
 
-#endif // boxm_opt_opencl_register_h_
+#endif // boxm_ocl_register_h_
