@@ -103,6 +103,33 @@ SOURCE=.\boxm_mob_grey_processor.cxx
 # Begin Source File
 SOURCE=.\boxm_mog_grey_processor.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/boct_tree_cell+short.boxm_opt3_sample+BOXM_APM_MOG_GREY--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_scene+boct_tree+short.boxm_opt3_sample+BOXM_APM_MOG_GREY---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_opt3_sample+BOXM_APM_MOG_GREY-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_block+boct_tree+short.boxm_opt3_sample+BOXM_APM_MOG_GREY---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_aux_scene+short.boxm_sample+BOXM_APM_MOG_GREY-.boxm_opt3_sample+BOXM_APM_MOG_GREY--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_array_3d+boxm_block+boct_tree+short.boxm_opt3_sample+BOXM_APM_MOG_GREY---~-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_aux_scene+short.boxm_sample+BOXM_APM_SIMPLE_GREY-.boxm_opt3_sample+BOXM_APM_MOG_GREY--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boct_tree_cell_reader+short.boxm_opt3_sample+BOXM_APM_MOG_GREY--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boct_tree+short.boxm_opt3_sample+BOXM_APM_MOG_GREY--.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h"
