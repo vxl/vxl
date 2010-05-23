@@ -6,7 +6,7 @@ ADD_EXECUTABLE( boxm_algo_sp_test_all
   test_update_multi_bin.cxx
  )
 
-TARGET_LINK_LIBRARIES( boxm_algo_sp_test_all boxm_algo_sp boxm_algo boxm boxm_util boxm_sample boxm_basic boct testlib vpl vul)
+TARGET_LINK_LIBRARIES( boxm_algo_sp_test_all boxm_algo_sp boxm_algo boxm boxm_util boxm_sample boxm_basic boct testlib vgl vil vpl vul)
 
 ADD_TEST( boxm_test_compute_visibility ${EXECUTABLE_OUTPUT_PATH}/boxm_algo_sp_test_all test_compute_visibility  )
 ADD_TEST( boxm_test_render_image       ${EXECUTABLE_OUTPUT_PATH}/boxm_algo_sp_test_all test_render_image  )
