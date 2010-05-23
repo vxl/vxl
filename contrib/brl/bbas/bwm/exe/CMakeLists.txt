@@ -11,4 +11,4 @@ ADD_EXECUTABLE( bwm_batch_project_meshes_to_perspective_video bwm_batch_project_
 TARGET_LINK_LIBRARIES( bwm_batch_project_meshes_to_perspective_video bwm bwm_algo vcl vgl vpgl vul)
 
 ADD_EXECUTABLE( bwm_bundler_to_video_site bwm_bundler_to_video_site.cxx)
-TARGET_LINK_LIBRARIES( bwm_bundler_to_video_site bwm bwm_algo vcl vgl vpgl vul vidl)
+TARGET_LINK_LIBRARIES( bwm_bundler_to_video_site bwm bwm_algo vpgl vgl_algo vgl vnl vul vidl vcl)
