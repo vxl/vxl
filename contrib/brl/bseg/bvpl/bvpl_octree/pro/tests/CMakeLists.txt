@@ -6,7 +6,7 @@ ADD_EXECUTABLE( bvpl_octree_pro_test_all
   test_bvpl_plane_propagation_process.cxx
 )
 
-TARGET_LINK_LIBRARIES( bvpl_octree_pro_test_all testlib bvpl_octree_pro bvpl_octree boxm boxm_pro boct bvpl bprb brdb vcl )
+TARGET_LINK_LIBRARIES( bvpl_octree_pro_test_all testlib bvpl_octree_pro bvpl_octree boxm boxm_pro boct bvpl bprb brdb vul vcl)
 
 ADD_TEST( bvpl_plane_propagation_process     ${EXECUTABLE_OUTPUT_PATH}/bvpl_octree_pro_test_all   test_bvpl_plane_propagation_process)
 
