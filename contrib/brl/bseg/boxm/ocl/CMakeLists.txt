@@ -17,14 +17,13 @@ IF(OPENCL_FOUND)
 
   SET(bomx2_ocl_source_files
       octree_library_functions.cl
-  )
+     )
   AUX_SOURCE_DIRECTORY(Templates boxm_ocl_sources)
   ADD_LIBRARY(boxm_ocl ${boxm_ocl_sources} ${bomx2_ocl_source_files})
 
-  TARGET_LINK_LIBRARIES(boxm_ocl boxm boxm_util boxm_sample boxm_basic boct bprb bgeo vnl vnl_algo vgl vbl vbl_io vpgl vul ${OPENCL_LIBRARIES})
+  TARGET_LINK_LIBRARIES(boxm_ocl boxm boxm_util boxm_sample boxm_basic boct bprb bgeo vnl vnl_algo vbl_io vpgl vgl vil vbl vul ${OPENCL_LIBRARIES})
 
-SUBDIRS(tests)
-
-SUBDIRS(pro)
+  SUBDIRS(tests)
+  SUBDIRS(pro)
 
 ENDIF(OPENCL_FOUND)
