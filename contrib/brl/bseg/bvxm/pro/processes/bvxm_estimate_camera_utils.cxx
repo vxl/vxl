@@ -1,4 +1,6 @@
 #include "bvxm_estimate_camera_utils.h"
+#include <vgl/algo/vgl_convex_hull_2d.h>
+#include <vgl/algo/vgl_homg_operators_3d.h>
 #include <vul/vul_file.h>
 #include <vcl_cassert.h>
 
