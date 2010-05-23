@@ -1,6 +1,6 @@
 # boxm's Process Library
 
-# bprb depends on expat and bvxm_prodepends on bprb primarily
+# bprb depends on expat and bvxm_pro depends on bprb primarily
 INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
 IF(EXPAT_FOUND)
   INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro )
@@ -19,7 +19,9 @@ IF(EXPAT_FOUND)
 
   ADD_LIBRARY(boxm_algo_pro ${boxm_algo_pro_sources} )
 
-  TARGET_LINK_LIBRARIES(boxm_algo_pro boxm_algo boxm boxm_sample boxm_util boct bprb brdb bsta vpgl bgeo vpgl_algo vil vsol vgl brip vcl)
-
+  TARGET_LINK_LIBRARIES(boxm_algo_pro boxm_algo boxm boxm_sample boxm_util boct bprb brdb bsta_pro vil_pro bsta vpgl_pro vpgl bgeo vpgl_algo vil vsol vgl brip vcl)
+  # Need bsta_pro only for the instantiation of brdb_value_t<vbl_smart_ptr<bsta_histogram_base> >
+  # Need vpgl_pro only for the instantiation of brdb_value_t<vbl_smart_ptr<vpgl_camera<double> > >
+  # Need vil_pro  only for the instantiation of brdb_value_t<vil_smart_ptr<vil_image_view_base> >
 
 ENDIF(EXPAT_FOUND)
