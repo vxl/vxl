@@ -2,7 +2,6 @@
 #define bsta_kent_txx_
 
 #include "bsta_kent.h"
-//#include <vnl/vnl_inverse.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_bessel.h>
@@ -10,7 +9,11 @@
 #include <vnl/vnl_math.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vnl/io/vnl_io_vector_fixed.h>
+#if 0
+#include <vnl/vnl_inverse.h>
+#include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_vector_3d.h>
+#endif
 #include <vcl_cassert.h>
 
 template <class T>

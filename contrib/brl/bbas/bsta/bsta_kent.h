@@ -15,7 +15,9 @@
 #include "bsta_distribution.h"
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix_fixed.h>
+#if 0
 #include <vgl/vgl_plane_3d.h>
+#endif
 #include <vsl/vsl_binary_io.h>
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
