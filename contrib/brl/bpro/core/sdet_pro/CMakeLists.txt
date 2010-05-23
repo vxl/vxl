@@ -10,10 +10,10 @@ SET(sdet_pro_sources
     sdet_register.h             sdet_register.cxx
     processes/sdet_detect_edges_process.h
     processes/sdet_detect_edge_tangent_process.h
-)
+   )
 
 AUX_SOURCE_DIRECTORY(Templates sdet_pro_sources)
 AUX_SOURCE_DIRECTORY(processes sdet_pro_sources)
 
 ADD_LIBRARY(sdet_pro ${sdet_pro_sources})
-TARGET_LINK_LIBRARIES(sdet_pro bprb brdb sdet vil_pro vil vsl sdet)
+TARGET_LINK_LIBRARIES(sdet_pro bprb brdb sdet vil_pro vil vgl vsl)
