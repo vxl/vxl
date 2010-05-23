@@ -14,15 +14,11 @@ SET(boxm_util_sources
     boxm_test_util.h                        boxm_test_util.cxx
    )
 
-
 AUX_SOURCE_DIRECTORY(Templates boxm_util_sources)
 
 ADD_LIBRARY(boxm_util ${boxm_util_sources})
-
+TARGET_LINK_LIBRARIES(boxm_util boxm boxm_sample bvrml boct bsta vpgl_algo vnl_algo vgl_algo vpgl vil vgl vnl vbl vcl)
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)
 ENDIF( BUILD_TESTING )
-
-TARGET_LINK_LIBRARIES(boxm_util boxm boxm_sample boct bsta vil vnl vnl_algo vcl vbl vgl vpgl vpgl_algo bvrml)
-
