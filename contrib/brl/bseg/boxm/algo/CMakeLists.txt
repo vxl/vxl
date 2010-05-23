@@ -19,7 +19,7 @@ IF( BUILD_TESTING )
   SUBDIRS(tests)
 ENDIF( BUILD_TESTING )
 
-TARGET_LINK_LIBRARIES(boxm_algo boxm boxm_util boxm_sample boxm_sample_algo boxm_basic vcl vgl bsta imesh vpgl bgeo vgl vgl_algo)
+TARGET_LINK_LIBRARIES(boxm_algo boxm boxm_util boxm_sample boxm_sample_algo boxm_basic bsta imesh vpgl bgeo vgl_algo vgl vbl vcl)
 
 #raytracing algorithms
 SUBDIRS(rt)
