@@ -67,7 +67,7 @@ vil_image_view<float> run_expected_image(boxm_scene<boct_tree<short,boxm_sample<
 {
     // set up the application-specific function to be called at every cell along a ray
     vcl_string expected_img_functor_fname = vcl_string(VCL_SOURCE_ROOT_DIR)
-        +"/contrib/brl/bseg/boxm/opt/open_cl/expected_functor.cl";
+        +"/contrib/brl/bseg/boxm/ocl/expected_functor.cl";
 
     vcl_vector<vcl_string> source_fnames;
     source_fnames.push_back(expected_img_functor_fname);
@@ -123,10 +123,10 @@ static void test_expected_image()
 {
     vcl_string root_dir = testlib_root_dir();
     boxm_scene<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY > > > s;
-    s.load_scene(root_dir+"/contrib/brl/bseg/boxm/opt/open_cl/tests/scene.xml");
+    s.load_scene(root_dir+"/contrib/brl/bseg/boxm/ocl/tests/scene.xml");
 
-    vcl_string camname=root_dir+"/contrib/brl/bseg/boxm/opt/open_cl/tests/cam_0.txt";
-    vcl_string imgname=root_dir+"/contrib/brl/bseg/boxm/opt/open_cl/tests/test_img0.tif";
+    vcl_string camname=root_dir+"/contrib/brl/bseg/boxm/ocl/tests/cam_0.txt";
+    vcl_string imgname=root_dir+"/contrib/brl/bseg/boxm/ocl/tests/test_img0.tif";
 
     vpgl_perspective_camera<double> *pcam=new vpgl_perspective_camera<double> ();
     vcl_ifstream ifs(camname.c_str());
@@ -135,8 +135,8 @@ static void test_expected_image()
     else
         ifs >> (*pcam);
 
-    update_world(root_dir+"/contrib/brl/bseg/boxm/opt/open_cl/tests/scene.xml",camname,imgname);
-    vil_image_view<float> im_nongpu=render_image(root_dir+"/contrib/brl/bseg/boxm/opt/open_cl/tests/scene.xml",camname,250,250);
+    update_world(root_dir+"/contrib/brl/bseg/boxm/ocl/tests/scene.xml",camname,imgname);
+    vil_image_view<float> im_nongpu=render_image(root_dir+"/contrib/brl/bseg/boxm/ocl/tests/scene.xml",camname,250,250);
     vil_image_view<float> im_gpu=run_expected_image(&s,pcam,250,250);
     s.clean_scene();
     float ssd = vil_math_ssd(im_gpu, im_nongpu, float());

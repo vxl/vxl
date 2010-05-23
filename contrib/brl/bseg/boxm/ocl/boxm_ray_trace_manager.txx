@@ -91,9 +91,9 @@ bool boxm_ray_trace_manager<T>::init_raytrace(boxm_scene<boct_tree<short,T > > *
 
   // load base raytrace code
   if (!load_kernel_source(vcl_string(VCL_SOURCE_ROOT_DIR)
-    +"/contrib/brl/bseg/boxm/opt/open_cl/octree_library_functions.cl") ||
+    +"/contrib/brl/bseg/boxm/ocl/octree_library_functions.cl") ||
     !append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-    +"/contrib/brl/bseg/boxm/opt/open_cl/backproject.cl")) {
+    +"/contrib/brl/bseg/boxm/ocl/backproject.cl")) {
       vcl_cerr << "Error: boxm_ray_trace_manager : failed to load kernel source (helper functions)" << vcl_endl;
       return false;
   }
@@ -110,7 +110,7 @@ bool boxm_ray_trace_manager<T>::init_raytrace(boxm_scene<boct_tree<short,T > > *
     }
   }
   if (!append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-    +"/contrib/brl/bseg/boxm/opt/open_cl/ray_trace_main.cl")) {
+    +"/contrib/brl/bseg/boxm/ocl/ray_trace_main.cl")) {
       vcl_cerr << "Error: boxm_ray_trace_manager : failed to load kernel source (main function)" << vcl_endl;
       return false;
   }
@@ -760,6 +760,9 @@ int boxm_ray_trace_manager<T>::build_kernel_program()
       "clReleaseProgram failed."))
       return SDK_FAILURE;
   }
+#ifdef OCL_DEBUG
+  vcl_cout << prog_ << '\n';
+#endif
   const char * source = prog_.c_str();
 
   program_ = clCreateProgramWithSource(this->context_,
