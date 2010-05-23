@@ -38,7 +38,7 @@ bool boxm_ray_statistics_process_cons(bprb_func_process& pro)
   input_types_[2] = "unsigned";  //ni
   input_types_[3] = "unsigned";  //nj
 
-  // process has 1 outputs:
+  // process has 1 output:
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   output_types_[0] = "bsta_histogram_sptr"; // No of rays per cell Histogram
   //output_types_[1] = "bsta_histogram_sptr"; // Sigma Histogram
@@ -48,12 +48,13 @@ bool boxm_ray_statistics_process_cons(bprb_func_process& pro)
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
-// This process produces four outputs
-//  1) The distribution of "Omega" values where Omega = 1-e^( alpha x length )
-//  2) The distribution of "Sigma" values where Sigma is the std_dev of
-//     the appearance model. (currenly implemented only for simple grey)
-//  3) The histogram of levels for leaves in the octree
-//  4) The number of leaves in the tree
+//: This process produces one output:
+//  * The distribution of "Omega" values where Omega = 1-e^( alpha x length )
+//  The following three outputs are no longer present:
+//  * The distribution of "Sigma" values where Sigma is the std_dev of
+//    the appearance model. (currenly implemented only for simple grey)
+//  * The histogram of levels for leaves in the octree
+//  * The number of leaves in the tree
 //
 bool boxm_ray_statistics_process(bprb_func_process& pro)
 {
@@ -63,8 +64,7 @@ bool boxm_ray_statistics_process(bprb_func_process& pro)
     vcl_cerr << pro.name() << ": invalid inputs\n";
     return false;
   }
-  unsigned n_leaves = 0;
-  //assign tree type
+  // assign tree type
   boxm_scene_base_sptr scene_ptr = pro.get_input<boxm_scene_base_sptr>(0);
   vpgl_camera_double_sptr cam_ptr = pro.get_input<vpgl_camera_double_sptr>(1);
   unsigned ni = pro.get_input<unsigned>(2);
