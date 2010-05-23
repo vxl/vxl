@@ -15,12 +15,12 @@ IF(EXPAT_FOUND)
   SET(boxm_pro_sources
       boxm_processes.h
       boxm_register.h   boxm_register.cxx
-  )
+     )
 
   AUX_SOURCE_DIRECTORY(Templates boxm_pro_sources)
   AUX_SOURCE_DIRECTORY(processes boxm_pro_sources)
 
   ADD_LIBRARY(boxm_pro ${boxm_pro_sources})
 
-  TARGET_LINK_LIBRARIES(boxm_pro boxm vpgl_pro bprb brdb brip vsol vil vgl vul bsta bsta_pro)
+  TARGET_LINK_LIBRARIES(boxm_pro boxm vpgl_pro bprb brdb brip vsol bsta bsta_pro vnl vil vgl vul)
 ENDIF(EXPAT_FOUND)
