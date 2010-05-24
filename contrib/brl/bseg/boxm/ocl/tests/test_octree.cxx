@@ -425,9 +425,9 @@ void tree_tests(octree_test_driver<T>& test_driver)
   boxm_ray_trace_manager<T>* ray_mgr = boxm_ray_trace_manager<T>::instance();
   vcl_string root_dir = testlib_root_dir();
   test_driver.set_buffers();
-  if (!ray_mgr->load_kernel_source(root_dir + "/contrib/brl/bseg/boxm/opt/open_cl/octree_library_functions.cl"))
+  if (!ray_mgr->load_kernel_source(root_dir + "/contrib/brl/bseg/boxm/ocl/octree_library_functions.cl"))
     return;
-  if (!ray_mgr->append_process_kernels(root_dir + "/contrib/brl/bseg/boxm/opt/open_cl/tests/octree_test_kernels.cl"))
+  if (!ray_mgr->append_process_kernels(root_dir + "/contrib/brl/bseg/boxm/ocl/tests/octree_test_kernels.cl"))
     return;
   if (test_driver.build_program()!=SDK_SUCCESS)
     return;

@@ -1,4 +1,4 @@
-// This is brl/bseg/boxm/ocl/boxm_ray_trace_manager.txx
+// This is brl/bseg/boxm/opt/open_cl/boxm_ray_trace_manager.txx
 #ifndef boxm_ray_trace_manager_txx_
 #define boxm_ray_trace_manager_txx_
 #include <vcl_fstream.h>
@@ -203,6 +203,7 @@ bool boxm_ray_trace_manager<T>::setup_tree()
   root_cell[1]=-1; //no data at the moment
   cell_input_.push_back(root_cell);
   copy_to_arrays<T>(root, cell_input_, data_input_, cell_ptr);
+
   //the tree is now resident in the 1-d vectors
   //cells as vnl_vector_fixed<int, 4> and
   //data as vnl_vector_fixed<float, 2>
@@ -760,9 +761,6 @@ int boxm_ray_trace_manager<T>::build_kernel_program()
       "clReleaseProgram failed."))
       return SDK_FAILURE;
   }
-#ifdef OCL_DEBUG
-  vcl_cout << prog_ << '\n';
-#endif
   const char * source = prog_.c_str();
 
   program_ = clCreateProgramWithSource(this->context_,
@@ -991,11 +989,12 @@ bool boxm_ray_trace_manager<T>::run()
   cl_int status = CL_SUCCESS;  
 
   vul_timer timer;       
-
-  vcl_string error_message="";
+  vul_timer t;
+   vcl_string error_message="";
  
   boxm_block_vis_graph_iterator<tree_type > block_vis_iter(cam_, scene_, ni_, nj_);
   float total_raytrace_time = 0.0f;
+  float total_gpu_time = 0.0f;
   float total_load_time = 0.0f;
   while (block_vis_iter.next())
   {
@@ -1024,6 +1023,7 @@ bool boxm_ray_trace_manager<T>::run()
       }
 
       tree_type * tree=curr_block->get_tree();
+      	  t.mark();
 
       set_tree(tree);
       setup_tree();
@@ -1031,17 +1031,19 @@ bool boxm_ray_trace_manager<T>::run()
       setup_roi_dims((unsigned int)img_bb.min_x(),(unsigned int)img_bb.max_x(),(unsigned int)img_bb.min_y(),(unsigned int)img_bb.max_y());
 
       // allocate and initialize memory
+
       setup_tree_input_buffers();
+
       setup_camera_input_buffer();
       setup_roidims_input_buffer();
       setup_ray_origin_buffer();
       setup_work_img_buffer();
       setup_tree_global_bbox_buffer();
       setup_imgdims_buffer();
+                  total_gpu_time+=t.all();
 
       // run the raytracing for this block
       run_block();
-      
       // release memory
       clean_imgdims_buffer();
       clean_tree_global_bbox_buffer();
@@ -1059,6 +1061,8 @@ bool boxm_ray_trace_manager<T>::run()
 
     }
   }
+        vcl_cout<<"Running block "<<total_gpu_time/1000<<"s"<<vcl_endl;
+
   vcl_cout << "total block loading time = " << total_load_time << "s" << vcl_endl;
   vcl_cout << "total block processing time = " << total_raytrace_time << "s" << vcl_endl;
   return true;
@@ -1119,6 +1123,7 @@ bool boxm_ray_trace_manager<T>::run_block()
   status = clSetKernelArg(kernel_,10,sizeof(cl_float4),0);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local origin)"))
     return SDK_FAILURE;
+
   status = clSetKernelArg(kernel_,11,sizeof(cl_float4),0);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local box)"))
     return SDK_FAILURE;
@@ -1154,6 +1159,7 @@ bool boxm_ray_trace_manager<T>::run_block()
   if (!this->check_val(status,CL_SUCCESS,"Falied in command queue creation" + error_to_string(status)))
     return false;
 
+  
   cl_event ceEvent;
   status = clEnqueueNDRangeKernel(command_queue,this->kernel_, 1,NULL,globalThreads,localThreads,0,NULL,&ceEvent);
 
@@ -1161,7 +1167,7 @@ bool boxm_ray_trace_manager<T>::run_block()
     return SDK_FAILURE;
 
   status = clFinish(command_queue);
-  if (!this->check_val(status,CL_SUCCESS,"clFinish failed."))
+  if (!this->check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status)))
     return SDK_FAILURE;
   cl_ulong tstart,tend;
   status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);

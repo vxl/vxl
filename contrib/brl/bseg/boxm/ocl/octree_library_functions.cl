@@ -20,7 +20,7 @@ short4 loc_code(float4 point, short root_level)
   float max_val = 1 << root_level; // index of root
   ushort4 maxl = (ushort4)max_val;
   ushort4 temp = convert_ushort4_sat(max_val*point);
-  ushort4 ret = vcl_min(temp, maxl);
+  ushort4 ret =  min(temp, maxl);
   ret.w = 0;
   return convert_short4(ret);
 }
@@ -89,6 +89,7 @@ int traverse(__global int4* cells, int cell_ptr, short4 cell_loc_code,
   return found_cell_ptr;
 }
 
+
 //-----------------------------------------------------------------
 // Traverse from the specified root_cell to the cell specified by loc_code.
 // Return the array pointer to the resulting cell. If a leaf node is
@@ -122,6 +123,7 @@ int traverse_to_level(__global int4* cells, int cell_ptr,
   return found_cell_ptr;
 }
 
+
 //-----------------------------------------------------------------
 // Traverse from the current cell to find the cell whose code is
 // closest to the specified target_loc_code and lies in the sub-tree of
@@ -133,7 +135,7 @@ int traverse_to_level(__global int4* cells, int cell_ptr,
 //-----------------------------------------------------------------
 
 int traverse_force(__global int4* cells, int cell_ptr, short4 cell_loc_code,
-                   short4 target_loc_code, short4* found_loc_code)
+                    short4 target_loc_code, short4* found_loc_code)
 {
   int found_cell_ptr = cell_ptr;
   (*found_loc_code) = cell_loc_code;
@@ -169,6 +171,7 @@ int traverse_force(__global int4* cells, int cell_ptr, short4 cell_loc_code,
   return found_cell_ptr;
 }
 
+
 //--------------------------------------------------------------------
 // Find the common ancestor of a cell given a binary difference
 //
@@ -198,6 +201,7 @@ int common_ancestor(__global int4* cells, int cell_ptr, short4 cell_loc_code,
   return curr_cell_ptr;
 }
 
+
 //---------------------------------------------------------------------
 // The vector result for the exit face as a short vector in X, Y, Z
 // The element corresponding to the exit coordinate has the value 1
@@ -208,20 +212,20 @@ int common_ancestor(__global int4* cells, int cell_ptr, short4 cell_loc_code,
 //---------------------------------------------------------------------
 short4 cell_exit_face(float4 exit_point, float4 cell_min, float4 cell_max)
 {
-  float4 min_diff = vcl_fabs(exit_point-cell_min);
-  float4 max_diff = vcl_fabs(exit_point-cell_max);
+  float4 min_diff =  fabs(exit_point-cell_min);
+  float4 max_diff =  fabs(exit_point-cell_max);
 
-  short4 faceid=X_MIN;
-  float min=min_diff.x;
-#if 0
-  faceid=(short4)(-1);
-  min=1.0;
+  //short4 faceid=(short4) -1;
+
+ /* float min=1.0;
+
   if (min_diff.x<min)
   {
-    min=min_diff.x;
+      min=min_diff.x;
     faceid=X_MIN;
-  }
-#endif // 0
+  }*/
+  float min=min_diff.x;
+  short4 faceid=X_MIN;
 
   if (min_diff.y<min)
   {
@@ -268,69 +272,69 @@ short4 cell_exit_face(float4 exit_point, float4 cell_min, float4 cell_max)
   }
   exit point doesn't lie on any face of the cell
   return (short4) -1;
-#endif
+#endif // 0
 }
 
 short4 cell_exit_face_but_not_entry_face(float4 exit_point, float4 cell_min, float4 cell_max,short4 entry_face)
 {
-    float4 min_diff = vcl_fabs(exit_point-cell_min);
-    float4 max_diff = vcl_fabs(exit_point-cell_max);
+  float4 min_diff =  fabs(exit_point-cell_min);
+  float4 max_diff =  fabs(exit_point-cell_max);
 
-    short4 faceid=(short4) -1;
+  short4 faceid=(short4) -1;
 
-    float min=1.0;
+  float min=1.0;
 
-    short4 temp;
-    if (min_diff.x<min)
+  short4 temp;
+  if (min_diff.x<min)
+  {
+    if (!(entry_face.x==1 && entry_face.w==0 ))
     {
-        if (!(entry_face.x==1 && entry_face.w==0 ))
-        {
-            min=min_diff.x;
-            faceid=X_MIN;
-        }
+      min=min_diff.x;
+      faceid=X_MIN;
     }
-    if (min_diff.y<min )
+  }
+  if (min_diff.y<min )
+  {
+    if (!(entry_face.y==1 && entry_face.w==0 ))
     {
-        if (!(entry_face.y==1 && entry_face.w==0 ))
-        {
-            min=min_diff.y;
-            faceid=Y_MIN;
-        }
+      min=min_diff.y;
+      faceid=Y_MIN;
     }
-    if (min_diff.z<min)
+  }
+  if (min_diff.z<min)
+  {
+    if (!(entry_face.z==1 && entry_face.w==0 ))
     {
-        if (!(entry_face.z==1 && entry_face.w==0 ))
-        {
-            min=min_diff.z;
-            faceid=Z_MIN;
-        }
+      min=min_diff.z;
+      faceid=Z_MIN;
     }
-    if (max_diff.x<min )
+  }
+  if (max_diff.x<min )
+  {
+    if (!(entry_face.x==1 && entry_face.w==1 ))
     {
-        if (!(entry_face.x==1 && entry_face.w==1 ))
-        {
-            min=max_diff.x;
-            faceid=X_MAX;
-        }
+      min=max_diff.x;
+      faceid=X_MAX;
     }
-    if (max_diff.y<min )
+  }
+  if (max_diff.y<min )
+  {
+    if (!(entry_face.y==1 && entry_face.w==1 ))
     {
-        if (!(entry_face.y==1 && entry_face.w==1 ))
-        {
-            min=max_diff.y;
-            faceid=Y_MAX;
-        }
+      min=max_diff.y;
+      faceid=Y_MAX;
     }
-    if (max_diff.z<min )
+  }
+  if (max_diff.z<min )
+  {
+    if (!(entry_face.z==1 && entry_face.w==1 ))
     {
-        if (!(entry_face.z==1 && entry_face.w==1 ))
-        {
-            min=max_diff.z;
-            faceid=Z_MAX;
-        }
+      min=max_diff.z;
+      faceid=Z_MAX;
     }
+  }
 
-    return faceid;
+  return faceid;
 }
 
 //-------------------------------------------------------------------
@@ -389,7 +393,7 @@ int neighbor(__global int4* cells, int cell_ptr, short4 cell_loc_code,
   }
   short4 ancestor_loc_code = error;
   int ancestor_ptr =  common_ancestor(cells, cell_ptr, cell_loc_code,
-                                      *neighbor_code,
+                                      (*neighbor_code),
                                       &ancestor_loc_code);
   if (ancestor_ptr<0) {
     (*neighbor_code) = error;
@@ -417,9 +421,9 @@ int intersect_cell(float4 ray_o, float4 ray_d, float4 cell_min, float4 cell_max,
 
   // re-order intersections to find smallest and largest on each axis
   // minimum t values for either bounding plane
-  float4 tmin_s = vcl_min(tmax, tmin);
+  float4 tmin_s =  min(tmax, tmin);
   // maximum t values for either bounding plane
-  float4 tmax_s = vcl_max(tmax, tmin);
+  float4 tmax_s =  max(tmax, tmin);
 
   if (ray_d.x ==0.0f) {
     tmin_s.x = -3.4e38f;
@@ -438,8 +442,8 @@ int intersect_cell(float4 ray_o, float4 ray_d, float4 cell_min, float4 cell_max,
   }
 
   // find the largest tmin and the smallest tmax
-  float largest_tmin = vcl_max(vcl_max(tmin_s.x, tmin_s.y), vcl_max(tmin_s.x, tmin_s.z));
-  float smallest_tmax = vcl_min(vcl_min(tmax_s.x, tmax_s.y), vcl_min(tmax_s.x, tmax_s.z));
+  float largest_tmin =  max( max(tmin_s.x, tmin_s.y),  max(tmin_s.x, tmin_s.z));
+  float smallest_tmax =  min( min(tmax_s.x, tmax_s.y),  min(tmax_s.x, tmax_s.z));
   *tnear = largest_tmin;
   *tfar = smallest_tmax;
   return smallest_tmax > largest_tmin;
@@ -487,3 +491,4 @@ int cell_exit_point(float4 ray_org, float4 ray_dir,
 }
 
 // end of library kernels
+

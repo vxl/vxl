@@ -1,4 +1,5 @@
 # boxm's opencl Process Library
+ ADD_DEFINITIONS(-DHAS_OPENCL=1)
 
 # bprb depends on expat and boxm_ocl_pro depends on bprb primarily
 INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )

@@ -20,7 +20,7 @@ void step_cell(__global float16* cell_data, int data_ptr,
   float intensity_norm = (*data_return).w;
 
   alpha_integral += data.s0*d;
-  float vis_prob_end = vcl_exp(-alpha_integral);
+  float vis_prob_end = exp(-alpha_integral);
   float omega = vis - vis_prob_end;
   expected_int += expected_int_cell*omega;
   (*data_return).x = alpha_integral;

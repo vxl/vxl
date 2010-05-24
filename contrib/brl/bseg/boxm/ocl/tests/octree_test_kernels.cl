@@ -299,7 +299,7 @@ test_ray_trace(__global int4* cells, __global float2* cell_data,
 
       int hit = intersect_cell(origin[i], dir[i], cell_min, cell_max,&tnear, &tfar);
 
-      if (vcl_fabs(tfar-tnear)<cellsize/100)
+      if ( fabs(tfar-tnear)<cellsize/100)
       {
         entry_pt=entry_pt+dir[i]*cellsize/2;
         entry_loc_code = loc_code(entry_pt, root.w);
