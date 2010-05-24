@@ -250,6 +250,9 @@ SOURCE=.\concat_3d_images.cxx
 SOURCE=.\print_mbl_log_properties.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\crop_image_2d.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\crop_image_3d.cxx
 # End Source File
 # Begin Source File
