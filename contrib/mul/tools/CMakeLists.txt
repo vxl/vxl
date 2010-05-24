@@ -9,6 +9,9 @@ TARGET_LINK_LIBRARIES(concat_3d_images vimt3d vil3d vul vbl)
 ADD_EXECUTABLE( print_mbl_log_properties print_mbl_log_properties.cxx )
 TARGET_LINK_LIBRARIES(print_mbl_log_properties mbl)
 
+ADD_EXECUTABLE( crop_image_2d crop_image_2d.cxx )
+TARGET_LINK_LIBRARIES(crop_image_2d vimt mbl vgl)
+
 ADD_EXECUTABLE( crop_image_3d crop_image_3d.cxx )
 TARGET_LINK_LIBRARIES(crop_image_3d vimt3d mbl vgl)
 
