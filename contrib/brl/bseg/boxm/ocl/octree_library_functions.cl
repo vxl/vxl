@@ -356,9 +356,7 @@ void cell_bounding_box(short4 loc_code, int n_levels,
 }
 
 //-------------------------------------------------------------------
-// Given the location code determine the bounding box for the
-// cell in local tree coordinates, i.e. the max bounds of the
-// tree are (0,0,0)->(1,1,1)
+// Given the cell loc_code and the exit face, find the neighboring cell.
 //-------------------------------------------------------------------
 int neighbor(__global int4* cells, int cell_ptr, short4 cell_loc_code,
              short4 exit_face, short n_levels, short4* neighbor_code)
