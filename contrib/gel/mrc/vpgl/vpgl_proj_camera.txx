@@ -406,10 +406,10 @@ image_jacobians(const vpgl_proj_camera<T>& camera,
   for (unsigned int i=0; i<num_pts; ++i)
   {
     const vgl_point_3d<T>& pt = pts[i];
-    vnl_matrix_fixed<double,2,3>& J = img_jac[i];
+    vnl_matrix_fixed<T,2,3>& J = img_jac[i];
     vnl_vector_fixed<T,4>  hpt(pt.x(),pt.y(),pt.z(),1.0);
 
-    double d = dot_product(denom,hpt);
+    T d = dot_product(denom,hpt);
     d *= d;
     J.set_row(0,Du*hpt);
     J.set_row(1,Dv*hpt);
