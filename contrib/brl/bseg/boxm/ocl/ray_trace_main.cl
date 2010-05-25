@@ -1,24 +1,25 @@
 
 __kernel
 void
-ray_trace_main(__global float4  *origin,
-               __global float16 *svd_UtVW,
-               __global int4    *cells,
-               __global float16 *cell_data,
-               __global uint4   *imgdims,
-               __global uint4   *roidims,
-               __global float4  *global_bbox,
-               __global float4  *inp,
-               __global float4  *results,
-               __local float16  *cam,
-               __local float4   *local_origin,
-               __local float4   *bbox,
-               __local uint4    *roi)
+ray_trace_main(__global float4  *origin,	// camera origin
+               __global float16 *svd_UtVW,  // SVD of inverse of camera matrix
+               __global int4    *cells,		// tree 
+               __global float16 *cell_data, // leaf data
+               __global uint4   *imgdims,   // dimensions of the image
+               __global uint4   *roidims,   // dimesnions of the roi per block
+               __global float4  *global_bbox, // dimesnions of the current bbox in global coordinate 
+               __global float4  *inp,		//inp image
+               __local float16  *cam,		// local storage of cam
+               __local float4   *local_origin, //store the origin locally
+               __local float4   *bbox,		// local storgae of bbox
+               __local uint4    *roi,
+               __local float4   *local_img)		// local storgae of bbox
 {
 
 
   unsigned gid = get_global_id(0);
-  if (get_local_id(0) == 0)
+  unsigned lid = get_local_id(0);
+  if (lid == 0)
   {
     cam[0]=svd_UtVW[0];  // conjugate transpose of U
     cam[1]=svd_UtVW[1];  // V
@@ -29,11 +30,14 @@ ray_trace_main(__global float4  *origin,
   }
   barrier(CLK_LOCAL_MEM_FENCE);
 
+  local_img[lid]=inp[gid];
   float tnear = 0, tfar =0;
 
   int root_ptr = 0;
-  //int4 root_cell=cells[0];
-  int n_levels = 10;
+
+  int4 root_cell=cells[root_ptr];
+  int n_levels = 11;//root_cell.z;
+  
   // set the nlevels here
   short4 root = (short4)(0,0,0,n_levels-1);
 
@@ -53,6 +57,7 @@ ray_trace_main(__global float4  *origin,
   // using local variables
   float4 ray_d = backproject(i,j,cam[0],cam[1],cam[2],(*local_origin));
 
+  //float4 data_return=inp[gid];
 
 
   //bounding box of root
@@ -70,7 +75,6 @@ ray_trace_main(__global float4  *origin,
   short4 curr_loc_code;
   ////traverse to leaf cell that contains the entry point
   int curr_cell_ptr = traverse_force(cells, root_ptr, root, entry_loc_code,&curr_loc_code);
-  float4 data_return=inp[gid];
   //this cell is the first pierced by the ray
   //follow the ray through the cells until no neighbors are found
   while (1) {
@@ -85,6 +89,7 @@ ray_trace_main(__global float4  *origin,
     {
       entry_pt=entry_pt+ray_d*cellsize/2;
       entry_pt.w=0.5;
+
       if (any(entry_pt>=(float4)1.0f)|| any(entry_pt<=(float4)0.0f))
         break;
       entry_loc_code = loc_code(entry_pt, n_levels-1);
@@ -105,6 +110,7 @@ ray_trace_main(__global float4  *origin,
     // the place where the ray trace function can be applied
 
     int data_ptr = cells[curr_cell_ptr].z;
+
     //int data_ptr = curr_cell.z;
     if ( data_ptr<0)
       break;
@@ -112,7 +118,10 @@ ray_trace_main(__global float4  *origin,
     float d = (tfar-tnear)*(*bbox).w;
     // no function pointers in OpenCL (spec 8.6a)
     // instead, user must provide source with a function named "step_cell"
+    float4 data_return=local_img[lid];
     step_cell(cell_data,  data_ptr, d, &data_return);
+    local_img[lid]=data_return;
+
     //////////////////////////////////////////////////////////
 
     //// exit point
@@ -135,8 +144,9 @@ ray_trace_main(__global float4  *origin,
     short4 neighbor_code;
     int neighbor_ptr=neighbor(cells, curr_cell_ptr, curr_loc_code,exit_face, n_levels, &neighbor_code);
     //if no neighbor then terminate ray
-    if (neighbor_ptr>0)
+    if (neighbor_ptr<0)
       break;
+
     //traverse from the neighbor to the cell having the
     //required exit location code
     short4 exit_loc_code = loc_code(exit_pt, n_levels-1);
@@ -151,7 +161,8 @@ ray_trace_main(__global float4  *origin,
   // should have a cleanup functor for expected image
   // also it is not necessary to have a full float4 as the
   // output type a single scalar float array is sufficient
-  results[gid] = (float4)(data_return);
+  //data_return.z=count;
+  inp[gid] = local_img[lid];//(float4)(data_return);
 
   //end ray trace
 }
