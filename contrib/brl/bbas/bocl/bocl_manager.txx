@@ -272,6 +272,50 @@ bool bocl_manager<T>::initialize_cl()
     vcl_cout << " Device id [" << id << "]: " << devices_[id] << '\n';
   return true;
 }
+template<class T>
+bool bocl_manager<T>::load_kernel_source(vcl_string const& path)
+{
+  prog_ = "";
+  vcl_ifstream is(path.c_str());
+  if (!is.is_open())
+    return false;
+  char temp[256];
+  vcl_ostringstream ostr;
+  while (!is.eof()) {
+    is.getline(temp, 256);
+    vcl_string s(temp);
+    ostr << s << '\n';
+  }
+  prog_ =  ostr.str();
+  return prog_.size() > 0;
+}
+
+template<class T>
+bool bocl_manager<T>::append_process_kernels(vcl_string const& path)
+{
+  vcl_ifstream is(path.c_str());
+  if (!is.is_open())
+    return false;
+  char temp[256];
+  vcl_ostringstream ostr;
+  while (!is.eof()) {
+    is.getline(temp, 256);
+    vcl_string s(temp);
+    ostr << s << '\n';
+  }
+  prog_ += ostr.str();
+  return true;
+}
+
+template<class T>
+bool bocl_manager<T>::write_program(vcl_string const& path)
+{
+  vcl_ofstream os(path.c_str());
+  if (!os.is_open())
+    return false;
+  os << prog_;
+  return true;
+}
 
 template <class T>
 void* bocl_manager<T>::allocate_host_mem(vcl_size_t size)

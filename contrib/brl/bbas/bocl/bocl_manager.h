@@ -73,6 +73,9 @@ class bocl_manager
 
   //: Allocate host memory for use with clCreateBuffer (aligned if necessary)
   void* allocate_host_mem(vcl_size_t size);
+  bool load_kernel_source(vcl_string const& path);
+  bool append_process_kernels(vcl_string const& path);
+  bool write_program(vcl_string const& path);
 
  protected:
 
@@ -80,6 +83,9 @@ class bocl_manager
   bocl_manager() : devices_(0),max_work_item_sizes_(0) {}
 
   static T* instance_;
+
+  vcl_string prog_;
+
 };
 
 #endif // bocl_manager_h_
