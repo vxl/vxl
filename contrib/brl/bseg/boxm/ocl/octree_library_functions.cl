@@ -20,7 +20,7 @@ short4 loc_code(float4 point, short root_level)
   float max_val = 1 << root_level; // index of root
   ushort4 maxl = (ushort4)max_val;
   ushort4 temp = convert_ushort4_sat(max_val*point);
-  ushort4 ret =  min(temp, maxl);
+  ushort4 ret =  vcl_min(temp, maxl);
   ret.w = 0;
   return convert_short4(ret);
 }
@@ -135,7 +135,7 @@ int traverse_to_level(__global int4* cells, int cell_ptr,
 //-----------------------------------------------------------------
 
 int traverse_force(__global int4* cells, int cell_ptr, short4 cell_loc_code,
-                    short4 target_loc_code, short4* found_loc_code)
+                   short4 target_loc_code, short4* found_loc_code)
 {
   int found_cell_ptr = cell_ptr;
   (*found_loc_code) = cell_loc_code;
@@ -212,8 +212,8 @@ int common_ancestor(__global int4* cells, int cell_ptr, short4 cell_loc_code,
 //---------------------------------------------------------------------
 short4 cell_exit_face(float4 exit_point, float4 cell_min, float4 cell_max)
 {
-  float4 min_diff =  fabs(exit_point-cell_min);
-  float4 max_diff =  fabs(exit_point-cell_max);
+  float4 min_diff =  vcl_fabs(exit_point-cell_min);
+  float4 max_diff =  vcl_fabs(exit_point-cell_max);
 
   //short4 faceid=(short4) -1;
 
@@ -277,8 +277,8 @@ short4 cell_exit_face(float4 exit_point, float4 cell_min, float4 cell_max)
 
 short4 cell_exit_face_but_not_entry_face(float4 exit_point, float4 cell_min, float4 cell_max,short4 entry_face)
 {
-  float4 min_diff =  fabs(exit_point-cell_min);
-  float4 max_diff =  fabs(exit_point-cell_max);
+  float4 min_diff = vcl_fabs(exit_point-cell_min);
+  float4 max_diff = vcl_fabs(exit_point-cell_max);
 
   short4 faceid=(short4) -1;
 
@@ -419,9 +419,9 @@ int intersect_cell(float4 ray_o, float4 ray_d, float4 cell_min, float4 cell_max,
 
   // re-order intersections to find smallest and largest on each axis
   // minimum t values for either bounding plane
-  float4 tmin_s =  min(tmax, tmin);
+  float4 tmin_s =  vcl_min(tmax, tmin);
   // maximum t values for either bounding plane
-  float4 tmax_s =  max(tmax, tmin);
+  float4 tmax_s =  vcl_max(tmax, tmin);
 
   if (ray_d.x ==0.0f) {
     tmin_s.x = -3.4e38f;
@@ -440,8 +440,8 @@ int intersect_cell(float4 ray_o, float4 ray_d, float4 cell_min, float4 cell_max,
   }
 
   // find the largest tmin and the smallest tmax
-  float largest_tmin =  max( max(tmin_s.x, tmin_s.y),  max(tmin_s.x, tmin_s.z));
-  float smallest_tmax =  min( min(tmax_s.x, tmax_s.y),  min(tmax_s.x, tmax_s.z));
+  float largest_tmin =  vcl_max( vcl_max(tmin_s.x, tmin_s.y),  vcl_max(tmin_s.x, tmin_s.z));
+  float smallest_tmax =  vcl_min( vcl_min(tmax_s.x, tmax_s.y),  vcl_min(tmax_s.x, tmax_s.z));
   *tnear = largest_tmin;
   *tfar = smallest_tmax;
   return smallest_tmax > largest_tmin;
