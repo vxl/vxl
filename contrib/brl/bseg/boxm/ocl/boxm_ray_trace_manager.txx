@@ -676,16 +676,11 @@ template<class T>
 int boxm_ray_trace_manager<T>::setup_work_img_buffer()
 {
   cl_int status = CL_SUCCESS;
-  work_image_buf_ = clCreateBuffer(this->context_,CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
+  work_image_buf_ = clCreateBuffer(this->context_,CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
     ni_*nj_* sizeof(cl_float4),ray_results_,&status);
   if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (work image) failed."))
     return SDK_FAILURE;
-  out_work_image_buf_ = clCreateBuffer(this->context_,CL_MEM_WRITE_ONLY | CL_MEM_USE_HOST_PTR,
-    ni_*nj_* sizeof(cl_float4),ray_results_,&status);
-  if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (work image) failed."))
-    return SDK_FAILURE;
-  else
-    return SDK_SUCCESS;
+  return SDK_SUCCESS;
 }
 
 template<class T>
@@ -693,10 +688,6 @@ int boxm_ray_trace_manager<T>::clean_work_img_buffer()
 {
   cl_int status = clReleaseMemObject(work_image_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject (work_image_buf_) failed."))
-    return SDK_FAILURE;
-
-  status = clReleaseMemObject(out_work_image_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject (roidims_) failed."))
     return SDK_FAILURE;
 
   return SDK_SUCCESS;
@@ -911,50 +902,6 @@ boxm_ray_trace_manager<T>::~boxm_ray_trace_manager()
     clReleaseProgram(program_);
 }
 
-template<class T>
-bool boxm_ray_trace_manager<T>::load_kernel_source(vcl_string const& path)
-{
-  prog_ = "";
-  vcl_ifstream is(path.c_str());
-  if (!is.is_open())
-    return false;
-  char temp[256];
-  vcl_ostringstream ostr;
-  while (!is.eof()) {
-    is.getline(temp, 256);
-    vcl_string s(temp);
-    ostr << s << '\n';
-  }
-  prog_ =  ostr.str();
-  return prog_.size() > 0;
-}
-
-template<class T>
-bool boxm_ray_trace_manager<T>::append_process_kernels(vcl_string const& path)
-{
-  vcl_ifstream is(path.c_str());
-  if (!is.is_open())
-    return false;
-  char temp[256];
-  vcl_ostringstream ostr;
-  while (!is.eof()) {
-    is.getline(temp, 256);
-    vcl_string s(temp);
-    ostr << s << '\n';
-  }
-  prog_ += ostr.str();
-  return true;
-}
-
-template<class T>
-bool boxm_ray_trace_manager<T>::write_program(vcl_string const& path)
-{
-  vcl_ofstream os(path.c_str());
-  if (!os.is_open())
-    return false;
-  os << prog_;
-  return true;
-}
 
 template<class T>
 bool boxm_ray_trace_manager<T>::load_tree(vcl_string const& path)
@@ -1023,7 +970,6 @@ bool boxm_ray_trace_manager<T>::run()
       }
 
       tree_type * tree=curr_block->get_tree();
-      	  t.mark();
 
       set_tree(tree);
       setup_tree();
@@ -1040,7 +986,7 @@ bool boxm_ray_trace_manager<T>::run()
       setup_work_img_buffer();
       setup_tree_global_bbox_buffer();
       setup_imgdims_buffer();
-                  total_gpu_time+=t.all();
+                  
 
       // run the raytracing for this block
       run_block();
@@ -1111,23 +1057,22 @@ bool boxm_ray_trace_manager<T>::run_block()
   status = clSetKernelArg(kernel_,7,sizeof(cl_mem),(void *)&work_image_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (input_work_image)"))
     return SDK_FAILURE;
-  // output image buffer
-  status = clSetKernelArg(kernel_,8,sizeof(cl_mem),(void *)&out_work_image_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output_expected_image)"))
-    return SDK_FAILURE;
     
   //  set local variable
-  status = clSetKernelArg(kernel_,9,sizeof(cl_float16)*3,0);
+  status = clSetKernelArg(kernel_,8,sizeof(cl_float16)*3,0);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local cam)"))
     return SDK_FAILURE;
-  status = clSetKernelArg(kernel_,10,sizeof(cl_float4),0);
+  status = clSetKernelArg(kernel_,9,sizeof(cl_float4),0);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local origin)"))
     return SDK_FAILURE;
 
-  status = clSetKernelArg(kernel_,11,sizeof(cl_float4),0);
+  status = clSetKernelArg(kernel_,10,sizeof(cl_float4),0);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local box)"))
     return SDK_FAILURE;
-  status = clSetKernelArg(kernel_,12,sizeof(cl_uint4),0);
+  status = clSetKernelArg(kernel_,11,sizeof(cl_uint4),0);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local roi)"))
+    return SDK_FAILURE;
+  status = clSetKernelArg(kernel_,12,sizeof(cl_float4)*this->group_size(),0);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local roi)"))
     return SDK_FAILURE;
 
@@ -1176,7 +1121,7 @@ bool boxm_ray_trace_manager<T>::run_block()
   cl_event events[2];
 
   // Enqueue readBuffers
-  status = clEnqueueReadBuffer(command_queue,out_work_image_buf_,CL_TRUE,
+  status = clEnqueueReadBuffer(command_queue,work_image_buf_,CL_TRUE,
     0,ni_*nj_*sizeof(cl_float4),
     this->ray_results(),
     0,NULL,&events[0]);

@@ -26,8 +26,7 @@ class boxm_ray_trace_manager : public bocl_manager<boxm_ray_trace_manager<T_data
   typedef boct_tree_cell<short,T_data> cell_type;
 
   boxm_ray_trace_manager()
-    : prog_(""),
-    scene_(0),
+    : scene_(0),
     program_(0),
     cells_(0),
     cell_data_(0),
@@ -148,9 +147,6 @@ class boxm_ray_trace_manager : public bocl_manager<boxm_ray_trace_manager<T_data
 
   cl_kernel kernel() {return kernel_;}
 
-  bool load_kernel_source(vcl_string const& path);
-  bool append_process_kernels(vcl_string const& path);
-  bool write_program(vcl_string const& path);
   bool load_tree(vcl_string const& path);
   bool write_tree(vcl_string const& path);
 
@@ -161,10 +157,9 @@ class boxm_ray_trace_manager : public bocl_manager<boxm_ray_trace_manager<T_data
   boxm_scene<tree_type> *scene_;
   vpgl_camera_double_sptr cam_;
   boct_tree<short, T_data > *tree_;
-
-  vcl_string prog_;
-  cl_command_queue command_queue_;
   cl_program program_;
+
+  cl_command_queue command_queue_;
   cl_kernel kernel_;
   vcl_vector<vnl_vector_fixed<int, 4> > cell_input_;
   vcl_vector<vnl_vector_fixed<float, 16>  > data_input_;
@@ -187,7 +182,6 @@ class boxm_ray_trace_manager : public bocl_manager<boxm_ray_trace_manager<T_data
   cl_mem   input_cell_buf_;
   cl_mem   input_data_buf_;
   cl_mem   work_image_buf_;
-  cl_mem   out_work_image_buf_;
   cl_mem   ray_origin_buf_;
   cl_mem   camera_buf_;
   cl_mem   imgdims_buf_;
