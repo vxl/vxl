@@ -48,7 +48,7 @@ bool extract_gaussian_primitives(vil_image_resource_sptr img, float lambda0, flo
   float min, max;
   vil_math_value_range(res, min, max);
 
-#if 1
+#if 0
   vcl_cout << "res min: " << min << " max: " << max << vcl_endl;
   vil_image_view<vxl_byte> res_o(ni, nj);
   vil_convert_stretch_range_limited(res, res_o, min, max);
@@ -63,7 +63,7 @@ bool extract_gaussian_primitives(vil_image_resource_sptr img, float lambda0, flo
 #endif // 0
   vil_image_view<float> strength_map(ni, nj);
   vil_convert_stretch_range_limited(res, strength_map, 0.0f, val, 0.0f, 1.0f);
-#if 1
+#if 0
   vil_math_value_range(strength_map, min, max);
   vcl_cout << "strength_map min: " << min << " max: " << max << vcl_endl;
   vil_convert_stretch_range_limited(strength_map, res_o, min, max);
@@ -92,7 +92,6 @@ bool extract_gaussian_primitives(vil_image_resource_sptr img, float lambda0, flo
   vcl_cout << "img min: " << min << " max: " << max << vcl_endl;
   vil_math_value_range(mask, min, max);
   vcl_cout << "mask min: " << min << " max: " << max << vcl_endl;
-#endif
 
   vil_image_view<bool> res_bool;
   vil_threshold_above(res, res_bool, max/2);
@@ -100,6 +99,7 @@ bool extract_gaussian_primitives(vil_image_resource_sptr img, float lambda0, flo
   vil_convert_cast(res_bool, res_bool_f);
   vil_convert_stretch_range_limited(res_bool_f, res_o, 0.0f, 1.0f);
   vil_save(res_o, "./temp_thresholded.png");
+#endif
 
   return true;
 }
@@ -640,9 +640,6 @@ bool brec_part_gaussian::extract(vil_image_view<float>& img, vil_image_view<floa
       float pos_nc_f = 0.0f;
       float pos_c_b = 0.0f;
       float pos_nc_b = 0.0f;
-
-      if (i == 459 && j == 735)
-        vcl_cout << "here!\n";
 
       float pf = fg_prob_operator(fg_prob_image, i, j); // was: fg_prob_image(i, j);
 
