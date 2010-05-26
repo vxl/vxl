@@ -1,12 +1,9 @@
 
 __kernel
 void
-<<<<<<< .mine
 ray_trace_main(__global int * nlevels,
 			   __global float4  *origin,	// camera origin
-=======
-ray_trace_main(__global float4  *origin,    // camera origin
->>>>>>> .r28430
+
                __global float16 *svd_UtVW,  // SVD of inverse of camera matrix
                __global int4    *cells,     // tree
                __global float16 *cell_data, // leaf data
@@ -18,7 +15,7 @@ ray_trace_main(__global float4  *origin,    // camera origin
                __local float4   *local_origin,// store the origin locally
                __local float4   *bbox,        // local storgae of bbox
                __local uint4    *roi)
-               //__local float4   *local_img)		// local storgae of bbox
+              // __local float4   *local_img)		// local storgae of bbox
 {
   unsigned gid = get_global_id(0);
   unsigned lid = get_local_id(0);
