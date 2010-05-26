@@ -11,12 +11,16 @@ IF(OPENCL_FOUND)
 
   SET(boxm_ocl_sources
       boxm_ray_trace_manager.h boxm_ray_trace_manager.txx
+      boxm_stack_ray_trace_manager.h boxm_stack_ray_trace_manager.txx
       boxm_ocl_utils.h  boxm_ocl_utils.cxx
       boxm_ocl_render_expected.h
      )
 
   SET(bomx2_ocl_source_files
       octree_library_functions.cl
+      ray_trace_main.cl
+      ray_stack_trace_main.cl
+      expected_functor.cl
      )
   AUX_SOURCE_DIRECTORY(Templates boxm_ocl_sources)
   ADD_LIBRARY(boxm_ocl ${boxm_ocl_sources} ${bomx2_ocl_source_files})
@@ -25,5 +29,6 @@ IF(OPENCL_FOUND)
 
   SUBDIRS(tests)
   SUBDIRS(pro)
+  SUBDIRS(exe)
 
 ENDIF(OPENCL_FOUND)

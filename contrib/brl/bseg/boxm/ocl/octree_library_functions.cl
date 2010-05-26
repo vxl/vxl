@@ -89,7 +89,34 @@ int traverse(__global int4* cells, int cell_ptr, short4 cell_loc_code,
   return found_cell_ptr;
 }
 
+int traverse_stack(__global int4* cells, int cell_ptr, short4 cell_loc_code,
+             short4 target_loc_code, short4* found_loc_code,uint lid,int stacksize, __local int*stack,int *stack_ptr)
+{
+  int found_cell_ptr = cell_ptr;
+  int ret = -1;
+  int level = target_loc_code.w;
+  if ( level < 0)
+    return ret;
+  int4 curr_cell = cells[cell_ptr];
+  int curr_level = cell_loc_code.w;
+  *found_loc_code = cell_loc_code;
+  while (level<curr_level && curr_cell.y>0)
+  {
+    int c_ptr = curr_cell.y;
+   (*stack_ptr)++;
 
+    uchar c_index = child_index(target_loc_code, curr_level);
+    (*found_loc_code) =
+      child_loc_code(c_index, curr_level-1, *found_loc_code);
+    c_ptr += c_index;
+    stack[lid*stacksize+(*stack_ptr)]=c_ptr;
+
+    curr_cell = cells[c_ptr];
+    found_cell_ptr = c_ptr;
+    --curr_level;
+  }
+  return found_cell_ptr;
+}
 //-----------------------------------------------------------------
 // Traverse from the specified root_cell to the cell specified by loc_code.
 // Return the array pointer to the resulting cell. If a leaf node is
@@ -112,6 +139,7 @@ int traverse_to_level(__global int4* cells, int cell_ptr,
   while (level<curr_level && curr_cell.y>0)
   {
     int c_ptr = curr_cell.y;
+
     uchar c_index = child_index(target_loc_code, curr_level);
     (*found_loc_code) =
       child_loc_code(c_index, curr_level-1, *found_loc_code);
@@ -123,7 +151,36 @@ int traverse_to_level(__global int4* cells, int cell_ptr,
   return found_cell_ptr;
 }
 
+int traverse_to_level_stack(__global int4* cells, int cell_ptr,
+                      short4 cell_loc_code, short4 target_loc_code,
+                      short target_level,
+                      short4* found_loc_code,uint lid,int stacksize, __local int*stack,int *stack_ptr)
+{
+  int found_cell_ptr = cell_ptr;
+  int ret = -1;
+  int level = target_level;
+  if ( level < 0)
+    return ret;
+  int4 curr_cell = cells[cell_ptr];
+  int curr_level = cell_loc_code.w;
+  *found_loc_code = cell_loc_code;
+  while (level<curr_level && curr_cell.y>0)
+  {
+    int c_ptr = curr_cell.y;
+    (*stack_ptr)++;
 
+    uchar c_index = child_index(target_loc_code, curr_level);
+    (*found_loc_code) =
+      child_loc_code(c_index, curr_level-1, *found_loc_code);
+    c_ptr += c_index;
+    stack[lid*stacksize+(*stack_ptr)]=c_ptr;
+
+    curr_cell = cells[c_ptr];
+    found_cell_ptr = c_ptr;
+    --curr_level;
+  }
+  return found_cell_ptr;
+}
 //-----------------------------------------------------------------
 // Traverse from the current cell to find the cell whose code is
 // closest to the specified target_loc_code and lies in the sub-tree of
@@ -170,7 +227,47 @@ int traverse_force(__global int4* cells, int cell_ptr, short4 cell_loc_code,
   }
   return found_cell_ptr;
 }
+int traverse_force_stack(__global int4* cells, int cell_ptr, short4 cell_loc_code,
+						 short4 target_loc_code, short4* found_loc_code,
+						 __local int* stack, 
+						 uint lid,int stacksize, int *stack_ptr)
+{
+  int found_cell_ptr = cell_ptr;
+  (*found_loc_code) = cell_loc_code;
+  int ret = (int)-1;
+  int level = target_loc_code.w;
+  if ( level < 0)
+    return ret;
+  int curr_level = cell_loc_code.w;
+  int4 curr_cell = cells[cell_ptr];//the root of the tree to search
+  short4 curr_code = cell_loc_code;
+  curr_code.w = curr_level;
+  while (level<curr_level && curr_cell.y>0)
+  {
+    int c_ptr = curr_cell.y;
+    (*stack_ptr)++;
+    short4 child_bit = (short4)(1);
+    child_bit = child_bit << (short4)(curr_level-1);
+    short4 code_diff = target_loc_code-curr_code;
+    // TODO: find a way to compute the following as a vector op
+    uchar c_index = 0;
+    if (code_diff.x >= child_bit.x)
+      c_index += 1;
+    if (code_diff.y >= child_bit.y)
+      c_index += 2;
+    if (code_diff.z >= child_bit.z)
+      c_index += 4;
+    curr_code = child_loc_code(c_index, curr_level-1, curr_code);
+    c_ptr += c_index;
+    stack[lid*stacksize+(*stack_ptr)]=c_ptr;
 
+    curr_cell = cells[c_ptr];
+    found_cell_ptr = c_ptr;
+    *found_loc_code = curr_code;
+    --curr_level;
+  }
+  return found_cell_ptr;
+}
 
 //--------------------------------------------------------------------
 // Find the common ancestor of a cell given a binary difference
@@ -200,7 +297,35 @@ int common_ancestor(__global int4* cells, int cell_ptr, short4 cell_loc_code,
   }
   return curr_cell_ptr;
 }
-
+//--------------------------------------------------------------------
+// Find the common ancestor of a cell given a binary difference
+//
+int common_ancestor_stack(__global int4* cells, int cell_ptr, short4 cell_loc_code,
+                    short4 target_loc_code, short4* ancestor_loc_code,int *stack_ptr)
+{
+  short4 bin_diff = cell_loc_code ^ target_loc_code;
+  short curr_level = (short)cell_loc_code.w;
+  int curr_cell_ptr = cell_ptr;
+  (*ancestor_loc_code) = cell_loc_code;
+  int4 curr_cell = cells[curr_cell_ptr];
+  short4 mask = (short4)(1 << (curr_level));
+  short4 shift_one =(short4)1;//shift the mask by 1 as a vector
+  short4 arg = bin_diff & mask; //masking the bits of the difference (xor)
+  while (arg.x>0||arg.y>0||arg.z>0)//might be done as vector op
+  {
+    //curr_cell_ptr = curr_cell.x;
+    //curr_cell = cells[curr_cell_ptr];
+    (*stack_ptr)--;
+    //clear the code bit at each level while ascending to common ancestor
+    short4 clear_bits = ~(short4)(mask);
+    curr_level++;
+    (*ancestor_loc_code) = (*ancestor_loc_code) & clear_bits;
+    (*ancestor_loc_code).w = curr_level;
+    mask = mask << shift_one;
+    arg = bin_diff & mask;
+  }
+  return curr_cell_ptr;
+}
 
 //---------------------------------------------------------------------
 // The vector result for the exit face as a short vector in X, Y, Z
@@ -402,7 +527,61 @@ int neighbor(__global int4* cells, int cell_ptr, short4 cell_loc_code,
                       (*neighbor_code), cell_level, neighbor_code);
   return neighbor_ptr;
 }
-
+//-------------------------------------------------------------------
+// Given the cell loc_code and the exit face, find the neighboring cell.
+//-------------------------------------------------------------------
+int neighbor_stack(__global int4* cells, int cell_ptr, short4 cell_loc_code,
+				   short4 exit_face, short n_levels, short4* neighbor_code,
+				   __local int* stack,uint lid,int * stack_ptr)
+{
+  short cell_level = cell_loc_code.w;
+  short cell_size = 1<<cell_level;
+  short4 error = (short4)-1;
+  int neighbor_ptr = -1;
+  // if the neighbor is on the min face
+  if (exit_face.w==0)
+  {
+    short4 zero = (short4)0;
+    (*neighbor_code) = cell_loc_code - exit_face;
+    (*neighbor_code).w = 0;//smallest cell level possible
+    short4 test =(short4)((*neighbor_code) < zero);
+    if (any(test)) {
+      (*neighbor_code) = error;
+      return neighbor_ptr;
+    }
+  }
+  else {
+    short4 largest = (short4)(1<<(n_levels-1));
+    short4 csize = (short4)cell_size;
+    csize.w = 0;
+    (*neighbor_code) = cell_loc_code + (csize*exit_face);
+    (*neighbor_code).w = 0;
+    short4 test =(short4)((*neighbor_code) >= largest);
+    if (any(test)) {
+      (*neighbor_code) = error;
+      return neighbor_ptr;
+    }
+  }
+  short4 ancestor_loc_code = error;
+  int ancestor_ptr =  common_ancestor_stack(cells, cell_ptr, cell_loc_code,
+                                      (*neighbor_code),
+                                      &ancestor_loc_code,
+                                      stack_ptr);
+  
+  ancestor_ptr=(*stack_ptr)<0?0:stack[lid*(n_levels-1)+(*stack_ptr)];
+  /*if((*stack_ptr)<0)
+	ancestor_ptr=0;
+  else
+	ancestor_ptr=stack[lid*(n_levels-1)+(*stack_ptr)];*/
+  /*if (ancestor_ptr<0) {
+    (*neighbor_code) = error;
+    return neighbor_ptr;
+  }*/
+ neighbor_ptr =
+    traverse_to_level_stack(cells, ancestor_ptr, ancestor_loc_code,
+                      (*neighbor_code), cell_level, neighbor_code, lid, n_levels-1,stack, stack_ptr);
+  return neighbor_ptr;
+}
 //--------------------------------------------------------------------------
 // Given the ray origin, ray_o and its direction, ray_d and the cell min
 // and max points, find the ray parameters, tnear and tfar that correspond

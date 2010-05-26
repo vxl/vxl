@@ -1,11 +1,11 @@
-// This is brl/bseg/boxm/ocl/pro/processes/boxm_ocl_render_expected_process.cxx
+// This is brl/bseg/boxm/ocl/pro/processes/boxm_ocl_stack_render_expected_process.cxx
 #include <bprb/bprb_func_process.h>
 //:
 // \file
 // \brief A process for rendering an expected image using OpenCL GPU acceleration
 //
-// \author Daniel Crispell
-// \date March 15, 2010
+// \author Vishal JAin
+// \date May 25, 2010
 // \verbatim
 //  Modifications
 //   <none yet>
@@ -20,16 +20,17 @@
 #include <boxm/sample/boxm_sample_multi_bin.h>
 
 #include <vil/vil_convert.h>
+#include <vil/vil_save.h>
 
-namespace boxm_ocl_render_expected_process_globals
+namespace boxm_ocl_stack_render_expected_process_globals
 {
   const unsigned n_inputs_ = 5;
   const unsigned n_outputs_ = 2;
 }
 
-bool boxm_ocl_render_expected_process_cons(bprb_func_process& pro)
+bool boxm_ocl_stack_render_expected_process_cons(bprb_func_process& pro)
 {
-  using namespace boxm_ocl_render_expected_process_globals;
+  using namespace boxm_ocl_stack_render_expected_process_globals;
   //process takes 4 inputs
   //input[0]: scene binary file
   //input[1]: camera
@@ -58,9 +59,9 @@ bool boxm_ocl_render_expected_process_cons(bprb_func_process& pro)
   return true;
 }
 
-bool boxm_ocl_render_expected_process(bprb_func_process& pro)
+bool boxm_ocl_stack_render_expected_process(bprb_func_process& pro)
 {
-  using namespace boxm_ocl_render_expected_process_globals;
+  using namespace boxm_ocl_stack_render_expected_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ){
     vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
@@ -89,7 +90,7 @@ bool boxm_ocl_render_expected_process(bprb_func_process& pro)
       {
         typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > type;
         boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
-        boxm_opencl_render_expected<BOXM_APM_MOG_GREY>(*scene, camera, expected, mask, use_black_background);
+        boxm_opencl_stack_render_expected<BOXM_APM_MOG_GREY>(*scene, camera, expected, mask, use_black_background);
       }
       else
       {
@@ -111,7 +112,8 @@ bool boxm_ocl_render_expected_process(bprb_func_process& pro)
       {
         typedef boct_tree<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > type;
         boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
-        boxm_opencl_render_expected<BOXM_APM_SIMPLE_GREY>(*scene, camera, expected, mask, use_black_background);
+        boxm_opencl_stack_render_expected<BOXM_APM_SIMPLE_GREY>(*scene, camera, expected, mask, use_black_background);
+		vil_save(expected,"f:/APL/expected.tiff");
       }
       else
       {
@@ -128,7 +130,7 @@ bool boxm_ocl_render_expected_process(bprb_func_process& pro)
     }
     default:
     {
-      vcl_cout << "boxm_ocl_render_expected_process: unsupported APM type" << vcl_endl;
+      vcl_cout << "boxm_ocl_stack_render_expected_process: unsupported APM type" << vcl_endl;
       return false;
     }
   }

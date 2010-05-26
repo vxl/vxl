@@ -1,5 +1,5 @@
-#ifndef boxm_ray_trace_manager_h_
-#define boxm_ray_trace_manager_h_
+#ifndef boxm_stack_ray_trace_manager_h_
+#define boxm_stack_ray_trace_manager_h_
 //:
 // \file
 #include <vcl_string.h>
@@ -18,14 +18,14 @@
 
 
 template <class T_data>
-class boxm_ray_trace_manager : public bocl_manager<boxm_ray_trace_manager<T_data> >
+class boxm_stack_ray_trace_manager : public bocl_manager<boxm_stack_ray_trace_manager<T_data> >
 {
  public:
   typedef boct_tree<short,T_data> tree_type;
   //typedef boct_tree<short,T_aux> aux_tree_type;
   typedef boct_tree_cell<short,T_data> cell_type;
 
-  boxm_ray_trace_manager()
+  boxm_stack_ray_trace_manager()
     : scene_(0),
     program_(0),
     cells_(0),
@@ -37,10 +37,10 @@ class boxm_ray_trace_manager : public bocl_manager<boxm_ray_trace_manager<T_data
     //tree_(0),
     cam_(0),
     svd_UtWV_(0),imgdims_(0),roidims_(0),global_bbox_(0),
-    ni_(0),nj_(0),nlevels_(0)
+    ni_(0),nj_(0), nlevels_(0)
   {}
 
-  ~boxm_ray_trace_manager();
+  ~boxm_stack_ray_trace_manager();
 
   //: setup the parameters needed to run the raytrace
   bool init_raytrace(boxm_scene<tree_type> *scene,
@@ -145,7 +145,7 @@ class boxm_ray_trace_manager : public bocl_manager<boxm_ray_trace_manager<T_data
   int create_kernel(vcl_string const& name);
   int release_kernel();
 
-unsigned num_levels(){return nlevels_;}
+  unsigned num_levels(){return nlevels_;}
   cl_kernel kernel() {return kernel_;}
 
   bool load_tree(vcl_string const& path);
@@ -170,7 +170,7 @@ unsigned num_levels(){return nlevels_;}
   unsigned int j0_;
   unsigned ni_;
   unsigned nj_;
-unsigned nlevels_;
+  unsigned nlevels_;
   cl_int* cells_;
   cl_float* cell_data_;
   cl_int* tree_results_;
@@ -180,7 +180,7 @@ unsigned nlevels_;
   cl_float* svd_UtWV_;
   cl_uint * imgdims_;
   cl_uint * roidims_;
- cl_uint * numlevels_;
+  cl_uint * numlevels_;
   cl_float * global_bbox_;
   cl_mem   input_cell_buf_;
   cl_mem   input_data_buf_;
@@ -190,7 +190,7 @@ unsigned nlevels_;
   cl_mem   imgdims_buf_;
   cl_mem   roidims_buf_;
   cl_mem   global_bbox_buf_;
-cl_mem   nlevels_buf_;
+  cl_mem   nlevels_buf_;
 };
 
-#endif // boxm_ray_trace_manager_h_
+#endif // boxm_stack_ray_trace_manager_h_
