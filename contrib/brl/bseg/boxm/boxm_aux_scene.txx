@@ -77,8 +77,9 @@ void boxm_aux_scene<T_loc,T,T_AUX>::clean_scene()
     if (aux_scene_->discover_block(iter.index().x(),iter.index().y(),iter.index().z())) {
       vcl_string filename=aux_scene_->gen_block_path(iter.index().x(),iter.index().y(),iter.index().z());
       vpl_unlink(filename.c_str());
-      iter++;
+      
     }
+    iter++;
   }
 }
 
