@@ -2,26 +2,23 @@
 __kernel
 void
 ray_stack_trace_main(__global int * nlevels,
-			   __global float4  *origin,	// camera origin
-               __global float16 *svd_UtVW,  // SVD of inverse of camera matrix
-               __global int4    *cells,		// tree 
-               __global float16 *cell_data, // leaf data
-               __global uint4   *imgdims,   // dimensions of the image
-               __global uint4   *roidims,   // dimesnions of the roi per block
-               __global float4  *global_bbox, // dimesnions of the current bbox in global coordinate 
-               __global float4  *inp,		//inp image
-               __local float16  *cam,		// local storage of cam
-               __local float4   *local_origin, //store the origin locally
-               __local float4   *bbox,		// local storgae of bbox
-               __local uint4    *roi,
-               //__local float4   *local_img,
-               __local int * stack)		// local storgae of bbox
+                     __global float4  *origin,      // camera origin
+                     __global float16 *svd_UtVW,    // SVD of inverse of camera matrix
+                     __global int4    *cells,       // tree
+                     __global float16 *cell_data,   // leaf data
+                     __global uint4   *imgdims,     // dimensions of the image
+                     __global uint4   *roidims,     // dimensions of the roi per block
+                     __global float4  *global_bbox, // dimensions of the current bbox in global coordinate
+                     __global float4  *inp,         // inp image
+                     __local float16  *cam,         // local storage of cam
+                     __local float4   *local_origin,// store the origin locally
+                     __local float4   *bbox,        // local storage of bbox
+                     __local uint4    *roi,
+                  // __local float4   *local_img,
+                     __local int * stack)           // local storage of bbox
 {
-
-
   unsigned gid = get_global_id(0);
   unsigned lid = get_local_id(0);
-  
 
   if (lid == 0)
   {
@@ -40,7 +37,7 @@ ray_stack_trace_main(__global int * nlevels,
 
   //int4 root_cell=cells[root_ptr];
   int n_levels = 11;//(*nlevels);
-  
+
   // set the nlevels here
   short4 root = (short4)(0,0,0,n_levels-1);
 
@@ -56,7 +53,7 @@ ray_stack_trace_main(__global int * nlevels,
   unsigned j   = gid-i*img_bb_y;
   if (i<(*roi).x || i>(*roi).y || j<(*roi).z || j> (*roi).w)
       return;
-  
+
   //local_img[lid]=inp[gid];
   float4 data_return=inp[gid];
   // using local variables
@@ -83,15 +80,14 @@ ray_stack_trace_main(__global int * nlevels,
 
   //this cell is the first pierced by the ray
   //follow the ray through the cells until no neighbors are found
-  while (1) {
-  
+  while (true) {
     ////current cell bounding box
     cell_bounding_box(curr_loc_code, n_levels, &cell_min, &cell_max);
     // check to see how close tnear and tfar are
     int hit = intersect_cell(ray_o, ray_d, cell_min, cell_max,&tnear, &tfar);
     // special case whenray grazes edge or corner of cube
 
-  if ( fabs(tfar-tnear)<smallest_cellsize/10)
+    if ( fabs(tfar-tnear)<smallest_cellsize/10)
     {
       entry_pt=entry_pt+ray_d*smallest_cellsize/2;
       entry_pt.w=0.5;
@@ -99,17 +95,16 @@ ray_stack_trace_main(__global int * nlevels,
       if (any(entry_pt>=(float4)1.0f)|| any(entry_pt<=(float4)0.0f))
         break;
       entry_loc_code = loc_code(entry_pt, n_levels-1);
-	  stack_ptr=-1;
+      stack_ptr=-1;
       ////traverse to leaf cell that contains the entry point
       curr_cell_ptr = traverse_stack(cells, root_ptr, root, entry_loc_code,&curr_loc_code, lid,n_levels-1,stack,&stack_ptr);
       if (curr_cell_ptr<0)
-         break;
+        break;
 
       cell_bounding_box(curr_loc_code, n_levels, &cell_min, &cell_max);
       hit = intersect_cell(ray_o, ray_d, cell_min, cell_max,&tnear, &tfar);
       if (hit)
         entry_pt=ray_o + tnear*ray_d;
-
     }
     if (!hit)
       break;
@@ -123,7 +118,6 @@ ray_stack_trace_main(__global int * nlevels,
     if ( data_ptr<0)
       break;
 
-    
     //distance must be multiplied by the dimension of the bounding box
     float d = (tfar-tnear)*(*bbox).w;
     // no function pointers in OpenCL (spec 8.6a)
@@ -136,9 +130,8 @@ ray_stack_trace_main(__global int * nlevels,
 
     //// exit point
     exit_pt=ray_o + tfar*ray_d;
-	exit_pt.w=0.5;
+    exit_pt.w=0.5;
 
-	
     //if the ray pierces the volume surface then terminate the ray
     if (any(exit_pt>=(float4)1.0f)|| any(exit_pt<=(float4)0.0f))
         break;
@@ -146,7 +139,7 @@ ray_stack_trace_main(__global int * nlevels,
     //location code of exit point
     //the exit face mask
     short4 exit_face= cell_exit_face(exit_pt, cell_min, cell_max);
-    if (exit_face.x<0)//exit face not defined
+    if (exit_face.x<0) // exit face not defined
       break;
 
     //find the neighboring cell at the exit face
@@ -168,7 +161,7 @@ ray_stack_trace_main(__global int * nlevels,
     //the neighbor's traverse
 
     //ray continues: make the current entry point the previous exit point
-   entry_pt = exit_pt;
+    entry_pt = exit_pt;
   }
   // note that the following code is application dependent
   // should have a cleanup functor for expected image
