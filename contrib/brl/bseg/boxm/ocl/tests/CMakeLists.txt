@@ -8,6 +8,8 @@ SET(boxm_ocl_test_sources
 
     test_backproject_ray.cxx
     test_expected_image.cxx
+    ray_bundle_test_driver.h ray_bundle_test_driver.txx
+    test_ray_bundle.cxx
    )
 
 AUX_SOURCE_DIRECTORY(Templates boxm_ocl_test_sources)
@@ -20,6 +22,7 @@ ADD_TEST( test_octree_stack         ${EXECUTABLE_OUTPUT_PATH}/boxm_ocl_test_all 
 
 ADD_TEST( test_backproject_ray ${EXECUTABLE_OUTPUT_PATH}/boxm_ocl_test_all test_backproject_ray)
 ADD_TEST( test_expected_image  ${EXECUTABLE_OUTPUT_PATH}/boxm_ocl_test_all test_expected_image )
+ADD_TEST( test_ray_bundle  ${EXECUTABLE_OUTPUT_PATH}/boxm_ocl_test_all test_ray_bundle )
 
 ADD_EXECUTABLE( boxm_ocl_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( boxm_ocl_test_include boxm_ocl boxm)

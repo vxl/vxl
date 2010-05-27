@@ -367,3 +367,18 @@ test_ray_trace(__global int4* cells, __global float2* cell_data,
     }
   }
 }
+__kernel
+void
+test_cell_contains_exit_pt(__global int4* cells, __global float2* cell_data,
+                           __global int4* results)
+{
+  short n_levels = 4;
+  int result_ptr = 0;
+  float4 p = (float4)(0.251f, 0.1f, 0.499f, 0.0f);
+  short4 code = loc_code(p, n_levels-1);
+  int4 res = (int4)cell_contains_exit_pt(n_levels, code, p);
+  results[result_ptr++]= res;
+  p = (float4)(0.499f, 0.1f, 0.499f, 0.0f);
+  res = (int4)cell_contains_exit_pt(n_levels, code, p);
+  results[result_ptr++]= res;
+}

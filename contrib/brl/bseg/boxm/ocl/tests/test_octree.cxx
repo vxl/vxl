@@ -418,7 +418,37 @@ static void test_ray_trace(octree_test_driver<T>& driver)
   }
   driver.release_kernel();
 }
-
+template <class T>
+static void test_cell_contains_exit_pt(octree_test_driver<T>& driver)
+{
+  if (driver.create_kernel("test_cell_contains_exit_pt")!=SDK_SUCCESS) {
+    TEST("Create Kernel test_cell_contains_exit_pt", false, true);
+    return;
+  }
+  if (driver.run_tree_test_kernels()!=SDK_SUCCESS) {
+    TEST("Run Kernel test_cell_contains_exit_pt", false, true);
+    return;
+  }
+  cl_int* results = driver.tree_results();
+  vcl_size_t size = 2*4;
+  if (size>driver.tree_result_size_bytes())
+    return;
+  if (results) {
+    int test[]={1,1,1,1,
+                0,0,0,0};
+    bool good = true;
+    for (vcl_size_t i= 0; i<size; i++)
+      good = good && results[i]==test[i];
+    TEST("test_cell_contains_exit_pt_data", good, true);
+    if (!good)
+      for (vcl_size_t i= 0; i<size; i+=4)
+        vcl_cout << "test_loc_code_result(" << results[i] << ' '
+                 << results[i+1] << ' '
+                 << results[i+2] << ' '
+                 << results[i+3] << ")\n";
+  }
+  driver.release_kernel();
+}
 template <class T>
 void tree_tests(octree_test_driver<T>& test_driver)
 {
@@ -442,6 +472,7 @@ void tree_tests(octree_test_driver<T>& test_driver)
   test_common_ancestor(test_driver);
   test_cell_exit_face(test_driver);
   test_neighbor(test_driver);
+  test_cell_contains_exit_pt(test_driver);
   //test_ray_trace(test_driver);
   //==============================================================
   //END OCTREE TESTS

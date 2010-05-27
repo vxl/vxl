@@ -407,9 +407,9 @@ short4 cell_exit_face_but_not_entry_face(float4 exit_point, float4 cell_min, flo
 
   short4 faceid=(short4) -1;
 
-  float min=1.0;
+  float min=1.0f;
 
-  short4 temp;
+ /* short4 temp; not used at the moment*/ 
   if (min_diff.x<min)
   {
     if (!(entry_face.x==1 && entry_face.w==0 ))
@@ -666,6 +666,15 @@ int cell_exit_point(float4 ray_org, float4 ray_dir,
     return 1;
   }
 }
-
+int cell_contains_exit_pt(int n_levels, short4 loc_code, float4 exit_pt)
+{
+  float4 cell_min, cell_max;
+  cell_bounding_box(loc_code, n_levels, &cell_min, &cell_max);
+  short4 test =(short4)(exit_pt < cell_min);
+  if(any(test)) return 0;
+  test = (short4)(exit_pt > cell_max);
+  if(any(test)) return 0;
+  return 1;
+}
 // end of library kernels
 
