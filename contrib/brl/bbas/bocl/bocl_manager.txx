@@ -7,6 +7,8 @@
 // \file
 
 #include <vcl_utility.h>
+#include <vcl_fstream.h>
+#include <vcl_sstream.h>
 
 
 //: Insure only one instance is created
