@@ -90,7 +90,7 @@ int traverse(__global int4* cells, int cell_ptr, short4 cell_loc_code,
 }
 
 int traverse_stack(__global int4* cells, int cell_ptr, short4 cell_loc_code,
-             short4 target_loc_code, short4* found_loc_code,uint lid,int stacksize, __local int*stack,int *stack_ptr)
+                   short4 target_loc_code, short4* found_loc_code,uint lid,int stacksize, __local int*stack,int *stack_ptr)
 {
   int found_cell_ptr = cell_ptr;
   int ret = -1;
@@ -117,6 +117,7 @@ int traverse_stack(__global int4* cells, int cell_ptr, short4 cell_loc_code,
   }
   return found_cell_ptr;
 }
+
 //-----------------------------------------------------------------
 // Traverse from the specified root_cell to the cell specified by loc_code.
 // Return the array pointer to the resulting cell. If a leaf node is
@@ -152,9 +153,9 @@ int traverse_to_level(__global int4* cells, int cell_ptr,
 }
 
 int traverse_to_level_stack(__global int4* cells, int cell_ptr,
-                      short4 cell_loc_code, short4 target_loc_code,
-                      short target_level,
-                      short4* found_loc_code,uint lid,int stacksize, __local int*stack,int *stack_ptr)
+                            short4 cell_loc_code, short4 target_loc_code,
+                            short target_level,
+                            short4* found_loc_code,uint lid,int stacksize, __local int*stack,int *stack_ptr)
 {
   int found_cell_ptr = cell_ptr;
   int ret = -1;
@@ -181,6 +182,7 @@ int traverse_to_level_stack(__global int4* cells, int cell_ptr,
   }
   return found_cell_ptr;
 }
+
 //-----------------------------------------------------------------
 // Traverse from the current cell to find the cell whose code is
 // closest to the specified target_loc_code and lies in the sub-tree of
@@ -227,10 +229,11 @@ int traverse_force(__global int4* cells, int cell_ptr, short4 cell_loc_code,
   }
   return found_cell_ptr;
 }
+
 int traverse_force_stack(__global int4* cells, int cell_ptr, short4 cell_loc_code,
-						 short4 target_loc_code, short4* found_loc_code,
-						 __local int* stack, 
-						 uint lid,int stacksize, int *stack_ptr)
+                         short4 target_loc_code, short4* found_loc_code,
+                         __local int* stack,
+                         uint lid,int stacksize, int *stack_ptr)
 {
   int found_cell_ptr = cell_ptr;
   (*found_loc_code) = cell_loc_code;
@@ -297,11 +300,12 @@ int common_ancestor(__global int4* cells, int cell_ptr, short4 cell_loc_code,
   }
   return curr_cell_ptr;
 }
+
 //--------------------------------------------------------------------
 // Find the common ancestor of a cell given a binary difference
 //
 int common_ancestor_stack(__global int4* cells, int cell_ptr, short4 cell_loc_code,
-                    short4 target_loc_code, short4* ancestor_loc_code,int *stack_ptr)
+                          short4 target_loc_code, short4* ancestor_loc_code,int *stack_ptr)
 {
   short4 bin_diff = cell_loc_code ^ target_loc_code;
   short curr_level = (short)cell_loc_code.w;
@@ -342,13 +346,15 @@ short4 cell_exit_face(float4 exit_point, float4 cell_min, float4 cell_max)
 
   //short4 faceid=(short4) -1;
 
- /* float min=1.0;
+#if 0
+  float min=1.0;
 
   if (min_diff.x<min)
   {
       min=min_diff.x;
     faceid=X_MIN;
-  }*/
+  }
+#endif // 0
   float min=min_diff.x;
   short4 faceid=X_MIN;
 
@@ -409,7 +415,7 @@ short4 cell_exit_face_but_not_entry_face(float4 exit_point, float4 cell_min, flo
 
   float min=1.0f;
 
- /* short4 temp; not used at the moment*/ 
+  // short4 temp; not used at the moment
   if (min_diff.x<min)
   {
     if (!(entry_face.x==1 && entry_face.w==0 ))
@@ -527,12 +533,13 @@ int neighbor(__global int4* cells, int cell_ptr, short4 cell_loc_code,
                       (*neighbor_code), cell_level, neighbor_code);
   return neighbor_ptr;
 }
+
 //-------------------------------------------------------------------
 // Given the cell loc_code and the exit face, find the neighboring cell.
 //-------------------------------------------------------------------
 int neighbor_stack(__global int4* cells, int cell_ptr, short4 cell_loc_code,
-				   short4 exit_face, short n_levels, short4* neighbor_code,
-				   __local int* stack,uint lid,int * stack_ptr)
+                   short4 exit_face, short n_levels, short4* neighbor_code,
+                   __local int* stack,uint lid,int * stack_ptr)
 {
   short cell_level = cell_loc_code.w;
   short cell_size = 1<<cell_level;
@@ -564,24 +571,27 @@ int neighbor_stack(__global int4* cells, int cell_ptr, short4 cell_loc_code,
   }
   short4 ancestor_loc_code = error;
   int ancestor_ptr =  common_ancestor_stack(cells, cell_ptr, cell_loc_code,
-                                      (*neighbor_code),
-                                      &ancestor_loc_code,
-                                      stack_ptr);
-  
+                                            (*neighbor_code),
+                                            &ancestor_loc_code,
+                                            stack_ptr);
+
   ancestor_ptr=(*stack_ptr)<0?0:stack[lid*(n_levels-1)+(*stack_ptr)];
-  /*if((*stack_ptr)<0)
-	ancestor_ptr=0;
+#if 0
+  if ((*stack_ptr)<0)
+    ancestor_ptr=0;
   else
-	ancestor_ptr=stack[lid*(n_levels-1)+(*stack_ptr)];*/
-  /*if (ancestor_ptr<0) {
+    ancestor_ptr=stack[lid*(n_levels-1)+(*stack_ptr)];
+  if (ancestor_ptr<0) {
     (*neighbor_code) = error;
     return neighbor_ptr;
-  }*/
+  }
+#endif // 0
  neighbor_ptr =
     traverse_to_level_stack(cells, ancestor_ptr, ancestor_loc_code,
-                      (*neighbor_code), cell_level, neighbor_code, lid, n_levels-1,stack, stack_ptr);
+                            (*neighbor_code), cell_level, neighbor_code, lid, n_levels-1,stack, stack_ptr);
   return neighbor_ptr;
 }
+
 //--------------------------------------------------------------------------
 // Given the ray origin, ray_o and its direction, ray_d and the cell min
 // and max points, find the ray parameters, tnear and tfar that correspond
@@ -666,15 +676,17 @@ int cell_exit_point(float4 ray_org, float4 ray_dir,
     return 1;
   }
 }
+
 int cell_contains_exit_pt(int n_levels, short4 loc_code, float4 exit_pt)
 {
   float4 cell_min, cell_max;
   cell_bounding_box(loc_code, n_levels, &cell_min, &cell_max);
   short4 test =(short4)(exit_pt < cell_min);
-  if(any(test)) return 0;
+  if (any(test)) return 0;
   test = (short4)(exit_pt > cell_max);
-  if(any(test)) return 0;
+  if (any(test)) return 0;
   return 1;
 }
+
 // end of library kernels
 
