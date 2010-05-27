@@ -18,7 +18,7 @@ void test_codes(int* i, int* n_codes, short4* code, short4* ncode)
 __kernel
 void
 test_traverse_stack(__global int4* cells, __global float2* cell_data,
-              __global int4* results,__local int * stack)
+                    __global int4* results,__local int * stack)
 {
   short4 code, ncode;
   int n_codes = 0;
@@ -43,11 +43,10 @@ test_traverse_stack(__global int4* cells, __global float2* cell_data,
 }
 
 
-
 __kernel
 void
 test_traverse_to_level_stack(__global int4* cells, __global float2* cell_data,
-						     __global int4* results,__local int* stack)
+                             __global int4* results,__local int* stack)
 {
   short4 code, ncode;
   int n_codes = 0;
@@ -63,7 +62,7 @@ test_traverse_to_level_stack(__global int4* cells, __global float2* cell_data,
     short4 root = (short4)(0,0,0,2);
     int level = 1;
     int cell_ptr = traverse_to_level_stack(cells, 0, root , code,
-                                     level, &found_loc_code, lid,3-1, stack,&stack_ptr);
+                                           level, &found_loc_code, lid,3-1, stack,&stack_ptr);
     int4 res = convert_int4(found_loc_code);
     results[3*i]=res;
     res = (int4)cell_ptr;
@@ -76,7 +75,7 @@ test_traverse_to_level_stack(__global int4* cells, __global float2* cell_data,
 __kernel
 void
 test_traverse_force_stack(__global int4* cells, __global float2* cell_data,
-                    __global int4* results,__local int* stack)
+                          __global int4* results,__local int* stack)
 {
   int result_ptr = 0;
   short4 found_loc_code = (short4)(0,0,0,0);
@@ -116,13 +115,12 @@ test_traverse_force_stack(__global int4* cells, __global float2* cell_data,
   results[result_ptr++]=convert_int4(found_loc_code);
   results[result_ptr++]=(int4)cell_ptr;
   results[result_ptr++]=(int4)stack_ptr;
-
 }
 
 __kernel
 void
 test_common_ancestor_stack(__global int4* cells, __global float2* cell_data,
-                     __global int4* results,__local int* stack)
+                           __global int4* results,__local int* stack)
 {
   short4 code, ncode;
   int n_codes = 0;
@@ -137,16 +135,16 @@ test_common_ancestor_stack(__global int4* cells, __global float2* cell_data,
   for (i = 0; i<n_codes; ++i)
   {
     int stack_ptr= -1;
-    
+
     test_codes(&i, &n_codes, &code, &ncode);
     short4 found_loc_code;
     int cell_ptr = traverse_to_level_stack(cells, 0, root , code,0, &found_loc_code, lid,3-1, stack,&stack_ptr);
 
     int start_ptr = 9+8*i;
     int ancestor_ptr = common_ancestor_stack(cells, start_ptr,
-                                       code, ncode,
-                                       &ancestor_loc_code,&stack_ptr);
-	ancestor_ptr=stack[lid*2+stack_ptr];
+                                             code, ncode,
+                                             &ancestor_loc_code,&stack_ptr);
+    ancestor_ptr=stack[lid*2+stack_ptr];
     results[2*i] = convert_int4(ancestor_loc_code);
     results[2*i+1] = (int4)ancestor_ptr;
     //results[2*i+2] = (int4)stack_ptr;
@@ -156,9 +154,9 @@ test_common_ancestor_stack(__global int4* cells, __global float2* cell_data,
 __kernel
 void
 test_neighbor_stack(__global int4* cells, __global float2* cell_data,
-              __global int4* results,__local int* stack)
+                    __global int4* results,__local int* stack)
 {
-  short4 faces[6];  
+  short4 faces[6];
   uint lid=get_local_id(0);
 
   faces[0]=X_MIN;   faces[1]=X_MAX;
@@ -199,8 +197,8 @@ test_neighbor_stack(__global int4* cells, __global float2* cell_data,
     results[result_ptr++]=neighbor_ptr;
   }
 }
-/*
 
+#if 0 // function commented out
 __kernel
 void
 test_ray_trace(__global int4* cells, __global float2* cell_data,
@@ -326,4 +324,4 @@ test_ray_trace(__global int4* cells, __global float2* cell_data,
     }
   }
 }
-*/
+#endif // 0
