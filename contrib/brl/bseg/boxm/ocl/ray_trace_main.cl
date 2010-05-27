@@ -2,20 +2,20 @@
 __kernel
 void
 ray_trace_main(__global int * nlevels,
-			   __global float4  *origin,	// camera origin
+               __global float4  *origin,    // camera origin
 
                __global float16 *svd_UtVW,  // SVD of inverse of camera matrix
                __global int4    *cells,     // tree
                __global float16 *cell_data, // leaf data
                __global uint4   *imgdims,   // dimensions of the image
-               __global uint4   *roidims,   // dimesnions of the roi per block
-               __global float4  *global_bbox, // dimesnions of the current bbox in global coordinate
+               __global uint4   *roidims,   // dimensions of the roi per block
+               __global float4  *global_bbox, // dimensions of the current bbox in global coordinate
                __global float4  *inp,         // inp image
                __local float16  *cam,         // local storage of cam
                __local float4   *local_origin,// store the origin locally
                __local float4   *bbox,        // local storgae of bbox
                __local uint4    *roi)
-              // __local float4   *local_img)		// local storgae of bbox
+            // __local float4   *local_img    // local storgae of bbox
 {
   unsigned gid = get_global_id(0);
   unsigned lid = get_local_id(0);
