@@ -32,7 +32,7 @@ SET(bsta_sources
   bsta_parzen_sf3.h
   bsta_gauss_f1.h
   bsta_gauss_f2.h
-  bsta_gauss_sf2.h               
+  bsta_gauss_sf2.h
   bsta_gauss_sf3.h               bsta_gauss_sd3.h
   bsta_gauss_if3.h               bsta_gauss_id3.h
   bsta_gauss_ff3.h               bsta_gauss_fd3.h
@@ -56,9 +56,7 @@ ADD_LIBRARY(bsta  ${bsta_sources})
 INSTALL_TARGETS(/lib bsta)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/bsta ${bsta_sources})
 
-
-
-TARGET_LINK_LIBRARIES(bsta vnl_algo vbl vnl vnl_io)
+TARGET_LINK_LIBRARIES(bsta vnl_algo vbl vnl_io vnl vgl)
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)
@@ -76,4 +74,3 @@ SUBDIRS( vis )
 
 # process library
 SUBDIRS(pro)
-
