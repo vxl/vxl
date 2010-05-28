@@ -46,7 +46,7 @@ void vsl_b_write(vsl_b_ostream & os, const vbl_smart_ptr<T> &p)
     // ordinary pointer. Cycles in the pointer network, are best dealt with
     // by avoiding them. You have to be aware they are happening to unprotect
     // the pointer anyway.
-    // <\rant>
+    // </rant>
     if (!p.is_protected())
     {
         vcl_cerr << "vsl_b_write(vsl_b_ostream & os, const vbl_smart_ptr<T>&):"
