@@ -58,7 +58,7 @@ void bdpg_array_dynamic_prg::print_path(unsigned row, unsigned col)
   }
 }
 
-//: find the column index that is most probable in the previous row
+//: find the column index that is most probably in the previous row
 bool bdpg_array_dynamic_prg::maxp(unsigned row, unsigned col, int & best_col)
 {
   best_col = -1;

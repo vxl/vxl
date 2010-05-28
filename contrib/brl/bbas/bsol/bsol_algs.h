@@ -114,7 +114,7 @@ class bsol_algs
                          vgl_h_matrix_2d<double> const& H,
                          vsol_box_2d_sptr& Hb);
 
-  //: Compute the tragent to a vsol_digital_curve_2d at the specified index
+  //: Compute the tangent to a vsol_digital_curve_2d at the specified index
   static void tangent(vsol_digital_curve_2d_sptr const& dc, unsigned index,
                       double& dx, double& dy);
 

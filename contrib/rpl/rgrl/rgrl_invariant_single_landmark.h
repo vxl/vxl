@@ -17,7 +17,7 @@
 
 //: Represent a 2D bifurcation landmark associated with a set of invariant properties.
 //
-//  This is the simplied implementation of the single-landmark feature
+//  This is the simplified implementation of the single-landmark feature
 //  with invariant properties in "The Dual-Bootstrap Iterative
 //  Closest Point Algorithm with Application to Retinal Image
 //  Registration" by Stewart et al., TMI 2003, vol 22, no 11.
@@ -108,7 +108,7 @@ class rgrl_invariant_single_landmark
   //  \note The indices are passed in by reference.  The indices
   //  specified are reordered counterclockwise from the basis
   //  direction specified. The counterclockwise angles from the basis
-  //  are also returned by referance.
+  //  are also returned by reference.
   void reorder_vessel( vcl_vector<vnl_vector<double> >& directions,
                        vcl_vector<double>& local_widths,
                        vcl_vector<double>& angles);

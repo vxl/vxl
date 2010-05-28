@@ -4,7 +4,7 @@
 //:
 // \file
 // \author Vishal Jain
-// \brief construction of peano curve on a sqaure grid.
+// \brief construction of Peano curve on a square grid.
 //
 // \verbatim
 //  Modifications

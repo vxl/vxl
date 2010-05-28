@@ -593,7 +593,7 @@ HANDLE  vidl1_avicodec::make_dib(vidl1_frame_sptr frame, UINT bits)
   }
   else
   {
-    // The byte swapping below is probabily unnecessary - use vil_flip_ud instead - FIXME
+    // The byte swapping below is probably unnecessary - use vil_flip_ud instead - FIXME
 
     // Store the TargetJr data in a Bitmap way, DIB is a flipped upside down
     switch (frame->get_bytes_pixel())

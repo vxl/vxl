@@ -17,7 +17,7 @@ static void test_detect()
   vcl_vector<vcl_set<unsigned int> > components =
      imesh_detect_connected_components(cube1.half_edges());
 
-  TEST("Found all connnected components", components.size(), 3);
+  TEST("Found all connected components", components.size(), 3);
 
   vcl_set<unsigned int> group1 =
       imesh_detect_connected_faces(cube1.half_edges(), 0);

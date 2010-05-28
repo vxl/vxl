@@ -7,7 +7,7 @@
 // \file
 // \brief Process-type class to find groups of approximately parallel lines.
 //
-// The vifa_group_pgram class is a grouper which finds relatively parallelogram-
+// The vifa_group_pgram class is a grouper which finds relatively parallellogram-
 // like shapes.  That is, there are groups of parallel line segments having
 // projection overlap
 //

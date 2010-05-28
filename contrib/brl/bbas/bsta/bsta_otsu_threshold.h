@@ -6,7 +6,7 @@
 // \author Vishal Jain, (vj@lems.brown.edu)
 // \date April 09, 2005
 //
-//  The Otsu threholding method maximizes the between class variance by
+//  The Otsu thresholding method maximizes the between class variance by
 //  an exhaustive linear scan over the histogram bin indices
 //
 // \verbatim

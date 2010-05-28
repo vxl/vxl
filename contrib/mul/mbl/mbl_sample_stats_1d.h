@@ -82,7 +82,7 @@ class mbl_sample_stats_1d
   //: Returns the skewness of the samples
   double skewness() const;
 
-  //: Returns the kurtosis of ths samples
+  //: Returns the kurtosis of the samples
   double kurtosis() const;
 
   //: Min of current samples
@@ -113,7 +113,7 @@ class mbl_sample_stats_1d
   //: Print all data.
   // \param delim Separate each value with this character/string.
   void print_all(vcl_ostream& os,
-    const vcl_string& delim="\n") const;
+                 const vcl_string& delim="\n") const;
 
   //: Version number for I/O
   short version_no() const;

@@ -184,7 +184,7 @@ update(bvxm_voxel_slab<dir_dist_t> & dir_dist,
       //generate a new sample line with the modified intersection point
       vgl_infinite_line_3d<T> adj_samp_line(closest.second, updt_mean_dirv);
 
-      //convert adjusted positons to the pos_t data type
+      //convert adjusted positions to the pos_t data type
       vgl_vector_2d<T> adj_mean_posv = adj_mean_line.x0();
       vgl_vector_2d<T> adj_samp_posv = adj_samp_line.x0();
       pos_t adj_mean_pos, adj_samp_pos;

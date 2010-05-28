@@ -871,7 +871,7 @@ rgtl_sqt_objects_query_closest_face<D, Face>
       }
     }
 
-    // Recrusively query each child.
+    // Recursively query each child.
     for (unsigned int i = 0;
          i < (1<<(D-1)) && this->qc_.bound_ >= nearest_squared; ++i)
     {

@@ -308,7 +308,7 @@ class vnl_vector
   vnl_vector<T>& normalize() { vnl_c_vector<T>::normalize(begin(), size()); return *this; }
 
   // These next 6 functions are should really be helper functions since they aren't
-  // really proper functions on a vector in a philosophial sense.
+  // really proper functions on a vector in a philosophical sense.
 
   //: Root Mean Squares of values
   abs_t rms() const { return vnl_c_vector<T>::rms_norm(begin(), size()); }

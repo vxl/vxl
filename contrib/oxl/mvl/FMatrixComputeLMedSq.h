@@ -41,7 +41,7 @@ class FMatrixComputeLMedSq : public FMatrixComputeRobust
                                     vgl_homg_point_2d<double>& two, FMatrix* F);
  private:
   // Helper Functions
-  // Return the median vaule for a vector of residuals
+  // Return the median value for a vector of residuals
   double median(vcl_vector<double> residuals);
 };
 

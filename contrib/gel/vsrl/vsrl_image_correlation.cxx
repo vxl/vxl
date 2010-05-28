@@ -122,7 +122,7 @@ void vsrl_image_correlation::compute_local_stats(vnl_matrix<double> &im, vnl_mat
 }
 
 void vsrl_image_correlation::shift_multiply_matrix(int offset, vnl_matrix<double> &X, vnl_matrix<double> &Y,
-                                                        vnl_matrix<double> &XY)
+                                                   vnl_matrix<double> &XY)
 {
   assert(offset >= 0);
   assert((unsigned int)offset <= Y.cols());
@@ -508,9 +508,9 @@ double vsrl_image_correlation::get_sub_pixel_delta(int x1,int y1, int delta_x)
   // the derivative  dY/dX = 2aX + b
   //  there for maxima/minima occurs at X_hat = -b/2a
   // the second derivative is a so if 2a so if
-  // 2a is poisitive then h_hat is a local minima
-  // if 2a is negative then X_hat ins a local maxima
-  // if 2a = 0, we are dealing with  a straigt line
+  // 2a is positive then h_hat is a local minimum
+  // if 2a is negative then X_hat ins a local maximum
+  // if 2a = 0, we are dealing with  a straight line
 
   // first check to see if the correlation range is within
   // spec.

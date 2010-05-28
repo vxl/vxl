@@ -187,7 +187,7 @@ bool boxm_line_backproject_process(bprb_func_process& pro)
               (*plane_image)(i,j,2)=float(plane.c());
               (*plane_image)(i,j,3)=float(plane.d());
             }
-            else { // the backprojection was unsuccessfull
+            else { // the backprojection was unsuccessful
               vcl_cout << i << ',' << j << "NO PLANE!!!!!" << vcl_endl;
               (*plane_image)(i,j,0) = 0.0f;
               (*plane_image)(i,j,1) = 0.0f;

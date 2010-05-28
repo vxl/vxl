@@ -46,7 +46,7 @@ struct vpdt_is_equal<T,T> { typedef void type; };
 
 
 //: The Stauffer-Grimson ordering function of mixture component fitness
-//  This is the simplified (orginal) version that applies to scalar covariance
+//  This is the simplified (original) version that applies to scalar covariance
 template <class gaussian_type>
 struct vpdt_mog_fitness<gaussian_type,
                         typename vpdt_is_equal<typename vpdt_dist_traits<gaussian_type>::scalar_type,

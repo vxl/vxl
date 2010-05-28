@@ -61,7 +61,7 @@ class vidl_v4l2_device
   struct buffer * buffers;
   unsigned int n_buffers;
   int last_buffer; // last read buffer to enqueue again (-1 if none)
-  struct v4l2_format fmt; // width=height=0 indicates not stablished
+  struct v4l2_format fmt; // width=height=0 indicates not established
   double frame_rate;
 
   vcl_string dev_name_;

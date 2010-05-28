@@ -226,7 +226,7 @@ class vtol_extract_topology
       }
     }
 
-    // Add a new region below this node. Prerequiste: the new region is
+    // Add a new region below this node. Prerequisite: the new region is
     // contained within this chain.
     //
     void
@@ -540,7 +540,7 @@ class vtol_extract_topology
   // boundaries. The return value will indicate this. A return value
   // of "true" indicates that the a region was successfully extracted,
   // and that \a chain_list and \a region_label are valid. A return
-  // value of "false" indicates that a region was not traaced.
+  // value of "false" indicates that a region was not traced.
   //
   bool
   trace_face_boundary( vcl_vector<unsigned>& markers,

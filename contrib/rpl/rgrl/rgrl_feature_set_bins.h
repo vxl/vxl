@@ -38,7 +38,7 @@
 // data is well distributed.
 //
 // rsdl_kd_tree is multi-dimensional version of binary search tree. It
-// handles data clustering better than rsdl_bins. Example applicaitons
+// handles data clustering better than rsdl_bins. Example applications
 // include range data registration.
 //
 template<unsigned N>

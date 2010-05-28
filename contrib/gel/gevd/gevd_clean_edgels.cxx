@@ -145,7 +145,7 @@ void gevd_clean_edgels::remove_similar_edges(vtol_vertex_2d*& v1, vcl_vector<vto
   float tol = 3.0f;
   vcl_vector<vtol_edge_sptr> v1_edges; v1->edges(v1_edges);
   vcl_vector<vtol_vertex_2d_sptr> opposite_v1_verts;
-  //Find all the vertics wes opposite from v1
+  // Find all the vertices opposite from v1
   for (vcl_vector<vtol_edge_sptr>::iterator eit = v1_edges.begin();
        eit != v1_edges.end(); ++eit)
   {

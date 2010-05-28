@@ -41,7 +41,7 @@ bool bvxm_threshold_grid_process_cons(bprb_func_process& pro)
    // Inputs
   // 0. Path of occupancy grid to threshold
   // 1. Path for thresholded occupancy grid (values above threshold are unchanged, otherwise they are set to 0)
-  // 2. Path for mask (values above threshol are set to 1.0, 0 otherwise)
+  // 2. Path for mask (values above threshold are set to 1.0, 0 otherwise)
   // 3. Threshold
 
   vcl_vector<vcl_string> input_types_(n_inputs_);

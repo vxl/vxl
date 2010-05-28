@@ -69,7 +69,7 @@ vpgl_fm_compute_7_point::compute(
 
   // Take the first and second nullvectors from the nullspace
   // Since rank 2 these should be the only associated with non-zero
-  // root (pr_normobably need conditioning first to be actually rank 2)
+  // root (probably need conditioning first to be actually rank 2)
 
   vnl_double_3x3 F1(W.get_column(0).data_block());
   vnl_double_3x3 F2(W.get_column(1).data_block());

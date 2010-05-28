@@ -75,9 +75,9 @@ void bvpl_kernel_factory::set_rotation_axis( vnl_float_3 rotation_axis)
     vcl_cout << "Rotation axis magnitude is zero, returning withount modifycation of kernel\n";
     return ;
   }
-  
+
   rotation_axis_ = rotation_axis;
-  
+
   //spherical coordinates of the rotation axis.
   float radius = 1.0f,
         theta = vcl_atan2(rotation_axis_[1],rotation_axis_[0]), //azimuth,
@@ -101,7 +101,7 @@ void bvpl_kernel_factory::set_rotation_axis( vnl_float_3 rotation_axis)
       return;
     }
     else //vectors are identical
-      return;  
+      return;
   }
 
   vgl_rotation_3d<float> r_align(canonical_rotation_axis_, rotation_axis_);
@@ -138,8 +138,8 @@ void bvpl_kernel_factory::set_rotation_axis( vnl_float_3 rotation_axis)
     for ( unsigned i = 0; i < 3; ++i ){
       if ( vcl_abs(parallel_axis[i] - canonical_parallel_axis_[i]) >  vcl_numeric_limits<float>::epsilon() ){
         vcl_cerr << "Error when aligning rotation axis to the z axis\n" ;
-        vcl_cout << "Parallel axis: "<< parallel_axis << vcl_endl; 
-        vcl_cout << "Canonical parallel axis " << canonical_parallel_axis_ << vcl_endl;
+        vcl_cout << "Parallel axis: "<< parallel_axis << vcl_endl
+                 << "Canonical parallel axis " << canonical_parallel_axis_ << vcl_endl;
         return;
       }
     }
@@ -161,9 +161,9 @@ bvpl_kernel_factory::rotate(float angle)
       vnl_quaternion<float> q(rotation_axis_/mag,angle);
       return this->rotate(vgl_rotation_3d<float>(q));
     }
-    else 
-      vcl_cout << "magnitude of rotation axis is zero, returning withount modifying kernel\n";
-    
+    else
+      vcl_cout << "magnitude of rotation axis is zero, returning without modifying kernel\n";
+
     return kernel_;
   }
   else
@@ -195,8 +195,8 @@ bvpl_kernel_factory::rotate(vgl_rotation_3d<float> R)
 
     kernel.push_back(vcl_make_pair(vgl_point_3d<float>(new_coord[0],new_coord[1],new_coord[2]), (kernel_it->second)));
 
-    // As is is implemented now, if many point to round a sigle integer, then that integer is used multiple times
-    // this may be a good solution, and avoids the problem of getting unequal number of symbols
+    // As it is implemented now, if many points round to a single integer, then that integer is used multiple times
+    // This may be a good solution, and avoids the problem of getting unequal number of symbols
   }
 
   return kernel;

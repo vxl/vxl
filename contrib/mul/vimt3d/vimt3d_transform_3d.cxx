@@ -48,8 +48,8 @@ void vimt3d_transform_3d::matrix(vnl_matrix<double>& M) const
 // See also vnl_rotation_matrix(), vgl_rotation_3d, and vnl_quaternion
 void vimt3d_transform_3d::angles(double& phi_x, double& phi_y, double& phi_z) const
 {
-  //nb in affine case will probablay have to store s_x, s_y, s_z etc somewhere else!
-  //also won't work properly in rigid body case either!
+  // NB: in affine case will probably have to store s_x, s_y, s_z etc somewhere else!
+  // also won't work properly in rigid body case either!
   double det=+xx_*yy_*zz_-xx_*zy_*yz_-yx_*xy_*zz_+yx_*zy_*xz_+zx_*xy_*yz_-zx_*yy_*xz_;
 
   double xlen = vcl_sqrt(xx_*xx_ + yx_*yx_ + zx_*zx_)* vnl_math_sgn(det);

@@ -42,7 +42,7 @@ static double pz(const double a, const double b, const double c, const double d)
 }
 
 //:
-// define points on S3 using 4-d spherical coordinates with quaterion angle
+// define points on S3 using 4-d spherical coordinates with quaternion angle
 // followed by projection theta is rotation angle, psi is elevation of rotation
 // axis and phi is azimuth of rotation axis.
 static double x(const double theta, const double psi, const double phi)

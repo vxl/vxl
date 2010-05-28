@@ -11,7 +11,7 @@
 //
 //  Supports pixel look-up table mapping for contrast adjustment
 //  and other interactive controls of the image display range
-//  A key application is producing useable display of 16 bit pixels
+//  A key application is producing usable display of 16 bit pixels
 //  Can be used to interactively window the dynamic range of 8 bit pixels
 //  or to display signed char or signed short.
 //

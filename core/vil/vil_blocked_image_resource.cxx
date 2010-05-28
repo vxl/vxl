@@ -171,8 +171,7 @@ bool vil_blocked_image_resource::trim_border_blocks(unsigned i0, unsigned ni,
                                                     unsigned start_block_j,
                                                     vcl_vector< vcl_vector< vil_image_view_base_sptr > >& blocks) const
 {
-  //loop thorugh all the boxes and trim the boxes around the border
-  //if necessary.
+  // loop through all the boxes and trim the boxes around the border if necessary.
   for (unsigned bi = 0 ; bi < blocks.size() ; bi++) {
     for (unsigned bj = 0 ; bj < blocks[bi].size() ; bj++) {
       if (!blocks[bi][bj]) continue;

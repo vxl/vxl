@@ -31,9 +31,8 @@ vgl_box_3d<double> boct_tree_cell<T_loc,T_data>::local_bounding_box(short root_l
   double cell_origin_z = (double)(code_.z_loc_)/(double)(1<<(root_level));
   vgl_point_3d<double> cell_min_corner(cell_origin_x, cell_origin_y, cell_origin_z);
   vgl_point_3d<double> cell_max_corner(cell_origin_x + cell_length, cell_origin_y+cell_length, cell_origin_z+cell_length);
-  
+
   return vgl_box_3d<double>(cell_min_corner,cell_max_corner);
-  
 }
 
 template<class T_loc,class T_data>
@@ -97,19 +96,17 @@ boct_tree_cell<T_loc,T_data>* boct_tree_cell<T_loc,T_data>::clone(boct_tree_cell
 }
 
 
-
 //: Clones a cell if it intesects a region
 template<class T_loc,class T_data>
 boct_tree_cell<T_loc,T_data>* boct_tree_cell<T_loc,T_data>::clone_and_intersect(boct_tree_cell<T_loc,T_data>* parent,
                                                                                 vgl_box_3d<double> local_crop_box,
                                                                                 short root_level)
 {
-  
   boct_tree_cell<T_loc,T_data>* cell = new boct_tree_cell<T_loc,T_data>(this->code_);
   //Check whether the cell intersects the region
   vgl_box_3d<double> cell_box = local_bounding_box(root_level);
   vgl_box_3d<double> inters = vgl_intersection(cell_box,local_crop_box);
-  
+
   if (!inters.is_empty())
   {
     cell->data_ = this->data();
@@ -131,24 +128,23 @@ boct_tree_cell<T_loc,T_data>* boct_tree_cell<T_loc,T_data>::clone_and_intersect(
     cell->children_ = NULL;
   }
   return cell;
-  
 }
+
 
 //: Clones and shifts a cell if it intesects a region
 template<class T_loc,class T_data>
 boct_tree_cell<T_loc,T_data>* boct_tree_cell<T_loc,T_data>::clone_and_intersect(boct_tree_cell<T_loc,T_data>* parent,
-                                                                                 boct_loc_code<T_loc> *shift_code,
-                                                                                 vgl_box_3d<double> local_crop_box,
-                                                                                 short root_level)
+                                                                                boct_loc_code<T_loc> *shift_code,
+                                                                                vgl_box_3d<double> local_crop_box,
+                                                                                short root_level)
 {
   boct_loc_code<T_loc>  *cell_loc_code = (this->code_).AND(shift_code);
   cell_loc_code->set_level(this->code_.level);
   boct_tree_cell<T_loc,T_data>* cell = new boct_tree_cell<T_loc,T_data>(*cell_loc_code);
-  
+
   //Check whether the cell intersects the region
   vgl_box_3d<double> cell_box = local_bounding_box(root_level);
   vgl_box_3d<double> inters = vgl_intersection(cell_box,local_crop_box);
-  
 
   if (!inters.is_empty())
   {
@@ -171,12 +167,12 @@ boct_tree_cell<T_loc,T_data>* boct_tree_cell<T_loc,T_data>::clone_and_intersect(
     //Set the cell to be empty and be a leaf
     cell->parent_ = parent;
     cell->data_ = T_data();
-    cell->children_=NULL;    
+    cell->children_=NULL;
   }
 
   return cell;
-
 }
+
 
 template<class T_loc,class T_data>
 void boct_tree_cell<T_loc,T_data>::delete_children()
@@ -593,7 +589,6 @@ bool  boct_tree_cell<T_loc,T_data>::find_neighbor(boct_face_idx face,
       // at the same or greater level ( towards the root)
       neighbor=commonancestor->traverse_to_level(&neighborcode,this->level());
 
-
       break;
     }
     case Y_LOW:
@@ -670,7 +665,6 @@ bool  boct_tree_cell<T_loc,T_data>::find_neighbor(boct_face_idx face,
       // at the same or greater level ( towards the root)
       neighbor=commonancestor->traverse_to_level(&neighborcode,this->level());
 
-
       break;
     }
     default:
@@ -703,27 +697,25 @@ void boct_tree_cell<T_loc,T_data>::leaf_children_at_level(vcl_vector<boct_tree_c
 {
   short curr_level = code_.level;
 
-  if(curr_level > target_level) 
+  if (curr_level > target_level)
   {
-    if(!this->is_leaf())
+    if (!this->is_leaf())
     {
       for (unsigned i=0; i<8; i++)
         children_[i].leaf_children_at_level(v,target_level);
-      
     }
-  }else if(curr_level == target_level)
+  }
+  else if (curr_level == target_level)
   {
-    if(this->is_leaf())
+    if (this->is_leaf())
       v.push_back(this);
   }
-  else 
+  else
     return;
-  
+
   return;
-  
-
-
 }
+
 
 //: adds a pointer to vector v, for each children at a particular level
 template<class T_loc,class T_data>
@@ -737,13 +729,12 @@ void boct_tree_cell<T_loc,T_data>::children_at_level(vcl_vector<boct_tree_cell<T
     return;
   }
 
-  else if (curr_level > target_level) 
+  else if (curr_level > target_level)
   {
-    if (!this->is_leaf()) 
+    if (!this->is_leaf())
     {
       for (unsigned i=0; i<8; i++)
          children_[i].children_at_level(v, target_level);
-      
     }
     return;
   }
@@ -754,23 +745,22 @@ void boct_tree_cell<T_loc,T_data>::children_at_level(vcl_vector<boct_tree_cell<T
   }
 }
 
-//: adds a pointer to vector v, for each children in a recursivve fashion
+//: adds a pointer to vector v, for each children in a recursive fashion
 template<class T_loc,class T_data>
 void boct_tree_cell<T_loc,T_data>::all_children(vcl_vector<boct_tree_cell<T_loc,T_data>*>& v)
 {
-  if(this-> is_leaf())
+  if (this-> is_leaf())
     return;
 
   for (unsigned i=0; i<8; i++) {
     v.push_back(&children_[i]);
-    if(!children_[i]. is_leaf())
+    if (!children_[i]. is_leaf())
       children_[i].all_children(v);
   }
-
 }
 
 //:Averages the value of the 8 children in a dynamic programming manner
-template<class T_loc, class T_data> 
+template<class T_loc, class T_data>
 void boct_tree_cell<T_loc,T_data>::set_data_to_avg_children()
 {
   //empty on the general case

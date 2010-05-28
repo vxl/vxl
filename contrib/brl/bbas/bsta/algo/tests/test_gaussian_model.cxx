@@ -6,8 +6,8 @@
 
 #include <vcl_string.h>
 
-// This test wast first written to verify whether the basic functionality of
-// bsta_mixtures is consistent accross plataforms.
+// This test was first written to verify whether the basic functionality of
+// bsta_mixtures is consistent across platforms.
 // It is only tested for gaussian 3-modal, floating point mixtures in 2, 3,
 // and 4 dimensions. More cases can be added when needed.
 

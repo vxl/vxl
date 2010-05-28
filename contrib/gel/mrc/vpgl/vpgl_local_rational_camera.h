@@ -8,7 +8,7 @@
 // \date February 16, 2008
 //
 // Rational camera models are defined with respect to global geographic
-// coordinates. In many applications it is necessary to project points wiht
+// coordinates. In many applications it is necessary to project points with
 // local 3-d Cartesian coordinates. This camera class incorporates a
 // Local Vertical Coordinate System (LVCS) to convert local coordinates
 // to geographic coordinates to input to the native geographic RPC model.
@@ -30,11 +30,11 @@ class vpgl_local_rational_camera : public vpgl_rational_camera<T>
 
   //: Constructor from a rational camera and a lvcs
   vpgl_local_rational_camera(bgeo_lvcs const& lvcs,
-                            vpgl_rational_camera<T> const& rcam);
+                             vpgl_rational_camera<T> const& rcam);
 
   //: Constructor from a rational camera and a geographic origin
   vpgl_local_rational_camera(T longitude, T latitude, T elevation,
-                            vpgl_rational_camera<T> const& rcam);
+                             vpgl_rational_camera<T> const& rcam);
 
 
   virtual ~vpgl_local_rational_camera() {}

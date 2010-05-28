@@ -245,7 +245,7 @@ class bprb_parameters : public vbl_ref_count
   }
 
   //: Return the value of the parameter
-  //  Be carefull when using this method, if the parameter DOES NOT EXIST --> returns 0
+  //  Be careful when using this method, if the parameter DOES NOT EXIST --> returns 0
   //  so MAKE SURE that a parameter with the given name EXISTS in the parameter list of the process
   template<class T>
   T value( const vcl_string& name )

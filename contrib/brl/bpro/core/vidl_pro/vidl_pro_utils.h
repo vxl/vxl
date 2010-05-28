@@ -2,7 +2,7 @@
 #define vidl_pro_utils_h_
 //:
 // \file
-// \brief Utilites to support image/video I/0
+// \brief Utilities to support image/video I/0
 // \author J. L. Mundy
 // \date March 16, 2008
 //

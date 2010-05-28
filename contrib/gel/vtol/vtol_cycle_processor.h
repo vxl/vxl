@@ -58,7 +58,7 @@ class vtol_cycle_processor
                                     vtol_vertex_sptr v);
 
  protected:
-  //internal utilites
+  //internal utilities
   void print_edge(vtol_edge_2d_sptr& e);
   void set_bridge_vars();
   void init(vcl_vector<vtol_edge_2d_sptr>& edges);

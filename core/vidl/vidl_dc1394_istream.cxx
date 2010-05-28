@@ -235,7 +235,7 @@ open(unsigned int num_dma_buffers,
     }
 
 
-    // Set the reature value(s)
+    // Set the feature value(s)
     switch (params.features_[i].id)
     {
      case vidl_iidc1394_params::FEATURE_WHITE_BALANCE:

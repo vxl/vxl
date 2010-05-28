@@ -29,7 +29,7 @@ class vcsl_velocity_unit;
 // A unit specifies how the quantity is measured--effectively, it specifies
 // what is amount is to be defined as 1
 //
-// This is a pure virutal class.
+// This is a pure virtual class.
 
 class vcsl_unit
   : public vbl_ref_count

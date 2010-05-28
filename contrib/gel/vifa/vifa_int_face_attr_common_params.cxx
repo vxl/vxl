@@ -12,8 +12,7 @@ vifa_int_face_attr_common_params(vdgl_fit_lines_params*    fitter_params,
                                  vifa_group_pgram_params*  gpp_s,
                                  vifa_group_pgram_params*  gpp_w,
                                  vifa_coll_lines_params*   cpp,
-                                 vifa_norm_params*         np
-                )
+                                 vifa_norm_params*         np)
 {
   init_params(fitter_params,
               gpp_s,
@@ -86,12 +85,12 @@ print_info(void)
     vcl_cout << *fitter_params_;
   else
     vcl_cout << "NULL\n";
-  vcl_cout << "  strong group parallelogram params: ";
+  vcl_cout << "  strong group parallellogram params: ";
   if (gpp_s_.ptr())
     gpp_s_->print_info();
   else
     vcl_cout << "NULL\n";
-  vcl_cout << "  weak group parallelogram params: ";
+  vcl_cout << "  weak group parallellogram params: ";
   if (gpp_w_.ptr())
     gpp_w_->print_info();
   else

@@ -227,7 +227,7 @@ bool vmal_track_lines::belong(vtol_edge_2d_sptr trans_line,vtol_edge_2d_sptr fit
                                      fl1x, fl1y,fl2x, fl2y))
     return true;
   else //test if at least one of the extremities of the fit line
-     //is inside the bounding rectanlge.
+     //is inside the bounding rectangle.
   {
     double x1,y1,x2,y2;
     vmal_operators::project_point(fl1x,fl1y,bound1_tl1x,bound1_tl1y,bound1_tl2x,bound1_tl2y,&x1,&y1);

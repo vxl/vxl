@@ -154,7 +154,7 @@ class rgrl_rad_dis_homo2d_func
  public:
   //: ctor
   rgrl_rad_dis_homo2d_func( rgrl_set_of<rgrl_match_set_sptr> const& matches,
-                    int num_res, bool with_grad = true )
+                            int num_res, bool with_grad = true )
   : vnl_least_squares_function( 11, num_res, with_grad ? use_gradient : no_gradient ),
     matches_ptr_( &matches ),
     from_centre_(2, 0.0), to_centre_(2, 0.0)
@@ -442,7 +442,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   // vnl_svd<double> svd( lm.get_JtJ(), 1e-4 );
   // Cannot use get_JtJ() because it is affected by the
   // scale in homography parameter vector
-  // Thus, use the nomalized p vector to compute Jacobian again
+  // Thus, use the normalized p vector to compute Jacobian again
   vnl_matrix<double> jac(tot_num, 11), jtj(11, 11);
   dis_homo_func.gradf( p, jac );
   //

@@ -202,7 +202,7 @@ void bmdl_classify<T>::label_lidar()
 }
 
 
-//: Perform an initial segementation at each pixel using thresholds
+//: Perform an initial segmentation at each pixel using thresholds
 //  Classify each pixel as Ground (0), Vegetation (1), or Building (2)
 //  Results are stored in the labels image
 template <class T>

@@ -26,8 +26,8 @@ class clsfy_binary_tree_bnode :public  clsfy_binary_tree_node
     //to keep track of relevant data subsets at each node
     vcl_set<unsigned> subIndicesL;
     vcl_set<unsigned> subIndicesR;
- 
-    
+
+
   clsfy_binary_tree_bnode(clsfy_binary_tree_node* parent,
                           const clsfy_binary_tree_op& op):
     clsfy_binary_tree_node(parent,op) {}
@@ -37,7 +37,7 @@ class clsfy_binary_tree_bnode :public  clsfy_binary_tree_node
     //Note the owning classifier removes the tree - beware as once deleted its children
     //may be inaccessible for deletion
     virtual ~clsfy_binary_tree_bnode();
-    
+
     friend class clsfy_binary_tree_builder;
 };
 
@@ -60,7 +60,7 @@ class clsfy_binary_tree_builder : public clsfy_builder_base
     // node less than this, then the split does not occur and the branch is
     // terminated
     int min_node_size_;
-    
+
     //: Set this for random forest behaviour
     //At each split the selection is only from a random subset of this size
     //If negative (default) it is ignored and all are used
@@ -122,17 +122,17 @@ class clsfy_binary_tree_builder : public clsfy_builder_base
     // node less than this, then the split does not occur and the branch is
     // terminated
     void set_min_node_size(int min_node_size) {min_node_size_=min_node_size;}
-    
+
     //: Set this for random forest behaviour
-    //At each split the selection is only from a random subset of this size 
-    //If negative then it is ignored
+    // At each split the selection is only from a random subset of this size
+    // If negative then it is ignored
     void set_nbranch_params(int nbranch_params) {nbranch_params_ = nbranch_params;}
 
-    //: set whether the build calculatates a test error over the input training set
-    //Default is on, but this can be turned off e.g. for a random forest of
-    //many child trees
+    //: set whether the build calculates a test error over the input training set
+    // Default is on, but this can be turned off e.g. for a random forest of
+    // many child trees
     void set_calc_test_error(bool on) {calc_test_error_=on;}
-    
+
     //: Seed the sample used to select branching parameter subsets
     void seed_sampler(unsigned long seed);
   protected:
@@ -144,13 +144,13 @@ class clsfy_binary_tree_builder : public clsfy_builder_base
 
     mutable  vnl_random random_sampler_;
 
-    
+
   private:
     void build_children(
         const vcl_vector<vnl_vector<double> >& vin,
         const vcl_vector<unsigned>& outputs,
-        clsfy_binary_tree_bnode* parent,bool left) const;
-    
+        clsfy_binary_tree_bnode* parent, bool to_left) const;
+
     void copy_children(clsfy_binary_tree_bnode* pBuilderNode,clsfy_binary_tree_node* pNode) const;
 
     void set_node_prob(clsfy_binary_tree_node* pNode,
@@ -161,18 +161,17 @@ class clsfy_binary_tree_builder : public clsfy_builder_base
         const vcl_vector<unsigned>& outputs,
         const vcl_set<unsigned >& subIndices,
         clsfy_binary_tree_bnode* pNode) const;
-    
+
     bool isNodePure(const vcl_set<unsigned >& subIndices,
                     const vcl_vector<unsigned>& outputs) const;
-    
+
     void add_terminator(
         const vcl_vector<vnl_vector<double> >& vin,
         const vcl_vector<unsigned>& outputs,
         clsfy_binary_tree_bnode* parent,
-        bool left, bool pure) const;
+        bool to_left, bool pure) const;
 
     bool calc_test_error_;
-    
 };
 
 

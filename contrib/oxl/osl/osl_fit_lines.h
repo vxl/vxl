@@ -6,7 +6,7 @@
 //
 // .SECTION Description
 // Definition of a class for fitting lines to Canny edge data
-// using orthognal regression and incremental fitting.
+// using orthogonal regression and incremental fitting.
 // The input data comes from a DigitalCurve pointed to by an edge.
 // If a fit is found the DigitalCurve is replaced by suitable
 // ImplicitDigitalLine, and the topology adjusted.

@@ -10,7 +10,7 @@
 // Given a 3D geometric object like a set of points, an ellipsoid, ...
 // find the bounding box with the minimal volume that completely contains
 // the given object. "Bounding box" is defined here as a Euclidean box
-// (with mutually ortogonal rectangular faces), i.e., a vgl_orient_box_3d<T>.
+// (with mutually orthogonal rectangular faces), i.e., a vgl_orient_box_3d<T>.
 //
 // The class vgl_orient_box_3d_operators is actually a kind of namespace:
 // it is just a collection of static methods, all returning a minimal box.

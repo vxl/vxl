@@ -32,9 +32,9 @@ class bvpl_opinion_functor
 
  private:
   float b_;  // accumulates belief
-  float u_;  // accumulates uncertainity
+  float u_;  // accumulates uncertainty
   float n_m_;  // accumulates the number of apply called
-  float n_p_;  // accumulates uncertainity
+  float n_p_;  // accumulates uncertainty
   //: Initializes class variables
   void init();
 };

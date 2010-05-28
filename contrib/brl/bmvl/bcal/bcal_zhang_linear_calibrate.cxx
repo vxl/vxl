@@ -247,7 +247,7 @@ compute_extrinsic(vgl_h_matrix_2d<double> const &H, vnl_double_3x3 const &A)
     Q[i][2] = r3[i];
   }
 
-  // since due to noise r2 and r3 might not be unit vecotors
+  // since due to noise r2 and r3 might not be unit vectors
   // we must find the closest valid rotation matrix
   vnl_double_3x3 R = get_closest_rotation(Q);
 

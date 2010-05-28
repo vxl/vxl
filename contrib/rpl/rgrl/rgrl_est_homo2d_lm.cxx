@@ -284,7 +284,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   // vnl_svd<double> svd( lm.get_JtJ(), 1e-4 );
   // Cannot use get_JtJ() because it is affected by the
   // scale in homography parameter vector
-  // Thus, use the nomalized p vector to compute Jacobian again
+  // Thus, use the normalized p vector to compute Jacobian again
   vnl_matrix<double> jac(tot_num, 9), jtj(9, 9);
   homo_func.gradf( p, jac );
   //

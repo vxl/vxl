@@ -258,7 +258,7 @@ void bwm_site_mgr::edit_site()
   int choices[3] = {0, 0, 0};
   double lat=0.0, lon=0.0, elev=0.0;
 
-  // previosly created obj vars
+  // previously created obj vars
   bool act_old[30];
   bool tab_remove[30];
   vcl_vector<vcl_string> cam;
@@ -1306,7 +1306,7 @@ void bwm_site_mgr::compute_3d_world_params()
     if (c->world_pt_valid())
       bb.add(c->world_pt());
   }
-  //to resore cam stream state
+  //to restore cam stream state
   unsigned cam_number = cam_istr->camera_number();
   cam_istr->seek_camera(0);
   vpgl_perspective_camera<double>* cam = cam_istr->current_camera();

@@ -211,7 +211,7 @@ static int geostr_to_latlon(const char* str, double* lat, double* lon)
   return latstrlen+lonstrlen;
 }
 
-//Coefficient ordering possiblities
+// Coefficient ordering possibilities
 // NITF_RATIONAL00B - commercial + airborne
 void vpgl_nitf_rational_camera::set_order_b(int* ord)
 {

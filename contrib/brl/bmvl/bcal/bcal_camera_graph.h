@@ -216,7 +216,7 @@ class bcal_camera_graph
   // get edge from v1 to v2
   inline E* get_edge(int v1, int v2)
   {
-    assert(v1 == 0 && v2 <= num_vertice_); // only from souce to camera is avaible
+    assert(v1 == 0 && v2 <= num_vertice_); // only from source to camera is available
     vcl_vector<edge_node*>* plist = edges_[v1];
     for (unsigned int i=0; i < plist->size(); i++){
       edge_node *e = (*plist)[i];

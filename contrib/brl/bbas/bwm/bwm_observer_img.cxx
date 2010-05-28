@@ -776,7 +776,7 @@ void bwm_observer_img::zoom_to_fit()
 
   float w = xmax-xorig, h = ymax-yorig;
 
-  // the requred scale to fit the image in the window
+  // the required scale to fit the image in the window
   float required_scale_x = w/ni;
   float required_scale_y = h/nj;
   float r = required_scale_x;

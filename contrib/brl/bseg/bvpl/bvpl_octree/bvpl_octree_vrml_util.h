@@ -49,7 +49,7 @@ void bvpl_octree_vrml_util::write_scene_as_disks(vcl_ofstream &vrml_os,
     scene->load_block(iter.index());
     tree_type  *tree = (*iter)->get_tree();
 
-    //iterate trhough the tree
+    // iterate through the tree
     vcl_vector<cell_type*> cells = tree->leaf_cells();
     unsigned lines = 0;
     float max_response =bvpl_cell_to_float(cells[0]);

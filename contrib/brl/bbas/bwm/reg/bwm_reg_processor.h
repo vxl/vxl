@@ -20,7 +20,7 @@
 // edges that are within a tolerance on orientation are considered to be
 // eligble for a match. The test for a match is based on a histogram of
 // distances between eligible edges in the model and the search segmentations.
-// There is a minimum acceptable cumulative probabiity of edges lying within
+// There is a minimum acceptable cumulative probability of edges lying within
 // the distance threshold, to produce a successful match.
 #include <vcl_vector.h>
 #include <vgl/vgl_point_3d.h>
@@ -47,7 +47,7 @@ class bwm_reg_processor
                     vgl_plane_3d<double> const& world_plane,
                     vil_image_resource_sptr const& search_image,
                     vpgl_rational_camera<double> const& search_cam
-                  );
+                   );
   // Constructor for other mode as well as model
   // The model image (EO) is applied to the other_mode_image
   // The model edges that are successful are kept for
@@ -60,7 +60,7 @@ class bwm_reg_processor
                     vgl_plane_3d<double> const& world_plane,
                     vil_image_resource_sptr const& search_image,
                     vpgl_rational_camera<double> const& search_cam
-                    );
+                   );
   ~bwm_reg_processor() {}
 
   //: Registers the world point in the search image.

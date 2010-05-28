@@ -106,8 +106,8 @@ find_intersection_point(vcl_vector<vpgl_rational_camera<double> > const& cams,
     vcl_cout << z << '\t' << var << '\n';
 #endif
   }
-  //at this point the best common intersection point is known.
-  // do some sanitity checks
+  // at this point the best common intersection point is known.
+  // do some sanity checks
   if (zopt == zmin||zopt == zmax)
     return false;
   p_3d.set(xopt, yopt, zopt);

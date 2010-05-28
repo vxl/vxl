@@ -201,7 +201,7 @@ void fhs_searcher::points_from_root(const vgl_point_2d<double>& root_pt,
   pts.resize(n_points());
   pts[root_node()]=root_pt;
 
-  // Propogate solution through the tree
+  // Propagate solution through the tree
   // arc_ ordered so that parents always precede leaves
   for (vcl_vector<fhs_arc>::const_iterator a=arc_.begin();a!=arc_.end();++a)
   {

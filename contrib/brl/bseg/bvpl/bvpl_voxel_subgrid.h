@@ -2,7 +2,7 @@
 #define bvpl_voxel_subgrid_h
 //:
 // \file
-// \brief A class to retrieve a subgrid withing a bigger grid
+// \brief A class to retrieve a subgrid within a bigger grid
 // \author Gamze Tunali
 // \date  June 24, 2009
 //

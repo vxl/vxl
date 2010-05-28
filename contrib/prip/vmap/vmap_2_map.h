@@ -511,7 +511,7 @@ class vmap_2_map : public vmap_owning_sequence<D>
   void set_phi (vmap_dart_index arg, vmap_dart_index arg_phi) ;
 
   //: Returns true if all the permutations are valid, false otherwise.
-  //  May be usefull for testing permutations set by hand...
+  //  May be useful for testing permutations set by hand...
   virtual bool valid() const ;
 
   //: Deletes everything.

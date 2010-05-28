@@ -260,7 +260,7 @@ class bvxm_voxel_world: public vbl_ref_count
   template<bvxm_voxel_type VOX_T>
   void increment_observations( unsigned int bin_idx = 0, unsigned scale = 0);
 
-  //: zero the number of obserevations at a specific bin
+  //: zero the number of observations at a specific bin
   template<bvxm_voxel_type VOX_T>
   void zero_observations( unsigned int bin_idx = 0, unsigned scale = 0);
 

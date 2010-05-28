@@ -210,7 +210,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     pp->push_back(cur_stat);
 
     // this is the termination criterion: it is based on the fro_norm of the current iteration's
-    // estimate of the rotation and the translation.  Iterations stop when new rotatations and new translations
+    // estimate of the rotation and the translation.  Iterations stop when new rotations and new translations
     // become negligible
     //if (fro_norm1<1e-4 && fro_norm2<1e-4)
     if (fro_norm1<1e-2 && fro_norm2<1e-1)

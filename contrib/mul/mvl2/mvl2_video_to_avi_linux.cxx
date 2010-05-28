@@ -28,7 +28,7 @@ mvl2_video_to_avi::~mvl2_video_to_avi()
 
 bool mvl2_video_to_avi::set_codec(char a, char b, char c, char d)
 {
-  // TO DO : verify if the codec is supported for video writting.
+  // TO DO : verify if the codec is supported for video writing.
   fourcc_=mmioFOURCC(a,b,c,d);
 
   // hack to get correct color with mjpg codec

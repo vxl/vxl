@@ -29,7 +29,7 @@ class boxm_opt3_sample
   void update_obs_dist(obs_datatype obs, float obs_prob);
 
   apm_datatype obs_dist_; // distribution of samples from this observation
-  float weighted_vis_sum_; // sum of visibility probabilitys * corresponding seg_lens
+  float weighted_vis_sum_; // sum of visibility probabilities * corresponding seg_lens
   float seg_len_sum_; // sum of sample segment lengths
   float log_pass_prob_sum_; // sum of log of updated (1 - PQ)
 };

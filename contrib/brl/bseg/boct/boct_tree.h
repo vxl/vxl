@@ -3,8 +3,8 @@
 #define boct_tree_h_
 //:
 // \file
-// \brief  A generic octree templated on locational code and datatype. Travesal operations are inplemented as described in
-//         [Simple and Efficient Travessal Methods for Quadtrees and Octrees/ Frisken, Perry 2002]
+// \brief  A generic octree templated on locational code and datatype. Traversal operations are inplemented as described in
+//         [Simple and Efficient Traversal Methods for Quadtrees and Octrees/ Frisken, Perry 2002]
 //
 // \author Gamze Tunali/Vishal Jain
 // \date   July 31, 2009
@@ -196,13 +196,10 @@ class boct_tree
   static short version_no(bool save_internal_nodes, bool platform_independent = true)
   {
     if (save_internal_nodes) {
-      if (platform_independent) {
-        return 1;
+      if (!platform_independent) {
+        vcl_cerr << "warning: boct_tree::version_no : no platform_dependent method for writing internal nodes\n";
       }
-      else {
-        vcl_cerr << "warning: boct_tree::version_no : no platform_dependent method for writing internal nodes" << vcl_endl;
-        return 1;
-      }
+      return 1;
     }
     else {
       if (platform_independent) {

@@ -64,7 +64,7 @@ static void test_interpolate()
   R0 = vgl_rotation_3d<double>(q0);
   vnl_quaternion<double> q1(-0.0187549, 0.0782806, -0.00136849, 0.996754);
   R1 = vgl_rotation_3d<double>(q1);
-  //test if the basic interpolation soluiton is valid
+  //test if the basic interpolation solution is valid
    Rm0 = R0.as_matrix(); Rm1 = R1.as_matrix();
    vnl_double_3x3 tm = Rm0.transpose()*Rm1;
    vcl_cout << "R0tR1\n"

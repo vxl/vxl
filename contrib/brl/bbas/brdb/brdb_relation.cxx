@@ -530,7 +530,7 @@ brdb_join(const brdb_relation_sptr& r1, const brdb_relation_sptr& r2)
     // go through all tuples in r1
     for (vcl_vector<brdb_tuple_sptr>::iterator itr_1 = r1->begin(); itr_1<r1->end(); ++itr_1)
     {
-      // go through all touples in r2
+      // go through all tuples in r2
       for (vcl_vector<brdb_tuple_sptr>::iterator itr_2 = r2->begin(); itr_2<r2->end(); ++itr_2)
       {
         bool isMatched = true;

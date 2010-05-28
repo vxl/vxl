@@ -20,7 +20,7 @@
 //: Represents a landmark feature.
 //
 // A landmark feature is a branching or cross-over point of a
-// vascular-like strucure. It is characterized by a number of outgoing
+// vascular-like structure. It is characterized by a number of outgoing
 // direction vectors. The error_projection matrix is identity.
 //
 class rgrl_feature_landmark

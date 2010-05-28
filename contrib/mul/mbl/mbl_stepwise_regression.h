@@ -86,7 +86,7 @@ class mbl_stepwise_regression
     void operator()();
 
     //: return the basis variables
-    // I.e. those determined to be significanly correlated with y in stepwise search
+    // I.e. those determined to be significantly correlated with y in stepwise search
     const vcl_set<unsigned > basis() const {return basis_;}
 
     //: Set the mode to forwards or backwards

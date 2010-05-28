@@ -35,7 +35,7 @@ class bvxm_mog_norm
 
  public:
 
-  //Grid opertions
+  // === Grid operations ===
 
   //: Computes the l2 distances between the mixtures of gaussians in a bvxm_grid and a reference.
   //  If no mixture is given as a reference, the first mixture in the grid is used
@@ -45,7 +45,7 @@ class bvxm_mog_norm
                           bool reference_given,
                           mix_gauss_type reference  = mix_gauss_type());
 
-  // Distribution operations
+  // === Distribution operations ===
 
   //:Computes the l2 norm between two mixtures of gaussians
   static T mog_l2 (mix_gauss_type const& p1, mix_gauss_type const& p2);
@@ -64,4 +64,3 @@ class bvxm_mog_norm
 };
 
 #endif
-

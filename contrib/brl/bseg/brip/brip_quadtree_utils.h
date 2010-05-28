@@ -21,11 +21,11 @@ template <class T>
 class brip_quadtree_utils
 {
  public:
-  //:Given a leaf quadtree node, fill the corresponding image region with its value -- the base case
+  //: Given a leaf quadtree node, fill the corresponding image region with its value -- the base case
   static void fill_image_region(brip_quadtree_node_base_sptr node,
                                 vil_image_view<T>& img);
 
-  //:Given a tree root, recursively fill the image values according to the tree nodes
+  //: Given a tree root, recursively fill the image values according to the tree nodes
   static void fill_image_from_node(brip_quadtree_node_base_sptr node,
                                    vil_image_view<T>& img);
 
@@ -42,7 +42,7 @@ class brip_quadtree_utils
                              unsigned scale,
                              vbl_array_2d<brip_quadtree_node_base_sptr>& nodes);
 
-  //: given two layers of a pyramid of quadtree nodes, establish the parent-chlid links
+//: given two layers of a pyramid of quadtree nodes, establish the parent-child links
 static void connect_children(vbl_array_2d<brip_quadtree_node_base_sptr>& nodes,
                              unsigned scale,
                              vbl_array_2d<brip_quadtree_node_base_sptr> const& prev);

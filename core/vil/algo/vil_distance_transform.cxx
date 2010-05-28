@@ -93,7 +93,7 @@ void vil_distance_transform(const vil_image_view<bool>& mask,
 }
 
 //: Distance function, using neighbours +/-2 in x,y
-//  More accurate thand vil_distance_function_one_way
+//  More accurate than vil_distance_function_one_way
 void vil_distance_transform_r2_one_way(vil_image_view<float>& image)
 {
   assert(image.nplanes()==1);

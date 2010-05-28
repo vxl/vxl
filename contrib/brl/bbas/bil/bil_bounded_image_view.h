@@ -34,7 +34,7 @@ class bil_bounded_image_view : public vil_image_view<T>
   T zero_;
   //: column origin of the bounded data
   unsigned ib0_;
-  //: row orgin of the bounded data
+  //: row origin of the bounded data
   unsigned jb0_;
   //: number of columns in the image space
   unsigned nib_;

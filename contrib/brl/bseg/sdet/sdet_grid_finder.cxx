@@ -433,7 +433,7 @@ get_vanishing_point(vcl_vector<vsol_line_2d_sptr> const & para_lines,
   double tx = 0, ty =0;
   //
   // convert the input lines to vgl_homg_line(s)
-  // and get the average distance of the intersection of the perpendiclar
+  // and get the average distance of the intersection of the perpendicular
   // line from the origin with each line.  This point set defines the
   // translation offset for the lines.
   //
@@ -1595,7 +1595,7 @@ bool sdet_grid_finder::get_square_pixel_stats(vil1_image img,
 
   if (n_scan_rows < 2*n_lines_x_)
   {
-    // less than 2 pixels per square - somethings wrong
+    // less than 2 pixels per square - something 's wrong
     return false;
   }
 

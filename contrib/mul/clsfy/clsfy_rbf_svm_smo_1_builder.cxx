@@ -176,7 +176,7 @@ void clsfy_rbf_svm_smo_1_builder::b_read(vsl_b_istream& bfs)
 // \verbatim
 // {
 //   boundC: 3  (default 0 meaning no bound) Upper bound on the Lagrange multiplies.
-//              Smaller non-zero values result in a osftening of the boundary.
+//              Smaller non-zero values result in a softening of the boundary.
 //
 //   rbf_width: 3.0  (required) - A good guess is the mean euclidean distance
 //                    to every examples nearest neighbour.

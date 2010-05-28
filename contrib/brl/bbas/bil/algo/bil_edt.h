@@ -10,7 +10,7 @@
 //
 // \todo
 // Maybe define these in a class; use of inheritance may be useful e.g. by
-// defining a base "distance_tranform" compute class wich abstracts all EDT
+// defining a base "distance_tranform" compute class which abstracts all EDT
 // algorithms (independent of the author) and imposes uniformity to their interfaces.
 // Otherwise we might end up with multiple DT implementations, each with a
 // different interface and differents assumption on the input image (e.g. 0

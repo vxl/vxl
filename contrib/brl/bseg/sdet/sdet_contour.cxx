@@ -1086,7 +1086,7 @@ void sdet_contour::BreakChain(vtol_vertex_2d_sptr const& junction,
 
   // have to remove stronger from superiors of v2
   edge2->set_v2(stronger->v2()->cast_to_vertex());
-  // junction keeps the orginal superiors + edge2
+  // junction keeps the original superiors + edge2
   edge2->set_v1(junction->cast_to_vertex());
 
   //mark vertex and edge arrays for edge 2

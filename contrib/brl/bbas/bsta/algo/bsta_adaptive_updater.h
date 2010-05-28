@@ -36,7 +36,7 @@ class bsta_mg_adaptive_updater
   typedef typename gaussian_::math_type T;//the field type, e.g. float
   typedef typename gaussian_::vector_type vector_;// the vector type
 
-  public:
+ public:
   //: for compatiblity with vpdl/vpdt
   typedef typename gaussian_::field_type field_type;
   typedef mix_dist_ distribution_type;
@@ -161,7 +161,7 @@ class bsta_mg_window_updater : public bsta_mg_statistical_updater<mix_dist_>
 };
 
 //: A mixture of Gaussians weighted statistical updater
-//  This updater treats data according to a specified weigth
+//  This updater treats data according to a specified weight
 template <class mix_dist_>
 class bsta_mg_weighted_updater : bsta_mg_statistical_updater<mix_dist_>
 {
@@ -194,7 +194,7 @@ class bsta_mg_weighted_updater : bsta_mg_statistical_updater<mix_dist_>
 
 
 //: A mixture of Gaussians statistical updater
-//  Using the grimson approximation to prior probablilities
+//  Using the grimson approximation to prior probabilities
 template <class mix_dist_>
 class bsta_mg_grimson_statistical_updater : public bsta_mg_adaptive_updater<mix_dist_>
 {
@@ -234,7 +234,7 @@ class bsta_mg_grimson_statistical_updater : public bsta_mg_adaptive_updater<mix_
 };
 
 //: A mixture of Gaussians window updater
-//  Using the grimson approximation to prior probablilities
+//  Using the grimson approximation to prior probabilities
 template <class mix_dist_>
 class bsta_mg_grimson_window_updater : public bsta_mg_grimson_statistical_updater<mix_dist_>
 {
@@ -272,7 +272,7 @@ class bsta_mg_grimson_window_updater : public bsta_mg_grimson_statistical_update
 };
 
 //: A mixture of Gaussians statistical weighted updater
-//  Using the grimson approximation to prior probablilities
+//  Using the grimson approximation to prior probabilities
 template <class mix_dist_>
 class bsta_mg_grimson_weighted_updater : bsta_mg_grimson_statistical_updater<mix_dist_>
 {

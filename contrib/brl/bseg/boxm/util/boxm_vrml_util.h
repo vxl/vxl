@@ -21,7 +21,7 @@ class boxm_vrml_util
 {
  public:
 
-  //Writes the values in the scene above the treshold as vrml dots
+  //Writes the values in the scene above the threshold as vrml dots
   template <class T_data>
   static void write_vrml_scene(vcl_ofstream& str, boxm_scene<boct_tree<short,T_data> > *scene,
                                const float threshold= 0.0f);

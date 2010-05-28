@@ -441,7 +441,7 @@ bool cube_mean(double* xverts_2d, double* yverts_2d, float* vert_dists, boct_fac
 
 inline void init_triangle_scan_iterator(vgl_triangle_scan_iterator<double> &tri_it, const double* xverts, const double* yverts, unsigned int v0=0, unsigned int v1=1, unsigned int v2=2)
 {
-  // subract 0.5 to follow convention that the center of pixel i,j is located at coordinates i+0.5, j+0.5
+  // subtract 0.5 to follow convention that the center of pixel i,j is located at coordinates i+0.5, j+0.5
   tri_it.a.x = xverts[v0] - 0.5; tri_it.a.y = yverts[v0] - 0.5;
   tri_it.b.x = xverts[v1] - 0.5; tri_it.b.y = yverts[v1] - 0.5;
   tri_it.c.x = xverts[v2] - 0.5; tri_it.c.y = yverts[v2] - 0.5;

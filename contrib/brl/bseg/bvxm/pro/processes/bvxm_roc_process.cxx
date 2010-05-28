@@ -142,7 +142,7 @@ bool bvxm_roc_process(bprb_func_process& pro)
         }
       }
 
-      //save image: for debugging purpouses
+      //save image: for debugging purposes
       vcl_stringstream img_out_ss;
       img_out_ss <<"./"<< thresh[n] *20.0 <<".png";
       vcl_string img_out = img_out_ss.str();

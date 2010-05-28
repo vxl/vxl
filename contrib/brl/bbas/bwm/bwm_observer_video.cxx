@@ -475,7 +475,7 @@ void bwm_observer_video::add_match()
       return;
     // display the new match
     this->display_video_corr(c, cur_frame, CORR_STYLE);
-    // display the fact that the match to the prevous frame soview is successful
+    // display the fact that the match to the previous frame soview is successful
     this->remove(cross);
     corr_soview_map_[frame].erase(corr_index);
     this->display_video_corr(c, frame, MATCHED_STYLE);

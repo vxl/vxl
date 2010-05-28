@@ -334,7 +334,7 @@ int main(int argc, char ** argv)
     vcl_cerr << "Setting up variables... ";
 
     // note: this assumes that the radius of each voxel in each image is
-    //       approximately the same.  Not true in general, but for the turntabl
+    //       approximately the same.  Not true in general, but for the turntable
     //       case this is 'ok'
     Voxel tempvoxel( count,
                      int((1<<count)/2),

@@ -32,8 +32,7 @@ class rgrl_object_observer
 };
 
 //: rgrl_object implements callbacks (via object/observer), and debug flags.
-//
-//  Most rgrl classes should be a subclas of rgrl_object.
+//  Most rgrl classes should be a subclass of rgrl_object.
 class rgrl_object
   : public vbl_ref_count
 {

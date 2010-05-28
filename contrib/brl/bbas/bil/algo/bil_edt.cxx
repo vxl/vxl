@@ -202,7 +202,7 @@ bil_edt_saito_3D(vil_image_view<vxl_uint_32> &im)
 // This particular implementation is based on the 1st part of the following method:
 // R. Lotufo and F. Zampirolli, Fast multidimensional parallel euclidean distance
 // transform based on mathematical morphology, in T. Wu and D. Borges, editors,
-// Proccedings of SIBGRAPI 2001, XIV Brazilian Symposium on Computer Graphics
+// Proceedings of SIBGRAPI 2001, XIV Brazilian Symposium on Computer Graphics
 // and Image Processing, pages 100-105. IEEE Computer Society, 2001.
 //
 //

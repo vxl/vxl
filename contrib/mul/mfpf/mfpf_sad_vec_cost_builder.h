@@ -20,7 +20,7 @@ class mfpf_sad_vec_cost_builder : public mfpf_vec_cost_builder
   //: Space to record examples
   vcl_vector<vnl_vector<double> > data_;
 
-  //: If true recalculate min_mad_ based on median of trainig set
+  //: If true recalculate min_mad_ based on median of training set
   bool impose_robust_min_mad_;
 
   //: Define default values

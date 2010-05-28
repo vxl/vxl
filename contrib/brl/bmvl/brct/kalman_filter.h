@@ -43,7 +43,7 @@ class kalman_filter
   vcl_vector<vgl_point_3d<double> > get_local_pts(); // will be superseded
   bugl_curve_3d get_curve_3d();
 
-  //: read all the data including time stampes, trackers.
+  //: read all the data including time stamps, trackers.
   void read_data(const char* fname);
 
   //: read vishual tracker result out of a file

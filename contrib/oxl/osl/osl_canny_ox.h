@@ -32,7 +32,7 @@
 //                               theta_[x][y] now stores the edge normal
 //   Maarten Vergauwen (ESAT, KULeuven) - 08/10/98 - Added AdjustForMask method
 //   Peter Vanroose - 30/12/99 - Link_edgelsOX rewritten and documented
-//   F. Schaffaliztky 2-apr-99   converted from Segmentation to osl
+//   F. Schaffalitzky 2-apr-99   converted from Segmentation to osl
 
 #include <vcl_vector.h>
 #include <vil1/vil1_image.h>

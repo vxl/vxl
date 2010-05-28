@@ -93,7 +93,7 @@ bool boxm_roi_init_rational_camera_process(bprb_func_process& pro)
     vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
     return false;
   }
-  // uncertainity (meters) -- SHOULD BE A PARAM
+  // uncertainty (meters) -- SHOULD BE A PARAM
   float uncertainty=10.0;
   if ( !pro.parameters()->get_value(error, uncertainty) ) {
     vcl_cout << pro.name() << ": error in retrieving parameters\n";

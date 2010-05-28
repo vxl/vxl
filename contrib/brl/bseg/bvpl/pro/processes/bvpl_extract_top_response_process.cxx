@@ -32,7 +32,7 @@ namespace bvpl_extract_top_response_process_globals
 //: process takes 5 inputs and has 2 outputs.
 // * input[0]: The respose grid (3-D)
 // * input[1]: The id grid (3-D)
-// * input[2]: The array index (0 corersponds to strongest)
+// * input[2]: The array index (0 corresponds to strongest)
 // * input[3]: Path to output response grid
 // * input[4]: Path to output id grid
 //

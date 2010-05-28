@@ -27,7 +27,7 @@ bool bvxm_update_process_cons(bprb_func_process& pro)
   //          -apm_mog_mc_2_3
   //          -apm_mog_mc_3_3
   //          -apm_mog_mc_4_3
-  //input[4]: The bin index to be updatet
+  //input[4]: The bin index to be updated
   //input[5]: The scale index  of the voxel world to be updated (default is 0)
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "vil_image_view_base_sptr";

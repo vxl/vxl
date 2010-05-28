@@ -10,12 +10,12 @@
 //         parallel (constant polar angle). These vectors determine the zero rotation position as followos:
 //         1. The rotation that transforms the canonical_rotation_axis to a new specified rotation axis,
 //            is applied to the kernel (Lets call such rotation R).
-//         2. The kernel is rotate around its new rototion such that R*canonical_parallel_axis achieves
+//         2. The kernel is rotate around its new rotation such that R*canonical_parallel_axis achieves
 //            the same same polar angle as the new rotation axis
 //         Usage:
 //         The user can create a kernel in its canonical form through children constructors
-//         Then, the user call set_rotation_axis(), set_angle() and create() and if one whises to use
-//         another angle with the same axis, it suffies to call set_angle(angle) and create(). This will save computation
+//         Then, the user call set_rotation_axis(), set_angle() and create() and if one wishes to use
+//         another angle with the same axis, it suffices to call set_angle(angle) and create(). This will save computation
 //         time since the rotation_axis has already been set
 //         Alternativly, the user can call create(axis, angle). This transforms the canonical kernel according
 //         to new parameters
@@ -42,7 +42,7 @@ class bvpl_kernel_factory
  public:
   //Default constructor. Initialize constant member variables
   bvpl_kernel_factory(): canonical_rotation_axis_(vnl_float_3(1,0,0)), canonical_parallel_axis_(vnl_float_3(0,1,0)){}
-  
+
   virtual ~bvpl_kernel_factory() {}
 
   //: Returns a kernel described by class variables rotation_axis_, \p angle_
@@ -52,8 +52,8 @@ class bvpl_kernel_factory
   //: Returns a kernel described by inputs; rotation_axis and angle
   bvpl_kernel create(vnl_float_3 rotation_axis, float angle);
 
-  //: Sets the toration axis of this kernel
-  void set_rotation_axis( vnl_float_3 rotation_axis);
+  //: Sets the rotation axis of this kernel
+  void set_rotation_axis(vnl_float_3 rotation_axis);
 
   //: Sets rotation angle of this kernel
   void set_angle(float angle) { angle_ =angle; }
@@ -135,10 +135,10 @@ bvpl_kernel_vector_sptr bvpl_kernel_factory::create_kernel_vector(F func)
 {
   vcl_vector<vnl_float_3> axes=func.get_axes();
   vcl_vector<float> angles = func.get_angles();
-  
+
   bvpl_kernel_vector_sptr vec_kernel=new bvpl_kernel_vector();
-  
-  for(unsigned i=0;i<axes.size();i++)
+
+  for (unsigned i=0;i<axes.size();i++)
   {
     this->set_rotation_axis(axes[i]);
     this->set_angle(angles[i]);

@@ -67,7 +67,7 @@ bool bvxm_roi_init_process(bprb_func_process& pro)
   //voxel_world
   bvxm_voxel_world_sptr voxel_world = pro.get_input<bvxm_voxel_world_sptr>(i++);
 
-  // uncertainity (meters) -- SHOULD BE A PARAM
+  // uncertainty (meters) -- SHOULD BE A PARAM
   float uncertainty=0;
   if ( !pro.parameters()->get_value(error, uncertainty) ) {
       vcl_cout << pro.name() << ": error in retrieving parameters\n";

@@ -78,7 +78,7 @@ class bsta_k_medoid
 
  protected:
 
-  //: avg distance change for element i reslting from swapping medoids, j->k.
+  //: avg distance change for element i resulting from swapping medoids, j->k.
   double dc(const unsigned i, const unsigned j, const unsigned k);
 
   //: avg inter-medoid distance change resulting from swapping medoids, j->k.

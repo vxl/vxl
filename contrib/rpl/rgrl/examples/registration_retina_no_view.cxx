@@ -193,7 +193,7 @@ read_landmark_file( const char* filename,
       landmark_inv.push_back( single );
 
       // If the single constellation was ambiguous create a copy with
-      // the indices shifted to releive the ambiguity
+      // the indices shifted to relieve the ambiguity
       if ( single->is_ambiguous() ) {
         rgrl_invariant_single_landmark* copy =
           new rgrl_invariant_single_landmark( *single, angular_std, width_ratio_std );
@@ -243,10 +243,10 @@ main( int argc, char* argv[] )
 
   moving_feature_set =
     new rgrl_feature_set_location_masked( new rgrl_feature_set_bins_2d(moving_set),
-                                                    mask);
+                                          mask);
   fixed_feature_set =
     new rgrl_feature_set_location_masked( new rgrl_feature_set_bins_2d(fixed_set),
-                                                    mask);
+                                          mask);
   rgrl_mask_sptr moving_image_region = new rgrl_mask_box( moving_feature_set->bounding_box() );
   rgrl_mask_sptr fixed_image_region  = new rgrl_mask_box( fixed_feature_set->bounding_box() );
 

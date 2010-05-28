@@ -30,7 +30,7 @@ class bdpg_node : public vbl_ref_count
   //: set optimum previous col on previous row
   void set_previous_col(const int col) { previous_col_ = col; }
 
-  //:the prior probablity of a node
+  //:the prior probability of a node
   void set_prior_prob(const double p);
 
   //:update the current probability of the node
@@ -48,8 +48,8 @@ class bdpg_node : public vbl_ref_count
  private:
   int previous_row_;//!< the previous row in the path to this node
   int previous_col_;//!< the previous column in the path to this node
-  double prior_prob_;//!< the prior probablity of the node
-  double log_prob_;//!< the log probablity of the node
+  double prior_prob_;//!< the prior probability of the node
+  double log_prob_;//!< the log probability of the node
 };
 
 #include "bdpg_node_sptr.h"

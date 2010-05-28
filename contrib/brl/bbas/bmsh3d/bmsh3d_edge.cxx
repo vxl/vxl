@@ -372,7 +372,7 @@ void bmsh3d_edge::_disconnect_HE(bmsh3d_halfedge* inputHE)
 
 void bmsh3d_edge::disconnect_all_Fs(vcl_vector<bmsh3d_face*>& disconn_faces)
 {
-  //Repeatly disconnect all incident faces until finish.
+  // Repeatedly disconnect all incident faces until finish.
   bmsh3d_halfedge* HE = halfedge_;
   while (HE != NULL) {
     bmsh3d_halfedge* pair = HE->pair();

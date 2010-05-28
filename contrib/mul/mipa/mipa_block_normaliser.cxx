@@ -1,4 +1,3 @@
-
 //:
 // \file
 // \brief Class to independently normalise sub-blocks with a region
@@ -64,7 +63,7 @@ void mipa_block_normaliser::normalise(vnl_vector<double>& v) const
                 {
                     //Copy all elements across the columns of the block
                     vcl_copy(pTarget,pTarget+nTargetColEls,pBlockTopLeft);
-                    pBlockTopLeft+= rowStep; //Next row of block in overall normalised vecor
+                    pBlockTopLeft+= rowStep; //Next row of block in overall normalised vector
                     pTarget+= nTargetColEls; //Next row of block
                 }
             }

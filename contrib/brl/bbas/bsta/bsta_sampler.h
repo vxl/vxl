@@ -10,7 +10,7 @@
 // \verbatim
 //  Modifications
 //   Ozge C. Ozcanli - Dec 09, 2008 - Added an algorithm to sample from a "set of samples with given probabilities"
-//   Daniel E. Crispell - Feb. 22, 2010 - Added verions of functions that allow user to provide own vnl_random object
+//   Daniel E. Crispell - Feb. 22, 2010 - Added versions of functions that allow user to provide own vnl_random object
 // \endverbatim
 
 #include <vcl_vector.h>
@@ -28,7 +28,7 @@ class bsta_sampler
                      unsigned cnt, vcl_vector<T>& out);
 
   //: put cnt samples into output vector wrt given probabilities
-  //  The sum of probabilities should sum to 1 otherwise return false. 
+  //  The sum of probabilities should sum to 1 otherwise return false.
   //  User provides seeded random generator
   static bool sample(vcl_vector<T>& samples, vcl_vector<float>& p,
                      unsigned cnt, vcl_vector<T>& out, vnl_random &rng);
@@ -39,13 +39,12 @@ class bsta_sampler
   //: sample from a joint histogram treating it as a discrete prob distribution
   // User provides seeded random generator
   static bool sample(const bsta_joint_histogram<float>& jh, unsigned cnt, vcl_vector<vcl_pair<float, float> >& out, vnl_random &rng);
-  
+
   //: sample in the decreasing order of likelihood (i.e. the most likely bin will be returned as the first sample)
   static bool sample_in_likelihood_order(const bsta_joint_histogram<float>& jh, unsigned cnt, vcl_vector<vcl_pair<float, float> >& out);
 
   //: sample in the decreasing order of likelihood (i.e. the most likely bin will be returned as the first sample)
   static bool sample_in_likelihood_order(const bsta_joint_histogram<float>& jh, unsigned cnt, vcl_vector<vcl_pair<unsigned, unsigned> >& out_indices);
-
 };
 
 #endif // bsta_sampler_h_

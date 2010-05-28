@@ -3,7 +3,7 @@
 #define mbl_mod_gram_schmidt_h_
 //:
 // \file
-// \brief Orthoganalise a basis using modified Gram-Schmidt (and normalise)
+// \brief Orthogonalise a basis using modified Gram-Schmidt (and normalise)
 // \author Martin Roberts
 //
 // Note: Modified Gram-Schmidt is more numerically stable than the classical version

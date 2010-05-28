@@ -36,8 +36,7 @@ class vbl_controlled_partition
   vbl_controlled_partition() ;
   ~vbl_controlled_partition() ;
 
-  //: Initializes the struture with "size" new sets composed
-  //   of a single element.
+  //: Initializes the structure with "size" new sets composed of a single element.
   void initialise(int size) ;
 
   vbl_controlled_partition & operator=(const vbl_controlled_partition & arg) ;

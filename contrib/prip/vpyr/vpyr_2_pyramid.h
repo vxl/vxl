@@ -183,7 +183,7 @@ class vpyr_2_pyramid
 #endif // 0
 
   //: Returns true if all the permutations are valid, false otherwise.
-  // May be usefull for testing permutations set by hand...
+  // May be useful for testing permutations set by hand...
   virtual bool valid() ;
 
   //: Deletes everything.

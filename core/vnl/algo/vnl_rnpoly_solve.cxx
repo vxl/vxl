@@ -73,7 +73,7 @@ vcl_vector<vnl_vector<double>*> vnl_rnpoly_solve::realroots(double tol)
 //------------------------- INPTBR ---------------------------
 //: Initialize random variables
 // This will initialize the random variables which are used
-// to preturb the starting point so as to have measure zero
+// to perturb the starting point so as to have measure zero
 // probability that we will start at a singular point.
 static void inptbr(vcl_vector<vnl_rnpoly_solve_cmplx>& p, vcl_vector<vnl_rnpoly_solve_cmplx>& q)
 {

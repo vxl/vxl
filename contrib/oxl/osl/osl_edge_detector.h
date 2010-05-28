@@ -2,11 +2,10 @@
 #ifndef osl_edge_detector_h
 #define osl_edge_detector_h
 //
-// .NAME osl_edge_detector - Charlie's topological edge detector:
+// \brief Charlie's topological edge detector
 // .INCLUDE osl/osl_edge_detector.h
 // .FILE osl_edge_detector.cxx
 //
-// .SECTION Description
 // A class for performing topologically-accurate edgel detection.  NB: this
 // implementation is (unintentionally) stochastic, so you don't necessarily
 // get the same results from the same image.
@@ -15,16 +14,17 @@
 // in that we compute the norm of the gradient, but then we use
 // non-maximal suppression dynamically to set the edge strength
 // thresholds. Non-maximal suppression is actually done using a
-// varient of Tsai-Fu thinning, and not as described in Canny's
+// variant of Tsai-Fu thinning, and not as described in Canny's
 // thesis.
 //
 // Full documentation is given in INRIA technical report 2444, 1994.
 //
-// .SECTION Author:
+// \author:
 //             Charlie Rothwell - 5/10/94
 //             INRIA, Sophia Antipolis
 //
-// .SECTION Modifications:
+// \verbatim
+//  Modifications:
 //          CAR March 1995: improved memory management so that computation
 //             time is reduced. Re-use of certain large arrays. Tried to
 //             re-write Set_thresholds() to use Delauney triangulation rather
@@ -56,6 +56,7 @@
 //          JLM Dec 1997 Moved sigma_, low_, gauss_tail_ and verbose_
 //                       up to osl_edge_detector_params and added new syle
 //                       constructors and execution
+// \endverbatim
 //-----------------------------------------------------------------------------
 
 #include <osl/osl_canny_port.h>

@@ -429,7 +429,7 @@ void CDirEdit::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
                 }
             }
             pp->CheckDir(ss);
-            // Make sure the directory name ends with backslash so user can type sub-drectory name
+            // Make sure the directory name ends with backslash so user can type sub-directory name
             GetWindowText(ss);
             if (ss[ss.GetLength()-1] != '\\')
             {

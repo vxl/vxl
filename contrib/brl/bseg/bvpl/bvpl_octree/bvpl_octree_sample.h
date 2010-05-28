@@ -3,7 +3,7 @@
 #define bvpl_octree_sample_h
 //:
 // \file
-// \brief  A data structture to contain- bvpl_kernel response, and id corresponding to axis of rotations and rotation around axis
+// \brief  A data structure to contain bvpl_kernel response, and id corresponding to axis of rotations and rotation around axis
 // \author Isabel Restrepo mir@lems.brown.edu
 // \date  December 9, 2009
 //

@@ -265,7 +265,7 @@ brdb_database::merge(const brdb_database_sptr& other)
   typedef vcl_map<vcl_string, brdb_relation_sptr> r_map;
 
   // copy the current relations so that the original relations
-  // are only modified if all merging is successfull.
+  // are only modified if all merging is successful.
   r_map new_relations(this->relations_);
 
   // for each relation in the other database

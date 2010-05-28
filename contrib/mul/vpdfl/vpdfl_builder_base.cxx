@@ -81,7 +81,7 @@ vcl_auto_ptr<vpdfl_builder_base> vpdfl_builder_base::new_builder_from_stream(vcl
 
   //: Incoming properties
   mbl_read_props_type props(mbl_read_props(is));
-  // which should be empty (until we add some relevent parameters)
+  // which should be empty (until we add some relevant parameters)
   mbl_read_props_look_for_unused_props("vpdfl_builder_base::new_builder_from_stream", props, mbl_read_props_type());
   return builder;
 }

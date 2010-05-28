@@ -51,10 +51,10 @@ in_range( vil_image_view< PixelType > const& image, // FIXME: unused
 template <class PixelType>
 rgrl_matcher_pseudo< PixelType > ::
 rgrl_matcher_pseudo( vil_image_view<PixelType> from_image,
-         vil_image_view<PixelType> to_image,
-         rgrl_evaluator_sptr      evaluator,
-         rgrl_mask_sptr from_mask,
-         rgrl_mask_sptr to_mask )
+                     vil_image_view<PixelType> to_image,
+                     rgrl_evaluator_sptr      evaluator,
+                     rgrl_mask_sptr from_mask,
+                     rgrl_mask_sptr to_mask )
   : from_image_( from_image ),
     to_image_( to_image ),
     from_mask_( from_mask ),
@@ -67,11 +67,11 @@ template <class PixelType>
 rgrl_match_set_sptr
 rgrl_matcher_pseudo< PixelType > ::
 compute_matches( rgrl_feature_set const&    from_set,
-     rgrl_feature_set const&    to_set,
-     rgrl_view const&           current_view,
-     rgrl_transformation const& current_xform,
-     rgrl_scale const&          current_scale,
-     rgrl_match_set_sptr const& /*old_matches*/ )
+                 rgrl_feature_set const&    to_set,
+                 rgrl_view const&           current_view,
+                 rgrl_transformation const& current_xform,
+                 rgrl_scale const&          current_scale,
+                 rgrl_match_set_sptr const& /*old_matches*/ )
 {
   typedef vcl_vector<rgrl_feature_sptr> f_vector_type;
   typedef f_vector_type::iterator f_iterator_type;
@@ -169,14 +169,14 @@ compute_matches( rgrl_feature_set const&    from_set,
     }
 
     this -> match_mapped_region( mapped_feature, mapped_pixels, current_scale,
-         matched_to_features, match_weights );
+                                 matched_to_features, match_weights );
 
     //  Make a dummy vector of intensity weights.
     // vcl_vector< double > dummy_intensity_weights( match_weights.size(), 1.0 );
 
     //  Add the feature and its matches and weights to the match set
     matches_sptr -> add_feature_matches_and_weights( *fitr, mapped_feature, matched_to_features,
-            match_weights );
+                                                     match_weights );
   }
 
   DebugMacro(3, "matches set from size = " << matches_sptr->from_size() <<'\n');
@@ -212,7 +212,7 @@ map_region_intensities( rgrl_transformation      const& trans,
     rgrl_feature_face_region * face_ptr =
         rgrl_cast<rgrl_feature_face_region *> ( feature_sptr );
     this -> map_region_intensities( face_ptr -> pixel_coordinates_ratio( spacing_ratio ), trans,
-            feature_sptr, mapped_pixels );
+                                    feature_sptr, mapped_pixels );
   }
   else if ( feature_sptr -> is_type( rgrl_feature_trace_region::type_id() ))
   {
@@ -318,7 +318,7 @@ map_region_intensities( vcl_vector< vnl_vector<int> > const& pixel_locations,
 
 //    // In 2D, I treat it as fitting a parabola in each direction ( d1
 //    // and d2 ), since we use the curvature along both direction to
-//    // approximate the paincipal curvature anyway.
+//    // approximate the principal curvature anyway.
 
 //    // let s be the similarity error, s = a r^2 + b r + c.
 //    // Use points index-1, index, index+1 to model the
@@ -487,7 +487,7 @@ match_mapped_region( rgrl_feature_sptr                     mapped_feature,
     // calculate the sub_offset.
     double sub_offset = 0;
     if ( best_offset != max_offset &&
-        best_offset != -max_offset )
+         best_offset != -max_offset )
       {
         // If one neighbor's response is not valid, calculate the second
         // derivative value of the other neighbor and sub_pixel is not necessary.
@@ -588,10 +588,10 @@ match_mapped_region( rgrl_feature_sptr                     mapped_feature,
     if ( best_off1 == max_offset || best_off1 == -max_offset )
       sub_offset1 = best_off1;
     else if ( responses[ idx1 - 1 ][ idx2 ] == max_response_value ||
-             responses[ idx1 + 1 ][ idx2 ] == max_response_value )
-      {
-        sub_offset1 = idx1 - max_offset;
-      }
+              responses[ idx1 + 1 ][ idx2 ] == max_response_value )
+    {
+      sub_offset1 = idx1 - max_offset;
+    }
     else
     {
       vcl_vector< double > responses_for_sub_pixel( 3 );
@@ -619,10 +619,10 @@ match_mapped_region( rgrl_feature_sptr                     mapped_feature,
     if ( best_off2 == max_offset || best_off2 == -max_offset )
       sub_offset2 = best_off2;
     else if ( responses[ idx1 ][ idx2 - 1 ] == max_response_value ||
-             responses[ idx1 ][ idx2 + 1 ] == max_response_value )
-      {
-        sub_offset2 = idx2 - max_offset;
-      }
+              responses[ idx1 ][ idx2 + 1 ] == max_response_value )
+    {
+      sub_offset2 = idx2 - max_offset;
+    }
     else
     {
       vcl_vector< double > responses_for_sub_pixel( 3 );

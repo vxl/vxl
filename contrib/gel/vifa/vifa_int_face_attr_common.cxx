@@ -409,7 +409,7 @@ compute_parallel_sal(vifa_group_pgram_params_sptr  gpp)
     // compute the score for the set of fitted lines
     if (nlines > 2)
     {
-      // Insert the lines into the parallelogram orientation index
+      // Insert the lines into the parallellogram orientation index
       vifa_group_pgram  gp(lg_filtered, *gpp);
       gp.SetTemp1(total_len);
 

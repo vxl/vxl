@@ -100,7 +100,7 @@ class vifa_histogram : public vul_timestamp,
 
   float* GetMinCountAddr() const { return counts+GetIndex(GetMinVal());  }
 
-  // Other usefule functions
+  // Other useful functions
   char GetDelimiter() const {return delimiter;}
   void SetDelimiter(char d) {delimiter = d;}
   float ComputeArea(float low, float high) const;// bounded area

@@ -3317,7 +3317,7 @@ gevd_float_operators::Correlations(const float* data, const int length,
                                                      pattern, radius,
                                                      index);
   for (int s = 1; s <= search; s++) {
-    result[search+s] = gevd_float_operators::Correlation(data, length, // translate patten in
+    result[search+s] = gevd_float_operators::Correlation(data, length, // translate pattren in
                                                          pattern, radius, // positive direction
                                                          index+s);
     result[search-s] = gevd_float_operators::Correlation(data, length, // translate pattern in

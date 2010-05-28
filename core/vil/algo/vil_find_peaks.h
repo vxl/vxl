@@ -135,7 +135,7 @@ bool vil_interpolate_peak(const T* pixel,
 
 //: Return sub-pixel (px,py,val) for all points in image strictly above their 8 neighbours
 //  Interpolation sub-pixel position of all local peaks (px[k],py[k])
-//  above given threshold value by fitting a parabaloid.
+//  above given threshold value by fitting a paraboloid.
 //  Interpolated peak values are returned in \a val.
 // \param clear_list  If true (the default) then empty lists before adding new examples.
 // \relatesalso vil_image_view

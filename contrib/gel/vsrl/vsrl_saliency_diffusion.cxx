@@ -35,7 +35,7 @@ void vsrl_saliency_diffusion::set_saliency(vsrl_token_saliency *saliency)
 void vsrl_saliency_diffusion::diffuse_disparity(int num_iter)
 {
   // OK we want to use diffusion so that disparity
-  // will propogate from stong regions of salienct
+  // will propagate from strong regions of saliency
   // to regions of low disparity
 
   vcl_cout << "Starting to diffuse\n";

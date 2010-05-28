@@ -54,7 +54,7 @@ vil_image_view_base_sptr test_process(vil_image_view_base_sptr const &ref_img)
 }
 
 
-//: This test verifys that vil_convert_to_n_planes_process is working for a
+//: This test verifies that vil_convert_to_n_planes_process is working for a
 // floating type image and a vxl_byte image. The images are converted from 4 planes
 // to 2 planes
 

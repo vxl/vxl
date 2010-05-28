@@ -11,7 +11,7 @@
 //  potentially matching points on the curve as having the same epipolar
 //  parameter. The segment is parametrized by alpha which defines the
 //  space of epipolar lines. The class supports interpolation to continuous
-//  values of alpha.  The properites of the segment that are needed for
+//  values of alpha.  The properties of the segment that are needed for
 //  matching:
 //     -        tangent angle
 //     -        left intensity

@@ -78,7 +78,7 @@ bool vpgl_geo_camera::init_geo_camera(vil_tiff_image* const& gtif_img,
     }
 #endif
     // create a transformation matrix
-    // if there is a transormation matrix in GEOTIFF, use that
+    // if there is a transformation matrix in GEOTIFF, use that
     vnl_matrix<double> trans_matrix;
     double* trans_matrix_values;
     double sx1, sy1, sz1;

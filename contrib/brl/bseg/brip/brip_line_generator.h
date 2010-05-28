@@ -12,7 +12,7 @@
 //
 //  Incremental generation of a digital line, a series of pixels that
 //  lie on a line segment specified by (xs, ys)->(xe, ye).  The function
-//  returns true when each new pixel is generated.  When the line segement
+//  returns true when each new pixel is generated.  When the line segment
 //  is completed the function returns false. The first call to the function
 //  should have init = true to signal the start of the generation process.
 //

@@ -67,7 +67,7 @@ class sdet_region_edge : public vbl_ref_count
   unsigned int GetLabel(unsigned int i, unsigned int max_label) const
   { return i<NumLabels(max_label) ? labels_[i] : 0; }
 
-  //Utitities (especially for testing)
+  // Utilities (especially for testing)
  protected:
   //Utilities
   bool SetNewLabel(unsigned int label);

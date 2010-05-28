@@ -2,10 +2,10 @@
 #define bvxm_opinion_h_
 //:
 // \file
-// \brief  This class is for keeping the uncertainity values beside belief probabilities.
+// \brief  This class is for keeping the uncertainty values beside belief probabilities.
 // \       When there is no data to support the value b_ available yet, u_ is 1.0 and it
 //         starts to decrease when some observations builds up some belief and goes to 0.0
-//         when certainity achieved.
+//         when certainty achieved.
 //
 // \author Gamze Tunali
 // \date   June 12, 2009
@@ -23,7 +23,7 @@ class bvxm_opinion
   bvxm_opinion() : u_(1.0f), b_(0.0f) {}
   bvxm_opinion(float u, float b) : u_(u), b_(b) {}
 
-  //: constructor where uncertinity is assumed to go away when a belief value is set
+  //: constructor where uncertainty is assumed to go away when a belief value is set
   bvxm_opinion(float b) {b_=b; u_=1.0f-b; }
 
   //: copy constructor
@@ -70,7 +70,7 @@ class bvxm_opinion
 
   bool operator==(bvxm_opinion const& o) const { return b_==o.b() && u_==o.u(); }
  private:
-  float u_;  // uncertainity value [0.0,1.0], 1.0 if total uncertainity, 0.0 if total certainity
+  float u_;  // uncertainty value [0.0,1.0], 1.0 if total uncertainty, 0.0 if total certainty
   float b_;  // probability as a belief value [0.0,1.0]
 };
 

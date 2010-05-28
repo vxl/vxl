@@ -90,7 +90,7 @@ class vpdt_mog_updater
 
 
 //: A mixture of Gaussians adaptive updater based on Stauffer-Grimson.
-//  Using the S-G approximation to prior probablilities
+//  Using the S-G approximation to prior probabilities
 // This algorithm is based on: C. Stauffer and W.E.L. Grimson,
 // "Adaptive background mixture models for real-time tracking", CVPR 1999
 template <class mog_type>

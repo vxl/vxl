@@ -82,7 +82,7 @@ void boxm_sun_vis_prob(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   boxm_aux_scene<T_loc, T_data,  sample_datatype> aux_scene(&scene,sun_occ_name, boxm_aux_scene<T_loc, T_data,  sample_datatype>::CLONE);
 
   vcl_cout<<"Sun visibility"<<vcl_endl;
-  // functor to accumulate sun visiblity
+  // functor to accumulate sun visibility
   typedef boxm_sun_vis_prob_functor<T_data::apm_type, sample_datatype> sun_vis;
 
   // set up the raytrace function

@@ -1119,7 +1119,7 @@ void print_overlap__image_3d_of_int__image_3d_of_int(opstack_t& s)
   assert(s.size() >= 2);
 
   vimt3d_image_3d_of<int> o1(s[1].as_image_3d_of_int()); // golden
-  vimt3d_image_3d_of<int> o2(s[0].as_image_3d_of_int()); // predicited
+  vimt3d_image_3d_of<int> o2(s[0].as_image_3d_of_int()); // predicted
   const vil3d_image_view<int>& i1 = o1.image();
   const vil3d_image_view<int>& i2 = o2.image();
 

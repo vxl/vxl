@@ -181,10 +181,10 @@ static void test_vector_normalisers()
         double max=*vcl_max_element(vL1.begin(),vL1.end());
         vcl_cout<<"Post Norm rms= "<<rms<<" Min= "<<min<<" Max= "<<max<<vcl_endl;
 
-        //Copy back from renomalised sample to image
+        // Copy back from renormalised sample to image
         mipa_sample_histo_boxes_3L_inv(histo_im4x4,0,0,vL1,ni,nj);
 
-        //Verify that each block is an identical tiling after normalisation
+        // Verify that each block is an identical tiling after normalisation
         for (unsigned iblock=1;iblock<nblocks;++iblock)
         {
             unsigned ioffset=ncPerBlock*iblock;

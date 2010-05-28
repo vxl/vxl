@@ -12,7 +12,7 @@
 class vsrl_saliency_diffusion : public vsrl_diffusion
 {
  protected:
-  vsrl_token_saliency *saliency_; // the object that defines the salieny of each point
+  vsrl_token_saliency *saliency_; // the object that defines the saliency of each point
 
  public:
 

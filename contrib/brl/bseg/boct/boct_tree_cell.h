@@ -2,8 +2,8 @@
 #define boct_tree_cell_h_
 //:
 // \file
-// \brief  Generic octree cell, travesal operations as described in 
-//         [Simple and Efficient Travessal Methods for Quadtrees and Octrees/ Frisken, Perry 2002]
+// \brief  Generic octree cell, traversal operations as described in
+//         [Simple and Efficient Traversal Methods for Quadtrees and Octrees/ Frisken, Perry 2002]
 //
 // \author Gamze Tunali/Vishal Jain
 // \date   July 31, 2009
@@ -52,16 +52,16 @@ class boct_tree_cell
 
   //Clones a cell, shifting its location code according to shift_code. This is useful when creating subtrees.
   boct_tree_cell<T_loc,T_data>* clone(boct_tree_cell<T_loc,T_data>* parent, boct_loc_code<T_loc> *shift_code);
-  
+
   //: Clones a cell if it intesects a region
   boct_tree_cell<T_loc,T_data>* clone_and_intersect(boct_tree_cell<T_loc,T_data>* parent,
-                                                     vgl_box_3d<double> local_crop_box, short root_level);
-  
+                                                    vgl_box_3d<double> local_crop_box, short root_level);
+
   //: Clones and shifts a cell if it intesects a region
   boct_tree_cell<T_loc,T_data>* clone_and_intersect(boct_tree_cell<T_loc,T_data>* parent,
-                                                     boct_loc_code<T_loc> *shift_code,
-                                                     vgl_box_3d<double> local_crop_box, short root_level);
-  
+                                                    boct_loc_code<T_loc> *shift_code,
+                                                    vgl_box_3d<double> local_crop_box, short root_level);
+
   template <class T_data_to>
   boct_tree_cell<T_loc,T_data_to>*  clone_to_type(boct_tree_cell<T_loc,T_data_to>* parent)
   {
@@ -80,27 +80,27 @@ class boct_tree_cell
     return cell;
   }
 
-  
+
   void set_parent(boct_tree_cell<T_loc,T_data>* p) {parent_ = p; }
   void set_children(unsigned i, boct_tree_cell<T_loc,T_data>* p) {if (children_) children_[i] = *p; else vcl_cout << "Children should be allocated first" << vcl_endl;}
   void set_children_null() { children_=0; }
   bool is_leaf();
-  
+
   //: Returns the bounting box of this cell in local coordinates i.e [0,1)x[0,1)x[0,1)
   vgl_box_3d<double> local_bounding_box(short root_level);
 
   //: adds a pointer for each leaf children to v
   void leaf_children(vcl_vector<boct_tree_cell<T_loc,T_data>*>& v);
-  
+
   //: adds a pointer to vector v, for each leaf children at a particular level
   void leaf_children_at_level(vcl_vector<boct_tree_cell<T_loc,T_data>*>& v, short level);
-  
+
   //: adds a pointer to vector v, for each children at a particular level
   void children_at_level(vcl_vector<boct_tree_cell<T_loc,T_data>*>& v, short level);
-  
+
   //: adds a pointer to vector v, for each children in a recursive fashion
   void all_children(vcl_vector<boct_tree_cell<T_loc,T_data>*>& v);
-  
+
   //: Fills a cells with the average value of the 8 children in a dynamic programming manner
   void set_data_to_avg_children();
 
@@ -145,18 +145,16 @@ class boct_tree_cell
   static short version_no() { return 1; }
 
   boct_loc_code<T_loc> code_;
-  
+
   boct_tree_cell<T_loc,T_data>* children_;
 
  protected:
-  
+
   boct_tree_cell<T_loc,T_data>* parent_;
-  
+
   T_data data_;
-  
+
   boct_cell_vis_graph_node<T_loc,T_data>* vis_node_;
-  
-   
 };
 
 template<class T_loc,class T_data>

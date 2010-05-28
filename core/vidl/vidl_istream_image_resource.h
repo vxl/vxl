@@ -20,11 +20,11 @@
 
 
 //: A vil_image_resource to a frame of a vidl_istream
-// With this class you can create image resources to serveral frames
+// With this class you can create image resources to several frames
 // of an open vidl istream.  When get_view is called the stream is
 // seeked to the relevant frame number and the frame is decoded and
 // converted to an image view.  The stream must be seekable unless
-// views are requested in squential order.  The stream is closed
+// views are requested in sequential order.  The stream is closed
 // when all image resources using it are destroyed.
 class vidl_istream_image_resource : public vil_image_resource
 {

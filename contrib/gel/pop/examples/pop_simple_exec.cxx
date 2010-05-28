@@ -19,7 +19,7 @@ int main(int argc, char** argv)
   pop_vertex cs1;
   pop_vertex cs2;
 
-  //  make an edge between these two coordinate systesm
+  //  make an edge between these two coordinate systems
 
   pop_edge e;
   e.set_vertex(&cs1,&cs2);

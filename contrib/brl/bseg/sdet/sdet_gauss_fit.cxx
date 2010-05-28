@@ -357,7 +357,7 @@ vnl_vector<double> sdet_gauss_fit::adjust( vcl_vector<vgl_point_3d<double> > img
 }
 
 // -------------------------------------------------------
-// Calculate the paremeters for the ellipse
+// Calculate the parameters for the ellipse
 // Argument is fitted 2-d gaussian parameters, returns ellipse angle and parameters
 
 vnl_vector<double> sdet_gauss_fit::calculate_ellipse( vnl_vector<double> result, float x,

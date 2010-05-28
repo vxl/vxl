@@ -938,7 +938,7 @@ bmsh3d_face* bmsh3d_face::m2t_nbr_face_against_vertex (bmsh3d_vertex* inputV)
   return NULL;
 }
 
-//: (redundent) for 2-manifold mesh, given input_face, find the neighboring face sharing incident v1 and v2
+//: (redundant) for 2-manifold mesh, given input_face, find the neighboring face sharing incident v1 and v2
 bmsh3d_face* bmsh3d_face::m2t_nbr_face_sharing_edge (bmsh3d_vertex* v1, bmsh3d_vertex* v2)
 {
   // loop through all incident edges, look for the one sharing inputV

@@ -7,7 +7,7 @@
 // \file
 // \brief Parameter mixin for grouping parallel line sets.
 //
-// \author Joesph L. Mundy
+// \author Joseph L. Mundy
 //
 // \date December 1998
 //
@@ -39,7 +39,7 @@ class vifa_group_pgram_params : public gevd_param_mixin,
   //: Radius of maximum suppression kernel.
   int    max_suppress_radius() const { return max_suppress_radius_; }
 
-  //: Relative length of sorter side of parallelogram.
+  //: Relative length of sorter side of parallellogram.
   float  length_ratio() const { return length_ratio_; }
 
   //: Default constructor.

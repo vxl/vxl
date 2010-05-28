@@ -41,7 +41,7 @@ bool bvxm_grid_distance_transform_process_cons(bprb_func_process& pro)
   vcl_vector<vcl_string> output_types_(n_outputs_);
   i=0;
   output_types_[i++]="bvxm_voxel_grid_base_sptr";  // The resulting direction grid
-  output_types_[i++]="bvxm_voxel_grid_base_sptr";  // The resulting distance transform as magnitude of direciton grid
+  output_types_[i++]="bvxm_voxel_grid_base_sptr";  // The resulting distance transform as magnitude of direction grid
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }

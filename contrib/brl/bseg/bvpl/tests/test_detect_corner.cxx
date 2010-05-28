@@ -42,30 +42,30 @@ void create_window(bvxm_voxel_grid<gauss_f1> *grid)
 
 bool test_result(bvxm_voxel_grid<gauss_f1> *grid, unsigned x, unsigned y, unsigned z)
 {
-  //iterate throungh the grid and get the max
+  // iterate through the grid and get the max
 
-    bvxm_voxel_grid<gauss_f1>::iterator grid_it = grid->begin();
-    float max =  vcl_abs(((*grid_it)(0,0)).mean());
-    unsigned max_x =0;
-    unsigned max_y =0;
-    unsigned max_z =0;
-    for (unsigned k=0; grid_it != grid->end(); ++grid_it, ++k) {
-      for (unsigned i=0; i<(*grid_it).nx(); ++i) {
-        for (unsigned j=0; j < (*grid_it).ny() -3 ; ++j) {
-          if (vcl_abs(((*grid_it)(i,j)).mean())> max){
-            max = vcl_abs(((*grid_it)(i,j)).mean());
-            max_x = i; max_y = j; max_z = k;
-          }
+  bvxm_voxel_grid<gauss_f1>::iterator grid_it = grid->begin();
+  float max =  vcl_abs(((*grid_it)(0,0)).mean());
+  unsigned max_x =0;
+  unsigned max_y =0;
+  unsigned max_z =0;
+  for (unsigned k=0; grid_it != grid->end(); ++grid_it, ++k) {
+    for (unsigned i=0; i<(*grid_it).nx(); ++i) {
+      for (unsigned j=0; j < (*grid_it).ny() -3 ; ++j) {
+        if (vcl_abs(((*grid_it)(i,j)).mean())> max){
+          max = vcl_abs(((*grid_it)(i,j)).mean());
+          max_x = i; max_y = j; max_z = k;
         }
       }
     }
-    vcl_cout << "Location of max = " << max_x << max_y << max_z << vcl_endl;
-    if ((x!=max_x)||(y!=max_y) || (z!=max_z))
-      return false;
+  }
+  vcl_cout << "Location of max = " << max_x << max_y << max_z << vcl_endl;
+  if ((x!=max_x)||(y!=max_y) || (z!=max_z))
+    return false;
 
-    bvxm_voxel_grid<gauss_f1>::iterator grid_it2 = grid->slab_iterator(0,grid->grid_size().z());
-    vcl_cout << "Max response= " << vcl_abs(((*grid_it2)(max_x,max_y, max_z)).mean()) << vcl_endl;
-    return true;
+  bvxm_voxel_grid<gauss_f1>::iterator grid_it2 = grid->slab_iterator(0,grid->grid_size().z());
+  vcl_cout << "Max response= " << vcl_abs(((*grid_it2)(max_x,max_y, max_z)).mean()) << vcl_endl;
+  return true;
 }
 
 bool test_id_grid(bvxm_voxel_grid<int> *grid,unsigned x, unsigned y, unsigned z, int id)

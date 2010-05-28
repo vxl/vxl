@@ -32,9 +32,9 @@ inline T vil3d_max_product_filter(const T* im,
 //  Performs bound checks to ensure voxels are valid
 template <class T>
 inline T vil3d_max_product_filter(const vil3d_image_view<T>& image,
-                                const vil3d_structuring_element& se,
-                                const vcl_vector<double>& f,
-                                int i0, int j0, int k0)
+                                  const vil3d_structuring_element& se,
+                                  const vcl_vector<double>& f,
+                                  int i0, int j0, int k0)
 {
   unsigned n = se.p_i().size();
   T max_v = image(i0,j0,k0);
@@ -54,7 +54,7 @@ inline T vil3d_max_product_filter(const vil3d_image_view<T>& image,
   return max_v;
 }
 
-//: Preforms raster scan through image, comparing each voxel with nbours
+//: Performs raster scan through image, comparing each voxel with neighbours
 // Runs through every voxel in raster order.  Each voxel is compared
 // with weighted versions of offset voxels, and is replaced with the
 // maximum value.
@@ -69,8 +69,8 @@ inline T vil3d_max_product_filter(const vil3d_image_view<T>& image,
 // \relatesalso vil3d_structuring_element
 template<class T>
 void vil3d_max_product_filter(vil3d_image_view<T>& image,
-                        const vil3d_structuring_element& se,
-                        const vcl_vector<double>& f)
+                              const vil3d_structuring_element& se,
+                              const vcl_vector<double>& f)
 {
   assert(image.nplanes()==1);  // Change this later
   unsigned ni = image.ni();

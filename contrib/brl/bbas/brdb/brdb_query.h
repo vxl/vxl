@@ -17,8 +17,6 @@
 #include <brdb/brdb_query_aptr.h>
 
 
-
-
 //: A database query (abstract base class)
 class brdb_query
 {
@@ -34,7 +32,7 @@ class brdb_query
   //: query comparison type enum
   enum comp_type {
     NONE = 0, // take none of the values (logical inverse of ALL)
-    ALL  = 1, // take all values, resgard compared value
+    ALL  = 1, // take all values, regard compared value
     EQ   = 2, // ==
     NEQ  = 3, // !=
     GT   = 4, // >
@@ -92,7 +90,6 @@ class brdb_query_and : public brdb_query_branch
   ~brdb_query_and() {}
 
   brdb_query_aptr complement() const;
-
 };
 
 
@@ -116,7 +113,6 @@ class brdb_query_or : public brdb_query_branch
   ~brdb_query_or() {}
 
   brdb_query_aptr complement() const;
-
 };
 
 
@@ -127,7 +123,7 @@ brdb_query_aptr operator |(brdb_query_aptr q1, brdb_query_aptr q2);
 //: A database query for comparisons
 class brdb_query_comp : public brdb_query
 {
- public: 
+ public:
 
   //: make a query on a certain attribute, with a certain type of comparison to a value
   brdb_query_comp(const vcl_string& attribute_name,
@@ -165,16 +161,14 @@ class brdb_query_comp : public brdb_query
  private:
 
   //: indicates the name of the attribute which this query constraint will be applied on
-  vcl_string attribute_name_; 
+  vcl_string attribute_name_;
 
   //: comparison_type_ indicates how the constraint will be;
   brdb_query::comp_type comparison_type_;
 
   //: the value which will be used by the constraints
   vcl_auto_ptr<brdb_value> value_;
-
 };
-
 
 
 template <class T>
@@ -186,7 +180,6 @@ brdb_query_aptr
   return brdb_query_aptr(new brdb_query_comp(attribute_name, type,
                             vcl_auto_ptr<brdb_value>(new brdb_value_t<T>(value))));
 }
-
 
 
 #endif // brdb_query_h_

@@ -98,19 +98,19 @@ class sdet_edgel_regions
 #ifdef DEBUG
   topo_debug_data_ref get_topo_debug_data() { return debug_data_; }
 #endif
-  //Utitities (especially for testing)
+  // Utilities (especially for testing)
   bool InsertRegionEquivalence(unsigned int label_b, unsigned int label_a);
   void GrowEquivalenceClasses();
   void PropagateEquivalence();
   unsigned int GetLabel(vtol_edge_2d_sptr e, unsigned int nr) const;
-  //Debug print methods
+  // Debug print methods
   void print_region_array();
   void print_region_equivalence();
   void print_reverse_region_equivalence();
   void print_base_equivalence();
   void print_intensity_data();
  protected:
-  //Utilities
+  // Utilities
   bool GroupContainsEdges(vcl_vector<vtol_edge_2d_sptr>& sg);
   bool InitRegionArray(vcl_vector<vtol_edge_2d_sptr>& sg);
   unsigned char label_code(unsigned int label);

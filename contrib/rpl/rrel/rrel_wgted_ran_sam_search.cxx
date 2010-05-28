@@ -19,7 +19,7 @@ rrel_wgted_ran_sam_search::~rrel_wgted_ran_sam_search( )
 // ------------------------------------------------------------
 bool
 rrel_wgted_ran_sam_search::estimate( const rrel_estimation_problem * problem,
-                                    const rrel_objective * obj_fcn )
+                                     const rrel_objective * obj_fcn )
 {
   // assume the weights are already sorted.
   // get similarity weights
@@ -34,7 +34,7 @@ rrel_wgted_ran_sam_search::estimate( const rrel_estimation_problem * problem,
     for ( unsigned i=0; i<wgts.size(); ++i )
       sum_wgt += wgts[i];
 
-    // build probility interval
+    // build probability interval
     double current_lower = 0.0;
     double next_lower;
     intervals_.resize( wgts.size() );
@@ -55,9 +55,9 @@ rrel_wgted_ran_sam_search::estimate( const rrel_estimation_problem * problem,
 // ------------------------------------------------------------
 void
 rrel_wgted_ran_sam_search::next_sample( unsigned int taken,
-                                  unsigned int num_points,
-                                  vcl_vector<int>& sample,
-                                  unsigned int points_per_sample )
+                                        unsigned int num_points,
+                                        vcl_vector<int>& sample,
+                                        unsigned int points_per_sample )
 {
   typedef vcl_vector<prob_interval>::iterator interval_iter;
 

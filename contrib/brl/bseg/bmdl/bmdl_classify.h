@@ -77,7 +77,7 @@ class bmdl_classify
   // \note This is the main function you should call, it runs all the steps
   void label_lidar();
 
-  //: Perform an initial segementation at each pixel using thresholds
+  //: Perform an initial segmentation at each pixel using thresholds
   // Classify each pixel as Ground (0), Vegetation (1), or Building (2)
   // Results are stored in the labels image
   void segment();

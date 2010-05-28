@@ -3,7 +3,7 @@
 #define bbgm_measure_h_
 //:
 // \file
-// \brief Measurement wrappers for distribution images and probablility images
+// \brief Measurement wrappers for distribution images and probability images
 // \author J.L. Mundy
 // \date February 10, 2008
 //
@@ -20,7 +20,7 @@
 
 //: measure a property (typically probability) requiring a tolerance, delta.
 // For probability, delta defines a square n-dimensional box over which
-// the probablity density is integrated. For example, the measure_functor_
+// the probability density is integrated. For example, the measure_functor_
 // is the bsta_probability_functor.
 template <class dist_, class measure_functor_>
 void measure(bbgm_image_of<dist_>& dimg,
@@ -105,7 +105,7 @@ void measure_bkground(bbgm_image_of<dist_>& dimg,
 
 //: measure a property (typically probability) requiring a tolerance, delta.
 // For probability, delta defines a square n-dimensional box over which
-// the probablity density is integrated. For example, the measure_functor_
+// the probability density is integrated. For example, the measure_functor_
 // is the bsta_probability_functor. In this method the tolerance is
 // augmented by an additional value that varies with position in the image
 template <class dist_, class measure_functor_>
@@ -149,7 +149,7 @@ void measure(bbgm_image_of<dist_>& dimg,
 
 //: measure a property (typically probability) requiring a tolerance, delta.
 // For probability, delta defines a square n-dimensional box over which
-// the probablity density is integrated. As an example, the measure_functor_
+// the probability density is integrated. As an example, the measure_functor_
 // is the bsta_probability_functor. In this method, the covariance of the
 // distribtution is augmented by and additional amount
 template <class dist_, class measure_functor_>
@@ -194,7 +194,7 @@ void measure(bbgm_image_of<dist_>& dimg,
 //: measure a property (typically probability) requiring a tolerance.
 // The tolerance is defined by a minumum and maximum values
 // For probability, min and max defines a square n-dimensional box over which
-// the probablity density is integrated. This functor assumes that the same
+// the probability density is integrated. This functor assumes that the same
 // box applies to the entire distribution image. An example is probability of
 // area lying within an interval, where the distribution image is a
 // 2-d array of area probability densities.

@@ -679,7 +679,7 @@ n_nearest_impl( point_type const& pt,
 
   // Check if any of the distances are greater than the dimensions of
   // the region that was searched.  This would cover points that are
-  // located ouside min-max boundaries.  If a point is located outside
+  // located outside min-max boundaries.  If a point is located outside
   // bin region, it would be placed into a bin on the boundary of the
   // region. As a result of this projection the distance information
   // would be lost and we have to search area that includes the

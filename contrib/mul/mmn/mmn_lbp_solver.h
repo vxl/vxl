@@ -2,7 +2,7 @@
 #define mmn_lbp_solver_h_
 //:
 // \file
-// \brief Run loopy belief propogation over the graph
+// \brief Run loopy belief propagation over the graph
 // \author Martin Roberts
 
 #include <vcl_vector.h>

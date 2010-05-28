@@ -100,7 +100,7 @@ class vpyr_2_tpyramid : public vpyr_2_pyramid<TLevel>
   virtual ~vpyr_2_tpyramid();
 
   //: Returns true if all the permutations are valid, false otherwise.
-  // May be usefull for testing permutations set by hand...
+  // May be useful for testing permutations set by hand...
   virtual bool valid() ;
 
   //: Deletes everything.

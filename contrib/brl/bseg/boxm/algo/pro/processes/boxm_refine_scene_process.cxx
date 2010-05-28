@@ -5,7 +5,7 @@
 // \brief Process to refine the block (octrees) of the scene
 //        If there are some cells with big values they are spitted into
 //        new child cells, the data of the cell is coppied to the
-//        children's data. The purspose of this process is to elaborate
+//        children's data. The purpose of this process is to elaborate
 //        the octree at the areas where more details exist.
 //
 // \author Gamze Tunali

@@ -64,8 +64,8 @@ bool bgui_vsol_camera_tableau::handle(vgui_event const &e)
 {
   if (e.type == vgui_MOTION&&highlight_)
   {
-    //retrive the previously highlighted soview and
-    //restore it to its default style
+    // retrieve the previously highlighted soview and
+    // restore it to its default style
     vgui_soview* old_so = vgui_soview::id_to_object(old_id_);
     if (old_so)
       old_so->set_style(style_map_[old_so->type_name()]);
