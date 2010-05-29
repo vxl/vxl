@@ -265,8 +265,8 @@ void mil3d_transform_3d::set_translation(double t_x, double t_y, double t_z)
   else
   {
     form_=Translation;
-    xx_=yy_=yy_=tt_=1;
-    xy_=xz_=yx_=yz_=zx_,zy_=0;
+    xx_=yy_=zz_=tt_=1;
+    xy_=xz_=yx_=yz_=zx_=zy_=0;
     tx_=ty_=tz_=0;
     xt_=t_x;
     yt_=t_y;
