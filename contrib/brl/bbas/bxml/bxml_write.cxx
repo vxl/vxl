@@ -67,7 +67,7 @@ void bxml_write_element(vcl_ostream& os, const bxml_element& element)
     os << ' '<<i->first<<"=\""<<i->second<<'"';
   }
 
-  // check if this should be an emtpy tag
+  // check if this should be an empty tag
   if (element.data_begin() == element.data_end()) {
     os << " />";
     return;

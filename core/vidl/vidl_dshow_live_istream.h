@@ -7,8 +7,8 @@
 // \brief  DirectShow live video input stream support.
 // \author Paul Crane
 // \author Miguel A. Figueroa-Villanueva (miguelf at ieee dot org)
-// 
-// This file includes experimetal support for DirectShow live video input
+//
+// This file includes experimental support for DirectShow live video input
 // in vidl (e.g., from cameras and/or frame grabbers).
 //
 // \verbatim
@@ -127,7 +127,7 @@ class vidl_dshow_live_istream : public vidl_istream
   //: Return the frame rate (FPS, 0.0 if unspecified)
   // TODO return a framerate if it is constant for a live video
   virtual double frame_rate() const { return 0.0; }
-  
+
   //: Return the duration in seconds (0.0 if unknown)
   virtual double duration() const { return 0.0; }
 

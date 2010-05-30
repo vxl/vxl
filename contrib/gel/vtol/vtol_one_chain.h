@@ -104,7 +104,7 @@ class vtol_one_chain : public vtol_chain
 
   // Access methods
 
- private: // has been superceeded by is_a()
+ private: // has been superseded by is_a()
   //: Return the topology type
   virtual vtol_topology_object_type topology_type() const {return ONECHAIN;}
 
@@ -116,12 +116,12 @@ class vtol_one_chain : public vtol_chain
   //***************************************************************************
 
   //---------------------------------------------------------------------------
-  //: Return `this' if `this' is an one_chain, 0 otherwise
+  //: Return `this' if `this' is a one_chain, 0 otherwise
   //---------------------------------------------------------------------------
   virtual const vtol_one_chain *cast_to_one_chain() const { return this; }
 
   //---------------------------------------------------------------------------
-  //: Return `this' if `this' is an one_chain, 0 otherwise
+  //: Return `this' if `this' is a one_chain, 0 otherwise
   //---------------------------------------------------------------------------
   virtual vtol_one_chain *cast_to_one_chain() { return this; }
 

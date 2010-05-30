@@ -46,14 +46,14 @@ compute_matches( rgrl_feature_set const&       from_set,
     rgrl_matcher_k_nearest::compute_matches(from_set, to_set, current_view,
                                             current_xform, current_scale);
 
-  rgrl_match_set_sptr bd_matches 
+  rgrl_match_set_sptr bd_matches
     = new rgrl_match_set( from_set.type(), to_set.type(), from_set.label(), to_set.label() );
 
   if ( cp_matches->from_size() == 0 ) return bd_matches;
 
   assert( cp_matches->from_begin().from_feature()->location().size() == 2 ); //For now, only deal with 2D
 
-  //2. For each center-point match, compute the bounary matches
+  //2. For each center-point match, compute the boundary matches
   //
   for ( FIter fi = cp_matches->from_begin(); fi != cp_matches->from_end(); ++fi ) {
     rgrl_feature_trace_pt* from_feature =

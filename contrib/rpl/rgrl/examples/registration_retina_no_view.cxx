@@ -46,8 +46,8 @@
 // \code{rgrl\_invariant\_single\_landmark}.
 //
 // EndLatex
-
-// A input landmark file contains a landmark entry in the format:
+//
+// An input landmark file contains a landmark entry in the format:
 //
 // \begin{verbatim}
 // x y

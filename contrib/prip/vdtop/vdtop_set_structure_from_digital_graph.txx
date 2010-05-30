@@ -42,7 +42,7 @@ void vdtop_set_structure_from_digital_graph(TMap & res,
         int k=0 ;
         int first=-1, last=-1 ;
 
-        // darts toward 1-4 have already been intanciated
+        // darts toward 1-4 have already been instantiated
         while (dart[i][k]<0 && k<4) k++ ;
         if (k<4)
         {
@@ -61,7 +61,7 @@ void vdtop_set_structure_from_digital_graph(TMap & res,
         // the dart 3 from preceding iteration
         dart[i][2]=dart3 ; dart3=-1 ;
 
-        // darts between 5,6,7,0 have to be intanciated
+        // darts between 5,6,7,0 have to be instantiated
 
         vdtop_8_neighborhood_mask tmp_mask=*current_mask ;
         tmp_mask&=vdtop_8_neighborhood_mask(225) ;
@@ -138,7 +138,7 @@ void vdtop_set_structure_from_digital_graph(TMap & res,
         int k=0 ;
         int first=-1, last=-1 ;
 
-        // darts toward 1-4 have already been intanciated
+        // darts toward 1-4 have already been instantiated
         while (dart[i][k]<0 && k<4) k++ ;
         if (k<4)
         {
@@ -159,7 +159,7 @@ void vdtop_set_structure_from_digital_graph(TMap & res,
         // the dart 3 from preceding iteration
         dart[i][2]=dart3 ; dart3=-1 ;
 
-        // darts between 5,6,7,0 have to be intanciated
+        // darts between 5,6,7,0 have to be instantiated
 
         vdtop_8_neighborhood_mask tmp_mask=*current_mask ;
         tmp_mask&=vdtop_8_neighborhood_mask(225) ;

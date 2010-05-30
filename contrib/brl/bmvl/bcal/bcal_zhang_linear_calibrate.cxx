@@ -165,7 +165,7 @@ vnl_double_3x3 bcal_zhang_linear_calibrate::compute_intrinsic(vgl_h_matrix_2d<do
     }
   }
 
-  // 3) get intrinsinsic parameter
+  // 3) get intrinsic parameter
   double B11,B12,B22,B13,B23,B33;
 
   B11 = b[0];
@@ -200,7 +200,7 @@ compute_extrinsic(vgl_h_matrix_2d<double> const &H, vnl_double_3x3 const &A)
   // let the Extrinsic parameters = (R | t) where R is a rotion matrix
   // and t is a translation matrix.
   // let R = (r1,r2,r3) where ri is the ith column vector
-  //  let H = the homogrhaphy = (h1,h2,h3)
+  //  let H = the homography = (h1,h2,h3)
   // let l = 1/||A^-1 h1||
   // it turns out that:
   // r1 = l A^-1 h1
@@ -209,7 +209,6 @@ compute_extrinsic(vgl_h_matrix_2d<double> const &H, vnl_double_3x3 const &A)
   // t = l A^-1 h3
   // Due to noise r1,r2,r3 might not be a pure rotation matrix.
   // In this case we will have to find the closest pure rotation matrix
-
 
   // compute A_inv which is the inverse of the intrinsic parameters
   vnl_double_3x3 A_inv = vnl_inverse(A);
@@ -237,7 +236,7 @@ compute_extrinsic(vgl_h_matrix_2d<double> const &H, vnl_double_3x3 const &A)
   // r2 is not guaranteed to have a unit normal due
   // to noise.
 
-  // caluculate r3 = r1 x r2
+  // calculate r3 = r1 x r2
   vnl_double_3 r3 = vnl_cross_3d(r1,r2);
 
   vnl_double_3x3 Q;

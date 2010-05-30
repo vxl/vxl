@@ -301,7 +301,7 @@ static void test_box_3d_intersection()
   good = vgl_intersection<double>(bg0, l3g, ip0, ip1);
   TEST("generic line intersect box", good, true);
   if (good) {
-    TEST_NEAR("generic line interesection points",length(ip0-ip1),3.464101615137,1.0e-6);
+    TEST_NEAR("generic line intersection points",length(ip0-ip1),3.464101615137,1.0e-6);
   }
 }
 

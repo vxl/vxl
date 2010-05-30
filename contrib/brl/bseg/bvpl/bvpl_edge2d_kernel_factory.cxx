@@ -50,7 +50,7 @@ void bvpl_edge2d_kernel_factory::create_canonical()
     vcl_cerr << "Warning, width of kernel is even. It has been increased by one\n";
     width_++;
   }
-  //The size of the kernel is limited. If widht or height of the kernel is too large,
+  //The size of the kernel is limited. If width or height of the kernel is too large,
   //the user should subsample the image/grid
   if (height_ > max_size_)
   {

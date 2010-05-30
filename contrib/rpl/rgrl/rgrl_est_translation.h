@@ -13,7 +13,7 @@
 class rgrl_est_translation
   : public rgrl_linear_estimator
 {
-public:
+ public:
   //: Default constructor
   //
   // Does nothing. This constructor is adequate for algorithms that
@@ -25,7 +25,7 @@ public:
   // estimator will be applied on.
   rgrl_est_translation( unsigned int dimension );
 
-  //: Estimates an translation transform.
+  //: Estimates a translation transform.
   //
   // The return pointer is to a rgrl_trans_translation object.
   //
@@ -35,8 +35,7 @@ public:
   estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
             rgrl_transformation const& cur_transform ) const;
 
-
-  //: Estimates an translation transform.
+  //: Estimates a translation transform.
   //
   // The return pointer is to a rgrl_trans_translation object.
   //
@@ -51,7 +50,6 @@ public:
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_est_translation, rgrl_linear_estimator );
-
 };
 
 #endif // rgrl_est_translation_h_

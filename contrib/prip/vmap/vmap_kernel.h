@@ -307,11 +307,11 @@ class vmap_phi_permutation
 //  This is the minimal structure for writing contraction/removal
 //  functions. It defines just the interface, and does not
 //  check the validity of the added elements.
-//  It can be used in algorithms constructing directely trees.
+//  It can be used in algorithms constructing directed trees.
 //
 //  For efficiency reasons, none of its functions should be virtual.
 //  That has for consequence that it must be a fully instantiated
-//  type when used or used in template fcts.
+//  type when used directly or used in template functions.
 template <class M>
 class vmap_kernel
 {

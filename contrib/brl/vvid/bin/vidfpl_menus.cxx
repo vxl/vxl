@@ -48,7 +48,7 @@ vidfpl_load_mpegcodec_callback(vidl_vil1_codec * vc)
 
 #endif // HAS_MPEG2
 
-//Static munu callback functions
+// Static menu callback functions
 void vidfpl_menus::load_video_callback()
 {
 #ifdef HAS_MPEG2

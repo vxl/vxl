@@ -57,7 +57,7 @@ vil_checker_board( vil_image_view< DEST >& des,
       // block on j index
       int jblock = ( (j+params.yoff_) / ysize + iblock ) % 2;
 
-      // check the pixel availablility
+      // check the pixel availability
       bool p1 = true, p2 = true;
 
       if ( params.not_use_color_flag_ )
@@ -80,7 +80,8 @@ vil_checker_board( vil_image_view< DEST >& des,
       if ( jblock ) {      // == 1
         if ( p1 && !p2 )
           jblock = 0;
-      } else {             // == 0
+      }
+      else {             // == 0
         if ( !p1 && p2 )
           jblock = 1;
       }

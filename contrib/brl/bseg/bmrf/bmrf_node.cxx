@@ -91,7 +91,7 @@ bmrf_node::probability()
 }
 
 
-//: Return the gamma funtion of this node
+//: Return the gamma function of this node
 bmrf_gamma_func_sptr
 bmrf_node::gamma()
 {
@@ -220,12 +220,12 @@ bmrf_node::prune_directed()
 double
 bmrf_node::probability(const bmrf_gamma_func_sptr& gamma, int time_step)
 {
-  // precompute the transformed segment 
+  // precompute the transformed segment
   bmrf_epi_seg_sptr trans_seg = bmrf_epi_transform(this->epi_seg(), gamma, time_step);
   double prob = 0.0;
   double total_alpha = 0.0;
   for ( arc_iterator a_itr = this->begin(TIME); a_itr != this->end(TIME); ++a_itr ) {
-    if((*a_itr)->time_step() != time_step)
+    if ((*a_itr)->time_step() != time_step)
       continue;
 
     bmrf_node_sptr neighbor = (*a_itr)->to();
@@ -238,10 +238,10 @@ bmrf_node::probability(const bmrf_gamma_func_sptr& gamma, int time_step)
   }
 
   // no neighbors found in this frame
-  if(total_alpha == 0.0)
+  if (total_alpha == 0.0)
     return 1.0;
 
-  return (prob / total_alpha);
+  return prob / total_alpha;
 }
 
 

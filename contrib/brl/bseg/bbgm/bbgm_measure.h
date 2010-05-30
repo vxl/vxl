@@ -151,7 +151,7 @@ void measure(bbgm_image_of<dist_>& dimg,
 // For probability, delta defines a square n-dimensional box over which
 // the probability density is integrated. As an example, the measure_functor_
 // is the bsta_probability_functor. In this method, the covariance of the
-// distribtution is augmented by and additional amount
+// distribution is augmented by and additional amount
 template <class dist_, class measure_functor_>
 void measure(bbgm_image_of<dist_>& dimg,
              const vil_image_view<typename dist_::math_type>& image,

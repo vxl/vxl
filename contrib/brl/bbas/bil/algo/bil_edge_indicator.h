@@ -145,7 +145,7 @@ inline void bil_malladi_image_force(const vil_image_view<inT >& src_im,
 
 // ------------------------------------------------------------------
 //: Compute image force using gradient of image and feature map
-// Similar to malladi_image_force but also take in an feature map
+// Similar to malladi_image_force but also take in a feature map
 template <class inT, class outT>
 inline void bil_malladi_image_force_with_feature_map(
   const vil_image_view<inT >& src_im,

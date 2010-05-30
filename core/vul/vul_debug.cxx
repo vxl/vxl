@@ -196,7 +196,7 @@ void vul_debug_core_dump(const char * filename)
 #endif
   vcl_cerr << "WARNING: vul_debug_core_dump: Unable to core dump\n";
 }
-// For a more reliable way of dunping core try forking and sending a SIGSTOP to the child.
+// For a more reliable way of dumping core try forking and sending a SIGSTOP to the child.
 // see http://kasperd.net/~kasperd/comp.os.linux.development.faq
 
 //: Setup the system to core dump and throw a C++ exception on detection of a Structured Exception

@@ -112,10 +112,10 @@ class vpyr_2_tpyramid : public vpyr_2_pyramid<TLevel>
     return this->level_.empty() ;
   }
 
-  //: Initializes the sturcture of the combinatorial map from "stream".
+  //: Initializes the structure of the combinatorial map from "stream".
   virtual void read_structure(vcl_istream & stream) ;
 
-  //: Writes the sturcture of the combinatorial map to "stream".
+  //: Writes the structure of the combinatorial map to "stream".
   virtual void write_structure(vcl_ostream & stream) const ;
 
   //: For each vertex of index v of the base level, res[v] is the index of v's surviving vertex of level "arg_level".

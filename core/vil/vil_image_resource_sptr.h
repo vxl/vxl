@@ -4,7 +4,7 @@
 
 //:
 // \file
-// Smart pointer to a image resource.
+// \brief Smart pointer to an image resource.
 
 #include <vil/vil_smart_ptr.h>
 

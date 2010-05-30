@@ -3,7 +3,7 @@
 #define bvpl_octree_vector_operator_h
 //:
 // \file
-// \brief  An abstract class with a template operation (as in template method pattern) to apply a vector of bvpl_kernel on a octree
+// \brief An abstract class with a template operation (as in template method pattern) to apply a vector of bvpl_kernel on an octree
 // \author Isabel Restrepo mir@lems.brown.edu
 // \date  November 17, 2009
 //
@@ -19,7 +19,7 @@
 #include <boct/boct_tree.h>
 
 
-// :A class with a template operation (as in template method pattern) to apply a vector of bvpl_kernel on a octree
+//: A class with a template operation (as in template method pattern) to apply a vector of bvpl_kernel on an octree
 //  The class also contains abstract methods to be specialized in the subclasses
 template <class T_data>
 class bvpl_octree_vector_operator
@@ -78,9 +78,7 @@ void bvpl_octree_vector_operator<T_data>::keep_max_response_tree(boct_tree<short
     T_data val2 = leaves_out[i]->data().response_;
     if (func_max.greater_than(val1, val2))
       leaves_out[i]->set_data(bvpl_octree_sample<T_data>(new_leaves[i]->data(), new_id));
-
   }
-  
 }
 
 #endif

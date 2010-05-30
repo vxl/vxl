@@ -6,9 +6,9 @@
 // \file
 // \brief a processor for extracting Harris corners
 //
-//  The Harris Corner is defined as a local maximum of 
+//  The Harris Corner is defined as a local maximum of
 //   Det(A)-k*Trace^2(A)
-//  where 
+//  where
 // \verbatim
 //                        _                           _
 //                       | (dI/dx)^2    (dI/dx)(dI/dy) |
@@ -17,7 +17,7 @@
 //                       |(dI/dx)(dI/dy)   (dI/dx)^2   |
 //                       |_                           _|
 // \endverbatim
-//  over a 2n+1 x 2n+1 neigborhood.
+//  over a 2n+1 x 2n+1 neighborhood.
 //  The value of k is typically 0.04 as originally recommended by Harris.
 //
 // Note:
@@ -31,7 +31,7 @@
 //
 // \verbatim
 //  Modifications
-// J.L. MUndy December 28, 2004 - added iterface for vil images
+// J.L. MUndy December 28, 2004 - added interface for vil images
 // \endverbatim
 //
 //-------------------------------------------------------------------------

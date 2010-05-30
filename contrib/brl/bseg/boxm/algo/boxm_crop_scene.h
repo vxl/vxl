@@ -28,7 +28,7 @@ boxm_scene<boct_tree<short, T_data> > *  boxm_crop_scene(boxm_scene<boct_tree<sh
     return 0;
   }
 
-  //get the tree inside the bloack and locate region
+  //get the tree inside the block and locate region
   boxm_block_iterator<boct_tree<short, T_data> > iter_in = scene_in->iterator();
   iter_in.begin();
 

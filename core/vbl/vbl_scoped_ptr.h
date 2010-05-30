@@ -36,8 +36,8 @@
 //    struct Y {
 //      vbl_scoped_ptr<X> member;
 //
-//      ~Y() { } // NO: causes ~vbl_scoped_ptr<X> to be instantated, which means X must be complete.
-//      ~Y(); // YES: destructor not yet generated
+//      ~Y() { } // NO: causes ~vbl_scoped_ptr<X> to be instantiated, which means X must be complete.
+//      ~Y();    // YES: destructor not yet generated
 //    };
 //  \endcode
 //  Y.cxx:
@@ -105,7 +105,7 @@ class vbl_scoped_ptr
 
   //: Safe implicit conversion to bool.
   //
-  // This allows for if(sp) type of usage.
+  // This allows for if (sp) type of usage.
   operator safe_bool () const
   {
     return ptr_ ? VCL_SAFE_BOOL_TRUE : 0;

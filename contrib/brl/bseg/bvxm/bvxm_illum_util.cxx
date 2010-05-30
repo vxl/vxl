@@ -12,7 +12,7 @@ load_surface_nhbds(vcl_string const& path,
   if (!is.is_open())
   {
     vcl_cerr << "In bvxm_illum_util::load_surface_nhbds(.) - "
-             <<"neigborhood path is not valid\n";
+             <<"neighborhood path is not valid\n";
     return false;
   }
 

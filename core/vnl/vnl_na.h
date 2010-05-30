@@ -16,11 +16,11 @@
 //
 // NA is distinct for the two other standard meanings of NaN - Indeterminate and Error.
 // It is entirely up to each algorithm to treat NA values meaningfully. Unless
-// a function's interpretation of NA is explicitly documentated, you should assume that
+// a function's interpretation of NA is explicitly documented, you should assume that
 // it will be treated similarly to every other NaN.
 // The IEEE754 bit value used to represent NA in double-precision is 0x7ff00000000007a2, the
 // same as used by Octave and R. Initial values of NA are stored as signalling NaNs, but
-// many uses will covert this to the non-signalling variant 0x7ff80000000007a2. vnl_isna()
+// many uses will convert this to the non-signalling variant 0x7ff80000000007a2. vnl_isna()
 // will accept either variant.
 //
 // You can read and write floating point values from a stream using standard operators
@@ -31,7 +31,7 @@
 // os << x << ' ' << y;
 // \endverbatim
 
- 
+
 //: qNaN to indicate value Not Available.
 // Don't assume that any VXL functions will do something sensible in the face of NA, unless
 // explicitly documented.
@@ -53,7 +53,6 @@ void vnl_na_double_extract(vcl_istream &is, double& x);
 // Should beahve exactly like a<<x, if the insertion operator was aware of the
 // character sequence \code NA.
 void vnl_na_double_insert(vcl_ostream &is, double x);
-
 
 
 //: Wrapper around a double that handles streaming NA.

@@ -79,7 +79,7 @@ class vsol_line_3d : public vsol_curve_3d
   virtual vsol_line_3d const*cast_to_line()const{return this;}
   virtual vsol_line_3d *cast_to_line() {return this;}
 
- private: // has been superceeded by is_a()
+ private: // has been superseded by is_a()
   //: Return the curve type
   virtual vsol_curve_3d_type curve_type() const { return vsol_curve_3d::LINE; }
 

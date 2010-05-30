@@ -466,7 +466,7 @@ void vsrl_manager::find_regions()
   region_dialog.field("Gaussian sigma", dp.smooth);
   region_dialog.field("Noise Threshold", dp.noise_multiplier);
   region_dialog.checkbox("Automatic Threshold", dp.automatic_threshold);
-  region_dialog.checkbox("Agressive Closure", agr);
+  region_dialog.checkbox("Aggressive Closure", agr);
   region_dialog.checkbox("Compute Junctions", dp.junctionp);
   region_dialog.checkbox("Debug", debug);
   region_dialog.checkbox("Residual Image", residual);
@@ -885,7 +885,7 @@ vsrl_manager::run_jseg(vil1_image image_in)
 
   // Loop through all the image pixels, assigning them to regions
   // This pass only counts the pixels in regions and calculates their means.
-  // Another pass is required later to actually assign inividual pixels to
+  // Another pass is required later to actually assign individual pixels to
   // their respective regions.
   // (See vdgl_digital_region::IncrementMeans(float,float,float,unsigned short)
   // for a description.

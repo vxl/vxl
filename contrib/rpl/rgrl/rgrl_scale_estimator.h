@@ -17,7 +17,7 @@ class rgrl_match_set;
 
 // We want to have smart pointers to the scale the weighted and
 // unweighted scale estimators, and so they should be reference
-// counted. However, dervied classes may implement both interfaces, so
+// counted. However, derived classes may implement both interfaces, so
 // we must make sure that the having a smart pointer via either type
 // of base doesn't mess up the reference count. The solution: a the
 // reference counter is a virtual base class. Since it doesn't require
@@ -32,7 +32,7 @@ class rgrl_match_set;
 class rgrl_scale_estimator_unwgted
   : virtual public rgrl_object
 {
-public:
+ public:
   rgrl_scale_estimator_unwgted();
 
   virtual
@@ -63,7 +63,7 @@ public:
 class rgrl_scale_estimator_wgted
   : virtual public rgrl_object
 {
-public:
+ public:
   rgrl_scale_estimator_wgted();
 
   virtual
@@ -93,15 +93,15 @@ class rgrl_scale_estimator
   : public rgrl_scale_estimator_unwgted,
     public rgrl_scale_estimator_wgted
 {
-public:
+ public:
   static const vcl_type_info& type_id()
   { return typeid(rgrl_scale_estimator); }
-  
-  virtual bool is_type( const vcl_type_info& type ) const
-  { return (typeid(rgrl_scale_estimator) == type)!=0 || 
-      this->rgrl_scale_estimator_unwgted::is_type(type) ||
-      this->rgrl_scale_estimator_wgted::is_type(type); }
 
+  virtual bool is_type( const vcl_type_info& type ) const
+  { return (typeid(rgrl_scale_estimator) == type)!=0 ||
+      this->rgrl_scale_estimator_unwgted::is_type(type) ||
+      this->rgrl_scale_estimator_wgted::is_type(type);
+  }
 };
 
 #endif // rgrl_scale_estimator_h_

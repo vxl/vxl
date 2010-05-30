@@ -541,7 +541,7 @@ void vdtop_set_structure_from_masks(TMap & res, const vil_image_view<vdtop_8_nei
         int k=0 ;
         int first=-1, last=-1 ;
 
-        // darts toward 0-4 have already been intanciated
+        // darts toward 0-4 have already been instantiated
         while (dart[i][k]<0 && k<4) k++ ;
         if (k<4)
         {
@@ -557,7 +557,7 @@ void vdtop_set_structure_from_masks(TMap & res, const vil_image_view<vdtop_8_nei
           }
         }
 
-        // darts between 5-7 have to be intanciated
+        // darts between 5-7 have to be instantiated
         const vdtop_8_neighborhood_mask down_left_neighbors(0xF0) ;
         vdtop_8_neighborhood_mask tmp_mask=*current_mask ;
         tmp_mask&=down_left_neighbors ;

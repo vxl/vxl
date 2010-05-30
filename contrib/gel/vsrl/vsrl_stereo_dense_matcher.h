@@ -31,11 +31,11 @@ class vsrl_stereo_dense_matcher : public vsrl_dense_matcher
   // destructor
   ~vsrl_stereo_dense_matcher();
 
-  // There may be some initial calculalations that we want to
+  // There may be some initial calculations that we want to
   // perform without computing all of the dense calculations
   void initial_calculations();
 
-  // perform the dence matching
+  // perform the dense matching
   void execute();
 
   // get the assigned coordinate

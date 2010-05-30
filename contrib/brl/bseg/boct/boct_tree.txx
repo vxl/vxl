@@ -194,7 +194,7 @@ boct_tree<T_loc, T_data>* boct_tree<T_loc,T_data>::clone_subtree(boct_tree_cell<
   }
 }
 
-//: Clones (from a root) the part of the subtree that intesects the bounding region
+//: Clones (from a root) the part of the subtree that intersects the bounding region
 template <class T_loc,class T_data>
 boct_tree<T_loc, T_data>* boct_tree<T_loc,T_data>::clone_and_intersect(boct_tree_cell<T_loc, T_data>* subtree_root,
                                                                        short parent_tree_root_level,

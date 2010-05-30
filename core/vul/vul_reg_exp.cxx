@@ -128,7 +128,7 @@ vul_reg_exp::vul_reg_exp (vul_reg_exp const& rxp)
   int ind;
   this->progsize = rxp.progsize;      // Copy regular expression size
   this->program = new char[this->progsize]; // Allocate storage
-  for (ind=this->progsize; ind-- != 0;)   // Copy regular expresion
+  for (ind=this->progsize; ind-- != 0;)   // Copy regular expression
   this->program[ind] = rxp.program[ind];
   this->startp[0] = rxp.startp[0];      // Copy pointers into last
   this->endp[0] = rxp.endp[0];        // Successful "find" operation

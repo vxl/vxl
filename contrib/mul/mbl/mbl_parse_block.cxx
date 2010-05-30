@@ -75,7 +75,7 @@ vcl_string mbl_parse_block(vcl_istream &afs, bool open_already /*= false*/, cons
   unsigned level=1;
   // The current position in a comment token.
   unsigned comment_position=0;
-  // true if we are currently in the whitespace at the beggining of a line
+  // true if we are currently in the whitespace at the beginning of a line
   bool newline=true;
 
   while (!(!afs))

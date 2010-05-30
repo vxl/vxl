@@ -82,7 +82,7 @@ bool vgl_triangle_3d_test_inside(const vgl_point_3d<double>& i_pnt,
                                  const vgl_point_3d<double>& p2,
                                  const vgl_point_3d<double>& p3 )
 {
-  //firstly perform some degeracy checks
+  // firstly perform some degeneracy checks
   if (collinear(p1,p2,p3))
   { //the triangle is degenerate - its vertices are collinear
 
@@ -231,7 +231,7 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_line_intersection(
 
   // perform some degeneracy checks on the line and triangle
   if (line_p1 == line_p2)
-  { //the line is degnerate - it has zero length
+  { //the line is degenerate - it has zero length
     if (!ignore_coplanar && vgl_triangle_3d_test_inside(line_p1,p1,p2,p3))
       return Coplanar;
 
@@ -273,10 +273,10 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_line_intersection(
   {
     if (ignore_coplanar)
       return None;
-    //coplanar line - uncommon case
+    // coplanar line - uncommon case
 
-    //check each triangle edge.
-    //behaviour is to return the first found intersetion point
+    // check each triangle edge.
+    // behaviour is to return the first found intersection point
     vgl_line_3d_2_points<double> i_line(line_p1,line_p2);
     vgl_line_segment_3d<double> edge1(p1,p2);
 
@@ -323,7 +323,7 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_line_intersection(
 //=======================================================================
 //: compute the intersection line of the given triangles
 //  \see vgl_triangle_3d_triangle_intersection()
-//  \note an intesection line is not computed for a coplanar intersection
+//  \note an intersection line is not computed for a coplanar intersection
 vgl_triangle_3d_intersection_t vgl_triangle_3d_triangle_intersection(
   const vgl_point_3d<double>& a_p1,
   const vgl_point_3d<double>& a_p2,

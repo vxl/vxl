@@ -57,7 +57,7 @@ bool mfpf_searcher::find_near_pose(mfpf_point_finder& pf,
   // Otherwise we have a potentially ambiguous situation
   // eg three overlapping objects in a row A-B-C with A not
   // overlapping with C, but f(A)<f(B)<f(C)
-  // In this case elliminate all overlapping poses except the best one.
+  // In this case eliminate all overlapping poses except the best one.
   // There's a danger that this might loose some weaker local
   // minima, so perhaps revise this later.
 

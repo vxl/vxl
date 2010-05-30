@@ -24,7 +24,7 @@
 #include <vil/algo/vil_sobel_3x3.h>
 #include <vil/algo/vil_convolve_1d.h>
 
-//: computes the conditioning of the 2n+1 x 2n+1 gradient neigborhood
+//: computes the conditioning of the 2n+1 x 2n+1 gradient neighborhood
 template<class T>
 inline void
 brip_sqrt_grad_singular_values(const vil_image_view<T>& input, vil_image_view<T>& output, unsigned n)

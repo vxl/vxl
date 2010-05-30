@@ -228,7 +228,7 @@ class bsta_gaussian_updater
     typedef vnl_vector_fixed<T,gauss_::dimension> vector_;
   public:
 
-    //: for compatiblity with vpdl/vpdt
+    //: for compatibility with vpdl/vpdt
     typedef typename gauss_::field_type field_type;
     typedef gauss_ distribution_type;
 
@@ -254,7 +254,7 @@ class bsta_gaussian_window_updater
     typedef vnl_vector_fixed<T,gauss_::dimension> vector_;
   public:
 
-    //: for compatiblity with vpdl/vpdt
+    //: for compatibility with vpdl/vpdt
     typedef typename gauss_::field_type field_type;
     typedef gauss_ distribution_type;
 

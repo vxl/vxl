@@ -390,7 +390,8 @@ void bwm_site_mgr::edit_site()
     for (unsigned i=0; i<object_paths.size(); i++) {
       if (!obj_remove[i]) {
         undeleted_objs.push_back(object_paths[i]);
-      } else
+      }
+      else
         deleted = true;
     }
     if (deleted) {
@@ -470,7 +471,8 @@ void bwm_site_mgr::load_site()
         bwm_tableau_img* tab = tableau_factory_.create_tableau(t);
         bwm_tableau_mgr::instance()->add_tableau(tab, t->name);
         active_tableaus_.push_back(t->clone());
-      } else // inactive tableau
+      }
+      else // inactive tableau
         inactive_tableaus_.push_back(t->clone());
     }
 
@@ -496,7 +498,8 @@ void bwm_site_mgr::load_site()
           vcl_cerr << "There is something wrong, the more is W-to-I but there is no world point\n";
       }
       bwm_observer_mgr::instance()->set_corr_mode(bwm_observer_mgr::WORLD_TO_IMAGE);
-    } else if (mode == "IMAGE_TO_IMAGE") {
+    }
+    else if (mode == "IMAGE_TO_IMAGE") {
       bwm_observer_mgr::instance()->set_corr_mode(bwm_observer_mgr::IMAGE_TO_IMAGE);
     }
 
@@ -510,7 +513,8 @@ void bwm_site_mgr::load_site()
         corr->set_world_pt(site->corresp_world_pts_[i].get_p());
         //sets the same pt each time FIXME -JLM
         //bwm_world::instance()->set_world_pt(corr->world_pt());
-      } else if (mode == "IMAGE_TO_IMAGE") {
+      }
+      else if (mode == "IMAGE_TO_IMAGE") {
         corr->set_mode(true);
       }
 
@@ -553,7 +557,8 @@ void bwm_site_mgr::load_site()
         else {
           if (type.compare(object_types_[VSOL]) == 0) {
             // will be implemented later!!!
-          } else {
+          }
+          else {
             // comes here if it is a mesh
             bwm_observable_mesh_sptr mesh = new bwm_observable_mesh();
             mesh->load_from(path);
@@ -858,7 +863,7 @@ void bwm_site_mgr::load_cam_tableau()
 
   if ((img_file == "") || (cam_file == "")) {
     vgui_dialog error ("Error");
-    error.message ("Please specify a input file (prefix)." );
+    error.message ("Please specify an input file (prefix)." );
     error.ask();
     return;
   }

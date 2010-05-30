@@ -8,13 +8,13 @@
 
 #include "vnl_integrant_fnct.h"
 
-class vnl_analytic_integrant : public vnl_integrant_fnct 
+class vnl_analytic_integrant : public vnl_integrant_fnct
 {
  public:
   vnl_analytic_integrant() {}
   ~vnl_analytic_integrant() {}
 
-  // the function every derived class has to implement, which is evalutate
+  // the function every derived class has to implement, which is to evaluate
   // the function value at point x
   virtual double f_(double /*x*/) = 0;
 };

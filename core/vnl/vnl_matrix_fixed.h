@@ -40,7 +40,7 @@ export template <class T, unsigned int num_rows, unsigned int num_cols> class vn
 // This mess is for a MSVC6 workaround.
 //
 // The problem: the matrix-matrix operator* should be written as a
-// non-member function since vxl (currently) forbits the use of member
+// non-member function since vxl (currently) forbids the use of member
 // templates. However, when declared as
 //
 //     template <class T, unsigned m, unsigned n, unsigned o>

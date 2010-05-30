@@ -54,7 +54,7 @@ inline void vil_find_peaks_3x3(vcl_vector<unsigned>& pi,
 }
 
 
-//: Fit a paraboloid to a pixel and its 8 neighbors to iterpolate the peak.
+//: Fit a paraboloid to a pixel and its 8 neighbors to interpolate the peak.
 // \return true if the neighborhood produces a proper peak (not a saddle)
 // return by reference the sub-pixel offsets from the pixel center
 // \a dx and \a dy as well as the interpolated peak value \a val.

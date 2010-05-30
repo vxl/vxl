@@ -52,7 +52,7 @@ bgui3d_translate_event(const vgui_event& v_event)
   // time relative to the start of the application
   int secs_now, msecs_now;
   vul_get_timestamp(secs_now, msecs_now);
-  // adjust for time since this event was constructucted (usually very small)
+  // adjust for time since this event was constructed (usually very small)
   long usecs_now = long(msecs_now)*1000 + v_event.usecs_since(vgui_event());
   i_event->setTime(SbTime(secs_now, usecs_now));
 

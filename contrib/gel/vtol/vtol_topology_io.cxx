@@ -280,9 +280,9 @@ void vtol_topology_io::write_vertex_2d(vtol_vertex_2d_sptr const& v,
   //       <vxl_point_2d id="p1" x="0" y="0"/>
   //    </vxl_vertex_2d>
 
-  strm << "<vxl_vertex_2d id=\"v2d" << v->get_id() << "\">" << vcl_endl;
-  strm << " <vxl_point_2d x=\""<< v->x() << "\"" << " y=\"" << v->y() << "\"/>" << vcl_endl;
-  strm << "</vxl_vertex_2d>" << vcl_endl;
+  strm << "<vxl_vertex_2d id=\"v2d" << v->get_id() << "\">" << vcl_endl
+       << " <vxl_point_2d x=\""<< v->x() << '"' << " y=\"" << v->y() << "\"/>" << vcl_endl
+       << "</vxl_vertex_2d>" << vcl_endl;
 }
 
 void vtol_topology_io::write_zero_chain(vtol_zero_chain_sptr const& zc,
@@ -337,7 +337,7 @@ void vtol_topology_io::write_one_chain(vtol_one_chain_sptr const& oc, vcl_ostrea
     {
       if (e->cast_to_edge_2d())
       {
-        // deterimine the direction of the edge
+        // determine the direction of the edge
         if (oc->direction(*e) ==1)
         {
           strm << " <vxl_edge_2d_sptr id=\"e2d" << (*i)->get_id() << "\"/>" << vcl_endl;
@@ -389,7 +389,7 @@ void vtol_topology_io::write_two_chain(vtol_two_chain_sptr const& tc, vcl_ostrea
     {
       if (f->cast_to_face_2d())
       {
-        // deterimine the direction of the edge
+        // determine the direction of the edge
         if (tc->direction(*f) ==1)
         {
           strm << " <vxl_face_2d_sptr id=\"f2d" << (*i)->get_id() << "\"/>" << vcl_endl;
@@ -428,8 +428,8 @@ void vtol_topology_io::write_dtd(vcl_ostream &strm)
 {
   #include <vtol/vtol_dtd.h>
 
-  strm << vtol_dtd0;
-  strm << vtol_dtd1;
-  strm << vtol_dtd2;
-  strm << vtol_dtd3;
+  strm << vtol_dtd0
+       << vtol_dtd1
+       << vtol_dtd2
+       << vtol_dtd3;
 }

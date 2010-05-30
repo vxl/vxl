@@ -35,7 +35,7 @@
 //
 //   Isabel Restrepo - 2/23/2008
 //               -Changed class to support different VOXEL_GRID_TYPES simultaneously.
-//                 Thus, the calss is not templated anymore but rather the indiviual functions.
+//                 Thus, the calss is not templated anymore but rather the individual functions.
 //               - There is no need for bvxm_world_base, hence this class is not subclassed form it anymore
 //               - Subclassed form vbl_ref_count
 //
@@ -63,7 +63,7 @@
 //
 //   Ibrahim Eden - 02/03/2009 - added the method: init_edges_prob
 //
-//   Gamze Tunali - 06/16/2009 - update_lidar and save_occupancy_raw methods are templatized and moved from .cxx file to the header
+//   Gamze Tunali - 06/16/2009 - update_lidar and save_occupancy_raw methods are templated and moved from .cxx file to the header
 //
 // \endverbatim
 //
@@ -562,11 +562,11 @@ bool bvxm_voxel_world::update_impl(bvxm_image_metadata const& metadata,
 
   vcl_cout << "Pass 1: " << vcl_endl;
 
-  // get ocuppancy probability grid
+  // get occupancy probability grid
   bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0,scale_idx);
   bvxm_voxel_grid<ocp_datatype> *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base.ptr());
 
-  // get appereance model grid
+  // get appearance model grid
   bvxm_voxel_grid_base_sptr apm_grid_base = this->get_grid<APM_T>(bin_index,scale_idx);
   bvxm_voxel_grid<apm_datatype> *apm_grid  = static_cast<bvxm_voxel_grid<apm_datatype>*>(apm_grid_base.ptr());
 
@@ -813,7 +813,7 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
 
   vcl_cout << "Pass 1:" << vcl_endl;
 
-  // get ocuppancy probability grid
+  // get occupancy probability grid
   bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<APM_T>(0,  scale);
   bvxm_voxel_grid<ocp_datatype> *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base.ptr());
 
@@ -1049,7 +1049,7 @@ bool bvxm_voxel_world::update_point_cloud(vcl_vector<vgl_point_3d<float> > & poi
   vgl_vector_3d<unsigned int> grid_size = params_->num_voxels();
 
   vcl_cout<<"Get Grid"<<vcl_endl;
-  // get ocuppancy probability grid
+  // get occupancy probability grid
   bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<APM_T>(0,0);
   bvxm_voxel_grid<ocp_datatype> *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base.ptr());
   typename bvxm_voxel_grid<ocp_datatype>::iterator ocp_slab_it = ocp_grid->begin();
@@ -1290,11 +1290,11 @@ bool bvxm_voxel_world::inv_pixel_range_probability(bvxm_image_metadata const& ob
 
   vcl_cout << "Computing inverse probability of frame +- range: ";
 
-  // get ocuppancy probability grid
+  // get occupancy probability grid
   bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0,scale_idx);
   bvxm_voxel_grid<ocp_datatype> *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype> >(ocp_grid_base.ptr());
 
-  // get appereance model grid
+  // get appearance model grid
   bvxm_voxel_grid_base_sptr apm_grid_base = this->get_grid<APM_T>(bin_index,scale_idx);
   bvxm_voxel_grid<apm_datatype> *apm_grid  = static_cast<bvxm_voxel_grid<apm_datatype> >(apm_grid_base.ptr());
 
@@ -1408,11 +1408,11 @@ bool bvxm_voxel_world::pixel_probability_density(bvxm_image_metadata const& obse
 
   vcl_cout << "Pass 1: " << vcl_endl;
 
-  // get ocuppancy probability grid
+  // get occupancy probability grid
   bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0,scale_idx);
   bvxm_voxel_grid<ocp_datatype> *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base.ptr());
 
-  // get appereance model grid
+  // get appearance model grid
   bvxm_voxel_grid_base_sptr apm_grid_base = this->get_grid<APM_T>(bin_index,scale_idx);
   bvxm_voxel_grid<apm_datatype> *apm_grid  = static_cast<bvxm_voxel_grid<apm_datatype>*>(apm_grid_base.ptr());
 
@@ -1556,11 +1556,11 @@ bool bvxm_voxel_world::region_probability_density(bvxm_image_metadata const& obs
 
   vcl_cout << "Pass 1: " << vcl_endl;
 
-  // get ocuppancy probability grid
+  // get occupancy probability grid
   bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0,scale_idx);
   bvxm_voxel_grid<ocp_datatype> *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base.ptr());
 
-  // get appereance model grid
+  // get appearance model grid
   bvxm_voxel_grid_base_sptr apm_grid_base = this->get_grid<APM_T>(bin_index,scale_idx);
   bvxm_voxel_grid<apm_datatype> *apm_grid  = static_cast<bvxm_voxel_grid<apm_datatype>*>(apm_grid_base.ptr());
 
@@ -1641,11 +1641,11 @@ bool bvxm_voxel_world::mixture_of_gaussians_image(bvxm_image_metadata const& obs
   visX_accum.fill(1.0f);
   mog_slab.fill(bvxm_voxel_traits<APM_T>::initial_val());
 
-  // get ocuppancy probability grid
+  // get occupancy probability grid
   bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0,scale_idx);
   bvxm_voxel_grid<ocp_datatype> *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base.ptr());
 
-  // get appereance model grid
+  // get appearance model grid
   bvxm_voxel_grid_base_sptr apm_grid_base = this->get_grid<APM_T>(bin_index,scale_idx);
   bvxm_voxel_grid<apm_datatype> *apm_grid  = static_cast<bvxm_voxel_grid<apm_datatype>*>(apm_grid_base.ptr());
 
@@ -1731,11 +1731,11 @@ bool bvxm_voxel_world::mog_most_probable_image(bvxm_image_metadata const& observ
   visX_accum.fill(1.0f);
   mog_slab.fill(bvxm_voxel_traits<APM_T>::initial_val());
 
-  // get ocuppancy probability grid
+  // get occupancy probability grid
   bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0,scale_idx);
   bvxm_voxel_grid<ocp_datatype> *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base.ptr());
 
-  // get appereance model grid
+  // get appearance model grid
   bvxm_voxel_grid_base_sptr apm_grid_base = this->get_grid<APM_T>(bin_index,scale_idx);
   bvxm_voxel_grid<apm_datatype> *apm_grid  = static_cast<bvxm_voxel_grid<apm_datatype>*>(apm_grid_base.ptr());
 
@@ -1824,11 +1824,11 @@ bool bvxm_voxel_world::mog_image_with_random_order_sampling(bvxm_image_metadata 
   visX_accum.fill(1.0f);
   mog_slab.fill(bvxm_voxel_traits<APM_T>::initial_val());
 
-  // get ocuppancy probability grid
+  // get occupancy probability grid
   bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0,scale_idx);
   bvxm_voxel_grid<ocp_datatype> *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base.ptr());
 
-  // get appereance model grid
+  // get appearance model grid
   bvxm_voxel_grid_base_sptr apm_grid_base = this->get_grid<APM_T>(bin_index,scale_idx);
   bvxm_voxel_grid<apm_datatype> *apm_grid  = static_cast<bvxm_voxel_grid<apm_datatype>*>(apm_grid_base.ptr());
 
@@ -2011,7 +2011,7 @@ bool bvxm_voxel_world::virtual_view(bvxm_image_metadata const& original_view,
   bvxm_voxel_slab<unsigned> heightmap(virtual_view->ni(),virtual_view->nj(),1);
   bvxm_voxel_slab<ocp_datatype> slice_prob_img(virtual_view->ni(),virtual_view->nj(),1);
 
-  // get ocuppancy probability grid
+  // get occupancy probability grid
   bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0,scale_idx);
   bvxm_voxel_grid<ocp_datatype> *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base.ptr());
 
@@ -2082,7 +2082,7 @@ bool bvxm_voxel_world::virtual_view(bvxm_image_metadata const& original_view,
   }
   vcl_cout << vcl_endl;
 
-  // mask out pixels whose rays did not intersct any voxels in the original and virtual frames
+  // mask out pixels whose rays did not intersect any voxels in the original and virtual frames
   vcl_cout << "Normalizing visibility probability. ";
   const float visX_thresh = 1.0f - params_->min_occupancy_prob();
 
@@ -2167,7 +2167,7 @@ bool bvxm_voxel_world::heightmap(bvxm_image_metadata const& virtual_camera, vil_
   visX_accum_virtual.fill(1.0f);
   max_prob_image.fill(0.0f);
 
-  // get ocuppancy probability grid
+  // get occupancy probability grid
   bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0,scale_index);
   bvxm_voxel_grid<ocp_datatype> *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base.ptr());
   bvxm_voxel_grid_base_sptr apm_grid_base = this->get_grid<APM_T>(bin_index,scale_index);

@@ -33,7 +33,7 @@ void print_usage()
           <<"Locates a set of interesting features (corners) on levels of image1.\n"
           <<"Constructs a tree model of their relative positions.\n"
           <<"Points at level L are linked to the nearest points at level L+1\n"
-          <<"Uses normalised correllation and this model to locate\n"
+          <<"Uses normalised correlation and this model to locate\n"
           <<"equivalent points on the second image."<<vcl_endl;
   vul_arg_display_usage_and_exit();
 }

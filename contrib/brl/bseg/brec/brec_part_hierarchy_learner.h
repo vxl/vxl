@@ -102,16 +102,16 @@ class brec_part_hierarchy_learner : public vbl_ref_count
   void layer0_fit_parametric_dist();
 
   void layer0_collect_posterior_stats(vil_image_view<float>& inp, vil_image_view<float>& fg_prob_img, vil_image_view<bool>& mask,
-    vil_image_view<float>& mean_img, vil_image_view<float>& std_dev_img);
+                                      vil_image_view<float>& mean_img, vil_image_view<float>& std_dev_img);
   void layer0_collect_posterior_stats(vil_image_view<float>& inp, vil_image_view<float>& fg_prob_img,
-    vil_image_view<float>& mean_img, vil_image_view<float>& std_dev_img);
+                                      vil_image_view<float>& mean_img, vil_image_view<float>& std_dev_img);
 
   //: create a part hierarchy of primitive parts which are added with respect to their average rho_ (posterior ratios)
   //  This will be used to construct layers 1 and above
   //  Clears \p stats_layer0_ and initializes \p stats_layer_n_
   brec_part_hierarchy_sptr layer0_rank_and_create_hierarchy(int N);
 
-  //: initialize learner to construct layer_n as pairs of layer_n-1 of the given hieararchy
+  //: initialize learner to construct layer_n as pairs of layer_n-1 of the given hierarchy
   //  Radius is used to initialize the histograms
   //  We use 8 bins for angle in [0, 2*pi] range and 8 bins for distance in [0,radius] range
   bool initialize_layer_n_as_pairs(brec_part_hierarchy_sptr h, unsigned layer_id, unsigned nclasses, float radius);

@@ -118,7 +118,7 @@ void mil_gauss_reduce_2d(int* dest_im,
 
 
 //: Smooth and subsample single plane src_im in x to produce dest_im using 121 filter in x and y
-//  Smoothes with a 3x3 filter and subsamples
+//  Smooths with a 3x3 filter and subsamples
 void mil_gauss_reduce_121_2d(vxl_byte* dest_im,
                              int d_x_step, int d_y_step,
                              const vxl_byte* src_im,
@@ -189,7 +189,7 @@ void mil_gauss_reduce_121_2d(vxl_byte* dest_im,
 }
 
 //: Smooth and subsample single plane src_im in x to produce dest_im using 121 filter in x and y
-//  Smoothes with a 3x3 filter and subsamples
+//  Smooths with a 3x3 filter and subsamples
 void mil_gauss_reduce_121_2d(float* dest_im,
                              int d_x_step, int d_y_step,
                              const float* src_im,
@@ -260,7 +260,7 @@ void mil_gauss_reduce_121_2d(float* dest_im,
 
 
 //: Smooth and subsample single plane src_im in x to produce dest_im using 121 filter in x and y
-//  Smoothes with a 3x3 filter and subsamples
+//  Smooths with a 3x3 filter and subsamples
 void mil_gauss_reduce_121_2d(int* dest_im,
                              int d_x_step, int d_y_step,
                              const int* src_im,

@@ -49,7 +49,7 @@ class vless
     return comp;
   }
  private:
-  //:pointer to the parzen distribtion for computing probability density
+  //: pointer to the parzen distribution for computing probability density
   bsta_parzen<T, n>* parz_ptr_;
 };
 

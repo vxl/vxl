@@ -298,7 +298,7 @@ AngleLoc(imp_line_sptr  il)
 }
 
 //--------------------------------------------------------------
-//: Define a line passing through the center of the Hough ROI and at an angle correspoinding the angle bin
+//: Define a line passing through the center of the Hough ROI and at an angle corresponding to the angle bin
 imp_line_sptr vifa_group_pgram::
 LineAtAngle(int  angle_bin)
 {

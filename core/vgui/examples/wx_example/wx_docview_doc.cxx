@@ -19,7 +19,7 @@ IMPLEMENT_DYNAMIC_CLASS(wx_docview_doc, wxDocument)
 
 wx_docview_doc::wx_docview_doc(void)
 {
-  // Put the image.tableau into a easy2D tableau
+  // Put the image.tableau into an easy2D tableau
   vgui_easy2D_tableau_new easy2D;
 
   // Add a point, line, and infinite line

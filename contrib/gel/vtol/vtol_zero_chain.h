@@ -95,7 +95,7 @@ class vtol_zero_chain : public vtol_topology_object
   //: Return true if the argument matches the string identifying the class or any parent class
   virtual bool is_class(vcl_string const& cls) const { return cls==is_a(); }
 
- private: // has been superceeded by is_a()
+ private: // has been superseded by is_a()
   //: Return the topology type
   virtual vtol_topology_object_type topology_type() const{return ZEROCHAIN;}
 

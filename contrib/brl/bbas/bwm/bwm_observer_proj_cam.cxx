@@ -38,7 +38,7 @@ bwm_observer_proj_cam::bwm_observer_proj_cam(bgui_image_tableau_sptr img,
   img->set_file_name(image_path);
 
   // check if the camera path is not empty, if it is NITF, the camera
-  // info is in the image, not a seperate file
+  // info is in the image, not a separate file
   if (cam_path.size() == 0)
   {
     bwm_utils::show_error("Camera tableaus need a valid camera path!");

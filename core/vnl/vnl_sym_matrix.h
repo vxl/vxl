@@ -28,7 +28,7 @@ class vnl_sym_matrix
   //: Construct an empty symmetric matrix.
   vnl_sym_matrix(): data_(0), index_(0), nn_(0) {}
 
-  //: Construct an symmetric matrix of size nn by nn.
+  //: Construct a symmetric matrix of size nn by nn.
   explicit vnl_sym_matrix(unsigned nn):
   data_(vnl_c_vector<T>::allocate_T(nn * (nn + 1) / 2)),
   index_(vnl_c_vector<T>::allocate_Tptr(nn)),
@@ -48,7 +48,7 @@ class vnl_sym_matrix
 
   //: Copy constructor
   inline vnl_sym_matrix(vnl_sym_matrix<T> const& that);
- 
+
   ~vnl_sym_matrix()
   { vnl_c_vector<T>::deallocate(data_, size());
     vnl_c_vector<T>::deallocate(index_, nn_);}

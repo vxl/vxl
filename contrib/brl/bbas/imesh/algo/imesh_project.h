@@ -103,7 +103,7 @@ void imesh_projection_bounds(const vcl_vector<vgl_point_2d<double> >& img_pts,
                              vgl_box_2d<unsigned int>& bbox);
 
 //: back project an image point onto the mesh using the camera
-//  Returns the index of the itersected triangle, or -1 for no intersection
+//  Returns the index of the intersected triangle, or -1 for no intersection
 int imesh_project_onto_mesh(const imesh_mesh& mesh,
                             const vcl_vector<vgl_vector_3d<double> >& normals,
                             const vcl_vector<vgl_point_2d<double> >& verts2d,
@@ -112,7 +112,7 @@ int imesh_project_onto_mesh(const imesh_mesh& mesh,
                             vgl_point_3d<double>& pt_3d);
 
 //: project a texture point onto a mesh face index with barycentric coordinates
-//  Returns the index of the itersected triangle, or -1 for no intersection
+//  Returns the index of the intersected triangle, or -1 for no intersection
 int imesh_project_texture_to_barycentric(const imesh_mesh& mesh,
                                          const vgl_point_2d<double>& pt_2d,
                                          vgl_point_2d<double>& pt_uv);
@@ -165,7 +165,7 @@ void imesh_project_onto_mesh(const imesh_mesh& mesh,
 
 //: back project an image point onto the mesh using the camera
 //  The resulting point is in barycentric coordinates for the returned triangle
-//  Returns the index of the itersected triangle, or -1 for no intersection
+//  Returns the index of the intersected triangle, or -1 for no intersection
 int imesh_project_onto_mesh_barycentric(const imesh_mesh& mesh,
                                         const vcl_vector<vgl_vector_3d<double> >& normals,
                                         const vcl_vector<vgl_point_2d<double> >& verts2d,
@@ -176,7 +176,7 @@ int imesh_project_onto_mesh_barycentric(const imesh_mesh& mesh,
 //: back project an image point onto the mesh using the camera
 //  Then project from the mesh into normalized texture coordinate (UV)
 //  Assumes the mesh has both normals and texture coordinates
-//  Returns the index of the itersected triangle, or -1 for no intersection
+//  Returns the index of the intersected triangle, or -1 for no intersection
 int imesh_project_onto_mesh_texture(const imesh_mesh& mesh,
                                     const vcl_vector<vgl_point_2d<double> >& verts2d,
                                     const vpgl_perspective_camera<double>& camera,

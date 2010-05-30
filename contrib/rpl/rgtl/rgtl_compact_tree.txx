@@ -75,7 +75,7 @@ rgtl_compact_tree<D, Policy1, Policy2>
 ::leaf_data_insert(cell_index_type c)
 {
   assert(!has_children(c));
-  if(link& cl = child_link(c))
+  if (link& cl = child_link(c))
     {
     // The leaf data entry already exists.
     return cl;
@@ -110,7 +110,7 @@ rgtl_compact_tree<D, Policy1, Policy2>
   // Erase the leaf data entry if it exists.  If it is not the last
   // entry move the last entry into its place and then erase the
   // last entry.
-  if(link& cl = child_link(c))
+  if (link& cl = child_link(c))
     {
     // Get the index of the leaf data entry.
     leaf_data_index_type ldi(cl.index());
@@ -119,7 +119,7 @@ rgtl_compact_tree<D, Policy1, Policy2>
     leaf_data_link(leaf_data_owner(ldi)) = link(0, false);
 
     // Move the last data entry to fill in the hole.
-    if(ldi < leaf_data_count()-1)
+    if (ldi < leaf_data_count()-1)
       {
       // Tell the new location of the moved data about its owner.
       leaf_data_index_type last(leaf_data_count()-1);
@@ -131,7 +131,7 @@ rgtl_compact_tree<D, Policy1, Policy2>
 
     // Deallocate the owner portion of the unused leaf data entry.
     leaf_data_owners_.erase(leaf_data_owners_.end()-1,
-                              leaf_data_owners_.end());
+                            leaf_data_owners_.end());
 
     // Remove the old leaf data value entry according to the leaf
     // data value policy.
@@ -214,7 +214,7 @@ rgtl_compact_tree<D, Policy1, Policy2>
   child_link(c) = link(0, false);
 
   // Move the last node to fill in the hole.
-  if(node_index < node_count()-1)
+  if (node_index < node_count()-1)
     {
     // Tell the new location of the moved node about its owner.
     node_owner(node_index) = node_owner(node_count()-1);
@@ -226,14 +226,14 @@ rgtl_compact_tree<D, Policy1, Policy2>
     child_links(node_index) = child_links(node_count()-1);
 
     // Tell the children of the moved node about its new location.
-    for(child_index_type i(0); i < (1<<D); ++i)
+    for (child_index_type i(0); i < (1<<D); ++i)
       {
       cell_index_type cr(node_index, i);
-      if(link& cl = child_link(cr))
+      if (link& cl = child_link(cr))
         {
         leaf_data_owner(leaf_data_index_type(cl.index())) = cr;
         }
-      else if(node_index_type ni = node_index_type(cl.index()))
+      else if (node_index_type ni = node_index_type(cl.index()))
         {
         node_owner(ni) = cr;
         }
@@ -246,7 +246,7 @@ rgtl_compact_tree<D, Policy1, Policy2>
     // third policy argument that provides this callback.  The user
     // may use that policy to inject an implementation of this
     // callback for example to update cell_index_type instances when a
-    // node is moved (which would allow iterators to not be invalided
+    // node is moved (which would allow iterators to not be invalidated
     // when a different node is removed).
     //
     // this->node_moved(node_count()-1, node_index);
@@ -264,12 +264,12 @@ bool
 rgtl_compact_tree<D, Policy1, Policy2>
 ::can_subdivide(cell_index_type c) const
 {
-  if(link const& l = child_link(c))
+  if (link const& l = child_link(c))
     {
     // The cell is a leaf with data.  It cannot be divided.
     return false;
     }
-  else if(l.index())
+  else if (l.index())
     {
     // The cell is a node.  It cannot be divided again.
     return false;
@@ -287,15 +287,15 @@ bool
 rgtl_compact_tree<D, Policy1, Policy2>
 ::can_collapse(cell_index_type c) const
 {
-  if(link const& l = child_link(c))
+  if (link const& l = child_link(c))
     {
     // The cell is a leaf with data.  It cannot be collapsed.
     return false;
     }
-  else if(l.index())
+  else if (l.index())
     {
     // The cell is a node.
-    if(this->node_data_get_impl(node_index_type(l.index())))
+    if (this->node_data_get_impl(node_index_type(l.index())))
       {
       // The node has data.  It cannot be collapsed.
       return false;
@@ -304,16 +304,16 @@ rgtl_compact_tree<D, Policy1, Policy2>
       {
       // The node may be collapsed only if all children are leaf
       // cells without data.
-      for(child_index_type i(0); i < (1<<D); ++i)
+      for (child_index_type i(0); i < (1<<D); ++i)
         {
         cell_index_type child = get_child(c, i);
-        if(link const& cl = child_link(child))
+        if (link const& cl = child_link(child))
           {
           // This child is a leaf with data.  The parent cannot be
           // collapsed.
           return false;
           }
-        else if(cl.index())
+        else if (cl.index())
           {
           // This child is a node.  The parent cannot be collapsed.
           return false;
@@ -337,7 +337,7 @@ bool
 rgtl_compact_tree<D, Policy1, Policy2>
 ::has_data(cell_index_type c) const
 {
-  if(link const& cl = child_link(c))
+  if (link const& cl = child_link(c))
     {
     return true;
     }

@@ -312,7 +312,7 @@ void CDlgWnd::CheckDir(const CString &ss)
     // put in the edit control due to OnFolderChange.  One exception is if the user has
     // used "..", "..." etc to change to an ancestor directory in which case we don't want to
     // leave this the same as it will cause repeated changes to ancestor directories whenever
-    // the user types backslash (\).  Also don;t set the edit string back to what the user
+    // the user types backslash (\).  Also don't set the edit string back to what the user
     // typed if it would be empty or unchanged except for case (as the case probably looks
     // better the way it was filled in).
     if (strSaved.IsEmpty() || strSaved[0] == '.' ||

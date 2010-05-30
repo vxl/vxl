@@ -46,7 +46,7 @@ class boxm_change_probability_functor
     const float Omega = vis_img_(i,j) - vis_prob_end;
     // and update expected image
     change_prob_(i,j) +=  prob_den* Omega;
-    // update visibility probabilty
+    // update visibility probability
     vis_img_(i,j) = vis_prob_end;
 
     return true;

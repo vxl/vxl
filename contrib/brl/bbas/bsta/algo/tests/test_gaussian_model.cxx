@@ -11,7 +11,7 @@
 // It is only tested for gaussian 3-modal, floating point mixtures in 2, 3,
 // and 4 dimensions. More cases can be added when needed.
 
-//Test the update of independent gauusian distributions
+// Test the update of independent Gaussian distributions
 template <class T, unsigned n>
 void test_gauss_indep_update()
 {

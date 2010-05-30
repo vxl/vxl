@@ -29,7 +29,7 @@ bool bvxm_save_rgba_grid_vrml_process_cons(bprb_func_process& pro)
 
   // process takes 3 inputs but has no outputs
   //input[0]: The voxel_grid
-  //input[1]: Threshold - voxels with alpha bellow this value are ignored
+  //input[1]: Threshold - voxels with alpha below this value are ignored
   //input[2]: The filename to write to
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "bvxm_voxel_grid_base_sptr";

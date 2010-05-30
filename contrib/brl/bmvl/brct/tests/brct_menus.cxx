@@ -5,7 +5,7 @@
 #include <vgui/vgui_menu.h>
 #include "brct_windows_frame.h"
 
-//Static munu callback functions
+// Static menu callback functions
 
 void brct_menus::load_image_callback()
 {
@@ -58,7 +58,7 @@ vgui_menu brct_menus::get_menu()
   action_menu.add("go", kalman_go_callback, (vgui_key)'g', vgui_CTRL);
 
   debug_menu.add("display epipolar lines", display_epipolar_lines_callback);
-                 
+
   debug_menu.add("show prediction", show_predicted_curves, (vgui_key)'p', vgui_CTRL);
   debug_menu.add("show next observes", show_next_observes, (vgui_key)'o', vgui_CTRL);
   debug_menu.add("show back projection", show_back_projection, (vgui_key)'b', vgui_CTRL);

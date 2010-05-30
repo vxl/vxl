@@ -6,7 +6,7 @@
 // \file
 //
 //  This file is a subset of routines that will be used
-//  to create and list the datum coordinate shift formulas. Inculded are
+//  to create and list the datum coordinate shift formulas. Included are
 //  the following  examples of datum shifts, demonstrating the functionality
 //  of these routines.
 //
@@ -57,7 +57,7 @@ void wgs72_to_wgs84_deltas
    double *delta_hgt)          //!< elev shift (meters)
 {
   // Information found from "Supplement to Department of Defense
-  // world geodeti systems 1984 Technical Report.  (pg 25-8)
+  // world geodetic systems 1984 Technical Report".  (pg 25-8)
 
   double delta_f, a, delta_a, delta_r;          // constants
 
@@ -81,7 +81,7 @@ void wgs72_to_wgs84_deltas
   if (lamda < 0)
     lamda += 360.0;
 
-  // First compure delta_phi and delta_lamda are in arc seconds
+  // First compute delta_phi and delta_lamda in arc seconds
 
   *delta_phi = (4.5 * dcos(phi))/(a * dsin(1/3600.0)) +
     (delta_f * dsin(2.0 * phi)) / (dsin(1/3600.0));
@@ -246,7 +246,7 @@ void wgs84_to_nad27m
 void nad27n_to_wgs84_deltas
   (double phi,                 //!< input lat (degrees)
    double lamda,               //!< input lon (degrees)
-   double /* height */,        //!< input elv (meters) 
+   double /* height */,        //!< input elv (meters)
    double *delta_phi,          //!< lat shift (arc sec)
    double *delta_lamda,        //!< lon shift (arc sec)
    double *delta_hgt)          //!< elev shift (meters)
@@ -882,17 +882,17 @@ double geo_centric2detic
 //  Computes, from the GRS coordinates of a point, its the lat, long,
 //  and elevation in a GEODETIC coordinate system.
 //  It used an iterative method based on an alternate way
-//  of coputating x, y, z from lat, lon, el based on the equations:
-//
-//  Nov. 28, 2000 - JLM
-//    The input x, y, z, values are assumed to be in meters
-//    The input elevation and A, B values are assumed to be in meters
-//    The output lat and lon values are in radians
+//  of computing x, y, z from lat, lon, el based on the equations:
 //
 //  $N = A/\sqrt{1 - e^2 \sin(\mbox{lat})^2}$
 //  $x = (N + \mbox{el}) \cos(\mbox{lat})\cos(\mbox{lon})$
 //  $y = (N + \mbox{el}) \cos(\mbox{lat})\sin(\mbox{lon})$
 //  $z = (N (1-e^2) + \mbox{el}) \sin(\mbox{lat})$
+//
+//  Nov. 28, 2000 - JLM
+//    The input x, y, z, values are assumed to be in meters
+//    The input elevation and A, B values are assumed to be in meters
+//    The output lat and lon values are in radians
 //
 //**********************************************************************
 void GRS_to_latlong
@@ -911,7 +911,7 @@ void GRS_to_latlong
   xy_dist = vcl_sqrt(x*x + y*y);
   ee = 1 - (B/A)*(B/A);
 
-  // Compute gecentric = gedetic longitude from the
+  // Compute geocentric = geodetic longitude from the
   // dot-product of (x, y, 0) and (1, 0, 0) and assign
   // proper sign to it based on y.
 

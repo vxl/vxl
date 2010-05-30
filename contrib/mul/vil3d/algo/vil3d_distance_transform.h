@@ -23,7 +23,7 @@ void vil3d_distance_transform(vil3d_image_view<float>& image, const float distan
 //  background, and zero at the places of interest. On exit,
 //  the values are the 8-connected distance to the nearest
 //  original zero voxel.
-//  One pass of distance transform, goins from low to high i,j,k.
+//  One pass of distance transform, going from low to high i,j,k.
 // \param distance_link_i use when calculating connected distance between i and i+1
 // \param distance_link_j use when calculating connected distance between j and j+1
 // \param distance_link_k use when calculating connected distance between k and k+1

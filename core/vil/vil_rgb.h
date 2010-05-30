@@ -56,7 +56,7 @@ struct vil_rgb
   inline vil_rgb(T v):
     r(v), g(v), b(v) {}
 
-  //:Construct an vil_rgb value.
+  //: Construct a vil_rgb value.
   inline vil_rgb(T red, T green, T blue):
     r(red), g(green), b(blue) {}
 
@@ -157,7 +157,7 @@ vcl_ostream& operator<<(vcl_ostream& s, vil_rgb<unsigned char> const& rgb);
 
 template <class T>
 inline
-bool operator!= (vil_rgb<T> const& a, vil_rgb<T> const& b) 
+bool operator!= (vil_rgb<T> const& a, vil_rgb<T> const& b)
 {
   return !(a==b);
 }

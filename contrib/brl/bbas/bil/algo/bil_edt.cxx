@@ -153,7 +153,8 @@ bil_edt_saito_3D(vil_image_view<vxl_uint_32> &im)
               npt += rc;
            }
            a = b;
-        } else
+        }
+        else
            a = 0;
         buffer = buff[k];
       }
@@ -180,7 +181,8 @@ bil_edt_saito_3D(vil_image_view<vxl_uint_32> &im)
                npt -= rc;
             }
             a = b;
-         } else
+         }
+         else
             a = 0;
          buffer = buff[k];
       }
@@ -219,14 +221,16 @@ bil_edt_1d_horizontal(vil_image_view<vxl_uint_32> &im)
          if (im(i,j) > im(i-1,j) + b) {
             im(i,j) = im(i-1,j) + b;
             b += 2;
-         } else
+         }
+         else
             b = 1;
       b=1;
       for (i=ni-2; i != (vxl_uint_32)-1; i--) {
          if (im(i,j) > im(i+1,j) + b) {
             im(i,j) = im(i+1,j) + b;
             b += 2;
-         } else
+         }
+         else
             b = 1;
       }
    }
@@ -308,7 +312,8 @@ bil_edt_saito(vil_image_view<vxl_uint_32> &im, unsigned plane_idx, const vcl_vec
              npt += c;
           }
           a = b;
-       } else
+       }
+       else
           a = 0;
        buffer = buff[j];
      }
@@ -335,7 +340,8 @@ bil_edt_saito(vil_image_view<vxl_uint_32> &im, unsigned plane_idx, const vcl_vec
                npt -= c;
             }
             a = b;
-         } else
+         }
+         else
             a = 0;
          buffer = buff[j];
       }
@@ -408,7 +414,7 @@ remove_edt(int du, int dv, int dw,
 }
 
 
-//: Function in the paper that elliminates unnecessary sites and computes 2D Euclidean distances to the nearest sites.
+//: Function in the paper that eliminates unnecessary sites and computes 2D Euclidean distances to the nearest sites.
 inline bool
 maurer_voronoi_edt_2D(vil_image_view<vxl_uint_32> &im, unsigned j1, int *g, int *h)
 {
@@ -535,7 +541,8 @@ bil_edt_brute_force_with_list(vil_image_view<vxl_uint_32> &im)
       if (I[i]) {
          list[n_ones++] = i;
          I[i] = infty_;
-      } else
+      }
+      else
          list[ptr_zeros--] = i;
 
    for (i=0; i<n_ones; ++i) { // for each 1-pixel
@@ -600,7 +607,8 @@ bil_edt_signed(
       if (diff < 0.0)
         diff = 0.0;
       surface_value = diff - cutoff_margin;
-    } else {
+    }
+    else {
       surface_value = vcl_sqrt((float)dt_input[i]); // distance_from_exterior
     }
 

@@ -40,7 +40,7 @@ class mmn_lbp_solver: public mmn_solver
     //:Store in graph form (so each node's neighbours are conveniently to hand)
     mmn_graph_rep1 graph_;
 
-    //: The arcs from which graph was generatd
+    //: The arcs from which the graph was generated
     vcl_vector<mmn_arc> arcs_;
 
     //: Total number of nodes

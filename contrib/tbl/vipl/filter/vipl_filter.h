@@ -355,7 +355,7 @@ class vipl_filter          : public vipl_filter_abs
   //:
   // For each section, this method runs before
   // section_applyop. Default at this level is no_op. (lower level
-  // class redefine it to ``fill'' the image boarders).
+  // class redefines it to ``fill'' the image borders).
   virtual bool section_preop();
 
   //:

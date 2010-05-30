@@ -80,7 +80,7 @@ bool vil1_interpolate_bilinear_grad(vil1_memory_image_of<T> const& img,
   double u1 = src_x - src_x_int, u0 = 1-u1;
   double v1 = src_y - src_y_int, v0 = 1-v1;
 
-  // the derivatives are obtained by differentating the interpolating expression.
+  // the derivatives are obtained by differentiating the interpolating expression.
   // capes@robots: vil1_rgb does not have the left operator- defined.
   *out_i  = U(  (pix00 * v0 + pix01 * v1)*u0 + (pix10 * v0 + pix11 * v1)*u1 );
   *out_dx = U(  (pix10 - pix00) * v0 + (pix11 - pix01) * v1  );

@@ -83,7 +83,7 @@ class vsol_conic_2d : public vsol_curve_2d, public vgl_conic<double>
     coincident_lines
   };
 
- private: // has been superceeded by is_a()
+ private: // has been superseded by is_a()
   //: Return the curve type
   virtual vsol_curve_2d_type curve_type() const { return vsol_curve_2d::CONIC; }
 
@@ -208,7 +208,7 @@ class vsol_conic_2d : public vsol_curve_2d, public vgl_conic<double>
   vcl_string real_conic_type() const { return static_cast<vgl_conic<double> >(*this).real_type(); }
 
   //---------------------------------------------------------------------------
-  //: Is `this' an real ellipse ?
+  //: Is `this' a real ellipse ?
   //---------------------------------------------------------------------------
   bool is_real_ellipse() const;
 
@@ -238,17 +238,17 @@ class vsol_conic_2d : public vsol_curve_2d, public vgl_conic<double>
   bool is_hyperbola() const;
 
   //---------------------------------------------------------------------------
-  //: Is `this' an real intersecting lines ?
+  //: Is `this' a pair of real intersecting lines ?
   //---------------------------------------------------------------------------
   bool is_real_intersecting_lines() const;
 
   //---------------------------------------------------------------------------
-  //: Is `this' an complex intersecting lines ?
+  //: Is `this' a pair of complex intersecting lines ?
   //---------------------------------------------------------------------------
   bool is_complex_intersecting_lines() const;
 
   //---------------------------------------------------------------------------
-  //: Is `this' an coincident lines ?
+  //: Is `this' a pair of coincident lines ?
   //---------------------------------------------------------------------------
   bool is_coincident_lines() const;
 
@@ -380,7 +380,7 @@ class vsol_conic_2d : public vsol_curve_2d, public vgl_conic<double>
   }
 
   //---------------------------------------------------------------------------
-  //: Return `this' if `this' is an conic, 0 otherwise
+  //: Return `this' if `this' is a conic, 0 otherwise
   //---------------------------------------------------------------------------
   virtual vsol_conic_2d const*cast_to_conic() const { return this; }
   virtual vsol_conic_2d *cast_to_conic() { return this; }

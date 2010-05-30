@@ -75,7 +75,7 @@ vgl_infinite_line_3d(vgl_point_3d<Type> const& p,
   // The intersection point
   vgl_vector_3d<Type> p0 = pv + k*t_, u, v;
   this->compute_uv_vectors(u, v);
-  // The location of the itersection point in plane coordinates can now be computed
+  // The location of the intersection point in plane coordinates can now be computed
   Type u0 = dot_product(u, p0), v0 = dot_product(v, p0);
   x0_.set(u0, v0);
 }

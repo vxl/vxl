@@ -15,9 +15,9 @@
 // \verbatim
 //  Modifications
 //   8/5/2008 Isabel Restrepo -Added template class bvxm_voxel_traits_mc<unsigned dim, unsigned modes>
-//                             This class is incharged of proper instantiation of multi-channel appereance model processor
+//                             This class is in charge of proper instantiation of multi-channel appearance model processor
 //                            -Added bvxm_voxel_traits<APM_MOG_MC_3_3> : public bvxm_voxel_traits_mc<3,3>,
-//                             Everytime an user needs an mog appereance model with unexisting dimension of number
+//                             Everytime an user needs an mog appearance model with unexisting dimension of number
 //                             of gaussian modes, it needs to add an entry in the enum and and new class that looks as follows
 //                             class bvxm_voxel_traits<APM_MOG_MC_DIM_MODES> : public bvxm_voxel_traits_mc<DIM,MODES> {};
 // \endverbatim
@@ -97,7 +97,7 @@ class bvxm_voxel_traits<OCCUPANCY_OPINION>
   static inline bool is_multibin() { return false; }
   static inline voxel_datatype initial_val() { return bvxm_opinion(0.005f);}
 };
-//: Voxel traits for a mixture of gaussian appereance model of grey-scale images
+//: Voxel traits for a mixture of gaussian appearance model of grey-scale images
 template<>
 class bvxm_voxel_traits<APM_MOG_GREY>
 {
@@ -117,7 +117,7 @@ class bvxm_voxel_traits<APM_MOG_GREY>
   }
 };
 
-//: Voxel traits for a mixture of gaussian appereance model of rgb images
+//: Voxel traits for a mixture of gaussian appearance model of rgb images
 template<>
 class bvxm_voxel_traits<APM_MOG_RGB>
 {
@@ -137,15 +137,15 @@ class bvxm_voxel_traits<APM_MOG_RGB>
   }
 };
 
-//: Initialize voxel traits for a mixture of gaussian appereance model of 2-d images, with 3 gaussian modes
+//: Initialize voxel traits for a mixture of gaussian appearance model of 2-d images, with 3 gaussian modes
 template<>
 class bvxm_voxel_traits<APM_MOG_MC_2_3> : public bvxm_voxel_traits_mc<2,3>{};
 
-//: Initialize voxel traits for a mixture of gaussian appereance model of 3-d images, with 3 gaussian modes
+//: Initialize voxel traits for a mixture of gaussian appearance model of 3-d images, with 3 gaussian modes
 template<>
 class bvxm_voxel_traits<APM_MOG_MC_3_3> : public bvxm_voxel_traits_mc<3,3>{};
 
-//: Initialize voxel traits for a mixture of gaussian appereance model of 4-d images, with 3 gaussian modes
+//: Initialize voxel traits for a mixture of gaussian appearance model of 4-d images, with 3 gaussian modes
 template<>
 class bvxm_voxel_traits<APM_MOG_MC_4_3> : public bvxm_voxel_traits_mc<4,3>{};
 
@@ -182,7 +182,6 @@ class bvxm_voxel_traits<LIDAR>
 template<>
 class bvxm_voxel_traits<FLOAT>
 {
-
  public:
   //:Datatype of the occupancy probabilities
   typedef bvxm_float_processor appearance_processor;
@@ -219,7 +218,6 @@ class bvxm_voxel_traits<TANGENT_POS>
 template<>
 class bvxm_voxel_traits<TANGENT_DIR>
 {
-
  public:
   typedef bvxm_von_mises_tangent_processor<float> tangent_processor;
   typedef bvxm_von_mises_tangent_processor<float>::dir_dist_t voxel_datatype;

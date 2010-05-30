@@ -4,7 +4,7 @@
 //:
 // \file
 // \brief  Ridge Detection
-// \author  jdfunaro, from matlab code by Amir Tamrakar, from Kalitzin etal PAMI 2001
+// \author  jdfunaro, from matlab code by Amir Tamrakar, from Kalitzin et al., PAMI 2001
 // \verbatim
 //  Modifications
 //   <none yet>
@@ -12,7 +12,7 @@
 
 #include <vil/vil_image_view.h>
 
-template <class T> 
+template <class T>
 void bil_detect_ridges( const vil_image_view<T>& Im,
                         float sigma,
                         float epsilon,

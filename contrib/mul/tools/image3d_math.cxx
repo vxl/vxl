@@ -5,7 +5,7 @@
 // \brief General Purpose Reverse Polish Notation image maths program.
 //
 // To add your own operations, add a function (e.g. plus__image_3d_of_float__image_3d_of_float),
-// and add a entry in operations::operations() to register your new operation.
+// and add an entry in operations::operations() to register your new operation.
 // That list of entries must be kept sorted.
 
 
@@ -608,7 +608,7 @@ void save__image_3d_of_int__string(opstack_t& s)
 }
 
 
-//: Load a image from an ascii matlab format - according to
+//: Load an image from an ASCII matlab format - according to
 void load_from_mat__string(opstack_t& s)
 {
   assert(s.size() >= 1);
@@ -700,7 +700,7 @@ void load_from_mat__string(opstack_t& s)
 }
 
 
-//: Save an int image to a ascii matlab format
+//: Save an int image to an ASCII matlab format
 void save_to_mat__image_3d_of_int__string(opstack_t& s)
 {
   assert(s.size() >= 2);
@@ -742,7 +742,7 @@ void save_to_mat__image_3d_of_int__string(opstack_t& s)
   s.pop_front();
 }
 
-//: Save a float image to a ascii matlab format
+//: Save a float image to an ASCII matlab format
 void save_to_mat__image_3d_of_float__string(opstack_t& s)
 {
   assert(s.size() >= 2);
@@ -786,7 +786,7 @@ void save_to_mat__image_3d_of_float__string(opstack_t& s)
 }
 
 
-//: Save a double image to a ascii matlab format
+//: Save a double image to an ASCII matlab format
 void save_to_mat__image_3d_of_double__string(opstack_t& s)
 {
   assert(s.size() >= 2);
@@ -1042,7 +1042,7 @@ void copy_coordinate_frame__image_3d_of_float__image_3d_of_float(opstack_t& s)
   vimt3d_image_3d_of<float> result;
   result.image().deep_copy(i_vox);
   result.world2im() = i_w2i;
- 
+
   s.pop_front();
   s.pop_front();
 

@@ -41,7 +41,7 @@ bool bvxm_ocp_compare_process(bprb_func_process& pro)
   // This process has 2 inputs:
   //input[0]: The voxel world for LIDAR ONLY update
   //input[1]: The voxel world for IMAGE ONLY update
-  //input[2]: Search neighbohood size
+  //input[2]: Search neighborhood size
   //input[3]: Scale of the voxel world
   if (pro.n_inputs()<n_inputs_)
   {
@@ -111,7 +111,7 @@ double bvxm_ocp_compare_process_gloabals::compare(bvxm_voxel_world_sptr w1,
   typedef bvxm_voxel_traits<LIDAR>::voxel_datatype lidar_datatype;
   typedef bvxm_voxel_traits<OCCUPANCY>::voxel_datatype ocp_datatype;
 
-  // get ocuppancy probability grids
+  // get occupancy probability grids
   bvxm_voxel_grid_base_sptr ocp_grid_base1 = w1->get_grid<OCCUPANCY>(0,scale);
   bvxm_voxel_grid<ocp_datatype> *ocp_grid1  = static_cast<bvxm_voxel_grid<lidar_datatype>*>(ocp_grid_base1.ptr());
   bvxm_voxel_grid<ocp_datatype>::const_iterator ocp_slab_it1 = ocp_grid1->begin();

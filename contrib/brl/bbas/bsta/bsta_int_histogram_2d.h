@@ -10,12 +10,15 @@
 //    which was a port from Targetjr.  Also borrowed from bsta_histogram.  Only the
 //    features needed for integer histograms of images with bucket_width = 1 are included.
 //    The class is defined to create a histogram with long int buckets (4 bytes).
+//
 //  Note that the 2D version is lacking some of the 1D methods because it isn't obvious
 //    that they would be of any use for a 2D histogram
+//
 //  The 2D histogram is a special case useful for isolating simularly colored regions
 //    of an image.  Probably not very generally useful to the vxl community.  But here
 //    it is anyway
-//  This is initally placed in contrib/jgl/bsta for now.  If others think it useful, it can be
+//
+//  This is initially placed in bbas/bsta for now.  If others think it useful, it can be
 //    moved to a permanent home later.
 //
 // \author James E. Green

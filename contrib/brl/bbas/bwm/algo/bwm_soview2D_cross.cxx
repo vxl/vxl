@@ -8,7 +8,7 @@ void bwm_soview2D_cross::draw() const
 
 #if 0
   glBegin(GL_LINES);
-  // horizantal lines of cross
+  // horizontal lines of cross
   glVertex2f(x-r_,y);
   glVertex2f(x-0.5,y);
   glVertex2f(x+0.5,y);

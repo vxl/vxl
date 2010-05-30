@@ -43,7 +43,7 @@ void mipa_vector_normaliser::config_from_stream(
 
 
 //=======================================================================
-//: Create a conrete mipa_vector_normaliser-derived object, from a text specification.
+//: Create a concrete mipa_vector_normaliser-derived object, from a text specification.
 vcl_auto_ptr<mipa_vector_normaliser>
   mipa_vector_normaliser::new_normaliser_from_stream(
     vcl_istream &is, const mbl_read_props_type &extra_props)

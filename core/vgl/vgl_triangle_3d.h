@@ -75,7 +75,7 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_triangle_intersection(
 
 //: Compute the intersection line of the given triangles
 //  \see vgl_triangle_3d_triangle_intersection()
-//  \note an intesection line is not computed for a coplanar intersection
+//  \note an intersection line is not computed for a coplanar intersection
 vgl_triangle_3d_intersection_t vgl_triangle_3d_triangle_intersection(
   const vgl_point_3d<double>& a_p1,
   const vgl_point_3d<double>& a_p2,

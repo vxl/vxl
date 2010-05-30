@@ -13,7 +13,7 @@ double vnl_adaptsimpson_integral::integral(vnl_integrant_fnct* f, double a,
   //set the function
   pfnct_ = f;
 
-  return adaptivesimpson(&vnl_adaptsimpson_integral::int_fnct_, a, b, acury, 0, deepth_);
+  return adaptivesimpson(&vnl_adaptsimpson_integral::int_fnct_, a, b, acury, 0, depth_);
 }
 
 double vnl_adaptsimpson_integral::adaptivesimpson(double(*f)(double*),

@@ -32,8 +32,8 @@ class mbl_sample_stats_1d
 
   ~mbl_sample_stats_1d();
 
-  //: Sets type of variance normalistation
-  // \param mvue if true (the dafault) the variance uses the "minimum variance unbiased estimator" which normalises by n_samples()-1
+  //: Sets type of variance normalisation
+  // \param mvue if true (the default) the variance uses the "minimum variance unbiased estimator" which normalises by n_samples()-1
   //             else will normalise the variance by n_samples()
   void set_use_mvue(bool b) { use_mvue_=b; }
 
@@ -66,7 +66,7 @@ class mbl_sample_stats_1d
   double nth_percentile(int n) const;
 
   //: Calculate a value at a specified quantile \a q.
-  // \param q Required quantile 0.0 <= q <= 1.0 
+  // \param q Required quantile 0.0 <= q <= 1.0
   // \note Linearly interpolates between the 2 sample values bracketing the specified quantile position.
   double quantile(double q) const;
 

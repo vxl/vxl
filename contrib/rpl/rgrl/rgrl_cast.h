@@ -57,7 +57,7 @@ class rgrl_cast
     assert ( ptr );
   }
 
-  //: Downcast a invariant feature object.
+  //: Downcast an invariant feature object.
   rgrl_cast( rgrl_invariant_sptr invariant )
   {
     ptr = dynamic_cast<ToType>( invariant.as_pointer() );
@@ -132,7 +132,7 @@ class rgrl_const_cast
     assert ( ptr );
   }
 
-  //: Downcast a invariant feature object.
+  //: Downcast an invariant feature object.
   rgrl_const_cast( rgrl_invariant_sptr const& invariant )
   {
     ptr = dynamic_cast<const ToType>( invariant.as_pointer() );

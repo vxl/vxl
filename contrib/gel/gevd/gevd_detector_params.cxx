@@ -71,7 +71,7 @@ void gevd_detector_params::InitParams(float smooth_sigma, float noise_w,
   cycle = cyc;
   ndimension = ndim;
   // The remaining parameters are set according to the state of
-  // Agressive junction closure.  If the value is <0 then the
+  // Aggressive junction closure.  If the value is <0 then the
   // state of junction parameters is derived from the constructor
   // arguments.  If the value is >0 then the variable is assumed to
   // be a bool and the parameters are determined from computation.

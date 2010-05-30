@@ -36,7 +36,7 @@ namespace
 {
   vgui_easy2D_tableau_sptr create_tableau()
   {
-    // Put the image.tableau into a easy2D tableau
+    // Put the image.tableau into an easy2D tableau
     vgui_easy2D_tableau_new easy2D;
 
     // Add a point, line, and infinite line

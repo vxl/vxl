@@ -12,7 +12,7 @@
 
 #include <vgl/vgl_point_2d.h>
 //:
-// There are several algorithms useful when determining which geografical regions
+// There are several algorithms useful when determining which geographical regions
 // are covered by a set of cameras. This class contains a set of algorithms that
 // provides such answer in different ways.
 class vpgl_nitf_camera_coverage
@@ -21,11 +21,11 @@ class vpgl_nitf_camera_coverage
    vpgl_nitf_camera_coverage() {}
   ~vpgl_nitf_camera_coverage() {}
 
- //: Saves to an input file, the filenames of the NITF images which contain the specified geografic position.
- //  The inputs to this function are: A vector of vgl_point_3d<double> with the
- //  geographic points of interest (x-longitude, y-latitud, z-elevation). The filename of a
- //  file containing a list of NITF images to go through. A filename to write the image for which
- //  the points projects within the image
+  //: Saves, to an input file, the filenames of the NITF images which contain the specified geographic position.
+  //  The inputs to this function are:
+  //   * A vector of vgl_point_3d<double> with the geographic points of interest (x-longitude, y-latitude, z-elevation).
+  //   * The filename of a file containing a list of NITF images to go through.
+  //   * A filename to write the image for which the points project within the image
   static bool coverage_list(vcl_vector<vgl_point_2d<double> > geo_pts,
                             vcl_string camera_list,
                             vcl_string img_coverage_list);

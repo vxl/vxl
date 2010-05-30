@@ -1,7 +1,7 @@
 #include "mfpf_norm_corr2d.h"
 //:
 // \file
-// \brief Searches over a grid using normalised correllation
+// \brief Searches over a grid using normalised correlation
 // \author Tim Cootes
 
 #include <vsl/vsl_binary_loader.h>
@@ -109,8 +109,8 @@ bool mfpf_norm_corr2d::set_model(const vcl_vector<double>& v)
 
 //: Number of dimensions in the model
 unsigned mfpf_norm_corr2d::model_dim()
-{ 
-  return kernel_.ni()*kernel_.nj(); 
+{
+  return kernel_.ni()*kernel_.nj();
 }
 
 //: Filter kernel to search with, expressed as a vector
@@ -172,10 +172,10 @@ static void normalize(vil_image_view<double>& im)
 
   assert(!vnl_math_isnan(sum));
 
-  if (ss<1e-6) 
+  if (ss<1e-6)
   {
-    vcl_cerr<<"Warning: Almost flat region in mfpf_norm_corr2d_builder\n"
-            <<"         Size: "<<ni<<" x "<<nj<<vcl_endl;
+    vcl_cerr << "Warning: Almost flat region in mfpf_norm_corr2d_builder\n"
+             << "         Size: "<<ni<<" x "<<nj<<vcl_endl;
   }
 
   // Normalise so that im has zero mean and unit sum of squares.
@@ -193,7 +193,7 @@ void mfpf_norm_corr2d::get_sample_vector(const vimt_image_2d_of<float>& image,
                                          vcl_vector<double>& v)
 {
   assert(image.image().size()>0);
-    
+
   vgl_vector_2d<double> u1=step_size_*u;
   vgl_vector_2d<double> v1(-u1.y(),u1.x());
 
@@ -264,7 +264,7 @@ double mfpf_norm_corr2d::evaluate(const vimt_image_2d_of<float>& image,
 }
 
 //: Evaluate match at in a region around p
-// Returns a qualtity of fit at a set of positions.
+// Returns a quality of fit at a set of positions.
 // response image (whose size and transform is set inside the
 // function), indicates the points at which the function was
 // evaluated.  response(i,j) is the fit at the point
@@ -328,7 +328,7 @@ void mfpf_norm_corr2d::evaluate_region(
 
 //: Search given image around p, using u to define scale and angle
 //  On exit, new_p defines position of the best nearby match.
-//  Returns a qualtity of fit measure at that
+//  Returns a quality of fit measure at that
 //  point (the smaller the better).
 double mfpf_norm_corr2d::search_one_pose(
                         const vimt_image_2d_of<float>& image,
@@ -457,8 +457,7 @@ void mfpf_norm_corr2d::print_summary(vcl_ostream& os) const
 {
   os<<"{  size: "<<kernel_.ni()<<" x "<<kernel_.nj();
   mfpf_point_finder::print_summary(os);
-  os<<" overlap_f: "<<overlap_f_;
-  os<<" }";
+  os<<" overlap_f: "<<overlap_f_<<" }";
 }
 
 void mfpf_norm_corr2d::b_write(vsl_b_ostream& bfs) const

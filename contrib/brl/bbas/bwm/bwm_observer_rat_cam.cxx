@@ -61,7 +61,7 @@ bwm_observer_rat_cam::bwm_observer_rat_cam(bgui_image_tableau_sptr img,
 
   // LOAD CAMERA
   // check if the camera path is not empty, if it is NITF, the camera
-  // info is in the image, not a seperate file
+  // info is in the image, not a separate file
   if (cam_path.size() == 0)
   {
     bwm_utils::show_error("Camera tableaus need a valid camera path!");
@@ -318,7 +318,8 @@ void bwm_observer_rat_cam::adjust_camera_offset(vsol_point_2d_sptr img_point)
         img_point->x() - image_pt.x() <<", " <<
         image_pt.y() - image_pt.y() <<"]\n";
       cam_adjusted_ = true;
-    }else {
+    }
+    else {
       vcl_cerr << " error shifting camera offset\n";
     }
   }
@@ -392,7 +393,8 @@ void bwm_observer_rat_cam::save_all()
     bwm_observable_sptr o = it->first;
     if (use_lvcs) {
       o->save(fullpath.str().data(),lvcs_);
-    } else {
+    }
+    else {
       o->save(fullpath.str().data());
     }
     it++;
@@ -591,7 +593,7 @@ void bwm_observer_rat_cam::save_kml_collada()
 
   params.field("model name",model_name);
   params.field("ground height",ground_height);
-  params.field("lattitude offset",lat_offset);
+  params.field("latitude offset",lat_offset);
   params.field("longitude offset",lon_offset);
 
   params.file("Save...",ext,kmz_dir);
@@ -1029,7 +1031,7 @@ vcl_string bwm_observer_rat_cam::select_file()
 
   if (file == "") {
     vgui_dialog error ("Error");
-    error.message ("Please specify a input file (prefix)." );
+    error.message ("Please specify an input file (prefix)." );
     error.ask();
     return empty;
   }

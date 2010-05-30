@@ -35,7 +35,7 @@ bool brip_line_generator::generate(bool& init, float xs, float ys,
   {
     x += (float)0.5*xinc;
     y += (float)0.5*yinc;
-    //Check to see if we have finshed the span
+    //Check to see if we have finished the span
     int xc = int(x), yc = int(y);
     bool passed_xe = ((xinc>=0)&&(xc>x1))||((xinc<0)&&(xc<x1));
     bool passed_ye = ((yinc>=0)&&(yc>y1))||((yinc<0)&&(yc<y1));

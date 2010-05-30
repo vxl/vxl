@@ -96,7 +96,7 @@ class mfpf_pose
     return mfpf_pose(p1,u1);
   }
 
-  //: Return pose appling inverse of this pose
+  //: Return pose applying inverse of this pose
   mfpf_pose inverse() const
   {
     vgl_point_2d<double> p1 = apply_inverse(0,0);

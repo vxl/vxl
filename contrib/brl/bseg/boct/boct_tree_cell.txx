@@ -96,7 +96,7 @@ boct_tree_cell<T_loc,T_data>* boct_tree_cell<T_loc,T_data>::clone(boct_tree_cell
 }
 
 
-//: Clones a cell if it intesects a region
+//: Clones a cell if it intersects a region
 template<class T_loc,class T_data>
 boct_tree_cell<T_loc,T_data>* boct_tree_cell<T_loc,T_data>::clone_and_intersect(boct_tree_cell<T_loc,T_data>* parent,
                                                                                 vgl_box_3d<double> local_crop_box,
@@ -122,7 +122,8 @@ boct_tree_cell<T_loc,T_data>* boct_tree_cell<T_loc,T_data>::clone_and_intersect(
         delete c;
       }
     }
-  } else{
+  }
+  else {
     cell->data_ = T_data();
     cell->parent_ = parent;
     cell->children_ = NULL;
@@ -131,7 +132,7 @@ boct_tree_cell<T_loc,T_data>* boct_tree_cell<T_loc,T_data>::clone_and_intersect(
 }
 
 
-//: Clones and shifts a cell if it intesects a region
+//: Clones and shifts a cell if it intersects a region
 template<class T_loc,class T_data>
 boct_tree_cell<T_loc,T_data>* boct_tree_cell<T_loc,T_data>::clone_and_intersect(boct_tree_cell<T_loc,T_data>* parent,
                                                                                 boct_loc_code<T_loc> *shift_code,

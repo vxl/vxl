@@ -1,7 +1,7 @@
 #include "mfpf_norm_corr1d.h"
 //:
 // \file
-// \brief Searches along a profile using normalised correllation
+// \brief Searches along a profile using normalised correlation
 // \author Tim Cootes
 
 #include <vsl/vsl_binary_loader.h>
@@ -64,8 +64,8 @@ void mfpf_norm_corr1d::set(int ilo, int ihi, const vnl_vector<double>& k)
 
 //: Number of dimensions in the model
 unsigned mfpf_norm_corr1d::model_dim()
-{ 
-  return kernel_.size(); 
+{
+  return kernel_.size();
 }
 
 //: Radius of circle containing modelled region
@@ -107,7 +107,7 @@ double mfpf_norm_corr1d::evaluate(const vimt_image_2d_of<float>& image,
 }
 
 //: Evaluate match at in a region around p
-// Returns a qualtity of fit at a set of positions.
+// Returns a quality of fit at a set of positions.
 // response image (whose size and transform is set inside the
 // function), indicates the points at which the function was
 // evaluated.  response(i,j) is the fit at the point
@@ -145,7 +145,7 @@ void mfpf_norm_corr1d::evaluate_region(
 
 //: Search given image around p, using u to define scale and orientation
 //  On exit, new_p and new_u define position, scale and orientation of
-//  the best nearby match.  Returns a qualtity of fit measure at that
+//  the best nearby match.  Returns a quality of fit measure at that
 //  point (the smaller the better).
 double mfpf_norm_corr1d::search_one_pose(
                                 const vimt_image_2d_of<float>& image,

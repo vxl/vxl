@@ -882,7 +882,7 @@ macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 // vil_image_view<float> input =
 //   vil_convert_to_grey_using_average(vil_load(filename), float());
 // \endcode
-// If you have a image_view of known pixel_type then you should use one of
+// If you have an image_view of known pixel_type then you should use one of
 // the other vil_convert functions.
 // The output may be a reconfigured view of the input.
 // \deprecated Use other vil_convert_to_grey_using_average()

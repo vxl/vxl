@@ -98,7 +98,7 @@ bool bocl_manager<T>::initialize_cl()
     }
   }
   // get an available GPU device from the the platform
-  // should we be using all if more than one avaiable?
+  // should we be using all if more than one available?
 
   if (!gpu_found && !cpu_found)
     return false;
@@ -274,6 +274,7 @@ bool bocl_manager<T>::initialize_cl()
     vcl_cout << " Device id [" << id << "]: " << devices_[id] << '\n';
   return true;
 }
+
 template<class T>
 bool bocl_manager<T>::load_kernel_source(vcl_string const& path)
 {

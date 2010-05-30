@@ -935,7 +935,7 @@ void segv_vil_segmentation_manager::vd_edges()
   vd_dialog.field("Gaussian sigma", dp.smooth);
   vd_dialog.field("Noise Threshold", nm);
   vd_dialog.checkbox("Automatic Threshold", dp.automatic_threshold);
-  vd_dialog.checkbox("Agressive Closure", agr);
+  vd_dialog.checkbox("Aggressive Closure", agr);
   vd_dialog.checkbox("Compute Junctions", dp.junctionp);
   if (!vd_dialog.ask())
     return;
@@ -972,7 +972,7 @@ void segv_vil_segmentation_manager::fit_lines()
   lf_dialog.field("Gaussian sigma", dp.smooth);
   lf_dialog.field("Noise Threshold", nm);
   lf_dialog.checkbox("Automatic Threshold", dp.automatic_threshold);
-  lf_dialog.checkbox("Agressive Closure", agr);
+  lf_dialog.checkbox("Aggressive Closure", agr);
   lf_dialog.checkbox("Compute Junctions", dp.junctionp);
   lf_dialog.field("Min Fit Length", flp.min_fit_length_);
   lf_dialog.field("RMS Distance", flp.rms_distance_);
@@ -1023,7 +1023,7 @@ void segv_vil_segmentation_manager::fit_conics()
   lf_dialog.field("Gaussian sigma", dp.smooth);
   lf_dialog.field("Noise Threshold", nm);
   lf_dialog.checkbox("Automatic Threshold", dp.automatic_threshold);
-  lf_dialog.checkbox("Agressive Closure", agr);
+  lf_dialog.checkbox("Aggressive Closure", agr);
   lf_dialog.checkbox("Compute Junctions", dp.junctionp);
   lf_dialog.field("Min Fit Length", fcp.min_fit_length_);
   lf_dialog.field("RMS Distance", fcp.rms_distance_);
@@ -1092,7 +1092,7 @@ void segv_vil_segmentation_manager::fit_overlay_conics()
   lf_dialog.field("Gaussian sigma", dp.smooth);
   lf_dialog.field("Noise Threshold", nm);
   lf_dialog.checkbox("Automatic Threshold", dp.automatic_threshold);
-  lf_dialog.checkbox("Agressive Closure", agr);
+  lf_dialog.checkbox("Aggressive Closure", agr);
   lf_dialog.checkbox("Compute Junctions", dp.junctionp);
   lf_dialog.field("Min Fit Length", fcp.min_fit_length_);
   lf_dialog.field("RMS Distance", fcp.rms_distance_);
@@ -1182,12 +1182,12 @@ void segv_vil_segmentation_manager::project_points()
   }
   //cast to an nitf2_image
 
-  static double lat=32.722;  // Lattitude
+  static double lat=32.722;  // Latitude
   static double lon=-117.15; // Longitude
   static double elev=43;     // Elevation
 
   vgui_dialog lf_dialog("Project Points");
-  lf_dialog.field("Lattitude", lat);
+  lf_dialog.field("Latitude", lat);
   lf_dialog.field("Longitude", lon);
   lf_dialog.field("Elevation", elev);
 
@@ -1222,7 +1222,7 @@ void segv_vil_segmentation_manager::regions()
   region_dialog.field("Gaussian sigma", dp.smooth);
   region_dialog.field("Noise Threshold", nm);
   region_dialog.checkbox("Automatic Threshold", dp.automatic_threshold);
-  region_dialog.checkbox("Agressive Closure", agr);
+  region_dialog.checkbox("Aggressive Closure", agr);
   region_dialog.checkbox("Compute Junctions", dp.junctionp);
   region_dialog.checkbox("Debug", debug);
   region_dialog.checkbox("Residual Image", residual);

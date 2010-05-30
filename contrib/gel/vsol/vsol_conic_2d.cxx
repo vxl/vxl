@@ -165,7 +165,7 @@ vsol_conic_2d::vsol_conic_type vsol_conic_2d::real_type() const
 }
 
 //---------------------------------------------------------------------------
-//: Is `this' an real ellipse ?
+//: Is `this' a real ellipse ?
 //---------------------------------------------------------------------------
 bool vsol_conic_2d::is_real_ellipse() const
 {
@@ -215,7 +215,7 @@ bool vsol_conic_2d::is_hyperbola() const
 }
 
 //---------------------------------------------------------------------------
-//: Is `this' an real intersecting lines ?
+//: Is `this' a pair of real intersecting lines ?
 //---------------------------------------------------------------------------
 bool vsol_conic_2d::is_real_intersecting_lines() const
 {
@@ -223,7 +223,7 @@ bool vsol_conic_2d::is_real_intersecting_lines() const
 }
 
 //---------------------------------------------------------------------------
-//: Is `this' an complex intersecting lines ?
+//: Is `this' a pair of complex intersecting lines ?
 //---------------------------------------------------------------------------
 bool vsol_conic_2d::is_complex_intersecting_lines() const
 {
@@ -231,7 +231,7 @@ bool vsol_conic_2d::is_complex_intersecting_lines() const
 }
 
 //---------------------------------------------------------------------------
-//: Is `this' an coincident lines ?
+//: Is `this' a pair of coincident lines ?
 //---------------------------------------------------------------------------
 bool vsol_conic_2d::is_coincident_lines() const
 {
@@ -369,7 +369,7 @@ void vsol_conic_2d::parabola_parameters(double & /* cx */,
 
   // Note that for a parabola B*B == 4*A*C, hence the quadratic part
   // of the equation is a square: (nX+mY)^2, with n=sqrt(A), m=sqrt(C)
-  // Hence norm cannot be zero since the parabola is not degererate:
+  // Hence norm cannot be zero since the parabola is not degenerate:
   const double norm=a()+c();
   // The parabola direction is then (-m,n):
   cosphi=-vcl_sqrt(c()/norm);
@@ -553,7 +553,8 @@ vsol_conic_2d::closest_point_on_curve(vsol_point_2d_sptr const& pt) const
   if (b()==0 && a()==c()) {
     // this ellipse is a circle ==> degenerate hyperbola (line + line at infinity)
     candidates = intersection(vsol_line_2d(midpoint(),pt));
-  } else {
+  }
+  else {
     // Non-degenerate hyperbola:
     vsol_conic_2d conic(b()/2,
                         c()-a(),

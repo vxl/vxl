@@ -19,7 +19,7 @@
 //  associated region. Regions are isolated by a boundary with a unique (0)
 //  label.
 //
-//  Region growth is managed by a priority queue. Neigborhing pixels to each
+//  Region growth is managed by a priority queue. Neighboring pixels to each
 //  seed are inserted in the queue to get the process started. When a new pixel
 //  is added to the region, its unlabeled neighbors are added to the queue.
 //

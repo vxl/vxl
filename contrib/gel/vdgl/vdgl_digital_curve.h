@@ -77,7 +77,7 @@ class vdgl_digital_curve : public vsol_curve_2d
   virtual vdgl_digital_curve const*cast_to_vdgl_digital_curve()const{return this;}
   virtual vdgl_digital_curve *cast_to_vdgl_digital_curve() {return this;}
 
- private: // has been superceeded by is_a()
+ private: // has been superseded by is_a()
   //: Return the curve type
   virtual vsol_curve_2d_type curve_type() const { return vsol_curve_2d::DIGITAL_CURVE; }
 

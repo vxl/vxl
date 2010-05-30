@@ -2,7 +2,7 @@
 #define brct_plane_sweeper_h_
 //:
 // \file
-// \brief Sweep a x-y plane and compute correllation and point matches.
+// \brief Sweep a x-y plane and compute correlation and point matches.
 //
 //  The goal is to compute 3-d points from a stereo pair. It is assumed
 //  that homographies for two planes (z=0 and z=z0) are available.  These

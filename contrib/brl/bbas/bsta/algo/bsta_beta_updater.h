@@ -55,7 +55,7 @@ void bsta_update_beta(bsta_beta<T>& beta_dist, T rho, const T& sample )
   //T beta=(1-new_mean)*t;
 
   if (alpha<1 && beta <1)
-    vcl_cout<<"Mean : "<<new_mean<< "  Var: "<<new_var<<"\n";
+    vcl_cout<<"Mean : "<<new_mean<< "  Var: "<<new_var<<'\n';
   beta_dist.set_alpha_beta(alpha, beta);
 }
 
@@ -138,7 +138,7 @@ class bsta_mix_beta_updater
   bsta_mix_beta_updater(const dist_& model, T thresh,  T var, unsigned int max_cmp = 5)
    : init_dist_(model,T(1)), max_components_(max_cmp), p_thresh_(thresh), var_(var) {}
 
-  //: for compatiblity with vpdl/vpdt
+  //: for compatibility with vpdl/vpdt
   typedef typename dist_::field_type field_type;
   typedef mix_dist_ distribution_type;
 

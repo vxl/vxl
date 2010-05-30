@@ -18,7 +18,7 @@
 // The matcher is the classic approach where a set of step edges is computed
 // for a model and then projected via a 3-d plane onto a search image. Only
 // edges that are within a tolerance on orientation are considered to be
-// eligble for a match. The test for a match is based on a histogram of
+// eligible for a match. The test for a match is based on a histogram of
 // distances between eligible edges in the model and the search segmentations.
 // There is a minimum acceptable cumulative probability of edges lying within
 // the distance threshold, to produce a successful match.

@@ -2,7 +2,7 @@
 #include "pdf1d_epanech_kernel_pdf_sampler.h"
 //:
 // \file
-// \brief Implements sampling for a Epanechnikov kernel PDF
+// \brief Implements sampling for an Epanechnikov kernel PDF
 // \author Ian Scott
 
 //=======================================================================

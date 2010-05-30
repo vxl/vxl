@@ -141,7 +141,7 @@ class vgui_tableau : public vgui_parent_child_link_data
   //  go and override it.
   virtual void post_redraw();
 
-  //: Post a overlay-redraw event.
+  //: Post an overlay-redraw event.
   //  The fact that this is virtual does not imply that you should
   //  go and override it.
   virtual void post_overlay_redraw();

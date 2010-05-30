@@ -9,7 +9,7 @@
 // .FILE osl_ortho_regress.cxx
 //
 // .SECTION Description
-// A osl_ortho_regress object performs least-squares
+// An osl_ortho_regress object performs least-squares
 // fitting of straight lines to point sets.
 //
 // Internally, the object maintains only the moments

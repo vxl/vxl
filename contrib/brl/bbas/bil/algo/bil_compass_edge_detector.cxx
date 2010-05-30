@@ -408,7 +408,7 @@ void compute_strength_and_orient(double* dist, int n_orient, float& strength, do
     strength = float(a + x*(c - b)/(2*wedgesize) + x*x*d/(2*wedgesize*wedgesize));
     orientation = vcl_fmod(maxEMDori + x + 2*vnl_math::pi, vnl_math::pi);
   }
-  else { // Uncertainty abounds
+  else { // Uncertainty bounds
     strength = float(a);
     orientation = maxEMDori;
   }

@@ -18,12 +18,12 @@
 // \endverbatim
 
 //: A class to generate kernels of the xx second derivative of gaussian. i.e. the first entry of the Hessian
-// This kernel can be constructed from 2 sigma values or 3 sigma values. In the fisrt case the kernel
-// will be an spheroid because 2 of the radii are equal. In such case the kernel is completely
-// decribed by a axis of rotation (which is aligned with the non-equal radii) and two variance parameters, sigma1 and sigma2
-// In the second case when all 3 sigmas are different then the gaussian kernel is a "triaxial ellipsoide" and it is
+// This kernel can be constructed from 2 sigma values or 3 sigma values. In the first case the kernel
+// will be a spheroid because 2 of the radii are equal. In such case the kernel is completely
+// described by an axis of rotation (which is aligned with the non-equal radii) and two variance parameters, sigma1 and sigma2
+// In the second case when all 3 sigmas are different then the gaussian kernel is a "triaxial ellipsoid" and it is
 // determined by axis of rotation, angle of rotation about such axis, sigma1, sigma2, sigma3.
-// The case of an isotropic has not been implemented becuase is it not needed at the moment, but the code is reusable for such case
+// The case of an isotropic has not been implemented because is it not needed at the moment, but the code is reusable for such case
 class bvpl_gauss3d_xx_kernel_factory : public bvpl_kernel_factory
 {
  public:

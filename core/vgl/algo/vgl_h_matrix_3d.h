@@ -88,7 +88,7 @@ class vgl_h_matrix_3d
 
   // ---------- extract components as transformations ----------
 
-  //: corresponds to rotation for Euclidan transformations
+  //: corresponds to rotation for Euclidean transformations
   vgl_h_matrix_3d<T> get_upper_3x3() const;
   vnl_matrix_fixed<T, 3,3> get_upper_3x3_matrix() const;
 

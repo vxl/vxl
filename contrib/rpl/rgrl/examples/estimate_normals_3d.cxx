@@ -3,7 +3,7 @@
 // The program reads in a set of 3D points and approximate the normal
 // directions at these points.
 //
-// At each point, a set of neighboring points (size=5) are extraced,
+// At each point, a set of neighboring points (size=5) are extracted,
 // and a plane is fit by minimizing the orthogonal distances of the
 // point set to the plane.
 //

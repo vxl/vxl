@@ -3,7 +3,7 @@
 //:
 // \file
 // \brief  locational code for octree.
-// The code is stored seperately from x, y and z dimensions.
+// The code is stored separately from x, y and z dimensions.
 // In that sense, it is similar or biTree in each dimension.
 //
 // \author Gamze Tunali
@@ -28,9 +28,9 @@ class boct_loc_code
   //: copy constructor
   boct_loc_code(const boct_loc_code& rhs);
 
-  //: Constructor from a poin, the root level of a tree (num_levels -1) 
+  //: Constructor from a poin, the root level of a tree (num_levels -1)
   boct_loc_code(vgl_point_3d<double> p, short root_level);
-  
+
   //: Constructor from a poin, the root level of a tree (num_levels -1) and a max_val( 2^(root_level)
   boct_loc_code(vgl_point_3d<double> p, short root_level, double max_val);
 
@@ -51,7 +51,7 @@ class boct_loc_code
 
   //: returns the XOR of the locational codes of this and b
   boct_loc_code * XOR(boct_loc_code * b);
-  
+
   //: returns the AND of the locationall codes of this and b
   boct_loc_code * AND(boct_loc_code *b);
 
@@ -71,10 +71,12 @@ class boct_loc_code
   short level;
 
   inline bool operator==(boct_loc_code<T>const& code) const
-    {
-      return (code.x_loc_==x_loc_&&code.y_loc_==y_loc_&&code.z_loc_==z_loc_&&
-        code.level == level);
-    }
+  {
+    return code.x_loc_ == x_loc_
+        && code.y_loc_ == y_loc_
+        && code.z_loc_ == z_loc_
+        && code.level  == level;
+  }
 };
 
 template<class T>

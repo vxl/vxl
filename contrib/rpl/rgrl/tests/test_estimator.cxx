@@ -220,7 +220,7 @@ static  vnl_random random;
         rgrl_estimator_sptr est = new rgrl_est_affine();
         TEST("Estimator type is correct", bool( (est->transformation_type()==rgrl_trans_affine::type_id())!=0 ), true );
         rgrl_transformation_sptr trans = est->estimate( ms, null3d_trans );
-        TEST("Underconstrained (not enough correspondences)", trans, false);
+        TEST("Underconstrained (not enough correspondences)", !trans, true);
         if ( trans ) {
           rgrl_trans_affine* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
           vcl_cout << "Estimated (shouldn't have):\nA=\n"<<aff_trans->A()<<"\nt="<<aff_trans->t()<<'\n';
@@ -235,7 +235,7 @@ static  vnl_random random;
         }
 
         rgrl_transformation_sptr trans = rgrl_est_affine().estimate( ms, null3d_trans );
-        TEST("Underconstrained (samples not independent)", trans, false);
+        TEST("Underconstrained (samples not independent)", !trans, true);
         if ( trans ) {
           rgrl_trans_affine* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
           vcl_cout << "Estimated (shouldn't have):\nA=\n"<<aff_trans->A()<<"\nt="<<aff_trans->t()<<'\n';
@@ -551,7 +551,7 @@ static  vnl_random random;
         }
 
         rgrl_transformation_sptr trans = rgrl_est_affine().estimate( ms, null2d_trans );
-        TEST("Underconstrained (not enough correspondences)", trans, false);
+        TEST("Underconstrained (not enough correspondences)", !trans, true);
         if ( trans ) {
           rgrl_trans_affine* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
           vcl_cout << "Estimated (shouldn't have):\nA=\n"<<aff_trans->A()<<"\nt="<<aff_trans->t()<<'\n';
@@ -566,7 +566,7 @@ static  vnl_random random;
         }
 
         rgrl_transformation_sptr trans = rgrl_est_affine().estimate( ms, null2d_trans );
-        TEST("Underconstrained (samples not independent)", trans, false);
+        TEST("Underconstrained (samples not independent)", !trans, true);
         if ( trans ) {
           rgrl_trans_affine* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
           vcl_cout << "Estimated (shouldn't have):\nA=\n"<<aff_trans->A()<<"\nt="<<aff_trans->t()<<'\n';
@@ -1067,7 +1067,7 @@ static  vnl_random random;
 
     vcl_vector< vnl_vector<double> > pts;
     vnl_vector<double> from_pt( dim );
-    // generateing points in roi
+    // generating points in roi
     for ( unsigned i=0; i<num_data_pts; ++i ) {
       for ( unsigned j=0; j<dim; ++j ) {
         from_pt[j] = random.drand32(m1[j], m2[j]);

@@ -148,12 +148,12 @@ class vgui_soview2D_group : public vgui_soview2D
 
   //: Destructor - responsible for deleting 2D soview objects
   //  In current design, Easy2D tableau is responsible for cleaning up
-  //  soview objects. To avoid memory leak when using this group class, 
-  //  clean up the soview objects in the descructor.
-  //  It is hard to be nice & clean, unless smart ptr is introduced. 
+  //  soview objects. To avoid memory leak when using this group class,
+  //  clean up the soview objects in the destructor.
+  //  It is hard to be nice & clean, unless smart ptr is introduced.
   //  GY
   virtual ~vgui_soview2D_group();
-  
+
   //: Set the style (colour, line width, etc) for this 2D soview group.
   virtual void set_style(const vgui_style_sptr&);
 
@@ -229,7 +229,7 @@ class vgui_soview2D_circle : public vgui_soview2D
   //: Constructor - creates a circle with radius r, centered at (x,y)
   vgui_soview2D_circle( float x_, float y_, float r_ )
     : r(r_), x(x_), y(y_)  {  }
-  
+
   //: Render this 2D circle on the display.
   virtual void draw() const;
 

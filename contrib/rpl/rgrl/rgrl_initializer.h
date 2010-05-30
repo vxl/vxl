@@ -26,7 +26,7 @@ class rgrl_initializer
  public:
   rgrl_initializer() : use_prior_scale_from_match_(true)
   {   }
-  
+
   virtual ~rgrl_initializer();
 
   //: Get next initial view.
@@ -39,7 +39,7 @@ class rgrl_initializer
   virtual bool next_initial( rgrl_view_sptr           & view,
                              rgrl_scale_sptr          & prior_scale) = 0;
 
-  //: Get next set of initial iniformation without the notion of a view.
+  //: Get next set of initial information without the notion of a view.
   //
   bool next_initial( rgrl_mask_sptr           & from_image_roi,
                      rgrl_mask_sptr           & to_image_roi,
@@ -70,11 +70,11 @@ class rgrl_initializer
   //  scale == 0   scale pointer is NULL, which indicates to use unwgted scale estimate
   //  scale < 0    use whatever scale set by the match
   void set_prior_geometric_scale( double scale );
-  
+
   //: return number of initializations
   //  -1 stands for unknown
   virtual int size() const = 0;
-  
+
   // Defines type-related functions
   rgrl_type_macro( rgrl_initializer, rgrl_object );
 

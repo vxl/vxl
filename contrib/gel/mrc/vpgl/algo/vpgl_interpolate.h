@@ -9,7 +9,7 @@
 //
 // \verbatim
 //  Modifications
-//   Jun 22, 2009  I. Eden Added the method: interpolate_next 
+//   Jun 22, 2009  I. Eden Added the method: interpolate_next
 // \endverbatim
 
 #include <vcl_vector.h>
@@ -43,7 +43,7 @@ class vpgl_interpolate
   //                    |r|         |r|*|r|
   //  \endverbatim
   //
-  // where r is a skew-symmetric matric matrix formed from a vector, v as,
+  // where r is a skew-symmetric matrix formed from a vector, v as,
   //  \verbatim
   //        _             _
   //       |  0   -vz   vy |
@@ -108,7 +108,7 @@ class vpgl_interpolate
                           unsigned n_between,
                           vcl_vector<vpgl_perspective_camera<double> >& cams);
 
-  //:Linearly interpolate (or extrapolate if abs(alpha) > 1) a rotation 
+  //:Linearly interpolate (or extrapolate if abs(alpha) > 1) a rotation
   // Using the Lie algebra about R0, the interpolated rotation = R0 + alpha*(R1 - R0)
   static vnl_double_3x3 interpolateR(double alpha, vnl_double_3x3 R0, vnl_double_3x3 R1);
 

@@ -38,7 +38,7 @@ class brip_max_scale_response
   //: A pyramid from a base image with scales according to this->scales()
   vcl_vector<vil_image_view<T> > image_pyramid(vil_image_view<T> const& base);
 
-  //: a single image with the natual scale at each pixel
+  //: a single image with the natural scale at each pixel
   vil_image_view<float> scale_base();
 
   //: a pyramid of natural scales at each pixel

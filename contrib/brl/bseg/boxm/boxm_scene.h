@@ -51,7 +51,7 @@ class boxm_scene :public boxm_scene_base
              const bool save_internal_nodes_ = false,
              const bool save_platform_independent_ = true);
 
-  //: Constructor when lvcs is not avialable. World origin, block dimensions and number of blocks
+  //: Constructor when lvcs is not available. World origin, block dimensions and number of blocks
   boxm_scene( const vgl_point_3d<double>& origin,
               const vgl_vector_3d<double>& block_dim,
               const vgl_vector_3d<unsigned>& world_dim,

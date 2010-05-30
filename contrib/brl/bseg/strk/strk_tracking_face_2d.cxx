@@ -1202,7 +1202,7 @@ compute_color_joint_entropy(strk_tracking_face_2d_sptr const& other,
 //     MI(this:obs, this:model)-MI(this:obs, other:model)
 //
 //  the stored model intensity information from the other face
-//  is compared with the observation intensites of *this face.  It is
+//  is compared with the observation intensities of *this face.  It is
 //  assumed that there is no intersection of the two pixel sets.
 //
 //  The other face has been constructed on the current image

@@ -20,7 +20,7 @@
 // The well-known square function
 static inline double square(double x) { return x * x; }
 
-//: returns the vertex (x,y) values of a 2D polygon in seperate x and y arrays
+//: returns the vertex (x,y) values of a 2D polygon in separate x and y arrays
 void bwm_algo::get_vertices_xy(vsol_polygon_2d_sptr poly2d,
                                float **x, float **y)
 {
@@ -34,7 +34,7 @@ void bwm_algo::get_vertices_xy(vsol_polygon_2d_sptr poly2d,
   }
 }
 
-//: returns the vertex (x,y) values of a 2D polygon in seperate x and y arrays
+//: returns the vertex (x,y) values of a 2D polygon in separate x and y arrays
 void bwm_algo::get_vertices_xy(vsol_polygon_2d_sptr poly2d,
                                double **x, double **y)
 {
@@ -48,7 +48,7 @@ void bwm_algo::get_vertices_xy(vsol_polygon_2d_sptr poly2d,
   }
 }
 
-//: returns the vertex (x,y) values of a 2D polygon in seperate x and y arrays
+//: returns the vertex (x,y) values of a 2D polygon in separate x and y arrays
 void bwm_algo::get_vertices_xy(vsol_polyline_2d_sptr poly2d,
                                float **x, float **y)
 {
@@ -92,7 +92,8 @@ vsol_polygon_3d_sptr bwm_algo::move_points_to_plane(vsol_polygon_3d_sptr polygon
   //fitter.fit();
 
   plane = fitter.get_plane();
-  } else {
+  }
+  else {
     vcl_cout << "NO FITTING" << vcl_endl;
     return 0;
   }
@@ -127,7 +128,8 @@ vsol_polygon_3d_sptr bwm_algo::move_points_to_plane(vcl_vector<vsol_point_3d_spt
   if (fitter.fit(1.0)) {
   // fitter.fit();
   plane = fitter.get_plane();
-  } else {
+  }
+  else {
     vcl_cout << "NO FITTING" << vcl_endl;
     return 0;
   }
@@ -174,7 +176,7 @@ bool bwm_algo::fit_circle(const vcl_list<vgl_point_2d<double> > &points,
   int rows = points.size();
 
   // must have at least 3 points to find circle
-  if (rows < 3)    
+  if (rows < 3)
     return false;
 
   vnl_vector<double> col1(rows);
@@ -234,7 +236,8 @@ bwm_algo::extract_nitf_camera(vil_image_resource_sptr img)
     nitf = (vil_nitf2_image*)img.ptr();
     vpgl_nitf_rational_camera* rpcam = new vpgl_nitf_rational_camera(nitf, true);
     return rpcam;
-  } else {
+  }
+  else {
     vcl_cout << "The image is not an NITF" << vcl_endl;
     return 0;
   }

@@ -86,7 +86,7 @@ class vgui_dialog_impl
   //: Pointer to a GUI widget for a bool field.
   virtual void* bool_field_widget(const char*, bool&);
 
-  //: Pointer to a GUI widget for a integer field.
+  //: Pointer to a GUI widget for an integer field.
   virtual void* int_field_widget(const char*, int&);
 
   //: Pointer to a GUI widget for a long integer field.

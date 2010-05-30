@@ -411,7 +411,7 @@ void bwm_observer_cam::move_ground_plane( vgl_plane_3d<double> master_plane,
     vsol_point_3d_sptr new_pt3d;
     bwm_observer_mgr::BWM_MASTER_OBSERVER->backproj_point((new vsol_point_2d(master_img_pt)), new_pt3d, master_plane);
 
-    // find the translation bewteen the beginning 3d point and ending,
+    // find the translation between the beginning 3d point and ending,
     // after moving the plane
     vgl_vector_3d<double> t(new_pt3d->x() - old_pt3d->x(),
                             new_pt3d->y() - old_pt3d->y(),

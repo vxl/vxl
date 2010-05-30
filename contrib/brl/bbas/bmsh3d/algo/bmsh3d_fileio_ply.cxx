@@ -266,7 +266,7 @@ bool bmsh3d_save_ply (bmsh3d_mesh* M, const char* file, bool ascii_mode, vcl_str
     ply_add_comment(oply, comment.c_str());
 
   // object info
-  ply_add_obj_info(oply, "an bmsh3d_mesh object");
+  ply_add_obj_info(oply, "a bmsh3d_mesh object");
 
   // end header
   ply_write_header(oply);
@@ -602,7 +602,7 @@ bool bmsh3d_save_ply (bmsh3d_richmesh* mesh,
   ply_add_comment(oply, "created by bmsh3d_save_ply");
 
   // object info
-  ply_add_obj_info(oply, "an bmsh3d_richmesh object");
+  ply_add_obj_info(oply, "a bmsh3d_richmesh object");
 
   // end header
   ply_write_header(oply);

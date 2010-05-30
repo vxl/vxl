@@ -3,12 +3,12 @@
 #define bvpl_combined_neighb_operator_h
 //:
 // \file
-// \brief A class for performing simultaneous neighborhood operations on a appearance and occupancy grids.
+// \brief A class for performing simultaneous neighborhood operations on appearance and occupancy grids.
 // \author Isabel Restrepo mir@lems.brown.edu
 // \date  September 20, 2009
 //
-// This class assumes occupancy=float and apperearance=unimodal gaussian. The class can be made more general
-// in the future but at moment of creation it is not clear if it will be necessary.
+// This class assumes occupancy=float and appearance=unimodal gaussian. The class can be made more general
+// in the future but at the moment of creation it is not clear if this will be necessary.
 //
 // \verbatim
 //  Modifications
@@ -48,8 +48,8 @@ class bvpl_combined_neighb_operator
       bvpl_kernel_iterator kernel_iter = kernel->iterator();
       bvpl_voxel_subgrid<float> ocp_subgrid = *ocp_iter;
       bvpl_voxel_subgrid<bsta_num_obs<bsta_gauss_f1> > app_subgrid = *app_iter;
-      
-      if(ocp_subgrid.get_voxel()>0.0f)
+
+      if (ocp_subgrid.get_voxel()>0.0f)
       {
         //reset the kernel iterator
         kernel_iter.begin();
@@ -67,7 +67,8 @@ class bvpl_combined_neighb_operator
         }
         // set the result at the output grid
         (*output_iter).set_voxel(ocp_func_.result()* (app_func_.result().mean()));
-      }else {
+      }
+      else {
         // set the result to zero
         (*output_iter).set_voxel(0.0f);
       }

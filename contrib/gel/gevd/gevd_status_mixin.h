@@ -43,7 +43,7 @@
 // .FILE    gevd_status_mixin.cxx
 //
 // .SECTION Description
-//      This mixin adds a status word and methods to contol the status
+//      This mixin adds a status word and methods to control the status
 // word.  The interpretation of the status word depends on the context
 // of the usage.  However, in all cases a status of zero is defined as
 // good.
@@ -63,10 +63,10 @@ typedef int StatusCode;
 
 class gevd_status_mixin
 {
-private:
+ private:
    int status;
 
-public:
+ public:
    inline void ClearStatus()            { status = 0;   }
    inline void ClearStatus(int x)       { status &= ~x; }
    inline void SetStatus(int x = 0)     { status |= x;  }
@@ -76,7 +76,7 @@ public:
 
    gevd_status_mixin() { ClearStatus(); }
 
-public:
+ public:
    inline StatusCode Stat()          const { return status; }     // XXX
    inline bool       StatusGood()    const { return status == 0; }
    inline bool       StatusBad()     const { return status != 0; }

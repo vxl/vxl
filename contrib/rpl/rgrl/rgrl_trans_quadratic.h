@@ -2,7 +2,7 @@
 #define rgrl_trans_quadratic_h_
 //:
 // \file
-// \brief Derived class to represent an quadratic transformation in arbitrary dimensions.
+// \brief Derived class to represent a quadratic transformation in arbitrary dimensions.
 // \author Charlene Tsai
 // \date Sep 2003
 
@@ -109,7 +109,7 @@ class rgrl_trans_quadratic
   //: make a clone copy
   rgrl_transformation_sptr clone() const;
 
-protected:
+ protected:
   void map_loc( vnl_vector<double> const& from,
                 vnl_vector<double>      & to ) const;
 

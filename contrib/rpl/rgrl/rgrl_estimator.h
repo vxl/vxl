@@ -50,7 +50,7 @@ class rgrl_estimator
 
   //: Estimate the transform
   //
-  // Given a collectsion of match sets in \a matches and the current
+  // Given a collection of match sets in \a matches and the current
   // transform estimate (from the previous iteration, for example),
   // this function will estimate the transformation parameters and
   // return a transform object that captures the estimated transform.

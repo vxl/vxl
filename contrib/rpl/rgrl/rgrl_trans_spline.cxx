@@ -1,6 +1,6 @@
 //:
 // \file
-// \autor Lee, Ying-Lin (Bess)
+// \author Lee, Ying-Lin (Bess)
 // \date  Sept 2003
 
 #include "rgrl_trans_spline.h"
@@ -107,7 +107,7 @@ jacobian_wrt_loc( vnl_matrix<double>& spline_jacobian, vnl_vector<double> const&
   for ( unsigned i=0; i<dim; ++i )
     spline_jacobian.set_row( i, splines_[ i ]->jacobian( from_loc ) );
 
-  // add with the jocobian of xform
+  // add with the Jacobian of xform
   vnl_matrix<double> xform_jac;
   xform_->jacobian_wrt_loc( xform_jac, from_loc );
   spline_jacobian += xform_jac;
@@ -117,7 +117,7 @@ jacobian_wrt_loc( vnl_matrix<double>& spline_jacobian, vnl_vector<double> const&
 // since covariance is assumed to be identical
 // in each axis, the transfer error has to be
 // diagonal?
-// need to be fixed
+// FIXME - needs to be fixed
 vnl_matrix<double>
 rgrl_trans_spline::
 transfer_error_covar( vnl_vector<double> const& p ) const
@@ -247,7 +247,7 @@ scale_by( double /*scale*/ ) const
 }
 
 //: make a clone copy
-rgrl_transformation_sptr 
+rgrl_transformation_sptr
 rgrl_trans_spline::
 clone() const
 {

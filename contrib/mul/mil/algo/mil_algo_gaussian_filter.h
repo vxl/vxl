@@ -3,12 +3,12 @@
 #define mil_algo_gaussian_filter_h_
 //:
 // \file
-// \brief Smoothes images.
+// \brief Smooths images.
 // \author Ian Scott
 
 #include <mil/mil_image_2d_of.h>
 
-//: Smoothes images.
+//: Smooths images.
 
 template <class srcT, class destT>
 class mil_algo_gaussian_filter

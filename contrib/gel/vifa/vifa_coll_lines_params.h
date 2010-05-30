@@ -37,7 +37,7 @@ class vifa_coll_lines_params : public gevd_param_mixin,
   //: Distance of midpoint of qualified edge segment to projected line.
   float midpt_distance() const { return midpt_distance_; }
 
-  //: Maximum angluar difference (in degrees).
+  //: Maximum angular difference (in degrees).
   float angle_tolerance() const { return angle_tolerance_; }
 
   //: Minimum of supported to spanning length.

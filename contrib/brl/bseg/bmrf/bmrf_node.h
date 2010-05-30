@@ -50,7 +50,7 @@ class bmrf_node : public vbl_ref_count
   // \note probability is computed as needed
   double probability();
 
-  //: Return the gamma funtion of this node
+  //: Return the gamma function of this node
   bmrf_gamma_func_sptr gamma();
 
   //: Calculate the probability given the gamma function and neighbors

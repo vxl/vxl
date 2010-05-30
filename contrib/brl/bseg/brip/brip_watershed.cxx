@@ -50,7 +50,7 @@ void brip_watershed::print_neighborhood(int col, int row, unsigned int lab)
     int cn = col + n_col[n];
     if (rn<0||rn>=rows||cn<0||cn>=cols)
     {
-      vcl_cout << "Neigborhood out of range\n";
+      vcl_cout << "Neighborhood out of range\n";
       return;
     }
     if (k>2)
@@ -136,7 +136,7 @@ bool brip_watershed::compute_seeds()
         }
       float diff = max_grad-min_grad;
       //a seed is defined when the minimum is at the center of
-      //local 3x3 neigborhood and gradient diff is greater than
+      //local 3x3 neighborhood and gradient diff is greater than
       //a threshold.
       if (!min_i&&!min_j&&diff>thresh_)
       {
@@ -204,7 +204,7 @@ bool brip_watershed::grow_regions()
     }
     for (int n = 0; n<8; n++)
     {
-      //location of neigboring pixel
+      //location of neighboring pixel
       int rn = location.y()+n_row[n];
       int cn = location.x()+n_col[n];
       if (rn<1||cn<1||rn>rs-2||cn>cs-2)
@@ -229,7 +229,7 @@ bool brip_watershed::grow_regions()
     if (lab>BOUNDARY)
       for (int n = 0; n<8; n++)
       {
-        //location of neigboring pixel
+        //location of neighboring pixel
         int rn = location.y()+n_row[n];
         int cn = location.x()+n_col[n];
         if (rn<1||cn<1||rn>rs-2||cn>cs-2)
@@ -237,7 +237,7 @@ bool brip_watershed::grow_regions()
         unsigned int n_lab = region_label_array_[rn][cn];
         if (n_lab != UNLABELED)
           continue;
-        //attributes of unlabeled neigboring pixel
+        //attributes of unlabeled neighboring pixel
         vgl_point_2d<int> n_location(cn, rn);
         float cost = gradient_mag_image_(cn, rn);
         brip_region_pixel_sptr pix =

@@ -713,7 +713,7 @@ bool bwm_observer_video::extract_world_plane(vgl_plane_3d<double>&  plane)
   return true;
 }
 
-//: extract two-class neigborhoods from a video stream
+//: extract two-class neighborhoods from a video stream
 bool bwm_observer_video::
 extract_neighborhoods(unsigned nhd_radius,
                       vcl_vector<vcl_vector<vnl_matrix<float> > >& nhds)

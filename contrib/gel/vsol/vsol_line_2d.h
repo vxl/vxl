@@ -101,7 +101,7 @@ class vsol_line_2d : public vsol_curve_2d
   virtual vsol_line_2d const*cast_to_line()const{return this;}
   virtual vsol_line_2d *cast_to_line() {return this;}
 
- private: // has been superceeded by is_a()
+ private: // has been superseded by is_a()
   //: Return the curve type
   virtual vsol_curve_2d_type curve_type() const { return vsol_curve_2d::LINE; }
 

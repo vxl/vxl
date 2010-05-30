@@ -36,7 +36,7 @@
 //  parameters for a total of 90 parameters.
 //
 //  The scale and offset transformation is applied to (X,Y,Z)
-//  before appying the polynomial mapping. The resulting (u,v) is normalized
+//  before applying the polynomial mapping. The resulting (u,v) is normalized
 //  and must be mapped back (un-normalized) to the image coordinate
 //  system to obtain the actual projection.
 //

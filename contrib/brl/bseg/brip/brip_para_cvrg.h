@@ -11,21 +11,22 @@
 //   The steps are then projected onto an accumulation array oriented
 //   perpendicular to the direction of the linear feature. The projection
 //   is carried out in each of the four orientations at each pixel, using
-//   the approriate gradient image.
+//   the appropriate gradient image.
+//
 //    Parallel support is defined as the existence of two or more peaks in
 //   the projection array. The peaks are found by carrying out non-maximal
 //   suppression on the projection array. This parallel coverage is quantified
 //   by computing the average peak height.  If there are not at least two
 //   peaks, the "coverage" is defined as zero.
+//
 //    The direction with maximum coverage value is determined and that
 //   value is inserted an output image called the cover_image.
 //
 //   The current algorithm has a performance of about 1.8*10^4 pixels/sec
 //   The bulk of the time is taken in doing the projections.
 //
-//
 // \verbatim
-// Modifications:
+//  Modifications:
 //   Ported to vxl July 01, 2004
 //   Converted to vil October 3, 2009
 // \endverbatim

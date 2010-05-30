@@ -49,7 +49,7 @@ class bmrf_arc : public vbl_ref_count
   //: Return the maximum alpha in common with both nodes
   double max_alpha() const { return max_alpha_; }
 
-  //: Return the average intesity error
+  //: Return the average intensity error
   double avg_intensity_error() const { return avg_intensity_error_; }
 
   //: Return the constant gamma value induced by the segment pair

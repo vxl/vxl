@@ -47,7 +47,7 @@ class boxm_render_expected_image_functor
     const float Omega = vis_img_(i,j) - vis_prob_end;
     // and update expected image
     expected_(i,j) +=  exp* Omega;
-    // update visibility probabilty
+    // update visibility probability
     vis_img_(i,j) = vis_prob_end;
 
     return true;

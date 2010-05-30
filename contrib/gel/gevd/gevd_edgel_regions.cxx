@@ -1240,7 +1240,7 @@ static bool reg_edges_neq(gevd_region_edge* r1, gevd_region_edge* r2)
   return r1->get_edge()!=r2->get_edge();
 }
 
-// A collision is defined by the condition where an region is bounded
+// A collision is defined by the condition where a region is bounded
 // by two different edges at adjacent pixels without crossing a vertex.
 // This can happen since boundary positions are sub-pixel and region
 // definition is at pixel granularity.  The edge collison causes a needed
@@ -1551,7 +1551,7 @@ void gevd_edgel_regions::repair_failed_insertions(vcl_vector<vtol_edge_2d_sptr>&
 //:
 //    After connected components have been generated pass over the
 //    array and assign region labels to the gevd_region_edge(s).
-//    As in ::UpdateConnectedNeighborhood, the algorithm uses a 2x2 neigborhood
+//    As in ::UpdateConnectedNeighborhood, the algorithm uses a 2x2 neighborhood
 //    E.G.,
 //    ee But the purpose is to assign labels. No updating of the
 //    aa region_label_array_ is carried out.

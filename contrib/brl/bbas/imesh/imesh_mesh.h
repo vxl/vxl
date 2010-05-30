@@ -108,7 +108,7 @@ class imesh_mesh
                         TEX_COORD_ON_VERT = 1,
                         TEX_COORD_ON_CORNER = 2 };
 
-  //: Returns texture coordinate availablity
+  //: Returns texture coordinate availability
   tex_coord_type has_tex_coords() const { return tex_coord_status_; }
 
   //: Return the texture coordinates

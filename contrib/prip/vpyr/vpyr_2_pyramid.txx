@@ -94,13 +94,13 @@ void vpyr_2_pyramid<TLevel>::clear()
   base_map_.clear() ;
 }
 
-//: Initializes the sturcture of the combinatorial map from "stream".
+//: Initializes the structure of the combinatorial map from "stream".
 template <class TLevel>
 void vpyr_2_pyramid<TLevel>::read_structure(vcl_istream & stream)
 {
 }
 
-//: Writes the sturcture of the combinatorial map to "stream".
+//: Writes the structure of the combinatorial map to "stream".
 template <class TLevel>
 void vpyr_2_pyramid<TLevel>::write_structure(vcl_ostream & stream) const
 {

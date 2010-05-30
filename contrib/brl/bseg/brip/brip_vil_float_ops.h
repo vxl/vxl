@@ -179,7 +179,7 @@ class brip_vil_float_ops
                                       vil_image_view<float> const& IyIy,
                                       double scale=0.04);
 
-  //: computes the conditioning of the 2n+1 x 2n+1 gradient neigborhood
+  //: computes the conditioning of the 2n+1 x 2n+1 gradient neighborhood
   static vil_image_view<float>
     sqrt_grad_singular_values(vil_image_view<float>& input, int n);
 
@@ -313,7 +313,7 @@ class brip_vil_float_ops
                          vil_image_view<unsigned char> const& B);
 
   //: Create a unsigned char color image from multiple resource channels
-  // Images do not have to be the same size arraysp
+  // Images do not have to be the same size arrays
   static vil_image_view<vil_rgb<vxl_byte> >
     combine_color_planes(vil_image_resource_sptr const& R,
                          vil_image_resource_sptr const& G,

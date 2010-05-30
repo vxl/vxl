@@ -162,7 +162,7 @@ class bcal_camera_graph
     return get_vertex_from_pos(id - 1);
   }
 
-  // return a id of vertex at position pos;
+  // return an id of vertex at position pos
   int get_vertex_id(int pos)
   {
     assert(pos >= 0 && pos < num_vertice_);
@@ -209,7 +209,7 @@ class bcal_camera_graph
   }
 
 #if 0
-  // return a iterator pointer to first vertex
+  // return an iterator pointer to the first vertex
   iterator begin() { return iterator(&vertice_, 1); }
 #endif // 0
 
@@ -285,7 +285,7 @@ class bcal_camera_graph
 
  private:
   vcl_vector<vertex_node*> vertice_;
-  vcl_vector<vcl_vector<edge_node*>* > edges_; // adjacent neigbhour list
+  vcl_vector<vcl_vector<edge_node*>* > edges_; // adjacent neighbour list
   S* source_;
   int num_vertice_;
 };

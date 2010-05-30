@@ -39,8 +39,7 @@ class osl_canny_ox_params
   //                          When equal to 0, only NMS and Hysteresis
   //                          are performed.
   bool  join_flag;         // True to enable pixel jumping
-  int  junction_option;    // True to enable locating junnctions
-
+  int  junction_option;    // True to enable locating junctions
 
   bool verbose;
 };

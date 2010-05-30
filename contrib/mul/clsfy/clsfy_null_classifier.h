@@ -23,7 +23,7 @@ class clsfy_null_classifier : public clsfy_classifier_base
   // Dflt constructor
   clsfy_null_classifier(): n_dims_(0u), default_class_(0u) {}
 
-  //: Constructor for when you need a diiferent default
+  //: Constructor for when you need a different default
   clsfy_null_classifier(unsigned dc): n_dims_(0u), default_class_(dc) {}
 
   //: Return the probability the input being in each class.

@@ -1,6 +1,6 @@
 //:
 // \file
-// \brief Tool to compute a orientation histogram image from an input image
+// \brief Tool to compute an orientation histogram image from an input image
 // \author Tim Cootes
 
 #include <vcl_iostream.h>
@@ -15,7 +15,7 @@
 void print_usage()
 {
   vcl_cout<<"mipa_orient_histo  -i src_image -o out_image -c 4\n"
-          <<"Tool to compute a orientation histogram image from an input image.\n"
+          <<"Tool to compute an orientation histogram image from an input image.\n"
           <<"Uses 4 orientation bins, outputs 3-plane image with first three.\n"
           <<"Each histogram is computed from pixels in square of size cell_size"<<vcl_endl;
 }

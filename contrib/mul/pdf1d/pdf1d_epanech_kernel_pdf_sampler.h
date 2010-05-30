@@ -2,7 +2,7 @@
 #define pdf1d_epanech_kernel_pdf_sampler_h_
 //:
 // \file
-// \brief Implements sampling for a Epanechnikov kernel PDF
+// \brief Implements sampling for an Epanechnikov kernel PDF
 // \author Tim Cootes
 
 #include <vnl/vnl_random.h>
@@ -11,7 +11,7 @@
 
 class pdf1d_epanech_kernel_pdf;
 
-//: Generates random samples from a Epanechnikov kernel estimate
+//: Generates random samples from an Epanechnikov kernel estimate
 class pdf1d_epanech_kernel_pdf_sampler : public pdf1d_sampler
 {
  protected:

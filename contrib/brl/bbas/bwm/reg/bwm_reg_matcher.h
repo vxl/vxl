@@ -7,11 +7,11 @@
 // \brief Find a match between sets of digital curves
 //
 // Inputs:
-// 1) two sets of digitial curves, model and search.
+// *  Two sets of digital curves, model and search.
 //    the goal is to find the translation that matches the model
 //    curves with the search curves
-// 2) the search image origin of the region enclosing the search curves
-// 3) The number of search cols and rows to scan
+// *  The search image origin of the region enclosing the search curves
+// *  The number of search cols and rows to scan
 //
 // \verbatim
 //  Modifications
@@ -36,7 +36,7 @@ class bwm_reg_matcher
                   unsigned search_col_origin, unsigned search_row_origin,
                   unsigned search_cols, unsigned search_rows,
                   vcl_vector<vsol_digital_curve_2d_sptr> const& search_edges
-                  );
+                 );
   ~bwm_reg_matcher(){}
 
 

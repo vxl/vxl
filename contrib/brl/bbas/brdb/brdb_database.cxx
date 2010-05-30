@@ -146,7 +146,7 @@ brdb_database::add_relation(const vcl_string& name, const brdb_relation_sptr& ne
   if (itr != relations_.end())
   {
     vcl_cerr << "Database warning: trying to add a new relation "
-             << "which has an conflicting name with an existinig relation. "
+             << "which has a conflicting name with an existing relation. "
              << name << vcl_endl;
     return false;
   }
@@ -281,7 +281,7 @@ brdb_database::merge(const brdb_database_sptr& other)
       continue;
     }
 
-    // test for compatiblity of relations
+    // test for compatibility of relations
     if (!ti->second->is_compatible(oi->second))
       return false;
 

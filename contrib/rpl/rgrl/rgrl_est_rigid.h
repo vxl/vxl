@@ -15,12 +15,12 @@
 class rgrl_est_rigid
   : public rgrl_nonlinear_estimator
 {
-public:
+ public:
   // Constructor which takes the dimension of the dataset that the
   // estimator will be applied on.
   rgrl_est_rigid( unsigned int dimension);
 
-  //: Estimates an rigid transform.
+  //: Estimates a rigid transform.
   //
   // The return pointer is to a rgrl_trans_rigid object.
   //
@@ -48,8 +48,8 @@ public:
   void determine_covariance( rgrl_set_of<rgrl_match_set_sptr> const& matches, rgrl_transformation_sptr current_trans) const;
 
   //: Return the estimation statistics
-  //  for each iteration, the stats are 
-  //    "determinant of DeltaR before orthonormalization", 
+  //  for each iteration, the stats are
+  //    "determinant of DeltaR before orthonormalization",
   //    "fro norm of orthonormalized DeltaR - I",
   //    "fro norm of DeltaTrans"
   inline vcl_vector<vcl_vector<double> > const& get_stats() { return this->stats; }
@@ -57,7 +57,7 @@ public:
   // Defines type-related functions
   rgrl_type_macro( rgrl_est_rigid, rgrl_nonlinear_estimator );
 
-protected:
+ protected:
   vcl_vector<vcl_vector<double> > stats;
 };
 

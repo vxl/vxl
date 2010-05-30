@@ -3,16 +3,16 @@
 #define bvxm_float_processor_h_
 //:
 // \file
-// \brief A class for a float processor. 
+// \brief A class for a float processor.
 //
 // \author Isabel Restrepo
 // \date March 11, 2009
 // \verbatim
 //  Modifications
-//   03/10/2009  Isabel Restrepo. Creation. This processor is intended for appereance model 
+//   03/10/2009  Isabel Restrepo. Creation. This processor is intended for appeareance model
 //               grids that contain only one floating point value. The only method implemented
 //               at creation time is expected_value() which returns itself
-//               The intention here is to be able to get expected images of grids that contain 
+//               The intention here is to be able to get expected images of grids that contain
 //               floating point information
 // \endverbatim
 
@@ -31,7 +31,6 @@
 
 class  bvxm_float_processor
 {
-
  public:
 
   typedef float apm_datatype;
@@ -43,9 +42,7 @@ class  bvxm_float_processor
 
   bvxm_voxel_slab<obs_datatype> expected_color( bvxm_voxel_slab<obs_mathtype> const& appear)
   {return appear;}
-      
 };
 
 
 #endif // bvxm_float_processor_h_
-

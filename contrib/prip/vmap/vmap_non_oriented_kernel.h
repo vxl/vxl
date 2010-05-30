@@ -16,9 +16,9 @@
 #include "vmap_types.h" // for vmap_dart_index
 #include <vcl_vector.h>
 
-//: A wrapper to an existing kernel which manage darts in an non oriented mananer and avoids aving loops in the resulting kernel.
+//: A wrapper to an existing kernel which manages darts in a non oriented manager and avoids having loops in the resulting kernel.
 // The darts added to the kernel using the function "add" are added if the resulting edge graph is a tree.
-// When finalise is called, the non oriented graph is turn into an oriented graph which is composed of rooted trees.
+// When finalise is called, the non oriented graph is turned into an oriented graph which is composed of rooted trees.
 template <class TKernel>
 class vmap_non_oriented_kernel : public TKernel
 {

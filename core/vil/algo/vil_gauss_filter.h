@@ -3,7 +3,7 @@
 #define vil_gauss_filter_h_
 //:
 // \file
-// \brief Smoothes images.
+// \brief Smooths images.
 // \author Ian Scott
 
 #include <vcl_vector.h>

@@ -749,7 +749,7 @@ static void xcv_geometry_explode_geometry()
     sv->translate(float(dx),float(dy));
   }
 
-  // Tell easy alll has changed
+  // Tell easy all has changed
   easy_tab->post_redraw();
 }
 

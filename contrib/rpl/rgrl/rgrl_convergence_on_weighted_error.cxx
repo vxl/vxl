@@ -135,9 +135,8 @@ verify( rgrl_transformation_sptr         const& /*xform_estimate*/,
   }
   else
   {
-    // immitate the previous behavior
-    // if it is not good enough to terminate
-    // it is still good result
+    // imitate the previous behavior
+    // if it is not good enough to terminate it is still good result
     status -> set_current_status( rgrl_converge_status::good_enough );
   }
 

@@ -39,7 +39,7 @@ class vnl_svd_fixed
   typedef typename vnl_numeric_traits<T>::abs_t singval_t;
 
   //:
-  // Construct an vnl_svd_fixed<T> object from $m \times n$ matrix $M$.  The
+  // Construct a vnl_svd_fixed<T> object from $m \times n$ matrix $M$.  The
   // vnl_svd_fixed<T> object contains matrices $U$, $W$, $V$ such that
   // $U W V^\top = M$.
   //

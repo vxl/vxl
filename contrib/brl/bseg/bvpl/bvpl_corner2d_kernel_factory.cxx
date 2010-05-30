@@ -16,7 +16,7 @@ bvpl_corner2d_kernel_factory::bvpl_corner2d_kernel_factory()
   angle_ = 0.0f;
 }
 
-//: Constructs a kernel from length, widht and thickness
+//: Constructs a kernel from length, width and thickness
 bvpl_corner2d_kernel_factory::bvpl_corner2d_kernel_factory(unsigned length, unsigned width , unsigned thickness)
 {
   //set variables

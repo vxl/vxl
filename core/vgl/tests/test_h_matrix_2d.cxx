@@ -253,7 +253,7 @@ static void test_compute_linear_lines()
 
 static void test_compute_4point()
 {
-  vcl_cout << "\n=== Test the recovery of an 2x scale transform using 4 points ===\n";
+  vcl_cout << "\n=== Test the recovery of a 2x scale transform using 4 points ===\n";
   vcl_vector<vgl_homg_point_2d<double> > points1, points2;
 
   //setup points in frame 1
@@ -298,6 +298,7 @@ static void test_set_transform()
   TEST_NEAR("scale and rotation", sp.y(), 2.0, 1e-06);
   TEST_NEAR("scale, rotation and translation", tp.x()+tp.y(), 6.0, 1e-06);
 }
+
 static void test_compute_rigid_body()
 {
     vgl_homg_point_2d<double> ps00(0,0);
@@ -309,7 +310,7 @@ static void test_compute_rigid_body()
     points1.push_back(ps10);     points1.push_back(ps11);
     vgl_h_matrix_2d_compute_rigid_body crb;
     vgl_h_matrix_2d<double> RT = crb.compute(points0, points1);
-    vcl_cout << "Rotation, translation \n" << RT << '\n';
+    vcl_cout << "Rotation, translation\n" << RT << '\n';
     vnl_matrix_fixed<double, 3, 3> M = RT.get_matrix();
     TEST_NEAR("rigid body pure rotation", M[0][0], 0.707107, 1.0e-6);
     points0.clear();     points1.clear();
@@ -328,13 +329,13 @@ static void test_compute_rigid_body()
 
     points0.push_back(p00);  points0.push_back(p01);
     points0.push_back(p02);  points0.push_back(p03);
-    points0.push_back(p04);  
+    points0.push_back(p04);
 
     points1.push_back(p10);  points1.push_back(p11);
     points1.push_back(p12);  points1.push_back(p13);
-    points1.push_back(p14);  
+    points1.push_back(p14);
     RT = crb.compute(points0, points1);
-    vcl_cout << "Rotation, translation \n" << RT << '\n';
+    vcl_cout << "Rotation, translation\n" << RT << '\n';
      M = RT.get_matrix();
      //0.149438
     TEST_NEAR("rigid body rotation and translation", M[0][0], 0.988771, 1.0e-3);

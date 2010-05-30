@@ -21,7 +21,7 @@ int main (int argc, char**)
     return 1;
   }
 
-  // size of original inage to be created
+  // size of original image to be created
   unsigned ni = 16;
   unsigned nj = 16;
   unsigned np = 3;              // 3 plane/color image

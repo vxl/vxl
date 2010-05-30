@@ -491,7 +491,7 @@ int imesh_project_onto_mesh_barycentric(const imesh_mesh& mesh,
 //: back project an image point onto the mesh using the camera
 //  Then project from the mesh into normalized texture coordinate (UV)
 //  Assumes the mesh has both normals and texture coordinates
-//  \returns the index of the itersected triangle, or -1 for no intersection
+//  \returns the index of the intersected triangle, or -1 for no intersection
 int imesh_project_onto_mesh_texture(const imesh_mesh& mesh,
                                     const vcl_vector<vgl_point_2d<double> >& verts2d,
                                     const vpgl_perspective_camera<double>& camera,
@@ -538,7 +538,7 @@ int imesh_project_onto_mesh_texture(const imesh_mesh& mesh,
 
 
 //: project a texture point onto a mesh face index with barycentric coordinates
-//  \returns the index of the itersected triangle, or -1 for no intersection
+//  \returns the index of the intersected triangle, or -1 for no intersection
 int imesh_project_texture_to_barycentric(const imesh_mesh& mesh,
                                          const vgl_point_2d<double>& pt_2d,
                                          vgl_point_2d<double>& pt_uv)

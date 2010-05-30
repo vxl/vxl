@@ -53,11 +53,13 @@ class cmu_1394_camera_params
   friend
     vcl_ostream& operator<<(vcl_ostream& os, const cmu_1394_camera_params& cpp);
 
-  //: video configuration (resolution, frame rate, color sampling)
+  // === video configuration (resolution, frame rate, color sampling) ===
+
   int video_format_;
   int video_mode_;
   int frame_rate_;
-  //:image collection (exposure, gain and offset (brighness))
+
+  // === image collection (exposure, gain and offset (brightness)) ===
 
   bool auto_exposure_;
   bool auto_gain_;
@@ -84,15 +86,14 @@ class cmu_1394_camera_params
   int min_sharpness_;
   int max_sharpness_;
 
-  //: White balance params
+  // === White balance params ===
+
   bool autowhitebalance_;
   int  whitebalanceU_;
   int  whitebalanceV_;
   bool onepushWBbalance_;
   int min_WB_;
   int max_WB_;
-
-
 
   //:capture vs acquisition (multiple frame buffering vs single frame)
   bool capture_;

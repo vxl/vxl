@@ -4,7 +4,7 @@
 #include "vidl_ffmpeg_istream.h"
 //:
 // \file
-// \author Matt Leota
+// \author Matt Leotta
 // \author Amitha Perera
 // \date   26 Dec 2007
 //
@@ -168,10 +168,10 @@ open(const vcl_string& filename)
 
   if ( is_->vid_str_->start_time == int64_t(1)<<63 ) {
     is_->start_time = 0;
-  } else {
+  }
+  else {
     is_->start_time = is_->vid_str_->start_time;
   }
-
 
   // The MPEG 2 codec has a latency of 1 frame when encoded in an AVI
   // stream, so the dts of the last packet (stored in last_dts) is

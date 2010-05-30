@@ -77,7 +77,7 @@ compute_matches( rgrl_feature_set const&    from_set,
   typedef f_vector_type::iterator f_iterator_type;
 
   //  Build an empty match set
-  rgrl_match_set_sptr matches_sptr 
+  rgrl_match_set_sptr matches_sptr
     = new rgrl_match_set( from_set.type(), to_set.type(), from_set.label(), to_set.label() );
 
   //  Get the from image features in the current view
@@ -580,7 +580,7 @@ match_mapped_region( rgrl_feature_sptr                     mapped_feature,
     // The best_offset so far is constrained on the discrete space.
     // Now we use a parabola to model the similarity error
     // (responses) and find the position of the minimum response.
-    // Here I calculate sub_pixel in each dimension seperately just for
+    // Here I calculate sub_pixel in each dimension separately just for
     // the convenience. Since it's only an approximation in one grid,
     // I assume this approximation is good enough.
     double sub_offset1;

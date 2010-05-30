@@ -55,7 +55,7 @@ attr_names[] =
   "EightyPercentParallel"
 };
 
-// Set some minimumm values
+// Set some minimum values
 
 float vifa_int_faces_attr::
 attr_min_vals[] = {
@@ -406,7 +406,7 @@ MakeAttrHist(vcl_vector<float>& attr_vals)
   return val_hist;
 }
 
-// Get or compute mean value of an vifa_int_face_attr attribute.  Computes
+// Get or compute mean value of a vifa_int_face_attr attribute.  Computes
 // histogram if necessary.  Not weighted by area.
 float vifa_int_faces_attr::
 GetMeanAttr(int attr_index)
@@ -438,7 +438,7 @@ GetMeanAttr(int attr_index)
   }
 }
 
-// Get or compute standard deviation of an vifa_int_face_attr attribute.
+// Get or compute standard deviation of a vifa_int_face_attr attribute.
 // Computes histogram if necessary.  Not weighted by area.
 float vifa_int_faces_attr::
 GetSDAttr(int attr_index)
@@ -460,7 +460,7 @@ GetSDAttr(int attr_index)
   }
 }
 
-// Get or compute min value of an vifa_int_face_attr attribute.
+// Get or compute min value of a vifa_int_face_attr attribute.
 // Computes histogram if necessary.  Not weighted by area.
 float vifa_int_faces_attr::
 GetMinAttr(int attr_index)
@@ -479,7 +479,7 @@ GetMinAttr(int attr_index)
     return -1.f;
 }
 
-// Get or compute max value of an vifa_int_face_attr attribute.
+// Get or compute max value of a vifa_int_face_attr attribute.
 // Computes histogram if necessary.  Not weighted by area.
 float vifa_int_faces_attr::
 GetMaxAttr(int attr_index)

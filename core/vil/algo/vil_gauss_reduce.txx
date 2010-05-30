@@ -323,7 +323,7 @@ void vil_gauss_reduce_1plane(const T* src_im,
 
 
 //: Smooth and subsample single plane src_im in x to produce dest_im using 121 filter in x and y
-//  Smoothes with a 3x3 filter and subsamples
+//  Smooths with a 3x3 filter and subsamples
 template <class T>
 void vil_gauss_reduce_121_1plane(const T* src_im,
                                  unsigned src_ni, unsigned src_nj,

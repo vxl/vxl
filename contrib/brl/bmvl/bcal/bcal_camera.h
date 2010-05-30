@@ -44,7 +44,7 @@ class bcal_lens_model
 
 
 // an abstract camera definition.
-// it store the lens model and intrisic parameter of camera
+// it store the lens model and intrinsic parameter of camera
 class bcal_camera
 {
   int id_;

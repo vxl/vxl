@@ -6,18 +6,20 @@
 // \brief  A base class for 3D kernel. The kernel is fully described by a rotation axis and an angle
 //         The children of this classes must create a kernel on a "canonical form" i.e. with a default
 //         axis of rotation and a complementary vector here called canonical_paralle_axis_.
+//
 //         If this two vector are seen as points on the unit sphere, then they lie on the same
-//         parallel (constant polar angle). These vectors determine the zero rotation position as followos:
-//         1. The rotation that transforms the canonical_rotation_axis to a new specified rotation axis,
+//         parallel (constant polar angle). These vectors determine the zero rotation position as follows:
+//         *  The rotation that transforms the canonical_rotation_axis to a new specified rotation axis,
 //            is applied to the kernel (Lets call such rotation R).
-//         2. The kernel is rotate around its new rotation such that R*canonical_parallel_axis achieves
+//         *  The kernel is rotate around its new rotation such that R*canonical_parallel_axis achieves
 //            the same same polar angle as the new rotation axis
+//
 //         Usage:
 //         The user can create a kernel in its canonical form through children constructors
 //         Then, the user call set_rotation_axis(), set_angle() and create() and if one wishes to use
-//         another angle with the same axis, it suffices to call set_angle(angle) and create(). This will save computation
-//         time since the rotation_axis has already been set
-//         Alternativly, the user can call create(axis, angle). This transforms the canonical kernel according
+//         another angle with the same axis, it suffices to call set_angle(angle) and create().
+//         This will save computation time since the rotation_axis has already been set.
+//         Alternatively, the user can call create(axis, angle). This transforms the canonical kernel according
 //         to new parameters
 //
 // \author Isabel Restrepo mir@lems.brown.edu
@@ -86,16 +88,16 @@ class bvpl_kernel_factory
 
   typedef vcl_vector<vcl_pair<vgl_point_3d<float>, bvpl_kernel_dispatch> > kernel_type;
 
-  //:The map of 3d positions and their symbols. This kernel has an axis of rotation, but it is always on zero-rotation position
+  //: The map of 3d positions and their symbols. This kernel has an axis of rotation, but it is always on zero-rotation position
   vcl_vector<vcl_pair<vgl_point_3d<float>, bvpl_kernel_dispatch> > kernel_;
 
-  //:The map of 3d positions and their symbols in their cacnonical form (As specified by children)
+  //: The map of 3d positions and their symbols in their canonical form (As specified by children)
   vcl_vector<vcl_pair<vgl_point_3d<float>, bvpl_kernel_dispatch> > canonical_kernel_;
 
-  //:The rotation axis for canonical edge
+  //: The rotation axis for canonical edge
   const vnl_float_3 canonical_rotation_axis_;//(1,0,0);
 
-  //:Rotation axis of kernel_
+  //: Rotation axis of kernel_
   vnl_float_3 rotation_axis_;
 
   // parallel_axis_ define a coordinate system for each kernel.

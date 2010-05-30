@@ -83,7 +83,7 @@ gevd_step::gevd_step(float smooth_sigma, // width of filter dG
     contourFactor(contour_factor), junctionFactor(junction_factor),
     filterFactor(2)              // factor from gevd_float_operators::Gradient
 {
-  if (smoothSigma < 0.5)        // no guarrantee for 2-pixel separation
+  if (smoothSigma < 0.5)        // no guarantee for 2-pixel separation
     vcl_cerr << "gevd_step::gevd_step -- too small smooth_sigma: "
              << smoothSigma << vcl_endl;
   if (smoothSigma > 3)          // smooth out too much the junctions
@@ -174,11 +174,13 @@ gevd_step::DetectEdgels(const gevd_bufferxy& image,
         const float k = -noiseSigma; // given linear interpolation factor
         noiseSigma = ((1-k)*sensorNoise + k*textureNoise) /
           NoiseResponseToFilter(1, smoothSigma, filterFactor);
-      } else {
+      }
+      else {
         vcl_cout << "Can not estimate sensor & texture noise\n";
         noiseSigma = 1;         // reasonable default for 8-bit
       }
-    } else {
+    }
+    else {
       vcl_cout << "Not enough edge elements to estimate noise\n";
       noiseSigma = 1;
     }
@@ -332,7 +334,8 @@ BestStepExtension(const gevd_bufferxy& smooth,
     }
     best_l = gevd_float_operators::InterpolateParabola(s_m, best_s, s_p, best_s);
     return best_s;
-  } else                        // not found
+  }
+  else                        // not found
     return 0;
 }
 
@@ -432,7 +435,8 @@ gevd_step::RecoverJunctions(const gevd_bufferxy& image,
           bytePixel(direction, x, y) = byte(dir);
           floatPixel(locationx, x, y) = loc*DIS[dir];
           floatPixel(locationy, x, y) = loc*DJS[dir];
-        } else                  // no further extension found
+        }
+        else                  // no further extension found
           ndir[i] = 0;
       }
     //vcl_cout << "Touch " << ntouch << " contours.\n";

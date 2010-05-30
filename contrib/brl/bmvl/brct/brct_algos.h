@@ -67,9 +67,9 @@ class brct_algos
                                                          const bugl_gaussian_point_3d<double> & X);
 
   static vnl_double_2 projection_3d_point(const vnl_double_3x4& P, const vnl_double_3 & X);
-  //: get closet point from a digital curve
+  //: get closest point from a digital curve
   static vgl_point_2d<double>  closest_point(vdgl_digital_curve_sptr dc, vgl_point_2d<double> pt);
-  //: get point on a digital curve which is most possible to the guassian pdf
+  //: get point on a digital curve which is most possible for the Gaussian pdf
   static vgl_point_2d<double> most_possible_point(vdgl_digital_curve_sptr dc, bugl_gaussian_point_2d<double> &pt);
 
   //: pointwise reconstruction

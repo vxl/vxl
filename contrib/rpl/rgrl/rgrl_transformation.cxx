@@ -257,7 +257,7 @@ double
 rgrl_transformation::
 log_det_covar_deficient( int rank ) const
 {
-  // first, scan the matrix and eleminate
+  // first, scan the matrix and eliminate
   // rows and columns containing only zeros
   vcl_vector<unsigned int> zero_indices;
   for ( unsigned i=0; i<covar_.rows(); ++i )
@@ -301,7 +301,8 @@ log_det_covar_deficient( int rank ) const
 
       ++ic;
     }
-  } else
+  }
+  else
     m = covar_;
 
   // compute the log of determinant with the largest [rank] eigenvalues
@@ -356,7 +357,7 @@ rgrl_transformation::
 set_scaling_factors( vnl_vector<double> const& scaling )
 {
   // checking scaling
-  // set it to epsison if scaling is in fact zero
+  // set it to epsilon if scaling is in fact zero
   for ( unsigned int i=0; i<scaling.size(); ++i )
     assert( vnl_math_isfinite( scaling[i] ) );
 

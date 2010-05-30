@@ -6,7 +6,7 @@
 #include <vgui/vgui_menu.h>
 #include <bmvv/bmvv_cal_manager.h>
 
-//Static munu callback functions
+//Static menu callback functions
 
 void bmvv_cal_menus::quit_callback()
 {
@@ -195,7 +195,7 @@ vgui_menu bmvv_cal_menus::get_menu()
 
   menucal.add("Set Identity Camera",set_identity_camera_callback);
   menucal.add("Compute Ransac Homography (RREL)",
-               compute_ransac_homography_callback);
+              compute_ransac_homography_callback);
   menucal.add("Pick Correspondence", pick_correspondence_callback,(vgui_key)'p');
 
   menucal.add("Remove Correspondence", remove_correspondence_callback,(vgui_key)'r');

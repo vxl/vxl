@@ -18,7 +18,7 @@ struct example_tableau : public vgui_image_tableau
   {
     if (e.type == vgui_BUTTON_DOWN && e.button == vgui_LEFT && e.modifier == 0)
     {
-      vcl_cout << "selecting at " << e.wx << " " << e.wy << vcl_endl;
+      vcl_cout << "selecting at " << e.wx << ' ' << e.wy << vcl_endl;
       return true; // event has been used
     }
 
@@ -36,13 +36,13 @@ struct example_tableau_new : public vgui_image_tableau_sptr
 };
 
 //-----------------------------------------------------------------------------
-// The first command line arguement is expected to be an image filename.
+// The first command line argument is expected to be an image filename.
 int main(int argc,char **argv)
 {
   vgui::init(argc, argv);
   if (argc <= 1)
   {
-    vcl_cerr << "Please give an image filename on the command line" << vcl_endl;
+    vcl_cerr << "Please give an image filename on the command line\n";
     return 0;
   }
 

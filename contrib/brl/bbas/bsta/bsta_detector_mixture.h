@@ -24,7 +24,7 @@ class bsta_top_weight_detector
     typedef typename mixture_::math_type T;
     typedef typename mixture_::vector_type vector_;
 
-    // for compatiblity with vpdl/vdpt
+    // for compatibility with vpdl/vdpt
     typedef return_T return_type;
     typedef mixture_ distribution_type;
 
@@ -67,7 +67,7 @@ class bsta_mix_any_less_index_detector
     typedef typename mixture_::math_type T;
     typedef typename mixture_::vector_type vector_;
 
-    // for compatiblity with vpdl/vdpt
+    // for compatibility with vpdl/vdpt
     typedef return_T return_type;
     typedef mixture_ distribution_type;
 

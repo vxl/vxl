@@ -357,7 +357,7 @@ class vnl_sse<double>
         z = _mm_shuffle_pd(w,w,_MM_SHUFFLE2(0,0));
         w = _mm_shuffle_pd(w,w,_MM_SHUFFLE2(1,1));
 
-        // multipy the two matrix columns
+        // multiply the two matrix columns
         // i.e.  x = ( v0 * m00, v0 * m01)
         //       y = ( v1 * m10, v1 * m11)
         //       z = ( v2 * m20, v2 * m21)
@@ -625,7 +625,7 @@ class vnl_sse<float>
         z = _mm_shuffle_ps(w,w,_MM_SHUFFLE(2,2,2,2));
         w = _mm_shuffle_ps(w,w,_MM_SHUFFLE(3,3,3,3));
 
-        // multipy the four matrix columns
+        // multiply the four matrix columns
         // i.e.  x = ( v0 * m00, v0 * m01, v0 * m02, v0 * m03)
         //       y = ( v1 * m10, v1 * m11, v1 * m12, v1 * m13)
         //       z = ( v2 * m20, v2 * m21, v2 * m22, v2 * m23)

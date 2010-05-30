@@ -27,7 +27,6 @@
 // \verbatim
 //  Modifications
 //   Initial version Dec. 2003
-//   The class doe
 // \endverbatim
 //
 //////////////////////////////////////////////////////////////////////
@@ -102,7 +101,7 @@ class brct_epi_reconstructor
   //: read time stamp
   vcl_vector<double> read_timestamp_file(char* fname);
 
-  //: if the zero probability returned, the matched point is a outlier
+  //: if zero probability returned, the matched point is an outlier
   double matched_point_prob(vnl_double_2& z, vnl_double_2& z_pred);
 
   //: get time interval from ith frame to j-th frame

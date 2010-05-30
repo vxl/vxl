@@ -694,12 +694,12 @@ void vtol_cycle_processor::print_edge(vtol_edge_2d_sptr& e)
 //------------------------------------------------------------------------
 //: The main cycle tracing algorithm.
 //  The input is edges_ and the output is chains_, a set of 1-cycles.
-//  The approach is to select an vtol_edge from edges_ and explore all the
+//  The approach is to select a vtol_edge from edges_ and explore all the
 //  vtol_edge(s) connected to it.  The search proceeds by traversing connected
 //  vtol_edge(s), turning in a cw or ccw direction depending on the initial vtol_edge
 //  orientation.  If the search returns to a vertex already on the path,
 //  then a cycle is output.  The traversed vtol_edge(s) and vertices are pushed
-//  onto a stack so that cycles can be "popped" off an the search continued
+//  onto a stack so that cycles can be "popped" off and the search continued
 //  from a proper state.  Each vtol_edge can be traversed in a plus or minus
 //  direction (2 half_edges). Thus boundaries might be traced twice producing
 //  identical cycles but traversed in opposite senses.
@@ -765,7 +765,7 @@ void vtol_cycle_processor::compute_cycles()
         pop_stacks(v_stack_, e_stack_, last_, cycle_edges);
         if (debug1_)
         {
-          vcl_cout << "======== In Cycle Classifer =======\n"
+          vcl_cout << "======== In Cycle Classifier =======\n"
                    << "cycle_edges\n";
           print_edges(cycle_edges);
         }

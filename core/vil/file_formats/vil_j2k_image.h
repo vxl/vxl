@@ -51,12 +51,12 @@ class vil_j2k_file_format : public vil_file_format
 //  asking for an image that is too big, get_copy_view() will scale down the image to the max dimension
 //  you specified.  It does this silently -- perhaps we could/should change this?
 //
-//  Note that, in order to use this class, you need to use cmake to cofigure VXL to link against
+//  Note that, in order to use this class, you need to use cmake to configure VXL to link against
 //  Er Mapper's freely available ECW JPEG 2000 SDK (http://ermapper.com/downloads/sdks.aspx#16).
 //
 // Writing implemented by J. Mundy April 2009
 // The SDK appears not to support float or double pixel types only integral
-// forms both signed or unsigned are supported. Another caveat is that the
+// forms; both signed or unsigned are supported. Another caveat is that the
 // actual compression rate is only loosely related to the targeted compression
 // rate specified upon creating the resource
 //

@@ -98,8 +98,8 @@ double mmn_lbp_solver::operator()(const vcl_vector<vnl_vector<double> >& node_co
     node_costs_.resize(nnodes_);
     for (unsigned i=0;i<nnodes_;++i)
     {
-        //: Negate costs to convert to log prob (i.e. internallly we do maximisation)
-        node_costs_[i] = -1.0*node_costs[i];
+        //: Negate costs to convert to log prob (i.e. internally we do maximisation)
+        node_costs_[i] = - node_costs[i];
     }
 
     //Initialise message structure and neighbourhood cost representation

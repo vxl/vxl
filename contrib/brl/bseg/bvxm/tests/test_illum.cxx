@@ -13,7 +13,7 @@ static void test_illum()
   vcl_vector<vcl_vector<vnl_matrix<float> > > nhds;
   bool good = bvxm_illum_util::load_surface_nhbds("e:/BaghdadIlum/white-side.txt",
                                                   nhds);
-  //assume that each surface point has the same number of neigborhoods
+  // assume that each surface point has the same number of neighborhoods
   unsigned n_images = nhds[0].size();
   unsigned n_surf_pts = nhds.size();
   vcl_vector<vcl_vector<float> > mean_intensities(n_images);

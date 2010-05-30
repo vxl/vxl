@@ -13,7 +13,7 @@
 //   Ozge C Ozcanli - Mar 25, 2008 - fixed a compiler warning as suggested by Daniel Lyddy
 //   Isabel Restrepo- Aug 22, 2008 - Moved most of calculations to template function
 //                    norm_parameters<bvxm_voxel_type APM_T>.
-//                  - Added support for multichannel appereance model processor,
+//                  - Added support for multichannel appearance model processor,
 //                  - Removed support for rgb_mog_processor
 //
 //   Ozge C Ozcanli - Dec 12, 2008 - added a third option to create mixture of gaussians (mog) image by sampling from the mixtures along the ray

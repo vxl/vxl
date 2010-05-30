@@ -34,10 +34,10 @@ class bsta_von_mises_updater
   typedef typename von_mises_dist_::math_type math_t;
   typedef typename von_mises_dist_::vector_type vect_t;
   typedef bsta_vsum_num_obs<von_mises_dist_> obs_vm_dist_;
-  //: for compatiblity with vpdl/vpdt
+  //: for compatibility with vpdl/vpdt
   typedef obs_vm_dist_ distribution_type;
   enum { data_dimension = von_mises_dist_::data_dimension };
-  //: for compatiblity with vpdl/vpdt
+  //: for compatibility with vpdl/vpdt
   typedef typename von_mises_dist_::field_type field_type;
 
   // Constructor

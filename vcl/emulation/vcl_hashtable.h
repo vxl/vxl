@@ -224,7 +224,7 @@ struct vcl_hashtable_const_iterator
 };
 
 // Note: assumes long is at least 32 bits.
-// fbp: try to avoid intances in every module
+// fbp: try to avoid instances in every module
 enum { VCL_num_primes = 28 };
 
 #if ( __STL_STATIC_TEMPLATE_DATA > 0 ) && ! defined (VCL_WIN32)

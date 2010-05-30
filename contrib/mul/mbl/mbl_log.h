@@ -294,7 +294,7 @@ class mbl_logger_root
   // or A. If none of these exist it will use the "root" category.
   // Each category has a level. If a log message has the same or higher
   // priority than the given level, the message will be output.
-  // Finally the category desination must be specified as a
+  // Finally the category destination must be specified as a
   // "file_output" and the filename or "stream_output" and the stream name.
   // The known stream names are "vcl_cout" and "vcl_cerr", and additional
   // names can be provided through \p stream_names.

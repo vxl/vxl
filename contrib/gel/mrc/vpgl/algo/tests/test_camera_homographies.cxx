@@ -47,8 +47,8 @@ static void test_camera_homographies()
   vgl_point_2d<double> ptp4 = Ht4(pt3);
   TEST_NEAR("test plane from image 45degrees perspective point1",
             ptp4.x(), 1.414, 0.001);
-// An  set of data corresponding to an actual image sequence
-  //World plane derived from 3 world points
+  // A set of data corresponding to an actual image sequence
+  // World plane derived from 3 world points
   vgl_plane_3d<double> world_plane(+0.0585478, -0.685533, -0.725683, +10.9752);
   vgl_point_3d<double> w0(34.89, -9.92, 27.31);
   vgl_point_3d<double> w1(48.92, -1.46, 20.45);

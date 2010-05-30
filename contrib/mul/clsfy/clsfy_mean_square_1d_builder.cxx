@@ -47,7 +47,7 @@ clsfy_classifier_1d* clsfy_mean_square_1d_builder::new_classifier() const
 //: Build a binary_threshold classifier
 //  Train classifier, returning weighted error
 //  Selects parameters of classifier which best separate examples from two classes,
-//  weighting examples appropriately when estimating the missclassification rate.
+//  weighting examples appropriately when estimating the misclassification rate.
 //  Returns weighted sum of error, e.wts, where e_i =0 for correct classifications,
 //  e_i=1 for incorrect.
 double clsfy_mean_square_1d_builder::build(clsfy_classifier_1d& classifier,

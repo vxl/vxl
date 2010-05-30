@@ -421,7 +421,7 @@ bgui3d_viewer_tableau::reset_to_home_position()
     camera_type_ = PERSPECTIVE;
   }
   // otherwise, cameras have changed in ways we don't understand since
-  // the last saveHomePosition() invokation, and so we're just going
+  // the last saveHomePosition() invocation, and so we're just going
   // to ignore the reset request
 }
 
@@ -626,8 +626,8 @@ bgui3d_viewer_tableau::set_clipping_planes()
   }
   // Some slack around the bounding box, in case the scene fits
   // exactly inside it. This is done to minimize the chance of
-  // artifacts caused by the limitation of the z-buffer
-  // resolution. One common artifact if this is not done is that the
+  // artefacts caused by the limitation of the z-buffer
+  // resolution. One common artefact if this is not done is that the
   // near clipping plane cuts into the corners of the model as it's
   // rotated.
   const float SLACK = 0.001f;

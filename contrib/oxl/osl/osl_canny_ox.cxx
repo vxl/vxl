@@ -407,9 +407,9 @@ void osl_canny_ox::Link_edgelsOX(vcl_vector<unsigned> const &col,
       // Diagonal neighbours (distance sqrt(2)):
 
       bool se = false;
-      if (!e && !s && col[j]+1==col[k])  {  // j and k are diagonal \ neigbours
+      if (!e && !s && col[j]+1==col[k])  {  // j and k are diagonal \ neighbours
         Add_linkOX(j,k,links); se = true; }
-      if (!w && !s && col[j]==col[k]+1)  {  // j and k are diagonal / neigbours
+      if (!w && !s && col[j]==col[k]+1)  {  // j and k are diagonal / neighbours
         Add_linkOX(j,k,links); s = w = true; }
       if (se) s = e = true;
 

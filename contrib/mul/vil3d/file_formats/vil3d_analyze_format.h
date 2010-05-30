@@ -13,7 +13,7 @@
 #include <vcl_iosfwd.h>
 #include <vil3d/vil3d_file_format.h>
 
-//: Structure containing anaylse header file information.
+//: Structure containing analyse header file information.
 class vil3d_analyze_header
 {
  public :

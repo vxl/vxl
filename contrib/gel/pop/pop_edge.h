@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \brief this is a edge/coordinate system transform in a coordinate system graph
+// \brief This is an edge/coordinate system transform in a coordinate system graph
 //
 // \author
 //            Peter Tu April 2003

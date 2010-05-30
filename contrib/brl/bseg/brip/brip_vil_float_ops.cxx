@@ -774,7 +774,7 @@ brip_vil_float_ops::beaudet(vil_image_view<float> const& Ixx,
 //                       |(dI/dx)(dI/dy)   (dI/dx)^2   |
 //                       |_                           _|
 // \endverbatim
-// over a 2n+1 x 2n+1 neigborhood
+// over a 2n+1 x 2n+1 neighborhood
 //
 void
 brip_vil_float_ops::grad_matrix_NxN(vil_image_view<float> const& input,
@@ -856,7 +856,7 @@ brip_vil_float_ops::harris(vil_image_view<float> const& IxIx,
 
 //----------------------------------------------------------------
 // Compute the sqrt of the product of the eigenvalues of the
-// gradient matrix over a 2n+1 x 2n+1 neigborhood
+// gradient matrix over a 2n+1 x 2n+1 neighborhood
 // That is,
 // \verbatim
 //                        _                           _
@@ -1181,7 +1181,7 @@ lucas_kanade_motion_on_view(vil_image_view<float> const& curr_frame,
 }
 
 //------------------------------------------------------------------------
-// Assume that curr mtch region is larger than prev_region by the required
+// Assume that curr match region is larger than prev_region by the required
 // search ranges. Step through the search and output the shift that
 // maximizes the correlation. zero_i and zero_j indicate the curr_image
 // pixel location corresponding to no velocity between frames
@@ -1320,7 +1320,7 @@ Horn_SchunckMotion(vil_image_view<float> const& current_frame,
   temp1.fill(0.0);
   temp2.fill(0.0);
 
-  //Averge the local intensites over 3x3 region
+  // Average the local intensities over 3x3 region
   temp1 = brip_vil_float_ops::average_NxN(previous_frame, 3);
   temp2 = brip_vil_float_ops::average_NxN(current_frame, 3);
   if (vil_image_view_deep_equality(emptyimg, temp1) ||
@@ -2523,7 +2523,7 @@ spatial_frequency_filter(vil_image_view<float> const& input,
 }
 
 //----------------------------------------------------------------------
-//: Bi-linear interpolation on the neigborhood below.
+//: Bi-linear interpolation on the neighborhood below.
 // \verbatim
 //      xr
 //   yr 0  x

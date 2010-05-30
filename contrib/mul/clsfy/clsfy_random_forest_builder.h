@@ -128,7 +128,7 @@ class clsfy_random_forest_builder : public clsfy_builder_base
   // terminated
   int min_node_size_;
 
-  //: Uniform sampler on 0,1 (for bootsrapping)
+  //: Uniform sampler on 0,1 (for bootstrapping)
   mutable  vnl_random random_sampler_;
 
   //: Pointer to storeage of point indices for each bootstrapped tree

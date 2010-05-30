@@ -29,7 +29,7 @@ vgui_tableau_sptr make_3d_tableau(char const* filename)
 {
   vgui_vrml_tableau_new vrml(filename, true);
 
-  // Create a easy3D tableau:
+  // Create an easy3D tableau:
   vgui_easy3D_tableau_new list3D;
 
   list3D->set_point_radius(1);

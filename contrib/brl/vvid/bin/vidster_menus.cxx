@@ -5,7 +5,7 @@
 #include <vvid/vvid_live_stereo_manager.h>
 
 
-//Static munu callback functions
+// Static menu callback functions
 
 void vidster_menus::quit_callback()
 {
@@ -28,7 +28,7 @@ void vidster_menus::stop_live_video_callback()
   vvid_live_stereo_manager::instance()->stop_live_video();
 }
 
-//vidster_menus definition
+// vidster_menus definition
 vgui_menu vidster_menus::get_menu()
 {
   vgui_menu menubar;

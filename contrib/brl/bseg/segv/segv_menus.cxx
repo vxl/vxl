@@ -6,7 +6,7 @@
 #include <vgui/vgui_menu.h>
 #include "segv_segmentation_manager.h"
 
-//Static munu callback functions
+// Static menu callback functions
 
 void segv_menus::quit_callback()
 {

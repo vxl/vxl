@@ -235,9 +235,9 @@ vil1_viff_createimage(vxl_uint_32 col_size, vxl_uint_32 row_size,
 *
 *  MODULE NAME: freeimage
 *
-*      PURPOSE: This routine frees an khoros xvimage structure.
+*      PURPOSE: This routine frees a Khoros xvimage structure.
 *
-*        INPUT: image --  a pointer to an khoros xvimage structure that
+*        INPUT: image --  a pointer to a Khoros xvimage structure that
 *                         contains the image structure to be freed.
 *
 *       OUTPUT: (none)  since all we are doing is freeing as much of
@@ -311,7 +311,7 @@ static vxl_uint_32 vil1_viff_getmachsize(vxl_uint_32 mtype,vxl_uint_32 dtype)
 
 /*
     IMAGESIZE - Compute the size in bytes and objects of the
-                components of an KHOROS 3 image.
+                components of a KHOROS 3 image.
 
     Written:  Scott Wilson
     Date:     29-Mar-89
@@ -347,7 +347,8 @@ int vil1_viff_imagesize(struct vil1_viff_xvimage *image,int *dsize, int *dcount,
   if (image->data_storage_type==VFF_TYP_BIT){
      datasize = ((cols+7)/8)*rows;
      datacount = datasize;
-  }else{
+  }
+  else {
      datasize = cols*rows * vil1_viff_getmachsize(mach, image->data_storage_type);
      datacount = cols*rows;
   }

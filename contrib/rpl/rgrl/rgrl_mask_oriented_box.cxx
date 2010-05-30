@@ -59,7 +59,7 @@ inside( vnl_vector<double> const& pt ) const
 
   vnl_vector<double> mapped = vnl_transpose( axes_ ) * pt;
 
-  // len_[i] >=0 is gurranteed in update_bounding_box function
+  // len_[i] >=0 is guaranteed in update_bounding_box function
   //
   bool inside = true;
   for ( unsigned i=0; i<omin_.size()&&inside; ++i )

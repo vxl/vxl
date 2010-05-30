@@ -251,7 +251,8 @@ point_to_bin( point_type const& pt, int ind[N] ) const
     ind[d] = coord_to_bin( pt[d], d );
     if ( ind[d] < 0 ) {
       ind[d] = 0;
-    } else if ( ind[d] >= size_[d] ) {
+    }
+    else if ( ind[d] >= size_[d] ) {
       ind[d] = size_[d] - 1;
     }
   }
@@ -270,7 +271,8 @@ bin_index( point_type const& pt ) const
     int i = coord_to_bin( pt[d], d );
     if ( i < 0 ) {
       i = 0;
-    } else if ( i >= size_[d] ) {
+    }
+    else if ( i >= size_[d] ) {
       i = size_[d] - 1;
     }
     index += i*skip;
@@ -312,7 +314,8 @@ bin_indices( point_type const& pt ) const
 
   if ( bin_lo == bin_hi ) {
     indices.push_back( bin_index( bin_lo ) );
-  } else {
+  }
+  else {
     int cur[N];
     scan_region( bin_lo, bin_hi, cur, 0, indices );
   }
@@ -507,7 +510,7 @@ n_nearest_impl( point_type const& pt,
       // stores the indices of the new candidate bins.
       bin_index_vector indices;
 
-      int cur[N];   // bin index, used by recursive iterator, needs no initializtion
+      int cur[N];   // bin index, used by recursive iterator, needs no initialization
       scan_region( bin_new_lo, bin_new_hi, cur, 0, indices );
 
       typedef typename bin_index_vector::iterator ind_iter;
@@ -595,10 +598,10 @@ n_nearest_impl( point_type const& pt,
 
   // 1. Find the list of bins with candidate points. The candidate
   // bins will collectively hold at least n points to test. Points in
-  // non-candidate bins will be further away that all points in the
+  // non-candidate bins will be further away than all points in the
   // candidate bins.
   //
-  // The idea is to repeatedly bins from an ever growning
+  // The idea is to repeatedly find bins from an ever growing
   // (square) "circle" until we have enough bins.
 
   // stores the indices of the candidate bins.
@@ -631,7 +634,8 @@ n_nearest_impl( point_type const& pt,
         found += scan_bdy( bin_lo, bin_hi, cur, 0, indices );
       }
       still_looking = false;
-    } else {
+    }
+    else {
       bool some_dimension_in_bounds = false;
       for ( unsigned i=0; i < N; ++i ) {
         --bin_lo[i];
@@ -670,7 +674,8 @@ n_nearest_impl( point_type const& pt,
   if ( distances.size() > n ) {
     mid = distances.begin() + n;
     vcl_partial_sort( distances.begin(), mid, distances.end() );
-  } else {
+  }
+  else {
     mid = distances.end();
   }
 
@@ -928,7 +933,8 @@ scan_region( int lo[N], int hi[N], int cur[N], unsigned dim,
     bin_index_type ind = bin_index( cur );
     indices.push_back( ind );
     found = bins_[ind].size();
-  } else {
+  }
+  else {
     int bx = vcl_max( lo[dim], 0 );
     int ex = vcl_min( hi[dim]+1, size_[dim] );
     for ( int x=bx; x < ex; ++x ) {

@@ -2,7 +2,7 @@
 #define osl_harris_h
 //:
 // \file
-// \brief The harris corner detector
+// \brief The Harris corner detector
 //
 // \par Parameters :
 // - corner_count_max - maximum no of corners required.
@@ -10,7 +10,7 @@
 // - relative minimum - a guidance term: first attempt will be to collect all
 //                      corners whose corner strength is greater than (max
 //                      strength * relative  minimum).
-// - scale factor     - the 'k' from the harris auto-correlation expression.
+// - scale factor     - the 'k' from the Harris auto-correlation expression.
 //
 // \author Paul Beardsley, Robotics Research Group, Oxford University
 // \date   16 October 1995
@@ -31,7 +31,7 @@
 #include <osl/osl_harris_params.h>
 #include <osl/osl_roi_window.h>
 
-//: A osl_harris object stores the internal buffers used by the harris corner detector.
+//: An osl_harris object stores the internal buffers used by the Harris corner detector.
 class osl_harris
 {
  public:

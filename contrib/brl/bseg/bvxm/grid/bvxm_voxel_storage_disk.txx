@@ -331,7 +331,7 @@ void bvxm_voxel_storage_disk<T>::increment_observations()
   fio_->seek(0);
   pos = fio_->tell();
   if (pos != 0) {
-    vcl_cerr << "error seeking to beggining of file\n";
+    vcl_cerr << "error seeking to beginning of file\n";
     return;
   }
   // write
@@ -375,7 +375,7 @@ void bvxm_voxel_storage_disk<T>::zero_observations()
   fio_->seek(0);
   pos = fio_->tell();
   if (pos != 0) {
-    vcl_cerr << "error seeking to beggining of file\n";
+    vcl_cerr << "error seeking to beginning of file\n";
     return;
   }
   // write

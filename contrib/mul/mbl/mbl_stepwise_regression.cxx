@@ -104,15 +104,15 @@ void mbl_stepwise_regression::operator()()
         //And now carry on and do forward stepwise (with some removals)
         do_forward_stepwise_regression();
     }
-    else //Backwards
+    else // Backwards
     {
-        //start from an full basis
+        // start from a full basis
         mbl_stl_increments_n(vcl_inserter(basis_,basis_.end()),
                             num_vars_,0);
         basis_complement_.clear();
         do_backward_stepwise_regression();
     }
-    //And ensure solution is set up for the final basis
+    // And ensure solution is set up for the final basis
     lsfit_this_basis fitter(x_,y_,XtX_,XtY_);
     fitter.set_basis(basis_);
     fitter();
@@ -124,7 +124,7 @@ void mbl_stepwise_regression::do_forward_stepwise_regression()
     bool carryOn=true;
     while (carryOn)
     {
-        //Now try another addition step followed by one elimination
+        // Now try another addition step followed by one elimination
         bool addedOne = add_variable();
         bool removedOne = remove_variable();
         carryOn = addedOne || removedOne ;

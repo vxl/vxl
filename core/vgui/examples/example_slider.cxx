@@ -1,7 +1,7 @@
 // This example displays a line in an OpenGL area in the window:
 
-#include <vgui/vgui.h> 
-#include <vgui/vgui_slider_tableau.h> 
+#include <vgui/vgui.h>
+#include <vgui/vgui_slider_tableau.h>
 #include <vgui/vgui_poly_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_easy2D_tableau.h>
@@ -9,14 +9,14 @@
 
 // This callback will change one of the coordinates of the line. The
 // appropriate coordinate is specified in the data tag associated with
-// the callback, so the implmentation of this callback is simple.
+// the callback, so the implementation of this callback is simple.
 void change_number_cb( vgui_slider_tableau* tab, void* data )
 {
   float* number = static_cast<float*>(data);
   *number = tab->value() * 2.0f - 1.0f;
 }
 
-int main(int argc, char **argv) 
+int main(int argc, char **argv)
 {
   vgui::init(argc, argv);
 

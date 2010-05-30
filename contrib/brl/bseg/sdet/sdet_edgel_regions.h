@@ -44,7 +44,7 @@
 //
 // 19 November 2002 - J.L. Mundy moved to brl for further evolution
 // 09 January 2003  - J.L. Mundy implemented expanded array resolution
-//                    for more accurate connection neigborhoods
+//                    for more accurate connection neighborhoods
 // \endverbatim
 //
 //-----------------------------------------------------------------------------

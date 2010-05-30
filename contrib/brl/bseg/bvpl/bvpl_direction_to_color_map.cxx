@@ -241,7 +241,7 @@ void bvpl_convert_grid_to_hsv_grid(bvxm_voxel_grid<vnl_float_4> *grid,
     }
   }
 
-  vcl_cout << "Maximum response: " << max << " Minimun response: " << min << vcl_endl;
+  vcl_cout << "Maximum response: " << max << " Minimum response: " << min << vcl_endl;
 
   //reset iterator
   grid1_it = grid->begin();
@@ -286,7 +286,7 @@ void bvpl_convert_id_grid_to_hsv_grid(bvxm_voxel_grid<int> *id_grid,
     }
   }
 
-  vcl_cout << "Maximum response: " << max << " Minimun response: " << min << vcl_endl;
+  vcl_cout << "Maximum response: " << max << " Minimum response: " << min << vcl_endl;
 
   //reset iterator
   bvxm_voxel_grid<vnl_float_4>::iterator out_grid_it = out_grid->begin();
@@ -344,7 +344,7 @@ void bvpl_convert_id_grid_to_hsv_grid(bvxm_voxel_grid<int> *id_grid,
     }
   }
 
-  vcl_cout << "Maximum response: " << max << " Minimun response: " << min << vcl_endl;
+  vcl_cout << "Maximum response: " << max << " Minimum response: " << min << vcl_endl;
 
   //reset iterator
   bvxm_voxel_grid<vnl_float_4>::iterator out_grid_it = out_grid->begin();

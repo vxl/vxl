@@ -50,7 +50,7 @@ class pre_inf_functor
     const float Omega = vis_img_(i,j) - vis_prob_end;
     // and update pre
     pre_img_(i,j) +=  PI * Omega;
-    // update visibility probabilty
+    // update visibility probability
     vis_img_(i,j) = vis_prob_end;
     return true;
   }

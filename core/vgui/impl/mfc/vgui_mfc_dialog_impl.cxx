@@ -71,7 +71,7 @@ void* vgui_mfc_dialog_impl::choice_field_widget(const char* /*txt*/,
   return (void*)ch;
 }
 
-//: Structure to contain data for a inline tableau.
+//: Structure to contain data for an inline tableau.
 struct vgui_mfc_dialog_inline_tab
 {
   vgui_tableau_sptr tab;
@@ -577,9 +577,9 @@ bool vgui_mfc_dialog_impl::ask()
   delete accept;
   delete cancel;
   DestroyWindow();
-  
+
   delete font;
-  
+
   // Enable the parent window
   AfxGetApp()->EnableModeless(TRUE);
   AfxGetApp()->GetMainWnd()->EnableWindow(TRUE);

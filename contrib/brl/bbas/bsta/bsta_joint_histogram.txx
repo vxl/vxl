@@ -318,7 +318,7 @@ void bsta_joint_histogram<T>::print_to_vrml(vcl_ostream& os) const
      << "  }\n"
      << "}\n";
 
-  //: draw a red thin box to designate a axis
+  // draw a red thin box to designate an axis
   os << "Transform {\n"
      << "  translation " << (nbins_a_-1)/2.0f << ' ' << (nbins_b_-1)/2.0f << " 0\n"
      << "  children Shape {\n"

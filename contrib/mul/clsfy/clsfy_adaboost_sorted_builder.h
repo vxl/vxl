@@ -4,7 +4,7 @@
 #define clsfy_adaboost_sorted_builder_h_
 //:
 // \file
-// \brief Describe an concrete classifier
+// \brief Describe a concrete classifier
 // \author Ian Scott
 // \date 2000-05-10
 // \verbatim

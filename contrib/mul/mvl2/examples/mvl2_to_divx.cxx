@@ -34,7 +34,7 @@ int main(int argc, char **argv)
     }
     else
     {
-      vcl_cout << "Not a AVI or SEQUENCE format file.\n";
+      vcl_cout << "Not an AVI or SEQUENCE format file.\n";
       return -1;
     }
   }

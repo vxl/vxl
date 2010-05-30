@@ -166,7 +166,8 @@ vcl_string& vul_string_capitalize(vcl_string& s)
     if ( !in_word && vcl_isalnum( *si ) ) {
       *si = (char)vcl_toupper( *si );
       in_word = true;
-    } else if ( in_word && !vcl_isalnum( *si ) ) {
+    }
+    else if ( in_word && !vcl_isalnum( *si ) ) {
       in_word = false;
     }
   }
@@ -219,8 +220,7 @@ double vul_string_atof(vcl_string const& s)
 }
 
 
-
-//: Reads an double from a string, with k, kb, M, etc suffix.
+//: Reads a double from a string, with k, kb, M, etc suffix.
 // No space is allowed between the number and the suffix.
 // k=10^3, kb=2^10, M=10^6, Mb=2^20, G=10^9, Gb=2^30, T=10^12, Tb=2^40
 // If parse fails, return 0.0;

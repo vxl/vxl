@@ -254,8 +254,8 @@ int clsfy_smo_1_lin::examine_example(int i1)
     E1 = learned_func(i1) - y1;
 
   r1 = y1 * E1;
-  if ((r1 < -tolerance_ && alph1 < C_)
-    || (r1 > tolerance_ && alph1 > 0)) // is the KKT condition for alph1 broken?
+  if ((r1 < -tolerance_ && alph1 < C_) ||
+      (r1 > tolerance_ && alph1 > 0)) // is the KKT condition for alph1 broken?
   {
     // Try i2 by three ways; if successful, then immediately return 1;
     {
@@ -334,7 +334,7 @@ int clsfy_smo_1_lin::calc()
   const unsigned long N = data_->size();
   assert(N != 0);     // Check that there is some data.
 
-  if (alph_.empty()) // only initialise alph if it hasn;t been externally set.
+  if (alph_.empty()) // only initialise alph if it hasn't been externally set.
   {
     alph_.set_size(N);
     alph_.fill(0.0);

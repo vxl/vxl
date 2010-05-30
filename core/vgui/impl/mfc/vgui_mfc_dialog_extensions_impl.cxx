@@ -75,7 +75,7 @@ void* vgui_mfc_dialog_extensions_impl::choice_field_widget(const char* /*txt*/,
   return (void*)ch;
 }
 
-//: Structure to contain data for a inline tableau.
+//: Structure to contain data for an inline tableau.
 struct vgui_mfc_dialog_inline_tab
 {
   vgui_tableau_sptr tab;
@@ -189,7 +189,7 @@ void vgui_mfc_dialog_extensions_impl::OnClose()
 }
 
 //: Display the dialog in a user formatted box.
-// Line breaks are used to seperate lines of elements
+// Line breaks are used to separate lines of elements
 bool vgui_mfc_dialog_extensions_impl::ask()
 {
   // Get the pointer to the main window
@@ -569,7 +569,8 @@ bool vgui_mfc_dialog_extensions_impl::ask()
       wlist.push_back(widg);
       delete tab_data;
       r.left = r.right;
-    } else if (l.type == line_br ) {
+    }
+    else if (l.type == line_br ) {
       // put a line break i.e. start a new line to put the elements
       r.top+=4*8;
       r.bottom+=4*8;

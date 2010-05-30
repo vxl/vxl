@@ -147,7 +147,7 @@ class bwm_video_corr_processor
   // INTERNALS-----------------------------------------------------------------
 
  protected:
-  //: compute the boolean mask defining which frames have coorespondences
+  //: compute the boolean mask defining which frames have correspondences
   void mask(unsigned& min_frame, unsigned& max_frame,
             vcl_vector<vcl_vector<bool> >& mask);
 
@@ -168,7 +168,7 @@ class bwm_video_corr_processor
                           unsigned frame_index_x, unsigned win_radius,
                           unsigned search_radius, bool use_lmq);
 
-  //: iterpolate between the set of known cameras (\a kcams).
+  //: interpolate between the set of known cameras (\a kcams).
   // The vector \a unknown specifies which cameras are unknown.
   // The number of elements in \a icams is the same as in \a unknown.
   // The number of false entries in \a unknown must be the same as the size of \a kcams.

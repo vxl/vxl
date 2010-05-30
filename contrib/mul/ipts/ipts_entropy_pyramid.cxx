@@ -55,7 +55,7 @@ void ipts_entropy_pyramid(const vimt_image_pyramid& smooth_pyramid,
          smooth_im.image().nj()>2*half_width+1)  n_levels++;
   }
 
-  // Compute entropys for all levels of an image pyramid
+  // Compute entropies for all levels of an image pyramid
   entropy_pyramid.resize(n_levels,vimt_image_2d_of<float>());
   for (int i=0;i<n_levels;++i)
   {

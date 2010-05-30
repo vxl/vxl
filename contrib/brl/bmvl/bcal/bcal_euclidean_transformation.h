@@ -5,8 +5,8 @@
 //
 // \verbatim
 //  Modifications:
-//    Sancar Adali  April 1, 2004  Added get_trans_matrix(i) for acccessing ith
-//                                 transformation matrix
+//    Sancar Adali  April 1, 2004  Added get_trans_matrix(i) for accessing
+//                                 the ith transformation matrix
 // \endverbatim
 //-----------------------------------------------------------------------------
 

@@ -73,7 +73,7 @@ void test_gauss_fit()
     }
   vcl_cout << "Finished creating test data, now fitting " << vcl_endl;
 
-  // now fit this noisless distribution and observe the results
+  // now fit this noiseless distribution and observe the results
 
   vnl_vector<double> result = sdet_gauss_fit::adjust( img_pts );
 

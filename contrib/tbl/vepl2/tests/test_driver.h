@@ -27,7 +27,7 @@ vil_image_resource_sptr CreateTest3planeImage(int wd, int ht);
 // create a float-pixel test image
 vil_image_resource_sptr CreateTestfloatImage(int wd, int ht);
 
-// create a oublei-pixel test image
+// create a double-pixel test image
 vil_image_resource_sptr CreateTestdoubleImage(int wd, int ht);
 
 // Compare two images and return true if their difference is not v

@@ -69,7 +69,7 @@ class vil_nitf2_image_subheader
   // \param lut_d: the LUT data indexed first by lut, then lut element
   //               ie, the last element would be lut_d[n_luts-1][ne_lut-1]
   //
-  // See the NITF spec for exactly how this data is to be interpretted.  Here's
+  // See the NITF spec for exactly how this data is to be interpreted.  Here's
   // a summary:
   // LUTS always contain 8 bit unsigned data.  If n_luts is 1, then this band
   // is to be transformed into an 8-bit image plane.  Each pixel value in the

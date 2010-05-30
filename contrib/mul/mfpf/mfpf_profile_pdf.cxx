@@ -72,7 +72,7 @@ double mfpf_profile_pdf::evaluate(const vimt_image_2d_of<float>& image,
 }
 
    //: Evaluate match at in a region around p
-   // Returns a qualtity of fit at a set of positions.
+   // Returns a quality of fit at a set of positions.
    // response image (whose size and transform is set inside the
    // function), indicates the points at which the function was
    // evaluated.  response(i,j) is the fit at the point
@@ -117,7 +117,7 @@ void mfpf_profile_pdf::evaluate_region(
    //: Search given image around p, using u to define scale and orientation
    //  On exit, new_p defines position of
    //  the best nearby match.
-   //  Returns a qualtity of fit measure at that
+   //  Returns a quality of fit measure at that
    //  point (the smaller the better).
 double mfpf_profile_pdf::search_one_pose(
                                 const vimt_image_2d_of<float>& image,

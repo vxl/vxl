@@ -5,7 +5,7 @@
 // \file
 // \author Ian Scott
 // \date  7-Aug-2007
-// \brief Load a int_list of PODs/objects from a config file.
+// \brief Load an int_list of PODs/objects from a config file.
 
 #include <vcl_istream.h>
 #include <vcl_cctype.h>

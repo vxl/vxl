@@ -7,7 +7,7 @@
 //:
 // \file
 // \author J.L. Mundy  June 18, 2005
-// \brief A curve segment with the geometry of an conic
+// \brief A curve segment with the geometry of a conic
 //
 // A conic segment contains those points of a given conic which lie between the
 // given start point (inclusive) and the given end point, in a certain direction

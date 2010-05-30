@@ -24,7 +24,7 @@ bool bvxm_render_virtual_view_process_cons(bprb_func_process& pro)
   //input[1]: The original camera
   //input[2]: The camera to render the virtual view from
   //input[3]: The voxel world
-  //input[4]: The apperance model type. This input must be either apm_mog_grey or apm_mog_rgb
+  //input[4]: The appearance model type. This input must be either apm_mog_grey or apm_mog_rgb
   //          any other string will initialize the value to apm_mog_grey
   //input[5]: The bin index to be updated
   //input[6]: The scale index to be rendered
@@ -155,7 +155,7 @@ bool bvxm_render_virtual_view_process(bprb_func_process& pro)
     }
   }
   else
-    vcl_cerr << "Error in bvxm_render_virtual_view_process: Unknown appereance model\n";
+    vcl_cerr << "Error in bvxm_render_virtual_view_process: Unknown appearance model\n";
 
   //store output
 

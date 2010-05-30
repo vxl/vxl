@@ -25,7 +25,7 @@ class bsta_distribution
     typedef T math_type;
     //: The type used for a n-dimensional vector of math types
     typedef vnl_vector_fixed<math_type,dimension> vector_type;
-    //: for compatiblity with vpdl/vpdt
+    //: for compatibility with vpdl/vpdt
     typedef vector_type field_type;
 };
 
@@ -43,7 +43,7 @@ class bsta_distribution<T,1>
     //: The type used for a n-dimensional vector of math types
     typedef T vector_type;
 
-    //: for compatiblity with vpdl/vpdt
+    //: for compatibility with vpdl/vpdt
     typedef vector_type field_type;
 };
 

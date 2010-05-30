@@ -85,7 +85,7 @@ class m23d_ortho_rigid_builder
   void reconstruct(const vnl_matrix<double>& P2D);
 
   //: Reconstruct structure from set of 2d pts
-  // Formulates measurement matrix P2D then calls reconstruct funtion above
+  // Formulates measurement matrix P2D then calls reconstruct function above
   void reconstruct(const vcl_vector< vcl_vector< vgl_point_2d<double> > >& pt_vec_list );
 
   //: Refine estimates of projection and structure

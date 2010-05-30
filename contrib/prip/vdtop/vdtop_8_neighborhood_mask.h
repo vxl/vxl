@@ -3,7 +3,7 @@
 #define vdtop_8_neighborhood_mask_h_
 //:
 // \file
-// \brief gives functionalities for computing certain characteritics of binary 8-neighborhoods.
+// \brief gives functionalities for computing certain characteristics of binary 8-neighborhoods.
 // \author Jocelyn Marchadier
 // \date 06 May 2004
 //

@@ -117,7 +117,7 @@ bool bbgm_local_frame_trans_process(bprb_func_process& pro)
       total += 1.0f;
       double A = 0, B = 0, C= 0, D = 0, E = 0;
       bool trans = true;
-      //run over 5x5 neigborhood about i,j
+      //run over 5x5 neighborhood about i,j
       for (int jn = -2; jn<=2; ++jn)
         for (int in = -2; in<=2; ++in) {
           //retrieve distribution

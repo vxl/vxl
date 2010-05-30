@@ -34,7 +34,7 @@ class bsta_parzen_updater
   typedef typename parzen_dist_::vector_type vector_;
   enum { data_dimension = parzen_dist_::dimension };
 
-  //: for compatiblity with vpdl/vpdt
+  //: for compatibility with vpdl/vpdt
   typedef typename parzen_dist_::field_type field_type;
 
   // Constructor
@@ -61,7 +61,7 @@ class bsta_parzen_adapt_bw_updater
   typedef typename parzen_dist_::vector_type vector_;
   enum { data_dimension = parzen_dist_::dimension };
 
-  //: for compatiblity with vpdl/vpdt
+  //: for compatibility with vpdl/vpdt
   typedef typename parzen_dist_::field_type field_type;
   typedef parzen_dist_ distribution_type;
 

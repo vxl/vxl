@@ -212,7 +212,7 @@ boxm_utils::visible_faces(vgl_box_3d<double> const& bbox, vpgl_camera_double_spt
   //// for other cameras, use projection and normals
   //else
   {
-    // fix the face normals so that the vertices are the counter clokwise order
+    // fix the face normals so that the vertices are in counter-clockwise order
     vcl_map<boct_face_idx, vcl_vector<vgl_point_3d<double> > > faces;
     faces_of_box_3d(bbox, faces);
 
@@ -1201,7 +1201,8 @@ bool boxm_utils::cube_uniform_mean(boct_face_idx & vis_face_ids,
   if (count > 0) {
     val/=(float)count;
     return true;
-  } else {
+  }
+  else {
     val = 0;
     return true;
   }
@@ -1255,7 +1256,8 @@ bool boxm_utils::cube_weighted_mean(boct_face_idx & vis_face_ids,
   if (count > 0) {
     val/=(float)count;
     return true;
-  } else {
+  }
+  else {
     val = 0;
     return true;
   }

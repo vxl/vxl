@@ -40,7 +40,7 @@ int main(int argc, char** argv)
   vil_image_resource_sptr cropped_data = vil_crop(data, 1, data->ni()-2, 1, data->nj()-2);
 
 
-  // An then get the image pixels from it.
+  // And then get the image pixels from it.
 
   vil_image_view<unsigned char> uc_view = cropped_data->get_view(0, cropped_data->ni(), 0, cropped_data->nj());
 

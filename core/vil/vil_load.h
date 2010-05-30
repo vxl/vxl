@@ -8,7 +8,7 @@
 // \file
 // \brief read an image from a file
 //
-// vil_load returns a pointer to the base class of an vil_image_view object.
+// vil_load returns a pointer to the base class of a vil_image_view object.
 // You can then cast, or assign it to the appropriate type. You must not forget to
 // delete the created view.
 //
@@ -60,7 +60,6 @@ vil_load_pyramid_resource(char const* directory_or_file, bool verbose = true);
 //: Convenience function for loading an image into an image view.
 // \relatesalso vil_image_view
 vil_image_view_base_sptr vil_load(const char *, bool verbose = true);
-
 
 
 #if defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T

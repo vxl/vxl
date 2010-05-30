@@ -40,7 +40,7 @@ class vimt_vil_fstream: vil_stream_fstream
 
 vil_image_resource_sptr vimt_vil_v2i_format::make_input_image(vil_stream* vs)
 {
-  // First of all hack an vil_stream to get at the underlying
+  // First of all hack a vil_stream to get at the underlying
   // vcl_stream, in order to create a vsl_b_stream
   if (typeid(*vs) != typeid(vil_stream_fstream))
   {
@@ -94,7 +94,7 @@ vil_image_resource_sptr vimt_vil_v2i_format::make_input_image(vil_stream* vs)
     case  F : \
     { vimt_image_2d_of< T > im; vsl_b_read(vslstream, im); if (!vslstream) return 0; } \
     break;
-// Don't include versions for which there is no template instantian of vimt_image_2d_of.
+// Don't include versions for which there is no template instantiation of vimt_image_2d_of.
 macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
 //macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
 //macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
@@ -117,7 +117,7 @@ vil_image_resource_sptr vimt_vil_v2i_format::make_output_image(vil_stream* vs,
                                                                unsigned nplanes,
                                                                vil_pixel_format format)
 {
-  // First of all hack an vil_stream to get at the underlying
+  // First of all hack a vil_stream to get at the underlying
   // ccl_stream, in order to create a vsl_b_stream
   if (typeid(*vs) != typeid(vil_stream_fstream))
   {
@@ -188,7 +188,7 @@ vimt_vil_v2i_image::vimt_vil_v2i_image(vil_stream* vs, vil_pixel_format f):
     im_ = new vimt_image_2d_of< T >(); \
     vsl_b_read(vslstream, *static_cast<vimt_image_2d_of< T >*>(im_)); \
     break;
-// Don't include versions for which there is no template instantian of vimt_image_2d_of.
+// Don't include versions for which there is no template instantiation of vimt_image_2d_of.
 macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
 //macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
 //macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
@@ -248,7 +248,7 @@ vimt_vil_v2i_image::vimt_vil_v2i_image(vil_stream* vs, unsigned ni, unsigned nj,
    case  F : \
     im_ = new vimt_image_2d_of< T > (ni, nj, nplanes); \
     break;
-// Don't include versions for which there is no template instantian of vimt_image_2d_of.
+// Don't include versions for which there is no template instantiation of vimt_image_2d_of.
 macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
 //macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
 //macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
@@ -362,7 +362,7 @@ vil_image_view_base_sptr vimt_vil_v2i_image::get_copy_view(unsigned i0, unsigned
                           ni, nj, v.nplanes(), \
                           v.istep(), v.jstep(), v.planestep()); \
     return new vil_image_view< T >(vil_copy_deep(w)); }
-// Don't include versions for which there is no template instantian of vimt_image_2d_of.
+// Don't include versions for which there is no template instantiation of vimt_image_2d_of.
 macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
 //macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
 //macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
@@ -397,7 +397,7 @@ vil_image_view_base_sptr vimt_vil_v2i_image::get_view(unsigned i0, unsigned ni,
     return new vil_image_view< T >(v.memory_chunk(), &v(i0,j0), \
                                    ni, nj, v.nplanes(), \
                                    v.istep(), v.jstep(), v.planestep()); }
-// Don't include versions for which there is no template instantian of vimt_image_2d_of.
+// Don't include versions for which there is no template instantiation of vimt_image_2d_of.
 macro(VIL_PIXEL_FORMAT_BYTE , vxl_byte )
 //macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
 //macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
@@ -441,7 +441,7 @@ bool vimt_vil_v2i_image::put_view(const vil_image_view_base& vv,
                        static_cast<vimt_image_2d_of< T >&>(*im_).image(), i0, j0); \
     return true;
 
-// Don't include versions for which there is no template instantian of vimt_image_2d_of.
+// Don't include versions for which there is no template instantiation of vimt_image_2d_of.
     macro(VIL_PIXEL_FORMAT_BYTE , vxl_byte )
 //  macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
 //  macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )

@@ -3,7 +3,7 @@
 #define brec_part_hierarchy_detector_h_
 //:
 // \file
-// \brief class to detect instances of a hiearachy of composable parts in images
+// \brief class to detect instances of a hierarchy of composable parts in images
 //
 // \author Ozge C Ozcanli (ozge@lems.brown.edu)
 // \date Oct 16, 2008
@@ -126,7 +126,7 @@ class brec_part_hierarchy_detector : public vbl_ref_count
 
   //: given a set of detected lower level parts, create a set of instance detections for one layer above in the hierarchy
   void extract_upper_layer(vcl_vector<brec_part_instance_sptr>& extracted_parts, unsigned ni, unsigned nj, Rtree_type* extracted_parts_rtree,
-    vcl_vector<brec_part_instance_sptr>& extracted_upper_parts);
+                           vcl_vector<brec_part_instance_sptr>& extracted_upper_parts);
 
   //: given a set of detected lower level parts, create a set of instance detections for one layer above in the hierarchy
   //  No thresholding, \return a probabilistic score
@@ -134,7 +134,7 @@ class brec_part_hierarchy_detector : public vbl_ref_count
   //  rho_calculation_method = 1 if training
   //  rho_calculation_method = 2 if using other hierarchies to compute a posterior
   void extract_upper_layer(vcl_vector<brec_part_instance_sptr>& extracted_parts, Rtree_type* extracted_parts_rtree,
-    vcl_vector<brec_part_instance_sptr>& extracted_upper_parts, unsigned rho_calculation_method = 0, double radius = 10.0);
+                           vcl_vector<brec_part_instance_sptr>& extracted_upper_parts, unsigned rho_calculation_method = 0, double radius = 10.0);
 
   //: extracts instances of each layer in the given image
   bool detect(vil_image_resource_sptr img);

@@ -39,7 +39,7 @@ class bwm_observable : public vgui_observable, public vbl_ref_count
 
   virtual int obj_type()=0;
 
-  // removes the object from 3D scene by notifiying the observers of deletion
+  // removes the object from 3D scene by notifying the observers of deletion
   virtual void remove()=0;
 
   void virtual set_object(vsol_polygon_3d_sptr poly3d)=0;

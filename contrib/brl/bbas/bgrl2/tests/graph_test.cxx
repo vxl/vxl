@@ -9,7 +9,7 @@
 
 //: Test the graph class
 //
-// This is a test of using the templatized graph class with
+// This is a test of using the templated graph class with
 // regular pointers (as opposed to smart pointers)
 static void graph_test()
 {

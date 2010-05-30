@@ -63,7 +63,7 @@ struct rgtl_octree_objects_cell_data
 
   // TODO: Instead of using rgtl_octree_data_fixed, setup a custom
   // node/leaf data policy so that a variable number of distance
-  // values can be stored for each cell.  This will allow an kth-order
+  // values can be stored for each cell.  This will allow a kth-order
   // distance transform to be computed by the user so that it can be
   // used for initial bounds with k > 1 for query_closest.
 
@@ -1434,7 +1434,7 @@ rgtl_octree_objects_internal<D>
     // The sphere completely contains the cell.  Extract objects in
     // the cell and its children.  By not passing the center or radius
     // to this method it will not bother testing the objects since
-    // they are known to interesect the cell, which is inside the
+    // they are known to intersect the cell, which is inside the
     // sphere.
     this->extract_objects(cidx, 0, 0, ids);
   }

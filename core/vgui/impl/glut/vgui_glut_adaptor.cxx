@@ -769,7 +769,7 @@ void fsm_dump(char const *file)
                pixels);
 
   // glReadPixels() reads the pixels from the bottom of the viewport up.
-  // Copy them into an vil1_memory_image_of in the other order :
+  // Copy them into a vil1_memory_image_of in the other order :
   static vil1_memory_image_of<vil1_rgb<GLubyte> > colour_buffer;
   colour_buffer.resize(w, h);
 

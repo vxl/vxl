@@ -51,13 +51,13 @@ struct vil1_rgb
 
   inline vil1_rgb() { }
 
-  //:Create grey (v,v,v) vil1_rgb cell from value v.
+  //: Create grey (v,v,v) vil1_rgb cell from value v.
   // This provides a conversion from T to vil1_rgb<T>, needed by e.g. two constructors in vil1_filter.h.
 
   inline vil1_rgb(T v):
     r(v), g(v), b(v) {}
 
-  //:Construct an vil1_rgb value.
+  //: Construct a vil1_rgb value.
   inline vil1_rgb(T red, T green, T blue):
     r(red), g(green), b(blue) {}
 

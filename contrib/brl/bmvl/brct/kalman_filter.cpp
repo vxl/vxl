@@ -161,7 +161,7 @@ void kalman_filter::init_state_3d_estimation()
         vcl_vector<vgl_point_2d<double> > pts;
         bdgl_curve_algs::intersect_line(dc1, lr, pts);
 
-        // find the correspoinding point
+        // find the corresponding point
         double dist = 1e99; // big number
         bool flag = false;
         for (unsigned int j=0; j<pts.size(); j++)

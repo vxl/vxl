@@ -31,7 +31,7 @@ bool bvxm_ocp_hist_process(bprb_func_process& pro)
 {
   using namespace bvxm_ocp_hist_process_globals;
 
- //check numeber of inputs
+  // check number of inputs
   if (pro.n_inputs()<n_inputs_)
   {
     vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
@@ -39,11 +39,11 @@ bool bvxm_ocp_hist_process(bprb_func_process& pro)
   }
   // get the inputs:
   unsigned i = 0;
-   //voxel_world
+  // voxel_world
   bvxm_voxel_world_sptr voxel_world = pro.get_input< bvxm_voxel_world_sptr>(i++);
   // the output path
   vcl_string path = pro.get_input<vcl_string>(i++);
-  //scale
+  // scale
   unsigned scale = pro.get_input<unsigned>(i++);
 
   compute(voxel_world,scale, path);
@@ -56,7 +56,7 @@ bool bvxm_ocp_hist_process_globals::compute(bvxm_voxel_world_sptr w,
 {
   typedef bvxm_voxel_traits<OCCUPANCY>::voxel_datatype ocp_datatype;
 
-  // get ocuppancy probability grids
+  // get occupancy probability grids
   bvxm_voxel_grid_base_sptr ocp_grid_base = w->get_grid<OCCUPANCY>(0, scale);
   bvxm_voxel_grid<ocp_datatype> *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base.ptr());
   bvxm_voxel_grid<ocp_datatype>::const_iterator ocp_slab_it = ocp_grid->begin();

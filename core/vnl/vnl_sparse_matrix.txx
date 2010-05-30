@@ -610,7 +610,7 @@ bool vnl_sparse_matrix<T>::next() const
     return false;
 
   if ( itr_isreset ) {
-    // itr_cur is not pointing to a entry
+    // itr_cur is not pointing to an entry
     itr_row = 0;
     itr_isreset = false;
   }

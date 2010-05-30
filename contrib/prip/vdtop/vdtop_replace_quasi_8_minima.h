@@ -13,7 +13,7 @@
 
 #include "vdtop_pixel.h"
 
-//: replaces the values of all points naving no 8 lower neighbor by "value".
+//: replaces the values of all points having no 8 lower neighbor by "value".
 template <class T>
 void vdtop_replace_quasi_8_minima(vil_image_view<T> & arg, vil_image_view<T> &res, T value)
 {

@@ -32,7 +32,8 @@ void ImageWarp<PixelType>::mean_nz_intensity(const vil1_memory_image_of<PixelTyp
           ++nnz;
         }
       }
-  } else {
+  }
+  else {
     for (int iy = y - window_size; iy < y + window_size; ++iy)
       for (int ix = x - window_size; ix < x + window_size; ++ix)
         if (in.in_range(ix, iy)) {
@@ -135,7 +136,7 @@ void ImageWarp<PixelType>::warp_inverse(Mapping_2d_2d& map,
       switch (1) {
       case 1: {
 #endif
-        // nearest neigbour
+        // nearest neighbour
         int ix = vnl_math_rnd(ixd);
         int iy = vnl_math_rnd(iyd);
         if (in.in_range(ix, iy))

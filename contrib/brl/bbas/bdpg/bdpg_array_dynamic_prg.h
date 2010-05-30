@@ -69,10 +69,10 @@ class bdpg_array_dynamic_prg
 
   // array search methods
 
-  //:find if an old column exists in the path at (row, col).
+  //: find if an old column exists in the path at (row, col).
   bool find(const unsigned row, const unsigned col, const unsigned old_col);
 
-  //:find the column index in the previous row with maximum path probabilty
+  //: find the column index in the previous row with maximum path probability
   bool maxp(unsigned row, unsigned col, int & best_col);
 
  private:

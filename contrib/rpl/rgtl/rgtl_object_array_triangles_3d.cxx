@@ -227,10 +227,10 @@ class rgtl_object_array_triangles_3d::pimpl
     double mag = vcl_sqrt(dot(n,n));
     if (mag > 0)
     {
-      double maginv = 1/mag;
-      n[0] *= maginv;
-      n[1] *= maginv;
-      n[2] *= maginv;
+      double mag_inv = 1/mag;
+      n[0] *= mag_inv;
+      n[1] *= mag_inv;
+      n[2] *= mag_inv;
     }
     return mag;
   }

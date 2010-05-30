@@ -119,7 +119,7 @@ class vtol_extract_topology_region_type
 
  private:
 
-  //: The list of bounday edges (which are edgel chains)
+  //: The list of boundary edges (which are edgel chains)
   vcl_vector< edgel_chain_sptr > list_;
 };
 
@@ -254,7 +254,8 @@ class vtol_extract_topology
         if ( contains( new_region, (*itr)->region ) ) {
           new_node->children.push_back( *itr );
           itr = this->children.erase( itr );
-        } else {
+        }
+        else {
           ++itr;
         }
       }
@@ -288,7 +289,8 @@ class vtol_extract_topology
         }
         vdgl_digital_region r( x.size(), &x[0], &y[0], &intensity[0]  );
         return new vtol_intensity_face( &face_chains, r );
-      } else {
+      }
+      else {
         // create a face without a digital geometry
         vcl_clog << "Creating region with NO pixels"  << vcl_endl;
         return new vtol_intensity_face( face_chains );
@@ -312,7 +314,8 @@ class vtol_extract_topology
         for ( unsigned i = 0; i < children.size(); ++i ) {
           children[i]->print( ostr, indent+7 );
         }
-      } else {
+      }
+      else {
         ostr << '\n';
       }
     }
@@ -385,7 +388,7 @@ class vtol_extract_topology
   unsigned
   num_crosses_x_pos_ray( double x, double y, vdgl_edgel_chain const& chain );
 
-  // Smoothes an edgel chain by fitting a line to the local
+  // Smooths an edgel chain by fitting a line to the local
   // neighbourhood and projecting onto that line
   //
   vdgl_edgel_chain_sptr

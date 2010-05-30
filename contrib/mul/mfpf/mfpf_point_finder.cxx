@@ -188,7 +188,7 @@ void mfpf_point_finder::get_sample_vector(const vimt_image_2d_of<float>& image,
 //  grid, then optimises its position by fitting a parabola.
 //
 //  On exit, new_p defines position of the best nearby match.
-//  Returns a qualtity of fit measure at that
+//  Returns a quality of fit measure at that
 //  point (the smaller the better).
 double mfpf_point_finder::search_one_pose_with_opt(
                       const vimt_image_2d_of<float>& image,
@@ -236,7 +236,7 @@ double mfpf_point_finder::search_one_pose_with_opt(
 
 //: Search given image around p, using u to define scale and orientation
 //  On exit, new_p and new_u define position, scale and orientation of
-//  the best nearby match.  Returns a qualtity of fit measure at that
+//  the best nearby match.  Returns a quality of fit measure at that
 //  point (the smaller the better).
 double mfpf_point_finder::search(const vimt_image_2d_of<float>& image,
                                  const vgl_point_2d<double>& p,
@@ -281,7 +281,7 @@ double mfpf_point_finder::search(const vimt_image_2d_of<float>& image,
 
 //: Search given image around p, using u to define scale and orientation
 //  On exit, new_p and new_u define position, scale and orientation of
-//  the best nearby match.  Returns a qualtity of fit measure at that
+//  the best nearby match.  Returns a quality of fit measure at that
 //  point (the smaller the better).
 double mfpf_point_finder::search_with_opt(
                         const vimt_image_2d_of<float>& image,

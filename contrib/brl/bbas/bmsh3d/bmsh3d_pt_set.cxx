@@ -168,7 +168,7 @@ void remove_duplicate_points (bmsh3d_pt_set* pt_set)
     }
   }
 
-  // perform delection
+  // perform deletion
   vcl_cout<< "\n\tDeleting "<< idToBeDeleted.size() <<" duplicates...\n";
   for (unsigned int i=0; i<idToBeDeleted.size(); i++) {
     int id = idToBeDeleted[i];

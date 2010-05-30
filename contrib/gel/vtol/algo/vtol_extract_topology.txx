@@ -168,7 +168,8 @@ label( unsigned i, unsigned j ) const
 {
   if ( i < label_img_.ni() && j < label_img_.nj() ) {
     return LabelPoint(label_img_( i, j ), true);
-  } else {
+  }
+  else {
     return LabelPoint(0, false);
   }
 }
@@ -445,7 +446,8 @@ trace_edge_chain( unsigned i, unsigned j, unsigned dir )
     end_index = vertex_index( i, j );
     dir = prev_dir; // the direction we came from to the new end point.
     // The new end point is already in the edgel chain; no need to add again.
-  } else {
+  }
+  else {
     // Add the end vertex
     chain->add_edgel( vdgl_edgel( i-0.5, j-0.5 ) );
   }
@@ -621,7 +623,7 @@ trace_face_boundary( vcl_vector<unsigned>& markers,
     return false;
   }
 
-  // Find an interior pixel of this face basd on the first edge we
+  // Find an interior pixel of this face based on the first edge we
   // encounter. The vertex (i,j) corresponds to pixel-coordinate-space
   // (i-0.5,j-0.5). Use this and the direction to get a point on the
   // right of the first edge. The delta_* store the appropriate
@@ -765,7 +767,8 @@ compute_faces( vcl_vector< region_type_sptr > const& chains,
     finder_type* finder = new finder_type( label_img_, vil_region_finder_4_conn );
     add_faces( faces, finder, data_img, &universe );
     delete finder;
-  } else {
+  }
+  else {
     add_faces( faces, 0, 0, &universe );
   }
 }
@@ -802,7 +805,8 @@ contains( region_type_sptr a, region_type_sptr b )
   assert( b );
   if ( !a ) {
     return true;
-  } else {
+  }
+  else {
     // Odd number of crossings => inside.
     //
     unsigned num_crossings = 0;

@@ -89,7 +89,7 @@ void vsl_binary_loader<BaseClass>::load_object( vsl_b_istream& is, BaseClass*& b
 //
 // An alternative solution is a single inline definition in vsl_binary_io.h
 // This definition must be implemented identically to the one in
-// vsl_binary_io.h, otherwise there may be a io incompatibility.
+// vsl_binary_io.h, otherwise there may be an I/O incompatibility.
 
 inline void vsl_b_write(vsl_b_ostream& bfs, const char* b)
 {

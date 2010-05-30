@@ -21,7 +21,7 @@ bool bvxm_render_expected_image_process_cons(bprb_func_process& pro)
   //input[1]: number of pixels (x)
   //input[2]: number of pixels (y)
   //input[3]: The voxel world
-  //input[4]: The apperance model type :this input must be either apm_mog_grey, apm_mog_rgb, edges or edges_prob
+  //input[4]: The appearance model type :this input must be either apm_mog_grey, apm_mog_rgb, edges or edges_prob
   //          any other string will initialize the value for apm_mog_grey
   //input[5]: The bin index to be updated
       //input[6]: The scale index to be updated
@@ -118,7 +118,7 @@ bool bvxm_render_expected_image_process(bprb_func_process& pro)
     result = world->expected_image<FLOAT>(camera_metadata, expected_img, *mask_img, bin_index,scale_index);
   }
   else
-    vcl_cerr << "Error in bvxm_render_expected_image_process: Unknown appereance model\n";
+    vcl_cerr << "Error in bvxm_render_expected_image_process: Unknown appearance model\n";
 
   //store output
   // process has 2 outputs:

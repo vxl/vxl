@@ -8,17 +8,17 @@
 // core libraries.
 
 //: Major version number.
-// This will only increase after major changes, or an large accumulation of
+// This will only increase after major changes, or a large accumulation of
 // significant smaller ones.
 #define VXL_VERSION_MAJOR 1
 
 //: Minor version number.
 // This increments between versions. There is no
-// "even = release, odd = developement" pattern, or anything like that.
+// "even = release, odd = development" pattern, or anything like that.
 #define VXL_VERSION_MINOR 15
 
 //: Patch number.
-// This is only likely to be non-zero if an serious bug is found soon after the
+// This is only likely to be non-zero if a serious bug is found soon after the
 // release of x.y.0. The VXL-maintainers do not usually distinguish between bug fixes
 // and feature improvements, so the fix for most known bugs will first be released
 // in x.(y+1).0

@@ -3,7 +3,7 @@
 #define test_node_h_
 //:
 // \file
-// \brief Test code for using the templatized graph class
+// \brief Test code for using the templated graph class
 // \author Amir Tamrakar
 // \date June 18, 2005
 

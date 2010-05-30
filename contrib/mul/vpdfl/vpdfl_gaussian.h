@@ -34,7 +34,7 @@ class vpdfl_gaussian : public vpdfl_pdf_base
 
  protected: // Workspace may be accessed by sub-classes
   //: Workspace
-  // The difference between an input vector an the mean
+  // The difference between an input vector and the mean
   mutable vnl_vector<double> dx_;
   //: Workspace
   // Usually the input vector after normalisation.

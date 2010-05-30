@@ -61,7 +61,7 @@ bwm_video_corr_lsqr_cost_func(vil_image_view<float> const& base_image,
 
 //the least squares cost function for minimizing intensity differences
 // x is a 2 element vector for correspondence position
-// f is an  M-element vector, where M = (2*match_radius_+1)^2
+// f is an M-element vector, where M = (2*match_radius_+1)^2
 // i.e. a window around each projected world point.
 void bwm_video_corr_lsqr_cost_func::f(vnl_vector<double> const& x,
                                       vnl_vector<double>& fx)
@@ -167,7 +167,8 @@ bool bwm_video_corr_processor::open_video_site(vcl_string const& site_path,
   if (cameras_exist){
     if (!this->open_camera_istream(camera_path_))
       return false;
-  }else{
+  }
+  else {
     vcl_string dir = vul_file::dirname(site_path)+"/cameras";
     if (vul_file::exists(dir))
       remove_dir(dir);
@@ -183,23 +184,26 @@ bool bwm_video_corr_processor::open_video_site(vcl_string const& site_path,
   this->set_correspondences(corrs);
   return true;
 }
+
 void bwm_video_corr_processor::
 set_world_pts(vcl_vector<vgl_point_3d<double> > const& pts)
 {
   vcl_vector<vgl_point_3d<double> >::const_iterator pit = pts.begin();
-  for(vcl_vector<bwm_video_corr_sptr>::iterator cit = corrs_.begin();
-      cit != corrs_.end()&&pit!=pts.end(); ++cit, ++pit)
+  for (vcl_vector<bwm_video_corr_sptr>::iterator cit = corrs_.begin();
+       cit != corrs_.end()&&pit!=pts.end(); ++cit, ++pit)
     (*cit)->set_world_pt(*pit);
 }
+
 vcl_vector<vgl_point_3d<double> > bwm_video_corr_processor::world_pts()
 {
   vcl_vector<vgl_point_3d<double> > pts;
-  for(vcl_vector<bwm_video_corr_sptr>::iterator cit = corrs_.begin();
-      cit != corrs_.end(); ++cit)
-    if((*cit)->world_pt_valid())
+  for (vcl_vector<bwm_video_corr_sptr>::iterator cit = corrs_.begin();
+       cit != corrs_.end(); ++cit)
+    if ((*cit)->world_pt_valid())
       pts.push_back((*cit)->world_pt());
   return pts;
 }
+
 bool bwm_video_corr_processor::write_video_site(vcl_string const& site_path)
 {
   if (site_name_ == "")
@@ -809,7 +813,7 @@ bool bwm_video_corr_processor::refine_world_pts_and_cameras()
 
   //next populate the image points and the mask array
   //the mask appears to be m x n ,
-  // where m = number of cameras an n = number of world points (corrs)
+  // where m = number of cameras and n = number of world points (corrs)
   //
   vcl_vector<vgl_point_2d<double> > image_points(ncameras*npoints);
   for (unsigned w = 0; w<npoints; ++w)

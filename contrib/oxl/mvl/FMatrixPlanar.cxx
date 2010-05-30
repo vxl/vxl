@@ -88,7 +88,7 @@ FMatrixPlanar::set (const vnl_matrix<double>& f_matrix )
 
   // CRUDE test for planar form with tolerance 0
   // test F and F+F' are Rank 2
-  // HACK: has been alterd to have some tolerances
+  // HACK: has been altered to have some tolerances
   bool planar = true;
   vnl_svd<double> svd(f_matrix,1e-8);
   if (svd.rank()!=2)
@@ -136,7 +136,7 @@ FMatrixPlanar::set (const vnl_matrix<double>& f_matrix )
 //: Initialises the FMatrixPlanar using a general fundamental matrix F.
 // Does so by finding the nearest planar fundamental matrix to F.
 // This should be used prior to FMPlanarComputeNonLinear to give
-// a initial value for the non-linear minimisation.
+// an initial value for the non-linear minimisation.
 // This function is required as trying to set FMatrixPlanar using a
 // general fundamental matrix
 // will fail as it does not satisfy the extra constraint of
@@ -146,7 +146,7 @@ void FMatrixPlanar::init(const FMatrix& F)
 {
   // this converts to 6 parameter form of [e2]x[ls]x[e1]x - see A Zisserman
   // HACK this is not the most efficient/accurate way to convert to this form
-  // as it goes via the Armstrong inplementation of the
+  // as it goes via the Armstrong implementation of the
   // Lingrand Veiville formula (ECCV96).
   // This should be redone at some point.
 

@@ -15,7 +15,7 @@ bsta_k_medoid::bsta_k_medoid(const unsigned n_elements, bool verbose)
 }
 
 //------------------------------------------------
-// Is a element a medoid?
+// Is an element a medoid?
 bool bsta_k_medoid::is_medoid(const unsigned i) const
 {
   vcl_vector<unsigned>::const_iterator result;

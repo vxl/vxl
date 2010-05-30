@@ -411,7 +411,7 @@ void osl_canny_rothwell::Final_hysteresis(vcl_list<osl_edge*> *edges)
       if ( count < 2 )
         continue;
 
-      // Create a osl_edgel_chain
+      // Create an osl_edgel_chain
       osl_edgel_chain *dc = new osl_edgel_chain(count);
       px = dc->GetX();     py = dc->GetY();
       pg = dc->GetGrad();  pt = dc->GetTheta();
@@ -654,7 +654,7 @@ void osl_canny_rothwell::Jump_single_breaks()
 void osl_canny_rothwell::Adaptive_Canny(vil1_image const &image)
 {
   // Reset the smoothing kernel parameters by
-  // halfing the size of the smoothing sigma
+  // halving the size of the smoothing sigma
   old_sigma_ = sigma_;  sigma_ /= 2.0f;
   old_width_ = width_;
   width_ = int(sigma_*vcl_sqrt(2*vcl_log(1.0/gauss_tail_))+1);
@@ -859,7 +859,7 @@ void osl_canny_rothwell::Find_junction_clusters()
         Follow_junctions(junction_, x,y,&xcoords,&ycoords);
 
         // Find the `centre' of the cluster. This is defined as the
-        // junction closest to the centre of gravity of the cluser
+        // junction closest to the centre of gravity of the cluster
         int x0,y0;
         Cluster_centre_of_gravity(jx_, jy_, xcoords,ycoords,x0,y0);
 

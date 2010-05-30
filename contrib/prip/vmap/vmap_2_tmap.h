@@ -526,10 +526,10 @@ class vmap_2_tmap: public vmap_2_map<D>,
   //:
   void contraction(dart_iterator & arg) ;
 
-  //: Initializes the sturcture of the combinatorial map from "stream".
+  //: Initializes the structure of the combinatorial map from "stream".
   void read_structure(vcl_istream & stream) ;
 
-  //: Writes the sturcture of the combinatorial map to "stream".
+  //: Writes the structure of the combinatorial map to "stream".
   void write_structure(vcl_ostream & stream) const ;
 
  protected:

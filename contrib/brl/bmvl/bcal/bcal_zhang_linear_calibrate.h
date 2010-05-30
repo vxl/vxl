@@ -45,7 +45,7 @@ class bcal_zhang_linear_calibrate
   // homographies list hm_list[0...n-1]
   vnl_double_3x3 compute_intrinsic(vgl_h_matrix_2d<double> *hm_list, int n);
 
-  // get closet rotation matrix from a none rotation matrix Q
+  // get closest rotation matrix from a no-rotation matrix Q
   vnl_double_3x3 get_closest_rotation(vnl_double_3x3 const & Q);
 
   // allocate memory to store homography according to camera graph

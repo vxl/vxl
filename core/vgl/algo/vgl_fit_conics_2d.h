@@ -11,11 +11,11 @@
 // \date June 18, 2005
 //
 //  The parameters are:
-//  -  min_length - the smallest number of points to fit with an conic
+//  -  min_length - the smallest number of points to fit with a conic
 //  -  tol - the threshold on mean square distance from points to the conic
-//  -  line_thresh - threshold for prefering a line over an conic
+//  -  line_thresh - threshold for prefering a line over a conic
 //
-//  An conic segment is incrementally fit to the curve until the tolerance
+//  A conic segment is incrementally fit to the curve until the tolerance
 //  is exceeded. When the tolerance is exceeded, the conic segment is
 //  output and a new conic fit is started.
 //
@@ -69,7 +69,7 @@ class vgl_fit_conics_2d
   vcl_vector<vgl_conic_segment_2d<T> >& get_conic_segs(){return segs_;}
 
  protected:
-  //:output an conic that fits from start to end
+  //: output a conic that fits from start to end
   void output(const unsigned start_index, const unsigned end_index,
               vgl_conic<T> const& conic);
 };

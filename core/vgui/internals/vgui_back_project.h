@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \author fsm@robts.ox.ac.uk
+// \author fsm@robots.ox.ac.uk
 // \brief  Given a 3x4 camera, project a point x back onto a plane pi.
 
 //: Given a 3x4 camera, project a point x back onto a plane pi.

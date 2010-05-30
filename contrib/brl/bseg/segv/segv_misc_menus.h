@@ -3,8 +3,8 @@
 //----------------------------------------------------------------------------
 //:
 // \file
-// \brief the setup for menus for miscellanous tests and debugging
-//  This is essentially a namespace for static methods;
+// \brief the setup for menus for miscellaneous tests and debugging
+//  This is essentially a namespace for static methods
 // \author
 //   J.L. Mundy
 //

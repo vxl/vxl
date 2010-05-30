@@ -3,7 +3,7 @@
 #define bvpl_octree_kernel_operator_h
 //:
 // \file
-// \brief A class that operates a bvpl_kernel on a octree or boxm scene
+// \brief A class that operates a bvpl_kernel on an octree or boxm scene
 // \author Isabel Restrepo mir@lems.brown.edu
 // \date  November 13, 2009
 //
@@ -31,18 +31,16 @@ class bvpl_octree_kernel_operator
   template<class F>
   void operate(F functor, bvpl_kernel_sptr kernel, tree_type* out_tree, short level, double cell_length)
   {
-    //get all cells at given scale
-    // vcl_vector<cell_type* > cells = tree_in_->cells_at_level(level);
-    // vcl_vector<cell_type* > out_cells = out_tree->cells_at_level(level);
+    // get all (leaf) cells at given scale
     vcl_vector<cell_type* > cells = tree_in_->leaf_cells_at_level(level);
     vcl_vector<cell_type* > out_cells = out_tree->leaf_cells_at_level(level);
 
     bvpl_kernel_iterator kernel_iter = kernel->iterator();
 
-    //iterate, through all cells
+    // iterate, through all cells
     for (unsigned i = 0; i <  cells.size();i++)
     {
-      // iterate through vector an compute result
+      // iterate through vector and compute result
       cell_type* center_cell = cells[i];
 
       if (center_cell->level()!=level)

@@ -6,7 +6,7 @@
 //
 //   The n-th order moment operation replaces a pixel with the expected value
 //   of x^n of its surrounding pixels, in a certain neighbourhood. Here the
-//   neighbourhood is a arbitrary rectangular mask, the height and width of which
+//   neighbourhood is an arbitrary rectangular mask, the height and width of which
 //   are passed to the constructor.
 //
 //   A fast computation method is used which needs only seven + or - operations per

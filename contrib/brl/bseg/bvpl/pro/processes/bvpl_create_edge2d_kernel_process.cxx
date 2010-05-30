@@ -2,7 +2,7 @@
 #include <bprb/bprb_func_process.h>
 //:
 // \file
-// \brief A class for creating an planar edge kernel
+// \brief A class for creating a planar edge kernel
 //
 // \author Isabel Restrepo
 // \date June 23, 2009

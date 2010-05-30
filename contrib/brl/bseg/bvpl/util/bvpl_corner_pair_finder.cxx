@@ -68,7 +68,7 @@ bvpl_corner_pairs_sptr bvpl_corner_pair_finder::find_pairs(bvxm_voxel_grid<int>*
 
   vcl_vector<vcl_vector<vgl_line_segment_3d<int> > > all_lines;
 
-  //1. run the same direction(id) kernel as the one we are intersted in
+  //1. run the same direction(id) kernel as the one we are interested in
   for (int target_id=0; target_id<search_kernels->size(); ++target_id)
   {
     bvpl_kernel_sptr this_search_kernel = search_kernels->kernels_[target_id];
@@ -126,7 +126,7 @@ bvpl_corner_pairs_sptr bvpl_corner_pair_finder::find_pairs(bvxm_voxel_grid<int>*
   vcl_vector<vcl_vector<vgl_line_segment_3d<int> > > all_lines;
   vcl_vector<vcl_vector<vgl_box_3d<int> > > all_boxes;
 
-  //1. run the same direction(id) kernel as the one we are intersted in
+  //1. run the same direction(id) kernel as the one we are interested in
   for (int target_id=0; target_id<search_kernels->size(); ++target_id)
   {
     bvpl_kernel_sptr this_search_kernel = search_kernels->kernels_[target_id];
@@ -213,7 +213,7 @@ bvpl_corner_pairs_sptr bvpl_corner_pair_finder::find_pairs(bvxm_voxel_grid<int>*
   vcl_vector<vcl_vector<vgl_line_segment_3d<int> > > all_lines;
   vcl_vector<vcl_vector<vgl_box_3d<int> > > all_boxes;
 
-  //1. run the same direction(id) kernel as the one we are intersted in
+  //1. run the same direction(id) kernel as the one we are interested in
   for (int target_id=0; target_id<search_kernels->size(); ++target_id)
   {
     bvpl_kernel_sptr this_search_kernel = search_kernels->kernels_[target_id];
@@ -300,7 +300,7 @@ void bvpl_corner_pair_finder::find_pairs_no_lines(bvxm_voxel_grid<int>* id_grid,
                                                   bvpl_kernel_vector_sptr corner_kernels,
                                                   bvxm_voxel_grid<bvpl_pair> *pair_grid)
 {
-  //1. run the same direction(id) kernel as the one we are intersted in
+  //1. run the same direction(id) kernel as the one we are interested in
   for (int target_id=0; target_id<search_kernels->size(); ++target_id)
   {
     bvpl_kernel_sptr this_search_kernel = search_kernels->kernels_[target_id];
@@ -375,7 +375,7 @@ bvpl_corner_pairs_sptr bvpl_corner_pair_finder::find_pairs(bvxm_voxel_grid<bvpl_
   vcl_vector<vcl_vector<vgl_line_segment_3d<int> > > all_lines;
   vcl_vector<vcl_vector<vgl_box_3d<int> > > all_boxes;
 
-  //1. run the same direction(id) kernel as the one we are intersted in
+  //1. run the same direction(id) kernel as the one we are interested in
   for (int target_id=0; target_id<search_kernels->size(); ++target_id)
   {
     bvpl_kernel_sptr this_search_kernel = search_kernels->kernels_[target_id];
@@ -474,7 +474,7 @@ void bvpl_corner_pair_finder::find_pairs_no_lines(bvxm_voxel_grid<bvpl_pair> *pa
                                                   bvxm_voxel_grid<bvpl_pair> *pair_grid_out,
                                                   int opposite_angle)
 {
-  //1. run the same direction(id) kernel as the one we are intersted in
+  //1. run the same direction(id) kernel as the one we are interested in
   for (int target_id=0; target_id<search_kernels->size(); ++target_id)
   {
     bvpl_kernel_sptr this_search_kernel = search_kernels->kernels_[target_id];

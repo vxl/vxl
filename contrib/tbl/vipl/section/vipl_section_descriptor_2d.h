@@ -24,7 +24,7 @@ class vipl_section_descriptor_2d : public vipl_section_descriptor< DataType >
   vipl_section_container< DataType >* hsreal_container;
   // pointer to the real data
   DataType* hsi_data_ptr;
-  // "pointer offsets" to move 1 unit in any diem
+  // "pointer offsets" to move 1 unit in any dimen
   vcl_vector< int > hsi_data_offsets;
   // describe the start,end and size of the section
   vcl_vector< int > hsi_curr_sec_start;

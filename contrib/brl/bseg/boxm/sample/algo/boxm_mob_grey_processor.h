@@ -21,7 +21,7 @@
 class  boxm_mob_grey_processor
 {
  protected:
-  // conveniance typedefs
+  // convenience typedefs
   typedef boxm_apm_traits<BOXM_APM_MOB_GREY>::apm_datatype apm_datatype;
   typedef boxm_apm_traits<BOXM_APM_MOB_GREY>::obs_datatype obs_datatype;
   typedef boxm_apm_traits<BOXM_APM_MOB_GREY>::obs_mathtype obs_mathtype;

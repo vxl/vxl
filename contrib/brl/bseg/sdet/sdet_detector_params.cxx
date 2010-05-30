@@ -73,7 +73,7 @@ void sdet_detector_params::InitParams(float smooth_sigma, float noise_w,
   cycle = cyc;
   ndimension = ndim;
   // The remaining parameters are set according to the state of
-  // Agressive junction closure.  If the value is <0 then the
+  // aggressive junction closure.  If the value is <0 then the
   // state of junction parameters is derived from the constructor
   // arguments.  If the value is >0 then the variable is assumed to
   // be a bool and the parameters are determined from computation.
@@ -250,7 +250,7 @@ vcl_ostream& operator << (vcl_ostream& os, const sdet_detector_params& dp)
      << " Noise Weight " << dp.noise_weight << vcl_endl
      << " Noise Multiplier " << dp.noise_multiplier << vcl_endl
      << " Automatic Threshold? " << st << vcl_endl
-     << " Agressive Closure " << sa << vcl_endl
+     << " Aggressive Closure " << sa << vcl_endl
      << " Recover Junctions " << dp.junctionp << vcl_endl
      << " Minimum Chain Length " << dp.minLength << vcl_endl
      << " Peaks Only " << dp.peaks_only << vcl_endl

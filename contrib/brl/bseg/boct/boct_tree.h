@@ -3,7 +3,7 @@
 #define boct_tree_h_
 //:
 // \file
-// \brief  A generic octree templated on locational code and datatype. Traversal operations are inplemented as described in
+// \brief  A generic octree templated on locational code and datatype. Traversal operations are implemented as described in
 //         [Simple and Efficient Traversal Methods for Quadtrees and Octrees/ Frisken, Perry 2002]
 //
 // \author Gamze Tunali/Vishal Jain
@@ -54,7 +54,7 @@ class boct_tree
   //: Clone a subtree determined by the root
   boct_tree<T_loc, T_data>* clone_subtree(boct_tree_cell<T_loc, T_data>* root, short num_levels);
 
-  //: Clones(from a root) the part of the subtree that intesects the bounding region
+  //: Clones(from a root) the part of the subtree that intersects the bounding region
   boct_tree<T_loc, T_data>* clone_and_intersect(boct_tree_cell<T_loc, T_data>* subtree_root,
                                                 short parent_tree_root_level,
                                                 vgl_box_3d<double> local_crop_box);
@@ -185,10 +185,10 @@ class boct_tree
   // Binary I/O
 
   //: data structure saved to disk for each cell in tree
-  struct plat_dep_cell_store 
-  { 
-    boct_loc_code<T_loc> code; 
-    T_data data; 
+  struct plat_dep_cell_store
+  {
+    boct_loc_code<T_loc> code;
+    T_data data;
   };
 
   void b_write(vsl_b_ostream & os, const bool save_internal_nodes, const bool platform_independent = true);

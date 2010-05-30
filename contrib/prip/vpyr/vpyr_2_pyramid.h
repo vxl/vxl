@@ -195,10 +195,10 @@ class vpyr_2_pyramid
     return level_.empty() ;
   }
 
-  //: Initializes the sturcture of the combinatorial map from "stream".
+  //: Initializes the structure of the combinatorial map from "stream".
   void read_structure(vcl_istream & stream) ;
 
-  //: Writes the sturcture of the combinatorial map to "stream".
+  //: Writes the structure of the combinatorial map to "stream".
   void write_structure(vcl_ostream & stream) const ;
 
   //: returns the ith dart of the base map.

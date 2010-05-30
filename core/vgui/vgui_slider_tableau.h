@@ -11,7 +11,7 @@
 
 //: A slider implementation
 //
-// Implments a tableau that can be used as a slider. This can be used
+// Implements a tableau that can be used as a slider. This can be used
 // to provide platform-independent scrollbar-like capabilities. (It
 // may be stretching the design parameters of vgui, but hey...)
 //
@@ -135,7 +135,7 @@ class vgui_slider_tableau
   //: Callbacks called on every change of the slider
   vcl_list< callback_info > motion_callbacks_;
 
-  //: Callbacks callled only at the final position of the slider
+  //: Callbacks called only at the final position of the slider
   vcl_list< callback_info > final_callbacks_;
 };
 

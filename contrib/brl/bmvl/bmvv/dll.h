@@ -8,7 +8,7 @@
 
 #if defined(VCL_WIN32) && !defined(BUILDING_BMVV_DLL)
 
-// if win32 and not buiding the DLL then you need a dllimport
+// if win32 and not building the DLL then you need a dllimport
 // Only if you are building a DLL linked application.
 # ifdef BUILD_DLL
 #  undef BMVV_DLL_DATA

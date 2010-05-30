@@ -667,7 +667,8 @@ gevd_float_operators::Gaussian(gevd_bufferxy& from, gevd_bufferxy*& to, const fl
     to = gevd_float_operators::Allocate(to, from);
     if (to != &from)
       gevd_float_operators::Update(*to, from); // just a copy, no smoothing needed
-  } else {
+  }
+  else {
     bool evenp = true;
     // 2 1D convolutions O(k), instead of a 2D convolution O(k^2).
     gevd_float_operators::Convolve(from, to,
@@ -842,7 +843,8 @@ gevd_float_operators::Gradient(const gevd_bufferxy& smooth,
                     floatPixel(*grady, highx, j));
     }
     delete pad;
-  } else {                      // zero by default
+  }
+  else {                      // zero by default
     gevd_float_operators::FillFrameX(*magnitude, 0, frame);
     gevd_float_operators::FillFrameX(*gradx, 0, frame);
     gevd_float_operators::FillFrameX(*grady, 0, frame);
@@ -861,7 +863,8 @@ gevd_float_operators::Gradient(const gevd_bufferxy& smooth,
                     floatPixel(*grady, i, highy));
     }
     delete pad;
-  } else {                      // zero by default
+  }
+  else {                      // zero by default
     gevd_float_operators::FillFrameY(*magnitude, 0, frame);
     gevd_float_operators::FillFrameY(*gradx, 0, frame);
     gevd_float_operators::FillFrameY(*grady, 0, frame);
@@ -928,7 +931,8 @@ LocalHessian(const gevd_bufferxy& smooth, const int i, const int j,
     mag = - ddx_plus_ddy        // most negative eigenvalue
           + vcl_sqrt((ddx_minus_ddy * ddx_minus_ddy) + (two_dxdy * two_dxdy));
     theta += (float)vnl_math::pi_over_2;// angle in range [0 pi]
-  } else {
+  }
+  else {
     mag = + ddx_plus_ddy        // most positive eigenvalue
           + vcl_sqrt((ddx_minus_ddy * ddx_minus_ddy) + (two_dxdy * two_dxdy));
     if (theta > 0)
@@ -988,7 +992,8 @@ gevd_float_operators::Hessian(const gevd_bufferxy& smooth,
                    floatPixel(*diry, highx, j));
     }
     delete pad;
-  } else {                      // zero by default
+  }
+  else {                      // zero by default
     gevd_float_operators::FillFrameX(*magnitude, 0, frame);
     gevd_float_operators::FillFrameX(*dirx, 0, frame);
     gevd_float_operators::FillFrameX(*diry, 0, frame);
@@ -1007,7 +1012,8 @@ gevd_float_operators::Hessian(const gevd_bufferxy& smooth,
                    floatPixel(*diry, i, highy));
     }
     delete pad;
-  } else {                      // zero by default
+  }
+  else {                      // zero by default
     gevd_float_operators::FillFrameY(*magnitude, 0, frame);
     gevd_float_operators::FillFrameY(*dirx, 0, frame);
     gevd_float_operators::FillFrameY(*diry, 0, frame);
@@ -1099,7 +1105,8 @@ gevd_float_operators::Laplacian(const gevd_bufferxy& smooth,
                      floatPixel(*diry, highx, j));
     }
     delete pad;
-  } else {                      // zero by default
+  }
+  else {                      // zero by default
     gevd_float_operators::FillFrameX(*magnitude, 0, frame);
     gevd_float_operators::FillFrameX(*dirx, 0, frame);
     gevd_float_operators::FillFrameX(*diry, 0, frame);
@@ -1118,7 +1125,8 @@ gevd_float_operators::Laplacian(const gevd_bufferxy& smooth,
                      floatPixel(*diry, i, highy));
     }
     delete pad;
-  } else {                      // zero by default
+  }
+  else {                      // zero by default
     gevd_float_operators::FillFrameY(*magnitude, 0, frame);
     gevd_float_operators::FillFrameY(*dirx, 0, frame);
     gevd_float_operators::FillFrameY(*diry, 0, frame);
@@ -1215,7 +1223,8 @@ LocalMaximum(const gevd_bufferxy& magnitude,
     if (dy < 0) {
       dx = -dx, dy = -dy;       // modulo PI
       dir = DIR4 - DIR0;
-    } else
+    }
+    else
       dir = 0;
     float sl, sr, r;
     if (dx > 0) {               // which octant?
@@ -1227,7 +1236,8 @@ LocalMaximum(const gevd_bufferxy& magnitude,
               (1-r)*floatPixel(magnitude, i+1, j));
         dx = 1, dy = r; // range in location
         dir += (r < tan_pi_8)? DIR0 : DIR1;
-      } else {          // 45-90 degree
+      }
+      else {          // 45-90 degree
         r = dx / dy;
         sl = (r*floatPixel(magnitude, i-1, j-1) +
               (1-r)*floatPixel(magnitude, i, j-1));
@@ -1236,7 +1246,8 @@ LocalMaximum(const gevd_bufferxy& magnitude,
         dy = 1, dx = r;
         dir += (r < tan_pi_8)? DIR2 : DIR1;
       }
-    } else {
+    }
+    else {
       dx = -dx;         // absolute value
       if (dy > dx) {    // 90-135 degree
         r = dx / dy;
@@ -1246,7 +1257,8 @@ LocalMaximum(const gevd_bufferxy& magnitude,
               (1-r)*floatPixel(magnitude, i, j-1));
         dy = -1, dx = r;
         dir += (r < tan_pi_8)? DIR2 : DIR3;
-      } else {          // 135-180 degree
+      }
+      else {          // 135-180 degree
         r = dy / dx;
         sl = (r*floatPixel(magnitude, i+1, j-1) +
               (1-r)*floatPixel(magnitude, i+1, j));
@@ -1262,9 +1274,11 @@ LocalMaximum(const gevd_bufferxy& magnitude,
                                                     contour); // interpolated max response
       locx = r*dx;
       locy = r*dy;
-    } else
+    }
+    else
       contour = 0;              // mark NULL contour
-  } else
+  }
+  else
     contour = 0;                // mark NULL contour
 }
 
@@ -1332,7 +1346,8 @@ gevd_float_operators::NonMaximumSuppression(const gevd_bufferxy& magnitude,
                    floatPixel(*locationy, highx, j));
     }
     delete mag; delete dirx; delete diry;
-  } else {                      // zero by default
+  }
+  else {                      // zero by default
     gevd_float_operators::FillFrameX(*contour, 0, frame);
     for (int j = 1; j < highy; ++j) {
       bytePixel(*direction, 0, j) = 0;
@@ -1359,7 +1374,8 @@ gevd_float_operators::NonMaximumSuppression(const gevd_bufferxy& magnitude,
                    floatPixel(*locationy, i, highy));
     }
     delete mag; delete dirx; delete diry;
-  } else {                      // zero by default
+  }
+  else {                      // zero by default
     gevd_float_operators::FillFrameY(*contour, 0, frame);
     for (int i = 1; i < highx; ++i) {
       bytePixel(*direction, i, 0) = 0;
@@ -1866,7 +1882,8 @@ gevd_float_operators::ShrinkBy2(const gevd_bufferxy& from, gevd_bufferxy*& to,
                                             ka, kb, kc);             // for pipeline
       gevd_float_operators::ShrinkBy2AlongX(from, p++, next1, sizeX, // new ylines
                                             ka, kb, kc);             // for pipeline
-    } else {                            // reflect at image border
+    }
+    else {                            // reflect at image border
       vcl_memcpy(next0, yline1, sizeX*sizeof(float));
       vcl_memcpy(next1, yline0, sizeX*sizeof(float));
     }
@@ -1904,7 +1921,8 @@ gevd_float_operators::ShrinkBy2AlongX(const gevd_bufferxy& from, const int y,
     if (x < sizeX-2) {
       x3 = floatPixel(from, p++, y);
       x4 = floatPixel(from, p++, y);
-    } else {
+    }
+    else {
       x3 = x1;
       x4 = x0;
     }
@@ -2272,7 +2290,8 @@ gevd_float_operators::ShrinkBy2(const float* from, const int length,
     if (x < slength-2) {
       x3 = from[p++];
       x4 = from[p++];
-    } else {
+    }
+    else {
       x3 = x1;
       x4 = x0;
     }
@@ -2487,7 +2506,8 @@ gevd_float_operators::FindWavelet(const int waveletno,
         hi_filter[ncof-1-k] = sign * lo_filter[k];
         sign = - sign;
       }
-    } else {                                    // odd filter is symmetric
+    }
+    else {                                    // odd filter is symmetric
       int sign = 1;
       int ctr = ncof/2;                         // flip sign on odd coefts
       for (int k = 0; k <= ncof/2; k++) {       // starting from center
@@ -2550,7 +2570,8 @@ gevd_float_operators::WaveletTransformStep(float* array, const int n,
     float scale = vcl_max(lo_filter[ncof], hi_filter[ncof]);
     for (int j = 0; j < nmod; j++)             // normalize results.
       wksp[j] /= scale;
-  } else {                                      // inverse transform
+  }
+  else {                                      // inverse transform
     for (int i=0, ii=0; i < nmod; i+=2, ++ii) { // every pair
       float lo = array[ii];
       float hi = array[ii+nmid];
@@ -2597,7 +2618,8 @@ gevd_float_operators::WaveletTransform(float* array, const int n,
         WaveletTransformStep(array, nn, forwardp,
                              lo_filter, hi_filter, ncof,
                              wksp);
-    } else {                                    // inverse transform
+    }
+    else {                                    // inverse transform
       const int sz = int(vcl_log(double(n))/vcl_log(2.0));
       int* sizes = new int[sz];
       int s = 0;
@@ -2714,7 +2736,8 @@ gevd_float_operators::WaveletTransformByIndex(float* array,
               WaveletTransformStep(buffer, nn, forwardp,
                                    lo_filter, hi_filter, ncof,
                                    wksp);
-          } else {                              // inverse 1d transform
+          }
+          else {                              // inverse 1d transform
             int s = 0;
             for (int nn = n, l = nlevels;
                  nn >= 4 && l > 0;
@@ -2802,7 +2825,8 @@ gevd_float_operators::CopyNdRecursive(const float* from_array,
     int size = vcl_min(from_size, to_size);
     for (int i = 0; i < size; i++)              // copy 1d array for
       to_array[i] = from_array[i];              // common indices only
-  } else {
+  }
+  else {
     int from_n = from_dims[0], to_n = to_dims[0];
     int from_nsize = from_size / from_n;
     int to_nsize = to_size / to_n;
@@ -2814,7 +2838,8 @@ gevd_float_operators::CopyNdRecursive(const float* from_array,
       if (fullp) {
         from_array += from_nsize;
         to_array += to_nsize;
-      } else {
+      }
+      else {
         int block_size = vcl_max(from_nsize, to_nsize);
         from_array += block_size;               // inc pointer of arrays
         to_array += block_size;                 // to next block
@@ -3127,7 +3152,7 @@ gevd_float_operators::TruncateLowestFrequency(gevd_bufferxy& wave,
 }
 
 //:
-// Delete boundary artifacts in 1d-array, because its length is not
+// Delete boundary artefacts in 1d-array, because its length is not
 // a power of 2, and so wrapping will skip the last odd element.
 
 int
@@ -3152,7 +3177,7 @@ gevd_float_operators::DeleteBoundaryArtifacts(float* wave, const int n,
 }
 
 //:
-// Delete boundary artifacts because the dimension of the image
+// Delete boundary artefacts because the dimension of the image
 // is not a power of 2, and so wrapping will skip the last odd element.
 
 int
@@ -3950,7 +3975,8 @@ gevd_float_operators::Maximum(const float* data, const int length,
           value = mid;
           index = r-1;
         }
-      } else {
+      }
+      else {
         value = mid;
         index = r-1;
       }

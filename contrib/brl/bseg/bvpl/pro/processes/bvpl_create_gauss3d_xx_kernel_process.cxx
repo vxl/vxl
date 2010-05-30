@@ -2,7 +2,7 @@
 #include <bprb/bprb_func_process.h>
 //:
 // \file
-// \brief A class for creating an volume second dderivative of gaussian
+// \brief A class for creating a volume second dderivative of gaussian
 //
 // \author Isabel Restrepo
 // \date August 13, 2009

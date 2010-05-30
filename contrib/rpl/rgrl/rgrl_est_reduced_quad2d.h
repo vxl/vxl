@@ -13,7 +13,7 @@
 class rgrl_est_reduced_quad2d
   : public rgrl_linear_estimator
 {
-public:
+ public:
   //: Default constructor
   //
   // Does nothing. This constructor is adequate for algorithms that
@@ -21,16 +21,17 @@ public:
   // the rgrl_feature_based_registration.
   explicit rgrl_est_reduced_quad2d();
 
-  // Constructor which takes the dimension of the dataset that the
-  // estimator will be applied on, and maybe the mienimum number of
+  //: Constructor
+  // Takes the dimension of the dataset that the
+  // estimator will be applied on, and maybe the minimum number of
   // samples to instantiate a fit. If \a num_samples_for_fit is not
   // set, the number is automatically generated, assuming each
   // component provides one constraint.
   //
-  rgrl_est_reduced_quad2d( unsigned int dimension, 
+  rgrl_est_reduced_quad2d( unsigned int dimension,
                            double condition_num_thrd = 0.0 );
 
-  //: Estimates an 2D reduced_quadratic transform.
+  //: Estimates a 2D reduced_quadratic transform.
   //
   // The return pointer is to a rgrl_trans_reduced_quad2d object.
   //
@@ -57,9 +58,8 @@ public:
   // Defines type-related functions
   rgrl_type_macro( rgrl_est_reduced_quad2d, rgrl_linear_estimator );
 
-private:
+ private:
   double condition_num_thrd_;
-
 };
 
 #endif // rgrl_est_reduced_quad2d_h_

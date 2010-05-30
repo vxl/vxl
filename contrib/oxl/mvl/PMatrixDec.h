@@ -8,7 +8,7 @@
 // \file
 //
 //   The PMatrixDec class is a subclass of PMatrix.
-//   It justs adds decomposition of the projection matrix, P, into
+//   It just adds decomposition of the projection matrix, P, into
 //   2 matrices: J (3x3) and D (4x4), with intrinsic and extrinsic
 //   parameters, respectively, where P=[J O_3]D.
 //

@@ -84,7 +84,7 @@ vil_streampos vil_stream_fstream::write(void const* buf, vil_streampos n)
 #endif
 
   if (!(flags_ & vcl_ios_out)) {
-    vcl_cerr << "vil_stream_fstream: write failed, not an vcl_ostream\n";
+    vcl_cerr << "vil_stream_fstream: write failed, not a vcl_ostream\n";
     return 0;
   }
 

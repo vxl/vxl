@@ -23,7 +23,10 @@ extern "C" {
 };
 
 //: A class for handle a video device input
-// This class is not finished. I am thinking about adding controls, that is, a number of user-settable controls such as brightness, saturation and so on. but different devices will have different controls available. So, I am thinking about new classes...
+// This class is not finished.
+// I am thinking about adding controls, that is, a number of user-settable controls such as
+// brightness, saturation and so on, but different devices will have different controls available.
+// So, I am thinking about new classes...
 class vidl_v4l2_input
 {
   struct v4l2_input input_;
@@ -38,14 +41,17 @@ class vidl_v4l2_input
 
 //: A class for handle a video device.
 // This class is designed to be vidl independent, although it is very easy to create a vidl istream from it.
-// It has not been fully tested, although it has been proven to capture images from multiple webcams with a single buffer (default) and has worked properly.
+// It has not been fully tested, although it has been proven to capture images
+// from multiple webcams with a single buffer (default) and has worked properly.
 // Generally, the steps to be made for a capture are as follows:
 // -# <b>Select input</b>
 // -# <b>Select format</b>
 // -# <b>Select number of buffers</b>.
 // -# <b>Start capturing</b>
 // -# <b>Stop capturing</b>
-// When a devide is opened, a input and format are selected by default (see vidl_v4l2_device::try_formats function). Then if you start capturing, you will <b>probably</b> get 640x480 frames,  from input 0, using just one buffer with a unknown format (the first one valid for the driver).
+// When a device is opened, an input and format are selected by default (see vidl_v4l2_device::try_formats function).
+// Then if you start capturing, you will <b>probably</b> get 640x480 frames,  from input 0,
+// using just one buffer with an unknown format (the first one valid for the driver).
 // \see vidl_v4l2_devices
 class vidl_v4l2_device
 {
@@ -95,7 +101,7 @@ class vidl_v4l2_device
   vidl_v4l2_device(const char *file);
   ~vidl_v4l2_device();
 
-  //: Reset the device to a initial state
+  //: Reset the device to an initial state
   void reset();
 
   //: Name of the associated file device (same as constructor)

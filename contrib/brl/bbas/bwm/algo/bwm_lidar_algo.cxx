@@ -70,7 +70,7 @@ void bwm_lidar_algo::label_lidar(vil_image_view<float> first_ret,
     }
   }
 
-  // initalize segmentation
+  // initialize segmentation
   for (unsigned i=0; i < labeled.ni(); i++) {
     for (unsigned j=0; j < labeled.nj(); j++) {
       double diff = first_ret(i,j) - last_ret(i,j);

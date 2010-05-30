@@ -6,7 +6,7 @@
 #include <vgui/vgui_menu.h>
 #include <bmvv/bmvv_recon_manager.h>
 
-//Static munu callback functions
+//Static menu callback functions
 
 void bmvv_recon_menus::quit_callback()
 {

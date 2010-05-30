@@ -101,10 +101,9 @@ class bwm_observer_video : public bwm_observer_cam
   //: get the camera stream
   bwm_video_cam_istream_sptr camera_stream() {return  cam_istr_;}
 
-  //: extract neigborhoods around correspondences for the stream
-  bool 
-    extract_neighborhoods(unsigned nbd_radius,
-                          vcl_vector<vcl_vector<vnl_matrix<float> > >& nhds);
+  //: extract neighborhoods around correspondences for the stream
+  bool extract_neighborhoods(unsigned nbd_radius,
+                             vcl_vector<vcl_vector<vnl_matrix<float> > >& nhds);
 
   //: extract histograms of each frame
   bool extract_histograms(vcl_vector<bsta_histogram<float> >& hists);
@@ -119,6 +118,7 @@ class bwm_observer_video : public bwm_observer_cam
   vgui_style_sptr POINT_3D_STYLE;
 
   void init();
+
   //: this function is called when a correspondence is set by observer_vgui.
   virtual void correspondence_action();
 

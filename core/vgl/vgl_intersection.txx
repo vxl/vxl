@@ -274,7 +274,7 @@ bool vgl_intersection(const vgl_box_2d<Type>& box,
   if (vgl_near_zero(b))// The line is x = -c/a
   {
     float x0 = static_cast<float>(-c/a);
-    // The box edge is collinar with l?
+    // The box edge is collinear with l?
     if (vgl_near_eq(xmin,x0))
     {
       p0.set(static_cast<Type>(xmin), static_cast<Type>(ymin));

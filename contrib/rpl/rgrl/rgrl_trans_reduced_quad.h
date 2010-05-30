@@ -2,7 +2,7 @@
 #define rgrl_trans_reduced_quad_h_
 //:
 // \file
-// \brief Derived class to represent an reduced quadratic transformation in 2D arbitrary dimensions.
+// \brief Derived class to represent a reduced quadratic transformation in 2D arbitrary dimensions.
 // \author Charlene Tsai
 // \date Sep 2003
 
@@ -105,7 +105,7 @@ class rgrl_trans_reduced_quad
   //: make a clone copy
   rgrl_transformation_sptr clone() const;
 
-protected:
+ protected:
   void map_loc( vnl_vector<double> const& from,
                 vnl_vector<double>      & to ) const;
 

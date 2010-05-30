@@ -118,7 +118,7 @@ bool bgui_image_utils::init_histogram_from_data()
         if ((*dit)<minr[p]) minr[p] = *dit;
         if ((*dit)>maxr[p]) maxr[p] = *dit;
       }
-      // determine if the number of bins exceess the limit
+      // determine if the number of bins exceeds the limit
       unsigned short smin = static_cast<unsigned short>(minr[p]);
       unsigned short smax = static_cast<unsigned short>(maxr[p]);
       unsigned short nbins = static_cast<unsigned short>(smax-smin);

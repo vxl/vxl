@@ -82,7 +82,7 @@ class mbl_stepwise_regression
     mbl_stepwise_regression(const vnl_matrix<double>& x,
                             const vnl_vector<double>& y);
 
-    //: Run the algorithm as detemined by mode
+    //: Run the algorithm as determined by mode
     void operator()();
 
     //: return the basis variables

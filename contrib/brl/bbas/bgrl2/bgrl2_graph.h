@@ -7,7 +7,7 @@
 // \author Amir Tamrakar
 // \date Feb. 30, 2005
 //
-// This is a templatized generic graph class that works with
+// This is a templated generic graph class that works with
 // vertex and edge classes subclassed from bgrl2_vertex and bgrl2_edge
 // classes
 //
@@ -59,8 +59,8 @@
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
 
-//: The templatized graph class
-template<class V, class E>
+//: The templated graph class
+template <class V, class E>
 class bgrl2_graph : public vbl_ref_count
 {
  protected:

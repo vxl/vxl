@@ -98,7 +98,7 @@ bool brec_detect_hierarchy_process_cons(bprb_func_process& pro)
   input_types.push_back("unsigned"); // layer_id (the id of the layer to be recognized
   input_types.push_back("float");      // angle to rotate detector for the type of structure to be recognized
                                   // should be passed zero if the original orientation of the detector will be used
-  input_types.push_back("double");  // detection radius of primitives (doubled as we go up in the hierarcy) - used for denominator calculations of posterior probs
+  input_types.push_back("double");  // detection radius of primitives (doubled as we go up in the hierarchy) - used for denominator calculations of posterior probs
   input_types.push_back("float");  // class prior
 
   if (pro.set_input_types(input_types)) {

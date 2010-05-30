@@ -13,7 +13,7 @@
 class rgrl_est_quadratic
   : public rgrl_linear_estimator
 {
-public:
+ public:
   //: Default constructor
   //
   // Does nothing. This constructor is adequate for algorithms that
@@ -27,7 +27,7 @@ public:
   rgrl_est_quadratic( unsigned int dimension,
                       double condition_num_thrd = 0.0);
 
-  //: Estimates an quadratic transform.
+  //: Estimates a quadratic transform.
   //
   // The return pointer is to a rgrl_trans_quadratic object.
   //
@@ -38,7 +38,7 @@ public:
             rgrl_transformation const& cur_transform ) const;
 
 
-  //: Estimates an quadratic transform.
+  //: Estimates a quadratic transform.
   //
   // The return pointer is to a rgrl_trans_quadratic object.
   //
@@ -53,15 +53,14 @@ public:
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_est_quadratic, rgrl_linear_estimator );
-  
-private:
-  //: Return maximum of 9 elements
-  double max_of_9_elements(double elt1, double elt2, double elt3, 
-                           double elt4, double elt5, double elt6,  
-                           double elt7, double elt8, double elt9 ) const;
-private:
-  double condition_num_thrd_;
 
+ private:
+  //: Return maximum of 9 elements
+  double max_of_9_elements(double elt1, double elt2, double elt3,
+                           double elt4, double elt5, double elt6,
+                           double elt7, double elt8, double elt9 ) const;
+ private:
+  double condition_num_thrd_;
 };
 
 #endif // rgrl_est_quadratic_h_

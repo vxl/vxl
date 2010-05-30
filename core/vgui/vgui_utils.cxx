@@ -62,7 +62,7 @@ vil1_memory_image_of<vil1_rgb<GLubyte> > vgui_utils::get_image()
   glReadBuffer( cur_read_buffer );
 
   // glReadPixels() reads the pixels from the bottom of the viewport up.
-  // Copy them into an vil1_memory_image_of in the other order :
+  // Copy them into a vil1_memory_image_of in the other order :
   vil1_memory_image_of<vil1_rgb<GLubyte> > colour_buffer(w, h);
   for (unsigned yy=0; yy<h; ++yy)
     for (unsigned xx=0; xx<w; ++xx) {
@@ -132,7 +132,7 @@ vgui_utils::get_view()
                pixels);
 
   // glReadPixels() reads the pixels from the bottom of the viewport up.
-  // Copy them into an vil_image_view in the other order :
+  // Copy them into a vil_image_view in the other order :
   vil_image_view<GLubyte> view(w, h, 1, 3);
   for (unsigned yy=0; yy<h; ++yy)
     for (unsigned xx=0; xx<w; ++xx) {

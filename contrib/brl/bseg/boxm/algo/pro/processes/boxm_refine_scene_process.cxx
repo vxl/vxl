@@ -3,8 +3,8 @@
 //:
 // \file
 // \brief Process to refine the block (octrees) of the scene
-//        If there are some cells with big values they are spitted into
-//        new child cells, the data of the cell is coppied to the
+//        If there are some cells with big values they are spit into
+//        new child cells; the data of the cell is copied to the
 //        children's data. The purpose of this process is to elaborate
 //        the octree at the areas where more details exist.
 //

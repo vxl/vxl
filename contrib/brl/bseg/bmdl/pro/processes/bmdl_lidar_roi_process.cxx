@@ -86,7 +86,7 @@ bool lidar_roi(unsigned type,  //0 for geo coordinates, 1 for image coord
                vil_image_view_base_sptr& ground_roi,
                vpgl_geo_camera*& camera)
 {
-  // the file should be a at least a tiff (better, geotiff)
+  // the file should be at least a tiff (better, geotiff)
   if (vcl_strcmp(lidar_first->file_format(), "tiff") != 0 &&
       vcl_strcmp(lidar_last->file_format(),"tiff") != 0) {
     vcl_cout << "bmdl_lidar_roi_process::lidar_roi -- The lidar images should be a TIFF!\n";
@@ -146,7 +146,8 @@ bool lidar_roi(unsigned type,  //0 for geo coordinates, 1 for image coord
     // if no ground input, create an estimated one
     if (ground == 0) {
       compute_ground(ground, first_roi, last_roi, ground_roi);
-    } else {   // crop the given one
+    }
+    else {   // crop the given one
       ground_roi = ground->get_copy_view((unsigned int)bb->get_min_x(),
                                          (unsigned int)bb->width(),
                                          (unsigned int)bb->get_min_y(),
@@ -160,7 +161,8 @@ bool lidar_roi(unsigned type,  //0 for geo coordinates, 1 for image coord
     if (ground_roi->pixel_format() == VIL_PIXEL_FORMAT_FLOAT) {
       vil_image_view<float> ground_view(ground_roi);
       elev = ground_view(0,0);
-    } else if (ground_roi->pixel_format() == VIL_PIXEL_FORMAT_DOUBLE) {
+    }
+    else if (ground_roi->pixel_format() == VIL_PIXEL_FORMAT_DOUBLE) {
       vil_image_view<double> ground_view(ground_roi);
       elev = ground_view(0,0);
     }

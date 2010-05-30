@@ -104,8 +104,8 @@ class bil_nms
   unsigned width() const { return mag_.ni(); }
   unsigned height() const { return mag_.nj(); }
 
-  //: return the array containing the suppressed non maximas(i.e., only maximas remain)
-  vil_image_view<float> mag(){ return mag_; } 
+  //: return the array containing the suppressed non maxima (i.e., only maxima remain)
+  vil_image_view<float> mag() { return mag_; }
 
   //: return the array containing the scond deriv map
   vbl_array_2d<double>& deriv() { return deriv_; }

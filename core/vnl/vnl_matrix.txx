@@ -128,7 +128,8 @@ do { \
     if (this->num_cols && this->num_rows) { \
       vnl_c_vector<T>::deallocate(this->data[0], this->num_cols * this->num_rows); \
       vnl_c_vector<T>::deallocate(this->data, this->num_rows); \
-    } else { \
+    } \
+    else { \
       vnl_c_vector<T>::deallocate(this->data, 1); \
     } \
   } \
@@ -496,7 +497,7 @@ vcl_ostream& operator<< (vcl_ostream& os, vnl_matrix<T> const& m)
   return os;
 }
 
-//: Read an vnl_matrix from an ascii vcl_istream.
+//: Read a vnl_matrix from an ascii vcl_istream.
 // Automatically determines file size if the input matrix has zero size.
 template<class T>
 vcl_istream& operator>>(vcl_istream& s, vnl_matrix<T>& M)
@@ -1116,7 +1117,7 @@ bool vnl_matrix<T>::operator_eq(vnl_matrix<T> const& rhs) const
     return false;                                        // different sizes => not equal.
 
   for (unsigned int i = 0; i < this->num_rows; i++)     // For each row
-    for (unsigned int j = 0; j < this->num_cols; j++)   // For each columne
+    for (unsigned int j = 0; j < this->num_cols; j++)   // For each column
       if (!(this->data[i][j] == rhs.data[i][j]))            // different element ?
         return false;                                    // Then not equal.
 

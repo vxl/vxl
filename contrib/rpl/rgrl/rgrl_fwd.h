@@ -2,7 +2,7 @@
 #define rgrl_fwd_h_
 //:
 // \file
-// \brief for forward delarations
+// \brief forward declarations of rgrl classes
 // \date 04 Aug 2004
 
 class rgrl_command;

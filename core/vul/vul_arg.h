@@ -124,7 +124,7 @@ class vul_arg : public vul_arg_base
  public:
   T value_;// public so we don't have to worry about templated friends.
 
-  //: Construct an vul_arg<T> with command-line switch and default value.
+  //: Construct a vul_arg<T> with command-line switch and default value.
   // Command line switch \a option_string, and default value
   // \a default_value.  Add this argument to the global
   // list of arguments that vul_arg_base::parse() uses when it eventually

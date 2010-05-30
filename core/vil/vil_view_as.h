@@ -71,7 +71,7 @@ inline vil_image_view<vil_rgba<T> > vil_view_as_rgba(const vil_image_view<T>& v)
                                       v.istep()/3,v.jstep()/3,1);
 }
 
-//: Return an complex component view of a 2N-plane image.
+//: Return a complex component view of a 2N-plane image.
 // \return an empty view if it can't do the conversion (e.g. planestep != 1)
 // O(1).
 // \relatesalso vil_image_view

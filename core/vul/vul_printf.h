@@ -22,7 +22,7 @@
 
 #include <vcl_iosfwd.h>
 
-//: Print using printf format specifiers to a ostream.
+//: Print using printf format specifiers to an ostream.
 // E.g.
 // \code
 // vul_printf(cout, "%d\n", 12);

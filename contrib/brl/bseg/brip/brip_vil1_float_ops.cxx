@@ -489,7 +489,7 @@ brip_vil1_float_ops::beaudet(vil1_memory_image_of<float> const & Ixx,
 //                       |(dI/dx)(dI/dy)   (dI/dx)^2   |
 //                       |_                           _|
 //
-// over a a 2n+1 x 2n+1 neigborhood
+// over a 2n+1 x 2n+1 neighborhood
 //
 void
 brip_vil1_float_ops::grad_matrix_NxN(vil1_memory_image_of<float> const & input,
@@ -553,7 +553,7 @@ brip_vil1_float_ops::harris(vil1_memory_image_of<float> const & IxIx,
 
 //----------------------------------------------------------------
 // Compute the sqrt of the product of the eigenvalues of the
-// gradient matrix over a 2n+1 x 2n+1 neigborhood
+// gradient matrix over a 2n+1 x 2n+1 neighborhood
 // That is,
 //                        _                           _
 //                       | (dI/dx)^2    (dI/dx)(dI/dy) |
@@ -1534,7 +1534,7 @@ spatial_frequency_filter(vil1_memory_image_of<float> const & input,
 }
 
 //----------------------------------------------------------------------
-//: Bi-linear interpolation on the neigborhood below.
+//: Bi-linear interpolation on the neighborhood below.
 //      xr
 //   yr 0  x
 //      x  x
@@ -1700,8 +1700,8 @@ bool brip_vil1_float_ops::homography(vil1_memory_image_of<float> const & input,
   return true;
 }
 
-//:rotate the input image counter-clockwise about the image origin.
-// demonstrates the use of image homograpy
+//: rotate the input image counter-clockwise about the image origin.
+// demonstrates the use of image homography
 vil1_memory_image_of<float>
 brip_vil1_float_ops::rotate(vil1_memory_image_of<float> const & input,
                             const double theta_deg)

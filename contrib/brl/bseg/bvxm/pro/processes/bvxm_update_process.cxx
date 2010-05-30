@@ -21,7 +21,7 @@ bool bvxm_update_process_cons(bprb_func_process& pro)
   //input[0]: The observation image
   //input[1]: The camera of the observation
   //input[2]: The voxel world
-  //input[3]: The apperance model type, the supported strings are:
+  //input[3]: The appearance model type, the supported strings are:
   //          -apm_mog_grey
   //          -apm_mog_rgb
   //          -apm_mog_mc_2_3
@@ -119,7 +119,7 @@ bool bvxm_update_process(bprb_func_process& pro)
     {
       if (observation.img->nplanes()!= 2)
       {
-        vcl_cerr << "appereance model type" << voxel_type << "does not support images with " << observation.img->nplanes()
+        vcl_cerr << "appearance model type" << voxel_type << "does not support images with " << observation.img->nplanes()
                  << " planes\n";
         return false;
       }
@@ -132,14 +132,14 @@ bool bvxm_update_process(bprb_func_process& pro)
     {
       if (observation.img->nplanes()!= 4)
       {
-        vcl_cerr << "appereance model type" << voxel_type << "does not support images with " << observation.img->nplanes()
+        vcl_cerr << "appearance model type" << voxel_type << "does not support images with " << observation.img->nplanes()
                  << " planes\n";
         return false;
       }
       result = world->update<APM_MOG_MC_4_3>(observation, prob_map, mask, bin_index,scale);
     }
     else
-      vcl_cerr << "Error in: bvxm_update_processor: Unsuppported appereance model\n";
+      vcl_cerr << "Error in: bvxm_update_processor: Unsuppported appearance model\n";
 
     vcl_cout<<"update done ";
     vcl_cout.flush();

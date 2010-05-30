@@ -85,9 +85,7 @@ void vsrl_step_diffusion::interpolate_disparity()
 
         if (flag1 && flag2)
         {
-          // OK we hade two points to interopolate
-          // from - lets doit
-
+          // OK, we have two points to interpolate from - let's do it
           len1 = x-x1;
           len2 = x2-x1;
           alpha = len1/len2;
@@ -179,7 +177,7 @@ void vsrl_step_diffusion::diffuse_disparity()
 
    for (dif_num=0;dif_num<100;dif_num++)
    {
-     vcl_cout << "Iteration " << dif_num << "\r";
+     vcl_cout << "Iteration " << dif_num << '\r';
 
      for (x=1;x<get_width() -1;x++)
      {

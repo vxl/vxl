@@ -77,21 +77,21 @@ static bool initial_offsets(vpgl_rational_camera<double> const& initial_rcam,
                             double& zoff)
 {
   unsigned npts = img_pts.size();
-  //get the average elevation
+  // get the average elevation
   zoff = 0;
   for (unsigned i = 0; i<npts; ++i)
     zoff += geo_pts[i].z();
   zoff /= npts;
-  //construct a x-y plane with this elevation
+  // construct a x-y plane with this elevation
   vgl_plane_3d<double> pl(0, 0, 1, -zoff);
 
-  //an inital point for the backprojection
+  // an initial point for the backprojection
   double xo = initial_rcam.offset(vpgl_rational_camera<double>::X_INDX);
   double yo = initial_rcam.offset(vpgl_rational_camera<double>::Y_INDX);
   vgl_point_3d<double> initial_pt(xo, yo, zoff);
 
   double xshift = 0, yshift = 0;
-  //backproject the image points onto this plane
+  // backproject the image points onto this plane
   for (unsigned i = 0; i<npts; ++i)
   {
     vgl_point_3d<double> bp_pt;
@@ -115,7 +115,7 @@ adjust(vpgl_rational_camera<double> const& initial_rcam,
        vcl_vector<vgl_point_3d<double> > geo_pts,
        vpgl_rational_camera<double> & adj_rcam)
 {
-  //Get initial offsets by backprojection
+  // Get initial offsets by backprojection
   double xoff=0, yoff=0, zoff=0;
   if (!initial_offsets(initial_rcam, img_pts, geo_pts, xoff, yoff, zoff))
     return false;

@@ -659,7 +659,7 @@ void vvid_file_manager::compute_vd_edges()
   det_dialog.field("Gaussian sigma", dp.smooth);
   det_dialog.field("Noise Threshold", dp.noise_multiplier);
   det_dialog.checkbox("Automatic Threshold", dp.automatic_threshold);
-  det_dialog.checkbox("Agressive Closure", agr);
+  det_dialog.checkbox("Aggressive Closure", agr);
   det_dialog.checkbox("Compute Junctions", dp.junctionp);
   det_dialog.checkbox("Tracks", track_);
   det_dialog.field("Window", track_window);
@@ -690,7 +690,7 @@ void vvid_file_manager::compute_line_fit()
   line_dialog.field("Gaussian sigma", dp.smooth);
   line_dialog.field("Noise Threshold", dp.noise_multiplier);
   line_dialog.checkbox("Automatic Threshold", dp.automatic_threshold);
-  line_dialog.checkbox("Agressive Closure", agr);
+  line_dialog.checkbox("Aggressive Closure", agr);
   line_dialog.checkbox("Compute Junctions", dp.junctionp);
   line_dialog.field("Min Fit Length", flp.min_fit_length_);
   line_dialog.field("RMS Distance", flp.rms_distance_);
@@ -721,7 +721,7 @@ void vvid_file_manager::compute_grid_match()
   grid_dialog.field("Gaussian sigma", dp.smooth);
   grid_dialog.field("Noise Threshold", dp.noise_multiplier);
   grid_dialog.checkbox("Automatic Threshold", dp.automatic_threshold);
-  grid_dialog.checkbox("Agressive Closure", agr);
+  grid_dialog.checkbox("Aggressive Closure", agr);
   grid_dialog.checkbox("Compute Junctions", dp.junctionp);
   grid_dialog.field("Min Fit Length", flp.min_fit_length_);
   grid_dialog.field("RMS Distance", flp.rms_distance_);

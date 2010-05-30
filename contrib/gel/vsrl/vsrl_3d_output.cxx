@@ -135,7 +135,7 @@ void vsrl_3d_output::write_output(const char *filename)
         input(2,0)=diffuse_d;
         input(3,0)=1.0; // change me based on image scale
 
-        // comput the output = H_ * input
+        // compute the output = H_ * input
         output = H_ * input;
 
         // normalize to X,Y,Z,1
@@ -280,12 +280,11 @@ void vsrl_3d_output::write_output(const char *filename)
 void vsrl_3d_output::read_projective_transform(const char *filename)
 {
   // since this is a projective transform from the RH point
-  // of view. I am assuming that the data will be of the form
+  // of view, I am assuming that the data will be of the form
   // (X,Y,Z,W)^T = H (v, u, du, 1)
-  // so if want this to be consisten with our world
-  // were v and u are transposed, the first and second
+  // so if we want this to be consistent with our world
+  // where v and u are transposed, the first and second
   // column of H must be swapped
-
 
   vcl_cout << "opening file " << filename << vcl_endl;
   vcl_ifstream file(filename);

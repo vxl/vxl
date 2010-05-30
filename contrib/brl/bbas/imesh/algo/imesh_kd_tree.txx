@@ -44,7 +44,7 @@ imesh_closest_index(const vgl_point_3d<double>& query,
     dists->clear();
 
 
-  // find the closet of the contained leaves
+  // find the closest of the contained leaves
   vcl_pop_heap( leaf_queue.begin(), leaf_queue.end() );
   vcl_vector<imesh_kd_tree_queue_entry>::iterator back = leaf_queue.end();
   --back;

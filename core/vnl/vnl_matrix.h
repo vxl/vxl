@@ -96,7 +96,7 @@ class vnl_matrix
   // Complexity $O(1)$
   vnl_matrix(unsigned r, unsigned c);                           // r rows, c cols.
 
-  //: Construct a matrix of size r rows by c columns, and all emelemnts equal to v0
+  //: Construct a matrix of size r rows by c columns, and all elements equal to v0
   // Complexity $O(r.c)$
   vnl_matrix(unsigned r, unsigned c, T const& v0);              // r rows, c cols, value v0.
 

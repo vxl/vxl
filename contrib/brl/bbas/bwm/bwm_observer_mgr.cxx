@@ -124,17 +124,17 @@ bool bwm_observer_mgr::comp_avg_camera_center(vgl_point_3d<double> &cam_center)
 }
 
 #if 0
-//Set a world point to be used in correspondences from world to image
+//: Set a world point to be used in correspondences from world to image
 void bwm_observer_mgr::set_world_pt(vgl_point_3d<double> world_pt)
 {
   corr_world_pt_ = world_pt;
   world_point_valid_ = true;
 }
 #endif
-//Set the correspodence mode which is either image_to_image or world_to_image
-//The world_to_image mode is only possible if there is a world point available
-//The existence of a valid world point is defined by the flag
-// world_point_valid_
+
+//: Set the correspondence mode which is either image_to_image or world_to_image
+// The world_to_image mode is only possible if there is a world point available
+// The existence of a valid world point is defined by the flag \a world_point_valid_
 void bwm_observer_mgr::set_corr_mode()
 {
   vgui_dialog params ("Correspondence Mode");
@@ -545,14 +545,14 @@ void bwm_observer_mgr::adjust_camera_offsets()
              << intersection.x() << ' ' << intersection.y()
              << ' ' << intersection.z() << ")\n";
     obsrc->shift_camera((*ti).x(), (*ti).y());
-    // here is where we would set the terrain plane an maybe not
+    // here is where we would set the terrain plane and maybe not
     // do anything to the projection plane of each observer.
     // but this approach works for now.
     obsrc->set_proj_plane(world_plane);
     obsrc->update_all();
   }
 
-  //send the objects in the world the fact that they need to redisplay
+  // send the objects in the world the fact that they need to redisplay
   vcl_vector<bwm_observable_sptr> objs = bwm_world::instance()->objects();
   for (vcl_vector<bwm_observable_sptr>::iterator oit = objs.begin();
        oit != objs.end(); ++oit)
@@ -561,7 +561,7 @@ void bwm_observer_mgr::adjust_camera_offsets()
   //
   // now that the 3-d intersection is available, the correspondence mode
   // should be changed to "world_to_image." The mode should only be
-  // chanaged back to "image_to_image" if a new image is added to the
+  // changed back to "image_to_image" if a new image is added to the
   // site and the intersection point is re-computed
   //
   for (vcl_vector<bwm_corr_sptr>::iterator cit = corr_list_.begin();

@@ -23,7 +23,7 @@ bool bvxm_locate_region_process_cons(bprb_func_process& pro)
   //input[2]: The camera of the observation
   //input[3]: The voxel world
   //input[4]: The path for output grid
-  //input[5]: The apperance model type, the supported strings are:
+  //input[5]: The appearance model type, the supported strings are:
   //          -apm_mog_grey
   //          -apm_mog_rgb
   //          -apm_mog_mc_2_3
@@ -96,7 +96,7 @@ bool bvxm_locate_region_process(bprb_func_process& pro)
   if (voxel_type == "apm_mog_grey")
     result = world->region_probability_density<APM_MOG_GREY>(observation,mask,grid_out, bin_index,scale);
   else
-    vcl_cerr << "Error in: bvxm_locate_region_processor: Unsuppported appereance model\n";
+    vcl_cerr << "Error in: bvxm_locate_region_processor: Unsuppported appearance model\n";
 
   vcl_cout.flush();
   return true;

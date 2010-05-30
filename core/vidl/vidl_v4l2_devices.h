@@ -16,7 +16,7 @@
 #include "vidl_v4l2_device_sptr.h"
 
 
-//: A class which stores all devices in a object
+//: A class which stores all devices in an object
 // This object is a singleton initialized automatically by detecting all devices in the system,
 // The devices are detected iterating over all files in the device directory.
 //
@@ -38,9 +38,8 @@ class vidl_v4l2_devices
   unsigned int size() const { return vecdev.size(); }
   // Return device i (0..size()-1)
   //vidl_v4l2_device& device(unsigned int i) {return *vecdev[i];}
-  //: Return device i (0..size()-1) 
+  //: Return device i (0..size()-1)
   vidl_v4l2_device& operator()(unsigned int i) {return *vecdev[i];}
-
 };
 
 #endif // vidl_v4l2_devices_h_

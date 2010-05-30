@@ -300,7 +300,7 @@ Collinearity()
   return coll;
 }
 
-// Get the ratio of an vifa_int_face_attr attribute to the seed.
+// Get the ratio of a vifa_int_face_attr attribute to the seed.
 float vifa_int_faces_adj_attr::
 GetRatioAttr(int attr_index)
 {
@@ -335,7 +335,7 @@ add_unique_face(iface_list&               facelist,
                 int                       size_filter)
 {
   for (iface_iterator check = facelist.begin();
-      check != facelist.end(); ++check)
+       check != facelist.end(); ++check)
   {
     if ((check->ptr()->Xo() == face->Xo()) &&
         (check->ptr()->Yo() == face->Yo()))

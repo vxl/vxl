@@ -88,7 +88,7 @@ void label_boundary_and_bkg(vil3d_image_view<int> &image,int i,int j, int k, int
 //  while (image(i0,j0,k) != boundary_label || (i!=i0 && j!=j0))
 //    while (image(i0,j0,k) != boundary_label || ((i==i0 && j==j0) && (offset != 0 || offset != 1)))
   while (image(i0,j0,k) != boundary_label || (i != i0 || j != j0) ||
-          (i == i0 && j == j0 && offset == 7))
+         (i == i0 && j == j0 && offset == 7))
   {
     image(i0,j0,k) = boundary_label;
 
@@ -156,7 +156,7 @@ void fill_boundary(vil3d_image_view<int> &image, int j, int k, int boundary_labe
 
   int i1,j1;
 
-  // Starting from first pixel on boundary, iteratively fill neighours in boundary
+  // Starting from first pixel on boundary, iteratively fill neighbours in boundary
   while (!x_stack.empty())
   {
     i = x_stack.top();

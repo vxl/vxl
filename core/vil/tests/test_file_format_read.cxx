@@ -255,7 +255,7 @@ CheckPixels( Compare<TruePixelType,ImgPixelType> const& check,
              char const* true_data_file,
              vil_image_resource_sptr ir )
 {
-  // The true data is a ASCII file consisting of a sequence of
+  // The true data is an ASCII file consisting of a sequence of
   // numbers. The first set of numbers are:
   //    number of planes (P)
   //    number of components (C)

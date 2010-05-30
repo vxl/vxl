@@ -69,10 +69,10 @@ mfpf_hog_box_finder::~mfpf_hog_box_finder()
 
 //: Define region and cost of region
 void mfpf_hog_box_finder::set(unsigned nA_bins, bool full360,
-                          unsigned ni, unsigned nj, unsigned nc,
-                          double ref_x, double ref_y,
-                          const mfpf_vec_cost& cost,
-                          const mbl_cloneable_nzptr<mipa_vector_normaliser>& normaliser)
+                              unsigned ni, unsigned nj, unsigned nc,
+                              double ref_x, double ref_y,
+                              const mfpf_vec_cost& cost,
+                              const mbl_cloneable_nzptr<mipa_vector_normaliser>& normaliser)
 {
   cost_ = cost.clone();
   ref_x_ = ref_x;
@@ -89,7 +89,7 @@ void mfpf_hog_box_finder::set(unsigned nA_bins, bool full360,
   //: Block normalisers (and their derivatives) typically need their regions copying from this
   mipa_vector_normaliser* pNormaliser=normaliser_.ptr();
   mipa_block_normaliser* pBlockNormaliser= dynamic_cast<mipa_block_normaliser*>(pNormaliser);
-  if(pBlockNormaliser)
+  if (pBlockNormaliser)
   {
       pBlockNormaliser->set_region(2*ni_,2*nj_);
       pBlockNormaliser->set_nbins(nA_bins_);
@@ -122,8 +122,8 @@ double mfpf_hog_box_finder::radius() const
 
 //: Evaluate match at p, using u to define scale and orientation
 double mfpf_hog_box_finder::evaluate(const vimt_image_2d_of<float>& image,
-                        const vgl_point_2d<double>& p,
-                        const vgl_vector_2d<double>& u)
+                                     const vgl_point_2d<double>& p,
+                                     const vgl_vector_2d<double>& u)
 {
   vgl_vector_2d<double> u1=step_size_*u;
   vgl_vector_2d<double> v1(-u1.y(),u1.x());
@@ -143,9 +143,9 @@ double mfpf_hog_box_finder::evaluate(const vimt_image_2d_of<float>& image,
   vgl_vector_2d<double> im_v = s_w2i.delta(p0, v1);
 
   vil_resample_bilin(image.image(),sample,
-                      im_p0.x(),im_p0.y(),  im_u.x(),im_u.y(),
-                      im_v.x(),im_v.y(),
-                      sni,snj);
+                     im_p0.x(),im_p0.y(),  im_u.x(),im_u.y(),
+                     im_v.x(),im_v.y(),
+                     sni,snj);
 
   vil_image_view<float> histo_im;
   mipa_orientation_histogram(sample,histo_im,nA_bins_,nc_,full360_);
@@ -161,7 +161,7 @@ double mfpf_hog_box_finder::evaluate(const vimt_image_2d_of<float>& image,
 }
 
 //: Evaluate match at in a region around p
-// Returns a qualtity of fit at a set of positions.
+// Returns a quality of fit at a set of positions.
 // response image (whose size and transform is set inside the
 // function), indicates the points at which the function was
 // evaluated.  response(i,j) is the fit at the point
@@ -198,9 +198,9 @@ void mfpf_hog_box_finder::evaluate_region(
 
   // Sample region of interest
   vil_resample_bilin(image.image(),sample,
-                      im_p0.x(),im_p0.y(),  im_u.x(),im_u.y(),
-                      im_v.x(),im_v.y(),
-                      nsi,nsj);
+                     im_p0.x(),im_p0.y(),  im_u.x(),im_u.y(),
+                     im_v.x(),im_v.y(),
+                     nsi,nsj);
 
   // Compute image of histograms (each cell is pool of nc x nc)
   vil_image_view<float> histo_im;
@@ -224,10 +224,10 @@ void mfpf_hog_box_finder::evaluate_region(
       r[i] = cost().evaluate(v);
       if (vnl_math_isnan(r[i]))
       {
-        vcl_cerr<<is_a()<<"::evaluate_region: Response is NaN."<<vcl_endl;
-        vcl_cerr<<*this<<vcl_endl;
-        vcl_cerr<<"i,j="<<i<<","<<j<<vcl_endl;
-        vcl_cerr<<"v.sum()="<<v.sum()<<vcl_endl;
+        vcl_cerr<<is_a()<<"::evaluate_region: Response is NaN.\n"
+                <<*this<<'\n'
+                <<"i,j="<<i<<','<<j<<'\n'
+                <<"v.sum()="<<v.sum()<<'\n';
         vcl_abort();
       }
     }
@@ -246,12 +246,12 @@ void mfpf_hog_box_finder::evaluate_region(
 
 //: Search given image around p, using u to define scale and orientation
 //  On exit, new_p and new_u define position, scale and orientation of
-//  the best nearby match.  Returns a qualtity of fit measure at that
+//  the best nearby match.  Returns a quality of fit measure at that
 //  point (the smaller the better).
 double mfpf_hog_box_finder::search_one_pose(const vimt_image_2d_of<float>& image,
-                        const vgl_point_2d<double>& p,
-                        const vgl_vector_2d<double>& u,
-                        vgl_point_2d<double>& new_p)
+                                            const vgl_point_2d<double>& p,
+                                            const vgl_vector_2d<double>& u,
+                                            vgl_point_2d<double>& new_p)
 {
   // Note: search_ni/nj defined in units of u
   // However, search occurs in units of nc*u due to histogram pooling.
@@ -311,8 +311,8 @@ double mfpf_hog_box_finder::search_one_pose(const vimt_image_2d_of<float>& image
 
 // Returns true if p is inside region at given pose
 bool mfpf_hog_box_finder::is_inside(const mfpf_pose& pose,
-                               const vgl_point_2d<double>& p,
-                               double f) const
+                                    const vgl_point_2d<double>& p,
+                                    double f) const
 {
   // Set transform model frame -> World
   vimt_transform_2d t1;
@@ -330,7 +330,7 @@ bool mfpf_hog_box_finder::is_inside(const mfpf_pose& pose,
 //: Return true if modelled regions at pose1 and pose2 overlap
 //  Checks if reference point of one is inside region of other
 bool mfpf_hog_box_finder::overlap(const mfpf_pose& pose1,
-                               const mfpf_pose& pose2) const
+                                  const mfpf_pose& pose2) const
 {
   if (is_inside(pose1,pose2.p(),overlap_f_)) return true;
   if (is_inside(pose2,pose1.p(),overlap_f_)) return true;
@@ -378,25 +378,27 @@ void mfpf_hog_box_finder::print_summary(vcl_ostream& os) const
 {
   os << "{ "<<'\n';
   vsl_indent_inc(os);
-  os<<vsl_indent()<<"size: " << ni_ << 'x' << nj_
+  os << vsl_indent()<<"size: " << ni_ << 'x' << nj_
      << " nc: " << nc_ <<" nA_bins: "<<nA_bins_
      << " ref_pt: (" << ref_x_ << ',' << ref_y_ << ')' <<'\n';
-  if (full360_) os<<vsl_indent()<<"Angle range: 0-360"<<'\n';
-  else          os<<vsl_indent()<<"Angle range: 0-180"<<'\n';
-  //if (norm_method_==0) os<<vsl_indent()<<"norm: none"<<'\n';
-  //else                 os<<vsl_indent()<<"norm: linear"<<'\n';
+  if (full360_) os << vsl_indent()<<"Angle range: 0-360"<<'\n';
+  else          os << vsl_indent()<<"Angle range: 0-180"<<'\n';
+#if 0
+  if (norm_method_==0) os << vsl_indent()<<"norm: none"<<'\n';
+  else                 os << vsl_indent()<<"norm: linear"<<'\n';
+#endif
 
   vcl_cout<<"The HOG's normaliser is:"<<vcl_endl;
   normaliser_->print_summary(os);
 
-  os <<vsl_indent()<< "cost: ";
+  os << vsl_indent()<< "cost: ";
   if (cost_.ptr()==0) os << "--"<<vcl_endl; else os << cost_<<'\n';
-  os<<vsl_indent();
+  os << vsl_indent();
   mfpf_point_finder::print_summary(os);
-  os <<'\n';
-  os <<vsl_indent()<<"overlap_f: "<<overlap_f_<<'\n';
+  os << '\n'
+     << vsl_indent()<<"overlap_f: "<<overlap_f_<<'\n';
   vsl_indent_dec(os);
-  os<<vsl_indent()<<'}';
+  os << vsl_indent()<<'}';
 }
 
 short mfpf_hog_box_finder::version_no() const
@@ -449,7 +451,7 @@ void mfpf_hog_box_finder::b_read(vsl_b_istream& bfs)
       break;
     default:
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
-               << "           Unknown version number "<< version << vcl_endl;
+               << "           Unknown version number "<< version << '\n';
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }

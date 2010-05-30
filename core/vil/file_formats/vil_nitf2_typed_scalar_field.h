@@ -22,7 +22,7 @@ class vil_nitf2_typed_scalar_field : public vil_nitf2_scalar_field
   vil_nitf2_typed_scalar_field(T value, vil_nitf2_field_definition* definition)
     : vil_nitf2_scalar_field(definition), m_value(value) {}
 
-  // Desructor
+  // Destructor
   ~vil_nitf2_typed_scalar_field() {}
 
   // Set out_value to my value and return true.
@@ -60,7 +60,8 @@ inline vcl_ostream& vil_nitf2_typed_scalar_field<vil_nitf2_location*>::output(vc
 {
   if (m_value==0) {
     os << m_value;
-  } else {
+  }
+  else {
     os << *m_value;
   }
   return os;

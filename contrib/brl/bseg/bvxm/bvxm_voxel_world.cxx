@@ -253,7 +253,7 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
 
   vcl_cout << "Pass 1:" << vcl_endl;
 
-  // get ocuppancy probability grid
+  // get occupancy probability grid
   bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0,  scale);
   bvxm_voxel_grid<ocp_datatype> *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base.ptr());
 
@@ -609,7 +609,7 @@ bool bvxm_voxel_world::heightmap(vpgl_camera_double_sptr virtual_camera, vil_ima
   visX_accum_virtual.fill(1.0f);
   max_prob_image.fill(0.0f);
 
-  // get ocuppancy probability grid
+  // get occupancy probability grid
   bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0,scale_idx);
   bvxm_voxel_grid<ocp_datatype> *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base.ptr());
 

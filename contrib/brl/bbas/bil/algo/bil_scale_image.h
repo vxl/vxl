@@ -101,7 +101,7 @@ class bil_scale_image
   //: Number of images per octave
   unsigned int num_levels_;
 
-  //: The scale of the inital image
+  //: The scale of the initial image
   float init_scale_;
 
   //: The first octave level

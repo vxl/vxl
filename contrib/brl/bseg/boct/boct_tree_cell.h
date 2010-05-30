@@ -53,11 +53,11 @@ class boct_tree_cell
   //Clones a cell, shifting its location code according to shift_code. This is useful when creating subtrees.
   boct_tree_cell<T_loc,T_data>* clone(boct_tree_cell<T_loc,T_data>* parent, boct_loc_code<T_loc> *shift_code);
 
-  //: Clones a cell if it intesects a region
+  //: Clones a cell if it intersects a region
   boct_tree_cell<T_loc,T_data>* clone_and_intersect(boct_tree_cell<T_loc,T_data>* parent,
                                                     vgl_box_3d<double> local_crop_box, short root_level);
 
-  //: Clones and shifts a cell if it intesects a region
+  //: Clones and shifts a cell if it intersects a region
   boct_tree_cell<T_loc,T_data>* clone_and_intersect(boct_tree_cell<T_loc,T_data>* parent,
                                                     boct_loc_code<T_loc> *shift_code,
                                                     vgl_box_3d<double> local_crop_box, short root_level);
@@ -86,7 +86,7 @@ class boct_tree_cell
   void set_children_null() { children_=0; }
   bool is_leaf();
 
-  //: Returns the bounting box of this cell in local coordinates i.e [0,1)x[0,1)x[0,1)
+  //: Returns the bounding box of this cell in local coordinates i.e [0,1)x[0,1)x[0,1)
   vgl_box_3d<double> local_bounding_box(short root_level);
 
   //: adds a pointer for each leaf children to v

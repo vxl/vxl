@@ -35,26 +35,26 @@
 template <class T>
 bool bvxm_voxel_grid_multiply(bvxm_voxel_grid_base_sptr grid1_base, bvxm_voxel_grid_base_sptr grid2_base, bvxm_voxel_grid_base_sptr grid_out_base)
 {
-  //cast
+  // cast
   bvxm_voxel_grid<T> *grid1 = dynamic_cast<bvxm_voxel_grid<T>* >(grid1_base.ptr());
   bvxm_voxel_grid<T> *grid2 = dynamic_cast<bvxm_voxel_grid<T>* >(grid2_base.ptr());
   bvxm_voxel_grid<T> *grid_out = dynamic_cast<bvxm_voxel_grid<T>* >(grid_out_base.ptr());
 
-  //check the casting was successful
+  // check the casting was successful
   if ( !grid1 || !grid2 || !grid_out)
   {
     vcl_cerr << "One of the input voxels is of the wrong type\n";
     return false;
   }
 
-  //check sizes are the same
+  // check sizes are the same
   if ( grid1->grid_size() != grid2->grid_size() ||  grid1->grid_size() != grid_out->grid_size() )
   {
     vcl_cerr << "Grids are not of the same type\n";
     return false;
   }
 
-  //multipy
+  // multiply
   typename bvxm_voxel_grid<T>::iterator grid1_it = grid1->begin();
   typename bvxm_voxel_grid<T>::iterator grid2_it = grid2->begin();
   typename bvxm_voxel_grid<T>::iterator grid_out_it = grid_out->begin();

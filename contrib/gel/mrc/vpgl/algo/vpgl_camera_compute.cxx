@@ -253,7 +253,7 @@ compute( vpgl_rational_camera<double> const& rat_cam,
     if (vcl_fabs(den_v[i])>dmax_v)
       dmax_v=vcl_fabs(den_v[i]);
   }
-  //Normalize polys so that ratio of neumerator and denominator is unchanged
+  // Normalize polys so that ratio of numerator and denominator is unchanged
   double norm_u = nmax_u, norm_v = nmax_v;
   if (norm_u<dmax_u) norm_u = dmax_u;
   if (norm_v<dmax_v) norm_v = dmax_v;
@@ -603,7 +603,7 @@ compute( const vcl_vector< vgl_point_2d<double> >& image_pts,
 bool vpgl_perspective_camera_compute::
 compute( const vcl_vector< vgl_point_2d<double> >& image_pts,
          const vcl_vector< vgl_point_2d<double> >& ground_pts,
-               vpgl_perspective_camera<double>& camera )
+         vpgl_perspective_camera<double>& camera )
 {
   unsigned num_pts = ground_pts.size();
   if (image_pts.size()!=num_pts)
@@ -620,10 +620,10 @@ compute( const vcl_vector< vgl_point_2d<double> >& image_pts,
   }
 
   vcl_vector<vgl_homg_point_2d<double> > pi, pg;
-  for(unsigned i=0; i<num_pts; ++i){
+  for (unsigned i=0; i<num_pts; ++i){
 #ifdef CAMERA_DEBUG
-    vcl_cout << "("<<image_pts[i].x()<<", "<<image_pts[i].y()<<") -> "
-             << "("<<ground_pts[i].x()<<", "<<ground_pts[i].y()<<")"<<vcl_endl;
+    vcl_cout << '('<<image_pts[i].x()<<", "<<image_pts[i].y()<<") -> "
+             << '('<<ground_pts[i].x()<<", "<<ground_pts[i].y()<<')'<<vcl_endl;
 #endif
     pi.push_back(vgl_homg_point_2d<double>(image_pts[i].x(),image_pts[i].y()));
     pg.push_back(vgl_homg_point_2d<double>(ground_pts[i].x(),ground_pts[i].y()));
@@ -632,7 +632,7 @@ compute( const vcl_vector< vgl_point_2d<double> >& image_pts,
   // compute a homography from the ground plane to image plane
   vgl_h_matrix_2d_compute_linear est_H;
   vnl_double_3x3 H = est_H.compute(pg,pi).get_matrix();
-  if(vnl_det(H) > 0)
+  if (vnl_det(H) > 0)
     H *= -1.0;
 
   // invert the effects of intrinsic parameters
@@ -650,9 +650,9 @@ compute( const vcl_vector< vgl_point_2d<double> >& image_pts,
   // find the point farthest from the origin
   int max_idx = 0;
   double max_dist = 0.0;
-  for(unsigned int i=0; i < ground_pts.size(); ++i){
+  for (unsigned int i=0; i < ground_pts.size(); ++i){
     double d = (ground_pts[i]-vgl_point_2d<double>(0,0)).length();
-    if(d >= max_dist){
+    if (d >= max_dist){
       max_dist = d;
       max_idx = i;
     }
@@ -671,13 +671,11 @@ compute( const vcl_vector< vgl_point_2d<double> >& image_pts,
   camera.set_rotation(vgl_rotation_3d<double>(R));
   camera.set_camera_center(vgl_point_3d<double>(t[0],t[1],t[2]));
 
-
-
   //perform a final non-linear optimization
   vcl_vector<vgl_homg_point_3d<double> > h_world_pts;
   for (unsigned i = 0; i<num_pts; ++i){
     h_world_pts.push_back(vgl_homg_point_3d<double>(ground_pts[i].x(),ground_pts[i].y(),0,1));
-    if(camera.is_behind_camera(h_world_pts.back())){
+    if (camera.is_behind_camera(h_world_pts.back())){
       vcl_cout << "behind camera" << vcl_endl;
       return false;
     }

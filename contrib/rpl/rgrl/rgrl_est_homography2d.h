@@ -13,12 +13,12 @@
 class rgrl_est_homography2d
   : public rgrl_linear_estimator
 {
-public:
+ public:
   //: Default constructor
   //
   rgrl_est_homography2d( double condition_num_thrd = 0.0 );
 
-  //: Estimates an quadratic transform.
+  //: Estimates a quadratic transform.
   //
   // The return pointer is to a rgrl_trans_quadratic object.
   //
@@ -28,7 +28,7 @@ public:
   estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
             rgrl_transformation const& cur_transform ) const;
 
-  //: Estimates an quadratic transform.
+  //: Estimates a quadratic transform.
   //
   // The return pointer is to a rgrl_trans_quadratic object.
   //
@@ -46,7 +46,7 @@ public:
   // Defines type-related functions
   rgrl_type_macro( rgrl_est_homography2d, rgrl_linear_estimator );
 
-private:
+ private:
   bool normalize( rgrl_set_of<rgrl_match_set_sptr> const& matches,
                   vcl_vector< vnl_vector<double> >& norm_froms,
                   vcl_vector< vnl_vector<double> >& norm_tos,
@@ -62,8 +62,8 @@ private:
                             double to_scale,
                             vnl_matrix<double>& covar ) const;
 
-private:
+ private:
   double condition_num_thrd_;
 };
 
-#endif 
+#endif

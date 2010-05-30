@@ -37,14 +37,14 @@ bool bvxm_update_edges_lidar_process(bprb_func_process& pro)
 {
   using namespace bvxm_update_edges_lidar_process_globals;
 
-  //check numebr of inputs
+  // check number of inputs
   if (pro.n_inputs() < n_inputs_)
   {
     vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
     return false;
   }
 
-  //get the inputs
+  // get the inputs
   unsigned i = 0;
   vil_image_view_base_sptr lidar_height = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view_base_sptr lidar_edges = pro.get_input<vil_image_view_base_sptr>(i++);

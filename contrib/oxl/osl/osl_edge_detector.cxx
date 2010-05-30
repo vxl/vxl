@@ -283,7 +283,7 @@ void osl_edge_detector::Sub_pixel_interpolation()
         if ( g1[y]>=h1 && g1[y]>=h2 && vcl_fabs(dnewx)<=0.5 && vcl_fabs(dnewy)<=0.5 )
         {
           if ( g1[y]*ALPHA > low_ )
-            thresh_[x][y] = ALPHA * g1[y]; // Use a ALPHA% bound
+            thresh_[x][y] = ALPHA * g1[y]; // Use an ALPHA% bound
           // thresh_ image starts off as being equal to low_
           // else
           //   thresh_[x][y] = low_;
@@ -715,7 +715,7 @@ void osl_edge_detector::Follow_curves(vcl_list<osl_edge*> *edges)
       }
 
       else if ( dc->size() > 1 ) {
-        // Create a edge for the image topology
+        // Create an edge for the image topology
         osl_Vertex *v1 = new osl_Vertex(dc->GetX(0),dc->GetY(0));
         v1->SetId(vertidcount_++);
         osl_Vertex *v2 = new osl_Vertex(dc->GetX(dc->size()-1),dc->GetY(dc->size()-1));

@@ -74,7 +74,7 @@ struct pyramid_level
   //:the resource
   vil_image_resource_sptr image_;
 
-  //:the currel pyramid level for this resource
+  //:the current pyramid level for this resource
   unsigned cur_level_;
 
   //:print ni and scale and values

@@ -6,7 +6,7 @@
 
 //: Averages the value of the 8 children in a dynamic programming manner
 // Specialization for float. Partial specialization is not part of c++ standard for this case
-// so we have to expiciltly write all template parameters
+// so we have to explicitly write all template parameters
 template<>
 void boct_tree_cell<short,float>::set_data_to_avg_children()
 {

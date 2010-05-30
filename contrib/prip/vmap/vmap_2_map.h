@@ -173,7 +173,7 @@ class vmap_2_map_dart
 };
 
 //: The base dart iterator class.
-// This class is instanciated in vmap_2_map. There is no need to use it directly.
+// This class is instantiated in vmap_2_map. There is no need to use it directly.
 template< typename Ref, typename Ptr, typename It >
 class vmap_2_map_dart_base_iterator
 {
@@ -517,10 +517,10 @@ class vmap_2_map : public vmap_owning_sequence<D>
   //: Deletes everything.
   virtual void clear() ;
 
-  //: Initializes the sturcture of the combinatorial map from "stream".
+  //: Initializes the structure of the combinatorial map from "stream".
   void read_structure(vcl_istream & stream) ;
 
-  //: Writes the sturcture of the combinatorial map to "stream".
+  //: Writes the structure of the combinatorial map to "stream".
   void write_structure(vcl_ostream & stream) const ;
 
  protected:

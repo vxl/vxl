@@ -48,7 +48,7 @@ class vil_geotiff_header
 
   //: <key> : key id
   // <value>: a single value or an array of values
-  // <size>:  the size of individial key values
+  // <size>:  the size of individual key values
   // <length> : the number of values in the value array
   // <type>: the type of the key
   bool get_key_value(geokey_t key, void** value,

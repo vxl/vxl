@@ -87,7 +87,7 @@ vtol_edge_2d::vtol_edge_2d(vtol_edge_2d_sptr const& other)
 //: Constructor from a zero-chain.
 //---------------------------------------------------------------------------
 //
-// Constructor for an vtol_edge_2d. If the vtol_zero_chain has two vertices , then the
+// Constructor for a vtol_edge_2d. If the vtol_zero_chain has two vertices , then the
 // first and last vertices of the vtol_zero_chain are used for endpoints and
 // an ImplicitLine is assumed to be the curve.  Otherwise, the all data
 // (v1_, v2_, curve_) are set to NULL.  The vtol_zero_chain, newchain, becomes
@@ -151,7 +151,7 @@ vtol_edge_2d::vtol_edge_2d(double x1, double y1,
   link_inferior(new vtol_zero_chain(v1_,v2_));
 }
 
-//: Constructor for an vtol_edge_2d from a vsol_curve_2d.
+//: Constructor for a vtol_edge_2d from a vsol_curve_2d.
 // If edgecurve is of vsol_line_2d
 // type, vertex locations for endpoints, v1_ and v2_, are computed from
 // the vsol_line_2d parameters.  If edgecurve is of any other type, v1_
@@ -243,13 +243,15 @@ void vtol_edge_2d::describe(vcl_ostream &strm,
   for (int i2=0; i2<blanking; ++i2) strm << ' ';
   if (v1_) {
     v1_->print(strm);
-  } else {
+  }
+  else {
     strm << "Null vertex 1\n";
   }
   for (int i3=0; i3<blanking; ++i3) strm << ' ';
   if (v2_) {
     v2_->print(strm);
-  } else {
+  }
+  else {
     strm << "Null vertex 2\n";
   }
 }

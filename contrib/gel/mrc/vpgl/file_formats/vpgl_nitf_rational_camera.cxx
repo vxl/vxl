@@ -14,7 +14,7 @@
 // for calls to get nitf_rational parameters from vil
 #include <vil/file_formats/vil_nitf2_image.h>
 
-//Conversion from geolo string format to doubles
+// Conversion from igeolo string format to doubles
 static int to_int (const char* in_string,int size)
 {
   int value = 0;

@@ -37,30 +37,30 @@ class bgeo_lvcs : public vbl_ref_count
   GEO_DLL_DATA static const char* cs_name_strings[];
   static bgeo_lvcs::cs_names str_to_enum(const char*);
   // Constructors/Initializers/Destructors-------------------------------------
-  bgeo_lvcs(double orig_lat=0,    //!< latitude of LVCS orig in radians.
-       double orig_lon=0,         //!< longitude of LVCS  orig in radians.
-       double orig_elev=0,        //!< elev of orig LVCS  in radians.
-       cs_names cs_name=wgs84,    //!< nad27n, wgs84, wgs72
-       double lat_scale=0,        //!< radians/meter along lat (custom geoid)
-       double lon_scale=0,        //!< radians/meter along lon (custom geoid)
-       AngUnits  ang_unit = DEG,  //!< angle units
-       LenUnits len_unit=METERS,  //!< input in LVCS in these lenght units.
-       double lox=0,              //!< Origin in local co-ordinates.
-       double loy=0,              //!< Origin in local co-ordinates.
-       double theta=0);           //!< Radians from y axis to north in local co-ordinates.
+  bgeo_lvcs(double orig_lat=0,         //!< latitude of LVCS orig in radians.
+            double orig_lon=0,         //!< longitude of LVCS  orig in radians.
+            double orig_elev=0,        //!< elev of orig LVCS  in radians.
+            cs_names cs_name=wgs84,    //!< nad27n, wgs84, wgs72
+            double lat_scale=0,        //!< radians/meter along lat (custom geoid)
+            double lon_scale=0,        //!< radians/meter along lon (custom geoid)
+            AngUnits  ang_unit = DEG,  //!< angle units
+            LenUnits len_unit=METERS,  //!< input in LVCS in these length units.
+            double lox=0,              //!< Origin in local co-ordinates.
+            double loy=0,              //!< Origin in local co-ordinates.
+            double theta=0);           //!< Radians from y axis to north in local co-ordinates.
 
   bgeo_lvcs(double orig_lat,
-       double orig_lon,
-       double orig_elev, //!< simplified interface
-       cs_names cs_name,
-       AngUnits  ang_unit = DEG,
-       LenUnits len_unit=METERS);
+            double orig_lon,
+            double orig_elev, //!< simplified interface
+            cs_names cs_name,
+            AngUnits  ang_unit = DEG,
+            LenUnits len_unit=METERS);
 
   bgeo_lvcs(double lat_low, double lon_low,  //!< lower corner bounding geo_rectangle
-       double lat_high, double lon_high,//!< upper corner bounding geo_rectangle
-       double elev,                     //!< elevation of all rectangle corners
-       cs_names cs_name=wgs84,
-       AngUnits ang_unit=DEG, LenUnits elev_unit=METERS);
+            double lat_high, double lon_high,//!< upper corner bounding geo_rectangle
+            double elev,                     //!< elevation of all rectangle corners
+            cs_names cs_name=wgs84,
+            AngUnits ang_unit=DEG, LenUnits elev_unit=METERS);
 
   bgeo_lvcs(const bgeo_lvcs&);
   bgeo_lvcs& operator=(const bgeo_lvcs&);
@@ -68,10 +68,10 @@ class bgeo_lvcs : public vbl_ref_count
 
   // Utility Methods-----------------------------------------------------------
   void local_to_global(const double lx, const double ly, const double lz,
-                               cs_names cs_name,
-                               double& lon, double& lat, double& gz,
-                               AngUnits output_ang_unit=DEG,
-                               LenUnits output_len_unit=METERS);
+                       cs_names cs_name,
+                       double& lon, double& lat, double& gz,
+                       AngUnits output_ang_unit=DEG,
+                       LenUnits output_len_unit=METERS);
 
   void global_to_local(const double lon, const double lat, const double gz,
                        cs_names cs_name,

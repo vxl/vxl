@@ -42,7 +42,7 @@ static void test_cloneable_ptr()
     TEST( "No deletion of released ptr, count = 3)", some_class::count, 3 );
     delete true_ptr_3b;
     TEST( "Manual deletion of released ptr, count = 2)", some_class::count, 2 );
-    // Check assumption that destructor isn;t called on null pointer.
+    // Check assumption that destructor isn't called on null pointer.
     true_ptr_3b=0;
     delete true_ptr_3b;
     TEST( "Manual deletion of null ptr, count = 2)", some_class::count, 2 );

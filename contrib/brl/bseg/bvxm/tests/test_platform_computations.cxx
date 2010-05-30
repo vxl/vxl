@@ -1,7 +1,7 @@
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 // The following test is to determine if there are platform differences in
-// roc calcluations. The reference counts are obtained on
+// roc calculations. The reference counts are obtained on
 // a Dell XPS M1710 Centro Duo running Windows XP
 // compiled with Visual Studio 2005 version 8.0.50727.42
 //

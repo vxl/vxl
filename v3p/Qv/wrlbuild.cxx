@@ -79,7 +79,7 @@ static int camswindex;
 // stuff must be done in build too (check for ge3d functions that do
 // matrix transformations)
 
-// a word about multiple instancing: the computed world bounding box
+// a word about multiple instantiating: the computed world bounding box
 // will be overwritten by subsequent instances and is therefore *not*
 // valid in draw; generally: all information stored in build stays
 // only valid if it is local to the node and when it does not depend
@@ -541,10 +541,10 @@ void QvOrthographicCamera::build (QvState*)
   camswindex_ = camswindex;
 #if 0 // commented out
   if (!registered_)
-    {
-      //vrmlscene_->hasCamera (this, objName->getString ());  // objName non nil
-      registered_ = 1;
-    }
+  {
+    //vrmlscene_->hasCamera (this, objName->getString ());  // objName non nil
+    registered_ = 1;
+  }
 
   ge3dPushIdentity ();
   ge3dRotate (rotaxis_, - rotangle_);

@@ -2,7 +2,7 @@
 
 //:
 // \file
-// \brief A class for creating an planar edge kernel
+// \brief A class for creating a planar edge kernel
 //
 // \author Isabel Restrepo
 // \date 6/24/09

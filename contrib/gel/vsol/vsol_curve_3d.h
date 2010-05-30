@@ -56,7 +56,7 @@ class vsol_curve_3d : public vsol_spatial_object_3d
   //---------------------------------------------------------------------------
   vsol_spatial_object_3d_type spatial_type() const { return vsol_spatial_object_3d::CURVE; }
 
- private: // has been superceeded by is_a()
+ private: // has been superseded by is_a()
   //: Return the curve type
   virtual vsol_curve_3d_type curve_type() const { return vsol_curve_3d::CURVE_NO_TYPE; }
 
@@ -82,25 +82,25 @@ class vsol_curve_3d : public vsol_spatial_object_3d
   virtual const vsol_curve_3d *cast_to_curve() const {return this;}
 
   //---------------------------------------------------------------------------
-  //: Return `this' if `this' is an line, 0 otherwise
+  //: Return `this' if `this' is a line, 0 otherwise
   //---------------------------------------------------------------------------
   virtual vsol_line_3d const*cast_to_line()const{return 0;}
   virtual vsol_line_3d *cast_to_line() {return 0;}
 
   //---------------------------------------------------------------------------
-  //: Return `this' if `this' is an conic, 0 otherwise
+  //: Return `this' if `this' is a conic, 0 otherwise
   //---------------------------------------------------------------------------
   virtual vsol_conic_3d const*cast_to_conic()const{return 0;}
   virtual vsol_conic_3d *cast_to_conic() {return 0;}
 
   //---------------------------------------------------------------------------
-  //: Return `this' if `this' is an polyline, 0 otherwise
+  //: Return `this' if `this' is a polyline, 0 otherwise
   //---------------------------------------------------------------------------
   virtual vsol_polyline_3d const*cast_to_polyline()const{return 0;}
   virtual vsol_polyline_3d *cast_to_polyline() {return 0;}
 
   //---------------------------------------------------------------------------
-  //: Return `this' if `this' is an digital_curve_3d, 0 otherwise
+  //: Return `this' if `this' is a digital_curve_3d, 0 otherwise
   //---------------------------------------------------------------------------
   virtual vsol_digital_curve_3d const*cast_to_digital_curve()const{return 0;}
   virtual vsol_digital_curve_3d *cast_to_digital_curve() {return 0;}

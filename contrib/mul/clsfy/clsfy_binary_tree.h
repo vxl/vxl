@@ -90,7 +90,7 @@ class clsfy_binary_tree_node
 };
 
 
-//: A binary tree classifer
+//: A binary tree classifier
 // Drop down the tree using a binary threshold on a specific variable from the set at each node.
 // Branch left for one classification, right for the other
 // Eventually a node is reached with no children and that node's

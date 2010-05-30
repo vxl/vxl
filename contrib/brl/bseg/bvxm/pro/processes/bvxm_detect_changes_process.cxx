@@ -25,7 +25,7 @@ bool bvxm_detect_changes_process_cons(bprb_func_process& pro)
   //input[0]: The observation to detect changes
   //input[1]: The camera of the observation
   //input[2]: The voxel world
-  //input[3]: The apperance model type, the supported strings are:
+  //input[3]: The appearance model type, the supported strings are:
   //          -apm_mog_grey
   //          -apm_mog_rgb
   //          -apm_mog_mc_2_3
@@ -105,7 +105,7 @@ bool bvxm_detect_changes_process(bprb_func_process& pro)
   {
     if (observation.img->nplanes()!= 2)
     {
-      vcl_cerr << "Error bvxm_detect_changes_process: appereance model type" << voxel_type << "does not support images with "
+      vcl_cerr << "Error bvxm_detect_changes_process: appearance model type" << voxel_type << "does not support images with "
                << observation.img->nplanes()<< " planes\n";
       return false;
     }
@@ -117,14 +117,14 @@ bool bvxm_detect_changes_process(bprb_func_process& pro)
   {
     if (observation.img->nplanes()!= 4)
     {
-      vcl_cerr << "Error bvxm_detect_changes_process: appereance model type" << voxel_type << "does not support images with "
+      vcl_cerr << "Error bvxm_detect_changes_process: appearance model type" << voxel_type << "does not support images with "
                << observation.img->nplanes()<< " planes\n";
       return false;
     }
     result = world->pixel_probability_density<APM_MOG_MC_4_3>(observation,prob_map, mask, bin_index,scale_index);
   }
   else
-    vcl_cerr << "Error in: bvxm_detect_changes_processor: Unsuppported appereance model\n";
+    vcl_cerr << "Error in: bvxm_detect_changes_processor: Unsuppported appearance model\n";
 
   if (!result) {
     vcl_cerr << "Error bvxm_detect_changes_process: failed to detect changes\n";

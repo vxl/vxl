@@ -560,7 +560,7 @@ double vsrl_image_correlation::get_sub_pixel_delta(int x1,int y1, int delta_x)
 
 void vsrl_image_correlation::get_correlation_stats(int x, int y, double &mean, double &std)
 {
-  // we want to determine how the correltaion behaves for the point x, y
+  // we want to determine how the correlation behaves for the point x, y
   // we do this by finding the correlation for every possible offset and
   // then recording the mean and standard deviation for this correlation function
 

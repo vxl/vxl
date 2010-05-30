@@ -10,8 +10,8 @@
 //: initialization
 bool vpgl_nitf_camera_coverage_process_cons(bprb_func_process& pro)
 {
-  //this process takes 2 inputs: 
-  // 1: the filename containg list of images to evaluate
+  //this process takes 2 inputs:
+  // 1: the filename containing a list of images to evaluate
   // 2: Filename for region-points input file
   //    This file must contain the points in the following format
   //    x-coord1 y-coord1
@@ -19,7 +19,7 @@ bool vpgl_nitf_camera_coverage_process_cons(bprb_func_process& pro)
   //    Caution: Don't forget that in geo coordinates. x-coord = longitude, y-coord =latitude
   // 3: the filename for output coverage list
   vcl_vector<vcl_string> input_types;
-  input_types.push_back("vcl_string"); 
+  input_types.push_back("vcl_string");
   input_types.push_back("vcl_string");
   input_types.push_back("vcl_string");
   return pro.set_input_types(input_types);
@@ -30,7 +30,7 @@ void  get_regions(vcl_string file, vcl_vector< vgl_point_2d<double> > &region)
 {
   region.clear();
   vcl_ifstream ifs( file.c_str() );
-  while(!ifs.eof())
+  while (!ifs.eof())
   {
       double x, y;
       ifs >> x; ifs >> y;
@@ -55,7 +55,7 @@ bool vpgl_nitf_camera_coverage_process(bprb_func_process& pro)
   vcl_vector<vgl_point_2d<double> > regions;
 
   get_regions(region_file, regions);
- 
+
   if (!vpgl_nitf_camera_coverage::coverage_list(regions,in_img_list, out_img_list))
   {
     vcl_cerr << "Error vpgl_nitf_camera_coverage_process: Failed to get coverage list" << vcl_endl;

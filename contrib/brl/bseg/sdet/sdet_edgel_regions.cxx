@@ -1194,7 +1194,7 @@ static bool reg_edges_neq(sdet_region_edge_sptr const& r1,
 }
 
 //:
-// A collision is defined by the condition where an region is bounded
+// A collision is defined by the condition where a region is bounded
 // by two different edges at adjacent pixels without crossing a vertex.
 // This can happen since boundary positions are sub-pixel and region
 // definition is at pixel granularity.  The edge collison causes a needed
@@ -1304,7 +1304,7 @@ bool sdet_edgel_regions::remove_hairs(vcl_vector<vtol_edge_2d_sptr>& edges)
 //:
 //  After connected components have been generated pass over the
 //  array and assign region labels to the sdet_region_edge(s).
-//  As in ::UpdateConnectedNeighborhood, the algorithm uses a 2x2 neigborhood
+//  As in ::UpdateConnectedNeighborhood, the algorithm uses a 2x2 neighborhood
 //  E.G.,
 //  ee But the purpose is to assign labels. No updating of the
 //  aa region_label_array_ is carried out.

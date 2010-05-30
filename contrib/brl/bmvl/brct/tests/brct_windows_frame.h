@@ -51,7 +51,7 @@ class brct_windows_frame : public vgui_wrapper_tableau
   // methods for run menu callbacks
   void creat_line();
   void quit();
-  void add_curve2d(vcl_vector<vgl_point_2d<double> > &pts, 
+  void add_curve2d(vcl_vector<vgl_point_2d<double> > &pts,
                    float r = 1.0, float g = 0.0, float b = 0.0);
   void remove_curve2d();
   void remove_debug_info();
@@ -108,7 +108,7 @@ class brct_windows_frame : public vgui_wrapper_tableau
   vcl_string data_file_name_;
 
   bool show_epipolar_lines_;
-  //: inital epipole
+  //: initial epipole
   vcl_vector<vgl_homg_line_2d<double> > lines_;
   vgl_point_2d<double> *e_;
   vcl_string status_info_;

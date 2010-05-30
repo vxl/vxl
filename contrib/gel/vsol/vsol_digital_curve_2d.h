@@ -143,12 +143,12 @@ class vsol_digital_curve_2d : public vsol_curve_2d
   //***************************************************************************
 
   //---------------------------------------------------------------------------
-  //: Return `this' if `this' is an digital_curve, 0 otherwise
+  //: Return `this' if `this' is a digital_curve, 0 otherwise
   //---------------------------------------------------------------------------
   virtual vsol_digital_curve_2d const*cast_to_digital_curve()const{return this;}
   virtual vsol_digital_curve_2d *cast_to_digital_curve() {return this;}
 
- private: // has been superceeded by is_a()
+ private: // has been superseded by is_a()
   //: Return the curve type
   virtual vsol_curve_2d_type curve_type() const { return vsol_curve_2d::DIGITAL_CURVE; }
 

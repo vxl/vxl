@@ -123,38 +123,38 @@ class bvpl_corner_pair_finder
   // Constructor
   bvpl_corner_pair_finder() {}
 
-  //: Find pairs that are 90 degrees appart e.g |_ with _|
+  //: Find pairs that are 90 degrees apart e.g |_ with _|
   static bvpl_corner_pairs_sptr find_pairs(bvxm_voxel_grid<int>* id_grid,
                                            bvpl_kernel_vector_sptr search_kernels,
                                            bvpl_kernel_vector_sptr corner_kernels);
 
-  //: Find pairs that are 90 degrees appart e.g |_ with _|
+  //: Find pairs that are 90 degrees apart e.g |_ with _|
   static bvpl_corner_pairs_sptr find_pairs(bvxm_voxel_grid<int>* id_grid,
                                            bvxm_voxel_grid<float>* response_grid,
                                            bvpl_kernel_vector_sptr search_kernels,
                                            bvpl_kernel_vector_sptr corner_kernels);
 
-  //: Find pairs that are 90 degrees appart e.g |_ with _|
+  //: Find pairs that are 90 degrees apart e.g |_ with _|
   static bvpl_corner_pairs_sptr find_pairs(bvxm_voxel_grid<int>* id_grid,
                                            bvxm_voxel_grid<float>* response_grid,
                                            bvpl_kernel_vector_sptr search_kernels,
                                            bvpl_kernel_vector_sptr corner_kernels,
                                            bvxm_voxel_grid<bvpl_pair> *pair_grid);
 
-  //: Find pairs that are 90 degrees appart e.g |_ with _|
+  //: Find pairs that are 90 degrees apart e.g |_ with _|
   static void find_pairs_no_lines(bvxm_voxel_grid<int>* id_grid,
                                   bvxm_voxel_grid<float>* response_grid,
                                   bvpl_kernel_vector_sptr search_kernels,
                                   bvpl_kernel_vector_sptr corner_kernels,
                                   bvxm_voxel_grid<bvpl_pair> *pair_grid);
 
-  //: Find pairs of pais that are 90 degrees appart e.g _ with |
+  //: Find pairs that are 90 degrees apart e.g _ with |
   static bvpl_corner_pairs_sptr find_pairs(bvxm_voxel_grid<bvpl_pair> *pair_grid_in,
                                            bvpl_kernel_vector_sptr search_kernels,
                                            bvxm_voxel_grid<bvpl_pair> *pair_grid_out,
                                            int opposite_angle);
 
-  //: Find pairs of pais that are 90 degrees appart e.g _ with |
+  //: Find pairs that are 90 degrees apart e.g _ with |
   static void find_pairs_no_lines(bvxm_voxel_grid<bvpl_pair> *pair_grid_in,
                                   bvpl_kernel_vector_sptr search_kernels,
                                   bvxm_voxel_grid<bvpl_pair> *pair_grid_out,

@@ -60,7 +60,7 @@ class vgui_mfc_adaptor : public CView, public vgui_adaptor, public vgui_adaptor_
 
   //: Device context for this adaptor.
   CDC* m_pDC;
-  
+
   HBITMAP m_pDC_default_bitmap;
 
   typedef vgui_adaptor_mixin mixin;
@@ -105,7 +105,7 @@ class vgui_mfc_adaptor : public CView, public vgui_adaptor, public vgui_adaptor_
 
   //: Stop timer
   void kill_timer(int id);
-  
+
   //: Flags than a child requests idle processing
   void post_idle_request() { idle_request_posted_ = true; }
 
@@ -148,13 +148,13 @@ class vgui_mfc_adaptor : public CView, public vgui_adaptor, public vgui_adaptor_
   CDC* m_pDC_aux;
   //: True if the aux buffer is a copy of the main GL buffer
   bool aux_dc_valid_;
-  
+
   HBITMAP m_pDC_aux_default_bitmap;
 
   //: True while a redraw event has been requested but not implemented.
   bool redraw_posted_;
 
-  //: True while a overlay redraw event has been requested but not implemented.
+  //: True while an overlay redraw event has been requested but not implemented.
   bool overlay_redraw_posted_;
 
   //: True while an idle time has been requested but not implemented.

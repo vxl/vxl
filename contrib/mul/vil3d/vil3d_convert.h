@@ -14,7 +14,7 @@
 // They are in two basic function types (plus a few helper functions.)
 // Some involve only explicit types and convert
 // a vil3d_image_view<T> to a vil3d_image_view<T>,
-// the others take an inknown pixel type, using a
+// the others take an unknown pixel type, using a
 // vil3d_image_view_base_sptr. The basic conversion
 // operations (e.g. casting, rounding) are available in both types.
 // All of the conversions attempt to find shortcuts, so the output

@@ -46,10 +46,10 @@ extern vcl_string& vul_string_reverse(vcl_string&);
 //: Reads an integer from a string
 extern int vul_string_atoi(vcl_string const&);
 
-//: Reads an double from a string
+//: Reads a double from a string
 extern double vul_string_atof(vcl_string const& s);
 
-//: Reads an double from a string, with k, kb, M, etc suffix.
+//: Reads a double from a string, with k, kb, M, etc suffix.
 // No space is allowed between the number and the suffix.
 // k=10^3, ki=2^10, M=10^6, Mi=2^20, G=10^9, Gi=2^30, T=10^12, Ti=2^40
 // The i suffix is from the IEC 60027 standard.

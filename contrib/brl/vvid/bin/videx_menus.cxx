@@ -4,7 +4,7 @@
 #include <vgui/vgui_menu.h>
 #include <vvid/vvid_live_video_manager.h>
 
-//Static munu callback functions
+// Static menu callback functions
 
 void videx_menus::quit_callback()
 {

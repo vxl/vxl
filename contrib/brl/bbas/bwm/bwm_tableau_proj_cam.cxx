@@ -4,9 +4,9 @@
 
 #if 0 // method commented out
 bwm_tableau_proj_cam::bwm_tableau_proj_cam(vcl_string name,
-    vcl_string& image_path,
-    vcl_string& cam_path,
-    bool display_image_path)
+                                           vcl_string& image_path,
+                                           vcl_string& cam_path,
+                                           bool display_image_path)
 : bwm_tableau_cam(my_observer_)
 {
   bgui_image_tableau_sptr img = bgui_image_tableau_new();
@@ -31,7 +31,7 @@ bwm_tableau_proj_cam::bwm_tableau_proj_cam(vcl_string name,
   bwm_tableau_cam* t = 0;
 
   // check if the camera path is not empty, if it is NITF, the camera
-  // info is in the image, not a seperate file
+  // info is in the image, not a separate file
   if (cam_path.size() == 0)
   {
     bwm_utils::show_error("Camera tableaus need a valid camera path!");

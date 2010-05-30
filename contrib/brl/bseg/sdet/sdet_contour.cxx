@@ -416,7 +416,8 @@ sdet_contour::FindChains(gevd_bufferxy& edgels, const int njunction,
             RecordPixel(i, j, edgels, xloc, yloc); // first pixel
             RecordPixel(x, y, edgels, xloc, yloc); // third pixel
             ii = i, jj = j;
-          } else  {             // reach other end point
+          }
+          else  {             // reach other end point
             floatPixel(edgels, i, j) = 0; // prune isolated pixel-pairs
             floatPixel(edgels, ii, jj) = 0;
             continue;
@@ -2424,10 +2425,10 @@ EqualizeElements(double* elmts, int n, double v1, double v2)
 //:
 // Make the spacing of the chain pixels nearly equal by
 // smoothing their locations with the average filter  [1 0 1]/2.
-// This will reduce square grid tessellation artifacts, and
+// This will reduce square grid tessellation artefacts, and
 // lead to more accurate estimation of the tangent direction,
 // and local curvature angle, from finite differences in location.
-// It is also useful to avoid weight artifacts in curve fitting
+// It is also useful to avoid weight artefacts in curve fitting
 // caused by the periodic clustering of pixels along the chain.
 // Truncating the float locations with int() will no longer map
 // to the original pixels of the discrete chains.

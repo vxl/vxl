@@ -10,7 +10,7 @@
 #include <pdf1d/pdf1d_weighted_epanech_kernel_pdf.h>
 class pdf1d_epanech_kernel_pdf;
 
-//: Generates random samples from a Epanechnikov kernel estimate
+//: Generates random samples from an Epanechnikov kernel estimate
 class pdf1d_weighted_epanech_kernel_sampler : public pdf1d_sampler
 {
  protected:

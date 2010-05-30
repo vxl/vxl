@@ -20,7 +20,7 @@ template <class T>
 class bsta_beta : public bsta_distribution<T,1>
 {
  public:
-  //: default construtor
+  // default constructor
   bsta_beta() : alpha_(T(0.00001)), beta_(T(0.00001)) {}
 
   //: pre: alpha>0 and beta>0

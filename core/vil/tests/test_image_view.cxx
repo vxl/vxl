@@ -453,7 +453,7 @@ static void test_image_view_assignment_operator()
 {
   // This test makes sure that the assignment operator does the
   // correct thing w.r.t. reference counts and such. The test copies a
-  // temporary view to a existing view. If a bitwise copy is done, the
+  // temporary view to an existing view. If a bitwise copy is done, the
   // existing view's reference count is overwritten, and the routine
   // will segfault.
 
@@ -495,12 +495,9 @@ static void test_image_view_assignment_operator()
     vil_image_view<float> float_im = *im1p;
     TEST ("Successfully detected dodgy assignment", float_im?true:false, false);
 #endif
-
-
 }
+
 static void test_non_standard_type();
-
-
 
 static void test_image_view()
 {
@@ -541,7 +538,7 @@ TESTMAIN(test_image_view);
 class my_int
 {
   int a;
-public:
+ public:
   my_int(): a(0) {};
   my_int(const my_int& i): a(i.a) {};
   explicit my_int(int i): a(i) {};
@@ -607,6 +604,5 @@ static void test_non_standard_type()
 
   vil_math_scale_values(my_int_image, 2.0);
   vil_print_all(vcl_cout, my_int_image);
-
 }
 

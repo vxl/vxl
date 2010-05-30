@@ -31,7 +31,7 @@ vcl_string bwm_utils::select_file()
 
   if (file == "") {
     vgui_dialog error ("Error");
-    error.message ("Please specify a input file (prefix)." );
+    error.message ("Please specify an input file (prefix)." );
     error.ask();
     return empty;
   }

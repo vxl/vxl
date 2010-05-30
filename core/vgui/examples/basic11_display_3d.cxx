@@ -10,7 +10,7 @@ int main(int argc, char **argv)
 {
   vgui::init(argc, argv);
 
-  // Create a easy3D tableau:
+  // Create an easy3D tableau:
   vgui_easy3D_tableau_new list3D;
 
   list3D->set_point_radius(15);

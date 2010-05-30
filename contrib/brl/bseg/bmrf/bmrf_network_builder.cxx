@@ -127,7 +127,7 @@ static void rectify_order(bmrf_epi_seg_sptr & seg)
   vcl_vector<bmrf_epi_point_sptr> temp(n);
   for (int i = 0; i<n; i++)
     temp[n-i-1]= seg->p(i);
-  //replace the points in the neigborhood
+  //replace the points in the neighborhood
   seg->clear();
   for (int i = 0; i<n; i++)
     seg->add_point(temp[i]);

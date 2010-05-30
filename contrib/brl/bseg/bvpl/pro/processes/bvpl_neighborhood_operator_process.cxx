@@ -8,7 +8,7 @@
 // \date June 19, 2009
 // \verbatim
 //  Modifications
-//  8/13/09 Isabel Restrepo: Added support for apperance grid of unimodal gaussians
+//  8/13/09 Isabel Restrepo: Added support for appearance grid of unimodal gaussians
 // \endverbatim
 
 #include <bprb/bprb_parameters.h>

@@ -56,7 +56,7 @@ class bvxm_mog_norm
   //: Computes l2 norm between two gaussians
   static T l2_gauss(gauss_type const& p1, gauss_type const& p2, bool normalize);
 
-  //: Computes the symmetric Kullerback-Liebler distance between two gaussians
+  //: Computes the symmetric Kullback-Leibler distance between two Gaussians
   static T kl_symmetric_distance(gauss_type const&g1, gauss_type const& g2);
 
   //: Computes the KL distance between two gaussians

@@ -6,8 +6,7 @@
 #include <vgui/vgui_menu.h>
 #include <bmvv/bmvv_f_manager.h>
 
-//Static munu callback functions
-//Static munu callback functions
+// Static menu callback functions
 
 void bmvv_f_menus::quit_callback()
 {

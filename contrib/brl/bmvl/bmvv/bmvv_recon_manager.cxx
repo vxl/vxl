@@ -174,7 +174,7 @@ void bmvv_recon_manager::quit()
 }
 
 //=========================================================================
-//: load an image an put it in the currently selected grid cell
+//: load an image and put it in the currently selected grid cell
 //=========================================================================
 void bmvv_recon_manager::load_image_file(vcl_string image_filename, bool /* greyscale */, unsigned col, unsigned row)
 {
@@ -190,7 +190,7 @@ void bmvv_recon_manager::load_image_file(vcl_string image_filename, bool /* grey
 }
 
 //=========================================================================
-//: load an image an put it in the currently selected grid cell
+//: load an image and put it in the currently selected grid cell
 //=========================================================================
 void bmvv_recon_manager::load_image()
 {
@@ -282,7 +282,7 @@ void bmvv_recon_manager::initial_model_projection()
   bgui_vtol2D_tableau_sptr btab = this->get_selected_vtol2D_tableau();
   if (!btab)
     return;
-  vgui_dialog initial_project_dlg("Project Model (Inital)");
+  vgui_dialog initial_project_dlg("Project Model (Initial)");
   initial_project_dlg.field("World Plane", plane_);
   if (!initial_project_dlg.ask())
     return;

@@ -58,7 +58,7 @@ void vnl_symmetric_eigensystem_compute_eigenvals(
   // deal explicitly with repeated root and treat
   // complex conjugate roots as numerically inaccurate repeated roots.
 
-  // first check we are not too numerically innacurate
+  // first check we are not too numerically inaccurate
   assert((g2 - f3) / vnl_math_sqr(vnl_math_cube(b)) < 1e-8);
 
   if (g2 >= f3)

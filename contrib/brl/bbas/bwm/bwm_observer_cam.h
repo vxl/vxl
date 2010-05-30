@@ -188,16 +188,16 @@ class bwm_observer_cam : public bwm_observer_vgui
 
   vgl_plane_3d<double> proj_plane_;
 
-  //face that is involved with moving
+  //: face that is involved with moving
   vgl_plane_3d<double> moving_face_plane_;
 
-  // controls extrude for keybord manipulation
+  //: controls extrude for keyboard manipulation
   bool extrude_mode_;
   bwm_observable_sptr extrude_obj_;
 
   bool show_geo_position_;
 
-  // list of selected soview objects after the last deselect_all
+  //: list of selected soview objects after the last deselect_all
   vcl_vector<vgui_soview*> selected_soviews_;
 
   bool geo_position(double u, double v, double& x, double& y, double& z);
@@ -231,7 +231,7 @@ class bwm_observer_cam : public bwm_observer_vgui
 
   void make_object_selectable(bwm_observable_sptr obj, bool status);
 
-  // deselects all the selected objects and sets their styles back to mesh
+  //: deselects all the selected objects and sets their styles back to mesh
   void deselect();
 };
 

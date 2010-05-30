@@ -19,7 +19,7 @@ bvpl_neighborhood_kernel_factory::bvpl_neighborhood_kernel_factory()
   angle_ = 0.0f;
 }
 
-//: Constructs a kernel from length, widht and thickness
+//: Constructs a kernel from length, width and thickness
 bvpl_neighborhood_kernel_factory::bvpl_neighborhood_kernel_factory(int min_length, int max_length,
                                                                    int min_width, int max_width,
                                                                    int min_thickness, int max_thickness)

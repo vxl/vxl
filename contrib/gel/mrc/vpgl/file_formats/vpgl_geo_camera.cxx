@@ -87,11 +87,13 @@ bool vpgl_geo_camera::init_geo_camera(vil_tiff_image* const& gtif_img,
       vcl_cout << "Transfer matrix is given, using that...." << vcl_endl;
       trans_matrix.copy_in(trans_matrix_values);
       vcl_cout << "Warning LIDAR sample spacing different than 1 meter will not be handled correctly!\n";
-    } else if (gtif->gtif_pixelscale(sx1, sy1, sz1)) {
+    }
+    else if (gtif->gtif_pixelscale(sx1, sy1, sz1)) {
       scale_tag = true;
       vpgl_geo_camera::comp_trans_matrix(sx1, sy1, sz1, tiepoints,
                                          trans_matrix, scale_tag);
-    } else {
+    }
+    else {
       vcl_cout << "vpgl_geo_camera::init_geo_camera comp_trans_matrix -- Transform matrix cannot be formed..\n";
       return false;
     }
@@ -103,7 +105,8 @@ bool vpgl_geo_camera::init_geo_camera(vil_tiff_image* const& gtif_img,
       camera->set_utm(utm_zone, h);
     camera->set_scale_format(scale_tag);
     return true;
-  } else {
+  }
+  else {
       vcl_cout << "bmdl_lidar_roi_process::lidar_init()-- Only ProjectedCSTypeGeoKey=PCS_WGS84_UTM_zoneXX_X is defined rigth now, please define yours!!" << vcl_endl;
       return false;
   }
@@ -160,7 +163,8 @@ void vpgl_geo_camera::backproject(const double u, const double v,
     //find the UTM values
     bgeo_utm utm;
     utm.transform(utm_zone_, vec[0], vec[1], vec[2], lat, lon, elev);
-  } else {
+  }
+  else {
     lat = vec[0];
     lon = vec[1];
     elev = vec[2];
@@ -175,8 +179,9 @@ void vpgl_geo_camera::translate(double tx, double ty, double z)
   // use the scale values
   if (scale_tag_) {
     trans_matrix_[0][3] += tx*trans_matrix_[0][0];
-    trans_matrix_[1][3] -= ty*(-1.0*trans_matrix_[1][1]); //multipying by -1.0 to get sy
-  } else {
+    trans_matrix_[1][3] -= ty*(-1.0*trans_matrix_[1][1]); // multiplying by -1.0 to get sy
+  }
+  else {
     vcl_cout << "Warning! Translation offset will only be computed correctly for lidar pixel spacing = 1 meter\n";
     trans_matrix_[0][3] += tx;
     trans_matrix_[1][3] -= ty;

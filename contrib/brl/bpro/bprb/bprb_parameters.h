@@ -56,7 +56,7 @@ class bprb_param
 
   //: Return a string representation of the minimum value
   virtual vcl_string min_str() const = 0;
-  //: Return a string representation of the maximium value
+  //: Return a string representation of the maximum value
   virtual vcl_string max_str() const = 0;
 
   //: Set the current value by parsing a string
@@ -127,7 +127,7 @@ class bprb_param_type : public bprb_param
 
   //: Return a string representation of the minimum value
   virtual vcl_string min_str() const { return has_bounds_? create_string(min_value_) : ""; }
-  //: Return a string representation of the maximium value
+  //: Return a string representation of the maximum value
   virtual vcl_string max_str() const { return has_bounds_? create_string(max_value_) : ""; }
 
   //: Set the current value by parsing a string
@@ -171,7 +171,7 @@ class bprb_choice_param_type : public bprb_param_type<unsigned>
 
  private:
 
-  //: Mulitple choice list
+  //: Multiple choice list
   vcl_vector<vcl_string> choices_;
 };
 

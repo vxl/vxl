@@ -36,8 +36,8 @@ mbl_rvm_regression_builder::~mbl_rvm_regression_builder()
 
 //: Compute design matrix F from subset of elements in kernel matrix
 void mbl_rvm_regression_builder::design_matrix(const vnl_matrix<double>& K,
-                     const vcl_vector<int>& index,
-                     vnl_matrix<double>& F)
+                                               const vcl_vector<int>& index,
+                                               vnl_matrix<double>& F)
 {
   unsigned n=index.size();
   unsigned ns=K.rows();
@@ -89,13 +89,13 @@ void mbl_rvm_regression_builder::gauss_build(
 
 //: Perform one iteration of optimisation
 bool mbl_rvm_regression_builder::update_step(const vnl_matrix<double>& F,
-                   const vnl_vector<double>& targets,
-                   const vcl_vector<int>& index0,
-                   const vcl_vector<double>& alpha0,
-                   double error_var0,
-                   vcl_vector<int>& index,
-                   vcl_vector<double>& alpha,
-                   double &error_var)
+                                             const vnl_vector<double>& targets,
+                                             const vcl_vector<int>& index0,
+                                             const vcl_vector<double>& alpha0,
+                                             double error_var0,
+                                             vcl_vector<int>& index,
+                                             vcl_vector<double>& alpha,
+                                             double &error_var)
 {
   unsigned n0 = alpha0.size();
   assert(F.rows()==targets.size());
@@ -132,7 +132,7 @@ bool mbl_rvm_regression_builder::update_step(const vnl_matrix<double>& F,
   // ---------------------
 #endif // 0
 
-  // Compute new alphas and elliminate very large values
+  // Compute new alphas and eliminate very large values
   alpha.resize(0);
   index.resize(0);
   double sum=0.0;

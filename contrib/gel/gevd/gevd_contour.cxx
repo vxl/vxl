@@ -326,7 +326,8 @@ gevd_contour::FindChains(gevd_bufferxy& edgels, const int njunction,
             RecordPixel(i, j, edgels, xloc, yloc); // first pixel
             RecordPixel(x, y, edgels, xloc, yloc); // third pixel
             ii = i, jj = j;
-          } else  {             // reach other end point
+          }
+          else  {             // reach other end point
             floatPixel(edgels, i, j) = 0; // prune isolated pixel-pairs
             floatPixel(edgels, ii, jj) = 0;
             continue;
@@ -888,7 +889,7 @@ MergeEndPtsOfChain(vtol_vertex_2d& endpt, vtol_vertex_2d& other, vtol_edge_2d& c
 void
 MergeEndPtTouchingEndPt(vtol_vertex_2d& end1, vtol_vertex_2d& end2,
                         vtol_edge_2d_sptr& merge, vtol_edge_2d_sptr& longer, vtol_edge_2d_sptr& shorter,
-                         vbl_array_2d<vtol_edge_2d_sptr>& edgeMap, vbl_array_2d<vtol_vertex_2d_sptr>& vertexMap)
+                        vbl_array_2d<vtol_edge_2d_sptr>& edgeMap, vbl_array_2d<vtol_vertex_2d_sptr>& vertexMap)
 {
   // 1. Retrieve the dangling edges/chains
   vcl_vector<vtol_edge_sptr> edges;
@@ -917,16 +918,17 @@ MergeEndPtTouchingEndPt(vtol_vertex_2d& end1, vtol_vertex_2d& end2,
   vdgl_edgel_chain_sptr cxy1= dc1->get_interpolator()->get_edgel_chain();
   if (edge1->v2() == &end1) {
     for (int i = 0; i < l1; i++, k++)
-      {
+    {
       cxy->add_edgel ( (*cxy1)[i] );
       (*cxy)[k] = (*cxy1)[i];//, cy[k] = cy1[i];
-      }
+    }
     v1 = edge1->v1();
-  } else {                      // reverse collection
-  for (int i = l1-1; i >= 0; i--, k++)
+  }
+  else {                      // reverse collection
+    for (int i = l1-1; i >= 0; i--, k++)
     {
-    cxy->add_edgel ( (*cxy1)[i] );
-    (*cxy)[k] = (*cxy1)[i];//, cy[k] = cy1[i];
+      cxy->add_edgel ( (*cxy1)[i] );
+      (*cxy)[k] = (*cxy1)[i];//, cy[k] = cy1[i];
     }
     v1 = edge1->v2();
   }
@@ -935,23 +937,24 @@ MergeEndPtTouchingEndPt(vtol_vertex_2d& end1, vtol_vertex_2d& end2,
   vdgl_edgel_chain_sptr cxy2= dc2->get_interpolator()->get_edgel_chain();
 
   if (edge2->v1() == &end2)
-    {
+  {
     for (int i = 0; i < l2; i++, k++)
-      {
+    {
       cxy->add_edgel ( (*cxy2)[i] );
       (*cxy)[k] = (*cxy2)[i];//, cy[k] = cy2[i];
-      }
-//    v2 = edge2->v2().ptr()->cast_to_vertex_2d();
+    }
+//  v2 = edge2->v2().ptr()->cast_to_vertex_2d();
     v2 = edge2->v2()->cast_to_vertex_2d();
-    } else {
+  }
+  else {
     // reverse collection
     for (int i = l2-1; i >= 0; i--, k++)
-      {
+    {
       cxy->add_edgel ( (*cxy2)[i] );
       (*cxy)[k] = (*cxy2)[i];//, cy[k] = cy2[i];
-      }
-    v2 = edge2->v1()->cast_to_vertex_2d();
     }
+    v2 = edge2->v1()->cast_to_vertex_2d();
+  }
   merge->set_v2(v2.ptr());
 
   // 3. Update global maps
@@ -1096,7 +1099,8 @@ gevd_contour::FindJunctions(gevd_bufferxy& edgels,
           LookupTableReplace(edges, stronger, split);
           jcycle++;             // remove original edge
         }
-      } else {                  // touch itself or another 1-chain
+      }
+      else {                  // touch itself or another 1-chain
         if (ConfirmJunctionOnChain(index, minJump,
                                    *stronger, edgels)) {
           if (weaker == stronger) {
@@ -1108,7 +1112,8 @@ gevd_contour::FindJunctions(gevd_bufferxy& edgels,
             LookupTableReplace(edges, stronger, straight);
             LookupTableInsert(edges, curled);
             jchain++;
-          } else {
+          }
+          else {
             vtol_edge_2d_sptr longer = NULL, shorter = NULL;
             BreakChain(*end, index, // break another stronger chain in 2
                        *stronger,
@@ -1145,7 +1150,8 @@ gevd_contour::FindJunctions(gevd_bufferxy& edgels,
                                *edgeMap, *vertexMap);
             LookupTableRemove(vertices, end2);
             dendpt++;
-          } else {              // end points of 2 distinct 1-chains
+          }
+          else {              // end points of 2 distinct 1-chains
 #if 0
             vcl_cout << "endpt1=" << *end1 << vcl_endl
                      << "endpt2=" << *end2 << vcl_endl;
@@ -1167,7 +1173,8 @@ gevd_contour::FindJunctions(gevd_bufferxy& edgels,
             LookupTableRemove(vertices, end2);
             dendpt += 2, dchain += 1;
           }
-        } else {                // merge into another junction
+        }
+        else {                // merge into another junction
 #if 0
           vcl_cout << "endpt1=" << *end1 << vcl_endl
                    << "junction2=" << *end2 << vcl_endl;
@@ -1640,10 +1647,10 @@ EqualizeElements(double* elmts, int n, double v1, double v2)
 //:
 // Make the spacing of the chain pixels nearly equal by
 // smoothing their locations with the average filter  [1 0 1]/2.
-// This will reduce square grid tessellation artifacts, and
+// This will reduce square grid tessellation artefacts, and
 // lead to more accurate estimation of the tangent direction,
 // and local curvature angle, from finite differences in location.
-// It is also useful to avoid weight artifacts in curve fitting
+// It is also useful to avoid weight artefacts in curve fitting
 // caused by the periodic clustering of pixels along the chain.
 // Truncating the float locations with int() will no longer map
 // to the original pixels of the discrete chains.
@@ -1961,7 +1968,8 @@ gevd_contour::LookupTableCompress(vcl_vector<vtol_edge_2d_sptr>& set)
       if (last) {
         last->set_id(i);                // move it to the front
         set[i] = last;
-      } else
+      }
+      else
         break;                  // no more elements
     }
   set.resize(i - 1);
@@ -1984,7 +1992,8 @@ gevd_contour::LookupTableCompress(vcl_vector<vtol_vertex_2d_sptr >& set)
       if (last) {
         last->set_id(i);                // move it to the front
         set[i] = last;
-      } else
+      }
+      else
         break;                  // no more elements
     }
   set.resize(i - 1);

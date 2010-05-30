@@ -104,7 +104,7 @@ class vtol_two_chain : public vtol_chain
                                             topology_list &edges) const;
   // Accessors
 
- private: // has been superceeded by is_a()
+ private: // has been superseded by is_a()
   //: Return the topology type
   virtual vtol_topology_object_type topology_type() const {return TWOCHAIN;}
 

@@ -200,7 +200,8 @@ vil_dicom_image::vil_dicom_image(vil_stream* vs)
       if ( stack.card() == 0 ) {
         vcl_cerr << "vil_dicom ERROR: no pixel data found\n";
         return;
-      } else {
+      }
+      else {
         assert( stack.top()->ident() == EVR_PixelData );
         pixels = static_cast<DcmPixelData*>(stack.top());
       }
@@ -334,7 +335,7 @@ bool vil_dicom_image::put_view(const vil_image_view_base& view,
 //NB if this section starts bloating, use derived classes which override correct_manufacturer_discrepancies
 void vil_dicom_image::correct_manufacturer_discrepancies()
 {
-    //If manufacturer is Holgic and it's a QDR or Discovery model DXA scanner...
+    //If manufacturer is Hologic and it's a QDR or Discovery model DXA scanner...
   if ( ( (header_.manufacturer_ == "HOLOGIC") || (header_.manufacturer_ == "Hologic") ) &&
        ( (header_.model_name_.find("QDR") != header_.model_name_.npos ) ||
          (header_.model_name_.find("Discovery") != header_.model_name_.npos )         ) )
@@ -435,7 +436,8 @@ find_element( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element )
   {
     if ( stack.card() == 0 ) {
       vcl_cerr << "vil_dicom ERROR: no results on stack\n";
-    } else {
+    }
+    else {
       result = static_cast<DcmElement*>(stack.top());
       if ( result->getVM() == 0 ) {
         // header present, but has no value == header not present
@@ -469,7 +471,8 @@ namespace
         OFString str;
         if ( e->getOFString( str, 0 ) != EC_Normal ) {
           vcl_cerr << "vil_dicom Warning: value of ("<<group<<','<<element<<") is not string\n";
-        } else {
+        }
+        else {
           value = str.c_str();
         }
       }
@@ -510,7 +513,8 @@ namespace
         OFString str;
         if ( e->getOFString( str, 0 ) != EC_Normal ) {
           vcl_cerr << "Warning: value of ("<<group<<','<<element<<") is not string\n";
-        } else {
+        }
+        else {
           value = vcl_atol( str.c_str() );
         }
       }
@@ -527,7 +531,8 @@ namespace
         OFString str;
         if ( e->getOFString( str, 0 ) != EC_Normal ) {
           vcl_cerr << "vil_dicom Warning: value of ("<<group<<','<<element<<") is not string\n";
-        } else {
+        }
+        else {
           value = static_cast<float>( vcl_atof( str.c_str() ) );
         }
       }
@@ -541,7 +546,8 @@ namespace
           OFString str;
           if ( e->getOFString( str, pos ) != EC_Normal ) {
             vcl_cerr << "Warning: value of ("<<group<<','<<element<<") at " << pos << " is not string\n";
-          } else {
+          }
+          else {
             value.push_back( static_cast<float>( vcl_atof( str.c_str() ) ) );
           }
         }
@@ -585,7 +591,8 @@ namespace
         OFString str;
         if ( e->getOFString( str, 0 ) != EC_Normal ) {
           vcl_cerr << "vil_dicom Warning: value of ("<<group<<','<<element<<") is not string\n";
-        } else {
+        }
+        else {
           value = vcl_atol( str.c_str() );
         }
       }
@@ -676,7 +683,8 @@ namespace
         OFString str;
         if ( e->getOFString( str, 0 ) != EC_Normal ) {
           vcl_cerr << "vil_dicom Warning: value of ("<<group<<','<<element<<") is not string\n";
-        } else {
+        }
+        else {
           value = static_cast<float>( vcl_atof( str.c_str() ) );
         }
       }
@@ -872,13 +880,16 @@ namespace
     if ( rep == 0 && stored <= 8 ) {
       act_format = VIL_PIXEL_FORMAT_BYTE;
       pixel_data = new DiInputPixelTemplate<InT,Uint8>( pixels, alloc, stored, high, 0, num_samples );
-    } else if ( rep == 0 && stored <= 16 ) {
+    }
+    else if ( rep == 0 && stored <= 16 ) {
       act_format = VIL_PIXEL_FORMAT_UINT_16;
       pixel_data = new DiInputPixelTemplate<InT,Uint16>( pixels, alloc, stored, high, 0, num_samples );
-    } else if ( rep == 1 && stored <= 8 ) {
+    }
+    else if ( rep == 1 && stored <= 8 ) {
       act_format = VIL_PIXEL_FORMAT_SBYTE;
       pixel_data = new DiInputPixelTemplate<InT,Sint8>( pixels, alloc, stored, high, 0, num_samples );
-    } else if ( rep == 1 && stored <= 16 ) {
+    }
+    else if ( rep == 1 && stored <= 16 ) {
       act_format = VIL_PIXEL_FORMAT_INT_16;
       pixel_data = new DiInputPixelTemplate<InT,Sint16>( pixels, alloc, stored, high, 0, num_samples );
     }
@@ -939,7 +950,8 @@ read_pixels_into_buffer(DcmPixelData* pixels,
   DiInputPixel* pixel_data = 0;
   if ( pixels->getVR() == EVR_OW ) {
     convert_src_type( (Uint16*)0, pixels, num_samples, alloc, stored, high, rep, pixel_data, act_format );
-  } else {
+  }
+  else {
     convert_src_type( (Uint8*)0, pixels, num_samples, alloc, stored, high, rep, pixel_data, act_format );
   }
 #ifdef MIXED_ENDIAN
@@ -983,7 +995,8 @@ read_pixels_into_buffer(DcmPixelData* pixels,
 #else
     vcl_memcpy( out_buf->data(), pixel_data->getData(), out_buf->size() );
 #endif //MIXED_ENDIAN
-  } else {
+  }
+  else {
     out_buf = new vil_memory_chunk( num_samples * sizeof(float), VIL_PIXEL_FORMAT_FLOAT );
     out_format = VIL_PIXEL_FORMAT_FLOAT;
 #ifdef MIXED_ENDIAN

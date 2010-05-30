@@ -3,7 +3,7 @@
 #define bvpl_octree_neighbors_h
 //:
 // \file
-// \brief  A class that operates a bvpl_kernel on a octree or boxm scene to find all the neighbor cells that correspond to that kernel, and returns a list of pointers to those neighbors
+// \brief  A class that operates a bvpl_kernel on an octree or boxm scene to find all the neighbor cells that correspond to that kernel, and returns a list of pointers to those neighbors
 // \author Gamze Tunali Gamze_Tunali@brown.edu
 // \date   March 18, 2010
 //
@@ -52,7 +52,8 @@ class bvpl_octree_neighbors
           vcl_vector<cell_type *> children;
           this_cell->leaf_children(children);
           neighb_cells.insert(neighb_cells.end(), children.begin(), children.end());
-        } else {
+        }
+        else {
           // make sure that the same cell is not added more than once
           bool found=0;
           for (unsigned i=0; i<neighb_cells.size(); i++) {

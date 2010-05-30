@@ -3,7 +3,7 @@
 #define brec_part_hierarchy_h_
 //:
 // \file
-// \brief class to represent a hiearachy of composable parts for recognition
+// \brief class to represent a hierarchy of composable parts for recognition
 //
 // \author Ozge C Ozcanli (ozge@lems.brown.edu)
 // \date Oct 16, 2008

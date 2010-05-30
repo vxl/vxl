@@ -50,12 +50,12 @@ class strk_region_info : public strk_region_info_params
 
   //Debug Methods
 
-  //: Evalutate the information at the initial region
+  //: Evaluate the information at the initial region
   void evaluate_info();
-  
-  //: Evalutate the information for the background region
+
+  //: Evaluate the information for the background region
   void evaluate_background_info();
-  
+
   //Protected methods
 
  protected:

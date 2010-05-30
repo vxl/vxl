@@ -59,20 +59,20 @@ bool bvxm_multiply_grids_process(bprb_func_process& pro)
   vcl_string output_path = pro.get_input<vcl_string>(2);
 
 
-  //get  and create the grids
+  // get and create the grids
   typedef float datatype;
 
   bvxm_voxel_grid_base_sptr grid1 = new bvxm_voxel_grid<datatype>(path1);
   bvxm_voxel_grid_base_sptr grid2 = new bvxm_voxel_grid<datatype>(path2);
 
   if (grid1->grid_size()!=grid2->grid_size()){
-    vcl_cerr << "Imput grids must be of same size\n";
+    vcl_cerr << "Input grids must be of same size\n";
     return false;
   }
 
   bvxm_voxel_grid_base_sptr grid_out = new bvxm_voxel_grid<datatype>(output_path, grid1->grid_size());
 
-  //multipy
+  // multiply
   bvxm_voxel_grid_multiply<float>(grid1, grid2, grid_out);
   return true;
 }

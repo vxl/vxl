@@ -203,7 +203,7 @@ void vil_gauss_reduce_1plane(const vxl_int_16* src_im,
                              vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step);
 
 //: Smooth and subsample single plane src_im in x to produce dest_im using 121 filter in x and y
-//  Smoothes with a 3x3 filter and subsamples
+//  Smooths with a 3x3 filter and subsamples
 template <class T>
 void vil_gauss_reduce_121_1plane(const T* src_im,
                                  unsigned src_nx, unsigned src_ny,
@@ -212,7 +212,7 @@ void vil_gauss_reduce_121_1plane(const T* src_im,
                                  vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step);
 
 //: Smooth and subsample single plane src_im in x to produce dest_im using 121 filter in x and y
-//  Smoothes with a 3x3 filter and subsamples
+//  Smooths with a 3x3 filter and subsamples
 VCL_DEFINE_SPECIALIZATION
 void vil_gauss_reduce_121_1plane(const vxl_byte* src_im,
                                  unsigned src_nx, unsigned src_ny,
@@ -221,7 +221,7 @@ void vil_gauss_reduce_121_1plane(const vxl_byte* src_im,
                                  vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step);
 
 //: Smooth and subsample single plane src_im in x to produce dest_im using 121 filter in x and y
-//  Smoothes with a 3x3 filter and subsamples
+//  Smooths with a 3x3 filter and subsamples
 VCL_DEFINE_SPECIALIZATION
 void vil_gauss_reduce_121_1plane(const float* src_im,
                                  unsigned src_nx, unsigned src_ny,
@@ -230,7 +230,7 @@ void vil_gauss_reduce_121_1plane(const float* src_im,
                                  vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step);
 
 //: Smooth and subsample single plane src_im in x to produce dest_im using 121 filter in x and y
-//  Smoothes with a 3x3 filter and subsamples
+//  Smooths with a 3x3 filter and subsamples
 VCL_DEFINE_SPECIALIZATION
 void vil_gauss_reduce_121_1plane(const int* src_im,
                                  unsigned src_nx, unsigned src_ny,
@@ -245,7 +245,7 @@ void vil_gauss_reduce_121_1plane(const double* src_im,
                                  vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step);
 
 //: Smooth and subsample single plane src_im in x to produce dest_im using 121 filter in x and y
-//  Smoothes with a 3x3 filter and subsamples
+//  Smooths with a 3x3 filter and subsamples
 VCL_DEFINE_SPECIALIZATION
 void vil_gauss_reduce_121_1plane(const vxl_int_16* src_im,
                                  unsigned src_nx, unsigned src_ny,

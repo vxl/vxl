@@ -21,8 +21,8 @@ class bvpl_neighborhood_kernel_factory : public bvpl_kernel_factory
   //:Default Constructor
   bvpl_neighborhood_kernel_factory();
 
-  //: Constructs a kernel form three values, lenght, widht and thickness
-  bvpl_neighborhood_kernel_factory(int min_lenght, int max_lenght,
+  //: Constructs a kernel form three values, length, width and thickness
+  bvpl_neighborhood_kernel_factory(int min_length, int max_length,
                                    int min_width, int max_width,
                                    int min_thickness, int max_thickness);
 

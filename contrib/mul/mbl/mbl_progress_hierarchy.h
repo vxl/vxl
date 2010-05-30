@@ -47,12 +47,12 @@ class mbl_progress_hierarchy: public mbl_progress
   virtual void on_changed_progress(double fraction)=0;
 
   mbl_progress_hierarchy() : just_ended_(false) {}
-  
+
  private:
   //: The ordered hierarchy of identifiers.
   vcl_vector<vcl_string> identifier_stack_;
 
-  //: Has an existing identifer just been ended.
+  //: Has an existing identifier just been ended.
   bool just_ended_;
 };
 

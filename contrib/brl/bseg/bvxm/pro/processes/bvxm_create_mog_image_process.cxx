@@ -23,7 +23,7 @@ bool bvxm_create_mog_image_process_cons(bprb_func_process& pro)
   //inputs
 
   //0: The voxel world
-  //1: The appereance model type
+  //1: The appearance model type
   //2: The illumination bin index nplanes_
   //3: The scale
   //4: The camera

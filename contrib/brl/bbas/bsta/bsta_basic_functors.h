@@ -28,7 +28,7 @@ class bsta_prob_density_functor
   typedef typename dist_::math_type T;
   typedef typename dist_::vector_type vector_;
   typedef T return_T;
-  typedef return_T return_type; // for compatiblity with vpdl/vdpt
+  typedef return_T return_type; // for compatibility with vpdl/vdpt
   enum { return_dim = 1 };
 
   //: The main function
@@ -48,7 +48,7 @@ class bsta_prob_density_addcovar_functor
   typedef typename mix_dist_::dist_type::vector_type vector_;
   typedef typename mix_dist_::dist_type::covar_type covar_t_;
   typedef T return_T;
-  typedef return_T return_type; // for compatiblity with vpdl/vdpt
+  typedef return_T return_type; // for compatibility with vpdl/vdpt
   enum { return_dim = 1 };
   //: The main function
   bool operator() ( const mix_dist_& d, const vector_& sample,
@@ -77,7 +77,7 @@ class bsta_probability_functor
   typedef typename dist_::math_type T;
   typedef typename dist_::vector_type vector_;
   typedef T return_T;
-  typedef return_T return_type; // for compatiblity with vpdl/vdpt
+  typedef return_T return_type; // for compatibility with vpdl/vdpt
   enum { return_dim = 1 };
 
   //: The main function
@@ -98,7 +98,7 @@ class bsta_probability_addcovar_functor
   typedef typename mix_dist_::dist_type::vector_type vector_;
   typedef typename mix_dist_::dist_type::covar_type covar_t_;
   typedef T return_T;
-  typedef return_T return_type; // for compatiblity with vpdl/vdpt
+  typedef return_T return_type; // for compatibility with vpdl/vdpt
   enum { return_dim = 1 };
   //: The main function
   bool operator() ( const mix_dist_& d,
@@ -130,7 +130,7 @@ class bsta_mean_functor
   typedef typename dist_::math_type T;
   typedef typename dist_::vector_type vector_;
   typedef vector_ return_T;
-  typedef return_T return_type; // for compatiblity with vpdl/vdpt
+  typedef return_T return_type; // for compatibility with vpdl/vdpt
   //: is this functor valid for its distribution type
   static const bool valid_functor = true;
   enum { return_dim = dist_::dimension };
@@ -181,7 +181,7 @@ class bsta_var_functor
  public:
   typedef typename dist_::math_type T;
   typedef T return_T;
-  typedef return_T return_type; // for compatiblity with vpdl/vdpt
+  typedef return_T return_type; // for compatibility with vpdl/vdpt
   enum { return_dim = 1 };
   //: is this functor valid for its distribution type
   static const bool valid_functor = false;
@@ -220,7 +220,7 @@ class bsta_var_functor<bsta_num_obs<bsta_gaussian_sphere<T,1> > >
   typedef bsta_gaussian_sphere<T,1> dist_;
   typedef typename dist_::vector_type vector_;
   typedef vector_ return_T;
-  typedef return_T return_type; // for compatiblity with vpdl/vdpt
+  typedef return_T return_type; // for compatibility with vpdl/vdpt
   enum { return_dim = dist_::dimension };
   //: is this functor valid for its distribution type
   static const bool valid_functor = true;
@@ -250,7 +250,7 @@ class bsta_diag_covar_functor
   typedef typename dist_::math_type T;
   typedef typename dist_::vector_type vector_;
   typedef vector_ return_T;
-  typedef return_T return_type; // for compatiblity with vpdl/vdpt
+  typedef return_T return_type; // for compatibility with vpdl/vdpt
   enum { return_dim = dist_::dimension };
   //: is this functor valid for its distribution type
   static const bool valid_functor = false;
@@ -290,7 +290,7 @@ class bsta_diag_covar_functor<bsta_num_obs<bsta_gaussian_indep<T,n> > >
   typedef bsta_gaussian_indep<T,n> dist_;
   typedef typename dist_::vector_type vector_;
   typedef vector_ return_T;
-  typedef return_T return_type; // for compatiblity with vpdl/vdpt
+  typedef return_T return_type; // for compatibility with vpdl/vdpt
   enum { return_dim = dist_::dimension };
   //: is this functor valid for its distribution type
   static const bool valid_functor = true;
@@ -318,7 +318,7 @@ class bsta_det_covar_functor
  public:
   typedef typename dist_::math_type T;
   typedef T return_T;
-  typedef return_T return_type; // for compatiblity with vpdl/vdpt
+  typedef return_T return_type; // for compatibility with vpdl/vdpt
   enum { return_dim = 1 };
 
   //: The main function
@@ -339,7 +339,7 @@ class bsta_weight_functor
  public:
   typedef typename mixture_::math_type T;
   typedef T return_T;
-  typedef return_T return_type; // for compatiblity with vpdl/vdpt
+  typedef return_T return_type; // for compatibility with vpdl/vdpt
   enum { return_dim = 1 };
   //: is this functor valid for its distribution type
   static const bool valid_functor = false;
@@ -370,7 +370,7 @@ class bsta_weight_functor<mixture_,
  public:
   typedef typename mixture_::math_type T;
   typedef T return_T;
-  typedef return_T return_type; // for compatiblity with vpdl/vdpt
+  typedef return_T return_type; // for compatibility with vpdl/vdpt
   enum { return_dim = 1 };
   //: is this functor valid for its distribution type
   static const bool valid_functor = true;
@@ -453,7 +453,7 @@ class bsta_mixture_functor
  public:
   typedef typename mixture_::math_type T;
   typedef typename functor_::return_T return_T;
-  typedef return_T return_type; // for compatiblity with vpdl/vdpt
+  typedef return_T return_type; // for compatibility with vpdl/vdpt
   enum { return_dim = functor_::return_dim };
 
   //: Constructor
@@ -484,7 +484,7 @@ class bsta_mixture_data_functor
  public:
   typedef typename mixture_::math_type T;
   typedef typename functor_::return_T return_T;
-  typedef return_T return_type; // for compatiblity with vpdl/vdpt
+  typedef return_T return_type; // for compatibility with vpdl/vdpt
   typedef typename mixture_::vector_type vector_;
   enum { return_dim = functor_::return_dim };
 
@@ -516,7 +516,7 @@ class bsta_weighted_sum_functor
  public:
   typedef typename mixture_::math_type T;
   typedef typename functor_::return_T return_T;
-  typedef return_T return_type; // for compatiblity with vpdl/vdpt
+  typedef return_T return_type; // for compatibility with vpdl/vdpt
   enum { return_dim = functor_::return_dim };
 
   //: Constructor
@@ -557,7 +557,7 @@ class bsta_weighted_sum_data_functor
  public:
   typedef typename mixture_::math_type T;
   typedef typename functor_::return_T return_T;
-  typedef return_T return_type; // for compatiblity with vpdl/vdpt
+  typedef return_T return_type; // for compatibility with vpdl/vdpt
   typedef typename mixture_::vector_type vector_;
   enum { return_dim = functor_::return_dim };
 
@@ -600,7 +600,7 @@ class bsta_mixture_size_functor
  public:
   typedef typename mixture_::math_type T;
   typedef unsigned int return_T;
-  typedef return_T return_type; // for compatiblity with vpdl/vdpt
+  typedef return_T return_type; // for compatibility with vpdl/vdpt
   enum { return_dim = 1 };
 
   //: The main function

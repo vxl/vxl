@@ -2,14 +2,14 @@
 #define mfpf_norm_corr2d_h_
 //:
 // \file
-// \brief Searches over a grid using normalised correllation
+// \brief Searches over a grid using normalised correlation
 // \author Tim Cootes
 
 #include <mfpf/mfpf_point_finder.h>
 #include <vgl/vgl_fwd.h>
 #include <vcl_iosfwd.h>
 
-//: Searches over a grid using normalised correllation.
+//: Searches over a grid using normalised correlation.
 class mfpf_norm_corr2d : public mfpf_point_finder
 {
  private:
@@ -76,7 +76,7 @@ class mfpf_norm_corr2d : public mfpf_point_finder
                           const vgl_vector_2d<double>& u);
 
   //: Evaluate match at in a region around p
-  // Returns a qualtity of fit at a set of positions.
+  // Returns a quality of fit at a set of positions.
   // response image (whose size and transform is set inside the
   // function), indicates the points at which the function was
   // evaluated.  response(i,j) is the fit at the point
@@ -89,7 +89,7 @@ class mfpf_norm_corr2d : public mfpf_point_finder
 
   //: Search given image around p, using u to define scale and angle
   //  On exit, new_p defines position of the best nearby match.
-  //  Returns a qualtity of fit measure at that
+  //  Returns a quality of fit measure at that
   //  point (the smaller the better).
   virtual double search_one_pose(const vimt_image_2d_of<float>& image,
                                  const vgl_point_2d<double>& p,

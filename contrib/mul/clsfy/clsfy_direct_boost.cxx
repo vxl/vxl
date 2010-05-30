@@ -163,7 +163,7 @@ unsigned clsfy_direct_boost::classify(const vnl_vector<double> &v) const
 //: Find the posterior probability of the input being in the positive class.
 // The result is is outputs(0)
 void clsfy_direct_boost::class_probabilities(vcl_vector<double> &outputs,
-  const vnl_vector<double> &input) const
+                                             const vnl_vector<double> &input) const
 {
   outputs.resize(1);
   outputs[0] = 1.0 / (1.0 + vcl_exp(-log_l(input)));
@@ -255,7 +255,7 @@ void clsfy_direct_boost::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,wts_);
       vsl_b_read(bfs,index_);
 
-      // set default number of classifiers used to be the maximimum number
+      // set default number of classifiers used to be the maximum number
       n_clfrs_used_= index_.size();
 
       break;

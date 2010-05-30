@@ -71,7 +71,6 @@ inline void vimt3d_resample_trilinear(
   d_i2w.set_affine(p,u,v,w);
   d_i2w.simplify();
   dest_image.set_world2im(d_i2w.inverse());
-
 }
 
 
@@ -102,8 +101,8 @@ inline void vimt3d_resample_trilin_edge_extend(
   vgl_vector_3d<double> im_w = s_w2i.delta(p, w);
 
   vil3d_resample_trilinear_edge_extend(src_image.image(),dest_image.image(),
-    im_p.x(),im_p.y(),im_p.z(), im_u.x(),im_u.y(),im_u.z(),
-    im_v.x(),im_v.y(),im_v.z(), im_w.x(),im_w.y(),im_w.z(), ni,nj,nk);
+                                       im_p.x(),im_p.y(),im_p.z(), im_u.x(),im_u.y(),im_u.z(),
+                                       im_v.x(),im_v.y(),im_v.z(), im_w.x(),im_w.y(),im_w.z(), ni,nj,nk);
 
   // Point (i,j,k) in dest corresponds to p+i.u+j.v+k.w,
   // an affine transformation for image to world
@@ -162,8 +161,8 @@ inline void vimt3d_resample_trilin_smoothing_edge_extend(
 }
 
 //: Resample src, using the grid defined by dest.
-//  Smooths appropriatly if the resolution changes significantly.
-//  dest(i,j,k,p) is sampled from src at the wc grid defined by 
+//  Smooths appropriately if the resolution changes significantly.
+//  dest(i,j,k,p) is sampled from src at the wc grid defined by
 //  the world co-ords of the pixel centres in dest.
 //
 //  dest is not resized, nor has its world2im transform modified.

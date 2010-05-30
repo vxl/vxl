@@ -6,7 +6,7 @@
 #include <vgui/vgui_menu.h>
 #include "segv_vil_segmentation_manager.h"
 
-//Static munu callback functions
+// Static menu callback functions
 
 void segv_vil_menus::quit_callback()
 {
@@ -246,7 +246,7 @@ vgui_menu segv_vil_menus::get_menu()
   menuview.add("Histogram Plot ", intensity_histogram_callback);
   menuview.add("RotateImage ", rotate_image_callback);
   menuview.add("ReduceImage(Burt)", reduce_image_callback);
-  menuview.add("ReduceImage(bicubic)", reduce_image_bicubic_callback);  
+  menuview.add("ReduceImage(bicubic)", reduce_image_bicubic_callback);
   menuview.add("ExpandImage(Burt) ", expand_image_callback);
   menuview.add("ExpandImage(bicubic) ", expand_image_bicubic_callback);
   menuview.add("Flip Image (LR)", flip_image_lr_callback);

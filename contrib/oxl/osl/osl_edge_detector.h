@@ -50,7 +50,7 @@
 //                       along edgel chains.  New accumulation is in
 //                       Follow_curves(edges). The old code is still in place
 //                       but commented out. (Look for "May")  The old code
-//                       just histogrammed the gradient magintude.
+//                       just histogrammed the gradient magnitude.
 //          JLM June 1997 Found a bug in the above change which failed if
 //                       ghist_ is NULL.
 //          JLM Dec 1997 Moved sigma_, low_, gauss_tail_ and verbose_

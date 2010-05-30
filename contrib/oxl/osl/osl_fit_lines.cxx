@@ -542,7 +542,7 @@ void osl_fit_lines::OutputLine(vcl_list<osl_edgel_chain*> *curves_,
   }
   old_finish_ = finish;
 
-  // Create a osl_edgel_chain from the fit
+  // Create an osl_edgel_chain from the fit
   osl_edgel_chain *line = new osl_edgel_chain(finish-start);
   for (int i=0,j=start;j<finish;i++,j++) {  // Copy the edgels into the new chain
     line->SetX(dc->GetX(j),i);

@@ -74,21 +74,21 @@ bool bvxm_voxel_grid_compare(bvxm_voxel_grid<float> * dt_grid,
                              bvxm_voxel_grid<bvxm_opinion> * op_grid,
                              bvxm_voxel_grid<float> * grid_out)
 {
-  //check the grids exist
+  // check the grids exist
   if ( !dt_grid || !op_grid || !grid_out)
   {
     vcl_cerr << "One of the input voxels is of the wrong type\n";
     return false;
   }
 
-  //check sizes are the same
+  // check sizes are the same
   if ( dt_grid->grid_size() != op_grid->grid_size() ||  dt_grid->grid_size() != grid_out->grid_size() )
   {
     vcl_cerr << "Grids are not of the same size\n";
     return false;
   }
 
-  //multipy
+  // multiply
   bvxm_voxel_grid<float>::iterator dt_grid_it = dt_grid->begin();
   bvxm_voxel_grid<bvxm_opinion>::iterator op_grid_it = op_grid->begin();
   bvxm_voxel_grid<float>::iterator grid_out_it = grid_out->begin();

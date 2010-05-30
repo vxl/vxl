@@ -110,7 +110,7 @@ bool bwm_texture_map_generator::generate_texture_map(bwm_observable_mesh_sptr ob
                  << "face normal global = "<< face_normal_global << vcl_endl << vcl_endl;
 #endif // DEBUG
 
-        face_normal = face_normal / face_normal.length(); // not gauranteed to be normalized
+        face_normal = face_normal / face_normal.length(); // not guaranteed to be normalized
         vgl_vector_3d<double> camera_direction = observers_[obs_idx]->camera_direction();//lvcs);
 
         // just use angle for now, maybe incorporate distance to camera later?

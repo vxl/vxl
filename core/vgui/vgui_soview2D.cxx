@@ -107,7 +107,7 @@ void vgui_soview2D_lineseg::draw() const
 
 float vgui_soview2D_lineseg::distance_squared(float vx, float vy) const
 {
-  // Here we explicitely cast some parameters to type float to help
+  // Here we explicitly cast some parameters to type float to help
   // the Borland compiler, which otherwise tries to use
   // vgl_distance2_to_linesegment<const float>, presumably because
   // this is a const member function so some of the parameters passed

@@ -45,7 +45,7 @@ void print_usage()
           <<"Loads in parameter file, which defines images,\n"
           <<"points, the arcs defining a tree and related details.\n"
           <<"Constructs a tree model from the first image.\n"
-          <<"Uses normalised correllation and this model to locate\n"
+          <<"Uses normalised correlation and this model to locate\n"
           <<"equivalent points on the second image."<<vcl_endl;
   vul_arg_display_usage_and_exit();
 }

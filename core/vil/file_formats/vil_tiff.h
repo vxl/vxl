@@ -315,7 +315,7 @@ struct tiff_pyramid_level
   //: the image length
   unsigned nj_;
 
-  //:the nubmer of planes
+  //:the number of planes
   unsigned nplanes_;
 
   //: the pixel format

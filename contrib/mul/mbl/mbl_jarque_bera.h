@@ -11,12 +11,12 @@
 
 //: Jarque Bera test for normality
 // Returns the p-value - the probability that
-// the data is normal. If you want an confidence alpha of 0.05
+// the data is normal. If you want a confidence alpha of 0.05
 // then the data is normal if (mbl_jarque_bera(start,end) > 0.05)
 //
 // Note that the test is not particular valuable for small data set.
 // For more info, see J. B. Cromwell, W. C. Labys and M. Terraza (1994):
-// Univariate Tests for Time Series Models, Sage, California, USA, pages 20-22. 
+// Univariate Tests for Time Series Models, Sage, California, USA, pages 20-22.
 template <class InIt>
 double mbl_jarque_bera(InIt start, InIt finish)
 {
@@ -46,7 +46,7 @@ double mbl_jarque_bera(InIt start, InIt finish)
   }
   S /= n;
   K = K/n - 3;
- 
+
   const double jbstat = n * ( (S*S)/6  +  (K*K)/24 );
 
   return 1 - vnl_cum_prob_chi2(2, jbstat);

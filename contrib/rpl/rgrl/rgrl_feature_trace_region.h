@@ -23,13 +23,13 @@ class rgrl_feature_trace_region
  public:
   //:  Constructor to initialize feature_trace_region location.
   rgrl_feature_trace_region( vnl_vector<double> const& loc,
-                         vnl_vector<double> const& tangent );
+                             vnl_vector<double> const& tangent );
 
-  //:  Constructor to initialize feature_trace_region location that has a length along the tangent and an normal.
+  //:  Constructor to initialize feature_trace_region location that has a length along the tangent and a normal.
   rgrl_feature_trace_region( vnl_vector<double> const& loc,
-                         vnl_vector<double> const& tangent,
-                         double                    region_length,
-                         double                    region_radius );
+                             vnl_vector<double> const& tangent,
+                             double                    region_length,
+                             double                    region_radius );
 
   //: The result is a rgrl_feature_trace_region, without transforming the radius/length parameters
   rgrl_feature_sptr

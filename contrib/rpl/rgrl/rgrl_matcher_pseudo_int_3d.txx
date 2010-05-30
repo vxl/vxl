@@ -162,7 +162,7 @@ compute_matches( rgrl_feature_set const&    from_set,
   typedef f_vector_type::iterator f_iterator_type;
 
   //  Build an empty match set
-  rgrl_match_set_sptr matches_sptr 
+  rgrl_match_set_sptr matches_sptr
     = new rgrl_match_set( from_set.type(), to_set.type(), from_set.label(), to_set.label() );
 
   //  Get the from image features in the current view
@@ -251,7 +251,7 @@ compute_matches( rgrl_feature_set const&    from_set,
      }
 
      this -> slide_window( mapped_feature, mapped_pixels, current_scale,
-                                  matched_to_features, match_weights );
+                           matched_to_features, match_weights );
 
      //  Make a dummy vector of intensity weights.
      //vcl_vector< double > dummy_intensity_weights( match_weights.size(), 1.0 );
@@ -346,7 +346,7 @@ map_region_intensities( vcl_vector< vnl_vector<int> > const& pixel_locations,
 
   // check for empty bounding box
   if ( box.empty() )   return;
-  // the dimension of a smallest image that encasulate the bounding box
+  // the dimension of a smallest image that encapsulate the bounding box
   vnl_int_3 origin, dim;
   origin[0] = (int)vcl_floor(box.xmin());
   origin[1] = (int)vcl_floor(box.ymin());
@@ -372,7 +372,7 @@ map_region_intensities( vcl_vector< vnl_vector<int> > const& pixel_locations,
   // to have smooth transition between 1.0(coincide with the point) and 0.0
   // (one pixel away).
   for (typename vcl_vector<mapped_info>::const_iterator it=direct_mapped_pts.begin();
-      it!=direct_mapped_pts.end(); ++it) {
+       it!=direct_mapped_pts.end(); ++it) {
     vnl_int_3 ceil, floor;
     vnl_double_3 diff_floor;
     for (unsigned i=0; i<3; i++) {
@@ -402,7 +402,7 @@ map_region_intensities( vcl_vector< vnl_vector<int> > const& pixel_locations,
   for (int i=0; i<dim[0]; ++i)
     for (int j=0; j<dim[1]; ++j)
       for (int k=0; k<dim[2]; ++k)
-        if ( wgts(i,j,k) >= 1e-8 ) {  // artitrary threshold for numerical stability
+        if ( wgts(i,j,k) >= 1e-8 ) {  // arbitrary threshold for numerical stability
           mapped_pixel.intensity = wgted_sum(i,j,k) / wgts(i,j,k);
           mapped_pixel.location[0] = i + origin[0];
           mapped_pixel.location[1] = j + origin[1];
@@ -575,7 +575,7 @@ slide_window(rgrl_feature_sptr         mapped_feature,
     DebugMacro(2, "best match :\n" << match_location << vcl_endl );
 
     // Now compute the second derivative
-    // Note that these descrete points are not evenly distributed.
+    // Note that these discrete points are not evenly distributed.
     // Solution:
     // Use Taylor expansion on f(x0-d1), f(x0), and f(x0+d2)
     // It is easy to show that in order to get f''(x) = a1*f(x0-d1) + a2*f(x0) + a3*f(x0+d2)
@@ -682,7 +682,7 @@ slide_window(rgrl_feature_sptr         mapped_feature,
       match_location[i] += double(best1[i]) + double(best2[i]);
 
     // TODO
-    // compute the second drivative
+    // compute the second derivative
     assert( 0 );
 #if 0 // commented out
     //  Evaluate the second derivative at the peak.  If the
@@ -699,7 +699,7 @@ slide_window(rgrl_feature_sptr         mapped_feature,
     // The best_offset so far is constrained on the discrete space.
     // Now we use a parabola to model the similarity error
     // (responses) and find the position of the minimum response.
-    // Here I calculate sub_pixel in each dimension seperately just for
+    // Here I calculate sub_pixel in each dimension separately just for
     // the convenience. Since it's only an approximation in one grid,
     // I assume this approximation is good enough.
     double sub_offset1;
@@ -707,7 +707,7 @@ slide_window(rgrl_feature_sptr         mapped_feature,
     if ( best_off1 == max_offset || best_off1 == -max_offset )
   sub_offset1 = best_off1;
     else if ( responses[ idx1 - 1 ][ idx2 ] == max_response_value ||
-        responses[ idx1 + 1 ][ idx2 ] == max_response_value )
+              responses[ idx1 + 1 ][ idx2 ] == max_response_value )
     {
       sub_offset1 = idx1 - max_offset;
     }
@@ -738,7 +738,7 @@ slide_window(rgrl_feature_sptr         mapped_feature,
     if ( best_off2 == max_offset || best_off2 == -max_offset )
   sub_offset2 = best_off2;
     else if ( responses[ idx1 ][ idx2 - 1 ] == max_response_value ||
-        responses[ idx1 ][ idx2 + 1 ] == max_response_value )
+              responses[ idx1 ][ idx2 + 1 ] == max_response_value )
     {
       sub_offset2 = idx2 - max_offset;
     }
@@ -762,7 +762,8 @@ slide_window(rgrl_feature_sptr         mapped_feature,
     match_location = mapped_location + basis1 * sub_offset1 + basis2 * sub_offset2;
     DBG( vcl_cout << "best match :\n" << match_location << vcl_endl );
 #endif // 0
-  } else {
+  }
+  else {
     vcl_cerr << "Code doesn't handle a normal subspace of greater than two dimenions.\n";
     assert( false );
   }
@@ -774,7 +775,8 @@ slide_window(rgrl_feature_sptr         mapped_feature,
     rgrl_feature_face_region * face_ptr =
     rgrl_cast<rgrl_feature_face_region *> ( mapped_feature );
     mf_ptr = new rgrl_feature_face_region( match_location, face_ptr -> normal() );
-  } else
+  }
+  else
   {
     rgrl_feature_trace_region * trace_ptr =
     rgrl_cast<rgrl_feature_trace_region *> ( mapped_feature );
@@ -844,8 +846,8 @@ template<class PixelType>
 void
 rgrl_matcher_pseudo_int_3d<PixelType>::
 sample_pixels_along_direction( vcl_vector<discrete_shift_node>& two_dir_shifts,
-                              vnl_double_3 dir,
-                              double max_length ) const
+                               vnl_double_3 dir,
+                               double max_length ) const
 {
   // make sure any element in normal vector/basis is less than 1.
   // Thus, divided by 2*mag, and double max_length;

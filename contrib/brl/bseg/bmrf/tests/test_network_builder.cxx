@@ -122,7 +122,7 @@ void test_network_builder()
   //Network builder Params
   bmrf_network_builder_params nbp;
   nbp.eu_=-100; // col position of the epipole
-  nbp.ev_= 50;   //row position of the epipolep
+  nbp.ev_= 50;   //row position of the epipole
   nbp.elu_ = 99; //col position of the epipolar parameter space
   nbp.elv_min_=0; // minimum row position of the epipolar space
   nbp.elv_max_=100; // maximum row position of the epipolar space

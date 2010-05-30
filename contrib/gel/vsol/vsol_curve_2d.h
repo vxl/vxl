@@ -42,7 +42,7 @@ class vsol_curve_2d : public vsol_spatial_object_2d
     DIGITAL_CURVE,
     NUM_CURVE_TYPES
   };
- private: // has been superceeded by is_a()
+ private: // has been superseded by is_a()
   //: return the curve type
   virtual vsol_curve_2d_type curve_type()const{return vsol_curve_2d::CURVE_NO_TYPE;}
 
@@ -86,32 +86,32 @@ class vsol_curve_2d : public vsol_spatial_object_2d
   virtual const vsol_curve_2d *cast_to_curve() const {return this;}
 
   //---------------------------------------------------------------------------
-  //: Return `this' if `this' is an line, 0 otherwise
+  //: Return `this' if `this' is a line, 0 otherwise
   //---------------------------------------------------------------------------
   virtual vsol_line_2d const*cast_to_line()const{return 0;}
   virtual vsol_line_2d *cast_to_line() {return 0;}
 
   //---------------------------------------------------------------------------
-  //: Return `this' if `this' is an conic, 0 otherwise
+  //: Return `this' if `this' is a conic, 0 otherwise
   //---------------------------------------------------------------------------
   virtual dbsol_circ_arc_2d const*cast_to_circ_arc()const{return 0;}
   virtual dbsol_circ_arc_2d *cast_to_circ_arc() {return 0;}
 
 
   //---------------------------------------------------------------------------
-  //: Return `this' if `this' is an conic, 0 otherwise
+  //: Return `this' if `this' is a conic, 0 otherwise
   //---------------------------------------------------------------------------
   virtual vsol_conic_2d const*cast_to_conic()const{return 0;}
   virtual vsol_conic_2d *cast_to_conic() {return 0;}
 
   //---------------------------------------------------------------------------
-  //: Return `this' if `this' is an polyline, 0 otherwise
+  //: Return `this' if `this' is a polyline, 0 otherwise
   //---------------------------------------------------------------------------
   virtual vsol_polyline_2d const*cast_to_polyline()const{return 0;}
   virtual vsol_polyline_2d *cast_to_polyline() {return 0;}
 
   //---------------------------------------------------------------------------
-  //: Return `this' if `this' is an digital_curve_2d, 0 otherwise
+  //: Return `this' if `this' is a digital_curve_2d, 0 otherwise
   //---------------------------------------------------------------------------
   virtual vsol_digital_curve_2d const*cast_to_digital_curve()const{return 0;}
   virtual vsol_digital_curve_2d *cast_to_digital_curve() {return 0;}

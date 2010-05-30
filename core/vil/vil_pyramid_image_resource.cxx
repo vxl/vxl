@@ -151,12 +151,12 @@ blocked_decimate(vil_blocked_image_resource_sptr const& brsc,
   //
   //=======================================================
   //
-  //Decimate the image using a 2x2 block neigborhood
+  //Decimate the image using a 2x2 block neighborhood
   //
   //   | buf[0][0]  buf[0][1] |==> [dec_blk]
   //   | buf[1][0]  buf[1][1] |
   //
-  // This neigborhood "slides" along the 2xnbi block buffer,
+  // This neighborhood "slides" along the 2xnbi block buffer,
   //  stepping two blocks each time.
   //=======================================================
   switch (np)

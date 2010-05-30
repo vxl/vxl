@@ -40,7 +40,7 @@ class vgui_wx_adaptor
 
   typedef vgui_adaptor_mixin mixin;
 
-public:
+ public:
   //: Constructor - used by dynamic creation.
   vgui_wx_adaptor(wxWindow* parent,
                   wxWindowID id = wxID_ANY,
@@ -85,7 +85,7 @@ public:
 
   //: Stop timer 'id'.
   virtual void kill_timer(int id);
-  
+
   //: Bind the given modifier/button combination to the popup menu.
   virtual void bind_popups(vgui_modifier m, vgui_button b)
   {
@@ -111,7 +111,7 @@ public:
 
   //-----------------------------------------------------------------------
   //-----------------------------------------------------------------------
-private:
+ private:
   //: Called when canvas is resized.
   void on_size(wxSizeEvent& event);
 
@@ -157,7 +157,7 @@ private:
 
   //-----------------------------------------------------------------------
   //-----------------------------------------------------------------------
-private:
+ private:
   wxView* view_;
 
   static vgui_menu last_popup_;
@@ -165,7 +165,7 @@ private:
   //: True while a redraw event has been requested but not implemented.
   bool redraw_posted_;
 
-  //: True while a overlay redraw event has been requested but not implemented.
+  //: True while an overlay redraw event has been requested but not implemented.
   bool overlay_redraw_posted_;
 
   //: True while an idle time has been requested but not implemented.

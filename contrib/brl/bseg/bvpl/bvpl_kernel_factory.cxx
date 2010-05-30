@@ -83,11 +83,11 @@ void bvpl_kernel_factory::set_rotation_axis( vnl_float_3 rotation_axis)
         theta = vcl_atan2(rotation_axis_[1],rotation_axis_[0]), //azimuth,
         phi = vcl_acos(rotation_axis_[2]/radius); //zenith
 
-  //set kernel back to its caninical form , since the rotation is calculated from its canonical position
+  //set kernel back to its canonical form, since the rotation is calculated from its canonical position
   kernel_ = canonical_kernel_;
 
   //construct a rotation to rotate vector a to vector b;
-  //if a and b are oposite, then this rotation is ambiguos(infinitely many axis of rotation)
+  //if a and b are oposite, then this rotation is ambiguous (infinitely many axes of rotation)
   //and we will choose to reflect
  if (vnl_cross_3d(canonical_rotation_axis_, rotation_axis_).two_norm()<1e-2)
  {
@@ -188,10 +188,10 @@ bvpl_kernel_factory::rotate(vgl_rotation_3d<float> R)
 
   for (; kernel_it != kernel_.end(); ++kernel_it)
   {
-    //Rotate, mantaing floating point values
+    //Rotate, maintaining floating point values
     vnl_float_3 new_coord = R_as_matrix* vnl_float_3(float((*kernel_it).first.x()),
-                                                                           float((*kernel_it).first.y()),
-                                                                           float((*kernel_it).first.z()));
+                                                     float((*kernel_it).first.y()),
+                                                     float((*kernel_it).first.z()));
 
     kernel.push_back(vcl_make_pair(vgl_point_3d<float>(new_coord[0],new_coord[1],new_coord[2]), (kernel_it->second)));
 

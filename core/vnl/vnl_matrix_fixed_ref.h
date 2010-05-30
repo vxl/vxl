@@ -42,7 +42,7 @@
 //  > trying to establish a class hierarchy, which may add too many burdens in
 //  > terms of object size for small vectors/matrices.
 //  >
-//  > Sorry - I've now found the debate on the maintaners list!
+//  > Sorry - I've now found the debate on the maintainers list!
 //  >
 //  > Anyway, I believe that vector_fixed_ref is very necessary, and that you
 //  > should be able to convert from a vector_fixed to a vector_fixed_ref - say

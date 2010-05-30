@@ -47,7 +47,7 @@ void vil1_warp_output_driven(vil1_memory_image_of<PixelType> const& in,
 
       switch (interpolation) {
         case vil1_warp_interpolation_nearest_neighbour: {
-          // nearest neigbour
+          // nearest neighbour
           int ix = int(ixd + 0.5);
           int iy = int(iyd + 0.5);
           if (vil1_warp_inrange_window(in, ix, iy, 0))

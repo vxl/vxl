@@ -376,8 +376,8 @@ void bgui_graph_tableau::clear()
   this->post_redraw();
 }
 
-//Provide a popup dialog that contains the graph.  The string info
-//contains user defined documention for the graph.
+// Provide a popup dialog that contains the graph.  The string info
+// contains user defined documentation for the graph.
 vgui_dialog* bgui_graph_tableau::popup_graph(vcl_string const& info,
                                              const unsigned sizex,
                                              const unsigned sizey)

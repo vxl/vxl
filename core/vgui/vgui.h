@@ -154,7 +154,7 @@ class vgui
   //: Quit application.
   static void quit();
 
-  //: Was quit called eariler?
+  //: Was quit called earlier?
   //
   // This is to help application-driven vgui programs determine when
   // the user has requested the GUI to close.

@@ -4,7 +4,7 @@
 #include <vgui/vgui_key.h>
 #include <vgui/vgui_menu.h>
 
-//Static munu callback functions
+// Static menu callback functions
 
 void basic_menus::quit_callback()
 {

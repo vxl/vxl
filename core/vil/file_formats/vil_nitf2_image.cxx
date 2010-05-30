@@ -70,7 +70,8 @@ vil_streampos vil_nitf2_image::get_offset_to( vil_nitf2_header::section_type sec
     assert( index == 0 );
     //file header is the first thing
     p = 0;
-  } else {
+  }
+  else {
     vil_nitf2_header::section_type preceding_section = (vil_nitf2_header::section_type)(sec-1);
     p = get_offset_to( preceding_section, vil_nitf2_header::enum_subheader, 0 ) +
         size_to( preceding_section, vil_nitf2_header::enum_subheader, -1 ) +
@@ -88,7 +89,8 @@ vil_streampos vil_nitf2_image::size_to(vil_nitf2_header::section_type sec,
       int file_header_size;
       m_file_header.get_property("HL", file_header_size);
       return (vil_streampos)file_header_size;
-    } else {
+    }
+    else {
       return 0;
     }
   }
@@ -114,7 +116,8 @@ vil_streampos vil_nitf2_image::size_to(vil_nitf2_header::section_type sec,
       vil_nitf2_long current_data_size;
       m_file_header.get_property(s, i, current_data_size);
       offset += current_data_size;
-    } else {
+    }
+    else {
       int current_data_size;
       m_file_header.get_property(s, i, current_data_size);
       offset += current_data_size;
@@ -245,19 +248,21 @@ vil_streampos vil_nitf2_image::get_offset_to_image_data_block_band(
       return 0;
     }
     offset += data_mask_table->block_band_offset(block_index_x, block_index_y, bI);
-  } else {
-      unsigned int pixels_per_block = size_block_i() * size_block_j();
-      unsigned int bits_per_band = pixels_per_block * bits_per_pixel_per_band;
-      unsigned int bytes_per_block_per_band = bits_per_band / 8;
-      //round up if remainder left over (this assumes that band/block boundaries
-      //always lie on byte boundaries.
-      if (bits_per_band % 8 != 0) bytes_per_block_per_band++;
+  }
+  else {
+    unsigned int pixels_per_block = size_block_i() * size_block_j();
+    unsigned int bits_per_band = pixels_per_block * bits_per_pixel_per_band;
+    unsigned int bytes_per_block_per_band = bits_per_band / 8;
+    //round up if remainder left over (this assumes that band/block boundaries
+    //always lie on byte boundaries.
+    if (bits_per_band % 8 != 0) bytes_per_block_per_band++;
     if (i_mode == "S") {
       //i_mode == "S" and not have data_mask_table
       unsigned int offset_to_desired_band = bandIndex * bytes_per_band;
       unsigned int offset_to_desired_block = bytes_per_block_per_band * (block_index_y * n_block_i() + block_index_x);
       offset += offset_to_desired_band + offset_to_desired_block;
-    } else {
+    }
+    else {
       //i_mode != "S" and not have data_mask_table
       unsigned int block_size_bytes = bytes_per_block_per_band * nplanes();
       unsigned int offset_to_desired_block = block_size_bytes * (block_index_y * n_block_i() + block_index_x);
@@ -384,9 +389,11 @@ enum vil_pixel_format vil_nitf2_image::pixel_format () const
     if (pixel_type == "INT") {
       if (bits_per_pixel == 8) {
         return VIL_PIXEL_FORMAT_BYTE;
-      } else if (bits_per_pixel == 16) {
+      }
+      else if (bits_per_pixel == 16) {
         return VIL_PIXEL_FORMAT_UINT_16;
-      } else if (bits_per_pixel == 32) {
+      }
+      else if (bits_per_pixel == 32) {
         return VIL_PIXEL_FORMAT_UINT_32;
       }
 #if VXL_HAS_INT_64
@@ -394,14 +401,18 @@ enum vil_pixel_format vil_nitf2_image::pixel_format () const
         return VIL_PIXEL_FORMAT_UINT_64;
       }
 #endif //VXL_HAS_INT_64
-    } else if (pixel_type == "B") {
+    }
+    else if (pixel_type == "B") {
       return VIL_PIXEL_FORMAT_BOOL;
-    } else if (pixel_type == "SI") {
+    }
+    else if (pixel_type == "SI") {
       if (bits_per_pixel == 8) {
         return VIL_PIXEL_FORMAT_SBYTE;
-      } else if (bits_per_pixel == 16) {
+      }
+      else if (bits_per_pixel == 16) {
         return VIL_PIXEL_FORMAT_INT_16;
-      } else if (bits_per_pixel == 32) {
+      }
+      else if (bits_per_pixel == 32) {
         return VIL_PIXEL_FORMAT_INT_32;
       }
 #if VXL_HAS_INT_64
@@ -409,13 +420,16 @@ enum vil_pixel_format vil_nitf2_image::pixel_format () const
         return VIL_PIXEL_FORMAT_INT_64;
       }
 #endif //VXL_HAS_INT_64
-    } else if (pixel_type == "R") {
+    }
+    else if (pixel_type == "R") {
       if (bits_per_pixel == 32) {
         return VIL_PIXEL_FORMAT_FLOAT;
-      } else if (bits_per_pixel == 64) {
+      }
+      else if (bits_per_pixel == 64) {
         return VIL_PIXEL_FORMAT_DOUBLE;
       }
-    } else if (pixel_type == "C") {
+    }
+    else if (pixel_type == "C") {
       //two 32 bit floats (real followed by complex)
       if (bits_per_pixel == 64) {
         return VIL_PIXEL_FORMAT_COMPLEX_FLOAT;
@@ -508,9 +522,11 @@ vil_image_view_base_sptr vil_nitf2_image::get_copy_view(unsigned start_i, unsign
   //right now we only plan to support uncompressed and JPEG2000
   if (compression_type == "NC" || compression_type == "NM") {
     return get_copy_view_uncompressed(start_i, num_i, start_j, num_j);
-  } else if ( is_jpeg_2000_compressed() ) {
+  }
+  else if ( is_jpeg_2000_compressed() ) {
     return get_copy_view_decimated_j2k( start_i, num_i, start_j, num_j, 1.0, 1.0 );
-  } else {
+  }
+  else {
     return 0;
   }
 }
@@ -596,7 +612,8 @@ vil_image_view_base_sptr get_block_vcl_internal(vil_pixel_format pix_format, vil
     {
       data_ptr[i] = (T)0;
     }
-  } else {
+  }
+  else {
     //in the rare case the the actual number of bits per pixel value (ABPP) is less than the number of bits
     //used in the data (NBPP) AND the data is vcl_left justified... then we correct that here
     if (need_to_right_justify)
@@ -680,7 +697,8 @@ vil_image_view_base_sptr vil_nitf2_image::get_block(unsigned int block_index_x, 
       if (current_offset == 0) {
         //this block isn't in the stream (ie. it's all blank)... just blank out the memory
         data_is_all_blank = true;
-      } else {
+      }
+      else {
         m_stream->seek(current_offset);
         char* position_to_read_to = static_cast<char*>(image_memory->data());
         position_to_read_to += i*bytes_per_block_per_band;
@@ -692,13 +710,15 @@ vil_image_view_base_sptr vil_nitf2_image::get_block(unsigned int block_index_x, 
     i_step = 1;
     j_step = size_block_i();
     plane_step = size_block_i() * size_block_j();
-  } else {
+  }
+  else {
     //calculate the offset we need
     vil_streampos current_offset = get_offset_to_image_data_block_band(m_current_image_index, block_index_x, block_index_y, 0);
     if (current_offset == 0) {
       //this block isn't in the stream (ie. it's all blank)... just blank out the memory
       data_is_all_blank = true;
-    } else {
+    }
+    else {
       //seek to the correct position in the stream
       m_stream->seek(current_offset);
       //read in the data
@@ -713,12 +733,14 @@ vil_image_view_base_sptr vil_nitf2_image::get_block(unsigned int block_index_x, 
       i_step = 1;
       j_step = size_block_i();
       plane_step = size_block_i() * size_block_j();
-    } else if (image_mode_type == "P") {
+    }
+    else if (image_mode_type == "P") {
       //band interleaved by Pixel
       i_step = nplanes();
       j_step = nplanes() * size_block_i();
       plane_step = 1;
-    } else if (image_mode_type == "R") {
+    }
+    else if (image_mode_type == "R") {
       //band interleaved by Row
       i_step = 1;
       j_step = nplanes() * size_block_i();
@@ -786,7 +808,7 @@ template<> bool* byte_align_data<bool>(bool* in_data, unsigned int num_samples, 
   }
 
 #if 0
-  //dignostic info
+  // diagnostic info
   vcl_cout << "\nBools: ";
   for (unsigned int i = 0 ; i < num_samples ; i++) {
     vcl_cout << (out_data[i] ?  '1' : '0');

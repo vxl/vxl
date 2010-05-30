@@ -44,7 +44,7 @@ class rgrl_initializer_inv_indexing
   //: Add the set of invariants from the fixed image and the set from one moving image
   //
   //  Matches are sorted in order of descreasing distance. \a
-  //  nn_radius has precedence over \a k_nn. If no neighbor falles in
+  //  nn_radius has precedence over \a k_nn. If no neighbor falls in
   //  \a nn_radius, \a k_nn are taken.
   //
   //  \param nn_radius  nearest-neighbors in nn_radius.

@@ -805,7 +805,7 @@ void test_random_forest()
 
     vcl_cout<<"Deleting classifiers"<<vcl_endl;
     delete pClassifier;
-    vcl_cout<<"Deleting the second classifer"<<vcl_endl;
+    vcl_cout<<"Deleting the second classifier"<<vcl_endl;
     delete pClassifier2;
     vcl_cout<<"have deleted classifiers"<<vcl_endl;
 

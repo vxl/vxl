@@ -4,7 +4,7 @@
 // \file
 //
 // updated by Yong Zhao
-// Apr 4th, 2007
+// \date Apr 4th, 2007
 // Make it work with the whole database initially based on Matt's sketch.
 
 #include <vcl_set.h>
@@ -13,7 +13,6 @@
 #include <vsl/vsl_vector_io.h>
 #include <brdb/brdb_value.h>
 #include <brdb/brdb_tuple.h>
-
 
 //======================= Constructors / Destructors ========================
 
@@ -556,7 +555,7 @@ brdb_join(const brdb_relation_sptr& r1, const brdb_relation_sptr& r2)
               return NULL;
           }
 
-          // add all non-comming values of tuple in r2;
+          // add all non-common values of tuple in r2
           for (unsigned int m=0; m<r2_non_common_attribute_index.size(); m++)
           {
             if (!new_tup->add_value((*(*itr_2))[r2_non_common_attribute_index[m]]))

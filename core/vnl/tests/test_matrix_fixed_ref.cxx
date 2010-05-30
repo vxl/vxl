@@ -90,7 +90,7 @@ void test_matrix_fixed_ref()
 #if 0 // cannot assign to a vnl_matrix_fixed_ref_const
   ref = other;
   TEST("assign_mf", ref, other);
-  // test different adresses
+  // test different addresses
   TEST("assign_mf", (ref.begin() != other.begin()), true);
 #endif // 0
 
@@ -100,7 +100,7 @@ void test_matrix_fixed_ref()
   mfrc cref(other);
   ref = cref;
   TEST("assign_const_ref", ref, other);
-  // test different adresses
+  // test different addresses
   TEST("assign_const_ref", (ref.begin() != other.begin()), true);
   }
 
@@ -111,7 +111,7 @@ void test_matrix_fixed_ref()
   mfr ref2(other);
   ref = ref2;
   TEST("assign_ref", ref, other);
-  // test different adresses
+  // test different addresses
   TEST("assign_ref", (ref.begin() != other.begin()), true);
 #endif // 0
   }

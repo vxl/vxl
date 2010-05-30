@@ -610,7 +610,7 @@ void brct_epi_reconstructor::inc()
     vnl_double_2 z(cur_measures[i].x(), cur_measures[i].y());
 
     vnl_double_2 z_pred = projection(P,X);
-    if (matched_point_prob(z, z_pred) >= 0) // if not a outlier
+    if (matched_point_prob(z, z_pred) >= 0) // if not an outlier
     {
       // go to the correction step
       //
@@ -943,7 +943,7 @@ vcl_vector<vdgl_digital_curve_sptr> brct_epi_reconstructor::read_track_file(char
 //---------------------------------------------------------------
 //: Use the initial epipole to specify the velocity at the first time step.
 //  The initial projection matrix is assumed to be the identity camera.
-//  The camera at the first time step is deterimined from the relation,
+//  The camera at the first time step is determined from the relation,
 // \verbatim
 //           _    _        _          _   _  _
 //          | w ex |      | 1  0  0  0 | | Tx |

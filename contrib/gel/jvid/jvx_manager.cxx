@@ -40,10 +40,10 @@ jvx_manager::~jvx_manager()
 // note that we have to get an adaptor and set the tableau to receive events
 bool jvx_manager::handle(const vgui_event &e)
 {
-  //example for joe to show event mastery : button up==false, button down==true
+  // example for joe to show event mastery : button up==false, button down==true
   vgui_event_condition g0(vgui_LEFT, vgui_CTRL, false);
   if (g0(e))
-     vcl_cout << "saw an left/cntl up event\n";
+    vcl_cout << "saw a left/cntl up event\n";
   // just pass it back to the base class
   return vgui_grid_tableau::handle(e);
 }

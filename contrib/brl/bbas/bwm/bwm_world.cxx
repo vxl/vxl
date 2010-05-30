@@ -375,7 +375,7 @@ void bwm_world::save_kml_collada()
 
   params.field("model name",model_name);
   params.field("ground height",ground_height);
-  params.field("lattitude offset",lat_offset);
+  params.field("latitude offset",lat_offset);
   params.field("longitude offset",lon_offset);
 
   params.file("Save...",ext,kmz_dir);

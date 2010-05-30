@@ -50,7 +50,7 @@ static void test_mesh_break_face()
   f0->connect_E_to_end(e03);
   M->_add_face(f0);
 
-  // add a neighbor face inciden to e12
+  // add a neighbor face incident to e12
   bmsh3d_vertex* v6 = M->_new_vertex();
   v6->get_pt().set(0, 2, 0);
   M->_add_vertex(v6);

@@ -50,7 +50,7 @@ class vtol_vertex : public vtol_topology_object
 
   // Accessors
 
- private: // has been superceeded by is_a()
+ private: // has been superseded by is_a()
   //: Return the topology type
   virtual vtol_topology_object_type topology_type() const { return VERTEX; }
 

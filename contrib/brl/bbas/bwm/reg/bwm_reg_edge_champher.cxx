@@ -28,7 +28,7 @@ bwm_reg_edge_champher(unsigned col_off, unsigned row_off,
                       unsigned ncols, unsigned nrows,
                       vcl_vector<vsol_digital_curve_2d_sptr> const& edges)
 {
-  // need a boarder of 1 pixel around the edge of the champher array
+  // need a border of 1 pixel around the edge of the champher array
   ncols_ = ncols+2;
   nrows_ = nrows+2;
 

@@ -10,7 +10,7 @@
 //  Modifications
 //   Sep 11, 2009   Gamze Tunali
 //                  Added scene writing option, input number is increased to 4 and if 4th
-//                  input is 0, blocks saved as raw files seperately, if 1, then blocks
+//                  input is 0, blocks saved as raw files separately, if 1, then blocks
 //                  combined to generate 1 raw file for the whole scene
 // \endverbatim
 

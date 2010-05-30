@@ -94,7 +94,7 @@ class mfpf_point_finder
                                  vcl_vector<double>& v);
 
   //: Evaluate match at p, using u to define scale and orientation
-  // Returns a qualtity of fit measure at the point (the smaller the better).
+  // Returns a quality of fit measure at the point (the smaller the better).
   virtual double evaluate(const vimt_image_2d_of<float>& image,
                           const vgl_point_2d<double>& p,
                           const vgl_vector_2d<double>& u)=0;
@@ -113,7 +113,7 @@ class mfpf_point_finder
 
   //: Search given image around p, using u to define scale and angle
   //  On exit, new_p defines position of the best nearby match.
-  //  Returns a qualtity of fit measure at that
+  //  Returns a quality of fit measure at that
   //  point (the smaller the better).
   virtual double search_one_pose(const vimt_image_2d_of<float>& image,
                                  const vgl_point_2d<double>& p,
@@ -125,7 +125,7 @@ class mfpf_point_finder
   //  grid, then optimises its position by fitting a parabola.
   //
   //  On exit, new_p defines position of the best nearby match.
-  //  Returns a qualtity of fit measure at that
+  //  Returns a quality of fit measure at that
   //  point (the smaller the better).
   virtual double search_one_pose_with_opt(
                         const vimt_image_2d_of<float>& image,

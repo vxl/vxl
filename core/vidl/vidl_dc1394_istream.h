@@ -30,7 +30,7 @@
 
 //: A video input stream using libdc1394
 // This stream uses the dc1394 API (v2.0) to stream
-// video from a IEEE 1394 camera
+// video from an IEEE 1394 camera
 class vidl_dc1394_istream
   : public vidl_istream
 {
@@ -80,7 +80,7 @@ class vidl_dc1394_istream
 
   //: Return the frame rate (FPS, 0.0 if unspecified)
   virtual double frame_rate() const;
-  
+
   //: Return the duration in seconds (0.0 if unknown)
   virtual double duration() const;
 

@@ -4,7 +4,7 @@
 //---------------------------------------------------------------------
 //:
 // \file
-// \brief a I/O formatting class for track data - static methods only
+// \brief An I/O formatting class for track data - static methods only
 //
 // \author
 //  J.L. Mundy - November 26, 2004
@@ -21,7 +21,7 @@
 #include <vgl/vgl_point_2d.h>
 #include <vtol/vtol_face_2d_sptr.h>
 
-class strk_io 
+class strk_io
 {
  public:
   //Constructors/destructor
@@ -35,7 +35,7 @@ class strk_io
                                    const unsigned int n_int_bins,
                                    const unsigned int n_grad_dir_bins,
                                    const unsigned int n_color_bins,
-                                   vcl_vector<vcl_vector<float> >const& data, 
+                                   vcl_vector<vcl_vector<float> >const& data,
                                    vcl_ofstream& strm);
 
   //: write the info tracker track data
@@ -46,7 +46,7 @@ class strk_io
 
 
   //: read the info tracker feature histogram track data
-  static bool read_histogram_data(vcl_ifstream& strm, 
+  static bool read_histogram_data(vcl_ifstream& strm,
                                   unsigned int& start_frame,
                                   unsigned int& n_frames,
                                   unsigned int& n_pixels,

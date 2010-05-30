@@ -70,7 +70,8 @@ bool bwm_observer_img::handle(const vgui_event &e)
       moving_polygon_ = true;
       moving_vertex_ = false;
       return true;
-    } else if (v = (bwm_soview2D_vertex*) get_selected_object(VERTEX_TYPE)) {
+    }
+    else if (v = (bwm_soview2D_vertex*) get_selected_object(VERTEX_TYPE)) {
       pi.window_to_image_coordinates(e.wx, e.wy, start_x_, start_y_);
       moving_v_ = v;
       moving_p_ = v->obj();
@@ -78,7 +79,8 @@ bool bwm_observer_img::handle(const vgui_event &e)
       moving_polygon_ = false;
       return true;
     }
-  } else if (e.type == vgui_MOTION && e.button == vgui_MIDDLE &&
+  }
+  else if (e.type == vgui_MOTION && e.button == vgui_MIDDLE &&
              e.modifier == vgui_SHIFT && moving_polygon_)
   {
     float x, y;
@@ -112,11 +114,13 @@ bool bwm_observer_img::handle(const vgui_event &e)
       bgui_vsol_soview2D_polygon* polygon = (bgui_vsol_soview2D_polygon*) moving_p_;
       polygon->sptr()->vertex(i)->set_x( polygon->sptr()->vertex(i)->x() + x_diff );
       polygon->sptr()->vertex(i)->set_y( polygon->sptr()->vertex(i)->y() + y_diff );
-    } else if (moving_p_->type_name().compare(POLYLINE_TYPE) == 0) {
+    }
+    else if (moving_p_->type_name().compare(POLYLINE_TYPE) == 0) {
       bgui_vsol_soview2D_polyline* polyline = (bgui_vsol_soview2D_polyline*) moving_p_;
       polyline->sptr()->vertex(i)->set_x( polyline->sptr()->vertex(i)->x() + x_diff );
       polyline->sptr()->vertex(i)->set_y( polyline->sptr()->vertex(i)->y() + y_diff );
-    } else {
+    }
+    else {
       vcl_cerr << moving_p_->type_name() << " is NOT movable!!!!\n";
     }
 
@@ -716,7 +720,7 @@ void bwm_observer_img::move_to_point(float x, float y)
     float twx = (xorig + xmax)/2;
     float twy = (yorig + ymax)/2;
 
-    // The required translation to position in the centern
+    // The required translation to position in the center
     float transx = twx-wx;
     float transy = twy-wy;
 

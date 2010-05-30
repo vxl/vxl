@@ -34,7 +34,8 @@ void vgl_ellipse_scan_iterator<T>::reset()
   T y0;
   if ( vcl_sin( theta_ ) == 0.0 ) {
     y0 = vcl_sqrt(ry_);
-  } else {
+  }
+  else {
     T t = vcl_atan2( vcl_sqrt(ry_) , vcl_sqrt(rx_) * vcl_tan( theta_ ) );
     y0 = vcl_sqrt(rx_) * vcl_cos( t ) * vcl_sin( theta_ ) + vcl_sqrt(ry_) * vcl_sin( t ) * vcl_cos( theta_ );
   }
@@ -57,7 +58,7 @@ bool vgl_ellipse_scan_iterator<T>::next()
   T x0, x1; // the intersection points of the scan line; x0 >= x1
 
   if ( A > 0 ) {
-    // not a denegerate horizontal line
+    // not a degenerate horizontal line
     //
     T B = (rx_ - ry_) * (y_-yc_) * ct*st;
 //  T C = - rx_*ry_ + (rx_*ct*ct + ry_*st*st)*(y_-yc_)*(y_-yc_);
@@ -66,7 +67,8 @@ bool vgl_ellipse_scan_iterator<T>::next()
 
     x0 = (-B + vcl_sqrt( D )) / A;
     x1 = (-B - vcl_sqrt( D )) / A;
-  } else {
+  }
+  else {
     // "ellipse" is a horizontal line or a point
     //
     x0 = vcl_sqrt( my_max(rx_,ry_) );
@@ -79,7 +81,8 @@ bool vgl_ellipse_scan_iterator<T>::next()
   if ( start_x_ > end_x_ ) {
     // Could happen with very thin ellipses, near the end points
     return next();
-  } else {
+  }
+  else {
     return true;
   }
 }

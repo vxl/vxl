@@ -307,13 +307,13 @@ void vsrl_dynamic_program::compute_cost(int i, int j)
     if (tok2->null_token())
     {
       // however it appears that token j is the null token
-      // which can have mulltiple assignments so we will
+      // which can have multiple assignments so we will
       // increment upper_j;
 
       upper_j++;
     }
 
-    // initiallly set the prior cost really high
+    // initially set the prior cost really high
     prior_cost = 100000;
 
     // the number of null assignments in a row
@@ -324,7 +324,7 @@ void vsrl_dynamic_program::compute_cost(int i, int j)
 
     for (int k=lower_search_range_[p_i];k<upper_j;k++)
     {
-      // this is the cost of the prior assignmentt
+      // this is the cost of the prior assignment
 
       double cost = cost_matrix_[p_i][k].cost;
 
@@ -339,8 +339,8 @@ void vsrl_dynamic_program::compute_cost(int i, int j)
       if (j==k)
       {
         // we have yet another null assignment so using the number of
-        // consecuative null assignmens for the node p_i->k we can compute
-        // how many consecuative null assignments now exist
+        // consecutive null assignments for the node p_i->k we can compute
+        // how many consecutive null assignments now exist
 
         num_null1=cost_matrix_[p_i][k].num_null1 + 1;
       }
@@ -363,7 +363,7 @@ void vsrl_dynamic_program::compute_cost(int i, int j)
 
 
       // add the cost for this gap  - note that as the number of
-      // consecuative null assignments increases, the penalty becomes more
+      // consecutive null assignments increases, the penalty becomes more
       // and more severe
 
       cost = cost + num_null1 * continuity_cost_;

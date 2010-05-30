@@ -35,55 +35,55 @@ rgtl_sqt_cell_geometry<D, Face>
   rgtl_sqt_cell_bounds<D> bounds(cell);
 
   // Compute the bounding plane normals.
-  for(unsigned int j=0; j < D-1; ++j)
-    {
+  for (unsigned int j=0; j < D-1; ++j)
+  {
     double u0 = bounds.origin(j);
     double u1 = u0 + bounds.size();
     space::isoplane_normal(j, u0, this->lower_[j]);
     space::isoplane_normal(j, u1, this->upper_[j]);
-    }
+  }
 
   // Compute the edge ray directions.
   // Precompute the lower and upper components for each axis.
   double dLower[D-1];
   double dUpper[D-1];
-  for(unsigned int j=0; j < D-1; ++j)
-    {
+  for (unsigned int j=0; j < D-1; ++j)
+  {
     double uLower = bounds.origin(j);
     double uUpper = uLower + bounds.size();
     dLower[j] = vcl_tan(uLower);
     dUpper[j] = vcl_tan(uUpper);
-    }
+  }
 
   // Now distribute the components into each edge.
-  for(unsigned int i=0; i < (1<<(D-1)); ++i)
+  for (unsigned int i=0; i < (1<<(D-1)); ++i)
+  {
+    for (unsigned int a=0; a < space::face_axis; ++a)
     {
-    for(unsigned int a=0; a < space::face_axis; ++a)
-      {
       unsigned int j = a;
-      if((i>>j)&1)
-        {
-        this->edges_[i][a] = dUpper[j];
-        }
-      else
-        {
-        this->edges_[i][a] = dLower[j];
-        }
-      }
-    this->edges_[i][space::face_axis] = (space::face_side? +1:-1);
-    for(unsigned int a=space::face_axis+1; a < D; ++a)
+      if ((i>>j)&1)
       {
-      unsigned int j = a-1;
-      if((i>>j)&1)
-        {
         this->edges_[i][a] = dUpper[j];
-        }
+      }
       else
-        {
+      {
         this->edges_[i][a] = dLower[j];
-        }
       }
     }
+    this->edges_[i][space::face_axis] = (space::face_side? +1:-1);
+    for (unsigned int a=space::face_axis+1; a < D; ++a)
+    {
+      unsigned int j = a-1;
+      if ((i>>j)&1)
+      {
+        this->edges_[i][a] = dUpper[j];
+      }
+      else
+      {
+        this->edges_[i][a] = dLower[j];
+      }
+    }
+  }
 
   // Compute the bounding cone axis and opening angle.
   this->compute_cone();
@@ -97,7 +97,7 @@ struct rgtl_sqt_cell_geometry_cone
   // up computation by skipping the SVD.
   static void compute(double edges[1<<(D-1)][D], unsigned int ei0,
                       double axis[D], double& angle)
-    {
+  {
     // The edge closest to the face axis direction is always contained
     // in the bounding cone surface.
     vnl_vector_fixed<double, D> e0;
@@ -110,14 +110,14 @@ struct rgtl_sqt_cell_geometry_cone
     // plane containing these points is the cone axis.  The plane cuts
     // the unit sphere and the cone on the same circle.
     vnl_matrix_fixed<double, D, D> m;
-    for(unsigned int j=0; j < D-1; ++j)
-      {
+    for (unsigned int j=0; j < D-1; ++j)
+    {
       unsigned int ei1 = ei0 ^ (1<<j);
       vnl_vector_fixed<double, D> e1;
       e1.copy_in(edges[ei1]);
       e1.normalize();
       m.set_column(j, e1-e0);
-      }
+    }
     m.set_column(D-1, 0.0);
 
     // The column space of the matrix provides a basis for a D-1
@@ -131,7 +131,7 @@ struct rgtl_sqt_cell_geometry_cone
     // Orient the normal ray to point in the same direction as the
     // edges.
     double dot = dot_product(e0, nv);
-    if(dot < 0)
+    if (dot < 0)
       {
       nv = -nv;
       dot = -dot;
@@ -140,7 +140,7 @@ struct rgtl_sqt_cell_geometry_cone
     // Return the axis and opening angle.
     nv.copy_out(axis);
     angle = vcl_acos(dot);
-    }
+  }
 };
 
 #ifdef RGTL_SQT_CELL_GEOMETRY_CONE_SPECIALIZE_3
@@ -152,7 +152,7 @@ struct rgtl_sqt_cell_geometry_cone<3>
 {
   static void compute(double edges[1<<(3-1)][3], unsigned int ei0,
                       double axis[3], double& angle)
-    {
+  {
     // The edge closest to the face axis direction is always contained
     // in the bounding cone surface.
     double e0[3] = {edges[ei0][0], edges[ei0][1], edges[ei0][2]};
@@ -178,40 +178,40 @@ struct rgtl_sqt_cell_geometry_cone<3>
 
     // Orient the normal ray to point in the same direction as the edges.
     double d = dot(e0, axis);
-    if(d < 0)
-      {
+    if (d < 0)
+    {
       axis[0] = -axis[0];
       axis[1] = -axis[1];
       axis[2] = -axis[2];
       d = -d;
-      }
+    }
 
     // Compute the cone opening angle.
     angle = vcl_acos(d);
-    }
+  }
 
   static double dot(double const u[3], double const v[3])
-    {
+  {
     return u[0]*v[0] + u[1]*v[1] + u[2]*v[2];
-    }
+  }
   static void cross(double const u[3], double const v[3], double w[3])
-    {
+  {
     w[0] = u[1] * v[2] - u[2] * v[1];
     w[1] = u[2] * v[0] - u[0] * v[2];
     w[2] = u[0] * v[1] - u[1] * v[0];
-    }
+  }
   static double normalize(double n[3])
-    {
+  {
     double mag = vcl_sqrt(dot(n,n));
-    if(mag > 0)
-      {
-      double maginv = 1/mag;
-      n[0] *= maginv;
-      n[1] *= maginv;
-      n[2] *= maginv;
-      }
-    return mag;
+    if (mag > 0)
+    {
+      double mag_inv = 1/mag;
+      n[0] *= mag_inv;
+      n[1] *= mag_inv;
+      n[2] *= mag_inv;
     }
+    return mag;
+  }
 };
 #endif
 
@@ -225,11 +225,11 @@ rgtl_sqt_cell_geometry<D, Face>
   // to the face axis direction and the D-1 neighbors along each
   // other axis.
   unsigned int ei0 = 0;
-  if(this->location_.level() >= 1)
+  if (this->location_.level() >= 1)
     {
-    for(unsigned int j=0; j < D-1; ++j)
+    for (unsigned int j=0; j < D-1; ++j)
       {
-      if(!(this->location_.index(j) >> (this->location_.level()-1)))
+      if (!(this->location_.index(j) >> (this->location_.level()-1)))
         {
         ei0 |= (1<<j);
         }
@@ -256,7 +256,7 @@ void
 rgtl_sqt_cell_geometry<D, Face>
 ::get_cone(float axis[D], float& angle) const
 {
-  for(unsigned int k=0; k < D; ++k)
+  for (unsigned int k=0; k < D; ++k)
     {
     axis[k] = static_cast<float>(this->axis_[k]);
     }
@@ -269,7 +269,7 @@ void
 rgtl_sqt_cell_geometry<D, Face>
 ::get_cone(double axis[D], double& angle) const
 {
-  for(unsigned int k=0; k < D; ++k)
+  for (unsigned int k=0; k < D; ++k)
     {
     axis[k] = this->axis_[k];
     }
@@ -301,7 +301,7 @@ rgtl_sqt_cell_geometry<D, Face>
 ::get_wedge_edge(unsigned int edge_index, double edge[D]) const
 {
   double const* e = this->get_wedge_edge(edge_index);
-  for(unsigned int a=0; a < D; ++a)
+  for (unsigned int a=0; a < D; ++a)
     {
     edge[a] = e[a];
     }
@@ -327,7 +327,7 @@ rgtl_sqt_cell_geometry<D, Face>
   cell_location_type upper_child =
     this->location_.get_child(child_index_type((1<<(D-1))-1));
   rgtl_sqt_cell_bounds<D> upper(upper_child);
-  for(unsigned int j=0; j < D-1; ++j)
+  for (unsigned int j=0; j < D-1; ++j)
     {
     space::isoplane_normal(j, upper.origin(j), center_normals[j]);
     }
@@ -351,20 +351,20 @@ rgtl_sqt_cell_geometry<D, Face>
 ::get_children(rgtl_sqt_cell_geometry children[(1<<(D-1))],
                double const center_normals[D-1][D]) const
 {
-  for(unsigned int i=0; i < (1<<(D-1)); ++i)
+  for (unsigned int i=0; i < (1<<(D-1)); ++i)
     {
     // Compute the child location.
     children[i].location_ = this->location_.get_child(child_index_type(i));
 
     // The child lower and upper bounding planes come from our bounding
     // planes and the center plane normals.
-    for(unsigned int j=0; j < D-1; ++j)
+    for (unsigned int j=0; j < D-1; ++j)
       {
-      if((i>>j)&1)
+      if ((i>>j)&1)
         {
         // This is an upper child along axis j.  The lower bounding
         // plane comes from the center and the upper from the parent.
-        for(unsigned int k=0; k < D; ++k)
+        for (unsigned int k=0; k < D; ++k)
           {
           children[i].lower_[j][k] = center_normals[j][k];
           children[i].upper_[j][k] = this->upper_[j][k];
@@ -374,7 +374,7 @@ rgtl_sqt_cell_geometry<D, Face>
         {
         // This is a lower child along axis j.  The lower bounding
         // plane comes from the parent and the upper from the center.
-        for(unsigned int k=0; k < D; ++k)
+        for (unsigned int k=0; k < D; ++k)
           {
           children[i].lower_[j][k] = this->lower_[j][k];
           children[i].upper_[j][k] = center_normals[j][k];
@@ -393,14 +393,14 @@ rgtl_sqt_cell_geometry<D, Face>
   double dLower[D-1];
   double dMiddle[D-1];
   double dUpper[D-1];
-  for(unsigned int a=0; a < space::face_axis; ++a)
+  for (unsigned int a=0; a < space::face_axis; ++a)
     {
     unsigned int j = a;
     dLower[j] = this->edges_[0][a];
     dMiddle[j] = vcl_tan(upper.origin(j));
     dUpper[j] = this->edges_[(1<<(D-1))-1][a];
     }
-  for(unsigned int a=space::face_axis+1; a < D; ++a)
+  for (unsigned int a=space::face_axis+1; a < D; ++a)
     {
     unsigned int j = a-1;
     dLower[j] = this->edges_[0][a];
@@ -409,20 +409,20 @@ rgtl_sqt_cell_geometry<D, Face>
     }
 
   // Distribute the components into all edges of each child.
-  for(unsigned int ci=0; ci < (1<<(D-1)); ++ci)
+  for (unsigned int ci=0; ci < (1<<(D-1)); ++ci)
     {
     // Distribute the components into each edge.
-    for(unsigned int i=0; i < (1<<(D-1)); ++i)
+    for (unsigned int i=0; i < (1<<(D-1)); ++i)
       {
       double* edge = children[ci].edges_[i];
-      for(unsigned int a=0; a < space::face_axis; ++a)
+      for (unsigned int a=0; a < space::face_axis; ++a)
         {
         unsigned int j = a;
-        if((ci>>j)&1)
+        if ((ci>>j)&1)
           {
           // This is an upper cell for axis j.
           // Edge components are middle..upper.
-          if((i>>j)&1)
+          if ((i>>j)&1)
             {
             edge[a] = dUpper[j];
             }
@@ -435,7 +435,7 @@ rgtl_sqt_cell_geometry<D, Face>
           {
           // This is a lower cell for axis j.
           // Edge components are lower..middle.
-          if((i>>j)&1)
+          if ((i>>j)&1)
             {
             edge[a] = dMiddle[j];
             }
@@ -446,14 +446,14 @@ rgtl_sqt_cell_geometry<D, Face>
           }
         }
       edge[space::face_axis] = (space::face_side? +1:-1);
-      for(unsigned int a=space::face_axis+1; a < D; ++a)
+      for (unsigned int a=space::face_axis+1; a < D; ++a)
         {
         unsigned int j = a-1;
-        if((ci>>j)&1)
+        if ((ci>>j)&1)
           {
           // This is an upper cell for axis j.
           // Edge components are middle..upper.
-          if((i>>j)&1)
+          if ((i>>j)&1)
             {
             edge[a] = dUpper[j];
             }
@@ -466,7 +466,7 @@ rgtl_sqt_cell_geometry<D, Face>
           {
           // This is a lower cell for axis j.
           // Edge components are lower..middle.
-          if((i>>j)&1)
+          if ((i>>j)&1)
             {
             edge[a] = dMiddle[j];
             }
@@ -480,7 +480,7 @@ rgtl_sqt_cell_geometry<D, Face>
     }
 
   // Compute the bounding cone axis and opening angle for each child.
-  for(unsigned int i=0; i < (1<<(D-1)); ++i)
+  for (unsigned int i=0; i < (1<<(D-1)); ++i)
     {
     children[i].compute_cone();
     }

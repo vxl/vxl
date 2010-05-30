@@ -109,12 +109,10 @@ class vsol_poly_set_2d : public vsol_region_2d
   //---------------------------------------------------------------------------
   vsol_region_2d_type region_type(void) const { return vsol_region_2d::POLYGON_SET; }
   //---------------------------------------------------------------------------
-  //: Return `this' if `this' is an poly_set, 0 otherwise
+  //: Return `this' if `this' is a poly_set, 0 otherwise
   //---------------------------------------------------------------------------
   virtual vsol_poly_set_2d const*cast_to_poly_set()const{return this;}
   virtual vsol_poly_set_2d *cast_to_poly_set() {return this;}
-
- private: // has been superceeded by is_a()
 
  public:
 

@@ -38,7 +38,7 @@ optimize_h(vcl_vector<vgl_homg_point_2d<double> > const& points1,
   lm.set_f_tolerance(ftol_);
   lm.set_g_tolerance(gtol_);
   bool success = lm.minimize(hv);
-  if (verbose_) 
+  if (verbose_)
   {
     lm.diagnose_outcome(vcl_cout);
   }
@@ -135,10 +135,10 @@ optimize_l(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
     vgl_homg_point_2d<double> p(l.a(), l.b(), l.c());
     tlines2.push_back(p);
   }
-  //At this step, we have two line sets normalized as a set of points.
-  //The input to the point optimizer method must be a line transform,
-  //so the inital homography, which is by convention a point transform
-  //must be converted as h_initial_line = h_initial_^-t
+  // At this step, we have two line sets normalized as a set of points.
+  // The input to the point optimizer method must be a line transform,
+  // so the initial homography, which is by convention a point transform,
+  // must be converted as h_initial_line = h_initial_^-t
 
   // normalize the initial guess
   vgl_h_matrix_2d<double> h_initial_line, h_line_opt, initial_h_norm;

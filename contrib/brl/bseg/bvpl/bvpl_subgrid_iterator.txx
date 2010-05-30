@@ -8,7 +8,7 @@ bvpl_subgrid_iterator<T>::bvpl_subgrid_iterator(bvxm_voxel_grid<T>* grid,
                                                 vgl_point_3d<int> min, vgl_point_3d<int> max)
   : bvpl_subgrid_iterator_base(min, max), grid_(grid)
 {
-  // start from the z radius top go towards the botton slab
+  // start from the z radius top, go towards the bottom slab
   iter_ = grid->slab_iterator(0, dim_.z());
   cur_voxel_ = offset_;
   global_cur_voxel_=offset_;

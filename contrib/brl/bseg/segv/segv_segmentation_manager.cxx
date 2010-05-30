@@ -628,7 +628,7 @@ void segv_segmentation_manager::vd_edges()
   vd_dialog.field("Gaussian sigma", dp.smooth);
   vd_dialog.field("Noise Threshold", nm);
   vd_dialog.checkbox("Automatic Threshold", dp.automatic_threshold);
-  vd_dialog.checkbox("Agressive Closure", agr);
+  vd_dialog.checkbox("Aggressive Closure", agr);
   vd_dialog.checkbox("Compute Junctions", dp.junctionp);
   if (!vd_dialog.ask())
     return;
@@ -664,7 +664,7 @@ void segv_segmentation_manager::regions()
   region_dialog.field("Gaussian sigma", dp.smooth);
   region_dialog.field("Noise Threshold", nm);
   region_dialog.checkbox("Automatic Threshold", dp.automatic_threshold);
-  region_dialog.checkbox("Agressive Closure", agr);
+  region_dialog.checkbox("Aggressive Closure", agr);
   region_dialog.checkbox("Compute Junctions", dp.junctionp);
   region_dialog.checkbox("Debug", debug);
   region_dialog.checkbox("Residual Image", residual);
@@ -879,7 +879,7 @@ void segv_segmentation_manager::fit_lines()
   vd_dialog.field("Gaussian sigma", dp.smooth);
   vd_dialog.field("Noise Threshold", nm);
   vd_dialog.checkbox("Automatic Threshold", dp.automatic_threshold);
-  vd_dialog.checkbox("Agressive Closure", agr);
+  vd_dialog.checkbox("Aggressive Closure", agr);
   vd_dialog.checkbox("Compute Junctions", dp.junctionp);
   vd_dialog.field("Min Fit Length", flp.min_fit_length_);
   vd_dialog.field("RMS Distance", flp.rms_distance_);

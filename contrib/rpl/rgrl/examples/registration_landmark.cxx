@@ -179,10 +179,10 @@ main( int argc, char* argv[] )
   const unsigned int dimension = 2;
   rgrl_feature_set_sptr moving_feature_set =
     new rgrl_feature_set_location_masked( new  rgrl_feature_set_bins<dimension>(moving_landmark_set),
-                                                    mask);
+                                          mask);
   rgrl_feature_set_sptr fixed_feature_set =
     new rgrl_feature_set_location_masked( new  rgrl_feature_set_bins<dimension>(fixed_landmark_set),
-                                                    mask);
+                                          mask);
   rgrl_mask_sptr moving_image_region = new rgrl_mask_box( moving_feature_set->bounding_box() );
   rgrl_mask_sptr fixed_image_region  = new rgrl_mask_box( fixed_feature_set->bounding_box() );
 
@@ -301,7 +301,7 @@ main( int argc, char* argv[] )
                   unwgted_scale_est,    // unweighted scale estimator
                   wgted_scale_est );    // weighted scale estimator
 
-  // The quadratic estimtaor has to be added to the data manager,
+  // The quadratic estimator has to be added to the data manager,
   // since it differs from the one provided by the initializer.
   data->add_estimator( quad_estimator );
 

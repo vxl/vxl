@@ -108,7 +108,7 @@ class mfpf_region_finder : public mfpf_point_finder
 
   //: Search given image around p, using u to define scale and angle
   //  On exit, new_p defines position of the best nearby match.
-  //  Returns a qualtity of fit measure at that
+  //  Returns a quality of fit measure at that
   //  point (the smaller the better).
   virtual double search_one_pose(const vimt_image_2d_of<float>& image,
                                  const vgl_point_2d<double>& p,

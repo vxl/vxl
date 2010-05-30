@@ -52,8 +52,8 @@ sdet_adjust_lsqr::
 void sdet_adjust_lsqr::f( vnl_vector<double> const& unknowns,
                           vnl_vector<double> & fit_error)
 {
-  // set the parameters of the 2-d gaussain from "unknowns" and
-  //   calculate the pixel point predictions using these values
+  // set the parameters of the 2-d Gaussian from "unknowns" and
+  // calculate the pixel point predictions using these values
 
   vnl_vector<double> fit_value(num_pixels_); // the gaussian predictions of image intensity
   vnl_vector<double> sum(num_pixels_); // the sum of gaussians from all peaks
@@ -166,9 +166,9 @@ static bool init(vcl_vector<vgl_point_3d<double> > img_pts, vcl_vector<double>& 
     // Compute various moments of the "Gaussian" distribution
     // For multiple peaks, the moments become much more difficult to calculate.
     // Let's see if a simplifying assumption can be used and still converge.  This
-    //   assumption will be that the highest pixel value arpund the peak will be a
-    //   good starting point for the peak and x,y values.  We will assume the variances
-    //   will be about half a pixel with covariance = 0. (see above and below)
+    // assumption will be that the highest pixel value around the peak will be a
+    // good starting point for the peak and x,y values.  We will assume the variances
+    // will be about half a pixel with covariance = 0. (see above and below)
 
 #if 0 // Original code, now commented out
     double sum = 0.0;
@@ -182,36 +182,37 @@ static bool init(vcl_vector<vgl_point_3d<double> > img_pts, vcl_vector<double>& 
       double x = p.x(), y = p.y();
       ux += w*x;
       uy += w*y;
-      sxx += x*x*w;
-      syy += y*y*w;
-      sxy += x*y*w;
+      sxx[j] += x*x*w;
+      syy[j] += y*y*w;
+      sxy[j] += x*y*w;
     }
 
     if (sum<=0) return false;
     ux /= sum;
     uy /= sum;
-    sxx = 0;
-    syy = 0;
-    sxy = 0;
+    sxx[j] = 0;
+    syy[j] = 0;
+    sxy[j] = 0;
 
     for (unsigned i=0; i<img_pts.size(); i++)
     {
       vgl_point_3d<double>& p = img_pts[i];
       double w = p.z()-plane;
       double x = p.x(), y = p.y();
-      sxx += (x-ux)*(x-ux)*w;
-      syy += (y-uy)*(y-uy)*w;
-      sxy += (x-ux)*(y-uy)*w;
+      sxx[j] += (x-ux)*(x-ux)*w;
+      syy[j] += (y-uy)*(y-uy)*w;
+      sxy[j] += (x-ux)*(y-uy)*w;
     }
 
-    sxx /= sum;
-    syy /= sum;
-    sxy /= sum;
-#endif // 0
+    sxx[j] /= sum;
+    syy[j] /= sum;
+    sxy[j] /= sum;
 
-    sxx[j] = 0.5;                // more rough guesses
+#else // more rough guesses
+    sxx[j] = 0.5;
     syy[j] = 0.5;
     sxy[j] = 0.0;
+#endif // 0
   }                            // end of for j loop
   return true;
 }
@@ -376,7 +377,7 @@ vnl_vector<double> sdet_gauss_fit::calculate_ellipse( vnl_vector<double> result,
   double sxy = result[6*i+6];
 
   // take care of special cases where sxy = 0 or sxx = syy
-  // First calculate the appropriate boolians about relationship of s(nn)
+  // First calculate the appropriate booleans about relationship of s(nn)
   bool xxgtyy = (sxx > syy);
   bool xxeqyy = (vcl_fabs(sxx - syy) < 0.0001);
   bool xygt0 = (sxy > 0.0001);

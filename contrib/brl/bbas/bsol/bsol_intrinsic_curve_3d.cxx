@@ -234,7 +234,7 @@ void bsol_intrinsic_curve_3d::computeProperties()
     double thetass = (thetas_[i] - thetas_[i-1])/s_[i];
     thetass_.push_back(thetass);
 
-    //compute torsion. (this is an very noisy approach, without ENO).
+    //compute torsion. (this is a very noisy approach, without ENO).
 #if 0
     double sin_phi = vcl_sin(phi_[i]);
     double cos_phi = vcl_cos(phi_[i]);

@@ -3,7 +3,7 @@
 #define vdtop_pixel_h_
 //:
 // \file
-// \brief Provides a class for handling topological maniplation on points of an image.
+// \brief Provides a class for handling topological manipulation on points of an image.
 // \author Jocelyn Marchadier
 // \date 06 May 2004
 //

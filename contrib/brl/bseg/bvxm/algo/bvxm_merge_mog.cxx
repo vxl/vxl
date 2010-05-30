@@ -8,7 +8,7 @@
 
 void bvxm_merge_mog::kl_merge(bvxm_merge_mog::mix_gauss_type const& mixture, bsta_gauss_f1 &gaussian)
 {
-  //When merging components of gaussian mixtures, we need to perform the followign calculations
+  //When merging components of gaussian mixtures, we need to perform the following calculations
   //1. find the normalizing weight of the new component. In this case this value is 1 because
   //   we are merging all the componets
   //2. find the mean

@@ -4,7 +4,7 @@
 #define clsfy_k_nearest_neighbour_h_
 //:
 // \file
-// \brief Describe an KNN classifier
+// \brief Describe a KNN classifier
 // \author Ian Scott
 // \date 2000-05-10
 // \verbatim

@@ -7,7 +7,7 @@
 // \brief The bmdl process class
 //
 //  A specialized process class for bpro library. This method receives
-//  a seperate function pointer for init, execute and finish method to
+//  a separate function pointer for init, execute and finish method to
 //  execute
 //
 // \author

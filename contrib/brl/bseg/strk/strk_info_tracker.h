@@ -66,7 +66,7 @@ class strk_info_tracker : public strk_info_tracker_params
   void cull_samples();
   void track();
   void clear();
-  //: Evalutate the information at the initial region
+  //: Evaluate the information at the initial region
   void evaluate_info();
  protected:
   //:random choice to refresh the intensity data of a sample
@@ -78,7 +78,7 @@ class strk_info_tracker : public strk_info_tracker_params
   strk_tracking_face_2d_sptr
   clone_and_refresh_data(strk_tracking_face_2d_sptr const& sample);
   //: Extract the marginal histograms from the current tracking face
-  vcl_vector<float> 
+  vcl_vector<float>
     extract_histograms(strk_tracking_face_2d_sptr const& tf,
                        bool first_frame=false);
 #if 0

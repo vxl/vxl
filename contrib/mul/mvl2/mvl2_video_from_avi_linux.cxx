@@ -93,37 +93,37 @@ bool mvl2_video_from_avi::get_frame(vil_image_view<vxl_byte>& image)
   if (cim==0) return false;
   CImage* im24;
   if (cim->Depth()==24)
-    {
+  {
     im24=cim;
-    }
+  }
   else
-    {
+  {
     im24=new CImage(cim,24);
-    }
+  }
   if (firstcall_)
-    {
+  {
     if (buffer_) delete buffer_;
     buffer_=NULL;
     firstcall_=false;
-    }
+  }
   if (!buffer_) buffer_=(vxl_byte*)malloc(sizeof(vxl_byte)*im24->Bytes());
   if (use_colour_)
-    {
+  {
     image.set_size(im24->Width(),im24->Height(),3);
     vcl_memcpy(buffer_,im24->At(0,0),sizeof(vxl_byte)*im24->Bytes());
     image.set_to_memory(buffer_+2,im24->Width(),im24->Height(),3,
                         3,3*im24->Width(),-1);
-    }
+  }
   else
-    {
+  {
     image.set_size(im24->Width(),im24->Height(),1);
-      // takes the Y componant in the YUV space
+      // takes the Y component in the YUV space
     for (unsigned int y=0;y<image.nj();++y)
       for (unsigned int x=0;x<image.ni();++x)
         image(x,y,0) = (int)(0.299*(double)im24->At(x,y)[1]+
             0.587*(double)im24->At(x,y)[2]+
             0.114*(double)im24->At(x,y)[0]);
-    }
+  }
   if (cim->Depth()!=24) delete im24;
   return true;
 }

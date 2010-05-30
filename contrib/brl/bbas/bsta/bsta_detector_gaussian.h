@@ -23,7 +23,7 @@ class bsta_g_mdist_detector
     typedef typename gaussian_::math_type T;
     typedef typename gaussian_::vector_type vector_;
 
-    // for compatiblity with vpdl/vdpt
+    // for compatibility with vpdl/vdpt
     typedef return_T return_type;
     typedef gaussian_ distribution_type;
 

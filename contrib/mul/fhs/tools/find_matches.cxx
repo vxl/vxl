@@ -30,7 +30,7 @@ void print_usage()
           <<"Loads in image1 and image2.\n"
           <<"Locates a set of interesting features (corners) on level L of image1.\n"
           <<"Constructs a model of their relative positions.\n"
-          <<"Uses normalised correllation and this model to locate\n"
+          <<"Uses normalised correlation and this model to locate\n"
           <<"equivalent points on the same level of the second image."<<vcl_endl;
   vul_arg_display_usage_and_exit();
 }

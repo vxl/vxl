@@ -113,7 +113,7 @@ class brip_vil1_float_ops
          double scale=0.04);
 
 
-  //: computes the conditioning of the 2n+1 x 2n+1 gradient neigborhood
+  //: computes the conditioning of the 2n+1 x 2n+1 gradient neighborhood
   static vil1_memory_image_of<float>
     sqrt_grad_singular_values(vil1_memory_image_of<float> & input, int n);
 
@@ -230,7 +230,7 @@ class brip_vil1_float_ops
   //: 2x2 bilinear interpolation of image at specified location
   static float
     bilinear_interpolation(vil1_memory_image_of<float> const & input,
-                            const double x, const double y);
+                           const double x, const double y);
   //:map the input to the output by a homography.
   // \note if the output size is fixed then only the corresponding
   // input image space is transformed.

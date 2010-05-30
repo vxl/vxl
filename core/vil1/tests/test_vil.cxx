@@ -62,7 +62,7 @@ static void test_vil(int argc, char* argv[])
     TEST("Loaded images correctly via vil1", vil_image_view_deep_equality(image1, ppm_image),true);
   }
 
-  // Check if we can create a image_view and put it into a vil1_image
+  // Check if we can create an image_view and put it into a vil1_image
   vil1_memory_image_of<double> vil_mem(10,8);
   vil_image_resource_sptr res1 = vil1_to_vil_image_resource(vil_mem);
   vil_image_view<double> image2(10,8);

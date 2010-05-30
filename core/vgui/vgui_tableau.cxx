@@ -221,7 +221,7 @@ void vgui_tableau::post_redraw()
 }
 
 //-----------------------------------------------------------------------------
-//: Post a overlay redraw event.
+//: Post an overlay redraw event.
 void vgui_tableau::post_overlay_redraw()
 {
   vcl_vector<vgui_tableau_sptr> ps;

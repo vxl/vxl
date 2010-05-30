@@ -17,7 +17,7 @@
 #include <vcl_cstdlib.h>
 
 //: Reconstruct structure from set of 2d pts
-// Formulates measurement matrix P2D then calls reconstruct funtion above
+// Formulates measurement matrix P2D then calls reconstruct function above
 void m23d_ortho_rigid_builder::reconstruct(const vcl_vector< vcl_vector< vgl_point_2d<double> > >& pt_vec_list )
 {
   // convert pts into a matrix
@@ -30,8 +30,8 @@ void m23d_ortho_rigid_builder::reconstruct(const vcl_vector< vcl_vector< vgl_poi
     {
       vcl_cerr<<"ERROR m23d_ortho_rigid_builder::reconstruct()\n"
               <<"problem with different numbers of pts\n"
-              <<"pt_vec_list[0].size()= "<<pt_vec_list[0].size()<<vcl_endl
-              <<"pt_vec_list["<<i<<"].size()= "<<pt_vec_list[i].size()<<vcl_endl;
+              <<"pt_vec_list[0].size()= "<<pt_vec_list[0].size()<<'\n'
+              <<"pt_vec_list["<<i<<"].size()= "<<pt_vec_list[i].size()<<'\n';
       vcl_abort();
     }
 
@@ -193,19 +193,18 @@ void m23d_ortho_rigid_builder::reconstruct(const vnl_matrix<double>& P2D)
 void m23d_ortho_rigid_builder::flip_z_coords()
 {
   vcl_cout<<"flipping z coords!"<<vcl_endl;
-  
+
   unsigned np = P3D_.cols();
-  for (unsigned j=0;j<np;++j) 
+  for (unsigned j=0;j<np;++j)
   {
     P3D_(2,j)*=-1;
   }
-  
+
   unsigned nf = P_.rows();
-  for (unsigned j=0;j<nf;++j) 
+  for (unsigned j=0;j<nf;++j)
   {
     P_(j,2)*=-1;
   }
-  
 }
 
 //: find matrix Q using constraints on matrix P which must contain orthonormal projects in each (2*3) submatrix for each frame old method
@@ -444,10 +443,10 @@ void m23d_ortho_rigid_builder::mat_to_3d_pts(vcl_vector< vgl_point_3d<double> >&
   // get pts out of P3D_ matrix
   if ( M.rows() != 3 )
   {
-    vcl_cerr<<"ERROR m23d_ortho_rigid_builder::mat_to_3d_pts()"<<vcl_endl
-            <<"problem with size of matrix"<<vcl_endl
-            <<"M.rows()= "<<M.rows()<<vcl_endl
-            <<"M.cols()= "<<M.cols()<<vcl_endl;
+    vcl_cerr<<"ERROR m23d_ortho_rigid_builder::mat_to_3d_pts()\n"
+            <<"problem with size of matrix\n"
+            <<"M.rows()= "<<M.rows()<<'\n'
+            <<"M.cols()= "<<M.cols()<<'\n';
     vcl_abort();
   }
 
@@ -464,10 +463,10 @@ void m23d_ortho_rigid_builder::recon_shapes(vcl_vector< vcl_vector< vgl_point_3d
 {
   if (P_.rows() < 2 || P_.cols() != 3 )
   {
-    vcl_cerr<<"ERROR m23d_ortho_rigid_builder::recon_shapes()"<<vcl_endl
-            <<"problem with size of P_"<<vcl_endl
-            <<"P_.rows()= "<<P_.rows()<<vcl_endl
-            <<"P_.cols()= "<<P_.cols()<<vcl_endl;
+    vcl_cerr<<"ERROR m23d_ortho_rigid_builder::recon_shapes()\n"
+            <<"problem with size of P_\n"
+            <<"P_.rows()= "<<P_.rows()<<'\n'
+            <<"P_.cols()= "<<P_.cols()<<'\n';
     vcl_abort();
   }
 
@@ -503,10 +502,10 @@ void m23d_ortho_rigid_builder::get_shape_3d_pts( vcl_vector< vgl_point_3d<double
 {
   if (P_.rows() < 2 || P_.cols() != 3 )
   {
-    vcl_cerr<<"ERROR m23d_ortho_rigid_builder::get_shape_3d_pts()"<<vcl_endl
-            <<"problem with size of P_"<<vcl_endl
-            <<"P_.rows()= "<<P_.rows()<<vcl_endl
-            <<"P_.cols()= "<<P_.cols()<<vcl_endl;
+    vcl_cerr<<"ERROR m23d_ortho_rigid_builder::get_shape_3d_pts()\n"
+            <<"problem with size of P_\n"
+            <<"P_.rows()= "<<P_.rows()<<'\n'
+            <<"P_.cols()= "<<P_.cols()<<'\n';
     vcl_abort();
   }
 

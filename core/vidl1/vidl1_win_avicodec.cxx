@@ -563,7 +563,7 @@ HANDLE  vidl1_avicodec::make_dib(vidl1_frame_sptr frame, UINT bits)
   // so it is usable by a 'windows' BitMap
   //
 
-  // The lenght of a row must be a multiple of 4 bytes
+  // The length of a row must be a multiple of 4 bytes
   // for windows bitmaps, so we will format them this way
   int line_length = (frame->width()*bits+31)/32 * 4;
 

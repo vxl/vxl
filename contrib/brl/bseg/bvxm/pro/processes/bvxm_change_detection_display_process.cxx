@@ -53,20 +53,20 @@ bool bvxm_change_detection_display_process(bprb_func_process& pro)
 {
   using namespace bvxm_change_detection_display_process_globals;
 
-  //Check number of inputs
+  // Check number of inputs
   if (pro.n_inputs()<3)
   {
     vcl_cout << "bvxm_change_detection_display_process: The input number should be 3" << vcl_endl;
     return false;
   }
 
-  //get inputs:
+  // get inputs:
   unsigned i=0;
   vil_image_view_base_sptr img0 = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view_base_sptr img1 = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view_base_sptr img2 = pro.get_input<vil_image_view_base_sptr>(i++);
 
-  //check imput's validity
+  // check input's validity
   i = 0;
   if (!img0) {
     vcl_cout << pro.name() <<" :--  Input " << i++ << " is not valid!\n";
@@ -92,7 +92,7 @@ bool bvxm_change_detection_display_process(bprb_func_process& pro)
     return false;
   }
 
-  //define locals
+  // define locals
   unsigned image_height = img0->nj();
   unsigned image_width = img0->ni();
 
@@ -103,13 +103,13 @@ bool bvxm_change_detection_display_process(bprb_func_process& pro)
   vil_image_view<unsigned char> output_image0( image_width, image_height, 3 );
   vil_image_view<unsigned char> output_image1( image_width, image_height, 1 );
 
-  //read the parameters
+  // read the parameters
   float prob_thresh = .5f;
   float prob_image_scale = .7f;
   pro.parameters()->get_value(param_prob_thresh_,prob_thresh);
   pro.parameters()->get_value(param_prob_image_scale_,prob_image_scale);
 
-  //obtain max probability
+  // obtain max probability
   float max_prob = 0.0f;
   for ( unsigned int i = 0; i < image_width; i++ ) {
     for ( unsigned int j = 0; j < image_height; j++ ) {
@@ -155,7 +155,7 @@ bool bvxm_change_detection_display_process(bprb_func_process& pro)
 
   vcl_cout << "Max prob: " << max_prob;
 
-  //Set and Store outputs
+  // Set and Store outputs
   int j =0;
   pro.set_output_val<vil_image_view_base_sptr>(j++, new vil_image_view<unsigned char>(output_image0));
   pro.set_output_val<vil_image_view_base_sptr>(j++, new vil_image_view<unsigned char>(output_image1));

@@ -11,12 +11,14 @@
 //    which was a port from Targetjr.  Also borrowed from bsta_histogram.  Only the
 //    features needed for integer histograms of images with bucket_width = 1 are included.
 //    The class is defined to create a histogram with long int buckets (4 bytes).
+//
 //  The original Targetjr class had methods like ::scale(...) which were needed
 //    (for example) for the edgel strength algorithm in which bucket widths needed to
 //    be rescaled, etc, so all floats were used.  Here we just use integers.  Also
-//    included are some useful methods for finding properties of these histogrems, like
+//    included are some useful methods for finding properties of these histograms, like
 //    the min and max value, largest value, locations of these, etc.
-//  It is initally placed in contrib/jgl/bsta for now.  If others think it useful, it can be
+//
+//  It is initially placed in bbas/bsta for now.  If others think it useful, it can be
 //    moved to a permanent home later.
 //
 // \author James E. Green
@@ -25,8 +27,6 @@
 // \verbatim
 //  Modifications
 //   2007/04/23 Initial Version
-//
-//
 // \endverbatim
 //-----------------------------------------------------------------------------
 

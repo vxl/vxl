@@ -29,7 +29,7 @@ void show_instructions(void)
 {
   vcl_cout << "\nThis example program shows off the dragpoint dragger.\n"
            << "\nQuick instructions:\n\n"
-           << "  - Use left mouse botton to rotate, mid mouse button to pan.\n"
+           << "  - Use left mouse button to rotate, mid mouse button to pan.\n"
            << "  - Pick and drag plane or stick with CTRL + left mouse button.\n\n";
 }
 

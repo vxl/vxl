@@ -65,7 +65,7 @@ void bvpl_gauss3d_xx_kernel_factory::create_canonical()
   float var2 = second_power(sigma2_);
   float var3 = second_power(sigma3_);
 
-  //The size of the kernel is limited. If widht or height of the kernel is too large,
+  //The size of the kernel is limited. If width or height of the kernel is too large,
   //the user should subsample the image/grid
   if ( (sigma1_ > max_size_) || (sigma2_ > max_size_) || (sigma3_ > max_size_) )
   {
@@ -82,7 +82,7 @@ void bvpl_gauss3d_xx_kernel_factory::create_canonical()
   int min_z = -int(4.0f*sigma3_+0.01f);
   int max_z =  int(4.0f*sigma3_+0.01f);
 
-  //Compute the first entry on the Hessian of a independent gaussian with variances (v1, v, v)
+  // Compute the first entry on the Hessian of an independent Gaussian with variances (v1, v, v)
 
   //constant expressions
   float w = vcl_sqrt(third_power(2.0f*float(vnl_math::pi))*(1.0f/var1*var2*var3));

@@ -3,7 +3,7 @@
 #define bgui3d_examiner_slide_tableau_h_
 //:
 // \file
-// \brief  Basic tableau that wraps Coin3D into VGUI and adds a slider and functionality to axamine the scene
+// \brief  Basic tableau that wraps Coin3D into VGUI and adds a slider and functionality to examine the scene
 //
 //         It basically adds the slider to the bgui_3d_examiner_tableau
 //         class. The slider keeps a minimum and maximum value which is

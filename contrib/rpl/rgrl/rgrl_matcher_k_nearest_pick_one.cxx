@@ -40,8 +40,8 @@ compute_matches( rgrl_feature_set const&       from_set,
   typedef feat_vector::const_iterator feat_iter;
 
   DebugMacro( 2, "Compute matches between features "
-    << from_set.label().name() << "-->"
-    << to_set.label().name() << vcl_endl; );
+                 << from_set.label().name() << "-->"
+                 << to_set.label().name() << vcl_endl; );
 
   // faster to check a boolean variable
   const bool allow_reuse_match = ( sqr_thres_for_reuse_match_ > 0) && (prev_xform_) && (old_matches);
@@ -151,7 +151,7 @@ compute_matches( rgrl_feature_set const&       from_set,
     }
 
     // Add match
-    // for consitent behavior, use
+    // for consistent behavior, use
     // add_feature_and_matches() which computes the signature weight
     // We could also add one match with max_weight, which
     // should be identical action.

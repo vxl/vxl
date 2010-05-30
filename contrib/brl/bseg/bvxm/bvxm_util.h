@@ -264,11 +264,11 @@ void bvxm_util::warp_slab_nearest_neighbor(bvxm_voxel_slab<T> const& slab_in,
   float x01 = th01[0]/th01[2], y01 = th01[1]/th01[2];
   float x10 = th10[0]/th10[2], y10 = th10[1]/th10[2];
   float x11 = th11[0]/th11[2], y11 = th11[1]/th11[2];
-  vcl_cout << "Warp slab\n";
-  vcl_cout << "(" << 0.0 << ' ' << 0.0 << ")->(" << x00 << ' ' << y00 << ")\n";
-  vcl_cout << "(" << 0.0 << ' ' << slab_out.ny() << ")->(" << x01 << ' ' << y01 << ")\n";
-  vcl_cout << "(" << slab_out.nx() << ' ' << 0.0 << ")->(" << x10 << ' ' << y10 << ")\n";
-  vcl_cout << "(" << slab_out.nx() << ' ' << slab_out.ny() << ")->(" << x11 << ' ' << y11 << ")\n";
+  vcl_cout << "Warp slab\n"
+           << '(' << 0.0 << ' ' << 0.0 << ")->(" << x00 << ' ' << y00 << ")\n"
+           << '(' << 0.0 << ' ' << slab_out.ny() << ")->(" << x01 << ' ' << y01 << ")\n"
+           << '(' << slab_out.nx() << ' ' << 0.0 << ")->(" << x10 << ' ' << y10 << ")\n"
+           << '(' << slab_out.nx() << ' ' << slab_out.ny() << ")->(" << x11 << ' ' << y11 << ")\n";
 #endif
 
   //slab_out.fill(T(0.0)); // this should work whether T is a vector_fixed or a scalar
@@ -941,7 +941,7 @@ bool bvxm_util::generate_test_boxes(T box_min_x, T box_min_y, T box_min_z,
   boxes.push_back(box);
 
   if (gen_2box) {
-    // create the top boxe
+    // create the top box
     vgl_point_3d<T> centroid = box.centroid();
     // make the top box 2/3 of the size of the previous one
     T dimx = (box.max_x() - box.min_x())/2;

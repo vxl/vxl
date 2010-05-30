@@ -59,7 +59,7 @@ class boxm_render_expected_shadow_image_functor
     const float Omega = vis_img_(i,j) - vis_prob_end;
     // and update expected image
     expected_(i,j) +=  exp * Omega * avg_sun_vis;
-    // update visibility probabilty
+    // update visibility probability
     vis_img_(i,j) = vis_prob_end;
     return true;
   }

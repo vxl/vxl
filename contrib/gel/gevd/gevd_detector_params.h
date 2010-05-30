@@ -113,7 +113,7 @@ class gevd_detector_params : public gevd_param_mixin
   float noise_weight; //!< The weight between sensor noise and texture noise
   float noise_multiplier; // !< The overal noise threshold scale factor
   bool   automatic_threshold; // !< Determine the threshold values from image
-  int aggressive_junction_closure; //!< Close junctions agressively
+  int aggressive_junction_closure; //!< Close junctions aggressively
   int minLength;                // !< minimum chain length
   float contourFactor;  //!< Threshold along contours
   float junctionFactor; //!< Threshold at junctions

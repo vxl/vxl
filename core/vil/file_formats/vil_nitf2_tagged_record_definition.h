@@ -20,7 +20,7 @@ template<typename T> class vil_nitf2_field_functor;
 //-----------------------------------------------------------------------------
 //: vil_nitf2_tagged_record_definition defines a particular tagged record extension (TRE).
 // It consists of its name and an ordered list of vil_nitf2_field_definitions.
-// It also defines a static method to look up an TRE defintion by name.
+// It also defines a static method to look up a TRE definition by name.
 //
 // The primary goal of this class design to provide a succinct way for the
 // programmer to specify a NITF tagged record definition, which can be used

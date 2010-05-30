@@ -125,7 +125,7 @@ static void test_database_manager()
   TEST("print_database()", true, true);
 
   //////////////////////////////////////////////////////////////////////////////////
-  ////////  test the binary IO funtion of database
+  ////////  test the binary IO function of database
   //////////////////////////////////////////////////////////////////////////////////
   TEST("save_database()", brdb_database_manager::instance()->save_database("test_database_manager_bio.vsl"), true);
   brdb_database_manager::instance()->clear_database();
@@ -415,8 +415,8 @@ static void test_database_manager()
   s15->print();
   s15->delete_tuples();
   brdb_database_manager::instance()->print_database();
-  // notice that s15 still has something because the query was make by the 0th tuple in relation "age",
-  // and "age" still have its 0th tuple after the original 0th one was delete
+  // notice that s15 still has something because the query was made by the 0th tuple in relation "age",
+  // and "age" still has its 0th tuple after the original 0th one was delete
   s15->print();
 
   s10->print();
@@ -425,7 +425,7 @@ static void test_database_manager()
   brdb_database_manager::instance()->select(q16, s16);
   s16->print();
   s16->delete_tuples();
-  // notice that s16 dosenot has anything because the query was make by the 0th tuple in selection s10
+  // notice that s16 does not have anything because the query was made by the 0th tuple in selection s10
   // and s10's tuple is deleted.
   s16->print();
 

@@ -40,7 +40,7 @@ class vgui_camera
 
   //: Plug this matrix into a vgui_loader_tableau.
   //  Note: this will return a GL_PROJECTION_MATRIX with the assumption that
-  //  you have an euclidean reconstruction.  The result is that the front and
+  //  you have a Euclidean reconstruction.  The result is that the front and
   //  back clipping planes will be PARALLEL (note: not projective frame!) to
   //  the image plane.
   vnl_matrix_fixed<double,3,4> get_glprojmatrix( const int imagesizex= 720,

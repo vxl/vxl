@@ -31,7 +31,7 @@ void vmal_dense_matching::set_fmatrix(const vnl_double_3x3 & F)
 void vmal_dense_matching::set_hmatrix(const vnl_double_3x3 & H)
 {
   _H=H;
-  _type=2; //2 for homograpgy
+  _type=2; // 2 for homography
 }
 
 // Between two set of lines in 2 images that are matched, it compute the best lines
@@ -39,9 +39,9 @@ void vmal_dense_matching::set_hmatrix(const vnl_double_3x3 & H)
 void vmal_dense_matching::refine_lines_using_F(vmal_multi_view_data_edge_sptr mvd_edge,
                                                vmal_multi_view_data_edge_sptr res)
 {
-  //We assume that the lines have been sorted. It means that, for example, the
-  //first end-point of the first segment correspond to the first end-point of
-  //the second segment.
+  // We assume that the lines have been sorted. It means that, for example, the
+  // first end-point of the first segment correspond to the first end-point of
+  // the second segment.
   if (_type==1)
   {
     if (mvd_edge->get_nb_views()>1)

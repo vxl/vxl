@@ -29,7 +29,7 @@ class vil_nitf2_index_vector;
 // please be sure to set the argument ignore_extra_indexes to true.
 // This will allow the functor to be used within a repeat loop
 // and reference any preceding tag, inside or outside the repeat loop.
-// For exampe, to define a field sequence like this:
+// For example, to define a field sequence like this:
 //   FIELD A;
 //   REPEAT i=1..N
 //     FIELD B(i)
@@ -178,7 +178,8 @@ class vil_nitf2_field_value_greater_than: public vil_nitf2_field_functor<bool>
     if (record->get_value(tag, indexes, value, true)) {
       result = value > threshold;
       return true;
-    } else {
+    }
+    else {
       return false;
     }
   }
@@ -280,7 +281,8 @@ class vil_nitf2_choose_field_value : public vil_nitf2_field_functor<T>
     if ((*choose_tag_1_predicate)(record, indexes, choose_tag_1)) {
       if (choose_tag_1) return record->get_value(tag_1, indexes, value, true);
       else return record->get_value(tag_2, indexes, value, true);
-    } else return false;
+    }
+    else return false;
   }
  private:
   vcl_string tag_1;

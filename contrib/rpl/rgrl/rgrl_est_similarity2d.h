@@ -13,7 +13,7 @@
 class rgrl_est_similarity2d
   : public rgrl_linear_estimator
 {
-public:
+ public:
   //: Default constructor
   //
   // Does nothing. This constructor is adequate for algorithms that
@@ -26,7 +26,7 @@ public:
   //
   rgrl_est_similarity2d( unsigned int dimension );
 
-  //: Estimates an 2D similarity transform.
+  //: Estimates a 2D similarity transform.
   //
   // The return pointer is to a rgrl_trans_similarity object.
   //
@@ -52,7 +52,6 @@ public:
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_est_similarity2d, rgrl_linear_estimator );
-
 };
 
 #endif // rgrl_est_similarity2d_h_

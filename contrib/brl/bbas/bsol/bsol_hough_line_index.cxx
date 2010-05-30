@@ -191,7 +191,7 @@ int bsol_hough_line_index::count(const int r, const int theta)
 
 //-----------------------------------------------------------------------------
 //
-//: Method to index into bsol_hough_line_index index given an vsol_line_2d_sptr.
+//: Method to index into bsol_hough_line_index index given a vsol_line_2d_sptr.
 //  The timestamp is not updated to facilitate lazy insertion of
 //  multiple items.
 bool bsol_hough_line_index::index(vsol_line_2d_sptr const& line)
@@ -212,7 +212,7 @@ bool bsol_hough_line_index::index(vsol_line_2d_sptr const& line)
 
 //-----------------------------------------------------------------------------
 //
-//: Method to index into bsol_hough_line_index index given an vsol_line_2d_sptr.
+//: Method to index into bsol_hough_line_index index given a vsol_line_2d_sptr.
 //  Only new vsol_line_2d_sptr pointers are added to the bin.
 bool bsol_hough_line_index::index_new(vsol_line_2d_sptr const& line)
 {

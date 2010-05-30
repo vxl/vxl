@@ -183,7 +183,7 @@ void vgl_conic_2d_regression<T>::fill_scatter_matrix()
 template <class T>
 bool vgl_conic_2d_regression<T>::fit()
 {
-  //Can't fit an conic with fewer than 5 points
+  //Can't fit a conic with fewer than 5 points
   if (this->get_n_pts()<5)
     return false;
 

@@ -280,10 +280,9 @@ gevd_memory_mixin::WriteBytes(const void* ib, int b)
     SetStatus(MM_OVERFLOW);
   else
     ClearStatus(MM_ERROR|MM_WARN);
-//      touched    = curr_into += num_b;  << Massive brain dammage!!!!!
+  /* touched = curr_into += num_b; */ // << Massive brain damage!!!!!
   // What if the buffer already has valid data and we are
   // just writing over some of it, like we do in export!!!!
-
 
   curr_into += num_b;                  // fixed 11/1/91 ajh
   touched = vcl_max( touched, curr_into ); //

@@ -335,7 +335,7 @@ void clsfy_binary_tree_builder::build_a_node(
         if (ndimsUsed<ndims)
         {
             // Note always do a full random permutation as the ones beyond ndimsUsed
-            // may be needed as a fallback in exceptinal cases where the initial random
+            // may be needed as a fallback in exceptional cases where the initial random
             // subset cannot split the data
             randomise_parameters(ndims,param_indices);
         }

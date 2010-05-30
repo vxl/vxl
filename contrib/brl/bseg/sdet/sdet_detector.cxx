@@ -236,7 +236,8 @@ bool sdet_detector::DoStep()
                                       *edgel, *direction,
                                       *locationx, *locationy,
                                       junctionx, junctiony);
-  } else {
+  }
+  else {
     njunction = 0;
     delete [] junctionx; junctionx = NULL;
     delete [] junctiony; junctiony = NULL;
@@ -274,7 +275,8 @@ bool sdet_detector::DoFold()
                                       *edgel, *direction,
                                       *locationx, *locationy,
                                       junctionx, junctiony);
-  } else {
+  }
+  else {
     njunction = 0;
     delete [] junctionx; junctionx = NULL;
     delete [] junctiony; junctiony = NULL;
@@ -411,7 +413,7 @@ void sdet_detector::print(vcl_ostream &strm) const
        << "    noise_weight " <<   noise_weight << vcl_endl //The weight between sensor noise and texture noise
        << "    noise_multiplier " <<   noise_multiplier << vcl_endl // The overal noise threshold scale factor
        << "    automatic_threshold " <<   automatic_threshold << vcl_endl // Determine the threshold values from image
-       << "    aggressive_junction_closure " <<   aggressive_junction_closure << vcl_endl //Close junctions agressively
+       << "    aggressive_junction_closure " <<   aggressive_junction_closure << vcl_endl //Close junctions aggressively
        << "    minLength " <<   minLength << vcl_endl          // minimum chain length
        << "    contourFactor " <<   contourFactor << vcl_endl  // Threshold along contours
        << "    junctionFactor " <<   junctionFactor << vcl_endl //Threshold at junctions

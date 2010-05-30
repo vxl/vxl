@@ -9,7 +9,7 @@
 // 'index' of the level. That is, if there are 5 levels in an octree
 // then the level of the root is 4 and level of the lowest leaves is 0.
 // When referring to a count of levels the notation n_levels is used to
-// distingush the term from a level index.
+// distinguish the term from a level index.
 
 //-------------------------------------------------------------
 // the code is three independent codes ordered as:

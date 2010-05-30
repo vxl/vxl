@@ -438,7 +438,7 @@ void vil_gauss_reduce_2_3_1plane(const vxl_int_16* src_im,
 }
 
 //: Smooth and subsample single plane src_im in x to produce dest_im using 121 filter in x and y
-//  Smoothes with a 3x3 filter and subsamples
+//  Smooths with a 3x3 filter and subsamples
 VCL_DEFINE_SPECIALIZATION
 void vil_gauss_reduce_121_1plane(const vxl_byte* src_im,
                                  unsigned src_ni, unsigned src_nj,
@@ -510,7 +510,7 @@ void vil_gauss_reduce_121_1plane(const vxl_byte* src_im,
 
 
 //: Smooth and subsample single plane src_im in x to produce dest_im using 121 filter in x and y
-//  Smoothes with a 3x3 filter and subsamples
+//  Smooths with a 3x3 filter and subsamples
 VCL_DEFINE_SPECIALIZATION
 void vil_gauss_reduce_121_1plane(const float* src_im,
                                  unsigned src_ni, unsigned src_nj,
@@ -582,7 +582,7 @@ void vil_gauss_reduce_121_1plane(const float* src_im,
 
 
 //: Smooth and subsample single plane src_im in x to produce dest_im using 121 filter in x and y
-//  Smoothes with a 3x3 filter and subsamples
+//  Smooths with a 3x3 filter and subsamples
 VCL_DEFINE_SPECIALIZATION
 void vil_gauss_reduce_121_1plane(const double* src_im,
                                  unsigned src_ni, unsigned src_nj,
@@ -654,7 +654,7 @@ void vil_gauss_reduce_121_1plane(const double* src_im,
 
 
 //: Smooth and subsample single plane src_im in x to produce dest_im using 121 filter in x and y
-//  Smoothes with a 3x3 filter and subsamples
+//  Smooths with a 3x3 filter and subsamples
 VCL_DEFINE_SPECIALIZATION
 void vil_gauss_reduce_121_1plane(const int* src_im,
                                  unsigned src_ni, unsigned src_nj,
@@ -726,7 +726,7 @@ void vil_gauss_reduce_121_1plane(const int* src_im,
 }
 
 //: Smooth and subsample single plane src_im in x to produce dest_im using 121 filter in x and y
-//  Smoothes with a 3x3 filter and subsamples
+//  Smooths with a 3x3 filter and subsamples
 VCL_DEFINE_SPECIALIZATION
 void vil_gauss_reduce_121_1plane(const vxl_int_16* src_im,
                                  unsigned src_ni, unsigned src_nj,

@@ -13,7 +13,7 @@
 //  Modifications
 //   Jun 29, 2009  Gamze Tunali
 //                 Added a datatype member to bvxm_drishti_header class. It is the datatype
-//                 to fill the drishti grid. It is needen specifically for bvxm_opinion
+//                 to fill the drishti grid. It is needed specifically for bvxm_opinion
 //                 because that type as T cannot be used to fill the resulting grid.
 // \endverbatim
 
@@ -29,7 +29,7 @@
 template <class T>
 class bvxm_dristhi_traits;
 
-//: Dristhi datypes for header:
+//: Dristhi datatypes for header:
 // 0 : unsigned byte - 1 byte per voxel
 // 1 : signed byte - 1 byte per voxel
 // 2 : unsigned short - 2 bytes per voxel
@@ -47,7 +47,7 @@ class bvxm_dristhi_traits<float>
   typedef float datatype;
 };
 
-template<>
+template <>
 class bvxm_dristhi_traits<unsigned char>
 {
  public:
@@ -55,22 +55,24 @@ class bvxm_dristhi_traits<unsigned char>
   typedef unsigned char datatype;
 };
 
-template<>
+template <>
 class bvxm_dristhi_traits<char>
 {
  public:
   static unsigned char dristhi_header() {return 1;}
   typedef char datatype;
 };
-template<>
+
+template <>
 class bvxm_dristhi_traits<unsigned int>
 {
  public:
   static unsigned char dristhi_header() {return 4;}
   typedef unsigned int datatype;
 };
+
 //opinion values will be written as float
-template<>
+template <>
 class bvxm_dristhi_traits<bvxm_opinion>
 {
  public:
@@ -78,7 +80,7 @@ class bvxm_dristhi_traits<bvxm_opinion>
   typedef float datatype;
 };
 
-template<>
+template <>
 class bvxm_dristhi_traits<bsta_num_obs<bsta_gauss_f1> >
 {
  public:
@@ -88,7 +90,7 @@ class bvxm_dristhi_traits<bsta_num_obs<bsta_gauss_f1> >
 
 
 //: Save to dristi raw file
-template<class T>
+template <class T>
 bool bvxm_grid_save_raw(bvxm_voxel_grid<T> *grid,  vcl_string filename)
 {
     vcl_fstream ofs(filename.c_str(),vcl_ios::binary | vcl_ios::out);
@@ -124,7 +126,7 @@ bool bvxm_grid_save_raw(bvxm_voxel_grid<T> *grid,  vcl_string filename)
       }
     }
     vcl_cout << "max =  " << max << " min= " <<min << vcl_endl;
-  
+
    // write data
    // iterate through slabs and fill in memory array
    typedef typename bvxm_dristhi_traits<T>::datatype DataType;
@@ -142,8 +144,6 @@ bool bvxm_grid_save_raw(bvxm_voxel_grid<T> *grid,  vcl_string filename)
     vcl_cout << vcl_endl;
     delete [] data_array;
     ofs.close();
-
-    
 
     return true;
 }

@@ -22,7 +22,7 @@ class bsta_top_weight_functor
   public:
     typedef typename mixture_::math_type T;
     typedef typename functor_::return_T return_T;
-    typedef return_T return_type; // for compatiblity with vpdl/vdpt
+    typedef return_T return_type; // for compatibility with vpdl/vdpt
     typedef vnl_vector_fixed<T,mixture_::dimension> vector_;
     enum { return_dim = functor_::return_dim };
 

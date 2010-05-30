@@ -538,7 +538,7 @@ unsigned vil_tiff_image::nj() const
   return 0;
 }
 
-//block size in cols
+//: block size in cols
 unsigned vil_tiff_image::size_block_i() const
 {
   if (h_->tile_width.valid)
@@ -548,10 +548,11 @@ unsigned vil_tiff_image::size_block_i() const
   return 0;
 }
 
-//block size in rows. For strips, the number of rows per strip can be larger
-//than the image length but data is only valid for the number of actual
-//image rows. For images with multiple strips, the last strip may be
-//croped by the acutal number of image rows.
+//: block size in rows.
+// For strips, the number of rows per strip can be larger
+// than the image length but data is only valid for the number of actual
+// image rows. For images with multiple strips, the last strip may be
+// cropped by the acutal number of image rows.
 unsigned vil_tiff_image::size_block_j() const
 {
   if (h_->tile_length.valid)
@@ -564,7 +565,7 @@ unsigned vil_tiff_image::size_block_j() const
   return 0;
 }
 
-// Number of blocks in image width
+//: Number of blocks in image width
 unsigned vil_tiff_image::n_block_i() const
 {
   if (h_->tile_width.valid)
@@ -572,7 +573,7 @@ unsigned vil_tiff_image::n_block_i() const
   return 1;
 }
 
-// Number of blocks in image height
+//: Number of blocks in image height
 unsigned vil_tiff_image::n_block_j() const
 {
   if (h_->tile_length.valid&&h_->image_length.valid)
@@ -597,8 +598,8 @@ unsigned vil_tiff_image::samples_per_block() const
   return 0;
 }
 
-//Transfer data from block to memory chunk, row by row
-//Since view and block are the same we can just blast across
+//: Transfer data from block to memory chunk, row by row
+// Since view and block are the same we can just blast across
 void vil_tiff_image::copy_byte_block(vxl_byte* data, const vxl_uint_32 nbytes, vil_memory_chunk_sptr& cnk) const
 {
   if (nbytes==0)
@@ -607,8 +608,9 @@ void vil_tiff_image::copy_byte_block(vxl_byte* data, const vxl_uint_32 nbytes, v
   vcl_memcpy(c_data, data, nbytes);
 }
 
-//map the input buffer into the view.  Note strips won't trigger byte
-//alignment, because they are already aligned at this point.
+//: map the input buffer into the view.
+// Note strips won't trigger byte
+// alignment, because they are already aligned at this point.
 vil_image_view_base_sptr vil_tiff_image::
 view_from_buffer(vil_pixel_format& fmt, vil_memory_chunk_sptr const& buf,
                  unsigned samples_per_block, unsigned bits_per_sample
@@ -656,12 +658,12 @@ vil_image_view_base_sptr
 vil_tiff_image::get_block( unsigned block_index_i,
                            unsigned block_index_j ) const
 {
-  //the only two possibilities
-  assert(h_->is_tiled()||h_->is_striped());
+  // the only two possibilities
+  assert(h_->is_tiled() || h_->is_striped());
   //
-  //If there are multiple images in the file it is
-  //necessary to set the TIFF directory and file header corresponding to
-  //this resource according to the index
+  // If there are multiple images in the file it is
+  // necessary to set the TIFF directory and file header corresponding to
+  // this resource according to the index
   //
   if (nimages_>1)
   {
@@ -747,7 +749,7 @@ fill_block_from_tile(vil_memory_chunk_sptr const & buf) const
 }
 
 // decode strips.  The strip is somewhat different from the tile in that
-// it is organized around scan lines. If bits_per_pixel is not a integral
+// it is organized around scan lines. If bits_per_pixel is not an integral
 // number of bytes then the last packed byte in the scan line will be only
 // partially filled. The header function, bytes_per_line() gives the actual
 // size of a scan line in the packed strip. The total size of the strip

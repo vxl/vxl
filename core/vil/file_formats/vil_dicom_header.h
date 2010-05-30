@@ -196,7 +196,7 @@ const vxl_uint_16 VIL_DICOM_HEADER_IMRESCALESLOPE           =0x1053; // DS
 const vxl_uint_16 VIL_DICOM_HEADER_PXGROUPLENGTH            =0x0000; // UL
 const vxl_uint_16 VIL_DICOM_HEADER_PXPIXELDATA              =0x0010; // OW
 
-// Tags needed in the Delimeter group
+// Tags needed in the Delimiter group
 const vxl_uint_16 VIL_DICOM_HEADER_DLITEM                   =0xe000;
 const vxl_uint_16 VIL_DICOM_HEADER_DLITEMDELIMITATIONITEM   =0xe00d;
 const vxl_uint_16 VIL_DICOM_HEADER_DLSEQDELIMITATIONITEM    =0xe0dd;

@@ -536,7 +536,7 @@ double vmal_track_lines::lines_correlation(vtol_edge_2d_sptr line0,
   vnl_double_3 r_line0_p, r_line0_q;
   vnl_double_3 r_line1_p, r_line1_q;
 
-  // refine the lines so that their lenght are the same
+  // refine the lines so that their length are the same
   vmal_refine_lines ref;
   ref.refine_lines_min_h(s_line0_p, s_line0_q,
                          s_line1_p, s_line1_q,

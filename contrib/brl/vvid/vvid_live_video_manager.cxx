@@ -209,7 +209,7 @@ void vvid_live_video_manager::set_detection_params()
   det_dialog.field("Gaussian sigma", dp.smooth);
   det_dialog.field("Noise Threshold", dp.noise_multiplier);
   det_dialog.checkbox("Automatic Threshold", dp.automatic_threshold);
-  det_dialog.checkbox("Agressive Closure", agr);
+  det_dialog.checkbox("Aggressive Closure", agr);
   det_dialog.checkbox("Compute Junctions", dp.junctionp);
   det_dialog.checkbox("Edges vs Regions", edges_);
   if (!det_dialog.ask())

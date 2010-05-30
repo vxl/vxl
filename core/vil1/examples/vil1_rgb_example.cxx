@@ -13,12 +13,12 @@ int main(int /*argc*/, char** /*argv*/)
   // The "normal" vil1_rgb class, with ubyte cells, is called vil1_rgb_cell;
   // its constructor takes the R, G and B values to be set:
   vil1_rgb_cell orange(255,140,0);
-  // A ubyte (= grey pixel) value is automatically converted to an vil1_rgb_cell:
+  // A ubyte (= grey pixel) value is automatically converted to a vil1_rgb_cell:
   vil1_rgb_cell black = (unsigned char)0;
   vil1_rgb_cell white = (unsigned char)255;
   vil1_rgb_cell grey = (unsigned char)190;
 
-  // Conversely, an vil1_rgb_cell can be converted to its ubyte grey equivalent:
+  // Conversely, a vil1_rgb_cell can be converted to its ubyte grey equivalent:
   unsigned char orange_grey = orange.grey();
 
   // Write to a vcl_ostream: the output as the format [R G B].
@@ -47,7 +47,7 @@ int main(int /*argc*/, char** /*argv*/)
 
 char* as_hex(vil1_rgb_cell const& rgb)
 {
-  // The data members r, g and b of an vil1_rgb_cell are public:
+  // The data members r, g and b of a vil1_rgb_cell are public:
   unsigned char r = rgb.r;
   unsigned char g = rgb.g;
   unsigned char b = rgb.b;
