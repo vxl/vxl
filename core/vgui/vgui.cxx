@@ -116,7 +116,8 @@ bool vgui::select(int &argc, char **argv)
       instance_ = vgui_toolkit::lookup(env_name);
   }
 
-  return (bool)instance_;
+  // return false if instance_ is still not set:
+  return instance_ ? true : false;
 }
 
 
