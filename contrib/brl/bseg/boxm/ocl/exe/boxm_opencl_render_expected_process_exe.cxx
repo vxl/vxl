@@ -30,7 +30,7 @@ int main(int argc, char ** argv)
   boxm_register::register_datatype();
   vil_register::register_datatype();
   vpgl_register::register_datatype();
-  
+
   brdb_value_sptr brdb_scene_file = new brdb_value_t<vcl_string>(scene_file());
   bool good = bprb_batch_process_manager::instance()->init_process("boxmCreateSceneProcess");
   good = good && bprb_batch_process_manager::instance()->set_input(0, brdb_scene_file);
@@ -58,14 +58,13 @@ int main(int argc, char ** argv)
   good = good && bprb_batch_process_manager::instance()->run_process();
   unsigned  id_img;
   good = good && bprb_batch_process_manager::instance()->commit_output(0, id_img);
-  if(img_outfile()!="")  
+  if (img_outfile()!="")
   {
-	  brdb_value_sptr brdb_img_file = new brdb_value_t<vcl_string>(img_outfile());
-	  good = bprb_batch_process_manager::instance()->init_process("vilSaveImageViewProcess");
-	  good = good && bprb_batch_process_manager::instance()->set_input_from_db(0, id_img);
-	  good = good && bprb_batch_process_manager::instance()->set_input(1, brdb_img_file);
-	  good = good && bprb_batch_process_manager::instance()->run_process();
+    brdb_value_sptr brdb_img_file = new brdb_value_t<vcl_string>(img_outfile());
+    good = bprb_batch_process_manager::instance()->init_process("vilSaveImageViewProcess");
+    good = good && bprb_batch_process_manager::instance()->set_input_from_db(0, id_img);
+    good = good && bprb_batch_process_manager::instance()->set_input(1, brdb_img_file);
+    good = good && bprb_batch_process_manager::instance()->run_process();
   }
-
 }
 

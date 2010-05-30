@@ -26,28 +26,28 @@ static void test_traverse_stack(octree_test_driver<T> & driver)
   {
     int test[] = {0,0,0,0,
                   9,9,9,9,
-				  1,1,1,1,
+                  1,1,1,1,
                   2,0,0,0,
                   17,17,17,17,
-				  1,1,1,1,
+                  1,1,1,1,
                   0,2,0,0,
                   25,25,25,25,
-				  1,1,1,1,
+                  1,1,1,1,
                   2,2,0,0,
                   33,33,33,33,
-				  1,1,1,1,
+                  1,1,1,1,
                   0,0,2,0,
                   41,41,41,41,
-				  1,1,1,1,
+                  1,1,1,1,
                   2,0,2,0,
                   49,49,49,49,
-				  1,1,1,1,
+                  1,1,1,1,
                   0,2,2,0,
                   57,57,57,57,
-				  1,1,1,1,
+                  1,1,1,1,
                   2,2,2,0,
                   65,65,65,65,
-					  1,1,1,1};
+                  1,1,1,1};
     bool good = true;
     for (vcl_size_t i= 0; i<size; i++)
       good = good && results[i]==test[i];
@@ -81,28 +81,28 @@ static void test_traverse_to_level_stack(octree_test_driver<T>& driver)
   {
     int test[] ={0,0,0,1,
                  1,1,1,1,
-				 0,0,0,0, // stack_ptr
+                 0,0,0,0, // stack_ptr
                  2,0,0,1,
                  2,2,2,2,
-				 0,0,0,0, // stack_ptr
+                 0,0,0,0, // stack_ptr
                  0,2,0,1,
                  3,3,3,3,
-				 0,0,0,0, // stack_ptr
+                 0,0,0,0, // stack_ptr
                  2,2,0,1,
                  4,4,4,4,
-				 0,0,0,0, // stack_ptr
+                 0,0,0,0, // stack_ptr
                  0,0,2,1,
                  5,5,5,5,
-				 0,0,0,0, // stack_ptr
+                 0,0,0,0, // stack_ptr
                  2,0,2,1,
                  6,6,6,6,
-				 0,0,0,0, // stack_ptr
+                 0,0,0,0, // stack_ptr
                  0,2,2,1,
                  7,7,7,7,
-				 0,0,0,0, // stack_ptr
+                 0,0,0,0, // stack_ptr
                  2,2,2,1,
                  8,8,8,8,
-				 0,0,0,0};
+                 0,0,0,0};
     bool good = true;
     for (vcl_size_t i= 0; i<size; i++)
       good = good && results[i]==test[i];
@@ -136,16 +136,16 @@ static void test_traverse_force_stack(octree_test_driver<T>& driver)
   if (results) {
     int test[]={1,0,0,0,
                 10,10,10,10,
-				0,0,0,0,
+                0,0,0,0,
                 0,1,0,0,
                 11,11,11,11,
                 0,0,0,0,
-				0,0,1,0,
+                0,0,1,0,
                 13,13,13,13,
-				0,0,0,0,
+                0,0,0,0,
                 1,1,1,0,
                 16,16,16,16,
-				0,0,0,0};
+                0,0,0,0};
     bool good = true;
     for (vcl_size_t i= 0; i<size; i++)
       good = good && results[i]==test[i];
@@ -208,7 +208,6 @@ static void test_common_ancestor_stack(octree_test_driver<T>& driver)
   }
   driver.release_kernel();
 }
-
 
 
 template <class T>
