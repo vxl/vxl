@@ -153,7 +153,7 @@ bool bocl_manager<T>::initialize_cl()
                        "clGetDeviceInfo CL_DEVICE_MAX_WORK_GROUP_SIZE failed."))
     return false;
 
-  max_work_group_size_ = max_work_group_size/sizeof(vcl_size_t);
+  max_work_group_size_ =max_work_group_size/sizeof(vcl_size_t);
 
   status = clGetDeviceInfo(devices_[0],
                            CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS,
