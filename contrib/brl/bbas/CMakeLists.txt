@@ -36,7 +36,7 @@ SUBDIRS(bil)
 SUBDIRS(bvrml)
 
 # Brown opencl library
-#SUBDIRS(bocl)
+SUBDIRS(bocl)
 
 IF( BUILD_GEL )
   # spatial object algorithms
