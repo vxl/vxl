@@ -85,30 +85,30 @@ template <class T>
 int ray_bundle_test_driver<T>::set_ray_bundle_args()
 {
   cl_int   status;
-  status = clSetKernelArg(cl_manager_->kernel(), 3,
-                          (this->n_rays() * sizeof(cl_uchar)), NULL);  
-  if (!this->check_val(status,
-                       CL_SUCCESS,
-                       "clSetKernelArg failed. (local bundle pointer array)"))
-    return SDK_FAILURE;
+  //status = clSetKernelArg(cl_manager_->kernel(), 3,
+  //                        (this->n_rays()* sizeof(cl_uchar)), NULL);  
+  //if (!this->check_val(status,
+  //                     CL_SUCCESS,
+  //                     "clSetKernelArg failed. (local bundle pointer array)"))
+  //  return SDK_FAILURE;
 
-  status = clSetKernelArg(cl_manager_->kernel(), 4, 
-                          (3 * this->n_rays() * sizeof(cl_float)), NULL);  
-  if (!this->check_val(status,
-                       CL_SUCCESS,
-                       "clSetKernelArg failed. (local exit point array)"))
-    return SDK_FAILURE;
+  //status = clSetKernelArg(cl_manager_->kernel(), 4, 
+  //                        (3 *this->n_rays() *sizeof(cl_float)), NULL);  
+  //if (!this->check_val(status,
+  //                     CL_SUCCESS,
+  //                     "clSetKernelArg failed. (local exit point array)"))
+  //  return SDK_FAILURE;
 
-  status = clSetKernelArg(cl_manager_->kernel(), 5, 
-                          (this->n_rays() * sizeof(cl_short4)), NULL);  
-  if (!this->check_val(status,
-                       CL_SUCCESS,
-                       "clSetKernelArg failed. (local cached loc_code array)"))
-    return SDK_FAILURE;
+  //status = clSetKernelArg(cl_manager_->kernel(), 5, 
+  //                        (this->n_rays()  * sizeof(cl_short4)), NULL);  
+  //if (!this->check_val(status,
+  //                     CL_SUCCESS,
+  //                     "clSetKernelArg failed. (local cached loc_code array)"))
+  //  return SDK_FAILURE;
 
 
-  status = clSetKernelArg(cl_manager_->kernel(), 6, 
-                          (this->n_rays() * sizeof(cl_float16)), NULL);  
+  status = clSetKernelArg(cl_manager_->kernel(), 3, 
+                          (this->n_rays() * sizeof(cl_float)), NULL);  
   if (!this->check_val(status,
                        CL_SUCCESS,
                        "clSetKernelArg failed. (local cached data array)"))
@@ -135,8 +135,6 @@ int ray_bundle_test_driver<T>::run_bundle_test_kernels()
     return SDK_FAILURE;
   else if (this->set_tree_args()!=SDK_SUCCESS)
     return SDK_FAILURE;
-  else if (this->set_ray_bundle_args()!=SDK_SUCCESS)
-    return SDK_FAILURE;
   // the returned array test result
   status = clSetKernelArg(cl_manager_->kernel(),
                           2,
@@ -145,6 +143,8 @@ int ray_bundle_test_driver<T>::run_bundle_test_kernels()
   if (!this->check_val(status,
                        CL_SUCCESS,
                        "clSetKernelArg failed. (result_buf)"))
+    return SDK_FAILURE;
+  if (this->set_ray_bundle_args()!=SDK_SUCCESS)
     return SDK_FAILURE;
 
   status = clGetKernelWorkGroupInfo(cl_manager_->kernel(),
@@ -182,7 +182,7 @@ int ray_bundle_test_driver<T>::run_bundle_test_kernels()
     vcl_cout << "Unsupported: Insufficient local memory on device.\n";
     return SDK_FAILURE;
   }
-  //  vcl_cout << "Local memory used: " << usedLocalMemory << '\n';
+  vcl_cout << "Local memory used: " << used_local_memory_ << '\n';
 
   status = clEnqueueNDRangeKernel(command_queue_,
                                   cl_manager_->kernel(),

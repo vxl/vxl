@@ -10,8 +10,6 @@
 #include <boxm/sample/boxm_sample.h>
 #include <boxm/boxm_apm_traits.h>
 
-vcl_size_t RoundUp(int global_size,int group_size);
-vcl_string error_to_string(cl_int  status );
 
 
 

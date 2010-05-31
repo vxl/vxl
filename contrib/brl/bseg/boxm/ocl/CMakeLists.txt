@@ -25,7 +25,7 @@ IF(OPENCL_FOUND)
   AUX_SOURCE_DIRECTORY(Templates boxm_ocl_sources)
   ADD_LIBRARY(boxm_ocl ${boxm_ocl_sources} ${bomx2_ocl_source_files})
 
-  TARGET_LINK_LIBRARIES(boxm_ocl boxm boxm_util boxm_sample boxm_basic boct bprb bgeo vnl vnl_algo vbl_io vpgl vgl vil vbl vul ${OPENCL_LIBRARIES})
+  TARGET_LINK_LIBRARIES(boxm_ocl bocl  boxm boxm_util boxm_sample boxm_basic boct bprb bgeo vnl vnl_algo vbl_io vpgl vgl vil vbl vul ${OPENCL_LIBRARIES})
 
   SUBDIRS(tests)
   SUBDIRS(pro)

@@ -178,12 +178,12 @@ int octree_test_driver<T>::run_stack_tree_test_kernels()
                        CL_SUCCESS,
                        "clSetKernelArg failed. (result_buf)"))
     return SDK_FAILURE;
-  // the returned array test result
+  // store the stack in local memory
   status = clSetKernelArg(cl_manager_->kernel(),
                           3,
-                          sizeof(cl_int)*cl_manager_->group_size()*(cl_manager_->num_levels()-1),
+                          sizeof(cl_int)*cl_manager_->group_size()*(cl_manager_->num_levels()),
                           0);
-  
+
   if (!this->check_val(status,
                        CL_SUCCESS,
                        "clSetKernelArg failed. (result_buf)"))

@@ -16,6 +16,7 @@ static void test_load_data(ray_bundle_test_driver<T>& driver)
     return;
   }
   vul_timer t;
+  t.mark();
   if (driver.run_bundle_test_kernels()!=SDK_SUCCESS) {
     TEST("Run Kernel test_loc_code", false, true);
     return;
@@ -23,7 +24,8 @@ static void test_load_data(ray_bundle_test_driver<T>& driver)
   
   cl_int* results = driver.tree_results();
   int count = results[0];
-  vcl_cout << "Transfer rate = " << 64.0f*(count/(static_cast<float>(t.real())))/1000.0f << " Mbytes/second\n";
+  vcl_cout<<t.all()<<" ";
+  vcl_cout << "Transfer rate = " << 64.0f*((float)count*count/(static_cast<float>(t.real())))/1000.0f << " Mbytes/second\n";
   bool good = false;
   vcl_size_t size = 6*4;
   if (size>driver.tree_result_size_bytes())
@@ -64,7 +66,7 @@ void tree_tests(ray_bundle_test_driver<T>& test_driver)
 
   //START TESTS
   //================================================================
-  test_load_data(test_driver);
+   test_load_data(test_driver);
   //==============================================================
   //END OCTREE TESTS
   test_driver.cleanup_bundle_test();

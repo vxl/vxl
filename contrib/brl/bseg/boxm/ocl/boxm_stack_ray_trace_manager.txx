@@ -1103,7 +1103,7 @@ bool boxm_stack_ray_trace_manager<T>::run_block()
   //status = clSetKernelArg(kernel_,i++,sizeof(cl_float4)*this->group_size(),0);
   //if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local roi)"))
   //  return SDK_FAILURE;
-  status = clSetKernelArg(kernel_,i++,sizeof(cl_int)*this->group_size()*(this->num_levels()-1),0);
+  status = clSetKernelArg(kernel_,i++,sizeof(cl_int)*this->group_size()*(this->num_levels()),0);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local stack)"))
     return SDK_FAILURE;
 

@@ -9,6 +9,7 @@
 #include <vnl/vnl_vector_fixed.h>
 #include <vbl/vbl_array_2d.h>
 #include <bocl/bocl_manager.h>
+#include <bocl/bocl_utils.h>
 #include <boxm/boxm_scene.h>
 #include <boxm/sample/boxm_sample.h>
 #include <boxm/boxm_apm_traits.h>
@@ -154,7 +155,7 @@ unsigned num_levels(){return nlevels_;}
  protected:
 
   bool run_block();
-
+  bool read_output_image();
   boxm_scene<tree_type> *scene_;
   vpgl_camera_double_sptr cam_;
   boct_tree<short, T_data > *tree_;

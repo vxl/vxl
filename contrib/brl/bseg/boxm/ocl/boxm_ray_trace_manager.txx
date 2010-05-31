@@ -966,6 +966,9 @@ bool boxm_ray_trace_manager<T>::run()
   vul_timer timer;
   vul_timer t;
   vcl_string error_message="";
+  setup_camera_input_buffer();
+  setup_ray_origin_buffer();
+  setup_work_img_buffer();
 
   boxm_block_vis_graph_iterator<tree_type > block_vis_iter(cam_, scene_, ni_, nj_);
   float total_raytrace_time = 0.0f;
@@ -1006,22 +1009,23 @@ bool boxm_ray_trace_manager<T>::run()
 
       setup_tree_input_buffers();
 
-      setup_camera_input_buffer();
+      //setup_camera_input_buffer();
       setup_roidims_input_buffer();
-      setup_ray_origin_buffer();
-      setup_work_img_buffer();
+      //setup_ray_origin_buffer();
+      //setup_work_img_buffer();
       setup_tree_global_bbox_buffer();
       setup_imgdims_buffer();
-
+	  t.mark();
       // run the raytracing for this block
       run_block();
+	  total_gpu_time+=t.all();
       // release memory
       clean_imgdims_buffer();
       clean_tree_global_bbox_buffer();
-      clean_work_img_buffer();
-      clean_ray_origin_buffer();
+      //clean_work_img_buffer();
+      //clean_ray_origin_buffer();
       clean_roidims_input_buffer();
-      clean_camera_input_buffer();
+      //clean_camera_input_buffer();
       clean_tree_input_buffers();
 
       clean_tree();
@@ -1031,6 +1035,11 @@ bool boxm_ray_trace_manager<T>::run()
       total_raytrace_time += raytrace_time;
     }
   }
+  read_output_image();
+  clean_work_img_buffer();
+  clean_ray_origin_buffer();
+  clean_camera_input_buffer();
+
         vcl_cout<<"Running block "<<total_gpu_time/1000<<'s'<<vcl_endl;
 
   vcl_cout << "total block loading time = " << total_load_time << 's' << vcl_endl
@@ -1098,6 +1107,9 @@ bool boxm_ray_trace_manager<T>::run_block()
     return SDK_FAILURE;
   //status = clSetKernelArg(kernel_,13,sizeof(cl_float4)*this->group_size(),0);
   //if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local roi)"))
+  // return SDK_FAILURE;
+  //status = clSetKernelArg(kernel_,13,sizeof(cl_int)*this->group_size()*(this->num_levels()),0);
+  //if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local stack)"))
   //  return SDK_FAILURE;
 
   // check the local memeory
@@ -1124,27 +1136,35 @@ bool boxm_ray_trace_manager<T>::run_block()
   }
 
   // set up a command queue
-  cl_command_queue command_queue = clCreateCommandQueue(this->context(),this->devices()[0],0,&status);
+  command_queue_ = clCreateCommandQueue(this->context(),this->devices()[0],0,&status);
   if (!this->check_val(status,CL_SUCCESS,"Falied in command queue creation" + error_to_string(status)))
     return false;
 
   cl_event ceEvent;
-  status = clEnqueueNDRangeKernel(command_queue,this->kernel_, 1,NULL,globalThreads,localThreads,0,NULL,&ceEvent);
+  status = clEnqueueNDRangeKernel(command_queue_,this->kernel_, 1,NULL,globalThreads,localThreads,0,NULL,&ceEvent);
 
   if (!this->check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed. "+error_to_string(status)))
     return SDK_FAILURE;
 
-  status = clFinish(command_queue);
+  status = clFinish(command_queue_);
   if (!this->check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status)))
     return SDK_FAILURE;
   cl_ulong tstart,tend;
   status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
   status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
 
+
+
+  return SDK_SUCCESS;
+}
+
+template<class T>
+bool boxm_ray_trace_manager<T>:: read_output_image()
+{
   cl_event events[2];
 
   // Enqueue readBuffers
-  status = clEnqueueReadBuffer(command_queue,work_image_buf_,CL_TRUE,
+  int status = clEnqueueReadBuffer(command_queue_,work_image_buf_,CL_TRUE,
                                0,ni_*nj_*sizeof(cl_float4),
                                this->ray_results(),
                                0,NULL,&events[0]);
@@ -1162,11 +1182,10 @@ bool boxm_ray_trace_manager<T>::run_block()
     return SDK_FAILURE;
 
   // release the command Queue
-  status = clReleaseCommandQueue(command_queue);
+  status = clReleaseCommandQueue(command_queue_);
   if (!this->check_val(status,CL_SUCCESS,"clReleaseCommandQueue failed."))
     return SDK_FAILURE;
 
-  return SDK_SUCCESS;
 }
 
 #define BOXM_RAY_TRACE_MANAGER_INSTANTIATE(T) \

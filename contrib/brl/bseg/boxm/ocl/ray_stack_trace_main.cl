@@ -19,13 +19,14 @@ ray_stack_trace_main(__global int * nlevels,
 {
   unsigned gid = get_global_id(0);
   unsigned lid = get_local_id(0);
+  unsigned workgrpsize=get_local_size(0);
 
   if (lid == 0)
   {
-    cam[0]=svd_UtVW[0];  // conjugate transpose of U
-    cam[1]=svd_UtVW[1];  // V
-    cam[2]=svd_UtVW[2];  // Winv(first4) and ray_origin(last four)
-    (*local_origin) =origin[0];    // ray_origin
+    cam[0]=svd_UtVW[0];				// conjugate transpose of U
+    cam[1]=svd_UtVW[1];				// V
+    cam[2]=svd_UtVW[2];				// Winv(first4) and ray_origin(last four)
+    (*local_origin) =origin[0];     // ray_origin
     (*bbox)=(*global_bbox);
     (*roi)=(*roidims);
   }
@@ -36,7 +37,7 @@ ray_stack_trace_main(__global int * nlevels,
   int root_ptr = 0;
 
   //int4 root_cell=cells[root_ptr];
-  int n_levels = 11;//(*nlevels);
+  int n_levels =11;//(*nlevels);
 
   // set the nlevels here
   short4 root = (short4)(0,0,0,n_levels-1);
@@ -72,15 +73,18 @@ ray_stack_trace_main(__global int * nlevels,
   short4 entry_loc_code = loc_code(entry_pt, n_levels-1);
   short4 curr_loc_code;
   ////traverse to leaf cell that contains the entry point
-  //int curr_cell_ptr = traverse_force(cells, root_ptr, root, entry_loc_code,&curr_loc_code);
-  int stack_ptr=-1;
+  int stack_ptr=0;
+  stack[lid]=root_ptr;
+  int stack_index=0;
   //short4 temp_curr_loc_code;
 
-  int curr_cell_ptr = traverse_force_stack(cells, root_ptr, root, entry_loc_code,&curr_loc_code,stack,lid,n_levels-1,&stack_ptr);
+  //int curr_cell_ptr =0;
+  stack_ptr=traverse_force_stack(cells,  root, entry_loc_code,&curr_loc_code,stack,lid,workgrpsize,stack_ptr);
 
   //this cell is the first pierced by the ray
   //follow the ray through the cells until no neighbors are found
-  while (true) {
+ while (1) {
+  
     ////current cell bounding box
     cell_bounding_box(curr_loc_code, n_levels, &cell_min, &cell_max);
     // check to see how close tnear and tfar are
@@ -95,10 +99,10 @@ ray_stack_trace_main(__global int * nlevels,
       if (any(entry_pt>=(float4)1.0f)|| any(entry_pt<=(float4)0.0f))
         break;
       entry_loc_code = loc_code(entry_pt, n_levels-1);
-      stack_ptr=-1;
-      ////traverse to leaf cell that contains the entry point
-      curr_cell_ptr = traverse_stack(cells, root_ptr, root, entry_loc_code,&curr_loc_code, lid,n_levels-1,stack,&stack_ptr);
-      if (curr_cell_ptr<0)
+	  stack_ptr=0;
+	  ////traverse to leaf cell that contains the entry point
+      stack_ptr = traverse_stack(cells,  root, entry_loc_code,&curr_loc_code, lid,workgrpsize,stack,stack_ptr);
+      if (stack_ptr<0)
         break;
 
       cell_bounding_box(curr_loc_code, n_levels, &cell_min, &cell_max);
@@ -112,7 +116,8 @@ ray_stack_trace_main(__global int * nlevels,
     ////////////////////////////////////////////////////////
     // the place where the ray trace function can be applied
 
-    int data_ptr = cells[curr_cell_ptr].z;
+	stack_index=lid +workgrpsize*stack_ptr;
+    int data_ptr = cells[stack[stack_index]].z;
 
     //int data_ptr = curr_cell.z;
     if ( data_ptr<0)
@@ -145,17 +150,17 @@ ray_stack_trace_main(__global int * nlevels,
     //find the neighboring cell at the exit face
 
     short4 neighbor_code;
-    int neighbor_ptr=neighbor_stack(cells, curr_cell_ptr, curr_loc_code,exit_face, n_levels, &neighbor_code,stack,lid,&stack_ptr);
+    stack_ptr=neighbor_stack(cells,  curr_loc_code,exit_face, n_levels, &neighbor_code,stack,lid,workgrpsize,stack_ptr);
 
     //if no neighbor then terminate ray
-    if (neighbor_ptr<0)
+    if (stack_ptr<0)
       break;
 
     //traverse from the neighbor to the cell having the
     //required exit location code
     short4 exit_loc_code = loc_code(exit_pt, n_levels-1);
 
-    int curr_cell_ptr = traverse_force_stack(cells, neighbor_ptr, neighbor_code,exit_loc_code, &curr_loc_code,stack, lid,n_levels-1,&stack_ptr);
+    stack_ptr = traverse_force_stack(cells,  neighbor_code,exit_loc_code, &curr_loc_code,stack, lid,workgrpsize,stack_ptr);
 
     //the current cell (cells[curr_cell_ptr])is the cell reached by
     //the neighbor's traverse
@@ -168,6 +173,7 @@ ray_stack_trace_main(__global int * nlevels,
   // also it is not necessary to have a full float4 as the
   // output type a single scalar float array is sufficient
   //data_return.z=count;
+  //data_return.z=workgrpsize;
   inp[gid] = (float4)(data_return);//local_img[lid];//
 
   //end ray trace

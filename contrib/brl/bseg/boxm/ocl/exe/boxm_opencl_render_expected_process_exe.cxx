@@ -49,7 +49,7 @@ int main(int argc, char ** argv)
   brdb_value_sptr brdb_nj = new brdb_value_t<unsigned>(nj());
   brdb_value_sptr brdb_black_background = new brdb_value_t<bool>(0);
 
-  good = bprb_batch_process_manager::instance()->init_process("boxmOclStackRenderExpectedProcess");
+  good = bprb_batch_process_manager::instance()->init_process("boxmOclRenderExpectedProcess");
   good = good && bprb_batch_process_manager::instance()->set_input_from_db(0, id_scene);
   good = good && bprb_batch_process_manager::instance()->set_input_from_db(1, id_cam);
   good = good && bprb_batch_process_manager::instance()->set_input(2, brdb_ni);

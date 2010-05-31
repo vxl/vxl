@@ -3,7 +3,6 @@ __kernel
 void
 ray_trace_main(__global int * nlevels,
                __global float4  *origin,    // camera origin
-
                __global float16 *svd_UtVW,  // SVD of inverse of camera matrix
                __global int4    *cells,     // tree
                __global float16 *cell_data, // leaf data
@@ -15,7 +14,6 @@ ray_trace_main(__global int * nlevels,
                __local float4   *local_origin,// store the origin locally
                __local float4   *bbox,        // local storgae of bbox
                __local uint4    *roi)
-            // __local float4   *local_img    // local storgae of bbox
 {
   unsigned gid = get_global_id(0);
   unsigned lid = get_local_id(0);
@@ -36,6 +34,8 @@ ray_trace_main(__global int * nlevels,
   int root_ptr = 0;
 
   int4 root_cell=cells[root_ptr];
+
+ 
   int n_levels = (*nlevels);//root_cell.z;
 
   // set the nlevels here
@@ -85,7 +85,7 @@ ray_trace_main(__global int * nlevels,
     int hit = intersect_cell(ray_o, ray_d, cell_min, cell_max,&tnear, &tfar);
     // special case whenray grazes edge or corner of cube
 
-    if ( vcl_fabs(tfar-tnear)<cellsize/10)
+    if ( fabs(tfar-tnear)<cellsize/10)
     {
       entry_pt=entry_pt+ray_d*cellsize/2;
       entry_pt.w=0.5;
@@ -141,7 +141,8 @@ ray_trace_main(__global int * nlevels,
     //find the neighboring cell at the exit face
 
     short4 neighbor_code;
-    int neighbor_ptr=neighbor(cells, curr_cell_ptr, curr_loc_code,exit_face, n_levels, &neighbor_code);
+
+	int neighbor_ptr=neighbor(cells, curr_cell_ptr, curr_loc_code,exit_face, n_levels, &neighbor_code);
     //if no neighbor then terminate ray
     if (neighbor_ptr<0)
       break;
@@ -152,7 +153,6 @@ ray_trace_main(__global int * nlevels,
     curr_cell_ptr = traverse_force(cells, neighbor_ptr, neighbor_code,exit_loc_code, &curr_loc_code);
     //the current cell (cells[curr_cell_ptr])is the cell reached by
     //the neighbor's traverse
-
     //ray continues: make the current entry point the previous exit point
    entry_pt = exit_pt;
   }
