@@ -61,6 +61,8 @@ SUBDIRS += imesh
 # vrml utilities library
 SUBDIRS += bvrml
 
+SUBDIRS += bocl
+
 ################################
 include ${VXLROOT}/config/top.mk
 ################################

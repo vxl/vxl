@@ -25,6 +25,7 @@ SOURCES += vimt3d_save.cxx
 MANPAGE_SOURCES += vimt3d_resample_tricubic.h
 MANPAGE_SOURCES += vimt3d_sample_transformed_blob.h
 MANPAGE_SOURCES += vimt3d_reflect.h
+MANPAGE_SOURCES += vimt3d_run_length_encoding.h
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

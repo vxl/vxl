@@ -6,8 +6,12 @@ SOURCES += boxm_ocl_utils.cxx
 SOURCES += octree_library_functions.cl
 MANPAGE_SOURCES += boxm_ray_trace_manager.txx
 MANPAGE_SOURCES += boxm_ocl_render_expected.h
+SOURCES += expected_functor.cl
+SOURCES += ray_trace_main.cl
+SOURCES += ray_stack_trace_main.cl
+MANPAGE_SOURCES += boxm_stack_ray_trace_manager.txx
 
-SUBDIRS += pro
+SUBDIRS += pro exe
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

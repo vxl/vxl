@@ -10,11 +10,11 @@ SOURCES += boxm_utils.cxx
 SOURCES += boxm_sigma_normalizer.cxx
 SOURCES += boxm_merge_mog.cxx
 SOURCES += boxm_test_util.cxx
+SOURCES += boxm_cell_data_traits.cxx
 
 MANPAGE_SOURCES += boxm_triangle_interpolation_iterator.txx
 MANPAGE_SOURCES += boxm_vrml_util.h
 MANPAGE_SOURCES += boxm_plane_ransac.h
-MANPAGE_SOURCES += boxm_cell_data_traits.h
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

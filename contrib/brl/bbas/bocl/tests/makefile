@@ -3,9 +3,8 @@ include ../config.mk
 include ${VXLROOT}/core/testlib/config.mk
 
 TESTMAIN := test_driver.cxx
-TESTS += test_mog_norm.cxx
-TESTS += test_merge_mog.cxx
-TESTS += test_boxm_scene_to_bvxm_grid.cxx
+
+TESTS += test_global_io_bandwidth.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
