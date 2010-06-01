@@ -44,7 +44,7 @@ TARGET_LINK_LIBRARIES( bvxm bvxm_grid bsta bsta_algo vpgl vpgl_file_formats bgeo
 SUBDIRS( grid )
 SUBDIRS( io )
 SUBDIRS( pro )
-SUBDIRS( algo )
+#SUBDIRS( algo )
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)
