@@ -11,6 +11,8 @@
 //
 // \verbatim
 //  J.L. Mundy added min,max, percentile methods
+//  B.A. Mayer add clear() method so a single instance can revert
+//             to the default constructor to be reused.
 // \endverbatim
 
 #include <vcl_vector.h>
@@ -146,6 +148,9 @@ template <class T> class bsta_histogram : public bsta_histogram_base
 
   //: print values and bin probability in full (even if counts ==0)
   void print_vals_prob(vcl_ostream& os = vcl_cout) const;
+
+  //:restore default constructor state.
+  void clear();
 
  private:
   void compute_area() const; // mutable const

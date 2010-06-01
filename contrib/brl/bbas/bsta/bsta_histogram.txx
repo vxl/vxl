@@ -359,6 +359,15 @@ T  bsta_histogram<T>::value_with_area_above(const T area_fraction) const
   return 0;
 }
 
+//function to erase all bin counts
+template <class T>
+void bsta_histogram<T>::clear()
+{
+    area_valid_ = false;
+    area_ = T(0);
+    counts_.assign(nbins_,T(0));
+}
+
 template <class T>
 void bsta_histogram<T>::print(vcl_ostream& os) const
 {
