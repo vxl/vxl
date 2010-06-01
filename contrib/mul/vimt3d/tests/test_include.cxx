@@ -9,6 +9,7 @@
 #include <vimt3d/vimt3d_reflect.h>
 #include <vimt3d/vimt3d_resample_tricubic.h>
 #include <vimt3d/vimt3d_resample_trilinear.h>
+#include <vimt3d/vimt3d_run_length_encoding.h>
 #include <vimt3d/vimt3d_sample_grid_trilin.h>
 #include <vimt3d/vimt3d_sample_profile_trilin.h>
 #include <vimt3d/vimt3d_sample_transformed_blob.h>
@@ -18,6 +19,7 @@
 #include <vimt3d/vimt3d_trilin_interp.h>
 #include <vimt3d/vimt3d_reconstruct_from_grid.h>
 #include <vimt3d/vimt3d_vil3d_v3i.h>
+
 #include <vimt3d/vimt3d_fwd.h>
 
 int main() { return 0; }
