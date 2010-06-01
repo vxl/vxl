@@ -239,6 +239,9 @@ SOURCE=.\vimt3d_sample_transformed_blob.h
 # Begin Source File
 SOURCE=.\vimt3d_reflect.h
 # End Source File
+# Begin Source File
+SOURCE=.\vimt3d_run_length_encoding.h
+# End Source File
 # End Group
 # End Target
 # End Project

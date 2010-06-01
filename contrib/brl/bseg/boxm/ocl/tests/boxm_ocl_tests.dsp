@@ -98,10 +98,10 @@ LIB32=link.exe -lib
 SOURCE=.\test_driver.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_octree.cxx
+SOURCE=.\open_cl_test_data.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\open_cl_test_data.cxx
+SOURCE=.\test_octree.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_expected_image.cxx
@@ -110,7 +110,13 @@ SOURCE=.\test_expected_image.cxx
 SOURCE=.\test_backproject_ray.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_include.cxx
+SOURCE=.\test_ray_bundle.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_octree_stack.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/ray_bundle_test_driver+float-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/octree_test_driver+boxm_sample+BOXM_APM_MOG_GREY--.cxx
@@ -120,6 +126,9 @@ SOURCE=.\Templates/octree_test_driver+boxm_sample+BOXM_APM_SIMPLE_GREY--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/octree_test_driver+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_include.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -132,6 +141,12 @@ SOURCE=.\octree_test_driver.txx
 # End Source File
 # Begin Source File
 SOURCE=.\octree_test_driver.h
+# End Source File
+# Begin Source File
+SOURCE=.\ray_bundle_test_driver.txx
+# End Source File
+# Begin Source File
+SOURCE=.\ray_bundle_test_driver.h
 # End Source File
 # End Group
 # End Target

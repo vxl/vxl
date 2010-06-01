@@ -201,16 +201,7 @@ SOURCE=.\processes/bvxm_synth_world_generator.cxx
 SOURCE=.\processes/bvxm_locate_region_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\processes/bvxm_mog_l2_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\processes/bvxm_merge_mog_process.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\processes/bvxm_get_grid_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\processes/bvxm_mog_to_mpm_process.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\processes/bvxm_create_synth_lidar_data_process.cxx
@@ -342,16 +333,10 @@ SOURCE=.\processes/bvxm_save_occupancy_vff_process.h
 SOURCE=.\processes/bvxm_lidar_init_process.h
 # End Source File
 # Begin Source File
-SOURCE=.\processes/bvxm_mog_l2_process.h
-# End Source File
-# Begin Source File
 SOURCE=.\processes/bvxm_update_edges_process.h
 # End Source File
 # Begin Source File
 SOURCE=.\processes/bvxm_roi_init_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\processes/bvxm_merge_mog_process.h
 # End Source File
 # Begin Source File
 SOURCE=.\processes/bvxm_locate_region_process.h

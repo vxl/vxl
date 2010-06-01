@@ -183,6 +183,9 @@ SOURCE=.\test_include.cxx
 # Begin Source File
 SOURCE=.\test_merge_mog.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_boxm_scene_to_bvxm_grid.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

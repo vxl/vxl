@@ -101,6 +101,21 @@ SOURCE=.\boxm_ocl_utils.cxx
 SOURCE=.\octree_library_functions.cl
 # End Source File
 # Begin Source File
+SOURCE=.\expected_functor.cl
+# End Source File
+# Begin Source File
+SOURCE=.\ray_trace_main.cl
+# End Source File
+# Begin Source File
+SOURCE=.\ray_stack_trace_main.cl
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bocl_manager+boxm_stack_ray_trace_manager+boxm_sample+BOXM_APM_SIMPLE_GREY---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bocl_manager+boxm_stack_ray_trace_manager+boxm_sample+BOXM_APM_MOG_GREY---.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/bocl_manager+boxm_ray_trace_manager+boxm_sample+BOXM_APM_SIMPLE_GREY---.cxx
 # End Source File
 # Begin Source File
@@ -127,6 +142,12 @@ SOURCE=.\Templates/vbl_array_2d+vnl_vector_fixed+float.3--.cxx
 # Begin Source File
 SOURCE=.\Templates/bocl_manager+boxm_ray_trace_manager+float--.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_stack_ray_trace_manager+boxm_sample+BOXM_APM_SIMPLE_GREY--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_stack_ray_trace_manager+boxm_sample+BOXM_APM_MOG_GREY--.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -141,6 +162,12 @@ SOURCE=.\boxm_ray_trace_manager.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_ocl_utils.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_stack_ray_trace_manager.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_stack_ray_trace_manager.txx
 # End Source File
 # End Group
 # End Target

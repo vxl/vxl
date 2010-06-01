@@ -108,6 +108,9 @@ SOURCE=.\bvxm_mog_norm.h
 # Begin Source File
 SOURCE=.\bvxm_mog_norm.txx
 # End Source File
+# Begin Source File
+SOURCE=.\bvxm_boxm_convert.h
+# End Source File
 # End Group
 # End Target
 # End Project
