@@ -13,9 +13,11 @@
 //  Modifications
 //   06/01/2010  Brandon A. Mayer. Added clear() function so that a single joint histogram 
 //               instance may revert to the default constructor and reused.
+//   06/01/2010  Brandon A. Mayer. Added mutual_information function
 // \endverbatim
 
 #include <vbl/vbl_array_2d.h>
+#include <vcl_vector.h>
 #include <vcl_iostream.h>
 #include <bsta/bsta_joint_histogram_base.h>
 
@@ -83,7 +85,9 @@ template <class T> class bsta_joint_histogram : public bsta_joint_histogram_base
 
   T volume() const;
   T entropy() const;
+  T mutual_information() const;
   T renyi_entropy() const;
+  
   void print(vcl_ostream& os = vcl_cout) const;
 
   //: The average and variance bin value for row a using counts to compute probs
@@ -111,6 +115,8 @@ template <class T> class bsta_joint_histogram : public bsta_joint_histogram_base
 
   //:restore to default constructor state
   void clear();
+
+
 
  private:
   void compute_volume() const; // mutable const
