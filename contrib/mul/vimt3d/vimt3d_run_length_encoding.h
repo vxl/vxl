@@ -16,9 +16,9 @@ const unsigned version_no = 1;
 template<class T>
 void vimt3d_run_length_encode(vsl_b_ostream& bfs,const vimt3d_image_3d_of<T> &image)
 {
-  typename vcl_vector<vcl_pair<unsigned,T> > run_length_and_values;
+  vcl_vector<vcl_pair<unsigned,T> > run_length_and_values;
 
-  vil3d_image_view<T>::const_iterator it, itp1;
+  typename vil3d_image_view<T>::const_iterator it, itp1;
   for (it=image.image().begin();it != image.image().end();++it)
   {
     itp1=it;
