@@ -259,6 +259,15 @@ T bsta_joint_histogram<T>::get_count(T a, T b) const
 }
 
 template <class T>
+void bsta_joint_histogram<T>::clear()
+{
+     volume_valid_ = false;
+     volume_ = 0;
+     counts_.clear();
+     counts_(1,1) = T(0);
+}
+
+template <class T>
 void bsta_joint_histogram<T>::print(vcl_ostream& os) const
 {
   for (unsigned int a = 0; a<nbins_a_; a++)
