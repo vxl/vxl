@@ -12,8 +12,8 @@
 // \verbatim
 //  Modifications
 //   06/01/2010  Brandon A. Mayer. Added clear() function so that a single joint histogram 
-//               instance may revert to the default constructor and reused.
-//   06/01/2010  Brandon A. Mayer. Added mutual_information function
+//               instance may revert to the default constructor and be reused.
+//   06/01/2010  Brandon A. Mayer. Added mutual_information() function
 // \endverbatim
 
 #include <vbl/vbl_array_2d.h>
