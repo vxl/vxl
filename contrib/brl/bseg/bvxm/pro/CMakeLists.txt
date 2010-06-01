@@ -61,12 +61,9 @@ SET(bvxm_pro_sources ${bvxm_pro_sources}
     processes/bvxm_compare_rpc_process.h              processes/bvxm_compare_rpc_process.cxx
     processes/bvxm_pmap_hist_process.h                processes/bvxm_pmap_hist_process.cxx
     processes/bvxm_create_mog_image_process.h         processes/bvxm_create_mog_image_process.cxx
-    processes/bvxm_mog_l2_process.h                   processes/bvxm_mog_l2_process.cxx
     processes/bvxm_synth_world_generator.h            processes/bvxm_synth_world_generator.cxx
-    processes/bvxm_merge_mog_process.h                processes/bvxm_merge_mog_process.cxx
     processes/bvxm_gen_synthetic_world_process.h      processes/bvxm_gen_synthetic_world_process.cxx
     processes/bvxm_save_edges_raw_process.h           processes/bvxm_save_edges_raw_process.cxx
-    processes/bvxm_mog_to_mpm_process.cxx
     processes/bvxm_display_edge_tangent_world_vrml_process.h
     processes/bvxm_display_edge_tangent_world_vrml_process.cxx
     processes/bvxm_expected_edge_image_process.h

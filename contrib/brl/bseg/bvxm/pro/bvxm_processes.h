@@ -54,9 +54,4 @@ DECLARE_FUNC_CONS(bvxm_display_edge_tangent_world_vrml_process);
 DECLARE_FUNC_CONS(bvxm_report_statistics_point_cloud_process);
 DECLARE_FUNC_CONS(bvxm_estimate_camera_process);
 
-//algo
-DECLARE_FUNC_CONS(bvxm_merge_mog_process);
-DECLARE_FUNC_CONS(bvxm_mog_to_mpm_process);
-DECLARE_FUNC_CONS(bvxm_mog_l2_distance);
-
 #endif
