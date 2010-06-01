@@ -11,7 +11,8 @@
 //
 // \verbatim
 //  Modifications
-//   <none yet>
+//   06/01/2010  Brandon A. Mayer. Added clear() function so that a single joint histogram 
+//               instance may revert to the default constructor and reused.
 // \endverbatim
 
 #include <vbl/vbl_array_2d.h>
@@ -107,6 +108,9 @@ template <class T> class bsta_joint_histogram : public bsta_joint_histogram_base
 
   void print_to_vrml(vcl_ostream& os) const;
   void print_to_m(vcl_ostream& os) const;
+
+  //:restore to default constructor state
+  void clear();
 
  private:
   void compute_volume() const; // mutable const
