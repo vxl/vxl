@@ -188,6 +188,15 @@ void test_bsta_histogram()
   bsta_histogram<double>* dcast = dynamic_cast<bsta_histogram<double>*>(hptr.ptr());
   bsta_histogram<float>* fcast = dynamic_cast<bsta_histogram<float>*>(hptr.ptr());
   TEST("dynamic cast histogram", dcast&&!fcast, true);
+
+  //Test Mutual Information
+  bsta_joint_histogram<double> joint_histogram_mi(2,2);
+  joint_histogram_mi.upcount(1,1,1,1);
+  joint_histogram_mi.upcount(1,3,2,3);
+  joint_histogram_mi.upcount(2,2,1,2);
+  joint_histogram_mi.upcount(2,4,2,4);
+  double mutual_information_error = joint_histogram_mi.mutual_information() - double(0.005802149014346);
+  TEST_NEAR("Mutual Information",mutual_information_error,0.0,0.0001);
 }
 
 TESTMAIN(test_bsta_histogram);
