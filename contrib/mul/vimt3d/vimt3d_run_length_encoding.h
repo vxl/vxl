@@ -1,5 +1,5 @@
-#ifndef raa_run_length_encoded_image_h
-#define raa_run_length_encoded_image_h
+#ifndef raa_run_length_encoding_h
+#define raa_run_length_encoding_h
 
 #include <vcl_vector.h>
 #include <vsl/vsl_vector_io.h>
@@ -8,14 +8,15 @@
 //:
 // \author Graham Vincent
 
+const unsigned version_no = 1;
 
-template<class T>
 
 // Encode vimt3d image using run lengths
-// \note decode with raa_run_length_decode
+// \note decode with vimt3d_run_length_decode
+template<class T>
 void vimt3d_run_length_encode(vsl_b_ostream& bfs,const vimt3d_image_3d_of<T> &image)
 {
-  vcl_vector<vcl_pair<unsigned,T> > run_length_and_values;
+  typename vcl_vector<vcl_pair<unsigned,T> > run_length_and_values;
 
   vil3d_image_view<T>::const_iterator it, itp1;
   for (it=image.image().begin();it != image.image().end();++it)
@@ -34,6 +35,7 @@ void vimt3d_run_length_encode(vsl_b_ostream& bfs,const vimt3d_image_3d_of<T> &im
     run_length_and_values.push_back( vcl_make_pair(run_length, *it) );
   }
 
+  vsl_b_write(bfs,version_no);
   vsl_b_write(bfs,image.world2im());
   vsl_b_write(bfs,image.image().ni());
   vsl_b_write(bfs,image.image().nj());
@@ -43,12 +45,15 @@ void vimt3d_run_length_encode(vsl_b_ostream& bfs,const vimt3d_image_3d_of<T> &im
 
 
 template<class T>
-// Decode vimt3d image encoded by raa_run_length_encode
+// Decode vimt3d image encoded by vimt3d_run_length_encode
 void vimt3d_run_length_decode(vsl_b_istream& bfs,vimt3d_image_3d_of<T> &image)
 {
   vimt3d_transform_3d world2im;
   unsigned ni, nj, nk;
   vcl_vector<vcl_pair<unsigned,T> > run_length_and_values;
+
+  unsigned v;
+  vsl_b_read(bfs,v);
   vsl_b_read(bfs,world2im);
   vsl_b_read(bfs,ni);
   vsl_b_read(bfs,nj);
@@ -57,7 +62,7 @@ void vimt3d_run_length_decode(vsl_b_istream& bfs,vimt3d_image_3d_of<T> &image)
 
   image.image().set_size(ni,nj,nk);
   image.set_world2im(world2im);
-  vil3d_image_view<T>::iterator it=image.image().begin();
+  typename vil3d_image_view<T>::iterator it=image.image().begin();
 
   for (unsigned i=0;i<run_length_and_values.size();++i)
   {
@@ -72,3 +77,4 @@ void vimt3d_run_length_decode(vsl_b_istream& bfs,vimt3d_image_3d_of<T> &image)
 
 
 #endif
+

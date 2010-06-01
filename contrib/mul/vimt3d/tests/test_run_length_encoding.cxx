@@ -27,7 +27,7 @@ void test_run_length_encoding1()
   vsl_b_ifstream in("./test_run_length_encoding1.bfs");
   vimt3d_run_length_decode(in,image2);
   in.close();
-
+ 
   TEST("Run length encoded image relaoded correcttly: ", image2.image()(1,2,3)==4 , true );
   TEST("Run length encoded image relaoded correcttly: ", image2.image()(3,6,4)==5, true );
   TEST("Run length encoded image relaoded correcttly: ", image2.image()(8,7,4)==6 , true );
