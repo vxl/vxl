@@ -257,6 +257,28 @@ T bsta_joint_histogram<T>::renyi_entropy() const
 }
 
 template <class T>
+T bsta_joint_histogram<T>::entropy_marginal_a() const
+{
+  T ent = 0;
+  vcl_vector<T> counts_a(nbins_a_, T(0));
+  T count_a_sum = T(0);
+  for (unsigned int i = 0; i<nbins_a_; ++i)
+    for (unsigned int j = 0; j <nbins_b_; ++j)
+    {
+      counts_a[i] += this->get_count(i,j);
+      count_a_sum += this->get_count(i,j);
+    }
+    
+  for (unsigned int i = 0; i <nbins_a_; ++i) {
+    T pi = counts_a[i]/count_a_sum;
+    if (pi>min_prob_)
+      ent -= pi*T(vcl_log(pi));
+  }
+  ent *= (T)vnl_math::log2e;
+  return ent;
+}
+
+template <class T>
 void bsta_joint_histogram<T>::parzen(const T sigma)
 {
   if (sigma<=0)
@@ -318,7 +340,7 @@ void bsta_joint_histogram<T>::print_to_vrml(vcl_ostream& os) const
   {
     for (unsigned int b = 0; b<nbins_b_; b++)
     {
-      float height = float((p(a,b)/max)*avg);
+      float height = (max > 0) ? float((p(a,b)/max)*avg) : 0.0f;
       os << "Transform {\n"
          << "  translation " << a << ' ' << b << ' ' << height << vcl_endl
          << "  children Shape {\n"
@@ -383,6 +405,30 @@ void bsta_joint_histogram<T>::print_to_m(vcl_ostream& os) const
   }
   //os << '\n';
   os << "bar3(y,'detached');\n";
+}
+
+template <class T>
+void bsta_joint_histogram<T>::print_to_text(vcl_ostream& os) const
+{
+  os << nbins_a_ << "\t" << nbins_b_ << "\n";
+  for (unsigned int a = 0; a<nbins_a_; a++) 
+  {
+    for (unsigned int b = 0; b<nbins_b_; b++) 
+    {
+      os << get_count(a,b) << '\t';
+    }
+    os << "\n";
+  }
+  os << "\n probs: \n";
+  for (unsigned int a = 0; a<nbins_a_; a++) 
+  {
+    for (unsigned int b = 0; b<nbins_b_; b++) 
+    {
+      os << p(a,b) << '\t';
+    }
+    os << "\n";
+  }
+  
 }
 
 #undef BSTA_JOINT_HISTOGRAM_INSTANTIATE
