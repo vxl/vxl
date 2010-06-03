@@ -100,7 +100,6 @@ class boxm_ray_trace_manager : public bocl_manager<boxm_ray_trace_manager<T_data
   void clear_ray_results();
   vcl_size_t n_ray_groups();
 
-  vcl_string program_source() const {return prog_;}
   cl_program program() {return program_;}
 
   void print_tree_input();
