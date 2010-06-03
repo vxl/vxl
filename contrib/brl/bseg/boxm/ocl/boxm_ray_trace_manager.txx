@@ -90,9 +90,9 @@ bool boxm_ray_trace_manager<T>::init_raytrace(boxm_scene<boct_tree<short,T > > *
   j0_ = j0;
 
   // load base raytrace code
-  if (!load_kernel_source(vcl_string(VCL_SOURCE_ROOT_DIR)
+  if (!this->load_kernel_source(vcl_string(VCL_SOURCE_ROOT_DIR)
                           +"/contrib/brl/bseg/boxm/ocl/octree_library_functions.cl") ||
-      !append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
+      !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
                               +"/contrib/brl/bseg/boxm/ocl/backproject.cl")) {
     vcl_cerr << "Error: boxm_ray_trace_manager : failed to load kernel source (helper functions)\n";
     return false;
@@ -104,12 +104,12 @@ bool boxm_ray_trace_manager<T>::init_raytrace(boxm_scene<boct_tree<short,T > > *
     return  false;
   }
   for (unsigned int i=0; i < n_sources; ++i) {
-    if (!append_process_kernels(functor_source_filenames[i])) {
+    if (!this->append_process_kernels(functor_source_filenames[i])) {
       vcl_cerr << "Error: boxm_ray_trace_manager : failed to load application-specific functor source\n";
       return false;
     }
   }
-  if (!append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
+  if (!this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
     +"/contrib/brl/bseg/boxm/ocl/ray_trace_main.cl")) {
       vcl_cerr << "Error: boxm_ray_trace_manager : failed to load kernel source (main function)\n";
       return false;
