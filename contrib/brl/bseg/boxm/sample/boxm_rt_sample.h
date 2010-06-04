@@ -29,6 +29,25 @@ class boxm_rt_sample
 };
 
 
+//: traits for a grey optimization sample
+template<>
+class boxm_aux_traits<BOXM_AUX_OPT_RT_GREY>
+{
+ public:
+  typedef boxm_rt_sample<float> sample_datatype;
+
+  static vcl_string storage_subdir() { return "opt_rt_grey_work"; }
+};
+
+//: traits for an rgb optimization sample
+template<>
+class boxm_aux_traits<BOXM_AUX_OPT_RT_RGB>
+{
+ public:
+  typedef boxm_rt_sample<vil_rgb<float> > sample_datatype;
+
+  static vcl_string storage_subdir() { return "opt_rt_rgb_work"; }
+};
 template <class T>
 void vsl_b_write(vsl_b_ostream & os, boxm_rt_sample<T> const &sample);
 
