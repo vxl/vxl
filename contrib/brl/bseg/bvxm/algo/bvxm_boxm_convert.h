@@ -1,4 +1,4 @@
-// This is brl/bseg/bvxm/algo/bbvxm_boxm_convert.h
+// This is brl/bseg/bvxm/algo/bvxm_boxm_convert.h
 #ifndef bvxm_boxm_convert_h
 #define bvxm_boxm_convert_h
 //:
@@ -26,15 +26,15 @@ bvxm_voxel_grid<T_data>* boxm_scene_to_bvxm_grid(boxm_scene<boct_tree<T_loc, T_d
 {
   //Print a little reminder that no inter/extra-polation happens in this function
   vcl_cout << "Convertion boxm_scene to bvxm_grid\n"
-  << "Current resolution level: " << resolution_level << "\n"
-  << "Enforcing only level cells ? " << enforce_level << "\n"
-  << "Is grid saving internal nodes? " <<scene.save_internal_nodes() << vcl_endl;
-  
+           << "Current resolution level: " << resolution_level << '\n'
+           << "Enforcing only level cells ? " << enforce_level << '\n'
+           << "Is grid saving internal nodes? " <<scene.save_internal_nodes() << vcl_endl;
+
   typedef boct_tree<T_loc, T_data > tree_type;
-  
+
   // create an array for each block, and save in a binary file
   boxm_block_iterator<tree_type> iter(&scene);
-  
+
   unsigned int finest_level=100000;
   // find the finest levels in the blocks
   while (!iter.end()) {
@@ -48,12 +48,12 @@ bvxm_voxel_grid<T_data>* boxm_scene_to_bvxm_grid(boxm_scene<boct_tree<T_loc, T_d
     }
     iter++;
   }
-  
+
   // do not make the resolution smaller than finest level
   if (resolution_level < finest_level)
     resolution_level=finest_level;
-  
-  
+
+
   // make sure the resolution level for all trees is the same
   iter.begin();
   short root_level = 0;
@@ -64,7 +64,7 @@ bvxm_voxel_grid<T_data>* boxm_scene_to_bvxm_grid(boxm_scene<boct_tree<T_loc, T_d
     tree_type* tree = block->get_tree();
     root_level = tree->root_level();
   }
-  
+
   // make sure root level is the same for all the trees
   while (!iter.end()) {
     vgl_point_3d<int> idx = iter.index();
@@ -77,13 +77,13 @@ bvxm_voxel_grid<T_data>* boxm_scene_to_bvxm_grid(boxm_scene<boct_tree<T_loc, T_d
     }
     iter++;
   }
-  
+
   // number of cells for each block should be the same, because they have the
   // same tree max_level definitions
   unsigned int ncells = 1 << (root_level - (int)resolution_level);
-  
-  vcl_cout << "Number of cells per grid side: " << ncells << "\n";
-  
+
+  vcl_cout << "Number of cells per grid side: " << ncells << '\n';
+
   //create the regular grid
   vgl_vector_3d<unsigned> dim = scene.world_dim(); //number of blocks in the scene
   unsigned dimx = dim.x()*ncells; // total number of cells in the scene x-dim
@@ -92,13 +92,13 @@ bvxm_voxel_grid<T_data>* boxm_scene_to_bvxm_grid(boxm_scene<boct_tree<T_loc, T_d
   bvxm_voxel_grid<T_data> *grid = new bvxm_voxel_grid<T_data>(input_path,vgl_vector_3d<unsigned>(dimx,dimy,dimz));
   T_data data_init(boxm_zero_val<T_loc, T_data>());
   grid->initialize_data(data_init);
-  
-  vcl_cout << "Grid Size: " << vgl_vector_3d<unsigned>(dimx,dimy,dimz) << "\n";
-  vcl_cout << "In boxm_scene_to_bxm_grid, default voxel value for the grid is: " << data_init << vcl_endl;
-  
+
+  vcl_cout << "Grid Size: " << vgl_vector_3d<unsigned>(dimx,dimy,dimz) << '\n'
+           << "In boxm_scene_to_bxm_grid, default voxel value for the grid is: " << data_init << vcl_endl;
+
   //iterate through grid, locate corresponding position in the octree
   typename bvxm_voxel_grid<T_data>::iterator grid_it=grid->begin();
-  
+
   //locate point in the tree, for now assume ONLY ONE BLOCK
   iter.begin();
   vgl_point_3d<int> idx = iter.index();
@@ -106,10 +106,10 @@ bvxm_voxel_grid<T_data>* boxm_scene_to_bvxm_grid(boxm_scene<boct_tree<T_loc, T_d
   boxm_block<tree_type>* block = scene.get_block(idx);
   vgl_box_3d<double> block_bb = block->bounding_box();
   tree_type* tree = block->get_tree();
-  
+
   // assume that bounding box is a cube
   //const double step_len = ((block_bb.max_x() - block_bb.min_x())/double(ncells));
-  
+
   for (unsigned z=0; z<dimz; ++grid_it, ++z)
   {
     bvxm_voxel_slab<T_data> slab = (*grid_it);
@@ -121,29 +121,29 @@ bvxm_voxel_grid<T_data>* boxm_scene_to_bvxm_grid(boxm_scene<boct_tree<T_loc, T_d
         vgl_point_3d<double> p(((double)x/(double)dimx), ((double)y/(double)dimy), (0.99 - (double)z/(double)dimz));
         //locate the cell containing the point closest to the specified level
         boct_tree_cell<T_loc,T_data>* this_cell = tree->locate_point_at_level(p, resolution_level,true);
-        
+
         if (!this_cell) {
           vcl_cerr << "In boxm_scene_to_bvxm_grid: cell out of bounds\n";
           continue;
         }
-        
+
         unsigned int level = this_cell->get_code().level;
         T_data cell_val = this_cell->data();
-        
-        if(level < resolution_level)
+
+        if (level < resolution_level)
           vcl_cerr << "In boxm_scene_to_bvxm_grid: current level smaller than target level\n";
-        
+
         //if enfoce level is true, there is no iter/extrapolation
-        if((enforce_level)&& (level != resolution_level))
+        if ((enforce_level)&& (level != resolution_level))
           continue;
-        
+
         // just copy value to output grid
         slab(x,y) = cell_val;
-        
       }
     }
   }
   vcl_cout << '\n';
   return grid;
 }
+
 #endif
