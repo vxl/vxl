@@ -1,5 +1,5 @@
-#ifndef bvxm_processes_h_
-#define bvxm_processes_h_
+#ifndef bvxm_algo_processes_h_
+#define bvxm_algo_processes_h_
 
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_macros.h>
