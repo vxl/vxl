@@ -9,26 +9,26 @@ bool bocl_global_memory_bandwidth_manager::setup_array(unsigned len)
 {
   len_=len;
 #if defined (_WIN32)
-	array_=(cl_float*)_aligned_malloc(len * sizeof(cl_float4), 16);
-	cl_len_=(cl_uint*)_aligned_malloc(sizeof(cl_uint),16);
+  array_=(cl_float*)_aligned_malloc(len * sizeof(cl_float4), 16);
+  cl_len_=(cl_uint*)_aligned_malloc(sizeof(cl_uint),16);
 #elif defined(__APPLE__)
-	array_ = (cl_float*)malloc(len * sizeof(cl_float4));
-	cl_len_=(cl_uint*)malloc(sizeof(cl_uint));
+  array_ = (cl_float*)malloc(len * sizeof(cl_float4));
+  cl_len_=(cl_uint*)malloc(sizeof(cl_uint));
 #else
-	array_ = (cl_float*)memalign(16, len * sizeof(cl_float4));
-	cl_len_=(cl_uint*)memalign(16,sizeof(cl_uint));
+  array_ = (cl_float*)memalign(16, len * sizeof(cl_float4));
+  cl_len_=(cl_uint*)memalign(16,sizeof(cl_uint));
 
 #endif
-	unsigned i=0;
-	unsigned grpsize=this->group_size();
-	while(i<len_*4)
-	{
-		array_[i]=(float)((i/4)%grpsize);
-		array_[i+1]=0.0f;
-		array_[i+2]=0.0f;
-		array_[i+3]=0.0f;
-		i+=4;
-	}
+  unsigned i=0;
+  unsigned grpsize=this->group_size();
+  while (i<len_*4)
+  {
+    array_[i]=(float)((i/4)%grpsize);
+    array_[i+1]=0.0f;
+    array_[i+2]=0.0f;
+    array_[i+3]=0.0f;
+    i+=4;
+  }
 
   if (array_)
     return true;
@@ -99,9 +99,9 @@ bool bocl_global_memory_bandwidth_manager::run_kernel()
   cl_int status = CL_SUCCESS;
   // Create and initialize memory objects
   array_buf_ = clCreateBuffer(this->context_,
-                               CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
-                               len_ * sizeof(cl_float4),array_,
-                               &status);
+                              CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
+                              len_ * sizeof(cl_float4),array_,
+                              &status);
   if (!this->check_val(status,
                        CL_SUCCESS,
                        "clCreateBuffer (input array) failed."))
@@ -133,7 +133,7 @@ bool bocl_global_memory_bandwidth_manager::run_kernel()
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (length of array)"))
     return SDK_FAILURE;
 
- status = clSetKernelArg(kernel_,1,sizeof(cl_mem),(void *)&array_buf_);
+  status = clSetKernelArg(kernel_,1,sizeof(cl_mem),(void *)&array_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (input array)"))
     return SDK_FAILURE;
 
@@ -237,49 +237,49 @@ bool bocl_global_memory_bandwidth_manager::run_kernel()
 
 bool bocl_global_memory_bandwidth_manager::run_kernel_using_image()
 {
-	cl_int status = CL_SUCCESS;
-	inputformat.image_channel_order = CL_RGBA;
-	inputformat.image_channel_data_type = CL_FLOAT;
+  cl_int status = CL_SUCCESS;
+  inputformat.image_channel_order = CL_RGBA;
+  inputformat.image_channel_data_type = CL_FLOAT;
 
   // Create and initialize memory objects
   array_buf_ = clCreateImage2D(this->context_,
-                                   CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,&inputformat,image2d_max_width_,len_/image2d_max_width_,
-                                   image2d_max_width_ * sizeof(cl_float4),array_,&status);
+                               CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,&inputformat,image2d_max_width_,len_/image2d_max_width_,
+                               image2d_max_width_ * sizeof(cl_float4),array_,&status);
   if (!this->check_val(status,
                        CL_SUCCESS,
                        "clCreateBuffer (input array) failed."))
     return SDK_FAILURE;
 
   result_array_buf_ = clCreateBuffer(this->context_,
-                                   CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
-                                   len_ * sizeof(cl_float),result_array_,
-                                   &status);
+                                     CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+                                     len_ * sizeof(cl_float),result_array_,
+                                     &status);
   if (!this->check_val(status,
                        CL_SUCCESS,
                        "clCreateBuffer (result array) failed."))
     return SDK_FAILURE;
   cl_len_buf_ = clCreateBuffer(this->context_,
-							  CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
-							  sizeof(cl_uint),cl_len_,&status);
+                               CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
+                               sizeof(cl_uint),cl_len_,&status);
   if (!this->check_val(status,CL_SUCCESS,
-	  "clCreateBuffer (len) failed."))
-	  return SDK_FAILURE;
+                       "clCreateBuffer (len) failed."))
+    return SDK_FAILURE;
   result_flag_buf_ = clCreateBuffer(this->context_,
-							  CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
-							  sizeof(cl_int),result_flag_,&status);
+                                    CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+                                    sizeof(cl_int),result_flag_,&status);
   if (!this->check_val(status,CL_SUCCESS,
-	  "clCreateBuffer (result_flag) failed."))
-	  return SDK_FAILURE;
+                       "clCreateBuffer (result_flag) failed."))
+    return SDK_FAILURE;
 
   // -- Set appropriate arguments to the kernel --
   status = clSetKernelArg(kernel_,0,sizeof(cl_mem),(void *)&cl_len_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (length of array)"))
     return SDK_FAILURE;
 
- status = clSetKernelArg(kernel_,1,sizeof(cl_mem),(void *)&array_buf_);
+  status = clSetKernelArg(kernel_,1,sizeof(cl_mem),(void *)&array_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (input array)"))
     return SDK_FAILURE;
-  
+
   status = clSetKernelArg(kernel_,2,sizeof(cl_mem),(void *)&result_array_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (result array)"))
     return SDK_FAILURE;
@@ -342,7 +342,7 @@ bool bocl_global_memory_bandwidth_manager::run_kernel_using_image()
                                0,NULL,&events[0]);
   status = clWaitForEvents(1, &events[0]);
   if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents failed."))
-	  return SDK_FAILURE;
+    return SDK_FAILURE;
 
   status = clEnqueueReadBuffer(command_queue_,result_flag_buf_,CL_TRUE,
                                0,sizeof(cl_int),
@@ -380,9 +380,8 @@ bool bocl_global_memory_bandwidth_manager::run_kernel_using_image()
     return SDK_FAILURE;
 
     return SDK_SUCCESS;
-
-
 }
+
 int bocl_global_memory_bandwidth_manager::build_kernel_program()
 {
   cl_int status = CL_SUCCESS;

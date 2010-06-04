@@ -8,37 +8,38 @@ bool test_single_thread_read_bandwidth_image(int len, float & bandwidth)
   mgr->setup_array(len);
   mgr->setup_result_array();
   if (!mgr->load_kernel_source(root_dir + "/contrib/brl/bbas/bocl/tests/test_global_io_bandwidth.cl"))
-	  return false;
+    return false;
   if (mgr->build_kernel_program()!=SDK_SUCCESS)
-	  return false;
+    return false;
 
- if (mgr->create_kernel("test_single_thread_read_bandwidth_image")!=SDK_SUCCESS) {
+  if (mgr->create_kernel("test_single_thread_read_bandwidth_image")!=SDK_SUCCESS) {
     TEST("Create Kernel test_single_thread_read_bandwidth_image", false, true);
     return false;
   }
- if (mgr->run_kernel_using_image()!=SDK_SUCCESS) {
+  if (mgr->run_kernel_using_image()!=SDK_SUCCESS) {
     TEST("Run Kernel test_single_thread_read_bandwidth_image", false, true);
     return false;
   }
   cl_int* result_flag = mgr->result_flag();
   bandwidth=(float)4/* image reades float4*/*(len*4)/mgr->time_taken()/(1024*1024);
- 
+
 
   float sum=0.0;
   cl_float * result_array=mgr->result_array();
-  for(unsigned i=0;i<len;i++)
-	sum+=result_array[i];
+  for (unsigned i=0;i<len;i++)
+  sum+=result_array[i];
 
   mgr->clean_array();
   mgr->clean_result_array();
-  if(sum==(float)len)
+  if (sum==(float)len)
   {
-	  TEST("Works test_single_thread_read_bandwidth_image", true, true);
-	  return true;
+    TEST("Works test_single_thread_read_bandwidth_image", true, true);
+    return true;
   }
   TEST("Works test_single_thread_read_bandwidth_image", false, true);
   return false;
 }
+
 bool test_workgroup_coalesced_read_bandwidth_image(int len, float & bandwidth)
 {
   vcl_string root_dir = testlib_root_dir();
@@ -46,37 +47,38 @@ bool test_workgroup_coalesced_read_bandwidth_image(int len, float & bandwidth)
   mgr->setup_array(len);
   mgr->setup_result_array();
   if (!mgr->load_kernel_source(root_dir + "/contrib/brl/bbas/bocl/tests/test_global_io_bandwidth.cl"))
-	  return false;
+    return false;
   if (mgr->build_kernel_program()!=SDK_SUCCESS)
-	  return false;
+    return false;
 
- if (mgr->create_kernel("test_workgroup_coalesced_read_bandwidth_image")!=SDK_SUCCESS) {
+  if (mgr->create_kernel("test_workgroup_coalesced_read_bandwidth_image")!=SDK_SUCCESS) {
     TEST("Create Kernel test_workgroup_coalesced_read_bandwidth_image", false, true);
     return false;
   }
- if (mgr->run_kernel_using_image()!=SDK_SUCCESS) {
+  if (mgr->run_kernel_using_image()!=SDK_SUCCESS) {
     TEST("Run Kernel test_workgroup_coalesced_read_bandwidth_image", false, true);
     return false;
   }
   cl_int* result_flag = mgr->result_flag();
   bandwidth=(float)4/*reads in float4 */*(len*4)/mgr->time_taken()/(1024*1024);
- 
+
 
   float sum=0.0;
   cl_float * result_array=mgr->result_array();
-  for(unsigned i=0;i<len;i++)
-	sum+=result_array[i];
+  for (unsigned i=0;i<len;i++)
+  sum+=result_array[i];
 
   mgr->clean_array();
   mgr->clean_result_array();
-  if(sum==(float)len)
+  if (sum==(float)len)
   {
-     TEST("Works test_workgroup_coalesced_read_bandwidth_image", true, true);
-     return true;
+    TEST("Works test_workgroup_coalesced_read_bandwidth_image", true, true);
+    return true;
   }
   TEST("Works test test_workgroup_coalesced_read_bandwidth_image", false, true);
   return false;
 }
+
 bool test_single_thread_read_bandwidth(int len, float & bandwidth)
 {
   vcl_string root_dir = testlib_root_dir();
@@ -107,10 +109,10 @@ bool test_single_thread_read_bandwidth(int len, float & bandwidth)
 
   mgr->clean_array();
   mgr->clean_result_array();
-  if(sum==(float)len)
+  if (sum==(float)len)
   {
     TEST("Works test_single_thread_read_bandwidth", true, true);
-	return true;
+  return true;
   }
   TEST("Works test_single_thread_read_bandwidth", false, true);
   return true;
@@ -146,10 +148,10 @@ bool test_workgroup_uncoalesced_read_bandwidth(int len, float & bandwidth)
 
   mgr->clean_array();
   mgr->clean_result_array();
-  if(sum==(float)len)
+  if (sum==(float)len)
   {
-	  TEST("Run Kernel test_workgroup_uncoalesced_read_bandwidth", true, true);
-	  return true;
+    TEST("Run Kernel test_workgroup_uncoalesced_read_bandwidth", true, true);
+    return true;
   }
   TEST("Run Kernel test_workgroup_uncoalesced_read_bandwidth", false, true);
   return false;
@@ -185,10 +187,10 @@ bool test_workgroup_coalesced_read_bandwidth(int len, float & bandwidth)
 
   mgr->clean_array();
   mgr->clean_result_array();
-  if(sum==(float)len)
+  if (sum==(float)len)
   {
-	  TEST("Run Kernel test_workgroup_coalesced_read_bandwidth", true, true);
-	  return true;
+    TEST("Run Kernel test_workgroup_coalesced_read_bandwidth", true, true);
+    return true;
   }
   TEST("Run Kernel test_workgroup_coalesced_read_bandwidth", false, true);
   return false;
@@ -224,9 +226,9 @@ bool test_single_thread_read_bandwidth_local_meory(int len, float & bandwidth)
 
   mgr->clean_array();
   mgr->clean_result_array();
-  if(sum==(float)len)
+  if (sum==(float)len)
   {
-	TEST("Run Kernel test_single_thread_read_bandwidth_local_meory", true, true);
+  TEST("Run Kernel test_single_thread_read_bandwidth_local_meory", true, true);
     return true;
   }
 
@@ -264,10 +266,10 @@ bool test_workgroup_uncoalesced_read_bandwidth_local_meory(int len, float & band
 
   mgr->clean_array();
   mgr->clean_result_array();
-  if(sum==(float)len)
+  if (sum==(float)len)
   {
-	  TEST("Works test_workgroup_uncoalesced_read_bandwidth_local_meory", true, true);
-	  return true;
+    TEST("Works test_workgroup_uncoalesced_read_bandwidth_local_meory", true, true);
+    return true;
   }
   TEST("Works test_workgroup_uncoalesced_read_bandwidth_local_meory", false, true);
   return false;
@@ -302,12 +304,12 @@ bool test_workgroup_coalesced_read_bandwidth_local_memory(int len, float & bandw
 
   mgr->clean_array();
   mgr->clean_result_array();
-  if(sum==(float)len)
+  if (sum==(float)len)
   {
-	  TEST("Works test_workgroup_coalesced_read_bandwidth_local_memory", true, true);
-	  return true;
+    TEST("Works test_workgroup_coalesced_read_bandwidth_local_memory", true, true);
+    return true;
   }
- 
+
   TEST("Run Kernel test_workgroup_coalesced_read_bandwidth_local_memory", false, true);
   return false;
 }
@@ -315,24 +317,24 @@ bool test_workgroup_coalesced_read_bandwidth_local_memory(int len, float & bandw
 
 static void test_global_io_bandwidth()
 {
-	int len=1024*1024;
-	float bandwidth=0.0f;
-	if(test_single_thread_read_bandwidth(len,bandwidth))
-		vcl_cout<<" test_single_thread_read_bandwidth "<<bandwidth<<vcl_endl;
-	if(test_single_thread_read_bandwidth_image(len,bandwidth))
-		vcl_cout<<" test_single_thread_read_bandwidth_image "<<bandwidth<<vcl_endl;
-	if(test_workgroup_uncoalesced_read_bandwidth(len,bandwidth))
-		vcl_cout<<" test_workgroup_uncoalesced_read_bandwidth "<<bandwidth<<vcl_endl;
-	if(test_workgroup_coalesced_read_bandwidth_image(len,bandwidth))
-		vcl_cout<<" test_workgroup_coalesced_read_bandwidth_image "<<bandwidth<<vcl_endl;
-	if(test_workgroup_coalesced_read_bandwidth(len,bandwidth))
-		vcl_cout<<" test_workgroup_coalesced_read_bandwidth "<<bandwidth<<vcl_endl;
-	if(test_single_thread_read_bandwidth_local_meory(len,bandwidth))
-		vcl_cout<<" test_single_thread_read_bandwidth_local_meory "<<bandwidth<<vcl_endl;
-	if(test_workgroup_uncoalesced_read_bandwidth_local_meory(len,bandwidth))
-		vcl_cout<<" test_workgroup_uncoalesced_read_bandwidth_local_meory "<<bandwidth<<vcl_endl;
-	if(test_workgroup_coalesced_read_bandwidth_local_memory(len,bandwidth))
-		vcl_cout<<" test_workgroup_coalesced_read_bandwidth_local_memory "<<bandwidth<<vcl_endl;
+  int len=1024*1024;
+  float bandwidth=0.0f;
+  if (test_single_thread_read_bandwidth(len,bandwidth))
+    vcl_cout<<" test_single_thread_read_bandwidth "<<bandwidth<<vcl_endl;
+  if (test_single_thread_read_bandwidth_image(len,bandwidth))
+    vcl_cout<<" test_single_thread_read_bandwidth_image "<<bandwidth<<vcl_endl;
+  if (test_workgroup_uncoalesced_read_bandwidth(len,bandwidth))
+    vcl_cout<<" test_workgroup_uncoalesced_read_bandwidth "<<bandwidth<<vcl_endl;
+  if (test_workgroup_coalesced_read_bandwidth_image(len,bandwidth))
+    vcl_cout<<" test_workgroup_coalesced_read_bandwidth_image "<<bandwidth<<vcl_endl;
+  if (test_workgroup_coalesced_read_bandwidth(len,bandwidth))
+    vcl_cout<<" test_workgroup_coalesced_read_bandwidth "<<bandwidth<<vcl_endl;
+  if (test_single_thread_read_bandwidth_local_meory(len,bandwidth))
+    vcl_cout<<" test_single_thread_read_bandwidth_local_meory "<<bandwidth<<vcl_endl;
+  if (test_workgroup_uncoalesced_read_bandwidth_local_meory(len,bandwidth))
+    vcl_cout<<" test_workgroup_uncoalesced_read_bandwidth_local_meory "<<bandwidth<<vcl_endl;
+  if (test_workgroup_coalesced_read_bandwidth_local_memory(len,bandwidth))
+    vcl_cout<<" test_workgroup_coalesced_read_bandwidth_local_memory "<<bandwidth<<vcl_endl;
 }
 
 TESTMAIN(test_global_io_bandwidth);
