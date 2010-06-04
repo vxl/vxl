@@ -23,10 +23,12 @@ class ray_bundle_test_driver
   cl_mem   input_data_buf_;
   //output results
   cl_mem   tree_test_output_;
-  unsigned ni_;
-  unsigned nj_;
+  unsigned bni_;
+  unsigned bnj_;
+  unsigned wni_;
+  unsigned wnj_;
  public:
-  ray_bundle_test_driver() { cl_manager_ = boxm_ray_trace_manager<T>::instance(); ni_=0; nj_=0;}
+  ray_bundle_test_driver() { cl_manager_ = boxm_ray_trace_manager<T>::instance(); bni_=0; bnj_=0;wni_=0; wnj_=0;}
 
   ~ray_bundle_test_driver();
 
@@ -51,8 +53,6 @@ class ray_bundle_test_driver
   cl_int* tree_results() { return cl_manager_->tree_results(); }
   vcl_size_t tree_result_size_bytes() const { return 4*cl_manager_->tree_result_size(); }
 
-  void set_buffers();
-
   int create_kernel(vcl_string const& name);
   cl_float * ray_results() { return cl_manager_->ray_results(); }
   int release_kernel();
@@ -63,16 +63,27 @@ class ray_bundle_test_driver
 
   int cleanup_bundle_test();
 
-  void set_ni(unsigned ni){ni_=ni;}
-  void set_nj(unsigned nj){nj_=nj;}
+  void set_bundle_ni(unsigned ni){bni_=ni;}
+  void set_bundle_nj(unsigned nj){bnj_=nj;}
 
-  vcl_size_t n_rays() const {return ni_*nj_;}
+  void set_work_space_ni(unsigned ni){wni_=ni;}
+  void set_work_space_nj(unsigned nj){wnj_=nj;}
+
+  vcl_size_t bundle_ni(){return bni_;}
+  vcl_size_t bundle_nj(){return bnj_;}
+
+  vcl_size_t work_space_ni(){return wni_;}
+  vcl_size_t work_space_nj(){return wnj_;}
+
+  vcl_size_t n_rays_in_bundle() const {return bni_*bnj_;}
 
   void print_kernel_usage_info();
- private:
-
   int set_tree_args();
-  int set_ray_bundle_args();
+  int set_basic_test_args();
+  bool setup_image_cam_data();
+  int set_image_cam_args();
+  bool clean_image_cam_data();
+ private:
   int setup_cl();
 };
 

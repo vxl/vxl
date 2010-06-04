@@ -59,6 +59,7 @@ copy_to_arrays(boct_tree_cell<short, T >* cell_ptr,
   cell_array[cell_input_ptr][3] = cell_ptr->level();
   //if the cell has chidren then they must be copied
   if (!cell_ptr->is_leaf()) {
+
     //initialize data values to null
     data_array[cell_array[cell_input_ptr][2]].fill(0.0);
     //create the children on the cell array
@@ -73,6 +74,14 @@ copy_to_arrays(boct_tree_cell<short, T >* cell_ptr,
       copy_to_arrays(child_cell_ptr, cell_array, data_array, child_cell_input_ptr);
     }
   }
+#if 0
+  else{
+    // Debug
+    boct_loc_code<short> cd = cell_ptr->get_code();
+    vgl_box_3d<double> lbb = cell_ptr->local_bounding_box(2);
+    vcl_cout<< cell_ptr->level() << ' ' << cd << ' ' << lbb << '\n'; 
+  }
+#endif
 }
 
 template<class T>
@@ -123,30 +132,43 @@ bool boxm_ray_trace_manager<T>::init_raytrace(boxm_scene<boct_tree<short,T > > *
   if (!this->check_val(status,CL_SUCCESS,error_to_string(status))) {
     return false;
   }
-  setup_ray_origin();
-  setup_img_dims(ni,nj);
-  setup_work_image();
-  setup_camera();
-
+  if(!this->setup_image_cam_arrays())
+    return false;
+  if(!this->setup_work_image())
+    return false;
   return true;
 }
 
 template<class T>
+bool boxm_ray_trace_manager<T>::setup_image_cam_arrays()
+{
+  bool good = true;
+  good = good && setup_ray_origin();
+  good = good && setup_img_dims(ni_,nj_);
+  good = good && setup_camera();
+  return good;
+}
+template<class T>
+bool boxm_ray_trace_manager<T>::clean_image_cam_arrays()
+{
+  bool good = true;
+  good = good && clean_img_dims();
+  good = good && clean_camera();
+  good = good && clean_ray_origin();
+  return good;
+}
+template<class T>
 bool boxm_ray_trace_manager<T>::clean_raytrace()
 {
-  clean_img_dims();
-  clean_camera();
-  clean_work_image();
-  clean_ray_origin();
+  bool good = true;
+  good = good && clean_image_cam_arrays();
+  good = good && clean_work_image();
 
   cl_int status = CL_SUCCESS;
   // release kernel
   status = clReleaseKernel(kernel_);
-  if (!this->check_val(status,CL_SUCCESS,"clReleaseKernel failed.")) {
-    return false;
-  }
-
-  return true;
+  good = good && this->check_val(status,CL_SUCCESS,"clReleaseKernel failed.");
+  return good;
 }
 
 template<class T>
@@ -450,6 +472,8 @@ bool boxm_ray_trace_manager<T>::clean_img_dims()
 template<class T>
 bool boxm_ray_trace_manager<T>::setup_roi_dims(unsigned min_i,unsigned max_i,unsigned min_j,unsigned max_j)
 {
+  roi_min_i_ = min_i;   roi_min_j_ = min_j;
+  roi_max_i_ = max_i;   roi_max_j_ = max_j;
 #if defined (_WIN32)
   roidims_ =  (cl_uint*)_aligned_malloc( sizeof(cl_uint4), 16);
 #elif defined(__APPLE__)
@@ -458,10 +482,10 @@ bool boxm_ray_trace_manager<T>::setup_roi_dims(unsigned min_i,unsigned max_i,uns
   roidims_ =  (cl_uint*)memalign(16, sizeof(cl_uint));
 #endif
 
-  roidims_[0]=min_i;
-  roidims_[1]=max_i;
-  roidims_[2]=min_j;
-  roidims_[3]=max_j;
+  roidims_[0]=roi_min_i_;
+  roidims_[1]=roi_max_i_;
+  roidims_[2]=roi_min_j_;
+  roidims_[3]=roi_max_j_;
 
   return true;
 }
@@ -661,7 +685,7 @@ int boxm_ray_trace_manager<T>::setup_roidims_input_buffer()
   cl_int status = CL_SUCCESS;
   roidims_buf_ = clCreateBuffer(this->context_,CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                 sizeof(cl_uint4),roidims_,&status);
-  if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (cell_array) failed."))
+  if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (roi) failed."))
     return SDK_FAILURE;
   else
     return SDK_SUCCESS;
@@ -728,7 +752,7 @@ int boxm_ray_trace_manager<T>::setup_imgdims_buffer()
   cl_int status = CL_SUCCESS;
   imgdims_buf_ = clCreateBuffer(this->context_,CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                 sizeof(cl_uint4),imgdims_,&status);
-  if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (cell_array) failed."))
+  if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (image size) failed."))
     return SDK_FAILURE;
   else
     return SDK_SUCCESS;
@@ -765,7 +789,36 @@ int boxm_ray_trace_manager<T>::clean_tree_global_bbox_buffer()
   else
     return SDK_SUCCESS;
 }
-
+template<class T>
+int boxm_ray_trace_manager<T>::setup_image_cam_buffers()
+{
+  if(setup_camera_input_buffer()!=SDK_SUCCESS)
+    return SDK_FAILURE;
+  if(setup_roidims_input_buffer()!=SDK_SUCCESS)
+    return SDK_FAILURE;
+  if(setup_ray_origin_buffer()!=SDK_SUCCESS)
+    return SDK_FAILURE;
+  if(setup_tree_global_bbox_buffer()!=SDK_SUCCESS)
+    return SDK_FAILURE;
+  if(setup_imgdims_buffer()!=SDK_SUCCESS)
+    return SDK_FAILURE;
+  return SDK_SUCCESS;
+}
+template<class T>
+int boxm_ray_trace_manager<T>::clean_image_cam_buffers()
+{
+  if(clean_camera_input_buffer()!=SDK_SUCCESS)
+    return SDK_FAILURE;
+  if(clean_roidims_input_buffer()!=SDK_SUCCESS)
+    return SDK_FAILURE;
+  if(clean_ray_origin_buffer()!=SDK_SUCCESS)
+    return SDK_FAILURE;
+  if(clean_tree_global_bbox_buffer()!=SDK_SUCCESS)
+    return SDK_FAILURE;
+  if(clean_imgdims_buffer()!=SDK_SUCCESS)
+    return SDK_FAILURE;
+  return SDK_SUCCESS;
+}
 template<class T>
 int boxm_ray_trace_manager<T>::build_kernel_program()
 {
@@ -1008,24 +1061,17 @@ bool boxm_ray_trace_manager<T>::run()
       // allocate and initialize memory
 
       setup_tree_input_buffers();
+      setup_image_cam_buffers();
+      setup_work_img_buffer();
 
-      //setup_camera_input_buffer();
-      setup_roidims_input_buffer();
-      //setup_ray_origin_buffer();
-      //setup_work_img_buffer();
-      setup_tree_global_bbox_buffer();
-      setup_imgdims_buffer();
       t.mark();
       // run the raytracing for this block
       run_block();
       total_gpu_time+=t.all();
       // release memory
-      clean_imgdims_buffer();
-      clean_tree_global_bbox_buffer();
-      //clean_work_img_buffer();
-      //clean_ray_origin_buffer();
-      clean_roidims_input_buffer();
-      //clean_camera_input_buffer();
+
+      clean_image_cam_buffers();
+      clean_work_img_buffer();
       clean_tree_input_buffers();
 
       clean_tree();

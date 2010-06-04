@@ -81,7 +81,8 @@ boct_tree<short,T > * open_cl_test_data::tree()
     T v((float)1.0*i);
     (*lit)->set_data(v);
   }
-
+  const vgl_box_3d<double> box(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
+  ret_tree->set_bbox(box);
   return ret_tree;
 }
 

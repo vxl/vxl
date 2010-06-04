@@ -38,17 +38,18 @@ class boxm_ray_trace_manager : public bocl_manager<boxm_ray_trace_manager<T_data
     //tree_(0),
     cam_(0),
     svd_UtWV_(0),imgdims_(0),roidims_(0),global_bbox_(0),
-    ni_(0),nj_(0),nlevels_(0)
-  {}
+    ni_(0),nj_(0),nlevels_(0), roi_min_i_(0), roi_min_j_(0),
+    roi_max_i_(0), roi_max_j_(0)
+    {}
 
   ~boxm_ray_trace_manager();
 
   //: setup the parameters needed to run the raytrace
   bool init_raytrace(boxm_scene<tree_type> *scene,
-    vpgl_camera_double_sptr cam,
-    unsigned int ni, unsigned int nj,
-    vcl_vector<vcl_string> functor_source_filenames,
-    unsigned int i0 = 0, unsigned int j0 = 0);
+                     vpgl_camera_double_sptr cam,
+                     unsigned int ni, unsigned int nj,
+                     vcl_vector<vcl_string> functor_source_filenames,
+                     unsigned int i0 = 0, unsigned int j0 = 0);
 
   //: run the raytrace
   bool run();
@@ -59,21 +60,29 @@ class boxm_ray_trace_manager : public bocl_manager<boxm_ray_trace_manager<T_data
 
   unsigned ni(){return ni_;}
   unsigned nj(){return nj_;}
+  void roi_min(unsigned& min_i, unsigned& min_j)
+    {min_i = roi_min_i_;min_j = roi_min_j_;}
+  void roi_max(unsigned& max_i, unsigned& max_j)
+    {max_i = roi_max_i_;max_j = roi_max_j_;}
 
   cl_float* ray_results() {return ray_results_;}
 
-  vcl_size_t tree_result_size() const {return 2*cell_input_.size();}
+  vcl_size_t tree_result_size() const {return 4*cell_input_.size();}
   cl_int* tree_results() {return tree_results_;}
 
   vcl_size_t n_rays() const {return ni_*nj_;}
   vcl_size_t ray_rows() const {return ni_;}
   vcl_size_t ray_cols() const {return nj_;}
 
-  cl_mem cell_buf() {return input_cell_buf_;}
-  cl_mem data_buf() {return input_data_buf_;}
-  cl_mem ray_origin_buf() {return ray_origin_buf_;}
-  cl_mem camera_buf() {return camera_buf_;}
-  cl_mem imgdims_buf() {return imgdims_buf_;}
+  cl_mem& cell_buf() {return input_cell_buf_;}
+  cl_mem& data_buf() {return input_data_buf_;}
+  cl_mem& ray_origin_buf() {return ray_origin_buf_;}
+  cl_mem& camera_buf() {return camera_buf_;}
+  cl_mem& imgdims_buf() {return imgdims_buf_;}
+  cl_mem& n_levels_buf() {return nlevels_buf_;}
+  cl_mem& roi_buf(){return roidims_buf_;}
+  cl_mem& global_bbox_buf(){return global_bbox_buf_;}
+
   vcl_size_t cell_array_size() const {return cell_input_.size();}
   vcl_size_t cell_data_array_size() const {return data_input_.size();}
 
@@ -140,12 +149,17 @@ class boxm_ray_trace_manager : public bocl_manager<boxm_ray_trace_manager<T_data
   int setup_imgdims_buffer();
   int clean_imgdims_buffer();
 
+  bool setup_image_cam_arrays();
+  bool clean_image_cam_arrays();
+  int setup_image_cam_buffers();
+  int clean_image_cam_buffers();
+
   int build_kernel_program();
 
   int create_kernel(vcl_string const& name);
   int release_kernel();
 
-unsigned num_levels(){return nlevels_;}
+  unsigned num_levels(){return nlevels_;}
   cl_kernel kernel() {return kernel_;}
 
   bool load_tree(vcl_string const& path);
@@ -170,7 +184,9 @@ unsigned num_levels(){return nlevels_;}
   unsigned int j0_;
   unsigned ni_;
   unsigned nj_;
-unsigned nlevels_;
+  unsigned roi_min_i_, roi_min_j_;
+  unsigned roi_max_i_, roi_max_j_;
+  unsigned nlevels_;
   cl_int* cells_;
   cl_float* cell_data_;
   cl_int* tree_results_;
@@ -180,7 +196,7 @@ unsigned nlevels_;
   cl_float* svd_UtWV_;
   cl_uint * imgdims_;
   cl_uint * roidims_;
- cl_uint * numlevels_;
+  cl_uint * numlevels_;
   cl_float * global_bbox_;
   cl_mem   input_cell_buf_;
   cl_mem   input_data_buf_;
@@ -190,7 +206,7 @@ unsigned nlevels_;
   cl_mem   imgdims_buf_;
   cl_mem   roidims_buf_;
   cl_mem   global_bbox_buf_;
-cl_mem   nlevels_buf_;
+  cl_mem   nlevels_buf_;
 };
 
 #endif // boxm_ray_trace_manager_h_

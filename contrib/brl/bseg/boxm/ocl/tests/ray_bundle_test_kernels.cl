@@ -1,91 +1,4 @@
 #pragma OPENCL EXTENSION cl_khr_byte_addressable_store : enable
-int load_data(__global int4*    cells,
-              __global float16* cell_data,
-              uchar nbi,      // bundle width
-              uchar nbj,      // bundle height
-              short n_levels, // number of tree levels
-              __local uchar*    ray_bundle_array, // bundle pointer array
-              __local float*    exit_points,      // required exit points
-              __local short4*   cached_loc_codes,
-              __local float16*  cached_data,
-              int4* ld_res)
-{
-  //serialized with thread 0 doing all the work
-  if (get_local_id(0)!=0)
-    return 0;
-  (*ld_res) = (int4)0;
-  // clear the cache
-  for (uchar j = 0; j<nbj; ++j)
-    for (uchar i = 0; i<nbi; ++i) {
-      int ptr = i+ (j*nbi);// 1-d array index
-      ray_bundle_array[ptr]=(uchar)0;
-      cached_loc_codes[ptr]= (short4)-1;
-      cached_data[ptr]= (float16)0.0f;
-    }
-
-  // note for now the traversal is from the root, however if a sub-tree
-  // is cached then the traversal can start at the root of the sub-tree
-  short4 root_code = (short4)(0,0,0,n_levels-1); // location code of root
-  int root_ptr = 0; // cell index for root
-  short4 loca; // loc code with multiple uses
-  uchar offset = 0;
-  float4 exit_pt = (float4)1;
-  // load data
-  for (uchar j = 0; j<nbj; ++j)
-    for (uchar i = 0; i<nbi; ++i) {
-      int ptr = i+ (j*nbi); // 1-d array index
-      //fetch the exit point for ray (i,j)
-      uchar tptr = 3*ptr;
-      exit_pt.x = exit_points[tptr];
-      exit_pt.y = exit_points[tptr+1];
-      exit_pt.z = exit_points[tptr+2];
-
-      // n n
-      // n x    The data for x might be at any of the bundle locations, n.
-      // check to see if neighbors already have the required data Note. Could
-      // be anywhere in the row above
-      if (i>0) {
-        tptr = ptr-1;
-        loca = cached_loc_codes[ray_bundle_array[tptr]];
-        if (cell_contains_exit_pt(n_levels, loca, exit_pt)) {
-          ray_bundle_array[ptr]=ray_bundle_array[tptr];
-          (*ld_res).x = 1;
-          continue;
-        }
-
-        if (j>0) { // check neighbors in previous row
-          tptr = ptr - nbi;
-          loca = cached_loc_codes[ray_bundle_array[tptr]];
-          if (cell_contains_exit_pt(n_levels, loca, exit_pt)) {
-          ray_bundle_array[ptr]=ray_bundle_array[tptr];
-          (*ld_res).y = 1;
-          continue;
-          }
-          tptr--;
-          loca = cached_loc_codes[ray_bundle_array[tptr]];
-          if (cell_contains_exit_pt(n_levels, loca, exit_pt)) {
-            ray_bundle_array[ptr]=ray_bundle_array[tptr];
-          (*ld_res).z = 1;
-            continue;
-          }
-        }
-      }
-      // data not in cache already
-      // get tree cell corresponding to exit point
-      loca = loc_code(exit_pt, n_levels-1);
-      int cell_ptr = traverse_force(cells, root_ptr, root_code, loca, &loca);
-      // loca now contains the loc_code of the found cell
-      if (cell_ptr<0) // traversal failed
-        return (int)0;
-      // put data items in cache
-      ray_bundle_array[ptr] = offset;
-      cached_loc_codes[offset] = loca;
-      cached_data[offset++] = cell_data[cells[cell_ptr].z];
-      (*ld_res).x += 2;
-    }
-  return 1;
-}
-
 __kernel
 void
 test_load_data(__global int4* cells, __global float16* cell_data,
@@ -95,35 +8,124 @@ test_load_data(__global int4* cells, __global float16* cell_data,
                __local short4*   cached_loc_codes,
                __local float16*  cached_data)
 {
-  if (get_local_id(0)!=0)
-    return;
-  int4 res = (int4)0;
-  uchar ni = 2;
-  uchar nj = 2;
+
   short n_levels = 3;
   exit_points[0]=0.25f;  exit_points[1]= 0.25f;  exit_points[2]= 1.0f;
   exit_points[3]=0.75f;  exit_points[4]= 0.25f;  exit_points[5]= 1.0f;
   exit_points[6]=0.25f;  exit_points[7]= 0.75f;  exit_points[8]= 1.0f;
   exit_points[9]=0.75f;  exit_points[10]=0.75f;  exit_points[11]=1.0f;
-  int ret = load_data(cells, cell_data, ni, nj, n_levels, ray_bundle_array,
-                      exit_points,cached_loc_codes,cached_data, &res);
+  barrier(CLK_LOCAL_MEM_FENCE); 
+  int ret = load_data(cells, cell_data,n_levels, ray_bundle_array,
+                      exit_points,cached_loc_codes,cached_data);
   int result_ptr = 0;
+  /* Check the load_data return value */
   results[result_ptr++]= (int4)ret;
-  results[result_ptr++]= res;
+  /* Check the loc_codes */
   for (uchar i = 0; i<4; ++i) {
     results[result_ptr++]=convert_int4(cached_loc_codes[i]);
-#if 0
-    float4 p=(float4)(exit_points[3*i], exit_points[3*i+1], exit_points[3*i+2], 0.0f);
-    short4 cd = loc_code(p, n_levels-1);
-    results[result_ptr++] = convert_int4(cached_loc_codes[i]);
-#endif
   }
-#if 0
-  int count = 40000000;
-  for (int i = 0; i<count; ++i)
-    cached_data[0]=cell_data[0];
-  int result_ptr = 0;
-  results[result_ptr++]= (int4)count;
-#endif
+
+  /* Check the data transfered to the local data cache */
+  for(uchar i = 0; i<4; ++i){
+    float16 temp = cached_data[i];
+    results[result_ptr++]=(int4)temp.s0;
+  }
+  exit_points[0]=0.25f;  exit_points[1]= 0.25f;  exit_points[2]= 1.0f; 
+  exit_points[3]=0.251f;  exit_points[4]= 0.252f;  exit_points[5]= 1.0f; 
+  exit_points[6]=0.253f;  exit_points[7]= 0.254f;  exit_points[8]= 1.0f; 
+  exit_points[9]=0.255f;  exit_points[10]=0.256f;  exit_points[11]=1.0f; 
+  barrier(CLK_LOCAL_MEM_FENCE); 
+  ret = load_data(cells, cell_data, n_levels, ray_bundle_array,
+                  exit_points,cached_loc_codes,cached_data);
+
+  /* Check the load_data return value */
+  results[result_ptr++]= (int4)ret;
+ /* Check the loc_codes */
+  for(uchar i = 0; i<4; ++i){
+    results[result_ptr++]=convert_int4(cached_loc_codes[i]);
+  }
+  /* Check the data transfered to the local data cache */
+  for(uchar i = 0; i<4; ++i){
+    float16 temp = cached_data[i];
+    results[result_ptr++]=(int4)temp.s0;
+  }
+}
+__kernel
+void
+test_map_work_space(__global int4* cells, __global float16* cell_data,
+                    __global int4* results,
+                    __local uchar*    ray_bundle_array, 
+                    __local float*    exit_points,
+                    __local short4*   cached_loc_codes,
+                    __local float16*  cached_data)
+{
+  int local_id0 = get_local_id(0), local_id1 = get_local_id(1);
+  int group_id0 = get_group_id(0), group_id1 = get_group_id(1);
+  int mapped_id0=0, mapped_id1=0;
+  map_work_space_2d(local_id0, local_id1, group_id0, group_id1,
+                    &mapped_id0, &mapped_id1);
+  int global_id0 = get_global_id(0), global_id1 = get_global_id(1);
+  int gs0 = get_global_size(0);
+  /* keep track of what thread executes by a global counter (results[0]) */
+  int offset = results[0].x;
+  results[offset+1] = (int4)(global_id0, global_id1, mapped_id0, mapped_id1);
+  results[0].x=offset+1;
+}
+
+__kernel
+void
+test_ray_entry_point(__global int4* cells, 
+                     __global float16* cell_data,
+                     __global int4* results,
+                     __global uint* n_levels_p,
+                     __global float4* cam_center_g,
+                     __global float16* cam_svd_g, /* cam pseudo inverse */
+                     __global uint4* roi_g, /* image roi */ 
+                     __global float4* bbox_g,/* bounding box,global coords*/
+                     __local float16* cam_svd,
+                     __local float4* cam_center,
+                     __local float4* bbox,
+                     __local uint4* roi,
+                     __local uchar*    ray_bundle_array, 
+                     __local float*    exit_points,
+                     __local short4*   cached_loc_codes,
+                     __local float16*  cached_data)
+{
+
+  int local_bundle_index = get_local_id(0)+(get_local_size(0))*get_local_id(1);
+  /* work item 0 moves data from global memory to local memory */
+  if(local_bundle_index == 0){
+    
+    cam_svd[0]=cam_svd_g[0];  // conjugate transpose of U
+    cam_svd[1]=cam_svd_g[1];  // V
+    cam_svd[2]=cam_svd_g[2];  // Winv(first4) and ray_origin(last four)
+    *cam_center =cam_center_g[0];    // ray_origin
+    *bbox=*bbox_g;
+    *roi=*roi_g;
+  }
+  barrier(CLK_LOCAL_MEM_FENCE); /* wait for work item 0 to finish */
+  uint grp_i = get_global_id(0), grp_j = get_global_id(1);
+  float4 ray_o, ray_d;
+  float4 cell_min, cell_max;
+  uint n_levels = *n_levels_p;
+  short4 root = (short4)(0,0,0,n_levels-1);
+  cell_bounding_box(root, n_levels, &cell_min, &cell_max);
+  
+  int res =  ray_entry_point(cam_svd, cam_center, bbox, roi, 
+                             cell_min, cell_max, grp_i, grp_j,
+                             local_bundle_index, 
+                             &ray_o, &ray_d, exit_points);
+  if(res==0){
+    results[0]=(int4)(-1,-1,-1,-1);
+    return;
+  }
+  int gs0 = get_global_size(0);
+  int ptr = grp_i + gs0*grp_j;
+  float p0 = 1000.0f*exit_points[3*local_bundle_index];
+  float p1 = 1000.0f*exit_points[(3*local_bundle_index)+1];
+  float p2 = 1000.0f*exit_points[(3*local_bundle_index)+2];
+  float p3 = 1000.0f*local_bundle_index;
+  float4 temp = (float4)(p0, p1, p2, p3);
+  results[ptr] = convert_int4(temp);
 }
 

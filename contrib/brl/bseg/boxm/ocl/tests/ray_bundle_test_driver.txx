@@ -39,10 +39,20 @@ ray_bundle_test_driver<T>::setup_cl()
 }
 
 template <class T>
-void ray_bundle_test_driver<T>::set_buffers()
-{
-  input_cell_buf_ =cl_manager_->cell_buf();
-  input_data_buf_ = cl_manager_->data_buf();
+bool ray_bundle_test_driver<T>::setup_image_cam_data(){
+  if(!cl_manager_->setup_image_cam_arrays())
+    return false;
+  if(cl_manager_->setup_image_cam_buffers()!=SDK_SUCCESS)
+    return false;
+  return true;
+}
+template <class T>
+bool ray_bundle_test_driver<T>::clean_image_cam_data(){
+  if(!cl_manager_->clean_image_cam_arrays())
+    return false;
+  if(cl_manager_->clean_image_cam_buffers()!=SDK_SUCCESS)
+    return false;
+  return true;
 }
 
 template <class T>
@@ -63,7 +73,7 @@ int ray_bundle_test_driver<T>::set_tree_args()
   status = clSetKernelArg(cl_manager_->kernel(),
                           0,
                           sizeof(cl_mem),
-                          (void *)&input_cell_buf_);
+                          (void *)&cl_manager_->cell_buf());
   if (!this->check_val(status,
                        CL_SUCCESS,
                        "clSetKernelArg failed. (input_cell_array)"))
@@ -72,7 +82,7 @@ int ray_bundle_test_driver<T>::set_tree_args()
   status = clSetKernelArg(cl_manager_->kernel(),
                           1,
                           sizeof(cl_mem),
-                          (void *)&input_data_buf_);
+                          (void *)&cl_manager_->data_buf());
   if (!this->check_val(status,
                        CL_SUCCESS,
                        "clSetKernelArg failed. (input_data_array)"))
@@ -82,39 +92,158 @@ int ray_bundle_test_driver<T>::set_tree_args()
 }
 
 template <class T>
-int ray_bundle_test_driver<T>::set_ray_bundle_args()
+int ray_bundle_test_driver<T>::set_basic_test_args()
 {
   cl_int   status;
-  //status = clSetKernelArg(cl_manager_->kernel(), 3,
-  //                        (this->n_rays()* sizeof(cl_uchar)), NULL);  
-  //if (!this->check_val(status,
-  //                     CL_SUCCESS,
-  //                     "clSetKernelArg failed. (local bundle pointer array)"))
-  //  return SDK_FAILURE;
 
-  //status = clSetKernelArg(cl_manager_->kernel(), 4, 
-  //                        (3 *this->n_rays() *sizeof(cl_float)), NULL);  
-  //if (!this->check_val(status,
-  //                     CL_SUCCESS,
-  //                     "clSetKernelArg failed. (local exit point array)"))
-  //  return SDK_FAILURE;
-
-  //status = clSetKernelArg(cl_manager_->kernel(), 5, 
-  //                        (this->n_rays()  * sizeof(cl_short4)), NULL);  
-  //if (!this->check_val(status,
-  //                     CL_SUCCESS,
-  //                     "clSetKernelArg failed. (local cached loc_code array)"))
-  //  return SDK_FAILURE;
+  status = clSetKernelArg(cl_manager_->kernel(), 3,
+                          (this->n_rays_in_bundle() * sizeof(cl_uchar)), NULL);  
+  if (!this->check_val(status,
+                       CL_SUCCESS,
+                       "clSetKernelArg failed. (local bundle pointer array)"))
+    return SDK_FAILURE;
 
 
-  status = clSetKernelArg(cl_manager_->kernel(), 3, 
-                          (this->n_rays() * sizeof(cl_float)), NULL);  
+
+  status = clSetKernelArg(cl_manager_->kernel(), 4, 
+                          (3 * this->n_rays_in_bundle() * sizeof(cl_float)), NULL);  
+  if (!this->check_val(status,
+                       CL_SUCCESS,
+                       "clSetKernelArg failed. (local exit point array)"))
+    return SDK_FAILURE;
+
+
+
+  status = clSetKernelArg(cl_manager_->kernel(), 5, 
+                          (this->n_rays_in_bundle() * sizeof(cl_short4)), NULL);  
+  if (!this->check_val(status,
+                       CL_SUCCESS,
+                       "clSetKernelArg failed. (local cached loc_code array)"))
+    return SDK_FAILURE;
+
+
+
+  status = clSetKernelArg(cl_manager_->kernel(), 6, 
+                          (this->n_rays_in_bundle() * sizeof(cl_float16)), NULL);  
+
   if (!this->check_val(status,
                        CL_SUCCESS,
                        "clSetKernelArg failed. (local cached data array)"))
     return SDK_FAILURE;
   return SDK_SUCCESS;
 }
+
+template <class T>
+int ray_bundle_test_driver<T>::set_image_cam_args()
+{
+  cl_int   status;
+
+  status = clSetKernelArg(cl_manager_->kernel(),
+                          3,
+                          sizeof(cl_mem),
+                          (void *)&cl_manager_->n_levels_buf());
+  if (!this->check_val(status,
+                       CL_SUCCESS,
+                       "clSetKernelArg failed. (n_levels buffer)"))
+    return SDK_FAILURE;
+
+  status = clSetKernelArg(cl_manager_->kernel(),
+                          4,
+                          sizeof(cl_mem),
+                          (void *)&cl_manager_->ray_origin_buf());
+  if (!this->check_val(status,
+                       CL_SUCCESS,
+                       "clSetKernelArg failed. (camera center)"))
+    return SDK_FAILURE;
+
+  status = clSetKernelArg(cl_manager_->kernel(),
+                          5,
+                          sizeof(cl_mem),
+                          (void *)&cl_manager_->camera_buf());
+  if (!this->check_val(status,
+                       CL_SUCCESS,
+                       "clSetKernelArg failed. (camera pseudo inverse svd)"))
+    return SDK_FAILURE;
+
+  status = clSetKernelArg(cl_manager_->kernel(),
+                          6,
+                          sizeof(cl_mem),
+                          (void *)&cl_manager_->roi_buf());
+  if (!this->check_val(status,
+                       CL_SUCCESS,
+                       "clSetKernelArg failed. (image_roi)"))
+    return SDK_FAILURE;
+
+  status = clSetKernelArg(cl_manager_->kernel(),
+                          7,
+                          sizeof(cl_mem),
+                          (void *)&cl_manager_->global_bbox_buf());
+  if (!this->check_val(status,
+                       CL_SUCCESS,
+                       "clSetKernelArg failed. ( bounding box )"))
+    return SDK_FAILURE;
+
+
+  status = clSetKernelArg(cl_manager_->kernel(), 8,
+                          3*sizeof(cl_float16), NULL);  
+  if (!this->check_val(status,
+                       CL_SUCCESS,
+                       "clSetKernelArg failed. ( camera pseudo-inverse cache)"))
+    return SDK_FAILURE;
+
+  status = clSetKernelArg(cl_manager_->kernel(), 9, 
+                          sizeof(cl_float4), NULL);  
+  if (!this->check_val(status,
+                       CL_SUCCESS,
+                       "clSetKernelArg failed. (camera center cache)"))
+    return SDK_FAILURE;
+
+  status = clSetKernelArg(cl_manager_->kernel(), 10, 
+                          sizeof(cl_float4), NULL);  
+  if (!this->check_val(status,
+                       CL_SUCCESS,
+                       "clSetKernelArg failed. (bounding box cache)"))
+    return SDK_FAILURE;
+
+  status = clSetKernelArg(cl_manager_->kernel(), 11, 
+                          sizeof(cl_uint4), NULL);  
+  if (!this->check_val(status,
+                       CL_SUCCESS,
+                       "clSetKernelArg failed. (roi cache)"))
+    return SDK_FAILURE;
+
+  status = clSetKernelArg(cl_manager_->kernel(), 12,
+                          (this->n_rays_in_bundle() * sizeof(cl_uchar)), NULL);  
+  if (!this->check_val(status,
+                       CL_SUCCESS,
+                       "clSetKernelArg failed. (local bundle pointer array)"))
+    return SDK_FAILURE;
+
+  status = clSetKernelArg(cl_manager_->kernel(), 13, 
+                          (3 * this->n_rays_in_bundle() * sizeof(cl_float)), NULL);  
+  if (!this->check_val(status,
+                       CL_SUCCESS,
+                       "clSetKernelArg failed. (local exit point array)"))
+    return SDK_FAILURE;
+
+  status = clSetKernelArg(cl_manager_->kernel(), 14, 
+                          (this->n_rays_in_bundle() * sizeof(cl_short4)), NULL);  
+  if (!this->check_val(status,
+                       CL_SUCCESS,
+                       "clSetKernelArg failed. (local cached loc_code array)"))
+    return SDK_FAILURE;
+
+
+  status = clSetKernelArg(cl_manager_->kernel(), 15, 
+                          (this->n_rays_in_bundle() * sizeof(cl_float16)), NULL);  
+  if (!this->check_val(status,
+                       CL_SUCCESS,
+                       "clSetKernelArg failed. (local cached data array)"))
+    return SDK_FAILURE;
+
+  return SDK_SUCCESS;
+}
+
 template <class T>
 int ray_bundle_test_driver<T>::run_bundle_test_kernels()
 {
@@ -133,8 +262,11 @@ int ray_bundle_test_driver<T>::run_bundle_test_kernels()
                        CL_SUCCESS,
                        "clCreateBuffer failed. (tree_results)"))
     return SDK_FAILURE;
-  else if (this->set_tree_args()!=SDK_SUCCESS)
-    return SDK_FAILURE;
+
+  if(this->set_tree_args()!=SDK_SUCCESS)
+     return SDK_FAILURE;
+
+
   // the returned array test result
   status = clSetKernelArg(cl_manager_->kernel(),
                           2,
@@ -144,9 +276,10 @@ int ray_bundle_test_driver<T>::run_bundle_test_kernels()
                        CL_SUCCESS,
                        "clSetKernelArg failed. (result_buf)"))
     return SDK_FAILURE;
+#if 0
   if (this->set_ray_bundle_args()!=SDK_SUCCESS)
-    return SDK_FAILURE;
-
+   return SDK_FAILURE;
+#endif
   status = clGetKernelWorkGroupInfo(cl_manager_->kernel(),
                                     cl_manager_->devices()[0],
                                     CL_KERNEL_LOCAL_MEM_SIZE,
@@ -174,8 +307,8 @@ int ray_bundle_test_driver<T>::run_bundle_test_kernels()
     return SDK_FAILURE;
   }
 
-  vcl_size_t globalThreads[]= {256*256};
-  vcl_size_t localThreads[] = {this->n_rays()};
+  vcl_size_t globalThreads[]= {this->work_space_ni(), this->work_space_nj()};
+  vcl_size_t localThreads[] = {this->bundle_ni(), this->bundle_nj()};
 
   if (used_local_memory_ > cl_manager_->total_local_memory())
   {
@@ -186,7 +319,7 @@ int ray_bundle_test_driver<T>::run_bundle_test_kernels()
 
   status = clEnqueueNDRangeKernel(command_queue_,
                                   cl_manager_->kernel(),
-                                  1,
+                                  2,
                                   NULL,
                                   globalThreads,
                                   localThreads,
