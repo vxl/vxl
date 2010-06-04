@@ -33,13 +33,13 @@ test_traverse_stack(__global int4* cells, __global float2* cell_data,
   {
     test_codes(&i, &n_codes, &code, &ncode);
     short4 root = (short4)(0,0,0,2);
-	int stack_ptr=0;
-	stack[lid]=0;
-	int stack_index=0;
+    int stack_ptr=0;
+        stack[lid]=0;
+        int stack_index=0;
     stack_ptr = traverse_stack(cells,  root , code, &found_loc_code,lid,workgrpsize, stack,stack_ptr);
-   	stack_index=lid +workgrpsize*stack_ptr;
+    stack_index=lid +workgrpsize*stack_ptr;
 
-	int4 res = convert_int4(found_loc_code);
+    int4 res = convert_int4(found_loc_code);
     results[3*i]=res;
     res = (int4)stack[stack_index];//cell_ptr;
     results[3*i+1]=res;
@@ -64,16 +64,16 @@ test_traverse_to_level_stack(__global int4* cells, __global float2* cell_data,
   short4 found_loc_code = (short4)(0,0,0,0);
   for (i = 0; i<n_codes; ++i)
   {
-	int stack_ptr=0;
-	stack[lid]=0;
-	int stack_index=0;
+    int stack_ptr=0;
+    stack[lid]=0;
+    int stack_index=0;
     test_codes(&i, &n_codes, &code, &ncode);
     short4 root = (short4)(0,0,0,2);
     int level = 1;
     stack_ptr= traverse_to_level_stack(cells,  root , code,level, &found_loc_code, 
-										   lid,workgrpsize, stack,stack_ptr);
+                                       lid,workgrpsize, stack,stack_ptr);
     int4 res = convert_int4(found_loc_code);
-   	stack_index=lid +workgrpsize*stack_ptr;
+    stack_index=lid +workgrpsize*stack_ptr;
 
     results[3*i]=res;
     res = (int4)stack[stack_index];
@@ -205,7 +205,7 @@ test_neighbor_stack(__global int4* cells, __global float2* cell_data,
 
     stack_ptr = traverse_to_level_stack(cells, root , code,0, &found_loc_code, lid,workgrpsize, stack,stack_ptr);
     stack_ptr = neighbor_stack(cells,  code,eface, n_levels , &neighbor_code,stack,lid,workgrpsize,stack_ptr);
-	int stack_index=lid +workgrpsize*stack_ptr;
+    int stack_index=lid +workgrpsize*stack_ptr;
 
     results[result_ptr++]=convert_int4(neighbor_code);
 
@@ -222,7 +222,7 @@ test_neighbor_stack(__global int4* cells, __global float2* cell_data,
     short4 found_loc_code;
     stack_ptr = traverse_to_level_stack(cells,  root , code,0, &found_loc_code, lid,workgrpsize, stack,stack_ptr);
     stack_ptr = neighbor_stack(cells,  code,eface, n_levels , &neighbor_code,stack,lid,workgrpsize,stack_ptr);
-	int stack_index=lid +workgrpsize*stack_ptr;
+    int stack_index=lid +workgrpsize*stack_ptr;
 
     results[result_ptr++]=convert_int4(neighbor_code);
 

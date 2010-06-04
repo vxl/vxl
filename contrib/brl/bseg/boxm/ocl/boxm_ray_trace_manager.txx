@@ -91,9 +91,9 @@ bool boxm_ray_trace_manager<T>::init_raytrace(boxm_scene<boct_tree<short,T > > *
 
   // load base raytrace code
   if (!this->load_kernel_source(vcl_string(VCL_SOURCE_ROOT_DIR)
-                          +"/contrib/brl/bseg/boxm/ocl/octree_library_functions.cl") ||
+                                +"/contrib/brl/bseg/boxm/ocl/octree_library_functions.cl") ||
       !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                              +"/contrib/brl/bseg/boxm/ocl/backproject.cl")) {
+                                    +"/contrib/brl/bseg/boxm/ocl/backproject.cl")) {
     vcl_cerr << "Error: boxm_ray_trace_manager : failed to load kernel source (helper functions)\n";
     return false;
   }
@@ -110,9 +110,9 @@ bool boxm_ray_trace_manager<T>::init_raytrace(boxm_scene<boct_tree<short,T > > *
     }
   }
   if (!this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-    +"/contrib/brl/bseg/boxm/ocl/ray_trace_main.cl")) {
-      vcl_cerr << "Error: boxm_ray_trace_manager : failed to load kernel source (main function)\n";
-      return false;
+                                    +"/contrib/brl/bseg/boxm/ocl/ray_trace_main.cl")) {
+    vcl_cerr << "Error: boxm_ray_trace_manager : failed to load kernel source (main function)\n";
+    return false;
   }
   if (build_kernel_program()) {
     return false;
@@ -291,7 +291,7 @@ bool boxm_ray_trace_manager<T>::clean_tree()
 #endif
     global_bbox_ = NULL;
   }
-if(numlevels_)
+  if (numlevels_)
 #ifdef _WIN32
     _aligned_free(numlevels_);
 #else
@@ -595,12 +595,12 @@ int boxm_ray_trace_manager<T>::setup_tree_input_buffers()
                        "clCreateBuffer (cell_data) failed."))
     return SDK_FAILURE;
 nlevels_buf_ = clCreateBuffer(this->context_,
-    CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
-    sizeof(cl_int),
-    numlevels_,
-    &status);
+                              CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
+                              sizeof(cl_int),
+                              numlevels_,
+                              &status);
   if (!this->check_val(status,CL_SUCCESS,
-    "clCreateBuffer (nlevels) failed."))
+                       "clCreateBuffer (nlevels) failed."))
     return SDK_FAILURE;
   else
     return SDK_SUCCESS;
@@ -1015,10 +1015,10 @@ bool boxm_ray_trace_manager<T>::run()
       //setup_work_img_buffer();
       setup_tree_global_bbox_buffer();
       setup_imgdims_buffer();
-	  t.mark();
+      t.mark();
       // run the raytracing for this block
       run_block();
-	  total_gpu_time+=t.all();
+      total_gpu_time+=t.all();
       // release memory
       clean_imgdims_buffer();
       clean_tree_global_bbox_buffer();
@@ -1040,9 +1040,9 @@ bool boxm_ray_trace_manager<T>::run()
   clean_ray_origin_buffer();
   clean_camera_input_buffer();
 
-        vcl_cout<<"Running block "<<total_gpu_time/1000<<'s'<<vcl_endl;
+  vcl_cout<<"Running block "<<total_gpu_time/1000<<'s'<<vcl_endl
 
-  vcl_cout << "total block loading time = " << total_load_time << 's' << vcl_endl
+           << "total block loading time = " << total_load_time << 's' << vcl_endl
            << "total block processing time = " << total_raytrace_time << 's' << vcl_endl;
   return true;
 }
@@ -1153,8 +1153,6 @@ bool boxm_ray_trace_manager<T>::run_block()
   status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
   status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
 
-
-
   return SDK_SUCCESS;
 }
 
@@ -1165,9 +1163,9 @@ bool boxm_ray_trace_manager<T>:: read_output_image()
 
   // Enqueue readBuffers
   int status = clEnqueueReadBuffer(command_queue_,work_image_buf_,CL_TRUE,
-                               0,ni_*nj_*sizeof(cl_float4),
-                               this->ray_results(),
-                               0,NULL,&events[0]);
+                                   0,ni_*nj_*sizeof(cl_float4),
+                                   this->ray_results(),
+                                   0,NULL,&events[0]);
 
   if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (ray_results)failed."))
     return SDK_FAILURE;
@@ -1185,7 +1183,6 @@ bool boxm_ray_trace_manager<T>:: read_output_image()
   status = clReleaseCommandQueue(command_queue_);
   if (!this->check_val(status,CL_SUCCESS,"clReleaseCommandQueue failed."))
     return SDK_FAILURE;
-
 }
 
 #define BOXM_RAY_TRACE_MANAGER_INSTANTIATE(T) \

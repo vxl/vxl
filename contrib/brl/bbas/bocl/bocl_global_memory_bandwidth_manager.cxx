@@ -3,129 +3,127 @@
 
 bocl_global_memory_bandwidth_manager::~bocl_global_memory_bandwidth_manager()
 {
-
 }
 
 bool bocl_global_memory_bandwidth_manager::setup_array(unsigned len)
 {
-	len_=len;
+  len_=len;
 #if defined (_WIN32)
-	array_=(cl_float*)_aligned_malloc(len * sizeof(cl_float), 16);
-	cl_len_=(cl_uint*)_aligned_malloc(sizeof(cl_uint),16);
+  array_=(cl_float*)_aligned_malloc(len * sizeof(cl_float), 16);
+  cl_len_=(cl_uint*)_aligned_malloc(sizeof(cl_uint),16);
 #elif defined(__APPLE__)
-	array_ = (cl_float*)malloc(len * sizeof(cl_float));
-	cl_len_=(cl_uint*)malloc(sizeof(cl_uint));
+  array_ = (cl_float*)malloc(len * sizeof(cl_float));
+  cl_len_=(cl_uint*)malloc(sizeof(cl_uint));
 #else
-	array_ = (cl_float*)memalign(16, len * sizeof(cl_float));
-	cl_len_=(cl_uint*)memalign(16,sizeof(cl_uint));
+  array_ = (cl_float*)memalign(16, len * sizeof(cl_float));
+  cl_len_=(cl_uint*)memalign(16,sizeof(cl_uint));
 
 #endif
-	unsigned i=0;
-	unsigned grpsize=this->group_size();
-	while(i<len_)
-	{
-		array_[i]=(float)(i%grpsize);
-		i++;
-	}
+  unsigned i=0;
+  unsigned grpsize=this->group_size();
+  while (i<len_)
+  {
+    array_[i]=(float)(i%grpsize);
+    i++;
+  }
 
-	if(array_)
-		return true;
-	return false;
-
+  if (array_)
+    return true;
+  return false;
 }
+
 void bocl_global_memory_bandwidth_manager::clean_array()
 {
-	if (array_)
-	{
+  if (array_)
+  {
 #ifdef _WIN32
-		_aligned_free(array_);
+    _aligned_free(array_);
 #elif defined(__APPLE__)
-		free(array_);
+    free(array_);
 #else
-		array_ = NULL;
+    array_ = NULL;
 #endif
-
-	}
-	len_=0;
+  }
+  len_=0;
 }
 
 bool bocl_global_memory_bandwidth_manager::setup_result_array()
 {
 #if defined (_WIN32)
-	result_array_=(cl_float*)_aligned_malloc(len_ * sizeof(cl_float), 16);
+  result_array_=(cl_float*)_aligned_malloc(len_ * sizeof(cl_float), 16);
 #elif defined(__APPLE__)
-	result_array_ = (cl_float*)malloc(len_ * sizeof(cl_float));
+  result_array_ = (cl_float*)malloc(len_ * sizeof(cl_float));
 #else
-	result_array_ = (cl_float*)memalign(16, len_ * sizeof(cl_float));
+  result_array_ = (cl_float*)memalign(16, len_ * sizeof(cl_float));
 #endif
 #if defined (_WIN32)
-	result_flag_=(cl_int*)_aligned_malloc( sizeof(cl_int), 16);
+  result_flag_=(cl_int*)_aligned_malloc( sizeof(cl_int), 16);
 #elif defined(__APPLE__)
-	result_flag_ = (cl_int*)malloc(sizeof(cl_int));
+  result_flag_ = (cl_int*)malloc(sizeof(cl_int));
 #else
-	result_flag_ = (cl_int*)memalign(16, sizeof(cl_int));
+  result_flag_ = (cl_int*)memalign(16, sizeof(cl_int));
 #endif
-	unsigned i=0;
-	while(i<len_)
-	{
-		result_array_[i]=0.0;
-		i++;
-	}
+  unsigned i=0;
+  while (i<len_)
+  {
+    result_array_[i]=0.0;
+    i++;
+  }
 
-	result_flag_[0]=0;
-	if(result_array_)
-		return true;
-	return false;
-
+  result_flag_[0]=0;
+  if (result_array_)
+    return true;
+  return false;
 }
+
 void bocl_global_memory_bandwidth_manager::clean_result_array()
 {
-	if (result_array_)
-	{
+  if (result_array_)
+  {
 #ifdef _WIN32
-		_aligned_free(result_array_);
+    _aligned_free(result_array_);
 #elif defined(__APPLE__)
-		free(result_array_);
+    free(result_array_);
 #else
-		result_array_ = NULL;
+    result_array_ = NULL;
 #endif
-	}
+  }
 }
 
 
 bool bocl_global_memory_bandwidth_manager::run_kernel()
 {
-	  cl_int status = CL_SUCCESS;
+  cl_int status = CL_SUCCESS;
   // Create and initialize memory objects
   array_buf_ = clCreateBuffer(this->context_,
-                                   CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
-                                   len_ * sizeof(cl_float),array_,
-                                   &status);
+                              CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
+                              len_ * sizeof(cl_float),array_,
+                              &status);
   if (!this->check_val(status,
                        CL_SUCCESS,
                        "clCreateBuffer (input array) failed."))
     return SDK_FAILURE;
 
   result_array_buf_ = clCreateBuffer(this->context_,
-                                   CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
-                                   len_ * sizeof(cl_float),result_array_,
-                                   &status);
+                                     CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+                                     len_ * sizeof(cl_float),result_array_,
+                                     &status);
   if (!this->check_val(status,
                        CL_SUCCESS,
                        "clCreateBuffer (result array) failed."))
     return SDK_FAILURE;
   cl_len_buf_ = clCreateBuffer(this->context_,
-							  CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
-							  sizeof(cl_uint),cl_len_,&status);
+                               CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
+                               sizeof(cl_uint),cl_len_,&status);
   if (!this->check_val(status,CL_SUCCESS,
-	  "clCreateBuffer (len) failed."))
-	  return SDK_FAILURE;
+    "clCreateBuffer (len) failed."))
+    return SDK_FAILURE;
   result_flag_buf_ = clCreateBuffer(this->context_,
-							  CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
-							  sizeof(cl_int),result_flag_,&status);
+                                    CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+                                    sizeof(cl_int),result_flag_,&status);
   if (!this->check_val(status,CL_SUCCESS,
-	  "clCreateBuffer (result_flag) failed."))
-	  return SDK_FAILURE;
+    "clCreateBuffer (result_flag) failed."))
+    return SDK_FAILURE;
 
   // -- Set appropriate arguments to the kernel --
   status = clSetKernelArg(kernel_,0,sizeof(cl_mem),(void *)&cl_len_buf_);
@@ -135,7 +133,7 @@ bool bocl_global_memory_bandwidth_manager::run_kernel()
  status = clSetKernelArg(kernel_,1,sizeof(cl_mem),(void *)&array_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (input array)"))
     return SDK_FAILURE;
-  
+
   status = clSetKernelArg(kernel_,2,sizeof(cl_mem),(void *)&result_array_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (result array)"))
     return SDK_FAILURE;
@@ -173,7 +171,6 @@ bool bocl_global_memory_bandwidth_manager::run_kernel()
   if (!this->check_val(status,CL_SUCCESS,"Falied in command queue creation" + error_to_string(status)))
     return false;
 
-
   cl_event ceEvent;
   status = clEnqueueNDRangeKernel(command_queue_,this->kernel_, 1,NULL,globalThreads,localThreads,0,NULL,&ceEvent);
 
@@ -195,7 +192,7 @@ bool bocl_global_memory_bandwidth_manager::run_kernel()
                                0,NULL,&events[0]);
   status = clWaitForEvents(1, &events[0]);
   if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents failed."))
-	  return SDK_FAILURE;
+    return SDK_FAILURE;
 
   status = clEnqueueReadBuffer(command_queue_,result_flag_buf_,CL_TRUE,
                                0,sizeof(cl_int),
@@ -231,11 +228,10 @@ bool bocl_global_memory_bandwidth_manager::run_kernel()
   status = clReleaseMemObject(cl_len_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject (cl_len_buf_) failed."))
     return SDK_FAILURE;
-
+  else
     return SDK_SUCCESS;
-
-
 }
+
 
 int bocl_global_memory_bandwidth_manager::build_kernel_program()
 {
@@ -283,7 +279,6 @@ int bocl_global_memory_bandwidth_manager::build_kernel_program()
   else
     return SDK_SUCCESS;
 }
-
 
 
 int bocl_global_memory_bandwidth_manager::create_kernel(vcl_string const& kernel_name)

@@ -142,7 +142,7 @@ ray_trace_main(__global int * nlevels,
 
     short4 neighbor_code;
 
-	int neighbor_ptr=neighbor(cells, curr_cell_ptr, curr_loc_code,exit_face, n_levels, &neighbor_code);
+    int neighbor_ptr=neighbor(cells, curr_cell_ptr, curr_loc_code,exit_face, n_levels, &neighbor_code);
     //if no neighbor then terminate ray
     if (neighbor_ptr<0)
       break;

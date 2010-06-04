@@ -88,9 +88,10 @@ int traverse(__global int4* cells, int cell_ptr, short4 cell_loc_code,
   }
   return found_cell_ptr;
 }
+
 int traverse_stack(__global int4* cells,  short4 cell_loc_code,
-             short4 target_loc_code, short4* found_loc_code,
-			 uint lid,uint workgrpsize, __local int*stack,int stack_ptr)
+                   short4 target_loc_code, short4* found_loc_code,
+                   uint lid,uint workgrpsize, __local int*stack,int stack_ptr)
 {
   int stack_index = lid + workgrpsize*stack_ptr;
   int found_cell_ptr = stack[stack_index];
@@ -152,14 +153,14 @@ int traverse_to_level(__global int4* cells, int cell_ptr,
   return found_cell_ptr;
 }
 
-int traverse_to_level_stack(__global int4* cells, short4 cell_loc_code, 
-							short4 target_loc_code,short target_level,
+int traverse_to_level_stack(__global int4* cells, short4 cell_loc_code,
+                            short4 target_loc_code,short target_level,
                             short4* found_loc_code,uint lid,uint workgrpsize, __local int*stack,int stack_ptr)
 {
   int stack_index=lid+workgrpsize*stack_ptr;
   int found_cell_ptr = stack[stack_index];
 
-	///int found_cell_ptr = cell_ptr;
+  ///int found_cell_ptr = cell_ptr;
   int ret = -1;
   int level = target_level;
   if ( level < 0)
@@ -169,13 +170,13 @@ int traverse_to_level_stack(__global int4* cells, short4 cell_loc_code,
   *found_loc_code = cell_loc_code;
   while (level<curr_level && curr_cell.y>0)
   {
-	stack_ptr++;
+    stack_ptr++;
     int c_ptr = curr_cell.y;
     uchar c_index = child_index(target_loc_code, curr_level);
     (*found_loc_code) =
       child_loc_code(c_index, curr_level-1, *found_loc_code);
     c_ptr += c_index;
-	stack_index+=workgrpsize;
+    stack_index+=workgrpsize;
     stack[stack_index]=c_ptr;
     --curr_level;
     curr_cell = cells[c_ptr];
@@ -229,10 +230,11 @@ int traverse_force(__global int4* cells, int cell_ptr, short4 cell_loc_code,
   }
   return found_cell_ptr;
 }
+
 int traverse_force_stack(__global int4* cells,  short4 cell_loc_code,
-						 short4 target_loc_code, short4* found_loc_code,
-						 __local int* stack, uint lid,uint workgrpsize, int 
-						 stack_ptr)
+                         short4 target_loc_code, short4* found_loc_code,
+                         __local int* stack, uint lid,uint workgrpsize, int
+                         stack_ptr)
 {
   int stack_index=lid+workgrpsize*stack_ptr;
   int found_cell_ptr = stack[stack_index];
@@ -261,7 +263,7 @@ int traverse_force_stack(__global int4* cells,  short4 cell_loc_code,
     curr_code = child_loc_code(c_index, curr_level-1, curr_code);
     found_cell_ptr += c_index;
     stack_ptr++;
-	stack_index+=workgrpsize;
+    stack_index+=workgrpsize;
     stack[stack_index]=found_cell_ptr;
     curr_cell = cells[found_cell_ptr];
     *found_loc_code = curr_code;
@@ -269,7 +271,6 @@ int traverse_force_stack(__global int4* cells,  short4 cell_loc_code,
   }
   return stack_ptr;
 }
-
 
 
 //--------------------------------------------------------------------
@@ -500,14 +501,14 @@ int neighbor(__global int4* cells,int cell_ptr,  short4 cell_loc_code,
     traverse_to_level(cells, ancestor_ptr, ancestor_loc_code,
                       (*neighbor_code), cell_level, neighbor_code);
   return neighbor_ptr;
-}  
+}
 
 //-------------------------------------------------------------------
 // Given the cell loc_code and the exit face, find the neighboring cell.
 //-------------------------------------------------------------------
 int neighbor_stack(__global int4* cells,  short4 cell_loc_code,
-				   short4 exit_face, short n_levels, short4* neighbor_code,
-				   __local int* stack,uint lid,uint workgrpsize, int stack_ptr)
+                   short4 exit_face, short n_levels, short4* neighbor_code,
+                   __local int* stack,uint lid,uint workgrpsize, int stack_ptr)
 {
   short cell_level = cell_loc_code.w;
   short cell_size = 1<<cell_level;
@@ -545,9 +546,9 @@ int neighbor_stack(__global int4* cells,  short4 cell_loc_code,
 
  stack_ptr =
     traverse_to_level_stack(cells,  ancestor_loc_code,
-                      (*neighbor_code), cell_level, neighbor_code, lid, workgrpsize,stack, stack_ptr);
+                            *neighbor_code, cell_level,
+                            neighbor_code, lid, workgrpsize,stack, stack_ptr);
   return stack_ptr;
-
 }
 
 //--------------------------------------------------------------------------

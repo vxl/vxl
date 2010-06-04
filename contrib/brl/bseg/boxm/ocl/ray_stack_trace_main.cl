@@ -23,9 +23,9 @@ ray_stack_trace_main(__global int * nlevels,
 
   if (lid == 0)
   {
-    cam[0]=svd_UtVW[0];				// conjugate transpose of U
-    cam[1]=svd_UtVW[1];				// V
-    cam[2]=svd_UtVW[2];				// Winv(first4) and ray_origin(last four)
+    cam[0]=svd_UtVW[0];        // conjugate transpose of U
+    cam[1]=svd_UtVW[1];        // V
+    cam[2]=svd_UtVW[2];        // Winv(first4) and ray_origin(last four)
     (*local_origin) =origin[0];     // ray_origin
     (*bbox)=(*global_bbox);
     (*roi)=(*roidims);
@@ -83,8 +83,7 @@ ray_stack_trace_main(__global int * nlevels,
 
   //this cell is the first pierced by the ray
   //follow the ray through the cells until no neighbors are found
- while (1) {
-  
+  while (true) {
     ////current cell bounding box
     cell_bounding_box(curr_loc_code, n_levels, &cell_min, &cell_max);
     // check to see how close tnear and tfar are
@@ -99,8 +98,8 @@ ray_stack_trace_main(__global int * nlevels,
       if (any(entry_pt>=(float4)1.0f)|| any(entry_pt<=(float4)0.0f))
         break;
       entry_loc_code = loc_code(entry_pt, n_levels-1);
-	  stack_ptr=0;
-	  ////traverse to leaf cell that contains the entry point
+      stack_ptr=0;
+      ////traverse to leaf cell that contains the entry point
       stack_ptr = traverse_stack(cells,  root, entry_loc_code,&curr_loc_code, lid,workgrpsize,stack,stack_ptr);
       if (stack_ptr<0)
         break;
@@ -116,7 +115,7 @@ ray_stack_trace_main(__global int * nlevels,
     ////////////////////////////////////////////////////////
     // the place where the ray trace function can be applied
 
-	stack_index=lid +workgrpsize*stack_ptr;
+    stack_index=lid +workgrpsize*stack_ptr;
     int data_ptr = cells[stack[stack_index]].z;
 
     //int data_ptr = curr_cell.z;
