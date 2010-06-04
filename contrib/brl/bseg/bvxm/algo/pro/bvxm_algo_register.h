@@ -8,4 +8,4 @@ class bvxm_algo_register
   static void register_process();
 };
 
-#endif // bvxm_register_h_
+#endif // bvxm_algo_register_h_
