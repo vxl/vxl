@@ -1,12 +1,12 @@
 #ifndef raa_run_length_encoding_h
 #define raa_run_length_encoding_h
+//:
+// \file
+// \author Graham Vincent
 
 #include <vcl_vector.h>
 #include <vsl/vsl_vector_io.h>
 #include <vimt3d/vimt3d_image_3d_of.h>
-
-//:
-// \author Graham Vincent
 
 const unsigned version_no = 1;
 
@@ -25,7 +25,7 @@ void vimt3d_run_length_encode(vsl_b_ostream& bfs,const vimt3d_image_3d_of<T> &im
     itp1++;
     unsigned run_length=1;
 
-    while (itp1!=image.image().end() && *itp1 == *it ) // move through image until value changes or reach end 
+    while (itp1!=image.image().end() && *itp1 == *it ) // move through image until value changes or reach end
     {
       it++;
       itp1++;
@@ -72,7 +72,6 @@ void vimt3d_run_length_decode(vsl_b_istream& bfs,vimt3d_image_3d_of<T> &image)
       ++it;
     }
   }
-
 }
 
 
