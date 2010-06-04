@@ -256,6 +256,28 @@ bool bocl_manager<T>::initialize_cl()
                        CL_SUCCESS,
                        "clGetDeviceInfo CL_DEVICE_IMAGE_SUPPORT failed."))
     return false;
+  status = clGetDeviceInfo(devices_[0],
+						  CL_DEVICE_IMAGE2D_MAX_WIDTH,
+						  sizeof(vcl_size_t),
+						  (void *)&image2d_max_width_,
+						  NULL);
+
+  if (!this->check_val(status,
+	  CL_SUCCESS,
+	  "clGetDeviceInfo CL_DEVICE_IMAGE_SUPPORT failed."))
+	  return false;
+  status = clGetDeviceInfo(devices_[0],
+						  CL_DEVICE_IMAGE2D_MAX_HEIGHT,
+						  sizeof(vcl_size_t),
+						  (void *)&image2d_max_height_,
+						  NULL);
+
+  if (!this->check_val(status,
+					  CL_SUCCESS,
+					  "clGetDeviceInfo CL_DEVICE_IMAGE_SUPPORT failed."))
+					  return false;
+
+  
   unsigned size = sizeof(vcl_size_t);
   vcl_cout << "Context Description\n"
            << " Number of devices: " << number_devices_ << '\n'
@@ -269,7 +291,10 @@ bool bocl_manager<T>::initialize_cl()
            << (cl_uint)max_work_item_sizes_[2]/size << ")\n"
            << " Preferred short vector length: " << vector_width_short_ << '\n'
            << " Preferred float vector length: " << vector_width_float_ << '\n'
-           << " image support " << image_support_ << '\n';
+           << " image support " << image_support_ << '\n'
+		   << " Max 2D image width  " << image2d_max_width_ << '\n'
+		   << " Max 2D image height  " << image2d_max_height_ << '\n'
+		   ;
   for (unsigned id = 0; id<number_devices_; ++id)
     vcl_cout << " Device id [" << id << "]: " << devices_[id] << '\n';
   return true;

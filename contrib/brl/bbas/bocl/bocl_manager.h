@@ -44,6 +44,7 @@ class bocl_manager
   cl_context context_;               //!< CL context
   cl_device_id *devices_;            //!< CL device list
   vcl_size_t image2d_max_width_;       //!< Ideal float vector size
+  vcl_size_t image2d_max_height_;       //!< Ideal float vector size
 
  public:
 

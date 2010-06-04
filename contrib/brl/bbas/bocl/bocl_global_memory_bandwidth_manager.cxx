@@ -9,23 +9,26 @@ bool bocl_global_memory_bandwidth_manager::setup_array(unsigned len)
 {
   len_=len;
 #if defined (_WIN32)
-  array_=(cl_float*)_aligned_malloc(len * sizeof(cl_float), 16);
-  cl_len_=(cl_uint*)_aligned_malloc(sizeof(cl_uint),16);
+	array_=(cl_float*)_aligned_malloc(len * sizeof(cl_float4), 16);
+	cl_len_=(cl_uint*)_aligned_malloc(sizeof(cl_uint),16);
 #elif defined(__APPLE__)
-  array_ = (cl_float*)malloc(len * sizeof(cl_float));
-  cl_len_=(cl_uint*)malloc(sizeof(cl_uint));
+	array_ = (cl_float*)malloc(len * sizeof(cl_float4));
+	cl_len_=(cl_uint*)malloc(sizeof(cl_uint));
 #else
-  array_ = (cl_float*)memalign(16, len * sizeof(cl_float));
-  cl_len_=(cl_uint*)memalign(16,sizeof(cl_uint));
+	array_ = (cl_float*)memalign(16, len * sizeof(cl_float4));
+	cl_len_=(cl_uint*)memalign(16,sizeof(cl_uint));
 
 #endif
-  unsigned i=0;
-  unsigned grpsize=this->group_size();
-  while (i<len_)
-  {
-    array_[i]=(float)(i%grpsize);
-    i++;
-  }
+	unsigned i=0;
+	unsigned grpsize=this->group_size();
+	while(i<len_*4)
+	{
+		array_[i]=(float)((i/4)%grpsize);
+		array_[i+1]=0.0f;
+		array_[i+2]=0.0f;
+		array_[i+3]=0.0f;
+		i+=4;
+	}
 
   if (array_)
     return true;
@@ -96,9 +99,9 @@ bool bocl_global_memory_bandwidth_manager::run_kernel()
   cl_int status = CL_SUCCESS;
   // Create and initialize memory objects
   array_buf_ = clCreateBuffer(this->context_,
-                              CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
-                              len_ * sizeof(cl_float),array_,
-                              &status);
+                               CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
+                               len_ * sizeof(cl_float4),array_,
+                               &status);
   if (!this->check_val(status,
                        CL_SUCCESS,
                        "clCreateBuffer (input array) failed."))
@@ -232,7 +235,154 @@ bool bocl_global_memory_bandwidth_manager::run_kernel()
     return SDK_SUCCESS;
 }
 
+bool bocl_global_memory_bandwidth_manager::run_kernel_using_image()
+{
+	cl_int status = CL_SUCCESS;
+	inputformat.image_channel_order = CL_RGBA;
+	inputformat.image_channel_data_type = CL_FLOAT;
 
+  // Create and initialize memory objects
+  array_buf_ = clCreateImage2D(this->context_,
+                                   CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,&inputformat,image2d_max_width_,len_/image2d_max_width_,
+                                   image2d_max_width_ * sizeof(cl_float4),array_,&status);
+  if (!this->check_val(status,
+                       CL_SUCCESS,
+                       "clCreateBuffer (input array) failed."))
+    return SDK_FAILURE;
+
+  result_array_buf_ = clCreateBuffer(this->context_,
+                                   CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+                                   len_ * sizeof(cl_float),result_array_,
+                                   &status);
+  if (!this->check_val(status,
+                       CL_SUCCESS,
+                       "clCreateBuffer (result array) failed."))
+    return SDK_FAILURE;
+  cl_len_buf_ = clCreateBuffer(this->context_,
+							  CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
+							  sizeof(cl_uint),cl_len_,&status);
+  if (!this->check_val(status,CL_SUCCESS,
+	  "clCreateBuffer (len) failed."))
+	  return SDK_FAILURE;
+  result_flag_buf_ = clCreateBuffer(this->context_,
+							  CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+							  sizeof(cl_int),result_flag_,&status);
+  if (!this->check_val(status,CL_SUCCESS,
+	  "clCreateBuffer (result_flag) failed."))
+	  return SDK_FAILURE;
+
+  // -- Set appropriate arguments to the kernel --
+  status = clSetKernelArg(kernel_,0,sizeof(cl_mem),(void *)&cl_len_buf_);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (length of array)"))
+    return SDK_FAILURE;
+
+ status = clSetKernelArg(kernel_,1,sizeof(cl_mem),(void *)&array_buf_);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (input array)"))
+    return SDK_FAILURE;
+  
+  status = clSetKernelArg(kernel_,2,sizeof(cl_mem),(void *)&result_array_buf_);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (result array)"))
+    return SDK_FAILURE;
+  status = clSetKernelArg(kernel_,3,sizeof(cl_mem),(void *)&result_flag_buf_);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (result flag)"))
+    return SDK_FAILURE;
+  status = clSetKernelArg(kernel_,4,sizeof(cl_float)*this->group_size(),0);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (result flag)"))
+    return SDK_FAILURE;
+
+  cl_ulong used_local_memory;
+  status = clGetKernelWorkGroupInfo(this->kernel(),this->devices()[0],CL_KERNEL_LOCAL_MEM_SIZE,
+                                    sizeof(cl_ulong),&used_local_memory,NULL);
+  if (!this->check_val(status,CL_SUCCESS,"clGetKernelWorkGroupInfo CL_KERNEL_LOCAL_MEM_SIZE failed."))
+    return SDK_FAILURE;
+
+  // determine the work group size
+  cl_ulong kernel_work_group_size;
+  status = clGetKernelWorkGroupInfo(this->kernel(),this->devices()[0],CL_KERNEL_WORK_GROUP_SIZE,
+                                    sizeof(cl_ulong),&kernel_work_group_size,NULL);
+  if (!this->check_val(status,CL_SUCCESS,"clGetKernelWorkGroupInfo CL_KERNEL_WORK_GROUP_SIZE, failed."))
+    return SDK_FAILURE;
+
+  vcl_size_t globalThreads[]= {RoundUp(len_,this->group_size())};
+  vcl_size_t localThreads[] = {this->group_size()};
+
+  if (used_local_memory > this->total_local_memory())
+  {
+    vcl_cout << "Unsupported: Insufficient local memory on device.\n";
+    return SDK_FAILURE;
+  }
+
+  // set up a command queue
+  command_queue_ = clCreateCommandQueue(this->context(),this->devices()[0],CL_QUEUE_PROFILING_ENABLE,&status);
+  if (!this->check_val(status,CL_SUCCESS,"Falied in command queue creation" + error_to_string(status)))
+    return false;
+  cl_event events[1];
+
+  //status=clEnqueueWriteBuffer(command_queue_,array_buf_,CL_FALSE,0,len_*sizeof(float),array_,0,NULL,NULL);
+  //if (!this->check_val(status,CL_SUCCESS,"clEnqueueWriteBuffer failed. "+error_to_string(status)))
+  //  return SDK_FAILURE;
+
+  cl_event ceEvent;
+  status = clEnqueueNDRangeKernel(command_queue_,this->kernel_, 1,NULL,globalThreads,localThreads,0,NULL,&ceEvent);
+
+  if (!this->check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed. "+error_to_string(status)))
+    return SDK_FAILURE;
+
+  status = clFinish(command_queue_);
+  if (!this->check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status)))
+    return SDK_FAILURE;
+  cl_ulong tstart,tend;
+  status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
+  status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
+  time_in_secs_=(float)(tend-tstart)/1000000000.0f;
+
+  status = clEnqueueReadBuffer(command_queue_,result_array_buf_,CL_TRUE,
+                               0,len_*sizeof(cl_float),
+                               result_array_,
+                               0,NULL,&events[0]);
+  status = clWaitForEvents(1, &events[0]);
+  if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents failed."))
+	  return SDK_FAILURE;
+
+  status = clEnqueueReadBuffer(command_queue_,result_flag_buf_,CL_TRUE,
+                               0,sizeof(cl_int),
+                               result_flag_,
+                               0,NULL,&events[0]);
+
+  if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (results flag)failed."))
+    return SDK_FAILURE;
+
+  // Wait for the read buffer to finish execution
+  status = clWaitForEvents(1, &events[0]);
+  if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents failed."))
+    return SDK_FAILURE;
+
+  status = clReleaseEvent(events[0]);
+  if (!this->check_val(status,CL_SUCCESS,"clReleaseEvent failed."))
+    return SDK_FAILURE;
+
+  // release the command Queue
+  status = clReleaseCommandQueue(command_queue_);
+  if (!this->check_val(status,CL_SUCCESS,"clReleaseCommandQueue failed."))
+    return SDK_FAILURE;
+
+  status = clReleaseMemObject(array_buf_);
+  if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject (array_buf_) failed."))
+    return SDK_FAILURE;
+  status = clReleaseMemObject(result_array_buf_);
+  if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject (result_array_buf_) failed."))
+    return SDK_FAILURE;
+  status = clReleaseMemObject(result_flag_buf_);
+  if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject (result_flag_buf_) failed."))
+    return SDK_FAILURE;
+  status = clReleaseMemObject(cl_len_buf_);
+  if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject (cl_len_buf_) failed."))
+    return SDK_FAILURE;
+
+    return SDK_SUCCESS;
+
+
+}
 int bocl_global_memory_bandwidth_manager::build_kernel_program()
 {
   cl_int status = CL_SUCCESS;

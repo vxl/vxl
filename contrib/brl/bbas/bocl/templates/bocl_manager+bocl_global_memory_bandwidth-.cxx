@@ -3,6 +3,4 @@
 
 
 
-class bocl_global_memory_bandwidth_manager;
-
 BOCL_MANAGER_INSTANTIATE(bocl_global_memory_bandwidth_manager);

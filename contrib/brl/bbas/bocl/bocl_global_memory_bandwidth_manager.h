@@ -9,8 +9,7 @@
 #include <vbl/vbl_array_2d.h>
 #include <bocl/bocl_manager.h>
 #include <bocl/bocl_utils.h>
-
-class bocl_global_memory_bandwidth_manager : public bocl_manager<bocl_global_memory_bandwidth_manager>
+class bocl_global_memory_bandwidth_manager : public bocl_manager<bocl_global_memory_bandwidth_manager> 
 {
  public:
 
@@ -38,6 +37,7 @@ class bocl_global_memory_bandwidth_manager : public bocl_manager<bocl_global_mem
   bool run_kernel();
 
 
+  bool run_kernel_using_image();
 
   int build_kernel_program();
 
@@ -65,7 +65,7 @@ class bocl_global_memory_bandwidth_manager : public bocl_manager<bocl_global_mem
   cl_mem   cl_len_buf_;
   cl_mem   result_flag_buf_;
   float time_in_secs_;
-
+  cl_image_format inputformat;
   unsigned len_;
 };
 
