@@ -1,4 +1,5 @@
-// This is brl/bseg/bvxm/algo//pro/processes/bvxm_merge_mog_process.cxx
+// This is brl/bseg/bvxm/algo/pro/processes/bvxm_merge_mog_process.cxx
+#include <bprb/bprb_func_process.h>
 //:
 // \file
 // \brief A process for merging gaussian mixtures in a grid into a single gaussian.
@@ -6,7 +7,6 @@
 // \author Isabel Restrepo
 // \date May 5, 2009
 //
-#include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 #include <brdb/brdb_value.h>
 

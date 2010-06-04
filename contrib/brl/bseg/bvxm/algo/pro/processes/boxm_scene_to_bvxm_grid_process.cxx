@@ -1,4 +1,4 @@
-// This is brl/bseg/boxm/algo/pro/processes/boxm_scene_to_bvxm_grid_process.cxx
+// This is brl/bseg/bvxm/algo/pro/processes/boxm_scene_to_bvxm_grid_process.cxx
 #include <bvxm/algo/bvxm_boxm_convert.h>
 //:
 // \file
