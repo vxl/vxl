@@ -65,32 +65,6 @@ class boxm_aux_traits<BOXM_AUX_SCALAR_SAMPLE>
   static vcl_string storage_subdir() { return "scalar"; }
 };
 
-template<>
-class boxm_aux_traits<BOXM_AUX_SCALAR_SAMPLE>
-{
- public:
-  typedef float sample_datatype;
 
-  static vcl_string storage_subdir() { return "scalar"; }
-};
-//: traits for a grey optimization sample
-template<>
-class boxm_aux_traits<BOXM_AUX_OPT_RT_GREY>
-{
- public:
-  typedef boxm_rt_sample<float> sample_datatype;
-
-  static vcl_string storage_subdir() { return "opt_rt_grey_work"; }
-};
-
-//: traits for an rgb optimization sample
-template<>
-class boxm_aux_traits<BOXM_AUX_OPT_RT_RGB>
-{
- public:
-  typedef boxm_rt_sample<vil_rgb<float> > sample_datatype;
-
-  static vcl_string storage_subdir() { return "opt_rt_rgb_work"; }
-};
 
 #endif // boxm_aux_traits_h_
