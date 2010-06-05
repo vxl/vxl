@@ -63,12 +63,12 @@ class octree_test_driver
   int run_tree_test_kernels();
 
   int run_stack_tree_test_kernels();
-
+  int run_image_tree_test_kernels();
   int run_ray_trace_test_kernels();
 
   int run_ray_creation_test_kernels();
 
-  int build_program();
+  int build_program(bool useimage=false);
 
   int cleanup_tree_test();
 

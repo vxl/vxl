@@ -90,9 +90,9 @@ bool boxm_stack_ray_trace_manager<T>::init_raytrace(boxm_scene<boct_tree<short,T
   j0_ = j0;
 
   // load base raytrace code
-  if (!this->load_kernel_source(vcl_string(VCL_SOURCE_ROOT_DIR)
+  if (!load_kernel_source(vcl_string(VCL_SOURCE_ROOT_DIR)
                           +"/contrib/brl/bseg/boxm/ocl/octree_library_functions.cl") ||
-      !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
+      !append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
                               +"/contrib/brl/bseg/boxm/ocl/backproject.cl")) {
     vcl_cerr << "Error: boxm_stack_ray_trace_manager : failed to load kernel source (helper functions)\n";
     return false;
@@ -104,12 +104,12 @@ bool boxm_stack_ray_trace_manager<T>::init_raytrace(boxm_scene<boct_tree<short,T
     return  false;
   }
   for (unsigned int i=0; i < n_sources; ++i) {
-    if (!this->append_process_kernels(functor_source_filenames[i])) {
+    if (!append_process_kernels(functor_source_filenames[i])) {
       vcl_cerr << "Error: boxm_stack_ray_trace_manager : failed to load application-specific functor source\n";
       return false;
     }
   }
-  if (!this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
+  if (!append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
                               +"/contrib/brl/bseg/boxm/ocl/ray_stack_trace_main.cl")) {
     vcl_cerr << "Error: boxm_stack_ray_trace_manager : failed to load kernel source (main function)\n";
     return false;
@@ -967,6 +967,9 @@ bool boxm_stack_ray_trace_manager<T>::run()
   vul_timer timer;
   vul_timer t;
   vcl_string error_message="";
+  setup_camera_input_buffer();
+  setup_ray_origin_buffer();
+  setup_work_img_buffer();
 
   boxm_block_vis_graph_iterator<tree_type > block_vis_iter(cam_, scene_, ni_, nj_);
   float total_raytrace_time = 0.0f;
@@ -1007,10 +1010,10 @@ bool boxm_stack_ray_trace_manager<T>::run()
 
       setup_tree_input_buffers();
 
-      setup_camera_input_buffer();
+     // setup_camera_input_buffer();
       setup_roidims_input_buffer();
-      setup_ray_origin_buffer();
-      setup_work_img_buffer();
+     // setup_ray_origin_buffer();
+     // setup_work_img_buffer();
       setup_tree_global_bbox_buffer();
       setup_imgdims_buffer();
 
@@ -1022,10 +1025,10 @@ bool boxm_stack_ray_trace_manager<T>::run()
       // release memory
       clean_imgdims_buffer();
       clean_tree_global_bbox_buffer();
-      clean_work_img_buffer();
-      clean_ray_origin_buffer();
+      //clean_work_img_buffer();
+      //clean_ray_origin_buffer();
       clean_roidims_input_buffer();
-      clean_camera_input_buffer();
+      //clean_camera_input_buffer();
       clean_tree_input_buffers();
 
       clean_tree();
@@ -1035,6 +1038,11 @@ bool boxm_stack_ray_trace_manager<T>::run()
       total_raytrace_time += raytrace_time;
     }
   }
+  read_output_image();
+  clean_work_img_buffer();
+  clean_ray_origin_buffer();
+  clean_camera_input_buffer();
+
   vcl_cout << "Running block (GPU)" << total_gpu_time/1000 << 's' << vcl_endl
            << "total block loading time = " << total_load_time << 's' << vcl_endl
            << "total block processing time = " << total_raytrace_time << 's' << vcl_endl;
@@ -1148,13 +1156,20 @@ bool boxm_stack_ray_trace_manager<T>::run_block()
   status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
   status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
 
+ 
+
+  return SDK_SUCCESS;
+}
+template<class T>
+bool boxm_stack_ray_trace_manager<T>:: read_output_image()
+{
   cl_event events[2];
 
   // Enqueue readBuffers
-  status = clEnqueueReadBuffer(command_queue,work_image_buf_,CL_TRUE,
-    0,ni_*nj_*sizeof(cl_float4),
-    this->ray_results(),
-    0,NULL,&events[0]);
+  int status = clEnqueueReadBuffer(command_queue_,work_image_buf_,CL_TRUE,
+                               0,ni_*nj_*sizeof(cl_float4),
+                               this->ray_results(),
+                               0,NULL,&events[0]);
 
   if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (ray_results)failed."))
     return SDK_FAILURE;
@@ -1168,12 +1183,11 @@ bool boxm_stack_ray_trace_manager<T>::run_block()
   if (!this->check_val(status,CL_SUCCESS,"clReleaseEvent failed."))
     return SDK_FAILURE;
 
-   // release the command Queue
-  status = clReleaseCommandQueue(command_queue);
+  // release the command Queue
+  status = clReleaseCommandQueue(command_queue_);
   if (!this->check_val(status,CL_SUCCESS,"clReleaseCommandQueue failed."))
     return SDK_FAILURE;
 
-  return SDK_SUCCESS;
 }
 
 #define BOXM_STACK_RAY_TRACE_MANAGER_INSTANTIATE(T) \

@@ -39,7 +39,7 @@ class boxm_ray_trace_manager : public bocl_manager<boxm_ray_trace_manager<T_data
     cam_(0),
     svd_UtWV_(0),imgdims_(0),roidims_(0),global_bbox_(0),
     ni_(0),nj_(0),nlevels_(0), roi_min_i_(0), roi_min_j_(0),
-    roi_max_i_(0), roi_max_j_(0)
+    roi_max_i_(0), roi_max_j_(0),useimage_(false)
     {}
 
   ~boxm_ray_trace_manager();
@@ -49,7 +49,7 @@ class boxm_ray_trace_manager : public bocl_manager<boxm_ray_trace_manager<T_data
                      vpgl_camera_double_sptr cam,
                      unsigned int ni, unsigned int nj,
                      vcl_vector<vcl_string> functor_source_filenames,
-                     unsigned int i0 = 0, unsigned int j0 = 0);
+                     unsigned int i0 = 0, unsigned int j0 = 0,bool useimage=false);
 
   //: run the raytrace
   bool run();
@@ -116,6 +116,7 @@ class boxm_ray_trace_manager : public bocl_manager<boxm_ray_trace_manager<T_data
   void print_tree_results() {} //TODO: later
   void print_ray_results();
 
+  void set_useimage(bool useimage){useimage_=useimage;}
   bool setup_img_dims(unsigned ni,unsigned nj);
   bool clean_img_dims();
 
@@ -128,7 +129,7 @@ class boxm_ray_trace_manager : public bocl_manager<boxm_ray_trace_manager<T_data
   bool setup_ray_origin();
   bool clean_ray_origin();
 
-  int setup_tree_input_buffers();
+  int setup_tree_input_buffers(bool useimage=false);
   int clean_tree_input_buffers();
 
   int setup_camera_input_buffer();
@@ -149,12 +150,12 @@ class boxm_ray_trace_manager : public bocl_manager<boxm_ray_trace_manager<T_data
   int setup_imgdims_buffer();
   int clean_imgdims_buffer();
 
+  int build_kernel_program(bool useimage=false);
   bool setup_image_cam_arrays();
   bool clean_image_cam_arrays();
   int setup_image_cam_buffers();
   int clean_image_cam_buffers();
 
-  int build_kernel_program();
 
   int create_kernel(vcl_string const& name);
   int release_kernel();
@@ -184,9 +185,10 @@ class boxm_ray_trace_manager : public bocl_manager<boxm_ray_trace_manager<T_data
   unsigned int j0_;
   unsigned ni_;
   unsigned nj_;
+  unsigned nlevels_;
+  bool useimage_;
   unsigned roi_min_i_, roi_min_j_;
   unsigned roi_max_i_, roi_max_j_;
-  unsigned nlevels_;
   cl_int* cells_;
   cl_float* cell_data_;
   cl_int* tree_results_;
@@ -207,6 +209,8 @@ class boxm_ray_trace_manager : public bocl_manager<boxm_ray_trace_manager<T_data
   cl_mem   roidims_buf_;
   cl_mem   global_bbox_buf_;
   cl_mem   nlevels_buf_;
+  cl_image_format inputformat;
+
 };
 
 #endif // boxm_ray_trace_manager_h_

@@ -66,5 +66,8 @@ int main(int argc, char ** argv)
     good = good && bprb_batch_process_manager::instance()->set_input(1, brdb_img_file);
     good = good && bprb_batch_process_manager::instance()->run_process();
   }
+
+ int a;
+ vcl_cin>>a;
 }
 

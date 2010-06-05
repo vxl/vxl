@@ -89,7 +89,7 @@ bool boxm_ray_trace_manager<T>::init_raytrace(boxm_scene<boct_tree<short,T > > *
                                               vpgl_camera_double_sptr cam,
                                               unsigned int ni, unsigned int nj,
                                               vcl_vector<vcl_string> functor_source_filenames,
-                                              unsigned int i0, unsigned int j0)
+                                              unsigned int i0, unsigned int j0, bool useimage)
 {
   scene_ = scene;
   cam_ = cam;
@@ -97,7 +97,7 @@ bool boxm_ray_trace_manager<T>::init_raytrace(boxm_scene<boct_tree<short,T > > *
   nj_ = nj;
   i0_ = i0;
   j0_ = j0;
-
+  useimage_=useimage;
   // load base raytrace code
   if (!this->load_kernel_source(vcl_string(VCL_SOURCE_ROOT_DIR)
                                 +"/contrib/brl/bseg/boxm/ocl/octree_library_functions.cl") ||
@@ -123,7 +123,7 @@ bool boxm_ray_trace_manager<T>::init_raytrace(boxm_scene<boct_tree<short,T > > *
     vcl_cerr << "Error: boxm_ray_trace_manager : failed to load kernel source (main function)\n";
     return false;
   }
-  if (build_kernel_program()) {
+  if (build_kernel_program(useimage_)) {
     return false;
   }
 
@@ -229,20 +229,24 @@ bool boxm_ray_trace_manager<T>::setup_tree()
   //the tree is now resident in the 1-d vectors
   //cells as vnl_vector_fixed<int, 4> and
   //data as vnl_vector_fixed<float, 2>
+
+  unsigned cells_size=cell_input_.size();
+  if(cells_size>image2d_max_width_)
+	cells_size=RoundUp(cells_size,image2d_max_width_);
   cells_ = NULL;
   cell_data_ = NULL;
 #if defined (_WIN32)
   cells_ =
-    (cl_int*)_aligned_malloc(cell_input_.size() * sizeof(cl_int4), 16);
+    (cl_int*)_aligned_malloc(cells_size * sizeof(cl_int4), 16);
   cell_data_ =
     (cl_float*)_aligned_malloc(data_input_.size() * sizeof(cl_float16), 16);
 numlevels_=(cl_uint*)_aligned_malloc(sizeof(cl_uint),16);
 #elif defined(__APPLE__)
-  cells_ = (cl_int*)malloc(cell_input_.size() * sizeof(cl_int4));
+  cells_ = (cl_int*)malloc(cells_size * sizeof(cl_int4));
   cell_data_ = (cl_float*)malloc(data_input_.size() * sizeof(cl_float16));
 numlevels_=(cl_int*)malloc(sizeof(cl_int));
 #else
-  cells_ = (cl_int*)memalign(16, cell_input_.size() * sizeof(cl_int4));
+  cells_ = (cl_int*)memalign(16, cells_size * sizeof(cl_int4));
   cell_data_ = (cl_float*)memalign(16, data_input_.size() * sizeof(cl_float16));
 numlevels_=(cl_int*)memalign(16,sizeof(cl_int));
 
@@ -595,10 +599,34 @@ bool boxm_ray_trace_manager<T>::clean_ray_origin()
 }
 
 template<class T>
-int boxm_ray_trace_manager<T>::setup_tree_input_buffers()
+int boxm_ray_trace_manager<T>::setup_tree_input_buffers(bool useimage)
 {
   cl_int status = CL_SUCCESS;
+  useimage_=useimage;
   // Create and initialize memory objects
+  if(useimage_)
+  {
+	  //: store the cells as 4 integers.
+	  inputformat.image_channel_data_type=CL_SIGNED_INT32;
+	  inputformat.image_channel_order=CL_RGBA;
+
+	  if(cell_input_.size()>image2d_max_width_*image2d_max_height_)
+		  return SDK_FAILURE;
+
+	  vcl_size_t width=vcl_min(cell_input_.size(),image2d_max_width_);
+	  vcl_size_t height=(vcl_size_t)vcl_ceil((float)cell_input_.size()/(float)width);
+	  input_cell_buf_=clCreateImage2D(this->context_,
+									  CL_MEM_READ_ONLY | CL_MEM_USE_HOST_PTR,
+									  &inputformat,width,height,width*sizeof(cl_int4),
+									  cells_,&status);
+	  if (!this->check_val(status,
+						  CL_SUCCESS,
+						  "clCreateBuffer (cell_array) failed."))
+						  return SDK_FAILURE;
+
+  }
+  else
+  {
   input_cell_buf_ = clCreateBuffer(this->context_,
                                    CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                    cell_input_.size() * sizeof(cl_int4),
@@ -608,7 +636,7 @@ int boxm_ray_trace_manager<T>::setup_tree_input_buffers()
                        CL_SUCCESS,
                        "clCreateBuffer (cell_array) failed."))
     return SDK_FAILURE;
-
+  }
   input_data_buf_ = clCreateBuffer(this->context_,
                                    CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                    data_input_.size() * sizeof(cl_float16),
@@ -618,11 +646,11 @@ int boxm_ray_trace_manager<T>::setup_tree_input_buffers()
                        CL_SUCCESS,
                        "clCreateBuffer (cell_data) failed."))
     return SDK_FAILURE;
-nlevels_buf_ = clCreateBuffer(this->context_,
-                              CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
-                              sizeof(cl_int),
-                              numlevels_,
-                              &status);
+  nlevels_buf_ = clCreateBuffer(this->context_,
+								CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
+								sizeof(cl_int),
+								numlevels_,
+								&status);
   if (!this->check_val(status,CL_SUCCESS,
                        "clCreateBuffer (nlevels) failed."))
     return SDK_FAILURE;
@@ -820,7 +848,8 @@ int boxm_ray_trace_manager<T>::clean_image_cam_buffers()
   return SDK_SUCCESS;
 }
 template<class T>
-int boxm_ray_trace_manager<T>::build_kernel_program()
+int boxm_ray_trace_manager<T>::build_kernel_program(bool useimage)
+
 {
   cl_int status = CL_SUCCESS;
   vcl_size_t sourceSize[] = { prog_.size() };
@@ -845,11 +874,16 @@ int boxm_ray_trace_manager<T>::build_kernel_program()
                        "clCreateProgramWithSource failed."))
     return SDK_FAILURE;
 
+  vcl_string options="";
+
+  if(useimage)
+	  options+="-D USEIMAGE";
+
   // create a cl program executable for all the devices specified
   status = clBuildProgram(program_,
                           1,
                           this->devices_,
-                          NULL,
+                          options.c_str(),
                           NULL,
                           NULL);
   if (!this->check_val(status,
@@ -1060,7 +1094,7 @@ bool boxm_ray_trace_manager<T>::run()
 
       // allocate and initialize memory
 
-      setup_tree_input_buffers();
+      setup_tree_input_buffers(useimage_);
       setup_image_cam_buffers();
       setup_work_img_buffer();
 

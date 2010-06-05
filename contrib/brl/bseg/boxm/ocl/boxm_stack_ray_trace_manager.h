@@ -99,7 +99,6 @@ class boxm_stack_ray_trace_manager : public bocl_manager<boxm_stack_ray_trace_ma
   void clear_ray_results();
   vcl_size_t n_ray_groups();
 
-  vcl_string program_source() const {return prog_;}
   cl_program program() {return program_;}
 
   void print_tree_input();
@@ -154,6 +153,7 @@ class boxm_stack_ray_trace_manager : public bocl_manager<boxm_stack_ray_trace_ma
  protected:
 
   bool run_block();
+  bool read_output_image();
 
   boxm_scene<tree_type> *scene_;
   vpgl_camera_double_sptr cam_;

@@ -34,10 +34,9 @@ ray_stack_trace_main(__global int * nlevels,
 
   float tnear = 0, tfar =0;
 
-  int root_ptr = 0;
 
   //int4 root_cell=cells[root_ptr];
-  int n_levels =11;//(*nlevels);
+  int n_levels =(*nlevels);
 
   // set the nlevels here
   short4 root = (short4)(0,0,0,n_levels-1);
@@ -55,8 +54,6 @@ ray_stack_trace_main(__global int * nlevels,
   if (i<(*roi).x || i>(*roi).y || j<(*roi).z || j> (*roi).w)
       return;
 
-  //local_img[lid]=inp[gid];
-  float4 data_return=inp[gid];
   // using local variables
   float4 ray_d = backproject(i,j,cam[0],cam[1],cam[2],(*local_origin));
   //bounding box of root
@@ -74,12 +71,11 @@ ray_stack_trace_main(__global int * nlevels,
   short4 curr_loc_code;
   ////traverse to leaf cell that contains the entry point
   int stack_ptr=0;
-  stack[lid]=root_ptr;
-  int stack_index=0;
-  //short4 temp_curr_loc_code;
-
+  stack[lid]=0;
+  
   //int curr_cell_ptr =0;
   stack_ptr=traverse_force_stack(cells,  root, entry_loc_code,&curr_loc_code,stack,lid,workgrpsize,stack_ptr);
+  float4 data_return=inp[gid];
 
   //this cell is the first pierced by the ray
   //follow the ray through the cells until no neighbors are found
@@ -115,7 +111,7 @@ ray_stack_trace_main(__global int * nlevels,
     ////////////////////////////////////////////////////////
     // the place where the ray trace function can be applied
 
-    stack_index=lid +workgrpsize*stack_ptr;
+	int stack_index=(int)lid +(int)workgrpsize*stack_ptr;
     int data_ptr = cells[stack[stack_index]].z;
 
     //int data_ptr = curr_cell.z;
