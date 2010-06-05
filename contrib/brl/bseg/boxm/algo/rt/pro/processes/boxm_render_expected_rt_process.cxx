@@ -14,7 +14,6 @@
 #include <vcl_fstream.h>
 #include <boxm/boxm_scene_base.h>
 #include <boxm/boxm_scene.h>
-//#include <boxm/algo/sp/boxm_render_image.h>
 #include <boxm/algo/rt/boxm_render_expected_image_functor.h>
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/sample/boxm_sample.h>
