@@ -10,7 +10,7 @@
 
 template <class T_loc, class T_data>
 void boxm_refine_block(boxm_block<boct_tree<T_loc, T_data> > *block,
-                       float occlusion_prob_thresh, bool reset_appearance = true)
+                       float occlusion_prob_thresh, unsigned & num_split, bool reset_appearance = true)
 {
   typedef boct_tree<T_loc, T_data> tree_type;
   tree_type* tree = block->get_tree();
@@ -39,7 +39,7 @@ void boxm_refine_block(boxm_block<boct_tree<T_loc, T_data> > *block,
 #endif
     }
   }
-
+  num_split+=split_list.size();
   vcl_cout<<" Splitting "<<split_list.size()<<" cells" << vcl_endl;
   // splitting
   for (unsigned i=0; i<split_list.size(); i++) {
@@ -77,16 +77,16 @@ unsigned int boxm_refine_scene(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   typedef boct_tree<T_loc, T_data > tree_type;
 
   unsigned int nleaves = 0;
-
   boxm_block_iterator<tree_type> iter(&scene);
   //float max_alpha_int = (float)-vcl_log(1.0 - occlusion_prob_thresh);
   for (; !iter.end(); iter++) {
     scene.load_block(iter.index());
     boxm_block<tree_type>* block = *iter;
-    boxm_refine_block(block, occlusion_prob_thresh, reset_appearance);
-    nleaves += block->size();
+    boxm_refine_block(block, occlusion_prob_thresh,nleaves, reset_appearance);
+    //nleaves += block->size();
     scene.write_active_block();
   }
+  vcl_cout<<"Total No of leaves split "<<nleaves<<vcl_endl;
   return nleaves;
 }
 
