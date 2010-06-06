@@ -23,7 +23,7 @@ class vmal_kl
  public:
 
   //---------------------------------------------------------------------------
-  //: Default constructor. Parametres set to defaults
+  //: Default constructor. Parameters set to defaults
   //---------------------------------------------------------------------------
   explicit vmal_kl(const vmal_kl_params & params);
 

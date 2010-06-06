@@ -227,7 +227,7 @@ set_iterations_for_scale_est( int iter)
   iterations_for_scale_est_ = iter;
 }
 
-//: penalize transformation that involves scaling of the registraion area
+//: penalize transformation that involves scaling of the registration area
 void
 rgrl_feature_based_registration::
  penalize_scaling( bool penalize)

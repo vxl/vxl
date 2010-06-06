@@ -17,7 +17,7 @@
 #include <vil/vil_image_view.h>
 #include <vdtop/vdtop_8_neighborhood_mask.h>
 
-//: draws the digital graph in a human understable form.
+//: draws the digital graph in a human understandable form.
 //
 void vdtop_draw_digital_graph(vil_image_view<vxl_byte> & img,  vil_image_view<vdtop_8_neighborhood_mask> & masks)
 {

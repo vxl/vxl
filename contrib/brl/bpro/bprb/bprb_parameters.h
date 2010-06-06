@@ -187,7 +187,7 @@ class bprb_parameters : public vbl_ref_count
   //: Destructor
   ~bprb_parameters();
 
-  //: Deep psuedo copy constructor
+  //: Deep pseudo copy constructor
   bprb_parameters(const bprb_parameters_sptr& old_params);
   //: Returns true if a parameter exists with \p name
   bool valid_parameter( const vcl_string& name ) const;

@@ -108,7 +108,7 @@ class vsol_group_3d : public vsol_spatial_object_3d
   //***************************************************************************
 
   //---------------------------------------------------------------------------
-  //: Add an object `new_object'to `this'
+  //: Add an object `new_object' to `this'
   //---------------------------------------------------------------------------
   void add_object(vsol_spatial_object_3d_sptr const& new_object);
 

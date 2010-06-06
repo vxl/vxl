@@ -423,7 +423,7 @@ void mbl_table::write(vcl_ostream& os) const
   }
 }
 //========================================================================
-//: Create a new table with as subset of columnsdefined by headers
+//: Create a new table with as subset of columns defined by headers
 //========================================================================
 bool mbl_table::subtable(mbl_table &new_table,  const vcl_vector<vcl_string> &headers) const
 {

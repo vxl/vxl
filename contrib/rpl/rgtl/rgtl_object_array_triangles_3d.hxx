@@ -1,10 +1,10 @@
 /* Copyright 2006-2009 Brad King, Chuck Stewart
    Distributed under the Boost Software License, Version 1.0.
    (See accompanying file rgtl_license_1_0.txt or copy at
-   http://www.boost.org/LICENSE_1_0.txt) */
+    http://www.boost.org/LICENSE_1_0.txt) */
+
 #ifndef rgtl_object_array_triangles_3d_hxx
 #define rgtl_object_array_triangles_3d_hxx
-
 //:
 // \file
 // \brief Hold a set of triangles for storage in spatial data structures.
@@ -25,10 +25,10 @@ class rgtl_serialize_access;
 // additionally stores a list of thre point ids for each triangle.
 class rgtl_object_array_triangles_3d: public rgtl_object_array_points<3>
 {
-public:
+ public:
   typedef rgtl_object_array_points<3> derived;
 
-  //: Construct to hold a given number of points and trianglse.
+  //: Construct to hold a given number of points and triangles.
   rgtl_object_array_triangles_3d(int npts = 0, int ntris = 0);
 
   //: Destruct.
@@ -50,12 +50,13 @@ public:
   //: Compute angle-weighted pseudo-normals on the entire mesh.
   void compute_normals();
 
-  //: Get the angle-weighted pseudo-normal from last closest point
+  //:
+  //  Get the angle-weighted pseudo-normal from last closest point
   //  found on the given triangle.  Safe only after all triangles
   //  have been inserted and compute_normals called.
   void get_closest_point_normal(int id, double n[3]) const;
 
-public:
+ public:
   //: Get the number of objects in the array.
   virtual int number_of_objects() const;
 
@@ -83,7 +84,7 @@ public:
                              double const direction[3],
                              double y[3], double* s) const;
 
-private:
+ private:
 
   // Precompute separating axes for each triangle.
   void compute_axes(int id) const;

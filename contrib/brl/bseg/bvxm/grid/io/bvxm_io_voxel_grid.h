@@ -25,11 +25,11 @@
 #include <vcl_limits.h>
 #include <vcl_iostream.h>
 
-//: Traits for saving grids of different datatypes to Dristhi .raw file
+//: Traits for saving grids of different datatypes to Drishti .raw file
 template <class T>
 class bvxm_dristhi_traits;
 
-//: Dristhi datatypes for header:
+//: Drishti datatypes for header:
 // 0 : unsigned byte - 1 byte per voxel
 // 1 : signed byte - 1 byte per voxel
 // 2 : unsigned short - 2 bytes per voxel
@@ -37,7 +37,7 @@ class bvxm_dristhi_traits;
 // 4 : integer - 4 bytes per voxel
 // 8 : float - 4 bytes per voxel
 
-//: Dristhi traits specializations. Please extent as needed
+//: Drishti traits specializations. Please extent as needed
 
 template <>
 class bvxm_dristhi_traits<float>
@@ -89,7 +89,7 @@ class bvxm_dristhi_traits<bsta_num_obs<bsta_gauss_f1> >
 };
 
 
-//: Save to dristi raw file
+//: Save to Drishti raw file
 template <class T>
 bool bvxm_grid_save_raw(bvxm_voxel_grid<T> *grid,  vcl_string filename)
 {

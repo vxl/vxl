@@ -495,7 +495,7 @@ void bil_compute_compass_gradient( vil_image_view<vxl_byte>& image, int spacing,
         if (dist_op==0)
           d = dbdet_chi_sq_dist(hist1norm.bins, hist2norm.bins); // compute chi^2 dist
         else if (dist_op==1)
-          d = dbdet_bhat_dist(hist1norm.bins, hist2norm.bins);   // compute Bhattacharya dist
+          d = dbdet_bhat_dist(hist1norm.bins, hist2norm.bins);   // compute Bhattacharyya dist
         else if (dist_op==2)
           d = dbdet_gray_EMD(hist1norm.bins, hist2norm.bins);    // compute EMD
 
@@ -650,7 +650,7 @@ vil_image_view<float> bil_detect_compass_edges(vil_image_view<vxl_byte>& image,
         if (dist_op==0)
           d = bil_chi_sq_dist(hist1norm.bins, hist2norm.bins); // compute chi^2 dist
         else if (dist_op==1)
-          d = bil_bhat_dist(hist1norm.bins, hist2norm.bins);   // compute Bhattacharya dist
+          d = bil_bhat_dist(hist1norm.bins, hist2norm.bins);   // compute Bhattacharyya dist
         else if (dist_op==2)
           d = bil_gray_EMD(hist1norm.bins, hist2norm.bins);    // compute EMD
 
@@ -719,7 +719,7 @@ double bil_chi_sq_dist(const bil_bin hist1[], const bil_bin hist2[])
   return dist;
 }
 
-//: Compute Bhattacharya distance between two histograms
+//: Compute Bhattacharyya distance between two histograms
 double bil_bhat_dist(const bil_bin hist1[], const bil_bin hist2[])
 {
   double dist = 0.0;

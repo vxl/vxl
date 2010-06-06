@@ -19,7 +19,7 @@ bool bbgm_save_image_of_process_cons(bprb_func_process& pro)
   return true;
 }
 
-//: Process exectute function
+//: Process execute function
 bool bbgm_save_image_of_process(bprb_func_process& pro)
 {
   // Sanity check

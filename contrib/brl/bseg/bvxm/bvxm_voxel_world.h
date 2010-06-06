@@ -126,17 +126,17 @@ class bvxm_voxel_world: public vbl_ref_count
   template<bvxm_voxel_type APM_T>
   bool update(bvxm_image_metadata const& observation, unsigned bin_index = 0, unsigned scale_idx=0);
 
-  //: update voxel grid wtih data from image/camera pair and return pixel probability densities.
+  //: update voxel grid with data from image/camera pair and return pixel probability densities.
   // Based on algorithm published in Pollard and Mundy 06.
   // The probability density of observing each pixel in the observation is returned in pixel_prob_density, which should be allocated by the caller.
   template<bvxm_voxel_type APM_T>
   bool update(bvxm_image_metadata const& observation, vil_image_view<float> &pixel_prob_density, vil_image_view<bool> &mask, unsigned bin_index = 0, unsigned scale_idx=0);
 
-  //: update voxel grid wtih data from LIDAR/camera pair
+  //: update voxel grid with data from LIDAR/camera pair
   template<bvxm_voxel_type APM_T>
   bool update_lidar(bvxm_image_metadata const& observation, unsigned scale_idx=0);
 
-  //: update voxel grid wtih data from LIDAR/camera pair and return pixel probability densities.
+  //: update voxel grid with data from LIDAR/camera pair and return pixel probability densities.
   template<bvxm_voxel_type APM_T>
   bool update_lidar(bvxm_image_metadata const& observation, vil_image_view<float> &pixel_prob_density, vil_image_view<bool> &mask, unsigned scale_idx=0);
 

@@ -162,14 +162,14 @@ bvpl_kernel_vector_sptr bvpl_gauss3d_xx_kernel_factory::create_kernel_vector()
   return kernels;
 }
 
-//: Creates a vector of kernels according to given  azimuthal and elevation resolutio, and angle of rotation= angular_resolution_
+//: Creates a vector of kernels according to given azimuthal and elevation resolution, and with angle of rotation = angular_resolution_
 bvpl_kernel_vector_sptr bvpl_gauss3d_xx_kernel_factory::create_kernel_vector(float pi, float phi)
 {
   //to be implemented
   return 0;
 }
 
-//: Creates a vector of kernels  according to given azimuthal, levation resolutio and angle_res
+//: Creates a vector of kernels  according to given azimuthal, levation, and angular resolution
 bvpl_kernel_vector_sptr bvpl_gauss3d_xx_kernel_factory::create_kernel_vector(float pi, float phi, float angular_res)
 {
   //to be impemented

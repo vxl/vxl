@@ -2,7 +2,7 @@
 #include "mbl_rvm_regression_builder.h"
 //:
 // \file
-// \brief Object to train Relevence Vector Machines for regression
+// \brief Object to train Relevance Vector Machines for regression
 // \author Tim Cootes
 
 #include <vcl_cmath.h>

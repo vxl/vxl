@@ -487,7 +487,7 @@ class vpyr_2_tpyramid_level: public vpyr_2_pyramid_level<D>,
   //:
   virtual void contraction(const contraction_kernel &arg_kernel) ;
 
-  //: Removes the darts of arg_kernel. The darts are required beforehand to form a representativeed forest of faces.
+  //: Removes the darts of arg_kernel. The darts are required beforehand to form a representative forest of faces.
   virtual void removal(const removal_kernel &arg_kernel) ;
 
  protected:

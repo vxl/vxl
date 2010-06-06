@@ -32,34 +32,34 @@ class bsta_k_medoid
   bsta_k_medoid(unsigned n_elements, bool verbose = false);
   ~bsta_k_medoid(){}
 
-  //:insert a distance into the array, the entry j, i is automatically added
+  //: insert a distance into the array, the entry j, i is automatically added
   inline void insert_distance(const unsigned i, const unsigned j, double d)
   {assert((i<n_elements_)&&(j<n_elements_));
   distance_array_[i][j] = d; distance_array_[j][i] = d;}
 
-  //:The distance between two elements
+  //: The distance between two elements
   inline double distance(const unsigned i, const unsigned j) const
     {assert((i<n_elements_)&&(j<n_elements_)); return distance_array_[i][j];}
 
-  //:cluster the elements using k medoids
+  //: cluster the elements using k medoids
   void do_clustering(const unsigned k);
 
-  //:get number of mediods
+  //:get number of medoids
   inline unsigned k() const
     {return medoids_.size();}
 
-  //:get a mediod
+  //: get a medoid
   unsigned medoid(const unsigned i) const
     {assert(i<medoids_.size()); return medoids_[i];}
 
   //: is an element a medoid?
   bool is_medoid(const unsigned i) const;
 
-  //:number of elements in cluster k
+  //: number of elements in cluster k
   inline unsigned size(const unsigned k) const
     {assert(k<this->k());return clusters_[k].size();}
 
-  //:the elements in cluster k
+  //: the elements in cluster k
   inline vcl_vector<unsigned> elements(const unsigned k)
     {assert(k<this->k());return clusters_[k];}
 
@@ -69,7 +69,7 @@ class bsta_k_medoid
   //:the distance between an element and its medoid
   double medoid_distance(const unsigned i) const;
 
-  //:the total distance between elements and the medoid in cluster k
+  //: the total distance between elements and the medoid in cluster k
   double total_distance(const unsigned k) const;
 
   //: print distance array (for debugging)
@@ -97,10 +97,10 @@ class bsta_k_medoid
   void form_clusters();
 
  private:
-  //:print useful debug messages
+  //: print useful debug messages
   bool verbose_;
 
-  //:the size of the distance array
+  //: the size of the distance array
   unsigned n_elements_;
 
   //: the k medoids

@@ -43,7 +43,6 @@ class rgrl_feature_based_registration: public rgrl_object
   // Defines type-related functions
   rgrl_type_macro( rgrl_feature_based_registration, rgrl_object );
 
-  
   //:  Clear record of results from previous runs
   void clear_results();
 
@@ -114,7 +113,7 @@ class rgrl_feature_based_registration: public rgrl_object
   //  has no effect on the registration.
   void set_iterations_for_scale_est( int iter);
 
-  //: penalize transformation that involves scaling of the registraion area
+  //: penalize transformation that involves scaling of the registration area
   void penalize_scaling( bool );
 
   //: Return the current match sets

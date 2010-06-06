@@ -52,7 +52,7 @@ class vgui_blackbox_tableau : public vgui_wrapper_tableau
   virtual vcl_string type_name() const;
 
  protected:
-  //: Destructor - called by smart-pointer vgui_blackbox_tableau_sprt.
+  //: Destructor - called by smart-pointer vgui_blackbox_tableau_sptr.
  ~vgui_blackbox_tableau();
 
   //: True if events are being recorded.

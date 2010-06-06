@@ -3,7 +3,6 @@
 #define bvpl_gauss3d_xx_kernel_factory_h
 
 #include "bvpl_kernel_factory.h"
-
 //:
 // \file
 // \brief: A factory of the kernel of type "xx derivative of 3d gaussian"
@@ -39,16 +38,17 @@ class bvpl_gauss3d_xx_kernel_factory : public bvpl_kernel_factory
 
   virtual ~bvpl_gauss3d_xx_kernel_factory() {}
 
+#if 0
   /******************Batch Methods ***********************/
-  ////: Creates a vector of kernels with azimuthal and elevation resolutio equal to pi/4. And angle of rotation= angular_resolution_
-  //virtual bvpl_kernel_vector_sptr create_kernel_vector();
-  //
-  ////: Creates a vector of kernels according to given  azimuthal and elevation resolutio, and angle of rotation= angular_resolution_
-  //virtual bvpl_kernel_vector_sptr create_kernel_vector(float pi, float phi);
-  //
-  ////: Creates a vector of kernels  according to given azimuthal, levation resolutio and angle_res
-  //virtual bvpl_kernel_vector_sptr create_kernel_vector(float pi, float phi, float angular_res);
+  //: Creates a vector of kernels with azimuthal and elevation resolution equal to pi/4, and with angle of rotation = angular_resolution_
+  virtual bvpl_kernel_vector_sptr create_kernel_vector();
 
+  //: Creates a vector of kernels according to given  azimuthal and elevation resolution, and with angle of rotation = angular_resolution_
+  virtual bvpl_kernel_vector_sptr create_kernel_vector(float pi, float phi);
+
+  //: Creates a vector of kernels  according to given azimuthal, levation, and angular resolution
+  virtual bvpl_kernel_vector_sptr create_kernel_vector(float pi, float phi, float angular_res);
+#endif
  private:
 
   //:Creates a 2d edge kernel

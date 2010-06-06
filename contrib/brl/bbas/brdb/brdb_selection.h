@@ -34,10 +34,10 @@ class brdb_selection : public vbl_ref_count
   //: Constructor
   brdb_selection(const brdb_selection_sptr& selection, brdb_query_aptr query);
 
-  //: deconstructor
+  //: destructor
   ~brdb_selection();
 
-  //: get the iterator pointing to the beginning of the selecton set
+  //: get the iterator pointing to the beginning of the selection set
   selection_t::const_iterator begin();
 
   //: get the iterator pointing to the ending of the selection set

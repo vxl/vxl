@@ -74,7 +74,7 @@ bool vgui_poly_tableau::item::inside(GLint const vp[4],int vx, int vy) const
 }
 
 //-----------------------------------------------------------------------------
-//: Constructor - don't use this, use vgui_poly_tableu_new.
+//: Constructor - don't use this, use vgui_poly_tableau_new.
 vgui_poly_tableau::vgui_poly_tableau()
   : vgui_tableau()
   , current(-1)
@@ -180,7 +180,7 @@ int vgui_poly_tableau::add(vgui_tableau_sptr const& t, float x, float y,
   assert(counter < 1000000); // a million. FIXME.
   item it(this, t, x, y, w, h, ++counter) ;
   sub.push_back(it);
-#ifdef DEBUG 
+#ifdef DEBUG
   vcl_cerr << "id = " << sub.back().id << '\n'
            << "x  = " << sub.back().x << '\n'
            << "y  = " << sub.back().y << '\n'

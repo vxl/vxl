@@ -110,7 +110,7 @@ class vsol_group_2d : public vsol_spatial_object_2d
   //***************************************************************************
 
   //---------------------------------------------------------------------------
-  //: Add an object `new_object'to `this'
+  //: Add an object `new_object' to `this'
   //---------------------------------------------------------------------------
   void add_object(const vsol_spatial_object_2d_sptr &new_object);
 

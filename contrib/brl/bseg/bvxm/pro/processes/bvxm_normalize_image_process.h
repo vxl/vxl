@@ -54,7 +54,7 @@ namespace bvxm_normalize_image_process_globals
   float b_ratio_ = 0.5f;
   bool verbose_ = false;
 
-  // other gloabal variables
+  // other global variables
   unsigned ni_= 0;
   unsigned nj_= 0;
   unsigned nplanes_=0;

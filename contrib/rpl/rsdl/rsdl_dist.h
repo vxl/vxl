@@ -47,7 +47,7 @@ rsdl_dist_point_in_box( const rsdl_point & pt,
                         const rsdl_bounding_box & box );
 
 
-//: Determine the relation between a proported "inner" box and a proported "outer" box.
+//: Determine the relation between a purported "inner" box and a purported "outer" box.
 //  \a inside will be true iff all points in \a inner are in \a outer
 //  \a intersect will be true iff at least one point from \a inner is in \a outer.
 void

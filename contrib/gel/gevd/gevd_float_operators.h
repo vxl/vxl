@@ -251,7 +251,7 @@ class gevd_float_operators
   static gevd_bufferxy* MakeCircles(const float mag, float w1, float w2,
                                     int x=100, int y=100);
   static gevd_bufferxy* MakeEllipses(const float mag, const float w1, const float w2,
-                                     const float excentricity,
+                                     const float eccentricity,
                                      int x=100, int y=100);
   static gevd_bufferxy* MakeSuperellipses(const float mag,
                                           const float w1, const float w2,

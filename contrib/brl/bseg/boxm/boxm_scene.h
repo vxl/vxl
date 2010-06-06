@@ -175,7 +175,7 @@ class boxm_scene :public boxm_scene_base
 
   //: Flag that indicates whether internal nodes of the trees should be saved
   bool save_internal_nodes_;
-  //: Flag that indicates whether the octree data should be saved in a platform-indepenent way (slower)
+  //: Flag that indicates whether the octree data should be saved in a platform-independent way (slower)
   bool save_platform_independent_;
   //************** private methods
   void create_block(unsigned i, unsigned j, unsigned k);

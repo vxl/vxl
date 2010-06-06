@@ -63,7 +63,7 @@ double bsta_k_medoid::total_distance(const unsigned k) const
 
 //--------------------------------------------------------
 // Compute the change in distance of swapping medoid j with
-// current mediod k with respect to element i
+// current medoid k with respect to element i
 double bsta_k_medoid::dc(const unsigned i, const unsigned j, const unsigned k)
 {
   //current distance
@@ -78,7 +78,7 @@ double bsta_k_medoid::dc(const unsigned i, const unsigned j, const unsigned k)
 
 //--------------------------------------------------------
 // Compute the change in distance of swapping medoid j with
-// current mediod k with respect to total distance between medoids
+// current medoid k with respect to total distance between medoids
 double bsta_k_medoid::dcm(const unsigned j, const unsigned k)
 {
   //iterate over medoids

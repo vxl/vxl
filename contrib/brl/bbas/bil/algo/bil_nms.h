@@ -107,7 +107,7 @@ class bil_nms
   //: return the array containing the suppressed non maxima (i.e., only maxima remain)
   vil_image_view<float> mag() { return mag_; }
 
-  //: return the array containing the scond deriv map
+  //: return the array containing the second deriv map
   vbl_array_2d<double>& deriv() { return deriv_; }
 
   void apply();

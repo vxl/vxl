@@ -341,7 +341,7 @@ static void test_conic()
 
   // 5. Test parabola
   vcl_cout << "\n\t=== test parabola ===\n";
-  // parabola, top (1,2), orientation(4,-3), "excentricity" -30.
+  // parabola, top (1,2), orientation(4,-3), "eccentricity" -30.
   cc = vgl_conic<double>(direction, 1,2, -30);
   c = vgl_conic<double>(9, 24, 16, -114, -52, 97);
   vcl_cout << c << '\n';

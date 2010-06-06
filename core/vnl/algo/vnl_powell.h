@@ -38,7 +38,7 @@ class vnl_powell : public vnl_nonlinear_minimizer
   //  Default value is 0.0001
   void set_linmin_xtol(double tol) { linmin_xtol_ = tol; }
 
-  //: Set initial step when bracketting minima along a line
+  //: Set initial step when bracketing minima along a line
   //  Default value is 1.0
   void set_initial_step(double step) { initial_step_ = step; }
 
@@ -51,7 +51,7 @@ class vnl_powell : public vnl_nonlinear_minimizer
   //: Tolerance on line search parameter step
   double linmin_xtol_;
 
-  //: Initial step when bracketting minima along a line
+  //: Initial step when bracketing minima along a line
   double initial_step_;
 };
 

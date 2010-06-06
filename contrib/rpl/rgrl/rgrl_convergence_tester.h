@@ -18,12 +18,12 @@ class rgrl_convergence_tester
   : public rgrl_object
 {
  public:
- 
+
   //: ctor
   rgrl_convergence_tester() : rel_tol_thres_(1e-3) { }
-  
-  virtual ~rgrl_convergence_tester(); 
-  
+
+  virtual ~rgrl_convergence_tester();
+
   //:  Compute the converge_status of the current view using multiple match sets
   //   This is the pure virtual function implemented in the derived classes.
   //
@@ -64,13 +64,13 @@ class rgrl_convergence_tester
                   rgrl_scale_sptr                         current_scale,
                   bool                                    penalize_scaling = false)const;
 
-  //: convinient function for initializing status
+  //: convenient function for initializing status
   rgrl_converge_status_sptr
   initialize_status( rgrl_view       const& init_view,
                      rgrl_scale_sptr const& prior_scale,
                      bool                   penalize_scaling ) const;
 
-  //: convinient function for initializing status
+  //: convenient function for initializing status
   rgrl_converge_status_sptr
   initialize_status( rgrl_transformation_sptr                xform_estimate,
                      rgrl_estimator_sptr                     xform_estimator,
@@ -80,36 +80,36 @@ class rgrl_convergence_tester
 
   //: verify the final alignment
   virtual
-  rgrl_converge_status_sptr 
+  rgrl_converge_status_sptr
   verify( rgrl_view                        const& view,
           rgrl_set_of<rgrl_match_set_sptr> const& current_match_sets,
           rgrl_set_of<rgrl_scale_sptr>     const& current_scales )const;
 
-  rgrl_converge_status_sptr 
+  rgrl_converge_status_sptr
   verify( rgrl_view                   const& view,
           rgrl_match_set_sptr         const& current_match_sets,
           rgrl_scale_sptr             const& current_scales )const;
 
   //: set relative tolerance on convergence
-  void set_rel_tol( double rel_tol ) 
+  void set_rel_tol( double rel_tol )
   { rel_tol_thres_ = rel_tol; }
-  
-  double rel_tol() const 
+
+  double rel_tol() const
   { return rel_tol_thres_; }
-  
+
   // Defines type-related functions
   rgrl_type_macro( rgrl_convergence_tester, rgrl_object );
 
-protected:
-  
+ protected:
+
   //: the real init status function
   virtual rgrl_converge_status_sptr
   init_status( rgrl_view       const& init_view,
                rgrl_scale_sptr const& prior_scale,
                bool                   penalize_scaling ) const;
-  
+
   //:  helper function for computing status
-  virtual 
+  virtual
   rgrl_converge_status_sptr
   compute_status_helper(double new_error,
                         bool   good_enough,
@@ -117,7 +117,7 @@ protected:
                         rgrl_view                        const& prev_view,
                         rgrl_view                        const& current_view ) const;
 
-protected:
+ protected:
   double  rel_tol_thres_;
 };
 

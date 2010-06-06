@@ -51,7 +51,7 @@ class bgui_vsol_soview2D : public vgui_soview2D
 
   //: Render this 2D digital_curve on the display.
   virtual void draw() const=0;
-  
+
   vsol_spatial_object_2d_sptr base_sptr() const { return sptr_; }
 
   //: Translate this 2D digital_curve by the given x and y distances.
@@ -178,7 +178,7 @@ class bgui_vsol_soview2D_polyline : public bgui_vsol_soview2D
   //: Constructor - creates a view of a given vsol_polyline_2d
   bgui_vsol_soview2D_polyline(vsol_polyline_2d_sptr const& pline);
 
-  //: Deconstructor
+  //: Destructor
   ~bgui_vsol_soview2D_polyline() {}
 
   //: Returns the type of this class ('bgui_vsol_soview2D_polyline').
@@ -210,7 +210,7 @@ class bgui_vsol_soview2D_polygon : public bgui_vsol_soview2D
   //: Constructor - creates a view of a vdgl_polygon
   bgui_vsol_soview2D_polygon(vsol_polygon_2d_sptr const& e);
 
-  //: Deconstructor
+  //: Destructor
   ~bgui_vsol_soview2D_polygon() {}
 
   //: Returns the type of this class ('bgui_vsol_soview2D_polygon').
@@ -241,14 +241,14 @@ class bgui_vsol_soview2D_polygon_set : public bgui_vsol_soview2D
   //: Constructor - creates a view of a vdgl_polygon
   bgui_vsol_soview2D_polygon_set(vsol_poly_set_2d_sptr const& e);
 
-  //: Deconstructor
+  //: Destructor
   ~bgui_vsol_soview2D_polygon_set() {}
 
   //: Returns the type of this class ('bgui_vsol_soview2D_polygon').
   static vcl_string type_name_() { return "bgui_vsol_soview2D_polygon_set"; }
   vcl_string type_name() const { return type_name_(); }
 
-  // Returns a smart pointer to the polygon set 
+  // Returns a smart pointer to the polygon set
   // \note cast from a vsol_spatial_object_2d_sptr in the base class
   vsol_poly_set_2d_sptr sptr() const;
 
@@ -278,7 +278,7 @@ class bgui_vsol_soview2D_digital_curve : public bgui_vsol_soview2D
   //: Returns the type of this class ('bgui_vsol_soview2D_digital_curve').
   static vcl_string type_name_() { return "bgui_vsol_soview2D_digital_curve"; }
   vcl_string type_name() const { return type_name_(); }
-  
+
   // Returns a smart pointer to the digital curve
   // \note cast from a vsol_spatial_object_2d_sptr in the base class
   vsol_digital_curve_2d_sptr sptr() const;
@@ -334,7 +334,6 @@ class bgui_vsol_soview2D_edgel_curve : public bgui_vsol_soview2D
  protected:
   bool draw_dotted_;
 };
-
 
 
 #endif // bgui_vsol_soview2D_h_

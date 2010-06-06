@@ -170,7 +170,7 @@ class vgl_conic
   //  'minor' axis length. The rotation is about the centre of the
   //  ellipse or hyperbola. A parabola is obtained when the centre has
   //  w()=0, i.e., is a point at infinity. In that case (rx,ry) is the
-  //  top, and theta is an excentricity parameter (since the centre
+  //  top, and theta is an eccentricity parameter (since the centre
   //  already specifies the direction of the symmetry axis).
   vgl_conic(vgl_homg_point_2d<T> const& c, T rx, T ry, T theta);
 
@@ -189,7 +189,7 @@ class vgl_conic
 
   //: Returns true if this conic is degenerate, i.e., if it consists of 2 lines.
   bool is_degenerate() const;
-  
+
   //: Returns true if a central conic, i.e., an ellipse, circle, or hyperbola.
   //  Also the degenerate versions of these return true.
   //  Returns false if a parabola or two parallel or coinciding lines.
@@ -243,7 +243,7 @@ class vgl_conic
   //: Returns the curvature of the conic at point p, assuming p is on the conic.
   double curvature_at(vgl_point_2d<T> const& p) const;
 
-  //: Converts the coefficients to a geometric description of an ellipse. 
+  //: Converts the coefficients to a geometric description of an ellipse.
   //  Returns false if the conic is not an ellipse. Double is appropriate
   //  since integer coefficients can produce non-integer ellipse parameters.
   bool ellipse_geometry(double& xc, double& yc, double& major_axis_length,

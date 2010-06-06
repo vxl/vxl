@@ -151,7 +151,7 @@ class vnl_sparse_matrix
   //: Put (i.e., add or overwrite) an entry into the matrix.
   void put(unsigned int row, unsigned int column, T value);
 
-  //: Get diag(A_tranpose * A).
+  //: Get diag(A_transpose * A).
   // Useful for forming Jacobi preconditioners for linear solvers.
   void diag_AtA(vnl_vector<T>& result) const;
 

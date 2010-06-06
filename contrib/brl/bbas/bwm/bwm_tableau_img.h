@@ -42,7 +42,7 @@ class bwm_tableau_img : public bwm_tableau, public bgui_picker_tableau
   virtual void paste();
   //************* IMAGE Processing Methods
 
-  //: Draws the hostogram on a graph (if the image is greyscale)
+  //: Draws the histogram on a graph (if the image is greyscale)
   void hist_plot() { my_observer_->hist_plot(); }
 
   //: Draws the intensity profile on a selected line(if the image is greyscale)
@@ -73,7 +73,7 @@ class bwm_tableau_img : public bwm_tableau, public bgui_picker_tableau
   void lines_vd();
   void recover_edges();
   void recover_lines();
-  
+
   //: mask operations
   void init_mask();
   void set_change_type() { my_observer_->set_change_type(); }
@@ -91,7 +91,7 @@ class bwm_tableau_img : public bwm_tableau, public bgui_picker_tableau
 
   void set_poly_mode() { my_observer_->set_draw_mode((bwm_observer_img::MODE_2D_POLY)); }
   void set_vertex_mode() { my_observer_->set_draw_mode((bwm_observer_img::MODE_2D_VERTEX)); }
-  
+
  protected:
   void lock();
   void unlock();

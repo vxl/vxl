@@ -631,14 +631,14 @@ void bmdl_mesh::mesh_lidar(const vcl_vector<bmdl_edge>& edges,
       if (edges[edge_idxs[j]].building1 == i+1)
       {
         face_list[i].push_back(edges[edge_idxs[j]].joint1);
-        // insert two psuedo edge points for disambiguation
+        // insert two pseudo edge points for disambiguation
         face_list[i].push_back(num_joints + 2*edge_idxs[j]);
         face_list[i].push_back(num_joints + 2*edge_idxs[j] + 1);
       }
       else
       {
         face_list[i].push_back(edges[edge_idxs[j]].joint2);
-        // insert two psuedo edge points for disambiguation
+        // insert two pseudo edge points for disambiguation
         face_list[i].push_back(num_joints + 2*edge_idxs[j] + 1);
         face_list[i].push_back(num_joints + 2*edge_idxs[j]);
       }

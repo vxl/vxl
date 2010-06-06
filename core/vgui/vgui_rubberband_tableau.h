@@ -50,7 +50,7 @@ class vgui_rubberband_client
   //: Called by vgui_rubberband_tableau when the user has selected a circle.
   virtual void add_circle(float,float,float);
 
-  //: Called by vgui_rubberband_tableau when the user has selectd a linestrip.
+  //: Called by vgui_rubberband_tableau when the user has selected a linestrip.
   virtual void add_linestrip(int n,float const *,float const *);
 
   //: Called by vgui_rubberband_tableau when the user has selected a polygon.
@@ -93,7 +93,7 @@ class vgui_rubberband_easy2D_client : public vgui_rubberband_client
   //  Adds a circle to the vgui_easy2D_tableau.
   void add_circle(float x, float y, float r);
 
-  //: Called by vgui_rubberband_tableau when the user has selectd a linestrip.
+  //: Called by vgui_rubberband_tableau when the user has selected a linestrip.
   //  Adds a linestrip to the vgui_easy2D_tableau.
   void add_linestrip(int n, float const* x, float const* y);
 

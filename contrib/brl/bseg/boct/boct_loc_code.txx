@@ -108,7 +108,7 @@ boct_loc_code<T> * boct_loc_code<T>::XOR(boct_loc_code<T> * b)
     return xorcode;
 }
 
-//: returns the AND of the locationall codes of this and b
+//: returns the AND of the locational codes of this and b
 template <class T>
 boct_loc_code<T> * boct_loc_code<T>::AND(boct_loc_code *b)
 {
@@ -120,7 +120,7 @@ boct_loc_code<T> * boct_loc_code<T>::AND(boct_loc_code *b)
   return xorcode;
 }
 
-//: function to convert location code to a point.
+//: function to convert locational code to a point.
 template <class T>
 vgl_point_3d<double> boct_loc_code<T>::get_point(short max_level)
 {

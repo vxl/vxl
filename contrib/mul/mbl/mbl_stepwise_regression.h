@@ -38,9 +38,9 @@ class mbl_stepwise_regression
 
     //: The residual sum of squares
     double rss_;
-    //: F-ratio signifcance threshold for adding a variable
+    //: F-ratio significance threshold for adding a variable
     double FthreshAdd_;
-    //: F-ratio signifcance threshold for removing a variable
+    //: F-ratio significance threshold for removing a variable
     // Note must be less than addition threshold or infinite cycling will occur
     double FthreshRemove_;
     //: forwards or backwards mode

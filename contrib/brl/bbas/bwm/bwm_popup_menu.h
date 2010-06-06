@@ -24,7 +24,7 @@ class bwm_popup_menu
 
   // ************* IMAGE Processing Methods
 
-  //: Draws the hostogram on a graph (if the image is greyscale)
+  //: Draws the histogram on a graph (if the image is greyscale)
   void hist_plot();// { (tab_->hist_plot(); }
 
   //: Draws the intensity profile on a selected line(if the image is greyscale)

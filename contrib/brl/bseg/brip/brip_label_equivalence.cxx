@@ -5,7 +5,7 @@
 #include <vcl_utility.h>
 #include <vcl_iostream.h>
 
-//:add a label pair equivalance
+//: add a label pair equivalence
 void brip_label_equivalence::add_label_pair(unsigned la, unsigned lb)
 {
   vcl_pair<vcl_set<unsigned>::iterator, bool> result;

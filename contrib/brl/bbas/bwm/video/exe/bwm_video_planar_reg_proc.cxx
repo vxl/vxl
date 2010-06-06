@@ -31,7 +31,7 @@ static bool planar_reg(vcl_string const& video_input_glob,
       video_output_dir == "")
     return false;
   bool pre_flt = true;
-  if(preserve_float == "false")
+  if (preserve_float == "false")
     pre_flt = false;
   if (!vul_file::exists(video_output_dir))
     if (!vul_file::make_directory_path(video_output_dir))
@@ -70,7 +70,7 @@ static bool planar_reg(vcl_string const& video_input_glob,
                                                           sample_distance))
     return false;
 
-  if(video_istr)
+  if (video_istr)
     if (!bwm_video_registration::register_image_stream_planar(video_istr,
                                                               cam_istr,
                                                               world_plane,
@@ -81,8 +81,8 @@ static bool planar_reg(vcl_string const& video_input_glob,
                                                               pre_flt))
       return false;
 
-  if(homography_path != "")
-    if(!bwm_video_registration::register_planar_homographies(cam_istr,
+  if (homography_path != "")
+    if (!bwm_video_registration::register_planar_homographies(cam_istr,
                                                             world_plane,
                                                             bounds,
                                                             sample_distance,
@@ -103,7 +103,7 @@ int main(int argc, char** argv)
                                        "video output file directory", "");
   vul_arg<vcl_string> world_plane_path(arglist, "-world_plane",
                                        "world plane (4 element vector)", "");
-  vul_arg<vcl_string> homography_path(arglist, "-homg_dir", "homgraphy dir", "");
+  vul_arg<vcl_string> homography_path(arglist, "-homg_dir", "homography dir", "");
   vul_arg<vcl_string> preserve_float(arglist, "-preserve_float", "keep float format", "");
   arglist.parse(argc, argv, true);
 

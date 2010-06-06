@@ -23,7 +23,7 @@ class bwm_tableau_cam : public bwm_tableau_img
 {
  public:
   typedef enum {RATIONAL=0, PROJECTIVE=1} BWM_CAMERA_TYPES;
-  
+
   //: destructor
   // Tableaux are responsible for deleting their observers
   virtual ~bwm_tableau_cam(){ delete my_observer_; }
@@ -58,7 +58,7 @@ class bwm_tableau_cam : public bwm_tableau_img
   //: draws a line onto a given face, dividing into two faces
   void divide_face();
 
-  //: Draws the hostogram on a graph (if the image is greyscale)
+  //: Draws the histogram on a graph (if the image is greyscale)
   void hist_plot();
 
   void set_corr(double X, double Y);
@@ -133,9 +133,8 @@ class bwm_tableau_cam : public bwm_tableau_img
 
  protected:
   bwm_observer_cam* my_observer_;
-  bwm_tableau_cam(bwm_observer_cam* obs) 
+  bwm_tableau_cam(bwm_observer_cam* obs)
     : bwm_tableau_img(obs), my_observer_(obs) {}
-  
 };
 
 #endif

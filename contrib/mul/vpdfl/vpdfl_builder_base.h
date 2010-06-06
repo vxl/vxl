@@ -83,7 +83,7 @@ class vpdfl_builder_base
   //: Load class from binary file stream
   virtual void b_read(vsl_b_istream& bfs) = 0;
 
-  //: Create a vpdfl_builder_base object given a config steram
+  //: Create a vpdfl_builder_base object given a config stream
   // \throw mbl_exception if parse error.
   static vcl_auto_ptr<vpdfl_builder_base> new_builder_from_stream(vcl_istream &is);
 
@@ -95,7 +95,6 @@ class vpdfl_builder_base
   //  Creates object, then uses config_from_stream(is) to set up internals
   // \throw vcl_runtime_exception if parse error.
   static vcl_auto_ptr<vpdfl_builder_base> new_pdf_builder_from_stream(vcl_istream &);
-
 };
 
 //: Allows derived class to be loaded by base-class pointer

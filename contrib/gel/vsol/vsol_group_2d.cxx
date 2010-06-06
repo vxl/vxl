@@ -121,7 +121,7 @@ unsigned int vsol_group_2d::deep_size(void) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-//: Add an object `new_object'to `this'
+//: Add an object `new_object' to `this'
 // Require: !is_child(new_object)
 //---------------------------------------------------------------------------
 void vsol_group_2d::add_object(const vsol_spatial_object_2d_sptr &new_object)

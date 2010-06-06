@@ -1,17 +1,17 @@
 /* Copyright 2006-2009 Brad King, Chuck Stewart
    Distributed under the Boost Software License, Version 1.0.
    (See accompanying file rgtl_license_1_0.txt or copy at
-   http://www.boost.org/LICENSE_1_0.txt) */
+    http://www.boost.org/LICENSE_1_0.txt) */
+
 #ifndef rgtl_object_array_hxx
 #define rgtl_object_array_hxx
-
-#include "rgtl_serialize_access.hxx"
-
 //:
 // \file
 // \brief Abstract interface for an array of objects for spatial structures.
 // \author Brad King
 // \date March 2007
+
+#include "rgtl_serialize_access.hxx"
 
 //: Abstract interface for an array of objects in D dimensions.
 //
@@ -22,8 +22,8 @@
 template <unsigned int D>
 class rgtl_object_array
 {
-public:
-  //: Virtual distructor.
+ public:
+  //: Virtual destructor.
   virtual ~rgtl_object_array() {}
 
   //: Get the number of objects in the array.
@@ -52,8 +52,8 @@ public:
                                     double y[D],
                                     double bound_squared) const = 0;
 
-  //: Compute the intersection of an object with a ray.  If an
-  //  intersection exists true is returned, "y" is set to the
+  //: Compute the intersection of an object with a ray.
+  //  If an intersection exists true is returned, "y" is set to the
   //  intersection point, and "s" is set to the scale between the
   //  vectors "direction" and "y - origin".  Otherwise false is
   //  returned.
@@ -64,7 +64,7 @@ public:
 
   //: Compute an axis-aligned bounding box around the objects.
   virtual void compute_bounds(double bounds[D][2]) const = 0;
-private:
+ private:
   friend class rgtl_serialize_access;
   template <class Serializer> void serialize(Serializer&) {}
 };

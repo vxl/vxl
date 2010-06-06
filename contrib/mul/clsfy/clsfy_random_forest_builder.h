@@ -131,10 +131,10 @@ class clsfy_random_forest_builder : public clsfy_builder_base
   //: Uniform sampler on 0,1 (for bootstrapping)
   mutable  vnl_random random_sampler_;
 
-  //: Pointer to storeage of point indices for each bootstrapped tree
+  //: Pointer to storage of point indices for each bootstrapped tree
   // Can be used for out of bag estimates
   // Saves for tree i the indices of all points used in its training
-  //Note the storeage is supplied from outside this class, as this is a kind of bolt-on
+  // Note the storage is supplied from outside this class, as this is a kind of bolt-on
   vcl_vector<vcl_vector<unsigned > >* poob_indices_;
  private:
   //: Does the builder calculate the error on the training set?

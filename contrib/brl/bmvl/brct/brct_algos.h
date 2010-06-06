@@ -137,12 +137,12 @@ class brct_algos
                       vgl_p_matrix<double> const& P,
                       vcl_vector<vgl_point_2d<double> > & image_points);
 
-  //: project a world polygon onto an image using a homgraphy
+  //: project a world polygon onto an image using a homography
   static vsol_polygon_2d_sptr
     project(vsol_polygon_3d_sptr const& world_poly,
             vgl_h_matrix_2d<double> const& H);
 
-  //: project world polygons onto an image using a homgraphy
+  //: project world polygons onto an image using a homography
   static void project(vcl_vector<vsol_polygon_3d_sptr> const& world_polys,
                       vgl_h_matrix_2d<double> const& H,
                       vcl_vector<vsol_polygon_2d_sptr > & image_polys);

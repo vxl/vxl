@@ -30,7 +30,7 @@ class vsl_basic_xml_element
   vsl_basic_xml_element(vcl_string tag)
     : tag_(tag) {}
 
-  //: constructs with a name and a list of (attibute,value) pair
+  //: constructs with a name and a list of (attribute,value) pair
   vsl_basic_xml_element(vcl_string tag, vcl_vector<vcl_pair<vcl_string, vcl_string> > attrs)
     : tag_(tag), attrs_(attrs) {}
 
@@ -59,7 +59,7 @@ class vsl_basic_xml_element
   void x_write_open(vcl_ostream& ostr);
 
   //: writes the closing tag to the stream
-  void x_write_close(vcl_ostream& ostr); 
+  void x_write_close(vcl_ostream& ostr);
 
  protected:
   vcl_string tag_;

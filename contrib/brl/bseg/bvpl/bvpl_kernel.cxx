@@ -17,19 +17,19 @@ void bvpl_kernel::print_to_file(vcl_string filename)
     vcl_cerr << "error opening file " << filename << " for write!\n";
     return;
   }
-  
+
   kernel_.begin();
   while (!kernel_.isDone()){
     vgl_point_3d<int> coord = kernel_.index();
     ofs.precision(2);
-    ofs << coord.x() << ' ' << coord.y() << ' ' << coord.z() << ' ' << (*kernel_).c_ << "\n" ; 
+    ofs << coord.x() << ' ' << coord.y() << ' ' << coord.z() << ' ' << (*kernel_).c_ << '\n' ;
     ++kernel_;
   }
-  
+
   ofs.close();
 }
 
-//: Saves the kernel to Dristhi .raw data format.
+//: Saves the kernel to Drishti .raw data format.
 // The kernel does not occupy the entire volume, so the empty voxels are set to 0.
 // The size of the box is max(x,y,z) * max(x,y,z) * max(x,y,z)
 bool bvpl_kernel::save_raw(vcl_string filename)
@@ -39,32 +39,32 @@ bool bvpl_kernel::save_raw(vcl_string filename)
     vcl_cerr << "error opening file " << filename << " for write!\n";
     return false;
   }
-  
+
   // write header
   //unsigned char data_type = 1; // 1 means signed byte
   unsigned char data_type = 8; // 8 means float
-  
+
   vxl_uint_32 nx = (max_point_.x() - min_point_.x()) + 1;
   vxl_uint_32 ny = (max_point_.y() - min_point_.y()) + 1;
   vxl_uint_32 nz = (max_point_.z() - min_point_.z()) + 1;
-  
+
   ofs.write(reinterpret_cast<char*>(&data_type),sizeof(data_type));
   ofs.write(reinterpret_cast<char*>(&nx),sizeof(nx));
   ofs.write(reinterpret_cast<char*>(&ny),sizeof(ny));
   ofs.write(reinterpret_cast<char*>(&nz),sizeof(nz));
-  
+
   // write data
   // iterate through slabs and fill in memory array
   unsigned size = nx*ny*nz;
   float *data_array = new float[size];
-  
+
   kernel_.begin();
   if (!kernel_.isDone())
   {
     float max = (*kernel_).c_,
     min = (*kernel_).c_;
     ++kernel_;
-    
+
     while (!kernel_.isDone()) {
       if ((*kernel_).c_> max)
         max = (*kernel_).c_;
@@ -73,13 +73,13 @@ bool bvpl_kernel::save_raw(vcl_string filename)
       ++kernel_;
     }
     vcl_cout << "max: " << max <<vcl_endl
-    << "min: " << min <<vcl_endl;
+             << "min: " << min <<vcl_endl;
   }
-  
+
   //Since our kernel does not occupy the entire space we need to initialize our data
   for (unsigned i = 0; i < size; i++)
     data_array[i] = 0;
-  
+
   kernel_.begin();
   while (!kernel_.isDone()){
     vgl_point_3d<int> coord = kernel_.index();
@@ -88,10 +88,10 @@ bool bvpl_kernel::save_raw(vcl_string filename)
     ++kernel_;
   }
   vcl_cout << vcl_endl;
-  
+
   ofs.write(reinterpret_cast<char*>(data_array),sizeof(float)*nx*ny*nz);
   ofs.close();
-  
+
   delete[] data_array;
   return true;
 }

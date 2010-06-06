@@ -207,11 +207,11 @@ class boxm_raytrace_function
                             curr_cell->set_data(cell_val);
                             if (step_functor.is_aux_)
                                 curr_aux_cell->set_data(aux_val);
-                            //: normalize the point to [0-1]to obtain the index.
+                            // normalize the point to [0-1]to obtain the index.
                             vgl_point_3d<double> exit_pt_norm((exit_pt.x()-block_bb.min_x())/block_bb.width(),
                                                               (exit_pt.y()-block_bb.min_y())/block_bb.height(),
                                                               (exit_pt.z()-block_bb.min_z())/block_bb.depth());
-                            //: obtian the code for the exit point
+                            // obtain the code for the exit point
                             boct_loc_code<T_loc> exit_loc_code(exit_pt_norm,tree->root_level());
                             cell_type *neighborcell=NULL;
                             if (curr_cell->find_neighbor(face_id,neighborcell,tree->root_level()))
@@ -314,7 +314,7 @@ class boxm_raytrace_function
                                 boct_loc_code<T_loc> cell_code(curr_cell->get_code());
                                 curr_aux_cell=aux_tree->get_cell(cell_code);
                             }
-                            //: get the canonical bounding box
+                            // get the canonical bounding box
                             vgl_box_3d<double> cell_bb = tree->cell_bounding_box(curr_cell);
                             // find exit point of cell
 
@@ -343,7 +343,7 @@ class boxm_raytrace_function
                                                                (exit_pt.y()-block_bb.min_y())/block_bb.height(),
                                                               (exit_pt.z()-block_bb.min_z())/block_bb.depth());
 
-                            //: obtian the code for the exit point
+                            // obtain the code for the exit point
                             boct_loc_code<T_loc> exit_loc_code(exit_pt_norm,tree->root_level(), tree->max_val());
                             cell_type *neighborcell=NULL;
                             if (curr_cell->find_neighbor(face_id,neighborcell,tree->root_level()))

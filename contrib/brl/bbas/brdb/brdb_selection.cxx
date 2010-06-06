@@ -51,7 +51,7 @@ brdb_selection::~brdb_selection()
 }
 
 
-//: get the iterator pointing to the beginning of the selecton set
+//: get the iterator pointing to the beginning of the selection set
 selection_t::const_iterator
 brdb_selection::begin()
 {
@@ -208,7 +208,7 @@ brdb_selection::get_sqlview()
     return sql_view;
 
   for (selection_t::const_iterator itr = selected_set_.begin();
-      itr != selected_set_.end(); ++itr)
+       itr != selected_set_.end(); ++itr)
   {
     sql_view->add_tuple((*(*itr)));
   }
@@ -342,7 +342,7 @@ brdb_selection::print()
       vcl_cout << "This selection is empty." << vcl_endl;
     }
     for (selection_t::const_iterator itr = selected_set_.begin();
-        itr != selected_set_.end(); ++itr)
+         itr != selected_set_.end(); ++itr)
     {
       brdb_tuple_sptr tuple = (*(*itr));
       tuple->print();

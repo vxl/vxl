@@ -83,7 +83,7 @@ class boct_tree
   //: Returns the leaf cell that contains the 3d point specified in octree-coordinates i.e. [0,1)x[0,1)x[0,1), with optional safe check for out of bounds
   boct_tree_cell<T_loc,T_data>* locate_point(const vgl_point_3d<double>& p, bool check_out_of_bounds = false);
 
-  //: Returns the cell at a particular level(not necessarly a leaf) containing the 3d point in octree-coordinates i.e. [0,1)x[0,1)x[0,1),with optional safe check for out of bounds
+  //: Returns the cell at a particular level(not necessarily a leaf) containing the 3d point in octree-coordinates i.e. [0,1)x[0,1)x[0,1),with optional safe check for out of bounds
   boct_tree_cell<T_loc,T_data>* locate_point_at_level(const vgl_point_3d<double>& p, short level, bool check_out_of_bounds = false);
 
   //: Returns the smallest cell that entirely contains a 3d region in global coordinates
@@ -101,7 +101,7 @@ class boct_tree
     return leaves;
   }
 
-  //: Return cell with a partcular locational code
+  //: Return cell with a particular locational code
   boct_tree_cell<T_loc,T_data>* get_cell(  boct_loc_code<T_loc>& code) { return root_->traverse(code); }
 
   //: Return root of the tree
@@ -119,7 +119,7 @@ class boct_tree
   //: Returns all leaf cells at a specified level of the tree
   vcl_vector<boct_tree_cell<T_loc,T_data>*> leaf_cells_at_level(short l);
 
-  //: Returns all cells at a specified level of the tree (wheather or not they are leafs)
+  //: Returns all cells at a specified level of the tree (whether or not they are leafs)
   vcl_vector<boct_tree_cell<T_loc,T_data>*> cells_at_level(short l);
 
   //: Returns all cells on the tree
@@ -137,7 +137,7 @@ class boct_tree
   //: Return a value for converting positions to locational codes 2^(root_level)
   double max_val() const { return max_val_; }
 
-  //: Return the finest level the tree has been split down to (not necessarly 0)
+  //: Return the finest level the tree has been split down to (not necessarily 0)
   short finest_level();
 
   //: Set the global-coordinates bounding box for the tree

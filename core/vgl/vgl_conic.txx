@@ -100,7 +100,7 @@ vgl_conic<T>::vgl_conic(T ta, T tb, T tc, T td, T te, T tf)
   set_type_from_equation();
 }
 
-//: ctor using centre, signed radii, and angle, or (for parabola) top + excentricity
+//: ctor using centre, signed radii, and angle, or (for parabola) top + eccentricity
 template <class T>
 vgl_conic<T>::vgl_conic(vgl_homg_point_2d<T> const& co, T rx, T ry, T theta)
 {

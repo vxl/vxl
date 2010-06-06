@@ -197,7 +197,7 @@ homographies_at_z(double z, vcl_vector<vgl_h_matrix_2d<double> >& homgs)
     vnl_matrix_fixed<double,3, 3> M1 = H1.get_matrix();
     vnl_matrix_fixed<double,3, 3> M;
 
-    //set the homgraphy columns 0 and 1 to the average of M0 and M1
+    //set the homography columns 0 and 1 to the average of M0 and M1
     for (int r = 0; r<3; r++)
       for (int c =0; c<2; c++)
         M[r][c] = 0.5*(M0[r][c] + M1[r][c]);

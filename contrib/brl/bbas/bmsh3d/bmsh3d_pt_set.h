@@ -25,7 +25,7 @@
 class bmsh3d_pt_set
 {
  protected:
-  //: The modified-halfedg mesh vertex data structure.
+  //: The modified-halfedge mesh vertex data structure.
   vcl_map<int, bmsh3d_vertex*> vertexmap_;
 
   //: traversal position of next vertex

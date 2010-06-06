@@ -351,9 +351,9 @@ class vmap_kernel
 
   //: To be called after all the additions.
   // For example, it can be used to
-  //   give a representative to a non oriented tree.
-  //   After the call of this function, the kernel should be a representativeed
-  //   tree that can be used for contraction/removal.
+  // give a representative to a non oriented tree.
+  // After the call of this function, the kernel should be a representative
+  // tree that can be used for contraction/removal.
   void finalise() {}
 
   //: Inserts a new dart pointed by "arg".

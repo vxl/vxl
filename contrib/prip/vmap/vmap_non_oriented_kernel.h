@@ -55,10 +55,10 @@ class vmap_non_oriented_kernel : public TKernel
   //:
   ~vmap_non_oriented_kernel() {}
 
-  //: Before any addion/test
+  //: Before any addition/test
   void initialise() ;
 
-  //: After addions
+  //: After additions
   void finalise() ;
 
   //: Inserts the edge corresponding to "arg". Returns false when the edge cannot be added.

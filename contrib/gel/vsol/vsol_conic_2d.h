@@ -118,9 +118,9 @@ class vsol_conic_2d : public vsol_curve_2d, public vgl_conic<double>
   vsol_conic_2d(vsol_point_2d const& cntr, double rx, double ry, double theta);
 
   //---------------------------------------------------------------------------
-  //: Parabola constructor from direction, top and excentricity parameter.
+  //: Parabola constructor from direction, top and eccentricity parameter.
   //  This constructor can only be used for non-degenerate parabolas:
-  //  specify the direction of the symmetry axis, the top, and an excentricity
+  //  specify the direction of the symmetry axis, the top, and an eccentricity
   //  parameter theta.
   //---------------------------------------------------------------------------
   vsol_conic_2d(vgl_vector_2d<double> const& dir, vsol_point_2d const& top, double theta);
@@ -138,9 +138,9 @@ class vsol_conic_2d : public vsol_curve_2d, public vgl_conic<double>
   void set_central_parameters(vsol_point_2d const& cntr, double rx, double ry, double theta);
 
   //---------------------------------------------------------------------------
-  //: Set parabola from direction, top and excentricity parameter.
+  //: Set parabola from direction, top and eccentricity parameter.
   //  This can only be used for non-degenerate parabolas:
-  //  specify the direction of the symmetry axis, the top, and an excentricity
+  //  specify the direction of the symmetry axis, the top, and an eccentricity
   //  parameter theta.
   //---------------------------------------------------------------------------
   void set_parabola_parameters(vgl_vector_2d<double> const& dir,

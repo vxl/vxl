@@ -1,10 +1,10 @@
 /* Copyright 2006-2009 Brad King, Chuck Stewart
    Distributed under the Boost Software License, Version 1.0.
    (See accompanying file rgtl_license_1_0.txt or copy at
-   http://www.boost.org/LICENSE_1_0.txt) */
+    http://www.boost.org/LICENSE_1_0.txt) */
+
 #ifndef rgtl_serialize_istream_hxx
 #define rgtl_serialize_istream_hxx
-
 //:
 // \file
 // \brief Load rgtl objects from a stream.
@@ -17,12 +17,12 @@
 #include <vcl_iosfwd.h>
 #include <vcl_cstddef.h>
 
-//: Seralization load object that reads from a stream.
+//: Serialization load object that reads from a stream.
 //  See rgtl_serialize.txt for serialization interface details.
 class rgtl_serialize_istream
 {
   VCL_SAFE_BOOL_DEFINE;
-public:
+ public:
   //: Mark this class as a serialization load direction.
   typedef rgtl_serialize_direction_load serialize_direction;
 
@@ -31,14 +31,14 @@ public:
 
   //: Safe conversion to a boolean type.
   operator safe_bool() const
-    { return this->okay()? VCL_SAFE_BOOL_TRUE : 0; }
+  { return this->okay()? VCL_SAFE_BOOL_TRUE : 0; }
 
   //: Read data from the input stream.
   rgtl_serialize_istream& read(void* data, vcl_size_t length);
 
   //: Get the current position in the stream.
   vcl_size_t position();
-private:
+ private:
   bool okay() const;
   vcl_istream& stream_;
   vcl_size_t buffer_left_;
@@ -66,7 +66,7 @@ rgtl_serialize_istream& operator&(rgtl_serialize_istream& rsr, T& x)
 template <typename T, unsigned int N>
 rgtl_serialize_istream& operator&(rgtl_serialize_istream& rsr, T(&x)[N])
 {
-  for(unsigned int i=0; i < N; ++i)
+  for (unsigned int i=0; i < N; ++i)
     {
     rsr & x[i];
     }

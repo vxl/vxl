@@ -5,7 +5,7 @@
 
 #include <vcl_config_compiler.h>
 
-//: Save to dristi raw file
+//: Save to Drishti raw file
 VCL_DEFINE_SPECIALIZATION
 bool bvxm_grid_save_raw<bsta_num_obs<bsta_gauss_f1> >(bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1> > *grid,  vcl_string filename)
 {

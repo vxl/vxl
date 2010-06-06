@@ -202,7 +202,7 @@ void strk_region_info::evaluate_info()
              << "\n\n\n"<< vcl_flush;
 }
 //--------------------------------------------------------------------------
-//: Evaluate background/forground information in image_0_
+//: Evaluate background/foreground information in image_0_
 //  Useful for debugging purposes.
 void strk_region_info::evaluate_background_info()
 {

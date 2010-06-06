@@ -21,7 +21,7 @@ class brip_label_equivalence
   brip_label_equivalence():max_label_(0){}
   ~brip_label_equivalence(){}
 
-  //:add a label pair equivalance
+  //:add a label pair equivalence
   void add_label_pair(unsigned la, unsigned lb);
 
   //:carry out full propagation of label equivalence
@@ -39,8 +39,8 @@ class brip_label_equivalence
   bool get_next_label(vcl_set<unsigned> const& labels, unsigned int& label);
 
   bool merge_equivalence(vcl_map<unsigned int, vcl_set<unsigned int> >& tab,
-                  unsigned int cur_label,
-                  unsigned int label);
+                         unsigned int cur_label,
+                         unsigned int label);
   vcl_map<unsigned, vcl_set<unsigned> > forward_pairs_;
   vcl_map<unsigned, vcl_set<unsigned> > reverse_pairs_;
   vcl_map<unsigned, vcl_set<unsigned> > equivalence_sets_;

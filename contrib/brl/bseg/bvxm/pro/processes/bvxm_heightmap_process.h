@@ -21,7 +21,7 @@
 
 #include <bprb/bprb_func_process.h>
 
-//: gloabal variables
+//: global variables
 namespace bvxm_heightmap_process_globals
 {
   const unsigned n_inputs_ = 4;

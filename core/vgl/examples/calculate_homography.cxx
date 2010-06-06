@@ -87,7 +87,7 @@ int main(int argc, char **argv)
   vgl_h_matrix_2d_compute_linear hcl;
   vgl_h_matrix_2d<double> H_comp = hcl.compute(pointsA,pointsB);
 
-  // translate and rotate the centre of gravity of set A using the computed homgraphy H_comp
+  // translate and rotate the centre of gravity of set A using the computed homography H_comp
   vgl_homg_point_2d<double> centre_pointB = H_comp*centre_pointA;
   centre_pointB.set(centre_pointB.x()/centre_pointB.w(),centre_pointB.y()/centre_pointB.w(),1.0);
 

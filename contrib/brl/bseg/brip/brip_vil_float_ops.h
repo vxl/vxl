@@ -136,14 +136,14 @@ class brip_vil_float_ops
   //: a helper function for the extrema method, revert angle to the range [-90, 90]
   static float extrema_revert_angle(float angle);
 
-  //: Find ansiotropic intensity extrema. Theta is in degrees
+  //: Find anisotropic intensity extrema. Theta is in degrees
   static vil_image_view<float> extrema(vil_image_view<float> const& input,
                                        float lambda0, float lambda1,
                                        float theta, bool bright = true,
                                        bool output_response_mask = true,
                                        bool unclipped_response = false);
 
-  //: Find ansiotropic intensity extrema at a range of orientations and return the maximal response at the best orientation.
+  //: Find anisotropic intensity extrema at a range of orientations and return the maximal response at the best orientation.
   //  Theta interval is in degrees
   //  If lambda0 == lambda1 then reduces to the normal extrema operator
   static vil_image_view<float> extrema_rotational(vil_image_view<float> const& input,
@@ -532,10 +532,10 @@ class brip_vil_float_ops
                                    const float k0, const float k1, const float k2,
                                    float* output);
 
-  //: One dimensional fft
+  //: One-dimensional fft
   static bool fft_1d(int dir, int m, double* x, double* y);
 
-  //: Two dimensonal fft
+  //: Two-dimensional fft
   static bool fft_2d(vnl_matrix<vcl_complex<double> >& c, int nx,int ny,int dir);
 
   //: Transform the fft coefficients from/to fft/frequency order(self inverse).

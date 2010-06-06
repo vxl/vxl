@@ -54,12 +54,12 @@ class brip_vil1_float_ops
                                       vcl_vector<float>& y_pos,
                                       vcl_vector<float>& value);
 
-  //:downsamples the input using the Bert-Adelson algorithm
+  //: downsamples the input using the Bert-Adelson algorithm
   static vil1_memory_image_of<float>
   half_resolution(vil1_memory_image_of<float> const & input,
                   float filter_coef=0.359375);
 
-  //:downsamples the color input image using the Bert-Adelson algorithm
+  //: downsamples the color input image using the Bert-Adelson algorithm
   static vil1_memory_image_of<vil1_rgb<unsigned char> >
   half_resolution(vil1_memory_image_of<vil1_rgb<unsigned char> > const & input,
                   float filter_coef=0.359375);
@@ -192,35 +192,35 @@ class brip_vil1_float_ops
   //: loads a 2n+1 x 2n+1 convolution kernel (see .cxx for file format)
   static vbl_array_2d<float> load_kernel(vcl_string const & file);
 
-  //:compute basis images for a set of input images
+  //: compute basis images for a set of input images
   static
     void basis_images(vcl_vector<vil1_memory_image_of<float> > const & input_images,
                       vcl_vector<vil1_memory_image_of<float> > & basis);
 
-  //:compute the Fourier transform using the vnl FFT algorithm
+  //: compute the Fourier transform using the vnl FFT algorithm
   static bool fourier_transform(vil1_memory_image_of<float> const & input,
                                 vil1_memory_image_of<float>& mag,
                                 vil1_memory_image_of<float>& phase);
 
-  //:compute the inverse Fourier transform using the vnl FFT algorithm
+  //: compute the inverse Fourier transform using the vnl FFT algorithm
   static
     bool inverse_fourier_transform(vil1_memory_image_of<float> const& mag,
                                    vil1_memory_image_of<float> const& phase,
                                    vil1_memory_image_of<float>& output);
 
-  //:resize to specified dimensions, fill with zeros if output is larger
+  //: resize to specified dimensions, fill with zeros if output is larger
   static
     void resize(vil1_memory_image_of<float> const & input,
                 const int width, const int height,
                 vil1_memory_image_of<float>& output);
 
 
-  //:resize to closest power of two larger dimensions than the input
+  //: resize to closest power of two larger dimensions than the input
   static
     bool resize_to_power_of_two(vil1_memory_image_of<float> const & input,
                                 vil1_memory_image_of<float>& output);
 
-  //:filter the input image with a Gaussian blocking filter
+  //: filter the input image with a Gaussian blocking filter
   static bool
     spatial_frequency_filter(vil1_memory_image_of<float> const & input,
                              const float dir_fx, const float dir_fy,
@@ -231,7 +231,7 @@ class brip_vil1_float_ops
   static float
     bilinear_interpolation(vil1_memory_image_of<float> const & input,
                            const double x, const double y);
-  //:map the input to the output by a homography.
+  //: map the input to the output by a homography.
   // \note if the output size is fixed then only the corresponding
   // input image space is transformed.
   static bool homography(vil1_memory_image_of<float> const & input,
@@ -240,7 +240,7 @@ class brip_vil1_float_ops
                          bool output_size_fixed = false,
                          float output_fill_value = 0.0);
 
-  //:rotate the input image counter-clockwise about the image origin
+  //: rotate the input image counter-clockwise about the image origin
   static
   vil1_memory_image_of<float> rotate(vil1_memory_image_of<float> const & input,
                                      const double theta_deg);
@@ -257,7 +257,7 @@ class brip_vil1_float_ops
                                          vil1_image const & chip,
                                          brip_roi_sptr const& roi);
 
-  //:cross-correlate two images at a given sub-pixel location
+  //: cross-correlate two images at a given sub-pixel location
   static float
   cross_correlate(vil1_memory_image_of<float> const & image1,
                   vil1_memory_image_of<float> const & image2,
@@ -265,7 +265,7 @@ class brip_vil1_float_ops
                   const int radius = 5,
                   const float intensity_thresh=25.0);
 
-  //:Cross-correlate two images using faster running sums
+  //: Cross-correlate two images using faster running sums
   static bool
   cross_correlate(vil1_memory_image_of<float> const & image1,
                   vil1_memory_image_of<float> const & image2,
@@ -288,10 +288,10 @@ class brip_vil1_float_ops
                                  const float k0, const float k1,
                                  const float k2, float* output);
 
-  //:One dimensional fft
+  //: One-dimensional fft
   static bool fft_1d(int dir, int m, double* x, double* y);
 
-  //:Two dimensonal fft
+  //: Two-dimensional fft
   static bool fft_2d(vnl_matrix<vcl_complex<double> >& c, int nx,int ny,int dir);
   //: Transform the fft coefficients from/to fft/frequency order(self inverse).
   static

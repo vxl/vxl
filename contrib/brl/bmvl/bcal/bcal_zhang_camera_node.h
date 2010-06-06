@@ -24,7 +24,7 @@ class bcal_zhang_camera_node : public bcal_camera_node
  private:
   vcl_vector< vgl_homg_point_2d<double> > *point_lists_ptr_;
 
- public: // constructor and deconstructor
+ public: // constructor and destructor
   bcal_zhang_camera_node(int id=0);
   virtual ~bcal_zhang_camera_node();
  public:

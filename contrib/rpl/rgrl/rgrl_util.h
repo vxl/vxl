@@ -19,7 +19,7 @@
 
 class rgrl_match_set;
 
-//: Estimate the maximum overlap region/volumn based on the curr_xform
+//: Estimate the maximum overlap region/volume based on the curr_xform
 rgrl_mask_box
 rgrl_util_estimate_global_region(
           rgrl_mask_sptr      const&   from_image_roi,
@@ -29,7 +29,7 @@ rgrl_util_estimate_global_region(
           bool                         union_with_curr = false,
           double                       drastic_change_ratio = 1.75 );
 
-//: Estimate the maximum overlap region/volumn based on the inverse xfrom
+//: Estimate the maximum overlap region/volume based on the inverse xfrom
 //  The inverse xform transforms points on Fixed image coordinate to Moving image
 rgrl_mask_box
 rgrl_util_estimate_global_region_with_inverse_xform(

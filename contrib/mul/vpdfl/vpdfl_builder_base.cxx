@@ -50,7 +50,7 @@ bool vpdfl_builder_base::is_class(vcl_string const& s) const
   return s==vpdfl_builder_base::is_a();
 }
 
-//: Create a vpdfl_builder_base object given a config steram
+//: Create a vpdfl_builder_base object given a config stream
 // \throw vcl_runtime_exception if parse error.
 vcl_auto_ptr<vpdfl_builder_base> vpdfl_builder_base::new_builder_from_stream(vcl_istream &is)
 {

@@ -346,7 +346,7 @@ boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_point_at_level(con
   return curr_cell;
 }
 
-//: Returns the smallest cell that entirely contains a 3d regionin octree coordinates [0,1)x[0,1)x[0,1)
+//: Returns the smallest cell that entirely contains a 3d region in octree coordinates [0,1)x[0,1)x[0,1)
 template <class T_loc,class T_data>
 boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_region(const vgl_box_3d<double>& r, bool check_out_of_bounds)
 {
@@ -433,7 +433,7 @@ vcl_vector<boct_tree_cell<T_loc,T_data>*> boct_tree<T_loc,T_data>::leaf_cells_at
   return v;
 }
 
-//: Returns all cells at a specified level of the tree (wheather or not they are leafs)
+//: Returns all cells at a specified level of the tree (whether or not they are leafs)
 template <class T_loc,class T_data>
 vcl_vector<boct_tree_cell<T_loc,T_data>*> boct_tree<T_loc,T_data>::cells_at_level(short level)
 {
@@ -462,7 +462,7 @@ vcl_vector<boct_tree_cell<T_loc,T_data>*>  boct_tree<T_loc,T_data>::all_cells()
   return v;
 }
 
-//: Fills inetermediade cells with the average of the children
+//: Fills intermediate cells with the average of the children
 template<class T_loc, class T_data>
 void boct_tree<T_loc,T_data>::fill_with_average()
 {
@@ -471,7 +471,7 @@ void boct_tree<T_loc,T_data>::fill_with_average()
   return;
 }
 
-//: Return the finest level the tree has been split down to (not necessarly 0)
+//: Return the finest level the tree has been split down to (not necessarily 0)
 template <class T_loc,class T_data>
 short boct_tree<T_loc,T_data>::finest_level()
 {

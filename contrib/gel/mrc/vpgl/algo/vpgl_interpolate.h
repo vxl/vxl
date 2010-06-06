@@ -101,7 +101,7 @@ class vpgl_interpolate
                             vcl_vector<vnl_double_3x3>& Rintrp,
                             vcl_vector<vnl_double_3>& tintrp);
 
-  //:Interpolate between two perpspective cameras with the same K given that cam0 = K[R0|t0], cam1 = K[R1|t1]
+  //:Interpolate between two perspective cameras with the same K given that cam0 = K[R0|t0], cam1 = K[R1|t1]
   // The interpolation produces cameras on uniform intervals in Lie distance
   static bool interpolate(vpgl_perspective_camera<double> const& cam0,
                           vpgl_perspective_camera<double> const& cam1,
@@ -112,7 +112,7 @@ class vpgl_interpolate
   // Using the Lie algebra about R0, the interpolated rotation = R0 + alpha*(R1 - R0)
   static vnl_double_3x3 interpolateR(double alpha, vnl_double_3x3 R0, vnl_double_3x3 R1);
 
-  //:Interpolate the next perpspective camera with the same K given
+  //:Interpolate the next perspective camera with the same K given
   static bool interpolate_next(vpgl_perspective_camera<double> const& prev,
                                vpgl_perspective_camera<double> const& curr,
                                double const& rel_step_size,

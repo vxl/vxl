@@ -52,7 +52,7 @@ class boct_loc_code
   //: returns the XOR of the locational codes of this and b
   boct_loc_code * XOR(boct_loc_code * b);
 
-  //: returns the AND of the locationall codes of this and b
+  //: returns the AND of the locational codes of this and b
   boct_loc_code * AND(boct_loc_code *b);
 
   //: converts location code to a point.

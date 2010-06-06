@@ -60,7 +60,7 @@ class bvpl_kernel_factory
   //: Sets rotation angle of this kernel
   void set_angle(float angle) { angle_ =angle; }
 
-  //: Returns the current aligments axis
+  //: Returns the current alignment axis
   vnl_float_3 axis() const { return rotation_axis_; }
 
   //: Return current rotation angle around axis()

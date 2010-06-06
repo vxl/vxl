@@ -28,7 +28,7 @@ class bcal_euclidean_transformation : public vcsl_spatial_transformation
  private:
   vcl_vector<vgl_h_matrix_3d<double> > trans_;
 
- public: // constructor and deconstructor
+ public: // constructor and destructor
   bcal_euclidean_transformation() {}
   virtual ~bcal_euclidean_transformation() {}
 

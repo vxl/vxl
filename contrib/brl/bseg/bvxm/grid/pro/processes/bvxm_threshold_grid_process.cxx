@@ -64,7 +64,7 @@ bool bvxm_threshold_grid_process_cons(bprb_func_process& pro)
 }
 
 
-//: Griven an input grid and a threshold, this process process returns two grids;
+//: Given an input grid and a threshold, this process process returns two grids;
 //  One being the thresholded grid, the other being the mask such that
 //  original * mask = thresholded. All grids are disk based.
 bool bvxm_threshold_grid_process(bprb_func_process& pro)

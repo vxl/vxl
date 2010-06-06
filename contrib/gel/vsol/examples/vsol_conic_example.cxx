@@ -54,7 +54,7 @@ int main()
   Dist = vgl_homg_operators_2d<double>::distance_squared(*Ell , origin);
   vcl_cout << "distance from origin to " << *Ell << "is " << vcl_sqrt(Dist) << '\n';
 
-  // Construct a parabola with top (10,0), direction (1,2), excentricity 5 :
+  // Construct a parabola with top (10,0), direction (1,2), eccentricity 5 :
   Ell = new vsol_conic_2d(vgl_vector_2d<double>(1,2), vsol_point_2d(10,0), 5);
   // Closest distance from origin to parabola:
   Dist = vgl_homg_operators_2d<double>::distance_squared(*Ell , origin);
