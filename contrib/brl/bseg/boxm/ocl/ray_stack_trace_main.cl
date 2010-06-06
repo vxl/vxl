@@ -34,14 +34,12 @@ ray_stack_trace_main(__global int * nlevels,
 
   float tnear = 0, tfar =0;
 
-
-  //int4 root_cell=cells[root_ptr];
   int n_levels =(*nlevels);
 
   // set the nlevels here
   short4 root = (short4)(0,0,0,n_levels-1);
 
-  //combine the following into one
+  // combine the following into one
   float4 cell_min, cell_max;
   float4 entry_pt, exit_pt;
   //// start ray trace
@@ -56,31 +54,30 @@ ray_stack_trace_main(__global int * nlevels,
 
   // using local variables
   float4 ray_d = backproject(i,j,cam[0],cam[1],cam[2],(*local_origin));
-  //bounding box of root
+  // bounding box of root
   cell_bounding_box(root,n_levels, &cell_min, &cell_max);
   float4 ray_o =(float4)(*local_origin);    // ray_origin
 
   // convertin global ray to local tree coordinates
   ray_o= (ray_o-(*bbox))/(*bbox).w;
 
-  //find entry point of overall tree bounding box
+  // find entry point of overall tree bounding box
   if (!cell_entry_point(ray_o, ray_d, cell_min, cell_max, &entry_pt))
     return;
 
   short4 entry_loc_code = loc_code(entry_pt, n_levels-1);
   short4 curr_loc_code;
-  ////traverse to leaf cell that contains the entry point
+  //// traverse to leaf cell that contains the entry point
   int stack_ptr=0;
   stack[lid]=0;
-  
-  //int curr_cell_ptr =0;
+
   stack_ptr=traverse_force_stack(cells,  root, entry_loc_code,&curr_loc_code,stack,lid,workgrpsize,stack_ptr);
   float4 data_return=inp[gid];
 
-  //this cell is the first pierced by the ray
-  //follow the ray through the cells until no neighbors are found
+  // this cell is the first pierced by the ray
+  // follow the ray through the cells until no neighbors are found
   while (true) {
-    ////current cell bounding box
+    //// current cell bounding box
     cell_bounding_box(curr_loc_code, n_levels, &cell_min, &cell_max);
     // check to see how close tnear and tfar are
     int hit = intersect_cell(ray_o, ray_d, cell_min, cell_max,&tnear, &tfar);
@@ -95,7 +92,7 @@ ray_stack_trace_main(__global int * nlevels,
         break;
       entry_loc_code = loc_code(entry_pt, n_levels-1);
       stack_ptr=0;
-      ////traverse to leaf cell that contains the entry point
+      //// traverse to leaf cell that contains the entry point
       stack_ptr = traverse_stack(cells,  root, entry_loc_code,&curr_loc_code, lid,workgrpsize,stack,stack_ptr);
       if (stack_ptr<0)
         break;
@@ -111,14 +108,14 @@ ray_stack_trace_main(__global int * nlevels,
     ////////////////////////////////////////////////////////
     // the place where the ray trace function can be applied
 
-	int stack_index=(int)lid +(int)workgrpsize*stack_ptr;
+    int stack_index=(int)lid +(int)workgrpsize*stack_ptr;
     int data_ptr = cells[stack[stack_index]].z;
 
     //int data_ptr = curr_cell.z;
     if ( data_ptr<0)
       break;
 
-    //distance must be multiplied by the dimension of the bounding box
+    // distance must be multiplied by the dimension of the bounding box
     float d = (tfar-tnear)*(*bbox).w;
     // no function pointers in OpenCL (spec 8.6a)
     // instead, user must provide source with a function named "step_cell"
@@ -132,35 +129,34 @@ ray_stack_trace_main(__global int * nlevels,
     exit_pt=ray_o + tfar*ray_d;
     exit_pt.w=0.5;
 
-    //if the ray pierces the volume surface then terminate the ray
+    // if the ray pierces the volume surface then terminate the ray
     if (any(exit_pt>=(float4)1.0f)|| any(exit_pt<=(float4)0.0f))
         break;
 
-    //location code of exit point
-    //the exit face mask
+    // location code of exit point
+    // the exit face mask
     short4 exit_face= cell_exit_face(exit_pt, cell_min, cell_max);
     if (exit_face.x<0) // exit face not defined
       break;
 
-    //find the neighboring cell at the exit face
+    // find the neighboring cell at the exit face
 
     short4 neighbor_code;
     stack_ptr=neighbor_stack(cells,  curr_loc_code,exit_face, n_levels, &neighbor_code,stack,lid,workgrpsize,stack_ptr);
 
-    //if no neighbor then terminate ray
+    // if no neighbor then terminate ray
     if (stack_ptr<0)
       break;
 
-    //traverse from the neighbor to the cell having the
-    //required exit location code
+    // traverse from the neighbor to the cell having the
+    // required exit location code
     short4 exit_loc_code = loc_code(exit_pt, n_levels-1);
 
     stack_ptr = traverse_force_stack(cells,  neighbor_code,exit_loc_code, &curr_loc_code,stack, lid,workgrpsize,stack_ptr);
 
-    //the current cell (cells[curr_cell_ptr])is the cell reached by
-    //the neighbor's traverse
+    // the current cell is the cell reached by the neighbor's traverse
 
-    //ray continues: make the current entry point the previous exit point
+    // ray continues: make the current entry point the previous exit point
     entry_pt = exit_pt;
   }
   // note that the following code is application dependent
@@ -171,6 +167,6 @@ ray_stack_trace_main(__global int * nlevels,
   //data_return.z=workgrpsize;
   inp[gid] = (float4)(data_return);//local_img[lid];//
 
-  //end ray trace
+  // end ray trace
 }
 

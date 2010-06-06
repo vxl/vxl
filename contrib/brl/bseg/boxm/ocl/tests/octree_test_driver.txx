@@ -22,9 +22,9 @@ octree_test_driver<T>::setup_cl()
   cl_device_id* device_p = cl_manager_->devices();
   if (device_p) {
     command_queue_ = clCreateCommandQueue(cl_manager_->context(),
-      device_p[0],
-      0,
-      &status);
+                                          device_p[0],
+                                          0,
+                                          &status);
   }
   else {
     return SDK_FAILURE;
@@ -147,13 +147,14 @@ int octree_test_driver<T>::set_camera_args()
   else
     return SDK_SUCCESS;
 }
+
 template <class T>
 int octree_test_driver<T>::run_stack_tree_test_kernels()
 {
   cl_int   status;
   cl_event events[2];
 
-  ////clear output array
+  //// clear output array
   cl_manager_->clear_tree_results();
 
   cl_mem result_buf = clCreateBuffer(cl_manager_->context(),
@@ -173,7 +174,7 @@ int octree_test_driver<T>::run_stack_tree_test_kernels()
                           2,
                           sizeof(cl_mem),
                           (void *)&result_buf);
-  
+
   if (!this->check_val(status,
                        CL_SUCCESS,
                        "clSetKernelArg failed. (result_buf)"))
@@ -279,13 +280,14 @@ int octree_test_driver<T>::run_stack_tree_test_kernels()
   else
     return SDK_SUCCESS;
 }
+
 template <class T>
 int octree_test_driver<T>::run_image_tree_test_kernels()
 {
   cl_int   status;
   cl_event events[2];
 
-  ////clear output array
+  //// clear output array
   cl_manager_->clear_tree_results();
 
   cl_mem result_buf = clCreateBuffer(cl_manager_->context(),
@@ -305,14 +307,13 @@ int octree_test_driver<T>::run_image_tree_test_kernels()
                           2,
                           sizeof(cl_mem),
                           (void *)&result_buf);
-  
+
   if (!this->check_val(status,
                        CL_SUCCESS,
                        "clSetKernelArg failed. (result_buf)"))
     return SDK_FAILURE;
   status = clGetKernelWorkGroupInfo(cl_manager_->kernel(),
-                         
-	  cl_manager_->devices()[0],
+                                    cl_manager_->devices()[0],
                                     CL_KERNEL_LOCAL_MEM_SIZE,
                                     sizeof(cl_ulong),
                                     &used_local_memory_,
@@ -402,13 +403,14 @@ int octree_test_driver<T>::run_image_tree_test_kernels()
   else
     return SDK_SUCCESS;
 }
+
 template <class T>
 int octree_test_driver<T>::run_tree_test_kernels()
 {
   cl_int   status;
   cl_event events[2];
 
-  ////clear output array
+  //// clear output array
   cl_manager_->clear_tree_results();
 
   cl_mem result_buf = clCreateBuffer(cl_manager_->context(),
@@ -531,7 +533,7 @@ int octree_test_driver<T>::run_ray_trace_test_kernels()
   cl_int   status;
   cl_event events[2];
 
-  //clear output array
+  // clear output array
   cl_manager_->clear_ray_results();
 
   cl_mem result_buf = clCreateBuffer(cl_manager_->context(),
@@ -658,7 +660,7 @@ int octree_test_driver<T>::run_ray_creation_test_kernels()
   cl_int   status;
   cl_event events[2];
 
-  //clear output array
+  // clear output array
   cl_manager_->clear_ray_results();
 
   cl_mem result_buf = clCreateBuffer(cl_manager_->context(),
@@ -673,7 +675,7 @@ int octree_test_driver<T>::run_ray_creation_test_kernels()
   if (this->set_camera_args()!=SDK_SUCCESS)
     return SDK_FAILURE;
 
-  //the returned array test result
+  // the returned array test result
   status = clSetKernelArg(cl_manager_->kernel(),
                           3,
                           sizeof(cl_mem),

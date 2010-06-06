@@ -31,12 +31,12 @@ namespace boxm_ocl_render_expected_process_globals
 bool boxm_ocl_render_expected_process_cons(bprb_func_process& pro)
 {
   using namespace boxm_ocl_render_expected_process_globals;
-  //process takes 4 inputs
-  //input[0]: scene binary file
-  //input[1]: camera
-  //input[2]: ni of the expected image
-  //input[3]: nj of the expected image
-  //input[4]: black background?
+  // process takes 5 inputs
+  // input[0]: scene binary file
+  // input[1]: camera
+  // input[2]: ni of the expected image
+  // input[3]: nj of the expected image
+  // input[4]: black background?
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm_scene_base_sptr";
   input_types_[1] = "vpgl_camera_double_sptr";
@@ -47,9 +47,9 @@ bool boxm_ocl_render_expected_process_cons(bprb_func_process& pro)
   if (!pro.set_input_types(input_types_))
     return false;
 
-  // process has 1 output:
+  // process has 2 outputs:
   // output[0]: rendered image
-  // output[0]: mask
+  // output[1]: mask
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";
   output_types_[1] = "vil_image_view_base_sptr";
@@ -68,7 +68,7 @@ bool boxm_ocl_render_expected_process(bprb_func_process& pro)
     return false;
   }
 
-  //get the inputs
+  // get the inputs
   unsigned i = 0;
   boxm_scene_base_sptr scene_ptr = pro.get_input<boxm_scene_base_sptr>(i++);
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(i++);
@@ -122,7 +122,7 @@ bool boxm_ocl_render_expected_process(bprb_func_process& pro)
       //img = new vil_image_view<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype>(expected);
       img_mask = new vil_image_view<float>(mask);
 
-	  vil_save(expected,"f:/APL/expected.tiff");
+      vil_save(expected,"f:/APL/expected.tiff");
       vil_image_view<unsigned char> *expected_byte = new vil_image_view<unsigned char>(expected.ni(),expected.nj(),expected.nplanes());
       vil_convert_stretch_range_limited(expected,*expected_byte, 0.0f, 1.0f);
       img = expected_byte;

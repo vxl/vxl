@@ -22,7 +22,7 @@
 #include "boxm_ocl_utils.h"
 
 
-//allocate child cells on the array
+// allocate child cells on the array
 template<class T>
 static void split(vcl_vector<vnl_vector_fixed<int, 4> >& cell_array,
                   int parent_ptr,
@@ -45,9 +45,9 @@ copy_to_arrays(boct_tree_cell<short, T >* cell_ptr,
                vcl_vector<vnl_vector_fixed<float, 16> >& data_array,
                int cell_input_ptr)
 {
-  //cell_input_ptr is the array index for the cell being constructed
-  //it already exists in the cell array but only has the parent index set
-  //no data or child pointers
+  // cell_input_ptr is the array index for the cell being constructed
+  // it already exists in the cell array but only has the parent index set
+  // no data or child pointers
 
   // convert the data to 16 vector size
   vnl_vector_fixed<float, 16> data;
@@ -57,12 +57,11 @@ copy_to_arrays(boct_tree_cell<short, T >* cell_ptr,
   cell_array[cell_input_ptr][2] = data_array.size();
   data_array.push_back(data);
   cell_array[cell_input_ptr][3] = cell_ptr->level();
-  //if the cell has chidren then they must be copied
+  // if the cell has chidren then they must be copied
   if (!cell_ptr->is_leaf()) {
-
-    //initialize data values to null
+    // initialize data values to null
     data_array[cell_array[cell_input_ptr][2]].fill(0.0);
-    //create the children on the cell array
+    // create the children on the cell array
     int child_ptr = -1;
     split<T>(cell_array, cell_input_ptr, child_ptr);
     cell_array[cell_input_ptr][1]=child_ptr;
@@ -79,7 +78,7 @@ copy_to_arrays(boct_tree_cell<short, T >* cell_ptr,
     // Debug
     boct_loc_code<short> cd = cell_ptr->get_code();
     vgl_box_3d<double> lbb = cell_ptr->local_bounding_box(2);
-    vcl_cout<< cell_ptr->level() << ' ' << cd << ' ' << lbb << '\n'; 
+    vcl_cout<< cell_ptr->level() << ' ' << cd << ' ' << lbb << '\n';
   }
 #endif
 }
@@ -132,9 +131,9 @@ bool boxm_ray_trace_manager<T>::init_raytrace(boxm_scene<boct_tree<short,T > > *
   if (!this->check_val(status,CL_SUCCESS,error_to_string(status))) {
     return false;
   }
-  if(!this->setup_image_cam_arrays())
+  if (!this->setup_image_cam_arrays())
     return false;
-  if(!this->setup_work_image())
+  if (!this->setup_work_image())
     return false;
   return true;
 }
@@ -148,6 +147,7 @@ bool boxm_ray_trace_manager<T>::setup_image_cam_arrays()
   good = good && setup_camera();
   return good;
 }
+
 template<class T>
 bool boxm_ray_trace_manager<T>::clean_image_cam_arrays()
 {
@@ -157,6 +157,7 @@ bool boxm_ray_trace_manager<T>::clean_image_cam_arrays()
   good = good && clean_ray_origin();
   return good;
 }
+
 template<class T>
 bool boxm_ray_trace_manager<T>::clean_raytrace()
 {
@@ -218,21 +219,21 @@ bool boxm_ray_trace_manager<T>::setup_tree()
   cell_input_.clear();
   data_input_.clear();
   int cell_ptr = 0;
-  //put the root into the cell array and its data in the data array
+  // put the root into the cell array and its data in the data array
   vnl_vector_fixed<int, 4> root_cell(0);
-  root_cell[0]=-1; //no parent
-  root_cell[1]=-1; //no children at the moment
-  root_cell[1]=-1; //no data at the moment
+  root_cell[0]=-1; // no parent
+  root_cell[1]=-1; // no children at the moment
+  root_cell[1]=-1; // no data at the moment
   cell_input_.push_back(root_cell);
   copy_to_arrays<T>(root, cell_input_, data_input_, cell_ptr);
 
-  //the tree is now resident in the 1-d vectors
-  //cells as vnl_vector_fixed<int, 4> and
-  //data as vnl_vector_fixed<float, 2>
+  // the tree is now resident in the 1-d vectors
+  // cells as vnl_vector_fixed<int, 4> and
+  // data as vnl_vector_fixed<float, 2>
 
   unsigned cells_size=cell_input_.size();
-  if(cells_size>image2d_max_width_)
-	cells_size=RoundUp(cells_size,image2d_max_width_);
+  if (cells_size>image2d_max_width_)
+    cells_size=RoundUp(cells_size,image2d_max_width_);
   cells_ = NULL;
   cell_data_ = NULL;
 #if defined (_WIN32)
@@ -248,7 +249,7 @@ numlevels_=(cl_int*)malloc(sizeof(cl_int));
 #else
   cells_ = (cl_int*)memalign(16, cells_size * sizeof(cl_int4));
   cell_data_ = (cl_float*)memalign(16, data_input_.size() * sizeof(cl_float16));
-numlevels_=(cl_int*)memalign(16,sizeof(cl_int));
+  numlevels_=(cl_int*)memalign(16,sizeof(cl_int));
 
 #endif
   if (cells_== NULL||cell_data_ == NULL)
@@ -260,9 +261,9 @@ numlevels_=(cl_int*)memalign(16,sizeof(cl_int));
     for (unsigned k = 0; k<4; ++k)
       cells_[i+k]=cell_input_[j][k];
 
-  //note that the cell data pointer cells[i+2] does not correspond to the 1-d
-  //data array location. It must be mapped as:
-  // cell_data indices = 2*cell_data_ptr, 2*cell_data_ptr +1,
+  // note that the cell data pointer cells[i+2] does not correspond to the 1-d
+  // data array location. It must be mapped as:
+  //  cell_data indices = 2*cell_data_ptr, 2*cell_data_ptr +1,
 
   unsigned cell_data_size=16;
   for (unsigned i = 0, j = 0; i<data_input_.size()*cell_data_size; i+=cell_data_size, j++)
@@ -604,38 +605,37 @@ int boxm_ray_trace_manager<T>::setup_tree_input_buffers(bool useimage)
   cl_int status = CL_SUCCESS;
   useimage_=useimage;
   // Create and initialize memory objects
-  if(useimage_)
+  if (useimage_)
   {
-	  //: store the cells as 4 integers.
-	  inputformat.image_channel_data_type=CL_SIGNED_INT32;
-	  inputformat.image_channel_order=CL_RGBA;
+    // store the cells as 4 integers.
+    inputformat.image_channel_data_type=CL_SIGNED_INT32;
+    inputformat.image_channel_order=CL_RGBA;
 
-	  if(cell_input_.size()>image2d_max_width_*image2d_max_height_)
-		  return SDK_FAILURE;
+    if (cell_input_.size()>image2d_max_width_*image2d_max_height_)
+      return SDK_FAILURE;
 
-	  vcl_size_t width=vcl_min(cell_input_.size(),image2d_max_width_);
-	  vcl_size_t height=(vcl_size_t)vcl_ceil((float)cell_input_.size()/(float)width);
-	  input_cell_buf_=clCreateImage2D(this->context_,
-									  CL_MEM_READ_ONLY | CL_MEM_USE_HOST_PTR,
-									  &inputformat,width,height,width*sizeof(cl_int4),
-									  cells_,&status);
-	  if (!this->check_val(status,
-						  CL_SUCCESS,
-						  "clCreateBuffer (cell_array) failed."))
-						  return SDK_FAILURE;
-
+    vcl_size_t width=vcl_min(cell_input_.size(),image2d_max_width_);
+    vcl_size_t height=(vcl_size_t)vcl_ceil((float)cell_input_.size()/(float)width);
+    input_cell_buf_=clCreateImage2D(this->context_,
+                                    CL_MEM_READ_ONLY | CL_MEM_USE_HOST_PTR,
+                                    &inputformat,width,height,width*sizeof(cl_int4),
+                                    cells_,&status);
+    if (!this->check_val(status,
+                         CL_SUCCESS,
+                         "clCreateBuffer (cell_array) failed."))
+      return SDK_FAILURE;
   }
   else
   {
-  input_cell_buf_ = clCreateBuffer(this->context_,
-                                   CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
-                                   cell_input_.size() * sizeof(cl_int4),
-                                   cells_,
-                                   &status);
-  if (!this->check_val(status,
-                       CL_SUCCESS,
-                       "clCreateBuffer (cell_array) failed."))
-    return SDK_FAILURE;
+    input_cell_buf_ = clCreateBuffer(this->context_,
+                                     CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
+                                     cell_input_.size() * sizeof(cl_int4),
+                                     cells_,
+                                     &status);
+    if (!this->check_val(status,
+                         CL_SUCCESS,
+                         "clCreateBuffer (cell_array) failed."))
+      return SDK_FAILURE;
   }
   input_data_buf_ = clCreateBuffer(this->context_,
                                    CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
@@ -647,10 +647,10 @@ int boxm_ray_trace_manager<T>::setup_tree_input_buffers(bool useimage)
                        "clCreateBuffer (cell_data) failed."))
     return SDK_FAILURE;
   nlevels_buf_ = clCreateBuffer(this->context_,
-								CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
-								sizeof(cl_int),
-								numlevels_,
-								&status);
+                                CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
+                                sizeof(cl_int),
+                                numlevels_,
+                                &status);
   if (!this->check_val(status,CL_SUCCESS,
                        "clCreateBuffer (nlevels) failed."))
     return SDK_FAILURE;
@@ -817,39 +817,41 @@ int boxm_ray_trace_manager<T>::clean_tree_global_bbox_buffer()
   else
     return SDK_SUCCESS;
 }
+
 template<class T>
 int boxm_ray_trace_manager<T>::setup_image_cam_buffers()
 {
-  if(setup_camera_input_buffer()!=SDK_SUCCESS)
+  if (setup_camera_input_buffer()!=SDK_SUCCESS)
     return SDK_FAILURE;
-  if(setup_roidims_input_buffer()!=SDK_SUCCESS)
+  if (setup_roidims_input_buffer()!=SDK_SUCCESS)
     return SDK_FAILURE;
-  if(setup_ray_origin_buffer()!=SDK_SUCCESS)
+  if (setup_ray_origin_buffer()!=SDK_SUCCESS)
     return SDK_FAILURE;
-  if(setup_tree_global_bbox_buffer()!=SDK_SUCCESS)
+  if (setup_tree_global_bbox_buffer()!=SDK_SUCCESS)
     return SDK_FAILURE;
-  if(setup_imgdims_buffer()!=SDK_SUCCESS)
+  if (setup_imgdims_buffer()!=SDK_SUCCESS)
     return SDK_FAILURE;
   return SDK_SUCCESS;
 }
+
 template<class T>
 int boxm_ray_trace_manager<T>::clean_image_cam_buffers()
 {
-  if(clean_camera_input_buffer()!=SDK_SUCCESS)
+  if (clean_camera_input_buffer()!=SDK_SUCCESS)
     return SDK_FAILURE;
-  if(clean_roidims_input_buffer()!=SDK_SUCCESS)
+  if (clean_roidims_input_buffer()!=SDK_SUCCESS)
     return SDK_FAILURE;
-  if(clean_ray_origin_buffer()!=SDK_SUCCESS)
+  if (clean_ray_origin_buffer()!=SDK_SUCCESS)
     return SDK_FAILURE;
-  if(clean_tree_global_bbox_buffer()!=SDK_SUCCESS)
+  if (clean_tree_global_bbox_buffer()!=SDK_SUCCESS)
     return SDK_FAILURE;
-  if(clean_imgdims_buffer()!=SDK_SUCCESS)
+  if (clean_imgdims_buffer()!=SDK_SUCCESS)
     return SDK_FAILURE;
   return SDK_SUCCESS;
 }
+
 template<class T>
 int boxm_ray_trace_manager<T>::build_kernel_program(bool useimage)
-
 {
   cl_int status = CL_SUCCESS;
   vcl_size_t sourceSize[] = { prog_.size() };
@@ -876,8 +878,8 @@ int boxm_ray_trace_manager<T>::build_kernel_program(bool useimage)
 
   vcl_string options="";
 
-  if(useimage)
-	  options+="-D USEIMAGE";
+  if (useimage)
+    options+="-D USEIMAGE";
 
   // create a cl program executable for all the devices specified
   status = clBuildProgram(program_,
@@ -1120,8 +1122,7 @@ bool boxm_ray_trace_manager<T>::run()
   clean_ray_origin_buffer();
   clean_camera_input_buffer();
 
-  vcl_cout<<"Running block "<<total_gpu_time/1000<<'s'<<vcl_endl
-
+  vcl_cout << "Running block "<<total_gpu_time/1000<<'s'<<vcl_endl
            << "total block loading time = " << total_load_time << 's' << vcl_endl
            << "total block processing time = " << total_raytrace_time << 's' << vcl_endl;
   return true;
@@ -1185,12 +1186,14 @@ bool boxm_ray_trace_manager<T>::run_block()
   status = clSetKernelArg(kernel_,12,sizeof(cl_uint4),0);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local roi)"))
     return SDK_FAILURE;
-  //status = clSetKernelArg(kernel_,13,sizeof(cl_float4)*this->group_size(),0);
-  //if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local roi)"))
-  // return SDK_FAILURE;
-  //status = clSetKernelArg(kernel_,13,sizeof(cl_int)*this->group_size()*(this->num_levels()),0);
-  //if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local stack)"))
-  //  return SDK_FAILURE;
+#if 0
+  status = clSetKernelArg(kernel_,13,sizeof(cl_float4)*this->group_size(),0);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local roi)"))
+   return SDK_FAILURE;
+  status = clSetKernelArg(kernel_,13,sizeof(cl_int)*this->group_size()*(this->num_levels()),0);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local stack)"))
+    return SDK_FAILURE;
+#endif
 
   // check the local memeory
   cl_ulong used_local_memory;
