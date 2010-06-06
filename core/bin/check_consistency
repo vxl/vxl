@@ -1358,12 +1358,14 @@ foreach $f (@FILES)
     $cst .= '\d*)\b';
     &msg(1, "should maybe use vnl_math::$name instead of $1")
       if ($f !~ m!\b(v[cuibg]l|v3p|vidl)\b/! && $f !~ m!\bcore/vnl/vnl_math\.! &&
-          $cpp_file && $file_s =~ m!$cst! &&
-          $f . $name !~ m!vnl/algo/vnl_rnpoly_solve.cxxlog10e$! &&
-          $f . $name !~ m!vgui/tests/test_popup.cxxe$! &&
-          $f . $name !~ m!bbas/bsta/algo/tests/test_von_mises_update.cxxpi$! &&
-          $f . $name !~ m!bbas/bsta/bsta_von_mises.txxone_over_sqrt2pi$! &&
-          $f . $name !~ m!bbas/bsta/bsta_von_mises.txxone_over_sqrt2pi$!);
+          ! ( $name eq 'e'                && $f =~ m!\bvgui/tests/test_popup\.cxx$! ) &&
+          ! ( $name eq 'log10e'           && $f =~ m!\bvnl/algo/vnl_rnpoly_solve\.cxx$! ) &&
+          ! ( $name eq 'sqrt2'            && $f =~ m!\brpl/rrel/rrel_misc\.cxx$! ) &&
+          ! ( $name eq 'sqrt1_2'          && $f =~ m!\bgel/gevd/gevd_float_operators\.cxx$! ) &&
+          ! ( $name eq 'sqrt1_2'          && $f =~ m!\bgel/mrc/vpgl/tests/test_affine_camera\.cxx$! ) &&
+          ! ( $name eq 'pi'               && $f =~ m!\bbsta/algo/tests/test_von_mises_update\.cxx$! ) &&
+          ! ( $name eq 'one_over_sqrt2pi' && $f =~ m!\bbsta/bsta_von_mises\.txx$! ) &&
+          $cpp_file && $file_s =~ m!$cst! );
   }
 
 # 14. Instantiation macro stuff
@@ -1373,7 +1375,7 @@ foreach $f (@FILES)
     if ($file_s =~ m!\#define\s+(\S*INSTANTIATE[^\s\(\)]*)\s*\([^)]*\)\S!);
   &msg(1, "definition of $1 has no space before > in $2")
     if ($file_s =~ m!\#define\s+(\S*INSTANTIATE[^\s\(\)]*).+(\<[^<>\n]*[A-Za-z_]\w*\>)!
-        && length($2) < 16 && $2 ne "<float>" && $2 ne "<double>" && $2 ne "<T,n>");
+        && length($2) < 16 && $2 ne "<float>" && $2 ne "<double>" && $2 ne "<T,n>" && $2 ne "<N>" && $2 ne "<double, N, N>");
 # Presence of VCL_*_INSTANTIATE in *.cxx files outside Templates directories
   &msg(1, "$1 may only be used in Templates subdirectories")
     if ($f !~ m!/Templates/! &&
