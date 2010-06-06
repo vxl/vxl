@@ -81,6 +81,7 @@ foreach $f (@FILES)
   $printed = $full;
 
   $cpp_file = ($f !~ m!\.c$! &&
+               $f !~ m!\.cl$! &&
                $f !~ m!\bintroduction_doxy\.txt$! &&
                $f !~ m!_mocced\.cxx$! &&
                $f !~ m!\bv3p/(netlib|[jm]peg2?|tiff|png|zlib|Qv)/! &&
@@ -639,221 +640,633 @@ foreach $f (@FILES)
     if ($file =~ m!(\$RCSfile|\$(Author|Revision|Date): .* \$)!);
   #typos
   &msg(1, "probably a typo: $1")
-    if ($file =~ m!\b(
+    if ($printed && $file =~ m!\b(
                       accom[^mp]\S*
+                    | abounds
+                    | abstrace
                     | accp\S+
+                    | accc\w+
+                    | accross
                     | accura[^ct]\S*
                     | adaptati[^no]\S*
+                    | addion\w*
+                    | adress\w*
                     | \w*(sss|ettt)\w*
+                    | agress\w*
                     | alement
+                    | aligm\w+
                     | alife
+                    | alll
+                    | alterd
+                    | alternativ[^e]\w*
+                    | ambiguo[^u]\w*
+                    | anay\w*
+                    | angluar
                     | anj\b
+                    | ansiot\w+
+                    | appart\w*
+                    | appere?a\w*
+                    | appling
+                    | appropriatly
+                    | approria\w*
+                    | appy\w*
                     | appi\w+
                     | arang\S+
                     | arbitar\S+
                     | aready
                     | argree
+                    | arguemen\S*
                     | argume[^n]\S*
+                    | arpund
+                    | artifact\w*
+                    | artitra\w*
                     | assemb[^l]\S*
                     | assignement
                     | authentification
+                    | assignmen[^t]\w*
+                    | \w+mentt\b
+                    | attib\w+
+                    | autor\b
                     | auxil[^i]\S*
                     | auxiliar\b
+                    | avai\B[^l]\w+
+                    | availabli\w+
+                    | aver\B[^a]\w+
+                    | avialab\w+
+                    | aving
                     | ayn\S+
+                    | axamin\w*
                     | azimutha[^l]
+                    | backword\w*
                     | bandwith
-                    | begining
+                    | becausee
+                    | becuase
+                    | begg?ining
+                    | bellow
+                    | bewteen
+                    | bloack\w*
                     | blted
+                    | boarder\w*
                     | bondar\S*
+                    | boolian\w*
+                    | bootsr\w*
                     | borgefor\b
+                    | botton
+                    | bounary
+                    | boundarys
+                    | bounday\w*
+                    | bount\w*
+                    | brackett\w+
+                    | brighness
+                    | buiding
+                    | calclua\w+
+                    | calculal\w+
+                    | callled
+                    | cal.culat\w+
+                    | caninical
+                    | ca.noni\w+
+                    | centern
+                    | centriod\S*
+                    | (un)?cert(i|ai)ni\S*
                     | chac\S*
+                    | chanag\S*
                     | changeb\S*
+                    | characterit\S*
+                    | chilr\S*
+                    | chlid\S*
+                    | chilr\S*
                     | cic[^ae]\S*
                     | cirl\w+
                     | cir[^c]\S\w+
+                    | \w+clas\b
+                    | classifer
+                    | clok\w*
+                    | closet
+                    | cluser
                     | coeffic[^i]\S*
                     | coefi\w+
+                    | cofigure
+                    | collectsion
+                    | collinar
                     | coli\w{4,}
                     | colum[^n]
                     | columnn[^u]
                     | coma\S*
+                    | comil[ie]\S*
+                    | comming
                     | comparis[^o]\S*
                     | compatibil[^i]\S*
+                    | compatiblit\w*
+                    | compent
                     | compilant
+                    | componant
+                    | compuat\w*
+                    | compure
                     | condt\S+
+                    | congug\S*
                     | conju[^gnr]\S*
+                    | conrete
+                    | consecua\w+
+                    | consisten\b
+                    | consit\S*
+                    | (con|de)structer\w*
+                    | (con|de)struct\B[^_oeis]\S*
+                    | (con|de)strut\S*
                     | (con|de)stuct\S*
                     | (con|de)truct\S*
+                    | deconstru\w*
+                    | containg
                     | containins
+                    | containt\w*
                     | continou\S*
                     | contrain\S+
                     | contor
                     | continguous
+                    | \w*continut\w*
+                    | contol
                     | controled
+                    | convenia\w*
+                    | converst\w*
                     | coordi[^n]\S*
-                    | cores\S+
+                    | co-oef\w*
+                    | cooresp\w*
+                    | coppie\w*
+                    | coput\w+
+                    | core[rs]\S+
+                    | correll\w*
+                    | correlta\S+
                     | corr[a-dfghj-np-tv-z]\w{3,}\b
+                    | correspo[^n]\S+
                     | corrosp\S+
+                    | croped
+                    | currop\w+
+                    | dafault
+                    | dammage
                     | decend\S*
                     | (de)?compos[^aei]\S*
                     | defau[^l]\S*
-                    | dependen[^ct]\S*
-                    | desct\S*
+                    | deger\w+
+                    | degner\w+
+                    | delarat\w+
+                    | delimet\w+
+                    | dence
+                    | deneger\S*
+                    | \w*depen[^d]\S*
+                    | \w*dependen[^ct]\S*
+                    | dervie\w*
+                    | descret\w*
+                    | desct\w*
+                    | desinat\w*
                     | despatch
+                    | des[^t]?ruc\w*
+                    | distruc\w*
+                    | detem\w+
+                    | deterim\w+
+                    | developem\w+
+                    | devid\w+
+                    | differenta\w+
+                    | differn\w+
                     | difu\w+
-                    | digtial
+                    | dignos\w*
+                    | digi?tial
+                    | diif\w+
+                    | dimens\B[^i]\w+
                     | dimensi[^o]\S*
                     | dimensionn\S*
-                    | distingish
+                    | \w*drect\S*
+                    | direciton
+                    | directely
+                    | disting[ui]sh
+                    | distribt\w*
+                    | documentat[^i]\w*
+                    | documenti[^n]\w*
                     | documen[^t-]\S*
                     | doen
+                    | drivat\w*
+                    | dunp\w*
+                    | eariler
+                    | efficiv\S*
                     | effic[^ai]\S*
                     | eigenval[a-rtv-z]\S*
+                    | elig\B[^i]\w+
+                    | elemin\S+
+                    | ellimi\S+
                     | elm[ei]\S+
+                    | emelem\w+
+                    | emtpy
+                    | encasul\S*
                     | encapsu[^l]\S*
                     | encounterd
                     | enquiries
+                    | entropys
                     | epipl\S+
+                    | epsi\B[^l]\w+
+                    | equa\B[^tl]\w*
+                    | equivalan\w*
                     | eq[a-tv-z]\w{5,}
                     | esti[^m]\S*
+                    | estim\B[^a]\S*
                     | Eucl[^i_]\S*
-                    | Euclidi\S*
+                    | Euclid[ia]\S*
+                    | evalu\B[^a]\w+
+                    | examp\B[^l]\w*
+                    | excee[^d]\w*
+                    | exect\w*
+                    | exisi\w+
                     | expalin
+                    | experime[^n]\w*
+                    | expici\w+
+                    | explicite\w*
+                    | expres\B[^s]\S*
                     | expri\S*
+                    | extrac[^t]\w*
                     | exr\w{3,}
+                    | featu[^r]\w*
+                    | finsh\w*
+                    | fisrt
                     | filname
                     | flaot\S*
+                    | follow\B[^_eisu]\w*
+                    | followi[^n]\w*
                     | fomat
+                    | forbit\w*
+                    | forgroun\w*
+                    | formating
                     | fractino
                     | frequence
+                    | fromn\b
                     | functo[^r]
                     | funct[^io]\S*
+                    | funtion\w*
+                    | [a-z]+full\b
+                    | \w+eratd\b
+                    | \w+ateing
+                    | gaussai\w*
+                    | gauu\w*
+                    | gecentr\w*
+                    | geograf\w*
+                    | gloa\w+
+                    | gluing
+                    | goins
                     | graid\S*
+                    | grapi\S*
+                    | growni\S*
+                    | guass\S*
+                    | gua?rran\S*
+                    | gauran\S*
                     | hasnt
                     | heigth
                     | heir\S+
+                    | hierarc[^h]\S*
                     | hiera[^r]\S*
+                    | hiear\S*
+                    | heigth
                     | hight
                     | highligh[^t]\S*
-                    | (non)?homege\S*
-                    | (non)?homog[a-df-qs-z]\S*
-                    | (non)?homogeni[^sz]\S*
-                    | (non)?homogen[^ei]\S*
+                    | histogr[^a]\S*
+                    | hostogr\S*
+                    | homgra\S*
+                    | homograp[^h]\S*
+                    | homogr[^a]\S*
+                    | horizan\S*
+                    | (non|un)?homege\S*
+                    | (non|un)?homog[a-df-qs-z]\S*
+                    | (non|un)?homogeni[^sz]\S*
+                    | (non|un)?homogen[^ei]\S*
+                    | identife\S*
                     | identia\S*
                     | \S+ifed\b
+                    | immita\S*
                     | implemen[^t]\S*
                     | implementat[^i]\S*
+                    | implen\S*
+                    | implme\S*
+                    | imput\S*
+                    | inciden\b
                     | incredibably
+                    | inculd\S*
                     | indentic\S*
                     | independant
                     | indicies
+                    | indivi[^d]\S*
+                    | individ[^u]\S*
+                    | \w+iua\S*
                     | inheranc\S*
                     | inhert\S*
+                    | inifo\w*
+                    | inita\w*
                     | initi[^a]\w*
                     | initialli\S+
+                    | \w+iztio\S*
+                    | iniv\S*
+                    | inkno\S*
+                    | innac\S*
+                    | \w+alll\S*
+                    | inplem\S*
+                    | instanc[^e]\S*
+                    | instanta\S*
+                    | instantian\w*
+                    | intanc\w*
+                    | integrant\w*
+                    | intensit[^iy]\S*
                     | interat\S*
                     | inte[^glmnrsx]\S*
+                    | interes[^t]\S*
+                    | interfacess\S*
+                    | interopo\S*
+                    | interprett\S*
+                    | intersted\w*
+                    | intersct\S*
+                    | intesec\w*
+                    | interse[^c]\S*
+                    | intesi\S*
+                    | intris\S*
+                    | intrinsi[^c]\S*
+                    | invalide\S*
                     | inti[^m]\w*
+                    | iter\B[^_a\d]\S*
+                    | jocob\S*
                     | judicous
+                    | junnc\S*
                     | kernal
+                    | keybord
                     | lable
+                    | latti\S*
+                    | lenght
                     | lenth
                     | likely\w\S*
                     | lik[^aei]\S*
+                    | magin\S*
                     | magnit[^u]\S*
                     | maint[^ae]\S*
+                    | mainta[^i]\S*
+                    | manane\S*
+                    | manipl\S*
+                    | mantai\S*
+                    | matric\b
                     | matricies
                     | maxiu\S*
+                    | maximas\b
+                    | maxim[^aiu]\S*
                     | maximu[^m]
                     | measur[^ei]\S*
+                    | mediod\S*
+                    | memeb\S*
+                    | milti\S*
                     | mili[^t]\S*
                     | minmu\S*
+                    | mienim\S*
                     | minimia\S*
-                    | minina\S*
+                    | minimu[^m]\S*
+                    | minimumm\S*
+                    | mi[mn]in[ai]\S*
                     | miscel[^l]\S*
+                    | \w+lanous\S*
+                    | missclas\w*
+                    | mulit\S*
+                    | mullt\S*
+                    | multip[^alr]\S*
+                    | munu
+                    | natua\S*
                     | necc\S*
-                    | neces[^s]\S*
+                    | neces\B[^s]\S*
+                    | necessarly
+                    | neigb\S*
+                    | neigh\B[^b_]\S*
+                    | neighbo\B[^ur]\S*
+                    | neumer\S*
+                    | \w+ifiy\S*
+                    | \w*[^n]\Bnnn+\B[^n]
+                    | nois[^eiy]\S*
+                    | noral\S*
+                    | normalista\S*
+                    | \w+n;t
+                    | nubme\S*
+                    | numebe?r\S*
                     | objects\'s
                     | obje[^c]\S*
+                    | obser[^v]\S*
+                    | obtian\S*
                     | occur[a-qt-z]\S*
+                    | ocuppa\w*
                     | octo[^b]\s*
+                    | ommit\S*
                     | oor
                     | openned
+                    | oper\B[^a]\S*
+                    | orgin\S*
                     | orienta[^lt]\S*
+                    | orthog\B[^_ro]\S*
+                    | ortog\S*
+                    | osft\S*
                     | ouput
+                    | ouside
                     | outputing
+                    | paincip\S*
+                    | parabal\S*
+                    | parallelo\S*
                     | parallal
                     | parameteric
                     | paramete[^r]\S*
                     | paramt\S*
+                    | parem\S*
                     | parap[^h]\S*
                     | parbol
-                    | perf[^eiou]\S*
+                    | partcular\w*
+                    | patten\b
+                    | pefor\S*
+                    | perf\B[^eiou]\S*
                     | perim[a-df-z]\S*
+                    | perps\S*
+                    | perpendicl\S*
+                    | philosophia\S*
+                    | plataf\S*
                     | polyon
+                    | poyl\w+
+                    | \w+ntin\b
+                    | pois[^os]\S*
+                    | possiblit\S*
                     | posi[^tx]\S*
                     | posti[^n]\S*
                     | pote[^n]\S*
+                    | \w*requist\S*
+                    | predicit\S*
+                    | preform\S*
                     | prefered
-                    | procces\S*
+                    | preturb\S*
+                    | previos\S*
+                    | prevous\S*
+                    | \w+mobably\b
+                    | \w+itys\b
+                    | probabii\S*
+                    | probabily\b
+                    | probabl[^ey]\S*
+                    | probabilt\w*
+                    | probabli\w*
+                    | probil\S*
+                    | probly
+                    | procce\S*
                     | proces[^s]
                     | progam\S*
+                    | properit\S*
+                    | propog\S*
                     | protocal
+                    | psuedo\S*
+                    | purspos\S*
+                    | purpous\S*
+                    | qualtit\w*
+                    | quateri\S*
+                    | reatur\S*
                     | receip[^t]
+                    | reciv\S*
+                    | recrus\S*
+                    | rectan[^g]\S*
+                    | recursivv\S*
                     | (re)?determing
-                    | refern
+                    | redunden\S*
+                    | referan\S*
+                    | refern\S*
+                    | \w+straions?
                     | regu[^l]\S*
+                    | relac\S*
+                    | releiv\S*
+                    | releven[tc]\S*
+                    | (re)?nomal\S*
                     | rep[eo]n\w{4,}
+                    | repeatl\S*
                     | represe[^n]\S*
                     | reps\w{2,}
-                    | retrei\S*
+                    | requr\S*
+                    | reslt\S*
+                    | resgard\S*
+                    | resore\S*
+                    | rotot\S*
+                    | retr(ei|iv)\S*
+                    | salienct\S*
+                    | salieny
                     | samp[a-kmnp-rt-z]\w*
-                    | seciton
+                    | \w+itons?\b
+                    | scond\S*
+                    | segeme\S*
+                    | selectd
+                    | selecton\w*
+                    | seperat\w*
+                    | servera\S*
+                    | serali[zs]a\S*
                     | seting
                     | severl\S*
+                    | sigl\S*
+                    | signif[^i]\S*
+                    | significan[^tc]\S*
                     | simulat[^eio]\S*
+                    | simplied
                     | singlt\S*
                     | singlet[^oh]\S*
+                    | smoothes
+                    | somethings
+                    | souc\S*
+                    | specifin\S*
+                    | sqa\S*
+                    | squen\S*
+                    | stablis\S*
                     | staig\S*
+                    | stampes\S*
+                    | steram\S*
+                    | straigt\S*
+                    | stong\S*
+                    | storeag\S*
+                    | stru[ct]u\S*
+                    | structtu\S*
+                    | sturc\w*
                     | subsit\S*
+                    | subra\S*
                     | substra\S*
+                    | \w*subtitu\w*
                     | succes[^s]\S*
+                    | suffies
+                    | supp\B[^elor]\S*
                     | supres\S*
-                    | supp[^elor]\S*
+                    | superce\w*
                     | syme\S*
                     | symmet[^r]\S*
+                    | syste[^m]\S*
                     | syte\S*
                     | tablea[^nu]\S*
-                    | tableu
-                    | talbeau
+                    | tableu\S*
+                    | talbo\S*
+                    | talbeau\S*
                     | tech[a-mo-z]\S*
                     | teh
+                    | templatiz\w*
                     | tesselat\S*
-                    | thse
+                    | thand\b
+                    | thickenes\S*
+                    | thoru\S*
+                    | ths\s
+                    | threhol\S*
+                    | threshol[^d]
+                    | throun\S*
+                    | treshold\S*
+                    | trh\S*
                     | togg[^l]\S*
                     | toler[^a]\S*
+                    | toration\S*
+                    | toupl\S*
+                    | traac\S*
+                    | tragen\S*
+                    | trainig\S*
                     | tran[a-prt-z]\S*
+                    | transor\S*
                     | transf[a-df-hj-np-z]\S*
+                    | trave[^lr]\S*
                     | traver[^s]\S*
+                    | triangl[^e]\S*
                     | unec\S+
-                    | utilitit[^iy]
+                    | (un)?certainit\w*
+                    | updatet
+                    | (un)?useab\S*
+                    | useful[a-km-z]\S*
+                    | utilite\S*
+                    | \w+itit
+                    | \w+tatat
+                    | varient
+                    | vaule\S*
                     | valu[^ae]\S*
+                    | vecor\S*
+                    | vecotor\S*
+                    | verifys
                     | verf\S*
-                    | verson
+                    | verion\S*
+                    | verson\S*
+                    | vertics
                     | verticies
                     | vertexes
+                    | virutal
+                    | visibli\S*
                     | vitural
                     | vlo\S*
+                    | wast\b
                     | whan
+                    | weigth\S*
                     | wether
+                    | wheather
+                    | whises
                     | whou\S*
+                    | wich
+                    | wierd
                     | wil\b
+                    | wiht
+                    | wtih
+                    | widht
+                    | withing
                     | wrapi\S*
                     | writted
+                    | writting
+                    | xist\w+
                     | yei\S*
                     | [a-z]*([a-z])\1\1[a-z]*\b
                     )!ix
-        && $1 ne 'valush' && $1 ne 'appicon' && $1 ne 'IntInfo' && $1 ne 'InitInstance' && $1 ne 'posinf,' && $1 ne 'ssss' && $1 ne 'sss' && $1 ne 'ttt' && $1 ne 'sssHdddmmss' && $1 ne 'sampNumCoef' && $1 ne 'vlow' && $1 !~ m!ClassSel|classSo|\bcorrs_!);
+        && $1 !~ '^[A-Z]+$' && $1 !~ m/^(systep=|InitAll|iterT|neigh[IT]|glCall)/ && $1 ne 'pointin' && $1 ne 'isfull' && $1 ne 'Plataforma' && $1 ne 'valush' && $1 ne 'appicon' && $1 ne 'systep' && $1 ne 'IntInfo' && $1 ne 'InitInstance' && $1 ne 'posinf,' && $1 ne 'ssss' && $1 ne 'sss' && $1 ne 'ttt' && $1 ne 'sssHdddmmss' && $1 ne 'sampNumCoef' && $1 ne 'vlow' && $1 !~ m!ClassSel|classSo|\bcorrs_!);
 
 # 10. spurious #pragma interface or #pragma implementation
   &msg(1, "contains $1 without #ifdef VCL_NEEDS_PRAGMA_INTERFACE")
@@ -948,7 +1361,6 @@ foreach $f (@FILES)
           $cpp_file && $file_s =~ m!$cst! &&
           $f . $name !~ m!vnl/algo/vnl_rnpoly_solve.cxxlog10e$! &&
           $f . $name !~ m!vgui/tests/test_popup.cxxe$! &&
-          $f . $name !~ m!vnl/algo/vnl_rnpoly_solve.cxxlog10e$! &&
           $f . $name !~ m!bbas/bsta/algo/tests/test_von_mises_update.cxxpi$! &&
           $f . $name !~ m!bbas/bsta/bsta_von_mises.txxone_over_sqrt2pi$! &&
           $f . $name !~ m!bbas/bsta/bsta_von_mises.txxone_over_sqrt2pi$!);
