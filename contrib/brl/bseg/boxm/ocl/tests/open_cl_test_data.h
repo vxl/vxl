@@ -209,12 +209,12 @@ tree_and_rays_from_image(vcl_string const& image_path,
 template <class T>
 void open_cl_test_data::save_tree(vcl_string const& tree_path)
 {
-  boxm_ray_trace_manager<T>* ray_mgr = typename boxm_ray_trace_manager<T>::instance();
-  boct_tree<short,T >* tree = typename open_cl_test_data::tree<T>();
-  ray_mgr->set_tree(tree);
-  ray_mgr->write_tree(tree_path);
-  ray_mgr->set_tree(0);
-  delete tree;
+//  boxm_ray_trace_manager<T>* ray_mgr = typename boxm_ray_trace_manager<T>::instance();
+//  boct_tree<short,T >* tree = typename open_cl_test_data::tree<T>();
+//  ray_mgr->set_tree(tree);
+//  ray_mgr->write_tree(tree_path);
+//  ray_mgr->set_tree(0);
+//  delete tree;
 }
 
 #endif // boxm_ocl_test_data_h_

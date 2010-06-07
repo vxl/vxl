@@ -222,7 +222,7 @@ bool boxm_stack_ray_trace_manager<T>::setup_tree()
 #else
   cells_ = (cl_int*)memalign(16, cell_input_.size() * sizeof(cl_int4));
   cell_data_ = (cl_float*)memalign(16, data_input_.size() * sizeof(cl_float16));
-    numlevels_=(cl_int*)memalign(16,sizeof(cl_int));
+    numlevels_=(cl_uint*)memalign(16,sizeof(cl_uint));
 
 #endif
   if (cells_== NULL||cell_data_ == NULL)
@@ -771,7 +771,7 @@ template<class T>
 int boxm_stack_ray_trace_manager<T>::build_kernel_program()
 {
   cl_int status = CL_SUCCESS;
-  vcl_size_t sourceSize[] = { prog_.size() };
+  vcl_size_t sourceSize[] = { this->prog_.size() };
   if (!sourceSize[0]) return SDK_FAILURE;
   if (program_) {
     status = clReleaseProgram(program_);
@@ -781,7 +781,7 @@ int boxm_stack_ray_trace_manager<T>::build_kernel_program()
       "clReleaseProgram failed."))
       return SDK_FAILURE;
   }
-  const char * source = prog_.c_str();
+  const char * source = this->prog_.c_str();
 
   program_ = clCreateProgramWithSource(this->context_,
     1,

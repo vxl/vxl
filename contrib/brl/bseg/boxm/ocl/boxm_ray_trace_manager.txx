@@ -249,7 +249,7 @@ numlevels_=(cl_int*)malloc(sizeof(cl_int));
 #else
   cells_ = (cl_int*)memalign(16, cells_size * sizeof(cl_int4));
   cell_data_ = (cl_float*)memalign(16, data_input_.size() * sizeof(cl_float16));
-  numlevels_=(cl_int*)memalign(16,sizeof(cl_int));
+  numlevels_=(cl_uint*)memalign(16,sizeof(cl_uint));
 
 #endif
   if (cells_== NULL||cell_data_ == NULL)
