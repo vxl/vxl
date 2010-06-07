@@ -4,6 +4,7 @@
 // \file
 
 #include <vcl_algorithm.h>
+#include <vnl/vnl_math.h> // for vnl_math::pi_over_2
 
 #include <Inventor/nodes/SoSeparator.h>
 #include <Inventor/nodes/SoCone.h>
@@ -52,11 +53,11 @@ bgui3d_examiner_slider_tableau::bgui3d_examiner_slider_tableau(SoNode * scene_ro
    this->min = 0;
    SoSeparator *min_root = new SoSeparator;
    min_transform = new SoTransform;
-   min_transform->rotation.setValue(SbVec3f(0., 0., 1.), 1.5707963f);
-   min_transform->translation.setValue(SbVec3f((float) 0.1, 0., 0.));
+   min_transform->rotation.setValue(SbVec3f(0.f, 0.f, 1.f), float(vnl_math::pi_over_2));
+   min_transform->translation.setValue(SbVec3f(0.1f, 0.f, 0.f));
    min_mark_ = new SoCone;
-   min_mark_ ->bottomRadius.setValue((float) 0.05);
-   min_mark_ ->height.setValue((float) 0.1);
+   min_mark_ ->bottomRadius.setValue(0.05f);
+   min_mark_ ->height.setValue(0.1f);
 
    ((SoGroup*)(slider_root_))->addChild(min_root);
    min_root->addChild(min_transform);
@@ -66,11 +67,11 @@ bgui3d_examiner_slider_tableau::bgui3d_examiner_slider_tableau(SoNode * scene_ro
    this->max = 255;
    SoSeparator *max_root = new SoSeparator;
    max_transform = new SoTransform;
-   max_transform->rotation.setValue(SbVec3f(0, 0, 1), 1.5707963f);
-   max_transform->translation.setValue(SbVec3f((float) 0.1, (float) 0, (float) 0));
+   max_transform->rotation.setValue(SbVec3f(0, 0, 1), float(vnl_math::pi_over_2));
+   max_transform->translation.setValue(SbVec3f(0.1f, 0f, 0f));
    max_mark_ = new SoCone;
-   max_mark_ ->bottomRadius.setValue((float) 0.05);
-   max_mark_ ->height.setValue((float) 0.1);
+   max_mark_ ->bottomRadius.setValue(0.05f);
+   max_mark_ ->height.setValue(0.1f);
 
    ((SoGroup*)(slider_root_))->addChild(max_root);
    max_root->addChild(max_transform);
