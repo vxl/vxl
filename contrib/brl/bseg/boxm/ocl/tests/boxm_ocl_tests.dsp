@@ -116,6 +116,9 @@ SOURCE=.\test_ray_bundle.cxx
 SOURCE=.\test_octree_stack.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_octree_image.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/ray_bundle_test_driver+float-.cxx
 # End Source File
 # Begin Source File
