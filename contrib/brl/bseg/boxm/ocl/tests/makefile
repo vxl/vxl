@@ -10,6 +10,7 @@ TESTS += test_expected_image.cxx
 TESTS += test_backproject_ray.cxx
 TESTS += test_ray_bundle.cxx
 TESTS += test_octree_stack.cxx
+TESTS += test_octree_image.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
