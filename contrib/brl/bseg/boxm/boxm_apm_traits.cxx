@@ -14,7 +14,8 @@ const char* boxm_apm_types::app_model_strings[]  = { "apm_mog_grey",
                                                      "edge_line",
                                                      "edge_tangent_line",
                                                      "scalar_float",
-                                                     "apm_na"};
+                                                     "apm_na",
+													 "apm_unknown"};
 
 
 boxm_apm_type boxm_apm_types::str_to_enum(const char* s)
