@@ -1051,14 +1051,14 @@ template<class T>
 bool boxm_ray_trace_manager<T>::run()
 {
   cl_int status = CL_SUCCESS;
-
   vul_timer timer;
   vul_timer t;
   vcl_string error_message="";
-  setup_camera_input_buffer();
-  setup_ray_origin_buffer();
+  //setup_camera_input_buffer();
+  //setup_ray_origin_buffer();
   setup_work_img_buffer();
 
+  
   boxm_block_vis_graph_iterator<tree_type > block_vis_iter(cam_, scene_, ni_, nj_);
   float total_raytrace_time = 0.0f;
   float total_gpu_time = 0.0f;
@@ -1095,11 +1095,9 @@ bool boxm_ray_trace_manager<T>::run()
       setup_roi_dims((unsigned int)img_bb.min_x(),(unsigned int)img_bb.max_x(),(unsigned int)img_bb.min_y(),(unsigned int)img_bb.max_y());
 
       // allocate and initialize memory
-
       setup_tree_input_buffers(useimage_);
       setup_image_cam_buffers();
-      setup_work_img_buffer();
-
+	  
       t.mark();
       // run the raytracing for this block
       run_block();
@@ -1107,7 +1105,7 @@ bool boxm_ray_trace_manager<T>::run()
       // release memory
 
       clean_image_cam_buffers();
-      clean_work_img_buffer();
+      //clean_work_img_buffer();
       clean_tree_input_buffers();
 
       clean_tree();
@@ -1119,8 +1117,8 @@ bool boxm_ray_trace_manager<T>::run()
   }
   read_output_image();
   clean_work_img_buffer();
-  clean_ray_origin_buffer();
-  clean_camera_input_buffer();
+  //clean_ray_origin_buffer();
+  //clean_camera_input_buffer();
 
   vcl_cout << "Running block "<<total_gpu_time/1000<<'s'<<vcl_endl
            << "total block loading time = " << total_load_time << 's' << vcl_endl
