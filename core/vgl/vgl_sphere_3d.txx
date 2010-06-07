@@ -31,10 +31,10 @@ bool vgl_sphere_3d<T>::clip(const vgl_line_3d_2_points<T> & line,
 {
   vgl_point_3d<T> cp = vgl_closest_point(line, c_);
 
-  T cp_len = (cp - c_).length();
-  if (cp_len > r_) return false;
+  T cp_sqr_len = (cp - c_).sqr_length();
+  if (cp_sqr_len > r_*r_) return false;
 
-  T half_chord_len = vcl_sqrt(r_*r_ - cp_len*cp_len);
+  T half_chord_len = vcl_sqrt(r_*r_ - cp_sqr_len);
 
   vgl_vector_3d<T> linevec = line.direction();
   linevec *= half_chord_len / linevec.length();
