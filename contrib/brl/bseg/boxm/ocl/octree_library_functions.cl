@@ -333,35 +333,39 @@ int common_ancestor_stack(short4 cell_loc_code,short4 target_loc_code, short4* a
 // cell_min is the minimum point in the cell and cell_max is the
 // maximum point in the cell.
 //---------------------------------------------------------------------
-short4 cell_exit_face(float4 exit_point, float4 cell_min, float4 cell_max)
+short4 cell_exit_face(float4 exit_point,float4 ray_d, float4 cell_min, float4 cell_max)
 {
   float4 min_diff =   fabs(exit_point-cell_min);
   float4 max_diff =   fabs(exit_point-cell_max);
 
-  float min=min_diff.x;
-  short4 faceid=X_MIN;
-
-  if (min_diff.y<min)
+  float min=1e5;
+  short4 faceid=(short4)(-1,-1,-1,-1);
+  if (min_diff.x<min && ray_d.x<0)
+  {
+    min=min_diff.x;
+    faceid=X_MIN;
+  }
+  if (min_diff.y<min && ray_d.y<0)
   {
     min=min_diff.y;
     faceid=Y_MIN;
   }
-  if (min_diff.z<min)
+  if (min_diff.z<min && ray_d.z<0)
   {
     min=min_diff.z;
     faceid=Z_MIN;
   }
-  if (max_diff.x<min)
+  if (max_diff.x<min && ray_d.x>0)
   {
       min=max_diff.x;
     faceid=X_MAX;
   }
-  if (max_diff.y<min)
+  if (max_diff.y<min&& ray_d.y>0)
   {
     min=max_diff.y;
     faceid=Y_MAX;
   }
-  if (max_diff.z<min)
+  if (max_diff.z<min&& ray_d.z>0)
   {
     min=max_diff.z;
     faceid=Z_MAX;

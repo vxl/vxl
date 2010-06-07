@@ -77,7 +77,8 @@ ray_trace_main(__global int * nlevels,
   int curr_cell_ptr = traverse_force(cells, root_ptr, root, entry_loc_code,&curr_loc_code);
   // this cell is the first pierced by the ray
   // follow the ray through the cells until no neighbors are found
-  while (true)
+  int count=0;
+  while (1)
   {
     //// current cell bounding box
     cell_bounding_box(curr_loc_code, n_levels, &cell_min, &cell_max);
@@ -118,9 +119,7 @@ ray_trace_main(__global int * nlevels,
     float d = (tfar-tnear)*(*bbox).w;
     // no function pointers in OpenCL (spec 8.6a)
     // instead, user must provide source with a function named "step_cell"
-    // float4 data_return=local_img[lid];
     step_cell(cell_data,  data_ptr, d, &data_return);
-    // local_img[lid]=data_return;
 
     //////////////////////////////////////////////////////////
 
@@ -134,7 +133,7 @@ ray_trace_main(__global int * nlevels,
 
     // location code of exit point
     // the exit face mask
-    short4 exit_face= cell_exit_face(exit_pt, cell_min, cell_max);
+    short4 exit_face= cell_exit_face(exit_pt,ray_d, cell_min, cell_max);
     if (exit_face.x<0) // exit face not defined
       break;
 
@@ -154,7 +153,11 @@ ray_trace_main(__global int * nlevels,
     // the current cell (cells[curr_cell_ptr])is the cell reached by
     // the neighbor's traverse
     // ray continues: make the current entry point the previous exit point
-   entry_pt = exit_pt;
+   //data_return=(float4)count;//(tfar,tnear,cellsize,0.0);
+	entry_pt = exit_pt;
+   count=count+1;
+   
+   //data_return.z=count;//(float)exit_loc_code.z;
   }
   // note that the following code is application dependent
   // should have a cleanup functor for expected image
