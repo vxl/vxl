@@ -96,6 +96,7 @@ bool axis_align_scene(vcl_vector<bwm_video_corr_sptr> & corrs,
     return false;
 
   vgl_homg_plane_3d<double> plane=fit_plane.get_plane();
+  vcl_cout<<"Normal "<<plane.normal();
   vgl_rotation_3d<double> rot_scene(plane.normal(),vgl_vector_3d<double>(0,0,1));
 
   double sumx=0,sumy=0,sumz=0;
@@ -135,6 +136,7 @@ bool axis_align_scene(vcl_vector<bwm_video_corr_sptr> & corrs,
 
   if (up<cams.size()-up)// flip the world
   {
+    vcl_cout<<"Flipping the world "<<vcl_endl;
     vnl_quaternion<double> q(vnl_math::pi,0,0);
     vgl_rotation_3d<double> rotx_pi(q);
     for (unsigned i=0;i<corrs.size();i++)
@@ -154,6 +156,8 @@ bool axis_align_scene(vcl_vector<bwm_video_corr_sptr> & corrs,
       new_cams[i]=vpgl_perspective_camera<double>(new_cams[i].get_calibration(),rot_cami,new_cams[i].get_translation());
     }
   }
+  for (unsigned i=0;i<cams.size();i++)
+	cams[i]=new_cams[i];
   return true;
 }
 
@@ -312,6 +316,8 @@ int main(int argc, char** argv)
     {
       vcl_sprintf(filename,"%s/camera%05d.txt",cam_txt_dir().c_str(),i);
       vcl_ofstream ofile(filename);
+	  double u1,v1;
+	  cams[i].project(0,0,0,u1,v1);
       if (ofile)
       {
         ofile<<cams[i].get_calibration().get_matrix()<<'\n'
