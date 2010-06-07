@@ -1,9 +1,9 @@
 #include "boxm_apm_traits.h"
 
 const char* boxm_apm_types::app_model_strings[]  = { "apm_mog_grey",
-                                                     "apm_mog_rgb", 
+                                                     "apm_mog_rgb",
                                                      "apm_simple_grey",
-                                                     "apm_simple_rgb", 
+                                                     "apm_simple_rgb",
                                                      "apm_mob_grey",
                                                      "float",
                                                      "bsta_mog_f1",
@@ -15,16 +15,16 @@ const char* boxm_apm_types::app_model_strings[]  = { "apm_mog_grey",
                                                      "edge_tangent_line",
                                                      "scalar_float",
                                                      "apm_na",
-													 "apm_unknown"};
+                                                     "apm_unknown" };
 
 
 boxm_apm_type boxm_apm_types::str_to_enum(const char* s)
 {
   for (int i=0; i < int(BOXM_APM_UNKNOWN); i++)
-    {
-      if (vcl_strcmp(s, boxm_apm_types::app_model_strings[i]) == 0)
-        return (boxm_apm_type) i;
-    }
+  {
+    if (vcl_strcmp(s, boxm_apm_types::app_model_strings[i]) == 0)
+      return (boxm_apm_type) i;
+  }
   return BOXM_APM_UNKNOWN;
 }
 
@@ -50,19 +50,18 @@ void vsl_b_read(vsl_b_istream & is, boxm_simple_grey &sample)
   short version;
   vsl_b_read(is,version);
   switch (version)
-    {
-    case 1:
-      vsl_b_read(is, sample.color_);
-      vsl_b_read(is, sample.one_over_sigma_);
-      //vsl_b_read(is, sample.gauss_weight_);
-      
-      break;
-    default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boxm_sample<T>&)\n"
-               << "           Unknown version number "<< version << '\n';
-      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
-      break;
-    }
+  {
+   case 1:
+    vsl_b_read(is, sample.color_);
+    vsl_b_read(is, sample.one_over_sigma_);
+    //vsl_b_read(is, sample.gauss_weight_);
+    break;
+   default:
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boxm_sample<T>&)\n"
+             << "           Unknown version number "<< version << '\n';
+    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    break;
+  }
 }
 
 void vsl_b_read(vsl_b_istream & is, boxm_simple_grey *&sample)
@@ -70,8 +69,8 @@ void vsl_b_read(vsl_b_istream & is, boxm_simple_grey *&sample)
   vsl_b_read(is, *sample);
 }
 
-vcl_ostream& operator<<(vcl_ostream &os, boxm_simple_grey const& apm) 
-{ 
+vcl_ostream& operator<<(vcl_ostream &os, boxm_simple_grey const& apm)
+{
   os << "color: " << apm.color() << ", one_over_sigma: " << apm.one_over_sigma() << vcl_endl;
   return os;
 }

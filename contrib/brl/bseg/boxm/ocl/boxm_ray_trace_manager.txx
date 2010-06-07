@@ -1,6 +1,8 @@
 // This is brl/bseg/boxm/ocl/boxm_ray_trace_manager.txx
 #ifndef boxm_ray_trace_manager_txx_
 #define boxm_ray_trace_manager_txx_
+#include "boxm_ray_trace_manager.h"
+
 #include <vcl_fstream.h>
 #include <vcl_iomanip.h>
 #include <vcl_sstream.h>
@@ -13,7 +15,6 @@
 #include <boxm/basic/boxm_block_vis_graph_iterator.h>
 #include <boxm/boxm_scene.h>
 #include <boxm/util/boxm_utils.h>
-#include "boxm_ray_trace_manager.h"
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vcl_where_root_dir.h>
@@ -175,36 +176,36 @@ bool boxm_ray_trace_manager<T>::clean_raytrace()
 template<class T>
 bool boxm_ray_trace_manager<T>::setup_img_bb(vpgl_camera_double_sptr cam, vgl_box_3d<double> const& block_bb, vgl_box_2d<double> &img_bb, unsigned ni,unsigned nj)
 {
-    // determine intersection of block bounding box projection and image bounds
-    vgl_box_2d<double> img_bounds;
-    img_bounds.add(vgl_point_2d<double>(0,0));
-    img_bounds.add(vgl_point_2d<double>(0 + ni - 1, 0 + nj - 1));
+  // determine intersection of block bounding box projection and image bounds
+  vgl_box_2d<double> img_bounds;
+  img_bounds.add(vgl_point_2d<double>(0,0));
+  img_bounds.add(vgl_point_2d<double>(0 + ni - 1, 0 + nj - 1));
 
-    vgl_box_2d<double> block_projection;
-    double u,v;
-    cam->project(block_bb.min_x(),block_bb.min_y(),block_bb.min_z(),u,v);
-    block_projection.add(vgl_point_2d<double>(u,v));
-    cam->project(block_bb.min_x(),block_bb.min_y(),block_bb.max_z(),u,v);
-    block_projection.add(vgl_point_2d<double>(u,v));
-    cam->project(block_bb.min_x(),block_bb.max_y(),block_bb.min_z(),u,v);
-    block_projection.add(vgl_point_2d<double>(u,v));
-    cam->project(block_bb.min_x(),block_bb.max_y(),block_bb.max_z(),u,v);
-    block_projection.add(vgl_point_2d<double>(u,v));
-    cam->project(block_bb.max_x(),block_bb.min_y(),block_bb.min_z(),u,v);
-    block_projection.add(vgl_point_2d<double>(u,v));
-    cam->project(block_bb.max_x(),block_bb.min_y(),block_bb.max_z(),u,v);
-    block_projection.add(vgl_point_2d<double>(u,v));
-    cam->project(block_bb.max_x(),block_bb.max_y(),block_bb.min_z(),u,v);
-    block_projection.add(vgl_point_2d<double>(u,v));
-    cam->project(block_bb.max_x(),block_bb.max_y(),block_bb.max_z(),u,v);
-    block_projection.add(vgl_point_2d<double>(u,v));
+  vgl_box_2d<double> block_projection;
+  double u,v;
+  cam->project(block_bb.min_x(),block_bb.min_y(),block_bb.min_z(),u,v);
+  block_projection.add(vgl_point_2d<double>(u,v));
+  cam->project(block_bb.min_x(),block_bb.min_y(),block_bb.max_z(),u,v);
+  block_projection.add(vgl_point_2d<double>(u,v));
+  cam->project(block_bb.min_x(),block_bb.max_y(),block_bb.min_z(),u,v);
+  block_projection.add(vgl_point_2d<double>(u,v));
+  cam->project(block_bb.min_x(),block_bb.max_y(),block_bb.max_z(),u,v);
+  block_projection.add(vgl_point_2d<double>(u,v));
+  cam->project(block_bb.max_x(),block_bb.min_y(),block_bb.min_z(),u,v);
+  block_projection.add(vgl_point_2d<double>(u,v));
+  cam->project(block_bb.max_x(),block_bb.min_y(),block_bb.max_z(),u,v);
+  block_projection.add(vgl_point_2d<double>(u,v));
+  cam->project(block_bb.max_x(),block_bb.max_y(),block_bb.min_z(),u,v);
+  block_projection.add(vgl_point_2d<double>(u,v));
+  cam->project(block_bb.max_x(),block_bb.max_y(),block_bb.max_z(),u,v);
+  block_projection.add(vgl_point_2d<double>(u,v));
 
-    img_bb=vgl_intersection(img_bounds,block_projection);
+  img_bb=vgl_intersection(img_bounds,block_projection);
 
-    if (img_bb.is_empty())
-        return false;
-    else
-        return true;
+  if (img_bb.is_empty())
+    return false;
+  else
+    return true;
 }
 
 template<class T>
@@ -372,7 +373,8 @@ template<class T>
 bool boxm_ray_trace_manager<T>::setup_camera()
 {
   if (vpgl_perspective_camera<double>* pcam =
-      dynamic_cast<vpgl_perspective_camera<double>*>(cam_.ptr())) {
+      dynamic_cast<vpgl_perspective_camera<double>*>(cam_.ptr()))
+  {
     vnl_svd<double>* svd=pcam->svd();
 
     vnl_matrix<double> Ut=svd->U().conjugate_transpose();
@@ -1058,7 +1060,7 @@ bool boxm_ray_trace_manager<T>::run()
   //setup_ray_origin_buffer();
   setup_work_img_buffer();
 
-  
+
   boxm_block_vis_graph_iterator<tree_type > block_vis_iter(cam_, scene_, ni_, nj_);
   float total_raytrace_time = 0.0f;
   float total_gpu_time = 0.0f;
@@ -1097,7 +1099,7 @@ bool boxm_ray_trace_manager<T>::run()
       // allocate and initialize memory
       setup_tree_input_buffers(useimage_);
       setup_image_cam_buffers();
-	  
+
       t.mark();
       // run the raytracing for this block
       run_block();
