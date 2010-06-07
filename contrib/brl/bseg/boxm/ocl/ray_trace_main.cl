@@ -2,12 +2,12 @@
 __kernel
 void
 ray_trace_main(__global int * nlevels,
-               __global float4  *origin,    // camera origin
-               __global float16 *svd_UtVW,  // SVD of inverse of camera matrix
-               __global int4    *cells,     // tree
-               __global float16 *cell_data, // leaf data
-               __global uint4   *imgdims,   // dimensions of the image
-               __global uint4   *roidims,   // dimensions of the roi per block
+               __global float4  *origin,      // camera origin
+               __global float16 *svd_UtVW,    // SVD of inverse of camera matrix
+               __global int4    *cells,       // tree
+               __global float16 *cell_data,   // leaf data
+               __global uint4   *imgdims,     // dimensions of the image
+               __global uint4   *roidims,     // dimensions of the roi per block
                __global float4  *global_bbox, // dimensions of the current bbox in global coordinate
                __global float4  *inp,         // inp image
                __local float16  *cam,         // local storage of cam
@@ -35,7 +35,6 @@ ray_trace_main(__global int * nlevels,
 
   int4 root_cell=cells[root_ptr];
 
-
   int n_levels = (*nlevels);//root_cell.z;
 
   // set the nlevels here
@@ -52,13 +51,12 @@ ray_trace_main(__global int * nlevels,
   unsigned i   = gid/img_bb_y;
   unsigned j   = gid-i*img_bb_y;
   if (i<(*roi).x || i>(*roi).y || j<(*roi).z || j> (*roi).w)
-      return;
+    return;
 
   // using local variables
   float4 ray_d = backproject(i,j,cam[0],cam[1],cam[2],(*local_origin));
 
   float4 data_return=inp[gid];
-
 
   // bounding box of root
   cell_bounding_box(root, root.w+1, &cell_min, &cell_max);
@@ -78,7 +76,7 @@ ray_trace_main(__global int * nlevels,
   // this cell is the first pierced by the ray
   // follow the ray through the cells until no neighbors are found
   int count=0;
-  while (1)
+  while (true)
   {
     //// current cell bounding box
     cell_bounding_box(curr_loc_code, n_levels, &cell_min, &cell_max);
@@ -129,7 +127,7 @@ ray_trace_main(__global int * nlevels,
 
     // if the ray pierces the volume surface then terminate the ray
     if (any(exit_pt>=(float4)1.0f)|| any(exit_pt<=(float4)0.0f))
-        break;
+      break;
 
     // location code of exit point
     // the exit face mask
@@ -153,11 +151,11 @@ ray_trace_main(__global int * nlevels,
     // the current cell (cells[curr_cell_ptr])is the cell reached by
     // the neighbor's traverse
     // ray continues: make the current entry point the previous exit point
-   //data_return=(float4)count;//(tfar,tnear,cellsize,0.0);
-	entry_pt = exit_pt;
-   count=count+1;
-   
-   //data_return.z=count;//(float)exit_loc_code.z;
+    //data_return=(float4)count;//(tfar,tnear,cellsize,0.0);
+    entry_pt = exit_pt;
+    count=count+1;
+
+    //data_return.z=count;//(float)exit_loc_code.z;
   }
   // note that the following code is application dependent
   // should have a cleanup functor for expected image

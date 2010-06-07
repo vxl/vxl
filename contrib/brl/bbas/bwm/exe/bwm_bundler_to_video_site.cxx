@@ -157,7 +157,7 @@ bool axis_align_scene(vcl_vector<bwm_video_corr_sptr> & corrs,
     }
   }
   for (unsigned i=0;i<cams.size();i++)
-	cams[i]=new_cams[i];
+    cams[i]=new_cams[i];
   return true;
 }
 
@@ -316,8 +316,8 @@ int main(int argc, char** argv)
     {
       vcl_sprintf(filename,"%s/camera%05d.txt",cam_txt_dir().c_str(),i);
       vcl_ofstream ofile(filename);
-	  double u1,v1;
-	  cams[i].project(0,0,0,u1,v1);
+      double u1,v1;
+      cams[i].project(0,0,0,u1,v1);
       if (ofile)
       {
         ofile<<cams[i].get_calibration().get_matrix()<<'\n'
