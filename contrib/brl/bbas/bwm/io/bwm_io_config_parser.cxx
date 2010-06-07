@@ -62,11 +62,9 @@ bwm_io_config_parser::handleAtts(const XML_Char** atts)
 void
 bwm_io_config_parser::startElement(const char* name, const char** atts)
 {
-  vcl_cout<< "element=" << name << vcl_endl;
 
   if (vcl_strcmp(name, SITE_TAG) == 0) {
     for (int i=0; atts[i]; i+=2) {
-      vcl_cout << "  Attr=" << atts[i] << "->" << atts[i+1] << vcl_endl;
       if (vcl_strcmp(atts[i], "name") == 0)
         convert(atts[i+1], site_->name_);
     }
@@ -76,7 +74,6 @@ bwm_io_config_parser::startElement(const char* name, const char** atts)
     (vcl_strcmp(name,COIN3D_TABLEAU_TAG) == 0) ||
     (vcl_strcmp(name,PROJ2D_TABLEAU_TAG) == 0)) {
     for (int i=0; atts[i]; i+=2) {
-      vcl_cout << "  Attr=" << atts[i] << "->" << atts[i+1] << vcl_endl;
       if (vcl_strcmp(atts[i], "name") == 0)
         convert(atts[i+1], name_);
       else if (vcl_strcmp(atts[i], "status") == 0) {
@@ -91,14 +88,12 @@ bwm_io_config_parser::startElement(const char* name, const char** atts)
   }
   else if (vcl_strcmp(name,CAMERA_PATH_TAG)== 0) {
     for (int i=0; atts[i]; i+=2) {
-      vcl_cout << "  Attr=" << atts[i] << "->" << atts[i+1] << vcl_endl;
       if (vcl_strcmp(atts[i], "type") == 0)
         convert(atts[i+1], camera_type_);
     }
   }
   else if (vcl_strcmp(name, CORRESPONDENCES_TAG) == 0) {
     for (int i=0; atts[i]; i+=2) {
-      vcl_cout << "  Attr=" << atts[i] << "->" << atts[i+1] << vcl_endl;
       if (vcl_strcmp(atts[i], "mode") == 0)
         convert(atts[i+1], site_->corr_mode_);
       else if (vcl_strcmp(atts[i], "type") == 0)
@@ -107,7 +102,6 @@ bwm_io_config_parser::startElement(const char* name, const char** atts)
   }
   else if (vcl_strcmp(name, CORRESP_PT_TAG) == 0) {
     for (int i=0; atts[i]; i+=2) {
-      vcl_cout << "  Attr=" << atts[i] << "->" << atts[i+1] << vcl_endl;
       if (vcl_strcmp(atts[i], "X") == 0)
         convert(atts[i+1], X_);
       else if (vcl_strcmp(atts[i], "Y") == 0)
@@ -116,7 +110,6 @@ bwm_io_config_parser::startElement(const char* name, const char** atts)
   }
   else if (vcl_strcmp(name, CORRESP_WORLD_PT_TAG) == 0) {
     for (int i=0; atts[i]; i+=2) {
-      vcl_cout << "  Attr=" << atts[i] << "->" << atts[i+1] << vcl_endl;
       if (vcl_strcmp(atts[i], "X") == 0)
         convert(atts[i+1], X_);
       else if (vcl_strcmp(atts[i], "Y") == 0)
@@ -127,14 +120,12 @@ bwm_io_config_parser::startElement(const char* name, const char** atts)
   }
   else if (vcl_strcmp(name, OBJECT_TAG) == 0) {
     for (int i=0; atts[i]; i+=2) {
-      vcl_cout << "  Attr=" << atts[i] << "->" << atts[i+1] << vcl_endl;
       if (vcl_strcmp(atts[i], "type") == 0)
         convert(atts[i+1], object_type_);
     }
   }
   else if (vcl_strcmp(name, LVCS_TAG) == 0) {
     for (int i=0; atts[i]; i+=2) {
-      vcl_cout << "  Attr=" << atts[i] << "->" << atts[i+1] << vcl_endl;
       if (vcl_strcmp(atts[i], "lat") == 0)
         convert(atts[i+1], lat_);
       else if (vcl_strcmp(atts[i], "lon") == 0)
