@@ -113,7 +113,6 @@ bool boxm_ocl_stack_render_expected_process(bprb_func_process& pro)
         typedef boct_tree<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > type;
         boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
         boxm_opencl_stack_render_expected<BOXM_APM_SIMPLE_GREY>(*scene, camera, expected, mask, use_black_background);
-        vil_save(expected,"f:/APL/expected.tiff");
       }
       else
       {
