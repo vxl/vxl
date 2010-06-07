@@ -232,8 +232,8 @@ bool boxm_ray_trace_manager<T>::setup_tree()
   // data as vnl_vector_fixed<float, 2>
 
   unsigned cells_size=cell_input_.size();
-  if (cells_size>image2d_max_width_)
-    cells_size=RoundUp(cells_size,image2d_max_width_);
+  if (cells_size>this->image2d_max_width_)
+    cells_size=RoundUp(cells_size,this->image2d_max_width_);
   cells_ = NULL;
   cell_data_ = NULL;
 #if defined (_WIN32)
@@ -611,10 +611,10 @@ int boxm_ray_trace_manager<T>::setup_tree_input_buffers(bool useimage)
     inputformat.image_channel_data_type=CL_SIGNED_INT32;
     inputformat.image_channel_order=CL_RGBA;
 
-    if (cell_input_.size()>image2d_max_width_*image2d_max_height_)
+    if (cell_input_.size()>this->image2d_max_width_*this->image2d_max_height_)
       return SDK_FAILURE;
 
-    vcl_size_t width=vcl_min(cell_input_.size(),image2d_max_width_);
+    vcl_size_t width=vcl_min(cell_input_.size(),this->image2d_max_width_);
     vcl_size_t height=(vcl_size_t)vcl_ceil((float)cell_input_.size()/(float)width);
     input_cell_buf_=clCreateImage2D(this->context_,
                                     CL_MEM_READ_ONLY | CL_MEM_USE_HOST_PTR,
@@ -854,7 +854,7 @@ template<class T>
 int boxm_ray_trace_manager<T>::build_kernel_program(bool useimage)
 {
   cl_int status = CL_SUCCESS;
-  vcl_size_t sourceSize[] = { prog_.size() };
+  vcl_size_t sourceSize[] = { this->prog_.size() };
   if (!sourceSize[0]) return SDK_FAILURE;
   if (program_) {
     status = clReleaseProgram(program_);
@@ -864,7 +864,7 @@ int boxm_ray_trace_manager<T>::build_kernel_program(bool useimage)
       "clReleaseProgram failed."))
       return SDK_FAILURE;
   }
-  const char * source = prog_.c_str();
+  const char * source = this->prog_.c_str();
 
   program_ = clCreateProgramWithSource(this->context_,
                                        1,
