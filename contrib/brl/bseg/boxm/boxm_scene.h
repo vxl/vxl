@@ -39,6 +39,7 @@ class boxm_scene :public boxm_scene_base
              const vgl_point_3d<double>& origin,
              const vgl_vector_3d<double>& block_dim,
              const vgl_vector_3d<unsigned>& world_dim,
+			 const bool load_all_blocks=false,
              const bool save_internal_nodes_ = false,
              const bool save_platform_independent_ = true);
 
@@ -48,6 +49,7 @@ class boxm_scene :public boxm_scene_base
              const vgl_vector_3d<double>& block_dim,
              const vgl_vector_3d<unsigned>& world_dim,
              unsigned max_level, unsigned init_level,
+			 const bool load_all_blocks=false,
              const bool save_internal_nodes_ = false,
              const bool save_platform_independent_ = true);
 
@@ -55,6 +57,7 @@ class boxm_scene :public boxm_scene_base
   boxm_scene( const vgl_point_3d<double>& origin,
               const vgl_vector_3d<double>& block_dim,
               const vgl_vector_3d<unsigned>& world_dim,
+        		 const bool load_all_blocks=false,
               const bool save_internal_nodes_ = false,
               const bool save_platform_independent_ = true);
 
@@ -87,6 +90,8 @@ class boxm_scene :public boxm_scene_base
   bool save_internal_nodes() const {return save_internal_nodes_;}
 
   bool save_platform_independent() const {return save_platform_independent_;}
+
+  bool load_all_blocks() const {return load_all_blocks_;}
 
   void block_num(int &x, int &y, int &z) const {
     x=(int) blocks_.get_row1_count();
@@ -129,6 +134,7 @@ class boxm_scene :public boxm_scene_base
 
   void load_scene(boxm_scene_parser& parser);
 
+  void force_write_blocks();
   static short version_no() { return 1; }
 
   boxm_block_iterator<T> iterator() { boxm_block_iterator<T> iter(this); return iter; }
@@ -177,6 +183,8 @@ class boxm_scene :public boxm_scene_base
   bool save_internal_nodes_;
   //: Flag that indicates whether the octree data should be saved in a platform-independent way (slower)
   bool save_platform_independent_;
+  //: Flag to load all the blocks in the memory
+  bool load_all_blocks_;
   //************** private methods
   void create_block(unsigned i, unsigned j, unsigned k);
 

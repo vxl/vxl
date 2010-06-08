@@ -21,6 +21,7 @@ boxm_scene<T>::boxm_scene(const bgeo_lvcs& lvcs,
                           const vgl_point_3d<double>& origin,
                           const vgl_vector_3d<double>& block_dim,
                           const vgl_vector_3d<unsigned>& world_dim,
+						  const bool load_all_blocks,
                           const bool save_internal_nodes,
                           const bool save_platform_independent)
 : lvcs_(lvcs),
@@ -28,7 +29,8 @@ boxm_scene<T>::boxm_scene(const bgeo_lvcs& lvcs,
   block_dim_(block_dim),
   active_block_(vgl_point_3d<int>(-1,-1,-1)),
   save_internal_nodes_(save_internal_nodes),
-  save_platform_independent_(save_platform_independent)
+  save_platform_independent_(save_platform_independent),
+  load_all_blocks_(load_all_blocks)
 {
   create_blocks(block_dim, world_dim);
 }
@@ -37,13 +39,15 @@ template <class T>
 boxm_scene<T>::boxm_scene( const vgl_point_3d<double>& origin,
                            const vgl_vector_3d<double>& block_dim,
                            const vgl_vector_3d<unsigned>& world_dim,
+						   const bool load_all_blocks,
                            const bool save_internal_nodes,
                            const bool save_platform_independent)
 : origin_(origin),
   block_dim_(block_dim),
   active_block_(vgl_point_3d<int>(-1,-1,-1)),
   save_internal_nodes_(save_internal_nodes),
-  save_platform_independent_(save_platform_independent)
+  save_platform_independent_(save_platform_independent),
+  load_all_blocks_(load_all_blocks)
 {
   create_blocks(block_dim, world_dim);
 }
@@ -56,7 +60,8 @@ boxm_scene<T>::boxm_scene(const boxm_scene& scene)
   block_dim_(scene.block_dim()),
   active_block_(vgl_point_3d<int>(-1,-1,-1)),
   save_internal_nodes_(scene.save_internal_nodes()),
-  save_platform_independent_(scene.save_platform_independent())
+  save_platform_independent_(scene.save_platform_independent()),
+  load_all_blocks_(scene.load_all_blocks())
 {
   int x,y,z;
   scene.block_num(x,y,z);
@@ -89,9 +94,10 @@ boxm_scene<T>::boxm_scene(const bgeo_lvcs& lvcs,
                           const vgl_vector_3d<double>& block_dim,
                           const vgl_vector_3d<unsigned>& world_dim,
                           unsigned max_level, unsigned init_level,
+						  const bool load_all_blocks,
                           const bool save_internal_nodes,
                           const bool save_platform_independent)
-: lvcs_(lvcs), origin_(origin), block_dim_(block_dim), active_block_(vgl_point_3d<int>(-1,-1,-1)),save_internal_nodes_(save_internal_nodes), save_platform_independent_(save_platform_independent)
+: lvcs_(lvcs), origin_(origin), block_dim_(block_dim), active_block_(vgl_point_3d<int>(-1,-1,-1)),load_all_blocks_(load_all_blocks),save_internal_nodes_(save_internal_nodes), save_platform_independent_(save_platform_independent)
 {
   create_blocks(block_dim, world_dim);
   set_octree_levels(max_level, init_level);
@@ -125,8 +131,9 @@ boxm_scene<T>::~boxm_scene()
 template <class T>
 void boxm_scene<T>::write_active_block()
 {
-  if (valid_index(active_block_))
+  if (valid_index(active_block_)&& (!load_all_blocks_))
   {
+    vcl_cout<<"Load All blocks "<<load_all_blocks_<<vcl_endl;
     int x=active_block_.x(), y=active_block_.y(), z=active_block_.z();
     vcl_string path = gen_block_path(x,y,z);
     vsl_b_ofstream os(path);
@@ -141,6 +148,25 @@ void boxm_scene<T>::write_active_block()
     active_block_.set(-1,-1,-1);
     os.close();
   }
+}
+template <class T>
+void boxm_scene<T>::force_write_blocks()
+{
+	boxm_block_iterator<T> iter(this);
+	iter.begin();
+	while(!iter.end())
+	{
+			int x=iter.index().x(), y=iter.index().y(), z=iter.index().z();
+			if(blocks_(x,y,z)->get_tree()!=NULL)
+			{
+				vcl_cout<<" ? ";
+				vcl_string path = gen_block_path(x,y,z);
+				vsl_b_ofstream os(path);
+				blocks_(x,y,z)->b_write(os, save_internal_nodes_, save_platform_independent_);
+				os.close();
+			}
+		iter++;
+	}
 }
 
 //: returns the block this point resides in
@@ -252,38 +278,45 @@ bool boxm_scene<T>::discover_block(unsigned i, unsigned j, unsigned k)
 template <class T>
 bool boxm_scene<T>::load_block(unsigned i, unsigned j, unsigned k)
 {
-  bool exist=false;
-  if (!valid_index(vgl_point_3d<int>(i,j,k)))
-    return false;
+	bool exist=false;
+	if (!valid_index(vgl_point_3d<int>(i,j,k)))
+		return false;
 
-  // make sure the active one is saved first
-  if (valid_index(active_block_)) {
-    if (active_block_ == vgl_point_3d<int>(i,j,k))
-      return true;
-    else {
-      int x=active_block_.x(), y=active_block_.y(), z=active_block_.z();
-      boxm_block<T>* block = blocks_(x,y,z);
-      block->delete_tree();
-      block->set_tree(0);
-    }
-  }
-  active_block_.set(i,j,k);
+	if(!load_all_blocks_)
+	{
+		// make sure the active one is saved first
+		if (valid_index(active_block_)) {
+			if (active_block_ == vgl_point_3d<int>(i,j,k))
+				return true;
+			else {
+				int x=active_block_.x(), y=active_block_.y(), z=active_block_.z();
+				boxm_block<T>* block = blocks_(x,y,z);
+				block->delete_tree();
+				block->set_tree(0);
+			}
+		}
+	}
 
-  vcl_string block_path = gen_block_path(i,j,k);
-  vsl_b_ifstream os(block_path);
+	active_block_.set(i,j,k);
 
-  //if the binary block file is not found
-  if (!os) {
-    if (blocks_(i,j,k)->get_tree()==NULL) {
-      exist = false;
-      T* tree= new T(max_tree_level_,init_tree_level_);
-      blocks_(i,j,k)->init_tree(tree);
-    }
-    return false;
-  }
-  blocks_(i,j,k)->b_read(os);
-  os.close();
-  return true;
+	if (blocks_(i,j,k)->get_tree()==NULL) // read it from file
+	{
+		vcl_string block_path = gen_block_path(i,j,k);
+		vsl_b_ifstream os(block_path);
+
+		//if the binary block file is not found
+		if (!os) {
+			if (blocks_(i,j,k)->get_tree()==NULL) {
+				exist = false;
+				T* tree= new T(max_tree_level_,init_tree_level_);
+				blocks_(i,j,k)->init_tree(tree);
+			}
+			return false;
+		}
+		blocks_(i,j,k)->b_read(os);
+		os.close();
+	}
+	return true;
 }
 
 template <class T>
@@ -385,6 +418,10 @@ void x_write(vcl_ostream &os, boxm_scene<T>& scene, vcl_string name)
   save_platform_independent.add_attribute("value", scene.save_platform_independent()? 1 : 0);
   save_platform_independent.x_write(os);
 
+  vsl_basic_xml_element load_all_blocks(LOAD_ALL_BLOCKS_TAG);
+  save_platform_independent.add_attribute("value", scene.load_all_blocks()? 1 : 0);
+  save_platform_independent.x_write(os);
+
   bgeo_lvcs lvcs=scene.lvcs();
   lvcs.x_write(os, LVCS_TAG);
   x_write(os, scene.origin(), LOCAL_ORIGIN_TAG);
@@ -422,6 +459,8 @@ bool boxm_scene<T>::parse_config(boxm_scene_parser& parser)
   multi_bin_ = parser.multi_bin();
   save_internal_nodes_ =parser.save_internal_nodes();
   save_platform_independent_ = parser.save_platform_independent();
+  load_all_blocks_ = parser.load_all_blocks();
+
   pinit_=parser.p_init();
 #if 0
   vcl_cout << "Internal Nodes 1: " << save_internal_nodes_ << vcl_endl;
@@ -458,6 +497,8 @@ bool boxm_scene<T>::parse_xml_string(vcl_string xml, boxm_scene_parser& parser)
   app_model_ = boxm_apm_types::str_to_enum(parser.app_model().data());
   multi_bin_ = parser.multi_bin();
   pinit_=parser.p_init();
+    load_all_blocks_ = parser.load_all_blocks();
+
   return true;
 }
 

@@ -19,6 +19,7 @@
 #define MULTI_BIN_TAG "multi_bin"
 #define SAVE_INTERNAL_NODES_TAG "save_internal_nodes"
 #define SAVE_PLATFORM_INDEPENDENT_TAG "save_platform_independent"
+#define LOAD_ALL_BLOCKS_TAG "load_all_blocks"
 #define P_INIT_TAG "p_init"
 
 class boxm_scene_parser : public expatpp
@@ -38,6 +39,8 @@ class boxm_scene_parser : public expatpp
    void levels(unsigned& max, unsigned& init) { max = max_tree_level_; init=init_tree_level_; }
    bool save_internal_nodes() {return save_internal_nodes_;}
    bool save_platform_independent() {return save_platform_independent_;}
+   bool load_all_blocks() {return load_all_blocks_;}
+
    float p_init(){return p_init_;}
 
  private:
@@ -84,6 +87,7 @@ class boxm_scene_parser : public expatpp
   unsigned init_tree_level_;
   bool save_internal_nodes_;
   bool save_platform_independent_;
+  bool load_all_blocks_;
   float p_init_;
 };
 

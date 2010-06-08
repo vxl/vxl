@@ -85,6 +85,7 @@ void boxm_scene_parser::init_params()
   block_pref_="";
   save_internal_nodes_ = false;
   save_platform_independent_ = true;
+  load_all_blocks_=false;
   p_init_=0.01f;
 }
 
@@ -191,6 +192,15 @@ boxm_scene_parser::startElement(const char* name, const char** atts)
     }
     //vcl_cout << "parser: save_platform_independent_ = " << save_platform_independent_ << vcl_endl;
   }
+  else if (vcl_strcmp(name,LOAD_ALL_BLOCKS_TAG)== 0) {
+    for (int i=0; atts[i]; i+=2) {
+      vcl_cout << "  Attr=" << atts[i] << "->" << atts[i+1] << vcl_endl;
+      if (vcl_strcmp(atts[i], "value") == 0)
+        convert(atts[i+1], load_all_blocks_);
+    }
+    //vcl_cout << "parser: load_all_blocks_ = " << load_all_blocks_ << vcl_endl;
+  }
+
   else if (vcl_strcmp(name, "octree_level")==0) {
     for (int i=0; atts[i]; i+=2) {
       vcl_cout << "  Attr=" << atts[i] << "->" << atts[i+1] << vcl_endl;
