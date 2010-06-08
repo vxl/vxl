@@ -21,6 +21,7 @@ DECLARE_FUNC_CONS(boxm_generate_opt3_samples_process);
 DECLARE_FUNC_CONS(boxm_opt3_update_process);
 DECLARE_FUNC_CONS(boxm_render_expected_edge_vrml_process);
 DECLARE_FUNC_CONS(boxm_ray_statistics_process);
+DECLARE_FUNC_CONS(boxm_change_probability_process);
 
 
 #endif

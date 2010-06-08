@@ -27,5 +27,6 @@ void boxm_algo_rt_register::register_process()
     REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_generate_opt2_samples_process,"boxmGenerateOpt2SamplesProcess");
     REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_generate_opt3_samples_process,"boxmGenerateOpt3SamplesProcess");
     REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_ray_statistics_process,"boxmRayStatisticsProcess");
+    REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_change_probability_process,"boxmChangeProbabilityProcess");
 
 }
