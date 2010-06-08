@@ -1,4 +1,4 @@
-// This is core/vil3d/algo/vil3d_suppress_non_max_edges.txx
+// This is mul/vil3d/algo/vil3d_suppress_non_max_edges.txx
 #ifndef vil3d_suppress_non_max_edges_txx_
 #define vil3d_suppress_non_max_edges_txx_
 //:
@@ -30,12 +30,12 @@
 // \relatesalso vil3d_image_view
 template<class srcT>
 void vil3d_suppress_non_max_edges(const vil3d_image_view<srcT>& world_grad,
-                                const vil3d_image_view<srcT>& grad_mag,
-                                double voxel_width_i,
-                                double voxel_width_j,
-                                double voxel_width_k,
-                                srcT grad_mag_threshold,
-                                vil3d_image_view<srcT>& max_grad_mag)
+                                  const vil3d_image_view<srcT>& grad_mag,
+                                  double voxel_width_i,
+                                  double voxel_width_j,
+                                  double voxel_width_k,
+                                  srcT grad_mag_threshold,
+                                  vil3d_image_view<srcT>& max_grad_mag)
 {
   assert(world_grad.nplanes()==3);
   assert(grad_mag.nplanes()==1);
@@ -60,8 +60,8 @@ void vil3d_suppress_non_max_edges(const vil3d_image_view<srcT>& world_grad,
   unsigned jhi=nj-3;
   unsigned khi=nk-3;
 
-  double step_size = vcl_sqrt((voxel_width_i*voxel_width_i + 
-                               voxel_width_j*voxel_width_j + 
+  double step_size = vcl_sqrt((voxel_width_i*voxel_width_i +
+                               voxel_width_j*voxel_width_j +
                                voxel_width_k*voxel_width_k   )/3.0);
 
   const srcT * gm_data = &grad_mag(0,0,0);
@@ -108,7 +108,6 @@ void vil3d_suppress_non_max_edges(const vil3d_image_view<srcT>& world_grad,
         double gm2=vil3d_trilin_interp_raw(i-dx,j-dy,k-dz,gm_data,gm_istep,gm_jstep,gm_kstep);
         if (gm2>gmag) *v_new_gm=0;
         else          *v_new_gm=gmag;
-
       }
     }
   }
@@ -116,12 +115,12 @@ void vil3d_suppress_non_max_edges(const vil3d_image_view<srcT>& world_grad,
 
 #undef VIL3D_SUPPRESS_NON_MAX_EDGES_INSTANTIATE
 #define VIL3D_SUPPRESS_NON_MAX_EDGES_INSTANTIATE(srcT) \
-template void vil3d_suppress_non_max_edges(const vil3d_image_view<srcT>& world_grad,\
-                                const vil3d_image_view<srcT>& grad_mag,\
-                                double voxel_width_i,\
-                                double voxel_width_j,\
-                                double voxel_width_k,\
-                                srcT grad_mag_threshold,\
-                                vil3d_image_view<srcT>& max_grad_mag);\
+template void vil3d_suppress_non_max_edges(const vil3d_image_view<srcT >& world_grad,\
+                                           const vil3d_image_view<srcT >& grad_mag,\
+                                           double voxel_width_i,\
+                                           double voxel_width_j,\
+                                           double voxel_width_k,\
+                                           srcT grad_mag_threshold,\
+                                           vil3d_image_view<srcT >& max_grad_mag)
 
 #endif // vil3d_suppress_non_max_edges_txx_

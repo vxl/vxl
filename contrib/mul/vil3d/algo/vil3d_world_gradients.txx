@@ -1,4 +1,4 @@
-// This is core/vil3d/algo/vil3d_world_gradients.txx
+// This is mul/vil3d/algo/vil3d_world_gradients.txx
 #ifndef vil3d_world_gradients_txx_
 #define vil3d_world_gradients_txx_
 //:
@@ -42,13 +42,13 @@ class vil3d_math_scale_functor
 // \relatesalso vil3d_image_view
 template<class srcT, class destT>
 void vil3d_world_gradients(const vil3d_image_view<srcT>& grad_i,
-                                const vil3d_image_view<srcT>& grad_j,
-                                const vil3d_image_view<srcT>& grad_k,
-                                double voxel_width_i,
-                                double voxel_width_j,
-                                double voxel_width_k,
-                                vil3d_image_view<destT>& world_grad,
-                                vil3d_image_view<destT>& grad_mag)
+                           const vil3d_image_view<srcT>& grad_j,
+                           const vil3d_image_view<srcT>& grad_k,
+                           double voxel_width_i,
+                           double voxel_width_j,
+                           double voxel_width_k,
+                           vil3d_image_view<destT>& world_grad,
+                           vil3d_image_view<destT>& grad_mag)
 {
   assert(grad_i.nplanes()==grad_j.nplanes());
   assert(grad_i.nplanes()==grad_k.nplanes());
@@ -71,7 +71,7 @@ void vil3d_world_gradients(const vil3d_image_view<srcT>& grad_i,
   // Fill 1 voxel border with zero
   vil3d_fill_border(grad_mag,1,1,1,destT(0));
 
-  const vcl_ptrdiff_t gi_istep = w_grad_i.istep(), gi_jstep = w_grad_i.jstep(), 
+  const vcl_ptrdiff_t gi_istep = w_grad_i.istep(), gi_jstep = w_grad_i.jstep(),
                       gi_kstep = w_grad_i.kstep();
   const vcl_ptrdiff_t gj_istep = w_grad_j.istep(), gj_jstep = w_grad_j.jstep(),
                       gj_kstep = w_grad_j.kstep();
@@ -127,7 +127,7 @@ template void vil3d_world_gradients(const vil3d_image_view<srcT >& grad_i,\
                                     double voxel_width_i,\
                                     double voxel_width_j,\
                                     double voxel_width_k,\
-                                    vil3d_image_view<destT>& world_grad,\
-                                    vil3d_image_view<destT >& grad_mag);\
+                                    vil3d_image_view<destT >& world_grad,\
+                                    vil3d_image_view<destT >& grad_mag)
 
 #endif // vil3d_world_gradients_txx_
