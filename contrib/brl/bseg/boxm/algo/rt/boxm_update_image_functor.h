@@ -108,7 +108,7 @@ void boxm_update_image_rt(boxm_scene<boct_tree<T_loc, T_data > > &scene,
                           bool black_background = false)
 {
     typedef boxm_aux_traits<BOXM_AUX_OPT_RT_GREY>::sample_datatype sample_datatype;
-	boxm_aux_scene<T_loc, T_data, sample_datatype > aux_scene(&scene,boxm_aux_traits<BOXM_AUX_OPT_RT_GREY>::storage_subdir(), boxm_aux_scene<T_loc, T_data, sample_datatype>::CLONE);
+    boxm_aux_scene<T_loc, T_data, sample_datatype > aux_scene(&scene,boxm_aux_traits<BOXM_AUX_OPT_RT_GREY>::storage_subdir(), boxm_aux_scene<T_loc, T_data, sample_datatype>::CLONE);
     typedef boxm_seg_length_functor<T_data::apm_type, sample_datatype>  pass_0;
     boxm_raytrace_function<pass_0, T_loc, T_data, sample_datatype> raytracer_0(scene, aux_scene, cam.ptr(),obs.ni(),obs.nj());
     vcl_cerr << "PASS 0\n";

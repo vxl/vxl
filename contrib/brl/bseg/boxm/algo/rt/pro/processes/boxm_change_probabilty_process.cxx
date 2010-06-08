@@ -1,4 +1,4 @@
-// This is brl/bseg/boxm/algo/rt/pro/processes/boxm_change_probability_process.cxx
+// This is brl/bseg/boxm/algo/rt/pro/processes/boxm_change_probabilty_process.cxx
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -76,32 +76,33 @@ bool boxm_change_probability_process(bprb_func_process& pro)
 
   // check the scene's app model
   if (scene_ptr->appearence_model() == BOXM_APM_MOG_GREY) {
-	  vil_image_view<float> mask(ni,nj,1);
-	  vil_image_view<float> expected(ni,nj,1);
+    vil_image_view<float> mask(ni,nj,1);
+    vil_image_view<float> expected(ni,nj,1);
 
-	  vil_image_view<vxl_byte> *img_byte
-		  = dynamic_cast<vil_image_view<vxl_byte>*>(input_img_ptr.ptr());
-	  vil_image_view<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> img_in(img_byte->ni(), img_byte->nj(), 1);
-	  vil_convert_stretch_range_limited(*img_byte ,img_in, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
+    vil_image_view<vxl_byte> *img_byte
+      = dynamic_cast<vil_image_view<vxl_byte>*>(input_img_ptr.ptr());
+    vil_image_view<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> img_in(img_byte->ni(), img_byte->nj(), 1);
+    vil_convert_stretch_range_limited(*img_byte ,img_in, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
 
-	  typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > type;
-	  boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
-	  boxm_change_prob_rt<short, boxm_sample<BOXM_APM_MOG_GREY> >(*scene,img_in, camera, expected, mask);
-	  img_mask = new vil_image_view<float>(mask);
-	  img = new vil_image_view<float>(expected);
-  } else if (scene_ptr->appearence_model() == BOXM_APM_SIMPLE_GREY) {
-	  vil_image_view<float> mask(ni,nj,1);
-	  vil_image_view<float> expected(ni,nj,1);
-	  vil_image_view<vxl_byte> *img_byte
-		  = dynamic_cast<vil_image_view<vxl_byte>*>(input_img_ptr.ptr());
-	  vil_image_view<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype> img_in(img_byte->ni(), img_byte->nj(), 1);
-	  vil_convert_stretch_range_limited(*img_byte ,img_in, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
+    typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > type;
+    boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
+    boxm_change_prob_rt<short, boxm_sample<BOXM_APM_MOG_GREY> >(*scene,img_in, camera, expected, mask);
+    img_mask = new vil_image_view<float>(mask);
+    img = new vil_image_view<float>(expected);
+  }
+  else if (scene_ptr->appearence_model() == BOXM_APM_SIMPLE_GREY) {
+    vil_image_view<float> mask(ni,nj,1);
+    vil_image_view<float> expected(ni,nj,1);
+    vil_image_view<vxl_byte> *img_byte
+      = dynamic_cast<vil_image_view<vxl_byte>*>(input_img_ptr.ptr());
+    vil_image_view<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype> img_in(img_byte->ni(), img_byte->nj(), 1);
+    vil_convert_stretch_range_limited(*img_byte ,img_in, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
 
-	  typedef boct_tree<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > type;
-	  boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
-	  boxm_change_prob_rt<short, boxm_sample<BOXM_APM_SIMPLE_GREY> >(*scene,img_in, camera, expected, mask);
-	  img_mask = new vil_image_view<float>(mask);
-	  img = new vil_image_view<float>(expected);
+    typedef boct_tree<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > type;
+    boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
+    boxm_change_prob_rt<short, boxm_sample<BOXM_APM_SIMPLE_GREY> >(*scene,img_in, camera, expected, mask);
+    img_mask = new vil_image_view<float>(mask);
+    img = new vil_image_view<float>(expected);
   }
   else {
     vcl_cout << "boxm_render_expected_process: undefined APM type" << vcl_endl;

@@ -21,7 +21,7 @@ boxm_scene<T>::boxm_scene(const bgeo_lvcs& lvcs,
                           const vgl_point_3d<double>& origin,
                           const vgl_vector_3d<double>& block_dim,
                           const vgl_vector_3d<unsigned>& world_dim,
-						  const bool load_all_blocks,
+                          const bool load_all_blocks,
                           const bool save_internal_nodes,
                           const bool save_platform_independent)
 : lvcs_(lvcs),
@@ -39,7 +39,7 @@ template <class T>
 boxm_scene<T>::boxm_scene( const vgl_point_3d<double>& origin,
                            const vgl_vector_3d<double>& block_dim,
                            const vgl_vector_3d<unsigned>& world_dim,
-						   const bool load_all_blocks,
+                           const bool load_all_blocks,
                            const bool save_internal_nodes,
                            const bool save_platform_independent)
 : origin_(origin),
@@ -94,7 +94,7 @@ boxm_scene<T>::boxm_scene(const bgeo_lvcs& lvcs,
                           const vgl_vector_3d<double>& block_dim,
                           const vgl_vector_3d<unsigned>& world_dim,
                           unsigned max_level, unsigned init_level,
-						  const bool load_all_blocks,
+                          const bool load_all_blocks,
                           const bool save_internal_nodes,
                           const bool save_platform_independent)
 : lvcs_(lvcs), origin_(origin), block_dim_(block_dim), active_block_(vgl_point_3d<int>(-1,-1,-1)),load_all_blocks_(load_all_blocks),save_internal_nodes_(save_internal_nodes), save_platform_independent_(save_platform_independent)
@@ -149,24 +149,25 @@ void boxm_scene<T>::write_active_block()
     os.close();
   }
 }
+
 template <class T>
 void boxm_scene<T>::force_write_blocks()
 {
-	boxm_block_iterator<T> iter(this);
-	iter.begin();
-	while(!iter.end())
-	{
-			int x=iter.index().x(), y=iter.index().y(), z=iter.index().z();
-			if(blocks_(x,y,z)->get_tree()!=NULL)
-			{
-				vcl_cout<<" ? ";
-				vcl_string path = gen_block_path(x,y,z);
-				vsl_b_ofstream os(path);
-				blocks_(x,y,z)->b_write(os, save_internal_nodes_, save_platform_independent_);
-				os.close();
-			}
-		iter++;
-	}
+  boxm_block_iterator<T> iter(this);
+  iter.begin();
+  while (!iter.end())
+  {
+    int x=iter.index().x(), y=iter.index().y(), z=iter.index().z();
+    if (blocks_(x,y,z)->get_tree()!=NULL)
+    {
+      vcl_cout<<" ? ";
+      vcl_string path = gen_block_path(x,y,z);
+      vsl_b_ofstream os(path);
+      blocks_(x,y,z)->b_write(os, save_internal_nodes_, save_platform_independent_);
+      os.close();
+    }
+    iter++;
+  }
 }
 
 //: returns the block this point resides in
@@ -180,7 +181,8 @@ boxm_block<T>* boxm_scene<T>::get_block(vgl_point_3d<double>& p)
     unsigned j = static_cast<unsigned>((p.y()-origin_.y())/block_dim_.y());
     unsigned k = static_cast<unsigned>((p.z()-origin_.z())/block_dim_.z());
     return blocks_(i,j,k);
-  } else {
+  }
+  else {
     vcl_cerr << "Point " << p << " is out of world " << world << '\n';
     return 0;
   }
@@ -205,7 +207,8 @@ bool boxm_scene<T>::get_block_index(vgl_point_3d<double>& p, vgl_point_3d<int> &
 
     index=vgl_point_3d<int>(i,j,k);
     return true;
-  } else {
+  }
+  else {
     vcl_cerr << "Point " << p << " is out of world " << world << '\n';
     return false;
   }
@@ -219,7 +222,8 @@ boxm_block<T>* boxm_scene<T>::get_active_block()
     if (block->get_tree() == 0)
       load_block(active_block_.x(),active_block_.y(),active_block_.z());
     return block;
-  } else{
+  }
+  else {
     vcl_cerr << "index"<<active_block_<<"  is out of world\n";
     return 0;
   }
@@ -278,45 +282,45 @@ bool boxm_scene<T>::discover_block(unsigned i, unsigned j, unsigned k)
 template <class T>
 bool boxm_scene<T>::load_block(unsigned i, unsigned j, unsigned k)
 {
-	bool exist=false;
-	if (!valid_index(vgl_point_3d<int>(i,j,k)))
-		return false;
+  bool exist=false;
+  if (!valid_index(vgl_point_3d<int>(i,j,k)))
+    return false;
 
-	if(!load_all_blocks_)
-	{
-		// make sure the active one is saved first
-		if (valid_index(active_block_)) {
-			if (active_block_ == vgl_point_3d<int>(i,j,k))
-				return true;
-			else {
-				int x=active_block_.x(), y=active_block_.y(), z=active_block_.z();
-				boxm_block<T>* block = blocks_(x,y,z);
-				block->delete_tree();
-				block->set_tree(0);
-			}
-		}
-	}
+  if (!load_all_blocks_)
+  {
+    // make sure the active one is saved first
+    if (valid_index(active_block_)) {
+      if (active_block_ == vgl_point_3d<int>(i,j,k))
+        return true;
+      else {
+        int x=active_block_.x(), y=active_block_.y(), z=active_block_.z();
+        boxm_block<T>* block = blocks_(x,y,z);
+        block->delete_tree();
+        block->set_tree(0);
+      }
+    }
+  }
 
-	active_block_.set(i,j,k);
+  active_block_.set(i,j,k);
 
-	if (blocks_(i,j,k)->get_tree()==NULL) // read it from file
-	{
-		vcl_string block_path = gen_block_path(i,j,k);
-		vsl_b_ifstream os(block_path);
+  if (blocks_(i,j,k)->get_tree()==NULL) // read it from file
+  {
+    vcl_string block_path = gen_block_path(i,j,k);
+    vsl_b_ifstream os(block_path);
 
-		//if the binary block file is not found
-		if (!os) {
-			if (blocks_(i,j,k)->get_tree()==NULL) {
-				exist = false;
-				T* tree= new T(max_tree_level_,init_tree_level_);
-				blocks_(i,j,k)->init_tree(tree);
-			}
-			return false;
-		}
-		blocks_(i,j,k)->b_read(os);
-		os.close();
-	}
-	return true;
+    //if the binary block file is not found
+    if (!os) {
+      if (blocks_(i,j,k)->get_tree()==NULL) {
+        exist = false;
+        T* tree= new T(max_tree_level_,init_tree_level_);
+        blocks_(i,j,k)->init_tree(tree);
+      }
+      return false;
+    }
+    blocks_(i,j,k)->b_read(os);
+    os.close();
+  }
+  return true;
 }
 
 template <class T>

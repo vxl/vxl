@@ -71,33 +71,30 @@ boct_tree_cell_reader<T_loc, T_AUX>* boxm_aux_scene<T_loc,T,T_AUX>::get_block_in
 template <class T_loc, class T, class T_AUX>
 void boxm_aux_scene<T_loc,T,T_AUX>::clean_scene()
 {
-	vcl_cout<<"Clean AUX scene "<<vcl_endl;
-	boxm_block_iterator<boct_tree<T_loc, T_AUX> > iter(aux_scene_);
-	iter.begin();
-	if(!aux_scene_->load_all_blocks())
-	{
-		while (!iter.end()) {
-			if (aux_scene_->discover_block(iter.index().x(),iter.index().y(),iter.index().z())) {
-				vcl_string filename=aux_scene_->gen_block_path(iter.index().x(),iter.index().y(),iter.index().z());
-				vpl_unlink(filename.c_str());
-
-			}
-			iter++;
-		}
-	}
-	else
-	{
-		while (!iter.end()) {
-			if(iter->get_tree()!=NULL)
-			{
-				iter->delete_tree();
-				iter->set_tree(0);
-			}
-					iter++;
-		}
-
-
-	}
+  vcl_cout<<"Clean AUX scene "<<vcl_endl;
+  boxm_block_iterator<boct_tree<T_loc, T_AUX> > iter(aux_scene_);
+  iter.begin();
+  if (!aux_scene_->load_all_blocks())
+  {
+    while (!iter.end()) {
+      if (aux_scene_->discover_block(iter.index().x(),iter.index().y(),iter.index().z())) {
+        vcl_string filename=aux_scene_->gen_block_path(iter.index().x(),iter.index().y(),iter.index().z());
+        vpl_unlink(filename.c_str());
+      }
+      iter++;
+    }
+  }
+  else
+  {
+    while (!iter.end()) {
+      if (iter->get_tree()!=NULL)
+      {
+        iter->delete_tree();
+        iter->set_tree(0);
+      }
+      iter++;
+    }
+  }
 }
 
 #if 0 // commented out

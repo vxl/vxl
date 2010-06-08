@@ -39,7 +39,7 @@ class boxm_scene :public boxm_scene_base
              const vgl_point_3d<double>& origin,
              const vgl_vector_3d<double>& block_dim,
              const vgl_vector_3d<unsigned>& world_dim,
-			 const bool load_all_blocks=false,
+             const bool load_all_blocks=false,
              const bool save_internal_nodes_ = false,
              const bool save_platform_independent_ = true);
 
@@ -49,7 +49,7 @@ class boxm_scene :public boxm_scene_base
              const vgl_vector_3d<double>& block_dim,
              const vgl_vector_3d<unsigned>& world_dim,
              unsigned max_level, unsigned init_level,
-			 const bool load_all_blocks=false,
+             const bool load_all_blocks=false,
              const bool save_internal_nodes_ = false,
              const bool save_platform_independent_ = true);
 
@@ -57,7 +57,7 @@ class boxm_scene :public boxm_scene_base
   boxm_scene( const vgl_point_3d<double>& origin,
               const vgl_vector_3d<double>& block_dim,
               const vgl_vector_3d<unsigned>& world_dim,
-        		 const bool load_all_blocks=false,
+              const bool load_all_blocks=false,
               const bool save_internal_nodes_ = false,
               const bool save_platform_independent_ = true);
 
