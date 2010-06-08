@@ -39,7 +39,7 @@ class bocl_global_memory_bandwidth_manager : public bocl_manager<bocl_global_mem
 
   bool run_kernel_using_image();
 
-  int build_kernel_program();
+  int build_kernel_program(bool useimage=false);
 
   int create_kernel(vcl_string const& name);
   int release_kernel();

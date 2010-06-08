@@ -1,5 +1,4 @@
 #pragma OPENCL EXTENSION cl_khr_global_int32_base_atomics : enable
-const sampler_t RowSampler = CLK_NORMALIZED_COORDS_FALSE | CLK_ADDRESS_CLAMP ;
 
 __kernel
 void
@@ -25,6 +24,8 @@ test_single_thread_read_bandwidth(__global uint * len, __global float4* input_ar
   }
 }
 
+#ifdef USEIMAGE
+const sampler_t RowSampler = CLK_NORMALIZED_COORDS_FALSE | CLK_ADDRESS_CLAMP ;
 
 __kernel
 void
@@ -79,7 +80,7 @@ test_workgroup_coalesced_read_bandwidth_image(__constant uint * len, __read_only
       result_array[gid]=worksize;
   }
 }
-
+#endif
 __kernel
 void
 test_workgroup_uncoalesced_read_bandwidth(__constant uint * len, __global float4* input_array,
@@ -142,7 +143,7 @@ test_single_thread_read_bandwidth_local_meory(__constant uint * len, __global fl
     {
       float4 temp=input_array[gid+i];
       local_mem[lid]=temp.x;
-      flag=flag && local_mem[i]==(float)i && temp.y==0.0 && temp.z==0.0 && temp.w==0;
+      flag=flag && local_mem[lid]==(float)i && temp.y==0.0 && temp.z==0.0 && temp.w==0;
     }
     if (flag)
       result_array[gid]=worksize;

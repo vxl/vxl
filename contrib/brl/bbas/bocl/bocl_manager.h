@@ -80,6 +80,7 @@ class bocl_manager
   bool write_program(vcl_string const& path);
   vcl_string program_source() const {return prog_;}
 
+  cl_bool image_support(){return image_support_;}
  protected:
 
   //: Constructor

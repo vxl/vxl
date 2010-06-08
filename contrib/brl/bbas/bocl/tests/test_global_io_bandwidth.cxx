@@ -5,11 +5,13 @@ bool test_single_thread_read_bandwidth_image(int len, float & bandwidth)
 {
   vcl_string root_dir = testlib_root_dir();
   bocl_global_memory_bandwidth_manager * mgr=bocl_global_memory_bandwidth_manager::instance();
-  mgr->setup_array(len);
+   if(!mgr->image_support())
+	  return false;
+ mgr->setup_array(len);
   mgr->setup_result_array();
   if (!mgr->load_kernel_source(root_dir + "/contrib/brl/bbas/bocl/tests/test_global_io_bandwidth.cl"))
     return false;
-  if (mgr->build_kernel_program()!=SDK_SUCCESS)
+  if (mgr->build_kernel_program(mgr->image_support())!=SDK_SUCCESS)
     return false;
 
   if (mgr->create_kernel("test_single_thread_read_bandwidth_image")!=SDK_SUCCESS) {
@@ -44,11 +46,13 @@ bool test_workgroup_coalesced_read_bandwidth_image(int len, float & bandwidth)
 {
   vcl_string root_dir = testlib_root_dir();
   bocl_global_memory_bandwidth_manager * mgr=bocl_global_memory_bandwidth_manager::instance();
-  mgr->setup_array(len);
+   if(!mgr->image_support())
+	  return false;
+ mgr->setup_array(len);
   mgr->setup_result_array();
   if (!mgr->load_kernel_source(root_dir + "/contrib/brl/bbas/bocl/tests/test_global_io_bandwidth.cl"))
     return false;
-  if (mgr->build_kernel_program()!=SDK_SUCCESS)
+  if (mgr->build_kernel_program(mgr->image_support())!=SDK_SUCCESS)
     return false;
 
   if (mgr->create_kernel("test_workgroup_coalesced_read_bandwidth_image")!=SDK_SUCCESS) {
@@ -163,6 +167,7 @@ bool test_workgroup_coalesced_read_bandwidth(int len, float & bandwidth)
   bocl_global_memory_bandwidth_manager * mgr=bocl_global_memory_bandwidth_manager::instance();
   mgr->setup_array(len);
   mgr->setup_result_array();
+
   if (!mgr->load_kernel_source(root_dir + "/contrib/brl/bbas/bocl/tests/test_global_io_bandwidth.cl"))
     return false;
   if (mgr->build_kernel_program()!=SDK_SUCCESS)
@@ -321,12 +326,8 @@ static void test_global_io_bandwidth()
   float bandwidth=0.0f;
   if (test_single_thread_read_bandwidth(len,bandwidth))
     vcl_cout<<" test_single_thread_read_bandwidth "<<bandwidth<<vcl_endl;
-  if (test_single_thread_read_bandwidth_image(len,bandwidth))
-    vcl_cout<<" test_single_thread_read_bandwidth_image "<<bandwidth<<vcl_endl;
   if (test_workgroup_uncoalesced_read_bandwidth(len,bandwidth))
     vcl_cout<<" test_workgroup_uncoalesced_read_bandwidth "<<bandwidth<<vcl_endl;
-  if (test_workgroup_coalesced_read_bandwidth_image(len,bandwidth))
-    vcl_cout<<" test_workgroup_coalesced_read_bandwidth_image "<<bandwidth<<vcl_endl;
   if (test_workgroup_coalesced_read_bandwidth(len,bandwidth))
     vcl_cout<<" test_workgroup_coalesced_read_bandwidth "<<bandwidth<<vcl_endl;
   if (test_single_thread_read_bandwidth_local_meory(len,bandwidth))
@@ -335,6 +336,12 @@ static void test_global_io_bandwidth()
     vcl_cout<<" test_workgroup_uncoalesced_read_bandwidth_local_meory "<<bandwidth<<vcl_endl;
   if (test_workgroup_coalesced_read_bandwidth_local_memory(len,bandwidth))
     vcl_cout<<" test_workgroup_coalesced_read_bandwidth_local_memory "<<bandwidth<<vcl_endl;
+
+  if (test_single_thread_read_bandwidth_image(len,bandwidth))
+    vcl_cout<<" test_single_thread_read_bandwidth_image "<<bandwidth<<vcl_endl;
+  if (test_workgroup_coalesced_read_bandwidth_image(len,bandwidth))
+    vcl_cout<<" test_workgroup_coalesced_read_bandwidth_image "<<bandwidth<<vcl_endl;
+
 }
 
 TESTMAIN(test_global_io_bandwidth);

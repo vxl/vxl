@@ -77,14 +77,14 @@ bool bocl_manager<T>::initialize_cl()
 
   cl_device_id device;
   //: First checking for GPU
-  for (unsigned i=0;i<num_platforms;i++)
-  {
-    if ( clGetDeviceIDs(platform_id[i], CL_DEVICE_TYPE_GPU, 1, &device, NULL)== CL_SUCCESS)
-    {
-      gpu_found=true;
-      break;
-    }
-  }
+  //for (unsigned i=0;i<num_platforms;i++)
+  //{
+  //  if ( clGetDeviceIDs(platform_id[i], CL_DEVICE_TYPE_GPU, 1, &device, NULL)== CL_SUCCESS)
+  //  {
+  //    gpu_found=true;
+  //    break;
+  //  }
+  //}
   //: If GPU not found then look for CPU
   if (!gpu_found)
   {
