@@ -246,7 +246,7 @@ numlevels_=(cl_uint*)_aligned_malloc(sizeof(cl_uint),16);
 #elif defined(__APPLE__)
   cells_ = (cl_int*)malloc(cells_size * sizeof(cl_int4));
   cell_data_ = (cl_float*)malloc(data_input_.size() * sizeof(cl_float16));
-numlevels_=(cl_int*)malloc(sizeof(cl_int));
+numlevels_=(cl_uint*)malloc(sizeof(cl_uint));
 #else
   cells_ = (cl_int*)memalign(16, cells_size * sizeof(cl_int4));
   cell_data_ = (cl_float*)memalign(16, data_input_.size() * sizeof(cl_float16));
