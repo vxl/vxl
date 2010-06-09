@@ -74,7 +74,7 @@ int main2(int argc, char*argv[])
   if (bbw.set()) nbb++;
   if (nbb!=1)
   {
-    vcl_cerr << "ERROR: specify exactly 1 of the -bbi, -bbf or bbw options." << vcl_endl;
+    vcl_cerr << "ERROR: specify exactly 1 of the -bbi, -bbf or -bbw options." << vcl_endl;
     return 1;
   }
 
@@ -84,13 +84,13 @@ int main2(int argc, char*argv[])
   {
     if (bbi().size() != 6)
     {
-      vcl_cerr << "ERROR: bbi argument should contain exactly 6 unsigneds\n";
+      vcl_cerr << "ERROR: -bbi argument should contain exactly 6 unsigneds\n";
       return 1;
     }
 
     if (bbi()[0] >= bbi()[3] || bbi()[1] >= bbi()[4] || bbi()[2] >= bbi()[5])
     {
-      vcl_cerr << "ERROR: bbi argument should indicate the lower and upper corners of a 3D box with strictly positive width, height and depth\n";
+      vcl_cerr << "ERROR: -bbi argument should indicate the lower and upper corners of a 3D box with strictly positive width, height and depth\n";
       return 1;
     }
 
@@ -104,13 +104,13 @@ int main2(int argc, char*argv[])
   {
     if (bbf().size() != 6)
     {
-      vcl_cerr << "ERROR: bbf argument should contain exactly 6 floats\n";
+      vcl_cerr << "ERROR: -bbf argument should contain exactly 6 floats\n";
       return 1;
     }
 
     if (bbf()[0] >= bbf()[3] || bbf()[1] >= bbf()[4] || bbf()[2] >= bbf()[5])
     {
-      vcl_cerr << "ERROR: bbf argument should indicate the lower and upper corners of a 3D box with strictly positive width, height and depth within [0,1]\n";
+      vcl_cerr << "ERROR: -bbf argument should indicate the lower and upper corners of a 3D box with strictly positive width, height and depth within [0,1]\n";
       return 1;
     }
     fx0 = bbf()[0]; fy0 = bbf()[1]; fz0 = bbf()[2];    
@@ -123,13 +123,13 @@ int main2(int argc, char*argv[])
   {
     if (bbw().size() != 6)
     {
-      vcl_cerr << "ERROR: bbw argument should contain exactly 6 floats\n";
+      vcl_cerr << "ERROR: -bbw argument should contain exactly 6 floats\n";
       return 1;
     }
 
     if (bbw()[0] >= bbw()[3] || bbw()[1] >= bbw()[4] || bbw()[2] >= bbw()[5])
     {
-      vcl_cerr << "ERROR: bbw argument should indicate the lower and upper corners of a 3D box with strictly positive width, height and depth.\n";
+      vcl_cerr << "ERROR: -bbw argument should indicate the lower and upper corners of a 3D box with strictly positive width, height and depth.\n";
       return 1;
     }
     x0 = bbw()[0]; y0 = bbw()[1]; z0 = bbw()[2];    

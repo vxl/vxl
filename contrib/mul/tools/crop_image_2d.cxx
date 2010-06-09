@@ -74,7 +74,7 @@ int main2(int argc, char*argv[])
   if (bbw.set()) nbb++;
   if (nbb!=1)
   {
-    vcl_cerr << "ERROR: specify exactly 1 of the -bbi, -bbf or bbw options." << vcl_endl;
+    vcl_cerr << "ERROR: specify exactly 1 of the -bbi, -bbf or -bbw options." << vcl_endl;
     return 1;
   }
 
@@ -84,13 +84,13 @@ int main2(int argc, char*argv[])
   {
     if (bbi().size() != 4)
     {
-      vcl_cerr << "ERROR: bbi argument should contain exactly 4 unsigneds\n";
+      vcl_cerr << "ERROR: -bbi argument should contain exactly 4 unsigneds\n";
       return 1;
     }
 
     if (bbi()[0] >= bbi()[2] || bbi()[1] >= bbi()[3])
     {
-      vcl_cerr << "ERROR: bbi argument should indicate the lower and upper corners of a 2D box with strictly positive width and height.\n";
+      vcl_cerr << "ERROR: -bbi argument should indicate the lower and upper corners of a 2D box with strictly positive width and height.\n";
       return 1;
     }
 
@@ -104,13 +104,13 @@ int main2(int argc, char*argv[])
   {
     if (bbf().size() != 4)
     {
-      vcl_cerr << "ERROR: bbf argument should contain exactly 4 floats\n";
+      vcl_cerr << "ERROR: -bbf argument should contain exactly 4 floats\n";
       return 1;
     }
 
     if (bbf()[0] >= bbf()[2] || bbf()[1] >= bbf()[3])
     {
-      vcl_cerr << "ERROR: bbf argument should indicate the lower and upper corners of a 2D box with strictly positive width and height within [0,1]\n";
+      vcl_cerr << "ERROR: -bbf argument should indicate the lower and upper corners of a 2D box with strictly positive width and height within [0,1]\n";
       return 1;
     }
     fx0 = bbf()[0]; fy0 = bbf()[1];
@@ -123,13 +123,13 @@ int main2(int argc, char*argv[])
   {
     if (bbw().size() != 4)
     {
-      vcl_cerr << "ERROR: bbw argument should contain exactly 4 floats\n";
+      vcl_cerr << "ERROR: -bbw argument should contain exactly 4 floats\n";
       return 1;
     }
 
     if (bbw()[0] >= bbw()[2] || bbw()[1] >= bbw()[3])
     {
-      vcl_cerr << "ERROR: bbw argument should indicate the lower and upper corners of a 2D box with strictly positive width and height.\n";
+      vcl_cerr << "ERROR: -bbw argument should indicate the lower and upper corners of a 2D box with strictly positive width and height.\n";
       return 1;
     }
     x0 = bbw()[0]; y0 = bbw()[1];   
