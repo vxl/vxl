@@ -130,14 +130,31 @@ void scene_kernel_operator()
   //Create functor
   bvpl_edge_geometric_mean_functor<float> functor;
 
-  //Create Scene
+  
+  /***********Part1 operate on tree*******************/
+  
+  //Create tree
   typedef boct_tree<short,float > tree_type;
   boct_tree<short,float> *tree = new boct_tree<short,float>(3);
 
   fill_sample_octree(tree);
 
-  //tree->print();
+  //operate on octree
+  bvpl_octree_kernel_operator<float> oper(tree);
+  
+  
+  //Create output trees
+  boct_tree<short,float > *tree_out = tree->clone();
+  tree_out->init_cells(0.0f);
+  short level = 0;
+  double cell_length = 1.0/(double)(1<<(tree->root_level() -level));
+ 
+  // void operate(F functor, bvpl_kernel_sptr kernel, tree_type* out_tree, short level, double cell_length)
+  oper.operate(functor,kernel, tree_out, level, cell_length);
 
+   
+  /***********Part2 operate on scene*******************/
+  
   bgeo_lvcs lvcs(33.33,44.44,10.0, bgeo_lvcs::wgs84, bgeo_lvcs::DEG, bgeo_lvcs::METERS);
   vgl_point_3d<double> origin(10,10,20);
 
@@ -145,7 +162,7 @@ void scene_kernel_operator()
   vgl_vector_3d<double> block_dim(1,1,1);
 
   //number of blocks in a scene
-  vgl_vector_3d<unsigned> world_dim(2,2,2);
+  vgl_vector_3d<unsigned> world_dim(1,1,1);
   boxm_scene<tree_type> scene(lvcs, origin, block_dim, world_dim);
   vcl_string scene_path="./";
   scene.set_paths(scene_path, "in_block");
@@ -159,20 +176,13 @@ void scene_kernel_operator()
     scene.write_active_block();
   }
 
-  //operate on octree
-  bvpl_octree_kernel_operator<float> oper(tree);
-
-  //tree->print();
-  tree_type *tree_out = tree->clone();
-
-  boxm_scene<tree_type> scene_out(lvcs, origin, block_dim, world_dim);
-  scene_out.set_paths(scene_path, "out_block");
-
-  oper.operate(functor,kernel, tree_out, 1, 0.5);
-
+  //Create the output scenes
+  boxm_scene<boct_tree<short,float> > scene_out(lvcs, origin, block_dim, world_dim);
+  scene_out.set_paths(scene_path, "response_scene");
+  
   //operate on scene
   bvpl_scene_kernel_operator scene_oper;
-  scene_oper.operate(scene,functor, kernel, scene_out, 1);
+  scene_oper.operate(scene,functor, kernel, scene_out, level);
 
   //compare blocks of scene with single tree, result should be the same
   vcl_vector<boct_tree_cell<short,float>* > leaves_out = tree_out->leaf_cells();
@@ -186,7 +196,11 @@ void scene_kernel_operator()
     vcl_vector<boct_tree_cell<short,float>* > temp_leaves = temp_tree->leaf_cells();
     // compare tree values
     for (unsigned i=0; i<temp_leaves.size(); i++) {
-      eq =eq && (temp_leaves[i]->data() == leaves_out[i]->data());
+      if (!((temp_leaves[i]->data() == leaves_out[i]->data())))
+      {
+        vcl_cout << "scene data: " << temp_leaves[i]->data() << " grid data: " << leaves_out[i]->data()  << vcl_endl;
+        eq = false;
+      }
     }
   }
   TEST("tree operator == scene operator", eq, true);
@@ -310,10 +324,11 @@ void scene_vector_operator()
       if (!((temp_leaves[i]->data().response_ == leaves_out[i]->data().response_)||
             (temp_leaves[i]->data().id_ == leaves_out[i]->data().id_)))
       {
-        //vcl_cout << "scene data: " << temp_leaves[i]->data() << " grid data: " << leaves_out[i]->data()  << vcl_endl;
+        vcl_cout << "scene data: " << temp_leaves[i]->data() << " grid data: " << leaves_out[i]->data()  << vcl_endl;
         eq = false;
       }
   }
+
   TEST("tree operator == scene operator", eq, true);
 
   //clean temporary files
