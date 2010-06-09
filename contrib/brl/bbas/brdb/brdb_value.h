@@ -32,16 +32,15 @@ class brdb_value : public vbl_ref_count
   //: Destructor
   virtual ~brdb_value() {}
 
-#if 0 // The conversion operator causes problems with the ICC compiler; Maybe it is not needed?
-  //: Conversion operator
+  //: Return the actual value
   template< class T >
-  operator T() const
+  T val() const
   {
     const brdb_value_t<T>* type_val = dynamic_cast<const brdb_value_t<T>*>(this);
     assert(type_val);
     return type_val->value();
   }
-#endif
+
 
   //: Assignment operator
   template< class T >
