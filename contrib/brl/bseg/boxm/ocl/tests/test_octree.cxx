@@ -430,17 +430,21 @@ static void test_cell_contains_exit_pt(octree_test_driver<T>& driver)
     return;
   }
   cl_int* results = driver.tree_results();
-  vcl_size_t size = 2*4;
+  vcl_size_t size = 5*4;
   if (size>driver.tree_result_size_bytes())
     return;
   if (results) {
     int test[]={1,1,1,1,
-                0,0,0,0};
+                0,0,0,0,
+                1,1,1,1,
+                1,1,1,1,
+                1,1,1,1
+    };
     bool good = true;
     for (vcl_size_t i= 0; i<size; i++)
       good = good && results[i]==test[i];
     TEST("test_cell_contains_exit_pt_data", good, true);
-    if (!good)
+    if (true||!good)
       for (vcl_size_t i= 0; i<size; i+=4)
         vcl_cout << "test_loc_code_result(" << results[i] << ' '
                  << results[i+1] << ' '

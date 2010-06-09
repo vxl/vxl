@@ -16,7 +16,7 @@ static void test_load_data(ray_bundle_test_driver<T>& driver)
   driver.set_work_space_ni(8);
   driver.set_work_space_nj(8);
   if (driver.create_kernel("test_load_data")!=SDK_SUCCESS) {
-    TEST("Create Kernel test_loc_code", false, true);
+    TEST("Create Kernel test_load_data", false, true);
     return;
   }
   if (driver.set_basic_test_args()!=SDK_SUCCESS)
@@ -24,7 +24,7 @@ static void test_load_data(ray_bundle_test_driver<T>& driver)
   vul_timer t;
   t.mark();
   if (driver.run_bundle_test_kernels()!=SDK_SUCCESS) {
-    TEST("Run Kernel test_loc_code", false, true);
+    TEST("Run Kernel test_load_data", false, true);
     return;
   }
   bool good = true;
@@ -34,7 +34,7 @@ static void test_load_data(ray_bundle_test_driver<T>& driver)
   vcl_cout<<t.all()<<" ";
   vcl_cout << "Transfer rate = " << 64.0f*((float)count*count/(static_cast<float>(t.real())))/1000.0f << " Mbytes/second\n";
 #endif
-  vcl_size_t size = 18*4;
+  vcl_size_t size = 14*4;
   if (size<driver.tree_result_size_bytes())
     if (results) {
 
@@ -47,21 +47,74 @@ static void test_load_data(ray_bundle_test_driver<T>& driver)
                   47,47,47,47,
                   55,55,55,55,
                   63,63,63,63,
+                  0,1,2,3,
                   1,1,1,1,
                   1,1,3,0,
-                  1,1,3,0,
-                  1,1,3,0,
-                  1,1,3,0,
                   39,39,39,39,
-                  39,39,39,39,
-                  39,39,39,39,
-                  39,39,39,39};
+                  0,0,0,0};
       for (vcl_size_t i= 0; i<size; i++)
         good = good && results[i]==test[i];
       TEST("test_load_data_into_cache", good, true);
       if (!good)
         for (vcl_size_t i= 0; i<size; i+=4)
           vcl_cout << "test_load_data_result(" << results[i] << ' '
+                   << results[i+1] << ' '
+                   << results[i+2] << ' '
+                   << results[i+3] << ")\n";
+    }
+  driver.release_kernel();
+}
+template <class T>
+static void test_load_data_mutable(ray_bundle_test_driver<T>& driver)
+{
+  driver.set_bundle_ni(2);
+  driver.set_bundle_nj(2);
+  driver.set_work_space_ni(8);
+  driver.set_work_space_nj(8);
+  if (driver.create_kernel("test_load_data_mutable")!=SDK_SUCCESS) {
+    TEST("Create Kernel test_load_data_mutable", false, true);
+    return;
+  }
+  // the false argument below means use uchar4 instead of char 
+  // for the ray_bundle_array
+  if (driver.set_basic_test_args(false)!=SDK_SUCCESS)
+    return;
+  if (driver.run_bundle_test_kernels()!=SDK_SUCCESS) {
+    TEST("Run Kernel test_load_data_mutable", false, true);
+    return;
+  }
+  bool good = true;
+  cl_int* results = driver.tree_results();
+
+  vcl_size_t size = 20*4;
+  if (size<driver.tree_result_size_bytes())
+    if (results) {
+      int test[]={1,1,1,1,
+                  1,1,3,0,
+                  3,1,3,0,
+                  1,3,3,0,
+                  3,3,3,0,
+                  39,39,39,39,
+                  47,47,47,47,
+                  55,55,55,55,
+                  63,63,63,63,
+                  0,0,0,1,
+                  1,0,1,1,
+                  2,0,2,1,
+                  3,0,3,1,
+                  1,1,1,1,
+                  1,1,3,0,
+                  39,39,39,39,
+                  0,1,3,3,
+                  0,2,0,3,
+                  0,3,0,3,
+                  0,0,0,1};
+      for (vcl_size_t i= 0; i<size; i++)
+        good = good && results[i]==test[i];
+      TEST("test_load_data_mutable", good, true);
+      if (!good)
+        for (vcl_size_t i= 0; i<size; i+=4)
+          vcl_cout << "test_load_data_mutable_result(" << results[i] << ' '
                    << results[i+1] << ' '
                    << results[i+2] << ' '
                    << results[i+3] << ")\n";
@@ -227,7 +280,8 @@ void ray_bundle_tests(ray_bundle_test_driver<T>& test_driver)
 
   //START TESTS
   //================================================================
-   test_load_data(test_driver);
+  test_load_data(test_driver);
+  test_load_data_mutable(test_driver);
   test_map_work_space(test_driver);
   test_ray_entry_point(test_driver);
   //==============================================================

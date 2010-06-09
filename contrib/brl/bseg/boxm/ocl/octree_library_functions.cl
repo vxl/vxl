@@ -639,6 +639,7 @@ int cell_exit_point(float4 ray_org, float4 ray_dir,
 
 int cell_contains_exit_pt(int n_levels, short4 loc_code, float4 exit_pt)
 {
+  exit_pt.w = 0.0f; /*should be no side effects since arg is copied */
   float4 cell_min, cell_max;
   cell_bounding_box(loc_code, n_levels, &cell_min, &cell_max);
   int4 test =isless(exit_pt , cell_min);

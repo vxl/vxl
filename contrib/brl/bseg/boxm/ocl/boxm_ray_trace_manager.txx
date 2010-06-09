@@ -74,7 +74,7 @@ copy_to_arrays(boct_tree_cell<short, T >* cell_ptr,
       copy_to_arrays(child_cell_ptr, cell_array, data_array, child_cell_input_ptr);
     }
   }
-#if 0
+#if 1
   else{
     // Debug
     boct_loc_code<short> cd = cell_ptr->get_code();

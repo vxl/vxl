@@ -79,7 +79,7 @@ class ray_bundle_test_driver
 
   void print_kernel_usage_info();
   int set_tree_args();
-  int set_basic_test_args();
+  int set_basic_test_args(bool ray_bundle_uchar = true);
   bool setup_image_cam_data();
   int set_image_cam_args();
   bool clean_image_cam_data();

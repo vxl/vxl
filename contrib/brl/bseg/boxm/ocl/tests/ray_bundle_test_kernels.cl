@@ -8,7 +8,7 @@ test_load_data(__global int4* cells, __global float16* cell_data,
                __local short4*   cached_loc_codes,
                __local float16*  cached_data)
 {
-
+  /* in this test the bundle must be 2x2 */
   short n_levels = 3;
   exit_points[0]=0.25f;  exit_points[1]= 0.25f;  exit_points[2]= 1.0f;
   exit_points[3]=0.75f;  exit_points[4]= 0.25f;  exit_points[5]= 1.0f;
@@ -30,6 +30,12 @@ test_load_data(__global int4* cells, __global float16* cell_data,
     float16 temp = cached_data[i];
     results[result_ptr++]=(int4)temp.s0;
   }
+  /* Check the ray_bundle_array */
+  results[result_ptr].x = ray_bundle_array[0];
+  results[result_ptr].y = ray_bundle_array[1];
+  results[result_ptr].z = ray_bundle_array[2];
+  results[result_ptr++].w = ray_bundle_array[3];
+  /* Test where all rays lie in the same cell */
   exit_points[0]=0.25f;  exit_points[1]= 0.25f;  exit_points[2]= 1.0f; 
   exit_points[3]=0.251f;  exit_points[4]= 0.252f;  exit_points[5]= 1.0f; 
   exit_points[6]=0.253f;  exit_points[7]= 0.254f;  exit_points[8]= 1.0f; 
@@ -41,14 +47,80 @@ test_load_data(__global int4* cells, __global float16* cell_data,
   /* Check the load_data return value */
   results[result_ptr++]= (int4)ret;
  /* Check the loc_codes */
-  for(uchar i = 0; i<4; ++i){
+
+  results[result_ptr++]=convert_int4(cached_loc_codes[0]);
+
+  /* Check the data transfered to the local data cache */
+    float16 temp = cached_data[0];
+    results[result_ptr++]=(int4)temp.s0;
+
+  /* Check the ray_bundle_array */
+  results[result_ptr].x = ray_bundle_array[0];
+  results[result_ptr].y = ray_bundle_array[1];
+  results[result_ptr].z = ray_bundle_array[2];
+  results[result_ptr].w = ray_bundle_array[3];
+}
+__kernel
+void
+test_load_data_mutable(__global int4* cells, __global float16* cell_data,
+                       __global int4* results,
+                       __local uchar4*    ray_bundle_array,
+                       __local float*    exit_points,
+                       __local short4*   cached_loc_codes,
+                       __local float16*  cached_data)
+{
+  /* in this test the bundle must be 2x2 */
+  short n_levels = 3;
+  exit_points[0]=0.25f;  exit_points[1]= 0.25f;  exit_points[2]= 1.0f;
+  exit_points[3]=0.75f;  exit_points[4]= 0.25f;  exit_points[5]= 1.0f;
+  exit_points[6]=0.25f;  exit_points[7]= 0.75f;  exit_points[8]= 1.0f;
+  exit_points[9]=0.75f;  exit_points[10]=0.75f;  exit_points[11]=1.0f;
+  barrier(CLK_LOCAL_MEM_FENCE); 
+  int ret = load_data_mutable(cells, cell_data,n_levels, ray_bundle_array,
+                              exit_points,cached_loc_codes,cached_data);
+  int result_ptr = 0;
+  /* Check the load_data return value */
+  results[result_ptr++]= (int4)ret;
+  /* Check the loc_codes */
+  for (uchar i = 0; i<4; ++i) {
     results[result_ptr++]=convert_int4(cached_loc_codes[i]);
   }
+
   /* Check the data transfered to the local data cache */
   for(uchar i = 0; i<4; ++i){
     float16 temp = cached_data[i];
     results[result_ptr++]=(int4)temp.s0;
   }
+  /* Check the ray_bundle_array */
+  results[result_ptr++] = convert_int4(ray_bundle_array[0]);
+  results[result_ptr++] = convert_int4(ray_bundle_array[1]);
+  results[result_ptr++] = convert_int4(ray_bundle_array[2]);
+  results[result_ptr++] = convert_int4(ray_bundle_array[3]);
+
+  /* Test where all rays lie in the same cell */
+  exit_points[0]=0.25f;  exit_points[1]= 0.25f;  exit_points[2]= 1.0f; 
+  exit_points[3]=0.251f;  exit_points[4]= 0.252f;  exit_points[5]= 1.0f; 
+  exit_points[6]=0.253f;  exit_points[7]= 0.254f;  exit_points[8]= 1.0f; 
+  exit_points[9]=0.255f;  exit_points[10]=0.256f;  exit_points[11]=1.0f; 
+  barrier(CLK_LOCAL_MEM_FENCE); 
+  ret = load_data_mutable(cells, cell_data, n_levels, ray_bundle_array,
+                          exit_points,cached_loc_codes,cached_data);
+
+  /* Check the load_data return value */
+  results[result_ptr++]= (int4)ret;
+ /* Check the loc_codes */
+
+  results[result_ptr++]=convert_int4(cached_loc_codes[0]);
+
+  /* Check the data transfered to the local data cache */
+    float16 temp = cached_data[0];
+    results[result_ptr++]=(int4)temp.s0;
+
+  /* Check the ray_bundle_array */
+  results[result_ptr++] = convert_int4(ray_bundle_array[0]);
+  results[result_ptr++] = convert_int4(ray_bundle_array[1]);
+  results[result_ptr++] = convert_int4(ray_bundle_array[2]);
+  results[result_ptr] = convert_int4(ray_bundle_array[3]);
 }
 __kernel
 void

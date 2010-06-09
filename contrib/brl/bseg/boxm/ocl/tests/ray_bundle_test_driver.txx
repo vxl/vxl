@@ -22,17 +22,17 @@ ray_bundle_test_driver<T>::setup_cl()
   cl_device_id* device_p = cl_manager_->devices();
   if (device_p) {
     command_queue_ = clCreateCommandQueue(cl_manager_->context(),
-      device_p[0],
-      0,
-      &status);
+                                          device_p[0],
+                                          0,
+                                          &status);
   }
   else {
     return SDK_FAILURE;
   }
 
   if (!this->check_val(status,
-    CL_SUCCESS,
-    "clCreateCommandQueue failed."))
+                       CL_SUCCESS,
+                       "clCreateCommandQueue failed."))
     return SDK_FAILURE;
   else
     return SDK_SUCCESS;
@@ -92,18 +92,24 @@ int ray_bundle_test_driver<T>::set_tree_args()
 }
 
 template <class T>
-int ray_bundle_test_driver<T>::set_basic_test_args()
+int ray_bundle_test_driver<T>::set_basic_test_args(bool ray_bundle_uchar)
 {
   cl_int   status;
-
-  status = clSetKernelArg(cl_manager_->kernel(), 3,
-                          (this->n_rays_in_bundle() * sizeof(cl_uchar)), NULL);  
-  if (!this->check_val(status,
-                       CL_SUCCESS,
-                       "clSetKernelArg failed. (local bundle pointer array)"))
-    return SDK_FAILURE;
-
-
+  if(ray_bundle_uchar){
+    status = clSetKernelArg(cl_manager_->kernel(), 3,
+                            (this->n_rays_in_bundle() * sizeof(cl_uchar)), NULL);  
+    if (!this->check_val(status,
+                         CL_SUCCESS,
+                         "clSetKernelArg failed. (local bundle pointer array)"))
+      return SDK_FAILURE;
+  }else{
+    status = clSetKernelArg(cl_manager_->kernel(), 3,
+                            (this->n_rays_in_bundle() * sizeof(cl_uchar4)), NULL);  
+    if (!this->check_val(status,
+                         CL_SUCCESS,
+                         "clSetKernelArg failed. (local bundle pointer array)"))
+      return SDK_FAILURE;
+  }
 
   status = clSetKernelArg(cl_manager_->kernel(), 4, 
                           (3 * this->n_rays_in_bundle() * sizeof(cl_float)), NULL);  
@@ -264,7 +270,7 @@ int ray_bundle_test_driver<T>::run_bundle_test_kernels()
     return SDK_FAILURE;
 
   if(this->set_tree_args()!=SDK_SUCCESS)
-     return SDK_FAILURE;
+    return SDK_FAILURE;
 
 
   // the returned array test result
@@ -278,7 +284,7 @@ int ray_bundle_test_driver<T>::run_bundle_test_kernels()
     return SDK_FAILURE;
 #if 0
   if (this->set_ray_bundle_args()!=SDK_SUCCESS)
-   return SDK_FAILURE;
+    return SDK_FAILURE;
 #endif
   status = clGetKernelWorkGroupInfo(cl_manager_->kernel(),
                                     cl_manager_->devices()[0],
@@ -290,9 +296,9 @@ int ray_bundle_test_driver<T>::run_bundle_test_kernels()
   if (!this->check_val(status,
                        CL_SUCCESS,
                        "clGetKernelWorkGroupInfo CL_KERNEL_LOCAL_MEM_SIZE failed."))
-  {
-    return SDK_FAILURE;
-  }
+    {
+      return SDK_FAILURE;
+    }
 
   status = clGetKernelWorkGroupInfo(cl_manager_->kernel(),
                                     cl_manager_->devices()[0],
@@ -301,20 +307,20 @@ int ray_bundle_test_driver<T>::run_bundle_test_kernels()
                                     &kernel_work_group_size_,
                                     NULL);
   if (!this->check_val(status,
-                      CL_SUCCESS,
-                      "clGetKernelWorkGroupInfo CL_KERNEL_WORK_GROUP_SIZE, failed."))
-  {
-    return SDK_FAILURE;
-  }
+                       CL_SUCCESS,
+                       "clGetKernelWorkGroupInfo CL_KERNEL_WORK_GROUP_SIZE, failed."))
+    {
+      return SDK_FAILURE;
+    }
 
   vcl_size_t globalThreads[]= {this->work_space_ni(), this->work_space_nj()};
   vcl_size_t localThreads[] = {this->bundle_ni(), this->bundle_nj()};
 
   if (used_local_memory_ > cl_manager_->total_local_memory())
-  {
-    vcl_cout << "Unsupported: Insufficient local memory on device.\n";
-    return SDK_FAILURE;
-  }
+    {
+      vcl_cout << "Unsupported: Insufficient local memory on device.\n";
+      return SDK_FAILURE;
+    }
   vcl_cout << "Local memory used: " << used_local_memory_ << '\n';
 
   status = clEnqueueNDRangeKernel(command_queue_,
@@ -390,11 +396,11 @@ int ray_bundle_test_driver<T>::release_kernel()
 template <class T>
 int ray_bundle_test_driver<T>::cleanup_bundle_test()
 {
- cl_int status = SDK_SUCCESS;
+  cl_int status = SDK_SUCCESS;
 
- //cl_manager_->cleanup_tree_processing();
+  //cl_manager_->cleanup_tree_processing();
 
- status = clReleaseCommandQueue(command_queue_);
+  status = clReleaseCommandQueue(command_queue_);
   if (!this->check_val(status,
                        CL_SUCCESS,
                        "clReleaseCommandQueue failed."))
