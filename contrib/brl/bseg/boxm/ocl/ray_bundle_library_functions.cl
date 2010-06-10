@@ -500,10 +500,10 @@ int ray_entry_point(__local float16* cam, __local float4* cam_center,
 
   return 1;
 }
-#if 0
+
 /*
  *  Accumulate ray segment length and the weighted observation
- *  sum as each cell is accessed. It can be the case that multiple rays pass
+ *  sums as each cell is accessed. It can be the case that multiple rays pass
  *  through the same cell. In order to avoid conflicts, only one thread 
  *  is allowed to update the sums for such cells. The active thread is
  *  identified with the index of the base pointer of the multiple ray
@@ -518,17 +518,63 @@ void seg_len_obs(float seg_len, float obs,
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
   /* first insert seg_len and obs into the local cache. This step
      is carried out by all threads */
-  chached_data[llid].se = seg_len;
-  chached_data[llid].sf = obs;
-  /*limit access to the thread that owns each ray bundle 
-     connected region */
+  cached_data[llid].se = seg_len;
+  cached_data[llid].sf = obs;
+  barrier(CLK_LOCAL_MEM_FENCE); /*wait for all threads to complete */
+
+  /*limit access to the thread that owns each ray bundle connected region */
   if(ray_bundle_array[llid].x!=llid)
     return;
-  /* The region owner is the only active thread within the region*/
-  uchar adr = llid;
-  while((ray_bundle_array[adr].w & NEXT_ADR_VALID>0))
+  uchar temp = ray_bundle_array[llid].w & ACTIVE;
+  if(temp == 0)
+    return;
+  /* The region owner (base) is now the only active thread within the region*/
+  /* process the base ray */
+    cached_data[llid].s2 = cached_data[llid].se; /* seg_len sum */
+  /* weighted observations */
+    cached_data[llid].sc = cached_data[llid].sf*cached_data[llid].se; 
+
+  uchar adr = llid;/* linked list pointer */
+  /* traverse the linked list and increment sums */
+  temp = ray_bundle_array[adr].w & NEXT_ADR_VALID;
+  while( temp > 0)
     {
-      
+      adr = ray_bundle_array[adr].y;
+      cached_data[llid].s2 += cached_data[adr].se;
+      cached_data[llid].sc += cached_data[adr].sf*cached_data[adr].se; 
+      temp = ray_bundle_array[adr].w & NEXT_ADR_VALID;
     }
+}
+/*
+ *  Accumulate the pre and vis image arrays based on the cell data.
+ *  A vector of images is maintained image_vect that is updated as the rays
+ *  step through the volume. The image vector is assigned as:
+ *
+ *  [ alpha_integral | vis | pre ]
+ *
+ */
+#if 0
+void pre_infinity(float seg_len, float4* image_vect,
+                 __local uchar4*   ray_bundle_array,
+                 __local float16*  cached_data)
+{
+  /* linear thread id */
+  uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
+  /* first insert seg_len into the local cache. This step
+     is carried out by all threads */
+  cached_data[llid].se = seg_len;
+  barrier(CLK_LOCAL_MEM_FENCE); /*wait for all threads to complete */
+
+  /*limit access to the thread that owns each ray bundle connected region */
+  if(ray_bundle_array[llid].x!=llid)
+    return;
+  uchar temp = ray_bundle_array[llid].w & ACTIVE;
+  if(temp == 0)
+    return;
+
+  float length_sum = cached_data.s2;
+  if(length_sum<1.0e-4f)
+    return;
+  float mean_obs = cached_data.se/length_sum;
 }
 #endif

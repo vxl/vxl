@@ -1251,21 +1251,22 @@ bool boxm_ray_trace_manager<T>:: read_output_image()
                                    0,NULL,&events[0]);
 
   if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (ray_results)failed."))
-    return SDK_FAILURE;
+    return false;
 
   // Wait for the read buffer to finish execution
   status = clWaitForEvents(1, &events[0]);
   if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents failed."))
-    return SDK_FAILURE;
+    return false;
 
   status = clReleaseEvent(events[0]);
   if (!this->check_val(status,CL_SUCCESS,"clReleaseEvent failed."))
-    return SDK_FAILURE;
+    return false;
 
   // release the command Queue
   status = clReleaseCommandQueue(command_queue_);
   if (!this->check_val(status,CL_SUCCESS,"clReleaseCommandQueue failed."))
-    return SDK_FAILURE;
+    return false;
+return true;
 }
 
 #define BOXM_RAY_TRACE_MANAGER_INSTANTIATE(T) \

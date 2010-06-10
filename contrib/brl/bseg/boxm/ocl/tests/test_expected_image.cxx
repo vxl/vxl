@@ -122,7 +122,7 @@ vil_image_view<float> render_image(vcl_string scene_name,vcl_string camname,unsi
 static void test_expected_image()
 {
     int nlevels = 10;
-    int temp = 1 << nlevels-1;
+    int temp = 1 << (nlevels-1);
     float temp1 = 1/(static_cast<float>(temp));
     vcl_string root_dir = testlib_root_dir();
     boxm_scene<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY > > > s;

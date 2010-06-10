@@ -338,7 +338,7 @@ short4 cell_exit_face(float4 exit_point,float4 ray_d, float4 cell_min, float4 ce
   float4 min_diff =   fabs(exit_point-cell_min);
   float4 max_diff =   fabs(exit_point-cell_max);
 
-  float min=1e5;
+  float min=1e5f;
   short4 faceid=(short4)(-1,-1,-1,-1);
   if (min_diff.x<min && ray_d.x<0)
   {

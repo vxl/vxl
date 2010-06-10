@@ -201,3 +201,72 @@ test_ray_entry_point(__global int4* cells,
   results[ptr] = convert_int4(temp);
 }
 
+__kernel
+void
+test_seg_len_obs(__global int4* cells, __global float16* cell_data,
+                       __global int4* results,
+                       __local uchar4*    ray_bundle_array,
+                       __local float*    exit_points,
+                       __local short4*   cached_loc_codes,
+                       __local float16*  cached_data)
+{
+  /* in this test the bundle must be 2x2 */
+  short n_levels = 3;
+  exit_points[0]=0.25f;  exit_points[1]= 0.25f;  exit_points[2]= 1.0f;
+  exit_points[3]=0.75f;  exit_points[4]= 0.25f;  exit_points[5]= 1.0f;
+  exit_points[6]=0.25f;  exit_points[7]= 0.75f;  exit_points[8]= 1.0f;
+  exit_points[9]=0.75f;  exit_points[10]=0.75f;  exit_points[11]=1.0f;
+  barrier(CLK_LOCAL_MEM_FENCE); 
+  int ret = load_data_mutable(cells, cell_data,n_levels, ray_bundle_array,
+                              exit_points,cached_loc_codes,cached_data);
+  int result_ptr = 0;
+  /* Check the load_data return value */
+  results[result_ptr++]= (int4)ret;
+  uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
+  float seg_len = (float)(llid+1), obs = ((float)(llid+1))*10.0f;
+  seg_len_obs(seg_len, obs, ray_bundle_array, cached_data);
+  results[result_ptr].x = (int)cached_data[0].s2;
+  results[result_ptr].y = (int)cached_data[0].sc;
+  results[result_ptr].z = (int)cached_data[0].se;
+  results[result_ptr++].w = (int)cached_data[0].sf;
+  results[result_ptr].x = (int)cached_data[1].s2;
+  results[result_ptr].y = (int)cached_data[1].sc;
+  results[result_ptr].z = (int)cached_data[1].se;
+  results[result_ptr++].w = (int)cached_data[1].sf;
+  results[result_ptr].x = (int)cached_data[2].s2;
+  results[result_ptr].y = (int)cached_data[2].sc;
+  results[result_ptr].z = (int)cached_data[2].se;
+  results[result_ptr++].w = (int)cached_data[2].sf;
+  results[result_ptr].x = (int)cached_data[3].s2;
+  results[result_ptr].y = (int)cached_data[3].sc;
+  results[result_ptr].z = (int)cached_data[3].se;
+  results[result_ptr++].w = (int)cached_data[3].sf;
+  /* Test where all rays lie in the same cell */
+  exit_points[0]=0.25f;  exit_points[1]= 0.25f;  exit_points[2]= 1.0f; 
+  exit_points[3]=0.251f;  exit_points[4]= 0.252f;  exit_points[5]= 1.0f; 
+  exit_points[6]=0.253f;  exit_points[7]= 0.254f;  exit_points[8]= 1.0f; 
+  exit_points[9]=0.255f;  exit_points[10]=0.256f;  exit_points[11]=1.0f; 
+  barrier(CLK_LOCAL_MEM_FENCE); 
+  ret = load_data_mutable(cells, cell_data, n_levels, ray_bundle_array,
+                          exit_points,cached_loc_codes,cached_data);
+
+  /* Check the load_data return value */
+  results[result_ptr++]= (int4)ret;
+  seg_len_obs(seg_len, obs, ray_bundle_array, cached_data);
+  results[result_ptr].x = (int)cached_data[0].s2;
+  results[result_ptr].y = (int)cached_data[0].sc;
+  results[result_ptr].z = (int)cached_data[0].se;
+  results[result_ptr++].w = (int)cached_data[0].sf;
+  results[result_ptr].x = (int)cached_data[1].s2;
+  results[result_ptr].y = (int)cached_data[1].sc;
+  results[result_ptr].z = (int)cached_data[1].se;
+  results[result_ptr++].w = (int)cached_data[1].sf;
+  results[result_ptr].x = (int)cached_data[2].s2;
+  results[result_ptr].y = (int)cached_data[2].sc;
+  results[result_ptr].z = (int)cached_data[2].se;
+  results[result_ptr++].w = (int)cached_data[2].sf;
+  results[result_ptr].x = (int)cached_data[3].s2;
+  results[result_ptr].y = (int)cached_data[3].sc;
+  results[result_ptr].z = (int)cached_data[3].se;
+  results[result_ptr++].w = (int)cached_data[3].sf;
+}
