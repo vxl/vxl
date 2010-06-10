@@ -530,9 +530,9 @@ void seg_len_obs(float seg_len, float obs,
     return;
   /* The region owner (base) is now the only active thread within the region*/
   /* process the base ray */
-    cached_data[llid].s2 = cached_data[llid].se; /* seg_len sum */
+    cached_data[llid].s2 += cached_data[llid].se; /* seg_len sum */
   /* weighted observations */
-    cached_data[llid].sc = cached_data[llid].sf*cached_data[llid].se; 
+    cached_data[llid].sc += cached_data[llid].sf*cached_data[llid].se; 
 
   uchar adr = llid;/* linked list pointer */
   /* traverse the linked list and increment sums */
