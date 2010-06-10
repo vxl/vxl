@@ -218,7 +218,7 @@ bool boxm_stack_ray_trace_manager<T>::setup_tree()
 #elif defined(__APPLE__)
   cells_ = (cl_int*)malloc(cell_input_.size() * sizeof(cl_int4));
   cell_data_ = (cl_float*)malloc(data_input_.size() * sizeof(cl_float16));
-  numlevels_=(cl_int*)malloc(sizeof(cl_int));
+  numlevels_=(cl_uint*)malloc(sizeof(cl_uint));
 #else
   cells_ = (cl_int*)memalign(16, cell_input_.size() * sizeof(cl_int4));
   cell_data_ = (cl_float*)memalign(16, data_input_.size() * sizeof(cl_float16));
