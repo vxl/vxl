@@ -5,8 +5,8 @@ bool test_single_thread_read_bandwidth_image(int len, float & bandwidth)
 {
   vcl_string root_dir = testlib_root_dir();
   bocl_global_memory_bandwidth_manager * mgr=bocl_global_memory_bandwidth_manager::instance();
-   if(!mgr->image_support())
-	  return false;
+   if (!mgr->image_support())
+     return false;
  mgr->setup_array(len);
   mgr->setup_result_array();
   if (!mgr->load_kernel_source(root_dir + "/contrib/brl/bbas/bocl/tests/test_global_io_bandwidth.cl"))
@@ -46,8 +46,8 @@ bool test_workgroup_coalesced_read_bandwidth_image(int len, float & bandwidth)
 {
   vcl_string root_dir = testlib_root_dir();
   bocl_global_memory_bandwidth_manager * mgr=bocl_global_memory_bandwidth_manager::instance();
-   if(!mgr->image_support())
-	  return false;
+   if (!mgr->image_support())
+     return false;
  mgr->setup_array(len);
   mgr->setup_result_array();
   if (!mgr->load_kernel_source(root_dir + "/contrib/brl/bbas/bocl/tests/test_global_io_bandwidth.cl"))
@@ -341,7 +341,6 @@ static void test_global_io_bandwidth()
     vcl_cout<<" test_single_thread_read_bandwidth_image "<<bandwidth<<vcl_endl;
   if (test_workgroup_coalesced_read_bandwidth_image(len,bandwidth))
     vcl_cout<<" test_workgroup_coalesced_read_bandwidth_image "<<bandwidth<<vcl_endl;
-
 }
 
 TESTMAIN(test_global_io_bandwidth);

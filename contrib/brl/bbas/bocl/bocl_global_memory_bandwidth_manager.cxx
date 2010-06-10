@@ -407,50 +407,49 @@ int bocl_global_memory_bandwidth_manager::build_kernel_program(bool useimage)
                        "clCreateProgramWithSource failed."))
     return SDK_FAILURE;
 
-  if(!useimage)
+  if (!useimage)
   {
-	  // create a cl program executable for all the devices specified
-	  status = clBuildProgram(program_,
-		  1,
-		  this->devices_,
-		  NULL,
-		  NULL,
-		  NULL);
-	  if (!this->check_val(status,
-		  CL_SUCCESS,
-		  error_to_string(status)))
-	  {
-		  vcl_size_t len;
-		  char buffer[2048];
-		  clGetProgramBuildInfo(program_, this->devices_[0],
-			  CL_PROGRAM_BUILD_LOG, sizeof(buffer), buffer, &len);
-		  vcl_printf("%s\n", buffer);
-		  return SDK_FAILURE;
-	  }
+    // create a cl program executable for all the devices specified
+    status = clBuildProgram(program_,
+                            1,
+                            this->devices_,
+                            NULL,
+                            NULL,
+                            NULL);
+    if (!this->check_val(status,
+                         CL_SUCCESS,
+                         error_to_string(status)))
+    {
+      vcl_size_t len;
+      char buffer[2048];
+      clGetProgramBuildInfo(program_, this->devices_[0],
+                            CL_PROGRAM_BUILD_LOG, sizeof(buffer), buffer, &len);
+      vcl_printf("%s\n", buffer);
+      return SDK_FAILURE;
+    }
   }
   else
   {
-	  status = clBuildProgram(program_,
-		  1,
-		  this->devices_,
-		  "-D USEIMAGE",
-		  NULL,
-		  NULL);
-	  if (!this->check_val(status,
-		  CL_SUCCESS,
-		  error_to_string(status)))
-	  {
-		  vcl_size_t len;
-		  char buffer[2048];
-		  clGetProgramBuildInfo(program_, this->devices_[0],
-			  CL_PROGRAM_BUILD_LOG, sizeof(buffer), buffer, &len);
-		  vcl_printf("%s\n", buffer);
-		  return SDK_FAILURE;
-	  }
+    status = clBuildProgram(program_,
+                            1,
+                            this->devices_,
+                            "-D USEIMAGE",
+                            NULL,
+                            NULL);
+    if (!this->check_val(status,
+                         CL_SUCCESS,
+                         error_to_string(status)))
+    {
+      vcl_size_t len;
+      char buffer[2048];
+      clGetProgramBuildInfo(program_, this->devices_[0],
+                            CL_PROGRAM_BUILD_LOG, sizeof(buffer), buffer, &len);
+      vcl_printf("%s\n", buffer);
+      return SDK_FAILURE;
+    }
   }
 
-return SDK_SUCCESS;
-
+  return SDK_SUCCESS;
 }
 
 
