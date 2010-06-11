@@ -20,69 +20,7 @@
 #include <vcl_where_root_dir.h>
 #include <vul/vul_timer.h>
 #include <vgl/vgl_intersection.h>
-#include "boxm_ocl_utils.h"
 
-
-// allocate child cells on the array
-template<class T>
-static void split(vcl_vector<vnl_vector_fixed<int, 4> >& cell_array,
-                  int parent_ptr,
-                  int& child_ptr)
-{
-  child_ptr = cell_array.size();
-  for (unsigned i=0; i<8; i++) {
-    vnl_vector_fixed<int, 4> cell(0);
-    cell[0]= parent_ptr;
-    cell[1]=-1;
-    cell[2]=-1;
-    cell_array.push_back(cell);
-  }
-}
-
-template<class T>
-static void
-copy_to_arrays(boct_tree_cell<short, T >* cell_ptr,
-               vcl_vector<vnl_vector_fixed<int, 4> >& cell_array,
-               vcl_vector<vnl_vector_fixed<float, 16> >& data_array,
-               int cell_input_ptr)
-{
-  // cell_input_ptr is the array index for the cell being constructed
-  // it already exists in the cell array but only has the parent index set
-  // no data or child pointers
-
-  // convert the data to 16 vector size
-  vnl_vector_fixed<float, 16> data;
-  pack_cell_data(cell_ptr,data);
-
-  // data pointer will be at index == size after the push_back
-  cell_array[cell_input_ptr][2] = data_array.size();
-  data_array.push_back(data);
-  cell_array[cell_input_ptr][3] = cell_ptr->level();
-  // if the cell has chidren then they must be copied
-  if (!cell_ptr->is_leaf()) {
-    // initialize data values to null
-    data_array[cell_array[cell_input_ptr][2]].fill(0.0);
-    // create the children on the cell array
-    int child_ptr = -1;
-    split<T>(cell_array, cell_input_ptr, child_ptr);
-    cell_array[cell_input_ptr][1]=child_ptr;
-    boct_tree_cell<short,T >* children =
-      cell_ptr->children();
-    for (unsigned i = 0; i<8; ++i) {
-      boct_tree_cell<short, T >* child_cell_ptr = children + i;
-      int child_cell_input_ptr = child_ptr +i;
-      copy_to_arrays(child_cell_ptr, cell_array, data_array, child_cell_input_ptr);
-    }
-  }
-#if 1
-  else{
-    // Debug
-    boct_loc_code<short> cd = cell_ptr->get_code();
-    vgl_box_3d<double> lbb = cell_ptr->local_bounding_box(2);
-    vcl_cout<< cell_ptr->level() << ' ' << cd << ' ' << lbb << '\n';
-  }
-#endif
-}
 
 template<class T>
 bool boxm_ray_trace_manager<T>::init_raytrace(boxm_scene<boct_tree<short,T > > *scene,
@@ -226,7 +164,7 @@ bool boxm_ray_trace_manager<T>::setup_tree()
   root_cell[1]=-1; // no children at the moment
   root_cell[1]=-1; // no data at the moment
   cell_input_.push_back(root_cell);
-  copy_to_arrays<T>(root, cell_input_, data_input_, cell_ptr);
+  boxm_ocl_utils<T >::copy_to_arrays(root, cell_input_, data_input_, cell_ptr);
 
   // the tree is now resident in the 1-d vectors
   // cells as vnl_vector_fixed<int, 4> and
@@ -1065,6 +1003,7 @@ bool boxm_ray_trace_manager<T>::run()
   float total_raytrace_time = 0.0f;
   float total_gpu_time = 0.0f;
   float total_load_time = 0.0f;
+  float total_gpu_load_time = 0.0f;
   while (block_vis_iter.next())
   {
     vcl_vector<vgl_point_3d<int> > block_indices = block_vis_iter.frontier_indices();
@@ -1099,6 +1038,10 @@ bool boxm_ray_trace_manager<T>::run()
       // allocate and initialize memory
       setup_tree_input_buffers(useimage_);
       setup_image_cam_buffers();
+    
+      float gpu_load_time = (float)timer.all() / 1e3f;
+      vcl_cout <<"gpu load took " << gpu_load_time << 's' << vcl_endl;
+      total_gpu_load_time += gpu_load_time;
 
       t.mark();
       // run the raytracing for this block
@@ -1124,7 +1067,15 @@ bool boxm_ray_trace_manager<T>::run()
 
   vcl_cout << "Running block "<<total_gpu_time/1000<<'s'<<vcl_endl
            << "total block loading time = " << total_load_time << 's' << vcl_endl
-           << "total block processing time = " << total_raytrace_time << 's' << vcl_endl;
+           << "total block processing time = " << total_raytrace_time << 's' << vcl_endl
+           << "total gpu preprocess time = " << total_gpu_load_time << 's' << vcl_endl;
+           
+           
+  //output to file for timing stats
+  //vcl_ofstream ofstr("/media/VXL/data/APl/output_img/GPUstats.txt", vcl_fstream::in | vcl_fstream::out | vcl_fstream::app);
+  //ofstr << total_load_time << "," << total_raytrace_time << "," << total_gpu_time/1000 << "," << total_gpu_load_time << vcl_endl;    
+  //ofstr.close();
+           
   return true;
 }
 

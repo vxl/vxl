@@ -21,60 +21,6 @@
 #include <vgl/vgl_intersection.h>
 #include "boxm_ocl_utils.h"
 
-
-//allocate child cells on the array
-template<class T>
-static void split(vcl_vector<vnl_vector_fixed<int, 4> >& cell_array,
-                  int parent_ptr,
-                  int& child_ptr)
-{
-  child_ptr = cell_array.size();
-  for (unsigned i=0; i<8; i++) {
-    vnl_vector_fixed<int, 4> cell(0);
-    cell[0]= parent_ptr;
-    cell[1]=-1;
-    cell[2]=-1;
-    cell_array.push_back(cell);
-  }
-}
-
-template<class T>
-static void
-copy_to_arrays(boct_tree_cell<short, T >* cell_ptr,
-               vcl_vector<vnl_vector_fixed<int, 4> >& cell_array,
-               vcl_vector<vnl_vector_fixed<float, 16> >& data_array,
-               int cell_input_ptr)
-{
-  //cell_input_ptr is the array index for the cell being constructed
-  //it already exists in the cell array but only has the parent index set
-  //no data or child pointers
-
-  // convert the data to 16 vector size
-  vnl_vector_fixed<float, 16> data;
-  pack_cell_data(cell_ptr,data);
-
-  // data pointer will be at index == size after the push_back
-  cell_array[cell_input_ptr][2] = data_array.size();
-  data_array.push_back(data);
-  cell_array[cell_input_ptr][3] = cell_ptr->level();
-  //if the cell has chidren then they must be copied
-  if (!cell_ptr->is_leaf()) {
-    //initialize data values to null
-    data_array[cell_array[cell_input_ptr][2]].fill(0.0);
-    //create the children on the cell array
-    int child_ptr = -1;
-    split<T>(cell_array, cell_input_ptr, child_ptr);
-    cell_array[cell_input_ptr][1]=child_ptr;
-    boct_tree_cell<short,T >* children =
-      cell_ptr->children();
-    for (unsigned i = 0; i<8; ++i) {
-      boct_tree_cell<short, T >* child_cell_ptr = children + i;
-      int child_cell_input_ptr = child_ptr +i;
-      copy_to_arrays(child_cell_ptr, cell_array, data_array, child_cell_input_ptr);
-    }
-  }
-}
-
 template<class T>
 bool boxm_stack_ray_trace_manager<T>::init_raytrace(boxm_scene<boct_tree<short,T > > *scene,
                                               vpgl_camera_double_sptr cam,
@@ -202,7 +148,7 @@ bool boxm_stack_ray_trace_manager<T>::setup_tree()
   root_cell[1]=-1; //no children at the moment
   root_cell[1]=-1; //no data at the moment
   cell_input_.push_back(root_cell);
-  copy_to_arrays<T>(root, cell_input_, data_input_, cell_ptr);
+  boxm_ocl_utils<T >::copy_to_arrays(root, cell_input_, data_input_, cell_ptr);
 
   //the tree is now resident in the 1-d vectors
   //cells as vnl_vector_fixed<int, 4> and
