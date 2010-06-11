@@ -131,7 +131,7 @@ ray_trace_main(__global int * nlevels,
 
     // location code of exit point
     // the exit face mask
-    short4 exit_face= cell_exit_face(exit_pt,ray_d, cell_min, cell_max);
+    short4 exit_face= cell_exit_face_safe(exit_pt,ray_d, cell_min, cell_max);
     if (exit_face.x<0) // exit face not defined
       break;
 
@@ -151,17 +151,12 @@ ray_trace_main(__global int * nlevels,
     // the current cell (cells[curr_cell_ptr])is the cell reached by
     // the neighbor's traverse
     // ray continues: make the current entry point the previous exit point
-    //data_return=(float4)count;//(tfar,tnear,cellsize,0.0);
-    entry_pt = exit_pt;
-    count=count+1;
-
-    //data_return.z=count;//(float)exit_loc_code.z;
+	entry_pt = exit_pt;
   }
   // note that the following code is application dependent
   // should have a cleanup functor for expected image
   // also it is not necessary to have a full float4 as the
   // output type a single scalar float array is sufficient
-  //data_return.z=count;
   inp[gid] = (float4)(data_return);//local_img[lid];//
 
   //end ray trace
@@ -307,7 +302,7 @@ ray_trace_main(__global int * nlevels,
 
     //location code of exit point
     //the exit face mask
-    short4 exit_face= cell_exit_face(exit_pt, cell_min, cell_max);
+    short4 exit_face= cell_exit_face_safe(exit_pt, cell_min, cell_max);
     if (exit_face.x<0)//exit face not defined
       break;
 
