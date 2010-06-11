@@ -16,6 +16,7 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include "boxm_ocl_utils.h"
 #include <bocl/bocl_utils.h>
+#include <boxm/ocl/boxm_ocl_utils.h>
 
 template <class T_data>
 class boxm_stack_ray_trace_manager : public bocl_manager<boxm_stack_ray_trace_manager<T_data> >
