@@ -19,7 +19,7 @@
 template <class T>
 bool vgl_sphere_3d<T>::contains(vgl_point_3d<T> const& p) const
 {
-  return (p-c_).length() <= r_;
+  return r_ >= 0 && (p-c_).sqr_length() <= r_*r_;
 }
 
 
@@ -29,6 +29,9 @@ template <class T>
 bool vgl_sphere_3d<T>::clip(const vgl_line_3d_2_points<T> & line,
                             vgl_point_3d<T> &p1, vgl_point_3d<T> &p2) const
 {
+  // The empty sphere does not intersect anything:
+  if (r_ < 0) return false;
+
   vgl_point_3d<T> cp = vgl_closest_point(line, c_);
 
   T cp_sqr_len = (cp - c_).sqr_length();
