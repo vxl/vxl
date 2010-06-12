@@ -65,6 +65,9 @@ void vnl_sparse_matrix<T>::mult(vnl_sparse_matrix<T> const& rhs, vnl_sparse_matr
   unsigned int result_rows = rows();
   unsigned int result_cols = rhs.columns();
 
+  // Early return: empty result matrix
+  if (result_rows <= 0 || result_cols <= 0) return;
+
   result.cs_ = result_cols;
   if (result.rows() != result_rows)
   {
