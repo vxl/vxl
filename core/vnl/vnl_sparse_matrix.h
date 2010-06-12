@@ -115,8 +115,6 @@ class vnl_sparse_matrix
   typedef vcl_vector < row > vnl_sparse_matrix_elements;
 #endif
 
-  // typedef vcl_vector<typename pair_t> row;
-
   //: Construct an empty matrix
   vnl_sparse_matrix();
 
@@ -257,14 +255,20 @@ class vnl_sparse_matrix
   //  would be much more inefficient than normalize_rows()!
   void normalize_rows();
 
- protected: // these three methods are used to implement their operator() variants
+  // These three methods are used to implement their operator() variants
+  // They should ideally be protected, but for backward compatibility reasons
+  // they continue to be public for a while ...
+
   //: Add rhs to this.
+  //  Deprecated for direct use: please use operator "+" instead.
   void add(const vnl_sparse_matrix<T>& rhs, vnl_sparse_matrix<T>& result) const;
 
   //: Subtract rhs from this.
+  //  Deprecated for direct use: please use operator "-" instead.
   void subtract(const vnl_sparse_matrix<T>& rhs, vnl_sparse_matrix<T>& result) const;
 
   //: Multiply this*rhs, another sparse matrix.
+  //  Deprecated for direct use: please use operator "*" instead.
   void mult(vnl_sparse_matrix<T> const& rhs, vnl_sparse_matrix<T>& result) const;
 
  protected:
