@@ -55,9 +55,9 @@ class vgl_sphere_3d
   //: Make the sphere empty.
   void set_empty() {c_.set(0,0,0); r_=-1;}
 
-  //: Set min \a x ordinate of box (other sides unchanged)
+  //: Set radius \a r of this sphere (while centre unchanged)
   inline void set_radius(Type r) { r_=r; }
-  //: Set min \a y ordinate of box (other sides unchanged)
+  //: Set centre of this sphere to \a c (while radius unchanged)
   inline void set_centre(const vgl_point_3d<Type> & c) { c_=c; }
 
   //: Calculate the end points of a line clipped by this sphere.
