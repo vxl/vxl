@@ -68,7 +68,7 @@ bgui3d_examiner_slider_tableau::bgui3d_examiner_slider_tableau(SoNode * scene_ro
    SoSeparator *max_root = new SoSeparator;
    max_transform = new SoTransform;
    max_transform->rotation.setValue(SbVec3f(0, 0, 1), float(vnl_math::pi_over_2));
-   max_transform->translation.setValue(SbVec3f(0.1f, 0f, 0f));
+   max_transform->translation.setValue(SbVec3f(0.1f, 0.f, 0.f));
    max_mark_ = new SoCone;
    max_mark_ ->bottomRadius.setValue(0.05f);
    max_mark_ ->height.setValue(0.1f);
