@@ -11,6 +11,7 @@
 #include <vgl/vgl_box_3d.h>
 #include <vcl_cmath.h>
 #include <vcl_cassert.h>
+#include <vcl_algorithm.h>
 
 //: Create windowed view of given image by specifying a cropping region in image co-ords.
 //  The world2im transform is set so that this appears identical to im when addressed in world co-ords.
