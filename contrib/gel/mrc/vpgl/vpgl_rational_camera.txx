@@ -388,7 +388,7 @@ bool vpgl_rational_camera<T>::save(vcl_string cam_path)
            << "  latScale = " << scale(Y_INDX) << '\n'
            << "  longScale = " << scale(X_INDX) << '\n'
            << "  heightScale = " << scale(Z_INDX) << '\n';
-  vnl_matrix_fixed<double,4,20> coeffs = this->coefficient_matrix();
+  vnl_matrix_fixed<T,4,20> coeffs = this->coefficient_matrix();
   file_out << "  lineNumCoef = (";
   for (int i=0; i<20; i++) {
     file_out << "\n    " << coeffs[NEU_V][map[i]];
@@ -443,7 +443,7 @@ vpgl_rational_camera<T>* read_rational_camera(vcl_string cam_path)
   return rcam;
 }
 //: read from an open istream
-template <class T> 
+template <class T>
 vpgl_rational_camera<T>* read_rational_camera(vcl_istream& istr)
 {
   vcl_vector<T> neu_u;
@@ -544,18 +544,18 @@ vpgl_rational_camera<T>* read_rational_camera(vcl_istream& istr)
       }
       break;
     }
-  }    
+  }
   istr >> input;
-  if(input!="END_GROUP")
+  if (input!="END_GROUP")
     return 0;
   istr >> input;
-  if(input!="=")
+  if (input!="=")
     return 0;
   istr >> input;
-  if(input!="IMAGE")
+  if (input!="IMAGE")
     return 0;
   istr >> input;
-  if(input!="END;")
+  if (input!="END;")
     return 0;
   int map[20];
   map[0]=19;
@@ -580,9 +580,9 @@ vpgl_rational_camera<T>* read_rational_camera(vcl_istream& istr)
   map[19]=16;
 
   if ((neu_u.size() != 20) || (den_u.size() != 20)) {
-    vcl_cerr << "the input is not a valid rational camera \n";
+    vcl_cerr << "the input is not a valid rational camera\n";
     return 0;
-    }
+  }
 
   T temp_vector[20];
   for (int j=0; j<20; j++) {
@@ -649,7 +649,7 @@ b_read(vsl_b_istream &is)
     vsl_b_read(is,off);
     scale_offsets_[i] = vpgl_scale_offset<T>(scale,off);
   }
- 
+
   return;
 }
 
@@ -668,7 +668,6 @@ b_write(vsl_b_ostream &os) const
   }
   return;
 }
-
 
 
 // Code for easy instantiation.

@@ -136,7 +136,7 @@ bool vpgl_local_rational_camera<T>::save(vcl_string cam_path)
            << "  latScale = " << scale(vpgl_rational_camera<T>::Y_INDX) << '\n'
            << "  longScale = " << scale(vpgl_rational_camera<T>::X_INDX) << '\n'
            << "  heightScale = " << scale(vpgl_rational_camera<T>::Z_INDX) << '\n';
-  vnl_matrix_fixed<double,4,20> coeffs = this->coefficient_matrix();
+  vnl_matrix_fixed<T,4,20> coeffs = this->coefficient_matrix();
   file_out << "  lineNumCoef = (";
   for (int i=0; i<20; i++) {
     file_out << "\n    " << coeffs[vpgl_rational_camera<T>::NEU_V][map[i]];
