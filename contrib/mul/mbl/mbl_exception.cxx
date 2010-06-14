@@ -110,6 +110,9 @@ void mbl_exception_throw_os_error(const vcl_string& filename,
   case ENOSPC:
     mbl_exception_warning(mbl_exception_os_no_space_left_on_device(ENOSPC, filename, additional_comment));
     break;
+  case EINVAL:
+    mbl_exception_warning(mbl_exception_os_invalid_value(EINVAL, filename, additional_comment));
+    break;
   default:
     mbl_exception_warning(mbl_exception_os_error(errno, filename, additional_comment));
     break;

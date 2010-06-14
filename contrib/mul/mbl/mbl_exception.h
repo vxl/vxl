@@ -327,6 +327,7 @@ MACRO(mbl_exception_os_file_exists);
 MACRO(mbl_exception_os_not_a_directory);
 MACRO(mbl_exception_os_is_a_directory);
 MACRO(mbl_exception_os_no_space_left_on_device);
+MACRO(mbl_exception_os_invalid_value);
 
 #undef MACRO
 
