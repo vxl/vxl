@@ -10,18 +10,18 @@
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
 
-//: Read in data from a stream, assumed to be a list of items
-// Assumes list of objects separated by a keyword.
+//: Read in keyword separated blocks of text from stream.
+// Assumes list of blocks separated by a keyword.
 //  keyword is always the same word, defined in the input variable.
 // Expects format of data:
 // \verbatim
 // {
-//   keyword: string1
-//   keyword: { data: fruit }
-//   keyword: string3
+//   object: { data: fruit0 }
+//   object: { data: fruit1 }
+//   object: { data: fruit2 }
 // }
-// To parse this, require keyword="keyword:". 
-// For this example, on exit, items[1]=="{ data: fruit }", which could
+// To parse this, require keyword="object:". 
+// For this example, on exit, items[1]=="{ data: fruit1 }", which could
 // be passed to mbl_read_props.
 // \endverbatim
 // Throws a mbl_exception_parse_error if it fails.
