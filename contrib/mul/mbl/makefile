@@ -52,6 +52,7 @@ SOURCES += mbl_sample_stats_1d.cxx
 SOURCES += mbl_parse_colon_pairs_list.cxx
 SOURCES += mbl_parse_string_list.cxx
 SOURCES += mbl_mask.cxx
+SOURCES += mbl_parse_keyword_list.cxx
 
 # Additional files to document:
 MANPAGE_SOURCES += mbl_cloneables_factory.h

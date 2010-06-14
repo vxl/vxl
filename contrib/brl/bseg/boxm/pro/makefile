@@ -13,6 +13,7 @@ SOURCES += processes/boxm_upload_mesh_process.cxx
 SOURCES += processes/boxm_construct_scene_from_image_process.cxx
 SOURCES += processes/boxm_camera_viewing_scene_process.cxx
 SOURCES += processes/boxm_clean_scene_process.cxx
+SOURCES += processes/boxm_force_write_blocks_process.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk

@@ -35,6 +35,9 @@ SOURCES += vil3d_overlap.cxx
 MANPAGE_SOURCES += vil3d_locally_z_normalise.h
 SOURCES += vil3d_find_blobs.cxx
 MANPAGE_SOURCES += vil3d_erode.h
+MANPAGE_SOURCES += vil3d_world_gradients.txx
+MANPAGE_SOURCES += vil3d_suppress_non_max_edges.txx
+MANPAGE_SOURCES += vil3d_fill_border.h
 
 ################################
 include ${VXLROOT}/config/top.mk
