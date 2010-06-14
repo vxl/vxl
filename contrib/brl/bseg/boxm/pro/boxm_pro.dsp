@@ -117,6 +117,9 @@ SOURCE=.\processes/boxm_camera_viewing_scene_process.cxx
 SOURCE=.\processes/boxm_clean_scene_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/boxm_force_write_blocks_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+boxm_scene_base_sptr-.cxx
 # End Source File
 # End Group

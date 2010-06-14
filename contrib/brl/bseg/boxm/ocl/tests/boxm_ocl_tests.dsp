@@ -119,6 +119,9 @@ SOURCE=.\test_octree_stack.cxx
 SOURCE=.\test_octree_image.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_statistics.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/ray_bundle_test_driver+float-.cxx
 # End Source File
 # Begin Source File
@@ -129,6 +132,12 @@ SOURCE=.\Templates/octree_test_driver+boxm_sample+BOXM_APM_SIMPLE_GREY--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/octree_test_driver+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/stat_test_driver+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/stat_test_driver+boxm_sample+BOXM_APM_MOG_GREY--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_include.cxx
@@ -150,6 +159,12 @@ SOURCE=.\ray_bundle_test_driver.txx
 # End Source File
 # Begin Source File
 SOURCE=.\ray_bundle_test_driver.h
+# End Source File
+# Begin Source File
+SOURCE=.\stat_test_driver.h
+# End Source File
+# Begin Source File
+SOURCE=.\stat_test_driver.txx
 # End Source File
 # End Group
 # End Target

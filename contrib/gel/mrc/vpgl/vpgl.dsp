@@ -158,6 +158,9 @@ SOURCE=.\Templates/vpgl_proj_camera+float-.cxx
 # Begin Source File
 SOURCE=.\Templates/vpgl_perspective_camera+float-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vpgl_calibration_matrix+float-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

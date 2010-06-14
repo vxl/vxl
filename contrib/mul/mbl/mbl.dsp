@@ -237,6 +237,9 @@ SOURCE=.\mbl_parse_string_list.cxx
 SOURCE=.\mbl_mask.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\mbl_parse_keyword_list.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/mbl_data_wrapper+double-.cxx
 # End Source File
 # Begin Source File
@@ -661,6 +664,9 @@ SOURCE=.\mbl_parse_string_list.h
 # End Source File
 # Begin Source File
 SOURCE=.\mbl_mask.h
+# End Source File
+# Begin Source File
+SOURCE=.\mbl_parse_keyword_list.h
 # End Source File
 # End Group
 # End Target

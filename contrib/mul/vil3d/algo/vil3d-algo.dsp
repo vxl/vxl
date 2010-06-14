@@ -179,6 +179,12 @@ SOURCE=.\Templates/vil3d_gauss_reduce+double-.cxx
 # Begin Source File
 SOURCE=.\Templates/vil3d_abs_shuffle_distance+float.float-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vil3d_suppress_non_max_edges+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil3d_world_gradients+float.float-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -286,6 +292,21 @@ SOURCE=.\vil3d_find_blobs.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil3d_erode.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_suppress_non_max_edges.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_world_gradients.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_world_gradients.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_suppress_non_max_edges.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_fill_border.h
 # End Source File
 # End Group
 # End Target

@@ -98,6 +98,9 @@ SOURCE=.\Templates/vpgl_io_camera+double-.cxx
 # Begin Source File
 SOURCE=.\Templates/vbl_io_smart_ptr+vpgl_camera+double--.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vpgl_io_camera+float-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
