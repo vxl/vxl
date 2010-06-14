@@ -130,6 +130,15 @@ void test_parse_sequence()
     TEST("Case 8: \"{ 1 2 \"", ss.fail() && caught, true);
   }
 
+  {
+    vcl_cout << "\nCase 9\n";
+    vcl_istringstream ss("a ba");
+    vcl_vector<vcl_string> v;
+    mbl_parse_sequence(ss, vcl_back_inserter(v), vcl_string());
+    vsl_print_summary(vcl_cout, v);
+    TEST("Case 9 : \"a ba\"", v.size()==2 && v[0]=="a" && v[1]=="ba" , true);
+  }
+
 
 
   vcl_cout << "\n\n";
