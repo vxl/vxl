@@ -10,6 +10,7 @@
 #include <vil3d/algo/vil3d_erode.h>
 #include <vil3d/algo/vil3d_exp_distance_transform.h>
 #include <vil3d/algo/vil3d_exp_filter.h>
+#include <vil3d/algo/vil3d_fill_border.h>
 #include <vil3d/algo/vil3d_fill_boundary.h>
 #include <vil3d/algo/vil3d_find_blobs.h>
 #include <vil3d/algo/vil3d_find_peaks.h>
@@ -27,7 +28,9 @@
 #include <vil3d/algo/vil3d_quad_distance_function.h>
 #include <vil3d/algo/vil3d_smooth_121.h>
 #include <vil3d/algo/vil3d_structuring_element.h>
+#include <vil3d/algo/vil3d_suppress_non_max_edges.h>
 #include <vil3d/algo/vil3d_threshold.h>
+#include <vil3d/algo/vil3d_world_gradients.h>
 
 #include <vil3d/vil3d_chord.h>
 #include <vil3d/vil3d_convert.h>

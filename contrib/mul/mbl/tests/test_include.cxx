@@ -39,6 +39,7 @@
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_parse_colon_pairs_list.h>
 #include <mbl/mbl_parse_int_list.h>
+#include <mbl/mbl_parse_keyword_list.h>
 #include <mbl/mbl_parse_sequence.h>
 #include <mbl/mbl_parse_string_list.h>
 #include <mbl/mbl_parse_tuple.h>
