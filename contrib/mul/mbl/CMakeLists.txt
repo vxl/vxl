@@ -36,6 +36,7 @@ SET(mbl_sources
                                         mbl_parse_int_list.h
   mbl_parse_colon_pairs_list.cxx        mbl_parse_colon_pairs_list.h
   mbl_parse_string_list.cxx             mbl_parse_string_list.h
+  mbl_parse_keyword_list.cxx            mbl_parse_keyword_list.h
   mbl_read_props.cxx                    mbl_read_props.h
   mbl_read_multi_props.cxx              mbl_read_multi_props.h
   mbl_lda.cxx                           mbl_lda.h
