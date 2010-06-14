@@ -14,6 +14,7 @@ IF(OPENCL_FOUND)
       boxm_stack_ray_trace_manager.h boxm_stack_ray_trace_manager.txx
       boxm_ocl_utils.h  boxm_ocl_utils.cxx
       boxm_ocl_render_expected.h
+      boxm_stat_manager.h boxm_stat_manager.txx
      )
 
   SET(bomx2_ocl_source_files

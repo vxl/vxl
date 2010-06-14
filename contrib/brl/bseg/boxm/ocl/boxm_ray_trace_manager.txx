@@ -538,6 +538,66 @@ bool boxm_ray_trace_manager<T>::clean_ray_origin()
     return false;
   }
 }
+template<class T>
+bool boxm_ray_trace_manager<T>::setup_app_density(bool use_uniform, float mean, float sigma)
+{
+#if defined (_WIN32)
+  app_density_ =  (cl_float*)_aligned_malloc( sizeof(cl_float4), 16);
+#elif defined(__APPLE__)
+  app_density_ =  (cl_float*)malloc( sizeof(cl_float4));
+#else
+  app_density_ =  (cl_float*)memalign(16, sizeof(cl_float4));
+#endif
+  if(use_uniform){
+    app_density_[0]=1.0f;
+    app_density_[1]=0.0f;
+    app_density_[2]=0.0f;
+    app_density_[3]=0.0f;
+  }else{
+    app_density_[0]=0.0f;
+    app_density_[1]=mean;
+    app_density_[2]=sigma;
+    app_density_[3]=0.0f;
+  }
+  return true;
+}
+template<class T>
+bool boxm_ray_trace_manager<T>::clean_app_density()
+{
+  if (app_density_) {
+#ifdef _WIN32
+    _aligned_free(app_density_);
+#else
+    free(app_density_);
+#endif
+    app_density_ = NULL;
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+template<class T>
+int boxm_ray_trace_manager<T>::setup_app_density_buffer()
+{
+  cl_int status = CL_SUCCESS;
+  app_density_buf_ = clCreateBuffer(this->context_,CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
+                                sizeof(cl_uint4),app_density_,&status);
+  if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (app density) failed."))
+    return SDK_FAILURE;
+  else
+    return SDK_SUCCESS;
+}
+
+template<class T>
+int boxm_ray_trace_manager<T>::clean_app_density_buffer()
+{
+  cl_int status = clReleaseMemObject(app_density_buf_);
+  if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject (app_density_buf_) failed."))
+    return SDK_FAILURE;
+  else
+    return SDK_SUCCESS;
+}
 
 template<class T>
 int boxm_ray_trace_manager<T>::setup_tree_input_buffers(bool useimage)

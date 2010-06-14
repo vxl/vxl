@@ -6,6 +6,7 @@ DECLARE( test_octree_image );
 DECLARE( test_backproject_ray );
 DECLARE( test_expected_image );
 DECLARE( test_ray_bundle );
+DECLARE( test_statistics );
 
 void register_tests()
 {
@@ -15,6 +16,7 @@ void register_tests()
   REGISTER( test_backproject_ray );
   REGISTER( test_expected_image );
   REGISTER( test_ray_bundle );
+  REGISTER( test_statistics );
 }
 
 

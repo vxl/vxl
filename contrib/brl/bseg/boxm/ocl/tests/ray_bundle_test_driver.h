@@ -79,10 +79,18 @@ class ray_bundle_test_driver
 
   void print_kernel_usage_info();
   int set_tree_args();
-  int set_basic_test_args(bool ray_bundle_uchar = true);
+  int set_basic_test_args(vcl_string arg_setup_spec="basic");
   bool setup_image_cam_data();
   int set_image_cam_args();
   bool clean_image_cam_data();
+  bool setup_norm_data(vcl_string mode,bool use_uniform=true,
+                       float mean = 0.0f, float sigma = 0.0f);
+  int set_norm_args();
+  int run_norm_kernel();
+  bool clean_norm_data();
+  bool init_work_image(vcl_string mode);
+  void print_work_image(){cl_manager_->print_ray_results();}
+  cl_float* work_image(){return cl_manager_->ray_results();}
  private:
   int setup_cl();
 };

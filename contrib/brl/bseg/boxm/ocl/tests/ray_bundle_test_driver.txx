@@ -92,10 +92,10 @@ int ray_bundle_test_driver<T>::set_tree_args()
 }
 
 template <class T>
-int ray_bundle_test_driver<T>::set_basic_test_args(bool ray_bundle_uchar)
+int ray_bundle_test_driver<T>::set_basic_test_args(vcl_string arg_setup_spec)
 {
   cl_int   status;
-  if(ray_bundle_uchar){
+  if(arg_setup_spec == "basic"){
     status = clSetKernelArg(cl_manager_->kernel(), 3,
                             (this->n_rays_in_bundle() * sizeof(cl_uchar)), NULL);  
     if (!this->check_val(status,
@@ -136,6 +136,15 @@ int ray_bundle_test_driver<T>::set_basic_test_args(bool ray_bundle_uchar)
                        CL_SUCCESS,
                        "clSetKernelArg failed. (local cached data array)"))
     return SDK_FAILURE;
+  if(arg_setup_spec == "include_image_array"){
+    status = clSetKernelArg(cl_manager_->kernel(), 7, 
+                            (this->n_rays_in_bundle() * sizeof(cl_float4)), NULL);  
+
+    if (!this->check_val(status,
+                         CL_SUCCESS,
+                         "clSetKernelArg failed. (local cached data array)"))
+      return SDK_FAILURE;
+  }
   return SDK_SUCCESS;
 }
 
@@ -377,6 +386,120 @@ int ray_bundle_test_driver<T>::run_bundle_test_kernels()
     return SDK_SUCCESS;
 }
 
+template <class T>
+bool ray_bundle_test_driver<T>::init_work_image(vcl_string mode)
+{
+  if(mode == "4x4_uniform"||mode == "4x4_gauss")
+    {
+      cl_manager_->set_ni(4);
+      cl_manager_->set_nj(4);
+      if(!cl_manager_->setup_work_image())
+        return false;
+      cl_float* image = cl_manager_->ray_results();
+      if(!image)
+        return false;
+      for(unsigned j = 0; j<4; ++j)
+        for(unsigned i = 0; i<4; ++i)
+          {
+            *(image++) = 0.16667f*(i+j);
+            *(image++) = 0.0f;/* skip alpha integral slot */
+            *(image++) = 1.0f; /* vis_inf */
+            *(image++) = (float)(i+j); /* pre */
+          }
+      return true;
+    }
+  return false;
+}
+template <class T>
+int ray_bundle_test_driver<T>::run_norm_kernel()
+{
+  cl_int   status;
+  cl_event events[2];
+
+  status = clGetKernelWorkGroupInfo(cl_manager_->kernel(),
+                                    cl_manager_->devices()[0],
+                                    CL_KERNEL_LOCAL_MEM_SIZE,
+                                    sizeof(cl_ulong),
+                                    &used_local_memory_,
+                                    NULL);
+
+  if (!this->check_val(status,
+                       CL_SUCCESS,
+                       "clGetKernelWorkGroupInfo CL_KERNEL_LOCAL_MEM_SIZE failed."))
+    {
+      return SDK_FAILURE;
+    }
+
+  status = clGetKernelWorkGroupInfo(cl_manager_->kernel(),
+                                    cl_manager_->devices()[0],
+                                    CL_KERNEL_WORK_GROUP_SIZE,
+                                    sizeof(cl_ulong),
+                                    &kernel_work_group_size_,
+                                    NULL);
+  if (!this->check_val(status,
+                       CL_SUCCESS,
+                       "clGetKernelWorkGroupInfo CL_KERNEL_WORK_GROUP_SIZE, failed."))
+    {
+      return SDK_FAILURE;
+    }
+
+  vcl_size_t globalThreads[]= {cl_manager_->ni(),
+                               cl_manager_->nj()};
+  vcl_size_t localThreads[] = {this->bundle_ni(), this->bundle_nj()};
+
+  if (used_local_memory_ > cl_manager_->total_local_memory())
+    {
+      vcl_cout << "Unsupported: Insufficient local memory on device.\n";
+      return SDK_FAILURE;
+    }
+  vcl_cout << "Local memory used: " << used_local_memory_ << '\n';
+
+  status = clEnqueueNDRangeKernel(command_queue_,
+                                  cl_manager_->kernel(),
+                                  2,
+                                  NULL,
+                                  globalThreads,
+                                  localThreads,
+                                  0,
+                                  NULL,
+                                  NULL);
+  if (!this->check_val(status,
+                       CL_SUCCESS,
+                       "clEnqueueNDRangeKernel failed."))
+    return SDK_FAILURE;
+
+  status = clFinish(command_queue_);
+  if (!this->check_val(status,
+                       CL_SUCCESS,
+                       "clFinish failed."))
+    return SDK_FAILURE;
+
+  status = clEnqueueReadBuffer(command_queue_,cl_manager_->image_buf(),CL_TRUE,
+                                   0,cl_manager_->n_rays()*sizeof(cl_float4),
+                                   cl_manager_->ray_results(),
+                                   0,NULL,&events[0]);
+
+  if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (ray_results)failed."))
+    return false;
+
+  // Wait for the read buffer to finish execution
+  status = clWaitForEvents(1, &events[0]);
+  if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents failed."))
+    return false;
+
+  status = clReleaseEvent(events[0]);
+  if (!this->check_val(status,CL_SUCCESS,"clReleaseEvent failed."))
+    return false;
+
+  status = clReleaseMemObject(cl_manager_->image_buf());
+  if (!this->check_val(status,
+                       CL_SUCCESS,
+                       "clReleaseMemObject failed."))
+    return SDK_FAILURE;
+  else
+    return SDK_SUCCESS;
+}
+
 
 template <class T>
 int ray_bundle_test_driver<T>::build_program()
@@ -408,8 +531,58 @@ int ray_bundle_test_driver<T>::cleanup_bundle_test()
   else
     return SDK_SUCCESS;
 }
+template <class T>
+bool ray_bundle_test_driver<T>::setup_norm_data(vcl_string mode, 
+                                                bool use_uniform,
+                                                float mean,
+                                                float sigma)
+{
+  if(!this->init_work_image(mode))
+    return false;
+  if(cl_manager_->setup_work_img_buffer()!=SDK_SUCCESS)
+    return false;
+  if(!cl_manager_->setup_app_density(use_uniform, mean, sigma))
+    return false;
+  if(cl_manager_->setup_app_density_buffer()!=SDK_SUCCESS)
+    return false;
+  return true;
+}
+template <class T>
+int ray_bundle_test_driver<T>::set_norm_args()
+{
+  cl_int status = SDK_SUCCESS;
+  status = clSetKernelArg(cl_manager_->kernel(), 0, 
+                          sizeof(cl_mem), (void *)&cl_manager_->image_buf());  
 
+  if (!this->check_val(status,
+                       CL_SUCCESS,
+                       "clSetKernelArg failed. (image array)"))
+    return SDK_FAILURE;
 
+  status = clSetKernelArg(cl_manager_->kernel(), 1, 
+                          sizeof(cl_mem), (void *)&cl_manager_->app_density());  
+  
+  if (!this->check_val(status,
+                       CL_SUCCESS,
+                       "clSetKernelArg failed. (remote surface appearance)"))
+    return SDK_FAILURE;
+  return SDK_SUCCESS;
+
+}
+template <class T>
+bool ray_bundle_test_driver<T>::clean_norm_data(){
+  if(!cl_manager_->clean_work_image())
+    return false;
+#if 0/* done in execute function */
+  if(cl_manager_->clean_work_img_buffer()!=SDK_SUCCESS)
+    return false;
+#endif
+  if(!cl_manager_->clean_app_density())
+    return false;
+  if(cl_manager_->clean_app_density_buffer()!=SDK_SUCCESS)
+    return false;
+  return true;
+}
 template <class T>
 ray_bundle_test_driver<T>::~ray_bundle_test_driver()
 {

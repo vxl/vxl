@@ -78,11 +78,12 @@ class boxm_ray_trace_manager : public bocl_manager<boxm_ray_trace_manager<T_data
   cl_mem& data_buf() {return input_data_buf_;}
   cl_mem& ray_origin_buf() {return ray_origin_buf_;}
   cl_mem& camera_buf() {return camera_buf_;}
+  cl_mem& image_buf() {return work_image_buf_;}
   cl_mem& imgdims_buf() {return imgdims_buf_;}
   cl_mem& n_levels_buf() {return nlevels_buf_;}
   cl_mem& roi_buf(){return roidims_buf_;}
   cl_mem& global_bbox_buf(){return global_bbox_buf_;}
-
+  cl_mem& app_density(){return app_density_buf_;}
   vcl_size_t cell_array_size() const {return cell_input_.size();}
   vcl_size_t cell_data_array_size() const {return data_input_.size();}
 
@@ -104,6 +105,8 @@ class boxm_ray_trace_manager : public bocl_manager<boxm_ray_trace_manager<T_data
   bool setup_img_bb(vpgl_camera_double_sptr cam, vgl_box_3d<double> const& block_bb, vgl_box_2d<double> &img_bb, unsigned ni,unsigned nj);
 
   void clear_tree_results();
+  void set_ni(unsigned ni){ni_ = ni;}
+  void set_nj(unsigned nj){nj_ = nj;}
   void set_dims(int ni,int nj){ni_=ni;nj_=nj;imgdims_[0]=ni_;imgdims_[1]=nj_;imgdims_[2]=0;imgdims_[3]=0;}
 
   void clear_ray_results();
@@ -156,6 +159,11 @@ class boxm_ray_trace_manager : public bocl_manager<boxm_ray_trace_manager<T_data
   int setup_image_cam_buffers();
   int clean_image_cam_buffers();
 
+  // The appearance of remote surfaces can be uniform or a Gaussian
+  bool setup_app_density(bool use_uniform=true, float mean = 0.0f, float sigma = 0.0f);
+  bool clean_app_density();
+  int setup_app_density_buffer();
+  int clean_app_density_buffer();
 
   int create_kernel(vcl_string const& name);
   int release_kernel();
@@ -200,6 +208,7 @@ class boxm_ray_trace_manager : public bocl_manager<boxm_ray_trace_manager<T_data
   cl_uint * roidims_;
   cl_uint * numlevels_;
   cl_float * global_bbox_;
+  cl_float * app_density_;
   cl_mem   input_cell_buf_;
   cl_mem   input_data_buf_;
   cl_mem   work_image_buf_;
@@ -209,6 +218,7 @@ class boxm_ray_trace_manager : public bocl_manager<boxm_ray_trace_manager<T_data
   cl_mem   roidims_buf_;
   cl_mem   global_bbox_buf_;
   cl_mem   nlevels_buf_;
+  cl_mem   app_density_buf_;
   cl_image_format inputformat;
 
 };
