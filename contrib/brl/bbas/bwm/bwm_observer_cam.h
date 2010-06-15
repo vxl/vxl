@@ -178,6 +178,8 @@ class bwm_observer_cam : public bwm_observer_vgui
                              vpgl_camera<double>* cam,
                              vcl_vector<vgl_polygon<double> > &poly_2d_list);
 
+  void create_boxm_scene();
+
  protected:
 
   vpgl_camera<double> *camera_;

@@ -23,6 +23,8 @@
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_point_3d.h>
+#include <vgl/xio/vgl_xio_point_3d.h>
+#include <vgl/xio/vgl_xio_vector_3d.h>
 #include <vgl/vgl_homg_plane_3d.h>
 #include <vgl/algo/vgl_convex_hull_2d.h>
 #include <vpgl/algo/vpgl_ray.h>
@@ -37,8 +39,12 @@
 #include <vsol/vsol_line_2d.h>
 
 #include <vgui/vgui_dialog.h>
+#include <vgui/vgui_dialog_extensions.h>
 #include <vgui/vgui_projection_inspector.h>
 #include <bgui/bgui_vsol_soview2D.h>
+
+#include <boxm/boxm_apm_traits.h>
+#include <vsl/vsl_basic_xml_element.h>
 
 bool bwm_observer_cam::geo_position(double u, double v,
                                     double& x, double& y, double& z)
@@ -1500,5 +1506,152 @@ void bwm_observer_cam::project_meshes(vcl_vector<vcl_string> paths,
         poly_2d_list.push_back(poly2d);
       }
     }
+  }
+}
+
+void bwm_observer_cam::create_boxm_scene()
+{
+  vgui_soview2D* obj =  bwm_observer_img::get_selected_object(POLYGON_TYPE);
+  if (obj) {
+    // find the mesh containing this polygon?????
+    unsigned face_id;
+    bwm_observable_sptr mesh = find_object(obj->get_id(), face_id);
+    vgl_box_3d<double> bb = mesh->bounding_box();
+    vgl_point_3d<double> min = bb.min_point();
+    double x_dim = bb.width();
+    double y_dim = bb.height();
+    double z_dim = bb.depth();
+
+    double lx=min.x(), ly=min.y(), lz=min.z();
+    bgeo_lvcs lvcs(ly, lx, lz,bgeo_lvcs::wgs84, bgeo_lvcs::DEG, bgeo_lvcs::METERS);
+    double local_x, local_y, local_z;
+    lvcs.global_to_local(lx+x_dim,ly+y_dim,lz+z_dim,bgeo_lvcs::wgs84,local_x, local_y, local_z);
+
+    // create the dialog
+    vgui_dialog_extensions dialog("Enter the World Parameters");
+    vcl_string ext, file, empty="";
+    dialog.file ("File Path", ext, file);
+  
+    // appearence model
+    vcl_vector<vcl_string> app_models;
+    for (int i=0; i < int(BOXM_APM_UNKNOWN); i++)
+      app_models.push_back(boxm_apm_types::app_model_strings[i]);
+  
+    dialog.line_break();
+    int app_model_num;
+    dialog.choice("Appearence Model",app_models,app_model_num);
+    dialog.line_break();
+
+    // multi-bin?
+    int multi_bin=0;
+    dialog.choice("Multiple Bins", "false","true",multi_bin);
+    dialog.line_break();
+
+    // LVCS
+    dialog.message("LVCS from the box ");
+    dialog.field("lon:", lx);
+    dialog.field("lat:", ly);
+    dialog.field("elev:", lz);
+    dialog.line_break();
+
+    dialog.message("Dimensions of the World ");
+    dialog.field("X:", local_x);
+    dialog.field("Y:", local_y);
+    dialog.field("Z:", local_z);
+    dialog.line_break();
+
+    // Local origin
+    double x=0, y=0, z=0;
+    dialog.message("Local Origin ");
+    dialog.field("X:", x);
+    dialog.field("Y:", y);
+    dialog.field("Z:", z);
+    dialog.line_break();
+
+    //number of blocks
+    double bx=1, by=1, bz=1;
+    dialog.message("Number of Blocks ");
+    dialog.field("X:", bx);
+    dialog.field("Y:", by);
+    dialog.field("Z:", bz);
+    dialog.line_break();
+
+    // scene path
+    vcl_string path;
+    dialog.field("Scene Path:", path);
+
+    // block prefix
+    vcl_string prefix;
+    dialog.field("Block Prefix:", prefix);
+
+    int tree_max=1, tree_init=1;
+    dialog.message("Tree Levels ");
+    dialog.field("Max:", tree_max);
+    dialog.field("Init:", tree_init);
+    dialog.line_break();
+
+    int load_all_blocks=0;
+    dialog.choice("Load All Blocks", "false","true",load_all_blocks);
+
+    int save_internal_nodes=0;
+    dialog.choice("Save Internal Nodes", "false","true",save_internal_nodes);
+
+    int save_platform_independent=0;
+    dialog.choice("save_platform_independent", "false","true",save_platform_independent);
+
+    if (!dialog.ask())
+      return;
+ 
+    ////////// Write the XML file
+    vcl_ofstream os(file.c_str());
+    vsl_basic_xml_element scene_elm("boxm_scene");
+    scene_elm.x_write_open(os);
+
+    vsl_basic_xml_element app_model("appearence_model");
+    app_model.add_attribute("type", app_models[app_model_num]);
+    app_model.x_write(os);
+
+    vsl_basic_xml_element bin("multi_bin");
+    bin.add_attribute("value", multi_bin);
+    bin.x_write(os);
+
+    vsl_basic_xml_element save_nodes("save_internal_nodes");
+    save_nodes.add_attribute("value", save_internal_nodes);
+    save_nodes.x_write(os);
+
+    vsl_basic_xml_element sp("save_platform_independent");
+    sp.add_attribute("value", save_platform_independent);
+    sp.x_write(os);
+
+    vsl_basic_xml_element load_blocks("load_all_blocks");
+    load_blocks.add_attribute("value", load_all_blocks);
+    load_blocks.x_write(os);
+
+    lvcs.x_write(os, "lvcs");
+
+    // convert the world dimensions to local coordinate system (meters)
+    x_write(os, vgl_point_3d<double>(x,y,z), "local_origin");
+
+    // compute the block dimensions from the world dimensions
+    double xx=local_x/bx, yy=local_y/by, zz=local_z/bz;
+    x_write(os, vgl_vector_3d<double>(xx,yy,zz), "block_dimensions"); // dimensions of matrix of blocks
+
+    vsl_basic_xml_element blocks("blocks");
+    blocks.add_attribute("x_dimension", bx);
+    blocks.add_attribute("y_dimension", by);
+    blocks.add_attribute("z_dimension", bz);
+    blocks.x_write(os);
+
+    vsl_basic_xml_element paths("scene_paths");
+    paths.add_attribute("path", path);
+    paths.add_attribute("block_prefix", prefix);
+    paths.x_write(os);
+
+    vsl_basic_xml_element levels("octree_level");
+    levels.add_attribute("max", tree_max);
+    levels.add_attribute("max", tree_init);
+    levels.x_write(os);
+    scene_elm.x_write_close(os);
+    os.close();
   }
 }

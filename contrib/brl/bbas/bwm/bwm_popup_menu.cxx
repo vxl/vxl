@@ -233,6 +233,11 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
     mesh_submenu.add("Scan Regions",
                      new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::scan_regions));
 
+    mesh_submenu.separator();
+
+    mesh_submenu.add("Create BOXM scene from mesh",
+                     new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::create_boxm_scene));
+
     if (tab_->type_name().compare("bwm_tableau_rat_cam") == 0) {
       bwm_tableau_rat_cam* rat_cam_tab = static_cast<bwm_tableau_rat_cam* > (tab_.as_pointer());
       mesh_submenu.separator();
