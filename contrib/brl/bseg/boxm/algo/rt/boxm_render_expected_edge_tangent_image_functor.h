@@ -35,9 +35,9 @@ class boxm_render_expected_edge_tangent_image_functor
                                                   unsigned int /*ni*/=0, unsigned /*nj*/=0,
                                                   bool scene_read_only=false,
                                                   bool is_aux=true)
-  : expected_(expected), num_obs_(expected.ni(),expected.nj()), cam_(cam), residual(threshold)
+  : expected_(expected), num_obs_(expected.ni(),expected.nj()), cam_(cam), residual(1.0)
   {
-    expected_.fill(-1);
+    expected_.fill(1.0);
     num_obs_.fill(0);
     scene_read_only_=scene_read_only;
     is_aux_=is_aux;
@@ -50,7 +50,13 @@ class boxm_render_expected_edge_tangent_image_functor
                         T_aux /*aux_val*/)
   {
     //vcl_cout<< cell_value.residual_<<' ';
-    if (cell_value.num_obs_>2 && cell_value.residual_<residual && cell_value.num_obs_>num_obs_(i,j))
+    if (cell_value.residual_<residual) {
+      if (expected_(i,j) > cell_value.residual_)
+        expected_(i,j) = cell_value.residual_;
+      //expected_(i,j,1)=residual;
+      //expected_(i,j,2)=residual;
+    }
+   /* if (cell_value.num_obs_>2 && cell_value.residual_<residual && cell_value.num_obs_>num_obs_(i,j))
     {
       num_obs_(i,j)=cell_value.num_obs_;
       double u1,v1,u2,v2;
@@ -70,7 +76,7 @@ class boxm_render_expected_edge_tangent_image_functor
         expected_(i,j,1)=float(v1+v2)/2;
         expected_(i,j,2)=float(angle_0_360(vcl_atan2(v2-v1,u2-u1)));
       }
-    }
+    }*/
     return true;
   }
 

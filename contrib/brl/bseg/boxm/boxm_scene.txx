@@ -501,7 +501,7 @@ bool boxm_scene<T>::parse_xml_string(vcl_string xml, boxm_scene_parser& parser)
   app_model_ = boxm_apm_types::str_to_enum(parser.app_model().data());
   multi_bin_ = parser.multi_bin();
   pinit_=parser.p_init();
-    load_all_blocks_ = parser.load_all_blocks();
+  load_all_blocks_ = parser.load_all_blocks();
 
   return true;
 }

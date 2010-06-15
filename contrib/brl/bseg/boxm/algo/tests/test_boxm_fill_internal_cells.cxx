@@ -56,7 +56,7 @@ static void test_boxm_fill_internal_cells()
   boxm_scene<tree_type> *scene= new boxm_scene<tree_type>(lvcs, origin, block_dim, world_dim,true);
   vcl_string scene_path=".";
   scene->set_paths(scene_path, "in_block");
-  scene->set_appearance_model(FLOAT);
+  scene->set_appearance_model(BOXM_FLOAT);
   scene->clean_scene();
 
   boxm_block_iterator<tree_type >  iter =scene->iterator();

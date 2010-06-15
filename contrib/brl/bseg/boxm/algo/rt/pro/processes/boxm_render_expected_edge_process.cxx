@@ -13,7 +13,6 @@
 
 #include <boxm/boxm_scene_base.h>
 #include <boxm/boxm_scene.h>
-//#include <boxm/algo/sp/boxm_render_image.h>
 #include <boxm/algo/rt/boxm_render_expected_edge_image_functor.h>
 #include <boxm/algo/rt/boxm_render_expected_edge_tangent_image_functor.h>
 #include <boxm/boxm_apm_traits.h>
@@ -126,7 +125,7 @@ bool boxm_render_expected_edge_process(bprb_func_process& pro)
   }
 
   if (scene_ptr->appearence_model() == BOXM_EDGE_LINE) {
-    vil_image_view<float > expected(ni,nj,3);
+    vil_image_view<float > expected(ni,nj,1);
     vil_image_view<float> mask(ni,nj);
     if (!scene_ptr->multi_bin())
     {
@@ -138,7 +137,7 @@ bool boxm_render_expected_edge_process(bprb_func_process& pro)
       }
       boxm_render_edge_tangent_image_rt<short, boxm_inf_line_sample<float> >(*scene, camera, expected, n_normal,num_updates, threshold);
 
-      vil_image_view<float > *edge_image=new  vil_image_view<float >(ni,nj,3);
+      vil_image_view<float > *edge_image=new  vil_image_view<float >(ni,nj,1);
       *edge_image=expected;
 
       unsigned j = 0;

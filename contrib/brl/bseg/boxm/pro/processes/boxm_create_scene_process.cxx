@@ -108,7 +108,7 @@ bool boxm_create_scene_process(bprb_func_process& pro)
     }
 #endif
   }
-    else if (scene_ptr->appearence_model() == FLOAT) {
+  else if (scene_ptr->appearence_model() == BOXM_FLOAT) {
       if (!scene_ptr->multi_bin())
       {
         typedef boct_tree<short,float> tree_type;

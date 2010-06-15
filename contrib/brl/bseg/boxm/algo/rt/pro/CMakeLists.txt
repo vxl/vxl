@@ -1,6 +1,6 @@
 # boxm's Process Library
 
-# bprb depends on expat and bvxm_prodepends on bprb primarily
+# bprb depends on expat and boxm_pro depends on bprb primarily
 INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
 IF(EXPAT_FOUND)
   INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro )
