@@ -7,8 +7,9 @@ test_single_thread_read_bandwidth(__global uint * len, __global float4* input_ar
                                   __local float* local_mem)
 {
   int gid=get_global_id(0);
-  int lid=get_local_id(0);
 
+  int lid=get_local_id(0);
+  int globalsize=get_global_size(0);
   int worksize=get_local_size(0);
   bool flag=true;
   float4 temp;
@@ -24,63 +25,7 @@ test_single_thread_read_bandwidth(__global uint * len, __global float4* input_ar
   }
 }
 
-#ifdef USEIMAGE
-const sampler_t RowSampler = CLK_NORMALIZED_COORDS_FALSE | CLK_ADDRESS_CLAMP ;
 
-__kernel
-void
-test_single_thread_read_bandwidth_image(__constant uint * len, __read_only image2d_t input_array,
-                                        __global float* result_array, __global int * result_flag,
-                                        __local float* local_mem)
-{
-  int gid=get_global_id(0);
-  int lid=get_local_id(0);
-  uint w=get_image_width(input_array);
-  int worksize=get_local_size(0);
-  bool flag=true;
-  float4 temp;
-  if (lid==0)
-  {
-    int2 pos;
-    for (int i=0;i<worksize;i++)
-    {
-      pos.y=(gid+i)/w;
-      pos.x=(gid+i)%w;
-      temp=read_imagef(input_array,RowSampler,pos);
-      flag=flag && temp.x==(float)i &&  temp.y==0.0 && temp.z==0.0 && temp.w==0;
-    }
-    if (flag)
-      result_array[gid]=(float)worksize;
-  }
-}
-
-__kernel
-void
-test_workgroup_coalesced_read_bandwidth_image(__constant uint * len, __read_only image2d_t input_array,
-                                              __global float* result_array, __global int * result_flag,
-                                              __local float* local_mem)
-{
-  int gid=get_global_id(0);
-  int lid=get_local_id(0);
-
-  int worksize=get_local_size(0);
-  int globalsize=get_global_size(0);
-  bool flag=true;
-  uint w=get_image_width(input_array);
-  int2 pos;
-  pos.y=gid/w;
-  pos.x=gid%w;
-
-  float4 temp;
-  temp=read_imagef(input_array,RowSampler,pos);
-  flag=flag && temp.x==(float)lid && temp.y==0.0 && temp.z==0.0 && temp.w==0;
-  if (lid==0)
-  {
-    if (flag)
-      result_array[gid]=worksize;
-  }
-}
-#endif
 __kernel
 void
 test_workgroup_uncoalesced_read_bandwidth(__constant uint * len, __global float4* input_array,
@@ -196,3 +141,60 @@ test_workgroup_coalesced_read_bandwidth_local_memory(__constant uint * len, __gl
       result_array[gid]=worksize;
   }
 }
+#ifdef USEIMAGE
+const sampler_t RowSampler = CLK_NORMALIZED_COORDS_FALSE | CLK_ADDRESS_CLAMP ;
+
+__kernel
+void
+test_single_thread_read_bandwidth_image(__constant uint * len, __read_only image2d_t input_array,
+                                        __global float* result_array, __global int * result_flag,
+                                        __local float* local_mem)
+{
+  int gid=get_global_id(0);
+  int lid=get_local_id(0);
+  uint w=get_image_width(input_array);
+  int worksize=get_local_size(0);
+  bool flag=true;
+  float4 temp;
+  if (lid==0)
+  {
+    int2 pos;
+    for (int i=0;i<worksize;i++)
+    {
+      pos.y=(gid+i)/w;
+      pos.x=(gid+i)%w;
+      temp=read_imagef(input_array,RowSampler,pos);
+      flag=flag && temp.x==(float)i &&  temp.y==0.0 && temp.z==0.0 && temp.w==0;
+    }
+    if (flag)
+      result_array[gid]=(float)worksize;
+  }
+}
+
+__kernel
+void
+test_workgroup_coalesced_read_bandwidth_image(__constant uint * len, __read_only image2d_t input_array,
+                                              __global float* result_array, __global int * result_flag,
+                                              __local float* local_mem)
+{
+  int gid=get_global_id(0);
+  int lid=get_local_id(0);
+
+  int worksize=get_local_size(0);
+  int globalsize=get_global_size(0);
+  bool flag=true;
+  uint w=get_image_width(input_array);
+  int2 pos;
+  pos.y=gid/w;
+  pos.x=gid%w;
+
+  float4 temp;
+  temp=read_imagef(input_array,RowSampler,pos);
+  flag=flag && temp.x==(float)lid && temp.y==0.0 && temp.z==0.0 && temp.w==0;
+  if (lid==0)
+  {
+    if (flag)
+      result_array[gid]=worksize;
+  }
+}
+#endif
