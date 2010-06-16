@@ -68,9 +68,7 @@ int load_data(__global int4*    cells,
             found = true;
           }
         }
-
         if(!found&&j>0){
-
           /* bundle has only one column */
           if(i==0&&nbi==1){
             tptr = indx - nbi;
@@ -81,7 +79,6 @@ int load_data(__global int4*    cells,
               found = true;
             }
           }
-
           /* more than one column and upper right neighbor */
           if(!found&&i==0){
             tptr = indx - nbi + 1;
@@ -159,7 +156,8 @@ int load_data(__global int4*    cells,
           /* data not in chache already */
           /* get tree cell corresponding to exit point */
           loca = loc_code(exit_pt, n_levels-1);
-          int cell_ptr = traverse_force(cells, root_ptr, root_code, loca, &loca);
+		  int g_count=0;
+          int cell_ptr = traverse_force(cells, root_ptr, root_code, loca, &loca,g_count);
           /* loca now contains the loc_code of the found cell */
           if(cell_ptr<0) /* traverse failed */
             return (int)0;
@@ -192,6 +190,105 @@ int load_data(__global int4*    cells,
 
   return 1;   
 } 
+
+int load_data_using_loc_codes(__local uchar*    ray_bundle_array, /* bundle pointer array */
+							  __local short4*   cached_loc_codes)
+							  // __local float16*  cached_data)
+{
+	uchar nbi = (uchar)get_local_size(0);
+	uchar nbj = (uchar)get_local_size(1);
+	uchar llid = (uchar)(get_local_id(0) + nbi*get_local_id(1));
+
+	// clear the cache
+	//serialized with thread 0 doing all the work
+	if(llid==0){
+		for(uchar j = 0; j<nbj; ++j)
+			for(uchar i = 0; i<nbi; ++i){
+				uchar indx = i + nbi*j;
+
+				if(cached_loc_codes[indx].x>-1)
+				{
+					//ray_bundle_array[indx]=(uchar)indx;
+					/* load data */
+					uchar org_ptr = 0;
+					uchar tptr = indx;
+
+					bool found = false;
+					/* j = 0 */
+					if(j==0){
+						if(i>0)
+						{
+							tptr = indx-1;
+							org_ptr = ray_bundle_array[tptr];
+							//if(!any(convert_int4(abs_diff(cached_loc_codes[tptr],cached_loc_codes[indx])))){
+							if(cached_loc_codes[tptr].x==cached_loc_codes[indx].x &&
+								cached_loc_codes[tptr].y==cached_loc_codes[indx].y &&
+								cached_loc_codes[tptr].z==cached_loc_codes[indx].z &&
+								cached_loc_codes[tptr].w==cached_loc_codes[indx].w ){
+									ray_bundle_array[indx]=org_ptr;
+									found = true;
+							}
+						}
+					}
+					if(!found&&j>0){
+						/* bundle has only one column */
+						// above neighbor everybody has it for j>0
+						tptr = indx - nbi;
+						org_ptr = ray_bundle_array[tptr];
+						if(cached_loc_codes[tptr].x==cached_loc_codes[indx].x &&
+							cached_loc_codes[tptr].y==cached_loc_codes[indx].y &&
+							cached_loc_codes[tptr].z==cached_loc_codes[indx].z &&
+							cached_loc_codes[tptr].w==cached_loc_codes[indx].w ){
+								ray_bundle_array[indx]=org_ptr;
+								found = true;
+						}
+						/* more than one column and upper right neighbor */
+						if(!found&&i<(nbi-1)&&nbi>1){
+							tptr = indx - nbi + 1;
+							org_ptr = ray_bundle_array[tptr];
+							if(cached_loc_codes[tptr].x==cached_loc_codes[indx].x &&
+								cached_loc_codes[tptr].y==cached_loc_codes[indx].y &&
+								cached_loc_codes[tptr].z==cached_loc_codes[indx].z &&
+								cached_loc_codes[tptr].w==cached_loc_codes[indx].w ){
+									ray_bundle_array[indx]=org_ptr;
+									found = true;
+							}
+						}
+
+						// left neighbor is goof for i>0 and j>0
+						if(!found&&i>0){
+							tptr = indx - nbi - 1;
+							org_ptr = ray_bundle_array[tptr];
+							if(cached_loc_codes[tptr].x==cached_loc_codes[indx].x &&
+								cached_loc_codes[tptr].y==cached_loc_codes[indx].y &&
+								cached_loc_codes[tptr].z==cached_loc_codes[indx].z &&
+								cached_loc_codes[tptr].w==cached_loc_codes[indx].w ){
+									ray_bundle_array[indx]=org_ptr;
+									found = true;
+							}
+						}
+						// left neighbor is goof for i>0
+						if(!found&&i>0){
+							tptr = indx -  1;
+							org_ptr = ray_bundle_array[tptr];
+							if(cached_loc_codes[tptr].x==cached_loc_codes[indx].x &&
+								cached_loc_codes[tptr].y==cached_loc_codes[indx].y &&
+								cached_loc_codes[tptr].z==cached_loc_codes[indx].z &&
+								cached_loc_codes[tptr].w==cached_loc_codes[indx].w ){
+									ray_bundle_array[indx]=org_ptr;
+									found = true;
+							}
+						}
+					}
+				}
+			}
+	}
+
+	barrier(CLK_LOCAL_MEM_FENCE); 
+
+	return 1;   
+} 
+
 
 /* 
  * Function for updating states and pointers for load_data_mutable 
@@ -392,7 +489,8 @@ int load_data_mutable(__global int4*    cells,
           /* data not in chache already */
           /* get tree cell corresponding to exit point */
           loca = loc_code(exit_pt, n_levels-1);
-          int cell_ptr = traverse_force(cells, root_ptr, root_code, loca, &loca);
+		  int g_count=0;
+          int cell_ptr = traverse_force(cells, root_ptr, root_code, loca, &loca,g_count);
           /* loca now contains the loc_code of the found cell */
           if(cell_ptr<0) /* traverse failed */
             return (int)0;
@@ -436,31 +534,49 @@ int load_data_mutable(__global int4*    cells,
  * are processed after two even rows are processed.
  *
  */
-void map_work_space_2d(int local_id0, int local_id1, 
-                       int group_id0, int group_id1,
-                       int* mapped_id0,
+
+void map_work_space_2d(int* mapped_id0,
                        int* mapped_id1)
 {
+  unsigned lid0 = get_local_id(0);
+  unsigned lid1 = get_local_id(1);
+  int group_id0 = get_group_id(0), group_id1 = get_group_id(1);
+
   /* map the group id to permuted 2d coordinates */
   int ls0 = get_local_size(0), ls1 = get_local_size(1);
-  int ngi = (get_global_size(0))/ls0, ngj = (get_global_size(0))/ls1;
+  int ngi = (get_global_size(0))/ls0, ngj = (get_global_size(1))/ls1;
   /* 1-dimensional group index */
   int g_1d = group_id0+ngi*group_id1;
 
   /* offset is 1 if the 1-d group index is past the halfway point */
-  int offset = (g_1d>=(ngi*ngj)/2) ? 1 : 0;
+  int offset0 = 0;
+
+  int offset1 = 0;
+  
+  if(g_1d>=(ngi*ngj)/4)
+  {
+	  offset0=1;
+	  if(g_1d>=(ngi*ngj)/2)
+	  {
+		  offset0=0;
+		  offset1=1;
+		  if(g_1d>=3*(ngi*ngj)/4)
+		  {
+			offset0=1;
+		  }
+	  }
+  }
 
   /* step by 2 in group column index - add offset for odd indices after 1/2
      the groups have been processed*/
-  int mi = 2*(group_id0%2)+ offset;
+  int mi = (group_id0 <ngi/2)? 2*(group_id0):2*(group_id0-ngi/2);
+  int mj = 4*(group_id1%(ngj/4))+2*(group_id0/(ngi/2));
 
-  /* step by 2 in group row index - then fill in odd indices that were
-     skipped */
-  int mj = 2*(group_id0/2)+ group_id1%2;
-
+  mi=mi+offset0;
+  mj=mj+offset1;
   /* map the individual bundle coordinates */
-  (*mapped_id0) = mi*ls0 + local_id0;
-  (*mapped_id1) = mj*ls1 + local_id1;
+  (*mapped_id0) = mi*ls0 + lid0;
+  (*mapped_id1) = mj*ls1 + lid1;
 }
 /*
  *  Determine initial ray bundle entry points for the entire tree bounding box
