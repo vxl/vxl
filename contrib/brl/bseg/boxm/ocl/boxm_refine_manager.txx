@@ -54,6 +54,7 @@ bool boxm_refine_manager<T>::init(int* cells, unsigned numcells, unsigned tree_m
   (*data_max_size_) = data_max_size; 
   (*prob_thresh_) = prob_thresh;
   (*max_level_) = max_level;
+  return true;
 }
 
 
