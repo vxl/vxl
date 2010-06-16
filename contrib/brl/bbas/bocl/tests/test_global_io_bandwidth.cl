@@ -197,4 +197,5 @@ test_workgroup_coalesced_read_bandwidth_image(__constant uint * len, __read_only
       result_array[gid]=worksize;
   }
 }
+
 #endif

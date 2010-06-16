@@ -1531,12 +1531,12 @@ void bwm_observer_cam::create_boxm_scene()
     vgui_dialog_extensions dialog("Enter the World Parameters");
     vcl_string ext, file, empty="";
     dialog.file ("File Path", ext, file);
-  
+
     // appearence model
     vcl_vector<vcl_string> app_models;
     for (int i=0; i < int(BOXM_APM_UNKNOWN); i++)
       app_models.push_back(boxm_apm_types::app_model_strings[i]);
-  
+
     dialog.line_break();
     int app_model_num;
     dialog.choice("Appearence Model",app_models,app_model_num);
@@ -1601,7 +1601,7 @@ void bwm_observer_cam::create_boxm_scene()
 
     if (!dialog.ask())
       return;
- 
+
     ////////// Write the XML file
     vcl_ofstream os(file.c_str());
     vsl_basic_xml_element scene_elm("boxm_scene");
