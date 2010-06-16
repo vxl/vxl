@@ -52,11 +52,11 @@ ray_trace_main(__global int * nlevels,
   unsigned j   = gid-i*img_bb_y;
   if (i<(*roi).x || i>(*roi).y || j<(*roi).z || j> (*roi).w)
     return;
-
+  float4 data_return=inp[gid];
   // using local variables
   float4 ray_d = backproject(i,j,cam[0],cam[1],cam[2],(*local_origin));
 
-  float4 data_return=inp[gid];
+  //float4 data_return=inp[j*get_global_size(0)+i];
 
   // bounding box of root
   cell_bounding_box(root, root.w+1, &cell_min, &cell_max);
@@ -71,11 +71,13 @@ ray_trace_main(__global int * nlevels,
 
   short4 entry_loc_code = loc_code(entry_pt, n_levels-1);
   short4 curr_loc_code;
+  int global_count=0;
+  int data_count=0;
   //// traverse to leaf cell that contains the entry point
-  int curr_cell_ptr = traverse_force(cells, root_ptr, root, entry_loc_code,&curr_loc_code);
+  int curr_cell_ptr = traverse_force(cells, root_ptr, root, entry_loc_code,&curr_loc_code,&global_count);
   // this cell is the first pierced by the ray
   // follow the ray through the cells until no neighbors are found
-  int count=0;
+
   while (true)
   {
     //// current cell bounding box
@@ -93,7 +95,7 @@ ray_trace_main(__global int * nlevels,
         break;
       entry_loc_code = loc_code(entry_pt, n_levels-1);
       //// traverse to leaf cell that contains the entry point
-      curr_cell_ptr = traverse(cells, root_ptr, root, entry_loc_code,&curr_loc_code);
+      curr_cell_ptr = traverse(cells, root_ptr, root, entry_loc_code,&curr_loc_code,&global_count);
       if (curr_cell_ptr<0)
          break;
 
@@ -115,15 +117,17 @@ ray_trace_main(__global int * nlevels,
       break;
     // distance must be multiplied by the dimension of the bounding box
     float d = (tfar-tnear)*(*bbox).w;
+
+	//float16 data=cell_data[data_ptr];
     // no function pointers in OpenCL (spec 8.6a)
     // instead, user must provide source with a function named "step_cell"
-    step_cell(cell_data,  data_ptr, d, &data_return);
-
+    step_cell(cell_data,data_ptr, d, &data_return);
+	global_count+=(int)4;
     //////////////////////////////////////////////////////////
 
     //// exit point
     exit_pt=ray_o + tfar*ray_d;
-    exit_pt.w=0.5;
+    exit_pt.w=0.5f;
 
     // if the ray pierces the volume surface then terminate the ray
     if (any(exit_pt>=(float4)1.0f)|| any(exit_pt<=(float4)0.0f))
@@ -139,7 +143,7 @@ ray_trace_main(__global int * nlevels,
 
     short4 neighbor_code;
 
-    int neighbor_ptr=neighbor(cells, curr_cell_ptr, curr_loc_code,exit_face, n_levels, &neighbor_code);
+    int neighbor_ptr=neighbor(cells, curr_cell_ptr, curr_loc_code,exit_face, n_levels, &neighbor_code,&global_count);
     // if no neighbor then terminate ray
     if (neighbor_ptr<0)
       break;
@@ -147,7 +151,7 @@ ray_trace_main(__global int * nlevels,
     // traverse from the neighbor to the cell having the
     // required exit location code
     short4 exit_loc_code = loc_code(exit_pt, n_levels-1);
-    curr_cell_ptr = traverse_force(cells, neighbor_ptr, neighbor_code,exit_loc_code, &curr_loc_code);
+    curr_cell_ptr = traverse_force(cells, neighbor_ptr, neighbor_code,exit_loc_code, &curr_loc_code,&global_count);
     // the current cell (cells[curr_cell_ptr])is the cell reached by
     // the neighbor's traverse
     // ray continues: make the current entry point the previous exit point
@@ -157,6 +161,9 @@ ray_trace_main(__global int * nlevels,
   // should have a cleanup functor for expected image
   // also it is not necessary to have a full float4 as the
   // output type a single scalar float array is sufficient
+#if 0
+  data_return.w+=(float)global_count;
+#endif
   inp[gid] = (float4)(data_return);//local_img[lid];//
 
   //end ray trace
@@ -175,7 +182,7 @@ ray_trace_main(__global int * nlevels,
                __global uint4   *roidims,   // dimensions of the roi per block
                __global float4  *global_bbox, // dimensions of the current bbox in global coordinate
                __global float4  *inp,         // inp image
-               __local float16  *cam,         // local storage of cam
+               __local  float16  *cam,         // local storage of cam
                __local float4   *local_origin,// store the origin locally
                __local float4   *bbox,        // local storgae of bbox
                __local uint4    *roi)
@@ -244,7 +251,9 @@ ray_trace_main(__global int * nlevels,
   int curr_cell_ptr = traverse_force(cells, root_ptr, root, entry_loc_code,&curr_loc_code);
   //this cell is the first pierced by the ray
   //follow the ray through the cells until no neighbors are found
-  while (true)
+  //int curr_cell_ptr=0;
+  //curr_loc_code=root;
+  while (1)
   {
     ////current cell bounding box
     cell_bounding_box(curr_loc_code, n_levels, &cell_min, &cell_max);
@@ -255,7 +264,7 @@ ray_trace_main(__global int * nlevels,
     if ( fabs(tfar-tnear)<cellsize/10)
     {
       entry_pt=entry_pt+ray_d*cellsize/2;
-      entry_pt.w=0.5;
+      entry_pt.w=0.5f;
 
       if (any(entry_pt>=(float4)1.0f)|| any(entry_pt<=(float4)0.0f))
         break;
@@ -286,15 +295,13 @@ ray_trace_main(__global int * nlevels,
     float d = (tfar-tnear)*(*bbox).w;
     // no function pointers in OpenCL (spec 8.6a)
     // instead, user must provide source with a function named "step_cell"
-    //float4 data_return=local_img[lid];
     step_cell(cell_data,  data_ptr, d, &data_return);
-    //local_img[lid]=data_return;
-
+   
     //////////////////////////////////////////////////////////
 
     //// exit point
     exit_pt=ray_o + tfar*ray_d;
-    exit_pt.w=0.5;
+    exit_pt.w=0.5f;
 
     //if the ray pierces the volume surface then terminate the ray
     if (any(exit_pt>=(float4)1.0f)|| any(exit_pt<=(float4)0.0f))
@@ -302,7 +309,7 @@ ray_trace_main(__global int * nlevels,
 
     //location code of exit point
     //the exit face mask
-    short4 exit_face= cell_exit_face_safe(exit_pt, cell_min, cell_max);
+    short4 exit_face= cell_exit_face_safe(exit_pt,ray_d, cell_min, cell_max);
     if (exit_face.x<0)//exit face not defined
       break;
 
@@ -331,7 +338,7 @@ ray_trace_main(__global int * nlevels,
 
   //data_return.z=count;
   inp[gid] = (float4)(data_return);//local_img[lid];//
-
+  
   // end ray trace
 }
 
