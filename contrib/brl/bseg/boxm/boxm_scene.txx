@@ -423,8 +423,8 @@ void x_write(vcl_ostream &os, boxm_scene<T>& scene, vcl_string name)
   save_platform_independent.x_write(os);
 
   vsl_basic_xml_element load_all_blocks(LOAD_ALL_BLOCKS_TAG);
-  save_platform_independent.add_attribute("value", scene.load_all_blocks()? 1 : 0);
-  save_platform_independent.x_write(os);
+  load_all_blocks.add_attribute("value", scene.load_all_blocks()? 1 : 0);
+  load_all_blocks.x_write(os);
 
   bgeo_lvcs lvcs=scene.lvcs();
   lvcs.x_write(os, LVCS_TAG);
