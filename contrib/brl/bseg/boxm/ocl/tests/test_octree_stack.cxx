@@ -61,6 +61,10 @@ static void test_traverse_stack(octree_test_driver<T> & driver)
                  << results[i+1] << ' '
                  << results[i+2] << ' '
                  << results[i+3] << ")\n";
+	else
+	{
+		vcl_cout<<"Time spent "<<driver.gpu_time()/(10000.0*8)<<" ms"<<vcl_endl;
+	}
   }
   driver.release_kernel();
 }
@@ -116,6 +120,11 @@ static void test_traverse_to_level_stack(octree_test_driver<T>& driver)
                  << results[i+1] << ' '
                  << results[i+2] << ' '
                  << results[i+3] << ")\n";
+		else
+	{
+		vcl_cout<<"Time spent "<<driver.gpu_time()/(10000.0*8)<<" ms"<<vcl_endl;
+	}
+
   }
   driver.release_kernel();
 }
@@ -159,6 +168,11 @@ static void test_traverse_force_stack(octree_test_driver<T>& driver)
                  << results[i+1] << ' '
                  << results[i+2] << ' '
                  << results[i+3] << ")\n";
+		else
+	{
+		vcl_cout<<"Time spent "<<driver.gpu_time()/(10000.0)<<" ms"<<vcl_endl;
+	}
+
   }
   driver.release_kernel();
 }
@@ -208,6 +222,12 @@ static void test_common_ancestor_stack(octree_test_driver<T>& driver)
                  << results[i+1] << ' '
                  << results[i+2] << ' '
                  << results[i+3] << ")\n";
+			else
+	{
+		vcl_cout<<"Time spent "<<driver.gpu_time()/(10000.0*8)<<" ms"<<vcl_endl;
+	}
+
+
   }
   driver.release_kernel();
 }
@@ -265,65 +285,16 @@ static void test_neighbor_stack(octree_test_driver<T>& driver)
                  << results[i+1] << ' '
                  << results[i+2] << ' '
                  << results[i+3] << ")\n";
+			else
+	{
+		vcl_cout<<"Time spent "<<driver.gpu_time()/(10000.0*6)<<" ms"<<vcl_endl;
+	}
+
+
   }
   driver.release_kernel();
 }
 
-template <class T>
-static void test_ray_trace(octree_test_driver<T>& driver)
-{
-  if (driver.create_kernel("test_ray_trace")!=SDK_SUCCESS) {
-    TEST("Create Kernel test_ray_trace", false, true);
-    return;
-  }
-  if (driver.run_ray_trace_test_kernels()!=SDK_SUCCESS) {
-    TEST("Run Kernel test_ray_trace", false, true);
-    return;
-  }
-
-  cl_int* results = driver.tree_results();
-  vcl_size_t size = 48*4;
-  if (size>driver.tree_result_size_bytes())
-    return;
-  if (results)
-  {
-    int test[] = {0,0,3,0, 250,250,250,250,
-                  0,0,2,0, 250,250,250,250,
-                  0,0,1,0, 250,250,250,250,
-                  0,0,0,0, 250,250,250,250,
-                  0,0,0,0, 250,250,250,250,
-                  1,0,0,0, 250,250,250,250,
-                  2,0,0,0, 250,250,250,250,
-                  3,0,0,0, 250,250,250,250,
-                  0,0,0,0, 250,250,250,250,
-                  0,1,0,0, 250,250,250,250,
-                  0,2,0,0, 250,250,250,250,
-                  0,3,0,0, 250,250,250,250,
-                  3,3,3,0, 433,433,433,433,
-                  2,2,2,0, 433,433,433,433,
-                  1,1,1,0, 433,433,433,433,
-                  0,0,0,0, 433,433,433,433,
-                  0,3,3,0, 433,433,433,433,
-                  1,2,2,0, 433,433,433,433,
-                  2,1,1,0, 433,433,433,433,
-                  3,0,0,0, 433,433,433,433,
-                  3,0,3,0, 433,433,433,433,
-                  2,1,2,0, 433,433,433,433,
-                  1,2,1,0, 433,433,433,433,
-                  0,3,0,0, 433,433,433,433};
-    bool good = true;
-    for (vcl_size_t i= 0; i<size; i++)
-      good = good && results[i]==test[i];
-    TEST("test_ray_trace_data", good, true);
-    if (!good)
-      for (vcl_size_t i= 0; i<size; i+=4)
-        vcl_cout << "ray_trace_result(" << results[i] << ' '
-                 << results[i+1] << ' '
-                 << results[i+2] << ' '
-                 << results[i+3] << ")\n";
-  }
-  driver.release_kernel();
-}
 
 template <class T>
 void tree_tests_stack(octree_test_driver<T>& test_driver)
