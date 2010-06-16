@@ -22,10 +22,10 @@ class boxm_refine_manager : public bocl_manager<boxm_refine_manager<T_data> >
 
     boxm_refine_manager() : 
     cells_(0), numcells_(0), tree_max_size_(0),
-    cell_data_(0), numdata_(0),
+    cell_data_(0), numdata_(0), data_max_size_(0),
     tree_results_(0), tree_results_size_(0),
     data_results_(0), data_results_size_(0),
-    prob_thresh_(0),
+    prob_thresh_(0), max_level_(0),
     program_(0) {}
     ~boxm_refine_manager() {  
       if (program_)
@@ -38,8 +38,10 @@ class boxm_refine_manager : public bocl_manager<boxm_refine_manager<T_data> >
     //(cl_float*)data_, 
     //(cl_int*) tree_max_size_
     //(cl_int*) numLevels_
-    bool init(tree_type* tree, float prob_thresh);
-    bool init(int* cells, unsigned numcells, float* data, unsigned data_size, unsigned tree_max_size, float prob_thresh);
+    bool init(tree_type* tree, float prob_thresh, unsigned max_level);
+    bool init(int* cells, unsigned numcells, unsigned tree_max_size,
+              float* data, unsigned data_size, unsigned data_max_size,
+              float prob_thresh, unsigned max_level);
 
     //: run refinement
     //bool run_scene();
@@ -86,17 +88,17 @@ class boxm_refine_manager : public bocl_manager<boxm_refine_manager<T_data> >
     //array of data pointed to by tree
     cl_float* cell_data_;
     cl_uint* numdata_;
+    cl_uint* data_max_size_;
     
-    //probability threshold
+    //probability threshold and max tree level
     cl_float* prob_thresh_;
+    cl_uint* max_level_;
 
     //output array of tree cells and new size
     cl_int* tree_results_;
     cl_uint* tree_results_size_;
     cl_float* data_results_;
     cl_uint* data_results_size_;
-    cl_float* output_results_;
-    cl_float* output_input_;
     
     //pointer to cl memory on GPU
     cl_mem   cell_buf_;
@@ -104,9 +106,17 @@ class boxm_refine_manager : public bocl_manager<boxm_refine_manager<T_data> >
     cl_mem   cell_max_size_buf_;
     cl_mem   data_buf_;
     cl_mem   data_size_buf_;
+    cl_mem   data_max_size_buf_;
     cl_mem   prob_thresh_buf_;
+    cl_mem   max_level_buf_;
+    
+    
+    ///////////////////////////////////
+    //TODO DELETE ME
+    cl_float* output_results_;
+    cl_float* output_input_;
     cl_mem   output_buf_;
-
+    //////////////////////////////////
 
 };
 

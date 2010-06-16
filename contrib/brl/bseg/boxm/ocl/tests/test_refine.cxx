@@ -48,11 +48,19 @@ bool test_refine_simple_scene()
   // Set up test tree
   boct_tree<short,float>* tree = open_cl_test_data::tree<float>();
   float prob_thresh = .3;
+  unsigned max_level = 3;
   
   // refine the scene using the opencl refine manager
   boxm_refine_manager<float>* mgr = boxm_refine_manager<float>::instance();
-  mgr->init(tree, prob_thresh);
-  mgr->run_tree();
+  if(!mgr->init(tree, prob_thresh, max_level)) {
+    TEST("Error : boxm_refine : mgr->init() failed\n", false, true);
+    return false;
+  }
+  if(!mgr->run_tree()) {
+    TEST("Error : boxm_refine : mgr->run_tree() failed\n", false, true);
+    return false;
+  }
+  
   
   //extract the output scene from the manager
   int* tree_array = mgr->get_tree();
@@ -66,9 +74,6 @@ bool test_refine_simple_scene()
     TEST("ERROR : boxm_refine : mgr->get_tree_size() returned NULL\n", false, true);
     return false;
   }
-  
-  
-  boxm_ocl_utils<float>::print_tree_array(tree_array, tree_size, data);
   
   //make sure the array is in the right order
   vcl_vector<vnl_vector_fixed<int,4> > tree_vector;

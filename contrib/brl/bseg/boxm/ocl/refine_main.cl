@@ -1,7 +1,7 @@
-/////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
 // STACK IMPLEMENTATION METHODS:
 // the necessary stack size will be about 8*num_levels
-/////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
 typedef struct {
   int data[1000];
   int top;
@@ -18,12 +18,12 @@ int pop(ocl_stack *stack) {
   return buff;
 }
   
-//////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////
 // Swaps 8 blocks of data from index A to index B
 // makes sure to switch A and B's parents to point to the new A and B locations
 // makes sure to switch A and B's children to point to the new A and B locations
 // makes sure to update the location of nodes in the STACK
-//////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////
 void swap_eight(__global int4 *tree, int a, int b)
 {
   //store data at B in some buffer
@@ -93,7 +93,7 @@ void reformat_tree(__global int4 *tree, __global float* output)
       child_ptr = curr_index+1;
     }  
 
-    //TODO this should be done all in one go...
+    //push children on stack (in reverse order)
     for(int i=7; i>=0; i--){
       push(&open, child_ptr+i);
     }
@@ -109,21 +109,24 @@ void reformat_tree(__global int4 *tree, __global float* output)
 ///////////////////////////////////////////
 __kernel
 void
-refine_main(__global int4     *tree,          //tree structure
-            __global unsigned *tree_size,
-            __global unsigned *tree_max_size,
+refine_main(__global int4     *tree,           //tree structure
+            __global unsigned *tree_size,      //current size of tree buffer
+            __global unsigned *tree_max_size,  //max size for tree buffer
             __global float16  *data,           //tree data
-            __global unsigned *data_size,
-            __global float    *prob_thresh,
-            __global float      *output)    //surface probability threshold for refinement
+            __global unsigned *data_size,      //current size of data buffer
+            __global unsigned *data_max_size,  //max size for data buffer
+            __global float    *prob_thresh,    //refinement threshold
+            __global unsigned *max_level,      //maximum number of levels for tree
+            __global float      *output)       //TODO delete me later
 {
   unsigned gid = get_global_id(0);
   unsigned lid = get_local_id(0);
- 
   
   //Threshold thing for now
   float max_alpha_int = (-1)*log(1.0 - (*prob_thresh));
   unsigned tSize = (*tree_size);
+  unsigned dSize = (*data_size);
+  unsigned maxLevel = (*max_level);
  
   if(gid==0) { //only do it on one core
     
@@ -176,15 +179,20 @@ refine_main(__global int4     *tree,          //tree structure
         //IF alpha value triggers split, tack on 8 children to end of tree array
         //make sure the PARENT cell for each of the new children points to i
         //ALSO make sure currLevel is less than MAX_LEVELS
-        if(alpha_int > max_alpha_int)  {
+        if(alpha_int > max_alpha_int && currLevel < maxLevel )  {
+          //new alpha for the child nodes
+          float new_alpha = max_alpha_int / side_len;
           //node I points to tSize - the place where it's children will be tacked on
           tree[currNode].y = tSize;
           for(int j=0; j<8; j++){
             tree[tSize+j].x = currNode;   //PARENT POINTS TO NODE THAT SPLIT
             tree[tSize+j].y = -1;         //HAS NO CHILDREN
-            tree[tSize+j].z = 0;          //NO DATA FOR NOW
+            tree[tSize+j].z = dSize+j;    //point to next piece of data
+            data[dSize+j].s0 = new_alpha; //initialize new piece of data's alpha
+                                          //TODO initialize new piece of data's other vals
           }
           tSize += 8; //update tree size 
+          dSize += 8; //update data buffer size
         }
         ////////////////////////////////////////////
         //END LEAF SPECIFIC CODE
@@ -199,7 +207,9 @@ refine_main(__global int4     *tree,          //tree structure
         currLevel++;
       }
     }
+    //tree and data size output
     tree_size[0] = tSize;
+    data_size[0] = dSize;
      
     
     /////////////////////////////////////////////////////////////////
