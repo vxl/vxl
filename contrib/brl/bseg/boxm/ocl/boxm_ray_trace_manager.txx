@@ -171,6 +171,8 @@ bool boxm_ray_trace_manager<T>::setup_tree()
   // data as vnl_vector_fixed<float, 2>
 
   unsigned cells_size=cell_input_.size();
+  vcl_cout<<"Size of tree "<<cells_size*16/(10^6)/(1000000) << "MBytes  "
+		  <<"  Size of data "<<data_input_.size()*16*4/(1000000) << "MBytes  "<<vcl_endl;
   if (cells_size>this->image2d_max_width_)
     cells_size=RoundUp(cells_size,this->image2d_max_width_);
   cells_ = NULL;
@@ -1125,7 +1127,10 @@ bool boxm_ray_trace_manager<T>::run()
   //clean_ray_origin_buffer();
   //clean_camera_input_buffer();
 
-  vcl_cout << "Running block "<<total_gpu_time/1000<<'s'<<vcl_endl
+  vcl_cout << "Timing Analysis "<<vcl_endl
+		   << "==============="<<vcl_endl
+		   <<"openCL Running time "<<gpu_time_<<" ms"<<vcl_endl
+		   << "Running block "<<total_gpu_time/1000<<'s'<<vcl_endl
            << "total block loading time = " << total_load_time << 's' << vcl_endl
            << "total block processing time = " << total_raytrace_time << 's' << vcl_endl
            << "total gpu preprocess time = " << total_gpu_load_time << 's' << vcl_endl;
@@ -1230,7 +1235,7 @@ bool boxm_ray_trace_manager<T>::run_block()
   }
 
   // set up a command queue
-  command_queue_ = clCreateCommandQueue(this->context(),this->devices()[0],0,&status);
+  command_queue_ = clCreateCommandQueue(this->context(),this->devices()[0],CL_QUEUE_PROFILING_ENABLE ,&status);
   if (!this->check_val(status,CL_SUCCESS,"Falied in command queue creation" + error_to_string(status)))
     return false;
 
@@ -1244,8 +1249,11 @@ bool boxm_ray_trace_manager<T>::run_block()
   if (!this->check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status)))
     return SDK_FAILURE;
   cl_ulong tstart,tend;
-  status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
   status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
+  status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
+  gpu_time_+= (double)1.0e-6 * (tend - tstart); // convert nanoseconds to milliseconds 
+
+
 
   return SDK_SUCCESS;
 }
