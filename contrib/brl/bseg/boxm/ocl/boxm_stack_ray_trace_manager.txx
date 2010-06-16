@@ -988,8 +988,10 @@ bool boxm_stack_ray_trace_manager<T>::run()
   clean_work_img_buffer();
   clean_ray_origin_buffer();
   clean_camera_input_buffer();
-
-  vcl_cout << "Running block (GPU)" << total_gpu_time/1000 << 's' << vcl_endl
+  vcl_cout << "Timing Analysis "<<vcl_endl
+		   << "==============="<<vcl_endl
+		   <<"openCL Running time "<<gpu_time_<<" ms"<<vcl_endl
+		   << "Running block "<<total_gpu_time/1000<<'s'<<vcl_endl
            << "total block loading time = " << total_load_time << 's' << vcl_endl
            << "total block processing time = " << total_raytrace_time << 's' << vcl_endl;
   return true;
@@ -1085,24 +1087,24 @@ bool boxm_stack_ray_trace_manager<T>::run_block()
   }
 
   // set up a command queue
-  cl_command_queue command_queue = clCreateCommandQueue(this->context(),this->devices()[0],0,&status);
+  command_queue_ = clCreateCommandQueue(this->context(),this->devices()[0],CL_QUEUE_PROFILING_ENABLE,&status);
   if (!this->check_val(status,CL_SUCCESS,"Falied in command queue creation" + error_to_string(status)))
     return false;
 
   cl_event ceEvent;
-  status = clEnqueueNDRangeKernel(command_queue,this->kernel_, 1,NULL,globalThreads,localThreads,0,NULL,&ceEvent);
+  status = clEnqueueNDRangeKernel(command_queue_,this->kernel_, 1,NULL,globalThreads,localThreads,0,NULL,&ceEvent);
 
   if (!this->check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed. "+error_to_string(status)))
     return SDK_FAILURE;
 
-  status = clFinish(command_queue);
+  status = clFinish(command_queue_);
   if (!this->check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status)))
     return SDK_FAILURE;
   cl_ulong tstart,tend;
-  status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
   status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
+  status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
+  gpu_time_+= (double)1.0e-6 * (tend - tstart); // convert nanoseconds to milliseconds 
 
- 
 
   return SDK_SUCCESS;
 }

@@ -70,8 +70,9 @@ ray_stack_trace_main(__global int * nlevels,
   //// traverse to leaf cell that contains the entry point
   int stack_ptr=0;
   stack[lid]=0;
+  int global_count=0;
 
-  stack_ptr=traverse_force_stack(cells,  root, entry_loc_code,&curr_loc_code,stack,lid,workgrpsize,stack_ptr);
+  stack_ptr=traverse_force_stack(cells,  root, entry_loc_code,&curr_loc_code,stack,lid,workgrpsize,stack_ptr,&global_count);
   float4 data_return=inp[gid];
 
   // this cell is the first pierced by the ray
@@ -93,7 +94,7 @@ ray_stack_trace_main(__global int * nlevels,
       entry_loc_code = loc_code(entry_pt, n_levels-1);
       stack_ptr=0;
       //// traverse to leaf cell that contains the entry point
-      stack_ptr = traverse_stack(cells,  root, entry_loc_code,&curr_loc_code, lid,workgrpsize,stack,stack_ptr);
+      stack_ptr = traverse_stack(cells,  root, entry_loc_code,&curr_loc_code, lid,workgrpsize,stack,stack_ptr,&global_count);
       if (stack_ptr<0)
         break;
 
@@ -121,6 +122,7 @@ ray_stack_trace_main(__global int * nlevels,
     // instead, user must provide source with a function named "step_cell"
     //float4 data_return=local_img[lid];
     step_cell(cell_data,  data_ptr, d, &data_return);
+	global_count+=4;
     //local_img[lid]=data_return;
 
     //////////////////////////////////////////////////////////
@@ -135,14 +137,14 @@ ray_stack_trace_main(__global int * nlevels,
 
     // location code of exit point
     // the exit face mask
-    short4 exit_face= cell_exit_face(exit_pt, cell_min, cell_max);
+    short4 exit_face= cell_exit_face_safe(exit_pt,ray_d, cell_min, cell_max);
     if (exit_face.x<0) // exit face not defined
       break;
 
     // find the neighboring cell at the exit face
 
     short4 neighbor_code;
-    stack_ptr=neighbor_stack(cells,  curr_loc_code,exit_face, n_levels, &neighbor_code,stack,lid,workgrpsize,stack_ptr);
+    stack_ptr=neighbor_stack(cells,  curr_loc_code,exit_face, n_levels, &neighbor_code,stack,lid,workgrpsize,stack_ptr,&global_count);
 
     // if no neighbor then terminate ray
     if (stack_ptr<0)
@@ -152,7 +154,7 @@ ray_stack_trace_main(__global int * nlevels,
     // required exit location code
     short4 exit_loc_code = loc_code(exit_pt, n_levels-1);
 
-    stack_ptr = traverse_force_stack(cells,  neighbor_code,exit_loc_code, &curr_loc_code,stack, lid,workgrpsize,stack_ptr);
+    stack_ptr = traverse_force_stack(cells,  neighbor_code,exit_loc_code, &curr_loc_code,stack, lid,workgrpsize,stack_ptr,&global_count);
 
     // the current cell is the cell reached by the neighbor's traverse
 
@@ -163,8 +165,7 @@ ray_stack_trace_main(__global int * nlevels,
   // should have a cleanup functor for expected image
   // also it is not necessary to have a full float4 as the
   // output type a single scalar float array is sufficient
-  //data_return.z=count;
-  //data_return.z=workgrpsize;
+ // data_return.w+=global_count;
   inp[gid] = (float4)(data_return);//local_img[lid];//
 
   // end ray trace

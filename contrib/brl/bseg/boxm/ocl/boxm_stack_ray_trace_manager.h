@@ -38,7 +38,7 @@ class boxm_stack_ray_trace_manager : public bocl_manager<boxm_stack_ray_trace_ma
     //tree_(0),
     cam_(0),
     svd_UtWV_(0),imgdims_(0),roidims_(0),global_bbox_(0),
-    ni_(0),nj_(0), nlevels_(0)
+    ni_(0),nj_(0), nlevels_(0),gpu_time_(0)
   {}
 
   ~boxm_stack_ray_trace_manager();
@@ -167,6 +167,7 @@ class boxm_stack_ray_trace_manager : public bocl_manager<boxm_stack_ray_trace_ma
   vcl_vector<vnl_vector_fixed<float, 16>  > data_input_;
   vnl_vector_fixed<float, 4>  ray_origin_input_;
   vbl_array_2d<vnl_vector_fixed<float, 3> > ray_dir_input_;
+  double gpu_time_;
   unsigned int i0_;
   unsigned int j0_;
   unsigned ni_;
