@@ -34,5 +34,14 @@ class boxm_ocl_utils
                     int parent_ptr,
                     int& child_ptr);
 
+  static void print_tree_array(int* tree, unsigned numcells, float* data);
+  
+  
+  static void* alloc_aligned(unsigned n, unsigned unit_size, unsigned block_size);
+  
+  static void free_aligned(void* ptr);
+  
+  //static void print_tree_data(float* data, unsigned numdata);
+
 };
 #endif

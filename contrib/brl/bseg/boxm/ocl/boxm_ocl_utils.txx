@@ -3,6 +3,7 @@
 #define boxm_ocl_utils_txx_
 
 #include "boxm_ocl_utils.h"
+#include <malloc.h>
 
 template<class T>
 void boxm_ocl_utils<T>::pack_cell_data(boct_tree_cell<short, boxm_sample<BOXM_APM_SIMPLE_GREY> >* cell_ptr, vnl_vector_fixed<float, 16> &data)
@@ -107,6 +108,49 @@ void boxm_ocl_utils<T>::split(vcl_vector<vnl_vector_fixed<int, 4> >& cell_array,
     cell[2]=-1;
     cell_array.push_back(cell);
   }
+}
+
+
+//Print tree array
+template<class T>
+void boxm_ocl_utils<T>::print_tree_array(int* tree, unsigned numcells, float* data)
+{
+  unsigned cell_size = 4;
+  for (unsigned i = 0, j = 0; i<numcells*cell_size; i+=cell_size, j++) {
+    int parent = tree[i];
+    int child = tree[i+1];
+    
+    //find alpha value - remember data size is 16
+    int dataIndex = tree[i+2];
+    float alpha = data[dataIndex*16];
+    vcl_cout<<"[index: "<<j<<"] [parent: "<<parent<<"] [child: "<<child<<"] [alpha: "<<alpha<<"] [dataIndex: "<<dataIndex<<"]";
+    vcl_cout<<vcl_endl;
+  }
+}
+ 
+template<class T>
+void* boxm_ocl_utils<T>::alloc_aligned(unsigned n, unsigned unit_size, unsigned block_size)
+{
+#if defined (_WIN32)
+  return _aligned_malloc(n * unit_size, block_size);
+#elif defined(__APPLE__)
+  return malloc(n * unit_size, block_size);
+#else
+  return memalign(block_size, n * unit_size);
+#endif
+}
+
+template<class T>
+void boxm_ocl_utils<T>::free_aligned(void* ptr)
+{
+  if(ptr) {
+#ifdef _WIN32
+    _aligned_free(ptr);
+#else
+    free(ptr);
+#endif
+    ptr = NULL;
+  }  
 }
 
 #define BOXM_OCL_UTILS_INSTANTIATE(T) \
