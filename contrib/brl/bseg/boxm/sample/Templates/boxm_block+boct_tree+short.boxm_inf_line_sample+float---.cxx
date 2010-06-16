@@ -4,5 +4,3 @@
 
 typedef boct_tree<short,boxm_inf_line_sample<float> > tree;
 BOXM_BLOCK_INSTANTIATE(tree);
-
-
