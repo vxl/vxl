@@ -142,7 +142,7 @@ bool bvpl_scene_kernel_operator_process(bprb_func_process& pro)
     boxm_scene<tree_type> *scene_out =
       new boxm_scene<tree_type>(scene_in->lvcs(), scene_in->origin(), scene_in->block_dim(), scene_in->world_dim());
     scene_out->set_paths(output_path, "response_scene");
-    scene_out->set_appearance_model(FLOAT);
+    scene_out->set_appearance_model(BOXM_FLOAT);
     scene_out->write_scene("/float_response_scene.xml");
 
     if (functor_name == "edge_algebraic_mean") {
