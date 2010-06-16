@@ -53,10 +53,9 @@ class boxm_render_expected_edge_tangent_image_functor
     if (cell_value.residual_<residual) {
       if (expected_(i,j) > cell_value.residual_)
         expected_(i,j) = cell_value.residual_;
-      //expected_(i,j,1)=residual;
-      //expected_(i,j,2)=residual;
     }
-   /* if (cell_value.num_obs_>2 && cell_value.residual_<residual && cell_value.num_obs_>num_obs_(i,j))
+#if 0
+    if (cell_value.num_obs_>2 && cell_value.residual_<residual && cell_value.num_obs_>num_obs_(i,j))
     {
       num_obs_(i,j)=cell_value.num_obs_;
       double u1,v1,u2,v2;
@@ -76,7 +75,8 @@ class boxm_render_expected_edge_tangent_image_functor
         expected_(i,j,1)=float(v1+v2)/2;
         expected_(i,j,2)=float(angle_0_360(vcl_atan2(v2-v1,u2-u1)));
       }
-    }*/
+    }
+#endif // 0
     return true;
   }
 
