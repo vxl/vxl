@@ -12,7 +12,8 @@ IF(OPENCL_FOUND)
       bocl_global_memory_bandwidth_manager.h bocl_global_memory_bandwidth_manager.cxx
       bocl_utils.h	bocl_utils.cxx
   )
-  AUX_SOURCE_DIRECTORY(Templates bocl_sources)
+  #this templates directory, unlike the others, starts with a lower case 't'...
+  AUX_SOURCE_DIRECTORY(templates bocl_sources)
   ADD_LIBRARY(bocl ${bocl_sources} )
 
   TARGET_LINK_LIBRARIES(bocl vnl vnl_algo vbl_io vpgl vgl vil vbl vul ${OPENCL_LIBRARIES})

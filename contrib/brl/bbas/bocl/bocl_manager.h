@@ -20,6 +20,7 @@
 #include <vcl_string.h>
 #include "bocl_cl.h"
 #include <vcl_cstddef.h>
+#include <malloc.h>
 #define SDK_SUCCESS 0
 #define SDK_FAILURE 1
 //#define GROUP_SIZE 64

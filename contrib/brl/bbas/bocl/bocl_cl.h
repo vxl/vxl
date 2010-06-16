@@ -21,6 +21,10 @@
 
 #include <cl.h>
 
+#else
+
+#include <opencl.h>
+
 #endif
 
 #endif
