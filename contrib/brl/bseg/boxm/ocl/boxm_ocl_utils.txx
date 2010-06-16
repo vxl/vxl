@@ -14,12 +14,9 @@ void boxm_ocl_utils<T>::pack_cell_data(boct_tree_cell<short, boxm_sample<BOXM_AP
   data[0]=cell_data.alpha; // alpha
 
   boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::apm_datatype appear=cell_data.appearance_;
-
-  data[1]=1; // num of components
-  data[2]=3; // size of component
-  data[3]=appear.color();
-  data[4]=appear.sigma();
-  data[5]=appear.gauss_weight();
+  data[1]=appear.color();
+  data[2]=appear.sigma();
+  data[3]=appear.gauss_weight();
 }
 
 template<class T>
@@ -29,16 +26,27 @@ void boxm_ocl_utils<T>::pack_cell_data(boct_tree_cell<short, boxm_sample<BOXM_AP
   boxm_sample<BOXM_APM_MOG_GREY> cell_data = cell_ptr->data();
   data[0]=cell_data.alpha; // alpha
   boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype appear=cell_data.appearance_;
+  //: assuming 3 components
+  data[1]=appear.distribution(0).mean();
+  data[2]=appear.distribution(0).var();
+  data[3]=appear.weight(0);
+  data[4]=appear.distribution(0).num_observations;
+  data[5]=appear.distribution(1).mean();
+  data[6]=appear.distribution(1).var();
+  data[7]=appear.weight(1);
+  data[8]=appear.distribution(1).num_observations;
+  data[9]=appear.distribution(2).mean();
+  data[10]=appear.distribution(2).var();
+  data[11]=appear.weight(2);
+  data[12]=appear.distribution(2).num_observations;
+  data[13]=appear.num_observations;
 
-  data[1]=(float)appear.num_components(); // num of components
-  data[2]=3; // size of component
-  unsigned j=3;
-  for (unsigned i=0;i<data[1];i++)
+ /* for (unsigned i=0;i<data[1];i++)
   {
     data[j]=appear.distribution(i).mean();++j;
     data[j]=appear.distribution(i).var();++j;
     data[j]=appear.weight(i);++j;
-  }
+  }*/
 }
 
 template<class T>
