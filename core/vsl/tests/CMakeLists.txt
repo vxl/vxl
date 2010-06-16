@@ -47,6 +47,8 @@ ADD_TEST(vsl_test_vector_io             ${EXECUTABLE_OUTPUT_PATH}/vsl_test_all t
 # x86, Win2k, MSVC7.1 Release mode - test passes
 # x86, Win2k, MSVC7.1 Debug mode - OS complains that you are messing with the
 #            system dlls.
+# x86_64, Win7, MSVC9.0 Release mode - test passes.
+# x86_64, Win7, MSVC9.0 Debug mode - test passes if you explicitly cancel OS low memory warnings.
 # x86_64, Linux 2.6, gcc 4.0.2, Linux VM doesn't limit the amount of memory -
 #            so the test cannot simulate low memory conditions.
 # x86_64, Linux 2.6, gcc 4.0.2 -fno-exceptions, ulimit -v 2000000, test passes
