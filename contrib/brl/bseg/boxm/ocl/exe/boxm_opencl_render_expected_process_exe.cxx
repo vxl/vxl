@@ -19,6 +19,8 @@ int main(int argc, char ** argv)
   vul_arg<vcl_string> img_outfile("-img", "image filename", "");
   vul_arg<unsigned> ni("-ni", "Width of image", 640);
   vul_arg<unsigned> nj("-nj", "Height of image", 480);
+  vul_arg<unsigned> option("-option", "Option", 0);
+
   vul_arg_parse(argc, argv);
 
   boxm_ocl_register::register_process();
@@ -49,7 +51,13 @@ int main(int argc, char ** argv)
   brdb_value_sptr brdb_nj = new brdb_value_t<unsigned>(nj());
   brdb_value_sptr brdb_black_background = new brdb_value_t<bool>(0);
 
-  good = bprb_batch_process_manager::instance()->init_process("boxmOclRenderExpectedProcess");
+  if(option()==0)
+	  good = bprb_batch_process_manager::instance()->init_process("boxmOclRenderExpectedProcess");
+  if(option()==1)
+	  good = bprb_batch_process_manager::instance()->init_process("boxmOclRayBundleExpectedProcess");
+  if(option()==2)
+	  good = bprb_batch_process_manager::instance()->init_process("boxmOclStackRenderExpectedProcess");
+
   good = good && bprb_batch_process_manager::instance()->set_input_from_db(0, id_scene);
   good = good && bprb_batch_process_manager::instance()->set_input_from_db(1, id_cam);
   good = good && bprb_batch_process_manager::instance()->set_input(2, brdb_ni);
@@ -66,8 +74,5 @@ int main(int argc, char ** argv)
     good = good && bprb_batch_process_manager::instance()->set_input(1, brdb_img_file);
     good = good && bprb_batch_process_manager::instance()->run_process();
   }
-
- int a;
- vcl_cin>>a;
 }
 
