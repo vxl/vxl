@@ -1,7 +1,8 @@
-// This is brl/bseg/boxm/ocl/boxm_stack_ray_trace_manager.txx
+// This is brl/bseg/boxm/ocl/boxm_ocl_utils.txx
 #ifndef boxm_ocl_utils_txx_
 #define boxm_ocl_utils_txx_
-
+//:
+// \file
 #include "boxm_ocl_utils.h"
 #include <malloc.h>
 
@@ -49,7 +50,7 @@ void boxm_ocl_utils<T>::pack_cell_data(boct_tree_cell<short, float> * cell_ptr, 
 }
 
 
-//: Recursive algorithm to take in a tree cell and copy structure and data into two arrays 
+//: Recursive algorithm to take in a tree cell and copy structure and data into two arrays
 template<class T>
 void boxm_ocl_utils<T>::copy_to_arrays(boct_tree_cell<short, T >* cell_ptr,
                vcl_vector<vnl_vector_fixed<int, 4> >& cell_array,
@@ -119,15 +120,15 @@ void boxm_ocl_utils<T>::print_tree_array(int* tree, unsigned numcells, float* da
   for (unsigned i = 0, j = 0; i<numcells*cell_size; i+=cell_size, j++) {
     int parent = tree[i];
     int child = tree[i+1];
-    
+
     //find alpha value - remember data size is 16
     int dataIndex = tree[i+2];
     float alpha = data[dataIndex*16];
-    vcl_cout<<"[index: "<<j<<"] [parent: "<<parent<<"] [child: "<<child<<"] [alpha: "<<alpha<<"] [dataIndex: "<<dataIndex<<"]";
-    vcl_cout<<vcl_endl;
+    vcl_cout<<"[index: "<<j<<"] [parent: "<<parent<<"] [child: "<<child<<"] [alpha: "<<alpha<<"] [dataIndex: "<<dataIndex<<']'
+            <<vcl_endl;
   }
 }
- 
+
 template<class T>
 void* boxm_ocl_utils<T>::alloc_aligned(unsigned n, unsigned unit_size, unsigned block_size)
 {
@@ -143,14 +144,14 @@ void* boxm_ocl_utils<T>::alloc_aligned(unsigned n, unsigned unit_size, unsigned 
 template<class T>
 void boxm_ocl_utils<T>::free_aligned(void* ptr)
 {
-  if(ptr) {
+  if (ptr) {
 #ifdef _WIN32
     _aligned_free(ptr);
 #else
     free(ptr);
 #endif
     ptr = NULL;
-  }  
+  }
 }
 
 #define BOXM_OCL_UTILS_INSTANTIATE(T) \
