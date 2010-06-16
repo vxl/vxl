@@ -23,7 +23,7 @@ octree_test_driver<T>::setup_cl()
   if (device_p) {
     command_queue_ = clCreateCommandQueue(cl_manager_->context(),
                                           device_p[0],
-                                          0,
+                                          CL_QUEUE_PROFILING_ENABLE,
                                           &status);
   }
   else {
@@ -226,7 +226,7 @@ int octree_test_driver<T>::run_stack_tree_test_kernels()
     return SDK_FAILURE;
   }
   //  vcl_cout << "Local memory used: " << usedLocalMemory << '\n';
-
+cl_event ceEvent;
   status = clEnqueueNDRangeKernel(command_queue_,
                                   cl_manager_->kernel(),
                                   1,
@@ -235,7 +235,7 @@ int octree_test_driver<T>::run_stack_tree_test_kernels()
                                   localThreads,
                                   0,
                                   NULL,
-                                  NULL);
+                                  &ceEvent);
   if (!this->check_val(status,
                        CL_SUCCESS,
                        "clEnqueueNDRangeKernel failed."))
@@ -246,6 +246,10 @@ int octree_test_driver<T>::run_stack_tree_test_kernels()
                        CL_SUCCESS,
                        "clFinish failed."))
     return SDK_FAILURE;
+  cl_ulong tstart,tend;
+  status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
+  status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
+  gpu_time_= (double)1.0e-6 * (tend - tstart); // convert nanoseconds to milliseconds 
 
   // Enqueue readBuffers
   status = clEnqueueReadBuffer(command_queue_,
@@ -404,6 +408,7 @@ int octree_test_driver<T>::run_image_tree_test_kernels()
     return SDK_SUCCESS;
 }
 
+
 template <class T>
 int octree_test_driver<T>::run_tree_test_kernels()
 {
@@ -472,6 +477,7 @@ int octree_test_driver<T>::run_tree_test_kernels()
     return SDK_FAILURE;
   }
   //  vcl_cout << "Local memory used: " << usedLocalMemory << '\n';
+  cl_event ceEvent;
 
   status = clEnqueueNDRangeKernel(command_queue_,
                                   cl_manager_->kernel(),
@@ -481,13 +487,154 @@ int octree_test_driver<T>::run_tree_test_kernels()
                                   localThreads,
                                   0,
                                   NULL,
-                                  NULL);
+                                  &  ceEvent);
   if (!this->check_val(status,
                        CL_SUCCESS,
                        "clEnqueueNDRangeKernel failed."))
     return SDK_FAILURE;
 
   status = clFinish(command_queue_);
+  cl_ulong tstart,tend;
+  status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
+  status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
+  gpu_time_= (double)1.0e-6 * (tend - tstart); // convert nanoseconds to milliseconds 
+
+  if (!this->check_val(status,
+                       CL_SUCCESS,
+                       "clFinish failed."))
+    return SDK_FAILURE;
+
+  // Enqueue readBuffers
+  status = clEnqueueReadBuffer(command_queue_,
+                               result_buf,
+                               CL_TRUE,
+                               0,
+                               cl_manager_->tree_result_size()*sizeof(cl_int4),
+                               cl_manager_->tree_results(),
+                               0,
+                               NULL,
+                               &events[0]);
+
+  if (!this->check_val(status,
+                       CL_SUCCESS,
+                       "clEnqueueBuffer (tree_results)failed."))
+    return SDK_FAILURE;
+
+  // Wait for the read buffer to finish execution
+  status = clWaitForEvents(1, &events[0]);
+  if (!this->check_val(status,
+                       CL_SUCCESS,
+                       "clWaitForEvents failed."))
+    return SDK_FAILURE;
+
+  clReleaseEvent(events[0]);
+
+  status = clReleaseMemObject(result_buf);
+  if (!this->check_val(status,
+                       CL_SUCCESS,
+                       "clReleaseMemObject failed."))
+    return SDK_FAILURE;
+  else
+    return SDK_SUCCESS;
+}
+template <class T>
+int octree_test_driver<T>::run_tree_with_local_test_kernels()
+{
+  cl_int   status;
+  cl_event events[2];
+
+  //// clear output array
+  cl_manager_->clear_tree_results();
+
+  cl_mem result_buf = clCreateBuffer(cl_manager_->context(),
+                                     CL_MEM_WRITE_ONLY | CL_MEM_USE_HOST_PTR,
+                                     cl_manager_->tree_result_size() * sizeof(cl_int4),
+                                     cl_manager_->tree_results(),
+                                     &status);
+  if (!this->check_val(status,
+                       CL_SUCCESS,
+                       "clCreateBuffer failed. (tree_results)"))
+    return SDK_FAILURE;
+  else if (this->set_tree_args()!=SDK_SUCCESS)
+    return SDK_FAILURE;
+
+  // the returned array test result
+  status = clSetKernelArg(cl_manager_->kernel(),
+                          2,
+                          sizeof(cl_mem),
+                          (void *)&result_buf);
+  if (!this->check_val(status,
+                       CL_SUCCESS,
+                       "clSetKernelArg failed. (result_buf)"))
+    return SDK_FAILURE;
+  status = clSetKernelArg(cl_manager_->kernel(),
+                          3,
+                          sizeof(cl_int4)*73/*hardcoded for now*/,
+                          0);
+  if (!this->check_val(status,
+                       CL_SUCCESS,
+                       "clSetKernelArg failed. (result_buf)"))
+    return SDK_FAILURE;
+
+  status = clGetKernelWorkGroupInfo(cl_manager_->kernel(),
+                                    cl_manager_->devices()[0],
+                                    CL_KERNEL_LOCAL_MEM_SIZE,
+                                    sizeof(cl_ulong),
+                                    &used_local_memory_,
+                                    NULL);
+
+  if (!this->check_val(status,
+                       CL_SUCCESS,
+                       "clGetKernelWorkGroupInfo CL_KERNEL_LOCAL_MEM_SIZE failed."))
+  {
+    return SDK_FAILURE;
+  }
+
+  status = clGetKernelWorkGroupInfo(cl_manager_->kernel(),
+                                    cl_manager_->devices()[0],
+                                    CL_KERNEL_WORK_GROUP_SIZE,
+                                    sizeof(cl_ulong),
+                                    &kernel_work_group_size_,
+                                    NULL);
+  if (!this->check_val(status,
+                      CL_SUCCESS,
+                      "clGetKernelWorkGroupInfo CL_KERNEL_WORK_GROUP_SIZE, failed."))
+  {
+    return SDK_FAILURE;
+  }
+
+  vcl_size_t globalThreads[]= {cl_manager_->n_ray_groups()*
+                               cl_manager_->group_size()};
+  vcl_size_t localThreads[] = {cl_manager_->group_size()};
+
+  if (used_local_memory_ > cl_manager_->total_local_memory())
+  {
+    vcl_cout << "Unsupported: Insufficient local memory on device.\n";
+    return SDK_FAILURE;
+  }
+  //  vcl_cout << "Local memory used: " << usedLocalMemory << '\n';
+  cl_event ceEvent;
+
+  status = clEnqueueNDRangeKernel(command_queue_,
+                                  cl_manager_->kernel(),
+                                  1,
+                                  NULL,
+                                  globalThreads,
+                                  localThreads,
+                                  0,
+                                  NULL,
+                                  &  ceEvent);
+  if (!this->check_val(status,
+                       CL_SUCCESS,
+                       "clEnqueueNDRangeKernel failed."))
+    return SDK_FAILURE;
+
+  status = clFinish(command_queue_);
+  cl_ulong tstart,tend;
+  status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
+  status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
+  gpu_time_= (double)1.0e-6 * (tend - tstart); // convert nanoseconds to milliseconds 
+
   if (!this->check_val(status,
                        CL_SUCCESS,
                        "clFinish failed."))
@@ -597,6 +744,7 @@ int octree_test_driver<T>::run_ray_trace_test_kernels()
     return SDK_FAILURE;
   }
     status = clGetCommandQueueInfo(command_queue_,CL_QUEUE_CONTEXT,0,NULL,0);
+  cl_event ceEvent;
 
   status = clEnqueueNDRangeKernel(command_queue_,
                                   cl_manager_->kernel(),
@@ -606,7 +754,7 @@ int octree_test_driver<T>::run_ray_trace_test_kernels()
                                   localThreads,
                                   0,
                                   NULL,
-                                  NULL);
+                                  &ceEvent);
 
 
   if (!this->check_val(status,
@@ -615,6 +763,7 @@ int octree_test_driver<T>::run_ray_trace_test_kernels()
     return SDK_FAILURE;
 
   status = clFinish(command_queue_);
+
   if (!this->check_val(status,
                        CL_SUCCESS,
                        "clFinish failed."))

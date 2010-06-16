@@ -27,9 +27,10 @@ class octree_test_driver
   cl_mem input_imgdims_buf_;
   //output results
   cl_mem   tree_test_output_;
+  double gpu_time_;
 
  public:
-  octree_test_driver() { cl_manager_ = boxm_ray_trace_manager<T>::instance(); }
+  octree_test_driver() { cl_manager_ = boxm_ray_trace_manager<T>::instance(); gpu_time_=0.0;}
 
   ~octree_test_driver();
 
@@ -65,7 +66,7 @@ class octree_test_driver
   int run_stack_tree_test_kernels();
   int run_image_tree_test_kernels();
   int run_ray_trace_test_kernels();
-
+  int run_tree_with_local_test_kernels();
   int run_ray_creation_test_kernels();
 
   int build_program(bool useimage=false);
@@ -73,6 +74,8 @@ class octree_test_driver
   int cleanup_tree_test();
 
   int cleanup_ray_test();
+
+  double gpu_time(){return gpu_time_;}
 
   vcl_size_t n_rays() const {return cl_manager_->n_rays();}
 
