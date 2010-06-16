@@ -7,6 +7,7 @@ DECLARE( test_backproject_ray );
 DECLARE( test_expected_image );
 DECLARE( test_ray_bundle );
 DECLARE( test_statistics );
+DECLARE( test_refine );
 
 void register_tests()
 {
@@ -17,6 +18,7 @@ void register_tests()
   REGISTER( test_expected_image );
   REGISTER( test_ray_bundle );
   REGISTER( test_statistics );
+  REGISTER( test_refine );
 }
 
 

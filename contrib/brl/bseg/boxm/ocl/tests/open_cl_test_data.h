@@ -78,8 +78,13 @@ boct_tree<short,T > * open_cl_test_data::tree()
   typename vcl_vector<boct_tree_cell<short, T >* >::iterator lit = tleaves.begin();
   for (; lit!= tleaves.end(); ++lit, ++i)
   {
-    T v((float)1.0*i);
-    (*lit)->set_data(v);
+    if(i==21 || i==41 || i==35) {
+      T v((float)2.0);
+      (*lit)->set_data(v);
+    } else {
+      T v((float)0.1);
+      (*lit)->set_data(v);
+    }
   }
   const vgl_box_3d<double> box(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
   ret_tree->set_bbox(box);
