@@ -3,7 +3,7 @@
 // the necessary stack size will be about 8*num_levels
 /////////////////////////////////////////////////////////////////////
 typedef struct {
-  int data[10000];
+  int data[999];
   int top;
 } ocl_stack;
 void init_ocl_stack(ocl_stack *stack) { stack->top = 0; }
