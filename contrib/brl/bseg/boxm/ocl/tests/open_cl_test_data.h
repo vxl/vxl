@@ -22,6 +22,8 @@ class open_cl_test_data
   template <class T>
   static boct_tree<short, T >* tree();
   template <class T>
+  static boct_tree<short, T >* simple_tree();
+  template <class T>
   static void save_tree(vcl_string const& tree_path);
 
   static void test_rays(vbl_array_2d<vnl_vector_fixed<float, 3> >& ray_origin,
@@ -90,6 +92,42 @@ boct_tree<short,T > * open_cl_test_data::tree()
   ret_tree->set_bbox(box);
   return ret_tree;
 }
+
+//Creates a simple tree with 3 nodes that "ought" to be refined
+template <class T>
+boct_tree<short,T > * open_cl_test_data::simple_tree()
+{
+  short max_level = 4;
+  short init_level = 3;
+  T v((float)0.1);
+  boct_tree<short, T >* ret_tree = 
+    new boct_tree<short, T >(v, max_level, init_level);
+  
+  vcl_vector<boct_tree_cell<short, T >* > tleaves = ret_tree->leaf_cells();
+  vcl_size_t i = 0;
+  typename vcl_vector<boct_tree_cell<short, T >* >::iterator lit = tleaves.begin();
+  for (; lit!= tleaves.end(); ++lit, ++i)
+  {
+    if(i==10 || i==25 || i==40 || i==55) {
+      T v((float)2.0);
+      (*lit)->set_data(v);
+    } else {
+      T v((float)0.1);
+      (*lit)->set_data(v);
+    }
+  }
+  
+  const vgl_box_3d<double> box(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
+  ret_tree->set_bbox(box);
+  vcl_cout<<"Test Tree Stats ---------------------------------------"<<vcl_endl
+          <<"num levels (max) "<<ret_tree->number_levels()<<vcl_endl
+          <<"root level "<<ret_tree->root_level()<<vcl_endl
+          <<"current finest level "<<ret_tree->finest_level()<<vcl_endl
+          <<"-------------------------------------------------------"<<vcl_endl;
+  return ret_tree;
+}
+
+
 
 template <class T>
 void open_cl_test_data::
