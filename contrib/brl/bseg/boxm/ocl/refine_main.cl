@@ -175,24 +175,33 @@ refine_main(__global int4     *tree,           //tree structure
         
         //integrate alpha value
         float alpha_int = alpha * side_len;
+        (*output) = dSize;
 
         //IF alpha value triggers split, tack on 8 children to end of tree array
         //make sure the PARENT cell for each of the new children points to i
         //ALSO make sure currLevel is less than MAX_LEVELS
         if(alpha_int > max_alpha_int && currLevel < maxLevel )  {
           //new alpha for the child nodes
-          float new_alpha = max_alpha_int / side_len;
+          float new_alpha = max_alpha_int / side_len;   
+          
           //node I points to tSize - the place where it's children will be tacked on
           tree[currNode].y = tSize;
           for(int j=0; j<8; j++){
             tree[tSize+j].x = currNode;   //PARENT POINTS TO NODE THAT SPLIT
             tree[tSize+j].y = -1;         //HAS NO CHILDREN
             tree[tSize+j].z = dSize+j;    //point to next piece of data
-            data[dSize+j].s0 = new_alpha; //initialize new piece of data's alpha
-                                          //TODO initialize new piece of data's other vals
+            
+            //copy data to new children, along with new alpha
+            float16 newData = datum;
+            newData.s0 = new_alpha;
+            data[dSize+j] = newData; 
           }
           tSize += 8; //update tree size 
           dSize += 8; //update data buffer size
+        
+          //reset data for curent node
+          float16 zeroDat = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}; 
+          data[dataIndex] =  zeroDat;     
         }
         ////////////////////////////////////////////
         //END LEAF SPECIFIC CODE
