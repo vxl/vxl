@@ -61,10 +61,10 @@ static void test_traverse_stack(octree_test_driver<T> & driver)
                  << results[i+1] << ' '
                  << results[i+2] << ' '
                  << results[i+3] << ")\n";
-	else
-	{
-		vcl_cout<<"Time spent "<<driver.gpu_time()/(10000.0*8)<<" ms"<<vcl_endl;
-	}
+    else
+    {
+      vcl_cout<<"Time spent "<<driver.gpu_time()/(10000.0*8)<<" ms"<<vcl_endl;
+    }
   }
   driver.release_kernel();
 }
@@ -120,11 +120,10 @@ static void test_traverse_to_level_stack(octree_test_driver<T>& driver)
                  << results[i+1] << ' '
                  << results[i+2] << ' '
                  << results[i+3] << ")\n";
-		else
-	{
-		vcl_cout<<"Time spent "<<driver.gpu_time()/(10000.0*8)<<" ms"<<vcl_endl;
-	}
-
+        else
+    {
+      vcl_cout<<"Time spent "<<driver.gpu_time()/(10000.0*8)<<" ms"<<vcl_endl;
+    }
   }
   driver.release_kernel();
 }
@@ -168,11 +167,10 @@ static void test_traverse_force_stack(octree_test_driver<T>& driver)
                  << results[i+1] << ' '
                  << results[i+2] << ' '
                  << results[i+3] << ")\n";
-		else
-	{
-		vcl_cout<<"Time spent "<<driver.gpu_time()/(10000.0)<<" ms"<<vcl_endl;
-	}
-
+        else
+    {
+      vcl_cout<<"Time spent "<<driver.gpu_time()/(10000.0)<<" ms"<<vcl_endl;
+    }
   }
   driver.release_kernel();
 }
@@ -222,12 +220,10 @@ static void test_common_ancestor_stack(octree_test_driver<T>& driver)
                  << results[i+1] << ' '
                  << results[i+2] << ' '
                  << results[i+3] << ")\n";
-			else
-	{
-		vcl_cout<<"Time spent "<<driver.gpu_time()/(10000.0*8)<<" ms"<<vcl_endl;
-	}
-
-
+            else
+    {
+      vcl_cout<<"Time spent "<<driver.gpu_time()/(10000.0*8)<<" ms"<<vcl_endl;
+    }
   }
   driver.release_kernel();
 }
@@ -285,12 +281,10 @@ static void test_neighbor_stack(octree_test_driver<T>& driver)
                  << results[i+1] << ' '
                  << results[i+2] << ' '
                  << results[i+3] << ")\n";
-			else
-	{
-		vcl_cout<<"Time spent "<<driver.gpu_time()/(10000.0*6)<<" ms"<<vcl_endl;
-	}
-
-
+            else
+    {
+      vcl_cout<<"Time spent "<<driver.gpu_time()/(10000.0*6)<<" ms"<<vcl_endl;
+    }
   }
   driver.release_kernel();
 }

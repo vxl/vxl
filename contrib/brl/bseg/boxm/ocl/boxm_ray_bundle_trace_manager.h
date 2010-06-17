@@ -40,7 +40,7 @@ class boxm_ray_bundle_trace_manager : public bocl_manager<boxm_ray_bundle_trace_
     svd_UtWV_(0),imgdims_(0),roidims_(0),global_bbox_(0),
     ni_(0),nj_(0),nlevels_(0), roi_min_i_(0), roi_min_j_(0),
     roi_max_i_(0), roi_max_j_(0),useimage_(false),
-	bni_(0),bnj_(0),wni_(0),wnj_(0),gpu_time_(0.0)
+    bni_(0),bnj_(0),wni_(0),wnj_(0),gpu_time_(0.0)
     {}
 
   ~boxm_ray_bundle_trace_manager();
@@ -227,7 +227,6 @@ class boxm_ray_bundle_trace_manager : public bocl_manager<boxm_ray_bundle_trace_
   cl_mem   global_bbox_buf_;
   cl_mem   nlevels_buf_;
   cl_image_format inputformat;
-
 };
 
 #endif // boxm_ray_bundle_trace_manager_h_

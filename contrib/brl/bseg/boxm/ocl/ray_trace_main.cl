@@ -118,11 +118,11 @@ ray_trace_main(__global int * nlevels,
     // distance must be multiplied by the dimension of the bounding box
     float d = (tfar-tnear)*(*bbox).w;
 
-	//float16 data=cell_data[data_ptr];
+    //float16 data=cell_data[data_ptr];
     // no function pointers in OpenCL (spec 8.6a)
     // instead, user must provide source with a function named "step_cell"
     step_cell(cell_data,data_ptr, d, &data_return);
-	global_count+=(int)4;
+    global_count+=(int)4;
     //////////////////////////////////////////////////////////
 
     //// exit point
@@ -155,7 +155,7 @@ ray_trace_main(__global int * nlevels,
     // the current cell (cells[curr_cell_ptr])is the cell reached by
     // the neighbor's traverse
     // ray continues: make the current entry point the previous exit point
-	entry_pt = exit_pt;
+    entry_pt = exit_pt;
   }
   // note that the following code is application dependent
   // should have a cleanup functor for expected image
@@ -296,7 +296,7 @@ ray_trace_main(__global int * nlevels,
     // no function pointers in OpenCL (spec 8.6a)
     // instead, user must provide source with a function named "step_cell"
     step_cell(cell_data,  data_ptr, d, &data_return);
-   
+
     //////////////////////////////////////////////////////////
 
     //// exit point
@@ -338,7 +338,7 @@ ray_trace_main(__global int * nlevels,
 
   //data_return.z=count;
   inp[gid] = (float4)(data_return);//local_img[lid];//
-  
+
   // end ray trace
 }
 

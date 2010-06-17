@@ -122,7 +122,7 @@ ray_stack_trace_main(__global int * nlevels,
     // instead, user must provide source with a function named "step_cell"
     //float4 data_return=local_img[lid];
     step_cell(cell_data,  data_ptr, d, &data_return);
-	global_count+=4;
+    global_count+=4;
     //local_img[lid]=data_return;
 
     //////////////////////////////////////////////////////////

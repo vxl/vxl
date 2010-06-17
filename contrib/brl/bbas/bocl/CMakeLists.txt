@@ -10,7 +10,7 @@ IF(OPENCL_FOUND)
       bocl_manager.h    bocl_manager.txx
       bocl_cl.h
       bocl_global_memory_bandwidth_manager.h bocl_global_memory_bandwidth_manager.cxx
-      bocl_utils.h	bocl_utils.cxx
+      bocl_utils.h      bocl_utils.cxx
   )
   #this templates directory, unlike the others, starts with a lower case 't'...
   AUX_SOURCE_DIRECTORY(templates bocl_sources)

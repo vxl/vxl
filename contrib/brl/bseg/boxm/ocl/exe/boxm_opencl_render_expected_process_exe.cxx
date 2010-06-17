@@ -51,12 +51,12 @@ int main(int argc, char ** argv)
   brdb_value_sptr brdb_nj = new brdb_value_t<unsigned>(nj());
   brdb_value_sptr brdb_black_background = new brdb_value_t<bool>(0);
 
-  if(option()==0)
-	  good = bprb_batch_process_manager::instance()->init_process("boxmOclRenderExpectedProcess");
-  if(option()==1)
-	  good = bprb_batch_process_manager::instance()->init_process("boxmOclRayBundleExpectedProcess");
-  if(option()==2)
-	  good = bprb_batch_process_manager::instance()->init_process("boxmOclStackRenderExpectedProcess");
+  if (option()==0)
+    good = bprb_batch_process_manager::instance()->init_process("boxmOclRenderExpectedProcess");
+  if (option()==1)
+    good = bprb_batch_process_manager::instance()->init_process("boxmOclRayBundleExpectedProcess");
+  if (option()==2)
+    good = bprb_batch_process_manager::instance()->init_process("boxmOclStackRenderExpectedProcess");
 
   good = good && bprb_batch_process_manager::instance()->set_input_from_db(0, id_scene);
   good = good && bprb_batch_process_manager::instance()->set_input_from_db(1, id_cam);

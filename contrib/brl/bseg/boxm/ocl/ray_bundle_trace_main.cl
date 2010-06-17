@@ -1,26 +1,26 @@
-//  This file contains kernel function for ray tracing a bundle. 
-//  The differene between this kernel and ray_Trace_main.cl is 
+//  This file contains kernel function for ray tracing a bundle.
+//  The differene between this kernel and ray_Trace_main.cl is
 //  that data is copied from the memory for the whole bundle.
 //#pragma OPENCL EXTENSION cl_khr_byte_addressable_store : enable
 #if 0 //// code for ray bundle ray trace for coherent rays
 __kernel
 void
 ray_bundle_trace_main(__global int * nlevels,
-					   __global float4  *origin,      // camera origin
-					   __global float16 *svd_UtVW,    // SVD of inverse of camera matrix
-					   __global int4    *cells,       // tree
-					   __global float16 *cell_data,   // leaf data
-					   __global uint4   *imgdims,     // dimensions of the image
-					   __global uint4   *roidims,     // dimensions of the roi per block
-					   __global float4  *global_bbox, // dimensions of the current bbox in global coordinate
-					   __global float4  *inp,         // inp image
-					   __local float16  *cam,         // local storage of cam
-					   __local float4   *local_origin,// store the origin locally
-					   __local float4   *bbox,        // local storgae of bbox
-					   __local uint4    *roi)//,
-					   //__local uchar    *ray_bundle_array,
-					   //__local short4   *cached_loc_codes,
-					   //__local float2  *cached_data)
+                      __global float4  *origin,      // camera origin
+                      __global float16 *svd_UtVW,    // SVD of inverse of camera matrix
+                      __global int4    *cells,       // tree
+                      __global float16 *cell_data,   // leaf data
+                      __global uint4   *imgdims,     // dimensions of the image
+                      __global uint4   *roidims,     // dimensions of the roi per block
+                      __global float4  *global_bbox, // dimensions of the current bbox in global coordinate
+                      __global float4  *inp,         // inp image
+                      __local float16  *cam,         // local storage of cam
+                      __local float4   *local_origin,// store the origin locally
+                      __local float4   *bbox,        // local storgae of bbox
+                      __local uint4    *roi)//,
+                      //__local uchar    *ray_bundle_array,
+                      //__local short4   *cached_loc_codes,
+                      //__local float2  *cached_data)
 {
   //unsigned ls0  = get_local_size(0);
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
@@ -38,7 +38,6 @@ ray_bundle_trace_main(__global int * nlevels,
     (*roi)=(*roidims);
   }
   barrier(CLK_LOCAL_MEM_FENCE);
-  
 
  // //local_img[lid]=inp[gid];
   float tnear = 0.0f, tfar =0.0f;
@@ -113,40 +112,41 @@ ray_bundle_trace_main(__global int * nlevels,
     }
     if (!hit)
       break;
-	//cached_loc_codes[llid]=curr_loc_code;
-	//ray_bundle_array[llid]=llid;
+    //cached_loc_codes[llid]=curr_loc_code;
+    //ray_bundle_array[llid]=llid;
 
+#if 0
     ////////////////////////////////////////////////////////
     // the place where the ray trace function can be applied
- //   load_data_using_loc_codes(ray_bundle_array,cached_loc_codes);
-	//if(ray_bundle_array[llid]==llid)
-	//{
- //     int data_ptr = cells[curr_cell_ptr].z;
-	//  float16 data= cell_data[data_ptr];
-	//  cached_data[llid] =(float2)(data.s0,data.s3);
-	//  global_count+=4;
-	//}
-	///* wait for all workitems to finish loading */
-	//barrier(CLK_LOCAL_MEM_FENCE); 
+    load_data_using_loc_codes(ray_bundle_array,cached_loc_codes);
+    if (ray_bundle_array[llid]==llid)
+    {
+      int data_ptr = cells[curr_cell_ptr].z;
+      float16 data= cell_data[data_ptr];
+      cached_data[llid] =(float2)(data.s0,data.s3);
+      global_count+=4;
+    }
+    /* wait for all workitems to finish loading */
+    barrier(CLK_LOCAL_MEM_FENCE);
+#endif // 0
+    int data_ptr = cells[curr_cell_ptr].z;
+    if ( data_ptr<0)
+        break;
 
-	int data_ptr = cells[curr_cell_ptr].z;
-	if ( data_ptr<0)
-		break;
-
-	// distance must be multiplied by the dimension of the bounding box
+    // distance must be multiplied by the dimension of the bounding box
     float d = (tfar-tnear)*(*bbox).w;
-	//float16 data=cell_data[data_ptr];
+    //float16 data=cell_data[data_ptr];
     // no function pointers in OpenCL (spec 8.6a)
     // instead, user must provide source with a function named "step_cell"
     step_cell(cell_data,data_ptr, d, &data_return);
 
-	global_count+=4;
+    global_count+=4;
 
-	//step_cell(cached_data[ray_bundle_array[llid]],d, &data_return);
+    //step_cell(cached_data[ray_bundle_array[llid]],d, &data_return);
 
-	//data_return=(float4)ray_bundle_array[llid];
+    //data_return=(float4)ray_bundle_array[llid];
     //////////////////////////////////////////////////////////
-	//barrier(CLK_LOCAL_MEM_FENCE); 
+    //barrier(CLK_LOCAL_MEM_FENCE);
 
     //// exit point
     exit_pt=ray_o + tfar*ray_d;
@@ -179,8 +179,7 @@ ray_bundle_trace_main(__global int * nlevels,
     // the current cell (cells[curr_cell_ptr])is the cell reached by
     // the neighbor's traverse
     // ray continues: make the current entry point the previous exit point
-	entry_pt = exit_pt;
-	
+    entry_pt = exit_pt;
   }
   // note that the following code is application dependent
   // should have a cleanup functor for expected image
@@ -191,31 +190,31 @@ ray_bundle_trace_main(__global int * nlevels,
 
   //end ray trace
 }
-
 #endif
-//  This file contains kernel function for ray tracing a bundle. 
-//  The differene between this kernel and ray_Trace_main.cl is 
+
+//  This file contains kernel function for ray tracing a bundle.
+//  The differene between this kernel and ray_Trace_main.cl is
 //  that data is copied from the memory for the whole bundle.
 #pragma OPENCL EXTENSION cl_khr_byte_addressable_store : enable
 
 __kernel
 void
 ray_bundle_trace_main(__global int * nlevels,
-					   __global float4  *origin,      // camera origin
-					   __global float16 *svd_UtVW,    // SVD of inverse of camera matrix
-					   __global int4    *cells,       // tree
-					   __global float16 *cell_data,   // leaf data
-					   __global uint4   *imgdims,     // dimensions of the image
-					   __global uint4   *roidims,     // dimensions of the roi per block
-					   __global float4  *global_bbox, // dimensions of the current bbox in global coordinate
-					   __global float4  *inp,         // inp image
-					   __local float16  *cam,         // local storage of cam
-					   __local float4   *local_origin,// store the origin locally
-					   __local float4   *bbox,        // local storgae of bbox
-					   __local uint4    *roi,
-					   __local uchar    *ray_bundle_array,
-					   __local short4   *cached_loc_codes,
-					   __local float2  *cached_data)
+                      __global float4  *origin,      // camera origin
+                      __global float16 *svd_UtVW,    // SVD of inverse of camera matrix
+                      __global int4    *cells,       // tree
+                      __global float16 *cell_data,   // leaf data
+                      __global uint4   *imgdims,     // dimensions of the image
+                      __global uint4   *roidims,     // dimensions of the roi per block
+                      __global float4  *global_bbox, // dimensions of the current bbox in global coordinate
+                      __global float4  *inp,         // inp image
+                      __local float16  *cam,         // local storage of cam
+                      __local float4   *local_origin,// store the origin locally
+                      __local float4   *bbox,        // local storgae of bbox
+                      __local uint4    *roi,
+                      __local uchar    *ray_bundle_array,
+                      __local short4   *cached_loc_codes,
+                      __local float2  *cached_data)
 {
   //unsigned ls0  = get_local_size(0);
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
@@ -233,7 +232,6 @@ ray_bundle_trace_main(__global int * nlevels,
     (*roi)=(*roidims);
   }
   barrier(CLK_LOCAL_MEM_FENCE);
-  
 
  // //local_img[lid]=inp[gid];
   float tnear = 0.0f, tfar =0.0f;
@@ -309,33 +307,33 @@ ray_bundle_trace_main(__global int * nlevels,
     }
     if (!hit)
       break;
-	cached_loc_codes[llid]=curr_loc_code;
-	ray_bundle_array[llid]=llid;
+    cached_loc_codes[llid]=curr_loc_code;
+    ray_bundle_array[llid]=llid;
 
     ////////////////////////////////////////////////////////
     // the place where the ray trace function can be applied
     load_data_using_loc_codes(ray_bundle_array,cached_loc_codes);
-	if(ray_bundle_array[llid]==llid)
-	{
+    if (ray_bundle_array[llid]==llid)
+    {
       int data_ptr = cells[curr_cell_ptr].z;
-	  float16 data= cell_data[data_ptr];
-	  cached_data[llid] =(float2)(data.s0,data.s3);
-	  data_count+=4;
-	}
-	// wait for all workitems to finish loading 
-	barrier(CLK_LOCAL_MEM_FENCE); 
+      float16 data= cell_data[data_ptr];
+      cached_data[llid] =(float2)(data.s0,data.s3);
+      data_count+=4;
+    }
+    // wait for all workitems to finish loading
+    barrier(CLK_LOCAL_MEM_FENCE);
 
     // int data_ptr = curr_cell.z;
     // distance must be multiplied by the dimension of the bounding box
     float d = (tfar-tnear)*(*bbox).w;
     // no function pointers in OpenCL (spec 8.6a)
     // instead, user must provide source with a function named "step_cell"
-	step_cell_bundle(cached_data[ray_bundle_array[llid]],d, &data_return);
-	//step_cell(cached_data[ray_bundle_array[llid]],d, &data_return);
+    step_cell_bundle(cached_data[ray_bundle_array[llid]],d, &data_return);
+    //step_cell(cached_data[ray_bundle_array[llid]],d, &data_return);
 
-	//data_return=(float4)ray_bundle_array[llid];
+    //data_return=(float4)ray_bundle_array[llid];
     //////////////////////////////////////////////////////////
-	//barrier(CLK_LOCAL_MEM_FENCE); 
+    //barrier(CLK_LOCAL_MEM_FENCE);
 
     //// exit point
     exit_pt=ray_o + tfar*ray_d;
@@ -368,8 +366,7 @@ ray_bundle_trace_main(__global int * nlevels,
     // the current cell (cells[curr_cell_ptr])is the cell reached by
     // the neighbor's traverse
     // ray continues: make the current entry point the previous exit point
-	entry_pt = exit_pt;
-	
+    entry_pt = exit_pt;
   }
   // note that the following code is application dependent
   // should have a cleanup functor for expected image

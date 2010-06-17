@@ -85,7 +85,7 @@ int traverse(__global int4* cells, int cell_ptr, short4 cell_loc_code,
       child_loc_code(c_index, curr_level-1, *found_loc_code);
     c_ptr += c_index;
     curr_cell = cells[c_ptr];
-	(*global_count)++;
+    (*global_count)++;
     found_cell_ptr = c_ptr;
     --curr_level;
   }
@@ -118,7 +118,7 @@ int traverse_stack(__global int4* cells,  short4 cell_loc_code,
     stack_index=stack_index+workgrpsize;
     stack[stack_index]=found_cell_ptr;
     curr_cell = cells[found_cell_ptr];
-	(*global_count)++;
+    (*global_count)++;
     --curr_level;
   }
   return stack_ptr;
@@ -153,7 +153,7 @@ int traverse_to_level(__global int4* cells, int cell_ptr,
       child_loc_code(c_index, curr_level-1, *found_loc_code);
     c_ptr += c_index;
     curr_cell = cells[c_ptr];
-	(*global_count)++;
+    (*global_count)++;
     found_cell_ptr = c_ptr;
     --curr_level;
   }
@@ -186,7 +186,7 @@ int traverse_to_level_stack(__global int4* cells, short4 cell_loc_code,
     stack[stack_index]=c_ptr;
     --curr_level;
     curr_cell = cells[c_ptr];
-	(*global_count)++;
+    (*global_count)++;
   }
   return stack_ptr;
 }
@@ -218,13 +218,13 @@ int traverse_force(__global int4* cells, int cell_ptr, short4 cell_loc_code,
   while (level<curr_level && curr_cell.y>0)
   {
     int c_ptr = curr_cell.y;
-	short4 child_bit = (short4)(1);
+    short4 child_bit = (short4)(1);
     child_bit = child_bit << (short4)(curr_level-1);
     short4 code_diff = target_loc_code-curr_code;
     // TODO: find a way to compute the following as a vector op
     uchar c_index = 0;
 
-	if (code_diff.x >= child_bit.x)
+    if (code_diff.x >= child_bit.x)
       c_index += 1;
     if (code_diff.y >= child_bit.y)
       c_index += 2;
@@ -232,18 +232,17 @@ int traverse_force(__global int4* cells, int cell_ptr, short4 cell_loc_code,
       c_index += 4;
     curr_code = child_loc_code(c_index, curr_level-1, curr_code);
     c_ptr += c_index;
- 	curr_cell = cells[c_ptr];
+     curr_cell = cells[c_ptr];
     found_cell_ptr = c_ptr;
     (*found_loc_code) = curr_code;
     --curr_level;
-	(*global_count)++;
-
+    (*global_count)++;
   }
   return found_cell_ptr;
 }
 
 int traverse_force_local(__local int4* cells, int cell_ptr, short4 cell_loc_code,
-                   short4 target_loc_code, short4* found_loc_code, int * global_count)
+                         short4 target_loc_code, short4* found_loc_code, int * global_count)
 {
   int found_cell_ptr = cell_ptr;
   (*found_loc_code) = cell_loc_code;
@@ -258,15 +257,14 @@ int traverse_force_local(__local int4* cells, int cell_ptr, short4 cell_loc_code
   curr_code.w = curr_level;
   while (level<curr_level && curr_cell.y>0)
   {
-
     int c_ptr = curr_cell.y;
-	short4 child_bit = (short4)(1);
+    short4 child_bit = (short4)(1);
     child_bit = child_bit << (short4)(curr_level-1);
     short4 code_diff = target_loc_code-curr_code;
     // TODO: find a way to compute the following as a vector op
     int c_index = 0;
 
-	if (code_diff.x >= child_bit.x)
+    if (code_diff.x >= child_bit.x)
       c_index += 1;
     if (code_diff.y >= child_bit.y)
       c_index += 2;
@@ -274,8 +272,8 @@ int traverse_force_local(__local int4* cells, int cell_ptr, short4 cell_loc_code
       c_index += 4;
     curr_code = child_loc_code(c_index, curr_level-1, curr_code);
     c_ptr += c_index;
- 	curr_cell = cells[c_ptr];
-	(*global_count)++;
+    curr_cell = cells[c_ptr];
+    (*global_count)++;
     found_cell_ptr = c_ptr;
     *found_loc_code = curr_code;
     --curr_level;
@@ -302,37 +300,37 @@ int traverse_force_stack(__global int4* cells,  short4 cell_loc_code,
 
   while (level<curr_level && curr_cell.y>0)
   {
-	  stack_ptr++;
-	  short4 code_diff = target_loc_code-curr_code;
-	  short4 child_bit = (short4)(1);
-	  child_bit = child_bit << (short4)(curr_level-1);
-	  // TODO: find a way to compute the following as a vector op
-	  int c_index = 0;
-	 
-	  if (code_diff.x >= child_bit.x)
-	  {
-		  c_index += 1;
-		  curr_code.x+=child_bit.x;
-	  }
+    stack_ptr++;
+    short4 code_diff = target_loc_code-curr_code;
+    short4 child_bit = (short4)(1);
+    child_bit = child_bit << (short4)(curr_level-1);
+    // TODO: find a way to compute the following as a vector op
+    int c_index = 0;
 
-	  if (code_diff.y >= child_bit.y)
-	  {
-		  c_index += 2;
-		  curr_code.y+=child_bit.y;
-	  }
-	  if (code_diff.z >= child_bit.z)
-	  {
-		  c_index += 4;
-		  curr_code.z+=child_bit.z;
-	  }
-	  curr_code.w--;
-	  //curr_code = child_loc_code(c_index, curr_level-1, curr_code);
-	  stack_index=stack_index+workgrpsize;
-	  stack[stack_index]=curr_cell.y+c_index; // = found_cell_ptr;
-	  curr_cell = cells[stack[stack_index]];
-	  (*global_count)++;
-	  *found_loc_code = curr_code;
-	  --curr_level;
+    if (code_diff.x >= child_bit.x)
+    {
+      c_index += 1;
+      curr_code.x+=child_bit.x;
+    }
+
+    if (code_diff.y >= child_bit.y)
+    {
+      c_index += 2;
+      curr_code.y+=child_bit.y;
+    }
+    if (code_diff.z >= child_bit.z)
+    {
+      c_index += 4;
+      curr_code.z+=child_bit.z;
+    }
+    curr_code.w--;
+    //curr_code = child_loc_code(c_index, curr_level-1, curr_code);
+    stack_index=stack_index+workgrpsize;
+    stack[stack_index]=curr_cell.y+c_index; // = found_cell_ptr;
+    curr_cell = cells[stack[stack_index]];
+    (*global_count)++;
+    *found_loc_code = curr_code;
+    --curr_level;
   }
   return stack_ptr;
 }
@@ -357,7 +355,7 @@ int common_ancestor(__global int4* cells, int cell_ptr, short4 cell_loc_code,
   {
     curr_cell_ptr = curr_cell.x;
     curr_cell = cells[curr_cell_ptr];
-	(*global_count)++;
+    (*global_count)++;
     // clear the code bit at each level while ascending to common ancestor
     short4 clear_bits = ~(short4)(mask);
     curr_level++;
@@ -394,6 +392,7 @@ int common_ancestor_stack(short4 cell_loc_code,short4 target_loc_code, short4* a
   }
   return stack_ptr;
 }
+
 //-------------------------------------------------------------------
 // Given the cell loc_code and the exit face, find the neighboring cell.
 //-------------------------------------------------------------------
@@ -524,7 +523,7 @@ short4 cell_exit_face(float4 exit_point, float4 cell_min, float4 cell_max)
   }
   if (max_diff.x<min)
   {
-      min=max_diff.x;
+    min=max_diff.x;
     faceid=X_MAX;
   }
   if (max_diff.y<min)
@@ -540,6 +539,7 @@ short4 cell_exit_face(float4 exit_point, float4 cell_min, float4 cell_max)
 
   return faceid;
 }
+
 short4 cell_exit_face_safe(float4 exit_point,float4 ray_d, float4 cell_min, float4 cell_max)
 {
   float4 min_diff =   fabs(exit_point-cell_min);
@@ -564,7 +564,7 @@ short4 cell_exit_face_safe(float4 exit_point,float4 ray_d, float4 cell_min, floa
   }
   if (max_diff.x<min && ray_d.x>0)
   {
-      min=max_diff.x;
+    min=max_diff.x;
     faceid=X_MAX;
   }
   if (max_diff.y<min&& ray_d.y>0)
@@ -662,7 +662,6 @@ void cell_bounding_box(short4 loc_code, int n_levels,
 }
 
 
-
 //--------------------------------------------------------------------------
 // Given the ray origin, ray_o and its direction, ray_d and the cell min
 // and max points, find the ray parameters, tnear and tfar that correspond
@@ -692,7 +691,6 @@ int intersect_cell(float4 ray_o, float4 ray_d, float4 cell_min, float4 cell_max,
     tmin_s.y = -3.4e38f;
     tmax_s.y = 3.4e38f;
   }
-
 
   if (ray_d.z ==0.0f) {
     tmin_s.z = -3.4e38f;

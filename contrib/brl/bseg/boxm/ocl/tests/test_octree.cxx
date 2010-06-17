@@ -37,11 +37,10 @@ static void test_loc_code(octree_test_driver<T>& driver)
                  << results[i+1] << ' '
                  << results[i+2] << ' '
                  << results[i+3] << ")\n";
-	else
-	{
-		vcl_cout<<"Time spent test_loc_code"<<driver.gpu_time()/(10000.0)<<" ms"<<vcl_endl;
-	}  
-
+    else
+    {
+      vcl_cout<<"Time spent test_loc_code"<<driver.gpu_time()/(10000.0)<<" ms"<<vcl_endl;
+    }
   }
   driver.release_kernel();
 }
@@ -89,11 +88,10 @@ static void test_traverse(octree_test_driver<T> & driver)
                  << results[i+1] << ' '
                  << results[i+2] << ' '
                  << results[i+3] << ")\n";
-		else
-	{
-		vcl_cout<<"Time spent test_traverse"<<driver.gpu_time()/(10000.0*8)<<" ms"<<vcl_endl;
-	}  
-
+    else
+    {
+      vcl_cout<<"Time spent test_traverse"<<driver.gpu_time()/(10000.0*8)<<" ms"<<vcl_endl;
+    }
   }
   driver.release_kernel();
 }
@@ -141,11 +139,10 @@ static void test_traverse_to_level(octree_test_driver<T>& driver)
                  << results[i+1] << ' '
                  << results[i+2] << ' '
                  << results[i+3] << ")\n";
-		else
-	{
-		vcl_cout<<"Time spent traverse_to_level"<<driver.gpu_time()/(10000.0*8)<<" ms"<<vcl_endl;
-	}  
-
+    else
+    {
+      vcl_cout<<"Time spent traverse_to_level"<<driver.gpu_time()/(10000.0*8)<<" ms"<<vcl_endl;
+    }
   }
   driver.release_kernel();
 }
@@ -185,14 +182,14 @@ static void test_traverse_force(octree_test_driver<T>& driver)
                  << results[i+1] << ' '
                  << results[i+2] << ' '
                  << results[i+3] << ")\n";
-		else
-	{
-		vcl_cout<<"Time spent traverse_force"<<driver.gpu_time()/(10000.0)<<" ms"<<vcl_endl;
-	}  
-
+    else
+    {
+      vcl_cout<<"Time spent traverse_force"<<driver.gpu_time()/(10000.0)<<" ms"<<vcl_endl;
+    }
   }
   driver.release_kernel();
 }
+
 template <class T>
 static void test_traverse_force_local(octree_test_driver<T>& driver)
 {
@@ -228,11 +225,10 @@ static void test_traverse_force_local(octree_test_driver<T>& driver)
                  << results[i+1] << ' '
                  << results[i+2] << ' '
                  << results[i+3] << ")\n";
-		else
-	{
-		vcl_cout<<"Time spent traverse_force_local"<<driver.gpu_time()/(10000.0)<<" ms"<<vcl_endl;
-	}  
-
+    else
+    {
+      vcl_cout<<"Time spent traverse_force_local"<<driver.gpu_time()/(10000.0)<<" ms"<<vcl_endl;
+    }
   }
   driver.release_kernel();
 }
@@ -281,11 +277,10 @@ static void test_cell_bounding_box(octree_test_driver<T>& driver)
                  << results[i+1] << ' '
                  << results[i+2] << ' '
                  << results[i+3] << ")\n";
-		else
-	{
-		vcl_cout<<"Time spent test_cell_bounding_box"<<driver.gpu_time()/(10000.0*8)<<" ms"<<vcl_endl;
-	}  
-
+    else
+    {
+      vcl_cout<<"Time spent test_cell_bounding_box"<<driver.gpu_time()/(10000.0*8)<<" ms"<<vcl_endl;
+    }
   }
   driver.release_kernel();
 }
@@ -324,9 +319,9 @@ static void test_intersect_cell(octree_test_driver<T>& driver)
                   250,750,750,0,
                   500,500,500,0,
                   750,750,750,0};
+#if 0 // FIXME
     bool good = true;
-#if 0 //: to fix
-	for (vcl_size_t i= 0; i<size; i++)
+    for (vcl_size_t i= 0; i<size; i++)
       good = good && results[i]==test[i];
     TEST("test_intersect_cell_data", good, true);
     if (!good)
@@ -335,12 +330,12 @@ static void test_intersect_cell(octree_test_driver<T>& driver)
                  << results[i+1] << ' '
                  << results[i+2] << ' '
                  << results[i+3] << ")\n";
-#endif	
-	vcl_cout<<"Time spent test_intersect_cell "<<driver.gpu_time()/(10000.0*8)<<" ms"<<vcl_endl;
-
+#endif
+    vcl_cout<<"Time spent test_intersect_cell "<<driver.gpu_time()/(10000.0*8)<<" ms"<<vcl_endl;
   }
   driver.release_kernel();
 }
+
 template <class T>
 static void test_common_ancestor(octree_test_driver<T>& driver)
 {
@@ -385,11 +380,10 @@ static void test_common_ancestor(octree_test_driver<T>& driver)
                  << results[i+1] << ' '
                  << results[i+2] << ' '
                  << results[i+3] << ")\n";
-		else
-	{
-		vcl_cout<<"Time spent test_common_ancestor"<<driver.gpu_time()/(10000.0*8)<<" ms"<<vcl_endl;
-	}  
-
+    else
+    {
+      vcl_cout<<"Time spent test_common_ancestor"<<driver.gpu_time()/(10000.0*8)<<" ms"<<vcl_endl;
+    }
   }
   driver.release_kernel();
 }
@@ -427,11 +421,10 @@ static void test_cell_exit_face(octree_test_driver<T>& driver)
                  << results[i+1] << ' '
                  << results[i+2] << ' '
                  << results[i+3] << ")\n";
-		else
-	{
-		vcl_cout<<"Time spent test_cell_exit_face"<<driver.gpu_time()/(10000.0)<<" ms"<<vcl_endl;
-	}  
-
+    else
+    {
+      vcl_cout<<"Time spent test_cell_exit_face"<<driver.gpu_time()/(10000.0)<<" ms"<<vcl_endl;
+    }
   }
   driver.release_kernel();
 }
@@ -488,11 +481,10 @@ static void test_neighbor(octree_test_driver<T>& driver)
                  << results[i+1] << ' '
                  << results[i+2] << ' '
                  << results[i+3] << ")\n";
-		else
-	{
-		vcl_cout<<"Time spent test_neighbor"<<driver.gpu_time()/(10000.0*6)<<" ms"<<vcl_endl;
-	}  
-
+    else
+    {
+      vcl_cout<<"Time spent test_neighbor"<<driver.gpu_time()/(10000.0*6)<<" ms"<<vcl_endl;
+    }
   }
   driver.release_kernel();
 }
@@ -552,6 +544,7 @@ static void test_ray_trace(octree_test_driver<T>& driver)
   }
   driver.release_kernel();
 }
+
 template <class T>
 static void test_cell_contains_exit_pt(octree_test_driver<T>& driver)
 {
@@ -587,6 +580,7 @@ static void test_cell_contains_exit_pt(octree_test_driver<T>& driver)
   }
   driver.release_kernel();
 }
+
 template <class T>
 void tree_tests(octree_test_driver<T>& test_driver)
 {
@@ -631,10 +625,8 @@ static void test_octree()
   ray_mgr->setup_tree_input_buffers();
   //ray_mgr->setup_camera_input_buffer();
   //ray_mgr->setup_tree_processing();
-  if (test_driver.init())
-  { tree_tests(test_driver); }
-  else
-  { TEST("octree_test_driver", true, false); }
+  if (test_driver.init()) { tree_tests(test_driver); }
+  else { TEST("octree_test_driver", true, false); }
 }
 
 TESTMAIN(test_octree);

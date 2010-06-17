@@ -2,30 +2,30 @@
 __kernel
 void
 test_loc_code(__global int4* cells, __global float2* cell_data,
-			  __global int4* results)
+              __global int4* results)
 {
-	short root_level = 3;
-	int result_ptr = 0;
+  short root_level = 3;
+  int result_ptr = 0;
 
-	float4 p = (float4)(0.1f, 0.1f, 0.1f, 0.0f);
-	for(int k=0;k<10000;k++)
-	{
-		short4 code = loc_code(p, root_level);
-	}
-	short4 code = loc_code(p, root_level);
-	results[result_ptr++]= convert_int4(code);
+  float4 p = (float4)(0.1f, 0.1f, 0.1f, 0.0f);
+  for (int k=0;k<10000;k++)
+  {
+    short4 code = loc_code(p, root_level);
+  }
+  short4 code = loc_code(p, root_level);
+  results[result_ptr++]= convert_int4(code);
 
-	p = (float4)(0.251f, 0.1f, 0.1f, 0.0f);
-	code = loc_code(p, root_level);
-	results[result_ptr++]= convert_int4(code);
+  p = (float4)(0.251f, 0.1f, 0.1f, 0.0f);
+  code = loc_code(p, root_level);
+  results[result_ptr++]= convert_int4(code);
 
-	p = (float4)(0.1f, 0.251f, 0.1f, 0.0f);
-	code = loc_code(p, root_level);
-	results[result_ptr++]= convert_int4(code);
+  p = (float4)(0.1f, 0.251f, 0.1f, 0.0f);
+  code = loc_code(p, root_level);
+  results[result_ptr++]= convert_int4(code);
 
-	p = (float4)(0.499f, 0.251f, 0.499f, 0.0f);
-	code = loc_code(p, root_level);
-	results[result_ptr++]= convert_int4(code);
+  p = (float4)(0.499f, 0.251f, 0.499f, 0.0f);
+  code = loc_code(p, root_level);
+  results[result_ptr++]= convert_int4(code);
 }
 
 void test_codes(int* i, int* n_codes, short4* code, short4* ncode)
@@ -61,10 +61,10 @@ test_traverse(__global int4* cells, __global float2* cell_data,
   {
     test_codes(&i, &n_codes, &code, &ncode);
     short4 root = (short4)(0,0,0,2);
-	for(int k=0;k<10000;k++)
-	{
-		cell_ptr=traverse(cells, 0, root , code, &found_loc_code,&global_count);
-	}
+    for (int k=0;k<10000;k++)
+    {
+      cell_ptr=traverse(cells, 0, root , code, &found_loc_code,&global_count);
+    }
     int4 res = convert_int4(found_loc_code);
     results[2*i]=res;
     res = (int4)cell_ptr;
@@ -90,99 +90,100 @@ test_traverse_to_level(__global int4* cells, __global float2* cell_data,
     test_codes(&i, &n_codes, &code, &ncode);
     short4 root = (short4)(0,0,0,2);
     int level = 1;
-	for(int k=0;k<10000;k++)
-	{
+    for (int k=0;k<10000;k++)
+    {
+      cell_ptr = traverse_to_level(cells, 0, root, code,
+                                   level, &found_loc_code, &global_count);
+    }
 
-		cell_ptr = traverse_to_level(cells, 0, root , code,
-			level, &found_loc_code,&global_count);
-	}
-
-	int4 res = convert_int4(found_loc_code);
+    int4 res = convert_int4(found_loc_code);
     results[2*i]=res;
     res = (int4)cell_ptr;
     results[2*i+1]=res;
   }
 }
+
 __kernel
 void
 test_traverse_force(__global int4* cells, __global float2* cell_data,
                     __global int4* results)
 {
-	
-	int result_ptr = 0;
-	short4 start_code = (short4)(0,0,0,1);
-	short4 found_loc_code = (short4)(0,0,0,0);
-	int global_count=0;
-	short4 target_code = (short4)(2,0,0,0);
-	int cell_ptr =0;
-	for(int k=0;k<10000;k++)
-	{
-		cell_ptr= traverse_force(cells, 1, start_code, target_code, &found_loc_code,&global_count);
-	}
-	results[result_ptr++]=convert_int4(found_loc_code);
-	results[result_ptr++]=(int4)cell_ptr;
+  int result_ptr = 0;
+  short4 start_code = (short4)(0,0,0,1);
+  short4 found_loc_code = (short4)(0,0,0,0);
+  int global_count=0;
+  short4 target_code = (short4)(2,0,0,0);
+  int cell_ptr =0;
+  for (int k=0;k<10000;k++)
+  {
+    cell_ptr= traverse_force(cells, 1, start_code, target_code, &found_loc_code,&global_count);
+  }
+  results[result_ptr++]=convert_int4(found_loc_code);
+  results[result_ptr++]=(int4)cell_ptr;
 
-	target_code = (short4)(0,2,0,0);
-	cell_ptr =
-		traverse_force(cells, 1, start_code, target_code, &found_loc_code,&global_count);
-	results[result_ptr++]=convert_int4(found_loc_code);
-	results[result_ptr++]=(int4)cell_ptr;
+  target_code = (short4)(0,2,0,0);
+  cell_ptr =
+    traverse_force(cells, 1, start_code, target_code, &found_loc_code,&global_count);
+  results[result_ptr++]=convert_int4(found_loc_code);
+  results[result_ptr++]=(int4)cell_ptr;
 
-	target_code = (short4)(0,0,2,0);
-	cell_ptr =
-		traverse_force(cells, 1, start_code, target_code, &found_loc_code,&global_count);
-	results[result_ptr++]=convert_int4(found_loc_code);
-	results[result_ptr++]=(int4)cell_ptr;
+  target_code = (short4)(0,0,2,0);
+  cell_ptr =
+    traverse_force(cells, 1, start_code, target_code, &found_loc_code,&global_count);
+  results[result_ptr++]=convert_int4(found_loc_code);
+  results[result_ptr++]=(int4)cell_ptr;
 
-	target_code = (short4)(2,2,2,0);
-	cell_ptr =
-		traverse_force(cells, 1, start_code, target_code, &found_loc_code,&global_count);
-	results[result_ptr++]=convert_int4(found_loc_code);
-	results[result_ptr++]=(int4)cell_ptr;
+  target_code = (short4)(2,2,2,0);
+  cell_ptr =
+    traverse_force(cells, 1, start_code, target_code, &found_loc_code,&global_count);
+  results[result_ptr++]=convert_int4(found_loc_code);
+  results[result_ptr++]=(int4)cell_ptr;
 }
+
 __kernel
 void
 test_traverse_force_local(__global int4* cells, __global float2* cell_data,
                           __global int4* results,__local int4* local_cells)
-{ 
-	if(get_local_id(0)==0)
-	{
-		for(int i=0;i<73;i++)
-		{
-			local_cells[i]=cells[i];
-		}
-	}
-	int result_ptr = 0;
-	short4 found_loc_code = (short4)(0,0,0,0);
-	short4 start_code = (short4)(0,0,0,1);
-	int global_count=0;
-	short4 target_code = (short4)(2,0,0,0);
-	int cell_ptr =0;
-	for(int k=0;k<10000;k++)
-	{
-		cell_ptr= traverse_force_local(local_cells, 1, start_code, target_code, &found_loc_code,&global_count);
-	}
-	results[result_ptr++]=convert_int4(found_loc_code);
-	results[result_ptr++]=(int4)cell_ptr;
+{
+  if (get_local_id(0)==0)
+  {
+    for (int i=0;i<73;i++)
+    {
+      local_cells[i]=cells[i];
+    }
+  }
+  int result_ptr = 0;
+  short4 found_loc_code = (short4)(0,0,0,0);
+  short4 start_code = (short4)(0,0,0,1);
+  int global_count=0;
+  short4 target_code = (short4)(2,0,0,0);
+  int cell_ptr =0;
+  for (int k=0;k<10000;k++)
+  {
+    cell_ptr= traverse_force_local(local_cells, 1, start_code, target_code, &found_loc_code,&global_count);
+  }
+  results[result_ptr++]=convert_int4(found_loc_code);
+  results[result_ptr++]=(int4)cell_ptr;
 
-	target_code = (short4)(0,2,0,0);
-	cell_ptr =
-		traverse_force_local(local_cells, 1, start_code, target_code, &found_loc_code,&global_count);
-	results[result_ptr++]=convert_int4(found_loc_code);
-	results[result_ptr++]=(int4)cell_ptr;
+  target_code = (short4)(0,2,0,0);
+  cell_ptr =
+    traverse_force_local(local_cells, 1, start_code, target_code, &found_loc_code,&global_count);
+  results[result_ptr++]=convert_int4(found_loc_code);
+  results[result_ptr++]=(int4)cell_ptr;
 
-	target_code = (short4)(0,0,2,0);
-	cell_ptr =
-		traverse_force_local(local_cells, 1, start_code, target_code, &found_loc_code,&global_count);
-	results[result_ptr++]=convert_int4(found_loc_code);
-	results[result_ptr++]=(int4)cell_ptr;
+  target_code = (short4)(0,0,2,0);
+  cell_ptr =
+    traverse_force_local(local_cells, 1, start_code, target_code, &found_loc_code,&global_count);
+  results[result_ptr++]=convert_int4(found_loc_code);
+  results[result_ptr++]=(int4)cell_ptr;
 
-	target_code = (short4)(2,2,2,0);
-	cell_ptr =
-		traverse_force_local(local_cells, 1, start_code, target_code, &found_loc_code,&global_count);
-	results[result_ptr++]=convert_int4(found_loc_code);
-	results[result_ptr++]=(int4)cell_ptr;
+  target_code = (short4)(2,2,2,0);
+  cell_ptr =
+    traverse_force_local(local_cells, 1, start_code, target_code, &found_loc_code,&global_count);
+  results[result_ptr++]=convert_int4(found_loc_code);
+  results[result_ptr++]=(int4)cell_ptr;
 }
+
 __kernel
 void
 test_cell_bounding_box(__global int4* cells, __global float2* cell_data,
@@ -194,15 +195,15 @@ test_cell_bounding_box(__global int4* cells, __global float2* cell_data,
   int n_levels = 3;
   //determine the number of codes
   test_codes(&i, &n_codes, &code, &ncode);
-  
+
   for (i = 0; i<n_codes; ++i)
   {
     test_codes(&i, &n_codes, &code, &ncode);
     float4 cell_min=(float4)0.0f, cell_max=(float4)0.0f;
-	for ( int k=0;k<10000;k++)
-	{
-		cell_bounding_box(code, n_levels, &cell_min, &cell_max);
-	}
+    for ( int k=0;k<10000;k++)
+    {
+      cell_bounding_box(code, n_levels, &cell_min, &cell_max);
+    }
     float4 scale = (float4)(1000.0f);
     int4 res = convert_int4(cell_min*scale);
     results[2*i]=res;
@@ -226,18 +227,18 @@ test_intersect_cell(__global int4* cells, __global float2* cell_data,
   float tnear=0.0f,tfar=0.0f;
   //determine the number of codes
   test_codes(&i, &n_codes, &code, &ncode);
-  
+
   for (i = 0; i<n_codes; ++i)
   {
     test_codes(&i, &n_codes, &code, &ncode);
     float4 cell_min, cell_max;
-	cell_bounding_box(code, n_levels, &cell_min, &cell_max);
-	for ( int k=0;k<10000;k++)
-	{
-	intersect_cell(ray_o, ray_d, cell_min, cell_max, &tnear, &tfar);
-	}
+    cell_bounding_box(code, n_levels, &cell_min, &cell_max);
+    for ( int k=0;k<10000;k++)
+    {
+      intersect_cell(ray_o, ray_d, cell_min, cell_max, &tnear, &tfar);
+    }
 
-	float4 scale = (float4)(1000.0f);
+    float4 scale = (float4)(1000.0f);
     int4 res = convert_int4(cell_min*scale);
     results[2*i]=res;
     res = convert_int4(tfar*scale);
@@ -250,26 +251,26 @@ void
 test_common_ancestor(__global int4* cells, __global float2* cell_data,
                      __global int4* results)
 {
-	short4 code, ncode;
-	int n_codes = 0;
-	int i= 0;
-	int global_count=0;
-	int ancestor_ptr=0;
-	//determine the number of codes
-	test_codes(&i, &n_codes, &code, &ncode);
-	short4 ancestor_loc_code = (short4)(0,0,0,0);
-	for (i = 0; i<n_codes; ++i)
-	{
-		test_codes(&i, &n_codes, &code, &ncode);
-		int start_ptr = 9+8*i;
-		for(int k=0;k<10000;k++)
-		{
-			ancestor_ptr = common_ancestor(cells, start_ptr,
-											code, ncode,&ancestor_loc_code,&global_count);
-		}
-		results[2*i] = convert_int4(ancestor_loc_code);
-		results[2*i+1] = (int4)ancestor_ptr;
-	}
+  short4 code, ncode;
+  int n_codes = 0;
+  int i= 0;
+  int global_count=0;
+  int ancestor_ptr=0;
+  //determine the number of codes
+  test_codes(&i, &n_codes, &code, &ncode);
+  short4 ancestor_loc_code = (short4)(0,0,0,0);
+  for (i = 0; i<n_codes; ++i)
+  {
+    test_codes(&i, &n_codes, &code, &ncode);
+    int start_ptr = 9+8*i;
+    for (int k=0;k<10000;k++)
+    {
+      ancestor_ptr = common_ancestor(cells, start_ptr,
+                                     code, ncode,&ancestor_loc_code,&global_count);
+    }
+    results[2*i] = convert_int4(ancestor_loc_code);
+    results[2*i+1] = (int4)ancestor_ptr;
+  }
 }
 
 __kernel
@@ -285,9 +286,9 @@ test_cell_exit_face(__global int4* cells, __global float2* cell_data,
 
   float4 exit_point = (float4)(cell_min.x, 0.01f, 0.01f, 0.0f);
   short4 exit_face=(short4)0;
-  for(int k=0;k<10000;k++)
+  for (int k=0;k<10000;k++)
   {
-	  exit_face = cell_exit_face(exit_point, cell_min, cell_max);
+    exit_face = cell_exit_face(exit_point, cell_min, cell_max);
   }
 
   results[result_ptr++] = convert_int4(exit_face);
@@ -311,49 +312,49 @@ test_cell_exit_face(__global int4* cells, __global float2* cell_data,
   exit_point = (float4)(0.01f, 0.01f, cell_max.z, 0.0f);
   exit_face = cell_exit_face(exit_point, cell_min, cell_max);
   results[result_ptr++] = convert_int4(exit_face);
-	
 }
+
 __kernel
 void
 test_neighbor(__global int4* cells, __global float2* cell_data,
-			  __global int4* results)
+              __global int4* results)
 {
-	short4 faces[6];
-	faces[0]=X_MIN;   faces[1]=X_MAX;
-	faces[2]=Y_MIN;   faces[3]=Y_MAX;
-	faces[4]=Z_MIN;   faces[5]=Z_MAX;
-	int n_levels = 3;
-	int cell_ptr = 9;
-	int result_ptr = 0;
-	int global_count=0;
-	// test the lower left cell, which has no neighbors on the min faces
-	short4 code = (short4)(0,0,0,0);
-	for (int j=0; j<6; ++j) {
-		short4 eface = faces[j];
-		short4 neighbor_code = (short4)-1;
+  short4 faces[6];
+  faces[0]=X_MIN;   faces[1]=X_MAX;
+  faces[2]=Y_MIN;   faces[3]=Y_MAX;
+  faces[4]=Z_MIN;   faces[5]=Z_MAX;
+  int n_levels = 3;
+  int cell_ptr = 9;
+  int result_ptr = 0;
+  int global_count=0;
+  // test the lower left cell, which has no neighbors on the min faces
+  short4 code = (short4)(0,0,0,0);
+  for (int j=0; j<6; ++j) {
+    short4 eface = faces[j];
+    short4 neighbor_code = (short4)-1;
 
-		int neighbor_ptr = neighbor(cells, cell_ptr, code,
-			eface, n_levels , &neighbor_code,&global_count);
-		results[result_ptr++]=convert_int4(neighbor_code);
+    int neighbor_ptr = neighbor(cells, cell_ptr, code,
+                                eface, n_levels, &neighbor_code,&global_count);
+    results[result_ptr++]=convert_int4(neighbor_code);
 
-		results[result_ptr++]=(int4)neighbor_ptr;
-	}
-	// test a cell having all neighbors
-	code = (short4)(1,1,1,0);
-	cell_ptr = 16;
-	for (int j=0; j<6; ++j) {
-		short4 eface = faces[j];
-		short4 neighbor_code = (short4)-1;
-		for(int k=0;k<10000;k++)
-		{
-			int temp_neighbor_ptr = neighbor(cells, cell_ptr, code,
-											eface, n_levels , &neighbor_code,&global_count);
-		}
-		int neighbor_ptr = neighbor(cells, cell_ptr, code,
-									eface, n_levels , &neighbor_code,&global_count);
-		results[result_ptr++]=convert_int4(neighbor_code);
-		results[result_ptr++]=(int4)neighbor_ptr;
-	}
+    results[result_ptr++]=(int4)neighbor_ptr;
+  }
+  // test a cell having all neighbors
+  code = (short4)(1,1,1,0);
+  cell_ptr = 16;
+  for (int j=0; j<6; ++j) {
+    short4 eface = faces[j];
+    short4 neighbor_code = (short4)-1;
+    for (int k=0;k<10000;k++)
+    {
+      int temp_neighbor_ptr = neighbor(cells, cell_ptr, code,
+                                       eface, n_levels , &neighbor_code,&global_count);
+    }
+    int neighbor_ptr = neighbor(cells, cell_ptr, code,
+                                eface, n_levels , &neighbor_code,&global_count);
+    results[result_ptr++]=convert_int4(neighbor_code);
+    results[result_ptr++]=(int4)neighbor_ptr;
+  }
 }
 
 __kernel
@@ -482,6 +483,7 @@ test_ray_trace(__global int4* cells, __global float2* cell_data,
     }
   }
 }
+
 __kernel
 void
 test_cell_contains_exit_pt(__global int4* cells, __global float2* cell_data,

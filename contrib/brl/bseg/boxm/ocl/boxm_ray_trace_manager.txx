@@ -70,11 +70,8 @@ bool boxm_ray_trace_manager<T>::init_raytrace(boxm_scene<boct_tree<short,T > > *
   if (!this->check_val(status,CL_SUCCESS,error_to_string(status))) {
     return false;
   }
-  if (!this->setup_image_cam_arrays())
-    return false;
-  if (!this->setup_work_image())
-    return false;
-  return true;
+  return this->setup_image_cam_arrays()
+     &&  this->setup_work_image();
 }
 
 template<class T>
@@ -140,10 +137,7 @@ bool boxm_ray_trace_manager<T>::setup_img_bb(vpgl_camera_double_sptr cam, vgl_bo
 
   img_bb=vgl_intersection(img_bounds,block_projection);
 
-  if (img_bb.is_empty())
-    return false;
-  else
-    return true;
+  return ! img_bb.is_empty();
 }
 
 template<class T>
@@ -172,7 +166,7 @@ bool boxm_ray_trace_manager<T>::setup_tree()
 
   unsigned cells_size=cell_input_.size();
   vcl_cout<<"Size of tree "<<cells_size*16/(10^6)/(1000000) << "MBytes  "
-		  <<"  Size of data "<<data_input_.size()*16*4/(1000000) << "MBytes  "<<vcl_endl;
+          <<"  Size of data "<<data_input_.size()*16*4/(1000000) << "MBytes  "<<vcl_endl;
   if (cells_size>this->image2d_max_width_)
     cells_size=RoundUp(cells_size,this->image2d_max_width_);
   cells_ = NULL;
@@ -540,6 +534,7 @@ bool boxm_ray_trace_manager<T>::clean_ray_origin()
     return false;
   }
 }
+
 template<class T>
 bool boxm_ray_trace_manager<T>::setup_app_density(bool use_uniform, float mean, float sigma)
 {
@@ -550,12 +545,13 @@ bool boxm_ray_trace_manager<T>::setup_app_density(bool use_uniform, float mean, 
 #else
   app_density_ =  (cl_float*)memalign(16, sizeof(cl_float4));
 #endif
-  if(use_uniform){
+  if (use_uniform) {
     app_density_[0]=1.0f;
     app_density_[1]=0.0f;
     app_density_[2]=0.0f;
     app_density_[3]=0.0f;
-  }else{
+  }
+  else {
     app_density_[0]=0.0f;
     app_density_[1]=mean;
     app_density_[2]=sigma;
@@ -563,6 +559,7 @@ bool boxm_ray_trace_manager<T>::setup_app_density(bool use_uniform, float mean, 
   }
   return true;
 }
+
 template<class T>
 bool boxm_ray_trace_manager<T>::clean_app_density()
 {
@@ -579,12 +576,13 @@ bool boxm_ray_trace_manager<T>::clean_app_density()
     return false;
   }
 }
+
 template<class T>
 int boxm_ray_trace_manager<T>::setup_app_density_buffer()
 {
   cl_int status = CL_SUCCESS;
   app_density_buf_ = clCreateBuffer(this->context_,CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
-                                sizeof(cl_uint4),app_density_,&status);
+                                    sizeof(cl_uint4),app_density_,&status);
   if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (app density) failed."))
     return SDK_FAILURE;
   else
@@ -1100,7 +1098,7 @@ bool boxm_ray_trace_manager<T>::run()
       // allocate and initialize memory
       setup_tree_input_buffers(useimage_);
       setup_image_cam_buffers();
-    
+
       float gpu_load_time = (float)timer.all() / 1e3f;
       vcl_cout <<"gpu load took " << gpu_load_time << 's' << vcl_endl;
       total_gpu_load_time += gpu_load_time;
@@ -1128,19 +1126,19 @@ bool boxm_ray_trace_manager<T>::run()
   //clean_camera_input_buffer();
 
   vcl_cout << "Timing Analysis "<<vcl_endl
-		   << "==============="<<vcl_endl
-		   <<"openCL Running time "<<gpu_time_<<" ms"<<vcl_endl
-		   << "Running block "<<total_gpu_time/1000<<'s'<<vcl_endl
+           << "==============="<<vcl_endl
+           <<"openCL Running time "<<gpu_time_<<" ms"<<vcl_endl
+           << "Running block "<<total_gpu_time/1000<<'s'<<vcl_endl
            << "total block loading time = " << total_load_time << 's' << vcl_endl
            << "total block processing time = " << total_raytrace_time << 's' << vcl_endl
            << "total gpu preprocess time = " << total_gpu_load_time << 's' << vcl_endl;
-           
-           
+
+
   //output to file for timing stats
   //vcl_ofstream ofstr("/media/VXL/data/APl/output_img/GPUstats.txt", vcl_fstream::in | vcl_fstream::out | vcl_fstream::app);
-  //ofstr << total_load_time << "," << total_raytrace_time << "," << total_gpu_time/1000 << "," << total_gpu_load_time << vcl_endl;    
+  //ofstr << total_load_time << ',' << total_raytrace_time << ',' << total_gpu_time/1000 << ',' << total_gpu_load_time << vcl_endl;
   //ofstr.close();
-           
+
   return true;
 }
 
@@ -1251,9 +1249,7 @@ bool boxm_ray_trace_manager<T>::run_block()
   cl_ulong tstart,tend;
   status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
   status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
-  gpu_time_+= (double)1.0e-6 * (tend - tstart); // convert nanoseconds to milliseconds 
-
-
+  gpu_time_+= (double)1.0e-6 * (tend - tstart); // convert nanoseconds to milliseconds
 
   return SDK_SUCCESS;
 }

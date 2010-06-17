@@ -55,6 +55,7 @@ void step_cell_bundle(float2 data,float d, float4 * data_return)
   (*data_return).x = alpha_integral;
   (*data_return).y = vis_prob_end;
   (*data_return).z = expected_int;
-  //: TEMPORARY DEBUGGING comment
-  //(*data_return).w = intensity_norm + omega;
+#ifdef DEBUG // TEMPORARY DEBUGGING comment
+  (*data_return).w = intensity_norm + omega;
+#endif
 }

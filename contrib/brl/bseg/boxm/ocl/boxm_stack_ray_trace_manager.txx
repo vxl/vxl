@@ -23,10 +23,10 @@
 
 template<class T>
 bool boxm_stack_ray_trace_manager<T>::init_raytrace(boxm_scene<boct_tree<short,T > > *scene,
-                                              vpgl_camera_double_sptr cam,
-                                              unsigned int ni, unsigned int nj,
-                                              vcl_vector<vcl_string> functor_source_filenames,
-                                              unsigned int i0, unsigned int j0)
+                                                    vpgl_camera_double_sptr cam,
+                                                    unsigned int ni, unsigned int nj,
+                                                    vcl_vector<vcl_string> functor_source_filenames,
+                                                    unsigned int i0, unsigned int j0)
 {
   scene_ = scene;
   cam_ = cam;
@@ -37,9 +37,9 @@ bool boxm_stack_ray_trace_manager<T>::init_raytrace(boxm_scene<boct_tree<short,T
 
   // load base raytrace code
   if (!this->load_kernel_source(vcl_string(VCL_SOURCE_ROOT_DIR)
-                          +"/contrib/brl/bseg/boxm/ocl/octree_library_functions.cl") ||
+                                +"/contrib/brl/bseg/boxm/ocl/octree_library_functions.cl") ||
       !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                              +"/contrib/brl/bseg/boxm/ocl/backproject.cl")) {
+                                    +"/contrib/brl/bseg/boxm/ocl/backproject.cl")) {
     vcl_cerr << "Error: boxm_stack_ray_trace_manager : failed to load kernel source (helper functions)\n";
     return false;
   }
@@ -88,46 +88,39 @@ bool boxm_stack_ray_trace_manager<T>::clean_raytrace()
   cl_int status = CL_SUCCESS;
   // release kernel
   status = clReleaseKernel(kernel_);
-  if (!this->check_val(status,CL_SUCCESS,"clReleaseKernel failed.")) {
-    return false;
-  }
-
-  return true;
+  return this->check_val(status,CL_SUCCESS,"clReleaseKernel failed.");
 }
 
 template<class T>
 bool boxm_stack_ray_trace_manager<T>::setup_img_bb(vpgl_camera_double_sptr cam, vgl_box_3d<double> const& block_bb, vgl_box_2d<double> &img_bb, unsigned ni,unsigned nj)
 {
-    // determine intersection of block bounding box projection and image bounds
-    vgl_box_2d<double> img_bounds;
-    img_bounds.add(vgl_point_2d<double>(0,0));
-    img_bounds.add(vgl_point_2d<double>(0 + ni - 1, 0 + nj - 1));
+  // determine intersection of block bounding box projection and image bounds
+  vgl_box_2d<double> img_bounds;
+  img_bounds.add(vgl_point_2d<double>(0,0));
+  img_bounds.add(vgl_point_2d<double>(0 + ni - 1, 0 + nj - 1));
 
-    vgl_box_2d<double> block_projection;
-    double u,v;
-    cam->project(block_bb.min_x(),block_bb.min_y(),block_bb.min_z(),u,v);
-    block_projection.add(vgl_point_2d<double>(u,v));
-    cam->project(block_bb.min_x(),block_bb.min_y(),block_bb.max_z(),u,v);
-    block_projection.add(vgl_point_2d<double>(u,v));
-    cam->project(block_bb.min_x(),block_bb.max_y(),block_bb.min_z(),u,v);
-    block_projection.add(vgl_point_2d<double>(u,v));
-    cam->project(block_bb.min_x(),block_bb.max_y(),block_bb.max_z(),u,v);
-    block_projection.add(vgl_point_2d<double>(u,v));
-    cam->project(block_bb.max_x(),block_bb.min_y(),block_bb.min_z(),u,v);
-    block_projection.add(vgl_point_2d<double>(u,v));
-    cam->project(block_bb.max_x(),block_bb.min_y(),block_bb.max_z(),u,v);
-    block_projection.add(vgl_point_2d<double>(u,v));
-    cam->project(block_bb.max_x(),block_bb.max_y(),block_bb.min_z(),u,v);
-    block_projection.add(vgl_point_2d<double>(u,v));
-    cam->project(block_bb.max_x(),block_bb.max_y(),block_bb.max_z(),u,v);
-    block_projection.add(vgl_point_2d<double>(u,v));
+  vgl_box_2d<double> block_projection;
+  double u,v;
+  cam->project(block_bb.min_x(),block_bb.min_y(),block_bb.min_z(),u,v);
+  block_projection.add(vgl_point_2d<double>(u,v));
+  cam->project(block_bb.min_x(),block_bb.min_y(),block_bb.max_z(),u,v);
+  block_projection.add(vgl_point_2d<double>(u,v));
+  cam->project(block_bb.min_x(),block_bb.max_y(),block_bb.min_z(),u,v);
+  block_projection.add(vgl_point_2d<double>(u,v));
+  cam->project(block_bb.min_x(),block_bb.max_y(),block_bb.max_z(),u,v);
+  block_projection.add(vgl_point_2d<double>(u,v));
+  cam->project(block_bb.max_x(),block_bb.min_y(),block_bb.min_z(),u,v);
+  block_projection.add(vgl_point_2d<double>(u,v));
+  cam->project(block_bb.max_x(),block_bb.min_y(),block_bb.max_z(),u,v);
+  block_projection.add(vgl_point_2d<double>(u,v));
+  cam->project(block_bb.max_x(),block_bb.max_y(),block_bb.min_z(),u,v);
+  block_projection.add(vgl_point_2d<double>(u,v));
+  cam->project(block_bb.max_x(),block_bb.max_y(),block_bb.max_z(),u,v);
+  block_projection.add(vgl_point_2d<double>(u,v));
 
-    img_bb=vgl_intersection(img_bounds,block_projection);
+  img_bb=vgl_intersection(img_bounds,block_projection);
 
-    if (img_bb.is_empty())
-        return false;
-    else
-        return true;
+  return ! img_bb.is_empty();
 }
 
 template<class T>
@@ -388,10 +381,11 @@ bool boxm_stack_ray_trace_manager<T>::clean_img_dims()
     free(imgdims_);
 #endif
     imgdims_ = NULL;
-  } else {
+    return true;
+  }
+  else {
     return false;
   }
-  return true;
 }
 
 
@@ -424,10 +418,11 @@ bool boxm_stack_ray_trace_manager<T>::clean_roi_dims()
     free(roidims_);
 #endif
     roidims_ = NULL;
-  } else {
+    return true;
+  }
+  else {
     return false;
   }
-  return true;
 }
 
 
@@ -463,10 +458,11 @@ bool boxm_stack_ray_trace_manager<T>::clean_work_image()
     free(ray_results_);
 #endif
     ray_results_ = NULL;
-  } else {
+    return true;
+  }
+  else {
     return false;
   }
-  return true;
 }
 
 template<class T>
@@ -509,10 +505,11 @@ bool boxm_stack_ray_trace_manager<T>::clean_ray_origin()
     free(ray_origin_);
 #endif
     ray_origin_ = NULL;
-  } else {
+    return true;
+  }
+  else {
     return false;
   }
-  return true;
 }
 
 template<class T>
@@ -521,32 +518,32 @@ int boxm_stack_ray_trace_manager<T>::setup_tree_input_buffers()
   cl_int status = CL_SUCCESS;
   // Create and initialize memory objects
   input_cell_buf_ = clCreateBuffer(this->context_,
-    CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
-    cell_input_.size() * sizeof(cl_int4),
-    cells_,
-    &status);
+                                   CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
+                                   cell_input_.size() * sizeof(cl_int4),
+                                   cells_,
+                                   &status);
   if (!this->check_val(status,
-    CL_SUCCESS,
-    "clCreateBuffer (cell_array) failed."))
+                       CL_SUCCESS,
+                       "clCreateBuffer (cell_array) failed."))
     return SDK_FAILURE;
 
   input_data_buf_ = clCreateBuffer(this->context_,
-    CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
-    data_input_.size() * sizeof(cl_float16),
-    cell_data_,
-    &status);
+                                   CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
+                                   data_input_.size() * sizeof(cl_float16),
+                                   cell_data_,
+                                   &status);
   if (!this->check_val(status,
-    CL_SUCCESS,
-    "clCreateBuffer (cell_data) failed."))
+                       CL_SUCCESS,
+                       "clCreateBuffer (cell_data) failed."))
     return SDK_FAILURE;
 
-    nlevels_buf_ = clCreateBuffer(this->context_,
-    CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
-    sizeof(cl_int),
-    numlevels_,
-    &status);
+  nlevels_buf_ = clCreateBuffer(this->context_,
+                                CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
+                                sizeof(cl_int),
+                                numlevels_,
+                                &status);
   if (!this->check_val(status,CL_SUCCESS,
-    "clCreateBuffer (nlevels) failed."))
+                       "clCreateBuffer (nlevels) failed."))
     return SDK_FAILURE;
   else
     return SDK_SUCCESS;
@@ -607,7 +604,7 @@ int boxm_stack_ray_trace_manager<T>::setup_roidims_input_buffer()
 {
   cl_int status = CL_SUCCESS;
   roidims_buf_ = clCreateBuffer(this->context_,CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
-    sizeof(cl_uint4),roidims_,&status);
+                                sizeof(cl_uint4),roidims_,&status);
   if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (cell_array) failed."))
     return SDK_FAILURE;
   else
@@ -652,7 +649,7 @@ int boxm_stack_ray_trace_manager<T>::setup_work_img_buffer()
 {
   cl_int status = CL_SUCCESS;
   work_image_buf_ = clCreateBuffer(this->context_,CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
-    ni_*nj_* sizeof(cl_float4),ray_results_,&status);
+                                   ni_*nj_* sizeof(cl_float4),ray_results_,&status);
   if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (work image) failed."))
     return SDK_FAILURE;
   return SDK_SUCCESS;
@@ -674,7 +671,7 @@ int boxm_stack_ray_trace_manager<T>::setup_imgdims_buffer()
 {
   cl_int status = CL_SUCCESS;
   imgdims_buf_ = clCreateBuffer(this->context_,CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
-    sizeof(cl_uint4),imgdims_,&status);
+                                sizeof(cl_uint4),imgdims_,&status);
   if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (cell_array) failed."))
     return SDK_FAILURE;
   else
@@ -730,30 +727,30 @@ int boxm_stack_ray_trace_manager<T>::build_kernel_program()
   const char * source = this->prog_.c_str();
 
   program_ = clCreateProgramWithSource(this->context_,
-    1,
-    &source,
-    sourceSize,
-    &status);
+                                       1,
+                                       &source,
+                                       sourceSize,
+                                       &status);
   if (!this->check_val(status,
-    CL_SUCCESS,
-    "clCreateProgramWithSource failed."))
+                       CL_SUCCESS,
+                       "clCreateProgramWithSource failed."))
     return SDK_FAILURE;
 
   // create a cl program executable for all the devices specified
   status = clBuildProgram(program_,
-    1,
-    this->devices_,
-    NULL,
-    NULL,
-    NULL);
+                          1,
+                          this->devices_,
+                          NULL,
+                          NULL,
+                          NULL);
   if (!this->check_val(status,
-    CL_SUCCESS,
-    error_to_string(status)))
+                       CL_SUCCESS,
+                       error_to_string(status)))
   {
     vcl_size_t len;
     char buffer[2048];
     clGetProgramBuildInfo(program_, this->devices_[0],
-      CL_PROGRAM_BUILD_LOG, sizeof(buffer), buffer, &len);
+                          CL_PROGRAM_BUILD_LOG, sizeof(buffer), buffer, &len);
     vcl_printf("%s\n", buffer);
     return SDK_FAILURE;
   }
@@ -989,9 +986,9 @@ bool boxm_stack_ray_trace_manager<T>::run()
   clean_ray_origin_buffer();
   clean_camera_input_buffer();
   vcl_cout << "Timing Analysis "<<vcl_endl
-		   << "==============="<<vcl_endl
-		   <<"openCL Running time "<<gpu_time_<<" ms"<<vcl_endl
-		   << "Running block "<<total_gpu_time/1000<<'s'<<vcl_endl
+           << "==============="<<vcl_endl
+           <<"openCL Running time "<<gpu_time_<<" ms"<<vcl_endl
+           << "Running block "<<total_gpu_time/1000<<'s'<<vcl_endl
            << "total block loading time = " << total_load_time << 's' << vcl_endl
            << "total block processing time = " << total_raytrace_time << 's' << vcl_endl;
   return true;
@@ -1066,14 +1063,14 @@ bool boxm_stack_ray_trace_manager<T>::run_block()
   // check the local memeory
   cl_ulong used_local_memory;
   status = clGetKernelWorkGroupInfo(this->kernel(),this->devices()[0],CL_KERNEL_LOCAL_MEM_SIZE,
-    sizeof(cl_ulong),&used_local_memory,NULL);
+                                    sizeof(cl_ulong),&used_local_memory,NULL);
   if (!this->check_val(status,CL_SUCCESS,"clGetKernelWorkGroupInfo CL_KERNEL_LOCAL_MEM_SIZE failed."))
     return SDK_FAILURE;
 
   // determine the work group size
   cl_ulong kernel_work_group_size;
   status = clGetKernelWorkGroupInfo(this->kernel(),this->devices()[0],CL_KERNEL_WORK_GROUP_SIZE,
-    sizeof(cl_ulong),&kernel_work_group_size,NULL);
+                                    sizeof(cl_ulong),&kernel_work_group_size,NULL);
   if (!this->check_val(status,CL_SUCCESS,"clGetKernelWorkGroupInfo CL_KERNEL_WORK_GROUP_SIZE, failed."))
     return SDK_FAILURE;
 
@@ -1103,11 +1100,11 @@ bool boxm_stack_ray_trace_manager<T>::run_block()
   cl_ulong tstart,tend;
   status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
   status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
-  gpu_time_+= (double)1.0e-6 * (tend - tstart); // convert nanoseconds to milliseconds 
-
+  gpu_time_+= (double)1.0e-6 * (tend - tstart); // convert nanoseconds to milliseconds
 
   return SDK_SUCCESS;
 }
+
 template<class T>
 bool boxm_stack_ray_trace_manager<T>:: read_output_image()
 {
@@ -1115,9 +1112,9 @@ bool boxm_stack_ray_trace_manager<T>:: read_output_image()
 
   // Enqueue readBuffers
   int status = clEnqueueReadBuffer(command_queue_,work_image_buf_,CL_TRUE,
-                               0,ni_*nj_*sizeof(cl_float4),
-                               this->ray_results(),
-                               0,NULL,&events[0]);
+                                   0,ni_*nj_*sizeof(cl_float4),
+                                   this->ray_results(),
+                                   0,NULL,&events[0]);
 
   if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (ray_results)failed."))
     return SDK_FAILURE;
@@ -1135,7 +1132,6 @@ bool boxm_stack_ray_trace_manager<T>:: read_output_image()
   status = clReleaseCommandQueue(command_queue_);
   if (!this->check_val(status,CL_SUCCESS,"clReleaseCommandQueue failed."))
     return SDK_FAILURE;
-
 }
 
 #define BOXM_STACK_RAY_TRACE_MANAGER_INSTANTIATE(T) \

@@ -86,10 +86,10 @@
 
 template<class T>
 bool boxm_ray_bundle_trace_manager<T>::init_raytrace(boxm_scene<boct_tree<short,T > > *scene,
-                                              vpgl_camera_double_sptr cam,
-                                              unsigned int ni, unsigned int nj,
-                                              vcl_vector<vcl_string> functor_source_filenames,
-                                              unsigned int i0, unsigned int j0, bool useimage)
+                                                     vpgl_camera_double_sptr cam,
+                                                     unsigned int ni, unsigned int nj,
+                                                     vcl_vector<vcl_string> functor_source_filenames,
+                                                     unsigned int i0, unsigned int j0, bool useimage)
 {
   scene_ = scene;
   cam_ = cam;
@@ -136,9 +136,7 @@ bool boxm_ray_bundle_trace_manager<T>::init_raytrace(boxm_scene<boct_tree<short,
   }
   if (!this->setup_image_cam_arrays())
     return false;
-  if (!this->setup_work_image())
-    return false;
-  return true;
+  return this->setup_work_image();
 }
 
 template<class T>
@@ -204,10 +202,7 @@ bool boxm_ray_bundle_trace_manager<T>::setup_img_bb(vpgl_camera_double_sptr cam,
 
   img_bb=vgl_intersection(img_bounds,block_projection);
 
-  if (img_bb.is_empty())
-    return false;
-  else
-    return true;
+  return !img_bb.is_empty();
 }
 
 template<class T>
@@ -761,7 +756,7 @@ int boxm_ray_bundle_trace_manager<T>::setup_work_img_buffer()
 {
   cl_int status = CL_SUCCESS;
   work_image_buf_ = clCreateBuffer(this->context_,CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
-	  this->work_space_ni()*this->work_space_nj()* sizeof(cl_float4),ray_results_,&status);
+                                   this->work_space_ni()*this->work_space_nj()* sizeof(cl_float4),ray_results_,&status);
   if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (work image) failed."))
     return SDK_FAILURE;
   return SDK_SUCCESS;
@@ -1123,10 +1118,10 @@ bool boxm_ray_bundle_trace_manager<T>::run()
   clean_work_img_buffer();
   //clean_ray_origin_buffer();
   //clean_camera_input_buffer();
-  vcl_cout << "Timing Analysis "<<vcl_endl
-		   << "==============="<<vcl_endl
-		   <<"openCL Running time "<<gpu_time_<<" ms"<<vcl_endl
-		   << "Running block "<<total_gpu_time/1000<<'s'<<vcl_endl
+  vcl_cout << "Timing Analysis\n"
+           << "===============\n"
+           <<"openCL Running time "<<gpu_time_<<" ms"<<vcl_endl
+           << "Running block "<<total_gpu_time/1000<<'s'<<vcl_endl
            << "total block loading time = " << total_load_time << 's' << vcl_endl
            << "total block processing time = " << total_raytrace_time << 's' << vcl_endl;
   return true;
@@ -1248,7 +1243,7 @@ bool boxm_ray_bundle_trace_manager<T>::run_block()
   cl_ulong tstart,tend;
   status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
   status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
-  gpu_time_+= (double)1.0e-6 * (tend - tstart); // convert nanoseconds to milliseconds 
+  gpu_time_+= (double)1.0e-6 * (tend - tstart); // convert nanoseconds to milliseconds
 
   return SDK_SUCCESS;
 }
