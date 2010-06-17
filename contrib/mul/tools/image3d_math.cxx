@@ -1543,7 +1543,7 @@ class operations
                   "filename", "image", "Explicitly load into integer image");
     add_operation("--local_z_normalise", &local_z_normalise__image_3d_of_float__double,
                   function_type_t() << operand::e_image_3d_of_float << operand::e_double,
-                  "image half_radius", "image", "Normalise each voxel by mean and stddev measured over half_radius window");
+                  "image half_radius", "image", "Normalise each voxel by mean and stddev measured over half_radius (mm) window");
     add_operation("--not", &not__image_3d_of_int,
                   function_type_t() << operand::e_image_3d_of_int,
                   "image", "image", "Apply logical NOT to voxels");
