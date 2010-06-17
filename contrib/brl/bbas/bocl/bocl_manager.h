@@ -20,7 +20,9 @@
 #include <vcl_string.h>
 #include "bocl_cl.h"
 #include <vcl_cstddef.h>
+#if !defined(__APPLE__)
 #include <malloc.h>
+#endif
 #define SDK_SUCCESS 0
 #define SDK_FAILURE 1
 //#define GROUP_SIZE 64
