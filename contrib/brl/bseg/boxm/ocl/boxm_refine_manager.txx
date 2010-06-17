@@ -7,37 +7,24 @@
 #include <boxm/ocl/boxm_ocl_utils.h>
 #include <vcl_cstdio.h>
 
+//include for timing
+#include <vul/vul_timer.h>
+
 
 //: Initializes CPU side input buffers
 //put tree structure and data into arrays
 //initializes (cl_int*) cells_ and (cl_float*) cell_data_
 // also initializes (cl_int*) tree_results_ and (cl_float*) data_results_
 template<class T>
-bool boxm_refine_manager<T>::init(tree_type *tree, float prob_thresh, unsigned max_level)
+bool boxm_refine_manager<T>::init(tree_type *tree, float prob_thresh)
 {
   //set the scene (this also allocates all host variables)
+  vcl_cout<<"INITIALIZING REFINE MANAGER-----------------------------"<<vcl_endl;
   format_tree(tree);
   (*prob_thresh_) = prob_thresh;
-  (*max_level_) = max_level;
+  (*max_level_) = tree->number_levels();
 
-  //load refine main
-  if (!this->load_kernel_source(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                    +"/contrib/brl/bseg/boxm/ocl/refine_main.cl")) {
-    vcl_cerr << "Error: boxm_refine_manager : failed to load kernel source (main function)\n";
-    return false;
-  }
-
-  if (this->build_kernel_program()) {
-    return false;
-  }
-
-  //create the kernel
-  cl_int status = CL_SUCCESS;
-  kernel_ = clCreateKernel(program_, "refine_main", &status);
-  if (!this->check_val(status, CL_SUCCESS, error_to_string(status))) {
-    return false;
-  }
-  return true;
+  return init_kernel();
 }
 
 template<class T>
@@ -54,6 +41,27 @@ bool boxm_refine_manager<T>::init(int* cells, unsigned numcells, unsigned tree_m
   (*data_max_size_) = data_max_size;
   (*prob_thresh_) = prob_thresh;
   (*max_level_) = max_level;
+  return init_kernel();
+}
+
+template<class T>
+bool boxm_refine_manager<T>::init_kernel() {
+  
+  //load kernel source main
+  if (!this->load_kernel_source(vcl_string(VCL_SOURCE_ROOT_DIR)
+                                    +"/contrib/brl/bseg/boxm/ocl/refine_main.cl")) {
+    vcl_cerr << "Error: boxm_refine_manager : failed to load kernel source (main function)\n";
+    return false;
+  }
+  if (this->build_kernel_program()) {
+    return false;
+  }
+  //create the kernel
+  cl_int status = CL_SUCCESS;
+  kernel_ = clCreateKernel(program_, "refine_main", &status);
+  if (!this->check_val(status, CL_SUCCESS, error_to_string(status))) {
+    return false;
+  }
   return true;
 }
 
@@ -65,17 +73,24 @@ bool boxm_refine_manager<T>::init(int* cells, unsigned numcells, unsigned tree_m
 template<class T>
 bool boxm_refine_manager<T>::run_tree()
 {
+
+  vcl_cout<<"REFINING TREE-----------------------------"<<vcl_endl;
   //allocate and initialize memory on gpu side
+  vcl_cout<<"---setting up buffers"<<vcl_endl;
   cl_int status =  setup_tree_buffers();
   if (!this->check_val(status,CL_SUCCESS,"setup_tree_buffers failed"))
     return false;
 
   //run this block on the GPU
+  vcl_cout<<"---running on gpu "<<vcl_endl;
+  vul_timer timer; timer.mark();
   status = run_block();
+  float gpu_time = (float) timer.all()/1e3f;
   if (!this->check_val(status,CL_SUCCESS,"setup_tree_buffers failed"))
     return false;
 
   //read output from GPU
+  vcl_cout<<"---reading buffers"<<vcl_endl;
   if (!read_tree_buffers())
     return false;
 
@@ -85,12 +100,20 @@ bool boxm_refine_manager<T>::run_tree()
           <<"END KERNEL OUTPUT"<<vcl_endl;
 
   //debug print method
-  vcl_cout<<"REFINE:"<<vcl_endl
-          <<"Tree Input Size (#cells) = "<<(*numcells_)<<vcl_endl
-          <<"Tree Output Size (#cells) = "<<(*tree_results_size_)<<vcl_endl;
+  vcl_cout<<"---REFINE Stats:-----------------------------------"<<vcl_endl
+          <<"---Tree Input Size (#cells) = "<<(*numcells_)<<vcl_endl
+          <<"---Tree Output Size (#cells) = "<<(*tree_results_size_)<<vcl_endl;
   int numSplit = ((*tree_results_size_)-(*numcells_))/8;
-  vcl_cout<<"number of nodes that split = "<<numSplit<<vcl_endl;
-  //boxm_ocl_utils<float>::print_tree_array(tree_results_, (*tree_results_size_), data_results_);
+  vcl_cout<<"---number of nodes that split = "<<numSplit<<vcl_endl
+          <<"----------------------------------------------------"<<vcl_endl;
+//  boxm_ocl_utils<float>::print_tree_array(tree_results_, (*tree_results_size_), data_results_);
+
+//  vcl_cout<<"VUL_TIMER: Global mem BANDWITH RESULTS"<<vcl_endl;
+//  vcl_cout<<"Size "<<16*(*tree_max_size_)<<" bytes in "<<gpu_time<<"sec"<<vcl_endl;
+//  float rate = (16.0*(*tree_max_size_))/gpu_time;
+//  vcl_cout<<" = "<<rate<<" bytes/sec"<<vcl_endl;
+//  vcl_cout<<" = "<<rate/pow(2,20)<<" megabytes/sec"<<vcl_endl;
+//  boxm_ocl_utils<float>::print_tree_array(tree_results_, (*tree_results_size_), data_results_);
 
   return true;
 }
@@ -159,8 +182,8 @@ bool boxm_refine_manager<T>::run_block()
 
   //Global size and local size is just 1 for now (serial)
   vcl_size_t globalThreads[1], localThreads[1];
-  globalThreads[0] = 1;
-  localThreads[0] = 1;
+  globalThreads[0] = 1; //(*tree_max_size_);
+  localThreads[0] = 1; //64;
 
   if (used_local_memory > this->total_local_memory())
   {
@@ -169,7 +192,7 @@ bool boxm_refine_manager<T>::run_block()
   }
 
   // set up a command queue
-  command_queue_ = clCreateCommandQueue(this->context(),this->devices()[0],0,&status);
+  command_queue_ = clCreateCommandQueue(this->context(),this->devices()[0],CL_QUEUE_PROFILING_ENABLE,&status);
   if (!this->check_val(status,CL_SUCCESS,"Failed in command queue creation" + error_to_string(status)))
     return false;
 
@@ -191,6 +214,14 @@ bool boxm_refine_manager<T>::run_block()
   cl_ulong tstart,tend;
   status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
   status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
+  float gpu_time = (tend-tstart)/1e9f;
+  vcl_cout<<"---GLOBAL MEM BANDWITH RESULTS-----------------------"<<vcl_endl
+          <<"---Tree Size: "<<(*tree_results_size_)<<" blocks; "<<16*(*tree_results_size_)<<" bytes"<<vcl_endl
+          <<"---GPU Time: "<<gpu_time<<" seconds"<<vcl_endl;
+  float rate = (16.0*(*tree_max_size_))/gpu_time;
+  vcl_cout<<"---Refine Bandwidth ~~ "<<rate/pow(2,20)<<" MB/sec"<<vcl_endl
+          <<"-----------------------------------------------------"<<vcl_endl;
+  
   return SDK_SUCCESS;
 }
 
@@ -424,7 +455,7 @@ bool boxm_refine_manager<T>::format_tree(tree_type* tree)
   vnl_vector_fixed<int, 4> root_cell(0);
   root_cell[0]=-1; // no parent
   root_cell[1]=-1; // no children at the moment
-  root_cell[1]=-1; // no data at the moment
+  root_cell[2]=-1; // no data at the moment
   cell_input.push_back(root_cell);
   boxm_ocl_utils<T>::copy_to_arrays(root, cell_input, data_input, cell_ptr);
 
@@ -436,6 +467,7 @@ bool boxm_refine_manager<T>::format_tree(tree_type* tree)
   unsigned num_cells = cell_input.size();
   unsigned cell_max_size = 3*cell_input.size();
   unsigned data_max_size = 3*data_input.size();
+  
 
   //allocate host memory
   alloc_trees(cell_max_size, data_max_size);
@@ -495,6 +527,7 @@ bool boxm_refine_manager<T>::alloc_trees(int cells_size, int data_input_size)
   output_results_ = (cl_float*) boxm_ocl_utils<T>::alloc_aligned(1, sizeof(cl_float), 16);
   output_input_ = (cl_float*) boxm_ocl_utils<T>::alloc_aligned(1, sizeof(cl_float), 16);
   (*output_input_) = 9876;
+  //TODO remove me ^^^
 
   if (cells_== NULL||cell_data_ == NULL)
   {
@@ -520,6 +553,12 @@ bool boxm_refine_manager<T>::free_trees()
   boxm_ocl_utils<T>::free_aligned(data_results_size_);
   boxm_ocl_utils<T>::free_aligned(prob_thresh_);
   boxm_ocl_utils<T>::free_aligned(max_level_);
+  
+  //TODO remove output stuff
+  //boxm_ocl_utils<T>::free_aligned(output_results_);
+  // boxm_ocl_utils<T>::free_aligned(output_input_);
+  //TODO remove me^^^^
+  
   return true;
 }
 

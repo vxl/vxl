@@ -26,7 +26,8 @@ class boxm_refine_manager : public bocl_manager<boxm_refine_manager<T_data> >
     tree_results_(0), tree_results_size_(0),
     data_results_(0), data_results_size_(0),
     prob_thresh_(0), max_level_(0),
-    program_(0) {}
+    program_(0),
+    output_input_(0), output_results_(0) {}
     ~boxm_refine_manager() {  
       if (program_)
         clReleaseProgram(program_);
@@ -38,7 +39,7 @@ class boxm_refine_manager : public bocl_manager<boxm_refine_manager<T_data> >
     //(cl_float*)data_, 
     //(cl_int*) tree_max_size_
     //(cl_int*) numLevels_
-    bool init(tree_type* tree, float prob_thresh, unsigned max_level);
+    bool init(tree_type* tree, float prob_thresh);
     bool init(int* cells, unsigned numcells, unsigned tree_max_size,
               float* data, unsigned data_size, unsigned data_max_size,
               float prob_thresh, unsigned max_level);
@@ -52,7 +53,7 @@ class boxm_refine_manager : public bocl_manager<boxm_refine_manager<T_data> >
     int* get_tree() { return tree_results_; }
     int get_tree_size() { return (*tree_results_size_); }
     float* get_data() { return data_results_; }
-    float get_data_size() { return (*data_results_size_); }
+    int get_data_size() { return (*data_results_size_); }
     
     //: cleanup
     bool clean_refine();
@@ -73,6 +74,7 @@ class boxm_refine_manager : public bocl_manager<boxm_refine_manager<T_data> >
     bool read_tree_buffers();
     int clean_tree_buffers();
     int build_kernel_program();
+    bool init_kernel();
     cl_kernel kernel() {return kernel_;}
  
     //necessary CL items
