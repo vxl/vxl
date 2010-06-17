@@ -37,7 +37,9 @@ int main2(int argc, char*argv[])
   if (lines_arg.set())
     lines = lines_arg();
   else if (lines_fname.set())
+  {
     if (!mbl_load_text_file(lines, lines_fname())) return 2;
+  }
   else
     vul_arg_base::display_usage_and_exit("Must specify either \"-l\" of \"-f\".\n");
 
@@ -47,7 +49,7 @@ int main2(int argc, char*argv[])
     {
       if (*it==0)
       {
-        vcl_cerr << "ERROR: Requested line 0, without specifing \"--zero-index\\n";
+        vcl_cerr << "ERROR: Requested line 0, without specifing \"-zero\"\n";
         return 3;
       }
       (*it)--;
@@ -92,7 +94,8 @@ int main2(int argc, char*argv[])
     {
       vcl_string s;
       std::getline(*in_stream, s);
-      while(ordered_lines[ii] == line_no && ii<n)
+      if (in_stream->eof()) break;
+      while(ii<n && ordered_lines[ii] == line_no)
       {
         data[index[ii]] = s;
         ++ii;
