@@ -158,8 +158,8 @@ void boxm_ocl_utils<T>::free_aligned(void* ptr)
 #else
     free(ptr);
 #endif
-    ptr = NULL;
   }
+  ptr = NULL;
 }
 
 #define BOXM_OCL_UTILS_INSTANTIATE(T) \

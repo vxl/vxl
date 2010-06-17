@@ -42,7 +42,7 @@ class boxm_refine_manager : public bocl_manager<boxm_refine_manager<T_data> >
     bool init(tree_type* tree, float prob_thresh);
     bool init(int* cells, unsigned numcells, unsigned tree_max_size,
               float* data, unsigned data_size, unsigned data_max_size,
-              float prob_thresh, unsigned max_level);
+              float prob_thresh, unsigned max_level, float bbox_len);
 
     //: run refinement
     //bool run_scene();
@@ -95,6 +95,7 @@ class boxm_refine_manager : public bocl_manager<boxm_refine_manager<T_data> >
     //probability threshold and max tree level
     cl_float* prob_thresh_;
     cl_uint* max_level_;
+    cl_float* bbox_len_;
 
     //output array of tree cells and new size
     cl_int* tree_results_;
@@ -111,6 +112,7 @@ class boxm_refine_manager : public bocl_manager<boxm_refine_manager<T_data> >
     cl_mem   data_max_size_buf_;
     cl_mem   prob_thresh_buf_;
     cl_mem   max_level_buf_;
+    cl_mem   bbox_len_buf_;
     
     
     ///////////////////////////////////

@@ -8,7 +8,7 @@
 DECLARE_FUNC_CONS(boxm_ocl_render_expected_process);
 DECLARE_FUNC_CONS(boxm_ocl_stack_render_expected_process);
 DECLARE_FUNC_CONS(boxm_ocl_ray_bundle_expected_process);
-
+DECLARE_FUNC_CONS(boxm_ocl_refine_process);
 
 
 #endif

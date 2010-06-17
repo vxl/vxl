@@ -3,7 +3,7 @@
 // the necessary stack size will be about 8*num_levels
 /////////////////////////////////////////////////////////////////////
 typedef struct {
-  int data[1000];
+  int data[10000];
   int top;
 } ocl_stack;
 void init_ocl_stack(ocl_stack *stack) { stack->top = 0; }
@@ -117,6 +117,7 @@ refine_main(__global int4     *tree,           //tree structure
             __global unsigned *data_max_size,  //max size for data buffer
             __global float    *prob_thresh,    //refinement threshold
             __global unsigned *max_level,      //maximum number of levels for tree
+            __global float    *bbox_len,       //
             __global float      *output)       //TODO delete me later
 {
   unsigned gid = get_global_id(0);
@@ -127,6 +128,7 @@ refine_main(__global int4     *tree,           //tree structure
   unsigned tSize = (*tree_size);
   unsigned dSize = (*data_size);
   unsigned maxLevel = (*max_level);
+  float boxLen = (*bbox_len);
  
   if(gid==0) { //only do it on one core
     
@@ -136,7 +138,8 @@ refine_main(__global int4     *tree,           //tree structure
     //1) parent pointer, 2) child pointer 3) data pointer 4) nothing right now
     /////////////////////////////////////////////////////////////////
     //need to keep track of current level and pops for each level
-    int popCounts[10];
+    (*output) = 0;
+    int popCounts[11];
     for(int i=0; i<10; i++) popCounts[i]=0; 
     int currLevel = 0;
 
@@ -159,14 +162,13 @@ refine_main(__global int4     *tree,           //tree structure
       //if the current node has no children, it's a leaf -> check if it needs to be refined
       int child_ptr = tree[currNode].y;
       if(child_ptr < 0){ 
-        
         ////////////////////////////////////////
         //INSERT LEAF SPECIFIC CODE HERE
         ////////////////////////////////////////
         //find side length for cell of this level (bit shift: two_pow_level = 1<<currLevel;)
         //int two_pow_level = pow(2,currLevel);
         unsigned two_pow_level = 1<<currLevel;
-        float side_len = 1.0/two_pow_level;
+        float side_len = boxLen/two_pow_level;
         
         //get alpha value for this cell;
         int dataIndex = tree[currNode].z;
@@ -175,15 +177,14 @@ refine_main(__global int4     *tree,           //tree structure
         
         //integrate alpha value
         float alpha_int = alpha * side_len;
-        (*output) = dSize;
 
         //IF alpha value triggers split, tack on 8 children to end of tree array
         //make sure the PARENT cell for each of the new children points to i
         //ALSO make sure currLevel is less than MAX_LEVELS
-        if(alpha_int > max_alpha_int && currLevel < maxLevel )  {
+        if(alpha_int > max_alpha_int && currLevel < maxLevel)  {
+          (*output)++;
           //new alpha for the child nodes
           float new_alpha = max_alpha_int / side_len;   
-          
           //node I points to tSize - the place where it's children will be tacked on
           tree[currNode].y = tSize;
           for(int j=0; j<8; j++){
@@ -219,7 +220,6 @@ refine_main(__global int4     *tree,           //tree structure
     //tree and data size output
     tree_size[0] = tSize;
     data_size[0] = dSize;
-     
     
     /////////////////////////////////////////////////////////////////
     //REFORMAT TREE into cannonical order
