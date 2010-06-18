@@ -4,8 +4,9 @@
 //:
 // \file
 #include "boxm_ocl_utils.h"
+#if defined(unix) || defined(__unix) || defined(__unix__)
 #include <malloc.h>
-
+#endif
 template<class T>
 void boxm_ocl_utils<T>::pack_cell_data(boct_tree_cell<short, boxm_sample<BOXM_APM_SIMPLE_GREY> >* cell_ptr, vnl_vector_fixed<float, 16> &data)
 {
@@ -41,12 +42,6 @@ void boxm_ocl_utils<T>::pack_cell_data(boct_tree_cell<short, boxm_sample<BOXM_AP
   data[12]=appear.distribution(2).num_observations;
   data[13]=appear.num_observations;
 
- /* for (unsigned i=0;i<data[1];i++)
-  {
-    data[j]=appear.distribution(i).mean();++j;
-    data[j]=appear.distribution(i).var();++j;
-    data[j]=appear.weight(i);++j;
-  }*/
 }
 
 template<class T>
@@ -61,9 +56,9 @@ void boxm_ocl_utils<T>::pack_cell_data(boct_tree_cell<short, float> * cell_ptr, 
 //: Recursive algorithm to take in a tree cell and copy structure and data into two arrays
 template<class T>
 void boxm_ocl_utils<T>::copy_to_arrays(boct_tree_cell<short, T >* cell_ptr,
-               vcl_vector<vnl_vector_fixed<int, 4> >& cell_array,
-               vcl_vector<vnl_vector_fixed<float, 16> >& data_array,
-               int cell_input_ptr)
+									   vcl_vector<vnl_vector_fixed<int, 4> >& cell_array,
+									   vcl_vector<vnl_vector_fixed<float, 16> >& data_array,
+									   int cell_input_ptr)
 {
   // cell_input_ptr is the array index for the cell being constructed
   // it already exists in the cell array but only has the parent index set
@@ -93,14 +88,7 @@ void boxm_ocl_utils<T>::copy_to_arrays(boct_tree_cell<short, T >* cell_ptr,
       copy_to_arrays(child_cell_ptr, cell_array, data_array, child_cell_input_ptr);
     }
   }
-#if 0
-  else{
-    // Debug
-    boct_loc_code<short> cd = cell_ptr->get_code();
-    vgl_box_3d<double> lbb = cell_ptr->local_bounding_box(2);
-    vcl_cout<< cell_ptr->level() << ' ' << cd << ' ' << lbb << '\n';
-  }
-#endif
+
 }
 
 // allocate child cells on the array

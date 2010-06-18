@@ -23,7 +23,7 @@ ray_bundle_test_driver<T>::setup_cl()
   if (device_p) {
     command_queue_ = clCreateCommandQueue(cl_manager_->context(),
                                           device_p[0],
-                                          0,
+                                          CL_QUEUE_PROFILING_ENABLE,
                                           &status);
   }
   else {
@@ -112,7 +112,7 @@ int ray_bundle_test_driver<T>::set_basic_test_args(vcl_string arg_setup_spec)
   }
 
   status = clSetKernelArg(cl_manager_->kernel(), 4, 
-                          (3 * this->n_rays_in_bundle() * sizeof(cl_float)), NULL);  
+                          ( this->n_rays_in_bundle() * sizeof(cl_int)), NULL);  
   if (!this->check_val(status,
                        CL_SUCCESS,
                        "clSetKernelArg failed. (local exit point array)"))
@@ -137,7 +137,14 @@ int ray_bundle_test_driver<T>::set_basic_test_args(vcl_string arg_setup_spec)
                        "clSetKernelArg failed. (local cached data array)"))
     return SDK_FAILURE;
   if(arg_setup_spec == "include_image_array"){
-    status = clSetKernelArg(cl_manager_->kernel(), 7, 
+       status = clSetKernelArg(cl_manager_->kernel(), 7, 
+                            (this->n_rays_in_bundle() * sizeof(cl_float4)), NULL);  
+
+    if (!this->check_val(status,
+                         CL_SUCCESS,
+                         "clSetKernelArg failed. (local cached data array)"))
+      return SDK_FAILURE;
+    status = clSetKernelArg(cl_manager_->kernel(), 8, 
                             (this->n_rays_in_bundle() * sizeof(cl_float4)), NULL);  
 
     if (!this->check_val(status,
@@ -269,7 +276,7 @@ int ray_bundle_test_driver<T>::run_bundle_test_kernels()
   cl_manager_->clear_tree_results();
 
   cl_mem result_buf = clCreateBuffer(cl_manager_->context(),
-                                     CL_MEM_WRITE_ONLY | CL_MEM_USE_HOST_PTR,
+                                     CL_MEM_WRITE_ONLY | CL_MEM_COPY_HOST_PTR,
                                      cl_manager_->tree_result_size() * sizeof(cl_int4),
                                      cl_manager_->tree_results(),
                                      &status);
@@ -331,6 +338,7 @@ int ray_bundle_test_driver<T>::run_bundle_test_kernels()
       return SDK_FAILURE;
     }
   vcl_cout << "Local memory used: " << used_local_memory_ << '\n';
+  cl_event ceEvent;
 
   status = clEnqueueNDRangeKernel(command_queue_,
                                   cl_manager_->kernel(),
@@ -340,7 +348,7 @@ int ray_bundle_test_driver<T>::run_bundle_test_kernels()
                                   localThreads,
                                   0,
                                   NULL,
-                                  NULL);
+                                  &ceEvent);
   if (!this->check_val(status,
                        CL_SUCCESS,
                        "clEnqueueNDRangeKernel failed."))
@@ -351,6 +359,11 @@ int ray_bundle_test_driver<T>::run_bundle_test_kernels()
                        CL_SUCCESS,
                        "clFinish failed."))
     return SDK_FAILURE;
+  cl_ulong tstart,tend;
+  status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
+  status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
+  float gpu_time_= (double)1.0e-6 * (tend - tstart); // convert nanoseconds to milliseconds 
+  //vcl_cout<<"GPU time is "<<gpu_time_<< "ms"<<vcl_endl;
 
   // Enqueue readBuffers
   status = clEnqueueReadBuffer(command_queue_,

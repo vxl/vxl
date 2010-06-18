@@ -13,6 +13,7 @@ SET(boxm_ocl_test_sources
     stat_test_driver.h stat_test_driver.txx
     test_statistics.cxx
     test_refine.cxx
+    test_update.cxx
    )
 
 AUX_SOURCE_DIRECTORY(Templates boxm_ocl_test_sources)
@@ -29,5 +30,7 @@ ADD_TEST( test_expected_image  ${EXECUTABLE_OUTPUT_PATH}/boxm_ocl_test_all test_
 ADD_TEST( test_ray_bundle  ${EXECUTABLE_OUTPUT_PATH}/boxm_ocl_test_all test_ray_bundle )
 ADD_TEST( test_statistics  ${EXECUTABLE_OUTPUT_PATH}/boxm_ocl_test_all test_statistics )
 ADD_TEST( test_refine ${EXECUTABLE_OUTPUT_PATH}/boxm_ocl_test_all test_refine )
+ADD_TEST( test_update ${EXECUTABLE_OUTPUT_PATH}/boxm_ocl_test_all test_update )
+
 ADD_EXECUTABLE( boxm_ocl_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( boxm_ocl_test_include boxm_ocl boxm)

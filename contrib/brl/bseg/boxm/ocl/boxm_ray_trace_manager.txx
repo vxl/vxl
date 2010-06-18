@@ -165,7 +165,7 @@ bool boxm_ray_trace_manager<T>::setup_tree()
   // data as vnl_vector_fixed<float, 2>
 
   unsigned cells_size=cell_input_.size();
-  vcl_cout<<"Size of tree "<<cells_size*16/(10^6)/(1000000) << "MBytes  "
+  vcl_cout<<"Size of tree "<<cells_size*4*4/(1000000) << "MBytes  "
           <<"  Size of data "<<data_input_.size()*16*4/(1000000) << "MBytes  "<<vcl_endl;
   if (cells_size>this->image2d_max_width_)
     cells_size=RoundUp(cells_size,this->image2d_max_width_);
@@ -1134,10 +1134,6 @@ bool boxm_ray_trace_manager<T>::run()
            << "total gpu preprocess time = " << total_gpu_load_time << 's' << vcl_endl;
 
 
-  //output to file for timing stats
-  //vcl_ofstream ofstr("/media/VXL/data/APl/output_img/GPUstats.txt", vcl_fstream::in | vcl_fstream::out | vcl_fstream::app);
-  //ofstr << total_load_time << ',' << total_raytrace_time << ',' << total_gpu_time/1000 << ',' << total_gpu_load_time << vcl_endl;
-  //ofstr.close();
 
   return true;
 }

@@ -23,66 +23,6 @@
 #include "boxm_ocl_utils.h"
 
 
-//// allocate child cells on the array
-//template<class T>
-//static void split(vcl_vector<vnl_vector_fixed<int, 4> >& cell_array,
-//                  int parent_ptr,
-//                  int& child_ptr)
-//{
-//  child_ptr = cell_array.size();
-//  for (unsigned i=0; i<8; i++) {
-//    vnl_vector_fixed<int, 4> cell(0);
-//    cell[0]= parent_ptr;
-//    cell[1]=-1;
-//    cell[2]=-1;
-//    cell_array.push_back(cell);
-//  }
-//}
-//
-//template<class T>
-//static void
-//copy_to_arrays(boct_tree_cell<short, T >* cell_ptr,
-//               vcl_vector<vnl_vector_fixed<int, 4> >& cell_array,
-//               vcl_vector<vnl_vector_fixed<float, 16> >& data_array,
-//               int cell_input_ptr)
-//{
-//  // cell_input_ptr is the array index for the cell being constructed
-//  // it already exists in the cell array but only has the parent index set
-//  // no data or child pointers
-//
-//  // convert the data to 16 vector size
-//  vnl_vector_fixed<float, 16> data;
-//  pack_cell_data(cell_ptr,data);
-//
-//  // data pointer will be at index == size after the push_back
-//  cell_array[cell_input_ptr][2] = data_array.size();
-//  data_array.push_back(data);
-//  cell_array[cell_input_ptr][3] = cell_ptr->level();
-//  // if the cell has chidren then they must be copied
-//  if (!cell_ptr->is_leaf()) {
-//    // initialize data values to null
-//    data_array[cell_array[cell_input_ptr][2]].fill(0.0);
-//    // create the children on the cell array
-//    int child_ptr = -1;
-//    split<T>(cell_array, cell_input_ptr, child_ptr);
-//    cell_array[cell_input_ptr][1]=child_ptr;
-//    boct_tree_cell<short,T >* children =
-//      cell_ptr->children();
-//    for (unsigned i = 0; i<8; ++i) {
-//      boct_tree_cell<short, T >* child_cell_ptr = children + i;
-//      int child_cell_input_ptr = child_ptr +i;
-//      copy_to_arrays(child_cell_ptr, cell_array, data_array, child_cell_input_ptr);
-//    }
-//  }
-//#if 0
-//  else{
-//    // Debug
-//    boct_loc_code<short> cd = cell_ptr->get_code();
-//    vgl_box_3d<double> lbb = cell_ptr->local_bounding_box(2);
-//    vcl_cout<< cell_ptr->level() << ' ' << cd << ' ' << lbb << '\n';
-//  }
-//#endif
-//}
 
 template<class T>
 bool boxm_ray_bundle_trace_manager<T>::init_raytrace(boxm_scene<boct_tree<short,T > > *scene,
@@ -95,9 +35,8 @@ bool boxm_ray_bundle_trace_manager<T>::init_raytrace(boxm_scene<boct_tree<short,
   cam_ = cam;
   ni_ = ni;
   nj_ = nj;
-  i0_ = i0;
-  j0_ = j0;
-  useimage_=useimage;
+
+
   // load base raytrace code
   if (!this->load_kernel_source(vcl_string(VCL_SOURCE_ROOT_DIR)
                                 +"/contrib/brl/bseg/boxm/ocl/octree_library_functions.cl") ||

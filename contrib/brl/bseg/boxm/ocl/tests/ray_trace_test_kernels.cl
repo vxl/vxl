@@ -7,7 +7,7 @@ void expected_image_funct(__global float16* cell_data, int data_ptr,
 
   if (alpha<0) return;
 
-  float expected_int_cell = data.s3;
+  float expected_int_cell = data.s1;
   float alpha_integral = (*data_return).x;
   float vis            = (*data_return).y;
   float expected_int   = (*data_return).z;
