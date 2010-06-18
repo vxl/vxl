@@ -513,6 +513,103 @@ void or__image_3d_of_int__image_3d_of_int(opstack_t& s)
   s.push_front(operand(result));
 }
 
+
+
+
+//: Find the minimum of corresponding voxel pairs between two images
+void min__image_3d_of_int__image_3d_of_int(opstack_t& s)
+{
+  assert(s.size() >= 2);
+  vimt3d_image_3d_of<int> o2(s[0].as_image_3d_of_int());
+  vimt3d_image_3d_of<int> o1(s[1].as_image_3d_of_int());
+  const vil3d_image_view<int>& o1_image = o1.image();
+  const vil3d_image_view<int>& o2_image = o2.image();
+
+  vimt3d_image_3d_of<int> result(o1_image.ni(), o1_image.nj(), o1_image.nk(),
+                                 1, o1.world2im());
+  vil3d_image_view<int> &result_image = result.image();
+
+  for (unsigned k=0,nk=o1_image.nk();k<nk;++k)
+    for (unsigned j=0,nj=o1_image.nj();j<nj;++j)
+      for (unsigned i=0,ni=o1_image.ni();i<ni;++i)
+        result_image(i,j,k) = vcl_min(o1_image(i,j,k), o2_image(i,j,k));
+
+  s.pop_front();
+  s.pop_front();
+  s.push_front(operand(result));
+}
+
+
+//: Find the minimum of corresponding voxel pairs between two images
+void min__image_3d_of_float__image_3d_of_float(opstack_t& s)
+{
+  assert(s.size() >= 2);
+  vimt3d_image_3d_of<float> o2(s[0].as_image_3d_of_float());
+  vimt3d_image_3d_of<float> o1(s[1].as_image_3d_of_float());
+  const vil3d_image_view<float>& o1_image = o1.image();
+  const vil3d_image_view<float>& o2_image = o2.image();
+
+  vimt3d_image_3d_of<float> result(o1_image.ni(), o1_image.nj(), o1_image.nk(),
+                                 1, o1.world2im());
+  vil3d_image_view<float> &result_image = result.image();
+
+  for (unsigned k=0,nk=o1_image.nk();k<nk;++k)
+    for (unsigned j=0,nj=o1_image.nj();j<nj;++j)
+      for (unsigned i=0,ni=o1_image.ni();i<ni;++i)
+        result_image(i,j,k) = vcl_min(o1_image(i,j,k), o2_image(i,j,k));
+
+  s.pop_front();
+  s.pop_front();
+  s.push_front(operand(result));
+}
+
+//: Find the maximum of corresponding voxel pairs between two images
+void max__image_3d_of_int__image_3d_of_int(opstack_t& s)
+{
+  assert(s.size() >= 2);
+  vimt3d_image_3d_of<int> o2(s[0].as_image_3d_of_int());
+  vimt3d_image_3d_of<int> o1(s[1].as_image_3d_of_int());
+  const vil3d_image_view<int>& o1_image = o1.image();
+  const vil3d_image_view<int>& o2_image = o2.image();
+
+  vimt3d_image_3d_of<int> result(o1_image.ni(), o1_image.nj(), o1_image.nk(),
+                                 1, o1.world2im());
+  vil3d_image_view<int> &result_image = result.image();
+
+  for (unsigned k=0,nk=o1_image.nk();k<nk;++k)
+    for (unsigned j=0,nj=o1_image.nj();j<nj;++j)
+      for (unsigned i=0,ni=o1_image.ni();i<ni;++i)
+        result_image(i,j,k) = vcl_max(o1_image(i,j,k), o2_image(i,j,k));
+
+  s.pop_front();
+  s.pop_front();
+  s.push_front(operand(result));
+}
+
+
+//: Find the maximum of corresponding voxel pairs between two images
+void max__image_3d_of_float__image_3d_of_float(opstack_t& s)
+{
+  assert(s.size() >= 2);
+  vimt3d_image_3d_of<float> o2(s[0].as_image_3d_of_float());
+  vimt3d_image_3d_of<float> o1(s[1].as_image_3d_of_float());
+  const vil3d_image_view<float>& o1_image = o1.image();
+  const vil3d_image_view<float>& o2_image = o2.image();
+
+  vimt3d_image_3d_of<float> result(o1_image.ni(), o1_image.nj(), o1_image.nk(),
+                                 1, o1.world2im());
+  vil3d_image_view<float> &result_image = result.image();
+
+  for (unsigned k=0,nk=o1_image.nk();k<nk;++k)
+    for (unsigned j=0,nj=o1_image.nj();j<nj;++j)
+      for (unsigned i=0,ni=o1_image.ni();i<ni;++i)
+        result_image(i,j,k) = vcl_max(o1_image(i,j,k), o2_image(i,j,k));
+
+  s.pop_front();
+  s.pop_front();
+  s.push_front(operand(result));
+}
+
 //: Find the difference between voxels of two images
 void diff__image_3d_of_float__image_3d_of_float(opstack_t& s)
 {
@@ -1544,6 +1641,18 @@ class operations
     add_operation("--local_z_normalise", &local_z_normalise__image_3d_of_float__double,
                   function_type_t() << operand::e_image_3d_of_float << operand::e_double,
                   "image half_radius", "image", "Normalise each voxel by mean and stddev measured over half_radius (mm) window");
+    add_operation("--max",  &max__image_3d_of_int__image_3d_of_int,
+                  function_type_t() << operand::e_image_3d_of_int << operand::e_image_3d_of_int,
+                  "im_A im_B", "image", "max over corresponding voxels in im_B and im_B");
+    add_operation("--max",  &max__image_3d_of_float__image_3d_of_float,
+                  function_type_t() << operand::e_image_3d_of_float << operand::e_image_3d_of_float,
+                  "im_A im_B", "image", "max over corresponding voxels in im_B and im_B");
+    add_operation("--min",  &min__image_3d_of_int__image_3d_of_int,
+                  function_type_t() << operand::e_image_3d_of_int << operand::e_image_3d_of_int,
+                  "im_A im_B", "image", "min over corresponding voxels in im_B and im_B");
+    add_operation("--min",  &min__image_3d_of_float__image_3d_of_float,
+                  function_type_t() << operand::e_image_3d_of_float << operand::e_image_3d_of_float,
+                  "im_A im_B", "image", "min over corresponding voxels in im_B and im_B");
     add_operation("--not", &not__image_3d_of_int,
                   function_type_t() << operand::e_image_3d_of_int,
                   "image", "image", "Apply logical NOT to voxels");
