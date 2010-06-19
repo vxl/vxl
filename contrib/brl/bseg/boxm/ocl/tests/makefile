@@ -13,6 +13,8 @@ TESTS += test_ray_bundle.cxx
 TESTS += test_octree_stack.cxx
 TESTS += test_octree_image.cxx
 TESTS += test_statistics.cxx
+TESTS += test_refine.cxx
+TESTS += test_update.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 

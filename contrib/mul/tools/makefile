@@ -6,7 +6,6 @@ include ${VXLROOT}/core/vul/config.mk
 include ${VXLROOT}/core/vbl/config.mk
 
 MINI_PROG_SOURCES += concat_3d_images.cxx
-MINI_PROG_SOURCES += print_mbl_log_properties.cxx
 MINI_PROG_SOURCES += crop_image_2d.cxx
 MINI_PROG_SOURCES += crop_image_3d.cxx
 MINI_PROG_SOURCES += print_image.cxx
@@ -17,6 +16,7 @@ MINI_PROG_SOURCES += tile_images_2d.cxx
 MINI_PROG_SOURCES += image3d_split.cxx
 MINI_PROG_SOURCES += reflect_image_2d.cxx
 MINI_PROG_SOURCES += reflect_image_3d.cxx
+MINI_PROG_SOURCES += select_lines.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk

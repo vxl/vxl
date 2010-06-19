@@ -12,6 +12,13 @@ SOURCES += ray_trace_main.cl
 SOURCES += ray_stack_trace_main.cl
 MANPAGE_SOURCES += boxm_stack_ray_trace_manager.txx
 MANPAGE_SOURCES += boxm_stat_manager.txx
+SOURCES += refine_main.cl
+SOURCES += ray_bundle_library_functions.cl
+MANPAGE_SOURCES += boxm_ocl_refine_scene.h
+MANPAGE_SOURCES += boxm_ray_bundle_trace_manager.txx
+MANPAGE_SOURCES += boxm_refine_manager.txx
+SOURCES += update_main.cl
+MANPAGE_SOURCES += boxm_online_update_manager.txx
 
 SUBDIRS += pro exe
 
