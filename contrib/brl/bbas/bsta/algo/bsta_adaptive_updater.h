@@ -69,7 +69,12 @@ class bsta_mg_adaptive_updater
         mixture.set_weight(i, mixture.weight(i)*adjust);
     }
     init_gaussian_.set_mean(sample);
-    mixture.insert(init_gaussian_,init_weight);
+    //The following statement was originally conditionally applied, which can 
+    //insert a single component with weight == init_weight, not one.
+    if(mixture.num_components()>0)
+      mixture.insert(init_gaussian_,init_weight);
+    else // added by JLM June 19, 2010, make weight==1 if only one component
+      mixture.insert(init_gaussian_,T(1));
   }
 
   //: A model for new Gaussians inserted
