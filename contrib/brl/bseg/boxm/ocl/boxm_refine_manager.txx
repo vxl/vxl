@@ -86,7 +86,7 @@ bool boxm_refine_manager<T>::run_tree()
   if (!this->check_val(status,CL_SUCCESS,"setup_tree_buffers failed"))
     return false;
 
-  float numMB = (16*(*tree_max_size_)+4*16*(*data_max_size_))/(1024.0*1024.0);
+  float numMB = (16*(*tree_max_size_)+4*16*(*data_max_size_))/(1024.0f*1024.0f);
   vcl_cout<<"---total global mem allocated: "<<numMB<<vcl_endl;
 
   //run this block on the GPU
@@ -605,7 +605,7 @@ bool boxm_refine_manager<T>::clean_refine()
 
   // release kernel
   status = clReleaseKernel(kernel_);
-  good = this->check_val(status,CL_SUCCESS,"clReleaseKernel failed.");
+  good = static_cast<bool>(this->check_val(status,CL_SUCCESS,"clReleaseKernel failed."));
   return good;
 }
 

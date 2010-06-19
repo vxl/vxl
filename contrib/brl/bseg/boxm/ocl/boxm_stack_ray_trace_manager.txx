@@ -88,7 +88,7 @@ bool boxm_stack_ray_trace_manager<T>::clean_raytrace()
   cl_int status = CL_SUCCESS;
   // release kernel
   status = clReleaseKernel(kernel_);
-  return this->check_val(status,CL_SUCCESS,"clReleaseKernel failed.");
+  return this->check_val(status,CL_SUCCESS,"clReleaseKernel failed.")==1;
 }
 
 template<class T>
@@ -1132,6 +1132,7 @@ bool boxm_stack_ray_trace_manager<T>:: read_output_image()
   status = clReleaseCommandQueue(command_queue_);
   if (!this->check_val(status,CL_SUCCESS,"clReleaseCommandQueue failed."))
     return SDK_FAILURE;
+ return SDK_SUCCESS;
 }
 
 #define BOXM_STACK_RAY_TRACE_MANAGER_INSTANTIATE(T) \

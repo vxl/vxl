@@ -51,7 +51,7 @@ bool test_refine_simple_scene()
   typedef boxm_sample<BOXM_APM_MOG_GREY> data_type; 
   typedef boct_tree<short,data_type> tree_type;
   tree_type* tree = open_cl_test_data::simple_tree<data_type>();
-  float prob_thresh = .3;
+  float prob_thresh = .3f;
 
   //-------- GPU side: refine the scene using the opencl refine manager -------
   boxm_refine_manager<data_type>* mgr = boxm_refine_manager<data_type>::instance();
@@ -80,7 +80,7 @@ bool test_refine_simple_scene()
 
   // Verify that the tree is formatted correctly
   vcl_vector<vnl_vector_fixed<int,4> > tree_vector;
-  for (unsigned i=0,j=0; j<tree_size; i+=4,j++) {
+  for (int i=0,j=0; j<tree_size; i+=4,j++) {
     vnl_vector_fixed<int,4> cell;
     for (unsigned k=0; k<4; k++) 
       cell[k] = tree_array[i+k];
@@ -116,7 +116,7 @@ bool test_refine_simple_scene()
   
   //Verify the tree's structure is correct
   bool good = true;
-  for(int i=0; i<tree_vector.size(); i++){
+  for(unsigned i=0; i<tree_vector.size(); i++){
     for(int j=0; j<2; j++) //0 and 1 are parent and child pointers
       good = good && (tree_vector[i][j] == cell_input[i][j]);
   }
@@ -124,7 +124,7 @@ bool test_refine_simple_scene()
   
   //verify that the data for each node is the same
   float ssd = 0;
-  for(int i=0; i<tree_vector.size(); i++){
+  for(unsigned i=0; i<tree_vector.size(); i++){
     
     //cpu side data
     int dataIndex = cell_input[i][2];

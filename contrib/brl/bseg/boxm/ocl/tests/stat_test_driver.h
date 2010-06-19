@@ -60,6 +60,8 @@ class stat_test_driver
 
   int set_stat_args(vcl_string arg_setup_spec="basic");
 
+  bool setup_data(vcl_vector<float> const& data);
+
   bool clean_io_data();
 
   bool read_stat_results();

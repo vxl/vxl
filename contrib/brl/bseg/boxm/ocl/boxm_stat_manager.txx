@@ -21,7 +21,7 @@ template<class T>
 void boxm_stat_manager<T>::clear_stat_input()
 {
   if (stat_input_) {
-    unsigned n = this->result_size();
+    unsigned n = this->input_size();
     for (unsigned i = 0; i<n; ++i)
       stat_input_[i]=0.0f;
   }
@@ -61,6 +61,56 @@ bool boxm_stat_manager<T>::clean_stat_input()
 #endif
       stat_input_ = NULL;
     }
+  input_size_ = 0;
+  return true;
+}
+template<class T>
+void boxm_stat_manager<T>::clear_stat_data()
+{
+  if (stat_input_) {
+    unsigned n = this->data_size();
+    for (unsigned i = 0; i<n; ++i)
+      stat_data_[i]=0.0f;
+  }
+}
+
+template<class T>
+bool boxm_stat_manager<T>::setup_stat_data(vcl_vector<float> const& data)
+{
+  data_size_ = data.size()+1;
+#if defined (_WIN32)
+  stat_data_ = (cl_float*)_aligned_malloc(this->data_size()* sizeof(cl_float), 16);
+#elif defined(__APPLE__)
+  stat_data_ = (cl_float*)malloc(this->data_size() * sizeof(cl_float));
+#else
+  stat_data_ = (cl_float*)memalign(16, this->data_size() * sizeof(cl_float));
+#endif
+
+  if (stat_data_ == NULL)
+    {
+      vcl_cout << "Failed to allocate host memory. (stat_data)\n";
+      return SDK_FAILURE;
+    }
+  this->clear_stat_data();
+  stat_data_[0]=static_cast<float>(data.size());
+  for(unsigned i = 1; i<this->data_size(); ++i)
+    stat_data_[i] = data[i-1];
+  return true;
+}
+
+template<class T>
+bool boxm_stat_manager<T>::clean_stat_data()
+{
+  if (stat_data_)
+    {
+#ifdef _WIN32
+      _aligned_free(stat_data_);
+#else
+      free(stat_data_);
+#endif
+      stat_data_ = NULL;
+    }
+  data_size_ = 0;
   return true;
 }
 
@@ -108,6 +158,7 @@ bool boxm_stat_manager<T>::clean_stat_results()
 #endif
       stat_results_ = NULL;
     }
+  result_size_ = 0;
   return true;
 }
 
@@ -128,8 +179,33 @@ int boxm_stat_manager<T>::clean_stat_input_buffer()
   cl_int status = clReleaseMemObject(stat_input_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject (stat_input_buf_) failed."))
     return SDK_FAILURE;
+  else{
+    stat_input_buf_=0;
+    return SDK_SUCCESS;
+  }
+}
+
+template<class T>
+int boxm_stat_manager<T>::setup_stat_data_buffer()
+{
+  cl_int status = CL_SUCCESS;
+  stat_data_buf_ = clCreateBuffer(this->context_,CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, data_size_*sizeof(cl_float),stat_data_,&status);
+  if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (stat data) failed."))
+    return SDK_FAILURE;
   else
     return SDK_SUCCESS;
+}
+
+template<class T>
+int boxm_stat_manager<T>::clean_stat_data_buffer()
+{
+  cl_int status = clReleaseMemObject(stat_data_buf_);
+  if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject (stat_data_buf_) failed."))
+    return SDK_FAILURE;
+  else{
+    stat_data_buf_=0;
+    return SDK_SUCCESS;
+  }
 }
 
 template <class T>
@@ -159,8 +235,10 @@ int boxm_stat_manager<T>::clean_stat_results_buffer()
   cl_int status = clReleaseMemObject(stat_results_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject (stat_results_buf_) failed."))
     return SDK_FAILURE;
-  else
+  else{
+    stat_results_buf_=0;
     return SDK_SUCCESS;
+  }
 }
 
 template<class T>
@@ -245,29 +323,73 @@ int boxm_stat_manager<T>::release_kernel()
 
 
 template<class T>
-void boxm_stat_manager<T>::set_gauss_1d(float x, float mean, float sigma){
+void boxm_stat_manager<T>::set_gauss_1d(float mean, float sigma){
   this->clean_stat_input();
-  this->set_input_size(3);
+  this->set_input_size(2);
   this->setup_stat_input();
-  stat_input_[0]=x;
-  stat_input_[1]=mean;
-  stat_input_[2]=sigma;
+  stat_input_[0]=mean;
+  stat_input_[1]=sigma;
+  this->setup_stat_input_buffer();
+}
+template<class T>
+void boxm_stat_manager<T>::set_init_gauss_1d(float mean, float sigma, 
+                                             float min_sigma, float rho)
+{
+  this->clean_stat_input();
+  this->set_input_size(4);
+  this->setup_stat_input();
+  stat_input_[0]=mean;
+  stat_input_[1]=sigma;
+  stat_input_[2]=min_sigma;
+  stat_input_[3]=rho;
   this->setup_stat_input_buffer();
 }
 template<class T>
 void boxm_stat_manager<T>::
-set_gauss_3_mixture_1d(float x, float mu0, float sigma0,
-                              float w0, float mu1, float sigma1,
-                              float w1, float mu2, float sigma2,
-                              float w2)
+set_gauss_3_mixture_1d(float mu0, float sigma0, float w0,
+                              float mu1, float sigma1, float w1,
+                              float mu2, float sigma2, float w2)
 {
   this->clean_stat_input();
-  this->set_input_size(10);
+  this->set_input_size(9);
   this->setup_stat_input();
-  stat_input_[0]=x;  
-  stat_input_[1]=mu0;  stat_input_[2]=sigma0;  stat_input_[3]=w0;
-  stat_input_[4]=mu1;  stat_input_[5]=sigma1;  stat_input_[6]=w1;
-  stat_input_[7]=mu2;  stat_input_[8]=sigma2;  stat_input_[9]=w2;
+  stat_input_[0]=mu0;  stat_input_[1]=sigma0;  stat_input_[2]=w0;
+  stat_input_[3]=mu1;  stat_input_[4]=sigma1;  stat_input_[5]=w1;
+  stat_input_[6]=mu2;  stat_input_[7]=sigma2;  stat_input_[8]=w2;
+  this->setup_stat_input_buffer();
+}
+template<class T>
+void boxm_stat_manager<T>::
+set_insert_gauss_3_mix_1d(float init_weight, float init_sigma,
+                          float mu0, float sigma0, float w0, 
+                          float mu1, float sigma1, float w1, 
+                          float mu2, float sigma2, float w2 )
+{
+  this->clean_stat_input();
+  this->set_input_size(11);
+  this->setup_stat_input();
+  stat_input_[0]=init_weight;   stat_input_[1]= init_sigma;
+  stat_input_[2]=mu0;  stat_input_[3]=sigma0;  stat_input_[4]=w0;
+  stat_input_[5]=mu1;  stat_input_[6]=sigma1;  stat_input_[7]=w1;
+  stat_input_[8]=mu2;  stat_input_[9]=sigma2;  stat_input_[10]=w2;
+  this->setup_stat_input_buffer();
+}
+template<class T>
+void boxm_stat_manager<T>::
+set_update_gauss_3_mix_1d(float weight, float init_sigma,
+                          float min_sigma, float t_match,
+                          float mu0, float sigma0, float w0, 
+                          float mu1, float sigma1, float w1,
+                          float mu2, float sigma2, float w2)
+{
+  this->clean_stat_input();
+  this->set_input_size(13);
+  this->setup_stat_input();
+  stat_input_[0]=weight;   stat_input_[1]= init_sigma;
+  stat_input_[2]=min_sigma;   stat_input_[3]=t_match;
+  stat_input_[4]=mu0;  stat_input_[5]=sigma0;  stat_input_[6]=w0;
+  stat_input_[7]=mu1;  stat_input_[8]=sigma1;  stat_input_[9]=w1;
+  stat_input_[10]=mu2;  stat_input_[11]=sigma2;  stat_input_[12]=w2;
   this->setup_stat_input_buffer();
 }
 template<class T>

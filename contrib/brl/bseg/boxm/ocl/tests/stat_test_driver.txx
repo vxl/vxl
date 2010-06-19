@@ -39,6 +39,14 @@ stat_test_driver<T>::setup_cl()
 }
 
 template <class T>
+bool stat_test_driver<T>::setup_data(vcl_vector<float> const& data){
+  if(!cl_manager_->setup_stat_data(data))
+    return false;
+  if(cl_manager_->setup_stat_data_buffer()!=SDK_SUCCESS)
+    return false;
+  return true;
+}
+template <class T>
 bool stat_test_driver<T>::setup_result_data(unsigned rsize){
   cl_manager_->set_result_size(rsize);
   if(!cl_manager_->setup_stat_results())
@@ -52,6 +60,10 @@ bool stat_test_driver<T>::clean_io_data(){
   if(!cl_manager_->clean_stat_input())
     return false;
   if(cl_manager_->clean_stat_input_buffer()!=SDK_SUCCESS)
+    return false;
+  if(!cl_manager_->clean_stat_data())
+    return false;
+  if(cl_manager_->clean_stat_data_buffer()!=SDK_SUCCESS)
     return false;
   if(!cl_manager_->clean_stat_results())
     return false;
@@ -85,9 +97,25 @@ int stat_test_driver<T>::set_stat_args(vcl_string arg_setup_spec)
                        CL_SUCCESS,
                        "clSetKernelArg failed. (input_buffer)"))
     return SDK_FAILURE;
-  // the test result buffer
+  if(cl_manager_->data_size()==0)
+    {
+      vcl_vector<float> null_data;
+      null_data.push_back(0.0f);
+      cl_manager_->setup_stat_data(null_data);
+      cl_manager_->setup_stat_data_buffer();
+    }
+  // the data buffer
   status = clSetKernelArg(cl_manager_->kernel(),
                           1,
+                          sizeof(cl_mem),
+                          (void *)&cl_manager_->data_buf());
+  if (!this->check_val(status,
+                       CL_SUCCESS,
+                       "clSetKernelArg failed. (data_buffer)"))
+    return SDK_FAILURE;
+  // the test result buffer
+  status = clSetKernelArg(cl_manager_->kernel(),
+                          2,
                           sizeof(cl_mem),
                           (void *)&cl_manager_->results_buf());
   if (!this->check_val(status,
