@@ -113,6 +113,8 @@ update_aux( __global int * root_level,  // level of the root.
 
     cached_loc_codes[llid]=curr_loc_code;
     ray_bundle_array[llid]=llid;
+    barrier(CLK_LOCAL_MEM_FENCE);
+
     int data_ptr = tree_array[curr_cell_ptr].z;
 
     ////////////////////////////////////////////////////////
@@ -120,22 +122,21 @@ update_aux( __global int * root_level,  // level of the root.
     load_data_mutable_using_loc_codes(ray_bundle_array,cached_loc_codes);
     if (ray_bundle_array[llid].x==llid)
     {
-      //cached_data[llid] =sample_array[data_ptr];
       cached_aux_data[llid] =aux_data_array[data_ptr];
     }
-    ///* wait for all workitems to finish loading */
-    barrier(CLK_LOCAL_MEM_FENCE);
+	 barrier(CLK_LOCAL_MEM_FENCE);
 
-    // distance must be multiplied by the dimension of the bounding box
+ //   // distance must be multiplied by the dimension of the bounding box
     float d = (tfar-tnear)*(*local_copy_bbox).w;
-    // no function pointers in OpenCL (spec 8.6a)
-    // instead, user must provide source with a function named "step_cell"
+ //   // no function pointers in OpenCL (spec 8.6a)
+ //   // instead, user must provide source with a function named "step_cell"
     seg_len_obs(d,image_vect,ray_bundle_array,cached_aux_data);
+	//barrier(CLK_LOCAL_MEM_FENCE);
     if (ray_bundle_array[llid].x==llid)
     {
       aux_data_array[data_ptr]=cached_aux_data[llid] ;
     }
-    barrier(CLK_LOCAL_MEM_FENCE);
+   
 
     //// exit point
     exit_pt=ray_o + tfar*ray_d;
@@ -176,7 +177,7 @@ update_aux( __global int * root_level,  // level of the root.
   // should have a cleanup functor for expected image
   // also it is not necessary to have a full float4 as the
   // output type a single scalar float array is sufficient
-  in_image[j*get_global_size(0)+i]=(float4)aux_data_array[j*get_global_size(0)+i];
+  in_image[j*get_global_size(0)+i]=(float4)(i,j,count,0);//count;//aux_data_array[j*get_global_size(0)+i];
 }
 
 #if 0

@@ -1090,6 +1090,7 @@ bool boxm_ray_trace_manager<T>::run()
 
       tree_type * tree=curr_block->get_tree();
 
+	  
       set_tree(tree);
       setup_tree();
 

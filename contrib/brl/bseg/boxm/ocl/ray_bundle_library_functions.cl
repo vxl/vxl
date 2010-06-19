@@ -370,7 +370,7 @@ int ray_entry_point(__local float16* cam, __local float4* cam_center,
  *
  */
 void seg_len_obs(float seg_len, __local float4* image_vect,
-                 __local uchar4*   ray_bundle_array,
+                 __local uchar4*  ray_bundle_array,
                  __local float4*  cached_aux_data)
 {
   /* linear thread id */
@@ -380,13 +380,14 @@ void seg_len_obs(float seg_len, __local float4* image_vect,
   /*limit access to the thread that owns each ray bundle connected region */
   if (ray_bundle_array[llid].x!=llid)
   {
-
 	// use these as temp
     cached_aux_data[llid]=(float4)0.0f;
     cached_aux_data[llid].x = seg_len;
-    return;
   }
+  barrier(CLK_LOCAL_MEM_FENCE);
 
+  if(ray_bundle_array[llid].x==llid)
+  {
   uchar temp = ray_bundle_array[llid].w & ACTIVE;
   if (temp == 0)
     return;
@@ -401,11 +402,13 @@ void seg_len_obs(float seg_len, __local float4* image_vect,
   while ( temp > 0)
   {
     adr = ray_bundle_array[adr].y;
-
     cached_aux_data[llid].x += cached_aux_data[adr].x;
     cached_aux_data[llid].y += (image_vect[adr].x)*cached_aux_data[adr].x;
     temp = ray_bundle_array[adr].w & NEXT_ADR_VALID;
   }
+  }
+  barrier(CLK_LOCAL_MEM_FENCE);
+
 }
 
 

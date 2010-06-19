@@ -63,7 +63,9 @@ void boxm_ocl_utils<T>::copy_to_arrays(boct_tree_cell<short, T >* cell_ptr,
   // it already exists in the cell array but only has the parent index set
   // no data or child pointers
 
+
   // convert the data to 16 vector size
+
   vnl_vector_fixed<float, 16> data;
   boxm_ocl_utils<T>::pack_cell_data(cell_ptr,data);
 
