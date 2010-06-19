@@ -13,63 +13,63 @@ test_load_data(__global int4* cells, __global float16* cell_data,
   /* in this test the bundle must be 2x2 */
   short n_levels = 3;
   if (get_local_id(0)==0&&get_local_id(1)==0)
-  {
-    exit_points[0]=0.25f;  exit_points[1]= 0.25f;  exit_points[2]= 1.0f;
-    exit_points[3]=0.75f;  exit_points[4]= 0.25f;  exit_points[5]= 1.0f;
-    exit_points[6]=0.25f;  exit_points[7]= 0.75f;  exit_points[8]= 1.0f;
-    exit_points[9]=0.75f;  exit_points[10]=0.75f;  exit_points[11]=1.0f;
+    {
+      exit_points[0]=0.25f;  exit_points[1]= 0.25f;  exit_points[2]= 1.0f;
+      exit_points[3]=0.75f;  exit_points[4]= 0.25f;  exit_points[5]= 1.0f;
+      exit_points[6]=0.25f;  exit_points[7]= 0.75f;  exit_points[8]= 1.0f;
+      exit_points[9]=0.75f;  exit_points[10]=0.75f;  exit_points[11]=1.0f;
 
 
-    int ret = load_data(cells, cell_data,n_levels, ray_bundle_array,
-                        exit_points,cached_loc_codes,cached_data);
-    int result_ptr = 0;
-    /* Check the load_data return value */
-    results[result_ptr++]= (int4)ret;
-    /* Check the loc_codes */
-    for (uchar i = 0; i<4; ++i) {
-      results[result_ptr++]=convert_int4(cached_loc_codes[i]);
+      int ret = load_data(cells, cell_data,n_levels, ray_bundle_array,
+                          exit_points,cached_loc_codes,cached_data);
+      int result_ptr = 0;
+      /* Check the load_data return value */
+      results[result_ptr++]= (int4)ret;
+      /* Check the loc_codes */
+      for (uchar i = 0; i<4; ++i) {
+        results[result_ptr++]=convert_int4(cached_loc_codes[i]);
+      }
+
+      /* Check the data transfered to the local data cache */
+      for (uchar i = 0; i<4; ++i) {
+        int16 temp = as_int16(cached_data[i]);
+        results[result_ptr++]=(int4)temp.s1;
+
+        if (temp.s0!=0)
+          cached_data[i] = cell_data[temp.s1];
+      }
+
+      /* Check the ray_bundle_array */
+      results[result_ptr].x = ray_bundle_array[0];
+      results[result_ptr].y = ray_bundle_array[1];
+      results[result_ptr].z = ray_bundle_array[2];
+      results[result_ptr++].w = ray_bundle_array[3];
+
+      /* Test where all rays lie in the same cell */
+      exit_points[0]=0.25f;  exit_points[1]= 0.25f;  exit_points[2]= 1.0f;
+      exit_points[3]=0.251f;  exit_points[4]= 0.252f;  exit_points[5]= 1.0f;
+      exit_points[6]=0.253f;  exit_points[7]= 0.254f;  exit_points[8]= 1.0f;
+      exit_points[9]=0.255f;  exit_points[10]=0.256f;  exit_points[11]=1.0f;
+
+      ret = load_data(cells, cell_data, n_levels, ray_bundle_array,
+                      exit_points,cached_loc_codes,cached_data);
+
+      /* Check the load_data return value */
+      results[result_ptr++]= (int4)ret;
+      /* Check the loc_codes */
+
+      results[result_ptr++]= convert_int4(cached_loc_codes[0]);
+
+      /* Check the data transfered to the local data cache */
+      float16 temp = cached_data[0];
+      results[result_ptr++]=(int4)as_int(temp.s1);
+
+      /* Check the ray_bundle_array */
+      results[result_ptr].x = ray_bundle_array[0];
+      results[result_ptr].y = ray_bundle_array[1];
+      results[result_ptr].z = ray_bundle_array[2];
+      results[result_ptr].w = ray_bundle_array[3];
     }
-
-    /* Check the data transfered to the local data cache */
-    for (uchar i = 0; i<4; ++i) {
-      int16 temp = as_int16(cached_data[i]);
-      results[result_ptr++]=(int4)temp.s1;
-
-      if (temp.s0!=0)
-        cached_data[i] = cell_data[temp.s1];
-    }
-
-    /* Check the ray_bundle_array */
-    results[result_ptr].x = ray_bundle_array[0];
-    results[result_ptr].y = ray_bundle_array[1];
-    results[result_ptr].z = ray_bundle_array[2];
-    results[result_ptr++].w = ray_bundle_array[3];
-
-    /* Test where all rays lie in the same cell */
-    exit_points[0]=0.25f;  exit_points[1]= 0.25f;  exit_points[2]= 1.0f;
-    exit_points[3]=0.251f;  exit_points[4]= 0.252f;  exit_points[5]= 1.0f;
-    exit_points[6]=0.253f;  exit_points[7]= 0.254f;  exit_points[8]= 1.0f;
-    exit_points[9]=0.255f;  exit_points[10]=0.256f;  exit_points[11]=1.0f;
-
-    ret = load_data(cells, cell_data, n_levels, ray_bundle_array,
-                    exit_points,cached_loc_codes,cached_data);
-
-    /* Check the load_data return value */
-    results[result_ptr++]= (int4)ret;
-    /* Check the loc_codes */
-
-    results[result_ptr++]= convert_int4(cached_loc_codes[0]);
-
-    /* Check the data transfered to the local data cache */
-    float16 temp = cached_data[0];
-    results[result_ptr++]=(int4)as_int(temp.s1);
-
-    /* Check the ray_bundle_array */
-    results[result_ptr].x = ray_bundle_array[0];
-    results[result_ptr].y = ray_bundle_array[1];
-    results[result_ptr].z = ray_bundle_array[2];
-    results[result_ptr].w = ray_bundle_array[3];
-  }
   barrier(CLK_LOCAL_MEM_FENCE);
 }
 
@@ -85,57 +85,57 @@ test_load_data_mutable(__global int4* cells, __global float16* cell_data,
   /* in this test the bundle must be 2x2 */
   short n_levels = 3;
   if (get_local_id(0)==0&&get_local_id(1)==0)
-  {
-    exit_points[0]=0.25f;  exit_points[1]= 0.25f;  exit_points[2]= 1.0f;
-    exit_points[3]=0.75f;  exit_points[4]= 0.25f;  exit_points[5]= 1.0f;
-    exit_points[6]=0.25f;  exit_points[7]= 0.75f;  exit_points[8]= 1.0f;
-    exit_points[9]=0.75f;  exit_points[10]=0.75f;  exit_points[11]=1.0f;
-    int ret = load_data_mutable(cells, cell_data,n_levels, ray_bundle_array,
-                                exit_points,cached_loc_codes,cached_data);
-    int result_ptr = 0;
-    /* Check the load_data return value */
-    results[result_ptr++]= (int4)ret;
-    /* Check the loc_codes */
-    for (uchar i = 0; i<4; ++i) {
-      results[result_ptr++]=convert_int4(cached_loc_codes[i]);
-    }
+    {
+      exit_points[0]=0.25f;  exit_points[1]= 0.25f;  exit_points[2]= 1.0f;
+      exit_points[3]=0.75f;  exit_points[4]= 0.25f;  exit_points[5]= 1.0f;
+      exit_points[6]=0.25f;  exit_points[7]= 0.75f;  exit_points[8]= 1.0f;
+      exit_points[9]=0.75f;  exit_points[10]=0.75f;  exit_points[11]=1.0f;
+      int ret = load_data_mutable(cells, cell_data,n_levels, ray_bundle_array,
+                                  exit_points,cached_loc_codes,cached_data);
+      int result_ptr = 0;
+      /* Check the load_data return value */
+      results[result_ptr++]= (int4)ret;
+      /* Check the loc_codes */
+      for (uchar i = 0; i<4; ++i) {
+        results[result_ptr++]=convert_int4(cached_loc_codes[i]);
+      }
 
-    /* Check the data transfered to the local data cache */
-    for (uchar i = 0; i<4; ++i) {
-      float16 temp = cached_data[i];
+      /* Check the data transfered to the local data cache */
+      for (uchar i = 0; i<4; ++i) {
+        float16 temp = cached_data[i];
+        results[result_ptr++]=(int4)temp.s1;
+      }
+      /* Check the ray_bundle_array */
+      results[result_ptr++] = convert_int4(ray_bundle_array[0]);
+      results[result_ptr++] = convert_int4(ray_bundle_array[1]);
+      results[result_ptr++] = convert_int4(ray_bundle_array[2]);
+      results[result_ptr++] = convert_int4(ray_bundle_array[3]);
+
+      /* Test where all rays lie in the same cell */
+      exit_points[0]=0.25f;  exit_points[1]= 0.25f;  exit_points[2]= 1.0f;
+      exit_points[3]=0.251f;  exit_points[4]= 0.252f;  exit_points[5]= 1.0f;
+      exit_points[6]=0.253f;  exit_points[7]= 0.254f;  exit_points[8]= 1.0f;
+      exit_points[9]=0.255f;  exit_points[10]=0.256f;  exit_points[11]=1.0f;
+
+      ret = load_data_mutable(cells, cell_data, n_levels, ray_bundle_array,
+                              exit_points,cached_loc_codes,cached_data);
+
+      /* Check the load_data return value */
+      results[result_ptr++]= (int4)ret;
+      /* Check the loc_codes */
+
+      results[result_ptr++]=convert_int4(cached_loc_codes[0]);
+
+      /* Check the data transfered to the local data cache */
+      float16 temp = cached_data[0];
       results[result_ptr++]=(int4)temp.s1;
+
+      /* Check the ray_bundle_array */
+      results[result_ptr++] = convert_int4(ray_bundle_array[0]);
+      results[result_ptr++] = convert_int4(ray_bundle_array[1]);
+      results[result_ptr++] = convert_int4(ray_bundle_array[2]);
+      results[result_ptr] = convert_int4(ray_bundle_array[3]);
     }
-    /* Check the ray_bundle_array */
-    results[result_ptr++] = convert_int4(ray_bundle_array[0]);
-    results[result_ptr++] = convert_int4(ray_bundle_array[1]);
-    results[result_ptr++] = convert_int4(ray_bundle_array[2]);
-    results[result_ptr++] = convert_int4(ray_bundle_array[3]);
-
-    /* Test where all rays lie in the same cell */
-    exit_points[0]=0.25f;  exit_points[1]= 0.25f;  exit_points[2]= 1.0f;
-    exit_points[3]=0.251f;  exit_points[4]= 0.252f;  exit_points[5]= 1.0f;
-    exit_points[6]=0.253f;  exit_points[7]= 0.254f;  exit_points[8]= 1.0f;
-    exit_points[9]=0.255f;  exit_points[10]=0.256f;  exit_points[11]=1.0f;
-
-    ret = load_data_mutable(cells, cell_data, n_levels, ray_bundle_array,
-                            exit_points,cached_loc_codes,cached_data);
-
-    /* Check the load_data return value */
-    results[result_ptr++]= (int4)ret;
-    /* Check the loc_codes */
-
-    results[result_ptr++]=convert_int4(cached_loc_codes[0]);
-
-    /* Check the data transfered to the local data cache */
-    float16 temp = cached_data[0];
-    results[result_ptr++]=(int4)temp.s1;
-
-    /* Check the ray_bundle_array */
-    results[result_ptr++] = convert_int4(ray_bundle_array[0]);
-    results[result_ptr++] = convert_int4(ray_bundle_array[1]);
-    results[result_ptr++] = convert_int4(ray_bundle_array[2]);
-    results[result_ptr] = convert_int4(ray_bundle_array[3]);
-  }
 
   barrier(CLK_LOCAL_MEM_FENCE);
 }
@@ -155,40 +155,40 @@ test_load_data_using_loc_codes(__global int4* cells, __global float16* cell_data
   short n_levels = 3;    int result_ptr = 0;
 
   if (get_local_id(0)==0 && get_local_id(1)==0)
-  {
-    cached_loc_codes[0]=(short4)(1,1,3,0); //cell_ptr 45
-    cached_loc_codes[1]=(short4)(3,1,3,0); //54
-    cached_loc_codes[2]=(short4)(1,3,3,0); //63
-    cached_loc_codes[3]=(short4)(3,3,3,0); //72
-  }
+    {
+      cached_loc_codes[0]=(short4)(1,1,3,0); //cell_ptr 45
+      cached_loc_codes[1]=(short4)(3,1,3,0); //54
+      cached_loc_codes[2]=(short4)(1,3,3,0); //63
+      cached_loc_codes[3]=(short4)(3,3,3,0); //72
+    }
   barrier(CLK_LOCAL_MEM_FENCE);
 
   int ret= load_data_using_loc_codes(ray_bundle_array,cached_loc_codes);
   if (get_local_id(0)==0 && get_local_id(1)==0)
-  {
-    /* Check the load_data return value */
-    results[result_ptr++]= (int4)ret;
-    /* Check the ptr in ray bundle array*/
-    for (uchar i = 0; i<4; ++i) {
-      results[result_ptr++]=(int4)(ray_bundle_array[i]);
-    }
+    {
+      /* Check the load_data return value */
+      results[result_ptr++]= (int4)ret;
+      /* Check the ptr in ray bundle array*/
+      for (uchar i = 0; i<4; ++i) {
+        results[result_ptr++]=(int4)(ray_bundle_array[i]);
+      }
 
-    cached_loc_codes[0]=(short4)(1,1,3,0);
-    cached_loc_codes[1]=(short4)(1,1,3,0);
-    cached_loc_codes[2]=(short4)(1,1,3,0);
-    cached_loc_codes[3]=(short4)(1,1,3,0);
-  }
+      cached_loc_codes[0]=(short4)(1,1,3,0);
+      cached_loc_codes[1]=(short4)(1,1,3,0);
+      cached_loc_codes[2]=(short4)(1,1,3,0);
+      cached_loc_codes[3]=(short4)(1,1,3,0);
+    }
   barrier(CLK_LOCAL_MEM_FENCE);
 
-    ret= load_data_using_loc_codes(ray_bundle_array,cached_loc_codes);
+  ret= load_data_using_loc_codes(ray_bundle_array,cached_loc_codes);
   if (get_local_id(0)==0 && get_local_id(1)==0)
-  {
-    results[result_ptr++]=(int4)ret;
-    /* Check the data transfered to the local data cache */
-    for (uchar i = 0; i<4; ++i) {
-      results[result_ptr++]=(int4)ray_bundle_array[i];
+    {
+      results[result_ptr++]=(int4)ret;
+      /* Check the data transfered to the local data cache */
+      for (uchar i = 0; i<4; ++i) {
+        results[result_ptr++]=(int4)ray_bundle_array[i];
+      }
     }
-  }
   barrier(CLK_LOCAL_MEM_FENCE);
 }
 
@@ -205,42 +205,42 @@ test_load_data_mutable_using_loc_codes(__global int4* cells, __global float16* c
   short n_levels = 3;    int result_ptr = 0;
 
   if (get_local_id(0)==0 && get_local_id(1)==0)
-  {
-    cached_loc_codes[0]=(short4)(1,1,3,0); //cell_ptr 45
-    cached_loc_codes[1]=(short4)(3,1,3,0); //54
-    cached_loc_codes[2]=(short4)(1,3,3,0); //63
-    cached_loc_codes[3]=(short4)(3,3,3,0); //72
-  }
+    {
+      cached_loc_codes[0]=(short4)(1,1,3,0); //cell_ptr 45
+      cached_loc_codes[1]=(short4)(3,1,3,0); //54
+      cached_loc_codes[2]=(short4)(1,3,3,0); //63
+      cached_loc_codes[3]=(short4)(3,3,3,0); //72
+    }
   barrier(CLK_LOCAL_MEM_FENCE);
 
   int ret= load_data_mutable_using_loc_codes(ray_bundle_array,cached_loc_codes);
   if (get_local_id(0)==0 && get_local_id(1)==0)
-  {
-    /* Check the load_data return value */
-    results[result_ptr++]= (int4)ret;
-    /* Check the ptr in ray bundle array*/
-    results[result_ptr++] = convert_int4(ray_bundle_array[0]);
-    results[result_ptr++] = convert_int4(ray_bundle_array[1]);
-    results[result_ptr++] = convert_int4(ray_bundle_array[2]);
-    results[result_ptr++] = convert_int4(ray_bundle_array[3]);
+    {
+      /* Check the load_data return value */
+      results[result_ptr++]= (int4)ret;
+      /* Check the ptr in ray bundle array*/
+      results[result_ptr++] = convert_int4(ray_bundle_array[0]);
+      results[result_ptr++] = convert_int4(ray_bundle_array[1]);
+      results[result_ptr++] = convert_int4(ray_bundle_array[2]);
+      results[result_ptr++] = convert_int4(ray_bundle_array[3]);
 
-    cached_loc_codes[0]=(short4)(1,1,3,0);
-    cached_loc_codes[1]=(short4)(1,1,3,0);
-    cached_loc_codes[2]=(short4)(1,1,3,0);
-    cached_loc_codes[3]=(short4)(1,1,3,0);
-  }
+      cached_loc_codes[0]=(short4)(1,1,3,0);
+      cached_loc_codes[1]=(short4)(1,1,3,0);
+      cached_loc_codes[2]=(short4)(1,1,3,0);
+      cached_loc_codes[3]=(short4)(1,1,3,0);
+    }
   barrier(CLK_LOCAL_MEM_FENCE);
 
   ret= load_data_mutable_using_loc_codes(ray_bundle_array,cached_loc_codes);
   if (get_local_id(0)==0 && get_local_id(1)==0)
-  {
-    results[result_ptr++]=(int4)ret;
-    /* Check the data transfered to the local data cache */
-    results[result_ptr++] = convert_int4(ray_bundle_array[0]);
-    results[result_ptr++] = convert_int4(ray_bundle_array[1]);
-    results[result_ptr++] = convert_int4(ray_bundle_array[2]);
-    results[result_ptr++] = convert_int4(ray_bundle_array[3]);
-  }
+    {
+      results[result_ptr++]=(int4)ret;
+      /* Check the data transfered to the local data cache */
+      results[result_ptr++] = convert_int4(ray_bundle_array[0]);
+      results[result_ptr++] = convert_int4(ray_bundle_array[1]);
+      results[result_ptr++] = convert_int4(ray_bundle_array[2]);
+      results[result_ptr++] = convert_int4(ray_bundle_array[3]);
+    }
   barrier(CLK_LOCAL_MEM_FENCE);
 }
 
@@ -334,89 +334,91 @@ test_seg_len_obs(__global int4* cells, __global float16* cell_data,
   /* setup example image array */
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
   cached_aux_data[llid]=(float4)0.0f;
+  barrier(CLK_LOCAL_MEM_FENCE);
   int result_ptr = 0;
 
   if (llid==0)
-  {
-    image_vect[0].x=10.0f;
-    image_vect[1].x=20.0f;
-    image_vect[2].x= 30.0f;
-    image_vect[3].x=40.0f;
+    {
+      image_vect[0].x=10.0f;
+      image_vect[1].x=20.0f;
+      image_vect[2].x= 30.0f;
+      image_vect[3].x=40.0f;
 
-    cell_ptrs[0]=45;
-    cell_ptrs[1]=54;
-    cell_ptrs[2]=63;
-    cell_ptrs[3]=72;
-
-
-    cached_loc_codes[0]=(short4)(1,1,3,0); //cell_ptr 45
-    cached_loc_codes[1]=(short4)(3,1,3,0); //54
-    cached_loc_codes[2]=(short4)(1,3,3,0); //63
-    cached_loc_codes[3]=(short4)(3,3,3,0); //72
+      cell_ptrs[0]=45;
+      cell_ptrs[1]=54;
+      cell_ptrs[2]=63;
+      cell_ptrs[3]=72;
 
 
-    barrier(CLK_LOCAL_MEM_FENCE);
-    int ret = load_data_mutable_using_loc_codes(ray_bundle_array,cached_loc_codes);
+      cached_loc_codes[0]=(short4)(1,1,3,0); //cell_ptr 45
+      cached_loc_codes[1]=(short4)(3,1,3,0); //54
+      cached_loc_codes[2]=(short4)(1,3,3,0); //63
+      cached_loc_codes[3]=(short4)(3,3,3,0); //72
+    }
 
-    /* Check the load_data return value */
-    results[result_ptr++]= (int4)ret;
-  }
-  barrier(CLK_LOCAL_MEM_FENCE);
-
-  float seg_len = (float)(llid+1);
-  cached_aux_data[llid]=(float4)0.0f;
-
-  seg_len_obs(seg_len, image_vect, ray_bundle_array, cached_aux_data);
-  if (llid==0)
-  {
-    results[result_ptr].x = (int)cached_aux_data[0].x;
-    results[result_ptr].y = (int)cached_aux_data[0].y;
-    results[result_ptr].z = (int)cached_aux_data[0].z;
-    results[result_ptr++].w = (int)cached_aux_data[0].w;
-    results[result_ptr].x = (int)cached_aux_data[1].x;
-    results[result_ptr].y = (int)cached_aux_data[1].y;
-    results[result_ptr].z = (int)cached_aux_data[1].z;
-    results[result_ptr++].w = (int)cached_aux_data[1].w;
-    results[result_ptr].x = (int)cached_aux_data[2].x;
-    results[result_ptr].y = (int)cached_aux_data[2].y;
-    results[result_ptr].z = (int)cached_aux_data[2].z;
-    results[result_ptr++].w = (int)cached_aux_data[2].w;
-    results[result_ptr].x = (int)cached_aux_data[3].x;
-    results[result_ptr].y = (int)cached_aux_data[3].y;
-    results[result_ptr].z = (int)cached_aux_data[3].z;
-    results[result_ptr++].w = (int)cached_aux_data[3].w;
-
-    // check the case where all of the rays lie in the same cell
-    cell_ptrs[0]=45;cell_ptrs[1]=45;cell_ptrs[2]=45;cell_ptrs[3]=45;
-    cached_loc_codes[0]=(short4)(1,1,3,0); //cell_ptr 45
-    cached_loc_codes[1]=(short4)(1,1,3,0); //54
-    cached_loc_codes[2]=(short4)(1,1,3,0); //63
-    cached_loc_codes[3]=(short4)(1,1,3,0); //72
-  }
   barrier(CLK_LOCAL_MEM_FENCE);
   int ret = load_data_mutable_using_loc_codes(ray_bundle_array,cached_loc_codes);
+
   /* Check the load_data return value */
   results[result_ptr++]= (int4)ret;
+  float seg_len = (float)(llid+1);
+  cached_aux_data[llid]=(float4)0.0f;
+  barrier(CLK_LOCAL_MEM_FENCE);
+
   seg_len_obs(seg_len, image_vect, ray_bundle_array, cached_aux_data);
+  barrier(CLK_LOCAL_MEM_FENCE);
   if (llid==0)
-  {
-    results[result_ptr].x = (int)cached_aux_data[0].x;
-    results[result_ptr].y = (int)cached_aux_data[0].y;
-    results[result_ptr].z = (int)cached_aux_data[0].z;
-    results[result_ptr++].w = (int)cached_aux_data[0].w;
-    results[result_ptr].x = (int)cached_aux_data[1].x;
-    results[result_ptr].y = (int)cached_aux_data[1].y;
-    results[result_ptr].z = (int)cached_aux_data[1].z;
-    results[result_ptr++].w = (int)cached_aux_data[1].w;
-    results[result_ptr].x = (int)cached_aux_data[2].x;
-    results[result_ptr].y = (int)cached_aux_data[2].y;
-    results[result_ptr].z = (int)cached_aux_data[2].z;
-    results[result_ptr++].w = (int)cached_aux_data[2].w;
-    results[result_ptr].x = (int)cached_aux_data[3].x;
-    results[result_ptr].y = (int)cached_aux_data[3].y;
-    results[result_ptr].z = (int)cached_aux_data[3].z;
-    results[result_ptr++].w = (int)cached_aux_data[3].w;
-  }
+    {
+      results[result_ptr].x = (int)cached_aux_data[0].x;
+      results[result_ptr].y = (int)cached_aux_data[0].y;
+      results[result_ptr].z = (int)cached_aux_data[0].z;
+      results[result_ptr++].w = (int)cached_aux_data[0].w;
+      results[result_ptr].x = (int)cached_aux_data[1].x;
+      results[result_ptr].y = (int)cached_aux_data[1].y;
+      results[result_ptr].z = (int)cached_aux_data[1].z;
+      results[result_ptr++].w = (int)cached_aux_data[1].w;
+      results[result_ptr].x = (int)cached_aux_data[2].x;
+      results[result_ptr].y = (int)cached_aux_data[2].y;
+      results[result_ptr].z = (int)cached_aux_data[2].z;
+      results[result_ptr++].w = (int)cached_aux_data[2].w;
+      results[result_ptr].x = (int)cached_aux_data[3].x;
+      results[result_ptr].y = (int)cached_aux_data[3].y;
+      results[result_ptr].z = (int)cached_aux_data[3].z;
+      results[result_ptr++].w = (int)cached_aux_data[3].w;
+
+      // check the case where all of the rays lie in the same cell
+      cell_ptrs[0]=45;cell_ptrs[1]=45;cell_ptrs[2]=45;cell_ptrs[3]=45;
+      cached_loc_codes[0]=(short4)(1,1,3,0); //cell_ptr 45
+      cached_loc_codes[1]=(short4)(1,1,3,0); //54
+      cached_loc_codes[2]=(short4)(1,1,3,0); //63
+      cached_loc_codes[3]=(short4)(1,1,3,0); //72
+    }
+
+  barrier(CLK_LOCAL_MEM_FENCE);
+  ret = load_data_mutable_using_loc_codes(ray_bundle_array,cached_loc_codes);
+  seg_len_obs(seg_len, image_vect, ray_bundle_array, cached_aux_data);
+  barrier(CLK_LOCAL_MEM_FENCE);
+  if (llid==0)
+    {
+      /* Check the load_data return value */
+      results[result_ptr++]= (int4)ret;
+      results[result_ptr].x = (int)cached_aux_data[0].x;
+      results[result_ptr].y = (int)cached_aux_data[0].y;
+      results[result_ptr].z = (int)cached_aux_data[0].z;
+      results[result_ptr++].w = (int)cached_aux_data[0].w;
+      results[result_ptr].x = (int)cached_aux_data[1].x;
+      results[result_ptr].y = (int)cached_aux_data[1].y;
+      results[result_ptr].z = (int)cached_aux_data[1].z;
+      results[result_ptr++].w = (int)cached_aux_data[1].w;
+      results[result_ptr].x = (int)cached_aux_data[2].x;
+      results[result_ptr].y = (int)cached_aux_data[2].y;
+      results[result_ptr].z = (int)cached_aux_data[2].z;
+      results[result_ptr++].w = (int)cached_aux_data[2].w;
+      results[result_ptr].x = (int)cached_aux_data[3].x;
+      results[result_ptr].y = (int)cached_aux_data[3].y;
+      results[result_ptr].z = (int)cached_aux_data[3].z;
+      results[result_ptr++].w = (int)cached_aux_data[3].w;
+    }
   barrier(CLK_LOCAL_MEM_FENCE);
 }
 

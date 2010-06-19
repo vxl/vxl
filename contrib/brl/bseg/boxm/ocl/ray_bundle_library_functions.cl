@@ -18,17 +18,17 @@ int load_data_using_loc_codes(__local uchar*    ray_bundle_array, /* bundle poin
                               __local short4*   cached_loc_codes)
                               // __local float16*  cached_data)
 {
-  uchar nbi = (uchar)get_local_size(0);
-  uchar nbj = (uchar)get_local_size(1);
-  uchar llid = (uchar)(get_local_id(0) + nbi*get_local_id(1));
+	uchar nbi = (uchar)get_local_size(0);
+	uchar nbj = (uchar)get_local_size(1);
+	uchar llid = (uchar)(get_local_id(0) + nbi*get_local_id(1));
   ray_bundle_array[llid]=llid;
-  // clear the cache
-  //serialized with thread 0 doing all the work
-  if (llid==0) {
-    for (uchar j = 0; j<nbj; ++j)
-      for (uchar i = 0; i<nbi; ++i) {
-        uchar indx = i + nbi*j;
-
+	barrier(CLK_LOCAL_MEM_FENCE); 
+	// clear the cache
+	//serialized with thread 0 doing all the work
+	if(llid==0){
+		for(uchar j = 0; j<nbj; ++j)
+			for(uchar i = 0; i<nbi; ++i){
+				uchar indx = i + nbi*j;
         if (cached_loc_codes[indx].x>-1)
         {
           //ray_bundle_array[indx]=(uchar)indx;
@@ -165,17 +165,18 @@ void update_state_ptr(__local uchar4*   ray_bundle_array,
 int load_data_mutable_using_loc_codes( __local uchar4*   ray_bundle_array, /* bundle state*/
                                        __local short4*   cached_loc_codes)
 {
-  uchar nbi = (uchar)get_local_size(0);
-  uchar nbj = (uchar)get_local_size(1);
-  uchar llid = (uchar)(get_local_id(0) + nbi*get_local_id(1));
-  ray_bundle_array[llid]=(uchar4)(llid,0,0,0);
-  // clear the cache
-  //serialized with thread 0 doing all the work
-  if (llid==0) {
-    for (uchar j = 0; j<nbj; ++j)
-      for (uchar i = 0; i<nbi; ++i) {
-        uchar indx = i + nbi*j;
 
+	uchar nbi = (uchar)get_local_size(0);
+	uchar nbj = (uchar)get_local_size(1);
+	uchar llid = (uchar)(get_local_id(0) + nbi*get_local_id(1));
+	ray_bundle_array[llid]=(uchar4)(llid,0,0,0);
+	barrier(CLK_LOCAL_MEM_FENCE); 
+	// clear the cache
+	//serialized with thread 0 doing all the work
+	if(llid==0){
+		for(uchar j = 0; j<nbj; ++j)
+			for(uchar i = 0; i<nbi; ++i){
+				uchar indx = i + nbi*j;
         if (cached_loc_codes[indx].x>-1)
         {
           //ray_bundle_array[indx]=(uchar)indx;
@@ -376,16 +377,16 @@ void seg_len_obs(float seg_len, __local float4* image_vect,
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
   /* first insert seg_len into the local cache. This step
      is carried out by all threads */
-
   /*limit access to the thread that owns each ray bundle connected region */
   if (ray_bundle_array[llid].x!=llid)
   {
-    // use these as temp
+
+	// use these as temp
     cached_aux_data[llid]=(float4)0.0f;
     cached_aux_data[llid].x = seg_len;
-
     return;
   }
+
   uchar temp = ray_bundle_array[llid].w & ACTIVE;
   if (temp == 0)
     return;
@@ -394,7 +395,6 @@ void seg_len_obs(float seg_len, __local float4* image_vect,
   cached_aux_data[llid].x += seg_len; /* seg_len sum */
   /* weighted observations */
   cached_aux_data[llid].y += (image_vect[llid].x)*seg_len;
-
   uchar adr = llid;/* linked list pointer */
   /* traverse the linked list and increment sums */
   temp = ray_bundle_array[adr].w & NEXT_ADR_VALID;
@@ -940,3 +940,4 @@ void bayes_ratio(float seg_len, __local float4* image_vect,
   }
 }
 #endif // 0
+

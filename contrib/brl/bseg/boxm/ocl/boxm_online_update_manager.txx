@@ -261,7 +261,7 @@ bool boxm_online_update_manager<T>:: read_output_image()
     return false;
 
   status = clReleaseEvent(events[0]);
-  return this->check_val(status,CL_SUCCESS,"clReleaseEvent failed.");
+  return this->check_val(status,CL_SUCCESS,"clReleaseEvent failed.")==1;
 }
 
 template<class T>
@@ -304,7 +304,7 @@ bool boxm_online_update_manager<T>:: read_trees()
   // Wait for the read buffer to finish execution
 
   status = clReleaseEvent(events[0]);
-  return this->check_val(status,CL_SUCCESS,"clReleaseEvent failed.");
+  return this->check_val(status,CL_SUCCESS,"clReleaseEvent failed.")==1;
 }
 
 template<class T>
@@ -456,7 +456,7 @@ bool boxm_online_update_manager<T>::set_root_level_buffers()
                                    CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                    sizeof(cl_uint),
                                    &root_level_,&status);
-  return this->check_val(status,CL_SUCCESS,"clCreateBuffer (root level) failed.");
+  return this->check_val(status,CL_SUCCESS,"clCreateBuffer (root level) failed.")==1;
 }
 
 template<class T>
@@ -616,7 +616,7 @@ bool boxm_online_update_manager<T>::set_tree_buffers()
                                     CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                     sizeof(cl_float4),
                                     tree_bbox_,&status);
-  return this->check_val(status,CL_SUCCESS,"clCreateBuffer (cell aux data) failed.");
+  return this->check_val(status,CL_SUCCESS,"clCreateBuffer (cell aux data) failed.")==1;
 }
 
 template<class T>
@@ -633,7 +633,7 @@ bool boxm_online_update_manager<T>::release_tree_buffers()
   if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (cell_aux_data_buf_)."))
     return false;
   status = clReleaseMemObject(tree_bbox_buf_);
-  return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (tree_bbox_buf_).");
+  return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (tree_bbox_buf_).")==1;
 }
 
 template<class T>
@@ -694,7 +694,7 @@ bool boxm_online_update_manager<T>::set_persp_camera_buffers()
                                   CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                   3*sizeof(cl_float16),
                                   persp_cam_,&status);
-  return this->check_val(status,CL_SUCCESS,"clCreateBuffer (persp_cam_buf_) failed.");
+  return this->check_val(status,CL_SUCCESS,"clCreateBuffer (persp_cam_buf_) failed.")==1;
 }
 
 template<class T>
@@ -702,7 +702,7 @@ bool boxm_online_update_manager<T>::release_persp_camera_buffers()
 {
   cl_int status;
   status = clReleaseMemObject(persp_cam_buf_);
-  return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (persp_cam_buf_).");
+  return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (persp_cam_buf_).")==1;
 }
 
 
@@ -767,7 +767,7 @@ bool boxm_online_update_manager<T>::set_input_image_buffers()
                                  CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                  sizeof(cl_uint4),
                                  img_dims_,&status);
-  return this->check_val(status,CL_SUCCESS,"clCreateBuffer (imd_dims_buf_) failed.");
+  return this->check_val(status,CL_SUCCESS,"clCreateBuffer (imd_dims_buf_) failed.")==1;
 }
 
 template<class T>
@@ -779,7 +779,9 @@ bool boxm_online_update_manager<T>::release_input_image_buffers()
     return false;
 
   status = clReleaseMemObject(img_dims_buf_);
-  return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (img_dims_buf_)."))
+  if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (img_dims_buf_)."))
+    return false;
+ return true;
 }
 
 template<class T>
@@ -799,7 +801,7 @@ bool boxm_online_update_manager<T>::set_offset_buffers(int offset_x,int offset_y
                                  CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                  sizeof(cl_int),
                                  &offset_y_,&status);
-  return this->check_val(status,CL_SUCCESS,"clCreateBuffer (offset_y_) failed.");
+  return this->check_val(status,CL_SUCCESS,"clCreateBuffer (offset_y_) failed.")==1;
 }
 
 template<class T>
@@ -811,7 +813,7 @@ bool boxm_online_update_manager<T>::release_offset_buffers()
     return false;
 
   status = clReleaseMemObject(offset_y_buf_);
-  return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (offset_y_buf_).");
+  return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (offset_y_buf_).")==1;
 }
 
 /*****************************************

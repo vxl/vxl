@@ -32,9 +32,10 @@ bool boxm_refine_manager<T>::init(tree_type *tree, float prob_thresh)
 }
 
 template<class T>
-bool boxm_refine_manager<T>::init(int* cells, unsigned numcells, unsigned tree_max_size,
-                                  float* data, unsigned data_size, unsigned data_max_size,
-                                  float prob_thresh, unsigned max_level, float bbox_len)
+bool boxm_refine_manager<T>::
+init(int* cells, unsigned numcells, unsigned tree_max_size,
+     float* data, unsigned data_size, unsigned data_max_size,
+     float prob_thresh, unsigned max_level, float bbox_len)
 {
   alloc_trees(tree_max_size, data_size);
   cells_ = cells;
