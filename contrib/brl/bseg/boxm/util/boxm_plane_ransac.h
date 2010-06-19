@@ -70,7 +70,7 @@ bool boxm_plane_ransac(vcl_vector<boxm_edge_tangent_sample<T> > aux_samples,
             T res = dot_product(normal,line_dir);
             if (vcl_fabs(res) < 0.05)  {
               // check to see if the line is close to the plane
-              if (plane.contains(p,cell_global_box.width()/8))
+              if (plane.contains(p,cell_global_box.width()/8.0f))
               {
                 fit_planes.push_back(plane);
                 ws.push_back(weights[i]);
