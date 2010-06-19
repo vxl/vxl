@@ -68,9 +68,9 @@ bool boxm_plane_ransac(vcl_vector<boxm_edge_tangent_sample<T> > aux_samples,
             vgl_vector_3d<T> normal = plane.normal();
             // see if the line direction and plane normal is perpendicular
             T res = dot_product(normal,line_dir);
-            if (vcl_fabs(res) < 0.05)  {
+            if (vcl_fabs(res) < T(0.05))  {
               // check to see if the line is close to the plane
-              if (plane.contains(p,cell_global_box.width()/8.0f))
+              if (plane.contains(p,T(cell_global_box.width())/T(8)))
               {
                 fit_planes.push_back(plane);
                 ws.push_back(weights[i]);
