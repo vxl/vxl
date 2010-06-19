@@ -41,7 +41,6 @@ void boxm_ocl_utils<T>::pack_cell_data(boct_tree_cell<short, boxm_sample<BOXM_AP
   data[11]=appear.weight(2);
   data[12]=appear.distribution(2).num_observations;
   data[13]=appear.num_observations;
-
 }
 
 template<class T>
@@ -56,9 +55,9 @@ void boxm_ocl_utils<T>::pack_cell_data(boct_tree_cell<short, float> * cell_ptr, 
 //: Recursive algorithm to take in a tree cell and copy structure and data into two arrays
 template<class T>
 void boxm_ocl_utils<T>::copy_to_arrays(boct_tree_cell<short, T >* cell_ptr,
-									   vcl_vector<vnl_vector_fixed<int, 4> >& cell_array,
-									   vcl_vector<vnl_vector_fixed<float, 16> >& data_array,
-									   int cell_input_ptr)
+                                       vcl_vector<vnl_vector_fixed<int, 4> >& cell_array,
+                                       vcl_vector<vnl_vector_fixed<float, 16> >& data_array,
+                                       int cell_input_ptr)
 {
   // cell_input_ptr is the array index for the cell being constructed
   // it already exists in the cell array but only has the parent index set
@@ -88,14 +87,13 @@ void boxm_ocl_utils<T>::copy_to_arrays(boct_tree_cell<short, T >* cell_ptr,
       copy_to_arrays(child_cell_ptr, cell_array, data_array, child_cell_input_ptr);
     }
   }
-
 }
 
 // allocate child cells on the array
 template<class T>
 void boxm_ocl_utils<T>::split(vcl_vector<vnl_vector_fixed<int, 4> >& cell_array,
-                      int parent_ptr,
-                      int& child_ptr)
+                              int parent_ptr,
+                              int& child_ptr)
 {
   child_ptr = cell_array.size();
   for (unsigned i=0; i<8; i++) {

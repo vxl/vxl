@@ -35,10 +35,10 @@ class normalize_expected_functor
 
 template <boxm_apm_type APM>
 void boxm_opencl_render_expected(boxm_scene<boct_tree<short, boxm_sample<APM> > > &scene,
-                                     vpgl_camera_double_sptr cam,
-                                     vil_image_view<typename boxm_apm_traits<APM>::obs_datatype> &expected,
-                                     vil_image_view<float> & mask,
-                                     bool use_black_background = false)
+                                 vpgl_camera_double_sptr cam,
+                                 vil_image_view<typename boxm_apm_traits<APM>::obs_datatype> &expected,
+                                 vil_image_view<float> & mask,
+                                 bool use_black_background = false)
 {
   // set up the application-specific function to be called at every cell along a ray
   vcl_string expected_img_functor_fname = vcl_string(VCL_SOURCE_ROOT_DIR)
@@ -79,7 +79,7 @@ void boxm_opencl_render_expected(boxm_scene<boct_tree<short, boxm_sample<APM> > 
   vil_save(img1,"f:/apl/img1.tiff");
   vil_save(expected,"f:/apl/img2.tiff");
   vil_save(mask,"f:/apl/img3.tiff");
-#endif 
+#endif
   ray_mgr->clean_raytrace();
 
   typedef typename boxm_apm_traits<APM>::obs_datatype obs_datatype;
@@ -89,10 +89,10 @@ void boxm_opencl_render_expected(boxm_scene<boct_tree<short, boxm_sample<APM> > 
 
 template <boxm_apm_type APM>
 void boxm_opencl_stack_render_expected(boxm_scene<boct_tree<short, boxm_sample<APM> > > &scene,
-                                     vpgl_camera_double_sptr cam,
-                                     vil_image_view<typename boxm_apm_traits<APM>::obs_datatype> &expected,
-                                     vil_image_view<float> & mask,
-                                     bool use_black_background = false)
+                                       vpgl_camera_double_sptr cam,
+                                       vil_image_view<typename boxm_apm_traits<APM>::obs_datatype> &expected,
+                                       vil_image_view<float> & mask,
+                                       bool use_black_background = false)
 {
   // set up the application-specific function to be called at every cell along a ray
   vcl_string expected_img_functor_fname = vcl_string(VCL_SOURCE_ROOT_DIR)
@@ -129,7 +129,7 @@ void boxm_opencl_stack_render_expected(boxm_scene<boct_tree<short, boxm_sample<A
   vil_save(img1,"f:/apl/img1.tiff");
   vil_save(expected,"f:/apl/img2.tiff");
   vil_save(mask,"f:/apl/img3.tiff");
-#endif 
+#endif
   float sum=0.0;
   vil_math_sum<float>(sum,mask,0);
   vcl_cout<<"Data transferred from global memory "<<16/* for int4*4*/*sum/1000000000.0f<<" GBytes "<<vcl_endl;
@@ -140,6 +140,7 @@ void boxm_opencl_stack_render_expected(boxm_scene<boct_tree<short, boxm_sample<A
   normalize_expected_functor<obs_datatype> norm_fn(use_black_background);
   vil_transform2<float,obs_datatype, normalize_expected_functor<obs_datatype> >(mask,expected,norm_fn);
 }
+
 template <boxm_apm_type APM>
 void boxm_opencl_ray_bundle_expected(boxm_scene<boct_tree<short, boxm_sample<APM> > > &scene,
                                      vpgl_camera_double_sptr cam,
@@ -176,14 +177,13 @@ void boxm_opencl_ray_bundle_expected(boxm_scene<boct_tree<short, boxm_sample<APM
   }
   cl_float *results_p = results;
   for (unsigned j = 0; j<nj; ++j)  {
-	  for (unsigned i = 0; i<ni; ++i) {
+    for (unsigned i = 0; i<ni; ++i) {
+      img0(i,j)=*(results_p++); // alpha integral
+      img1(i,j)=*(results_p++); // vis_inf
 
-		  img0(i,j)=*(results_p++); // alpha integral
-		  img1(i,j)=*(results_p++); // vis_inf
-
-		  expected(i,j) = *(results_p++); // expected intensity
-		  mask(i,j) = *(results_p++); // 1 - vis_inf
-	  }
+      expected(i,j) = *(results_p++); // expected intensity
+      mask(i,j) = *(results_p++); // 1 - vis_inf
+    }
   }
   float sum=0.0;
   vil_math_sum<float>(sum,mask,0);
@@ -194,7 +194,7 @@ void boxm_opencl_ray_bundle_expected(boxm_scene<boct_tree<short, boxm_sample<APM
   vil_save(img1,"f:/apl/img1.tiff");
   vil_save(expected,"f:/apl/img2.tiff");
   vil_save(mask,"f:/apl/img3.tiff");
-#endif 
+#endif
   ray_mgr->clean_raytrace();
 
   typedef typename boxm_apm_traits<APM>::obs_datatype obs_datatype;

@@ -13,7 +13,6 @@
 template <class T>
 static void test_seg_len_obs()
 {
- 
 }
 
 static void test_update()
@@ -24,11 +23,11 @@ static void test_update()
 
   boxm_scene<boct_tree<short,float> > scene(vgl_point_3d<double>(0.0,0.0,0.0),vgl_vector_3d<double>(1,1,1),vgl_vector_3d<unsigned>(1,1,1));
   scene.set_octree_levels(3,2);
-  
+
   scene.load_block(0,0,0);
   boxm_block<boct_tree<short,float> > * block=scene.get_active_block();
   block->set_tree(open_cl_test_data::tree<float>());
-  
+
   vnl_matrix_fixed<double, 3, 3> mk(0.0);
   mk[0][0]=990.0; mk[0][2]=4.0;
   mk[1][1]=990.0; mk[1][2]=4.0; mk[2][2]=8.0/7.0;
@@ -51,28 +50,26 @@ static void test_update()
   float * image=updt_mgr->output_image();
 
   vcl_cout<<"Plane 0"<<vcl_endl;
-  for(unsigned j=0;j<updt_mgr->wnj();j++)
+  for (unsigned j=0;j<updt_mgr->wnj();j++)
   {
-	  for(unsigned i=0;i<updt_mgr->wni();i++)	  
-		  vcl_cout<<image[(j*updt_mgr->wni()+i)*4]<<" ";
-	  vcl_cout<<vcl_endl;
+    for (unsigned i=0;i<updt_mgr->wni();i++)
+      vcl_cout<<image[(j*updt_mgr->wni()+i)*4]<<' ';
+    vcl_cout<<vcl_endl;
   }
   vcl_cout<<"Plane 1"<<vcl_endl;
-  for(unsigned j=0;j<updt_mgr->wnj();j++)
+  for (unsigned j=0;j<updt_mgr->wnj();j++)
   {
-	  for(unsigned i=0;i<updt_mgr->wni();i++)
-		  vcl_cout<<image[(j*updt_mgr->wni()+i)*4+1]<<" ";
-	  vcl_cout<<vcl_endl;
+    for (unsigned i=0;i<updt_mgr->wni();i++)
+      vcl_cout<<image[(j*updt_mgr->wni()+i)*4+1]<<' ';
+    vcl_cout<<vcl_endl;
   }
   vcl_cout<<"Plane 2"<<vcl_endl;
-  for(unsigned j=0;j<updt_mgr->wnj();j++)
+  for (unsigned j=0;j<updt_mgr->wnj();j++)
   {
-	  for(unsigned i=0;i<updt_mgr->wni();i++)
-		  vcl_cout<<image[(j*updt_mgr->wni()+i)*4+2]<<" ";
-	  vcl_cout<<vcl_endl;
+    for (unsigned i=0;i<updt_mgr->wni();i++)
+      vcl_cout<<image[(j*updt_mgr->wni()+i)*4+2]<<' ';
+    vcl_cout<<vcl_endl;
   }
-
-
 }
 
 TESTMAIN(test_update);
