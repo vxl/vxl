@@ -247,9 +247,6 @@ LINK32=link.exe
 SOURCE=.\concat_3d_images.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\print_mbl_log_properties.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\crop_image_2d.cxx
 # End Source File
 # Begin Source File
@@ -278,6 +275,9 @@ SOURCE=.\reflect_image_2d.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\reflect_image_3d.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\select_lines.cxx
 # End Source File
 # End Group
 # End Target

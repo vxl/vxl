@@ -110,6 +110,15 @@ SOURCE=.\ray_trace_main.cl
 SOURCE=.\ray_stack_trace_main.cl
 # End Source File
 # Begin Source File
+SOURCE=.\refine_main.cl
+# End Source File
+# Begin Source File
+SOURCE=.\ray_bundle_library_functions.cl
+# End Source File
+# Begin Source File
+SOURCE=.\update_main.cl
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/bocl_manager+boxm_stack_ray_trace_manager+boxm_sample+BOXM_APM_SIMPLE_GREY---.cxx
 # End Source File
 # Begin Source File
@@ -169,6 +178,48 @@ SOURCE=.\Templates/boxm_ocl_utils+BOXM_APM_SIMPLE_GREY--.cxx
 # Begin Source File
 SOURCE=.\Templates/bocl_manager+boxm_stat_manager+float--.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_refine_manager+boxm_sample+BOXM_APM_SIMPLE_GREY--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bocl_manager+boxm_ray_bundle_trace_manager+boxm_sample+BOXM_APM_MOG_GREY---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_ray_bundle_trace_manager+boxm_sample+BOXM_APM_MOG_GREY--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bocl_manager+boxm_refine_manager+boxm_sample+BOXM_APM_MOG_GREY---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_ray_bundle_trace_manager+boxm_sample+BOXM_APM_SIMPLE_GREY--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bocl_manager+boxm_refine_manager+boxm_sample+BOXM_APM_SIMPLE_GREY---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_refine_manager+boxm_sample+BOXM_APM_MOG_GREY--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_refine_manager+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bocl_manager+boxm_ray_bundle_trace_manager+boxm_sample+BOXM_APM_SIMPLE_GREY---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bocl_manager+boxm_refine_manager+float--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_online_update_manager+boxm_sample+BOXM_APM_MOG_GREY--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bocl_manager+boxm_online_update_manager+boxm_sample+BOXM_APM_MOG_GREY---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_online_update_manager+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bocl_manager+boxm_online_update_manager+float--.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -198,6 +249,27 @@ SOURCE=.\boxm_stat_manager.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_ocl_utils.txx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_ocl_refine_scene.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_ray_bundle_trace_manager.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_refine_manager.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_ray_bundle_trace_manager.txx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_refine_manager.txx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_online_update_manager.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_online_update_manager.txx
 # End Source File
 # End Group
 # End Target

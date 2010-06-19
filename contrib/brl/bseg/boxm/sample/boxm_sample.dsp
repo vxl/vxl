@@ -370,6 +370,9 @@ SOURCE=.\Templates/boxm_block_iterator+boct_tree+short.boxm_sample+BOXM_APM_SIMP
 # Begin Source File
 SOURCE=.\Templates/boxm_block_iterator+boct_tree+short.boxm_sample_multi_bin+BOXM_APM_MOG_GREY---.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_block+boct_tree+short.boxm_inf_line_sample+float---.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

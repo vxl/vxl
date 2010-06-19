@@ -98,6 +98,9 @@ SOURCE=.\bocl_utils.cxx
 # Begin Source File
 SOURCE=.\bocl_global_memory_bandwidth_manager.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/bocl_manager+bocl_global_memory_bandwidth-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

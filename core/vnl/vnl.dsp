@@ -794,6 +794,9 @@ SOURCE=.\Templates/vnl_fortran_copy_fixed+float.3.4-.cxx
 # Begin Source File
 SOURCE=.\Templates/vnl_diag_matrix_fixed+float.3-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_matrix_fixed+float.4.20-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
