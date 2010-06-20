@@ -111,8 +111,8 @@ center_of_mass(vcl_vector<vgl_homg_point_3d<T> > const& in,
   T cog_x = 0;
   T cog_y = 0;
   T cog_z = 0;
-  T cog_count = 0.0;
-  T tol = 1e-06;
+  T cog_count = 0;
+  T tol = 1e-06f;
   unsigned n = in.size();
   for (unsigned i = 0; i < n; ++i)
   {
