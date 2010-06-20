@@ -199,7 +199,7 @@ vgl_intersection(const vcl_list<vgl_plane_3d<T> >& planes, vcl_vector<T> ws,
        pit != planes.end(); ++pit)
   {
     double a = pit->normal().x(), b = pit->normal().y(), c = pit->normal().z();
-    residual+=ws[cnt]*ws[cnt]*(a*tx+b*ty+c*tz)*(a*tx+b*ty+c*tz);
+    residual+=ws[cnt]*ws[cnt]*T(a*tx+b*ty+c*tz)*T(a*tx+b*ty+c*tz);
     sum_ws+=ws[cnt]*ws[cnt];
     cnt++;
   }
