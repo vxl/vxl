@@ -18,7 +18,7 @@ ADD_EXECUTABLE ( bgrl2_test_all ${bgrl2_test_sources})
 
 TARGET_LINK_LIBRARIES( bgrl2_test_all bgrl2 testlib vbl )
 
-ADD_TEST( bgrl2_test_graph   bgrl2_test_all graph_test )
+ADD_TEST( bgrl2_test_graph   ${EXECUTABLE_OUTPUT_PATH}/bgrl2_test_all graph_test )
 
 #this is for test_includes
 ADD_EXECUTABLE( bgrl2_test_include test_include.cxx)
