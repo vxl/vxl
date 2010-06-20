@@ -111,9 +111,9 @@ void vil3d_world_gradients(const vil3d_image_view<srcT>& grad_i,
       const srcT* pgk = gk_row;
       destT *pgm = gm_row;
       for (unsigned i=2; i<=ihi; ++i, pgi+=gi_istep, pgj+=gj_istep,
-                                      pgm+=gm_istep)
+                                      pgk+=gk_istep, pgm+=gm_istep)
       {
-        *pgm=vcl_sqrt(double(c2i*pgi[0]*pgi[0] + c2j*pgj[0]*pgj[0] + c2k*pgk[0]*pgk[0]));
+        *pgm=destT(vcl_sqrt(double(c2i*pgi[0]*pgi[0] + c2j*pgj[0]*pgj[0] + c2k*pgk[0]*pgk[0])));
       }
     }
   }
