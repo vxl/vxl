@@ -32,7 +32,7 @@
 template <unsigned int N>
 class rtvl_refine_internal
 {
-public:
+ public:
   rtvl_refine_internal(rtvl_refine<N>* e);
   void init(unsigned int num_points, double* points);
   void set_mask_size(double f);
@@ -40,7 +40,7 @@ public:
   void extract_tokens(rtvl_tokens<N>& out) const;
   unsigned int get_vote_count() const { return vote_count; }
 
-private:
+ private:
   void setup_level();
   void select_scale();
   void refine_level();
@@ -74,11 +74,11 @@ void rtvl_refine_internal<N>::init(unsigned int num_points, double* points)
 
   // Store points in the level.
   level->points.set_number_of_points(num_points);
-  for(unsigned int i=0; i < num_points; ++i)
-    {
+  for (unsigned int i=0; i < num_points; ++i)
+  {
     level->points.set_point(i, points);
     points += N;
-    }
+  }
 
   // Initialize all tokens to have ball tensors.
   level->tokens.resize(num_points);
@@ -92,14 +92,14 @@ void rtvl_refine_internal<N>::init(unsigned int num_points, double* points)
 template <unsigned int N>
 void rtvl_refine_internal<N>::set_mask_size(double f)
 {
-  if(f < 0.01)
-    {
+  if (f < 0.01)
+  {
     f = 0.01;
-    }
-  if(f > 1)
-    {
+  }
+  if (f > 1)
+  {
     f = 1;
-    }
+  }
   this->mask_size = f;
 }
 
@@ -128,17 +128,17 @@ void rtvl_refine_internal<N>::select_scale()
   // Compute the nearest point to every point.
   unsigned int n = level->points.get_number_of_points();
   vcl_vector<double> distances(n, 0.0);
-  for(unsigned int id=0; id < n; ++id)
-    {
+  for (unsigned int id=0; id < n; ++id)
+  {
     double p[N];
     level->points.get_point(id, p);
     double squared_distances[k+1];
     int nc = objects->query_closest(p, k+1, 0, squared_distances, 0);
-    if(nc == (k+1))
-      {
+    if (nc == (k+1))
+    {
       distances[id] = vcl_sqrt(squared_distances[k]);
-      }
     }
+  }
 
   // Choose a scale based on an order-statistic.
   unsigned int nth = static_cast<unsigned int>(distances.size()/10);
@@ -158,8 +158,8 @@ void rtvl_refine_internal<N>::refine_level()
   rtvl_weight_smooth<N> tvw(level->scale);
 
   vote_count = 0;
-  for(unsigned int i=0; i < n; ++i)
-    {
+  for (unsigned int i=0; i < n; ++i)
+  {
     vnl_vector_fixed<double, N> voter_location;
     level->points.get_point(i, voter_location.data_block());
     rtvl_voter<N> voter(voter_location, level->tokens[i]);
@@ -171,22 +171,22 @@ void rtvl_refine_internal<N>::refine_level()
 
     // Cast a vote at every votee.
     vnl_vector_fixed<double, N> votee_location;
-    for(int vi=0; vi < num_votees; ++vi)
-      {
+    for (int vi=0; vi < num_votees; ++vi)
+    {
       int j = votee_ids[vi];
-      if(j == i) { continue; }
+      if (j == i) { continue; }
       level->points.get_point(j, votee_location.data_block());
       rtvl_votee<N> votee(votee_location, tensors[j]);
       rtvl_vote(voter, votee, tvw, true);
-      }
-    vote_count += num_votees;
     }
+    vote_count += num_votees;
+  }
 
   // Update the level with the refined tokens.
-  for(unsigned int i=0; i < n; ++i)
-    {
+  for (unsigned int i=0; i < n; ++i)
+  {
     level->tokens[i].set_tensor(tensors[i]);
-    }
+  }
 }
 
 //----------------------------------------------------------------------------
@@ -201,16 +201,16 @@ void rtvl_refine_internal<N>::select_samples(vcl_vector<int>& selection)
   saliency_map_type saliency_map;
   vcl_vector<saliency_map_type::iterator> saliency_map_index;
   saliency_map_index.resize(n, saliency_map.end());
-  for(unsigned int i=0; i < n; ++i)
-    {
+  for (unsigned int i=0; i < n; ++i)
+  {
     rtvl_tensor<N> const& tensor = level->tokens[i];
     double s = tensor.lambda(0);
     saliency_map_type::value_type entry(s, i);
     saliency_map_index[i] = saliency_map.insert(entry);
-    }
+  }
 
-  while(!saliency_map.empty())
-    {
+  while (!saliency_map.empty())
+  {
     // Select the next-most-salient sample.
     unsigned int id = saliency_map.begin()->second;
     selection.push_back(id);
@@ -223,16 +223,16 @@ void rtvl_refine_internal<N>::select_samples(vcl_vector<int>& selection)
                                            masked_ids);
 
     // Remove the masked points.
-    for(int i=0; i < num_masked; ++i)
-      {
+    for (int i=0; i < num_masked; ++i)
+    {
       saliency_map_type::iterator& mi = saliency_map_index[masked_ids[i]];
-      if(mi != saliency_map.end())
-        {
+      if (mi != saliency_map.end())
+      {
         saliency_map.erase(mi);
         mi = saliency_map.end();
-        }
       }
     }
+  }
 }
 
 //----------------------------------------------------------------------------
@@ -248,10 +248,10 @@ template <unsigned int N>
 bool rtvl_refine_internal<N>::build_next_level()
 {
   // Stop if this is already the last level.
-  if(this->last_level())
-    {
+  if (this->last_level())
+  {
     return false;
-    }
+  }
 
   // Select samples for inclusion in the next level.
   vcl_vector<int> selection;
@@ -272,8 +272,8 @@ bool rtvl_refine_internal<N>::build_next_level()
 
   // Copy selected samples to the next level.
   next_level->points.set_number_of_points(n);
-  for(unsigned int i=0; i < n; ++i)
-    {
+  for (unsigned int i=0; i < n; ++i)
+  {
     unsigned int id = selection[i];
     double p[N];
     level->points.get_point(id, p);
@@ -283,7 +283,7 @@ bool rtvl_refine_internal<N>::build_next_level()
     double const max_saliency = 10;
     next_level->tokens[i] = level->tokens[id];
     next_level->tokens[i].next_scale(scale_multiplier, max_saliency);
-    }
+  }
 
   // We are done with the selection.
   selection.clear();
@@ -303,32 +303,32 @@ void rtvl_refine_internal<N>::extract_tokens(rtvl_tokens<N>& out) const
   // Identify the salient tokens.
   vcl_vector<unsigned int> salient;
   unsigned int n = level->points.get_number_of_points();
-  for(unsigned int id=0; id < n; ++id)
-    {
+  for (unsigned int id=0; id < n; ++id)
+  {
     // Get the sum of all saliencies.
     double s = level->tokens[id].lambda(0);
 
     // TODO: What to use as threshold here?
-    if(s > 1.0)
-      {
+    if (s > 1.0)
+    {
       salient.push_back(id);
-      }
     }
+  }
 
   // Copy the salient tokens into the output.
   out.scale = level->scale;
   out.points.set_number_of_points(int(salient.size()));
   out.tokens.resize(salient.size());
-  for(vcl_vector<unsigned int>::const_iterator si = salient.begin();
-      si != salient.end(); ++si)
-    {
+  for (vcl_vector<unsigned int>::const_iterator si = salient.begin();
+       si != salient.end(); ++si)
+  {
     unsigned int in_id = *si;
     unsigned int out_id = static_cast<unsigned int>(si - salient.begin());
     double p[N];
     level->points.get_point(in_id, p);
     out.points.set_point(out_id, p);
     out.tokens[out_id] = level->tokens[in_id];
-    }
+  }
 }
 
 //----------------------------------------------------------------------------
@@ -336,9 +336,9 @@ template <unsigned int N>
 rtvl_refine<N>::rtvl_refine(unsigned int num_points, double* points):
   internal_(0)
 {
-  vcl_auto_ptr<internal_type> internal(new internal_type(this));
-  internal->init(num_points, points);
-  this->internal_ = internal.release();
+  vcl_auto_ptr<internal_type> internal_p(new internal_type(this));
+  internal_p->init(num_points, points);
+  this->internal_ = internal_p.release();
 }
 
 //----------------------------------------------------------------------------
