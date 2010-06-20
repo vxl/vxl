@@ -124,19 +124,18 @@ update_aux( __global int * root_level,  // level of the root.
     {
       cached_aux_data[llid] =aux_data_array[data_ptr];
     }
-	 barrier(CLK_LOCAL_MEM_FENCE);
+    barrier(CLK_LOCAL_MEM_FENCE);
 
- //   // distance must be multiplied by the dimension of the bounding box
+    // distance must be multiplied by the dimension of the bounding box
     float d = (tfar-tnear)*(*local_copy_bbox).w;
- //   // no function pointers in OpenCL (spec 8.6a)
- //   // instead, user must provide source with a function named "step_cell"
+    // no function pointers in OpenCL (spec 8.6a)
+    // instead, user must provide source with a function named "step_cell"
     seg_len_obs(d,image_vect,ray_bundle_array,cached_aux_data);
-	//barrier(CLK_LOCAL_MEM_FENCE);
+    //barrier(CLK_LOCAL_MEM_FENCE);
     if (ray_bundle_array[llid].x==llid)
     {
       aux_data_array[data_ptr]=cached_aux_data[llid] ;
     }
-   
 
     //// exit point
     exit_pt=ray_o + tfar*ray_d;

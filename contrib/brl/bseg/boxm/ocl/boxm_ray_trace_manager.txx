@@ -165,8 +165,8 @@ bool boxm_ray_trace_manager<T>::setup_tree()
   // data as vnl_vector_fixed<float, 2>
 
   unsigned cells_size=cell_input_.size();
-  vcl_cout<<"Size of tree "<<cells_size*4*4/(1000000) << "MBytes  "
-          <<"  Size of data "<<data_input_.size()*16*4/(1000000) << "MBytes  "<<vcl_endl;
+  vcl_cout<<"Size of tree "<<cells_size*4*4/(1000000) << "MBytes\n"
+          <<"  Size of data "<<data_input_.size()*16*4/(1000000) << "MBytes"<<vcl_endl;
   if (cells_size>this->image2d_max_width_)
     cells_size=RoundUp(cells_size,this->image2d_max_width_);
   cells_ = NULL;
@@ -1090,7 +1090,6 @@ bool boxm_ray_trace_manager<T>::run()
 
       tree_type * tree=curr_block->get_tree();
 
-	  
       set_tree(tree);
       setup_tree();
 
@@ -1126,15 +1125,13 @@ bool boxm_ray_trace_manager<T>::run()
   //clean_ray_origin_buffer();
   //clean_camera_input_buffer();
 
-  vcl_cout << "Timing Analysis "<<vcl_endl
-           << "==============="<<vcl_endl
-           <<"openCL Running time "<<gpu_time_<<" ms"<<vcl_endl
-           << "Running block "<<total_gpu_time/1000<<'s'<<vcl_endl
-           << "total block loading time = " << total_load_time << 's' << vcl_endl
-           << "total block processing time = " << total_raytrace_time << 's' << vcl_endl
+  vcl_cout << "Timing Analysis\n"
+           << "===============\n"
+           << "openCL Running time "<<gpu_time_<<" ms\n"
+           << "Running block "<<total_gpu_time/1000<<"s\n"
+           << "total block loading time = " << total_load_time << "s\n"
+           << "total block processing time = " << total_raytrace_time << "s\n"
            << "total gpu preprocess time = " << total_gpu_load_time << 's' << vcl_endl;
-
-
 
   return true;
 }

@@ -20,14 +20,14 @@ static void test_gaussian_pdf(stat_test_driver<T>& driver)
   vcl_vector<float> data(1); data[0]=0.1f;
   driver.setup_data(data);
   driver.setup_result_data(1);
-   
+
   if (driver.create_kernel("test_gaussian_pdf")!=SDK_SUCCESS) {
     TEST("Create Kernel test_gaussian", false, true);
     return;
   }
   if (driver.set_stat_args()!=SDK_SUCCESS)
     return;
- 
+
   if (driver.run_stat_kernels()!=SDK_SUCCESS) {
     TEST("Run Kernel test_gaussian", false, true);
     return;
@@ -48,26 +48,27 @@ static void test_gaussian_pdf(stat_test_driver<T>& driver)
   driver.clean_io_data();
   driver.release_kernel();
 }
+
 template <class T>
 static void test_gaussian_3_mixture_pdf(stat_test_driver<T>& driver)
 {
   boxm_stat_manager<T>::instance()->
-    set_gauss_3_mixture_1d(0.5f, 0.05f, 1.0f/3.0f, 
-                           0.25f, 0.01f, 1.0f/3.0f, 
+    set_gauss_3_mixture_1d(0.5f, 0.05f, 1.0f/3.0f,
+                           0.25f, 0.01f, 1.0f/3.0f,
                            0.75f, 0.2f, 1.0f/3.0f);
 
   vcl_vector<float> data(1); data[0]=0.5f;
   driver.setup_data(data);
 
   driver.setup_result_data(3);
-  
+
   if (driver.create_kernel("test_gaussian_3_mixture_pdf")!=SDK_SUCCESS) {
     TEST("Create Kernel test_gaussian_3_mixture", false, true);
     return;
   }
   if (driver.set_stat_args()!=SDK_SUCCESS)
     return;
- 
+
   if (driver.run_stat_kernels()!=SDK_SUCCESS) {
     TEST("Run Kernel test_gaussian_3_mixture", false, true);
     return;
@@ -88,6 +89,7 @@ static void test_gaussian_3_mixture_pdf(stat_test_driver<T>& driver)
   driver.clean_io_data();
   driver.release_kernel();
 }
+
 template <class T>
 static void test_update_gauss(stat_test_driver<T>& driver)
 {
@@ -98,24 +100,24 @@ static void test_update_gauss(stat_test_driver<T>& driver)
   // Samples from a Gaussian
   unsigned nsamp = 20;
   //
-  
-  float samples[] = {0.509497f, 0.271204f, 0.519466f, 0.669653f, 0.292289f, 
-                     0.534911f, 0.706098f, 0.468127f, 0.493323f, 0.57566f, 
-                     0.500368f, 0.434049f, 0.414085f, 0.482841f, 0.560543f, 
+
+  float samples[] = {0.509497f, 0.271204f, 0.519466f, 0.669653f, 0.292289f,
+                     0.534911f, 0.706098f, 0.468127f, 0.493323f, 0.57566f,
+                     0.500368f, 0.434049f, 0.414085f, 0.482841f, 0.560543f,
                      0.536531f, 0.48683f, 0.510946f, 0.552359f, 0.60396f};
   vcl_vector<float> data(nsamp);
-  for(unsigned i = 0; i<nsamp; ++i)
-    data[i]=samples[i];// data size 
+  for (unsigned i = 0; i<nsamp; ++i)
+    data[i]=samples[i];// data size
   driver.setup_data(data);
   driver.setup_result_data(2*nsamp);
-  
+
   if (driver.create_kernel("test_update_gauss")!=SDK_SUCCESS) {
     TEST("Create Kernel test_update_gauss", false, true);
     return;
   }
   if (driver.set_stat_args()!=SDK_SUCCESS)
     return;
- 
+
   if (driver.run_stat_kernels()!=SDK_SUCCESS) {
     TEST("Run Kernel test_update_gauss", false, true);
     return;
@@ -127,15 +129,15 @@ static void test_update_gauss(stat_test_driver<T>& driver)
   if (results) {
     // comparison with bsta
     bsta_gaussian_sphere<float, 1> bgauss(mu_init, sigma_init*sigma_init);
-		for (vcl_size_t i= 0; i<nsamp; i++){
+    for (vcl_size_t i= 0; i<nsamp; i++) {
       bsta_update_gaussian(bgauss, rho, data[i], min_sigma*min_sigma);
 #if 0
       vcl_cout << i << ' ' << bgauss.mean() << ' ' << vcl_sqrt(bgauss.var())
                << '\n';
 #endif
-		  good = good && near_eq(results[2*i], bgauss.mean(), 0.0001f) &&
-        near_eq(results[2*i+1], vcl_sqrt(bgauss.var()), 0.001f);
-    }            
+      good = good && near_eq(results[2*i], bgauss.mean(), 0.0001f) &&
+                     near_eq(results[2*i+1], vcl_sqrt(bgauss.var()), 0.001f);
+    }
     TEST("test_update_gaussian", good, true);
     if (!good)
       for (vcl_size_t i= 0; i<2*nsamp; i+=2)
@@ -144,11 +146,12 @@ static void test_update_gauss(stat_test_driver<T>& driver)
   driver.clean_io_data();
   driver.release_kernel();
 }
+
 template <class T>
 static void test_mixture_sort(stat_test_driver<T>& driver)
 {
   boxm_stat_manager<T>::instance()->
-    set_gauss_3_mixture_1d(0.75f, 0.2f, 1.0f/3.0f, 
+    set_gauss_3_mixture_1d(0.75f, 0.2f, 1.0f/3.0f,
                            0.25f, 0.01f, 1.0f/3.0f,
                            0.5f, 0.05f, 1.0f/3.0f
                            );
@@ -160,7 +163,7 @@ static void test_mixture_sort(stat_test_driver<T>& driver)
   }
   if (driver.set_stat_args()!=SDK_SUCCESS)
     return;
- 
+
   if (driver.run_stat_kernels()!=SDK_SUCCESS) {
     TEST("Run Kernel test_mixture_sort", false, true);
     return;
@@ -193,12 +196,11 @@ static void test_mixture_sort(stat_test_driver<T>& driver)
 template <class T>
 static void test_insert(stat_test_driver<T>& driver)
 {
-
   boxm_stat_manager<T>::instance()->
-    set_insert_gauss_3_mix_1d(0.2f, 0.25f, 
+    set_insert_gauss_3_mix_1d(0.2f, 0.25f,
                               0.25f, 0.01f, 1.0f/3.0f,
                               0.5f, 0.05f, 1.0f/3.0f,
-                              0.75f, 0.2f, 1.0f/3.0f 
+                              0.75f, 0.2f, 1.0f/3.0f
                               );
   vcl_vector<float> data(1); data[0]=0.28f;
   driver.setup_data(data);
@@ -211,7 +213,7 @@ static void test_insert(stat_test_driver<T>& driver)
   }
   if (driver.set_stat_args()!=SDK_SUCCESS)
     return;
- 
+
   if (driver.run_stat_kernels()!=SDK_SUCCESS) {
     TEST("Run Kernel test_insert", false, true);
     return;
@@ -221,7 +223,6 @@ static void test_insert(stat_test_driver<T>& driver)
 
   vcl_size_t size = boxm_stat_manager<T>::instance()->result_size();
   if (results) {
-
     float test[]={0.25f,0.01f,0.4f,3.0f,0.5f,0.05f,0.4f,4.0f,0.28f,0.25f,
                   0.2f,1.0f,2.0f,0.25f,0.01f,0.8f,3.0f,0.28f,0.25f,0.2f,1.0f,
                   0.28f,0.25f,0.0f,0.0f,1.0f,0.28f,0.25f,1.0f,1.0f,0.28f,
@@ -235,6 +236,7 @@ static void test_insert(stat_test_driver<T>& driver)
   }
   driver.release_kernel();
 }
+
 static void print_mix(unsigned b, float* results)
 {
   float mu0=results[b],sigma0=results[b+1],
@@ -244,45 +246,46 @@ static void print_mix(unsigned b, float* results)
   float mu2=results[b+8],sigma2=results[b+9],
     w2=results[b+10],Nobs2=results[b+11];
   float Nobs_mix = results[b+12];
-  unsigned ncomp = 0; 
-  if(w0>0.0f) ncomp++;
-  if(w1>0.0f) ncomp++;
-  if(w2>0.0f) ncomp++;
-  if(ncomp == 0)
-    vcl_cout << "no components \n";
-  if(ncomp == 1)
-    vcl_cout <<mu0 << ' ' <<sigma0*sigma0 << ' ' << w0 << ' ' 
+  unsigned ncomp = 0;
+  if (w0>0.0f) ncomp++;
+  if (w1>0.0f) ncomp++;
+  if (w2>0.0f) ncomp++;
+  if (ncomp == 0)
+    vcl_cout << "no components\n";
+  if (ncomp == 1)
+    vcl_cout <<mu0 << ' ' <<sigma0*sigma0 << ' ' << w0 << ' '
              << Nobs0 << '\n' << Nobs_mix << '\n';
-  if(ncomp == 2){
-    vcl_cout <<mu0 << ' ' <<sigma0*sigma0 << ' ' << w0 << ' ' 
-             << Nobs0 << '\n';
-    vcl_cout <<mu1 << ' ' <<sigma1*sigma1 << ' ' << w1 << ' ' 
+  if (ncomp == 2) {
+    vcl_cout <<mu0 << ' ' <<sigma0*sigma0 << ' ' << w0 << ' '
+             << Nobs0 << '\n'
+             <<mu1 << ' ' <<sigma1*sigma1 << ' ' << w1 << ' '
              << Nobs1 << '\n' << Nobs_mix << '\n';
   }
-  if(ncomp == 3){
-    vcl_cout <<mu0 << ' ' <<sigma0*sigma0 << ' ' << w0 << ' ' 
-             << Nobs0 << '\n';
-    vcl_cout <<mu1 << ' ' <<sigma1*sigma1 << ' ' << w1 << ' ' 
-             << Nobs1 << '\n';
-    vcl_cout <<mu2 << ' ' <<sigma2*sigma2 << ' ' << w2 << ' ' 
+  if (ncomp == 3) {
+    vcl_cout <<mu0 << ' ' <<sigma0*sigma0 << ' ' << w0 << ' '
+             << Nobs0 << '\n'
+             <<mu1 << ' ' <<sigma1*sigma1 << ' ' << w1 << ' '
+             << Nobs1 << '\n'
+             <<mu2 << ' ' <<sigma2*sigma2 << ' ' << w2 << ' '
              << Nobs2 << '\n' << Nobs_mix << '\n';
-  } 
+  }
 }
+
 static bool mix_eq(bsta_num_obs<bsta_mixture_fixed<bsta_num_obs<bsta_gauss_f1>, 3> > const& mix, unsigned b, float* results, float tol = 0.001)
 {
   float mu0=results[b],sigma0=results[b+1],w0=results[b+2],Nobs0=results[b+3];
   float mu1=results[b+4],sigma1=results[b+5],w1=results[b+6],Nobs1=results[b+7];
   float mu2=results[b+8],sigma2=results[b+9],w2=results[b+10],Nobs2=results[b+11];
   float Nobs_mix = results[b+12];
-  unsigned ncomp = 0; 
-  if(w0>0.0f) ncomp++;
-  if(w1>0.0f) ncomp++;
-  if(w2>0.0f) ncomp++;  
-  if(ncomp!=mix.num_components())
+  unsigned ncomp = 0;
+  if (w0>0.0f) ncomp++;
+  if (w1>0.0f) ncomp++;
+  if (w2>0.0f) ncomp++;
+  if (ncomp!=mix.num_components())
     return false;
-  if(mix.num_observations != Nobs_mix)
+  if (mix.num_observations != Nobs_mix)
     return false;
-  if(ncomp >=1){
+  if (ncomp >=1) {
     float vw0 = mix.weight(0);
     float vmu0 = mix.distribution(0).mean();
     float vsigma0 = vcl_sqrt(mix.distribution(0).var());
@@ -291,10 +294,10 @@ static bool mix_eq(bsta_num_obs<bsta_mixture_fixed<bsta_num_obs<bsta_gauss_f1>, 
     good = good && near_eq(sigma0, vsigma0, tol);
     good = good && near_eq(w0, vw0, tol);
     good = good && vNobs0 == static_cast<short>(Nobs0);
-    if(!good)
+    if (!good)
       return false;
   }
-  if(ncomp >=2){
+  if (ncomp >=2) {
     float vw1 = mix.weight(1);
     float vmu1 = mix.distribution(1).mean();
     float vsigma1 = vcl_sqrt(mix.distribution(1).var());
@@ -303,10 +306,10 @@ static bool mix_eq(bsta_num_obs<bsta_mixture_fixed<bsta_num_obs<bsta_gauss_f1>, 
     good = good && near_eq(sigma1, vsigma1, tol);
     good = good && near_eq(w1, vw1, tol);
     good = good && vNobs1 == static_cast<short>(Nobs1);
-    if(!good)
+    if (!good)
       return false;
   }
-  if(ncomp ==3){
+  if (ncomp ==3) {
     float vw2 = mix.weight(2);
     float vmu2 = mix.distribution(2).mean();
     float vsigma2 = vcl_sqrt(mix.distribution(2).var());
@@ -315,11 +318,12 @@ static bool mix_eq(bsta_num_obs<bsta_mixture_fixed<bsta_num_obs<bsta_gauss_f1>, 
     good = good && near_eq(sigma2, vsigma2, tol);
     good = good && near_eq(w2, vw2, tol);
     good = good && vNobs2 == (short)Nobs2;
-    if(!good)
+    if (!good)
       return false;
   }
- return true;
+  return true;
 }
+
 template <class T>
 static void test_update_mix(stat_test_driver<T>& driver)
 {
@@ -341,9 +345,9 @@ static void test_update_mix(stat_test_driver<T>& driver)
                      0.255286f, 0.53242f, 0.728973f, 0.243507f, 0.535631f,
                      0.832079f, 0.260184f,0.552204f, 0.843705f, 0.253314f,
                      0.508654f, 0.634243f, 0.236118f, 0.522571f, 0.650016f};
-  
+
   vcl_vector<float> data(nsamp);
-  for(unsigned i = 0; i<nsamp; ++i)
+  for (unsigned i = 0; i<nsamp; ++i)
     data[i]=samples[i];
   driver.setup_data(data);
 
@@ -364,7 +368,7 @@ static void test_update_mix(stat_test_driver<T>& driver)
   }
   if (driver.set_stat_args()!=SDK_SUCCESS)
     return;
- 
+
   if (driver.run_stat_kernels()!=SDK_SUCCESS) {
     TEST("Run Kernel test_update_mix", false, true);
     return;
@@ -374,14 +378,14 @@ static void test_update_mix(stat_test_driver<T>& driver)
 
   vcl_size_t size = boxm_stat_manager<T>::instance()->result_size();
   if (results) {
-    for(unsigned i =0; i<size; i+=13){
+    for (unsigned i =0; i<size; i+=13) {
       unsigned j=i/13;
       updater(mix, samples[j], 1.0f);
       good = good && mix_eq(mix, i, results);
-    }      
+    }
     TEST("test_update_mix", good, true);
     if (!good)
-      for(unsigned i =0; i<size; i+=13)
+      for (unsigned i =0; i<size; i+=13)
         print_mix(i, results);
   }
   driver.release_kernel();
@@ -420,8 +424,8 @@ static void test_statistics()
   stat_test_driver<float > test_driver;
   boxm_stat_manager<float >* stat_mgr = boxm_stat_manager<float >::instance();
   good = test_driver.init();
-  if(good)stat_tests(test_driver);
-  else{ TEST("stat_test_driver", true, false); }
+  if (good) stat_tests(test_driver);
+  else { TEST("stat_test_driver", true, false); }
 }
 
 TESTMAIN(test_statistics);
