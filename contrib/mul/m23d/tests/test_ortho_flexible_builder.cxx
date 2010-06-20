@@ -41,7 +41,7 @@ void test_projection_matrix1(const vnl_matrix<double>& P)
 
 void test_ortho_flexible_builder_on_rigid()
 {
-  vcl_cout<<"==== test m23d_ortho_flexible_builder ====="<<vcl_endl;
+  vcl_cout<<"==== test m23d_ortho_flexible_builder on rigid ====="<<vcl_endl;
 
   vnl_random r(35813);
   unsigned ns = 20;
@@ -158,7 +158,7 @@ vnl_matrix<double> make_cube_model()
 
 void test_ortho_flexible_builder_on_flexible()
 {
-  vcl_cout<<"==== test m23d_ortho_flexible_builder ====="<<vcl_endl;
+  vcl_cout<<"==== test m23d_ortho_flexible_builder on flexible ====="<<vcl_endl;
 
   vnl_random r(35813);
   unsigned ns = 20;
