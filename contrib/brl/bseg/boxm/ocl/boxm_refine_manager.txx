@@ -24,7 +24,7 @@ bool boxm_refine_manager<T>::init(tree_type *tree, float prob_thresh)
   format_tree(tree);
   (*prob_thresh_) = prob_thresh;
   (*max_level_) = tree->number_levels();
-  
+
   //set bounding box length for integrating alpha
   vgl_box_3d<double> bbox = tree->bounding_box();
   (*bbox_len_) = (float) (bbox.max_z() - bbox.min_z());
@@ -51,8 +51,8 @@ init(int* cells, unsigned numcells, unsigned tree_max_size,
 }
 
 template<class T>
-bool boxm_refine_manager<T>::init_kernel() {
-  
+bool boxm_refine_manager<T>::init_kernel()
+{
   //load kernel source main
   if (!this->load_kernel_source(vcl_string(VCL_SOURCE_ROOT_DIR)
                                     +"/contrib/brl/bseg/boxm/ocl/refine_main.cl")) {
@@ -79,7 +79,6 @@ bool boxm_refine_manager<T>::init_kernel() {
 template<class T>
 bool boxm_refine_manager<T>::run_tree()
 {
-
   vcl_cout<<"REFINING TREE-----------------------------"<<vcl_endl;
   //allocate and initialize memory on gpu side
   vcl_cout<<"---setting up buffers"<<vcl_endl;
@@ -115,14 +114,16 @@ bool boxm_refine_manager<T>::run_tree()
   int numSplit = ((*tree_results_size_)-(*numcells_))/8;
   vcl_cout<<"---number of nodes that split = "<<numSplit<<vcl_endl
           <<"----------------------------------------------------"<<vcl_endl;
-//  boxm_ocl_utils<float>::print_tree_array(tree_results_, (*tree_results_size_), data_results_);
+#if 0
+  boxm_ocl_utils<float>::print_tree_array(tree_results_, (*tree_results_size_), data_results_);
 
-//  vcl_cout<<"VUL_TIMER: Global mem BANDWITH RESULTS"<<vcl_endl;
-//  vcl_cout<<"Size "<<16*(*tree_max_size_)<<" bytes in "<<gpu_time<<"sec"<<vcl_endl;
-//  float rate = (16.0*(*tree_max_size_))/gpu_time;
-//  vcl_cout<<" = "<<rate<<" bytes/sec"<<vcl_endl;
-//  vcl_cout<<" = "<<rate/pow(2,20)<<" megabytes/sec"<<vcl_endl;
-//  boxm_ocl_utils<float>::print_tree_array(tree_results_, (*tree_results_size_), data_results_);
+  vcl_cout<<"VUL_TIMER: Global mem BANDWITH RESULTS"<<vcl_endl
+          <<"Size "<<16*(*tree_max_size_)<<" bytes in "<<gpu_time<<"sec"<<vcl_endl;
+  float rate = (16.0*(*tree_max_size_))/gpu_time;
+  vcl_cout<<" = "<<rate<<" bytes/sec"<<vcl_endl
+          <<" = "<<rate/vcl_pow(2,20)<<" megabytes/sec"<<vcl_endl;
+  boxm_ocl_utils<float>::print_tree_array(tree_results_, (*tree_results_size_), data_results_);
+#endif // 0
 
   return true;
 }
@@ -228,13 +229,14 @@ bool boxm_refine_manager<T>::run_block()
   status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
   status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
   float gpu_time = (tend-tstart)/1e9f;
-//  vcl_cout<<"---GLOBAL MEM BANDWITH RESULTS-----------------------"<<vcl_endl
-//          <<"---Tree Size: "<<(*tree_results_size_)<<" blocks; "<<16*(*tree_results_size_)<<" bytes"<<vcl_endl
-//          <<"---GPU Time: "<<gpu_time<<" seconds"<<vcl_endl;
-//  float rate = (16.0*(*tree_max_size_))/gpu_time;
-//  vcl_cout<<"---Refine Bandwidth ~~ "<<rate/pow(2,20)<<" MB/sec"<<vcl_endl
-//          <<"-----------------------------------------------------"<<vcl_endl;
-//  
+#if 0
+  vcl_cout<<"---GLOBAL MEM BANDWITH RESULTS-----------------------"<<vcl_endl
+          <<"---Tree Size: "<<(*tree_results_size_)<<" blocks; "<<16*(*tree_results_size_)<<" bytes"<<vcl_endl
+          <<"---GPU Time: "<<gpu_time<<" seconds"<<vcl_endl;
+  float rate = (16.0*(*tree_max_size_))/gpu_time;
+  vcl_cout<<"---Refine Bandwidth ~~ "<<rate/vcl_pow(2,20)<<" MB/sec"<<vcl_endl
+          <<"-----------------------------------------------------"<<vcl_endl;
+#endif // 0
   return SDK_SUCCESS;
 }
 
@@ -250,73 +252,73 @@ int boxm_refine_manager<T>::setup_tree_buffers()
   //---- create and initialize memory objects -----
   //tree array (cells_)
   cell_buf_ = clCreateBuffer(this->context_,  //write output_
-                                 CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR,
-                                 (*tree_max_size_) * sizeof(cl_int4),
-                                 cells_,
-                                 &status);
+                             CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR,
+                             (*tree_max_size_) * sizeof(cl_int4),
+                             cells_,
+                             &status);
   if (!this->check_val(status, CL_SUCCESS, "clCreateBuffer (cell_array) failed."))
     return SDK_FAILURE;
 
   //tree SIZE
   cell_size_buf_ = clCreateBuffer(this->context_,
-                                 CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR,
-                                 sizeof(cl_uint),
-                                 numcells_,
-                                 &status);
+                                  CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR,
+                                  sizeof(cl_uint),
+                                  numcells_,
+                                  &status);
   if (!this->check_val(status, CL_SUCCESS, "clCreateBuffer (tree_size_) failed."))
     return SDK_FAILURE;
 
   //tree max SIZE
   cell_max_size_buf_ = clCreateBuffer(this->context_,
-                                 CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR,
-                                 sizeof(cl_uint),
-                                 tree_max_size_,
-                                 &status);
+                                      CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR,
+                                      sizeof(cl_uint),
+                                      tree_max_size_,
+                                      &status);
   if (!this->check_val(status, CL_SUCCESS, "clCreateBuffer (tree_max_size_) failed."))
     return SDK_FAILURE;
 
   //data array (cell_data_)
   data_buf_ = clCreateBuffer(this->context_,
-                                 CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR,
-                                 (*data_max_size_) * sizeof(cl_float16),
-                                 cell_data_,
-                                 &status);
+                             CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR,
+                             (*data_max_size_) * sizeof(cl_float16),
+                             cell_data_,
+                             &status);
   if (!this->check_val(status, CL_SUCCESS, "clCreateBuffer (cell_data) failed."))
     return SDK_FAILURE;
 
   //data SIZE
   data_size_buf_ = clCreateBuffer(this->context_,
-                                 CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR,
-                                 sizeof(cl_uint),
-                                 numdata_,
-                                 &status);
+                                  CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR,
+                                  sizeof(cl_uint),
+                                  numdata_,
+                                  &status);
   if (!this->check_val(status, CL_SUCCESS, "clCreateBuffer (data_size_buff_) failed."))
     return SDK_FAILURE;
 
   //data max size
   data_max_size_buf_ = clCreateBuffer(this->context_,
-                                 CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR,
-                                 sizeof(cl_uint),
-                                 data_max_size_,
-                                 &status);
+                                      CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR,
+                                      sizeof(cl_uint),
+                                      data_max_size_,
+                                      &status);
   if (!this->check_val(status, CL_SUCCESS, "clCreateBuffer (data_max_size_buff_) failed."))
     return SDK_FAILURE;
 
   //probability threshold buffer
   prob_thresh_buf_ = clCreateBuffer(this->context_,
-                                 CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR,
-                                 sizeof(cl_float),
-                                 prob_thresh_,
-                                 &status);
+                                    CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR,
+                                    sizeof(cl_float),
+                                    prob_thresh_,
+                                    &status);
   if (!this->check_val(status, CL_SUCCESS, "clCreateBuffer (prob_thresh_) failed."))
     return SDK_FAILURE;
 
   //max level buffer
   max_level_buf_ = clCreateBuffer(this->context_,
-                                 CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR,
-                                 sizeof(cl_uint),
-                                 max_level_,
-                                 &status);
+                                  CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR,
+                                  sizeof(cl_uint),
+                                  max_level_,
+                                  &status);
   if (!this->check_val(status, CL_SUCCESS, "clCreateBuffer (max_level_) failed."))
     return SDK_FAILURE;
 
@@ -328,7 +330,7 @@ int boxm_refine_manager<T>::setup_tree_buffers()
                                  &status);
   if (!this->check_val(status, CL_SUCCESS, "clCreateBuffer (bbox_len_) failed."))
     return SDK_FAILURE;
-    
+
   //output buffer
   output_buf_ = clCreateBuffer(this->context_,
                                CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR,
@@ -360,33 +362,33 @@ bool boxm_refine_manager<T>::read_tree_buffers()
 
   // read number of cells
   status = clEnqueueReadBuffer(command_queue_, cell_size_buf_, CL_TRUE,
-                                   0, sizeof(cl_uint),
-                                   tree_results_size_,
-                                   0, NULL, &events[1]);
+                               0, sizeof(cl_uint),
+                               tree_results_size_,
+                               0, NULL, &events[1]);
   if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (tree_results_size_)failed."))
     return false;
 
   //read data_size before the array
   status = clEnqueueReadBuffer(command_queue_, data_size_buf_, CL_TRUE,
-                                   0,  sizeof(cl_uint),
-                                   data_results_size_,
-                                   0, NULL, &events[2]);
+                               0,  sizeof(cl_uint),
+                               data_results_size_,
+                               0, NULL, &events[2]);
   if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (tree_results_)failed."))
     return false;
 
   //read data_buf_
   status = clEnqueueReadBuffer(command_queue_, data_buf_, CL_TRUE,
-                                   0, (*data_results_size_) * sizeof(cl_float16),
-                                   data_results_,
-                                   0,NULL,&events[3]);
+                               0, (*data_results_size_) * sizeof(cl_float16),
+                               data_results_,
+                               0,NULL,&events[3]);
   if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (data_results_)failed."))
     return false;
 
   //read output_buf_
   status = clEnqueueReadBuffer(command_queue_, output_buf_, CL_TRUE,
-                                   0, sizeof(cl_float),
-                                   output_results_,
-                                   0,NULL,&events[4]);
+                               0, sizeof(cl_float),
+                               output_results_,
+                               0,NULL,&events[4]);
   if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (output_results_)failed."))
     return false;
 
@@ -447,7 +449,7 @@ int boxm_refine_manager<T>::clean_tree_buffers()
   status = clReleaseMemObject(max_level_buf_);
   if (!this->check_val(status, CL_SUCCESS, "clReleaseMemObject failed (max_level_buf_)."))
     return SDK_FAILURE;
-    
+
   status = clReleaseMemObject(bbox_len_buf_);
   if (!this->check_val(status, CL_SUCCESS, "clReleaseMemObject failed (bbox_len_buf_)."))
     return SDK_FAILURE;
@@ -492,7 +494,7 @@ bool boxm_refine_manager<T>::format_tree(tree_type* tree)
   unsigned num_cells = cell_input.size();
   unsigned cell_max_size = (unsigned) (2*cell_input.size());
   unsigned data_max_size = (unsigned) (2*data_input.size());
-  
+
 
   //allocate host memory
   alloc_trees(cell_max_size, data_max_size);
@@ -580,12 +582,12 @@ bool boxm_refine_manager<T>::free_trees()
   boxm_ocl_utils<T>::free_aligned(prob_thresh_);
   boxm_ocl_utils<T>::free_aligned(max_level_);
   boxm_ocl_utils<T>::free_aligned(bbox_len_);
-  
+
   //TODO remove output stuff
   //boxm_ocl_utils<T>::free_aligned(output_results_);
   // boxm_ocl_utils<T>::free_aligned(output_input_);
   //TODO remove me^^^^
-  
+
   return true;
 }
 
@@ -650,7 +652,7 @@ int boxm_refine_manager<T>::build_kernel_program()
     vcl_size_t len;
     char buffer[2048];
     clGetProgramBuildInfo(program_, this->devices_[0],
-      CL_PROGRAM_BUILD_LOG, sizeof(buffer), buffer, &len);
+                          CL_PROGRAM_BUILD_LOG, sizeof(buffer), buffer, &len);
     vcl_printf("%s\n", buffer);
     return SDK_FAILURE;
   }
