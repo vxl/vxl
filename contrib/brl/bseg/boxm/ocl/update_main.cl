@@ -122,6 +122,8 @@ update_aux( __global int * root_level,  // level of the root.
     load_data_mutable_using_loc_codes(ray_bundle_array,cached_loc_codes);
     if (ray_bundle_array[llid].x==llid)
     {
+      /* cell data, i.e., alpha and app model is needed for passes */
+      cached_data[llid] = sample_array[data_ptr];
       cached_aux_data[llid] =aux_data_array[data_ptr];
     }
     barrier(CLK_LOCAL_MEM_FENCE);
@@ -134,6 +136,7 @@ update_aux( __global int * root_level,  // level of the root.
     //barrier(CLK_LOCAL_MEM_FENCE);
     if (ray_bundle_array[llid].x==llid)
     {
+      /* note that sample data is not changed during ray tracing passes */
       aux_data_array[data_ptr]=cached_aux_data[llid] ;
     }
 

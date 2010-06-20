@@ -362,7 +362,7 @@ int ray_bundle_test_driver<T>::run_bundle_test_kernels()
   cl_ulong tstart,tend;
   status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
   status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
-  float gpu_time_= (double)1.0e-6 * (tend - tstart); // convert nanoseconds to milliseconds 
+  float gpu_time_= 1.0e-6f * (tend - tstart); // convert nanoseconds to milliseconds 
   //vcl_cout<<"GPU time is "<<gpu_time_<< "ms"<<vcl_endl;
 
   // Enqueue readBuffers

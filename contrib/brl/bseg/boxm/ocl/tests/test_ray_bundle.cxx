@@ -9,62 +9,6 @@
 #include <vul/vul_timer.h>
 #include <vbl/vbl_array_2d.h>
 
-#if 0
-template <class T>
-static void test_load_data(ray_bundle_test_driver<T>& driver)
-{
-  driver.set_bundle_ni(2);
-  driver.set_bundle_nj(2);
-  driver.set_work_space_ni(8);
-  driver.set_work_space_nj(8);
-  if (driver.create_kernel("test_load_data")!=SDK_SUCCESS) {
-    TEST("Create Kernel test_load_data", false, true);
-    return;
-  }
-  if (driver.set_basic_test_args()!=SDK_SUCCESS)
-    return;
-  vul_timer t;
-  t.mark();
-  if (driver.run_bundle_test_kernels()!=SDK_SUCCESS) {
-    TEST("Run Kernel test_load_data", false, true);
-    return;
-  }
-  bool good = true;
-  cl_int* results = driver.tree_results();
-#if 0
-  int count = results[0];
-  vcl_cout<<t.all()<<' '
-          << "Transfer rate = " << 64.0f*((float)count*count/(static_cast<float>(t.real())))/1000.0f << " Mbytes/second\n";
-#endif
-  vcl_size_t size = 14*4;
-  if (size<driver.tree_result_size_bytes() && results) {
-    int test[]={1,1,1,1,
-                1,1,3,0,
-                3,1,3,0,
-                1,3,3,0,
-                3,3,3,0,
-                45,45,45,45,
-                54,54,54,54,
-                63,63,63,63,
-                72,72,72,72,
-                0,1,2,3,
-                1,1,1,1,
-                1,1,3,0,
-                45,45,45,45,
-                0,0,0,0};
-    for (vcl_size_t i= 0; i<size; i++)
-      good = good && results[i]==test[i];
-    TEST("test_load_data_into_cache", good, true);
-    if (!good)
-      for (vcl_size_t i= 0; i<size; i+=4)
-        vcl_cout << "test_load_data_result(" << results[i] << ' '
-                 << results[i+1] << ' '
-                 << results[i+2] << ' '
-                 << results[i+3] << ")\n";
-  }
-  driver.release_kernel();
-}
-#endif // 0
 
 template <class T>
 static void test_load_data_using_loc_codes(ray_bundle_test_driver<T>& driver)
@@ -164,65 +108,6 @@ static void test_load_data_mutable_using_loc_codes(ray_bundle_test_driver<T>& dr
   driver.release_kernel();
 }
 
-#if 0
-template <class T>
-static void test_load_data_mutable(ray_bundle_test_driver<T>& driver)
-{
-  driver.set_bundle_ni(2);
-  driver.set_bundle_nj(2);
-  driver.set_work_space_ni(8);
-  driver.set_work_space_nj(8);
-  if (driver.create_kernel("test_load_data_mutable")!=SDK_SUCCESS) {
-    TEST("Create Kernel test_load_data_mutable", false, true);
-    return;
-  }
-  // the string argument below means use uchar4 instead of char
-  // for the ray_bundle_array
-  if (driver.set_basic_test_args("use_char4")!=SDK_SUCCESS)
-    return;
-  if (driver.run_bundle_test_kernels()!=SDK_SUCCESS) {
-    TEST("Run Kernel test_load_data_mutable", false, true);
-    return;
-  }
-  bool good = true;
-  cl_int* results = driver.tree_results();
-
-  vcl_size_t size = 20*4;
-  if (size<driver.tree_result_size_bytes() && results) {
-    int test[]={1,1,1,1,
-                1,1,3,0,
-                3,1,3,0,
-                1,3,3,0,
-                3,3,3,0,
-                45,45,45,45,
-                54,54,54,54,
-                63,63,63,63,
-                72,72,72,72,
-                0,0,0,1,
-                1,0,1,1,
-                2,0,2,1,
-                3,0,3,1,
-                1,1,1,1,
-                1,1,3,0,
-                45,45,45,45,
-                0,1,3,3,
-                0,2,0,3,
-                0,3,0,3,
-                0,0,0,1};
-    for (vcl_size_t i= 0; i<size; i++)
-      good = good && results[i]==test[i];
-    TEST("test_load_data_mutable", good, true);
-    if (!good)
-      for (vcl_size_t i= 0; i<size; i+=4)
-        vcl_cout << "test_load_data_mutable_result(" << results[i] << ' '
-                 << results[i+1] << ' '
-                 << results[i+2] << ' '
-                 << results[i+3] << ")\n";
-  }
-  driver.release_kernel();
-}
-#endif // 0
-
 template <class T>
 static void test_seg_len_obs(ray_bundle_test_driver<T>& driver)
 {
@@ -295,21 +180,26 @@ static void test_pre_infinity(ray_bundle_test_driver<T>& driver)
   bool good = true;
   cl_int* results = driver.tree_results();
 
-  vcl_size_t size = 13*4;
+  vcl_size_t size = 18*4;
   if (size<driver.tree_result_size_bytes() && results) {
-    int test[]={100,693,500,3989,
+    int test[]={1,1,1,1,
+                1000,100,0,0,
+                1000,200,0,0,
+                1000,500,0,0,
+                1000,700,0,0,
+                100,693,500,3989,
                 200,1386,250,5984,
                 500,223,799,1595,
                 700,2302,99,7180,
+                1,1,1,1,
                 2500,1275,0,0,
+                500,0,0,0,
+                750,0,0,0,
+                1000,0,0,0,
                 500,173,840,467,
                 600,346,707,859,
                 400,519,594,1190,
-                550,693,500,1468,
-                250,2936,0,0,
-                500,0,0,0,
-                750,0,0,0,
-                1000,0,0,0};
+                550,693,500,1468};
     for (vcl_size_t i= 0; i<size; i++)
       good = good && results[i]==test[i];
     TEST("test_pre_infinity", good, true);
@@ -657,15 +547,15 @@ void ray_bundle_tests(ray_bundle_test_driver<T>& test_driver)
   //================================================================
 
   //test_load_data(test_driver);
-//  test_load_data_mutable(test_driver);
+  //  test_load_data_mutable(test_driver);
   test_load_data_using_loc_codes(test_driver);
   test_load_data_mutable_using_loc_codes(test_driver);
   test_map_work_space(test_driver);
   test_ray_entry_point(test_driver);
 
   test_seg_len_obs(test_driver);
-#if 0 // to fix
   test_pre_infinity(test_driver);
+#if 0 // to fix
   test_bayes_ratio(test_driver);
   test_norm_uniform(test_driver);
   test_norm_gauss(test_driver);

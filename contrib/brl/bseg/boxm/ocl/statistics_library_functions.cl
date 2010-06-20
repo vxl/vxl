@@ -111,7 +111,7 @@ void sort_mix_3(float* mu0, float* sigma0, float* w0, short* Nobs0,
  * insert a new component in the mixture. The mixture is assumed
  * to be sorted so that if w2>0 the third component is the one replaced.
  */
-void insert_gauss_3(float x, float init_weight, float init_sigma, char* match, 
+void insert_gauss_3(float x, float init_weight, float init_sigma, int* match, 
                     float* mu0, float* sigma0, float* w0, short* Nobs0,
                     float* mu1, float* sigma1, float* w1, short* Nobs1,
                     float* mu2, float* sigma2, float* w2, short* Nobs2)
@@ -125,7 +125,7 @@ void insert_gauss_3(float x, float init_weight, float init_sigma, char* match,
       *sigma2 = init_sigma;
       *w2 = init_weight;
       *Nobs2 = 1;
-      *match = (char)2;
+      *match = 2;
       return;
     }else if((*w0)>0.0f){/* replace the second component */
       *w0 = (1.0f-init_weight);
@@ -133,7 +133,7 @@ void insert_gauss_3(float x, float init_weight, float init_sigma, char* match,
       *sigma1 = init_sigma;
       *w1 = init_weight;
       *Nobs1 = 1;
-      *match = (char)1;
+      *match = 1;
       return;
     }else{/* replace the first component */
       /*note that in C++ the weights don't sum to 1?
@@ -142,7 +142,7 @@ void insert_gauss_3(float x, float init_weight, float init_sigma, char* match,
       *mu0 = x;
       *sigma0 = init_sigma;
       *Nobs0 = 1;
-      *match = (char)0;
+      *match = 0;
     }
 }
 

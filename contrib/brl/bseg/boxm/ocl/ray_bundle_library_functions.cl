@@ -4,19 +4,23 @@
 #define  NEXT_ADR_VALID 2;
 
 /*
- * Load the necessary cell data items that are required by the
- * rays in the ray bundle. The requested cells are defined by the
- * exit points for each ray. As the data is loaded, a check is made
- * of the ray neighbors to see if the required cell data has already
- * been loaded. If so, the pointer for that ray is assigned to the
- * cached data item. If not the data is loaded from global memory and
- * inserted in the data cache. Before each round of data input the cache
- * is cleared. This function requires that the byte_addressable_store
- * is supported by the opencl SDK.
+ * Determine the necessary cell data items that are required by the
+ * rays in the ray bundle. The requested cell data items are defined by the
+ * cached loc_codes for each ray. As the ray bundle is scanned, a check is made
+ * of the ray neighbors to see if the required cell data is already in
+ * use, i.e. a neigborhing ray has the same required loc_code. If so, 
+ * the pointer for that ray is assigned the neigbhor's data pointer. 
+ * If not, a new data pointer is inserted corresponding to the cell data
+ * for the required loc_code. Before each round of data indexing,
+ * the ray_bundle_array is initialized to the same index as the local 
+ * work group id, which is the address that would be valid if no data is
+ * shared, i.e. a one-to-one correspondence between ray id and cache adrress.
+ * This function is valid only if byte_addressable_store is supported by 
+ * the opencl SDK.
  */
 int load_data_using_loc_codes(__local uchar*    ray_bundle_array, /* bundle pointer array */
                               __local short4*   cached_loc_codes)
-                              // __local float16*  cached_data)
+  // __local float16*  cached_data)
 {
   uchar nbi = (uchar)get_local_size(0);
   uchar nbj = (uchar)get_local_size(1);
@@ -31,83 +35,84 @@ int load_data_using_loc_codes(__local uchar*    ray_bundle_array, /* bundle poin
       {
         uchar indx = i + nbi*j;
         if (cached_loc_codes[indx].x>-1)
-        {
-          //ray_bundle_array[indx]=(uchar)indx;
-          /* load data */
-          uchar org_ptr = 0;
-          uchar tptr = indx;
+          {
+            //ray_bundle_array[indx]=(uchar)indx;
+            /* load data */
+            uchar org_ptr = 0;
+            uchar tptr = indx;
 
-          bool found = false;
-          /* j = 0 */
-          if (j==0) {
-            if (i>0)
-            {
-              tptr = indx-1;
+            bool found = false;
+            /* j = 0 */
+            if (j==0) {/* for first row, only left neighbor is valid */
+              if (i>0)
+                {
+                  tptr = indx-1;
+                  org_ptr = ray_bundle_array[tptr];
+                  if (cached_loc_codes[tptr].x==cached_loc_codes[indx].x &&
+                      cached_loc_codes[tptr].y==cached_loc_codes[indx].y &&
+                      cached_loc_codes[tptr].z==cached_loc_codes[indx].z &&
+                      cached_loc_codes[tptr].w==cached_loc_codes[indx].w ) {
+                    ray_bundle_array[indx]=org_ptr;
+                    found = true;
+                  }
+                }
+            }
+            if (!found&&j>0) {
+              /* bundle has only one column */
+              /* above neighbor is always valid for j>0*/
+              tptr = indx - nbi;
               org_ptr = ray_bundle_array[tptr];
-              //if (!any(convert_int4(abs_diff(cached_loc_codes[tptr],cached_loc_codes[indx])))) {
               if (cached_loc_codes[tptr].x==cached_loc_codes[indx].x &&
                   cached_loc_codes[tptr].y==cached_loc_codes[indx].y &&
                   cached_loc_codes[tptr].z==cached_loc_codes[indx].z &&
                   cached_loc_codes[tptr].w==cached_loc_codes[indx].w ) {
                 ray_bundle_array[indx]=org_ptr;
                 found = true;
+              }
+              /* more than one column and upper right neighbor */
+              if (!found&&i<(nbi-1)&&nbi>1) {
+                tptr = indx - nbi + 1;
+                org_ptr = ray_bundle_array[tptr];
+                if (cached_loc_codes[tptr].x==cached_loc_codes[indx].x &&
+                    cached_loc_codes[tptr].y==cached_loc_codes[indx].y &&
+                    cached_loc_codes[tptr].z==cached_loc_codes[indx].z &&
+                    cached_loc_codes[tptr].w==cached_loc_codes[indx].w ) {
+                  ray_bundle_array[indx]=org_ptr;
+                  found = true;
+                }
+              }
+
+              // upper left neighbor is valid for i>0 and j>0
+              if (!found&&i>0) {
+                tptr = indx - nbi - 1;
+                org_ptr = ray_bundle_array[tptr];
+                if (cached_loc_codes[tptr].x==cached_loc_codes[indx].x &&
+                    cached_loc_codes[tptr].y==cached_loc_codes[indx].y &&
+                    cached_loc_codes[tptr].z==cached_loc_codes[indx].z &&
+                    cached_loc_codes[tptr].w==cached_loc_codes[indx].w ) {
+                  ray_bundle_array[indx]=org_ptr;
+                  found = true;
+                }
+              }
+              // left neighbor is valid for i>0
+              if (!found&&i>0) {
+                tptr = indx -  1;
+                org_ptr = ray_bundle_array[tptr];
+                if (cached_loc_codes[tptr].x==cached_loc_codes[indx].x &&
+                    cached_loc_codes[tptr].y==cached_loc_codes[indx].y &&
+                    cached_loc_codes[tptr].z==cached_loc_codes[indx].z &&
+                    cached_loc_codes[tptr].w==cached_loc_codes[indx].w ) {
+                  ray_bundle_array[indx]=org_ptr;
+                  found = true;
+                }
               }
             }
           }
-          if (!found&&j>0) {
-            /* bundle has only one column */
-            // above neighbor everybody has it for j>0
-            tptr = indx - nbi;
-            org_ptr = ray_bundle_array[tptr];
-            if (cached_loc_codes[tptr].x==cached_loc_codes[indx].x &&
-                cached_loc_codes[tptr].y==cached_loc_codes[indx].y &&
-                cached_loc_codes[tptr].z==cached_loc_codes[indx].z &&
-                cached_loc_codes[tptr].w==cached_loc_codes[indx].w ) {
-              ray_bundle_array[indx]=org_ptr;
-              found = true;
-            }
-            /* more than one column and upper right neighbor */
-            if (!found&&i<(nbi-1)&&nbi>1) {
-              tptr = indx - nbi + 1;
-              org_ptr = ray_bundle_array[tptr];
-              if (cached_loc_codes[tptr].x==cached_loc_codes[indx].x &&
-                  cached_loc_codes[tptr].y==cached_loc_codes[indx].y &&
-                  cached_loc_codes[tptr].z==cached_loc_codes[indx].z &&
-                  cached_loc_codes[tptr].w==cached_loc_codes[indx].w ) {
-                ray_bundle_array[indx]=org_ptr;
-                found = true;
-              }
-            }
-
-            // left neighbor is goof for i>0 and j>0
-            if (!found&&i>0) {
-              tptr = indx - nbi - 1;
-              org_ptr = ray_bundle_array[tptr];
-              if (cached_loc_codes[tptr].x==cached_loc_codes[indx].x &&
-                  cached_loc_codes[tptr].y==cached_loc_codes[indx].y &&
-                  cached_loc_codes[tptr].z==cached_loc_codes[indx].z &&
-                  cached_loc_codes[tptr].w==cached_loc_codes[indx].w ) {
-                ray_bundle_array[indx]=org_ptr;
-                found = true;
-              }
-            }
-            // left neighbor is goof for i>0
-            if (!found&&i>0) {
-              tptr = indx -  1;
-              org_ptr = ray_bundle_array[tptr];
-              if (cached_loc_codes[tptr].x==cached_loc_codes[indx].x &&
-                  cached_loc_codes[tptr].y==cached_loc_codes[indx].y &&
-                  cached_loc_codes[tptr].z==cached_loc_codes[indx].z &&
-                  cached_loc_codes[tptr].w==cached_loc_codes[indx].w ) {
-                ray_bundle_array[indx]=org_ptr;
-                found = true;
-              }
-            }
-          }
-        }
       }
   }
-
+  /* This function only inserts single ray_bundle_array pointers to access the
+   * data in a read-only mode, e.g., for expected image generation
+   */
   barrier(CLK_LOCAL_MEM_FENCE);
 
   return 1;
@@ -135,25 +140,29 @@ void update_state_ptr(__local uchar4*   ray_bundle_array,
   ray_bundle_array[org_ptr].z=indx;
 }
 
-/* Load the necessary cell data items that are required by the
+/* Determine pointers to the necessary cell data items that are required by the
  * rays in the ray bundle. The requested cells are defined by the
- * exit points for each ray. As the data is loaded, a check is made
+ * required loc_codes for each ray. As the bundle is scanned, a check is made
  * of the ray neighbors to see if the required cell data has already
- * been loaded. If so, the pointer for that ray is assigned to the
- * cached data item. If not the data is loaded from global memory and
- * inserted in the data cache. Before each round of data input the cache
- * is cleared. This function differs from the library function "load_data"
+ * been associated with a neigborhing ray. If so, the pointer for that ray 
+ * is assigned to that of the neighbor. If not, the pointer to the data in 
+ * the cache is determined and assigned to the ray_bundle_array data pointer,
+ * (the .x slot of the pointer vector).
+ * This function differs from the library function "load_data"
  * in that additional mechanisms are provided that prevent conflicts
  * when the data is written, as in model updating. In this function, the
- * ray_bundle_array contains information that supports serial processing
- * of each multiple ray data item to prevent conflicts. Especially note
- * that the ray_bundle_array is uchar4 instead of uchar as in "load_data."
- * The content of the ray_bundle_array vector is:
+ * ray_bundle_array contains information in the form of a linked list that 
+ * supports serial processing of each multiple ray data item to prevent 
+ * conflicts. More specifically, when a data item is shared by a number of 
+ * rays, a "master" ray is allowed to run sequentially to scan the connected 
+ * region defined by the linked list and to update the cell data as needed.
+ * In this case, the ray_bundle_array is uchar4 instead of uchar as in 
+ * "load_data." The content of the ray_bundle_array vector is:
  *      x       y          z         w
  *   [ ptr | next_ptr | curr_ptr | flags ]
  *
  *      o ptr is the address in the arrays of loc_codes and cached data
- *        corresponding to the ray
+ *        required by the ray
  *      o next_ptr is the next ray slot (linear index) in the connected region
  *      o curr_ptr is the current ray slot in the region (linear index)
  *      o flags define the state of a ray slot
@@ -178,18 +187,32 @@ int load_data_mutable_using_loc_codes( __local uchar4*   ray_bundle_array, /* bu
       for (uchar i = 0; i<nbi; ++i) {
         uchar indx = i + nbi*j;
         if (cached_loc_codes[indx].x>-1)
-        {
-          //ray_bundle_array[indx]=(uchar)indx;
-          /* load data */
-          uchar org_ptr = 0;
-          uchar tptr = indx;
+          {
+            //ray_bundle_array[indx]=(uchar)indx;
+            /* load data */
+            uchar org_ptr = 0;
+            uchar tptr = indx;
 
-          bool found = false;
-          /* j = 0 */
-          if (j==0) {
-            if (i>0)
-            {
-              tptr = indx-1;
+            bool found = false;
+            /* j = 0 */
+            if (j==0) {/* for first row, only left neighbor is valid */
+              if (i>0)
+                {
+                  tptr = indx-1;
+                  org_ptr = ray_bundle_array[tptr].x;
+                  if (cached_loc_codes[tptr].x==cached_loc_codes[indx].x &&
+                      cached_loc_codes[tptr].y==cached_loc_codes[indx].y &&
+                      cached_loc_codes[tptr].z==cached_loc_codes[indx].z &&
+                      cached_loc_codes[tptr].w==cached_loc_codes[indx].w ) {
+                    update_state_ptr(ray_bundle_array, indx, org_ptr);
+                    found = true;
+                  }
+                }
+            }
+            if (!found&&j>0) {
+              /* bundle has only one column */
+              // above neighbor, always valid for j>0
+              tptr = indx - nbi;
               org_ptr = ray_bundle_array[tptr].x;
               if (cached_loc_codes[tptr].x==cached_loc_codes[indx].x &&
                   cached_loc_codes[tptr].y==cached_loc_codes[indx].y &&
@@ -198,68 +221,54 @@ int load_data_mutable_using_loc_codes( __local uchar4*   ray_bundle_array, /* bu
                 update_state_ptr(ray_bundle_array, indx, org_ptr);
                 found = true;
               }
-            }
-          }
-          if (!found&&j>0) {
-            /* bundle has only one column */
-            // above neighbor everybody has it for j>0
-            tptr = indx - nbi;
-            org_ptr = ray_bundle_array[tptr].x;
-            if (cached_loc_codes[tptr].x==cached_loc_codes[indx].x &&
-                cached_loc_codes[tptr].y==cached_loc_codes[indx].y &&
-                cached_loc_codes[tptr].z==cached_loc_codes[indx].z &&
-                cached_loc_codes[tptr].w==cached_loc_codes[indx].w ) {
-              update_state_ptr(ray_bundle_array, indx, org_ptr);
-              found = true;
-            }
-            /* more than one column and upper right neighbor */
-            if (!found&&i<(nbi-1)&&nbi>1) {
-              tptr = indx - nbi + 1;
-              org_ptr = ray_bundle_array[tptr].x;
-              if (cached_loc_codes[tptr].x==cached_loc_codes[indx].x &&
-                  cached_loc_codes[tptr].y==cached_loc_codes[indx].y &&
-                  cached_loc_codes[tptr].z==cached_loc_codes[indx].z &&
-                  cached_loc_codes[tptr].w==cached_loc_codes[indx].w ) {
-                update_state_ptr(ray_bundle_array, indx, org_ptr);
-                found = true;
+              /* more than one column and upper right neighbor */
+              if (!found&&i<(nbi-1)&&nbi>1) {
+                tptr = indx - nbi + 1;
+                org_ptr = ray_bundle_array[tptr].x;
+                if (cached_loc_codes[tptr].x==cached_loc_codes[indx].x &&
+                    cached_loc_codes[tptr].y==cached_loc_codes[indx].y &&
+                    cached_loc_codes[tptr].z==cached_loc_codes[indx].z &&
+                    cached_loc_codes[tptr].w==cached_loc_codes[indx].w ) {
+                  update_state_ptr(ray_bundle_array, indx, org_ptr);
+                  found = true;
+                }
               }
-            }
 
-            // left neighbor is goof for i>0 and j>0
-            if (!found&&i>0) {
-              tptr = indx - nbi - 1;
-              org_ptr = ray_bundle_array[tptr].x;
-              if (cached_loc_codes[tptr].x==cached_loc_codes[indx].x &&
-                  cached_loc_codes[tptr].y==cached_loc_codes[indx].y &&
-                  cached_loc_codes[tptr].z==cached_loc_codes[indx].z &&
-                  cached_loc_codes[tptr].w==cached_loc_codes[indx].w ) {
-                update_state_ptr(ray_bundle_array, indx, org_ptr);
-                found = true;
+              // upper left neighbor is valid for i>0 and j>0
+              if (!found&&i>0) {
+                tptr = indx - nbi - 1;
+                org_ptr = ray_bundle_array[tptr].x;
+                if (cached_loc_codes[tptr].x==cached_loc_codes[indx].x &&
+                    cached_loc_codes[tptr].y==cached_loc_codes[indx].y &&
+                    cached_loc_codes[tptr].z==cached_loc_codes[indx].z &&
+                    cached_loc_codes[tptr].w==cached_loc_codes[indx].w ) {
+                  update_state_ptr(ray_bundle_array, indx, org_ptr);
+                  found = true;
+                }
+              }
+              // left neighbor is valid for i>0
+              if (!found&&i>0) {
+                tptr = indx -  1;
+                org_ptr = ray_bundle_array[tptr].x;
+                if (cached_loc_codes[tptr].x==cached_loc_codes[indx].x &&
+                    cached_loc_codes[tptr].y==cached_loc_codes[indx].y &&
+                    cached_loc_codes[tptr].z==cached_loc_codes[indx].z &&
+                    cached_loc_codes[tptr].w==cached_loc_codes[indx].w ) {
+                  update_state_ptr(ray_bundle_array, indx, org_ptr);
+                  found = true;
+                }
               }
             }
-            // left neighbor is goof for i>0
-            if (!found&&i>0) {
-              tptr = indx -  1;
-              org_ptr = ray_bundle_array[tptr].x;
-              if (cached_loc_codes[tptr].x==cached_loc_codes[indx].x &&
-                  cached_loc_codes[tptr].y==cached_loc_codes[indx].y &&
-                  cached_loc_codes[tptr].z==cached_loc_codes[indx].z &&
-                  cached_loc_codes[tptr].w==cached_loc_codes[indx].w ) {
-                update_state_ptr(ray_bundle_array, indx, org_ptr);
-                found = true;
-              }
+            if (!found) {
+              /*establish the new data pointers. Next address is invalid*/
+              ray_bundle_array[indx].x = indx;
+              ray_bundle_array[indx].z = indx;
+              ray_bundle_array[indx].w = ray_bundle_array[indx].w | ACTIVE;
             }
           }
-          if (!found) {
-            /* put data items in cache*/
-            ray_bundle_array[indx].x = indx;
-            ray_bundle_array[indx].z = indx;
-            ray_bundle_array[indx].w = ray_bundle_array[indx].w | ACTIVE;
-          }
-        }
       }
   }
-
+  /* note that no data is actually loaded, only the pointers are set up */
   barrier(CLK_LOCAL_MEM_FENCE);
 
   return 1;
@@ -293,18 +302,18 @@ void map_work_space_2d(int* mapped_id0,
   int offset1 = 0;
 
   if (g_1d>=(ngi*ngj)/4)
-  {
-    offset0=1;
-    if (g_1d>=(ngi*ngj)/2)
     {
-      offset0=0;
-      offset1=1;
-      if (g_1d>=3*(ngi*ngj)/4)
-      {
       offset0=1;
-      }
+      if (g_1d>=(ngi*ngj)/2)
+        {
+          offset0=0;
+          offset1=1;
+          if (g_1d>=3*(ngi*ngj)/4)
+            {
+              offset0=1;
+            }
+        }
     }
-  }
 
   /* step by 2 in group column index - add offset for odd indices after 1/2
      the groups have been processed*/
@@ -375,383 +384,44 @@ void seg_len_obs(float seg_len, __local float4* image_vect,
 {
   /* linear thread id */
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
-  /* first insert seg_len into the local cache. This step
-     is carried out by all threads */
-  /*limit access to the thread that owns each ray bundle connected region */
+
+  /* limit access to threads that do not own a connected region */
   if (ray_bundle_array[llid].x!=llid)
-  {
-    // use these as temp
-    cached_aux_data[llid]=(float4)0.0f;
-    cached_aux_data[llid].x = seg_len;
-  }
-  barrier(CLK_LOCAL_MEM_FENCE);
-
-  if (ray_bundle_array[llid].x==llid)
-  {
-    uchar temp = ray_bundle_array[llid].w & ACTIVE;
-    if (temp == 0)
-      return;
-    /* The region owner (base) is now the only active thread within the region*/
-    /* process the base ray */
-    cached_aux_data[llid].x += seg_len; /* seg_len sum */
-    /* weighted observations */
-    cached_aux_data[llid].y += (image_vect[llid].x)*seg_len;
-    uchar adr = llid;/* linked list pointer */
-    /* traverse the linked list and increment sums */
-    temp = ray_bundle_array[adr].w & NEXT_ADR_VALID;
-    while ( temp > 0)
     {
-      adr = ray_bundle_array[adr].y;
-      cached_aux_data[llid].x += cached_aux_data[adr].x;
-      cached_aux_data[llid].y += (image_vect[adr].x)*cached_aux_data[adr].x;
-      temp = ray_bundle_array[adr].w & NEXT_ADR_VALID;
+      /* store seg_len in the corresponding aux data slot to be accessed 
+       * by other threads since these aux_data items are not used, they 
+       * can be cleared and used to store the seg_len of non-owner rays
+       */
+      cached_aux_data[llid]=(float4)0.0f;
+      cached_aux_data[llid].x = seg_len;
     }
-  }
   barrier(CLK_LOCAL_MEM_FENCE);
-}
-
-
-int load_data(__global int4*    cells,
-              __global float16* cell_data,
-              short n_levels,   /* number of tree levels */
-              __local uchar*    ray_bundle_array, /* bundle pointer array */
-              __local float*    exit_points, /* required exit points */
-              __local short4*   cached_loc_codes,
-              __local float16*  cached_data)
-{
-  uchar nbi = (uchar)get_local_size(0);
-  uchar nbj = (uchar)get_local_size(1);
-  uchar llid = (uchar)(get_local_id(0) + nbi*get_local_id(1));
-
-  //serialized with thread 0 doing all the work
-  if (llid==0)
-  {
-    // clear the cache
-    for (uchar jj = 0; jj<nbj; ++jj)
-      for (uchar ii = 0; ii<nbi; ++ii) {
-        uchar ptr = ii+ (jj*nbi);/* 1-d array index */
-        ray_bundle_array[ptr]=(uchar)0;
-        cached_loc_codes[ptr]= (short4)-1;
-        cached_data[ptr]= (float16)0.0f;
-      }
-    uchar offset = 0;
-
-    for (uchar j = 0; j<nbj; ++j)
-      for (uchar i = 0; i<nbi; ++i)
-      {
-        uchar indx = i + nbi*j;
-        // note for now the traversal is from the root, however if a sub-tree
-        // is cached then the traversal can start at the root of the sub-tree
-        short4 root_code = (short4)(0,0,0,n_levels-1); /* location code of root */
-        int root_ptr = 0; /* cell index for root */
-        short4 loca; /*loc code with multiple uses */
-        float4 exit_pt = (float4)1;
-        /* load data */
-        uchar org_ptr = 0;
-        uchar tptr = 3*indx;
-        exit_pt.x = exit_points[tptr];
-        exit_pt.y = exit_points[tptr+1];
-        exit_pt.z = exit_points[tptr+2];
-        bool found = false;
-        /* j = 0 */
-        if (j==0) {
-          if (i>0)
-            tptr = indx-1;
-          org_ptr = ray_bundle_array[tptr];
-          loca = cached_loc_codes[org_ptr];
-          if (cell_contains_exit_pt(n_levels, loca, exit_pt)) {
-            ray_bundle_array[indx]=org_ptr;
-            found = true;
-          }
-        }
-        if (!found&&j>0)
+  /* now, limit access to the threads that own each connected region */
+  if (ray_bundle_array[llid].x==llid)
+    {
+      uchar temp = ray_bundle_array[llid].w & ACTIVE;
+      if (temp == 0)
+        return;
+      /* The region owner (base) is now the only active thread within the region*/
+      /* process the base ray */
+      cached_aux_data[llid].x += seg_len; /* seg_len sum */
+      /* weighted observations */
+      cached_aux_data[llid].y += (image_vect[llid].x)*seg_len;
+      uchar adr = llid;/* linked list pointer */
+      /* traverse the linked list and increment sums */
+      temp = ray_bundle_array[adr].w & NEXT_ADR_VALID;
+      while ( temp > 0)
         {
-          /* bundle has only one column */
-          if (i==0&&nbi==1) {
-            tptr = indx - nbi;
-            org_ptr = ray_bundle_array[tptr];
-            loca = cached_loc_codes[org_ptr];
-            if (cell_contains_exit_pt(n_levels, loca, exit_pt)) {
-              ray_bundle_array[indx]=org_ptr;
-              found = true;
-            }
-          }
-          /* more than one column and upper right neighbor */
-          if (!found&&i==0) {
-            tptr = indx - nbi + 1;
-            org_ptr = ray_bundle_array[tptr];
-            loca = cached_loc_codes[org_ptr];
-            if (cell_contains_exit_pt(n_levels, loca, exit_pt)) {
-              ray_bundle_array[indx]=org_ptr;
-              found = true;
-            }
-          }
-          /* more than one column and neighbor above (above left N/A)*/
-          if (!found&&i==0) {
-            tptr--;
-            org_ptr = ray_bundle_array[tptr];
-            loca = cached_loc_codes[org_ptr];
-            if (cell_contains_exit_pt(n_levels, loca, exit_pt)) {
-              ray_bundle_array[indx]=org_ptr;
-              found = true;
-            }
-          }
-          /* interior to row upper right neighbor*/
-          if (!found&&i>0&&i<(nbi-1)) {
-            tptr = indx - nbi + 1;
-            org_ptr = ray_bundle_array[tptr];
-            loca = cached_loc_codes[org_ptr];
-            if (cell_contains_exit_pt(n_levels, loca, exit_pt)) {
-              ray_bundle_array[indx]=org_ptr;
-              found = true;
-            }
-          }
-          /* interior to row, neighbor above*/
-          if (!found&&i>0&&i<(nbi-1)) {
-            tptr--;
-            org_ptr = ray_bundle_array[tptr];
-            loca = cached_loc_codes[org_ptr];
-            if (cell_contains_exit_pt(n_levels, loca, exit_pt)) {
-              ray_bundle_array[indx]=org_ptr;
-              found = true;
-            }
-          }
-          /* interior to row, upper left neighbor*/
-          if (!found&&i>0&&i<(nbi-1)) {
-            tptr--;
-            org_ptr = ray_bundle_array[tptr];
-            loca = cached_loc_codes[org_ptr];
-            if (cell_contains_exit_pt(n_levels, loca, exit_pt)) {
-              ray_bundle_array[indx]=org_ptr;
-              found = true;
-            }
-          }
-          /* end of row, neighbor above */
-          if (!found&&i==(nbi-1)) {
-            tptr = indx - nbi;
-            org_ptr = ray_bundle_array[tptr];
-            loca = cached_loc_codes[org_ptr];
-            if (cell_contains_exit_pt(n_levels, loca, exit_pt)) {
-              ray_bundle_array[indx]=org_ptr;
-              found = true;
-            }
-          }
-          /* end of row, upper left neighbor */
-          if (!found&&i==(nbi-1)) {
-            tptr--;
-            org_ptr = ray_bundle_array[tptr];
-            loca = cached_loc_codes[org_ptr];
-            if (cell_contains_exit_pt(n_levels, loca, exit_pt)) {
-              ray_bundle_array[indx]=org_ptr;
-              found = true;
-            }
-          }
+          adr = ray_bundle_array[adr].y;
+          cached_aux_data[llid].x += cached_aux_data[adr].x;
+          cached_aux_data[llid].y += (image_vect[adr].x)*cached_aux_data[adr].x;
+          temp = ray_bundle_array[adr].w & NEXT_ADR_VALID;
         }
-
-        if (!found) {
-          // data not in cache already
-          // get tree cell corresponding to exit point
-          short4 target_loc_code = loc_code(exit_pt, n_levels-1);
-
-          int g_count=0;
-          int cell_ptr = traverse_force(cells, root_ptr, root_code, target_loc_code, &loca,&g_count);
-
-          /* loca now contains the loc_code of the found cell */
-          if (cell_ptr<0) /* traverse failed */
-            return (int)0;
-          /* put data items in cache*/
-          ray_bundle_array[indx] = offset;
-          cached_loc_codes[offset] = loca;
-          /*Insert the cell data request into the local data slot that owns the
-            data */
-          int16 temp = (int16)(1, cells[cell_ptr].z,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
-          cached_data[offset++]=as_float16(temp);
-        }
-      }
-  }
-
+    }
   barrier(CLK_LOCAL_MEM_FENCE);
 
-  return 1;
 }
 
-
-int load_data_mutable(__global int4*    cells,
-                      __global float16* cell_data,
-                      short n_levels,   /* number of tree levels */
-                      __local uchar4*   ray_bundle_array, /* bundle state*/
-                      __local float*    exit_points, /* required exit points */
-                      __local short4*   cached_loc_codes,
-                      __local float16*  cached_data)
-{
-  int16 temp;
-  uchar nbi = (uchar)get_local_size(0);
-  uchar nbj = (uchar)get_local_size(1);
-  uchar llid = (uchar)(get_local_id(0) + nbi*get_local_id(1));
-
-  //serialized with thread 0 doing all the work
-  if (llid==0)
-  {
-    // clear the cache
-    for (uchar jj = 0; jj<nbj; ++jj)
-      for (uchar ii = 0; ii<nbi; ++ii) {
-        uchar ptr = ii+ (jj*nbi);/* 1-d array index */
-        ray_bundle_array[ptr]=(uchar4)0;
-        cached_loc_codes[ptr]= (short4)-1;
-        cached_data[ptr]= (float16)0.0f;
-      }
-    uchar offset = 0;
-    for (uchar j = 0; j<nbj; ++j)
-      for (uchar i = 0; i<nbi; ++i)
-      {
-        uchar indx = i + nbi*j;
-        /* note for now the traversal is from the root, however if a sub-tree
-           is cached then the traversal can start at the root of the sub-tree
-        */
-        short4 root_code = (short4)(0,0,0,n_levels-1); /* location code of root */
-        int root_ptr = 0; /* cell index for root */
-        short4 loca; /*loc code with multiple uses */
-        float4 exit_pt = (float4)1;
-        /* load data */
-        uchar tptr = 3*indx;
-        exit_pt.x = exit_points[tptr];
-        exit_pt.y = exit_points[tptr+1];
-        exit_pt.z = exit_points[tptr+2];
-
-        /*
-           n n n
-           n x    The data for x might be at any of the bundle locations, n.
-           check to see if neighbors already have the required data Note. Could
-           be anywhere in the row above
-        */
-        bool found = false;
-        uchar org_ptr = 0;
-        /* j = 0 */
-        if (j==0) {
-          if (i>0)
-            tptr = indx-1;
-          org_ptr = ray_bundle_array[tptr].x;
-          loca = cached_loc_codes[org_ptr];
-          if (cell_contains_exit_pt(n_levels, loca, exit_pt)) {
-            update_state_ptr(ray_bundle_array, indx, org_ptr);
-            found = true;
-          }
-        }
-        if (!found&&j>0)
-        {
-          /* bundle has only one column */
-          if (i==0&&nbi==1) {
-            tptr = indx - nbi;
-            org_ptr = ray_bundle_array[tptr].x;
-            loca = cached_loc_codes[org_ptr];
-            if (cell_contains_exit_pt(n_levels, loca, exit_pt)) {
-              update_state_ptr(ray_bundle_array, indx, org_ptr);
-              found = true;
-            }
-          }
-          /* more than one column and upper right neighbor */
-          if (!found&&i==0) {
-            tptr = indx - nbi + 1;
-            org_ptr = ray_bundle_array[tptr].x;
-            loca = cached_loc_codes[org_ptr];
-            if (cell_contains_exit_pt(n_levels, loca, exit_pt)) {
-              update_state_ptr(ray_bundle_array, indx, org_ptr);
-              found = true;
-            }
-          }
-          /* more than one column and neighbor above (above left N/A)*/
-          if (!found&&i==0) {
-            tptr--;
-            org_ptr = ray_bundle_array[tptr].x;
-            loca = cached_loc_codes[org_ptr];
-            if (cell_contains_exit_pt(n_levels, loca, exit_pt)) {
-              update_state_ptr(ray_bundle_array, indx, org_ptr);
-              found = true;
-            }
-          }
-          /* interior to row upper right neighbor*/
-          if (!found&&i>0&&i<(nbi-1)) {
-            tptr = indx - nbi + 1;
-            org_ptr = ray_bundle_array[tptr].x;
-            loca = cached_loc_codes[org_ptr];
-            if (cell_contains_exit_pt(n_levels, loca, exit_pt)) {
-              update_state_ptr(ray_bundle_array, indx, org_ptr);
-              found = true;
-            }
-          }
-          /* interior to row, neighbor above*/
-          if (!found&&i>0&&i<(nbi-1)) {
-            tptr--;
-            org_ptr = ray_bundle_array[tptr].x;
-            loca = cached_loc_codes[org_ptr];
-            if (cell_contains_exit_pt(n_levels, loca, exit_pt)) {
-              update_state_ptr(ray_bundle_array, indx, org_ptr);
-              found = true;
-            }
-          }
-          /* interior to row, upper left neighbor*/
-          if (!found&&i>0&&i<(nbi-1)) {
-            tptr--;
-            org_ptr = ray_bundle_array[tptr].x;
-            loca = cached_loc_codes[org_ptr];
-            if (cell_contains_exit_pt(n_levels, loca, exit_pt)) {
-              update_state_ptr(ray_bundle_array, indx, org_ptr);
-              found = true;
-            }
-          }
-          /* end of row, neighbor above */
-          if (!found&&i==(nbi-1)) {
-            tptr = indx - nbi;
-            org_ptr = ray_bundle_array[tptr].x;
-            loca = cached_loc_codes[org_ptr];
-            if (cell_contains_exit_pt(n_levels, loca, exit_pt)) {
-              update_state_ptr(ray_bundle_array, indx, org_ptr);
-              found = true;
-            }
-          }
-          /* end of row, upper left neighbor */
-          if (!found&&i==(nbi-1)) {
-            tptr--;
-            org_ptr = ray_bundle_array[tptr].x;
-            loca = cached_loc_codes[org_ptr];
-            if (cell_contains_exit_pt(n_levels, loca, exit_pt)) {
-              update_state_ptr(ray_bundle_array, indx, org_ptr);
-              found = true;
-            }
-          }
-        }
-        if (!found) {
-          /* data not in cache already */
-          /* get tree cell corresponding to exit point */
-          loca = loc_code(exit_pt, n_levels-1);
-          int g_count=0;
-          int cell_ptr = traverse_force(cells, root_ptr, root_code, loca, &loca,&g_count);
-          /* loca now contains the loc_code of the found cell */
-          if (cell_ptr<0) /* traverse failed */
-            return (int)0;
-          /* put data items in cache*/
-          ray_bundle_array[indx].x = offset;
-          ray_bundle_array[indx].z = offset;
-          ray_bundle_array[indx].w = ray_bundle_array[indx].w | ACTIVE;
-          cached_loc_codes[offset] = loca;
-          /*Insert the cell data request into the local data slot that owns the
-            data */
-          cached_data[offset++]=(float16)(1, cells[cell_ptr].z,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
-        }
-      }
-  }
-
-  barrier(CLK_LOCAL_MEM_FENCE);
-  /* Load the required cell data. Each work item checks to see if:
-     1) the flag to see if the data item slot needs to be loaded
-     2) if the item is to be loaded by *this* work item
-  */
-
-  return 1;
-}
-
-
-#if 0 // functions commented out
 /*
  *  Accumulate the pre and vis image arrays based on the cell data.
  *  A vector of images is maintained image_vect that is updated as the rays
@@ -762,58 +432,60 @@ int load_data_mutable(__global int4*    cells,
  */
 void pre_infinity(float seg_len, __local float4* image_vect,
                   __local uchar4*   ray_bundle_array,
-                  __local float16*  cached_data)
+                  __local float16*  cached_data,
+                  __local float4*  cached_aux_data)
 {
   /* linear thread id */
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
-  /* first insert seg_len into the local cache. This step
-     is carried out by all threads */
-  cached_data[llid].sf = seg_len;
+  cached_data[llid].sd = seg_len;
+  barrier(CLK_LOCAL_MEM_FENCE); /*wait for all threads to complete */
+  float temp1 = 0.0f, temp2 = 0.0f; /* minimize registers */
+  /* now, limit access to the threads that own each connected region */
+  bool temp = ray_bundle_array[llid].w & ACTIVE;
+  if(ray_bundle_array[llid].x==llid && temp)
+    {
+      /* if total length of rays is too small, do nothing */
+      temp1 = cached_aux_data[llid].x; /* length sum */
+      if (temp1<1.0e-4f)
+        return;
+      /* The mean intensity for the cell */
+      temp2 = cached_aux_data[llid].y/temp1; /* mean observation */
+      temp1 = gauss_3_mixture_prob_density(temp2,
+                                           cached_data[llid].s1,
+                                           cached_data[llid].s2,
+                                           cached_data[llid].s3,
+                                           cached_data[llid].s5,
+                                           cached_data[llid].s6,
+                                           cached_data[llid].s7,
+                                           cached_data[llid].s9,
+                                           cached_data[llid].sa,
+                                           (1.0f-cached_data[llid].s3
+                                            -cached_data[llid].s7)
+                                           );/* PI */
+      /* temporary slot to store PI*/
+      cached_data[llid].se = temp1;
+    }
   barrier(CLK_LOCAL_MEM_FENCE); /*wait for all threads to complete */
 
-  /*limit access to the thread that owns each ray bundle connected region */
-  uchar temp = ray_bundle_array[llid].w & ACTIVE;
-  if (temp==0) return;
-  float temp1 = 0.0f, temp2 = 0.0f; /* minimize registers */
-  if (ray_bundle_array[llid].x==llid) {
-    /* if total length of rays is too small, do nothing */
-    temp1 = cached_data[llid].s2; /* length sum */
-    if (temp1<1.0e-4f)
-      return;
-    /* The mean intensity for the cell */
-    temp2 = cached_data[llid].sc/temp1; /* mean observation */
-    temp1 = gauss_3_mixture_prob_density(temp2,
-                                         cached_data[llid].s3,
-                                         cached_data[llid].s4,
-                                         cached_data[llid].s5,
-                                         cached_data[llid].s6,
-                                         cached_data[llid].s7,
-                                         cached_data[llid].s8,
-                                         cached_data[llid].s9,
-                                         cached_data[llid].sa,
-                                         (1.0f-cached_data[llid].s5
-                                          -cached_data[llid].s8)
-                                         );/* PI */
-    cached_data[llid].sb = temp1;
-    temp2 = cached_data[llid].s0; /* alpha */
-  }
-  barrier(CLK_LOCAL_MEM_FENCE); /*wait for all threads to complete */
-  /* Below, all threads participate in updating the pre-vis images */
+  /* Below, all active threads participate in updating the pre-vis images */
   /* pointer to the cached cell data for this ray */
-  temp = ray_bundle_array[llid].x;
+  if(temp){
+  char adr = ray_bundle_array[llid].x;
 
   /*alpha integral          alpha           *        seg_len      */
-  image_vect[llid].y += cached_data[temp].s0*cached_data[llid].sf;
+  image_vect[llid].y += cached_data[adr].s0*cached_data[llid].sd;
 
   temp2 = exp(-image_vect[llid].y); /* vis_prob_end */
 
   /* updated pre                      Omega         *       PI         */
-  image_vect[llid].w += (image_vect[llid].z - temp2)*cached_data[temp].sb;
-
+  image_vect[llid].w += (image_vect[llid].z - temp2)*cached_data[adr].se;
+  
   /* updated visibility probability */
   image_vect[llid].z = temp2;
+  }
+  barrier(CLK_LOCAL_MEM_FENCE);
 }
-
+#if 0 // functions commented out
 /*
  * Form the denominator of the Bayes update expression,
  * which normalizes the expression to form a probability
@@ -832,15 +504,15 @@ void pre_infinity(float seg_len, __local float4* image_vect,
  */
 __kernel void proc_norm_image(__global float4* image, __global float4* p_inf)
 {
-  /* linear index of the global and local image */
-  int lgid = get_global_id(0) + get_global_size(0)*get_global_id(1);
-  float4 vect = image[lgid];
-  float mult = (p_inf[0].x>0.0f) ? 1.0f :
-    gauss_prob_density(vect.x, p_inf[0].y, p_inf[0].z);
-  /* compute the norm image */
-  vect.x = vect.w + mult * vect.z;
-  /* write it back */
-  image[lgid] = vect;
+/* linear index of the global and local image */
+int lgid = get_global_id(0) + get_global_size(0)*get_global_id(1);
+float4 vect = image[lgid];
+float mult = (p_inf[0].x>0.0f) ? 1.0f :
+gauss_prob_density(vect.x, p_inf[0].y, p_inf[0].z);
+/* compute the norm image */
+vect.x = vect.w + mult * vect.z;
+/* write it back */
+image[lgid] = vect;
 }
 
 /*
@@ -852,8 +524,8 @@ __kernel void proc_norm_image(__global float4* image, __global float4* p_inf)
  *
  */
 void bayes_ratio(float seg_len, __local float4* image_vect,
-                 __local uchar4*   ray_bundle_array,
-                 __local float16*  cached_data)
+  __local uchar4*   ray_bundle_array,
+  __local float16*  cached_data)
 {
   /* linear thread id */
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
@@ -883,7 +555,7 @@ void bayes_ratio(float seg_len, __local float4* image_vect,
                                          cached_data[llid].sa,
                                          (1.0f-cached_data[llid].s5
                                           -cached_data[llid].s8)
-                                        );/* PI */
+                                         );/* PI */
     cached_data[llid].sb = temp1;
     temp2 = cached_data[llid].s0; /* alpha */
   }
