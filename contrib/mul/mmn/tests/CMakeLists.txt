@@ -19,9 +19,9 @@ ADD_TEST( mmn_test_dp_solver        ${EXECUTABLE_OUTPUT_PATH}/mmn_test_all test_
 ADD_TEST( mmn_test_lbp_solver       ${EXECUTABLE_OUTPUT_PATH}/mmn_test_all test_lbp_solver )
 ADD_TEST( mmn_test_order_cost       ${EXECUTABLE_OUTPUT_PATH}/mmn_test_all test_order_cost )
 ADD_TEST( mmn_test_csp_solver       ${EXECUTABLE_OUTPUT_PATH}/mmn_test_all test_csp_solver )
-ADD_TEST( mmn_test_tri_tree         ${EXECUTABLE_OUTPUT_PATH}/mmn_test_all test_make_tri_tree )
+ADD_TEST( mmn_test_make_tri_tree    ${EXECUTABLE_OUTPUT_PATH}/mmn_test_all test_make_tri_tree )
 ADD_TEST( mmn_test_diffusion_solver ${EXECUTABLE_OUTPUT_PATH}/mmn_test_all test_diffusion_solver )
-ADD_TEST( mmn_parse_arcs            ${EXECUTABLE_OUTPUT_PATH}/mmn_test_all test_parse_arcs )
+ADD_TEST( mmn_test_parse_arcs       ${EXECUTABLE_OUTPUT_PATH}/mmn_test_all test_parse_arcs )
 
 ADD_EXECUTABLE( mmn_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( mmn_test_include mmn )
