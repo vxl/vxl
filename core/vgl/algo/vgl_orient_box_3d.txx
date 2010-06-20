@@ -43,7 +43,7 @@ vgl_orient_box_3d<Type>::vgl_orient_box_3d(vgl_point_3d<Type> const& p0,
   vnl_vector_fixed<double,3> corner_0 = centroid + rotation * p0_to_centroid;
   vgl_point_3d<Type> corner0((Type)(corner_0[0]), (Type)(corner_0[1]), (Type)(corner_0[2])); // explicitly cast back from double
   vnl_vector_fixed<double,3> corner_1 = centroid - rotation * p0_to_centroid;
-  vgl_point_3d<Type> corner1(corner_1[0], corner_1[1], corner_1[2]);
+  vgl_point_3d<Type> corner1((Type)(corner_1[0]), (Type)(corner_1[1]), (Type)(corner_1[2])); // explicitly cast back from double
   box_ = vgl_box_3d<Type>(corner0, corner1);
 }
 
