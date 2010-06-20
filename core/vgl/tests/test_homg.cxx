@@ -102,9 +102,9 @@ static void test_homg_point_1d()
   r = vgl_distance(p1,p2);
   TEST("distance", r, 2);
 
-  vcl_stringstream is; is << "4.4 -5 7e1";
+  vcl_stringstream is; is << "4.25 -5 7e1";
   vgl_homg_point_1d<double> p; is >> p;
-  TEST("istream", p, vgl_homg_point_1d<double>(4.4,-5));
+  TEST("istream", p, vgl_homg_point_1d<double>(4.25,-5));
 }
 
 static void test_homg_point_2d()
@@ -223,9 +223,9 @@ static void test_homg_point_2d()
   r = vgl_homg_operators_2d<double>::abs_angle(l3,l2);
   TEST_NEAR("vgl_homg_operators_2d<double>::abs_angle", r, pi_4, 1e-12);
 
-  vcl_stringstream is; is << "4.4 -5 7e1";
+  vcl_stringstream is; is << "4.25 -5 7e1";
   vgl_homg_point_2d<float> p; is >> p;
-  TEST("istream", p, vgl_homg_point_2d<float>(4.4f,-5,70));
+  TEST("istream", p, vgl_homg_point_2d<float>(4.25f,-5,70));
 }
 
 static void test_homg_point_3d()
@@ -423,9 +423,9 @@ static void test_homg_line_2d()
   pp = vgl_homg_operators_2d<double>::closest_point(li,p);
   TEST("closest_point to point on line", pp, p);
 
-  vcl_stringstream is; is << "4.4 -5 7e1";
+  vcl_stringstream is; is << "4.25 -5 7e1";
   vgl_homg_line_2d<float> h_l; is >> h_l;
-  TEST("istream", h_l, vgl_homg_line_2d<float>(4.4f,-5,70));
+  TEST("istream", h_l, vgl_homg_line_2d<float>(4.25f,-5,70));
 }
 
 static void test_homg_line_3d()
@@ -521,9 +521,9 @@ static void test_homg_plane_3d()
   pl2.normalize();
   TEST("normalize", pl2.a() == -0.36 && pl2.b() == -0.48 && pl2.c() == 0.8 && pl2.d() == 0.6, true);
 
-  vcl_stringstream is; is << "4.4 -5 7e1 5e-1";
+  vcl_stringstream is; is << "4.25 -5 7e1 5e-1";
   vgl_homg_plane_3d<double> l; is >> l;
-  TEST("istream", l, vgl_homg_plane_3d<double>(4.4,-5,70,0.5));
+  TEST("istream", l, vgl_homg_plane_3d<double>(4.25f,-5,70,0.5));
 }
 
 inline bool collinear(vgl_homg_line_2d<int> const& l1,
