@@ -3,9 +3,9 @@
 //  \date 20 October 2008
 //  \brief Select specified lines from a text file.
 
-
 #include <vcl_exception.h>
 #include <vcl_iostream.h>
+#include <vcl_fstream.h>
 #include <vcl_iterator.h>
 #include <vcl_limits.h>
 #include <vul/vul_arg.h>
@@ -13,9 +13,6 @@
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_index_sort.h>
 #include <mbl/mbl_load_text_file.h>
-
-
-
 
 //========================================================================
 // Actual main function
@@ -45,11 +42,11 @@ int main2(int argc, char*argv[])
 
   if (!zero_index())
   {
-    for(vcl_vector<unsigned>::iterator it=lines.begin(), end=lines.end(); it!=end; ++it)
+    for (vcl_vector<unsigned>::iterator it=lines.begin(), end=lines.end(); it!=end; ++it)
     {
       if (*it==0)
       {
-        vcl_cerr << "ERROR: Requested line 0, without specifing \"-zero\"\n";
+        vcl_cerr << "ERROR: Requested line 0, without specifying \"-zero\"\n";
         return 3;
       }
       (*it)--;
@@ -76,7 +73,7 @@ int main2(int argc, char*argv[])
   const unsigned n = lines.size();
   vcl_vector<unsigned> ordered_lines(n);
 
-  for(unsigned i=0; i!=n; ++i)
+  for (unsigned i=0; i!=n; ++i)
     ordered_lines[i] = lines[index[i]];
 
 // read input into data;
@@ -95,7 +92,7 @@ int main2(int argc, char*argv[])
       vcl_string s;
       std::getline(*in_stream, s);
       if (in_stream->eof()) break;
-      while(ii<n && ordered_lines[ii] == line_no)
+      while (ii<n && ordered_lines[ii] == line_no)
       {
         data[index[ii]] = s;
         ++ii;
@@ -141,7 +138,7 @@ int main(int argc, char*argv[])
   }
   catch (...)
   {
-    vcl_cerr << "ERROR: Caught unknown exception " << vcl_endl;
+    vcl_cerr << "ERROR: Caught unknown exception\n";
     return -2;
   }
 
