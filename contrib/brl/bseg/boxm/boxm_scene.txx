@@ -97,7 +97,13 @@ boxm_scene<T>::boxm_scene(const bgeo_lvcs& lvcs,
                           const bool load_all_blocks,
                           const bool save_internal_nodes,
                           const bool save_platform_independent)
-: lvcs_(lvcs), origin_(origin), block_dim_(block_dim), active_block_(vgl_point_3d<int>(-1,-1,-1)),load_all_blocks_(load_all_blocks),save_internal_nodes_(save_internal_nodes), save_platform_independent_(save_platform_independent)
+: lvcs_(lvcs)
+, origin_(origin)
+, block_dim_(block_dim)
+, active_block_(vgl_point_3d<int>(-1,-1,-1))
+, save_internal_nodes_(save_internal_nodes)
+, save_platform_independent_(save_platform_independent)
+, load_all_blocks_(load_all_blocks)
 {
   create_blocks(block_dim, world_dim);
   set_octree_levels(max_level, init_level);
