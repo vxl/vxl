@@ -63,7 +63,7 @@ ADD_TEST( vil_test_file_format_read         ${EXECUTABLE_OUTPUT_PATH}/vil_test_a
 ADD_TEST( vil_test_save_load_image          ${EXECUTABLE_OUTPUT_PATH}/vil_test_all test_save_load_image)
 ADD_TEST( vil_test_image_loader_robustness  ${EXECUTABLE_OUTPUT_PATH}/vil_test_all test_image_loader_robustness)
 ADD_TEST( vil_test_stream                   ${EXECUTABLE_OUTPUT_PATH}/vil_test_all test_stream ${CMAKE_CURRENT_SOURCE_DIR}/file_read_data)
-ADD_TEST( vil_test_4_plane_tiff                   ${EXECUTABLE_OUTPUT_PATH}/vil_test_all test_4_plane_tiff ${CMAKE_CURRENT_SOURCE_DIR}/file_read_data)
+ADD_TEST( vil_test_4_plane_tiff             ${EXECUTABLE_OUTPUT_PATH}/vil_test_all test_4_plane_tiff ${CMAKE_CURRENT_SOURCE_DIR}/file_read_data)
 # image operations
 ADD_TEST( vil_test_deep_copy_3_plane        ${EXECUTABLE_OUTPUT_PATH}/vil_test_all test_deep_copy_3_plane )
 ADD_TEST( vil_test_image_view_maths         ${EXECUTABLE_OUTPUT_PATH}/vil_test_all test_image_view_maths)
