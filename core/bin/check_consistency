@@ -627,9 +627,10 @@ foreach $f (@FILES)
 #     unless ($f =~ m!vcl/vcl_complex_fwd\.h$! || $f =~ m!win32-vc60/vcl_complex\.h$! || $f =~ m!vgui/vgui_glut\.h$!);
 # }
   &msg(1, "contains long /*...*/ comments")
-    if ($cpp_file && $f !~ m!\bvidl1/vidl1_mpegcodec\.cxx$! && $f !~ m!\bvidl_vil1/vidl_vil1_mpegcodec\.cxx$! &&
-        $f !~ m!\bvul/vul_url\.cxx$! && $f !~ m!\bvcl/gtkgl/! &&
-        $f !~ m!\bvul/tests/test_file_iterator\.cxx$! && $file =~ s!\001[^\001\002]{121,}\002!!g);
+    if ($cpp_file && $file =~ s!\001[^\001\002]{121,}\002!!g &&
+        $f !~ m!\bvidl1/vidl1_mpegcodec\.cxx$! && $f !~ m!\bvidl_vil1/vidl_vil1_mpegcodec\.cxx$! &&
+        $f !~ m!\bvul/vul_url\.cxx$! && $f !~ m!\bvcl/gtkgl/! && $f !~ m!\bcontrib/rpl/rtvl/! &&
+        $f !~ m!\bvul/tests/test_file_iterator\.cxx$!);
   if ($file =~ m!\n\s*//\s*vcl_c(out|err)\s*\<\<.*(\n\s*//.*){5,}! && $file !~ m!//\s*\\code!)
   {
     $tmp=$file; $tmp =~ s!\n\s*//\s*vcl_c(out|err)\s*\<\<.*(\n\s*//.*){5,}[^\000]*!!; $tmp =~ s![^\n]*!!g; $tmp=length($tmp)+2;
@@ -1332,8 +1333,9 @@ foreach $f (@FILES)
     $file_ =~ s!^.*/(config|vcl|v3p|core|contrib)/!$1/!;
     $file_ =~ s!^contrib/!!; $file_ =~ s!/CORE/!/core/!;
     &msg(1, "has // This is $filename, should be $file_")
-      unless ("$filename" eq "$file_" ||
-              ("$filename" eq "contrib/$file_" && !$printed));
+      unless ($filename eq $file_ ||
+              ($file_ =~ m!/bocl\b! && $file_ =~ m!$filename$!) ||
+              ($filename eq "contrib/$file_" && !$printed));
   }
 
 # 13. Constants pi, e, euler written as 3.1415..., 2.71828..., 0.5772...
@@ -1520,8 +1522,11 @@ foreach $f (@FILES)
             $f !~ m!\bbgui3d_examiner_tableau\.cxx$! &&
             $f !~ m!\brgtl_octree_objects\.txx$! &&
             $f !~ m!\brgtl_sqt_objects\.txx$! &&
-            $f !~ m!\brsdl/(rsdl_kd_tree|tests/test_bins_2d|tests/test_kd_tree)\.cxx$! ) ) &&
-            $f !~ m!\bimesh/algo/imesh_kd_tree\.h$! &&
+            $f !~ m!\brsdl/(rsdl_kd_tree|tests/test_bins_2d|tests/test_kd_tree)\.cxx$! &&
+            $f !~ m!\bclsfy/clsfy_binary_tree_builder\.cxx$! &&
+            $f !~ m!\bclsfy/clsfy_binary_tree\.cxx$! &&
+            $f !~ m!\bclsfy/clsfy_binary_tree_builder\.cxx$! ) ) &&
+          $f !~ m!\bimesh/algo/imesh_kd_tree\.h$! &&
           $file_s =~ m![^ .>]\s*\b$wd\s*[|),]! );
     &msg(1, "vcl_ios_$wd must be used together with vcl_ios_adjustfield")
       if ($cpp_file &&
@@ -1570,7 +1575,7 @@ foreach $f (@FILES)
   }
 
 # 16. Multiple empty lines, empty line before } or after {, return (...), indentation,
-#   if/for/while without space, variable names starting with underscore
+#   if/for/while/else without space, variable names starting with underscore
 #   (mentioned only if something else is already printed, or when -f given)
   &msg(1, "contains multiple (>2) empty lines")
     if ($printed && $file =~ m!\n\n\n\n!);
@@ -1605,6 +1610,8 @@ foreach $f (@FILES)
     $tmp=$file; $tmp =~ s!\n( *)\S.*\n(\1 +)\{ *\n\2 [^\000]*!!; $tmp =~ s![^\n]*!!g; $tmp=length($tmp)+3;
     &msg($tmp, "excess indentation in code block around line $tmp");
   }
+  &msg(1, "consider placing \"else\" on a separate line")
+    if ($printed && $file =~ m!\} *else\b!);
   undef $f_;
   &msg("/$1", "$1 not preceded by space")
     if ($printed && $file =~ m!\n(public|private|protected)\s*\:!);
@@ -1622,7 +1629,7 @@ foreach $f (@FILES)
     if ($printed && $file =~ m!\n [^\n]*\bdelete\s*\([^;()]*(\([^;()]*\)[^;()]*)*\)\s*;!);
   $file =~ s!^\#.*!!g; $file =~ s!\n\#.*!!g;
   &msg("/$2", "$2 starts with underscore")
-    if ($cpp_file && $printed && $file_s =~ m!([^\"\# ] *\b|^)(_[a-z]\w*)(.)! && "$2$3" ne "_fmemset(" && "$2$3" ne "_declspec(" && $2 ne "_finddata_t");
+    if ($cpp_file && $printed && $file_s =~ m!([^\"\# ] *\b|^)(_[a-z]\w*)(.)! && '$2$3' ne '_fmemset(' && '$2$3' ne '_declspec(' && $2 ne '_finddata_t' && $2 ne '_aligned_malloc');
 
 # 17. too long { ... } section with the "{" not on the start of a line
   &msg(1, "has a block of more than 52 lines with the opening brace not on a line by itself")
