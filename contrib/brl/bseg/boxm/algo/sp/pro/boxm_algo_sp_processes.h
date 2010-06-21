@@ -8,7 +8,6 @@
 DECLARE_FUNC_CONS(boxm_volume_visibility_process);
 DECLARE_FUNC_CONS(boxm_update_process);
 DECLARE_FUNC_CONS(boxm_render_expected_process);
-DECLARE_FUNC_CONS(boxm_render_expected_edge_vrml_process);
 
 
 
