@@ -254,15 +254,16 @@ test_seg_len_obs(__global int4* cells, __global float16* cell_data,
 __kernel
 void
 test_pre_infinity(__global int4* cells, __global float16* cell_data,
-                  __global int4* results,
-                  __local uchar4*    ray_bundle_array,
-                  __local float*    exit_points,
-                  __local short4*   cached_loc_codes,
-                  __local float16*  cached_data,
-                  __local float4*   cached_aux_data,
-                  __local float4*   image_vect)
+                 __global int4* results,
+                 __local uchar4*    ray_bundle_array,
+                 __local int*    cell_ptrs,
+                 __local short4*   cached_loc_codes,
+                 __local float16*  cached_data,
+                 __local float4*   cached_aux_data,
+                 __local float4*   image_vect)
 {
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
+  cached_data[llid]=(float16)0.0f;
   cached_aux_data[llid]=(float4)0.0f;
   barrier(CLK_LOCAL_MEM_FENCE);
   int result_ptr = 0;
@@ -314,7 +315,7 @@ test_pre_infinity(__global int4* cells, __global float16* cell_data,
   float seg_len = 1.0f;
   seg_len_obs(seg_len, image_vect, ray_bundle_array, cached_aux_data);
   pre_infinity(seg_len, image_vect, ray_bundle_array, cached_data, cached_aux_data);
-  barrier(CLK_LOCAL_MEM_FENCE);
+  barrier(CLK_LOCAL_MEM_FENCE);/* try removing */
 
   if(llid == 0){
     for (unsigned i = 0; i<4; ++i)
@@ -323,7 +324,7 @@ test_pre_infinity(__global int4* cells, __global float16* cell_data,
       results[result_ptr++] = convert_int4(1000.0f*image_vect[i]);
   }
   barrier(CLK_LOCAL_MEM_FENCE);
-
+  cached_data[llid]=(float16)0.0f;
   /* test where all rays lie in the same cell */
   if(llid == 0){
     for (unsigned i = 0; i<4; ++i)
@@ -367,135 +368,137 @@ test_pre_infinity(__global int4* cells, __global float16* cell_data,
   }
   barrier(CLK_LOCAL_MEM_FENCE);
 }
-#if 0
+
 __kernel
 void
 test_bayes_ratio(__global int4* cells, __global float16* cell_data,
                  __global int4* results,
                  __local uchar4*    ray_bundle_array,
-                 __local float*    exit_points,
+                 __local int*    cell_ptrs,
                  __local short4*   cached_loc_codes,
                  __local float16*  cached_data,
+                 __local float4*   cached_aux_data,
                  __local float4*   image_vect)
 {
-  short n_levels = 3;
+
+  uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
+  cached_aux_data[llid]=(float4)0.0f;
+  cached_data[llid]=(float16)0.0f;
+  barrier(CLK_LOCAL_MEM_FENCE);
   int result_ptr = 0;
   /* in this test the bundle must be 2x2 */
   /* setup example image array */
-  for (unsigned i = 0; i<4; ++i)
-    image_vect[i]=(float4)0.0f;
-  image_vect[0].x=0.1f;   image_vect[1].x=0.2f; image_vect[2].x= 0.5f;
-  image_vect[3].x=0.7f;
-  image_vect[0].z=1.0f;   image_vect[1].z=1.0f; image_vect[2].z= 1.0f;
-  image_vect[3].z=1.0f;
-  /* exit points that access individual cells */
-  exit_points[0]=0.25f;  exit_points[1]= 0.25f;  exit_points[2]= 1.0f;
-  exit_points[3]=0.75f;  exit_points[4]= 0.25f;  exit_points[5]= 1.0f;
-  exit_points[6]=0.25f;  exit_points[7]= 0.75f;  exit_points[8]= 1.0f;
-  exit_points[9]=0.75f;  exit_points[10]=0.75f;  exit_points[11]=1.0f;
+  if(llid == 0){
+    for (unsigned i = 0; i<4; ++i)
+      image_vect[i]=(float4)0.0f;
+    image_vect[0].x=0.1f;   image_vect[1].x=0.2f; image_vect[2].x= 0.5f;
+    image_vect[3].x=0.7f;
+    image_vect[0].z=1.0f;   image_vect[1].z=1.0f; image_vect[2].z= 1.0f;
+    image_vect[3].z=1.0f;
+    cached_loc_codes[0]=(short4)(1,1,3,0); //cell_ptr 45
+    cached_loc_codes[1]=(short4)(3,1,3,0); //54
+    cached_loc_codes[2]=(short4)(1,3,3,0); //63
+    cached_loc_codes[3]=(short4)(3,3,3,0); //72
+    /* setup alpha and the appearance model */
+    cached_data[0].s0 = 0.693147f; /* exp = 0.5*/
+    cached_data[0].s1 = 0.1f; /* mean */
+    cached_data[0].s2 = 0.05f; /* sd */
+    cached_data[0].s3 = 1.0f; /* weight */
+    cached_data[0].s4 = 0.0f; /* Nobs0 */
+
+    cached_data[1].s0 = 1.38629f; /* exp = 0.25*/
+    cached_data[1].s1 = 0.2f; /* mean */
+    cached_data[1].s2 = 0.05f; /* sd */
+    cached_data[1].s3 = 1.0f; /* weight */
+    cached_data[1].s4 = 0.0f; /* Nobs0 */
+
+    cached_data[2].s0 = 0.223144f; /* exp = 0.8*/
+    cached_data[2].s1 = 0.5f; /* mean */
+    cached_data[2].s2 = 0.05f; /* sd */
+    cached_data[2].s3 = 1.0f; /* weight */
+    cached_data[2].s4 = 0.0f; /* Nobs0 */
+
+    cached_data[3].s0 = 2.30259f; /* exp = 0.1*/
+    cached_data[3].s1 = 0.7f; /* mean */
+    cached_data[3].s2 = 0.05f; /* sd */
+    cached_data[3].s3 = 1.0f; /* weight */
+    cached_data[3].s4 = 0.0f; /* Nobs0 */
+  }
   barrier(CLK_LOCAL_MEM_FENCE);
-  int ret = load_data_mutable(cells, cell_data,n_levels, ray_bundle_array,
-                              exit_points,cached_loc_codes,cached_data);
-  uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
+  int ret = load_data_mutable_using_loc_codes(ray_bundle_array,cached_loc_codes);
+  if(llid==0){
+  results[result_ptr++]= (int4)ret;
+  }
+  barrier(CLK_LOCAL_MEM_FENCE);
+
   float seg_len = 1.0f;
-  seg_len_obs(seg_len, image_vect, ray_bundle_array, cached_data);
-  /* revise the cached data for this test */
-  cached_data[0].s0 = 0.693147f; /* exp = 0.5*/
-  cached_data[0].s1 = 1.0f; /* one component */
-  cached_data[0].s3 = 0.1f; /* mean */
-  cached_data[0].s4 = 0.05f; /* sd */
-  cached_data[0].s5 = 1.0f; /* weight */
-
-  cached_data[1].s0 = 1.38629f; /* exp = 0.25*/
-  cached_data[1].s1 = 1.0f; /* one component */
-  cached_data[1].s3 = 0.2f; /* mean */
-  cached_data[1].s4 = 0.05f; /* sd */
-  cached_data[1].s5 = 1.0f; /* weight */
-
-  cached_data[2].s0 = 0.223144f; /* exp = 0.8*/
-  cached_data[2].s1 = 1.0f; /* one component */
-  cached_data[2].s3 = 0.5f; /* mean */
-  cached_data[2].s4 = 0.05f; /* sd */
-  cached_data[2].s5 = 1.0f; /* weight */
-
-  cached_data[3].s0 = 2.30259f; /* exp = 0.1*/
-  cached_data[3].s1 = 1.0f; /* one component */
-  cached_data[3].s3 = 0.7f; /* mean */
-  cached_data[3].s4 = 0.05f; /* sd */
-  cached_data[3].s5 = 1.0f; /* weight */
-  pre_infinity(seg_len, image_vect, ray_bundle_array, cached_data);
-
+  seg_len_obs(seg_len, image_vect, ray_bundle_array, cached_aux_data);
+  pre_infinity(seg_len, image_vect, ray_bundle_array, cached_data, cached_aux_data);
   /* set up norm image - initially 1 */
-  for (unsigned i = 0; i<4; ++i)
-    image_vect[i]=(float4)(1.0f,0.0f,1.0f,0.0f);
-  bayes_ratio(seg_len, image_vect, ray_bundle_array, cached_data);
-
-  for (unsigned i = 0; i<4; ++i)
-    results[result_ptr++] = convert_int4(1000.0f*image_vect[i]);
-
-  results[result_ptr].x = (int)(1000.0f*cached_data[0].s2);/*seg_len sum*/
-  results[result_ptr].y = (int)(1000.0f*cached_data[0].sc);/*obs sum */
-  results[result_ptr].z = (int)(1000.0f*cached_data[0].sd);/*Bayes ratio */
-  results[result_ptr++].w = (int)(1000.0f*cached_data[0].se);/*weighted vis*/
-
-  results[result_ptr].x = (int)(1000.0f*cached_data[1].s2);
-  results[result_ptr].y = (int)(1000.0f*cached_data[1].sc);
-  results[result_ptr].z = (int)(1000.0f*cached_data[1].sd);
-  results[result_ptr++].w = (int)(1000.0f*cached_data[1].se);
-
-  results[result_ptr].x = (int)(1000.0f*cached_data[2].s2);
-  results[result_ptr].y = (int)(1000.0f*cached_data[2].sc);
-  results[result_ptr].z = (int)(1000.0f*cached_data[2].sd);
-  results[result_ptr++].w = (int)(1000.0f*cached_data[2].se);
-
-  results[result_ptr].x = (int)(1000.0f*cached_data[3].s2);
-  results[result_ptr].y = (int)(1000.0f*cached_data[3].sc);
-  results[result_ptr].z = (int)(1000.0f*cached_data[3].sd);
-  results[result_ptr++].w = (int)(1000.0f*cached_data[3].se);
-
-  /* test where all rays lie in the same cell */
-  exit_points[0]=0.25f;  exit_points[1]= 0.25f;  exit_points[2]= 1.0f;
-  exit_points[3]=0.251f;  exit_points[4]= 0.252f;  exit_points[5]= 1.0f;
-  exit_points[6]=0.253f;  exit_points[7]= 0.254f;  exit_points[8]= 1.0f;
-  exit_points[9]=0.255f;  exit_points[10]=0.256f;  exit_points[11]=1.0f;
+  if(llid == 0){
+    for (unsigned i = 0; i<4; ++i)
+      image_vect[i]=(float4)(1.0f,0.0f,1.0f,0.0f);
+  }
   barrier(CLK_LOCAL_MEM_FENCE);
-  ret = load_data_mutable(cells, cell_data, n_levels, ray_bundle_array,
-                          exit_points,cached_loc_codes,cached_data);
 
-  for (unsigned i = 0; i<4; ++i)
-    image_vect[i]=(float4)0.0f;
-  image_vect[0].x=0.5f;   image_vect[1].x=0.6f; image_vect[2].x= 0.4f;
-  image_vect[3].x=0.55f;
-  image_vect[0].z=1.0f;   image_vect[1].z=1.0f; image_vect[2].z= 1.0f;
-  image_vect[3].z=1.0f;
+  bayes_ratio(seg_len, image_vect, ray_bundle_array, cached_data, cached_aux_data);
 
-  seg_len_obs(seg_len, image_vect, ray_bundle_array, cached_data);
-  /* revise the cached data for cell 0 */
-  cached_data[0].s0 = 0.693147f; /* exp = 0.5*/
-  cached_data[0].s1 = 3.0f; /* three components */
-  cached_data[0].s3 = 0.4f; /* mean0 */
-  cached_data[0].s4 = 0.1f; /* sd0 */
-  cached_data[0].s5 = 0.333f; /* weight0 */
-  cached_data[0].s6 = 0.5f; /* mean1 */
-  cached_data[0].s7 = 0.1f; /* sd1 */
-  cached_data[0].s8 = 0.333f; /* weight1 */
-  cached_data[0].s9 = 0.6f; /* mean3 */
-  cached_data[0].sa = 0.1f; /* sd3 */
-  cached_data[0].sb = 0.333f; /* weight3 */
-  pre_infinity(seg_len, image_vect, ray_bundle_array, cached_data);
-
+  if(llid == 0){
+    for (unsigned i = 0; i<4; ++i)
+      results[result_ptr++] = convert_int4(1000.0f*cached_aux_data[i]);
+    for (unsigned i = 0; i<4; ++i)
+      results[result_ptr++] = convert_int4(1000.0f*image_vect[i]);
+  }
+  barrier(CLK_LOCAL_MEM_FENCE);
+  cached_data[llid]=(float16)0.0f;
+  /* test where all rays lie in the same cell */
+  if(llid == 0){
+    for (unsigned i = 0; i<4; ++i)
+      image_vect[i]=(float4)0.0f;
+    image_vect[0].x=0.5f;   image_vect[1].x=0.6f; image_vect[2].x= 0.4f;
+    image_vect[3].x=0.55f;
+    image_vect[0].z=1.0f;   image_vect[1].z=1.0f; image_vect[2].z= 1.0f;
+    image_vect[3].z=1.0f;
+    cached_loc_codes[0]=(short4)(1,1,3,0); //cell_ptr 45
+    cached_loc_codes[1]=(short4)(1,1,3,0); 
+    cached_loc_codes[2]=(short4)(1,1,3,0); 
+    cached_loc_codes[3]=(short4)(1,1,3,0); 
+    /* revise the cached data for cell 0 */
+    cached_data[0].s0 = 0.693147f; /* exp = 0.5*/
+    cached_data[0].s1 = 0.4f; /* mean0 */
+    cached_data[0].s2 = 0.1f; /* sd0 */
+    cached_data[0].s3 = 0.333f; /* weight0 */
+    cached_data[0].s4 = 0.0f; /* Nobs0 */
+    cached_data[0].s5 = 0.5f; /* mean1 */
+    cached_data[0].s6 = 0.1f; /* sd1 */
+    cached_data[0].s7 = 0.333f; /* weight1 */
+    cached_data[0].s8 = 0.0f; /* Nobs1 */
+    cached_data[0].s9 = 0.6f; /* mean2 */
+    cached_data[0].sa = 0.1f; /* sd2 */
+    cached_data[0].sb = 0.0f; /* Nobs2 */
+    cached_data[0].sc = 0.0f; /* Nobs_mix */
+  }
+  barrier(CLK_LOCAL_MEM_FENCE);
+  cached_aux_data[llid]=(float4)0.0f;
+  ret = load_data_mutable_using_loc_codes(ray_bundle_array,cached_loc_codes);
+  barrier(CLK_LOCAL_MEM_FENCE);
+  float len = 0.25f*(float)(llid +1);/*vary the seg_len to reveal bugs*/
+  seg_len_obs(len, image_vect, ray_bundle_array, cached_aux_data);
+  pre_infinity(len, image_vect, ray_bundle_array, cached_data,cached_aux_data);
+  /* insert */
   /* vary norm image to detect bugs */
   for (unsigned i = 0; i<4; ++i)
     image_vect[i]=(float4)(0.25f*((float)(i+1)),0.0f,1.0f,0.0f);
 
-  bayes_ratio(seg_len, image_vect, ray_bundle_array, cached_data);
+  bayes_ratio(seg_len, image_vect, ray_bundle_array, cached_data, cached_aux_data);
 
-  for (unsigned i = 0; i<4; ++i)
-    results[result_ptr++] = convert_int4(1000.0f*image_vect[i]);
-
-  results[result_ptr].x = (int)(1000.0f*cached_data[0].s2);
-  results[result_ptr].y = (int)(1000.0f*cached_data[0].sc);
-  results[result_ptr].z = (int)(1000.0f*cached_data[0].sd);
-  results[result_ptr].w = (int)(1000.0f*cached_data[0].se);
+  if(llid == 0){
+    results[result_ptr++]= (int4)ret;
+    for (unsigned i = 0; i<4; ++i)
+      results[result_ptr++] = convert_int4(1000.0f*cached_aux_data[i]);
+    for (unsigned i = 0; i<4; ++i)
+      results[result_ptr++] = convert_int4(1000.0f*image_vect[i]);
+  }
+  barrier(CLK_LOCAL_MEM_FENCE);
 }
-#endif // 0
+

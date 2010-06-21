@@ -236,24 +236,31 @@ static void test_bayes_ratio(ray_bundle_test_driver<T>& driver)
   bool good = true;
   cl_int* results = driver.tree_results();
 
-  vcl_size_t size = 13*4;
+  vcl_size_t size = 18*4;
   if (size<driver.tree_result_size_bytes() && results) {
-    int test[]={1000,693,500,3989,
-                1000,1386,250,5984,
-                1000,223,799,1595,
-                1000,2302,99,7180,
+
+    int test[]={1,1,1,1,
                 1000,100,7978,500,
                 1000,200,7978,250,
                 1000,500,7978,799,
                 1000,700,7978,99,
-                250,693,500,1466,
-                500,693,500,1466,
-                750,693,500,1466,
-                1000,693,500,1466,
-                4000,2050,24436,2000};
+                1000,693,500,3989,
+                1000,1386,250,5984,
+                1000,223,799,1595,
+                1000,2302,99,7180,
+                1,1,1,1,
+                2500,1275,24466,2000,
+                500,0,0,0,
+                750,0,0,0,
+                1000,0,0,0,
+                250,693,500,1468,
+                500,693,500,1468,
+                750,693,500,1468,
+                1000,693,500,1468};
     for (vcl_size_t i= 0; i<size; i++)
       good = good && results[i]==test[i];
     TEST("test_bayes_ratio", good, true);
+
     if (!good)
       for (vcl_size_t i= 0; i<size; i+=4)
         vcl_cout << "test_bayes_ratio_result(" << results[i] << ' '
@@ -555,11 +562,9 @@ void ray_bundle_tests(ray_bundle_test_driver<T>& test_driver)
 
   test_seg_len_obs(test_driver);
   test_pre_infinity(test_driver);
-#if 0 // to fix
   test_bayes_ratio(test_driver);
   test_norm_uniform(test_driver);
   test_norm_gauss(test_driver);
-#endif
   //==============================================================
   //END RAY BUNDLE TESTS
   test_driver.cleanup_bundle_test();

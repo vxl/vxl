@@ -25,8 +25,11 @@ int load_data_using_loc_codes(__local uchar*    ray_bundle_array, /* bundle poin
   uchar nbi = (uchar)get_local_size(0);
   uchar nbj = (uchar)get_local_size(1);
   uchar llid = (uchar)(get_local_id(0) + nbi*get_local_id(1));
+
+  /* initialize pointer to local id */
   ray_bundle_array[llid]=llid;
   barrier(CLK_LOCAL_MEM_FENCE);
+
   // clear the cache
   //serialized with thread 0 doing all the work
   if (llid==0) {
@@ -44,7 +47,7 @@ int load_data_using_loc_codes(__local uchar*    ray_bundle_array, /* bundle poin
             bool found = false;
             /* j = 0 */
             if (j==0) {/* for first row, only left neighbor is valid */
-              if (i>0)
+              if (i>0)/* except in first column */
                 {
                   tptr = indx-1;
                   org_ptr = ray_bundle_array[tptr];
@@ -58,7 +61,6 @@ int load_data_using_loc_codes(__local uchar*    ray_bundle_array, /* bundle poin
                 }
             }
             if (!found&&j>0) {
-              /* bundle has only one column */
               /* above neighbor is always valid for j>0*/
               tptr = indx - nbi;
               org_ptr = ray_bundle_array[tptr];
@@ -81,7 +83,6 @@ int load_data_using_loc_codes(__local uchar*    ray_bundle_array, /* bundle poin
                   found = true;
                 }
               }
-
               // upper left neighbor is valid for i>0 and j>0
               if (!found&&i>0) {
                 tptr = indx - nbi - 1;
@@ -196,7 +197,7 @@ int load_data_mutable_using_loc_codes( __local uchar4*   ray_bundle_array, /* bu
             bool found = false;
             /* j = 0 */
             if (j==0) {/* for first row, only left neighbor is valid */
-              if (i>0)
+              if (i>0)/* except for the first column */
                 {
                   tptr = indx-1;
                   org_ptr = ray_bundle_array[tptr].x;
@@ -210,8 +211,7 @@ int load_data_mutable_using_loc_codes( __local uchar4*   ray_bundle_array, /* bu
                 }
             }
             if (!found&&j>0) {
-              /* bundle has only one column */
-              // above neighbor, always valid for j>0
+              /* above neighbor is always valid for j>0 */
               tptr = indx - nbi;
               org_ptr = ray_bundle_array[tptr].x;
               if (cached_loc_codes[tptr].x==cached_loc_codes[indx].x &&
@@ -233,8 +233,7 @@ int load_data_mutable_using_loc_codes( __local uchar4*   ray_bundle_array, /* bu
                   found = true;
                 }
               }
-
-              // upper left neighbor is valid for i>0 and j>0
+              /* upper left neighbor is valid for i>0 and j>0 */
               if (!found&&i>0) {
                 tptr = indx - nbi - 1;
                 org_ptr = ray_bundle_array[tptr].x;
@@ -246,7 +245,7 @@ int load_data_mutable_using_loc_codes( __local uchar4*   ray_bundle_array, /* bu
                   found = true;
                 }
               }
-              // left neighbor is valid for i>0
+              /* left neighbor is valid for i>0 */
               if (!found&&i>0) {
                 tptr = indx -  1;
                 org_ptr = ray_bundle_array[tptr].x;
@@ -260,7 +259,7 @@ int load_data_mutable_using_loc_codes( __local uchar4*   ray_bundle_array, /* bu
               }
             }
             if (!found) {
-              /*establish the new data pointers. Next address is invalid*/
+              /*establish the new data pointers. Next address is not enabled*/
               ray_bundle_array[indx].x = indx;
               ray_bundle_array[indx].z = indx;
               ray_bundle_array[indx].w = ray_bundle_array[indx].w | ACTIVE;
@@ -468,8 +467,8 @@ void pre_infinity(float seg_len, __local float4* image_vect,
   barrier(CLK_LOCAL_MEM_FENCE); /*wait for all threads to complete */
 
   /* Below, all active threads participate in updating the pre-vis images */
-  /* pointer to the cached cell data for this ray */
   if(temp){
+  /* pointer to the cached cell data for this ray */
   char adr = ray_bundle_array[llid].x;
 
   /*alpha integral          alpha           *        seg_len      */
@@ -485,7 +484,7 @@ void pre_infinity(float seg_len, __local float4* image_vect,
   }
   barrier(CLK_LOCAL_MEM_FENCE);
 }
-#if 0 // functions commented out
+
 /*
  * Form the denominator of the Bayes update expression,
  * which normalizes the expression to form a probability
@@ -504,7 +503,7 @@ void pre_infinity(float seg_len, __local float4* image_vect,
  */
 __kernel void proc_norm_image(__global float4* image, __global float4* p_inf)
 {
-/* linear index of the global and local image */
+/* linear global id of the normalization image */
 int lgid = get_global_id(0) + get_global_size(0)*get_global_id(1);
 float4 vect = image[lgid];
 float mult = (p_inf[0].x>0.0f) ? 1.0f :
@@ -524,93 +523,106 @@ image[lgid] = vect;
  *
  */
 void bayes_ratio(float seg_len, __local float4* image_vect,
-  __local uchar4*   ray_bundle_array,
-  __local float16*  cached_data)
+                 __local uchar4*   ray_bundle_array,
+                 __local float16*  cached_data,
+                 __local float4*  cached_aux_data)
 {
   /* linear thread id */
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
   /* insert seg_len into the local cache. This step
      is carried out by all threads */
-  cached_data[llid].sf = seg_len;
+  cached_data[llid].sd = seg_len;
+  barrier(CLK_LOCAL_MEM_FENCE);
 
-  uchar temp = ray_bundle_array[llid].w & ACTIVE;
-  if (temp==0) return;
+  /* ray must be active after data is loaded */
+  bool active = ray_bundle_array[llid].w & ACTIVE;
+
   float temp1 = 0.0f, temp2 = 0.0f; /* minimize registers */
-  /* If ray is owner of the octree cell */
-  if (ray_bundle_array[llid].x==llid) {
-    /* if total length of rays is too small, do nothing */
-    temp1 = cached_data[llid].s2; /* length sum */
-    if (temp1<1.0e-4f)
-      return;
+  /* 
+   * if the ray is active and owner of the octree cell and the
+   * total length of rays is large enough then compute PI
+   *
+   */
+  if (active&& ray_bundle_array[llid].x==llid && 
+      cached_aux_data[llid].x > 1.0e-4f) {    /* if  too small, do nothing */
+    temp1 = cached_aux_data[llid].x; /* length sum */
     /* The mean intensity for the cell */
-    temp2 = cached_data[llid].sc/temp1; /* mean observation */
+    temp2 = cached_aux_data[llid].y/temp1; /* mean observation */
     temp1 = gauss_3_mixture_prob_density(temp2,
-                                         cached_data[llid].s3,
-                                         cached_data[llid].s4,
-                                         cached_data[llid].s5,
-                                         cached_data[llid].s6,
-                                         cached_data[llid].s7,
-                                         cached_data[llid].s8,
-                                         cached_data[llid].s9,
-                                         cached_data[llid].sa,
-                                         (1.0f-cached_data[llid].s5
-                                          -cached_data[llid].s8)
-                                         );/* PI */
-    cached_data[llid].sb = temp1;
-    temp2 = cached_data[llid].s0; /* alpha */
+                                           cached_data[llid].s1,
+                                           cached_data[llid].s2,
+                                           cached_data[llid].s3,
+                                           cached_data[llid].s5,
+                                           cached_data[llid].s6,
+                                           cached_data[llid].s7,
+                                           cached_data[llid].s9,
+                                           cached_data[llid].sa,
+                                           (1.0f-cached_data[llid].s3
+                                            -cached_data[llid].s7)
+                                           );/* PI */
+    /* temporary slot to store PI*/
+    cached_data[llid].se = temp1;
   }
   barrier(CLK_LOCAL_MEM_FENCE); /*wait for all threads to complete */
-
-  /* Below, all threads participate in updating the alpha integral, pre
-   * and vis images */
-  temp = ray_bundle_array[llid].x;/* pointer to region owner cell data */
-
+  /* Below, all active threads participate in updating the alpha integral,
+   * pre and vis images */
+  //active = ray_bundle_array[llid].w & ACTIVE;
+  if(active){
+  /* pointer to the cached cell data for this ray */
+  uchar adr = ray_bundle_array[llid].x;
+  
   /*alpha integral          alpha           *        seg_len      */
-  image_vect[llid].y += cached_data[temp].s0*cached_data[llid].sf;
+  image_vect[llid].y += cached_data[adr].s0*cached_data[llid].sd;
 
   temp2 = exp(-image_vect[llid].y); /* vis_prob_end */
 
   /* updated pre                      Omega         *       PI         */
-  image_vect[llid].w += (image_vect[llid].z - temp2)*cached_data[temp].sb;
-
+  image_vect[llid].w += (image_vect[llid].z - temp2)*cached_data[adr].se;
+  
   /* updated visibility probability */
   image_vect[llid].z = temp2;
+}
 
   barrier(CLK_LOCAL_MEM_FENCE); /*wait for all threads to complete */
 
-  /* region owner scans the region and computes Bayes ratio and weighted vis*/
-  if (ray_bundle_array[llid].x==llid) {
+  
+  /* region owner scans the region and computes Bayes ratio and weighted vis.
+   * The aux_data cell elements are assigned as:
+   *
+   *   [seg_len sum | weighted obs | update_ratio (beta) | weighted vis]
+   *
+   */
+  //  active = ray_bundle_array[llid].w & ACTIVE;
+  if (ray_bundle_array[llid].x==llid && active) {
     /* compute data for base ray cell */
     /*   cell.vis         +=        vis(i,j)    *      seg_len */
-    cached_data[llid].se += image_vect[llid].z*cached_data[llid].sf;
-
+    cached_aux_data[llid].w += image_vect[llid].z*cached_data[llid].sd;
     /* Bayes ratio */
     /* ( pre + PI*vis)/norm)*seg_len */
-    cached_data[llid].sd +=
+    cached_aux_data[llid].z +=
       /*      pre(i,j)        +        PI        *       vis(i,j) */
-      ((image_vect[llid].w + cached_data[llid].sb*image_vect[llid].z)/
-       image_vect[llid].x)*cached_data[llid].sf;
+      ((image_vect[llid].w + cached_data[llid].se*image_vect[llid].z)/
+       image_vect[llid].x)*cached_data[llid].sd;
     /*     norm(i,j)        seg_len */
 
     /* If ray has no neighbors - then just return */
-    temp = ray_bundle_array[llid].w & NEXT_ADR_VALID;
-    if (temp==0) return;
-
+    uchar next_adr_valid = ray_bundle_array[llid].w & NEXT_ADR_VALID;
     uchar adr = llid; /* linked list pointer */
-    while (temp>0) {
+    while (next_adr_valid>0) {
       adr = ray_bundle_array[adr].y;/* follow the linked list */
 
-      /* cell.vis           +=     vis(i,j)      *      seg_len     */
-      cached_data[llid].se += image_vect[adr].z*cached_data[adr].sf;
-
-      /* Bayes ratio */
+      /*    cell.vis           +=     vis(i,j)      *      seg_len     */
+      cached_aux_data[llid].w += image_vect[adr].z*cached_data[adr].sd;
+          /* Bayes ratio */
       /* ( pre + PI*vis)/norm)*seg_len */
-      cached_data[llid].sd +=
-        ((image_vect[adr].w + cached_data[llid].sb*image_vect[adr].z)/image_vect[adr].x)*cached_data[adr].sf;
+      cached_aux_data[llid].z +=
+        ((image_vect[adr].w + cached_data[llid].se*image_vect[adr].z)/
+         image_vect[adr].x)*cached_data[adr].sd;
 
-      temp = ray_bundle_array[adr].w & NEXT_ADR_VALID;
+      next_adr_valid = ray_bundle_array[adr].w & NEXT_ADR_VALID;
     }
   }
+  barrier(CLK_LOCAL_MEM_FENCE); /*wait for all threads to complete */
 }
-#endif // 0
+
 
