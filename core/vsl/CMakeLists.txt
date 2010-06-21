@@ -16,7 +16,8 @@ SET(vsl_sources
   vsl_block_binary.h  vsl_block_binary.cxx
   vsl_b_read_block_old.h
   vsl_stream.h
-
+  vsl_block_binary_rle.h
+  
   vsl_binary_loader.txx vsl_binary_loader.h
   vsl_clipon_binary_loader.txx vsl_clipon_binary_loader.h
   vsl_complex_io.txx vsl_complex_io.h
