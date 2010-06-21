@@ -20,4 +20,5 @@ void boxm_algo_register::register_process()
     REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_roi_init_process, "boxmROIInitProcess");
     REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_roi_init_rational_camera_process, "boxmROIInitRationalCameraProcess");
     REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_save_occupancy_raw_process, "boxmSaveOccupancyRawProcess");
+    REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_render_expected_edge_vrml_process, "boxmRenderExpectedEdgeVRMLProcess");
 }
