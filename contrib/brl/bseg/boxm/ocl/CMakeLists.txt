@@ -12,7 +12,6 @@ IF(OPENCL_FOUND)
   SET(boxm_ocl_sources
       boxm_ray_trace_manager.h boxm_ray_trace_manager.txx
       boxm_stack_ray_trace_manager.h boxm_stack_ray_trace_manager.txx
-	  boxm_online_update_manager.h boxm_online_update_manager.txx
       boxm_ray_bundle_trace_manager.h boxm_ray_bundle_trace_manager.txx
       boxm_refine_manager.h boxm_refine_manager.txx
       boxm_ocl_refine_scene.h

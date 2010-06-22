@@ -122,8 +122,10 @@ update_aux( __global int * root_level,  // level of the root.
     load_data_mutable_using_loc_codes(ray_bundle_array,cached_loc_codes);
     if (ray_bundle_array[llid].x==llid)
     {
-      /* cell data, i.e., alpha and app model is needed for passes */
+      /* cell data, i.e., alpha and app model is needed for some passes */
+#if %%
       cached_data[llid] = sample_array[data_ptr];
+#endif
       cached_aux_data[llid] =aux_data_array[data_ptr];
     }
     barrier(CLK_LOCAL_MEM_FENCE);
@@ -132,7 +134,7 @@ update_aux( __global int * root_level,  // level of the root.
     float d = (tfar-tnear)*(*local_copy_bbox).w;
     // no function pointers in OpenCL (spec 8.6a)
     // instead, user must provide source with a function named "step_cell"
-    seg_len_obs(d,image_vect,ray_bundle_array,cached_aux_data);
+    $$step_cell$$;
     //barrier(CLK_LOCAL_MEM_FENCE);
     if (ray_bundle_array[llid].x==llid)
     {

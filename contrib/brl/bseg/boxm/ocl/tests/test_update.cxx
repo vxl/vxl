@@ -10,11 +10,6 @@
 #include <vbl/vbl_array_2d.h>
 
 
-template <class T>
-static void test_seg_len_obs()
-{
-}
-
 static void test_update()
 {
   bool good = true;
@@ -42,9 +37,11 @@ static void test_update()
   img.fill(0.0f);
   updt_mgr->set_bundle_ni(2);
   updt_mgr->set_bundle_nj(2);
-
-  updt_mgr->init_update(&scene,cam,img);
-
+  updt_mgr->set_scene_items(&scene,cam,img);
+  if(!updt_mgr->build_program("seg_len_obs(d,image_vect,ray_bundle_array,cached_aux_data)", false))
+    return;
+  updt_mgr->create_command_queue();
+  updt_mgr->set_kernel();
   updt_mgr->run_scene();
 
   float * image=updt_mgr->output_image();
