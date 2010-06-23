@@ -99,6 +99,8 @@ inline void vsl_block_binary_rle_write(vsl_b_ostream &os, const T* begin, vcl_si
 template <class T>
 inline void vsl_block_binary_rle_read(vsl_b_istream &is, T* begin, vcl_size_t nelems)
 {
+  if (!is) return;
+
   short ver;
   vsl_b_read(is, ver);
   switch (ver)
