@@ -18,10 +18,10 @@ SET(vimt3d_sources
     vimt3d_load.h                         vimt3d_load.cxx
     vimt3d_save.h                         vimt3d_save.cxx
     vimt3d_reflect.h
-
     vimt3d_gaussian_pyramid_builder_3d.h  vimt3d_gaussian_pyramid_builder_3d.txx
     vimt3d_crop.h
     vimt3d_vil3d_v3i.h                    vimt3d_vil3d_v3i.cxx
+    vimt3d_vil3d_v3m.cxx                  vimt3d_vil3d_v3m.h
     vimt3d_add_all_loaders.h              vimt3d_add_all_loaders.cxx
     vimt3d_from_image_2d.h
     vimt3d_fwd.h

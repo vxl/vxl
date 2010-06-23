@@ -7,6 +7,7 @@
 #include <vimt3d/vimt3d_gaussian_pyramid_builder_3d.h>
 #include <vil3d/vil3d_file_format.h>
 #include <vimt3d/vimt3d_vil3d_v3i.h>
+#include <vimt3d/vimt3d_vil3d_v3m.h>
 
 void vimt3d_add_all_loaders()
 {
@@ -22,6 +23,7 @@ void vimt3d_add_all_loaders()
   vsl_add_to_binary_loader(vimt3d_image_3d_of<int>());
   vsl_add_to_binary_loader(vimt3d_image_3d_of<double>());
 
-// Allow vil3d_load with the vimt3d-specific .v3i format.
+// Allow vil3d_load with the vimt3d-specific .v3i and v3m formats.
   vil3d_file_format::add_format(new vimt3d_vil3d_v3i_format);  
+  vil3d_file_format::add_format(new vimt3d_vil3d_v3m_format);  
 }

@@ -6,6 +6,7 @@ DECLARE( test_image_3d_of );
 DECLARE( test_load );
 DECLARE( test_save );
 DECLARE( test_v3i );
+DECLARE( test_v3m );
 DECLARE( test_from_image_2d );
 DECLARE( test_resample );
 DECLARE( test_gauss_reduce );
@@ -23,6 +24,7 @@ register_tests()
   REGISTER( test_save );
   REGISTER( test_sample_grid_trilin );
   REGISTER( test_v3i );
+  REGISTER( test_v3m );
   REGISTER( test_from_image_2d );
   REGISTER( test_resample );
   REGISTER( test_gauss_reduce );

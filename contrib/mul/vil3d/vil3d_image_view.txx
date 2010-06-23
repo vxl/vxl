@@ -64,13 +64,13 @@ vil3d_image_view<T>::vil3d_image_view(const vil_memory_chunk_sptr& mem_chunk,
   {
     // check view and chunk are in rough agreement
     assert(mem_chunk->size() >= n_planes*n_i*n_j*n_k*sizeof(T));
-    if (top_left  < reinterpret_cast<const T*>(mem_chunk->data()) ||
-        top_left >= reinterpret_cast<const T*>(reinterpret_cast<char*>(mem_chunk->data()) + mem_chunk->size()))
+    if (size() && (top_left  < reinterpret_cast<const T*>(mem_chunk->data()) ||
+        top_left >= reinterpret_cast<const T*>(reinterpret_cast<char*>(mem_chunk->data()) + mem_chunk->size()) ))
       vcl_cerr << "top_left at " << static_cast<const void*>(top_left) << ", memory_chunk at "
                << reinterpret_cast<const void*>(mem_chunk->data()) << ", size " << mem_chunk->size()
                << ", size of data type " << sizeof(T) << '\n';
-    assert(top_left >= reinterpret_cast<const T*>(mem_chunk->data()) &&
-           top_left  < reinterpret_cast<const T*>(reinterpret_cast<char*>(mem_chunk->data()) + mem_chunk->size()));
+    assert(!size() || (top_left >= reinterpret_cast<const T*>(mem_chunk->data()) &&
+           top_left  < reinterpret_cast<const T*>(reinterpret_cast<char*>(mem_chunk->data()) + mem_chunk->size()) ));
   }
 }
 
