@@ -120,6 +120,7 @@ class boxm_refine_manager : public bocl_manager<boxm_refine_manager<T_data> >
     cl_float* output_results_;
     cl_float* output_input_;
     cl_mem   output_buf_;
+    float gpu_time;
     //////////////////////////////////
 
 };

@@ -114,9 +114,36 @@ bool boxm_refine_manager<T>::run_tree()
   int numSplit = ((*tree_results_size_)-(*numcells_))/8;
   vcl_cout<<"---number of nodes that split = "<<numSplit<<vcl_endl
           <<"----------------------------------------------------"<<vcl_endl;
-#if 0
-  boxm_ocl_utils<float>::print_tree_array(tree_results_, (*tree_results_size_), data_results_);
 
+  //boxm_ocl_utils<T>::print_tree_array(tree_results_, (*tree_results_size_), data_results_);
+
+  // Verify that the tree is formatted correctly
+  vcl_vector<vnl_vector_fixed<int,4> > tree_vector;
+  for (int i=0,j=0; j<(*tree_results_size_); i+=4,j++) {
+    vnl_vector_fixed<int,4> cell;
+    for (unsigned k=0; k<4; k++) 
+      cell[k] = tree_results_[i+k];
+    tree_vector.push_back(cell);
+  }
+  if(boxm_ocl_utils<T>::verify_format(tree_vector))
+    vcl_cout<<"---TREE IN CORRECT FORMAT---"<<vcl_endl;
+  else
+    vcl_cout<<"---TREE NOT IN CORRECT FORMAT ---"<<vcl_endl;
+  
+
+  //PROFILING INFORMATION FROM OPENCL
+#if 1
+  float treeSize = 4*4*(*tree_results_size_)/(1024.0f*1024.0f); //tree size in MB
+  float dataSize = 4*16*(*data_results_size_)/(1024.0f*1024.0f); //data size in MBs
+  vcl_cout<<"---GLOBAL MEM BANDWITH RESULTS-----------------------"<<vcl_endl
+          <<"---Tree Size: "<<(*tree_results_size_)<<" blocks; "<<treeSize<<" MB"<<vcl_endl
+          <<"---Data size: "<<(*data_results_size_)<<" blocks; "<<dataSize<<" MB"<<vcl_endl
+          <<"---GPU Time: "<<gpu_time<<" seconds"<<vcl_endl
+          <<"---Refine Bandwidth ~~ "<<(treeSize+dataSize)/gpu_time<<" MB/sec"<<vcl_endl
+          <<"-----------------------------------------------------"<<vcl_endl;
+#endif // 0
+
+#if 0
   vcl_cout<<"VUL_TIMER: Global mem BANDWITH RESULTS"<<vcl_endl
           <<"Size "<<16*(*tree_max_size_)<<" bytes in "<<gpu_time<<"sec"<<vcl_endl;
   float rate = (16.0*(*tree_max_size_))/gpu_time;
@@ -228,15 +255,8 @@ bool boxm_refine_manager<T>::run_block()
   cl_ulong tstart,tend;
   status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
   status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
-  float gpu_time = (tend-tstart)/1e9f;
-#if 0
-  vcl_cout<<"---GLOBAL MEM BANDWITH RESULTS-----------------------"<<vcl_endl
-          <<"---Tree Size: "<<(*tree_results_size_)<<" blocks; "<<16*(*tree_results_size_)<<" bytes"<<vcl_endl
-          <<"---GPU Time: "<<gpu_time<<" seconds"<<vcl_endl;
-  float rate = (16.0*(*tree_max_size_))/gpu_time;
-  vcl_cout<<"---Refine Bandwidth ~~ "<<rate/vcl_pow(2,20)<<" MB/sec"<<vcl_endl
-          <<"-----------------------------------------------------"<<vcl_endl;
-#endif // 0
+  gpu_time = (tend-tstart)/1e9f;  //gpu time in seconds
+ 
   return SDK_SUCCESS;
 }
 
@@ -492,8 +512,8 @@ bool boxm_refine_manager<T>::format_tree(tree_type* tree)
 
   //need to allocate an array with some fixed size (because the GPU cannot allocate memory)
   unsigned num_cells = cell_input.size();
-  unsigned cell_max_size = (unsigned) (2*cell_input.size());
-  unsigned data_max_size = (unsigned) (2*data_input.size());
+  unsigned cell_max_size = (unsigned) (10*cell_input.size());
+  unsigned data_max_size = (unsigned) (10*data_input.size());
 
 
   //allocate host memory
