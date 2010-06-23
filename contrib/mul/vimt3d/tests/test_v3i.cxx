@@ -96,7 +96,20 @@ static void test_v3i()
   
   vpl_unlink(fname3.c_str());
   
+  // Try saving and loading empty vil3d image.
+  vil3d_image_view<vxl_int_32> im6;
+  vcl_string fname6 = vul_temp_filename() + ".v3i";
+  TEST( "Successfully saved empty v3i image",vil3d_save(im6, fname6.c_str()), true);
+  vil3d_image_resource_sptr ir6 = vil3d_load_image_resource(fname6.c_str());
+  TEST( "Successfully loaded empty v3i image",!ir6, false);
 
+  TEST("Loaded simple image has identity for a transform",
+    dynamic_cast<vimt3d_vil3d_v3i_image&>(*ir6).world2im().is_identity(),true);
+  TEST("Loaded image is empty", ir6->ni() + ir6->nj() + ir6->nk(), 0);
+  vil3d_image_view<vxl_int_32> im7 = ir6->get_view();
+  TEST("Loaded image is empty2", im7.size(), 0);
+
+  vpl_unlink(fname6.c_str());
 }
 
 TESTMAIN(test_v3i);

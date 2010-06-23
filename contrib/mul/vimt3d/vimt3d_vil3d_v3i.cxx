@@ -380,8 +380,8 @@ vimt3d_vil3d_v3i_image::vimt3d_vil3d_v3i_image(vcl_auto_ptr<vcl_fstream> file):
                     "vimt3d_vil3d_v3i_image constructor", "vimt3d_vil3d_v3i_image", "", oss.str()));
                   return;
                 }
+                vsl_b_read(is, dummy_step /*offset*/);
               }
-              vsl_b_read(is, dummy_step /*offset*/);
               break;
 
               default:
@@ -638,7 +638,7 @@ vil3d_image_view_base_sptr vimt3d_vil3d_v3i_image::get_view(unsigned i0, unsigne
    case  F : { \
     const vil3d_image_view< T > &v = \
       static_cast<const vil3d_image_view< T > &>(view); \
-    return new vil3d_image_view< T >(v.memory_chunk(), &v(i0,j0,k0), \
+      return new vil3d_image_view< T >(v.memory_chunk(), v.size() ? &v(i0,j0,k0) : 0, \
                                      ni, nj, nk, v.nplanes(), \
                                      v.istep(), v.jstep(), v.kstep(), \
                                      v.planestep()); }
