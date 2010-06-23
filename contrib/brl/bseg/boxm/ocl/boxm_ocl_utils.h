@@ -5,6 +5,7 @@
 #include <vcl_string.h>
 #include <vcl_cstddef.h>
 #include <vnl/vnl_vector_fixed.h>
+#include <vcl_stack.h>
 
 #include <boct/boct_tree_cell.h>
 #include <boxm/sample/boxm_sample.h>
@@ -41,6 +42,7 @@ class boxm_ocl_utils
   
   static void free_aligned(void* ptr);
   
+  static bool verify_format(vcl_vector<vnl_vector_fixed<int, 4> > cell_array);
   //static void print_tree_data(float* data, unsigned numdata);
 
 };

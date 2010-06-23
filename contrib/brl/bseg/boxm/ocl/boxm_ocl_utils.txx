@@ -150,6 +150,37 @@ void boxm_ocl_utils<T>::free_aligned(void* ptr)
   ptr = NULL;
 }
 
+template<class T>
+bool boxm_ocl_utils<T>::verify_format(vcl_vector<vnl_vector_fixed<int, 4> > cell_array)
+{
+  unsigned curr_index = 0;
+  vcl_stack<int> open;
+  open.push(0);
+  while (!open.empty()) {
+    int currNode = open.top();
+    open.pop();
+    int child_ptr = cell_array[currNode][1];
+
+    // if the current node has no children, nothing to verify
+    if (child_ptr < 0) {
+      continue;
+    }
+    // if child pointer isn't to the right place..
+    if (child_ptr != curr_index+1) {
+      vcl_cout<<"Children of "<<currNode<<" not in the right place"<<vcl_endl;
+      vcl_cout<<"should be at "<<curr_index+1<<", actually at "<<child_ptr<<vcl_endl;
+      return false;
+    }
+
+    // push children on stack in reverse order
+    for (int i=7; i>=0; i--) {
+      open.push(child_ptr+i);
+    }
+    curr_index += 8;
+  }
+  return true;
+}
+
 #define BOXM_OCL_UTILS_INSTANTIATE(T) \
   template class boxm_ocl_utils<T >\
 
