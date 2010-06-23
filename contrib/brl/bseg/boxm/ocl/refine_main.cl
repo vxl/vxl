@@ -17,51 +17,46 @@ int pop(ocl_stack *stack) {
   stack->top--;
   return buff;
 }
-  
+ 
 ///////////////////////////////////////////////////////////////////////
 // Swaps 8 blocks of data from index A to index B
 // makes sure to switch A and B's parents to point to the new A and B locations
 // makes sure to switch A and B's children to point to the new A and B locations
 // makes sure to update the location of nodes in the STACK
 ///////////////////////////////////////////////////////////////////////
-void swap_eight(__global int4 *tree, int a, int b)
+void swap_eight(__global int4 *tree, int a, int b, __global float* output)
 {
-  //store data at B in some buffer
-  unsigned i;
-  int4 buff[8];
-  for(i=0; i<8; i++){
-    buff[i] = tree[b+i];
-  }
-    
-  //move data at A into B's spot (make sure A's parent updates it's child pointer)
+
+  //update A and B's Parent's child pointer first
   int parent_ptr = tree[a].x;
   tree[parent_ptr].y = b;
-  for(i=0; i<8; i++){
+  parent_ptr = tree[b].x;
+  tree[parent_ptr].y = a; 
+  
+  //copy B to a buffer
+  int4 buff[8];
+  for(int i=0; i<8; i++)
+    buff[i] = tree[b+i];
+  
+  //copy A into B
+  for(int i=0; i<8; i++)
     tree[b+i] = tree[a+i];
-    
-    //update the parent pointers for each child
-    int childIndex = tree[b+i].y;
-    if(childIndex >= 0){        //if it's not a leaf
-      for(int j=0; j<8; j++)
-        tree[childIndex+j].x = b+i;
-    }
-  }
-
-  //move buffer (B's data) into A's spot (make sure B's parent updates it's child pointer)
-  parent_ptr = buff[0].x;
-  tree[parent_ptr].y = a;
-  for(i=0; i<8; i++){
+  
+  //copy buffer into A
+  for(int i=0; i<8; i++)
     tree[a+i] = buff[i];
-    
-    //update the parent pointers for each child
-    int childIndex = tree[a+i].y;
-    if(childIndex >= 0){
-      for(int j=0; j<8; j++)
-        tree[childIndex+j].x = a+i;
+
+  //for each child of B and A, update the parent pointer
+  for(int i=0; i<8; i++){
+    int childA = tree[a+i].y;
+    int childB = tree[b+i].y;
+    for(int j=0; j<8; j++){
+      tree[childA+j].x = a+i;
+      tree[childB+j].x = b+i; 
     }
   }
 }
-
+ 
 ////////////////////////////////////////////
 //reformat tree method
 ///////////////////////////////////////////
@@ -71,37 +66,32 @@ void reformat_tree(__global int4 *tree, __global float* output)
   ocl_stack open;
   init_ocl_stack(&open);
   push(&open, 0);
-
-  int bugcount = 0;
-
+ 
   while(!empty(&open)){
+    
     //examine node at top of stack
     int currNode = pop(&open);
-
     //recall tree's are organized as such:
     //1) parent pointer, 2) child pointer 3) data pointer 4) nothing right now
     //if the current node has no children, nothing to verify
     int child_ptr = tree[currNode].y;
-    if(child_ptr < 0){
-      continue;
+    bool isleaf = (child_ptr < 0);
+    if(!isleaf){
+      //if child pointer isn't to the right place..
+      if(child_ptr != curr_index+1){          
+        //-- need to swap 8 nodes at currNode[1] to curr_index+1 --//
+        swap_eight(tree, child_ptr, curr_index+1, output);
+        child_ptr = curr_index+1;  //verify that tree[currNode].y is equal to curr_index+1;
+      } 
+      //push children on stack (in reverse order)
+      for(int i=7; i>=0; i--){
+        push(&open, child_ptr+i);
+      }
+      curr_index += 8;
     }
-
-    //if child pointer isn't to the right place..
-    if(child_ptr != curr_index+1){           
-      //-- need to swap 8 nodes at currNode[1] to curr_index+1 --//
-      swap_eight(tree, child_ptr, curr_index+1);
-      child_ptr = curr_index+1;
-    }  
-
-    //push children on stack (in reverse order)
-    for(int i=7; i>=0; i--){
-      push(&open, child_ptr+i);
-    }
-    curr_index += 8;
   }
-  
 }
-
+ 
 ///////////////////////////////////////////
 //REFINE MAIN
 //TODO include CELL LEVEL SOMEHOW to make sure cells don't over split
@@ -122,7 +112,7 @@ refine_main(__global int4     *tree,           //tree structure
 {
   unsigned gid = get_global_id(0);
   unsigned lid = get_local_id(0);
-  
+ 
   //Threshold thing for now
   float max_alpha_int = (-1)*log(1.0 - (*prob_thresh));
   unsigned tSize = (*tree_size);
@@ -131,37 +121,36 @@ refine_main(__global int4     *tree,           //tree structure
   float boxLen = (*bbox_len);
  
   if(gid==0) { //only do it on one core
-    
-    /////////////////////////////////////////////////////////////////
+   
+    ///////////////////////////////////////////////////////////////
     //SPLIT TREE
     //Depth first search iteration of the tree (keeping track of node level)
     //1) parent pointer, 2) child pointer 3) data pointer 4) nothing right now
-    /////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////
     //need to keep track of current level and pops for each level
     (*output) = 0;
     int popCounts[11];
-    for(int i=0; i<10; i++) popCounts[i]=0; 
+    for(int i=0; i<11; i++) popCounts[i]=0;
     int currLevel = 0;
-
-    //stack for depth first traversal
+ 
+    ////stack for depth first traversal
     ocl_stack open;
     init_ocl_stack(&open);
     push(&open, 0);
     while(!empty(&open)){
-      
       //figure out the current level
       while(popCounts[currLevel]>=8) {
         popCounts[currLevel] = 0;
         currLevel--;
       }
-      
+     
       //examine node at top of stack (and keep track of popping)
       int currNode = pop(&open);
       popCounts[currLevel]++;
-
+      
       //if the current node has no children, it's a leaf -> check if it needs to be refined
       int child_ptr = tree[currNode].y;
-      if(child_ptr < 0){ 
+      if(child_ptr < 0){
         ////////////////////////////////////////
         //INSERT LEAF SPECIFIC CODE HERE
         ////////////////////////////////////////
@@ -169,48 +158,51 @@ refine_main(__global int4     *tree,           //tree structure
         //int two_pow_level = pow(2,currLevel);
         unsigned two_pow_level = 1<<currLevel;
         float side_len = boxLen/two_pow_level;
-        
+       
         //get alpha value for this cell;
         int dataIndex = tree[currNode].z;
         float16 datum = data[dataIndex];
         float alpha = datum.s0;
-        
+       
         //integrate alpha value
         float alpha_int = alpha * side_len;
-
+ 
         //IF alpha value triggers split, tack on 8 children to end of tree array
         //make sure the PARENT cell for each of the new children points to i
         //ALSO make sure currLevel is less than MAX_LEVELS
         if(alpha_int > max_alpha_int && currLevel < maxLevel)  {
-          (*output)++;
           //new alpha for the child nodes
-          float new_alpha = max_alpha_int / side_len;   
+          float new_alpha = max_alpha_int / side_len;  
+          
           //node I points to tSize - the place where it's children will be tacked on
-          tree[currNode].y = tSize;
+          int4 treecell=tree[currNode];
+          treecell.y= tSize;
+          tree[currNode]=treecell;
           for(int j=0; j<8; j++){
-            tree[tSize+j].x = currNode;   //PARENT POINTS TO NODE THAT SPLIT
-            tree[tSize+j].y = -1;         //HAS NO CHILDREN
-            tree[tSize+j].z = dSize+j;    //point to next piece of data
-            
+            int4 tcell = (int4) (currNode, -1, (int)dSize+j, 0);
+            tree[tSize+j] = tcell;   //PARENT POINTS TO NODE THAT SPLIT
+            //tree[tSize+j]   //HAS NO CHILDREN
+            //tree[tSize+j]   //point to next piece of data
+           
             //copy data to new children, along with new alpha
             float16 newData = datum;
             newData.s0 = new_alpha;
-            data[dSize+j] = newData; 
+            data[dSize+j] = newData;
           }
-          tSize += 8; //update tree size 
+          tSize += 8; //update tree size
           dSize += 8; //update data buffer size
-        
+       
           //reset data for curent node
-          float16 zeroDat = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}; 
-          data[dataIndex] =  zeroDat;     
+          float16 zeroDat = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+          data[dataIndex] =  zeroDat;    
         }
         ////////////////////////////////////////////
         //END LEAF SPECIFIC CODE
         ////////////////////////////////////////////
-        
+       
       }
       //for inner nodes
-      else {                       
+      else {                      
         for(int i=7; i>=0; i--){
           push(&open, child_ptr+i);
         }
@@ -220,15 +212,15 @@ refine_main(__global int4     *tree,           //tree structure
     //tree and data size output
     tree_size[0] = tSize;
     data_size[0] = dSize;
-    
-    /////////////////////////////////////////////////////////////////
-    //REFORMAT TREE into cannonical order
-    /////////////////////////////////////////////////////////////////
-    reformat_tree(tree, output);  
+        
+    ///////////////////////////////////////////////////////////////////
+    ////REFORMAT TREE into cannonical order
+    ///////////////////////////////////////////////////////////////////
+    reformat_tree(tree, output); 
   }
-  
+ 
 }
-
-
-
-
+ 
+ 
+ 
+ 
