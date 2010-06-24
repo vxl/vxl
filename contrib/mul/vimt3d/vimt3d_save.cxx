@@ -11,6 +11,7 @@
 #include <vimt3d/vimt3d_transform_3d.h>
 #include <vimt3d/vimt3d_image_3d.h>
 #include <vimt3d/vimt3d_vil3d_v3i.h>
+#include <vimt3d/vimt3d_vil3d_v3m.h>
 
 
 static mbl_logger& logger()
@@ -25,7 +26,8 @@ void vimt3d_save_transform(vil3d_image_resource_sptr &ir,
                            const vimt3d_transform_3d& trans, 
                            bool use_millimetres /*=false*/)
 {
-  if (dynamic_cast<vimt3d_vil3d_v3i_image *>(ir.ptr()))
+  if (dynamic_cast<vimt3d_vil3d_v3i_image *>(ir.ptr()) )//|| 
+   // dynamic_cast<vimt3d_vil3d_v3m_image *>(ir.ptr()) )
   {
     vgl_vector_3d<double> vox_per_mm = trans.delta(vgl_point_3d<double>(0,0,0), 
                                                    vgl_vector_3d<double>(1.0, 1.0, 1.0));
@@ -41,14 +43,19 @@ void vimt3d_save_transform(vil3d_image_resource_sptr &ir,
                       1000.0*vox_per_mm.y(),
                       1000.0*vox_per_mm.z(), tx,ty,tz );
 
-    static_cast<vimt3d_vil3d_v3i_image &>(*ir).set_world2im(tr);
+    if (dynamic_cast<vimt3d_vil3d_v3i_image *>(ir.ptr()))
+      static_cast<vimt3d_vil3d_v3i_image &>(*ir).set_world2im(tr);
+    else
+      static_cast<vimt3d_vil3d_v3m_image &>(*ir).set_world2im(tr);
+
   }
   else
   {
     vimt3d_transform_3d i2w=trans.inverse();
     vgl_vector_3d<double> dp = i2w.delta(vgl_point_3d<double> (0,0,0),
                                          vgl_vector_3d<double> (1.0, 1.0, 1.0));
-    if (!ir->set_voxel_size(float(dp.x()),float(dp.y()),float(dp.z())))
+    float scale = use_millimetres ? 1000.0f : 1.0f;
+    if (!ir->set_voxel_size(float(dp.x())/scale,float(dp.y())/scale,float(dp.z())/scale))
       MBL_LOG(WARN, logger(), "vimt3d_save_transform(): Unable to include voxel sizes:"
               <<dp.x()<<','<<dp.y()<<','<<dp.z() );
   }
