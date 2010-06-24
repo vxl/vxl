@@ -55,7 +55,7 @@ bool boxm_refine_manager<T>::init_kernel()
 {
   //load kernel source main
   if (!this->load_kernel_source(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                    +"/contrib/brl/bseg/boxm/ocl/refine_main.cl")) {
+                                    +"/contrib/brl/bseg/boxm/ocl/refine_main_opt.cl")) {
     vcl_cerr << "Error: boxm_refine_manager : failed to load kernel source (main function)\n";
     return false;
   }
@@ -163,45 +163,45 @@ bool boxm_refine_manager<T>::run_block()
 
   // ----- Set appropriate arguments to the kernel ----
   // tree buffer
-  status = clSetKernelArg(kernel_, 0, sizeof(cl_mem), &cell_buf_);
+  status = clSetKernelArg(kernel_, 0, sizeof(cl_mem), (void*) &cell_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (octree buffer)"))
     return SDK_FAILURE;
   // number of tree cells
-  status = clSetKernelArg(kernel_, 1, sizeof(cl_mem), &cell_size_buf_);
+  status = clSetKernelArg(kernel_, 1, sizeof(cl_mem),(void*) &cell_size_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (octree buffer)"))
     return SDK_FAILURE;
   // tree max size
-  status = clSetKernelArg(kernel_, 2, sizeof(cl_mem), &cell_max_size_buf_);
+  status = clSetKernelArg(kernel_, 2, sizeof(cl_mem), (void*) &cell_max_size_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (max_size buffer)"))
     return SDK_FAILURE;
   // data buffer
-  status = clSetKernelArg(kernel_, 3, sizeof(cl_mem), &data_buf_);
+  status = clSetKernelArg(kernel_, 3, sizeof(cl_mem), (void*) &data_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (data buffer)"))
     return SDK_FAILURE;
   // data size
-  status = clSetKernelArg(kernel_, 4, sizeof(cl_mem), &data_size_buf_);
+  status = clSetKernelArg(kernel_, 4, sizeof(cl_mem), (void*) &data_size_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (data_size buffer)"))
     return SDK_FAILURE;
   //data max sizeof
-  status = clSetKernelArg(kernel_, 5, sizeof(cl_mem), &data_max_size_buf_);
+  status = clSetKernelArg(kernel_, 5, sizeof(cl_mem), (void*) &data_max_size_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (data_max_size buffer)"))
     return SDK_FAILURE;
   //probability threshold
-  status = clSetKernelArg(kernel_, 6, sizeof(cl_mem), &prob_thresh_buf_);
+  status = clSetKernelArg(kernel_, 6, sizeof(cl_mem), (void*) &prob_thresh_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (prob_thresh buffer)"))
     return SDK_FAILURE;
   //max level
-  status = clSetKernelArg(kernel_, 7, sizeof(cl_mem), &max_level_buf_);
+  status = clSetKernelArg(kernel_, 7, sizeof(cl_mem), (void*) &max_level_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (max_level_) buffer)"))
     return SDK_FAILURE;
   //bbox length
-  status = clSetKernelArg(kernel_, 8, sizeof(cl_mem), &bbox_len_buf_);
+  status = clSetKernelArg(kernel_, 8, sizeof(cl_mem), (void*) &bbox_len_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (bbox_len_) buffer)"))
     return SDK_FAILURE;
   // ----- end kernel arguments ---
 
   //IO ARGUMENT
-  status = clSetKernelArg(kernel_, 9, sizeof(cl_mem), &output_buf_);
+  status = clSetKernelArg(kernel_, 9, sizeof(cl_mem), (void*) &output_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output_Buff buffer)"))
     return SDK_FAILURE;
   ////
@@ -223,8 +223,8 @@ bool boxm_refine_manager<T>::run_block()
 
   //Global size and local size is just 1 for now (serial)
   vcl_size_t globalThreads[1], localThreads[1];
-  globalThreads[0] = 1; //(*tree_max_size_);
-  localThreads[0] = 1; //64;
+  globalThreads[0] = 8; //(*tree_max_size_);
+  localThreads[0] = 8; //64;
 
   if (used_local_memory > this->total_local_memory())
   {
@@ -233,12 +233,15 @@ bool boxm_refine_manager<T>::run_block()
   }
 
   // set up a command queue
-  command_queue_ = clCreateCommandQueue(this->context(),this->devices()[0],CL_QUEUE_PROFILING_ENABLE,&status);
+  command_queue_ = clCreateCommandQueue(this->context(), 
+                                        this->devices()[0], 
+                                        CL_QUEUE_PROFILING_ENABLE, 
+                                        &status);
   if (!this->check_val(status,CL_SUCCESS,"Failed in command queue creation" + error_to_string(status)))
     return false;
 
   // pop the kernel onto the queue to execute
-  cl_event ceEvent;
+  cl_event ceEvent = 0;
   status = clEnqueueNDRangeKernel(command_queue_, this->kernel_,
                                   1,NULL,
                                   globalThreads,localThreads,
@@ -472,6 +475,11 @@ int boxm_refine_manager<T>::clean_tree_buffers()
 
   status = clReleaseMemObject(bbox_len_buf_);
   if (!this->check_val(status, CL_SUCCESS, "clReleaseMemObject failed (bbox_len_buf_)."))
+    return SDK_FAILURE;   
+    
+  //output buffer
+  status = clReleaseMemObject(output_buf_);
+  if (!this->check_val(status, CL_SUCCESS, "clReleaseMemObject failed (output_buf_)."))
     return SDK_FAILURE;
 
   return SDK_SUCCESS;
@@ -512,8 +520,8 @@ bool boxm_refine_manager<T>::format_tree(tree_type* tree)
 
   //need to allocate an array with some fixed size (because the GPU cannot allocate memory)
   unsigned num_cells = cell_input.size();
-  unsigned cell_max_size = (unsigned) (10*cell_input.size());
-  unsigned data_max_size = (unsigned) (10*data_input.size());
+  unsigned cell_max_size = (unsigned) (5*cell_input.size());
+  unsigned data_max_size = (unsigned) (5*data_input.size());
 
 
   //allocate host memory
@@ -604,8 +612,8 @@ bool boxm_refine_manager<T>::free_trees()
   boxm_ocl_utils<T>::free_aligned(bbox_len_);
 
   //TODO remove output stuff
-  //boxm_ocl_utils<T>::free_aligned(output_results_);
-  // boxm_ocl_utils<T>::free_aligned(output_input_);
+  boxm_ocl_utils<T>::free_aligned(output_results_);
+  boxm_ocl_utils<T>::free_aligned(output_input_);
   //TODO remove me^^^^
 
   return true;
