@@ -158,10 +158,10 @@ SOURCE=.\Templates/boxm_stack_ray_trace_manager+boxm_sample+BOXM_APM_SIMPLE_GREY
 SOURCE=.\Templates/boxm_stack_ray_trace_manager+boxm_sample+BOXM_APM_MOG_GREY--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boxm_ocl_utils+BOXM_APM_MOG_GREY--.cxx
+SOURCE=.\Templates/boxm_ocl_utils+boxm_sample+BOXM_APM_MOG_GREY--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boxm_ocl_utils+float--.cxx
+SOURCE=.\Templates/boxm_ocl_utils+float-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/boxm_stat_manager+boxm_sample+BOXM_APM_MOG_GREY--.cxx
@@ -173,7 +173,7 @@ SOURCE=.\Templates/boxm_stat_manager+float-.cxx
 SOURCE=.\Templates/bocl_manager+boxm_stat_manager+boxm_sample+BOXM_APM_MOG_GREY---.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boxm_ocl_utils+BOXM_APM_SIMPLE_GREY--.cxx
+SOURCE=.\Templates/boxm_ocl_utils+boxm_sample+BOXM_APM_SIMPLE_GREY--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/bocl_manager+boxm_stat_manager+float--.cxx
@@ -207,18 +207,6 @@ SOURCE=.\Templates/bocl_manager+boxm_ray_bundle_trace_manager+boxm_sample+BOXM_A
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/bocl_manager+boxm_refine_manager+float--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/boxm_online_update_manager+boxm_sample+BOXM_APM_MOG_GREY--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bocl_manager+boxm_online_update_manager+boxm_sample+BOXM_APM_MOG_GREY---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/boxm_online_update_manager+float-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bocl_manager+boxm_online_update_manager+float--.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -264,12 +252,6 @@ SOURCE=.\boxm_ray_bundle_trace_manager.txx
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_refine_manager.txx
-# End Source File
-# Begin Source File
-SOURCE=.\boxm_online_update_manager.h
-# End Source File
-# Begin Source File
-SOURCE=.\boxm_online_update_manager.txx
 # End Source File
 # End Group
 # End Target

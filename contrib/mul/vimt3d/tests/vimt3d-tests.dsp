@@ -269,6 +269,9 @@ SOURCE=.\test_sample_grid_trilin.cxx
 SOURCE=.\test_v3i.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_v3m.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_from_image_2d.cxx
 # End Source File
 # Begin Source File

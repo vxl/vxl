@@ -161,6 +161,9 @@ SOURCE=.\vimt3d_vil3d_v3i.cxx
 # Begin Source File
 SOURCE=.\vimt3d_save.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\vimt3d_vil3d_v3m.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -241,6 +244,9 @@ SOURCE=.\vimt3d_reflect.h
 # End Source File
 # Begin Source File
 SOURCE=.\vimt3d_run_length_encoding.h
+# End Source File
+# Begin Source File
+SOURCE=.\vimt3d_vil3d_v3m.h
 # End Source File
 # End Group
 # End Target

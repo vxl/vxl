@@ -239,6 +239,9 @@ SOURCE=.\Templates/vsl_vector_io+vcl_vector+vcl_pair+uint.float---.cxx
 # Begin Source File
 SOURCE=.\Templates/vsl_pair_io+uint.float-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_deque_io+bool-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -337,6 +340,9 @@ SOURCE=.\vsl_basic_xml_element.h
 # End Source File
 # Begin Source File
 SOURCE=.\vsl_stream.h
+# End Source File
+# Begin Source File
+SOURCE=.\vsl_block_binary_rle.h
 # End Source File
 # End Group
 # End Target
