@@ -448,6 +448,7 @@ void voxel_size__image_3d_of_float(opstack_t& s)
   s.push_front(operand(voxel_size.y()));
   s.push_front(operand(voxel_size.z()));
 }
+
 //: Add voxels of two images together
 void sum__image_3d_of_float__image_3d_of_float(opstack_t& s)
 {
@@ -456,6 +457,22 @@ void sum__image_3d_of_float__image_3d_of_float(opstack_t& s)
   vimt3d_image_3d_of<float> o1(s[1].as_image_3d_of_float());
 
   vimt3d_image_3d_of<float> result;
+  vil3d_math_image_sum(o1.image(), o2.image(), result.image());
+  result.world2im() = o1.world2im();
+
+  s.pop_front();
+  s.pop_front();
+  s.push_front(operand(result));
+}
+
+//: Add voxels of two images together
+void sum__image_3d_of_int__image_3d_of_int(opstack_t& s)
+{
+  assert(s.size() >= 2);
+  vimt3d_image_3d_of<int> o2(s[0].as_image_3d_of_int());
+  vimt3d_image_3d_of<int> o1(s[1].as_image_3d_of_int());
+
+  vimt3d_image_3d_of<int> result;
   vil3d_math_image_sum(o1.image(), o2.image(), result.image());
   result.world2im() = o1.world2im();
 
@@ -618,6 +635,22 @@ void diff__image_3d_of_float__image_3d_of_float(opstack_t& s)
   vimt3d_image_3d_of<float> o1(s[1].as_image_3d_of_float());
 
   vimt3d_image_3d_of<float> result;
+  vil3d_math_image_difference(o1.image(), o2.image(), result.image());
+  result.world2im() = o1.world2im();
+
+  s.pop_front();
+  s.pop_front();
+  s.push_front(operand(result));
+}
+
+//: Find the difference between voxels of two images
+void diff__image_3d_of_int__image_3d_of_int(opstack_t& s)
+{
+  assert(s.size() >= 2);
+  vimt3d_image_3d_of<int> o2(s[0].as_image_3d_of_int());
+  vimt3d_image_3d_of<int> o1(s[1].as_image_3d_of_int());
+
+  vimt3d_image_3d_of<int> result;
   vil3d_math_image_difference(o1.image(), o2.image(), result.image());
   result.world2im() = o1.world2im();
 
@@ -1326,9 +1359,9 @@ void print_stats__image_3d_of_int(opstack_t& s)
   s.pop_front();
 }
 
-void print__double__double(opstack_t& s)
+void print__double(opstack_t& s)
 {
-  assert(s.size() > 2);
+  assert(s.size() >= 1);
   unsigned n = static_cast<unsigned>(s[0].as_double());
   // variable number of parameters, so check types now
 
@@ -1339,21 +1372,25 @@ void print__double__double(opstack_t& s)
        << "Stack is :\n" << vsl_stream_summary(s);
     throw vcl_runtime_error(ss.str());
   }
-  for (unsigned i=1;i<=n; ++i)
-  {
-    if (!s[i].is_double())
-    {
-      vcl_ostringstream ss;
-      ss << "PRINT command could not find " << n << " doubles to print.\n"
-         << "Stack is :\n" << vsl_stream_summary(s);
-      throw vcl_runtime_error(ss.str());
-    }
-  }
 
-  vcl_cout << s[n].as_double();
-  for (unsigned i=n-1;i>=1; --i)
+  if (n)
   {
-    vcl_cout << ' ' << s[i].as_double();
+    for (unsigned i=1;i<=n; ++i)
+    {
+      if (!s[i].is_double())
+      {
+        vcl_ostringstream ss;
+        ss << "PRINT command could not find " << n << " doubles to print.\n"
+           << "Stack is :\n" << vsl_stream_summary(s);
+        throw vcl_runtime_error(ss.str());
+      }
+    }
+
+    vcl_cout << s[n].as_double();
+    for (unsigned i=n-1;i>=1; --i)
+    {
+      vcl_cout << ' ' << s[i].as_double();
+    }
   }
   vcl_cout << vcl_endl;
 
@@ -1617,6 +1654,9 @@ class operations
     add_operation("--diff", &diff__image_3d_of_float__image_3d_of_float,
                   function_type_t() << operand::e_image_3d_of_float << operand::e_image_3d_of_float,
                   "im_A im_B", "im_A-B", "Subtract corresponding voxels of im_B from im_A");
+    add_operation("--diff", &diff__image_3d_of_int__image_3d_of_int,
+                  function_type_t() << operand::e_image_3d_of_int << operand::e_image_3d_of_int,
+                  "im_A im_B", "im_A-B", "Subtract corresponding voxels of im_B from im_A");
     add_operation("--fill", &fill__image_3d_of_float__double,
                   function_type_t() << operand::e_image_3d_of_float << operand::e_double,
                   "image v", "image", "Fill all voxels with value v");
@@ -1674,9 +1714,9 @@ class operations
     add_operation("--or",  &or__image_3d_of_int__image_3d_of_int,
                   function_type_t() << operand::e_image_3d_of_int << operand::e_image_3d_of_int,
                   "im_A im_B", "image", "Logical OR over corresponding voxels in im_B and im_B");
-    add_operation("--print", &print__double__double,
-                  function_type_t() << operand::e_double << operand::e_double,
-                  "value ... n", "", "Print the previous n values");
+    add_operation("--print", &print__double,
+                  function_type_t() <<operand::e_double,
+                  "[value value ...] n", "", "Print the previous n values");
     add_operation("--print_overlap", &print_overlap__image_3d_of_int__image_3d_of_int,
                   function_type_t() << operand::e_image_3d_of_int << operand::e_image_3d_of_int,
                   "image image", "", "Print overlap measures and volumes of two binary mask images. Assuming the first image is the golden data, it prints the error rates.");
@@ -1745,6 +1785,9 @@ class operations
                   "A B", "A+B", "Add values A plus B");
     add_operation("--sum", &sum__image_3d_of_float__image_3d_of_float,
                   function_type_t() << operand::e_image_3d_of_float << operand::e_image_3d_of_float,
+                  "im_A im_B", "im_A+B", "Add corresponding voxels of im_A and im_B");
+    add_operation("--sum", &sum__image_3d_of_int__image_3d_of_int,
+                  function_type_t() << operand::e_image_3d_of_int << operand::e_image_3d_of_int,
                   "im_A im_B", "im_A+B", "Add corresponding voxels of im_A and im_B");
     add_operation("--voxel_product", &voxel_product__image_3d_of_float,
                   function_type_t() << operand::e_image_3d_of_float,
