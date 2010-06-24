@@ -24,6 +24,12 @@ template <class T_loc, class T_data>
 class boct_tree
 {
  public:
+  //: Type of locational code
+  typedef T_loc loc_type;
+  
+  //: Datatype of the cells
+  typedef T_data datatype;
+  
   //: Default constructor
   boct_tree() : num_levels_(0), root_level_(-1), max_val_(0), root_(0), global_bbox_() {}
 
