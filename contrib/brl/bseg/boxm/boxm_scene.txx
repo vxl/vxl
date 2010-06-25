@@ -526,6 +526,9 @@ void boxm_scene<T>::clean_scene()
   }
 }
 
+/************************************************ BOXM_BLOCK_ITERATOR *******************************************/
+
+
 template <class T>
 boxm_block_iterator<T>& boxm_block_iterator<T>::begin()
 {
@@ -626,6 +629,84 @@ boxm_block<T>*  boxm_block_iterator<T>::operator->()
   return block;
 }
 
+/************************************************ BOXM_CELL_ITERATOR *******************************************/
+template <class T>
+boxm_cell_iterator<T>& boxm_cell_iterator<T>::begin()
+{
+  //reset block iterator
+  block_iterator_.begin();
+  
+  //load active block, retrieve pointer to all cells
+  block_iterator_.scene_->load_block(block_iterator_.index());
+  cells_ = (*block_iterator_)->get_tree()->all_cells();
+  cells_iterator_ = cells_.begin();
+    
+  return *this;
+}
+
+template <class T>
+bool boxm_cell_iterator<T>::end()
+{
+  return (block_iterator_.end() && (cells_iterator_ == cells_.end()));
+}
+
+template <class T>
+boxm_cell_iterator<T>& boxm_cell_iterator<T>::operator=(const boxm_cell_iterator<T>& that)
+{
+  return *this;
+}
+
+template <class T>
+bool boxm_cell_iterator<T>::operator==(const boxm_cell_iterator<T>& that)
+{
+  if ((this->block_iterator_ == that.block_iterator_) && (this->cells_iterator_ == that.cells_iterator_))
+    return true;
+  return false;
+}
+
+template <class T>
+bool boxm_cell_iterator<T>::operator!=(const boxm_cell_iterator<T>& that)
+{
+  if ((this->block_iterator_ != that.block_iterator_) && (this->cells_iterator_ != that.cells_iterator_))
+    return true;
+  return false;
+}
+
+template <class T>
+boxm_cell_iterator<T>& boxm_cell_iterator<T>::operator++()
+{
+  if (cells_iterator_++ == cells_.end())
+  {
+    block_iterator_++;
+    if(!block_iterator_.end())
+    {
+      block_iterator_.scene_->load_block(block_iterator_.index());
+      cells_ = (*block_iterator_)->get_tree()->all_cells();
+      cells_iterator_ = cells_.begin();
+      
+    }
+  }
+  return *this;
+}
+
+
+template <class T>
+boct_tree_cell<typename boxm_cell_iterator<T>::loc_type, typename boxm_cell_iterator<T>::datatype>* boxm_cell_iterator<T>::operator*()
+{
+  return (*cells_iterator_);
+}
+
+template <class T>
+boct_tree_cell<typename boxm_cell_iterator<T>::loc_type, typename boxm_cell_iterator<T>::datatype>*  boxm_cell_iterator<T>::operator->()
+{
+  return (*cells_iterator_);
+}
+
+
+/******************************************* I/ O *******************************************************/
+
+
+
 
 template <class T>
 void vsl_b_write(vsl_b_ostream & os, boxm_scene<T> const &scene)
@@ -660,6 +741,7 @@ template void vsl_b_read(vsl_b_istream & is, boxm_scene<T >  &scene); \
 template void vsl_b_read(vsl_b_istream & is, boxm_scene<T > * &scene)
 
 #define BOXM_BLOCK_ITERATOR_INSTANTIATE(T) \
-template class boxm_block_iterator<T >
+template class boxm_block_iterator<T >; \
+template class boxm_cell_iterator<T >
 
 #endif

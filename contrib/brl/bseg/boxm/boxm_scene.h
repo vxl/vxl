@@ -26,6 +26,7 @@
 
 class boxm_scene_parser;
 template <class T> class boxm_block_iterator;
+template <class T> class boxm_cell_iterator;
 
 template <class T>
 class boxm_scene :public boxm_scene_base
@@ -138,6 +139,10 @@ class boxm_scene :public boxm_scene_base
   static short version_no() { return 1; }
 
   boxm_block_iterator<T> iterator() { boxm_block_iterator<T> iter(this); return iter; }
+  
+  boxm_block_iterator<T> const_iterator() { const boxm_block_iterator<T> iter(this); return iter; }
+  
+  boxm_cell_iterator<T> cell_iterator() { boxm_cell_iterator<T> cell_iter(this->iterator()); return cell_iter; }
 
   virtual vgl_box_3d<double> get_world_bbox();
 
@@ -197,8 +202,14 @@ class boxm_scene :public boxm_scene_base
 template <class T>
 class boxm_block_iterator
 {
+  
+  friend class boxm_cell_iterator<T>;
+
  public:
   boxm_block_iterator(boxm_scene<T>* const scene): i_(0), j_(0), k_(0), scene_(scene) {}
+  
+  //: Copy constructor
+  boxm_block_iterator(const boxm_block_iterator<T>& other): i_(other.i_), j_(other.j_), k_(other.k_), scene_(other.scene_) {}
 
   ~boxm_block_iterator() {}
 
@@ -231,6 +242,47 @@ class boxm_block_iterator
 
   boxm_scene<T>* const scene_;
 };
+
+template <class T>
+class boxm_cell_iterator
+{
+public:
+  typedef typename T::loc_type loc_type;
+  typedef typename T::datatype datatype;
+  
+  boxm_cell_iterator(boxm_block_iterator<T> iter): block_iterator_(iter){}
+    
+  ~boxm_cell_iterator() {}
+  
+  boxm_cell_iterator<T>& begin();
+  
+  bool end();
+  
+  boxm_cell_iterator<T>& operator=( const boxm_cell_iterator<T>& that);
+  
+  bool operator==(const boxm_cell_iterator<T>& that);
+  
+  bool operator!=(const boxm_cell_iterator<T>& that);
+  
+  boxm_cell_iterator<T>& operator++();  // pre-inc
+  
+  
+  boct_tree_cell<loc_type, datatype>* operator*();
+  
+  boct_tree_cell<loc_type, datatype>* operator->();
+  
+ 
+private:
+  
+  boxm_block_iterator<T> block_iterator_;
+  
+  vcl_vector<boct_tree_cell<loc_type ,datatype >* > cells_;
+  
+  typename vcl_vector< boct_tree_cell<loc_type , datatype >* >::const_iterator cells_iterator_;
+  
+};
+
+
 
 //: generates an XML file from the member variables
 template <class T>
