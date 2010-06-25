@@ -76,9 +76,8 @@ bool boxm_scene_to_bvxm_grid_process(bprb_func_process& pro)
     pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid);
     return true;
   }
-  else if ( scene_base->appearence_model() == BSTA_GAUSS_F1)
+  else if ( boxm_scene< boct_tree<short, bsta_num_obs<bsta_gauss_f1> > > *scene= dynamic_cast<boxm_scene< boct_tree<short, bsta_num_obs<bsta_gauss_f1> > > * >(scene_base.as_pointer()))
   {
-    boxm_scene< boct_tree<short, bsta_num_obs<bsta_gauss_f1> > > *scene= dynamic_cast<boxm_scene< boct_tree<short, bsta_num_obs<bsta_gauss_f1> > > * >(scene_base.as_pointer());
     if (!scene)
       vcl_cerr << "what's going on\n";
 
