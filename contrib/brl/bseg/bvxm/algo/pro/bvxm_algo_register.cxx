@@ -10,8 +10,6 @@
 
 void bvxm_algo_register::register_datatype()
 {
-  REGISTER_DATATYPE( bvxm_voxel_world_sptr );
-  REGISTER_DATATYPE( bvxm_voxel_slab_base_sptr );
 }
 
 void bvxm_algo_register::register_process()
