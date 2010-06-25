@@ -41,6 +41,49 @@ class open_cl_test_data
                                   float* expected_img);
 };
 
+template <class T> static void set_data(boct_tree<short, T >* tree)
+{}
+
+template <>
+static void set_data(boct_tree<short,float >* tree)
+{
+  vcl_vector<boct_tree_cell<short, float >* > tleaves;
+  tleaves = tree->leaf_cells();
+  vcl_size_t i = 0;
+  vcl_vector<boct_tree_cell<short, float >* >::iterator lit = tleaves.begin();
+  for (; lit!= tleaves.end(); ++lit, ++i)
+  {
+    if(i==21 || i==41 || i==35) {
+      float v((float)2.0);
+      (*lit)->set_data(v);
+    } else {
+      float v((float)0.1);
+      (*lit)->set_data(v);
+    }  
+  }
+};
+template <>
+static void set_data(boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> >* tree)
+{
+  typedef bsta_num_obs<bsta_gauss_f1> gauss_type_f1;
+  typedef bsta_num_obs<bsta_mixture_fixed<gauss_type_f1, 3> > mix_type;
+  vcl_vector<boct_tree_cell<short, boxm_sample<BOXM_APM_MOG_GREY> >* > tleaves;
+  tleaves = tree->leaf_cells();
+  vcl_size_t i = 0;
+  vcl_vector<boct_tree_cell<short, boxm_sample<BOXM_APM_MOG_GREY> >* >::iterator lit = tleaves.begin();
+  gauss_type_f1 g;
+  g.set_mean(0.533333f); g.set_var(0.01f); g.num_observations = 1;
+  mix_type mix;
+  mix.insert(g, 1.0f); mix.num_observations = 1;
+  boxm_sample<BOXM_APM_MOG_GREY> samp;
+  samp.set_appearance(mix);
+  samp.alpha = 1.38629f;
+    for (; lit!= tleaves.end(); ++lit, ++i)
+  {
+    (*lit)->set_data(samp);
+  }  
+};
+
 template <class T>
 boct_tree<short,T > * open_cl_test_data::tree()
 {
@@ -74,20 +117,7 @@ boct_tree<short,T > * open_cl_test_data::tree()
   boct_tree<short, T > * ret_tree =
     new boct_tree<short, T >(root, init_tree->number_levels());
   delete init_tree;
-  vcl_vector<boct_tree_cell<short, T >* > tleaves;
-  tleaves = ret_tree->leaf_cells();
-  vcl_size_t i = 0;
-  typename vcl_vector<boct_tree_cell<short, T >* >::iterator lit = tleaves.begin();
-  for (; lit!= tleaves.end(); ++lit, ++i)
-  {
-    if(i==21 || i==41 || i==35) {
-      T v((float)2.0);
-      (*lit)->set_data(v);
-    } else {
-      T v((float)0.1);
-      (*lit)->set_data(v);
-    }
-  }
+  set_data(ret_tree);
   const vgl_box_3d<double> box(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
   ret_tree->set_bbox(box);
   return ret_tree;

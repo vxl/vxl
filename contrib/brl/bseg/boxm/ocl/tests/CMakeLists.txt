@@ -14,6 +14,7 @@ SET(boxm_ocl_test_sources
     test_statistics.cxx
     test_refine.cxx
     test_update.cxx
+    online_update_test_manager.h     online_update_test_manager.txx
    )
 
 AUX_SOURCE_DIRECTORY(Templates boxm_ocl_test_sources)

@@ -383,7 +383,6 @@ void seg_len_obs(float seg_len, __local float4* image_vect,
 {
   /* linear thread id */
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
-
   /* limit access to threads that do not own a connected region */
   if (ray_bundle_array[llid].x!=llid)
     {
@@ -395,12 +394,11 @@ void seg_len_obs(float seg_len, __local float4* image_vect,
       cached_aux_data[llid].x = seg_len;
     }
   barrier(CLK_LOCAL_MEM_FENCE);
+  uchar temp = ray_bundle_array[llid].w & ACTIVE;
   /* now, limit access to the threads that own each connected region */
-  if (ray_bundle_array[llid].x==llid)
+  if (ray_bundle_array[llid].x==llid &&temp)
     {
-      uchar temp = ray_bundle_array[llid].w & ACTIVE;
-      if (temp == 0)
-        return;
+      
       /* The region owner (base) is now the only active thread within the region*/
       /* process the base ray */
       cached_aux_data[llid].x += seg_len; /* seg_len sum */
@@ -478,7 +476,6 @@ void pre_infinity(float seg_len, __local float4* image_vect,
 
   /* updated pre                      Omega         *       PI         */
   image_vect[llid].w += (image_vect[llid].z - temp2)*cached_data[adr].se;
-  
   /* updated visibility probability */
   image_vect[llid].z = temp2;
   }
@@ -509,7 +506,13 @@ float4 vect = image[lgid];
 float mult = (p_inf[0].x>0.0f) ? 1.0f :
 gauss_prob_density(vect.x, p_inf[0].y, p_inf[0].z);
 /* compute the norm image */
-vect.x = vect.w + mult * vect.z;
+ vect.x = vect.w + mult * vect.z;
+ /* the following  quantities have to be re-initialized before 
+  *the bayes_ratio kernel is executed
+  */
+ vect.y = 0.0f;/* clear alpha integral */
+ vect.z = 1.0f; /* initial vis = 1.0 */
+ vect.w = 0.0f; /* initial pre = 0.0 */
 /* write it back */
 image[lgid] = vect;
 }
@@ -604,7 +607,6 @@ void bayes_ratio(float seg_len, __local float4* image_vect,
       ((image_vect[llid].w + cached_data[llid].se*image_vect[llid].z)/
        image_vect[llid].x)*cached_data[llid].sd;
     /*     norm(i,j)        seg_len */
-
     /* If ray has no neighbors - then just return */
     uchar next_adr_valid = ray_bundle_array[llid].w & NEXT_ADR_VALID;
     uchar adr = llid; /* linked list pointer */
@@ -615,14 +617,11 @@ void bayes_ratio(float seg_len, __local float4* image_vect,
       cached_aux_data[llid].w += image_vect[adr].z*cached_data[adr].sd;
           /* Bayes ratio */
       /* ( pre + PI*vis)/norm)*seg_len */
-      cached_aux_data[llid].z +=
+      cached_aux_data[llid].z += 
         ((image_vect[adr].w + cached_data[llid].se*image_vect[adr].z)/
          image_vect[adr].x)*cached_data[adr].sd;
-
       next_adr_valid = ray_bundle_array[adr].w & NEXT_ADR_VALID;
     }
   }
   barrier(CLK_LOCAL_MEM_FENCE); /*wait for all threads to complete */
 }
-
-

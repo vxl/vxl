@@ -135,13 +135,12 @@ update_aux( __global int * root_level,  // level of the root.
     // no function pointers in OpenCL (spec 8.6a)
     // instead, user must provide source with a function named "step_cell"
     $$step_cell$$;
-    //barrier(CLK_LOCAL_MEM_FENCE);
     if (ray_bundle_array[llid].x==llid)
     {
       /* note that sample data is not changed during ray tracing passes */
       aux_data_array[data_ptr]=cached_aux_data[llid] ;
     }
-
+    in_image[j*get_global_size(0)+i] = image_vect[llid];
     //// exit point
     exit_pt=ray_o + tfar*ray_d;
     exit_pt.w=0.5;
@@ -177,11 +176,6 @@ update_aux( __global int * root_level,  // level of the root.
 
     count++;
   }
-  // note that the following code is application dependent
-  // should have a cleanup functor for expected image
-  // also it is not necessary to have a full float4 as the
-  // output type a single scalar float array is sufficient
-  in_image[j*get_global_size(0)+i]=(float4)(i,j,count,0);//count;//aux_data_array[j*get_global_size(0)+i];
 }
 
 #if 0

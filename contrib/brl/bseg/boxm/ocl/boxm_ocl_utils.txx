@@ -29,15 +29,15 @@ void boxm_ocl_utils<T>::pack_cell_data(boct_tree_cell<short, boxm_sample<BOXM_AP
   boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype appear=cell_data.appearance_;
   //: assuming 3 components
   data[1]=appear.distribution(0).mean();
-  data[2]=appear.distribution(0).var();
+  data[2]=vcl_sqrt(appear.distribution(0).var());
   data[3]=appear.weight(0);
   data[4]=appear.distribution(0).num_observations;
   data[5]=appear.distribution(1).mean();
-  data[6]=appear.distribution(1).var();
+  data[6]=vcl_sqrt(appear.distribution(1).var());
   data[7]=appear.weight(1);
   data[8]=appear.distribution(1).num_observations;
   data[9]=appear.distribution(2).mean();
-  data[10]=appear.distribution(2).var();
+  data[10]=vcl_sqrt(appear.distribution(2).var());
   data[11]=appear.weight(2);
   data[12]=appear.distribution(2).num_observations;
   data[13]=appear.num_observations;
