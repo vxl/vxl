@@ -14,8 +14,6 @@
 #include <boxm/basic/boxm_block_vis_graph_iterator.h>
 #include <vpgl/vpgl_perspective_camera.h>
 
-//: Initializes CPU side input buffers
-//put tree structure and data into arrays
 template<class T>
 void online_update_test_manager<T>::
 set_block_items(boxm_block<boct_tree<short,T> > *block,
@@ -28,7 +26,21 @@ set_block_items(boxm_block<boct_tree<short,T> > *block,
   cam_ = cam;
   input_img_=obs;
 }
-  
+// This function enables a kind of "functor" capability where a token 
+// in the ray trace main program is replaced with an appropriate function
+// signature. There are two aspects that have to be modified:
+// 1) Whether or not cached_cell_data is used in the functor. If cell_data
+//    (as opposed to cell_aux_data) is not used then the cost of 
+//    transferring it from global memory is avoided. This choice is
+//    enabled by the %% token in update_main. If "1" is substituted then
+//    global memory is transferred.
+// 2) The functor name and argument list is controlled by the token
+//    $$step_cell$$. The token is replaced by the desired functor signature
+//
+//  To do - should split prog_ into two parts: prog_libraries_ and prog_main_.
+//  Then the functor modification is restricted to just one file and 
+//  the library files need to be loaded only once.
+//
 template<class T>
 bool online_update_test_manager<T>::
 build_program(vcl_string const& functor, bool use_cell_data)
