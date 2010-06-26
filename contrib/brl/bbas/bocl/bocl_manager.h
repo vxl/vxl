@@ -27,7 +27,7 @@
 #define SDK_FAILURE 1
 //#define GROUP_SIZE 64
 #define VECTOR_SIZE 4
-
+#include <CL/cl_gl.h>
 
 template <class T>
 class bocl_manager
@@ -44,12 +44,13 @@ class bocl_manager
   cl_uint vector_width_float_;       //!< Ideal float vector size
   cl_uint max_clock_freq_;           //!< Maximum clock frequency
   cl_bool image_support_;            //!< image support
-  cl_context context_;               //!< CL context
   cl_device_id *devices_;            //!< CL device list
   vcl_size_t image2d_max_width_;       //!< Ideal float vector size
   vcl_size_t image2d_max_height_;       //!< Ideal float vector size
+  cl_char extensions_supported_[1000];
 
  public:
+  cl_context context_;               //!< CL context
 
   //: Destructor
   virtual ~bocl_manager();
@@ -84,6 +85,7 @@ class bocl_manager
   vcl_string program_source() const {return prog_;}
 
   cl_bool image_support(){return image_support_;}
+
  protected:
 
   //: Constructor
@@ -92,6 +94,7 @@ class bocl_manager
   static T* instance_;
 
   vcl_string prog_;
+
 
 };
 

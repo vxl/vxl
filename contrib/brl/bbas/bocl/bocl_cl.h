@@ -16,6 +16,7 @@
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
 
 #include <CL/cl.h>
+#include <CL/cl_gl.h>
 
 #elif defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__)
 
