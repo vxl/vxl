@@ -20,17 +20,18 @@ set_block_items(boxm_block<boct_tree<short,T> > *block,
                 vpgl_camera_double_sptr cam,
                 vil_image_view<float> &obs)
 {
-  if(block_)
+  if (block_)
     delete block_;
   block_ = block;
   cam_ = cam;
   input_img_=obs;
 }
-// This function enables a kind of "functor" capability where a token 
+
+// This function enables a kind of "functor" capability where a token
 // in the ray trace main program is replaced with an appropriate function
 // signature. There are two aspects that have to be modified:
 // 1) Whether or not cached_cell_data is used in the functor. If cell_data
-//    (as opposed to cell_aux_data) is not used then the cost of 
+//    (as opposed to cell_aux_data) is not used then the cost of
 //    transferring it from global memory is avoided. This choice is
 //    enabled by the %% token in update_main. If "1" is substituted then
 //    global memory is transferred.
@@ -38,7 +39,7 @@ set_block_items(boxm_block<boct_tree<short,T> > *block,
 //    $$step_cell$$. The token is replaced by the desired functor signature
 //
 //  To do - should split prog_ into two parts: prog_libraries_ and prog_main_.
-//  Then the functor modification is restricted to just one file and 
+//  Then the functor modification is restricted to just one file and
 //  the library files need to be loaded only once.
 //
 template<class T>
@@ -46,17 +47,13 @@ bool online_update_test_manager<T>::
 build_program(vcl_string const& functor, bool use_cell_data)
 {
   vcl_string root = vcl_string(VCL_SOURCE_ROOT_DIR);
-  bool oct = 
-    this->load_kernel_source(root + "/contrib/brl/bseg/boxm/ocl/octree_library_functions.cl");
-  bool bpr = 
-    this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/backproject.cl");
-  bool stat = 
-    this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/statistics_library_functions.cl");
-  bool rbun = 
-    this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/ray_bundle_library_functions.cl");
+  bool octr = this->load_kernel_source(root + "/contrib/brl/bseg/boxm/ocl/octree_library_functions.cl");
+  bool bpr  = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/backproject.cl");
+  bool stat = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/statistics_library_functions.cl");
+  bool rbun = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/ray_bundle_library_functions.cl");
   bool main = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/update_main.cl");
-  
-  if (!oct||!bpr||!stat||!rbun||!main){
+
+  if (!octr||!bpr||!stat||!rbun||!main) {
     vcl_cerr << "Error: boxm_ray_trace_manager : failed to load kernel source (helper functions)\n";
     return false;
   }
@@ -64,19 +61,20 @@ build_program(vcl_string const& functor, bool use_cell_data)
   // transfer cell data from global to local memory if use_cell_data_ == true
   vcl_string use = "%%";
   vcl_string::size_type use_start = prog_.find(use);
-  if(use_start<prog_.size())
-    if(use_cell_data)
+  if (use_start<prog_.size()) {
+    if (use_cell_data)
       prog_ = prog_.replace (use_start, 2, one.c_str(), 1);
     else
       prog_ = prog_.replace (use_start, 2, zero.c_str(), 1);
+  }
   else
     return false;
   // assign the functor calling signature
   vcl_string::size_type pos_start = prog_.find(patt);
   vcl_string::size_type n1 = patt.size();
-  if(pos_start<prog_.size()){
+  if (pos_start<prog_.size()) {
     vcl_string::size_type n2 = functor.size();
-    if(!n2)
+    if (!n2)
       return false;
     prog_ = prog_.replace(pos_start, n1, functor.c_str(), n2);
     //write_program("c:/mundy/local-software/junk.cl");
@@ -84,16 +82,17 @@ build_program(vcl_string const& functor, bool use_cell_data)
   }
   return false;
 }
+
 template<class T>
 bool online_update_test_manager<T>::clean_kernels()
 {
   cl_int status = CL_SUCCESS;
   int CHECK_SUCCESS = 1;
-  for(unsigned i = 0; i<kernels_.size(); ++i){
-    if(kernels_[i]){
+  for (unsigned i = 0; i<kernels_.size(); ++i) {
+    if (kernels_[i]) {
       status = clReleaseKernel(kernels_[i]);
-      if(this->check_val(status,CL_SUCCESS,"clReleaseKernel failed.")!=CHECK_SUCCESS)
-  return false;
+      if (this->check_val(status,CL_SUCCESS,"clReleaseKernel failed.")!=CHECK_SUCCESS)
+        return false;
     }
   }
   kernels_.clear();
@@ -106,58 +105,55 @@ bool online_update_test_manager<T>::set_kernels()
 {
   cl_int status = CL_SUCCESS;
   int CHECK_SUCCESS = 1;
-  if(!this->clean_kernels())
+  if (!this->clean_kernels())
     return false;
- // pass 0
-  if(!this->build_program("seg_len_obs(d,image_vect,ray_bundle_array,cached_aux_data)", false))
+  // pass 0
+  if (!this->build_program("seg_len_obs(d,image_vect,ray_bundle_array,cached_aux_data)", false))
     return false;
   cl_kernel kernel = clCreateKernel(program_,"update_aux",&status);
-  if (this->check_val(status,CL_SUCCESS,error_to_string(status))!=CHECK_SUCCESS)    return false;
+  if (this->check_val(status,CL_SUCCESS,error_to_string(status))!=CHECK_SUCCESS)
+    return false;
   kernels_.push_back(kernel);
   // pass 1
-  if(!this->build_program("pre_infinity(d,image_vect,ray_bundle_array, cached_data, cached_aux_data)", true))
+  if (!this->build_program("pre_infinity(d,image_vect,ray_bundle_array, cached_data, cached_aux_data)", true))
     return false;
   kernel = clCreateKernel(program_,"update_aux",&status);
-  if(this->check_val(status,CL_SUCCESS,error_to_string(status))!=CHECK_SUCCESS)    return false;
+  if (this->check_val(status,CL_SUCCESS,error_to_string(status))!=CHECK_SUCCESS)    return false;
   kernels_.push_back(kernel);
   //pass 2 norm image (pre-requisite to C++ pass 2)
   kernel = clCreateKernel(program_,"proc_norm_image",&status);
-  if(this->check_val(status,CL_SUCCESS,error_to_string(status))!=CHECK_SUCCESS)
+  if (this->check_val(status,CL_SUCCESS,error_to_string(status))!=CHECK_SUCCESS)
     return false;
   kernels_.push_back(kernel);
   // pass 3 Bayes ratio (pass 2 in C++)
-  if(!this->build_program("bayes_ratio(d,image_vect,ray_bundle_array, cached_data, cached_aux_data)", true))
+  if (!this->build_program("bayes_ratio(d,image_vect,ray_bundle_array, cached_data, cached_aux_data)", true))
     return false;
   kernel = clCreateKernel(program_,"update_aux",&status);
-  if(this->check_val(status,CL_SUCCESS,error_to_string(status))!=CHECK_SUCCESS)    return false;
+  if (this->check_val(status,CL_SUCCESS,error_to_string(status))!=CHECK_SUCCESS)
+    return false;
   kernels_.push_back(kernel);
   return true;
 }
+
 template<class T>
 bool online_update_test_manager<T>::set_kernel_args(unsigned pass)
 {
   int CHECK_SUCCESS = 1;
   cl_int status = SDK_SUCCESS;
- 
-  if(pass == 2){// norm image process //
 
-
-    status = clSetKernelArg(kernels_[pass], 0, 
-                          sizeof(cl_mem), (void *)&image_buf_);  
+  if (pass == 2) { // norm image process //
+    status = clSetKernelArg(kernels_[pass], 0,
+                            sizeof(cl_mem), (void *)&image_buf_);
     if (this->check_val(status, CL_SUCCESS, "clSetKernelArg failed. (image array)")!=CHECK_SUCCESS)
       return false;
 
-  status = clSetKernelArg(kernels_[pass], 1, 
-                          sizeof(cl_mem), (void *)&app_density_buf_);  
-  
-  if (this->check_val(status, CL_SUCCESS,
-                       "clSetKernelArg failed. (remote surface appearance)")!=CHECK_SUCCESS)
-    return false;
+    status = clSetKernelArg(kernels_[pass], 1,
+                            sizeof(cl_mem), (void *)&app_density_buf_);
 
-
-  return true;
+    return this->check_val(status, CL_SUCCESS,
+                           "clSetKernelArg failed. (remote surface appearance)")==CHECK_SUCCESS;
   }
-cl_kernel kernel = kernels_[pass];
+  cl_kernel kernel = kernels_[pass];
   // -- Set appropriate arguments to the kernel for ray tracing--
   int i=0;
   status = clSetKernelArg(kernel,i++,sizeof(cl_mem),(void *)&root_level_buf_);
@@ -226,20 +222,18 @@ cl_kernel kernel = kernels_[pass];
   if (this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (loc code bundle)")!=CHECK_SUCCESS)
     return false;
   status = clSetKernelArg(kernel,i++,sizeof(cl_float4)*this->bni_*this->bnj_,0);
-  if (this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (loc code bundle)")!=CHECK_SUCCESS)
-    return false;
-  return true;
+  return this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (loc code bundle)")==CHECK_SUCCESS;
 }
+
 template<class T>
 bool online_update_test_manager<T>::create_command_queue()
 {
-cl_int status = SDK_SUCCESS;
+  cl_int status = SDK_SUCCESS;
   // set up a command queue
   command_queue_ = clCreateCommandQueue(this->context(),this->devices()[0],CL_QUEUE_PROFILING_ENABLE,&status);
-  if (this->check_val(status,CL_SUCCESS,"Falied in command queue creation" + error_to_string(status))!=1)
-    return false;
-    return true;
+  return this->check_val(status,CL_SUCCESS,"Falied in command queue creation" + error_to_string(status))==1;
 }
+
 template<class T>
 bool online_update_test_manager<T>::setup_app_density(bool use_uniform, float mean, float sigma)
 {
@@ -277,9 +271,8 @@ bool online_update_test_manager<T>::clean_app_density()
     app_density_ = NULL;
     return true;
   }
-  else {
+  else
     return false;
-  }
 }
 
 template<class T>
@@ -309,31 +302,26 @@ bool online_update_test_manager<T>::setup_norm_data(bool use_uniform,
                                                     float mean,
                                                     float sigma)
 {
-  if(!this->setup_app_density(use_uniform, mean, sigma))
-    return false;
-  if(this->setup_app_density_buffer()!=SDK_SUCCESS)
-    return false;
-  return true;
+  return this->setup_app_density(use_uniform, mean, sigma)
+      && this->setup_app_density_buffer()==SDK_SUCCESS;
 }
 
 
 template <class T>
-bool online_update_test_manager<T>::clean_norm_data(){
-
-  if(!this->clean_app_density())
-    return false;
-  if(this->clean_app_density_buffer()!=SDK_SUCCESS)
-    return false;
-  return true;
+bool online_update_test_manager<T>::clean_norm_data()
+{
+  return this->clean_app_density()
+      && this->clean_app_density_buffer()==SDK_SUCCESS;
 }
 
 template<class T>
-bool online_update_test_manager<T>::run_block(unsigned pass){
+bool online_update_test_manager<T>::run_block(unsigned pass)
+{
   int CHECK_SUCCESS = 1;
   cl_int status = SDK_SUCCESS;
   this->set_kernel_args(pass);
-    // check the local memeory
-    cl_ulong used_local_memory;
+  // check the local memeory
+  cl_ulong used_local_memory;
   status = clGetKernelWorkGroupInfo(kernels_[pass],this->devices()[0],CL_KERNEL_LOCAL_MEM_SIZE,
                                     sizeof(cl_ulong),&used_local_memory,NULL);
   if (this->check_val(status,CL_SUCCESS,"clGetKernelWorkGroupInfo CL_KERNEL_LOCAL_MEM_SIZE failed.")!=CHECK_SUCCESS)
@@ -350,10 +338,10 @@ bool online_update_test_manager<T>::run_block(unsigned pass){
   vcl_size_t localThreads[] = {this->bni_,this->bnj_};
 
   if (used_local_memory > this->total_local_memory())
-    {
-      vcl_cout << "Unsupported: Insufficient local memory on device.\n";
-      return false;
-    }
+  {
+    vcl_cout << "Unsupported: Insufficient local memory on device.\n";
+    return false;
+  }
 
   cl_event ceEvent;
   status = clEnqueueNDRangeKernel(command_queue_, kernels_[pass], 2,NULL,globalThreads,localThreads,0,NULL,&ceEvent);
@@ -377,51 +365,43 @@ template<class T>
 bool online_update_test_manager<T>::process_block()
 {
   cl_int status = CL_SUCCESS;
-  bool good=true;
-  if(!this->set_kernels())
+  if (!this->set_kernels())
     return false;
-  if(!this->create_command_queue())
+  if (!this->create_command_queue())
     return false;
   vcl_string error_message="";
   vul_timer timer;
-  if(!block_)
+  if (!block_)
     return false;
-  good=good && set_block_data();
-  good=good && set_block_data_buffers();
-  good=good && set_input_view();
-  good=good && set_input_view_buffers();
-
-  if(!good)
+  if (!(set_block_data() &&
+        set_block_data_buffers() &&
+        set_input_view() &&
+        set_input_view_buffers()))
     return false;
   float total_raytrace_time = 0.0f;
   float total_gpu_time = 0.0f;
   float total_load_time = 0.0f;
   tree_type * tree = block_->get_tree();
-  good =good && set_tree(tree);
-  good =good && set_tree_buffers();
-  if(!good)
+  if (!(set_tree(tree) && set_tree_buffers()))
     return false;
   // run the raytracing for this block
-  for(unsigned pass = 0; pass<4; pass++)
-    if(!run_block(pass))
+  for (unsigned pass = 0; pass<4; pass++)
+    if (!run_block(pass))
       return false;
   // release memory
   this->read_trees();
   this->archive_tree_data();
   //this->print_leaves();
-  good = true;
-  good =good && release_tree_buffers();
-  good =good && clean_tree();
+  if (!(release_tree_buffers() && clean_tree()))
+    return false;
   float raytrace_time = (float)timer.all() / 1e3f;
   vcl_cout<<"processing block took " << raytrace_time << 's' << vcl_endl;
-  good=good && read_output_image();
-  //  this->print_image();
-  good=good && clean_input_view();
-  good=good && release_block_data_buffers();
-  good=good && clean_block_data();
-  good=good && clean_norm_data();
-  good=good && release_command_queue();
-  return good;
+  return read_output_image() // && this->print_image()
+      && clean_input_view()
+      && release_block_data_buffers()
+      && clean_block_data()
+      && clean_norm_data()
+      && release_command_queue();
 }
 
 template<class T>
@@ -429,7 +409,7 @@ bool online_update_test_manager<T>:: read_output_image()
 {
   cl_event events[2];
   // clear image
-  for(unsigned i = 0; i<this->wni_*this->wnj_*4; ++i)
+  for (unsigned i = 0; i<this->wni_*this->wnj_*4; ++i)
     image_[i]=0.0f;
 
   // Enqueue readBuffers
@@ -492,10 +472,11 @@ bool online_update_test_manager<T>:: read_trees()
   status = clReleaseEvent(events[0]);
   return this->check_val(status,CL_SUCCESS,"clReleaseEvent failed.")==1;
 }
+
 template<class T>
 void online_update_test_manager<T>::print_image()
 {
-  if(!image_)
+  if (!image_)
     return;
   vcl_cout<<"Plane 0"<<vcl_endl;
   for (unsigned j=0;j<this->wnj_;j++)
@@ -526,6 +507,7 @@ void online_update_test_manager<T>::print_image()
     vcl_cout<<vcl_endl;
   }
 }
+
 template<class T>
 void online_update_test_manager<T>::print_tree()
 {
@@ -565,6 +547,7 @@ void online_update_test_manager<T>::print_tree()
       vcl_cout << ")\n";
     }
 }
+
 template<class T>
 void online_update_test_manager<T>::print_leaves()
 {
@@ -599,32 +582,35 @@ void online_update_test_manager<T>::print_leaves()
                  << cell_aux_data_[aux_data_ptr+3] << "]\n\n";
     }
 }
+
 template<class T>
 void online_update_test_manager<T>::clear_tree_data()
 {
   tree_data_.clear();
   tree_aux_data_.clear();
 }
+
 template<class T>
-void online_update_test_manager<T>::archive_tree_data(){
+void online_update_test_manager<T>::archive_tree_data()
+{
   this->clear_tree_data();
   if (cells_)
     for (unsigned i = 0; i<cells_size_*4; i+=4) {
       int child_ptr = 16*cells_[i+1];
       int data_ptr = 16*cells_[i+2];
       int aux_data_ptr = 4*cells_[i+2];
-      if (child_ptr<0&&data_ptr>0){
+      if (child_ptr<0&&data_ptr>0) {
         vnl_vector_fixed<float, 16> cdata;
 
-        for(unsigned k = 0; k<16; ++k)
+        for (unsigned k = 0; k<16; ++k)
           cdata[k] = cell_data_[data_ptr+k];
-        tree_data_.push_back(cdata); 
+        tree_data_.push_back(cdata);
       }
-      if (child_ptr<0&&aux_data_ptr>0){
+      if (child_ptr<0&&aux_data_ptr>0) {
         vnl_vector_fixed<float, 4> caux_data;
-        for(unsigned k = 0; k<4; ++k)
+        for (unsigned k = 0; k<4; ++k)
           caux_data[k] = cell_aux_data_[aux_data_ptr+k];
-        tree_aux_data_.push_back(caux_data); 
+        tree_aux_data_.push_back(caux_data);
       }
     }
 }
@@ -670,14 +656,14 @@ int online_update_test_manager<T>::build_kernel_program(cl_program & program)
   if (!this->check_val(status,
                        CL_SUCCESS,
                        error_to_string(status)))
-    {
-      vcl_size_t len;
-      char buffer[2048];
-      clGetProgramBuildInfo(program, this->devices_[0],
-                            CL_PROGRAM_BUILD_LOG, sizeof(buffer), buffer, &len);
-      vcl_printf("%s\n", buffer);
-      return SDK_FAILURE;
-    }
+  {
+    vcl_size_t len;
+    char buffer[2048];
+    clGetProgramBuildInfo(program, this->devices_[0],
+                          CL_PROGRAM_BUILD_LOG, sizeof(buffer), buffer, &len);
+    vcl_printf("%s\n", buffer);
+    return SDK_FAILURE;
+  }
   else
     return SDK_SUCCESS;
 }
@@ -710,12 +696,14 @@ template<class T>
 bool online_update_test_manager<T>::set_root_level()
 {
   if (block_==NULL)
-    {
-      vcl_cout<<"Block is Missing "<<vcl_endl;
-      return false;
-    }
-  root_level_=block_->get_tree()->root_level();
-  return true;
+  {
+    vcl_cout<<"Block is Missing "<<vcl_endl;
+    return false;
+  }
+  else {
+    root_level_=block_->get_tree()->root_level();
+    return true;
+  }
 }
 
 template<class T>
@@ -741,45 +729,36 @@ bool online_update_test_manager<T>::release_root_level_buffers()
 {
   cl_int status;
   status = clReleaseMemObject(root_level_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (root_level_buf_)."))
-    return false;
-  return true;
+  return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (root_level_buf_).");
 }
 
 template<class T>
 bool online_update_test_manager<T>::set_input_view()
 {
-  bool good = true;
-  good = good && set_persp_camera();
-  good = good && set_input_image();
-  return good;
+  return set_persp_camera()
+      && set_input_image();
 }
 
 template<class T>
 bool online_update_test_manager<T>::clean_input_view()
 {
   bool good = true;
-  good = good && clean_persp_camera();
-  good = good && clean_input_image();
-  return good;
+  return clean_persp_camera()
+      && clean_input_image();
 }
 
 template<class T>
 bool online_update_test_manager<T>::set_input_view_buffers()
 {
-  bool good = true;
-  good = good && set_persp_camera_buffers();
-  good = good && set_input_image_buffers();
-  return good;
+  return set_persp_camera_buffers()
+      && set_input_image_buffers();
 }
 
 template<class T>
 bool online_update_test_manager<T>::release_input_view_buffers()
 {
-  bool good = true;
-  good = good && release_persp_camera_buffers();
-  good = good && release_input_image_buffers();
-  return good;
+  return release_persp_camera_buffers();
+      && release_input_image_buffers();
 }
 
 template<class T>
@@ -815,10 +794,10 @@ bool online_update_test_manager<T>::set_tree(tree_type* tree)
   cell_aux_data_=(cl_float *)boxm_ocl_utils<T>::alloc_aligned(data_input_.size(),sizeof(cl_float4),16);
 
   if (cells_== NULL||cell_data_ == NULL||cell_aux_data_==NULL)
-    {
-      vcl_cout << "Failed to allocate host memory. (tree input)\n";
-      return false;
-    }
+  {
+    vcl_cout << "Failed to allocate host memory. (tree input)\n";
+    return false;
+  }
 
   //: copy the data from vectors to arrays
   for (unsigned i = 0, j = 0; i<cell_input_.size()*4; i+=4, j++)
@@ -832,14 +811,13 @@ bool online_update_test_manager<T>::set_tree(tree_type* tree)
   unsigned cell_data_size=16;
   unsigned aux_cell_data_size=4;
   for (unsigned i = 0, j = 0; i<data_input_.size()*cell_data_size; i+=cell_data_size, j++)
-    {
-      for (unsigned k = 0; k<cell_data_size; ++k)
-        cell_data_[i+k]=data_input_[j][k];
+  {
+    for (unsigned k = 0; k<cell_data_size; ++k)
+      cell_data_[i+k]=data_input_[j][k];
 
-      for (unsigned k = 0; k<aux_cell_data_size; ++k)
-        cell_aux_data_[j*aux_cell_data_size+k]=0.0f;
-    }
-
+    for (unsigned k = 0; k<aux_cell_data_size; ++k)
+      cell_aux_data_[j*aux_cell_data_size+k]=0.0f;
+  }
 
   tree_bbox_=(cl_float *)boxm_ocl_utils<T>::alloc_aligned(1,sizeof(cl_float4),16);
 
@@ -918,37 +896,37 @@ bool online_update_test_manager<T>::set_persp_camera()
 {
   if (vpgl_perspective_camera<double>* pcam =
       dynamic_cast<vpgl_perspective_camera<double>*>(cam_.ptr()))
+  {
+    vnl_svd<double>* svd=pcam->svd();
+
+    vnl_matrix<double> Ut=svd->U().conjugate_transpose();
+    vnl_matrix<double> V=svd->V();
+    vnl_vector<double> Winv=svd->Winverse().diagonal();
+
+    persp_cam_=(cl_float *)boxm_ocl_utils<T>::alloc_aligned(3,sizeof(cl_float16),16);
+
+    int cnt=0;
+    for (unsigned i=0;i<Ut.rows();i++)
     {
-      vnl_svd<double>* svd=pcam->svd();
+      for (unsigned j=0;j<Ut.cols();j++)
+        persp_cam_[cnt++]=(cl_float)Ut(i,j);
 
-      vnl_matrix<double> Ut=svd->U().conjugate_transpose();
-      vnl_matrix<double> V=svd->V();
-      vnl_vector<double> Winv=svd->Winverse().diagonal();
-
-      persp_cam_=(cl_float *)boxm_ocl_utils<T>::alloc_aligned(3,sizeof(cl_float16),16);
-
-      int cnt=0;
-      for (unsigned i=0;i<Ut.rows();i++)
-        {
-          for (unsigned j=0;j<Ut.cols();j++)
-            persp_cam_[cnt++]=(cl_float)Ut(i,j);
-
-          persp_cam_[cnt++]=0;
-        }
-
-      for (unsigned i=0;i<V.rows();i++)
-        for (unsigned j=0;j<V.cols();j++)
-          persp_cam_[cnt++]=(cl_float)V(i,j);
-
-      for (unsigned i=0;i<Winv.size();i++)
-        persp_cam_[cnt++]=(cl_float)Winv(i);
-
-      vgl_point_3d<double> cam_center=pcam->get_camera_center();
-      persp_cam_[cnt++]=(cl_float)cam_center.x();
-      persp_cam_[cnt++]=(cl_float)cam_center.y();
-      persp_cam_[cnt++]=(cl_float)cam_center.z();
-      return true;
+      persp_cam_[cnt++]=0;
     }
+
+    for (unsigned i=0;i<V.rows();i++)
+      for (unsigned j=0;j<V.cols();j++)
+        persp_cam_[cnt++]=(cl_float)V(i,j);
+
+    for (unsigned i=0;i<Winv.size();i++)
+      persp_cam_[cnt++]=(cl_float)Winv(i);
+
+    vgl_point_3d<double> cam_center=pcam->get_camera_center();
+    persp_cam_[cnt++]=(cl_float)cam_center.x();
+    persp_cam_[cnt++]=(cl_float)cam_center.y();
+    persp_cam_[cnt++]=(cl_float)cam_center.z();
+    return true;
+  }
   else {
     vcl_cerr << "Error set_persp_camera() : unsupported camera type\n";
     return false;
@@ -996,15 +974,15 @@ bool online_update_test_manager<T>::set_input_image()
 
   // pad the image
   for (unsigned i=0;i<input_img_.ni();i++)
+  {
+    for (unsigned j=0;j<input_img_.nj();j++)
     {
-      for (unsigned j=0;j<input_img_.nj();j++)
-        {
-          image_[(j*wni_+i)*4]=input_img_(i,j);
-          image_[(j*wni_+i)*4+1]=0.0f;
-          image_[(j*wni_+i)*4+2]=1.0f;
-          image_[(j*wni_+i)*4+3]=0.0f;
-        }
+      image_[(j*wni_+i)*4]=input_img_(i,j);
+      image_[(j*wni_+i)*4+1]=0.0f;
+      image_[(j*wni_+i)*4+2]=1.0f;
+      image_[(j*wni_+i)*4+3]=0.0f;
     }
+  }
 
   img_dims_[0]=0;
   img_dims_[1]=0;
@@ -1012,11 +990,12 @@ bool online_update_test_manager<T>::set_input_image()
   img_dims_[3]=input_img_.nj();
 
   if (image_==NULL || img_dims_==NULL)
-    {
-      vcl_cerr<<"Failed allocation of image or image dimensions\n";
-      return false;
-    }
-  return true;
+  {
+    vcl_cerr<<"Failed allocation of image or image dimensions\n";
+    return false;
+  }
+  else
+    return true;
 }
 
 template<class T>
@@ -1056,9 +1035,7 @@ bool online_update_test_manager<T>::release_input_image_buffers()
     return false;
 
   status = clReleaseMemObject(img_dims_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (img_dims_buf_)."))
-    return false;
-  return true;
+  return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (img_dims_buf_).");
 }
 
 template<class T>
@@ -1092,15 +1069,14 @@ bool online_update_test_manager<T>::release_offset_buffers()
   status = clReleaseMemObject(offset_y_buf_);
   return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (offset_y_buf_).")==1;
 }
+
 template<class T>
 bool online_update_test_manager<T>::release_command_queue()
 {
-  cl_int status;
-  status = clReleaseCommandQueue(command_queue_);
-  if (this->check_val(status,CL_SUCCESS,"clReleaseCommandQueue failed.")!=1)
-    return false;
-return true;
+  cl_int status = clReleaseCommandQueue(command_queue_);
+  return this->check_val(status,CL_SUCCESS,"clReleaseCommandQueue failed.") == 1;
 }
+
 /*****************************************
  *macro for template instantiation
  *****************************************/
@@ -1108,4 +1084,3 @@ return true;
   template class online_update_test_manager<T >
 
 #endif    //online_update_test_manager_txx_
-
