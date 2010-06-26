@@ -14,9 +14,11 @@
 #include <vcl_cstring.h>
 
 
+#ifdef LIBAVFORMAT_BUILD
 #if LIBAVFORMAT_BUILD <= 4623
 // PIX_FMT_NONE is undefined in old versions of FFMPEG
 #define PIX_FMT_NONE PixelFormat(-1)
+#endif
 #endif
 
 #if LIBAVCODEC_BUILD >= ((52<<16)+(10<<8)+0)  // after ver 52.10.0
