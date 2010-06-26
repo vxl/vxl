@@ -22,11 +22,10 @@ vsl_b_write(vsl_b_ostream &os, const bsta_num_obs<comp_>& m)
 {
   comp_ n=static_cast<comp_>(m);
 
-  //vcl_cout<<sizeof(n)<<" "<<sizeof(m)<<":";
-  vsl_b_write(os,n);vcl_cout<<"";
+  //vcl_cout<<sizeof(n)<<' '<<sizeof(m)<<':';
+  vsl_b_write(os,n);
   //vsl_b_write(os,(int)1);
   vsl_b_write(os,m.num_observations);
-  
 }
 
 //: Binary load bsta_attributes from stream.
@@ -36,11 +35,9 @@ vsl_b_read(vsl_b_istream &is, bsta_num_obs<comp_>& m)
 {
   comp_ dstrb;
   vsl_b_read(is,dstrb);
-  int a;
- // vsl_b_read(is,a);
+  // int a; vsl_b_read(is,a);
   m = bsta_num_obs<comp_>(dstrb);
   vsl_b_read(is,m.num_observations);
-
 }
 
 //: Print summary
