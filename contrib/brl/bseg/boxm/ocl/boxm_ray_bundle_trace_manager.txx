@@ -170,7 +170,7 @@ bool boxm_ray_bundle_trace_manager<T>::setup_tree()
 
   unsigned cells_size=cell_input_.size();
   if (cells_size>this->image2d_max_width_)
-    cells_size=RoundUp(cells_size,this->image2d_max_width_);
+    cells_size=RoundUp((unsigned int)cells_size,this->image2d_max_width_);
   cells_ = NULL;
   cell_data_ = NULL;
 #if defined (_WIN32)

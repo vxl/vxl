@@ -165,8 +165,9 @@ bool boxm_ray_trace_manager<T>::setup_tree()
   // data as vnl_vector_fixed<float, 2>
 
   unsigned cells_size=cell_input_.size();
-  vcl_cout<<"Size of tree "<<cells_size*4*4/(1000000) << "MBytes\n"
-          <<"  Size of data "<<data_input_.size()*16*4/(1000000) << "MBytes"<<vcl_endl;
+  vcl_cout<<"Size of tree "<<(float)cells_size*4*4/(1024*1024)		 << "MBytes"<<vcl_endl
+          <<"Size of data "<<(float)data_input_.size()*16*4/(1024*1024) << "MBytes  "<<vcl_endl;
+
   if (cells_size>this->image2d_max_width_)
     cells_size=RoundUp(cells_size,this->image2d_max_width_);
   cells_ = NULL;

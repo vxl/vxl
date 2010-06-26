@@ -584,6 +584,7 @@ static void test_ray_bundle()
   if (good)ray_bundle_tests(test_driver);
   else { TEST("ray_bundle_test_driver", true, false); }
   ray_mgr->clean_tree_input_buffers();
+
 }
 
 TESTMAIN(test_ray_bundle);

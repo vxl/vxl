@@ -38,9 +38,9 @@ void boxm_ocl_utils<T>::pack_cell_data(boct_tree_cell<short, boxm_sample<BOXM_AP
   data[8]=appear.distribution(1).num_observations;
   data[9]=appear.distribution(2).mean();
   data[10]=vcl_sqrt(appear.distribution(2).var());
-  data[11]=appear.weight(2);
-  data[12]=appear.distribution(2).num_observations;
-  data[13]=appear.num_observations;
+  //data[11]=appear.weight(2);
+  data[11]=appear.distribution(2).num_observations;
+  data[12]=appear.num_observations;
 }
 
 template<class T>
@@ -65,7 +65,7 @@ void boxm_ocl_utils<T>::copy_to_arrays(boct_tree_cell<short, T >* cell_ptr,
 
 
   // convert the data to 16 vector size
-
+ if (cell_ptr->is_leaf()) {
   vnl_vector_fixed<float, 16> data;
   boxm_ocl_utils<T>::pack_cell_data(cell_ptr,data);
 
@@ -73,16 +73,16 @@ void boxm_ocl_utils<T>::copy_to_arrays(boct_tree_cell<short, T >* cell_ptr,
   cell_array[cell_input_ptr][2] = data_array.size();
   data_array.push_back(data);
   cell_array[cell_input_ptr][3] = cell_ptr->level();
+ }
   // if the cell has chidren then they must be copied
   if (!cell_ptr->is_leaf()) {
     // initialize data values to null
-    data_array[cell_array[cell_input_ptr][2]].fill(0.0);
+    //data_array[cell_array[cell_input_ptr][2]].fill(0.0);
     // create the children on the cell array
     int child_ptr = -1;
     split(cell_array, cell_input_ptr, child_ptr);
     cell_array[cell_input_ptr][1]=child_ptr;
-    boct_tree_cell<short,T >* children =
-      cell_ptr->children();
+    boct_tree_cell<short,T >* children = cell_ptr->children();
     for (unsigned i = 0; i<8; ++i) {
       boct_tree_cell<short, T >* child_cell_ptr = children + i;
       int child_cell_input_ptr = child_ptr +i;

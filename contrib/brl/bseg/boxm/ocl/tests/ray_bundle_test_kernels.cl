@@ -265,7 +265,11 @@ test_pre_infinity(__global int4* cells, __global float16* cell_data,
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
   cached_data[llid]=(float16)0.0f;
   cached_aux_data[llid]=(float4)0.0f;
+  cached_data[llid]=(float16)0.0f;
+
   barrier(CLK_LOCAL_MEM_FENCE);
+
+
   int result_ptr = 0;
   /* in this test the bundle must be 2x2 */
   /* setup example image array */
@@ -325,6 +329,11 @@ test_pre_infinity(__global int4* cells, __global float16* cell_data,
   }
   barrier(CLK_LOCAL_MEM_FENCE);
   cached_data[llid]=(float16)0.0f;
+
+  cached_data[llid]=(float16)0.0f;
+  barrier(CLK_LOCAL_MEM_FENCE);
+
+
   /* test where all rays lie in the same cell */
   if(llid == 0){
     for (unsigned i = 0; i<4; ++i)
@@ -359,6 +368,8 @@ test_pre_infinity(__global int4* cells, __global float16* cell_data,
   float len = 0.25f*(float)(llid +1);/*vary the seg_len to reveal bugs*/
   seg_len_obs(len, image_vect, ray_bundle_array, cached_aux_data);
   pre_infinity(len, image_vect, ray_bundle_array, cached_data,cached_aux_data);
+  barrier(CLK_LOCAL_MEM_FENCE);
+
   if(llid == 0){
     results[result_ptr++]= (int4)ret;
     for (unsigned i = 0; i<4; ++i)

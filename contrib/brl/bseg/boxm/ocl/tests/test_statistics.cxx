@@ -45,8 +45,8 @@ static void test_gaussian_pdf(stat_test_driver<T>& driver)
       for (vcl_size_t i= 0; i<size; i++)
         vcl_cout << "test_gaussian_result["<< i <<"](" << results[i] << ")\n";
   }
-  driver.clean_io_data();
-  driver.release_kernel();
+  //driver.clean_io_data();
+  //driver.release_kernel();
 }
 
 template <class T>
@@ -86,8 +86,8 @@ static void test_gaussian_3_mixture_pdf(stat_test_driver<T>& driver)
       for (vcl_size_t i= 0; i<size; i++)
         vcl_cout << "test_gaussian_3_mixture_result["<< i <<"](" << results[i] << ")\n";
   }
-  driver.clean_io_data();
-  driver.release_kernel();
+  //driver.clean_io_data();
+  //driver.release_kernel();
 }
 
 template <class T>
@@ -405,16 +405,16 @@ void stat_tests(stat_test_driver<T>& test_driver)
 
   //START TESTS
   //================================================================
-  test_gaussian_pdf(test_driver);
+ // test_gaussian_pdf(test_driver);
   test_gaussian_3_mixture_pdf(test_driver);
-  test_update_gauss(test_driver);
-  test_mixture_sort(test_driver);
-  test_insert(test_driver);
-  test_update_mix(test_driver);
+ // test_update_gauss(test_driver);
+ // test_mixture_sort(test_driver);
+ // test_insert(test_driver);
+ // test_update_mix(test_driver);
 
   //==============================================================
   //END STAT  TESTS
-  test_driver.cleanup_stat_test();
+  //test_driver.cleanup_stat_test();
 }
 
 static void test_statistics()

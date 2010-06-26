@@ -1,11 +1,11 @@
-// This is brl/bseg/boxm/ocl/pro/processes/boxm_ocl_render_expected_process.cxx
+// This is brl/bseg/boxm/ocl/pro/processes/boxm_ocl_render_all_blocks_expected_process.cxx
 #include <bprb/bprb_func_process.h>
 //:
 // \file
-// \brief A process for rendering an expected image using OpenCL GPU acceleration
+// \brief A process for rendering an expected image with all the blocks in the GPU
 //
-// \author Daniel Crispell
-// \date March 15, 2010
+// \author Vishal Jain
+// \date june 22, 2010
 // \verbatim
 //  Modifications
 //   <none yet>
@@ -22,15 +22,15 @@
 #include <vil/vil_convert.h>
 #include <vil/vil_save.h>
 
-namespace boxm_ocl_render_expected_process_globals
+namespace boxm_ocl_render_all_blocks_expected_process_globals
 {
   const unsigned n_inputs_ = 5;
   const unsigned n_outputs_ = 2;
 }
 
-bool boxm_ocl_render_expected_process_cons(bprb_func_process& pro)
+bool boxm_ocl_render_all_blocks_expected_process_cons(bprb_func_process& pro)
 {
-  using namespace boxm_ocl_render_expected_process_globals;
+  using namespace boxm_ocl_render_all_blocks_expected_process_globals;
   // process takes 5 inputs
   // input[0]: scene binary file
   // input[1]: camera
@@ -59,9 +59,9 @@ bool boxm_ocl_render_expected_process_cons(bprb_func_process& pro)
   return true;
 }
 
-bool boxm_ocl_render_expected_process(bprb_func_process& pro)
+bool boxm_ocl_render_all_blocks_expected_process(bprb_func_process& pro)
 {
-  using namespace boxm_ocl_render_expected_process_globals;
+  using namespace boxm_ocl_render_all_blocks_expected_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ){
     vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
@@ -91,7 +91,7 @@ bool boxm_ocl_render_expected_process(bprb_func_process& pro)
       {
         typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > type;
         boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
-        boxm_opencl_render_expected<BOXM_APM_MOG_GREY>(*scene, camera, expected, mask, use_black_background);
+		boxm_opencl_all_blocks_expected<BOXM_APM_MOG_GREY>(*scene, camera, expected, mask, use_black_background);
       }
       else
       {
@@ -99,9 +99,8 @@ bool boxm_ocl_render_expected_process(bprb_func_process& pro)
         return false;
       }
       img_mask = new vil_image_view<float>(mask);
-
       vil_image_view<unsigned char> *expected_byte = new vil_image_view<unsigned char>(expected.ni(),expected.nj(),expected.nplanes());
-      vil_convert_stretch_range_limited(expected,*expected_byte, 0.0f, 1.0f);
+      vil_convert_stretch_range_limited(expected,*expected_byte, 0.0f, 255.0f);
       img = expected_byte;
       break;
     }
@@ -114,7 +113,7 @@ bool boxm_ocl_render_expected_process(bprb_func_process& pro)
       {
         typedef boct_tree<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > type;
         boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
-        boxm_opencl_render_expected<BOXM_APM_SIMPLE_GREY>(*scene, camera, expected, mask, use_black_background);
+    	boxm_opencl_all_blocks_expected<BOXM_APM_SIMPLE_GREY>(*scene, camera, expected, mask, use_black_background);
       }
       else
       {
@@ -123,9 +122,8 @@ bool boxm_ocl_render_expected_process(bprb_func_process& pro)
       }
       //img = new vil_image_view<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype>(expected);
       img_mask = new vil_image_view<float>(mask);
-
       vil_image_view<unsigned char> *expected_byte = new vil_image_view<unsigned char>(expected.ni(),expected.nj(),expected.nplanes());
-      vil_convert_stretch_range_limited(expected,*expected_byte, 0.0f, 1.0f);
+      vil_convert_stretch_range_limited(expected,*expected_byte, 0.0f, 255.0f);
       img = expected_byte;
       break;
     }

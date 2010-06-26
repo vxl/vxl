@@ -13,6 +13,7 @@ IF(OPENCL_FOUND)
       boxm_ray_trace_manager.h boxm_ray_trace_manager.txx
       boxm_stack_ray_trace_manager.h boxm_stack_ray_trace_manager.txx
       boxm_ray_bundle_trace_manager.h boxm_ray_bundle_trace_manager.txx
+      boxm_render_image_manager.h boxm_render_image_manager.txx
       boxm_refine_manager.h boxm_refine_manager.txx
       boxm_ocl_refine_scene.h
       boxm_ocl_utils.h boxm_ocl_utils.txx boxm_ocl_utils.cxx

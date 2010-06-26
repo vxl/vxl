@@ -14,7 +14,7 @@
 #include "boxm_ray_trace_manager.h"
 #include <boxm/ocl/boxm_stack_ray_trace_manager.h>
 #include <boxm/ocl/boxm_ray_bundle_trace_manager.h>
-
+#include <boxm/ocl/boxm_render_image_manager.h>
 #include <vcl_where_root_dir.h>
 #include <vcl_iostream.h>
 
@@ -54,7 +54,10 @@ void boxm_opencl_render_expected(boxm_scene<boct_tree<short, boxm_sample<APM> > 
   vil_image_view<float> img1(ni,nj);
   // render the image using the opencl raytrace manager
   boxm_ray_trace_manager<boxm_sample<APM> >* ray_mgr = boxm_ray_trace_manager<boxm_sample<APM> >::instance();
+  vcl_cout<<"In expected image "<<vcl_endl;
+
   ray_mgr->init_raytrace(&scene, cam, ni, nj, source_fnames,0,0,0);
+
   ray_mgr->run();
 
   // extract expected image and mask from OpenCL output data
@@ -203,6 +206,60 @@ void boxm_opencl_ray_bundle_expected(boxm_scene<boct_tree<short, boxm_sample<APM
   normalize_expected_functor<obs_datatype> norm_fn(use_black_background);
   vil_transform2<float,obs_datatype, normalize_expected_functor<obs_datatype> >(mask,expected,norm_fn);
 }
+
+
+template <boxm_apm_type APM>
+void boxm_opencl_all_blocks_expected(boxm_scene<boct_tree<short, boxm_sample<APM> > > &scene,
+                                     vpgl_camera_double_sptr cam,
+                                     vil_image_view<typename boxm_apm_traits<APM>::obs_datatype> &expected,
+                                     vil_image_view<float> & mask,
+                                     bool use_black_background = false)
+{
+  // set up the application-specific function to be called at every cell along a ray
+
+  const unsigned int ni = expected.ni();
+  const unsigned int nj = expected.nj();
+  vil_image_view<unsigned char> img0(ni,nj);
+  vil_image_view<unsigned char> img1(ni,nj);
+  // render the image using the opencl raytrace manager
+  boxm_render_image_manager<boxm_sample<APM> >* ray_mgr = boxm_render_image_manager<boxm_sample<APM> >::instance();
+  int bundle_dim=8;
+  ray_mgr->set_bundle_ni(bundle_dim);
+  ray_mgr->set_bundle_nj(bundle_dim);
+  //ray_mgr->set_work_space_ni((int)RoundUp(ni,bundle_dim));
+  //ray_mgr->set_work_space_nj((int)RoundUp(nj,bundle_dim));
+  ray_mgr->init_ray_trace(&scene, cam, expected);
+
+  ray_mgr->run_scene();
+
+  // extract expected image and mask from OpenCL output data
+  cl_uint* results = ray_mgr->output_image();
+  if (!results) {
+    vcl_cerr << "Error : boxm_opencl_render_expected : ray_mgr->ray_results() returned NULL\n";
+    return;
+  }
+  cl_uint *results_p = results;
+  for (unsigned j = 0; j<nj; ++j)  {
+    for (unsigned i = 0; i<ni; ++i) {
+		unsigned int val=(unsigned int)(*(results_p++)) ;
+		val=val >> 24;
+        expected(i,j)=val; // alpha integral
+      //img1(i,j)=*(results_p++); // vis_inf
+
+      //expected(i,j) = *(results_p++); // expected intensity
+      //mask(i,j) = *(results_p++); // 1 - vis_inf
+    }
+  }
+
+#if 0 //images for debuggin
+  vil_save(img0,"f:/apl/img0.tiff");
+  vil_save(img1,"f:/apl/img1.tiff");
+  vil_save(expected,"f:/apl/img2.tiff");
+  vil_save(mask,"f:/apl/img3.tiff");
+#endif
+
+}
+
 
 #endif
 
