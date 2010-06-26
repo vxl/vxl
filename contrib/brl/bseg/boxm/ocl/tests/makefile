@@ -5,6 +5,7 @@ SOURCES += open_cl_test_data.cxx
 MANPAGE_SOURCES += octree_test_driver.txx
 MANPAGE_SOURCES += ray_bundle_test_driver.txx
 MANPAGE_SOURCES += stat_test_driver.txx
+MANPAGE_SOURCES += online_update_test_manager.txx
 
 TESTS += test_octree.cxx
 TESTS += test_expected_image.cxx
