@@ -146,6 +146,18 @@ SOURCE=.\Templates/stat_test_driver+float-.cxx
 SOURCE=.\Templates/stat_test_driver+boxm_sample+BOXM_APM_MOG_GREY--.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/bocl_manager+online_update_test_manager+float--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/online_update_test_manager+boxm_sample+BOXM_APM_MOG_GREY--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bocl_manager+online_update_test_manager+boxm_sample+BOXM_APM_MOG_GREY---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/online_update_test_manager+float-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group
@@ -171,6 +183,12 @@ SOURCE=.\stat_test_driver.h
 # End Source File
 # Begin Source File
 SOURCE=.\stat_test_driver.txx
+# End Source File
+# Begin Source File
+SOURCE=.\online_update_test_manager.txx
+# End Source File
+# Begin Source File
+SOURCE=.\online_update_test_manager.h
 # End Source File
 # End Group
 # End Target
