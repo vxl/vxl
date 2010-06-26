@@ -46,7 +46,7 @@ class vidl1_ffmpeg_codec : public vidl1_codec
   //-----------------------------------------------------
   virtual bool probe(vcl_string const& fname);
   virtual vidl1_codec_sptr load(vcl_string const& fname, char mode = 'r' );
-  virtual bool save(vidl1_movie* movie, vcl_string const& fname) { return false; }
+  virtual bool save(vidl1_movie* /*movie*/, vcl_string const& /*fname*/) { return false; }
   virtual vcl_string type() const { return "FFMPEG"; }
   virtual vidl1_ffmpeg_codec* castto_vidl1_ffmpeg_codec() { return this; }
 
