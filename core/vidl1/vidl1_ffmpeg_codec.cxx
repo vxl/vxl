@@ -88,7 +88,7 @@ bool vidl1_ffmpeg_codec::probe(vcl_string const& fname)
 #endif
   char buf[100];
   avcodec_string(buf, 100, enc, 0);
-#if DEBUG
+#ifdef DEBUG
   vcl_cout<< "ffmpeg codec: " << buf<<vcl_endl;
 #endif
   AVCodec* codec = avcodec_find_decoder(enc->codec_id);
@@ -345,7 +345,7 @@ vidl1_ffmpeg_codec::count_frames() const
                              * vid_str_->time_base.num / vid_str_->time_base.den );
 #endif
 
-#if DEBUG
+#ifdef DEBUG
     vcl_cout << "estimated "<<cnt+1<<" frames"<<vcl_endl;
 #endif
     return cnt+1;
@@ -368,7 +368,8 @@ vidl1_ffmpeg_codec::count_frames() const
     if (pkt.stream_index==vid_index_) {
       if ( enc->codec_id == CODEC_ID_RAWVIDEO ) {
         got_picture = 1;
-      } else {
+      }
+      else {
         avcodec_decode_video( enc,
                               frame_, &got_picture,
                               pkt.data, pkt.size );
@@ -385,7 +386,7 @@ vidl1_ffmpeg_codec::count_frames() const
   if (got_picture)
     ++frame_count;
 
-#if DEBUG
+#ifdef DEBUG
   vcl_cout << "counted "<<frame_count<<" frames"<<vcl_endl;
 #endif
 
@@ -435,7 +436,8 @@ vidl1_ffmpeg_codec::advance() const
                         codec->height );
         frame_->pict_type = FF_I_TYPE;
         got_picture = 1;
-      } else {
+      }
+      else {
         avcodec_decode_video( codec,
                               frame_, &got_picture,
                               pkt.data, pkt.size );
