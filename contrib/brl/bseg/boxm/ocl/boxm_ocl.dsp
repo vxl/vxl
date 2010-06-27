@@ -208,6 +208,24 @@ SOURCE=.\Templates/bocl_manager+boxm_ray_bundle_trace_manager+boxm_sample+BOXM_A
 # Begin Source File
 SOURCE=.\Templates/bocl_manager+boxm_refine_manager+float--.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_render_image_manager+boxm_sample+BOXM_APM_MOG_GREY--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bocl_manager+boxm_render_image_manager+float--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_render_image_manager+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_render_image_manager+boxm_sample+BOXM_APM_SIMPLE_GREY--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bocl_manager+boxm_render_image_manager+boxm_sample+BOXM_APM_MOG_GREY---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bocl_manager+boxm_render_image_manager+boxm_sample+BOXM_APM_SIMPLE_GREY---.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -252,6 +270,12 @@ SOURCE=.\boxm_ray_bundle_trace_manager.txx
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_refine_manager.txx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_render_image_manager.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_render_image_manager.txx
 # End Source File
 # End Group
 # End Target
