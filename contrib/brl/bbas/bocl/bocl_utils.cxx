@@ -3,6 +3,8 @@
 
 vcl_size_t RoundUp(int global_size,int group_size) 
 {
+	if(group_size==0)
+		return global_size;
     int r = global_size % group_size;
     if(r == 0) 
     {

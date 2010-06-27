@@ -50,7 +50,8 @@ IF( BUILD_GEL )
 ENDIF( BUILD_GEL )
 
 # multiview library
-SUBDIRS(bmvl)
+# test if bmvl is used by anyone prior to removal
+#SUBDIRS(bmvl)
 
 # standalone executables
 SUBDIRS(bexe)
