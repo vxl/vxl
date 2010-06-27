@@ -4,6 +4,7 @@
 #include <boxm/ocl/boxm_ray_bundle_trace_manager.h>
 #include <boxm/ocl/boxm_ray_trace_manager.h>
 #include <boxm/ocl/boxm_refine_manager.h>
+#include <boxm/ocl/boxm_render_image_manager.h>
 #include <boxm/ocl/boxm_stack_ray_trace_manager.h>
 #include <boxm/ocl/boxm_stat_manager.h>
 
