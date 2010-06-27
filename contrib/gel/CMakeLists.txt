@@ -51,11 +51,5 @@ ENDIF(BUILD_OXL)
 # coordinate systems add-on in mrc/vcsl
 SUBDIRS(mrc)
 
-# Experiments with the vidl library and vgui (JLM)
-IF (BUILD_UNMAINTAINED_LIBRARIES OR BUILD_FOR_VXL_DASHBOARD)
-# TEST IF ANYONE USES jvid
-#  SUBDIRS(jvid)
-ENDIF (BUILD_UNMAINTAINED_LIBRARIES OR BUILD_FOR_VXL_DASHBOARD)
-
 # Intensity face attributes (MPP)
 SUBDIRS(vifa)
