@@ -18,6 +18,7 @@ MANPAGE_SOURCES += boxm_ocl_refine_scene.h
 MANPAGE_SOURCES += boxm_ray_bundle_trace_manager.txx
 MANPAGE_SOURCES += boxm_refine_manager.txx
 SOURCES += update_main.cl
+MANPAGE_SOURCES += boxm_render_image_manager.txx
 
 SUBDIRS += pro exe
 
