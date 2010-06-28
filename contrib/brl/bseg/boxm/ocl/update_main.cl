@@ -178,11 +178,23 @@ update_aux( __global int * root_level,  // level of the root.
   }
 }
 
-#if 0
+
 // This function is to update the data
 __kernel
 void
-update_main()
+update_main(__global float16 * sample_array,
+            __global float4  * aux_data_array,
+            __global uint * data_size)
 {
+    int gid=get_global_id(0);
+    int datasize= (*data_size);
+    if(gid<datasize)
+    {   
+
+        float16 data=sample_array[gid];
+        float4 aux_data=aux_data_array[gid];
+        update_cell(&data,aux_data,2.5f,0.15f,0.09f);
+        sample_array[gid]=data;
+    }
+
 }
-#endif

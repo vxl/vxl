@@ -384,6 +384,7 @@ void seg_len_obs(float seg_len, __local float4* image_vect,
   /* linear thread id */
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
   /* limit access to threads that do not own a connected region */
+
   if (ray_bundle_array[llid].x!=llid)
     {
       /* store seg_len in the corresponding aux data slot to be accessed 
@@ -443,8 +444,8 @@ void pre_infinity(float seg_len, __local float4* image_vect,
     {
       /* if total length of rays is too small, do nothing */
       temp1 = cached_aux_data[llid].x; /* length sum */
-      if (temp1<1.0e-4f)
-        return;
+      if (temp1>1.0e-4f)
+      {
       /* The mean intensity for the cell */
       temp2 = cached_aux_data[llid].y/temp1; /* mean observation */
       temp1 = gauss_3_mixture_prob_density(temp2,
@@ -461,6 +462,7 @@ void pre_infinity(float seg_len, __local float4* image_vect,
                                            );/* PI */
       /* temporary slot to store PI*/
       cached_data[llid].se = temp1;
+      }
     }
   barrier(CLK_LOCAL_MEM_FENCE); /*wait for all threads to complete */
 
@@ -624,4 +626,31 @@ void bayes_ratio(float seg_len, __local float4* image_vect,
     }
   }
   barrier(CLK_LOCAL_MEM_FENCE); /*wait for all threads to complete */
+}
+
+
+
+void update_cell(float16 * data, float4 aux_data,float t_match, float init_sigma, float min_sigma)
+{
+    if (aux_data.x>1e-10)
+    {
+        float mu0 = (*data).s1, sigma0 = (*data).s2, w0 = (*data).s3;
+        float mu1 = (*data).s5, sigma1 = (*data).s6, w1 = (*data).s7;
+        float mu2 = (*data).s9, sigma2 = (*data).sa, w2 = 1-(*data).s3-(*data).s7;  
+        short Nobs0 = (short)(*data).s4, Nobs1 = (short)(*data).s8, Nobs2 = (short)(*data).sb; 
+        float Nobs_mix = (*data).sc;
+
+        update_gauss_3_mixture(aux_data.y/aux_data.x,
+                               aux_data.w/aux_data.x,t_match,
+                               init_sigma,min_sigma,
+                               &mu0,&sigma0,&w0,&Nobs0,
+                               &mu1,&sigma1,&w1,&Nobs1,
+                               &mu2,&sigma2,&w2,&Nobs2,
+                               &Nobs_mix);
+        (*data).s0*=aux_data.z/aux_data.x;
+        (*data).s1=mu0; (*data).s2=sigma0, (*data).s3=w0;(*data).s4=(float)Nobs0;
+        (*data).s5=mu1; (*data).s6=sigma1, (*data).s7=w1;(*data).s8=(float)Nobs1;
+        (*data).s9=mu2; (*data).sa=sigma2, (*data).sb=(float)Nobs2;
+        (*data).sc=(float)Nobs_mix;
+    }
 }
