@@ -45,7 +45,7 @@ template <class T> static void set_data(boct_tree<short, T >* tree)
 {}
 
 template <>
-static void set_data(boct_tree<short,float >* tree)
+void set_data(boct_tree<short,float >* tree)
 {
   vcl_vector<boct_tree_cell<short, float >* > tleaves;
   tleaves = tree->leaf_cells();
@@ -63,7 +63,7 @@ static void set_data(boct_tree<short,float >* tree)
   }
 };
 template <>
-static void set_data(boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> >* tree)
+void set_data(boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> >* tree)
 {
   typedef bsta_num_obs<bsta_gauss_f1> gauss_type_f1;
   typedef bsta_num_obs<bsta_mixture_fixed<gauss_type_f1, 3> > mix_type;
