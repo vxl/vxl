@@ -162,6 +162,17 @@ void bwm_tableau_video::extract_neighborhoods()
     }
   os.close();
 }
+void bwm_tableau_video::set_world_pt()
+{
+  vgui_dialog dlg("3D World Point");
+  double lat, lon, elev;
+  dlg.field("Lat:",lat);
+  dlg.field("Lon:",lon);
+  dlg.field("Elev:",elev);
+  if (!dlg.ask())
+    return;
+  my_observer_->set_world_pt(lat,lon,elev);
+}
 
 void bwm_tableau_video::extract_histograms()
 {

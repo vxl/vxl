@@ -44,6 +44,7 @@ class bwm_tableau_video : public bwm_tableau_cam
   void extract_world_plane();
   void extract_neighborhoods();
   void extract_histograms();
+  void set_world_pt();
   void set_corrs(vcl_vector<bwm_video_corr_sptr> const& corrs) { my_observer_->set_corrs(corrs); }
 protected:
   bwm_observer_video* my_observer_;
