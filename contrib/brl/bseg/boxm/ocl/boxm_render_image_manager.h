@@ -28,12 +28,12 @@ class boxm_render_image_manager : public bocl_manager<boxm_render_image_manager<
 
   boxm_render_image_manager() :
     block_ptrs_(0),
-	scene_dims_(0),
-	block_dims_(0),
-	scene_x_(0),scene_y_(0),scene_z_(0),
+    scene_dims_(0),
+    block_dims_(0),
+    scene_x_(0),scene_y_(0),scene_z_(0),
     cells_(0),
     cell_data_(0),
-	cell_alpha_(0),
+    cell_alpha_(0),
     root_level_(0),
     img_dims_(0),
     offset_y_(0),
@@ -233,8 +233,6 @@ class boxm_render_image_manager : public bocl_manager<boxm_render_image_manager<
 
   vcl_size_t globalThreads[2];
   vcl_size_t localThreads[2] ;
-
-
 };
 
 #endif // boxm_render_image_manager_h_

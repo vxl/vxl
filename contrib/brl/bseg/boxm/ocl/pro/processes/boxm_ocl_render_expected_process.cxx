@@ -86,7 +86,7 @@ bool boxm_ocl_render_expected_process(bprb_func_process& pro)
     {
       vil_image_view<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> expected(ni,nj);
       expected.fill(0.0);
-	  vil_image_view<float> mask(ni,nj);
+      vil_image_view<float> mask(ni,nj);
       if (!scene_ptr->multi_bin())
       {
         typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > type;
@@ -108,7 +108,7 @@ bool boxm_ocl_render_expected_process(bprb_func_process& pro)
     case BOXM_APM_SIMPLE_GREY:
     {
       vil_image_view<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype> expected(ni,nj);
-	  expected.fill(0.0);
+      expected.fill(0.0);
       vil_image_view<float> mask(ni,nj);
       if (!scene_ptr->multi_bin())
       {

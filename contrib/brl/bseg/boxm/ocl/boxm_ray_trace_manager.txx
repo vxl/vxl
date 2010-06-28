@@ -71,7 +71,7 @@ bool boxm_ray_trace_manager<T>::init_raytrace(boxm_scene<boct_tree<short,T > > *
     return false;
   }
   return this->setup_image_cam_arrays()
-     &&  this->setup_work_image();
+      && this->setup_work_image();
 }
 
 template<class T>
@@ -165,8 +165,8 @@ bool boxm_ray_trace_manager<T>::setup_tree()
   // data as vnl_vector_fixed<float, 2>
 
   unsigned cells_size=cell_input_.size();
-  vcl_cout<<"Size of tree "<<(float)cells_size*4*4/(1024*1024)		 << "MBytes"<<vcl_endl
-          <<"Size of data "<<(float)data_input_.size()*16*4/(1024*1024) << "MBytes  "<<vcl_endl;
+  vcl_cout<<"Size of tree "<<(float)cells_size*4*4/(1024*1024)          << "MBytes\n"
+          <<"Size of data "<<(float)data_input_.size()*16*4/(1024*1024) << "MBytes"<<vcl_endl;
 
   if (cells_size>this->image2d_max_width_)
     cells_size=RoundUp(cells_size,this->image2d_max_width_);
@@ -677,7 +677,7 @@ int boxm_ray_trace_manager<T>::clean_tree_input_buffers()
                        CL_SUCCESS,
                        "clReleaseMemObject failed (input_data_buf_)."))
     return SDK_FAILURE;
- status = clReleaseMemObject(nlevels_buf_);
+  status = clReleaseMemObject(nlevels_buf_);
   if (!this->check_val(status,
     CL_SUCCESS,
     "clReleaseMemObject failed (nlevels_buf_)."))
@@ -1198,7 +1198,7 @@ bool boxm_ray_trace_manager<T>::run_block()
 #if 0
   status = clSetKernelArg(kernel_,13,sizeof(cl_float4)*this->group_size(),0);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local roi)"))
-   return SDK_FAILURE;
+    return SDK_FAILURE;
   status = clSetKernelArg(kernel_,13,sizeof(cl_int)*this->group_size()*(this->num_levels()),0);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local stack)"))
     return SDK_FAILURE;

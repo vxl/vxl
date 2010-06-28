@@ -1,4 +1,4 @@
-// This is brl/bseg/boxm/ocl/pro/processes/boxm_ocl_render_all_blocks_expected_process.cxx
+// This is brl/bseg/boxm/ocl/pro/processes/boxm_ocl_ray_bundle_all_blocks_expected_process.cxx
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -86,12 +86,12 @@ bool boxm_ocl_render_all_blocks_expected_process(bprb_func_process& pro)
     {
       vil_image_view<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> expected(ni,nj);
       expected.fill(0.0);
-	  vil_image_view<float> mask(ni,nj);
+      vil_image_view<float> mask(ni,nj);
       if (!scene_ptr->multi_bin())
       {
         typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > type;
         boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
-		boxm_opencl_all_blocks_expected<BOXM_APM_MOG_GREY>(*scene, camera, expected, mask, use_black_background);
+        boxm_opencl_all_blocks_expected<BOXM_APM_MOG_GREY>(*scene, camera, expected, mask, use_black_background);
       }
       else
       {
@@ -107,13 +107,13 @@ bool boxm_ocl_render_all_blocks_expected_process(bprb_func_process& pro)
     case BOXM_APM_SIMPLE_GREY:
     {
       vil_image_view<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype> expected(ni,nj);
-	  expected.fill(0.0);
+      expected.fill(0.0);
       vil_image_view<float> mask(ni,nj);
       if (!scene_ptr->multi_bin())
       {
         typedef boct_tree<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > type;
         boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
-    	boxm_opencl_all_blocks_expected<BOXM_APM_SIMPLE_GREY>(*scene, camera, expected, mask, use_black_background);
+        boxm_opencl_all_blocks_expected<BOXM_APM_SIMPLE_GREY>(*scene, camera, expected, mask, use_black_background);
       }
       else
       {

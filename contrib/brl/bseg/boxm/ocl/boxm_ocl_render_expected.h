@@ -241,9 +241,9 @@ void boxm_opencl_all_blocks_expected(boxm_scene<boct_tree<short, boxm_sample<APM
   cl_uint *results_p = results;
   for (unsigned j = 0; j<nj; ++j)  {
     for (unsigned i = 0; i<ni; ++i) {
-		unsigned int val=(unsigned int)(*(results_p++)) ;
-		val=val >> 24;
-        expected(i,j)=val; // alpha integral
+      unsigned int val=(unsigned int)(*(results_p++)) ;
+      val=val >> 24;
+      expected(i,j)=val; // alpha integral
       //img1(i,j)=*(results_p++); // vis_inf
 
       //expected(i,j) = *(results_p++); // expected intensity
@@ -257,9 +257,7 @@ void boxm_opencl_all_blocks_expected(boxm_scene<boct_tree<short, boxm_sample<APM
   vil_save(expected,"f:/apl/img2.tiff");
   vil_save(mask,"f:/apl/img3.tiff");
 #endif
-
 }
 
 
 #endif
-

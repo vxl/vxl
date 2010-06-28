@@ -16,8 +16,8 @@
 //put tree structure and data into arrays
 template<class T>
 bool boxm_render_image_manager<T>::init_ray_trace(boxm_scene<boct_tree<short,T > > *scene,
-                                               vpgl_camera_double_sptr cam,
-                                               vil_image_view<float> &obs)
+                                                  vpgl_camera_double_sptr cam,
+                                                  vil_image_view<float> &obs)
 {
   scene_ = scene;
   cam_ = cam;
@@ -25,17 +25,15 @@ bool boxm_render_image_manager<T>::init_ray_trace(boxm_scene<boct_tree<short,T >
   vcl_string extensions_supported((char*)this->extensions_supported_);
   vcl_size_t found=extensions_supported.find("gl_sharing");
 
-  
-
-  //: Code for Pass_0
+  // Code for Pass_0
   if (!this->load_kernel_source(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                    +"/contrib/brl/bseg/boxm/ocl/octree_library_functions.cl") ||
+                                +"/contrib/brl/bseg/boxm/ocl/octree_library_functions.cl") ||
       !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
                                     +"/contrib/brl/bseg/boxm/ocl/backproject.cl")||
       !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-									+"/contrib/brl/bseg/boxm/ocl/expected_functor.cl")||
+                                    +"/contrib/brl/bseg/boxm/ocl/expected_functor.cl")||
       !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-									+"/contrib/brl/bseg/boxm/ocl/statistics_library_functions.cl")||
+                                    +"/contrib/brl/bseg/boxm/ocl/statistics_library_functions.cl")||
       !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
                                     +"/contrib/brl/bseg/boxm/ocl/ray_bundle_library_functions.cl")||
       !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
@@ -60,24 +58,24 @@ bool boxm_render_image_manager<T>::set_kernel()
 
   return true;
 }
+
 template<class T>
 bool boxm_render_image_manager<T>::release_kernel()
 {
-	if(kernel_)
-	{
-		cl_int status = clReleaseKernel(kernel_);
-		if (!this->check_val(status,CL_SUCCESS,error_to_string(status))) 
-			return false;
-
-	}
-	return true;
-
+  if (kernel_)
+  {
+    cl_int status = clReleaseKernel(kernel_);
+    if (!this->check_val(status,CL_SUCCESS,error_to_string(status)))
+      return false;
+  }
+  return true;
 }
+
 template<class T>
 bool boxm_render_image_manager<T>::set_args()
 {
-	if(!kernel_)
-		return false;
+  if (!kernel_)
+    return false;
   cl_int status = CL_SUCCESS;
   int i=0;
   status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&scene_dims_buf_);
@@ -85,14 +83,14 @@ bool boxm_render_image_manager<T>::set_args()
     return SDK_FAILURE;
   status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&scene_origin_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (scene_orign_buf_)"))
-	  return SDK_FAILURE;
+      return SDK_FAILURE;
   status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&block_dims_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (block_dims_buf_)"))
     return SDK_FAILURE;
   status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&block_ptrs_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (block_ptrs_buf_)"))
     return SDK_FAILURE;
-  // root level buffer	
+  // root level buffer
   status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&root_level_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (root_level_buf_)"))
     return SDK_FAILURE;
@@ -106,7 +104,7 @@ bool boxm_render_image_manager<T>::set_args()
     return SDK_FAILURE;
   status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&cell_alpha_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_data_buf_)"))
-	  return SDK_FAILURE;
+      return SDK_FAILURE;
 
   // camera buffer
   status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&persp_cam_buf_);
@@ -127,7 +125,8 @@ bool boxm_render_image_manager<T>::set_args()
   status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&image_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (input_image)"))
     return SDK_FAILURE;
-
+  else
+    return SDK_SUCCESS;
 }
 
 template<class T>
@@ -136,21 +135,21 @@ bool boxm_render_image_manager<T>::set_commandqueue()
   cl_int status = CL_SUCCESS;
   command_queue_ = clCreateCommandQueue(this->context(),this->devices()[0],CL_QUEUE_PROFILING_ENABLE,&status);
   if (!this->check_val(status,CL_SUCCESS,"Falied in command queue creation" + error_to_string(status)))
-	  return false;
+    return false;
 
   return true;
 }
+
 template<class T>
 bool boxm_render_image_manager<T>::release_commandqueue()
 {
-	if(command_queue_)
-	{
-		cl_int status = clReleaseCommandQueue(command_queue_);
-		if (!this->check_val(status,CL_SUCCESS,"clReleaseCommandQueue failed."))
-			return false;
-	}
-	return true;
-
+  if (command_queue_)
+  {
+    cl_int status = clReleaseCommandQueue(command_queue_);
+    if (!this->check_val(status,CL_SUCCESS,"clReleaseCommandQueue failed."))
+      return false;
+  }
+  return true;
 }
 
 template<class T>
@@ -161,7 +160,7 @@ bool boxm_render_image_manager<T>::set_workspace()
   // check the local memeory
   cl_ulong used_local_memory;
   status = clGetKernelWorkGroupInfo(this->kernel(),this->devices()[0],
-									CL_KERNEL_LOCAL_MEM_SIZE,
+                                    CL_KERNEL_LOCAL_MEM_SIZE,
                                     sizeof(cl_ulong),&used_local_memory,NULL);
   if (!this->check_val(status,CL_SUCCESS,"clGetKernelWorkGroupInfo CL_KERNEL_LOCAL_MEM_SIZE failed."))
     return 0;
@@ -184,10 +183,10 @@ bool boxm_render_image_manager<T>::set_workspace()
     vcl_cout << "Unsupported: Insufficient local memory on device.\n";
     return 0;
   }
-
-  return 1;
-
+  else
+    return 1;
 }
+
 template<class T>
 bool boxm_render_image_manager<T>::run()
 {
@@ -245,12 +244,13 @@ bool boxm_render_image_manager<T>::run_scene()
   // release the command Queue
 
   this->release_kernel();
-  vcl_cout << "Timing Analysis "<<vcl_endl
-           << "==============="<<vcl_endl;
-//         <<"openCL Running time "<<gpu_time_<<" ms"<<vcl_endl
-//           << "Running block "<<total_gpu_time/1000<<'s'<<vcl_endl
-//           << "total block loading time = " << total_load_time << 's' << vcl_endl
-//           << "total block processing time = " << total_raytrace_time << 's' << vcl_endl;
+  vcl_cout << "Timing Analysis\n"
+           << "===============\n"
+  //       <<"openCL Running time "<<gpu_time_<<" ms\n"
+  //       << "Running block "<<total_gpu_time/1000<<"s\n"
+  //       << "total block loading time = " << total_load_time << "s\n"
+  //       << "total block processing time = " << total_raytrace_time << 's' << vcl_endl
+  ;
   return true;
 }
 
@@ -355,44 +355,44 @@ void boxm_render_image_manager<T>::print_tree()
       vcl_cout << ")\n";
     }
 }
+
 template<class T>
 void boxm_render_image_manager<T>::print_image()
 {
-	vcl_cout << "IMage Output\n";
-	if (image_)
-	{
-		vcl_cout<<"Plane 0"<<vcl_endl;
-		for (unsigned j=0;j<img_dims_[3];j++)
-		{
-			for (unsigned i=0;i<img_dims_[2];i++)
-				vcl_cout<<image_[(j*img_dims_[2]+i)*4]<<' ';
-			vcl_cout<<vcl_endl;
-		}
-		vcl_cout<<"Plane 1"<<vcl_endl;
-		for (unsigned j=0;j<img_dims_[3];j++)
-		{
-			for (unsigned i=0;i<img_dims_[2];i++)
-				vcl_cout<<image_[(j*img_dims_[2]+i)*4+1]<<' ';
-			vcl_cout<<vcl_endl;
-		}
-		vcl_cout<<"Plane 2"<<vcl_endl;
-		for (unsigned j=0;j<img_dims_[3];j++)
-		{
-			for (unsigned i=0;i<img_dims_[2];i++)
-				vcl_cout<<image_[(j*img_dims_[2]+i)*4+2]<<' ';
-			vcl_cout<<vcl_endl;
-		}
-		vcl_cout<<"Plane 3"<<vcl_endl;
-		for (unsigned j=0;j<img_dims_[3];j++)
-		{
-			for (unsigned i=0;i<img_dims_[2];i++)
-				vcl_cout<<image_[(j*img_dims_[2]+i)*4+3]<<' ';
-			vcl_cout<<vcl_endl;
-		}
-	}
-
-
+  vcl_cout << "IMage Output\n";
+  if (image_)
+  {
+    vcl_cout<<"Plane 0"<<vcl_endl;
+    for (unsigned j=0;j<img_dims_[3];j++)
+    {
+      for (unsigned i=0;i<img_dims_[2];i++)
+        vcl_cout<<image_[(j*img_dims_[2]+i)*4]<<' ';
+      vcl_cout<<vcl_endl;
+    }
+    vcl_cout<<"Plane 1"<<vcl_endl;
+    for (unsigned j=0;j<img_dims_[3];j++)
+    {
+      for (unsigned i=0;i<img_dims_[2];i++)
+        vcl_cout<<image_[(j*img_dims_[2]+i)*4+1]<<' ';
+      vcl_cout<<vcl_endl;
+    }
+    vcl_cout<<"Plane 2"<<vcl_endl;
+    for (unsigned j=0;j<img_dims_[3];j++)
+    {
+      for (unsigned i=0;i<img_dims_[2];i++)
+        vcl_cout<<image_[(j*img_dims_[2]+i)*4+2]<<' ';
+      vcl_cout<<vcl_endl;
+    }
+    vcl_cout<<"Plane 3"<<vcl_endl;
+    for (unsigned j=0;j<img_dims_[3];j++)
+    {
+      for (unsigned i=0;i<img_dims_[2];i++)
+        vcl_cout<<image_[(j*img_dims_[2]+i)*4+3]<<' ';
+      vcl_cout<<vcl_endl;
+    }
+  }
 }
+
 template<class T>
 bool boxm_render_image_manager<T>::clean_update()
 {
@@ -454,47 +454,41 @@ int boxm_render_image_manager<T>::build_kernel_program(cl_program & program)
 template<class T>
 bool boxm_render_image_manager<T>::set_scene_data()
 {
-	bool good = true;
-	good = good && set_scene_dims();
-	good = good && set_scene_origin();
-	good = good && set_block_dims();
-	good = good && set_block_ptrs();
-	return good && set_root_level();
+    return set_scene_dims()
+        && set_scene_origin()
+        && set_block_dims()
+        && set_block_ptrs()
+        && set_root_level();
 }
 
 template<class T>
 bool boxm_render_image_manager<T>::clean_scene_data()
 {
- 	bool good = true;
-	good = good && clean_scene_dims();
-			good = good && clean_scene_origin();
-	good = good && clean_block_dims();
-	good = good && clean_block_ptrs();
-	return good && clean_root_level(); 
+    return clean_scene_dims()
+        && clean_scene_origin()
+        && clean_block_dims()
+        && clean_block_ptrs()
+        && clean_root_level();
 }
 
 template<class T>
 bool boxm_render_image_manager<T>::set_scene_data_buffers()
 {
-  	bool good = true;
-	good = good && set_scene_dims_buffers();
-	good = good && set_scene_origin_buffers();
-	good = good && set_block_dims_buffers();
-	good = good && set_block_ptrs_buffers();
-	return good && set_root_level_buffers();
+    return set_scene_dims_buffers()
+        && set_scene_origin_buffers()
+        && set_block_dims_buffers()
+        && set_block_ptrs_buffers()
+        && set_root_level_buffers();
 }
 
 template<class T>
 bool boxm_render_image_manager<T>::release_scene_data_buffers()
 {
- 
-	bool good = true;
-	good = good && release_scene_dims_buffers();
-	good = good && release_scene_origin_buffers();
-	good = good && release_block_dims_buffers();
-	good = good && release_block_ptrs_buffers();
-	return good && release_root_level_buffers();
-
+    return release_scene_dims_buffers()
+        && release_scene_origin_buffers()
+        && release_block_dims_buffers()
+        && release_block_ptrs_buffers()
+        && release_root_level_buffers();
 }
 
 template<class T>
@@ -515,6 +509,7 @@ bool boxm_render_image_manager<T>::clean_root_level()
   root_level_=0;
   return true;
 }
+
 template<class T>
 bool boxm_render_image_manager<T>::set_scene_origin()
 {
@@ -534,16 +529,18 @@ bool boxm_render_image_manager<T>::set_scene_origin()
 
   return true;
 }
+
 template<class T>
 bool boxm_render_image_manager<T>::set_scene_origin_buffers()
 {
   cl_int status;
   scene_origin_buf_ = clCreateBuffer(this->context_,
-                                   CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
-                                   4*sizeof(cl_float),
-                                   scene_origin_,&status);
+                                     CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
+                                     4*sizeof(cl_float),
+                                     scene_origin_,&status);
   return this->check_val(status,CL_SUCCESS,"clCreateBuffer (scene_origin_) failed.")==1;
 }
+
 template<class T>
 bool boxm_render_image_manager<T>::release_scene_origin_buffers()
 {
@@ -551,6 +548,7 @@ bool boxm_render_image_manager<T>::release_scene_origin_buffers()
   status = clReleaseMemObject(scene_origin_buf_);
   return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (scene_origin_buf_).")==1;
 }
+
 template<class T>
 bool boxm_render_image_manager<T>::clean_scene_origin()
 {
@@ -558,6 +556,7 @@ bool boxm_render_image_manager<T>::clean_scene_origin()
     boxm_ocl_utils<T>::free_aligned(scene_origin_);
   return true;
 }
+
 template<class T>
 bool boxm_render_image_manager<T>::set_scene_dims()
 {
@@ -576,6 +575,7 @@ bool boxm_render_image_manager<T>::set_scene_dims()
 
   return true;
 }
+
 template<class T>
 bool boxm_render_image_manager<T>::set_scene_dims_buffers()
 {
@@ -586,6 +586,7 @@ bool boxm_render_image_manager<T>::set_scene_dims_buffers()
                                    scene_dims_,&status);
   return this->check_val(status,CL_SUCCESS,"clCreateBuffer (scene_dims_) failed.")==1;
 }
+
 template<class T>
 bool boxm_render_image_manager<T>::release_scene_dims_buffers()
 {
@@ -593,6 +594,7 @@ bool boxm_render_image_manager<T>::release_scene_dims_buffers()
   status = clReleaseMemObject(scene_dims_buf_);
   return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (scene_dims_buf_).")==1;
 }
+
 template<class T>
 bool boxm_render_image_manager<T>::clean_scene_dims()
 {
@@ -600,6 +602,7 @@ bool boxm_render_image_manager<T>::clean_scene_dims()
     boxm_ocl_utils<T>::free_aligned(scene_dims_);
   return true;
 }
+
 template<class T>
 bool boxm_render_image_manager<T>::set_block_dims()
 {
@@ -608,7 +611,7 @@ bool boxm_render_image_manager<T>::set_block_dims()
     vcl_cout<<"Scene is Missing "<<vcl_endl;
     return false;
   }
-  vgl_vector_3d<double> block_dim=scene_->block_dim(); 
+  vgl_vector_3d<double> block_dim=scene_->block_dim();
 
   block_dims_=(cl_float *)boxm_ocl_utils<T>::alloc_aligned(1,sizeof(cl_float4),16);
 
@@ -619,6 +622,7 @@ bool boxm_render_image_manager<T>::set_block_dims()
 
   return true;
 }
+
 template<class T>
 bool boxm_render_image_manager<T>::set_block_dims_buffers()
 {
@@ -629,6 +633,7 @@ bool boxm_render_image_manager<T>::set_block_dims_buffers()
                                    block_dims_,&status);
   return this->check_val(status,CL_SUCCESS,"clCreateBuffer (block_dims_) failed.")==1;
 }
+
 template<class T>
 bool boxm_render_image_manager<T>::release_block_dims_buffers()
 {
@@ -636,6 +641,7 @@ bool boxm_render_image_manager<T>::release_block_dims_buffers()
   status = clReleaseMemObject(block_dims_buf_);
   return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (block_dims_buf_).")==1;
 }
+
 template<class T>
 bool boxm_render_image_manager<T>::clean_block_dims()
 {
@@ -657,8 +663,8 @@ bool boxm_render_image_manager<T>::set_block_ptrs()
   int numblocks=scene_x_*scene_y_*scene_z_;
   block_ptrs_=(cl_int*)boxm_ocl_utils<T>::alloc_aligned(numblocks,sizeof(cl_int),16);
 
-  for(int i=0;i<numblocks;i++)
-	  block_ptrs_[i]=0;
+  for (int i=0;i<numblocks;i++)
+    block_ptrs_[i]=0;
   return true;
 }
 
@@ -672,6 +678,7 @@ bool boxm_render_image_manager<T>::set_block_ptrs_buffers()
                                    block_ptrs_,&status);
   return this->check_val(status,CL_SUCCESS,"clCreateBuffer (block_ptrs_) failed.")==1;
 }
+
 template<class T>
 bool boxm_render_image_manager<T>::release_block_ptrs_buffers()
 {
@@ -679,6 +686,7 @@ bool boxm_render_image_manager<T>::release_block_ptrs_buffers()
   status = clReleaseMemObject(block_ptrs_buf_);
   return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (block_ptrs_buf_).")==1;
 }
+
 template<class T>
 bool boxm_render_image_manager<T>::clean_block_ptrs()
 {
@@ -711,38 +719,30 @@ bool boxm_render_image_manager<T>::release_root_level_buffers()
 template<class T>
 bool boxm_render_image_manager<T>::set_input_view()
 {
-  bool good = true;
-  good = good && set_persp_camera();
-  good = good && set_input_image();
-  return good;
+  return set_persp_camera()
+      && set_input_image();
 }
 
 template<class T>
 bool boxm_render_image_manager<T>::clean_input_view()
 {
-  bool good = true;
-  good = good && clean_persp_camera();
-  good = good && clean_input_image();
-  return good;
+  return clean_persp_camera()
+      && clean_input_image();
 }
 
 template<class T>
 bool boxm_render_image_manager<T>::set_input_view_buffers()
 {
-  bool good = true;
-  good = good && set_persp_camera_buffers();
-  good = good && set_input_image_buffers();
-  good = good && set_image_dims_buffers();
-  return good;
+  return set_persp_camera_buffers()
+      && set_input_image_buffers()
+      && set_image_dims_buffers();
 }
 
 template<class T>
 bool boxm_render_image_manager<T>::release_input_view_buffers()
 {
-  bool good = true;
-  good = good && release_persp_camera_buffers();
-  good = good && release_input_image_buffers();
-  return good;
+  return release_persp_camera_buffers()
+      && release_input_image_buffers();
 }
 
 template<class T>
@@ -773,7 +773,7 @@ bool boxm_render_image_manager<T>::set_tree(tree_type* tree)
   cell_data_ = NULL;
 
   cells_=(cl_int *)boxm_ocl_utils<T>::alloc_aligned(cell_input_.size(),sizeof(cl_int4),16);
-//  cell_data_=(cl_float *)boxm_ocl_utils<T>::alloc_aligned(data_input_.size(),sizeof(cl_float16),16);
+  // cell_data_=(cl_float *)boxm_ocl_utils<T>::alloc_aligned(data_input_.size(),sizeof(cl_float16),16);
 
   if (cells_== NULL||cell_data_ == NULL)
   {
@@ -781,7 +781,7 @@ bool boxm_render_image_manager<T>::set_tree(tree_type* tree)
     return false;
   }
 
-  //: copy the data from vectors to arrays
+  // copy the data from vectors to arrays
   for (unsigned i = 0, j = 0; i<cell_input_.size()*4; i+=4, j++)
     for (unsigned k = 0; k<4; ++k)
       cells_[i+k]=cell_input_[j][k];
@@ -796,61 +796,57 @@ bool boxm_render_image_manager<T>::set_tree(tree_type* tree)
   {
     for (unsigned k = 0; k<cell_data_size; ++k)
       cell_data_[i+k]=data_input_[j][k];
-
   }
-
 
   tree_bbox_=(cl_float *)boxm_ocl_utils<T>::alloc_aligned(1,sizeof(cl_float4),16);
 
   tree_bbox_[0] = (cl_float)tree->bounding_box().min_x();
   tree_bbox_[1] = (cl_float)tree->bounding_box().min_y();
   tree_bbox_[2] = (cl_float)tree->bounding_box().min_z();
-  //: Assumption is isotropic dimensions.
+  // Assumption is isotropic dimensions.
   tree_bbox_[3] = (cl_float)tree->bounding_box().width();
 
   return true;
 }
+
 template<class T>
 bool boxm_render_image_manager<T>::set_all_blocks()
 {
   vcl_vector<vnl_vector_fixed<int, 4> > cell_input_;
   vcl_vector<vnl_vector_fixed<float, 16>  > data_input_;
 
-  
   if (!scene_)
     return false;
 
   boxm_block_iterator<tree_type> iter(scene_);
-  
+
   for (int cnt=0; !iter.end(); iter++,cnt++) {
-	  scene_->load_block(iter.index());
-	  boxm_block<tree_type>* block = *iter;
-	  
-	  tree_type * tree =block->get_tree();
-	  cell_type * root = tree->root();
-	  // put the root into the cell array and its data in the data array
-	  vnl_vector_fixed<int, 4> root_cell(0);
-	  root_cell[0]=-1; // no parent
-	  root_cell[1]=-1; // no children at the moment
-	  root_cell[2]=-1; // no data at the moment
+    scene_->load_block(iter.index());
+    boxm_block<tree_type>* block = *iter;
 
-	  //: set the ptr of the tree to the blcok
-	  vcl_cout<<" Root ptr "<<cell_input_.size()<<vcl_endl;
-	  block_ptrs_[cnt]=cell_input_.size();
- 	  int cell_ptr = cell_input_.size();
+    tree_type * tree =block->get_tree();
+    cell_type * root = tree->root();
+    // put the root into the cell array and its data in the data array
+    vnl_vector_fixed<int, 4> root_cell(0);
+    root_cell[0]=-1; // no parent
+    root_cell[1]=-1; // no children at the moment
+    root_cell[2]=-1; // no data at the moment
 
-	  cell_input_.push_back(root_cell);
-	  boxm_ocl_utils<T>::copy_to_arrays(root, cell_input_, data_input_, cell_ptr);
+    // set the ptr of the tree to the blcok
+    vcl_cout<<" Root ptr "<<cell_input_.size()<<vcl_endl;
+    block_ptrs_[cnt]=cell_input_.size();
+    int cell_ptr = cell_input_.size();
+
+    cell_input_.push_back(root_cell);
+    boxm_ocl_utils<T>::copy_to_arrays(root, cell_input_, data_input_, cell_ptr);
   }
-
-
 
   // the tree is now resident in the 1-d vectors
   cells_size_=cell_input_.size();
   cell_data_size_=data_input_.size();
 
   vcl_cout<<"Tree Size "<<(float)cells_size_*4*4/(1024.0*1024.0)<<"MB"<<vcl_endl
-		  <<"Tree Data Size "<<(float)cell_data_size_*9*4/(1024.0*1024.0)<<"MB"<<vcl_endl;
+          <<"Tree Data Size "<<(float)cell_data_size_*9*4/(1024.0*1024.0)<<"MB"<<vcl_endl;
   cells_ = NULL;
   cell_data_ = NULL;
   cell_alpha_=NULL;
@@ -865,7 +861,7 @@ bool boxm_render_image_manager<T>::set_all_blocks()
     return false;
   }
 
-  //: copy the data from vectors to arrays
+  // copy the data from vectors to arrays
   for (unsigned i = 0, j = 0; i<cell_input_.size()*4; i+=4, j++)
     for (unsigned k = 0; k<4; ++k)
       cells_[i+k]=cell_input_[j][k];
@@ -874,7 +870,7 @@ bool boxm_render_image_manager<T>::set_all_blocks()
   // data array location. It must be mapped as:
   //  cell_data indices = 2*cell_data_ptr, 2*cell_data_ptr +1,
 
-  //: apperance model is 8 and alpha is 1
+  // appearance model is 8 and alpha is 1
   unsigned cell_data_size=8;
   for (unsigned i = 0, j = 0; i<data_input_.size()*cell_data_size; i+=cell_data_size, j++)
   {
@@ -883,18 +879,18 @@ bool boxm_render_image_manager<T>::set_all_blocks()
       cell_data_[i+k]=data_input_[j][k+1];
   }
 
-
   return true;
 }
+
 template<class T>
 bool boxm_render_image_manager<T>::clean_tree()
 {
-	if (cells_)
-		boxm_ocl_utils<T>::free_aligned(cells_);
-	if (cell_data_)
-		boxm_ocl_utils<T>::free_aligned(cell_data_);
-	if (cell_alpha_)
-		boxm_ocl_utils<T>::free_aligned(cell_alpha_);
+  if (cells_)
+    boxm_ocl_utils<T>::free_aligned(cells_);
+  if (cell_data_)
+    boxm_ocl_utils<T>::free_aligned(cell_data_);
+  if (cell_alpha_)
+    boxm_ocl_utils<T>::free_aligned(cell_alpha_);
 
   return true;
 }
@@ -911,13 +907,13 @@ bool boxm_render_image_manager<T>::set_tree_buffers()
     return false;
 
   cell_data_buf_ = clCreateBuffer(this->context_,
-                                    CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
-                                    cell_data_size_*sizeof(cl_float8),
-                                    cell_data_,&status);
+                                  CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+                                  cell_data_size_*sizeof(cl_float8),
+                                  cell_data_,&status);
   cell_alpha_buf_ = clCreateBuffer(this->context_,
-                                    CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
-                                    cell_data_size_*sizeof(cl_float),
-                                    cell_alpha_,&status);
+                                   CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+                                   cell_data_size_*sizeof(cl_float),
+                                   cell_alpha_,&status);
   if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (cell data) failed."))
     return false;
 }
@@ -933,18 +929,14 @@ bool boxm_render_image_manager<T>::release_tree_buffers()
   if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (cell_data_buf_)."))
     return false;
     status = clReleaseMemObject(cell_alpha_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (cell_alpha_buf_)."))
-    return false;
-
+  return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (cell_alpha_buf_).");
 }
-
-
 
 template<class T>
 bool boxm_render_image_manager<T>::set_persp_camera(vpgl_perspective_camera<double> * pcam)
 {
-	if(pcam)
-	{
+  if (pcam)
+  {
     vnl_svd<double>* svd=pcam->svd();
     vnl_matrix<double> Ut=svd->U().conjugate_transpose();
     vnl_matrix<double> V=svd->V();
@@ -974,10 +966,11 @@ bool boxm_render_image_manager<T>::set_persp_camera(vpgl_perspective_camera<doub
     return true;
   }
   else {
-    vcl_cerr << "Error set_persp_camera() : Missing camera \n";
+    vcl_cerr << "Error set_persp_camera() : Missing camera\n";
     return false;
   }
 }
+
 template<class T>
 bool boxm_render_image_manager<T>::set_persp_camera()
 {
@@ -1038,17 +1031,19 @@ bool boxm_render_image_manager<T>::set_persp_camera_buffers()
                                   persp_cam_,&status);
   return this->check_val(status,CL_SUCCESS,"clCreateBuffer (persp_cam_buf_) failed.")==1;
 }
+
 template<class T>
 bool boxm_render_image_manager<T>::write_persp_camera_buffers()
 {
-	cl_int status;
-	status=clEnqueueWriteBuffer(command_queue_,persp_cam_buf_,CL_FALSE, 0,3*sizeof(cl_float16), persp_cam_, 0, 0, 0);	
-	if (!this->check_val(status,CL_SUCCESS,"clEnqueueWriteBuffer (persp_cam_buf_) failed."))
-		return false;
-    clFinish(command_queue_);
+  cl_int status;
+  status=clEnqueueWriteBuffer(command_queue_,persp_cam_buf_,CL_FALSE, 0,3*sizeof(cl_float16), persp_cam_, 0, 0, 0);
+  if (!this->check_val(status,CL_SUCCESS,"clEnqueueWriteBuffer (persp_cam_buf_) failed."))
+    return false;
+  clFinish(command_queue_);
 
-	return true;
+  return true;
 }
+
 template<class T>
 bool boxm_render_image_manager<T>::release_persp_camera_buffers()
 {
@@ -1074,7 +1069,7 @@ bool boxm_render_image_manager<T>::set_input_image()
   {
     for (unsigned j=0;j<output_img_.nj();j++)
     {
-    image_[(j*wni_+i)]=0;
+      image_[(j*wni_+i)]=0;
     }
   }
 
@@ -1111,6 +1106,7 @@ bool boxm_render_image_manager<T>::set_input_image_buffers()
                               image_,&status);
   return this->check_val(status,CL_SUCCESS,"clCreateBuffer (image_buf_) failed.")==1;
 }
+
 template<class T>
 bool boxm_render_image_manager<T>::set_image_dims_buffers()
 {
@@ -1132,9 +1128,7 @@ bool boxm_render_image_manager<T>::release_input_image_buffers()
     return false;
 
   status = clReleaseMemObject(img_dims_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (img_dims_buf_)."))
-    return false;
- return true;
+  return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (img_dims_buf_)."))
 }
 
 /*****************************************
