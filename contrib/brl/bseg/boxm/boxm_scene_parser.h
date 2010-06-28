@@ -20,6 +20,7 @@
 #define SAVE_INTERNAL_NODES_TAG "save_internal_nodes"
 #define SAVE_PLATFORM_INDEPENDENT_TAG "save_platform_independent"
 #define LOAD_ALL_BLOCKS_TAG "load_all_blocks"
+#define OCTREE_LEVELS_TAG "octree_level"
 #define P_INIT_TAG "p_init"
 
 class boxm_scene_parser : public expatpp

@@ -437,10 +437,17 @@ void x_write(vcl_ostream &os, boxm_scene<T>& scene, vcl_string name)
   blocks.add_attribute("y_dimension", y_dim);
   blocks.add_attribute("z_dimension", z_dim);
   blocks.x_write(os);
+  
   vsl_basic_xml_element paths(SCENE_PATHS_TAG);
   paths.add_attribute("path", scene.path());
   paths.add_attribute("block_prefix", scene.block_prefix());
   paths.x_write(os);
+  
+  vsl_basic_xml_element tree(OCTREE_LEVELS_TAG);
+  tree.add_attribute("max", (int) scene.max_level());
+  tree.add_attribute("init", (int) scene.init_level());
+  tree.x_write(os);
+  
   scene_elm.x_write_close(os);
 }
 
