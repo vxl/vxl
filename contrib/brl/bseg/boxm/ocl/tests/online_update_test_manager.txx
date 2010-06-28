@@ -5,6 +5,7 @@
 #include "online_update_test_manager.h"
 #include <vcl_where_root_dir.h>
 #include <boxm/ocl/boxm_ocl_utils.h>
+#include <bocl/bocl_utils.h>
 #include <vcl_cstdio.h>
 #include <vcl_string.h>
 #include <vul/vul_timer.h>
@@ -132,6 +133,11 @@ bool online_update_test_manager<T>::set_kernels()
   if (this->check_val(status,CL_SUCCESS,error_to_string(status))!=CHECK_SUCCESS)
     return false;
   kernels_.push_back(kernel);
+
+  kernel = clCreateKernel(program_,"update_main",&status);
+  if (this->check_val(status,CL_SUCCESS,error_to_string(status))!=CHECK_SUCCESS)
+      return false;
+  kernels_.push_back(kernel);
   return true;
 }
 
@@ -141,6 +147,23 @@ bool online_update_test_manager<T>::set_kernel_args(unsigned pass)
   int CHECK_SUCCESS = 1;
   cl_int status = SDK_SUCCESS;
 
+  if(pass==4)
+  {
+    status = clSetKernelArg(kernels_[pass], 0,
+                            sizeof(cl_mem), (void *)&cell_data_buf_);
+    if (this->check_val(status, CL_SUCCESS, "clSetKernelArg failed. (cell_data_buf_)")!=CHECK_SUCCESS)
+      return false;
+
+    status = clSetKernelArg(kernels_[pass], 1,
+                            sizeof(cl_mem), (void *)&cell_aux_data_buf_);
+    if (this->check_val(status, CL_SUCCESS, "clSetKernelArg failed. (cell_aux_data_buf_)")!=CHECK_SUCCESS)
+      return false;
+    status = clSetKernelArg(kernels_[pass], 2,
+                            sizeof(cl_mem), (void *)&data_array_size_buf_);
+    return this->check_val(status, CL_SUCCESS,
+                           "clSetKernelArg failed. (data array size)")==CHECK_SUCCESS;
+
+  }
   if (pass == 2) { // norm image process //
     status = clSetKernelArg(kernels_[pass], 0,
                             sizeof(cl_mem), (void *)&image_buf_);
@@ -334,9 +357,16 @@ bool online_update_test_manager<T>::run_block(unsigned pass)
   if (this->check_val(status,CL_SUCCESS,"clGetKernelWorkGroupInfo CL_KERNEL_WORK_GROUP_SIZE, failed.")!=CHECK_SUCCESS)
     return false;
 
+
   vcl_size_t globalThreads[]= {this->wni_,this->wnj_};
   vcl_size_t localThreads[] = {this->bni_,this->bnj_};
 
+  if(pass==4) //: change the gloabal threads
+  {
+    globalThreads[0]=RoundUp(data_array_size_[0],64);globalThreads[1]=1;
+    localThreads[0]=64;localThreads[1]=1;
+
+  }
   if (used_local_memory > this->total_local_memory())
   {
     vcl_cout << "Unsupported: Insufficient local memory on device.\n";
@@ -396,8 +426,8 @@ bool online_update_test_manager<T>::process_block()
     return false;
   float raytrace_time = (float)timer.all() / 1e3f;
   vcl_cout<<"processing block took " << raytrace_time << 's' << vcl_endl;
-  return read_output_image() // && this->print_image()
-      && clean_input_view()
+  this->print_image() ;
+  return read_output_image()    && clean_input_view()
       && release_block_data_buffers()
       && clean_block_data()
       && clean_norm_data()
@@ -599,14 +629,14 @@ void online_update_test_manager<T>::archive_tree_data()
       int child_ptr = 16*cells_[i+1];
       int data_ptr = 16*cells_[i+2];
       int aux_data_ptr = 4*cells_[i+2];
-      if (child_ptr<0&&data_ptr>0) {
+      if (child_ptr<0&&data_ptr>=0) {
         vnl_vector_fixed<float, 16> cdata;
 
         for (unsigned k = 0; k<16; ++k)
           cdata[k] = cell_data_[data_ptr+k];
         tree_data_.push_back(cdata);
       }
-      if (child_ptr<0&&aux_data_ptr>0) {
+      if (child_ptr<0&&aux_data_ptr>=0) {
         vnl_vector_fixed<float, 4> caux_data;
         for (unsigned k = 0; k<4; ++k)
           caux_data[k] = cell_aux_data_[aux_data_ptr+k];
@@ -757,8 +787,8 @@ bool online_update_test_manager<T>::set_input_view_buffers()
 template<class T>
 bool online_update_test_manager<T>::release_input_view_buffers()
 {
-  return release_persp_camera_buffers()
-      && release_input_image_buffers();
+  return release_persp_camera_buffers()    
+        && release_input_image_buffers();
 }
 
 template<class T>
@@ -784,7 +814,7 @@ bool online_update_test_manager<T>::set_tree(tree_type* tree)
   // the tree is now resident in the 1-d vectors
   cells_size_=cell_input_.size();
   cell_data_size_=data_input_.size();
-
+  
   cells_ = NULL;
   cell_data_ = NULL;
   cell_aux_data_ = NULL;
@@ -792,7 +822,8 @@ bool online_update_test_manager<T>::set_tree(tree_type* tree)
   cells_=(cl_int *)boxm_ocl_utils<T>::alloc_aligned(cell_input_.size(),sizeof(cl_int4),16);
   cell_data_=(cl_float *)boxm_ocl_utils<T>::alloc_aligned(data_input_.size(),sizeof(cl_float16),16);
   cell_aux_data_=(cl_float *)boxm_ocl_utils<T>::alloc_aligned(data_input_.size(),sizeof(cl_float4),16);
-
+  data_array_size_=(cl_uint *)boxm_ocl_utils<T>::alloc_aligned(1,sizeof(cl_uint),16);
+ 
   if (cells_== NULL||cell_data_ == NULL||cell_aux_data_==NULL)
   {
     vcl_cout << "Failed to allocate host memory. (tree input)\n";
@@ -819,6 +850,9 @@ bool online_update_test_manager<T>::set_tree(tree_type* tree)
       cell_aux_data_[j*aux_cell_data_size+k]=0.0f;
   }
 
+
+  data_array_size_[0]=cell_data_size_;
+
   tree_bbox_=(cl_float *)boxm_ocl_utils<T>::alloc_aligned(1,sizeof(cl_float4),16);
 
   tree_bbox_[0] = (cl_float)tree->bounding_box().min_x();
@@ -841,6 +875,9 @@ bool online_update_test_manager<T>::clean_tree()
     boxm_ocl_utils<T>::free_aligned(cell_aux_data_);
   if (tree_bbox_)
     boxm_ocl_utils<T>::free_aligned(tree_bbox_);
+  if(data_array_size_)
+    boxm_ocl_utils<T>::free_aligned(data_array_size_);
+
   return true;
 }
 
@@ -871,7 +908,14 @@ bool online_update_test_manager<T>::set_tree_buffers()
                                   CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                   sizeof(cl_float4),
                                   tree_bbox_,&status);
-  return this->check_val(status,CL_SUCCESS,"clCreateBuffer (cell aux data) failed.")==1;
+  if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (tree_bbox_buf_) failed."))
+    return false;
+  data_array_size_buf_ = clCreateBuffer(this->context_,
+                                  CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
+                                  sizeof(cl_uint),
+                                  data_array_size_,&status);
+
+  return this->check_val(status,CL_SUCCESS,"clCreateBuffer (data_array_size_) failed.")==1;
 }
 
 template<class T>
@@ -888,6 +932,10 @@ bool online_update_test_manager<T>::release_tree_buffers()
   if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (cell_aux_data_buf_)."))
     return false;
   status = clReleaseMemObject(tree_bbox_buf_);
+    if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (tree_bbox_buf_)."))
+    return false;
+  status = clReleaseMemObject(data_array_size_buf_);
+
   return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (tree_bbox_buf_).")==1;
 }
 

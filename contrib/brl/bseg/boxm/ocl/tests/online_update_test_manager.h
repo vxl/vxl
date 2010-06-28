@@ -155,6 +155,7 @@ class online_update_test_manager : public bocl_manager<online_update_test_manage
   // image dimensions
   cl_uint* img_dims_;
 
+  cl_uint* data_array_size_;
   //offset for non-overlapping sections
   cl_uint  offset_x_;
   cl_uint  offset_y_;
@@ -181,6 +182,7 @@ class online_update_test_manager : public bocl_manager<online_update_test_manage
   cl_mem   cell_data_buf_;
   cl_mem   cell_aux_data_buf_;
   cl_mem   tree_bbox_buf_;
+  cl_mem   data_array_size_buf_;
 
   cl_mem   persp_cam_buf_;
   cl_mem   image_buf_;
