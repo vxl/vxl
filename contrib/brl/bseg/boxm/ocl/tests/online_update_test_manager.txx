@@ -60,23 +60,23 @@ build_program(vcl_string const& functor, bool use_cell_data)
   vcl_string patt = "$$step_cell$$", empty = "", zero = "0", one = "1";
   // transfer cell data from global to local memory if use_cell_data_ == true
   vcl_string use = "%%";
-  vcl_string::size_type use_start = prog_.find(use);
-  if (use_start<prog_.size()) {
+  vcl_string::size_type use_start = this->prog_.find(use);
+  if (use_start < this->prog_.size()) {
     if (use_cell_data)
-      prog_ = prog_.replace (use_start, 2, one.c_str(), 1);
+      this->prog_ = this->prog_.replace (use_start, 2, one.c_str(), 1);
     else
-      prog_ = prog_.replace (use_start, 2, zero.c_str(), 1);
+      this->prog_ = this->prog_.replace (use_start, 2, zero.c_str(), 1);
   }
   else
     return false;
   // assign the functor calling signature
-  vcl_string::size_type pos_start = prog_.find(patt);
+  vcl_string::size_type pos_start = this->prog_.find(patt);
   vcl_string::size_type n1 = patt.size();
-  if (pos_start<prog_.size()) {
+  if (pos_start < this->prog_.size()) {
     vcl_string::size_type n2 = functor.size();
     if (!n2)
       return false;
-    prog_ = prog_.replace(pos_start, n1, functor.c_str(), n2);
+    this->prog_ = this->prog_.replace(pos_start, n1, functor.c_str(), n2);
     //write_program("c:/mundy/local-software/junk.cl");
     return this->build_kernel_program(program_)==SDK_SUCCESS;
   }
@@ -757,7 +757,7 @@ bool online_update_test_manager<T>::set_input_view_buffers()
 template<class T>
 bool online_update_test_manager<T>::release_input_view_buffers()
 {
-  return release_persp_camera_buffers();
+  return release_persp_camera_buffers()
       && release_input_image_buffers();
 }
 
