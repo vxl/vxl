@@ -22,7 +22,7 @@ bool boxm_render_image_manager<T>::init_ray_trace(boxm_scene<boct_tree<short,T >
   scene_ = scene;
   cam_ = cam;
   output_img_=obs;
-  vcl_string extensions_supported((char*)extensions_supported_);
+  vcl_string extensions_supported((char*)this->extensions_supported_);
   vcl_size_t found=extensions_supported.find("gl_sharing");
 
   
