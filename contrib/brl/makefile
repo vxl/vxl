@@ -8,7 +8,7 @@ SUBDIRS += bseg
 SUBDIRS += vvid
 
 # multiview library
-SUBDIRS += bmvl
+#SUBDIRS += bmvl
  
 # standalone executables
 SUBDIRS += bexe
