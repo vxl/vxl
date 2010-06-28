@@ -54,6 +54,7 @@ class bwm_observer_video : public bwm_observer_cam
   bool save_as_image_list(vcl_string const& path);
 
   //correspondence edit methods
+  void set_world_pt(double lat, double lon, double elev);
 
   //: add a match to an existing correspondence in the current frame
   void add_match();

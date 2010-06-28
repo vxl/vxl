@@ -443,6 +443,15 @@ void bwm_observer_video::add_video_corr()
   this->display_video_corr(corr, frame_index, CORR_STYLE);
 }
 
+void bwm_observer_video::set_world_pt(double lat, double lon, double elev)
+{
+  unsigned frame = 0, corr_index = 0;
+  bwm_soview2D_cross* cross =0;
+  if (!this->find_selected_video_corr(frame, corr_index, cross))
+    return;
+  bwm_video_corr_sptr c = video_corrs_[corr_index];
+  c->set_world_pt(vgl_point_3d<double>(lon,lat,elev));
+}
 
 void bwm_observer_video::add_match()
 {

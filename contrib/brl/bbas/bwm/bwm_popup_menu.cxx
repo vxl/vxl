@@ -399,6 +399,9 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
     menu.separator();
 
     vgui_menu video_corr_submenu;
+    video_corr_submenu.add( "Attach a 3D point",
+                            new vgui_command_simple<bwm_tableau_video>(video_tab,&bwm_tableau_video::set_world_pt));
+    video_corr_submenu.separator();
     video_corr_submenu.add( "Add Match",
                             new vgui_command_simple<bwm_tableau_video>(video_tab,&bwm_tableau_video::add_match));
     video_corr_submenu.separator();
