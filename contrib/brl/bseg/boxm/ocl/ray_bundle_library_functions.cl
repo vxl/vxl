@@ -326,6 +326,24 @@ void map_work_space_2d(int* mapped_id0,
   (*mapped_id1) = mj*ls1 + lid1;
 }
 
+void map_work_space_2d_offset(int* mapped_id0,
+                              int* mapped_id1,
+                              int offset0,
+                              int offset1)
+{
+  unsigned lid0 = get_local_id(0);
+  unsigned lid1 = get_local_id(1);
+  int group_id0 = get_group_id(0), group_id1 = get_group_id(1);
+
+  /* map the group id to permuted 2d coordinates */
+  int ls0 = get_local_size(0), ls1 = get_local_size(1);
+
+  /* map the individual bundle coordinates */
+  (*mapped_id0) = (2*group_id0+offset0)*ls0 + lid0;
+  (*mapped_id1) = (2*group_id1+offset1)*ls1 + lid1;
+}
+
+
 ///*
 // *  Determine initial ray bundle entry points for the entire tree bounding box
 // *  This operation can be done by all the work items in parallel. Note that
