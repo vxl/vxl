@@ -6,6 +6,7 @@
 // \brief Utility functions for C strings and vcl_strings
 
 #include <vcl_string.h>
+#include <vcl_vector.h>
 
 // C string functions:
 
@@ -59,6 +60,9 @@ extern double vul_string_atof_withsuffix(vcl_string const& s);
 // Looks for On, true, yes, 1 to mean true. everything else is false.
 // It ignores leading and trailing whitespace and capitalisation.
 extern bool vul_string_to_bool(const vcl_string &str);
+
+//: Convert a string to a list of ints.
+extern vcl_vector<int> vul_string_to_int_list(vcl_string str);
 
 //: Expand any environment variables in the string.
 // \verbatim

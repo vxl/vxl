@@ -10,6 +10,7 @@
 #include <vcl_algorithm.h>
 #include <vcl_sstream.h>
 #include <vcl_cmath.h>
+#include <vul/vul_reg_exp.h>
 
 #ifndef END_OF_STRING                           // If END_OF_STRING not defined
 #define END_OF_STRING (0)
@@ -287,6 +288,86 @@ bool vul_string_to_bool(const vcl_string &str)
      ||  myequals(begin, end, s1, s1+1)
      ||  myequals(begin, end, son, son+2);
 }
+
+
+//: Convert a string to a list of ints, using the matlab index format.
+// e.g. "0,1,10:14,20:-2:10" results in 0,1,10,11,12,13,14,20,18,16,14,12,10
+// No spaces are allowed.
+// \return empty on error.
+vcl_vector<int> vul_string_to_int_list(vcl_string str)
+{
+  vcl_vector<int> rv;
+
+
+#define REGEXP_INTEGER "\\-?[0123456789]+"
+
+  vul_reg_exp range_regexp("(" REGEXP_INTEGER ")"      // int
+                           "([:-]" REGEXP_INTEGER ")?" // :int [optional]
+                           "([:-]" REGEXP_INTEGER ")?" // :int [optional]
+                          );
+  
+
+  while (str.length() > 0 && range_regexp.find(str)) {
+    // the start/end positions (ref from 0) of the
+    //    current ',' separated token.
+    vcl_ptrdiff_t start= range_regexp.start(0);
+    vcl_ptrdiff_t endp = range_regexp.end(0);
+    if (start != 0)
+    {
+      rv.clear();
+      return rv;
+    }
+
+
+    vcl_string match1 = range_regexp.match(1);
+    vcl_string match2 = range_regexp.match(2);
+    vcl_string match3 = range_regexp.match(3);
+
+
+    // Remove this match from the front of string.
+    str.erase(0, endp);
+    if (str.size() > 1 && str[0] == ',' ) str.erase(0, 1);
+
+    bool matched2 = range_regexp.match(2).size() > 0;
+    bool matched3 = range_regexp.match(3).size() > 0;
+
+    int s = vul_string_atoi(match1);
+    int d = 1;
+    int e = s;
+    if (matched3) {
+      // "1:2:10"
+      d = vul_string_atoi(match2.substr(1));
+      e = vul_string_atoi(match3.substr(1));
+    }
+    else if (matched2)
+      e = vul_string_atoi(match2.substr(1));
+
+    if (d==0)
+    {
+      rv.clear();
+      return rv;
+    }
+
+    if (e >= s)
+    {
+      if (d < 0) d = -d;
+      for (int i = s; i <= e; i += d)
+        rv.push_back(i);
+    }
+    else
+    {
+      if (d > 0) d = -d;
+      for (int i = s; i >= e; i += d)
+        rv.push_back(i);
+    }
+  }
+
+  if (!str.empty())
+    rv.clear();
+
+  return rv;
+}
+
 
 //Leave verbatim in to avoid $->LaTeX munging.
 
