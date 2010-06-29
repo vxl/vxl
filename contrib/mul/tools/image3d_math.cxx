@@ -15,6 +15,7 @@
 #include <vcl_exception.h>
 #include <vcl_stdexcept.h>
 #include <vcl_sstream.h>
+#include <vcl_cstdio.h>
 #include <vcl_deque.h>
 #include <vcl_map.h>
 #include <vcl_iomanip.h>
@@ -63,6 +64,10 @@ enum global_option_load_as_image_t
   image3d_int_t
 } global_option_load_as_image = image3d_float_t;
 
+//: List of command arguments parsed so far
+// Kept for error reporting purposes.
+vcl_string args_so_far;
+
 class operand;
 vcl_ostream& operator <<( vcl_ostream&, const operand&);
 
@@ -77,19 +82,42 @@ bool string_to_double(const vcl_string&s, double&d)
   return true;
 }
 
+//: Like string_to_image, but suppress any error messages, and report success or failure.
 template <class T>
-bool string_to_image(const vcl_string&s, vimt3d_image_3d_of<T>&d)
+bool try_string_to_image(const vcl_string&s, vimt3d_image_3d_of<T>&d)
 {
   try
   {
     vimt3d_load(s, d, true);
+    if (!d.image()) return false; // LEGACY_ERROR_REPORTING
   }
-  catch (const vcl_exception& e)
+  catch (const vcl_exception&)
   {
-    vcl_cerr << e.what() << '\n';
     return false;
   }
   return true;
+}
+
+//: Load filename /p s as an image.
+template <class T>
+void string_to_image(const vcl_string&s, vimt3d_image_3d_of<T>&d)
+{
+  try
+  {
+    vimt3d_load(s, d, true);
+    if (!d.image())
+    {
+      vcl_cerr << "\nERROR: Failed to load image: " << s << " for unknown reason.\n"
+        << "At \"" << args_so_far << "\"<-- HERE\n";
+      vcl_exit(4);
+    }
+  }
+  catch (const vcl_exception& e)
+  {
+    vcl_cerr << "\nERROR: " << e.what() << '\n'
+      << "At \"" << args_so_far << "\"<-- HERE\n";
+    vcl_exit(4);
+  }
 }
 
 
@@ -103,10 +131,23 @@ class operand
   vimt3d_image_3d_of<int> image_3d_of_int_;
   double double_;
 
+
  public:
-  enum operand_type_t { e_string, e_image_3d_of_double, e_image_3d_of_float, e_image_3d_of_int, e_double, e_never };
+  enum operand_type_t {
+    e_string,
+    e_image_3d_of_double,
+    e_image_3d_of_float,
+    e_image_3d_of_int,
+    e_double,
+    e_open_brace,
+    e_never };
+
+
+ protected:
   operand_type_t operand_type_;
 
+
+ public:
   operand(): operand_type_(e_never) {} // if used with this value - should throw.
 
   explicit operand(const vcl_string& s):
@@ -141,15 +182,15 @@ class operand
       string_to_double(string_, v);
       return v;
     }
-    vcl_ostringstream ss;
-    ss << "Tried to use unsuitable operand as a double: " << *this;
-    throw mbl_exception_abort(ss.str());
+    vcl_cerr << "\nERROR: Tried to use unsuitable operand as a double: " << *this
+        << "\nAt \"" << args_so_far << "\"<-- HERE\n";
+    vcl_exit(1);
   }
 
   bool is_image_3d_of_float() const
   {
     vimt3d_image_3d_of<float> dummy;
-    return (operand_type_==e_string && global_option_load_as_image==image3d_float_t && string_to_image(string_, dummy))
+    return (operand_type_==e_string && global_option_load_as_image==image3d_float_t && try_string_to_image(string_, dummy))
       || operand_type_==e_image_3d_of_float;
   }
   const vimt3d_image_3d_of<float> as_image_3d_of_float() const
@@ -170,7 +211,7 @@ class operand
   bool is_image_3d_of_double() const
   {
     vimt3d_image_3d_of<double> dummy;
-    return (operand_type_==e_string && global_option_load_as_image==image3d_double_t && string_to_image(string_, dummy))
+    return (operand_type_==e_string && global_option_load_as_image==image3d_double_t && try_string_to_image(string_, dummy))
       || operand_type_==e_image_3d_of_double;
   }
   const vimt3d_image_3d_of<double> as_image_3d_of_double() const
@@ -191,7 +232,7 @@ class operand
   bool is_image_3d_of_int() const
   {
     vimt3d_image_3d_of<int> dummy;
-    return (operand_type_==e_string && global_option_load_as_image==image3d_int_t && string_to_image(string_, dummy))
+    return (operand_type_==e_string && global_option_load_as_image==image3d_int_t && try_string_to_image(string_, dummy))
       || operand_type_==e_image_3d_of_int;
   }
   const vimt3d_image_3d_of<int> as_image_3d_of_int() const
@@ -207,6 +248,10 @@ class operand
     ss << "Tried to use unsuitable operand as a vimt_image_3d_of<int>: " << *this;
     mbl_exception_abort(ss.str());
     return vimt3d_image_3d_of<int>();
+  }
+  bool is_open_brace() const
+  {
+    return operand_type_==e_open_brace;
   }
 
   void print_summary(vcl_ostream &os) const
@@ -232,6 +277,8 @@ class operand
      case e_double:
       os << double_;
       break;
+     case e_open_brace:
+      break;
      default: {
       os << "Unknown operand_type: " << operand_type_;
       vcl_ostringstream ss;
@@ -254,6 +301,8 @@ class operand
       return is_image_3d_of_int();
      case e_double:
       return is_double();
+     case e_open_brace:
+      return is_open_brace();
      default: {
       vcl_ostringstream ss;
       ss << "Unknown operand_type: " << operand_type_;
@@ -270,6 +319,7 @@ class operand
      case e_string:
      case e_double:
        return *this;
+     // Explicit deep copy.
      case e_image_3d_of_double:
      {
        vimt3d_image_3d_of<double> im;
@@ -298,12 +348,19 @@ class operand
   }
 };
 
+
+class operand_open_brace: public operand
+{
+public:
+  operand_open_brace() { operand_type_ = e_open_brace; }
+};
+
 void vsl_print_summary( vcl_ostream&os, const operand& p) { p.print_summary(os); }
 vcl_ostream& operator <<( vcl_ostream&os, const operand& p) { p.print_summary(os); return os; }
 
 void vsl_print_summary(vcl_ostream& os, const vcl_deque<operand> &v)
 {
-  os << "Deque length: " << v.size() << vcl_endl;
+  os << "Operand Stack Length: " << v.size() << vcl_endl;
   for (unsigned int i=0; i<v.size() && i<5; i++)
   {
     os << ' ' << i << ": ";
@@ -328,6 +385,8 @@ vcl_ostream& operator <<( vcl_ostream&os, const operand::operand_type_t& t)
       os << "image_3d_of_int"; break;
     case operand::e_double:
       os << "double"; break;
+    case operand::e_open_brace:
+      os << "brace {"; break;
     default: {
       os << "Unknown operand_type: " << static_cast<int>(t);
       vcl_ostringstream ss;
@@ -337,7 +396,35 @@ vcl_ostream& operator <<( vcl_ostream&os, const operand::operand_type_t& t)
   return os;
 }
 
-typedef vcl_deque<operand> opstack_t;
+class opstack_t : public vcl_deque<operand>
+{
+public:
+  opstack_t(): last_pop_(vcl_numeric_limits<vcl_size_t>::max()) {}
+
+  //: Get rid of n operands on the stack.
+  // The stack size after this is stored in last_pop,
+  // allowing calculation of the last number of results pushed
+  // onto stack.
+  void pop(unsigned n)
+  {
+    for (; n!=0; --n)
+      pop_front();
+    last_pop_=size();
+  }
+
+  //: Return size of stack after last call to pop;
+  unsigned last_pop() const { return last_pop_; }
+
+  void reset_last_pop()
+  {
+    last_pop_=vcl_numeric_limits<vcl_size_t>::max();
+  }
+private:
+  vcl_size_t last_pop_;
+
+  // Force the use of pop(unsigned) rather than pop_front();
+  void pop_front() { vcl_deque<operand>::pop_front(); }
+};
 
 typedef vcl_map<vcl_string, operand> named_store_t;
 
@@ -348,12 +435,37 @@ void print_operations(vcl_ostream&);
 //: Operation implementation
 void help(opstack_t& )
 {
-  vcl_cerr <<
-    "usage: image3d_math [--operand | operation] [--operand | operation] ... --operand\n"
+  vcl_cout <<
+    "usage: image3d_math [--operation|operand] [--operation|operand] ... --operation\n"
     "Manipulate images using Reverse polish notiation.\n"
     "List of commands:\n";
-  print_operations(vcl_cerr);
+  print_operations(vcl_cout);
+  vcl_cout << "{ and }:  Braces - for debugging, have no side effects.\n"
+    "usage: eg. { { v1 v2 --op1 } v3 --op2 }\n"
+    "       The braces can be used to delineate all the operands used by the\n"
+    "       operation preceeding the closing brace.\n"
+    "\n"
+    "+name: identical to \"name --recall\"\n";
   vcl_exit(3);
+}
+
+void close_brace__brace(opstack_t& s)
+{
+  if (s.last_pop() > s.size())
+  {
+    vcl_cerr << "\nERROR: A closing brace must be preceeded by an operation.\n"
+      "At \"" << args_so_far << "\"<-- HERE";
+    vcl_exit(1);
+  }
+  if (s.size() < 1 || s.last_pop() > s.size() ||
+    s.last_pop()==0 || !s[s.size() - s.last_pop()].is_open_brace() )
+  {
+    vcl_cerr << "\nERROR: No matching openning brace found for closing brace.\n"
+      "At \"" << args_so_far << "\"<-- HERE\n"
+      "Stack is: \n" << vsl_stream_summary(s);
+    vcl_exit(1);
+  }
+  s.erase(s.end() - s.last_pop());
 }
 
 
@@ -366,7 +478,7 @@ void voxel_sum__image_3d_of_float(opstack_t& s)
   double result = 0;
   vil3d_math_sum(result, o1.image(), 0);
 
-  s.pop_front();
+  s.pop(1);
   s.push_front(operand(result));
 }
 
@@ -379,7 +491,7 @@ void voxel_sum__image_3d_of_int(opstack_t& s)
   unsigned long result = 0;
   vil3d_math_sum(result, o1.image(), 0);
 
-  s.pop_front();
+  s.pop(1);
   s.push_front(operand(result));
 }
 
@@ -396,7 +508,7 @@ void voxel_product__image_3d_of_float(opstack_t& s)
       for (unsigned i=0,ni=o1_image.ni(); i<ni; ++i)
         result *= o1_image(i,j,k);
 
-  s.pop_front();
+  s.pop(1);
   s.push_front(operand(result));
 }
 
@@ -413,7 +525,7 @@ void voxel_product__image_3d_of_int(opstack_t& s)
       for (unsigned i=0,ni=o1_image.ni(); i<ni; ++i)
         result *= o1_image(i,j,k);
 
-  s.pop_front();
+  s.pop(1);
   s.push_front(operand(static_cast<double>(result)));
 }
 
@@ -427,7 +539,7 @@ void voxel_size__image_3d_of_int(opstack_t& s)
   vgl_vector_3d<double> voxel_size=o1.world2im().inverse().delta(
     vgl_point_3d<double>(0,0,0), vgl_vector_3d<double>(1.0,1.0,1.0) );
 
-  s.pop_front();
+  s.pop(1);
   s.push_front(operand(voxel_size.x()));
   s.push_front(operand(voxel_size.y()));
   s.push_front(operand(voxel_size.z()));
@@ -443,7 +555,7 @@ void voxel_size__image_3d_of_float(opstack_t& s)
   vgl_vector_3d<double> voxel_size=o1.world2im().inverse().delta(
     vgl_point_3d<double>(0,0,0), vgl_vector_3d<double>(1.0,1.0,1.0) );
 
-  s.pop_front();
+  s.pop(1);
   s.push_front(operand(voxel_size.x()));
   s.push_front(operand(voxel_size.y()));
   s.push_front(operand(voxel_size.z()));
@@ -460,8 +572,7 @@ void sum__image_3d_of_float__image_3d_of_float(opstack_t& s)
   vil3d_math_image_sum(o1.image(), o2.image(), result.image());
   result.world2im() = o1.world2im();
 
-  s.pop_front();
-  s.pop_front();
+  s.pop(2);
   s.push_front(operand(result));
 }
 
@@ -476,8 +587,7 @@ void sum__image_3d_of_int__image_3d_of_int(opstack_t& s)
   vil3d_math_image_sum(o1.image(), o2.image(), result.image());
   result.world2im() = o1.world2im();
 
-  s.pop_front();
-  s.pop_front();
+  s.pop(2);
   s.push_front(operand(result));
 }
 
@@ -500,8 +610,7 @@ void and__image_3d_of_int__image_3d_of_int(opstack_t& s)
         result_image(i,j,k) =
           (o1_image(i,j,k) && o2_image(i,j,k)) ? 1 : 0;
 
-  s.pop_front();
-  s.pop_front();
+  s.pop(2);
   s.push_front(operand(result));
 }
 
@@ -525,8 +634,7 @@ void or__image_3d_of_int__image_3d_of_int(opstack_t& s)
         result_image(i,j,k) =
           (o1_image(i,j,k) || o2_image(i,j,k)) ? 1 : 0;
 
-  s.pop_front();
-  s.pop_front();
+  s.pop(2);
   s.push_front(operand(result));
 }
 
@@ -551,8 +659,7 @@ void min__image_3d_of_int__image_3d_of_int(opstack_t& s)
       for (unsigned i=0,ni=o1_image.ni();i<ni;++i)
         result_image(i,j,k) = vcl_min(o1_image(i,j,k), o2_image(i,j,k));
 
-  s.pop_front();
-  s.pop_front();
+  s.pop(2);
   s.push_front(operand(result));
 }
 
@@ -575,8 +682,7 @@ void min__image_3d_of_float__image_3d_of_float(opstack_t& s)
       for (unsigned i=0,ni=o1_image.ni();i<ni;++i)
         result_image(i,j,k) = vcl_min(o1_image(i,j,k), o2_image(i,j,k));
 
-  s.pop_front();
-  s.pop_front();
+  s.pop(2);
   s.push_front(operand(result));
 }
 
@@ -598,8 +704,7 @@ void max__image_3d_of_int__image_3d_of_int(opstack_t& s)
       for (unsigned i=0,ni=o1_image.ni();i<ni;++i)
         result_image(i,j,k) = vcl_max(o1_image(i,j,k), o2_image(i,j,k));
 
-  s.pop_front();
-  s.pop_front();
+  s.pop(2);
   s.push_front(operand(result));
 }
 
@@ -622,8 +727,7 @@ void max__image_3d_of_float__image_3d_of_float(opstack_t& s)
       for (unsigned i=0,ni=o1_image.ni();i<ni;++i)
         result_image(i,j,k) = vcl_max(o1_image(i,j,k), o2_image(i,j,k));
 
-  s.pop_front();
-  s.pop_front();
+  s.pop(2);
   s.push_front(operand(result));
 }
 
@@ -638,8 +742,7 @@ void diff__image_3d_of_float__image_3d_of_float(opstack_t& s)
   vil3d_math_image_difference(o1.image(), o2.image(), result.image());
   result.world2im() = o1.world2im();
 
-  s.pop_front();
-  s.pop_front();
+  s.pop(2);
   s.push_front(operand(result));
 }
 
@@ -654,8 +757,7 @@ void diff__image_3d_of_int__image_3d_of_int(opstack_t& s)
   vil3d_math_image_difference(o1.image(), o2.image(), result.image());
   result.world2im() = o1.world2im();
 
-  s.pop_front();
-  s.pop_front();
+  s.pop(2);
   s.push_front(operand(result));
 }
 
@@ -680,8 +782,7 @@ void resample__image_3d_of_float__image_3d_of_float(opstack_t& s)
 
   result.world2im() = o2.world2im();
 
-  s.pop_front();
-  s.pop_front();
+  s.pop(2);
   s.push_front(operand(result));
 }
 
@@ -692,8 +793,7 @@ void store__poly__string(opstack_t& s)
 
   named_store[s[0].as_string()] = s[1];
 
-  s.pop_front();
-  s.pop_front();
+  s.pop(2);
 }
 
 
@@ -705,12 +805,11 @@ void recall__string(opstack_t& s)
   named_store_t::const_iterator it = named_store.find(o1);
   if (it == named_store.end())
   {
-    vcl_ostringstream ss;
-    ss << "RECALL could not find a store called " << o1
+    vcl_cerr << "\nERROR: --recall could not find a store called " << o1
        << "\n Store is :\n" << vsl_stream_summary(named_store);
-    throw vcl_runtime_error(ss.str());
+    exit(5);
   }
-  s.pop_front();
+  s.pop(1);
   s.push_front(it->second.deep_copy());
 }
 
@@ -722,8 +821,7 @@ void save__image_3d_of_float__string(opstack_t& s)
 
   vimt3d_save(s[0].as_string(), s[1].as_image_3d_of_float(), true);
 
-  s.pop_front();
-  s.pop_front();
+  s.pop(2);
 }
 
 //: Save an int image using vil3d saver
@@ -733,8 +831,7 @@ void save__image_3d_of_int__string(opstack_t& s)
 
   vimt3d_save(s[0].as_string(), s[1].as_image_3d_of_int(), true);
 
-  s.pop_front();
-  s.pop_front();
+  s.pop(2);
 }
 
 
@@ -748,7 +845,12 @@ void load_from_mat__string(opstack_t& s)
   vcl_ifstream input(o1.c_str());
 
   if (!input)
-    mbl_exception_throw_os_error(o1);
+  {
+    vcl_cerr << "\nERROR: --load_from_mat: ";
+    vcl_perror(o1.c_str());    
+    vcl_cerr << "At \"" << args_so_far << "\"<-- HERE\n";
+    vcl_exit(4);
+  }
 
   char c;
   vcl_string dummy;
@@ -765,11 +867,12 @@ void load_from_mat__string(opstack_t& s)
   input >> ni >> nj >> nk;
   if (!input)
   {
-    vcl_cerr << "Unable to parse " << o1 << '\n';
+    vcl_cerr << "\nERROR: Unable to parse " << o1
+      << "\nAt \"" << args_so_far << "\"<-- HERE\n";
     vcl_exit(1);
   }
 
-  s.pop_front();
+  s.pop(1);
 
   switch (global_option_load_as_image)
   {
@@ -783,7 +886,8 @@ void load_from_mat__string(opstack_t& s)
             input >> result.image()(i,j,k);
         if (!input)
         {
-          vcl_cerr << "Unable to parse " << o1 << '\n';
+          vcl_cerr << "\nERROR: Unable to parse " << o1
+            << "\nAt \"" << args_so_far << "\"<-- HERE\n";
           vcl_exit(1);
         }
       }
@@ -800,7 +904,8 @@ void load_from_mat__string(opstack_t& s)
             input >> result.image()(i,j,k);
         if (!input)
         {
-          vcl_cerr << "Unable to parse " << o1 << '\n';
+          vcl_cerr << "\nERROR: Unable to parse " << o1
+            << "\nAt \"" << args_so_far << "\"<-- HERE\n";
           vcl_exit(1);
         }
       }
@@ -817,7 +922,8 @@ void load_from_mat__string(opstack_t& s)
             input >> result.image()(i,j,k);
         if (!input)
         {
-          vcl_cerr << "Unable to parse " << o1 << '\n';
+          vcl_cerr << "\nERROR: Unable to parse " << o1
+            << "\nAt \"" << args_so_far << "\"<-- HERE\n";
           vcl_exit(1);
         }
       }
@@ -851,7 +957,12 @@ void save_to_mat__image_3d_of_int__string(opstack_t& s)
   }
 
   if (!*output)
-    mbl_exception_throw_os_error(o1);
+  {
+    vcl_cerr << "\nERROR: --save_to_mat: ";
+    vcl_perror(o1.c_str());
+    vcl_cerr << "\nAt \"" << args_so_far << "\"<-- HERE\n";
+    vcl_exit(4);
+  }
 
   // copy precision length from console to output file
   output->precision(vcl_cout.precision());
@@ -868,8 +979,7 @@ void save_to_mat__image_3d_of_int__string(opstack_t& s)
       for (unsigned i=0;i<o2_image.ni();++i)
         (*output) <<  o2_image(i,j,k) << '\n';
 
-  s.pop_front();
-  s.pop_front();
+  s.pop(2);
 }
 
 //: Save a float image to an ASCII matlab format
@@ -894,7 +1004,12 @@ void save_to_mat__image_3d_of_float__string(opstack_t& s)
   }
 
   if (!*output)
-    mbl_exception_throw_os_error(o1);
+  {
+    vcl_cerr << "\nERROR: --save_to_mat: ";
+    vcl_perror(o1.c_str());
+    vcl_cerr << "\nAt \"" << args_so_far << "\"<-- HERE\n";
+    vcl_exit(4);
+  }
 
   // copy precision length from console to output file
   output->precision(vcl_cout.precision());
@@ -911,8 +1026,7 @@ void save_to_mat__image_3d_of_float__string(opstack_t& s)
       for (unsigned i=0;i<o2_image.ni();++i)
         (*output) <<  o2_image(i,j,k) << '\n';
 
-  s.pop_front();
-  s.pop_front();
+  s.pop(2);
 }
 
 
@@ -938,7 +1052,12 @@ void save_to_mat__image_3d_of_double__string(opstack_t& s)
   }
 
   if (!*output)
-    mbl_exception_throw_os_error(o1);
+  {
+    vcl_cerr << "\nERROR: --save_to_mat: ";
+    vcl_perror(o1.c_str());
+    vcl_cerr << "\nAt \"" << args_so_far << "\"<-- HERE\n";
+    vcl_exit(4);
+  }
 
   // copy precision length from console to output file
   output->precision(vcl_cout.precision());
@@ -955,8 +1074,7 @@ void save_to_mat__image_3d_of_double__string(opstack_t& s)
       for (unsigned i=0;i<o2_image.ni();++i)
         (*output) <<  o2_image(i,j,k) << '\n';
 
-  s.pop_front();
-  s.pop_front();
+  s.pop(2);
 }
 
 //: Force an image to load as double - replace the filename in the operand stack with the image.
@@ -965,7 +1083,7 @@ void load_image_double__string(opstack_t& s)
   assert(s.size() >= 1);
   vimt3d_image_3d_of<double> v;
   string_to_image(s[0].as_string(), v);
-  s.pop_front();
+  s.pop(1);
   s.push_front(operand(v));
 }
 
@@ -975,7 +1093,7 @@ void load_image_float__string(opstack_t& s)
   assert(s.size() >= 1);
   vimt3d_image_3d_of<float> v;
   string_to_image(s[0].as_string(), v);
-  s.pop_front();
+  s.pop(1);
   s.push_front(operand(v));
 }
 
@@ -985,7 +1103,7 @@ void load_image_int__string(opstack_t& s)
   assert(s.size() >= 1);
   vimt3d_image_3d_of<int> v;
   string_to_image(s[0].as_string(), v);
-  s.pop_front();
+  s.pop(1);
   s.push_front(operand(v));
 }
 
@@ -998,9 +1116,7 @@ void scale_and_offset__image_3d_of_float__double__double(opstack_t& s)
                                      s[1].as_double(),
                                      static_cast<float>(s[0].as_double()) );
 
-  s.pop_front();
-  s.pop_front();
-  s.pop_front();
+  s.pop(3);
   s.push_front(operand(o1));
 }
 
@@ -1020,7 +1136,7 @@ void not__image_3d_of_int(opstack_t& s)
       for (unsigned i=0,ni=o1_image.ni();i<ni;++i)
         result_image(i,j,k) = o1_image(i,j,k) ? 0 : 1;
 
-  s.pop_front();
+  s.pop(1);
   s.push_front(operand(result));
 }
 
@@ -1040,7 +1156,7 @@ void not__image_3d_of_float(opstack_t& s)
       for (unsigned i=0,ni=o1_image.ni();i<ni;++i)
         result_image(i,j,k) = o1_image(i,j,k) ? 0 : 1;
 
-  s.pop_front();
+  s.pop(1);
   s.push_front(operand(result));
 }
 
@@ -1053,7 +1169,7 @@ void convert_to_int__image_3d_of_float(opstack_t& s)
   vil3d_convert_round(o1.image(), result.image());
   result.world2im() = o1.world2im();
 
-  s.pop_front();
+  s.pop(1);
   s.push_front(operand(result));
 }
 
@@ -1066,23 +1182,26 @@ void convert_to_int__image_3d_of_double(opstack_t& s)
   vil3d_convert_round(o1.image(), result.image());
   result.world2im() = o1.world2im();
 
-  s.pop_front();
+  s.pop(1);
   s.push_front(operand(result));
 }
 
-void option_load_as_image_int(opstack_t& )
+void option_load_as_image_int(opstack_t& s)
 {
   global_option_load_as_image = image3d_int_t;
+  s.pop(0);
 }
 
-void option_load_as_image_double(opstack_t& )
+void option_load_as_image_double(opstack_t& s)
 {
   global_option_load_as_image = image3d_double_t;
+  s.pop(0);
 }
 
-void option_load_as_image_float(opstack_t& )
+void option_load_as_image_float(opstack_t& s)
 {
   global_option_load_as_image = image3d_float_t;
+  s.pop(0);
 }
 
 void option_precision__double(opstack_t& s)
@@ -1092,11 +1211,12 @@ void option_precision__double(opstack_t& s)
   int prec = vnl_math_rnd(s[0].as_double());
   if (prec < 0 || prec > 20)
   {
-    vcl_cerr << "option_precision takes an integer between 0 and 20.\n";
+    vcl_cerr << "\nERROR: option_precision takes an integer between 0 and 20.\n"
+      "At \"" << args_so_far << "\"<-- HERE\n";
     vcl_exit(1);
   }
   vcl_cout.precision(prec);
-  s.pop_front();
+  s.pop(1);
 }
 
 
@@ -1109,7 +1229,7 @@ void convert_to_float__image_3d_of_int(opstack_t& s)
   vil3d_convert_cast(o1.image(), result.image());
   result.world2im() = o1.world2im();
 
-  s.pop_front();
+  s.pop(1);
   s.push_front(operand(result));
 }
 
@@ -1122,7 +1242,7 @@ void convert_to_float__image_3d_of_double(opstack_t& s)
   vil3d_convert_cast(o1.image(), result.image());
   result.world2im() = o1.world2im();
 
-  s.pop_front();
+  s.pop(1);
   s.push_front(operand(result));
 }
 
@@ -1136,29 +1256,42 @@ void product__image_3d_of_float__image_3d_of_float(opstack_t& s)
   vil3d_math_image_product(o1.image(), o2.image(), result.image());
   result.world2im() = o1.world2im();
 
-  s.pop_front();
-  s.pop_front();
+  s.pop(2);
   s.push_front(operand(result));
 }
 
 void copy__image_3d_of_float(opstack_t& s)
 {
   assert(s.size() >= 1);
-  vimt3d_image_3d_of<float> o1(s[0].as_image_3d_of_float());
+  operand op = s[0];
   vimt3d_image_3d_of<float> result;
-  result.deep_copy(o1);
+  result.deep_copy(op.as_image_3d_of_float());
 
+  s.pop(1);
+  s.push_front(op);
   s.push_front(operand(result));
 }
 
 void copy__image_3d_of_int(opstack_t& s)
 {
   assert(s.size() >= 1);
-  vimt3d_image_3d_of<int> o1(s[0].as_image_3d_of_int());
+  operand op = s[0];
   vimt3d_image_3d_of<int> result;
-  result.deep_copy(o1);
+  result.deep_copy(op.as_image_3d_of_int());
 
+  s.pop(1);
+  s.push_front(op);
   s.push_front(operand(result));
+}
+
+void copy__double(opstack_t& s)
+{
+  assert(s.size() >= 1);
+  operand op = s[0];
+
+  s.pop(1);
+  s.push_front(op);
+  s.push_front(op);
 }
 
 void copy_coordinate_frame__image_3d_of_float__image_3d_of_float(opstack_t& s)
@@ -1173,8 +1306,7 @@ void copy_coordinate_frame__image_3d_of_float__image_3d_of_float(opstack_t& s)
   result.image().deep_copy(i_vox);
   result.world2im() = i_w2i;
 
-  s.pop_front();
-  s.pop_front();
+  s.pop(2);
 
   s.push_front(operand(result));
 }
@@ -1191,17 +1323,8 @@ void copy_coordinate_frame__image_3d_of_int__image_3d_of_int(opstack_t& s)
   result.image().deep_copy(i_vox);
   result.world2im() = i_w2i;
 
-  s.pop_front();
-  s.pop_front();
-
+  s.pop(2);
   s.push_front(operand(result));
-}
-
-void copy__double(opstack_t& s)
-{
-  assert(s.size() >= 1);
-
-  s.push_front(s[0]);
 }
 
 void print_overlap__image_3d_of_float__image_3d_of_float(opstack_t& s)
@@ -1240,8 +1363,7 @@ void print_overlap__image_3d_of_float__image_3d_of_float(opstack_t& s)
   if (dodgy)
     vcl_cerr << "WARNING: PRINT_OVERLAP: At least some voxels were outside the range [0,1].\n";
 
-  s.pop_front();
-  s.pop_front();
+  s.pop(2);
 }
 
 void print_overlap__image_3d_of_int__image_3d_of_int(opstack_t& s)
@@ -1274,8 +1396,7 @@ void print_overlap__image_3d_of_int__image_3d_of_int(opstack_t& s)
   vcl_cout << "Tanamoto: " << static_cast<double>(Tanamoto_num)/Tanamoto_den
            << " Volume Change: " << (static_cast<double>(sum2)-sum1)/sum1 << vcl_endl;
 
-  s.pop_front();
-  s.pop_front();
+  s.pop(2);
 }
 
 void print_quantiles__image_3d_of_float__double(opstack_t& s)
@@ -1303,8 +1424,7 @@ void print_quantiles__image_3d_of_float__double(opstack_t& s)
   }
   vcl_cout << "   100%: " << vcl_setw(20)
            << *vcl_max_element(storage.begin() + vnl_math_rnd((nsteps-1)*step), storage.end()) << vcl_endl;
-  s.pop_front();
-  s.pop_front();
+  s.pop(2);
 }
 
 void print_quantiles__image_3d_of_int__double(opstack_t& s)
@@ -1331,8 +1451,7 @@ void print_quantiles__image_3d_of_int__double(opstack_t& s)
   }
   vcl_cout << "   100%: " << vcl_setw(20)
            << *vcl_max_element(storage.begin() + vnl_math_rnd((nsteps-1)*step), storage.end()) << vcl_endl;
-  s.pop_front();
-  s.pop_front();
+  s.pop(2);
 }
 
 void print_stats__image_3d_of_float(opstack_t& s)
@@ -1344,7 +1463,7 @@ void print_stats__image_3d_of_float(opstack_t& s)
   vil3d_math_mean_and_variance(mean, var, o1.image(), 0);
   vcl_cout << "Mean: " << mean << " Std: " << vcl_sqrt(var) << vcl_endl;
 
-  s.pop_front();
+  s.pop(1);
 }
 
 void print_stats__image_3d_of_int(opstack_t& s)
@@ -1356,7 +1475,7 @@ void print_stats__image_3d_of_int(opstack_t& s)
   vil3d_math_mean_and_variance(mean, var, o1.image(), 0);
   vcl_cout << "Mean: " << mean << " Std: " << vcl_sqrt(var) << vcl_endl;
 
-  s.pop_front();
+  s.pop(1);
 }
 
 void print__double(opstack_t& s)
@@ -1367,35 +1486,42 @@ void print__double(opstack_t& s)
 
   if (s.size() < n+1)
   {
-    vcl_ostringstream ss;
-    ss << "PRINT command could not find " << n << " doubles to print.\n"
-       << "Stack is :\n" << vsl_stream_summary(s);
-    throw vcl_runtime_error(ss.str());
+    vcl_cerr << "\nERROR: --print command could not find " << n << " doubles or strings to print.\n"
+      "At \"" << args_so_far << "\"<-- HERE\n"
+      "Stack is :\n" << vsl_stream_summary(s);
+    vcl_exit(1);
   }
 
   if (n)
   {
     for (unsigned i=1;i<=n; ++i)
     {
-      if (!s[i].is_double())
+      if (!s[i].is_string() && !s[i].is_double())
       {
         vcl_ostringstream ss;
-        ss << "PRINT command could not find " << n << " doubles to print.\n"
-           << "Stack is :\n" << vsl_stream_summary(s);
-        throw vcl_runtime_error(ss.str());
+        vcl_cerr << "\nERROR: --print command could not find " << n << " doubles or strings to print.\n"
+          "At \"" << args_so_far << "\"<-- HERE\n"
+          "Stack is :\n" << vsl_stream_summary(s);
+        vcl_exit(1);
       }
     }
 
-    vcl_cout << s[n].as_double();
+    if (s[n].is_string())
+      vcl_cout << s[n].as_string();
+    else
+      vcl_cout << s[n].as_double();
+
     for (unsigned i=n-1;i>=1; --i)
     {
-      vcl_cout << ' ' << s[i].as_double();
+      if (s[i].is_string())
+        vcl_cout << ' ' << s[i].as_string();
+      else
+        vcl_cout << ' ' << s[i].as_double();
     }
   }
   vcl_cout << vcl_endl;
 
-  for (unsigned i=0;i<=n; ++i)
-    s.pop_front();
+  s.pop(n+1);
 }
 
 void signed_distance_transform__image_3d_of_int(opstack_t& s)
@@ -1416,7 +1542,7 @@ void signed_distance_transform__image_3d_of_int(opstack_t& s)
                                   static_cast<float>(vcl_abs(voxel_size.y())),
                                   static_cast<float>(vcl_abs(voxel_size.z())) );
 
-  s.pop_front();
+  s.pop(1);
   s.push_front(operand(result));
 }
 
@@ -1427,8 +1553,7 @@ void sum__double__double(opstack_t& s)
   double o1(s[1].as_double());
   double o2(s[0].as_double());
 
-  s.pop_front();
-  s.pop_front();
+  s.pop(2);
   s.push_front(operand(o1+o2));
 }
 
@@ -1438,8 +1563,7 @@ void diff__double__double(opstack_t& s)
   double o1(s[1].as_double());
   double o2(s[0].as_double());
 
-  s.pop_front();
-  s.pop_front();
+  s.pop(2);
   s.push_front(operand(o1-o2));
 }
 
@@ -1449,8 +1573,7 @@ void product__double__double(opstack_t& s)
   double o1(s[1].as_double());
   double o2(s[0].as_double());
 
-  s.pop_front();
-  s.pop_front();
+  s.pop(2);
   s.push_front(operand(o1*o2));
 }
 
@@ -1460,8 +1583,7 @@ void quotient__double__double(opstack_t& s)
   double o1(s[1].as_double());
   double o2(s[0].as_double());
 
-  s.pop_front();
-  s.pop_front();
+  s.pop(2);
   s.push_front(operand(o1/o2));
 }
 
@@ -1473,8 +1595,7 @@ void fill__image_3d_of_float__double(opstack_t& s)
   double o2(s[0].as_double());
 
   o1.image().fill(static_cast<float>(o2));
-  s.pop_front();
-  s.pop_front();
+  s.pop(2);
   s.push_front(operand(o1));
 }
 
@@ -1486,8 +1607,7 @@ void fill__image_3d_of_int__double(opstack_t& s)
   double o2(s[0].as_double());
 
   o1.image().fill(static_cast<int>(o2));
-  s.pop_front();
-  s.pop_front();
+  s.pop(2);
   s.push_front(operand(o1));
 }
 
@@ -1507,8 +1627,7 @@ void local_z_normalise__image_3d_of_float__double(opstack_t& s)
                             o1/voxel_size.x(), o1/voxel_size.y(), o1/voxel_size.z(),
                             result.image());
 
-  s.pop_front();
-  s.pop_front();
+  s.pop(2);
   s.push_front(operand(result));
 }
 
@@ -1519,9 +1638,7 @@ void clamp_above__image_3d_of_float__double__double(opstack_t& s)
   vil3d_clamp_above(o1.image(), static_cast<float>(s[1].as_double()),
     static_cast<float>(s[0].as_double()) );
 
-  s.pop_front();
-  s.pop_front();
-  s.pop_front();
+  s.pop(3);
   s.push_front(operand(o1));
 }
 
@@ -1532,9 +1649,7 @@ void clamp_below__image_3d_of_float__double__double(opstack_t& s)
   vil3d_clamp_below(o1.image(), static_cast<float>(s[1].as_double()),
     static_cast<float>(s[0].as_double()) );
 
-  s.pop_front();
-  s.pop_front();
-  s.pop_front();
+  s.pop(3);
   s.push_front(operand(o1));
 }
 
@@ -1545,9 +1660,7 @@ void clamp_above__image_3d_of_int__double__double(opstack_t& s)
   vil3d_clamp_above(o1.image(), static_cast<int>(s[1].as_double()),
     static_cast<int>(s[0].as_double()) );
 
-  s.pop_front();
-  s.pop_front();
-  s.pop_front();
+  s.pop(3);
   s.push_front(operand(o1));
 }
 
@@ -1558,9 +1671,7 @@ void clamp_below__image_3d_of_int__double__double(opstack_t& s)
   vil3d_clamp_below(o1.image(), static_cast<int>(s[1].as_double()),
     static_cast<int>(s[0].as_double()) );
 
-  s.pop_front();
-  s.pop_front();
-  s.pop_front();
+  s.pop(3);
   s.push_front(operand(o1));
 }
 
@@ -1834,6 +1945,13 @@ class operations
     typedef vcl_pair<vcl_vector<vcl_string>::iterator, vcl_vector<vcl_string>::iterator> range_t;
     range_t range =
       vcl_equal_range(singleton_.names_.begin(), singleton_.names_.end(), name);
+
+    if (range.first == range.second)
+    {
+      vcl_cerr << "\nERROR: No such operation \"" << name << "\"\n."
+        "At \"" << args_so_far << "\"<-- HERE\n";
+      vcl_exit(1);
+    }
     for (vcl_ptrdiff_t i = distance(singleton_.names_.begin(), range.first),
          end = distance(singleton_.names_.begin(), range.second); i!=end; ++i)
     {
@@ -1843,16 +1961,18 @@ class operations
         return ;
       }
     }
-    vcl_ostringstream ss;
-    ss << "Unable to match command \"" << name << '"'
-       << "\nStack is :\n" << vsl_stream_summary(stack);
-    throw vcl_runtime_error(ss.str());
+    vcl_cerr << "\nERROR: Unable to match operands for operation \"" << name << '"'
+       << "\nAt \"" << args_so_far << "\"<-- HERE\n"
+       << "\nStack is :\n" << vsl_stream_summary(stack)
+       << "\nPossible \"" << name << "\" operations are:\n";
+    print(vcl_cerr, distance(singleton_.names_.begin(), range.first),
+      distance(range.first, range.second) );
+    vcl_exit(1);
   }
-  static void print(vcl_ostream& os)
+  static void print(vcl_ostream& os, vcl_size_t j, vcl_size_t n)
   {
-    unsigned n = singleton_.names_.size();
-
-    for (unsigned i=0; i<n; ++i)
+    n+=j;
+    for (unsigned i=j; i<n; ++i)
     {
       vcl_string name = singleton_.names_[i].substr(2);
       os << vul_string_upcase(name) << ":  "
@@ -1867,6 +1987,10 @@ class operations
         os << singleton_.function_types_[i][j] << ' ';
       os << "\n\n";
     }
+  }
+  static void print(vcl_ostream& os)
+  {
+    print(os, 0, singleton_.names_.size());
   }
 };
 
@@ -1886,16 +2010,31 @@ int main2(int argc, char*argv[])
   for (int i=1; i<argc; ++i)
   {
     vcl_string option = argv[i];
+    
+    args_so_far += option + ' ';
 
     if (option.empty()) continue;
     if (option.substr(0, 2) == "--")
     {
       operations::run(option, stack);
+      continue; // skip reset_last_pop at end of loop.
     }
-    else
+
+    // Special cases
+    if (option == "{")
+      stack.push_front(operand_open_brace());
+    else if (option == "}")
+      close_brace__brace(stack);
+    else if (option.length()>1 && option[0]=='+')
     {
-      stack.push_front(operand(option));
+      stack.push_front(operand(option.substr(1, vcl_string::npos)));
+      recall__string(stack);
     }
+    else // operand case
+      stack.push_front(operand(option));
+
+    stack.reset_last_pop();
+    
   }
 
   if (!stack.empty())
@@ -1936,6 +2075,6 @@ int main(int argc, char*argv[])
 #else // VCL_HAS_EXCEPTIONS
 int main(int argc, char*argv[])
 {
-  vcl_cerr << "ERROR: image3d_math needs exception support to compile properly.\n";
+  vcl_cerr << "\nERROR: image3d_math needs exception support to compile properly.\n";
 }
 #endif // VCL_HAS_EXCEPTIONS
