@@ -39,6 +39,7 @@ class online_update_test_manager : public bocl_manager<online_update_test_manage
     input_img_(),
     program_(),
     block_(0),
+    factor_(0),
     app_density_(0)
     {}
   ~online_update_test_manager() {
@@ -115,7 +116,7 @@ class online_update_test_manager : public bocl_manager<online_update_test_manage
   bool release_root_level_buffers();
   bool clean_root_level();
 
-  bool set_offset_buffers(int off_x, int off_y);
+  bool set_offset_buffers(int off_x, int off_y,int factor);
   bool release_offset_buffers();
   bool release_command_queue();
   
@@ -159,6 +160,7 @@ class online_update_test_manager : public bocl_manager<online_update_test_manage
   //offset for non-overlapping sections
   cl_uint  offset_x_;
   cl_uint  offset_y_;
+  cl_uint  factor_;
   // bounding box for each tree
   cl_float * tree_bbox_;
 
@@ -190,6 +192,7 @@ class online_update_test_manager : public bocl_manager<online_update_test_manage
 
   cl_mem   offset_x_buf_;
   cl_mem   offset_y_buf_;
+  cl_mem   factor_buf_;
 
   cl_mem   root_level_buf_;
 

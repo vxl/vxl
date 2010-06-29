@@ -57,7 +57,7 @@ static void test_update_upto_pass_4()
   updt_mgr->process_block(4);
   vcl_vector<vnl_vector_fixed<float, 16> > tree_data = updt_mgr->tree_data();
   vcl_vector<vnl_vector_fixed<float, 4> > tree_aux_data = updt_mgr->aux_data();
-#if 0
+#if 1
   vcl_cout << "Cell data -->\n";
   for (unsigned i = 0; i<tree_data.size(); ++i)
     vcl_cout << tree_data[i] << '\n' << tree_aux_data[i] << "\n\n";
@@ -118,7 +118,7 @@ static void test_update_upto_pass_5()
   float dblk1[] = {0.470925f, 0.533333f, 0.1f, 0.800001f, 1.0f, 0.8f, 0.15f, 0.199999f, 1.0f, 0.0f, 0.0f, 0.0f, 1.25f, 0.0f, 0.0f, 0.0f};
   vnl_vector_fixed<float, 16> tdata1(dblk1);
   good = near_eq<16>(tree_data[0],tdata0, 0.0001f);
-  TEST("Upto Pass5 updated an exiting component", good, true);
+  TEST("Upto Pass5 updated an existing component", good, true);
   good = near_eq<16>(tree_data[8],tdata1, 0.0001f);
   TEST("Upto Pass5 created a new component", good, true);
 
@@ -128,5 +128,9 @@ static void test_update()
     test_update_upto_pass_4();
     test_update_upto_pass_5();
 }
+void run_update_on_dalmation()
+{
 
+
+}
 TESTMAIN(test_update);

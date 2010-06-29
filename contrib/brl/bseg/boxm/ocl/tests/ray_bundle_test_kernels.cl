@@ -112,6 +112,7 @@ test_map_work_space(__global int4* cells, __global float16* cell_data,
 {
   int mapped_id0=0, mapped_id1=0;
   map_work_space_2d(&mapped_id0, &mapped_id1);
+  //map_work_space_2d_offset(&mapped_id0, &mapped_id1,0,1);
   int global_id0 = get_global_id(0), global_id1 = get_global_id(1);
   int gs0 = get_global_size(0);
   /* keep track of what thread executes by a global counter (results[0]) */

@@ -212,14 +212,16 @@ bool online_update_test_manager<T>::set_kernel_args(unsigned pass)
   status = clSetKernelArg(kernel,i++,sizeof(cl_mem),(void *)&image_buf_);
   if (this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (input_image)")!=CHECK_SUCCESS)
     return false;
-  set_offset_buffers(0,0);
-
   //  offset buffer
-  status = clSetKernelArg(kernel,i++,sizeof(cl_mem),(void *)&offset_x_buf_);
-  if (this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local cam)")!=CHECK_SUCCESS)
+  status = clSetKernelArg(kernel,i++,sizeof(cl_mem),(void *)&factor_buf_);
+  if (this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (factor_buf_)")!=CHECK_SUCCESS)
     return false;
+  status = clSetKernelArg(kernel,i++,sizeof(cl_mem),(void *)&offset_x_buf_);
+  if (this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (offset_x_buf_)")!=CHECK_SUCCESS)
+    return false;
+
   status = clSetKernelArg(kernel,i++,sizeof(cl_mem),(void *)&offset_y_buf_);
-  if (this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local cam)")!=CHECK_SUCCESS)
+  if (this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (offset_y_buf_)")!=CHECK_SUCCESS)
     return false;
   status = clSetKernelArg(kernel,i++,sizeof(cl_float4),0);
   if (this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local origin)")!=CHECK_SUCCESS)
@@ -356,6 +358,11 @@ bool online_update_test_manager<T>::run_block(unsigned pass)
                                     sizeof(cl_ulong),&kernel_work_group_size,NULL);
   if (this->check_val(status,CL_SUCCESS,"clGetKernelWorkGroupInfo CL_KERNEL_WORK_GROUP_SIZE, failed.")!=CHECK_SUCCESS)
     return false;
+  if (used_local_memory > this->total_local_memory())
+  {
+    vcl_cout << "Unsupported: Insufficient local memory on device.\n";
+    return false;
+  }
 
 
   vcl_size_t globalThreads[]= {this->wni_,this->wnj_};
@@ -364,29 +371,48 @@ bool online_update_test_manager<T>::run_block(unsigned pass)
   if(pass==4) //: change the gloabal threads
   {
     globalThreads[0]=RoundUp(data_array_size_[0],64);globalThreads[1]=1;
-    localThreads[0]=64;localThreads[1]=1;
-
+    localThreads[0]=64;                              localThreads[1]=1;
   }
-  if (used_local_memory > this->total_local_memory())
+  if(pass!=2 && pass!=4)
   {
-    vcl_cout << "Unsupported: Insufficient local memory on device.\n";
-    return false;
+      globalThreads[0]=this->wni_/2; globalThreads[1]=this->wnj_/2;
+      localThreads[0] =this->bni_  ; localThreads[1] =this->bnj_  ;
+
+      for(unsigned k=0;k<2;k++)
+      {
+          for(unsigned l=0;l<2;l++)
+          {
+              status=clEnqueueWriteBuffer(command_queue_,offset_y_buf_,0,0,sizeof(cl_uint),(void *)&k,0,0,0);
+              status=clEnqueueWriteBuffer(command_queue_,offset_x_buf_,0,0,sizeof(cl_uint),(void *)&l,0,0,0);
+              clFinish(command_queue_);
+              cl_event ceEvent;
+
+              status = clEnqueueNDRangeKernel(command_queue_, kernels_[pass], 2,NULL,globalThreads,localThreads,0,NULL,&ceEvent);
+              if (this->check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed. "+error_to_string(status))!=CHECK_SUCCESS)
+                  return false;
+              status = clFinish(command_queue_);
+              if (this->check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status))!=CHECK_SUCCESS)
+                  return false;
+          }
+      }
   }
+  else
+  {
+      cl_event ceEvent;
 
-  cl_event ceEvent;
-  status = clEnqueueNDRangeKernel(command_queue_, kernels_[pass], 2,NULL,globalThreads,localThreads,0,NULL,&ceEvent);
+      status = clEnqueueNDRangeKernel(command_queue_, kernels_[pass], 2,NULL,globalThreads,localThreads,0,NULL,&ceEvent);
+      if (this->check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed. "+error_to_string(status))!=CHECK_SUCCESS)
+          return false;
+      status = clFinish(command_queue_);
 
-  if (this->check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed. "+error_to_string(status))!=CHECK_SUCCESS)
-    return false;
-
-  status = clFinish(command_queue_);
+  }
   if (this->check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status))!=CHECK_SUCCESS)
     return false;
   cl_ulong tstart,tend;
-  status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
-  status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
+  //status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
+  //status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
   //  gpu_time_+= (double)1.0e-6 * (tend - tstart); // convert nanoseconds to milliseconds
-  //  release_offset_buffers();
+  
 
   return true;
 }
@@ -405,6 +431,7 @@ bool online_update_test_manager<T>::process_block(int numpass)
     return false;
   if (!(set_block_data() &&
         set_block_data_buffers() &&
+        set_offset_buffers(0,0,2)&&
         set_input_view() &&
         set_input_view_buffers()))
     return false;
@@ -426,9 +453,11 @@ bool online_update_test_manager<T>::process_block(int numpass)
     return false;
   float raytrace_time = (float)timer.all() / 1e3f;
   vcl_cout<<"processing block took " << raytrace_time << 's' << vcl_endl;
+  read_output_image() ;
   this->print_image() ;
-  return read_output_image()    && clean_input_view()
+  return  clean_input_view()
       && release_block_data_buffers()
+      && release_offset_buffers()
       && clean_block_data()
       && clean_norm_data()
       && release_command_queue();
@@ -1087,11 +1116,18 @@ bool online_update_test_manager<T>::release_input_image_buffers()
 }
 
 template<class T>
-bool online_update_test_manager<T>::set_offset_buffers(int offset_x,int offset_y)
+bool online_update_test_manager<T>::set_offset_buffers(int offset_x,int offset_y,int factor)
 {
   cl_int status;
   offset_x_=offset_x;
   offset_y_=offset_y;
+  factor_=factor;
+  factor_buf_ = clCreateBuffer(this->context_,
+                                 CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
+                                 sizeof(cl_int),
+                                 &factor_,&status);
+  if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (factor_) failed."))
+    return false;
 
   offset_x_buf_ = clCreateBuffer(this->context_,
                                  CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
@@ -1109,13 +1145,17 @@ bool online_update_test_manager<T>::set_offset_buffers(int offset_x,int offset_y
 template<class T>
 bool online_update_test_manager<T>::release_offset_buffers()
 {
-  cl_int status;
-  status = clReleaseMemObject(offset_x_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (offset_x_buf_)."))
-    return false;
+    cl_int status;
+    status = clReleaseMemObject(factor_buf_);
+    if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (factor_buf_)."))
+        return false;
 
-  status = clReleaseMemObject(offset_y_buf_);
-  return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (offset_y_buf_).")==1;
+    status = clReleaseMemObject(offset_x_buf_);
+    if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (offset_x_buf_)."))
+        return false;
+
+    status = clReleaseMemObject(offset_y_buf_);
+    return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (offset_y_buf_).")==1;
 }
 
 template<class T>
