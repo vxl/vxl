@@ -55,7 +55,7 @@ class online_update_test_manager : public bocl_manager<online_update_test_manage
   //: 2d workgroup
   void set_bundle_ni(unsigned bundle_x) {bni_=bundle_x;}
   void set_bundle_nj(unsigned bundle_y) {bnj_=bundle_y;}
-  bool process_block();
+  bool process_block(int numpass=5);
   //: set input image and image dimensions and camera
   bool set_input_view();
   bool set_input_view_buffers();

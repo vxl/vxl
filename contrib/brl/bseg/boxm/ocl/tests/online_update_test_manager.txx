@@ -392,7 +392,7 @@ bool online_update_test_manager<T>::run_block(unsigned pass)
 }
 
 template<class T>
-bool online_update_test_manager<T>::process_block()
+bool online_update_test_manager<T>::process_block(int numpass)
 {
   cl_int status = CL_SUCCESS;
   if (!this->set_kernels())
@@ -415,7 +415,7 @@ bool online_update_test_manager<T>::process_block()
   if (!(set_tree(tree) && set_tree_buffers()))
     return false;
   // run the raytracing for this block
-  for (unsigned pass = 0; pass<4; pass++)
+  for (unsigned pass = 0; pass<numpass; pass++)
     if (!run_block(pass))
       return false;
   // release memory
