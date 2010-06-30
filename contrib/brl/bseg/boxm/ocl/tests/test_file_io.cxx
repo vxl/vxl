@@ -12,7 +12,7 @@
 #include <boxm/ocl/boxm_ocl_utils.h>
 #include <vpl/vpl.h>
 
-//: reading and writing a tree in an array form
+// reading and writing a tree in an array form
 static void test_tree_read_write()
 {
     boct_tree<short,float> *tree=open_cl_test_data::tree<float>();
@@ -65,13 +65,12 @@ static void test_tree_read_write()
     cl_float *rcell_data =boxm_ocl_utils::readtreedata(treedatafile,treedatasize);
 
     bool flag=true;
-    for(unsigned i=0;i<treesize;i++)
-        if(rcells[i]!=cells[i])
+    for (unsigned i=0;i<treesize;i++)
+        if (rcells[i]!=cells[i])
             flag=false;
-  
-    
-    for(unsigned i=0;i<treedatasize;i++)
-        if(rcell_data[i]!=cell_data[i])
+
+    for (unsigned i=0;i<treedatasize;i++)
+        if (rcell_data[i]!=cell_data[i])
             flag=false;
 
     vpl_unlink(treefile.c_str());
@@ -79,9 +78,10 @@ static void test_tree_read_write()
 
     TEST("Read Write of tree and data arrays",flag,true);
 }
+
 static void test_file_io()
 {
     test_tree_read_write();
-
 }
+
 TESTMAIN(test_file_io);

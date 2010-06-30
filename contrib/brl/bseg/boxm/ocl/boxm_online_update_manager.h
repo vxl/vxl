@@ -42,15 +42,19 @@ class boxm_online_update_manager : public bocl_manager<boxm_online_update_manage
     factor_(0),
     app_density_(0)
     {}
+
   ~boxm_online_update_manager() {
     if (program_)
       clReleaseProgram(program_);
   }
 
-  // read the scene, cam and image
-  //void set_block_items(boxm_block<tree_type> *block,
-  //                     vpgl_camera_double_sptr cam,
-  //                     vil_image_view<obs_type> &obs);
+#if 0
+  //: read the scene, cam and image
+  void set_block_items(boxm_block<tree_type> *block,
+                       vpgl_camera_double_sptr cam,
+                       vil_image_view<obs_type> &obs);
+#endif // 0
+
   //: 2d workgroup
   void set_bundle_ni(unsigned bundle_x) {bni_=bundle_x;}
   void set_bundle_nj(unsigned bundle_y) {bnj_=bundle_y;}
@@ -61,7 +65,7 @@ class boxm_online_update_manager : public bocl_manager<boxm_online_update_manage
   bool release_input_view_buffers();
   bool clean_input_view();
 
-  //: set the tree, data , aux_data and bbox
+  //: set the tree, data, aux_data and bbox
   bool load_tree(vcl_string filename);
   bool set_tree_buffers();
   bool release_tree_buffers();
@@ -94,7 +98,8 @@ class boxm_online_update_manager : public bocl_manager<boxm_online_update_manage
   bool release_block_data_buffers();
   bool clean_block_data();
 
-  //: helper functions
+  // === helper functions ===
+
   bool run_block(unsigned pass);
 
   // Set up Camera
@@ -117,29 +122,27 @@ class boxm_online_update_manager : public bocl_manager<boxm_online_update_manage
   bool set_offset_buffers(int off_x, int off_y,int factor);
   bool release_offset_buffers();
   bool release_command_queue();
-  
+
   bool setup_app_density(bool use_uniform=true, float mean = 0.0f, float sigma = 0.0f);
   int setup_app_density_buffer();
   bool clean_app_density();
   int clean_app_density_buffer();
   cl_mem& app_density(){return app_density_buf_;}
 
-
   bool clean_norm_data();
 
   int build_kernel_program(cl_program & program);
-  cl_kernel kernel(unsigned i) 
-    {if(i<kernels_.size()) return kernels_[i]; return 0;}
-  
+  cl_kernel kernel(unsigned i) { if (i<kernels_.size()) return kernels_[i]; else return 0; }
+
   cl_program program_;
 
   cl_command_queue command_queue_;
 
   vcl_vector<cl_kernel> kernels_;
 
-  //array of tree cells,
+  //array of tree cells
   cl_int* cells_;
-  cl_uint  cells_size_;
+  cl_uint cells_size_;
 
   //array of data pointed to by tree
   cl_float* cell_data_;
@@ -148,7 +151,7 @@ class boxm_online_update_manager : public bocl_manager<boxm_online_update_manage
   // array of aux data point to by tree
   cl_float* cell_aux_data_;
 
-  //root level
+  // root level
   cl_uint root_level_;
 
   // image dimensions
