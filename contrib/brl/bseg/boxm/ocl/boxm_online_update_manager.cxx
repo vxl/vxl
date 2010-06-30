@@ -1,4 +1,3 @@
-
 //:
 // \file
 #include "boxm_online_update_manager.h"
@@ -17,18 +16,19 @@
 
 #include <vil/vil_save.h>
 
-
-//void boxm_online_update_manager::
-//set_block_items(boxm_block<boct_tree<short,T> > *block,
-//                vpgl_camera_double_sptr cam,
-//                vil_image_view<float> &obs)
-//{
-//  if (block_)
-//    delete block_;
-//  block_ = block;
-//  cam_ = cam;
-//  input_img_=obs;
-//}
+#if 0
+void boxm_online_update_manager::
+set_block_items(boxm_block<boct_tree<short,T> > *block,
+                vpgl_camera_double_sptr cam,
+                vil_image_view<float> &obs)
+{
+  if (block_)
+    delete block_;
+  block_ = block;
+  cam_ = cam;
+  input_img_=obs;
+}
+#endif // 0
 
 // This function enables a kind of "functor" capability where a token
 // in the ray trace main program is replaced with an appropriate function
@@ -149,7 +149,7 @@ bool boxm_online_update_manager::set_kernel_args(unsigned pass)
   int CHECK_SUCCESS = 1;
   cl_int status = SDK_SUCCESS;
 
-  if(pass==4)
+  if (pass==4)
   {
     status = clSetKernelArg(kernels_[pass], 0,
                             sizeof(cl_mem), (void *)&cell_data_buf_);
@@ -164,8 +164,8 @@ bool boxm_online_update_manager::set_kernel_args(unsigned pass)
                             sizeof(cl_mem), (void *)&data_array_size_buf_);
     return this->check_val(status, CL_SUCCESS,
                            "clSetKernelArg failed. (data array size)")==CHECK_SUCCESS;
-
   }
+
   if (pass == 2) { // norm image process //
     status = clSetKernelArg(kernels_[pass], 0,
                             sizeof(cl_mem), (void *)&image_buf_);
@@ -325,8 +325,8 @@ int boxm_online_update_manager::clean_app_density_buffer()
 }
 
 bool boxm_online_update_manager::setup_norm_data(bool use_uniform,
-                                                    float mean,
-                                                    float sigma)
+                                                 float mean,
+                                                 float sigma)
 {
   return this->setup_app_density(use_uniform, mean, sigma)
       && this->setup_app_density_buffer()==SDK_SUCCESS;
@@ -368,19 +368,19 @@ bool boxm_online_update_manager::run_block(unsigned pass)
   vcl_size_t globalThreads[]= {this->wni_,this->wnj_};
   vcl_size_t localThreads[] = {this->bni_,this->bnj_};
 
-  if(pass==4) //: change the gloabal threads
+  if (pass==4) // change the global threads
   {
     globalThreads[0]=RoundUp(data_array_size_[0],64);globalThreads[1]=1;
     localThreads[0]=64;                              localThreads[1]=1;
   }
-  if(pass!=2 && pass!=4)
+  if (pass!=2 && pass!=4)
   {
       globalThreads[0]=this->wni_/2; globalThreads[1]=this->wnj_/2;
       localThreads[0] =this->bni_  ; localThreads[1] =this->bnj_  ;
 
-      for(unsigned k=0;k<2;k++)
+      for (unsigned k=0;k<2;k++)
       {
-          for(unsigned l=0;l<2;l++)
+          for (unsigned l=0;l<2;l++)
           {
               status=clEnqueueWriteBuffer(command_queue_,offset_y_buf_,0,0,sizeof(cl_uint),(void *)&k,0,0,0);
               status=clEnqueueWriteBuffer(command_queue_,offset_x_buf_,0,0,sizeof(cl_uint),(void *)&l,0,0,0);
@@ -404,15 +404,16 @@ bool boxm_online_update_manager::run_block(unsigned pass)
       if (this->check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed. "+error_to_string(status))!=CHECK_SUCCESS)
           return false;
       status = clFinish(command_queue_);
-
   }
+
   if (this->check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status))!=CHECK_SUCCESS)
     return false;
   cl_ulong tstart,tend;
-  //status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
-  //status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
-  //  gpu_time_+= (double)1.0e-6 * (tend - tstart); // convert nanoseconds to milliseconds
-  
+#if 0
+  status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
+  status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
+    gpu_time_+= (double)1.0e-6 * (tend - tstart); // convert nanoseconds to milliseconds
+#endif
 
   return true;
 }
@@ -420,48 +421,50 @@ bool boxm_online_update_manager::run_block(unsigned pass)
 
 bool boxm_online_update_manager::process_block(int numpass)
 {
-  //cl_int status = CL_SUCCESS;
-  //if (!this->set_kernels())
-  //  return false;
-  //if (!this->create_command_queue())
-  //  return false;
-  //vcl_string error_message="";
-  //vul_timer timer;
-  //if (!block_)
-  //  return false;
-  //if (!(set_block_data() &&
-  //      set_block_data_buffers() &&
-  //      set_offset_buffers(0,0,2)&&
-  //      set_input_view() &&
-  //      set_input_view_buffers()))
-  //  return false;
-  //float total_raytrace_time = 0.0f;
-  //float total_gpu_time = 0.0f;
-  //float total_load_time = 0.0f;
-  //tree_type * tree = block_->get_tree();
-  //if (!(set_tree(tree) && set_tree_buffers()))
-  //  return false;
-  //// run the raytracing for this block
-  //for (unsigned pass = 0; pass<numpass; pass++)
-  //{
-  //  if (!run_block(pass))
-  //    return false;
-  //  if(pass==2)
-  //  {
-  //      read_output_image() ;
-  //      this->save_image() ;
-  //  }
-  //}
-  //// release memory
-  //this->read_trees();
-  //this->archive_tree_data();
-  ////this->print_leaves();
-  //if (!(release_tree_buffers() && clean_tree()))
-  //  return false;
-  //float raytrace_time = (float)timer.all() / 1e3f;
-  //vcl_cout<<"processing block took " << raytrace_time << 's' << vcl_endl;
-  //read_output_image() ;
-  //this->print_image() ;
+#if 0
+  cl_int status = CL_SUCCESS;
+  if (!this->set_kernels())
+    return false;
+  if (!this->create_command_queue())
+    return false;
+  vcl_string error_message="";
+  vul_timer timer;
+  if (!block_)
+    return false;
+  if (!(set_block_data() &&
+        set_block_data_buffers() &&
+        set_offset_buffers(0,0,2)&&
+        set_input_view() &&
+        set_input_view_buffers()))
+    return false;
+  float total_raytrace_time = 0.0f;
+  float total_gpu_time = 0.0f;
+  float total_load_time = 0.0f;
+  tree_type * tree = block_->get_tree();
+  if (!(set_tree(tree) && set_tree_buffers()))
+    return false;
+  // run the raytracing for this block
+  for (unsigned pass = 0; pass<numpass; pass++)
+  {
+    if (!run_block(pass))
+      return false;
+    if (pass==2)
+    {
+        read_output_image() ;
+        this->save_image() ;
+    }
+  }
+  // release memory
+  this->read_trees();
+  this->archive_tree_data();
+  //this->print_leaves();
+  if (!(release_tree_buffers() && clean_tree()))
+    return false;
+  float raytrace_time = (float)timer.all() / 1e3f;
+  vcl_cout<<"processing block took " << raytrace_time << 's' << vcl_endl;
+  read_output_image() ;
+  this->print_image() ;
+#endif // 0
   return  clean_input_view()
       && release_block_data_buffers()
       && release_offset_buffers()
@@ -787,16 +790,18 @@ bool boxm_online_update_manager::release_block_data_buffers()
 
 bool boxm_online_update_manager::set_root_level()
 {
-  //if (block_==NULL)
-  //{
-  //  vcl_cout<<"Block is Missing "<<vcl_endl;
-  //  return false;
-  //}
-  //else {
-  //  root_level_=block_->get_tree()->root_level();
-  //  return true;
-  //}
+#if 0
+  if (block_==NULL)
+  {
+    vcl_cout<<"Block is Missing "<<vcl_endl;
+    return false;
+  }
+  else {
+    root_level_=block_->get_tree()->root_level();
     return true;
+  }
+#endif // 0
+  return true;
 }
 
 
@@ -850,97 +855,99 @@ bool boxm_online_update_manager::set_input_view_buffers()
 
 bool boxm_online_update_manager::release_input_view_buffers()
 {
-  return release_persp_camera_buffers()    
+  return release_persp_camera_buffers()
         && release_input_image_buffers();
 }
 
 
 bool boxm_online_update_manager::load_tree(vcl_string filename)
 {
-//  vcl_vector<vnl_vector_fixed<int, 4> > cell_input_;
-//  vcl_vector<vnl_vector_fixed<float, 16>  > data_input_;
-//
-//  cell_type * root = tree->root();
-//  //nlevels_=root->level()+1;
-//  if (!root)
-//    return false;
-//
-//  int cell_ptr = 0;
-//  // put the root into the cell array and its data in the data array
-//  vnl_vector_fixed<int, 4> root_cell(0);
-//  root_cell[0]=-1; // no parent
-//  root_cell[1]=-1; // no children at the moment
-//  root_cell[1]=-1; // no data at the moment
-//  cell_input_.push_back(root_cell);
-//  boxm_ocl_utils::copy_to_arrays(root, cell_input_, data_input_, cell_ptr);
-//
-//  // the tree is now resident in the 1-d vectors
-//  cells_size_=cell_input_.size();
-//  cell_data_size_=data_input_.size();
-//  
-//  cells_ = NULL;
-//  cell_data_ = NULL;
-//  cell_aux_data_ = NULL;
-//
-//  cells_=(cl_int *)boxm_ocl_utils::alloc_aligned(cell_input_.size(),sizeof(cl_int4),16);
-//  cell_data_=(cl_float *)boxm_ocl_utils::alloc_aligned(data_input_.size(),sizeof(cl_float16),16);
-//  cell_aux_data_=(cl_float *)boxm_ocl_utils::alloc_aligned(data_input_.size(),sizeof(cl_float4),16);
-//  data_array_size_=(cl_uint *)boxm_ocl_utils::alloc_aligned(1,sizeof(cl_uint),16);
-// 
-//  if (cells_== NULL||cell_data_ == NULL||cell_aux_data_==NULL)
-//  {
-//    vcl_cout << "Failed to allocate host memory. (tree input)\n";
-//    return false;
-//  }
-//
-//  //: copy the data from vectors to arrays
-//  for (unsigned i = 0, j = 0; i<cell_input_.size()*4; i+=4, j++)
-//    for (unsigned k = 0; k<4; ++k)
-//      cells_[i+k]=cell_input_[j][k];
-//
-//  // note that the cell data pointer cells[i+2] does not correspond to the 1-d
-//  // data array location. It must be mapped as:
-//  //  cell_data indices = 2*cell_data_ptr, 2*cell_data_ptr +1,
-//
-//  unsigned cell_data_size=16;
-//  unsigned aux_cell_data_size=4;
-//  for (unsigned i = 0, j = 0; i<data_input_.size()*cell_data_size; i+=cell_data_size, j++)
-//  {
-//    for (unsigned k = 0; k<cell_data_size; ++k)
-//      cell_data_[i+k]=data_input_[j][k];
-//
-//    for (unsigned k = 0; k<aux_cell_data_size; ++k)
-//      cell_aux_data_[j*aux_cell_data_size+k]=0.0f;
-//  }
-//
-//
-//  data_array_size_[0]=cell_data_size_;
-//
-//  tree_bbox_=(cl_float *)boxm_ocl_utils::alloc_aligned(1,sizeof(cl_float4),16);
-//
-//  tree_bbox_[0] = (cl_float)tree->bounding_box().min_x();
-//  tree_bbox_[1] = (cl_float)tree->bounding_box().min_y();
-//  tree_bbox_[2] = (cl_float)tree->bounding_box().min_z();
-//  //: Assumption is isotropic dimensions.
-//  tree_bbox_[3] = (cl_float)tree->bounding_box().width();
-//
+#if 0 // completely commented out ...
+  vcl_vector<vnl_vector_fixed<int, 4> > cell_input_;
+  vcl_vector<vnl_vector_fixed<float, 16>  > data_input_;
+
+  cell_type * root = tree->root();
+  //nlevels_=root->level()+1;
+  if (!root)
+    return false;
+
+  int cell_ptr = 0;
+  // put the root into the cell array and its data in the data array
+  vnl_vector_fixed<int, 4> root_cell(0);
+  root_cell[0]=-1; // no parent
+  root_cell[1]=-1; // no children at the moment
+  root_cell[1]=-1; // no data at the moment
+  cell_input_.push_back(root_cell);
+  boxm_ocl_utils::copy_to_arrays(root, cell_input_, data_input_, cell_ptr);
+
+  // the tree is now resident in the 1-d vectors
+  cells_size_=cell_input_.size();
+  cell_data_size_=data_input_.size();
+
+  cells_ = NULL;
+  cell_data_ = NULL;
+  cell_aux_data_ = NULL;
+
+  cells_=(cl_int *)boxm_ocl_utils::alloc_aligned(cell_input_.size(),sizeof(cl_int4),16);
+  cell_data_=(cl_float *)boxm_ocl_utils::alloc_aligned(data_input_.size(),sizeof(cl_float16),16);
+  cell_aux_data_=(cl_float *)boxm_ocl_utils::alloc_aligned(data_input_.size(),sizeof(cl_float4),16);
+  data_array_size_=(cl_uint *)boxm_ocl_utils::alloc_aligned(1,sizeof(cl_uint),16);
+
+  if (cells_== NULL||cell_data_ == NULL||cell_aux_data_==NULL)
+  {
+    vcl_cout << "Failed to allocate host memory. (tree input)\n";
+    return false;
+  }
+
+  // copy the data from vectors to arrays
+  for (unsigned i = 0, j = 0; i<cell_input_.size()*4; i+=4, j++)
+    for (unsigned k = 0; k<4; ++k)
+      cells_[i+k]=cell_input_[j][k];
+
+  // note that the cell data pointer cells[i+2] does not correspond to the 1-d
+  // data array location. It must be mapped as:
+  //  cell_data indices = 2*cell_data_ptr, 2*cell_data_ptr +1,
+
+  unsigned cell_data_size=16;
+  unsigned aux_cell_data_size=4;
+  for (unsigned i = 0, j = 0; i<data_input_.size()*cell_data_size; i+=cell_data_size, j++)
+  {
+    for (unsigned k = 0; k<cell_data_size; ++k)
+      cell_data_[i+k]=data_input_[j][k];
+
+    for (unsigned k = 0; k<aux_cell_data_size; ++k)
+      cell_aux_data_[j*aux_cell_data_size+k]=0.0f;
+  }
+
+  data_array_size_[0]=cell_data_size_;
+
+  tree_bbox_=(cl_float *)boxm_ocl_utils::alloc_aligned(1,sizeof(cl_float4),16);
+
+  tree_bbox_[0] = (cl_float)tree->bounding_box().min_x();
+  tree_bbox_[1] = (cl_float)tree->bounding_box().min_y();
+  tree_bbox_[2] = (cl_float)tree->bounding_box().min_z();
+  // Assumption is isotropic dimensions.
+  tree_bbox_[3] = (cl_float)tree->bounding_box().width();
+#endif // 0
+
   return true;
 }
 
 
 bool boxm_online_update_manager::clean_tree()
 {
-//  if (cells_)
-//    boxm_ocl_utils::free_aligned(cells_);
-//  if (cell_data_)
-//    boxm_ocl_utils::free_aligned(cell_data_);
-//  if (cell_aux_data_)
-//    boxm_ocl_utils::free_aligned(cell_aux_data_);
-//  if (tree_bbox_)
-//    boxm_ocl_utils::free_aligned(tree_bbox_);
-//  if(data_array_size_)
-//    boxm_ocl_utils::free_aligned(data_array_size_);
-
+#if 0
+  if (cells_)
+    boxm_ocl_utils::free_aligned(cells_);
+  if (cell_data_)
+    boxm_ocl_utils::free_aligned(cell_data_);
+  if (cell_aux_data_)
+    boxm_ocl_utils::free_aligned(cell_aux_data_);
+  if (tree_bbox_)
+    boxm_ocl_utils::free_aligned(tree_bbox_);
+  if (data_array_size_)
+    boxm_ocl_utils::free_aligned(data_array_size_);
+#endif // 0
   return true;
 }
 
@@ -974,9 +981,9 @@ bool boxm_online_update_manager::set_tree_buffers()
   if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (tree_bbox_buf_) failed."))
     return false;
   data_array_size_buf_ = clCreateBuffer(this->context_,
-                                  CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
-                                  sizeof(cl_uint),
-                                  data_array_size_,&status);
+                                        CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
+                                        sizeof(cl_uint),
+                                        data_array_size_,&status);
 
   return this->check_val(status,CL_SUCCESS,"clCreateBuffer (data_array_size_) failed.")==1;
 }
@@ -1072,7 +1079,6 @@ bool boxm_online_update_manager::release_persp_camera_buffers()
 }
 
 
-
 bool boxm_online_update_manager::set_input_image()
 {
   wni_=(cl_uint)RoundUp(input_img_.ni(),bni_);
@@ -1081,8 +1087,8 @@ bool boxm_online_update_manager::set_input_image()
   image_=(cl_float *)boxm_ocl_utils::alloc_aligned(wni_*wnj_,sizeof(cl_float4),16);
   img_dims_=(cl_uint *)boxm_ocl_utils::alloc_aligned(1,sizeof(cl_uint4),16);
 
-  for(unsigned i=0;i<wni_*wnj_*4;i++)
-        image_[i]=0.0f;
+  for (unsigned i=0;i<wni_*wnj_*4;i++)
+    image_[i]=0.0f;
   vil_image_view<float>::iterator iter=input_img_.begin();
 
   // pad the image
@@ -1159,9 +1165,9 @@ bool boxm_online_update_manager::set_offset_buffers(int offset_x,int offset_y,in
   offset_y_=offset_y;
   factor_=factor;
   factor_buf_ = clCreateBuffer(this->context_,
-                                 CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
-                                 sizeof(cl_int),
-                                 &factor_,&status);
+                               CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
+                               sizeof(cl_int),
+                               &factor_,&status);
   if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (factor_) failed."))
     return false;
 
@@ -1181,17 +1187,17 @@ bool boxm_online_update_manager::set_offset_buffers(int offset_x,int offset_y,in
 
 bool boxm_online_update_manager::release_offset_buffers()
 {
-    cl_int status;
-    status = clReleaseMemObject(factor_buf_);
-    if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (factor_buf_)."))
-        return false;
+  cl_int status;
+  status = clReleaseMemObject(factor_buf_);
+  if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (factor_buf_)."))
+    return false;
 
-    status = clReleaseMemObject(offset_x_buf_);
-    if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (offset_x_buf_)."))
-        return false;
+  status = clReleaseMemObject(offset_x_buf_);
+  if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (offset_x_buf_)."))
+    return false;
 
-    status = clReleaseMemObject(offset_y_buf_);
-    return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (offset_y_buf_).")==1;
+  status = clReleaseMemObject(offset_y_buf_);
+  return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (offset_y_buf_).")==1;
 }
 
 
@@ -1201,6 +1207,3 @@ bool boxm_online_update_manager::release_command_queue()
   return this->check_val(status,CL_SUCCESS,"clReleaseCommandQueue failed.") == 1;
 }
 
-
-
-    
