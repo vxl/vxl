@@ -159,8 +159,8 @@ class vil_exception_image_io
 #else
     full_what
 #endif
-    ("Unrecoverable failure in " + function + " while loading "
-     + file_name + " using " + type + " loader.  Error description: " + description),
+    ("Failed to load " + file_name + " in "
+     + function + " using " + type + " loader. " + description),
     function_name(function), file_type(type), filename(file_name), details(description) {}
 #if VCL_HAS_EXCEPTIONS
   virtual ~vil_exception_image_io() throw() {}
