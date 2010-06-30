@@ -9,6 +9,7 @@ DECLARE( test_ray_bundle );
 DECLARE( test_statistics );
 DECLARE( test_refine );
 DECLARE( test_update );
+DECLARE( test_file_io );
 
 void register_tests()
 {
@@ -21,6 +22,7 @@ void register_tests()
   REGISTER( test_statistics );
   REGISTER( test_refine );
   REGISTER( test_update );
+  REGISTER( test_file_io );
 }
 
 

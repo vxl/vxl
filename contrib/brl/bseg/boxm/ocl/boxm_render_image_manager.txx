@@ -520,7 +520,7 @@ bool boxm_render_image_manager<T>::set_scene_origin()
   }
   vgl_point_3d<double> orig=scene_->origin();
 
-  scene_origin_=(cl_float *)boxm_ocl_utils<T>::alloc_aligned(1,sizeof(cl_float4),16);
+  scene_origin_=(cl_float *)boxm_ocl_utils::alloc_aligned(1,sizeof(cl_float4),16);
 
   scene_origin_[0]=(float)orig.x();
   scene_origin_[1]=(float)orig.y();
@@ -553,7 +553,7 @@ template<class T>
 bool boxm_render_image_manager<T>::clean_scene_origin()
 {
   if (scene_origin_)
-    boxm_ocl_utils<T>::free_aligned(scene_origin_);
+    boxm_ocl_utils::free_aligned(scene_origin_);
   return true;
 }
 
@@ -566,7 +566,7 @@ bool boxm_render_image_manager<T>::set_scene_dims()
     return false;
   }
   scene_->block_num(scene_x_,scene_y_,scene_z_);
-  scene_dims_=(cl_int *)boxm_ocl_utils<T>::alloc_aligned(1,sizeof(cl_int4),16);
+  scene_dims_=(cl_int *)boxm_ocl_utils::alloc_aligned(1,sizeof(cl_int4),16);
 
   scene_dims_[0]=scene_x_;
   scene_dims_[1]=scene_y_;
@@ -599,7 +599,7 @@ template<class T>
 bool boxm_render_image_manager<T>::clean_scene_dims()
 {
   if (scene_dims_)
-    boxm_ocl_utils<T>::free_aligned(scene_dims_);
+    boxm_ocl_utils::free_aligned(scene_dims_);
   return true;
 }
 
@@ -613,7 +613,7 @@ bool boxm_render_image_manager<T>::set_block_dims()
   }
   vgl_vector_3d<double> block_dim=scene_->block_dim();
 
-  block_dims_=(cl_float *)boxm_ocl_utils<T>::alloc_aligned(1,sizeof(cl_float4),16);
+  block_dims_=(cl_float *)boxm_ocl_utils::alloc_aligned(1,sizeof(cl_float4),16);
 
   block_dims_[0]=(float)block_dim.x();
   block_dims_[1]=(float)block_dim.y();
@@ -646,7 +646,7 @@ template<class T>
 bool boxm_render_image_manager<T>::clean_block_dims()
 {
   if (block_dims_)
-    boxm_ocl_utils<T>::free_aligned(block_dims_);
+    boxm_ocl_utils::free_aligned(block_dims_);
   return true;
 }
 
@@ -661,7 +661,7 @@ bool boxm_render_image_manager<T>::set_block_ptrs()
   scene_->block_num(scene_x_,scene_y_,scene_z_);
 
   int numblocks=scene_x_*scene_y_*scene_z_;
-  block_ptrs_=(cl_int*)boxm_ocl_utils<T>::alloc_aligned(numblocks,sizeof(cl_int),16);
+  block_ptrs_=(cl_int*)boxm_ocl_utils::alloc_aligned(numblocks,sizeof(cl_int),16);
 
   for (int i=0;i<numblocks;i++)
     block_ptrs_[i]=0;
@@ -691,7 +691,7 @@ template<class T>
 bool boxm_render_image_manager<T>::clean_block_ptrs()
 {
   if (block_ptrs_)
-    boxm_ocl_utils<T>::free_aligned(block_ptrs_);
+    boxm_ocl_utils::free_aligned(block_ptrs_);
   return true;
 }
 
@@ -763,7 +763,7 @@ bool boxm_render_image_manager<T>::set_tree(tree_type* tree)
   root_cell[1]=-1; // no children at the moment
   root_cell[1]=-1; // no data at the moment
   cell_input_.push_back(root_cell);
-  boxm_ocl_utils<T>::copy_to_arrays(root, cell_input_, data_input_, cell_ptr);
+  boxm_ocl_convert<T>::copy_to_arrays(root, cell_input_, data_input_, cell_ptr);
 
   // the tree is now resident in the 1-d vectors
   cells_size_=cell_input_.size();
@@ -772,8 +772,8 @@ bool boxm_render_image_manager<T>::set_tree(tree_type* tree)
   cells_ = NULL;
   cell_data_ = NULL;
 
-  cells_=(cl_int *)boxm_ocl_utils<T>::alloc_aligned(cell_input_.size(),sizeof(cl_int4),16);
-  // cell_data_=(cl_float *)boxm_ocl_utils<T>::alloc_aligned(data_input_.size(),sizeof(cl_float16),16);
+  cells_=(cl_int *)boxm_ocl_utils::alloc_aligned(cell_input_.size(),sizeof(cl_int4),16);
+  // cell_data_=(cl_float *)boxm_ocl_utils::alloc_aligned(data_input_.size(),sizeof(cl_float16),16);
 
   if (cells_== NULL||cell_data_ == NULL)
   {
@@ -798,7 +798,7 @@ bool boxm_render_image_manager<T>::set_tree(tree_type* tree)
       cell_data_[i+k]=data_input_[j][k];
   }
 
-  tree_bbox_=(cl_float *)boxm_ocl_utils<T>::alloc_aligned(1,sizeof(cl_float4),16);
+  tree_bbox_=(cl_float *)boxm_ocl_utils::alloc_aligned(1,sizeof(cl_float4),16);
 
   tree_bbox_[0] = (cl_float)tree->bounding_box().min_x();
   tree_bbox_[1] = (cl_float)tree->bounding_box().min_y();
@@ -838,7 +838,7 @@ bool boxm_render_image_manager<T>::set_all_blocks()
     int cell_ptr = cell_input_.size();
 
     cell_input_.push_back(root_cell);
-    boxm_ocl_utils<T>::copy_to_arrays(root, cell_input_, data_input_, cell_ptr);
+    boxm_ocl_convert<T>::copy_to_arrays(root, cell_input_, data_input_, cell_ptr);
   }
 
   // the tree is now resident in the 1-d vectors
@@ -850,10 +850,10 @@ bool boxm_render_image_manager<T>::set_all_blocks()
   cells_ = NULL;
   cell_data_ = NULL;
   cell_alpha_=NULL;
-  cells_=(cl_int *)boxm_ocl_utils<T>::alloc_aligned(cell_input_.size(),sizeof(cl_int4),16);
-  cell_data_=(cl_float *)boxm_ocl_utils<T>::alloc_aligned(data_input_.size(),sizeof(cl_float8),16);
-  cell_alpha_=(cl_float *)boxm_ocl_utils<T>::alloc_aligned(data_input_.size(),sizeof(cl_float),16);
-  //cell_data_=(cl_half *)boxm_ocl_utils<T>::alloc_aligned(data_input_.size(),sizeof(cl_float16)/2,16);
+  cells_=(cl_int *)boxm_ocl_utils::alloc_aligned(cell_input_.size(),sizeof(cl_int4),16);
+  cell_data_=(cl_float *)boxm_ocl_utils::alloc_aligned(data_input_.size(),sizeof(cl_float8),16);
+  cell_alpha_=(cl_float *)boxm_ocl_utils::alloc_aligned(data_input_.size(),sizeof(cl_float),16);
+  //cell_data_=(cl_half *)boxm_ocl_utils::alloc_aligned(data_input_.size(),sizeof(cl_float16)/2,16);
 
   if (cells_== NULL||cell_data_ == NULL || cell_alpha_==NULL)
   {
@@ -886,11 +886,11 @@ template<class T>
 bool boxm_render_image_manager<T>::clean_tree()
 {
   if (cells_)
-    boxm_ocl_utils<T>::free_aligned(cells_);
+    boxm_ocl_utils::free_aligned(cells_);
   if (cell_data_)
-    boxm_ocl_utils<T>::free_aligned(cell_data_);
+    boxm_ocl_utils::free_aligned(cell_data_);
   if (cell_alpha_)
-    boxm_ocl_utils<T>::free_aligned(cell_alpha_);
+    boxm_ocl_utils::free_aligned(cell_alpha_);
 
   return true;
 }
@@ -941,7 +941,7 @@ bool boxm_render_image_manager<T>::set_persp_camera(vpgl_perspective_camera<doub
     vnl_matrix<double> Ut=svd->U().conjugate_transpose();
     vnl_matrix<double> V=svd->V();
     vnl_vector<double> Winv=svd->Winverse().diagonal();
-    persp_cam_=(cl_float *)boxm_ocl_utils<T>::alloc_aligned(3,sizeof(cl_float16),16);
+    persp_cam_=(cl_float *)boxm_ocl_utils::alloc_aligned(3,sizeof(cl_float16),16);
 
     int cnt=0;
     for (unsigned i=0;i<Ut.rows();i++)
@@ -983,7 +983,7 @@ bool boxm_render_image_manager<T>::set_persp_camera()
     vnl_matrix<double> V=svd->V();
     vnl_vector<double> Winv=svd->Winverse().diagonal();
 
-    persp_cam_=(cl_float *)boxm_ocl_utils<T>::alloc_aligned(3,sizeof(cl_float16),16);
+    persp_cam_=(cl_float *)boxm_ocl_utils::alloc_aligned(3,sizeof(cl_float16),16);
 
     int cnt=0;
     for (unsigned i=0;i<Ut.rows();i++)
@@ -1017,7 +1017,7 @@ template<class T>
 bool boxm_render_image_manager<T>::clean_persp_camera()
 {
   if (persp_cam_)
-    boxm_ocl_utils<T>::free_aligned(persp_cam_);
+    boxm_ocl_utils::free_aligned(persp_cam_);
   return true;
 }
 
@@ -1059,8 +1059,8 @@ bool boxm_render_image_manager<T>::set_input_image()
   wni_=(cl_uint)RoundUp(output_img_.ni(),bni_);
   wnj_=(cl_uint)RoundUp(output_img_.nj(),bnj_);
 
-  image_=(cl_uint *)boxm_ocl_utils<T>::alloc_aligned(wni_*wnj_,sizeof(cl_uint),16);
-  img_dims_=(cl_uint *)boxm_ocl_utils<T>::alloc_aligned(1,sizeof(cl_uint4),16);
+  image_=(cl_uint *)boxm_ocl_utils::alloc_aligned(wni_*wnj_,sizeof(cl_uint),16);
+  img_dims_=(cl_uint *)boxm_ocl_utils::alloc_aligned(1,sizeof(cl_uint4),16);
 
   vil_image_view<float>::iterator iter=output_img_.begin();
 
@@ -1090,9 +1090,9 @@ template<class T>
 bool boxm_render_image_manager<T>::clean_input_image()
 {
   if (image_)
-    boxm_ocl_utils<T>::free_aligned(image_);
+    boxm_ocl_utils::free_aligned(image_);
   if (img_dims_)
-    boxm_ocl_utils<T>::free_aligned(img_dims_);
+    boxm_ocl_utils::free_aligned(img_dims_);
   return true;
 }
 

@@ -19,6 +19,7 @@ IF(OPENCL_FOUND)
       boxm_ocl_utils.h boxm_ocl_utils.txx boxm_ocl_utils.cxx
       boxm_ocl_render_expected.h
       boxm_stat_manager.h boxm_stat_manager.txx
+      boxm_online_update_manager.h boxm_online_update_manager.cxx
      )
 
   SET(bomx_ocl_cl_files

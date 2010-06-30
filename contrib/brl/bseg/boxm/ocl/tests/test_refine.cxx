@@ -108,7 +108,7 @@ bool test_refine_simple_scene()
   root_cell[2]=-1; // no data at the moment
   cell_input.push_back(root_cell);
   boct_tree_cell<short,data_type>* root = tree->root();
-  boxm_ocl_utils<data_type>::copy_to_arrays(root, cell_input, data_input, cell_ptr);
+  boxm_ocl_convert<data_type>::copy_to_arrays(root, cell_input, data_input, cell_ptr);
   
   //verify that tree_vector and cell_input are same size
   TEST("CPU refine and GPU refine tree output same size ", (tree_vector.size()), cell_input.size());

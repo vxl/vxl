@@ -158,7 +158,7 @@ bool boxm_ray_trace_manager<T>::setup_tree()
   root_cell[1]=-1; // no children at the moment
   root_cell[1]=-1; // no data at the moment
   cell_input_.push_back(root_cell);
-  boxm_ocl_utils<T >::copy_to_arrays(root, cell_input_, data_input_, cell_ptr);
+  boxm_ocl_convert<T>::copy_to_arrays(root, cell_input_, data_input_, cell_ptr);
 
   // the tree is now resident in the 1-d vectors
   // cells as vnl_vector_fixed<int, 4> and

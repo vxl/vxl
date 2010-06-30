@@ -187,7 +187,7 @@ void update_with_boxm_cpp(vcl_vector<vnl_vector_fixed<float, 16> > & updated_tre
 
     boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > * tree=block->get_tree();
     vcl_vector<vnl_vector_fixed<int, 4> > cell_array;
-    boxm_ocl_utils<boxm_sample<BOXM_APM_MOG_GREY> >::copy_to_arrays(tree->root(),cell_array,updated_tree,0);
+    boxm_ocl_convert<boxm_sample<BOXM_APM_MOG_GREY> >::copy_to_arrays(tree->root(),cell_array,updated_tree,0);
 
     s.clean_scene();
 

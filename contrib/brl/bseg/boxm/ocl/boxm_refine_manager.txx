@@ -125,7 +125,7 @@ bool boxm_refine_manager<T>::run_tree()
       cell[k] = tree_results_[i+k];
     tree_vector.push_back(cell);
   }
-  if(boxm_ocl_utils<T>::verify_format(tree_vector))
+  if(boxm_ocl_utils::verify_format(tree_vector))
     vcl_cout<<"---TREE IN CORRECT FORMAT---"<<vcl_endl;
   else
     vcl_cout<<"---TREE NOT IN CORRECT FORMAT ---"<<vcl_endl;
@@ -512,7 +512,7 @@ bool boxm_refine_manager<T>::format_tree(tree_type* tree)
   root_cell[1]=-1; // no children at the moment
   root_cell[2]=-1; // no data at the moment
   cell_input.push_back(root_cell);
-  boxm_ocl_utils<T>::copy_to_arrays(root, cell_input, data_input, cell_ptr);
+  boxm_ocl_convert<T>::copy_to_arrays(root, cell_input, data_input, cell_ptr);
 
   // the tree is now resident in the 1-d vectors
   // cell_input_ as vnl_vector_fixed<int, 4> and
@@ -562,26 +562,26 @@ bool boxm_refine_manager<T>::alloc_trees(int cells_size, int data_input_size)
 
   //---- allocate input buffers ----//
   //allocate tree structure
-  cells_ =             (cl_int*) boxm_ocl_utils<T>::alloc_aligned(cells_size, sizeof(cl_int4), 16);
-  numcells_ =         (cl_uint*) boxm_ocl_utils<T>::alloc_aligned(1, sizeof(cl_uint), 16);
-  tree_max_size_ =    (cl_uint*) boxm_ocl_utils<T>::alloc_aligned(1, sizeof(cl_uint), 16);
+  cells_ =             (cl_int*) boxm_ocl_utils::alloc_aligned(cells_size, sizeof(cl_int4), 16);
+  numcells_ =         (cl_uint*) boxm_ocl_utils::alloc_aligned(1, sizeof(cl_uint), 16);
+  tree_max_size_ =    (cl_uint*) boxm_ocl_utils::alloc_aligned(1, sizeof(cl_uint), 16);
   //allocate data array
-  cell_data_ =       (cl_float*) boxm_ocl_utils<T>::alloc_aligned(data_input_size, sizeof(cl_float16), 16);
-  numdata_ =          (cl_uint*) boxm_ocl_utils<T>::alloc_aligned(1, sizeof(cl_uint), 16);
-  data_max_size_ =    (cl_uint*) boxm_ocl_utils<T>::alloc_aligned(1, sizeof(cl_uint), 16);
+  cell_data_ =       (cl_float*) boxm_ocl_utils::alloc_aligned(data_input_size, sizeof(cl_float16), 16);
+  numdata_ =          (cl_uint*) boxm_ocl_utils::alloc_aligned(1, sizeof(cl_uint), 16);
+  data_max_size_ =    (cl_uint*) boxm_ocl_utils::alloc_aligned(1, sizeof(cl_uint), 16);
   //output results
-  tree_results_ =      (cl_int*) boxm_ocl_utils<T>::alloc_aligned(cells_size, sizeof(cl_int4), 16);
-  data_results_ =    (cl_float*) boxm_ocl_utils<T>::alloc_aligned(data_input_size, sizeof(cl_float16), 16);
-  data_results_size_ =(cl_uint*) boxm_ocl_utils<T>::alloc_aligned(1, sizeof(cl_uint), 16);
-  tree_results_size_ =(cl_uint*) boxm_ocl_utils<T>::alloc_aligned(1, sizeof(cl_uint), 16);
+  tree_results_ =      (cl_int*) boxm_ocl_utils::alloc_aligned(cells_size, sizeof(cl_int4), 16);
+  data_results_ =    (cl_float*) boxm_ocl_utils::alloc_aligned(data_input_size, sizeof(cl_float16), 16);
+  data_results_size_ =(cl_uint*) boxm_ocl_utils::alloc_aligned(1, sizeof(cl_uint), 16);
+  tree_results_size_ =(cl_uint*) boxm_ocl_utils::alloc_aligned(1, sizeof(cl_uint), 16);
   //probability threshold
-  prob_thresh_ =     (cl_float*) boxm_ocl_utils<T>::alloc_aligned(1, sizeof(cl_float), 16);
-  max_level_ =        (cl_uint*) boxm_ocl_utils<T>::alloc_aligned(1, sizeof(cl_uint), 16);
-  bbox_len_ =        (cl_float*) boxm_ocl_utils<T>::alloc_aligned(1, sizeof(cl_float),16);
+  prob_thresh_ =     (cl_float*) boxm_ocl_utils::alloc_aligned(1, sizeof(cl_float), 16);
+  max_level_ =        (cl_uint*) boxm_ocl_utils::alloc_aligned(1, sizeof(cl_uint), 16);
+  bbox_len_ =        (cl_float*) boxm_ocl_utils::alloc_aligned(1, sizeof(cl_float),16);
 
   //TODO remove output stuff
-  output_results_ = (cl_float*) boxm_ocl_utils<T>::alloc_aligned(1, sizeof(cl_float), 16);
-  output_input_ = (cl_float*) boxm_ocl_utils<T>::alloc_aligned(1, sizeof(cl_float), 16);
+  output_results_ = (cl_float*) boxm_ocl_utils::alloc_aligned(1, sizeof(cl_float), 16);
+  output_input_ = (cl_float*) boxm_ocl_utils::alloc_aligned(1, sizeof(cl_float), 16);
   (*output_input_) = 9876;
   //TODO remove me ^^^
 
@@ -597,23 +597,23 @@ bool boxm_refine_manager<T>::alloc_trees(int cells_size, int data_input_size)
 template<class T>
 bool boxm_refine_manager<T>::free_trees()
 {
-  boxm_ocl_utils<T>::free_aligned(cells_);
-  boxm_ocl_utils<T>::free_aligned(numcells_);
-  boxm_ocl_utils<T>::free_aligned(cell_data_);
-  boxm_ocl_utils<T>::free_aligned(data_max_size_);
-  boxm_ocl_utils<T>::free_aligned(numdata_);
-  boxm_ocl_utils<T>::free_aligned(tree_max_size_);
-  boxm_ocl_utils<T>::free_aligned(tree_results_);
-  boxm_ocl_utils<T>::free_aligned(tree_results_size_);
-  boxm_ocl_utils<T>::free_aligned(data_results_);
-  boxm_ocl_utils<T>::free_aligned(data_results_size_);
-  boxm_ocl_utils<T>::free_aligned(prob_thresh_);
-  boxm_ocl_utils<T>::free_aligned(max_level_);
-  boxm_ocl_utils<T>::free_aligned(bbox_len_);
+  boxm_ocl_utils::free_aligned(cells_);
+  boxm_ocl_utils::free_aligned(numcells_);
+  boxm_ocl_utils::free_aligned(cell_data_);
+  boxm_ocl_utils::free_aligned(data_max_size_);
+  boxm_ocl_utils::free_aligned(numdata_);
+  boxm_ocl_utils::free_aligned(tree_max_size_);
+  boxm_ocl_utils::free_aligned(tree_results_);
+  boxm_ocl_utils::free_aligned(tree_results_size_);
+  boxm_ocl_utils::free_aligned(data_results_);
+  boxm_ocl_utils::free_aligned(data_results_size_);
+  boxm_ocl_utils::free_aligned(prob_thresh_);
+  boxm_ocl_utils::free_aligned(max_level_);
+  boxm_ocl_utils::free_aligned(bbox_len_);
 
   //TODO remove output stuff
-  boxm_ocl_utils<T>::free_aligned(output_results_);
-  boxm_ocl_utils<T>::free_aligned(output_input_);
+  boxm_ocl_utils::free_aligned(output_results_);
+  boxm_ocl_utils::free_aligned(output_input_);
   //TODO remove me^^^^
 
   return true;

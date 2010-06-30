@@ -14,6 +14,7 @@ SET(boxm_ocl_test_sources
     test_statistics.cxx
     test_refine.cxx
     test_update.cxx
+    test_file_io.cxx
     online_update_test_manager.h     online_update_test_manager.txx
    )
 
@@ -32,6 +33,7 @@ ADD_TEST( test_ray_bundle  ${EXECUTABLE_OUTPUT_PATH}/boxm_ocl_test_all test_ray_
 ADD_TEST( test_statistics  ${EXECUTABLE_OUTPUT_PATH}/boxm_ocl_test_all test_statistics )
 ADD_TEST( test_refine ${EXECUTABLE_OUTPUT_PATH}/boxm_ocl_test_all test_refine )
 ADD_TEST( test_update ${EXECUTABLE_OUTPUT_PATH}/boxm_ocl_test_all test_update )
+ADD_TEST( test_file_io ${EXECUTABLE_OUTPUT_PATH}/boxm_ocl_test_all test_file_io )
 
 ADD_EXECUTABLE( boxm_ocl_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( boxm_ocl_test_include boxm_ocl boxm)

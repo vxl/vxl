@@ -1,8 +1,7 @@
-#ifndef online_update_test_manager_txx_
-#define online_update_test_manager_txx_
+
 //:
 // \file
-#include "online_update_test_manager.h"
+#include "boxm_online_update_manager.h"
 #include <vcl_where_root_dir.h>
 #include <boxm/ocl/boxm_ocl_utils.h>
 #include <bocl/bocl_utils.h>
@@ -18,18 +17,18 @@
 
 #include <vil/vil_save.h>
 
-template<class T>
-void online_update_test_manager<T>::
-set_block_items(boxm_block<boct_tree<short,T> > *block,
-                vpgl_camera_double_sptr cam,
-                vil_image_view<float> &obs)
-{
-  if (block_)
-    delete block_;
-  block_ = block;
-  cam_ = cam;
-  input_img_=obs;
-}
+
+//void boxm_online_update_manager::
+//set_block_items(boxm_block<boct_tree<short,T> > *block,
+//                vpgl_camera_double_sptr cam,
+//                vil_image_view<float> &obs)
+//{
+//  if (block_)
+//    delete block_;
+//  block_ = block;
+//  cam_ = cam;
+//  input_img_=obs;
+//}
 
 // This function enables a kind of "functor" capability where a token
 // in the ray trace main program is replaced with an appropriate function
@@ -46,8 +45,8 @@ set_block_items(boxm_block<boct_tree<short,T> > *block,
 //  Then the functor modification is restricted to just one file and
 //  the library files need to be loaded only once.
 //
-template<class T>
-bool online_update_test_manager<T>::
+
+bool boxm_online_update_manager::
 build_program(vcl_string const& functor, bool use_cell_data)
 {
   vcl_string root = vcl_string(VCL_SOURCE_ROOT_DIR);
@@ -87,8 +86,8 @@ build_program(vcl_string const& functor, bool use_cell_data)
   return false;
 }
 
-template<class T>
-bool online_update_test_manager<T>::clean_kernels()
+
+bool boxm_online_update_manager::clean_kernels()
 {
   cl_int status = CL_SUCCESS;
   int CHECK_SUCCESS = 1;
@@ -104,8 +103,8 @@ bool online_update_test_manager<T>::clean_kernels()
 }
 
 //: update the tree
-template<class T>
-bool online_update_test_manager<T>::set_kernels()
+
+bool boxm_online_update_manager::set_kernels()
 {
   cl_int status = CL_SUCCESS;
   int CHECK_SUCCESS = 1;
@@ -144,8 +143,8 @@ bool online_update_test_manager<T>::set_kernels()
   return true;
 }
 
-template<class T>
-bool online_update_test_manager<T>::set_kernel_args(unsigned pass)
+
+bool boxm_online_update_manager::set_kernel_args(unsigned pass)
 {
   int CHECK_SUCCESS = 1;
   cl_int status = SDK_SUCCESS;
@@ -253,8 +252,8 @@ bool online_update_test_manager<T>::set_kernel_args(unsigned pass)
   return this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (loc code bundle)")==CHECK_SUCCESS;
 }
 
-template<class T>
-bool online_update_test_manager<T>::create_command_queue()
+
+bool boxm_online_update_manager::create_command_queue()
 {
   cl_int status = SDK_SUCCESS;
   // set up a command queue
@@ -262,8 +261,8 @@ bool online_update_test_manager<T>::create_command_queue()
   return this->check_val(status,CL_SUCCESS,"Falied in command queue creation" + error_to_string(status))==1;
 }
 
-template<class T>
-bool online_update_test_manager<T>::setup_app_density(bool use_uniform, float mean, float sigma)
+
+bool boxm_online_update_manager::setup_app_density(bool use_uniform, float mean, float sigma)
 {
 #if defined (_WIN32)
   app_density_ =  (cl_float*)_aligned_malloc( sizeof(cl_float4), 16);
@@ -287,8 +286,8 @@ bool online_update_test_manager<T>::setup_app_density(bool use_uniform, float me
   return true;
 }
 
-template<class T>
-bool online_update_test_manager<T>::clean_app_density()
+
+bool boxm_online_update_manager::clean_app_density()
 {
   if (app_density_) {
 #ifdef _WIN32
@@ -303,8 +302,8 @@ bool online_update_test_manager<T>::clean_app_density()
     return false;
 }
 
-template<class T>
-int online_update_test_manager<T>::setup_app_density_buffer()
+
+int boxm_online_update_manager::setup_app_density_buffer()
 {
   cl_int status = CL_SUCCESS;
   app_density_buf_ = clCreateBuffer(this->context_,CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
@@ -315,8 +314,8 @@ int online_update_test_manager<T>::setup_app_density_buffer()
     return SDK_SUCCESS;
 }
 
-template<class T>
-int online_update_test_manager<T>::clean_app_density_buffer()
+
+int boxm_online_update_manager::clean_app_density_buffer()
 {
   cl_int status = clReleaseMemObject(app_density_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject (app_density_buf_) failed."))
@@ -325,8 +324,7 @@ int online_update_test_manager<T>::clean_app_density_buffer()
     return SDK_SUCCESS;
 }
 
-template <class T>
-bool online_update_test_manager<T>::setup_norm_data(bool use_uniform,
+bool boxm_online_update_manager::setup_norm_data(bool use_uniform,
                                                     float mean,
                                                     float sigma)
 {
@@ -335,15 +333,14 @@ bool online_update_test_manager<T>::setup_norm_data(bool use_uniform,
 }
 
 
-template <class T>
-bool online_update_test_manager<T>::clean_norm_data()
+bool boxm_online_update_manager::clean_norm_data()
 {
   return this->clean_app_density()
       && this->clean_app_density_buffer()==SDK_SUCCESS;
 }
 
-template<class T>
-bool online_update_test_manager<T>::run_block(unsigned pass)
+
+bool boxm_online_update_manager::run_block(unsigned pass)
 {
   int CHECK_SUCCESS = 1;
   cl_int status = SDK_SUCCESS;
@@ -420,50 +417,50 @@ bool online_update_test_manager<T>::run_block(unsigned pass)
   return true;
 }
 
-template<class T>
-bool online_update_test_manager<T>::process_block(int numpass)
+
+bool boxm_online_update_manager::process_block(int numpass)
 {
-  cl_int status = CL_SUCCESS;
-  if (!this->set_kernels())
-    return false;
-  if (!this->create_command_queue())
-    return false;
-  vcl_string error_message="";
-  vul_timer timer;
-  if (!block_)
-    return false;
-  if (!(set_block_data() &&
-        set_block_data_buffers() &&
-        set_offset_buffers(0,0,2)&&
-        set_input_view() &&
-        set_input_view_buffers()))
-    return false;
-  float total_raytrace_time = 0.0f;
-  float total_gpu_time = 0.0f;
-  float total_load_time = 0.0f;
-  tree_type * tree = block_->get_tree();
-  if (!(set_tree(tree) && set_tree_buffers()))
-    return false;
-  // run the raytracing for this block
-  for (unsigned pass = 0; pass<numpass; pass++)
-  {
-    if (!run_block(pass))
-      return false;
-    if(pass==2)
-    {
-        read_output_image() ;
-        this->save_image() ;
-    }
-  }
-  // release memory
-  this->read_trees();
-  this->archive_tree_data();
-  //this->print_leaves();
-  if (!(release_tree_buffers() && clean_tree()))
-    return false;
-  float raytrace_time = (float)timer.all() / 1e3f;
-  vcl_cout<<"processing block took " << raytrace_time << 's' << vcl_endl;
-  read_output_image() ;
+  //cl_int status = CL_SUCCESS;
+  //if (!this->set_kernels())
+  //  return false;
+  //if (!this->create_command_queue())
+  //  return false;
+  //vcl_string error_message="";
+  //vul_timer timer;
+  //if (!block_)
+  //  return false;
+  //if (!(set_block_data() &&
+  //      set_block_data_buffers() &&
+  //      set_offset_buffers(0,0,2)&&
+  //      set_input_view() &&
+  //      set_input_view_buffers()))
+  //  return false;
+  //float total_raytrace_time = 0.0f;
+  //float total_gpu_time = 0.0f;
+  //float total_load_time = 0.0f;
+  //tree_type * tree = block_->get_tree();
+  //if (!(set_tree(tree) && set_tree_buffers()))
+  //  return false;
+  //// run the raytracing for this block
+  //for (unsigned pass = 0; pass<numpass; pass++)
+  //{
+  //  if (!run_block(pass))
+  //    return false;
+  //  if(pass==2)
+  //  {
+  //      read_output_image() ;
+  //      this->save_image() ;
+  //  }
+  //}
+  //// release memory
+  //this->read_trees();
+  //this->archive_tree_data();
+  ////this->print_leaves();
+  //if (!(release_tree_buffers() && clean_tree()))
+  //  return false;
+  //float raytrace_time = (float)timer.all() / 1e3f;
+  //vcl_cout<<"processing block took " << raytrace_time << 's' << vcl_endl;
+  //read_output_image() ;
   //this->print_image() ;
   return  clean_input_view()
       && release_block_data_buffers()
@@ -473,8 +470,8 @@ bool online_update_test_manager<T>::process_block(int numpass)
       && release_command_queue();
 }
 
-template<class T>
-bool online_update_test_manager<T>:: read_output_image()
+
+bool boxm_online_update_manager:: read_output_image()
 {
   cl_event events[2];
 
@@ -496,8 +493,8 @@ bool online_update_test_manager<T>:: read_output_image()
   return this->check_val(status,CL_SUCCESS,"clReleaseEvent failed.")==1;
 }
 
-template<class T>
-bool online_update_test_manager<T>:: read_trees()
+
+bool boxm_online_update_manager:: read_trees()
 {
   cl_event events[2];
 
@@ -539,8 +536,8 @@ bool online_update_test_manager<T>:: read_trees()
   return this->check_val(status,CL_SUCCESS,"clReleaseEvent failed.")==1;
 }
 
-template<class T>
-void online_update_test_manager<T>::print_image()
+
+void boxm_online_update_manager::print_image()
 {
   if (!image_)
     return;
@@ -573,8 +570,8 @@ void online_update_test_manager<T>::print_image()
     vcl_cout<<vcl_endl;
   }
 }
-template<class T>
-void online_update_test_manager<T>::save_image()
+
+void boxm_online_update_manager::save_image()
 {
   if (!image_)
     return;
@@ -603,8 +600,8 @@ void online_update_test_manager<T>::save_image()
   vil_save(img2,"f:/APL/img2.tiff");
   vil_save(img3,"f:/APL/img3.tiff");
 }
-template<class T>
-void online_update_test_manager<T>::print_tree()
+
+void boxm_online_update_manager::print_tree()
 {
   vcl_cout << "Tree Input\n";
   if (cells_)
@@ -643,8 +640,8 @@ void online_update_test_manager<T>::print_tree()
     }
 }
 
-template<class T>
-void online_update_test_manager<T>::print_leaves()
+
+void boxm_online_update_manager::print_leaves()
 {
   vcl_cout << "Tree Leaves\n";
   if (cells_)
@@ -678,15 +675,15 @@ void online_update_test_manager<T>::print_leaves()
     }
 }
 
-template<class T>
-void online_update_test_manager<T>::clear_tree_data()
+
+void boxm_online_update_manager::clear_tree_data()
 {
   tree_data_.clear();
   tree_aux_data_.clear();
 }
 
-template<class T>
-void online_update_test_manager<T>::archive_tree_data()
+
+void boxm_online_update_manager::archive_tree_data()
 {
   this->clear_tree_data();
   if (cells_)
@@ -715,8 +712,8 @@ void online_update_test_manager<T>::archive_tree_data()
  * build_kernel_program - builds kernel program
  * from source (a vcl string)
  *******************************************/
-template<class T>
-int online_update_test_manager<T>::build_kernel_program(cl_program & program)
+
+int boxm_online_update_manager::build_kernel_program(cl_program & program)
 {
   cl_int status = CL_SUCCESS;
   vcl_size_t sourceSize[] = { this->prog_.size() };
@@ -763,53 +760,54 @@ int online_update_test_manager<T>::build_kernel_program(cl_program & program)
     return SDK_SUCCESS;
 }
 
-template<class T>
-bool online_update_test_manager<T>::set_block_data()
+
+bool boxm_online_update_manager::set_block_data()
 {
   return set_root_level();
 }
 
-template<class T>
-bool online_update_test_manager<T>::clean_block_data()
+
+bool boxm_online_update_manager::clean_block_data()
 {
   return clean_root_level();
 }
 
-template<class T>
-bool online_update_test_manager<T>::set_block_data_buffers()
+
+bool boxm_online_update_manager::set_block_data_buffers()
 {
   return set_root_level_buffers();
 }
 
-template<class T>
-bool online_update_test_manager<T>::release_block_data_buffers()
+
+bool boxm_online_update_manager::release_block_data_buffers()
 {
   return release_root_level_buffers();
 }
 
-template<class T>
-bool online_update_test_manager<T>::set_root_level()
+
+bool boxm_online_update_manager::set_root_level()
 {
-  if (block_==NULL)
-  {
-    vcl_cout<<"Block is Missing "<<vcl_endl;
-    return false;
-  }
-  else {
-    root_level_=block_->get_tree()->root_level();
+  //if (block_==NULL)
+  //{
+  //  vcl_cout<<"Block is Missing "<<vcl_endl;
+  //  return false;
+  //}
+  //else {
+  //  root_level_=block_->get_tree()->root_level();
+  //  return true;
+  //}
     return true;
-  }
 }
 
-template<class T>
-bool online_update_test_manager<T>::clean_root_level()
+
+bool boxm_online_update_manager::clean_root_level()
 {
   root_level_=0;
   return true;
 }
 
-template<class T>
-bool online_update_test_manager<T>::set_root_level_buffers()
+
+bool boxm_online_update_manager::set_root_level_buffers()
 {
   cl_int status;
   root_level_buf_ = clCreateBuffer(this->context_,
@@ -819,135 +817,135 @@ bool online_update_test_manager<T>::set_root_level_buffers()
   return this->check_val(status,CL_SUCCESS,"clCreateBuffer (root level) failed.")==1;
 }
 
-template<class T>
-bool online_update_test_manager<T>::release_root_level_buffers()
+
+bool boxm_online_update_manager::release_root_level_buffers()
 {
   cl_int status;
   status = clReleaseMemObject(root_level_buf_);
   return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (root_level_buf_).");
 }
 
-template<class T>
-bool online_update_test_manager<T>::set_input_view()
+
+bool boxm_online_update_manager::set_input_view()
 {
   return set_persp_camera()
       && set_input_image();
 }
 
-template<class T>
-bool online_update_test_manager<T>::clean_input_view()
+
+bool boxm_online_update_manager::clean_input_view()
 {
   bool good = true;
   return clean_persp_camera()
       && clean_input_image();
 }
 
-template<class T>
-bool online_update_test_manager<T>::set_input_view_buffers()
+
+bool boxm_online_update_manager::set_input_view_buffers()
 {
   return set_persp_camera_buffers()
       && set_input_image_buffers();
 }
 
-template<class T>
-bool online_update_test_manager<T>::release_input_view_buffers()
+
+bool boxm_online_update_manager::release_input_view_buffers()
 {
   return release_persp_camera_buffers()    
         && release_input_image_buffers();
 }
 
-template<class T>
-bool online_update_test_manager<T>::set_tree(tree_type* tree)
+
+bool boxm_online_update_manager::load_tree(vcl_string filename)
 {
-  vcl_vector<vnl_vector_fixed<int, 4> > cell_input_;
-  vcl_vector<vnl_vector_fixed<float, 16>  > data_input_;
+//  vcl_vector<vnl_vector_fixed<int, 4> > cell_input_;
+//  vcl_vector<vnl_vector_fixed<float, 16>  > data_input_;
+//
+//  cell_type * root = tree->root();
+//  //nlevels_=root->level()+1;
+//  if (!root)
+//    return false;
+//
+//  int cell_ptr = 0;
+//  // put the root into the cell array and its data in the data array
+//  vnl_vector_fixed<int, 4> root_cell(0);
+//  root_cell[0]=-1; // no parent
+//  root_cell[1]=-1; // no children at the moment
+//  root_cell[1]=-1; // no data at the moment
+//  cell_input_.push_back(root_cell);
+//  boxm_ocl_utils::copy_to_arrays(root, cell_input_, data_input_, cell_ptr);
+//
+//  // the tree is now resident in the 1-d vectors
+//  cells_size_=cell_input_.size();
+//  cell_data_size_=data_input_.size();
+//  
+//  cells_ = NULL;
+//  cell_data_ = NULL;
+//  cell_aux_data_ = NULL;
+//
+//  cells_=(cl_int *)boxm_ocl_utils::alloc_aligned(cell_input_.size(),sizeof(cl_int4),16);
+//  cell_data_=(cl_float *)boxm_ocl_utils::alloc_aligned(data_input_.size(),sizeof(cl_float16),16);
+//  cell_aux_data_=(cl_float *)boxm_ocl_utils::alloc_aligned(data_input_.size(),sizeof(cl_float4),16);
+//  data_array_size_=(cl_uint *)boxm_ocl_utils::alloc_aligned(1,sizeof(cl_uint),16);
+// 
+//  if (cells_== NULL||cell_data_ == NULL||cell_aux_data_==NULL)
+//  {
+//    vcl_cout << "Failed to allocate host memory. (tree input)\n";
+//    return false;
+//  }
+//
+//  //: copy the data from vectors to arrays
+//  for (unsigned i = 0, j = 0; i<cell_input_.size()*4; i+=4, j++)
+//    for (unsigned k = 0; k<4; ++k)
+//      cells_[i+k]=cell_input_[j][k];
+//
+//  // note that the cell data pointer cells[i+2] does not correspond to the 1-d
+//  // data array location. It must be mapped as:
+//  //  cell_data indices = 2*cell_data_ptr, 2*cell_data_ptr +1,
+//
+//  unsigned cell_data_size=16;
+//  unsigned aux_cell_data_size=4;
+//  for (unsigned i = 0, j = 0; i<data_input_.size()*cell_data_size; i+=cell_data_size, j++)
+//  {
+//    for (unsigned k = 0; k<cell_data_size; ++k)
+//      cell_data_[i+k]=data_input_[j][k];
+//
+//    for (unsigned k = 0; k<aux_cell_data_size; ++k)
+//      cell_aux_data_[j*aux_cell_data_size+k]=0.0f;
+//  }
+//
+//
+//  data_array_size_[0]=cell_data_size_;
+//
+//  tree_bbox_=(cl_float *)boxm_ocl_utils::alloc_aligned(1,sizeof(cl_float4),16);
+//
+//  tree_bbox_[0] = (cl_float)tree->bounding_box().min_x();
+//  tree_bbox_[1] = (cl_float)tree->bounding_box().min_y();
+//  tree_bbox_[2] = (cl_float)tree->bounding_box().min_z();
+//  //: Assumption is isotropic dimensions.
+//  tree_bbox_[3] = (cl_float)tree->bounding_box().width();
+//
+  return true;
+}
 
-  cell_type * root = tree->root();
-  //nlevels_=root->level()+1;
-  if (!root)
-    return false;
 
-  int cell_ptr = 0;
-  // put the root into the cell array and its data in the data array
-  vnl_vector_fixed<int, 4> root_cell(0);
-  root_cell[0]=-1; // no parent
-  root_cell[1]=-1; // no children at the moment
-  root_cell[1]=-1; // no data at the moment
-  cell_input_.push_back(root_cell);
-  boxm_ocl_convert<T>::copy_to_arrays(root, cell_input_, data_input_, cell_ptr);
-
-  // the tree is now resident in the 1-d vectors
-  cells_size_=cell_input_.size();
-  cell_data_size_=data_input_.size();
-  
-  cells_ = NULL;
-  cell_data_ = NULL;
-  cell_aux_data_ = NULL;
-
-  cells_=(cl_int *)boxm_ocl_utils::alloc_aligned(cell_input_.size(),sizeof(cl_int4),16);
-  cell_data_=(cl_float *)boxm_ocl_utils::alloc_aligned(data_input_.size(),sizeof(cl_float16),16);
-  cell_aux_data_=(cl_float *)boxm_ocl_utils::alloc_aligned(data_input_.size(),sizeof(cl_float4),16);
-  data_array_size_=(cl_uint *)boxm_ocl_utils::alloc_aligned(1,sizeof(cl_uint),16);
- 
-  if (cells_== NULL||cell_data_ == NULL||cell_aux_data_==NULL)
-  {
-    vcl_cout << "Failed to allocate host memory. (tree input)\n";
-    return false;
-  }
-
-  //: copy the data from vectors to arrays
-  for (unsigned i = 0, j = 0; i<cell_input_.size()*4; i+=4, j++)
-    for (unsigned k = 0; k<4; ++k)
-      cells_[i+k]=cell_input_[j][k];
-
-  // note that the cell data pointer cells[i+2] does not correspond to the 1-d
-  // data array location. It must be mapped as:
-  //  cell_data indices = 2*cell_data_ptr, 2*cell_data_ptr +1,
-
-  unsigned cell_data_size=16;
-  unsigned aux_cell_data_size=4;
-  for (unsigned i = 0, j = 0; i<data_input_.size()*cell_data_size; i+=cell_data_size, j++)
-  {
-    for (unsigned k = 0; k<cell_data_size; ++k)
-      cell_data_[i+k]=data_input_[j][k];
-
-    for (unsigned k = 0; k<aux_cell_data_size; ++k)
-      cell_aux_data_[j*aux_cell_data_size+k]=0.0f;
-  }
-
-
-  data_array_size_[0]=cell_data_size_;
-
-  tree_bbox_=(cl_float *)boxm_ocl_utils::alloc_aligned(1,sizeof(cl_float4),16);
-
-  tree_bbox_[0] = (cl_float)tree->bounding_box().min_x();
-  tree_bbox_[1] = (cl_float)tree->bounding_box().min_y();
-  tree_bbox_[2] = (cl_float)tree->bounding_box().min_z();
-  //: Assumption is isotropic dimensions.
-  tree_bbox_[3] = (cl_float)tree->bounding_box().width();
+bool boxm_online_update_manager::clean_tree()
+{
+//  if (cells_)
+//    boxm_ocl_utils::free_aligned(cells_);
+//  if (cell_data_)
+//    boxm_ocl_utils::free_aligned(cell_data_);
+//  if (cell_aux_data_)
+//    boxm_ocl_utils::free_aligned(cell_aux_data_);
+//  if (tree_bbox_)
+//    boxm_ocl_utils::free_aligned(tree_bbox_);
+//  if(data_array_size_)
+//    boxm_ocl_utils::free_aligned(data_array_size_);
 
   return true;
 }
 
-template<class T>
-bool online_update_test_manager<T>::clean_tree()
-{
-  if (cells_)
-    boxm_ocl_utils::free_aligned(cells_);
-  if (cell_data_)
-    boxm_ocl_utils::free_aligned(cell_data_);
-  if (cell_aux_data_)
-    boxm_ocl_utils::free_aligned(cell_aux_data_);
-  if (tree_bbox_)
-    boxm_ocl_utils::free_aligned(tree_bbox_);
-  if(data_array_size_)
-    boxm_ocl_utils::free_aligned(data_array_size_);
 
-  return true;
-}
-
-template<class T>
-bool online_update_test_manager<T>::set_tree_buffers()
+bool boxm_online_update_manager::set_tree_buffers()
 {
   cl_int status;
   cells_buf_ = clCreateBuffer(this->context_,
@@ -983,8 +981,8 @@ bool online_update_test_manager<T>::set_tree_buffers()
   return this->check_val(status,CL_SUCCESS,"clCreateBuffer (data_array_size_) failed.")==1;
 }
 
-template<class T>
-bool online_update_test_manager<T>::release_tree_buffers()
+
+bool boxm_online_update_manager::release_tree_buffers()
 {
   cl_int status;
   status = clReleaseMemObject(cells_buf_);
@@ -1004,8 +1002,8 @@ bool online_update_test_manager<T>::release_tree_buffers()
   return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (tree_bbox_buf_).")==1;
 }
 
-template<class T>
-bool online_update_test_manager<T>::set_persp_camera()
+
+bool boxm_online_update_manager::set_persp_camera()
 {
   if (vpgl_perspective_camera<double>* pcam =
       dynamic_cast<vpgl_perspective_camera<double>*>(cam_.ptr()))
@@ -1046,16 +1044,16 @@ bool online_update_test_manager<T>::set_persp_camera()
   }
 }
 
-template<class T>
-bool online_update_test_manager<T>::clean_persp_camera()
+
+bool boxm_online_update_manager::clean_persp_camera()
 {
   if (persp_cam_)
     boxm_ocl_utils::free_aligned(persp_cam_);
   return true;
 }
 
-template<class T>
-bool online_update_test_manager<T>::set_persp_camera_buffers()
+
+bool boxm_online_update_manager::set_persp_camera_buffers()
 {
   cl_int status;
   persp_cam_buf_ = clCreateBuffer(this->context_,
@@ -1065,8 +1063,8 @@ bool online_update_test_manager<T>::set_persp_camera_buffers()
   return this->check_val(status,CL_SUCCESS,"clCreateBuffer (persp_cam_buf_) failed.")==1;
 }
 
-template<class T>
-bool online_update_test_manager<T>::release_persp_camera_buffers()
+
+bool boxm_online_update_manager::release_persp_camera_buffers()
 {
   cl_int status;
   status = clReleaseMemObject(persp_cam_buf_);
@@ -1074,8 +1072,8 @@ bool online_update_test_manager<T>::release_persp_camera_buffers()
 }
 
 
-template<class T>
-bool online_update_test_manager<T>::set_input_image()
+
+bool boxm_online_update_manager::set_input_image()
 {
   wni_=(cl_uint)RoundUp(input_img_.ni(),bni_);
   wnj_=(cl_uint)RoundUp(input_img_.nj(),bnj_);
@@ -1113,8 +1111,8 @@ bool online_update_test_manager<T>::set_input_image()
     return true;
 }
 
-template<class T>
-bool online_update_test_manager<T>::clean_input_image()
+
+bool boxm_online_update_manager::clean_input_image()
 {
   if (image_)
     boxm_ocl_utils::free_aligned(image_);
@@ -1123,8 +1121,8 @@ bool online_update_test_manager<T>::clean_input_image()
   return true;
 }
 
-template<class T>
-bool online_update_test_manager<T>::set_input_image_buffers()
+
+bool boxm_online_update_manager::set_input_image_buffers()
 {
   cl_int status;
   image_buf_ = clCreateBuffer(this->context_,
@@ -1141,8 +1139,8 @@ bool online_update_test_manager<T>::set_input_image_buffers()
   return this->check_val(status,CL_SUCCESS,"clCreateBuffer (imd_dims_buf_) failed.")==1;
 }
 
-template<class T>
-bool online_update_test_manager<T>::release_input_image_buffers()
+
+bool boxm_online_update_manager::release_input_image_buffers()
 {
   cl_int status;
   status = clReleaseMemObject(image_buf_);
@@ -1153,8 +1151,8 @@ bool online_update_test_manager<T>::release_input_image_buffers()
   return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (img_dims_buf_).");
 }
 
-template<class T>
-bool online_update_test_manager<T>::set_offset_buffers(int offset_x,int offset_y,int factor)
+
+bool boxm_online_update_manager::set_offset_buffers(int offset_x,int offset_y,int factor)
 {
   cl_int status;
   offset_x_=offset_x;
@@ -1180,8 +1178,8 @@ bool online_update_test_manager<T>::set_offset_buffers(int offset_x,int offset_y
   return this->check_val(status,CL_SUCCESS,"clCreateBuffer (offset_y_) failed.")==1;
 }
 
-template<class T>
-bool online_update_test_manager<T>::release_offset_buffers()
+
+bool boxm_online_update_manager::release_offset_buffers()
 {
     cl_int status;
     status = clReleaseMemObject(factor_buf_);
@@ -1196,17 +1194,13 @@ bool online_update_test_manager<T>::release_offset_buffers()
     return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (offset_y_buf_).")==1;
 }
 
-template<class T>
-bool online_update_test_manager<T>::release_command_queue()
+
+bool boxm_online_update_manager::release_command_queue()
 {
   cl_int status = clReleaseCommandQueue(command_queue_);
   return this->check_val(status,CL_SUCCESS,"clReleaseCommandQueue failed.") == 1;
 }
 
-/*****************************************
- *macro for template instantiation
- *****************************************/
-#define ONLINE_UPDATE_TEST_MANAGER_INSTANTIATE(T) \
-  template class online_update_test_manager<T >
 
-#endif    //online_update_test_manager_txx_
+
+    

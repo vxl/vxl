@@ -8,7 +8,7 @@
 #include <malloc.h>
 #endif
 template<class T>
-void boxm_ocl_utils<T>::pack_cell_data(boct_tree_cell<short, boxm_sample<BOXM_APM_SIMPLE_GREY> >* cell_ptr, vnl_vector_fixed<float, 16> &data)
+void boxm_ocl_convert<T>::pack_cell_data(boct_tree_cell<short, boxm_sample<BOXM_APM_SIMPLE_GREY> >* cell_ptr, vnl_vector_fixed<float, 16> &data)
 {
   data.fill(0.0f);
   boxm_sample<BOXM_APM_SIMPLE_GREY> cell_data = cell_ptr->data();
@@ -21,7 +21,7 @@ void boxm_ocl_utils<T>::pack_cell_data(boct_tree_cell<short, boxm_sample<BOXM_AP
 }
 
 template<class T>
-void boxm_ocl_utils<T>::pack_cell_data(boct_tree_cell<short, boxm_sample<BOXM_APM_MOG_GREY> >* cell_ptr, vnl_vector_fixed<float, 16> &data)
+void boxm_ocl_convert<T>::pack_cell_data(boct_tree_cell<short, boxm_sample<BOXM_APM_MOG_GREY> >* cell_ptr, vnl_vector_fixed<float, 16> &data)
 {
   data.fill(0.0f);
   boxm_sample<BOXM_APM_MOG_GREY> cell_data = cell_ptr->data();
@@ -44,7 +44,7 @@ void boxm_ocl_utils<T>::pack_cell_data(boct_tree_cell<short, boxm_sample<BOXM_AP
 }
 
 template<class T>
-void boxm_ocl_utils<T>::pack_cell_data(boct_tree_cell<short, float> * cell_ptr, vnl_vector_fixed<float, 16> &data)
+void boxm_ocl_convert<T>::pack_cell_data(boct_tree_cell<short, float> * cell_ptr, vnl_vector_fixed<float, 16> &data)
 {
   data.fill(0.0f);
   float cell_data = cell_ptr->data();
@@ -54,7 +54,7 @@ void boxm_ocl_utils<T>::pack_cell_data(boct_tree_cell<short, float> * cell_ptr, 
 
 //: Recursive algorithm to take in a tree cell and copy structure and data into two arrays
 template<class T>
-void boxm_ocl_utils<T>::copy_to_arrays(boct_tree_cell<short, T >* cell_ptr,
+void boxm_ocl_convert<T>::copy_to_arrays(boct_tree_cell<short, T >* cell_ptr,
                                        vcl_vector<vnl_vector_fixed<int, 4> >& cell_array,
                                        vcl_vector<vnl_vector_fixed<float, 16> >& data_array,
                                        int cell_input_ptr)
@@ -67,7 +67,7 @@ void boxm_ocl_utils<T>::copy_to_arrays(boct_tree_cell<short, T >* cell_ptr,
   // convert the data to 16 vector size
  if (cell_ptr->is_leaf()) {
   vnl_vector_fixed<float, 16> data;
-  boxm_ocl_utils<T>::pack_cell_data(cell_ptr,data);
+  boxm_ocl_convert<T>::pack_cell_data(cell_ptr,data);
 
   // data pointer will be at index == size after the push_back
   cell_array[cell_input_ptr][2] = data_array.size();
@@ -80,7 +80,7 @@ void boxm_ocl_utils<T>::copy_to_arrays(boct_tree_cell<short, T >* cell_ptr,
     //data_array[cell_array[cell_input_ptr][2]].fill(0.0);
     // create the children on the cell array
     int child_ptr = -1;
-    split(cell_array, cell_input_ptr, child_ptr);
+    boxm_ocl_utils::split(cell_array, cell_input_ptr, child_ptr);
     cell_array[cell_input_ptr][1]=child_ptr;
     boct_tree_cell<short,T >* children = cell_ptr->children();
     for (unsigned i = 0; i<8; ++i) {
@@ -91,98 +91,10 @@ void boxm_ocl_utils<T>::copy_to_arrays(boct_tree_cell<short, T >* cell_ptr,
   }
 }
 
-// allocate child cells on the array
-template<class T>
-void boxm_ocl_utils<T>::split(vcl_vector<vnl_vector_fixed<int, 4> >& cell_array,
-                              int parent_ptr,
-                              int& child_ptr)
-{
-  child_ptr = cell_array.size();
-  for (unsigned i=0; i<8; i++) {
-    vnl_vector_fixed<int, 4> cell(0);
-    cell[0]= parent_ptr;
-    cell[1]=-1;
-    cell[2]=-1;
-    cell_array.push_back(cell);
-  }
-}
 
-
-//Print tree array
-template<class T>
-void boxm_ocl_utils<T>::print_tree_array(int* tree, unsigned numcells, float* data)
-{
-  unsigned cell_size = 4;
-  for (unsigned i = 0, j = 0; i<numcells*cell_size; i+=cell_size, j++) {
-    int parent = tree[i];
-    int child = tree[i+1];
-
-    //find alpha value - remember data size is 16
-    int dataIndex = tree[i+2];
-    float alpha = data[dataIndex*16];
-    vcl_cout<<"[index: "<<j<<"] [parent: "<<parent<<"] [child: "<<child<<"] [alpha: "<<alpha<<"] [dataIndex: "<<dataIndex<<']'
-            <<vcl_endl;
-  }
-}
-
-template<class T>
-void* boxm_ocl_utils<T>::alloc_aligned(unsigned n, unsigned unit_size, unsigned block_size)
-{
-#if defined (_WIN32)
-  return _aligned_malloc(n * unit_size, block_size);
-#elif defined(__APPLE__)
-  return malloc(n * unit_size, block_size);
-#else
-  return memalign(block_size, n * unit_size);
-#endif
-}
-
-template<class T>
-void boxm_ocl_utils<T>::free_aligned(void* ptr)
-{
-  if (ptr) {
-#ifdef _WIN32
-    _aligned_free(ptr);
-#else
-    free(ptr);
-#endif
-  }
-  ptr = NULL;
-}
-
-template<class T>
-bool boxm_ocl_utils<T>::verify_format(vcl_vector<vnl_vector_fixed<int, 4> > cell_array)
-{
-  unsigned curr_index = 0;
-  vcl_stack<int> open;
-  open.push(0);
-  while (!open.empty()) {
-    int currNode = open.top();
-    open.pop();
-    int child_ptr = cell_array[currNode][1];
-
-    // if the current node has no children, nothing to verify
-    if (child_ptr < 0) {
-      continue;
-    }
-    // if child pointer isn't to the right place..
-    if (child_ptr != curr_index+1) {
-      vcl_cout<<"Children of "<<currNode<<" not in the right place"<<vcl_endl;
-      vcl_cout<<"should be at "<<curr_index+1<<", actually at "<<child_ptr<<vcl_endl;
-      return false;
-    }
-
-    // push children on stack in reverse order
-    for (int i=7; i>=0; i--) {
-      open.push(child_ptr+i);
-    }
-    curr_index += 8;
-  }
-  return true;
-}
-
+    
 #define BOXM_OCL_UTILS_INSTANTIATE(T) \
-  template class boxm_ocl_utils<T >\
+  template class boxm_ocl_convert<T >\
 
 #endif
 
