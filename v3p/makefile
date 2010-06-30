@@ -8,7 +8,7 @@ SUBDIRS += Qv
 
 SUBDIRS += rply
 
-# do not compile zlib, png, jpeg or tiff by default as they
+# do not compile zlib, png, jpeg, tiff etc. by default as they
 # are "native" libraries on some systems. clients who wish
 # to compile the 3rd libraries which come with the v3p source
 # distribution must specify include paths to the v3p versions.
@@ -16,6 +16,10 @@ SUBDIRS += rply
 
 ifneq (,$(strip $(wildcard $(ZLIB_INC_DIR)/../v3p_tag)))
 SUBDIRS += zlib
+endif
+
+ifneq (,$(strip $(wildcard $(BZLIB_INC_DIR)/../v3p_tag)))
+SUBDIRS += bzlib
 endif
 
 ifneq (,$(strip $(wildcard $(PNG_INC_DIR)/../v3p_tag)))
