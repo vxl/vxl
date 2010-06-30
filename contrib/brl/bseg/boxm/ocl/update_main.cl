@@ -197,7 +197,7 @@ update_main(__global float16 * sample_array,
 
         float16 data=sample_array[gid];
         float4 aux_data=aux_data_array[gid];
-        update_cell(&data,aux_data,2.5f,0.15f,0.09f);
+        update_cell(&data,aux_data,2.5f,0.09f,0.03f);
         sample_array[gid]=data;
     }
 

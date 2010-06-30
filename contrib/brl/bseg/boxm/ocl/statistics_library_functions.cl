@@ -21,6 +21,8 @@ float gauss_3_mixture_prob_density(float x,
       if(w2>0.0f)
         sum += w2*gauss_prob_density(x, mu2, sigma2);
     }
+  else 
+      sum=1.0f;
   return sum;
 }
 
@@ -116,7 +118,7 @@ void insert_gauss_3(float x, float init_weight, float init_sigma, int* match,
                     float* mu1, float* sigma1, float* w1, short* Nobs1,
                     float* mu2, float* sigma2, float* w2, short* Nobs2)
 {
-  if(*w2>0.0f||*w1>0.0f)  /* replace the third component */
+  if((*w2)>1e-3f||(*w1)>1e-3f)  /* replace the third component */
     {
       float adjust = *w0 + *w1;
       adjust = (1.0f - init_weight)/adjust;
@@ -164,12 +166,15 @@ void update_gauss_3_mixture(float x, float w, float t_match,
                             float* mu2, float* sigma2, float* w2, short* Nobs2,
                             float* Nobs_mix) 
 {
-  int match = -1;
+  if(w>0.0f)
+  {
+    int match = -1;
   (*Nobs_mix) += w;
   float alpha = w/(*Nobs_mix), tsq=t_match*t_match;
   float weight = 0.0f, rho = 0.0f;
+  
   /* test for a match of component 0 */
-  if(*w0>0){
+  if(*w0>0.0f){
     weight = (1.0f-alpha)*(*w0);
     if(match<0 && 
        ((x-*mu0)*(x-*mu0)/((*sigma0)*(*sigma0))) < tsq){
@@ -181,8 +186,8 @@ void update_gauss_3_mixture(float x, float w, float t_match,
     }
     *w0 = weight;
   }
-  /* test for a match of component 1 */
-  if(*w1>0){
+  ///* test for a match of component 1 */
+  if(*w1>0.0f){
     weight = (1.0f-alpha)*(*w1);
     if(match<0 && ((x-*mu1)*(x-*mu1)/((*sigma1)*(*sigma1))) < tsq){
       weight += alpha;
@@ -194,7 +199,7 @@ void update_gauss_3_mixture(float x, float w, float t_match,
     *w1 = weight;
   }
   /* test for a match of component 2 */
-  if(*w2>0){
+  if(*w2>0.0f){
     weight = (1.0f-alpha)*(*w2);
     if(match<0 && ((x-*mu2)*(x-*mu2)/((*sigma2)*(*sigma2))) < tsq){
       weight += alpha;
@@ -212,12 +217,13 @@ void update_gauss_3_mixture(float x, float w, float t_match,
                    mu1, sigma1, w1, Nobs1,
                    mu2, sigma2, w2, Nobs2);
 
-  /* If there is more than one component, sort the components with
-   * respect to weight/sigma.  
-   */
+  ///* If there is more than one component, sort the components with
+  // * respect to weight/sigma.  
+  // */
   if(match>0)
     sort_mix_3(mu0, sigma0, w0, Nobs0, 
                mu1, sigma1, w1, Nobs1,
                mu2, sigma2, w2, Nobs2);
+  }
 }
 

@@ -80,7 +80,7 @@ class online_update_test_manager : public bocl_manager<online_update_test_manage
   void print_tree();
   void print_leaves();
   void print_image();
-
+  void save_image();
   cl_float * output_image() {return image_;}
 
  protected:

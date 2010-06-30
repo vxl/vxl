@@ -1,6 +1,6 @@
 float4 backproject(unsigned i,unsigned j,float16 Ut,float16 V,float16 w, float4 origin)
 {
-  float4 inputpoint=(float4)(i,j,1.0f,0.0f);
+  float4 inputpoint=(float4)((float)i,(float)j,1.0f,0.0f);
 
   float4 X=(float4)(dot((float4)(Ut.s0123),inputpoint),
                     dot((float4)(Ut.s4567),inputpoint),

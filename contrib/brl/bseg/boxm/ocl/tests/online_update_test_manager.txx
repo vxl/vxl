@@ -15,6 +15,9 @@
 #include <boxm/basic/boxm_block_vis_graph_iterator.h>
 #include <vpgl/vpgl_perspective_camera.h>
 
+
+#include <vil/vil_save.h>
+
 template<class T>
 void online_update_test_manager<T>::
 set_block_items(boxm_block<boct_tree<short,T> > *block,
@@ -443,8 +446,15 @@ bool online_update_test_manager<T>::process_block(int numpass)
     return false;
   // run the raytracing for this block
   for (unsigned pass = 0; pass<numpass; pass++)
+  {
     if (!run_block(pass))
       return false;
+    if(pass==2)
+    {
+        read_output_image() ;
+        this->save_image() ;
+    }
+  }
   // release memory
   this->read_trees();
   this->archive_tree_data();
@@ -454,7 +464,7 @@ bool online_update_test_manager<T>::process_block(int numpass)
   float raytrace_time = (float)timer.all() / 1e3f;
   vcl_cout<<"processing block took " << raytrace_time << 's' << vcl_endl;
   read_output_image() ;
-  this->print_image() ;
+  //this->print_image() ;
   return  clean_input_view()
       && release_block_data_buffers()
       && release_offset_buffers()
@@ -467,9 +477,6 @@ template<class T>
 bool online_update_test_manager<T>:: read_output_image()
 {
   cl_event events[2];
-  // clear image
-  for (unsigned i = 0; i<this->wni_*this->wnj_*4; ++i)
-    image_[i]=0.0f;
 
   // Enqueue readBuffers
   int status = clEnqueueReadBuffer(command_queue_,image_buf_,CL_TRUE,
@@ -566,7 +573,36 @@ void online_update_test_manager<T>::print_image()
     vcl_cout<<vcl_endl;
   }
 }
+template<class T>
+void online_update_test_manager<T>::save_image()
+{
+  if (!image_)
+    return;
+  vil_image_view<float> img0(this->wni_,this->wnj_);
+  vil_image_view<float> img1(this->wni_,this->wnj_);
+  vil_image_view<float> img2(this->wni_,this->wnj_);
+  vil_image_view<float> img3(this->wni_,this->wnj_);
 
+
+  for (unsigned j=0;j<this->wnj_;j++)
+    for (unsigned i=0;i<this->wni_;i++)
+      img0(i,j)=image_[(j*this->wni_+i)*4];
+  for (unsigned j=0;j<this->wnj_;j++)
+    for (unsigned i=0;i<this->wni_;i++)
+      img1(i,j)=image_[(j*this->wni_+i)*4+1];
+  for (unsigned j=0;j<this->wnj_;j++)
+    for (unsigned i=0;i<this->wni_;i++)
+      img2(i,j)=image_[(j*this->wni_+i)*4+2];
+  for (unsigned j=0;j<this->wnj_;j++)
+    for (unsigned i=0;i<this->wni_;i++)
+      img3(i,j)=image_[(j*this->wni_+i)*4+3];
+
+
+  vil_save(img0,"f:/APL/img0.tiff");
+  vil_save(img1,"f:/APL/img1.tiff");
+  vil_save(img2,"f:/APL/img2.tiff");
+  vil_save(img3,"f:/APL/img3.tiff");
+}
 template<class T>
 void online_update_test_manager<T>::print_tree()
 {
@@ -1047,6 +1083,8 @@ bool online_update_test_manager<T>::set_input_image()
   image_=(cl_float *)boxm_ocl_utils<T>::alloc_aligned(wni_*wnj_,sizeof(cl_float4),16);
   img_dims_=(cl_uint *)boxm_ocl_utils<T>::alloc_aligned(1,sizeof(cl_uint4),16);
 
+  for(unsigned i=0;i<wni_*wnj_*4;i++)
+        image_[i]=0.0f;
   vil_image_view<float>::iterator iter=input_img_.begin();
 
   // pad the image
