@@ -311,7 +311,7 @@ bool boxm_scene<T>::load_block(unsigned i, unsigned j, unsigned k)
     vsl_b_ifstream os(block_path);
 
     //if the binary block file is not found
-    if (!os) {
+    if(!os) {
       if (blocks_(i,j,k)->get_tree()==NULL) {
         exist = false;
         T* tree= new T(max_tree_level_,init_tree_level_);

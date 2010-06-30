@@ -148,6 +148,7 @@ class boxm_scene :public boxm_scene_base
 
   bool valid_index(vgl_point_3d<int> idx);
 
+  void set_pinit(float pinit){pinit_=pinit;}
   float pinit(){return pinit_;}
 
   vgl_box_3d<double> get_block_bbox(vgl_point_3d<int>& idx){return get_block_bbox(idx.x(), idx.y(), idx.z());}
