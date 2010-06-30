@@ -39,7 +39,7 @@ void boxm_refine_block(boxm_block<boct_tree<T_loc, T_data> > *block,
 #endif
     }
   }
-  num_split+=split_list.size();
+  num_split+=(int)split_list.size();
   vcl_cout<<" Splitting "<<split_list.size()<<" cells" << vcl_endl;
   // splitting
   for (unsigned i=0; i<split_list.size(); i++) {
