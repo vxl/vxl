@@ -108,14 +108,14 @@ void string_to_image(const vcl_string&s, vimt3d_image_3d_of<T>&d)
     if (!d.image())
     {
       vcl_cerr << "\nERROR: Failed to load image: " << s << " for unknown reason.\n"
-        << "At \"" << args_so_far << "\"<-- HERE\n";
+               << "At \"" << args_so_far << "\"<-- HERE\n";
       vcl_exit(4);
     }
   }
   catch (const vcl_exception& e)
   {
     vcl_cerr << "\nERROR: " << e.what() << '\n'
-      << "At \"" << args_so_far << "\"<-- HERE\n";
+             << "At \"" << args_so_far << "\"<-- HERE\n";
     vcl_exit(4);
   }
 }
@@ -183,7 +183,7 @@ class operand
       return v;
     }
     vcl_cerr << "\nERROR: Tried to use unsuitable operand as a double: " << *this
-        << "\nAt \"" << args_so_far << "\"<-- HERE\n";
+             << "\nAt \"" << args_so_far << "\"<-- HERE\n";
     vcl_exit(1);
   }
 
@@ -351,7 +351,7 @@ class operand
 
 class operand_open_brace: public operand
 {
-public:
+ public:
   operand_open_brace() { operand_type_ = e_open_brace; }
 };
 
@@ -398,7 +398,7 @@ vcl_ostream& operator <<( vcl_ostream&os, const operand::operand_type_t& t)
 
 class opstack_t : public vcl_deque<operand>
 {
-public:
+ public:
   opstack_t(): last_pop_(vcl_numeric_limits<vcl_size_t>::max()) {}
 
   //: Get rid of n operands on the stack.
@@ -419,7 +419,7 @@ public:
   {
     last_pop_=vcl_numeric_limits<vcl_size_t>::max();
   }
-private:
+ private:
   vcl_size_t last_pop_;
 
   // Force the use of pop(unsigned) rather than pop_front();
@@ -454,15 +454,15 @@ void close_brace__brace(opstack_t& s)
   if (s.last_pop() > s.size())
   {
     vcl_cerr << "\nERROR: A closing brace must be preceeded by an operation.\n"
-      "At \"" << args_so_far << "\"<-- HERE";
+             << "At \"" << args_so_far << "\"<-- HERE";
     vcl_exit(1);
   }
   if (s.size() < 1 || s.last_pop() > s.size() ||
     s.last_pop()==0 || !s[s.size() - s.last_pop()].is_open_brace() )
   {
     vcl_cerr << "\nERROR: No matching openning brace found for closing brace.\n"
-      "At \"" << args_so_far << "\"<-- HERE\n"
-      "Stack is: \n" << vsl_stream_summary(s);
+             << "At \"" << args_so_far << "\"<-- HERE\n"
+      "Stack is:\n" << vsl_stream_summary(s);
     vcl_exit(1);
   }
   s.erase(s.end() - s.last_pop());
@@ -639,8 +639,6 @@ void or__image_3d_of_int__image_3d_of_int(opstack_t& s)
 }
 
 
-
-
 //: Find the minimum of corresponding voxel pairs between two images
 void min__image_3d_of_int__image_3d_of_int(opstack_t& s)
 {
@@ -806,8 +804,8 @@ void recall__string(opstack_t& s)
   if (it == named_store.end())
   {
     vcl_cerr << "\nERROR: --recall could not find a store called " << o1
-       << "\n Store is :\n" << vsl_stream_summary(named_store);
-    exit(5);
+             << "\n Store is :\n" << vsl_stream_summary(named_store);
+    vcl_exit(5);
   }
   s.pop(1);
   s.push_front(it->second.deep_copy());
@@ -847,7 +845,7 @@ void load_from_mat__string(opstack_t& s)
   if (!input)
   {
     vcl_cerr << "\nERROR: --load_from_mat: ";
-    vcl_perror(o1.c_str());    
+    vcl_perror(o1.c_str());
     vcl_cerr << "At \"" << args_so_far << "\"<-- HERE\n";
     vcl_exit(4);
   }
@@ -868,7 +866,7 @@ void load_from_mat__string(opstack_t& s)
   if (!input)
   {
     vcl_cerr << "\nERROR: Unable to parse " << o1
-      << "\nAt \"" << args_so_far << "\"<-- HERE\n";
+             << "\nAt \"" << args_so_far << "\"<-- HERE\n";
     vcl_exit(1);
   }
 
@@ -887,7 +885,7 @@ void load_from_mat__string(opstack_t& s)
         if (!input)
         {
           vcl_cerr << "\nERROR: Unable to parse " << o1
-            << "\nAt \"" << args_so_far << "\"<-- HERE\n";
+                   << "\nAt \"" << args_so_far << "\"<-- HERE\n";
           vcl_exit(1);
         }
       }
@@ -905,7 +903,7 @@ void load_from_mat__string(opstack_t& s)
         if (!input)
         {
           vcl_cerr << "\nERROR: Unable to parse " << o1
-            << "\nAt \"" << args_so_far << "\"<-- HERE\n";
+                   << "\nAt \"" << args_so_far << "\"<-- HERE\n";
           vcl_exit(1);
         }
       }
@@ -923,7 +921,7 @@ void load_from_mat__string(opstack_t& s)
         if (!input)
         {
           vcl_cerr << "\nERROR: Unable to parse " << o1
-            << "\nAt \"" << args_so_far << "\"<-- HERE\n";
+                   << "\nAt \"" << args_so_far << "\"<-- HERE\n";
           vcl_exit(1);
         }
       }
@@ -1212,7 +1210,7 @@ void option_precision__double(opstack_t& s)
   if (prec < 0 || prec > 20)
   {
     vcl_cerr << "\nERROR: option_precision takes an integer between 0 and 20.\n"
-      "At \"" << args_so_far << "\"<-- HERE\n";
+             << "At \"" << args_so_far << "\"<-- HERE\n";
     vcl_exit(1);
   }
   vcl_cout.precision(prec);
@@ -1487,8 +1485,8 @@ void print__double(opstack_t& s)
   if (s.size() < n+1)
   {
     vcl_cerr << "\nERROR: --print command could not find " << n << " doubles or strings to print.\n"
-      "At \"" << args_so_far << "\"<-- HERE\n"
-      "Stack is :\n" << vsl_stream_summary(s);
+             << "At \"" << args_so_far << "\"<-- HERE\n"
+             << "Stack is :\n" << vsl_stream_summary(s);
     vcl_exit(1);
   }
 
@@ -1500,8 +1498,8 @@ void print__double(opstack_t& s)
       {
         vcl_ostringstream ss;
         vcl_cerr << "\nERROR: --print command could not find " << n << " doubles or strings to print.\n"
-          "At \"" << args_so_far << "\"<-- HERE\n"
-          "Stack is :\n" << vsl_stream_summary(s);
+                 << "At \"" << args_so_far << "\"<-- HERE\n"
+                 << "Stack is :\n" << vsl_stream_summary(s);
         vcl_exit(1);
       }
     }
@@ -1949,7 +1947,7 @@ class operations
     if (range.first == range.second)
     {
       vcl_cerr << "\nERROR: No such operation \"" << name << "\"\n."
-        "At \"" << args_so_far << "\"<-- HERE\n";
+               << "At \"" << args_so_far << "\"<-- HERE\n";
       vcl_exit(1);
     }
     for (vcl_ptrdiff_t i = distance(singleton_.names_.begin(), range.first),
@@ -1962,9 +1960,9 @@ class operations
       }
     }
     vcl_cerr << "\nERROR: Unable to match operands for operation \"" << name << '"'
-       << "\nAt \"" << args_so_far << "\"<-- HERE\n"
-       << "\nStack is :\n" << vsl_stream_summary(stack)
-       << "\nPossible \"" << name << "\" operations are:\n";
+             << "\nAt \"" << args_so_far << "\"<-- HERE\n"
+             << "\nStack is :\n" << vsl_stream_summary(stack)
+             << "\nPossible \"" << name << "\" operations are:\n";
     print(vcl_cerr, distance(singleton_.names_.begin(), range.first),
       distance(range.first, range.second) );
     vcl_exit(1);
@@ -2010,7 +2008,7 @@ int main2(int argc, char*argv[])
   for (int i=1; i<argc; ++i)
   {
     vcl_string option = argv[i];
-    
+
     args_so_far += option + ' ';
 
     if (option.empty()) continue;
@@ -2034,7 +2032,6 @@ int main2(int argc, char*argv[])
       stack.push_front(operand(option));
 
     stack.reset_last_pop();
-    
   }
 
   if (!stack.empty())
