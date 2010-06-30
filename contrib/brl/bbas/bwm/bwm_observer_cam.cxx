@@ -1689,9 +1689,9 @@ void bwm_observer_cam::load_boxm_scene()
   vcl_cout << "defining lvcs with origin = <" << lvcs << vcl_endl;
 
   // create the world
-  unsigned x_dim = dims.x()*block_dim.x(); 
-  unsigned y_dim = dims.y()*block_dim.y(); 
-  unsigned z_dim = dims.z()*block_dim.z(); 
+  unsigned x_dim = dims.x()*block_dim.x();
+  unsigned y_dim = dims.y()*block_dim.y();
+  unsigned z_dim = dims.z()*block_dim.z();
 
   // find the origin in global coordinates
   double lon, lat, elev;
