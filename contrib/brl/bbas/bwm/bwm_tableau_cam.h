@@ -130,6 +130,7 @@ class bwm_tableau_cam : public bwm_tableau_img
   void set_vertex_mode() { my_observer_->set_vertex_mode(); }
 
   void create_boxm_scene() { my_observer_->create_boxm_scene(); }
+  void load_boxm_scene() { my_observer_->load_boxm_scene(); }
 
   bool show_vertices_;
 

@@ -44,6 +44,7 @@
 #include <bgui/bgui_vsol_soview2D.h>
 
 #include <boxm/boxm_apm_traits.h>
+#include <boxm/boxm_scene_parser.h>
 #include <vsl/vsl_basic_xml_element.h>
 
 bool bwm_observer_cam::geo_position(double u, double v,
@@ -1654,4 +1655,60 @@ void bwm_observer_cam::create_boxm_scene()
     scene_elm.x_write_close(os);
     os.close();
   }
+}
+
+void bwm_observer_cam::load_boxm_scene()
+{
+  vgui_dialog params("Load Scene File");
+  vcl_string ext, file, empty="";
+
+  params.file ("Load...", ext, file);
+  if (!params.ask())
+    return;
+
+  if (file == "") {
+    vgui_dialog error ("Error");
+    error.message ("Please specify a filename (prefix)." );
+    error.ask();
+    return;
+  }
+
+  boxm_scene_parser parser;
+  boxm_scene_base scene_base;
+  scene_base.load_scene(file, parser);
+  //parse_config(parser);
+
+  bgeo_lvcs lvcs;
+  parser.lvcs(lvcs);
+  vgl_vector_3d<unsigned> dims = parser.block_nums();
+  vgl_point_3d<double> loc_origin =  parser.origin();
+  vgl_vector_3d<double> block_dim = parser.block_dim();
+
+  // set lvcs
+  bwm_world::instance()->set_lvcs(lvcs);
+  vcl_cout << "defining lvcs with origin = <" << lvcs << vcl_endl;
+
+  // create the world
+  unsigned x_dim = dims.x()*block_dim.x(); 
+  unsigned y_dim = dims.y()*block_dim.y(); 
+  unsigned z_dim = dims.z()*block_dim.z(); 
+
+  // find the origin in global coordinates
+  double lon, lat, elev;
+  lvcs.local_to_global(loc_origin.x(), loc_origin.y(), loc_origin.z(), bgeo_lvcs::wgs84, lon, lat, elev);
+  vgl_point_3d<double> world_min(lon,lat,elev);
+
+  //find the max point of world in local coordinates
+  double w_max_x = loc_origin.x() + x_dim;
+  double w_max_y = loc_origin.y() + y_dim;
+  double w_max_z = loc_origin.z() + z_dim;
+  lvcs.local_to_global(w_max_x, w_max_y, w_max_z, bgeo_lvcs::wgs84, lon, lat, elev);
+  vgl_point_3d<double> world_max(lon,lat,elev);
+
+  //create the observable mesh
+  vgl_box_3d<double> world(world_min, world_max);
+  bwm_observable_mesh_sptr mesh = new bwm_observable_mesh();
+  bwm_world::instance()->add(mesh);
+  bwm_observer_mgr::instance()->attach(mesh);
+  *mesh = bwm_observable_mesh(world);
 }

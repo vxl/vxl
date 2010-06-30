@@ -33,9 +33,12 @@ class bwm_observable_mesh : public bwm_observable
   bwm_observable_mesh(BWM_MESH_TYPES type);
   bwm_observable_mesh(bmsh3d_mesh_mc* object);
   bwm_observable_mesh(vsol_polygon_3d_sptr poly);
+  bwm_observable_mesh(vgl_box_3d<double> box);
 
   //: destructor
   virtual ~bwm_observable_mesh();
+
+  bwm_observable_mesh& operator=(bwm_observable_mesh& m);
 
   void set_mesh_type(BWM_MESH_TYPES type) { mesh_type_ = type; }
 

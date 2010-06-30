@@ -59,6 +59,33 @@ bwm_observable_mesh::bwm_observable_mesh(vsol_polygon_3d_sptr poly)
   notify_observers("new");
 }
 
+//: create a mesh from a 3D box
+bwm_observable_mesh::bwm_observable_mesh(vgl_box_3d<double> box)
+{
+  // get the bottom polygon
+  vgl_point_3d<double> min=box.min_point();
+  vgl_point_3d<double> max=box.max_point();
+  vgl_point_3d<double> p1(max.x(), min.y(), min.z());
+  vgl_point_3d<double> p2(min.x(), max.y(), min.z());
+  vgl_point_3d<double> p3(max.x(), max.y(), min.z());
+  vcl_vector<vsol_point_3d_sptr> v;
+  v.push_back(new vsol_point_3d(min));
+  v.push_back(new vsol_point_3d(p1));
+  v.push_back(new vsol_point_3d(p3));
+  v.push_back(new vsol_point_3d(p2));
+  vsol_polygon_3d_sptr poly = new vsol_polygon_3d(v);
+  
+  // create the mesh
+  object_ = new bmsh3d_mesh_mc;
+  bmsh3d_face_mc* face = create_face(poly);
+  object_->_add_face (face);
+  object_->orient_face_normals();
+
+  // extrude the bottom till top
+  this->extrude(0, max.z()-min.z());
+  notify_observers("new");
+}
+
 bwm_observable_mesh::~bwm_observable_mesh()
 {
 #if 0
@@ -70,6 +97,14 @@ bwm_observable_mesh::~bwm_observable_mesh()
   }
 #endif // 0
   remove();
+}
+
+bwm_observable_mesh& bwm_observable_mesh::operator=(bwm_observable_mesh& m)
+{
+  bmsh3d_mesh_mc *o=m.get_object();
+  object_=o->clone();
+  notify_observers("new");
+  return *this;
 }
 
 void bwm_observable_mesh::remove()
