@@ -146,5 +146,7 @@ void mbl_load_mask(mbl_mask & mask, vcl_istream & stream);
 //: Load from file
 void mbl_load_mask(mbl_mask & mask, const char * filename);
 
+//: Load from file
+void mbl_load_mask(mbl_mask & mask, const vcl_string &filename);
 
 #endif // mbl_mask_h_

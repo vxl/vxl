@@ -179,3 +179,9 @@ void mbl_load_mask(mbl_mask & mask, const char * filename)
     throw mbl_exception_parse_file_error(e.what(), filename);
   }
 }
+
+    //: Load from file
+void mbl_load_mask(mbl_mask & mask, const vcl_string &filename)
+{
+  mbl_load_mask( mask, filename.c_str() );
+}
