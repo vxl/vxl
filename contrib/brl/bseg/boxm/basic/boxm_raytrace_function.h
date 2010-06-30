@@ -459,8 +459,8 @@ class boxm_raytrace_function
       }
     }
 
-    bool entry_point(vgl_box_3d<double> & block_bb, vgl_point_3d<double>  ray_origin,
-                     vgl_vector_3d<double> direction, vgl_point_3d<double> & enter_pt)
+    bool entry_point(vgl_box_3d<double> & block_bb, vgl_point_3d<double>  &ray_origin,
+                     vgl_vector_3d<double> &direction, vgl_point_3d<double> & enter_pt)
     {
       double lambda[6];
       vcl_vector<vgl_point_3d<double> > plane_intersections(6);
