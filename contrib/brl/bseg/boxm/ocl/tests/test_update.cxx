@@ -13,9 +13,10 @@
 #include <boxm/algo/rt/boxm_update_image_functor.h>
 #include <boxm/ocl/boxm_ocl_utils.h>
 #include <boxm/algo/boxm_init_scene.h>
+#include <vnl/vnl_vector_fixed.h>
 
 template<unsigned n>
-static bool near_eq(vnl_vector_fixed<float, n> v1,
+bool near_eq(vnl_vector_fixed<float, n> v1,
                     vnl_vector_fixed<float, n> v2, float tol)
 {
   return (v1-v2).magnitude() <= tol;
@@ -73,7 +74,7 @@ static void test_update_upto_pass_4()
   vnl_vector_fixed<float, 16> tdata(dblk);
   float ablk[] = {1.0f, 0.533333f, 1.23052f, 0.249998f};
   vnl_vector_fixed<float, 4> adata(ablk);
-  bool good = near_eq<16>(tree_data[0],tdata, 0.0001f);
+  bool good = near_eq<16>(tree_data[0],tdata, 0.0001f)
            && near_eq<4>(tree_aux_data[0],adata, 0.0001f);
   TEST("All passes except update and refine", good, true);
 }
