@@ -172,6 +172,9 @@ vcl_ostream&  operator<<(vcl_ostream& s, vpgl_perspective_camera<Type> const& p)
 template <class Type>
 vcl_istream&  operator>>(vcl_istream& s, vpgl_perspective_camera<Type>& p);
 
+//: Write vpgl_perspective_camera to a vrml file, does not write a vrml header, only the camera, the camera center sphere has radius rad
+template <class Type>
+void vrml_write(vcl_ostream& s, vpgl_perspective_camera<Type> const& p, double rad);
 
 //: Decompose camera into parameter blocks.
 // Attempts to decompose a 3x4 camera matrix into the parameter blocks that describe
