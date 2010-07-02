@@ -414,6 +414,65 @@ vcl_istream&  operator >>(vcl_istream& s,
   return s ;
 }
 
+//: Write vpgl_perspective_camera to a vrml file
+template <class Type>
+void vrml_write(vcl_ostream& str, vpgl_perspective_camera<Type> const& p, double rad)
+{
+  vgl_point_3d<Type> cent =  p.get_camera_center();
+    str << "Transform {\n"
+        << "translation " << cent.x() << ' ' << cent.y() << ' '
+        << ' ' << cent.z() << '\n'
+        << "children [\n"
+        << "Shape {\n"
+        << " appearance Appearance{\n"
+        << "   material Material\n"
+        << "    {\n"
+        << "      diffuseColor " << 1 << ' ' << 1.0 << ' ' << 0.0 << '\n'
+        << "      transparency " << 0.0 << '\n'
+        << "    }\n"
+        << "  }\n"
+        << " geometry Sphere\n"
+        <<   "{\n"
+        << "  radius " << rad << '\n'
+        <<  "   }\n"
+        <<  "  }\n"
+        <<  " ]\n"
+        << "}\n";
+    vgl_vector_3d<Type> r = p.principal_axis();
+    vcl_cout<<"principal axis :" <<r<<vcl_endl;
+    vnl_vector_fixed<Type,3> yaxis(0.0, 1.0, 0.0), pvec(r.x(), r.y(), r.z());
+    vgl_rotation_3d<Type> rot(yaxis, pvec);
+    vnl_quaternion<Type> q = rot.as_quaternion();
+
+    //vnl_double_3 axis = q.axis();
+    vnl_vector_fixed<Type,3> axis = q.axis();
+    vcl_cout<<"quaternion "<<axis<< " angle "<<q.angle()<<"\n\n";
+    double ang = q.angle();
+    str <<  "Transform {\n"
+        << " translation " << cent.x()+6*rad*r.x() << ' ' << cent.y()+6*rad*r.y()
+        << ' ' << cent.z()+6*rad*r.z() << '\n'
+        << " rotation " << axis[0] << ' ' << axis[1] << ' ' << axis[2] << ' ' <<  ang << '\n'
+        << "children [\n"
+        << " Shape {\n"
+        << " appearance Appearance{\n"
+        << "  material Material\n"
+        << "   {\n"
+        << "     diffuseColor 1 0 0\n"
+        << "     transparency 0\n"
+        << "    }\n"
+        << "  }\n"
+        << " geometry Cylinder\n"
+        << "{\n"
+        << " radius "<<rad/3<<'\n'
+        << " height " << 12*rad << '\n'
+        << " }\n"
+        << " }\n"
+        << "]\n"
+        << "}\n";
+}
+
+
+
 //-------------------------------
 template <class T> void vpgl_perspective_camera<T>::
 b_read(vsl_b_istream &is)
@@ -503,8 +562,11 @@ template vpgl_perspective_camera<T > vpgl_align_down(const vpgl_perspective_came
                                                      const vpgl_perspective_camera<T >& p1 ); \
 template vpgl_perspective_camera<T > vpgl_align_up(const vpgl_perspective_camera<T >& p0, \
                                                    const vpgl_perspective_camera<T >& p1 ); \
+template vpgl_perspective_camera<T > postmultiply(const vpgl_perspective_camera<T >& in_cam, \
+                                                  const vgl_h_matrix_3d<T >& euclid_trans); \
 template void vsl_b_read(vsl_b_istream &is, vpgl_perspective_camera<T >* &p); \
 template void vsl_b_write(vsl_b_ostream &os, const vpgl_perspective_camera<T > * p); \
+template void vrml_write(vcl_ostream &s, const vpgl_perspective_camera<T >&, double rad); \
 template vcl_ostream& operator<<(vcl_ostream&, const vpgl_perspective_camera<T >&); \
 template vcl_istream& operator>>(vcl_istream&, vpgl_perspective_camera<T >&)
 
