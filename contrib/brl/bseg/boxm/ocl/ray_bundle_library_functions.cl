@@ -458,7 +458,7 @@ void pre_infinity(float seg_len, __local float4* image_vect,
     {
         /* if total length of rays is too small, do nothing */
         temp1 = cached_aux_data[llid].x; /* length sum */
-        if (temp1>1.0e-4f)
+        if (temp1>1.0e-10f)
         {
             /* The mean intensity for the cell */
             temp2 = cached_aux_data[llid].y/temp1; /* mean observation */
@@ -475,7 +475,7 @@ void pre_infinity(float seg_len, __local float4* image_vect,
                 -cached_data[llid].s7)
                 );/* PI */
             /* temporary slot to store PI*/
-            cached_data[llid].se = temp1;
+            cached_data[llid].se =temp1;
         }
     }
     barrier(CLK_LOCAL_MEM_FENCE); /*wait for all threads to complete */
