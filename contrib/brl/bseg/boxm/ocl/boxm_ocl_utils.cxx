@@ -1,7 +1,7 @@
 // allocate child cells on the array
 #include <boxm/ocl/boxm_ocl_utils.h>
 
-
+#include <vcl_iostream.h>
 void boxm_ocl_utils ::split(vcl_vector<vnl_vector_fixed<int, 4> >& cell_array,
                             int parent_ptr,
                             int& child_ptr)
@@ -91,54 +91,66 @@ bool boxm_ocl_utils ::verify_format(vcl_vector<vnl_vector_fixed<int, 4> > cell_a
 }
 
 
-bool boxm_ocl_utils ::writetree(vcl_string tree_file,cl_int* cell_array, int tree_size )
+bool boxm_ocl_utils ::writetree(vcl_string tree_file,cl_int* cell_array, unsigned int tree_size )
 {
     vcl_ofstream ofile(tree_file.c_str());
     if (!ofile)
         return false;
-    ofile.write(reinterpret_cast<const char*>(&tree_size),sizeof(int));
-    ofile.write(reinterpret_cast<const char*>(cell_array),sizeof(cl_int4)*tree_size);
+    ofile<<tree_size;
+    for(unsigned i=0;i<tree_size*4;i++)
+        ofile<<" "<<cell_array[i];
     ofile.close();
 
     return true;
 }
 
-cl_int* boxm_ocl_utils ::readtree(vcl_string tree_file, int & tree_size )
+cl_int* boxm_ocl_utils ::readtree(vcl_string tree_file, unsigned int & tree_size )
 {
     vcl_ifstream ifile(tree_file.c_str());
     if (!ifile)
         return 0;
-    ifile.read(reinterpret_cast<char*>(&tree_size),sizeof(int));
+    ifile>>tree_size;
     if (tree_size<=0)
         return 0;
-    cl_int * cell_array=new cl_int[sizeof(cl_int4)*tree_size];
-    ifile.read(reinterpret_cast<char*>(cell_array),sizeof(cl_int4)*tree_size);
+
+    cl_int * cell_array=(cl_int*)boxm_ocl_utils::alloc_aligned(tree_size,sizeof(cl_int4),16);
+    for(unsigned i=0;i<tree_size*4;i++)
+        ifile>>cell_array[i];
     ifile.close();
     return cell_array;
 }
 
-bool boxm_ocl_utils ::writetreedata(vcl_string tree_data_file,cl_float* data_array, int  tree_data_size )
+bool boxm_ocl_utils ::writetreedata(vcl_string tree_data_file,cl_float* data_array, unsigned int  tree_data_size )
 {
     vcl_ofstream ofile(tree_data_file.c_str());
     if (!ofile)
         return false;
-    ofile.write(reinterpret_cast<const char*>(&tree_data_size),sizeof(int));
-    ofile.write(reinterpret_cast<const char*>(data_array),sizeof(cl_float16)*tree_data_size);
+        ofile<<tree_data_size;
+    for(unsigned i=0;i<tree_data_size*16;i++)
+        ofile<<" "<<data_array[i];
+
+    //ofile.write(reinterpret_cast<const char*>(&tree_data_size),sizeof(int));
+    //ofile.write(reinterpret_cast<const char*>(data_array),sizeof(cl_float16)*tree_data_size);
     ofile.close();
 
     return true;
 }
 
-cl_float * boxm_ocl_utils ::readtreedata(vcl_string tree_data_file, int &tree_data_size)
+
+ 
+
+cl_float * boxm_ocl_utils ::readtreedata(vcl_string tree_data_file, unsigned int &tree_data_size)
 {
     vcl_ifstream ifile(tree_data_file.c_str());
     if (!ifile)
         return 0;
-    ifile.read(reinterpret_cast<char*>(&tree_data_size),sizeof(int));
+    ifile>>tree_data_size;
     if (tree_data_size<=0)
         return 0;
-    cl_float * data_array=new cl_float[sizeof(cl_float16)*tree_data_size];
-    ifile.read(reinterpret_cast<char*>(data_array),sizeof(cl_float16)*tree_data_size);
+    cl_float * data_array=(cl_float*)boxm_ocl_utils::alloc_aligned(tree_data_size,sizeof(cl_float16),16);
+    for(unsigned i=0;i<tree_data_size*16;i++)
+        ifile>>data_array[i];
+    ifile.close();
     return data_array;
 }
 
