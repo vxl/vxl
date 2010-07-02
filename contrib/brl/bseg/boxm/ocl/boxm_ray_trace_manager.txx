@@ -163,12 +163,12 @@ bool boxm_ray_trace_manager<T>::setup_tree()
   // cells as vnl_vector_fixed<int, 4> and
   // data as vnl_vector_fixed<float, 2>
 
-  unsigned cells_size=cell_input_.size();
+  unsigned cells_size=(unsigned)cell_input_.size();
   vcl_cout<<"Size of tree "<<(float)cells_size*4*4/(1024*1024)          << "MBytes\n"
           <<"Size of data "<<(float)data_input_.size()*16*4/(1024*1024) << "MBytes"<<vcl_endl;
 
   if (cells_size>this->image2d_max_width_)
-    cells_size=RoundUp(cells_size,this->image2d_max_width_);
+    cells_size=(unsigned)RoundUp(cells_size,this->image2d_max_width_);
   cells_ = NULL;
   cell_data_ = NULL;
 #if defined (_WIN32)
@@ -935,7 +935,7 @@ template<class T>
 void boxm_ray_trace_manager<T>::clear_tree_results()
 {
   if (tree_results_) {
-    unsigned n = 4*this->tree_result_size();
+    unsigned n = 4*(unsigned)this->tree_result_size();
     for (unsigned i = 0; i<n; ++i)
       tree_results_[i]=0;
   }
@@ -1217,8 +1217,8 @@ bool boxm_ray_trace_manager<T>::run_block()
   if (!this->check_val(status,CL_SUCCESS,"clGetKernelWorkGroupInfo CL_KERNEL_WORK_GROUP_SIZE, failed."))
     return SDK_FAILURE;
 
-  vcl_size_t globalThreads[]= (vcl_size_t){RoundUp((imgdims_[0])*(imgdims_[1]),this->group_size())};
-  vcl_size_t localThreads[] = (vcl_size_t){this->group_size()};
+  vcl_size_t globalThreads[]= {RoundUp((imgdims_[0])*(imgdims_[1]),this->group_size())};
+  vcl_size_t localThreads[] = {this->group_size()};
 
   if (used_local_memory > this->total_local_memory())
   {
