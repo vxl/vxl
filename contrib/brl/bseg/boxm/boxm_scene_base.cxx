@@ -17,7 +17,6 @@ bool boxm_scene_base::load_scene(vcl_string filename, boxm_scene_parser& parser)
     }
   }
 
-  vcl_cout << "finished!" << vcl_endl;
   parser.paths(scene_path_, block_pref_);
   app_model_ = boxm_apm_types::str_to_enum(parser.app_model().data());
   multi_bin_ = parser.multi_bin();
