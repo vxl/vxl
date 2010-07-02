@@ -13,12 +13,12 @@ float gauss_3_mixture_prob_density(float x,
                                    float mu2, float sigma2, float w2)
 {
   float sum = 0.0f;
-  if(w0>0.0f)
+  if(w0>0.0f && sigma0 >0.0f)
     {
       sum += w0*gauss_prob_density(x, mu0, sigma0);
-      if(w1>0.0f)
+      if(w1>0.0f && sigma1 >0.0f)
         sum += w1*gauss_prob_density(x, mu1, sigma1);
-      if(w2>0.0f)
+      if(w2>0.0f && sigma2 >0.0f)
         sum += w2*gauss_prob_density(x, mu2, sigma2);
     }
   else 
