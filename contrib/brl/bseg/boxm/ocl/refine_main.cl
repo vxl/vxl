@@ -50,9 +50,13 @@ void swap_eight(__global int4 *tree, int a, int b, __global float* output)
   for(int i=0; i<8; i++){
     int childA = tree[a+i].y;
     int childB = tree[b+i].y;
-    for(int j=0; j<8; j++){
-      tree[childA+j].x = a+i;
-      tree[childB+j].x = b+i; 
+    if(childA > 0) {
+      for(int j=0; j<8; j++)
+        tree[childA+j].x = a+i;
+    }
+    if(childB > 0) {
+      for(int j=0; j<8; j++)
+        tree[childB+j].x = b+i; 
     }
   }
 }
@@ -67,8 +71,9 @@ void reformat_tree(__global int4 *tree, __global float* output)
   init_ocl_stack(&open);
   push(&open, 0);
  
+  int count = 0;
   while(!empty(&open)){
-    
+    count++;
     //examine node at top of stack
     int currNode = pop(&open);
     //recall tree's are organized as such:
@@ -78,7 +83,8 @@ void reformat_tree(__global int4 *tree, __global float* output)
     bool isleaf = (child_ptr < 0);
     if(!isleaf){
       //if child pointer isn't to the right place..
-      if(child_ptr != curr_index+1){          
+      if(child_ptr != curr_index+1){      
+        (*output) = curr_index+1;    
         //-- need to swap 8 nodes at currNode[1] to curr_index+1 --//
         swap_eight(tree, child_ptr, curr_index+1, output);
         child_ptr = curr_index+1;  //verify that tree[currNode].y is equal to curr_index+1;
