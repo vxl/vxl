@@ -115,6 +115,8 @@ class vpgl_perspective_camera : public vpgl_proj_camera<T>
   // static public functions -----------------------------------------------
 
   //: Post-multiply this perspective camera with a 3-d Euclidean transformation
+  // TODO: decide whether this needs to be either a static method or a stand-alone function.
+  // (Now both are present.)
   static  vpgl_perspective_camera<T>
    postmultiply( const vpgl_perspective_camera<T>& in_cam,
                  const vgl_h_matrix_3d<T>& euclid_trans);
@@ -197,7 +199,10 @@ vpgl_perspective_camera<T> vpgl_align_up( const vpgl_perspective_camera<T>& p0,
 template <class T>
 vpgl_perspective_camera<T>
 postmultiply( const vpgl_perspective_camera<T>& in_cam,
-              const vgl_h_matrix_3d<T>& euclid_trans);
+              const vgl_h_matrix_3d<T>& euclid_trans)
+{
+  return vpgl_perspective_camera<T>::postmultiply(in_cam, euclid_trans);
+}
 
 //: Binary save
 template <class T>
