@@ -52,10 +52,10 @@ class boxm_ocl_utils
   static bool verify_format(vcl_vector<vnl_vector_fixed<int, 4> > cell_array);
   
   // Binary read and writes for a tree.
-  static cl_int* readtree(vcl_string tree_file, int & tree_size );
-  static bool writetree(vcl_string tree_file,cl_int* cell_array, int tree_size );
-  static bool writetreedata(vcl_string tree_data_file,cl_float* data_array, int  tree_data_size);
-  static cl_float*  readtreedata(vcl_string tree_data_file, int & tree_data_size );
+  static cl_int* readtree(vcl_string tree_file, unsigned int & tree_size );
+  static bool writetree(vcl_string tree_file,cl_int* cell_array, unsigned int tree_size );
+  static bool writetreedata(vcl_string tree_data_file,cl_float* data_array, unsigned int  tree_data_size);
+  static cl_float*  readtreedata(vcl_string tree_data_file,unsigned int & tree_data_size );
 
 };
 
