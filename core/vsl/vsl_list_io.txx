@@ -9,8 +9,9 @@
 // Implementation
 
 #include "vsl_list_io.h"
-#include <vsl/vsl_binary_io.h>
 #include <vcl_iostream.h>
+#include <vsl/vsl_binary_io.h>
+#include <vsl/vsl_indent.h>
 
 //====================================================================================
 //: Write list to binary stream
@@ -64,9 +65,11 @@ void vsl_print_summary(vcl_ostream& os, const vcl_list<T> &v)
   for (typename vcl_list<T>::const_iterator iter = v.begin();
        iter != v.end() && i<5; ++iter,++i)
   {
-    os << ' ' << i << ": ";
+    os << vsl_indent() << ' ' << i << ": ";
+    vsl_indent_inc(os);
     vsl_print_summary(os, *iter);
     os << '\n';
+    vsl_indent_dec(os);
   }
   if (v.size() > 5)
     os << " ...\n";

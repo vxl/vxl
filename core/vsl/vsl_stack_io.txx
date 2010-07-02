@@ -8,6 +8,7 @@
 
 #include "vsl_stack_io.h"
 #include <vsl/vsl_binary_io.h>
+#include <vsl/vsl_indent.h>
 
 //====================================================================================
 //: Write stack to binary stream
@@ -80,10 +81,12 @@ void vsl_print_summary(vcl_ostream& os, const vcl_stack<T> &v)
   unsigned stack_size = v.size();
   for (unsigned i=0; i<stack_size && i<5; i++)
   {
-    os << ' ' << i << ": ";
+    os << vsl_indent() << ' ' << i << ": ";
+    vsl_indent_inc(os);
     vsl_print_summary(os, tmp_stack.top());
     tmp_stack.pop();
     os << '\n';
+    vsl_indent_dec(os);
   }
   if (stack_size > 5)
     os << " ...\n";

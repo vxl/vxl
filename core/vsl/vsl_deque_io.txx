@@ -9,8 +9,9 @@
 // Implementation
 
 #include "vsl_deque_io.h"
-#include <vsl/vsl_binary_io.h>
 #include <vcl_iostream.h>
+#include <vsl/vsl_binary_io.h>
+#include <vsl/vsl_indent.h>
 
 //====================================================================================
 //: Write deque to binary stream
@@ -58,9 +59,11 @@ void vsl_print_summary(vcl_ostream& os, const vcl_deque<T> &v)
   os << "Deque length: " << v.size() << '\n';
   for (unsigned int i=0; i<v.size() && i<5; i++)
   {
-    os << ' ' << i << ": ";
+    os << vsl_indent() << ' ' << i << ": ";
+    vsl_indent_inc(os);
     vsl_print_summary(os,v[i]);
     os << '\n';
+    vsl_indent_dec(os);
   }
   if (v.size() > 5)
     os << " ...\n";
