@@ -56,7 +56,6 @@ namespace
         block.size/=2;
         block.ptr = (char *)vcl_malloc(block.size);
 #endif
-        
       }
       if (block.ptr) // It is possible half allocation failed, if so continue cutting size.
         return block;
@@ -65,7 +64,7 @@ namespace
     }
   }
 }
-#endif 
+#endif // 0
 
 //: Write a block of values to a vsl_b_ostream, as (value count) pairs.
 template <class T>
@@ -105,12 +104,11 @@ inline void vsl_block_binary_rle_read(vsl_b_istream &is, T* begin, vcl_size_t ne
   vsl_b_read(is, ver);
   switch (ver)
   {
-  case 1:
+   case 1:
     {
       if (nelems==0) return;
 
       T* last=begin;
-      T* current=begin+1;
       while (nelems)
       {
         vsl_b_read(is, *last);
@@ -129,14 +127,12 @@ inline void vsl_block_binary_rle_read(vsl_b_istream &is, T* begin, vcl_size_t ne
       }
       break;
     }
-  default:
+   default:
     vcl_cerr << "I/O ERROR: vsl_block_binary_rle_read(&is, T* begin, vcl_size_t nelems)\n"
              << "           Unknown version number "<< ver << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
-
 }
-
 
 #endif // vsl_block_binary_rle_h_
