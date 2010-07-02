@@ -43,6 +43,8 @@ class boxm_refine_manager : public bocl_manager<boxm_refine_manager<T_data> >
     bool init(int* cells, unsigned numcells, unsigned tree_max_size,
               float* data, unsigned data_size, unsigned data_max_size,
               float prob_thresh, unsigned max_level, float bbox_len);
+    bool init(vcl_string treefile,vcl_string treedatafile,int factor,
+              float prob_thresh, unsigned max_level, float bbox_len);
 
     //: run refinement
     //bool run_scene();

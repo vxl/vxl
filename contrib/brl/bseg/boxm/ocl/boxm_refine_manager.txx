@@ -50,12 +50,50 @@ init(int* cells, unsigned numcells, unsigned tree_max_size,
   return init_kernel();
 }
 
+template<class T>   
+bool boxm_refine_manager<T>::init(vcl_string treefile,vcl_string treedatafile,int factor,
+              float prob_thresh, unsigned max_level, float bbox_len)
+{
+    unsigned int numcells=0;
+    unsigned int numdata=0;
+    cl_int * cells=boxm_ocl_utils::readtree(treefile,numcells);
+    cl_float * cell_data=boxm_ocl_utils::readtreedata(treedatafile,numdata);
+
+
+
+    alloc_trees(numcells*factor,numdata*factor);
+
+    (*numcells_)=numcells;
+    (*numdata_)=numdata;
+    (*tree_max_size_)=(*numcells_)*factor;
+    (*data_max_size_)=(*numdata_)*factor;
+
+    for(unsigned i=0;i<(*tree_max_size_)*4;i++)
+        cells_[i]=-1;
+    for(unsigned i=0;i<(*data_max_size_)*16;i++)
+        cell_data_[i]=0.0;
+
+    for(unsigned i=0;i<(*numcells_)*4;i++)
+        cells_[i]=cells[i];
+    for(unsigned i=0;i<(*numdata_)*16;i++)
+        cell_data_[i]=cell_data[i];
+
+
+    boxm_ocl_utils::free_aligned(cells);
+    boxm_ocl_utils::free_aligned(cell_data);
+
+    (*prob_thresh_) = prob_thresh;
+    (*max_level_) = max_level;
+    (*bbox_len_) = bbox_len;
+  return init_kernel();
+}
+
 template<class T>
 bool boxm_refine_manager<T>::init_kernel()
 {
   //load kernel source main
   if (!this->load_kernel_source(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                    +"/contrib/brl/bseg/boxm/ocl/refine_main_opt.cl")) {
+                                    +"/contrib/brl/bseg/boxm/ocl/refine_main.cl")) {
     vcl_cerr << "Error: boxm_refine_manager : failed to load kernel source (main function)\n";
     return false;
   }
