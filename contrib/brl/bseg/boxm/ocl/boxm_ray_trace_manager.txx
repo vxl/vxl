@@ -73,7 +73,6 @@ bool boxm_ray_trace_manager<T>::init_raytrace(boxm_scene<boct_tree<short,T > > *
   return this->setup_image_cam_arrays()
       && this->setup_work_image();
 }
-
 template<class T>
 bool boxm_ray_trace_manager<T>::setup_image_cam_arrays()
 {
@@ -1218,8 +1217,8 @@ bool boxm_ray_trace_manager<T>::run_block()
   if (!this->check_val(status,CL_SUCCESS,"clGetKernelWorkGroupInfo CL_KERNEL_WORK_GROUP_SIZE, failed."))
     return SDK_FAILURE;
 
-  vcl_size_t globalThreads[]= {RoundUp((imgdims_[0])*(imgdims_[1]),this->group_size())};
-  vcl_size_t localThreads[] = {this->group_size()};
+  vcl_size_t globalThreads[]= (vcl_size_t){RoundUp((imgdims_[0])*(imgdims_[1]),this->group_size())};
+  vcl_size_t localThreads[] = (vcl_size_t){this->group_size()};
 
   if (used_local_memory > this->total_local_memory())
   {
