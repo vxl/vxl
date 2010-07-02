@@ -106,13 +106,11 @@ void vimt3d_vil3d_v3m_image::load_full_image() const
   }
   short version;
   vsl_b_read(is, version);
-  vimt_image *p_im=0;
 
   switch (version)
   {
-    case 1:
+   case 1:
     {
-
       vsl_b_read(is, header_.ni);
       vsl_b_read(is, header_.nj);
       vsl_b_read(is, header_.nk);
@@ -126,7 +124,7 @@ void vimt3d_vil3d_v3m_image::load_full_image() const
       vil_memory_chunk_sptr chunk_ptr( new vil_memory_chunk(
         size * vil_pixel_format_sizeof_components(header_.pixel_format), header_.pixel_format) );
 
-      switch(header_.pixel_format)
+      switch (header_.pixel_format)
       {
 #define macro( F , T ) \
        case F : \
@@ -145,9 +143,9 @@ void vimt3d_vil3d_v3m_image::load_full_image() const
             origin_ptr += offset; \
           } \
           im_ = new vimt3d_image_3d_of<T>( \
-            vil3d_image_view<T>(chunk_ptr, origin_ptr, \
-            header_.ni, header_.nj, header_.nk, header_.nplanes, \
-            istep, jstep, kstep, pstep), header_.w2i ); \
+                      vil3d_image_view<T>(chunk_ptr, origin_ptr, \
+                                          header_.ni, header_.nj, header_.nk, header_.nplanes, \
+                                          istep, jstep, kstep, pstep), header_.w2i ); \
          } \
         break;
 macro(VIL_PIXEL_FORMAT_BYTE , vxl_byte )
@@ -160,26 +158,27 @@ macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
 macro(VIL_PIXEL_FORMAT_FLOAT , float )
 macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 #undef macro
-       case  VIL_PIXEL_FORMAT_INT_32 : 
-        { 
-          vxl_int_32* origin_ptr=static_cast<vxl_int_32*>(chunk_ptr->data()); \
-          vcl_ptrdiff_t istep=0, jstep=0, kstep=0, pstep=0; 
-          if (size) 
-          { 
-            vsl_block_binary_rle_read(is, static_cast<vxl_int_32 *>(chunk_ptr->data()), size); 
-            vsl_b_read(is, istep); 
-            vsl_b_read(is, jstep); 
-            vsl_b_read(is, kstep); 
-            vsl_b_read(is, pstep); 
-            vcl_ptrdiff_t offset; 
-            vsl_b_read(is, offset); 
-            origin_ptr += offset; 
-          } 
+       case  VIL_PIXEL_FORMAT_INT_32 :
+        {
+          vxl_int_32* origin_ptr=static_cast<vxl_int_32*>(chunk_ptr->data());
+          vcl_ptrdiff_t istep=0, jstep=0, kstep=0, pstep=0;
+          if (size)
+          {
+            vsl_block_binary_rle_read(is, static_cast<vxl_int_32 *>(chunk_ptr->data()), size);
+            vsl_b_read(is, istep);
+            vsl_b_read(is, jstep);
+            vsl_b_read(is, kstep);
+            vsl_b_read(is, pstep);
+            vcl_ptrdiff_t offset;
+            vsl_b_read(is, offset);
+            origin_ptr += offset;
+          }
           im_ = new vimt3d_image_3d_of<vxl_int_32>(
-            vil3d_image_view<vxl_int_32>(chunk_ptr, origin_ptr, 
-            header_.ni, header_.nj, header_.nk, header_.nplanes, 
-            istep, jstep, kstep, pstep), header_.w2i ); 
-         } 
+                      vil3d_image_view<vxl_int_32>(chunk_ptr, origin_ptr,
+                                                   header_.ni, header_.nj, header_.nk, header_.nplanes,
+                                                   istep, jstep, kstep, pstep),
+                      header_.w2i );
+         }
         break;
        default:
         vil_exception_error(vil_exception_unsupported_pixel_format(
@@ -193,7 +192,7 @@ macro(VIL_PIXEL_FORMAT_DOUBLE , double )
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     vcl_ostringstream oss;
     oss << "I/O ERROR: vimt3d_vil3d_v3m_image::load_full_image()\n"
-             << "           Unknown version number "<< version << '\n';
+        << "           Unknown version number "<< version << '\n';
     vil_exception_warning(vil_exception_invalid_version(
       "vimt3d_vil3d_v3m_image::load_full_image", "vimt3d_vil3d_v3m_image", "", oss.str()));
     return;
@@ -204,7 +203,6 @@ macro(VIL_PIXEL_FORMAT_DOUBLE , double )
       "vimt3d_vil3d_v3m_image::load_full_image", "vimt3d_vil3d_v3m_image", "", "Failed to read all expected values."));
     im_=0;
   }
-
 }
 
 
@@ -247,7 +245,7 @@ vimt3d_vil3d_v3m_image::vimt3d_vil3d_v3m_image(vcl_auto_ptr<vcl_fstream> file):
     default:
       vcl_ostringstream oss;
       oss << "I/O ERROR: vimt3d_vil3d_v3m_image::vimt3d_vil3d_v3m_image()\n"
-               << "           Unknown version number "<< version << '\n';
+          << "           Unknown version number "<< version << '\n';
       vil_exception_warning(vil_exception_invalid_version("vimt3d_vil3d_v3m_image constructor", "vimt3d_vil3d_v3m_image", "", oss.str()));
       return;
   }
@@ -299,8 +297,6 @@ vimt3d_vil3d_v3m_image::~vimt3d_vil3d_v3m_image()
 {
   if (dirty_)
   {
-
-
     file_->seekp(0);
     vsl_b_ostream os(file_);
 
@@ -316,8 +312,7 @@ vimt3d_vil3d_v3m_image::~vimt3d_vil3d_v3m_image()
     vsl_b_write(os, im_->image_base().pixel_format());
     vsl_b_write(os, im_->world2im());
 
-
-    switch(im_->image_base().pixel_format())
+    switch (im_->image_base().pixel_format())
     {
 #define macro( F , T ) \
      case F : \
@@ -330,13 +325,13 @@ vimt3d_vil3d_v3m_image::~vimt3d_vil3d_v3m_image()
           /* Data should be stored with non-compound type, since this class controls im_ */ \
           assert(!image || image.pixel_format() == image.memory_chunk()->pixel_format()); \
           vsl_block_binary_rle_write(os, static_cast<const T *>(image.memory_chunk()->const_data()), \
-            image.size()); \
+                                     image.size()); \
           vsl_b_write(os, image.istep()); \
           vsl_b_write(os, image.jstep()); \
           vsl_b_write(os, image.kstep()); \
           vsl_b_write(os, image.planestep()); \
           vcl_ptrdiff_t offset = (image.origin_ptr() - \
-            reinterpret_cast<const T*>(image.memory_chunk()->data())); \
+                                  reinterpret_cast<const T*>(image.memory_chunk()->data())); \
           vsl_b_write(os, offset); \
         } \
        } \
@@ -367,7 +362,7 @@ macro(VIL_PIXEL_FORMAT_DOUBLE , double )
           vsl_b_write(os, image.kstep());
           vsl_b_write(os, image.planestep());
           vcl_ptrdiff_t offset = (image.origin_ptr() -
-            reinterpret_cast<const vxl_int_32*>(image.memory_chunk()->data()));
+                                  reinterpret_cast<const vxl_int_32*>(image.memory_chunk()->data()));
           vsl_b_write(os, offset);
         }
        }
@@ -547,9 +542,9 @@ vil3d_image_view_base_sptr vimt3d_vil3d_v3m_image::get_view(unsigned i0, unsigne
     const vil3d_image_view< T > &v = \
       static_cast<const vil3d_image_view< T > &>(view); \
       return new vil3d_image_view< T >(v.memory_chunk(), (!v)?0:&v(i0,j0,k0), \
-                                     ni, nj, nk, v.nplanes(), \
-                                     v.istep(), v.jstep(), v.kstep(), \
-                                     v.planestep()); }
+                                       ni, nj, nk, v.nplanes(), \
+                                       v.istep(), v.jstep(), v.kstep(), \
+                                       v.planestep()); }
 macro(VIL_PIXEL_FORMAT_BYTE , vxl_byte )
 //macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
 //macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
@@ -564,9 +559,9 @@ macro(VIL_PIXEL_FORMAT_DOUBLE , double )
     const vil3d_image_view< vxl_int_32 > &v =
       static_cast<const vil3d_image_view< vxl_int_32 > &>(view);
     return new vil3d_image_view< vxl_int_32 >(v.memory_chunk(), v.size()?&v(i0,j0,k0):0,
-                                     ni, nj, nk, v.nplanes(),
-                                     v.istep(), v.jstep(), v.kstep(),
-                                     v.planestep()); }
+                                              ni, nj, nk, v.nplanes(),
+                                              v.istep(), v.jstep(), v.kstep(),
+                                              v.planestep()); }
    default:
      vil_exception_warning(vil_exception_unsupported_pixel_format(
        view.pixel_format(), "vimt3d_vil3d_v3m_image::get_view"));
@@ -583,7 +578,6 @@ bool vimt3d_vil3d_v3m_image::put_view(const vil3d_image_view_base& vv,
     load_full_image();
   if (!im_) return false; // If load full image failed then im_ will remain null
 
-
   if (!view_fits(vv, i0, j0, k0))
   {
     vil_exception_warning(vil_exception_out_of_bounds("vimt3d_vil3d_v3m_image::put_view"));
@@ -596,7 +590,6 @@ bool vimt3d_vil3d_v3m_image::put_view(const vil3d_image_view_base& vv,
       vv.pixel_format(), im_->image_base().pixel_format(), "vimt3d_vil3d_v3m_image::put_view"));
     return false;
   }
-
 
   dirty_ = true;
 
