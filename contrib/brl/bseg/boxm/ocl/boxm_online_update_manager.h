@@ -19,9 +19,7 @@ class boxm_online_update_manager : public bocl_manager<boxm_online_update_manage
 {
  public:
 
-  //typedef boct_tree<short,T_data> tree_type;
-  //typedef boct_tree_cell<short,T_data> cell_type;
-
+ 
   typedef float obs_type;
 
   boxm_online_update_manager() :
@@ -38,7 +36,10 @@ class boxm_online_update_manager : public bocl_manager<boxm_online_update_manage
     cell_data_size_(0),
     input_img_(),
     program_(),
-   // block_(0),
+    treedatafile_(""),
+    treefile_(""),
+    origin_(),
+    block_dim_(),
     factor_(0),
     app_density_(0)
     {}
@@ -48,13 +49,12 @@ class boxm_online_update_manager : public bocl_manager<boxm_online_update_manage
       clReleaseProgram(program_);
   }
 
-#if 0
-  //: read the scene, cam and image
-  void set_block_items(boxm_block<tree_type> *block,
-                       vpgl_camera_double_sptr cam,
-                       vil_image_view<obs_type> &obs);
-#endif // 0
-
+  void init_update(vcl_string treefile, 
+                   vcl_string datafile,
+                   vgl_point_3d<double>  origin,
+                   vgl_vector_3d<double>  block_dim,
+                   vpgl_camera_double_sptr cam,
+                   vil_image_view<float> &obs, unsigned int root_level);
   //: 2d workgroup
   void set_bundle_ni(unsigned bundle_x) {bni_=bundle_x;}
   void set_bundle_nj(unsigned bundle_y) {bnj_=bundle_y;}
@@ -66,7 +66,7 @@ class boxm_online_update_manager : public bocl_manager<boxm_online_update_manage
   bool clean_input_view();
 
   //: set the tree, data, aux_data and bbox
-  bool load_tree(vcl_string filename);
+  bool set_tree();
   bool set_tree_buffers();
   bool release_tree_buffers();
   bool clean_tree();
@@ -84,8 +84,10 @@ class boxm_online_update_manager : public bocl_manager<boxm_online_update_manage
   void print_image();
   void save_image();
   cl_float * output_image() {return image_;}
+  void set_input_camera(vpgl_camera_double_sptr cam){  cam_=cam;}
 
  protected:
+  void save_tree_data();
   void clear_tree_data();
   void archive_tree_data();
   bool create_command_queue();
@@ -203,6 +205,10 @@ class boxm_online_update_manager : public bocl_manager<boxm_online_update_manage
   //boxm_block<tree_type >* block_;
   vpgl_camera_double_sptr cam_;
   vil_image_view<obs_type>  input_img_;
+  vcl_string treedatafile_;
+  vcl_string treefile_;
+  vgl_point_3d<double> origin_;
+  vgl_vector_3d<double> block_dim_;
   vcl_vector<vnl_vector_fixed<float, 16> > tree_data_;
   vcl_vector<vnl_vector_fixed<float, 4> > tree_aux_data_;
 };

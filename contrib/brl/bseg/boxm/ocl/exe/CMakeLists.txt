@@ -4,6 +4,15 @@ ADD_EXECUTABLE( boxm_opencl_render_expected_process
  )
 TARGET_LINK_LIBRARIES( boxm_opencl_render_expected_process boxm_pro  boxm_ocl boxm_ocl_pro vil_pro vpgl_pro boxm_algo_rt_pro vul )
 
+ADD_EXECUTABLE( boxm_opencl_update
+  boxm_opencl_update_exe.cxx
+ )
+TARGET_LINK_LIBRARIES( boxm_opencl_update boxm_pro  boxm_ocl boxm_ocl_pro vil_pro vpgl_pro boxm_algo_rt_pro vul )
+ADD_EXECUTABLE( boxm_opencl_render
+  boxm_opencl_render_exe.cxx
+ )
+TARGET_LINK_LIBRARIES( boxm_opencl_render boxm_pro  boxm_ocl boxm_ocl_pro vil_pro vpgl_pro boxm_algo_rt_pro vul )
+
 INCLUDE( ${BRL_MODULE_PATH}/FindGLEW.cmake )
 INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindGLUT.cmake )
 

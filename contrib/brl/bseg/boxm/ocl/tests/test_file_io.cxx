@@ -22,7 +22,7 @@ static void test_tree_read_write()
     vnl_vector_fixed<int, 4> root_cell(0);
     root_cell[0]=-1; // no parent
     root_cell[1]=-1; // no children at the moment
-    root_cell[1]=-1; // no data at the moment
+    root_cell[2]=-1; // no data at the moment
     cell_array.push_back(root_cell);
 
     boxm_ocl_convert<float>::copy_to_arrays(tree->root(),cell_array,data_array,0);
@@ -58,8 +58,8 @@ static void test_tree_read_write()
     boxm_ocl_utils::writetree(treefile,cells,cells_size);
     boxm_ocl_utils::writetreedata(treedatafile,cell_data,cell_data_size);
 
-    int treesize=0;
-    int treedatasize=0;
+    unsigned int treesize=0;
+    unsigned int treedatasize=0;
 
     cl_int * rcells  =boxm_ocl_utils::readtree(treefile,treesize);
     cl_float *rcell_data =boxm_ocl_utils::readtreedata(treedatafile,treedatasize);

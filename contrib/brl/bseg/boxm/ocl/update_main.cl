@@ -115,17 +115,18 @@ update_aux( __global int * root_level,  // level of the root.
       break;
 
     cached_loc_codes[llid]=curr_loc_code;
-    ray_bundle_array[llid]=llid;
+    ray_bundle_array[llid].x=llid;
     barrier(CLK_LOCAL_MEM_FENCE);
 
     int data_ptr = tree_array[curr_cell_ptr].z;
 
+    //image_vect[llid].x=(float)data_ptr;
     ////////////////////////////////////////////////////////
     // the place where the ray trace function can be applied
     load_data_mutable_using_loc_codes(ray_bundle_array,cached_loc_codes);
-    if (ray_bundle_array[llid].x==llid)
+   if (ray_bundle_array[llid].x==llid)
     {
-      /* cell data, i.e., alpha and app model is needed for some passes */
+//      /* cell data, i.e., alpha and app model is needed for some passes */
 #if %%
       cached_data[llid] = sample_array[data_ptr];
 #endif
@@ -179,7 +180,7 @@ update_aux( __global int * root_level,  // level of the root.
 
     count++;
   }
-  //in_image[j*get_global_size(0)*factor+i]=(float4)(-1,-1,i,j);
+  //in_image[j*get_global_size(0)*factor+i]=image_vect[llid];
 }
 
 
