@@ -5,11 +5,11 @@ void step_cell(__global float16* cell_data, int data_ptr,
   float16 data = cell_data[data_ptr];
   // TODO - fix it
 
-  float expected_int_cell = data.s1*data.s3+data.s5*data.s7+data.s9*data.sb;
-  float total_weight_model = data.s3 + data.s7 + data.sb;
-  if (total_weight_model > 0) {
-    expected_int_cell /= total_weight_model;
-  }
+  float expected_int_cell = data.s1*data.s3+data.s5*data.s7+data.s9*(1-data.s3-data.s7);
+  //float total_weight_model = data.s3 + data.s7 + data.sb;
+  //if (total_weight_model > 0) {
+  //  expected_int_cell /= total_weight_model;
+  //}
 
   if (data.s0<0) return;
 
