@@ -493,7 +493,6 @@ bool boxm_scene<T>::parse_xml_string(vcl_string xml, boxm_scene_parser& parser)
     return false;
   }
 
-  vcl_cout << "finished!" << vcl_endl;
   bgeo_lvcs lvcs;
   parser.lvcs(lvcs);
   vgl_vector_3d<unsigned> nums = parser.block_nums();
