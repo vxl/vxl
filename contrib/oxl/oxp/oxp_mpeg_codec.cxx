@@ -481,10 +481,10 @@ bool oxp_mpeg_codec::get_section(int position, // position of the frame in the s
 // We may need to change make_dib to
 // be able to put a section different
 // of the entire frame.
-int oxp_mpeg_codec::put_section(int position,
-                                void* ib,
-                                int x0, int y0,
-                                int xs, int ys)
+int oxp_mpeg_codec::put_section(int /* position */,
+                                void* /* ib */,
+                                int /* x0 */, int /* y0 */,
+                                int /* xs */, int /* ys */)
 {
   vcl_cerr << "oxp_mpeg_codec::put_section not implemented\n";
   return -1;
@@ -708,16 +708,17 @@ static int demux(oxp_mpeg_codec_data* impl, unsigned char const *buf, unsigned c
     break;
   }
 
-  while (true) {
+  while (true)
+  {
     if (impl->demux_pid)
     {
       state = DEMUX_SKIP;
       return 0;
     }
-  payload_start:
+   payload_start:
     header = const_cast<unsigned char*>(buf); // bletcherous const_cast -- it will write into the user's space.
     bytes = end - buf;
-  continue_header:
+   continue_header:
     NEEDBYTES(4);
     if (header[0] || header[1] || (header[2] != 1))
     {
@@ -747,12 +748,13 @@ static int demux(oxp_mpeg_codec_data* impl, unsigned char const *buf, unsigned c
       vcl_cerr << "bad stream id " << header[3] << '\n';
       vcl_exit(1);
     }
-    switch (header[3]) {
-    case 0xb9: // program end code
+    switch (header[3])
+    {
+     case 0xb9: // program end code
       // DONEBYTES(4);
       // break;
       return 1;
-    case 0xba: // pack header
+     case 0xba: // pack header
       NEEDBYTES(12);
       if ((header[4] & 0xc0) == 0x40) // mpeg2
       {
@@ -773,10 +775,10 @@ static int demux(oxp_mpeg_codec_data* impl, unsigned char const *buf, unsigned c
         vcl_exit(1);
       }
       break;
-    default:
+     default:
       if (header[3] == impl->demux_track)
       {
-      pes:
+       pes:
         NEEDBYTES(7);
         if ((header[6] & 0xc0) == 0x80) // mpeg2
         {
