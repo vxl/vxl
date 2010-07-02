@@ -51,33 +51,14 @@ void swap_eight(__global int4 *tree, int a, int b, __global float* output)
   //for each child of B and A update the parent pointer
   int childA = tree[a+lid].y;
   int childB = tree[b+lid].y;
-  for(int j=0; j<8; j++){
-    tree[childA+j].x = a+lid;
-    tree[childB+j].x = b+lid;
+  if(childA > 0) {
+    for(int j=0; j<8; j++)
+      tree[childA+j].x = a+lid;
   } 
-
-//  //copy B to a buffer
-//  int4 buff[8];
-//  for(int i=0; i<8; i++)
-//    buff[i] = tree[b+i];
-//  
-//  //copy A into B
-//  for(int i=0; i<8; i++)
-//    tree[b+i] = tree[a+i];
-//  
-//  //copy buffer into A
-//  for(int i=0; i<8; i++)
-//    tree[a+i] = buff[i];
-
-//  //for each child of B and A, update the parent pointer
-//  for(int i=0; i<8; i++){
-//    int childA = tree[a+i].y;
-//    int childB = tree[b+i].y;
-//    for(int j=0; j<8; j++){
-//      tree[childA+j].x = a+i;
-//      tree[childB+j].x = b+i; 
-//    }
-//  }
+  if(childB > 0) {
+    for(int j=0; j<8; j++)
+      tree[childB+j].x = b+lid;
+  }
 }
  
 ////////////////////////////////////////////
@@ -144,108 +125,107 @@ refine_main(__global int4     *tree,           //tree structure
   unsigned dSize = (*data_size);
   unsigned maxLevel = (*max_level);
   float boxLen = (*bbox_len);
- 
-  if(gid==0) { //only do it on one core
    
-    ///////////////////////////////////////////////////////////////
-    //SPLIT TREE
-    //Depth first search iteration of the tree (keeping track of node level)
-    //1) parent pointer, 2) child pointer 3) data pointer 4) nothing right now
-    ///////////////////////////////////////////////////////////////
-    //need to keep track of current level and pops for each level
-    (*output) = 0;
-    int popCounts[11];
-    for(int i=0; i<11; i++) popCounts[i]=0;
-    int currLevel = 0;
- 
-    ////stack for depth first traversal
-    ocl_stack open;
-    init_ocl_stack(&open);
-    push(&open, 0);
-    while(!empty(&open)){
-      //figure out the current level
-      while(popCounts[currLevel]>=8) {
-        popCounts[currLevel] = 0;
-        currLevel--;
-      }
-     
-      //examine node at top of stack (and keep track of popping)
-      int currNode = pop(&open);
-      popCounts[currLevel]++;
-      
-      //if the current node has no children, it's a leaf -> check if it needs to be refined
-      int child_ptr = tree[currNode].y;
-      if(child_ptr < 0){
-        ////////////////////////////////////////
-        //INSERT LEAF SPECIFIC CODE HERE
-        ////////////////////////////////////////
-        //find side length for cell of this level (bit shift: two_pow_level = 1<<currLevel;)
-        //int two_pow_level = pow(2,currLevel);
-        unsigned two_pow_level = 1<<currLevel;
-        float side_len = boxLen/two_pow_level;
-       
-        //get alpha value for this cell;
-        int dataIndex = tree[currNode].z;
-        float16 datum = data[dataIndex];
-        float alpha = datum.s0;
-       
-        //integrate alpha value
-        float alpha_int = alpha * side_len;
- 
-        //IF alpha value triggers split, tack on 8 children to end of tree array
-        //make sure the PARENT cell for each of the new children points to i
-        //ALSO make sure currLevel is less than MAX_LEVELS
-        if(alpha_int > max_alpha_int && currLevel < maxLevel)  {
-          //new alpha for the child nodes
-          float new_alpha = max_alpha_int / side_len;  
-          
-          //node I points to tSize - the place where it's children will be tacked on
-          int4 treecell=tree[currNode];
-          treecell.y= tSize;
-          tree[currNode]=treecell;
-          for(int j=0; j<8; j++){
-            int4 tcell = (int4) (currNode, -1, (int)dSize+j, 0);
-            tree[tSize+j] = tcell;   //PARENT POINTS TO NODE THAT SPLIT
-            //tree[tSize+j]   //HAS NO CHILDREN
-            //tree[tSize+j]   //point to next piece of data
-           
-            //copy data to new children, along with new alpha
-            float16 newData = datum;
-            newData.s0 = new_alpha;
-            data[dSize+j] = newData;
-          }
-          tSize += 8; //update tree size
-          dSize += 8; //update data buffer size
-       
-          //reset data for curent node
-          float16 zeroDat = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-          data[dataIndex] =  zeroDat;    
-        }
-        ////////////////////////////////////////////
-        //END LEAF SPECIFIC CODE
-        ////////////////////////////////////////////
-       
-      }
-      //for inner nodes
-      else {                      
-        for(int i=7; i>=0; i--){
-          push(&open, child_ptr+i);
-        }
-        currLevel++;
-      }
+  ///////////////////////////////////////////////////////////////
+  //SPLIT TREE
+  //Depth first search iteration of the tree (keeping track of node level)
+  //1) parent pointer, 2) child pointer 3) data pointer 4) nothing right now
+  ///////////////////////////////////////////////////////////////
+  //need to keep track of current level and pops for each level
+  (*output) = 0;
+  int popCounts[11];
+  for(int i=0; i<11; i++) popCounts[i]=0;
+  int currLevel = 0;
+
+  ////stack for depth first traversal
+  ocl_stack open;
+  init_ocl_stack(&open);
+  push(&open, 0);
+  while(!empty(&open)){
+    //figure out the current level
+    while(popCounts[currLevel]>=8) {
+      popCounts[currLevel] = 0;
+      currLevel--;
     }
-    //tree and data size output
-    tree_size[0] = tSize;
-    data_size[0] = dSize;
+   
+    //examine node at top of stack (and keep track of popping)
+    int currNode = pop(&open);
+    popCounts[currLevel]++;
+    
+    //if the current node has no children, it's a leaf -> check if it needs to be refined
+    int child_ptr = tree[currNode].y;
+    if(child_ptr < 0){
+    
+      //////////////////////////////////////////////////
+      //INSERT LEAF SPECIFIC CODE HERE
+      //////////////////////////////////////////////////
+      //find side length for cell of this level (bit shift: two_pow_level = 1<<currLevel;)
+      //int two_pow_level = pow(2,currLevel);
+      unsigned two_pow_level = 1<<currLevel;
+      float side_len = boxLen/two_pow_level;
+     
+      //get alpha value for this cell;
+      int dataIndex = tree[currNode].z;
+      float16 datum = data[dataIndex];
+      float alpha = datum.s0;
+     
+      //integrate alpha value
+      float alpha_int = alpha * side_len;
+
+      //IF alpha value triggers split, tack on 8 children to end of tree array
+      //make sure the PARENT cell for each of the new children points to i
+      //ALSO make sure currLevel is less than MAX_LEVELS
+      if(alpha_int > max_alpha_int && currLevel < maxLevel)  {
+        //new alpha for the child nodes
+        float new_alpha = max_alpha_int / side_len;  
         
-    (*output) = 9887;
-    ///////////////////////////////////////////////////////////////////
-    ////REFORMAT TREE into cannonical order
-    ///////////////////////////////////////////////////////////////////
+        //node I points to tSize - the place where it's children will be tacked on
+        int4 treecell=tree[currNode];
+        treecell.y= tSize;
+        tree[currNode]=treecell;
+        
+        //each child points to the currNode, has no children, 
+        barrier(CLK_GLOBAL_MEM_FENCE);
+        int4 tcell = (int4) (currNode, -1, (int)dSize+lid, 0);
+        tree[tSize+lid] = tcell;
+        
+        //copy data for new children
+        float16 newData = datum;
+        newData.s0 = new_alpha;
+        data[dSize+lid] = newData;
+
+        //update tree and buffer size
+        tSize += 8; 
+        dSize += 8;
+     
+        //reset data for curent node
+        float16 zeroDat = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+        data[dataIndex] =  zeroDat;    
+      }
+      ////////////////////////////////////////////
+      //END LEAF SPECIFIC CODE
+      ////////////////////////////////////////////
+     
+    }
+    //for inner nodes
+    else {                      
+      for(int i=7; i>=0; i--){
+        push(&open, child_ptr+i);
+      }
+      currLevel++;
+    }
   }
-  
+  //tree and data size output
+  tree_size[0] = tSize;
+  data_size[0] = dSize;
+      
+  (*output) = 9887;
+
+  ///////////////////////////////////////////////////////////////////
+  ////REFORMAT TREE into cannonical order
+  ///////////////////////////////////////////////////////////////////
   reformat_tree(tree, output); 
- 
+
 }
  
  
