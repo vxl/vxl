@@ -82,6 +82,7 @@ void boxm_ocl_convert<T>::copy_to_arrays(boct_tree_cell<short, T >* cell_ptr,
     int child_ptr = -1;
     boxm_ocl_utils::split(cell_array, cell_input_ptr, child_ptr);
     cell_array[cell_input_ptr][1]=child_ptr;
+    cell_array[cell_input_ptr][3]=0;
     boct_tree_cell<short,T >* children = cell_ptr->children();
     for (unsigned i = 0; i<8; ++i) {
       boct_tree_cell<short, T >* child_cell_ptr = children + i;
