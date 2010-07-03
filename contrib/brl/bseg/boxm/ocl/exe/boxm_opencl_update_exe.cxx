@@ -1,4 +1,4 @@
-// Main to run opencl implentation of onlineupdate
+// Main to run opencl implementation of onlineupdate
 #include <bocl/bocl_cl.h>
 #include <boxm/ocl/boxm_ocl_utils.h>
 #include <boxm/ocl/boxm_online_update_manager.h>
@@ -9,7 +9,6 @@
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/boxm_block.h>
 #include <boct/boct_tree.h>
-
 
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vil/vil_convert.h>
@@ -34,8 +33,8 @@ void save_tree_and_data_array(boxm_scene<boct_tree<short,boxm_sample<BOXM_APM_MO
     vnl_vector_fixed<int, 4> root_cell(0);
     root_cell[0]=-1;                                     // no parent
     root_cell[1]=-1;                                     // no children at the moment
-    root_cell[2]=-1;    
-    root_cell[3]=-1;  
+    root_cell[2]=-1;
+    root_cell[3]=-1;
     // no data at the moment
     cell_array.push_back(root_cell);
 
@@ -69,9 +68,6 @@ void save_tree_and_data_array(boxm_scene<boct_tree<short,boxm_sample<BOXM_APM_MO
 }
 
 
-
-
-
 int main(int argc,  char** argv)
 {
     vcl_cout<<"UPDATE "<<vcl_endl;
@@ -86,9 +82,8 @@ int main(int argc,  char** argv)
     vul_arg_parse(argc, argv);
 
     bool flag=true;
-    if(vul_file::is_directory(cam_dir().c_str()))
+    if (vul_file::is_directory(cam_dir().c_str()))
     {
-
         vcl_string camglob=cam_dir()+"/*.txt";
         vcl_string imgglob=img_dir()+"/*.jpg";
 
@@ -96,14 +91,12 @@ int main(int argc,  char** argv)
         vul_file_iterator img_file_it(imgglob.c_str());
 
         int count=0;
-        while(file_it && img_file_it)
+        while (file_it && img_file_it)
         {
-            //if(count2)
-            {
+          //if (count2)
+          {
             vcl_cout<<"Cam "<<file_it()<<" Image "<<img_file_it()<<vcl_endl;
 
-
-            
             vcl_ifstream ifs(file_it());
             vpgl_perspective_camera<double>* pcam =new vpgl_perspective_camera<double>;
             if (!ifs.is_open()) {
@@ -124,12 +117,11 @@ int main(int argc,  char** argv)
                 vcl_string treefile =workdir()+"/treefile.bin";
                 vcl_string treedatafile =workdir()+"/treedatafile.bin";
 
-
                 vil_image_view_base_sptr loaded_image = vil_load(img_file_it());//img().c_str() );
                 vil_image_view<float> floatimg(loaded_image->ni(), loaded_image->nj(), 1);
 
-                //: load the image
-                if(vil_image_view<vxl_byte> *img_byte
+                // load the image
+                if (vil_image_view<vxl_byte> *img_byte
                     = dynamic_cast<vil_image_view<vxl_byte>*>(loaded_image.ptr()))
                     vil_convert_stretch_range_limited(*img_byte ,floatimg, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
                 else
@@ -143,19 +135,19 @@ int main(int argc,  char** argv)
                 scene_ptr->load_scene(scene_file(), parser);
 
                 if (scene_ptr->appearence_model() == BOXM_APM_MOG_GREY) {
-                    typedef boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
-                    boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
-                    scene->load_scene(parser);
-                    scene_ptr = scene;
-                    if(flag)
-                    {
+                  typedef boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
+                  boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
+                  scene->load_scene(parser);
+                  scene_ptr = scene;
+                  if (flag)
+                  {
                     boxm_init_scene<BOXM_APM_MOG_GREY>(*scene);
                     save_tree_and_data_array(scene,treefile,treedatafile);
                     flag=false;
-                    }
-                    updt_mgr->init_update(treefile,treedatafile,scene->origin(),scene->block_dim(), pcam, floatimg,scene->max_level()-1);
+                  }
+                  updt_mgr->init_update(treefile,treedatafile,scene->origin(),scene->block_dim(), pcam, floatimg,scene->max_level()-1);
                 }
-                else 
+                else
                 {
                     return -1;
                 }
@@ -177,16 +169,13 @@ int main(int argc,  char** argv)
                 boxm_ocl_utils::writetreedata(treedatafile,cell_data_refined,refine_mgr->get_data_size());
 
                 refine_mgr->clean_refine();
-
             }
-              }
-            ++file_it ; ++img_file_it;
-            ++file_it ; ++img_file_it;
-            count++;
+          }
+          ++file_it ; ++img_file_it;
+          ++file_it ; ++img_file_it;
+          count++;
         }
-      
     }
-
 
     return 0;
 }
