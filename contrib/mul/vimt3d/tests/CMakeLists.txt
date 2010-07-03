@@ -15,10 +15,9 @@ ADD_EXECUTABLE( vimt3d_test_all
   test_image_bounds_and_centre_3d.cxx
   test_reflect.cxx
   test_run_length_encoding.cxx
-  
 )
 
-TARGET_LINK_LIBRARIES( vimt3d_test_all vimt3d vil3d mbl vgl vnl vpl vul testlib )
+TARGET_LINK_LIBRARIES( vimt3d_test_all vimt3d vil3d mbl vgl vnl vpl vul vsl testlib )
 
 ADD_TEST( vimt3d_test_transform_3d                ${EXECUTABLE_OUTPUT_PATH}/vimt3d_test_all test_transform_3d )
 ADD_TEST( vimt3d_test_image_3d_of                 ${EXECUTABLE_OUTPUT_PATH}/vimt3d_test_all test_image_3d_of )
@@ -37,4 +36,3 @@ ADD_TEST( vimt3d_test_run_length_encoding         ${EXECUTABLE_OUTPUT_PATH}/vimt
 
 ADD_EXECUTABLE( vimt3d_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vimt3d_test_include vimt3d )
-
