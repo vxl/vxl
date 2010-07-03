@@ -19,6 +19,8 @@ MANPAGE_SOURCES += boxm_ray_bundle_trace_manager.txx
 MANPAGE_SOURCES += boxm_refine_manager.txx
 SOURCES += update_main.cl
 MANPAGE_SOURCES += boxm_render_image_manager.txx
+SOURCES += boxm_render_single_block_manager.cxx
+SOURCES += boxm_online_update_manager.cxx
 
 SUBDIRS += pro exe
 
