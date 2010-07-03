@@ -644,7 +644,7 @@ bool boxm_cell_iterator<T>::end()
 }
 
 template <class T>
-boxm_cell_iterator<T>& boxm_cell_iterator<T>::operator=(const boxm_cell_iterator<T>& that)
+boxm_cell_iterator<T>& boxm_cell_iterator<T>::operator=(const boxm_cell_iterator<T>& /*that*/)
 {
   vcl_cerr << "assignment operator not yet implemented\n";
   return *this;
