@@ -128,6 +128,9 @@ SOURCE=.\test_refine.cxx
 SOURCE=.\test_update.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_file_io.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/ray_bundle_test_driver+float-.cxx
 # End Source File
 # Begin Source File

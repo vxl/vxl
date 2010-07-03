@@ -100,6 +100,12 @@ SOURCE=.\boxm_opencl_render_expected_process_exe.cxx
 # Begin Source File
 SOURCE=.\boxm_ocl_render_with_gl.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\boxm_opencl_update_exe.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_opencl_render_exe.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
