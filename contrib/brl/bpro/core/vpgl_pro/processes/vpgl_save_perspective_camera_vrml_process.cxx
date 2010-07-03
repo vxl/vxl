@@ -1,4 +1,4 @@
-// This is brl/bpro/core/vpgl_pro/processes/vpgl_save_perspective_camera_process.cxx
+// This is brl/bpro/core/vpgl_pro/processes/vpgl_save_perspective_camera_vrml_process.cxx
 #include <bprb/bprb_func_process.h>
 //:
 // \file

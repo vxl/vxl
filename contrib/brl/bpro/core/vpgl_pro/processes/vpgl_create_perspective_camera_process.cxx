@@ -1,4 +1,4 @@
-// This is brl/bpro/core/vpgl_pro/processes/vpgl_scale_perspective_camera_process.cxx
+// This is brl/bpro/core/vpgl_pro/processes/vpgl_create_perspective_camera_process.cxx
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -46,7 +46,7 @@ bool vpgl_create_perspective_camera_process(bprb_func_process& pro)
     return false;
   }
   // get the inputs
-  
+
   double k00 = pro.get_input<double>(0), k02 = pro.get_input<double>(1);
   double k11 = pro.get_input<double>(2), k12 = pro.get_input<double>(3);
   vnl_matrix_fixed<double ,3,3> m(0.0);
