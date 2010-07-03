@@ -79,10 +79,20 @@ static void test_three_planes()
 
 static void test_plane_plane()
 {
+  // Intersect the YZ plane with the plane Y=Z:
+  vgl_plane_3d<double> plane1(1,0,0,0), plane2(0,1,-1,0);
+  vgl_infinite_line_3d<double> line;
+  bool good = vgl_intersection(plane1, plane2, line);
+  TEST("plane-plane intersection", good, true);
+  if (good) {
+    TEST("line points", line.contains(vgl_point_3d<double>(0,0,0))
+                     && line.contains(vgl_point_3d<double>(1,1,0)), true);
+  }
+  // And more intersections: three planes: X=2, Y=3, and Z=1:
   vgl_plane_3d<double> planex(1,0,0,-2),planey(0,1,0,-3), planez(0,0,1,-1);
   vgl_line_segment_3d<double> linexy, linexz, lineyz;
   // intersecting x-y
-  bool good = vgl_intersection(planex, planey, linexy);
+  good = vgl_intersection(planex, planey, linexy);
   // intersecting x-z
   good = good && vgl_intersection(planez, planex, linexz);
   //intersecting y-z
@@ -96,6 +106,9 @@ static void test_plane_plane()
     TEST("y-z intersection", lineyz.point1()==vgl_point_3d<double>(0,3,1)&&
          lineyz.point2()==vgl_point_3d<double>(1,3,1), true);
   }
+  // And finally two parallel planes (X=0 and X=2):
+  good = vgl_intersection(plane1, planex, line);
+  TEST("parallel planes do not intersect", good, false);
 }
 
 static void test_multiple_planes()
