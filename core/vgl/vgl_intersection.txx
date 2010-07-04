@@ -653,7 +653,7 @@ bool vgl_intersection(vgl_plane_3d<T> const& plane0,
   // t is the direction vector of the line
   vgl_vector_3d<double> t = cross_product(n0, n1);
   double mag = t.length();
-  if (vgl_near_zero(mag))
+  if (vgl_near_zero(mag)) // planes are parallel (or coincident)
     return false;
   t/=mag; // create unit vector
   double tx = vcl_fabs(static_cast<double>(t.x_));
@@ -661,9 +661,9 @@ bool vgl_intersection(vgl_plane_3d<T> const& plane0,
   double tz = vcl_fabs(static_cast<double>(t.z_));
   // determine maximum component of t
   char component = 'x';
-  if (ty>tx&&ty>tz)
+  if (ty>=tx&&ty>=tz)
     component = 'y';
-  if (tz>tx&&tz>ty)
+  if (tz>=tx&&tz>=ty)
     component = 'z';
   double d0 = static_cast<double>(plane0.d());
   double d1 = static_cast<double>(plane1.d());

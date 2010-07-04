@@ -86,7 +86,7 @@ static void test_plane_plane()
   TEST("plane-plane intersection", good, true);
   if (good) {
     TEST("line points", line.contains(vgl_point_3d<double>(0,0,0))
-                     && line.contains(vgl_point_3d<double>(1,1,0)), true);
+                     && line.contains(vgl_point_3d<double>(0,1,1)), true);
   }
   // And more intersections: three planes: X=2, Y=3, and Z=1:
   vgl_plane_3d<double> planex(1,0,0,-2),planey(0,1,0,-3), planez(0,0,1,-1);
