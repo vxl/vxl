@@ -41,6 +41,7 @@
 #include <vimt3d/vimt3d_resample_trilinear.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_point_3d.h>
+#include <vul/vul_reg_exp.h>
 
 //=========================================================================
 // Static function to create a static logger when first required
@@ -51,6 +52,8 @@ static mbl_logger& logger()
   return l;
 }
 
+//-------------------------------------------------------------------------------------
+// Stack and Storage Infrastructure
 
 //: This is the return value of the program.
 // It can be modified using the (as yet unimplemented) "-return" operator.
@@ -432,7 +435,9 @@ static named_store_t named_store;
 
 void print_operations(vcl_ostream&);
 
-//: Operation implementation
+//-------------------------------------------------------------------------------------
+// Operation implementation
+
 void help(opstack_t& )
 {
   vcl_cout <<
@@ -449,8 +454,12 @@ void help(opstack_t& )
   vcl_exit(3);
 }
 
+
 void close_brace__brace(opstack_t& s)
 {
+  static vul_reg_exp del_stack_brace_re("--del[-_]stack } $");
+  static vul_reg_exp brace_brace_re("} } $");
+
   if (s.last_pop() > s.size())
   {
     vcl_cerr << "\nERROR: A closing brace must be preceeded by an operation.\n"
@@ -460,9 +469,15 @@ void close_brace__brace(opstack_t& s)
   if (s.size() < 1 || s.last_pop() > s.size() ||
     s.last_pop()==0 || !s[s.size() - s.last_pop()].is_open_brace() )
   {
-    vcl_cerr << "\nERROR: No matching openning brace found for closing brace.\n"
-             << "At \"" << args_so_far << "\"<-- HERE\n"
-      "Stack is:\n" << vsl_stream_summary(s);
+    vcl_cerr << "\nERROR: No matching opening brace found for closing brace.\n";
+    if (del_stack_brace_re.find(args_so_far))
+      vcl_cerr << "      The interaction of --del-stack and braces can be misleading. Try\n"
+                  "      removing the closing brace following --del-stack, and its opening pair.\n";
+    else if (brace_brace_re.find(args_so_far))
+      vcl_cerr << "      You cannot have two closing braces next to each other, since closing\n"
+                  "      braces check the behaviour of the immediately preceeding operation.\n";
+    vcl_cerr << "At \"" << args_so_far << "\"<-- HERE\n"
+      "Stack is: \n" << vsl_stream_summary(s);
     vcl_exit(1);
   }
   s.erase(s.end() - s.last_pop());
@@ -1673,6 +1688,8 @@ void clamp_below__image_3d_of_int__double__double(opstack_t& s)
   s.push_front(operand(o1));
 }
 
+//-------------------------------------------------------------------------------------
+// Execution infrastructure
 
 class operations
 {
@@ -1718,28 +1735,28 @@ class operations
     add_operation("--and",  &and__image_3d_of_int__image_3d_of_int,
                   function_type_t() << operand::e_image_3d_of_int << operand::e_image_3d_of_int,
                   "im_A im_B", "image", "Logical AND over corresponding voxels in im_B and im_B");
-    add_operation("--clamp_above", &clamp_above__image_3d_of_float__double__double,
+    add_operation("--clamp-above", &clamp_above__image_3d_of_float__double__double,
                   function_type_t() << operand::e_image_3d_of_float << operand::e_double << operand::e_double,
                   "image threshold value", "image", "Set all voxels in image at or above threshold to value");
-    add_operation("--clamp_above", &clamp_above__image_3d_of_int__double__double,
+    add_operation("--clamp-above", &clamp_above__image_3d_of_int__double__double,
                   function_type_t() << operand::e_image_3d_of_int << operand::e_double << operand::e_double,
                   "image threshold value", "image", "Set all voxels in image at or above threshold to value");
-    add_operation("--clamp_below", &clamp_below__image_3d_of_float__double__double,
+    add_operation("--clamp-below", &clamp_below__image_3d_of_float__double__double,
                   function_type_t() << operand::e_image_3d_of_float << operand::e_double << operand::e_double,
                   "image threshold value", "image", "Set all voxels in image at or below threshold to value");
-    add_operation("--clamp_below", &clamp_below__image_3d_of_int__double__double,
+    add_operation("--clamp-below", &clamp_below__image_3d_of_int__double__double,
                   function_type_t() << operand::e_image_3d_of_int << operand::e_double << operand::e_double,
                   "image threshold value", "image", "Set all voxels in image at or below threshold to value");
-    add_operation("--convert_to_float", &convert_to_float__image_3d_of_double,
+    add_operation("--convert-to-float", &convert_to_float__image_3d_of_double,
                   function_type_t() << operand::e_image_3d_of_double,
                   "image", "image", "Convert voxel type of image from double to float");
-    add_operation("--convert_to_float", &convert_to_float__image_3d_of_int,
+    add_operation("--convert-to-float", &convert_to_float__image_3d_of_int,
                   function_type_t() << operand::e_image_3d_of_int,
                   "image", "image", "Convert voxel type of image from int to float");
-    add_operation("--convert_to_int", &convert_to_int__image_3d_of_double,
+    add_operation("--convert-to-int", &convert_to_int__image_3d_of_double,
                   function_type_t() << operand::e_image_3d_of_double,
                   "image", "image", "Round voxel values from double to int");
-    add_operation("--convert_to_int", &convert_to_int__image_3d_of_float,
+    add_operation("--convert-to-int", &convert_to_int__image_3d_of_float,
                   function_type_t() << operand::e_image_3d_of_float,
                   "image", "image", "Round voxel values from float to int");
     add_operation("--copy", &copy__double,
@@ -1751,10 +1768,10 @@ class operations
     add_operation("--copy", &copy__image_3d_of_float,
                   function_type_t() << operand::e_image_3d_of_float,
                   "image", "image image", "Duplicate image onto stack");
-    add_operation("--copy_coordinate_frame", &copy_coordinate_frame__image_3d_of_int__image_3d_of_int,
+    add_operation("--copy-coordinate-frame", &copy_coordinate_frame__image_3d_of_int__image_3d_of_int,
                   function_type_t() << operand::e_image_3d_of_int << operand::e_image_3d_of_int,
                   "image_v image_c", "image", "create image that is voxels of image_v and the world to image transform of image_c");
-    add_operation("--copy_coordinate_frame", &copy_coordinate_frame__image_3d_of_float__image_3d_of_float,
+    add_operation("--copy-coordinate-frame", &copy_coordinate_frame__image_3d_of_float__image_3d_of_float,
                   function_type_t() << operand::e_image_3d_of_float << operand::e_image_3d_of_float,
                   "image_v image_c", "image", "create image that is voxels of image_v and the world to image transform of image_c");
     add_operation("--diff", &diff__double__double,
@@ -1775,19 +1792,19 @@ class operations
     add_operation("--help", &help,
                   no_operands,
                   "", "", "Display help");
-    add_operation("--load_from_mat", &load_from_mat__string,
+    add_operation("--load-from-mat", &load_from_mat__string,
                   function_type_t() << operand::e_string,
                   "filename", "image", "Explicitly load image from ASCII Matlab file ");
-    add_operation("--load_image_double", &load_image_double__string,
+    add_operation("--load-image-double", &load_image_double__string,
                   function_type_t() << operand::e_string,
                   "filename", "image", "Explicitly load into double image.");
-    add_operation("--load_image_float", &load_image_float__string,
+    add_operation("--load-image-float", &load_image_float__string,
                   function_type_t() << operand::e_string,
                   "filename", "image", "Explicitly load into float image.");
-    add_operation("--load_image_int", &load_image_int__string,
+    add_operation("--load-image-int", &load_image_int__string,
                   function_type_t() << operand::e_string,
                   "filename", "image", "Explicitly load into integer image");
-    add_operation("--local_z_normalise", &local_z_normalise__image_3d_of_float__double,
+    add_operation("--local-z-normalise", &local_z_normalise__image_3d_of_float__double,
                   function_type_t() << operand::e_image_3d_of_float << operand::e_double,
                   "image half_radius", "image", "Normalise each voxel by mean and stddev measured over half_radius (mm) window");
     add_operation("--max",  &max__image_3d_of_int__image_3d_of_int,
@@ -1808,16 +1825,16 @@ class operations
     add_operation("--not", &not__image_3d_of_float,
                   function_type_t() << operand::e_image_3d_of_float,
                   "image", "image", "Apply logical NOT to voxels");
-    add_operation("--option_load_as_image_double", &option_load_as_image_double,
+    add_operation("--option-load-as-image-double", &option_load_as_image_double,
                   no_operands,
                   "", "", "Load future image files as double voxel-type");
-    add_operation("--option_load_as_image_float", &option_load_as_image_float,
+    add_operation("--option-load-as-image-float", &option_load_as_image_float,
                   no_operands,
                   "", "", "Load future image files as float voxel-type (default)");
-    add_operation("--option_load_as_image_int", &option_load_as_image_int,
+    add_operation("--option-load-as-image-int", &option_load_as_image_int,
                   no_operands,
                   "", "", "Load future image files as int voxel-type");
-    add_operation("--option_precision", &option_precision__double,
+    add_operation("--option-precision", &option_precision__double,
                   function_type_t() << operand::e_double,
                   "n", "", "Set precision of floating point numbers on the console to n digits");
     add_operation("--or",  &or__image_3d_of_int__image_3d_of_int,
@@ -1826,22 +1843,22 @@ class operations
     add_operation("--print", &print__double,
                   function_type_t() <<operand::e_double,
                   "[value value ...] n", "", "Print the previous n values");
-    add_operation("--print_overlap", &print_overlap__image_3d_of_int__image_3d_of_int,
+    add_operation("--print-overlap", &print_overlap__image_3d_of_int__image_3d_of_int,
                   function_type_t() << operand::e_image_3d_of_int << operand::e_image_3d_of_int,
                   "image image", "", "Print overlap measures and volumes of two binary mask images. Assuming the first image is the golden data, it prints the error rates.");
-    add_operation("--print_overlap", &print_overlap__image_3d_of_float__image_3d_of_float,
+    add_operation("--print-overlap", &print_overlap__image_3d_of_float__image_3d_of_float,
                   function_type_t() << operand::e_image_3d_of_float << operand::e_image_3d_of_float,
                   "image image", "", "Print generalised overlap measures and volumes of two partial volume mask images.");
-    add_operation("--print_quantiles", &print_quantiles__image_3d_of_int__double,
+    add_operation("--print-quantiles", &print_quantiles__image_3d_of_int__double,
                   function_type_t() << operand::e_image_3d_of_int << operand::e_double,
                   "image n", "", "Print n evenly space quantiles of image's voxel values");
-    add_operation("--print_quantiles", &print_quantiles__image_3d_of_float__double,
+    add_operation("--print-quantiles", &print_quantiles__image_3d_of_float__double,
                   function_type_t() << operand::e_image_3d_of_float << operand::e_double,
                   "image n", "", "Print n evenly space quantiles of image's voxel values");
-    add_operation("--print_stats", &print_stats__image_3d_of_int,
+    add_operation("--print-stats", &print_stats__image_3d_of_int,
                   function_type_t() << operand::e_image_3d_of_int,
                   "image", "", "Print basic statistics of image's voxel values");
-    add_operation("--print_stats", &print_stats__image_3d_of_float,
+    add_operation("--print-stats", &print_stats__image_3d_of_float,
                   function_type_t() << operand::e_image_3d_of_float,
                   "image", "", "Print basic statistics of image's voxel values");
     add_operation("--product", &product__double__double,
@@ -1865,19 +1882,19 @@ class operations
     add_operation("--save", &save__image_3d_of_int__string,
                   function_type_t() << operand::e_image_3d_of_int << operand::e_string,
                   "image filename", "", "Save image to filename");
-    add_operation("--save_to_mat", &save_to_mat__image_3d_of_int__string,
+    add_operation("--save-to-mat", &save_to_mat__image_3d_of_int__string,
                   function_type_t() << operand::e_image_3d_of_int << operand::e_string,
                   "image filename", "", "Save image to text 3D array Matlab format");
-    add_operation("--save_to_mat", &save_to_mat__image_3d_of_float__string,
+    add_operation("--save-to-mat", &save_to_mat__image_3d_of_float__string,
                   function_type_t() << operand::e_image_3d_of_float << operand::e_string,
                   "image filename", "", "Save image to text 3D array Matlab format");
-    add_operation("--save_to_mat", &save_to_mat__image_3d_of_double__string,
+    add_operation("--save-to-mat", &save_to_mat__image_3d_of_double__string,
                   function_type_t() << operand::e_image_3d_of_double << operand::e_string,
                   "image filename", "", "Save image to text 3D array Matlab format");
-    add_operation("--scale_and_offset", &scale_and_offset__image_3d_of_float__double__double,
+    add_operation("--scale-and-offset", &scale_and_offset__image_3d_of_float__double__double,
                   function_type_t() << operand::e_image_3d_of_float << operand::e_double << operand::e_double,
                   "image scale offset", "image", "multiply images's voxels by scale and add offset");
-    add_operation("--signed_distance_transform", &signed_distance_transform__image_3d_of_int,
+    add_operation("--signed-distance-transform", &signed_distance_transform__image_3d_of_int,
                   function_type_t() << operand::e_image_3d_of_int,
                   "image", "image", "Calculate SDT from zero/non-zero boundary in image");
     add_operation("--store", &store__poly__string,
@@ -1898,22 +1915,22 @@ class operations
     add_operation("--sum", &sum__image_3d_of_int__image_3d_of_int,
                   function_type_t() << operand::e_image_3d_of_int << operand::e_image_3d_of_int,
                   "im_A im_B", "im_A+B", "Add corresponding voxels of im_A and im_B");
-    add_operation("--voxel_product", &voxel_product__image_3d_of_float,
+    add_operation("--voxel-product", &voxel_product__image_3d_of_float,
                   function_type_t() << operand::e_image_3d_of_float,
                   "image", "value", "Product over all the voxel values.");
-    add_operation("--voxel_product", &voxel_product__image_3d_of_int,
+    add_operation("--voxel-product", &voxel_product__image_3d_of_int,
                   function_type_t() << operand::e_image_3d_of_int,
                   "image", "value", "Product over all the voxel values.");
-    add_operation("--voxel_size", &voxel_size__image_3d_of_int,
+    add_operation("--voxel-size", &voxel_size__image_3d_of_int,
                   function_type_t() << operand::e_image_3d_of_int,
                   "image", "x_length y_length z_length", "Length of each side of a voxel.");
-    add_operation("--voxel_size", &voxel_size__image_3d_of_float,
+    add_operation("--voxel-size", &voxel_size__image_3d_of_float,
                   function_type_t() << operand::e_image_3d_of_float,
                   "image", "x_length y_length z_length", "Length of each side of a voxel.");
-    add_operation("--voxel_sum", &voxel_sum__image_3d_of_float,
+    add_operation("--voxel-sum", &voxel_sum__image_3d_of_float,
                   function_type_t() << operand::e_image_3d_of_float,
                   "image", "value", "Sum over all the voxel values.");
-    add_operation("--voxel_sum", &voxel_sum__image_3d_of_int,
+    add_operation("--voxel-sum", &voxel_sum__image_3d_of_int,
                   function_type_t() << operand::e_image_3d_of_int,
                   "image", "value", "Sum over all the voxel values.");
 
@@ -1923,8 +1940,17 @@ class operations
     {
       vcl_string &left = *it;
       if (left > *++it)
-        throw mbl_exception_abort(vcl_string("\"") + left + "\" is not in correct order");
+      {
+        vcl_cerr << "INTERNAL ERROR: \"" << left << "\" is not in correct order\n";
+        vcl_abort();
+      }
     }
+    for (it=names_.begin(); it!=end; ++it)
+      if (it->find('_')!=vcl_string::npos)
+      {
+        vcl_cerr << "INTERNAL ERROR: \"" << *it << "\" contains an underscore\n";
+        vcl_abort();
+      }
   }
 
   static bool operation_type_matches(const function_type_t& type, const opstack_t& stack)
@@ -1938,8 +1964,11 @@ class operations
     return true;
   }
  public:
-  static void run(vcl_string &name, opstack_t& stack)
+  static void run(vcl_string name, opstack_t& stack)
   {
+    // Handle underscores or dashes in name.
+    vcl_replace(name.begin(), name.end(), '_', '-');
+
     typedef vcl_pair<vcl_vector<vcl_string>::iterator, vcl_vector<vcl_string>::iterator> range_t;
     range_t range =
       vcl_equal_range(singleton_.names_.begin(), singleton_.names_.end(), name);
@@ -2035,7 +2064,7 @@ int main2(int argc, char*argv[])
   }
 
   if (!stack.empty())
-    MBL_LOG(WARN, logger(), "Stack not empty after all operations." <<
+    MBL_LOG(WARN, logger(), "Stack not empty after all operations.\n" <<
             vsl_stream_summary(stack));
 
   return global_retval;
