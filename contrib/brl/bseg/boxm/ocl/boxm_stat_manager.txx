@@ -217,7 +217,7 @@ int boxm_stat_manager<T>::setup_stat_results_buffer()
   this->clear_stat_results();
 
   stat_results_buf_ = clCreateBuffer(this->context(),
-                                     CL_MEM_WRITE_ONLY | CL_MEM_USE_HOST_PTR,
+                                     CL_MEM_WRITE_ONLY | CL_MEM_COPY_HOST_PTR,
                                      result_size_* sizeof(cl_float),
                                      stat_results_,
                                      &status);
