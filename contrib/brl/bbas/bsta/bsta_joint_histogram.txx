@@ -233,7 +233,8 @@ T bsta_joint_histogram<T>::mutual_information() const
     //calculate mutual information in base 10
     for(unsigned a = 0; a < nbins_a_; ++a)
         for(unsigned b = 0; b < nbins_b_; ++b)
-            mutual_information+=this->p(a,b)*(vcl_log(this->p(a,b)) - (vcl_log(pa[a]) + vcl_log(pb[b])) );
+            if(p(a,b) != 0 && pa[a] != 0 && pb[b] != 0)
+                mutual_information+=this->p(a,b)*(vcl_log(this->p(a,b)) - (vcl_log(pa[a]) + vcl_log(pb[b])) );
 
     //convert mutual information to base 2
     mutual_information *= (T)vnl_math::log2e;
@@ -310,8 +311,7 @@ void bsta_joint_histogram<T>::clear()
 {
      volume_valid_ = false;
      volume_ = 0;
-     counts_.clear();
-     counts_(1,1) = T(0);
+     counts_.fill(T(0));
 }
 
 template <class T>
