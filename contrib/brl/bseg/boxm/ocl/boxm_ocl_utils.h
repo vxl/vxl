@@ -10,6 +10,7 @@
 #include <boct/boct_tree_cell.h>
 #include <boxm/sample/boxm_sample.h>
 #include <boxm/boxm_apm_traits.h>
+#include <malloc.h>
 template<class T>
 class boxm_ocl_convert
 {
@@ -43,6 +44,8 @@ class boxm_ocl_utils
                     int& child_ptr);
 
   static void print_tree_array(int* tree, unsigned numcells, float* data);
+  
+  static void print_multi_block_tree(int* blocks, int* block_ptrs, int numBlocks, float* data);
   
   
   static void* alloc_aligned(unsigned n, unsigned unit_size, unsigned block_size);

@@ -18,7 +18,6 @@ void boxm_ocl_utils ::split(vcl_vector<vnl_vector_fixed<int, 4> >& cell_array,
 
 
 //Print tree array
-
 void boxm_ocl_utils ::print_tree_array(int* tree, unsigned numcells, float* data)
 {
   unsigned cell_size = 4;
@@ -33,6 +32,45 @@ void boxm_ocl_utils ::print_tree_array(int* tree, unsigned numcells, float* data
             <<vcl_endl;
   }
 }
+
+//print multiblock tree
+//blocks = multi block tree array (1 cell = 4 ints)
+//block_ptrs = stores where blocks begin and how big they are (1 block_ptr = 2 ints)
+void boxm_ocl_utils::print_multi_block_tree(int* blocks, int* block_ptrs, int numBlocks, float* data)
+{
+  //list all of the blocks 
+  vcl_cout<<"Blocks at: ";
+  for(int i=0; i<numBlocks; i++)
+    vcl_cout<<block_ptrs[2*i]<<" (size "<<block_ptrs[2*i+1]<<"), ";
+  vcl_cout<<vcl_endl;
+  
+  //print out each tree 
+  for(int i=0; i<numBlocks; i++){
+    int blkRoot = block_ptrs[2*i];
+    int blkSize = block_ptrs[2*i+1];
+    vcl_cout<<"---- block "<<i<<" at "<<blkRoot<<"-----"<<vcl_endl;
+    for(int j=0; j<blkSize; j++){
+    
+      //print tree cell
+      vcl_cout<<"cell @ "<<j<<" (absolute: "<<j+blkRoot<<" : ";
+      for(int k=0; k<4; k++)
+        vcl_cout<<blocks[4*blkRoot+4*j+k]<<" ";
+
+      //print data if it exists
+      int data_ptr = blocks[4*blkRoot+4*j+2];
+      if(data_ptr >= 0) {
+        vcl_cout<<"  data @ "<<data_ptr<<" : ";
+        for(int k=0; k<16; k++) 
+          vcl_cout<<data[16*data_ptr+k]<<" ";          
+      }
+      else {
+        vcl_cout<<"  data for this cell not stored "; 
+      }
+      vcl_cout<<vcl_endl;
+    }
+  }
+}
+
 
 
 void* boxm_ocl_utils ::alloc_aligned(unsigned n, unsigned unit_size, unsigned block_size)
