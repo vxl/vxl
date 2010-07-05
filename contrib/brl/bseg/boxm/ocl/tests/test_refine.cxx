@@ -4,6 +4,7 @@
 #include <testlib/testlib_root_dir.h>
 #include "open_cl_test_data.h"
 #include <boxm/ocl/boxm_refine_manager.h>
+#include <boxm/ocl/boxm_refine_scene_manager.h>
 #include <boxm/boxm_scene.h>
 #include <boct/boct_tree.h>
 #include <boct/boct_tree_cell.h>
@@ -11,6 +12,7 @@
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_vector.h>
 #include <vcl_stack.h>
+#include <vcl_cstring.h> //(memcpy)
 #include <boxm/ocl/boxm_ocl_utils.h>
 #include <boxm/algo/boxm_refine.h>
 
@@ -44,6 +46,95 @@ bool verify_format(vcl_vector<vnl_vector_fixed<int, 4> > cell_array)
   }
   return true;
 }
+
+bool test_multi_block_refine()
+{
+  vcl_cout<<vcl_endl<<"Testing multi block refine "<<vcl_endl;
+
+  //set up multiple blocks of small trees
+  typedef boxm_sample<BOXM_APM_MOG_GREY> data_type; 
+  typedef boct_tree<short,data_type> tree_type;
+  
+  //Tree stats  
+  int numBlocks = 4;
+  int treeBuffSize = 100;
+  int dataBuffSize = 100;
+  
+  //set up simple tree
+  int cell_input[treeBuffSize*4];
+  int block_ptrs[20];
+  for(int i=0; i<treeBuffSize; i++) {
+    if(i<4){
+      block_ptrs[2*i] = i;
+      block_ptrs[2*i+1] = 1;
+      cell_input[4*i+0] = -1;  //roots have no parents
+      cell_input[4*i+1] = -1;  //no children now
+      cell_input[4*i+2] = i;   //sequential data
+      cell_input[4*i+3] = 0;   //nothing
+    }
+    else {
+      for(int j=0;  j<4; j++)
+        cell_input[4*i+j] = -1;     
+    }
+  }
+  
+  //set up simple data
+  float data_input[16*dataBuffSize];
+  for(int i=0; i<dataBuffSize; i++){
+    for(int j=0; j<16; j++){
+      if(i<4 && j==0)
+        data_input[16*i+j] = .4;
+      else
+        data_input[16*i+j] = 0;
+    }
+  }
+  data_input[0] = 0.0;
+
+
+  //refine the simple data
+  float prob_thresh = .3;
+  int maxLevel = 4;
+  float bbox_len = 1;
+  int startPtr = 0, endPtr = 4;
+  boxm_refine_scene_manager* mgr = boxm_refine_scene_manager::instance();
+  mgr->init(cell_input, block_ptrs, numBlocks, treeBuffSize, 
+            startPtr, endPtr,
+            data_input, numBlocks, dataBuffSize,
+            prob_thresh, maxLevel, bbox_len);
+  
+  mgr->run_scene();
+
+
+  int* scene_result = mgr->get_scene();
+  int* block_ptrs_result = mgr->get_block_ptrs();
+  float* data_result = mgr->get_data();
+
+#if 1 //print out result....
+  for(int i=0; i<treeBuffSize; i++) {
+    vcl_cout<<"cell "<<i<<": ";
+    vcl_cout<<scene_result[i*4+0]<<" "<<scene_result[i*4+1]<<" "<<scene_result[i*4+2];
+    vcl_cout<<vcl_endl;
+  }
+  boxm_ocl_utils::print_multi_block_tree(scene_result, block_ptrs_result, numBlocks, data_result);
+#endif
+
+  //try running it again:
+  int newScene[treeBuffSize*4];
+  float newData[dataBuffSize*4];
+  int newBlkPtrs[numBlocks*2];
+  vcl_memcpy(newScene, scene_result, treeBuffSize*4);
+  vcl_memcpy(newData, data_result, dataBuffSize*4);
+  vcl_memcpy(newBlkPtrs, block_ptrs_result, numBlocks*2);
+  
+  //clean up so you can run it again
+  mgr->clean_refine();
+  
+  //try running scene again
+  //mgr->init(newScene, newBlkPtrs, numBlocks, treeBuffSize,
+            
+}
+
+
 
 bool test_refine_simple_scene()
 {
@@ -146,8 +237,11 @@ bool test_refine_simple_scene()
 
 static void test_refine()
 {
-  if (test_refine_simple_scene())
-    vcl_cout<<"test_refine, simple scene"<<vcl_endl;
+  //if (test_refine_simple_scene())
+  //  vcl_cout<<"test_refine, simple scene"<<vcl_endl;
+    
+  if (test_multi_block_refine())
+    vcl_cout<<"test_multi_block_refine, simple scene"<<vcl_endl;
 }
 
 TESTMAIN(test_refine);

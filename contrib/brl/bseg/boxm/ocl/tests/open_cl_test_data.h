@@ -95,7 +95,7 @@ boct_tree<short,T > * open_cl_test_data::simple_tree()
   typename vcl_vector<boct_tree_cell<short, T >* >::iterator lit = tleaves.begin();
   for (; lit!= tleaves.end(); ++lit, ++i)
   {
-    if(i==10 || i==25 || i==40 || i==55) {
+    if(i==0 || i==25 || i==40 || i==55) {
       T v((float)2.0);
       (*lit)->set_data(v);
     } else {
