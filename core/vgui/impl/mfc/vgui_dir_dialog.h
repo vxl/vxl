@@ -48,8 +48,6 @@ class vgui_dir_dialog : public CFileDialog
 
   // Disallow selection of files (since we're only selecting directories)
   virtual BOOL OnFileNameOK(); // { return TRUE; }
-  void set_vista(bool val){m_bVistaStyle = val;}
-  bool vista(){return m_bVistaStyle>0;}
  private:
   CString m_strPath;                  // Current directory
   CString m_strFilter;                // The current file filters string (used for string storage

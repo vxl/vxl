@@ -153,15 +153,11 @@ void vgui_mfc_dialog_extensions_impl::OnBrowseDir(UINT uID)
   ASSERT(which>=0 && which<100);
   vcl_cerr<<"Directory browser loading...";
   vgui_dir_dialog dir_dialog(NULL,"All Files |*.*|", this);
-  bool temp = dir_dialog.vista();
-  if(temp)
-    dir_dialog.set_vista(false);
   if (dir_dialog.DoModal() == IDOK) {
     CString s(dir_dialog.GetPath());
     s.TrimRight('\\');
     dbsrs[which]->SetWindowText(s);
   }
-  dir_dialog.set_vista(temp);
 }
 
 //: Called by MFC when the user clicks the colour chooser button.

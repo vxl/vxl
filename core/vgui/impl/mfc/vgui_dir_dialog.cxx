@@ -164,6 +164,7 @@ BEGIN_MESSAGE_MAP(CDlgWnd, CWnd)
         ON_BN_CLICKED(IDC_OPEN, OnOpen)
 END_MESSAGE_MAP()
 
+
 void CDlgWnd::OnOpen()
 {
     // Get the text and check whether it is a valid directory
@@ -615,7 +616,7 @@ UINT CDirEdit::OnGetDlgCode()
 vgui_dir_dialog::vgui_dir_dialog(LPCTSTR initial, LPCTSTR filter, CWnd* pParentWnd)
     : CFileDialog(TRUE, NULL, NULL,
                   OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_PATHMUSTEXIST,
-                  NULL, pParentWnd),
+                  NULL, pParentWnd,0,0), // Set bVistaStyle to FALSE (last param)
       m_strPath(initial)
 {
     // Note: m_strFilter is a member variable so it doesn't disappear because
@@ -713,6 +714,7 @@ void vgui_dir_dialog::OnFolderChange()
 {
     CWnd *pp;                           // Parent window = the dialog itself
     VERIFY(pp = GetParent());
+    pp = GetParent();
     ASSERT(::IsWindow(pp->m_hWnd));
 
     ASSERT(pp->GetDlgItem(IDC_DIR) != NULL);
