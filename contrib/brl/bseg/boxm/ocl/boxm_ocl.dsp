@@ -125,6 +125,12 @@ SOURCE=.\boxm_render_single_block_manager.cxx
 SOURCE=.\boxm_online_update_manager.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\boxm_refine_scene_manager.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_ocl_scene.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/bocl_manager+boxm_stack_ray_trace_manager+boxm_sample+BOXM_APM_SIMPLE_GREY---.cxx
 # End Source File
 # Begin Source File
@@ -238,6 +244,9 @@ SOURCE=.\Templates/bocl_manager+boxm_online_update_manager-.cxx
 # Begin Source File
 SOURCE=.\Templates/bocl_manager+boxm_render_single_block_manager-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/bocl_manager+boxm_refine_scene_manager-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -294,6 +303,12 @@ SOURCE=.\boxm_online_update_manager.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_render_single_block_manager.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_refine_scene_manager.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_ocl_scene.h
 # End Source File
 # End Group
 # End Target
