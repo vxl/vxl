@@ -21,6 +21,8 @@ SOURCES += update_main.cl
 MANPAGE_SOURCES += boxm_render_image_manager.txx
 SOURCES += boxm_render_single_block_manager.cxx
 SOURCES += boxm_online_update_manager.cxx
+SOURCES += boxm_refine_scene_manager.cxx
+SOURCES += boxm_ocl_scene.cxx
 
 SUBDIRS += pro exe
 
