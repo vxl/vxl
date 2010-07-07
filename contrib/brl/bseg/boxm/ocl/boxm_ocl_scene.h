@@ -2,7 +2,7 @@
 #define boxm_ocl_scene_h_
 //:
 // \file
-// \brief  Small block scene optimized for GPU
+// \brief  Small-block scene optimized for opencl's memory scheme
 // \author Andrew Miller
 // \date   5 Jul 2010
 //
@@ -10,8 +10,14 @@
 #include <vbl/vbl_array_2d.h>
 #include <vbl/vbl_array_1d.h>
 #include <vnl/vnl_vector_fixed.h>
+#include <vpgl/bgeo/bgeo_lvcs.h>
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_vector_3d.h>
+
 
 #include <vsl/vsl_binary_io.h>
+#include <boxm/boxm_scene_parser.h>
+#include <boxm/boxm_apm_traits.h>
 class boxm_ocl_scene 
 {
 
@@ -25,35 +31,53 @@ class boxm_ocl_scene
 
   public: 
     //initializes an empty scene
-    boxm_ocl_scene(int nb_x, int nb_y, int nb_z, 
-                     int num_tree_buffs, int tb_len);
-    ~boxm_ocl_scene();
+    boxm_ocl_scene(vcl_string filename);
+    //copy constructor
+    boxm_ocl_scene(boxm_ocl_scene* scene);
+    ~boxm_ocl_scene() { }
     
+    static short version_no() { return 1; }
+    void block_num(int &x, int &y, int &z){x=blocks_.get_row1_count(); y=blocks_.get_row2_count(); z=blocks_.get_row3_count();}
+    void block_dim(int &x, int &y, int &z){x=block_dim_.x(); y=block_dim_.y(); z=block_dim_.z();}
+    void tree_buffer_shape(int &num, int &len){num=num_tree_buffers_; len=tree_buff_length_;}
+    boxm_scene_parser parser() { return parser_; }
+    vbl_array_1d<int2> mem_ptrs(){ return mem_ptrs_; }
+
+    /* ocl_scene I/O */
+    bool load_scene(vcl_string filename);   
+    bool save_scene(vcl_string dir);
     
-    void b_read(vsl_b_istream &s);
-    void b_write(vsl_b_ostream &s);
-  
   private:
+
+    bool init_existing_scene(); 
+    bool init_existing_data();
+    bool init_empty_scene();
+    bool init_empty_data();
+    
+    /* world scene information */
+    bgeo_lvcs lvcs_;
+    vgl_point_3d<double> origin_;
+    vgl_point_3d<double> rpc_origin_;
+    //: World dimensions of a block .e.g 1 meter x 1 meter x 1 meter
+    vgl_vector_3d<double> block_dim_;
+
+    //actual local scene structure and data
     int num_tree_buffers_, tree_buff_length_;
-    int num_blocks_x_, num_blocks_y_, num_blocks_z_;
     
-    //pointers to each block
+    //pointers to each block, multiple tree buffers, and mem_ptrs for each tree_buffer
     vbl_array_3d<int4> blocks_;
-    
-    //multiple tree buffers
     vbl_array_2d<int4> tree_buffers_;
-    
-    //bookkeeping: keep track of start and end pointers for each tree buffer
-    vbl_array_1d<int2> mem_ptrs;
-    
-    //data buffers - data blocks are templated
+    vbl_array_1d<int2> mem_ptrs_;
     vbl_array_2d<float16> data_buffers_;
-    
+
+    /* model xml information */
+    boxm_scene_parser parser_;
+    vcl_string xml_path_;
 };
 
-//scene file i/o
-void vsl_b_write(vsl_b_ostream & os, boxm_ocl_scene const &scene);
-void vsl_b_read(vsl_b_istream & is, boxm_ocl_scene &scene);
+
+vcl_ostream& operator <<(vcl_ostream &s, boxm_ocl_scene& scene);
+void x_write(vcl_ostream &os, boxm_ocl_scene& scene, vcl_string name);
 
 
 #endif //boxm_ocl_scene_h_
