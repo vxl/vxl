@@ -26,8 +26,11 @@ template <class T_loc, class APM, class AUX>
 boxm_edge_tangent_updater<T_loc,APM,AUX>::boxm_edge_tangent_updater(boxm_scene<boct_tree<T_loc,
                                                                     boxm_inf_line_sample<APM> > > &scene,
                                                                     vcl_vector<vcl_string> const& image_ids,
-                                                                    bool use_ransac)
-: image_ids_(image_ids), use_ransac_(use_ransac), scene_(scene)
+                                                                    bool use_ransac, 
+                                                                    float ransac_ortho_thres, 
+                                                                    float ransac_volume_ratio,
+                                                                    int ransac_concensus_cnt)
+: image_ids_(image_ids), use_ransac_(use_ransac), scene_(scene), ransac_ortho_thres_(ransac_ortho_thres), ransac_volume_ratio_(ransac_volume_ratio), ransac_concensus_cnt_(ransac_concensus_cnt)
 {}
 
 
@@ -118,7 +121,8 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
             float residual=1e5;
             vgl_box_3d<double> bb = tree->cell_bounding_box(cell);
 
-            if (boxm_plane_ransac<AUX>(aux_samples, weights, line, residual,bb, 5)) {
+            //if (boxm_plane_ransac<AUX>(aux_samples, weights, line, residual,bb, 5)) {  // ransac_concensus_cnt_ used to be hard-coded to 5, made it into a parameter with a default value of 3 
+            if (boxm_plane_ransac<AUX>(aux_samples, weights, line, residual,bb, ransac_concensus_cnt_, ransac_ortho_thres_, ransac_volume_ratio_)) {
               boxm_inf_line_sample<AUX> data(line,aux_samples.size());
               data.residual_=residual;
               cell->set_data(data);
@@ -163,7 +167,7 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
   for (unsigned i=0; i<aux_scenes.size(); i++) {
     aux_scenes[i].clean_scene();
   }
-
+  
   return true;
 }
 
