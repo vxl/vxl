@@ -56,12 +56,16 @@ static void test_boxm_plane_ransac()
     planes.push_back(sample);
   }
 
+  vcl_cout << " planes size: " << planes.size() << vcl_endl;
+
   vcl_vector<float> weights(test_set,1);
   int threshold=2;
   float residual;
   vgl_infinite_line_3d<float> l;
   vgl_box_3d<double> cell_global_box(18,15,5,32,25,15);
-  boxm_plane_ransac<float>(planes, weights, l, residual, cell_global_box, threshold);
+  float ortho_thres = 0.01f;
+  float volume_ratio = 128;
+  boxm_plane_ransac<float>(planes, weights, l, residual, cell_global_box, threshold, ortho_thres, volume_ratio);
 
   bool good= (l.x0()-line.x0()).sqr_length()<1e-4 && (l.direction()-line.direction()).sqr_length()<1e-4;
 
