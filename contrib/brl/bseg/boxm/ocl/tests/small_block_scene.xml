@@ -1,0 +1,16 @@
+<boxm_scene>
+<appearence_model type="apm_mog_grey"></appearence_model>
+<multi_bin value="0" />
+<lvcs cs_name="wgs84" origin_lon="0.000000" origin_lat="0.000000" origin_elev="0.000000" lon_scale="0.000000" lat_scale="0.000000" local_XYZ_unit="meters" geo_angle_unit="degrees" local_origin_x="0.000000" local_origin_y="0.000000" theta="0.000000">
+</lvcs>
+<local_origin x="0" y="0" z="0.000000">
+</local_origin>
+<block_dimensions x="2" y="2" z="2">
+</block_dimensions>
+<blocks x_dimension="3" y_dimension="3" z_dimension="2">
+</blocks>
+<tree_init num_buffers="2" buff_size="100" />
+<scene_paths path="/home/acm/vxl/src/contrib/brl/bseg/boxm/ocl/tests" block_prefix="block">
+<octree_level max="4" init="1" />
+</scene_paths>
+</boxm_scene>

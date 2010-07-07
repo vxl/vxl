@@ -17,35 +17,6 @@
 #include <boxm/algo/boxm_refine.h>
 
 
-//: Verifies that a tree is in the canonical format in the array
-// Depth first search
-bool verify_format(vcl_vector<vnl_vector_fixed<int, 4> > cell_array)
-{
-  unsigned curr_index = 0;
-  vcl_stack<int> open;
-  open.push(0);
-  while (!open.empty()) {
-    int currNode = open.top();
-    open.pop();
-    int child_ptr = cell_array[currNode][1];
-
-    // if the current node has no children, nothing to verify
-    if (child_ptr < 0) {
-      continue;
-    }
-    // if child pointer isn't to the right place..
-    if (child_ptr != curr_index+1) {
-      return false;
-    }
-
-    // push children on stack in reverse order
-    for (int i=7; i>=0; i--) {
-      open.push(child_ptr+i);
-    }
-    curr_index += 8;
-  }
-  return true;
-}
 
 bool test_multi_block_refine()
 {
@@ -177,7 +148,7 @@ bool test_refine_simple_scene()
       cell[k] = tree_array[i+k];
     tree_vector.push_back(cell);
   }
-  bool correctFormat = verify_format(tree_vector);
+  bool correctFormat = boxm_ocl_utils::verify_format(tree_vector);
   TEST("test_refine_simple_scene output format", correctFormat, true);
   
   
@@ -237,8 +208,8 @@ bool test_refine_simple_scene()
 
 static void test_refine()
 {
-  //if (test_refine_simple_scene())
-  //  vcl_cout<<"test_refine, simple scene"<<vcl_endl;
+  if (test_refine_simple_scene())
+    vcl_cout<<"test_refine, simple scene"<<vcl_endl;
     
   if (test_multi_block_refine())
     vcl_cout<<"test_multi_block_refine, simple scene"<<vcl_endl;
