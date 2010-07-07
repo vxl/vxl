@@ -1,5 +1,15 @@
 #ifndef boxm_plane_ransac_h_
 #define boxm_plane_ransac_h_
+//:
+// \file
+// \brief class to find the optimal intersecting 3D line of a set of 3D planes. 
+//
+// \author G. Tunali
+//
+// \verbatim
+//  Modifications
+//    Ozge C. Ozcanli  July 7, 2010 : made some internal hard-coded defaults into parameters
+// \endverbatim
 
 #include <vgl/vgl_infinite_line_3d.h>
 #include <vgl/vgl_intersection.h>
@@ -20,9 +30,10 @@ bool boxm_plane_ransac(vcl_vector<boxm_edge_tangent_sample<T> > aux_samples,
                        vcl_vector<T> weights,
                        vgl_infinite_line_3d<T>& line,
                        T &min_res, vgl_box_3d<double> cell_global_box,
-                       unsigned int threshold)
+                       unsigned int threshold, float ortho_thres = 0.01f, float volume_ratio = 128.0f)
 {
   unsigned int num_imgs = aux_samples.size();
+
   vgl_point_3d<T> local_origin((T)cell_global_box.centroid_x(),(T)cell_global_box.centroid_y(),(T)cell_global_box.centroid_z());
   vcl_list<vgl_plane_3d<T> > fit_planes;
   min_res=T(1e10);
@@ -68,9 +79,9 @@ bool boxm_plane_ransac(vcl_vector<boxm_edge_tangent_sample<T> > aux_samples,
             vgl_vector_3d<T> normal = plane.normal();
             // see if the line direction and plane normal is perpendicular
             T res = dot_product(normal,line_dir);
-            if (vcl_fabs(res) < T(0.05))  {
+            if (vcl_fabs(res) < T(ortho_thres))  {  // ortho_thres, used to be hard-coded to 0.05, then made a param with default 0.01 (stricter)
               // check to see if the line is close to the plane
-              if (plane.contains(p,T(cell_global_box.width())/T(8)))
+              if (plane.contains(p,T(cell_global_box.width())/T(volume_ratio)))  // volume_ratio, used to be hard-coded to 8, then made a param with default 128 (stricter)
               {
                 fit_planes.push_back(plane);
                 ws.push_back(weights[i]);
