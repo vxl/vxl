@@ -87,6 +87,8 @@ void boxm_scene_parser::init_params()
   save_platform_independent_ = true;
   load_all_blocks_=false;
   p_init_=0.01f;
+  num_buffers_init_ = 0; 
+  size_buffer_init_ = 0;
 }
 
 void
@@ -242,4 +244,17 @@ boxm_scene_parser::startElement(const char* name, const char** atts)
         convert(atts[i+1], p_init_); 
     }
   }
+  
+  else if (vcl_strcmp(name, "tree_init") == 0) {
+    for (int i=0; atts[i]; i+=2) {
+#if 0
+        vcl_cout << "  Attr=" << atts[i] << "->" << atts[i+1] << vcl_endl;
+#endif 
+      if (vcl_strcmp(atts[i], "num_buffers")==0)
+        convert(atts[i+1], num_buffers_init_);    
+      if (vcl_strcmp(atts[i], "buff_size")==0)
+        convert(atts[i+1], size_buffer_init_);
+    }
+  }
+  
 }

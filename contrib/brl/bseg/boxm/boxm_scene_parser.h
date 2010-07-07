@@ -22,6 +22,7 @@
 #define LOAD_ALL_BLOCKS_TAG "load_all_blocks"
 #define OCTREE_LEVELS_TAG "octree_level"
 #define P_INIT_TAG "p_init"
+#define TREE_INIT_TAG "tree_init"
 
 class boxm_scene_parser : public expatpp
 {
@@ -41,6 +42,7 @@ class boxm_scene_parser : public expatpp
    bool save_internal_nodes() {return save_internal_nodes_;}
    bool save_platform_independent() {return save_platform_independent_;}
    bool load_all_blocks() {return load_all_blocks_;}
+   void tree_buffer_shape(int &num_buffers, int &buff_size) {num_buffers = num_buffers_init_; buff_size = size_buffer_init_;}
 
    float p_init(){return p_init_;}
 
@@ -90,6 +92,7 @@ class boxm_scene_parser : public expatpp
   bool save_platform_independent_;
   bool load_all_blocks_;
   float p_init_;
+  int num_buffers_init_, size_buffer_init_;
 };
 
 #endif
