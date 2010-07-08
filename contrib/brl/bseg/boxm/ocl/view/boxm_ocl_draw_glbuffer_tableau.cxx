@@ -20,11 +20,26 @@
 #include <boxm/ocl/boxm_ocl_utils.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_calibration_matrix.h>
-#include <vgui/vgui_glut.h>
+
 #if defined(WIN32)
     #include <windows.h>
 #endif
 
+void
+boxm_ocl_draw_glbuffer_tableau::setup_gl_matrices()
+{
+      GLint vp[4]; // x,y,w,h
+      glGetIntegerv(GL_VIEWPORT, vp);
+      glViewport(0, 0, vp[2], vp[3]);
+
+      glMatrixMode(GL_MODELVIEW);
+      glLoadIdentity();
+
+      glMatrixMode(GL_PROJECTION);
+      glLoadIdentity();
+      glOrtho(0.0, 1.0, 0.0, 1.0, 0.0, 1.0);
+
+}
 boxm_ocl_draw_glbuffer_tableau::boxm_ocl_draw_glbuffer_tableau()
 {
     pbuffer_=0;
@@ -123,7 +138,7 @@ boxm_ocl_draw_glbuffer_tableau::handle(vgui_event const &e)
   {
 
       this->render_frame();
-
+      this->setup_gl_matrices();
       glClear(GL_COLOR_BUFFER_BIT);
       glDisable(GL_DEPTH_TEST);
       glRasterPos2i(0, 1);
@@ -135,17 +150,7 @@ boxm_ocl_draw_glbuffer_tableau::handle(vgui_event const &e)
   }
   if (e.type == vgui_RESHAPE)
   {
-      GLint vp[4]; // x,y,w,h
-      glGetIntegerv(GL_VIEWPORT, vp);
-      glViewport(0, 0, vp[2], vp[3]);
-
-      glMatrixMode(GL_MODELVIEW);
-      glLoadIdentity();
-
-      glMatrixMode(GL_PROJECTION);
-      glLoadIdentity();
-      glOrtho(0.0, 1.0, 0.0, 1.0, 0.0, 1.0);
-
+      this->setup_gl_matrices();
   }
 
 

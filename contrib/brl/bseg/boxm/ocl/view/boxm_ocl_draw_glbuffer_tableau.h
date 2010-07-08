@@ -22,6 +22,7 @@ public:
     //;  set the GL buffer which needs to be displayed.
     void set_glbuffer(GLuint  pbuffer){pbuffer_=pbuffer;}
 
+    void setup_gl_matrices();
 protected:
     bool render_frame();
     GLuint pbuffer_;
