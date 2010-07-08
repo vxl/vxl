@@ -14,17 +14,20 @@ ADD_EXECUTABLE( boxm_opencl_render
 TARGET_LINK_LIBRARIES( boxm_opencl_render boxm_pro  boxm_ocl boxm_ocl_pro vil_pro vpgl_pro boxm_algo_rt_pro vul )
 
 INCLUDE( ${BRL_MODULE_PATH}/FindGLEW.cmake )
-INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindGLUT.cmake )
-
 
 IF(GLEW_FOUND)
-  IF(GLUT_FOUND)
-  INCLUDE_DIRECTORIES( ${GLEW_INCLUDE_DIR} )
+ IF(VGUI_FOUND)
+  INCLUDE_DIRECTORIES(${GLEW_INCLUDE_DIR} )
   LINK_DIRECTORIES(${OPENGL_LIBRARY_DIR})
 
-  ADD_EXECUTABLE( boxm_ocl_render_with_gl
-    boxm_ocl_render_with_gl.cxx
-   )
-  TARGET_LINK_LIBRARIES( boxm_ocl_render_with_gl boxm_pro  boxm_ocl boxm_ocl_pro vil_pro vpgl_pro boxm_algo_rt_pro vul ${GLEW_LIBRARY} ${GLUT_glut_LIBRARY})
-  ENDIF(GLUT_FOUND)
+  ADD_EXECUTABLE( boxm_ocl_render_view
+  boxm_ocl_render_view.cxx
+ )
+ TARGET_LINK_LIBRARIES( boxm_ocl_render_view boxm_ocl  boxm_ocl_view vul vgui ${GLEW_LIBRARY} ${GLUT_glut_LIBRARY})
+ ENDIF(VGUI_FOUND)
 ENDIF(GLEW_FOUND)
+
+
+
+
+
