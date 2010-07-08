@@ -130,7 +130,7 @@ boxm_ocl_scene boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T>
   block_type* block = scene->get_active_block();
   tree_type* tree = block->get_tree();
   int max_level = (int) tree->number_levels(); 
-  int sm_n = vcl_pow(2, max_level-1)/vcl_pow(2, SMALL_BLK_MAX_LEVEL-1); 
+  int sm_n =(int)( (float)vcl_pow((float)2, (float)(max_level-1))/(float)vcl_pow((float)2,(float)(SMALL_BLK_MAX_LEVEL-1))); 
   vgl_vector_3d<int> block_num_small(sm_n*x_num, sm_n*y_num, sm_n*z_num);
   
   /* 1. Set up 3D array of blocks (small blocks), assuming all blocks are similarly sized */
