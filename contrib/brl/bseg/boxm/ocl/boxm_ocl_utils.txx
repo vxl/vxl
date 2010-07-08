@@ -265,6 +265,7 @@ boxm_ocl_scene boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T>
   }
   vcl_cout<<vcl_endl;
 
+
   //create scene, and return it. 
   boxm_ocl_scene ocl_scene(blocks, 
                            tree_buffers, 

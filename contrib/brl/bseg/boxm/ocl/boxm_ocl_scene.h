@@ -72,6 +72,7 @@ class boxm_ocl_scene
     vgl_point_3d<double> rpc_origin_;
     //: World dimensions of a block .e.g 1 meter x 1 meter x 1 meter
     vgl_vector_3d<double> block_dim_;
+    vgl_box_3d<double> world_bb_;
 
     //actual local scene structure and data
     int num_tree_buffers_, tree_buff_length_;

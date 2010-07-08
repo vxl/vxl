@@ -209,16 +209,16 @@ bool boxm_ocl_scene::init_empty_scene()
         int4 blk(0);
         blk[0] = buffIndex;  //buffer index 
         blk[1] = buffOffset; //buffer offset to root 
-        blk[3] = 1;          //tree has size of 1 now
-        blk[4] = 0;          //nothign for now
+        blk[2] = 1;          //tree has size of 1 now
+        blk[3] = 0;          //nothign for now
         blocks_[i][j][k] = blk;
         
         //put root in that memory
         int4 root; 
-        root[0] = -1; //no parent for root
-        root[1] = -1; // no children yet
+        root[0] = -1;         //no parent for root
+        root[1] = -1;         // no children yet
         root[2] = buffOffset; // points to datum
-        root[4] = 0;  // not used yet
+        root[3] = 0;          // not used yet
         tree_buffers_[buffIndex][buffOffset] = root;
         
         //put data in memory 
@@ -237,7 +237,10 @@ bool boxm_ocl_scene::init_empty_scene()
 /* initializes scene data assuming that the tree structure has already been initalized */
 bool boxm_ocl_scene::init_empty_data()
 {
-  //TODO implement me and work me into init_empty_scene();
+  //initialize data buffers
+  float16 init_dat(0.0f);
+  data_buffers_ = vbl_array_2d<float16>(num_tree_buffers_, tree_buff_length_, init_dat);
+  return true;
 }
 
 
@@ -347,6 +350,8 @@ vcl_ostream& operator <<(vcl_ostream &s, boxm_ocl_scene& scene)
   //print out buffer free space 
   typedef vnl_vector_fixed<int,2> int2;
   typedef vnl_vector_fixed<int,4> int4;
+  typedef vnl_vector_fixed<float,16> float16;
+  vbl_array_2d<float16> data_buffers = scene.data_buffers();
   vbl_array_2d<int4> tree_buffers = scene.tree_buffers();
   vbl_array_1d<int2> mem_ptrs = scene.mem_ptrs();
   s << "[free space: ";
@@ -358,8 +363,47 @@ vcl_ostream& operator <<(vcl_ostream &s, boxm_ocl_scene& scene)
   }
   s << vcl_endl;
   s <<"--------------------------------------------" << vcl_endl;
-  return s;
   
+  
+#if 1  
+  //verbose scene printing
+  s << "Blocks: "<<vcl_endl;
+  vbl_array_3d<int4> blocks = scene.blocks();
+  for(int i=0; i<x_num; i++) {
+    for(int j=0; j<y_num; j++) {
+      for(int k=0; k<z_num; k++) {
+      
+        int buffIndex = blocks[i][j][k][0];
+        int buffOffset = blocks[i][j][k][1];
+        int blkSize = blocks[i][j][k][2]; 
+        
+        s <<"---- block ("<<i<<","<<j<<","<<k<<") at tree["<<buffIndex<<"]["<<buffOffset<<"] size: "<<blkSize<<vcl_endl;
+        
+        //now print tree... 
+        for(int l=0; l<blkSize; l++){
+        
+          //print tree cell
+          vcl_cout<<"cell @ "<<l<<" (absolute: "<<l+buffOffset<<" : ";
+          vcl_cout<<tree_buffers[buffIndex][buffOffset+l]<<" ";
+
+          //print data if it exists
+          int data_ptr = tree_buffers[buffIndex][buffOffset+l][2];
+          if(data_ptr >= 0) {
+            vcl_cout<<"  data @ "<<data_ptr<<" : ";
+            vcl_cout<<data_buffers[buffIndex][data_ptr]<<" ";          
+          }
+          else {
+            vcl_cout<<"  data for this cell not stored "; 
+          }
+          vcl_cout<<vcl_endl;
+        }
+      }
+    }
+  } 
+
+#endif 
+  
+  return s;
   
   //print 3 corner blocks for now
 //   //list all of the blocks 
