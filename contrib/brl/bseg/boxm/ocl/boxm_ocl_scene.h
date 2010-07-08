@@ -46,8 +46,8 @@ class boxm_ocl_scene
     ~boxm_ocl_scene() { }
     
     static short version_no() { return 1; }
-    void block_num(int &x, int &y, int &z){x=blocks_.get_row1_count(); y=blocks_.get_row2_count(); z=blocks_.get_row3_count();}
-    void block_dim(int &x, int &y, int &z){x=block_dim_.x(); y=block_dim_.y(); z=block_dim_.z();}
+    void block_num(int &x, int &y, int &z){x=(int)blocks_.get_row1_count(); y=(int)blocks_.get_row2_count(); z=(int)blocks_.get_row3_count();}
+    void block_dim(double &x, double &y, double &z){x=block_dim_.x(); y=block_dim_.y(); z=block_dim_.z();}
     void tree_buffer_shape(int &num, int &len){num=num_tree_buffers_; len=tree_buff_length_;}
     boxm_scene_parser parser() { return parser_; }
     vbl_array_1d<int2> mem_ptrs(){ return mem_ptrs_; }
@@ -59,6 +59,8 @@ class boxm_ocl_scene
     bool load_scene(vcl_string filename);   
     bool save_scene(vcl_string dir);
     
+
+    vgl_point_3d<double> origin(){return origin_;}
   private:
 
     bool init_existing_scene(); 

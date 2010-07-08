@@ -297,7 +297,7 @@ void x_write(vcl_ostream &os, boxm_ocl_scene& scene, vcl_string name)
   
   //write block dimensions for each 
   vsl_basic_xml_element bnum(BLOCK_NUM_TAG);
-  int x_dim, y_dim, z_dim;
+  double x_dim, y_dim, z_dim;
   scene.block_dim(x_dim, y_dim, z_dim);
   blocks.add_attribute("x", x_dim);
   blocks.add_attribute("y", y_dim);
@@ -336,7 +336,7 @@ vcl_ostream& operator <<(vcl_ostream &s, boxm_ocl_scene& scene)
   scene.block_num(x_num, y_num, z_num);
  
   //get dimension of each block 
-  int x_dim, y_dim, z_dim;
+  double x_dim, y_dim, z_dim;
   scene.block_dim(x_dim, y_dim, z_dim);
   
   
