@@ -12,6 +12,7 @@
 #include "algo/bwm_utils.h"
 
 #include <bgui/bgui_image_utils.h>
+#include <vgui/vgui_dialog.h>
 
 bwm_tableau_mgr* bwm_tableau_mgr::instance_ = 0;
 vcl_map<vcl_string, bwm_command_sptr> bwm_tableau_mgr::tab_types_;
@@ -263,6 +264,26 @@ void bwm_tableau_mgr::zoom_to_fit()
   while (iter != tableaus_.end()) {
     bwm_tableau_img* tab = static_cast<bwm_tableau_img*> (iter->second.as_pointer());
     tab->zoom_to_fit();
+    iter++;
+  }
+}
+
+void bwm_tableau_mgr::scroll_to_point()
+{
+  double lx,ly,lz;
+  vgui_dialog dialog("Point");
+  dialog.message("3D World Point: ");
+  dialog.field("lon:", lx);
+  dialog.field("lat:", ly);
+  dialog.field("elev:", lz);
+  if (!dialog.ask())
+    return;
+
+  vcl_map<vcl_string, vgui_tableau_sptr>::iterator iter = tableaus_.begin();
+  while (iter != tableaus_.end()) {
+    bwm_tableau_cam* tab = dynamic_cast<bwm_tableau_cam*> (iter->second.as_pointer());
+    if (tab) 
+      tab->scroll_to_point(lx,ly,lz);
     iter++;
   }
 }

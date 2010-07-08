@@ -627,6 +627,14 @@ void bwm_observer_cam::world_pt_corr()
   vcl_cerr << "Please select only one object\n";
 }
 
+void bwm_observer_cam::scroll_to_point(double lx, double ly, double lz)
+{
+  vgl_point_3d<double> world_pt(lx,ly,lz);
+  vgl_point_2d<double> image_pt;
+  proj_point(world_pt,image_pt);
+  float x = static_cast<float>(image_pt.x()), y = static_cast<float>(image_pt.y());
+  this->move_to_point(x,y);
+}
 
 // ********************** Protected Methods
 

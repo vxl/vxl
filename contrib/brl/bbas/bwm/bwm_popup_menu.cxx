@@ -157,7 +157,6 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
                  new vgui_command_simple<bwm_tableau_img>(img_tab,
                                                           &bwm_tableau_img::
                                                           zoom_to_fit));
-//  img_other.separator();
   img_other.add( "Scroll to Image Location" ,
                  new vgui_command_simple<bwm_tableau_img>(img_tab,
                                                           &bwm_tableau_img::

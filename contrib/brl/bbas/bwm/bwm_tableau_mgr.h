@@ -64,6 +64,7 @@ class bwm_tableau_mgr
   void set_draw_mode_mesh();
   
   void zoom_to_fit();
+  void scroll_to_point();
 
  private:
 

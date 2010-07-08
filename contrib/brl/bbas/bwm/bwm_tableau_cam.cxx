@@ -319,6 +319,11 @@ void bwm_tableau_cam::local_position_vertex()
   my_observer_->position_vertex(false);
 }
 
+void bwm_tableau_cam::scroll_to_point(double lx, double ly, double lz)
+{
+  my_observer_->scroll_to_point(lx,ly,lz);
+}
+
 void bwm_tableau_cam::create_terrain()
 {
 #if 0 // commented out

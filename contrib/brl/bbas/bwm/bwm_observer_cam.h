@@ -160,6 +160,8 @@ class bwm_observer_cam : public bwm_observer_vgui
   //: displays position at vertex as text, either geo or local coordinates
   void position_vertex(bool show_as_geo = true);
 
+  void scroll_to_point(double lx, double ly, double lz);
+
   void create_terrain();
 
   void create_circular_polygon(vcl_vector< vsol_point_2d_sptr > ps_list,

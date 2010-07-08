@@ -81,6 +81,8 @@ class bwm_tableau_cam : public bwm_tableau_img
 
   void local_position_vertex();
 
+  void scroll_to_point(double lx, double ly, double lz);
+
   void create_terrain();
 
   void create_circular_polygon();

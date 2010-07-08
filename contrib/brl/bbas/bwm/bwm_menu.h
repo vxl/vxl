@@ -29,6 +29,7 @@ class bwm_menu
     { bwm_site_mgr::instance()->save_video_site();}
   static void remove_tableau() {bwm_tableau_mgr::instance()->remove_tableau();}
   static void zoom_to_fit() {bwm_tableau_mgr::instance()->zoom_to_fit();}
+  static void scroll_to_point() {bwm_tableau_mgr::instance()->scroll_to_point();}
   static void load_shape_file() { bwm_world::instance()->load_shape_file(); }
   static void save_ply() { bwm_world::instance()->save_ply(); }
   static void save_gml() { bwm_world::instance()->save_gml(); }
