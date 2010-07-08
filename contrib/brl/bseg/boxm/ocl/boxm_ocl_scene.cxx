@@ -19,6 +19,30 @@
 #define BLOCK_NAME "blocks.bin"
 #define DATA_NAME "data.bin"
 
+boxm_ocl_scene::boxm_ocl_scene(vbl_array_3d<int4> blocks, 
+                               vbl_array_2d<int4> tree_buffers, 
+                               vbl_array_2d<float16> data_buffers, 
+                               vbl_array_1d<int2> mem_ptrs, 
+                               bgeo_lvcs lvcs,
+                               vgl_point_3d<double> origin,
+                               vgl_vector_3d<double> block_dim)
+{
+
+  //copy all blocks 
+  blocks_ = vbl_array_3d<int4>(blocks);
+  tree_buffers_ = vbl_array_2d<int4>(tree_buffers); 
+  data_buffers_ = vbl_array_2d<float16>(data_buffers);
+  mem_ptrs_ = vbl_array_1d<int2>(mem_ptrs), 
+  
+  num_tree_buffers_ = (int) tree_buffers.rows();
+  tree_buff_length_ = (int) tree_buffers.cols();
+  lvcs_ = lvcs;
+  origin_ = origin;
+  block_dim_ = block_dim;
+}
+ 
+
+
 //intializes Scene from XML file
 boxm_ocl_scene::boxm_ocl_scene(vcl_string filename)
 {
@@ -299,25 +323,47 @@ void x_write(vcl_ostream &os, boxm_ocl_scene& scene, vcl_string name)
 /********************* stream I/O *****************************/
 vcl_ostream& operator <<(vcl_ostream &s, boxm_ocl_scene& scene)
 {
+
+  //get shape of tree buffers 
   int num, len;
   scene.tree_buffer_shape(num, len);
-  s << "OCL_SCENE: [num_buffs " << num << "] " 
-    << "[buff_length " << len << "] ";
+  
+  //get block numbers in each dimension
   int x_num, y_num, z_num;
   scene.block_num(x_num, y_num, z_num);
-  s << "[blocks "<<x_num<<","<<y_num<<","<<z_num<<"] ";
-  
+ 
+  //get dimension of each block 
   int x_dim, y_dim, z_dim;
   scene.block_dim(x_dim, y_dim, z_dim);
-  s << "[blk_dim "<<x_dim<<","<<y_dim<<","<<z_dim<<"] ";
+  
+  
+  s <<"---OCL_SCENE--------------------------------" << vcl_endl
+    <<"[block_nums "<<x_num<<","<<y_num<<","<<z_num<<"] "
+    <<"[blk_dim "<<x_dim<<","<<y_dim<<","<<z_dim<<"] " << vcl_endl
+    <<"[num_buffs " << num << "] " 
+    <<"[buff_length " << len << "] " << vcl_endl;
     
+    
+  //print out buffer free space 
+  typedef vnl_vector_fixed<int,2> int2;
+  typedef vnl_vector_fixed<int,4> int4;
+  vbl_array_2d<int4> tree_buffers = scene.tree_buffers();
+  vbl_array_1d<int2> mem_ptrs = scene.mem_ptrs();
+  s << "[free space: ";
+  for(int i=0; i<mem_ptrs.size(); i++) {
+    int start=mem_ptrs[i][0];
+    int end = mem_ptrs[i][1];
+    int freeSpace = (start >= end)? start-end : tree_buffers.cols() - (end-start);
+    s <<"buff["<<i<<"]="<<freeSpace<<" blocks"<<", ";
+  }
+  s << vcl_endl;
+  s <<"--------------------------------------------" << vcl_endl;
   return s;
+  
+  
   //print 3 corner blocks for now
 //   //list all of the blocks 
-//  vcl_cout<<"Blocks at: ";
-//  for(int i=0; i<numBlocks; i++)
-//    vcl_cout<<block_ptrs[2*i]<<" (size "<<block_ptrs[2*i+1]<<"), ";
-//  vcl_cout<<vcl_endl;
+//  
 //  
 //  //print out each tree 
 //  for(int i=0; i<numBlocks; i++){

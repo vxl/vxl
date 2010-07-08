@@ -30,7 +30,16 @@ class boxm_ocl_scene
   typedef vnl_vector_fixed<int, 2> int2;
 
   public: 
-    //initializes an empty scene
+    //initializes scene from data and tree arrays
+    boxm_ocl_scene(vbl_array_3d<int4> blocks, 
+                   vbl_array_2d<int4> tree_buffers, 
+                   vbl_array_2d<float16> data_buffers, 
+                   vbl_array_1d<int2> mem_ptrs, 
+                   bgeo_lvcs lvcs,
+                   vgl_point_3d<double> origin,
+                   vgl_vector_3d<double> block_dim);
+  
+    //initializes scene from xmlFile
     boxm_ocl_scene(vcl_string filename);
     //copy constructor
     boxm_ocl_scene(boxm_ocl_scene* scene);
@@ -42,6 +51,9 @@ class boxm_ocl_scene
     void tree_buffer_shape(int &num, int &len){num=num_tree_buffers_; len=tree_buff_length_;}
     boxm_scene_parser parser() { return parser_; }
     vbl_array_1d<int2> mem_ptrs(){ return mem_ptrs_; }
+    vbl_array_3d<int4> blocks(){ return blocks_; }
+    vbl_array_2d<int4> tree_buffers(){ return tree_buffers_; }
+    vbl_array_2d<float16> data_buffers(){ return data_buffers_; }
 
     /* ocl_scene I/O */
     bool load_scene(vcl_string filename);   
