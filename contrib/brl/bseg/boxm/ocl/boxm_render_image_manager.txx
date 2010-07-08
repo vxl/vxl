@@ -125,8 +125,11 @@ bool boxm_render_image_manager<T>::set_args()
   status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&image_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (input_image)"))
     return SDK_FAILURE;
-  else
-    return SDK_SUCCESS;
+  status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&image_gl_buf_);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (gl_image)"))
+    return SDK_FAILURE;
+
+  return SDK_SUCCESS;
 }
 
 template<class T>
@@ -261,7 +264,7 @@ bool boxm_render_image_manager<T>:: read_output_image()
 
   // Enqueue readBuffers
   int status = clEnqueueReadBuffer(command_queue_,image_buf_,CL_TRUE,
-                                   0,this->wni_*this->wnj_*sizeof(cl_uint),
+                                   0,this->wni_*this->wnj_*sizeof(cl_float4),
                                    image_,
                                    0,NULL,&events[0]);
 
@@ -916,6 +919,7 @@ bool boxm_render_image_manager<T>::set_tree_buffers()
                                    cell_alpha_,&status);
   if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (cell data) failed."))
     return false;
+  return true;
 }
 
 template<class T>
@@ -1059,7 +1063,9 @@ bool boxm_render_image_manager<T>::set_input_image()
   wni_=(cl_uint)RoundUp(output_img_.ni(),bni_);
   wnj_=(cl_uint)RoundUp(output_img_.nj(),bnj_);
 
-  image_=(cl_uint *)boxm_ocl_utils::alloc_aligned(wni_*wnj_,sizeof(cl_uint),16);
+  image_=(cl_float *)boxm_ocl_utils::alloc_aligned(wni_*wnj_,sizeof(cl_float4),16);
+  image_gl_=(cl_uint*)boxm_ocl_utils::alloc_aligned(wni_*wnj_,sizeof(cl_uint),16);
+
   img_dims_=(cl_uint *)boxm_ocl_utils::alloc_aligned(1,sizeof(cl_uint4),16);
 
   vil_image_view<float>::iterator iter=output_img_.begin();
@@ -1069,7 +1075,12 @@ bool boxm_render_image_manager<T>::set_input_image()
   {
     for (unsigned j=0;j<output_img_.nj();j++)
     {
-      image_[(j*wni_+i)]=0;
+      image_[(j*wni_+i)*4]=0;
+      image_[(j*wni_+i)*4+1]=0;
+      image_[(j*wni_+i)*4+2]=0;
+      image_[(j*wni_+i)*4+3]=0;
+
+      image_gl_[(j*wni_+i)]=0;
     }
   }
 
@@ -1100,9 +1111,10 @@ template<class T>
 bool boxm_render_image_manager<T>::set_input_image_buffers()
 {
   cl_int status;
+
   image_buf_ = clCreateBuffer(this->context_,
                               CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
-                              wni_*wnj_*sizeof(cl_uchar4),
+                              wni_*wnj_*sizeof(cl_float4),
                               image_,&status);
   return this->check_val(status,CL_SUCCESS,"clCreateBuffer (image_buf_) failed.")==1;
 }

@@ -97,10 +97,12 @@ class boxm_render_image_manager : public bocl_manager<boxm_render_image_manager<
   //: cleanup
   bool clean_update();
 
-  cl_uint * output_image() {return image_;}
+  cl_float * output_image() {return image_;}
   // image
-  cl_uint * image_;
+  cl_float * image_;
+  cl_uint * image_gl_;
   cl_mem   image_buf_;
+  cl_mem   image_gl_buf_;
 
 
   //: helper functions
