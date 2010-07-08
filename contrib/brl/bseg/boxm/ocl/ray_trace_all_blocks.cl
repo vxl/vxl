@@ -14,19 +14,20 @@ uint rgbaFloatToInt(float4 rgba)
 #if 0
 __kernel
 void
-ray_trace_all_blocks( __global int4 * scene_dims,  // level of the root.
-                      __global float4 * scene_origin,
-                      __global float4 * block_dims,
-                      __global int * block_ptrs,
-                      __global int * root_level,
+ray_trace_all_blocks( __global int4    * scene_dims,  // level of the root.
+                      __global float4  * scene_origin,
+                      __global float4  * block_dims,
+                      __global int     * block_ptrs,
+                      __global int     * root_level,
                       __global int4    * tree_array,
-                      __global float8 * sample_array,
-                      __global float * alpha_array,
+                      __global float8  * sample_array,
+                      __global float   * alpha_array,
                       __global float16 * persp_cam, // camera orign and SVD of inverse of camera matrix
                       __global uint4   * imgdims,   // dimensions of the image
-                      __local  float16  * local_copy_cam,
-                      __local uint4 * local_copy_imgdims,
-                      __global float4  * in_image)    // input image and store vis_inf and pre_inf
+                      __local  float16 * local_copy_cam,
+                      __local  uint4   * local_copy_imgdims,
+                      __global float4  * in_image,
+                      __global uint    * gl_image)    // input image and store vis_inf and pre_inf
 {
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
 
@@ -85,6 +86,9 @@ ray_trace_all_blocks( __global int4 * scene_dims,  // level of the root.
   int count=0;
   short4 root = (short4)(0,0,0,rootlevel);
 
+  short4 exit_face=(short4)-1;
+
+  float4 debug_var=(float4)0;
   while (true)
   {
     if (any(curr_block_index<(int4)0)|| any(curr_block_index>=(scenedims)))
@@ -98,10 +102,6 @@ ray_trace_all_blocks( __global int4 * scene_dims,  // level of the root.
                               +curr_block_index.x];
 
     //// set the nlevels here
-    //float4 block_origin=blockdims*convert_float4(curr_block_index)+origin;
-    //// ray origin is moved to canonical coordinates
-    //float4 local_ray_o= (ray_o-block_origin)/blockdims;
- 
     float4 local_ray_o= (ray_o-origin)/blockdims-convert_float4(curr_block_index);
     int4 root_cell=tree_array[root_ptr];
 
@@ -131,9 +131,11 @@ ray_trace_all_blocks( __global int4 * scene_dims,  // level of the root.
       {
         entry_pt=entry_pt+ray_d*cellsize/2;
         entry_pt.w=0.5;
-
         if (any(entry_pt>=(float4)1.0f)|| any(entry_pt<=(float4)0.0f))
-          break;
+        {
+            
+            break;
+        }
         entry_loc_code = loc_code(entry_pt, rootlevel);
         //// traverse to leaf cell that contains the entry point
         curr_cell_ptr = traverse(tree_array, root_ptr, root, entry_loc_code,&curr_loc_code,&global_count);
@@ -146,7 +148,11 @@ ray_trace_all_blocks( __global int4 * scene_dims,  // level of the root.
           entry_pt=local_ray_o + tnear*ray_d;
       }
       if (!hit)
-        break;
+      {
+          debug_var=(float4)-10.0;       
+          break;
+
+      }
 
       int data_ptr = tree_array[curr_cell_ptr].z;
       // distance must be multiplied by the dimension of the bounding box
@@ -165,7 +171,7 @@ ray_trace_all_blocks( __global int4 * scene_dims,  // level of the root.
 
       // location code of exit point
       // the exit face mask
-      short4 exit_face= cell_exit_face_safe(exit_pt,ray_d, cell_min, cell_max);
+      exit_face= cell_exit_face_safe(exit_pt,ray_d, cell_min, cell_max);
       if (exit_face.x<0) // exit face not defined
         break;
 
@@ -176,7 +182,10 @@ ray_trace_all_blocks( __global int4 * scene_dims,  // level of the root.
       int neighbor_ptr=neighbor(tree_array, curr_cell_ptr,curr_loc_code,exit_face, rootlevel+1, &neighbor_code,&global_count);
       // if no neighbor then terminate ray
       if (neighbor_ptr<0)
+      {
+          debug_var=(float4)-20.0;
         break;
+      }
 
       // traverse from the neighbor to the cell having the
       // required exit location code
@@ -199,7 +208,8 @@ ray_trace_all_blocks( __global int4 * scene_dims,  // level of the root.
     if (!intersect_cell(ray_o, ray_d, cell_min, cell_max,&tnear, &tfar))
       break;
     exit_pt =ray_o + tfar *ray_d;
-    short4 exit_face= cell_exit_face_safe(exit_pt,ray_d, cell_min, cell_max);
+    //exit_pt=cell_min+exit_pt*blockdims;
+    exit_face= cell_exit_face_safe(exit_pt,ray_d, cell_min, cell_max);
     if (exit_face.x<0) // exit face not defined
       break;
 
@@ -213,7 +223,7 @@ ray_trace_all_blocks( __global int4 * scene_dims,  // level of the root.
   }
 
   data_return.z+=(1-data_return.w)*0.5f;
-  in_image[j*get_global_size(0)+i]=data_return;
+  in_image[j*get_global_size(0)+i]=(float4)count;//convert_float4(exit_face);
 }
 
 
