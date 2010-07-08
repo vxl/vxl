@@ -22,6 +22,7 @@ DECLARE_FUNC_CONS(boxm_opt3_update_process);
 DECLARE_FUNC_CONS(boxm_render_expected_edge_vrml_process);
 DECLARE_FUNC_CONS(boxm_ray_statistics_process);
 DECLARE_FUNC_CONS(boxm_change_probability_process);
+DECLARE_FUNC_CONS(boxm_estimate_camera_process);
 
 
 #endif

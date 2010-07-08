@@ -135,7 +135,7 @@ bool boxm_render_expected_edge_process(bprb_func_process& pro)
         vcl_cerr << "boxm_render_expected_edge_process: the scene is not of expected type\n";
         return false;
       }
-      boxm_render_edge_tangent_image_rt<short, boxm_inf_line_sample<float> >(*scene, camera, expected, n_normal,num_updates, threshold);
+      boxm_render_edge_tangent_image_rt<short, boxm_inf_line_sample<float> >(*scene, camera, expected);//, n_normal,num_updates, threshold);
 
       vil_image_view<float > *edge_image=new  vil_image_view<float >(ni,nj,1);
       *edge_image=expected;

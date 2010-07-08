@@ -106,6 +106,7 @@ bool boxm_edge_update_process(bprb_func_process& pro)
   for (unsigned int i=0; i<n_images; ++i) {
     vcl_string img_id;
     ifs >> img_id;
+    vcl_cout << img_id << vcl_endl;
     image_ids.push_back(img_id);
     vcl_cout << img_id << " ";
   }
