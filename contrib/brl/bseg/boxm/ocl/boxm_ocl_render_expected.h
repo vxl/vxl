@@ -219,8 +219,8 @@ void boxm_opencl_all_blocks_expected(boxm_scene<boct_tree<short, boxm_sample<APM
 
   const unsigned int ni = expected.ni();
   const unsigned int nj = expected.nj();
-  vil_image_view<unsigned char> img0(ni,nj);
-  vil_image_view<unsigned char> img1(ni,nj);
+  vil_image_view<float> img0(ni,nj);
+  vil_image_view<float> img1(ni,nj);
   // render the image using the opencl raytrace manager
   boxm_render_image_manager<boxm_sample<APM> >* ray_mgr = boxm_render_image_manager<boxm_sample<APM> >::instance();
   int bundle_dim=8;
@@ -233,25 +233,26 @@ void boxm_opencl_all_blocks_expected(boxm_scene<boct_tree<short, boxm_sample<APM
   ray_mgr->run_scene();
 
   // extract expected image and mask from OpenCL output data
-  cl_uint* results = ray_mgr->output_image();
+  cl_float* results = ray_mgr->output_image();
   if (!results) {
     vcl_cerr << "Error : boxm_opencl_render_expected : ray_mgr->ray_results() returned NULL\n";
     return;
   }
-  cl_uint *results_p = results;
+  cl_float *results_p = results;
   for (unsigned j = 0; j<nj; ++j)  {
     for (unsigned i = 0; i<ni; ++i) {
-      unsigned int val=(unsigned int)(*(results_p++)) ;
-      val=val >> 24;
-      expected(i,j)=val; // alpha integral
-      //img1(i,j)=*(results_p++); // vis_inf
+        
+      img0(i,j)=*(results_p++); // vis_inf
+      img1(i,j)=*(results_p++); // vis_inf
+      expected(i,j) = *(results_p++); // expected intensity
+      mask(i,j) = *(results_p++); // 1 - vis_inf
 
-      //expected(i,j) = *(results_p++); // expected intensity
-      //mask(i,j) = *(results_p++); // 1 - vis_inf
+      if(i==4 && j==400)
+          vcl_cout<<"["<<img0(i,j)<<","<<img1(i,j)<<","<<expected(i,j)<<","<<mask(i,j)<<"]"<<vcl_endl;
     }
   }
 
-#if 0 //images for debuggin
+#if 1 //images for debuggin
   vil_save(img0,"f:/apl/img0.tiff");
   vil_save(img1,"f:/apl/img1.tiff");
   vil_save(expected,"f:/apl/img2.tiff");
