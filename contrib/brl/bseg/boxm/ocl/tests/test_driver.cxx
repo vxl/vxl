@@ -11,6 +11,7 @@ DECLARE( test_refine );
 DECLARE( test_update );
 DECLARE( test_file_io );
 DECLARE( test_scene_io);
+DECLARE( test_scene_convert);
 
 void register_tests()
 {
@@ -25,6 +26,7 @@ void register_tests()
   REGISTER( test_update );
   REGISTER( test_file_io );
   REGISTER( test_scene_io );
+  REGISTER( test_scene_convert);
 }
 
 
