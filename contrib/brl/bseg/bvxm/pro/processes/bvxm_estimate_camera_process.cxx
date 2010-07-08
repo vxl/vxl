@@ -19,6 +19,10 @@
 #include <vgl/vgl_plane_3d.h>
 #include <bvxm/bvxm_edge_ray_processor.h>
 
+#include <vpgl/vpgl_perspective_camera.h>
+#include <bvpgl/bvpgl_camera_estimator.h>
+#include <bvpgl/bvpgl_camera_estimator_amoeba.h>
+
 #include <vcl_cstdio.h>
 #include <vcl_cassert.h>
 
@@ -26,7 +30,7 @@
 
 #include <vgl/vgl_distance.h>
 
-#include "bvxm_estimate_camera_utils.h"
+#include "bvxm_expected_edge_functor.h"
 
 //: set input and output types
 bool bvxm_estimate_camera_process_cons(bprb_func_process& pro)
@@ -88,7 +92,7 @@ bool bvxm_estimate_camera_process(bprb_func_process& pro)
   vil_image_view<vxl_byte> img_e_vb(img_e_sptr);
 
   vil_image_view<float> img_e;
-  bvxm_camera_estimator::normalize_to_interval<vxl_byte,float>(img_e_vb,img_e,0.0f,1.0f);
+  brip_vil_float_ops::normalize_to_interval<vxl_byte,float>(img_e_vb,img_e,0.0f,1.0f);
 
   unsigned ni = img_e.ni();
   unsigned nj = img_e.nj();
@@ -160,20 +164,25 @@ bool bvxm_estimate_camera_process(bprb_func_process& pro)
       }
     }
   }
-
+  
   vpgl_perspective_camera<double> *cam_est = new vpgl_perspective_camera<double>(*cam_init);
+  vgl_vector_3d<float> vox_dim(dx,dy,dz);
+  vgl_vector_3d<float> world_dim(nx,ny,nz);
+  vgl_box_3d<double> box(sx,sy,(sz+((double)nz)*dz),(sx+((double)nx)*dx),(sy+((double)ny)*dy),sz);
 
-  bvxm_camera_estimator cam_estimator;
-  cam_estimator.set_world_params(nx,ny,nz,sx,sy,sz,dx,dy,dz);
+  // create the functor that finds edges
+  bvxm_expected_edge_functor func(&data, box, vox_dim, world_dim);
+  bvpgl_camera_estimator<bvxm_expected_edge_functor> cam_estimator(func);
+
   cam_estimator.set_estimation_params(theta_range,theta_step,phi_range,phi_step,rot_range,rot_step,max_iter_rot_angle);
 
-  cam_estimator.get_expected_edge_image(data,cam_est,img_eei);
+  func.apply(cam_inp,img_eei);
 
   vil_image_view<vxl_byte> *img_eei_before_correction = new vil_image_view<vxl_byte>(ni,nj,1);
-  bvxm_camera_estimator::normalize_to_interval<float,vxl_byte>(*img_eei,*img_eei_before_correction,0.0f,255.0f);
+  brip_vil_float_ops::normalize_to_interval<float,vxl_byte>(*img_eei,*img_eei_before_correction,0.0f,255.0f);
 
   //vcl_cout << "Estimating correct camera parameters\n";
-  bvxm_camera_estimator_amoeba cost_ftn(data,cam_estimator,img_e,cam_est);
+  bvpgl_camera_estimator_amoeba<bvxm_expected_edge_functor> cost_ftn(cam_estimator,img_e,cam_inp);
   vnl_vector<double> x(2,1.0);
   vnl_amoeba amoeba(cost_ftn);
   amoeba.set_relative_diameter(3.0);
@@ -181,15 +190,16 @@ bool bvxm_estimate_camera_process(bprb_func_process& pro)
   amoeba.minimize(x);
   cost_ftn.get_result(x,cam_est);
 
-  cam_estimator.get_expected_edge_image(data,cam_est,img_eei);
+  vpgl_camera_double_sptr cam_ptr = new vpgl_perspective_camera<double>(*cam_est);
+  func.apply(cam_ptr,img_eei);
 
   vil_image_view<vxl_byte> *img_eei_vb = new vil_image_view<vxl_byte>(ni,nj,1);
-  bvxm_camera_estimator::normalize_to_interval<float,vxl_byte>(*img_eei,*img_eei_vb,0.0f,255.0f);
+  brip_vil_float_ops::normalize_to_interval<float,vxl_byte>(*img_eei,*img_eei_vb,0.0f,255.0f);
 
   // output
   unsigned j = 0;
   // update the camera and store
-  pro.set_output_val<vpgl_camera_double_sptr>(j++, cam_est);
+  pro.set_output_val<vpgl_camera_double_sptr>(j++, cam_ptr);
   // update the edge image after update and store
   pro.set_output_val<vil_image_view_base_sptr>(j++, img_eei_vb);
   // update the edge image before update and store
