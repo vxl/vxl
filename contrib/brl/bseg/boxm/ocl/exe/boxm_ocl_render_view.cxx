@@ -26,12 +26,9 @@
 #include <vul/vul_timer.h>
 
 
-#include <vgui/vgui_viewer2D_tableau.h>
-#include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_adaptor.h>
 #include <vgui/vgui_window.h>
-#include <vgui/impl/glut/vgui_glut_window.h>
 
 #include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_clear_tableau.h>
@@ -124,15 +121,8 @@ int main(int argc, char ** argv)
     
 
     boxm_ocl_draw_glbuffer_tableau_new glbuffer_tableau;
-    //vgui_clear_tableau_new glbuffer_tableau;
     vgui_window* win = vgui::produce_window(ni(), nj(), "OpenCl Volume Visualizer");
-    vgui_viewer2D_tableau_new viewer(glbuffer_tableau);
-
-    //// Put a shell tableau at the top of our tableau tree.
-    vgui_shell_tableau_new shell(viewer);
-
-
-    win->get_adaptor()->set_tableau(  shell ); 
+    win->get_adaptor()->set_tableau(  glbuffer_tableau ); 
     GLenum err = glewInit();
     if (GLEW_OK != err)
     {
