@@ -247,6 +247,39 @@ SOURCE=.\Templates/bocl_manager+boxm_render_single_block_manager-.cxx
 # Begin Source File
 SOURCE=.\Templates/bocl_manager+boxm_refine_scene_manager-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_array_1d+vnl_vector_fixed+int.2--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_array_3d+vnl_vector_fixed+int.4--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_io_array_3d+vnl_vector_fixed+int.4--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_io_vector_fixed+int.4--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_array_2d+vnl_vector_fixed+int.4--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_array_2d+vnl_vector_fixed+float.16--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_io_array_2d+vnl_vector_fixed+float.16--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_io_vector_fixed+float.16--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_io_vector_fixed+int.2--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_io_array_1d+vnl_vector_fixed+int.2--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_io_array_2d+vnl_vector_fixed+int.4--.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
