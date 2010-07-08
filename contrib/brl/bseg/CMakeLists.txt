@@ -56,7 +56,6 @@ SUBDIRS(boct)
 # octree based modeling
 SUBDIRS(boxm)
 
-
 # octree based modeling python interface
 SUBDIRS(boxm_batch)
 
@@ -68,3 +67,7 @@ SUBDIRS(bvpl_batch)
 
 # voxel processing library python interface for octrees
 SUBDIRS(bvpl_octree_batch)
+
+#SUBDIRS(btpl_satellite_tools)
+
+SUBDIRS(bvpgl)
