@@ -153,7 +153,7 @@ boxm_ocl_scene boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T>
   
   
   /* 5. Go through each block and convert it to smaller blocks */
-  srand(time(NULL));
+  vnl_random random(9667566);
   for(iter.begin(); !iter.end(); iter++) {
     //vcl_cout<<"Converting big block at "<<iter.index()<<vcl_endl;
     vgl_point_3d<int> blk_ind = iter.index();
@@ -164,10 +164,10 @@ boxm_ocl_scene boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T>
     //cells at level 3 (4th level from the bottom) make up the new roots 
     vcl_vector<boct_tree_cell<short,T>*> blk_roots = tree->cells_at_level(3);
     //vcl_cout<<"  number small blocks: "<<blk_roots.size()<<vcl_endl;
-    for(int i=0; i<blk_roots.size(); i++) {
+    for(int blk_i=0; blk_i<blk_roots.size(); blk_i++) {
       
       //figure out which small_block i,j,k this root corresponds to
-      boct_tree_cell<short,T>* root = blk_roots[i];
+      boct_tree_cell<short,T>* root = blk_roots[blk_i];
       boct_loc_code<short> loc_code = root->get_code();
       vgl_point_3d<double> back_left = loc_code.get_point(tree->number_levels());
       int i = (int) (back_left.x()*sm_n) + blk_ind.x()*sm_n;
@@ -181,7 +181,7 @@ boxm_ocl_scene boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T>
       arr_root[0] = -1; //no parent for root
       arr_root[1] = -1; // no children yet
       arr_root[2] = 0;  // points to datum
-      arr_root[4] = 0;  // not used yet
+      arr_root[3] = 0;  // not used yet
       vcl_vector<int4> cell_array; 
       cell_array.push_back(arr_root); 
       vcl_vector<float16> data_array;
@@ -190,14 +190,14 @@ boxm_ocl_scene boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T>
       //vcl_cout<<" with size: "<<cell_array.size()<<" (data size: "<<data_array.size()<<")";
       
       //randomly choose a buffer, and get the first free spot in memory (update blocks)
-      int buffIndex = (int) (rand() % num_buffers);
+      int buffIndex = random.lrand32(0, num_buffers-1);
       int buffOffset = mem_ptrs[buffIndex][1]-1; //minus one cause mem_end points to one past the last one
       int4 blk(0);
       blk[0] = buffIndex;            //buffer index 
       blk[1] = buffOffset;           //buffer offset to root 
       blk[2] = cell_array.size();    //tree size
       blk[3] = 0;                    //nothign for now
-      blocks[i][j][k] = blk;
+      blocks(i,j,k) = blk;
       //vcl_cout<<" to tree buffer "<<buffIndex<<" @ "<<buffOffset<<vcl_endl;
       
       //copy cell_array and data_array to buffer 
@@ -240,8 +240,8 @@ boxm_ocl_scene boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T>
           int buffOffset = mem_ptrs[buffIndex][1]-1; //minus one cause mem_end points to one past the last one
           blk_ptr[0] = buffIndex;  //buffer index 
           blk_ptr[1] = buffOffset; //buffer offset to root 
-          blk_ptr[3] = 1;          //tree has size of 1 now
-          blk_ptr[4] = 0;          //nothign for now
+          blk_ptr[2] = 1;          //tree has size of 1 now
+          blk_ptr[3] = 0;          //nothign for now
           blocks[i][j][k] = blk_ptr;
 
           //put root in that memory
@@ -249,7 +249,7 @@ boxm_ocl_scene boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T>
           root[0] = -1; //no parent for root
           root[1] = -1; // no children yet
           root[2] = buffOffset; // points to datum
-          root[4] = 0;  // not used yet
+          root[3] = 0;  // not used yet
           tree_buffers[buffIndex][buffOffset] = root;
 
           //put data in memory 
