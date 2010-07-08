@@ -10,6 +10,8 @@
 #include <boct/boct_tree_cell.h>
 #include <boxm/sample/boxm_sample.h>
 #include <boxm/boxm_apm_traits.h>
+#include <boxm/boxm_scene.h>
+#include <boxm/ocl/boxm_ocl_scene.h>
 #include <malloc.h>
 template<class T>
 class boxm_ocl_convert
@@ -29,6 +31,8 @@ class boxm_ocl_convert
                  vcl_vector<vnl_vector_fixed<int, 4> >& cell_array,
                  vcl_vector<vnl_vector_fixed<float, 16> >& data_array,
                  int cell_input_ptr);
+
+  static boxm_ocl_scene convert_scene(boxm_scene<boct_tree<short, T> >* scene, int num_buffers, int buff_size);
 
 };
 
