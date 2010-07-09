@@ -27,28 +27,47 @@ boxm_ocl_scene::boxm_ocl_scene(vbl_array_3d<int4> blocks,
                                vgl_point_3d<double> origin,
                                vgl_vector_3d<double> block_dim)
 {
-
-  //copy all blocks 
-  blocks_ = vbl_array_3d<int4>(blocks);
-  tree_buffers_ = vbl_array_2d<int4>(tree_buffers); 
-  data_buffers_ = vbl_array_2d<float16>(data_buffers);
-  mem_ptrs_ = vbl_array_1d<int2>(mem_ptrs), 
-  
-  num_tree_buffers_ = (int) tree_buffers.rows();
-  tree_buff_length_ = (int) tree_buffers.cols();
-  lvcs_ = lvcs;
-  origin_ = origin;
-  block_dim_ = block_dim;
+  this->init_scene(blocks, tree_buffers, data_buffers, mem_ptrs, lvcs, origin, block_dim);
 }
  
-
-
 //intializes Scene from XML file
 boxm_ocl_scene::boxm_ocl_scene(vcl_string filename)
 {
   //load the scene xml file
   this->load_scene(filename);
 }
+
+//copy constructor 
+boxm_ocl_scene::boxm_ocl_scene(boxm_ocl_scene *that) 
+{
+  this->init_scene(that->blocks(), that->tree_buffers(), that->data_buffers(),
+                   that->mem_ptrs(), that->lvcs(), that->origin(), that->block_dim());
+}
+
+//init function for variables 
+void boxm_ocl_scene::init_scene(vbl_array_3d<int4> blocks, 
+                               vbl_array_2d<int4> tree_buffers, 
+                               vbl_array_2d<float16> data_buffers, 
+                               vbl_array_1d<int2> mem_ptrs, 
+                               bgeo_lvcs lvcs,
+                               vgl_point_3d<double> origin,
+                               vgl_vector_3d<double> block_dim)
+{
+  //copy all blocks 
+  blocks_ = vbl_array_3d<int4>(blocks);
+  tree_buffers_ = vbl_array_2d<int4>(tree_buffers); 
+  data_buffers_ = vbl_array_2d<float16>(data_buffers);
+  mem_ptrs_ = vbl_array_1d<int2>(mem_ptrs);
+  
+  num_tree_buffers_ = (int) tree_buffers.rows();
+  tree_buff_length_ = (int) tree_buffers.cols();
+  lvcs_ = lvcs;
+  origin_ = origin;
+  block_dim_ = block_dim;
+  
+  /* initialize parser information */
+}
+ 
 
 //: Saves XML scene file, block binary and data binary files to 'dir' 
 bool boxm_ocl_scene::save_scene(vcl_string dir)
@@ -60,9 +79,10 @@ bool boxm_ocl_scene::save_scene(vcl_string dir)
   vcl_string xml_path = dir + "scene.xml";
 
   //write out to XML file
-//  vcl_ofstream xmlstrm(xml_path.c_str());
-//  boxm_ocl_scene scene = boxm_ocl_scene(this);
-//  x_write(xmlstrm, scene, "scene");
+  vcl_ofstream xmlstrm(xml_path.c_str());
+  boxm_ocl_scene scene = boxm_ocl_scene(this);
+  scene.set_path(dir);
+  x_write(xmlstrm, scene, "scene");
   
   //write to block binary file
   vsl_b_ofstream bin_os(block_path);
@@ -246,45 +266,23 @@ bool boxm_ocl_scene::init_empty_data()
 
 
 /******************************** XML WRITE **************************/
+//MAKE scene aware of its own appearance model 
 void x_write(vcl_ostream &os, boxm_ocl_scene& scene, vcl_string name)
 {
-  boxm_scene_parser info = scene.parser();
-
   //open root tag
   vsl_basic_xml_element scene_elm(name);
   scene_elm.x_write_open(os);
 
   //write appearance model
-  vsl_basic_xml_element app_model(APP_MODEL_TAG);
-  boxm_apm_type apm = boxm_apm_types::str_to_enum(info.app_model().data());
-  app_model.add_attribute("type", boxm_apm_types::app_model_strings[apm]);
-  app_model.x_write(os);
-
-  /* next four are not really necessary... */
-  //write multi bin boolean
-  vsl_basic_xml_element bin(MULTI_BIN_TAG);
-  bin.add_attribute("value", info.multi_bin()? 1 : 0);
-  bin.x_write(os);
-  //write save internal nodes boolean
-  vsl_basic_xml_element save_nodes(SAVE_INTERNAL_NODES_TAG);
-  save_nodes.add_attribute("value", info.save_internal_nodes()? 1 : 0);
-  save_nodes.x_write(os);
-  //write save platform independent boolean
-  vsl_basic_xml_element save_platform_independent(SAVE_PLATFORM_INDEPENDENT_TAG);
-  save_platform_independent.add_attribute("value", info.save_platform_independent()? 1 : 0);
-  save_platform_independent.x_write(os);
-  //write load_all_blocks boolean 
-  vsl_basic_xml_element load_all_blocks(LOAD_ALL_BLOCKS_TAG);
-  load_all_blocks.add_attribute("value", info.load_all_blocks()? 1 : 0);
-  load_all_blocks.x_write(os);
+  //vsl_basic_xml_element app_model(APP_MODEL_TAG);
+  //boxm_apm_type apm = boxm_apm_types::str_to_enum(info.app_model().data());
+  //app_model.add_attribute("type", boxm_apm_types::app_model_strings[apm]);
+  //app_model.x_write(os);
   
   //write lvcs information 
-  bgeo_lvcs lvcs; 
-  info.lvcs(lvcs);
+  bgeo_lvcs lvcs = scene.lvcs();
   lvcs.x_write(os, LVCS_TAG);
-  vgl_point_3d<double> test;
-  x_write(os, test, LOCAL_ORIGIN_TAG);
-  x_write(os, info.block_dim(), BLOCK_DIMENSIONS_TAG);
+  x_write(os, scene.block_dim(), BLOCK_DIMENSIONS_TAG);
 
   //write block numbers for x,y,z 
   vsl_basic_xml_element blocks(BLOCK_NUM_TAG);
@@ -305,16 +303,13 @@ void x_write(vcl_ostream &os, boxm_ocl_scene& scene, vcl_string name)
   blocks.x_write(os);
   
   //write scene path for (needs to know where blocks are)
-  vcl_string path, pref;
-  info.paths(path, pref);
+  vcl_string path = scene.path();
   vsl_basic_xml_element paths(SCENE_PATHS_TAG);
   paths.add_attribute("path", path);
-  paths.add_attribute("block_prefix", pref);
   paths.x_write(os);
   
   //write octree levels tag
-  unsigned max_level, init_level;
-  info.levels(max_level, init_level);
+  unsigned max_level = 4, init_level = 1;
   vsl_basic_xml_element tree(OCTREE_LEVELS_TAG);
   tree.add_attribute("max", (int) max_level);
   tree.add_attribute("init", (int) init_level);
@@ -359,13 +354,13 @@ vcl_ostream& operator <<(vcl_ostream &s, boxm_ocl_scene& scene)
     int start=mem_ptrs[i][0];
     int end = mem_ptrs[i][1];
     int freeSpace = (start >= end)? start-end : tree_buffers.cols() - (end-start);
-    s <<"buff["<<i<<"]="<<freeSpace<<" blocks"<<", ";
+    s <<"buff["<<i<<"]="<<freeSpace<<" ptrs("<<mem_ptrs[i][0]<<", "<<mem_ptrs[i][1]<<")";
   }
   s << vcl_endl;
   s <<"--------------------------------------------" << vcl_endl;
   
   
-#if 1  
+#if 0 
   //verbose scene printing
   s << "Blocks: "<<vcl_endl;
   vbl_array_3d<int4> blocks = scene.blocks();

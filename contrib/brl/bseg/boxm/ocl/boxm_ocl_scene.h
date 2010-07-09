@@ -41,11 +41,13 @@ class boxm_ocl_scene
   
     //initializes scene from xmlFile
     boxm_ocl_scene(vcl_string filename);
+    boxm_ocl_scene(){}
     //copy constructor
     boxm_ocl_scene(boxm_ocl_scene* scene);
     ~boxm_ocl_scene() { }
     
     static short version_no() { return 1; }
+
     void block_num(int &x, int &y, int &z){x=(int)blocks_.get_row1_count(); y=(int)blocks_.get_row2_count(); z=(int)blocks_.get_row3_count();}
     void block_dim(double &x, double &y, double &z){x=block_dim_.x(); y=block_dim_.y(); z=block_dim_.z();}
     void tree_buffer_shape(int &num, int &len){num=num_tree_buffers_; len=tree_buff_length_;}
@@ -54,13 +56,25 @@ class boxm_ocl_scene
     vbl_array_3d<int4> blocks(){ return blocks_; }
     vbl_array_2d<int4> tree_buffers(){ return tree_buffers_; }
     vbl_array_2d<float16> data_buffers(){ return data_buffers_; }
+    vgl_vector_3d<double> block_dim(){ return block_dim_; }
+    vgl_point_3d<double> origin(){return origin_;}
+    bgeo_lvcs lvcs() { return lvcs_; }
 
     /* ocl_scene I/O */
     bool load_scene(vcl_string filename);   
     bool save_scene(vcl_string dir);
-    
+    void init_scene(vbl_array_3d<int4> blocks, 
+                               vbl_array_2d<int4> tree_buffers, 
+                               vbl_array_2d<float16> data_buffers, 
+                               vbl_array_1d<int2> mem_ptrs, 
+                               bgeo_lvcs lvcs,
+                               vgl_point_3d<double> origin,
+                               vgl_vector_3d<double> block_dim);
 
-    vgl_point_3d<double> origin(){return origin_;}
+    //setters
+    void set_path(vcl_string dir) { path_ = dir; }
+    vcl_string path() { return path_; }
+
   private:
 
     bool init_existing_scene(); 
@@ -75,6 +89,8 @@ class boxm_ocl_scene
     //: World dimensions of a block .e.g 1 meter x 1 meter x 1 meter
     vgl_vector_3d<double> block_dim_;
     vgl_box_3d<double> world_bb_;
+    boxm_apm_type app_model_;
+    vcl_string path_;
 
     //actual local scene structure and data
     int num_tree_buffers_, tree_buff_length_;
