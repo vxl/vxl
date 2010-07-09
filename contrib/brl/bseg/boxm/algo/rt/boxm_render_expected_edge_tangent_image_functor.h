@@ -31,7 +31,7 @@ class boxm_render_expected_edge_tangent_image_functor
   //: "default" constructor
   boxm_render_expected_edge_tangent_image_functor(vil_image_view<float > &expected,
                                                   vpgl_camera_double_sptr cam,
-                                                  float threshold,
+                                                  //float threshold,
                                                   unsigned int /*ni*/=0, unsigned /*nj*/=0,
                                                   bool scene_read_only=false,
                                                   bool is_aux=true)
@@ -93,16 +93,16 @@ class boxm_render_expected_edge_tangent_image_functor
 template <class T_loc, class T_data>
 void boxm_render_edge_tangent_image_rt(boxm_scene<boct_tree<T_loc, T_data > > &scene,
                                        vpgl_camera_double_sptr cam,
-                                       vil_image_view<float> &expected,
-                                       float n_normal, // FIXME - unused
-                                       unsigned int num_samples, // FIXME - unused
-                                       float threshold) // degrees of freedom
+                                       vil_image_view<float> &expected)
+                                     //  float n_normal, // FIXME - unused
+                                     //  unsigned int num_samples, // FIXME - unused
+                                     //  float threshold) // degrees of freedom
 {
   typedef boxm_aux_traits<BOXM_AUX_NULL>::sample_datatype sample_datatype;
   boxm_aux_scene<T_loc, T_data,boxm_edge_tangent_sample<sample_datatype> > aux_scene(&scene,boxm_aux_traits<BOXM_AUX_NULL>::storage_subdir(), boxm_aux_scene<T_loc, T_data,boxm_edge_tangent_sample<sample_datatype> >::LOAD);
   typedef boxm_render_expected_edge_tangent_image_functor<BOXM_EDGE_LINE,sample_datatype > expfunctor;
   boxm_raytrace_function<expfunctor,T_loc, T_data> raytracer(scene, cam.ptr(),expected.ni(),expected.nj());
-  expfunctor exp_functor(expected,cam,threshold,expected.ni(),expected.nj(),true,false);
+  expfunctor exp_functor(expected,cam,/*threshold,*/expected.ni(),expected.nj(),true,false);
   raytracer.run(exp_functor);
 }
 
