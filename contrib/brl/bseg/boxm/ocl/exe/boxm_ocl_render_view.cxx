@@ -29,7 +29,6 @@
 #include <vgui/vgui.h>
 #include <vgui/vgui_adaptor.h>
 #include <vgui/vgui_window.h>
-
 #include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_clear_tableau.h>
 cl_context_properties * set_gl_props()
@@ -122,7 +121,7 @@ int main(int argc, char ** argv)
 
     boxm_ocl_draw_glbuffer_tableau_new glbuffer_tableau;
     vgui_window* win = vgui::produce_window(ni(), nj(), "OpenCl Volume Visualizer");
-    win->get_adaptor()->set_tableau(  glbuffer_tableau ); 
+    win->get_adaptor()->set_tableau( glbuffer_tableau  ); 
     GLenum err = glewInit();
     if (GLEW_OK != err)
     {
