@@ -122,6 +122,7 @@ void boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T> >* scene,
           <<"---origin: "<<origin<<vcl_endl
           <<"---block_dim: "<<block_dim<<vcl_endl
           <<"---block_num: "<<block_num<<vcl_endl
+          <<"---max_level: "<<scene->max_level()<<vcl_endl
           <<"---------------------------------------------"<<vcl_endl;
   
   /* calculate number of small blocks along one side of one big block*/
@@ -147,7 +148,7 @@ void boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T> >* scene,
   //vcl_cout<<"Small block dimensions = "<<block_num_small<<vcl_endl;
   int4 init(-1);
   vbl_array_3d<int4> blocks(block_num_small.x(), block_num_small.y(), block_num_small.z(), init);
-  
+
   /* 2. set up 2d array of tree_buffers */
   //vcl_cout<<"tree_buffer dimensions = "<<num_buffers<<" buffers by "<<buff_length<<vcl_endl;
   vbl_array_2d<int4> tree_buffers(num_buffers, buff_length, init);
@@ -161,11 +162,10 @@ void boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T> >* scene,
   dat_init[1] = .1;
   vbl_array_2d<float16> data_buffers(num_buffers, buff_length, dat_init);
   
-  
   /* 5. Go through each block and convert it to smaller blocks */
   bool buffFull = false;
   vnl_random random(9667566);
-  boxm_block_iterator<tree_type> iter(scene); iter.begin();
+  boxm_block_iterator<tree_type> iter(scene); 
   for(iter.begin(); !iter.end(); iter++) {
     //vcl_cout<<"Converting big block at "<<iter.index()<<vcl_endl;
     vgl_point_3d<int> blk_ind = iter.index();
@@ -233,8 +233,8 @@ void boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T> >* scene,
       }
       else {
         buffFull = true;
-        //vcl_cerr<<"Convert Scene:: Not enough free space in buffer["<<buffIndex
-        //        <<"] ("<<freeSpace<<" slots). Allocate more room/do something better!"<<vcl_endl;
+        vcl_cerr<<"Convert Scene:: Not enough free space in buffer["<<buffIndex
+                <<"] ("<<freeSpace<<" slots). Allocate more room!"<<vcl_endl;
       }
     }
     if(buffFull) vcl_cout<<"boxm_ocl_utils::convert_scene: first pass buffer "<<blk_ind<<" filled buffer "<<vcl_endl;
@@ -294,7 +294,6 @@ void boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T> >* scene,
   }
   if(init_blocks) vcl_cout<<"initialized blocks "<<vcl_endl;
 
- 
   ocl_scene.init_scene(blocks, tree_buffers, data_buffers, mem_ptrs, lvcs, origin, block_dim);
 }
 

@@ -31,9 +31,10 @@ boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > > create_scene()
   x_write(os, scene, "scene");
   os.close();
 
-  unsigned max_level=5, init_level=3;
+  unsigned max_level=10, init_level=8;
+  scene.set_octree_levels(max_level, init_level);
     
-  // default model
+  // default model (alpha = .001)
   bsta_gauss_f1 simple_gauss_f1(0.0f,0.1f);
   bsta_num_obs<bsta_gauss_f1> simple_obs_gauss_val_f1(simple_gauss_f1,1);
   bsta_mixture_fixed<bsta_num_obs<bsta_gauss_f1>, 3>  simple_mix_gauss_val_f1;
@@ -49,7 +50,7 @@ boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > > create_scene()
   default_sample.alpha=0.001f;
   default_sample.set_appearance(simple_obs_mix_gauss_val_f1);
 
-  // sample 1
+  // sample 1 (alpha = .6)
   bsta_gauss_f1 s1_simple_gauss_f1(0.5f,0.1f);
   bsta_num_obs<bsta_gauss_f1> s1_simple_obs_gauss_val_f1(s1_simple_gauss_f1,1);
   bsta_mixture_fixed<bsta_num_obs<bsta_gauss_f1>, 3>  s1_simple_mix_gauss_val_f1;
@@ -63,7 +64,7 @@ boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > > create_scene()
   s1_sample.alpha=0.6f;
   s1_sample.set_appearance(s1_simple_obs_mix_gauss_val_f1);
 
-  // sample 2
+  // sample 2 (alpha = .6)
   bsta_gauss_f1 s2_simple_gauss_f1(1.0f,0.1f);
   bsta_num_obs<bsta_gauss_f1> s2_simple_obs_gauss_val_f1(s2_simple_gauss_f1,1);
   bsta_mixture_fixed<bsta_num_obs<bsta_gauss_f1>, 3>  s2_simple_mix_gauss_val_f1;
@@ -84,10 +85,11 @@ boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > > create_scene()
     scene.load_block(iter.index().x(),iter.index().y(),iter.index().z());
     boxm_block<tree_type>* block=scene.get_active_block();
     tree_type* tree;
+    //make first block one level further initialized than others 
     if (iter.index().x()==0 && iter.index().y()==0 && iter.index().z()==0) {
       tree = new tree_type(max_level,init_level);
     } else {
-      tree=new tree_type(max_level,init_level-1);
+      tree = new tree_type(max_level,init_level-1);
     }
     boct_tree_cell<short,data_type>* cel11 = tree->locate_point(vgl_point_3d<double>(0.01,0.01,0.9));
     s2_sample.alpha=count;
@@ -113,9 +115,26 @@ static void test_scene_convert()
   
   scene_type scene = create_scene();
   
-  int num_buffers = 2, buff_size = 999;
-  boxm_ocl_scene ocl_scene = boxm_ocl_convert<boxm_sample<BOXM_APM_MOG_GREY> >::convert_scene(&scene, num_buffers, buff_size);
-
+  //for each block in the boxm_scene, hide a random point and determine it's 
+  int sum = 0, leaves = 0;
+  boxm_block_iterator<tree_type> iter(&scene);
+  for(iter.begin(); !iter.end(); iter++) {
+    vgl_point_3d<int> blk_ind = iter.index();
+    scene.load_block(blk_ind.x(), blk_ind.y(), blk_ind.z());
+    boxm_block<tree_type>* block = scene.get_active_block();
+    tree_type* tree = block->get_tree();
+    sum+=tree->all_cells().size();
+    leaves+=tree->leaf_cells().size();
+  }
+    
+  vcl_cout<<"Tree cells = "<<sum<<vcl_endl;  
+  vcl_cout<<"leaf cells = "<<leaves<<vcl_endl;
+  vcl_cout<<scene.get_world_bbox()<<vcl_endl;
+  
+  
+  int num_buffers = 1;
+  boxm_ocl_scene ocl_scene;
+  boxm_ocl_convert<boxm_sample<BOXM_APM_MOG_GREY> >::convert_scene(&scene, num_buffers, ocl_scene);
   vcl_cout<<ocl_scene<<vcl_endl;
 
 }
