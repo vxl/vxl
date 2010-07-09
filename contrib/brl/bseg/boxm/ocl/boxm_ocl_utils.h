@@ -32,7 +32,7 @@ class boxm_ocl_convert
                  vcl_vector<vnl_vector_fixed<float, 16> >& data_array,
                  int cell_input_ptr);
 
-  static boxm_ocl_scene convert_scene(boxm_scene<boct_tree<short, T> >* scene, int num_buffers, int buff_size);
+  static void convert_scene(boxm_scene<boct_tree<short, T> >* scene, int num_buffers, boxm_ocl_scene &ocl_scene);
 
 };
 
