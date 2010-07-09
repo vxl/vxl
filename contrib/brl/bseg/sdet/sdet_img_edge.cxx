@@ -9,6 +9,8 @@
 #include <vdgl/vdgl_edgel.h>
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_interpolator.h>
+#include <vdgl/vdgl_interpolator_cubic.h>
+#include <vdgl/vdgl_interpolator_linear.h>
 #include <vtol/vtol_edge_2d.h>
 #include <bil/algo/bil_edt.h>
 #include <vil/vil_convert.h>
@@ -23,6 +25,12 @@
 #include <vcl_string.h>
 #include <vcl_vector.h>
 #include <vcl_cassert.h>
+#include <vgl/vgl_line_2d.h>
+#include <vsol/vsol_line_2d.h>
+#include <vsol/vsol_point_2d.h>
+#include <vsol/vsol_digital_curve_2d.h>
+#include <sdet/sdet_fit_lines_params.h>
+#include <sdet/sdet_fit_lines.h>
 
 vil_image_view<vxl_byte> sdet_img_edge::detect_edges(vil_image_view<vxl_byte> img,
                                                      double noise_multiplier,
@@ -198,6 +206,194 @@ sdet_img_edge::detect_edge_tangent(vil_image_view<vxl_byte> img,
     edge_img(temp_index,j,1) = -1;
   }
   return edge_img;
+}
+
+// return image has three planes as in detect_edge_tangent
+// Canny edge detector returns edgel chains with a linear interpolator by default, replace this interpolator with a cubic one and read the edge tangents from this interpolator                                  
+vil_image_view<float> 
+sdet_img_edge::detect_edge_tangent_interpolated(vil_image_view<vxl_byte> img,
+                                                       double noise_multiplier,
+                                                       double smooth,
+                                                       bool automatic_threshold,
+                                                       bool junctionp,
+                                                       bool aggressive_junction_closure)
+{
+  // set parameters for the edge detector
+  sdet_detector_params dp;
+  dp.noise_multiplier = (float)noise_multiplier;
+  dp.smooth = (float)smooth;
+  dp.automatic_threshold = automatic_threshold;
+  dp.junctionp = junctionp;
+  dp.aggressive_junction_closure = aggressive_junction_closure;
+
+  // detect edgels from the input image
+  sdet_detector detector(dp);
+  vil_image_resource_sptr img_res_sptr = vil_new_image_resource_of_view(img);
+  detector.SetImage(img_res_sptr);
+  detector.DoContour();
+  vcl_vector<vdgl_digital_curve_sptr> edges;
+  detector.get_vdgl_edges(edges);
+
+  // initialize the output edge image
+  vil_image_view<float> edge_img(img.ni(),img.nj(),3);
+  edge_img.fill(-1.0f);
+
+  // iterate over each connected edge component
+  //for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges->begin(); eit != edges->end(); eit++)
+  for (unsigned ii = 0; ii < edges.size(); ii++) 
+  {
+    vdgl_digital_curve_sptr dc = edges[ii];
+    if (!dc)
+      continue;
+    vdgl_interpolator_sptr intp = dc->get_interpolator();
+    vdgl_edgel_chain_sptr ec = intp->get_edgel_chain();
+    unsigned n = ec->size();
+
+    vdgl_interpolator_sptr cubic_intp = new vdgl_interpolator_cubic(ec);
+    //vdgl_interpolator_sptr cubic_intp = new vdgl_interpolator_linear(ec);
+    vcl_cout << " length: " << cubic_intp->get_length()  << vcl_endl;
+
+    for (unsigned j=1; j<n-1; j++) {
+      double cex = cubic_intp->get_x(j);
+      double cey = cubic_intp->get_y(j);
+
+      unsigned xc = static_cast<unsigned>(cex);
+      unsigned yc = static_cast<unsigned>(cey);
+      double angle = angle_0_360((vnl_math::pi/180.0)*cubic_intp->get_theta(j)+vnl_math::pi/2.0);
+      //double angle = angle_0_360((vnl_math::pi/180.0)*cubic_intp->get_tangent_angle(j));
+
+      edge_img(xc, yc, 0) = static_cast<float>(cex);
+      edge_img(xc, yc, 1) = static_cast<float>(cey);
+      edge_img(xc, yc, 2) = static_cast<float>(angle);
+    }
+  }
+
+  // Following loop removes the edges in the image boundary
+  int temp_index = edge_img.nj()-1;
+  for (unsigned i=0; i<edge_img.ni(); i++) {
+    edge_img(i,0,0) = -1;     edge_img(i,0,1) = -1;
+    edge_img(i,temp_index,0) = -1;
+    edge_img(i,temp_index,1) = -1;
+  }
+  temp_index = edge_img.ni()-1;
+  for (unsigned j=0; j<edge_img.nj(); j++) {
+    edge_img(0,j,0) = -1;     edge_img(0,j,1) = -1;
+    edge_img(temp_index,j,0) = -1;
+    edge_img(temp_index,j,1) = -1;
+  }
+  return edge_img;
+}
+
+// return image has three planes as in detect_edge_tangent
+vil_image_view<float> 
+sdet_img_edge::detect_edge_line_fitted(vil_image_view<vxl_byte> img,
+                                       double noise_multiplier,
+                                       double smooth,
+                                       bool automatic_threshold,
+                                       bool junctionp,
+                                       bool aggressive_junction_closure,
+                                       int min_fit_length, double rms_distance)
+{
+  sdet_detector_params dp;
+
+  dp.noise_multiplier = (float)noise_multiplier;
+  dp.smooth = (float)smooth;
+  dp.automatic_threshold = automatic_threshold;
+  dp.junctionp = junctionp;
+  dp.aggressive_junction_closure = aggressive_junction_closure;
+  dp.borderp = false;
+
+  sdet_fit_lines_params flp;
+  flp.min_fit_length_ = min_fit_length;
+  flp.rms_distance_ = rms_distance;
+
+  sdet_detector det(dp);
+
+  vil_image_resource_sptr img_res_sptr = vil_new_image_resource_of_view(img);
+  unsigned ni = img.ni(); unsigned nj = img.nj();
+
+  // initialize the output edge image
+  vil_image_view<float> edge_img(img.ni(),img.nj(),3);
+  edge_img.fill(-1.0f);
+
+  det.SetImage(img_res_sptr);
+  det.DoContour();
+  vcl_vector<vtol_edge_2d_sptr>* edges = det.GetEdges();
+  if (!edges)
+  {
+    vcl_cerr << "In sdet_img_edge::detect_edge_line_fitted() - No edges found in the image\n";
+    return edge_img;
+  }
+  sdet_fit_lines fl(flp);
+  fl.set_edges(*edges);
+  fl.fit_lines();
+  vcl_vector<vsol_line_2d_sptr> lines = fl.get_line_segs();
+
+  for (unsigned i = 0; i < lines.size(); i++) {
+    vsol_line_2d_sptr l = lines[i];
+    int length = (int)vcl_ceil(l->length());
+    double tangent = l->tangent_angle();
+    double angle = angle_0_360((vnl_math::pi/180.0)*l->tangent_angle());
+
+    /*vcl_cout << " line: " << i << " length: " << l->length();
+    vcl_cout << " p0: (" << l->p0()->x() << ", " << l->p0()->y() << ") "; 
+    vcl_cout << " p1: (" << l->p1()->x() << ", " << l->p1()->y() << ") ";
+    vcl_cout << " mid: (" << l->middle()->x() << ", " << l->middle()->y() << ") \n";*/
+
+    vcl_vector<vsol_point_2d_sptr> samples; samples.push_back(l->p0()); samples.push_back(l->p1());
+    vsol_digital_curve_2d_sptr dc = new vsol_digital_curve_2d(samples);
+
+
+    //: now sample length many samples along the line
+    float inc = 1.0f/length;
+    for (float index = 0.0f; index <= 1.0f; index += inc) {
+      vgl_point_2d<double> pt = dc->interp((double)index);
+
+      double cex = pt.x();
+      double cey = pt.y();
+      if (cex < 0 || cey < 0) continue;
+
+      unsigned xc = static_cast<unsigned>(cex);
+      unsigned yc = static_cast<unsigned>(cey);
+      if (xc > ni || yc > nj) continue;
+
+      edge_img(xc, yc, 0) = static_cast<float>(cex);
+      edge_img(xc, yc, 1) = static_cast<float>(cey);
+      edge_img(xc, yc, 2) = static_cast<float>(angle);
+    }
+  }
+
+  return edge_img;
+}
+
+
+void
+sdet_img_edge::convert_edge_image_to_line_image(vil_image_view<float>& edge_image, vil_image_view<float>& line_image)
+{
+  if (line_image.ni() != edge_image.ni() || line_image.nj() != edge_image.nj() || 
+    line_image.nplanes() != edge_image.nplanes() || line_image.nplanes() != 3) {
+    vcl_cerr << "In sdet_img_edge::convert_edge_image_to_line_image() -- incompatible input output image pair!\n";
+    return;
+  }
+
+  line_image.fill(-2.0f);
+  for (unsigned j = 0; j<line_image.nj(); ++j)
+    for (unsigned i = 0; i<line_image.ni(); ++i) {
+      float x = edge_image(i,j,0);
+      float y = edge_image(i,j,1);
+      if (x<0||y<0)
+        continue;
+      float angle = edge_image(i,j,2);
+      vgl_vector_2d<float> tangent(vcl_cos(angle), vcl_sin(angle));
+      vgl_point_2d<float> pt(x,y);
+      vgl_line_2d<float> l(pt, tangent);
+      float a = l.a(), b = l.b(), c = l.c();
+      float norm = vcl_sqrt(a*a+b*b);
+      a/=norm; b/=norm; c/=norm;
+      line_image(i,j,0)= a;
+      line_image(i,j,1)= b;
+      line_image(i,j,2)= c;
+    }
 }
 
 void sdet_img_edge::edge_distance_transform(vil_image_view<vxl_byte>& inp_image, vil_image_view<float>& out_edt)

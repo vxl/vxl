@@ -11,6 +11,7 @@
 //  Modifications
 //   December 15, 2009 - Ibrahim Eden - removed convert_image_types
 //   January 13, 2010 - Gamze Tunali - moved from bvxm/bvxm_edge_util.h to sdet_img_edge.h
+//   July 07, 2010 - Ozge C. Ozcanli - added detect_edge_tangent_interpolated method
 // \endverbatim
 
 #include <vil/vil_image_view.h>
@@ -40,6 +41,31 @@ class sdet_img_edge
                                                    bool automatic_threshold,
                                                    bool junctionp,
                                                    bool aggressive_junction_closure);
+
+  // return image has three planes as in detect_edge_tangent
+  // Canny edge detector returns edgel chains with a linear interpolator by default, replace this interpolator with a cubic one and read the edge tangents from this interpolator                                  
+  static vil_image_view<float> detect_edge_tangent_interpolated(vil_image_view<vxl_byte> img,
+                                                                double noise_multiplier,
+                                                                double smooth,
+                                                                bool automatic_threshold,
+                                                                bool junctionp,
+                                                                bool aggressive_junction_closure);
+  // return image has three planes as in detect_edge_tangent
+  static vil_image_view<float> detect_edge_line_fitted(vil_image_view<vxl_byte> img,
+                                                   double noise_multiplier,
+                                                   double smooth,
+                                                   bool automatic_threshold,
+                                                   bool junctionp,
+                                                   bool aggressive_junction_closure,
+                                                   int min_fit_length, double rms_distance);
+
+  // input is an edge image as the output of detect_edge_tangent(); output is line image: 
+  // plane 0 - line coefficient a --
+  //                                |-- components of line normal vector
+  // plane 1 - line coefficient b --
+  //
+  // plane 2 - line coefficient c
+  static void convert_edge_image_to_line_image(vil_image_view<float>& edge_img, vil_image_view<float>& output_line_img);
 
 
   static void edge_distance_transform(vil_image_view<vxl_byte>& inp_image, vil_image_view<float>& out_edt);
