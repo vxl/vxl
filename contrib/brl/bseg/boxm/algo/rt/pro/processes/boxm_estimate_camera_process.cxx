@@ -156,7 +156,7 @@ bool boxm_estimate_camera_process(bprb_func_process& pro)
       // create the functor that finds edges
       typedef boxm_expected_edge_functor<short, boxm_inf_line_sample<float> > func_type;
       func_type func(*scene);
-      bvpgl_camera_estimator<func_type> cam_estimator(func);
+      bvpgl_camera_estimator<func_type > cam_estimator(func);
       cam_estimator.set_estimation_params(theta_range,theta_step,phi_range,phi_step,rot_range,rot_step,max_iter_rot_angle);
 
       func.apply(cam_inp,img_eei);
