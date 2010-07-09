@@ -11,8 +11,19 @@
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vil/vil_image_view.h>
+#include <vil/vil_transform.h>
 
 #include <vcl_vector.h>
+
+//: Functor class to compute (1-x) 
+// assumes that max range value is "1"
+// only sensible for real types
+class boxm_exp_edge_vil_not_functor
+{
+ public:
+  float operator()(float x)       const { return x<1.0f?(1.0f-x):0.0f; }
+  double operator()(double x)     const { return x<1.0?1.0-x:0.0; }
+};
 
 template <class T_loc, class T_data>
 class boxm_expected_edge_functor {
@@ -22,7 +33,14 @@ public:
     : scene_(scene) {}
   ~boxm_expected_edge_functor(){}
 
-  bool apply(const vpgl_camera_double_sptr& cam, vil_image_view<float> *img_eei) { boxm_render_edge_tangent_image_rt(scene_,cam,*img_eei); return true; }
+  bool apply(const vpgl_camera_double_sptr& cam, vil_image_view<float> *img_eei) 
+  { 
+    boxm_render_edge_tangent_image_rt(scene_,cam,*img_eei); 
+    //: now take the inverse of this image, pixels which contain edges will have values closer to 1 and others will be zero
+    boxm_exp_edge_vil_not_functor nt;
+    vil_transform(*img_eei, nt);
+    return true; 
+  }
 
 private:
   boxm_scene<boct_tree<T_loc, T_data > > scene_;
