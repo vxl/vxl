@@ -30,7 +30,7 @@
 //: globals
 namespace boxm_estimate_camera_process_globals
 {
-  const unsigned n_inputs_ = 4;
+  const unsigned n_inputs_ = 3;
   const unsigned n_outputs_ = 3;
 
   // parameter strings
@@ -49,18 +49,16 @@ bool boxm_estimate_camera_process_cons(bprb_func_process& pro)
 {
   using namespace boxm_estimate_camera_process_globals;
 
-  // process takes 4 inputs:
+  // process takes 3 inputs:
   //input[0]: The scene
   //input[1]: Initial camera
   //input[2]: Edge image
-  //input[3]: Scale of the image
 
   vcl_vector<vcl_string> input_types_(n_inputs_);
   unsigned i = 0;
   input_types_[i++] = "boxm_scene_base_sptr";
   input_types_[i++] = "vpgl_camera_double_sptr";
   input_types_[i++] = "vil_image_view_base_sptr";
-  input_types_[i++] = "unsigned";
   if (!pro.set_input_types(input_types_))
     return false;
 
@@ -108,9 +106,6 @@ bool boxm_estimate_camera_process(bprb_func_process& pro)
   unsigned ni = img_e.ni();
   unsigned nj = img_e.nj();
 
-  // scale of image
-  unsigned scale = pro.get_input<unsigned>(i++);
-
   double deg2rad = vnl_math::pi/180.0;
 
   double theta_range = 12.0*deg2rad, theta_step = 0.05*deg2rad, phi_range = 12.0*deg2rad, phi_step = 0.05*deg2rad, rot_range = 10.0*deg2rad, rot_step = 1.0*deg2rad;
@@ -136,9 +131,6 @@ bool boxm_estimate_camera_process(bprb_func_process& pro)
            << "max_iter_rot_angle: " << max_iter_rot_angle << '\n'
            << "max_iter_cam_center: " << max_iter_cam_center << '\n';
 #endif
-
- // int num_obs = vox_world->num_observations<EDGES>(0,scale);
- // vcl_cout << "Number of observations in the voxel world: " << num_obs << '\n';
 
   vil_image_view<float> *img_eei = new vil_image_view<float>(ni,nj,1);
   img_eei->fill(0.0f);
