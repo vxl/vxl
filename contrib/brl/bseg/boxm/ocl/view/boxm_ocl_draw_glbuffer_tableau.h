@@ -3,12 +3,14 @@
 
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_gl.h>
+#include <vgui/vgui_drag_mixin.h>
+#include <vgui/vgui_event_condition.h>
 #include <boxm/ocl/view/boxm_ocl_draw_glbuffer_tableau_sptr.h>
 #include <boxm/boxm_scene_base.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <bocl/bocl_utils.h>
 
-class boxm_ocl_draw_glbuffer_tableau:public vgui_tableau
+class boxm_ocl_draw_glbuffer_tableau:public vgui_tableau, public vgui_drag_mixin
 {
 
 public:
@@ -23,13 +25,47 @@ public:
     void set_glbuffer(GLuint  pbuffer){pbuffer_=pbuffer;}
 
     void setup_gl_matrices();
+
+    bool mouse_up(int x, int y, vgui_button button, vgui_modifier modifier);
+    bool mouse_drag(int x, int y, vgui_button button, vgui_modifier modifier);
+    bool mouse_down(int x, int y, vgui_button button, vgui_modifier modifier);
+
+    vgui_event_condition c_mouse_rotate;
+    vgui_event_condition c_mouse_translate;
+    vgui_event_condition c_mouse_zoom;
+    struct token_t
+    {
+        float quat[4];     // quaternion
+        float scale;
+        float trans[3];
+        float fov;
+        token_t() {
+            quat[0] = quat[1] = quat[2] = quat[3] = 0.0f;
+            scale = 0.0;
+            trans[0] = trans[1] = trans[2] = 0.0;
+            fov = 45;
+        }
+    };
+
+    token_t token;
+    token_t home;
 protected:
+    vgui_event event;
+    vgui_event last;
+
+    float beginx;
+    float beginy;
+    token_t lastpos;
+    float prevx;
+    float prevy;
+
     bool render_frame();
     GLuint pbuffer_;
     boxm_scene_base_sptr scene_;
     unsigned ni_;
     unsigned nj_;
-    vpgl_perspective_camera<double> * cam_;
+    vpgl_perspective_camera<double> cam_;
+    vpgl_perspective_camera<double> default_cam_;
 };
 //: Create a smart-pointer to a boxm_ocl_draw_glbuffer_tableau tableau.
 struct boxm_ocl_draw_glbuffer_tableau_new : public boxm_ocl_draw_glbuffer_tableau_sptr

@@ -20,6 +20,7 @@
 #include <boxm/ocl/boxm_ocl_utils.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_calibration_matrix.h>
+#include <vgui/internals/trackball.h>
 
 #if defined(WIN32)
     #include <windows.h>
@@ -40,11 +41,26 @@ boxm_ocl_draw_glbuffer_tableau::setup_gl_matrices()
       glOrtho(0.0, 1.0, 0.0, 1.0, 0.0, 1.0);
 
 }
-boxm_ocl_draw_glbuffer_tableau::boxm_ocl_draw_glbuffer_tableau()
+boxm_ocl_draw_glbuffer_tableau::boxm_ocl_draw_glbuffer_tableau():
+  c_mouse_rotate(vgui_LEFT),
+  c_mouse_translate(vgui_RIGHT),
+  c_mouse_zoom(vgui_MIDDLE),
+  default_cam_(),cam_()
+
 {
     pbuffer_=0;
     ni_=640;
     nj_=480;
+
+    trackball(token.quat , 0.0, 0.0, 0.0, 0.0);
+    token.scale = 1.0;
+
+    token.trans[0] = 0;
+    token.trans[1] = 0;
+    token.trans[2] = -10;
+
+    home = token;
+
     //scene_=0;
     GLenum err = glewInit();
     if (GLEW_OK != err)
@@ -62,7 +78,8 @@ boxm_ocl_draw_glbuffer_tableau::init(boxm_scene_base_sptr scene, unsigned ni, un
 {
     ni_=ni;
     nj_=nj;
-    cam_=cam; //default cam
+    default_cam_=(*cam);
+    cam_=(*cam); //default cam
     vil_image_view<float> expected(ni_,nj_);
     if(boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > >* s 
         = dynamic_cast<boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> >>*> (scene.as_pointer()))
@@ -92,7 +109,7 @@ boxm_ocl_draw_glbuffer_tableau::init(boxm_scene_base_sptr scene, unsigned ni, un
         ray_mgr->context_ = clCreateContext(props, 1, &ray_mgr->devices()[0], NULL, NULL, &status);
         int bundle_dim=8;  ray_mgr->set_bundle_ni(bundle_dim);  ray_mgr->set_bundle_nj(bundle_dim);
         
-        ray_mgr->init_ray_trace(s, cam_, expected);
+        ray_mgr->init_ray_trace(s, &cam_, expected);
         bool good=true;
         good=good && ray_mgr->set_scene_data()
                   && ray_mgr->set_all_blocks() 
@@ -137,6 +154,12 @@ boxm_ocl_draw_glbuffer_tableau::handle(vgui_event const &e)
   if (e.type == vgui_DRAW)
   {
 
+      vcl_cout<<"Quat ["<<token.quat[0]<<","<<token.quat[1]<<","<<token.quat[2]<<","<<token.quat[3]<<"]"<<vcl_endl;
+      //vcl_cout<<"Scale "<<token.scale<<vcl_endl;
+      vcl_cout<<"trans ["<<token.trans[0]<<","<<token.trans[1]<<","<<token.trans[2]<<"]"<<vcl_endl;
+      vcl_cout<<"Fov "<<token.fov<<vcl_endl;
+
+
       this->render_frame();
       this->setup_gl_matrices();
       glClear(GL_COLOR_BUFFER_BIT);
@@ -151,35 +174,17 @@ boxm_ocl_draw_glbuffer_tableau::handle(vgui_event const &e)
   if (e.type == vgui_RESHAPE)
   {
       this->setup_gl_matrices();
-  }
-
-
-  if (e.type == vgui_BUTTON_DOWN && e.button == vgui_LEFT )
-  {
-
-      vpgl_calibration_matrix<double> cmatrix=cam_->get_calibration();
-      double f=cmatrix.focal_length();
-
-      if(f>0.05)
-          cmatrix.set_focal_length(f-0.05);
-      else
-          cmatrix.set_focal_length(1.0);
-      cam_->set_calibration(cmatrix);
       this->post_redraw();
   }
- if (e.type == vgui_BUTTON_DOWN && e.button == vgui_RIGHT )
-  {
+  
+  event = e;
+  if (vgui_drag_mixin::handle(e))
+      return true;
 
-      vpgl_calibration_matrix<double> cmatrix=cam_->get_calibration();
-      double f=cmatrix.focal_length();
+  if (vgui_tableau::handle(e))
+    return true;
 
-      if(f>2.0)
-          cmatrix.set_focal_length(f+0.05);
-      else
-          cmatrix.set_focal_length(1.0);
-      cam_->set_calibration(cmatrix);
-      this->post_redraw();
-  }
+
    return false;
 }
 
@@ -194,7 +199,7 @@ boxm_ocl_draw_glbuffer_tableau::render_frame()
 
         boxm_render_image_manager<boxm_sample<BOXM_APM_SIMPLE_GREY> >* ray_mgr = boxm_render_image_manager<boxm_sample<BOXM_APM_SIMPLE_GREY> >::instance();
         cl_int status= clEnqueueAcquireGLObjects(ray_mgr->command_queue_, 1, &ray_mgr->image_gl_buf_ , 0, 0, 0);
-        ray_mgr->set_persp_camera(cam_);
+        ray_mgr->set_persp_camera(&cam_);
         ray_mgr->write_persp_camera_buffers();
         ray_mgr->run();
 
@@ -208,4 +213,140 @@ boxm_ocl_draw_glbuffer_tableau::render_frame()
         vcl_cout<<"Undefined tree type "<<vcl_endl;
         return false;
     }
+}
+
+
+bool boxm_ocl_draw_glbuffer_tableau::mouse_down(int x, int y, vgui_button /*button*/, vgui_modifier /*modifier*/)
+{
+  if (c_mouse_rotate(event) || c_mouse_translate(event) || c_mouse_zoom(event)) {
+    beginx = x;
+    beginy = y;
+    lastpos = this->token;
+    last = event;
+    return true;
+  }
+
+  return false;
+}
+
+bool boxm_ocl_draw_glbuffer_tableau::mouse_drag(int x, int y, vgui_button button, vgui_modifier modifier)
+{
+  // SPINNING
+  if (c_mouse_rotate(button, modifier))
+  {
+#ifdef DEBUG
+    vcl_cerr << "vgui_viewer3D_tableau::mouse_drag: left\n";
+#endif
+
+    GLdouble vp[4];
+    glGetDoublev(GL_VIEWPORT, vp); // ok
+    float width  = (float)vp[2];
+    float height = (float)vp[3];
+
+    float wscale = 2.0f / width;
+    float hscale = 2.0f / height;
+    float delta_r[4];
+    trackball(delta_r,
+              (wscale*beginx - 1)/2.0, (hscale*beginy - 1)/2.0,
+              (wscale*x - 1)/2.0, (hscale*y - 1)/2.0);
+    add_quats(delta_r, lastpos.quat, this->token.quat);
+
+    prevx = x;
+    prevx = y;
+    vnl_quaternion<double> q(token.quat[0],token.quat[1],token.quat[2],token.quat[3]);
+    vgl_rotation_3d<double> r(q*default_cam_.get_rotation().as_quaternion());
+    cam_.set_rotation(r);
+
+    this->post_redraw();
+    return true;
+  }
+
+  // ZOOMING
+  if (c_mouse_zoom(button, modifier))
+  {
+#ifdef DEBUG
+    vcl_cerr << "vgui_viewer3D_tableau::mouse_drag: middle\n";
+#endif
+
+    GLdouble vp[4];
+    glGetDoublev(GL_VIEWPORT, vp); // ok
+    double width = vp[2];
+    double height = vp[3];
+
+    double dx = (beginx - x) / width;
+    double dy = (beginy - y) / height;
+
+    // changed to vcl_pow(5,dy) to vcl_pow(5.0,dy)
+    // the first version is ambiguous when overloads exist for vcl_pow
+    double scalefactor = vcl_pow(5.0, dy);
+    this->token.scale = static_cast<float>(/*lastpos.scale* scalefactor */ dy/10.0f);
+    cam_.set_camera_center(cam_.get_camera_center()+token.scale*cam_.principal_axis());
+
+    // changed to vcl_pow(5,dy) to vcl_pow(5.0,dy)
+    // the first version is ambiguous when overloads exist for vcl_pow
+    //double zoomfactor = vcl_pow(5.0,dx);
+    //this->token.fov = static_cast<float>(lastpos.fov * zoomfactor);
+
+    this->post_redraw();
+    return true;
+  }
+
+  // TRANSLATION
+  if (c_mouse_translate(button, modifier)) {
+    GLint vp[4];
+    glGetIntegerv(GL_VIEWPORT, vp); // ok
+    double width = (double)vp[2];
+    double height = (double)vp[3];
+
+    double dx = (beginx - x) / width;
+    double dy = (beginy - y) / height;
+
+    this->token.trans[0] = static_cast<float>(lastpos.trans[0] - dx * 20);
+    this->token.trans[1] = static_cast<float>(lastpos.trans[1] - dy * 20);
+
+    this->post_redraw();
+    return true;
+  }
+  return false;
+}
+
+bool boxm_ocl_draw_glbuffer_tableau::mouse_up(int x, int y, vgui_button button, vgui_modifier modifier)
+{
+  // SPINNING
+  if (c_mouse_rotate(button, modifier))
+  {
+#ifdef DEBUG
+    vcl_cerr << "vgui_viewer3D_tableau::mouse_up: left\n";
+#endif
+
+    GLdouble vp[4];
+    glGetDoublev(GL_VIEWPORT, vp); // ok
+    double width = vp[2];
+    double height = vp[3];
+
+    double wscale = 2.0 / width;
+    double hscale = 2.0 / height;
+    float delta_r[4];
+    trackball(delta_r,
+              static_cast<float>(wscale*beginx - 1), static_cast<float>(hscale*beginy - 1),
+              static_cast<float>(wscale*x - 1), static_cast<float>(hscale*y - 1));
+
+    //if (beginx != x && beginy != y)
+    //{
+    //  this->spinning = true;
+    //  double delay = event.secs_since(last);
+
+    //  delete spin_data;
+    //  spin_data = new vgui_viewer3D_tableau_spin;
+    //  spin_data->viewer = this;
+    //  spin_data->delay = delay;
+    //  for (int i=0; i<4; ++i)
+    //    spin_data->delta_r[i] = delta_r[i];
+
+    //  // Fl::add_timeout(delay,spin_callback,(void*)spin_data);
+
+    //  return true;
+    //}
+  }
+  return false;
 }
