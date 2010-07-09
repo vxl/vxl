@@ -29,6 +29,7 @@
 #include <vil/vil_image_resource.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_rgb.h>
+#include <vil/vil_convert.h>
 #include <vsol/vsol_box_2d_sptr.h>
 #include <brip/brip_roi_sptr.h>
 
