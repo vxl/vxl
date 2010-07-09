@@ -10,6 +10,7 @@ SET(sdet_pro_sources
     sdet_register.h             sdet_register.cxx
     processes/sdet_detect_edges_process.h
     processes/sdet_detect_edge_tangent_process.h
+    processes/sdet_detect_edge_tangent_interp_process.h
    )
 
 AUX_SOURCE_DIRECTORY(Templates sdet_pro_sources)
