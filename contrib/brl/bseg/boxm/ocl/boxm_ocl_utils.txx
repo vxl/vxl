@@ -132,16 +132,20 @@ void boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T> >* scene,
   
   /* compute total tree space to allocate = number of blocks + size of all existing trees */
   int total_blocks = block_num_small.x() * block_num_small.y() * block_num_small.z();
-  int total_tree_cells = 0;
+  int total_inner_cells = 0;
+  int total_leaf_cells = 0;
   boxm_block_iterator<tree_type> it(scene);
   for(it.begin(); !it.end(); it++) {
     vgl_point_3d<int> blk_ind = it.index();
     scene->load_block(blk_ind.x(), blk_ind.y(), blk_ind.z());
     block_type* block = scene->get_active_block();
     tree_type* tree = block->get_tree();
-    total_tree_cells += tree->all_cells().size();
+    total_inner_cells += tree->all_cells().size();
+    total_leaf_cells += tree->leaf_cells().size();
+    vcl_cout<<"# tree cells "<<tree->all_cells().size()<<vcl_endl;
   }
-  total_tree_cells += total_blocks;
+  int total_tree_cells = total_inner_cells;
+  vcl_cout<<"Total number of tree cells = "<<total_inner_cells<<vcl_endl;
   int buff_length = (int) (total_tree_cells/num_buffers);
   
   /* 1. Set up 3D array of blocks (small blocks), assuming all blocks are similarly sized */
@@ -163,11 +167,11 @@ void boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T> >* scene,
   vbl_array_2d<float16> data_buffers(num_buffers, buff_length, dat_init);
   
   /* 5. Go through each block and convert it to smaller blocks */
-  bool buffFull = false;
+  bool buffFull = false; 
   vnl_random random(9667566);
   boxm_block_iterator<tree_type> iter(scene); 
   for(iter.begin(); !iter.end(); iter++) {
-    //vcl_cout<<"Converting big block at "<<iter.index()<<vcl_endl;
+    vcl_cout<<"Converting big block at "<<iter.index()<<vcl_endl;
     vgl_point_3d<int> blk_ind = iter.index();
     scene->load_block(blk_ind.x(), blk_ind.y(), blk_ind.z());
     block_type* block = scene->get_active_block();
@@ -175,7 +179,8 @@ void boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T> >* scene,
         
     //cells at level 3 (4th level from the bottom) make up the new roots 
     vcl_vector<boct_tree_cell<short,T>*> blk_roots = tree->cells_at_level(3);
-    //vcl_cout<<"  number small blocks: "<<blk_roots.size()<<vcl_endl;
+    vcl_cout<<"  number small blocks: "<<blk_roots.size()<<vcl_endl;
+    int tot_alloc = 0, tot_child = 0;
     for(int blk_i=0; blk_i<blk_roots.size(); blk_i++) {
       
       //figure out which small_block i,j,k this root corresponds to
@@ -198,8 +203,10 @@ void boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T> >* scene,
       cell_array.push_back(arr_root); 
       vcl_vector<float16> data_array;
       data_array.push_back(dat_init);
-      boxm_ocl_convert<T>::copy_to_arrays(blk_roots[i], cell_array, data_array, 0);
-      //vcl_cout<<" with size: "<<cell_array.size()<<" (data size: "<<data_array.size()<<")";
+      boxm_ocl_convert<T>::copy_to_arrays(root, cell_array, data_array, 0);
+      tot_alloc += cell_array.size();
+      
+
       
       //randomly choose a buffer, and get the first free spot in memory (update blocks)
       int buffIndex = random.lrand32(0, num_buffers-1);
@@ -233,18 +240,21 @@ void boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T> >* scene,
       }
       else {
         buffFull = true;
-        vcl_cerr<<"Convert Scene:: Not enough free space in buffer["<<buffIndex
-                <<"] ("<<freeSpace<<" slots). Allocate more room!"<<vcl_endl;
+        //vcl_cerr<<"Convert Scene:: Not enough free space in buffer["<<buffIndex
+        //        <<"] ("<<freeSpace<<" slots). Allocate more room!"<<vcl_endl;
       }
+      cell_array.clear();
     }
-    if(buffFull) vcl_cout<<"boxm_ocl_utils::convert_scene: first pass buffer "<<blk_ind<<" filled buffer "<<vcl_endl;
+    vcl_cout<<"  allocated "<<tot_alloc<<" cells"<<vcl_endl;
+    if(buffFull) vcl_cout<<"boxm_ocl_utils::convert_scene: BLOCK @ "<<blk_ind<<" FILLED BUFFER "<<vcl_endl;
     buffFull = false;
   }
-  if(buffFull) vcl_cout<<"boxm_ocl_utils::convert_scene: tree buffer filled up"<<vcl_endl;
+  
+
 
   /* make a pass to make sure all small blocks were initialized */
   bool init_blocks = false;
-  vcl_cout<<"init blocks: ";
+  vcl_cout<<"init blocks: "<<vcl_endl;
   for(int i=0; i<blocks.get_row1_count(); i++) {
     for(int j=0; j<blocks.get_row2_count(); j++) {
       for(int k=0; k<blocks.get_row3_count(); k++) {
