@@ -614,9 +614,15 @@ UINT CDirEdit::OnGetDlgCode()
 
 // class vgui_dir_dialog
 vgui_dir_dialog::vgui_dir_dialog(LPCTSTR initial, LPCTSTR filter, CWnd* pParentWnd)
+#if WINVER >= 0x0600
     : CFileDialog(TRUE, NULL, NULL,
                   OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_PATHMUSTEXIST,
                   NULL, pParentWnd,0,0), // Set bVistaStyle to FALSE (last param)
+#elif
+    : CFileDialog(TRUE, NULL, NULL,
+                  OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_PATHMUSTEXIST,
+                  NULL, pParentWnd);
+#endif
       m_strPath(initial)
 {
     // Note: m_strFilter is a member variable so it doesn't disappear because
