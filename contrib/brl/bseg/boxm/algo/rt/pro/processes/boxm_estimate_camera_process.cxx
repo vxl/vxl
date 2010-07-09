@@ -108,7 +108,8 @@ bool boxm_estimate_camera_process(bprb_func_process& pro)
 
   double deg2rad = vnl_math::pi/180.0;
 
-  double theta_range = 12.0*deg2rad, theta_step = 0.05*deg2rad, phi_range = 12.0*deg2rad, phi_step = 0.05*deg2rad, rot_range = 10.0*deg2rad, rot_step = 1.0*deg2rad;
+  //: parameters are in degree
+  double theta_range = 12.0, theta_step = 0.05, phi_range = 12.0, phi_step = 0.05, rot_range = 10.0, rot_step = 1.0;
   int max_iter_rot_angle = 5, max_iter_cam_center = 50;
 
   pro.parameters()->get_value(theta_range_, theta_range);
@@ -131,6 +132,9 @@ bool boxm_estimate_camera_process(bprb_func_process& pro)
            << "max_iter_rot_angle: " << max_iter_rot_angle << '\n'
            << "max_iter_cam_center: " << max_iter_cam_center << '\n';
 #endif
+
+  //: change the parameters into radians
+  theta_range *= deg2rad; theta_step *= deg2rad; phi_range *= deg2rad; phi_step *= deg2rad; rot_range *= deg2rad; rot_step *= deg2rad;
 
   vil_image_view<float> *img_eei = new vil_image_view<float>(ni,nj,1);
   img_eei->fill(0.0f);
