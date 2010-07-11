@@ -9,7 +9,9 @@
 
 #include <bocl/bocl_cl.h>
 #include <bocl/bocl_utils.h>
-#include <boxm/ocl/boxm_render_image_manager.h>
+#include <boxm/ocl/boxm_ocl_scene.h>
+#include <boxm/ocl/boxm_render_ocl_scene_manager.h>
+
 #include <boxm/ocl/view/boxm_ocl_draw_glbuffer_tableau.h>
 #include <boxm/ocl/view/boxm_ocl_draw_glbuffer_tableau_sptr.h>
 
@@ -31,54 +33,11 @@
 #include <vgui/vgui_window.h>
 #include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_clear_tableau.h>
-cl_context_properties * set_gl_props()
-{
-    cl_platform_id platform_id[1];
-    cl_int status = clGetPlatformIDs (1, platform_id, NULL);
-    if (status!=CL_SUCCESS) {
-        vcl_cout<<error_to_string(status);
-        return 0;
-    }
-#if defined (__APPLE__)
-  CGLContextObj kCGLContext = CGLGetCurrentContext();
-  CGLShareGroupObj kCGLShareGroup = CGLGetShareGroup(kCGLContext);
-  cl_context_properties props[] =
-  {
-    CL_CONTEXT_PROPERTY_USE_CGL_SHAREGROUP_APPLE, (cl_context_properties)kCGLShareGroup,
-    0
-  };
-
-  return props;
-#else
-#ifdef UNIX
-  cl_context_properties props[] =
-  {
-    CL_GL_CONTEXT_KHR, (cl_context_properties)glXGetCurrentContext(),
-    CL_GLX_DISPLAY_KHR, (cl_context_properties)glXGetCurrentDisplay(),
-    CL_CONTEXT_PLATFORM, (cl_context_properties)cpPlatform,
-    0
-  };
-  return props;
-
-#else // Win32
-
-  cl_context_properties props[] =
-  {
-    CL_GL_CONTEXT_KHR, (cl_context_properties)wglGetCurrentContext(),
-    CL_WGL_HDC_KHR, (cl_context_properties)wglGetCurrentDC(),
-    CL_CONTEXT_PLATFORM, (cl_context_properties)platform_id[0],
-    0
-  };
-  return props;
-#endif
-#endif
-}
 
 int main(int argc, char ** argv)
 {
 
     vgui::init(argc, argv);
-    cl_context_properties * props=set_gl_props();
 
     vul_arg<vcl_string> camfile("-cam", "camera filename", "");
     vul_arg<vcl_string> scene_file("-scene", "scene filename", "");
@@ -88,7 +47,9 @@ int main(int argc, char ** argv)
     //// need this on some toolkit implementations to get the window up.
     vul_arg_parse(argc, argv);
 
-    boxm_scene_parser parser;
+    boxm_ocl_scene ocl_scene(scene_file());
+
+ /*   boxm_scene_parser parser;
     boxm_scene_base_sptr scene_ptr=new boxm_scene_base();
     scene_ptr->load_scene(scene_file(), parser);
     if (scene_ptr->appearence_model() == BOXM_APM_MOG_GREY) {
@@ -105,7 +66,7 @@ int main(int argc, char ** argv)
     }
     else {
         vcl_cout<<"type is not defined yet "<<vcl_endl;
-    }
+    }*/
 
 
     vcl_ifstream ifs(camfile().c_str());
@@ -129,7 +90,7 @@ int main(int argc, char ** argv)
         vcl_cout<< "Error: "<<glewGetErrorString(err)<<vcl_endl;
     }
     GLboolean bGLEW = glewIsSupported("GL_VERSION_2_0  GL_ARB_pixel_buffer_object");
-    glbuffer_tableau->init(scene_ptr,ni(),nj(),pcam);
+    glbuffer_tableau->init(&ocl_scene,ni(),nj(),pcam);
 
     return  vgui::run();
 

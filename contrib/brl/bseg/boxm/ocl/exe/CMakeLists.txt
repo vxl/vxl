@@ -28,6 +28,12 @@ IF(GLEW_FOUND)
 ENDIF(GLEW_FOUND)
 
 
+ADD_EXECUTABLE( boxm_opencl_render_ocl_scene_exe
+  boxm_opencl_render_ocl_scene_exe.cxx
+ )
+TARGET_LINK_LIBRARIES( boxm_opencl_render_ocl_scene_exe   boxm_ocl vil vpgl_algo  vul )
+
+
 
 
 
