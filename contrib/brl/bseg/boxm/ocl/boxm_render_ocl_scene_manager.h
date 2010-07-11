@@ -17,6 +17,10 @@
 
 class boxm_render_ocl_scene_manager : public bocl_manager<boxm_render_ocl_scene_manager >
 {
+    typedef vnl_vector_fixed<int, 4> int4;
+    typedef vnl_vector_fixed<float, 16> float16;
+    typedef vnl_vector_fixed<int, 2> int2;
+
  public:
 
 
@@ -39,6 +43,8 @@ class boxm_render_ocl_scene_manager : public bocl_manager<boxm_render_ocl_scene_
     cells_size_(0),
     cell_data_size_(0),
     output_img_(),
+    numbuffer_(0),
+    lenbuffer_(0),
     program_(0) {}
   ~boxm_render_ocl_scene_manager() {
     if (program_)
@@ -177,6 +183,8 @@ class boxm_render_ocl_scene_manager : public bocl_manager<boxm_render_ocl_scene_
   cl_uint  cell_data_size_;
 
 
+  cl_int numbuffer_;
+  cl_int lenbuffer_;
   //root level
   cl_uint root_level_;
 
@@ -218,6 +226,8 @@ class boxm_render_ocl_scene_manager : public bocl_manager<boxm_render_ocl_scene_
   cl_mem   scene_orig_buf_;
 
   cl_mem   root_level_buf_;
+  cl_mem   numbuffer_buf_;
+  cl_mem   lenbuffer_buf_;
 
   cl_mem   scene_dims_buf_;
   cl_mem   scene_origin_buf_;
