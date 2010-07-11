@@ -74,6 +74,10 @@ class boxm_ocl_scene
     //setters
     void set_path(vcl_string dir) { path_ = dir; }
     vcl_string path() { return path_; }
+    vbl_array_3d<int4> blocks_;
+    vbl_array_2d<int4> tree_buffers_;
+    vbl_array_1d<int2> mem_ptrs_;
+    vbl_array_2d<float16> data_buffers_;
 
   private:
 
@@ -96,10 +100,6 @@ class boxm_ocl_scene
     int num_tree_buffers_, tree_buff_length_;
     
     //pointers to each block, multiple tree buffers, and mem_ptrs for each tree_buffer
-    vbl_array_3d<int4> blocks_;
-    vbl_array_2d<int4> tree_buffers_;
-    vbl_array_1d<int2> mem_ptrs_;
-    vbl_array_2d<float16> data_buffers_;
 
     /* model xml information */
     boxm_scene_parser parser_;

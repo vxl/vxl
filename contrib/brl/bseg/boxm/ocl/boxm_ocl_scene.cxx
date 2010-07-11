@@ -273,16 +273,11 @@ void x_write(vcl_ostream &os, boxm_ocl_scene& scene, vcl_string name)
   vsl_basic_xml_element scene_elm(name);
   scene_elm.x_write_open(os);
 
-  //write appearance model
-  //vsl_basic_xml_element app_model(APP_MODEL_TAG);
-  //boxm_apm_type apm = boxm_apm_types::str_to_enum(info.app_model().data());
-  //app_model.add_attribute("type", boxm_apm_types::app_model_strings[apm]);
-  //app_model.x_write(os);
-  
+ 
   //write lvcs information 
   bgeo_lvcs lvcs = scene.lvcs();
   lvcs.x_write(os, LVCS_TAG);
-  x_write(os, scene.block_dim(), BLOCK_DIMENSIONS_TAG);
+  x_write(os, scene.origin(), LOCAL_ORIGIN_TAG);
 
   //write block numbers for x,y,z 
   vsl_basic_xml_element blocks(BLOCK_NUM_TAG);
@@ -294,13 +289,13 @@ void x_write(vcl_ostream &os, boxm_ocl_scene& scene, vcl_string name)
   blocks.x_write(os);
   
   //write block dimensions for each 
-  vsl_basic_xml_element bnum(BLOCK_NUM_TAG);
+  vsl_basic_xml_element bnum(BLOCK_DIMENSIONS_TAG);
   double x_dim, y_dim, z_dim;
   scene.block_dim(x_dim, y_dim, z_dim);
-  blocks.add_attribute("x", x_dim);
-  blocks.add_attribute("y", y_dim);
-  blocks.add_attribute("z", z_dim);
-  blocks.x_write(os);
+  bnum.add_attribute("x", x_dim);
+  bnum.add_attribute("y", y_dim);
+  bnum.add_attribute("z", z_dim);
+  bnum.x_write(os);
   
   //write scene path for (needs to know where blocks are)
   vcl_string path = scene.path();
