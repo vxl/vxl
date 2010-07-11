@@ -58,13 +58,13 @@ bool bwm_world::get_lvcs(bgeo_lvcs &lvcs)
 {
   vgl_point_3d<double> center;
 
-#if 0 // commented out
+
   // if lvcs is set get that
   if (lvcs_valid_) {
     lvcs = lvcs_;
     return true;
   }
-
+#if 0 // commented out
   // else, create from the world point
   else if (world_pt_valid_) {
     lvcs = bgeo_lvcs(world_pt_.x(), world_pt_.y(), world_pt_.z());
@@ -87,7 +87,8 @@ bool bwm_world::get_lvcs(bgeo_lvcs &lvcs)
   lvcs_dialog.field("Elevation:", elev);
   if (!lvcs_dialog.ask())
     return false;
-  lvcs = bgeo_lvcs(lat, lon, elev);
+  lvcs_ = bgeo_lvcs(lat, lon, elev);
+  lvcs_valid_ = true;
   return true;
 }
 

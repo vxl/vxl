@@ -1409,7 +1409,15 @@ void  bwm_observer_cam::position_vertex(bool show_as_geo)
     vcl_cerr << "Can't find selected vertex for geo_position!\n";
     return;
   }
+  bgeo_lvcs lvcs;
+  bwm_world::instance()->get_lvcs(lvcs);
+
+
   vsol_point_3d_sptr p3d = (*vit).second;
+  // convert point to local
+  double lx,ly,lz;
+  lvcs.global_to_local(p3d->x(), p3d->y(), p3d->z(), bgeo_lvcs::wgs84,lx, ly, lz);
+
   vgui_text_tableau_sptr tt = img_tab_->text_tab();
   if (!tt) return;
   tt->clear();
@@ -1419,8 +1427,8 @@ void  bwm_observer_cam::position_vertex(bool show_as_geo)
     str << vcl_fixed << vcl_setprecision(6)<< '(' << p3d->y()
         << ' '  << p3d->x() << vcl_setprecision(2)<< ' ' << p3d->z() << ')' << vcl_ends;
   else
-    str << vcl_fixed << vcl_setprecision(6)<< '(' << p3d->x()
-        << ' '  << p3d->y() << vcl_setprecision(2)<< ' ' << p3d->z() << ')' << vcl_ends;
+    str << vcl_fixed << vcl_setprecision(6)<< '(' << lx
+        << ' '  << ly << vcl_setprecision(2)<< ' ' << lz << ')' << vcl_ends;
   float x = static_cast<float>(u+2.0);
   float y = static_cast<float>(v-2.0);
   tt->add(x, y, str.str());
