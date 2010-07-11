@@ -6,6 +6,7 @@
 #include <vgui/vgui_drag_mixin.h>
 #include <vgui/vgui_event_condition.h>
 #include <boxm/ocl/view/boxm_ocl_draw_glbuffer_tableau_sptr.h>
+#include <boxm/ocl/boxm_ocl_scene.h>
 #include <boxm/boxm_scene_base.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <bocl/bocl_utils.h>
@@ -20,7 +21,7 @@ public:
 
     virtual bool handle( vgui_event const& e );
 
-    bool init(boxm_scene_base_sptr scene, unsigned ni, unsigned nj, vpgl_perspective_camera<double> * cam);
+    bool init(boxm_ocl_scene * scene, unsigned ni, unsigned nj, vpgl_perspective_camera<double> * cam);
     //;  set the GL buffer which needs to be displayed.
     void set_glbuffer(GLuint  pbuffer){pbuffer_=pbuffer;}
 
@@ -61,7 +62,7 @@ protected:
 
     bool render_frame();
     GLuint pbuffer_;
-    boxm_scene_base_sptr scene_;
+    boxm_ocl_scene * scene_;
     unsigned ni_;
     unsigned nj_;
     vpgl_perspective_camera<double> cam_;

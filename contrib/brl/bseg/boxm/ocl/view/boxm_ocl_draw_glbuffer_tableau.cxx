@@ -17,6 +17,8 @@
 #endif
 #include <boxm/ocl/view/boxm_ocl_draw_glbuffer_tableau.h>
 #include <boxm/ocl/boxm_render_image_manager.h>
+#include <boxm/ocl/boxm_render_ocl_scene_manager.h>
+
 #include <boxm/ocl/boxm_ocl_utils.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_calibration_matrix.h>
@@ -74,75 +76,77 @@ boxm_ocl_draw_glbuffer_tableau::~boxm_ocl_draw_glbuffer_tableau()
   
 }
 bool 
-boxm_ocl_draw_glbuffer_tableau::init(boxm_scene_base_sptr scene, unsigned ni, unsigned nj, vpgl_perspective_camera<double> * cam)
+boxm_ocl_draw_glbuffer_tableau::init(boxm_ocl_scene * scene, unsigned ni, unsigned nj, vpgl_perspective_camera<double> * cam)
 {
     ni_=ni;
     nj_=nj;
     default_cam_=(*cam);
     cam_=(*cam); //default cam
+    scene_=scene;
     vil_image_view<float> expected(ni_,nj_);
-    if(boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > >* s 
-        = dynamic_cast<boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> >>*> (scene.as_pointer()))
+
+    //if(boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > >* s 
+    //    = dynamic_cast<boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> >>*> (scene.as_pointer()))
+    //{
+    //    scene_=s;
+    //}
+    //if(boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > >* s 
+    //    = dynamic_cast<boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_SIMPLE_GREY> >>*> (scene.as_pointer()))
+    //{
+    //    scene_=s;
+    boxm_render_ocl_scene_manager* ray_mgr
+        = boxm_render_ocl_scene_manager::instance();
+    int status=0;
+    cl_platform_id platform_id[1];
+    status = clGetPlatformIDs (1, platform_id, NULL);
+    if (status!=CL_SUCCESS) {
+        vcl_cout<<error_to_string(status);
+        return 0;
+    }  
+    cl_context_properties props[] =
     {
-        scene_=s;
+        CL_GL_CONTEXT_KHR, (cl_context_properties)wglGetCurrentContext(),
+        CL_WGL_HDC_KHR, (cl_context_properties)wglGetCurrentDC(),
+        CL_CONTEXT_PLATFORM, (cl_context_properties)platform_id[0],
+        0
+    };
+    ray_mgr->context_ = clCreateContext(props, 1, &ray_mgr->devices()[0], NULL, NULL, &status);
+    int bundle_dim=8;  ray_mgr->set_bundle_ni(bundle_dim);  ray_mgr->set_bundle_nj(bundle_dim);
+
+    ray_mgr->init_ray_trace(scene_, &cam_, expected);
+    bool good=true;
+    good=good && ray_mgr->set_scene_data()
+        && ray_mgr->set_all_blocks() 
+        && ray_mgr->set_scene_data_buffers()
+        && ray_mgr->set_tree_buffers();
+
+    // run the raytracing
+    good=good && ray_mgr->set_persp_camera(cam)
+        && ray_mgr->set_persp_camera_buffers()
+        && ray_mgr->set_input_image()
+        && ray_mgr->set_input_image_buffers()
+        && ray_mgr->set_image_dims_buffers();
+    if (pbuffer_) {
+        // delete old buffer
+        clReleaseMemObject(ray_mgr->image_buf_);
+        glDeleteBuffers(1, &pbuffer_);
     }
-    if(boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > >* s 
-        = dynamic_cast<boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_SIMPLE_GREY> >>*> (scene.as_pointer()))
-    {
-        scene_=s;
-        boxm_render_image_manager<boxm_sample<BOXM_APM_SIMPLE_GREY> >* ray_mgr
-            = boxm_render_image_manager<boxm_sample<BOXM_APM_SIMPLE_GREY> >::instance();
-        int status=0;
-        cl_platform_id platform_id[1];
-        status = clGetPlatformIDs (1, platform_id, NULL);
-        if (status!=CL_SUCCESS) {
-            vcl_cout<<error_to_string(status);
-            return 0;
-        }  
-        cl_context_properties props[] =
-        {
-            CL_GL_CONTEXT_KHR, (cl_context_properties)wglGetCurrentContext(),
-            CL_WGL_HDC_KHR, (cl_context_properties)wglGetCurrentDC(),
-            CL_CONTEXT_PLATFORM, (cl_context_properties)platform_id[0],
-            0
-        };
-        ray_mgr->context_ = clCreateContext(props, 1, &ray_mgr->devices()[0], NULL, NULL, &status);
-        int bundle_dim=8;  ray_mgr->set_bundle_ni(bundle_dim);  ray_mgr->set_bundle_nj(bundle_dim);
-        
-        ray_mgr->init_ray_trace(s, &cam_, expected);
-        bool good=true;
-        good=good && ray_mgr->set_scene_data()
-                  && ray_mgr->set_all_blocks() 
-                  && ray_mgr->set_scene_data_buffers()
-                  && ray_mgr->set_tree_buffers();
-
-        // run the raytracing
-        good=good && ray_mgr->set_persp_camera(cam)
-                  && ray_mgr->set_persp_camera_buffers()
-                  && ray_mgr->set_input_image()
-                  && ray_mgr->set_input_image_buffers()
-                  && ray_mgr->set_image_dims_buffers();
-        if (pbuffer_) {
-            // delete old buffer
-            clReleaseMemObject(ray_mgr->image_buf_);
-            glDeleteBuffers(1, &pbuffer_);
-        }
 
 
 
-        glGenBuffers(1, &pbuffer_);
-        glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbuffer_);
-        glBufferData(GL_PIXEL_UNPACK_BUFFER, ray_mgr->wni() * ray_mgr->wnj() * sizeof(GLubyte) * 4, 0, GL_STREAM_DRAW);
-        glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
+    glGenBuffers(1, &pbuffer_);
+    glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbuffer_);
+    glBufferData(GL_PIXEL_UNPACK_BUFFER, ray_mgr->wni() * ray_mgr->wnj() * sizeof(GLubyte) * 4, 0, GL_STREAM_DRAW);
+    glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
 
-        //// create OpenCL buffer from GL PBO
-        ray_mgr->image_gl_buf_ = clCreateFromGLBuffer(ray_mgr->context(),CL_MEM_WRITE_ONLY, pbuffer_, &status);
-        vcl_cout<<error_to_string(status)<<vcl_endl;
-        ray_mgr->set_kernel();
-        ray_mgr->set_args();
-        ray_mgr->set_commandqueue();
-        ray_mgr->set_workspace();
-    }
+    //// create OpenCL buffer from GL PBO
+    ray_mgr->image_gl_buf_ = clCreateFromGLBuffer(ray_mgr->context(),CL_MEM_WRITE_ONLY, pbuffer_, &status);
+    vcl_cout<<error_to_string(status)<<vcl_endl;
+    ray_mgr->set_kernel();
+    ray_mgr->set_args();
+    ray_mgr->set_commandqueue();
+    ray_mgr->set_workspace();
+    //}
 
     return true;
 
@@ -192,27 +196,17 @@ boxm_ocl_draw_glbuffer_tableau::handle(vgui_event const &e)
 bool
 boxm_ocl_draw_glbuffer_tableau::render_frame()
 {
-    if(boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > >* scene 
-        = dynamic_cast<boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_SIMPLE_GREY> >>*> (scene_.as_pointer()))
-    {
 
+    boxm_render_ocl_scene_manager* ray_mgr = boxm_render_ocl_scene_manager::instance();
+    cl_int status= clEnqueueAcquireGLObjects(ray_mgr->command_queue_, 1, &ray_mgr->image_gl_buf_ , 0, 0, 0);
+    ray_mgr->set_persp_camera(&cam_);
+    ray_mgr->write_persp_camera_buffers();
+    ray_mgr->run();
 
-        boxm_render_image_manager<boxm_sample<BOXM_APM_SIMPLE_GREY> >* ray_mgr = boxm_render_image_manager<boxm_sample<BOXM_APM_SIMPLE_GREY> >::instance();
-        cl_int status= clEnqueueAcquireGLObjects(ray_mgr->command_queue_, 1, &ray_mgr->image_gl_buf_ , 0, 0, 0);
-        ray_mgr->set_persp_camera(&cam_);
-        ray_mgr->write_persp_camera_buffers();
-        ray_mgr->run();
+    status=clEnqueueReleaseGLObjects(ray_mgr->command_queue_, 1, &ray_mgr->image_gl_buf_ , 0, 0, 0);
+    clFinish( ray_mgr->command_queue_ );
 
-        status=clEnqueueReleaseGLObjects(ray_mgr->command_queue_, 1, &ray_mgr->image_gl_buf_ , 0, 0, 0);
-        clFinish( ray_mgr->command_queue_ );
-
-        return true;
-    }
-    else 
-    {
-        vcl_cout<<"Undefined tree type "<<vcl_endl;
-        return false;
-    }
+    return true;
 }
 
 
