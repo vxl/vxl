@@ -125,6 +125,16 @@ bool boxm_render_image_manager<T>::set_args()
   status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&image_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (input_image)"))
     return SDK_FAILURE;
+  
+
+      image_gl_buf_ = clCreateBuffer(this->context_,
+          CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+          wni_*wnj_*sizeof(cl_uint),
+          image_gl_,&status);
+      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (gl_image)"))
+          return SDK_FAILURE;
+
+
   status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&image_gl_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (gl_image)"))
     return SDK_FAILURE;
@@ -664,9 +674,9 @@ bool boxm_render_image_manager<T>::set_block_ptrs()
   scene_->block_num(scene_x_,scene_y_,scene_z_);
 
   int numblocks=scene_x_*scene_y_*scene_z_;
-  block_ptrs_=(cl_int*)boxm_ocl_utils::alloc_aligned(numblocks,sizeof(cl_int),16);
+  block_ptrs_=(cl_int*)boxm_ocl_utils::alloc_aligned(numblocks,sizeof(cl_int4),16);
 
-  for (int i=0;i<numblocks;i++)
+  for (int i=0;i<numblocks*4;i++)
     block_ptrs_[i]=0;
   return true;
 }
@@ -677,7 +687,7 @@ bool boxm_render_image_manager<T>::set_block_ptrs_buffers()
   cl_int status;
   block_ptrs_buf_ = clCreateBuffer(this->context_,
                                    CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
-                                   scene_x_*scene_y_*scene_z_*sizeof(cl_int),
+                                   scene_x_*scene_y_*scene_z_*sizeof(cl_int4),
                                    block_ptrs_,&status);
   return this->check_val(status,CL_SUCCESS,"clCreateBuffer (block_ptrs_) failed.")==1;
 }
@@ -1096,7 +1106,6 @@ bool boxm_render_image_manager<T>::set_input_image()
   }
   return true;
 }
-
 template<class T>
 bool boxm_render_image_manager<T>::clean_input_image()
 {

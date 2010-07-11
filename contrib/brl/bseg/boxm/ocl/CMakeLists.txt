@@ -17,7 +17,7 @@ IF(OPENCL_FOUND)
       boxm_refine_manager.h boxm_refine_manager.txx
       boxm_ocl_refine_scene.h
       boxm_ocl_utils.h boxm_ocl_utils.txx boxm_ocl_utils.cxx
-      boxm_ocl_render_expected.h
+      boxm_ocl_render_expected.h        boxm_ocl_render_expected.cxx
       boxm_stat_manager.h boxm_stat_manager.txx
       boxm_online_update_manager.h boxm_online_update_manager.cxx
       boxm_render_single_block_manager.h boxm_render_single_block_manager.cxx

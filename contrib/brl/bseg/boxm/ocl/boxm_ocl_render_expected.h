@@ -15,6 +15,7 @@
 #include <boxm/ocl/boxm_stack_ray_trace_manager.h>
 #include <boxm/ocl/boxm_ray_bundle_trace_manager.h>
 #include <boxm/ocl/boxm_render_image_manager.h>
+#include <boxm/ocl/boxm_render_ocl_scene_manager.h>
 #include <vcl_where_root_dir.h>
 #include <vcl_iostream.h>
 
@@ -247,7 +248,7 @@ void boxm_opencl_all_blocks_expected(boxm_scene<boct_tree<short, boxm_sample<APM
       expected(i,j) = *(results_p++); // expected intensity
       mask(i,j) = *(results_p++); // 1 - vis_inf
 
-      if(i==4 && j==400)
+      if(i==389 && j==159)
           vcl_cout<<"["<<img0(i,j)<<","<<img1(i,j)<<","<<expected(i,j)<<","<<mask(i,j)<<"]"<<vcl_endl;
     }
   }
@@ -259,6 +260,10 @@ void boxm_opencl_all_blocks_expected(boxm_scene<boct_tree<short, boxm_sample<APM
   vil_save(mask,"f:/apl/img3.tiff");
 #endif
 }
-
+void boxm_opencl_ocl_scene_expected(boxm_ocl_scene &scene,
+                                     vpgl_camera_double_sptr cam,
+                                     vil_image_view<float> &expected,
+                                     vil_image_view<float> & mask,
+                                     bool use_black_background = false);
 
 #endif
