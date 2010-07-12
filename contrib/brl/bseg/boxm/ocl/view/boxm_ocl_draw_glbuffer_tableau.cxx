@@ -2,6 +2,7 @@
     #if defined(__APPLE__) || defined(MACOSX)
         #include <OpenGL/OpenGL.h>
     #else
+        #include <GL/glew.h>
         #include <GL/glx.h>
     #endif
 #endif
@@ -11,9 +12,6 @@
   #define GL_SHARING_EXTENSION "cl_APPLE_gl_sharing"
 #else
   #define GL_SHARING_EXTENSION "cl_khr_gl_sharing"
-  // GLEW and GLUT includes
-  #include <GL/glew.h>
-  
 #endif
 #include <boxm/ocl/view/boxm_ocl_draw_glbuffer_tableau.h>
 #include <boxm/ocl/boxm_render_image_manager.h>
@@ -103,13 +101,24 @@ boxm_ocl_draw_glbuffer_tableau::init(boxm_ocl_scene * scene, unsigned ni, unsign
         vcl_cout<<error_to_string(status);
         return 0;
     }  
+
+#ifdef WIN32
     cl_context_properties props[] =
     {
-        CL_GL_CONTEXT_KHR, (cl_context_properties)wglGetCurrentContext(),
-        CL_WGL_HDC_KHR, (cl_context_properties)wglGetCurrentDC(),
-        CL_CONTEXT_PLATFORM, (cl_context_properties)platform_id[0],
+        CL_GL_CONTEXT_KHR, (cl_context_properties) glXGetCurrentContext(),
+        CL_WGL_HDC_KHR, (cl_context_properties) glXGetCurrentDC(),
+        CL_CONTEXT_PLATFORM, (cl_context_properties) platform_id[0],
         0
     };
+#else
+    cl_context_properties props[] = 
+    {
+        CL_GL_CONTEXT_KHR, (cl_context_properties) glXGetCurrentContext(),
+        CL_WGL_HDC_KHR, (cl_context_properties) glXGetCurrentDrawable(),
+        CL_CONTEXT_PLATFORM, (cl_context_properties) platform_id[0],
+        0
+    };
+#endif
     ray_mgr->context_ = clCreateContext(props, 1, &ray_mgr->devices()[0], NULL, NULL, &status);
     int bundle_dim=8;  ray_mgr->set_bundle_ni(bundle_dim);  ray_mgr->set_bundle_nj(bundle_dim);
 
