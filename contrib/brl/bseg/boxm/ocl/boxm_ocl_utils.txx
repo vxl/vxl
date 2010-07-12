@@ -129,6 +129,7 @@ void boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T> >* scene,
   int max_level = (int) scene->max_level(); 
   int sm_n =(int)( (float)vcl_pow((float)2, (float)(max_level-1))/(float)vcl_pow((float)2,(float)(SMALL_BLK_MAX_LEVEL-1))); 
   vgl_vector_3d<int> block_num_small(sm_n*x_num, sm_n*y_num, sm_n*z_num);
+  vgl_vector_3d<double> block_dim_small(block_dim.x()/sm_n, block_dim.y()/sm_n, block_dim.z()/sm_n);
   
   /* compute total tree space to allocate = number of blocks + size of all existing trees */
   int total_blocks = block_num_small.x() * block_num_small.y() * block_num_small.z();
@@ -304,7 +305,9 @@ void boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T> >* scene,
   }
   if(init_blocks) vcl_cout<<"initialized blocks "<<vcl_endl;
 
-  ocl_scene.init_scene(blocks, tree_buffers, data_buffers, mem_ptrs, lvcs, origin, block_dim);
+
+  
+  ocl_scene.init_scene(blocks, tree_buffers, data_buffers, mem_ptrs, lvcs, origin, block_dim_small);
 }
 
 
