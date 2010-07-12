@@ -11,22 +11,22 @@ uint rgbaFloatToInt(float4 rgba)
 
 __kernel
 void
-ray_trace_ocl_scene( __global int4     * scene_dims,  // level of the root.
-                      __global float4  * scene_origin,
-                      __global float4  * block_dims,
-                      __global int4     * block_ptrs,
-                      __global int     * root_level,
-                      __global int     * num_buffer,
-                      __global int     * len_buffer,
-                      __global int4    * tree_array,
-                      __global float8  * sample_array,
-                      __global float   * alpha_array,
-                      __global float16 * persp_cam, // camera orign and SVD of inverse of camera matrix
-                      __global uint4   * imgdims,   // dimensions of the image
-                      __local  float16 * local_copy_cam,
-                      __local  uint4   * local_copy_imgdims,
-                      __global float4  * in_image,
-                      __global uint    * gl_image)    // input image and store vis_inf and pre_inf
+ray_trace_ocl_scene(__global int4     * scene_dims,  // level of the root.
+                    __global float4  * scene_origin,
+                    __global float4  * block_dims,
+                    __global int4     * block_ptrs,
+                    __global int     * root_level,
+                    __global int     * num_buffer,
+                    __global int     * len_buffer,
+                    __global int4    * tree_array,
+                    __global float8  * sample_array,
+                    __global float   * alpha_array,
+                    __global float16 * persp_cam, // camera orign and SVD of inverse of camera matrix
+                    __global uint4   * imgdims,   // dimensions of the image
+                    __local  float16 * local_copy_cam,
+                    __local  uint4   * local_copy_imgdims,
+                    __global float4  * in_image,
+                    __global uint    * gl_image)    // input image and store vis_inf and pre_inf
 {
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
 
@@ -63,8 +63,7 @@ ray_trace_ocl_scene( __global int4     * scene_dims,  // level of the root.
   // check to see if the thread corresponds to an actual pixel as in some cases #of threads will be more than the pixels.
   if (i>=(*local_copy_imgdims).z && j>=(*local_copy_imgdims).w)
   {
-          gl_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)(0.0,0.0,0.0,0.0));
-
+    gl_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)(0.0,0.0,0.0,0.0));
     return;
   }
   float4 origin=(*scene_origin);
@@ -86,8 +85,7 @@ ray_trace_ocl_scene( __global int4     * scene_dims,  // level of the root.
   int hit=intersect_cell(ray_o, ray_d, cell_min, cell_max,&tnear, &tfar);
   if(!hit)
   {
-          gl_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)(0.0,0.0,0.0,0.0));
-
+      gl_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)(0.0,0.0,0.0,0.0));
       return;
   }
   entry_pt=ray_o + tnear*ray_d;
@@ -98,7 +96,6 @@ ray_trace_ocl_scene( __global int4     * scene_dims,  // level of the root.
   curr_block_index=curr_block_index+(curr_block_index==scenedims);
 
   int global_count=0;
-
 
   while (!(any(curr_block_index<(int4)0)|| any(curr_block_index>=(scenedims))))
   {
@@ -163,7 +160,6 @@ ray_trace_ocl_scene( __global int4     * scene_dims,  // level of the root.
       if (any(exit_pt>=(float4)1.0f)|| any(exit_pt<=(float4)0.0f))
         break;
 
-
       //// required exit location code
       short4 exit_loc_code = loc_code(exit_pt, rootlevel);
       curr_cell_ptr = traverse_force_woffset(tree_array, root_ptr, root,exit_loc_code, &curr_loc_code,&global_count,root_ptr);
@@ -188,44 +184,36 @@ ray_trace_ocl_scene( __global int4     * scene_dims,  // level of the root.
         // this is the first case
         if(tfar-tnear<blockdims.x/100)
         {
+           
             entry_pt=entry_pt + blockdims.x/2 *ray_d;
             curr_block_index=convert_int4((entry_pt-origin)/blockdims);
             curr_block_index.w=0;
         }
+
     }
     else
     {
-        exit_pt =ray_o + tfar *ray_d;
-        exit_face= cell_exit_face_safe(exit_pt,ray_d, cell_min, cell_max);
-        if (exit_face.x<0) // exit face not defined
-            break;
-        if (exit_face.w==0)
-            curr_block_index=curr_block_index-convert_int4(exit_face);
-        else
-            curr_block_index=curr_block_index+convert_int4(exit_face);
-
-        curr_block_index.w=0;
-        entry_pt=exit_pt;
-
-        //curr_block_index=convert_int4((ray_o + tfar *ray_d+(blockdims.x/100.0f)*ray_d-origin)/blockdims);
-        ////exit_pt =ray_o + tfar *ray_d;
-        ////exit_face= cell_exit_face_safe(exit_pt,ray_d, cell_min, cell_max);
-        ////if (exit_face.x<0) // exit face not defined
-        ////    break;
-        ////if (exit_face.w==0)
-        ////    curr_block_index=curr_block_index-convert_int4(exit_face);
-        ////else
-        ////    curr_block_index=curr_block_index+convert_int4(exit_face);
+        //exit_pt =ray_o + tfar *ray_d;
+        //exit_face= cell_exit_face_safe(exit_pt,ray_d, cell_min, cell_max);
+        //if (exit_face.x<0) // exit face not defined
+        //    break;
+        //if (exit_face.w==0)
+        //    curr_block_index=curr_block_index-convert_int4(exit_face);
+        //else
+        //    curr_block_index=curr_block_index+convert_int4(exit_face);
 
         //curr_block_index.w=0;
-        //entry_pt=ray_o + tfar *ray_d;
+        //entry_pt=exit_pt;
+
+        curr_block_index=convert_int4(floor((ray_o + tfar *ray_d+(blockdims.x/20.0f)*ray_d-origin)/blockdims));
+        curr_block_index.w=0;
+        entry_pt=ray_o + tfar *ray_d;
     }
     count++;
 
   }
   data_return.z+=(1-data_return.w)*0.5f;
   gl_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)data_return.z);
-
-  in_image[j*get_global_size(0)+i]=(float4)data_return;
+  in_image[j*get_global_size(0)+i]=(float4)count;
 
 }
