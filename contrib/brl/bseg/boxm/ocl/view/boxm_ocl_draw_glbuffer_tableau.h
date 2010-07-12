@@ -71,8 +71,7 @@ protected:
 //: Create a smart-pointer to a boxm_ocl_draw_glbuffer_tableau tableau.
 struct boxm_ocl_draw_glbuffer_tableau_new : public boxm_ocl_draw_glbuffer_tableau_sptr
 {
-
   //: Constructor - create an empty vgui_easy3D_tableau.
-  boxm_ocl_draw_glbuffer_tableau_new() : boxm_ocl_draw_glbuffer_tableau_sptr( new boxm_ocl_draw_glbuffer_tableau ) { }
+  boxm_ocl_draw_glbuffer_tableau_new() : boxm_ocl_draw_glbuffer_tableau_sptr( new   boxm_ocl_draw_glbuffer_tableau ) { }
 };
 #endif // boxm_ocl_draw_glbuffer_tableau

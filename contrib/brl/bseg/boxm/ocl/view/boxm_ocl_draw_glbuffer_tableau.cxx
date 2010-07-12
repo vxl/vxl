@@ -26,27 +26,12 @@
     #include <windows.h>
 #endif
 
-void
-boxm_ocl_draw_glbuffer_tableau::setup_gl_matrices()
-{
-      GLint vp[4]; // x,y,w,h
-      glGetIntegerv(GL_VIEWPORT, vp);
-      glViewport(0, 0, vp[2], vp[3]);
-
-      glMatrixMode(GL_MODELVIEW);
-      glLoadIdentity();
-
-      glMatrixMode(GL_PROJECTION);
-      glLoadIdentity();
-      glOrtho(0.0, 1.0, 0.0, 1.0, 0.0, 1.0);
-
-}
+//: Constructor 
 boxm_ocl_draw_glbuffer_tableau::boxm_ocl_draw_glbuffer_tableau():
   c_mouse_rotate(vgui_LEFT),
   c_mouse_translate(vgui_RIGHT),
   c_mouse_zoom(vgui_MIDDLE),
   default_cam_(),cam_()
-
 {
     pbuffer_=0;
     ni_=640;
@@ -60,38 +45,25 @@ boxm_ocl_draw_glbuffer_tableau::boxm_ocl_draw_glbuffer_tableau():
     token.trans[2] = -10;
 
     home = token;
+}
 
-    //scene_=0;
-    GLenum err = glewInit();
-    if (GLEW_OK != err)
-    {
-        /* Problem: glewInit failed, something is seriously wrong. */
-        vcl_cout<< "Error: "<<glewGetErrorString(err)<<vcl_endl;
-    }
-}
 boxm_ocl_draw_glbuffer_tableau::~boxm_ocl_draw_glbuffer_tableau()
+{ }
+
+//: initialize tableau properties
+bool boxm_ocl_draw_glbuffer_tableau::init(boxm_ocl_scene * scene, 
+                          unsigned ni, unsigned nj, 
+                          vpgl_perspective_camera<double> * cam)
 {
-  
-}
-bool 
-boxm_ocl_draw_glbuffer_tableau::init(boxm_ocl_scene * scene, unsigned ni, unsigned nj, vpgl_perspective_camera<double> * cam)
-{
+    //set image dimensions, camera and scene 
     ni_=ni;
     nj_=nj;
     default_cam_=(*cam);
     cam_=(*cam); //default cam
     scene_=scene;
     vil_image_view<float> expected(ni_,nj_);
-
-    //if(boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > >* s 
-    //    = dynamic_cast<boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> >>*> (scene.as_pointer()))
-    //{
-    //    scene_=s;
-    //}
-    //if(boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > >* s 
-    //    = dynamic_cast<boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_SIMPLE_GREY> >>*> (scene.as_pointer()))
-    //{
-    //    scene_=s;
+  
+    //initialize the render manager     
     boxm_render_ocl_scene_manager* ray_mgr
         = boxm_render_ocl_scene_manager::instance();
     int status=0;
@@ -101,26 +73,28 @@ boxm_ocl_draw_glbuffer_tableau::init(boxm_ocl_scene * scene, unsigned ni, unsign
         vcl_cout<<error_to_string(status);
         return 0;
     }  
-
+    
 #ifdef WIN32
     cl_context_properties props[] =
     {
-        CL_GL_CONTEXT_KHR, (cl_context_properties) glXGetCurrentContext(),
-        CL_WGL_HDC_KHR, (cl_context_properties) glXGetCurrentDC(),
+        CL_GL_CONTEXT_KHR, (cl_context_properties) wglGetCurrentContext(),
+        CL_WGL_HDC_KHR, (cl_context_properties) wglGetCurrentDC(),
         CL_CONTEXT_PLATFORM, (cl_context_properties) platform_id[0],
         0
     };
 #else
     cl_context_properties props[] = 
     {
-        CL_GL_CONTEXT_KHR, (cl_context_properties) glXGetCurrentContext(),
-        CL_WGL_HDC_KHR, (cl_context_properties) glXGetCurrentDrawable(),
-        CL_CONTEXT_PLATFORM, (cl_context_properties) platform_id[0],
+        CL_GL_CONTEXT_KHR, (cl_context_properties)glXGetCurrentContext(), 
+        CL_GLX_DISPLAY_KHR, (cl_context_properties)glXGetCurrentDisplay(), 
+        CL_CONTEXT_PLATFORM, (cl_context_properties) platform_id[0], 
         0
     };
 #endif
     ray_mgr->context_ = clCreateContext(props, 1, &ray_mgr->devices()[0], NULL, NULL, &status);
-    int bundle_dim=8;  ray_mgr->set_bundle_ni(bundle_dim);  ray_mgr->set_bundle_nj(bundle_dim);
+    int bundle_dim=8;  
+    ray_mgr->set_bundle_ni(bundle_dim);  
+    ray_mgr->set_bundle_nj(bundle_dim);
 
     ray_mgr->init_ray_trace(scene_, &cam_, expected);
     bool good=true;
@@ -141,37 +115,47 @@ boxm_ocl_draw_glbuffer_tableau::init(boxm_ocl_scene * scene, unsigned ni, unsign
         glDeleteBuffers(1, &pbuffer_);
     }
 
-
-
     glGenBuffers(1, &pbuffer_);
     glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbuffer_);
     glBufferData(GL_PIXEL_UNPACK_BUFFER, ray_mgr->wni() * ray_mgr->wnj() * sizeof(GLubyte) * 4, 0, GL_STREAM_DRAW);
     glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
 
     //// create OpenCL buffer from GL PBO
-    ray_mgr->image_gl_buf_ = clCreateFromGLBuffer(ray_mgr->context(),CL_MEM_WRITE_ONLY, pbuffer_, &status);
-    vcl_cout<<error_to_string(status)<<vcl_endl;
+    ray_mgr->image_gl_buf_ = clCreateFromGLBuffer(ray_mgr->context(),
+                                                  CL_MEM_WRITE_ONLY, 
+                                                  pbuffer_, 
+                                                  &status);
     ray_mgr->set_kernel();
     ray_mgr->set_args();
     ray_mgr->set_commandqueue();
     ray_mgr->set_workspace();
-    //}
 
     return true;
-
 }
-bool
-boxm_ocl_draw_glbuffer_tableau::handle(vgui_event const &e)
-{
 
+void boxm_ocl_draw_glbuffer_tableau::setup_gl_matrices()
+{
+      GLint vp[4]; // x,y,w,h
+      glGetIntegerv(GL_VIEWPORT, vp);
+      glViewport(0, 0, vp[2], vp[3]);
+
+      glMatrixMode(GL_MODELVIEW);
+      glLoadIdentity();
+
+      glMatrixMode(GL_PROJECTION);
+      glLoadIdentity();
+      glOrtho(0.0, 1.0, 0.0, 1.0, 0.0, 1.0);
+}
+
+//: Handles tableau events (drawing and keys) 
+bool boxm_ocl_draw_glbuffer_tableau::handle(vgui_event const &e)
+{
   if (e.type == vgui_DRAW)
   {
-
       vcl_cout<<"Quat ["<<token.quat[0]<<","<<token.quat[1]<<","<<token.quat[2]<<","<<token.quat[3]<<"]"<<vcl_endl;
       //vcl_cout<<"Scale "<<token.scale<<vcl_endl;
       vcl_cout<<"trans ["<<token.trans[0]<<","<<token.trans[1]<<","<<token.trans[2]<<"]"<<vcl_endl;
       vcl_cout<<"Fov "<<token.fov<<vcl_endl;
-
 
       this->render_frame();
       this->setup_gl_matrices();
@@ -189,7 +173,16 @@ boxm_ocl_draw_glbuffer_tableau::handle(vgui_event const &e)
       this->setup_gl_matrices();
       this->post_redraw();
   }
-  
+  if (e.type == vgui_KEY_PRESS && e.key == vgui_key_CTRL('r')) 
+  {
+    vcl_cout<<"resetting to initial camera view"<<vcl_endl;
+    cam_.set_camera_center(default_cam_.get_camera_center());
+    cam_.set_rotation(default_cam_.get_rotation());
+    token = this->home;
+    lastpos = this->home;
+    this->post_redraw();
+  }
+
   event = e;
   if (vgui_drag_mixin::handle(e))
       return true;
@@ -197,8 +190,7 @@ boxm_ocl_draw_glbuffer_tableau::handle(vgui_event const &e)
   if (vgui_tableau::handle(e))
     return true;
 
-
-   return false;
+  return false;
 }
 
 
@@ -208,6 +200,7 @@ boxm_ocl_draw_glbuffer_tableau::render_frame()
 
     boxm_render_ocl_scene_manager* ray_mgr = boxm_render_ocl_scene_manager::instance();
     cl_int status= clEnqueueAcquireGLObjects(ray_mgr->command_queue_, 1, &ray_mgr->image_gl_buf_ , 0, 0, 0);
+    vcl_cout<<"render frame status: "<<status<<vcl_endl;
     ray_mgr->set_persp_camera(&cam_);
     ray_mgr->write_persp_camera_buffers();
     ray_mgr->run();
@@ -220,7 +213,7 @@ boxm_ocl_draw_glbuffer_tableau::render_frame()
 
 
 bool boxm_ocl_draw_glbuffer_tableau::mouse_down(int x, int y, vgui_button /*button*/, vgui_modifier /*modifier*/)
-{
+{  
   if (c_mouse_rotate(event) || c_mouse_translate(event) || c_mouse_zoom(event)) {
     beginx = x;
     beginy = y;
@@ -228,7 +221,6 @@ bool boxm_ocl_draw_glbuffer_tableau::mouse_down(int x, int y, vgui_button /*butt
     last = event;
     return true;
   }
-
   return false;
 }
 
@@ -334,22 +326,6 @@ bool boxm_ocl_draw_glbuffer_tableau::mouse_up(int x, int y, vgui_button button, 
               static_cast<float>(wscale*beginx - 1), static_cast<float>(hscale*beginy - 1),
               static_cast<float>(wscale*x - 1), static_cast<float>(hscale*y - 1));
 
-    //if (beginx != x && beginy != y)
-    //{
-    //  this->spinning = true;
-    //  double delay = event.secs_since(last);
-
-    //  delete spin_data;
-    //  spin_data = new vgui_viewer3D_tableau_spin;
-    //  spin_data->viewer = this;
-    //  spin_data->delay = delay;
-    //  for (int i=0; i<4; ++i)
-    //    spin_data->delta_r[i] = delta_r[i];
-
-    //  // Fl::add_timeout(delay,spin_callback,(void*)spin_data);
-
-    //  return true;
-    //}
   }
   return false;
 }
