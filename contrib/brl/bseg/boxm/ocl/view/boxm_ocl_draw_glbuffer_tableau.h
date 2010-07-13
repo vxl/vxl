@@ -1,6 +1,11 @@
+// This is boxm/ocl/view/boxm_ocl_draw_glbuffer_tableau.h
 #ifndef boxm_ocl_draw_glbuffer_tableau_h
 #define boxm_ocl_draw_glbuffer_tableau_h
-
+//:
+// \file
+// \brief A tableau to view octree models in real time
+// \author Vishal Jain, Andrew Miller
+// \date July 13, 2010
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_drag_mixin.h>
@@ -11,7 +16,7 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <bocl/bocl_utils.h>
 
-class boxm_ocl_draw_glbuffer_tableau:public vgui_tableau, public vgui_drag_mixin
+class boxm_ocl_draw_glbuffer_tableau: public vgui_tableau, public vgui_drag_mixin
 {
 
 public:
@@ -67,6 +72,7 @@ protected:
     unsigned nj_;
     vpgl_perspective_camera<double> cam_;
     vpgl_perspective_camera<double> default_cam_;
+    vgl_homg_point_3d<double> stare_point_;
 };
 //: Create a smart-pointer to a boxm_ocl_draw_glbuffer_tableau tableau.
 struct boxm_ocl_draw_glbuffer_tableau_new : public boxm_ocl_draw_glbuffer_tableau_sptr

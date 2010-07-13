@@ -21,6 +21,7 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_calibration_matrix.h>
 #include <vgui/internals/trackball.h>
+#include <vgl/vgl_distance.h>
 
 #if defined(WIN32)
     #include <windows.h>
@@ -39,14 +40,15 @@ boxm_ocl_draw_glbuffer_tableau::boxm_ocl_draw_glbuffer_tableau():
 
     trackball(token.quat , 0.0, 0.0, 0.0, 0.0);
     token.scale = 1.0;
-
     token.trans[0] = 0;
     token.trans[1] = 0;
     token.trans[2] = -10;
-
     home = token;
+   
+    stare_point_ = vgl_homg_point_3d<double>(0.0,0.0,0.0);
 }
 
+//: Destructor 
 boxm_ocl_draw_glbuffer_tableau::~boxm_ocl_draw_glbuffer_tableau()
 { }
 
@@ -55,84 +57,89 @@ bool boxm_ocl_draw_glbuffer_tableau::init(boxm_ocl_scene * scene,
                           unsigned ni, unsigned nj, 
                           vpgl_perspective_camera<double> * cam)
 {
-    //set image dimensions, camera and scene 
-    ni_=ni;
-    nj_=nj;
-    default_cam_=(*cam);
-    cam_=(*cam); //default cam
-    scene_=scene;
-    vil_image_view<float> expected(ni_,nj_);
+  //set image dimensions, camera and scene 
+  ni_=ni;
+  nj_=nj;
+  default_cam_=(*cam);
+  cam_=(*cam); //default cam
+  scene_=scene;
+  vil_image_view<float> expected(ni_,nj_);
+
+  //initialize the render manager     
+  boxm_render_ocl_scene_manager* ray_mgr
+      = boxm_render_ocl_scene_manager::instance();
+  int status=0;
+  cl_platform_id platform_id[1];
+  status = clGetPlatformIDs (1, platform_id, NULL);
+  if (status!=CL_SUCCESS) {
+      vcl_cout<<error_to_string(status);
+      return 0;
+  }  
   
-    //initialize the render manager     
-    boxm_render_ocl_scene_manager* ray_mgr
-        = boxm_render_ocl_scene_manager::instance();
-    int status=0;
-    cl_platform_id platform_id[1];
-    status = clGetPlatformIDs (1, platform_id, NULL);
-    if (status!=CL_SUCCESS) {
-        vcl_cout<<error_to_string(status);
-        return 0;
-    }  
-    
 #ifdef WIN32
-    cl_context_properties props[] =
-    {
-        CL_GL_CONTEXT_KHR, (cl_context_properties) wglGetCurrentContext(),
-        CL_WGL_HDC_KHR, (cl_context_properties) wglGetCurrentDC(),
-        CL_CONTEXT_PLATFORM, (cl_context_properties) platform_id[0],
-        0
-    };
+  cl_context_properties props[] =
+  {
+      CL_GL_CONTEXT_KHR, (cl_context_properties) wglGetCurrentContext(),
+      CL_WGL_HDC_KHR, (cl_context_properties) wglGetCurrentDC(),
+      CL_CONTEXT_PLATFORM, (cl_context_properties) platform_id[0],
+      0
+  };
 #else
-    cl_context_properties props[] = 
-    {
-        CL_GL_CONTEXT_KHR, (cl_context_properties)glXGetCurrentContext(), 
-        CL_GLX_DISPLAY_KHR, (cl_context_properties)glXGetCurrentDisplay(), 
-        CL_CONTEXT_PLATFORM, (cl_context_properties) platform_id[0], 
-        0
-    };
+  cl_context_properties props[] = 
+  {
+      CL_GL_CONTEXT_KHR, (cl_context_properties)glXGetCurrentContext(), 
+      CL_GLX_DISPLAY_KHR, (cl_context_properties)glXGetCurrentDisplay(), 
+      CL_CONTEXT_PLATFORM, (cl_context_properties) platform_id[0], 
+      0
+  };
 #endif
-    ray_mgr->context_ = clCreateContext(props, 1, &ray_mgr->devices()[0], NULL, NULL, &status);
-    int bundle_dim=8;  
-    ray_mgr->set_bundle_ni(bundle_dim);  
-    ray_mgr->set_bundle_nj(bundle_dim);
 
-    ray_mgr->init_ray_trace(scene_, &cam_, expected);
-    bool good=true;
-    good=good && ray_mgr->set_scene_data()
-        && ray_mgr->set_all_blocks() 
-        && ray_mgr->set_scene_data_buffers()
-        && ray_mgr->set_tree_buffers();
+  //create OpenCL context with display properties determined above 
+  ray_mgr->context_ = clCreateContext(props, 1, &ray_mgr->devices()[0], NULL, NULL, &status);
 
-    // run the raytracing
-    good=good && ray_mgr->set_persp_camera(cam)
-        && ray_mgr->set_persp_camera_buffers()
-        && ray_mgr->set_input_image()
-        && ray_mgr->set_input_image_buffers()
-        && ray_mgr->set_image_dims_buffers();
-    if (pbuffer_) {
-        // delete old buffer
-        clReleaseMemObject(ray_mgr->image_buf_);
-        glDeleteBuffers(1, &pbuffer_);
-    }
+  ///initialize ray trace using the input camera  
+  int bundle_dim = 8;  
+  ray_mgr->set_bundle_ni(bundle_dim);  
+  ray_mgr->set_bundle_nj(bundle_dim);
+  ray_mgr->init_ray_trace(scene_, &cam_, expected);
+  bool good=true;
+  good = good && ray_mgr->set_scene_data()
+      && ray_mgr->set_all_blocks() 
+      && ray_mgr->set_scene_data_buffers()
+      && ray_mgr->set_tree_buffers();
 
-    glGenBuffers(1, &pbuffer_);
-    glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbuffer_);
-    glBufferData(GL_PIXEL_UNPACK_BUFFER, ray_mgr->wni() * ray_mgr->wnj() * sizeof(GLubyte) * 4, 0, GL_STREAM_DRAW);
-    glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
+  // run the raytracing
+  good = good && ray_mgr->set_persp_camera(cam)
+      && ray_mgr->set_persp_camera_buffers()
+      && ray_mgr->set_input_image()
+      && ray_mgr->set_input_image_buffers()
+      && ray_mgr->set_image_dims_buffers();
+      
+  // delete old buffer
+  if (pbuffer_) {
+      clReleaseMemObject(ray_mgr->image_buf_);
+      glDeleteBuffers(1, &pbuffer_);
+  }
 
-    //// create OpenCL buffer from GL PBO
-    ray_mgr->image_gl_buf_ = clCreateFromGLBuffer(ray_mgr->context(),
-                                                  CL_MEM_WRITE_ONLY, 
-                                                  pbuffer_, 
-                                                  &status);
-    ray_mgr->set_kernel();
-    ray_mgr->set_args();
-    ray_mgr->set_commandqueue();
-    ray_mgr->set_workspace();
+  //generate glBuffer, and bind to ray_mgr->image_gl_buf_
+  glGenBuffers(1, &pbuffer_);
+  glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbuffer_);
+  glBufferData(GL_PIXEL_UNPACK_BUFFER, ray_mgr->wni() * ray_mgr->wnj() * sizeof(GLubyte) * 4, 0, GL_STREAM_DRAW);
+  glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
 
-    return true;
+  //create OpenCL buffer from GL PBO, and set kernel and arguments
+  ray_mgr->image_gl_buf_ = clCreateFromGLBuffer(ray_mgr->context(),
+                                                CL_MEM_WRITE_ONLY, 
+                                                pbuffer_, 
+                                                &status);
+  ray_mgr->set_kernel();
+  ray_mgr->set_args();
+  ray_mgr->set_commandqueue();
+  ray_mgr->set_workspace();
+  return true;
 }
 
+//: sets up viewport and GL Modes 
 void boxm_ocl_draw_glbuffer_tableau::setup_gl_matrices()
 {
       GLint vp[4]; // x,y,w,h
@@ -150,13 +157,16 @@ void boxm_ocl_draw_glbuffer_tableau::setup_gl_matrices()
 //: Handles tableau events (drawing and keys) 
 bool boxm_ocl_draw_glbuffer_tableau::handle(vgui_event const &e)
 {
+  //draw handler - called on post_draw()
   if (e.type == vgui_DRAW)
   {
-      vcl_cout<<"Quat ["<<token.quat[0]<<","<<token.quat[1]<<","<<token.quat[2]<<","<<token.quat[3]<<"]"<<vcl_endl;
+      //vcl_cout<<"Quat ["<<token.quat[0]<<","<<token.quat[1]<<","<<token.quat[2]<<","<<token.quat[3]<<"]"<<vcl_endl;
       //vcl_cout<<"Scale "<<token.scale<<vcl_endl;
-      vcl_cout<<"trans ["<<token.trans[0]<<","<<token.trans[1]<<","<<token.trans[2]<<"]"<<vcl_endl;
-      vcl_cout<<"Fov "<<token.fov<<vcl_endl;
-
+      //vcl_cout<<"trans ["<<token.trans[0]<<","<<token.trans[1]<<","<<token.trans[2]<<"]"<<vcl_endl;
+      //vcl_cout<<"Fov "<<token.fov<<vcl_endl;
+      vcl_cout<<"Cam center: "<<cam_.get_camera_center()<<vcl_endl
+              <<"stare point: "<<stare_point_<<vcl_endl;
+      vcl_cout<<cam_<<vcl_endl;
       this->render_frame();
       this->setup_gl_matrices();
       glClear(GL_COLOR_BUFFER_BIT);
@@ -182,10 +192,9 @@ bool boxm_ocl_draw_glbuffer_tableau::handle(vgui_event const &e)
     lastpos = this->home;
     this->post_redraw();
   }
-
   event = e;
   if (vgui_drag_mixin::handle(e))
-      return true;
+    return true;
 
   if (vgui_tableau::handle(e))
     return true;
@@ -193,25 +202,21 @@ bool boxm_ocl_draw_glbuffer_tableau::handle(vgui_event const &e)
   return false;
 }
 
-
-bool
-boxm_ocl_draw_glbuffer_tableau::render_frame()
+//: calls on ray manager to render frame into the pbuffer_ 
+bool boxm_ocl_draw_glbuffer_tableau::render_frame()
 {
-
     boxm_render_ocl_scene_manager* ray_mgr = boxm_render_ocl_scene_manager::instance();
-    cl_int status= clEnqueueAcquireGLObjects(ray_mgr->command_queue_, 1, &ray_mgr->image_gl_buf_ , 0, 0, 0);
-    vcl_cout<<"render frame status: "<<status<<vcl_endl;
+    cl_int status = clEnqueueAcquireGLObjects(ray_mgr->command_queue_, 1, 
+                                             &ray_mgr->image_gl_buf_ , 0, 0, 0);
     ray_mgr->set_persp_camera(&cam_);
     ray_mgr->write_persp_camera_buffers();
     ray_mgr->run();
-
-    status=clEnqueueReleaseGLObjects(ray_mgr->command_queue_, 1, &ray_mgr->image_gl_buf_ , 0, 0, 0);
+    status = clEnqueueReleaseGLObjects(ray_mgr->command_queue_, 1, &ray_mgr->image_gl_buf_ , 0, 0, 0);
     clFinish( ray_mgr->command_queue_ );
-
     return true;
 }
 
-
+//: called on all mouse down events on tableau 
 bool boxm_ocl_draw_glbuffer_tableau::mouse_down(int x, int y, vgui_button /*button*/, vgui_modifier /*modifier*/)
 {  
   if (c_mouse_rotate(event) || c_mouse_translate(event) || c_mouse_zoom(event)) {
@@ -224,6 +229,7 @@ bool boxm_ocl_draw_glbuffer_tableau::mouse_down(int x, int y, vgui_button /*butt
   return false;
 }
 
+//: called on mouse movement while mousedown is true
 bool boxm_ocl_draw_glbuffer_tableau::mouse_drag(int x, int y, vgui_button button, vgui_modifier modifier)
 {
   // SPINNING
@@ -238,19 +244,26 @@ bool boxm_ocl_draw_glbuffer_tableau::mouse_drag(int x, int y, vgui_button button
     float width  = (float)vp[2];
     float height = (float)vp[3];
 
-    float wscale = 2.0f / width;
-    float hscale = 2.0f / height;
-    float delta_r[4];
-    trackball(delta_r,
-              (wscale*beginx - 1)/2.0, (hscale*beginy - 1)/2.0,
-              (wscale*x - 1)/2.0, (hscale*y - 1)/2.0);
-    add_quats(delta_r, lastpos.quat, this->token.quat);
-
-    prevx = x;
-    prevx = y;
-    vnl_quaternion<double> q(token.quat[0],token.quat[1],token.quat[2],token.quat[3]);
-    vgl_rotation_3d<double> r(q*default_cam_.get_rotation().as_quaternion());
-    cam_.set_rotation(r);
+    // get mouse deltas 
+    double dx = (beginx - x) / width;
+    double dy = (beginy - y) / height;
+      
+    //cam location in spherical coordinates (this should be relative to the stare point
+    vgl_point_3d<double> cam_center = cam_.get_camera_center();
+    vgl_point_3d<double> origin(0.0f,0.0f,0.0f);
+    double rad = vgl_distance<double>(cam_center, origin);
+    double theta = vcl_acos(cam_center.z()/rad);
+    double phi = vcl_atan2(cam_center.y(), cam_center.x());
+    
+    //update theta by a function of dy 
+    double angleScale = .01;
+    double newTheta = theta - dy * angleScale;
+    double newPhi = phi + dx * angleScale;
+    vgl_point_3d<double> newCenter(rad * vcl_sin(newTheta) * vcl_cos(newPhi), 
+                                   rad * vcl_sin(newTheta) * vcl_sin(newPhi),
+                                   rad * vcl_cos(newTheta));
+    cam_.set_camera_center(newCenter);
+    cam_.look_at(stare_point_);      
 
     this->post_redraw();
     return true;
@@ -271,16 +284,15 @@ bool boxm_ocl_draw_glbuffer_tableau::mouse_drag(int x, int y, vgui_button button
     double dx = (beginx - x) / width;
     double dy = (beginy - y) / height;
 
+    //dy determines change in theta
+    
+
     // changed to vcl_pow(5,dy) to vcl_pow(5.0,dy)
     // the first version is ambiguous when overloads exist for vcl_pow
     double scalefactor = vcl_pow(5.0, dy);
     this->token.scale = static_cast<float>(/*lastpos.scale* scalefactor */ dy/10.0f);
     cam_.set_camera_center(cam_.get_camera_center()+token.scale*cam_.principal_axis());
 
-    // changed to vcl_pow(5,dy) to vcl_pow(5.0,dy)
-    // the first version is ambiguous when overloads exist for vcl_pow
-    //double zoomfactor = vcl_pow(5.0,dx);
-    //this->token.fov = static_cast<float>(lastpos.fov * zoomfactor);
 
     this->post_redraw();
     return true;

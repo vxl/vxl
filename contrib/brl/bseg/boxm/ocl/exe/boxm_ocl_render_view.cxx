@@ -33,10 +33,13 @@
 #include <vgui/vgui_window.h>
 #include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_clear_tableau.h>
+#include <vgui/vgui_easy3D_tableau.h>
+#include <vgui/vgui_viewer3D_tableau.h>
 
 int main(int argc, char ** argv)
 {
 
+    //init vgui (should choose/determine toolkit)
     vgui::init(argc, argv);
 
     vul_arg<vcl_string> camfile("-cam", "camera filename", "");
@@ -47,9 +50,10 @@ int main(int argc, char ** argv)
     //// need this on some toolkit implementations to get the window up.
     vul_arg_parse(argc, argv);
 
+    //create ocl_scene from xml file 
     boxm_ocl_scene ocl_scene(scene_file());
 
- /*   boxm_scene_parser parser;
+    /*   boxm_scene_parser parser;
     boxm_scene_base_sptr scene_ptr=new boxm_scene_base();
     scene_ptr->load_scene(scene_file(), parser);
     if (scene_ptr->appearence_model() == BOXM_APM_MOG_GREY) {
@@ -68,7 +72,7 @@ int main(int argc, char ** argv)
         vcl_cout<<"type is not defined yet "<<vcl_endl;
     }*/
 
-
+    //create camera from file 
     vcl_ifstream ifs(camfile().c_str());
     vpgl_perspective_camera<double>* pcam =new vpgl_perspective_camera<double>;
     if (!ifs.is_open()) {
@@ -78,9 +82,9 @@ int main(int argc, char ** argv)
     else  {
         ifs >> *pcam;
     }
-    
 
-    boxm_ocl_draw_glbuffer_tableau_new glbuffer_tableau;
+    //create a new ocl_draw_glbuffer_tableau, window, and initialize it
+    boxm_ocl_draw_glbuffer_tableau_new glbuffer_tableau;  
     vgui_window* win = vgui::produce_window(ni(), nj(), "OpenCl Volume Visualizer");
     win->get_adaptor()->set_tableau( glbuffer_tableau  ); 
     GLenum err = glewInit();
@@ -92,6 +96,9 @@ int main(int argc, char ** argv)
     GLboolean bGLEW = glewIsSupported("GL_VERSION_2_0  GL_ARB_pixel_buffer_object");
     glbuffer_tableau->init(&ocl_scene,ni(),nj(),pcam);
 
-    return  vgui::run();
 
+
+
+
+    return  vgui::run();
 }
