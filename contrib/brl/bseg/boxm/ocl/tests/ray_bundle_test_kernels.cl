@@ -100,6 +100,58 @@ test_load_data_mutable_using_loc_codes(__global int4* cells, __global float16* c
     }
   barrier(CLK_LOCAL_MEM_FENCE);
 }
+__kernel
+void
+test_load_data_mutable_using_cell_ptrs(__global int4* cells, __global float16* cell_data,
+                                       __global int4* results,
+                                       __local uchar4*    ray_bundle_array,
+                                       __local int*    cell_ptrs,
+                                       __local short4*   cached_loc_codes,
+                                       __local float16*  cached_data)
+{
+  /* in this test the bundle must be 2x2 */
+  int result_ptr = 0;
+
+  if (get_local_id(0)==0 && get_local_id(1)==0)
+    {
+      cell_ptrs[0]=45;
+      cell_ptrs[1]=54;
+      cell_ptrs[2]=63;
+      cell_ptrs[3]=72;
+    }
+  barrier(CLK_LOCAL_MEM_FENCE);
+
+  int ret= load_data_mutable_using_cell_ptrs(ray_bundle_array,cell_ptrs);
+  if (get_local_id(0)==0 && get_local_id(1)==0)
+    {
+      /* Check the load_data return value */
+      results[result_ptr++]= (int4)ret;
+      /* Check the ptr in ray bundle array*/
+      results[result_ptr++] = convert_int4(ray_bundle_array[0]);
+      results[result_ptr++] = convert_int4(ray_bundle_array[1]);
+      results[result_ptr++] = convert_int4(ray_bundle_array[2]);
+      results[result_ptr++] = convert_int4(ray_bundle_array[3]);
+
+      cell_ptrs[0]=45;
+      cell_ptrs[1]=45;
+      cell_ptrs[2]=45;
+      cell_ptrs[3]=45;
+
+    }
+  barrier(CLK_LOCAL_MEM_FENCE);
+
+  ret= load_data_mutable_using_cell_ptrs(ray_bundle_array,cell_ptrs);
+  if (get_local_id(0)==0 && get_local_id(1)==0)
+    {
+      results[result_ptr++]=(int4)ret;
+      /* Check the data transfered to the local data cache */
+      results[result_ptr++] = convert_int4(ray_bundle_array[0]);
+      results[result_ptr++] = convert_int4(ray_bundle_array[1]);
+      results[result_ptr++] = convert_int4(ray_bundle_array[2]);
+      results[result_ptr++] = convert_int4(ray_bundle_array[3]);
+    }
+  barrier(CLK_LOCAL_MEM_FENCE);
+}
 
 __kernel
 void

@@ -109,6 +109,54 @@ static void test_load_data_mutable_using_loc_codes(ray_bundle_test_driver<T>& dr
 }
 
 template <class T>
+static void test_load_data_mutable_using_cell_ptrs(ray_bundle_test_driver<T>& driver)
+{
+  driver.set_bundle_ni(2);
+  driver.set_bundle_nj(2);
+  driver.set_work_space_ni(8);
+  driver.set_work_space_nj(8);
+  if (driver.create_kernel("test_load_data_mutable_using_cell_ptrs")!=SDK_SUCCESS) {
+    TEST("Create Kernel test_load_data_mutable_using_cell_ptrs", false, true);
+    return;
+  }
+  if (driver.set_basic_test_args("use_char4")!=SDK_SUCCESS)
+    return;
+  vul_timer t;
+  t.mark();
+  if (driver.run_bundle_test_kernels()!=SDK_SUCCESS) {
+    TEST("Run Kernel test_load_data_mutable_using_cell_ptrs", false, true);
+    return;
+  }
+  bool good = true;
+  cl_int* results = driver.tree_results();
+
+  vcl_size_t size = 10*4;
+  if (size<driver.tree_result_size_bytes() && results) {
+    int test[]={1,1,1,1,
+                0,0,0,1,
+                1,0,1,1,
+                2,0,2,1,
+                3,0,3,1,
+                1,1,1,1,
+                0,1,3,3,
+                0,2,0,3,
+                0,3,0,3,
+                0,0,0,1};
+    for (vcl_size_t i= 0; i<size; i++)
+      good = good && results[i]==test[i];
+    TEST("test_load_data_mutable_using_cell_ptrs_into_cache", good, true);
+    if (!good)
+      for (vcl_size_t i= 0; i<size; i+=4)
+        vcl_cout << "test_load_data_mutable_using_cell_ptrs_codes_result(" << results[i] << ' '
+                 << results[i+1] << ' '
+                 << results[i+2] << ' '
+                 << results[i+3] << ")\n";
+  }
+  driver.release_kernel();
+}
+
+
+template <class T>
 static void test_seg_len_obs(ray_bundle_test_driver<T>& driver)
 {
   driver.set_bundle_ni(2);
@@ -553,10 +601,9 @@ void ray_bundle_tests(ray_bundle_test_driver<T>& test_driver)
   //START TESTS
   //================================================================
 
-  //test_load_data(test_driver);
-  //  test_load_data_mutable(test_driver);
   test_load_data_using_loc_codes(test_driver);
   test_load_data_mutable_using_loc_codes(test_driver);
+  test_load_data_mutable_using_cell_ptrs(test_driver);
   test_map_work_space(test_driver);
   test_ray_entry_point(test_driver);
 

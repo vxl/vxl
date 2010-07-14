@@ -27,9 +27,9 @@ bool test_multi_block_refine()
   typedef boct_tree<short,data_type> tree_type;
   
   //Tree stats  
-  int numBlocks = 4;
-  int treeBuffSize = 100;
-  int dataBuffSize = 100;
+  const int numBlocks = 4;
+  const int treeBuffSize = 100;
+  const int dataBuffSize = 100;
   
   //set up simple tree
   int cell_input[treeBuffSize*4];
@@ -102,7 +102,8 @@ bool test_multi_block_refine()
   
   //try running scene again
   //mgr->init(newScene, newBlkPtrs, numBlocks, treeBuffSize,
-            
+           
+  return true;
 }
 
 
@@ -204,6 +205,7 @@ bool test_refine_simple_scene()
 
   // free memory used by the manager
   mgr->clean_refine();
+  return true;
 }
 
 static void test_refine()
