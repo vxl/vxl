@@ -51,7 +51,7 @@ ray_trace_ocl_scene(__global int4     * scene_dims,  // level of the root.
 
   short4 exit_face=(short4)-1;
 
-  //float4 debug_var=(float4)0;
+  float4 debug_var=(float4)0;
   int curr_cell_ptr=-1;
 
   // get image coordinates
@@ -61,7 +61,7 @@ ray_trace_ocl_scene(__global int4     * scene_dims,  // level of the root.
   // rootlevel of the trees.
 
   // check to see if the thread corresponds to an actual pixel as in some cases #of threads will be more than the pixels.
-  if (i>=(*local_copy_imgdims).z && j>=(*local_copy_imgdims).w)
+  if (i>=(*local_copy_imgdims).z || j>=(*local_copy_imgdims).w)
   {
     gl_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)(0.0,0.0,0.0,0.0));
     return;
@@ -92,9 +92,9 @@ ray_trace_ocl_scene(__global int4     * scene_dims,  // level of the root.
 
   int4 curr_block_index=convert_int4((entry_pt-origin)/blockdims);
 
+  
   //: handling the border case where a ray pierces the max side
   curr_block_index=curr_block_index+(curr_block_index==scenedims);
-
   int global_count=0;
 
   while (!(any(curr_block_index<(int4)0)|| any(curr_block_index>=(scenedims))))
@@ -169,6 +169,7 @@ ray_trace_ocl_scene(__global int4     * scene_dims,  // level of the root.
 
     }
 
+    count++;
     // finding the next block
 
     // block bounding box
@@ -190,6 +191,8 @@ ray_trace_ocl_scene(__global int4     * scene_dims,  // level of the root.
             curr_block_index.w=0;
         }
 
+        else
+            debug_var=(float4)10.0;
     }
     else
     {
@@ -204,16 +207,22 @@ ray_trace_ocl_scene(__global int4     * scene_dims,  // level of the root.
 
         //curr_block_index.w=0;
         //entry_pt=exit_pt;
-
-        curr_block_index=convert_int4(floor((ray_o + tfar *ray_d+(blockdims.x/20.0f)*ray_d-origin)/blockdims));
-        curr_block_index.w=0;
         entry_pt=ray_o + tfar *ray_d;
+        ray_d.w=1;
+        if(any(-1*(isless(fabs(entry_pt-cell_min),(float4)blockdims.x/100.0f)*isless(fabs(ray_d),(float4)1e-3))))
+            break;
+        if(any(-1*(isless(fabs(entry_pt-cell_max),(float4)blockdims.x/100.0f)*isless(fabs(ray_d),(float4)1e-3))))
+            break;
+
+        curr_block_index=convert_int4(floor((entry_pt+(blockdims.x/20.0f)*ray_d-origin)/blockdims));
+        curr_block_index.w=0;
+        
     }
     count++;
 
   }
   data_return.z+=(1-data_return.w)*0.5f;
   gl_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)data_return.z);
-  in_image[j*get_global_size(0)+i]=(float4)count;
+  in_image[j*get_global_size(0)+i]=(float4)data_return;
 
 }
