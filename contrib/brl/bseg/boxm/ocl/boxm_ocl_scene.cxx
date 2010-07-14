@@ -109,7 +109,41 @@ bool boxm_ocl_scene::save_scene(vcl_string dir)
   return true;
 }
 
+bool boxm_ocl_scene::save()
+{
+    vcl_string dir,pref;
+      parser_.paths(dir, pref);
 
+  vcl_cout<<"boxm_ocl_scene::save_scene to "<<dir<<vcl_endl;
+  //get the paths straight... 
+  vcl_string block_path = dir + "blocks.bin";
+  vcl_string data_path = dir + "data.bin";
+
+  //write out to XML file
+  //write to block binary file
+  vsl_b_ofstream bin_os(block_path);
+  if(!bin_os) {
+    vcl_cout<<"cannot open "<<block_path<<" for writing";
+    return false;
+  }
+  vsl_b_write(bin_os, num_tree_buffers_);
+  vsl_b_write(bin_os, tree_buff_length_);
+  vsl_b_write(bin_os, tree_buffers_);
+  vsl_b_write(bin_os, blocks_);
+  vsl_b_write(bin_os, mem_ptrs_);
+  bin_os.close();
+  
+  //write to data binary file 
+  vsl_b_ofstream dat_os(data_path);
+  if(!dat_os) {
+    vcl_cout<<"cannot open "<<data_path<<" for writing";
+    return false;
+  }
+  vsl_b_write(dat_os, data_buffers_);
+  dat_os.close();
+
+  return true;
+}
 
 
 //:Loads small block scene from XML file (filename is xml file path)

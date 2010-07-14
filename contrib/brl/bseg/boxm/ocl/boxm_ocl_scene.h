@@ -63,6 +63,8 @@ class boxm_ocl_scene
     /* ocl_scene I/O */
     bool load_scene(vcl_string filename);   
     bool save_scene(vcl_string dir);
+    bool save();
+
     void init_scene(vbl_array_3d<int4> blocks, 
                                vbl_array_2d<int4> tree_buffers, 
                                vbl_array_2d<float16> data_buffers, 
