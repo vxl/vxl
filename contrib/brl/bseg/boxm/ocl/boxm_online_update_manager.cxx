@@ -1052,7 +1052,6 @@ bool boxm_online_update_manager::set_input_image()
 
   for (unsigned i=0;i<wni_*wnj_*4;i++)
     image_[i]=0.0f;
-  vil_image_view<float>::iterator iter=input_img_.begin();
 
   // pad the image
   for (unsigned i=0;i<input_img_.ni();i++)
