@@ -29,10 +29,10 @@
 
 //: Constructor 
 boxm_ocl_draw_glbuffer_tableau::boxm_ocl_draw_glbuffer_tableau():
-  c_mouse_rotate(vgui_LEFT),
-  c_mouse_translate(vgui_RIGHT),
-  c_mouse_zoom(vgui_MIDDLE),
-  default_cam_(),cam_()
+                                  c_mouse_rotate(vgui_LEFT),
+                                  c_mouse_translate(vgui_RIGHT),
+                                  c_mouse_zoom(vgui_MIDDLE),
+                                  default_cam_(),cam_()
 {
     pbuffer_=0;
     ni_=640;
@@ -161,7 +161,6 @@ bool boxm_ocl_draw_glbuffer_tableau::handle(vgui_event const &e)
   if (e.type == vgui_DRAW)
   {
       //vcl_cout<<"Quat ["<<token.quat[0]<<","<<token.quat[1]<<","<<token.quat[2]<<","<<token.quat[3]<<"]"<<vcl_endl;
-      //vcl_cout<<"Scale "<<token.scale<<vcl_endl;
       //vcl_cout<<"trans ["<<token.trans[0]<<","<<token.trans[1]<<","<<token.trans[2]<<"]"<<vcl_endl;
       //vcl_cout<<"Fov "<<token.fov<<vcl_endl;
       vcl_cout<<"Cam center: "<<cam_.get_camera_center()<<vcl_endl
@@ -208,6 +207,9 @@ bool boxm_ocl_draw_glbuffer_tableau::render_frame()
     boxm_render_ocl_scene_manager* ray_mgr = boxm_render_ocl_scene_manager::instance();
     cl_int status = clEnqueueAcquireGLObjects(ray_mgr->command_queue_, 1, 
                                              &ray_mgr->image_gl_buf_ , 0, 0, 0);
+    if (!ray_mgr->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (input_image)"+error_to_string(status)))
+        return false;
+
     ray_mgr->set_persp_camera(&cam_);
     ray_mgr->write_persp_camera_buffers();
     ray_mgr->run();
@@ -265,6 +267,7 @@ bool boxm_ocl_draw_glbuffer_tableau::mouse_drag(int x, int y, vgui_button button
     cam_.set_camera_center(newCenter);
     cam_.look_at(stare_point_);      
 
+    vcl_cout<<cam_;
     this->post_redraw();
     return true;
   }
@@ -292,6 +295,7 @@ bool boxm_ocl_draw_glbuffer_tableau::mouse_drag(int x, int y, vgui_button button
     double scalefactor = vcl_pow(5.0, dy);
     this->token.scale = static_cast<float>(/*lastpos.scale* scalefactor */ dy/10.0f);
     cam_.set_camera_center(cam_.get_camera_center()+token.scale*cam_.principal_axis());
+    vcl_cout<<cam_;
 
 
     this->post_redraw();

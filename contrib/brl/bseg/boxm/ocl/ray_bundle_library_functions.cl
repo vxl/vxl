@@ -272,7 +272,90 @@ int load_data_mutable_using_loc_codes( __local uchar4*   ray_bundle_array, /* bu
 
     return 1;
 }
+int load_data_mutable_using_cell_ptrs( __local uchar4*   ray_bundle_array, /* bundle state*/
+                                       __local int*   cell_ptrs)
+{
+    uchar nbi = (uchar)get_local_size(0);
+    uchar nbj = (uchar)get_local_size(1);
+    uchar llid = (uchar)(get_local_id(0) + nbi*get_local_id(1));
+    ray_bundle_array[llid]=(uchar4)(llid,0,0,0);
+    barrier(CLK_LOCAL_MEM_FENCE);
+    // clear the cache
+    //serialized with thread 0 doing all the work
+    if (llid==0) {
+        for (uchar j = 0; j<nbj; ++j)
+            for (uchar i = 0; i<nbi; ++i) {
+                uchar indx = i + nbi*j;
+                if (cell_ptrs[indx]>-1)
+                {
+                    //ray_bundle_array[indx]=(uchar)indx;
+                    /* load data */
+                    uchar org_ptr = 0;
+                    uchar tptr = indx;
 
+                    bool found = false;
+                    /* j = 0 */
+                    if (j==0) {/* for first row, only left neighbor is valid */
+                        if (i>0)/* except for the first column */
+                        {
+                            tptr = indx-1;
+                            org_ptr = ray_bundle_array[tptr].x;
+                            if (cell_ptrs[tptr]==cell_ptrs[indx]) {
+                                    update_state_ptr(ray_bundle_array, indx, org_ptr);
+                                    found = true;
+                            }
+                        }
+                    }
+                    if (!found&&j>0) {
+                        /* above neighbor is always valid for j>0 */
+                        tptr = indx - nbi;
+                        org_ptr = ray_bundle_array[tptr].x;
+                        if (cell_ptrs[tptr]==cell_ptrs[indx]) {
+                                update_state_ptr(ray_bundle_array, indx, org_ptr);
+                                found = true;
+                        }
+                        /* more than one column and upper right neighbor */
+                        if (!found&&i<(nbi-1)&&nbi>1) {
+                            tptr = indx - nbi + 1;
+                            org_ptr = ray_bundle_array[tptr].x;
+                            if (cell_ptrs[tptr]==cell_ptrs[indx]) {
+                                    update_state_ptr(ray_bundle_array, indx, org_ptr);
+                                    found = true;
+                            }
+                        }
+                        /* upper left neighbor is valid for i>0 and j>0 */
+                        if (!found&&i>0) {
+                            tptr = indx - nbi - 1;
+                            org_ptr = ray_bundle_array[tptr].x;
+                            if (cell_ptrs[tptr]==cell_ptrs[indx]) {
+                                    update_state_ptr(ray_bundle_array, indx, org_ptr);
+                                    found = true;
+                            }
+                        }
+                        /* left neighbor is valid for i>0 */
+                        if (!found&&i>0) {
+                            tptr = indx -  1;
+                            org_ptr = ray_bundle_array[tptr].x;
+                            if (cell_ptrs[tptr]==cell_ptrs[indx]) {
+                                    update_state_ptr(ray_bundle_array, indx, org_ptr);
+                                    found = true;
+                            }
+                        }
+                    }
+                    if (!found) {
+                        /*establish the new data pointers. Next address is not enabled*/
+                        ray_bundle_array[indx].x = indx;
+                        ray_bundle_array[indx].z = indx;
+                        ray_bundle_array[indx].w = ray_bundle_array[indx].w | ACTIVE;
+                    }
+                }
+            }
+    }
+    /* note that no data is actually loaded, only the pointers are set up */
+    barrier(CLK_LOCAL_MEM_FENCE);
+
+    return 1;
+}
 ///*
 // *
 // * Map the 2-d group id so that the mapped ids step by 2x in both column
@@ -514,11 +597,38 @@ void pre_infinity(float seg_len, __local float4* image_vect,
 * a Gaussian with the specifived mean and standard deviation is used.
 *
 */
-__kernel void proc_norm_image(__global float4* image, __global float4* p_inf)
+//__kernel void proc_norm_image(__global float4* image, __global float4* p_inf)
+//{
+//    /* linear global id of the normalization image */
+//    int lgid = get_global_id(0) + get_global_size(0)*get_global_id(1);
+//    float4 vect = image[lgid];
+//    float mult = (p_inf[0].x>0.0f) ? 1.0f :
+//        gauss_prob_density(vect.x, p_inf[0].y, p_inf[0].z);
+//    /* compute the norm image */
+//    vect.x = vect.w + mult * vect.z;
+//    /* the following  quantities have to be re-initialized before
+//    *the bayes_ratio kernel is executed
+//    */
+//    vect.y = 0.0f;/* clear alpha integral */
+//    vect.z = 1.0f; /* initial vis = 1.0 */
+//    vect.w = 0.0f; /* initial pre = 0.0 */
+//    /* write it back */
+//    image[lgid] = vect;
+//}
+
+__kernel void proc_norm_image(__global float4* image, __global float4* p_inf,__global uint4   * imgdims)
 {
     /* linear global id of the normalization image */
     int lgid = get_global_id(0) + get_global_size(0)*get_global_id(1);
-    float4 vect = image[lgid];
+
+    int i=0;
+    int j=0;
+    map_work_space_2d(&i,&j);
+    
+    if (i>=(*imgdims).z && j>=(*imgdims).w)
+        return;
+
+    float4 vect = image[j*get_global_size(0)+i];
     float mult = (p_inf[0].x>0.0f) ? 1.0f :
         gauss_prob_density(vect.x, p_inf[0].y, p_inf[0].z);
     /* compute the norm image */
@@ -530,7 +640,7 @@ __kernel void proc_norm_image(__global float4* image, __global float4* p_inf)
     vect.z = 1.0f; /* initial vis = 1.0 */
     vect.w = 0.0f; /* initial pre = 0.0 */
     /* write it back */
-    image[lgid] = vect;
+    image[j*get_global_size(0)+i] = vect;
 }
 
 /*
@@ -568,17 +678,17 @@ void bayes_ratio(float seg_len, __local float4* image_vect,
             /* The mean intensity for the cell */
             temp2 = cached_aux_data[llid].y/temp1; /* mean observation */
             temp1 = gauss_3_mixture_prob_density(temp2,
-                cached_data[llid].s1,
-                cached_data[llid].s2,
-                cached_data[llid].s3,
-                cached_data[llid].s5,
-                cached_data[llid].s6,
-                cached_data[llid].s7,
-                cached_data[llid].s9,
-                cached_data[llid].sa,
-                (1.0f-cached_data[llid].s3
-                -cached_data[llid].s7)
-                );/* PI */
+                                                cached_data[llid].s1,
+                                                cached_data[llid].s2,
+                                                cached_data[llid].s3,
+                                                cached_data[llid].s5,
+                                                cached_data[llid].s6,
+                                                cached_data[llid].s7,
+                                                cached_data[llid].s9,
+                                                cached_data[llid].sa,
+                                                (1.0f-cached_data[llid].s3
+                                                -cached_data[llid].s7)
+                                                );/* PI */
             /* temporary slot to store PI*/
             cached_data[llid].se = temp1;
     }
@@ -620,8 +730,7 @@ void bayes_ratio(float seg_len, __local float4* image_vect,
         /* ( pre + PI*vis)/norm)*seg_len */
         cached_aux_data[llid].z +=
             /*      pre(i,j)        +        PI        *       vis(i,j) */
-            ((image_vect[llid].w + cached_data[llid].se*image_vect[llid].z)/
-            image_vect[llid].x)*cached_data[llid].sd;
+            ((image_vect[llid].w + cached_data[llid].se*image_vect[llid].z)/image_vect[llid].x)*cached_data[llid].sd;
         /*     norm(i,j)        seg_len */
         /* If ray has no neighbors - then just return */
         uchar next_adr_valid = ray_bundle_array[llid].w & NEXT_ADR_VALID;
@@ -646,7 +755,7 @@ void bayes_ratio(float seg_len, __local float4* image_vect,
 
 void update_cell(float16 * data, float4 aux_data,float t_match, float init_sigma, float min_sigma)
 {
-    if (aux_data.x>1e-10)
+    if (aux_data.x>1e-5)
     {
         float mu0 = (*data).s1, sigma0 = (*data).s2, w0 = (*data).s3;
         float mu1 = (*data).s5, sigma1 = (*data).s6, w1 = (*data).s7;

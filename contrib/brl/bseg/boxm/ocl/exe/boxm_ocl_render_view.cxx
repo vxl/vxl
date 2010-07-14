@@ -53,26 +53,6 @@ int main(int argc, char ** argv)
     //create ocl_scene from xml file 
     boxm_ocl_scene ocl_scene(scene_file());
 
-    /*   boxm_scene_parser parser;
-    boxm_scene_base_sptr scene_ptr=new boxm_scene_base();
-    scene_ptr->load_scene(scene_file(), parser);
-    if (scene_ptr->appearence_model() == BOXM_APM_MOG_GREY) {
-        typedef boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
-        boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
-        scene->load_scene(parser);
-        scene_ptr = scene;
-    }
-    else if (scene_ptr->appearence_model() == BOXM_APM_SIMPLE_GREY) {
-        typedef boct_tree<short,boxm_sample<BOXM_APM_SIMPLE_GREY> > tree_type;
-        boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
-        scene->load_scene(parser);
-        scene_ptr = scene;
-    }
-    else {
-        vcl_cout<<"type is not defined yet "<<vcl_endl;
-    }*/
-
-    //create camera from file 
     vcl_ifstream ifs(camfile().c_str());
     vpgl_perspective_camera<double>* pcam =new vpgl_perspective_camera<double>;
     if (!ifs.is_open()) {

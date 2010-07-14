@@ -50,7 +50,7 @@ void sort_mix_3(float* mu0, float* sigma0, float* w0, short* Nobs0,
                 float* mu1, float* sigma1, float* w1, short* Nobs1,
                 float* mu2, float* sigma2, float* w2, short* Nobs2)
 {
-  if((*w2)==0.0f&&(*w1)==0.0f) return; /* no need to sort */
+  if((*w2)<1e-3f&&(*w1)<1e-3f && (*sigma1)<1e-4 && (*sigma2)<1e-4) return; /* no need to sort */
 
   float fa = (*w0)/(*sigma0), fb = (*w1)/(*sigma1), fc = (*w2)/(*sigma2);
   if((*w2)==0.0f) 
@@ -174,7 +174,7 @@ void update_gauss_3_mixture(float x, float w, float t_match,
   float weight = 0.0f, rho = 0.0f;
   
   /* test for a match of component 0 */
-  if(*w0>0.0f){
+  if(*w0>0.0f && (*sigma0)>0.0f){
     weight = (1.0f-alpha)*(*w0);
     if(match<0 && 
        ((x-*mu0)*(x-*mu0)/((*sigma0)*(*sigma0))) < tsq){
@@ -187,7 +187,7 @@ void update_gauss_3_mixture(float x, float w, float t_match,
     *w0 = weight;
   }
   ///* test for a match of component 1 */
-  if(*w1>0.0f){
+  if(*w1>0.0f && (*sigma1)>0.0f){
     weight = (1.0f-alpha)*(*w1);
     if(match<0 && ((x-*mu1)*(x-*mu1)/((*sigma1)*(*sigma1))) < tsq){
       weight += alpha;
@@ -199,7 +199,7 @@ void update_gauss_3_mixture(float x, float w, float t_match,
     *w1 = weight;
   }
   /* test for a match of component 2 */
-  if(*w2>0.0f){
+  if(*w2>0.0f &&  (*sigma2)>0.0f){
     weight = (1.0f-alpha)*(*w2);
     if(match<0 && ((x-*mu2)*(x-*mu2)/((*sigma2)*(*sigma2))) < tsq){
       weight += alpha;

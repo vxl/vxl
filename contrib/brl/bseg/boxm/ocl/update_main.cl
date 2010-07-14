@@ -14,7 +14,7 @@ update_aux( __global int * root_level,  // level of the root.
             __global float4  * in_image,  // input image and store vis_inf and pre_inf
             __global int    * offsetfactor,
             __global int    * offset_x,
-            __global int    * offset_y,//,// which threads to run (0,0) (0,1) (1,0) (1,1)
+            __global int    * offset_y,// which threads to run (0,0) (0,1) (1,0) (1,1)
             __local  float4   * local_copy_bbox,
             __local  float16  * local_copy_cam,
             __local uint4 * local_copy_imgdims,
@@ -40,7 +40,6 @@ update_aux( __global int * root_level,  // level of the root.
   ray_o.w=1.0f;
   int i=0;
   int j=0;
-
   int factor=(*offsetfactor);
   //map_work_space_2d(&i,&j);
   map_work_space_2d_offset(&i,&j,(*offset_x),(*offset_y));
@@ -124,13 +123,13 @@ update_aux( __global int * root_level,  // level of the root.
     ////////////////////////////////////////////////////////
     // the place where the ray trace function can be applied
     load_data_mutable_using_loc_codes(ray_bundle_array,cached_loc_codes);
-   if (ray_bundle_array[llid].x==llid)
+    if (ray_bundle_array[llid].x==llid)
     {
-//      /* cell data, i.e., alpha and app model is needed for some passes */
+        //      /* cell data, i.e., alpha and app model is needed for some passes */
 #if %%
-      cached_data[llid] = sample_array[data_ptr];
+        cached_data[llid] = sample_array[data_ptr];
 #endif
-      cached_aux_data[llid] =aux_data_array[data_ptr];
+        cached_aux_data[llid] =aux_data_array[data_ptr];
     }
     barrier(CLK_LOCAL_MEM_FENCE);
 
@@ -180,26 +179,25 @@ update_aux( __global int * root_level,  // level of the root.
 
     count++;
   }
-  //in_image[j*get_global_size(0)*factor+i]=image_vect[llid];
 }
 
 
 // This function is to update the data
-__kernel
-void
-update_main(__global float16 * sample_array,
-            __global float4  * aux_data_array,
-            __global uint * data_size)
-{
-    int gid=get_global_id(0);
-    int datasize= (*data_size);
-    if(gid<datasize)
-    {   
-
-        float16 data=sample_array[gid];
-        float4 aux_data=aux_data_array[gid];
-        update_cell(&data,aux_data,2.5f,0.09f,0.03f);
-        sample_array[gid]=data;
-    }
-
-}
+//__kernel
+//void
+//update_main(__global float16 * sample_array,
+//            __global float4  * aux_data_array,
+//            __global uint * data_size)
+//{
+//    int gid=get_global_id(0);
+//    int datasize= (*data_size);
+//    if(gid<datasize)
+//    {   
+//
+//        float16 data=sample_array[gid];
+//        float4 aux_data=aux_data_array[gid];
+//        update_cell(&data,aux_data,2.5f,0.09f,0.03f);
+//        sample_array[gid]=data;
+//    }
+//
+//}

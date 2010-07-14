@@ -24,6 +24,8 @@ IF(OPENCL_FOUND)
       boxm_refine_scene_manager.h boxm_refine_scene_manager.cxx
       boxm_ocl_scene.h boxm_ocl_scene.cxx
       boxm_render_ocl_scene_manager.h boxm_render_ocl_scene_manager.cxx
+      boxm_update_ocl_scene_manager.h boxm_update_ocl_scene_manager.cxx
+
      )
 
   SET(bomx_ocl_cl_files
