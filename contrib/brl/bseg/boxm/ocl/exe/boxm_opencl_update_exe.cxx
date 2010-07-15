@@ -22,6 +22,7 @@
 #include <vul/vul_file.h>
 #include <vul/vul_file_iterator.h>
 #include <vul/vul_timer.h>
+#include <vcl_vector.h>
 
 //void save_tree_and_data_array(boxm_scene<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > >* scene,
 //                              vcl_string treefile, vcl_string treedatafile)
@@ -184,69 +185,82 @@
 
 int main(int argc,  char** argv)
 {
+    //: handle arguments 
     vcl_cout<<"OCL SCENE UPDATE "<<vcl_endl;
     vul_arg<vcl_string> cam_dir("-camdir", "camera directory", "");
     vul_arg<vcl_string> img_dir("-imgdir", "Image directory", "");
     vul_arg<vcl_string> scene_file("-scene", "scene filename", "");
-
     vul_arg_parse(argc, argv);
+    if (!vul_file::is_directory(cam_dir().c_str()))
+        return -1;
+    
+    //initialize the ocl scene and update manager
     boxm_ocl_scene ocl_scene(scene_file());
-    boxm_update_ocl_scene_manager* updt_mgr= boxm_update_ocl_scene_manager::instance();
+    boxm_update_ocl_scene_manager* updt_mgr = boxm_update_ocl_scene_manager::instance();
     int bundle_dim=8;
     updt_mgr->set_bundle_ni(bundle_dim);
     updt_mgr->set_bundle_nj(bundle_dim);
     bool flag=true;
 
-    if (!vul_file::is_directory(cam_dir().c_str()))
-        return -1;
-
+    //get all of the cam and image files, and sort them!
     vcl_string camglob=cam_dir()+"/*.txt";
     vcl_string imgglob=img_dir()+"/*.jpg";
-
     vul_file_iterator file_it(camglob.c_str());
     vul_file_iterator img_file_it(imgglob.c_str());
 
-    int count=0;
-    while (file_it && img_file_it)
-    {
-        vcl_cout<<"Cam "<<file_it()<<" Image "<<img_file_it()<<vcl_endl;
+    vcl_vector<vcl_string> cam_files;
+    vcl_vector<vcl_string> img_files;
+    while(file_it && img_file_it) {
+      vcl_string camName(file_it());
+      vcl_string imgName(img_file_it());
+      cam_files.push_back(camName);
+      img_files.push_back(imgName);
+      ++file_it; ++img_file_it;
+    }
+    vcl_sort(cam_files.begin(), cam_files.end());
+    vcl_sort(img_files.begin(), img_files.end());
+    if(cam_files.size() != img_files.size()) {
+      vcl_cerr<<"Image files and cam files not one to one"<<vcl_endl;
+      return -1;
+    }
 
-        vcl_ifstream ifs(file_it());
-        vpgl_perspective_camera<double>* pcam =new vpgl_perspective_camera<double>;
-        if (!ifs.is_open()) {
-            vcl_cerr << "Failed to open file " << file_it() << vcl_endl;
-            return -1;
-        }
+    //loop through the images/cams and build the scene 
+    for(int i=0; i<cam_files.size(); i++) {
 
-        ifs >> *pcam;
+      vcl_cout<<"Cam "<<cam_files[i]<<" Image "<<img_files[i]<<vcl_endl;
 
+      //build the camera from file 
+      vcl_ifstream ifs(cam_files[i].c_str());
+      vpgl_perspective_camera<double>* pcam =new vpgl_perspective_camera<double>;
+      if (!ifs.is_open()) {
+          vcl_cerr << "Failed to open file " << file_it() << vcl_endl;
+          return -1;
+      }
+      ifs >> *pcam;
 
-        vil_image_view_base_sptr loaded_image = vil_load(img_file_it());//img().c_str() );
-        vil_image_view<float> floatimg(loaded_image->ni(), loaded_image->nj(), 1);
-
-        //load the image
-            if (vil_image_view<vxl_byte> *img_byte
-                = dynamic_cast<vil_image_view<vxl_byte>*>(loaded_image.ptr()))
-                vil_convert_stretch_range_limited(*img_byte ,floatimg, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
-            else
-                return -1;
-        if(count==0)
-        {
-            updt_mgr->init_update(&ocl_scene,pcam, floatimg);
-            if (!updt_mgr->setup_norm_data(true, 0.5f, 0.25f))
-                return -1;   
-            updt_mgr->setup_online_processing();
-        }
-        else
-        {
-            updt_mgr->set_input_image(floatimg);
-            updt_mgr->write_image_buffer();
-            updt_mgr->set_persp_camera(pcam);
-            updt_mgr->write_persp_camera_buffers();
-        }
-        updt_mgr->online_processing();
-        ++file_it ; ++img_file_it;
-        count++;
+      //load image from file 
+      vil_image_view_base_sptr loaded_image = vil_load(img_files[i].c_str());
+      vil_image_view<float> floatimg(loaded_image->ni(), loaded_image->nj(), 1);
+      if (vil_image_view<vxl_byte> *img_byte
+            = dynamic_cast<vil_image_view<vxl_byte>*>(loaded_image.ptr()))
+        vil_convert_stretch_range_limited(*img_byte ,floatimg, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
+      else
+        return -1;
+      if(i==0)
+      {
+        updt_mgr->init_update(&ocl_scene,pcam, floatimg);
+        if (!updt_mgr->setup_norm_data(true, 0.5f, 0.25f))
+          return -1;   
+        updt_mgr->setup_online_processing();
+      }
+      else
+      {
+        updt_mgr->set_input_image(floatimg);
+        updt_mgr->write_image_buffer();
+        updt_mgr->set_persp_camera(pcam);
+        updt_mgr->write_persp_camera_buffers();
+      }
+      updt_mgr->online_processing();
     }
     updt_mgr->finish_online_processing();
     updt_mgr->clean_update();

@@ -6,6 +6,7 @@
 
 // Utilities, OpenCL and system includes
 #include <GL/glew.h>
+#include <GL/glx.h>
 
 #include <bocl/bocl_cl.h>
 #include <bocl/bocl_utils.h>
@@ -35,6 +36,8 @@
 #include <vgui/vgui_clear_tableau.h>
 #include <vgui/vgui_easy3D_tableau.h>
 #include <vgui/vgui_viewer3D_tableau.h>
+#include <vgui/vgui_shell_tableau.h>
+#include <vgui/vgui_viewer2D_tableau.h>
 
 int main(int argc, char ** argv)
 {
@@ -64,21 +67,35 @@ int main(int argc, char ** argv)
     }
 
     //create a new ocl_draw_glbuffer_tableau, window, and initialize it
+    vcl_cout<<"I'm in boxm_ocl_render_view.cxx"<<vcl_endl;
     boxm_ocl_draw_glbuffer_tableau_new glbuffer_tableau;  
-    vgui_window* win = vgui::produce_window(ni(), nj(), "OpenCl Volume Visualizer");
-    win->get_adaptor()->set_tableau( glbuffer_tableau  ); 
-    GLenum err = glewInit();
-    if (GLEW_OK != err)
-    {
-        /* Problem: glewInit failed, something is seriously wrong. */
-        vcl_cout<< "Error: "<<glewGetErrorString(err)<<vcl_endl;
-    }
-    GLboolean bGLEW = glewIsSupported("GL_VERSION_2_0  GL_ARB_pixel_buffer_object");
+    //vgui_window* win = vgui::produce_window(ni(), nj(), "OpenCl Volume Visualizer");
+    //win->get_adaptor()->make_current();
+    vcl_cout<<"Current Context: "<<glXGetCurrentContext()<<vcl_endl;  
+    vcl_cout<<"Current display: "<<glXGetCurrentDisplay()<<vcl_endl; 
+    //win->get_adaptor()->set_tableau( glbuffer_tableau  ); 
+    vcl_cout.flush();
+   
     glbuffer_tableau->init(&ocl_scene,ni(),nj(),pcam);
+    GLboolean bGLEW = glewIsSupported("GL_VERSION_2_0  GL_ARB_pixel_buffer_object");
+    return  vgui::run(glbuffer_tableau, ni(), nj());
 
 
+    // Load image (given in the first command line param) into an image tableau.
+    //vgui_image_tableau_new image("/home/acm/Pictures/Flowerings_90_by_love1008.jpg");
+
+    //// Put the image tableau inside a 2D viewer tableau (for zoom, etc).
+    //vgui_viewer2D_tableau_new viewer(image);
+
+    ////// Put a shell tableau at the top of our tableau tree.
+    //vgui_shell_tableau_new shell(viewer);
+
+    ////vgui_window* win = vgui::adapt(shell, image->width(), image->height(), "OpenCl Volume Visualizer");
+    ////win->get_adaptor()->set_tableau( shell  ); 
+    ////win->get_adaptor()->make_current();
+
+    //// Create a window, add the tableau and show it on screen.
+    //return vgui::run(shell, image->width(), image->height());
 
 
-
-    return  vgui::run();
 }
