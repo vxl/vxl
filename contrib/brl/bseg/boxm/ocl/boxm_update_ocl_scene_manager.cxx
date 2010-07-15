@@ -21,7 +21,6 @@ bool boxm_update_ocl_scene_manager::init_update(boxm_ocl_scene *scene,
   scene_ = scene;
   cam_ = cam;
   input_img_=obs;
-
   return true;
 }
 
@@ -65,6 +64,22 @@ build_program(vcl_string const& functor, bool use_cell_data)
   }
   return false;
 }
+bool 
+boxm_update_ocl_scene_manager::build_rendering_program()
+{
+    vcl_string root = vcl_string(VCL_SOURCE_ROOT_DIR);
+    bool octr = this->load_kernel_source(root + "/contrib/brl/bseg/boxm/ocl/octree_library_functions.cl");
+    bool bpr  = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/backproject.cl");
+    bool exp  = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/expected_functor.cl");
+    bool rbun = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/ray_bundle_library_functions.cl");
+    bool main = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/ray_trace_ocl_scene.cl");
+
+    if (!octr||!bpr||!exp||!rbun||!main) {
+        vcl_cerr << "Error: boxm_ray_trace_manager : failed to load kernel source (helper functions)\n";
+        return false;
+    }
+    return this->build_kernel_program(program_)==SDK_SUCCESS;
+}
 bool boxm_update_ocl_scene_manager::set_kernels()
 {
   cl_int status = CL_SUCCESS;
@@ -101,6 +116,14 @@ bool boxm_update_ocl_scene_manager::set_kernels()
   if (this->check_val(status,CL_SUCCESS,error_to_string(status))!=CHECK_SUCCESS)
       return false;
   kernels_.push_back(kernel);
+
+  if (!this->build_rendering_program())
+    return false;
+  kernel = clCreateKernel(program_,"ray_trace_ocl_scene_with_full_data",&status);
+  if (this->check_val(status,CL_SUCCESS,error_to_string(status))!=CHECK_SUCCESS)
+    return false;
+  kernels_.push_back(kernel);
+
   return true;
 }
 
@@ -236,6 +259,8 @@ bool boxm_update_ocl_scene_manager::set_args(unsigned pass)
     return this->check_val(status, CL_SUCCESS,
                            "clSetKernelArg failed. (image dimensions)")==CHECK_SUCCESS;
   }
+  if(pass==0 || pass ==1 || pass==3)
+  {
   int i=0;
   status = clSetKernelArg(kernels_[pass],i++,sizeof(cl_mem),(void *)&scene_dims_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (scene_dims_buf_)"))
@@ -321,7 +346,64 @@ bool boxm_update_ocl_scene_manager::set_args(unsigned pass)
     return false;
   status = clSetKernelArg(kernels_[pass],i++,sizeof(cl_float4)*this->bni_*this->bnj_,0);
   return this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (loc code bundle)")==CHECK_SUCCESS;
+  }
+  if(pass==5)
+  {
+      int i=0;
+      status = clSetKernelArg(kernels_[pass],i++,sizeof(cl_mem),(void *)&scene_dims_buf_);
+      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (scene_dims_buf_)"))
+          return SDK_FAILURE;
+      status = clSetKernelArg(kernels_[pass],i++,sizeof(cl_mem),(void *)&scene_origin_buf_);
+      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (scene_orign_buf_)"))
+          return SDK_FAILURE;
+      status = clSetKernelArg(kernels_[pass],i++,sizeof(cl_mem),(void *)&block_dims_buf_);
+      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (block_dims_buf_)"))
+          return SDK_FAILURE;
+      status = clSetKernelArg(kernels_[pass],i++,sizeof(cl_mem),(void *)&block_ptrs_buf_);
+      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (block_ptrs_buf_)"))
+          return SDK_FAILURE;
+      // root level buffer
+      status = clSetKernelArg(kernels_[pass],i++,sizeof(cl_mem),(void *)&root_level_buf_);
+      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (root_level_buf_)"))
+          return SDK_FAILURE;
+      // the lenght of buffer
+      status = clSetKernelArg(kernels_[pass],i++,sizeof(cl_mem),(void *)&numbuffer_buf_);
+      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (lenbuffer_buf_)"))
+          return SDK_FAILURE;
 
+      // the lenght of buffer
+      status = clSetKernelArg(kernels_[pass],i++,sizeof(cl_mem),(void *)&lenbuffer_buf_);
+      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (lenbuffer_buf_)"))
+          return SDK_FAILURE;
+      // the tree buffer
+      status = clSetKernelArg(kernels_[pass],i++,sizeof(cl_mem),(void *)&cells_buf_);
+      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cells_buf_)"))
+          return SDK_FAILURE;
+      // data buffer
+      status = clSetKernelArg(kernels_[pass],i++,sizeof(cl_mem),(void *)&cell_data_buf_);
+      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_data_buf_)"))
+          return SDK_FAILURE;
+
+      // camera buffer
+      status = clSetKernelArg(kernels_[pass],i++,sizeof(cl_mem),(void *)&persp_cam_buf_);
+      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (data)"))
+          return SDK_FAILURE;
+      // roi dimensions
+      status = clSetKernelArg(kernels_[pass],i++,sizeof(cl_mem),(void *)&img_dims_buf_);
+      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (Img dimensions)"))
+          return SDK_FAILURE;
+      //// input image buffer
+
+      status = clSetKernelArg(kernels_[pass],i++,3*sizeof(cl_float16),0);
+      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local cam)"))
+          return SDK_FAILURE;
+      status = clSetKernelArg(kernels_[pass],i++,sizeof(cl_uint4),0);
+      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local image dimensions)"))
+          return SDK_FAILURE;
+      status = clSetKernelArg(kernels_[pass],i++,sizeof(cl_mem),(void *)&image_gl_buf_);
+      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (input_image)"))
+          return SDK_FAILURE;
+  }
 
   return SDK_SUCCESS;
 }
@@ -384,6 +466,11 @@ bool boxm_update_ocl_scene_manager::set_workspace(unsigned pass)
   {
     globalThreads[0]=RoundUp(cell_data_size_,64);globalThreads[1]=1;
     localThreads[0]=64;                              localThreads[1]=1;
+  }
+  if(pass==5)
+  {
+      globalThreads[0]=this->wni_;globalThreads[1]=this->wnj_;
+      localThreads[0] =this->bni_;localThreads[0] =this->bnj_;
   }
   if (used_local_memory > this->total_local_memory())
   {
@@ -536,6 +623,24 @@ bool boxm_update_ocl_scene_manager::online_processing()
           this->save_image();
       }
   }
+  vcl_cout << "Timing Analysis\n"
+      << "===============\n"
+      <<"openCL Running time "<<gpu_time_<<" ms\n"
+      //       << "Running block "<<total_gpu_time/1000<<"s\n"
+      //       << "total block loading time = " << total_load_time << "s\n"
+      //       << "total block processing time = " << total_raytrace_time << 's' << vcl_endl
+      ;
+
+  return true;
+}
+bool boxm_update_ocl_scene_manager::rendering()
+{
+  gpu_time_=0;
+  unsigned pass = 5;
+  this->set_args(pass);
+  this->set_workspace(pass);
+  if (!this->run(pass))
+      return false;
   vcl_cout << "Timing Analysis\n"
       << "===============\n"
       <<"openCL Running time "<<gpu_time_<<" ms\n"

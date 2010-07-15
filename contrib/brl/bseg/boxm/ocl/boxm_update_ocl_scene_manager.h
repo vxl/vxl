@@ -173,8 +173,10 @@ class boxm_update_ocl_scene_manager : public bocl_manager<boxm_update_ocl_scene_
   //open cl side helper functions
   int build_kernel_program(cl_program & program);
   bool build_program(vcl_string const& functor, bool use_cell_data);
-void archive_tree_data();
+  void archive_tree_data();
+  bool build_rendering_program();
 
+  bool rendering();
 
   //necessary CL items
   // for pass0 to compute seg len
