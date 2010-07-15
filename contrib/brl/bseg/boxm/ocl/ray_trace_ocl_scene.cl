@@ -223,7 +223,7 @@ ray_trace_ocl_scene_with_full_data(__global int4     * scene_dims,  // level of 
                     __global int     * num_buffer,
                     __global int     * len_buffer,
                     __global int4    * tree_array,
-                    __global float8  * sample_array,
+                    __global float16  * sample_array,
                     __global float16 * persp_cam, // camera orign and SVD of inverse of camera matrix
                     __global uint4   * imgdims,   // dimensions of the image
                     __local  float16 * local_copy_cam,
