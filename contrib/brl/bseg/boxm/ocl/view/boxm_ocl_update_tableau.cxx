@@ -7,34 +7,35 @@
     #endif
 #endif
 
+#if defined(WIN32)
+    #include <GL/glew.h>
+    #include <windows.h>
+#endif
 
 #if defined (__APPLE__) || defined(MACOSX)
   #define GL_SHARING_EXTENSION "cl_APPLE_gl_sharing"
 #else
   #define GL_SHARING_EXTENSION "cl_khr_gl_sharing"
 #endif
+
 #include <boxm/ocl/view/boxm_ocl_update_tableau.h>
-#include <boxm/ocl/boxm_render_image_manager.h>
-#include <boxm/ocl/boxm_render_ocl_scene_manager.h>
+//#include <boxm/ocl/boxm_render_image_manager.h>
+//#include <boxm/ocl/boxm_render_ocl_scene_manager.h>
 #include <boxm/ocl/boxm_update_ocl_scene_manager.h>
 
 #include <boxm/ocl/boxm_ocl_utils.h>
-#include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_calibration_matrix.h>
 #include <vgui/internals/trackball.h>
 #include <vgl/vgl_distance.h>
 
 //image load 
-#include <vpgl/vpgl_perspective_camera.h>
 #include <vil/vil_convert.h>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_load.h>
 
 
-#if defined(WIN32)
-    #include <windows.h>
-#endif
+
 
 //: Constructor 
 boxm_ocl_update_tableau::boxm_ocl_update_tableau():
@@ -74,7 +75,6 @@ bool boxm_ocl_update_tableau::init(boxm_ocl_scene * scene,
   default_cam_ = (*cam);
   cam_ = (*cam); //default cam
   scene_ = scene;
-  vil_image_view<float> expected(ni_,nj_);
   
   //directory of cameras
   cam_files_ = cam_files;
@@ -154,7 +154,6 @@ bool boxm_ocl_update_tableau::render_frame() {
 bool boxm_ocl_update_tableau::init_ocl() {
   
   //only ever do this method once. 
-  do_init_ocl_ = false;
   
   //initialize GLEW 
   GLenum err = glewInit();
@@ -163,9 +162,10 @@ bool boxm_ocl_update_tableau::init_ocl() {
     /* Problem: glewInit failed, something is seriously wrong. */
     vcl_cout<< "Error: "<<glewGetErrorString(err)<<vcl_endl;
   }
-  
+
   //initialize the render manager     
-  boxm_update_ocl_scene_manager* ocl_mgr = boxm_update_ocl_scene_manager::instance();
+  boxm_update_ocl_scene_manager* updt_mgr 
+      = boxm_update_ocl_scene_manager::instance();
   int status=0;
   cl_platform_id platform_id[1];
   status = clGetPlatformIDs (1, platform_id, NULL);
@@ -194,35 +194,36 @@ bool boxm_ocl_update_tableau::init_ocl() {
 #endif
 
   //create OpenCL context with display properties determined above 
-  ocl_mgr->context_ = clCreateContext(props, 1, &ocl_mgr->devices()[0], NULL, NULL, &status);
+  updt_mgr->context_ = clCreateContext(props, 1, &updt_mgr->devices()[0], NULL, NULL, &status);
 
+  vcl_cout<<error_to_string(status);
   ///initialize update  
+
   vil_image_view<float> expected(ni_,nj_);
   int bundle_dim = 8;  
-  ocl_mgr->set_bundle_ni(bundle_dim);  
-  ocl_mgr->set_bundle_nj(bundle_dim);
-  ocl_mgr->init_update(scene_, &cam_, expected);
-  if (!ocl_mgr->setup_norm_data(true, 0.5f, 0.25f))
+  updt_mgr->set_bundle_ni(bundle_dim);  
+  updt_mgr->set_bundle_nj(bundle_dim);
+  updt_mgr->init_update(scene_, &cam_, expected);
+  if (!updt_mgr->setup_norm_data(true, 0.5f, 0.25f))
     return -1;   
-  ocl_mgr->setup_online_processing();
-  ocl_mgr->online_processing();
+  updt_mgr->setup_online_processing();
 
   
   //need to set ray trace 
   //delete old buffer
   if (pbuffer_) {
-      clReleaseMemObject(ocl_mgr->image_buf_);
+      clReleaseMemObject(updt_mgr->image_buf_);
       glDeleteBuffers(1, &pbuffer_);
   }
 
   //generate glBuffer, and bind to ocl_mgr->image_gl_buf_
   glGenBuffers(1, &pbuffer_);
   glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbuffer_);
-  glBufferData(GL_PIXEL_UNPACK_BUFFER, ocl_mgr->wni() * ocl_mgr->wnj() * sizeof(GLubyte) * 4, 0, GL_STREAM_DRAW);
+  glBufferData(GL_PIXEL_UNPACK_BUFFER, updt_mgr->wni() * updt_mgr->wnj() * sizeof(GLubyte) * 4, 0, GL_STREAM_DRAW);
   glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
 
   //create OpenCL buffer from GL PBO, and set kernel and arguments
-  ocl_mgr->image_gl_buf_ = clCreateFromGLBuffer(ocl_mgr->context(),
+  updt_mgr->image_gl_buf_ = clCreateFromGLBuffer(updt_mgr->context(),
                                                 CL_MEM_WRITE_ONLY, 
                                                 pbuffer_, 
                                                 &status);
@@ -251,7 +252,12 @@ void boxm_ocl_update_tableau::setup_gl_matrices() {
 bool boxm_ocl_update_tableau::handle(vgui_event const &e) {
   //draw handler - called on post_draw()
   if (e.type == vgui_DRAW) {
-    if(do_init_ocl_) this->init_ocl();
+    if(do_init_ocl_) 
+    {
+        this->init_ocl();
+          do_init_ocl_ = false;
+
+    }
   
     vcl_cout<<"redrawing"<<vcl_endl;
     do_update_ = false;

@@ -215,7 +215,7 @@ ray_trace_ocl_scene(__global int4     * scene_dims,  // level of the root.
 }
 __kernel
 void
-ray_trace_ocl_scene_with_full_data(__global int4     * scene_dims,  // level of the root.
+ray_trace_ocl_scene_full_data(__global int4     * scene_dims,  // level of the root.
                     __global float4  * scene_origin,
                     __global float4  * block_dims,
                     __global int4     * block_ptrs,
@@ -290,6 +290,7 @@ ray_trace_ocl_scene_with_full_data(__global int4     * scene_dims,  // level of 
       gl_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)(0.0,0.0,0.0,0.0));
       return;
   }
+
   entry_pt=ray_o + tnear*ray_d;
 
   int4 curr_block_index=convert_int4((entry_pt-origin)/blockdims);
@@ -411,6 +412,6 @@ ray_trace_ocl_scene_with_full_data(__global int4     * scene_dims,  // level of 
 
   }
   data_return.z+=(1-data_return.w)*0.5f;
-  gl_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)data_return.z);
+  gl_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)(data_return.z));
 
 }

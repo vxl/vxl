@@ -120,7 +120,7 @@ bool boxm_update_ocl_scene_manager::set_kernels()
 
   if (!this->build_rendering_program())
     return false;
-  kernel = clCreateKernel(program_,"ray_trace_ocl_scene_with_full_data",&status);
+  kernel = clCreateKernel(program_,"ray_trace_ocl_scene_full_data",&status);
   if (this->check_val(status,CL_SUCCESS,error_to_string(status))!=CHECK_SUCCESS)
     return false;
   kernels_.push_back(kernel);
@@ -471,7 +471,7 @@ bool boxm_update_ocl_scene_manager::set_workspace(unsigned pass)
   if(pass==5)
   {
       globalThreads[0]=this->wni_;globalThreads[1]=this->wnj_;
-      localThreads[0] =this->bni_;localThreads[0] =this->bnj_;
+      localThreads[0] =this->bni_;localThreads[1] =this->bnj_;
   }
   if (used_local_memory > this->total_local_memory())
   {
@@ -513,7 +513,7 @@ bool boxm_update_ocl_scene_manager::run(unsigned pass)
           }
       }
   }
-  if(pass==2 || pass ==4)
+  if(pass==2 || pass ==4 || pass==5)
   {
       cl_event ceEvent;
 
@@ -526,7 +526,6 @@ bool boxm_update_ocl_scene_manager::run(unsigned pass)
       gpu_time_+= (double)1.0e-6 * (tend - tstart); // convert nanoseconds to milliseconds
 
   }
-
   if (this->check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status))!=CHECK_SUCCESS)
     return false;
 
@@ -603,7 +602,7 @@ bool boxm_update_ocl_scene_manager::setup_online_processing()
   good=good && set_input_view()
             && set_input_view_buffers();
   good=good && this->set_kernels()
-            &&   this->set_commandqueue();
+            &&  this->set_commandqueue();
 
   return good;
 
@@ -618,11 +617,11 @@ bool boxm_update_ocl_scene_manager::online_processing()
       this->set_workspace(pass);
       if (!this->run(pass))
           return false;
-      if(pass==2)
-      {
-          this->read_output_image();
-          this->save_image();
-      }
+      //if(pass==2)
+      //{
+      //    this->read_output_image();
+      //    this->save_image();
+      //}
   }
   vcl_cout << "Timing Analysis\n"
       << "===============\n"

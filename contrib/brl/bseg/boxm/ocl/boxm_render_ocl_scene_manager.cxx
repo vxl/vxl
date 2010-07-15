@@ -135,12 +135,12 @@ bool boxm_render_ocl_scene_manager::set_args()
     return SDK_FAILURE;
   
 
-      //image_gl_buf_ = clCreateBuffer(this->context_,
-      //    CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
-      //    wni_*wnj_*sizeof(cl_uint),
-      //    image_gl_,&status);
-      //if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (gl_image)"))
-      //    return SDK_FAILURE;
+  //image_gl_buf_ = clCreateBuffer(this->context_,
+  //                               CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+  //                               wni_*wnj_*sizeof(cl_uint),
+  //                               image_gl_,&status);
+  //if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (gl_image)"))
+  //    return SDK_FAILURE;
 
 
   status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&image_gl_buf_);
@@ -267,7 +267,7 @@ bool boxm_render_ocl_scene_manager::run_scene()
   this->release_kernel();
   vcl_cout << "Timing Analysis\n"
            << "===============\n"
-  //       <<"openCL Running time "<<gpu_time_<<" ms\n"
+           //<<"openCL Running time "<<gpu_time_<<" ms\n"
   //       << "Running block "<<total_gpu_time/1000<<"s\n"
   //       << "total block loading time = " << total_load_time << "s\n"
   //       << "total block processing time = " << total_raytrace_time << 's' << vcl_endl

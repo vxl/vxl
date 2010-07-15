@@ -15,7 +15,6 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <bocl/bocl_utils.h>
 #include <vcl_vector.h>
-#include <boxm/ocl/boxm_update_ocl_scene_manager.h>
 
 class boxm_ocl_update_tableau: public vgui_tableau, public vgui_drag_mixin
 {
@@ -45,6 +44,7 @@ public:
     vgui_event_condition c_mouse_rotate;
     vgui_event_condition c_mouse_translate;
     vgui_event_condition c_mouse_zoom;
+    bool init_ocl();
 
 protected:
     vgui_event event;
@@ -53,7 +53,6 @@ protected:
     //render and update functions 
     bool render_frame();
     bool update_model();
-    bool init_ocl();
     bool do_init_ocl_;
 
     //keep track of mouse dragging 

@@ -83,6 +83,8 @@ int main(int argc, char ** argv)
       
     //create and initialize update_tableau
     boxm_ocl_update_tableau_new update_tableau;  
+    GLboolean bGLEW = glewIsSupported("GL_VERSION_2_0  GL_ARB_pixel_buffer_object");
+
     update_tableau->init(&ocl_scene, ni(), nj(), pcam, cam_files, img_files);
 
     //vgui_window* win = vgui::produce_window(ni(), nj(), "OpenCl Volume Visualizer");

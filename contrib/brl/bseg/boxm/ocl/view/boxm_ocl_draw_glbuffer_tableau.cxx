@@ -7,7 +7,10 @@
     #endif
 #endif
 
-
+#if defined(WIN32)
+    #include <GL/glew.h>
+    #include <windows.h>
+#endif
 #if defined (__APPLE__) || defined(MACOSX)
   #define GL_SHARING_EXTENSION "cl_APPLE_gl_sharing"
 #else
@@ -16,6 +19,7 @@
 #include <boxm/ocl/view/boxm_ocl_draw_glbuffer_tableau.h>
 #include <boxm/ocl/boxm_render_image_manager.h>
 #include <boxm/ocl/boxm_render_ocl_scene_manager.h>
+#include <boxm/ocl/boxm_update_ocl_scene_manager.h>
 
 #include <boxm/ocl/boxm_ocl_utils.h>
 #include <vpgl/vpgl_perspective_camera.h>
@@ -24,9 +28,7 @@
 #include <vgui/vgui_modifier.h>
 #include <vgl/vgl_distance.h>
 
-#if defined(WIN32)
-    #include <windows.h>
-#endif
+
 
 //: Constructor 
 boxm_ocl_draw_glbuffer_tableau::boxm_ocl_draw_glbuffer_tableau():
@@ -109,19 +111,15 @@ bool boxm_ocl_draw_glbuffer_tableau::init_ocl(){
   };
 #endif
 
-  vcl_cout<<"Current Context (tableau): "<<glXGetCurrentContext()<<vcl_endl;  
-  vcl_cout<<"Current display (tableau): "<<glXGetCurrentDisplay()<<vcl_endl; 
-
   //create OpenCL context with display properties determined above 
   ray_mgr->context_ = clCreateContext(props, 1, &ray_mgr->devices()[0], NULL, NULL, &status);
 
-  ///initialize ray trace using the input camera  
+//  initialize ray trace using the input camera  
   int bundle_dim = 8;  
   ray_mgr->set_bundle_ni(bundle_dim);  
   ray_mgr->set_bundle_nj(bundle_dim);
   ray_mgr->init_ray_trace(scene_, &cam_, expected);
-  bool good=true;
-  good = good && ray_mgr->set_scene_data()
+  bool good=true;  good = good && ray_mgr->set_scene_data()
       && ray_mgr->set_all_blocks() 
       && ray_mgr->set_scene_data_buffers()
       && ray_mgr->set_tree_buffers();

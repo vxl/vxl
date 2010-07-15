@@ -6,7 +6,6 @@
 
 // Utilities, OpenCL and system includes
 #include <GL/glew.h>
-#include <GL/glx.h>
 
 #include <bocl/bocl_cl.h>
 #include <bocl/bocl_utils.h>
@@ -71,8 +70,6 @@ int main(int argc, char ** argv)
     boxm_ocl_draw_glbuffer_tableau_new glbuffer_tableau;  
     //vgui_window* win = vgui::produce_window(ni(), nj(), "OpenCl Volume Visualizer");
     //win->get_adaptor()->make_current();
-    vcl_cout<<"Current Context: "<<glXGetCurrentContext()<<vcl_endl;  
-    vcl_cout<<"Current display: "<<glXGetCurrentDisplay()<<vcl_endl; 
     //win->get_adaptor()->set_tableau( glbuffer_tableau  ); 
     vcl_cout.flush();
    
