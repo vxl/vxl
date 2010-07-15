@@ -21,6 +21,7 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_calibration_matrix.h>
 #include <vgui/internals/trackball.h>
+#include <vgui/vgui_modifier.h>
 #include <vgl/vgl_distance.h>
 
 #if defined(WIN32)
@@ -30,7 +31,7 @@
 //: Constructor 
 boxm_ocl_draw_glbuffer_tableau::boxm_ocl_draw_glbuffer_tableau():
                                   c_mouse_rotate(vgui_LEFT),
-                                  c_mouse_translate(vgui_RIGHT),
+                                  c_mouse_translate(vgui_LEFT, vgui_CTRL),
                                   c_mouse_zoom(vgui_MIDDLE),
                                   default_cam_(),cam_()
 {
@@ -63,6 +64,20 @@ bool boxm_ocl_draw_glbuffer_tableau::init(boxm_ocl_scene * scene,
   default_cam_=(*cam);
   cam_=(*cam); //default cam
   scene_=scene;
+  
+  do_init_ocl = true;
+  return true;
+}
+
+bool boxm_ocl_draw_glbuffer_tableau::init_ocl(){
+  
+  GLenum err = glewInit();
+  if (GLEW_OK != err)
+  {
+      /* Problem: glewInit failed, something is seriously wrong. */
+      vcl_cout<< "Error: "<<glewGetErrorString(err)<<vcl_endl;
+  }
+  
   vil_image_view<float> expected(ni_,nj_);
 
   //initialize the render manager     
@@ -94,6 +109,9 @@ bool boxm_ocl_draw_glbuffer_tableau::init(boxm_ocl_scene * scene,
   };
 #endif
 
+  vcl_cout<<"Current Context (tableau): "<<glXGetCurrentContext()<<vcl_endl;  
+  vcl_cout<<"Current display (tableau): "<<glXGetCurrentDisplay()<<vcl_endl; 
+
   //create OpenCL context with display properties determined above 
   ray_mgr->context_ = clCreateContext(props, 1, &ray_mgr->devices()[0], NULL, NULL, &status);
 
@@ -109,7 +127,7 @@ bool boxm_ocl_draw_glbuffer_tableau::init(boxm_ocl_scene * scene,
       && ray_mgr->set_tree_buffers();
 
   // run the raytracing
-  good = good && ray_mgr->set_persp_camera(cam)
+  good = good && ray_mgr->set_persp_camera(&cam_)
       && ray_mgr->set_persp_camera_buffers()
       && ray_mgr->set_input_image()
       && ray_mgr->set_input_image_buffers()
@@ -135,8 +153,8 @@ bool boxm_ocl_draw_glbuffer_tableau::init(boxm_ocl_scene * scene,
   ray_mgr->set_kernel();
   ray_mgr->set_args();
   ray_mgr->set_commandqueue();
-  ray_mgr->set_workspace();
-  return true;
+  ray_mgr->set_workspace();  
+  
 }
 
 //: sets up viewport and GL Modes 
@@ -160,6 +178,11 @@ bool boxm_ocl_draw_glbuffer_tableau::handle(vgui_event const &e)
   //draw handler - called on post_draw()
   if (e.type == vgui_DRAW)
   {
+      if(do_init_ocl){
+        this->init_ocl();
+        do_init_ocl = false;
+      }
+    
       //vcl_cout<<"Quat ["<<token.quat[0]<<","<<token.quat[1]<<","<<token.quat[2]<<","<<token.quat[3]<<"]"<<vcl_endl;
       //vcl_cout<<"trans ["<<token.trans[0]<<","<<token.trans[1]<<","<<token.trans[2]<<"]"<<vcl_endl;
       //vcl_cout<<"Fov "<<token.fov<<vcl_endl;
@@ -182,15 +205,35 @@ bool boxm_ocl_draw_glbuffer_tableau::handle(vgui_event const &e)
       this->setup_gl_matrices();
       this->post_redraw();
   }
-  if (e.type == vgui_KEY_PRESS && e.key == vgui_key_CTRL('r')) 
+  
+  //handle key presses - these mostly just rearrange the camera
+  if (e.type == vgui_KEY_PRESS) 
   {
-    vcl_cout<<"resetting to initial camera view"<<vcl_endl;
-    cam_.set_camera_center(default_cam_.get_camera_center());
-    cam_.set_rotation(default_cam_.get_rotation());
-    token = this->home;
-    lastpos = this->home;
+    if(e.key == vgui_key_CTRL('r')) {
+        vcl_cout<<"resetting to initial camera view"<<vcl_endl;
+        cam_.set_camera_center(default_cam_.get_camera_center());
+        cam_.set_rotation(default_cam_.get_rotation());
+        token = this->home;
+        lastpos = this->home;
+    }
+    else if(e.key == vgui_key_CTRL('x')) {
+        vcl_cout<<"looking down X axis at the origin"<<vcl_endl;
+        cam_.set_camera_center(vgl_point_3d<double>(2,0,0));
+        cam_.look_at(vgl_homg_point_3d<double>(0,0,0));
+    }
+    else if(e.key == vgui_key_CTRL('y')) {
+        vcl_cout<<"looking down Y axis at the origin"<<vcl_endl;
+        cam_.set_camera_center(vgl_point_3d<double>(0,2,0));
+        cam_.look_at(vgl_homg_point_3d<double>(0,0,0));
+    }
+    else if(e.key == vgui_key_CTRL('z')) { 
+        vcl_cout<<"looking down Z axis at the origin"<<vcl_endl;
+        cam_.set_camera_center(vgl_point_3d<double>(0,0,2));
+        cam_.look_at(vgl_homg_point_3d<double>(0,0,0));
+    }
     this->post_redraw();
   }
+  
   event = e;
   if (vgui_drag_mixin::handle(e))
     return true;
@@ -207,7 +250,7 @@ bool boxm_ocl_draw_glbuffer_tableau::render_frame()
     boxm_render_ocl_scene_manager* ray_mgr = boxm_render_ocl_scene_manager::instance();
     cl_int status = clEnqueueAcquireGLObjects(ray_mgr->command_queue_, 1, 
                                              &ray_mgr->image_gl_buf_ , 0, 0, 0);
-    if (!ray_mgr->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (input_image)"+error_to_string(status)))
+    if (!ray_mgr->check_val(status,CL_SUCCESS,"clEnqueueAcquireGLObjects failed. (gl_image)"+error_to_string(status)))
         return false;
 
     ray_mgr->set_persp_camera(&cam_);
@@ -311,9 +354,28 @@ bool boxm_ocl_draw_glbuffer_tableau::mouse_drag(int x, int y, vgui_button button
 
     double dx = (beginx - x) / width;
     double dy = (beginy - y) / height;
+    
+    vcl_cout<<"Translating: begin ("<<beginx<<","<<beginy<<") -> ("<<x<<","<<y<<")"<<vcl_endl;
 
-    this->token.trans[0] = static_cast<float>(lastpos.trans[0] - dx * 20);
-    this->token.trans[1] = static_cast<float>(lastpos.trans[1] - dy * 20);
+    double scale = .01;
+
+    vgl_point_3d<double> p0(beginx/width, beginy/height, 0.0);
+    vgl_point_3d<double> p1(x/width, y/height, 0.0);
+    
+    vcl_cout<<"cam matrix: "<<cam_.get_matrix()<<vcl_endl;
+    vgl_point_3d<double> wp0 = cam_.get_rotation().inverse()*(p0-cam_.get_translation());
+    vgl_point_3d<double> wp1 = cam_.get_rotation().inverse()*(p1-cam_.get_translation());
+    vgl_vector_3d<double> tVec = scale*(wp0-wp1);
+
+    
+    vcl_cout<<"  begin world point:"<<wp0<<vcl_endl;
+    vcl_cout<<"  end world point  :"<<wp1<<vcl_endl;
+    
+    vgl_point_3d<double> cam_center;
+    cam_.set_camera_center(cam_center + tVec);
+    
+    //this->token.trans[0] = static_cast<float>(lastpos.trans[0] - dx * 20);
+    //this->token.trans[1] = static_cast<float>(lastpos.trans[1] - dy * 20);
 
     this->post_redraw();
     return true;

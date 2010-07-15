@@ -10,11 +10,14 @@ IF(VGUI_FOUND)
   LINK_DIRECTORIES(${OPENGL_LIBRARY_DIR})
 
   SET(boxm_ocl_view_sources
-      boxm_ocl_draw_glbuffer_tableau.h boxm_ocl_draw_glbuffer_tableau.cxx
+      boxm_ocl_draw_glbuffer_tableau.h 
+      boxm_ocl_draw_glbuffer_tableau.cxx
       boxm_ocl_draw_glbuffer_tableau_sptr.h
+      boxm_ocl_update_tableau.h 
+      boxm_ocl_update_tableau.cxx
+      boxm_ocl_update_tableau_sptr.h
      )
 
-  
   
   ADD_LIBRARY(boxm_ocl_view ${boxm_ocl_view_sources} )
 

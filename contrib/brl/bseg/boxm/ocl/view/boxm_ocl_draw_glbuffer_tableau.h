@@ -27,6 +27,8 @@ public:
     virtual bool handle( vgui_event const& e );
 
     bool init(boxm_ocl_scene * scene, unsigned ni, unsigned nj, vpgl_perspective_camera<double> * cam);
+    bool init_ocl();
+    
     //;  set the GL buffer which needs to be displayed.
     void set_glbuffer(GLuint  pbuffer){pbuffer_=pbuffer;}
 
@@ -73,6 +75,7 @@ protected:
     vpgl_perspective_camera<double> cam_;
     vpgl_perspective_camera<double> default_cam_;
     vgl_homg_point_3d<double> stare_point_;
+    bool do_init_ocl;
 };
 //: Create a smart-pointer to a boxm_ocl_draw_glbuffer_tableau tableau.
 struct boxm_ocl_draw_glbuffer_tableau_new : public boxm_ocl_draw_glbuffer_tableau_sptr
