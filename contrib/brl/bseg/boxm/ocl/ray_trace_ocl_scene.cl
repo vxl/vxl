@@ -353,7 +353,7 @@ ray_trace_ocl_scene_with_full_data(__global int4     * scene_dims,  // level of 
 
       //// distance must be multiplied by the dimension of the bounding box
       float d = (tfar-tnear)*(blockdims.x);
-      step_cell(sample_array,,data_ptr,d,&data_return);
+      step_cell(sample_array,data_ptr,d,&data_return);
 
       // Added aliitle extra to the exit point
       exit_pt=local_ray_o + (tfar+cellsize/10)*ray_d;exit_pt.w=0.5;
