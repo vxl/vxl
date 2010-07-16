@@ -66,7 +66,6 @@ int main(int argc, char ** argv)
     }
 
     //create a new ocl_draw_glbuffer_tableau, window, and initialize it
-    vcl_cout<<"I'm in boxm_ocl_render_view.cxx"<<vcl_endl;
     boxm_ocl_draw_glbuffer_tableau_new glbuffer_tableau;  
     //vgui_window* win = vgui::produce_window(ni(), nj(), "OpenCl Volume Visualizer");
     //win->get_adaptor()->make_current();

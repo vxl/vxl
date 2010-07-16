@@ -16,6 +16,9 @@ IF(VGUI_FOUND)
       boxm_ocl_update_tableau.h 
       boxm_ocl_update_tableau.cxx
       boxm_ocl_update_tableau_sptr.h
+      boxm_cam_tableau.h
+      boxm_cam_tableau.cxx
+      boxm_cam_tableau_sptr.h
      )
 
   
