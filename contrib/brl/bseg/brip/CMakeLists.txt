@@ -30,6 +30,9 @@ SET(brip_sources
    brip_rect_mask.h          brip_rect_mask.cxx
    brip_line_generator.h     brip_line_generator.cxx
    brip_label_equivalence.h  brip_label_equivalence.cxx
+   brip_kernel.h
+   brip_interp_kernel.h
+   brip_gaussian_kernel.h
 )
 AUX_SOURCE_DIRECTORY(Templates brip_sources)
 
