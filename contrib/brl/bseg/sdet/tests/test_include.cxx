@@ -23,5 +23,8 @@
 #include <sdet/sdet_watershed_region_proc.h>
 #include <sdet/sdet_watershed_region_proc_params.h>
 #include <sdet/sdet_img_edge.h>
+#include <sdet/sdet_third_order_edge_det.h>
+#include <sdet/sdet_third_order_edge_det_params.h>
+#include <sdet/sdet_nms.h>
 
 int main() { return 0; }
