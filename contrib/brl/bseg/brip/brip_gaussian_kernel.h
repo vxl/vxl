@@ -1,4 +1,4 @@
-// This is brcv/seg/brip/edge/brip_gaussian_kernel.h
+// This is seg/brip/edge/brip_gaussian_kernel.h
 #ifndef brip_gaussian_kernel_h
 #define brip_gaussian_kernel_h
 //:

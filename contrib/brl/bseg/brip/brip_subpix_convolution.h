@@ -1,4 +1,4 @@
-// This is brcv/seg/brip/algo/brip_subpix_convolution.h
+// This is seg/brip/brip_subpix_convolution.h
 #ifndef brip_subpix_convolution_h
 #define brip_subpix_convolution_h
 //:

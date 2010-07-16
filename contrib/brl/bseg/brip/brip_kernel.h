@@ -1,4 +1,4 @@
-// This is brcv/seg/brip/edge/brip_kernel.h
+// This is seg/brip/edge/brip_kernel.h
 #ifndef brip_kernel_h
 #define brip_kernel_h
 //:
