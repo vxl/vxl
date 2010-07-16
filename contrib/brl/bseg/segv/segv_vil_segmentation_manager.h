@@ -90,6 +90,7 @@ class segv_vil_segmentation_manager : public vgui_wrapper_tableau
   void harris_corners();
   void nonmaximal_suppression();
   void vd_edges();
+  void third_order_edges();
   void fit_lines();
   void fit_conics();
   void fit_overlay_conics();

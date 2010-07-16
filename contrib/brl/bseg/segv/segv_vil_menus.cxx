@@ -75,6 +75,11 @@ void segv_vil_menus::vd_edges_callback()
   segv_vil_segmentation_manager::instance()->vd_edges();
 }
 
+void segv_vil_menus::third_order_edges_callback()
+{
+  segv_vil_segmentation_manager::instance()->third_order_edges();
+}
+
 void segv_vil_menus::fit_lines_callback()
 {
   segv_vil_segmentation_manager::instance()->fit_lines();
@@ -262,6 +267,7 @@ vgui_menu segv_vil_menus::get_menu()
   menuedit.add("Parallel Coverage", parallel_coverage_callback);
 
   menuedit.add("VD Edges", vd_edges_callback);
+  menuedit.add("Third Order Edges", third_order_edges_callback);
   menuedit.add("Line Segments", fit_lines_callback);
   menuedit.add("Conic Segments", fit_conics_callback);
   menuedit.add("Overlay Conic Segments", fit_overlay_conics_callback);

@@ -81,7 +81,8 @@
 #include <strk/strk_region_info_params.h>
 #include <strk/strk_region_info.h>
 #include <strk/strk_io.h>
-
+#include <sdet/sdet_third_order_edge_det_params.h>
+#include <sdet/sdet_third_order_edge_det.h>
 segv_vil_segmentation_manager *segv_vil_segmentation_manager::instance_ = 0;
 
 segv_vil_segmentation_manager *segv_vil_segmentation_manager::instance()
@@ -959,6 +960,31 @@ void segv_vil_segmentation_manager::vd_edges()
     this->draw_edges(*edges, true);
 }
 
+void segv_vil_segmentation_manager::third_order_edges()
+{
+  this->clear_display();
+  static sdet_third_order_edge_det_params dp;
+  vgui_dialog todr_dialog("Third Order Edges");
+  todr_dialog.field("Sigma", dp.sigma_);
+  todr_dialog.field("Threshold", dp.thresh_);
+  todr_dialog.field("Parabola Type", dp.pfit_type_);
+  todr_dialog.field("Gradient Oper", dp.grad_op_);
+  todr_dialog.field("Convolution Algo", dp.conv_algo_);
+  if (!todr_dialog.ask())
+    return;
+  vil_image_resource_sptr img = selected_image();
+  if (!img||!img->ni()||!img->nj())
+  {
+    vcl_cout << "In segv_vil_segmentation_manager::third_order_edges() - no image\n";
+    return;
+  }
+  sdet_third_order_edge_det det(dp);
+  det.apply(img->get_view());
+  vcl_vector<vsol_line_2d_sptr> lines;
+  det.line_segs(lines);
+  if (lines.size())
+    this->draw_lines(lines);
+}
 void segv_vil_segmentation_manager::fit_lines()
 {
   this->clear_display();
