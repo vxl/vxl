@@ -113,7 +113,7 @@ int main2(int argc, char*argv[])
   {
     out_file.open(out_fname().c_str());
     out_stream = &out_file;
-    if (!in_file) mbl_exception_throw_os_error(out_fname(), "Failed to open for writing");
+    if (!out_file) mbl_exception_throw_os_error(out_fname(), "Failed to open for writing");
   }
 
   vcl_copy(data.begin(), data.end(), vcl_ostream_iterator<vcl_string>(*out_stream, "\n"));
