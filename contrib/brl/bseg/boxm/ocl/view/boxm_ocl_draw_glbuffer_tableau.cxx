@@ -27,6 +27,7 @@
 #include <vgui/internals/trackball.h>
 #include <vgui/vgui_modifier.h>
 #include <vgl/vgl_distance.h>
+#include <vcl_sstream.h>
 
 
 
@@ -153,7 +154,7 @@ bool boxm_ocl_draw_glbuffer_tableau::handle(vgui_event const &e)
       vcl_cout<<"Cam center: "<<cam_.get_camera_center()<<vcl_endl
               <<"stare point: "<<stare_point_<<vcl_endl;
       //vcl_cout<<cam_<<vcl_endl;
-      this->render_frame();
+      float gpu_time = this->render_frame();
       this->setup_gl_matrices();
       glClear(GL_COLOR_BUFFER_BIT);
       glDisable(GL_DEPTH_TEST);
@@ -162,6 +163,12 @@ bool boxm_ocl_draw_glbuffer_tableau::handle(vgui_event const &e)
       glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, pbuffer_);
       glDrawPixels(ni_, nj_, GL_RGBA, GL_UNSIGNED_BYTE, 0);
       glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
+      
+      //calculate and write fps to status
+      vcl_stringstream str; 
+      str<<"rendering at about "<< (1000.0f / gpu_time) <<" fps ";
+      status_->write(str.str().c_str());
+      
       return true;
   }
   
@@ -172,7 +179,7 @@ bool boxm_ocl_draw_glbuffer_tableau::handle(vgui_event const &e)
 }
 
 //: calls on ray manager to render frame into the pbuffer_ 
-bool boxm_ocl_draw_glbuffer_tableau::render_frame()
+float boxm_ocl_draw_glbuffer_tableau::render_frame()
 {
     boxm_render_ocl_scene_manager* ray_mgr = boxm_render_ocl_scene_manager::instance();
     cl_int status = clEnqueueAcquireGLObjects(ray_mgr->command_queue_, 1, 
@@ -185,6 +192,6 @@ bool boxm_ocl_draw_glbuffer_tableau::render_frame()
     ray_mgr->run();
     status = clEnqueueReleaseGLObjects(ray_mgr->command_queue_, 1, &ray_mgr->image_gl_buf_ , 0, 0, 0);
     clFinish( ray_mgr->command_queue_ );
-    return true;
+    return ray_mgr->gpu_time();
 }
 

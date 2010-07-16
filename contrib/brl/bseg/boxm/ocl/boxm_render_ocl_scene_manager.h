@@ -90,6 +90,8 @@ class boxm_render_ocl_scene_manager : public bocl_manager<boxm_render_ocl_scene_
   unsigned wni() {return wni_;}
   unsigned wnj() {return wnj_;}
 
+  float gpu_time() {return gpu_time_; }
+
   bool read_output_image();
   bool read_trees();
   void print_tree();
@@ -240,6 +242,9 @@ class boxm_render_ocl_scene_manager : public bocl_manager<boxm_render_ocl_scene_
 
   vcl_size_t globalThreads[2];
   vcl_size_t localThreads[2] ;
+  
+  //gpu time 
+  float gpu_time_;
 };
 
 #endif // boxm_render_ocl_scene_manager_h_

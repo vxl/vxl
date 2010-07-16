@@ -14,6 +14,7 @@
 #include <boxm/boxm_scene_base.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <bocl/bocl_utils.h>
+#include <vgui/vgui_statusbar.h>
 
 class boxm_ocl_draw_glbuffer_tableau : public boxm_cam_tableau
 {
@@ -27,12 +28,13 @@ public:
     bool init(boxm_ocl_scene * scene, unsigned ni, unsigned nj, vpgl_perspective_camera<double> * cam);
     
     //;  set the GL buffer which needs to be displayed.
-    void set_glbuffer(GLuint  pbuffer){pbuffer_=pbuffer;}
+    void set_glbuffer(GLuint  pbuffer){ pbuffer_=pbuffer; }
+    void set_statusbar(vgui_statusbar* status) { status_ = status; }
 
 protected:
 
-    //func to render frame on GPU
-    bool render_frame();
+    //func to render frame on GPU (returns gpu time)
+    float render_frame();
     
     bool init_ocl();
     bool do_init_ocl;
@@ -43,6 +45,8 @@ protected:
     boxm_ocl_scene * scene_;
     unsigned ni_;
     unsigned nj_;
+    
+    vgui_statusbar* status_;
 };
 //: Create a smart-pointer to a boxm_ocl_draw_glbuffer_tableau tableau.
 struct boxm_ocl_draw_glbuffer_tableau_new : public boxm_ocl_draw_glbuffer_tableau_sptr

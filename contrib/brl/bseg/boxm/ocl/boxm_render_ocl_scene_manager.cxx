@@ -227,7 +227,7 @@ bool boxm_render_ocl_scene_manager::run()
   cl_ulong tstart,tend;
   status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
   status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
-  float  gpu_time_= (double)1.0e-6 * (tend - tstart); // convert nanoseconds to milliseconds
+  gpu_time_= (double)1.0e-6 * (tend - tstart); // convert nanoseconds to milliseconds
   vcl_cout<<"GPU time is "<<gpu_time_<<vcl_endl;
   return SDK_SUCCESS;
 }

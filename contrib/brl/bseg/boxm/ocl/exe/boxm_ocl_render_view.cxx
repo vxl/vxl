@@ -67,15 +67,20 @@ int main(int argc, char ** argv)
 
     //create a new ocl_draw_glbuffer_tableau, window, and initialize it
     boxm_ocl_draw_glbuffer_tableau_new glbuffer_tableau;  
-    //vgui_window* win = vgui::produce_window(ni(), nj(), "OpenCl Volume Visualizer");
-    //win->get_adaptor()->make_current();
-    //win->get_adaptor()->set_tableau( glbuffer_tableau  ); 
-    vcl_cout.flush();
-   
     glbuffer_tableau->init(&ocl_scene,ni(),nj(),pcam);
-    GLboolean bGLEW = glewIsSupported("GL_VERSION_2_0  GL_ARB_pixel_buffer_object");
-    return  vgui::run(glbuffer_tableau, ni(), nj());
 
+    vgui_window* win = vgui::produce_window(ni(), nj(), "OpenCl Volume Visualizer");
+    //win->get_adaptor()->make_current();
+    win->get_adaptor()->set_tableau( glbuffer_tableau  ); 
+    glbuffer_tableau->set_statusbar(win->get_statusbar());
+    win->show();
+   
+    GLboolean bGLEW = glewIsSupported("GL_VERSION_2_0  GL_ARB_pixel_buffer_object");
+      
+    return vgui::run();
+    
+    //return  vgui::run(glbuffer_tableau, ni(), nj());
+    
 
     // Load image (given in the first command line param) into an image tableau.
     //vgui_image_tableau_new image("/home/acm/Pictures/Flowerings_90_by_love1008.jpg");
