@@ -285,3 +285,24 @@ char   vnl_huge_val(char)   { return 0x7f; }
 
 
 //----------------------------------------------------------------------
+double vnl_math::angle_0_to_2pi(double angle)
+{
+    double a;
+  if (angle>=2*vnl_math::pi)
+    a = vcl_fmod (angle,vnl_math::pi*2);
+  else if (angle < 0)
+    a = (2*vnl_math::pi+ vcl_fmod (angle,2*vnl_math::pi));
+  else 
+    a= angle;
+
+  // added by Nhon: these two lines of code is to fix the bug when
+  // angle = -1.1721201390607859e-016
+  // then after all the computation, we get
+  // a = 6.2831853071795862 == 2*vnl_math::pi !!!!!!!
+  // this situation can happen is when a is very close to zero.
+
+  if (!(a>=0 && a<2*vnl_math::pi)) {
+    a = 0;
+  }
+  return a;
+}
