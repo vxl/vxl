@@ -65,7 +65,9 @@ void boxm_ocl_scene::init_scene(vbl_array_3d<int4> blocks,
   origin_ = origin;
   block_dim_ = block_dim;
   
-  /* initialize parser information */
+  //initialize level information 
+  max_level_ = 4;
+  init_level_ = 1;
 }
  
 
@@ -173,6 +175,10 @@ bool boxm_ocl_scene::load_scene(vcl_string filename)
   origin_ = parser_.origin();
   rpc_origin_ = parser_.origin();
   block_dim_ = parser_.block_dim();
+  unsigned max, init;
+  parser_.levels(max, init);
+  max_level_ = (int) max; 
+  init_level_ = (int) init;
   
   /* load tree binary information */
   bool tree_loaded = this->init_existing_scene(); 
@@ -365,9 +371,11 @@ vcl_ostream& operator <<(vcl_ostream &s, boxm_ocl_scene& scene)
   
   
   s <<"---OCL_SCENE--------------------------------" << vcl_endl
-    <<"[block_nums "<<x_num<<","<<y_num<<","<<z_num<<"] "
+    <<"blocks:  [block_nums "<<x_num<<","<<y_num<<","<<z_num<<"] "
     <<"[blk_dim "<<x_dim<<","<<y_dim<<","<<z_dim<<"] " << vcl_endl
-    <<"[num_buffs " << num << "] " 
+    <<"blk levels: [init level "<<scene.init_level()<<"] "
+    <<"[max level "<<scene.max_level()<<"] "<<vcl_endl
+    <<"buffers: [num_buffs " << num << "] " 
     <<"[buff_length " << len << "] " << vcl_endl;
     
     
@@ -378,7 +386,7 @@ vcl_ostream& operator <<(vcl_ostream &s, boxm_ocl_scene& scene)
   vbl_array_2d<float16> data_buffers = scene.data_buffers();
   vbl_array_2d<int4> tree_buffers = scene.tree_buffers();
   vbl_array_1d<int2> mem_ptrs = scene.mem_ptrs();
-  s << "[free space: ";
+  s << "free space: ";
   for(int i=0; i<mem_ptrs.size(); i++) {
     int start=mem_ptrs[i][0];
     int end = mem_ptrs[i][1];

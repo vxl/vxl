@@ -48,6 +48,8 @@ class boxm_ocl_scene
     
     static short version_no() { return 1; }
 
+    int  init_level() { return init_level_; }
+    int  max_level() { return max_level_; }
     void block_num(int &x, int &y, int &z){x=(int)blocks_.get_row1_count(); y=(int)blocks_.get_row2_count(); z=(int)blocks_.get_row3_count();}
     void block_dim(double &x, double &y, double &z){x=block_dim_.x(); y=block_dim_.y(); z=block_dim_.z();}
     void tree_buffer_shape(int &num, int &len){num=num_tree_buffers_; len=tree_buff_length_;}
@@ -97,6 +99,8 @@ class boxm_ocl_scene
     vgl_box_3d<double> world_bb_;
     boxm_apm_type app_model_;
     vcl_string path_;
+    int init_level_;   //each block's init level (default 1)
+    int max_level_;    //each blocks max_level (default 4)
 
     //actual local scene structure and data
     int num_tree_buffers_, tree_buff_length_;

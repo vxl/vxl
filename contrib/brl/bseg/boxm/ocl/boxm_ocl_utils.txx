@@ -123,11 +123,20 @@ void boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T> >* scene,
           <<"---block_dim: "<<block_dim<<vcl_endl
           <<"---block_num: "<<block_num<<vcl_endl
           <<"---max_level: "<<scene->max_level()<<vcl_endl
+          <<"---init_level: "<<scene->init_level()<<vcl_endl
           <<"---------------------------------------------"<<vcl_endl;
   
   /* calculate number of small blocks along one side of one big block*/
-  int max_level = (int) scene->max_level(); 
-  int sm_n =(int)( (float)vcl_pow((float)2, (float)(max_level-1))/(float)vcl_pow((float)2,(float)(SMALL_BLK_MAX_LEVEL-1))); 
+  int max_level = (int) scene->max_level(); //equals rootLevel + 1
+  int def_init = max_level - SMALL_BLK_MAX_LEVEL; //allows for trees to grow to depth 4
+  int scene_init = scene->init_level(); 
+  int init_level = vcl_max(def_init, scene_init);
+  
+  //finest blocks that lie along one side of the big (or small) blocks
+  float finestPerBig = (float) vcl_pow((float)2, (float)(max_level-1));
+  float finestPerSmall = (float) vcl_pow((float)2, (float)(max_level-init_level));
+  //float finestPerSmall = (float) vcl_pow((float)2, (float(SMALL_BLK_MAX_LEVEL));
+  int sm_n = (int) (finestPerBig/finestPerSmall);
   vgl_vector_3d<int> block_num_small(sm_n*x_num, sm_n*y_num, sm_n*z_num);
   vgl_vector_3d<double> block_dim_small(block_dim.x()/sm_n, block_dim.y()/sm_n, block_dim.z()/sm_n);
   
@@ -306,7 +315,6 @@ void boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T> >* scene,
   if(init_blocks) vcl_cout<<"initialized blocks "<<vcl_endl;
 
 
-  
   ocl_scene.init_scene(blocks, tree_buffers, data_buffers, mem_ptrs, lvcs, origin, block_dim_small);
 }
 
