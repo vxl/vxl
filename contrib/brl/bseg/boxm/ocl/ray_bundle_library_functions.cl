@@ -301,8 +301,8 @@ int load_data_mutable_using_cell_ptrs( __local uchar4*   ray_bundle_array, /* bu
                             tptr = indx-1;
                             org_ptr = ray_bundle_array[tptr].x;
                             if (cell_ptrs[tptr]==cell_ptrs[indx]) {
-                                    update_state_ptr(ray_bundle_array, indx, org_ptr);
-                                    found = true;
+                                update_state_ptr(ray_bundle_array, indx, org_ptr);
+                                found = true;
                             }
                         }
                     }
@@ -311,16 +311,16 @@ int load_data_mutable_using_cell_ptrs( __local uchar4*   ray_bundle_array, /* bu
                         tptr = indx - nbi;
                         org_ptr = ray_bundle_array[tptr].x;
                         if (cell_ptrs[tptr]==cell_ptrs[indx]) {
-                                update_state_ptr(ray_bundle_array, indx, org_ptr);
-                                found = true;
+                            update_state_ptr(ray_bundle_array, indx, org_ptr);
+                            found = true;
                         }
                         /* more than one column and upper right neighbor */
                         if (!found&&i<(nbi-1)&&nbi>1) {
                             tptr = indx - nbi + 1;
                             org_ptr = ray_bundle_array[tptr].x;
                             if (cell_ptrs[tptr]==cell_ptrs[indx]) {
-                                    update_state_ptr(ray_bundle_array, indx, org_ptr);
-                                    found = true;
+                                update_state_ptr(ray_bundle_array, indx, org_ptr);
+                                found = true;
                             }
                         }
                         /* upper left neighbor is valid for i>0 and j>0 */
@@ -328,8 +328,8 @@ int load_data_mutable_using_cell_ptrs( __local uchar4*   ray_bundle_array, /* bu
                             tptr = indx - nbi - 1;
                             org_ptr = ray_bundle_array[tptr].x;
                             if (cell_ptrs[tptr]==cell_ptrs[indx]) {
-                                    update_state_ptr(ray_bundle_array, indx, org_ptr);
-                                    found = true;
+                                update_state_ptr(ray_bundle_array, indx, org_ptr);
+                                found = true;
                             }
                         }
                         /* left neighbor is valid for i>0 */
@@ -337,8 +337,8 @@ int load_data_mutable_using_cell_ptrs( __local uchar4*   ray_bundle_array, /* bu
                             tptr = indx -  1;
                             org_ptr = ray_bundle_array[tptr].x;
                             if (cell_ptrs[tptr]==cell_ptrs[indx]) {
-                                    update_state_ptr(ray_bundle_array, indx, org_ptr);
-                                    found = true;
+                                update_state_ptr(ray_bundle_array, indx, org_ptr);
+                                found = true;
                             }
                         }
                     }
@@ -728,9 +728,12 @@ void bayes_ratio(float seg_len, __local float4* image_vect,
         cached_aux_data[llid].w += image_vect[llid].z*cached_data[llid].sd;
         /* Bayes ratio */
         /* ( pre + PI*vis)/norm)*seg_len */
+        if(image_vect[llid].x>1e-10f)
+        {
         cached_aux_data[llid].z +=
             /*      pre(i,j)        +        PI        *       vis(i,j) */
             ((image_vect[llid].w + cached_data[llid].se*image_vect[llid].z)/image_vect[llid].x)*cached_data[llid].sd;
+        }
         /*     norm(i,j)        seg_len */
         /* If ray has no neighbors - then just return */
         uchar next_adr_valid = ray_bundle_array[llid].w & NEXT_ADR_VALID;
@@ -742,9 +745,13 @@ void bayes_ratio(float seg_len, __local float4* image_vect,
             cached_aux_data[llid].w += image_vect[adr].z*cached_data[adr].sd;
             /* Bayes ratio */
             /* ( pre + PI*vis)/norm)*seg_len */
+        if( image_vect[adr].x>1e-10f)
+        {
+
             cached_aux_data[llid].z +=
                 ((image_vect[adr].w + cached_data[llid].se*image_vect[adr].z)/
                 image_vect[adr].x)*cached_data[adr].sd;
+        }
             next_adr_valid = ray_bundle_array[adr].w & NEXT_ADR_VALID;
         }
     }
