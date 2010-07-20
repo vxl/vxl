@@ -730,9 +730,9 @@ void bayes_ratio(float seg_len, __local float4* image_vect,
         /* ( pre + PI*vis)/norm)*seg_len */
         if(image_vect[llid].x>1e-10f)
         {
-        cached_aux_data[llid].z +=
-            /*      pre(i,j)        +        PI        *       vis(i,j) */
-            ((image_vect[llid].w + cached_data[llid].se*image_vect[llid].z)/image_vect[llid].x)*cached_data[llid].sd;
+            cached_aux_data[llid].z +=
+                /*      pre(i,j)        +        PI        *       vis(i,j) */
+                ((image_vect[llid].w + cached_data[llid].se*image_vect[llid].z)/image_vect[llid].x)*cached_data[llid].sd;
         }
         /*     norm(i,j)        seg_len */
         /* If ray has no neighbors - then just return */
@@ -745,13 +745,13 @@ void bayes_ratio(float seg_len, __local float4* image_vect,
             cached_aux_data[llid].w += image_vect[adr].z*cached_data[adr].sd;
             /* Bayes ratio */
             /* ( pre + PI*vis)/norm)*seg_len */
-        if( image_vect[adr].x>1e-10f)
-        {
+            if( image_vect[adr].x>1e-10f)
+            {
 
-            cached_aux_data[llid].z +=
-                ((image_vect[adr].w + cached_data[llid].se*image_vect[adr].z)/
-                image_vect[adr].x)*cached_data[adr].sd;
-        }
+                cached_aux_data[llid].z +=
+                    ((image_vect[adr].w + cached_data[llid].se*image_vect[adr].z)/
+                    image_vect[adr].x)*cached_data[adr].sd;
+            }
             next_adr_valid = ray_bundle_array[adr].w & NEXT_ADR_VALID;
         }
     }
