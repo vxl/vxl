@@ -27,8 +27,8 @@ IF(GLEW_FOUND)
   ADD_EXECUTABLE( boxm_ocl_update_view
   boxm_ocl_update_view.cxx
   )
- TARGET_LINK_LIBRARIES( boxm_ocl_render_view boxm_ocl  boxm_ocl_view vul vgui ${GLEW_LIBRARY} ${GLUT_glut_LIBRARY})
- TARGET_LINK_LIBRARIES( boxm_ocl_update_view boxm_ocl  boxm_ocl_view vul vgui ${GLEW_LIBRARY} ${GLUT_glut_LIBRARY})
+ TARGET_LINK_LIBRARIES( boxm_ocl_render_view boxm_ocl  boxm_ocl_view vul vgui ${GLEW_LIBRARY} )
+ TARGET_LINK_LIBRARIES( boxm_ocl_update_view boxm_ocl  boxm_ocl_view vul vgui ${GLEW_LIBRARY} )
  ENDIF(VGUI_FOUND)
 ENDIF(GLEW_FOUND)
 
