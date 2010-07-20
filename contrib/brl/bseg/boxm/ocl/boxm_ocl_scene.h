@@ -68,14 +68,16 @@ class boxm_ocl_scene
     bool save();
 
     void init_scene(vbl_array_3d<int4> blocks, 
-                               vbl_array_2d<int4> tree_buffers, 
-                               vbl_array_2d<float16> data_buffers, 
-                               vbl_array_1d<int2> mem_ptrs, 
-                               bgeo_lvcs lvcs,
-                               vgl_point_3d<double> origin,
-                               vgl_vector_3d<double> block_dim);
+                    vbl_array_2d<int4> tree_buffers, 
+                    vbl_array_2d<float16> data_buffers, 
+                    vbl_array_1d<int2> mem_ptrs, 
+                    bgeo_lvcs lvcs,
+                    vgl_point_3d<double> origin,
+                    vgl_vector_3d<double> block_dim);
 
     //setters
+    void set_max_level(int max_level) { max_level_ = max_level; }
+    void set_init_level(int init_level) { init_level_ = init_level; }
     void set_path(vcl_string dir) { path_ = dir; }
     vcl_string path() { return path_; }
     vbl_array_3d<int4> blocks_;
