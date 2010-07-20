@@ -11,6 +11,7 @@
 #include <vcl_sstream.h>
 #include <vcl_cmath.h>
 #include <vul/vul_reg_exp.h>
+#include <vul/vul_sprintf.h>
 
 #ifndef END_OF_STRING                           // If END_OF_STRING not defined
 #define END_OF_STRING (0)
@@ -497,4 +498,35 @@ bool vul_string_replace(vcl_string& full_str,
     }
   }
   return rep;
+}
+
+
+//: Replace control chars with escaped representations.
+// Space and \n are preserved, but tabs, CR, etc are escaped.
+// This is not aimed and is not suitable for any particular input-validation
+// security problem, such as sql-injection.
+vcl_string vul_string_escape_ctrl_chars(const vcl_string &in)
+{
+  vcl_string out;
+
+  const static vcl_string special("\t\v\b\r\f\a\\");
+  const static vcl_string special_tr("tvbrfa\\");
+
+  for (vcl_string::const_iterator it=in.begin(), end=in.end(); it!=end; ++it)
+  {
+    if (!vcl_iscntrl(*it) || *it=='\n')
+      out+=*it;
+    else
+    {
+      vcl_string::size_type i=special.find(*it);
+      if (i==vcl_string::npos)
+        out+=vul_sprintf("\\x%02x",static_cast<int>(*it));
+      else
+      {      
+        out+='\\';
+        out+=special_tr[i];
+      }
+    }
+  }
+  return out;
 }

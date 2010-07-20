@@ -10,6 +10,7 @@
 #include <vcl_map.h>
 #include <vcl_fstream.h>
 #include <vcl_string.h>
+#include <vul/vul_string.h>
 #include <mbl/mbl_exception.h>
 
 
@@ -152,14 +153,16 @@ void mbl_load_mask(mbl_mask & mask, vcl_istream & stream)
   vcl_string line;
   while (stream.good())
   {
-    vcl_getline(stream, line);
-    if (line.length() == 0) continue;
-    if (line == "0") mask.push_back(false);
-    else if (line == "1") mask.push_back(true);
+    char c='X';
+    stream >> vcl_ws >> c;
+    if (stream.eof()) break;
+    if (c == '0') mask.push_back(false);
+    else if (c == '1') mask.push_back(true);
     else
     {
       mask.clear();
-      throw mbl_exception_parse_file_error("Unable to parse mask value " + line, "");
+      throw mbl_exception_parse_file_error(vcl_string("Unable to parse mask value " + 
+        vul_string_escape_ctrl_chars(vcl_string(c,1)) ), "" );
     }
   }
 }

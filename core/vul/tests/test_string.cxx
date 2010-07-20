@@ -125,6 +125,12 @@ void test_string()
     vul_string_replace( s, "hate", "love" );
     TEST( "vul_string_replace", s== "I love mices to pieces", true);
   }
+
+  {
+    vcl_string s("Too many \r\003\t\v\a\f\x05 control chars.\n");
+    TEST("vul_string_escape_dodgy_chars(\"Too many \\r\\003\\t\\v\\a\\f\\x05 control chars.\\n\")",
+      vul_string_escape_ctrl_chars(s), "Too many \\r\\x03\\t\\v\\a\\f\\x05 control chars.\n");
+  }
 }
 
 TEST_MAIN(test_string);

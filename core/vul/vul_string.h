@@ -84,4 +84,11 @@ extern bool vul_string_replace( vcl_string& full_str,
                                 const vcl_string& replace_str,
                                 int num_times=1000);
 
+//: Replace control chars with escaped representations.
+// Space and \n are preserved, but tabs, CR, etc are escaped.
+// This is not aimed and is not suitable for any particular input-validation
+// security problem, such as sql-injection.
+vcl_string vul_string_escape_ctrl_chars(const vcl_string &in);
+
+
 #endif // vul_string_h
