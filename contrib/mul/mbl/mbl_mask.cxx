@@ -162,7 +162,7 @@ void mbl_load_mask(mbl_mask & mask, vcl_istream & stream)
     {
       mask.clear();
       throw mbl_exception_parse_file_error(vcl_string("Unable to parse mask value " + 
-        vul_string_escape_ctrl_chars(vcl_string(c,1)) ), "" );
+        vul_string_escape_ctrl_chars(vcl_string(1,c)) ), "" );
     }
   }
 }
