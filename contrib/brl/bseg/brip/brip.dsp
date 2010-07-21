@@ -227,6 +227,18 @@ SOURCE=.\brip_line_generator.h
 # Begin Source File
 SOURCE=.\brip_rect_mask.h
 # End Source File
+# Begin Source File
+SOURCE=.\brip_gaussian_kernel.h
+# End Source File
+# Begin Source File
+SOURCE=.\brip_interp_kernel.h
+# End Source File
+# Begin Source File
+SOURCE=.\brip_kernel.h
+# End Source File
+# Begin Source File
+SOURCE=.\brip_subpix_convolution.h
+# End Source File
 # End Group
 # End Target
 # End Project

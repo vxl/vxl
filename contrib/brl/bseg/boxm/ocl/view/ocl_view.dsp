@@ -1,4 +1,4 @@
-# Microsoft Developer Studio Project File - Name="boxm_algo_sp_pro" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="boxm_ocl_view" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
@@ -7,25 +7,25 @@
 # /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl/bseg" == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
 #  == override in output directory
-# boxm_algo_sp_pro  == name of output library
+# boxm_ocl_view  == name of output library
 
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
 
-CFG=boxm_algo_sp_pro - Win32 Debug
+CFG=boxm_ocl_view - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "boxm_algo_sp_pro.mak".
+!MESSAGE NMAKE /f "boxm_ocl_view.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "boxm_algo_sp_pro.mak" CFG="bmrf - Win32 Debug"
+!MESSAGE NMAKE /f "boxm_ocl_view.mak" CFG="bmrf - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "boxm_algo_sp_pro - Win32 Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "boxm_algo_sp_pro - Win32 Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "boxm_ocl_view - Win32 Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "boxm_ocl_view - Win32 Release" (based on "Win32 (x86) Static Library")
 # Begin Project
 # PROP AllowPerConfigDependencies 0
 # PROP Scc_ProjName ""
@@ -33,7 +33,7 @@ CFG=boxm_algo_sp_pro - Win32 Debug
 CPP=cl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "boxm_algo_sp_pro - Win32 Release"
+!IF  "$(CFG)" == "boxm_ocl_view - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -47,7 +47,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /FD /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl/bseg" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "boxm_algo_sp_pro_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl/bseg" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "boxm_ocl_view_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -59,7 +59,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo
 
-!ELSEIF  "$(CFG)" == "boxm_algo_sp_pro - Win32 Debug"
+!ELSEIF  "$(CFG)" == "boxm_ocl_view - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -73,7 +73,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FD /c
 # ADD CPP /nologo /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /FD /GZ /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl/bseg" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "boxm_algo_sp_pro_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl/bseg" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "boxm_ocl_view_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -87,70 +87,42 @@ LIB32=link.exe -lib
 
 # Begin Target
 
-# Name "boxm_algo_sp_pro - Win32 Release"
-# Name "boxm_algo_sp_pro - Win32 Debug"
+# Name "boxm_ocl_view - Win32 Release"
+# Name "boxm_ocl_view - Win32 Debug"
 
+# Begin Project
+# Begin Target
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\boxm_algo_rt_register.cxx
+SOURCE=.\boxm_cam_tableau.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\processes/boxm_render_expected_edge_process.cxx
+SOURCE=.\boxm_ocl_draw_glbuffer_tableau.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\processes/boxm_generate_opt3_samples_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\processes/boxm_render_expected_depth_rt_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\processes/boxm_ray_statistics_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\processes/boxm_generate_edge_samples_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\processes/boxm_update_rt_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\processes/boxm_opt_bayesian_update_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\processes/boxm_render_expected_rt_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\processes/boxm_opt3_update_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\processes/boxm_edge_update_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\processes/boxm_generate_opt2_samples_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\processes/boxm_generate_opt_samples_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\processes/boxm_rpc_registration_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\processes/boxm_opt2_update_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\processes/boxm_change_probabilty_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\processes/boxm_estimate_camera_process.cxx
+SOURCE=.\boxm_ocl_update_tableau.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
-SOURCE=.\boxm_algo_rt_register.h
+SOURCE=.\boxm_cam_tableau_sptr.h
 # End Source File
 # Begin Source File
-SOURCE=.\boxm_algo_rt_processes.h
+SOURCE=.\boxm_ocl_update_tableau.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_ocl_update_tableau_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_ocl_draw_glbuffer_tableau_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_ocl_draw_glbuffer_tableau.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_cam_tableau.h
 # End Source File
 # End Group
 # End Target

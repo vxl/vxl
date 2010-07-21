@@ -290,9 +290,6 @@ SOURCE=.\test_save.cxx
 SOURCE=.\test_reflect.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_run_length_encoding.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

@@ -231,6 +231,9 @@ SOURCE=.\processes/bvxm_estimate_camera_process.cxx
 SOURCE=.\processes/bvxm_estimate_camera_utils.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/bvxm_expected_edge_functor.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+bvxm_voxel_world_sptr-.cxx
 # End Source File
 # Begin Source File
@@ -238,6 +241,9 @@ SOURCE=.\Templates/brdb_value_t+bvxm_voxel_slab_base_sptr-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/brdb_value_t+bvxm_voxel_grid_base_sptr-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvpgl_camera_estimator+bvxm_expected_edge_functor--.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -382,6 +388,9 @@ SOURCE=.\processes/bvxm_estimate_camera_process.h
 # End Source File
 # Begin Source File
 SOURCE=.\processes/bvxm_estimate_camera_utils.h
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bvxm_expected_edge_functor.h
 # End Source File
 # End Group
 # End Target

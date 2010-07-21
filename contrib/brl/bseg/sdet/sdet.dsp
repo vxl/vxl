@@ -173,6 +173,15 @@ SOURCE=.\sdet_gauss_fit.cxx
 # Begin Source File
 SOURCE=.\sdet_img_edge.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\sdet_third_order_edge_det.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\sdet_third_order_edge_det_params.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\sdet_nms.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -250,6 +259,15 @@ SOURCE=.\sdet_gauss_fit.h
 # End Source File
 # Begin Source File
 SOURCE=.\sdet_img_edge.h
+# End Source File
+# Begin Source File
+SOURCE=.\sdet_third_order_edge_det_params.h
+# End Source File
+# Begin Source File
+SOURCE=.\sdet_third_order_edge_det.h
+# End Source File
+# Begin Source File
+SOURCE=.\sdet_nms.h
 # End Source File
 # End Group
 # End Target
