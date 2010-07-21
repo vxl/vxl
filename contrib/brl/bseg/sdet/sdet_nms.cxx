@@ -19,14 +19,14 @@
 //----------------------------------------------------------------
 
 //: default constructor
-sdet_nms::sdet_nms(): 
-  thresh_(0.0), 
+sdet_nms::sdet_nms():
+  thresh_(0.0),
   parabola_fit_type_(sdet_nms_params::PFIT_3_POINTS),
   margin_(1),
   rel_thresh_(2.5),
   use_adaptive_thresh_(true),
-  dir_x_(vil_image_view<double>(0,0,1)), 
-  dir_y_(vil_image_view<double>(0,0,1)), 
+  dir_x_(vil_image_view<double>(0,0,1)),
+  dir_y_(vil_image_view<double>(0,0,1)),
   grad_mag_(vil_image_view<double>(0,0,1)),
   x_(0,0, 0.0),
   y_(0,0, 0.0),
@@ -37,15 +37,15 @@ sdet_nms::sdet_nms():
 }
 
 //: Constructor from a parameter block, gradient magnitudes given as an image and directions given as component image
-sdet_nms::sdet_nms(const sdet_nms_params& nsp, const vil_image_view<double>& dir_x, 
-                     const vil_image_view<double>& dir_y, const vil_image_view<double>& grad_mag) : 
-  thresh_(nsp.thresh_), 
-  parabola_fit_type_(nsp.pfit_type_), 
+sdet_nms::sdet_nms(const sdet_nms_params& nsp, const vil_image_view<double>& dir_x,
+                   const vil_image_view<double>& dir_y, const vil_image_view<double>& grad_mag) :
+  thresh_(nsp.thresh_),
+  parabola_fit_type_(nsp.pfit_type_),
   margin_(nsp.margin_),
   rel_thresh_(nsp.rel_thresh_),
   use_adaptive_thresh_(nsp.use_adaptive_thresh_),
-  dir_x_(dir_x), 
-  dir_y_(dir_y), 
+  dir_x_(dir_x),
+  dir_y_(dir_y),
   grad_mag_(grad_mag),
   x_(grad_mag.nj(), grad_mag.ni(), 0.0),
   y_(grad_mag.nj(), grad_mag.ni(), 0.0),
@@ -59,9 +59,9 @@ sdet_nms::sdet_nms(const sdet_nms_params& nsp, const vil_image_view<double>& dir
 
 // backward compatible method
 void sdet_nms::apply(bool collect_tokens,
-                      vcl_vector<vgl_point_2d<double> >& loc, 
-                      vcl_vector<double>& orientation, 
-                      vcl_vector<double>& mag)
+                     vcl_vector<vgl_point_2d<double> >& loc,
+                     vcl_vector<double>& orientation,
+                     vcl_vector<double>& mag)
 {
   vcl_vector<double> d2f;
   vcl_vector<vgl_point_2d<int> > pix_loc;
@@ -71,10 +71,10 @@ void sdet_nms::apply(bool collect_tokens,
 }
 
 void sdet_nms::apply(bool collect_tokens,
-                      vcl_vector<vgl_point_2d<double> >& loc, 
-                      vcl_vector<double>& orientation, 
-                      vcl_vector<double>& mag,
-                      vcl_vector<double>& d2f)
+                     vcl_vector<vgl_point_2d<double> >& loc,
+                     vcl_vector<double>& orientation,
+                     vcl_vector<double>& mag,
+                     vcl_vector<double>& d2f)
 {
   vcl_vector<vgl_point_2d<int> > pix_loc;
 
@@ -84,11 +84,11 @@ void sdet_nms::apply(bool collect_tokens,
 
 //: Apply the algorithm
 void sdet_nms::apply(bool collect_tokens,
-                      vcl_vector<vgl_point_2d<double> >& loc, 
-                      vcl_vector<double>& orientation, 
-                      vcl_vector<double>& mag,
-                      vcl_vector<double>& d2f,
-                      vcl_vector<vgl_point_2d<int> >& pix_loc)
+                     vcl_vector<vgl_point_2d<double> >& loc,
+                     vcl_vector<double>& orientation,
+                     vcl_vector<double>& mag,
+                     vcl_vector<double>& d2f,
+                     vcl_vector<vgl_point_2d<int> >& pix_loc)
 {
   double f[3], s_list[3];
 
@@ -124,7 +124,7 @@ void sdet_nms::apply(bool collect_tokens,
         double grad_val = 0.0; //should be updated by parabola fit
 
         //compute location of extrema
-        double s_star = (parabola_fit_type_ == sdet_nms_params::PFIT_3_POINTS) ? 
+        double s_star = (parabola_fit_type_ == sdet_nms_params::PFIT_3_POINTS) ?
                             subpixel_s(s_list, f, max_val, grad_val) : subpixel_s(x, y, direction, max_val);
 
         if (vcl_fabs(s_star)< 0.7)
@@ -162,7 +162,7 @@ void sdet_nms::apply(bool collect_tokens,
 
             if ((dx*dx+dy*dy)<0.1){ //closeness threshold, may be made into a parameter if anyone cares
               mag_(y,x)=0.0; //kill the current edgel
-              continue; 
+              continue;
             }
           }
         }
@@ -184,11 +184,10 @@ void sdet_nms::apply(bool collect_tokens,
         d2f.push_back(deriv_(y,x));
 
         //also return the pixel location so that they can be used for tracing algorithms
-        pix_loc.push_back(vgl_point_2d<int>(x, y)); 
+        pix_loc.push_back(vgl_point_2d<int>(x, y));
       }
     }
   }
-
 }
 
 int sdet_nms::intersected_face_number(const vgl_vector_2d<double>& direction)
@@ -342,17 +341,18 @@ double sdet_nms::subpixel_s(double *s, double *f, double &max_f, double &max_d)
 
   max_f = A*s_star*s_star + B*s_star + C;
 
-  //derivatives at f+ and f- 
-  double d2fp = 2*A*s[2] + B;
-  double d2fm = 2*A*s[0] + B;
-
   //second derivative
   double d2f = 2*A;
   max_d = d2f;
 
   if (A<0){ //make sure this is a maximum
     if (use_adaptive_thresh_){
-      //if (vcl_fabs(d2fp)>rel_thresh_ || vcl_fabs(d2fm)>rel_thresh_)
+#if 0 // no longer used...
+      //derivatives at f+ and f-
+      double d2fp = 2*A*s[2] + B;
+      double d2fm = 2*A*s[0] + B;
+      if (vcl_fabs(d2fp)>rel_thresh_ || vcl_fabs(d2fm)>rel_thresh_)
+#endif // 0
       if (d2f<-rel_thresh_)//d2f is always negative at a maxima
         return s_star;
       else
@@ -362,22 +362,22 @@ double sdet_nms::subpixel_s(double *s, double *f, double &max_f, double &max_d)
       return s_star;
   }
   else
-    return 5.0; //not a maxima
+    return 5.0; //not a maximum
 
 //From gevd NMS
-
-//  // Fit a parabola through 3 points with strict local max/min.
-//  // Return the offset location, and value of the maximum/minimum.
-//  float
-//  gevd_float_operators::InterpolateParabola(float y_1, float y_0, float y_2,
-//                                            float&y)
-//  {
-//    float diff1 = y_2 - y_1;      // first derivative
-//    float diff2 = 2 * y_0 - y_1 - y_2; // second derivative
-//    y = y_0 + diff1 * diff1 / (8 * diff2);        // interpolate y as max/min
-//    return diff1 / (2 * diff2);   // interpolate x offset
-//}
-
+#if 0
+  // Fit a parabola through 3 points with strict local max/min.
+  // Return the offset location, and value of the maximum/minimum.
+  float
+  gevd_float_operators::InterpolateParabola(float y_1, float y_0, float y_2,
+                                            float&y)
+  {
+    float diff1 = y_2 - y_1;      // first derivative
+    float diff2 = 2 * y_0 - y_1 - y_2; // second derivative
+    y = y_0 + diff1 * diff1 / (8 * diff2);        // interpolate y as max/min
+    return diff1 / (2 * diff2);   // interpolate x offset
+}
+#endif // 0
 }
 
 double sdet_nms::subpixel_s(int x, int y, const vgl_vector_2d<double>& direction, double &max_f)
@@ -414,18 +414,17 @@ double sdet_nms::subpixel_s(int x, int y, const vgl_vector_2d<double>& direction
   P = svd.solve(B);
   double s_star = -P(1,0)/(2*P(0,0));
 
-  
+
   max_f = P(0,0)*s_star*s_star + P(1,0)*s_star + P(2,0);
 
   if (P(0,0)<0)
     return s_star;
   else
     return 5.0; //not a maxima
-
 }
 
 void sdet_nms::find_distance_s_and_f_for_point(int x, int y, vgl_homg_line_2d<double> line,
-                                                double &d, double &s, const vgl_vector_2d<double>& direction)
+                                               double &d, double &s, const vgl_vector_2d<double>& direction)
 {
   vgl_homg_point_2d<double> point(x,y);
   vgl_homg_line_2d<double> perp_line = vgl_homg_operators_2d<double>::perp_line_through_point(line, point);

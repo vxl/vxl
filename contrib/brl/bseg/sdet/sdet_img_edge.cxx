@@ -209,14 +209,14 @@ sdet_img_edge::detect_edge_tangent(vil_image_view<vxl_byte> img,
 }
 
 // return image has three planes as in detect_edge_tangent
-// Canny edge detector returns edgel chains with a linear interpolator by default, replace this interpolator with a cubic one and read the edge tangents from this interpolator                                  
-vil_image_view<float> 
+// Canny edge detector returns edgel chains with a linear interpolator by default, replace this interpolator with a cubic one and read the edge tangents from this interpolator
+vil_image_view<float>
 sdet_img_edge::detect_edge_tangent_interpolated(vil_image_view<vxl_byte> img,
-                                                       double noise_multiplier,
-                                                       double smooth,
-                                                       bool automatic_threshold,
-                                                       bool junctionp,
-                                                       bool aggressive_junction_closure)
+                                                double noise_multiplier,
+                                                double smooth,
+                                                bool automatic_threshold,
+                                                bool junctionp,
+                                                bool aggressive_junction_closure)
 {
   // set parameters for the edge detector
   sdet_detector_params dp;
@@ -240,7 +240,7 @@ sdet_img_edge::detect_edge_tangent_interpolated(vil_image_view<vxl_byte> img,
 
   // iterate over each connected edge component
   //for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges->begin(); eit != edges->end(); eit++)
-  for (unsigned ii = 0; ii < edges.size(); ii++) 
+  for (unsigned ii = 0; ii < edges.size(); ii++)
   {
     vdgl_digital_curve_sptr dc = edges[ii];
     if (!dc)
@@ -285,7 +285,7 @@ sdet_img_edge::detect_edge_tangent_interpolated(vil_image_view<vxl_byte> img,
 }
 
 // return image has three planes as in detect_edge_tangent
-vil_image_view<float> 
+vil_image_view<float>
 sdet_img_edge::detect_edge_line_fitted(vil_image_view<vxl_byte> img,
                                        double noise_multiplier,
                                        double smooth,
@@ -332,19 +332,17 @@ sdet_img_edge::detect_edge_line_fitted(vil_image_view<vxl_byte> img,
   for (unsigned i = 0; i < lines.size(); i++) {
     vsol_line_2d_sptr l = lines[i];
     int length = (int)vcl_ceil(l->length());
-    double tangent = l->tangent_angle();
-    double angle = angle_0_360((vnl_math::pi/180.0)*l->tangent_angle());
-
-    /*vcl_cout << " line: " << i << " length: " << l->length();
-    vcl_cout << " p0: (" << l->p0()->x() << ", " << l->p0()->y() << ") "; 
-    vcl_cout << " p1: (" << l->p1()->x() << ", " << l->p1()->y() << ") ";
-    vcl_cout << " mid: (" << l->middle()->x() << ", " << l->middle()->y() << ") \n";*/
-
+    double angle = angle_0_360(vnl_math::pi/180*l->tangent_angle());
+#if 0
+    vcl_cout << " line: " << i << " length: " << l->length()
+             << " p0: (" << l->p0()->x() << ", " << l->p0()->y() << ')'
+             << " p1: (" << l->p1()->x() << ", " << l->p1()->y() << ')'
+             << " mid: (" << l->middle()->x() << ", " << l->middle()->y() << ")\n";
+#endif
     vcl_vector<vsol_point_2d_sptr> samples; samples.push_back(l->p0()); samples.push_back(l->p1());
     vsol_digital_curve_2d_sptr dc = new vsol_digital_curve_2d(samples);
 
-
-    //: now sample length many samples along the line
+    // now sample length many samples along the line
     float inc = 1.0f/length;
     for (float index = 0.0f; index <= 1.0f; index += inc) {
       vgl_point_2d<double> pt = dc->interp((double)index);
@@ -370,8 +368,8 @@ sdet_img_edge::detect_edge_line_fitted(vil_image_view<vxl_byte> img,
 void
 sdet_img_edge::convert_edge_image_to_line_image(vil_image_view<float>& edge_image, vil_image_view<float>& line_image)
 {
-  if (line_image.ni() != edge_image.ni() || line_image.nj() != edge_image.nj() || 
-    line_image.nplanes() != edge_image.nplanes() || line_image.nplanes() != 3) {
+  if (line_image.ni() != edge_image.ni() || line_image.nj() != edge_image.nj() ||
+      line_image.nplanes() != edge_image.nplanes() || line_image.nplanes() != 3) {
     vcl_cerr << "In sdet_img_edge::convert_edge_image_to_line_image() -- incompatible input output image pair!\n";
     return;
   }
