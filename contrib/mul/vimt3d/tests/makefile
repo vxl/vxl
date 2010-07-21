@@ -21,7 +21,6 @@ TESTS += test_gauss_reduce.cxx
 TESTS += test_image_bounds_and_centre_3d.cxx
 TESTS += test_save.cxx
 TESTS += test_reflect.cxx
-TESTS += test_run_length_encoding.cxx
 TESTS += test_v3m.cxx
 
 MINI_PROG_SOURCES += test_include.cxx

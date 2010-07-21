@@ -29,6 +29,9 @@ SOURCES += sdet_nonmax_suppression.cxx
 SOURCES += sdet_nonmax_suppression_params.cxx
 SOURCES += sdet_gauss_fit.cxx
 SOURCES += sdet_img_edge.cxx
+SOURCES += sdet_third_order_edge_det.cxx
+SOURCES += sdet_third_order_edge_det_params.cxx
+SOURCES += sdet_nms.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

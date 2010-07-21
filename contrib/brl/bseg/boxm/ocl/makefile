@@ -23,8 +23,11 @@ SOURCES += boxm_render_single_block_manager.cxx
 SOURCES += boxm_online_update_manager.cxx
 SOURCES += boxm_refine_scene_manager.cxx
 SOURCES += boxm_ocl_scene.cxx
+SOURCES += boxm_render_ocl_scene_manager.cxx
+SOURCES += boxm_update_ocl_scene_manager.cxx
+SOURCES += boxm_ocl_render_expected.cxx
 
-SUBDIRS += pro exe
+SUBDIRS += pro exe view
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

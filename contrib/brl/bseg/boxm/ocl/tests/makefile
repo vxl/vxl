@@ -18,6 +18,7 @@ TESTS += test_refine.cxx
 TESTS += test_update.cxx
 TESTS += test_file_io.cxx
 TESTS += test_scene_io.cxx
+TESTS += test_scene_convert.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 

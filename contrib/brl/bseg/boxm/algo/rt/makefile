@@ -30,6 +30,7 @@ MANPAGE_SOURCES += boxm_compute_num_rays_statistics.h
 MANPAGE_SOURCES += boxm_edge_updater.txx
 MANPAGE_SOURCES += boxm_generate_opt3_sample_functor.h
 MANPAGE_SOURCES += boxm_change_3d_functor.h
+MANPAGE_SOURCES += boxm_expected_edge_functor.h
 
 SUBDIRS += pro
 

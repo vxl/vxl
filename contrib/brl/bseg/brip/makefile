@@ -23,6 +23,10 @@ MANPAGE_SOURCES += brip_quadtree_utils.txx
 SOURCES += brip_label_equivalence.cxx
 SOURCES += brip_line_generator.cxx
 SOURCES += brip_rect_mask.cxx
+MANPAGE_SOURCES += brip_gaussian_kernel.h
+MANPAGE_SOURCES += brip_interp_kernel.h
+MANPAGE_SOURCES += brip_kernel.h
+MANPAGE_SOURCES += brip_subpix_convolution.h
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
