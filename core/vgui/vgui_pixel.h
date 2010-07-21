@@ -172,7 +172,7 @@ struct vgui_pixel_rgbfloat
   float G;
   float B;
   vgui_pixel_rgbfloat() {}
-  vgui_pixel_rgbfloat( vxl_byte red, vxl_byte green, vxl_byte blue, vxl_byte alpha )
+  vgui_pixel_rgbfloat( vxl_byte red, vxl_byte green, vxl_byte blue, vxl_byte /*alpha*/ = 0 )
     : R(red), G(green), B(blue) {}
 };
 
