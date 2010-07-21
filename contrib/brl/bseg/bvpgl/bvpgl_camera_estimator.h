@@ -1,4 +1,4 @@
-//This is contrib/brl/bseg/bvpgl/bvpgl_camera_estimator.h
+//This is brl/bseg/bvpgl/bvpgl_camera_estimator.h
 #ifndef bvpgl_camera_estimator_h_
 #define bvpgl_camera_estimator_h_
 //:
@@ -45,7 +45,7 @@ class bvpgl_camera_estimator
   static void convert_angles_to_vector(const double theta, const double phi, double &vx, double &vy, double &vz);
 
   static double edge_prob_cross_correlation(const vil_image_view<float> &img1, const vil_image_view<float> &img2);
- 
+
   template <class T1,class T2,class TR>
   vil_image_view<TR> estimate_offsets_fd(const vil_image_view<T1> &img1,
                                          const vil_image_view<T2> &img2,
@@ -59,11 +59,11 @@ class bvpgl_camera_estimator
   void estimate_rotation_iterative(const vil_image_view<float>& img_e,
                                    vpgl_perspective_camera<double> *cam);
 
-  bool get_expected_edge_image(const vpgl_camera_double_sptr& curr_cam, 
+  bool get_expected_edge_image(const vpgl_camera_double_sptr& curr_cam,
                                vil_image_view<float> *img_eei) { return func_.apply(curr_cam, img_eei); }
 
  private:
-  typename exp_edge_func func_;
+  exp_edge_func func_;
 
   //store parameters as global variables to be used across functions
   double theta_range_;
@@ -82,10 +82,10 @@ class bvpgl_camera_estimator
 template <class exp_edge_func>
 template <class T1,class T2,class TR>
 vil_image_view<TR> bvpgl_camera_estimator<exp_edge_func>::estimate_offsets_fd(const vil_image_view<T1> &img1,
-                                                              const vil_image_view<T2> &img2,
-                                                              int &offset_x,
-                                                              int &offset_y,
-                                                              float &score)
+                                                                              const vil_image_view<T2> &img2,
+                                                                              int &offset_x,
+                                                                              int &offset_y,
+                                                                              float &score)
 {
   vil_image_view<float> img_1;
   brip_vil_float_ops::normalize_to_interval<T1,float>(img1,img_1,0.0f,1.0f);
