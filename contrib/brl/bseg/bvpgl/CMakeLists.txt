@@ -1,5 +1,5 @@
-# gel/mrc/vpgl/algo/CMakeLists.txt
-# Photogrammetry Algorithms Library.
+# bseg/bvpgl/CMakeLists.txt
+# additional Photogrammetry Library.
 
 
 INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR})
@@ -11,9 +11,7 @@ SET( bvpgl_sources
   bvpgl_camera_estimator_amoeba.h
 )
 
-#AUX_SOURCE_DIRECTORY(Templates bvpgl_sources)
+AUX_SOURCE_DIRECTORY(Templates bvpgl_sources)
 
 ADD_LIBRARY(bvpgl ${bvpgl_sources})
 TARGET_LINK_LIBRARIES( bvpgl vpgl brip vnl vgl vil vul vbl vcl)
-
-
