@@ -32,9 +32,6 @@ SUBDIRS += mrc
 # photogrammetry in mrc/vpgl
 # coordinate systems add-on in mrc/vcsl
 
-# Experiments with the vidl_vil1 library and vgui (JLM)
-#SUBDIRS += jvid
-
 # Intensity face attributes (MPP)
 SUBDIRS += vifa
 
