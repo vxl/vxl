@@ -3,6 +3,7 @@
 #include <boxm/algo/rt/boxm_compute_num_rays_statistics.h>
 #include <boxm/algo/rt/boxm_edge_tangent_updater.h>
 #include <boxm/algo/rt/boxm_edge_updater.h>
+#include <boxm/algo/rt/boxm_expected_edge_functor.h>
 #include <boxm/algo/rt/boxm_generate_edge_sample_functor.h>
 #include <boxm/algo/rt/boxm_generate_edge_tangent_sample_functor.h>
 #include <boxm/algo/rt/boxm_generate_opt2_sample_functor.h>
