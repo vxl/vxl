@@ -12,23 +12,23 @@ IF( PYTHON_FOUND )
           INCLUDE_DIRECTORIES( ${ZLIB_INCLUDE_DIR} )
           INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/b3p )
         ENDIF(ZLIB_FOUND)
-        INCLUDE_DIRECTORIES( ${PYTHON_INCLUDE_PATH} )
+        INCLUDE_DIRECTORIES( ${PYTHON_INCLUDE_DIRS} )
         INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
         INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro )
         INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro/core )
-        
+
         INCLUDE_DIRECTORIES( ${VXLCORE_INCLUDE_DIR} )
         INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
         INCLUDE_DIRECTORIES( ${MUL_INCLUDE_DIR} )
         INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg/bmdl )
-      
-        INCLUDE_DIRECTORIES( ${TIFF_INCLUDE_DIR} ) 
-        INCLUDE_DIRECTORIES( ${GEOTIFF_INCLUDE_DIR} ) 
-    
+
+        INCLUDE_DIRECTORIES( ${TIFF_INCLUDE_DIR} )
+        INCLUDE_DIRECTORIES( ${GEOTIFF_INCLUDE_DIR} )
+
         SET(bmdl_batch_sources
           reg_bmdl.cxx          reg_bmdl.h
         )
-     
+
         ADD_LIBRARY(bmdl_batch MODULE ${bmdl_batch_sources})
 
         IF(WIN32)
@@ -39,8 +39,8 @@ IF( PYTHON_FOUND )
         IF(NOT WIN32)
           SET_TARGET_PROPERTIES(bmdl_batch PROPERTIES COMPILE_FLAGS "-fPIC")
         ENDIF(NOT WIN32)
-        TARGET_LINK_LIBRARIES(bmdl_batch bprb brdb bpro_batch bmdl_pro vbl vpgl_io vpgl_pro vil_io vil_pro) 
-      
+        TARGET_LINK_LIBRARIES(bmdl_batch bprb brdb bpro_batch bmdl_pro vbl vpgl_io vpgl_pro vil_io vil_pro)
+
         IF (PYTHON_DEBUG_LIBRARIES)
           TARGET_LINK_LIBRARIES( bmdl_batch debug ${PYTHON_DEBUG_LIBRARY})
         ENDIF(PYTHON_DEBUG_LIBRARIES )
@@ -49,6 +49,6 @@ IF( PYTHON_FOUND )
           TARGET_LINK_LIBRARIES( bmdl_batch optimized ${PYTHON_LIBRARY})
         ENDIF(PYTHON_LIBRARIES)
     ENDIF(GEOTIFF_FOUND )
-   ENDIF(TIFF_FOUND ) 
-  ENDIF( EXPAT_FOUND ) 
+   ENDIF(TIFF_FOUND )
+  ENDIF( EXPAT_FOUND )
 ENDIF( PYTHON_FOUND )
