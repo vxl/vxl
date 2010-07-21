@@ -80,7 +80,7 @@ void boxm_opencl_render_expected(boxm_scene<boct_tree<short, boxm_sample<APM> > 
   float sum=0.0;
   vil_math_sum<float>(sum,mask,0);
   vcl_cout<<"Data transferred from global memory "<<16/* for int4*4*/*sum/1000000000.0f<<" GBytes "<<vcl_endl;
-#if 1 //images for debuggin
+#if 0 //images for debuggin
   vil_save(img0,"f:/apl/img0.tiff");
   vil_save(img1,"f:/apl/img1.tiff");
   vil_save(expected,"f:/apl/img2.tiff");
@@ -130,7 +130,7 @@ void boxm_opencl_stack_render_expected(boxm_scene<boct_tree<short, boxm_sample<A
       mask(i,j) = *results_p++; // 1 - vis_inf
     }
   }
-#if 1 //images for debuggin
+#if 0 //images for debuggin
   vil_save(img0,"f:/apl/img0.tiff");
   vil_save(img1,"f:/apl/img1.tiff");
   vil_save(expected,"f:/apl/img2.tiff");
@@ -195,7 +195,7 @@ void boxm_opencl_ray_bundle_expected(boxm_scene<boct_tree<short, boxm_sample<APM
   vil_math_sum<float>(sum,mask,0);
   vcl_cout<<"Data transferred from global memory "<<16/* for int4*4*/*sum/1000000000.0f<<" GBytes "<<vcl_endl;
 
-#if 1 //images for debuggin
+#if 0 //images for debuggin
   vil_save(img0,"f:/apl/img0.tiff");
   vil_save(img1,"f:/apl/img1.tiff");
   vil_save(expected,"f:/apl/img2.tiff");
@@ -248,12 +248,10 @@ void boxm_opencl_all_blocks_expected(boxm_scene<boct_tree<short, boxm_sample<APM
       expected(i,j) = *(results_p++); // expected intensity
       mask(i,j) = *(results_p++); // 1 - vis_inf
 
-      if(i==389 && j==159)
-          vcl_cout<<"["<<img0(i,j)<<","<<img1(i,j)<<","<<expected(i,j)<<","<<mask(i,j)<<"]"<<vcl_endl;
     }
   }
 
-#if 1 //images for debuggin
+#if 0 //images for debuggin
   vil_save(img0,"f:/apl/img0.tiff");
   vil_save(img1,"f:/apl/img1.tiff");
   vil_save(expected,"f:/apl/img2.tiff");

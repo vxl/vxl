@@ -36,14 +36,14 @@ void boxm_opencl_ocl_scene_expected(boxm_ocl_scene &scene,
       expected(i,j) = *(results_p++); // expected intensity
       mask(i,j) = *(results_p++); // 1 - vis_inf
 
-      if(i==359 && j==63)
+      if(i==266 && j==329)
       {
           vcl_cout<<img0(i,j)<<","<<img1(i,j)<<","<<expected(i,j)<<","<<mask(i,j)<<vcl_endl;
       }
     }
   }
 
-#if 1 //images for debuggin
+#if 0 //images for debuggin
   vil_save(img0,"f:/apl/img0.tiff");
   vil_save(img1,"f:/apl/img1.tiff");
   vil_save(expected,"f:/apl/img2.tiff");
