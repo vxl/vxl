@@ -63,8 +63,9 @@ update_ocl_scene(__global int4    * scene_dims,  // level of the root.
 
     // check to see if the thread corresponds to an actual pixel as in some cases #of threads will be more than the pixels.
     if (i>=(*local_copy_imgdims).z || j>=(*local_copy_imgdims).w)
+    {
         return;
-
+    }
 
     float4 origin=(*scene_origin);
     float4 data_return=(float4)(0.0f,1.0f,0.0f,0.0f);
@@ -84,7 +85,9 @@ update_ocl_scene(__global int4    * scene_dims,  // level of the root.
     cell_max=blockdims*convert_float4(scenedims)+origin;
     int hit=intersect_cell(ray_o, ray_d, cell_min, cell_max,&tnear, &tfar);
     if(!hit)
+    {
         return;
+    }
     entry_pt=ray_o + tnear*ray_d;
 
     int4 curr_block_index=convert_int4((entry_pt-origin)/blockdims);
@@ -116,7 +119,7 @@ update_ocl_scene(__global int4    * scene_dims,  // level of the root.
         // this cell is the first pierced by the ray
         // follow the ray through the cells until no neighbors are found
 
-        while (true )
+        while (true)
         {
             //// current cell bounding box
             cell_bounding_box(curr_loc_code, rootlevel+1, &cell_min, &cell_max);
@@ -207,8 +210,9 @@ update_ocl_scene(__global int4    * scene_dims,  // level of the root.
         }
         else
         {
-            entry_pt=ray_o + tfar *ray_d;ray_d.w=1;
-            //; (2)grazing the side.
+            entry_pt=ray_o + tfar *ray_d;
+            ray_d.w=1;
+            
             if(any(-1*(isless(fabs(entry_pt-cell_min),(float4)blockdims.x/100.0f)*isless(fabs(ray_d),(float4)1e-3))))
                 break;
             if(any(-1*(isless(fabs(entry_pt-cell_max),(float4)blockdims.x/100.0f)*isless(fabs(ray_d),(float4)1e-3))))
@@ -216,7 +220,7 @@ update_ocl_scene(__global int4    * scene_dims,  // level of the root.
             curr_block_index=convert_int4(floor((ray_o + tfar *ray_d+(blockdims.x/20.0f)*ray_d-origin)/blockdims));
             curr_block_index.w=0;
         }
-        count++;
+        //count++;
 
     }
 }
