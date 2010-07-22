@@ -12,8 +12,8 @@
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/boxm_scene.h>
 #include <boxm/ocl/boxm_ocl_scene.h>
-#include <malloc.h>
-template<class T>
+
+template <class T>
 class boxm_ocl_convert
 {
  public:
@@ -28,44 +28,37 @@ class boxm_ocl_convert
 
 
   static void copy_to_arrays(boct_tree_cell<short, T >* cell_ptr,
-                 vcl_vector<vnl_vector_fixed<int, 4> >& cell_array,
-                 vcl_vector<vnl_vector_fixed<float, 16> >& data_array,
-                 int cell_input_ptr);
+                             vcl_vector<vnl_vector_fixed<int, 4> >& cell_array,
+                             vcl_vector<vnl_vector_fixed<float, 16> >& data_array,
+                             int cell_input_ptr);
 
   static void convert_scene(boxm_scene<boct_tree<short, T> >* scene, int num_buffers, boxm_ocl_scene &ocl_scene);
-
 };
 
 class boxm_ocl_utils
 {
  public:
 
-
-
-
   static void split(vcl_vector<vnl_vector_fixed<int, 4> >& cell_array,
                     int parent_ptr,
                     int& child_ptr);
 
   static void print_tree_array(int* tree, unsigned numcells, float* data);
-  
+
   static void print_multi_block_tree(int* blocks, int* block_ptrs, int numBlocks, float* data);
-  
-  
+
   static void* alloc_aligned(unsigned n, unsigned unit_size, unsigned block_size);
-  
+
   static void free_aligned(void* ptr);
-  
+
   static bool verify_format(vcl_vector<vnl_vector_fixed<int, 4> > cell_array);
-  
+
   // Binary read and writes for a tree.
   static cl_int* readtree(vcl_string tree_file, unsigned int & tree_size );
   static bool writetree(vcl_string tree_file,cl_int* cell_array, unsigned int tree_size );
   static bool writetreedata(vcl_string tree_data_file,cl_float* data_array, unsigned int  tree_data_size);
   static cl_float*  readtreedata(vcl_string tree_data_file,unsigned int & tree_data_size );
-
 };
-
 
 
 #endif
