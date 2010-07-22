@@ -105,14 +105,19 @@ void reformat_tree(__local int4 *tree, __global float* output)
 ////SPLIT TREE
 ////Depth first search iteration of the tree (keeping track of node level)
 ////1) parent pointer, 2) child pointer 3) data pointer 4) nothing right now
+// Kind of a wierd mix of functions - the tree structure is modified locally, 
+// so no tree_buffer information is needed, whereas the data is modified 
+// on the global level, so buffers, offsets are used
 /////////////////////////////////////////////////////////////////
 int refine_tree(__local int4    *tree, 
                         int      tree_size, 
-               __global float16 *data, 
+               __global float   *alpha_cells,
+               __global float8  *data_cells,
                         int      data_size,
                         float    prob_thresh, 
                         float    boxLen, 
                         int      maxLevel, 
+                        int      len_buffer,
                __global float   *output)
 {
   unsigned gid = get_global_id(0);
@@ -126,13 +131,13 @@ int refine_tree(__local int4    *tree,
   for(int i=0; i<5; i++) popCounts[i]=0;
   int currLevel = 0;
 
-  ////stack for depth first traversal
+  //stack for depth first traversal
   ocl_stack open;
   init_ocl_stack(&open);
   push(&open, 0);
   while(!empty(&open)){
     //figure out the current level
-    while(popCounts[currLevel]>=8) {
+    while(popCounts[currLevel] >= 8) {
       popCounts[currLevel] = 0;
       currLevel--;
     }
@@ -144,7 +149,7 @@ int refine_tree(__local int4    *tree,
     //if the current node has no children, it's a leaf -> check if it needs to be refined
     int child_ptr = tree[currNode].y;
     if(child_ptr < 0){
-   
+         
       //////////////////////////////////////////////////
       //INSERT LEAF SPECIFIC CODE HERE
       //////////////////////////////////////////////////
@@ -155,16 +160,20 @@ int refine_tree(__local int4    *tree,
      
       //get alpha value for this cell;
       int dataIndex = tree[currNode].z;
-      float16 datum = data[dataIndex];
-      float alpha = datum.s0;
+      //float16 datum = data[dataIndex];
+      //float alpha = datum.s0;
+      float8 datum = data_cells[gid*len_buffer + dataIndex];
+      float alpha = alpha_cells[gid*len_buffer + dataIndex];
      
       //integrate alpha value
       float alpha_int = alpha * side_len;
-
+      
       //IF alpha value triggers split, tack on 8 children to end of tree array
       //make sure the PARENT cell for each of the new children points to i
       //ALSO make sure currLevel is less than MAX_LEVELS
-      if(alpha_int > max_alpha_int && currLevel < maxLevel)  {
+      if(alpha_int > max_alpha_int && currLevel < maxLevel-1)  {
+
+        (*output)++;
 
         //new alpha for the child nodes
         float new_alpha = max_alpha_int / side_len;  
@@ -177,24 +186,27 @@ int refine_tree(__local int4    *tree,
         if(lid < 8) {
           int4 tcell = (int4) (currNode, -1, (int)data_size+lid, 0);
           tree[tree_size+lid] = tcell;
-        }
         
-        //copy data for new children
-        float16 newData = datum;
-        newData.s0 = new_alpha;
-        data[data_size+lid] = newData;
+          //copy data for new children
+          //float16 newData = datum;
+          //newData.s0 = new_alpha;
+          float8 newData = datum;
+          int newDataIndex = gid*len_buffer + (data_size+lid);
+          data_cells[newDataIndex] = newData;
+        }
 
         //update tree and buffer size
         tree_size += 8; 
         data_size += 8;
      
         //reset data for curent node
-        float16 zeroDat = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-        data[dataIndex] =  zeroDat;    
+        float8 zeroDat = {0,0,0,0,0,0,0,0};
+        data_cells[dataIndex] = zeroDat;    
       }
       ////////////////////////////////////////////
       //END LEAF SPECIFIC CODE
       ////////////////////////////////////////////
+
      
     }
     //for inner nodes
@@ -214,7 +226,6 @@ int refine_tree(__local int4    *tree,
   //tree and data size output
   return tree_size;
 }
- 
 
  
 ///////////////////////////////////////////
@@ -224,73 +235,106 @@ int refine_tree(__local int4    *tree,
 ///////////////////////////////////////////
 __kernel
 void
-refine_main(__global  int4     *cells,          //all blocks
-            __global  int2     *block_ptrs,     //location and size of blocks
-            __private unsigned  num_blocks,     //number of blocks
-            __private unsigned  treeBuffSize,   //length of tree buffer (number of int4 cells allocated)
-            __global  unsigned *start_ptr,      //start of free memory in treeBuffSize
-            __global  unsigned *end_ptr,        //end of free memory in treeBuffSize
-            __global  float16  *data,           //tree data
-            __private unsigned  data_size,      //number of data items in data buffer
-            __private unsigned  dataBuffSize,   //max size for data buffer
+refine_main(__global  int4     *block_ptrs,     //3d block array
+            __global  int4     *block_nums,     //number of blocks in each dimension
+            __private unsigned  num_buffer,     //number of tree buffers
+            __private unsigned  len_buffer,     //length of tree buffer (number of int4 cells allocated)
+            __global  int4     *tree_cells,     //tree_cells
+            __global  float8   *data_cells,     //data_cells
+            __global  float    *alpha_cells,    //alpha vals for each cell
+            __global  int2     *mem_ptrs,       //denotes occupied space in each tree buffer
             __private float     prob_thresh,    //refinement threshold
             __private unsigned  max_level,      //maximum number of levels for tree (4 for small tree)
             __private float     bbox_len,       //side length of one block
-            __local   int4      *local_tree,    // local copy of the tree
+            __local   int4      *local_tree,    //local copy of the tree
             __global  float     *output)        //TODO delete me later
 {
+
+  //global id will be the tree buffer
   unsigned gid = get_global_id(0);
   unsigned lid = get_local_id(0);
+
+  (*output) = 0;
   
-  //mem start and end pointers
-  int startPtr = (*start_ptr);
-  int endPtr = (*end_ptr);
-  
+  //go through the tree array and refine it...
+  if(gid < num_buffer) 
+  {
+    //keep track of the start and end pointer as they change
+    //NOTE THAT END POINTER is equal to 2 after the last element
+    int startPtr = mem_ptrs[gid].x;
+    int endPtr = mem_ptrs[gid].y;
     
-  //refine each block
-  for(int i=0; i<num_blocks; i++){
+    //get the (absolute) index of the start and end pointers
+    int preRefineStart = mem_ptrs[gid].x;
+    int preRefineEnd = mem_ptrs[gid].y;
     
-    //clear out local tree
-    for(int j=0; j<585; j++){
-      int4 buff = (int4) (-1,-1,-1,-1);
-      local_tree[j] = buff;
-    }
+    //initialize curr root index, next root index 
+    int currRootIndex = preRefineStart;
     
-    //copy block into local memory
-    int currRoot = block_ptrs[i].x;
-    int currSize = block_ptrs[i].y;
-    for(int j=0; j<currSize; j++) {
-      local_tree[j] = cells[currRoot+j];
-    }
-    
-    //free space in global memory
-    startPtr = (startPtr+currSize)%treeBuffSize;
-    
-    //refine tree locally
-    int newSize = refine_tree(local_tree, currSize, data, data_size, prob_thresh, bbox_len, max_level, output);
-    data_size += newSize-currSize;
-    block_ptrs[i].x = endPtr;
-    block_ptrs[i].y = newSize;
-   
-    //check to make sure there's enough buffer space
-    int freeSpace = (startPtr >= endPtr)? startPtr-endPtr : treeBuffSize - (endPtr-startPtr);
-    if(newSize <= freeSpace) {    
-    
-      //copy refined tree to global memory 
-      for(int j=0; j<newSize; j++) {
-        cells[(endPtr+j)%treeBuffSize] = local_tree[j];
+    //when currRootIndex is equal to preRefineEnd-1, then you're done
+    while(currRootIndex != preRefineEnd-1) {
+      
+      //get current tree information (and next so you don't go over)
+      int4 currRoot = tree_cells[currRootIndex];
+      int currBlkIndex = currRoot.w;
+      int currTreeSize = block_ptrs[currBlkIndex].z;
+      
+      //TODO Make sure your tree doesn't get corrupted because you don't clear out all 585 cells
+      //maybe pass in a length to the refine function to make sure yo udon't go out of bounds.  
+      //copy current tree to local mem
+      for(int j=0; j<currTreeSize; j++) {
+        local_tree[j] = tree_cells[gid*len_buffer + (currRootIndex+j)];
       }
-    
-      //update endPtr
-      endPtr = (endPtr+newSize)%treeBuffSize;
-    
-    }
-    else {
-      //Do something with emergency space or swapping or something
-      (*output) = 666;
-    }
+      
+      //free space in global memory
+      startPtr = (startPtr+currTreeSize)%len_buffer;
+      
+      //determine number of data cells used, datasize = occupied space
+      int dataSize = (endPtr > startPtr)? (endPtr-1)-startPtr: len_buffer - (startPtr-endPtr)-1;
+      //refine tree locally
 
+      int newSize = refine_tree(local_tree, 
+                                currTreeSize, 
+                                alpha_cells,
+                                data_cells, 
+                                dataSize, 
+                                prob_thresh, 
+                                bbox_len, 
+                                max_level,
+                                len_buffer, output);
 
+/*
+      //copy refined tree to global memory, if there's space
+      int freeSpace = (startPtr >= endPtr)? startPtr-endPtr : len_buffer - (endPtr-startPtr);
+      if(newSize <= freeSpace) {    
+        for(int j=0; j<newSize; j++) {
+          int cellIndex = gid*len_buffer + (endPtr-1+j+len_buffer)%len_buffer;
+          tree_cells[cellIndex] = local_tree[j];
+        }
+      
+        //update endPtr
+        endPtr = (endPtr+newSize)%len_buffer;
+        
+        //update block_ptrs 
+        block_ptrs[currBlkIndex].y = (endPtr-1+len_buffer)%len_buffer;
+        block_ptrs[currBlkIndex].z = newSize;
+      
+      }
+      else {
+        //Do something with emergency space or swapping or something
+        (*output) = 666;
+        block_ptrs[currBlkIndex].y = -666;  //you need to really do something about this one.
+        block_ptrs[currBlkIndex].z = newSize;
+      }
+*/
+
+      //update current root idenx
+      currRootIndex = (currRootIndex+currTreeSize)%len_buffer;
+    }
+    
+    mem_ptrs[gid].x = startPtr;
+    mem_ptrs[gid].y = endPtr; 
+    //(*output) = max_level;
   }
 
 }
