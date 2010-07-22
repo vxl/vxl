@@ -1,6 +1,9 @@
 // allocate child cells on the array
 #include <boxm/ocl/boxm_ocl_utils.h>
-#include <vcl_cstdlib.h> // for std::malloc() and memalign()
+#include <vcl_cstdlib.h> // for std::malloc()
+#if !defined (_WIN32) && !defined(__APPLE__)
+#include <malloc.h> // for memalign()
+#endif
 
 #include <vcl_iostream.h>
 void boxm_ocl_utils ::split(vcl_vector<vnl_vector_fixed<int, 4> >& cell_array,
@@ -112,7 +115,7 @@ bool boxm_ocl_utils ::verify_format(vcl_vector<vnl_vector_fixed<int, 4> > cell_a
       continue;
     }
     // if child pointer isn't to the right place..
-    if (child_ptr != curr_index+1) {
+    if ((unsigned int)child_ptr != curr_index+1) {
       vcl_cout<<"Children of "<<currNode<<" not in the right place"<<vcl_endl
               <<"should be at "<<curr_index+1<<", actually at "<<child_ptr<<vcl_endl;
       return false;
