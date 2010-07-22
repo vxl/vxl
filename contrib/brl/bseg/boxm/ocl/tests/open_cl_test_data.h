@@ -1,6 +1,7 @@
 #ifndef boxm_ocl_test_data_h_
 #define boxm_ocl_test_data_h_
 
+#include <vcl_where_root_dir.h>
 #include <boxm/sample/algo/boxm_mog_grey_processor.h>
 #include <boxm/sample/algo/boxm_simple_grey_processor.h>
 #include <boxm/sample/boxm_sample.h>
@@ -13,6 +14,7 @@
 #include <vcl_vector.h>
 #include <vcl_string.h>
 #include <vcl_iostream.h>
+#include <vul/vul_file.h>
 
 #include <boxm/ocl/boxm_ray_trace_manager.h>
 class open_cl_test_data
@@ -20,8 +22,10 @@ class open_cl_test_data
  public:
   template <class T>
   static boct_tree<short, T >* tree();
+  
   template <class T>
   static boct_tree<short, T >* simple_tree();
+  
   template <class T>
   static void save_tree(vcl_string const& tree_path);
 
