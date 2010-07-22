@@ -1,6 +1,6 @@
 //This is brl/bseg/sdet/sdet_third_order_edge_det.cxx
+#include "sdet_third_order_edge_det.h"
 
-#include <sdet/sdet_third_order_edge_det.h>
 #include <vul/vul_timer.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_line_2d.h>
@@ -24,7 +24,7 @@ void sdet_third_order_edge_det::apply(vil_image_view<vxl_byte> const& image)
 
   //compute image gradients before performing nonmax suppression
   vil_image_view<double> grad_x, grad_y, grad_mag;
-  int scale = (int) vcl_pow(2.0, interp_factor_);
+  int scale = (int) (vcl_pow(2.0, double(interp_factor_))+0.5);
 
   //compute gradients
   switch (grad_op_)
@@ -92,7 +92,7 @@ void sdet_third_order_edge_det::apply(vil_image_view<vxl_byte> const& image)
   double noise_sigma = 1.5;
   double rel_thresh = 1.3*noise_sigma/(sigma_*sigma_*sigma_);
   sdet_nms NMS(sdet_nms_params(thresh_, (sdet_nms_params::PFIT_TYPE)pfit_type_,
-                                 static_cast<unsigned>(vcl_pow(2.0,interp_factor_)*(4*sigma_+1)),
+                                 static_cast<unsigned int>(vcl_pow(2.0,double(interp_factor_))*(4*sigma_+1)+0.5),
                                  rel_thresh, adapt_thresh_),
                 grad_x, grad_y, grad_mag);
 
