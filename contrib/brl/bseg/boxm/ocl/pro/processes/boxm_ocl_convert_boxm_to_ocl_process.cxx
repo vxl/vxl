@@ -21,7 +21,7 @@
 
 namespace boxm_ocl_convert_boxm_to_ocl_process_globals
 {
-  const unsigned n_inputs_ = 2;
+  const unsigned n_inputs_ = 3;
   const unsigned n_outputs_ = 0;
 }
 
@@ -34,6 +34,7 @@ bool boxm_ocl_convert_boxm_to_ocl_process_cons(bprb_func_process& pro)
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm_scene_base_sptr";
   input_types_[1] = "vcl_string";
+  input_types_[2] = "int";
 
   if (!pro.set_input_types(input_types_))
     return false;
@@ -59,6 +60,7 @@ bool boxm_ocl_convert_boxm_to_ocl_process(bprb_func_process& pro)
   unsigned i = 0;
   boxm_scene_base_sptr scene_ptr = pro.get_input<boxm_scene_base_sptr>(i++);
   vcl_string output_dir = pro.get_input<vcl_string>(i++);
+  int num_buffers = pro.get_input<unsigned>(i++);
 
   // check the scene's appearance model
   switch (scene_ptr->appearence_model())
@@ -71,7 +73,6 @@ bool boxm_ocl_convert_boxm_to_ocl_process(bprb_func_process& pro)
         //convert 
         //boxm_ocl_scene* ocl_scene = boxm_ocl_convert<boxm_sample<BOXM_APM_MOG_GREY> >::convert_scene(scene, num_buffers, buff_length);
         boxm_ocl_scene ocl_scene; 
-        int num_buffers = 1;
         boxm_ocl_convert<boxm_sample<BOXM_APM_MOG_GREY> >::convert_scene(scene, num_buffers, ocl_scene);
         vcl_cout<<ocl_scene<<vcl_endl;
         ocl_scene.save_scene(output_dir);
@@ -83,8 +84,6 @@ bool boxm_ocl_convert_boxm_to_ocl_process(bprb_func_process& pro)
         boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
 
         boxm_ocl_scene ocl_scene; 
-        int num_buffers = 1;
-        boxm_ocl_convert<boxm_sample<BOXM_APM_SIMPLE_GREY> >::convert_scene(scene, num_buffers, ocl_scene);
         vcl_cout<<ocl_scene<<vcl_endl;
         ocl_scene.save_scene(output_dir);
         break;
