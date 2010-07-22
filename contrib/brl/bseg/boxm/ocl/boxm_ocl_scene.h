@@ -84,7 +84,14 @@ class boxm_ocl_scene
     vbl_array_2d<int4> tree_buffers_;
     vbl_array_1d<int2> mem_ptrs_;
     vbl_array_2d<float16> data_buffers_;
-
+    
+    //setters from 1 d int and float arrays
+    void set_blocks(int* block_ptrs);
+    void set_tree_buffers(int* tree_buffers);
+    void set_mem_ptrs(int* mem_ptrs);
+    void set_alpha_values(float* alpha_buffer);
+    void set_data_values(float* data_buffer);
+    
   private:
 
     bool init_existing_scene(); 

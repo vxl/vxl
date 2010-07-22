@@ -158,7 +158,8 @@ void boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T> >* scene,
     total_leaf_cells += tree->leaf_cells().size();
     vcl_cout<<"# tree cells "<<tree->all_cells().size()<<vcl_endl;
   }
-  vcl_cout<<"Total number of tree cells = "<<total_tree_cells<<vcl_endl;
+  total_tree_cells += total_blocks;
+  vcl_cout<<"Total number of tree cells allocated = "<<total_tree_cells<<vcl_endl;
   int buff_length = (int) (total_tree_cells/num_buffers);
 
   /* 1. Set up 3D array of blocks (small blocks), assuming all blocks are similarly sized */
@@ -255,7 +256,6 @@ void boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T> >* scene,
     if (buff_Full) vcl_cout<<"boxm_ocl_utils::convert_scene: BLOCK @ "<<blk_ind<<" FILLED BUFFER "<<vcl_endl;
   }
 
-
   /* make a pass to make sure all small blocks were initialized */
   int nonInitCount = 0;
   vcl_cout<<"init blocks: "<<vcl_endl;
@@ -306,13 +306,28 @@ void boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T> >* scene,
       }
     }
   }
-  if (nonInitCount < 0)
+  
+  /* make a pass to ensure that all tree roots point back to their cell index */
+  int blk_index = 0;
+  vbl_array_3d<int4>::iterator blk_iter; 
+  for (blk_iter = blocks.begin(); blk_iter != blocks.end(); blk_iter++) {
+    int4 blk = (*blk_iter);
+    int buffIndex = blk[0];
+    int buffOffset = blk[1];
+    int4 treeRoot = tree_buffers(buffIndex, buffOffset);
+    treeRoot[3] = blk_index;
+    tree_buffers(buffIndex, buffOffset) = treeRoot;
+    blk_index++;
+  }
+
+  //notify how many blocks needed to be initialized/there's enough space
+  if(nonInitCount < 0) 
     vcl_cout<<"Initializing uninitialized blocks failed.  Your scene is no good."<<vcl_endl;
   else
     vcl_cout<<"Initialized "<<nonInitCount<<" uninitialized blocks"<<vcl_endl;
 
   ocl_scene.init_scene(blocks, tree_buffers, data_buffers, mem_ptrs, lvcs, origin, block_dim_small);
-  ocl_scene.set_max_level(max_level-init_level+1);
+  ocl_scene.set_max_level(small_blk_root_level+1);
 }
 
 

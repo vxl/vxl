@@ -42,6 +42,8 @@ boxm_ocl_scene::boxm_ocl_scene(boxm_ocl_scene *that)
 {
   this->init_scene(that->blocks(), that->tree_buffers(), that->data_buffers(),
                    that->mem_ptrs(), that->lvcs(), that->origin(), that->block_dim());
+  this->set_max_level(that->max_level());
+  this->set_init_level(that->init_level());
 }
 
 //init function for variables 
@@ -304,6 +306,63 @@ bool boxm_ocl_scene::init_empty_data()
 }
 
 
+//SETTERS from int and float arrays
+void boxm_ocl_scene::set_blocks(int* block_ptrs)
+{
+  int index = 0;
+  vbl_array_3d<int4>::iterator iter; 
+  for (iter = blocks_.begin(); iter != blocks_.end(); iter++) {
+    (*iter)[0] = block_ptrs[index++];
+    (*iter)[1] = block_ptrs[index++];
+    (*iter)[2] = block_ptrs[index++];
+    (*iter)[3] = block_ptrs[index++];
+  }
+}
+
+void boxm_ocl_scene::set_tree_buffers(int* tree_buffers)
+{ 
+  int index = 0;
+  vbl_array_2d<int4>::iterator iter; 
+  for (iter = tree_buffers_.begin(); iter != tree_buffers_.end(); iter++) {
+    (*iter)[0] = tree_buffers[index++];
+    (*iter)[1] = tree_buffers[index++];
+    (*iter)[2] = tree_buffers[index++];
+    (*iter)[3] = tree_buffers[index++];
+  }
+}
+
+void boxm_ocl_scene::set_mem_ptrs(int* mem_ptrs) 
+{  
+  int index = 0;
+  vbl_array_2d<int2>::iterator iter;
+  for(iter = mem_ptrs_.begin(); iter != mem_ptrs_.end(); iter++) {
+    (*iter)[0] = mem_ptrs[index++];
+    (*iter)[1] = mem_ptrs[index++];
+  }
+}
+void boxm_ocl_scene::set_alpha_values(float* alpha_buffer)
+{
+  int index = 0;
+  vbl_array_2d<float16>::iterator iter;
+  for(iter = data_buffers_.begin(); iter != data_buffers_.end(); iter++) {
+    (*iter)[0] = alpha_buffer[index++];
+  }
+}
+void boxm_ocl_scene::set_data_values(float* data_buffer)
+{
+  int datIndex = 0;
+  vbl_array_2d<float16>::iterator iter;
+  for(iter = data_buffers_.begin(); iter != data_buffers_.end(); iter++) {
+    (*iter)[1] = data_buffer[datIndex++];
+    (*iter)[2] = data_buffer[datIndex++]; 
+    (*iter)[3] = data_buffer[datIndex++]; 
+    (*iter)[5] = data_buffer[datIndex++];
+    (*iter)[6] = data_buffer[datIndex++];
+    (*iter)[7] = data_buffer[datIndex++];
+    (*iter)[9] = data_buffer[datIndex++];
+    (*iter)[10] = data_buffer[datIndex++];
+  }
+}
 
 /******************************** XML WRITE **************************/
 //MAKE scene aware of its own appearance model 
@@ -344,10 +403,9 @@ void x_write(vcl_ostream &os, boxm_ocl_scene& scene, vcl_string name)
   paths.x_write(os);
   
   //write octree levels tag
-  unsigned max_level = 4, init_level = 1;
   vsl_basic_xml_element tree(OCTREE_LEVELS_TAG);
-  tree.add_attribute("max", (int) max_level);
-  tree.add_attribute("init", (int) init_level);
+  tree.add_attribute("max", (int) scene.max_level());
+  tree.add_attribute("init", (int) scene.init_level());
   tree.x_write(os);
   
   scene_elm.x_write_close(os);
@@ -376,7 +434,9 @@ vcl_ostream& operator <<(vcl_ostream &s, boxm_ocl_scene& scene)
     <<"blk levels: [init level "<<scene.init_level()<<"] "
     <<"[max level "<<scene.max_level()<<"] "<<vcl_endl
     <<"buffers: [num_buffs " << num << "] " 
-    <<"[buff_length " << len << "] " << vcl_endl;
+    <<"[buff_length " << len << "] "
+    <<" [total cells "<< num*len <<"] " << vcl_endl
+    <<"size: "<< (4*4 + 16*4)*num*len/1024.0/1024.0 << " MB"<<vcl_endl;
     
     
   //print out buffer free space 
@@ -386,12 +446,13 @@ vcl_ostream& operator <<(vcl_ostream &s, boxm_ocl_scene& scene)
   vbl_array_2d<float16> data_buffers = scene.data_buffers();
   vbl_array_2d<int4> tree_buffers = scene.tree_buffers();
   vbl_array_1d<int2> mem_ptrs = scene.mem_ptrs();
-  s << "free space: ";
+  s << "free space: "<<vcl_endl;;
   for(int i=0; i<mem_ptrs.size(); i++) {
     int start=mem_ptrs[i][0];
     int end = mem_ptrs[i][1];
     int freeSpace = (start >= end)? start-end : tree_buffers.cols() - (end-start);
-    s <<"buff["<<i<<"]="<<freeSpace<<" ptrs("<<mem_ptrs[i][0]<<", "<<mem_ptrs[i][1]<<")";
+    s <<"     buff["<<i<<"]="<<freeSpace<<" blocks, "
+      <<"ptrs @ ("<<mem_ptrs[i][0]<<", "<<mem_ptrs[i][1]<<")"<<vcl_endl;;
   }
   s << vcl_endl;
   s <<"--------------------------------------------" << vcl_endl;
