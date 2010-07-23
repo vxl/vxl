@@ -1,6 +1,7 @@
 #ifndef boxm_expected_edge_functor_h_
 #define boxm_expected_edge_functor_h_
-
+//:
+// \file
 #include <boxm/boxm_scene.h>
 #include <boxm/algo/rt/boxm_render_expected_edge_tangent_image_functor.h>
 
@@ -15,7 +16,7 @@
 
 #include <vcl_vector.h>
 
-//: Functor class to compute (1-x) 
+//: Functor class to compute (1-x)
 // assumes that max range value is "1"
 // only sensible for real types
 class boxm_exp_edge_vil_not_functor
@@ -26,25 +27,24 @@ class boxm_exp_edge_vil_not_functor
 };
 
 template <class T_loc, class T_data>
-class boxm_expected_edge_functor {
-
-public:
-  boxm_expected_edge_functor(boxm_scene<boct_tree<T_loc, T_data > > &scene) 
+class boxm_expected_edge_functor
+{
+ public:
+  boxm_expected_edge_functor(boxm_scene<boct_tree<T_loc, T_data > > &scene)
     : scene_(scene) {}
   ~boxm_expected_edge_functor(){}
 
-  bool apply(const vpgl_camera_double_sptr& cam, vil_image_view<float> *img_eei) 
-  { 
-    boxm_render_edge_tangent_image_rt(scene_,cam,*img_eei); 
+  bool apply(const vpgl_camera_double_sptr& cam, vil_image_view<float> *img_eei)
+  {
+    boxm_render_edge_tangent_image_rt(scene_,cam,*img_eei);
     //: now take the inverse of this image, pixels which contain edges will have values closer to 1 and others will be zero
     boxm_exp_edge_vil_not_functor nt;
     vil_transform(*img_eei, nt);
-    return true; 
+    return true;
   }
 
-private:
+ private:
   boxm_scene<boct_tree<T_loc, T_data > > scene_;
-
 };
 
 #undef BOXM_EXPECTED_EDGE_INSTANTIATE

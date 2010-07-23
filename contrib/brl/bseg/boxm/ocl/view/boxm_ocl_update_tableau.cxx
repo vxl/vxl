@@ -19,8 +19,12 @@
 #endif
 
 #include <boxm/ocl/view/boxm_ocl_update_tableau.h>
-//#include <boxm/ocl/boxm_render_image_manager.h>
-//#include <boxm/ocl/boxm_render_ocl_scene_manager.h>
+//:
+// \file
+#if 0
+#include <boxm/ocl/boxm_render_image_manager.h>
+#include <boxm/ocl/boxm_render_ocl_scene_manager.h>
+#endif
 #include <boxm/ocl/boxm_update_ocl_scene_manager.h>
 
 #include <boxm/ocl/boxm_ocl_utils.h>
@@ -28,16 +32,14 @@
 #include <vgui/internals/trackball.h>
 #include <vgl/vgl_distance.h>
 
-//image load 
+//image load
 #include <vil/vil_convert.h>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_load.h>
 
 
-
-
-//: Constructor 
+//: Constructor
 boxm_ocl_update_tableau::boxm_ocl_update_tableau()
 {
     pbuffer_=0;
@@ -47,10 +49,10 @@ boxm_ocl_update_tableau::boxm_ocl_update_tableau()
     do_update_ = true;
 }
 
-//: Destructor 
+//: Destructor
 boxm_ocl_update_tableau::~boxm_ocl_update_tableau()
-{ 
-  //boxm_update_ocl_scene_manager* updt_mgr = 
+{
+  //boxm_update_ocl_scene_manager* updt_mgr =
     //boxm_update_ocl_scene_manager::instance();
   //updt_mgr->finish_online_processing();
   //updt_mgr->clean_update();
@@ -58,34 +60,34 @@ boxm_ocl_update_tableau::~boxm_ocl_update_tableau()
 }
 
 //: initialize tableau properties
-bool boxm_ocl_update_tableau::init(boxm_ocl_scene * scene, 
-                                  unsigned ni, unsigned nj, 
-                                  vpgl_perspective_camera<double> * cam,
-                                  vcl_vector<vcl_string> cam_files,
-                                  vcl_vector<vcl_string> img_files)
+bool boxm_ocl_update_tableau::init(boxm_ocl_scene * scene,
+                                   unsigned ni, unsigned nj,
+                                   vpgl_perspective_camera<double> * cam,
+                                   vcl_vector<vcl_string> cam_files,
+                                   vcl_vector<vcl_string> img_files)
 {
-  //set image dimensions, camera and scene 
+  //set image dimensions, camera and scene
   ni_ = ni;
   nj_ = nj;
   default_cam_ = (*cam);
   cam_ = (*cam); //default cam
   scene_ = scene;
-  
+
   //directory of cameras
   cam_files_ = cam_files;
   img_files_ = img_files;
-  
+
   //initialize OCL stuff
   do_init_ocl_ = true;
   return true;
 }
 
-//: initializes ocl_related stuff 
-// (must be called AFTER window is popped up so QT 
+//: initializes ocl_related stuff
+// (must be called AFTER window is popped up so QT
 // can get the correct context )
-bool boxm_ocl_update_tableau::init_ocl() {
-  
-  //initialize GLEW 
+bool boxm_ocl_update_tableau::init_ocl()
+{
+  //initialize GLEW
   GLenum err = glewInit();
   if (GLEW_OK != err)
   {
@@ -93,8 +95,8 @@ bool boxm_ocl_update_tableau::init_ocl() {
     vcl_cout<< "Error: "<<glewGetErrorString(err)<<vcl_endl;
   }
 
-  //initialize the render manager     
-  boxm_update_ocl_scene_manager* updt_mgr 
+  //initialize the render manager
+  boxm_update_ocl_scene_manager* updt_mgr
       = boxm_update_ocl_scene_manager::instance();
   int status=0;
   cl_platform_id platform_id[1];
@@ -102,9 +104,9 @@ bool boxm_ocl_update_tableau::init_ocl() {
   if (status!=CL_SUCCESS) {
       vcl_cout<<error_to_string(status)<<vcl_endl;
       return 0;
-  }  
-  
-  //get context properties 
+  }
+
+  //get context properties
 #ifdef WIN32
   cl_context_properties props[] =
   {
@@ -114,31 +116,31 @@ bool boxm_ocl_update_tableau::init_ocl() {
       0
   };
 #else
-  cl_context_properties props[] = 
+  cl_context_properties props[] =
   {
-      CL_GL_CONTEXT_KHR, (cl_context_properties)glXGetCurrentContext(), 
-      CL_GLX_DISPLAY_KHR, (cl_context_properties)glXGetCurrentDisplay(), 
-      CL_CONTEXT_PLATFORM, (cl_context_properties) platform_id[0], 
+      CL_GL_CONTEXT_KHR, (cl_context_properties)glXGetCurrentContext(),
+      CL_GLX_DISPLAY_KHR, (cl_context_properties)glXGetCurrentDisplay(),
+      CL_CONTEXT_PLATFORM, (cl_context_properties) platform_id[0],
       0
   };
 #endif
 
-  //create OpenCL context with display properties determined above 
+  //create OpenCL context with display properties determined above
   updt_mgr->context_ = clCreateContext(props, 1, &updt_mgr->devices()[0], NULL, NULL, &status);
 
   vcl_cout<<error_to_string(status);
-  ///initialize update  
+  ///initialize update
 
   vil_image_view<float> expected(ni_,nj_);
-  int bundle_dim = 8;  
-  updt_mgr->set_bundle_ni(bundle_dim);  
+  int bundle_dim = 8;
+  updt_mgr->set_bundle_ni(bundle_dim);
   updt_mgr->set_bundle_nj(bundle_dim);
   updt_mgr->init_update(scene_, &cam_, expected);
   if (!updt_mgr->setup_norm_data(true, 0.5f, 0.25f))
-    return -1;   
+    return -1;
   updt_mgr->setup_online_processing();
 
-  //need to set ray trace 
+  //need to set ray trace
   //delete old buffer
   if (pbuffer_) {
       clReleaseMemObject(updt_mgr->image_buf_);
@@ -153,30 +155,29 @@ bool boxm_ocl_update_tableau::init_ocl() {
 
   //create OpenCL buffer from GL PBO, and set kernel and arguments
   updt_mgr->image_gl_buf_ = clCreateFromGLBuffer(updt_mgr->context(),
-                                                CL_MEM_WRITE_ONLY, 
-                                                pbuffer_, 
-                                                &status);
+                                                 CL_MEM_WRITE_ONLY,
+                                                 pbuffer_,
+                                                 &status);
   return true;
 }
 
 
-
-
 //-------------- OpenCL methods (render and update) ------------------//
 
-//: calls on update manager to update model 
-bool boxm_ocl_update_tableau::update_model() {
+//: calls on update manager to update model
+bool boxm_ocl_update_tableau::update_model()
+{
   vcl_cout<<"UPDATING MODEL!!!"<<vcl_endl;
-  
-  //make sure you get a valid frame... 
-  if(curr_frame_ >= cam_files_.size()) curr_frame_ = 0;
+
+  //make sure you get a valid frame...
+  if (curr_frame_ >= cam_files_.size()) curr_frame_ = 0;
   vcl_cout<<"Cam "<<cam_files_[curr_frame_]
           <<" Image "<<img_files_[curr_frame_]<<vcl_endl;
 
-  //load up the update manager instance 
+  //load up the update manager instance
   boxm_update_ocl_scene_manager* updt_mgr = boxm_update_ocl_scene_manager::instance();
-   
-  //build the camera from file 
+
+  //build the camera from file
   vcl_ifstream ifs(cam_files_[curr_frame_].c_str());
   vpgl_perspective_camera<double>* pcam = new vpgl_perspective_camera<double>;
   if (!ifs.is_open()) {
@@ -184,21 +185,22 @@ bool boxm_ocl_update_tableau::update_model() {
       return -1;
   }
   ifs >> *pcam;
-   
-  //load image from file 
+
+  //load image from file
   vil_image_view_base_sptr loaded_image = vil_load(img_files_[curr_frame_].c_str());
   vil_image_view<float> floatimg(loaded_image->ni(), loaded_image->nj(), 1);
-  if (vil_image_view<vxl_byte> *img_byte
-        = dynamic_cast<vil_image_view<vxl_byte>*>(loaded_image.ptr()))
+  if (vil_image_view<vxl_byte> *img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(loaded_image.ptr()))
+  {
     vil_convert_stretch_range_limited(*img_byte ,floatimg, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
+  }
   else {
     vcl_cerr << "Failed to load image " << img_files_[curr_frame_] << vcl_endl;
     return -1;
   }
-  
+
   curr_frame_++ ;
-  
-  //run the opencl update business 
+
+  //run the opencl update business
   updt_mgr->set_input_image(floatimg);
   updt_mgr->write_image_buffer();
   updt_mgr->set_persp_camera(pcam);
@@ -207,11 +209,12 @@ bool boxm_ocl_update_tableau::update_model() {
   return true;
 }
 
-//: calls on ray manager to render frame into the pbuffer_ 
-bool boxm_ocl_update_tableau::render_frame() {
+//: calls on ray manager to render frame into the pbuffer_
+bool boxm_ocl_update_tableau::render_frame()
+{
     vcl_cout<<"RENDERING FRAME!"<<vcl_endl;
     boxm_update_ocl_scene_manager* ocl_mgr = boxm_update_ocl_scene_manager::instance();
-    cl_int status = clEnqueueAcquireGLObjects(ocl_mgr->command_queue_, 1, 
+    cl_int status = clEnqueueAcquireGLObjects(ocl_mgr->command_queue_, 1,
                                               &ocl_mgr->image_gl_buf_ , 0, 0, 0);
     if (!ocl_mgr->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (input_image)"+error_to_string(status)))
         return false;
@@ -227,19 +230,19 @@ bool boxm_ocl_update_tableau::render_frame() {
 
 //--------------------- Event Handlers -------------------------------//
 
-//: Handles tableau events (drawing and keys) 
-bool boxm_ocl_update_tableau::handle(vgui_event const &e) {
-  
+//: Handles tableau events (drawing and keys)
+bool boxm_ocl_update_tableau::handle(vgui_event const &e)
+{
   //draw handler - called on post_draw()
   if (e.type == vgui_DRAW) {
-    if(do_init_ocl_) {
+    if (do_init_ocl_) {
       this->init_ocl();
       do_init_ocl_ = false;
     }
-    
+
     //do_update_ = false;
-    vcl_cout<<"redrawing"<<vcl_endl;
-    vcl_cout<<"Cam center: "<<cam_.get_camera_center()<<vcl_endl
+    vcl_cout<<"redrawing\n"
+            <<"Cam center: "<<cam_.get_camera_center()<<'\n'
             <<"stare point: "<<stare_point_<<vcl_endl;
     this->render_frame();
     this->setup_gl_matrices();
@@ -249,38 +252,35 @@ bool boxm_ocl_update_tableau::handle(vgui_event const &e) {
     glPixelZoom(1,-1);
     glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, pbuffer_);
     glDrawPixels(ni_, nj_, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-    glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, 0);    
+    glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
     return true;
   }
   //handle update command - keyboard press U
-  else if(e.type == vgui_KEY_PRESS && e.key == vgui_key('u')) {
+  else if (e.type == vgui_KEY_PRESS && e.key == vgui_key('u')) {
     vcl_cout<<"Continuing update"<<vcl_endl;
     do_update_ = true;
     this->post_idle_request();
   }
   //HANDLE idle events - do model updating
-  else if (e.type == vgui_IDLE) 
+  else if (e.type == vgui_IDLE)
   {
-    if(do_update_) {
-      vcl_cout<<"Idling - i will be updating scene "<<vcl_endl;
+    if (do_update_) {
+      vcl_cout<<"Idling - i will be updating scene"<<vcl_endl;
       this->update_model();
       this->post_redraw();
       return true;
     }
     else {
-      vcl_cout<<"done idling "<<vcl_endl;
+      vcl_cout<<"done idling"<<vcl_endl;
       return false;
     }
   }
   //if you click on the canvas, you wanna render, so turn off update
-  else if(e.type == vgui_BUTTON_DOWN) {
+  else if (e.type == vgui_BUTTON_DOWN) {
     do_update_ = false;
   }
-  
+
   //otherwise trigger cam handling events
-  if (boxm_cam_tableau::handle(e))
-    return true;
- 
-  return false;
+  return boxm_cam_tableau::handle(e);
 }
 
