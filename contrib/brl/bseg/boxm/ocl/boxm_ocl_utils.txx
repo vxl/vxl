@@ -106,7 +106,7 @@ void boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T> >* scene,
   typedef vnl_vector_fixed<int, 4> int4;
   typedef vnl_vector_fixed<int, 2> int2;
   typedef vnl_vector_fixed<float, 16> float16;
-  int SMALL_BLK_MAX_LEVEL = 4, SMALL_BLK_INIT_LEVEL = 1;
+  const int SMALL_BLK_MAX_LEVEL = 4, SMALL_BLK_INIT_LEVEL = 1;
 
   vgl_point_3d<double> origin = scene->origin();
   vgl_vector_3d<double> block_dim = scene->block_dim();
@@ -136,7 +136,7 @@ void boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T> >* scene,
           <<" to become small block scene root"<<vcl_endl;
 
   //finest blocks that lie along one side of the big (or small) blocks
-  float finestPerBig = (float) vcl_pow((float)2, (float)(max_level-1));
+  float finestPerBig = (float) vcl_pow((float)2, (float)(max_level-SMALL_BLK_INIT_LEVEL));
   float finestPerSmall = (float) vcl_pow((float)2, (float)(max_level-init_level));
   //float finestPerSmall = (float) vcl_pow((float)2, (float(SMALL_BLK_MAX_LEVEL));
   int sm_n = (int) (finestPerBig/finestPerSmall);
@@ -194,8 +194,8 @@ void boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T> >* scene,
     //cells at level 3 (4th level from the bottom) make up the new roots
     vcl_vector<boct_tree_cell<short,T>*> blk_roots = tree->cells_at_level(small_blk_root_level);
     vcl_cout<<"  number small blocks: "<<blk_roots.size()<<vcl_endl;
-    int tot_alloc = 0, tot_child = 0;
-    for (int blk_i=0; blk_i<blk_roots.size(); blk_i++)
+    int tot_alloc = 0;
+    for (unsigned int blk_i=0; blk_i<blk_roots.size(); ++blk_i)
     {
       //figure out which small_block i,j,k this root corresponds to
       boct_tree_cell<short,T>* root = blk_roots[blk_i];
@@ -233,9 +233,9 @@ void boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T> >* scene,
       //make sure there's enough room
       int start=mem_ptrs[buffIndex][0];
       int end = mem_ptrs[buffIndex][1];
-      int freeSpace = (start >= end)? start-end : buff_length - (end-start);
+      unsigned int freeSpace = (start >= end)? start-end : buff_length - (end-start);
       if (freeSpace > cell_array.size()) {
-        for (int c=0; c<cell_array.size(); c++) {
+        for (unsigned int c=0; c<cell_array.size(); ++c) {
           tree_buffers(buffIndex, buffOffset+c) = cell_array[c];
           //only copy data if it exists for this cell (not inner cells)
           int dat_index = cell_array[c][2];
@@ -259,9 +259,9 @@ void boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T> >* scene,
   /* make a pass to make sure all small blocks were initialized */
   int nonInitCount = 0;
   vcl_cout<<"init blocks: "<<vcl_endl;
-  for (int i=0; i<blocks.get_row1_count(); i++) {
-    for (int j=0; j<blocks.get_row2_count(); j++) {
-      for (int k=0; k<blocks.get_row3_count(); k++) {
+  for (unsigned int i=0; i<blocks.get_row1_count(); ++i) {
+    for (unsigned int j=0; j<blocks.get_row2_count(); ++j) {
+      for (unsigned int k=0; k<blocks.get_row3_count(); ++k) {
         int buffIndex = blocks(i,j,k)[0];
         //if this block isn't initialized... initialize it
         if (buffIndex < 0) {
@@ -306,10 +306,10 @@ void boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T> >* scene,
       }
     }
   }
-  
+
   /* make a pass to ensure that all tree roots point back to their cell index */
   int blk_index = 0;
-  vbl_array_3d<int4>::iterator blk_iter; 
+  vbl_array_3d<int4>::iterator blk_iter;
   for (blk_iter = blocks.begin(); blk_iter != blocks.end(); blk_iter++) {
     int4 blk = (*blk_iter);
     int buffIndex = blk[0];
@@ -321,7 +321,7 @@ void boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T> >* scene,
   }
 
   //notify how many blocks needed to be initialized/there's enough space
-  if(nonInitCount < 0) 
+  if (nonInitCount < 0)
     vcl_cout<<"Initializing uninitialized blocks failed.  Your scene is no good."<<vcl_endl;
   else
     vcl_cout<<"Initialized "<<nonInitCount<<" uninitialized blocks"<<vcl_endl;

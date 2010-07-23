@@ -16,23 +16,24 @@
 
 #include <vil/vil_save.h>
 
-void boxm_online_update_manager::init_update(vcl_string treefile, 
-                   vcl_string treedatafile,
-                   vgl_point_3d<double>  origin,
-                   vgl_vector_3d<double>  block_dim,
-                   vpgl_camera_double_sptr cam,
-                   vil_image_view<float> &obs,
-                   unsigned int root_level)
+void boxm_online_update_manager::init_update(vcl_string treefile,
+                                             vcl_string treedatafile,
+                                             vgl_point_3d<double>  origin,
+                                             vgl_vector_3d<double>  block_dim,
+                                             vpgl_camera_double_sptr cam,
+                                             vil_image_view<float> &obs,
+                                             unsigned int root_level)
  {
-
-  treefile_=treefile;
-  treedatafile_=treedatafile;
-  origin_=origin;
-  block_dim_=block_dim;
-  cam_ = cam;
-  input_img_=obs;
-  root_level_=root_level;
+   treefile_=treefile;
+   treedatafile_=treedatafile;
+   origin_=origin;
+   block_dim_=block_dim;
+   cam_ = cam;
+   input_img_=obs;
+   root_level_=root_level;
  }
+
+//:
 // This function enables a kind of "functor" capability where a token
 // in the ray trace main program is replaced with an appropriate function
 // signature. There are two aspects that have to be modified:
@@ -48,7 +49,6 @@ void boxm_online_update_manager::init_update(vcl_string treefile,
 //  Then the functor modification is restricted to just one file and
 //  the library files need to be loaded only once.
 //
-
 bool boxm_online_update_manager::
 build_program(vcl_string const& functor, bool use_cell_data)
 {
@@ -105,8 +105,8 @@ bool boxm_online_update_manager::clean_kernels()
   return true;
 }
 
-//: update the tree
 
+//: update the tree
 bool boxm_online_update_manager::set_kernels()
 {
   cl_int status = CL_SUCCESS;
@@ -378,41 +378,41 @@ bool boxm_online_update_manager::run_block(unsigned pass)
   }
   if (pass!=2 && pass!=4)
   {
-      globalThreads[0]=this->wni_/2; globalThreads[1]=this->wnj_/2;
-      localThreads[0] =this->bni_  ; localThreads[1] =this->bnj_  ;
+    globalThreads[0]=this->wni_/2; globalThreads[1]=this->wnj_/2;
+    localThreads[0] =this->bni_  ; localThreads[1] =this->bnj_  ;
 
-      for (unsigned k=0;k<2;k++)
+    for (unsigned k=0;k<2;k++)
+    {
+      for (unsigned l=0;l<2;l++)
       {
-          for (unsigned l=0;l<2;l++)
-          {
-              status=clEnqueueWriteBuffer(command_queue_,offset_y_buf_,0,0,sizeof(cl_uint),(void *)&k,0,0,0);
-              status=clEnqueueWriteBuffer(command_queue_,offset_x_buf_,0,0,sizeof(cl_uint),(void *)&l,0,0,0);
-              clFinish(command_queue_);
-              cl_event ceEvent;
+        status=clEnqueueWriteBuffer(command_queue_,offset_y_buf_,0,0,sizeof(cl_uint),(void *)&k,0,0,0);
+        status=clEnqueueWriteBuffer(command_queue_,offset_x_buf_,0,0,sizeof(cl_uint),(void *)&l,0,0,0);
+        clFinish(command_queue_);
+        cl_event ceEvent;
 
-              status = clEnqueueNDRangeKernel(command_queue_, kernels_[pass], 2,NULL,globalThreads,localThreads,0,NULL,&ceEvent);
-              if (this->check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed. "+error_to_string(status))!=CHECK_SUCCESS)
-                  return false;
-              status = clFinish(command_queue_);
-              if (this->check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status))!=CHECK_SUCCESS)
-                  return false;
-          }
+        status = clEnqueueNDRangeKernel(command_queue_, kernels_[pass], 2,NULL,globalThreads,localThreads,0,NULL,&ceEvent);
+        if (this->check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed. "+error_to_string(status))!=CHECK_SUCCESS)
+          return false;
+        status = clFinish(command_queue_);
+        if (this->check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status))!=CHECK_SUCCESS)
+          return false;
       }
+    }
   }
   else
   {
-      cl_event ceEvent;
+    cl_event ceEvent;
 
-      status = clEnqueueNDRangeKernel(command_queue_, kernels_[pass], 2,NULL,globalThreads,localThreads,0,NULL,&ceEvent);
-      if (this->check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed. "+error_to_string(status))!=CHECK_SUCCESS)
-          return false;
-      status = clFinish(command_queue_);
+    status = clEnqueueNDRangeKernel(command_queue_, kernels_[pass], 2,NULL,globalThreads,localThreads,0,NULL,&ceEvent);
+    if (this->check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed. "+error_to_string(status))!=CHECK_SUCCESS)
+      return false;
+    status = clFinish(command_queue_);
   }
 
   if (this->check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status))!=CHECK_SUCCESS)
     return false;
-  cl_ulong tstart,tend;
 #if 0
+  cl_ulong tstart,tend;
   status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
   status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
     gpu_time_+= (double)1.0e-6 * (tend - tstart); // convert nanoseconds to milliseconds
@@ -424,8 +424,6 @@ bool boxm_online_update_manager::run_block(unsigned pass)
 
 bool boxm_online_update_manager::process_block(int numpass)
 {
-
-  cl_int status = CL_SUCCESS;
   if (!this->set_kernels())
     return false;
   if (!this->create_command_queue())
@@ -438,21 +436,18 @@ bool boxm_online_update_manager::process_block(int numpass)
         set_input_view() &&
         set_input_view_buffers()))
     return false;
-  float total_raytrace_time = 0.0f;
-  float total_gpu_time = 0.0f;
-  float total_load_time = 0.0f;
   //tree_type * tree = block_->get_tree();
   if (!(set_tree() && set_tree_buffers()))
     return false;
   // run the raytracing for this block
-  for (unsigned pass = 0; pass<numpass; pass++)
+  for (int pass = 0; pass<numpass; ++pass)
   {
     if (!run_block(pass))
       return false;
-    if(pass==1)
+    if (pass==1)
     {
-        read_output_image() ;
-        this->save_image() ;
+      read_output_image();
+      this->save_image();
     }
   }
   // release memory
@@ -464,10 +459,10 @@ bool boxm_online_update_manager::process_block(int numpass)
     return false;
   float raytrace_time = (float)timer.all() / 1e3f;
   vcl_cout<<"processing block took " << raytrace_time << 's' << vcl_endl;
-  read_output_image() ;
-  //this->print_image() ;
+  read_output_image();
+  //this->print_image();
 
-  return  clean_input_view()
+  return clean_input_view()
       && release_block_data_buffers()
       && release_offset_buffers()
       && clean_block_data()
@@ -694,7 +689,7 @@ void boxm_online_update_manager::archive_tree_data()
   if (cells_)
     for (unsigned i = 0; i<cells_size_*4; i+=4) {
       int child_ptr = 16*cells_[i+1];
-      if(cells_[i+2]>=0)
+      if (cells_[i+2]>=0)
       {
       int data_ptr = 16*cells_[i+2];
       int aux_data_ptr = 4*cells_[i+2];
@@ -714,13 +709,13 @@ void boxm_online_update_manager::archive_tree_data()
      }
     }
 }
+
 void boxm_online_update_manager::save_tree_data()
 {
     boxm_ocl_utils::writetree(treefile_,cells_,(unsigned) cells_size_);
     boxm_ocl_utils::writetreedata(treedatafile_,cell_data_,(unsigned) cell_data_size_);
     //vcl_string filename="F:/APL/test/aux.tree";
     //boxm_ocl_utils::writetreeauxdata(filename,cell_aux_data_,(unsigned) cell_data_size_);
-
 }
 
 /*******************************************
@@ -802,7 +797,6 @@ bool boxm_online_update_manager::release_block_data_buffers()
 
 bool boxm_online_update_manager::set_root_level()
 {
-
   return true;
 }
 
@@ -842,7 +836,6 @@ bool boxm_online_update_manager::set_input_view()
 
 bool boxm_online_update_manager::clean_input_view()
 {
-  bool good = true;
   return clean_persp_camera()
       && clean_input_image();
 }
@@ -864,36 +857,33 @@ bool boxm_online_update_manager::release_input_view_buffers()
 
 bool boxm_online_update_manager::set_tree()
 {
+  cells_ = boxm_ocl_utils::readtree(treefile_.c_str(),cells_size_);
+  cell_data_ = boxm_ocl_utils::readtreedata(treedatafile_.c_str(),cell_data_size_);
+  cell_aux_data_ = NULL;
 
+  cell_aux_data_=(cl_float *)boxm_ocl_utils::alloc_aligned(cell_data_size_,sizeof(cl_float4),16);
+  data_array_size_=(cl_uint *)boxm_ocl_utils::alloc_aligned(1,sizeof(cl_uint),16);
 
-    cells_ = boxm_ocl_utils::readtree(treefile_.c_str(),cells_size_);
-    cell_data_ = boxm_ocl_utils::readtreedata(treedatafile_.c_str(),cell_data_size_);
-    cell_aux_data_ = NULL;
+  if (cells_== NULL||cell_data_ == NULL||cell_aux_data_==NULL)
+  {
+    vcl_cout << "Failed to allocate host memory. (tree input)\n";
+    return false;
+  }
 
-    cell_aux_data_=(cl_float *)boxm_ocl_utils::alloc_aligned(cell_data_size_,sizeof(cl_float4),16);
-    data_array_size_=(cl_uint *)boxm_ocl_utils::alloc_aligned(1,sizeof(cl_uint),16);
+  for (unsigned i=0;i<cell_data_size_*4;)
+    for (unsigned j=0;j<4;j++)
+      cell_aux_data_[i++]=0.0;
 
-    if (cells_== NULL||cell_data_ == NULL||cell_aux_data_==NULL)
-    {
-        vcl_cout << "Failed to allocate host memory. (tree input)\n";
-        return false;
-    }
+  data_array_size_[0]=cell_data_size_;
+  tree_bbox_=(cl_float *)boxm_ocl_utils::alloc_aligned(1,sizeof(cl_float4),16);
 
+  tree_bbox_[0] = (cl_float)origin_.x();
+  tree_bbox_[1] = (cl_float)origin_.y();
+  tree_bbox_[2] = (cl_float)origin_.z();
+  // Assumption: isotropic dimensions.
+  tree_bbox_[3] = (cl_float)block_dim_.x();
 
-    for(unsigned i=0;i<cell_data_size_*4;)
-        for(unsigned j=0;j<4;j++)
-            cell_aux_data_[i++]=0.0;
-
-    data_array_size_[0]=cell_data_size_;
-    tree_bbox_=(cl_float *)boxm_ocl_utils::alloc_aligned(1,sizeof(cl_float4),16);
-
-    tree_bbox_[0] = (cl_float)origin_.x();
-    tree_bbox_[1] = (cl_float)origin_.y();
-    tree_bbox_[2] = (cl_float)origin_.z();
-    //: Assumption: isotropic dimensions.
-    tree_bbox_[3] = (cl_float)block_dim_.x();
-
-    return true;
+  return true;
 }
 
 
@@ -907,7 +897,7 @@ bool boxm_online_update_manager::clean_tree()
     boxm_ocl_utils::free_aligned(cell_aux_data_);
   if (tree_bbox_)
     boxm_ocl_utils::free_aligned(tree_bbox_);
-  if(data_array_size_)
+  if (data_array_size_)
     boxm_ocl_utils::free_aligned(data_array_size_);
 
   return true;
@@ -970,7 +960,6 @@ bool boxm_online_update_manager::release_tree_buffers()
 
   return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (tree_bbox_buf_).")==1;
 }
-
 
 
 bool boxm_online_update_manager::set_persp_camera()

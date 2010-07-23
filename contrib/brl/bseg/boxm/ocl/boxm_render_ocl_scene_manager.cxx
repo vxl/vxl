@@ -1,4 +1,3 @@
-
 //:
 // \file
 #include "boxm_render_ocl_scene_manager.h"
@@ -15,15 +14,16 @@
 //put tree structure and data into arrays
 
 bool boxm_render_ocl_scene_manager::init_ray_trace(boxm_ocl_scene *scene,
-                                                  vpgl_camera_double_sptr cam,
-                                                  vil_image_view<float> &obs)
+                                                   vpgl_camera_double_sptr cam,
+                                                   vil_image_view<float> &obs)
 {
   scene_ = scene;
   cam_ = cam;
   output_img_=obs;
+#if 0 // unused variables
   vcl_string extensions_supported((char*)this->extensions_supported_);
   vcl_size_t found=extensions_supported.find("gl_sharing");
-
+#endif
   // Code for Pass_0
   if (!this->load_kernel_source(vcl_string(VCL_SOURCE_ROOT_DIR)
                                 +"/contrib/brl/bseg/boxm/ocl/octree_library_functions.cl") ||
@@ -93,12 +93,12 @@ bool boxm_render_ocl_scene_manager::set_args()
   status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&root_level_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (root_level_buf_)"))
     return SDK_FAILURE;
-  // the lenght of buffer
+  // the length of buffer
   status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&numbuffer_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (lenbuffer_buf_)"))
     return SDK_FAILURE;
 
-  // the lenght of buffer
+  // the length of buffer
   status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&lenbuffer_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (lenbuffer_buf_)"))
     return SDK_FAILURE;
@@ -133,7 +133,6 @@ bool boxm_render_ocl_scene_manager::set_args()
   status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&image_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (input_image)"))
     return SDK_FAILURE;
-  
 
   //image_gl_buf_ = clCreateBuffer(this->context_,
   //                               CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
@@ -235,7 +234,6 @@ bool boxm_render_ocl_scene_manager::run()
 
 bool boxm_render_ocl_scene_manager::run_scene()
 {
-  cl_int status = CL_SUCCESS;
   bool good=true;
   vcl_string error_message="";
   vul_timer timer;
@@ -349,7 +347,6 @@ void boxm_render_ocl_scene_manager::print_tree()
   if (cells_)
     for (unsigned i = 0; i<cells_size_*4; i+=4) {
       int data_ptr = 16*cells_[i+2];
-      int aux_data_ptr = 4*cells_[i+2];
       vcl_cout << "tree input[" << i/4 << "]("
                << cells_[i]   << ' '
                << cells_[i+1] << ' '
@@ -690,13 +687,12 @@ bool boxm_render_ocl_scene_manager::set_block_ptrs()
   int index=0;
   for (vbl_array_3d<int4>::iterator iter=scene_->blocks_.begin();iter!=scene_->blocks_.end();iter++)
   {
-
       block_ptrs_[index++]=(*iter)[0];
       block_ptrs_[index++]=(*iter)[1];
       block_ptrs_[index++]=(*iter)[2];
       block_ptrs_[index++]=(*iter)[3];
   }
-    
+
   return true;
 }
 
@@ -780,7 +776,6 @@ bool boxm_render_ocl_scene_manager::release_input_view_buffers()
 
 bool boxm_render_ocl_scene_manager::set_all_blocks()
 {
-
   if (!scene_)
     return false;
 
@@ -794,8 +789,7 @@ bool boxm_render_ocl_scene_manager::set_all_blocks()
   cells_=(cl_int *)boxm_ocl_utils::alloc_aligned(cells_size_,sizeof(cl_int4),16);
   cell_data_=(cl_float *)boxm_ocl_utils::alloc_aligned(cell_data_size_,sizeof(cl_float8),16);
   cell_alpha_=(cl_float *)boxm_ocl_utils::alloc_aligned(cell_data_size_,sizeof(cl_float),16);
- 
-  
+
   vcl_cout<<"Cells "<<(float)cells_size_*16/1024.0/1024.0<<"MB"<<vcl_endl;
 
   vcl_cout<<"Data "<<(float)cells_size_*9*4/1024.0/1024.0<<"MB"<<vcl_endl;
@@ -807,29 +801,27 @@ bool boxm_render_ocl_scene_manager::set_all_blocks()
   }
 
   int index=0;
-  for(vbl_array_2d<int4>::iterator iter=scene_->tree_buffers_.begin();iter!=scene_->tree_buffers_.end();iter++)
+  for (vbl_array_2d<int4>::iterator iter=scene_->tree_buffers_.begin();iter!=scene_->tree_buffers_.end();iter++)
   {
-      cells_[index++]=(*iter)[0];
-      cells_[index++]=(*iter)[1];
-      cells_[index++]=(*iter)[2];
-      cells_[index++]=(*iter)[3];
+    cells_[index++]=(*iter)[0];
+    cells_[index++]=(*iter)[1];
+    cells_[index++]=(*iter)[2];
+    cells_[index++]=(*iter)[3];
   }
   int indexalpha=0;
   int indexapp=0;
-  for(vbl_array_2d<float16>::iterator iter=scene_->data_buffers_.begin();iter!=scene_->data_buffers_.end();iter++)
+  for (vbl_array_2d<float16>::iterator iter=scene_->data_buffers_.begin();iter!=scene_->data_buffers_.end();iter++)
   {
-   cell_alpha_[indexalpha++]=(*iter)[0];
-   cell_data_[indexapp++]=(*iter)[1]; 
-   cell_data_[indexapp++]=(*iter)[2]; 
-   cell_data_[indexapp++]=(*iter)[3]; 
-   cell_data_[indexapp++]=(*iter)[5];
-   cell_data_[indexapp++]=(*iter)[6];
-   cell_data_[indexapp++]=(*iter)[7];
-   cell_data_[indexapp++]=(*iter)[9];
-   cell_data_[indexapp++]=(*iter)[10];
+    cell_alpha_[indexalpha++]=(*iter)[0];
+    cell_data_[indexapp++]=(*iter)[1];
+    cell_data_[indexapp++]=(*iter)[2];
+    cell_data_[indexapp++]=(*iter)[3];
+    cell_data_[indexapp++]=(*iter)[5];
+    cell_data_[indexapp++]=(*iter)[6];
+    cell_data_[indexapp++]=(*iter)[7];
+    cell_data_[indexapp++]=(*iter)[9];
+    cell_data_[indexapp++]=(*iter)[10];
   }
-
-  
 
   return true;
 }
@@ -901,7 +893,6 @@ bool boxm_render_ocl_scene_manager::release_tree_buffers()
   status = clReleaseMemObject(numbuffer_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (numbuffer_buf_)."))
     return false;
-  
   status = clReleaseMemObject(cells_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (cells_buf_)."))
     return false;
@@ -1033,7 +1024,6 @@ bool boxm_render_ocl_scene_manager::release_persp_camera_buffers()
 }
 
 
-
 bool boxm_render_ocl_scene_manager::set_input_image()
 {
   wni_=(cl_uint)RoundUp(output_img_.ni(),bni_);
@@ -1043,8 +1033,6 @@ bool boxm_render_ocl_scene_manager::set_input_image()
   image_gl_=(cl_uint*)boxm_ocl_utils::alloc_aligned(wni_*wnj_,sizeof(cl_uint),16);
 
   img_dims_=(cl_uint *)boxm_ocl_utils::alloc_aligned(1,sizeof(cl_uint4),16);
-
-  vil_image_view<float>::iterator iter=output_img_.begin();
 
   // pad the image
   for (unsigned i=0;i<output_img_.ni();i++)
@@ -1070,7 +1058,8 @@ bool boxm_render_ocl_scene_manager::set_input_image()
     vcl_cerr<<"Failed allocation of image or image dimensions\n";
     return false;
   }
-  return true;
+  else
+    return true;
 }
 
 bool boxm_render_ocl_scene_manager::clean_input_image()

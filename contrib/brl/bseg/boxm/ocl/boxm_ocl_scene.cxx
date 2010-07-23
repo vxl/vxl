@@ -262,9 +262,9 @@ bool boxm_ocl_scene::init_empty_scene()
 
   //now assign block ptrs to things
   //for each block[i,j,k], throw it's root tree randomly into one of the tree buffers
-  for (int i=0; i<blk_nums.x(); i++) {
-    for (int j=0; j<blk_nums.y(); j++) {
-      for (int k=0; k<blk_nums.z(); k++) {
+  for (unsigned int i=0; i<blk_nums.x(); ++i) {
+    for (unsigned int j=0; j<blk_nums.y(); ++j) {
+      for (unsigned int k=0; k<blk_nums.z(); ++k) {
         //randomly choose a buffer, and get the first free spot in memory
         int buffIndex = (int) (num_tree_buffers_-1)*(vcl_rand()/(RAND_MAX+1.0));
         int buffOffset = mem_ptrs_[buffIndex][1];
@@ -446,7 +446,7 @@ vcl_ostream& operator <<(vcl_ostream &s, boxm_ocl_scene& scene)
   vbl_array_2d<int4> tree_buffers = scene.tree_buffers();
   vbl_array_1d<int2> mem_ptrs = scene.mem_ptrs();
   s << "free space: "<<vcl_endl;;
-  for (int i=0; i<mem_ptrs.size(); i++) {
+  for (unsigned int i=0; i<mem_ptrs.size(); ++i) {
     int start=mem_ptrs[i][0];
     int end = mem_ptrs[i][1];
     int freeSpace = (start >= end)? start-end : tree_buffers.cols() - (end-start);
