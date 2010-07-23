@@ -11,7 +11,7 @@ bool bvxm_expected_edge_functor::apply(const vpgl_camera_double_sptr& camera,
   int ni = img_eei->ni();
   int nj = img_eei->nj();
 
-  // check the camera type 
+  // check the camera type
   if (camera->type_name() == "vpgl_perspective_camera") {
     vpgl_perspective_camera<double>* cam = dynamic_cast<vpgl_perspective_camera<double>*>(camera.ptr());
     if (!cam)
@@ -71,7 +71,8 @@ bool bvxm_expected_edge_functor::apply(const vpgl_camera_double_sptr& camera,
       }
     }
     return true;
-  } else {
+  }
+  else {
     vcl_cout << "bvxm_expected_edge_functor::apply() -- The camera type: " << camera->type_name() << " is not implemented yet!" << vcl_endl;
     return false;
   }
@@ -100,7 +101,7 @@ vcl_vector<vgl_point_3d<double> > bvxm_expected_edge_functor::convert_3d_box_to_
 }
 
 vgl_polygon<double> bvxm_expected_edge_functor::convert_3d_box_to_2d_polygon(const vgl_box_3d<double> box_3d,
-                                                                        const vpgl_perspective_camera<double> *cam)
+                                                                             const vpgl_perspective_camera<double> *cam)
 {
   vcl_vector<vgl_point_3d<double> > box_pts_3d = convert_3d_box_to_3d_points(box_3d);
 

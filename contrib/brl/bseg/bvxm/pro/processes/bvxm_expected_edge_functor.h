@@ -14,26 +14,24 @@
 #include <vcl_vector.h>
 
 
-class bvxm_expected_edge_functor {
-
-public:
-  bvxm_expected_edge_functor(const bvxm_voxel_slab<float>* slab, const vgl_box_3d<double>& box, 
-    const vgl_vector_3d<float>& vox_dim, const vgl_vector_3d<float>& world_dim) 
+class bvxm_expected_edge_functor
+{
+ public:
+  bvxm_expected_edge_functor(const bvxm_voxel_slab<float>* slab, const vgl_box_3d<double>& box,
+                             const vgl_vector_3d<float>& vox_dim, const vgl_vector_3d<float>& world_dim)
     : slab_(slab), box_(box), vox_dim_(vox_dim), world_dim_(world_dim) {}
   ~bvxm_expected_edge_functor(){}
   bool apply(const vpgl_camera_double_sptr& cam, vil_image_view<float> *img_eei);
 
-private:
+ private:
 
   vcl_vector<vgl_point_3d<double> > convert_3d_box_to_3d_points(const vgl_box_3d<double> box_3d);
   vgl_polygon<double> convert_3d_box_to_2d_polygon(const vgl_box_3d<double> box_3d, const vpgl_perspective_camera<double> *cam);
 
   const bvxm_voxel_slab<float>* slab_;
-  vgl_box_3d<double> box_; 
+  vgl_box_3d<double> box_;
   vgl_vector_3d<float> vox_dim_;
   vgl_vector_3d<float> world_dim_;
-
-
 };
 
 #endif

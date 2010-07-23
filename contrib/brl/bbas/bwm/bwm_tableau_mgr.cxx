@@ -191,7 +191,8 @@ void bwm_tableau_mgr::add_to_grid(vgui_tableau_sptr tab, unsigned& col,
     if (row_added_) {
       grid_->add_column();
       row_added_ = false;
-    } else {
+    }
+    else {
       grid_->add_row();
       row_added_ = true;
     }
@@ -282,7 +283,7 @@ void bwm_tableau_mgr::scroll_to_point()
   vcl_map<vcl_string, vgui_tableau_sptr>::iterator iter = tableaus_.begin();
   while (iter != tableaus_.end()) {
     bwm_tableau_cam* tab = dynamic_cast<bwm_tableau_cam*> (iter->second.as_pointer());
-    if (tab) 
+    if (tab)
       tab->scroll_to_point(lx,ly,lz);
     iter++;
   }
