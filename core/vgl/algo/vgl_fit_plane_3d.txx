@@ -86,7 +86,7 @@ void vgl_fit_plane_3d<T>::add_point(const T x, const T y, const T z)
   coeff_matrix(3, 0) = A;
   coeff_matrix(3, 1) = B;
   coeff_matrix(3, 2) = C;
-  coeff_matrix(3, 3) = n;
+  coeff_matrix(3, 3) = T(n);
 
   vnl_svd<T> svd(coeff_matrix);
   // check if the error_margin is achieved
