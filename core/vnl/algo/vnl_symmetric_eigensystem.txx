@@ -81,8 +81,8 @@ void vnl_symmetric_eigensystem_compute_eigenvals(
   const T k = vcl_acos(g / sqrt_f3) / 3;
   const T j = 2 * sqrt_f;
   l1 = j * vcl_cos(k) - b_3;
-  l2 = j * vcl_cos(k + vnl_math::pi * 2.0 / 3.0) - b_3;
-  l3 = j * vcl_cos(k - vnl_math::pi * 2.0 / 3.0) - b_3;
+  l2 = j * vcl_cos(k + T(vnl_math::pi * 2.0 / 3.0)) - b_3;
+  l3 = j * vcl_cos(k - T(vnl_math::pi * 2.0 / 3.0)) - b_3;
 
   if (l2 < l1) vcl_swap(l2, l1);
   if (l3 < l2)
