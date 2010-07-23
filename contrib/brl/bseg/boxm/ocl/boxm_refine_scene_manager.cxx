@@ -13,38 +13,39 @@
 
 
 //: Initializes CPU side input buffers
-//put tree structure and data into arrays
-//initializes (cl_int*) cells_ and (cl_float*) cell_data_
+// Put tree structure and data into arrays
+// Initializes (cl_int*) cells_ and (cl_float*) cell_data_
 // also initializes (cl_int*) tree_results_ and (cl_float*) data_results_
 bool boxm_refine_scene_manager::
 init_refine(boxm_ocl_scene* scene, float prob_thresh)
 {
-  //keep track of the scene 
+  //keep track of the scene
   scene_ = scene;
- 
-  //store scene information, numbuffer_ length of buffer, 
+
+  //store scene information, numbuffer_ length of buffer,
   tree_cell_size_ = 4;  //four ints for now
   data_cell_size_ = 8;  //8 floats for now
-  scene->tree_buffer_shape(numbuffer_, lenbuffer_); 
-  max_level_ = scene->max_level();      //this is really the same as max level... 
-    
-  //stuff refine needs 
+  scene->tree_buffer_shape(numbuffer_, lenbuffer_);
+  max_level_ = scene->max_level();      //this is really the same as max level...
+
+  //stuff refine needs
   prob_thresh_ = prob_thresh;
   double x, y, z; scene->block_dim(x, y, z);
   bbox_len_ = (float) x;
 
-  bool good = setup_scene_data() && 
-              setup_scene_data_buffers() && 
+  bool good = setup_scene_data() &&
+              setup_scene_data_buffers() &&
               init_kernel();
   return good;
 }
 
-//: copies scene data into these memeber variable buffers 
-bool boxm_refine_scene_manager::setup_scene_data() {
+//: copies scene data into these member variable buffers
+bool boxm_refine_scene_manager::setup_scene_data()
+{
   typedef vnl_vector_fixed<int, 4> int4;
   typedef vnl_vector_fixed<float, 16> float16;
   typedef vnl_vector_fixed<int, 2> int2;
-  
+
   //number of blocks along each dimension
   block_nums_   = (cl_int*)   boxm_ocl_utils::alloc_aligned(1, sizeof(cl_int4), 16);
   int numX, numY, numZ;
@@ -54,46 +55,46 @@ bool boxm_refine_scene_manager::setup_scene_data() {
   block_nums_[2] = numZ;
   block_nums_[3] = 0;
 
-  //3d array of block pointers 
+  //3d array of block pointers
   int numblocks = block_nums_[0]*block_nums_[1]*block_nums_[2];
   vcl_cout<<"Block size "<<(float)numblocks*16/1024.0/1024.0<<"MB"<<vcl_endl;
   block_ptrs_   = (cl_int*)   boxm_ocl_utils::alloc_aligned(numblocks,sizeof(cl_int4),16);
   int index=0;
-  vbl_array_3d<int4>::iterator iter; 
+  vbl_array_3d<int4>::iterator iter;
   for (iter = scene_->blocks_.begin(); iter != scene_->blocks_.end(); iter++) {
     block_ptrs_[index++]=(*iter)[0];
     block_ptrs_[index++]=(*iter)[1];
     block_ptrs_[index++]=(*iter)[2];
     block_ptrs_[index++]=(*iter)[3];
   }
-  
-  for(int i=0; i<4; i++)
-    vcl_cout<<block_ptrs_[i]<<",";
+
+  for (int i=0; i<4; i++)
+    vcl_cout<<block_ptrs_[i]<<',';
   vcl_cout<<vcl_endl;
-  
-  //2d array of tree cells 
+
+  //2d array of tree cells
   vcl_cout<<"Cells "<<(float)(numbuffer_*lenbuffer_)*16/1024.0/1024.0<<"MB"<<vcl_endl;
   tree_cells_   = (cl_int*)   boxm_ocl_utils::alloc_aligned(numbuffer_*lenbuffer_, sizeof(cl_int4), 16);
-  index = 0; 
+  index = 0;
   vbl_array_2d<int4>::iterator tree_iter;
-  for( tree_iter = scene_->tree_buffers_.begin(); tree_iter != scene_->tree_buffers_.end(); tree_iter++) {
+  for ( tree_iter = scene_->tree_buffers_.begin(); tree_iter != scene_->tree_buffers_.end(); tree_iter++) {
     tree_cells_[index++]=(*tree_iter)[0];
     tree_cells_[index++]=(*tree_iter)[1];
     tree_cells_[index++]=(*tree_iter)[2];
     tree_cells_[index++]=(*tree_iter)[3];
   }
 
-  //2d array of data cells and 2d array of alpha cells 
+  //2d array of data cells and 2d array of alpha cells
   vcl_cout<<"Data "<<(float)(numbuffer_*lenbuffer_)*9*4/1024.0/1024.0<<"MB"<<vcl_endl;
   alpha_cells_  = (cl_float*) boxm_ocl_utils::alloc_aligned(numbuffer_*lenbuffer_, sizeof(cl_float), 16);
   data_cells_   = (cl_float*) boxm_ocl_utils::alloc_aligned(numbuffer_*lenbuffer_, sizeof(cl_float8), 16);
   vbl_array_2d<float16>::iterator data_iter;
   int datIndex = 0, alphaIndex = 0;
-  for(data_iter=scene_->data_buffers_.begin(); data_iter!=scene_->data_buffers_.end(); data_iter++) {
+  for (data_iter=scene_->data_buffers_.begin(); data_iter!=scene_->data_buffers_.end(); data_iter++) {
     alpha_cells_[alphaIndex++]=(*data_iter)[0];
-    data_cells_[datIndex++]=(*data_iter)[1]; 
-    data_cells_[datIndex++]=(*data_iter)[2]; 
-    data_cells_[datIndex++]=(*data_iter)[3]; 
+    data_cells_[datIndex++]=(*data_iter)[1];
+    data_cells_[datIndex++]=(*data_iter)[2];
+    data_cells_[datIndex++]=(*data_iter)[3];
     data_cells_[datIndex++]=(*data_iter)[5];
     data_cells_[datIndex++]=(*data_iter)[6];
     data_cells_[datIndex++]=(*data_iter)[7];
@@ -102,79 +103,80 @@ bool boxm_refine_scene_manager::setup_scene_data() {
   }
 
 
-  //1d array of memory pointers 
+  //1d array of memory pointers
   mem_ptrs_     = (cl_int*)   boxm_ocl_utils::alloc_aligned(numbuffer_, sizeof(cl_int2), 16);
   vbl_array_1d<int2>::iterator mem_iter;
   index = 0;
-  for(mem_iter = scene_->mem_ptrs_.begin(); mem_iter != scene_->mem_ptrs_.end(); mem_iter++) {
-    mem_ptrs_[index++] = (*mem_iter)[0]; 
+  for (mem_iter = scene_->mem_ptrs_.begin(); mem_iter != scene_->mem_ptrs_.end(); mem_iter++) {
+    mem_ptrs_[index++] = (*mem_iter)[0];
     mem_ptrs_[index++] = (*mem_iter)[1];
-  } 
-  
+  }
+
   //scene_dims_   = (cl_int*)   boxm_ocl_utils::alloc_aligned(1, sizeof(cl_int4), 16);
   //scene_origin_ = (cl_float*) boxm_ocl_utils::alloc_aligned(1, sizeof(cl_int4), 16);
   return true;
 }
 
-//: Setup tree bufers and clean tree buffers
-//: sets up and cleans tree buffers sent to GPU
-bool boxm_refine_scene_manager::setup_scene_data_buffers() {
+//: Setup tree buffers and clean tree buffers
+//  Sets up and cleans tree buffers sent to GPU
+bool boxm_refine_scene_manager::setup_scene_data_buffers()
+{
   cl_int status = CL_SUCCESS;
-  
-  //block pointers 
+
+  //block pointers
   int numblocks = block_nums_[0]*block_nums_[1]*block_nums_[2];
   block_ptrs_buf_ = clCreateBuffer(this->context_,
-                                CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR,
-                                numblocks * sizeof(cl_int4),
-                                block_ptrs_,
-                                &status);
+                                   CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR,
+                                   numblocks * sizeof(cl_int4),
+                                   block_ptrs_,
+                                   &status);
   if (!this->check_val(status, CL_SUCCESS, "clCreateBuffer (block_ptrs_) failed."))
-    return false;                             
-  
+    return false;
+
   //number of blocks in each dimension
   block_nums_buf_ = clCreateBuffer(this->context_,
-                                CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR,
-                                sizeof(cl_int4),
-                                block_nums_,
-                                &status);
+                                   CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR,
+                                   sizeof(cl_int4),
+                                   block_nums_,
+                                   &status);
   if (!this->check_val(status, CL_SUCCESS, "clCreateBuffer (block_nums_) failed."))
-    return false;                               
-                 
-  //tree cells 
-  tree_cells_buf_ = clCreateBuffer(this->context_, 
-                                CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR,
-                                numbuffer_*lenbuffer_*sizeof(cl_int4),
-                                tree_cells_,
-                                &status);
+    return false;
+
+  //tree cells
+  tree_cells_buf_ = clCreateBuffer(this->context_,
+                                   CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR,
+                                   numbuffer_*lenbuffer_*sizeof(cl_int4),
+                                   tree_cells_,
+                                   &status);
   if (!this->check_val(status, CL_SUCCESS, "clCreateBuffer (tree_cells_) failed."))
-    return false;                           
-  
+    return false;
+
   //data cells buffer
   data_cells_buf_ = clCreateBuffer(this->context_,
-                                CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR,
-                                numbuffer_*lenbuffer_*sizeof(cl_float8),
-                                data_cells_,
-                                &status);
+                                   CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR,
+                                   numbuffer_*lenbuffer_*sizeof(cl_float8),
+                                   data_cells_,
+                                   &status);
   if (!this->check_val(status, CL_SUCCESS, "clCreateBuffer (data_cells_) failed."))
-    return false;                                            
-                          
+    return false;
+
   //alpha values for each cell
-  alpha_cells_buf_ = clCreateBuffer(this->context_, 
-                                CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR,
-                                numbuffer_*lenbuffer_*sizeof(cl_float),
-                                alpha_cells_,
-                                &status);
+  alpha_cells_buf_ = clCreateBuffer(this->context_,
+                                    CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR,
+                                    numbuffer_*lenbuffer_*sizeof(cl_float),
+                                    alpha_cells_,
+                                    &status);
   if (!this->check_val(status, CL_SUCCESS, "clCreateBuffer (alpha_cells_) failed."))
-    return false;   
-  
+    return false;
+
   //memory pointers for each tree buffer
-  mem_ptrs_buf_ = clCreateBuffer(this->context_, 
-                                CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR,
-                                numbuffer_*sizeof(cl_int2),
-                                mem_ptrs_,
-                                &status);
+  mem_ptrs_buf_ = clCreateBuffer(this->context_,
+                                 CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR,
+                                 numbuffer_*sizeof(cl_int2),
+                                 mem_ptrs_,
+                                 &status);
   if (!this->check_val(status, CL_SUCCESS, "clCreateBuffer (mem_ptrs_) failed."))
-    return false;   
+    return false;
 
   //OUTPUT
   output_buf_ = clCreateBuffer(this->context_,
@@ -182,15 +184,14 @@ bool boxm_refine_scene_manager::setup_scene_data_buffers() {
                                sizeof(cl_float),
                                &output_results_,
                                &status);
-  if (!this->check_val(status, CL_SUCCESS, "clCreateBuffer (cell_data) failed."))
-    return false;
 
-  return true;
+  return this->check_val(status, CL_SUCCESS, "clCreateBuffer (cell_data) failed.");
 }
 
 
 //: Cleans up the tree in computer memory (cells_ and cell_data_, tree_max_size_, tree_results_)
-bool boxm_refine_scene_manager::clean_scene_data() {
+bool boxm_refine_scene_manager::clean_scene_data()
+{
   boxm_ocl_utils::free_aligned(block_ptrs_);
   boxm_ocl_utils::free_aligned(block_nums_);
   boxm_ocl_utils::free_aligned(tree_cells_);
@@ -202,7 +203,8 @@ bool boxm_refine_scene_manager::clean_scene_data() {
   return true;
 }
 
-bool boxm_refine_scene_manager::clean_scene_data_buffers() {
+bool boxm_refine_scene_manager::clean_scene_data_buffers()
+{
   // Releases OpenCL resources (Context, Memory etc.)
   cl_int status;
   status = clReleaseMemObject(block_ptrs_buf_);
@@ -220,7 +222,7 @@ bool boxm_refine_scene_manager::clean_scene_data_buffers() {
   status = clReleaseMemObject(data_cells_buf_);
   if (!this->check_val(status, CL_SUCCESS, "clReleaseMemObject failed (data_cells_buf_)."))
     return SDK_FAILURE;
-    
+
   status = clReleaseMemObject(alpha_cells_buf_);
   if (!this->check_val(status, CL_SUCCESS, "clReleaseMemObject failed (alpha_cells_buf_)."))
     return SDK_FAILURE;
@@ -235,11 +237,10 @@ bool boxm_refine_scene_manager::clean_scene_data_buffers() {
     return SDK_FAILURE;
 
   return SDK_SUCCESS;
-  
 }
 
 
-//: Runs refine on gpu 
+//: Runs refine on gpu
 bool boxm_refine_scene_manager::run_refine()
 {
   vcl_cout<<"REFINING OCL SCENE:--------------------------------"<<vcl_endl;
@@ -275,9 +276,9 @@ bool boxm_refine_scene_manager::run_refine()
 
 
   // set up a command queue
-  command_queue_ = clCreateCommandQueue(this->context(), 
-                                        this->devices()[0], 
-                                        CL_QUEUE_PROFILING_ENABLE, 
+  command_queue_ = clCreateCommandQueue(this->context(),
+                                        this->devices()[0],
+                                        CL_QUEUE_PROFILING_ENABLE,
                                         &status);
   if (!this->check_val(status,CL_SUCCESS,"Failed in command queue creation" + error_to_string(status)))
     return false;
@@ -295,7 +296,7 @@ bool boxm_refine_scene_manager::run_refine()
   if (!this->check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status)))
     return SDK_FAILURE;
 
-  
+
   //get scene information back and reinitialize the ocl_scene
   this->read_buffers();
   scene_->set_blocks(block_ptrs_);
@@ -309,7 +310,7 @@ bool boxm_refine_scene_manager::run_refine()
   status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
   status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
   gpu_time = (tend-tstart)/1e9f;  //gpu time in seconds
- 
+
   //opencl output_
   vcl_cout<<"---OPENCL KERNEL OUTPUT: "<<output_results_<<vcl_endl;
 
@@ -318,11 +319,11 @@ bool boxm_refine_scene_manager::run_refine()
 #if 0
   float treeSize = 4*4*tree_results_size_/(1024.0f*1024.0f); //tree size in MB
   float dataSize = 4*16*data_results_size_/(1024.0f*1024.0f); //data size in MBs
-  vcl_cout<<"---GLOBAL MEM BANDWITH RESULTS-----------------------"<<vcl_endl
-          <<"---Tree Size: "<<(*tree_results_size_)<<" blocks; "<<treeSize<<" MB"<<vcl_endl
-          <<"---Data size: "<<(*data_results_size_)<<" blocks; "<<dataSize<<" MB"<<vcl_endl
-          <<"---GPU Time: "<<gpu_time<<" seconds"<<vcl_endl
-          <<"---Refine Bandwidth ~~ "<<(treeSize+dataSize)/gpu_time<<" MB/sec"<<vcl_endl
+  vcl_cout<<"---GLOBAL MEM BANDWITH RESULTS-----------------------\n"
+          <<"---Tree Size: "<<(*tree_results_size_)<<" blocks; "<<treeSize<<" MB\n"
+          <<"---Data size: "<<(*data_results_size_)<<" blocks; "<<dataSize<<" MB\n"
+          <<"---GPU Time: "<<gpu_time<<" seconds\n"
+          <<"---Refine Bandwidth ~~ "<<(treeSize+dataSize)/gpu_time<<" MB/sec\n"
           <<"-----------------------------------------------------"<<vcl_endl;
 #endif // 0
 
@@ -340,11 +341,11 @@ bool boxm_refine_scene_manager::read_buffers()
   int numblocks = block_nums_[0]*block_nums_[1]*block_nums_[2];
   status = clEnqueueReadBuffer(command_queue_, block_ptrs_buf_, CL_TRUE,
                                0, numblocks * sizeof(cl_int4),
-                               block_ptrs_, 
+                               block_ptrs_,
                                0, NULL, &events[eventI++]);
   if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (block_ptrs)failed."))
     return false;
-  
+
   //Read tree_cells
   status = clEnqueueReadBuffer(command_queue_, tree_cells_buf_, CL_TRUE,
                                0,  numbuffer_*lenbuffer_*sizeof(cl_int4),
@@ -399,8 +400,6 @@ bool boxm_refine_scene_manager::read_buffers()
 }
 
 
-
-
 /*****************************************
  * Cleanup refine_manager
  *****************************************/
@@ -422,23 +421,22 @@ bool boxm_refine_scene_manager::clean_refine()
 //: Sets kernel arguments
 int boxm_refine_scene_manager::set_kernel_args()
 {
-  
-  /*Refine args:
-   * block_ptrs
-   * num blocksn
-   * num buffers
-   * length buffers 
-   * tree cells
-   * data cells
-   * alpha cells
-   * mem pointers 
-   * prob thresh
-   * max level 
-   * bbox len  */
+  //Refine args:
+  // block_ptrs
+  // num blocksn
+  // num buffers
+  // length buffers
+  // tree cells
+  // data cells
+  // alpha cells
+  // mem pointers
+  // prob thresh
+  // max level
+  // bbox len
   cl_int status = CL_SUCCESS;
   int i = 0;
 
-  
+
   // ----- Set appropriate arguments to the kernel ----
   //block pointers and block nums in each dimension
   status = clSetKernelArg(kernel_, i++, sizeof(cl_mem), (void*) &block_ptrs_buf_);
@@ -447,16 +445,16 @@ int boxm_refine_scene_manager::set_kernel_args()
   status = clSetKernelArg(kernel_, i++, sizeof(cl_mem), (void*) &block_nums_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (block_nums buffer)"))
     return SDK_FAILURE;
-    
-  //num buffers, length of buffers 
+
+  //num buffers, length of buffers
   status = clSetKernelArg(kernel_, i++, sizeof(cl_int), &numbuffer_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (numbuffer_ buffer)"))
     return SDK_FAILURE;
   status = clSetKernelArg(kernel_, i++, sizeof(cl_int), &lenbuffer_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (lenbuffer_ buffer)"))
     return SDK_FAILURE;
-  
-  //tree cells, data cells, alpha cells 
+
+  //tree cells, data cells, alpha cells
   status = clSetKernelArg(kernel_, i++, sizeof(cl_mem), (void*) &tree_cells_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (tree_cells_buf_ buffer)"))
     return SDK_FAILURE;
@@ -466,12 +464,12 @@ int boxm_refine_scene_manager::set_kernel_args()
   status = clSetKernelArg(kernel_, i++, sizeof(cl_mem), (void*) &alpha_cells_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (alpha_cells_buf_ buffer)"))
     return SDK_FAILURE;
-     
+
   //mem pointers for the tree cells
   status = clSetKernelArg(kernel_, i++, sizeof(cl_mem), (void*) &mem_ptrs_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (data buffer)"))
     return SDK_FAILURE;
-    
+
   //probability threshold
   status = clSetKernelArg(kernel_, i++, sizeof(cl_float),  &prob_thresh_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (prob_thresh buffer)"))
@@ -492,14 +490,17 @@ int boxm_refine_scene_manager::set_kernel_args()
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local tree buffer)"))
     return false;
   //---- end local memory arguments
-  
+
   //IO ARGUMENT
   status = clSetKernelArg(kernel_, i++, sizeof(cl_mem), (void*) &output_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output_Buff buffer)"))
-    return SDK_FAILURE; 
+    return SDK_FAILURE;
+  else
+    return SDK_SUCCESS;
 }
 
-bool boxm_refine_scene_manager::init_kernel(){
+bool boxm_refine_scene_manager::init_kernel()
+{
   //load kernel source main
   if (!this->load_kernel_source(vcl_string(VCL_SOURCE_ROOT_DIR)
                                     +"/contrib/brl/bseg/boxm/ocl/refine_blocks.cl")) {
@@ -518,8 +519,7 @@ bool boxm_refine_scene_manager::init_kernel(){
   return true;
 }
 
-//: build_kernel_program - builds kernel program
-//: from source (a vcl string)
+//: build_kernel_program - builds kernel program from source (a vcl string)
 int boxm_refine_scene_manager::build_kernel_program()
 {
   cl_int status = CL_SUCCESS;
