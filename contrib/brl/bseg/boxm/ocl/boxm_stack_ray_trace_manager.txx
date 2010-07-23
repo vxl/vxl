@@ -905,8 +905,6 @@ bool boxm_stack_ray_trace_manager<T>::write_tree(vcl_string const& path)
 template<class T>
 bool boxm_stack_ray_trace_manager<T>::run()
 {
-  cl_int status = CL_SUCCESS;
-
   vul_timer timer;
   vul_timer t;
   vcl_string error_message="";
@@ -985,11 +983,11 @@ bool boxm_stack_ray_trace_manager<T>::run()
   clean_work_img_buffer();
   clean_ray_origin_buffer();
   clean_camera_input_buffer();
-  vcl_cout << "Timing Analysis "<<vcl_endl
-           << "==============="<<vcl_endl
-           <<"openCL Running time "<<gpu_time_<<" ms"<<vcl_endl
-           << "Running block "<<total_gpu_time/1000<<'s'<<vcl_endl
-           << "total block loading time = " << total_load_time << 's' << vcl_endl
+  vcl_cout << "Timing Analysis\n"
+           << "===============\n"
+           <<"openCL Running time "<<gpu_time_<<" ms\n"
+           << "Running block "<<total_gpu_time/1000<<"s\n"
+           << "total block loading time = " << total_load_time << "s\n"
            << "total block processing time = " << total_raytrace_time << 's' << vcl_endl;
   return true;
 }

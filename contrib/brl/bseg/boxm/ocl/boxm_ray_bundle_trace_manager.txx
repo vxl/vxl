@@ -23,7 +23,6 @@
 #include "boxm_ocl_utils.h"
 
 
-
 template<class T>
 bool boxm_ray_bundle_trace_manager<T>::init_raytrace(boxm_scene<boct_tree<short,T > > *scene,
                                                      vpgl_camera_double_sptr cam,
@@ -988,7 +987,6 @@ bool boxm_ray_bundle_trace_manager<T>::write_tree(vcl_string const& path)
 template<class T>
 bool boxm_ray_bundle_trace_manager<T>::run()
 {
-  cl_int status = CL_SUCCESS;
   vul_timer timer;
   vul_timer t;
   vcl_string error_message="";
@@ -1059,9 +1057,9 @@ bool boxm_ray_bundle_trace_manager<T>::run()
   //clean_camera_input_buffer();
   vcl_cout << "Timing Analysis\n"
            << "===============\n"
-           <<"openCL Running time "<<gpu_time_<<" ms"<<vcl_endl
-           << "Running block "<<total_gpu_time/1000<<'s'<<vcl_endl
-           << "total block loading time = " << total_load_time << 's' << vcl_endl
+           <<"openCL Running time "<<gpu_time_<<" ms\n"
+           << "Running block "<<total_gpu_time/1000<<"s\n"
+           << "total block loading time = " << total_load_time << "s\n"
            << "total block processing time = " << total_raytrace_time << 's' << vcl_endl;
   return true;
 }

@@ -125,7 +125,6 @@ static void test_update_gauss(stat_test_driver<T>& driver)
   bool good = true;
 
   cl_float* results = boxm_stat_manager<T>::instance()->stat_results();
-  vcl_size_t size = boxm_stat_manager<T>::instance()->result_size();
   if (results) {
     // comparison with bsta
     bsta_gaussian_sphere<float, 1> bgauss(mu_init, sigma_init*sigma_init);
@@ -154,7 +153,7 @@ static void test_mixture_sort(stat_test_driver<T>& driver)
     set_gauss_3_mixture_1d(0.75f, 0.2f, 1.0f/3.0f,
                            0.25f, 0.01f, 1.0f/3.0f,
                            0.5f, 0.05f, 1.0f/3.0f
-                           );
+                          );
   driver.setup_result_data(9);
 
   if (driver.create_kernel("test_mixture_sort")!=SDK_SUCCESS) {
@@ -201,7 +200,7 @@ static void test_insert(stat_test_driver<T>& driver)
                               0.25f, 0.01f, 1.0f/3.0f,
                               0.5f, 0.05f, 1.0f/3.0f,
                               0.75f, 0.2f, 1.0f/3.0f
-                              );
+                             );
   vcl_vector<float> data(1); data[0]=0.28f;
   driver.setup_data(data);
 
@@ -327,8 +326,7 @@ static bool mix_eq(bsta_num_obs<bsta_mixture_fixed<bsta_num_obs<bsta_gauss_f1>, 
 template <class T>
 static void test_update_mix(stat_test_driver<T>& driver)
 {
-  float mu_init = 0.0f, sigma_init = 0.1f, min_sigma = 0.05f,
-    t_match = 1.0f, w = 1.0f;
+  float sigma_init = 0.1f, min_sigma = 0.05f, t_match = 1.0f, w = 1.0f;
   float mu0 = 0.0f, sigma0 = 0.0f, w0 = 0.0f;
   float mu1 = 0.0f, sigma1 = 0.0f, w1 = 0.0f;
   float mu2 = 0.0f, sigma2 = 0.0f, w2 = 0.0f;
@@ -337,7 +335,7 @@ static void test_update_mix(stat_test_driver<T>& driver)
                               mu0, sigma0, w0,
                               mu1, sigma1, w1,
                               mu2, sigma2, w2
-                              );
+                             );
   unsigned nsamp = 30;
   float samples[] = {0.242128f, 0.48103f, 0.445362f, 0.257038f, 0.492382f,
                      1.07666f, 0.249464f, 0.554577f, 0.916411f, 0.241236f,
@@ -422,7 +420,6 @@ static void test_statistics()
   bool good = true;
   vcl_string root_dir = testlib_root_dir();
   stat_test_driver<float > test_driver;
-  boxm_stat_manager<float >* stat_mgr = boxm_stat_manager<float >::instance();
   good = test_driver.init();
   if (good) stat_tests(test_driver);
   else { TEST("stat_test_driver", true, false); }

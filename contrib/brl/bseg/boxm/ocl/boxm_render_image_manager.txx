@@ -22,8 +22,10 @@ bool boxm_render_image_manager<T>::init_ray_trace(boxm_scene<boct_tree<short,T >
   scene_ = scene;
   cam_ = cam;
   output_img_=obs;
+#if 0 // unused
   vcl_string extensions_supported((char*)this->extensions_supported_);
   vcl_size_t found=extensions_supported.find("gl_sharing");
+#endif
 
   // Code for Pass_0
   if (!this->load_kernel_source(vcl_string(VCL_SOURCE_ROOT_DIR)
@@ -125,21 +127,20 @@ bool boxm_render_image_manager<T>::set_args()
   status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&image_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (input_image)"))
     return SDK_FAILURE;
-  
 
-      image_gl_buf_ = clCreateBuffer(this->context_,
-          CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
-          wni_*wnj_*sizeof(cl_uint),
-          image_gl_,&status);
-      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (gl_image)"))
-          return SDK_FAILURE;
+  image_gl_buf_ = clCreateBuffer(this->context_,
+                                 CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+                                 wni_*wnj_*sizeof(cl_uint),
+                                 image_gl_,&status);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (gl_image)"))
+    return SDK_FAILURE;
 
 
   status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&image_gl_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (gl_image)"))
     return SDK_FAILURE;
-
-  return SDK_SUCCESS;
+  else
+    return SDK_SUCCESS;
 }
 
 template<class T>
@@ -147,10 +148,7 @@ bool boxm_render_image_manager<T>::set_commandqueue()
 {
   cl_int status = CL_SUCCESS;
   command_queue_ = clCreateCommandQueue(this->context(),this->devices()[0],CL_QUEUE_PROFILING_ENABLE,&status);
-  if (!this->check_val(status,CL_SUCCESS,"Falied in command queue creation" + error_to_string(status)))
-    return false;
-
-  return true;
+  return this->check_val(status,CL_SUCCESS,"Falied in command queue creation" + error_to_string(status));
 }
 
 template<class T>
@@ -227,7 +225,6 @@ bool boxm_render_image_manager<T>::run()
 template<class T>
 bool boxm_render_image_manager<T>::run_scene()
 {
-  cl_int status = CL_SUCCESS;
   bool good=true;
   vcl_string error_message="";
   vul_timer timer;
@@ -258,11 +255,13 @@ bool boxm_render_image_manager<T>::run_scene()
 
   this->release_kernel();
   vcl_cout << "Timing Analysis\n"
-           << "===============\n"
-  //       <<"openCL Running time "<<gpu_time_<<" ms\n"
-  //       << "Running block "<<total_gpu_time/1000<<"s\n"
-  //       << "total block loading time = " << total_load_time << "s\n"
-  //       << "total block processing time = " << total_raytrace_time << 's' << vcl_endl
+           << "===============" << vcl_endl
+#ifdef DEBUG
+           <<"openCL Running time "<<gpu_time_<<" ms\n"
+           << "Running block "<<total_gpu_time/1000<<"s\n"
+           << "total block loading time = " << total_load_time << "s\n"
+           << "total block processing time = " << total_raytrace_time << 's' << vcl_endl
+#endif
   ;
   return true;
 }
@@ -341,7 +340,6 @@ void boxm_render_image_manager<T>::print_tree()
   if (cells_)
     for (unsigned i = 0; i<cells_size_*4; i+=4) {
       int data_ptr = 16*cells_[i+2];
-      int aux_data_ptr = 4*cells_[i+2];
       vcl_cout << "tree input[" << i/4 << "]("
                << cells_[i]   << ' '
                << cells_[i+1] << ' '
@@ -668,7 +666,7 @@ bool boxm_render_image_manager<T>::set_block_ptrs()
 {
   if (scene_==NULL)
   {
-    vcl_cout<<"Scene is Missing "<<vcl_endl;
+    vcl_cout<<"Scene is Missing"<<vcl_endl;
     return false;
   }
   scene_->block_num(scene_x_,scene_y_,scene_z_);
@@ -804,7 +802,6 @@ bool boxm_render_image_manager<T>::set_tree(tree_type* tree)
   //  cell_data indices = 2*cell_data_ptr, 2*cell_data_ptr +1,
 
   unsigned cell_data_size=16;
-  unsigned aux_cell_data_size=4;
   for (unsigned i = 0, j = 0; i<data_input_.size()*cell_data_size; i+=cell_data_size, j++)
   {
     for (unsigned k = 0; k<cell_data_size; ++k)
@@ -858,7 +855,7 @@ bool boxm_render_image_manager<T>::set_all_blocks()
   cells_size_=cell_input_.size();
   cell_data_size_=data_input_.size();
 
-  vcl_cout<<"Tree Size "<<(float)cells_size_*4*4/(1024.0*1024.0)<<"MB"<<vcl_endl
+  vcl_cout<<"Tree Size "<<(float)cells_size_*4*4/(1024.0*1024.0)<<"MB\n"
           <<"Tree Data Size "<<(float)cell_data_size_*9*4/(1024.0*1024.0)<<"MB"<<vcl_endl;
   cells_ = NULL;
   cell_data_ = NULL;
@@ -1078,8 +1075,6 @@ bool boxm_render_image_manager<T>::set_input_image()
 
   img_dims_=(cl_uint *)boxm_ocl_utils::alloc_aligned(1,sizeof(cl_uint4),16);
 
-  vil_image_view<float>::iterator iter=output_img_.begin();
-
   // pad the image
   for (unsigned i=0;i<output_img_.ni();i++)
   {
@@ -1106,6 +1101,7 @@ bool boxm_render_image_manager<T>::set_input_image()
   }
   return true;
 }
+
 template<class T>
 bool boxm_render_image_manager<T>::clean_input_image()
 {

@@ -73,6 +73,7 @@ bool boxm_ray_trace_manager<T>::init_raytrace(boxm_scene<boct_tree<short,T > > *
   return this->setup_image_cam_arrays()
       && this->setup_work_image();
 }
+
 template<class T>
 bool boxm_ray_trace_manager<T>::setup_image_cam_arrays()
 {
@@ -1050,7 +1051,6 @@ bool boxm_ray_trace_manager<T>::write_tree(vcl_string const& path)
 template<class T>
 bool boxm_ray_trace_manager<T>::run()
 {
-  cl_int status = CL_SUCCESS;
   vul_timer timer;
   vul_timer t;
   vcl_string error_message="";

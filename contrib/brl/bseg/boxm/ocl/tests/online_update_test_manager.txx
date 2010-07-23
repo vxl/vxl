@@ -150,7 +150,7 @@ bool online_update_test_manager<T>::set_kernel_args(unsigned pass)
   int CHECK_SUCCESS = 1;
   cl_int status = SDK_SUCCESS;
 
-  if(pass==4)
+  if (pass==4)
   {
     status = clSetKernelArg(kernels_[pass], 0,
                             sizeof(cl_mem), (void *)&cell_data_buf_);
@@ -165,7 +165,6 @@ bool online_update_test_manager<T>::set_kernel_args(unsigned pass)
                             sizeof(cl_mem), (void *)&data_array_size_buf_);
     return this->check_val(status, CL_SUCCESS,
                            "clSetKernelArg failed. (data array size)")==CHECK_SUCCESS;
-
   }
   if (pass == 2) { // norm image process //
     status = clSetKernelArg(kernels_[pass], 0,
@@ -371,19 +370,19 @@ bool online_update_test_manager<T>::run_block(unsigned pass)
   vcl_size_t globalThreads[]= {this->wni_,this->wnj_};
   vcl_size_t localThreads[] = {this->bni_,this->bnj_};
 
-  if(pass==4) //: change the gloabal threads
+  if (pass==4) // change the global threads
   {
     globalThreads[0]=RoundUp(data_array_size_[0],64);globalThreads[1]=1;
     localThreads[0]=64;                              localThreads[1]=1;
   }
-  if(pass!=2 && pass!=4)
+  if (pass!=2 && pass!=4)
   {
       globalThreads[0]=this->wni_/2; globalThreads[1]=this->wnj_/2;
       localThreads[0] =this->bni_  ; localThreads[1] =this->bnj_  ;
 
-      for(unsigned k=0;k<2;k++)
+      for (unsigned k=0;k<2;k++)
       {
-          for(unsigned l=0;l<2;l++)
+          for (unsigned l=0;l<2;l++)
           {
               status=clEnqueueWriteBuffer(command_queue_,offset_y_buf_,0,0,sizeof(cl_uint),(void *)&k,0,0,0);
               status=clEnqueueWriteBuffer(command_queue_,offset_x_buf_,0,0,sizeof(cl_uint),(void *)&l,0,0,0);
@@ -407,15 +406,15 @@ bool online_update_test_manager<T>::run_block(unsigned pass)
       if (this->check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed. "+error_to_string(status))!=CHECK_SUCCESS)
           return false;
       status = clFinish(command_queue_);
-
   }
   if (this->check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status))!=CHECK_SUCCESS)
     return false;
+#if 0
   cl_ulong tstart,tend;
-  //status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
-  //status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
-  //  gpu_time_+= (double)1.0e-6 * (tend - tstart); // convert nanoseconds to milliseconds
-  
+  status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
+  status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
+  gpu_time_+= (double)1.0e-6 * (tend - tstart); // convert nanoseconds to milliseconds
+#endif
 
   return true;
 }
@@ -423,7 +422,6 @@ bool online_update_test_manager<T>::run_block(unsigned pass)
 template<class T>
 bool online_update_test_manager<T>::process_block(int numpass)
 {
-  cl_int status = CL_SUCCESS;
   if (!this->set_kernels())
     return false;
   if (!this->create_command_queue())
@@ -438,21 +436,18 @@ bool online_update_test_manager<T>::process_block(int numpass)
         set_input_view() &&
         set_input_view_buffers()))
     return false;
-  float total_raytrace_time = 0.0f;
-  float total_gpu_time = 0.0f;
-  float total_load_time = 0.0f;
   tree_type * tree = block_->get_tree();
   if (!(set_tree(tree) && set_tree_buffers()))
     return false;
   // run the raytracing for this block
-  for (unsigned pass = 0; pass<numpass; pass++)
+  for (int pass = 0; pass<numpass; ++pass)
   {
     if (!run_block(pass))
       return false;
-    if(pass==2)
+    if (pass==2)
     {
-        read_output_image() ;
-        this->save_image() ;
+      read_output_image() ;
+      this->save_image() ;
     }
   }
   // release memory
@@ -573,6 +568,7 @@ void online_update_test_manager<T>::print_image()
     vcl_cout<<vcl_endl;
   }
 }
+
 template<class T>
 void online_update_test_manager<T>::save_image()
 {
@@ -603,6 +599,7 @@ void online_update_test_manager<T>::save_image()
   vil_save(img2,"f:/APL/img2.tiff");
   vil_save(img3,"f:/APL/img3.tiff");
 }
+
 template<class T>
 void online_update_test_manager<T>::print_tree()
 {
@@ -837,7 +834,6 @@ bool online_update_test_manager<T>::set_input_view()
 template<class T>
 bool online_update_test_manager<T>::clean_input_view()
 {
-  bool good = true;
   return clean_persp_camera()
       && clean_input_image();
 }
@@ -852,7 +848,7 @@ bool online_update_test_manager<T>::set_input_view_buffers()
 template<class T>
 bool online_update_test_manager<T>::release_input_view_buffers()
 {
-  return release_persp_camera_buffers()    
+  return release_persp_camera_buffers()
         && release_input_image_buffers();
 }
 
@@ -879,7 +875,7 @@ bool online_update_test_manager<T>::set_tree(tree_type* tree)
   // the tree is now resident in the 1-d vectors
   cells_size_=cell_input_.size();
   cell_data_size_=data_input_.size();
-  
+
   cells_ = NULL;
   cell_data_ = NULL;
   cell_aux_data_ = NULL;
@@ -888,14 +884,14 @@ bool online_update_test_manager<T>::set_tree(tree_type* tree)
   cell_data_=(cl_float *)boxm_ocl_utils::alloc_aligned(data_input_.size(),sizeof(cl_float16),16);
   cell_aux_data_=(cl_float *)boxm_ocl_utils::alloc_aligned(data_input_.size(),sizeof(cl_float4),16);
   data_array_size_=(cl_uint *)boxm_ocl_utils::alloc_aligned(1,sizeof(cl_uint),16);
- 
+
   if (cells_== NULL||cell_data_ == NULL||cell_aux_data_==NULL)
   {
     vcl_cout << "Failed to allocate host memory. (tree input)\n";
     return false;
   }
 
-  //: copy the data from vectors to arrays
+  // copy the data from vectors to arrays
   for (unsigned i = 0, j = 0; i<cell_input_.size()*4; i+=4, j++)
     for (unsigned k = 0; k<4; ++k)
       cells_[i+k]=cell_input_[j][k];
@@ -923,7 +919,7 @@ bool online_update_test_manager<T>::set_tree(tree_type* tree)
   tree_bbox_[0] = (cl_float)tree->bounding_box().min_x();
   tree_bbox_[1] = (cl_float)tree->bounding_box().min_y();
   tree_bbox_[2] = (cl_float)tree->bounding_box().min_z();
-  //: Assumption is isotropic dimensions.
+  // Assumption is isotropic dimensions.
   tree_bbox_[3] = (cl_float)tree->bounding_box().width();
 
   return true;
@@ -940,7 +936,7 @@ bool online_update_test_manager<T>::clean_tree()
     boxm_ocl_utils::free_aligned(cell_aux_data_);
   if (tree_bbox_)
     boxm_ocl_utils::free_aligned(tree_bbox_);
-  if(data_array_size_)
+  if (data_array_size_)
     boxm_ocl_utils::free_aligned(data_array_size_);
 
   return true;
@@ -976,9 +972,9 @@ bool online_update_test_manager<T>::set_tree_buffers()
   if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (tree_bbox_buf_) failed."))
     return false;
   data_array_size_buf_ = clCreateBuffer(this->context_,
-                                  CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
-                                  sizeof(cl_uint),
-                                  data_array_size_,&status);
+                                        CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
+                                        sizeof(cl_uint),
+                                        data_array_size_,&status);
 
   return this->check_val(status,CL_SUCCESS,"clCreateBuffer (data_array_size_) failed.")==1;
 }
@@ -1083,9 +1079,8 @@ bool online_update_test_manager<T>::set_input_image()
   image_=(cl_float *)boxm_ocl_utils::alloc_aligned(wni_*wnj_,sizeof(cl_float4),16);
   img_dims_=(cl_uint *)boxm_ocl_utils::alloc_aligned(1,sizeof(cl_uint4),16);
 
-  for(unsigned i=0;i<wni_*wnj_*4;i++)
-        image_[i]=0.0f;
-  vil_image_view<float>::iterator iter=input_img_.begin();
+  for (unsigned i=0;i<wni_*wnj_*4;i++)
+    image_[i]=0.0f;
 
   // pad the image
   for (unsigned i=0;i<input_img_.ni();i++)
@@ -1161,9 +1156,9 @@ bool online_update_test_manager<T>::set_offset_buffers(int offset_x,int offset_y
   offset_y_=offset_y;
   factor_=factor;
   factor_buf_ = clCreateBuffer(this->context_,
-                                 CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
-                                 sizeof(cl_int),
-                                 &factor_,&status);
+                               CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
+                               sizeof(cl_int),
+                               &factor_,&status);
   if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (factor_) failed."))
     return false;
 

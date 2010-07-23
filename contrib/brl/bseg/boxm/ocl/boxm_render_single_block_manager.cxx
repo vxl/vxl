@@ -17,14 +17,13 @@
 //: Initializes CPU side input buffers
 //put tree structure and data into arrays
 
-bool boxm_render_single_block_manager::init_render(vcl_string treefile, 
-                                          vcl_string treedatafile,
-                                          vgl_point_3d<double>  origin,
-                                          vgl_vector_3d<double>  block_dim,
-                                          vpgl_camera_double_sptr cam,
-                                          vil_image_view<float> &obs,
-                                          unsigned int root_level)
-
+bool boxm_render_single_block_manager::init_render(vcl_string treefile,
+                                                   vcl_string treedatafile,
+                                                   vgl_point_3d<double>  origin,
+                                                   vgl_vector_3d<double>  block_dim,
+                                                   vpgl_camera_double_sptr cam,
+                                                   vil_image_view<float> &obs,
+                                                   unsigned int root_level)
 {
   cam_ = cam;
   output_img_=obs;
@@ -33,8 +32,10 @@ bool boxm_render_single_block_manager::init_render(vcl_string treefile,
   origin_=origin;
   block_dim_=block_dim;
   root_level_=root_level;
+#if 0 // unused variables
   vcl_string extensions_supported((char*)this->extensions_supported_);
   vcl_size_t found=extensions_supported.find("gl_sharing");
+#endif
 
   // Code for Pass_0
   if (!this->load_kernel_source(vcl_string(VCL_SOURCE_ROOT_DIR)
@@ -225,7 +226,6 @@ bool boxm_render_single_block_manager::run()
 
 bool boxm_render_single_block_manager::run_scene()
 {
-  cl_int status = CL_SUCCESS;
   bool good=true;
   vcl_string error_message="";
   vul_timer timer;
@@ -257,11 +257,13 @@ bool boxm_render_single_block_manager::run_scene()
 
   this->release_kernel();
   vcl_cout << "Timing Analysis\n"
-           << "===============\n"
-  //       <<"openCL Running time "<<gpu_time_<<" ms\n"
-  //       << "Running block "<<total_gpu_time/1000<<"s\n"
-  //       << "total block loading time = " << total_load_time << "s\n"
-  //       << "total block processing time = " << total_raytrace_time << 's' << vcl_endl
+           << "===============" << vcl_endl
+#ifdef DEBUG
+           <<"openCL Running time "<<gpu_time_<<" ms\n"
+           << "Running block "<<total_gpu_time/1000<<"s\n"
+           << "total block loading time = " << total_load_time << "s\n"
+           << "total block processing time = " << total_raytrace_time << 's' << vcl_endl
+#endif
   ;
   return true;
 }
@@ -340,7 +342,6 @@ void boxm_render_single_block_manager::print_tree()
   if (cells_)
     for (unsigned i = 0; i<cells_size_*4; i+=4) {
       int data_ptr = 16*cells_[i+2];
-      int aux_data_ptr = 4*cells_[i+2];
       vcl_cout << "tree input[" << i/4 << "]("
                << cells_[i]   << ' '
                << cells_[i+1] << ' '
@@ -515,13 +516,14 @@ bool boxm_render_single_block_manager::clean_root_level()
 
 bool boxm_render_single_block_manager::set_scene_origin()
 {
-  //if (scene_==NULL)
-  //{
-  //  vcl_cout<<"Scene is Missing "<<vcl_endl;
-  //  return false;
-  //}
-  //vgl_point_3d<double> orig=scene_->origin();
-
+#if 0
+  if (scene_==NULL)
+  {
+    vcl_cout<<"Scene is Missing"<<vcl_endl;
+    return false;
+  }
+  vgl_point_3d<double> orig=scene_->origin();
+#endif
   scene_origin_=(cl_float *)boxm_ocl_utils::alloc_aligned(1,sizeof(cl_float4),16);
 
   scene_origin_[0]=(float)origin_.x();
@@ -602,7 +604,6 @@ bool boxm_render_single_block_manager::clean_scene_dims()
 
 bool boxm_render_single_block_manager::set_block_dims()
 {
-
   block_dims_=(cl_float *)boxm_ocl_utils::alloc_aligned(1,sizeof(cl_float4),16);
 
   block_dims_[0]=(float)block_dim_.x();
@@ -639,8 +640,6 @@ bool boxm_render_single_block_manager::clean_block_dims()
     boxm_ocl_utils::free_aligned(block_dims_);
   return true;
 }
-
-
 
 
 bool boxm_render_single_block_manager::set_root_level_buffers()
@@ -749,8 +748,7 @@ bool boxm_render_single_block_manager::set_tree_buffers()
   //                                 CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
   //                                 cell_data_size_*sizeof(cl_float),
   //                                 cell_alpha_,&status);
-  if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (cell data) failed."))
-    return false;
+  return this->check_val(status,CL_SUCCESS,"clCreateBuffer (cell data) failed.");
 }
 
 
@@ -889,7 +887,6 @@ bool boxm_render_single_block_manager::release_persp_camera_buffers()
 }
 
 
-
 bool boxm_render_single_block_manager::set_input_image()
 {
   wni_=(cl_uint)RoundUp(output_img_.ni(),bni_);
@@ -897,8 +894,6 @@ bool boxm_render_single_block_manager::set_input_image()
 
   image_=(cl_uint *)boxm_ocl_utils::alloc_aligned(wni_*wnj_,sizeof(cl_uint),16);
   img_dims_=(cl_uint *)boxm_ocl_utils::alloc_aligned(1,sizeof(cl_uint4),16);
-
-  vil_image_view<float>::iterator iter=output_img_.begin();
 
   // pad the image
   for (unsigned i=0;i<output_img_.ni();i++)
@@ -921,11 +916,9 @@ bool boxm_render_single_block_manager::set_input_image()
   }
   return true;
 }
+
 bool boxm_render_single_block_manager::save_output_image(vcl_string filename)
 {
-
-
-
   // pad the image
   for (unsigned i=0;i<output_img_.ni();i++)
   {
@@ -937,9 +930,9 @@ bool boxm_render_single_block_manager::save_output_image(vcl_string filename)
 
   vil_save(output_img_,filename.c_str());
 
- 
   return true;
 }
+
 bool boxm_render_single_block_manager::clean_input_image()
 {
   if (image_)
@@ -983,7 +976,6 @@ bool boxm_render_single_block_manager::release_input_image_buffers()
   status = clReleaseMemObject(img_dims_buf_);
   return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (img_dims_buf_).")==1;
 }
-
 
 
 #endif    //boxm_render_single_block_manager_txx_

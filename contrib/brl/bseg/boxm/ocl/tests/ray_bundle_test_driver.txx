@@ -39,18 +39,21 @@ ray_bundle_test_driver<T>::setup_cl()
 }
 
 template <class T>
-bool ray_bundle_test_driver<T>::setup_image_cam_data(){
-  if(!cl_manager_->setup_image_cam_arrays())
+bool ray_bundle_test_driver<T>::setup_image_cam_data()
+{
+  if (!cl_manager_->setup_image_cam_arrays())
     return false;
-  if(cl_manager_->setup_image_cam_buffers()!=SDK_SUCCESS)
+  if (cl_manager_->setup_image_cam_buffers()!=SDK_SUCCESS)
     return false;
   return true;
 }
+
 template <class T>
-bool ray_bundle_test_driver<T>::clean_image_cam_data(){
-  if(!cl_manager_->clean_image_cam_arrays())
+bool ray_bundle_test_driver<T>::clean_image_cam_data()
+{
+  if (!cl_manager_->clean_image_cam_arrays())
     return false;
-  if(cl_manager_->clean_image_cam_buffers()!=SDK_SUCCESS)
+  if (cl_manager_->clean_image_cam_buffers()!=SDK_SUCCESS)
     return false;
   return true;
 }
@@ -95,57 +98,54 @@ template <class T>
 int ray_bundle_test_driver<T>::set_basic_test_args(vcl_string arg_setup_spec)
 {
   cl_int   status;
-  if(arg_setup_spec == "basic"){
+  if (arg_setup_spec == "basic") {
     status = clSetKernelArg(cl_manager_->kernel(), 3,
-                            (this->n_rays_in_bundle() * sizeof(cl_uchar)), NULL);  
+                            (this->n_rays_in_bundle() * sizeof(cl_uchar)), NULL);
     if (!this->check_val(status,
                          CL_SUCCESS,
                          "clSetKernelArg failed. (local bundle pointer array)"))
       return SDK_FAILURE;
-  }else{
+  }
+  else {
     status = clSetKernelArg(cl_manager_->kernel(), 3,
-                            (this->n_rays_in_bundle() * sizeof(cl_uchar4)), NULL);  
+                            (this->n_rays_in_bundle() * sizeof(cl_uchar4)), NULL);
     if (!this->check_val(status,
                          CL_SUCCESS,
                          "clSetKernelArg failed. (local bundle pointer array)"))
       return SDK_FAILURE;
   }
 
-  status = clSetKernelArg(cl_manager_->kernel(), 4, 
-                          ( this->n_rays_in_bundle() * sizeof(cl_int)), NULL);  
+  status = clSetKernelArg(cl_manager_->kernel(), 4,
+                          ( this->n_rays_in_bundle() * sizeof(cl_int)), NULL);
   if (!this->check_val(status,
                        CL_SUCCESS,
                        "clSetKernelArg failed. (local exit point array)"))
     return SDK_FAILURE;
 
-
-
-  status = clSetKernelArg(cl_manager_->kernel(), 5, 
-                          (this->n_rays_in_bundle() * sizeof(cl_short4)), NULL);  
+  status = clSetKernelArg(cl_manager_->kernel(), 5,
+                          (this->n_rays_in_bundle() * sizeof(cl_short4)), NULL);
   if (!this->check_val(status,
                        CL_SUCCESS,
                        "clSetKernelArg failed. (local cached loc_code array)"))
     return SDK_FAILURE;
 
-
-
-  status = clSetKernelArg(cl_manager_->kernel(), 6, 
-                          (this->n_rays_in_bundle() * sizeof(cl_float16)), NULL);  
+  status = clSetKernelArg(cl_manager_->kernel(), 6,
+                          (this->n_rays_in_bundle() * sizeof(cl_float16)), NULL);
 
   if (!this->check_val(status,
                        CL_SUCCESS,
                        "clSetKernelArg failed. (local cached data array)"))
     return SDK_FAILURE;
-  if(arg_setup_spec == "include_image_array"){
-       status = clSetKernelArg(cl_manager_->kernel(), 7, 
-                            (this->n_rays_in_bundle() * sizeof(cl_float4)), NULL);  
+  if (arg_setup_spec == "include_image_array"){
+       status = clSetKernelArg(cl_manager_->kernel(), 7,
+                               (this->n_rays_in_bundle() * sizeof(cl_float4)), NULL);
 
     if (!this->check_val(status,
                          CL_SUCCESS,
                          "clSetKernelArg failed. (local cached data array)"))
       return SDK_FAILURE;
-    status = clSetKernelArg(cl_manager_->kernel(), 8, 
-                            (this->n_rays_in_bundle() * sizeof(cl_float4)), NULL);  
+    status = clSetKernelArg(cl_manager_->kernel(), 8,
+                            (this->n_rays_in_bundle() * sizeof(cl_float4)), NULL);
 
     if (!this->check_val(status,
                          CL_SUCCESS,
@@ -207,57 +207,57 @@ int ray_bundle_test_driver<T>::set_image_cam_args()
 
 
   status = clSetKernelArg(cl_manager_->kernel(), 8,
-                          3*sizeof(cl_float16), NULL);  
+                          3*sizeof(cl_float16), NULL);
   if (!this->check_val(status,
                        CL_SUCCESS,
                        "clSetKernelArg failed. ( camera pseudo-inverse cache)"))
     return SDK_FAILURE;
 
-  status = clSetKernelArg(cl_manager_->kernel(), 9, 
-                          sizeof(cl_float4), NULL);  
+  status = clSetKernelArg(cl_manager_->kernel(), 9,
+                          sizeof(cl_float4), NULL);
   if (!this->check_val(status,
                        CL_SUCCESS,
                        "clSetKernelArg failed. (camera center cache)"))
     return SDK_FAILURE;
 
-  status = clSetKernelArg(cl_manager_->kernel(), 10, 
-                          sizeof(cl_float4), NULL);  
+  status = clSetKernelArg(cl_manager_->kernel(), 10,
+                          sizeof(cl_float4), NULL);
   if (!this->check_val(status,
                        CL_SUCCESS,
                        "clSetKernelArg failed. (bounding box cache)"))
     return SDK_FAILURE;
 
-  status = clSetKernelArg(cl_manager_->kernel(), 11, 
-                          sizeof(cl_uint4), NULL);  
+  status = clSetKernelArg(cl_manager_->kernel(), 11,
+                          sizeof(cl_uint4), NULL);
   if (!this->check_val(status,
                        CL_SUCCESS,
                        "clSetKernelArg failed. (roi cache)"))
     return SDK_FAILURE;
 
   status = clSetKernelArg(cl_manager_->kernel(), 12,
-                          (this->n_rays_in_bundle() * sizeof(cl_uchar)), NULL);  
+                          (this->n_rays_in_bundle() * sizeof(cl_uchar)), NULL);
   if (!this->check_val(status,
                        CL_SUCCESS,
                        "clSetKernelArg failed. (local bundle pointer array)"))
     return SDK_FAILURE;
 
-  status = clSetKernelArg(cl_manager_->kernel(), 13, 
-                          (3 * this->n_rays_in_bundle() * sizeof(cl_float)), NULL);  
+  status = clSetKernelArg(cl_manager_->kernel(), 13,
+                          (3 * this->n_rays_in_bundle() * sizeof(cl_float)), NULL);
   if (!this->check_val(status,
                        CL_SUCCESS,
                        "clSetKernelArg failed. (local exit point array)"))
     return SDK_FAILURE;
 
-  status = clSetKernelArg(cl_manager_->kernel(), 14, 
-                          (this->n_rays_in_bundle() * sizeof(cl_short4)), NULL);  
+  status = clSetKernelArg(cl_manager_->kernel(), 14,
+                          (this->n_rays_in_bundle() * sizeof(cl_short4)), NULL);
   if (!this->check_val(status,
                        CL_SUCCESS,
                        "clSetKernelArg failed. (local cached loc_code array)"))
     return SDK_FAILURE;
 
 
-  status = clSetKernelArg(cl_manager_->kernel(), 15, 
-                          (this->n_rays_in_bundle() * sizeof(cl_float16)), NULL);  
+  status = clSetKernelArg(cl_manager_->kernel(), 15,
+                          (this->n_rays_in_bundle() * sizeof(cl_float16)), NULL);
   if (!this->check_val(status,
                        CL_SUCCESS,
                        "clSetKernelArg failed. (local cached data array)"))
@@ -285,7 +285,7 @@ int ray_bundle_test_driver<T>::run_bundle_test_kernels()
                        "clCreateBuffer failed. (tree_results)"))
     return SDK_FAILURE;
 
-  if(this->set_tree_args()!=SDK_SUCCESS)
+  if (this->set_tree_args()!=SDK_SUCCESS)
     return SDK_FAILURE;
 
 
@@ -333,10 +333,10 @@ int ray_bundle_test_driver<T>::run_bundle_test_kernels()
   vcl_size_t localThreads[] = {this->bundle_ni(), this->bundle_nj()};
 
   if (used_local_memory_ > cl_manager_->total_local_memory())
-    {
-      vcl_cout << "Unsupported: Insufficient local memory on device.\n";
-      return SDK_FAILURE;
-    }
+  {
+    vcl_cout << "Unsupported: Insufficient local memory on device.\n";
+    return SDK_FAILURE;
+  }
   vcl_cout << "Local memory used: " << used_local_memory_ << '\n';
   cl_event ceEvent;
 
@@ -362,8 +362,10 @@ int ray_bundle_test_driver<T>::run_bundle_test_kernels()
   cl_ulong tstart,tend;
   status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
   status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
-  float gpu_time_= 1.0e-6f * (tend - tstart); // convert nanoseconds to milliseconds 
-  //vcl_cout<<"GPU time is "<<gpu_time_<< "ms"<<vcl_endl;
+#if 0
+  float gpu_time_= 1.0e-6f * (tend - tstart); // convert nanoseconds to milliseconds
+  vcl_cout<<"GPU time is "<<gpu_time_<< "ms"<<vcl_endl;
+#endif
 
   // Enqueue readBuffers
   status = clEnqueueReadBuffer(command_queue_,
@@ -402,27 +404,28 @@ int ray_bundle_test_driver<T>::run_bundle_test_kernels()
 template <class T>
 bool ray_bundle_test_driver<T>::init_work_image(vcl_string mode)
 {
-  if(mode == "4x4_uniform"||mode == "4x4_gauss")
-    {
-      cl_manager_->set_ni(4);
-      cl_manager_->set_nj(4);
-      if(!cl_manager_->setup_work_image())
-        return false;
-      cl_float* image = cl_manager_->ray_results();
-      if(!image)
-        return false;
-      for(unsigned j = 0; j<4; ++j)
-        for(unsigned i = 0; i<4; ++i)
-          {
-            *(image++) = 0.16667f*(i+j);
-            *(image++) = 0.0f;/* skip alpha integral slot */
-            *(image++) = 1.0f; /* vis_inf */
-            *(image++) = (float)(i+j); /* pre */
-          }
-      return true;
-    }
+  if (mode == "4x4_uniform"||mode == "4x4_gauss")
+  {
+    cl_manager_->set_ni(4);
+    cl_manager_->set_nj(4);
+    if (!cl_manager_->setup_work_image())
+      return false;
+    cl_float* image = cl_manager_->ray_results();
+    if (!image)
+      return false;
+    for (unsigned j = 0; j<4; ++j)
+      for (unsigned i = 0; i<4; ++i)
+      {
+        *(image++) = 0.16667f*(i+j);
+        *(image++) = 0.0f;/* skip alpha integral slot */
+        *(image++) = 1.0f; /* vis_inf */
+        *(image++) = (float)(i+j); /* pre */
+      }
+    return true;
+  }
   return false;
 }
+
 template <class T>
 int ray_bundle_test_driver<T>::run_norm_kernel()
 {
@@ -461,10 +464,10 @@ int ray_bundle_test_driver<T>::run_norm_kernel()
   vcl_size_t localThreads[] = {this->bundle_ni(), this->bundle_nj()};
 
   if (used_local_memory_ > cl_manager_->total_local_memory())
-    {
-      vcl_cout << "Unsupported: Insufficient local memory on device.\n";
-      return SDK_FAILURE;
-    }
+  {
+    vcl_cout << "Unsupported: Insufficient local memory on device.\n";
+    return SDK_FAILURE;
+  }
   vcl_cout << "Local memory used: " << used_local_memory_ << '\n';
 
   status = clEnqueueNDRangeKernel(command_queue_,
@@ -488,9 +491,9 @@ int ray_bundle_test_driver<T>::run_norm_kernel()
     return SDK_FAILURE;
 
   status = clEnqueueReadBuffer(command_queue_,cl_manager_->image_buf(),CL_TRUE,
-                                   0,cl_manager_->n_rays()*sizeof(cl_float4),
-                                   cl_manager_->ray_results(),
-                                   0,NULL,&events[0]);
+                               0,cl_manager_->n_rays()*sizeof(cl_float4),
+                               cl_manager_->ray_results(),
+                               0,NULL,&events[0]);
 
   if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (ray_results)failed."))
     return false;
@@ -544,58 +547,63 @@ int ray_bundle_test_driver<T>::cleanup_bundle_test()
   else
     return SDK_SUCCESS;
 }
+
 template <class T>
-bool ray_bundle_test_driver<T>::setup_norm_data(vcl_string mode, 
+bool ray_bundle_test_driver<T>::setup_norm_data(vcl_string mode,
                                                 bool use_uniform,
                                                 float mean,
                                                 float sigma)
 {
-  if(!this->init_work_image(mode))
+  if (!this->init_work_image(mode))
     return false;
-  if(cl_manager_->setup_work_img_buffer()!=SDK_SUCCESS)
+  if (cl_manager_->setup_work_img_buffer()!=SDK_SUCCESS)
     return false;
-  if(!cl_manager_->setup_app_density(use_uniform, mean, sigma))
+  if (!cl_manager_->setup_app_density(use_uniform, mean, sigma))
     return false;
-  if(cl_manager_->setup_app_density_buffer()!=SDK_SUCCESS)
+  if (cl_manager_->setup_app_density_buffer()!=SDK_SUCCESS)
     return false;
   return true;
 }
+
 template <class T>
 int ray_bundle_test_driver<T>::set_norm_args()
 {
   cl_int status = SDK_SUCCESS;
-  status = clSetKernelArg(cl_manager_->kernel(), 0, 
-                          sizeof(cl_mem), (void *)&cl_manager_->image_buf());  
+  status = clSetKernelArg(cl_manager_->kernel(), 0,
+                          sizeof(cl_mem), (void *)&cl_manager_->image_buf());
 
   if (!this->check_val(status,
                        CL_SUCCESS,
                        "clSetKernelArg failed. (image array)"))
     return SDK_FAILURE;
 
-  status = clSetKernelArg(cl_manager_->kernel(), 1, 
-                          sizeof(cl_mem), (void *)&cl_manager_->app_density());  
-  
+  status = clSetKernelArg(cl_manager_->kernel(), 1,
+                          sizeof(cl_mem), (void *)&cl_manager_->app_density());
+
   if (!this->check_val(status,
                        CL_SUCCESS,
                        "clSetKernelArg failed. (remote surface appearance)"))
     return SDK_FAILURE;
   return SDK_SUCCESS;
-
 }
+
 template <class T>
-bool ray_bundle_test_driver<T>::clean_norm_data(){
-  if(!cl_manager_->clean_work_image())
+bool ray_bundle_test_driver<T>::clean_norm_data()
+{
+  if (!cl_manager_->clean_work_image())
     return false;
 #if 0/* done in execute function */
-  if(cl_manager_->clean_work_img_buffer()!=SDK_SUCCESS)
+  if (cl_manager_->clean_work_img_buffer()!=SDK_SUCCESS)
     return false;
 #endif
-  if(!cl_manager_->clean_app_density())
+  if (!cl_manager_->clean_app_density())
     return false;
-  if(cl_manager_->clean_app_density_buffer()!=SDK_SUCCESS)
+  if (cl_manager_->clean_app_density_buffer()!=SDK_SUCCESS)
     return false;
-  return true;
+  else
+    return true;
 }
+
 template <class T>
 ray_bundle_test_driver<T>::~ray_bundle_test_driver()
 {

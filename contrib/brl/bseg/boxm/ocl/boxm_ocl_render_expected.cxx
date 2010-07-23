@@ -1,10 +1,10 @@
 #include <boxm/ocl/boxm_ocl_render_expected.h>
 
 void boxm_opencl_ocl_scene_expected(boxm_ocl_scene &scene,
-                                     vpgl_camera_double_sptr cam,
-                                     vil_image_view<float> &expected,
-                                     vil_image_view<float> & mask,
-                                     bool use_black_background)
+                                    vpgl_camera_double_sptr cam,
+                                    vil_image_view<float> &expected,
+                                    vil_image_view<float> & mask,
+                                    bool use_black_background)
 {
   // set up the application-specific function to be called at every cell along a ray
 
@@ -30,15 +30,14 @@ void boxm_opencl_ocl_scene_expected(boxm_ocl_scene &scene,
   cl_float *results_p = results;
   for (unsigned j = 0; j<nj; ++j)  {
     for (unsigned i = 0; i<ni; ++i) {
-        
       img0(i,j)=*(results_p++); // vis_inf
       img1(i,j)=*(results_p++); // vis_inf
       expected(i,j) = *(results_p++); // expected intensity
       mask(i,j) = *(results_p++); // 1 - vis_inf
 
-      if(i==266 && j==329)
+      if (i==266 && j==329)
       {
-          vcl_cout<<img0(i,j)<<","<<img1(i,j)<<","<<expected(i,j)<<","<<mask(i,j)<<vcl_endl;
+        vcl_cout<<img0(i,j)<<','<<img1(i,j)<<','<<expected(i,j)<<','<<mask(i,j)<<vcl_endl;
       }
     }
   }

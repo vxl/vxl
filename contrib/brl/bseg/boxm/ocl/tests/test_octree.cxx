@@ -303,6 +303,7 @@ static void test_intersect_cell(octree_test_driver<T>& driver)
     return;
   if (results)
   {
+#if 0 // FIXME
     int test[] = {0,0,0,0,
                   250,250,250,0,
                   500,0,0,0,
@@ -319,7 +320,6 @@ static void test_intersect_cell(octree_test_driver<T>& driver)
                   250,750,750,0,
                   500,500,500,0,
                   750,750,750,0};
-#if 0 // FIXME
     bool good = true;
     for (vcl_size_t i= 0; i<size; i++)
       good = good && results[i]==test[i];
