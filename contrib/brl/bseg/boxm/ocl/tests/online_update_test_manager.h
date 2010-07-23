@@ -25,27 +25,28 @@ class online_update_test_manager : public bocl_manager<online_update_test_manage
   typedef float obs_type;
 
   online_update_test_manager() :
+    program_(),
     cells_(0),
+    cells_size_(0),
     cell_data_(0),
+    cell_data_size_(0),
     cell_aux_data_(0),
     root_level_(0),
     img_dims_(0),
-    offset_y_(0),
     offset_x_(0),
+    offset_y_(0),
+    factor_(0),
     bni_(1),bnj_(1),
     wni_(1),wnj_(1),
-    cells_size_(0),
-    cell_data_size_(0),
-    input_img_(),
-    program_(),
+    app_density_(0),
     block_(0),
-    factor_(0),
-    app_density_(0)
-    {}
+    input_img_()
+  {}
+
   ~online_update_test_manager() {
     if (program_)
       clReleaseProgram(program_);
-    if(block_)
+    if (block_)
       delete block_;
   }
 
@@ -119,20 +120,19 @@ class online_update_test_manager : public bocl_manager<online_update_test_manage
   bool set_offset_buffers(int off_x, int off_y,int factor);
   bool release_offset_buffers();
   bool release_command_queue();
-  
+
   bool setup_app_density(bool use_uniform=true, float mean = 0.0f, float sigma = 0.0f);
   int setup_app_density_buffer();
   bool clean_app_density();
   int clean_app_density_buffer();
   cl_mem& app_density(){return app_density_buf_;}
 
-
   bool clean_norm_data();
 
   int build_kernel_program(cl_program & program);
-  cl_kernel kernel(unsigned i) 
-    {if(i<kernels_.size()) return kernels_[i]; return 0;}
-  
+  cl_kernel kernel(unsigned i)
+  { if (i<kernels_.size()) return kernels_[i]; return 0; }
+
   cl_program program_;
 
   cl_command_queue command_queue_;

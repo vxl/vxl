@@ -18,30 +18,28 @@
 class boxm_online_update_manager : public bocl_manager<boxm_online_update_manager>
 {
  public:
-
- 
   typedef float obs_type;
 
   boxm_online_update_manager() :
+    program_(),
     cells_(0),
+    cells_size_(0),
     cell_data_(0),
+    cell_data_size_(0),
     cell_aux_data_(0),
     root_level_(0),
     img_dims_(0),
-    offset_y_(0),
     offset_x_(0),
-    bni_(1),bnj_(1),
-    wni_(1),wnj_(1),
-    cells_size_(0),
-    cell_data_size_(0),
+    offset_y_(0),
+    factor_(0),
+    bni_(1), bnj_(1),
+    wni_(1), wnj_(1),
+    app_density_(0),
     input_img_(),
-    program_(),
     treedatafile_(""),
     treefile_(""),
     origin_(),
-    block_dim_(),
-    factor_(0),
-    app_density_(0)
+    block_dim_()
     {}
 
   ~boxm_online_update_manager() {
@@ -49,7 +47,7 @@ class boxm_online_update_manager : public bocl_manager<boxm_online_update_manage
       clReleaseProgram(program_);
   }
 
-  void init_update(vcl_string treefile, 
+  void init_update(vcl_string treefile,
                    vcl_string datafile,
                    vgl_point_3d<double>  origin,
                    vgl_vector_3d<double>  block_dim,

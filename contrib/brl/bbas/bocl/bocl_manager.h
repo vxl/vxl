@@ -13,7 +13,6 @@
 //   <none yet>
 // \endverbatim
 
-
 #include <vcl_vector.h>
 #include <vcl_map.h>
 #include <vcl_iostream.h>
@@ -72,6 +71,7 @@ class bocl_manager
     }
     return 1;
   }
+
   vcl_size_t group_size() const {return max_work_group_size_;}
   cl_ulong total_local_memory() const {return total_local_memory_;}
   cl_context context() {return context_;}
@@ -89,13 +89,11 @@ class bocl_manager
  protected:
 
   //: Constructor
-  bocl_manager() : devices_(0),max_work_item_sizes_(0) {}
+  bocl_manager() : max_work_item_sizes_(0), devices_(0) {}
 
   static T* instance_;
 
   vcl_string prog_;
-
-
 };
 
 #endif // bocl_manager_h_

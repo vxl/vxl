@@ -27,28 +27,27 @@ class boxm_stack_ray_trace_manager : public bocl_manager<boxm_stack_ray_trace_ma
   typedef boct_tree_cell<short,T_data> cell_type;
 
   boxm_stack_ray_trace_manager()
-    : scene_(0),
+  : scene_(0), cam_(0), //tree_(0),
     program_(0),
+    gpu_time_(0),
+    ni_(0),nj_(0),nlevels_(0),
     cells_(0),
     cell_data_(0),
     tree_results_(0),
     ray_origin_(0),
     ray_dir_(0),
     ray_results_(0),
-    //tree_(0),
-    cam_(0),
-    svd_UtWV_(0),imgdims_(0),roidims_(0),global_bbox_(0),
-    ni_(0),nj_(0), nlevels_(0),gpu_time_(0)
+    svd_UtWV_(0),imgdims_(0),roidims_(0),global_bbox_(0)
   {}
 
   ~boxm_stack_ray_trace_manager();
 
   //: setup the parameters needed to run the raytrace
   bool init_raytrace(boxm_scene<tree_type> *scene,
-    vpgl_camera_double_sptr cam,
-    unsigned int ni, unsigned int nj,
-    vcl_vector<vcl_string> functor_source_filenames,
-    unsigned int i0 = 0, unsigned int j0 = 0);
+                     vpgl_camera_double_sptr cam,
+                     unsigned int ni, unsigned int nj,
+                     vcl_vector<vcl_string> functor_source_filenames,
+                     unsigned int i0 = 0, unsigned int j0 = 0);
 
   //: run the raytrace
   bool run();

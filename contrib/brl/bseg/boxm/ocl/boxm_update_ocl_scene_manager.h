@@ -17,35 +17,34 @@
 
 class boxm_update_ocl_scene_manager : public bocl_manager<boxm_update_ocl_scene_manager >
 {
-    typedef vnl_vector_fixed<int, 4> int4;
-    typedef vnl_vector_fixed<float, 16> float16;
-    typedef vnl_vector_fixed<int, 2> int2;
+  typedef vnl_vector_fixed<int, 4> int4;
+  typedef vnl_vector_fixed<float, 16> float16;
+  typedef vnl_vector_fixed<int, 2> int2;
 
  public:
-
-
   typedef float obs_type;
 
   boxm_update_ocl_scene_manager() :
+    program_(0),
     block_ptrs_(0),
     scene_dims_(0),
     block_dims_(0),
-    scene_x_(0),scene_y_(0),scene_z_(0),
     cells_(0),
-    cell_data_(0),
-    root_level_(0),
-    img_dims_(0),
-    offset_y_(0),
-    offset_x_(0),
-    bni_(1),bnj_(1),
-    wni_(1),wnj_(1),
     cells_size_(0),
+    cell_data_(0),
     cell_data_size_(0),
-    input_img_(),
     numbuffer_(0),
     lenbuffer_(0),
-    gpu_time_(0),
-    program_(0) {}
+    root_level_(0),
+    img_dims_(0),
+    offset_x_(0),
+    offset_y_(0),
+    bni_(1),bnj_(1),
+    scene_x_(0),scene_y_(0),scene_z_(0),
+    wni_(1),wnj_(1),
+    input_img_(),
+    gpu_time_(0)
+  {}
   ~boxm_update_ocl_scene_manager() {
     if (program_)
       clReleaseProgram(program_);
@@ -53,8 +52,8 @@ class boxm_update_ocl_scene_manager : public bocl_manager<boxm_update_ocl_scene_
 
   // read the scene, cam and image
   bool init_update(boxm_ocl_scene *scene,
-                      vpgl_camera_double_sptr cam,
-                      vil_image_view<float> &obs);
+                   vpgl_camera_double_sptr cam,
+                   vil_image_view<float> &obs);
 
   bool setup_online_processing();
   bool online_processing();
@@ -202,7 +201,6 @@ class boxm_update_ocl_scene_manager : public bocl_manager<boxm_update_ocl_scene_
   cl_float* cell_data_;
   cl_uint  cell_data_size_;
   cl_float* cell_aux_data_;
-
 
   cl_int numbuffer_;
   cl_int lenbuffer_;

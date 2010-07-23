@@ -18,46 +18,48 @@
 
 class boxm_render_single_block_manager : public bocl_manager<boxm_render_single_block_manager>
 {
+#if 0
+  typedef boct_tree<short,T_data> tree_type;
+  typedef boct_tree_cell<short,T_data> cell_type;
+  typedef float obs_type;
+#endif
+
  public:
-
-  //typedef boct_tree<short,T_data> tree_type;
-  //typedef boct_tree_cell<short,T_data> cell_type;
-
-  //typedef float obs_type;
-
   boxm_render_single_block_manager() :
+    program_(0),
     scene_dims_(0),
     block_dims_(0),
-    scene_x_(0),scene_y_(0),scene_z_(0),
     cells_(0),
+    cells_size_(0),
     cell_data_(0),
     cell_alpha_(0),
+    cell_data_size_(0),
     root_level_(0),
     img_dims_(0),
-    offset_y_(0),
     offset_x_(0),
+    offset_y_(0),
     bni_(1),bnj_(1),
+    scene_x_(0),scene_y_(0),scene_z_(0),
     wni_(1),wnj_(1),
-    cells_size_(0),
-    cell_data_size_(0),
     output_img_(),
     treedatafile_(""),
     treefile_(""),
     origin_(),
-    block_dim_(),
-    program_(0) {}
+    block_dim_()
+  {}
+
   ~boxm_render_single_block_manager() {
     if (program_)
       clReleaseProgram(program_);
   }
 
   // read the scene, cam and image
-  bool init_render(vcl_string treefile, 
-      vcl_string datafile,
-      vgl_point_3d<double>  origin,
-      vgl_vector_3d<double>  block_dim,
-      vpgl_camera_double_sptr cam,
-      vil_image_view<float> &obs,unsigned int root_level);
+  bool init_render(vcl_string treefile,
+                   vcl_string datafile,
+                   vgl_point_3d<double>  origin,
+                   vgl_vector_3d<double>  block_dim,
+                   vpgl_camera_double_sptr cam,
+                   vil_image_view<float> &obs,unsigned int root_level);
 
   //: 2d workgroup
   void set_bundle_ni(unsigned bundle_x) {bni_=bundle_x;}
@@ -182,9 +184,7 @@ bool save_output_image(vcl_string filename);
   //array of data pointed to by tree
   cl_float* cell_data_;
   cl_float* cell_alpha_;
-  //cl_half* cell_data_;
   cl_uint  cell_data_size_;
-
 
   //root level
   cl_uint root_level_;
@@ -198,9 +198,7 @@ bool save_output_image(vcl_string filename);
   // bounding box for each tree
   cl_float * tree_bbox_;
 
-
   // camera
-
   cl_float * persp_cam_;
 
   cl_uint bni_;

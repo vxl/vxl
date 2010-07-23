@@ -27,20 +27,20 @@ class boxm_ray_bundle_trace_manager : public bocl_manager<boxm_ray_bundle_trace_
   typedef boct_tree_cell<short,T_data> cell_type;
 
   boxm_ray_bundle_trace_manager()
-    : scene_(0),
+  : scene_(0), cam_(0), //tree_(0),
     program_(0),
-    cells_(0),
-    cell_data_(0),
+    gpu_time_(0.0),
+    ni_(0),nj_(0),bni_(0),bnj_(0),wni_(0),wnj_(0),
+    nlevels_(0), useimage_(false),
+    roi_min_i_(0), roi_min_j_(0),
+    roi_max_i_(0), roi_max_j_(0),
+    cells_(0), cell_data_(0),
     tree_results_(0),
     ray_origin_(0),
     ray_dir_(0),
-    ray_results_(0),
-    //tree_(0),
-    cam_(0),
-    svd_UtWV_(0),imgdims_(0),roidims_(0),global_bbox_(0),
-    ni_(0),nj_(0),nlevels_(0), roi_min_i_(0), roi_min_j_(0),
-    roi_max_i_(0), roi_max_j_(0),useimage_(false),
-    bni_(0),bnj_(0),wni_(0),wnj_(0),gpu_time_(0.0)
+    ray_results_(0),svd_UtWV_(0),
+    imgdims_(0),roidims_(0),
+    global_bbox_(0)
     {}
 
   ~boxm_ray_bundle_trace_manager();

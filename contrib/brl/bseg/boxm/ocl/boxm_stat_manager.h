@@ -20,14 +20,14 @@ class boxm_stat_manager : public bocl_manager<boxm_stat_manager<T_data> >
 {
  public:
   boxm_stat_manager()
-    : program_(0),
-    stat_input_(0),
-    stat_data_(0),
-    stat_results_(0),
+  : program_(0),
     input_size_(0),
     data_size_(0),
-    result_size_(0)
-    {}
+    result_size_(0),
+    stat_input_(0),
+    stat_data_(0),
+    stat_results_(0)
+  {}
 
   ~boxm_stat_manager(){  if (program_)
     clReleaseProgram(program_);}
@@ -41,10 +41,7 @@ class boxm_stat_manager : public bocl_manager<boxm_stat_manager<T_data> >
   unsigned result_size(){return result_size_;}
   void set_result_size(unsigned rsize){result_size_=rsize;}
 
-
   cl_float* stat_results() {return stat_results_;}
-
-  
 
   cl_mem& input_buf() {return stat_input_buf_;}
   cl_mem& data_buf() {return stat_data_buf_;}
@@ -87,12 +84,12 @@ class boxm_stat_manager : public bocl_manager<boxm_stat_manager<T_data> >
                               float mu1, float sigma1, float w1,
                               float mu2, float sigma2, float w2);
   void set_insert_gauss_3_mix_1d(float init_weight, float init_sigma,
-                                 float mu0, float sigma0, float w0, 
+                                 float mu0, float sigma0, float w0,
                                  float mu1, float sigma1, float w1,
                                  float mu2, float sigma2, float w2);
 void set_update_gauss_3_mix_1d(float weight, float init_sigma,
                                float min_sigma, float t_match,
-                               float mu0, float sigma0, float w0, 
+                               float mu0, float sigma0, float w0,
                                float mu1, float sigma1, float w1,
                                float mu2, float sigma2, float w2);
   void print_results();

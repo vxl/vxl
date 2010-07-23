@@ -27,23 +27,24 @@ class boxm_render_image_manager : public bocl_manager<boxm_render_image_manager<
   typedef float obs_type;
 
   boxm_render_image_manager() :
+    program_(0),
     block_ptrs_(0),
     scene_dims_(0),
     block_dims_(0),
-    scene_x_(0),scene_y_(0),scene_z_(0),
     cells_(0),
+    cells_size_(0),
     cell_data_(0),
     cell_alpha_(0),
+    cell_data_size_(0),
     root_level_(0),
     img_dims_(0),
-    offset_y_(0),
     offset_x_(0),
+    offset_y_(0),
     bni_(1),bnj_(1),
+    scene_x_(0),scene_y_(0),scene_z_(0),
     wni_(1),wnj_(1),
-    cells_size_(0),
-    cell_data_size_(0),
-    output_img_(),
-    program_(0) {}
+    output_img_()
+    {}
   ~boxm_render_image_manager() {
     if (program_)
       clReleaseProgram(program_);
@@ -178,9 +179,7 @@ class boxm_render_image_manager : public bocl_manager<boxm_render_image_manager<
   //array of data pointed to by tree
   cl_float* cell_data_;
   cl_float* cell_alpha_;
-  //cl_half* cell_data_;
   cl_uint  cell_data_size_;
-
 
   //root level
   cl_uint root_level_;
@@ -194,9 +193,7 @@ class boxm_render_image_manager : public bocl_manager<boxm_render_image_manager<
   // bounding box for each tree
   cl_float * tree_bbox_;
 
-
   // camera
-
   cl_float * persp_cam_;
 
   cl_uint bni_;

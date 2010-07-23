@@ -17,35 +17,34 @@
 
 class boxm_render_ocl_scene_manager : public bocl_manager<boxm_render_ocl_scene_manager >
 {
-    typedef vnl_vector_fixed<int, 4> int4;
-    typedef vnl_vector_fixed<float, 16> float16;
-    typedef vnl_vector_fixed<int, 2> int2;
+  typedef vnl_vector_fixed<int, 4> int4;
+  typedef vnl_vector_fixed<float, 16> float16;
+  typedef vnl_vector_fixed<int, 2> int2;
 
  public:
-
-
   typedef float obs_type;
 
   boxm_render_ocl_scene_manager() :
+    program_(0),
     block_ptrs_(0),
     scene_dims_(0),
     block_dims_(0),
-    scene_x_(0),scene_y_(0),scene_z_(0),
     cells_(0),
+    cells_size_(0),
     cell_data_(0),
     cell_alpha_(0),
-    root_level_(0),
-    img_dims_(0),
-    offset_y_(0),
-    offset_x_(0),
-    bni_(1),bnj_(1),
-    wni_(1),wnj_(1),
-    cells_size_(0),
     cell_data_size_(0),
-    output_img_(),
     numbuffer_(0),
     lenbuffer_(0),
-    program_(0) {}
+    root_level_(0),
+    img_dims_(0),
+    offset_x_(0),
+    offset_y_(0),
+    bni_(1),bnj_(1),
+    scene_x_(0), scene_y_(0), scene_z_(0),
+    wni_(1), wnj_(1),
+    output_img_() {}
+
   ~boxm_render_ocl_scene_manager() {
     if (program_)
       clReleaseProgram(program_);
@@ -242,8 +241,8 @@ class boxm_render_ocl_scene_manager : public bocl_manager<boxm_render_ocl_scene_
 
   vcl_size_t globalThreads[2];
   vcl_size_t localThreads[2] ;
-  
-  //gpu time 
+
+  //gpu time
   float gpu_time_;
 };
 
