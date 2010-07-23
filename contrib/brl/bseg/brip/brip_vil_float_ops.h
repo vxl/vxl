@@ -21,6 +21,7 @@
 //-----------------------------------------------------------------------------
 #include <vcl_vector.h>
 #include <vcl_complex.h>
+#include <vcl_cassert.h>
 #include <vnl/vnl_matrix.h>
 #include <vbl/vbl_array_2d.h>
 #include <vgl/vgl_box_2d.h>
@@ -575,9 +576,9 @@ class brip_vil_float_ops
 
 template <class T_from,class T_to>
 void brip_vil_float_ops::normalize_to_interval(const vil_image_view<T_from>& img_inp,
-                                                  vil_image_view<T_to>& img_out,
-                                                  float min,
-                                                  float max)
+                                               vil_image_view<T_to>& img_out,
+                                               float min,
+                                               float max)
 {
   assert(min<max);
   vil_image_view<float> img_temp;
