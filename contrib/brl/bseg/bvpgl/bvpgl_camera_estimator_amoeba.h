@@ -14,18 +14,20 @@
 
 #include <vnl/vnl_cost_function.h>
 
+#include <vcl_iostream.h>
+
 template <class func_>
 class bvpgl_camera_estimator_amoeba : public vnl_cost_function
 {
  public:
   bvpgl_camera_estimator_amoeba(bvpgl_camera_estimator<func_> &cest,
-                               const vil_image_view<float> &img_e,
-                               const vpgl_camera_double_sptr& cam)
+                                const vil_image_view<float> &img_e,
+                                const vpgl_camera_double_sptr& cam)
   : vnl_cost_function(2), cest_(cest), img_e_(img_e)
   {
     best_score = 0.0;
 
-    // check the camera type 
+    // check the camera type
     if (cam->type_name() == "vpgl_perspective_camera") {
       cam_ = dynamic_cast<vpgl_perspective_camera<double>*>(cam.ptr());
 
@@ -50,7 +52,8 @@ class bvpgl_camera_estimator_amoeba : public vnl_cost_function
       cam_center = cam_->get_camera_center();
       cam_center = cam_center - 2.0*vec_x;
       cam_center = cam_center - 2.0*vec_y;
-    } else {
+    }
+    else {
       vcl_cout << "bvxm_expected_edge_functor::apply() -- The camera type: " << cam->type_name() << " is not implemented yet!" << vcl_endl;
     }
   }
@@ -74,7 +77,7 @@ class bvpgl_camera_estimator_amoeba : public vnl_cost_function
 
       cest_.estimate_rotation_iterative(img_e_,curr_cam);
       vil_image_view<float> img_eei(img_e_.ni(),img_e_.nj());
-      
+
       cest_.get_expected_edge_image(curr_cam_sptr,&img_eei);
       double curr_score = cest_.edge_prob_cross_correlation(img_e_,img_eei);
 
@@ -84,7 +87,7 @@ class bvpgl_camera_estimator_amoeba : public vnl_cost_function
         best_camera.set_rotation(curr_cam->get_rotation());
       }
       return -curr_score;
-    } 
+    }
     return 0;
   }
 
