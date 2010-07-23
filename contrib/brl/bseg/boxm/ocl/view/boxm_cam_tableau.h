@@ -1,10 +1,9 @@
-// This is boxm/ocl/view/boxm_cam_tableau.h
+// This is brl/bseg/boxm/ocl/view/boxm_cam_tableau.h
 #ifndef boxm_cam_tableau_h_
 #define boxm_cam_tableau_h_
 //:
 // \file
-// \brief A tableau with a single camera that changes viewpoints based 
-//        on mouse and keyboard manipulations.  
+// \brief A tableau with a single camera that changes viewpoints based on mouse and keyboard manipulations.
 // \author Andrew Miller
 // \date July 14, 2010
 #include "boxm_cam_tableau_sptr.h"
@@ -15,31 +14,30 @@
 
 class boxm_cam_tableau: public vgui_tableau, public vgui_drag_mixin
 {
-
-public:
+ public:
 
     //: Constructor - don't use this, use vgui_viewer3D_tableau_new.
     boxm_cam_tableau();
-    virtual ~boxm_cam_tableau() {} 
+    virtual ~boxm_cam_tableau() {}
 
     //camera
     void set_camera(vpgl_perspective_camera<double> cam) {cam_ = cam; }
 
     void setup_gl_matrices();
 
-    //tableau handle - moves camera around 
+    //tableau handle - moves camera around
     virtual bool handle( vgui_event const& e );
     bool mouse_up(int x, int y, vgui_button button, vgui_modifier modifier);
     bool mouse_drag(int x, int y, vgui_button button, vgui_modifier modifier);
     bool mouse_down(int x, int y, vgui_button button, vgui_modifier modifier);
 
-    //event conditions 
+    //event conditions
     vgui_event_condition c_mouse_rotate;
     vgui_event_condition c_mouse_translate;
     vgui_event_condition c_mouse_zoom;
 
-protected:
-  
+ protected:
+
     //Current Cam, init cam and current stare point
     vpgl_perspective_camera<double> cam_;
     vpgl_perspective_camera<double> default_cam_;
@@ -48,8 +46,8 @@ protected:
     //keep track of events
     vgui_event event;
     vgui_event last;
-    
-    //keep track of mouse dragging 
+
+    //keep track of mouse dragging
     float beginx;
     float beginy;
     float prevx;
@@ -59,7 +57,7 @@ protected:
 //: Create a smart-pointer to a boxm_cam_tableau tableau.
 struct boxm_cam_tableau_new : public boxm_cam_tableau_sptr
 {
-  //: Constructor - create an empty boxm_cam_tableau.
+  // Constructor - create an empty boxm_cam_tableau.
   typedef boxm_cam_tableau_sptr base;
   boxm_cam_tableau_new() : base( new boxm_cam_tableau ) { }
 };

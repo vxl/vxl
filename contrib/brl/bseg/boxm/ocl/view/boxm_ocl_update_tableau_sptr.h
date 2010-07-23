@@ -1,5 +1,4 @@
-
-// This is core/vgui/boxm_ocl_draw_glbuffer_tableau_sptr.h
+// This is brl/bseg/boxm/ocl/view/boxm_ocl_update_tableau_sptr.h
 #ifndef boxm_ocl_update_tableau_sptr_h_
 #define boxm_ocl_update_tableau_sptr_h_
 //:
