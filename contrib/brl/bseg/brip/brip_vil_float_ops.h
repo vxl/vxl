@@ -573,7 +573,6 @@ class brip_vil_float_ops
   brip_vil_float_ops() {}
 };
 
-
 template <class T_from,class T_to>
 void brip_vil_float_ops::normalize_to_interval(const vil_image_view<T_from>& img_inp,
                                                vil_image_view<T_to>& img_out,
@@ -585,14 +584,15 @@ void brip_vil_float_ops::normalize_to_interval(const vil_image_view<T_from>& img
   vil_convert_cast<T_from,float>(img_inp,img_temp);
   float min_img,max_img;
   vil_math_value_range<float>(img_temp,min_img,max_img);
-  assert(min_img<max_img);
-
-  float scale = (max-min)/(max_img-min_img);
-  float offset = (min*max_img - min_img*max)/(max_img-min_img);
-
-  vil_math_scale_and_offset_values<float,float>(img_temp,scale,offset);
-
-  vil_convert_cast<float,T_to>(img_temp,img_out);
+  if (min_img >= max_img) {
+    img_temp.fill(min);
+    vil_convert_cast<float,T_to>(img_temp,img_out);
+  } else {
+    float scale = (max-min)/(max_img-min_img);
+    float offset = (min*max_img - min_img*max)/(max_img-min_img);
+    vil_math_scale_and_offset_values<float,float>(img_temp,scale,offset);
+    vil_convert_cast<float,T_to>(img_temp,img_out);
+  }
 }
 
 #endif // brip_vil_float_ops_h_
