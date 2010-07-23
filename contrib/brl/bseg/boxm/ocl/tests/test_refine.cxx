@@ -29,7 +29,7 @@ boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > > create_simple_sce
   vgl_vector_3d<unsigned> world_dim(1,1,1);
   scene_type scene(lvcs, origin, block_dim, world_dim);
   scene.set_appearance_model(BOXM_APM_MOG_GREY);
-  
+
   vcl_string scene_dir = vcl_string(VCL_SOURCE_ROOT_DIR)+"/contrib/brl/bseg/boxm/ocl/tests/boxm_scene1";
   vcl_string xml_path = scene_dir + "/scene1.xml";
   scene.set_paths(scene_dir, "block");
@@ -40,7 +40,7 @@ boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > > create_simple_sce
 
   unsigned max_level=10, init_level=7;
   scene.set_octree_levels(max_level, init_level);
-    
+
   // default model (alpha = .001)
   bsta_gauss_f1 simple_gauss_f1(0.0f,0.1f);
   bsta_num_obs<bsta_gauss_f1> simple_obs_gauss_val_f1(simple_gauss_f1,1);
@@ -92,10 +92,11 @@ boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > > create_simple_sce
     scene.load_block(iter.index().x(),iter.index().y(),iter.index().z());
     boxm_block<tree_type>* block=scene.get_active_block();
     tree_type* tree;
-    //make first block one level further initialized than others 
+    //make first block one level further initialized than others
     if (iter.index().x()==0 && iter.index().y()==0 && iter.index().z()==0) {
       tree = new tree_type(max_level,init_level);
-    } else {
+    }
+    else {
       tree = new tree_type(max_level,init_level-1);
     }
     boct_tree_cell<short,data_type>* cel11 = tree->locate_point(vgl_point_3d<double>(0.01,0.01,0.9));
@@ -103,7 +104,7 @@ boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > > create_simple_sce
     cel11->set_data(s2_sample);
 //    boct_tree_cell<short,data_type>* cell2=tree->locate_point(vgl_point_3d<double>(0.51,0.51,0.51));
 //    cell2->set_data(s2_sample);
-    
+
     block->init_tree(tree);
     scene.write_active_block();
     iter++;
@@ -113,46 +114,45 @@ boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > > create_simple_sce
   return scene;
 }
 
-//: Test refine on a simple ocl scene 
+//: Test refine on a simple ocl scene
 bool test_refine_ocl_scene()
 {
   vcl_cout<<vcl_endl<<"Testing multi block refine "<<vcl_endl;
   float prob_thresh = .001;
 
   //set up multiple blocks of small trees
-  typedef boxm_sample<BOXM_APM_MOG_GREY> data_type; 
+  typedef boxm_sample<BOXM_APM_MOG_GREY> data_type;
   typedef boct_tree<short,data_type> tree_type;
   typedef boxm_scene<tree_type> scene_type;
 
-  //cpu refine test 
+  //cpu refine test
   scene_type scene = create_simple_scene();
-  boxm_refine_scene(scene, prob_thresh); 
-  
+  boxm_refine_scene(scene, prob_thresh);
+
   //GPU refine test
   scene_type scene2 = create_simple_scene();
   int num_buffers = 1;
   boxm_ocl_scene ocl_scene;
   boxm_ocl_convert<data_type>::convert_scene(&scene2, num_buffers, ocl_scene);
   vcl_cout<<ocl_scene<<vcl_endl;
-           
+
   //create the manager and startup the refining
   boxm_refine_scene_manager* mgr = boxm_refine_scene_manager::instance();
   mgr->init_refine(&ocl_scene, prob_thresh);
   mgr->run_refine();
   boxm_ocl_scene* scene_ptr = mgr->get_scene();
-  
-  vcl_cout<<"Scene ptr "<<scene_ptr<<" ?= scene address "<<&ocl_scene<<vcl_endl;
-  vcl_cout<<ocl_scene<<vcl_endl;
+
+  vcl_cout<<"Scene ptr "<<scene_ptr<<" ?= scene address "<<&ocl_scene<<'\n'
+          <<ocl_scene<<vcl_endl;
 
   return true;
 }
 
 
-
 bool test_refine_simple_scene()
 {
   // Set up test tree
-  typedef boxm_sample<BOXM_APM_MOG_GREY> data_type; 
+  typedef boxm_sample<BOXM_APM_MOG_GREY> data_type;
   typedef boct_tree<short,data_type> tree_type;
   tree_type* tree = open_cl_test_data::simple_tree<data_type>();
   float prob_thresh = .3f;
@@ -172,7 +172,7 @@ bool test_refine_simple_scene()
   int* tree_array = mgr->get_tree();
   int  tree_size = mgr->get_tree_size();
   float* data = mgr->get_data();
-  int  data_size = mgr->get_data_size();
+  unsigned int  data_size = mgr->get_data_size();
   if (!tree_array) {
     TEST("Error : boxm_refine : mgr->get_tree() returned NULL\n", false, true);
     return false;
@@ -186,20 +186,20 @@ bool test_refine_simple_scene()
   vcl_vector<vnl_vector_fixed<int,4> > tree_vector;
   for (int i=0,j=0; j<tree_size; i+=4,j++) {
     vnl_vector_fixed<int,4> cell;
-    for (unsigned k=0; k<4; k++) 
+    for (unsigned k=0; k<4; k++)
       cell[k] = tree_array[i+k];
     tree_vector.push_back(cell);
   }
   bool correctFormat = boxm_ocl_utils::verify_format(tree_vector);
   TEST("test_refine_simple_scene output format", correctFormat, true);
-  
-  
+
+
   //--------- CPU side refine ------------------------------
   unsigned num_split = 0;
   typedef boxm_block<tree_type> block_type;
   block_type block(tree->bounding_box(), tree);
-  boxm_refine_block(&block, prob_thresh, num_split); 
-  
+  boxm_refine_block(&block, prob_thresh, num_split);
+
   //use vectors to build the tree up
   vcl_vector<vnl_vector_fixed<int, 4> > cell_input;
   vcl_vector<vnl_vector_fixed<float, 16>  > data_input;
@@ -213,35 +213,35 @@ bool test_refine_simple_scene()
   cell_input.push_back(root_cell);
   boct_tree_cell<short,data_type>* root = tree->root();
   boxm_ocl_convert<data_type>::copy_to_arrays(root, cell_input, data_input, cell_ptr);
-  
+
   //verify that tree_vector and cell_input are same size
   TEST("CPU refine and GPU refine tree output same size ", (tree_vector.size()), cell_input.size());
   TEST("CPU refine and GPU refine data output same size ", (data_input.size()), data_size);
-  
+
   //Verify the tree's structure is correct
   bool good = true;
-  for(unsigned i=0; i<tree_vector.size(); i++){
-    for(int j=0; j<2; j++) //0 and 1 are parent and child pointers
+  for (unsigned i=0; i<tree_vector.size(); i++){
+    for (int j=0; j<2; j++) //0 and 1 are parent and child pointers
       good = good && (tree_vector[i][j] == cell_input[i][j]);
   }
   TEST("CPU/GPU refine tree output same parent/child pointers ", good, true);
-  
+
   //verify that the data for each node is the same
   float ssd = 0;
-  for(unsigned i=0; i<tree_vector.size(); i++){
-    
+  for (unsigned i=0; i<tree_vector.size(); i++){
+
     //cpu side data
     int dataIndex = cell_input[i][2];
     vnl_vector_fixed<float, 16> datum = data_input[dataIndex];
-    
+
     //gpu side data
     dataIndex = 16*tree_vector[i][2];
-    
+
     //compare
-    for(int j=0; j<16; j++)
+    for (int j=0; j<16; j++)
       ssd += (datum[j]-data[dataIndex+j])*(datum[j]-data[dataIndex+j]);
   }
-  TEST("CPU/GPU refine tree output same data ", (ssd<10e-8), true);  
+  TEST("CPU/GPU refine tree output same data ", (ssd<10e-8), true);
   vcl_cout<<"SSD between cpu/gpu data = "<<ssd<<vcl_endl;
 
   // free memory used by the manager
@@ -251,9 +251,10 @@ bool test_refine_simple_scene()
 
 static void test_refine()
 {
-  //if (test_refine_simple_scene())
-  //  vcl_cout<<"test_refine, simple scene"<<vcl_endl;
-    
+#if 0
+  if (test_refine_simple_scene())
+    vcl_cout<<"test_refine, simple scene"<<vcl_endl;
+#endif
   if (test_refine_ocl_scene())
     vcl_cout<<"test_multi_block_refine, simple scene"<<vcl_endl;
 }

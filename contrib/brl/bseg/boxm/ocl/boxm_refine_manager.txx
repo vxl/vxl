@@ -50,41 +50,38 @@ init(int* cells, unsigned numcells, unsigned tree_max_size,
   return init_kernel();
 }
 
-template<class T>   
+template<class T>
 bool boxm_refine_manager<T>::init(vcl_string treefile,vcl_string treedatafile,int factor,
-              float prob_thresh, unsigned max_level, float bbox_len)
+                                  float prob_thresh, unsigned max_level, float bbox_len)
 {
-    unsigned int numcells=0;
-    unsigned int numdata=0;
-    cl_int * cells=boxm_ocl_utils::readtree(treefile,numcells);
-    cl_float * cell_data=boxm_ocl_utils::readtreedata(treedatafile,numdata);
+  unsigned int numcells=0;
+  unsigned int numdata=0;
+  cl_int * cells=boxm_ocl_utils::readtree(treefile,numcells);
+  cl_float * cell_data=boxm_ocl_utils::readtreedata(treedatafile,numdata);
 
+  alloc_trees(numcells*factor,numdata*factor);
 
+  (*numcells_)=numcells;
+  (*numdata_)=numdata;
+  (*tree_max_size_)=(*numcells_)*factor;
+  (*data_max_size_)=(*numdata_)*factor;
 
-    alloc_trees(numcells*factor,numdata*factor);
+  for (unsigned i=0;i<(*tree_max_size_)*4;i++)
+      cells_[i]=-1;
+  for (unsigned i=0;i<(*data_max_size_)*16;i++)
+      cell_data_[i]=0.0;
 
-    (*numcells_)=numcells;
-    (*numdata_)=numdata;
-    (*tree_max_size_)=(*numcells_)*factor;
-    (*data_max_size_)=(*numdata_)*factor;
+  for (unsigned i=0;i<(*numcells_)*4;i++)
+      cells_[i]=cells[i];
+  for (unsigned i=0;i<(*numdata_)*16;i++)
+      cell_data_[i]=cell_data[i];
 
-    for(unsigned i=0;i<(*tree_max_size_)*4;i++)
-        cells_[i]=-1;
-    for(unsigned i=0;i<(*data_max_size_)*16;i++)
-        cell_data_[i]=0.0;
+  boxm_ocl_utils::free_aligned(cells);
+  boxm_ocl_utils::free_aligned(cell_data);
 
-    for(unsigned i=0;i<(*numcells_)*4;i++)
-        cells_[i]=cells[i];
-    for(unsigned i=0;i<(*numdata_)*16;i++)
-        cell_data_[i]=cell_data[i];
-
-
-    boxm_ocl_utils::free_aligned(cells);
-    boxm_ocl_utils::free_aligned(cell_data);
-
-    (*prob_thresh_) = prob_thresh;
-    (*max_level_) = max_level;
-    (*bbox_len_) = bbox_len;
+  (*prob_thresh_) = prob_thresh;
+  (*max_level_) = max_level;
+  (*bbox_len_) = bbox_len;
   return init_kernel();
 }
 
@@ -141,51 +138,51 @@ bool boxm_refine_manager<T>::run_tree()
     return false;
 
   //opencl output_
-  vcl_cout<<"KERNEL OUTPUT"<<vcl_endl
-          <<(*output_results_)<<vcl_endl
+  vcl_cout<<"KERNEL OUTPUT\n"
+          <<(*output_results_)<<'\n'
           <<"END KERNEL OUTPUT"<<vcl_endl;
 
   //debug print method
-  vcl_cout<<"---REFINE Stats:-----------------------------------"<<vcl_endl
-          <<"---Tree Input Size (#cells) = "<<(*numcells_)<<vcl_endl
+  vcl_cout<<"---REFINE Stats:-----------------------------------\n"
+          <<"---Tree Input Size (#cells) = "<<(*numcells_)<<'\n'
           <<"---Tree Output Size (#cells) = "<<(*tree_results_size_)<<vcl_endl;
   int numSplit = ((*tree_results_size_)-(*numcells_))/8;
-  vcl_cout<<"---number of nodes that split = "<<numSplit<<vcl_endl
+  vcl_cout<<"---number of nodes that split = "<<numSplit<<'\n'
           <<"----------------------------------------------------"<<vcl_endl;
 
   //boxm_ocl_utils<T>::print_tree_array(tree_results_, (*tree_results_size_), data_results_);
 
   // Verify that the tree is formatted correctly
   vcl_vector<vnl_vector_fixed<int,4> > tree_vector;
-  for (int i=0,j=0; j<(*tree_results_size_); i+=4,j++) {
+  for (unsigned int i=0,j=0; j<(*tree_results_size_); i+=4,++j) {
     vnl_vector_fixed<int,4> cell;
-    for (unsigned k=0; k<4; k++) 
+    for (unsigned k=0; k<4; k++)
       cell[k] = tree_results_[i+k];
     tree_vector.push_back(cell);
   }
-  if(boxm_ocl_utils::verify_format(tree_vector))
+  if (boxm_ocl_utils::verify_format(tree_vector))
     vcl_cout<<"---TREE IN CORRECT FORMAT---"<<vcl_endl;
   else
     vcl_cout<<"---TREE NOT IN CORRECT FORMAT ---"<<vcl_endl;
-  
+
 
   //PROFILING INFORMATION FROM OPENCL
 #if 1
   float treeSize = 4*4*(*tree_results_size_)/(1024.0f*1024.0f); //tree size in MB
   float dataSize = 4*16*(*data_results_size_)/(1024.0f*1024.0f); //data size in MBs
-  vcl_cout<<"---GLOBAL MEM BANDWITH RESULTS-----------------------"<<vcl_endl
-          <<"---Tree Size: "<<(*tree_results_size_)<<" blocks; "<<treeSize<<" MB"<<vcl_endl
-          <<"---Data size: "<<(*data_results_size_)<<" blocks; "<<dataSize<<" MB"<<vcl_endl
-          <<"---GPU Time: "<<gpu_time<<" seconds"<<vcl_endl
-          <<"---Refine Bandwidth ~~ "<<(treeSize+dataSize)/gpu_time<<" MB/sec"<<vcl_endl
+  vcl_cout<<"---GLOBAL MEM BANDWITH RESULTS-----------------------\n"
+          <<"---Tree Size: "<<(*tree_results_size_)<<" blocks; "<<treeSize<<" MB\n"
+          <<"---Data size: "<<(*data_results_size_)<<" blocks; "<<dataSize<<" MB\n"
+          <<"---GPU Time: "<<gpu_time<<" seconds\n"
+          <<"---Refine Bandwidth ~~ "<<(treeSize+dataSize)/gpu_time<<" MB/sec\n"
           <<"-----------------------------------------------------"<<vcl_endl;
 #endif // 0
 
 #if 0
-  vcl_cout<<"VUL_TIMER: Global mem BANDWITH RESULTS"<<vcl_endl
+  vcl_cout<<"VUL_TIMER: Global mem BANDWITH RESULTS\n"
           <<"Size "<<16*(*tree_max_size_)<<" bytes in "<<gpu_time<<"sec"<<vcl_endl;
   float rate = (16.0*(*tree_max_size_))/gpu_time;
-  vcl_cout<<" = "<<rate<<" bytes/sec"<<vcl_endl
+  vcl_cout<<" = "<<rate<<" bytes/sec\n"
           <<" = "<<rate/vcl_pow(2,20)<<" megabytes/sec"<<vcl_endl;
   boxm_ocl_utils<float>::print_tree_array(tree_results_, (*tree_results_size_), data_results_);
 #endif // 0
@@ -271,9 +268,9 @@ bool boxm_refine_manager<T>::run_block()
   }
 
   // set up a command queue
-  command_queue_ = clCreateCommandQueue(this->context(), 
-                                        this->devices()[0], 
-                                        CL_QUEUE_PROFILING_ENABLE, 
+  command_queue_ = clCreateCommandQueue(this->context(),
+                                        this->devices()[0],
+                                        CL_QUEUE_PROFILING_ENABLE,
                                         &status);
   if (!this->check_val(status,CL_SUCCESS,"Failed in command queue creation" + error_to_string(status)))
     return false;
@@ -297,7 +294,7 @@ bool boxm_refine_manager<T>::run_block()
   status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
   status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
   gpu_time = (tend-tstart)/1e9f;  //gpu time in seconds
- 
+
   return SDK_SUCCESS;
 }
 
@@ -513,8 +510,8 @@ int boxm_refine_manager<T>::clean_tree_buffers()
 
   status = clReleaseMemObject(bbox_len_buf_);
   if (!this->check_val(status, CL_SUCCESS, "clReleaseMemObject failed (bbox_len_buf_)."))
-    return SDK_FAILURE;   
-    
+    return SDK_FAILURE;
+
   //output buffer
   status = clReleaseMemObject(output_buf_);
   if (!this->check_val(status, CL_SUCCESS, "clReleaseMemObject failed (output_buf_)."))
