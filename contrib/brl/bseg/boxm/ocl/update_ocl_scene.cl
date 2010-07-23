@@ -1,7 +1,7 @@
 #pragma OPENCL EXTENSION cl_khr_byte_addressable_store : enable
 
 __kernel
-void 
+void
 update_ocl_scene(__global int4    * scene_dims,  // level of the root.
                  __global float4  * scene_origin,
                  __global float4  * block_dims,
@@ -84,7 +84,7 @@ update_ocl_scene(__global int4    * scene_dims,  // level of the root.
     cell_min=origin;
     cell_max=blockdims*convert_float4(scenedims)+origin;
     int hit=intersect_cell(ray_o, ray_d, cell_min, cell_max,&tnear, &tfar);
-    if(!hit)
+    if (!hit)
     {
         return;
     }
@@ -92,7 +92,7 @@ update_ocl_scene(__global int4    * scene_dims,  // level of the root.
 
     int4 curr_block_index=convert_int4((entry_pt-origin)/blockdims);
 
-    //: handling the border case where a ray pierces the max side
+    // handling the border case where a ray pierces the max side
     curr_block_index=curr_block_index+(curr_block_index==scenedims);
     int global_count=0;
     //float length=0;
@@ -104,7 +104,7 @@ update_ocl_scene(__global int4    * scene_dims,  // level of the root.
                                +curr_block_index.y*scenedims.z
                                +curr_block_index.x*scenedims.y*scenedims.z];
 
-        //: tree offset is the root_ptr
+        // tree offset is the root_ptr
         int root_ptr= block.x*lenbuffer+block.y;
 
         float4 local_ray_o= (ray_o-origin)/blockdims-convert_float4(curr_block_index);
@@ -196,13 +196,12 @@ update_ocl_scene(__global int4    * scene_dims,  // level of the root.
         cell_max=cell_min+blockdims;
         if (!intersect_cell(ray_o, ray_d, cell_min, cell_max,&tnear, &tfar))
         {
-            //: this means the ray has hit a special case 
-            //: two special cases
-            //: (1)grazing the corner/edge and (2)grazing the side.
+            // this means the ray has hit a special case
+            // two special cases
+            // (1) grazing the corner/edge and (2) grazing the side.
             // this is the first case
-            if(tfar-tnear<blockdims.x/100)
+            if (tfar-tnear<blockdims.x/100)
             {
-
                 entry_pt=entry_pt + blockdims.x/2 *ray_d;
                 curr_block_index=convert_int4((entry_pt-origin)/blockdims);
                 curr_block_index.w=0;
@@ -212,16 +211,15 @@ update_ocl_scene(__global int4    * scene_dims,  // level of the root.
         {
             entry_pt=ray_o + tfar *ray_d;
             ray_d.w=1;
-            
-            if(any(-1*(isless(fabs(entry_pt-cell_min),(float4)blockdims.x/100.0f)*isless(fabs(ray_d),(float4)1e-3))))
+
+            if (any(-1*(isless(fabs(entry_pt-cell_min),(float4)blockdims.x/100.0f)*isless(fabs(ray_d),(float4)1e-3))))
                 break;
-            if(any(-1*(isless(fabs(entry_pt-cell_max),(float4)blockdims.x/100.0f)*isless(fabs(ray_d),(float4)1e-3))))
+            if (any(-1*(isless(fabs(entry_pt-cell_max),(float4)blockdims.x/100.0f)*isless(fabs(ray_d),(float4)1e-3))))
                 break;
             curr_block_index=convert_int4(floor((ray_o + tfar *ray_d+(blockdims.x/20.0f)*ray_d-origin)/blockdims));
             curr_block_index.w=0;
         }
         //count++;
-
     }
 }
 __kernel
@@ -233,11 +231,11 @@ update_ocl_scene_main(__global float16 * sample_array,
 {
     int gid=get_global_id(0);
     int datasize= (*lenbuffer);
-    if(gid<datasize)
-    {   
+    if (gid<datasize)
+    {
         float16 data=sample_array[gid];
         float4 aux_data=aux_data_array[gid];
-        if(aux_data.x>1e-10f)
+        if (aux_data.x>1e-10f)
             update_cell(&data,aux_data,2.5f,0.09f,0.03f);
         sample_array[gid]=data;
         aux_data_array[gid]=(float4)0.0f;

@@ -93,7 +93,7 @@ int traverse(__global int4* cells, int cell_ptr, short4 cell_loc_code,
 }
 
 int traverse_woffset(__global int4* cells, int cell_ptr, short4 cell_loc_code,
-             short4 target_loc_code, short4* found_loc_code, int * global_count,int tree_offset)
+                     short4 target_loc_code, short4* found_loc_code, int * global_count,int tree_offset)
 {
   int found_cell_ptr = cell_ptr;
   int ret = -1;
@@ -189,9 +189,9 @@ int traverse_to_level(__global int4* cells, int cell_ptr,
 }
 
 int traverse_to_level_woffset(__global int4* cells, int cell_ptr,
-                      short4 cell_loc_code, short4 target_loc_code,
-                      short target_level,
-                      short4* found_loc_code,int *global_count, int tree_offset)
+                              short4 cell_loc_code, short4 target_loc_code,
+                              short target_level,
+                              short4* found_loc_code,int *global_count, int tree_offset)
 {
   int found_cell_ptr = cell_ptr;
   int ret = -1;
@@ -261,7 +261,7 @@ int traverse_to_level_stack(__global int4* cells, short4 cell_loc_code,
 //-----------------------------------------------------------------
 
 
-//: tree_offset is the root_ptr index and all the ptrs are offset relative to the root
+// tree_offset is the root_ptr index and all the ptrs are offset relative to the root
 
 int traverse_force(__global int4* cells, int cell_ptr, short4 cell_loc_code,
                    short4 target_loc_code, short4* found_loc_code, int * global_count)
@@ -302,8 +302,9 @@ int traverse_force(__global int4* cells, int cell_ptr, short4 cell_loc_code,
   }
   return found_cell_ptr;
 }
+
 int traverse_force_woffset(__global int4* cells, int cell_ptr, short4 cell_loc_code,
-                   short4 target_loc_code, short4* found_loc_code, int * global_count, int tree_offset)
+                           short4 target_loc_code, short4* found_loc_code, int * global_count, int tree_offset)
 {
   int found_cell_ptr = cell_ptr;
   (*found_loc_code) = cell_loc_code;
@@ -469,7 +470,7 @@ int common_ancestor(__global int4* cells, int cell_ptr, short4 cell_loc_code,
 }
 
 int common_ancestor_woffset(__global int4* cells, int cell_ptr, short4 cell_loc_code,
-                    short4 target_loc_code, short4* ancestor_loc_code, int * global_count, int tree_offset)
+                            short4 target_loc_code, short4* ancestor_loc_code, int * global_count, int tree_offset)
 {
   short4 bin_diff = cell_loc_code ^ target_loc_code;
   short curr_level = (short)cell_loc_code.w;
@@ -572,7 +573,7 @@ int neighbor(__global int4* cells,int cell_ptr,  short4 cell_loc_code,
 }
 
 int neighbor_woffset(__global int4* cells,int cell_ptr,  short4 cell_loc_code,
-             short4 exit_face, short n_levels, short4* neighbor_code,int * global_count, int tree_offset)
+                     short4 exit_face, short n_levels, short4* neighbor_code,int * global_count, int tree_offset)
 {
   short cell_level = cell_loc_code.w;
   short cell_size = 1<<cell_level;
@@ -604,15 +605,15 @@ int neighbor_woffset(__global int4* cells,int cell_ptr,  short4 cell_loc_code,
   }
   short4 ancestor_loc_code = error;
   int ancestor_ptr =  common_ancestor_woffset(cells, cell_ptr, cell_loc_code,
-                                      (*neighbor_code),
-                                      &ancestor_loc_code,global_count,tree_offset);
+                                              (*neighbor_code),
+                                              &ancestor_loc_code,global_count,tree_offset);
   if (ancestor_ptr<0) {
     (*neighbor_code) = error;
     return neighbor_ptr;
   }
   neighbor_ptr =
     traverse_to_level_woffset(cells, ancestor_ptr, ancestor_loc_code,
-                      (*neighbor_code), cell_level, neighbor_code,global_count,tree_offset);
+                              (*neighbor_code), cell_level, neighbor_code,global_count,tree_offset);
   return neighbor_ptr;
 }
 
