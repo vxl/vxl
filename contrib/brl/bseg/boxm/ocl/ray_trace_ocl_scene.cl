@@ -83,7 +83,7 @@ ray_trace_ocl_scene(__global int4     * scene_dims,  // level of the root.
   cell_min=origin;
   cell_max=blockdims*convert_float4(scenedims)+origin;
   int hit=intersect_cell(ray_o, ray_d, cell_min, cell_max,&tnear, &tfar);
-  if(!hit)
+  if (!hit)
   {
       gl_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)(0.0,0.0,0.0,0.0));
       return;
@@ -92,8 +92,7 @@ ray_trace_ocl_scene(__global int4     * scene_dims,  // level of the root.
 
   int4 curr_block_index=convert_int4((entry_pt-origin)/blockdims);
 
-  
-  //: handling the border case where a ray pierces the max side
+  // handling the border case where a ray pierces the max side
   curr_block_index=curr_block_index+(curr_block_index==scenedims);
   int global_count=0;
 
@@ -106,7 +105,7 @@ ray_trace_ocl_scene(__global int4     * scene_dims,  // level of the root.
                            +curr_block_index.y*scenedims.z
                            +curr_block_index.x*scenedims.y*scenedims.z];
 
-    //: tree offset is the root_ptr
+    // tree offset is the root_ptr
     int root_ptr= block.x*lenbuffer+block.y;
 
     float4 local_ray_o= (ray_o-origin)/blockdims-convert_float4(curr_block_index);
@@ -166,7 +165,6 @@ ray_trace_ocl_scene(__global int4     * scene_dims,  // level of the root.
 
       block_entry_pt = local_ray_o + (tfar)*ray_d;
       count++;
-
     }
 
     count++;
@@ -178,14 +176,13 @@ ray_trace_ocl_scene(__global int4     * scene_dims,  // level of the root.
     cell_max=cell_min+blockdims;
     if (!intersect_cell(ray_o, ray_d, cell_min, cell_max,&tnear, &tfar))
     {
-        //: this means the ray has hit a special case 
-        //: two special cases
-        //: (1)grazing the corner/edge and (2)grazing the side.
+        // this means the ray has hit a special case
+        // two special cases
+        // (1) grazing the corner/edge and (2) grazing the side.
 
         // this is the first case
-        if(tfar-tnear<blockdims.x/100)
+        if (tfar-tnear<blockdims.x/100)
         {
-           
             entry_pt=entry_pt + blockdims.x/2 *ray_d;
             curr_block_index=convert_int4((entry_pt-origin)/blockdims);
             curr_block_index.w=0;
@@ -198,37 +195,36 @@ ray_trace_ocl_scene(__global int4     * scene_dims,  // level of the root.
     {
         entry_pt=ray_o + tfar *ray_d;
         ray_d.w=1;
-        if(any(-1*(isless(fabs(entry_pt-cell_min),(float4)blockdims.x/100.0f)*isless(fabs(ray_d),(float4)1e-3))))
+        if (any(-1*(isless(fabs(entry_pt-cell_min),(float4)blockdims.x/100.0f)*isless(fabs(ray_d),(float4)1e-3))))
             break;
-        if(any(-1*(isless(fabs(entry_pt-cell_max),(float4)blockdims.x/100.0f)*isless(fabs(ray_d),(float4)1e-3))))
+        if (any(-1*(isless(fabs(entry_pt-cell_max),(float4)blockdims.x/100.0f)*isless(fabs(ray_d),(float4)1e-3))))
             break;
         curr_block_index=convert_int4(floor((entry_pt+(blockdims.x/20.0f)*ray_d-origin)/blockdims));
         curr_block_index.w=0;
     }
     count++;
-
   }
   data_return.z+=(1-data_return.w)*0.5f;
   gl_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)data_return.z);
   in_image[j*get_global_size(0)+i]=(float4)data_return;
-
 }
+
 __kernel
 void
 ray_trace_ocl_scene_full_data(__global int4     * scene_dims,  // level of the root.
-                    __global float4  * scene_origin,
-                    __global float4  * block_dims,
-                    __global int4     * block_ptrs,
-                    __global int     * root_level,
-                    __global int     * num_buffer,
-                    __global int     * len_buffer,
-                    __global int4    * tree_array,
-                    __global float16  * sample_array,
-                    __global float16 * persp_cam, // camera orign and SVD of inverse of camera matrix
-                    __global uint4   * imgdims,   // dimensions of the image
-                    __local  float16 * local_copy_cam,
-                    __local  uint4   * local_copy_imgdims,
-                    __global uint    * gl_image)    // input image and store vis_inf and pre_inf
+                              __global float4  * scene_origin,
+                              __global float4  * block_dims,
+                              __global int4     * block_ptrs,
+                              __global int     * root_level,
+                              __global int     * num_buffer,
+                              __global int     * len_buffer,
+                              __global int4    * tree_array,
+                              __global float16  * sample_array,
+                              __global float16 * persp_cam, // camera orign and SVD of inverse of camera matrix
+                              __global uint4   * imgdims,   // dimensions of the image
+                              __local  float16 * local_copy_cam,
+                              __local  uint4   * local_copy_imgdims,
+                              __global uint    * gl_image)    // input image and store vis_inf and pre_inf
 {
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
 
@@ -285,7 +281,7 @@ ray_trace_ocl_scene_full_data(__global int4     * scene_dims,  // level of the r
   cell_min=origin;
   cell_max=blockdims*convert_float4(scenedims)+origin;
   int hit=intersect_cell(ray_o, ray_d, cell_min, cell_max,&tnear, &tfar);
-  if(!hit)
+  if (!hit)
   {
       gl_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)(0.0,0.0,0.0,0.0));
       return;
@@ -295,8 +291,7 @@ ray_trace_ocl_scene_full_data(__global int4     * scene_dims,  // level of the r
 
   int4 curr_block_index=convert_int4((entry_pt-origin)/blockdims);
 
-  
-  //: handling the border case where a ray pierces the max side
+  // handling the border case where a ray pierces the max side
   curr_block_index=curr_block_index+(curr_block_index==scenedims);
   int global_count=0;
 
@@ -309,7 +304,7 @@ ray_trace_ocl_scene_full_data(__global int4     * scene_dims,  // level of the r
                            +curr_block_index.y*scenedims.z
                            +curr_block_index.x*scenedims.y*scenedims.z];
 
-    //: tree offset is the root_ptr
+    // tree offset is the root_ptr
     int root_ptr= block.x*lenbuffer+block.y;
 
     float4 local_ray_o= (ray_o-origin)/blockdims-convert_float4(curr_block_index);
@@ -369,7 +364,6 @@ ray_trace_ocl_scene_full_data(__global int4     * scene_dims,  // level of the r
 
       block_entry_pt = local_ray_o + (tfar)*ray_d;
       count++;
-
     }
 
     count++;
@@ -381,14 +375,13 @@ ray_trace_ocl_scene_full_data(__global int4     * scene_dims,  // level of the r
     cell_max=cell_min+blockdims;
     if (!intersect_cell(ray_o, ray_d, cell_min, cell_max,&tnear, &tfar))
     {
-        //: this means the ray has hit a special case 
-        //: two special cases
-        //: (1)grazing the corner/edge and (2)grazing the side.
+        // this means the ray has hit a special case
+        // two special cases
+        // (1) grazing the corner/edge and (2) grazing the side.
 
         // this is the first case
-        if(tfar-tnear<blockdims.x/100)
+        if (tfar-tnear<blockdims.x/100)
         {
-           
             entry_pt=entry_pt + blockdims.x/2 *ray_d;
             curr_block_index=convert_int4((entry_pt-origin)/blockdims);
             curr_block_index.w=0;
@@ -401,17 +394,15 @@ ray_trace_ocl_scene_full_data(__global int4     * scene_dims,  // level of the r
     {
         entry_pt=ray_o + tfar *ray_d;
         ray_d.w=1;
-        if(any(-1*(isless(fabs(entry_pt-cell_min),(float4)blockdims.x/100.0f)*isless(fabs(ray_d),(float4)1e-3))))
+        if (any(-1*(isless(fabs(entry_pt-cell_min),(float4)blockdims.x/100.0f)*isless(fabs(ray_d),(float4)1e-3))))
             break;
-        if(any(-1*(isless(fabs(entry_pt-cell_max),(float4)blockdims.x/100.0f)*isless(fabs(ray_d),(float4)1e-3))))
+        if (any(-1*(isless(fabs(entry_pt-cell_max),(float4)blockdims.x/100.0f)*isless(fabs(ray_d),(float4)1e-3))))
             break;
         curr_block_index=convert_int4(floor((entry_pt+(blockdims.x/20.0f)*ray_d-origin)/blockdims));
         curr_block_index.w=0;
     }
     count++;
-
   }
   data_return.z+=(1-data_return.w)*0.5f;
   gl_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)(data_return.z));
-
 }
