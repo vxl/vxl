@@ -118,10 +118,8 @@ ELSE( ${DCMTK_CONFIG_SERIAL_CURRENT} MATCHES "^${DCMTK_CONFIG_SERIAL_LAST}$" )
 
   # Record that we've done the new config.
   SET( DCMTK_CONFIG_SERIAL_LAST ${DCMTK_CONFIG_SERIAL_CURRENT} CACHE INTERNAL "Serial number of last configuration" )
-  
+
 ENDIF( ${DCMTK_CONFIG_SERIAL_CURRENT} MATCHES "^${DCMTK_CONFIG_SERIAL_LAST}$" )
-
-
 
 
 INCLUDE( ${CMAKE_ROOT}/Modules/CheckFunctionExists.cmake )
@@ -237,7 +235,7 @@ CHECK_PROTOTYPE_EXISTS_CXX(
   "string.h;strings.h;libc.h;unistd.h;stdlib.h"
   DCMTK_HAVE_PROTOTYPE_BZERO )
 CHECK_PROTOTYPE_EXISTS_CXX(
-  gethostid 
+  gethostid
   "libc.h;unistd.h;stdlib.h;netdb.h"
   DCMTK_HAVE_PROTOTYPE_GETHOSTID )
 CHECK_PROTOTYPE_EXISTS_CXX(
@@ -281,22 +279,22 @@ IF( "DCMTK_INCLUDE_MATH_H_AS_CXX" MATCHES "^${DCMTK_INCLUDE_MATH_H_AS_CXX}$" )
   TRY_COMPILE( DCMTK_INCLUDE_MATH_H_AS_CXX
     ${CMAKE_BINARY_DIR}
     ${CMAKE_BINARY_DIR}/CMakeTmp/CheckIncludeMath.cxx
-    CMAKE_FLAGS 
+    CMAKE_FLAGS
     -DCOMPILE_DEFINITIONS:STRING=${CMAKE_REQUIRED_FLAGS}
     OUTPUT_VARIABLE OUTPUT)
-  IF( DCMTK_INCLUDE_MATH_H_AS_CXX ) 
-    FILE(APPEND ${CMAKE_BINARY_DIR}/CMakeOutput.log 
+  IF( DCMTK_INCLUDE_MATH_H_AS_CXX )
+    FILE(APPEND ${CMAKE_BINARY_DIR}/CMakeOutput.log
       "Determining math.h as cxx"
       "passed with the following output:\n"
       "${OUTPUT}\n\n")
     SET( DCMTK_INCLUDE_MATH_H_AS_CXX 1 CACHE INTERNAL "Can include math.h with extern C")
-  ELSE( DCMTK_INCLUDE_MATH_H_AS_CXX ) 
-    FILE(APPEND ${CMAKE_BINARY_DIR}/CMakeOutput.log 
+  ELSE( DCMTK_INCLUDE_MATH_H_AS_CXX )
+    FILE(APPEND ${CMAKE_BINARY_DIR}/CMakeOutput.log
       "Determining math.h as cxx"
       "failed with the following output:\n"
       "${OUTPUT}\n\n")
     SET( DCMTK_INCLUDE_MATH_H_AS_CXX "" CACHE INTERNAL "Can include math.h with extern C")
-  ENDIF( DCMTK_INCLUDE_MATH_H_AS_CXX ) 
+  ENDIF( DCMTK_INCLUDE_MATH_H_AS_CXX )
 ENDIF( "DCMTK_INCLUDE_MATH_H_AS_CXX" MATCHES "^${DCMTK_INCLUDE_MATH_H_AS_CXX}$" )
 
 CONFIGURE_FILE(
@@ -305,10 +303,9 @@ CONFIGURE_FILE(
 )
 
 
-
 # The gcc 3.3 compiler produces lots of warnings like
 #   ./v3p/dcmtk/ofstd/include/ofcond.h:350: warning: cast
-#     from `const OFConditionBase*' to `OFConditionBase*' discards qualifiers from 
+#     from `const OFConditionBase*' to `OFConditionBase*' discards qualifiers from
 #     pointer target type
 # and
 #   ./v3p/dcmtk/dcmdata/libsrc/dcuid.cxx:773: warning: unused
@@ -456,5 +453,9 @@ IF( DCMTK_HAVE_ZLIB )
 ENDIF( DCMTK_HAVE_ZLIB )
 
 INSTALL_TARGETS( /lib dcmtk )
+
+IF( BUILD_TESTING )
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTING )
 
 ENDIF( VXL_BUILD_DCMTK )
