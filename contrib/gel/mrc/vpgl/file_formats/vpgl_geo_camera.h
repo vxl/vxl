@@ -32,7 +32,7 @@ class vpgl_geo_camera : public vpgl_camera<double>
 
   vpgl_geo_camera(vnl_matrix<double> trans_matrix,
                   bgeo_lvcs_sptr lvcs,
-                  vcl_vector<vcl_vector<double> > tiepoints) // FIXME - unused parameter
+                  vcl_vector<vcl_vector<double> > /*tiepoints*/) // FIXME - unused parameter
     : trans_matrix_(trans_matrix), is_utm(false), scale_tag_(false) { this->set_lvcs(lvcs); }
 
   // copy constructor
