@@ -653,7 +653,7 @@ class vnl_matrix_fixed_ref : public vnl_matrix_fixed_ref_const<T,num_rows,num_co
   //: Return true if *this == rhs
   bool operator_eq (vnl_matrix_fixed_ref_const<T,num_rows,num_cols> const & rhs) const
   {
-    return equal( this->data_block(), rhs.data_block() );
+    return vnl_matrix_fixed_ref<T,num_rows,num_cols>::equal( this->data_block(), rhs.data_block() );
   }
 
   //: Equality operator
