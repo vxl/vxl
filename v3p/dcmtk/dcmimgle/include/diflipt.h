@@ -130,7 +130,7 @@ class DiFlipTemplate
             else if (vert)
                 flipVert(src, dest);
             else
-                copyPixel(src, dest);
+                DiTransTemplate<T>::copyPixel(src, dest);
         }
     }
 

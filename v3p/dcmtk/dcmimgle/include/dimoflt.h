@@ -105,11 +105,11 @@ class DiMonoFlipTemplate
             if (this->Data != NULL)
             {
                 if (horz && vert)
-                    flipHorzVert(&pixel, &this->Data);
+                    DiFlipTemplate<T>::flipHorzVert(&pixel, &this->Data);
                 else if (horz)
-                    flipHorz(&pixel, &this->Data);
+                    DiFlipTemplate<T>::flipHorz(&pixel, &this->Data);
                 else if (vert)
-                    flipVert(&pixel, &this->Data);
+                    DiFlipTemplate<T>::flipVert(&pixel, &this->Data);
             }
         }
     }

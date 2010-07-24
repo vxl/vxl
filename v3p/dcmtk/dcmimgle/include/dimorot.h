@@ -105,11 +105,11 @@ class DiMonoRotateTemplate
             if (this->Data != NULL)
             {
                 if (degree == 90)
-                    rotateRight(&pixel, &this->Data);
+                    DiRotateTemplate<T>::rotateRight(&pixel, &this->Data);
                 else if (degree == 180)
-                    rotateTopDown(&pixel, &this->Data);
+                    DiRotateTemplate<T>::rotateTopDown(&pixel, &this->Data);
                 else if (degree == 270)
-                    rotateLeft(&pixel, &this->Data);
+                    DiRotateTemplate<T>::rotateLeft(&pixel, &this->Data);
             }
         }
     }

@@ -132,7 +132,7 @@ class DiRotateTemplate
         else if (degree == 270)
             rotateLeft(src, dest);
         else
-            copyPixel(src, dest);
+            DiTransTemplate<T>::copyPixel(src, dest);
     }
 
 

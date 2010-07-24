@@ -121,7 +121,7 @@ class DiMonoScaleTemplate
             {
                 const T value = (T)((double)DicomImageClass::maxval(bits) * (double)pvalue /
                     (double)DicomImageClass::maxval(WIDTH_OF_PVALUES));
-                scaleData(&pixel, &this->Data, interpolate, value);
+                DiScaleTemplate<T>::scaleData(&pixel, &this->Data, interpolate, value);
              }
         }
     }
