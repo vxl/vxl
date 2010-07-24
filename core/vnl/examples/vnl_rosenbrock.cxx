@@ -68,7 +68,7 @@ int main()
 
   // Make a Levenberg Marquardt minimizer, attach f to it, and
   // run the minimization
-  x = x0;
+  x = static_cast<vnl_vector<double> >(x0);
   vnl_levenberg_marquardt levmarq(f);
   levmarq.minimize(x);
 
@@ -83,7 +83,7 @@ int main()
   // Now rerun the optimizer with a new, looser, X tolerance.
   //
   levmarq.set_x_tolerance(0.1);
-  x = x0;
+  x = static_cast<vnl_vector<double> >(x0);
   levmarq.minimize(x);
 
   // Summarize the results. It has taken fewer iterations to reach the same
@@ -99,7 +99,7 @@ int main()
     vcl_cout << "** Amoeba (Nelder Meade downhill simplex)  **\n";
     vnl_least_squares_cost_function cf(&f);
     vnl_amoeba amoeba(cf);
-    x = x0;
+    x = static_cast<vnl_vector<double> >(x0);
     amoeba.minimize(x);
     vcl_cout << "Rosenbrock min of " << cf.f(x) << " at " << x << vcl_endl
              << "Evaluations: " << amoeba.get_num_evaluations() << vcl_endl;
@@ -108,7 +108,7 @@ int main()
     vcl_cout << "** Conjugate Gradient **\n";
     vnl_rosenbrock_grad_cost_fun rcf;
     vnl_conjugate_gradient cg(rcf);
-    x = x0;
+    x = static_cast<vnl_vector<double> >(x0);
     cg.minimize(x);
     vcl_cout << "CG min of " << rcf.f(x) << " at " << x << vcl_endl;
     cg.diagnose_outcome();
@@ -118,7 +118,7 @@ int main()
     vcl_cout << "** LBFGS (Limited memory Broyden Fletcher Goldfarb Shanno) **\n";
     vnl_rosenbrock_grad_cost_fun rcf;
     vnl_lbfgs lbfgs(rcf);
-    x = x0;
+    x = static_cast<vnl_vector<double> >(x0);
     lbfgs.minimize(x);
     //    assert(lbfgs.get_end_error() == rcf.f(x));
     vcl_cout << "L-BFGS min of " << lbfgs.get_end_error() << " at " << x << vcl_endl
@@ -129,7 +129,7 @@ int main()
     vcl_cout << "** Powell (Powell's direction set method) **\n";
     vnl_rosenbrock_grad_cost_fun rcf;
     vnl_powell powell(&rcf);
-    x = x0;
+    x = static_cast<vnl_vector<double> >(x0);
     powell.minimize(x);
     //    assert(lbfgs.get_end_error() == rcf.f(x));
     vcl_cout << "Powell min of " << powell.get_end_error() << " at " << x << vcl_endl

@@ -15,7 +15,7 @@ void test_matrix_exp()
 {
   vnl_double_3 v(1.233,-0.572,0.777);
 
-  vnl_double_3x3 X = vnl_cross_product_matrix(v);
+  vnl_double_3x3 X = static_cast<vnl_cross_product_matrix>(v);
   vnl_matlab_print(vcl_cout, X, "[v]");
 
   vnl_double_3x3 expX = vnl_matrix_exp(X);
