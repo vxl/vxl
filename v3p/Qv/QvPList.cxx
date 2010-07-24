@@ -23,7 +23,7 @@ QvPList::find(const void *ptr) const
 
     for (i = 0; i < nPtrs; i++)
         if (ptrs[i] == ptr)
-            return(i);
+            return i;
 
     return -1;
 }
@@ -66,7 +66,7 @@ QvPList::expand(int size)
         ptrsSize *= 2;
     }
 
-    newPtrs = new (void *[ptrsSize]);
+    newPtrs = new void *[ptrsSize];
 
     if (ptrs != NULL) {
         for (i = 0; i < nPtrs; i++)
