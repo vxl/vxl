@@ -24,7 +24,7 @@ vnl_vector<double> vcsl_displacement::execute(const vnl_vector<double> &v,
 
   vnl_vector<double> translation=vector_value(time);
 
-  vnl_vector<double> result(3);
+  vnl_vector_fixed<double,3> result;
 
   if (mode_2d_)
   {
@@ -64,7 +64,7 @@ vnl_vector<double> vcsl_displacement::inverse(const vnl_vector<double> &v,
 
   vnl_vector<double> translation=vector_value(time);
 
-  vnl_vector<double> result(3);
+  vnl_vector_fixed<double,3> result;
 
   if (mode_2d_)
   {
