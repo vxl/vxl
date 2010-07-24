@@ -15,7 +15,7 @@ void test_matrix_fixed_ref()
   typedef vnl_matrix_fixed_ref<double,rows,cols> mfr;
   typedef vnl_matrix_fixed_ref_const<double,rows,cols> mfrc;
 
-  int i,j;
+  unsigned int i,j;
   mf mat; // copy in
   for (i=0;i<rows;++i)
     for (j=0;j<cols;++j)
