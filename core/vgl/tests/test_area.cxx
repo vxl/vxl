@@ -25,6 +25,23 @@ static void test_simple2()
   TEST_NEAR("rectangle (cw) centroid y", c.y(), 2.5, 1e-6);
 }
 
+static void test_simple3()
+{
+  const double x[4]= { 1.0, 20.0, 20.0, 1.0};
+  const double y[4]= { 1.0, 1.0, 20.0, 20.0};
+  const unsigned int size = 4;
+
+  vgl_polygon<double> poly;
+  poly.new_sheet();
+  poly[0].resize(size);
+  for (unsigned int ii=0; ii<size; ++ii) {
+    poly[0][ii].set(x[ii],y[ii]);
+  }
+
+  TEST("rectangle (ccw)", vgl_area(poly), 19*19);
+  TEST("rectangle (ccw) signed", vgl_area_signed(poly), 19*19);
+}
+
 static void test_holey()
 {
   double cont1[] = { 0,0,  5,0,  5,5,  0,5 };
@@ -43,6 +60,7 @@ static void test_area()
 {
   test_simple1();
   test_simple2();
+  test_simple3();
   test_holey();
 }
 
