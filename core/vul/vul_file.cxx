@@ -48,8 +48,10 @@ vcl_string vul_file::get_cwd()
 {
   const int BIG = 65536;
   char buf[BIG];
-  getcwd(buf,BIG-1);
-  return buf;
+  if (getcwd(buf,BIG-1))
+    return buf;
+  else
+    return "Error returned by getcwd";
 }
 
 bool vul_file::change_directory(char const* dirname)
@@ -247,7 +249,8 @@ vcl_string vul_file::expand_tilde(char const* vul_filename)
   if (first_slash != vcl_string::npos) {
     dir = fn.substr(1, first_slash-1);
     fn = fn.substr(first_slash, vcl_string::npos);
-  } else {
+  }
+  else {
     dir = fn.substr(1, vcl_string::npos);
     fn = "";
   }

@@ -135,7 +135,8 @@ void FrameGrabberV4lGrey::acquire_frame_synch()
 {
   if (debug)
     vcl_cout << "acquire_frame_synch, current = " << current << vcl_endl;
-  read(fd, (void*)contents[current], width*height*3);
+  if (!read(fd, (void*)contents[current], width*height*3))
+    return;
   if (debug)
     vcl_cout << "acquire_frame_synch end, current = " << current << vcl_endl;
 #if 0
@@ -172,7 +173,8 @@ void FrameGrabberV4lGrey::acquire_frame_asynch()
 {
   if (debug)
     vcl_cout << "acquire_frame_asynch: currently equivalent to synch\n";
-  read(fd, (void*)contents[current], width*height*3);
+  if (!read(fd, (void*)contents[current], width*height*3))
+    return;
   if (debug)
     vcl_cout << "acquire_frame_asynch end\n";
 #if 0

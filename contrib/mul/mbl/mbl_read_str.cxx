@@ -16,7 +16,8 @@ char* mbl_read_str(char *reply, int max_str_len, const char *q_str, const char *
   vcl_printf("%s (%s) :",q_str,default_str);
 
   // Now read in a line of text
-  vcl_fgets(new_reply,max_str_len,stdin);
+  if (!vcl_fgets(new_reply,max_str_len,stdin))
+    return "Error from std::fgets()";
   if (new_reply[0]=='\n')
   {
     if (reply!=default_str)
