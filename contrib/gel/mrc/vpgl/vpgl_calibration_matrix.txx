@@ -51,10 +51,10 @@ vpgl_calibration_matrix<T>::vpgl_calibration_matrix( const vnl_matrix_fixed<T,3,
   if ( K(2,2) != (T)1 ) scale_factor = ((T)1)/K(2,2);
 
   focal_length_ = (T)1;
-  x_scale_ = scale_factor*K(0,0);
-  y_scale_ = scale_factor*K(1,1);
-  skew_ = scale_factor*K(0,1);
-  principal_point_.set( scale_factor*K(0,2), scale_factor*K(1,2) );
+  x_scale_ = T(scale_factor*K(0,0));
+  y_scale_ = T(scale_factor*K(1,1));
+  skew_    = T(scale_factor*K(0,1));
+  principal_point_.set( T(scale_factor*K(0,2)), T(scale_factor*K(1,2)) );
 
   assert( ( x_scale_ > 0 && y_scale_ > 0 ) || ( x_scale_ < 0 && y_scale_ < 0 ) );
 }

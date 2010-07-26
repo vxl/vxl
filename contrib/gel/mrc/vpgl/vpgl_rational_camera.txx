@@ -49,7 +49,7 @@ vpgl_rational_camera(vcl_vector<T> const& neu_u,
                      const T z_scale, const T z_off,
                      const T u_scale, const T u_off,
                      const T v_scale, const T v_off
-                     )
+                    )
 {
   for (unsigned i = 0; i<20; ++i)
   {
@@ -78,14 +78,14 @@ vpgl_rational_camera(const double*  neu_u,
                      const T z_scale, const T z_off,
                      const T u_scale, const T u_off,
                      const T v_scale, const T v_off
-                     )
+                    )
 {
   for (unsigned i = 0; i<20; ++i)
   {
-    rational_coeffs_[NEU_U][i] = neu_u[i];
-    rational_coeffs_[DEN_U][i] = den_u[i];
-    rational_coeffs_[NEU_V][i] = neu_v[i];
-    rational_coeffs_[DEN_V][i] = den_v[i];
+    rational_coeffs_[NEU_U][i] = T(neu_u[i]);
+    rational_coeffs_[DEN_U][i] = T(den_u[i]);
+    rational_coeffs_[NEU_V][i] = T(neu_v[i]);
+    rational_coeffs_[DEN_V][i] = T(den_v[i]);
   }
   scale_offsets_.resize(5);
   scale_offsets_[X_INDX] = vpgl_scale_offset<T>(x_scale, x_off);
@@ -166,26 +166,26 @@ vpgl_rational_camera<T>::power_vector(const T x, const T y, const T z) const
 
   //fill the vector
   vnl_vector_fixed<T, 20> pv;
-  pv.put( 0, xxx);
-  pv.put( 1, xxy);
-  pv.put( 2, xxz);
-  pv.put( 3, xxw);
-  pv.put( 4, xyy);
-  pv.put( 5, xyz);
-  pv.put( 6, xyw);
-  pv.put( 7, xzz);
-  pv.put( 8, xzw);
-  pv.put( 9, xww);
-  pv.put(10, yyy);
-  pv.put(11, yyz);
-  pv.put(12, yyw);
-  pv.put(13, yzz);
-  pv.put(14, yzw);
-  pv.put(15, yww);
-  pv.put(16, zzz);
-  pv.put(17, zzw);
-  pv.put(18, zww);
-  pv.put(19, www);
+  pv.put( 0, T(xxx));
+  pv.put( 1, T(xxy));
+  pv.put( 2, T(xxz));
+  pv.put( 3, T(xxw));
+  pv.put( 4, T(xyy));
+  pv.put( 5, T(xyz));
+  pv.put( 6, T(xyw));
+  pv.put( 7, T(xzz));
+  pv.put( 8, T(xzw));
+  pv.put( 9, T(xww));
+  pv.put(10, T(yyy));
+  pv.put(11, T(yyz));
+  pv.put(12, T(yyw));
+  pv.put(13, T(yzz));
+  pv.put(14, T(yzw));
+  pv.put(15, T(yww));
+  pv.put(16, T(zzz));
+  pv.put(17, T(zzw));
+  pv.put(18, T(zww));
+  pv.put(19, T(www));
   return pv;
 }
 
@@ -611,7 +611,8 @@ vpgl_rational_camera<T>* read_rational_camera(vcl_istream& istr)
   }
 
   vpgl_rational_camera<T>* cam = new vpgl_rational_camera<T>(neu_u, den_u, neu_v, den_v,
-  x_scale, x_off, y_scale, y_off, z_scale, z_off,u_scale, u_off, v_scale, v_off);
+                                                             x_scale, x_off, y_scale, y_off, z_scale, z_off,
+                                                             u_scale, u_off, v_scale, v_off);
   return cam;
 #if 0
   for (unsigned i = 0; i<20; ++i)

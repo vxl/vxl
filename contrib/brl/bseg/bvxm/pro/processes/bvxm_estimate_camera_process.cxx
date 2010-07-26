@@ -147,13 +147,13 @@ bool bvxm_estimate_camera_process(bprb_func_process& pro)
   vgl_point_3d<float> pt_0 = vox_world->voxel_index_to_xyz(0,0,0);
   vgl_point_3d<float> pt_1 = vox_world->voxel_index_to_xyz(1,1,1);
 
-  double sx = (double)pt_0.x();
-  double sy = (double)pt_0.y();
-  double sz = (double)pt_0.z();
+  double sx = pt_0.x();
+  double sy = pt_0.y();
+  double sz = pt_0.z();
 
-  double dx = (double)(pt_1.x() - pt_0.x());
-  double dy = (double)(pt_1.y() - pt_0.y());
-  double dz = (double)(pt_1.z() - pt_0.z());
+  float dx = pt_1.x() - pt_0.x();
+  float dy = pt_1.y() - pt_0.y();
+  float dz = pt_1.z() - pt_0.z();
 
   bvxm_voxel_grid<edges_datatype>::iterator edges_grid_it(edges_grid->begin());
 
@@ -164,11 +164,11 @@ bool bvxm_estimate_camera_process(bprb_func_process& pro)
       }
     }
   }
-  
+
   vpgl_perspective_camera<double> *cam_est = new vpgl_perspective_camera<double>(*cam_init);
   vgl_vector_3d<float> vox_dim(dx,dy,dz);
-  vgl_vector_3d<float> world_dim(nx,ny,nz);
-  vgl_box_3d<double> box(sx,sy,(sz+((double)nz)*dz),(sx+((double)nx)*dx),(sy+((double)ny)*dy),sz);
+  vgl_vector_3d<float> world_dim(float(nx),float(ny),float(nz));
+  vgl_box_3d<double> box(sx,sy,sz+nz*dz,sx+nx*dx,sy+ny*dy,sz);
 
   // create the functor that finds edges
   bvxm_expected_edge_functor func(&data, box, vox_dim, world_dim);

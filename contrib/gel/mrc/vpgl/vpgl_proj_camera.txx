@@ -146,7 +146,7 @@ vgl_homg_line_3d_2_points<T> vpgl_proj_camera<T>::backproject(
   vgl_homg_point_3d<T> wp( vnl_wp[0], vnl_wp[1], vnl_wp[2], vnl_wp[3] );
 
   // The ray is then defined by that point and the camera center.
-  if ( wp.ideal(.000001) ) // modified 11/6/05 by tpollard
+  if ( wp.ideal(.000001f) ) // modified 11/6/2005 by tpollard
     return vgl_homg_line_3d_2_points<T>( camera_center(), wp );
   return vgl_homg_line_3d_2_points<T>( wp, camera_center() );
 }

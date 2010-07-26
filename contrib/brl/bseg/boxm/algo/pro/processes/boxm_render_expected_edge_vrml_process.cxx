@@ -121,7 +121,7 @@ bool boxm_render_expected_edge_vrml_process(bprb_func_process& pro)
                 vcl_cout<<data.residual_<<' ';
                 if (data.residual_<threshold)
                 {
-                  bvrml_write::write_vrml_line(stream, p0,dir,length,1.f,0.f,0.f);
+                  bvrml_write::write_vrml_line(stream, p0,dir,float(length),1.f,0.f,0.f);
                   //bvrml_write::write_vrml_disk(stream,p0,dir,data.residual_,0.f,1.0f,0.f);
                 }
               }

@@ -324,9 +324,9 @@ bool boxm_rpc_registration(boxm_scene_base_sptr scene_base,//<boct_tree<T_loc, T
         for (int n=offset_search_size; n<nj-offset_search_size; n++) {
           if (edge_image(m,n,0)!=-1 || edge_image(m,n,1)!=-1 || edge_image(m,n,2)!=-1) {
             if (expected_edge_image(m-best_offset_u,n-best_offset_v,0)>0 && expected_edge_image(m-best_offset_u,n-best_offset_v,1)>0 && expected_edge_image(m-best_offset_u,n-best_offset_v,2)>0) {
-              float dx=expected_edge_image(m-best_offset_u,n-best_offset_v,0)+best_offset_u+u-edge_image(m,n,0);
-              float dy=expected_edge_image(m-best_offset_u,n-best_offset_v,1)+best_offset_v+v-edge_image(m,n,1);
-              float dist=vcl_sqrt(dx*dx+dy*dy);
+              double dx=expected_edge_image(m-best_offset_u,n-best_offset_v,0)+best_offset_u+u-edge_image(m,n,0);
+              double dy=expected_edge_image(m-best_offset_u,n-best_offset_v,1)+best_offset_v+v-edge_image(m,n,1);
+              double dist=vcl_sqrt(dx*dx+dy*dy);
               cost += dist;
             }
           }
