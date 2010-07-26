@@ -27,7 +27,7 @@ static void test_bins_2D()
   const double dist_tol = 0.0001;
   bins.set_distance_tolerance( dist_tol );
   vnl_vector_fixed< double, 2 >  pt( 12.5, 3 );
-  int added_value = 0, stored_value;
+  int added_value = 0, stored_value = -1;
   bins.add_point( pt, added_value );
   TEST( "adding point inside range", bins.get_value( pt, stored_value ) &&
                                      stored_value == added_value, true);
@@ -167,7 +167,7 @@ static void test_bins_3D()
     const double dist_tol = 0.0001;
     bins.set_distance_tolerance( dist_tol );
     vnl_double_3  pt( 12.5, 3.0, -5.0 );
-    int added_value = 0, stored_value;
+    int added_value = 0, stored_value = -1;
     bins.add_point( pt, added_value );
     TEST("adding point inside range", bins.get_value( pt, stored_value ) &&
                                       stored_value == added_value, true);
