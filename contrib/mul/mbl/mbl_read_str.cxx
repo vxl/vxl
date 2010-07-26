@@ -17,8 +17,10 @@ char* mbl_read_str(char *reply, int max_str_len, const char *q_str, const char *
 
   // Now read in a line of text
   if (!vcl_fgets(new_reply,max_str_len,stdin))
-    return "Error from std::fgets()";
-  if (new_reply[0]=='\n')
+  {
+    vcl_strncpy(reply,"*** Error from std::fgets() ***",max_str_len);
+  }
+  else if (new_reply[0]=='\n')
   {
     if (reply!=default_str)
       vcl_strncpy(reply,default_str,max_str_len);
