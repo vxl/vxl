@@ -234,7 +234,7 @@ void vgl_h_matrix_3d<T>::get (T* t_matrix) const
 template <class T>
 void vgl_h_matrix_3d<T>::get (vnl_matrix_fixed<T, 4, 4>* t_matrix) const
 {
-  *t_matrix = t12_matrix_;
+  *t_matrix = vnl_matrix<T>(t12_matrix_.data_block(), 4,4);
 }
 
 //-----------------------------------------------------------------------------

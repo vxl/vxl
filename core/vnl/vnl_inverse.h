@@ -171,11 +171,11 @@ vnl_matrix<T> vnl_inverse(vnl_matrix<T> const& m)
   if (m.rows() == 1)
     return vnl_matrix<T>(1,1, T(1)/m(0,0));
   else if (m.rows() == 2)
-    return static_cast<vnl_matrix<T> >(vnl_inverse(vnl_matrix_fixed<T,2,2>(m)));
+    return vnl_matrix<T>(vnl_inverse(vnl_matrix_fixed<T,2,2>(m)).data_block(), 2, 2);
   else if (m.rows() == 3)
-    return static_cast<vnl_matrix<T> >(vnl_inverse(vnl_matrix_fixed<T,3,3>(m)));
+    return vnl_matrix<T>(vnl_inverse(vnl_matrix_fixed<T,3,3>(m)).data_block(), 3, 3);
   else
-    return static_cast<vnl_matrix<T> >(vnl_inverse(vnl_matrix_fixed<T,4,4>(m)));
+    return vnl_matrix<T>(vnl_inverse(vnl_matrix_fixed<T,4,4>(m)).data_block(), 4, 4);
 }
 
 //: Calculates transpose of the inverse of a small vnl_matrix_fixed (not using svd)

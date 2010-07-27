@@ -207,7 +207,7 @@ void vgl_h_matrix_2d<T>::get(T* H) const
 template <class T>
 void vgl_h_matrix_2d<T>::get(vnl_matrix<T>* H) const
 {
-  *H = t12_matrix_;
+  *H = vnl_matrix<T>(t12_matrix_.data_block(), 3,3);
 }
 
 //: Set to identity
@@ -257,7 +257,7 @@ projective_basis(vcl_vector<vgl_homg_point_2d<T> > const& points)
     this->set_identity();
     return false;
   }
-  vnl_svd<T> svd1(point_matrix, 1e-8);
+  vnl_svd<T> svd1(vnl_matrix<T>(point_matrix.data_block(), 3,4), 1e-8);
   if (svd1.rank() < 3)
   {
     vcl_cerr << "vgl_h_matrix_2d<T>::projective_basis():\n"
@@ -316,7 +316,7 @@ projective_basis(vcl_vector<vgl_homg_line_2d<T> > const& lines
     this->set_identity();
     return false;
   }
-  vnl_svd<T> svd1(line_matrix, 1e-8);
+  vnl_svd<T> svd1(vnl_matrix<T>(line_matrix.data_block(), 3,4), 1e-8);
   if (svd1.rank() < 3)
   {
     vcl_cerr << "vgl_h_matrix_2d<T>::projective_basis():\n"

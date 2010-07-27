@@ -76,14 +76,9 @@ vnl_vector<double> vcsl_rotation::execute(const vnl_vector<double> &v,
     result=v;
   result = q.rotate(result);
   if (mode_2d_)
-  {
-    vnl_vector<double> tmp(2);
-    result.put(0,result.get(0));
-    result.put(1,result.get(1));
-    return tmp;
-  }
+    return vnl_vector<double>(result.data_block(), 2);
   else
-    return static_cast<vnl_vector<double> >(result);
+    return vnl_vector<double>(result.data_block(), 3);
 }
 
 //---------------------------------------------------------------------------
@@ -113,14 +108,9 @@ vnl_vector<double> vcsl_rotation::inverse(const vnl_vector<double> &v,
   vnl_quaternion<double> q=quaternion(time);
   result = q.conjugate().rotate(result);
   if (mode_2d_)
-  {
-    vnl_vector<double> tmp(2);
-    result.put(0,result.get(0));
-    result.put(1,result.get(1));
-    return tmp;
-  }
+    return vnl_vector<double>(result.data_block(), 2);
   else
-    return static_cast<vnl_vector<double> >(result);
+    return vnl_vector<double>(result.data_block(), 3);
 }
 
 //---------------------------------------------------------------------------

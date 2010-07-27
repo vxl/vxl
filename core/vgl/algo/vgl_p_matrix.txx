@@ -13,7 +13,7 @@
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_inverse.h>
 #include <vnl/algo/vnl_svd.h>
-#include <vnl/algo/vnl_qr.h>
+#include <vnl/algo/vnl_determinant.h>
 #include <vgl/vgl_homg_plane_3d.h>
 #include <vgl/vgl_point_3d.h>
 
@@ -118,7 +118,7 @@ vgl_line_segment_2d<T> vgl_p_matrix<T>::operator()(vgl_line_segment_3d<T> const&
 template <class T>
 vgl_homg_point_3d<T> vgl_p_matrix<T>::backproject_pseudoinverse(const vgl_homg_point_2d<T>& x) const
 {
-  vnl_vector_fixed<T,4> p = svd()->solve(vnl_vector_fixed<T,3>(x.x(),x.y(),x.w()));
+  vnl_vector_fixed<T,4> p = svd()->solve(vnl_vector<T>(vnl_vector_fixed<T,3>(x.x(),x.y(),x.w()).data_block(), 3));
   return vgl_homg_point_3d<T>(p[0],p[1],p[2],p[3]);
 }
 
@@ -202,8 +202,7 @@ template <class T>
 vnl_svd<T>* vgl_p_matrix<T>::svd() const
 {
   if (svd_ == 0) {
-    // Need to make svd_ volatile for SGI g++ 2.7.2 optimizer bug.
-    svd_ = new vnl_svd<T>(p_matrix_); // mutable const
+    svd_ = new vnl_svd<T>(vnl_matrix<T>(p_matrix_.data_block(), 3,4)); // mutable const
   }
   return svd_;
 }
@@ -473,7 +472,7 @@ vgl_p_matrix<T>::fix_cheirality()
   vnl_matrix_fixed<T,3,3> A;
   vnl_vector_fixed<T,3> a;
   this->get(&A, &a);
-  T det = vnl_qr<T>(A).determinant();
+  T det = vnl_determinant(A);
 
   T scale = 1;
 #if 0 // Used to scale by 1/det, but it's a bad idea if det is small

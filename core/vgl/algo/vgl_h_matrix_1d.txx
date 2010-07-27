@@ -151,7 +151,7 @@ void vgl_h_matrix_1d<T>::get(T *H) const
 template <class T>
 void vgl_h_matrix_1d<T>::get(vnl_matrix<T>* H) const
 {
-  *H = t12_matrix_;
+  *H = vnl_matrix<T>(t12_matrix_.data_block(), 2,2);
 }
 
 //: Set to 2x2 row-stored matrix
@@ -192,7 +192,7 @@ projective_basis(vcl_vector<vgl_homg_point_1d<T> > const& points)
     this->set_identity();
     return false;
   }
-  vnl_svd<T> svd1(point_matrix, 1e-8);
+  vnl_svd<T> svd1(vnl_matrix<T>(point_matrix.data_block(), 2,3), 1e-8);
   if (svd1.rank() < 2)
   {
     vcl_cerr << "vgl_h_matrix_1d<T>::projective_basis():\n"

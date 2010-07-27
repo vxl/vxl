@@ -15,10 +15,10 @@ void test_matrix_exp()
 {
   vnl_double_3 v(1.233,-0.572,0.777);
 
-  vnl_double_3x3 X = static_cast<vnl_cross_product_matrix>(v);
+  vnl_cross_product_matrix X(v);
   vnl_matlab_print(vcl_cout, X, "[v]");
 
-  vnl_double_3x3 expX = vnl_matrix_exp(X);
+  vnl_double_3x3 expX = vnl_matrix_exp(static_cast<vnl_double_3x3>(X));
   vnl_matlab_print(vcl_cout, expX, "matrix exp([v])");
   TEST_NEAR("expX(0,0)", expX(0,0), 0.6221833130, 1e-10);
   TEST_NEAR("expX(0,1)", expX(0,1),-0.7825192869, 1e-10);
