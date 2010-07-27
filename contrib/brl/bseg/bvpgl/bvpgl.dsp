@@ -90,6 +90,12 @@ LIB32=link.exe -lib
 # Name "bvpgl - Win32 Release"
 # Name "bvpgl - Win32 Debug"
 
+# Begin Group "Source Files"
+# PROP Default_Filter "cxx"
+# Begin Source File
+SOURCE=.\Templates/bvpgl_camera_estimator+dummy-.cxx
+# End Source File
+# End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File

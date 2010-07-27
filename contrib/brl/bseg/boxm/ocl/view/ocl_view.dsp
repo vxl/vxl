@@ -103,6 +103,9 @@ SOURCE=.\boxm_ocl_draw_glbuffer_tableau.cxx
 # Begin Source File
 SOURCE=.\boxm_ocl_update_tableau.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\boxm_ocl_change_detection_tableau.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -123,6 +126,12 @@ SOURCE=.\boxm_ocl_draw_glbuffer_tableau.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_cam_tableau.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_ocl_change_detection_tableau_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_ocl_change_detection_tableau.h
 # End Source File
 # End Group
 # End Target

@@ -243,7 +243,7 @@ SOURCE=.\Templates/brdb_value_t+bvxm_voxel_slab_base_sptr-.cxx
 SOURCE=.\Templates/brdb_value_t+bvxm_voxel_grid_base_sptr-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bvpgl_camera_estimator+bvxm_expected_edge_functor--.cxx
+SOURCE=.\Templates/bvpgl_camera_estimator+bvxm_expected_edge_functor-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"

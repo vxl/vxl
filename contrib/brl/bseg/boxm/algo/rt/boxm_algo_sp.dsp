@@ -120,7 +120,7 @@ SOURCE=.\Templates/boxm_opt2_optimizer+short.BOXM_APM_MOG_GREY.BOXM_AUX_OPT2_GRE
 SOURCE=.\Templates/boxm_opt3_optimizer+short.BOXM_APM_SIMPLE_GREY.BOXM_APM_MOG_GREY-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bvpgl_camera_estimator+boxm_expected_edge_functor+short.boxm_inf_line_sample--.cxx
+SOURCE=.\Templates/bvpgl_camera_estimator+boxm_expected_edge_functor+short.boxm_inf_line_sample+float---.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
