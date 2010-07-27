@@ -149,7 +149,7 @@ update_ocl_scene(__global int4    * scene_dims,  // level of the root.
             ray_bundle_array[llid].x=llid;
             barrier(CLK_LOCAL_MEM_FENCE);
 
-            int data_ptr = tree_array[curr_cell_ptr].z;
+            int data_ptr =  block.x*lenbuffer+tree_array[curr_cell_ptr].z;
 
             ////////////////////////////////////////////////////////
             // the place where the ray trace function can be applied
@@ -219,7 +219,6 @@ update_ocl_scene(__global int4    * scene_dims,  // level of the root.
             curr_block_index=convert_int4(floor((ray_o + tfar *ray_d+(blockdims.x/20.0f)*ray_d-origin)/blockdims));
             curr_block_index.w=0;
         }
-        //count++;
     }
 }
 __kernel
@@ -230,7 +229,7 @@ update_ocl_scene_main(__global float16 * sample_array,
                       __global int * numbuffer)
 {
     int gid=get_global_id(0);
-    int datasize= (*lenbuffer);
+    int datasize= (*lenbuffer)*(*numbuffer);
     if (gid<datasize)
     {
         float16 data=sample_array[gid];

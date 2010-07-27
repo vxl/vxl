@@ -15,15 +15,14 @@
 
 bool boxm_render_ocl_scene_manager::init_ray_trace(boxm_ocl_scene *scene,
                                                    vpgl_camera_double_sptr cam,
-                                                   vil_image_view<float> &obs)
+                                                   vil_image_view<float> &obs,
+                                                   bool render_depth)
 {
   scene_ = scene;
   cam_ = cam;
   output_img_=obs;
-#if 0 // unused variables
-  vcl_string extensions_supported((char*)this->extensions_supported_);
-  vcl_size_t found=extensions_supported.find("gl_sharing");
-#endif
+
+  
   // Code for Pass_0
   if (!this->load_kernel_source(vcl_string(VCL_SOURCE_ROOT_DIR)
                                 +"/contrib/brl/bseg/boxm/ocl/octree_library_functions.cl") ||
@@ -40,7 +39,27 @@ bool boxm_render_ocl_scene_manager::init_ray_trace(boxm_ocl_scene *scene,
     vcl_cerr << "Error: boxm_ray_trace_manager : failed to load kernel source (helper functions)\n";
     return false;
   }
+ 
+  vcl_string patt = "/*$$step_cell$$*/";
+  // transfer cell data from global to local memory if use_cell_data_ == true
 
+  vcl_string functor="";
+
+  if(render_depth)
+    functor="step_cell_render_depth(alpha_array,data_ptr,d,tfar*blockdims.x,&data_return);";
+  else
+    functor="step_cell_render(sample_array,alpha_array,data_ptr,d,&data_return);";
+  
+  // assign the functor calling signature
+  vcl_string::size_type pos_start = this->prog_.find(patt);
+  vcl_string::size_type n1 = patt.size();
+  if (pos_start < this->prog_.size()) {
+    vcl_string::size_type n2 = functor.size();
+    if (!n2)
+      return false;
+    this->prog_ = this->prog_.replace(pos_start, n1, functor.c_str(), n2);
+    return this->build_kernel_program(program_)==SDK_SUCCESS;
+  }
   return !build_kernel_program(program_);
 }
 
@@ -517,7 +536,7 @@ bool boxm_render_ocl_scene_manager::set_root_level()
     vcl_cout<<"Scene is Missing "<<vcl_endl;
     return false;
   }
-  root_level_=3; // TODO: for now its hardcoded
+  root_level_=scene_->max_level()-1;
   return true;
 }
 
@@ -780,6 +799,7 @@ bool boxm_render_ocl_scene_manager::set_all_blocks()
     return false;
 
   scene_->tree_buffer_shape(numbuffer_,lenbuffer_);
+
   cells_size_=numbuffer_*lenbuffer_;
   cell_data_size_=numbuffer_*lenbuffer_;
   cells_ = NULL;

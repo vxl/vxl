@@ -468,7 +468,8 @@ bool boxm_update_ocl_scene_manager::set_workspace(unsigned pass)
   }
   if (pass==4)  //: pass for updating data from aux data
   {
-    globalThreads[0]=RoundUp(cell_data_size_,64);globalThreads[1]=1;
+  vcl_cout<<"No of global thread "<<RoundUp(numbuffer_*lenbuffer_,64)<<vcl_endl;
+    globalThreads[0]=RoundUp(numbuffer_*lenbuffer_,64);globalThreads[1]=1;
     localThreads[0]=64;                              localThreads[1]=1;
   }
   if (pass==5)
@@ -917,7 +918,7 @@ bool boxm_update_ocl_scene_manager::set_root_level()
     vcl_cout<<"Scene is Missing"<<vcl_endl;
     return false;
   }
-  root_level_=3; // TODO: for now its hardcoded
+  root_level_=scene_->max_level()-1;; // TODO: for now its hardcoded
   return true;
 }
 
@@ -1181,6 +1182,7 @@ bool boxm_update_ocl_scene_manager::set_all_blocks()
 
   scene_->tree_buffer_shape(numbuffer_,lenbuffer_);
   cells_size_=numbuffer_*lenbuffer_;
+  vcl_cout<<"Numbuffer "<<numbuffer_<< " Len buffer "<<lenbuffer_<<vcl_endl;
   cell_data_size_=numbuffer_*lenbuffer_;
   cells_ = NULL;
   cell_data_ = NULL;

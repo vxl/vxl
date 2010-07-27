@@ -53,7 +53,8 @@ class boxm_render_ocl_scene_manager : public bocl_manager<boxm_render_ocl_scene_
   // read the scene, cam and image
   bool init_ray_trace(boxm_ocl_scene *scene,
                       vpgl_camera_double_sptr cam,
-                      vil_image_view<obs_type> &obs);
+                      vil_image_view<obs_type> &obs,
+                      bool render_depth=false);
   //: 2d workgroup
   void set_bundle_ni(unsigned bundle_x) {bni_=bundle_x;}
   void set_bundle_nj(unsigned bundle_y) {bnj_=bundle_y;}

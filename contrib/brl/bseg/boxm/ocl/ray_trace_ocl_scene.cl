@@ -7,6 +7,7 @@ uint rgbaFloatToInt(float4 rgba)
     rgba.z = clamp(rgba.z,0.0f,1.0f);
     rgba.w = clamp(rgba.w,0.0f,1.0f);
     return ((uint)(rgba.w*255.0f)<<24) | ((uint)(rgba.z*255.0f)<<16) | ((uint)(rgba.y*255.0f)<<8) | (uint)(rgba.x*255.0f);
+
 }
 
 __kernel
@@ -46,12 +47,10 @@ ray_trace_ocl_scene(__global int4     * scene_dims,  // level of the root.
 
   float cellsize=(float)(1<<rootlevel);
   cellsize=1/cellsize;
-  int count=0;
   short4 root = (short4)(0,0,0,rootlevel);
 
   short4 exit_face=(short4)-1;
 
-  float4 debug_var=(float4)0;
   int curr_cell_ptr=-1;
 
   // get image coordinates
@@ -110,7 +109,6 @@ ray_trace_ocl_scene(__global int4     * scene_dims,  // level of the root.
 
     float4 local_ray_o= (ray_o-origin)/blockdims-convert_float4(curr_block_index);
     // canonincal bounding box of the tree
-    //cell_bounding_box(root, rootlevel+1, &cell_min, &cell_max);
     float4 block_entry_pt=(entry_pt-origin)/blockdims-convert_float4(curr_block_index);
     short4 entry_loc_code = loc_code(block_entry_pt, rootlevel);
     short4 curr_loc_code=(short4)-1;
@@ -146,11 +144,16 @@ ray_trace_ocl_scene(__global int4     * scene_dims,  // level of the root.
       if (!hit)
           break;
 
-      int data_ptr = tree_array[curr_cell_ptr].z;
+      int data_ptr =  block.x*lenbuffer+tree_array[curr_cell_ptr].z;
 
       //// distance must be multiplied by the dimension of the bounding box
       float d = (tfar-tnear)*(blockdims.x);
-      step_cell_render(sample_array,alpha_array,data_ptr,d,&data_return);
+      //step_cell_render(sample_array,alpha_array,data_ptr,d,&data_return);
+      
+      // X:-) DO NOT DELETE THE LINE BELOW THIS IS A STRING REPLACEMNT
+      /*$$step_cell$$*/
+      // X:-)
+
 
       // Added aliitle extra to the exit point
       exit_pt=local_ray_o + (tfar+cellsize/10)*ray_d;exit_pt.w=0.5;
@@ -164,10 +167,8 @@ ray_trace_ocl_scene(__global int4     * scene_dims,  // level of the root.
       curr_cell_ptr = traverse_force_woffset(tree_array, root_ptr, root,exit_loc_code, &curr_loc_code,&global_count,root_ptr);
 
       block_entry_pt = local_ray_o + (tfar)*ray_d;
-      count++;
     }
 
-    count++;
     // finding the next block
 
     // block bounding box
@@ -188,8 +189,6 @@ ray_trace_ocl_scene(__global int4     * scene_dims,  // level of the root.
             curr_block_index.w=0;
         }
 
-        else
-            debug_var=(float4)10.0;
     }
     else
     {
@@ -202,7 +201,6 @@ ray_trace_ocl_scene(__global int4     * scene_dims,  // level of the root.
         curr_block_index=convert_int4(floor((entry_pt+(blockdims.x/20.0f)*ray_d-origin)/blockdims));
         curr_block_index.w=0;
     }
-    count++;
   }
   data_return.z+=(1-data_return.w)*0.5f;
   gl_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)data_return.z);
@@ -244,12 +242,10 @@ ray_trace_ocl_scene_full_data(__global int4     * scene_dims,  // level of the r
 
   float cellsize=(float)(1<<rootlevel);
   cellsize=1/cellsize;
-  int count=0;
   short4 root = (short4)(0,0,0,rootlevel);
 
   short4 exit_face=(short4)-1;
 
-  float4 debug_var=(float4)0;
   int curr_cell_ptr=-1;
 
   // get image coordinates
@@ -345,7 +341,7 @@ ray_trace_ocl_scene_full_data(__global int4     * scene_dims,  // level of the r
       if (!hit)
           break;
 
-      int data_ptr = tree_array[curr_cell_ptr].z;
+      int data_ptr = block.x*lenbuffer+tree_array[curr_cell_ptr].z;
 
       //// distance must be multiplied by the dimension of the bounding box
       float d = (tfar-tnear)*(blockdims.x);
@@ -363,11 +359,9 @@ ray_trace_ocl_scene_full_data(__global int4     * scene_dims,  // level of the r
       curr_cell_ptr = traverse_force_woffset(tree_array, root_ptr, root,exit_loc_code, &curr_loc_code,&global_count,root_ptr);
 
       block_entry_pt = local_ray_o + (tfar)*ray_d;
-      count++;
+      //count++;
     }
 
-    count++;
-    // finding the next block
 
     // block bounding box
 
@@ -386,9 +380,6 @@ ray_trace_ocl_scene_full_data(__global int4     * scene_dims,  // level of the r
             curr_block_index=convert_int4((entry_pt-origin)/blockdims);
             curr_block_index.w=0;
         }
-
-        else
-            debug_var=(float4)10.0;
     }
     else
     {
@@ -401,7 +392,7 @@ ray_trace_ocl_scene_full_data(__global int4     * scene_dims,  // level of the r
         curr_block_index=convert_int4(floor((entry_pt+(blockdims.x/20.0f)*ray_d-origin)/blockdims));
         curr_block_index.w=0;
     }
-    count++;
+    //count++;
   }
   data_return.z+=(1-data_return.w)*0.5f;
   gl_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)(data_return.z));

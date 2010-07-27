@@ -160,7 +160,7 @@ void boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T> >* scene,
   }
   total_tree_cells += total_blocks;
   vcl_cout<<"Total number of tree cells allocated = "<<total_tree_cells<<vcl_endl;
-  int buff_length = (int) (total_tree_cells/num_buffers);
+  int buff_length = (int) vcl_ceil(((float)total_tree_cells/(float)num_buffers));
 
   /* 1. Set up 3D array of blocks (small blocks), assuming all blocks are similarly sized */
   //vcl_cout<<"Small block dimensions = "<<block_num_small<<vcl_endl;
