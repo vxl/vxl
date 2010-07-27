@@ -26,6 +26,7 @@ SOURCES += boxm_ocl_scene.cxx
 SOURCES += boxm_render_ocl_scene_manager.cxx
 SOURCES += boxm_update_ocl_scene_manager.cxx
 SOURCES += boxm_ocl_render_expected.cxx
+SOURCES += boxm_change_detection_ocl_scene_manager.cxx
 
 SUBDIRS += pro exe view
 

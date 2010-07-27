@@ -111,6 +111,11 @@ SOURCES += dcmimgle/libsrc/diovlimg.cxx
 SOURCES += dcmimgle/libsrc/diovpln.cxx
 SOURCES += dcmimgle/libsrc/diutils.cxx
 
+# tests
+ifndef NOTEST
+SUBDIRS += tests
+endif
+
 # configure stuff:
 xall:: $(VXLROOT_libbase)/v3p/$(tj_libdir)/osconfig.h
 $(VXLROOT_libbase)/v3p/$(tj_libdir)/osconfig.h: config/include/osconfig_cmake.h.in
