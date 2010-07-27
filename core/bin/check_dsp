@@ -71,7 +71,7 @@ foreach my $dir (@DIRS)
   }
 
   # verify #includes in test_include.cxx
-  if (-f "$dir/test_include.cxx")
+  if (-f "$dir/test_include.cxx" && $dir !~ m/^v3p/)
   {
     my %updir_files = ();
     my %inc_files = ();

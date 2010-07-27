@@ -84,7 +84,7 @@ foreach $f (@FILES)
                $f !~ m!\.cl$! &&
                $f !~ m!\bintroduction_doxy\.txt$! &&
                $f !~ m!_mocced\.cxx$! &&
-               $f !~ m!\bv3p/(netlib|[jm]peg2?|tiff|png|zlib|Qv)/! &&
+               $f !~ m!\bv3p/(netlib|[jm]peg2?|tiff|png|zlib|bzlib|Qv)/! &&
                $f !~ m!vil1?/file_formats/vil1?_viff(header|_support)! &&
                $f !~ m!\bvgui/internals/trackball! &&
                $f !~ m!\bcore/vgl/internals/gpc\.h$! &&
