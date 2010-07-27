@@ -38,20 +38,20 @@ void boxm_ocl_refine_scene(boxm_scene<boct_tree<short, boxm_sample<APM> > >* sce
   //loop through the blocks of scene, refine each tree
   boxm_block_iterator<tree_type > iter(scene);
   int count = 0;
-  for (iter.begin(); !iter.end(); iter++) {
+  for (iter.begin(); !iter.end(); ++iter) {
     scene->load_block(iter.index());
     boxm_block<tree_type >* block = scene->get_active_block();
     tree_type* tree = block->get_tree();
 
     //initialize the manager
     if (!mgr->init(tree, prob_thresh)) {
-      vcl_cout<<"ERROR : boxm_refine : mgr->init() failed"<<vcl_endl;
+      vcl_cerr<<"ERROR : boxm_refine : mgr->init() failed\n";
       return;
     }
 
     //run the refine method
     if (!mgr->run_tree()) {
-      vcl_cout<<"ERROR : boxm_refine : mgr->run_tree() failed"<<vcl_endl;
+      vcl_cerr<<"ERROR : boxm_refine : mgr->run_tree() failed\n";
       return;
     }
 
@@ -65,7 +65,7 @@ void boxm_ocl_refine_scene(boxm_scene<boct_tree<short, boxm_sample<APM> > >* sce
     //Do something with tree array here
     /////////////////////////////////////////
     int  tree_size = mgr->get_tree_size();
-    vcl_cout<<"REFINED TREE! -> size:"<<tree_size<<vcl_endl;
+    vcl_cerr<<"REFINED TREE! -> size:"<<tree_size<<vcl_endl;
 
 
     //clean up after each tree
@@ -101,22 +101,22 @@ void swap_eight(vcl_vector<vnl_vector_fixed<int, 4> > &tree, int a, int b)
 
   //copy B to a buffer
   vnl_vector_fixed<int, 4> buff[8];
-  for (int i=0; i<8; i++)
+  for (int i=0; i<8; ++i)
     buff[i] = tree[b+i];
 
   //copy A into B
-  for (int i=0; i<8; i++)
+  for (int i=0; i<8; ++i)
     tree[b+i] = tree[a+i];
 
   //copy buffer into A
-  for (int i=0; i<8; i++)
+  for (int i=0; i<8; ++i)
     tree[a+i] = buff[i];
 
   //for each child of B and A, update the parent pointer
-  for (int i=0; i<8; i++){
+  for (int i=0; i<8; ++i) {
     int childA = tree[a+i][1];
     int childB = tree[b+i][1];
-    for (int j=0; j<8; j++){
+    for (int j=0; j<8; ++j) {
       tree[childA+j][0] = a+i;
       tree[childB+j][0] = b+i;
     }
@@ -140,15 +140,15 @@ void reformat_tree(vcl_vector<vnl_vector_fixed<int, 4> > &tree)
     //if the current node has no children, nothing to verify
     int child_ptr = tree[currNode][1];
     bool isleaf = (child_ptr < 0);
-    if (!isleaf){
+    if (!isleaf) {
       //if child pointer isn't to the right place..
-      if (child_ptr != curr_index+1){
+      if ((unsigned int)child_ptr != curr_index+1) {
         //-- need to swap 8 nodes at currNode[1] to curr_index+1 --//
         swap_eight(tree, child_ptr, curr_index+1);
         child_ptr = curr_index+1;
       }
       //push children on stack (in reverse order)
-      for (int i=7; i>=0; i--){
+      for (int i=7; i>=0; --i) {
         open.push(child_ptr+i);
       }
       curr_index += 8;
@@ -186,7 +186,7 @@ void boxm_ocl_refine_scene_cpu(boct_tree<short, boxm_sample<APM> >* tree, float 
   int tSize = cells.size();
   int dSize = data.size();
   int popCounts[11];
-  for (int i=0; i<11; i++) popCounts[i]=0;
+  for (int i=0; i<11; ++i) popCounts[i]=0;
   int currLevel = 0;
 
   ////stack for depth first traversal
@@ -233,7 +233,7 @@ void boxm_ocl_refine_scene_cpu(boct_tree<short, boxm_sample<APM> >* tree, float 
 
         //node I points to tSize - the place where it's children will be tacked on
         cells[currNode][1] = tSize;
-        for (int j=0; j<8; j++){
+        for (int j=0; j<8; ++j) {
           vnl_vector_fixed<int, 4> newCell(currNode, -1, dSize+j, 0);
           cells.push_back(newCell);
 
@@ -255,7 +255,7 @@ void boxm_ocl_refine_scene_cpu(boct_tree<short, boxm_sample<APM> >* tree, float 
     }
     //for inner nodes
     else {
-      for (int i=7; i>=0; i--){
+      for (int i=7; i>=0; --i) {
         open.push(child_ptr+i);
       }
       currLevel++;
