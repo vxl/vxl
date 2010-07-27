@@ -1044,7 +1044,7 @@ bool boxm_change_detection_ocl_scene_manager::set_input_image(vil_image_view<flo
 bool boxm_change_detection_ocl_scene_manager::write_image_buffer()
 {
   cl_int status;
-  status=clEnqueueWriteBuffer(command_queue_,int_image_buf_,CL_TRUE, 0,wni_*wnj_*sizeof(cl_float), image_, 0, 0, 0);
+  status=clEnqueueWriteBuffer(command_queue_,int_image_buf_,CL_TRUE, 0,wni_*wnj_*sizeof(cl_float), int_image_, 0, 0, 0);
   if (!this->check_val(status,CL_SUCCESS,"clEnqueueWriteBuffer (image_buf_) failed."))
     return false;
   status=clFinish(command_queue_);

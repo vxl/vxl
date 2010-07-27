@@ -150,7 +150,8 @@ change_detection_ocl_scene(__global int4     * scene_dims,  // level of the root
       float d = (tfar-tnear)*(blockdims.x);
       float intensity=obs_image[j*get_global_size(0)+i];
       step_cell_change_detection(sample_array,alpha_array,data_ptr,d,&data_return,intensity);
-      
+      //step_cell_render(sample_array,alpha_array,data_ptr,d,&data_return);
+ 
       // X:-) DO NOT DELETE THE LINE BELOW THIS IS A STRING REPLACEMNT
       /*$$step_cell$$*/
       // X:-)
@@ -203,6 +204,6 @@ change_detection_ocl_scene(__global int4     * scene_dims,  // level of the root
         curr_block_index.w=0;
     }
   }
-  gl_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)1-data_return.z);
+  gl_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)(1-data_return.z));
   in_image[j*get_global_size(0)+i]=(float4)data_return;
 }
