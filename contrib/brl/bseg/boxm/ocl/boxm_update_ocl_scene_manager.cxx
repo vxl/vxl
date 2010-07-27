@@ -71,8 +71,8 @@ boxm_update_ocl_scene_manager::build_rendering_program()
     vcl_string root = vcl_string(VCL_SOURCE_ROOT_DIR);
     bool octr = this->load_kernel_source(root + "/contrib/brl/bseg/boxm/ocl/octree_library_functions.cl");
     bool bpr  = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/backproject.cl");
-    bool exp  = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/expected_functor.cl");
     bool stat = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/statistics_library_functions.cl");
+    bool exp  = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/expected_functor.cl");
     bool rbun = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/ray_bundle_library_functions.cl");
     bool main = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/ray_trace_ocl_scene.cl");
 
