@@ -25,6 +25,7 @@ IF(OPENCL_FOUND)
       boxm_ocl_scene.h boxm_ocl_scene.cxx
       boxm_render_ocl_scene_manager.h boxm_render_ocl_scene_manager.cxx
       boxm_update_ocl_scene_manager.h boxm_update_ocl_scene_manager.cxx
+      boxm_change_detection_ocl_scene_manager.h boxm_change_detection_ocl_scene_manager.cxx
 
      )
 

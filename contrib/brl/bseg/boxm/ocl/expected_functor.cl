@@ -75,7 +75,7 @@ void step_cell_change_detection(__global float8* cell_data, __global float* alph
   change_density += prob_den*omega;
   (*data_return).x = alpha_integral;
   (*data_return).y = vis_prob_end;
-  (*data_return).z = expected_int;
+  (*data_return).z = change_density;
   (*data_return).w = intensity_norm + omega;
 }
 void step_cell_render_depth(__global float* alpha_data,int data_ptr,

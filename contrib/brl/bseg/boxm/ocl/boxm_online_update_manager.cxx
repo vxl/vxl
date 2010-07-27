@@ -823,7 +823,7 @@ bool boxm_online_update_manager::release_root_level_buffers()
 {
   cl_int status;
   status = clReleaseMemObject(root_level_buf_);
-  return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (root_level_buf_).");
+  return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (root_level_buf_).")==1;
 }
 
 

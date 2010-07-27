@@ -103,7 +103,7 @@ bool boxm_ocl_draw_glbuffer_tableau::init_ocl()
   int bundle_dim = 8;
   ray_mgr->set_bundle_ni(bundle_dim);
   ray_mgr->set_bundle_nj(bundle_dim);
-  ray_mgr->init_ray_trace(scene_, &cam_, expected);
+  ray_mgr->init_ray_trace(scene_, &cam_, expected,false);
   bool good=true;  good = good && ray_mgr->set_scene_data()
       && ray_mgr->set_all_blocks()
       && ray_mgr->set_scene_data_buffers()
@@ -137,6 +137,8 @@ bool boxm_ocl_draw_glbuffer_tableau::init_ocl()
   ray_mgr->set_args();
   ray_mgr->set_commandqueue();
   ray_mgr->set_workspace();
+
+  return true;
 }
 
 

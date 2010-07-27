@@ -335,7 +335,7 @@ bool boxm_refine_scene_manager::run_refine()
 bool boxm_refine_scene_manager::read_buffers()
 {
   int numEvents = 5, eventI = 0, status = CL_SUCCESS;
-  cl_event events[numEvents];
+  cl_event events[5];
 
   //read block pointers
   int numblocks = block_nums_[0]*block_nums_[1]*block_nums_[2];

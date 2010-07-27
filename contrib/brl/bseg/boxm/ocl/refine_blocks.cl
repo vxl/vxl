@@ -272,65 +272,65 @@ refine_main(__global  int4     *block_ptrs,     //3d block array
     int currRootIndex = preRefineStart;
     
     //when currRootIndex is equal to preRefineEnd-1, then you're done
-    while(currRootIndex != preRefineEnd-1) {
-      
-      //get current tree information (and next so you don't go over)
-      int4 currRoot = tree_cells[currRootIndex];
-      int currBlkIndex = currRoot.w;
-      int currTreeSize = block_ptrs[currBlkIndex].z;
-      
-      //TODO Make sure your tree doesn't get corrupted because you don't clear out all 585 cells
-      //maybe pass in a length to the refine function to make sure yo udon't go out of bounds.  
-      //copy current tree to local mem
-      for(int j=0; j<currTreeSize; j++) {
-        local_tree[j] = tree_cells[gid*len_buffer + (currRootIndex+j)];
-      }
-      
-      //free space in global memory
-      startPtr = (startPtr+currTreeSize)%len_buffer;
-      
-      //determine number of data cells used, datasize = occupied space
-      int dataSize = (endPtr > startPtr)? (endPtr-1)-startPtr: len_buffer - (startPtr-endPtr)-1;
-      //refine tree locally
-
-      int newSize = refine_tree(local_tree, 
-                                currTreeSize, 
-                                alpha_cells,
-                                data_cells, 
-                                dataSize, 
-                                prob_thresh, 
-                                bbox_len, 
-                                max_level,
-                                len_buffer, output);
-
-/*
-      //copy refined tree to global memory, if there's space
-      int freeSpace = (startPtr >= endPtr)? startPtr-endPtr : len_buffer - (endPtr-startPtr);
-      if(newSize <= freeSpace) {    
-        for(int j=0; j<newSize; j++) {
-          int cellIndex = gid*len_buffer + (endPtr-1+j+len_buffer)%len_buffer;
-          tree_cells[cellIndex] = local_tree[j];
-        }
-      
-        //update endPtr
-        endPtr = (endPtr+newSize)%len_buffer;
-        
-        //update block_ptrs 
-        block_ptrs[currBlkIndex].y = (endPtr-1+len_buffer)%len_buffer;
-        block_ptrs[currBlkIndex].z = newSize;
-      
-      }
-      else {
-        //Do something with emergency space or swapping or something
-        (*output) = 666;
-        block_ptrs[currBlkIndex].y = -666;  //you need to really do something about this one.
-        block_ptrs[currBlkIndex].z = newSize;
-      }
-*/
-
-      //update current root idenx
-      currRootIndex = (currRootIndex+currTreeSize)%len_buffer;
-    }
+//    while(currRootIndex != preRefineEnd-1) {
+//      
+//      //get current tree information (and next so you don't go over)
+//      int4 currRoot = tree_cells[currRootIndex];
+//      int currBlkIndex = currRoot.w;
+//      int currTreeSize = block_ptrs[currBlkIndex].z;
+//      
+//      //TODO Make sure your tree doesn't get corrupted because you don't clear out all 585 cells
+//      //maybe pass in a length to the refine function to make sure yo udon't go out of bounds.  
+//      //copy current tree to local mem
+//      for(int j=0; j<currTreeSize; j++) {
+//        local_tree[j] = tree_cells[gid*len_buffer + (currRootIndex+j)];
+//      }
+//      
+//      //free space in global memory
+//      startPtr = (startPtr+currTreeSize)%len_buffer;
+//      
+//      //determine number of data cells used, datasize = occupied space
+//      int dataSize = (endPtr > startPtr)? (endPtr-1)-startPtr: len_buffer - (startPtr-endPtr)-1;
+//      //refine tree locally
+//
+//      int newSize = refine_tree(local_tree, 
+//                                currTreeSize, 
+//                                alpha_cells,
+//                                data_cells, 
+//                                dataSize, 
+//                                prob_thresh, 
+//                                bbox_len, 
+//                                max_level,
+//                                len_buffer, output);
+//
+///*
+//      //copy refined tree to global memory, if there's space
+//      int freeSpace = (startPtr >= endPtr)? startPtr-endPtr : len_buffer - (endPtr-startPtr);
+//      if(newSize <= freeSpace) {    
+//        for(int j=0; j<newSize; j++) {
+//          int cellIndex = gid*len_buffer + (endPtr-1+j+len_buffer)%len_buffer;
+//          tree_cells[cellIndex] = local_tree[j];
+//        }
+//      
+//        //update endPtr
+//        endPtr = (endPtr+newSize)%len_buffer;
+//        
+//        //update block_ptrs 
+//        block_ptrs[currBlkIndex].y = (endPtr-1+len_buffer)%len_buffer;
+//        block_ptrs[currBlkIndex].z = newSize;
+//      
+//      }
+//      else {
+//        //Do something with emergency space or swapping or something
+//        (*output) = 666;
+//        block_ptrs[currBlkIndex].y = -666;  //you need to really do something about this one.
+//        block_ptrs[currBlkIndex].z = newSize;
+//      }
+//*/
+//
+//      //update current root idenx
+//      currRootIndex = (currRootIndex+currTreeSize)%len_buffer;
+//    }
     
     mem_ptrs[gid].x = startPtr;
     mem_ptrs[gid].y = endPtr; 

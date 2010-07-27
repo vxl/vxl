@@ -71,7 +71,6 @@ bool boxm_ocl_convert_boxm_to_ocl_process(bprb_func_process& pro)
         boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
         
         //convert 
-        //boxm_ocl_scene* ocl_scene = boxm_ocl_convert<boxm_sample<BOXM_APM_MOG_GREY> >::convert_scene(scene, num_buffers, buff_length);
         boxm_ocl_scene ocl_scene; 
         boxm_ocl_convert<boxm_sample<BOXM_APM_MOG_GREY> >::convert_scene(scene, num_buffers, ocl_scene);
         vcl_cout<<ocl_scene<<vcl_endl;
@@ -82,8 +81,9 @@ bool boxm_ocl_convert_boxm_to_ocl_process(bprb_func_process& pro)
     {
         typedef boct_tree<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > type;
         boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
-
         boxm_ocl_scene ocl_scene; 
+
+        boxm_ocl_convert<boxm_sample<BOXM_APM_SIMPLE_GREY> >::convert_scene(scene, num_buffers, ocl_scene);
         vcl_cout<<ocl_scene<<vcl_endl;
         ocl_scene.save_scene(output_dir);
         break;
