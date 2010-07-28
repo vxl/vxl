@@ -355,7 +355,7 @@ void boxm_ocl_scene::set_data_values(float* data_buffer)
   int datIndex = 0;
   vbl_array_2d<float16>::iterator iter;
   for (iter = data_buffers_.begin(); iter != data_buffers_.end(); iter++) {
-    for(int j=0; j<16; j++) 
+    for (int j=0; j<16; j++)
       (*iter)[j] = data_buffer[datIndex++];
   }
 }
@@ -423,11 +423,11 @@ vcl_ostream& operator <<(vcl_ostream &s, boxm_ocl_scene& scene)
   scene.block_dim(x_dim, y_dim, z_dim);
 
   //estimate size of scene
-  int sizeofCell = 4*sizeof(int) + 20*sizeof(float); 
+  //int sizeofCell = 4*sizeof(int) + 20*sizeof(float); // unused variable
   int sizeBlks = 4*sizeof(int)*x_num*y_num*z_num;
   int sizeTree = 4*sizeof(int)*num*len;
   int sizeData = 16*sizeof(float)*num*len;
-  double scene_size = (sizeBlks + sizeTree + sizeData)/1024.0/1024.0; 
+  double scene_size = (sizeBlks + sizeTree + sizeData)/1024.0/1024.0;
   s <<"---OCL_SCENE--------------------------------\n"
     <<"blocks:  [block_nums "<<x_num<<','<<y_num<<','<<z_num<<"] "
     <<"[blk_dim "<<x_dim<<','<<y_dim<<','<<z_dim<<"]\n"
@@ -445,7 +445,7 @@ vcl_ostream& operator <<(vcl_ostream &s, boxm_ocl_scene& scene)
   vbl_array_2d<float16> data_buffers = scene.data_buffers();
   vbl_array_2d<int4> tree_buffers = scene.tree_buffers();
   vbl_array_1d<int2> mem_ptrs = scene.mem_ptrs();
-  s << "free space: "<<vcl_endl;;
+  s << "free space: "<<vcl_endl;
   for (unsigned int i=0; i<mem_ptrs.size(); ++i) {
     int start=mem_ptrs[i][0];
     int end = mem_ptrs[i][1];
