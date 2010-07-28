@@ -621,6 +621,9 @@ class vnl_matrix_fixed  VNL_MATRIX_FIXED_VCL60_WORKAROUND
   //: Equality operator
   bool operator==(vnl_matrix_fixed const &that) const { return  this->operator_eq(that); }
 
+  //: Inequality operator
+  bool operator!=(vnl_matrix_fixed const &that) const { return !this->operator_eq(that); }
+
   //: Equality operator
   bool operator==(vnl_matrix<T> const &that) const { return  this->operator_eq(that); }
 
