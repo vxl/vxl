@@ -106,7 +106,6 @@ void test_int()
   TEST("m2.get(1,1)", m2.get(1,1), 3);
   TEST("m0 == m2", (m0 == m2), false);
   TEST("m0 != m2", (m0 != m2), true);
-  TEST("(m0 == m2)", (m0 == m2), false);
   TEST("m1.fill(3)",
        (m1.fill(3),
         (m1.get(0,0)==3 && m1.get(1,1)==3 && m1.get(2,2)==3 && m1.get(2,3)==3)), true);
@@ -227,7 +226,6 @@ void test_float()
   TEST("d2.get(1,1)", d2.get(1,1), (float)3.0);
   TEST("d0 == d2", (d0 == d2), false);
   TEST("d0 != d2", (d0 != d2), true);
-  TEST("(d0 == d2)", (d0==d2), false);
   TEST("d1.fill(3.0)",
        (d1.fill(3.0),
         (d1.get(0,0)==3.0 && d1.get(1,1)==3.0 && d1.get(2,2)==3.0 && d1.get(2,3)==3.0)), true);
@@ -326,7 +324,6 @@ void test_double()
   TEST("d2.get(1,1)", d2.get(1,1), 3.0);
   TEST("d0 == d2", (d0 == d2), false);
   TEST("d0 != d2", (d0 != d2), true);
-  TEST("(d0 == d2)", (d0==d2), false);
   TEST("d1.fill(3.0)",
        (d1.fill(3.0),
         (d1.get(0,0)==3.0 && d1.get(1,1)==3.0 && d1.get(2,2)==3.0 && d1.get(2,3)==3.0)), true);
