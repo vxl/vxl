@@ -21,7 +21,6 @@ class boxm_refine_scene_manager : public bocl_manager<boxm_refine_scene_manager 
       block_nums_(0),
       tree_cells_(0),
       data_cells_(0),
-      alpha_cells_(0),
       mem_ptrs_(0),
       scene_dims_(0),
       scene_origin_(0)
@@ -73,7 +72,6 @@ class boxm_refine_scene_manager : public bocl_manager<boxm_refine_scene_manager 
     cl_int*   block_nums_;    //(numX, numY, numZ);
     cl_int*   tree_cells_;    //array of tree cells (int4)
     cl_float* data_cells_;    //array of data pointed to by tree (float16)
-    cl_float* alpha_cells_;    //alpha values for data (redundant)
     cl_int*   mem_ptrs_;      //(int2) points to tree_cells_ free mem
     cl_float* scene_dims_;    //x,y,z,0
     cl_float* scene_origin_;  //x,y,z,0
@@ -83,7 +81,6 @@ class boxm_refine_scene_manager : public bocl_manager<boxm_refine_scene_manager 
     cl_mem    block_nums_buf_;  //def necessary
     cl_mem    tree_cells_buf_;  //
     cl_mem    data_cells_buf_;
-    cl_mem    alpha_cells_buf_;
     cl_mem    mem_ptrs_buf_;
     cl_mem    scene_dims_buf_;  //probably not necessary for refinement
     cl_mem    scene_origin_buf_;// also probably not necessary

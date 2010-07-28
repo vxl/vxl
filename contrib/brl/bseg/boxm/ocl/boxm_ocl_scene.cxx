@@ -355,14 +355,8 @@ void boxm_ocl_scene::set_data_values(float* data_buffer)
   int datIndex = 0;
   vbl_array_2d<float16>::iterator iter;
   for (iter = data_buffers_.begin(); iter != data_buffers_.end(); iter++) {
-    (*iter)[1] = data_buffer[datIndex++];
-    (*iter)[2] = data_buffer[datIndex++];
-    (*iter)[3] = data_buffer[datIndex++];
-    (*iter)[5] = data_buffer[datIndex++];
-    (*iter)[6] = data_buffer[datIndex++];
-    (*iter)[7] = data_buffer[datIndex++];
-    (*iter)[9] = data_buffer[datIndex++];
-    (*iter)[10] = data_buffer[datIndex++];
+    for(int j=0; j<16; j++) 
+      (*iter)[j] = data_buffer[datIndex++];
   }
 }
 
@@ -428,6 +422,12 @@ vcl_ostream& operator <<(vcl_ostream &s, boxm_ocl_scene& scene)
   double x_dim, y_dim, z_dim;
   scene.block_dim(x_dim, y_dim, z_dim);
 
+  //estimate size of scene
+  int sizeofCell = 4*sizeof(int) + 20*sizeof(float); 
+  int sizeBlks = 4*sizeof(int)*x_num*y_num*z_num;
+  int sizeTree = 4*sizeof(int)*num*len;
+  int sizeData = 16*sizeof(float)*num*len;
+  double scene_size = (sizeBlks + sizeTree + sizeData)/1024.0/1024.0; 
   s <<"---OCL_SCENE--------------------------------\n"
     <<"blocks:  [block_nums "<<x_num<<','<<y_num<<','<<z_num<<"] "
     <<"[blk_dim "<<x_dim<<','<<y_dim<<','<<z_dim<<"]\n"
@@ -436,7 +436,7 @@ vcl_ostream& operator <<(vcl_ostream &s, boxm_ocl_scene& scene)
     <<"buffers: [num_buffs " << num << "] "
     <<"[buff_length " << len << "] "
     <<" [total cells "<< num*len <<"]\n"
-    <<"size: "<< (4*4 + 16*4)*num*len/1024.0/1024.0 << " MB"<<vcl_endl;
+    <<"size: "<< scene_size << " MB"<<vcl_endl;
 
   //print out buffer free space
   typedef vnl_vector_fixed<int,2> int2;
@@ -450,7 +450,7 @@ vcl_ostream& operator <<(vcl_ostream &s, boxm_ocl_scene& scene)
     int start=mem_ptrs[i][0];
     int end = mem_ptrs[i][1];
     int freeSpace = (start >= end)? start-end : tree_buffers.cols() - (end-start);
-    s <<"     buff["<<i<<"]="<<freeSpace<<" blocks, "
+    s <<"     buff["<<i<<"]="<<freeSpace<<" free cells, "
       <<"ptrs @ ("<<mem_ptrs[i][0]<<", "<<mem_ptrs[i][1]<<')'<<vcl_endl;
   }
   s << '\n'

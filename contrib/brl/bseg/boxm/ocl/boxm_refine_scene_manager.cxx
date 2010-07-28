@@ -22,9 +22,11 @@ init_refine(boxm_ocl_scene* scene, float prob_thresh)
   //keep track of the scene
   scene_ = scene;
 
+  output_results_ = 0; 
+
   //store scene information, numbuffer_ length of buffer,
   tree_cell_size_ = 4;  //four ints for now
-  data_cell_size_ = 8;  //8 floats for now
+  data_cell_size_ = 16;  //8 floats for now
   scene->tree_buffer_shape(numbuffer_, lenbuffer_);
   max_level_ = scene->max_level();      //this is really the same as max level...
 
@@ -84,24 +86,16 @@ bool boxm_refine_scene_manager::setup_scene_data()
     tree_cells_[index++]=(*tree_iter)[3];
   }
 
-  //2d array of data cells and 2d array of alpha cells
-  vcl_cout<<"Data "<<(float)(numbuffer_*lenbuffer_)*9*4/1024.0/1024.0<<"MB"<<vcl_endl;
-  alpha_cells_  = (cl_float*) boxm_ocl_utils::alloc_aligned(numbuffer_*lenbuffer_, sizeof(cl_float), 16);
-  data_cells_   = (cl_float*) boxm_ocl_utils::alloc_aligned(numbuffer_*lenbuffer_, sizeof(cl_float8), 16);
+  //2d array of data cells
+  vcl_cout<<"Data "<<(float)(numbuffer_*lenbuffer_)*16*4/1024.0/1024.0<<"MB"<<vcl_endl;
+  data_cells_   = (cl_float*) boxm_ocl_utils::alloc_aligned(numbuffer_*lenbuffer_, sizeof(cl_float16), 16);
   vbl_array_2d<float16>::iterator data_iter;
-  int datIndex = 0, alphaIndex = 0;
+  int datIndex = 0;
   for (data_iter=scene_->data_buffers_.begin(); data_iter!=scene_->data_buffers_.end(); data_iter++) {
-    alpha_cells_[alphaIndex++]=(*data_iter)[0];
-    data_cells_[datIndex++]=(*data_iter)[1];
-    data_cells_[datIndex++]=(*data_iter)[2];
-    data_cells_[datIndex++]=(*data_iter)[3];
-    data_cells_[datIndex++]=(*data_iter)[5];
-    data_cells_[datIndex++]=(*data_iter)[6];
-    data_cells_[datIndex++]=(*data_iter)[7];
-    data_cells_[datIndex++]=(*data_iter)[9];
-    data_cells_[datIndex++]=(*data_iter)[10];
+    for(int j=0; j<16; j++) {
+      data_cells_[datIndex++]=(*data_iter)[j];
+    }
   }
-
 
   //1d array of memory pointers
   mem_ptrs_     = (cl_int*)   boxm_ocl_utils::alloc_aligned(numbuffer_, sizeof(cl_int2), 16);
@@ -154,19 +148,10 @@ bool boxm_refine_scene_manager::setup_scene_data_buffers()
   //data cells buffer
   data_cells_buf_ = clCreateBuffer(this->context_,
                                    CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR,
-                                   numbuffer_*lenbuffer_*sizeof(cl_float8),
+                                   numbuffer_*lenbuffer_*sizeof(cl_float16),
                                    data_cells_,
                                    &status);
   if (!this->check_val(status, CL_SUCCESS, "clCreateBuffer (data_cells_) failed."))
-    return false;
-
-  //alpha values for each cell
-  alpha_cells_buf_ = clCreateBuffer(this->context_,
-                                    CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR,
-                                    numbuffer_*lenbuffer_*sizeof(cl_float),
-                                    alpha_cells_,
-                                    &status);
-  if (!this->check_val(status, CL_SUCCESS, "clCreateBuffer (alpha_cells_) failed."))
     return false;
 
   //memory pointers for each tree buffer
@@ -196,7 +181,6 @@ bool boxm_refine_scene_manager::clean_scene_data()
   boxm_ocl_utils::free_aligned(block_nums_);
   boxm_ocl_utils::free_aligned(tree_cells_);
   boxm_ocl_utils::free_aligned(data_cells_);
-  boxm_ocl_utils::free_aligned(alpha_cells_);
   boxm_ocl_utils::free_aligned(mem_ptrs_);
   //boxm_ocl_utils::free_aligned(scene_dims_);
   //boxm_ocl_utils::free_aligned(scene_origin_);
@@ -221,10 +205,6 @@ bool boxm_refine_scene_manager::clean_scene_data_buffers()
 
   status = clReleaseMemObject(data_cells_buf_);
   if (!this->check_val(status, CL_SUCCESS, "clReleaseMemObject failed (data_cells_buf_)."))
-    return SDK_FAILURE;
-
-  status = clReleaseMemObject(alpha_cells_buf_);
-  if (!this->check_val(status, CL_SUCCESS, "clReleaseMemObject failed (alpha_cells_buf_)."))
     return SDK_FAILURE;
 
   status = clReleaseMemObject(mem_ptrs_buf_);
@@ -273,7 +253,7 @@ bool boxm_refine_scene_manager::run_refine()
   vcl_size_t globalThreads[1], localThreads[1];
   globalThreads[0] = 8*numbuffer_; //(*tree_max_size_);
   localThreads[0] = 8; //64;
-
+  vcl_cout<<"(global, local) threads: "<<globalThreads[0]<<", "<<localThreads[0]<<vcl_endl;
 
   // set up a command queue
   command_queue_ = clCreateCommandQueue(this->context(),
@@ -302,7 +282,6 @@ bool boxm_refine_scene_manager::run_refine()
   scene_->set_blocks(block_ptrs_);
   scene_->set_tree_buffers(tree_cells_);
   scene_->set_mem_ptrs(mem_ptrs_);
-  scene_->set_alpha_values(alpha_cells_);
   scene_->set_data_values(data_cells_);
 
   //profiling information
@@ -335,7 +314,7 @@ bool boxm_refine_scene_manager::run_refine()
 bool boxm_refine_scene_manager::read_buffers()
 {
   int numEvents = 5, eventI = 0, status = CL_SUCCESS;
-  cl_event events[5];
+  cl_event events[numEvents];
 
   //read block pointers
   int numblocks = block_nums_[0]*block_nums_[1]*block_nums_[2];
@@ -356,19 +335,17 @@ bool boxm_refine_scene_manager::read_buffers()
 
   //read data_cells
   status = clEnqueueReadBuffer(command_queue_, data_cells_buf_, CL_TRUE,
-                               0, numbuffer_*lenbuffer_*sizeof(cl_float8),
+                               0, numbuffer_*lenbuffer_*sizeof(cl_float16),
                                data_cells_,
                                0, NULL, &events[eventI++]);
   if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (block_ptrs_results_)failed."))
     return false;
-
-  //read alpha_buf_
-  status = clEnqueueReadBuffer(command_queue_, alpha_cells_buf_, CL_TRUE,
-                               0, numbuffer_*lenbuffer_*sizeof(cl_float),
-                               alpha_cells_,
+    
+  //read mem_ptrs_
+  status = clEnqueueReadBuffer(command_queue_, mem_ptrs_buf_, CL_TRUE,
+                               0, numbuffer_*sizeof(cl_int2),
+                               mem_ptrs_,
                                0,NULL,&events[eventI++]);
-  if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (data_results_)failed."))
-    return false;
 
   //read output_buf_
   status = clEnqueueReadBuffer(command_queue_, output_buf_, CL_TRUE,
@@ -428,7 +405,6 @@ int boxm_refine_scene_manager::set_kernel_args()
   // length buffers
   // tree cells
   // data cells
-  // alpha cells
   // mem pointers
   // prob thresh
   // max level
@@ -454,15 +430,12 @@ int boxm_refine_scene_manager::set_kernel_args()
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (lenbuffer_ buffer)"))
     return SDK_FAILURE;
 
-  //tree cells, data cells, alpha cells
+  //tree cells, data cells cells
   status = clSetKernelArg(kernel_, i++, sizeof(cl_mem), (void*) &tree_cells_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (tree_cells_buf_ buffer)"))
     return SDK_FAILURE;
   status = clSetKernelArg(kernel_, i++, sizeof(cl_mem), (void*) &data_cells_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (data_cells_buf_ buffer)"))
-    return SDK_FAILURE;
-  status = clSetKernelArg(kernel_, i++, sizeof(cl_mem), (void*) &alpha_cells_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (alpha_cells_buf_ buffer)"))
     return SDK_FAILURE;
 
   //mem pointers for the tree cells
