@@ -574,17 +574,16 @@ class my_int
 };
 
 
-VIL_IMAGE_VIEW_INSTANTIATE( my_int );
-
 VCL_DEFINE_SPECIALIZATION
 inline bool convert_components_from_planes(vil_image_view<my_int> &,
                                            const vil_image_view_base &)
 { return false; }  // when lhs has scalar pixels, don't attempt conversion
 
-
 VCL_DEFINE_SPECIALIZATION
 void vil_print_value(vcl_ostream& os, const my_int& v)
 { os<<double(v); }
+
+VIL_IMAGE_VIEW_INSTANTIATE( my_int );
 
 
 static void test_non_standard_type()
