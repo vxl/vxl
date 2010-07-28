@@ -19,7 +19,7 @@
 
 namespace boxm_ocl_refine_process_globals
 {
-  const unsigned n_inputs_ = 2;
+  const unsigned n_inputs_ = 3;
   const unsigned n_outputs_ = 0;
 }
 
@@ -29,9 +29,11 @@ bool boxm_ocl_refine_process_cons(bprb_func_process& pro)
   // process takes 5 inputs
   // input[0]: scene.xml file path
   // input[1]: prob_thresh
+  // input[2]: output_directory
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "vcl_string";
   input_types_[1] = "float";
+  input_types_[2] = "vcl_string";
 
   if (!pro.set_input_types(input_types_))
     return false;
@@ -52,6 +54,7 @@ bool boxm_ocl_refine_process(bprb_func_process& pro)
   unsigned i = 0;
   vcl_string scene_path = pro.get_input<vcl_string>(i++);
   float prob_thresh = pro.get_input<float>(i++);
+  vcl_string out_path = pro.get_input<vcl_string>(i++);
   
   vcl_cout<<"Refining OCL scene: "<<scene_path<<" with prob "<<prob_thresh<<vcl_endl;
 
@@ -62,6 +65,9 @@ bool boxm_ocl_refine_process(bprb_func_process& pro)
   mgr->init_refine(&scene, prob_thresh);
   mgr->run_refine();
   vcl_cout<<scene<<vcl_endl;
+  
+  vcl_cout<<"Saving scene to "<<out_path<<vcl_endl;
+  scene.save_scene(out_path);
   
   // check the scene's appearance model
   //switch (scene_ptr->appearence_model())
