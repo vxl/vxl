@@ -50,13 +50,13 @@ vpgl_local_rational_camera<T>* vpgl_local_rational_camera<T>::clone(void) const
 // Base projection method, x, y, z are in local Cartesian coordinates
 template <class T>
 void vpgl_local_rational_camera<T>::project(const T x, const T y, const T z,
-                                           T& u, T& v) const
+                                            T& u, T& v) const
 {
   //first convert to global geographic  coordinates
   double lon, lat, gz;
   bgeo_lvcs& non_const_lvcs = const_cast<bgeo_lvcs&>(lvcs_);
   non_const_lvcs.local_to_global(x, y, z, bgeo_lvcs::wgs84, lon, lat, gz);
-  vpgl_rational_camera<T>::project(lon, lat, gz, u, v);
+  vpgl_rational_camera<T>::project((T)lon, (T)lat, (T)gz, u, v);
 }
 
 //vnl interface methods
@@ -223,7 +223,7 @@ vpgl_local_rational_camera<T>* read_local_rational_camera(vcl_istream& istr)
       double longitude, latitude, elevation;
       istr >> longitude >> latitude >> elevation;
       lvcs = bgeo_lvcs(latitude, longitude, elevation,
-                     bgeo_lvcs::wgs84, bgeo_lvcs::DEG, bgeo_lvcs::METERS);
+                       bgeo_lvcs::wgs84, bgeo_lvcs::DEG, bgeo_lvcs::METERS);
       good = true;
     }
   }
