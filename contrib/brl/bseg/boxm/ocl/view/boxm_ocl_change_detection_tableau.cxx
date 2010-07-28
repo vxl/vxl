@@ -194,17 +194,17 @@ bool boxm_ocl_change_detection_tableau::init_ocl()
 //: calls on update manager to update model
 bool boxm_ocl_change_detection_tableau::change_detection()
 {
-    vcl_cout<<"UPDATING MODEL!!!"<<vcl_endl;
+    vcl_cout<<"Change Detection!!!"<<vcl_endl;
 
     //make sure you get a valid frame...
     if (curr_frame_ >= cam_files_.size()) curr_frame_ = 0;
     vcl_cout<<"Cam "<<cam_files_[curr_frame_]<<" Image "<<img_files_[curr_frame_]<<vcl_endl;
 
     //load up the update manager instance
-    boxm_change_detection_ocl_scene_manager* updt_mgr = boxm_change_detection_ocl_scene_manager::instance();
-    cl_int status = clEnqueueAcquireGLObjects(updt_mgr->command_queue_, 1,
-        &updt_mgr->image_gl_buf_ , 0, 0, 0);
-    if (!updt_mgr->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (input_image)"+error_to_string(status)))
+    boxm_change_detection_ocl_scene_manager* cd_mgr = boxm_change_detection_ocl_scene_manager::instance();
+    cl_int status = clEnqueueAcquireGLObjects(cd_mgr->command_queue_, 1,
+        &cd_mgr->image_gl_buf_ , 0, 0, 0);
+    if (!cd_mgr->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (input_image)"+error_to_string(status)))
         return false;
 
     //build the camera from file
@@ -231,13 +231,13 @@ bool boxm_ocl_change_detection_tableau::change_detection()
     curr_frame_++ ;
 
     //run the opencl update business
-    updt_mgr->set_input_image(floatimg);
-    updt_mgr->write_image_buffer();
-    updt_mgr->set_persp_camera(pcam);
-    updt_mgr->write_persp_camera_buffers();
-    updt_mgr->run();
-    status = clEnqueueReleaseGLObjects(updt_mgr->command_queue_, 1, &updt_mgr->image_gl_buf_ , 0, 0, 0);
-    clFinish( updt_mgr->command_queue_ );
+    cd_mgr->set_input_image(floatimg);
+    cd_mgr->write_image_buffer();
+    cd_mgr->set_persp_camera(pcam);
+    cd_mgr->write_persp_camera_buffers();
+    cd_mgr->run();
+    status = clEnqueueReleaseGLObjects(cd_mgr->command_queue_, 1, &cd_mgr->image_gl_buf_ , 0, 0, 0);
+    clFinish( cd_mgr->command_queue_ );
 
     return true;
 }
