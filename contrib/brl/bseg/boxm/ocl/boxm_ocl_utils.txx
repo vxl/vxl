@@ -343,8 +343,12 @@ void boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T> >* scene,
     blk_index++;
   }
   
-  vcl_cout<<"Alpha for first tree "<<data_buffers[0][0]<<vcl_endl;
+  vcl_cout<<"Alpha for first tree "<<data_buffers(0,0)<<vcl_endl;
   
+  for(int i=0; i< 2; i++) {
+    if(data_buffers(0,i)[0] != data_buffers(0,0)[0])
+      vcl_cout<<"block at "<<i<<" has alpha of "<<data_buffers(0,i)[0]<<vcl_endl;
+  }
 
   //notify how many blocks needed to be initialized/there's enough space
   if (nonInitCount < 0)
