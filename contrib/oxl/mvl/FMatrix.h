@@ -41,7 +41,7 @@ class FMatrix
   FMatrix();
   FMatrix(vcl_istream& f);
   FMatrix(const double *f_matrix);
-  FMatrix(const vnl_matrix<double>& f_matrix);
+  FMatrix(const vnl_double_3x3& f_matrix);
   FMatrix(const PMatrix& P1, const PMatrix& P2);
   FMatrix(const PMatrix& P2);
   FMatrix(const FMatrix& that) { *this = that; }
@@ -113,7 +113,7 @@ class FMatrix
   virtual bool set (const double* f_matrix);
   void get (double *f_matrix) const;
 
-  virtual bool set (const vnl_matrix<double>& f_matrix);
+  virtual bool set (const vnl_double_3x3& f_matrix);
   void get (vnl_matrix<double>* f_matrix) const;
 
   void set(const PMatrix& P1, const PMatrix& P2);

@@ -17,7 +17,6 @@
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_3.h>
-#include <vnl/vnl_transpose.h>
 #include <vnl/vnl_cross_product_matrix.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_rpoly_roots.h>
@@ -59,7 +58,7 @@ FMatrix::FMatrix(const double *f_matrix)
 //
 //: Constructor
 
-FMatrix::FMatrix(const vnl_matrix<double>& f_matrix)
+FMatrix::FMatrix(const vnl_double_3x3& f_matrix)
 {
   rank2_flag_ = false;
   set(f_matrix);
@@ -254,7 +253,7 @@ FMatrix::get_epipoles(vgl_homg_point_2d<double>& epipole1,
                       vgl_homg_point_2d<double>& epipole2) const
 {
   // fm_compute_epipoles
-  vnl_svd<double> svd(f_matrix_);
+  vnl_svd<double> svd(vnl_matrix<double>(f_matrix_.data_block(),3,3));
   vnl_double_3 v = svd.nullvector();
   epipole1.set(v[0],v[1],v[2]);
   v = svd.left_nullvector();
@@ -271,7 +270,7 @@ bool
 FMatrix::get_epipoles(HomgPoint2D*epipole1_ptr, HomgPoint2D*epipole2_ptr) const
 {
   // fm_compute_epipoles
-  vnl_svd<double> svd(f_matrix_);
+  vnl_svd<double> svd(vnl_matrix<double>(f_matrix_.data_block(),3,3));
   epipole1_ptr->set(svd.nullvector());
   epipole2_ptr->set(svd.left_nullvector());
   return svd.W(2,2) == 0;
@@ -370,7 +369,7 @@ FMatrix::find_nearest_perfect_match(vgl_homg_point_2d<double> const& point1,
   p2_matrix(2, 1) = 0;
   p2_matrix(2, 2) = 1;
 
-  vnl_double_3x3 special_f_matrix= vnl_transpose(p2_matrix) *f_matrix_ *p1_matrix;
+  vnl_double_3x3 special_f_matrix= p2_matrix.transpose() *f_matrix_ *p1_matrix;
 
   double f = -special_f_matrix(1, 0) / special_f_matrix(1, 2);
   double f2 = -special_f_matrix(2, 0) / special_f_matrix(2, 2);
@@ -488,7 +487,7 @@ FMatrix::find_nearest_perfect_match(const HomgPoint2D& point1,
   p2_matrix(2, 1) = 0;
   p2_matrix(2, 2) = 1;
 
-  vnl_double_3x3 special_f_matrix= vnl_transpose(p2_matrix) *f_matrix_ *p1_matrix;
+  vnl_double_3x3 special_f_matrix= p2_matrix.transpose() *f_matrix_ *p1_matrix;
 
   double f = -special_f_matrix(1, 0) / special_f_matrix(1, 2);
   double f2 = -special_f_matrix(2, 0) / special_f_matrix(2, 2);
@@ -552,8 +551,8 @@ FMatrix::find_nearest_perfect_match(const HomgPoint2D& point1,
     HomgLine2D epipolar_line2(-g * (c*t_min + d), a*t_min + b, c*t_min + d);
     HomgPoint2D origin(0,0,1);
 
-    *perfect_point1_ptr = p1_matrix * HomgOperator2D::perp_projection(epipolar_line1, origin).get_vector();
-    *perfect_point2_ptr = p2_matrix * HomgOperator2D::perp_projection(epipolar_line2, origin).get_vector();
+    *perfect_point1_ptr = HomgPoint2D(p1_matrix * HomgOperator2D::perp_projection(epipolar_line1, origin).get_vector());
+    *perfect_point2_ptr = HomgPoint2D(p2_matrix * HomgOperator2D::perp_projection(epipolar_line2, origin).get_vector());
   }
 }
 
@@ -583,7 +582,7 @@ void FMatrix::compute_P_matrix(vnl_matrix<double> &P2) const
 void FMatrix::set_rank2_using_svd(void)
 {
   // ma2_static_set_rank
-  vnl_svd<double> svd(f_matrix_);
+  vnl_svd<double> svd(vnl_matrix<double>(f_matrix_.data_block(),3,3));
   svd.W(2) = 0;
   f_matrix_ = svd.recompose();
   ft_matrix_ = f_matrix_.transpose();
@@ -626,7 +625,7 @@ void FMatrix::get (double *c) const
 //: Copy the fundamental matrix into a vnl_matrix<double>
 void FMatrix::get (vnl_matrix<double>* f_matrix) const
 {
-  *f_matrix = f_matrix_;
+  *f_matrix = vnl_matrix<double>(f_matrix_.data_block(), 3,3);
 }
 
 
@@ -668,12 +667,12 @@ bool FMatrix::set (const double *c_matrix)
 
 //--------------------------------------------------------------
 //
-//: Set the fundamental matrix using the vnl_matrix<double> f_matrix.
+//: Set the fundamental matrix using the vnl_matrix_fixed<double,3,3> f_matrix.
 // Always returns true for the base class - showing the set was a success.
 // When overridden by derived classes it may return false, to indicate
 // that the matrix violates the constraints imposed by the derived classes.
 
-bool FMatrix::set (const vnl_matrix<double>& f_matrix)
+bool FMatrix::set (const vnl_double_3x3& f_matrix)
 {
   f_matrix_ = f_matrix;
   ft_matrix_ = f_matrix.transpose();
@@ -688,7 +687,7 @@ void FMatrix::set (const PMatrix& P1, const PMatrix& P2)
 
   vnl_cross_product_matrix e2x(P2.get_matrix() * svd->nullvector());
 
-  set(e2x * P2.get_matrix() * svd->inverse());
+  set(vnl_double_3x3((e2x * P2.get_matrix() * svd->inverse()).data_block()));
 }
 
 //: Set from one P matrix, the second.  The first is assumed to be [I O].
