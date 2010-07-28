@@ -564,6 +564,9 @@ class vnl_matrix_fixed_ref : public vnl_matrix_fixed_ref_const<T,num_rows,num_co
   //: Set j-th column to v
   void set_column(unsigned j, vnl_vector<T> const& v) const;
 
+  //: Set j-th column to v
+  void set_column(unsigned j, vnl_vector_fixed<T, num_rows> const& v) const;
+
   //: Set columns to those in M, starting at starting_column
   void set_columns(unsigned starting_column, vnl_matrix<T> const& M) const;
 
@@ -573,8 +576,11 @@ class vnl_matrix_fixed_ref : public vnl_matrix_fixed_ref_const<T,num_rows,num_co
   //: Set the elements of the i'th row to value
   void set_row   (unsigned i, T value ) const;
 
-  //: Set the i-th row
-  void set_row   (unsigned i, vnl_vector<T> const&) const;
+  //: Set the i-th row to v
+  void set_row   (unsigned i, vnl_vector<T> const& v) const;
+
+  //: Set the i-th row to v
+  void set_row   (unsigned i, vnl_vector_fixed<T, num_cols> const& v) const;
 
   // ==== mutators ====
 

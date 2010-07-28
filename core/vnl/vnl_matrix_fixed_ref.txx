@@ -413,6 +413,13 @@ vnl_matrix_fixed_ref<T,nrows,ncols>::set_row(unsigned row_index, T const *v) con
 
 template<class T, unsigned nrows, unsigned ncols>
 void
+vnl_matrix_fixed_ref<T,nrows,ncols>::set_row(unsigned row_index, vnl_vector_fixed<T,ncols> const &v) const
+{
+  set_row(row_index,v.data_block());
+}
+
+template<class T, unsigned nrows, unsigned ncols>
+void
 vnl_matrix_fixed_ref<T,nrows,ncols>::set_row(unsigned row_index, vnl_vector<T> const &v) const
 {
   set_row(row_index,v.data_block());
@@ -434,6 +441,13 @@ vnl_matrix_fixed_ref<T,nrows,ncols>::set_column(unsigned column_index, T const *
 {
   for (unsigned int i = 0; i < nrows; i++)
     (*this)(i,column_index) = v[i];
+}
+
+template<class T, unsigned nrows, unsigned ncols>
+void
+vnl_matrix_fixed_ref<T,nrows,ncols>::set_column(unsigned column_index, vnl_vector_fixed<T,nrows> const &v) const
+{
+  set_column(column_index,v.data_block());
 }
 
 template<class T, unsigned nrows, unsigned ncols>
