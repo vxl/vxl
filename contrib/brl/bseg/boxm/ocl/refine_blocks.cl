@@ -117,7 +117,8 @@ int refine_tree(__local int4    *tree,
                         float    boxLen, 
                         int      maxLevel, 
                         int      len_buffer,
-               __global float   *output)
+               __global float   *output, 
+                        int      block_index)
 {
   unsigned gid = get_group_id(0);
   unsigned lid = get_local_id(0);
@@ -148,7 +149,7 @@ int refine_tree(__local int4    *tree,
     //if the current node has no children, it's a leaf -> check if it needs to be refined
     int child_ptr = tree[currNode].y;
     if(child_ptr < 0){
-         
+                
       //////////////////////////////////////////////////
       //INSERT LEAF SPECIFIC CODE HERE
       //////////////////////////////////////////////////
@@ -162,6 +163,10 @@ int refine_tree(__local int4    *tree,
       float16 datum = data_cells[gid*len_buffer + dataIndex];
       float alpha = datum.s0;
      
+      if(lid == 0)
+        output[gid] = alpha;
+
+     
       //integrate alpha value
       float alpha_int = alpha * side_len;
       
@@ -169,9 +174,7 @@ int refine_tree(__local int4    *tree,
       //make sure the PARENT cell for each of the new children points to i
       //ALSO make sure currLevel is less than MAX_LEVELS
       if(alpha_int > max_alpha_int && currLevel < maxLevel-1)  {
-  
-        output[gid]++;
-
+        
         //new alpha for the child nodes
         float new_alpha = max_alpha_int / side_len;  
         
@@ -179,7 +182,8 @@ int refine_tree(__local int4    *tree,
         tree[currNode].y = tree_size;
         
         //each child points to the currNode, has no children, 
-        barrier(CLK_GLOBAL_MEM_FENCE);
+        //barrier(CLK_GLOBAL_MEM_FENCE);
+/*
         if(lid < 8) {
           int4 tcell = (int4) (currNode, -1, (int)data_size+lid, 0);
           tree[tree_size+lid] = tcell;
@@ -191,6 +195,16 @@ int refine_tree(__local int4    *tree,
           int newDataIndex = gid*len_buffer + (data_size+lid);
           data_cells[newDataIndex] = newData;
         }
+*/
+        for(int i=0; i<8; i++) {
+          int4 tcell = (int4) (currNode, -1, (int)data_size+i, 0);
+          tree[tree_size+i] = tcell;
+          
+          float16 newData = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+          newData.s0 = new_alpha;
+          int newDataIndex = gid*len_buffer + (data_size+i);
+          data_cells[newDataIndex] = newData;
+        }
 
         //update tree and buffer size
         tree_size += 8; 
@@ -200,6 +214,7 @@ int refine_tree(__local int4    *tree,
         float16 zeroDat = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
         data_cells[dataIndex] = zeroDat;    
       }
+      
 
       ////////////////////////////////////////////
       //END LEAF SPECIFIC CODE
@@ -218,7 +233,7 @@ int refine_tree(__local int4    *tree,
   ///////////////////////////////////////////////////////////////////
   ////REFORMAT TREE into cannonical order
   ///////////////////////////////////////////////////////////////////
-  reformat_tree(tree, output); 
+  //reformat_tree(tree, output); 
 
   //tree and data size output
   return tree_size;
@@ -292,7 +307,7 @@ refine_main(__global  int4     *block_ptrs,     //3d block array
                                 prob_thresh, 
                                 bbox_len, 
                                 max_level,
-                                len_buffer, output);
+                                len_buffer, output, currRootIndex);
       
       //5. update start pointer (as data will be moved up to the end)
       startPtr = (startPtr+currTreeSize)%len_buffer;

@@ -90,10 +90,14 @@ bool boxm_refine_scene_manager::setup_scene_data()
   vbl_array_2d<float16>::iterator data_iter;
   int datIndex = 0;
   for (data_iter=scene_->data_buffers_.begin(); data_iter!=scene_->data_buffers_.end(); data_iter++) {
+    if(datIndex == 6614*16) {
+      vcl_cout<<"data item 6614 = "<<(*data_iter)<<vcl_endl;
+    }
     for(int j=0; j<16; j++) {
       data_cells_[datIndex++]=(*data_iter)[j];
     }
   }
+  vcl_cout<<"datIndex after = "<<datIndex<<vcl_endl;
 
   //1d array of memory pointers
   mem_ptrs_     = (cl_int*)   boxm_ocl_utils::alloc_aligned(numbuffer_, sizeof(cl_int2), 16);
@@ -255,8 +259,8 @@ bool boxm_refine_scene_manager::run_refine()
 
   //Global size and local size is just 8 for now (serial)
   vcl_size_t globalThreads[1], localThreads[1];
-  globalThreads[0] = 8*numbuffer_; //(*tree_max_size_);
-  localThreads[0] = 8; //64;
+  localThreads[0] = 1; //64;
+  globalThreads[0] = 1*numbuffer_; //(*tree_max_size_);
   vcl_cout<<"(global, local) threads: "<<globalThreads[0]<<", "<<localThreads[0]<<vcl_endl;
 
   // set up a command queue
