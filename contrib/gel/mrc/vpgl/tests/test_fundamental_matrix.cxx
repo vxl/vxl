@@ -89,7 +89,7 @@ static void test_fundamental_matrix()
            << C2l_est.project( vgl_homg_point_3d<double>(p3w[1]) ) << '\n';
   TEST_NEAR( "left camera extraction from correspondences",
              vgl_distance( p3i[0], vgl_point_2d<double>(
-                C2l_est2.project( vgl_homg_point_3d<double>(p3w[0]) ) ) ), 0, 4.0 );
+                C2l_est2.project( vgl_homg_point_3d<double>(p3w[0]) ) ) ), 0, 5.0 );
 
   // Test registered fundamental matrix construction:
   vgl_point_2d<double> p3r(0,2);
