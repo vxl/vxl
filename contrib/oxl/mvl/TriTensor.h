@@ -30,7 +30,6 @@
 #include <vbl/vbl_array_3d.h>
 
 #include <vnl/vnl_matrix.h>
-#include <vnl/vnl_vector.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_3x3.h>
 
@@ -174,11 +173,11 @@ class TriTensor
   const FManifoldProject* get_fmp23() const;
   const FManifoldProject* get_fmp13() const;
 
-  void compute_P_matrices(const vnl_vector<double>& x, double alpha, double beta, PMatrix* P2, PMatrix* P3) const;
-  void compute_P_matrices(const vnl_vector<double>& x, double alpha, PMatrix* P2, PMatrix* P3) const {
+  void compute_P_matrices(const vnl_double_3& x, double alpha, double beta, PMatrix* P2, PMatrix* P3) const;
+  void compute_P_matrices(const vnl_double_3& x, double alpha, PMatrix* P2, PMatrix* P3) const {
     compute_P_matrices(x,alpha,alpha, P2, P3);
   }
-  void compute_P_matrices(const vnl_vector<double>& x, PMatrix* P2, PMatrix* P3) const {
+  void compute_P_matrices(const vnl_double_3& x, PMatrix* P2, PMatrix* P3) const {
     compute_P_matrices(x, 1, 1, P2, P3);
   }
   void compute_P_matrices(PMatrix* P2, PMatrix* P3) const {

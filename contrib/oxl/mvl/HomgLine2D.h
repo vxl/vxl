@@ -30,7 +30,7 @@ class HomgLine2D : public Homg2D
   HomgLine2D () {}
   HomgLine2D (const HomgLine2D& that): Homg2D(that) {}
   HomgLine2D (double px, double py, double pw): Homg2D (px, py, pw) {}
-  explicit HomgLine2D (const vnl_vector<double>& vector_ptr): Homg2D (vector_ptr) {}
+  explicit HomgLine2D (const vnl_double_3& vector_ptr): Homg2D (vector_ptr) {}
  ~HomgLine2D () {}
 
   HomgLine2D& operator=(const HomgLine2D& that)
