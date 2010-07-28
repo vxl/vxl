@@ -133,8 +133,9 @@ static void test_scene_convert()
   
   
   int num_buffers = 1;
+  int max_mb = 100;
   boxm_ocl_scene ocl_scene;
-  boxm_ocl_convert<boxm_sample<BOXM_APM_MOG_GREY> >::convert_scene(&scene, num_buffers, ocl_scene);
+  boxm_ocl_convert<boxm_sample<BOXM_APM_MOG_GREY> >::convert_scene(&scene, num_buffers, ocl_scene, max_mb);
   vcl_cout<<ocl_scene<<vcl_endl;
 
 }
