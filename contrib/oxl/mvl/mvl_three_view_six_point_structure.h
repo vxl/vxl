@@ -18,7 +18,8 @@
 //
 // There are up to three solutions.
 
-#include <vnl/vnl_vector.h>
+#include <vnl/vnl_double_4.h>
+#include <vnl/vnl_double_3x4.h>
 #include <vnl/vnl_matrix.h>
 
 struct mvl_three_view_six_point_structure
@@ -40,8 +41,8 @@ struct mvl_three_view_six_point_structure
   struct solution_t
   {
     bool valid;
-    vnl_matrix<double> P[3]; // camera matrices.
-    vnl_vector<double> Q;    // last world point.
+    vnl_double_3x4 P[3]; // camera matrices.
+    vnl_double_4   Q;    // last world point.
   } solution[3];
 };
 

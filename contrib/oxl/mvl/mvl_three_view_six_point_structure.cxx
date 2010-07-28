@@ -66,7 +66,6 @@ bool mvl_three_view_six_point_structure::compute()
     }
     else {
       solution[k].valid = true;
-      solution[k].Q.set_size(4);
       mvl_psi_invert((re * p + q).data_block(), solution[k].Q.data_block());
     }
 
