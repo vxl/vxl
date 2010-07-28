@@ -124,7 +124,7 @@ class vpdt_mog_sg_updater : public vpdt_mog_updater<mog_type>
   void update( mog_type& mix, const F& sample, T alpha ) const
   {
     T sqr_dist;
-    unsigned int i = match(mix,sample,gt2_,sqr_dist);
+    unsigned int i = vpdt_mog_updater<mog_type>::match(mix,sample,gt2_,sqr_dist);
     if (i<mix.num_components())
     {
       gaussian_type& g = mix.distribution(i);
@@ -141,7 +141,7 @@ class vpdt_mog_sg_updater : public vpdt_mog_updater<mog_type>
     }
     else
     {
-      insert(mix,sample,init_weight_);
+      vpdt_mog_updater<mog_type>::insert(mix,sample,init_weight_);
     }
     mix.sort(vpdt_mog_fitness<gaussian_type>::order);
   }

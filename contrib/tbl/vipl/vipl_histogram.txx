@@ -14,8 +14,10 @@ bool vipl_histogram <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
   if (index < 0) index = 0;
 #endif
   if (checkrange() == 1)  { // check range is slow, we always keep the divide...
-    for (int j = start(this->Y_Axis()), ej = stop(this->Y_Axis()) ; j < ej ; ++j)
-      for (int i = start(this->X_Axis(),j), ei = stop(this->X_Axis(),j) ; i < ei ; ++i) {
+    for (int j = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::start(this->Y_Axis()),
+            ej = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::stop(this->Y_Axis()) ; j < ej ; ++j)
+      for (int i = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::start(this->X_Axis(),j),
+              ei = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::stop(this->X_Axis(),j) ; i < ei ; ++i) {
         long bin = long(0.5 + (shiftin()+getpixel(in,i,j,DataIn(0)))/scalein());
 #if 0
         if (bin < 0) bin = 0;
@@ -26,22 +28,30 @@ bool vipl_histogram <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
       }
   }  // else we want speed, skip safety check, check special cases
   else  if (scalein() == 1 && scaleout() == 1 && shiftin() == 0) {
-    for (int j = start(this->Y_Axis()), ej = stop(this->Y_Axis()) ; j < ej ; ++j)
-      for (int i = start(this->X_Axis(),j), ei = stop(this->X_Axis(),j) ; i < ei ; ++i) {
+    for (int j = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::start(this->Y_Axis()),
+            ej = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::stop(this->Y_Axis()) ; j < ej ; ++j)
+      for (int i = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::start(this->X_Axis(),j),
+              ei = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::stop(this->X_Axis(),j) ; i < ei ; ++i) {
         long bin = long(0.5 + (getpixel(in,i,j,DataIn(0))));
         DataOut bs = getpixel(out,bin,index,DataOut(0));
         setpixel(out, bin, index, bs+1);
       }
-  } else  if (scalein() == 1)  {
-    for (int j = start(this->Y_Axis()), ej = stop(this->Y_Axis()) ; j < ej ; ++j)
-      for (int i = start(this->X_Axis(),j), ei = stop(this->X_Axis(),j) ; i < ei ; ++i) {
+  }
+  else  if (scalein() == 1)  {
+    for (int j = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::start(this->Y_Axis()),
+            ej = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::stop(this->Y_Axis()) ; j < ej ; ++j)
+      for (int i = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::start(this->X_Axis(),j),
+              ei = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::stop(this->X_Axis(),j) ; i < ei ; ++i) {
         long bin = long(0.5 + (shiftin()+getpixel(in,i,j,DataIn(0))));
         DataOut bs = getpixel(out,bin,index,DataOut(0));
         setpixel(out, bin, index, scaleout()+bs);
       }
-  } else { // all modes
-    for (int j = start(this->Y_Axis()), ej = stop(this->Y_Axis()) ; j < ej ; ++j)
-      for (int i = start(this->X_Axis(),j), ei = stop(this->X_Axis(),j) ; i < ei ; ++i) {
+  }
+  else { // all modes
+    for (int j = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::start(this->Y_Axis()),
+            ej = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::stop(this->Y_Axis()) ; j < ej ; ++j)
+      for (int i = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::start(this->X_Axis(),j),
+              ei = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::stop(this->X_Axis(),j) ; i < ei ; ++i) {
         long bin = long(0.5 + (shiftin()+getpixel(in,i,j,DataIn(0)))/scalein());
         DataOut bs = getpixel(out,bin,index,DataOut(0));
         setpixel(out, bin, index, scaleout()+bs);

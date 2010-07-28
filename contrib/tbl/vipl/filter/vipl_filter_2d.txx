@@ -112,7 +112,7 @@ template < class ImgIn,class ImgOut,class DataIn,class DataOut, class PixelItr >
       vipl_section_descriptor<DataOut>& secDesc = *dstitr;
       put_secp( new vipl_section_descriptor<DataOut> (secDesc) );
 #else
-      put_secp( new vipl_section_descriptor<DataOut> (*dstitr));
+      vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::put_secp( new vipl_section_descriptor<DataOut> (*dstitr));
 #endif
       this->ref_dst_section()->ref_overlap()[0] = this->image_border_size();
       this->ref_dst_section()->ref_overlap()[1] = this->image_border_size();
@@ -121,7 +121,7 @@ template < class ImgIn,class ImgOut,class DataIn,class DataOut, class PixelItr >
         vipl_section_descriptor<DataIn>& inSecDesc = *it;
         put_insecp( new vipl_section_descriptor<DataIn> (inSecDesc));
 #else
-        put_insecp( new vipl_section_descriptor<DataIn> (*it));
+        vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::put_insecp( new vipl_section_descriptor<DataIn> (*it));
 #endif
         this->ref_src_section()->ref_overlap()[0] = this->image_border_size();
         this->ref_src_section()->ref_overlap()[1] = this->image_border_size();
@@ -151,7 +151,7 @@ template < class ImgIn,class ImgOut,class DataIn,class DataOut, class PixelItr >
       vipl_section_descriptor<DataOut>& secDesc2 = *it;
       put_secp( new vipl_section_descriptor<DataOut> (secDesc2));
 #else
-      put_secp( new vipl_section_descriptor<DataOut> (*it));
+      vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::put_secp( new vipl_section_descriptor<DataOut> (*it));
 #endif
       this->ref_dst_section()->ref_overlap()[0] = this->image_border_size();
       this->ref_dst_section()->ref_overlap()[1] = this->image_border_size();
@@ -160,7 +160,7 @@ template < class ImgIn,class ImgOut,class DataIn,class DataOut, class PixelItr >
         vipl_section_descriptor<DataIn>& inSecDesc2 = *srcitr;
         put_insecp( new vipl_section_descriptor<DataIn> (inSecDesc2));
 #else
-        put_insecp( new vipl_section_descriptor<DataIn> (*srcitr));
+        vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::put_insecp( new vipl_section_descriptor<DataIn> (*srcitr));
 #endif
         this->ref_src_section()->ref_overlap()[0] = this->image_border_size();
         this->ref_src_section()->ref_overlap()[1] = this->image_border_size();

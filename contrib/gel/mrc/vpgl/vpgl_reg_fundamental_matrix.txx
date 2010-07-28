@@ -16,7 +16,7 @@ vpgl_reg_fundamental_matrix<T>::vpgl_reg_fundamental_matrix() :
   vnl_matrix_fixed<T,3,3> default_matrix( (T)0 );
   default_matrix(0,1) = default_matrix(0,2) = (T)1;
   default_matrix(1,0) = default_matrix(2,0) = -(T)1;
-  set_matrix( default_matrix );
+  vpgl_fundamental_matrix<T>::set_matrix( default_matrix );
 }
 
 
@@ -53,7 +53,7 @@ bool vpgl_reg_fundamental_matrix<T>::set_from_points(
   fm.put( 1, 2, -ex );
   fm.put( 2, 0, -ey );
   fm.put( 2, 1, ex );
-  set_matrix( fm );
+  vpgl_fundamental_matrix<T>::set_matrix( fm );
   return true;
 }
 
@@ -67,7 +67,7 @@ void vpgl_reg_fundamental_matrix<T>::set_from_params( T a, T b )
   fm.put( 1, 2, -b );
   fm.put( 2, 0, -a );
   fm.put( 2, 1, b );
-  set_matrix( fm );
+  vpgl_fundamental_matrix<T>::set_matrix( fm );
 };
 
 

@@ -46,10 +46,10 @@ bool vipl_moment <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
 
   // We create a (double) float buffer to hold the computed values.
 
-  int startx = start(this->X_Axis());
-  int starty = start(this->Y_Axis());
-  int stopx = stop(this->X_Axis());
-  int stopy = stop(this->Y_Axis());
+  int startx = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::start(this->X_Axis());
+  int starty = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::start(this->Y_Axis());
+  int stopx  = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::stop(this->X_Axis());
+  int stopy  = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::stop(this->Y_Axis());
 
   int sizex = stopx-startx+1;
   int sizey = stopy-starty+1;

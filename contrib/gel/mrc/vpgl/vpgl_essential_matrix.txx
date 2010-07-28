@@ -66,7 +66,7 @@ template <class T>
 const vpgl_essential_matrix<T>&
 vpgl_essential_matrix<T>::operator=( const vpgl_essential_matrix<T>& fm )
 {
-  set_matrix( fm.F_ );
+  vpgl_fundamental_matrix<T>::set_matrix( fm.F_ );
   return *this;
 }
 

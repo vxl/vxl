@@ -21,10 +21,10 @@ bool vipl_erode_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
 #ifdef DEBUG
   vcl_cout << " set start & stop ...";
 #endif
-  int startx = start(this->X_Axis());
-  int starty = 0; // = start(this->Y_Axis());
-  int stopx = stop(this->X_Axis());
-  int stopy = stop(this->Y_Axis()); // = height(out);
+  int startx = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::start(this->X_Axis());
+  int starty = 0; // = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::start(this->Y_Axis());
+  int stopx  = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::stop(this->X_Axis());
+  int stopy  = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::stop(this->Y_Axis()); // = height(out);
 #ifdef DEBUG
   vcl_cout << " (" << startx << ':' << stopx << ',' << starty << ':' << stopy << ')';
   vcl_cout << " run over image ...";

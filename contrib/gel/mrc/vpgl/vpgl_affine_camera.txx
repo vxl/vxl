@@ -17,7 +17,7 @@ vpgl_affine_camera<T>::vpgl_affine_camera()
 {
   vnl_matrix_fixed<T,3,4> C( (T)0 );
   C(0,0) = C(1,1) = C(2,3) = (T)1;
-  set_matrix( C );
+  vpgl_proj_camera<T>::set_matrix( C );
   view_distance_ = (T)0;
   vgl_homg_point_3d<T> cc = vpgl_proj_camera<T>::camera_center();
   ray_dir_.set(cc.x(), cc.y(), cc.z());
@@ -46,7 +46,7 @@ vpgl_affine_camera<T>::vpgl_affine_camera( const vnl_matrix_fixed<T,3,4>& camera
   vnl_matrix_fixed<T,3,4> C( camera_matrix );
   C = C/C(2,3);
   C(2,0) = (T)0; C(2,1) = (T)0; C(2,2) = (T)0;
-  set_matrix( C );
+  vpgl_proj_camera<T>::set_matrix( C );
   view_distance_ = (T)0;
   vgl_homg_point_3d<T> cc = vpgl_proj_camera<T>::camera_center();
   ray_dir_.set(cc.x(), cc.y(), cc.z());
@@ -122,7 +122,7 @@ void vpgl_affine_camera<T>::set_rows(
     C(1,i) = row2(i);
   }
   C(2,3) = (T)1;
-  set_matrix( C );
+  vpgl_proj_camera<T>::set_matrix( C );
 }
 
 //: Find the 3d coordinates of the center of the camera. Will be an ideal point with the sense of the ray direction.

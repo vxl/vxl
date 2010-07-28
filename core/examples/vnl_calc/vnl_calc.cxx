@@ -33,7 +33,7 @@ template <class T>
 class mystack : public vcl_vector<T>
 {
  public:
-  void push(const T& t) { push_back(t); }
+  void push(const T& t) { vcl_vector<T>::push_back(t); }
 
   T pop() {
     int n = this->size();
@@ -102,51 +102,53 @@ int main(int argc, char ** argv)
     }
     else if (arg == "+") {
       POP2(a+b);
-    } else if (arg == "-") {
+    }
+    else if (arg == "-") {
       POP2(a-b);
-    } else if (arg == "*" || arg == "x") {
+    }
+    else if (arg == "*" || arg == "x") {
       POP2(a*b);
-    } else if (arg == "/") {
-
+    }
+    else if (arg == "/") {
       POP2(element_quotient(a,b));
-
-    } else if (arg == "svd") {
+    }
+    else if (arg == "svd") {
       Matrix a = stack.pop();
       vnl_svd<double> svd(a);
       stack.push(svd.U());
       stack.push(svd.W().asMatrix());
       stack.push(svd.V());
-
-    } else if (arg == "X" || arg == "allx") {
+    }
+    else if (arg == "X" || arg == "allx") {
       // Multiply everything
       Matrix out = stack[0];
       for (unsigned k = 1; k < stack.size(); ++k)
         out = out * stack[k];
       stack.clear();
       stack.push(out);
-
-    } else if (arg == "all+") {
+    }
+    else if (arg == "all+") {
       // Add everything
       Matrix out = stack[0];
       for (unsigned k = 1; k < stack.size(); ++k)
         out += stack[k];
       stack.clear();
       stack.push(out);
-
-    } else if (arg == "i") {
+    }
+    else if (arg == "i") {
       stack.push(vnl_svd<double>(stack.pop()).inverse());
-
-      // Printing:
-    } else if (arg == "p") {
+    }
+    // Printing:
+    else if (arg == "p") {
       //stack.print();
       print(stack, print_format);
-
-    } else if (arg == "fmt") {
+    }
+    else if (arg == "fmt") {
       SHIFT;
       //Matrix::set_print_format(arg.c_str());
       print_format = arg;
-
-    } else if (arg == "setp") {
+    }
+    else if (arg == "setp") {
       Matrix a = stack.pop();
       cout_precision = int(a(0,0));
       if (cout_precision > 99 || cout_precision < 0)
@@ -156,7 +158,8 @@ int main(int argc, char ** argv)
       t[5]=char('0'+cout_precision%10);
       //Matrix::set_print_format(t);
       print_format = t;
-    } else { // Load from file
+    }
+    else { // Load from file
       Matrix m;
       vcl_ifstream f(arg.c_str());
       if (!m.read_ascii(f)) {

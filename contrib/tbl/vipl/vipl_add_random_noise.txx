@@ -7,10 +7,10 @@
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
 bool vipl_add_random_noise <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
 {
-  int startx = start(this->X_Axis());
-  int starty = start(this->Y_Axis());
-  int stopx = stop(this->X_Axis());
-  int stopy = stop(this->Y_Axis());
+  int startx = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::start(this->X_Axis());
+  int starty = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::start(this->Y_Axis());
+  int stopx = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::stop(this->X_Axis());
+  int stopy = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::stop(this->Y_Axis());
   for (register int j = starty; j < stopy; ++j)
     for (register int i = startx; i < stopx; ++i)
     {
