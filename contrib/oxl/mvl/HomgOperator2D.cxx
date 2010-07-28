@@ -341,7 +341,7 @@ HomgPoint2D HomgOperator2D::perp_projection (const HomgLine2D& line,
 //: Return the midpoint of the line joining two homogeneous points
 HomgPoint2D HomgOperator2D::midpoint (const HomgPoint2D& p1, const HomgPoint2D& p2)
 {
-  return p1 * (1/(2*p1[2])) + p2*(1/(2*p2[2]));
+  return HomgPoint2D(p1 * (1/(2*p1[2])) + p2*(1/(2*p2[2])));
 }
 
 // == FITTING ==
@@ -383,9 +383,9 @@ HomgPoint2D HomgOperator2D::lines_to_point(const vcl_vector<HomgLine2D>& lines)
   assert(lines.size() >= 2);
 
   if (lines_to_point_use_svd)
-    return most_orthogonal_vector_svd(lines);
+    return HomgPoint2D(most_orthogonal_vector_svd(lines));
   else
-    return most_orthogonal_vector(lines);
+    return HomgPoint2D(most_orthogonal_vector(lines));
 }
 
 // == MISCELLANEOUS ==
@@ -409,7 +409,8 @@ HomgLineSeg2D HomgOperator2D::clip_line_to_lineseg(const HomgLine2D& line,
     HomgPoint2D p1(x0 * ny, -(nz + x0 * nx), ny);
     HomgPoint2D p2(x1 * ny, -(nz + x1 * nx), ny);
     return HomgLineSeg2D(p1, p2);
-  } else {
+  }
+  else {
     HomgPoint2D p1(-(nz + y0 * ny), y0 * nx, nx);
     HomgPoint2D p2(-(nz + y1 * ny), y1 * nx, nx);
     return HomgLineSeg2D(p1, p2);

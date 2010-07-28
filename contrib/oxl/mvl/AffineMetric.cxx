@@ -70,10 +70,11 @@ vgl_homg_point_2d<double> AffineMetric::homg_to_imagehomg(vgl_homg_point_2d<doub
 {
   return A_ * p;
 }
+
 //: Transform p
 HomgPoint2D AffineMetric::homg_to_imagehomg(const HomgPoint2D& p) const
 {
-   return A_ * p.get_vector();
+   return HomgPoint2D(A_ * p.get_vector());
 }
 
 //: Inverse-transform p
@@ -81,10 +82,11 @@ vgl_homg_point_2d<double> AffineMetric::imagehomg_to_homg(vgl_homg_point_2d<doub
 {
   return A_inverse_ * p;
 }
+
 //: Inverse-transform p
 HomgPoint2D AffineMetric::imagehomg_to_homg(const HomgPoint2D& p) const
 {
-  return A_inverse_ * p.get_vector();
+  return HomgPoint2D(A_inverse_ * p.get_vector());
 }
 
 vgl_homg_point_2d<double> AffineMetric::image_to_homg(vgl_point_2d<double> const& p) const
@@ -130,7 +132,8 @@ vnl_double_2 AffineMetric::homg_to_image(const HomgPoint2D& p) const
 //: print to vcl_ostream
 vcl_ostream& AffineMetric::print(vcl_ostream& s) const
 {
-  return s << "AffineMetric [" << A_.get_row(0) << ';'
-                               << A_.get_row(1) << ';'
-                               << A_.get_row(2) << ']';
+  return s << "AffineMetric ["
+           << A_.get_row(0) << ';'
+           << A_.get_row(1) << ';'
+           << A_.get_row(2) << ']';
 }
