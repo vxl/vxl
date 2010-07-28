@@ -86,17 +86,17 @@ static void test_constructors()
   }
   {
     double gold[] = {7,7,7,30, 7,7,7,40, 7,7,7,50}; // the "ground truth"
-    vnl_matrix<double> M(3,3,7.0);
+    vnl_double_3x3 M(7.0);
     vnl_double_3 V(30,40,50);
     vgl_p_matrix<double> P(M,V); P.get(data);
-    TEST( "Constructor from vnl_matrix and vnl_vector", equals(data, gold), true );
-    vnl_vector<double> v = V;
-    P.get(&M,&v);
-    vgl_p_matrix<double> P2(M,v); P2.get(data);
+    TEST( "Constructor from vnl_double_3x3 and vnl_double_3", equals(data, gold), true );
+    vnl_vector<double> v(V.data_block(), 3);
+    vnl_matrix<double> m(M.data_block(), 3,3);
+    P.get(&m,&v);
+    vgl_p_matrix<double> P2(m,v); P2.get(data);
     TEST( "get(vnl_matrix*,vnl_vector*)", equals(data, gold), true );
-    vnl_double_3x3 m = M;
-    P.get(&m,&V);
-    vgl_p_matrix<double> P3(m,V); P3.get(data);
+    P.get(&M,&V);
+    vgl_p_matrix<double> P3(M,V); P3.get(data);
     TEST( "get(vnl_double_3x3*,vnl_double_3*)", equals(data, gold), true );
   }
   {
@@ -127,12 +127,12 @@ static void test_constructors()
     vnl_double_3x4 M(gold);
     vgl_p_matrix<double> P; P.set(M); P.get(data);
     TEST( "set(vnl_matrix)", equals(data, gold), true );
-    vnl_matrix<double> m = M; P.set(m); P.get(data);
+    vnl_matrix<double> m(M.data_block(), 3,4); P.set(m); P.get(data);
     TEST( "set(vnl_double_3x4)", equals(data, gold), true );
   }
   {
     double gold[] = {7,7,7,30, 7,7,7,40, 7,7,7,50}; // the "ground truth"
-    vnl_matrix<double> M(3,3,7.0);
+    vnl_double_3x3 M(7.0);
     vnl_double_3 V(30,40,50);
     vgl_p_matrix<double> P; P.set(M,V); P.get(data);
     TEST( "set(matrix,vector)", equals(data, gold), true );
@@ -144,12 +144,12 @@ static void test_accessors()
   double rotation[] = {1,0,0,0, 0,0.6,0.8,0, 0,-0.8,0.6,0, 0,0,0,1}; // Euclidean rotation around (0,0,0,1)
   vgl_p_matrix<double> P(rotation);
   vnl_double_3x4 M(rotation), M1;
-  vnl_matrix<double> M2;
+  vnl_matrix<double> m(rotation, 3,4), M2;
 
   TEST( "get(row,col)", P.get(1,2), 0.8 );
   TEST( "get_matrix()", P.get_matrix(), M );
-  P.get(M1); TEST( "get(vnl_matrix)", M1, M );
-  P.get(M2); TEST( "get(vnl_double_3x4)", M2, M );
+  P.get(M1); TEST( "get(vnl_double_3x4)", M1, M );
+  P.get(M2); TEST( "get(vnl_matrix)", M2, m );
   vnl_vector<double> v1, v2, v3; P.get_rows(&v1,&v2,&v3);
   TEST( "get_rows(vnl_vector 3x)", v1==vnl_double_4(1,0,0,0) && v2==vnl_double_4(0,0.6,0.8,0) && v3==vnl_double_4(0,-0.8,0.6,0), true );
   vnl_double_4 d1, d2, d3; P.get_rows(&d1,&d2,&d3);

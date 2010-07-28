@@ -60,8 +60,9 @@ void test_gaussian_type(T epsilon, const vcl_string& type_name)
          gauss3.covariance(), zero_matrix);
     TEST(("zero default variance <"+type_name+"> scalar").c_str(),
          gauss1.covariance(), T(0));
+    vnl_matrix<T> zero_matrix3(3,3, T(0));
     TEST(("zero default variance <"+type_name+"> variable").c_str(),
-         gauss.covariance(), zero_matrix);
+         gauss.covariance(), zero_matrix3);
 
     // test zero variance evaluations
     vnl_vector_fixed<T,3> test_pt(T(1), T(1), T(1));
