@@ -89,20 +89,23 @@ vcl_vector<int> Monte_Carlo(vcl_vector<HomgPoint2D> points, vcl_vector<int> inde
     int random;
     if (buckets > 1) {
       random  = (int)((float)(no_buckets - 1)*vcl_rand()/(RAND_MAX+1.0));
-    } else {
+    }
+    else {
       random  = 1;
     }
 
     int row_num;
     if (buckets > 1) {
       row_num = random/buckets;
-    } else {
+    }
+    else {
       row_num = 0;
     }
     int col_num;
     if (buckets > 1) {
       col_num = random - row_num*buckets;
-    } else {
+    }
+    else {
       col_num = 0;
     }
 
@@ -152,7 +155,8 @@ vcl_vector<int> Monte_Carlo(vcl_vector<HomgPoint2D> points, vcl_vector<int> inde
           out_points[i] = picked;
           not_picked = false;
           i++;
-        } else {
+        }
+        else {
           counter++;
           //vcl_cerr << "Failed\n";
         }
@@ -198,8 +202,7 @@ vcl_vector<HomgPoint2D> Taubins_MLE(HomgPoint2D x1, HomgPoint2D x2, FMatrix *F)
 double Sampsons_MLE(HomgPoint2D x1, HomgPoint2D x2, FMatrix *F)
 {
   double rX, rY, rX_dash, rY_dash, GRADr, r, dist;
-  vnl_matrix<double> temp(3, 3);
-  temp = (vnl_matrix<double>)F->get_matrix();
+  vnl_matrix_fixed<double,3,3> temp = F->get_matrix();
   vcl_cerr << x2.x() << vcl_endl;
   rX = temp.get(0, 0)*x2.x() + temp.get(1, 0)*x2.y() + temp.get(2, 0);
   rY = F->get(0, 1)*x2.x() + F->get(1, 1)*x2.y() + F->get(2, 1);
