@@ -53,7 +53,7 @@ void test_matrix_type(T epsilon, const vcl_string& type_name)
 
   {
     vcl_cout <<"=======================================\n";
-    vpdt_eigen_sym_matrix<T> sym(M);
+    vpdt_eigen_sym_matrix<T> sym(vnl_matrix<T>(M.data_block(), 3,3));
     vnl_matrix<T> M2;
     sym.form_matrix(M2);
     TEST_NEAR(("reform matrix <"+type_name+"> variable").c_str(),
