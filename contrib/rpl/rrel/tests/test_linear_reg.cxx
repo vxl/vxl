@@ -13,7 +13,7 @@ bool close(double,double);
 static void test_linear_reg()
 {
   vnl_double_3 true_params(10.0,0.02,-0.1);
-  vnl_vector<double> a(true_params);
+  vnl_double_3 a = true_params;
 
   const unsigned int num_pts=7;
 

@@ -74,7 +74,7 @@ void test_update_gaussian_type(T epsilon, const vcl_string& type_name)
     test_mean = true;
     test_vars = true;
     for (unsigned int i=0; i<data.size(); ++i){
-      vpdt_update_gaussian(gauss, T(1.0/(i+1)), vnl_vector<T>(data[i]));
+      vpdt_update_gaussian(gauss, T(1.0/(i+1)), vnl_vector<T>(data[i].data_block(),3));
 
       T mean_diff = (gauss.mean - means[i]).inf_norm();
       test_mean = test_mean && (mean_diff < epsilon);

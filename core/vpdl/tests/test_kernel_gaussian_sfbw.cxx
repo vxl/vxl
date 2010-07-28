@@ -98,7 +98,7 @@ void test_kernel_gaussian_sfbw_type(T epsilon, const vcl_string& type_name)
   vcl_cout << "=================== variable ======================="<<vcl_endl;
   {
     vcl_vector<vnl_vector<T> > vsamples;
-    vsamples.push_back(samples[0]);
+    vsamples.push_back(vnl_vector<T>(samples[0].data_block(), 3));
     vpdl_kernel_gaussian_sfbw<T> kernel_g, kernel_g1(vsamples,bandwidth);
 
     TEST(("init num_components <"+type_name+">").c_str(),

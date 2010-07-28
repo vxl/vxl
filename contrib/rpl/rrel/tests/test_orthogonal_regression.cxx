@@ -34,7 +34,7 @@ static void test_orthogonal_regression()
 
 
   vcl_vector< vnl_vector<double> > pts(num_pts);
-  vnl_vector<double> p(3);
+  vnl_double_3 p;
 
   p[0] = 1.0;  p[1]=-0.5; p[2] = a0 * p[0] + a1* p[1] + a2;
   p += error[0] * norm_vect;

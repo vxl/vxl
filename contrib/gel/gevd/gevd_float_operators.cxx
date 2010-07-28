@@ -1509,7 +1509,7 @@ gevd_float_operators::SurfaceNormal(const gevd_bufferxy& range, gevd_bufferxy*& 
       tx[2] = floatPixel(range, i+1, j) - floatPixel(range, i-1, j);
       ty[2] = floatPixel(range, i, j+1) - floatPixel(range, i, j-1);
 
-      vnl_vector<float> *nz= new vnl_vector<float>(vnl_cross_3d(tx,ty));
+      vnl_vector<float> *nz= new vnl_vector<float>(vnl_cross_3d(tx,ty).data_block(),3);
 
       float mag = nz->magnitude();
       if (mag != 0) *nz /= mag; // make unit vector
@@ -1632,7 +1632,7 @@ gevd_float_operators::SurfaceNormalD(const gevd_bufferxy& range,
         {
           vnl_float_3 tx(d_x*pixel_distance, 0.f, d_z_x),
                       ty(0.f, d_y*pixel_distance, d_z_y);
-          vnl_vector<float>* nz = new vnl_vector<float>(vnl_cross_3d(tx, ty));
+          vnl_vector<float>* nz = new vnl_vector<float>(vnl_cross_3d(tx,ty).data_block(),3);
 
 #ifdef DEBUG
           vcl_cout << "Tx = " << tx << ",  Ty = " << ty << vcl_endl;

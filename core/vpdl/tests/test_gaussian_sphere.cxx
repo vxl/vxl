@@ -58,7 +58,7 @@ void test_gaussian_sphere_type(T epsilon, const vcl_string& type_name)
          gauss1.sqr_mahal_dist(test_pt[0]),
          vcl_numeric_limits<T>::infinity());
     TEST(("zero var mahalanobis dist <"+type_name+"> variable").c_str(),
-         gauss.sqr_mahal_dist(test_pt),
+         gauss.sqr_mahal_dist(vnl_vector<T>(test_pt.data_block(), 3)),
          vcl_numeric_limits<T>::infinity());
 
     // test zero variance probability
@@ -233,10 +233,10 @@ void test_gaussian_sphere_type(T epsilon, const vcl_string& type_name)
     TEST_NEAR(("box probability <"+type_name+"> variable").c_str(),
               gauss.box_prob(test2,test1), box_test, epsilon);
 
+    vpdl_distribution<T>* base = &gauss; // pointer to the base class
     TEST_NEAR(("box probability (base==derived) <"+type_name+">").c_str(),
-              gauss.vpdl_distribution<T>::box_prob(test2,test1),
+              base->box_prob(test2,test1),
               gauss.box_prob(test2,test1), epsilon);
-
 
     // This is really a test of the base class box_prob function
     // An even dimension can have a create a sign error not seen in an odd one
