@@ -168,11 +168,11 @@ void boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T> >* scene,
   int buff_length = (int) (num_cells / num_buffers);
   vcl_cout<<"Number of blocks "<<total_blocks
           <<" takes up "<<total_blocks*4<<" bytes"<<vcl_endl
-          <<"   "<<MAX_BYTES-total_blocks*4<<" bytes left"<<vcl_endl;
+          <<"   "<<freeBytes<<" bytes left"<<vcl_endl;
   
   //int buff_length = (int) vcl_ceil(((float)total_tree_cells/(float)num_buffers));
   vcl_cout<<"OCL Scene buffer shape: ["<<num_buffers<<" buffers by "<<buff_length<<" cells]. "
-          <<"[total:"<<total_tree_cells<<"]"<<vcl_endl;
+          <<"[total tree:"<<num_buffers*buff_length<<"]"<<vcl_endl;
   
   // make sure that the number of cells allocated is greater than
   // the number of cells in the input tree 
@@ -199,7 +199,6 @@ void boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T> >* scene,
   vbl_array_2d<float16> data_buffers(num_buffers, buff_length, dat_init);
 
   /* 5. Go through each block and convert it to smaller blocks */
-  int4 blkCounts(0);
   vnl_random random(9667566);
   boxm_block_iterator<tree_type> iter(scene);
   for (iter.begin(); !iter.end(); iter++) {
@@ -247,7 +246,6 @@ void boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T> >* scene,
       blk[2] = cell_array.size();    //tree size
       blk[3] = 0;                    //nothign for now
       blocks(i,j,k) = blk;
-      blkCounts[buffIndex]++;
 
       //copy cell_array and data_array to buffer
       //make sure there's enough room
@@ -275,8 +273,6 @@ void boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T> >* scene,
     vcl_cout<<"  allocated "<<tot_alloc<<" cells"<<vcl_endl;
     if (buff_Full) vcl_cout<<"boxm_ocl_utils::convert_scene: BLOCK @ "<<blk_ind<<" FILLED BUFFER "<<vcl_endl;
   }
-  
-  vcl_cout<<"buffers allocated as "<<blkCounts<<vcl_endl;
   
   /* make a pass to make sure all small blocks were initialized */
   //(This isn't really necessary if the init level is high enough)
