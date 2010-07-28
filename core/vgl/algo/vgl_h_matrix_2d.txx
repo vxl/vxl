@@ -330,7 +330,7 @@ projective_basis(vcl_vector<vgl_homg_line_2d<T> > const& lines
   back_matrix.set_column(1, l1);
   back_matrix.set_column(2, l2);
 
-  vnl_svd<T> svd(back_matrix);
+  vnl_svd<T> svd(vnl_matrix<T>(back_matrix.data_block(), 3,3));
 
   vnl_vector_fixed<T, 3> scales_vector = svd.solve(l3);
 
@@ -376,12 +376,13 @@ void vgl_h_matrix_2d<T>::set_rotation(const T theta)
 }
 
 //: Compose the existing matrix with a uniform scale transformation
+// \verbatim
 //        _     _
 //       |s  0  0|
 //  Hs = |0  s  0| Hinitial
 //       |0  0  1|
 //        -     -
-//
+// \endverbatim
 template <class T>
 void vgl_h_matrix_2d<T>::set_scale(const T scale)
 {
@@ -390,13 +391,14 @@ void vgl_h_matrix_2d<T>::set_scale(const T scale)
       t12_matrix_[r][c]*=scale;
 }
 
-//: Compose the existing matrix with an aspect ratio transform 
+//: Compose the existing matrix with an aspect ratio transform
+// \verbatim
 //        _     _
 //       |1  0  0|
 //  Hs = |0  r  0| Hinitial
 //       |0  0  1|
 //        -     -
-//
+// \endverbatim
 template <class T>
 void vgl_h_matrix_2d<T>::set_aspect_ratio(const T aspect_ratio)
 {

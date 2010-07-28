@@ -69,17 +69,17 @@ HMatrix2DSimilarityCompute::tmp_fun(PointArray const& pts1,
   sub_rows(p2,mn2);
 
   vnl_double_2x2 scatter = vnl_transpose(p2)*p1;
-  vnl_svd<double> svd(scatter);
+  vnl_svd<double> svd(vnl_matrix<double>(scatter.data_block(), 2,2));
 
   vnl_double_2x2 R = svd.U() * vnl_transpose(svd.V());
-  double scale = dot_product(p2,p1*vnl_transpose(R)) / dot_product(p1,p1);
-  vnl_double_2 t = mn2 - scale * R * mn1;
+  double scale = dot_product(p2,p1*R.transpose()) / dot_product(p1,p1);
+  R *= scale;
+  vnl_double_2 t = mn2 - R * mn1;
 
   vnl_double_3x3 T;
-  T.set_identity();
-  T.update(scale*R);
-  T(0,2) = t[0];
-  T(1,2) = t[1];
+  T(0,0) = R(0,0); T(0,1) = R(0,1); T(0,2) = t[0];
+  T(1,0) = R(1,0); T(1,1) = R(1,1); T(1,2) = t[1];
+  T(2,0) = 0.0;    T(2,1) = 0.0;    T(2,2) = 1.0;
   H->set(T);
   return true;
 }
