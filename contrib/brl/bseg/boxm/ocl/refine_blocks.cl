@@ -33,7 +33,7 @@ void swap_eight(__local int4 *tree, int a, int b, __global float* output)
   unsigned gid = get_group_id(0);
 
   //update A and B's Parent's child pointer first
-  if(gid==0) {
+  if(lid==0) {
     int parent_ptr = tree[a].x;
     tree[parent_ptr].y = b;
     parent_ptr = tree[b].x;
@@ -170,8 +170,7 @@ int refine_tree(__local int4    *tree,
       //ALSO make sure currLevel is less than MAX_LEVELS
       if(alpha_int > max_alpha_int && currLevel < maxLevel-1)  {
   
-        if(gid==0 && lid==3)
-          (*output) ++ ;
+        output[gid]++;
 
         //new alpha for the child nodes
         float new_alpha = max_alpha_int / side_len;  
@@ -322,6 +321,7 @@ refine_main(__global  int4     *block_ptrs,     //3d block array
 
       //update current root index
       currRootIndex = (currRootIndex+currTreeSize)%len_buffer;
+      
     }
     
     mem_ptrs[gid].x = startPtr;

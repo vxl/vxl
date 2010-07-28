@@ -99,7 +99,7 @@ class boxm_refine_scene_manager : public bocl_manager<boxm_refine_scene_manager 
     ///////////////////////////////////
     //OUTPUT BUFFERS
     cl_mem    output_buf_;
-    cl_float  output_results_;
+    cl_float* output_;
     float     gpu_time;
     //////////////////////////////////
 };

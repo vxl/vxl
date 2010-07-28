@@ -22,8 +22,6 @@ init_refine(boxm_ocl_scene* scene, float prob_thresh)
   //keep track of the scene
   scene_ = scene;
 
-  output_results_ = 0; 
-
   //store scene information, numbuffer_ length of buffer,
   tree_cell_size_ = 4;  //four ints for now
   data_cell_size_ = 16;  //8 floats for now
@@ -108,6 +106,11 @@ bool boxm_refine_scene_manager::setup_scene_data()
 
   //scene_dims_   = (cl_int*)   boxm_ocl_utils::alloc_aligned(1, sizeof(cl_int4), 16);
   //scene_origin_ = (cl_float*) boxm_ocl_utils::alloc_aligned(1, sizeof(cl_int4), 16);
+  
+  //output buffer
+  output_       = (cl_float*) boxm_ocl_utils::alloc_aligned(10, sizeof(cl_float), 16);
+  for(int i=0; i<10; i++)
+    output_[i] = 0;
   return true;
 }
 
@@ -166,8 +169,8 @@ bool boxm_refine_scene_manager::setup_scene_data_buffers()
   //OUTPUT
   output_buf_ = clCreateBuffer(this->context_,
                                CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR,
-                               sizeof(cl_float),
-                               &output_results_,
+                               sizeof(cl_float)*10,
+                               output_,
                                &status);
 
   return this->check_val(status, CL_SUCCESS, "clCreateBuffer (cell_data) failed.");
@@ -184,6 +187,7 @@ bool boxm_refine_scene_manager::clean_scene_data()
   boxm_ocl_utils::free_aligned(mem_ptrs_);
   //boxm_ocl_utils::free_aligned(scene_dims_);
   //boxm_ocl_utils::free_aligned(scene_origin_);
+  boxm_ocl_utils::free_aligned(output_);
   return true;
 }
 
@@ -291,7 +295,10 @@ bool boxm_refine_scene_manager::run_refine()
   gpu_time = (tend-tstart)/1e9f;  //gpu time in seconds
 
   //opencl output_
-  vcl_cout<<"---OPENCL KERNEL OUTPUT: "<<output_results_<<vcl_endl;
+  vcl_cout<<"---OPENCL KERNEL OUTPUT: ";
+  for(int i=0; i<10; i++) 
+    vcl_cout<<output_[i]<<",";
+  vcl_cout<<vcl_endl;
 
 
   //PROFILING INFORMATION FROM OPENCL
@@ -349,8 +356,8 @@ bool boxm_refine_scene_manager::read_buffers()
 
   //read output_buf_
   status = clEnqueueReadBuffer(command_queue_, output_buf_, CL_TRUE,
-                               0, sizeof(cl_float),
-                               &output_results_,
+                               0, sizeof(cl_float)*10,
+                               output_,
                                0,NULL,&events[eventI++]);
   if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (output_results_)failed."))
     return false;
