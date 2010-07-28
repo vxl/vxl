@@ -25,9 +25,9 @@ sdet_nms::sdet_nms():
   margin_(1),
   rel_thresh_(2.5),
   use_adaptive_thresh_(true),
-  dir_x_(vil_image_view<double>(0,0,1)),
-  dir_y_(vil_image_view<double>(0,0,1)),
-  grad_mag_(vil_image_view<double>(0,0,1)),
+  dir_x_(vil_image_view<double>(0,0,1)), // FIXME: this does not make sense: reference member is initialized to a temporary that doesn't persist after the constructor exits
+  dir_y_(vil_image_view<double>(0,0,1)), // idem
+  grad_mag_(vil_image_view<double>(0,0,1)), // idem
   x_(0,0, 0.0),
   y_(0,0, 0.0),
   dir_(0,0, 0.0),
