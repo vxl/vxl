@@ -153,7 +153,7 @@ void FMatrixPlanar::init(const FMatrix& F)
   vgl_homg_point_2d<double> e1,e2;
   F.get_epipoles(e1,e2);
 
-  vnl_symmetric_eigensystem<double>  symm_eig(F.get_matrix()+F.get_matrix().transpose());
+  vnl_symmetric_eigensystem<double>  symm_eig(vnl_matrix<double>((F.get_matrix()+F.get_matrix().transpose()).data_block(), 3,3));
 
   double eig0 = symm_eig.D(0,0);
   double eig1 = symm_eig.D(2,2);

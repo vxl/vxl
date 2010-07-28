@@ -157,7 +157,7 @@ void HMatrix2D::get (double *H) const
 //: Fill H with contents of this
 void HMatrix2D::get (vnl_matrix<double>* H) const
 {
-  *H = t12_matrix_;
+  *H = vnl_matrix<double>(t12_matrix_.data_block(), 3,3);
 }
 
 //: Set to identity

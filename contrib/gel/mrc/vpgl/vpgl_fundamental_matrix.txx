@@ -152,7 +152,7 @@ vpgl_proj_camera<T> vpgl_fundamental_matrix<T>::extract_left_camera(
   elvt(0,2) = el.x()*v[2]; elvt(1,2) = el.y()*v[2]; elvt(2,2) = el.w()*v[2];
 
   vnl_matrix_fixed<T,3,4> P;
-  P.set_columns( 0, elx*F_+elvt );
+  P.set_columns( 0, vnl_matrix<T>((elx*F_+elvt).data_block(),3,3) );
   P.set_column( 3, vnl_vector_fixed<T,3>( lambda*el.x(), lambda*el.y(), lambda*el.w() ) );
   return P;
 }

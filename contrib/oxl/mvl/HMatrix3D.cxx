@@ -153,7 +153,7 @@ void HMatrix3D::get (double *t_matrix) const
 //: Fill t_matrix with contents of H
 void HMatrix3D::get (vnl_matrix<double>* t_matrix) const
 {
-  *t_matrix = (*this);
+  *t_matrix = vnl_matrix<double>(this->data_block(), 4,4);
 }
 
 //-----------------------------------------------------------------------------
