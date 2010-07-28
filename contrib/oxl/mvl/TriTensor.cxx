@@ -157,7 +157,8 @@ TriTensor::set(const PMatrix& P1, const PMatrix& P2, const PMatrix& P3)
   if (canon1) {
     p2.set(P2);
     p3.set(P3);
-  } else {
+  }
+  else {
     HMatrix3D H = P1.get_canonical_H();
     p2.set(P2 * H);
     p3.set(P3 * H);
@@ -1973,14 +1974,14 @@ HomgPoint2D TriTensor::get_epipole_13() const
 FMatrix TriTensor::get_fmatrix_12() const
 {
   get_epipoles(0,0);
-  return vnl_cross_product_matrix(e12_->get_vector()) * dot3(e13_->get_vector().as_ref()).transpose().as_ref();
+  return FMatrix(vnl_cross_product_matrix(e12_->get_vector()) * dot3(e13_->get_vector().as_ref()).transpose().as_ref());
 }
 
 //: Return F13, the fundamental matrix between images 1 and 3
 FMatrix TriTensor::get_fmatrix_13() const
 {
   get_epipoles(0,0);
-  return vnl_cross_product_matrix(e13_->get_vector()) * dot2(e12_->get_vector().as_ref()).transpose().as_ref();
+  return FMatrix(vnl_cross_product_matrix(e13_->get_vector()) * dot2(e12_->get_vector().as_ref()).transpose().as_ref());
 }
 
 FMatrix TriTensor::compute_fmatrix_23() const
@@ -2024,7 +2025,7 @@ const FManifoldProject* TriTensor::get_fmp23() const
 }
 
 //: Compute one of the family of P matrix triplets consistent with this T
-void TriTensor::compute_P_matrices(const vnl_vector<double>& x, double alpha, double beta, PMatrix* P2, PMatrix* P3) const
+void TriTensor::compute_P_matrices(const vnl_double_3& x, double alpha, double beta, PMatrix* P2, PMatrix* P3) const
 {
   HomgPoint2D e2 = get_epipole_12();
   HomgPoint2D e3 = get_epipole_13();
