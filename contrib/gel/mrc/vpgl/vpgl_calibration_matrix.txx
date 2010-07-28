@@ -8,7 +8,9 @@
 
 #include <vgl/vgl_point_2d.h>
 #include <vgl/io/vgl_io_point_2d.h>
-#include <vnl/algo/vnl_svd.h>
+#include <vnl/vnl_inverse.h>
+#include <vnl/vnl_vector_fixed.h>
+#include <vnl/vnl_matrix_fixed.h>
 #include <vcl_cassert.h>
 
 //--------------------------------------
@@ -135,16 +137,14 @@ operator==(vpgl_calibration_matrix<T> const &that) const
 }
 
 //: Map from image to focal plane.
-// (Later may need to cache the svd for efficiency)
+// (Later may need to cache the inverse for efficiency)
 template <class T>
 vgl_point_2d<T> vpgl_calibration_matrix<T>::
 map_to_focal_plane(vgl_point_2d<T> const& p_image) const
 {
-  vnl_vector<T> p(3);
-  p[0]=p_image.x();   p[1]=p_image.y();   p[2]=1;
-  vnl_svd<T> svd(this->get_matrix());
-  vnl_matrix<T> Kinv = svd.inverse();
-  vnl_vector<T> pf = Kinv*p;
+  vnl_vector_fixed<T,3> p(p_image.x(), p_image.y(), 1);
+  vnl_matrix_fixed<T,3,3> Kinv = vnl_inverse(this->get_matrix());
+  vnl_vector_fixed<T,3> pf = Kinv*p;
   return vgl_point_2d<T>(pf[0]/pf[2], pf[1]/pf[2]);
 }
 
@@ -152,10 +152,9 @@ template <class T>
 vgl_point_2d<T> vpgl_calibration_matrix<T>::
 map_to_image(vgl_point_2d<T> const& p_focal_plane) const
 {
-  vnl_vector<T> p(3);
-  p[0]=p_focal_plane.x();   p[1]=p_focal_plane.y();   p[2]=1;
+  vnl_vector_fixed<T,3> p(p_focal_plane.x(), p_focal_plane.y(), 1);
   vnl_matrix_fixed<T,3,3> K = this->get_matrix();
-  vnl_vector<T> pf = K*p;
+  vnl_vector_fixed<T,3> pf = K*p;
   return vgl_point_2d<T>(pf[0]/pf[2], pf[1]/pf[2]);
 }
 
@@ -189,7 +188,6 @@ b_read(vsl_b_istream &is)
 
 //-------------------------------
 //: Binary save self to stream.
-// \remark cached_svd_ not written
 template <class T> void vpgl_calibration_matrix<T>::
 b_write(vsl_b_ostream &os) const
 {
