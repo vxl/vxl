@@ -35,6 +35,10 @@ boxm_ocl_scene::boxm_ocl_scene(vbl_array_3d<int4> blocks,
 // initializes Scene from XML file
 boxm_ocl_scene::boxm_ocl_scene(vcl_string filename)
 {
+  //default values for blank scene init
+  max_mb_ = 400;
+  pinit_ = .01;
+
   //load the scene xml file
   this->load_scene(filename);
 }
@@ -117,8 +121,8 @@ bool boxm_ocl_scene::save_scene(vcl_string dir)
 
 bool boxm_ocl_scene::save()
 {
-    vcl_string dir,pref;
-      parser_.paths(dir, pref);
+  vcl_string dir,pref;
+  parser_.paths(dir, pref);
 
   vcl_cout<<"boxm_ocl_scene::save_scene to "<<dir<<vcl_endl;
   //get the paths straight...
@@ -173,11 +177,19 @@ bool boxm_ocl_scene::load_scene(vcl_string filename)
     }
   }
 
-  // store world information
+  /* store scene and world meta data */
+  //path (directory where you can find the scene.xml file) 
+  vcl_string dir, pref; 
+  parser_.paths(dir, pref);
+  path_ = dir;
+  
+  //lvcs, origin, block dimension
   parser_.lvcs(lvcs_);
   origin_ = parser_.origin();
   rpc_origin_ = parser_.origin();
   block_dim_ = parser_.block_dim();
+  
+  //init levels
   unsigned max, init;
   parser_.levels(max, init);
   max_level_ = (int) max;
@@ -197,6 +209,8 @@ bool boxm_ocl_scene::load_scene(vcl_string filename)
   else {
     vcl_cout<<"tree_not loaded, initializing empty scene"<<vcl_endl;
     parser_.tree_buffer_shape(num_tree_buffers_, tree_buff_length_);
+    max_mb_ = parser_.max_mb();
+    pinit_  = parser_.p_init();
     this->init_empty_scene();
   }
 
@@ -219,6 +233,14 @@ bool boxm_ocl_scene::init_existing_scene()
   vsl_b_read(is, tree_buffers_);
   vsl_b_read(is, blocks_);
   vsl_b_read(is, mem_ptrs_);
+  is.close();
+  
+  //initialize max_mb based blockSize+treeSize+dataSize
+  int numBlocks = blocks_.get_row1_count() * blocks_.get_row2_count() * blocks_.get_row3_count();
+  int blockBytes = numBlocks * sizeof(int) * 4;
+  int buffBytes = tree_buff_length_ * num_tree_buffers_ * sizeof(int) * 4;
+  int dataBytes = tree_buff_length_ * num_tree_buffers_ * sizeof(float) * 16;
+  max_mb_ = vcl_ceil( (blockBytes + buffBytes + dataBytes)/1024.0/1024.0 ); 
   return true;
 }
 
@@ -243,14 +265,26 @@ bool boxm_ocl_scene::init_existing_data()
 bool boxm_ocl_scene::init_empty_scene()
 {
   vcl_cout<<"initializing empty scene ..."<<vcl_endl;
-  //tree buffers
-  int4 init_cell(-1);
-  tree_buffers_ = vbl_array_2d<int4>(num_tree_buffers_, tree_buff_length_, init_cell);
-
-  //initialize 3d block structure, init to -1
+  //initialize 3d block structure - init to -1
   int4 init_blk(-1);
   vgl_vector_3d<unsigned> blk_nums = parser_.block_nums();
   blocks_ =  vbl_array_3d<int4>(blk_nums.x(), blk_nums.y(), blk_nums.z(), init_blk);
+  
+
+  /* compute total number of cells that can be allocated given max_mb */
+  int MAX_BYTES = max_mb_ * 1024 * 1024;
+  int total_blocks = blk_nums.x() * blk_nums.y() * blk_nums.z();
+  int freeBytes = MAX_BYTES-total_blocks*4*sizeof(int); 
+  int sizeofCell = 4*sizeof(int) + 20*sizeof(float); 
+  int num_cells = (int) (freeBytes/sizeofCell);
+  vcl_cout<<"Max Bytes "<<MAX_BYTES<<vcl_endl;
+  vcl_cout<<"Num cells "<<num_cells<<vcl_endl;
+  tree_buff_length_ = (int) (num_cells / num_tree_buffers_);
+  vcl_cout<<"Tree shape: "<<num_tree_buffers_<<" by "<<tree_buff_length_<<" cells"<<vcl_endl;
+  
+  //tree buffers
+  int4 init_cell(-1);
+  tree_buffers_ = vbl_array_2d<int4>(num_tree_buffers_, tree_buff_length_, init_cell);
 
   //initialize book keeping mem ptrs
   int2 init_mem(0);
@@ -285,7 +319,9 @@ bool boxm_ocl_scene::init_empty_scene()
 
         //put data in memory
         float16 datum(0.0f);
-        datum[0] = .1;
+        float bboxLen = (float) block_dim_.x();
+        float alpha_init = (-1.0/bboxLen) * vcl_log(1.0-pinit_);
+        datum[0] = alpha_init;
         data_buffers_[buffIndex][buffOffset] = datum;
 
         //make sure mem spot is now taken
@@ -368,7 +404,6 @@ void x_write(vcl_ostream &os, boxm_ocl_scene& scene, vcl_string name)
   vsl_basic_xml_element scene_elm(name);
   scene_elm.x_write_open(os);
 
-
   //write lvcs information
   bgeo_lvcs lvcs = scene.lvcs();
   lvcs.x_write(os, LVCS_TAG);
@@ -403,6 +438,24 @@ void x_write(vcl_ostream &os, boxm_ocl_scene& scene, vcl_string name)
   tree.add_attribute("max", (int) scene.max_level());
   tree.add_attribute("init", (int) scene.init_level());
   tree.x_write(os);
+  
+  //write max MB for scene 
+  vsl_basic_xml_element max_mb(MAX_MB_TAG);
+  max_mb.add_attribute("mb", (int) scene.max_mb());
+  max_mb.x_write(os);
+  
+  //write p_init for scene
+  vsl_basic_xml_element pinit(P_INIT_TAG);
+  pinit.add_attribute("val", (float) scene.pinit());
+  pinit.x_write(os);
+
+  //write number of buffers 
+  int num, len;
+  scene.tree_buffer_shape(num,len);
+  vsl_basic_xml_element buffers(TREE_INIT_TAG);
+  buffers.add_attribute("num_buffers", num);
+  buffers.add_attribute("buff_size", len);
+  buffers.x_write(os);
 
   scene_elm.x_write_close(os);
 }
@@ -429,6 +482,7 @@ vcl_ostream& operator <<(vcl_ostream &s, boxm_ocl_scene& scene)
   int sizeData = 16*sizeof(float)*num*len;
   double scene_size = (sizeBlks + sizeTree + sizeData)/1024.0/1024.0;
   s <<"---OCL_SCENE--------------------------------\n"
+    <<"path: "<<scene.path()<<vcl_endl
     <<"blocks:  [block_nums "<<x_num<<','<<y_num<<','<<z_num<<"] "
     <<"[blk_dim "<<x_dim<<','<<y_dim<<','<<z_dim<<"]\n"
     <<"blk levels: [init level "<<scene.init_level()<<"] "
@@ -461,9 +515,9 @@ vcl_ostream& operator <<(vcl_ostream &s, boxm_ocl_scene& scene)
   //verbose scene printing
   s << "Blocks:"<<vcl_endl;
   vbl_array_3d<int4> blocks = scene.blocks();
-  for (int i=0; i<x_num; i++) {
-    for (int j=0; j<y_num; j++) {
-      for (int k=0; k<z_num; k++) {
+  for (int i=0; i<4; i++) {
+    for (int j=0; j<3; j++) {
+      for (int k=0; k<2; k++) {
         int buffIndex = blocks[i][j][k][0];
         int buffOffset = blocks[i][j][k][1];
         int blkSize = blocks[i][j][k][2];
@@ -473,17 +527,17 @@ vcl_ostream& operator <<(vcl_ostream &s, boxm_ocl_scene& scene)
         //now print tree...
         for (int l=0; l<blkSize; l++) {
           //print tree cell
-          vcl_cout<<"cell @ "<<l<<" (absolute: "<<l+buffOffset<<" : "
+          vcl_cout<<"     cell @ "<<l<<" (buffer location: "<<l+buffOffset<<") : "
                   <<tree_buffers[buffIndex][buffOffset+l]<<' ';
 
           //print data if it exists
           int data_ptr = tree_buffers[buffIndex][buffOffset+l][2];
           if (data_ptr >= 0) {
-            vcl_cout<<"  data @ "<<data_ptr<<" : "
+            vcl_cout<<"     data @ "<<data_ptr<<" : "
                     <<data_buffers[buffIndex][data_ptr]<<' ';
           }
           else {
-            vcl_cout<<"  data for this cell not stored ";
+            vcl_cout<<"     data for this cell not stored ";
           }
           vcl_cout<<vcl_endl;
         }

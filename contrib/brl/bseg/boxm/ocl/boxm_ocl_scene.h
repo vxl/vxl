@@ -61,6 +61,8 @@ class boxm_ocl_scene
     vgl_vector_3d<double> block_dim(){ return block_dim_; }
     vgl_point_3d<double> origin(){return origin_;}
     bgeo_lvcs lvcs() { return lvcs_; }
+    int max_mb() { return max_mb_; }
+    float pinit() { return pinit_; }
 
     /* ocl_scene I/O */
     bool load_scene(vcl_string filename);   
@@ -110,6 +112,8 @@ class boxm_ocl_scene
     vcl_string path_;
     int init_level_;   //each block's init level (default 1)
     int max_level_;    //each blocks max_level (default 4)
+    int max_mb_;
+    float pinit_;
 
     //actual local scene structure and data
     int num_tree_buffers_, tree_buff_length_;
