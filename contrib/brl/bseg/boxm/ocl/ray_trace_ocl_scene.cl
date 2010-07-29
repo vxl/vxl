@@ -114,6 +114,7 @@ ray_trace_ocl_scene(__global int4     * scene_dims,  // level of the root.
     short4 curr_loc_code=(short4)-1;
     // traverse to leaf cell that contains the entry point
     curr_cell_ptr = traverse_force_woffset(tree_array, root_ptr, root, entry_loc_code,&curr_loc_code,&global_count,root_ptr);
+    curr_cell_ptr = traverse_force_woffset_mod(tree_array, root_ptr, root, entry_loc_code,&curr_loc_code,&global_count,lenbuffer,block.x,block.y);
 
     // this cell is the first pierced by the ray
     // follow the ray through the cells until no neighbors are found
@@ -135,7 +136,7 @@ ray_trace_ocl_scene(__global int4     * scene_dims,  // level of the root.
 
         entry_loc_code = loc_code(block_entry_pt, rootlevel);
         //// traverse to leaf cell that contains the entry point
-        curr_cell_ptr = traverse_woffset(tree_array, root_ptr, root, entry_loc_code,&curr_loc_code,&global_count,root_ptr);
+        curr_cell_ptr = traverse_woffset_mod(tree_array, root_ptr, root, entry_loc_code,&curr_loc_code,&global_count,lenbuffer,block.x,block.y);
         cell_bounding_box(curr_loc_code, rootlevel+1, &cell_min, &cell_max);
         hit = intersect_cell(local_ray_o, ray_d, cell_min, cell_max,&tnear, &tfar);
         if (hit)
@@ -164,7 +165,7 @@ ray_trace_ocl_scene(__global int4     * scene_dims,  // level of the root.
 
       //// required exit location code
       short4 exit_loc_code = loc_code(exit_pt, rootlevel);
-      curr_cell_ptr = traverse_force_woffset(tree_array, root_ptr, root,exit_loc_code, &curr_loc_code,&global_count,root_ptr);
+      curr_cell_ptr = traverse_force_woffset_mod(tree_array, root_ptr, root,exit_loc_code, &curr_loc_code,&global_count,lenbuffer,block.x,block.y);
 
       block_entry_pt = local_ray_o + (tfar)*ray_d;
     }
@@ -310,7 +311,9 @@ ray_trace_ocl_scene_full_data(__global int4     * scene_dims,  // level of the r
     short4 entry_loc_code = loc_code(block_entry_pt, rootlevel);
     short4 curr_loc_code=(short4)-1;
     // traverse to leaf cell that contains the entry point
-    curr_cell_ptr = traverse_force_woffset(tree_array, root_ptr, root, entry_loc_code,&curr_loc_code,&global_count,root_ptr);
+    //curr_cell_ptr = traverse_force_woffset(tree_array, root_ptr, root, entry_loc_code,&curr_loc_code,&global_count,root_ptr);
+
+    curr_cell_ptr = traverse_force_woffset_mod(tree_array, root_ptr, root, entry_loc_code,&curr_loc_code,&global_count,lenbuffer,block.x,block.y);
 
     // this cell is the first pierced by the ray
     // follow the ray through the cells until no neighbors are found
@@ -332,7 +335,7 @@ ray_trace_ocl_scene_full_data(__global int4     * scene_dims,  // level of the r
 
         entry_loc_code = loc_code(block_entry_pt, rootlevel);
         //// traverse to leaf cell that contains the entry point
-        curr_cell_ptr = traverse_woffset(tree_array, root_ptr, root, entry_loc_code,&curr_loc_code,&global_count,root_ptr);
+        curr_cell_ptr = traverse_woffset_mod(tree_array, root_ptr, root, entry_loc_code,&curr_loc_code,&global_count,lenbuffer,block.x,block.y);
         cell_bounding_box(curr_loc_code, rootlevel+1, &cell_min, &cell_max);
         hit = intersect_cell(local_ray_o, ray_d, cell_min, cell_max,&tnear, &tfar);
         if (hit)
@@ -356,7 +359,7 @@ ray_trace_ocl_scene_full_data(__global int4     * scene_dims,  // level of the r
 
       //// required exit location code
       short4 exit_loc_code = loc_code(exit_pt, rootlevel);
-      curr_cell_ptr = traverse_force_woffset(tree_array, root_ptr, root,exit_loc_code, &curr_loc_code,&global_count,root_ptr);
+      curr_cell_ptr = traverse_force_woffset_mod(tree_array, root_ptr, root,exit_loc_code, &curr_loc_code,&global_count,lenbuffer,block.x,block.y);
 
       block_entry_pt = local_ray_o + (tfar)*ray_d;
       //count++;
