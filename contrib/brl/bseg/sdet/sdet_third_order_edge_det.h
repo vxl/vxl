@@ -34,6 +34,10 @@ class sdet_third_order_edge_det : public sdet_third_order_edge_det_params
   void apply(vil_image_view<vxl_byte> const& image);
   vcl_vector<vdgl_edgel>& edgels(){return edgels_;}
   void line_segs(vcl_vector<vsol_line_2d_sptr>& lines);
+
+  //: save edgels in the edge map file FORMAT, output files have .edg extension
+  static bool save_edg_ascii(const vcl_string& filename, unsigned ni, unsigned nj, const vcl_vector<vdgl_edgel>& edgels);
+
  private:
   vcl_vector<vdgl_edgel> edgels_;
 };

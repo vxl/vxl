@@ -255,3 +255,42 @@ void sdet_third_order_edge_det::line_segs(vcl_vector<vsol_line_2d_sptr>& lines)
     lines.push_back(line);
   }
 }
+
+//: save edgels in the edge map file FORMAT, output files have .edg extension
+bool sdet_third_order_edge_det::save_edg_ascii(const vcl_string& filename, unsigned ni, unsigned nj, const vcl_vector<vdgl_edgel>& edgels)
+{
+  //1) If file open fails, return.
+  vcl_ofstream outfp(filename.c_str(), vcl_ios::out);
+
+  if (!outfp){
+    vcl_cout << " Error opening file  " << filename.c_str() << vcl_endl;
+    return false;
+  }
+
+  //2) write out the header block
+  outfp << "# EDGE_MAP v3.0" << vcl_endl << vcl_endl;
+  outfp << "# Format :  [Pixel_Pos]  Pixel_Dir Pixel_Conf  [Sub_Pixel_Pos] Sub_Pixel_Dir Strength Uncer" << vcl_endl;
+  outfp << vcl_endl;
+  outfp << "WIDTH=" << ni << vcl_endl;
+  outfp << "HEIGHT=" << nj << vcl_endl;
+  outfp << "EDGE_COUNT=" << edgels.size()  << vcl_endl;
+  outfp << vcl_endl << vcl_endl;
+
+  //save the edgel tokens
+  for (unsigned k = 0; k < edgels.size(); k++) {
+    vdgl_edgel edgel = edgels[k];
+    double x = edgel.x();
+    double y = edgel.y();
+
+    unsigned ix = (unsigned)x;
+    unsigned iy = (unsigned)y;
+    double idir = edgel.get_theta();
+    double iconf = edgel.get_grad();
+    double dir = idir, conf = iconf, uncer = 0.0;
+    outfp << "[" << ix << ", " << iy << "]    " << idir << " " << iconf << "   [" << x << ", " << y << "]   " << dir << " " << conf << " " << uncer << vcl_endl;
+  }
+
+  outfp.close();
+
+  return true;
+}
