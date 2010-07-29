@@ -28,16 +28,17 @@ class boxm_ocl_update_tableau: public boxm_cam_tableau
     bool init(boxm_ocl_scene * scene, unsigned ni, unsigned nj,
               vpgl_perspective_camera<double> * cam,
               vcl_vector<vcl_string> cam_files,
-              vcl_vector<vcl_string> img_files);
+              vcl_vector<vcl_string> img_files,
+              float prob_thresh);
 
     //:  set the GL buffer which needs to be displayed.
     void set_glbuffer(GLuint  pbuffer){pbuffer_=pbuffer;}
-    bool refine_model();
-
  protected:
     //render and update functions
     bool render_frame();
     bool update_model();
+    bool refine_model();
+    bool save_model();
     bool init_ocl();
     bool do_init_ocl_;
 
@@ -52,7 +53,7 @@ class boxm_ocl_update_tableau: public boxm_cam_tableau
     boxm_ocl_scene * scene_;
     unsigned ni_;
     unsigned nj_;
-
+    float prob_thresh_;
     vnl_random rand;
     //list of cameras and images for update
     int curr_frame_;

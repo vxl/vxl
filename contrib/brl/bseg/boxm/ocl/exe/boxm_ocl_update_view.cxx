@@ -42,6 +42,7 @@ int main(int argc, char ** argv)
   vul_arg<vcl_string> camfile("-initcam", "initial camera filename", "");
   vul_arg<unsigned> ni("-ni", "Width of image", 640);
   vul_arg<unsigned> nj("-nj", "Height of image", 480);
+  vul_arg<float> prob_thresh("-prob", "Refine probability", 0.3);
   vul_arg_parse(argc, argv);
   if (!vul_file::is_directory(cam_dir().c_str()))
     return -1;
@@ -85,10 +86,7 @@ int main(int argc, char ** argv)
   boxm_ocl_update_tableau_new update_tableau;
   GLboolean bGLEW = glewIsSupported("GL_VERSION_2_0  GL_ARB_pixel_buffer_object");
 
-  update_tableau->init(&ocl_scene, ni(), nj(), pcam, cam_files, img_files);
-
-  //vgui_window* win = vgui::produce_window(ni(), nj(), "OpenCl Volume Visualizer");
-  //win->get_adaptor()->set_tableau( update_tableau  );
+  update_tableau->init(&ocl_scene, ni(), nj(), pcam, cam_files, img_files,prob_thresh());
 
   return  vgui::run(update_tableau, ni(), nj());
 }

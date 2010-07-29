@@ -16,11 +16,13 @@
 
 bool boxm_update_ocl_scene_manager::init_update(boxm_ocl_scene *scene,
                                                 vpgl_camera_double_sptr cam,
-                                                vil_image_view<float> &obs)
+                                                vil_image_view<float> &obs,
+                                                float prob_thresh=0.3)
 {
   scene_ = scene;
   cam_ = cam;
   input_img_=obs;
+  prob_thresh_=prob_thresh;
   return true;
 }
 
@@ -455,7 +457,6 @@ bool boxm_update_ocl_scene_manager::set_args(unsigned pass)
       status = clSetKernelArg(kernels_[pass], i++, sizeof(cl_mem), (void*) &mem_ptrs_buf_);
       if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (data buffer)"))
           return SDK_FAILURE;
-      prob_thresh_=0.6;
       status = clSetKernelArg(kernels_[pass], i++, sizeof(cl_float),  &prob_thresh_);
       if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (prob_thresh buffer)"))
           return SDK_FAILURE;
@@ -602,28 +603,7 @@ bool boxm_update_ocl_scene_manager::run(unsigned pass)
       status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
       status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
       gpu_time_+= (double)1.0e-6 * (tend - tstart); // convert nanoseconds to milliseconds
-      if(pass==6)
-           
-      {
-           cl_event events[2];
-  // Enqueue readBuffers
-   status = clEnqueueReadBuffer(command_queue_,output_debug_buf_,CL_TRUE,
-                                   0,numbuffer_*sizeof(cl_float),
-                                   output_debug_,
-                                   0,NULL,&events[0]);
 
-  if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (cells )failed."))
-    return false;
-  status = clWaitForEvents(1, &events[0]);
-  if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents failed."))
-    return false;
-
-  for(int k=0;k<numbuffer_;k++)
-  {
-    vcl_cout<<output_debug_[k]<<" ";
-  }
-  vcl_cout<<"\n";
-      }
 
 
   }
@@ -827,6 +807,21 @@ bool boxm_update_ocl_scene_manager::read_trees()
 
   if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (cell data )failed."))
     return false;
+  status = clEnqueueReadBuffer(command_queue_,mem_ptrs_buf_,CL_TRUE,
+                               0,numbuffer_*sizeof(cl_int2),
+                               mem_ptrs_,
+                               0,NULL,&events[0]);
+
+  if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (cell data )failed."))
+    return false;
+  status = clEnqueueReadBuffer(command_queue_,block_ptrs_buf_,CL_TRUE,
+                               0,scene_x_*scene_y_*scene_z_*sizeof(cl_int4),
+                               block_ptrs_,
+                               0,NULL,&events[0]);
+  if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (cell data )failed."))
+    return false;
+
+
   status = clWaitForEvents(1, &events[0]);
   if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents failed."))
     return false;
@@ -840,7 +835,19 @@ bool boxm_update_ocl_scene_manager::read_trees()
   return this->check_val(status,CL_SUCCESS,"clReleaseEvent failed.")==1;
 }
 
+bool boxm_update_ocl_scene_manager::save_scene()
+{
+    this->read_trees();
 
+    scene_->set_blocks(block_ptrs_);
+    scene_->set_tree_buffers(cells_);
+    scene_->set_mem_ptrs(mem_ptrs_);
+    scene_->set_data_values(cell_data_);
+
+    return     scene_->save();
+
+
+}
 void boxm_update_ocl_scene_manager::print_tree()
 {
   vcl_cout << "Tree Input\n";

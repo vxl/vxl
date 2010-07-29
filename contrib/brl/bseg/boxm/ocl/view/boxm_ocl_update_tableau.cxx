@@ -52,11 +52,7 @@ boxm_ocl_update_tableau::boxm_ocl_update_tableau()
 //: Destructor
 boxm_ocl_update_tableau::~boxm_ocl_update_tableau()
 {
-  //boxm_update_ocl_scene_manager* updt_mgr =
-    //boxm_update_ocl_scene_manager::instance();
-  //updt_mgr->finish_online_processing();
-  //updt_mgr->clean_update();
-  //scene_->save();
+
 }
 
 //: initialize tableau properties
@@ -64,7 +60,8 @@ bool boxm_ocl_update_tableau::init(boxm_ocl_scene * scene,
                                    unsigned ni, unsigned nj,
                                    vpgl_perspective_camera<double> * cam,
                                    vcl_vector<vcl_string> cam_files,
-                                   vcl_vector<vcl_string> img_files)
+                                   vcl_vector<vcl_string> img_files,
+                                   float prob_thresh)
 {
   //set image dimensions, camera and scene
   ni_ = ni;
@@ -78,6 +75,7 @@ bool boxm_ocl_update_tableau::init(boxm_ocl_scene * scene,
   cam_files_ = cam_files;
   img_files_ = img_files;
 
+  prob_thresh_=prob_thresh;
   ////initialize OCL stuff
   do_init_ocl_ = true;
   return true;
@@ -136,7 +134,7 @@ bool boxm_ocl_update_tableau::init_ocl()
   int bundle_dim = 8;
   updt_mgr->set_bundle_ni(bundle_dim);
   updt_mgr->set_bundle_nj(bundle_dim);
-  updt_mgr->init_update(scene_, &cam_, expected);
+  updt_mgr->init_update(scene_, &cam_, expected,prob_thresh_);
   if (!updt_mgr->setup_norm_data(true, 0.5f, 0.25f))
     return -1;
   updt_mgr->setup_online_processing();
@@ -164,6 +162,12 @@ bool boxm_ocl_update_tableau::init_ocl()
 
 
 //-------------- OpenCL methods (render and update) ------------------//
+bool boxm_ocl_update_tableau::save_model()
+{
+  vcl_cout<<"SAVING MODEL!!!"<<vcl_endl;
+  boxm_update_ocl_scene_manager* updt_mgr = boxm_update_ocl_scene_manager::instance();
+  return updt_mgr->save_scene();
+}
 bool boxm_ocl_update_tableau::refine_model()
 {
   vcl_cout<<"REFINING MODEL!!!"<<vcl_endl;
@@ -181,7 +185,7 @@ bool boxm_ocl_update_tableau::update_model()
   curr_frame_=rand.lrand32(0,cam_files_.size()-1);
 
   vcl_cout<<"Cam "<<cam_files_[curr_frame_]
-          <<" Image "<<img_files_[curr_frame_]<<vcl_endl;
+          <<"Image "<<img_files_[curr_frame_]<<vcl_endl;
 
   //load up the update manager instance
   boxm_update_ocl_scene_manager* updt_mgr = boxm_update_ocl_scene_manager::instance();
@@ -276,6 +280,12 @@ bool boxm_ocl_update_tableau::handle(vgui_event const &e)
     this->refine_model();
     this->post_idle_request();
   }
+  else if (e.type == vgui_KEY_PRESS && e.key == vgui_key('s')) {
+    vcl_cout<<"saving"<<vcl_endl;
+    this->save_model();
+    return true;
+  }
+
   //HANDLE idle events - do model updating
   else if (e.type == vgui_IDLE)
   {

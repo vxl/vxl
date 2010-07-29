@@ -57,7 +57,8 @@ class boxm_update_ocl_scene_manager : public bocl_manager<boxm_update_ocl_scene_
   // read the scene, cam and image
   bool init_update(boxm_ocl_scene *scene,
                    vpgl_camera_double_sptr cam,
-                   vil_image_view<float> &obs);
+                   vil_image_view<float> &obs,
+                   float prob_thresh);
 
   bool setup_online_processing();
   bool online_processing();
@@ -100,6 +101,7 @@ class boxm_update_ocl_scene_manager : public bocl_manager<boxm_update_ocl_scene_
   //: load all blocks in an array and store the tree pointers in block_ptrs;
   bool set_all_blocks();
 
+  
   unsigned wni() {return wni_;}
   unsigned wnj() {return wnj_;}
 
@@ -108,6 +110,7 @@ class boxm_update_ocl_scene_manager : public bocl_manager<boxm_update_ocl_scene_
   void print_tree();
   void save_image();
 
+  bool save_scene();
   //: cleanup
   bool clean_update();
 
