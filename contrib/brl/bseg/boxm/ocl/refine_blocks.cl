@@ -356,14 +356,24 @@ refine_main(__global  int4     *block_ptrs,     //3d block array
       //7. not enough space, currently just puts the block back into memory as is
       else {
         
+        //move start pointer back
+        startPtr = (startPtr - currTreeSize + len_buffer)%len_buffer;
+        output[gid] = -666;
+        break;
+/*
         //7a. update block_ptrs 
         block_ptrs[currBlkIndex].y = (endPtr-1+len_buffer)%len_buffer;
         block_ptrs[currBlkIndex].z = currTreeSize;
         
+        //recopy tree
+        for(int j=0; j<currTreeSize; j++) {
+          local_tree[j] = tree_cells[gid*len_buffer + (currRootIndex+j)%len_buffer];
+        }   
+        
         //7b. move tree to it's new spot
         for(int j=0; j<currTreeSize; j++) {
           int cellIndex = gid*len_buffer + (endPtr-1+j+len_buffer)%len_buffer;
-          tree_cells[cellIndex] = tree_cells[gid*len_buffer + (currRootIndex+j)];
+          tree_cells[cellIndex] = tree_cells[gid*len_buffer + (currRootIndex+j)%len_buffer];
         }
         
         //7c. update endPtr
@@ -371,6 +381,7 @@ refine_main(__global  int4     *block_ptrs,     //3d block array
 
         //set output flag to let user know what happpned
         output[gid] = -666;
+*/
       }
 
       //update current root index
