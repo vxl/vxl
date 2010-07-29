@@ -257,4 +257,14 @@ boxm_scene_parser::startElement(const char* name, const char** atts)
     }
   }
   
+  else if (vcl_strcmp(name, "max_mb") == 0) {
+    for (int i=0; atts[i]; i+=2) {
+#if 0
+        vcl_cout << "  Attr=" << atts[i] << "->" << atts[i+1] << vcl_endl;
+#endif       
+      if (vcl_strcmp(atts[i], "mb") == 0) 
+        convert(atts[i+1], max_mb_);
+    }
+  }
+  
 }
