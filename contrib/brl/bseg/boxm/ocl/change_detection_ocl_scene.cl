@@ -204,6 +204,7 @@ change_detection_ocl_scene(__global int4     * scene_dims,  // level of the root
         curr_block_index.w=0;
     }
   }
+  data_return.z=data_return.z/data_return.w;
   gl_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)(1-data_return.z));
   in_image[j*get_global_size(0)+i]=(float4)data_return;
 }

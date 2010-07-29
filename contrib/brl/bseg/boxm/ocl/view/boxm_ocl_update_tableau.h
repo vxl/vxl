@@ -32,6 +32,7 @@ class boxm_ocl_update_tableau: public boxm_cam_tableau
 
     //:  set the GL buffer which needs to be displayed.
     void set_glbuffer(GLuint  pbuffer){pbuffer_=pbuffer;}
+    bool refine_model();
 
  protected:
     //render and update functions
@@ -52,11 +53,13 @@ class boxm_ocl_update_tableau: public boxm_cam_tableau
     unsigned ni_;
     unsigned nj_;
 
+    vnl_random rand;
     //list of cameras and images for update
     int curr_frame_;
     vcl_vector<vcl_string> cam_files_;
     vcl_vector<vcl_string> img_files_;
     bool do_update_;
+    int count_;
 };
 
 //: Create a smart-pointer to a boxm_ocl_update_tableau tableau.

@@ -207,20 +207,6 @@ int refine_tree(__local int4    *tree,
         tree[currNode].y = tree_size;
         
         //each child points to the currNode, has no children, 
-        //barrier(CLK_GLOBAL_MEM_FENCE);
-/*
-        if(lid < 8) {
-          int4 tcell = (int4) (currNode, -1, (int)data_size+lid, 0);
-          tree[tree_size+lid] = tcell;
-        
-          //copy data for new children
-          //float16 newData = datum;
-          float16 newData = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-          newData.s0 = new_alpha;
-          int newDataIndex = gid*len_buffer + (data_size+lid);
-          data_cells[newDataIndex] = newData;
-        }
-*/
         for(int i=0; i<8; i++) {
           int4 tcell = (int4) (currNode, -1, (int)data_size+i, 0);
           tree[tree_size+i] = tcell;
@@ -256,7 +242,7 @@ int refine_tree(__local int4    *tree,
   ///////////////////////////////////////////////////////////////////
   ////REFORMAT TREE into cannonical order
   ///////////////////////////////////////////////////////////////////
-  reformat_tree(tree, output); 
+  //reformat_tree(tree, output); 
 
   //tree and data size output
   return tree_size;
@@ -272,8 +258,8 @@ __kernel
 void
 refine_main(__global  int4     *block_ptrs,     //3d block array
             __global  int4     *block_nums,     //number of blocks in each dimension
-            __private unsigned  num_buffer,     //number of tree buffers
-            __private unsigned  len_buffer,     //length of tree buffer (number of int4 cells allocated)
+            __private int  num_buffer,     //number of tree buffers
+            __private int  len_buffer,     //length of tree buffer (number of int4 cells allocated)
             __global  int4     *tree_cells,     //tree_cells
             __global  float16  *data_cells,     //data_cells
             __global  int2     *mem_ptrs,       //denotes occupied space in each tree buffer

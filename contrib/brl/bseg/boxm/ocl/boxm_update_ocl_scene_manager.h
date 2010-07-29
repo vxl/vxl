@@ -27,6 +27,7 @@ class boxm_update_ocl_scene_manager : public bocl_manager<boxm_update_ocl_scene_
   boxm_update_ocl_scene_manager() :
     program_(0),
     block_ptrs_(0),
+    mem_ptrs_(0),
     scene_dims_(0),
     block_dims_(0),
     cells_(0),
@@ -43,7 +44,10 @@ class boxm_update_ocl_scene_manager : public bocl_manager<boxm_update_ocl_scene_
     scene_x_(0),scene_y_(0),scene_z_(0),
     wni_(1),wnj_(1),
     input_img_(),
-    gpu_time_(0)
+    prob_thresh_(1.0f),
+    gpu_time_(0),
+    block_len_(0),
+    max_level_(0)
   {}
   ~boxm_update_ocl_scene_manager() {
     if (program_)
@@ -127,6 +131,10 @@ class boxm_update_ocl_scene_manager : public bocl_manager<boxm_update_ocl_scene_
   bool set_block_dims_buffers();
   bool set_block_ptrs();
   bool set_block_ptrs_buffers();
+  bool set_mem_ptrs();
+  bool set_mem_ptrs_buffers();
+  bool release_mem_ptrs_buffers();
+  bool clean_mem_ptrs();
 
   bool clean_scene_dims();
   bool release_scene_dims_buffers();
@@ -174,9 +182,10 @@ class boxm_update_ocl_scene_manager : public bocl_manager<boxm_update_ocl_scene_
   bool build_program(vcl_string const& functor, bool use_cell_data);
   void archive_tree_data();
   bool build_rendering_program();
+  bool build_refining_program();
 
   bool rendering();
-
+  bool refine();
   //necessary CL items
   // for pass0 to compute seg len
   cl_program program_;
@@ -188,11 +197,16 @@ class boxm_update_ocl_scene_manager : public bocl_manager<boxm_update_ocl_scene_
 
   // scene information
   cl_int * block_ptrs_;
+  cl_int*   mem_ptrs_;      //(int2) points to tree_cells_ free mem
+
   // (x,y,z,0)
   cl_int * scene_dims_;
   cl_float * scene_origin_;
+  cl_float * output_debug_;
   // (x,y,z,0)
   cl_float * block_dims_;
+  cl_float block_len_;
+  cl_float max_level_;
   //array of tree cells,
   cl_int* cells_;
   cl_uint  cells_size_;
@@ -204,6 +218,7 @@ class boxm_update_ocl_scene_manager : public bocl_manager<boxm_update_ocl_scene_
 
   cl_int numbuffer_;
   cl_int lenbuffer_;
+  cl_float prob_thresh_;
   //root level
   cl_uint root_level_;
 
@@ -256,10 +271,13 @@ class boxm_update_ocl_scene_manager : public bocl_manager<boxm_update_ocl_scene_
   cl_mem   scene_origin_buf_;
   cl_mem   block_ptrs_buf_;
   cl_mem   block_dims_buf_;
+  cl_mem   mem_ptrs_buf_;
 
   cl_mem   offset_x_buf_;
   cl_mem   offset_y_buf_;
   cl_mem   factor_buf_;
+
+  cl_mem output_debug_buf_;
 
   boxm_ocl_scene * scene_;
   vpgl_camera_double_sptr cam_;

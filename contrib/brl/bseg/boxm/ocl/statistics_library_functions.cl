@@ -151,9 +151,11 @@ void insert_gauss_3(float x, float init_weight, float init_sigma, int* match,
 /* 
  *update a 1d gaussian mixture with a sample. The mixture parameters are
  * mutated in place. Note that the number of components can vary between
- * 0 and 3 as the updating proceeds. Initially, the mixture contains no 
+ * 0 and 3 as the updating proceeds. Initially, the mixture contains no
  * components. The number of observations for each component is Nobs(i).
+
  * The number of observations for the whole mixture is Nobs_mix. When 
+
  * a new component is inserted in the mixture, it is given a mean of x
  * and a sigma of min_sigma. The threshold t_match deterimines the maximum
  * Mahalanobis distance that the sample can have in order to be considered

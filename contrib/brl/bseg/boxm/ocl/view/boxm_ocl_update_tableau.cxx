@@ -73,11 +73,12 @@ bool boxm_ocl_update_tableau::init(boxm_ocl_scene * scene,
   cam_ = (*cam); //default cam
   scene_ = scene;
 
-  //directory of cameras
+  count_=0;
+  ////directory of cameras
   cam_files_ = cam_files;
   img_files_ = img_files;
 
-  //initialize OCL stuff
+  ////initialize OCL stuff
   do_init_ocl_ = true;
   return true;
 }
@@ -163,7 +164,12 @@ bool boxm_ocl_update_tableau::init_ocl()
 
 
 //-------------- OpenCL methods (render and update) ------------------//
-
+bool boxm_ocl_update_tableau::refine_model()
+{
+  vcl_cout<<"REFINING MODEL!!!"<<vcl_endl;
+  boxm_update_ocl_scene_manager* updt_mgr = boxm_update_ocl_scene_manager::instance();
+  return updt_mgr->refine();
+}
 //: calls on update manager to update model
 bool boxm_ocl_update_tableau::update_model()
 {
@@ -171,6 +177,9 @@ bool boxm_ocl_update_tableau::update_model()
 
   //make sure you get a valid frame...
   if (curr_frame_ >= cam_files_.size()) curr_frame_ = 0;
+
+  curr_frame_=rand.lrand32(0,cam_files_.size()-1);
+
   vcl_cout<<"Cam "<<cam_files_[curr_frame_]
           <<" Image "<<img_files_[curr_frame_]<<vcl_endl;
 
@@ -206,6 +215,7 @@ bool boxm_ocl_update_tableau::update_model()
   updt_mgr->set_persp_camera(pcam);
   updt_mgr->write_persp_camera_buffers();
   updt_mgr->online_processing();
+
   return true;
 }
 
@@ -259,6 +269,11 @@ bool boxm_ocl_update_tableau::handle(vgui_event const &e)
   else if (e.type == vgui_KEY_PRESS && e.key == vgui_key('u')) {
     vcl_cout<<"Continuing update"<<vcl_endl;
     do_update_ = true;
+    this->post_idle_request();
+  }
+  else if (e.type == vgui_KEY_PRESS && e.key == vgui_key('d')) {
+    vcl_cout<<"refining"<<vcl_endl;
+    this->refine_model();
     this->post_idle_request();
   }
   //HANDLE idle events - do model updating
