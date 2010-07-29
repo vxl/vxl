@@ -213,8 +213,10 @@ int refine_tree(__local int4    *tree,
           
           float16 newData = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
           newData.s0 = new_alpha;
-          int newDataIndex = gid*len_buffer + (data_size+i);
-          data_cells[newDataIndex] = newData;
+          if(data_size+i < len_buffer) {
+            int newDataIndex = gid*len_buffer + (data_size+i);
+            data_cells[newDataIndex] = newData;
+          } 
         }
 
         //update tree and buffer size
@@ -222,8 +224,8 @@ int refine_tree(__local int4    *tree,
         data_size += 8;
      
         //reset data for curent node
-        float16 zeroDat = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-        data_cells[gid*len_buffer + dataIndex] = zeroDat;    
+        //float16 zeroDat = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+        //data_cells[gid*len_buffer + dataIndex] = zeroDat;    
       }
       ////////////////////////////////////////////
       //END LEAF SPECIFIC CODE
@@ -307,6 +309,13 @@ refine_main(__global  int4     *block_ptrs,     //3d block array
 
       //3. determine number of data cells used, datasize = occupied space
       int dataSize = (endPtr > startPtr)? (endPtr-1)-startPtr: len_buffer - (startPtr-endPtr)-1;
+      
+      //if there aren't 585 cells, quit refining
+      int preFreeSpace = (startPtr >= endPtr)? startPtr-endPtr : len_buffer - (endPtr-startPtr);
+      if(preFreeSpace < 585) {
+        output[gid] = -666; 
+        break;
+      }
 
       //4. refine tree locally
       int newSize = refine_tree(local_tree, 
