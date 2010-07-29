@@ -312,32 +312,37 @@ refine_main(__global  int4     *block_ptrs,     //3d block array
       //6. if there's enough space, move tree
       int freeSpace = (startPtr >= endPtr)? startPtr-endPtr : len_buffer - (endPtr-startPtr);
       if(newSize <= freeSpace) {    
+        
+        //6a. update block_ptrs 
+        block_ptrs[currBlkIndex].y = (endPtr-1+len_buffer)%len_buffer;
+        block_ptrs[currBlkIndex].z = newSize;        
+        
+        //6b. move refined tree to it's new spot
         for(int j=0; j<newSize; j++) {
           int cellIndex = gid*len_buffer + (endPtr-1+j+len_buffer)%len_buffer;
           tree_cells[cellIndex] = local_tree[j];
         }
                   
-        //6b. update endPtr
+        //6c. update endPtr
         endPtr = (endPtr+newSize)%len_buffer;
-        
-        //6c. update block_ptrs 
-        block_ptrs[currBlkIndex].y = (endPtr-1+len_buffer)%len_buffer;
-        block_ptrs[currBlkIndex].z = newSize;
+
       } 
       //7. not enough space, currently just puts the block back into memory as is
       else {
+        
+        //7a. update block_ptrs 
+        block_ptrs[currBlkIndex].y = (endPtr-1+len_buffer)%len_buffer;
+        block_ptrs[currBlkIndex].z = currTreeSize;
+        
+        //7b. move tree to it's new spot
         for(int j=0; j<currTreeSize; j++) {
           int cellIndex = gid*len_buffer + (endPtr-1+j+len_buffer)%len_buffer;
           tree_cells[cellIndex] = tree_cells[gid*len_buffer + (currRootIndex+j)];
         }
         
-        //7b. update endPtr
+        //7c. update endPtr
         endPtr = (endPtr+currTreeSize)%len_buffer;
-        
-        //7c. update block_ptrs 
-        block_ptrs[currBlkIndex].y = (endPtr-1+len_buffer)%len_buffer;
-        block_ptrs[currBlkIndex].z = currTreeSize;
-      
+
         //set output flag to let user know what happpned
         output[gid] = -666;
       }
