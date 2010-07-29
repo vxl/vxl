@@ -269,7 +269,6 @@ bool boxm_ocl_scene::init_empty_scene()
   int4 init_blk(-1);
   vgl_vector_3d<unsigned> blk_nums = parser_.block_nums();
   blocks_ =  vbl_array_3d<int4>(blk_nums.x(), blk_nums.y(), blk_nums.z(), init_blk);
-  
 
   /* compute total number of cells that can be allocated given max_mb */
   int MAX_BYTES = max_mb_ * 1024 * 1024;
@@ -287,8 +286,8 @@ bool boxm_ocl_scene::init_empty_scene()
   tree_buffers_ = vbl_array_2d<int4>(num_tree_buffers_, tree_buff_length_, init_cell);
 
   //initialize book keeping mem ptrs
-  int2 init_mem(0);
-  mem_ptrs_ = vbl_array_1d<int2>(num_tree_buffers_, init_mem);
+  int2 mem_init; mem_init[0] = 0; mem_init[1] = 1;
+  mem_ptrs_ = vbl_array_1d<int2>(num_tree_buffers_, mem_init);
 
   //initialize data buffers
   float16 init_dat(0.0f);
@@ -296,12 +295,15 @@ bool boxm_ocl_scene::init_empty_scene()
 
   //now assign block ptrs to things
   //for each block[i,j,k], throw it's root tree randomly into one of the tree buffers
+  vnl_random random(9667566);
   for (unsigned int i=0; i<blk_nums.x(); ++i) {
     for (unsigned int j=0; j<blk_nums.y(); ++j) {
       for (unsigned int k=0; k<blk_nums.z(); ++k) {
-        //randomly choose a buffer, and get the first free spot in memory
-        int buffIndex = (int) (num_tree_buffers_-1)*(vcl_rand()/(RAND_MAX+1.0));
-        int buffOffset = mem_ptrs_[buffIndex][1];
+       
+        //randomly choose a buffer, and get the first free spot in memory (update blocks)
+        int buffIndex = random.lrand32(0, num_tree_buffers_-1);
+        int buffOffset = mem_ptrs_[buffIndex][1]-1; //minus one cause mem_end points to one past the last one
+
         int4 blk(0);
         blk[0] = buffIndex;  //buffer index
         blk[1] = buffOffset; //buffer offset to root
@@ -328,6 +330,19 @@ bool boxm_ocl_scene::init_empty_scene()
         mem_ptrs_[buffIndex][1]++;
       }
     }
+  }
+
+  /* make a pass to ensure that all tree roots point back to their cell index */
+  int blk_index = 0;
+  vbl_array_3d<int4>::iterator blk_iter;
+  for (blk_iter = blocks_.begin(); blk_iter != blocks_.end(); blk_iter++) {
+    int4 blk = (*blk_iter);
+    int buffIndex = blk[0];
+    int buffOffset = blk[1];
+    int4 treeRoot = tree_buffers_(buffIndex, buffOffset);
+    treeRoot[3] = blk_index;
+    tree_buffers_(buffIndex, buffOffset) = treeRoot;
+    blk_index++;
   }
 
   return true;
