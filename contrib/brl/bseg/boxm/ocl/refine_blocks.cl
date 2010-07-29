@@ -41,16 +41,41 @@ void swap_eight(__local int4 *tree, int a, int b, __global float* output)
   }
 
   //copy b to a buffer
-  int4 buff;
-  buff = tree[b+lid];
+  //int4 buff;
+  //buff = tree[b+lid];
+  int4 buff[8];
+  for(int i=0; i<8; i++) {
+    buff[i] = tree[b+i];
+  }
 
   //copy A to B
-  tree[b+lid] = tree[a+lid];
+  //tree[b+lid] = tree[a+lid];
+  for(int i=0; i<8; i++) {
+    tree[b+i] = tree[a+i];
+  }
   
   //copy Buffer to A
-  tree[a+lid] = buff;
+  //tree[a+lid] = buff;
+  for(int i=0; i<8; i++) {
+    tree[a+i] = buff[i];
+  }
   
   //for each child of B and A update the parent pointer
+  for(int i=0; i<8; i++) {
+    int childA = tree[a+i].y;
+    int childB = tree[b+i].y;
+    
+    if(childA > 0) {
+      for(int j=0; j<8; j++)
+        tree[childA+j].x = a+i;
+      } 
+    if(childB > 0) {
+      for(int j=0; j<8; j++)
+        tree[childB+j].x = b+i;    
+    }
+  }
+  
+/*
   int childA = tree[a+lid].y;
   int childB = tree[b+lid].y;
   if(childA > 0) {
@@ -61,6 +86,7 @@ void swap_eight(__local int4 *tree, int a, int b, __global float* output)
     for(int j=0; j<8; j++)
       tree[childB+j].x = b+lid;    
   }
+*/
 }
  
 ////////////////////////////////////////////
@@ -290,7 +316,7 @@ refine_main(__global  int4     *block_ptrs,     //3d block array
       //TODO Make sure your tree doesn't get corrupted because you don't clear out all 585 cells
       //maybe pass in a length to the refine function to make sure yo udon't go out of bounds.  
       for(int j=0; j<currTreeSize; j++) {
-        local_tree[j] = tree_cells[gid*len_buffer + (currRootIndex+j)];
+        local_tree[j] = tree_cells[gid*len_buffer + (currRootIndex+j)%len_buffer];
       }   
 
       //3. determine number of data cells used, datasize = occupied space
