@@ -30,6 +30,8 @@ class boxm_update_ocl_scene_manager : public bocl_manager<boxm_update_ocl_scene_
     mem_ptrs_(0),
     scene_dims_(0),
     block_dims_(0),
+    block_len_(0),
+    max_level_(0),
     cells_(0),
     cells_size_(0),
     cell_data_(0),
@@ -45,9 +47,7 @@ class boxm_update_ocl_scene_manager : public bocl_manager<boxm_update_ocl_scene_
     wni_(1),wnj_(1),
     input_img_(),
     prob_thresh_(1.0f),
-    gpu_time_(0),
-    block_len_(0),
-    max_level_(0)
+    gpu_time_(0)
   {}
   ~boxm_update_ocl_scene_manager() {
     if (program_)
@@ -92,7 +92,6 @@ class boxm_update_ocl_scene_manager : public bocl_manager<boxm_update_ocl_scene_
   bool set_input_image(vil_image_view<float>  obs);
   bool write_image_buffer();
 
-
   //: set the tree, data , aux_data and bbox
   bool set_tree_buffers();
   bool release_tree_buffers();
@@ -101,9 +100,8 @@ class boxm_update_ocl_scene_manager : public bocl_manager<boxm_update_ocl_scene_
   //: load all blocks in an array and store the tree pointers in block_ptrs;
   bool set_all_blocks();
 
-  
-  unsigned wni() {return wni_;}
-  unsigned wnj() {return wnj_;}
+  unsigned wni() const {return wni_;}
+  unsigned wnj() const {return wnj_;}
 
   bool read_output_image();
   bool read_trees();
