@@ -56,7 +56,7 @@ void test_gaussian_indep_type(T epsilon, const vcl_string& type_name)
     TEST(("zero default variance <"+type_name+"> scalar").c_str(),
          gauss1.covariance(), T(0));
     TEST(("zero default variance <"+type_name+"> variable").c_str(),
-         gauss.covariance(), zero_vector);
+         gauss.covariance(), zero_vector.as_ref());
 
     // test zero variance evaluations
     vnl_vector_fixed<T,3> test_pt(T(1), T(1), T(1));
@@ -76,7 +76,7 @@ void test_gaussian_indep_type(T epsilon, const vcl_string& type_name)
     TEST(("zero var probability density<"+type_name+"> scalar").c_str(),
          gauss1.prob_density(test_pt[0]), T(0));
     TEST(("zero var probability density<"+type_name+"> variable").c_str(),
-         gauss.prob_density(test_pt), T(0));
+         gauss.prob_density(test_pt.as_ref()), T(0));
 
     // test zero variance log probability
     TEST(("zero var log probability density<"+type_name+"> fixed").c_str(),
@@ -86,7 +86,7 @@ void test_gaussian_indep_type(T epsilon, const vcl_string& type_name)
          gauss1.log_prob_density(test_pt[0]),
          -vcl_numeric_limits<T>::infinity());
     TEST(("zero var log probability density<"+type_name+"> variable").c_str(),
-         gauss.log_prob_density(test_pt),
+         gauss.log_prob_density(test_pt.as_ref()),
          -vcl_numeric_limits<T>::infinity());
   }
 
@@ -97,15 +97,15 @@ void test_gaussian_indep_type(T epsilon, const vcl_string& type_name)
     vnl_vector_fixed<T,3> var(T(2.0), T(0.5), T(1.5));
     vpdl_gaussian_indep<T,3> gauss3(mean,var);
     vpdl_gaussian_indep<T,1> gauss1(mean[0],var[0]);
-    vpdl_gaussian_indep<T> gauss(mean,var);
+    vpdl_gaussian_indep<T> gauss(mean.as_ref(),var.as_ref());
 
     // test direct access to data member
     TEST(("mean <"+type_name+"> fixed").c_str(), gauss3.mean(), mean);
     TEST(("covar <"+type_name+"> fixed").c_str(), gauss3.covariance(), var);
     TEST(("mean <"+type_name+"> scalar").c_str(), gauss1.mean(), mean[0]);
     TEST(("covar <"+type_name+"> scalar").c_str(), gauss1.covariance(), var[0]);
-    TEST(("mean <"+type_name+"> variable").c_str(), gauss.mean(), mean);
-    TEST(("covar <"+type_name+"> variable").c_str(), gauss.covariance(), var);
+    TEST(("mean <"+type_name+"> variable").c_str(), gauss.mean(), mean.as_ref());
+    TEST(("covar <"+type_name+"> variable").c_str(), gauss.covariance(), var.as_ref());
 
     // test virtual functions
     const vpdl_distribution<T,3>& dist3 = gauss3;
@@ -153,7 +153,7 @@ void test_gaussian_indep_type(T epsilon, const vcl_string& type_name)
     TEST(("mahalanobis dist <"+type_name+"> scalar").c_str(),
          gauss1.sqr_mahal_dist(test_pt[0]), d[0]*d[0]/var[0]);
     TEST(("mahalanobis dist <"+type_name+"> variable").c_str(),
-         gauss.sqr_mahal_dist(test_pt), sqr_mahal_dist);
+         gauss.sqr_mahal_dist(test_pt.as_ref()), sqr_mahal_dist);
 
     T two_pi = static_cast<T>(2.0*vnl_math::pi);
     T prob3 = static_cast<T>(1.0/vcl_sqrt(two_pi*two_pi*two_pi
@@ -168,7 +168,7 @@ void test_gaussian_indep_type(T epsilon, const vcl_string& type_name)
     TEST_NEAR(("probability density <"+type_name+"> scalar").c_str(),
               dist1.prob_density(test_pt[0]), prob1, epsilon);
     TEST_NEAR(("probability density <"+type_name+"> variable").c_str(),
-              dist.prob_density(test_pt), prob3, epsilon);
+              dist.prob_density(test_pt.as_ref()), prob3, epsilon);
 
     // test log probability density virtual functions
     TEST_NEAR(("probability density <"+type_name+"> fixed").c_str(),
@@ -176,7 +176,7 @@ void test_gaussian_indep_type(T epsilon, const vcl_string& type_name)
     TEST_NEAR(("probability density <"+type_name+"> scalar").c_str(),
               dist1.log_prob_density(test_pt[0]), vcl_log(prob1), epsilon);
     TEST_NEAR(("probability density <"+type_name+"> variable").c_str(),
-              dist.log_prob_density(test_pt), vcl_log(prob3), epsilon);
+              dist.log_prob_density(test_pt.as_ref()), vcl_log(prob3), epsilon);
 
     // test gradient virtual functions against numerical difference
     vnl_vector_fixed<T,3> g3;
@@ -200,7 +200,7 @@ void test_gaussian_indep_type(T epsilon, const vcl_string& type_name)
     TEST_NEAR(("density <"+type_name+"> scalar").c_str(),
               density, den1, epsilon);
     vnl_vector<T> g;
-    density = dist.gradient_density(test_pt,g);
+    density = dist.gradient_density(test_pt.as_ref(),g);
     TEST_NEAR(("gradient density <"+type_name+"> variable").c_str(),
               (g-grad).inf_norm(), 0, dp);
     TEST_NEAR(("density <"+type_name+"> variable").c_str(),
@@ -222,9 +222,9 @@ void test_gaussian_indep_type(T epsilon, const vcl_string& type_name)
     TEST_NEAR(("cumulative probability 2 <"+type_name+"> scalar").c_str(),
               gauss1.cumulative_prob(test1[0]), cum_test1[0], epsilon);
     TEST(("cumulative probability 1 <"+type_name+"> variable").c_str(),
-         gauss.cumulative_prob(mean), T(0.125));
+         gauss.cumulative_prob(mean.as_ref()), T(0.125));
     TEST_NEAR(("cumulative probability 2 <"+type_name+"> variable").c_str(),
-              gauss.cumulative_prob(test1), joint_cum_test1, epsilon);
+              gauss.cumulative_prob(test1.as_ref()), joint_cum_test1, epsilon);
 
     // test box probability
     vnl_vector_fixed<T,3> test2(T(-1), T(1), T(0));
@@ -241,12 +241,12 @@ void test_gaussian_indep_type(T epsilon, const vcl_string& type_name)
               gauss1.box_prob(test2[0],test1[0]),
               (cum_test1[0]-cum_test2[0]), epsilon);
     TEST_NEAR(("box probability <"+type_name+"> variable").c_str(),
-              gauss.box_prob(test2,test1), box_test, epsilon);
+              gauss.box_prob(test2.as_ref(),test1.as_ref()), box_test, epsilon);
 
     vpdl_distribution<T>* base = &gauss; // pointer to the base class
     TEST_NEAR(("box probability (base==derived) <"+type_name+">").c_str(),
-              base->box_prob(test2,test1),
-              gauss.box_prob(test2,test1), epsilon);
+              base->box_prob(test2.as_ref(),test1.as_ref()),
+              gauss.box_prob(test2.as_ref(),test1.as_ref()), epsilon);
   }
 }
 

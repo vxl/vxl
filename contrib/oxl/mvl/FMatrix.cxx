@@ -569,8 +569,8 @@ void FMatrix::compute_P_matrix(vnl_matrix<double> &P2) const
   vnl_cross_product_matrix e2x(a);
   A = e2x * f_matrix_;
 
-  P2.set_columns(0, A);
-  P2.set_column(3, a);
+  P2.set_columns(0, A.as_ref());
+  P2.set_column(3, a.as_ref());
 }
 
 //-------------------------------------------------------------------

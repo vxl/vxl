@@ -12,7 +12,6 @@
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vnl/algo/vnl_rpoly_roots.h>
 #include <vnl/vnl_real_polynomial.h>
-#include <vnl/vnl_transpose.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_diag_matrix.h>
 #include <vnl/vnl_math.h>
@@ -21,6 +20,8 @@
 #include <mvl/HomgPoint2D.h>
 #include <mvl/FMatrix.h>
 #include <mvl/HomgOperator2D.h>
+
+#include <vcl_iostream.h>
 
 //: Construct an FManifoldProject object which will use the given F to correct point pairs.
 FManifoldProject::FManifoldProject(const FMatrix& Fobj)
@@ -43,8 +44,8 @@ void FManifoldProject::set_F(const FMatrix& Fobj)
 
   // A := 0.5*[O f22'; f22 O];
   A_.fill(0.0);
-  A_.update(0.5*f22.transpose(), 0, 2);
-  A_.update(0.5*f22, 2, 0);
+  A_.update(0.5*f22.transpose().as_ref(), 0, 2);
+  A_.update(0.5*f22.as_ref(), 2, 0);
 
   vnl_double_4 b(F_(2,0), F_(2,1), F_(0,2), F_(1,2));
 
@@ -84,7 +85,7 @@ void FManifoldProject::set_F(const FMatrix& Fobj)
                << "FManifoldProject: ** HartleySturm: B = " << Bprime << vcl_endl
                << "FManifoldProject: ** HartleySturm: Cerror = " << Cprime << vcl_endl
                << "FManifoldProject: ** HartleySturm: F not rank 2 ?\n"
-               << "FManifoldProject: singular values are "  << vnl_svd<double>(F_).W() << vcl_endl;
+               << "FManifoldProject: singular values are "  << vnl_svd<double>(F_.as_ref()).W() << vcl_endl;
     }
     // **** Now have quadric x'*A*x = 0 ****
 
@@ -191,7 +192,7 @@ double FManifoldProject::correct(double   x1, double   y1, double   x2, double  
   }
 
   // Transform the query point
-  vnl_double_4 pprime = vnl_transpose(V_) * (p - t_);
+  vnl_double_4 pprime = V_.transpose() * (p - t_);
 
   // Solve p' (I - lambda D)^-1 D (I - lambda D)^-1 p = 0
   double b1 = 1./d_[0]; double a1 = vnl_math_sqr(pprime[0])*b1;

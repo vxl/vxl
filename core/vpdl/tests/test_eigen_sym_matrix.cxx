@@ -68,7 +68,7 @@ void test_matrix_type(T epsilon, const vcl_string& type_name)
               sym.determinant(), det, epsilon);
 
     vnl_vector<T> y;
-    sym.product(x,y);
+    sym.product(x.as_ref(),y); // length 3
     sym.form_matrix(M2);
     TEST_NEAR(("product <"+type_name+"> fixed").c_str(),
               (y - M2*x).inf_norm(), 0, epsilon);
