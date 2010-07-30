@@ -1,4 +1,4 @@
-// This is brl/bpro/core/sdet_pro/processes/sdet_detect_edges_process.cxx
+// This is brl/bpro/core/sdet_pro/processes/sdet_detect_third_order_edges_process.cxx
 #include "sdet_detect_edges_process.h"
 //:
 // \file
@@ -60,8 +60,8 @@ bool sdet_detect_third_order_edges_process(bprb_func_process& pro)
   dp.grad_op_ = 0; dp.conv_algo_ = 0; dp.pfit_type_ = 0;
   dp.sigma_ = 1.0; dp.thresh_ = 2.0;
   dp.interp_factor_ = 1;
-  dp.adapt_thresh_ = false; 
-  
+  dp.adapt_thresh_ = false;
+
   pro.parameters()->get_value( "grad_op", dp.grad_op_);
   pro.parameters()->get_value( "conv_algo", dp.conv_algo_);
   pro.parameters()->get_value( "int_factor" , dp.interp_factor_);
@@ -75,9 +75,9 @@ bool sdet_detect_third_order_edges_process(bprb_func_process& pro)
 
   vcl_vector<vdgl_edgel> edgels = det.edgels();
 
-  vcl_cout << "done, sigma: " << dp.sigma_ << " thres: " << dp.thresh_ << "!" << vcl_endl;
-  vcl_cout << "#edgels = " << edgels.size() << vcl_endl;
-  
+  vcl_cout << "done, sigma: " << dp.sigma_ << " thres: " << dp.thresh_ << "!\n"
+           << "#edgels = " << edgels.size() << vcl_endl;
+
   sdet_third_order_edge_det::save_edg_ascii(out_edg_map_path, input_image.ni(), input_image.nj(), edgels);
 
   // initialize the output edge image
@@ -88,7 +88,7 @@ bool sdet_detect_third_order_edges_process(bprb_func_process& pro)
 
   for (unsigned k = 0; k < edgels.size(); k++) {
     vdgl_edgel edgel = edgels[k];
-    
+
     double x = edgel.x();
     double y = edgel.y();
 
@@ -99,7 +99,7 @@ bool sdet_detect_third_order_edges_process(bprb_func_process& pro)
     edge_img(ix, iy, 0) = static_cast<float>(x);
     edge_img(ix, iy, 1) = static_cast<float>(y);
     edge_img(ix, iy, 2) = static_cast<float>(idir);
-    edge_img_byte(ix, iy) = 255; 
+    edge_img_byte(ix, iy) = 255;
   }
 
   // Following loop removes the edges in the image boundary
