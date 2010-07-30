@@ -17,19 +17,19 @@
 #include <boxm/algo/boxm_refine.h>
 
 
-bool test_refine_apl() 
-{  
+bool test_refine_apl()
+{
   typedef vnl_vector_fixed<int,4> int4;
   typedef vnl_vector_fixed<float,16> float16;
-  
-  vcl_cout<<"Comparing single block of APL scene "<<vcl_endl; 
-  
-  //load apl scene 
+
+  vcl_cout<<"Comparing single block of APL scene "<<vcl_endl;
+
+  //load apl scene
   vcl_string cpu_path = "/media/VXL/data/APl/try4/scene_refined/scene.xml";
   boxm_ocl_scene cpu_scene(cpu_path);
   vcl_cout<<cpu_scene<<vcl_endl;
   cpu_scene.save();
-  
+
   vcl_string gpu_path = "/media/VXL/data/APl/try4/small_block_refined/scene.xml";
   boxm_ocl_scene gpu_scene(gpu_path);
 
@@ -42,10 +42,10 @@ bool test_refine_apl()
   vbl_array_2d<int4> gpu_buffer = gpu_scene.tree_buffers();
   vbl_array_2d<float16> cpu_data = cpu_scene.data_buffers();
   vbl_array_2d<float16> gpu_data = gpu_scene.data_buffers();
-  for (int i=0; i<cpu_blocks.get_row1_count(); i++) {
-    for (int j=0; j<cpu_blocks.get_row2_count(); j++) {
-      for (int k=0; k<cpu_blocks.get_row3_count(); k++) {
-        
+  for (unsigned int i=0; i<cpu_blocks.get_row1_count(); i++) {
+    for unsigned (int j=0; j<cpu_blocks.get_row2_count(); j++) {
+      for unsigned (int k=0; k<cpu_blocks.get_row3_count(); k++)
+      {
         //get tree info for CPU block
         int cpuBuffIndex = cpu_blocks[i][j][k][0];
         int cpuBuffOffset = cpu_blocks[i][j][k][1];
@@ -55,47 +55,44 @@ bool test_refine_apl()
         int gpuBuffIndex = gpu_blocks[i][j][k][0];
         int gpuBuffOffset = gpu_blocks[i][j][k][1];
         int gpuBlkSize = gpu_blocks[i][j][k][2];
-        
-        //make sure they agree 
-        if(gpuBlkSize != cpuBlkSize) {
-          vcl_cout<<"Tree @ block ("<<i<<","<<j<<","<<k<<") doesn't match"<<vcl_endl;
+
+        //make sure they agree
+        if (gpuBlkSize != cpuBlkSize) {
+          vcl_cerr<<"Tree @ block ("<<i<<','<<j<<','<<k<<") doesn't match\n";
           return false;
         }
-        
-       // vcl_cout<<"BLK @ ("<<i<<","<<j<<","<<k<<") with size "<<gpuBlkSize<<vcl_endl;
-        
-        
+#if 0
+        vcl_cout<<"BLK @ ("<<i<<','<<j<<','<<k<<") with size "<<gpuBlkSize<<vcl_endl;
+#endif
         //compare the tree's data
         //tree cell is (parent, child, data, block)
-        for(int l=0; l<gpuBlkSize; l++) {
-          
-          //vcl_cout<<"  cell @ "<<l<<vcl_endl;
-         // vcl_cout<<"    cpu cell "<<cpu_buffer[cpuBuffIndex][cpuBuffOffset+l]<<vcl_endl;
-          //vcl_cout<<"    gpu cell "<<gpu_buffer[gpuBuffIndex][gpuBuffOffset+l]<<vcl_endl;
-          
+        for (int l=0; l<gpuBlkSize; l++) {
+#if 0
+          vcl_cout<<"  cell @ "<<l<<'\n'
+                  <<"    cpu cell "<<cpu_buffer[cpuBuffIndex][cpuBuffOffset+l]<<'\n'
+                  <<"    gpu cell "<<gpu_buffer[gpuBuffIndex][gpuBuffOffset+l]<<vcl_endl;
+#endif
           int cpuDatIndex = cpu_buffer[cpuBuffIndex][cpuBuffOffset+l][2];
           int gpuDatIndex = gpu_buffer[gpuBuffIndex][gpuBuffOffset+l][2];
           int childPtr = cpu_buffer[cpuBuffIndex][cpuBuffOffset+l][1];
-          if(cpuDatIndex > 0 && gpuDatIndex > 0 && childPtr < 0) {
+          if (cpuDatIndex > 0 && gpuDatIndex > 0 && childPtr < 0) {
             float16 cpuDatCell = cpu_data[cpuBuffIndex][cpuDatIndex];
             float16 gpuDatCell = gpu_data[gpuBuffIndex][gpuDatIndex];
-            
-           // vcl_cout<<"    "<<gpuBlkSize<<","<<cpuBlkSize<<","<<l<<" ";
-          //  vcl_cout<<"Alphas: (cpu,gpu) ("<<cpuDatCell[0]<<","<<gpuDatCell[0]<<")"<<vcl_endl;
-            
-            //sum up squared differences 
-            for(int i=0; i<16; i++) {
+#if 0
+            vcl_cout<<"    "<<gpuBlkSize<<','<<cpuBlkSize<<','<<l<<' '
+                    <<"Alphas: (cpu,gpu) ("<<cpuDatCell[0]<<','<<gpuDatCell[0]<<')'<<vcl_endl;
+#endif
+            //sum up squared differences
+            for (int i=0; i<16; i++) {
               ssd[i] += (cpuDatCell[i] - gpuDatCell[i]) * (cpuDatCell[i] - gpuDatCell[i]);
             }
           }
-
         }
       }
     }
   }
-  
+
   vcl_cout<<"Data SSD = "<<ssd<<vcl_endl;
-  
 }
 
 
@@ -184,9 +181,10 @@ boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > > create_simple_sce
     boct_tree_cell<short,data_type>* cel11 = tree->locate_point(vgl_point_3d<double>(0.01,0.01,0.9));
     s2_sample.alpha=count;
     cel11->set_data(s2_sample);
-//    boct_tree_cell<short,data_type>* cell2=tree->locate_point(vgl_point_3d<double>(0.51,0.51,0.51));
-//    cell2->set_data(s2_sample);
-
+#if 0
+    boct_tree_cell<short,data_type>* cell2=tree->locate_point(vgl_point_3d<double>(0.51,0.51,0.51));
+    cell2->set_data(s2_sample);
+#endif
     block->init_tree(tree);
     scene.write_active_block();
     iter++;
