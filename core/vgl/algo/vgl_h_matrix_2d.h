@@ -38,11 +38,11 @@ class vgl_h_matrix_2d
   // Constructors/Initializers/Destructors-------------------------------------
 
   vgl_h_matrix_2d();
-  vgl_h_matrix_2d(const vgl_h_matrix_2d<T>& M);
+  vgl_h_matrix_2d(vgl_h_matrix_2d<T> const& M);
   vgl_h_matrix_2d(vnl_matrix_fixed<T,3,3> const& M);
-  vgl_h_matrix_2d(const T* t_matrix);
-  vgl_h_matrix_2d(vcl_istream& s);
-  vgl_h_matrix_2d(char const* filename);
+  explicit vgl_h_matrix_2d(T const* t_matrix);
+  explicit vgl_h_matrix_2d(vcl_istream& s);
+  explicit vgl_h_matrix_2d(char const* filename);
 
  ~vgl_h_matrix_2d();
 
@@ -72,9 +72,10 @@ class vgl_h_matrix_2d
 
   T get(unsigned int row_index, unsigned int col_index) const;
   void get(T *t_matrix) const;
+  void get(vnl_matrix_fixed<T,3,3>* t_matrix) const;
   void get(vnl_matrix<T>* t_matrix) const;
   const vnl_matrix_fixed<T,3,3>& get_matrix() const { return t12_matrix_; }
-  const vgl_h_matrix_2d get_inverse () const;
+  vgl_h_matrix_2d get_inverse() const;
 
   void set(const T *t_matrix);
   void set(vnl_matrix_fixed<T,3,3> const& t_matrix);

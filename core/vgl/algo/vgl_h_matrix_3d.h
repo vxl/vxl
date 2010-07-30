@@ -33,13 +33,13 @@ class vgl_h_matrix_3d
  public:
   vgl_h_matrix_3d() {}
  ~vgl_h_matrix_3d() {}
-  vgl_h_matrix_3d(const vgl_h_matrix_3d& M);
+  vgl_h_matrix_3d(const vgl_h_matrix_3d<T>& M);
   vgl_h_matrix_3d(vnl_matrix_fixed<T,4,4> const& M);
   vgl_h_matrix_3d(vnl_matrix_fixed<T,3,3> const& M,
                   vnl_vector_fixed<T,3> const& m);
-  vgl_h_matrix_3d(const T* t_matrix);
-  vgl_h_matrix_3d(vcl_istream&);
-  vgl_h_matrix_3d(char const* filename);
+  explicit vgl_h_matrix_3d(const T* t_matrix);
+  explicit vgl_h_matrix_3d(vcl_istream&);
+  explicit vgl_h_matrix_3d(char const* filename);
   vgl_h_matrix_3d(vcl_vector<vgl_homg_point_3d<T> > const &points1,
                   vcl_vector<vgl_homg_point_3d<T> > const &points2);
 
@@ -57,7 +57,7 @@ class vgl_h_matrix_3d
 
   //:composition (*this) * H
   vgl_h_matrix_3d<T> operator * (vgl_h_matrix_3d<T> const& H) const
-    {return t12_matrix_* H.t12_matrix_;}
+  { return vgl_h_matrix_3d<T>(t12_matrix_* H.t12_matrix_); }
 
   bool read(vcl_istream&);
 
@@ -66,11 +66,12 @@ class vgl_h_matrix_3d
   T get (unsigned int row_index, unsigned int col_index) const;
   void get (T* t_matrix) const;
   void get (vnl_matrix_fixed<T, 4, 4>* t_matrix) const;
+  void get (vnl_matrix<T>* t_matrix) const;
   const vnl_matrix_fixed<T,4,4>& get_matrix() const { return t12_matrix_; }
   vgl_h_matrix_3d get_inverse() const;
 
   void set (unsigned int row_index, unsigned int col_index, const T value)
-    {t12_matrix_[row_index][col_index]=value;}
+  { t12_matrix_[row_index][col_index]=value; }
 
   void set(const T *t_matrix);
   void set(vnl_matrix_fixed<T,4,4> const& t_matrix);

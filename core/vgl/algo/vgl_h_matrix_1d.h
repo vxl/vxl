@@ -34,13 +34,14 @@ class vgl_h_matrix_1d
 
   // Constructors/Initializers/Destructors-------------------------------------
 
-  vgl_h_matrix_1d();
-  vgl_h_matrix_1d(const vgl_h_matrix_1d<T>& M);
+  vgl_h_matrix_1d() {}
+  vgl_h_matrix_1d(vgl_h_matrix_1d<T> const& M);
   // product of two vgl_h_matrix_1ds
-  vgl_h_matrix_1d(const vgl_h_matrix_1d<T>&,const vgl_h_matrix_1d<T>&);
+  vgl_h_matrix_1d(vgl_h_matrix_1d<T> const&, vgl_h_matrix_1d<T> const&);
   vgl_h_matrix_1d(vnl_matrix_fixed<T,2,2> const& M);
-  vgl_h_matrix_1d(const T* t_matrix);
-  vgl_h_matrix_1d(vcl_istream& s);
+  explicit vgl_h_matrix_1d(T const* t_matrix);
+  explicit vgl_h_matrix_1d(vcl_istream& s);
+  explicit vgl_h_matrix_1d(char const* filename);
  ~vgl_h_matrix_1d();
 
   // Operations----------------------------------------------------------------
@@ -55,8 +56,9 @@ class vgl_h_matrix_1d
   T get (unsigned int row_index, unsigned int col_index) const;
   void get (T *t_matrix) const;
   void get (vnl_matrix<T>* t_matrix) const;
-  const vnl_matrix_fixed<T,2,2>& get_matrix () const { return t12_matrix_; }
-  const vgl_h_matrix_1d get_inverse () const;
+  void get (vnl_matrix_fixed<T,2,2>* t_matrix) const;
+  const vnl_matrix_fixed<T,2,2>& get_matrix() const { return t12_matrix_; }
+  vgl_h_matrix_1d get_inverse() const;
 
   //: transformation to projective basis (canonical frame)
   // Compute the homography that takes the input set of points to the
