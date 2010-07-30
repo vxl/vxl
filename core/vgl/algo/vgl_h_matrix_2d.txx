@@ -336,11 +336,7 @@ projective_basis(vcl_vector<vgl_homg_line_2d<T> > const& lines
   back_matrix.set_column(0, l0);
   back_matrix.set_column(1, l1);
   back_matrix.set_column(2, l2);
-
-  vnl_svd<T> svd(back_matrix.as_ref()); // size 3x3
-
-  vnl_vector_fixed<T, 3> scales_vector = svd.solve(l3);
-
+  vnl_vector_fixed<T,3> scales_vector = vnl_inverse(back_matrix) * l3;
   back_matrix.set_row(0, scales_vector[0] * l0);
   back_matrix.set_row(1, scales_vector[1] * l1);
   back_matrix.set_row(2, scales_vector[2] * l2);
