@@ -70,7 +70,6 @@ int main(int argc, char ** argv)
     glbuffer_tableau->init(&ocl_scene,ni(),nj(),pcam);
 
     vgui_window* win = vgui::produce_window(ni(), nj(), "OpenCl Volume Visualizer");
-    //win->get_adaptor()->make_current();
     win->get_adaptor()->set_tableau( glbuffer_tableau  ); 
     glbuffer_tableau->set_statusbar(win->get_statusbar());
     win->show();
@@ -78,25 +77,5 @@ int main(int argc, char ** argv)
     GLboolean bGLEW = glewIsSupported("GL_VERSION_2_0  GL_ARB_pixel_buffer_object");
       
     return vgui::run();
-    
-    //return  vgui::run(glbuffer_tableau, ni(), nj());
-    
-
-    // Load image (given in the first command line param) into an image tableau.
-    //vgui_image_tableau_new image("/home/acm/Pictures/Flowerings_90_by_love1008.jpg");
-
-    //// Put the image tableau inside a 2D viewer tableau (for zoom, etc).
-    //vgui_viewer2D_tableau_new viewer(image);
-
-    ////// Put a shell tableau at the top of our tableau tree.
-    //vgui_shell_tableau_new shell(viewer);
-
-    ////vgui_window* win = vgui::adapt(shell, image->width(), image->height(), "OpenCl Volume Visualizer");
-    ////win->get_adaptor()->set_tableau( shell  ); 
-    ////win->get_adaptor()->make_current();
-
-    //// Create a window, add the tableau and show it on screen.
-    //return vgui::run(shell, image->width(), image->height());
-
 
 }
