@@ -86,12 +86,10 @@ static void test_constructors()
   }
   {
     double gold[] = {7,7,7,30, 7,7,7,40, 7,7,7,50}; // the "ground truth"
-    vnl_double_3x3 M(7.0);
-    vnl_double_3 V(30,40,50);
+    vnl_double_3x3 M(7.0);     vnl_matrix<double> m = M.as_ref();
+    vnl_double_3 V(30,40,50);  vnl_vector<double> v = V.as_ref();
     vgl_p_matrix<double> P(M,V); P.get(data);
     TEST( "Constructor from vnl_double_3x3 and vnl_double_3", equals(data, gold), true );
-    vnl_vector<double> v = V.as_ref(); // length 3
-    vnl_matrix<double> m = M.as_ref(); // size 3x3
     P.get(&m,&v);
     vgl_p_matrix<double> P2(m,v); P2.get(data);
     TEST( "get(vnl_matrix*,vnl_vector*)", equals(data, gold), true );
@@ -126,9 +124,9 @@ static void test_constructors()
     double gold[] = {1,2,3,4, 5,6,7,8, 9,10,11,12}; // the "ground truth"
     vnl_double_3x4 M(gold);
     vgl_p_matrix<double> P; P.set(M); P.get(data);
-    TEST( "set(vnl_matrix)", equals(data, gold), true );
-    vnl_matrix<double> m = M.as_ref(); P.set(m); P.get(data);
     TEST( "set(vnl_double_3x4)", equals(data, gold), true );
+    vnl_matrix<double> m = M.as_ref(); P.set(m); P.get(data);
+    TEST( "set(vnl_matrix)", equals(data, gold), true );
   }
   {
     double gold[] = {7,7,7,30, 7,7,7,40, 7,7,7,50}; // the "ground truth"
