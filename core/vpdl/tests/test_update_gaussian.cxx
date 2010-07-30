@@ -1,5 +1,6 @@
 #include <testlib/testlib_test.h>
 #include <vpdl/vpdt/vpdt_update_gaussian.h>
+#include <vnl/vnl_vector_fixed.h>
 #include <vcl_string.h>
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
@@ -70,11 +71,11 @@ void test_update_gaussian_type(T epsilon, const vcl_string& type_name)
     TEST(("sphere variance bound <"+type_name+"> fixed").c_str(), gauss3.covar, min_var);
 
     // test dynamic dimension variant
-    vpdt_gaussian<vnl_vector<T>,T> gauss(3);
+    vpdt_gaussian<vnl_vector_fixed<T,3>,T> gauss(3);
     test_mean = true;
     test_vars = true;
     for (unsigned int i=0; i<data.size(); ++i){
-      vpdt_update_gaussian(gauss, T(1.0/(i+1)), vnl_vector<T>(data[i].data_block(),3));
+      vpdt_update_gaussian(gauss, T(1.0/(i+1)), data[i]);
 
       T mean_diff = (gauss.mean - means[i]).inf_norm();
       test_mean = test_mean && (mean_diff < epsilon);
@@ -92,7 +93,7 @@ void test_update_gaussian_type(T epsilon, const vcl_string& type_name)
 
     // test updating with a lower bound on variance
     for (unsigned int i=0; i<20; ++i)
-      vpdt_update_gaussian(gauss, T(0.5), vnl_vector<T>(data[0]), min_var);
+      vpdt_update_gaussian(gauss, T(0.5), data[0], min_var);
 
     TEST(("sphere variance bound <"+type_name+"> variable").c_str(), gauss.covar, min_var);
   }
@@ -127,11 +128,11 @@ void test_update_gaussian_type(T epsilon, const vcl_string& type_name)
          gauss3.covar.min_value(), min_var);
 
     // test dynamic dimension variant
-    vpdt_gaussian<vnl_vector<T>,vnl_vector<T> > gauss(3);
+    vpdt_gaussian<vnl_vector_fixed<T,3>,vnl_vector_fixed<T,3> > gauss(3);
     test_mean = true;
     test_vars = true;
-    for (unsigned int i=0; i<data.size(); ++i){
-      vpdt_update_gaussian(gauss, T(1.0/(i+1)), vnl_vector<T>(data[i]));
+    for (unsigned int i=0; i<data.size(); ++i) {
+      vpdt_update_gaussian(gauss, T(1.0/(i+1)), data[i]);
 
       T mean_diff = (gauss.mean - means[i]).inf_norm();
       test_mean = test_mean && (mean_diff < epsilon);
@@ -149,7 +150,7 @@ void test_update_gaussian_type(T epsilon, const vcl_string& type_name)
 
     // test updating with a lower bound on variance
     for (unsigned int i=0; i<20; ++i)
-      vpdt_update_gaussian(gauss, T(0.5), vnl_vector<T>(data[0]), min_var);
+      vpdt_update_gaussian(gauss, T(0.5), data[0], min_var);
     TEST(("independent variance bound <"+type_name+"> variable").c_str(),
          gauss.covar.min_value(), min_var);
   }
@@ -187,18 +188,18 @@ void test_update_gaussian_type(T epsilon, const vcl_string& type_name)
          gauss3.covar.eigenvalues().min_value(), min_var);
 
     // test dynamic dimension variant
-    vpdt_gaussian<vnl_vector<T> > gauss(3);
+    vpdt_gaussian<vnl_vector_fixed<T,3> > gauss(3);
     test_mean = true;
     test_vars = true;
     for (unsigned int i=0; i<data.size(); ++i){
-      vpdt_update_gaussian(gauss, T(1.0/(i+1)), vnl_vector<T>(data[i]));
+      vpdt_update_gaussian(gauss, T(1.0/(i+1)), data[i]);
 
       T mean_diff = (gauss.mean - means[i]).inf_norm();
       test_mean = test_mean && (mean_diff < epsilon);
       if (mean_diff >= epsilon)
         vcl_cout << "mean should be "<<means[i]<<" is "<<gauss.mean<<vcl_endl;
 
-      vnl_matrix<T> covariance;
+      vnl_matrix_fixed<T,3,3> covariance;
       gauss.compute_covar(covariance);
       T var_diff = (covariance - covars[i]).array_inf_norm();
       test_vars = test_vars && (var_diff < epsilon);
@@ -212,7 +213,7 @@ void test_update_gaussian_type(T epsilon, const vcl_string& type_name)
 
     // test updating with a lower bound on variance
     for (unsigned int i=0; i<20; ++i)
-      vpdt_update_gaussian(gauss, T(0.5), vnl_vector<T>(data[0]), min_var);
+      vpdt_update_gaussian(gauss, T(0.5), data[0], min_var);
     TEST(("general covariance bound <"+type_name+"> variable").c_str(),
          gauss.covar.eigenvalues().min_value(), min_var);
   }
