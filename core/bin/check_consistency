@@ -225,6 +225,8 @@ foreach $f (@FILES)
          "$f-$j" !~ m!\bv3p/netlib/triangle\.c\-math\.h$! &&
          "$f-$j" !~ m!\bv3p/png/tests/pngtest\.c\-time\.h$! &&
          "$f-$j" !~ m!\bbgui3d_file_io\.cxx-Inventor/! &&
+         "$f-$j" !~ m!\bboxm_ocl_\w+_tableau\.cxx-GL/glew\.h$! &&
+         "$f-$j" !~ m!\bbocl_cl\.h-CL/cl\.h$! &&
           $j !~ m!^(stdlib|varargs|sys/types|stdio|windows|GL/glu?t?)\.h$!);
     $jj = $j; $i = $j;
     next unless ($i =~ s!^(v[bginpsu]l|vil1|vgui|vidl|vidl1|vidl_vil1|vpdl|vtol|vsol|vdgl|vipl/vipl_with_[a-z_]+|vipl|vepl2?|mbl|pdf1d|vpdfl|mil|mil3d|vimt|vimt3d|gevd|bsol|btol|bugl|bvnl|bvgl|bgui|bdgl|rrel|rsdl|rgrl)/(file_formats/|algo/|io/|internals/|filter/|section/|vrml/|impl/(X|glut|gtk|mfc)/|)(.*)\.h!$4! || $i =~ s!^(v[cx]l_[a-z]+)\.h$!$1!);
