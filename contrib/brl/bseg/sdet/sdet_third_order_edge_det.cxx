@@ -1,11 +1,12 @@
-//This is brl/bseg/sdet/sdet_third_order_edge_det.cxx
+// This is brl/bseg/sdet/sdet_third_order_edge_det.cxx
 #include "sdet_third_order_edge_det.h"
-
+//:
+// \file
 #include <vul/vul_timer.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_line_2d.h>
 
-// function to compute generic edges
+//: function to compute generic edges
 void sdet_third_order_edge_det::apply(vil_image_view<vxl_byte> const& image)
 {
   //convert to grayscale
@@ -268,13 +269,13 @@ bool sdet_third_order_edge_det::save_edg_ascii(const vcl_string& filename, unsig
   }
 
   //2) write out the header block
-  outfp << "# EDGE_MAP v3.0" << vcl_endl << vcl_endl;
-  outfp << "# Format :  [Pixel_Pos]  Pixel_Dir Pixel_Conf  [Sub_Pixel_Pos] Sub_Pixel_Dir Strength Uncer" << vcl_endl;
-  outfp << vcl_endl;
-  outfp << "WIDTH=" << ni << vcl_endl;
-  outfp << "HEIGHT=" << nj << vcl_endl;
-  outfp << "EDGE_COUNT=" << edgels.size()  << vcl_endl;
-  outfp << vcl_endl << vcl_endl;
+  outfp << "# EDGE_MAP v3.0\n\n"
+        << "# Format :  [Pixel_Pos]  Pixel_Dir Pixel_Conf  [Sub_Pixel_Pos] Sub_Pixel_Dir Strength Uncer\n"
+        << vcl_endl
+        << "WIDTH=" << ni << vcl_endl
+        << "HEIGHT=" << nj << vcl_endl
+        << "EDGE_COUNT=" << edgels.size()  << vcl_endl
+        << vcl_endl << vcl_endl;
 
   //save the edgel tokens
   for (unsigned k = 0; k < edgels.size(); k++) {
@@ -287,7 +288,9 @@ bool sdet_third_order_edge_det::save_edg_ascii(const vcl_string& filename, unsig
     double idir = edgel.get_theta();
     double iconf = edgel.get_grad();
     double dir = idir, conf = iconf, uncer = 0.0;
-    outfp << "[" << ix << ", " << iy << "]    " << idir << " " << iconf << "   [" << x << ", " << y << "]   " << dir << " " << conf << " " << uncer << vcl_endl;
+    outfp << '[' << ix << ", " << iy << "]    "
+          << idir << ' ' << iconf << "   [" << x << ", " << y << "]   "
+          << dir << ' ' << conf << ' ' << uncer << vcl_endl;
   }
 
   outfp.close();
