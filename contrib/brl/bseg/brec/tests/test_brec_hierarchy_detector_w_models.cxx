@@ -128,7 +128,7 @@ static void test_brec_hierarchy_detector_w_models()
   vcl_cout << "h: # of nodes: " << h->number_of_vertices() << " # of edges: " << h->number_of_edges() << " # of prims: " << h->get_dummy_primitive_instances().size() << vcl_endl;
 
   // train the response models
-  vcl_string model_dir(".\\train_dir\\");
+  vcl_string model_dir("./train_dir/");
   vul_file::make_directory(model_dir);
   h->set_model_dir(model_dir);
 
