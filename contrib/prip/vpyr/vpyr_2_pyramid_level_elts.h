@@ -144,7 +144,7 @@ class vpyr_2_pyramid_level_dart_base_iterator : protected FD
   vpyr_2_pyramid_level_dart_base_iterator(const vpyr_2_pyramid_level_dart_base_iterator<FDp,Refp,Ptrp,Itp> &it)
     :it_((It)it.reference())
   {
-    set(*it_, it.level()) ;
+    this->set(*it_, it.level()) ;
   }
 
   //:
@@ -152,7 +152,7 @@ class vpyr_2_pyramid_level_dart_base_iterator : protected FD
   self_type & operator=(const vpyr_2_pyramid_level_dart_base_iterator<FDp,Refp,Ptrp,Itp> &it)
   {
     it_=(It)it.reference() ;
-    set(*it_, it.level()) ;
+    this->set(*it_, it.level()) ;
     return *this ;
   }
 
@@ -164,7 +164,7 @@ class vpyr_2_pyramid_level_dart_base_iterator : protected FD
   {
     this->level_=it.level() ;
     it_=it.reference() ;
-    set_link();
+    this->set_link();
     return *this ;
   }
 
@@ -196,7 +196,7 @@ class vpyr_2_pyramid_level_dart_base_iterator : protected FD
   self_type & alpha()
   {
     it_+=offset(vpyr_2_pyramid_base_alpha(this->link(),level())) ;
-    set_link();
+    this->set_link();
     return *this ;
   }
 
@@ -204,7 +204,7 @@ class vpyr_2_pyramid_level_dart_base_iterator : protected FD
   self_type & phi ()
   {
     it_+=offset(vpyr_2_pyramid_base_phi(this->link(),level())) ;
-    set_link();
+    this->set_link();
     return *this ;
   }
 
@@ -212,7 +212,7 @@ class vpyr_2_pyramid_level_dart_base_iterator : protected FD
   self_type & sigma ()
   {
     it_+=offset(vpyr_2_pyramid_base_sigma(this->link(),level())) ;
-    set_link();
+    this->set_link();
     return *this ;
   }
 
@@ -227,7 +227,7 @@ class vpyr_2_pyramid_level_dart_base_iterator : protected FD
   self_type & iphi ()
   {
     it_+=offset(vpyr_2_pyramid_base_iphi(this->link(),level())) ;
-    set_link();
+    this->set_link();
     return *this ;
   }
 
@@ -235,7 +235,7 @@ class vpyr_2_pyramid_level_dart_base_iterator : protected FD
   self_type & isigma ()
   {
     it_+=offset(vpyr_2_pyramid_base_isigma(this->link(),level())) ;
-    set_link();
+    this->set_link();
     return *this ;
   }
 
@@ -243,7 +243,7 @@ class vpyr_2_pyramid_level_dart_base_iterator : protected FD
   self_type & operator++ ()
   {
     ++it_;
-    set_link();
+    this->set_link();
     return *this ;
   }
 
@@ -251,7 +251,7 @@ class vpyr_2_pyramid_level_dart_base_iterator : protected FD
   self_type & operator+ (int i)
   {
     it_+=i;
-    set_link();
+    this->set_link();
     return *this ;
   }
 
@@ -267,7 +267,7 @@ class vpyr_2_pyramid_level_dart_base_iterator : protected FD
   vpyr_2_pyramid_level_dart_base_iterator(It arg,vmap_level_index l)
     :it_(arg)
   {
-    set(*arg,l) ;
+    this->set(*arg,l) ;
   }
 
   //:
