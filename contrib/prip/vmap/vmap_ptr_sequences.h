@@ -174,14 +174,14 @@ class vmap_ptr_sequence
   }
 
   //:
-  pointer & get_pointer(int arg)
+  pointer& get_pointer(int arg)
   {
     assert (begin_+arg < end_);
     return begin_[arg] ;
   }
 
   //:
-  const pointer & get_pointer(int arg) const
+  const pointer& get_pointer(int arg) const
   {
     assert (begin_+arg < end_);
     return begin_[arg] ;
@@ -292,7 +292,7 @@ class vmap_owning_sequence: public vmap_ptr_sequence<D>
   {
     clear() ;
     storage_.resize(arg_size) ;
-    set_begin(new pointer[arg_size]) ;
+    this->set_begin(new pointer[arg_size]) ;
     vmap_ptr_sequence<D>::resize(arg_size) ;
 
     for (int i=0; i<arg_size; ++i)
