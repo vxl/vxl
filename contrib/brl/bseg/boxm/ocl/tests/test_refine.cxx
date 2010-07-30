@@ -43,8 +43,8 @@ bool test_refine_apl()
   vbl_array_2d<float16> cpu_data = cpu_scene.data_buffers();
   vbl_array_2d<float16> gpu_data = gpu_scene.data_buffers();
   for (unsigned int i=0; i<cpu_blocks.get_row1_count(); i++) {
-    for unsigned (int j=0; j<cpu_blocks.get_row2_count(); j++) {
-      for unsigned (int k=0; k<cpu_blocks.get_row3_count(); k++)
+    for (unsigned int j=0; j<cpu_blocks.get_row2_count(); j++) {
+      for (unsigned int k=0; k<cpu_blocks.get_row3_count(); k++)
       {
         //get tree info for CPU block
         int cpuBuffIndex = cpu_blocks[i][j][k][0];
