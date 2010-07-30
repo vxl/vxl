@@ -193,6 +193,8 @@ int main(int argc,  char** argv)
   vul_arg<vcl_string> cam_dir("-camdir", "camera directory", "");
   vul_arg<vcl_string> img_dir("-imgdir", "Image directory", "");
   vul_arg<vcl_string> scene_file("-scene", "scene filename", "");
+  vul_arg<float> prob_thresh("-prob", "refine probability threshold", .3);
+
   vul_arg_parse(argc, argv);
   if (!vul_file::is_directory(cam_dir().c_str()))
     return -1;
@@ -249,7 +251,7 @@ int main(int argc,  char** argv)
       return -1;
     if (i==0)
     {
-      updt_mgr->init_update(&ocl_scene,pcam, floatimg);
+      updt_mgr->init_update(&ocl_scene,pcam, floatimg, prob_thresh());
       if (!updt_mgr->setup_norm_data(true, 0.5f, 0.25f))
         return -1;
       updt_mgr->setup_online_processing();
