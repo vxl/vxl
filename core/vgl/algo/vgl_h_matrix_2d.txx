@@ -22,8 +22,8 @@ vgl_h_matrix_2d<T>::vgl_h_matrix_2d()
 //: Copy constructor
 template <class T>
 vgl_h_matrix_2d<T>::vgl_h_matrix_2d(const vgl_h_matrix_2d<T>& M)
+  : t12_matrix_(M.get_matrix())
 {
-  t12_matrix_ = M.t12_matrix_;
 }
 
 
@@ -46,7 +46,7 @@ vgl_h_matrix_2d<T>::vgl_h_matrix_2d(char const* filename)
 }
 
 //--------------------------------------------------------------
-//: Constructor
+//: Constructor, and implicit cast from vnl_matrix_fixed<T,3,3>
 template <class T>
 vgl_h_matrix_2d<T>::vgl_h_matrix_2d(vnl_matrix_fixed<T,3,3> const& M):
   t12_matrix_(M)
@@ -198,16 +198,23 @@ T vgl_h_matrix_2d<T>::get(unsigned int row_index, unsigned int col_index) const
 template <class T>
 void vgl_h_matrix_2d<T>::get(T* H) const
 {
-  for (int row_index = 0; row_index < 3; row_index++)
-    for (int col_index = 0; col_index < 3; col_index++)
-      *H++ = t12_matrix_.get(row_index, col_index);
+  T const* data = t12_matrix_.data_block();
+  for (int index = 0; index < 9; ++index)
+    *H++ = data[index];
+}
+
+//: Fill H with contents of this
+template <class T>
+void vgl_h_matrix_2d<T>::get(vnl_matrix_fixed<T,3,3>* H) const
+{
+  *H = t12_matrix_;
 }
 
 //: Fill H with contents of this
 template <class T>
 void vgl_h_matrix_2d<T>::get(vnl_matrix<T>* H) const
 {
-  *H = vnl_matrix<T>(t12_matrix_.data_block(), 3,3);
+  *H = t12_matrix_.as_ref(); // size 3x3
 }
 
 //: Set to identity
@@ -221,9 +228,9 @@ void vgl_h_matrix_2d<T>::set_identity()
 template <class T>
 void vgl_h_matrix_2d<T>::set(const T* H)
 {
-  for (int row_index = 0; row_index < 3; row_index++)
-    for (int col_index = 0; col_index < 3; col_index++)
-      t12_matrix_.put(row_index, col_index, *H++);
+  T* data = t12_matrix_.data_block();
+  for (int index = 0; index < 9; ++index)
+    data[index] = *H++;
 }
 
 //: Set to given vnl_matrix
@@ -257,7 +264,7 @@ projective_basis(vcl_vector<vgl_homg_point_2d<T> > const& points)
     this->set_identity();
     return false;
   }
-  vnl_svd<T> svd1(vnl_matrix<T>(point_matrix.data_block(), 3,4), 1e-8);
+  vnl_svd<T> svd1(point_matrix.as_ref(), 1e-8); // size 3x4
   if (svd1.rank() < 3)
   {
     vcl_cerr << "vgl_h_matrix_2d<T>::projective_basis():\n"
@@ -316,7 +323,7 @@ projective_basis(vcl_vector<vgl_homg_line_2d<T> > const& lines
     this->set_identity();
     return false;
   }
-  vnl_svd<T> svd1(vnl_matrix<T>(line_matrix.data_block(), 3,4), 1e-8);
+  vnl_svd<T> svd1(line_matrix.as_ref(), 1e-8); // size 3x4
   if (svd1.rank() < 3)
   {
     vcl_cerr << "vgl_h_matrix_2d<T>::projective_basis():\n"
@@ -330,7 +337,7 @@ projective_basis(vcl_vector<vgl_homg_line_2d<T> > const& lines
   back_matrix.set_column(1, l1);
   back_matrix.set_column(2, l2);
 
-  vnl_svd<T> svd(vnl_matrix<T>(back_matrix.data_block(), 3,3));
+  vnl_svd<T> svd(back_matrix.as_ref()); // size 3x3
 
   vnl_vector_fixed<T, 3> scales_vector = svd.solve(l3);
 
@@ -351,10 +358,9 @@ projective_basis(vcl_vector<vgl_homg_line_2d<T> > const& lines
 
 //: Return the inverse
 template <class T>
-const vgl_h_matrix_2d<T> vgl_h_matrix_2d<T>::get_inverse() const
+vgl_h_matrix_2d<T> vgl_h_matrix_2d<T>::get_inverse() const
 {
-  vnl_matrix_fixed<T, 3, 3> temp = vnl_inverse(t12_matrix_);
-  return vgl_h_matrix_2d<T>(temp);
+  return vgl_h_matrix_2d<T>(vnl_inverse(t12_matrix_));
 }
 
 

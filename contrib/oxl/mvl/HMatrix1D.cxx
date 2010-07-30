@@ -128,7 +128,7 @@ void HMatrix1D::get (double *H) const
 //: Fill H with contents of this
 void HMatrix1D::get (vnl_matrix<double>* H) const
 {
-  *H = vnl_matrix<double>(t12_matrix_.data_block(), 2,2);
+  *H = t12_matrix_.as_ref(); // size 2x2
 }
 
 //: Set to 2x2 row-stored matrix, and cache inverse.

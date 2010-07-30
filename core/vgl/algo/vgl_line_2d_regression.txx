@@ -69,7 +69,7 @@ bool vgl_line_2d_regression<T>::fit()
   M(0, 1) = M(1, 0) = Sxy_-Sx_*Sy_/npts_;
   M(1, 1) = Syy_-Sy_*Sy_/npts_;
 
-  vnl_symmetric_eigensystem<T> sym(vnl_matrix<T>(M.data_block(), 2,2));
+  vnl_symmetric_eigensystem<T> sym(M.as_ref()); // size 2x2
   T a = sym.V(0,0);
   T b = sym.V(1,0);
   T c = -(a*Sx_/npts_ + b*Sy_/npts_);
@@ -90,7 +90,7 @@ bool vgl_line_2d_regression<T>::fit_constrained(T x, T y)
   M(0, 0) = Sxx_-2*Sx_*x +npts_*x*x;
   M(0, 1) = M(1, 0) = Sxy_-Sx_*y-x*Sy_+npts_*x*y;
   M(1, 1) = Syy_-2*Sy_*y+npts_*y*y;
-  vnl_symmetric_eigensystem<T> sym(vnl_matrix<T>(M.data_block(), 2,2));
+  vnl_symmetric_eigensystem<T> sym(M.as_ref()); // size 2x2
   T a = sym.V(0,0);
   T b = sym.V(1,0);
   T c = -(a*x + b*y);

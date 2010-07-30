@@ -67,7 +67,7 @@ void test_gaussian_indep_type(T epsilon, const vcl_string& type_name)
          gauss1.sqr_mahal_dist(test_pt[0]),
          vcl_numeric_limits<T>::infinity());
     TEST(("zero var mahalanobis dist <"+type_name+"> variable").c_str(),
-         gauss.sqr_mahal_dist(vnl_vector<T>(test_pt.data_block(), 3)),
+         gauss.sqr_mahal_dist(test_pt.as_ref()),
          vcl_numeric_limits<T>::infinity());
 
     // test zero variance probability

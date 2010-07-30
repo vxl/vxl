@@ -205,7 +205,7 @@ bool vgl_conic_2d_regression<T>::fit()
   vnl_matrix_fixed<T,3,3> S_lambda =
     Dinv_*(S11_- S12_*(vnl_inverse(S22_)*S12_T));
 
-  vnl_svd<T> svd(vnl_matrix<T>(S_lambda.data_block(), 3, 3));
+  vnl_svd<T> svd(S_lambda.as_ref()); // size 3x3
   cost_ = svd.sigma_min();
   vnl_vector_fixed<T,3> v1 = svd.nullvector();
   vnl_vector_fixed<T,3> v2 = - vnl_inverse(S22_)*S12_T*v1;

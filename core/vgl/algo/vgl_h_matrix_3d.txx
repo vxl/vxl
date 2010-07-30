@@ -22,13 +22,13 @@
 //: Copy constructor
 template <class T>
 vgl_h_matrix_3d<T>::vgl_h_matrix_3d(vgl_h_matrix_3d<T> const& M)
+  : t12_matrix_(M.get_matrix())
 {
-  t12_matrix_ = M.t12_matrix_;
 }
 
 //--------------------------------------------------------------
 //
-//: Constructor
+//: Constructor, and implicit cast from vnl_matrix_fixed<T,4,4>
 template <class T>
 vgl_h_matrix_3d<T>::vgl_h_matrix_3d(vnl_matrix_fixed<T, 4, 4> const& M)
 {
@@ -75,7 +75,7 @@ vgl_h_matrix_3d<T>::vgl_h_matrix_3d(vcl_vector<vgl_homg_point_3d<T> > const& poi
   }
 
   vnl_svd<T> SVD(W);
-  t12_matrix_ = vnl_matrix<T>(SVD.nullvector().data_block(), 4, 4);
+  t12_matrix_ = vnl_matrix_fixed<T,4,4>(SVD.nullvector().data_block()); // 16-dim. nullvector
 }
 
 //--------------------------------------------------------------
@@ -84,7 +84,7 @@ vgl_h_matrix_3d<T>::vgl_h_matrix_3d(vcl_vector<vgl_homg_point_3d<T> > const& poi
 template <class T>
 vgl_h_matrix_3d<T>::vgl_h_matrix_3d(vcl_istream& s)
 {
-  read(s);
+  t12_matrix_.read_ascii(s);
 }
 
 //--------------------------------------------------------------
@@ -151,7 +151,7 @@ vgl_h_matrix_3d<T>::preimage(vgl_homg_plane_3d<T> const& p)
 {
   vnl_vector_fixed<T, 4> v;
   v[0]=p.a();  v[1]=p.b();   v[2]=p.c();   v[3]=p.d();
-  vnl_vector_fixed<T,4> v2 = (t12_matrix_.transpose()) * v;
+  vnl_vector_fixed<T,4> v2 = t12_matrix_.transpose() * v;
   return vgl_homg_plane_3d<T>(v2[0], v2[1], v2[2], v2[3]);
 }
 
@@ -223,9 +223,9 @@ T vgl_h_matrix_3d<T>::get (unsigned int row_index, unsigned int col_index) const
 template <class T>
 void vgl_h_matrix_3d<T>::get (T* t_matrix) const
 {
-  for (int row_index = 0; row_index < 4; row_index++)
-    for (int col_index = 0; col_index < 4; col_index++)
-      *t_matrix++ = t12_matrix_.get(row_index, col_index);
+  T const* data = t12_matrix_.data_block();
+  for (int index = 0; index < 16; ++index)
+    *t_matrix++ = data[index];
 }
 
 //-----------------------------------------------------------------------------
@@ -234,7 +234,16 @@ void vgl_h_matrix_3d<T>::get (T* t_matrix) const
 template <class T>
 void vgl_h_matrix_3d<T>::get (vnl_matrix_fixed<T, 4, 4>* t_matrix) const
 {
-  *t_matrix = vnl_matrix<T>(t12_matrix_.data_block(), 4,4);
+  *t_matrix = t12_matrix_;
+}
+
+//-----------------------------------------------------------------------------
+//
+//: Fill t_matrix with contents of H
+template <class T>
+void vgl_h_matrix_3d<T>::get (vnl_matrix<T>* t_matrix) const
+{
+  *t_matrix = t12_matrix_.as_ref(); // size 4x4
 }
 
 //-----------------------------------------------------------------------------
@@ -243,8 +252,7 @@ void vgl_h_matrix_3d<T>::get (vnl_matrix_fixed<T, 4, 4>* t_matrix) const
 template <class T>
 vgl_h_matrix_3d<T> vgl_h_matrix_3d<T>::get_inverse() const
 {
-  vnl_matrix_fixed<T, 4, 4> temp = vnl_inverse(t12_matrix_);
-  return vgl_h_matrix_3d<T>(temp);
+  return vgl_h_matrix_3d<T>(vnl_inverse(t12_matrix_));
 }
 
 //: Set to 4x4 row-stored matrix
@@ -252,9 +260,9 @@ vgl_h_matrix_3d<T> vgl_h_matrix_3d<T>::get_inverse() const
 template <class T>
 void vgl_h_matrix_3d<T>::set (T const* H)
 {
-  for (int row_index = 0; row_index < 4; row_index++)
-    for (int col_index = 0; col_index < 4; col_index++)
-      t12_matrix_. put (row_index, col_index, *H++);
+  T* data = t12_matrix_.data_block();
+  for (int index = 0; index < 16; ++index)
+    data[index] = *H++;
 }
 
 //: Set to given vnl_matrix
@@ -283,14 +291,13 @@ void vgl_h_matrix_3d<T>::set_identity ()
   t12_matrix_.set_identity();
 }
 
-//: Set to translation
-//
+//: Set the (0,3) to (2,3) elements of the transform matrix
 template <class T>
 void vgl_h_matrix_3d<T>::set_translation(T tx, T ty, T tz)
 {
-  (t12_matrix_)(0, 3)  = tx;
-  (t12_matrix_)(1, 3)  = ty;
-  (t12_matrix_)(2, 3)  = tz;
+  t12_matrix_(0, 3)  = tx;
+  t12_matrix_(1, 3)  = ty;
+  t12_matrix_(2, 3)  = tz;
 }
 
 //: Set to rotation about an axis
@@ -365,10 +372,9 @@ vgl_h_matrix_3d<T>::set_rotation_matrix(vnl_matrix_fixed<T, 3, 3> const& R)
 template <class T>
 bool vgl_h_matrix_3d<T>::is_rotation() const
 {
-  const vnl_matrix_fixed<T,4,4>& H = t12_matrix_;
-  return H.get(0,3) == (T)0
-      && H.get(1,3) == (T)0
-      && H.get(2,3) == (T)0
+  return t12_matrix_.get(0,3) == (T)0
+      && t12_matrix_.get(1,3) == (T)0
+      && t12_matrix_.get(2,3) == (T)0
       && this->is_euclidean();
 }
 
@@ -376,23 +382,19 @@ bool vgl_h_matrix_3d<T>::is_rotation() const
 template <class T>
 bool vgl_h_matrix_3d<T>::is_euclidean() const
 {
-  const vnl_matrix_fixed<T,4,4>& H = t12_matrix_;
-  if ( H.get(3,0) == (T)0 &&
-       H.get(3,1) == (T)0 &&
-       H.get(3,2) == (T)0 &&
-       H.get(3,3) == (T)1 )
-  {
-    // use an error tolerance on the orthonormality constraint
-    vnl_matrix_fixed<T, 3,3> R = get_upper_3x3_matrix();
-    R *= R.transpose();
-    R(0,0) -= T(1);
-    R(1,1) -= T(1);
-    R(2,2) -= T(1);
-    double absolute_error = R.absolute_value_max();
-    if ( absolute_error <= 10*vcl_numeric_limits<T>::epsilon() )
-      return true;
-  }
-  return false;
+  if ( t12_matrix_.get(3,0) != (T)0 ||
+       t12_matrix_.get(3,1) != (T)0 ||
+       t12_matrix_.get(3,2) != (T)0 ||
+       t12_matrix_.get(3,3) != (T)1 )
+    return false; // should not have a translation part
+
+  // use an error tolerance on the orthonormality constraint
+  vnl_matrix_fixed<T, 3,3> R = get_upper_3x3_matrix();
+  R *= R.transpose();
+  R(0,0) -= T(1);
+  R(1,1) -= T(1);
+  R(2,2) -= T(1);
+  return R.absolute_value_max() <= 10*vcl_numeric_limits<T>::epsilon();
 }
 
 
@@ -401,9 +403,8 @@ vgl_h_matrix_3d<T>
 vgl_h_matrix_3d<T>::get_upper_3x3() const
 {
   //only sensible for affine transformations
-  double u = (double)t12_matrix_[3][3];
-  assert(vcl_fabs(u)>1e-9);
-  T d = static_cast<T>(u);
+  T d = t12_matrix_[3][3];
+  assert(d<-1e-9 || d>1e-9);
   vnl_matrix_fixed<T,4,4> m(0.0);
   for (unsigned r = 0; r<3; r++)
     for (unsigned c = 0; c<3; c++)
@@ -428,13 +429,12 @@ vgl_homg_point_3d<T>
 vgl_h_matrix_3d<T>::get_translation() const
 {
   //only sensible for affine transformations
-  double u = (double)t12_matrix_[3][3];
-  assert(vcl_fabs(u)>1e-9);
-  T d = static_cast<T>(u);
+  T d = t12_matrix_[3][3];
+  assert(d<-1e-9 || d>1e-9);
   return vgl_homg_point_3d<T>(t12_matrix_[0][3]/d,
                               t12_matrix_[1][3]/d,
-                              t12_matrix_[2][3]/d
-                              ,(T)1.0);
+                              t12_matrix_[2][3]/d,
+                              (T)1);
 }
 
 template <class T>

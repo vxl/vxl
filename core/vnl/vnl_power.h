@@ -65,13 +65,13 @@ vnl_matrix<T> vnl_power(vnl_matrix<T> const& m, int n)
   else if (n == 1 || m.is_identity())
     return m;
   else if (n < 0 && m.rows() == 1)
-    return vnl_matrix<T>(vnl_power(vnl_matrix_fixed<T,1,1>(m),n).data_block(), 1, 1);
+    return vnl_power(vnl_matrix_fixed<T,1,1>(m),n).as_ref();
   else if (n < 0 && m.rows() == 2)
-    return vnl_matrix<T>(vnl_power(vnl_matrix_fixed<T,2,2>(m),n).data_block(), 2, 2);
+    return vnl_power(vnl_matrix_fixed<T,2,2>(m),n).as_ref();
   else if (n < 0 && m.rows() == 3)
-    return vnl_matrix<T>(vnl_power(vnl_matrix_fixed<T,3,3>(m),n).data_block(), 3, 3);
+    return vnl_power(vnl_matrix_fixed<T,3,3>(m),n).as_ref();
   else if (n < 0 && m.rows() == 4)
-    return vnl_matrix<T>(vnl_power(vnl_matrix_fixed<T,4,4>(m),n).data_block(), 4, 4);
+    return vnl_power(vnl_matrix_fixed<T,4,4>(m),n).as_ref();
   else {
     vnl_matrix<T> r = vnl_power(m, n/2);
     return n%2==0 ? r * r : r * r * m;

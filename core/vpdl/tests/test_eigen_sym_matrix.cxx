@@ -7,7 +7,7 @@ template <class T>
 void test_matrix_type(T epsilon, const vcl_string& type_name)
 {
   // generate a test matrix
-  vnl_matrix_fixed<T,3,3> M(T(0));
+  vnl_matrix_fixed<T,3,3> M;
   M(0,0) = (T)0.5; M(0,1) = (T)0.2; M(0,2) = (T)0.1;
   M(1,0) = (T)0.2; M(1,1) = (T)0.3; M(1,2) = (T)0.1;
   M(2,0) = (T)0.1; M(2,1) = (T)0.1; M(2,2) = (T)0.4;
@@ -15,10 +15,13 @@ void test_matrix_type(T epsilon, const vcl_string& type_name)
   T det = (T)0.04;
 
   // the inverse of M
-  vnl_matrix_fixed<T,3,3> invM(T(0));
+  vnl_matrix_fixed<T,3,3> invM;
   invM(0,0) = (T)2.75;  invM(0,1) = (T)-1.75; invM(0,2) = (T)-0.25;
   invM(1,0) = (T)-1.75; invM(1,1) = (T)4.75;  invM(1,2) = (T)-0.75;
   invM(2,0) = (T)-0.25; invM(2,1) = (T)-0.75; invM(2,2) = (T)2.75;
+
+  vnl_matrix_fixed<T,3,3> id; id.set_identity();
+  TEST_NEAR("assert invM is inverse of M", (M*invM-id).array_inf_norm(), 0, epsilon);
 
   vnl_vector_fixed<T,3> x(T(1), T(2), T(-1));
 
@@ -53,7 +56,7 @@ void test_matrix_type(T epsilon, const vcl_string& type_name)
 
   {
     vcl_cout <<"=======================================\n";
-    vpdt_eigen_sym_matrix<T> sym(vnl_matrix<T>(M.data_block(), 3,3));
+    vpdt_eigen_sym_matrix<T> sym(M.as_ref()); // size 3x3
     vnl_matrix<T> M2;
     sym.form_matrix(M2);
     TEST_NEAR(("reform matrix <"+type_name+"> variable").c_str(),
@@ -83,8 +86,11 @@ void test_matrix_type(T epsilon, const vcl_string& type_name)
 
 static void test_eigen_sym_matrix()
 {
+  vcl_cout <<"=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n";
   test_matrix_type(1e-5f,"float");
+  vcl_cout <<"=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n";
   test_matrix_type(1e-13,"double");
+  vcl_cout <<"=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n";
 }
 
 TESTMAIN(test_eigen_sym_matrix);

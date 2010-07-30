@@ -71,7 +71,7 @@ similarity_from_matches::fit_from_minimal_set( const vcl_vector<int>& match_indi
     return false;
   }
 
-  params = vnl_vector<double>((vnl_inverse(X) * U).data_block(), 4);
+  params = (vnl_inverse(X) * U).as_ref(); // length 4
   return true;
 }
 
@@ -161,7 +161,7 @@ similarity_from_matches::weighted_least_squares_fit( vnl_vector<double>& params,
     return false;
   }
 
-  cofact = vnl_matrix<double>(vnl_inverse(wXtX).data_block(), 4,4);
+  cofact = vnl_inverse(wXtX).as_ref(); // size 4x4
   params = cofact * wXtu;
   if ( vnl_math_abs(params[0]) < 1.0e-6 && vnl_math_abs(params[1]) < 1.0e-6 )
   {

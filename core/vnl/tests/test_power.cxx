@@ -8,9 +8,9 @@
 static void test_power()
 {
   double eps = 1e-11;
-  vnl_double_2x2 residue2, id2; id2.set_identity(); vnl_matrix<double> ID2(id2.data_block(), 2, 2);
-  vnl_double_3x3 residue3, id3; id3.set_identity(); vnl_matrix<double> ID3(id3.data_block(), 3, 3);
-  vnl_double_4x4 residue4, id4; id4.set_identity(); vnl_matrix<double> ID4(id4.data_block(), 4, 4);
+  vnl_double_2x2 residue2, id2; id2.set_identity(); vnl_matrix<double> ID2 = id2.as_ref();
+  vnl_double_3x3 residue3, id3; id3.set_identity(); vnl_matrix<double> ID3 = id3.as_ref();
+  vnl_double_4x4 residue4, id4; id4.set_identity(); vnl_matrix<double> ID4 = id4.as_ref();
   vnl_matrix<double> M, Mi;
 
   // 11th power of the identity 2x2 matrix
@@ -35,7 +35,7 @@ static void test_power()
   residue2 += m2i*m2 - id2;
   TEST_NEAR("-1st power of a fixed 2x2 matrix", residue2.array_inf_norm(), 0.0, eps);
 
-  M = vnl_matrix<double>(m2.data_block(), 2, 2);
+  M = m2.as_ref();
   Mi = vnl_power(M,0);
   TEST("0th power of 2x2 matrix", Mi, ID2);
   Mi = vnl_power(M,1);
@@ -76,7 +76,7 @@ static void test_power()
   residue3 += m3i*m3 - id3;
   TEST_NEAR("-1st power of a fixed 3x3 matrix", residue3.array_inf_norm(), 0.0, eps);
 
-  M = vnl_matrix<double>(m3.data_block(), 3, 3);
+  M = m3.as_ref();
   Mi = vnl_power(M,0);
   TEST("0th power of 3x3 matrix", Mi, ID3);
   Mi = vnl_power(M,1);
@@ -118,7 +118,7 @@ static void test_power()
   residue4 += m4i*m4 - id4;
   TEST_NEAR("-1st power of a fixed 4x4 matrix", residue4.array_inf_norm(), 0.0, eps);
 
-  M = vnl_matrix<double>(m4.data_block(), 4, 4);
+  M = m4.as_ref();
   Mi = vnl_power(M,0);
   TEST("0th power of 4x4 matrix", Mi, ID4);
   Mi = vnl_power(M,1);

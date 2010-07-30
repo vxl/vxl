@@ -68,7 +68,7 @@ void ProjectiveBasis2D::compute(const HomgPoint2D& p1, const HomgPoint2D& p2, co
       T_.set_identity(); collinear_ = true; return;
     }
 
-    vnl_svd<double> s(vnl_matrix<double>(full_matrix.data_block(),3,4), 1e-8);
+    vnl_svd<double> s(full_matrix.as_ref(), 1e-8); // size 3x4
     collinear_ = (s.rank() < 3);
 
     if (collinear_ && warn_)
@@ -83,7 +83,7 @@ void ProjectiveBasis2D::compute(const HomgPoint2D& p1, const HomgPoint2D& p2, co
   back_matrix.set_column(1, p2.get_vector());
   back_matrix.set_column(2, p3.get_vector());
 
-  vnl_svd<double> svd(vnl_matrix<double>(back_matrix.data_block(), 3,3));
+  vnl_svd<double> svd(back_matrix.as_ref()); // size 3x3
 
   vnl_double_3 scales_vector = svd.solve(p4.get_vector());
 

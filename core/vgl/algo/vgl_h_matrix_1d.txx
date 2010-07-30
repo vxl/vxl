@@ -11,22 +11,15 @@
 #include <vnl/algo/vnl_svd.h>
 #include <vcl_fstream.h>
 
-//--------------------------------------------------------------
-//: Default constructor
-template <class T>
-vgl_h_matrix_1d<T>::vgl_h_matrix_1d()
-{
-}
-
 //: Copy constructor
 template <class T>
 vgl_h_matrix_1d<T>::vgl_h_matrix_1d(const vgl_h_matrix_1d<T>& M)
-  : t12_matrix_(M.t12_matrix_)
+  : t12_matrix_(M.get_matrix())
 {
 }
 
 //--------------------------------------------------------------
-//: Constructor
+//: Constructor, and implicit cast from vnl_matrix_fixed<T,2,2>
 template <class T>
 vgl_h_matrix_1d<T>::vgl_h_matrix_1d(vnl_matrix_fixed<T,2,2> const& M)
   : t12_matrix_(M)
@@ -88,10 +81,9 @@ vgl_homg_point_1d<T> vgl_h_matrix_1d<T>::operator*(const vgl_homg_point_1d<T>& x
 //: Return the inverse
 //
 template <class T>
-const vgl_h_matrix_1d<T> vgl_h_matrix_1d<T>::get_inverse() const
+vgl_h_matrix_1d<T> vgl_h_matrix_1d<T>::get_inverse() const
 {
-  vnl_matrix_fixed<T,2,2> temp = vnl_inverse(t12_matrix_);
-  return vgl_h_matrix_1d<T>(temp);
+  return vgl_h_matrix_1d<T>(vnl_inverse(t12_matrix_));
 }
 
 //-----------------------------------------------------------------------------
@@ -118,6 +110,17 @@ vgl_h_matrix_1d<T> vgl_h_matrix_1d<T>::read(vcl_istream& s)
 }
 
 
+//: Constructor from file
+template <class T>
+vgl_h_matrix_1d<T>::vgl_h_matrix_1d(char const* filename)
+{
+  vcl_ifstream f(filename);
+  if (!f.good())
+    vcl_cerr << "vgl_h_matrix_1d::read: Error opening " << filename << vcl_endl;
+  else
+    t12_matrix_.read_ascii(f);
+}
+
 //: Read H from file
 template <class T>
 vgl_h_matrix_1d<T> vgl_h_matrix_1d<T>::read(char const* filename)
@@ -135,32 +138,39 @@ vgl_h_matrix_1d<T> vgl_h_matrix_1d<T>::read(char const* filename)
 template <class T>
 T vgl_h_matrix_1d<T>::get(unsigned int row_index, unsigned int col_index) const
 {
-  return t12_matrix_. get(row_index, col_index);
+  return t12_matrix_.get(row_index, col_index);
 }
 
 //: Fill H with contents of this
 template <class T>
 void vgl_h_matrix_1d<T>::get(T *H) const
 {
-  for (int row_index = 0; row_index < 2; row_index++)
-    for (int col_index = 0; col_index < 2; col_index++)
-      *H++ = t12_matrix_.get(row_index, col_index);
+  T const* data = t12_matrix_.data_block();
+  for (int index = 0; index < 4; ++index)
+    *H++ = data[index];
+}
+
+//: Fill H with contents of this
+template <class T>
+void vgl_h_matrix_1d<T>::get(vnl_matrix_fixed<T,2,2>* H) const
+{
+  *H = t12_matrix_;
 }
 
 //: Fill H with contents of this
 template <class T>
 void vgl_h_matrix_1d<T>::get(vnl_matrix<T>* H) const
 {
-  *H = vnl_matrix<T>(t12_matrix_.data_block(), 2,2);
+  *H = t12_matrix_.as_ref(); // size 2x2
 }
 
 //: Set to 2x2 row-stored matrix
 template <class T>
 void vgl_h_matrix_1d<T>::set(const T* H)
 {
-  for (int row_index = 0; row_index < 2; row_index++)
-    for (int col_index = 0; col_index < 2; col_index++)
-      t12_matrix_.put(row_index, col_index, *H++);
+  T* data = t12_matrix_.data_block();
+  for (int index = 0; index < 4; ++index)
+    data[index] = *H++;
 }
 
 //: Set to given vnl_matrix
@@ -192,7 +202,7 @@ projective_basis(vcl_vector<vgl_homg_point_1d<T> > const& points)
     this->set_identity();
     return false;
   }
-  vnl_svd<T> svd1(vnl_matrix<T>(point_matrix.data_block(), 2,3), 1e-8);
+  vnl_svd<T> svd1(point_matrix.as_ref(), 1e-8); // size 2x3
   if (svd1.rank() < 2)
   {
     vcl_cerr << "vgl_h_matrix_1d<T>::projective_basis():\n"

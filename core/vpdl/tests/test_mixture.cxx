@@ -308,9 +308,9 @@ void test_mixture_type(T epsilon, const vcl_string& type_name)
 
   vcl_cout << "=================== variable ======================="<<vcl_endl;
   {
-    vpdl_gaussian_sphere<T> gauss1(vnl_vector<T>(mean1.data_block(),3),var1);
-    vpdl_gaussian_indep<T> gauss2(vnl_vector<T>(mean2.data_block(),3),var2);
-    vpdl_gaussian_indep<T> gauss3(vnl_vector<T>(mean3.data_block(),3),var3);
+    vpdl_gaussian_sphere<T> gauss1(mean1.as_ref(),var1);
+    vpdl_gaussian_indep<T>  gauss2(mean2.as_ref(),var2);
+    vpdl_gaussian_indep<T>  gauss3(mean3.as_ref(),var3);
 
     vpdl_mixture<T> mixture;
     TEST(("initial num_components <"+type_name+">").c_str(),

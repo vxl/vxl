@@ -253,7 +253,7 @@ FMatrix::get_epipoles(vgl_homg_point_2d<double>& epipole1,
                       vgl_homg_point_2d<double>& epipole2) const
 {
   // fm_compute_epipoles
-  vnl_svd<double> svd(vnl_matrix<double>(f_matrix_.data_block(),3,3));
+  vnl_svd<double> svd(f_matrix_.as_ref()); // size 3x3
   vnl_double_3 v = svd.nullvector();
   epipole1.set(v[0],v[1],v[2]);
   v = svd.left_nullvector();
@@ -270,7 +270,7 @@ bool
 FMatrix::get_epipoles(HomgPoint2D*epipole1_ptr, HomgPoint2D*epipole2_ptr) const
 {
   // fm_compute_epipoles
-  vnl_svd<double> svd(vnl_matrix<double>(f_matrix_.data_block(),3,3));
+  vnl_svd<double> svd(f_matrix_.as_ref()); // size 3x3
   epipole1_ptr->set(svd.nullvector());
   epipole2_ptr->set(svd.left_nullvector());
   return svd.W(2,2) == 0;
@@ -582,7 +582,7 @@ void FMatrix::compute_P_matrix(vnl_matrix<double> &P2) const
 void FMatrix::set_rank2_using_svd(void)
 {
   // ma2_static_set_rank
-  vnl_svd<double> svd(vnl_matrix<double>(f_matrix_.data_block(),3,3));
+  vnl_svd<double> svd(f_matrix_.as_ref()); // size 3x3
   svd.W(2) = 0;
   f_matrix_ = svd.recompose();
   ft_matrix_ = f_matrix_.transpose();
@@ -625,7 +625,7 @@ void FMatrix::get (double *c) const
 //: Copy the fundamental matrix into a vnl_matrix<double>
 void FMatrix::get (vnl_matrix<double>* f_matrix) const
 {
-  *f_matrix = vnl_matrix<double>(f_matrix_.data_block(), 3,3);
+  *f_matrix = f_matrix_.as_ref(); // size 3x3
 }
 
 

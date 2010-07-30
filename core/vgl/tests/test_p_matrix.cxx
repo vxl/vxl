@@ -90,8 +90,8 @@ static void test_constructors()
     vnl_double_3 V(30,40,50);
     vgl_p_matrix<double> P(M,V); P.get(data);
     TEST( "Constructor from vnl_double_3x3 and vnl_double_3", equals(data, gold), true );
-    vnl_vector<double> v(V.data_block(), 3);
-    vnl_matrix<double> m(M.data_block(), 3,3);
+    vnl_vector<double> v = V.as_ref(); // length 3
+    vnl_matrix<double> m = M.as_ref(); // size 3x3
     P.get(&m,&v);
     vgl_p_matrix<double> P2(m,v); P2.get(data);
     TEST( "get(vnl_matrix*,vnl_vector*)", equals(data, gold), true );
@@ -127,7 +127,7 @@ static void test_constructors()
     vnl_double_3x4 M(gold);
     vgl_p_matrix<double> P; P.set(M); P.get(data);
     TEST( "set(vnl_matrix)", equals(data, gold), true );
-    vnl_matrix<double> m(M.data_block(), 3,4); P.set(m); P.get(data);
+    vnl_matrix<double> m = M.as_ref(); P.set(m); P.get(data);
     TEST( "set(vnl_double_3x4)", equals(data, gold), true );
   }
   {

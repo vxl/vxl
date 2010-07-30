@@ -159,7 +159,7 @@ class vgl_p_matrix
   //: Return the 3x4 projection matrix in the C-array, c_matrix
   void get(T *c_matrix) const;
   //: Return the 3x4 projection matrix in p_matrix
-  void get(vnl_matrix<T>& p_matrix) const { p_matrix = vnl_matrix<T>(p_matrix_.data_block(), 3,4); }
+  void get(vnl_matrix<T>& p_matrix) const { p_matrix = p_matrix_.as_ref(); }
   //: Return the 3x4 projection matrix in p_matrix
   void get(vnl_matrix_fixed<T, 3, 4>& p_matrix) const { p_matrix = p_matrix_; }
 
