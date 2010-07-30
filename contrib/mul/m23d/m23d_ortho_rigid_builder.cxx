@@ -8,6 +8,7 @@
 #include <m23d/m23d_scaled_ortho_projection.h>
 #include <m23d/m23d_set_q_constraint.h>
 
+#include <vnl/vnl_inverse.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vgl/vgl_vector_3d.h>
@@ -89,16 +90,16 @@ void m23d_ortho_rigid_builder::reconstruct(const vnl_matrix<double>& P2D)
   }
 
 #if 0
-  vcl_cout<<"W= "<<W<<vcl_endl
-          <<"P_.rows()= "<<P_.rows()<<vcl_endl
-          <<"P_.cols()= "<<P_.cols()<<vcl_endl
-          <<"P3D_.rows()= "<<P3D_.rows()<<vcl_endl
+  vcl_cout<<"W= "<<W<<'\n'
+          <<"P_.rows()= "<<P_.rows()<<'\n'
+          <<"P_.cols()= "<<P_.cols()<<'\n'
+          <<"P3D_.rows()= "<<P3D_.rows()<<'\n'
           <<"P3D_.cols()= "<<P3D_.cols()<<vcl_endl;
 #endif
   P_= P_*W;
   P3D_= W*P3D_;
 #if 0
-  vcl_cout<<"P_.extract(2,3)= "<<P_.extract(2,3)<<vcl_endl
+  vcl_cout<<"P_.extract(2,3)= "<<P_.extract(2,3)<<'\n'
           <<"P3D_.extract(3,5)= "<<P3D_.extract(3,5)<<vcl_endl;
 #endif
 
@@ -111,14 +112,12 @@ void m23d_ortho_rigid_builder::reconstruct(const vnl_matrix<double>& P2D)
   //j QQt j=1
   //i QQt j=0
   // find this matrix Q
-  vnl_matrix<double> Q;
+  vnl_matrix<double> Q; // will be 3x3
   find_correction_matrix( Q, P_);
 
   // apply correction
   P_= P_*Q;
-  //P3D_= Q.transpose() * P3D_;
-  vnl_svd<double> Q_svd(Q);
-  P3D_=Q_svd.inverse() * P3D_;
+  P3D_=vnl_inverse(Q) * P3D_; // Q.transpose() * P3D_;
 
   // align model frame with first frame
   // Now need to apply an additional rotation so that the
@@ -152,8 +151,8 @@ void m23d_ortho_rigid_builder::reconstruct(const vnl_matrix<double>& P2D)
   vnl_matrix<double> P0=P_.extract(2,3)*Q;
 
 #if 0
-  vcl_cout<<"P_.extract(2,3)= "<<P_.extract(2,3)<<vcl_endl
-          <<"Q= "<<Q<<vcl_endl
+  vcl_cout<<"P_.extract(2,3)= "<<P_.extract(2,3)<<'\n'
+          <<"Q= "<<Q<<'\n'
           <<"P0= "<<P0<<vcl_endl;
 #endif // 0
 
@@ -168,8 +167,7 @@ void m23d_ortho_rigid_builder::reconstruct(const vnl_matrix<double>& P2D)
 
   // Apply the correction matrix
   P_=P_*Q;
-  vnl_svd<double> Q_svd(Q);
-  P3D_=Q_svd.inverse() * P3D_;
+  P3D_=vnl_inverse(Q) * P3D_;
 #endif // 0
 
 
@@ -192,7 +190,7 @@ void m23d_ortho_rigid_builder::reconstruct(const vnl_matrix<double>& P2D)
 // may need to do this to fix z coord ambiguity
 void m23d_ortho_rigid_builder::flip_z_coords()
 {
-  vcl_cout<<"flipping z coords!"<<vcl_endl;
+  vcl_cerr<<"flipping z coords!\n";
 
   unsigned np = P3D_.cols();
   for (unsigned j=0;j<np;++j)

@@ -15,6 +15,7 @@
 #include <vbl/vbl_bounding_box.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_math.h>
+#include <vnl/vnl_inverse.h>
 #include <vnl/vnl_double_2x3.h>
 #include <vnl/algo/vnl_fft_prime_factors.h>
 #include <vnl/algo/vnl_svd.h>
@@ -2569,7 +2570,7 @@ bool brip_vil_float_ops::homography(vil_image_view<float> const& input,
   //the input and output image rois are consistent with the homography.
 
   // the bounding boxes corresponding to input and output rois
-  // We also construct polygons since homgraphies turn boxes into arbitrary
+  // We also construct polygons since homographies turn boxes into arbitrary
   // quadrilaterals.
   vsol_box_2d_sptr input_roi, output_roi;
   vsol_polygon_2d_sptr input_poly, output_poly;
@@ -2594,15 +2595,12 @@ bool brip_vil_float_ops::homography(vil_image_view<float> const& input,
     output_roi = new vsol_box_2d();
     output_roi->add_point(0, 0);
     output_roi->add_point(temp->width(), temp->height());
-    vnl_matrix_fixed<double,3, 3> Mt = H.get_matrix();
-    vnl_matrix_fixed<double,3, 3> t, tMt;
+    vnl_matrix_fixed<double,3,3> Mt = H.get_matrix();
+    vnl_matrix_fixed<double,3,3> t;
     t[0][0]=1;  t[0][1]=0; t[0][2]=-temp->get_min_x();
     t[1][0]=0;  t[1][1]=1; t[1][2]=-temp->get_min_y();
     t[2][0]=0;  t[2][1]=0; t[2][2]=1;
-    tMt = t*Mt;
-    vnl_svd<double> svd(tMt);
-    vnl_matrix_fixed<double,3, 3> Mtinv = svd.inverse();
-    Hinv = vgl_h_matrix_2d<double> (Mtinv);
+    Hinv = vgl_h_matrix_2d<double> (vnl_inverse(t*Mt));
   }
   else // Case II, the output image size is fixed so we have to find the
   {    // inverse mapping of the output roi and intersect with the input roi

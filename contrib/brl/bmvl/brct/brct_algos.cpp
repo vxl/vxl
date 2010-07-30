@@ -516,7 +516,7 @@ void
 brct_algos::write_vrml_points(vcl_ofstream& str,
                               vcl_vector<vgl_point_3d<double> > const& pts3d,
                               vcl_vector<vgl_point_3d<float> > const& color
-                              )
+                             )
 {
   str << "Shape {\n"
       << "  appearance NULL\n"
@@ -568,8 +568,8 @@ void brct_algos::write_vrml_box(vcl_ofstream& str, vsol_box_3d_sptr const& box,
 }
 
 void brct_algos::write_vrml_sphere(vcl_ofstream& str, vgl_sphere_3d<double> const& sphere,
-                                const float r, const float g, const float b,
-                                const float transparency)
+                                   const float r, const float g, const float b,
+                                   const float transparency)
 {
   double x0 = sphere.centre().x(), y0 = sphere.centre().y(), z0 = sphere.centre().z();
   double rad = sphere.radius();
@@ -595,10 +595,10 @@ void brct_algos::write_vrml_sphere(vcl_ofstream& str, vgl_sphere_3d<double> cons
 }
 
 void brct_algos::write_vrml_polyline(vcl_ofstream& str,
-                                vcl_vector<vgl_point_3d<double> > const& vts,
-                                const float r,
-                                const float g,
-                                const float b)
+                                     vcl_vector<vgl_point_3d<double> > const& vts,
+                                     const float r,
+                                     const float g,
+                                     const float b)
 {
   str << "Transform {\n"
       << "translation " << 0 << ' ' << 0 << ' '
@@ -932,7 +932,7 @@ void brct_algos::project(vcl_vector<vsol_polygon_3d_sptr> const& world_polys,
 {
   image_polys.clear();
   for (vcl_vector<vsol_polygon_3d_sptr>::const_iterator wpi=world_polys.begin();
-      wpi != world_polys.end(); ++wpi)
+       wpi != world_polys.end(); ++wpi)
     image_polys.push_back(brct_algos::project(*wpi, H));
 }
 
@@ -960,7 +960,7 @@ void brct_algos::project(vcl_vector<vsol_polygon_3d_sptr> const& world_polys,
 {
   image_polys.clear();
   for (vcl_vector<vsol_polygon_3d_sptr>::const_iterator wpi=world_polys.begin();
-      wpi != world_polys.end(); ++wpi)
+       wpi != world_polys.end(); ++wpi)
     image_polys.push_back(brct_algos::project(*wpi, P));
 }
 
@@ -1298,7 +1298,8 @@ bool brct_algos::write_brct_corrs(vcl_ofstream& str,
         str << "VALID:" << ' ' << 1 << '\n'
             << "X:" << ' ' << (corrs[i]->match(c)).x() << '\n'
             << "Y:" << ' ' << (corrs[i]->match(c)).y() << '\n';
-      } else {
+      }
+      else {
         str << "VALID:" << ' ' << 0 << '\n'
             << "X:" << ' ' << -1 << '\n'
             << "Y:" << ' ' << -1 << '\n';
@@ -1508,8 +1509,7 @@ map_image_to_world(vil_image_resource_sptr const& image,
   //copy last column
   Mh[0][2]=M[0][3]; Mh[1][2]=M[1][3]; Mh[2][2]=M[2][3];
   //invert to get image-to-world homography
-  vnl_svd<double> svd(Mh);
-  Mhinv = svd.inverse();
+  Mhinv = vnl_inverse(Mh);
   vgl_h_matrix_2d<double> H(Mhinv);
   vil_image_view<float> mapped_image, temp;
   if (!brip_vil_float_ops::homography(fimage, H, temp))

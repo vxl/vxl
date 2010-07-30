@@ -4,7 +4,7 @@
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_diag_matrix.h>
 #include <vnl/algo/vnl_ldl_cholesky.h>
-#include <vnl/algo/vnl_svd.h>
+#include <vnl/vnl_inverse.h>
 #include <vnl/vnl_random.h>
 
 #include "test_util.h"
@@ -60,10 +60,9 @@ void test_ldl_cholesky()
 
   {
     vnl_ldl_cholesky chol(A);
-    vnl_svd<double> svd(A);
     vcl_cout << "cholesky inverse:\n" << chol.inverse() << '\n'
-             << "svd inverse:\n" << svd.inverse() << '\n';
-    TEST_NEAR("svd.inverse() ~= cholesky.inverse()", (chol.inverse() - svd.inverse()).fro_norm(), 0.0, 1e-12);
+             << "vnl_inverse:\n" << vnl_inverse(A) << '\n';
+    TEST_NEAR("vnl_inverse() ~= cholesky.inverse()", (chol.inverse() - vnl_inverse(A)).fro_norm(), 0.0, 1e-12);
   }
   {
     vnl_ldl_cholesky chol(A);
