@@ -51,15 +51,6 @@ vgl_p_matrix<T>::vgl_p_matrix(vnl_matrix_fixed<T, 3, 4> const& pmatrix) :
 //--------------------------------------------------------------
 //
 template <class T>
-vgl_p_matrix<T>::vgl_p_matrix(const vnl_matrix<T>& A, const vnl_vector<T>& a) :
-  svd_(0)
-{
-  set(A,a);
-}
-
-//--------------------------------------------------------------
-//
-template <class T>
 vgl_p_matrix<T>::vgl_p_matrix(const T *c_matrix) :
   p_matrix_(c_matrix), svd_(0)
 {
@@ -424,7 +415,30 @@ vgl_p_matrix<T>::set(const T *p)
 //
 template <class T>
 void
-vgl_p_matrix<T>::set(const vnl_matrix<T>& A, const vnl_vector<T>& a)
+vgl_p_matrix<T>::set(vnl_matrix_fixed<T,3,3> const& A, vnl_vector_fixed<T,3> const& a)
+{
+  p_matrix_(0,0) = A(0,0);
+  p_matrix_(1,0) = A(1,0);
+  p_matrix_(2,0) = A(2,0);
+
+  p_matrix_(0,1) = A(0,1);
+  p_matrix_(1,1) = A(1,1);
+  p_matrix_(2,1) = A(2,1);
+
+  p_matrix_(0,2) = A(0,2);
+  p_matrix_(1,2) = A(1,2);
+  p_matrix_(2,2) = A(2,2);
+
+  p_matrix_(0,3) = a[0];
+  p_matrix_(1,3) = a[1];
+  p_matrix_(2,3) = a[2];
+}
+
+//----------------------------------------------------------------
+//
+template <class T>
+void
+vgl_p_matrix<T>::set(vnl_matrix<T> const& A, vnl_vector<T> const& a)
 {
   p_matrix_(0,0) = A(0,0);
   p_matrix_(1,0) = A(1,0);

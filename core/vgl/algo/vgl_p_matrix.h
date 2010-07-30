@@ -62,7 +62,11 @@ class vgl_p_matrix
   //: Construct from 3x4 matrix
   explicit vgl_p_matrix(vnl_matrix_fixed<T, 3, 4> const& P);
   //: Construct from 3x3 matrix A and vector a. P = [A a].
-  vgl_p_matrix(const vnl_matrix<T>& A, const vnl_vector<T>& a);
+  vgl_p_matrix(const vnl_matrix_fixed<T,3,3>& A, const vnl_vector_fixed<T,3>& a)
+  : svd_(0) { set(A,a); }
+  vgl_p_matrix(const vnl_matrix<T>& A, const vnl_vector<T>& a)
+  : svd_(0) { set(A,a); }
+
   vgl_p_matrix(const vgl_p_matrix& P);
  ~vgl_p_matrix();
 
@@ -170,9 +174,11 @@ class vgl_p_matrix
   //: Set the internal matrix using the vnl_matrix<double> p_matrix.
   void set(const vnl_matrix<T>& p_matrix) { p_matrix_ = p_matrix; clear_svd(); }
   //: Set the internal matrix using the vnl_matrix<double> p_matrix.
-  void set(vnl_matrix_fixed<T, 3, 4> const& p_matrix) { p_matrix_ = p_matrix; clear_svd(); }
+  void set(vnl_matrix_fixed<T,3,4> const& p_matrix) { p_matrix_ = p_matrix; clear_svd(); }
   //: Set from 3x3 matrix and 3x1 column vector of P = [A a].
-  void set(const vnl_matrix<T>& A, const vnl_vector<T>& a);
+  void set(vnl_matrix_fixed<T,3,3> const& A, vnl_vector_fixed<T,3> const& a);
+  //: Set from 3x3 matrix and 3x1 column vector of P = [A a].
+  void set(vnl_matrix<T> const& A, vnl_vector<T> const& a);
 
   const vnl_matrix_fixed<T, 3, 4>& get_matrix() const { return p_matrix_; }
 
