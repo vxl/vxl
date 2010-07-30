@@ -2,7 +2,7 @@
 #include <bprb/bprb_func_process.h>
 //:
 // \file
-// \brief A process for converting boxm scene to boxm ocl scene 
+// \brief A process for converting boxm scene to boxm ocl scene
 //
 // \author Vishal jain
 // \date July 8, 2010
@@ -28,37 +28,31 @@ namespace boxm_ocl_convert_boxm_to_ocl_process_globals
 bool boxm_ocl_convert_boxm_to_ocl_process_cons(bprb_func_process& pro)
 {
   using namespace boxm_ocl_convert_boxm_to_ocl_process_globals;
-  // process takes 5 inputs
+  // process takes 4 inputs and no outputs
   // input[0]: inout scene binary file
-  // input[1]: ouput scene dir
+  // input[1]: output scene dir
   // input[2]: num buffers
   // input[3]: max megabytes for OCL_Scene
   vcl_vector<vcl_string> input_types_(n_inputs_);
+  vcl_vector<vcl_string> output_types_(n_outputs_);
   input_types_[0] = "boxm_scene_base_sptr";
   input_types_[1] = "vcl_string";
   input_types_[2] = "int";
   input_types_[3] = "int";
 
-  if (!pro.set_input_types(input_types_))
-    return false;
-
-  // process has 0 outputs:
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
-  if (!pro.set_output_types(output_types_))
-    return false;
-
-  return true;
+  return pro.set_input_types(input_types_)
+      && pro.set_output_types(output_types_);
 }
 
 bool boxm_ocl_convert_boxm_to_ocl_process(bprb_func_process& pro)
 {
   using namespace boxm_ocl_convert_boxm_to_ocl_process_globals;
 
-  if ( pro.n_inputs() < n_inputs_ ){
+  if ( pro.n_inputs() < n_inputs_ ) {
     vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
     return false;
-  } 
-  
+  }
+
   // get the inputs
   unsigned i = 0;
   boxm_scene_base_sptr scene_ptr = pro.get_input<boxm_scene_base_sptr>(i++);
@@ -71,26 +65,25 @@ bool boxm_ocl_convert_boxm_to_ocl_process(bprb_func_process& pro)
   {
     case BOXM_APM_MOG_GREY:
     {
-        typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > type;
-        boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
-        
-        //convert 
-        boxm_ocl_scene ocl_scene; 
-        boxm_ocl_convert<boxm_sample<BOXM_APM_MOG_GREY> >::convert_scene(scene, num_buffers, ocl_scene, max_mb);
-        vcl_cout<<ocl_scene<<vcl_endl;
-        ocl_scene.save_scene(output_dir);
-        break;
+      typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > type;
+      boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
+
+      //convert
+      boxm_ocl_scene ocl_scene;
+      boxm_ocl_convert<boxm_sample<BOXM_APM_MOG_GREY> >::convert_scene(scene, num_buffers, ocl_scene, max_mb);
+      vcl_cout<<ocl_scene<<vcl_endl;
+      ocl_scene.save_scene(output_dir);
+      break;
     }
     case BOXM_APM_SIMPLE_GREY:
     {
-        typedef boct_tree<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > type;
-        boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
-        boxm_ocl_scene ocl_scene; 
-
-        //boxm_ocl_convert<boxm_sample<BOXM_APM_SIMPLE_GREY> >::convert_scene(scene, num_buffers, ocl_scene, max_mb);
-        vcl_cout<<ocl_scene<<vcl_endl;
-        ocl_scene.save_scene(output_dir);
-        break;
+      //convert
+      boxm_ocl_scene ocl_scene;
+      //typedef boct_tree<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > type;
+      //boxm_ocl_convert<boxm_sample<BOXM_APM_SIMPLE_GREY> >::convert_scene(dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer()), num_buffers, ocl_scene, max_mb);
+      vcl_cout<<ocl_scene<<vcl_endl;
+      ocl_scene.save_scene(output_dir);
+      break;
     }
     default:
     {
@@ -98,7 +91,6 @@ bool boxm_ocl_convert_boxm_to_ocl_process(bprb_func_process& pro)
       return false;
     }
   }
-
 
   return true;
 }
