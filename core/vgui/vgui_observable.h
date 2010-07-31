@@ -14,6 +14,7 @@
 // \verbatim
 //  Modifications
 //   17-Sep-2002 K.Y.McGaul - Added doxygen style comments.
+//   31-Jul-2010 Peter Vanroose - minor bug fix (operator= instead of operator==)
 // \endverbatim
 
 #include <vcl_vector.h>
@@ -58,7 +59,7 @@ class vgui_observable
   vgui_observable(vgui_observable const&) { }
 
   //: Disallow assignment.
-  void operator==(vgui_observable const&) { }
+  void operator=(vgui_observable const&) { }
 };
 
 #endif // vgui_observable_h_
