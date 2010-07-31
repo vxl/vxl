@@ -93,6 +93,7 @@ bool test_refine_apl()
   }
 
   vcl_cout<<"Data SSD = "<<ssd<<vcl_endl;
+  return true;
 }
 
 
