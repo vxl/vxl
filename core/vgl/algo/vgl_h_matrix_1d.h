@@ -49,7 +49,7 @@ class vgl_h_matrix_1d
   vgl_homg_point_1d<T> operator()(const vgl_homg_point_1d<T>& x1) const;
   vgl_homg_point_1d<T> preimage(const vgl_homg_point_1d<T>& x2) const;
   vgl_homg_point_1d<T> operator* (const vgl_homg_point_1d<T>& x1) const;
-  bool operator==(vgl_h_matrix_1d<T> const& M) { return t12_matrix_ == M.get_matrix(); }
+  bool operator==(vgl_h_matrix_1d<T> const& M) const { return t12_matrix_ == M.get_matrix(); }
 
   // Data Access---------------------------------------------------------------
 
