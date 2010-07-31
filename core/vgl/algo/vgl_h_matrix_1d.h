@@ -17,12 +17,17 @@
 //   23 Oct 2002 - Peter Vanroose - using fixed 3x3 matrices throughout
 //   22 Mar 2003 - J.L. Mundy - preparing for upgrade to vgl
 //   13 Jun 2004 - Peter Vanroose - added set_identity() and projective_basis()
+//   31 Jul 2010 - Peter Vanroose - made more similar to 2d and 3d variants
 // \endverbatim
 
+#include <vcl_vector.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vgl/vgl_homg_point_1d.h>
 #include <vcl_iosfwd.h>
 
+//:
+// A class to hold a line-to-line projective transformation matrix
+// and to perform common operations using it e.g. transfer point.
 template <class T>
 class vgl_h_matrix_1d
 {
@@ -35,20 +40,24 @@ class vgl_h_matrix_1d
   // Constructors/Initializers/Destructors-------------------------------------
 
   vgl_h_matrix_1d() {}
+ ~vgl_h_matrix_1d() {}
   vgl_h_matrix_1d(vgl_h_matrix_1d<T> const& M);
-  // product of two vgl_h_matrix_1ds
-  vgl_h_matrix_1d(vgl_h_matrix_1d<T> const&, vgl_h_matrix_1d<T> const&);
   vgl_h_matrix_1d(vnl_matrix_fixed<T,2,2> const& M);
+  // product of two vgl_h_matrix_1ds
+  vgl_h_matrix_1d(vgl_h_matrix_1d<T> const&,
+                  vgl_h_matrix_1d<T> const&);
   explicit vgl_h_matrix_1d(T const* t_matrix);
   explicit vgl_h_matrix_1d(vcl_istream& s);
   explicit vgl_h_matrix_1d(char const* filename);
- ~vgl_h_matrix_1d();
+  vgl_h_matrix_1d(vcl_vector<vgl_homg_point_1d<T> > const& points1,
+                  vcl_vector<vgl_homg_point_1d<T> > const& points2);
 
   // Operations----------------------------------------------------------------
 
-  vgl_homg_point_1d<T> operator()(const vgl_homg_point_1d<T>& x1) const;
-  vgl_homg_point_1d<T> preimage(const vgl_homg_point_1d<T>& x2) const;
-  vgl_homg_point_1d<T> operator* (const vgl_homg_point_1d<T>& x1) const;
+  vgl_homg_point_1d<T> operator()(vgl_homg_point_1d<T> const& p) const;
+  vgl_homg_point_1d<T> preimage(vgl_homg_point_1d<T> const& p) const;
+  vgl_homg_point_1d<T> operator*(vgl_homg_point_1d<T> const& p) const { return (*this)(p); }
+
   bool operator==(vgl_h_matrix_1d<T> const& M) const { return t12_matrix_ == M.get_matrix(); }
 
   // Data Access---------------------------------------------------------------
@@ -57,7 +66,7 @@ class vgl_h_matrix_1d
   void get (T *t_matrix) const;
   void get (vnl_matrix<T>* t_matrix) const;
   void get (vnl_matrix_fixed<T,2,2>* t_matrix) const;
-  const vnl_matrix_fixed<T,2,2>& get_matrix() const { return t12_matrix_; }
+  vnl_matrix_fixed<T,2,2> const& get_matrix() const { return t12_matrix_; }
   vgl_h_matrix_1d get_inverse() const;
 
   //: transformation to projective basis (canonical frame)
@@ -73,15 +82,15 @@ class vgl_h_matrix_1d
   bool projective_basis(vcl_vector<vgl_homg_point_1d<T> > const& three_points);
 
   void set_identity() { t12_matrix_.set_identity(); }
-  void set(const T *t_matrix);
+  void set(T const* t_matrix);
   void set(vnl_matrix_fixed<T,2,2> const& t_matrix);
 
-  static vgl_h_matrix_1d<T> read(char const* filename);
-  static vgl_h_matrix_1d<T> read(vcl_istream&);
+  bool read(char const* filename);
+  bool read(vcl_istream& s);
 };
 
-template <class T> vcl_ostream& operator<<(vcl_ostream& s, const vgl_h_matrix_1d<T>& h);
-template <class T> vcl_istream& operator>>(vcl_istream& s, vgl_h_matrix_1d<T>& h);
+template <class T> vcl_ostream& operator<<(vcl_ostream& s, vgl_h_matrix_1d<T> const& h);
+template <class T> vcl_istream& operator>>(vcl_istream& s, vgl_h_matrix_1d<T>&       h);
 
 
 #define VGL_H_MATRIX_1D_INSTANTIATE(T) extern "please include vgl/algo/vgl_h_matrix_1d.txx first"

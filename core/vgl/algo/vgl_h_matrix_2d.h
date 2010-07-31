@@ -14,6 +14,7 @@
 //   23 Oct 2002 - Peter Vanroose - using fixed 3x3 matrices throughout
 //   22 Mar 2003 - J.L. Mundy - preparing for upgrade to vgl
 //   24 Jun 2003 - Peter Vanroose - added projective_basis() from 4 lines
+//   31 Jul 2010 - Peter Vanroose - made more similar to 1d and 3d variants
 // \endverbatim
 
 #include <vcl_vector.h>
@@ -37,14 +38,17 @@ class vgl_h_matrix_2d
 
   // Constructors/Initializers/Destructors-------------------------------------
 
-  vgl_h_matrix_2d();
+  vgl_h_matrix_2d() {}
+ ~vgl_h_matrix_2d() {}
   vgl_h_matrix_2d(vgl_h_matrix_2d<T> const& M);
   vgl_h_matrix_2d(vnl_matrix_fixed<T,3,3> const& M);
+  vgl_h_matrix_2d(vnl_matrix_fixed<T,2,2> const& M,
+                  vnl_vector_fixed<T,2> const& m);
   explicit vgl_h_matrix_2d(T const* t_matrix);
   explicit vgl_h_matrix_2d(vcl_istream& s);
   explicit vgl_h_matrix_2d(char const* filename);
-
- ~vgl_h_matrix_2d();
+  vgl_h_matrix_2d(vcl_vector<vgl_homg_point_2d<T> > const& points1,
+                  vcl_vector<vgl_homg_point_2d<T> > const& points2);
 
   // Operations----------------------------------------------------------------
 
@@ -66,7 +70,8 @@ class vgl_h_matrix_2d
   vgl_homg_line_2d<T> operator*(vgl_homg_line_2d<T> const& l) const { return (*this)(l);}
 
   //: Composition
-  vgl_h_matrix_2d operator*(const vgl_h_matrix_2d& h2) const { return vgl_h_matrix_2d<T>(t12_matrix_ * h2.t12_matrix_); }
+  vgl_h_matrix_2d<T> operator*(vgl_h_matrix_2d<T> const& H) const
+  { return vgl_h_matrix_2d<T>(t12_matrix_ * H.t12_matrix_); }
 
   // Data Access---------------------------------------------------------------
 
@@ -74,8 +79,11 @@ class vgl_h_matrix_2d
   void get(T *t_matrix) const;
   void get(vnl_matrix_fixed<T,3,3>* t_matrix) const;
   void get(vnl_matrix<T>* t_matrix) const;
-  const vnl_matrix_fixed<T,3,3>& get_matrix() const { return t12_matrix_; }
+  vnl_matrix_fixed<T,3,3> const& get_matrix() const { return t12_matrix_; }
   vgl_h_matrix_2d get_inverse() const;
+
+  void set (unsigned int row_index, unsigned int col_index, const T value)
+  { t12_matrix_[row_index][col_index]=value; }
 
   void set(const T *t_matrix);
   void set(vnl_matrix_fixed<T,3,3> const& t_matrix);
@@ -108,6 +116,9 @@ class vgl_h_matrix_2d
   // \end{array}\right]$                         , Ta = A*T.
   void set_aspect_ratio(const T aspect_ratio);
 
+  bool is_rotation() const;
+  bool is_euclidean() const;
+
   //: transformation to projective basis (canonical frame)
   // Compute the homography that takes the input set of points to the
   // canonical frame.  The points act as the projective basis for
@@ -132,12 +143,22 @@ class vgl_h_matrix_2d
 #endif
                        );
 
+  // ---------- extract components as transformations ----------
+
+  //: corresponds to rotation for Euclidean transformations
+  vgl_h_matrix_2d<T> get_upper_2x2() const;
+  vnl_matrix_fixed<T, 2,2> get_upper_2x2_matrix() const;
+
+  //: corresponds to translation for affine transformations
+  vgl_homg_point_2d<T> get_translation() const;
+  vnl_vector_fixed<T, 2> get_translation_vector() const;
+
   bool read(vcl_istream& s);
   bool read(char const* filename);
 };
 
-template <class T> vcl_ostream& operator<<(vcl_ostream& s, const vgl_h_matrix_2d<T>& h);
-template <class T> vcl_istream& operator>>(vcl_istream& s, vgl_h_matrix_2d<T>& h);
+template <class T> vcl_ostream& operator<<(vcl_ostream& s, vgl_h_matrix_2d<T> const& h);
+template <class T> vcl_istream& operator>>(vcl_istream& s, vgl_h_matrix_2d<T>&       h);
 
 #define VGL_H_MATRIX_2D_INSTANTIATE(T) extern "please include vgl/algo/vgl_h_matrix_2d.txx first"
 

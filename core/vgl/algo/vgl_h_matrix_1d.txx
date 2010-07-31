@@ -9,7 +9,9 @@
 #include <vnl/vnl_inverse.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/algo/vnl_svd.h>
+#include <vcl_cstdlib.h> // for exit()
 #include <vcl_fstream.h>
+#include <vcl_cassert.h>
 
 //: Copy constructor
 template <class T>
@@ -47,10 +49,35 @@ vgl_h_matrix_1d<T>::vgl_h_matrix_1d(vcl_istream &is)
   t12_matrix_.read_ascii(is);
 }
 
-//: Destructor
+//--------------------------------------------------------------
+//
+//: Constructor - calculate homography between two sets of 1D points (minimum 3)
 template <class T>
-vgl_h_matrix_1d<T>::~vgl_h_matrix_1d()
+vgl_h_matrix_1d<T>::vgl_h_matrix_1d(vcl_vector<vgl_homg_point_1d<T> > const& points1,
+                                    vcl_vector<vgl_homg_point_1d<T> > const& points2)
 {
+  vnl_matrix<T> W;
+  assert(points1.size() == points2.size());
+  unsigned int numpoints = points1.size();
+  if (numpoints < 3)
+  {
+    vcl_cerr << "\nvhl_h_matrix_1d - minimum of 3 points required\n";
+    vcl_exit(0);
+  }
+
+  W.set_size(numpoints, 4);
+
+  for (unsigned int i = 0; i < numpoints; i++)
+  {
+    T x1 = points1[i].x(), w1 = points1[i].w();
+    T x2 = points2[i].x(), w2 = points2[i].w();
+
+    W[i][0]=x1*w2;    W[i][1]=w1*w2;
+    W[i][2]=-x1*x2;   W[i][3]=-w1*x2;
+  }
+
+  vnl_svd<T> SVD(W);
+  t12_matrix_ = vnl_matrix_fixed<T,2,2>(SVD.nullvector().data_block()); // 4-dim. nullvector
 }
 
 // == OPERATIONS ==
@@ -70,12 +97,6 @@ vgl_homg_point_1d<T> vgl_h_matrix_1d<T>::preimage(const vgl_homg_point_1d<T>& x2
   vnl_vector_fixed<T,2> v = vnl_inverse(t12_matrix_) *
                             vnl_vector_fixed<T,2>(x2.x(),x2.w());
   return vgl_homg_point_1d<T>(v[0], v[1]);
-}
-
-template <class T>
-vgl_homg_point_1d<T> vgl_h_matrix_1d<T>::operator*(const vgl_homg_point_1d<T>& x1) const
-{
-  return (*this)(x1);
 }
 
 //: Return the inverse
@@ -104,9 +125,10 @@ vcl_istream& operator >> (vcl_istream& s, vgl_h_matrix_1d<T>& H)
 
 //: Read H from vcl_istream
 template <class T>
-vgl_h_matrix_1d<T> vgl_h_matrix_1d<T>::read(vcl_istream& s)
+bool vgl_h_matrix_1d<T>::read(vcl_istream& s)
 {
-  return vgl_h_matrix_1d<T>(s);
+  t12_matrix_.read_ascii(s);
+  return s.good() || s.eof();
 }
 
 
@@ -123,12 +145,12 @@ vgl_h_matrix_1d<T>::vgl_h_matrix_1d(char const* filename)
 
 //: Read H from file
 template <class T>
-vgl_h_matrix_1d<T> vgl_h_matrix_1d<T>::read(char const* filename)
+bool vgl_h_matrix_1d<T>::read(char const* filename)
 {
   vcl_ifstream f(filename);
   if (!f.good())
     vcl_cerr << "vgl_h_matrix_1d::read: Error opening " << filename << vcl_endl;
-  return vgl_h_matrix_1d<T>(f);
+  return read(f);
 }
 
 // == DATA ACCESS ==

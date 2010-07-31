@@ -147,7 +147,7 @@ vgl_h_matrix_3d<T>::operator()(vgl_homg_point_3d<T> const& x) const
 //: Return the preimage of a transformed plane
 template <class T>
 vgl_homg_plane_3d<T>
-vgl_h_matrix_3d<T>::preimage(vgl_homg_plane_3d<T> const& p)
+vgl_h_matrix_3d<T>::preimage(vgl_homg_plane_3d<T> const& p) const
 {
   vnl_vector_fixed<T, 4> v;
   v[0]=p.a();  v[1]=p.b();   v[2]=p.c();   v[3]=p.d();
@@ -196,6 +196,16 @@ bool vgl_h_matrix_3d<T>::read(vcl_istream& s)
 {
   t12_matrix_.read_ascii(s);
   return s.good() || s.eof();
+}
+
+//: Read H from file
+template <class T>
+bool vgl_h_matrix_3d<T>::read(char const* filename)
+{
+  vcl_ifstream f(filename);
+  if (!f.good())
+    vcl_cerr << "vgl_h_matrix_3d::read: Error opening " << filename << vcl_endl;
+  return read(f);
 }
 
 //: Load H from ASCII file.

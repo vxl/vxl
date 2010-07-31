@@ -8,16 +8,10 @@
 #include <vnl/vnl_inverse.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/algo/vnl_svd.h>
+#include <vcl_limits.h>
+#include <vcl_cstdlib.h> // for exit()
 #include <vcl_fstream.h>
-
-//--------------------------------------------------------------
-//
-
-//: Default constructor
-template <class T>
-vgl_h_matrix_2d<T>::vgl_h_matrix_2d()
-{
-}
+#include <vcl_cassert.h>
 
 //: Copy constructor
 template <class T>
@@ -61,12 +55,60 @@ vgl_h_matrix_2d<T>::vgl_h_matrix_2d(const T* H)
 {
 }
 
-
-//: Destructor
+//--------------------------------------------------------------
+//
+//: Constructor - calculate homography between two sets of 2D points (minimum 4)
 template <class T>
-vgl_h_matrix_2d<T>::~vgl_h_matrix_2d()
+vgl_h_matrix_2d<T>::vgl_h_matrix_2d(vcl_vector<vgl_homg_point_2d<T> > const& points1,
+                                    vcl_vector<vgl_homg_point_2d<T> > const& points2)
 {
+  vnl_matrix<T> W;
+  assert(points1.size() == points2.size());
+  unsigned int numpoints = points1.size();
+  if (numpoints < 4)
+  {
+    vcl_cerr << "\nvhl_h_matrix_2d - minimum of 4 points required\n";
+    vcl_exit(0);
+  }
+
+  W.set_size(2*numpoints, 9);
+
+  for (unsigned int i = 0; i < numpoints; i++)
+  {
+    T x1 = points1[i].x(), y1 = points1[i].y(), w1 = points1[i].w();
+    T x2 = points2[i].x(), y2 = points2[i].y(), w2 = points2[i].w();
+
+    W[i*2][0]=x1*w2;    W[i*2][1]=y1*w2;    W[i*2][2]=w1*w2;
+    W[i*2][3]=0.0;      W[i*2][4]=0.0;      W[i*2][5]=0.0;
+    W[i*2][6]=-x1*x2;   W[i*2][7]=-y1*x2;   W[i*2][8]=-w1*x2;
+
+    W[i*2+1][0]=0.0;    W[i*2+1][1]=0.0;    W[i*2+1][2]=0.0;
+    W[i*2+1][3]=x1*w2;  W[i*2+1][4]=y1*w2;  W[i*2+1][5]=w1*w2;
+    W[i*2+1][6]=-x1*y2; W[i*2+1][7]=-y1*y2; W[i*2+1][8]=-w1*y2;
+  }
+
+  vnl_svd<T> SVD(W);
+  t12_matrix_ = vnl_matrix_fixed<T,3,3>(SVD.nullvector().data_block()); // 9-dim. nullvector
 }
+
+//--------------------------------------------------------------
+//
+//: Construct an affine vgl_h_matrix_2d from 2x2 M and 2x1 m.
+//
+template <class T>
+vgl_h_matrix_2d<T>::vgl_h_matrix_2d(vnl_matrix_fixed<T,2,2> const& M,
+                                    vnl_vector_fixed<T,2> const& m)
+{
+  for (int r = 0; r < 2; ++r) {
+    for (int c = 0; c < 2; ++c)
+      (t12_matrix_)(r, c) = M(r,c);
+    (t12_matrix_)(r, 2) = m(r);
+  }
+  for (int c = 0; c < 2; ++c)
+    (t12_matrix_)(2,c) = 0;
+  (t12_matrix_)(2,2) = 1;
+}
+
 
 // == OPERATIONS ==
 
@@ -171,7 +213,8 @@ vcl_istream& operator >> (vcl_istream& s, vgl_h_matrix_2d<T>& H)
 template <class T>
 bool vgl_h_matrix_2d<T>::read(vcl_istream& s)
 {
-  return t12_matrix_.read_ascii(s);
+  t12_matrix_.read_ascii(s);
+  return s.good() || s.eof();
 }
 
 //: Read H from file
@@ -295,6 +338,30 @@ projective_basis(vcl_vector<vgl_homg_point_2d<T> > const& points)
   return true;
 }
 
+template <class T>
+bool vgl_h_matrix_2d<T>::is_rotation() const
+{
+  return t12_matrix_.get(0,2) == (T)0
+      && t12_matrix_.get(1,2) == (T)0
+      && this->is_euclidean();
+}
+
+template <class T>
+bool vgl_h_matrix_2d<T>::is_euclidean() const
+{
+  if ( t12_matrix_.get(2,0) != (T)0 ||
+       t12_matrix_.get(2,1) != (T)0 ||
+       t12_matrix_.get(2,3) != (T)1 )
+    return false; // should not have a translation part
+
+  // use an error tolerance on the orthonormality constraint
+  vnl_matrix_fixed<T, 2,2> R = get_upper_2x2_matrix();
+  R *= R.transpose();
+  R(0,0) -= T(1);
+  R(1,1) -= T(1);
+  return R.absolute_value_max() <= 10*vcl_numeric_limits<T>::epsilon();
+}
+
 //-------------------------------------------------------------------
 template <class T>
 bool vgl_h_matrix_2d<T>::
@@ -406,6 +473,52 @@ void vgl_h_matrix_2d<T>::set_aspect_ratio(const T aspect_ratio)
 {
   for (unsigned c = 0; c<3; ++c)
     t12_matrix_[1][c]*=aspect_ratio;
+}
+
+template <class T>
+vgl_h_matrix_2d<T> 
+vgl_h_matrix_2d<T>::get_upper_2x2() const
+{
+  //only sensible for affine transformations
+  T d = t12_matrix_[2][2];
+  assert(d<-1e-9 || d>1e-9);
+  vnl_matrix_fixed<T,3,3> m(0.0);
+  for (unsigned r = 0; r<2; r++)
+    for (unsigned c = 0; c<2; c++)
+      m[r][c] = t12_matrix_[r][c]/d;
+  m[2][2]=1.0;
+  return vgl_h_matrix_2d<T>(m);
+}
+
+template <class T>
+vnl_matrix_fixed<T, 2,2> vgl_h_matrix_2d<T>::get_upper_2x2_matrix() const
+{
+  vnl_matrix_fixed<T,2,2> R;
+  vgl_h_matrix_2d<T> m = this->get_upper_2x2();
+  for (unsigned r = 0; r<3; r++)
+    for (unsigned c = 0; c<3; c++)
+      R[r][c] = m.get(r,c);
+  return R;
+}
+
+template <class T>
+vgl_homg_point_2d<T>
+vgl_h_matrix_2d<T>::get_translation() const
+{
+  //only sensible for affine transformations
+  T d = t12_matrix_[2][2];
+  assert(d<-1e-9 || d>1e-9);
+  return vgl_homg_point_2d<T>(t12_matrix_[0][2]/d,
+                              t12_matrix_[1][2]/d,
+                              (T)1);
+}
+
+template <class T>
+vnl_vector_fixed<T, 2>
+vgl_h_matrix_2d<T>::get_translation_vector() const
+{
+  vgl_homg_point_2d<T> p = this->get_translation();
+  return vnl_vector_fixed<T,2>(p.x(), p.y());
 }
 
 //----------------------------------------------------------------------------

@@ -13,6 +13,7 @@
 //   22 Oct 2002 - Peter Vanroose - added vgl_homg_point_2d interface
 //   23 Oct 2002 - Peter Vanroose - using fixed 3x3 matrices throughout
 //   22 Mar 2003 - J. L. Mundy  - prep for moving to vgl
+//   31 Jul 2010 - Peter Vanroose - made more similar to 1d and 2d variants
 // \endverbatim
 
 #include <vcl_vector.h>
@@ -33,33 +34,32 @@ class vgl_h_matrix_3d
  public:
   vgl_h_matrix_3d() {}
  ~vgl_h_matrix_3d() {}
-  vgl_h_matrix_3d(const vgl_h_matrix_3d<T>& M);
+  vgl_h_matrix_3d(vgl_h_matrix_3d<T> const& M);
   vgl_h_matrix_3d(vnl_matrix_fixed<T,4,4> const& M);
   vgl_h_matrix_3d(vnl_matrix_fixed<T,3,3> const& M,
                   vnl_vector_fixed<T,3> const& m);
-  explicit vgl_h_matrix_3d(const T* t_matrix);
-  explicit vgl_h_matrix_3d(vcl_istream&);
+  explicit vgl_h_matrix_3d(T const* t_matrix);
+  explicit vgl_h_matrix_3d(vcl_istream& s);
   explicit vgl_h_matrix_3d(char const* filename);
-  vgl_h_matrix_3d(vcl_vector<vgl_homg_point_3d<T> > const &points1,
-                  vcl_vector<vgl_homg_point_3d<T> > const &points2);
+  vgl_h_matrix_3d(vcl_vector<vgl_homg_point_3d<T> > const& points1,
+                  vcl_vector<vgl_homg_point_3d<T> > const& points2);
 
   // Operations----------------------------------------------------------------
 
-  vgl_homg_point_3d<T> operator()(vgl_homg_point_3d<T> const& x) const;
-  vgl_homg_point_3d<T> operator* (vgl_homg_point_3d<T> const& x) const {return (*this)(x);}
+  vgl_homg_point_3d<T> operator()(vgl_homg_point_3d<T> const& p) const;
+  vgl_homg_point_3d<T> operator* (vgl_homg_point_3d<T> const& p) const {return (*this)(p);}
   bool operator==(vgl_h_matrix_3d<T> const& M) const { return t12_matrix_ == M.get_matrix(); }
 
-  vgl_homg_plane_3d<T> preimage(vgl_homg_plane_3d<T> const& p);
+  vgl_homg_plane_3d<T> preimage(vgl_homg_plane_3d<T> const& l) const;
 
   //the following require forming an inverse
-  vgl_homg_point_3d<T> preimage(vgl_homg_point_3d<T> const& x) const;
-  vgl_homg_plane_3d<T> operator()(vgl_homg_plane_3d<T> const& x) const;
+  vgl_homg_point_3d<T> preimage(vgl_homg_point_3d<T> const& p) const;
+  vgl_homg_plane_3d<T> operator()(vgl_homg_plane_3d<T> const& l) const;
+  vgl_homg_plane_3d<T> operator*(vgl_homg_plane_3d<T> const& l) const { return (*this)(l);}
 
   //:composition (*this) * H
   vgl_h_matrix_3d<T> operator * (vgl_h_matrix_3d<T> const& H) const
   { return vgl_h_matrix_3d<T>(t12_matrix_* H.t12_matrix_); }
-
-  bool read(vcl_istream&);
 
   // Data Access---------------------------------------------------------------
 
@@ -67,7 +67,7 @@ class vgl_h_matrix_3d
   void get (T* t_matrix) const;
   void get (vnl_matrix_fixed<T, 4, 4>* t_matrix) const;
   void get (vnl_matrix<T>* t_matrix) const;
-  const vnl_matrix_fixed<T,4,4>& get_matrix() const { return t12_matrix_; }
+  vnl_matrix_fixed<T,4,4> const& get_matrix() const { return t12_matrix_; }
   vgl_h_matrix_3d get_inverse() const;
 
   void set (unsigned int row_index, unsigned int col_index, const T value)
@@ -75,7 +75,6 @@ class vgl_h_matrix_3d
 
   void set(const T *t_matrix);
   void set(vnl_matrix_fixed<T,4,4> const& t_matrix);
-  bool projective_basis(vcl_vector<vgl_homg_point_3d<T> > const & five_points);
   void set_identity();
   void set_translation(T tx, T ty, T tz);
   //: rotation angle is in radians
@@ -87,6 +86,20 @@ class vgl_h_matrix_3d
   bool is_rotation() const;
   bool is_euclidean() const;
 
+  //: transformation to projective basis (canonical frame)
+  // Compute the homography that takes the input set of points to the
+  // canonical frame.  The points act as the projective basis for
+  // the canonical coordinate system.  In the canonical frame the points
+  // have coordinates:
+  // $\begin{array}{cccc}
+  //   p[0] & p[1] & p[2]  & p[3] & p[4] \\%
+  //     1  &   0  &   0   &   0  &   1  \\%
+  //     0  &   1  &   0   &   0  &   1  \\%
+  //     0  &   0  &   1   &   0  &   1  \\%
+  //     0  &   0  &   0   &   1  &   1
+  // \end{array}$
+  bool projective_basis(vcl_vector<vgl_homg_point_3d<T> > const & five_points);
+
   // ---------- extract components as transformations ----------
 
   //: corresponds to rotation for Euclidean transformations
@@ -96,6 +109,9 @@ class vgl_h_matrix_3d
   //: corresponds to translation for affine transformations
   vgl_homg_point_3d<T> get_translation() const;
   vnl_vector_fixed<T, 3> get_translation_vector() const;
+
+  bool read(vcl_istream& s);
+  bool read(char const* filename);
 };
 
 // stream I/O
