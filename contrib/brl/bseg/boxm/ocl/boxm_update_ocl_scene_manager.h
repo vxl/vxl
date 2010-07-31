@@ -38,6 +38,7 @@ class boxm_update_ocl_scene_manager : public bocl_manager<boxm_update_ocl_scene_
     cell_data_size_(0),
     numbuffer_(0),
     lenbuffer_(0),
+    prob_thresh_(1.0f),
     root_level_(0),
     img_dims_(0),
     offset_x_(0),
@@ -46,7 +47,6 @@ class boxm_update_ocl_scene_manager : public bocl_manager<boxm_update_ocl_scene_
     scene_x_(0),scene_y_(0),scene_z_(0),
     wni_(1),wnj_(1),
     input_img_(),
-    prob_thresh_(1.0f),
     gpu_time_(0)
   {}
   ~boxm_update_ocl_scene_manager() {
