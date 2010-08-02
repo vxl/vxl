@@ -65,8 +65,8 @@ bool vipl_histogram <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_preop()
 {
   const int index = indexout();
   ImgOut &out = *this->out_data_ptr();
-  for (int i = start_dst(this->X_Axis()),
-    ei = stop_dst(this->X_Axis()); i < ei; ++i)
+  for (int i = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::start_dst(this->X_Axis()),
+    ei = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::stop_dst(this->X_Axis()); i < ei; ++i)
     setpixel(out, i, index, DataOut(0));
   return true;
 }
