@@ -76,7 +76,7 @@ read_feature_file( const char*     filename,
   vcl_ifstream istr( filename );
 
   if ( !istr ) {
-    vcl_cerr<<"ERROR: Cannot open "<<filename<<vcl_endl;
+    vcl_cerr<<"ERROR: Cannot open "<<filename<<'\n';
     return;
   }
 
@@ -86,7 +86,7 @@ read_feature_file( const char*     filename,
   while ( !done && istr ) {
     if ( !(istr >> location[0] >> location[1] >> direction[0] >> direction[1]) )
       done = true;
-    else trace_points.push_back( new rgrl_feature_trace_pt(location, direction) );
+    else trace_points.push_back( new rgrl_feature_trace_pt(location.as_ref(), direction.as_ref()) );
   }
   istr.close();
   vcl_cout<<"There are "<<trace_points.size()<<" features"<<vcl_endl;

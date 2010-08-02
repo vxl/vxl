@@ -252,9 +252,9 @@ void test_mixture_of_type(T epsilon, const vcl_string& type_name)
 
   vcl_cout << "=================== variable ======================="<<vcl_endl;
   {
-    vpdl_gaussian_indep<T> gauss1(mean1.as_ref(),var1);
-    vpdl_gaussian_indep<T> gauss2(mean2.as_ref(),var2);
-    vpdl_gaussian_indep<T> gauss3(mean3.as_ref(),var3);
+    vpdl_gaussian_indep<T> gauss1(mean1.as_ref(),var1.as_ref());
+    vpdl_gaussian_indep<T> gauss2(mean2.as_ref(),var2.as_ref());
+    vpdl_gaussian_indep<T> gauss3(mean3.as_ref(),var3.as_ref());
 
     typedef vpdl_gaussian_indep<T> dist_t;
     vpdl_mixture_of<dist_t> mixture;
@@ -305,39 +305,39 @@ void test_mixture_of_type(T epsilon, const vcl_string& type_name)
          mixture2.dimension() == 3, true);
 
     vnl_vector_fixed<T,3> pt(T(0), T(1.5), T(1));
-    T prob = T( 0.1*gauss1.prob_density(pt)
-              + 0.6*gauss2.prob_density(pt)
-              + 0.3*gauss3.prob_density(pt));
+    T prob = T( 0.1*gauss1.prob_density(pt.as_ref())
+              + 0.6*gauss2.prob_density(pt.as_ref())
+              + 0.3*gauss3.prob_density(pt.as_ref()));
     TEST_NEAR(("probability density <"+type_name+">").c_str(),
-              mixture2.prob_density(pt), prob, epsilon);
+              mixture2.prob_density(pt.as_ref()), prob, epsilon);
 
     // test gradient virtual functions against numerical difference
     vnl_vector<T> g;
     T dp = vcl_sqrt(epsilon);
-    T den = mixture2.density(pt);
-    T den_x = mixture2.density(pt+vnl_vector_fixed<T,3>(dp,0,0));
-    T den_y = mixture2.density(pt+vnl_vector_fixed<T,3>(0,dp,0));
-    T den_z = mixture2.density(pt+vnl_vector_fixed<T,3>(0,0,dp));
+    T den = mixture2.density(pt.as_ref());
+    T den_x = mixture2.density((pt+vnl_vector_fixed<T,3>(dp,0,0)).as_ref());
+    T den_y = mixture2.density((pt+vnl_vector_fixed<T,3>(0,dp,0)).as_ref());
+    T den_z = mixture2.density((pt+vnl_vector_fixed<T,3>(0,0,dp)).as_ref());
     vnl_vector_fixed<T,3> grad(den_x-den, den_y-den, den_z-den);
     grad /= dp;
-    T density =  mixture2.gradient_density(pt,g);
+    T density =  mixture2.gradient_density(pt.as_ref(),g);
     TEST_NEAR(("gradient density <"+type_name+">").c_str(),
               (g-grad).inf_norm(), 0, dp);
     TEST_NEAR(("density <"+type_name+">").c_str(),
               density, den, epsilon);
 
-    prob = T( 0.1*gauss1.cumulative_prob(pt)
-            + 0.6*gauss2.cumulative_prob(pt)
-            + 0.3*gauss3.cumulative_prob(pt));
+    prob = T( 0.1*gauss1.cumulative_prob(pt.as_ref())
+            + 0.6*gauss2.cumulative_prob(pt.as_ref())
+            + 0.3*gauss3.cumulative_prob(pt.as_ref()));
     TEST_NEAR(("cumulative probability <"+type_name+">").c_str(),
-              mixture2.cumulative_prob(pt), prob, epsilon);
+              mixture2.cumulative_prob(pt.as_ref()), prob, epsilon);
 
     vnl_vector_fixed<T,3> pt2(T(10), T(5), T(8));
-    prob = T( 0.1*gauss1.box_prob(pt,pt2)
-            + 0.6*gauss2.box_prob(pt,pt2)
-            + 0.3*gauss3.box_prob(pt,pt2));
+    prob = T( 0.1*gauss1.box_prob(pt.as_ref(),pt2.as_ref())
+            + 0.6*gauss2.box_prob(pt.as_ref(),pt2.as_ref())
+            + 0.3*gauss3.box_prob(pt.as_ref(),pt2.as_ref()));
     TEST_NEAR(("box probability <"+type_name+">").c_str(),
-              mixture2.box_prob(pt,pt2), prob, epsilon);
+              mixture2.box_prob(pt.as_ref(),pt2.as_ref()), prob, epsilon);
 
     mixture2.sort(weight_less<dist_t>);
     TEST(("sort by increasing weight <"+type_name+">").c_str(),

@@ -56,7 +56,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     return 0;
   }
 
-  return new rgrl_trans_homography2d( init_H, covar, from_centre, to_centre );
+  return new rgrl_trans_homography2d( init_H.as_ref(), covar, from_centre.as_ref(), to_centre.as_ref() );
 }
 
 

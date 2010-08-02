@@ -199,7 +199,7 @@ transfer_error_covar( vnl_vector<double> const& from  ) const
 
   // Step 2. homography transformation
   vnl_double_2 true_to_loc;
-  map_inhomo_point( true_to_loc, H_, true_from_loc );
+  map_inhomo_point( true_to_loc, H_, true_from_loc.as_ref() );
   vnl_double_2x2 qu_pu;
   homo_wrt_loc( qu_pu, H_, true_from_loc );
   vnl_matrix_fixed<double, 2, 9> qu_h;
@@ -264,7 +264,7 @@ jacobian_wrt_loc( vnl_matrix<double>& jac, vnl_vector<double> const& from ) cons
 
   // Step 2. homography transformation
   vnl_double_2 true_to_loc;
-  map_inhomo_point( true_to_loc, H_, true_from_loc );
+  map_inhomo_point( true_to_loc, H_, true_from_loc.as_ref() );
   vnl_double_2x2 qu_pu;
   homo_wrt_loc( qu_pu, H_, true_from_loc );
 
@@ -273,7 +273,7 @@ jacobian_wrt_loc( vnl_matrix<double>& jac, vnl_vector<double> const& from ) cons
   distort_wrt_loc( qd_qu, true_to_loc, k1_to_ );
 
   // Steop 4. put them together
-  jac = qd_qu * qu_pu * pu_pd;
+  jac = (qd_qu * qu_pu * pu_pd).as_ref();
 }
 
 void
@@ -291,14 +291,14 @@ map_loc( vnl_vector<double> const& from,
 
   // Step 2. homography transformation
   vnl_double_2 true_to_loc;
-  map_inhomo_point( true_to_loc, H_, true_from_loc );
+  map_inhomo_point( true_to_loc, H_, true_from_loc.as_ref() );
 
   // Step 3. distorted To coodinates
   vnl_double_2 dis_to_loc;
   distort( dis_to_loc, true_to_loc, k1_to_ );
 
   // add center back
-  to = dis_to_loc + to_centre_;
+  to = (dis_to_loc + to_centre_).as_ref();
 }
 
 void

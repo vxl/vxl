@@ -110,7 +110,7 @@ vnl_double_3x4 make_camera()
   R = R.transpose();
 
   vnl_double_3x4 C;
-  C.update(R);
+  C.update(R.as_ref()); // left 3x3 part
   C.set_column(3, -R*t);
   vcl_cout << "Camera =\n" <<K*C << vcl_endl;
 

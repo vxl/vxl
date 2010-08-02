@@ -84,8 +84,7 @@ void ProjectiveBasis2D::compute(const HomgPoint2D& p1, const HomgPoint2D& p2, co
   back_matrix.set_column(2, p3.get_vector());
 
   vnl_svd<double> svd(back_matrix.as_ref()); // size 3x3
-
-  vnl_double_3 scales_vector = svd.solve(p4.get_vector());
+  vnl_double_3 scales_vector = svd.solve(p4.get_vector().as_ref());
 
   back_matrix.set_column(0, scales_vector[0] * p1.get_vector());
   back_matrix.set_column(1, scales_vector[1] * p2.get_vector());

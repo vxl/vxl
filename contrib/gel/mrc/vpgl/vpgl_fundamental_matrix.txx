@@ -214,9 +214,9 @@ void vpgl_fundamental_matrix<T>::set_matrix( const vpgl_proj_camera<T>& cr,
 template <class T>
 void vpgl_fundamental_matrix<T>::set_matrix( const vnl_matrix_fixed<T,3,3>& F )
 {
-  F_ = vnl_svd<T>( F ).recompose(2);
+  F_ = vnl_svd<T>( F.as_ref() ).recompose(2);
   if ( cached_svd_ != NULL ) delete cached_svd_;
-  cached_svd_ = new vnl_svd<T>( F_ );
+  cached_svd_ = new vnl_svd<T>( F_.as_ref() );
 }
 
 //:vpgl_fundamental_matrix stream I/O

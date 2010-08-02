@@ -98,7 +98,7 @@ main( int argc, char* argv[] )
   vcl_vector<rsdl_point> search_pts(total);
   for (int i = 0; i<total; ++i) {
     search_pts[i].resize( nc, na );
-    search_pts[i].set_cartesian(points[i]);
+    search_pts[i].set_cartesian(points[i].as_ref());
   }
   rsdl_kd_tree kd_tree( search_pts );
 
@@ -116,7 +116,7 @@ main( int argc, char* argv[] )
   int num_nb = 4;
   for (int i = 0; i<total; ++i) {
     rsdl_point query_pt( 3, 0);
-    query_pt.set_cartesian(points[i]);
+    query_pt.set_cartesian(points[i].as_ref());
     kd_tree.n_nearest(query_pt, num_nb, near_neighbor_pts, near_neighbor_indices);
     near_neighbors.clear();
     for (int j = 0; j<num_nb; ++j)

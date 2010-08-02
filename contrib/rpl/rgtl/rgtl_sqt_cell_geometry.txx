@@ -124,7 +124,7 @@ struct rgtl_sqt_cell_geometry_cone
     // dimensional subspace embedded in D dimensions.  The
     // left-nullspace of the matrix is described by a single vector
     // and is the desired plane normal and cone axis.
-    vnl_svd<double> svd(m);
+    vnl_svd<double> svd(m.as_ref());
     vnl_vector<double> nv = svd.left_nullvector();
     //nv.normalize(); // should already be normalized.
 
@@ -132,10 +132,10 @@ struct rgtl_sqt_cell_geometry_cone
     // edges.
     double dot = dot_product(e0, nv);
     if (dot < 0)
-      {
+    {
       nv = -nv;
       dot = -dot;
-      }
+    }
 
     // Return the axis and opening angle.
     nv.copy_out(axis);

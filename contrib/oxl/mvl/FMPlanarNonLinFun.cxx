@@ -112,7 +112,7 @@ bool FMPlanarNonLinFun::compute(FMatrixPlanar* F)
 
   norm_F = params_to_fmatrix (f_params);
 
-  F->set(vnl_transpose(denorm_matrix_) * norm_F.get_matrix() * denorm_matrix_);
+  F->set(denorm_matrix_.transpose() * norm_F.get_matrix() * denorm_matrix_);
 
   vcl_cerr << "fm_fmatrix_nagmin: accepted " << data_size_ << '/' << data_size_
            << " rms point-epipolar error " << lm.get_end_error() / vcl_sqrt(double(data_size_))
@@ -128,7 +128,7 @@ void FMPlanarNonLinFun::f(vnl_vector<double> const& f_params, vnl_vector<double>
 {
      FMatrixPlanar norm_F = params_to_fmatrix(f_params);
 
-     FMatrixPlanar F(vnl_transpose(denorm_matrix_) * norm_F.get_matrix() * denorm_matrix_);
+     FMatrixPlanar F(denorm_matrix_.transpose() * norm_F.get_matrix() * denorm_matrix_);
 
      for (int i = 0; i < data_size_; ++i) {
           const vgl_homg_point_2d<double>& p1 = points1_[i];
@@ -176,7 +176,7 @@ void FMPlanarNonLinFun::fmatrix_to_params_mna(const FMatrixPlanar& F,
   HomgPoint2D e1,e2;
   F.get_epipoles(&e1,&e2);
 
-  vnl_symmetric_eigensystem<double>  symm_eig(F.get_matrix()+F.get_matrix().transpose());
+  vnl_symmetric_eigensystem<double>  symm_eig((F.get_matrix()+F.get_matrix().transpose()).as_ref());
 
   double eig0 = symm_eig.D(0,0);
   double eig1 = symm_eig.D(2,2);
@@ -265,7 +265,7 @@ void FMPlanarNonLinFun::fmatrix_to_params_awf(const FMatrixPlanar& F, vnl_vector
   HomgPoint2D e1,e2;
   F.get_epipoles(&e1,&e2);
 
-  vnl_symmetric_eigensystem<double>  symm_eig(F.get_matrix()+F.get_matrix().transpose());
+  vnl_symmetric_eigensystem<double>  symm_eig((F.get_matrix()+F.get_matrix().transpose()).as_ref());
 
   double eig0 = symm_eig.D(0,0);
   double eig1 = symm_eig.D(2,2);

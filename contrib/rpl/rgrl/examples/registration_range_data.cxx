@@ -62,7 +62,7 @@ read_feature_file( const char* filename,
   vcl_ifstream istr( filename );
 
   if ( !istr ) {
-    vcl_cerr<<"ERROR: Cannot open "<<filename<<vcl_endl;
+    vcl_cerr<<"ERROR: Cannot open "<<filename<<'\n';
     return;
   }
 
@@ -74,7 +74,7 @@ read_feature_file( const char* filename,
   for (int i = 0; i<total; i+=sample_spacing) {
     istr >> location[0] >> location[1] >> location[2]
          >>normal[0]>>normal[1]>>normal[2];
-    features.push_back( new rgrl_feature_face_pt(location, normal) );
+    features.push_back( new rgrl_feature_face_pt(location.as_ref(), normal.as_ref()) );
   }
 
   istr.close();
@@ -203,12 +203,12 @@ main( int argc, char* argv[] )
   //vector_3d t(-0.0520211, -0.000383981, -0.0109223);
   vector_3d t(-0.065, -0.015, -0.02);
 
-  init_trans = new rgrl_trans_affine(A, t);
+  init_trans = new rgrl_trans_affine(A, t.as_ref());
 
   //Initializer
   vector_3d x0(-1,-1,-1);           //upper left corner
   vector_3d x1(1,1,1);              //bottom right corner
-  rgrl_mask_sptr moving_image_region = new rgrl_mask_box(x0, x1);
+  rgrl_mask_sptr moving_image_region = new rgrl_mask_box(x0.as_ref(), x1.as_ref());
   rgrl_mask_sptr fixed_image_region = moving_image_region;  // assume two are identical
   rgrl_initializer_sptr initializer =
     new rgrl_initializer_prior( moving_image_region,

@@ -82,36 +82,36 @@ test_inv_indexing()
   // Dataset 1
   vnl_vector_fixed<double,2> t(-15, 7); //shift
   vnl_vector_fixed<double,2> noise(0.001, 0.003);
-  fixed_set1.push_back(new simple_invariant_feature(location1,
-                                                    loc1_cart_inv,
-                                                    loc1_ang_inv) );
-  fixed_set1.push_back(new simple_invariant_feature(location2,
-                                                    loc2_cart_inv+noise,
-                                                    loc2_ang_inv+noise) );
-  moving_set1.push_back(new simple_invariant_feature(location1 + t,
-                                                     loc1_cart_inv,
-                                                     loc1_ang_inv) );
-  moving_set1.push_back(new simple_invariant_feature(location2 + t,
-                                                     loc2_cart_inv,
-                                                     loc2_ang_inv) );
+  fixed_set1.push_back(new simple_invariant_feature(location1.as_ref(),
+                                                    loc1_cart_inv.as_ref(),
+                                                    loc1_ang_inv.as_ref()) );
+  fixed_set1.push_back(new simple_invariant_feature(location2.as_ref(),
+                                                    (loc2_cart_inv+noise).as_ref(),
+                                                    (loc2_ang_inv+noise).as_ref()) );
+  moving_set1.push_back(new simple_invariant_feature((location1 + t).as_ref(),
+                                                     loc1_cart_inv.as_ref(),
+                                                     loc1_ang_inv.as_ref()) );
+  moving_set1.push_back(new simple_invariant_feature((location2 + t).as_ref(),
+                                                     loc2_cart_inv.as_ref(),
+                                                     loc2_ang_inv.as_ref()) );
   // Dataset2
-  vnl_vector_fixed<double,2> location3(15.0, 37.0);
+  vnl_vector_fixed<double,2> location3( 15.0, 37.0);
   vnl_vector_fixed<double,2> location4(-11.0, 24.0);
   vnl_vector_fixed<double,2> noise2(0.04, 0.007);
-  vnl_vector_fixed<double,2> noise3(0.1, 0.06);
-  vnl_vector<double> zero_vec(0);
-  fixed_set2.push_back(new simple_invariant_feature(location3,
-                                                    loc1_cart_inv+noise2,
-                                                    zero_vec) );
-  fixed_set2.push_back(new simple_invariant_feature(location4,
-                                                    loc2_cart_inv+noise3,
-                                                    zero_vec) );
-  moving_set2.push_back(new simple_invariant_feature(location3 + t,
-                                                     loc1_cart_inv,
-                                                     zero_vec) );
-  moving_set2.push_back(new simple_invariant_feature(location4 + t,
-                                                     loc2_cart_inv,
-                                                     zero_vec) );
+  vnl_vector_fixed<double,2> noise3(0.1,  0.06);
+  vnl_vector_fixed<double,2> zero_vec(0.0, 0.0);
+  fixed_set2.push_back(new simple_invariant_feature(location3.as_ref(),
+                                                    (loc1_cart_inv+noise2).as_ref(),
+                                                    zero_vec.as_ref()) );
+  fixed_set2.push_back(new simple_invariant_feature(location4.as_ref(),
+                                                    (loc2_cart_inv+noise3).as_ref(),
+                                                    zero_vec.as_ref()) );
+  moving_set2.push_back(new simple_invariant_feature((location3 + t).as_ref(),
+                                                     loc1_cart_inv.as_ref(),
+                                                     zero_vec.as_ref()) );
+  moving_set2.push_back(new simple_invariant_feature((location4 + t).as_ref(),
+                                                     loc2_cart_inv.as_ref(),
+                                                     zero_vec.as_ref()) );
   rgrl_mask_sptr roi = new rgrl_mask_box(2);
   rgrl_initializer_inv_indexing* initializer = new rgrl_initializer_inv_indexing( roi, roi, 0, 0, false);
 

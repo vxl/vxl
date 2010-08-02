@@ -98,7 +98,7 @@ main( int argc, char* argv[] )
   const char* filename = argv[1];
   vcl_ifstream istr( filename );
   if ( !istr ) {
-    vcl_cerr<<"ERROR: Cannot open "<<filename<<vcl_endl;
+    vcl_cerr<<"ERROR: Cannot open "<<filename<<'\n';
     return 1;
   }
 
@@ -119,7 +119,7 @@ main( int argc, char* argv[] )
   while ( !done && istr ) {
     if ( !(istr >> location[0] >> location[1] >> direction[0] >> direction[1]) )
       done = true;
-    else moving_feature_points.push_back( new rgrl_feature_point(location) );
+    else moving_feature_points.push_back( new rgrl_feature_point(location.as_ref()) );
   }
 
   fixed_feature_points = moving_feature_points;
@@ -153,7 +153,7 @@ main( int argc, char* argv[] )
   // BeginCodeSnippet
   rgrl_transformation_sptr init_transform;
   vector_2d init_parameters( 15, 15);
-  init_transform = new rgrl_trans_translation(init_parameters);
+  init_transform = new rgrl_trans_translation(init_parameters.as_ref());
   // EndCodeSnippet
 
   // BeginLatex
@@ -168,7 +168,7 @@ main( int argc, char* argv[] )
   // BeginCodeSnippet
   vector_2d x0(0,0);          //upper left corner
   vector_2d x1(1023,1023);    //bottom right corner
-  rgrl_mask_sptr moving_image_roi = new rgrl_mask_box(x0, x1);
+  rgrl_mask_sptr moving_image_roi = new rgrl_mask_box(x0.as_ref(), x1.as_ref());
   rgrl_mask_sptr fixed_image_roi = moving_image_roi; // assume two are identical
   rgrl_initializer_sptr initializer =
     new rgrl_initializer_prior(moving_image_roi,

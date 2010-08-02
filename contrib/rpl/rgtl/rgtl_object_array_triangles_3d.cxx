@@ -606,7 +606,7 @@ rgtl_object_array_triangles_3d::pimpl
   A.set_row(1, n02);
   A.set_row(2, n);
   double b[3] = {dot(n01, m01), dot(n02, m02), dot(n, x0)};
-  vnl_svd<double> svd(A);
+  vnl_svd<double> svd(A.as_ref());
   svd.solve(b, c0); // TODO: Check for numerical problems.
 
   // Return the radius of the smallest ball touching the points.

@@ -98,7 +98,7 @@ void test_kernel_gaussian_sfbw_type(T epsilon, const vcl_string& type_name)
   vcl_cout << "=================== variable ======================="<<vcl_endl;
   {
     vcl_vector<vnl_vector<T> > vsamples;
-    vsamples.push_back(vnl_vector<T>(samples[0].data_block(), 3));
+    vsamples.push_back(samples[0].as_ref());
     vpdl_kernel_gaussian_sfbw<T> kernel_g, kernel_g1(vsamples,bandwidth);
 
     TEST(("init num_components <"+type_name+">").c_str(),
@@ -115,32 +115,31 @@ void test_kernel_gaussian_sfbw_type(T epsilon, const vcl_string& type_name)
          kernel_g.bandwidth(), bandwidth);
 
     for (unsigned int i=0; i<samples.size(); ++i)
-      kernel_g.add_sample(samples[i]);
+      kernel_g.add_sample(samples[i].as_ref());
     TEST(("add_sample <"+type_name+">").c_str(),
          kernel_g.num_components(), samples.size());
 
     TEST(("dimension <"+type_name+">").c_str(),
          kernel_g.dimension(), 3);
 
-
     // test probability funnctions
     TEST_NEAR(("prob_density <"+type_name+">").c_str(),
-              kernel_g.prob_density(pt1), density, epsilon);
+              kernel_g.prob_density(pt1.as_ref()), density, epsilon);
     TEST_NEAR(("cumulative_prob <"+type_name+">").c_str(),
-              kernel_g.cumulative_prob(pt1), cum_prob, epsilon);
+              kernel_g.cumulative_prob(pt1.as_ref()), cum_prob, epsilon);
     TEST_NEAR(("box_prob <"+type_name+">").c_str(),
-              kernel_g.box_prob(pt1,pt2), box_prob, epsilon);
+              kernel_g.box_prob(pt1.as_ref(),pt2.as_ref()), box_prob, epsilon);
 
     // test gradient virtual functions against numerical difference
     vnl_vector<T> g;
     T dp = vcl_sqrt(epsilon);
-    T den = kernel_g.density(pt1);
-    T den_x = kernel_g.density(pt1+vnl_vector_fixed<T,3>(dp,0,0));
-    T den_y = kernel_g.density(pt1+vnl_vector_fixed<T,3>(0,dp,0));
-    T den_z = kernel_g.density(pt1+vnl_vector_fixed<T,3>(0,0,dp));
+    T den = kernel_g.density(pt1.as_ref());
+    T den_x = kernel_g.density((pt1+vnl_vector_fixed<T,3>(dp,0,0)).as_ref());
+    T den_y = kernel_g.density((pt1+vnl_vector_fixed<T,3>(0,dp,0)).as_ref());
+    T den_z = kernel_g.density((pt1+vnl_vector_fixed<T,3>(0,0,dp)).as_ref());
     vnl_vector_fixed<T,3> grad(den_x-den, den_y-den, den_z-den);
     grad /= dp;
-    T density =  kernel_g.gradient_density(pt1,g);
+    T density =  kernel_g.gradient_density(pt1.as_ref(),g);
     TEST_NEAR(("gradient density <"+type_name+">").c_str(),
               (g-grad).inf_norm(), 0, dp);
     TEST_NEAR(("density <"+type_name+">").c_str(),
@@ -225,5 +224,4 @@ static void test_kernel_gaussian_sfbw()
 }
 
 TESTMAIN(test_kernel_gaussian_sfbw);
-
 

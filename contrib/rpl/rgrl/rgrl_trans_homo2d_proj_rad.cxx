@@ -99,7 +99,7 @@ map_loc( vnl_vector<double> const& from,
   vnl_double_2 pt = from;
   vnl_double_2 mapped;
   rgrl_est_proj_rad_func<2,2>::map_loc( mapped, H_, rad_k_, pt );
-  to = mapped;
+  to = mapped.as_ref();
 }
 
 void
@@ -119,7 +119,7 @@ map_dir( vnl_vector<double> const& from_loc,
   rgrl_est_proj_rad_func<2,2>::map_loc( to_loc_begin, H_, rad_k_, from_begin );
   rgrl_est_proj_rad_func<2,2>::map_loc( to_loc_end,   H_, rad_k_, from_end );
 
-  to_dir = to_loc_end - to_loc_begin;
+  to_dir = (to_loc_end - to_loc_begin).as_ref();
   to_dir.normalize();
 }
 
@@ -161,7 +161,7 @@ scale_by( double scale ) const
                                        radk,
                                        ic,
                                        vnl_matrix<double>(),
-                                       from, to );
+                                       from.as_ref(), to.as_ref() );
   xform->set_scaling_factors( this->scaling_factors() );
   return xform;
 }
@@ -191,7 +191,7 @@ jacobian_wrt_loc( vnl_matrix<double>& jacobian, vnl_vector<double> const& from_l
 {
   vnl_double_2x2 jac_loc;
   proj_jac_wrt_loc( jac_loc, H_, rad_k_, from_loc );
-  jacobian = jac_loc;
+  jacobian = jac_loc.as_ref();
 }
 
 // for output CENTERED transformation

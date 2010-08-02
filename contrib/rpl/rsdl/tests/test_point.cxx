@@ -43,7 +43,7 @@ static void test_point()
   {
     vnl_double_2 cv(1.5,2.1);
     vnl_double_3 av(-3.0,-1.5,3.1);
-    rsdl_point pt_from_2v( cv, av );
+    rsdl_point pt_from_2v( cv.as_ref(), av.as_ref() );
     bool ok=true;
     for ( unsigned int i=0; ok && i<Nc; ++i ) ok = ok && close(pt_from_2v.cartesian(i), cv[i]);
     for ( unsigned int i=0; ok && i<Na; ++i ) ok = ok && close(pt_from_2v.angular(i), av[i]);
@@ -144,7 +144,7 @@ static void test_point()
   testlib_test_begin( "set_angular from vnl_vector" );
   {
     vnl_double_3 avect(-1.0,-1.4,2.0);
-    q.set_angular( avect );
+    q.set_angular( avect.as_ref() );
     bool ok = true;
     for ( unsigned int i=0; ok && i<Nc; ++i )
       ok = close( q.cartesian(i), cart[i] );

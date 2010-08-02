@@ -88,7 +88,7 @@ read_feature_file( const char* filename,
   vcl_ifstream istr( filename );
 
   if ( !istr ) {
-    vcl_cerr<<"ERROR: Cannot open "<<filename<<vcl_endl;
+    vcl_cerr<<"ERROR: Cannot open "<<filename<<'\n';
     return;
   }
 
@@ -106,7 +106,7 @@ read_feature_file( const char* filename,
       istr >> direction[0] >> direction[1];
       directions.push_back( direction.as_ref() );
     }
-    landmarks.push_back( new rgrl_feature_landmark(location, directions) );
+    landmarks.push_back( new rgrl_feature_landmark(location.as_ref(), directions) );
   }
 
   istr.close();
@@ -203,7 +203,7 @@ main( int argc, char* argv[] )
   double shift_x = -286;
   double shift_y = -42;
   vector_2d shift( shift_x, shift_y);
-  rgrl_transformation_sptr init_translation = new rgrl_trans_translation( shift );
+  rgrl_transformation_sptr init_translation = new rgrl_trans_translation( shift.as_ref() );
   rgrl_scale_sptr dummy_scale = new rgrl_scale();
 
   // BeginCodeSnippet

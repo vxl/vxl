@@ -70,7 +70,7 @@ read_feature_file( const char* filename,
   vcl_ifstream istr( filename );
 
   if ( !istr ) {
-    vcl_cerr<<"ERROR: Cannot open "<<filename<<vcl_endl;
+    vcl_cerr<<"ERROR: Cannot open "<<filename<<'\n';
     return;
   }
 
@@ -83,7 +83,7 @@ read_feature_file( const char* filename,
     istr >> location[0] >> location[1] >> location[2]
          >>normal[0]>>normal[1]>>normal[2];
     // BeginCodeSnippet
-    rgrl_feature_sptr feature_pt = new rgrl_feature_face_pt(location, normal);
+    rgrl_feature_sptr feature_pt = new rgrl_feature_face_pt(location.as_ref(), normal.as_ref());
     feature_points.push_back( feature_pt );
     // EndCodeSnippet
   }
@@ -198,7 +198,7 @@ main( int argc, char* argv[] )
   vector_3d t(10, 0, 15);
   t *= 1/1000;
 
-  rgrl_transformation_sptr init_transform = new rgrl_trans_affine(A, t);
+  rgrl_transformation_sptr init_transform = new rgrl_trans_affine(A, t.as_ref());
   rgrl_estimator_sptr estimator = new rgrl_est_affine();
 
   // Store the data in the data manager. Other components in the black

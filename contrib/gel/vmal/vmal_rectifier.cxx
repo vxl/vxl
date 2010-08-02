@@ -384,7 +384,7 @@ void vmal_rectifier::factor_Q_matrix_SR (
 
   // First do the singular value decomposition of Q
 
-  vnl_svd<double> SVD(Q);
+  vnl_svd<double> SVD(Q.as_ref());
   vnl_double_3x3 U(SVD.U());
   vnl_double_3x3 V(SVD.V());
 

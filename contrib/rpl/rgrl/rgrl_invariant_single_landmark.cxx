@@ -149,7 +149,7 @@ region() const
   vnl_double_2 x0(location_[0] - ratio*radius_, location_[1] - ratio*radius_);
   vnl_double_2 x1(location_[0] + ratio*radius_, location_[1] + ratio*radius_);
 
-  return rgrl_mask_box(x0, x1);
+  return rgrl_mask_box(x0.as_ref(), x1.as_ref());
 }
 
 bool
@@ -267,7 +267,7 @@ estimate(rgrl_invariant_sptr         from_inv,
   A(0,0) = A(1,1) = c_params(2,0);
   A(0,1) = -c_params(3,0);
   A(1,0) = -A(0,1);
-  rgrl_trans_similarity est_xform(A, trans, norm_covar);
+  rgrl_trans_similarity est_xform(A, trans.as_ref(), norm_covar.as_ref());
 
   // Compute the scale
   //
@@ -275,11 +275,11 @@ estimate(rgrl_invariant_sptr         from_inv,
   double geometric_scale = 0;
   vnl_vector<double> mapped;
   for (unsigned int i = 0; i< num_boundary_points; i++) {
-    est_xform.map_location(from->boundary_point_location(i), mapped);
+    est_xform.map_location(from->boundary_point_location(i).as_ref(), mapped);
     obj += vnl_math_sqr( dot_product((this->boundary_point_location(i) - mapped),
                                      this->boundary_point_normal(i)) );
   }
-  est_xform.map_location(from->location(), mapped);
+  est_xform.map_location(from->location().as_ref(), mapped);
   obj += (location_ - mapped).squared_magnitude();
   //n = 8 for number of constraints
   //k = 4 for dof

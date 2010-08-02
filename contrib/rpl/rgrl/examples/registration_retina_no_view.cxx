@@ -131,7 +131,7 @@ read_feature_file( const char* filename,
   vcl_ifstream istr( filename );
 
   if ( !istr ) {
-    vcl_cerr<<"ERROR: Cannot open "<<filename<<vcl_endl;
+    vcl_cerr<<"ERROR: Cannot open "<<filename<<'\n';
     return;
   }
 
@@ -142,7 +142,7 @@ read_feature_file( const char* filename,
   while ( !done && istr ) {
     if ( !(istr >> location[0] >> location[1] >> direction[0] >> direction[1]) )
       done = true;
-    else trace_points.push_back( new rgrl_feature_trace_pt(location, direction) );
+    else trace_points.push_back( new rgrl_feature_trace_pt(location.as_ref(), direction.as_ref()) );
   }
 
   istr.close();
@@ -156,7 +156,7 @@ read_landmark_file( const char* filename,
   vcl_ifstream istr( filename );
 
   if ( !istr ) {
-    vcl_cerr<<"ERROR: Cannot open "<<filename<<vcl_endl;
+    vcl_cerr<<"ERROR: Cannot open "<<filename<<'\n';
     return;
   }
 
@@ -185,8 +185,8 @@ read_landmark_file( const char* filename,
 
       // BeginCodeSnippet
       rgrl_invariant_single_landmark* single =
-        new rgrl_invariant_single_landmark( location, direction1,
-                                            direction2, direction3,
+        new rgrl_invariant_single_landmark( location.as_ref(), direction1.as_ref(),
+                                            direction2.as_ref(), direction3.as_ref(),
                                             width1, width2, width3,
                                             angular_std, width_ratio_std );
       // EndCodeSnippet

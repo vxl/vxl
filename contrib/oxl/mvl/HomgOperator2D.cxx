@@ -362,7 +362,7 @@ static vnl_vector<double> most_orthogonal_vector_svd(const vcl_vector<HomgLine2D
   vnl_matrix<double> D(lines.size(), 3);
 
   for (unsigned i = 0; i < lines.size(); i++)
-    D.set_row(i, lines[i].get_vector());
+    D.set_row(i, lines[i].get_vector().as_ref());
 
   vnl_svd<double> svd(D);
   vcl_cerr << "[movrank " << svd.W() << ']';

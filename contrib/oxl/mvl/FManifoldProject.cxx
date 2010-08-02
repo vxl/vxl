@@ -52,7 +52,7 @@ void FManifoldProject::set_F(const FMatrix& Fobj)
   double c = F_(2,2);
 
   // Compute eig(A) to translate and rotate the quadric
-  vnl_symmetric_eigensystem<double>  eig(A_);
+  vnl_symmetric_eigensystem<double>  eig(A_.as_ref()); // size 4x4
 
 #ifdef DEBUG
   vcl_cerr << vnl_svd<double>(F_);
@@ -72,7 +72,7 @@ void FManifoldProject::set_F(const FMatrix& Fobj)
   }
   else {
     // Translate Quadric so that b = 0. (Translates to the epipoles)
-    t_ = -0.5 * eig.solve(b);
+    t_ = -0.5 * eig.solve(b.as_ref()); // length 4
 
     vnl_double_4 At = A_*t_;
     vnl_double_4 Bprime = 2.0*At + b;
@@ -246,7 +246,7 @@ double FManifoldProject::correct(double   x1, double   y1, double   x2, double  
     if (vcl_fabs(RATPOLY_RESIDUAL) > 1e-8)
       continue;
 
-    vnl_diag_matrix<double> Dinv(1.0 - lambda * d_);
+    vnl_diag_matrix<double> Dinv((1.0 - lambda * d_).as_ref()); // length 4
     Dinv.invert_in_place();
     vnl_double_4 Xp = Dinv * pprime.as_ref();
     vnl_double_4 X = V_ * Xp + t_;

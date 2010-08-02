@@ -78,7 +78,7 @@ vgl_line_3d_2_points<T> vpgl_perspective_camera<T>::backproject(
 {
   // First find a point in front of the camera that projects to "image_point".
   vnl_vector_fixed<T,4> vnl_wp = this->svd()->solve(
-    vnl_vector_fixed<T,3>( image_point.x(), image_point.y(), 1.0 ) );
+    vnl_vector_fixed<T,3>( image_point.x(), image_point.y(), 1.0 ).as_ref() );
   vgl_homg_point_3d<T> wp_homg( vnl_wp[0], vnl_wp[1], vnl_wp[2], vnl_wp[3] );
   vgl_point_3d<T> wp;
   if ( !wp_homg.ideal() )
@@ -265,7 +265,7 @@ bool vpgl_perspective_decomposition( const vnl_matrix_fixed<T,3,4>& camera_matri
   for ( int i = 0; i < 3; i++ )
     for ( int j = 0; j < 3; j++ )
       Hf(i,j) = H(2-j,2-i);
-  vnl_qr<T> QR( Hf );
+  vnl_qr<T> QR( Hf.as_ref() );
   vnl_matrix_fixed<T,3,3> q,r,Qf,Rf;
   q = QR.Q();
   r = QR.R();
@@ -295,8 +295,8 @@ bool vpgl_perspective_decomposition( const vnl_matrix_fixed<T,3,4>& camera_matri
   vpgl_calibration_matrix<T> new_K( K1 );
   p_camera.set_calibration( new_K );
 
-  vnl_qr<T> QRofH(H);
-  vnl_vector<T> c1 = -QRofH.solve(t);
+  vnl_qr<T> QRofH(H.as_ref()); // size 3x3
+  vnl_vector<T> c1 = -QRofH.solve(t.as_ref());
   vgl_point_3d<T> new_c( c1(0), c1(1), c1(2) );
   p_camera.set_camera_center( new_c );
 
@@ -470,7 +470,6 @@ void vrml_write(vcl_ostream& str, vpgl_perspective_camera<Type> const& p, double
         << "]\n"
         << "}\n";
 }
-
 
 
 //-------------------------------

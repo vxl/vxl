@@ -87,7 +87,7 @@ generate_data( feature_vector& feature_set )
     vector_2d pt, tangent_dir(1,0);
     pt[0] = org_x + xi + random.normal()*sigma;
     pt[1] = org_y + random.normal()*sigma;
-    feature_set.push_back( new rgrl_feature_trace_pt(pt, tangent_dir) );
+    feature_set.push_back( new rgrl_feature_trace_pt(pt.as_ref(), tangent_dir.as_ref()) );
   }
 
   // The edge of y = org_y + 99
@@ -96,7 +96,7 @@ generate_data( feature_vector& feature_set )
     vector_2d pt, tangent_dir(-1, 0);
     pt[0] = org_x + xi + random.normal()*sigma;
     pt[1] = org_y + 99 + random.normal()*sigma;
-    feature_set.push_back( new rgrl_feature_trace_pt(pt, tangent_dir) );
+    feature_set.push_back( new rgrl_feature_trace_pt(pt.as_ref(), tangent_dir.as_ref()) );
   }
 
   // The edge of x = org_x
@@ -105,7 +105,7 @@ generate_data( feature_vector& feature_set )
     vector_2d pt, tangent_dir(0,1);
     pt[0] = org_x + random.normal()*sigma;
     pt[1] = org_y + yi + random.normal()*sigma;
-    feature_set.push_back( new rgrl_feature_trace_pt(pt, tangent_dir) );
+    feature_set.push_back( new rgrl_feature_trace_pt(pt.as_ref(), tangent_dir.as_ref()) );
   }
 
   // The edge of x = org_x+199
@@ -114,7 +114,7 @@ generate_data( feature_vector& feature_set )
     vector_2d pt,tangent_dir(0,-1);
     pt[0] = org_x + 199 + random.normal()*sigma;
     pt[1] = org_y + yi + random.normal()*sigma;
-    feature_set.push_back( new rgrl_feature_trace_pt(pt, tangent_dir) );
+    feature_set.push_back( new rgrl_feature_trace_pt(pt.as_ref(), tangent_dir.as_ref()) );
   }
 
   // Draw the circle, centered at (115, 115), with radius 50
@@ -131,7 +131,7 @@ generate_data( feature_vector& feature_set )
     tangent_dir[0] = vcl_cos(next_angle) - vcl_cos(angle) ;
     tangent_dir[1] = vcl_sin(next_angle) - vcl_sin(angle) ;
     tangent_dir.normalize(); //make the tangent a unit vector
-    feature_set.push_back( new rgrl_feature_trace_pt(pt, tangent_dir) );
+    feature_set.push_back( new rgrl_feature_trace_pt(pt.as_ref(), tangent_dir.as_ref()) );
   }
 }
 
@@ -143,9 +143,8 @@ add_outliers( feature_vector& feature_set )
   unsigned int num_outliers = 200;
   for (unsigned int i = 0; i<num_outliers; i++) {
     vnl_vector<double> v(2), n(2);
-    v[0] = random.drand32(0, 300);
-    v[1] = random.drand32(0, 300);
-    n = v;
+    n[0] = v[0] = random.drand32(0, 300);
+    n[1] = v[1] = random.drand32(0, 300);
     feature_set.push_back( new rgrl_feature_trace_pt(v, n.normalize()) );
   }
 }
@@ -186,7 +185,7 @@ main()
   A(0,0) = 0.996;   A(0,1) = -0.087;
   A(1,0) = -0.087;  A(1,1) = 0.996;
   vector_2d t( 10, -13);
-  init_transform = new rgrl_trans_affine(A, t);
+  init_transform = new rgrl_trans_affine(A, t.as_ref());
   rgrl_estimator_sptr estimator = new rgrl_est_affine();
 
   // Set up the ICP matcher

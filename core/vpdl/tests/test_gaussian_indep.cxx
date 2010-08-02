@@ -135,11 +135,11 @@ void test_gaussian_indep_type(T epsilon, const vcl_string& type_name)
 
     vnl_vector<T> m;
     dist.compute_mean(m);
-    TEST(("compute_mean <"+type_name+"> variable").c_str(), m, mean);
+    TEST(("compute_mean <"+type_name+"> variable").c_str(), m, mean.as_ref());
 
     vnl_matrix<T> S;
     dist.compute_covar(S);
-    TEST(("compute_covar <"+type_name+"> variable").c_str(), S, Strue);
+    TEST(("compute_covar <"+type_name+"> variable").c_str(), S, Strue.as_ref());
 
     vnl_vector_fixed<T,3> test_pt(T(1.5), T(3.0), T(3.0));
     vnl_vector_fixed<T,3> d = mean - test_pt;

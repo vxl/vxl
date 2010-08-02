@@ -656,16 +656,16 @@ match_mapped_region( rgrl_feature_sptr                     mapped_feature,
   {
     rgrl_feature_face_region * face_ptr =
       rgrl_cast<rgrl_feature_face_region *> ( mapped_feature );
-    mf_ptr = new rgrl_feature_face_region( match_location, face_ptr -> normal() );
+    mf_ptr = new rgrl_feature_face_region( match_location.as_ref(), face_ptr -> normal() );
   }
   else if (  mapped_feature -> is_type( rgrl_feature_trace_region::type_id() ) )
   {
     rgrl_feature_trace_region * trace_ptr =
       rgrl_cast<rgrl_feature_trace_region *> ( mapped_feature );
-    mf_ptr = new rgrl_feature_trace_region( match_location, trace_ptr -> tangent() );
+    mf_ptr = new rgrl_feature_trace_region( match_location.as_ref(), trace_ptr -> tangent() );
   }
   else { //rgrl_feature_point_region
-    mf_ptr = new rgrl_feature_point_region( match_location );
+    mf_ptr = new rgrl_feature_point_region( match_location.as_ref() );
   }
 
   matched_to_features.push_back( mf_ptr );

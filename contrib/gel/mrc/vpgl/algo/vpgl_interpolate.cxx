@@ -23,14 +23,13 @@ vnl_double_3x3 vpgl_interpolate::logR(vnl_double_3x3 const& R)
   if (vcl_fabs(trace + 1.0)<tol)
   {
     vnl_double_3x3 I; I.fill(0.0);
-    vnl_complex_eigensystem ce(R, I);
-    for (unsigned i = 0; i<3; ++i){
+    vnl_complex_eigensystem ce(R.as_ref(), I.as_ref());
+    for (unsigned i = 0; i<3; ++i) {
       vcl_complex<double> eigenv = ce.eigen_value(i);
 
       if (vcl_fabs(eigenv.imag())<tol&&vcl_fabs(eigenv.real()-1.0)<tol)
       {
-        vnl_vector<vcl_complex<double> > vr =
-          ce.right_eigen_vector(i);
+        vnl_vector<vcl_complex<double> > vr = ce.right_eigen_vector(i);
         log_r[0][1] = -pi*vr[2].real(); log_r[0][2] =  pi*vr[1].real();
         log_r[1][0] =  pi*vr[2].real(); log_r[1][2] = -pi*vr[0].real();
         log_r[2][0] = -pi*vr[1].real(); log_r[2][1] =  pi*vr[0].real();
@@ -221,7 +220,7 @@ interpolate_next(vpgl_perspective_camera<double> const& cam_prev,
   vpgl_calibration_matrix<double> K_curr = cam_curr.get_calibration();
   if (K_prev != K_curr)
     return false;
-    
+
   vgl_point_3d<double> c_prev = cam_prev.get_camera_center();
   vgl_point_3d<double> c_curr = cam_curr.get_camera_center();
 
@@ -238,18 +237,18 @@ interpolate_next(vpgl_perspective_camera<double> const& cam_prev,
 
   vnl_double_3x3 log_dR = vpgl_interpolate::logR(dR);
   vnl_double_3x3 dR_step = vpgl_interpolate::expr(log_dR*rel_step_size);
-  
+
   vnl_double_3x3 R_next = R_curr*dR_step;
-  
+
   vnl_double_3x3 a = vpgl_interpolate::A(log_dR*rel_step_size);
   vnl_double_3x3 ainv = vpgl_interpolate::Ainv(log_dR*rel_step_size);
   vnl_double_3 sadt = ainv*(rel_step_size*dt);
   vnl_double_3 dlt = a*sadt;
   vnl_double_3 t_next = t_curr + dlt;
-  
+
   vgl_rotation_3d<double> rot_next(R_next);
   vgl_point_3d<double> p_next(t_next[0],t_next[1],t_next[2]);
-  
+
   cam_next.set_calibration(K_curr);
   cam_next.set_camera_center(p_next);
   cam_next.set_rotation(rot_next);

@@ -90,13 +90,13 @@ void bvxm_util::bilinear_weights(vgl_h_matrix_2d<double> invH, unsigned nx_out, 
   unsigned col_idx = 0;
   for (unsigned y=0; y<ny_out; ++y) {
     for (unsigned x=0; x<nx_out; ++x, ++col_idx) {
-      pix_out_homg.set_column(col_idx,vnl_vector_fixed<float,3>((float)x,(float)y,1.0f));
+      pix_out_homg.set_column(col_idx,vnl_vector_fixed<float,3>((float)x,(float)y,1.0f).as_ref());
     }
   }
   vnl_matrix<float> pix_in_homg = H*pix_out_homg;
-  xvals = vnl_matrix<unsigned>(4,npix_out);
-  yvals = vnl_matrix<unsigned>(4,npix_out);
-  weights = vnl_matrix<float>(4,npix_out);
+  xvals.set_size(4,npix_out);
+  yvals.set_size(4,npix_out);
+  weights.set_size(4,npix_out);
 
   for (unsigned n=0; n<npix_out; ++n) {
     // normalize homogeneous coordinate
@@ -111,12 +111,12 @@ void bvxm_util::bilinear_weights(vgl_h_matrix_2d<double> invH, unsigned nx_out, 
     unsigned y1 = (unsigned)vcl_ceil(pix_in_y);
     float y0_weight = (float)(y1 - pix_in_y);
     float y1_weight = (float)(1.0f - y0_weight);
-    xvals.set_column(n,vnl_vector_fixed<unsigned,4>(x0,x0,x1,x1));
-    yvals.set_column(n,vnl_vector_fixed<unsigned,4>(y0,y1,y0,y1));
+    xvals.set_column(n,vnl_vector_fixed<unsigned,4>(x0,x0,x1,x1).as_ref());
+    yvals.set_column(n,vnl_vector_fixed<unsigned,4>(y0,y1,y0,y1).as_ref());
     weights.set_column(n,vnl_vector_fixed<float,4>(x0_weight*y0_weight,
                                                    x0_weight*y1_weight,
                                                    x1_weight*y0_weight,
-                                                   x1_weight*y1_weight));
+                                                   x1_weight*y1_weight).as_ref());
   }
 }
 

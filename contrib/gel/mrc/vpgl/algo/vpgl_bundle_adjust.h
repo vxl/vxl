@@ -100,7 +100,7 @@ class vpgl_bundle_adj_lsqr : public vnl_sparse_lst_sqr_function
   {
     vnl_double_3x3 M = Km_[i]*rod_to_matrix(d);
     vnl_double_3x4 P;
-    P.update(M);
+    P.set_columns(0, M.as_ref());
     const vnl_vector_ref<double> c(3,const_cast<double*>(d+3));
     P.set_column(3,-(M*c));
     return P;

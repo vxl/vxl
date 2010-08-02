@@ -159,7 +159,7 @@ generate_data( feature_vector& feature_points )
     pt[1] = org_y + random.normal()*sigma;
     tangent_dir[0] = 1;
     tangent_dir[1] = 0;
-    rgrl_feature_sptr feature_pt = new rgrl_feature_trace_pt(pt, tangent_dir);
+    rgrl_feature_sptr feature_pt = new rgrl_feature_trace_pt(pt.as_ref(), tangent_dir.as_ref());
     feature_points.push_back( feature_pt );
     // EndCodeSnippet
   }
@@ -170,7 +170,7 @@ generate_data( feature_vector& feature_points )
     vector_2d pt, tangent_dir(-1,0);
     pt[0] = org_x + xi + random.normal()*sigma;
     pt[1] = org_y + 99 + random.normal()*sigma;
-    feature_points.push_back( new rgrl_feature_trace_pt(pt, tangent_dir) );
+    feature_points.push_back( new rgrl_feature_trace_pt(pt.as_ref(), tangent_dir.as_ref()) );
   }
 
   // The edge of x = org_x
@@ -179,7 +179,7 @@ generate_data( feature_vector& feature_points )
     vector_2d pt, tangent_dir(0,1);
     pt[0] = org_x + random.normal()*sigma;
     pt[1] = org_y + yi + random.normal()*sigma;
-    feature_points.push_back( new rgrl_feature_trace_pt(pt, tangent_dir) );
+    feature_points.push_back( new rgrl_feature_trace_pt(pt.as_ref(), tangent_dir.as_ref()) );
   }
 
   // The edge of x = org_x+199
@@ -188,7 +188,7 @@ generate_data( feature_vector& feature_points )
     vector_2d pt,tangent_dir(0,-1);
     pt[0] = org_x + 199 + random.normal()*sigma;
     pt[1] = org_y + yi + random.normal()*sigma;
-    feature_points.push_back( new rgrl_feature_trace_pt(pt, tangent_dir) );
+    feature_points.push_back( new rgrl_feature_trace_pt(pt.as_ref(), tangent_dir.as_ref()) );
   }
 
   // Draw the circle, centered at (115, 115), with radius 50
@@ -196,7 +196,7 @@ generate_data( feature_vector& feature_points )
   double radius = 50;
   double center_x = 115;
   double center_y = 115;
-  for ( unsigned int ci = 0; ci<360; ci++ ) {
+  for ( unsigned int ci = 0; ci<360; ++ci ) {
     vector_2d pt,tangent_dir;
     double angle = ci*2*vnl_math::pi/180;
     double next_angle = (ci+1)*2*vnl_math::pi/180;
@@ -205,7 +205,7 @@ generate_data( feature_vector& feature_points )
     tangent_dir[0] = vcl_cos(next_angle) - vcl_cos(angle) ;
     tangent_dir[1] = vcl_sin(next_angle) - vcl_sin(angle) ;
     tangent_dir.normalize(); //make the tangent a unit vector
-    feature_points.push_back( new rgrl_feature_trace_pt(pt, tangent_dir) );
+    feature_points.push_back( new rgrl_feature_trace_pt(pt.as_ref(), tangent_dir.as_ref()) );
   }
 }
 
@@ -235,11 +235,10 @@ add_outliers( feature_vector& feature_points )
   vnl_random random;
 
   unsigned int num_outliers = 200;
-  for (unsigned int i = 0; i<num_outliers; i++) {
+  for (unsigned int i = 0; i<num_outliers; ++i) {
     vnl_vector<double> v(2), n(2);
-    v[0] = random.drand32(0, 300);
-    v[1] = random.drand32(0, 300);
-    n = v;
+    n[0] = v[0] = random.drand32(0, 300);
+    n[1] = v[1] = random.drand32(0, 300);
     feature_points.push_back( new rgrl_feature_trace_pt(v, n.normalize()) );
   }
 }
@@ -311,7 +310,7 @@ main()
   A(0,0) = 0.996;   A(0,1) = -0.087;
   A(1,0) = -0.087;  A(1,1) = 0.996;
   vector_2d t( 10, -13 );
-  rgrl_transformation_sptr init_transform = new rgrl_trans_affine(A, t);
+  rgrl_transformation_sptr init_transform = new rgrl_trans_affine(A, t.as_ref());
   rgrl_estimator_sptr      estimator = new rgrl_est_affine();
   // EndCodeSnippet
 

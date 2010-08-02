@@ -328,7 +328,7 @@ map_region_intensities( vcl_vector< vnl_vector<int> > const& pixel_locations,
     // map the pixel, in the physical coordinates, and then convert
     // it to the pixel cooridinates.
     vnl_double_3 mapped_physical_pt;
-    trans.map_location( physical_loc, mapped_physical_pt.as_ref().non_const() );
+    trans.map_location( physical_loc.as_ref(), mapped_physical_pt.as_ref().non_const() );
     // Check if the mapped location is inside the valid region
     if ( !physical_in_range( to_image_, mask_, mapped_physical_pt, to_spacing_ratio_ ) )
       continue;

@@ -117,7 +117,7 @@ generate_data(feature_vector& feature_set)
     vector_2d pt;
     pt[0] = org_x + xi + random.normal()*sigma;
     pt[1] = org_y + random.normal()*sigma;
-    feature_set.push_back( new rgrl_feature_point(pt) );
+    feature_set.push_back( new rgrl_feature_point(pt.as_ref()) );
   }
 
   // The edge of y = org_y + 99
@@ -126,7 +126,7 @@ generate_data(feature_vector& feature_set)
     vector_2d pt;
     pt[0] = org_x + xi + random.normal()*sigma;
     pt[1] = org_y + 99 + random.normal()*sigma;
-    feature_set.push_back( new rgrl_feature_point(pt) );
+    feature_set.push_back( new rgrl_feature_point(pt.as_ref()) );
   }
 
   // The edge of x = org_x
@@ -135,7 +135,7 @@ generate_data(feature_vector& feature_set)
     vector_2d pt;
     pt[0] = org_x + random.normal()*sigma;
     pt[1] = org_y + yi + random.normal()*sigma;
-    feature_set.push_back( new rgrl_feature_point(pt) );
+    feature_set.push_back( new rgrl_feature_point(pt.as_ref()) );
   }
 
   // The edge of x = org_x+199
@@ -144,7 +144,7 @@ generate_data(feature_vector& feature_set)
     vector_2d pt;
     pt[0] = org_x + 199 + random.normal()*sigma;
     pt[1] = org_y + yi + random.normal()*sigma;
-    feature_set.push_back( new rgrl_feature_point(pt) );
+    feature_set.push_back( new rgrl_feature_point(pt.as_ref()) );
   }
 
   // Draw the circle, centered at (115, 115), with radius 50
@@ -157,7 +157,7 @@ generate_data(feature_vector& feature_set)
     double angle = ci*2*vnl_math::pi/180;
     pt[0] = center_x + radius*vcl_cos(angle);
     pt[1] = center_y + radius*vcl_sin(angle);
-    feature_set.push_back( new rgrl_feature_point(pt) );
+    feature_set.push_back( new rgrl_feature_point(pt.as_ref()) );
   }
 }
 
@@ -205,7 +205,7 @@ main()
   A(0,0) = 0.98;  A(0,1) = -0.17;
   A(1,0) = -0.17;  A(1,1) =0.98;
   vector_2d t( 5, -3);
-  init_transform = new rgrl_trans_affine(A, t);
+  init_transform = new rgrl_trans_affine(A, t.as_ref());
 
   // Store the data in the data manager
   //

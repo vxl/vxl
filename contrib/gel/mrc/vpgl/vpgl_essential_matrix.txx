@@ -92,15 +92,15 @@ bool extract_left_camera(const vpgl_essential_matrix<T>& E,
 {
   //The right camera is the identity camera [I|0]
   vpgl_perspective_camera<T> p_right;
-  vnl_matrix_fixed<T, 3, 3> U, V, W;
 
-  W[0][0]=0;W[0][1]=-1;W[0][2]=0;
-  W[1][0]=1;W[1][1]=0;W[1][2]=0;
-  W[2][0]=0;W[2][1]=0;W[2][2]=1;
+  vnl_matrix_fixed<T,3,3> W;
+  W[0][0]=0; W[0][1]=-1;W[0][2]=0;
+  W[1][0]=1; W[1][1]=0; W[1][2]=0;
+  W[2][0]=0; W[2][1]=0; W[2][2]=1;
 
-  vnl_svd<T> SVD(E.get_matrix());
-  U=SVD.U();
-  V=SVD.V();
+  vnl_svd<T> SVD(E.get_matrix().as_ref());
+  vnl_matrix_fixed<T,3,3> U=SVD.U();
+  vnl_matrix_fixed<T,3,3> V=SVD.V();
   vnl_matrix_fixed<T,3,3> R;
   vnl_vector_fixed<T, 3> t;
   // checking for the correct combination of cameras

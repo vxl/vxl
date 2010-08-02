@@ -237,7 +237,7 @@ vcl_istream&  operator>>(vcl_istream& s,
 
   bgeo_lvcs_sptr lvcs = new bgeo_lvcs();
   s >> (*lvcs);
-  p = vpgl_geo_camera(tr_matrix, lvcs, tiepoints);
+  p = vpgl_geo_camera(tr_matrix.as_ref(), lvcs, tiepoints);
   return s ;
 }
 

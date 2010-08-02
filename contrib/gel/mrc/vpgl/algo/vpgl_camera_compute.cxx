@@ -320,7 +320,7 @@ compute( vpgl_rational_camera<double> const& rat_cam,
   for ( int i = 0; i < 3; i++ )
     for ( int j = 0; j < 3; j++ )
       Mf(i,j) = M(2-j,2-i);
-  vnl_qr<double> QR( Mf );
+  vnl_qr<double> QR( Mf.as_ref() );
   vnl_matrix_fixed<double,3,3> q,r,Qf,Rf, uq,ur;
   q = QR.Q();
   r = QR.R();
@@ -332,7 +332,7 @@ compute( vpgl_rational_camera<double> const& rat_cam,
   }
   vcl_cout << "Flipped Rotation\n" << Qf << '\n'
            << "Flipped Upper Triangular\n" << Rf << '\n';
-  vnl_qr<double> uqr(M);
+  vnl_qr<double> uqr(M.as_ref());
   uq = uqr.Q();
   ur = uqr.R();
   vcl_cout << "UnFlipped Rotation\n" << uq << '\n'
@@ -378,7 +378,7 @@ vcl_cout << "Denominators\n"
   for ( int i = 0; i < 3; i++ )
     for ( int j = 0; j < 3; j++ )
       KRf(i,j) = KR(2-j,2-i);
-  vnl_qr<double> krQR( KRf );
+  vnl_qr<double> krQR( KRf.as_ref() );
   vnl_matrix_fixed<double,3,3> krq,krr,krQf,krRf;
   krq = krQR.Q();
   krr = krQR.R();
@@ -644,7 +644,7 @@ compute( const vcl_vector< vgl_point_2d<double> >& image_pts,
 
   // compute the closest rotation matrix
   A.set_column(2, vnl_cross_3d(A.get_column(0), A.get_column(1)));
-  vnl_svd<double> svdA(A);
+  vnl_svd<double> svdA(A.as_ref());
   vnl_double_3x3 R = svdA.U()*svdA.V().conjugate_transpose();
 
   // find the point farthest from the origin

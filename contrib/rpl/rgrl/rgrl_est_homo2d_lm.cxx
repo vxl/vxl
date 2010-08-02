@@ -336,7 +336,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
 
   DebugMacro(2, "null vector: " << svd.nullvector() << "   estimate: " << p << vcl_endl );
 
-  return new rgrl_trans_homography2d( init_H, covar, from_centre, to_centre );
+  return new rgrl_trans_homography2d( init_H.as_ref(), covar, from_centre, to_centre );
 }
 
 

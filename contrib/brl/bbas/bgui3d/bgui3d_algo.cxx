@@ -20,7 +20,7 @@ bgui3d_decompose_camera( const vnl_double_3x4& camera,
     for (int j = 0; j < 3; ++j)
       PermH(i,j) = camera(2-j,2-i);
 
-  vnl_qr<double> qr(PermH);
+  vnl_qr<double> qr(PermH.as_ref());
 
   vnl_double_3x3 Q = qr.Q();
   vnl_double_3x3 R = qr.R();
@@ -63,7 +63,7 @@ bgui3d_decompose_camera( const vnl_double_3x4& camera,
 
   // Recompose the matrix and compare
   vnl_double_3x4 Po;
-  Po.update(rotation);
+  Po.set_columns(0,rotation.as_ref());
   Po.set_column(3,translation);
   if (((internal_calibration * Po - camera).fro_norm() > 1e-4) ||
       (internal_calibration(0,0) < 0) ||

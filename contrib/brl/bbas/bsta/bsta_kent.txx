@@ -19,7 +19,7 @@
 template <class T>
 bsta_kent<T>::bsta_kent(vnl_matrix_fixed<T,3,3> const& m)
 {
-  vnl_symmetric_eigensystem<T> E(m);
+  vnl_symmetric_eigensystem<T> E(m.as_ref());
   T t3 = E.get_eigenvalue(0); // smallest ??
   T t2 = E.get_eigenvalue(1);
   T t1 = E.get_eigenvalue(2); // largest??

@@ -38,31 +38,31 @@ static void test_orthogonal_regression()
 
   p[0] = 1.0;  p[1]=-0.5; p[2] = a0 * p[0] + a1* p[1] + a2;
   p += error[0] * norm_vect;
-  pts[0] = p;
+  pts[0] = p.as_ref();
 
   p[0] = 2.0;  p[1]=4.0;  p[2] = a0 * p[0] + a1* p[1] + a2;
   p += error[1] * norm_vect;
-  pts[1] = p;
+  pts[1] = p.as_ref();
 
   p[0]= 3.0;   p[1]=1.0;  p[2] = a0 * p[0] + a1* p[1] + a2;
   p += error[2] * norm_vect;
-  pts[2] = p;
+  pts[2] = p.as_ref();
 
   p[0]= -2.0;  p[1]=3.0;  p[2] = a0 * p[0] + a1* p[1] + a2;
   p += error[3] * norm_vect;
-  pts[3] = p;
+  pts[3] = p.as_ref();
 
   p[0]= 2.0;   p[1]=4.0;  p[2] = a0 * p[0] + a1* p[1] + a2;
   p += error[4] * norm_vect;
-  pts[4] = p;
+  pts[4] = p.as_ref();
 
   p[0]= 5.0;   p[1]=-4.0; p[2] = a0 * p[0] + a1* p[1] + a2;
   p += error[5] * norm_vect;
-  pts[5] = p;
+  pts[5] = p.as_ref();
 
   p[0]= 3.0;   p[1]=-2.0; p[2] = a0 * p[0] + a1* p[1] + a2;
   p += error[6] * norm_vect;
-  pts[6] = p;
+  pts[6] = p.as_ref();
 
   //
   //  The first set of tests are for the constructor, and parameter access methods.

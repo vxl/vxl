@@ -21,7 +21,7 @@ rgrl_trans_homography2d()
 
 rgrl_trans_homography2d::
 rgrl_trans_homography2d( vnl_matrix<double> const& H,
-                        vnl_matrix<double> const& covar )
+                         vnl_matrix<double> const& covar )
   : rgrl_transformation( covar ),
     H_( H ),
     from_centre_( 0.0, 0.0 ),
@@ -42,9 +42,9 @@ rgrl_trans_homography2d( vnl_matrix<double> const& H )
 
 rgrl_trans_homography2d::
 rgrl_trans_homography2d( vnl_matrix<double> const& H,
-                        vnl_matrix<double> const& covar,
-                        vnl_vector<double> const& from_centre,
-                        vnl_vector<double> const& to_centre )
+                         vnl_matrix<double> const& covar,
+                         vnl_vector<double> const& from_centre,
+                         vnl_vector<double> const& to_centre )
   : rgrl_transformation( covar ),
     from_centre_( from_centre ),
     to_centre_( to_centre )
@@ -172,7 +172,7 @@ inv_map( const vnl_vector<double>& to,
 
     // compute the inverse of the approximated affine from the jacobian
     vnl_matrix_fixed<double,2,3> J = homo_jacobian(from);
-    vnl_svd<double> svd(J);
+    vnl_svd<double> svd(J.as_ref());
     approx_A_inv = svd.inverse();
 
     // Increase "from" by approx_A^-1*(to-to_est).  "homo_from_delta"
@@ -193,7 +193,7 @@ inv_map( const vnl_vector<double>& to,
   if ( initialize_next ) {
     if ( t == 0 ) { //approx_A_inv not yet calculated
       vnl_matrix_fixed<double,2,3> J = homo_jacobian(from);
-      vnl_svd<double> svd(J);
+      vnl_svd<double> svd(J.as_ref());
       approx_A_inv = svd.inverse();
     }
     vnl_vector<double> homo_from_delta(3,1);
@@ -212,7 +212,7 @@ inverse_transform() const
 {
   vnl_matrix_fixed<double,3,3> H_inv = vnl_inverse(H_);
   rgrl_transformation_sptr result =
-    new rgrl_trans_homography2d( H_inv, vnl_matrix<double>(), to_centre_, from_centre_ );
+    new rgrl_trans_homography2d( H_inv.as_ref(), vnl_matrix<double>(), to_centre_.as_ref(), from_centre_.as_ref() );
 
   const unsigned m = scaling_factors_.size();
   if ( m > 0 ) {

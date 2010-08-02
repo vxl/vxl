@@ -128,26 +128,26 @@ bgui3d_project2d_tableau::set_camera(const vpgl_proj_camera<double>& cam)
   }
 
   // The model matrix is the cameras rotation and translation
-  vnl_double_4x4 M(0.0);
-  M.update(R);
-  M.set_column(3, t);
-  M(3,3) = 1.0;
+  vnl_double_4x4 M(0.0); // unused?! - FIXME
+  M.update(R.as_ref());        // upper 3x3 part
+  M.set_column(3, t.as_ref()); // last column, upper 3 elements
+  M(3,3) = 1.0; // and the rest of the 4th row is zero
 
   // set M to model_matrix_ for OpenGL use
-  vnl_matrix_ref<double> mm(4,4,model_matrix_);
+  vnl_matrix_fixed<double,4,4> mm(model_matrix_); // mm unused?! - FIXME
   mm = M.transpose();
 
   // The inverse of the model matrix
   vnl_double_4x4 Mi(0.0);
-  Mi.update(R.transpose());
-  Mi.set_column(3, -R.transpose()*t);
-  Mi(3,3) = 1.0;
+  Mi.update(R.transpose().as_ref()); // upper 3x3 part
+  Mi.set_column(3, (-R.transpose()*t).as_ref()); // last column, upper 3 elements
+  Mi(3,3) = 1.0; // and the rest of the 4th row is zero
 
   // Apply the inverse of the model matrix to the camera
   camera_z_ = camera * Mi;
 
   // The resulting left 3x3 submatrix must be upper triangle
-  // check this condition and force it to be exactly true.
+  // check this condition and then force it to be exactly true.
   assert(vcl_fabs(camera_z_(1,0))<1e-10);
   assert(vcl_fabs(camera_z_(2,0))<1e-10);
   assert(vcl_fabs(camera_z_(2,1))<1e-10);

@@ -66,7 +66,7 @@ struct compute_sqr_mahalanobis<T,n,0>
 //: compute the inverse
 template <class T, unsigned n>
 inline vnl_matrix_fixed<T,n,n>* make_inverse(const vnl_matrix_fixed<T,n,n>& M)
-{ return new vnl_matrix_fixed<T,n,n>(vnl_svd_inverse(vnl_matrix<T>(M))); }
+{ return new vnl_matrix_fixed<T,n,n>(vnl_svd_inverse(M.as_ref())); }
 
 template <class T>
 inline vnl_matrix_fixed<T,4,4>* make_inverse(const vnl_matrix_fixed<T,4,4>& M)

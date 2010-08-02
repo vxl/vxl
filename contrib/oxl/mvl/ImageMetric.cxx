@@ -11,7 +11,6 @@
 #include <vcl_cassert.h>
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_double_3x3.h>
-#include <vnl/vnl_transpose.h>
 #include <vnl/vnl_math.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_homg_point_2d.h>
@@ -107,7 +106,7 @@ vgl_homg_line_2d<double> ImageMetric::homg_to_image_line(vgl_homg_line_2d<double
 HomgLine2D ImageMetric::homg_to_image_line(const HomgLine2D& l) const
 {
   if (is_linear())
-    return HomgLine2D(vnl_transpose(get_C_inverse()) * l.get_vector().as_ref());
+    return HomgLine2D(get_C_inverse().transpose() * l.get_vector().as_ref());
 
   // get points, decondition, and rejoin
   HomgPoint2D p1, p2;
@@ -133,7 +132,7 @@ vgl_homg_line_2d<double> ImageMetric::image_to_homg_line(const vgl_homg_line_2d<
 HomgLine2D ImageMetric::image_to_homg_line(const HomgLine2D& l) const
 {
   if (is_linear())
-    return HomgLine2D(vnl_transpose(get_C()) * l.get_vector().as_ref());
+    return HomgLine2D(get_C().transpose() * l.get_vector().as_ref());
 
   // get points, condition, and rejoin
   HomgPoint2D p1, p2;
@@ -316,7 +315,7 @@ FMatrix ImageMetric::decondition(const FMatrix& F, const ImageMetric* c1, const 
 
   vnl_double_3x3 C1inv = c1->get_C_inverse();
   vnl_double_3x3 C2inv = c2->get_C_inverse();
-  return FMatrix( vnl_transpose(C1inv) * F.get_matrix() * C2inv );
+  return FMatrix( C1inv.transpose() * F.get_matrix() * C2inv );
 }
 
 vcl_ostream & ImageMetric::print(vcl_ostream& s) const

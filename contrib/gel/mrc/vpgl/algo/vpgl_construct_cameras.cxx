@@ -6,6 +6,7 @@
 #include <vcl_cmath.h> // for std::abs
 #include <vnl/vnl_inverse.h>
 #include <vnl/vnl_vector.h>
+#include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_4.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vgl/vgl_homg_point_2d.h>
@@ -81,21 +82,20 @@ bool vpgl_construct_cameras::construct()
         fm_error << '\n';
     }
 
-    vnl_double_3x3  Kt,Kinv;
-    Kt=K_.transpose();
-    Kinv=vnl_inverse(K_);
+    vnl_double_3x3 Kt  = K_.transpose();
+    vnl_double_3x3 Kinv= vnl_inverse(K_);
 
     //: computing the essential matrix
     E_=Kt*fm.get_matrix()*K_;
-    vnl_double_3x3 U, V, W;
 
-    W[0][0]=0;W[0][1]=-1;W[0][2]=0;
-    W[1][0]=1;W[1][1]=0;W[1][2]=0;
-    W[2][0]=0;W[2][1]=0;W[2][2]=1;
+    vnl_double_3x3 W;
+    W[0][0]=0; W[0][1]=-1;W[0][2]=0;
+    W[1][0]=1; W[1][1]=0; W[1][2]=0;
+    W[2][0]=0; W[2][1]=0; W[2][2]=1;
 
-    vnl_svd<double> SVD(E_);
-    U=SVD.U();
-    V=SVD.V();
+    vnl_svd<double> SVD(E_.as_ref());
+    vnl_double_3x3 U=SVD.U();
+    vnl_double_3x3 V=SVD.V();
 
     // Get some image points to test possible cameras on.
     vnl_vector<double> point2d1(3);    vnl_vector<double> point2d2(3);
@@ -111,7 +111,7 @@ bool vpgl_construct_cameras::construct()
     for ( int c = 0; c < 4; c++ )
     {
       vnl_double_3x3 R;
-      vnl_vector<double> t;
+      vnl_double_3 t;
       if ( c == 0 ) { //case 1
         R=U*W.transpose()*V.transpose();
         t=U.get_column(2);
@@ -129,7 +129,7 @@ bool vpgl_construct_cameras::construct()
         t=-U.get_column(2);
       }
       if ( vnl_det<double>( R ) < 0 ) R = -R;
-      vnl_vector<double> cc = -R.transpose()*t;
+      vnl_double_3 cc = -R.transpose()*t;
       P2_.set_rotation( vgl_rotation_3d<double>(R) );
       P2_.set_camera_center( vgl_point_3d<double>( cc(0), cc(1), cc(2) ) );
       vgl_point_3d<double> p3d = triangulate_3d_point(
@@ -177,7 +177,7 @@ vpgl_construct_cameras::triangulate_3d_point(
     A[3][i] = x2.y()*P2[2][i] - P2[1][i];
   }
 
-  vnl_svd<double> svd_solver(A);
+  vnl_svd<double> svd_solver(A.as_ref());
   vnl_double_4 p = svd_solver.nullvector();
   return vgl_homg_point_3d<double>(p[0],p[1],p[2],p[3]);
 }

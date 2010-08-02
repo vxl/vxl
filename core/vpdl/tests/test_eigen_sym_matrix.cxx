@@ -72,15 +72,15 @@ void test_matrix_type(T epsilon, const vcl_string& type_name)
     sym.form_matrix(M2);
     TEST_NEAR(("product <"+type_name+"> fixed").c_str(),
               (y - M2*x).inf_norm(), 0, epsilon);
-    sym.inverse_product(x,y);
+    sym.inverse_product(x.as_ref(),y);
     sym.form_inverse(M2);
     TEST_NEAR(("inverse product <"+type_name+"> fixed").c_str(),
               (y - M2*x).inf_norm(), 0, epsilon);
 
     TEST_NEAR(("quad form <"+type_name+"> variable").c_str(),
-              sym.quad_form(x), dot_product(x,M*x), epsilon);
+              sym.quad_form(x.as_ref()), dot_product(x,M*x), epsilon);
     TEST_NEAR(("inverse quad form <"+type_name+"> variable").c_str(),
-              sym.inverse_quad_form(x), dot_product(x,invM*x), epsilon);
+              sym.inverse_quad_form(x.as_ref()), dot_product(x,invM*x), epsilon);
   }
 }
 

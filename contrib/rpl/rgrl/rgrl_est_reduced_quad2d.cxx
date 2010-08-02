@@ -101,10 +101,10 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   }
   // if the weight is too small or zero,
   // that means there is no good match
-  if( sum_wgt < 1e-13 ) {
+  if ( sum_wgt < 1e-13 ) {
     return 0;
   }
-  
+
   from_centre /= sum_wgt;
   to_centre /= sum_wgt;
 
@@ -172,7 +172,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   // ----------------------------
   // Compute the solution
 
-  vnl_svd<double> svd( XtWX );
+  vnl_svd<double> svd( XtWX.as_ref() );
 
   // Due to floating point inaccuracies, some zero singular values may
   // look non-zero, so we correct for that.
@@ -223,7 +223,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   Q(0,0) = Q(0,1) = XtWy[0];
   Q(1,0) = Q(1,1) = XtWy[1];
 
-  return new rgrl_trans_reduced_quad( Q, A, trans, covar, from_centre, to_centre );
+  return new rgrl_trans_reduced_quad( Q, A, trans, covar.as_ref(), from_centre.as_ref(), to_centre.as_ref() );
 }
 
 

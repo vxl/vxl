@@ -44,7 +44,7 @@ namespace
 
     rgrl_transformation_sptr trans = new rgrl_trans_affine(A, t, covar);
 
-    rgrl_mask_sptr roi = new rgrl_mask_box(vnl_double_2(0, -50), vnl_double_2(50, 50));
+    rgrl_mask_sptr roi = new rgrl_mask_box(vnl_double_2(0, -50).as_ref(), vnl_double_2(50, 50).as_ref());
     rgrl_estimator_sptr est_p = new rgrl_est_affine;
     rgrl_view_sptr view = new rgrl_view( roi, roi, roi->bounding_box(), roi->bounding_box(), est_p, trans, 0 );
     rgrl_scale_sptr scale = new rgrl_scale();
@@ -53,17 +53,17 @@ namespace
     //
     vcl_vector<rgrl_feature_sptr> from_pts, to_pts;
 
-    from_pts.push_back(new rgrl_feature_trace_pt( vnl_double_2(10.0, 20.0),
-                                                  vnl_double_2(0.0, 1.0),
+    from_pts.push_back(new rgrl_feature_trace_pt( vnl_double_2(10.0, 20.0).as_ref(),
+                                                  vnl_double_2(0.0, 1.0).as_ref(),
                                                   5, 5));
-    from_pts.push_back(new rgrl_feature_trace_pt( vnl_double_2(35.0, -20.0),
-                                                  vnl_double_2(1.0, 0.0),
+    from_pts.push_back(new rgrl_feature_trace_pt( vnl_double_2(35.0, -20.0).as_ref(),
+                                                  vnl_double_2(1.0, 0.0).as_ref(),
                                                   5, 5));
-    to_pts.push_back(new rgrl_feature_trace_pt( vnl_double_2( 25.0, 16.0),
-                                                vnl_double_2(0.0, 1.0),
+    to_pts.push_back(new rgrl_feature_trace_pt( vnl_double_2( 25.0, 16.0).as_ref(),
+                                                vnl_double_2(0.0, 1.0).as_ref(),
                                                 5, 5));
-    to_pts.push_back(new rgrl_feature_trace_pt( vnl_double_2(38.0, -12.0),
-                                                vnl_double_2(-1.0, 0.0),
+    to_pts.push_back(new rgrl_feature_trace_pt( vnl_double_2(38.0, -12.0).as_ref(),
+                                                vnl_double_2(-1.0, 0.0).as_ref(),
                                                 5, 5));
 
     // Create feature sets from the vector of features.
@@ -93,8 +93,8 @@ namespace
     }
 
     TEST( "Correct boundary points",
-          close( from_bd_locs[0], vnl_double_2(5, 20)) &&
-          close( from_bd_locs[1], vnl_double_2(15, 20)), true);
+          close( from_bd_locs[0], vnl_double_2( 5, 20).as_ref()) &&
+          close( from_bd_locs[1], vnl_double_2(15, 20).as_ref()), true);
 
     TEST( "Correct boundary matches, same side",
           close( to_bd_locs[0], xformed_bd_locs[0]+diff1 ) &&
@@ -150,7 +150,7 @@ namespace
 
     rgrl_transformation_sptr trans = new rgrl_trans_affine(A, t, covar);
 
-    rgrl_mask_sptr roi = new rgrl_mask_box(vnl_double_2(-1, -1), vnl_double_2(40, 40));
+    rgrl_mask_sptr roi = new rgrl_mask_box(vnl_double_2(-1, -1).as_ref(), vnl_double_2(40, 40).as_ref());
     rgrl_estimator_sptr est_p = new rgrl_est_affine;
     rgrl_view_sptr view = new rgrl_view( roi, roi, roi->bounding_box(), roi->bounding_box(), est_p, trans, 0 );
     rgrl_scale_sptr scale = new rgrl_scale();
@@ -159,16 +159,15 @@ namespace
     //
     vcl_vector<rgrl_feature_sptr> from_pts, to_pts;
 
-    from_pts.push_back( new rgrl_feature_point( vnl_double_2(4,4) ) );
-    from_pts.push_back( new rgrl_feature_point( vnl_double_2(25,4) ) );
-    from_pts.push_back( new rgrl_feature_point( vnl_double_2(4,16) ) );
-    from_pts.push_back( new rgrl_feature_point( vnl_double_2(30,30) ) );
+    from_pts.push_back( new rgrl_feature_point( vnl_double_2(4,4).as_ref() ) );
+    from_pts.push_back( new rgrl_feature_point( vnl_double_2(25,4).as_ref() ) );
+    from_pts.push_back( new rgrl_feature_point( vnl_double_2(4,16).as_ref() ) );
+    from_pts.push_back( new rgrl_feature_point( vnl_double_2(30,30).as_ref() ) );
 
-    to_pts.push_back( new rgrl_feature_point( vnl_double_2(0,0) ) );
-    to_pts.push_back( new rgrl_feature_point( vnl_double_2(15,0) ) );
-    to_pts.push_back( new rgrl_feature_point( vnl_double_2(0,10) ) );
-    to_pts.push_back( new rgrl_feature_point( vnl_double_2(15,10) ) );
-
+    to_pts.push_back( new rgrl_feature_point( vnl_double_2(0,0).as_ref() ) );
+    to_pts.push_back( new rgrl_feature_point( vnl_double_2(15,0).as_ref() ) );
+    to_pts.push_back( new rgrl_feature_point( vnl_double_2(0,10).as_ref() ) );
+    to_pts.push_back( new rgrl_feature_point( vnl_double_2(15,10).as_ref() ) );
 
     // Create feature sets from the vector of features.
     //
@@ -254,7 +253,7 @@ namespace
 
     rgrl_transformation_sptr trans = new rgrl_trans_affine(A, t, covar);
 
-    rgrl_mask_sptr roi = new rgrl_mask_box(vnl_double_2(-1, -1), vnl_double_2(40, 40));
+    rgrl_mask_sptr roi = new rgrl_mask_box(vnl_double_2(-1, -1).as_ref(), vnl_double_2(40, 40).as_ref());
     rgrl_estimator_sptr est_p = new rgrl_est_affine;
     rgrl_view_sptr view = new rgrl_view( roi, roi, roi->bounding_box(), roi->bounding_box(), est_p, trans, 0 );
     rgrl_scale_sptr scale = new rgrl_scale();
@@ -263,16 +262,16 @@ namespace
     //
     vcl_vector<rgrl_feature_sptr> from_pts, to_pts(4);
 
-    from_pts.push_back( new rgrl_feature_point( vnl_double_2(4,4) ) );
+    from_pts.push_back( new rgrl_feature_point( vnl_double_2(4,4).as_ref() ) );
     from_pts[0]->set_scale(1.0);
 
-    to_pts[0] = new rgrl_feature_point( vnl_double_2(0,0) );
+    to_pts[0] = new rgrl_feature_point( vnl_double_2(0,0).as_ref() );
     to_pts[0]->set_scale(100);
-    to_pts[1] = new rgrl_feature_point( vnl_double_2(0,10) );
+    to_pts[1] = new rgrl_feature_point( vnl_double_2(0,10).as_ref() );
     to_pts[1]->set_scale(0.02);
-    to_pts[2] = new rgrl_feature_point( vnl_double_2(15,0) );
+    to_pts[2] = new rgrl_feature_point( vnl_double_2(15,0).as_ref() );
     to_pts[2]->set_scale(20);
-    to_pts[3] = new rgrl_feature_point( vnl_double_2(15,10) );
+    to_pts[3] = new rgrl_feature_point( vnl_double_2(15,10).as_ref() );
     to_pts[3]->set_scale(5);
 
 

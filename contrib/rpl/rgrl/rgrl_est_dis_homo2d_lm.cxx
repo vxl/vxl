@@ -207,7 +207,7 @@ f(vnl_vector<double> const& x, vnl_vector<double>& fx)
         // Step 1.
         distort( true_from, from, k1_from );
         // Step 2.
-        map_inhomo_point( true_mapped, H, true_from );
+        map_inhomo_point( true_mapped, H, true_from.as_ref() );
         // Step 3.
         distort( dis_mapped, true_mapped, k1_to );
 
@@ -274,7 +274,7 @@ gradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian)
 
         // Step 2. homography transformation
         vnl_double_2 true_to_loc;
-        map_inhomo_point( true_to_loc, H, true_from_loc );
+        map_inhomo_point( true_to_loc, H, true_from_loc.as_ref() );
         homo_wrt_loc( qu_pu, H, true_from_loc );
         homo_wrt_h( qu_h, H, true_from_loc );
 
@@ -410,7 +410,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
 
   // construct least square cost function
   rgrl_rad_dis_homo2d_func dis_homo_func( matches, tot_num, with_grad_ );
-  dis_homo_func.set_centres( from_centre_, to_centre_ );
+  dis_homo_func.set_centres( from_centre_.as_ref(), to_centre_.as_ref() );
 
   vnl_levenberg_marquardt lm( dis_homo_func );
   //lm.set_trace( true );
@@ -492,7 +492,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   DebugMacro(2, "null vector: " << svd.nullvector() << "   estimate: " << p << vcl_endl );
 #endif
 
-  return new rgrl_trans_rad_dis_homo2d( init_H, k1_from, k1_to, covar, from_centre_, to_centre_ );
+  return new rgrl_trans_rad_dis_homo2d( init_H.as_ref(), k1_from, k1_to, covar, from_centre_.as_ref(), to_centre_.as_ref() );
 }
 
 

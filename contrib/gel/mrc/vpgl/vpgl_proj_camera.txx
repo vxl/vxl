@@ -142,7 +142,7 @@ vgl_homg_line_3d_2_points<T> vpgl_proj_camera<T>::backproject(
 {
   // First find any point in the world that projects to the "image_point".
   vnl_vector_fixed<T,4> vnl_wp = svd()->solve(
-    vnl_vector_fixed<T,3>( image_point.x(), image_point.y(), image_point.w() ) );
+    vnl_vector_fixed<T,3>( image_point.x(), image_point.y(), image_point.w() ).as_ref() );
   vgl_homg_point_3d<T> wp( vnl_wp[0], vnl_wp[1], vnl_wp[2], vnl_wp[3] );
 
   // The ray is then defined by that point and the camera center.
@@ -184,7 +184,7 @@ vnl_svd<T>* vpgl_proj_camera<T>::svd() const
   // Check if the cached copy is valid, if not recompute it.
   if ( cached_svd_ == NULL )
   {
-    cached_svd_ = new vnl_svd<T>(P_);
+    cached_svd_ = new vnl_svd<T>(P_.as_ref());
 
     // Check that the projection matrix isn't degenerate.
     if ( cached_svd_->rank() != 3 )
@@ -357,7 +357,7 @@ vgl_point_3d<T> triangulate_3d_point(const vpgl_proj_camera<T>& c1,
     A[2][i] = x2.x()*P2[2][i] - P2[0][i];
     A[3][i] = x2.y()*P2[2][i] - P2[1][i];
   }
-  vnl_svd<T> svd_solver(A);
+  vnl_svd<T> svd_solver(A.as_ref());
   vnl_vector_fixed<T, 4> p = svd_solver.nullvector();
   vgl_homg_point_3d<T> hp(p[0],p[1],p[2],p[3]);
   return vgl_point_3d<T>(hp);

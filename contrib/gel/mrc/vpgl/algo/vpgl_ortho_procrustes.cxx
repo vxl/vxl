@@ -69,7 +69,7 @@ void vpgl_ortho_procrustes::compute()
 
   vnl_matrix<double> Xt = Xm.transpose();
   vnl_matrix_fixed<double, 3,3> M = Ym*Xt;
-  vnl_svd<double> SVD(M);
+  vnl_svd<double> SVD(M.as_ref());
   vnl_matrix_fixed<double, 3,3> U = SVD.U();
   vnl_matrix_fixed<double, 3,3> V = SVD.V();
   vnl_matrix_fixed<double, 3,3> Ut = U.transpose();

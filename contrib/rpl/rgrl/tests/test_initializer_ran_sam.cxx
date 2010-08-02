@@ -322,8 +322,8 @@ static
 void
 test_on_matches(rgrl_transformation_sptr xform, rgrl_match_set_sptr matches, unsigned int total_matches)
 {
-  rgrl_mask_sptr from_roi = new rgrl_mask_box( vnl_double_2(-50.0, -50.0),
-                                               vnl_double_2(100.0, 100.0));
+  rgrl_mask_sptr from_roi = new rgrl_mask_box( vnl_double_2(-50.0, -50.0).as_ref(),
+                                               vnl_double_2(100.0, 100.0).as_ref());
   rgrl_mask_sptr to_roi = from_roi;
   rgrl_estimator_sptr est = new rgrl_est_affine(2);
   rgrl_view_sptr  view = new rgrl_view( from_roi, to_roi, from_roi->bounding_box(), from_roi->bounding_box(), est, xform, 0 );
@@ -353,8 +353,8 @@ test_on_matches(rgrl_transformation_sptr xform, rgrl_match_set_sptr matches, uns
 
   rgrl_mask_box max_region = v->global_region();
   TEST("Update maximum overlap correctly",
-       close(max_region.x0(), vnl_double_2(-50,-50)) &&
-       close(max_region.x1(), vnl_double_2(98, 90)), true);
+       close(max_region.x0(), vnl_double_2(-50,-50).as_ref()) &&
+       close(max_region.x1(), vnl_double_2( 98, 90).as_ref()), true);
 
 
   TEST("No second", !init->next_initial(v,s), true);
@@ -381,7 +381,7 @@ static void test_initializer_ran_sam()
 {
   rgrl_transformation_sptr trans =
     new rgrl_trans_affine( vnl_matrix<double>( 2, 2, vnl_matrix_identity ),
-                           vnl_double_2( 2.0, 10.0 ),
+                           vnl_double_2( 2.0, 10.0 ).as_ref(),
                            vnl_matrix<double>( 6, 6, 0.0 ) );
 
   START( "initializers_ran_sam w/ unique matches" );

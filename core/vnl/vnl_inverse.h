@@ -339,11 +339,11 @@ vnl_matrix<T> vnl_inverse_transpose(vnl_matrix<T> const& m)
   if (m.rows() == 1)
     return vnl_matrix<T>(1,1, T(1)/m(0,0));
   else if (m.rows() == 2)
-    return vnl_matrix<T>(vnl_inverse_transpose(vnl_matrix_fixed<T,2,2>(m)));
+    return vnl_inverse_transpose(vnl_matrix_fixed<T,2,2>(m)).as_ref();
   else if (m.rows() == 3)
-    return vnl_matrix<T>(vnl_inverse_transpose(vnl_matrix_fixed<T,3,3>(m)));
+    return vnl_inverse_transpose(vnl_matrix_fixed<T,3,3>(m)).as_ref();
   else
-    return vnl_matrix<T>(vnl_inverse_transpose(vnl_matrix_fixed<T,4,4>(m)));
+    return vnl_inverse_transpose(vnl_matrix_fixed<T,4,4>(m)).as_ref();
 }
 
 #endif // vnl_inverse_h_

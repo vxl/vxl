@@ -9,7 +9,6 @@
 
 #include <vcl_iostream.h>
 #include <vnl/vnl_math.h>
-#include <vnl/vnl_transpose.h>
 #include <vnl/vnl_identity_3x3.h>
 #include <vnl/vnl_double_2.h>
 #include <vgl/vgl_point_2d.h>
@@ -71,7 +70,8 @@ void HomgMetric::homg_to_image(const HomgPoint2D& homg, double* ix, double* iy) 
     vnl_double_2 p = metric_->homg_to_image(homg);
     *ix = p[0];
     *iy = p[1];
-  } else {
+  }
+  else {
     homg.get_nonhomogeneous(*ix, *iy);
   }
 }
@@ -81,7 +81,8 @@ void HomgMetric::homg_to_image(vgl_homg_point_2d<double> const& homg, double& ix
   if (metric_) {
     vgl_point_2d<double> p = metric_->homg_to_image(homg);
     ix = p.x(); iy = p.y();
-  } else {
+  }
+  else {
     ix = homg.x()/homg.w();
     iy = homg.y()/homg.w();
   }
@@ -341,7 +342,7 @@ FMatrix HomgMetric::homg_to_image_F(const FMatrix& F, const HomgMetric& c1, cons
 
   vnl_double_3x3 C1inv = c1.get_C_inverse();
   vnl_double_3x3 C2inv = c2.get_C_inverse();
-  return FMatrix(vnl_transpose(C2inv) * F.get_matrix() * C1inv);
+  return FMatrix(C2inv.transpose() * F.get_matrix() * C1inv);
 }
 
 //: Condition a fundamental matrix.
@@ -352,7 +353,7 @@ FMatrix HomgMetric::image_to_homg_F(const FMatrix& F, const HomgMetric& c1, cons
 
   vnl_double_3x3 C1 = c1.get_C();
   vnl_double_3x3 C2 = c2.get_C();
-  return FMatrix(vnl_transpose(C2) * F.get_matrix() * C1);
+  return FMatrix(C2.transpose() * F.get_matrix() * C1);
 }
 
 //: Decondition a planar homography.

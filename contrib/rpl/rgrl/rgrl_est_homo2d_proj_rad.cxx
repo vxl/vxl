@@ -89,10 +89,10 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   }
 
   return new rgrl_trans_homo2d_proj_rad( radk,
-                                         init_H,
-                                         to_camera_centre_,
+                                         init_H.as_ref(),
+                                         to_camera_centre_.as_ref(),
                                          covar,
-                                         from_centre, to_centre );
+                                         from_centre.as_ref(), to_centre.as_ref() );
 }
 
 

@@ -19,14 +19,14 @@ rgrl_est_similarity2d( unsigned int dimension )
   assert (dimension == 2);
   // Derive the parameter_dof from the dimension
   //
-  unsigned int param_dof = 2*dimension; //It is always for 2D 
+  unsigned int param_dof = 2*dimension; //It is always for 2D
 
   // Pass the two variable to the parent class, where they're stored
   //
   rgrl_estimator::set_param_dof( param_dof );
 }
 
-rgrl_transformation_sptr 
+rgrl_transformation_sptr
 rgrl_est_similarity2d::
 estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
           rgrl_transformation const& /*cur_transform*/ ) const
@@ -73,7 +73,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   vnl_vector_fixed<double, 2> from_pt;
   vnl_vector_fixed<double, 2> to_pt;
   vnl_vector_fixed<double, 4> DtBq;
-  vnl_matrix_fixed<double, 2, 4> D; // holds [px -py 1 0; py px 0 1] 
+  vnl_matrix_fixed<double, 2, 4> D; // holds [px -py 1 0; py px 0 1]
   vnl_matrix_fixed<double, 4, 2> Dt; // holds [px -py 1 0; py px 0 1]^T
   vnl_matrix_fixed<double, 4, 2> DtB;      // holds product of D^T * B
   double sum_wgt = 0.0;
@@ -96,10 +96,10 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   }
   // if the weight is too small or zero,
   // that means there is no good match
-  if( sum_wgt < 1e-13 ) {
+  if ( sum_wgt < 1e-13 ) {
     return 0;
   }
-  
+
   from_centre /= sum_wgt;
   to_centre /= sum_wgt;
 
@@ -128,7 +128,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
         // transpose D explicitly for efficiency
         Dt(0,0) = from_pt[0]; Dt(1,0) = -from_pt[1]; Dt(2,0) = 1;
         Dt(0,1) = from_pt[1]; Dt(1,1) =  from_pt[0]; Dt(3,1) = 1;
-        
+
         DtB = Dt * B;
         XtWX += (DtB * D) * wgt;
 
@@ -146,7 +146,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   double factor0 = vnl_math_max(XtWX(2,2),XtWX(3,3));
   double factor1 = vnl_math_max(XtWX(1,1),XtWX(0,0));
   double scale = vcl_sqrt( (factor1 > 0 && factor0 > 0) ? factor1 / factor0 : 1 );   // neither should be 0
- 
+
   vnl_vector_fixed<double, 4> s;
   s(2) = s(3) = scale; s(0) = s(1) = 1;
   for ( int i=0; i<4; i++ ) {
@@ -159,7 +159,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   // ----------------------------
   // Compute the solution
 
-  vnl_svd<double> svd( XtWX );
+  vnl_svd<double> svd( XtWX.as_ref() );
 
   // Due to floating point inaccuracies, some zero singular values may
   // look non-zero, so we correct for that.
@@ -200,7 +200,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   A(0,1) =  -XtWy[1];
   A(1,0) = -A(0,1);
 
-  return new rgrl_trans_similarity( A, trans, covar, from_centre, to_centre );
+  return new rgrl_trans_similarity( A, trans, covar.as_ref(), from_centre.as_ref(), to_centre.as_ref() );
 }
 
 
