@@ -415,7 +415,7 @@ vpgl_bundle_adj_lsqr::create_param_vector(const vcl_vector<vpgl_perspective_came
     const vgl_rotation_3d<double>& R = cam.get_rotation();
 
     // compute the Rodrigues vector from the rotation
-    vnl_vector<double> w = R.as_rodrigues();
+    vnl_vector_fixed<double,3> w = R.as_rodrigues();
 
     double* ai = a.data_block() + i*6;
     ai[0]=w[0];   ai[1]=w[1];   ai[2]=w[2];
