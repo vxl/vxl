@@ -22,7 +22,7 @@
 // \endverbatim
 //
 
-#include <vnl/vnl_matrix.h>
+#include <vnl/vnl_double_3x3.h>
 #include <mvl/HomgPoint2D.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <mvl/FMatrix.h>
@@ -32,7 +32,7 @@ class FMatrixPlanar : public FMatrix
  public:
   FMatrixPlanar();
   FMatrixPlanar(const double* f_matrix);
-  FMatrixPlanar(const vnl_matrix<double>& f_matrix);
+  FMatrixPlanar(const vnl_double_3x3& f_matrix);
   ~FMatrixPlanar();
 
   // Computations-----------------------------------------------------------
@@ -52,7 +52,7 @@ class FMatrixPlanar : public FMatrix
   // Data Access------------------------------------------------------------
 
   bool set (const double* f_matrix );
-  bool set (const vnl_matrix<double>& f_matrix );
+  bool set (const vnl_double_3x3& f_matrix );
   //: Returns the rank2 flag which is always true for FMatrixPlanar.
   inline bool get_rank2_flag (void) const { return true; }
   //: Null function since planar FMatrix has already rank 2.

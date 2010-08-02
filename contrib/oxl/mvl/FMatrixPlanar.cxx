@@ -10,7 +10,6 @@
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vcl_cmath.h>
-#include <vnl/vnl_matrix.h>
 #include <vnl/vnl_double_3.h>
 
 #include <vnl/algo/vnl_svd.h>
@@ -42,7 +41,7 @@ FMatrixPlanar::FMatrixPlanar(const double* f_matrix)
 //
 //: Constructor.
 
-FMatrixPlanar::FMatrixPlanar(const vnl_matrix<double>& f_matrix)
+FMatrixPlanar::FMatrixPlanar(const vnl_double_3x3& f_matrix)
 {
   rank2_flag_ = true;
   set(f_matrix.data_block());
@@ -62,25 +61,25 @@ FMatrixPlanar::~FMatrixPlanar()
 //: Set the fundamental matrix using the two-dimensional array f_matrix.
 // Only returns true if f_matrix contained a planar matrix, not an
 // approximation to one. Otherwise returns false and the matrix is not set.
-// Patch on FMatrixSkew::set (const vnl_matrix<double>& f_matrix ).
+// Patch on FMatrixSkew::set (const vnl_double_3x3& f_matrix ).
 
 bool FMatrixPlanar::set (const double* f_matrix )
 {
-  vnl_matrix<double> temp(f_matrix,3,3);
+  vnl_double_3x3 temp(f_matrix);
   return set(temp);
 }
 
 
 //--------------------------------------------------------------
 //
-//: Set the fundamental matrix using the vnl_matrix<double> f_matrix.
+//: Set the fundamental matrix using the vnl_double_3x3 f_matrix.
 // Only returns true if f_matrix contained a planar matrix, not an
 // approximation to one. The test is against a Rank 2 constraint for
 // both ${\tt F}$ and the symmetric part ({\tt F}+{\tt F}^\top).
 // Otherwise returns false and the matrix is not set.
 
 bool
-FMatrixPlanar::set (const vnl_matrix<double>& f_matrix )
+FMatrixPlanar::set (vnl_double_3x3 const& f_matrix )
 {
   int row_index, col_index;
 
@@ -90,7 +89,7 @@ FMatrixPlanar::set (const vnl_matrix<double>& f_matrix )
   // test F and F+F' are Rank 2
   // HACK: has been altered to have some tolerances
   bool planar = true;
-  vnl_svd<double> svd(f_matrix,1e-8);
+  vnl_svd<double> svd(f_matrix.as_ref(),1e-8);
   if (svd.rank()!=2)
   {
     planar = false;
@@ -99,7 +98,7 @@ FMatrixPlanar::set (const vnl_matrix<double>& f_matrix )
   }
   else
   {
-    vnl_svd<double> svd(f_matrix + f_matrix.transpose(),1e-8);
+    vnl_svd<double> svd((f_matrix + f_matrix.transpose()).as_ref(),1e-8);
     if (svd.rank()!=2)
     {
       planar = false;
@@ -211,9 +210,9 @@ void FMatrixPlanar::init(const FMatrix& F)
                      1,0,-e2.x()/e2.w(),
                      -e2.y()/e2.w(),e2.x()/e2.w(),0};
 
-  vnl_matrix<double> mat1(3,3,9,list1),mat2(3,3,9,list2),mat3(3,3,9,list3);
+  vnl_double_3x3 mat1(list1),mat2(list2),mat3(list3);
 
-  vnl_matrix<double> fmat = mat1*mat2*mat3;
+  vnl_double_3x3 fmat = mat1*mat2*mat3;
 
   fmat /= fmat.fro_norm();
 

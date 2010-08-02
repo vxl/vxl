@@ -16,7 +16,7 @@
 #include <vnl/vnl_transpose.h>
 #include <vnl/vnl_matlab_print.h>
 #include <vnl/algo/vnl_svd.h>
-#include <vnl/algo/vnl_qr.h>
+#include <vnl/algo/vnl_determinant.h>
 #include <vgl/vgl_homg_plane_3d.h>
 #include <vgl/vgl_point_3d.h>
 
@@ -164,13 +164,13 @@ HomgLineSeg2D PMatrix::project (const HomgLineSeg3D& L) const
 // Uses svd().
 vgl_homg_point_3d<double> PMatrix::backproject_pseudoinverse (const vgl_homg_point_2d<double>& x) const
 {
-  vnl_double_4 p = svd()->solve(vnl_double_3(x.x(),x.y(),x.w()));
+  vnl_double_4 p = svd()->solve(vnl_double_3(x.x(),x.y(),x.w()).as_ref());
   return vgl_homg_point_3d<double>(p[0],p[1],p[2],p[3]);
 }
 
 HomgPoint3D PMatrix::backproject_pseudoinverse (const HomgPoint2D& x) const
 {
-  return svd()->solve(x.get_vector());
+  return svd()->solve(x.get_vector().as_ref());
 }
 
 //-----------------------------------------------------------------------------
@@ -197,7 +197,7 @@ vgl_homg_plane_3d<double> PMatrix::backproject (const vgl_homg_line_2d<double>& 
 
 HomgPlane3D PMatrix::backproject (const HomgLine2D& l) const
 {
-  return HomgPlane3D(vnl_transpose(p_matrix_) * l.get_vector());
+  return HomgPlane3D(p_matrix_.transpose() * l.get_vector());
 }
 
 //-----------------------------------------------------------------------------
@@ -280,7 +280,7 @@ vnl_svd<double>* PMatrix::svd() const
 {
   if (svd_ == 0) {
     // Need to make svd_ volatile for SGI g++ 2.7.2 optimizer bug.
-    svd_ = new vnl_svd<double>(p_matrix_); // mutable const
+    svd_ = new vnl_svd<double>(p_matrix_.as_ref()); // mutable const
   }
   return svd_;
 }
@@ -341,8 +341,8 @@ HMatrix3D PMatrix::get_canonical_H() const
 //Hinverse = [inv(M1) t1; 0 0 0 1];
 //
   PMatrixDecompAa p(*this);
-  vnl_svd<double> svd(p.A);
-  return HMatrix3D(svd.inverse(), -svd.solve(p.a));
+  vnl_svd<double> svd(p.A.as_ref());
+  return HMatrix3D(svd.inverse(), -svd.solve(p.a.as_ref()));
 }
 
 //: Return true iff P is [I 0].
@@ -467,9 +467,9 @@ PMatrix::get_rows (vnl_vector<double>* a, vnl_vector<double>* b, vnl_vector<doub
 //
 //: Return the rows of P = [a b c]'.
 void
-PMatrix::get_rows(vnl_vector_fixed<double,4>* a,
-                  vnl_vector_fixed<double,4>* b,
-                  vnl_vector_fixed<double,4>* c) const
+PMatrix::get_rows(vnl_double_4* a,
+                  vnl_double_4* b,
+                  vnl_double_4* c) const
 {
   a->put(0, p_matrix_(0, 0));
   a->put(1, p_matrix_(0, 1));
@@ -540,7 +540,7 @@ PMatrix::set (vnl_double_3x4 const& p_matrix)
 //
 //: Set from 3x3 matrix and 3x1 column vector of P = [A a].
 void
-PMatrix::set (const vnl_matrix<double>& A, const vnl_vector<double>& a)
+PMatrix::set (vnl_double_3x3 const& A, vnl_double_3 const& a)
 {
   p_matrix_(0,0) = A(0,0);
   p_matrix_(1,0) = A(1,0);
@@ -564,7 +564,7 @@ void
 PMatrix::fix_cheirality()
 {
   PMatrixDecompAa p(*this);
-  double det = vnl_qr<double>(p.A).determinant();
+  double det = vnl_determinant(p.A);
 
   double scale = 1;
 #if 0  // Used to scale by 1/det, but it's a bad idea if det is small

@@ -31,6 +31,7 @@
 #include <vnl/vnl_double_3x4.h>
 #include <vnl/vnl_double_4x4.h>
 #include <vnl/vnl_double_3.h>
+#include <vnl/vnl_double_4.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_homg_line_2d.h>
@@ -120,10 +121,10 @@ class PMatrix : public vbl_ref_count
 
   void get(vnl_matrix<double>* A, vnl_vector<double>* a) const;
   void get(vnl_double_3x3* A, vnl_double_3* a) const;
-  void set(const vnl_matrix<double>& A, const vnl_vector<double>& a);
+  void set(vnl_double_3x3 const& A, vnl_double_3 const& a);
 
   void get_rows(vnl_vector<double>*, vnl_vector<double>*, vnl_vector<double>*) const;
-  void get_rows(vnl_vector_fixed<double, 4>*, vnl_vector_fixed<double, 4>*, vnl_vector_fixed<double, 4>*) const;
+  void get_rows(vnl_double_4*, vnl_double_4*, vnl_double_4*) const;
   void set_rows(const vnl_vector<double>&, const vnl_vector<double>&, const vnl_vector<double>&);
 
   double get(unsigned int row_index, unsigned int col_index) const;

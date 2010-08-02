@@ -11,6 +11,7 @@
 // A class to hold a homogeneous 4-vector for a 3D plane.
 
 #include <mvl/Homg3D.h>
+#include <vnl/vnl_double_3.h>
 #include <vcl_iosfwd.h>
 
 class HomgPoint3D;
@@ -22,8 +23,8 @@ class HomgPlane3D : public Homg3D
 
   HomgPlane3D ();
   HomgPlane3D (double x, double y, double z, double w);
-  HomgPlane3D (const vnl_vector<double>& n, double d);
-  HomgPlane3D (const vnl_vector<double>& v): Homg3D(v) {}
+  HomgPlane3D (const vnl_double_3& n, double d);
+  HomgPlane3D (const vnl_double_4& v): Homg3D(v) {}
   ~HomgPlane3D ();
 
   // Utility Methods-----------------------------------------------------------

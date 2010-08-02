@@ -41,7 +41,7 @@
 
 struct OuterProduct3x3 : public vnl_double_3x3
 {
-  OuterProduct3x3(const vnl_vector<double>& a, const vnl_vector<double>& b)
+  OuterProduct3x3(vnl_double_3 const& a, vnl_double_3 const& b)
   {
     for (int i = 0; i < 3; ++i)
       for (int j = 0; j < 3; ++j)
@@ -1896,15 +1896,15 @@ bool TriTensor::compute_epipoles() const
   vnl_double_3x3 T2 = dot1(vnl_double_3(0,1,0).as_ref());
   vnl_double_3x3 T3 = dot1(vnl_double_3(0,0,1).as_ref());
 
-  vnl_svd<double> svd1(T1);
+  vnl_svd<double> svd1(T1.as_ref());
   vnl_double_3 u1 = svd1.nullvector();
   vnl_double_3 v1 = svd1.left_nullvector();
 
-  vnl_svd<double> svd2(T2);
+  vnl_svd<double> svd2(T2.as_ref());
   vnl_double_3 u2 = svd2.nullvector();
   vnl_double_3 v2 = svd2.left_nullvector();
 
-  vnl_svd<double> svd3(T3);
+  vnl_svd<double> svd3(T3.as_ref());
   vnl_double_3 u3 = svd3.nullvector();
   vnl_double_3 v3 = svd3.left_nullvector();
 
@@ -1913,7 +1913,7 @@ bool TriTensor::compute_epipoles() const
   V(1,0) = v1[1];   V(1,1) = v2[1];  V(1,2) = v3[1];
   V(2,0) = v1[2];   V(2,1) = v2[2];  V(2,2) = v3[2];
 
-  vnl_svd<double> svdv(V);
+  vnl_svd<double> svdv(V.as_ref());
 
   delete e12_;
   e12_ = new HomgPoint2D(svdv.left_nullvector());
@@ -1923,7 +1923,7 @@ bool TriTensor::compute_epipoles() const
   U(1,0) = u1[1];   U(1,1) = u2[1];  U(1,2) = u3[1];
   U(2,0) = u1[2];   U(2,1) = u2[2];  U(2,2) = u3[2];
 
-  vnl_svd<double> svdu(U);
+  vnl_svd<double> svdu(U.as_ref());
 
   delete e13_;
   e13_ = new HomgPoint2D(svdu.left_nullvector());
@@ -2040,7 +2040,7 @@ void TriTensor::compute_P_matrices(const vnl_double_3& x, double alpha, double b
 
   vnl_double_3x3 B0 = -M * TTe2;
 
-  vnl_double_3x3 DIFF = B0 + TTe2 - OuterProduct3x3(e3, vnl_transpose(TTe2)*e3);
+  vnl_double_3x3 DIFF = B0 + TTe2 - OuterProduct3x3(e3, TTe2.transpose()*e3);
   double diffmag = DIFF.fro_norm();
   if (diffmag > 1e-12) {
     vcl_cerr << "TriTensor::compute_P_matrices: DIFF = " << DIFF << vcl_endl;

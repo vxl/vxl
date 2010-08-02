@@ -31,7 +31,7 @@ HomgPlane3D::HomgPlane3D (double x, double y, double z, double w)
 //--------------------------------------------------------------
 //
 //: Constructor
-HomgPlane3D::HomgPlane3D (const vnl_vector<double>& n, double d)
+HomgPlane3D::HomgPlane3D (const vnl_double_3& n, double d)
   : Homg3D (n[0], n[1], n[2], -d)
 {
 }
