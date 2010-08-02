@@ -82,17 +82,17 @@ bool vgui_projection_inspector::back_project(double const x[3],
   return true;
 }
 
-vnl_vector<double> vgui_projection_inspector::back_project(vnl_vector<double> const &x,
+vnl_vector<double> vgui_projection_inspector::back_project(vnl_double_2 const &x,
                                                            vnl_double_4 const &p) const
 {
-  if (x.size() == 2)
-  {
-    vnl_double_3 x_(x[0],x[1],1.0);
-    vnl_double_4 X_ = back_project(x_,p);
-    return (X_/X_[3]).extract(3,0);
-  }
-  x.assert_size(3);
+  vnl_double_3 x_(x[0],x[1],1.0);
+  vnl_double_4 X_ = back_project(x_,p);
+  return (X_/X_[3]).extract(3,0);
+}
 
+vnl_vector<double> vgui_projection_inspector::back_project(vnl_double_3 const &x,
+                                                           vnl_double_4 const &p) const
+{
   vnl_double_4 X;
   if (!back_project(x.data_block(), p.data_block(), X.data_block()))
     X.fill(0);

@@ -11,6 +11,8 @@
 //   14-Aug-2002 K.Y.McGaul - Converted to Doxygen style comments.
 // \endverbatim
 
+#include <vnl/vnl_double_2.h>
+#include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_4.h>
 #include <vnl/vnl_double_4x4.h>
 #include <vcl_iosfwd.h>
@@ -104,8 +106,12 @@ class vgui_projection_inspector
   vnl_vector<double> back_project(double x,double y,double z,vnl_double_4 const &p) const;
 
   //: Back-projection of a given point onto a given plane p.
-  //  x can be a 2 or 3-vcl_vector. The returned vcl_vector has size 1+x.size().
-  vnl_vector<double> back_project(vnl_vector<double> const &x,vnl_double_4 const &p) const;
+  //  x is a 2-vector (Euclidean coordinates), and the returned 3-vector is also Euclidean.
+  vnl_vector<double> back_project(vnl_double_2 const &x,vnl_double_4 const &p) const;
+
+  //: Back-projection of a given point onto a given plane p.
+  //  x is a 3-vector (projective coordinates), and the returned 4-vector is also projective.
+  vnl_vector<double> back_project(vnl_double_3 const &x,vnl_double_4 const &p) const;
 
  private:
   int vp[4]; // viewport
