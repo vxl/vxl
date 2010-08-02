@@ -1463,10 +1463,10 @@ static  vnl_random random;
 
   void test_homography2d()
   {
-    vnl_matrix<double> H(3,3,0.0), est_H(3,3,0.0);
+    vnl_double_3x3 H(0.0), est_H(0.0);
     vnl_matrix<double> cofact;
     vcl_vector <int> indices;
-    vcl_vector <vnl_vector<double> > p,q;
+    vcl_vector <vnl_double_3 > p,q;
     vcl_vector <vnl_double_2 > d2_p,d2_q;
     vnl_vector<double> param(9,0.0);
     vnl_vector<double> true_param(9,0.0), est_param(9,0.0);
@@ -1474,56 +1474,56 @@ static  vnl_random random;
     const double tol = 1e-8;
     vnl_double_3 t(0,0,1);
 
-    p.push_back(t.as_ref());
+    p.push_back(t);
 
     //first 4 points are collinear.
     t(0) = 2; t(1) = 5;
-    p.push_back(t.as_ref());
+    p.push_back(t);
 
     t(0) = 4; t(1) = 9;
-    p.push_back(t.as_ref());
+    p.push_back(t);
 
     t(0) = -1; t(1) = -1;
-    p.push_back(t.as_ref());
+    p.push_back(t);
 
     t(0) = -3; t(1) = -5;
-    p.push_back(t.as_ref());
+    p.push_back(t);
 
     t(0) = -9; t(1) = .5;
-    p.push_back(t.as_ref());
+    p.push_back(t);
 
     t(0) = 5; t(1) = -5.678;
-    p.push_back(t.as_ref());
+    p.push_back(t);
 
     t(0) = 5/3; t(1) = -5.678/3;
-    p.push_back(t.as_ref());
+    p.push_back(t);
 
     t(0) = 0.4/0.1; t(1) = 0.894/0.1; ;
-    p.push_back(t.as_ref());
+    p.push_back(t);
 
     t(0) = 5; t(1) = -5.678; t(2) = 3;
-    p.push_back(t.as_ref());
+    p.push_back(t);
 
     t(0) = 0.4; t(1) = 0.894; t(2) = 0.1;
-    p.push_back(t.as_ref());
+    p.push_back(t);
 
     t(0) = 500; t(1) = -100; t(2) = 100;
-    p.push_back(t.as_ref());
+    p.push_back(t);
 
     t(0) = -20; t(1) = -20; t(2) = 1;
-    p.push_back(t.as_ref());
+    p.push_back(t);
 
     t(0) = 4; t(1) = 0.02; t(2) = 1.5;
-    p.push_back(t.as_ref());
+    p.push_back(t);
 
     t(0) = 2.345; t(1) = -10; t(2) = 1;
-    p.push_back(t.as_ref());
+    p.push_back(t);
 
     t(0) = 8.9e-4; t(1) = -3.1e-4; t(2) = -1e-4;
-    p.push_back(t.as_ref());
+    p.push_back(t);
 
     t(0) = -10; t(1) = 40; t(2) = 1;
-    p.push_back(t.as_ref());
+    p.push_back(t);
 
     unsigned int n = p.size();
     q.resize(n);
@@ -1535,8 +1535,8 @@ static  vnl_random random;
     H(1,2) = 2;
     H(2,2) = 1;
     H(0,0) = 2*vcl_cos(pi/3);
-    H(1,0) = -H(0,1);
     H(0,1) = -5; H(1,1) = -1.5;
+    H(1,0) = -H(0,1);
     H(2,0) = 0.5; H(2,1) = -2;
 
     for (int i=0;i<3;i++)
@@ -1557,8 +1557,8 @@ static  vnl_random random;
       rgrl_match_set_sptr ms = new rgrl_match_set( rgrl_feature_point::type_id());
 
       for (unsigned i=0; i < n; ++i) {
-        ms->add_feature_and_match( new rgrl_feature_point(d2_p[i]), 0,
-                                   new rgrl_feature_point(d2_q[i]) );
+        ms->add_feature_and_match( new rgrl_feature_point(d2_p[i].as_ref()), 0,
+                                   new rgrl_feature_point(d2_q[i].as_ref()) );
       }
       rgrl_estimator_sptr estimator = new rgrl_est_homography2d();
       rgrl_transformation_sptr dummy_trans = new rgrl_trans_homography2d();
@@ -1580,20 +1580,20 @@ static  vnl_random random;
       vnl_vector<double> to_delta;
       vnl_vector<double> from(2,5);
       vnl_vector<double> from_next_est;
-      homo_est->inv_map( d2_q[3], initialize_next, to_delta, from, from_next_est);
+      homo_est->inv_map( d2_q[3].as_ref(), initialize_next, to_delta, from, from_next_est);
       vcl_cout<<"from = "<<from<<vcl_endl;
       TEST("Test incremental inverse mapping", (from-d2_p[3]).two_norm() <0.1, true);
-      homo_est->inv_map( d2_q[3], from);
+      homo_est->inv_map( d2_q[3].as_ref(), from);
       TEST("Test inverse mapping", (from-d2_p[3]).two_norm() <tol, true);
     }
   }
 
   void test_homography2d_lm(rgrl_estimator_sptr estimator)
   {
-    vnl_matrix<double> H(3,3,0.0), est_H(3,3,0.0);
+    vnl_double_3x3 H(0.0), est_H(0.0);
     vnl_matrix<double> cofact;
     vcl_vector <int> indices;
-    vcl_vector <vnl_vector<double> > p,q;
+    vcl_vector <vnl_double_3 > p,q;
     vcl_vector <vnl_double_2 > d2_p,d2_q;
     vnl_vector<double> param(9,0.0);
     vnl_vector<double> true_param(9,0.0), est_param(9,0.0);
@@ -1601,56 +1601,56 @@ static  vnl_random random;
     const double tol = 1e-8;
     vnl_double_3 t(0,0,1);
 
-    p.push_back(t.as_ref());
+    p.push_back(t);
 
     //first 4 points are collinear.
     t(0) = 2; t(1) = 5;
-    p.push_back(t.as_ref());
+    p.push_back(t);
 
     t(0) = 4; t(1) = 9;
-    p.push_back(t.as_ref());
+    p.push_back(t);
 
     t(0) = -1; t(1) = -1;
-    p.push_back(t.as_ref());
+    p.push_back(t);
 
     t(0) = -3; t(1) = -5;
-    p.push_back(t.as_ref());
+    p.push_back(t);
 
     t(0) = -9; t(1) = .5;
-    p.push_back(t.as_ref());
+    p.push_back(t);
 
     t(0) = 5; t(1) = -5.678;
-    p.push_back(t.as_ref());
+    p.push_back(t);
 
     t(0) = 5/3; t(1) = -5.678/3;
-    p.push_back(t.as_ref());
+    p.push_back(t);
 
     t(0) = 0.4/0.1; t(1) = 0.894/0.1; ;
-    p.push_back(t.as_ref());
+    p.push_back(t);
 
     t(0) = 5; t(1) = -5.678; t(2) = 3;
-    p.push_back(t.as_ref());
+    p.push_back(t);
 
     t(0) = 0.4; t(1) = 0.894; t(2) = 0.1;
-    p.push_back(t.as_ref());
+    p.push_back(t);
 
     t(0) = 500; t(1) = -100; t(2) = 100;
-    p.push_back(t.as_ref());
+    p.push_back(t);
 
     t(0) = -20; t(1) = -20; t(2) = 1;
-    p.push_back(t.as_ref());
+    p.push_back(t);
 
     t(0) = 4; t(1) = 0.02; t(2) = 1.5;
-    p.push_back(t.as_ref());
+    p.push_back(t);
 
     t(0) = 2.345; t(1) = -10; t(2) = 1;
-    p.push_back(t.as_ref());
+    p.push_back(t);
 
     t(0) = 8.9e-4; t(1) = -3.1e-4; t(2) = -1e-4;
-    p.push_back(t.as_ref());
+    p.push_back(t);
 
     t(0) = -10; t(1) = 40; t(2) = 1;
-    p.push_back(t.as_ref());
+    p.push_back(t);
 
     unsigned int n = p.size();
     q.resize(n);
@@ -1662,8 +1662,8 @@ static  vnl_random random;
     H(1,2) = 2;
     H(2,2) = 1;
     H(0,0) = 2*vcl_cos(pi/3);
-    H(1,0) = -H(0,1);
     H(0,1) = -5; H(1,1) = -1.5;
+    H(1,0) = -H(0,1);
     H(2,0) = 0.5; H(2,1) = -2;
     H /= H.array_two_norm();
 
@@ -1681,14 +1681,14 @@ static  vnl_random random;
       rgrl_match_set_sptr ms = new rgrl_match_set( rgrl_feature_point::type_id());
 
       for (unsigned i=0; i < n; ++i) {
-        ms->add_feature_and_match( new rgrl_feature_point(d2_p[i]), 0,
-                                   new rgrl_feature_point(d2_q[i]) );
+        ms->add_feature_and_match( new rgrl_feature_point(d2_p[i].as_ref()), 0,
+                                   new rgrl_feature_point(d2_q[i].as_ref()) );
       }
 
       {
-        vnl_matrix<double> perturbed_H( H );
+        vnl_double_3x3 perturbed_H( H );
         perturbed_H( 0, 0 ) += 1;
-        rgrl_transformation_sptr init_trans = new rgrl_trans_homography2d( perturbed_H );
+        rgrl_transformation_sptr init_trans = new rgrl_trans_homography2d( perturbed_H.as_ref() );
         rgrl_transformation_sptr est = estimator->estimate( ms, *init_trans);
         rgrl_trans_homography2d* homo_est = rgrl_cast<rgrl_trans_homography2d*>(est.as_pointer());
         est_H = homo_est->H();
@@ -1700,17 +1700,17 @@ static  vnl_random random;
 
         // test on transfer error
         vnl_vector<double> pt(2);
-        vnl_matrix<double> trans_error = est->transfer_error_covar( inhomo(p[2]) );
+        vnl_double_3x3 trans_error = est->transfer_error_covar( inhomo(p[2].as_ref()) );
         vcl_cout << "transfer error at this point:" << trans_error << vcl_endl;
       }
       // error STD = 0.5
       {
-        vnl_matrix<double> perturbed_H( H );
+        vnl_double_3x3 perturbed_H( H );
         const double err_std = 0.5;
         for ( unsigned i=0; i<3; ++i )
           for ( unsigned j=0; j<3; ++j )
             perturbed_H( 0, 0 ) += random.drand32()*err_std;
-        rgrl_transformation_sptr init_trans = new rgrl_trans_homography2d( perturbed_H );
+        rgrl_transformation_sptr init_trans = new rgrl_trans_homography2d( perturbed_H.as_ref() );
         rgrl_transformation_sptr est = estimator->estimate( ms, *init_trans);
         rgrl_trans_homography2d* homo_est = rgrl_cast<rgrl_trans_homography2d*>(est.as_pointer());
         est_H = homo_est->H();
@@ -1723,12 +1723,12 @@ static  vnl_random random;
       }
       // error STD = 1
       {
-        vnl_matrix<double> perturbed_H( H );
+        vnl_double_3x3 perturbed_H( H );
         const double err_std = 1;
         for ( unsigned i=0; i<3; ++i )
           for ( unsigned j=0; j<3; ++j )
             perturbed_H( 0, 0 ) += random.drand32()*err_std;
-        rgrl_transformation_sptr init_trans = new rgrl_trans_homography2d( perturbed_H );
+        rgrl_transformation_sptr init_trans = new rgrl_trans_homography2d( perturbed_H.as_ref() );
         rgrl_transformation_sptr est = estimator->estimate( ms, *init_trans);
         rgrl_trans_homography2d* homo_est = rgrl_cast<rgrl_trans_homography2d*>(est.as_pointer());
         est_H = homo_est->H();
@@ -1741,12 +1741,12 @@ static  vnl_random random;
       }
       // error STD = 50
       {
-        vnl_matrix<double> perturbed_H( H );
+        vnl_double_3x3 perturbed_H( H );
         const double err_std = 50;
         for ( unsigned i=0; i<3; ++i )
           for ( unsigned j=0; j<3; ++j )
             perturbed_H( 0, 0 ) += random.drand32()*err_std;
-        rgrl_transformation_sptr init_trans = new rgrl_trans_homography2d( perturbed_H );
+        rgrl_transformation_sptr init_trans = new rgrl_trans_homography2d( perturbed_H.as_ref() );
         rgrl_transformation_sptr est = estimator->estimate( ms, *init_trans);
         rgrl_trans_homography2d* homo_est = rgrl_cast<rgrl_trans_homography2d*>(est.as_pointer());
         est_H = homo_est->H();
@@ -1762,12 +1762,12 @@ static  vnl_random random;
 
   inline
   void
-  inhomo_map( vnl_vector<double>& mapped, vnl_matrix<double> const& H, vnl_vector<double> const& p )
+  inhomo_map( vnl_double_2& mapped, vnl_double_3x3 const& H, vnl_double_2 const& p )
   {
-    static vnl_vector<double> homo(3, 1.0), homo_mapped(3);
+    static vnl_double_3 homo(0.0,0.0,1.0);
     homo[0]=p[0];
     homo[1]=p[1];
-    homo_mapped = H*homo;
+    vnl_double_3 homo_mapped = H*homo;
 
     // division
     mapped[0] = homo_mapped[0]/homo_mapped[2];
@@ -1777,7 +1777,8 @@ static  vnl_random random;
   void
   test_homography2d_points_on_circle(rgrl_estimator_sptr estimator)
   {
-    vnl_matrix<double> H(3,3, vnl_matrix_identity);
+    vnl_double_3x3 H;
+    H.set_identity();
     const double tol = 1e-6;
 
     // Test projective transform
@@ -1785,17 +1786,17 @@ static  vnl_random random;
     H(1,2) = 2;
     H(2,2) = 1;
     H(0,0) = 2*vcl_cos(vnl_math::pi/3);
-    //H(1,0) = -H(0,1);
     H(0,1) = -5; H(1,1) = -1.5;
+    H(1,0) = -H(0,1);
     H(2,0) = 0.5; H(2,1) = -3;
     H /= H.array_two_norm();
 
     vcl_cout<<"Original H =\n"<< H <<vcl_endl;
 
-    vcl_vector< vnl_vector<double> > p, q;
+    vcl_vector< vnl_double_2 > p, q;
 
 
-    vnl_vector<double> pt(2), mapped(2);
+    vnl_double_2 pt, mapped;
     const double c = 10;
     bool xform_is_good=true;
 
@@ -1821,18 +1822,18 @@ static  vnl_random random;
       rgrl_match_set_sptr ms = new rgrl_match_set( rgrl_feature_point::type_id());
 
       for (unsigned int i=0; i < num; ++i) {
-        ms->add_feature_and_match( new rgrl_feature_point(p[i]), 0,
-                                   new rgrl_feature_point(q[i]) );
+        ms->add_feature_and_match( new rgrl_feature_point(p[i].as_ref()), 0,
+                                   new rgrl_feature_point(q[i].as_ref()) );
       }
 
       // error STD = 1
       {
-        vnl_matrix<double> perturbed_H( H ), est_H;
+        vnl_double_3x3 perturbed_H( H ), est_H;
         const double err_std = 1e-3;
         for ( unsigned i=0; i<3; ++i )
           for ( unsigned j=0; j<3; ++j )
             perturbed_H( i, j ) += random.drand32()*err_std;
-        rgrl_transformation_sptr init_trans = new rgrl_trans_homography2d( perturbed_H );
+        rgrl_transformation_sptr init_trans = new rgrl_trans_homography2d( perturbed_H.as_ref() );
 
         //estimate
         rgrl_transformation_sptr est = estimator->estimate( ms, *init_trans);
@@ -1854,7 +1855,6 @@ static  vnl_random random;
                                    vnl_double_2 const& camera_centre)
   {
     vnl_double_3x3 H;
-    H.set_identity();
     const double tol = 1e-6;
 
     // Test projective transform
@@ -1862,8 +1862,8 @@ static  vnl_random random;
     H(1,2) = 2;
     H(2,2) = 1;
     H(0,0) = 2*vcl_cos(vnl_math::pi/3);
-    //H(1,0) = -H(0,1);
     H(0,1) = -5; H(1,1) = -1.5;
+    H(1,0) = -H(0,1);
     H(2,0) = 0.5; H(2,1) = -3;
      H /= H.array_two_norm();
 
@@ -1874,7 +1874,7 @@ static  vnl_random random;
             << " at camera centre " << camera_centre
             <<vcl_endl;
 
-    vcl_vector< vnl_vector<double> > p, q;
+    vcl_vector< vnl_double_2 > p, q;
 
 
     vnl_double_2 pt, mapped, centre_mapped;
@@ -1895,7 +1895,7 @@ static  vnl_random random;
         pt[1] = c*vcl_sin(angle);
         p.push_back(pt);
         // Map point
-        inhomo_map( mapped.as_ref().non_const(), H.as_ref(), pt.as_ref() );
+        inhomo_map( mapped, H, pt );
         centre_mapped = mapped - camera_centre;
         mapped += radk[0]*centre_mapped.squared_magnitude()*centre_mapped;
         q.push_back(mapped);
@@ -1905,18 +1905,18 @@ static  vnl_random random;
       rgrl_match_set_sptr ms = new rgrl_match_set( rgrl_feature_point::type_id());
 
       for (unsigned int i=0; i < num; ++i) {
-        ms->add_feature_and_match( new rgrl_feature_point(p[i]), 0,
-                                   new rgrl_feature_point(q[i]) );
+        ms->add_feature_and_match( new rgrl_feature_point(p[i].as_ref()), 0,
+                                   new rgrl_feature_point(q[i].as_ref()) );
       }
 
       // error STD = 1
       {
-        vnl_matrix<double> perturbed_H( H ), est_H;
+        vnl_double_3x3 perturbed_H( H ), est_H;
         const double err_std = 2e-3;
         for ( unsigned i=0; i<3; ++i )
           for ( unsigned j=0; j<3; ++j )
             perturbed_H( i, j ) += random.drand32()*err_std;
-        rgrl_transformation_sptr init_trans = new rgrl_trans_homography2d( perturbed_H );
+        rgrl_transformation_sptr init_trans = new rgrl_trans_homography2d( perturbed_H.as_ref() );
 
         //estimate
         rgrl_transformation_sptr est = estimator->estimate( ms, *init_trans);
@@ -1949,25 +1949,18 @@ static  vnl_random random;
                                               double tol_xform,
                                               double tol_trans_error )
   {
-    vnl_matrix<double> H(3,3, vnl_matrix_identity);
-
+    vnl_double_3x3 H;
     // Test projective transform
-    //H(0,2) = -4;
-    //H(1,2) = 2;
-    //H(2,2) = 1;
-    H(0,0) = 1.5; //2*vcl_cos(vnl_math::pi/3);
-    //H(1,0) = -H(0,1);
-    //H(0,1) = -5;
+    H.set_identity();
+    H(0,0) = 1.5;
     H(1,1) = 1.5;
-    //H(2,0) = 0.5; H(2,1) = -2;
     H /= H.array_two_norm();
 
     vcl_cout<<"Original H =\n"<< H <<vcl_endl;
 
-    vcl_vector< vnl_vector<double> > p, q;
+    vcl_vector< vnl_double_2 > p, q;
 
-
-    vnl_vector<double> pt(2), mapped(2);
+    vnl_double_2 pt, mapped;
     const double c = 20;
     bool cov_is_good = true;
     bool homography_is_good = true;
@@ -1999,19 +1992,19 @@ static  vnl_random random;
       rgrl_match_set_sptr ms = new rgrl_match_set( rgrl_feature_point::type_id());
 
       for (unsigned int i=0; i < num; ++i) {
-        ms->add_feature_and_match( new rgrl_feature_point(p[i]), 0,
-                                   new rgrl_feature_point(q[i]) );
+        ms->add_feature_and_match( new rgrl_feature_point(p[i].as_ref()), 0,
+                                   new rgrl_feature_point(q[i].as_ref()) );
       }
 
       // error STD = 3
       {
-        vnl_matrix<double> perturbed_H( H ), est_H;
+        vnl_double_3x3 perturbed_H( H ), est_H;
         vnl_matrix<double> iid_cov(2,2,vnl_matrix_identity);
         const double err_std = 2e-3;
         for ( unsigned i=0; i<3; ++i )
           for ( unsigned j=0; j<3; ++j )
             perturbed_H( i, j ) += random.drand32()*err_std;
-        rgrl_transformation_sptr init_trans = new rgrl_trans_homography2d( perturbed_H );
+        rgrl_transformation_sptr init_trans = new rgrl_trans_homography2d( perturbed_H.as_ref() );
 
         // estimate
         rgrl_transformation_sptr est = estimator->estimate( ms, *init_trans);
@@ -2030,7 +2023,7 @@ static  vnl_random random;
         vnl_matrix<double> trans_error;
         double ratio;
 
-        trans_error = est->transfer_error_covar( p[0] );
+        trans_error = est->transfer_error_covar( p[0].as_ref() );
         ratio = trans_error(0,0);  // this constant shall be the same
         vcl_cout << "transfer error(1):\n" << trans_error << vcl_endl;
         if ((ratio*iid_cov-trans_error).array_two_norm() > tol_trans_error) {
@@ -2038,21 +2031,21 @@ static  vnl_random random;
           vcl_cout << "*** correct=\n"<< ratio*iid_cov << vcl_endl;
         }
 
-        trans_error = est->transfer_error_covar( p[num/4] );
+        trans_error = est->transfer_error_covar( p[num/4].as_ref() );
         vcl_cout << "transfer error(1):\n" << trans_error << vcl_endl;
         if ((ratio*iid_cov-trans_error).array_two_norm() > tol_trans_error) {
           cov_is_good = false;
           vcl_cout << "*** correct=\n"<< ratio*iid_cov << vcl_endl;
         }
 
-        trans_error = est->transfer_error_covar( p[num/2] );
+        trans_error = est->transfer_error_covar( p[num/2].as_ref() );
         vcl_cout << "transfer error(1):\n" << trans_error << vcl_endl;
         if ((ratio*iid_cov-trans_error).array_two_norm() > tol_trans_error) {
           cov_is_good = false;
           vcl_cout << "*** correct=\n"<< ratio*iid_cov << vcl_endl;
         }
 
-        trans_error = est->transfer_error_covar( p[num*3/4] );
+        trans_error = est->transfer_error_covar( p[num*3/4].as_ref() );
         vcl_cout << "transfer error(1):\n" << trans_error << vcl_endl;
         if ((ratio*iid_cov-trans_error).array_two_norm() > tol_trans_error) {
           cov_is_good = false;
@@ -2069,17 +2062,17 @@ static  vnl_random random;
 void
 test_rad_dis_homo2d_lm()
 {
-  vnl_matrix<double> H(3, 3, vnl_matrix_identity), initH(H);
+  vnl_double_3x3 H(vnl_matrix_identity), initH(H);
   const double k1_from = -1e-6;
   const double k1_to = 0;
   vnl_vector<double> centre(2,0.0);
-  rgrl_transformation_sptr true_xform = new rgrl_trans_rad_dis_homo2d( H, k1_from, k1_to, centre, centre );
+  rgrl_transformation_sptr true_xform = new rgrl_trans_rad_dis_homo2d( H.as_ref(), k1_from, k1_to, centre, centre );
 
   // add errors
   initH(1,1) = 0.98;
   initH(0,2) = -0.005;
   initH(1,2) = 0.1;
-  rgrl_transformation_sptr init_xform = new rgrl_trans_homography2d( initH );
+  rgrl_transformation_sptr init_xform = new rgrl_trans_homography2d( initH.as_ref() );
 
   rgrl_match_set_sptr ms = new rgrl_match_set( rgrl_feature_point::type_id() );
   vnl_vector<double> pt_loc( 2 );
