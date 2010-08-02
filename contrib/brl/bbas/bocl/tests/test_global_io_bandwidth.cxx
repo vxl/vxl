@@ -1,7 +1,7 @@
 #include <testlib/testlib_test.h>
 #include <testlib/testlib_root_dir.h>
 #include <bocl/bocl_global_memory_bandwidth_manager.h>
-bool test_single_thread_read_bandwidth_image(int len, float & bandwidth)
+bool test_single_thread_read_bandwidth_image(unsigned len, float & bandwidth)
 {
   vcl_string root_dir = testlib_root_dir();
   bocl_global_memory_bandwidth_manager * mgr=bocl_global_memory_bandwidth_manager::instance();
@@ -22,13 +22,13 @@ bool test_single_thread_read_bandwidth_image(int len, float & bandwidth)
     TEST("Run Kernel test_single_thread_read_bandwidth_image", false, true);
     return false;
   }
-  cl_int* result_flag = mgr->result_flag();
+  // cl_int* result_flag = mgr->result_flag(); // unused
   bandwidth=(float)4/* image reades float4*/*(len*4)/mgr->time_taken()/(1024*1024);
 
 
   float sum=0.0;
   cl_float * result_array=mgr->result_array();
-  for (unsigned i=0;i<len;i++)
+  for (unsigned i=0;i<len;++i)
   sum+=result_array[i];
 
   mgr->clean_array();
@@ -42,7 +42,7 @@ bool test_single_thread_read_bandwidth_image(int len, float & bandwidth)
   return false;
 }
 
-bool test_workgroup_coalesced_read_bandwidth_image(int len, float & bandwidth)
+bool test_workgroup_coalesced_read_bandwidth_image(unsigned len, float & bandwidth)
 {
   vcl_string root_dir = testlib_root_dir();
   bocl_global_memory_bandwidth_manager * mgr=bocl_global_memory_bandwidth_manager::instance();
@@ -63,13 +63,13 @@ bool test_workgroup_coalesced_read_bandwidth_image(int len, float & bandwidth)
     TEST("Run Kernel test_workgroup_coalesced_read_bandwidth_image", false, true);
     return false;
   }
-  cl_int* result_flag = mgr->result_flag();
+  // cl_int* result_flag = mgr->result_flag(); // unused
   bandwidth=(float)4/*reads in float4 */*(len*4)/mgr->time_taken()/(1024*1024);
 
 
   float sum=0.0;
   cl_float * result_array=mgr->result_array();
-  for (unsigned i=0;i<len;i++)
+  for (unsigned i=0;i<len;++i)
   sum+=result_array[i];
 
   mgr->clean_array();
@@ -83,7 +83,7 @@ bool test_workgroup_coalesced_read_bandwidth_image(int len, float & bandwidth)
   return false;
 }
 
-bool test_single_thread_read_bandwidth(int len, float & bandwidth)
+bool test_single_thread_read_bandwidth(unsigned len, float & bandwidth)
 {
   vcl_string root_dir = testlib_root_dir();
   bocl_global_memory_bandwidth_manager * mgr=bocl_global_memory_bandwidth_manager::instance();
@@ -102,13 +102,13 @@ bool test_single_thread_read_bandwidth(int len, float & bandwidth)
     TEST("Run Kernel test_single_thread_read_bandwidth", false, true);
     return false;
   }
-  cl_int* result_flag = mgr->result_flag();
+  // cl_int* result_flag = mgr->result_flag(); // unused
   bandwidth=(float)4*(len*4)/mgr->time_taken()/(1024*1024);
 
 
   float sum=0.0;
   cl_float * result_array=mgr->result_array();
-  for (unsigned i=0;i<len;i++)
+  for (unsigned i=0;i<len;++i)
     sum+=result_array[i];
 
   mgr->clean_array();
@@ -122,7 +122,7 @@ bool test_single_thread_read_bandwidth(int len, float & bandwidth)
   return true;
 }
 
-bool test_workgroup_uncoalesced_read_bandwidth(int len, float & bandwidth)
+bool test_workgroup_uncoalesced_read_bandwidth(unsigned len, float & bandwidth)
 {
   vcl_string root_dir = testlib_root_dir();
   bocl_global_memory_bandwidth_manager * mgr=bocl_global_memory_bandwidth_manager::instance();
@@ -141,13 +141,13 @@ bool test_workgroup_uncoalesced_read_bandwidth(int len, float & bandwidth)
     TEST("Run Kernel test_workgroup_uncoalesced_read_bandwidth", false, true);
     return false;
   }
-  cl_int* result_flag = mgr->result_flag();
+  // cl_int* result_flag = mgr->result_flag(); // unused
   bandwidth=(float)4*(len*4)/mgr->time_taken()/(1024*1024);
 
 
   float sum=0.0;
   cl_float * result_array=mgr->result_array();
-  for (unsigned i=0;i<len;i++)
+  for (unsigned i=0;i<len;++i)
     sum+=result_array[i];
 
   mgr->clean_array();
@@ -161,7 +161,7 @@ bool test_workgroup_uncoalesced_read_bandwidth(int len, float & bandwidth)
   return false;
 }
 
-bool test_workgroup_coalesced_read_bandwidth(int len, float & bandwidth)
+bool test_workgroup_coalesced_read_bandwidth(unsigned len, float & bandwidth)
 {
   vcl_string root_dir = testlib_root_dir();
   bocl_global_memory_bandwidth_manager * mgr=bocl_global_memory_bandwidth_manager::instance();
@@ -181,13 +181,13 @@ bool test_workgroup_coalesced_read_bandwidth(int len, float & bandwidth)
     TEST("Run Kernel test_workgroup_coalesced_read_bandwidth", false, true);
     return false;
   }
-  cl_int* result_flag = mgr->result_flag();
+  // cl_int* result_flag = mgr->result_flag(); // unused
   bandwidth=(float)4*(len*4)/mgr->time_taken()/(1024*1024);
 
 
   float sum=0.0;
   cl_float * result_array=mgr->result_array();
-  for (unsigned i=0;i<len;i++)
+  for (unsigned i=0;i<len;++i)
     sum+=result_array[i];
 
   mgr->clean_array();
@@ -201,7 +201,7 @@ bool test_workgroup_coalesced_read_bandwidth(int len, float & bandwidth)
   return false;
 }
 
-bool test_single_thread_read_bandwidth_local_meory(int len, float & bandwidth)
+bool test_single_thread_read_bandwidth_local_meory(unsigned len, float & bandwidth)
 {
   vcl_string root_dir = testlib_root_dir();
   bocl_global_memory_bandwidth_manager * mgr=bocl_global_memory_bandwidth_manager::instance();
@@ -220,13 +220,13 @@ bool test_single_thread_read_bandwidth_local_meory(int len, float & bandwidth)
     TEST("Run Kernel test_single_thread_read_bandwidth_local_meory", false, true);
     return false;
   }
-  cl_int* result_flag = mgr->result_flag();
+  // cl_int* result_flag = mgr->result_flag(); // unused
   bandwidth=(float)4*(len*4)/mgr->time_taken()/(1024*1024);
 
 
   float sum=0.0;
   cl_float * result_array=mgr->result_array();
-  for (unsigned i=0;i<len;i++)
+  for (unsigned i=0;i<len;++i)
     sum+=result_array[i];
 
   mgr->clean_array();
@@ -242,7 +242,7 @@ bool test_single_thread_read_bandwidth_local_meory(int len, float & bandwidth)
 }
 
 
-bool test_workgroup_uncoalesced_read_bandwidth_local_meory(int len, float & bandwidth)
+bool test_workgroup_uncoalesced_read_bandwidth_local_meory(unsigned len, float & bandwidth)
 {
   vcl_string root_dir = testlib_root_dir();
   bocl_global_memory_bandwidth_manager * mgr=bocl_global_memory_bandwidth_manager::instance();
@@ -261,12 +261,12 @@ bool test_workgroup_uncoalesced_read_bandwidth_local_meory(int len, float & band
     TEST("Run Kernel test_workgroup_uncoalesced_read_bandwidth_local_meory", false, true);
     return false;
   }
-  cl_int* result_flag = mgr->result_flag();
+  // cl_int* result_flag = mgr->result_flag(); // unused
   bandwidth=(float) 4*(len*4)/mgr->time_taken()/(1024*1024);
 
   float sum=0.0;
   cl_float * result_array=mgr->result_array();
-  for (unsigned i=0;i<len;i++)
+  for (unsigned i=0;i<len;++i)
     sum+=result_array[i];
 
   mgr->clean_array();
@@ -280,7 +280,7 @@ bool test_workgroup_uncoalesced_read_bandwidth_local_meory(int len, float & band
   return false;
 }
 
-bool test_workgroup_coalesced_read_bandwidth_local_memory(int len, float & bandwidth)
+bool test_workgroup_coalesced_read_bandwidth_local_memory(unsigned len, float & bandwidth)
 {
   vcl_string root_dir = testlib_root_dir();
   bocl_global_memory_bandwidth_manager * mgr=bocl_global_memory_bandwidth_manager::instance();
@@ -299,12 +299,12 @@ bool test_workgroup_coalesced_read_bandwidth_local_memory(int len, float & bandw
     TEST("Run Kernel test_workgroup_coalesced_read_bandwidth_local_memory", false, true);
     return false;
   }
-  cl_int* result_flag = mgr->result_flag();
+  // cl_int* result_flag = mgr->result_flag(); // unused
   bandwidth=(float)4*(len*4)/mgr->time_taken()/(1024*1024);
 
   float sum=0.0;
   cl_float * result_array=mgr->result_array();
-  for (unsigned i=0;i<len;i++)
+  for (unsigned i=0;i<len;++i)
     sum+=result_array[i];
 
   mgr->clean_array();
@@ -322,7 +322,7 @@ bool test_workgroup_coalesced_read_bandwidth_local_memory(int len, float & bandw
 
 static void test_global_io_bandwidth()
 {
-  int len=1024*1024;
+  unsigned len=1024*1024;
   float bandwidth=0.0f;
   if (test_single_thread_read_bandwidth(len,bandwidth))
     vcl_cout<<" test_single_thread_read_bandwidth "<<bandwidth<<vcl_endl;
