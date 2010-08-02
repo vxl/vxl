@@ -179,7 +179,7 @@ class vpyr_2_tpyramid_level_element_iterator : protected FD
   vpyr_2_tpyramid_level_element_iterator(It arg,vmap_level_index l)
     :it_(arg)
   {
-    set(*arg,l) ;
+    this->set(*arg,l) ;
   }
 
   //:
