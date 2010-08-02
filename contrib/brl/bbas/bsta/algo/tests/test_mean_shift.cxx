@@ -296,7 +296,7 @@ void test_mean_shift_algo(T epsilon, const vcl_string& type_name)
   switch (n)
   {
     case 1:
-      vcl_cout << "case 1\n";
+      vcl_cout << "case n==1\n";
       of << "x = [" << ss.sample(0);
       for (unsigned i = 0; i < ss.size(); i++) {
         of << ", " << ss.sample(i);
@@ -305,7 +305,7 @@ void test_mean_shift_algo(T epsilon, const vcl_string& type_name)
       break;
 
     case 2:
-      vcl_cout << "case 2\n";
+      vcl_cout << "case n==2\n";
       of << "cmap = colormap(lines(" << ms.modes().size() << "));\n";
       // plot the assignments
       for (unsigned m = 0; m < ms.modes().size(); m++) {
@@ -363,21 +363,21 @@ void test_mean_shift_algo(T epsilon, const vcl_string& type_name)
 
     case 3:
     {
-      vcl_cout << "case 3\n";
-      vnl_vector_fixed<T,3> s0(ss.sample(0));
+      vcl_cout << "case n==3\n";
+      vnl_vector_fixed<T,n> s0(ss.sample(0));
       of << "x = [" << s0[0];
       for (unsigned i = 0; i < ss.size(); i++) {
-        vnl_vector_fixed<T,3> si(ss.sample(i));
+        vnl_vector_fixed<T,n> si(ss.sample(i));
         of << ", " << si[0];
       }
       of << "];\ny = [" << s0[1];
       for (unsigned i = 0; i < ss.size(); i++) {
-        vnl_vector_fixed<T,3> si(ss.sample(i));
+        vnl_vector_fixed<T,n> si(ss.sample(i));
         of << ", " << si[1];
       }
       of << "];\nz = [" << s0[2];
       for (unsigned i = 0; i < ss.size(); i++) {
-        vnl_vector_fixed<T,3> si(ss.sample(i));
+        vnl_vector_fixed<T,n> si(ss.sample(i));
         of << ", " << si[2];
       }
       of << "];\nplot3(x,y,z,'or');\n";
