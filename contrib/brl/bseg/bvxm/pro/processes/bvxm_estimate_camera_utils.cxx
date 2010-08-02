@@ -1,6 +1,7 @@
 #include "bvxm_estimate_camera_utils.h"
 #include <vgl/algo/vgl_convex_hull_2d.h>
 #include <vgl/algo/vgl_homg_operators_3d.h>
+#include <vnl/vnl_double_3.h>
 #include <vul/vul_file.h>
 #include <vcl_cassert.h>
 
@@ -47,8 +48,8 @@ vil_image_view<float> bvxm_camera_estimator::convert_to_spherical_coordinates(co
   vil_image_view<float> imgs(theta_size,phi_size,1);
   imgs.fill(0.0f);
 
-  vnl_matrix<double> K = cam.get_calibration().get_matrix();
-  vnl_matrix<double> K_inv = vnl_inverse<double>(K);
+  vnl_double_3x3 K = cam.get_calibration().get_matrix();
+  // vnl_double_3x3 K_inv = vnl_inverse<double>(K); // unused?! - FIXME
 
   vnl_matrix<double> R(3,3,0.0);
   R(0,0) = 1.0;
@@ -66,11 +67,7 @@ vil_image_view<float> bvxm_camera_estimator::convert_to_spherical_coordinates(co
       double y = vcl_sin(curr_theta)*vcl_sin(curr_phi);
       double z = vcl_cos(curr_theta);
 
-      vnl_vector<double> curr_vector(3);
-      curr_vector[0] = x;
-      curr_vector[1] = y;
-      curr_vector[2] = z;
-
+      vnl_double_3 curr_vector(x,y,z);
       curr_vector = R*curr_vector;
 
       x = curr_vector[0];
@@ -80,8 +77,7 @@ vil_image_view<float> bvxm_camera_estimator::convert_to_spherical_coordinates(co
       curr_vector[0] = -z;
       curr_vector[1] = y;
       curr_vector[2] = x;
-
-      vnl_vector<double> curr_pixel = K*curr_vector;
+      vnl_double_3 curr_pixel = K*curr_vector;
 
       int u = vnl_math_rnd(curr_pixel[0]/curr_pixel[2]);
       int v = vnl_math_rnd(curr_pixel[1]/curr_pixel[2]);

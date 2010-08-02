@@ -2,6 +2,8 @@
 #define bvpgl_camera_estimator_txx_
 
 #include "bvpgl_camera_estimator.h"
+#include <vnl/vnl_double_3.h>
+#include <vnl/vnl_double_3x3.h>
 #include <vbl/vbl_array_3d.h>
 #include <vul/vul_file.h>
 #include <vil/vil_math.h>
@@ -9,8 +11,8 @@
 
 // Default constructor
 template <class exp_edge_func>
-bvpgl_camera_estimator<exp_edge_func>::bvpgl_camera_estimator(const exp_edge_func& func) 
-: func_(func) 
+bvpgl_camera_estimator<exp_edge_func>::bvpgl_camera_estimator(const exp_edge_func& func)
+: func_(func)
 {
  // world_params_set_ = false;
   estimation_params_set_ = false;
@@ -31,8 +33,8 @@ void bvpgl_camera_estimator<exp_edge_func>::set_estimation_params(double theta_r
 
 template <class exp_edge_func>
 vil_image_view<float> bvpgl_camera_estimator<exp_edge_func>::convert_to_spherical_coordinates(const vil_image_view<float> &img,
-                                                                              const vpgl_perspective_camera<double> &cam,
-                                                                              const double rotate)
+                                                                                              const vpgl_perspective_camera<double> &cam,
+                                                                                              const double rotate)
 {
   int theta_size = 2*vnl_math_ceil(theta_range_/theta_step_);
   int phi_size = 2*vnl_math_ceil(phi_range_/phi_step_);
@@ -40,10 +42,10 @@ vil_image_view<float> bvpgl_camera_estimator<exp_edge_func>::convert_to_spherica
   vil_image_view<float> imgs(theta_size,phi_size,1);
   imgs.fill(0.0f);
 
-  vnl_matrix<double> K = cam.get_calibration().get_matrix();
-  vnl_matrix<double> K_inv = vnl_inverse<double>(K);
+  vnl_double_3x3 K = cam.get_calibration().get_matrix();
+  // vnl_double_3x3 K_inv = vnl_inverse(K); // unused
 
-  vnl_matrix<double> R(3,3,0.0);
+  vnl_double_3x3 R(0.0);
   R(0,0) = 1.0;
   R(1,1) = vcl_cos(rotate);
   R(1,2) = vcl_sin(rotate);
@@ -59,13 +61,8 @@ vil_image_view<float> bvpgl_camera_estimator<exp_edge_func>::convert_to_spherica
       double y = vcl_sin(curr_theta)*vcl_sin(curr_phi);
       double z = vcl_cos(curr_theta);
 
-      vnl_vector<double> curr_vector(3);
-      curr_vector[0] = x;
-      curr_vector[1] = y;
-      curr_vector[2] = z;
-
+      vnl_double_3 curr_vector(x,y,z);
       curr_vector = R*curr_vector;
-
       x = curr_vector[0];
       y = curr_vector[1];
       z = curr_vector[2];
@@ -73,8 +70,7 @@ vil_image_view<float> bvpgl_camera_estimator<exp_edge_func>::convert_to_spherica
       curr_vector[0] = -z;
       curr_vector[1] = y;
       curr_vector[2] = x;
-
-      vnl_vector<double> curr_pixel = K*curr_vector;
+      vnl_double_3 curr_pixel = K*curr_vector;
 
       int u = vnl_math_rnd(curr_pixel[0]/curr_pixel[2]);
       int v = vnl_math_rnd(curr_pixel[1]/curr_pixel[2]);
@@ -89,13 +85,12 @@ vil_image_view<float> bvpgl_camera_estimator<exp_edge_func>::convert_to_spherica
 }
 
 
-
 template <class exp_edge_func>
 void bvpgl_camera_estimator<exp_edge_func>::convert_angles_to_vector(const double theta,
-                                                     const double phi,
-                                                     double &vx,
-                                                     double &vy,
-                                                     double &vz)
+                                                                     const double phi,
+                                                                     double &vx,
+                                                                     double &vy,
+                                                                     double &vz)
 {
   vx = vcl_sin(theta)*vcl_cos(phi);
   vy = vcl_sin(theta)*vcl_sin(phi);
@@ -103,8 +98,8 @@ void bvpgl_camera_estimator<exp_edge_func>::convert_angles_to_vector(const doubl
 }
 
 template <class exp_edge_func>
-double bvpgl_camera_estimator<exp_edge_func>::edge_prob_cross_correlation(const vil_image_view<float> &img1, 
-                                                          const vil_image_view<float> &img2)
+double bvpgl_camera_estimator<exp_edge_func>::edge_prob_cross_correlation(const vil_image_view<float> &img1,
+                                                                          const vil_image_view<float> &img2)
 {
   vil_image_view<float> img1n; img1n.deep_copy(img1);
   vil_image_view<float> img2n; img2n.deep_copy(img2);
@@ -124,7 +119,7 @@ double bvpgl_camera_estimator<exp_edge_func>::edge_prob_cross_correlation(const 
 
 template <class exp_edge_func>
 double bvpgl_camera_estimator<exp_edge_func>::estimate_rotation_angle(const vil_image_view<float> &img1c,
-                                                      const vil_image_view<float> &img2c)
+                                                                      const vil_image_view<float> &img2c)
 {
   assert(img1c.ni()==img2c.ni());
   assert(img1c.nj()==img2c.nj());
@@ -179,7 +174,7 @@ double bvpgl_camera_estimator<exp_edge_func>::estimate_rotation_angle(const vil_
 
 template <class exp_edge_func>
 void bvpgl_camera_estimator<exp_edge_func>::estimate_rotation_iterative(const vil_image_view<float>& img_e,
-                                                        vpgl_perspective_camera<double> *cam)
+                                                                        vpgl_perspective_camera<double> *cam)
 {
   if (!estimation_params_set_){
     vcl_cerr << "Error: estimation parameters are not set\n";
@@ -230,8 +225,7 @@ void bvpgl_camera_estimator<exp_edge_func>::estimate_rotation_iterative(const vi
       break;
     }
 
-    vnl_vector<double> rot_rot_vec(3,0.0);
-    rot_rot_vec[2] = rot_ang;
+    vnl_double_3 rot_rot_vec(0.0, 0.0, rot_ang);
     vgl_rotation_3d<double> rot_rot(rot_rot_vec);
 
     cam->set_rotation(rot_rot*cam->get_rotation());
