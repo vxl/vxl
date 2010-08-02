@@ -9,6 +9,7 @@
 #include <vcl_algorithm.h>
 
 #include <vnl/algo/vnl_svd.h>
+#include <vnl/vnl_matrix_fixed.h>
 
 #include <mvl/HomgLine3D.h>
 #include <mvl/HomgPoint3D.h>
@@ -205,13 +206,13 @@ HomgOperator3D::perp_projection (const HomgLine3D& , const HomgPoint3D& )
 HomgLine3D
 HomgOperator3D::planes_to_line (const HomgPlane3D& plane1, const HomgPlane3D& plane2)
 {
-  vnl_matrix<double> M(2,4);
+  vnl_matrix_fixed<double,2,4> M;
   M.set_row(0, plane1.get_vector());
   M.set_row(1, plane2.get_vector());
-  vnl_svd<double> svd(M);
-  M = svd.nullspace(2);
-  HomgPoint3D p1(M.get_column(0));
-  HomgPoint3D p2(M.get_column(1));
+  vnl_svd<double> svd(M.as_ref());
+  vnl_matrix_fixed<double,4,2> N = svd.nullspace(2);
+  HomgPoint3D p1(N.get_column(0));
+  HomgPoint3D p2(N.get_column(1));
   return HomgLine3D(p1, p2);
 }
 
