@@ -31,7 +31,7 @@ static void test_boxm_plane_ransac()
   vnl_random rand;
   // get two points from the line, and create a random 3rd point to define a plane
   unsigned i;
-  for (i=0; i<test_num; i++) {
+  for (i=0; i<test_num; ++i) {
     float x=float(rand.drand32()*100);
     float y=float(rand.drand32()*100);
     float z=float(rand.drand32()*100);
@@ -44,7 +44,7 @@ static void test_boxm_plane_ransac()
   }
 
   // add the random planes
-  for (; i<test_set; i++) {
+  for (; i<test_set; ++i) {
     float a=float(rand.drand32()*100);
     float b=float(rand.drand32()*100);
     float c=float(rand.drand32()*100);
@@ -67,9 +67,9 @@ static void test_boxm_plane_ransac()
   float volume_ratio = 128;
   boxm_plane_ransac<float>(planes, weights, l, residual, cell_global_box, threshold, ortho_thres, volume_ratio);
 
-  bool good= (l.x0()-line.x0()).sqr_length()<1e-4 && (l.direction()-line.direction()).sqr_length()<1e-4;
-
-  TEST("test_boxm_plane_ransac: found the right plane set", good, true);
+  TEST_NEAR("test_boxm_plane_ransac: found the right plane set",
+            (l.x0()-line.x0()).sqr_length() + (l.direction()-line.direction()).sqr_length(),
+            0.0f, 0.01f);
 }
 
 TESTMAIN(test_boxm_plane_ransac);
