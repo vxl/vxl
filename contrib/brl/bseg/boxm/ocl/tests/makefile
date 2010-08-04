@@ -11,7 +11,6 @@ TESTS += test_octree.cxx
 TESTS += test_expected_image.cxx
 TESTS += test_backproject_ray.cxx
 TESTS += test_ray_bundle.cxx
-TESTS += test_octree_stack.cxx
 TESTS += test_octree_image.cxx
 TESTS += test_statistics.cxx
 TESTS += test_refine.cxx
