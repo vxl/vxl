@@ -27,7 +27,7 @@ void sdet_third_order_edge_det::apply(vil_image_view<vxl_byte> const& image)
 
   //compute image gradients before performing nonmax suppression
   vil_image_view<double> grad_x, grad_y, grad_mag;
-  int scale = (int) (vcl_pow(2.0, double(interp_factor_))+0.5);
+  int scale = 1 << interp_factor_; // 2^interp_factor_
 
   //compute gradients
   switch (grad_op_)
@@ -95,8 +95,8 @@ void sdet_third_order_edge_det::apply(vil_image_view<vxl_byte> const& image)
   double noise_sigma = 1.5;
   double rel_thresh = 1.3*noise_sigma/(sigma_*sigma_*sigma_);
   sdet_nms NMS(sdet_nms_params(thresh_, (sdet_nms_params::PFIT_TYPE)pfit_type_,
-                                 static_cast<unsigned int>(vcl_pow(2.0,double(interp_factor_))*(4*sigma_+1)+0.5),
-                                 rel_thresh, adapt_thresh_),
+                               (4*sigma_+1)*(1 << interp_factor_), // 2^interp_factor_
+                               rel_thresh, adapt_thresh_),
                 grad_x, grad_y, grad_mag);
 
   //  NMS.apply(true, edge_locs, orientation, mag, d2f, pix_locs);
@@ -264,9 +264,8 @@ bool sdet_third_order_edge_det::apply_color(vil_image_view<vxl_byte> const& imag
   switch (grad_op_)
   {
     case 0: //Gaussian
-    {  
-      scale = (int) vcl_pow(2.0, interp_factor_);
-
+    {
+      scale = 1 << interp_factor_; // 2^interp_factor_
       //compute gradients
       if (conv_algo_==0){
         brip_subpix_convolve_2d(comp1, f1_dx, brip_Gx_kernel(sigma_), float(), interp_factor_);
@@ -288,9 +287,9 @@ bool sdet_third_order_edge_det::apply_color(vil_image_view<vxl_byte> const& imag
     }
     case 1: //h0-operator
     {
-      scale = (int) vcl_pow(2.0, interp_factor_);
+      scale = 1 << interp_factor_; // 2^interp_factor_
 
-      //compute gradients  
+      //compute gradients
       if (conv_algo_==0){
         brip_subpix_convolve_2d(comp1, f1_dx, brip_h0_Gx_kernel(sigma_), float(), interp_factor_);
         brip_subpix_convolve_2d(comp1, f1_dy, brip_h0_Gy_kernel(sigma_), float(), interp_factor_);
@@ -312,7 +311,7 @@ bool sdet_third_order_edge_det::apply_color(vil_image_view<vxl_byte> const& imag
     }
     case 2:  //h1-operator
     {
-      scale = (int) vcl_pow(2.0, interp_factor_);
+      scale = 1 << interp_factor_; // 2^interp_factor_
 
       //compute gradients
       if (conv_algo_==0){
@@ -334,7 +333,7 @@ bool sdet_third_order_edge_det::apply_color(vil_image_view<vxl_byte> const& imag
       break;
     }
   }
-  
+
   //5) compute the squared norm of the vector-gradient
   vil_image_view<double> grad_mag, nu1, nu2; //eigenvalue and eigenvector
   grad_mag.set_size(f1_dx.ni(), f1_dx.nj());
@@ -353,7 +352,7 @@ bool sdet_third_order_edge_det::apply_color(vil_image_view<vxl_byte> const& imag
   double *n2  =  nu2.top_left_ptr();
 
   //compute the squared norm of gradient
-  for(unsigned long i=0; i<grad_mag.size(); i++){
+  for (unsigned long i=0; i<grad_mag.size(); i++) {
     double A = f1x[i]*f1x[i]+f2x[i]*f2x[i]+f3x[i]*f3x[i];
     double B = f1x[i]*f1y[i]+f2x[i]*f2y[i]+f3x[i]*f3y[i];
     double C = f1y[i]*f1y[i]+f2y[i]*f2y[i]+f3y[i]*f3y[i];
@@ -373,7 +372,7 @@ bool sdet_third_order_edge_det::apply_color(vil_image_view<vxl_byte> const& imag
   }
 
 
-  double conv_time = t.real();  
+  double conv_time = t.real();
   t.mark(); //reset timer
 
   //Now call the nms code to get the subpixel edge tokens
@@ -398,7 +397,7 @@ bool sdet_third_order_edge_det::apply_color(vil_image_view<vxl_byte> const& imag
   switch (grad_op_)
   {
     case 0: //Interpolated Gaussian
-    { 
+    {
       brip_subpix_convolve_2d(comp1, edge_locations, If1x,   brip_Gx_kernel(sigma_),   double(), interp_factor_);
       brip_subpix_convolve_2d(comp1, edge_locations, If1y,   brip_Gy_kernel(sigma_),   double(), interp_factor_);
       brip_subpix_convolve_2d(comp1, edge_locations, If1xx,  brip_Gxx_kernel(sigma_),  double(), interp_factor_);
@@ -500,10 +499,10 @@ bool sdet_third_order_edge_det::apply_color(vil_image_view<vxl_byte> const& imag
       break;
     }
   }
-      
+
   //Now, compute and update each edge with its new orientation
   vcl_vector<double> edge_orientations(edge_locations.size());
-  
+
   for (unsigned i=0; i<edge_locations.size();i++)
   {
     double A   = If1x[i]*If1x[i] + If2x[i]*If2x[i] + If3x[i]*If3x[i];
@@ -553,7 +552,7 @@ bool sdet_third_order_edge_det::apply_color(vil_image_view<vxl_byte> const& imag
       n1x = 0;
       n1y = 0;
       n2x = 0;
-      n2y = 0; 
+      n2y = 0;
     }
     ********************************************************************************/
 
@@ -577,7 +576,7 @@ bool sdet_third_order_edge_det::apply_color(vil_image_view<vxl_byte> const& imag
       n2 = B/f;
 
       n1x = (lx-Cx)/f - (l-C)*(B*Bx + (l-C)*(lx-Cx))/(f*f*f);
-      n1y = (ly-Cy)/f - (l-C)*(B*By + (l-C)*(ly-Cy))/(f*f*f); 
+      n1y = (ly-Cy)/f - (l-C)*(B*By + (l-C)*(ly-Cy))/(f*f*f);
       n2x = Bx/f - B*(B*Bx + (l-C)*(lx-Cx))/(f*f*f);
       n2y = By/f - B*(B*By + (l-C)*(ly-Cy))/(f*f*f);
     }
@@ -593,11 +592,10 @@ bool sdet_third_order_edge_det::apply_color(vil_image_view<vxl_byte> const& imag
   double third_order_time = t.real();
 
   //report timings
-  vcl_cout << vcl_endl;
-  vcl_cout << "time taken for conv: " << conv_time << " msec" << vcl_endl;
-  vcl_cout << "time taken for nms: " << nms_time << " msec" << vcl_endl;
-  vcl_cout << "time taken for color third-order: " << third_order_time << " msec" << vcl_endl;
- 
+  vcl_cout << '\n'
+           << "time taken for conv: " << conv_time << " msec\n"
+           << "time taken for nms: " << nms_time << " msec\n"
+           << "time taken for color third-order: " << third_order_time << " msec" << vcl_endl;
 
   // --- new code ---
   t.mark(); //reset timer
@@ -660,18 +658,17 @@ bool sdet_third_order_edge_det::save_edg_ascii(const vcl_string& filename, unsig
   vcl_ofstream outfp(filename.c_str(), vcl_ios::out);
 
   if (!outfp){
-    vcl_cout << " Error opening file  " << filename.c_str() << vcl_endl;
+    vcl_cerr << " Error opening file  " << filename.c_str() << vcl_endl;
     return false;
   }
 
   //2) write out the header block
   outfp << "# EDGE_MAP v3.0\n\n"
-        << "# Format :  [Pixel_Pos]  Pixel_Dir Pixel_Conf  [Sub_Pixel_Pos] Sub_Pixel_Dir Strength Uncer\n"
-        << vcl_endl
-        << "WIDTH=" << ni << vcl_endl
-        << "HEIGHT=" << nj << vcl_endl
-        << "EDGE_COUNT=" << edgels.size()  << vcl_endl
-        << vcl_endl << vcl_endl;
+        << "# Format :  [Pixel_Pos]  Pixel_Dir Pixel_Conf  [Sub_Pixel_Pos] Sub_Pixel_Dir Strength Uncer\n\n"
+        << "WIDTH=" << ni << '\n'
+        << "HEIGHT=" << nj << '\n'
+        << "EDGE_COUNT=" << edgels.size()  << '\n'
+        << '\n' << vcl_endl;
 
   //save the edgel tokens
   for (unsigned k = 0; k < edgels.size(); k++) {
