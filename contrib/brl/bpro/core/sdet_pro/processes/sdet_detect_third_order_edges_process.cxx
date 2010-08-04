@@ -11,6 +11,10 @@
 #include <sdet/sdet_third_order_edge_det_params.h>
 #include <sdet/sdet_third_order_edge_det.h>
 
+#include <sdet/sdet_edge_champher.h>
+#include <vtol/vtol_edge_2d.h>
+#include <vsol/vsol_line_2d.h>
+
 //: initialize input and output types
 bool sdet_detect_third_order_edges_process_cons(bprb_func_process& pro)
 {
@@ -71,7 +75,12 @@ bool sdet_detect_third_order_edges_process(bprb_func_process& pro)
   pro.parameters()->get_value( "parabola_fit", dp.pfit_type_);
 
   sdet_third_order_edge_det det(dp);
-  det.apply(input_image);
+  if (input_image.nplanes() == 3) {
+    vcl_cout << "Input image has 3 planes, applying color edge detector!\n";
+    det.apply_color(input_image);
+  } else {
+    det.apply(input_image);
+  }
 
   vcl_vector<vdgl_edgel> edgels = det.edgels();
 
@@ -119,3 +128,110 @@ bool sdet_detect_third_order_edges_process(bprb_func_process& pro)
 
   return true;
 }
+
+
+//: initialize input and output types
+bool sdet_detect_third_order_edges_dt_process_cons(bprb_func_process& pro)
+{
+  //inputs
+  bool ok=false;
+  vcl_vector<vcl_string> input_types;
+  input_types.push_back("vil_image_view_base_sptr");
+  input_types.push_back("int");  // max distance threshold
+  ok = pro.set_input_types(input_types);
+  if (!ok) return ok;
+
+  //output: [0] Distance transform (DT) of output edge image as a byte image
+  vcl_vector<vcl_string> output_types;
+  output_types.push_back("vil_image_view_base_sptr");
+  output_types.push_back("vil_image_view_base_sptr");
+  ok = pro.set_output_types(output_types);
+  return ok;
+}
+
+//: generates the edge map
+bool sdet_detect_third_order_edges_dt_process(bprb_func_process& pro)
+{
+  // Sanity check
+  if (pro.n_inputs() < 1) {
+    vcl_cerr << "sdet_detect_third_order_edges_dt_process - invalid inputs\n";
+    return false;
+  }
+
+  // get input
+  unsigned i = 0;
+  vil_image_view_base_sptr input_image_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
+  vil_image_view<vxl_byte> input_image(input_image_sptr);
+  int max_dist_threshold = pro.get_input<int>(i++);
+
+  //get the parameters
+  sdet_third_order_edge_det_params dp;
+  dp.grad_op_ = 0; dp.conv_algo_ = 0; dp.pfit_type_ = 0;
+  dp.sigma_ = 1.0; dp.thresh_ = 2.0;
+  dp.interp_factor_ = 1;
+  dp.adapt_thresh_ = false; 
+  
+  pro.parameters()->get_value( "grad_op", dp.grad_op_);
+  pro.parameters()->get_value( "conv_algo", dp.conv_algo_);
+  pro.parameters()->get_value( "int_factor" , dp.interp_factor_);
+  pro.parameters()->get_value( "sigma", dp.sigma_);
+  pro.parameters()->get_value( "thresh", dp.thresh_);
+  pro.parameters()->get_value( "badap_thresh" , dp.adapt_thresh_);
+  pro.parameters()->get_value( "parabola_fit", dp.pfit_type_);
+
+  sdet_third_order_edge_det det(dp);
+  if (input_image.nplanes() == 3) {
+    vcl_cout << "Input image has 3 planes, applying color edge detector!\n";
+    det.apply_color(input_image);
+  } else {
+    det.apply(input_image);
+  }
+  vcl_vector<vdgl_edgel> edgels = det.edgels();
+
+  vcl_vector<vsol_line_2d_sptr> line_segs;
+  det.line_segs(line_segs);
+  
+  unsigned ni = input_image.ni();
+  unsigned nj = input_image.nj();
+  vbl_array_2d<vtol_edge_2d_sptr> vtol_edges(ni, nj);
+  for (unsigned k = 0; k < edgels.size(); k++) {
+    vdgl_edgel edgel = edgels[k];
+    
+    double x = edgel.x();
+    double y = edgel.y();
+
+    unsigned ix = (unsigned)x;
+    unsigned iy = (unsigned)y;
+
+    vtol_edge_2d_sptr vtol_edg = new vtol_edge_2d(*(line_segs[k]->cast_to_curve()));
+    vtol_edges[ix][iy] = vtol_edg;
+  }
+
+  sdet_edge_champher ec(vtol_edges);
+  //: create distance image
+  vil_image_view<float> out_imgf(ni, nj);
+  out_imgf.fill((float)max_dist_threshold);
+  for (unsigned i = 0; i < ni; i++) {
+    for (unsigned j = 0; j < nj; j++) {
+      float distf = ec.distance(j,i);
+      if (out_imgf(i,j) > distf) 
+        out_imgf(i,j) = distf;
+    }
+  }
+  vil_image_view<float> diff_img(ni, nj);
+  diff_img.fill((float)max_dist_threshold);
+  vil_image_view<float> sum_img(ni, nj);
+  vil_math_image_difference(diff_img, out_imgf, sum_img);
+
+  //: scale to 0-255 range
+  //vil_math_scale_values(out_imgf, 255.0f/max_dist_threshold);
+  vil_math_scale_values(sum_img, 255.0f/max_dist_threshold);
+  vil_image_view<vxl_byte> out_img(ni, nj);
+  //vil_convert_cast(out_imgf, out_img);
+  vil_convert_cast(sum_img, out_img);
+
+  pro.set_output_val<vil_image_view_base_sptr>(0,new vil_image_view<vxl_byte>(out_img));
+  pro.set_output_val<vil_image_view_base_sptr>(1,new vil_image_view<float>(out_imgf));
+  return true;
+}
+

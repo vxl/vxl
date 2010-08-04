@@ -21,4 +21,11 @@ bool sdet_detect_third_order_edges_process_cons(bprb_func_process& pro);
 //: generates the edge map
 bool sdet_detect_third_order_edges_process(bprb_func_process& pro);
 
+//: initialize input and output types
+bool sdet_detect_third_order_edges_dt_process_cons(bprb_func_process& pro);
+
+//: generates the edge map
+bool sdet_detect_third_order_edges_dt_process(bprb_func_process& pro);
+
+
 #endif // sdet_detect_third_order_edges_process_h_

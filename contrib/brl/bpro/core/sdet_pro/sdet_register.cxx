@@ -18,4 +18,5 @@ void sdet_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, sdet_write_edge_file_process, "sdetWriteEdgeFileProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, sdet_detect_edge_line_fitted_process, "sdetDetectEdgesLineFittedProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, sdet_detect_third_order_edges_process, "sdetDetectThirdOrderEdgesProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, sdet_detect_third_order_edges_dt_process, "sdetDetectThirdOrderEdgesDTProcess");
 }
