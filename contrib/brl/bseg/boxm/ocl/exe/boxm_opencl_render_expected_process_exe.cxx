@@ -56,8 +56,6 @@ int main(int argc, char ** argv)
   if (option()==1)
     good = bprb_batch_process_manager::instance()->init_process("boxmOclRayBundleExpectedProcess");
   if (option()==2)
-    good = bprb_batch_process_manager::instance()->init_process("boxmOclStackRenderExpectedProcess");
-  if (option()==3)
     good = bprb_batch_process_manager::instance()->init_process("boxmOclRenderAllBlocksExpectedProcess");
 
   good = good && bprb_batch_process_manager::instance()->set_input_from_db(0, id_scene);
