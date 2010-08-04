@@ -1122,14 +1122,7 @@ bool boxm_ray_bundle_trace_manager<T>::run_block()
   status = clSetKernelArg(kernel_,12,sizeof(cl_uint4),0);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local roi)"))
     return SDK_FAILURE;
-#if 0
-  status = clSetKernelArg(kernel_,13,sizeof(cl_float4)*this->group_size(),0);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local roi)"))
-   return SDK_FAILURE;
-  status = clSetKernelArg(kernel_,13,sizeof(cl_int)*this->group_size()*(this->num_levels()),0);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local stack)"))
-    return SDK_FAILURE;
-#endif
+
   status = clSetKernelArg(kernel_,13,sizeof(cl_uchar)*this->bundle_ni()*this->bundle_nj(),0);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local cache ptr bundle)"))
    return SDK_FAILURE;

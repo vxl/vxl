@@ -12,7 +12,7 @@
 
 #include <bocl/bocl_cl.h>
 #include "boxm_ray_trace_manager.h"
-#include <boxm/ocl/boxm_stack_ray_trace_manager.h>
+//#include <boxm/ocl/boxm_stack_ray_trace_manager.h>
 #include <boxm/ocl/boxm_ray_bundle_trace_manager.h>
 #include <boxm/ocl/boxm_render_image_manager.h>
 #include <boxm/ocl/boxm_render_ocl_scene_manager.h>
@@ -86,60 +86,6 @@ void boxm_opencl_render_expected(boxm_scene<boct_tree<short, boxm_sample<APM> > 
   vil_save(expected,"f:/apl/img2.tiff");
   vil_save(mask,"f:/apl/img3.tiff");
 #endif
-  ray_mgr->clean_raytrace();
-
-  typedef typename boxm_apm_traits<APM>::obs_datatype obs_datatype;
-  normalize_expected_functor<obs_datatype> norm_fn(use_black_background);
-  vil_transform2<float,obs_datatype, normalize_expected_functor<obs_datatype> >(mask,expected,norm_fn);
-}
-
-template <boxm_apm_type APM>
-void boxm_opencl_stack_render_expected(boxm_scene<boct_tree<short, boxm_sample<APM> > > &scene,
-                                       vpgl_camera_double_sptr cam,
-                                       vil_image_view<typename boxm_apm_traits<APM>::obs_datatype> &expected,
-                                       vil_image_view<float> & mask,
-                                       bool use_black_background = false)
-{
-  // set up the application-specific function to be called at every cell along a ray
-  vcl_string expected_img_functor_fname = vcl_string(VCL_SOURCE_ROOT_DIR)
-    +"/contrib/brl/bseg/boxm/ocl/expected_functor.cl";
-  vcl_vector<vcl_string> source_fnames;
-  source_fnames.push_back(expected_img_functor_fname);
-
-  const unsigned int ni = expected.ni();
-  const unsigned int nj = expected.nj();
-  // render the image using the opencl raytrace manager
-  boxm_stack_ray_trace_manager<boxm_sample<APM> >* ray_mgr = boxm_stack_ray_trace_manager<boxm_sample<APM> >::instance();
-  ray_mgr->init_raytrace(&scene, cam, ni, nj, source_fnames);
-  ray_mgr->run();
-  vil_image_view<float> img0(ni,nj);
-  vil_image_view<float> img1(ni,nj);
-
-  // extract expected image and mask from OpenCL output data
-  cl_float* results = ray_mgr->ray_results();
-  if (!results) {
-    vcl_cerr << "Error : boxm_opencl_render_expected : ray_mgr->ray_results() returned NULL\n";
-    return;
-  }
-  cl_float *results_p = results;
-  for (unsigned i = 0; i<ni; ++i) {
-    for (unsigned j = 0; j<nj; ++j)  {
-      img0(i,j)=*results_p++; // alpha integral
-      img1(i,j)=*results_p++; // vis_inf
-      expected(i,j) = *results_p++; // expected intensity
-      mask(i,j) = *results_p++; // 1 - vis_inf
-    }
-  }
-#if 0 //images for debuggin
-  vil_save(img0,"f:/apl/img0.tiff");
-  vil_save(img1,"f:/apl/img1.tiff");
-  vil_save(expected,"f:/apl/img2.tiff");
-  vil_save(mask,"f:/apl/img3.tiff");
-#endif
-  float sum=0.0;
-  vil_math_sum<float>(sum,mask,0);
-  vcl_cout<<"Data transferred from global memory "<<16/* for int4*4*/*sum/1000000000.0f<<" GBytes "<<vcl_endl;
-
   ray_mgr->clean_raytrace();
 
   typedef typename boxm_apm_traits<APM>::obs_datatype obs_datatype;
