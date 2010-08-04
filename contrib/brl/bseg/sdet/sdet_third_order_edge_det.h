@@ -32,6 +32,7 @@ class sdet_third_order_edge_det : public sdet_third_order_edge_det_params
   sdet_third_order_edge_det(sdet_third_order_edge_det_params const& params)
     : sdet_third_order_edge_det_params(params){}
   void apply(vil_image_view<vxl_byte> const& image);
+  bool apply_color(vil_image_view<vxl_byte> const& image);
   vcl_vector<vdgl_edgel>& edgels(){return edgels_;}
   void line_segs(vcl_vector<vsol_line_2d_sptr>& lines);
 
