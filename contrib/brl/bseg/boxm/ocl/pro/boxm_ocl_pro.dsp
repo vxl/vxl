@@ -101,9 +101,6 @@ SOURCE=.\boxm_ocl_register.cxx
 SOURCE=.\processes/boxm_ocl_render_expected_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\processes/boxm_ocl_stack_render_expected_process.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\processes/boxm_ocl_refine_process.cxx
 # End Source File
 # Begin Source File

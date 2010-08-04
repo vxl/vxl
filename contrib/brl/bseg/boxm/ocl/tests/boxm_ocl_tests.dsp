@@ -113,9 +113,6 @@ SOURCE=.\test_backproject_ray.cxx
 SOURCE=.\test_ray_bundle.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_octree_stack.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\test_octree_image.cxx
 # End Source File
 # Begin Source File
