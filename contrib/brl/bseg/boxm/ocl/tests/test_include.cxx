@@ -11,7 +11,6 @@
 #include <boxm/ocl/boxm_render_image_manager.h>
 #include <boxm/ocl/boxm_render_ocl_scene_manager.h>
 #include <boxm/ocl/boxm_render_single_block_manager.h>
-#include <boxm/ocl/boxm_stack_ray_trace_manager.h>
 #include <boxm/ocl/boxm_stat_manager.h>
 #include <boxm/ocl/boxm_update_ocl_scene_manager.h>
 

@@ -63,7 +63,6 @@ class octree_test_driver
 
   int run_tree_test_kernels();
 
-  int run_stack_tree_test_kernels();
   int run_image_tree_test_kernels();
   int run_ray_trace_test_kernels();
   int run_tree_with_local_test_kernels();
