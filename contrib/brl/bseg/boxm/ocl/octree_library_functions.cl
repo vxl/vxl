@@ -146,37 +146,7 @@ int traverse_woffset_mod(__global int4* cells, int cell_ptr, short4 cell_loc_cod
 
 }
 
-int traverse_stack(__global int4* cells,  short4 cell_loc_code,
-                   short4 target_loc_code, short4* found_loc_code,
-                   uint lid,uint workgrpsize, __local int*stack,int stack_ptr,int * global_count)
-{
-  int stack_index = lid + workgrpsize*stack_ptr;
-  int found_cell_ptr = stack[stack_index];
-  int ret = -1;
-  int level = target_loc_code.w;
-  if ( level < 0)
-    return ret;
-  int4 curr_cell = cells[found_cell_ptr];
-  (*global_count)++;
-  int curr_level = cell_loc_code.w;
-  *found_loc_code = cell_loc_code;
-  while (level<curr_level && curr_cell.y>0)
-  {
-    found_cell_ptr = curr_cell.y;
 
-    uchar c_index = child_index(target_loc_code, curr_level);
-    (*found_loc_code) =
-      child_loc_code(c_index, curr_level-1, *found_loc_code);
-    found_cell_ptr += c_index;
-    stack_ptr++;
-    stack_index=stack_index+workgrpsize;
-    stack[stack_index]=found_cell_ptr;
-    curr_cell = cells[found_cell_ptr];
-    (*global_count)++;
-    --curr_level;
-  }
-  return stack_ptr;
-}
 
 //-----------------------------------------------------------------
 // Traverse from the specified root_cell to the cell specified by loc_code.
@@ -245,36 +215,6 @@ int traverse_to_level_woffset(__global int4* cells, int cell_ptr,
 }
 
 
-int traverse_to_level_stack(__global int4* cells, short4 cell_loc_code,
-                            short4 target_loc_code,short target_level,
-                            short4* found_loc_code,uint lid,uint workgrpsize, __local int*stack,int stack_ptr,int * global_count)
-{
-  int stack_index=lid+workgrpsize*stack_ptr;
-  int found_cell_ptr = stack[stack_index]; // = cell_ptr;
-  int ret = -1;
-  int level = target_level;
-  if ( level < 0)
-    return ret;
-  int4 curr_cell = cells[found_cell_ptr];
-  (*global_count)++;
-  int curr_level = cell_loc_code.w;
-  *found_loc_code = cell_loc_code;
-  while (level<curr_level && curr_cell.y>0)
-  {
-    stack_ptr++;
-    int c_ptr = curr_cell.y;
-    uchar c_index = child_index(target_loc_code, curr_level);
-    (*found_loc_code) =
-      child_loc_code(c_index, curr_level-1, *found_loc_code);
-    c_ptr += c_index;
-    stack_index+=workgrpsize;
-    stack[stack_index]=c_ptr;
-    --curr_level;
-    curr_cell = cells[c_ptr];
-    (*global_count)++;
-  }
-  return stack_ptr;
-}
 
 //-----------------------------------------------------------------
 // Traverse from the current cell to find the cell whose code is
@@ -449,60 +389,6 @@ int traverse_force_local(__local int4* cells, int cell_ptr, short4 cell_loc_code
 }
 
 
-int traverse_force_stack(__global int4* cells,  short4 cell_loc_code,
-                         short4 target_loc_code, short4* found_loc_code,
-                         __local int* stack, uint lid,uint workgrpsize, int
-                         stack_ptr,int * global_count)
-{
-  int stack_index=lid+workgrpsize*stack_ptr;
-  (*found_loc_code) = cell_loc_code;
-  int level = target_loc_code.w;
-  if ( level < 0)
-    return -1;
-  int curr_level = cell_loc_code.w;
-  int4 curr_cell = cells[stack[stack_index]]; // the root of the tree to search
-  (*global_count)++;
-  short4 curr_code = cell_loc_code;
-  curr_code.w = curr_level;
-
-  while (level<curr_level && curr_cell.y>0)
-  {
-    stack_ptr++;
-    short4 code_diff = target_loc_code-curr_code;
-    short4 child_bit = (short4)(1);
-    child_bit = child_bit << (short4)(curr_level-1);
-    // TODO: find a way to compute the following as a vector op
-    int c_index = 0;
-
-    if (code_diff.x >= child_bit.x)
-    {
-      c_index += 1;
-      curr_code.x+=child_bit.x;
-    }
-
-    if (code_diff.y >= child_bit.y)
-    {
-      c_index += 2;
-      curr_code.y+=child_bit.y;
-    }
-    if (code_diff.z >= child_bit.z)
-    {
-      c_index += 4;
-      curr_code.z+=child_bit.z;
-    }
-    curr_code.w--;
-    //curr_code = child_loc_code(c_index, curr_level-1, curr_code);
-    stack_index=stack_index+workgrpsize;
-    stack[stack_index]=curr_cell.y+c_index; // = found_cell_ptr;
-    curr_cell = cells[stack[stack_index]];
-    (*global_count)++;
-    *found_loc_code = curr_code;
-    --curr_level;
-  }
-  return stack_ptr;
-}
-
-
 //--------------------------------------------------------------------
 // Find the common ancestor of a cell given a binary difference
 //
@@ -567,27 +453,6 @@ int common_ancestor_woffset(__global int4* cells, int cell_ptr, short4 cell_loc_
 // Find the common ancestor of a cell given a binary difference
 //
 
-int common_ancestor_stack(short4 cell_loc_code,short4 target_loc_code, short4* ancestor_loc_code,int stack_ptr)
-{
-  short4 bin_diff = cell_loc_code ^ target_loc_code;
-  short curr_level = (short)cell_loc_code.w;
-  (*ancestor_loc_code) = cell_loc_code;
-  short4 mask = (short4)(1 << (curr_level));
-  short4 shift_one =(short4)1; // shift the mask by 1 as a vector
-  short4 arg = bin_diff & mask; // masking the bits of the difference (xor)
-  while (arg.x>0||arg.y>0||arg.z>0) // might be done as vector op
-  {
-    stack_ptr--;
-    // clear the code bit at each level while ascending to common ancestor
-    short4 clear_bits = ~(short4)(mask);
-    curr_level++;
-    (*ancestor_loc_code) = (*ancestor_loc_code) & clear_bits;
-    (*ancestor_loc_code).w = curr_level;
-    mask = mask << shift_one;
-    arg = bin_diff & mask;
-  }
-  return stack_ptr;
-}
 
 //-------------------------------------------------------------------
 // Given the cell loc_code and the exit face, find the neighboring cell.
@@ -683,55 +548,7 @@ int neighbor_woffset(__global int4* cells,int cell_ptr,  short4 cell_loc_code,
 }
 
 
-//-------------------------------------------------------------------
-// Given the cell loc_code and the exit face, find the neighboring cell.
-//-------------------------------------------------------------------
-int neighbor_stack(__global int4* cells,  short4 cell_loc_code,
-                   short4 exit_face, short n_levels, short4* neighbor_code,
-                   __local int* stack,uint lid,uint workgrpsize, int stack_ptr,int * global_count)
-{
-  short cell_level = cell_loc_code.w;
-  short cell_size = 1<<cell_level;
-  short4 error = (short4)-1;
-  int neighbor_ptr = -1;
-  // if the neighbor is on the min face
-  if (exit_face.w==0)
-  {
-    short4 zero = (short4)0;
-    (*neighbor_code) = cell_loc_code - exit_face;
-    (*neighbor_code).w = 0; // smallest cell level possible
-    short4 test =(short4)((*neighbor_code) < zero);
-    if (any(test)) {
-      (*neighbor_code) = error;
-      return neighbor_ptr;
-    }
-  }
-  else {
-    short4 largest = (short4)(1<<(n_levels-1));
-    short4 csize = (short4)cell_size;
-    csize.w = 0;
-    (*neighbor_code) = cell_loc_code + (csize*exit_face);
-    (*neighbor_code).w = 0;
-    short4 test =(short4)((*neighbor_code) >= largest);
-    if (any(test)) {
-      (*neighbor_code) = error;
-      return neighbor_ptr;
-    }
-  }
-  short4 ancestor_loc_code = error;
-  stack_ptr  =  common_ancestor_stack(cell_loc_code,
-                                      (*neighbor_code),
-                                      &ancestor_loc_code,
-                                      stack_ptr);
 
- stack_ptr =
-    traverse_to_level_stack(cells,  ancestor_loc_code,
-                            *neighbor_code, cell_level,
-                            neighbor_code, lid, workgrpsize,stack, stack_ptr, global_count);
-  return stack_ptr;
-}
-
-#endif
 
 //---------------------------------------------------------------------
 // The vector result for the exit face as a short vector in X, Y, Z

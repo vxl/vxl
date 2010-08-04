@@ -11,7 +11,6 @@ IF(OPENCL_FOUND)
 
   SET(boxm_ocl_sources
       boxm_ray_trace_manager.h boxm_ray_trace_manager.txx
-      boxm_stack_ray_trace_manager.h boxm_stack_ray_trace_manager.txx
       boxm_ray_bundle_trace_manager.h boxm_ray_bundle_trace_manager.txx
       boxm_render_image_manager.h boxm_render_image_manager.txx
       boxm_refine_manager.h boxm_refine_manager.txx
@@ -32,7 +31,6 @@ IF(OPENCL_FOUND)
   SET(bomx_ocl_cl_files
       octree_library_functions.cl
       ray_trace_main.cl
-      ray_stack_trace_main.cl
       refine_main.cl
       expected_functor.cl
       ray_bundle_library_functions.cl
