@@ -33,6 +33,7 @@ ADD_EXECUTABLE( vcl_test_all
      test_cstdio.cxx
      test_preprocessor.cxx
      test_atomic_count.cxx
+     test_typename.cxx
 )
 TARGET_LINK_LIBRARIES( vcl_test_all vcl )
 
@@ -61,6 +62,7 @@ ADD_TEST( vcl_test_preprocessor ${EXECUTABLE_OUTPUT_PATH}/vcl_test_all test_prep
 ADD_TEST( vcl_test_atomic_count ${EXECUTABLE_OUTPUT_PATH}/vcl_test_all test_atomic_count )
 # Only a compiler test:
 #ADD_TEST( vcl_test_stlfwd      ${EXECUTABLE_OUTPUT_PATH}/vcl_test_all test_stlfwd )
+#ADD_TEST( vcl_test_typename    ${EXECUTABLE_OUTPUT_PATH}/vcl_test_all test_typename )
 
 ADD_EXECUTABLE( vcl_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vcl_test_include vcl )

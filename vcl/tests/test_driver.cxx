@@ -38,6 +38,7 @@ int test_vector_main(int, char*[]);
 int test_cstdio_main(int, char*[]);
 int test_preprocessor_main(int, char*[]);
 int test_atomic_count_main(int, char*[]);
+int test_typename_main(int, char*[]); // need not be called: just a compiler test
 
 int passed;
 int failed;
