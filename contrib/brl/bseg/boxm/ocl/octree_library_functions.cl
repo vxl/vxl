@@ -146,7 +146,43 @@ int traverse_woffset_mod(__global int4* cells, int cell_ptr, short4 cell_loc_cod
 
 }
 
-
+//: traverse_woffset using int2 tree cells
+int traverse_woffset_mod_opt(__global int2* cells, int cell_ptr, short4 cell_loc_code,
+                            short4 target_loc_code, short4* found_loc_code, int * global_count,int lenbuffer, int bufferindex,int buffoffset)
+{
+  int found_cell_ptr = cell_ptr;
+  int ret = -1;
+  int level = target_loc_code.w;
+  if ( level < 0)
+    return ret;
+    
+  //curr_cell's y has child pointer and data pointer packed
+  int2 curr_cell = cells[cell_ptr];
+  short2 child_data = as_short2(curr_cell.y);
+  int child_ptr = (int) child_data.y;
+  
+  (*global_count)++;
+  int curr_level = cell_loc_code.w;
+  *found_loc_code = cell_loc_code;
+  while (level<curr_level && child_ptr>0)
+  {
+    int c_ptr = (child_ptr + buffoffset)%lenbuffer + bufferindex*lenbuffer;
+    uchar c_index = child_index(target_loc_code, curr_level);
+    (*found_loc_code) =
+      child_loc_code(c_index, curr_level-1, *found_loc_code);
+    c_ptr += c_index;
+    
+    //update curr cell and child_ptr
+    curr_cell = cells[c_ptr];
+    child_data = as_short2(curr_cell.y);
+    child_ptr = (int) child_data.y;
+    
+    (*global_count)++;
+    found_cell_ptr = c_ptr;
+    --curr_level;
+  }
+  return found_cell_ptr;
+}
 
 //-----------------------------------------------------------------
 // Traverse from the specified root_cell to the cell specified by loc_code.
@@ -339,7 +375,7 @@ int traverse_force_woffset_mod(__global int4* cells, int cell_ptr, short4 cell_l
       c_index += 4;
     curr_code = child_loc_code(c_index, curr_level-1, curr_code);
     c_ptr += c_index;
-     curr_cell = cells[c_ptr];
+    curr_cell = cells[c_ptr];
     found_cell_ptr = c_ptr;
     (*found_loc_code) = curr_code;
     --curr_level;
@@ -348,6 +384,58 @@ int traverse_force_woffset_mod(__global int4* cells, int cell_ptr, short4 cell_l
   return found_cell_ptr;
 
 }
+//:traverse_force_woffset_mod_opt using int2 tree cells
+int traverse_force_woffset_mod_opt(__global int2* cells, int cell_ptr, short4 cell_loc_code,
+                     short4 target_loc_code, short4* found_loc_code, int * global_count,int lenbuffer, int bufferindex,int buffoffset)
+{
+  int found_cell_ptr = cell_ptr;
+  (*found_loc_code) = cell_loc_code;
+  int ret = (int)-1;
+  int level = target_loc_code.w;
+  if ( level < 0)
+    return ret;
+  int curr_level = cell_loc_code.w;
+  
+  //curr_cell's y has child pointer and data pointer packed
+  int2 curr_cell = cells[cell_ptr];
+  short2 child_data = as_short2(curr_cell.y);
+  int child_ptr = (int) child_data.y;
+  
+  (*global_count)++;
+  short4 curr_code = cell_loc_code;
+  curr_code.w = curr_level;
+  while (level<curr_level && child_ptr>0)
+  {
+    int c_ptr = (child_ptr + buffoffset)%lenbuffer + bufferindex*lenbuffer;
+    short4 child_bit = (short4)(1);
+    child_bit = child_bit << (short4)(curr_level-1);
+    short4 code_diff = target_loc_code-curr_code;
+    // TODO: find a way to compute the following as a vector op
+    uchar c_index = 0;
+
+    if (code_diff.x >= child_bit.x)
+      c_index += 1;
+    if (code_diff.y >= child_bit.y)
+      c_index += 2;
+    if (code_diff.z >= child_bit.z)
+      c_index += 4;
+    curr_code = child_loc_code(c_index, curr_level-1, curr_code);
+    c_ptr += c_index;
+    
+    //up[date curr cell and child ptr
+    curr_cell = cells[c_ptr];
+    child_data = as_short2(curr_cell.y);
+    child_ptr = (int) child_data.y;
+    
+    found_cell_ptr = c_ptr;
+    (*found_loc_code) = curr_code;
+    --curr_level;
+    (*global_count)++;
+  }
+  return found_cell_ptr;
+
+}
+
 int traverse_force_local(__local int4* cells, int cell_ptr, short4 cell_loc_code,
                          short4 target_loc_code, short4* found_loc_code, int * global_count)
 {
@@ -547,7 +635,7 @@ int neighbor_woffset(__global int4* cells,int cell_ptr,  short4 cell_loc_code,
   return neighbor_ptr;
 }
 
-
+#endif
 
 
 //---------------------------------------------------------------------
