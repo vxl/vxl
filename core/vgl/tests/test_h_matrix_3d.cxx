@@ -17,6 +17,9 @@
 #include <vgl/vgl_point_3d.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_4x4.h>
+#include <vnl/vnl_math.h>
+#include <vgl/algo/vgl_h_matrix_3d_compute_linear.h>
+#include <vgl/vgl_distance.h>
 
 static bool equals(double x[16], double y[16])
 {
@@ -144,6 +147,85 @@ static void test_rotation_about_axis()
   TEST_NEAR("rotation",distance , 0.0, 1e-03);
 }
 
+static void test_compute_linear_points() 
+{
+  vcl_cout << "\n=== Test the recovery of a general homography using the "
+           << "linear algorithm ===\n";
+  vcl_vector<vgl_homg_point_3d<double> > points1, points2;
+  
+  //setup the first set of points,  no 4 of them should be co-planar
+  vgl_homg_point_3d<double> p10(100.0, 50.0, 100.0), p11(100.0, 50.0, 200.0);
+  vgl_homg_point_3d<double> p12(200.0, 50.0, 200.0), p13(100.0, 200.0, 200.0);
+
+  vgl_homg_point_3d<double> p14(300.0, 25.0, 0.0), p15(350.0, 25.0, 0.0);
+  vgl_homg_point_3d<double> p16(300.0, 25.0, 250.0), p17(280.0, 100.0, 250.0);
+
+  vgl_homg_point_3d<double> p18(250.0, 75.0, 300.0), p19(250.0, 75.0, 0.0);
+  
+  
+  points1.push_back(p10); points1.push_back(p11); points1.push_back(p12);
+  points1.push_back(p13); points1.push_back(p14); points1.push_back(p15);
+  points1.push_back(p16); points1.push_back(p17); points1.push_back(p18);
+  points1.push_back(p19);
+
+  //: setup an initial homography
+  vgl_h_matrix_3d<double> H1; H1.set_identity(); H1.set_rotation_roll_pitch_yaw(45.0*(vnl_math::pi/180.0), 15.0*(vnl_math::pi/180.0), 10.0*(vnl_math::pi/180.0));
+  vgl_h_matrix_3d<double> H2; H2.set_identity(); H2.set_translation(5.0, 50.0, 150.0);
+  vgl_h_matrix_3d<double> gt_H = H1*H2;
+
+  vcl_cout << "The gt transform\n" << gt_H << '\n';
+
+  //: transform the points
+  for (unsigned i = 0; i < points1.size(); i++) 
+    points2.push_back(gt_H(points1[i]));
+
+  vgl_h_matrix_3d_compute_linear hmcl;
+  vgl_h_matrix_3d<double> H = hmcl.compute(points1, points2);
+
+  vcl_cout << "The resulting transform\n" << H << '\n';
+  
+  vgl_homg_point_3d<double> p_test_hom(150.0, 75.0, 100.0);
+  vgl_point_3d<double> p_test(p_test_hom);
+  vgl_point_3d<double> p_test_mapped(gt_H(p_test_hom));
+  vgl_point_3d<double> p_test_mapped2(H(p_test_hom));
+  vcl_cout << "supposed to map: " << p_test << " to " << p_test_mapped << vcl_endl;
+  vcl_cout << "maps: " << p_test_mapped2 << vcl_endl;
+
+  double dist = vgl_distance(p_test_mapped, p_test_mapped2);
+  vcl_cout << " dist: " << dist << vcl_endl;
+  TEST_NEAR("testing computed H", dist, 0.0, 5e-03);
+
+  //: setup a general homography
+  vnl_matrix_fixed<double, 4, 4> H_m;
+  H_m(0,0)=2.0; H_m(0,1)=1.5; H_m(0,2)=3.0; H_m(0,3)=4.0;
+  H_m(1,0)=3.0; H_m(1,1)=3.5; H_m(1,2)=4.0; H_m(1,3)=4.5;
+  H_m(2,0)=2.5; H_m(2,1)=1.5; H_m(2,2)=1.0; H_m(2,3)=5.0;
+  H_m(3,0)=5.5; H_m(3,1)=6.5; H_m(3,2)=1.0; H_m(3,3)=2.5;
+  vgl_h_matrix_3d<double> gt_H2(H_m);
+
+  vcl_cout << "The gt transform\n" << gt_H2 << '\n';
+
+  points2.clear();
+  //: transform the points
+  for (unsigned i = 0; i < points1.size(); i++) 
+    points2.push_back(gt_H2(points1[i]));
+
+  vgl_h_matrix_3d_compute_linear hmcl2;
+  vgl_h_matrix_3d<double> H2o = hmcl2.compute(points1, points2);
+
+  vcl_cout << "The resulting transform\n" << H2o << '\n';
+  
+  p_test_mapped = gt_H2(p_test_hom);
+  p_test_mapped2 = H2o(p_test_hom);
+  vcl_cout << "supposed to map: " << p_test << " to " << p_test_mapped << vcl_endl;
+  vcl_cout << "maps: " << p_test_mapped2 << vcl_endl;
+
+  dist = vgl_distance(p_test_mapped, p_test_mapped2);
+  vcl_cout << " dist: " << dist << vcl_endl;
+  TEST_NEAR("testing computed H2o", dist, 0.0, 5e-03);
+
+}
+
 static void test_h_matrix_3d()
 {
   vcl_cout << "\n==================== test_constructors ====================\n\n";
@@ -156,6 +238,8 @@ static void test_h_matrix_3d()
   test_projective_basis();
   vcl_cout << "\n================ test_rotation_about_axis =================\n\n";
   test_rotation_about_axis();
+  vcl_cout << "\n================ test_compute_linear_points =================\n\n";
+  test_compute_linear_points();
 }
 
 TESTMAIN(test_h_matrix_3d);
