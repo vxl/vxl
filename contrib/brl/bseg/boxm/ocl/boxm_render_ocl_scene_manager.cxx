@@ -9,6 +9,7 @@
 #include <boxm/boxm_scene.h>
 #include <boxm/util/boxm_utils.h>
 #include <boxm/basic/boxm_block_vis_graph_iterator.h>
+#include <bsta/bsta_histogram.h>
 
 //: Initializes CPU side input buffers
 //put tree structure and data into arrays
@@ -45,7 +46,7 @@ bool boxm_render_ocl_scene_manager::init_ray_trace(boxm_ocl_scene *scene,
   vcl_string functor="";
   if(render_depth) {
     vcl_cout<<"Using Functor step_cell_render_depth = "<<vcl_endl;
-    functor="step_cell_render_depth(alpha_array,data_ptr,d,tfar*blockdims.x,&data_return);";
+    functor="step_cell_render_depth(alpha_array,data_ptr,d,global_depth,&data_return);";
   }
   else{
     vcl_cout<<"Using functor step_cell_render_opt"<<vcl_endl;
