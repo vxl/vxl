@@ -157,6 +157,11 @@ class boxm_change_detection_ocl_scene_manager : public bocl_manager<boxm_change_
   bool release_root_level_buffers();
   bool clean_root_level();
 
+  bool set_foreground_pdf(vcl_vector<float> & hist);
+  bool set_foreground_pdf_buffers();
+  bool release_foreground_pdf_buffers();
+  bool clean_foreground_pdf();
+
   bool set_offset_buffers(int off_x, int off_y);
   bool release_offset_buffers();
   //open cl side helper functions
@@ -203,6 +208,7 @@ class boxm_change_detection_ocl_scene_manager : public bocl_manager<boxm_change_
   cl_uint  offset_y_;
   // bounding box for each tree
   cl_float * tree_bbox_;
+  cl_float* foreground_pdf_;
 
 
   // camera
@@ -240,6 +246,7 @@ class boxm_change_detection_ocl_scene_manager : public bocl_manager<boxm_change_
   cl_mem   scene_origin_buf_;
   cl_mem   block_ptrs_buf_;
   cl_mem   block_dims_buf_;
+  cl_mem   foreground_pdf_buf_;
 
   boxm_ocl_scene * scene_;
   vpgl_camera_double_sptr cam_;

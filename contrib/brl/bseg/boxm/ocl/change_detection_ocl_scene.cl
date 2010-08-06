@@ -27,7 +27,8 @@ change_detection_ocl_scene(__global int4     * scene_dims,  // level of the root
                            __local  uint4   * local_copy_imgdims,
                            __global float   * obs_image,
                            __global float4  * in_image,
-                           __global uint    * gl_image)    // input image and store vis_inf and pre_inf
+                           __global uint    * gl_image,
+                           __global float   * fg_pdf_)    // input image and store vis_inf and pre_inf
 {
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
 
@@ -77,6 +78,7 @@ change_detection_ocl_scene(__global int4     * scene_dims,  // level of the root
 
   float4 cell_min, cell_max;
   float4 entry_pt, exit_pt;
+  float intensity=obs_image[j*get_global_size(0)+i];
 
   //// scene bounding box
   cell_min=origin;
@@ -148,13 +150,7 @@ change_detection_ocl_scene(__global int4     * scene_dims,  // level of the root
 
       //// distance must be multiplied by the dimension of the bounding box
       float d = (tfar-tnear)*(blockdims.x);
-      float intensity=obs_image[j*get_global_size(0)+i];
       step_cell_change_detection(sample_array,alpha_array,data_ptr,d,&data_return,intensity);
-      //step_cell_render(sample_array,alpha_array,data_ptr,d,&data_return);
- 
-      // X:-) DO NOT DELETE THE LINE BELOW THIS IS A STRING REPLACEMNT
-      /*$$step_cell$$*/
-      // X:-)
 
 
       // Added aliitle extra to the exit point
@@ -204,7 +200,30 @@ change_detection_ocl_scene(__global int4     * scene_dims,  // level of the root
         curr_block_index.w=0;
     }
   }
-  data_return.z=data_return.z/data_return.w;
-  gl_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)(1-data_return.z));
+  data_return.z+=(1-data_return.w);
+
+  //data_return.z=data_return.z/(1+data_return.z);
+
+  float bg_belief=0.0f;
+  float fg_belief=0.0f;
+
+  int fg_hist_index=(int)(intensity/0.05);
+  if(fg_hist_index==20)
+    fg_hist_index=19;
+
+  float foreground_density_val=fg_pdf_[fg_hist_index];
+  if(data_return.z>foreground_density_val)
+  { 
+      bg_belief=data_return.z/(data_return.z+foreground_density_val)-foreground_density_val/(2*data_return.z);
+      fg_belief=0.0;
+  }
+  else
+  {
+      bg_belief=0.0;
+      fg_belief=foreground_density_val/(foreground_density_val+data_return.z)-data_return.z/(2*foreground_density_val);
+  }
+  float4 outputval=(float4)(fg_belief,0,0,1);
+
+  gl_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)outputval);
   in_image[j*get_global_size(0)+i]=(float4)data_return;
 }

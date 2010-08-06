@@ -149,6 +149,9 @@ bool boxm_change_detection_ocl_scene_manager::set_args()
   status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&image_gl_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (gl_image)"))
     return SDK_FAILURE;
+  status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&foreground_pdf_buf_);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (foreground_pdf)"))
+    return SDK_FAILURE;
 
   return SDK_SUCCESS;
 }
@@ -1153,3 +1156,42 @@ bool boxm_change_detection_ocl_scene_manager::release_input_image_buffers()
 }
 
 
+bool boxm_change_detection_ocl_scene_manager::set_foreground_pdf(vcl_vector<float> & hist)
+{
+ 
+
+    foreground_pdf_=(cl_float *)boxm_ocl_utils::alloc_aligned(hist.size(),sizeof(cl_float),16);
+
+    for(unsigned i=0;i<hist.size();i++)
+        foreground_pdf_[i]=hist[i];
+
+  return true;
+}
+bool boxm_change_detection_ocl_scene_manager::set_foreground_pdf_buffers()
+{
+ 
+
+  cl_int status;
+
+  foreground_pdf_buf_ = clCreateBuffer(this->context_,
+                                      CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+                                      20*sizeof(cl_float),
+                                      foreground_pdf_,&status);
+  return this->check_val(status,CL_SUCCESS,"clCreateBuffer (foreground_pdf_) failed.")==1;
+}
+bool boxm_change_detection_ocl_scene_manager::release_foreground_pdf_buffers()
+{
+ 
+  cl_int status;
+  status = clReleaseMemObject(foreground_pdf_buf_);
+  return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (foreground_pdf_buf_).")==1;
+
+}
+bool boxm_change_detection_ocl_scene_manager::clean_foreground_pdf()
+{
+ 
+  if (foreground_pdf_)
+    boxm_ocl_utils::free_aligned(foreground_pdf_);
+
+  return true;
+}
