@@ -13,6 +13,7 @@
 #include <vil/vil_transform.h>
 #include <vbl/vbl_array_2d.h>
 #include <sdet/sdet_img_edge.h>
+#include <vgl/vgl_distance.h>
 #ifdef DEBUG
 #include <vcl_iostream.h>
 #endif
@@ -50,9 +51,30 @@ class boxm_render_expected_edge_tangent_image_functor
                         T_aux /*aux_val*/)
   {
     //vcl_cout<< cell_value.residual_<<' ';
+#if 0
     if (cell_value.residual_<residual) {
       if (expected_(i,j) > cell_value.residual_)
         expected_(i,j) = cell_value.residual_;
+    }
+#endif
+    if (cell_value.residual_<residual) {
+      if (expected_(i,j) > cell_value.residual_) {
+        double u1,v1,u2,v2;
+        vgl_point_3d<float>  p1=cell_value.line_clipped_.point1();
+        vgl_point_3d<float>  p2=cell_value.line_clipped_.point2();
+        cam_->project(p1.x(),p1.y(),p1.z(),u1,v1);
+        cam_->project(p2.x(),p2.y(),p2.z(),u2,v2);
+        vgl_point_2d<double> img_p1(u1,v1);
+        vgl_point_2d<double> img_p2(u2,v2);
+        double dist = length(img_p1-img_p2);
+        if (dist > 1.0)  // for img lines shorter than a pixel don't bother
+        {
+          double dist_to_seg = vgl_distance_to_linesegment<double>(u1, v1, u2, v2, i, j);
+          if (dist_to_seg <= 0.5) { // if the current pixel is less than 0.5 pixels closer to the projected line then mark it
+            expected_(i,j)=cell_value.residual_;
+          }
+        }
+      }
     }
 #if 0
     if (cell_value.num_obs_>2 && cell_value.residual_<residual && cell_value.num_obs_>num_obs_(i,j))
