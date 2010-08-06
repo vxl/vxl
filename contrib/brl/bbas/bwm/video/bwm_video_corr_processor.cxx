@@ -23,8 +23,13 @@
 #include <vidl/vidl_frame.h>
 #include <vidl/vidl_convert.h>
 #include <vidl/vidl_image_list_istream.h>
+
+#include <vpgl/bgeo/bgeo_lvcs.h>
+
 //Minimum number of correspondences on a frame to compute cameras
-static const unsigned min_corrs = 10;
+//static const unsigned min_corrs = 10;
+//static const unsigned min_corrs = 9;
+static const unsigned min_corrs = 6;
 // if an element of pixels is negative it indicates the point was outside the
 // image
 static void extract_window(float u, float v, int radius,
@@ -131,8 +136,12 @@ open_camera_istream(vcl_string const& camera_path)
     return false;
   cam_istr_ = new bwm_video_cam_istream(camera_path);
   bool open = cam_istr_->is_open();
-  if (open)
+  if (open) {
+    vcl_cout << "in bwm_video_corr_processor::open_camera_istream() -- input stream: " << camera_path << " is opened!\n";
     cam_istr_->seek_camera(0);
+  } else {
+    vcl_cout << "in bwm_video_corr_processor::open_camera_istream() -- input stream: " << camera_path << " can NOT be opened!\n";
+  }
   return open;
 }
 
@@ -143,8 +152,23 @@ open_camera_ostream(vcl_string const& camera_path)
     return false;
   cam_ostr_ = new bwm_video_cam_ostream(camera_path);
   bool open = cam_ostr_->is_open();
+  if (open) {
+    vcl_cout << "in bwm_video_corr_processor::open_camera_ostream() -- output stream: " << camera_path << " is opened!\n";
+  } else {
+    vcl_cout << "in bwm_video_corr_processor::open_camera_ostream() -- output stream: " << camera_path << " can NOT be opened!\n";
+  }
   return open;
 }
+
+void bwm_video_corr_processor::close_camera_ostream()
+{
+  cam_ostr_->close();
+}
+void bwm_video_corr_processor::close_camera_istream()
+{
+  cam_istr_->close();
+}
+
 
 void remove_dir(vcl_string const& dir)
 {
@@ -204,6 +228,23 @@ vcl_vector<vgl_point_3d<double> > bwm_video_corr_processor::world_pts()
   return pts;
 }
 
+//: if the world coordinates are given in global coordinates of satellite cameras, convert them to local coordinate frame of the given lvcs
+void bwm_video_corr_processor::convert_world_pts_to_local(bgeo_lvcs_sptr lvcs)
+{
+  for (vcl_vector<bwm_video_corr_sptr>::iterator cit = corrs_.begin();
+       cit != corrs_.end(); ++cit)
+  {
+    if ((*cit)->world_pt_valid()) {
+      vgl_point_3d<double> pt = (*cit)->world_pt();
+      double x,y,z;
+      lvcs->global_to_local(pt.x(), pt.y(), pt.z(), lvcs->get_cs_name(), x,y,z); 
+      vgl_point_3d<double> new_pt(x,y,z);
+      vcl_cout << "world pt: " << pt << " converted to " << new_pt << vcl_endl;
+      (*cit)->set_world_pt(new_pt);
+    }
+  }
+}
+
 bool bwm_video_corr_processor::write_video_site(vcl_string const& site_path)
 {
   if (site_name_ == "")
@@ -215,6 +256,26 @@ bool bwm_video_corr_processor::write_video_site(vcl_string const& site_path)
   sio.set_corrs(corrs_);
   sio.x_write(site_path);
   return true;
+}
+
+void bwm_video_corr_processor::write_cameras_txt(vcl_string const& cam_txt_dir, vcl_vector<vpgl_perspective_camera<double> >& cameras)
+{
+  char filename[1024];
+  if (vul_file::is_directory(cam_txt_dir.c_str()))
+  {
+    vcl_cout << "writing " << cameras.size() << " cams to: " << cam_txt_dir << vcl_endl;
+    for (unsigned i=0;i<cameras.size();i++)
+    {
+      vcl_sprintf(filename,"%s/camera%05d.txt",cam_txt_dir.c_str(),i);
+      vcl_ofstream ofile(filename);
+      if (ofile)
+      {
+        ofile<<cameras[i].get_calibration().get_matrix()<<'\n'
+             <<cameras[i].get_rotation().as_matrix()<<'\n'
+             <<cameras[i].get_translation().x()<<' '<<cameras[i].get_translation().y()<<' '<<cameras[i].get_translation().z()<<'\n';
+      }
+    }
+  }
 }
 
 bool bwm_video_corr_processor::
@@ -315,6 +376,16 @@ void min_max_frame(vcl_vector<bwm_video_corr_sptr> const& corrs,
         max_frame = maxf;
     }
 }
+//: return the number of cameras that observe the correspondences
+unsigned bwm_video_corr_processor::get_ncameras(unsigned& min_frame, unsigned& max_frame) const
+{
+  min_frame =0; max_frame = 0;
+  //get the start and end frame numbers. assume contiguous frames inbetween
+  min_max_frame(corrs_, min_frame, max_frame);
+  if (verbose_)
+    vcl_cout << "Start frame = " << min_frame << " End frame = " << max_frame << '\n';
+  return max_frame-min_frame +1;
+}
 
 //
 //compute the mask on existing correspondences
@@ -324,13 +395,7 @@ void min_max_frame(vcl_vector<bwm_video_corr_sptr> const& corrs,
 void bwm_video_corr_processor::mask(unsigned& min_frame, unsigned& max_frame,
                                     vcl_vector<vcl_vector<bool> >& mask)
 {
-  //get the start and end frame numbers. assume contiguous frames inbetween
-  min_frame =0, max_frame = 0;
-  min_max_frame(corrs_, min_frame, max_frame);
-  if (verbose_)
-    vcl_cout << "Start frame = " << min_frame << " End frame = "
-             << max_frame << '\n';
-  unsigned ncameras = max_frame-min_frame +1;
+  unsigned ncameras = get_ncameras(min_frame, max_frame);
   unsigned npoints = corrs_.size();
   vcl_vector<bool> init(npoints);
   mask.resize(ncameras, init);
@@ -887,6 +952,7 @@ bool bwm_video_corr_processor::refine_world_pts_and_cameras()
   if (!this->interpolate_cameras(unknown_cameras, unknown_frames,
                                  interp_cameras))
     return false;
+  cameras_ = interp_cameras;
   // close the input camera stream
   if (cam_ostr_&&cam_ostr_->is_open())
     for (unsigned i = 0; i<ncameras; ++i)

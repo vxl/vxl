@@ -25,6 +25,7 @@
 #include <bwm/video/bwm_video_cam_istream_sptr.h>
 #include <bwm/video/bwm_video_cam_ostream_sptr.h>
 #include <bwm/video/bwm_video_site_io.h>
+#include <vpgl/bgeo/bgeo_lvcs_sptr.h>
 
 //: A least squares cost function for registering correspondences by minimizing square difference in intensities
 class bwm_video_corr_lsqr_cost_func : public vnl_least_squares_function
@@ -100,6 +101,9 @@ class bwm_video_corr_processor
   void set_world_pts(vcl_vector<vgl_point_3d<double> > const& pts);
   vcl_vector<vgl_point_3d<double> > world_pts();
 
+  //: if the world coordinates are given in global coordinates of satellite cameras, convert them to local coordinate frame of the given lvcs
+  void convert_world_pts_to_local(bgeo_lvcs_sptr lvcs);
+
   vcl_string site_name() const {return site_name_;}
   vcl_string video_path() const {return video_path_;}
   vcl_string camera_path() const {return camera_path_;}
@@ -108,6 +112,8 @@ class bwm_video_corr_processor
   bool open_video_stream(vcl_string const& video_path);
   bool open_camera_istream(vcl_string const& camera_path);
   bool open_camera_ostream(vcl_string const& camera_path);
+  void close_camera_ostream();
+  void close_camera_istream();
 
   //: Data output methods
   bool write_video_site(vcl_string const& site_path);
@@ -127,6 +133,8 @@ class bwm_video_corr_processor
 
   //: save cameras to output stream
   bool write_cameras_to_stream();
+  //: save cameras as txt files to the directory cam_txt_dir
+  void write_cameras_txt(vcl_string const& cam_txt_dir, vcl_vector<vpgl_perspective_camera<double> >& cameras);
 
   //: Find the missing correspondences by correlating with respect to the bounding adjacent frames with correspondences
   // Assumptions:
@@ -143,6 +151,9 @@ class bwm_video_corr_processor
 
   void close(); //close all streams and clear data
   void print_frame_alignment_quality(unsigned start_frame, unsigned end_frame);
+
+  //: return the number of cameras that observe the correspondences
+  unsigned get_ncameras(unsigned& min_frame, unsigned& max_frame) const;
 
   // INTERNALS-----------------------------------------------------------------
 
