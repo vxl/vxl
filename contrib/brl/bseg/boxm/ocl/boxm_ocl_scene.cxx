@@ -29,7 +29,8 @@ boxm_ocl_scene::boxm_ocl_scene(vbl_array_3d<int4> blocks,
                                vgl_point_3d<double> origin,
                                vgl_vector_3d<double> block_dim)
 {
-  this->init_scene(blocks, tree_buffers, data_buffers, mem_ptrs, lvcs, origin, block_dim);
+  this->init_scene(blocks, tree_buffers, data_buffers, 
+                   mem_ptrs, lvcs, origin, block_dim);
 }
 
 // initializes Scene from XML file
@@ -356,7 +357,6 @@ bool boxm_ocl_scene::init_empty_data()
   return true;
 }
 
-
 //SETTERS from int and float arrays
 void boxm_ocl_scene::set_blocks(int* block_ptrs)
 {
@@ -374,12 +374,38 @@ void boxm_ocl_scene::set_tree_buffers(int* tree_buffers)
 {
   int index = 0;
   vbl_array_2d<int4>::iterator iter;
-  for (iter = tree_buffers_.begin(); iter != tree_buffers_.end(); iter++) {
+  for(iter = tree_buffers_.begin(); iter != tree_buffers_.end(); iter++) {
     (*iter)[0] = tree_buffers[index++];
     (*iter)[1] = tree_buffers[index++];
     (*iter)[2] = tree_buffers[index++];
     (*iter)[3] = tree_buffers[index++];
   }
+}
+
+void boxm_ocl_scene::set_tree_buffers_opt(int* tree_buffers)
+{
+  int index = 0;
+  vbl_array_2d<int4>::iterator iter;
+  for(iter = tree_buffers_.begin(); iter != tree_buffers_.end(); iter++) {
+    
+    //if it's a root, store block pointer
+    if(tree_buffers[index] < 0) {
+      (*iter)[0] = -1;
+      (*iter)[3] = vcl_abs(tree_buffers[index]);
+    }
+    else {
+      (*iter)[0] = tree_buffers[index];
+      (*iter)[3] = -1;
+    }
+    index++;
+    
+    //split the second int into two shorts, cast back to ints...
+    int data_child = tree_buffers[index++];
+    unsigned short dataInd = (unsigned short) data_child & 0xFFFF;// this is 0^16 1^16 in binary
+    short childInd         = (short) (data_child >> 16);
+    (*iter)[1] = (int) childInd;
+    (*iter)[2] = (int) dataInd;
+  } 
 }
 
 void boxm_ocl_scene::set_mem_ptrs(int* mem_ptrs)
@@ -392,6 +418,16 @@ void boxm_ocl_scene::set_mem_ptrs(int* mem_ptrs)
   }
 }
 
+void boxm_ocl_scene::set_data_values(float* data_buffer)
+{
+  int datIndex = 0;
+  vbl_array_2d<float16>::iterator iter;
+  for (iter = data_buffers_.begin(); iter != data_buffers_.end(); iter++) {
+    for (int j=0; j<16; j++)
+      (*iter)[j] = data_buffer[datIndex++];
+  }
+}
+
 void boxm_ocl_scene::set_alpha_values(float* alpha_buffer)
 {
   int index = 0;
@@ -401,14 +437,145 @@ void boxm_ocl_scene::set_alpha_values(float* alpha_buffer)
   }
 }
 
-void boxm_ocl_scene::set_data_values(float* data_buffer)
+void boxm_ocl_scene::set_mixture_values(unsigned char* mixtures)
 {
-  int datIndex = 0;
+  int index = 0;
   vbl_array_2d<float16>::iterator iter;
   for (iter = data_buffers_.begin(); iter != data_buffers_.end(); iter++) {
-    for (int j=0; j<16; j++)
-      (*iter)[j] = data_buffer[datIndex++];
+    (*iter)[1] = (float) (mixtures[index++]/255.0);
+    (*iter)[2] = (float) (mixtures[index++]/255.0);
+    (*iter)[3] = (float) (mixtures[index++]/255.0);
+    (*iter)[5] = (float) (mixtures[index++]/255.0);
+    (*iter)[6] = (float) (mixtures[index++]/255.0);
+    (*iter)[7] = (float) (mixtures[index++]/255.0);
+    (*iter)[9] = (float) (mixtures[index++]/255.0);
+    (*iter)[10]= (float) (mixtures[index++]/255.0);
   }
+}
+void boxm_ocl_scene::set_num_obs_values(unsigned short* num_obs) 
+{
+  int index = 0;
+  vbl_array_2d<float16>::iterator iter;
+  for (iter = data_buffers_.begin(); iter != data_buffers_.end(); iter++) {
+    (*iter)[4]  = (float) num_obs[index++];
+    (*iter)[8]  = (float) num_obs[index++];
+    (*iter)[11] = (float) num_obs[index++];
+    (*iter)[12] = (float) num_obs[index++];
+  }
+}
+
+//data compression getters 
+void boxm_ocl_scene::get_mixture(unsigned char* mixture)
+{
+  int indexmix = 0;
+  vbl_array_2d<float16>::iterator iter;
+  for(iter = data_buffers_.begin(); iter != data_buffers_.end(); iter++)
+  {
+    mixture[indexmix++] = (unsigned char) (255.0 * (*iter)[1]);
+    mixture[indexmix++] = (unsigned char) (255.0 * (*iter)[2]);
+    mixture[indexmix++] = (unsigned char) (255.0 * (*iter)[3]);
+    mixture[indexmix++] = (unsigned char) (255.0 * (*iter)[5]);
+    mixture[indexmix++] = (unsigned char) (255.0 * (*iter)[6]);
+    mixture[indexmix++] = (unsigned char) (255.0 * (*iter)[7]);
+    mixture[indexmix++] = (unsigned char) (255.0 * (*iter)[9]);
+    mixture[indexmix++] = (unsigned char) (255.0 * (*iter)[10]);
+  }
+}
+
+void boxm_ocl_scene::get_alphas(float* alphas) 
+{
+  //init data arrays
+  int index = 0;
+  vbl_array_2d<float16>::iterator iter;
+  for(iter = data_buffers_.begin(); iter != data_buffers_.end(); iter++)
+    alphas[index++] = (*iter)[0];
+}
+
+void boxm_ocl_scene::get_num_obs(unsigned short* num_obs)
+{
+  //init data arrays
+  int index = 0;
+  vbl_array_2d<float16>::iterator iter;
+  for(iter = data_buffers_.begin(); iter != data_buffers_.end(); iter++)
+  {
+    num_obs[index++] = (unsigned short) (*iter)[4];
+    num_obs[index++] = (unsigned short) (*iter)[8];
+    num_obs[index++] = (unsigned short) (*iter)[11];
+    num_obs[index++] = (unsigned short) (*iter)[12];
+  }
+}
+
+void boxm_ocl_scene::get_tree_cells(int* cells) 
+{
+  //init tree structure
+  int index=0;
+  vbl_array_2d<int4>::iterator iter;
+  for (iter = tree_buffers_.begin(); iter != tree_buffers_.end(); iter++)
+  {
+    //cells[index++]=(*iter)[0];
+    //cells[index++]=(*iter)[1];
+    //cells[index++]=(*iter)[2];
+    //cells[index++]=(*iter)[3];
+    
+    //if node is root put the negative block pointer, otherwise parent
+    int block = (*iter)[3];
+    int parent = (*iter)[0];
+    int slotOne;
+    slotOne = (parent < 0) ? -1*block : parent; 
+    
+    //pack child and data pointer as two shorts
+    short child = (short) (*iter)[1];
+    unsigned short data = (unsigned short) (*iter)[2]; 
+    int packed_child_data = (child << 16) | data;
+    
+    //pack em in the cells
+    cells[index++] = slotOne;
+    cells[index++] = packed_child_data;
+  }
+  
+  //Bit packing tree cell unsigned ints:
+  //int0: either negative block index or positive parent index
+  //packing/unpacking experiment - use this in CL code
+  short child = -1;
+  unsigned short data = 23;
+  int packed_child = (child << 16) | data;
+  vcl_cout<<"Packed child data: "<<packed_child<<vcl_endl;
+  vcl_cout<<"Child in hex: "<<vcl_hex<<child<<vcl_endl;
+  vcl_cout<<"data in hex : "<<vcl_hex<<data<<vcl_endl;
+  vcl_cout<<"packed child in hex: "<<vcl_hex<<packed_child<<vcl_endl;
+  
+  // Unpack with shifts and masking using "and"
+  unsigned short udata = (unsigned short) packed_child & 0xFFFF; // this is 0^16 1^16 in binary
+  short uchild = (short) (packed_child >> 16); // this is 1^16 0^16 in binary
+  vcl_cout<<"unpacked data : "<<vcl_dec<<udata<<vcl_endl
+          <<"unpacked child: "<<vcl_dec<<uchild<<vcl_endl;
+
+}
+void boxm_ocl_scene::get_block_ptrs(int* blocks) 
+{
+  int index=0;
+  vbl_array_3d<int4>::iterator iter;
+  for (iter = blocks_.begin(); iter != blocks_.end(); iter++)
+  {
+    //blocks[index++]= (unsigned short) (*iter)[0];
+    //blocks[index++]= (unsigned short) (*iter)[1];
+    //blocks[index++]= (unsigned short) (*iter)[2];
+    //blocks[index++]= (unsigned short) (*iter)[3];
+    blocks[index++] = (*iter)[0];
+    blocks[index++] = (*iter)[1];
+    blocks[index++] = (*iter)[2];
+    blocks[index++]= (*iter)[3];
+  }  
+}
+
+void boxm_ocl_scene::get_mem_ptrs(int* mem_ptrs)
+{
+  int index = 0;
+  vbl_array_1d<int2>::iterator mem_iter;
+  for (mem_iter = mem_ptrs_.begin(); mem_iter != mem_ptrs_.end(); mem_iter++) {
+    mem_ptrs[index++] = (*mem_iter)[0];
+    mem_ptrs[index++] = (*mem_iter)[1];
+  }  
 }
 
 /******************************** XML WRITE **************************/

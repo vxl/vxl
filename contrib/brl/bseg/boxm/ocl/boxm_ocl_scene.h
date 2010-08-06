@@ -46,29 +46,7 @@ class boxm_ocl_scene
     boxm_ocl_scene(boxm_ocl_scene* scene);
     ~boxm_ocl_scene() { }
     
-    static short version_no() { return 1; }
-
-    int  init_level() { return init_level_; }
-    int  max_level() { return max_level_; }
-    void block_num(int &x, int &y, int &z){x=(int)blocks_.get_row1_count(); y=(int)blocks_.get_row2_count(); z=(int)blocks_.get_row3_count();}
-    void block_dim(double &x, double &y, double &z){x=block_dim_.x(); y=block_dim_.y(); z=block_dim_.z();}
-    void tree_buffer_shape(int &num, int &len){num=num_tree_buffers_; len=tree_buff_length_;}
-    boxm_scene_parser parser() { return parser_; }
-    vbl_array_1d<int2> mem_ptrs(){ return mem_ptrs_; }
-    vbl_array_3d<int4> blocks(){ return blocks_; }
-    vbl_array_2d<int4> tree_buffers(){ return tree_buffers_; }
-    vbl_array_2d<float16> data_buffers(){ return data_buffers_; }
-    vgl_vector_3d<double> block_dim(){ return block_dim_; }
-    vgl_point_3d<double> origin(){return origin_;}
-    bgeo_lvcs lvcs() { return lvcs_; }
-    int max_mb() { return max_mb_; }
-    float pinit() { return pinit_; }
-
-    /* ocl_scene I/O */
-    bool load_scene(vcl_string filename);   
-    bool save_scene(vcl_string dir);
-    bool save();
-
+    //initializes scene given scene values
     void init_scene(vbl_array_3d<int4> blocks, 
                     vbl_array_2d<int4> tree_buffers, 
                     vbl_array_2d<float16> data_buffers, 
@@ -76,8 +54,33 @@ class boxm_ocl_scene
                     bgeo_lvcs lvcs,
                     vgl_point_3d<double> origin,
                     vgl_vector_3d<double> block_dim);
+    
+    /* ocl_scene I/O */
+    bool load_scene(vcl_string filename);   
+    bool save_scene(vcl_string dir);
+    bool save();
+    static short version_no() { return 1; }
+
+    //accessors methods
+    vbl_array_1d<int2> mem_ptrs(){ return mem_ptrs_; }
+    vbl_array_3d<int4> blocks(){ return blocks_; }
+    vbl_array_2d<int4> tree_buffers(){ return tree_buffers_; }
+    vbl_array_2d<float16> data_buffers(){ return data_buffers_; }
+    vgl_vector_3d<double> block_dim(){ return block_dim_; }
+    vgl_point_3d<double> origin(){return origin_;}
+    int  init_level() { return init_level_; }
+    int  max_level() { return max_level_; }
+    void block_num(int &x, int &y, int &z){x=(int)blocks_.get_row1_count(); y=(int)blocks_.get_row2_count(); z=(int)blocks_.get_row3_count();}
+    void block_dim(double &x, double &y, double &z){x=block_dim_.x(); y=block_dim_.y(); z=block_dim_.z();}
+    void tree_buffer_shape(int &num, int &len){num=num_tree_buffers_; len=tree_buff_length_;}
+    boxm_scene_parser parser() { return parser_; }
+    bgeo_lvcs lvcs() { return lvcs_; }
+    int max_mb() { return max_mb_; }
+    float pinit() { return pinit_; }
 
     //setters
+    void set_num_buffers(int numBuf) {num_tree_buffers_ = numBuf; }
+    void set_buff_length(int len) {tree_buff_length_ = len; }
     void set_max_level(int max_level) { max_level_ = max_level; }
     void set_init_level(int init_level) { init_level_ = init_level; }
     void set_path(vcl_string dir) { path_ = dir; }
@@ -90,9 +93,20 @@ class boxm_ocl_scene
     //setters from 1 d int and float arrays
     void set_blocks(int* block_ptrs);
     void set_tree_buffers(int* tree_buffers);
+    void set_tree_buffers_opt(int* tree_buffers);
     void set_mem_ptrs(int* mem_ptrs);
+    void set_data_values(float* data_buffer);     //non opt
     void set_alpha_values(float* alpha_buffer);
-    void set_data_values(float* data_buffer);
+    void set_mixture_values(unsigned char* mixtures);
+    void set_num_obs_values(unsigned short* num_obs);
+    
+    //data compression getters 
+    void get_mixture(unsigned char* mixture);
+    void get_alphas(float* alphas);
+    void get_num_obs(unsigned short* num_obs);
+    void get_tree_cells(int* cells);
+    void get_block_ptrs(int* blocks);
+    void get_mem_ptrs(int* blocks);
     
   private:
 
