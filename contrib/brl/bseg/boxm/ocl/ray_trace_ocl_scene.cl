@@ -297,6 +297,7 @@ ray_trace_ocl_scene(__global int4     * scene_dims,  // level of the root.
   curr_block_index=curr_block_index+(curr_block_index==scenedims);
   int global_count=0;
 
+  float global_depth=0;
   while (!(any(curr_block_index<(int4)0)|| any(curr_block_index>=(scenedims))))
   {
      // Ray tracing with in each block
@@ -315,7 +316,7 @@ ray_trace_ocl_scene(__global int4     * scene_dims,  // level of the root.
     short4 entry_loc_code = loc_code(block_entry_pt, rootlevel);
     short4 curr_loc_code=(short4)-1;
     // traverse to leaf cell that contains the entry point
-    curr_cell_ptr = traverse_force_woffset(tree_array, root_ptr, root, entry_loc_code,&curr_loc_code,&global_count,root_ptr);
+    //curr_cell_ptr = traverse_force_woffset(tree_array, root_ptr, root, entry_loc_code,&curr_loc_code,&global_count,root_ptr);
     curr_cell_ptr = traverse_force_woffset_mod(tree_array, root_ptr, root, entry_loc_code,&curr_loc_code,&global_count,lenbuffer,block.x,block.y);
 
     // this cell is the first pierced by the ray
@@ -351,7 +352,7 @@ ray_trace_ocl_scene(__global int4     * scene_dims,  // level of the root.
 
       //// distance must be multiplied by the dimension of the bounding box
       float d = (tfar-tnear)*(blockdims.x);
-      //step_cell_render(sample_array,alpha_array,data_ptr,d,&data_return);
+      global_depth+=d;
       
       // X:-) DO NOT DELETE THE LINE BELOW THIS IS A STRING REPLACEMNT
       /*$$step_cell$$*/
@@ -375,7 +376,6 @@ ray_trace_ocl_scene(__global int4     * scene_dims,  // level of the root.
     // finding the next block
 
     // block bounding box
-
     cell_min=blockdims*convert_float4(curr_block_index)+origin;
     cell_max=cell_min+blockdims;
     if (!intersect_cell(ray_o, ray_d, cell_min, cell_max,&tnear, &tfar))
@@ -383,7 +383,6 @@ ray_trace_ocl_scene(__global int4     * scene_dims,  // level of the root.
         // this means the ray has hit a special case
         // two special cases
         // (1) grazing the corner/edge and (2) grazing the side.
-
         // this is the first case
         if (tfar-tnear<blockdims.x/100)
         {
@@ -391,12 +390,10 @@ ray_trace_ocl_scene(__global int4     * scene_dims,  // level of the root.
             curr_block_index=convert_int4((entry_pt-origin)/blockdims);
             curr_block_index.w=0;
         }
-
     }
     else
     {
-        entry_pt=ray_o + tfar *ray_d;
-        ray_d.w=1;
+        entry_pt=ray_o + tfar *ray_d;ray_d.w=1;
         if (any(-1*(isless(fabs(entry_pt-cell_min),(float4)blockdims.x/100.0f)*isless(fabs(ray_d),(float4)1e-3))))
             break;
         if (any(-1*(isless(fabs(entry_pt-cell_max),(float4)blockdims.x/100.0f)*isless(fabs(ray_d),(float4)1e-3))))
@@ -600,8 +597,7 @@ ray_trace_ocl_scene_full_data(__global int4     * scene_dims,  // level of the r
         curr_block_index=convert_int4(floor((entry_pt+(blockdims.x/20.0f)*ray_d-origin)/blockdims));
         curr_block_index.w=0;
     }
-    //count++;
   }
-  data_return.z+=(1-data_return.w)*0.5f;
+  data_return.z+=(1-data_return.w)*0.5;
   gl_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)(data_return.z));
 }
