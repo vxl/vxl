@@ -42,8 +42,7 @@ vil_image_view<float> bvpgl_camera_estimator<exp_edge_func>::convert_to_spherica
   vil_image_view<float> imgs(theta_size,phi_size,1);
   imgs.fill(0.0f);
 
-  vnl_double_3x3 K = cam.get_calibration().get_matrix();
-  // vnl_double_3x3 K_inv = vnl_inverse(K); // unused
+  vnl_matrix<double> K = cam.get_calibration().get_matrix();
 
   vnl_double_3x3 R(0.0);
   R(0,0) = 1.0;
@@ -134,7 +133,8 @@ double bvpgl_camera_estimator<exp_edge_func>::estimate_rotation_angle(const vil_
 
   int rot_size = vnl_math_ceil(rot_range_/rot_step_);
 
-  double best_score = 0.0;
+  //double best_score = 0.0;
+  double best_score = vcl_numeric_limits<double>::min();
   double best_rot = 0.0;
 
   for (int r=-rot_size; r<rot_size+1; r++) {
