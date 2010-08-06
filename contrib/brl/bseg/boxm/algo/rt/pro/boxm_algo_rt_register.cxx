@@ -29,4 +29,5 @@ void boxm_algo_rt_register::register_process()
     REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_ray_statistics_process,"boxmRayStatisticsProcess");
     REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_change_probability_process,"boxmChangeProbabilityProcess");
     REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_estimate_camera_process,"boxmEstimateCameraProcess");
+    REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_edge_refine_updates_process, "boxmEdgeRefineUpdatesProcess");
 }
