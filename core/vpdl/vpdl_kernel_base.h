@@ -13,6 +13,7 @@
 // \endverbatim
 
 #include <vpdl/vpdl_multi_cmp_dist.h>
+#include <vpdl/vpdt/vpdt_access.h> // function vpdt_size(v)
 #include <vcl_cassert.h>
 #include <vcl_vector.h>
 
