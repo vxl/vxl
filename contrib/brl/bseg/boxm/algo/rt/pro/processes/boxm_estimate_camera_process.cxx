@@ -160,10 +160,11 @@ bool boxm_estimate_camera_process(bprb_func_process& pro)
       vil_image_view<vxl_byte> *img_eei_before_correction = new vil_image_view<vxl_byte>(ni,nj,1);
       brip_vil_float_ops::normalize_to_interval<float,vxl_byte>(*img_eei,*img_eei_before_correction,0.0f,255.0f);
 
-      //vcl_cout << "Estimating correct camera parameters\n";
       bvpgl_camera_estimator_amoeba<func_type> cost_ftn(cam_estimator,img_e,cam_inp);
       vnl_vector<double> x(2,1.0);
       vnl_amoeba amoeba(cost_ftn);
+      amoeba.verbose = 1;
+      amoeba.default_verbose = true;
       amoeba.set_relative_diameter(3.0);
       amoeba.set_max_iterations(max_iter_cam_center);
       amoeba.minimize(x);
@@ -176,7 +177,6 @@ bool boxm_estimate_camera_process(bprb_func_process& pro)
       vil_image_view<vxl_byte> *img_eei_vb = new vil_image_view<vxl_byte>(ni,nj,1);
       brip_vil_float_ops::normalize_to_interval<float,vxl_byte>(*img_eei,*img_eei_vb,0.0f,255.0f);
     
- 
       delete cam_est;
       delete img_eei;
 
