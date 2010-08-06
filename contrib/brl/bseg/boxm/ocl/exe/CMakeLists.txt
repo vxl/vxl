@@ -45,5 +45,10 @@ ADD_EXECUTABLE( boxm_opencl_render_ocl_scene_exe
 TARGET_LINK_LIBRARIES( boxm_opencl_render_ocl_scene_exe   boxm_ocl vil vpgl_algo  vul )
 
 
+ADD_EXECUTABLE( boxm_build_foreground_distribution_exe
+  boxm_build_foreground_distribution.cxx
+ )
+TARGET_LINK_LIBRARIES( boxm_build_foreground_distribution_exe vcl vul bsta_algo )
+
 
 

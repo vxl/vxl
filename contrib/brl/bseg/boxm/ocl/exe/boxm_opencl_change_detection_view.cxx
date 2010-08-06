@@ -1,4 +1,4 @@
-//    Volume update and rendering sample
+//    Volume change detection
 //    This sample loads a 3D volume
 // Utilities, OpenCL and system includes
 #include <GL/glew.h>
@@ -28,6 +28,7 @@
 #include <vgui/vgui_viewer3D_tableau.h>
 
 #include <vcl_vector.h>
+#include <bsta/bsta_histogram.h>
 
 int main(int argc, char ** argv)
 {
@@ -35,10 +36,11 @@ int main(int argc, char ** argv)
   vgui::init(argc, argv);
 
   // handle arguments
-  vcl_cout<<"OCL SCENE UPDATE"<<vcl_endl;
+  vcl_cout<<"OCL Change Detection "<<vcl_endl;
   vul_arg<vcl_string> cam_dir("-camdir", "camera directory", "");
   vul_arg<vcl_string> img_dir("-imgdir", "Image directory", "");
   vul_arg<vcl_string> scene_file("-scene", "scene filename", ""); //ocl_scene xml file
+  vul_arg<vcl_string> hist_file("-foregroundhist", "foreground histogram", ""); //ocl_scene xml file
   vul_arg_parse(argc, argv);
   if (!vul_file::is_directory(cam_dir().c_str()))
     return -1;
@@ -71,7 +73,30 @@ int main(int argc, char ** argv)
   boxm_ocl_change_detection_tableau_new change_detection_tableau;
   GLboolean bGLEW = glewIsSupported("GL_VERSION_2_0  GL_ARB_pixel_buffer_object");
 
-  change_detection_tableau->init(&ocl_scene, cam_files, img_files);
+  bsta_histogram<float> hist(0.0f,1.0f,20);
+
+  vcl_ifstream ifile(hist_file().c_str());
+  vcl_vector<float> pdf;
+  if(!ifile)
+  {
+      vcl_cout<<"Failed to open a histogram: will assume uniform distriubtion"<<vcl_endl;
+      for(unsigned i=0;i<hist.nbins();i++)
+          pdf.push_back(1.0f);
+  }
+  else
+  {
+      hist.read(ifile);
+      float area=hist.area();
+      vcl_cout<<"Area = "<<area<<vcl_endl;
+      pdf=hist.count_array();
+      for(unsigned i=0;i<hist.nbins();i++)
+      {
+          pdf[i]=pdf[i]/area*20;
+          vcl_cout<<pdf[i]<<" ";
+      }
+      ifile.close();
+  }
+  change_detection_tableau->init(&ocl_scene, cam_files, img_files,pdf);
 
   return  vgui::run(change_detection_tableau, 640,480);
 }
