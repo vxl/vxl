@@ -12,3 +12,7 @@ TARGET_LINK_LIBRARIES(bwm_extract_snippets  bwm_video vsol vnl vil vpl vul vsl)
 
 ADD_EXECUTABLE(bwm_transform_video_site_proc bwm_transform_video_site_proc.cxx)
 TARGET_LINK_LIBRARIES(bwm_transform_video_site_proc  bwm_video vsol vil vnl vgl vpl vul vsl)
+
+ADD_EXECUTABLE(bwm_corr_proc_gt bwm_video_corr_proc_gt.cxx)
+TARGET_LINK_LIBRARIES(bwm_corr_proc_gt  bwm_video vnl vpl vul)
+
