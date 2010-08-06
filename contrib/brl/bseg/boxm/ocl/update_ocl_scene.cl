@@ -174,16 +174,16 @@ update_ocl_scene_opt(__global int4*    scene_dims,    // level of the root.
                 //      /* cell data, i.e., alpha and app model is needed for some passes */
 #if %%
                 cached_data[llid].s0 = (float) (alpha_array[data_ptr]);
-                cached_data[llid].s1 = (float) (mixture_array[data_ptr].s0/255.0);
-                cached_data[llid].s2 = (float) (mixture_array[data_ptr].s1/255.0);
-                cached_data[llid].s3 = (float) (mixture_array[data_ptr].s2/255.0);
+                cached_data[llid].s1 = (float) ((float)mixture_array[data_ptr].s0/255.0);
+                cached_data[llid].s2 = (float) ((float)mixture_array[data_ptr].s1/255.0);
+                cached_data[llid].s3 = (float) ((float)mixture_array[data_ptr].s2/255.0);
                 cached_data[llid].s4 = (float) (num_obs_array[data_ptr].s0);
-                cached_data[llid].s5 = (float) (mixture_array[data_ptr].s3/255.0);
-                cached_data[llid].s6 = (float) (mixture_array[data_ptr].s4/255.0);
-                cached_data[llid].s7 = (float) (mixture_array[data_ptr].s5/255.0);
+                cached_data[llid].s5 = (float) ((float)mixture_array[data_ptr].s3/255.0);
+                cached_data[llid].s6 = (float) ((float)mixture_array[data_ptr].s4/255.0);
+                cached_data[llid].s7 = (float) ((float)mixture_array[data_ptr].s5/255.0);
                 cached_data[llid].s8 = (float) (num_obs_array[data_ptr].s1);
-                cached_data[llid].s9 = (float) (mixture_array[data_ptr].s6/255.0);
-                cached_data[llid].sa = (float) (mixture_array[data_ptr].s7/255.0);
+                cached_data[llid].s9 = (float) ((float)mixture_array[data_ptr].s6/255.0);
+                cached_data[llid].sa = (float) ((float)mixture_array[data_ptr].s7/255.0);
                 cached_data[llid].sb = (float) (num_obs_array[data_ptr].s2);
                 cached_data[llid].sc = (float) (num_obs_array[data_ptr].s3);
                 cached_data[llid].sd = 0.0;
@@ -255,6 +255,14 @@ update_ocl_scene_opt(__global int4*    scene_dims,    // level of the root.
             curr_block_index.w=0;
         }
     }
+    
+    if(llid == 31) {
+      output[0] = cached_aux_data[llid].x;
+      output[1] = cached_aux_data[llid].y;
+      output[2] = cached_aux_data[llid].z;
+      output[3] = cached_aux_data[llid].w;
+    }
+    
 }
 
 
@@ -493,8 +501,11 @@ update_ocl_scene_main_opt(__global float*   alpha_array,
                           __global short4*  nobs_array,
                           __global float4*  aux_data_array,
                           __global int*     lenbuffer,
-                          __global int*     numbuffer)
+                          __global int*     numbuffer, 
+                          __global float*   output)
 {
+
+  
     int gid=get_global_id(0);
     int datasize= (*lenbuffer)*(*numbuffer);
     if (gid<datasize)
@@ -511,6 +522,13 @@ update_ocl_scene_main_opt(__global float*   alpha_array,
       nobs_array[gid]    = nobs;
       aux_data_array[gid]=(float4)0.0f;
     }
+     if(gid==49) {
+      output[0] = alpha_array[gid];
+      output[1] = (float) (mixture_array[gid].s0/255.0);
+      output[2] = (float) (mixture_array[gid].s1/255.0);
+      output[3] = (float) (nobs_array[gid].s3/10.0);
+    }
+    
 }
 
 

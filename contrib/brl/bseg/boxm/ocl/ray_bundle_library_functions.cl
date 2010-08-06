@@ -805,7 +805,7 @@ void update_cell_mixture(float * alpha, uchar8 * mixture, short4 * nobs,
           w2=1-w0-w1;  
 
         short Nobs0 = (*nobs).s0, Nobs1 = (*nobs).s1, Nobs2 = (*nobs).s2; 
-        float Nobs_mix = (float) (*nobs).s3;
+        float Nobs_mix = (float) ((*nobs).s3/10.0);  //needs to be a floating point number
 
         update_gauss_3_mixture(aux_data.y/aux_data.x,
                                aux_data.w/aux_data.x,
@@ -816,7 +816,7 @@ void update_cell_mixture(float * alpha, uchar8 * mixture, short4 * nobs,
                                &mu2,&sigma2,&w2,&Nobs2,
                                &Nobs_mix);
         
-        (*alpha) = aux_data.z/aux_data.x;
+        (*alpha) *= aux_data.z/aux_data.x;
         (*mixture).s0 = (uchar) (mu0*255.0); 
         (*mixture).s1 = (uchar) (sigma0*255.0); 
         (*mixture).s2 = (uchar) (w0*255.0);
@@ -829,7 +829,7 @@ void update_cell_mixture(float * alpha, uchar8 * mixture, short4 * nobs,
         (*nobs).s0 = Nobs0;
         (*nobs).s1 = Nobs1;
         (*nobs).s2 = Nobs2;
-        (*nobs).s3 = (short) Nobs_mix;
+        (*nobs).s3 = (short) (Nobs_mix*10);
         
     }
 }

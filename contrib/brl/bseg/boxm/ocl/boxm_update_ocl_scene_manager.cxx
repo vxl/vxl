@@ -292,10 +292,15 @@ bool boxm_update_ocl_scene_manager::set_args(unsigned pass)
       return false;
     status = clSetKernelArg(kernels_[pass], i++, sizeof(cl_mem), (void *)&lenbuffer_buf_);
     if (this->check_val(status, CL_SUCCESS, "clSetKernelArg failed. (lenbuffer_buf_)")!=CHECK_SUCCESS)
-        return false;
+      return false;
     status = clSetKernelArg(kernels_[pass], i++, sizeof(cl_mem), (void *)&numbuffer_buf_);
-    return this->check_val(status, CL_SUCCESS,
-                           "clSetKernelArg failed. (numbuffer_buf_)")==CHECK_SUCCESS;
+    if (this->check_val(status, CL_SUCCESS, "clSetKernelArg failed. (numbuffer_buf_)")!=CHECK_SUCCESS)
+      return false;
+    
+    //output float buffer (one float for each buffer)
+    status = clSetKernelArg(kernels_[pass],i++,sizeof(cl_mem),(void *)&output_debug_buf_);
+    if (this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output debugger)")!=CHECK_SUCCESS)
+      return false;
   }
 
   if (pass == 2) { // norm image process //
@@ -617,7 +622,6 @@ bool boxm_update_ocl_scene_manager::set_workspace(unsigned pass)
 
 bool boxm_update_ocl_scene_manager::run(unsigned pass)
 {
-  vcl_cout<<"Running pass "<<pass<<vcl_endl;
   int CHECK_SUCCESS = 1;
   cl_int status = SDK_SUCCESS;
   cl_ulong tstart,tend;
@@ -706,6 +710,22 @@ bool boxm_update_ocl_scene_manager::online_processing()
           return false;
       }
       
+      //read some output
+      cl_event events[0];
+      int status = clEnqueueReadBuffer(command_queue_,output_debug_buf_,CL_TRUE,
+                                       0,numbuffer_*sizeof(cl_float),
+                                       output_debug_,
+                                       0,NULL,&events[0]);
+      if (!this->check_val(status,CL_SUCCESS,"clEnqueueReadBuffer (output buffer )failed."))
+        return false;
+      status = clWaitForEvents(1, &events[0]);
+      if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents (output read) failed."))
+        return false;
+      vcl_cout<<"OUTPUT: "
+              <<output_debug_[0]<<","
+              <<output_debug_[1]<<","
+              <<output_debug_[2]<<","
+              <<output_debug_[3]<<vcl_endl;
   }
   vcl_cout << "Timing Analysis\n"
            << "===============\n"
