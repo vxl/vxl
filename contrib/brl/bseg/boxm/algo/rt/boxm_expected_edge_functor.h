@@ -14,6 +14,8 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_transform.h>
 
+#include <brip/brip_vil_float_ops.h>
+
 #include <vcl_vector.h>
 
 //: Functor class to compute (1-x)
@@ -40,6 +42,10 @@ class boxm_expected_edge_functor
     //: now take the inverse of this image, pixels which contain edges will have values closer to 1 and others will be zero
     boxm_exp_edge_vil_not_functor nt;
     vil_transform(*img_eei, nt);
+
+    //: now blur this image
+    *img_eei = brip_vil_float_ops::gaussian(*img_eei, 1.0f);
+
     return true;
   }
 
