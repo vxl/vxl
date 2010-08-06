@@ -34,7 +34,9 @@ class boxm_update_ocl_scene_manager : public bocl_manager<boxm_update_ocl_scene_
     max_level_(0),
     cells_(0),
     cells_size_(0),
-    cell_data_(0),
+    cell_alpha_(0),
+    cell_mixture_(0),
+    cell_num_obs_(0),
     cell_data_size_(0),
     numbuffer_(0),
     lenbuffer_(0),
@@ -119,7 +121,6 @@ class boxm_update_ocl_scene_manager : public bocl_manager<boxm_update_ocl_scene_
   cl_mem   image_buf_;
   cl_mem   image_gl_buf_;
 
-
   //: helper functions
   bool run(unsigned pass);
 
@@ -181,7 +182,6 @@ class boxm_update_ocl_scene_manager : public bocl_manager<boxm_update_ocl_scene_
   //open cl side helper functions
   int build_kernel_program(cl_program & program);
   bool build_program(vcl_string const& functor, bool use_cell_data);
-  void archive_tree_data();
   bool build_rendering_program();
   bool build_refining_program();
 
@@ -196,49 +196,50 @@ class boxm_update_ocl_scene_manager : public bocl_manager<boxm_update_ocl_scene_
 
  protected:
 
-  // scene information
-  cl_int * block_ptrs_;
-  cl_int*   mem_ptrs_;      //(int2) points to tree_cells_ free mem
+ /*****************************************
+  * scene information
+  *****************************************/
+  cl_int    * block_ptrs_;     //(int4) 3d array, points to (buff,offset) for each block
+  cl_int    * mem_ptrs_;       //(int2) points to tree_cells_ free mem
+  /* array of tree cells */
+  cl_int    * cells_;           //(int2) packed tree cell data
+  cl_uint     cells_size_;      //length of above array
+  /* optimized data format in 4 buffers */
+  cl_float  * cell_alpha_;      //array of floats
+  cl_uchar  * cell_mixture_;    //array of uchar8s
+  cl_ushort * cell_num_obs_;    //array of short4s  
+  cl_float  * cell_aux_data_;   //array of float4s
+  cl_uint     cell_data_size_;  //length of above arrays
+  /* scene world information (x,y,z,0) */
+  cl_int    * scene_dims_;      //int4 dimension of whole scene 
+  cl_float  * scene_origin_;    //float4 
+  cl_float  * output_debug_;    //
+  cl_float  * block_dims_;      //float4 dimension of each block
+  cl_float    block_len_;       //
+  cl_float    max_level_;       //max level for each block (no more than 4)
+  /* scene meta data */
+  cl_int      numbuffer_;       //number of buffers of cells and data 
+  cl_int      lenbuffer_;       //length of each buffer
+  cl_float    prob_thresh_;     //update prob thresh
+  cl_uint     root_level_;      //root level
 
-  // (x,y,z,0)
-  cl_int * scene_dims_;
-  cl_float * scene_origin_;
-  cl_float * output_debug_;
-  // (x,y,z,0)
-  cl_float * block_dims_;
-  cl_float block_len_;
-  cl_float max_level_;
-  //array of tree cells,
-  cl_int* cells_;
-  cl_uint  cells_size_;
+ /*****************************************
+  * update information
+  *****************************************/
+  cl_uint   * img_dims_;           //image dimensions
+  
+  /* offset for non-overlapping sections */
+  cl_uint     offset_x_;
+  cl_uint     offset_y_;
+  cl_uint     factor_;
 
-  //array of data pointed to by tree
-  cl_float* cell_data_;
-  cl_uint  cell_data_size_;
-  cl_float* cell_aux_data_;
-
-  cl_int numbuffer_;
-  cl_int lenbuffer_;
-  cl_float prob_thresh_;
-  //root level
-  cl_uint root_level_;
-
-  // image dimensions
-  cl_uint* img_dims_;
-
-  //offset for non-overlapping sections
-  cl_uint  offset_x_;
-  cl_uint  offset_y_;
-  cl_uint  factor_;
-
-  // bounding box for each tree
+  /* bounding box for each tree */
   cl_float * tree_bbox_;
 
   cl_float* app_density_;
   cl_mem    app_density_buf_;
 
   // camera
-
   cl_float * persp_cam_;
 
   cl_uint bni_;
@@ -250,43 +251,49 @@ class boxm_update_ocl_scene_manager : public bocl_manager<boxm_update_ocl_scene_
 
   // workspace dimensions which will be
   // greater than or equal to image dimensions
-
   cl_uint wni_;
   cl_uint wnj_;
-  // pointer to cl memory on GPU
-  cl_mem   cells_buf_;
-  cl_mem   cell_data_buf_;
-  cl_mem   cell_aux_data_buf_;
-  cl_mem   tree_bbox_buf_;
+  
+ /*****************************************
+  *pointers to cl memory on GPU
+  *****************************************/
+  /* scene buffers */
+  cl_mem    block_ptrs_buf_;      
+  cl_mem    mem_ptrs_buf_;
+  cl_mem    cells_buf_;
+  cl_mem    cell_alpha_buf_;
+  cl_mem    cell_mixture_buf_;
+  cl_mem    cell_num_obs_buf_;
+  cl_mem    cell_aux_data_buf_;
+  cl_mem    scene_orig_buf_;
+  cl_mem    root_level_buf_;
+  cl_mem    numbuffer_buf_;
+  cl_mem    lenbuffer_buf_;
+  cl_mem    scene_dims_buf_;
+  cl_mem    scene_origin_buf_;
+  cl_mem    block_dims_buf_;
+  
+  /* update buffers */
+  cl_mem    tree_bbox_buf_;
+  cl_mem    persp_cam_buf_;
+  cl_mem    img_dims_buf_;
+  cl_mem    offset_x_buf_;
+  cl_mem    offset_y_buf_;
+  cl_mem    factor_buf_;
+  
+  /*debugger ... */
+  cl_mem    output_debug_buf_;
 
-  cl_mem   persp_cam_buf_;
-  cl_mem   img_dims_buf_;
-
-  cl_mem   scene_orig_buf_;
-
-  cl_mem   root_level_buf_;
-  cl_mem   numbuffer_buf_;
-  cl_mem   lenbuffer_buf_;
-
-  cl_mem   scene_dims_buf_;
-  cl_mem   scene_origin_buf_;
-  cl_mem   block_ptrs_buf_;
-  cl_mem   block_dims_buf_;
-  cl_mem   mem_ptrs_buf_;
-
-  cl_mem   offset_x_buf_;
-  cl_mem   offset_y_buf_;
-  cl_mem   factor_buf_;
-
-  cl_mem output_debug_buf_;
-
+ /*****************************************
+  *helper member variables 
+  *****************************************/
   boxm_ocl_scene * scene_;
   vpgl_camera_double_sptr cam_;
   vil_image_view<float>  input_img_;
 
   float gpu_time_;
   vcl_size_t globalThreads[2];
-  vcl_size_t localThreads[2] ;
+  vcl_size_t localThreads[2];
 };
 
 #endif // boxm_update_ocl_scene_manager_h_

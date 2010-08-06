@@ -96,6 +96,8 @@ void boxm_ocl_convert<T>::copy_to_arrays(boct_tree_cell<short, T >* cell_ptr,
 }
 
 //: Converts boxm_scene to a boxm_ocl_scene
+//: length of each buffer is now constant = 2^16 (needs to be 
+//: addressable by a short)
 template<class T>
 void boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T> >* scene, 
                                         int num_buffers, 
@@ -110,6 +112,7 @@ void boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T> >* scene,
   typedef vnl_vector_fixed<float, 16> float16;
   const int SMALL_BLK_INIT_LEVEL = 1, SMALL_BLK_MAX_LEVEL = 4;
   const int MAX_BYTES = max_mb*1024*1024;
+  const int BUFF_LENGTH = vcl_pow(2,16);
   
   /* report some current scene stats */
   vgl_point_3d<double> origin = scene->origin();
@@ -127,7 +130,7 @@ void boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T> >* scene,
           <<"---init_level: "<<scene->init_level()<<vcl_endl
           <<"---------------------------------------------"<<vcl_endl;
 
-  /* calculate number of small blocks along one side of one big block*/
+  /* calculate level of boxm_scene to become root for ocl_scene */
   int max_level = (int) scene->max_level(); //equals rootLevel + 1
   int def_init = max_level - SMALL_BLK_MAX_LEVEL; //allows for trees to grow to depth 4
   int scene_init = scene->init_level();
@@ -138,6 +141,7 @@ void boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T> >* scene,
           <<"big block scene level: "<<small_blk_root_level
           <<" to become small block scene root"<<vcl_endl;
 
+  /* Calculate number of small blocks along one side of a big block */
   //finest blocks that lie along one side of the big (or small) blocks
   float finestPerBig = (float) vcl_pow((float)2, (float)(max_level-SMALL_BLK_INIT_LEVEL));
   float finestPerSmall = (float) vcl_pow((float)2, (float)(max_level-init_level));
@@ -146,7 +150,7 @@ void boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T> >* scene,
   vgl_vector_3d<int> block_num_small(sm_n*x_num, sm_n*y_num, sm_n*z_num);
   vgl_vector_3d<double> block_dim_small(block_dim.x()/sm_n, block_dim.y()/sm_n, block_dim.z()/sm_n);
   
-  /* compute total number of tree cells needed for this scene */
+  /* compute number of tree cells needed for this scene (minimum) */
   int total_blocks = block_num_small.x() * block_num_small.y() * block_num_small.z();
   int total_tree_cells = 0;
   int total_leaf_cells = 0;
@@ -158,58 +162,68 @@ void boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T> >* scene,
     tree_type* tree = block->get_tree();
     total_tree_cells += tree->all_cells().size();
     total_leaf_cells += tree->leaf_cells().size();
-    vcl_cout<<"# tree cells "<<tree->all_cells().size()<<vcl_endl;
+    vcl_cout<<"blk@"<<blk_ind<<" contains "
+            <<tree->all_cells().size()<<" tree cells"<<vcl_endl;
   }
+  vcl_cout<<"scene: "<<total_tree_cells<<" in boxm_scene"<<vcl_endl;
   
+  //UPDATE: now buff length is 2^16, number of buffers is what varies
   /* compute total number of cells that can be allocated given max_mb */
-  int freeBytes = MAX_BYTES-total_blocks*4*sizeof(int); 
-  int sizeofCell = 4*sizeof(int) + 20*sizeof(float); 
-  int num_cells = (int) (freeBytes/sizeofCell);
-  int buff_length = (int) (num_cells / num_buffers);
-  vcl_cout<<"Number of blocks "<<total_blocks
-          <<" takes up "<<total_blocks*4<<" bytes"<<vcl_endl
-          <<"   "<<freeBytes<<" bytes left"<<vcl_endl;
-  
+  //if max_mb is less than 0, then fit the scene as tightly as possible
+  if(max_mb < 0) {
+    num_buffers = (int) vcl_ceil( ((float)total_tree_cells/(float)BUFF_LENGTH) );
+  }
+  else {
+    int freeBytes = MAX_BYTES-total_blocks*4*sizeof(int); 
+    int sizeofCell = 2*sizeof(int) + 8*sizeof(char) + 4*sizeof(short) + 5*sizeof(float); 
+    int num_cells = (int) (freeBytes/sizeofCell);
+    num_buffers = (int) vcl_ceil( ((float)num_cells/(float)BUFF_LENGTH) );
+    vcl_cout<<"Number of blocks "<<total_blocks
+            <<" leaves "<<freeBytes<<" bytes left"<<vcl_endl;
+  }
   //int buff_length = (int) vcl_ceil(((float)total_tree_cells/(float)num_buffers));
-  vcl_cout<<"OCL Scene buffer shape: ["<<num_buffers<<" buffers by "<<buff_length<<" cells]. "
-          <<"[total tree:"<<num_buffers*buff_length<<"]"<<vcl_endl;
+  vcl_cout<<"OCL Scene buffer shape: ["<<num_buffers<<" buffers by "<<BUFF_LENGTH<<" cells]. "
+          <<"[total tree:"<<num_buffers*BUFF_LENGTH<<"]"<<vcl_endl;
   
   // make sure that the number of cells allocated is greater than
   // the number of cells in the input tree 
-  if(num_buffers * buff_length <= total_tree_cells) {
-    vcl_cerr<<"boxm_ocl_convert::convert_scene: Max scene size not large enough to accomodate input scene"<<vcl_endl;
+  if(num_buffers * BUFF_LENGTH <= total_tree_cells) {
+    vcl_cerr<<"**************************************************"<<vcl_endl
+            <<"*** boxm_ocl_convert::convert_scene: ERROR!!!!"<<vcl_endl
+            <<"*** Max scene size not large enough to accomodate input scene"<<vcl_endl
+            <<"*** cells allocated:   "<<num_buffers * BUFF_LENGTH<<vcl_endl
+            <<"*** total scene cells: "<<total_tree_cells<<vcl_endl
+            <<"**************************************************"<<vcl_endl;
     return;
   }
-    
-
+  
   /* 1. Set up 3D array of blocks (small blocks), assuming all blocks are similarly sized */
   int4 init(-1);
   vbl_array_3d<int4> blocks(block_num_small.x(), block_num_small.y(), block_num_small.z(), init);
 
-  /* 2. set up 2d array of tree_buffers */
-  vbl_array_2d<int4> tree_buffers(num_buffers, buff_length, init);
+  /* 2. set up 2d array of tree_buffers (add one buffer for emergencies) */
+  vbl_array_2d<int4> tree_buffers(num_buffers+1, BUFF_LENGTH, init);
 
-  /* 3. set up 1d array of mem ptrs */
-  int2 mem_init; mem_init[0] = 0; mem_init[1] = 1;
-  vbl_array_1d<int2> mem_ptrs(num_buffers, mem_init);
-
-  /* 4. set up 2d array of data buffers */
+  /* 3. set up 2d array of data buffers (add one buffer for emergencies) */
   float16 dat_init(0.0f);
   dat_init[1] = .1;
-  vbl_array_2d<float16> data_buffers(num_buffers, buff_length, dat_init);
-
+  vbl_array_2d<float16> data_buffers(num_buffers+1, BUFF_LENGTH, dat_init);
+  
+  /* 4. set up 1d array of mem ptrs */
+  int2 mem_init; mem_init[0] = 0; mem_init[1] = 1;
+  vbl_array_1d<int2> mem_ptrs(num_buffers+1, mem_init);
+  
   /* 5. Go through each block and convert it to smaller blocks */
   vnl_random random(9667566);
   boxm_block_iterator<tree_type> iter(scene);
   for (iter.begin(); !iter.end(); iter++) {
-    bool buff_Full = false;
     vcl_cout<<"Converting big block at "<<iter.index()<<vcl_endl;
     vgl_point_3d<int> blk_ind = iter.index();
     scene->load_block(blk_ind.x(), blk_ind.y(), blk_ind.z());
     block_type* block = scene->get_active_block();
     tree_type* tree = block->get_tree();
 
-    //cells at level 3 (4th level from the bottom) make up the new roots
+    //get the new roots - cells at small_blk_root_level
     vcl_vector<boct_tree_cell<short,T>*> blk_roots = tree->cells_at_level(small_blk_root_level);
     vcl_cout<<"  number small blocks: "<<blk_roots.size()<<vcl_endl;
     int tot_alloc = 0;
@@ -230,15 +244,41 @@ void boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T> >* scene,
       arr_root[1] = -1; // no children yet
       arr_root[2] = 0;  // points to datum
       arr_root[3] = 0;  // not used yet
-      vcl_vector<int4> cell_array;
+      vcl_vector<int4> cell_array; 
       cell_array.push_back(arr_root);
-      vcl_vector<float16> data_array;
+      vcl_vector<float16> data_array; 
       data_array.push_back(dat_init);
       boxm_ocl_convert<T>::copy_to_arrays(root, cell_array, data_array, 0);
       tot_alloc += cell_array.size();
 
-      //randomly choose a buffer, and get the first free spot in memory (update blocks)
+      /* randomly place block into a buffer  */
+      //choose random buff index to start out with
       int buffIndex = random.lrand32(0, num_buffers-1);
+      int start=mem_ptrs[buffIndex][0];
+      int end = mem_ptrs[buffIndex][1];
+      unsigned int freeSpace = (start >= end)? start-end : BUFF_LENGTH - (end-start);
+      
+      //if there isn't enough space in this buffer, find one
+      if(freeSpace < cell_array.size()) {
+        int bCount = 0;
+        bool buffFound = false;
+        while(!buffFound && bCount < num_buffers*2) {
+          bCount++;
+          buffIndex = random.lrand32(0, num_buffers-1);
+          start=mem_ptrs[buffIndex][0];
+          end = mem_ptrs[buffIndex][1];
+          freeSpace = (start >= end)? start-end : BUFF_LENGTH - (end-start);
+          if(freeSpace >= cell_array.size())
+            buffFound = true;
+        }
+        if(!buffFound) 
+          buffIndex = num_buffers; //use emergency space
+      }
+      
+      if(buffIndex == num_buffers) 
+        vcl_cout<<"using emergency space"<<vcl_endl;
+      
+      //point block to chosen buffer       
       int buffOffset = mem_ptrs[buffIndex][1]-1; //minus one cause mem_end points to one past the last one
       int4 blk(0);
       blk[0] = buffIndex;            //buffer index
@@ -247,12 +287,11 @@ void boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T> >* scene,
       blk[3] = 0;                    //nothign for now
       blocks(i,j,k) = blk;
 
-      //copy cell_array and data_array to buffer
-      //make sure there's enough room
-      int start=mem_ptrs[buffIndex][0];
-      int end = mem_ptrs[buffIndex][1];
-      unsigned int freeSpace = (start >= end)? start-end : buff_length - (end-start);
-      if (freeSpace > cell_array.size()) {
+      //copy cell_array and data_array to chosen buffer
+      start = mem_ptrs[buffIndex][0];
+      end   = mem_ptrs[buffIndex][1];
+      freeSpace = (start >= end)? start-end : BUFF_LENGTH - (end-start);
+      if (freeSpace >= cell_array.size()) {
         for (unsigned int c=0; c<cell_array.size(); ++c) {
           tree_buffers(buffIndex, buffOffset+c) = cell_array[c];
           //only copy data if it exists for this cell (not inner cells)
@@ -266,69 +305,71 @@ void boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T> >* scene,
         mem_ptrs[buffIndex][1] += cell_array.size();
       }
       else {
-        buff_Full = true;
+        // all resources have been exhausted - this should never ever happen
+        vcl_cout<<"boxm_ocl_utils::convert_scene: ERROR"<<vcl_endl
+                <<"BIG BLOCK @ "<<blk_ind<<", small block @ "<<sm_ind<<vcl_endl
+                <<" FILLED BUFFER. FAILED TO CREATE NEW SCENE."<<vcl_endl;
+        vcl_cout<<"mem layout: "<<vcl_endl;
+        for(int i=0; i<mem_ptrs.size(); i++) {
+          start = mem_ptrs[i][0];
+          end   = mem_ptrs[i][1];       
+          freeSpace = (start >= end)? start-end : BUFF_LENGTH - (end-start);
+          vcl_cout<<" buff "<<i<<": "<<freeSpace<<" ["<<start<<","<<end<<"]"<<vcl_endl;
+        }
+        return; 
       }
-      cell_array.clear();
     }
     vcl_cout<<"  allocated "<<tot_alloc<<" cells"<<vcl_endl;
-    if (buff_Full) vcl_cout<<"boxm_ocl_utils::convert_scene: BLOCK @ "<<blk_ind<<" FILLED BUFFER "<<vcl_endl;
   }
   
   /* make a pass to make sure all small blocks were initialized */
   //(This isn't really necessary if the init level is high enough)
-  int nonInitCount = 0;
   vcl_cout<<"init blocks: "<<vcl_endl;
-  for (unsigned int i=0; i<blocks.get_row1_count(); ++i) {
-    for (unsigned int j=0; j<blocks.get_row2_count(); ++j) {
-      for (unsigned int k=0; k<blocks.get_row3_count(); ++k) {
-        int buffIndex = blocks(i,j,k)[0];
-        //if this block isn't initialized... initialize it
-        if (buffIndex < 0) {
-          nonInitCount++;
+  int nonInitCount = 0;
+  vbl_array_3d<int4>::iterator blk_iter;
+  for(blk_iter = blocks.begin(); blk_iter != blocks.end(); blk_iter++) {
+    int buffIndex = (*blk_iter)[0];
+    if(buffIndex < 0) {
+      //choose a random buffIndex and see how much free space is left
+      buffIndex = random.lrand32(0, num_buffers-1);
+      int start = mem_ptrs[buffIndex][0];
+      int end   = mem_ptrs[buffIndex][1];
+      int freeSpace = (start >= end)? start-end : BUFF_LENGTH - (end-start);
+      if (freeSpace > 0) {
+        int buffOffset = mem_ptrs[buffIndex][1]-1; //minus one cause mem_end points to one past the last one
+        (*blk_iter)[0] = buffIndex;  //buffer index
+        (*blk_iter)[1] = buffOffset; //buffer offset to root
+        (*blk_iter)[2] = 1;          //tree has size of 1 now
+        (*blk_iter)[3] = 0;          //nothign for now
 
-          //choose a random buffIndex and see how much free space is left
-          buffIndex = random.lrand32(0, num_buffers-1);
-          int start=mem_ptrs[buffIndex][0];
-          int end = mem_ptrs[buffIndex][1];
-          int freeSpace = (start >= end)? start-end : buff_length - (end-start);
-          if (freeSpace > 0) {
+        //put root in that memory
+        int4 blk_root(0);
+        blk_root[0] = -1; //no parent for root
+        blk_root[1] = -1; // no children yet
+        blk_root[2] = buffOffset; // points to datum
+        blk_root[3] = 0;  // not used yet
+        tree_buffers(buffIndex, buffOffset) = blk_root;
 
-            int buffOffset = mem_ptrs[buffIndex][1]-1; //minus one cause mem_end points to one past the last one
-            int4 blk_ptr(0);
-            blk_ptr[0] = buffIndex;  //buffer index
-            blk_ptr[1] = buffOffset; //buffer offset to root
-            blk_ptr[2] = 1;          //tree has size of 1 now
-            blk_ptr[3] = 0;          //nothign for now
-            blocks(i,j,k) = blk_ptr;
+        //put data in memory
+        float pinit = .01;
+        float16 datum(0.0f);
+        float bboxLen = (float) block_dim_small.x();
+        float alpha_init = (-1.0/bboxLen) * vcl_log(1.0-pinit);
+        datum[0] = alpha_init;
+        data_buffers(buffIndex, buffOffset) = datum;
 
-            //put root in that memory
-            int4 blk_root(0);
-            blk_root[0] = -1; //no parent for root
-            blk_root[1] = -1; // no children yet
-            blk_root[2] = buffOffset; // points to datum
-            blk_root[3] = 0;  // not used yet
-            tree_buffers(buffIndex, buffOffset) = blk_root;
-
-            //put data in memory
-            float16 datum(0.0f);
-            datum[0] = .001;  //TODO have some p_init determine this alpha val
-            data_buffers(buffIndex, buffOffset) = datum;
-
-            //make sure mem spot is now taken
-            mem_ptrs[buffIndex][1]++;
-          }
-          else {
-            //notify that you ran out of space
-            nonInitCount = -666;
-          }
-        }
+        //make sure mem spot is now taken
+        mem_ptrs[buffIndex][1]++;
+      }
+      else {
+        //notify that you ran out of space
+        nonInitCount = -666;
       }
     }
-  }
-
+  } 
+    
   /* make a pass to ensure that all tree roots point back to their cell index */
   int blk_index = 0;
-  vbl_array_3d<int4>::iterator blk_iter;
   for (blk_iter = blocks.begin(); blk_iter != blocks.end(); blk_iter++) {
     int4 blk = (*blk_iter);
     int buffIndex = blk[0];
@@ -339,12 +380,13 @@ void boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T> >* scene,
     blk_index++;
   }
   
+  /****** DEBUG PRINT *******/
   vcl_cout<<"Alpha for first tree "<<data_buffers(0,0)<<vcl_endl;
-  
   for(int i=0; i< 2; i++) {
     if(data_buffers(0,i)[0] != data_buffers(0,0)[0])
       vcl_cout<<"block at "<<i<<" has alpha of "<<data_buffers(0,i)[0]<<vcl_endl;
   }
+  /****************************/
 
   //notify how many blocks needed to be initialized/there's enough space
   if (nonInitCount < 0)
@@ -352,7 +394,10 @@ void boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T> >* scene,
   else
     vcl_cout<<"Initialized "<<nonInitCount<<" uninitialized blocks"<<vcl_endl;
 
-  ocl_scene.init_scene(blocks, tree_buffers, data_buffers, mem_ptrs, lvcs, origin, block_dim_small);
+  ocl_scene.init_scene(blocks, tree_buffers, data_buffers, 
+                       mem_ptrs, lvcs, origin, block_dim_small);
+  //ocl_scene.set_num_buffers(num_buffers);
+  //ocl_scene.set_buff_length(BUFF_LENGTH);
   ocl_scene.set_max_level(small_blk_root_level+1);
 }
 
