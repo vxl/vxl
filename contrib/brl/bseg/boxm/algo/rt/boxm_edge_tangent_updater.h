@@ -20,6 +20,8 @@
 
 #include <boxm/sample/boxm_inf_line_sample.h>
 
+#include <vil/vil_image_view.h>
+
 template<class T_loc, class APM, class AUX>
 class boxm_edge_tangent_updater
 {
@@ -41,6 +43,28 @@ class boxm_edge_tangent_updater
   int ransac_concensus_cnt_;  // number of images that need to contribute planes to a hypothesis for a cell to be assigned a 3D edge
                               // there should be at least ransac_concensus_cnt_+1 training images for some concensus to be met at any voxel, otherwise edge world will be empty
 
+  boxm_scene<boct_tree<T_loc, boxm_inf_line_sample<APM> > > &scene_;
+};
+
+template<class T_loc, class APM, class AUX>
+class boxm_edge_tangent_refine_updates
+{
+public:
+
+  boxm_edge_tangent_refine_updates(boxm_scene<boct_tree<T_loc, boxm_inf_line_sample<APM> > > &scene, int concensus_cnt,
+                            vcl_vector<vil_image_view<float> > const& edge_images, vcl_vector<vpgl_camera_double_sptr> const& cameras);
+
+  ~boxm_edge_tangent_refine_updates() {}
+
+  bool refine_cells();
+
+protected:
+  vcl_vector<vil_image_view<float> > edge_images_; // edge_img(ix, iy, 0) = static_cast<float>(x); subpixel location of edge
+                                                   // edge_img(ix, iy, 1) = static_cast<float>(y);
+                                                   // edge_img(ix, iy, 2) = static_cast<float>(dir); tangent direction of the edgel
+  vcl_vector<vpgl_camera_double_sptr> cameras_;
+
+  int concensus_cnt_;  // how many images need to be in agreement for an edgel to survive
   boxm_scene<boct_tree<T_loc, boxm_inf_line_sample<APM> > > &scene_;
 };
 
