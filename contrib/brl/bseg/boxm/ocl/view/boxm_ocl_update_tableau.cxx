@@ -254,7 +254,6 @@ bool boxm_ocl_update_tableau::handle(vgui_event const &e)
       do_init_ocl_ = false;
     }
 
-    //do_update_ = false;
     vcl_cout<<"redrawing\n"
             <<"Cam center: "<<cam_.get_camera_center()<<'\n'
             <<"stare point: "<<stare_point_<<vcl_endl;
@@ -278,7 +277,7 @@ bool boxm_ocl_update_tableau::handle(vgui_event const &e)
   else if (e.type == vgui_KEY_PRESS && e.key == vgui_key('d')) {
     vcl_cout<<"refining"<<vcl_endl;
     this->refine_model();
-    this->post_idle_request();
+    return true;
   }
   else if (e.type == vgui_KEY_PRESS && e.key == vgui_key('s')) {
     vcl_cout<<"saving"<<vcl_endl;
