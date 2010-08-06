@@ -15,6 +15,7 @@
 #include <vnl/vnl_cost_function.h>
 
 #include <vcl_iostream.h>
+#include <vil/vil_save.h>
 
 template <class func_>
 class bvpgl_camera_estimator_amoeba : public vnl_cost_function
@@ -25,7 +26,7 @@ class bvpgl_camera_estimator_amoeba : public vnl_cost_function
                                 const vpgl_camera_double_sptr& cam)
   : vnl_cost_function(2), cest_(cest), img_e_(img_e)
   {
-    best_score = 0.0;
+    best_score = -vcl_numeric_limits<double>::min();
 
     // check the camera type
     if (cam->type_name() == "vpgl_perspective_camera") {
@@ -63,7 +64,6 @@ class bvpgl_camera_estimator_amoeba : public vnl_cost_function
     cam->set_calibration(best_camera.get_calibration());
     cam->set_camera_center(best_camera.get_camera_center());
     cam->set_rotation(best_camera.get_rotation());
-    vcl_cout << '\n';
     return best_score;
   }
 
@@ -81,6 +81,14 @@ class bvpgl_camera_estimator_amoeba : public vnl_cost_function
       cest_.get_expected_edge_image(curr_cam_sptr,&img_eei);
       double curr_score = cest_.edge_prob_cross_correlation(img_e_,img_eei);
 
+#if 0
+      vil_image_view<vxl_byte> img_eei_vb(img_eei.ni(),img_eei.nj(),1);
+      brip_vil_float_ops::normalize_to_interval<float,vxl_byte>(img_eei,img_eei_vb,0.0f,255.0f);
+      vcl_stringstream name; name << "./current_eei_" << curr_score << ".png";
+      vil_save(img_eei_vb, name.str().c_str());
+      vcl_cout << "x[0]: " << x[0] << " x[1]: " << x[1] << " ctr: " << curr_center << " score: " << curr_score << " best_score: " << best_score << " \n";
+      vcl_cout.flush();
+#endif
       if (curr_score > best_score) {
         best_score = curr_score;
         best_camera.set_camera_center(curr_cam->get_camera_center());
