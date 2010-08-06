@@ -50,7 +50,7 @@ class boxm_raytrace_function
                            bool reverse_traversal = false,
                            unsigned int i0 = 0, unsigned int j0 = 0
                           )
-    : scene_(scene), aux_scene_(null_scene_), reverse_traversal_(reverse_traversal), cam_(cam), img_i0_(i0), img_j0_(j0), img_ni_(ni), img_nj_(nj), debug_lvl_(2) {}
+    : scene_(scene), aux_scene_(null_scene_), reverse_traversal_(reverse_traversal), cam_(cam), img_i0_(i0), img_j0_(j0), img_ni_(ni), img_nj_(nj), debug_lvl_(0) {}
 
     //: constructor for functions using an auxiliary scene
     boxm_raytrace_function(boxm_scene<tree_type> &scene,
@@ -59,7 +59,7 @@ class boxm_raytrace_function
                            unsigned int ni, unsigned int nj,
                            bool reverse_traversal = false,
                            unsigned int i0 = 0, unsigned int j0 = 0)
-    : scene_(scene), aux_scene_(aux_scene), reverse_traversal_(reverse_traversal), cam_(cam), img_i0_(i0), img_j0_(j0), img_ni_(ni), img_nj_(nj), debug_lvl_(2) {}
+    : scene_(scene), aux_scene_(aux_scene), reverse_traversal_(reverse_traversal), cam_(cam), img_i0_(i0), img_j0_(j0), img_ni_(ni), img_nj_(nj), debug_lvl_(0) {}
 
     bool run_single_ray(F& step_functor,float i, float j)
     {
@@ -365,10 +365,11 @@ class boxm_raytrace_function
 
                 float save_time = (float)timer.all() /  1e3f;
                 total_save_time += save_time;
-                vcl_cout << "load: " << load_time << "s  compute: " << compute_time << "s  save: " << save_time << 's' << vcl_endl;
+                //vcl_cout << "load: " << load_time << "s  compute: " << compute_time << "s  save: " << save_time << 's' << vcl_endl;
             }
         }
-        vcl_cout << "total load: " << total_load_time << "s  total compute: " << total_compute_time << "s  total save: " << total_save_time << 's' << vcl_endl;
+
+        //vcl_cout << "total load: " << total_load_time << "s  total compute: " << total_compute_time << "s  total save: " << total_save_time << 's' << vcl_endl;
         return true;
     }
 
