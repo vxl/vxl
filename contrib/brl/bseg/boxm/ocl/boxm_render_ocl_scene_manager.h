@@ -31,8 +31,8 @@ class boxm_render_ocl_scene_manager : public bocl_manager<boxm_render_ocl_scene_
     block_dims_(0),
     cells_(0),
     cells_size_(0),
-    cell_data_(0),
     cell_alpha_(0),
+    cell_mixture_(0),
     cell_data_size_(0),
     numbuffer_(0),
     lenbuffer_(0),
@@ -174,16 +174,17 @@ class boxm_render_ocl_scene_manager : public bocl_manager<boxm_render_ocl_scene_
   cl_float * scene_origin_;
   // (x,y,z,0)
   cl_float * block_dims_;
+  
   //array of tree cells,
   cl_int* cells_;
   cl_uint  cells_size_;
 
   //array of data pointed to by tree
-  cl_float* cell_data_;
   cl_float* cell_alpha_;
-  //cl_half* cell_data_;
   cl_uint  cell_data_size_;
-
+  
+  //OPTIMIZED DATA to replace float data
+  cl_uchar* cell_mixture_;
 
   cl_int numbuffer_;
   cl_int lenbuffer_;
@@ -199,9 +200,7 @@ class boxm_render_ocl_scene_manager : public bocl_manager<boxm_render_ocl_scene_
   // bounding box for each tree
   cl_float * tree_bbox_;
 
-
   // camera
-
   cl_float * persp_cam_;
 
   cl_uint bni_;
@@ -213,13 +212,13 @@ class boxm_render_ocl_scene_manager : public bocl_manager<boxm_render_ocl_scene_
 
   // workspace dimensions which will be
   // greater than or equal to image dimensions
-
   cl_uint wni_;
   cl_uint wnj_;
+  
   // pointer to cl memory on GPU
   cl_mem   cells_buf_;
-  cl_mem   cell_data_buf_;
   cl_mem   cell_alpha_buf_;
+  cl_mem   cell_mixture_buf_;
   cl_mem   tree_bbox_buf_;
 
   cl_mem   persp_cam_buf_;
