@@ -53,17 +53,17 @@ boxm_ocl_change_detection_tableau::~boxm_ocl_change_detection_tableau()
 //: initialize tableau properties
 bool boxm_ocl_change_detection_tableau::init(boxm_ocl_scene * scene,
                                    vcl_vector<vcl_string> cam_files,
-                                   vcl_vector<vcl_string> img_files)
+                                   vcl_vector<vcl_string> img_files,
+                                   vcl_vector<float> &hist)
 {
   //set image dimensions, camera and scene
-  //default_cam_ = (*cam);
-  //cam_ = (*cam); //default cam
   scene_ = scene;
 
   //directory of cameras
   cam_files_ = cam_files;
   img_files_ = img_files;
 
+  hist_=hist;
   if(cam_files_.size()>0 && img_files_.size()>0)
   {
       //build the camera from file
@@ -161,6 +161,9 @@ bool boxm_ocl_change_detection_tableau::init_ocl()
       && cd_mgr->set_input_image()
       && cd_mgr->set_input_image_buffers()
       && cd_mgr->set_image_dims_buffers();
+
+  good= good && cd_mgr->set_foreground_pdf(hist_)
+             && cd_mgr->set_foreground_pdf_buffers();
   //need to set ray trace
   //delete old buffer
   if (pbuffer_) {

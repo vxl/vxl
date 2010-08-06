@@ -15,6 +15,7 @@
 #include <vcl_vector.h>
 #include <vil/vil_image_view.h>
 #include <vgui/vgui_tableau.h>
+#include <bsta/bsta_histogram.h>
 
 class boxm_ocl_change_detection_tableau: public vgui_tableau
 {
@@ -28,7 +29,8 @@ class boxm_ocl_change_detection_tableau: public vgui_tableau
 
     bool init(boxm_ocl_scene * scene,
               vcl_vector<vcl_string> cam_files,
-              vcl_vector<vcl_string> img_files);
+              vcl_vector<vcl_string> img_files,
+              vcl_vector<float> &hist);
 
     //:  set the GL buffer which needs to be displayed.
     void set_glbuffer(GLuint  pbuffer){pbuffer_=pbuffer;}
@@ -59,6 +61,7 @@ class boxm_ocl_change_detection_tableau: public vgui_tableau
 
     vil_image_view<float> obs_img_;
     vpgl_perspective_camera<double> *cam_;
+    vcl_vector<float>  hist_;
 
 };
 
