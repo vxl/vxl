@@ -37,6 +37,8 @@ SET( vgl_algo_sources
                                            vgl_rotation_3d.h
                                            vgl_rtree_c.h
   vgl_orient_box_3d_operators.txx          vgl_orient_box_3d_operators.h
+                                           vgl_h_matrix_3d_compute.h
+  vgl_h_matrix_3d_compute_linear.cxx       vgl_h_matrix_3d_compute_linear.h
 )
 AUX_SOURCE_DIRECTORY(Templates vgl_algo_sources)
 
