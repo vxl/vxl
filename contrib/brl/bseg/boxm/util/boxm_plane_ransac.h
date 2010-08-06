@@ -84,7 +84,8 @@ bool boxm_plane_ransac(vcl_vector<boxm_edge_tangent_sample<T> > aux_samples,
               if (plane.contains(p,T(cell_global_box.width())/T(volume_ratio)))  // volume_ratio, used to be hard-coded to 8, then made a param with default 128 (stricter)
               {
                 fit_planes.push_back(plane);
-                ws.push_back(weights[i]);
+                //ws.push_back(weights[i]);
+                ws.push_back(aux_samples[i].obs(j).seg_len_);
                 flag=true;
               }
             }
