@@ -21,7 +21,7 @@ update_ocl_scene_opt(__global int4*    scene_dims,    // level of the root.
                      __global int2*    tree_array,
                      __global float*   alpha_array,
                      __global uchar8*  mixture_array,
-                     __global short4*  num_obs_array,
+                     __global ushort4*  num_obs_array,
                      __global float4*  aux_data_array,
                      __global float16* persp_cam, // camera orign and SVD of inverse of camera matrix
                      __global uint4*   imgdims,   // dimensions of the image
@@ -185,7 +185,7 @@ update_ocl_scene_opt(__global int4*    scene_dims,    // level of the root.
                 cached_data[llid].s9 = (float) ((float)mixture_array[data_ptr].s6/255.0);
                 cached_data[llid].sa = (float) ((float)mixture_array[data_ptr].s7/255.0);
                 cached_data[llid].sb = (float) (num_obs_array[data_ptr].s2);
-                cached_data[llid].sc = (float) (num_obs_array[data_ptr].s3);
+                cached_data[llid].sc = (float) (num_obs_array[data_ptr].s3/100.0);
                 cached_data[llid].sd = 0.0;
                 cached_data[llid].se = 0.0;
                 cached_data[llid].sf = 0.0;
@@ -256,7 +256,7 @@ update_ocl_scene_opt(__global int4*    scene_dims,    // level of the root.
         }
     }
     
-    if(llid == 31) {
+    if(llid == 47) {
       output[0] = cached_aux_data[llid].x;
       output[1] = cached_aux_data[llid].y;
       output[2] = cached_aux_data[llid].z;
@@ -498,35 +498,77 @@ __kernel
 void
 update_ocl_scene_main_opt(__global float*   alpha_array,
                           __global uchar8*  mixture_array,
-                          __global short4*  nobs_array,
+                          __global ushort4* nobs_array,
                           __global float4*  aux_data_array,
                           __global int*     lenbuffer,
                           __global int*     numbuffer, 
                           __global float*   output)
 {
-
-  
     int gid=get_global_id(0);
     int datasize= (*lenbuffer)*(*numbuffer);
     if (gid<datasize)
     {
       float  alpha    = alpha_array[gid];
       uchar8 mixture  = mixture_array[gid];
-      short4 nobs     = nobs_array[gid];
+      ushort4 nobs    = nobs_array[gid];
       float4 aux_data = aux_data_array[gid];
-      if (aux_data.x>1e-10f)
-        update_cell_mixture(&alpha, &mixture, &nobs, aux_data, 2.5f, 0.09f, 0.03f);
       
-      alpha_array[gid]   = alpha;
-      mixture_array[gid] = mixture;
-      nobs_array[gid]    = nobs;
-      aux_data_array[gid]=(float4)0.0f;
+      float16 data; 
+      data.s0 = alpha;
+      data.s1 = ((float) mixture.s0/255.0);
+      data.s2 = ((float) mixture.s1/255.0);
+      data.s3 = ((float) mixture.s2/255.0);
+      data.s4 = ((float) nobs.s0);
+      data.s5 = ((float) mixture.s3/255.0);
+      data.s6 = ((float) mixture.s4/255.0);
+      data.s7 = ((float) mixture.s5/255.0);
+      data.s8 = ((float) nobs.s1);
+      data.s9 = ((float) mixture.s6/255.0);
+      data.sa = ((float) mixture.s7/255.0);
+      data.sb = ((float) nobs.s2);
+      data.sc = ((float) nobs.s3/100.0);
+      data.sd = 0.0;
+      data.se = 0.0;
+      data.sf = 0.0;
+      
+      if (aux_data.x>1e-10f)
+        update_cell(&data, aux_data, 2.5f, 0.09f, 0.03f);
+        //update_cell_mixture(&alpha, &mixture, &nobs, aux_data, 2.5f, 0.09f, 0.03f);
+
+      alpha_array[gid]      = data.s0;
+      mixture_array[gid].s0 = (uchar) clamp(data.s1*255.0 + .5, 0.0, 255.0);
+      mixture_array[gid].s1 = (uchar) clamp(data.s2*255.0 + .5, 0.0, 255.0);
+      mixture_array[gid].s2 = (uchar) clamp(data.s3*255.0 + .5, 0.0, 255.0);
+      
+      mixture_array[gid].s3 = (uchar) clamp(data.s5*255.0 + .5, 0.0, 255.0);
+      mixture_array[gid].s4 = (uchar) clamp(data.s6*255.0 + .5, 0.0, 255.0);
+      mixture_array[gid].s5 = (uchar) clamp(data.s7*255.0 + .5, 0.0, 255.0);
+      
+      mixture_array[gid].s6 = (uchar) clamp(data.s9*255.0 + .5, 0.0, 255.0);
+      mixture_array[gid].s7 = (uchar) clamp(data.sa*255.0 + .5, 0.0, 255.0);
+      nobs_array[gid].s0    = (ushort) (data.s4);
+      nobs_array[gid].s1    = (ushort) (data.s8);
+      nobs_array[gid].s2    = (ushort) (data.sb);
+      nobs_array[gid].s3    = (ushort) ((float) data.sc*100.0+.5);
+      
+      aux_data_array[gid]   = (float4)0.0f;
+
+      //alpha_array[gid] = alpha;
+      //mixture_array[gid] = mixture;
+      //nobs_array[gid] = nobs;
     }
-     if(gid==49) {
+     if(gid==345) {
       output[0] = alpha_array[gid];
-      output[1] = (float) (mixture_array[gid].s0/255.0);
-      output[2] = (float) (mixture_array[gid].s1/255.0);
-      output[3] = (float) (nobs_array[gid].s3/10.0);
+      output[1] = (float) (mixture_array[gid].s0/255.0); //mu0
+      output[2] = (float) (mixture_array[gid].s1/255.0); //sig0
+      output[3] = (float) (mixture_array[gid].s2/255.0); //w0
+      output[4] = (float) (mixture_array[gid].s3/255.0); //mu1
+      output[5] = (float) (mixture_array[gid].s4/255.0); //sig1
+      output[6] = (float) (mixture_array[gid].s5/255.0); //w1
+      output[7] = (float) (mixture_array[gid].s6/255.0); //mu2
+      output[8] = (float) (mixture_array[gid].s7/255.0); //sig2
+
+      output[9] = (float) (nobs_array[gid].s3/100.0);
     }
     
 }
