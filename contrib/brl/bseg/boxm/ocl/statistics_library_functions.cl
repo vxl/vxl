@@ -42,18 +42,15 @@ void update_gauss(float x, float rho, float* mu, float* sigma,
   *sigma = (*sigma < min_sigma)? min_sigma: *sigma;
 }
 
-/* use insertion sort to order the components on the factor w/sigma
- * no assumptions are made about the number of components   
- * or if the mixture is already sorted. Based on qsort using pivot comp 1. 
- */
 void sort_mix_3(float* mu0, float* sigma0, float* w0, short* Nobs0,
                 float* mu1, float* sigma1, float* w1, short* Nobs1,
                 float* mu2, float* sigma2, float* w2, short* Nobs2)
 {
-  if((*w2)<1e-3f&&(*w1)<1e-3f && (*sigma1)<1e-4 && (*sigma2)<1e-4) return; /* no need to sort */
-
-  float fa = (*w0)/(*sigma0), fb = (*w1)/(*sigma1), fc = (*w2)/(*sigma2);
-  if((*w2)==0.0f) 
+  if((*w1)>0.0f && (*sigma1)>0.0f )
+  {/* no need to sort */
+ 
+  float fa = (*w0)/(*sigma0), fb = (*w1)/(*sigma1);
+  if((*w2)==0.0f || (*sigma2)==0.0f)
     if(fa<fb){/*only need to swap a and b*/
       float tmu0 = *mu0, tsig0 = *sigma0, tw0 = *w0;
       short n0 = *Nobs0;
@@ -61,8 +58,9 @@ void sort_mix_3(float* mu0, float* sigma0, float* w0, short* Nobs0,
       *mu1 = tmu0; *sigma1 = tsig0; *w1 = tw0; *Nobs1 = n0;
       return ;
     }else return;
-
-
+ 
+  float fc = (*w2)/(*sigma2);
+ 
   if(fa>=fb&&fb>=fc)/* [a b c ] - already sorted */
     return;
   if(fa<fb&&fb<fc)/* [c b a] - swap a and c */
@@ -100,6 +98,75 @@ void sort_mix_3(float* mu0, float* sigma0, float* w0, short* Nobs0,
         return;
       }else{
         /* [c a b] - two swaps */
+        float tmu0 = *mu0, tsig0 = *sigma0, tw0 = *w0;
+        short n0 = *Nobs0;
+        *mu0 = *mu2; *sigma0 = *sigma2; *w0 = *w2; *Nobs0 = *Nobs2;
+        *mu2 = *mu1; *sigma2 = *sigma1; *w2 = *w1; *Nobs2 = *Nobs1;
+        *mu1 = tmu0; *sigma1 = tsig0; *w1 = tw0; *Nobs1 = n0;
+        return;
+      }
+  }
+}
+
+/* use insertion sort to order the components on the factor w/sigma
+ * no assumptions are made about the number of components   
+ * or if the mixture is already sorted. Based on qsort using pivot comp 1. 
+ */
+/*
+void sort_mix_3(float* mu0, float* sigma0, float* w0, short* Nobs0,
+                float* mu1, float* sigma1, float* w1, short* Nobs1,
+                float* mu2, float* sigma2, float* w2, short* Nobs2)
+{
+  if((*w2)<1e-3f&&(*w1)<1e-3f && (*sigma1)<1e-4 && (*sigma2)<1e-4) return; // no need to sort 
+
+  float fa = (*w0)/(*sigma0), fb = (*w1)/(*sigma1), fc = (*w2)/(*sigma2);
+  if((*w2)==0.0f) 
+    if(fa<fb){//only need to swap a and b
+      float tmu0 = *mu0, tsig0 = *sigma0, tw0 = *w0;
+      short n0 = *Nobs0;
+      *mu0 = *mu1; *sigma0 = *sigma1; *w0 = *w1; *Nobs0 = *Nobs1;
+      *mu1 = tmu0; *sigma1 = tsig0; *w1 = tw0; *Nobs1 = n0;
+      return ;
+    }else return;
+
+
+  if(fa>=fb&&fb>=fc)// [a b c ] - already sorted 
+    return;
+  if(fa<fb&&fb<fc)// [c b a] - swap a and c 
+    {
+      float tmu0 = *mu0, tsig0 = *sigma0, tw0 = *w0;
+      short n0 = *Nobs0;
+      *mu0 = *mu2; *sigma0 = *sigma2; *w0 = *w2; *Nobs0 = *Nobs2;
+      *mu2 = tmu0; *sigma2 = tsig0; *w2 = tw0; *Nobs2 = n0;
+      return ;
+    }
+  if(fa<fb&&fb>=fc)
+    if(fa>=fc)// [b a c] - c stays where it is and a b swap 
+      {
+        float tmu0 = *mu0, tsig0 = *sigma0, tw0 = *w0;
+        short n0 = *Nobs0;
+        *mu0 = *mu1; *sigma0 = *sigma1; *w0 = *w1; *Nobs0 = *Nobs1;
+        *mu1 = tmu0; *sigma1 = tsig0; *w1 = tw0; *Nobs1 = n0;
+        return;
+      }else{
+        // [b c a] - two swaps 
+        float tmu0 = *mu0, tsig0 = *sigma0, tw0 = *w0;
+        short n0 = *Nobs0;
+        *mu0 = *mu1; *sigma0 = *sigma1; *w0 = *w1; *Nobs0 = *Nobs1;
+        *mu1 = *mu2; *sigma1 = *sigma2; *w1 = *w2; *Nobs1 = *Nobs2;
+        *mu2 = tmu0; *sigma2 = tsig0; *w2 = tw0; *Nobs2 = n0;
+        return;
+      }
+  if(fa>=fb&&fb<fc)
+    if(fa>=fc)// [a c b] - b and c swap 
+      {
+        float tmu1 = *mu1, tsig1 = *sigma1, tw1 = *w1;
+        short n1 = *Nobs1;
+        *mu1 = *mu2; *sigma1 = *sigma2; *w1 = *w2; *Nobs1 = *Nobs2;
+        *mu2 = tmu1; *sigma2 = tsig1; *w2 = tw1; *Nobs2 = n1;
+        return;
+      }else{
+        // [c a b] - two swaps 
         float tmu0 = *mu0, tsig0 = *sigma0, tw0 = *w0; 
         short n0 = *Nobs0;
         *mu0 = *mu2; *sigma0 = *sigma2; *w0 = *w2; *Nobs0 = *Nobs2; 
@@ -108,6 +175,7 @@ void sort_mix_3(float* mu0, float* sigma0, float* w0, short* Nobs0,
         return;
       }
 }
+*/
 
 /*
  * insert a new component in the mixture. The mixture is assumed
@@ -118,7 +186,7 @@ void insert_gauss_3(float x, float init_weight, float init_sigma, int* match,
                     float* mu1, float* sigma1, float* w1, short* Nobs1,
                     float* mu2, float* sigma2, float* w2, short* Nobs2)
 {
-  if((*w2)>1e-3f||(*w1)>1e-3f)  /* replace the third component */
+  if((*w1)>0.0f && (*sigma1)>0.0f)  /* replace the third component */
     {
       float adjust = *w0 + *w1;
       adjust = (1.0f - init_weight)/adjust;
@@ -222,7 +290,7 @@ void update_gauss_3_mixture(float x, float w, float t_match,
   ///* If there is more than one component, sort the components with
   // * respect to weight/sigma.  
   // */
-  if(match>0)
+  //if(match>0)
     sort_mix_3(mu0, sigma0, w0, Nobs0, 
                mu1, sigma1, w1, Nobs1,
                mu2, sigma2, w2, Nobs2);
