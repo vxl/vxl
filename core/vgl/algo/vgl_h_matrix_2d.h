@@ -100,7 +100,7 @@ class vgl_h_matrix_2d
   // theta is in radians
   void set_rotation(const T theta);
 
-  //: initialize the transform to a scaling transform.
+  //: compose the current transform with a scaling transform, S.
   // $S = \left[ \begin{array}{ccc}
   //                                s & 0 & 0 \\%
   //                                0 & s & 0 \\%
@@ -108,7 +108,15 @@ class vgl_h_matrix_2d
   // \end{array}\right]$                         , Ts = S*T.
   void set_scale(const T scale);
 
-  //: initialize the transform to a diagonal aspect transform.
+  //: set the transform to a similarity mapping
+  //: $Sim = \left[ \begin{array}{ccc}
+  //                                sCos(theta)&-sSin(theta)& tx \\%
+  //                                sSin(theta)& sCos(thea) & ty \\%
+  //                                0 & 0 & 1
+  // \end{array}\right]$
+  void set_similarity(const T s, const T theta, const T tx, const T ty);
+
+  //: compose the transform with diagonal aspect transform.
   // $A = \left[ \begin{array}{ccc}
   //                                1 & 0 & 0 \\%
   //                                0 & a & 0 \\%
@@ -116,8 +124,19 @@ class vgl_h_matrix_2d
   // \end{array}\right]$                         , Ta = A*T.
   void set_aspect_ratio(const T aspect_ratio);
 
+
+  //: set the transform to a general affine transform matrix
+  // $A = \left[ \begin{array}{ccc}
+  //                                a00 & a01 & a02 \\%
+  //                                a10 & a11 & a12 \\%
+  //                                0 & 0 & 1
+  // \end{array}\right]$                         
+  void set_affine(const vnl_matrix<T>& M23);
+
+
   bool is_rotation() const;
   bool is_euclidean() const;
+
 
   //: transformation to projective basis (canonical frame)
   // Compute the homography that takes the input set of points to the

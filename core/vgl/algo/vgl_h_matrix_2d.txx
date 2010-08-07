@@ -459,6 +459,22 @@ void vgl_h_matrix_2d<T>::set_scale(const T scale)
     for (unsigned c = 0; c<3; ++c)
       t12_matrix_[r][c]*=scale;
 }
+//: set the transform to a similarity mapping
+//        _                         _
+//       |sCos(theta) -sSin(theta) tx|
+// Sim = |sSin(theta)  sCos(theta) ty|
+//       |   0            0        1 |
+//        -                         -
+template <class T>
+void vgl_h_matrix_2d<T>::set_similarity(const T s, const T theta,
+                                        const T tx, const T ty)
+{
+  T a=s*vcl_cos(theta);
+  T b=s*vcl_sin(theta);
+  t12_matrix_[0][0] = a; t12_matrix_[0][1] = -b; t12_matrix_[0][2] = tx;
+  t12_matrix_[1][0] = b; t12_matrix_[1][1] =  a; t12_matrix_[1][2] = ty;
+  t12_matrix_[2][0]=T(0); t12_matrix_[2][1]=T(0); t12_matrix_[2][2] = T(1);
+}
 
 //: Compose the existing matrix with an aspect ratio transform
 // \verbatim
@@ -473,6 +489,16 @@ void vgl_h_matrix_2d<T>::set_aspect_ratio(const T aspect_ratio)
 {
   for (unsigned c = 0; c<3; ++c)
     t12_matrix_[1][c]*=aspect_ratio;
+}
+
+
+template <class T>
+void vgl_h_matrix_2d<T>::set_affine(const vnl_matrix<T>& M23)
+{
+  for(unsigned r = 0; r<2; ++r)
+    for(unsigned c = 0; c<3; ++c)
+      t12_matrix_[r][c] = M23[r][c];
+  t12_matrix_[2][0] = T(0); t12_matrix_[2][1] = T(0);  t12_matrix_[2][2] = T(1);
 }
 
 template <class T>
@@ -520,6 +546,7 @@ vgl_h_matrix_2d<T>::get_translation_vector() const
   vgl_homg_point_2d<T> p = this->get_translation();
   return vnl_vector_fixed<T,2>(p.x(), p.y());
 }
+
 
 //----------------------------------------------------------------------------
 #undef VGL_H_MATRIX_2D_INSTANTIATE
