@@ -509,24 +509,26 @@ update_ocl_scene_main_opt(__global float*   alpha_array,
     if (gid<datasize)
     {
       float  alpha    = alpha_array[gid];
-      uchar8 mixture  = mixture_array[gid];
-      ushort4 nobs    = nobs_array[gid];
+      //uchar8 mixture  = mixture_array[gid];
+      //ushort4 nobs    = nobs_array[gid];
       float4 aux_data = aux_data_array[gid];
+      float4 nobs     = convert_float4(nobs_array[gid]);
+      float8 mixture  = convert_float8(mixture_array[gid]);
       
       float16 data; 
       data.s0 = alpha;
-      data.s1 = ((float) mixture.s0/255.0);
-      data.s2 = ((float) mixture.s1/255.0);
-      data.s3 = ((float) mixture.s2/255.0);
-      data.s4 = ((float) nobs.s0);
-      data.s5 = ((float) mixture.s3/255.0);
-      data.s6 = ((float) mixture.s4/255.0);
-      data.s7 = ((float) mixture.s5/255.0);
-      data.s8 = ((float) nobs.s1);
-      data.s9 = ((float) mixture.s6/255.0);
-      data.sa = ((float) mixture.s7/255.0);
-      data.sb = ((float) nobs.s2);
-      data.sc = ((float) nobs.s3/100.0);
+      data.s1 = (mixture.s0/255.0);
+      data.s2 = (mixture.s1/255.0);
+      data.s3 = (mixture.s2/255.0);
+      data.s4 = (nobs.s0);
+      data.s5 = (mixture.s3/255.0);
+      data.s6 = (mixture.s4/255.0);
+      data.s7 = (mixture.s5/255.0);
+      data.s8 = (nobs.s1);
+      data.s9 = (mixture.s6/255.0);
+      data.sa = (mixture.s7/255.0);
+      data.sb = (nobs.s2);
+      data.sc = (nobs.s3/100.0);
       data.sd = 0.0;
       data.se = 0.0;
       data.sf = 0.0;
@@ -549,7 +551,7 @@ update_ocl_scene_main_opt(__global float*   alpha_array,
       nobs_array[gid].s0    = (ushort) (data.s4);
       nobs_array[gid].s1    = (ushort) (data.s8);
       nobs_array[gid].s2    = (ushort) (data.sb);
-      nobs_array[gid].s3    = (ushort) ((float) data.sc*100.0+.5);
+      nobs_array[gid].s3    = (ushort) ((float) data.sc*100.0);
       
       aux_data_array[gid]   = (float4)0.0f;
 
