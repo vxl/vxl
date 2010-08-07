@@ -47,6 +47,41 @@ static void test_perspective_transform()
            << " , Tproj.preimage(pp) = ppp =" << ppp << '\n';
   TEST_NEAR("perspective", length(p-ppp) , 0.0, 1e-06);
 }
+static void test_transform_types()
+{
+  vgl_h_matrix_2d<double> h;
+  h.set_identity();
+  vgl_homg_point_2d<double> p(3.0,2.0,1.5), pp;
+  pp = h(p);
+  TEST_NEAR("identity", length(p-pp), 0.0, 1e-06);
+  h.set_translation(1.1, 1.2);
+  pp = h(p);
+  vgl_homg_point_2d<double> tt(4.65, 3.8, 1.5);
+  TEST_NEAR("translation", length(pp-tt), 0.0, 1e-06);
+  h.set_rotation(0.7853982);
+  pp = h(p);
+  vgl_homg_point_2d<double> tr(2.35711, 5.33553, 1.5);
+  TEST_NEAR("rotation", length(pp-tr), 0.0, 1e-05);
+  h.set_scale(1.4);
+  pp = h(p);
+  vgl_homg_point_2d<double> ts(3.29995, 7.46975, 1.5);
+  TEST_NEAR("scale", length(pp-ts), 0.0, 1e-05);
+  h.set_similarity(1.2, 0.7853982, 1.1, 1.2);
+  pp = h(p);
+  vgl_homg_point_2d<double> tsim(2.49853,6.04264, 1.5);
+  TEST_NEAR("similarity", length(pp-tsim), 0.0, 1e-05);
+  h.set_similarity(1.0, 0.7853982, 1.1, 1.2);
+  h.set_aspect_ratio(1.4);
+  pp = h(p);
+  vgl_homg_point_2d<double> tasp(2.35711,7.46975, 1.5);
+  TEST_NEAR("aspect ratio", length(pp-tasp), 0.0, 1e-05);
+  vnl_matrix<double> M(2,3);
+  M[0][0]=0.707107;   M[0][1]=-0.707107; M[0][2]=1.1;
+  M[1][0]=0.98995;   M[1][1]=0.989949; M[1][2]=1.68;
+  h.set_affine(M);
+  pp = h(p);
+  TEST_NEAR("affine", length(pp-tasp), 0.0, 1e-05);
+}
 
 static void test_projective_basis()
 {
@@ -344,6 +379,7 @@ static void test_compute_rigid_body()
 static void test_h_matrix_2d()
 {
   test_identity_transform();
+  test_transform_types();
   test_perspective_transform();
   test_projective_basis();
   test_projective_basis_from_lines();
