@@ -22,12 +22,12 @@ IF( DIRECTSHOW_FOUND )
 # An example use of vidl_dshow_file_istream
 ADD_EXECUTABLE (vidl_dshow_file_example vidl_dshow_file_example.cxx)
 TARGET_LINK_LIBRARIES(vidl_dshow_file_example vidl)
-
+IF(BUILD_MUL)
 # An example use of vidl_dshow_live_istream
 INCLUDE_DIRECTORIES( ${VXL_MUL_INCLUDE_DIR} )
 ADD_EXECUTABLE (vidl_dshow_live_example vidl_dshow_live_example.cxx)
 TARGET_LINK_LIBRARIES(vidl_dshow_live_example vidl mbl)
-
+ENDIF(BUILD_MUL)
 ENDIF( DIRECTSHOW_FOUND )
 
 IF ( VIDEODEV_FOUND )
