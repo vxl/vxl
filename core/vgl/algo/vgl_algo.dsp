@@ -92,6 +92,30 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
+SOURCE=.\vgl_h_matrix_1d_compute_3point.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_h_matrix_1d_compute_linear.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_h_matrix_1d_compute_optimize.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_h_matrix_2d_compute_4point.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_h_matrix_2d_compute_linear.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_h_matrix_2d_optimize_lmq.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_h_matrix_2d_compute_rigid_body.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_h_matrix_3d_compute_linear.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vgl_homg_operators_1d+double-.cxx
 # End Source File
 # Begin Source File
@@ -213,27 +237,6 @@ SOURCE=.\Templates/vgl_line_2d_regression+float-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vgl_ellipsoid_3d+float-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vgl_h_matrix_1d_compute_3point.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vgl_h_matrix_1d_compute_linear.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vgl_h_matrix_1d_compute_optimize.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vgl_h_matrix_2d_compute_4point.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vgl_h_matrix_2d_compute_linear.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vgl_h_matrix_2d_optimize_lmq.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vgl_h_matrix_2d_compute_rigid_body.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -396,6 +399,12 @@ SOURCE=.\vgl_orient_box_3d_operators.h
 # End Source File
 # Begin Source File
 SOURCE=.\vgl_orient_box_3d_operators.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_h_matrix_3d_compute_linear.h
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_h_matrix_3d_compute.h
 # End Source File
 # End Group
 # End Target
