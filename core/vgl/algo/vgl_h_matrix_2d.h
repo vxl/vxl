@@ -109,28 +109,28 @@ class vgl_h_matrix_2d
   void set_scale(const T scale);
 
   //: set the transform to a similarity mapping
-  //: $Sim = \left[ \begin{array}{ccc}
-  //                                sCos(theta)&-sSin(theta)& tx \\%
-  //                                sSin(theta)& sCos(thea) & ty \\%
-  //                                0 & 0 & 1
+  // Sim $ = \left[\begin{array}{ccc}
+  //         \cos(\theta) & -\sin(\theta) & tx \\%
+  //         \sin(\theta) &  \cos(\theta) & ty \\%
+  //         0            &  0            & 1
   // \end{array}\right]$
   void set_similarity(const T s, const T theta, const T tx, const T ty);
 
   //: compose the transform with diagonal aspect transform.
   // $A = \left[ \begin{array}{ccc}
-  //                                1 & 0 & 0 \\%
-  //                                0 & a & 0 \\%
-  //                                0 & 0 & 1
+  //                                 1 & 0 & 0 \\%
+  //                                 0 & a & 0 \\%
+  //                                 0 & 0 & 1
   // \end{array}\right]$                         , Ta = A*T.
   void set_aspect_ratio(const T aspect_ratio);
 
 
   //: set the transform to a general affine transform matrix
   // $A = \left[ \begin{array}{ccc}
-  //                                a00 & a01 & a02 \\%
-  //                                a10 & a11 & a12 \\%
-  //                                0 & 0 & 1
-  // \end{array}\right]$                         
+  //                           a00 & a01 & a02 \\%
+  //                           a10 & a11 & a12 \\%
+  //                           0   & 0   & 1
+  // \end{array}\right]$
   void set_affine(const vnl_matrix<T>& M23);
 
 
@@ -144,10 +144,10 @@ class vgl_h_matrix_2d
   // the canonical coordinate system.  In the canonical frame the points
   // have coordinates:
   // $\begin{array}{cccc}
-  //   p[0] & p[1] & p[2] & p[3] \\%
-  //     1  &   0  &   0  &   1  \\%
-  //     0  &   1  &   0  &   1  \\%
-  //     0  &   0  &   1  &   1
+  //                 p[0] & p[1] & p[2] & p[3] \\%
+  //                   1  &   0  &   0  &   1  \\%
+  //                   0  &   1  &   0  &   1  \\%
+  //                   0  &   0  &   1  &   1
   // \end{array}$
   bool projective_basis(vcl_vector<vgl_homg_point_2d<T> > const& four_points);
 

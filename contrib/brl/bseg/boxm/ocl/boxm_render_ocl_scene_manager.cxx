@@ -4,7 +4,6 @@
 #include <vcl_where_root_dir.h>
 #include <boxm/ocl/boxm_ocl_utils.h>
 #include <vcl_cstdio.h>
-#include <vul/vul_timer.h>
 #include <boxm/boxm_block.h>
 #include <boxm/boxm_scene.h>
 #include <boxm/util/boxm_utils.h>
@@ -39,21 +38,21 @@ bool boxm_render_ocl_scene_manager::init_ray_trace(boxm_ocl_scene *scene,
     vcl_cerr << "Error: boxm_ray_trace_manager : failed to load kernel source (helper functions)\n";
     return false;
   }
- 
+
   vcl_string patt = "/*$$step_cell$$*/";
   // transfer cell data from global to local memory if use_cell_data_ == true
 
   vcl_string functor="";
-  if(render_depth) {
+  if (render_depth) {
     vcl_cout<<"Using Functor step_cell_render_depth = "<<vcl_endl;
     functor="step_cell_render_depth(alpha_array,data_ptr,d,global_depth,&data_return);";
   }
-  else{
+  else {
     vcl_cout<<"Using functor step_cell_render_opt"<<vcl_endl;
     functor = "step_cell_render_opt(mixture_array,alpha_array,data_ptr,d,&data_return);";
     //functor="step_cell_render(sample_array,alpha_array,data_ptr,d,&data_return);";
   }
-  
+
   // assign the functor calling signature
   vcl_string::size_type pos_start = this->prog_.find(patt);
   vcl_string::size_type n1 = patt.size();
@@ -129,7 +128,7 @@ bool boxm_render_ocl_scene_manager::set_args()
   status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&cells_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cells_buf_)"))
     return SDK_FAILURE;
-  // alpha buffer 
+  // alpha buffer
   status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&cell_alpha_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_data_buf_)"))
       return SDK_FAILURE;
@@ -260,14 +259,13 @@ bool boxm_render_ocl_scene_manager::run_scene()
 {
   bool good=true;
   vcl_string error_message="";
-  vul_timer timer;
-  good=good && set_scene_data();
-  good=good && set_all_blocks();
-  good=good && set_scene_data_buffers();
-  good=good && set_tree_buffers();
+  good=good && set_scene_data()
+            && set_all_blocks()
+            && set_scene_data_buffers()
+            && set_tree_buffers();
   // run the raytracing
-  good=good && set_input_view();
-  good=good && set_input_view_buffers();
+  good=good && set_input_view()
+            && set_input_view_buffers();
   this->set_kernel();
   this->set_args();
   this->set_commandqueue();
@@ -275,26 +273,27 @@ bool boxm_render_ocl_scene_manager::run_scene()
 
   this->run();
 
-  good =good && release_tree_buffers();
-  good =good && clean_tree();
-  good=good && read_output_image();
+  good =good && release_tree_buffers()
+             && clean_tree()
+             && read_output_image();
   //this->print_image();
-  good=good && release_input_view_buffers();
-  //good=good && clean_input_view();
-  good=good && release_scene_data_buffers();
-  good=good && clean_scene_data();
+  good=good && release_input_view_buffers()
+  //        && clean_input_view()
+            && release_scene_data_buffers()
+            && clean_scene_data();
 
   // release the command Queue
 
   this->release_kernel();
+#if 0
   vcl_cout << "Timing Analysis\n"
            << "===============\n"
-           //<<"openCL Running time "<<gpu_time_<<" ms\n"
-  //       << "Running block "<<total_gpu_time/1000<<"s\n"
-  //       << "total block loading time = " << total_load_time << "s\n"
-  //       << "total block processing time = " << total_raytrace_time << 's' << vcl_endl
-  ;
-  return true;
+           <<"openCL Running time "<<gpu_time_<<" ms\n"
+           << "Running block "<<total_gpu_time/1000<<"s\n"
+           << "total block loading time = " << total_load_time << "s\n"
+           << "total block processing time = " << total_raytrace_time << 's' << vcl_endl;
+#endif
+  return good;
 }
 
 
@@ -333,18 +332,18 @@ bool boxm_render_ocl_scene_manager:: read_trees()
 
   if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (cells )failed."))
     return false;
-    
+
   status = clWaitForEvents(1, &events[0]);
   if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents failed."))
     return false;
-    
-  //status = clEnqueueReadBuffer(command_queue_,cell_data_buf_,CL_TRUE,
-                               //0,cell_data_size_*sizeof(cl_float8),
-                               //cell_data_,
-                               //0,NULL,&events[0]);
-  //if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (cell data )failed."))
-    //return false;
-    
+#if 0
+  status = clEnqueueReadBuffer(command_queue_,cell_data_buf_,CL_TRUE,
+                               0,cell_data_size_*sizeof(cl_float8),
+                               cell_data_,
+                               0,NULL,&events[0]);
+  if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (cell data )failed."))
+    return false;
+#endif // 0
   status = clEnqueueReadBuffer(command_queue_,cell_alpha_buf_,CL_TRUE,
                                0,cell_data_size_*sizeof(cl_float),
                                cell_alpha_,
@@ -377,24 +376,25 @@ void boxm_render_ocl_scene_manager::print_tree()
                << cells_[i+1] << ' '
                << cells_[i+2] << ' '
                << cells_[i+3];
-      //if (data_ptr>0)
-        //vcl_cout << '[' << cell_data_[data_ptr] << ','
-                 //<< cell_data_[data_ptr+1] << ','
-                 //<< cell_data_[data_ptr+2] << ','
-                 //<< cell_data_[data_ptr+3] << ','
-                 //<< cell_data_[data_ptr+4] << ','
-                 //<< cell_data_[data_ptr+5] << ','
-                 //<< cell_data_[data_ptr+6] << ','
-                 //<< cell_data_[data_ptr+7] << ','
-                 //<< cell_data_[data_ptr+8] << ','
-                 //<< cell_data_[data_ptr+9] << ','
-                 //<< cell_data_[data_ptr+10] << ','
-                 //<< cell_data_[data_ptr+11] << ','
-                 //<< cell_data_[data_ptr+12] << ','
-                 //<< cell_data_[data_ptr+13] << ','
-                 //<< cell_data_[data_ptr+14] << ','
-                 //<< cell_data_[data_ptr+15] << ']';
-
+#if 0
+      if (data_ptr>0)
+        vcl_cout << '[' << cell_data_[data_ptr] << ','
+                 << cell_data_[data_ptr+1] << ','
+                 << cell_data_[data_ptr+2] << ','
+                 << cell_data_[data_ptr+3] << ','
+                 << cell_data_[data_ptr+4] << ','
+                 << cell_data_[data_ptr+5] << ','
+                 << cell_data_[data_ptr+6] << ','
+                 << cell_data_[data_ptr+7] << ','
+                 << cell_data_[data_ptr+8] << ','
+                 << cell_data_[data_ptr+9] << ','
+                 << cell_data_[data_ptr+10] << ','
+                 << cell_data_[data_ptr+11] << ','
+                 << cell_data_[data_ptr+12] << ','
+                 << cell_data_[data_ptr+13] << ','
+                 << cell_data_[data_ptr+14] << ','
+                 << cell_data_[data_ptr+15] << ']';
+#endif // 0
       vcl_cout << ")\n";
     }
 }
@@ -705,7 +705,7 @@ bool boxm_render_ocl_scene_manager::set_block_ptrs()
   scene_->block_num(scene_x_,scene_y_,scene_z_);
   int numblocks=scene_x_*scene_y_*scene_z_;
   vcl_cout<<"Block size "<<(float)numblocks*16/1024.0/1024.0<<"MB"<<vcl_endl;
-  
+
   block_ptrs_=(cl_int*)boxm_ocl_utils::alloc_aligned(numblocks,sizeof(cl_int4),16);
   scene_->get_block_ptrs(block_ptrs_);
   return true;
@@ -793,7 +793,7 @@ bool boxm_render_ocl_scene_manager::set_all_blocks()
 {
   if (!scene_)
     return false;
-  
+
   cells_ = NULL;
   cell_alpha_=NULL;
   cell_mixture_ = NULL;
@@ -808,19 +808,19 @@ bool boxm_render_ocl_scene_manager::set_all_blocks()
           <<"    cells: "<<(float)cells_size_*cellBytes/1024.0/1024.0<<"MB"<<vcl_endl
           <<"    data:  "<<(float)cells_size_*dataBytes/1024.0/1024.0<<"MB"<<vcl_endl;
   /**********************************/
-  
+
   //allocate and initialize tree cells
   cells_=(cl_int *)boxm_ocl_utils::alloc_aligned(cells_size_,sizeof(cl_int2),16);
   scene_->get_tree_cells(cells_);
-  
+
   //allocate and initialize alphas
   cell_alpha_=(cl_float *)boxm_ocl_utils::alloc_aligned(cell_data_size_,sizeof(cl_float),16);
   scene_->get_alphas(cell_alpha_);
-  
+
   //allocate and initialize mix components
   cell_mixture_ = (cl_uchar *) boxm_ocl_utils::alloc_aligned(cell_data_size_,sizeof(cl_uchar8),16);
   scene_->get_mixture(cell_mixture_);
-  
+
   if (cells_== NULL|| cell_mixture_ == NULL || cell_alpha_==NULL) {
     vcl_cout << "Failed to allocate host memory. (tree input)\n";
     return false;
@@ -859,13 +859,13 @@ bool boxm_render_ocl_scene_manager::set_tree_buffers()
                                    cell_alpha_,&status);
   if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (cell data) failed."))
     return false;
-    
+
   cell_mixture_buf_ = clCreateBuffer(this->context_,
-                                    CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
-                                    cell_data_size_*sizeof(cl_uchar8),
-                                    cell_mixture_,&status);
+                                     CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+                                     cell_data_size_*sizeof(cl_uchar8),
+                                     cell_mixture_,&status);
   if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (cell mixture) failed."))
-    return false;                                  
+    return false;
 
   numbuffer_buf_=clCreateBuffer(this->context_,
                                 CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
@@ -881,8 +881,6 @@ bool boxm_render_ocl_scene_manager::set_tree_buffers()
   if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (lenbuffer_) failed."))
     return false;
 
-  
-  
   /******* debug print ***************/
   int cellBytes = cells_size_*sizeof(cl_int2);
   int alphaBytes = cell_data_size_*sizeof(cl_float);
@@ -1123,5 +1121,4 @@ bool boxm_render_ocl_scene_manager::release_input_image_buffers()
   status = clReleaseMemObject(img_dims_buf_);
   return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (img_dims_buf_).")==1;
 }
-
 
