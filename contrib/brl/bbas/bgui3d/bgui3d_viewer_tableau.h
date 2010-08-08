@@ -136,7 +136,7 @@ class bgui3d_viewer_tableau : public bgui3d_tableau
 
   SoDirectionalLight * headlight_;
 
-  SoText2* _text;
+  SoText2* text_;
 };
 
 #endif // bgui3d_viewer_tableau_h_

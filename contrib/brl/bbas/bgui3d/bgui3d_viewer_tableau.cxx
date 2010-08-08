@@ -91,9 +91,9 @@ bgui3d_viewer_tableau::set_scene_root(SoNode* scene_root)
   trans->translation = SbVec3f(-.98f,.93f,0);
   super_root->addChild( trans );
 
-  _text = new SoText2;
-  _text->string.deleteValues(0, -1); // empty the string
-  super_root->addChild( _text );
+  text_ = new SoText2;
+  text_->string.deleteValues(0, -1); // empty the string
+  super_root->addChild( text_ );
 
   //: Make a group of all the cameras in the scene
   camera_group_ = new SoSwitch;
@@ -463,9 +463,9 @@ static void setTextCallback( void *data, SoSensor *sensor )
 
 void bgui3d_viewer_tableau::setText( const vcl_string& string )
 {
-  int numStrings = _text->string.getNum();
-  _text->string.set1Value( numStrings, string.c_str() );
-  SoAlarmSensor* alarm = new SoAlarmSensor( setTextCallback, _text );
+  int numStrings = text_->string.getNum();
+  text_->string.set1Value( numStrings, string.c_str() );
+  SoAlarmSensor* alarm = new SoAlarmSensor( setTextCallback, text_ );
   alarm->setTimeFromNow( 7.0 );
   alarm->schedule();
 }
@@ -590,8 +590,8 @@ bgui3d_viewer_tableau::set_clipping_planes()
       glGetIntegerv(GL_DEPTH_BITS, depthbits);
 #endif // 0
 
-      int use_bits = (int) (float(depthbits[0]) * (0.4f));
-      float r = (float) vcl_pow(2.0, (double) use_bits);
+      int use_bits = (int) (float(depthbits[0]) * 0.4f + 0.001f);
+      float r = (float)(1 << use_bits);
       nearlimit = farval / r;
 #if 0
     }
