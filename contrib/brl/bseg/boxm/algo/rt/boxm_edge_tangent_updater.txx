@@ -125,14 +125,14 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
             if (boxm_plane_ransac<AUX>(aux_samples, weights, line, residual,bb, ransac_concensus_cnt_, ransac_ortho_thres_, ransac_volume_ratio_)) {
               boxm_inf_line_sample<AUX> data(line,aux_samples.size());
               data.residual_=residual;
-              
-              //: now set the clipped line
+
+              // now set the clipped line
               // convert to type double
               vgl_vector_2d<double> x0(line.x0().x(), line.x0().y());
               vgl_point_3d<double> p0,p1;
               vgl_vector_3d<double> dir(line.direction().x(), line.direction().y(), line.direction().z());
               vgl_infinite_line_3d<double> dline(x0,dir);
-              if (!vgl_intersection<double>(bb, dline, p0, p1)) 
+              if (!vgl_intersection<double>(bb, dline, p0, p1))
                 data.residual_=0;
               else {
                 // convert back to type AUX
@@ -141,7 +141,7 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
                 vgl_line_3d_2_points<AUX> line_clipped(p0_t,p1_t);
                 data.line_clipped_ = line_clipped;
               }
-                 
+
               cell->set_data(data);
             }
             else
@@ -179,19 +179,19 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
 #ifdef DEBUG
   vcl_cout << "done with all cells" << vcl_endl;
 #endif
-/*
+#if 0
   // clear the aux scenes so that its starts with the refined scene next time
   for (unsigned i=0; i<aux_scenes.size(); i++) {
     aux_scenes[i].clean_scene();
   }
- */
+#endif
   return true;
 }
 
 template <class T_loc, class APM, class AUX>
 boxm_edge_tangent_refine_updates<T_loc,APM,AUX>::boxm_edge_tangent_refine_updates(boxm_scene<boct_tree<T_loc, boxm_inf_line_sample<APM> > > &scene,
                                                                                   int concensus_cnt,
-                                                                                  vcl_vector<vil_image_view<float> > const& edge_images, 
+                                                                                  vcl_vector<vil_image_view<float> > const& edge_images,
                                                                                   vcl_vector<vpgl_camera_double_sptr> const& cameras)
 : edge_images_(edge_images), cameras_(cameras), concensus_cnt_(concensus_cnt), scene_(scene)
 {}
@@ -200,9 +200,9 @@ template <class T_loc, class APM, class AUX>
 bool boxm_edge_tangent_refine_updates<T_loc,APM,AUX>::refine_cells()
 {
   vcl_cout << "using " << edge_images_.size() << " images to refine edge world!" << vcl_endl;
-  
+
   typedef boct_tree<T_loc, boxm_inf_line_sample<APM> > tree_type;
-  
+
   // for each block
   boxm_block_iterator<tree_type> iter(&scene_);
   iter.begin();
@@ -212,36 +212,36 @@ bool boxm_edge_tangent_refine_updates<T_loc,APM,AUX>::refine_cells()
     boxm_block<tree_type>* block = *iter;
     boct_tree<T_loc, boxm_inf_line_sample<APM> >* tree = block->get_tree();
     vcl_vector<boct_tree_cell<T_loc,boxm_inf_line_sample<APM> >*> cells = tree->leaf_cells();
-    
+
     // iterate over cells
     for (unsigned i=0; i<cells.size(); ++i)
     {
       boct_tree_cell<T_loc,boxm_inf_line_sample<APM> >* cell = cells[i];
       boxm_inf_line_sample<AUX> cell_value = cell->data();
-      
-      //: update residual of cell_value based on the visibility and support of this 3D line in all the images
-      if (cell_value.residual_<1.0) {
-        
-        //: go through each image
+
+      // update residual of cell_value based on the visibility and support of this 3D line in all the images
+      if (cell_value.residual_<1.0)
+      {
+        // go through each image
         int cnt = 0;
         for (unsigned k = 0; k < edge_images_.size(); k++) {
           int ni = edge_images_[k].ni();
           int nj = edge_images_[k].nj();
-          //: project this 3D line to the image
+          // project this 3D line to the image
           double u1,v1,u2,v2;
           vgl_point_3d<float>  p1=cell_value.line_clipped_.point1();
           vgl_point_3d<float>  p2=cell_value.line_clipped_.point2();
           cameras_[k]->project(p1.x(),p1.y(),p1.z(),u1,v1);
           cameras_[k]->project(p2.x(),p2.y(),p2.z(),u2,v2);
-          
+
           double line_angle = vnl_math::angle_0_to_2pi(vcl_atan2(v2-v1, -(u2-u1)));
           double line_angle2 = vnl_math::angle_0_to_2pi(line_angle + vnl_math::pi); // line segment is symmetric
-          
-          //: find mid point of line seg
+
+          // find mid point of line seg
           int cent_i = int(u1+(u2-u1)/2.0);
           int cent_j = int(v1+(v2-v1)/2.0);
-          
-          //: check a neighborhood of 10x10 in the image to find the edgel that is nearest to this line segment
+
+          // check a neighborhood of 10x10 in the image to find the edgel that is nearest to this line segment
           double angle_of_min;
           double dist = 10.0;
           for (int ii = cent_i - 10; ii < cent_i + 10; ii++) {
@@ -251,20 +251,19 @@ bool boxm_edge_tangent_refine_updates<T_loc,APM,AUX>::refine_cells()
               double ex = edge_images_[k](ii,jj,0);
               double ey = edge_images_[k](ii,jj,1);
               double dir = edge_images_[k](ii,jj,2);
-              double dist_to_seg = vgl_distance_to_linesegment<double>(u1, v1, u2, v2, ex, ey);    
+              double dist_to_seg = vgl_distance_to_linesegment<double>(u1, v1, u2, v2, ex, ey);
               if (dist_to_seg < dist) {
                 dist = dist_to_seg;
                 angle_of_min = dir;
               }
             }
           }
-          if (dist < 10.0) 
-            if (vcl_abs(angle_of_min - line_angle) < vnl_math::pi/16.0 || vcl_abs(angle_of_min - line_angle2) < vnl_math::pi/16.0) 
+          if (dist < 10.0)
+            if (vcl_abs(angle_of_min - line_angle) < vnl_math::pi/16.0 || vcl_abs(angle_of_min - line_angle2) < vnl_math::pi/16.0)
               cnt++;
-          
         }
-      
-        if (cnt >= concensus_cnt_) 
+
+        if (cnt >= concensus_cnt_)
           cell_value.residual_ = AUX(1.0)-AUX(cnt)/AUX(edge_images_.size());
         else
           cell_value.residual_ = AUX(1.0);
@@ -274,7 +273,7 @@ bool boxm_edge_tangent_refine_updates<T_loc,APM,AUX>::refine_cells()
     scene_.write_active_block();
     iter++;
   }
-  
+
   return true;
 }
 

@@ -1,5 +1,6 @@
 #include "bwm_video_corr_processor.h"
-
+//:
+// \file
 #include <bwm/video/bwm_video_site_io.h>
 #include <bwm/video/bwm_video_corr.h>
 #include <vcl_cmath.h>
@@ -139,7 +140,8 @@ open_camera_istream(vcl_string const& camera_path)
   if (open) {
     vcl_cout << "in bwm_video_corr_processor::open_camera_istream() -- input stream: " << camera_path << " is opened!\n";
     cam_istr_->seek_camera(0);
-  } else {
+  }
+  else {
     vcl_cout << "in bwm_video_corr_processor::open_camera_istream() -- input stream: " << camera_path << " can NOT be opened!\n";
   }
   return open;
@@ -154,7 +156,8 @@ open_camera_ostream(vcl_string const& camera_path)
   bool open = cam_ostr_->is_open();
   if (open) {
     vcl_cout << "in bwm_video_corr_processor::open_camera_ostream() -- output stream: " << camera_path << " is opened!\n";
-  } else {
+  }
+  else {
     vcl_cout << "in bwm_video_corr_processor::open_camera_ostream() -- output stream: " << camera_path << " can NOT be opened!\n";
   }
   return open;
@@ -164,6 +167,7 @@ void bwm_video_corr_processor::close_camera_ostream()
 {
   cam_ostr_->close();
 }
+
 void bwm_video_corr_processor::close_camera_istream()
 {
   cam_istr_->close();
@@ -376,6 +380,7 @@ void min_max_frame(vcl_vector<bwm_video_corr_sptr> const& corrs,
         max_frame = maxf;
     }
 }
+
 //: return the number of cameras that observe the correspondences
 unsigned bwm_video_corr_processor::get_ncameras(unsigned& min_frame, unsigned& max_frame) const
 {
@@ -387,11 +392,9 @@ unsigned bwm_video_corr_processor::get_ncameras(unsigned& min_frame, unsigned& m
   return max_frame-min_frame +1;
 }
 
-//
-//compute the mask on existing correspondences
-//the mask is m x n , where m = number of cameras and
-//n = number of world points (corrs)
-//
+//: compute the mask on existing correspondences
+// The mask is m x n , where m = number of cameras and
+// n = number of world points (corrs)
 void bwm_video_corr_processor::mask(unsigned& min_frame, unsigned& max_frame,
                                     vcl_vector<vcl_vector<bool> >& mask)
 {
