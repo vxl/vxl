@@ -8,6 +8,7 @@ MINI_PROG_SOURCES += boxm_opencl_render_ocl_scene_exe.cxx
 MINI_PROG_SOURCES += boxm_ocl_update_view.cxx
 MINI_PROG_SOURCES += boxm_ocl_render_view.cxx
 MINI_PROG_SOURCES += boxm_opencl_change_detection_view.cxx
+MINI_PROG_SOURCES += boxm_build_foreground_distribution.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk
