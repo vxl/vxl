@@ -1,8 +1,17 @@
 // This is core/vil/tests/test_image_resource.cxx
 #include <testlib/testlib_test.h>
 
-#include <vcl_iostream.h>
 #include <vcl_complex.h>
+
+// These are "dummy" operator< for complex<T>.  These functions are never
+// to be actually called, but declaring these makes it possible to use a
+// single template implementation for test_image_resource().  - PVr
+static inline bool operator< (vcl_complex<float> const&, vcl_complex<float> const&) { return false; }
+static inline bool operator< (vcl_complex<double>const&, vcl_complex<double>const&) { return false; }
+static inline bool operator> (vcl_complex<float> const&, vcl_complex<float> const&) { return false; }
+static inline bool operator> (vcl_complex<double>const&, vcl_complex<double>const&) { return false; }
+
+#include <vcl_iostream.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_math.h>
 #include <vil/vil_new.h>
@@ -12,14 +21,6 @@
 #include <vil/vil_flip.h>
 #include <vil/vil_print.h>
 #include <vil/vil_decimate.h>
-
-// This is a "dummy" operator< for complex<T>.  This function is never
-// actually called, but declaring it makes it possible to use a single
-// template implementation for test_image_resource().  - PVr
-static inline bool operator< (vcl_complex<float> const&, vcl_complex<float> const&) { return false; }
-static inline bool operator< (vcl_complex<double>const&, vcl_complex<double>const&) { return false; }
-static inline bool operator> (vcl_complex<float> const&, vcl_complex<float> const&) { return false; }
-static inline bool operator> (vcl_complex<double>const&, vcl_complex<double>const&) { return false; }
 
 template <class T>
 void test_image_resource(vcl_string type, vil_pixel_format format, T /*dummy*/)
