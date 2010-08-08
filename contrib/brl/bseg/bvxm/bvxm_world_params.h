@@ -69,7 +69,7 @@ class bvxm_world_params : public vbl_ref_count
 
   inline vgl_vector_3d<unsigned int> num_voxels(unsigned scale=0) {
     vgl_vector_3d<unsigned int> num_voxels_scaled;
-    double divisor=vcl_pow(2.0,-(double)scale); // actually, inverse of divisor
+    double divisor= 1.0 / double(1 << scale); // actually, inverse of divisor
     num_voxels_scaled.set((unsigned int)(num_voxels_.x()*divisor),
                           (unsigned int)(num_voxels_.y()*divisor),
                           (unsigned int)(num_voxels_.z()*divisor));
@@ -77,7 +77,7 @@ class bvxm_world_params : public vbl_ref_count
   }
 
   inline float voxel_length(unsigned scale=0) {
-    return (float)vcl_pow(2.0,(double)scale)*voxel_length_; }
+    return float(1<<scale)*voxel_length_; }
 
   inline vgl_vector_3d<float> base_x() const { return base_x_; }
   inline vgl_vector_3d<float> base_y() const { return base_y_; }

@@ -65,7 +65,7 @@ void boxm_ocl_refine_scene(boxm_scene<boct_tree<short, boxm_sample<APM> > >* sce
     //Do something with tree array here
     /////////////////////////////////////////
     int  tree_size = mgr->get_tree_size();
-    vcl_cerr<<"REFINED TREE! -> size:"<<tree_size<<vcl_endl;
+    vcl_cerr<<"REFINED TREE! -> size:"<<tree_size<<'\n';
 
 
     //clean up after each tree
@@ -211,8 +211,7 @@ void boxm_ocl_refine_scene_cpu(boct_tree<short, boxm_sample<APM> >* tree, float 
       ////////////////////////////////////////
       //INSERT LEAF SPECIFIC CODE HERE
       ////////////////////////////////////////
-      //find side length for cell of this level (bit shift: two_pow_level = 1<<currLevel;)
-      //int two_pow_level = pow(2,currLevel);
+      //find side length for cell of this level (bit shift):
       unsigned two_pow_level = 1<<currLevel;
       float side_len = boxLen/two_pow_level;
 

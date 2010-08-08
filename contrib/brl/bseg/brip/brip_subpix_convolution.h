@@ -30,7 +30,7 @@ inline void brip_subpix_convolve_2d(const vil_image_view<srcT>& src_im,
                                     kernelT kernel, accumT ac,
                                     int N)
 {
-  int two_pow_N = (int) vcl_pow(2.0, N);
+  int two_pow_N = 1 << N;
 
   //the portion of the src_image that can be used for the convolution
   int src_ni = 1+src_im.ni()-kernel.ni(); assert(src_ni >= 0);
@@ -194,7 +194,7 @@ inline void brip_subpix_convolve_2d_sep(const vil_image_view<srcT>& src_im,
                                         kernelT kernel, accumT ac,
                                         int N)
 {
-  int two_pow_N = (int) vcl_pow(2.0, N);
+  int two_pow_N = 1 << N;
 
   //the portion of the src_image that can be used for the convolution
   int src_ni = src_im.ni(); assert(src_ni >= 0);

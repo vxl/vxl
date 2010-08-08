@@ -181,9 +181,9 @@ bool boxm_refine_manager<T>::run_tree()
 #if 0
   vcl_cout<<"VUL_TIMER: Global mem BANDWITH RESULTS\n"
           <<"Size "<<16*(*tree_max_size_)<<" bytes in "<<gpu_time<<"sec"<<vcl_endl;
-  float rate = (16.0*(*tree_max_size_))/gpu_time;
+  float rate = (16.0f*(*tree_max_size_))/gpu_time;
   vcl_cout<<" = "<<rate<<" bytes/sec\n"
-          <<" = "<<rate/vcl_pow(2,20)<<" megabytes/sec"<<vcl_endl;
+          <<" = "<<rate/float(1L<<20)<<" megabytes/sec"<<vcl_endl;
   boxm_ocl_utils<float>::print_tree_array(tree_results_, (*tree_results_size_), data_results_);
 #endif // 0
 

@@ -56,11 +56,11 @@ class bil_scale_image
     return (float) vcl_pow(2.0, octave + double(level)/(num_levels_)) * init_scale_;
   }
 
-  //: Find the how much the size of the image has been scaled for the given index
+  //: Find how much the size of the image has been scaled for the given index
   //  This is useful for converting coordinates
   float image_scale(int octave) const
   {
-    return (float) vcl_pow(2.0, double(octave));
+    return (float)(1 << octave);
   }
 
   //: Find the closest scale to \p scale that is represented by an image

@@ -73,7 +73,7 @@ bool parse_param_file(const vcl_string& param_path,
   vcl_ifstream ifs(param_path.c_str());
   if (!ifs)
   {
-    vcl_cerr<<"Failed to open parameter file: "<<param_path<<vcl_endl;
+    vcl_cerr<<"Failed to open parameter file: "<<param_path<<'\n';
     return false;
   }
 
@@ -135,7 +135,7 @@ bool fhs_load_points(const vcl_string& path,
 {
   vcl_ifstream ifs( path.c_str(), vcl_ios_in );
   if (!ifs)
-    { vcl_cerr<<"Failed to load in points from "<<path<<vcl_endl; return false; }
+    { vcl_cerr<<"Failed to load in points from "<<path<<'\n'; return false; }
   vcl_string label;
 
     // Possible extra data - ignore it
@@ -174,7 +174,7 @@ bool fhs_load_points(const vcl_string& path,
       ifs>>label;
       if (label!="}")
       {
-        vcl_cerr<<"Expecting }, got "<<label<<vcl_endl;
+        vcl_cerr<<"Expecting }, got "<<label<<'\n';
         return false;
       }
     }
@@ -196,7 +196,7 @@ bool fhs_load_arcs(const vcl_string& path,
   vcl_vector<int> v;
     vcl_ifstream ifs( path.c_str(), vcl_ios_in );
   if (!ifs)
-    { vcl_cerr<<"Failed to load in arc links from "<<path<<vcl_endl; return false; }
+    { vcl_cerr<<"Failed to load in arc links from "<<path<<'\n'; return false; }
 
   int x;
   ifs>>vcl_ws;
@@ -208,7 +208,7 @@ bool fhs_load_arcs(const vcl_string& path,
 
   if (v.size()%2==1)
   {
-    vcl_cerr<<"Odd number of indices supplied in "<<path<<vcl_endl;
+    vcl_cerr<<"Odd number of indices supplied in "<<path<<'\n';
     return false;
   }
 
@@ -320,13 +320,13 @@ int main( int argc, char* argv[] )
   image1.image() = vil_load(params.image1_path.c_str());
   if (image1.image().size()==0)
   {
-    vcl_cerr<<"Unable to read in image from "<<params.image1_path<<vcl_endl;
+    vcl_cerr<<"Unable to read in image from "<<params.image1_path<<'\n';
     return 1;
   }
   image2.image() = vil_load(params.image2_path.c_str());
   if (image2.image().size()==0)
   {
-    vcl_cerr<<"Unable to read in image from "<<params.image2_path<<vcl_endl;
+    vcl_cerr<<"Unable to read in image from "<<params.image2_path<<'\n';
     return 1;
   }
 
@@ -365,9 +365,9 @@ int main( int argc, char* argv[] )
   for (unsigned i=0;i<pairs.size();++i)
   {
     if (pairs[i].first<0 || (unsigned int)(pairs[i].first)>=ref_pts.size())
-    { vcl_cerr<<"Invalid point index "<<pairs[i].first<<vcl_endl; return 5; }
+    { vcl_cerr<<"Invalid point index "<<pairs[i].first<<'\n'; return 5; }
     if (pairs[i].second<0 || (unsigned int)(pairs[i].second)>=ref_pts.size())
-    { vcl_cerr<<"Invalid point index "<<pairs[i].second<<vcl_endl; return 5; }
+    { vcl_cerr<<"Invalid point index "<<pairs[i].second<<'\n'; return 5; }
   }
 
   // ====================================================================
@@ -393,8 +393,8 @@ int main( int argc, char* argv[] )
     int i1 = pairs[i].first;
     int i2 = pairs[i].second;
     vgl_vector_2d<double> dp = ref_pts[i2]-ref_pts[i1];
-    double sd_x = vcl_max(vcl_pow(2.0,double(im_level[i])),0.2*dp.length());
-    double sd_y = vcl_max(vcl_pow(2.0,double(im_level[i])),0.2*dp.length());
+    double sd_x = vcl_max(double(1 << im_level[i]),0.2*dp.length());
+    double sd_y = vcl_max(double(1 << im_level[i]),0.2*dp.length());
     arcs[i]=fhs_arc(i1,i2,dp.x(),dp.y(),sd_x*sd_x,sd_y*sd_y);
   }
 

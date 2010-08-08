@@ -176,7 +176,7 @@ vpgl_camera_double_sptr bvxm_util::downsample_camera(vpgl_camera_double_sptr cam
   {
     vpgl_local_rational_camera<double>* new_rat_camera=new vpgl_local_rational_camera<double>(*rat_camera);
     double u_s,v_s;
-    float factor=  vcl_pow(2.0f,-((float)scale));
+    float factor=  1.0f / float(1 << scale);
     rat_camera->image_scale(u_s,v_s);
     new_rat_camera->set_image_scale(u_s*factor,v_s*factor);
 
@@ -200,7 +200,7 @@ vpgl_camera_double_sptr bvxm_util::downsample_persp_camera(vpgl_camera_double_sp
     vnl_matrix_fixed<double,3,4> camera_matrix = persp_camera->get_matrix();
     vnl_matrix_fixed<double,3,3> scale_matrix;
     scale_matrix.fill(0.0);
-    float factor=  vcl_pow(2.0f,-((float)scale));
+    float factor=  1.0f / float(1 << scale);
 
     scale_matrix.put(0,0,1*factor);
     scale_matrix.put(1,1,1*factor);
