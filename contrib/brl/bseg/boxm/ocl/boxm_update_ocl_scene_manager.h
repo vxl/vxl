@@ -15,7 +15,7 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vul/vul_file_iterator.h>
 
-class boxm_update_ocl_scene_manager : public bocl_manager<boxm_update_ocl_scene_manager >
+class boxm_update_ocl_scene_manager : public bocl_manager<boxm_update_ocl_scene_manager>
 {
   typedef vnl_vector_fixed<int, 4> int4;
   typedef vnl_vector_fixed<float, 16> float16;
@@ -28,16 +28,16 @@ class boxm_update_ocl_scene_manager : public bocl_manager<boxm_update_ocl_scene_
     program_(0),
     block_ptrs_(0),
     mem_ptrs_(0),
-    scene_dims_(0),
-    block_dims_(0),
-    block_len_(0),
-    max_level_(0),
     cells_(0),
     cells_size_(0),
     cell_alpha_(0),
     cell_mixture_(0),
     cell_num_obs_(0),
     cell_data_size_(0),
+    scene_dims_(0),
+    block_dims_(0),
+    block_len_(0),
+    max_level_(0),
     numbuffer_(0),
     lenbuffer_(0),
     prob_thresh_(1.0f),
@@ -207,18 +207,18 @@ class boxm_update_ocl_scene_manager : public bocl_manager<boxm_update_ocl_scene_
   /* optimized data format in 4 buffers */
   cl_float  * cell_alpha_;      //array of floats
   cl_uchar  * cell_mixture_;    //array of uchar8s
-  cl_ushort * cell_num_obs_;    //array of short4s  
+  cl_ushort * cell_num_obs_;    //array of short4s
   cl_float  * cell_aux_data_;   //array of float4s
   cl_uint     cell_data_size_;  //length of above arrays
   /* scene world information (x,y,z,0) */
-  cl_int    * scene_dims_;      //int4 dimension of whole scene 
-  cl_float  * scene_origin_;    //float4 
+  cl_int    * scene_dims_;      //int4 dimension of whole scene
+  cl_float  * scene_origin_;    //float4
   cl_float  * output_debug_;    //
   cl_float  * block_dims_;      //float4 dimension of each block
   cl_float    block_len_;       //
   cl_float    max_level_;       //max level for each block (no more than 4)
   /* scene meta data */
-  cl_int      numbuffer_;       //number of buffers of cells and data 
+  cl_int      numbuffer_;       //number of buffers of cells and data
   cl_int      lenbuffer_;       //length of each buffer
   cl_float    prob_thresh_;     //update prob thresh
   cl_uint     root_level_;      //root level
@@ -227,7 +227,7 @@ class boxm_update_ocl_scene_manager : public bocl_manager<boxm_update_ocl_scene_
   * update information
   *****************************************/
   cl_uint   * img_dims_;           //image dimensions
-  
+
   /* offset for non-overlapping sections */
   cl_uint     offset_x_;
   cl_uint     offset_y_;
@@ -253,12 +253,12 @@ class boxm_update_ocl_scene_manager : public bocl_manager<boxm_update_ocl_scene_
   // greater than or equal to image dimensions
   cl_uint wni_;
   cl_uint wnj_;
-  
+
  /*****************************************
   *pointers to cl memory on GPU
   *****************************************/
   /* scene buffers */
-  cl_mem    block_ptrs_buf_;      
+  cl_mem    block_ptrs_buf_;
   cl_mem    mem_ptrs_buf_;
   cl_mem    cells_buf_;
   cl_mem    cell_alpha_buf_;
@@ -272,7 +272,7 @@ class boxm_update_ocl_scene_manager : public bocl_manager<boxm_update_ocl_scene_
   cl_mem    scene_dims_buf_;
   cl_mem    scene_origin_buf_;
   cl_mem    block_dims_buf_;
-  
+
   /* update buffers */
   cl_mem    tree_bbox_buf_;
   cl_mem    persp_cam_buf_;
@@ -280,12 +280,12 @@ class boxm_update_ocl_scene_manager : public bocl_manager<boxm_update_ocl_scene_
   cl_mem    offset_x_buf_;
   cl_mem    offset_y_buf_;
   cl_mem    factor_buf_;
-  
+
   /*debugger ... */
   cl_mem    output_debug_buf_;
 
  /*****************************************
-  *helper member variables 
+  *helper member variables
   *****************************************/
   boxm_ocl_scene * scene_;
   vpgl_camera_double_sptr cam_;

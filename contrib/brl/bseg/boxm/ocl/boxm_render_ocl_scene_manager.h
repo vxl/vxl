@@ -32,8 +32,8 @@ class boxm_render_ocl_scene_manager : public bocl_manager<boxm_render_ocl_scene_
     cells_(0),
     cells_size_(0),
     cell_alpha_(0),
-    cell_mixture_(0),
     cell_data_size_(0),
+    cell_mixture_(0),
     numbuffer_(0),
     lenbuffer_(0),
     root_level_(0),
@@ -174,7 +174,7 @@ class boxm_render_ocl_scene_manager : public bocl_manager<boxm_render_ocl_scene_
   cl_float * scene_origin_;
   // (x,y,z,0)
   cl_float * block_dims_;
-  
+
   //array of tree cells,
   cl_int* cells_;
   cl_uint  cells_size_;
@@ -182,7 +182,7 @@ class boxm_render_ocl_scene_manager : public bocl_manager<boxm_render_ocl_scene_
   //array of data pointed to by tree
   cl_float* cell_alpha_;
   cl_uint  cell_data_size_;
-  
+
   //OPTIMIZED DATA to replace float data
   cl_uchar* cell_mixture_;
 
@@ -214,7 +214,7 @@ class boxm_render_ocl_scene_manager : public bocl_manager<boxm_render_ocl_scene_
   // greater than or equal to image dimensions
   cl_uint wni_;
   cl_uint wnj_;
-  
+
   // pointer to cl memory on GPU
   cl_mem   cells_buf_;
   cl_mem   cell_alpha_buf_;
