@@ -216,7 +216,7 @@ class boxm_update_ocl_scene_manager : public bocl_manager<boxm_update_ocl_scene_
   cl_float  * output_debug_;    //
   cl_float  * block_dims_;      //float4 dimension of each block
   cl_float    block_len_;       //
-  cl_float    max_level_;       //max level for each block (no more than 4)
+  cl_uint     max_level_;       //max level for each block (no more than 4)
   /* scene meta data */
   cl_int      numbuffer_;       //number of buffers of cells and data
   cl_int      lenbuffer_;       //length of each buffer

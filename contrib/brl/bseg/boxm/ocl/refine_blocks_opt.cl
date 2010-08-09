@@ -236,8 +236,9 @@ int refine_tree(__local  int2    *tree,
         data_size += 8;
      
         //reset data for curent node
-        //float16 zeroDat = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-        //data_cells[gid*len_buffer + dataIndex] = zeroDat;    
+        //alpha_array[gid*len_buffer + dataIndex]   = 0.0;
+        //mixture_array[gid*len_buffer + dataIndex] = (uchar8) (0);
+        //num_obs_array[gid*len_buffer + dataIndex] = (ushort4) (0);   
       }
       ////////////////////////////////////////////
       //END LEAF SPECIFIC CODE
@@ -293,6 +294,7 @@ refine_main(__global  int4     *block_ptrs,     //3d block array
   //go through the tree array and refine it...
   if(gid < num_buffer) 
   {
+    output[gid] == 0.0;
 
     //keep track of the start and end pointer as they change
     //NOTE THAT END POINTER is equal to 2 after the last element
@@ -315,12 +317,14 @@ refine_main(__global  int4     *block_ptrs,     //3d block array
       if(currRoot.x <= 0) {
         currBlkIndex = abs(currRoot.x);
       } 
-      else {
-        output[gid] = -555;
+      else {         
+        output[gid] = -555; //pointer back to block is bad
+        mem_ptrs[gid].x = startPtr;  //WRITE mem_ptrs TO GLOBAL
+        mem_ptrs[gid].y = endPtr; 
         break;
       }
       int currTreeSize = block_ptrs[currBlkIndex].z;
-                                    
+                         
       //2. copy current tree to local mem
       //TODO asynch_workgroup_copy (will fire all threads) look at quick reference card
       //TODO Make sure your tree doesn't get corrupted because you don't clear out all 585 cells
@@ -328,14 +332,17 @@ refine_main(__global  int4     *block_ptrs,     //3d block array
       for(int j=0; j<currTreeSize; j++) {
         local_tree[j] = tree_cells[gid*len_buffer + (currRootIndex+j)%len_buffer];
       }   
-
+       
       //3. determine number of data cells used, datasize = occupied space
       int dataSize = (endPtr > startPtr)? (endPtr-1)-startPtr: len_buffer - (startPtr-endPtr)-1;
       
-      //if there aren't 585 cells, quit refining
+      //if there aren't 585 cells, quit refining 
+      //NOTE THAT BEFORE YOU BREAK you need to store mem_ptrs!!!!!
       int preFreeSpace = (startPtr >= endPtr)? startPtr-endPtr : len_buffer - (endPtr-startPtr);
       if(preFreeSpace < 585) {
-        output[gid] = -666; 
+        output[gid] = -665;
+        mem_ptrs[gid].x = startPtr;
+        mem_ptrs[gid].y = endPtr; 
         break;
       }
 
@@ -378,34 +385,17 @@ refine_main(__global  int4     *block_ptrs,     //3d block array
         //move start pointer back
         startPtr = (startPtr - currTreeSize + len_buffer)%len_buffer;
         output[gid] = -666;
+        mem_ptrs[gid].x = startPtr;
+        mem_ptrs[gid].y = endPtr; 
         break;
-/*
-        //7a. update block_ptrs 
-        block_ptrs[currBlkIndex].y = (endPtr-1+len_buffer)%len_buffer;
-        block_ptrs[currBlkIndex].z = currTreeSize;
-        
-        //recopy tree
-        for(int j=0; j<currTreeSize; j++) {
-          local_tree[j] = tree_cells[gid*len_buffer + (currRootIndex+j)%len_buffer];
-        }   
-        
-        //7b. move tree to it's new spot
-        for(int j=0; j<currTreeSize; j++) {
-          int cellIndex = gid*len_buffer + (endPtr-1+j+len_buffer)%len_buffer;
-          tree_cells[cellIndex] = tree_cells[gid*len_buffer + (currRootIndex+j)%len_buffer];
-        }
-        
-        //7c. update endPtr
-        endPtr = (endPtr+currTreeSize)%len_buffer;
 
-        //set output flag to let user know what happpned
-        output[gid] = -666;
-*/
       }
+      
 
       //update current root index
       currRootIndex = (currRootIndex+currTreeSize)%len_buffer;
     }
+
     
     mem_ptrs[gid].x = startPtr;
     mem_ptrs[gid].y = endPtr; 

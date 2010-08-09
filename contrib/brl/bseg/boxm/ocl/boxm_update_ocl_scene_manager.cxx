@@ -527,7 +527,7 @@ bool boxm_update_ocl_scene_manager::set_args(unsigned pass)
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (prob_thresh buffer)"))
         return SDK_FAILURE;
     //max level
-    max_level_=root_level_+1;
+    max_level_ = (unsigned int) (root_level_+1);
     status = clSetKernelArg(kernels_[pass], i++, sizeof(cl_uint), &max_level_);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (max_level_) buffer)"))
         return SDK_FAILURE;
@@ -783,6 +783,16 @@ bool boxm_update_ocl_scene_manager::rendering()
 }
 bool boxm_update_ocl_scene_manager::refine()
 {
+  //read trees for mem_ptrs
+  this->read_trees();
+  scene_->set_blocks(block_ptrs_);
+  scene_->set_tree_buffers_opt(cells_);
+  scene_->set_mem_ptrs(mem_ptrs_);
+  scene_->set_alpha_values(cell_alpha_);
+  scene_->set_mixture_values(cell_mixture_);
+  scene_->set_num_obs_values(cell_num_obs_);
+  vcl_cout<<(*scene_)<<vcl_endl;
+  
   gpu_time_=0;
   unsigned pass = 6;
   this->set_args(pass);
@@ -804,19 +814,26 @@ bool boxm_update_ocl_scene_manager::refine()
   status = clWaitForEvents(1, &events[0]);
   if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents (output read) failed."))
     return false;
-    
-  //read trees for mem_ptrs
-  this->read_trees();
+
   vcl_cout<<"Kernel OUTPUT: "<<vcl_endl;
   for(int i=0; i<numbuffer_; i++) {
+    int startPtr = mem_ptrs_[2*i];
+    int endPtr   = mem_ptrs_[2*i+1];
+    int freeSpace = (startPtr >= endPtr)? startPtr-endPtr : lenbuffer_ - (endPtr-startPtr);
     if(output_debug_[i] == -666) {
-      vcl_cout<<"buffer @ "<<i<<" cannot be refined. "
-              <<"mem_ptrs="<<mem_ptrs_[2*i]<<","<<mem_ptrs_[2*i+1]<<vcl_endl;
+      vcl_cout<<"buffer @ "<<i<<" is out of space post refine. "
+              <<"freeSpace = "<<freeSpace<<"  "
+              <<"mem_ptrs = "<<startPtr<<","<<endPtr<<vcl_endl;
+    }
+    else if(output_debug_[i] == -665) {
+      vcl_cout<<"buffer @ "<<i<<" is out of space PRE refine "          
+              <<"freeSpace = "<<freeSpace<<"  "
+              <<"mem_ptrs = "<<startPtr<<","<<endPtr<<vcl_endl;
     }
     else if(output_debug_[i] == -555) {
-      this->read_trees();
       vcl_cout<<"buffer @ "<<i<<" has bad block pointer!!! "          
-              <<"mem_ptrs="<<mem_ptrs_[2*i]<<","<<mem_ptrs_[2*i+1]<<vcl_endl;
+              <<"freeSpace = "<<freeSpace<<"  "
+              <<"mem_ptrs = "<<startPtr<<","<<endPtr<<vcl_endl;
     }
     else {
       vcl_cout<<output_debug_[i]<<", ";
