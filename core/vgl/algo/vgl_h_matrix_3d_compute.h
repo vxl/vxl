@@ -7,12 +7,12 @@
 // \author Ozge C. Ozcanli
 // \date June 24, 2010
 //
-// Abstract interface for classes that compute projective transformations 
+// Abstract interface for classes that compute projective transformations
 // from point correspondences.
 //
 // \verbatim
 //  Modifications
-//    none
+//   <none yet>
 // \endverbatim
 
 #include <vcl_vector.h>
@@ -55,4 +55,4 @@ class vgl_h_matrix_3d_compute
                          vgl_h_matrix_3d<double>& H) = 0;
 };
 
-#endif // vgl_h_matrix_2d_compute_h_
+#endif // vgl_h_matrix_3d_compute_h_
