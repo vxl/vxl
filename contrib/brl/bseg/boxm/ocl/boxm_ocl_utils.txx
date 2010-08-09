@@ -309,7 +309,7 @@ void boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T> >* scene,
                 <<"BIG BLOCK @ "<<blk_ind<<", small block @ "<<sm_ind<<'\n'
                 <<" FILLED BUFFER. FAILED TO CREATE NEW SCENE.\n"
                 <<"mem layout:"<<vcl_endl;
-        for (int i=0; i<mem_ptrs.size(); i++) {
+        for (unsigned int i=0; i<mem_ptrs.size(); ++i) {
           start = mem_ptrs[i][0];
           end   = mem_ptrs[i][1];
           freeSpace = (start >= end)? start-end : BUFF_LENGTH - (end-start);
