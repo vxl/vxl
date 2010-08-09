@@ -370,13 +370,13 @@ void boxm_render_ocl_scene_manager::print_tree()
   vcl_cout << "Tree Input\n";
   if (cells_)
     for (unsigned i = 0; i<cells_size_*4; i+=4) {
-      int data_ptr = 16*cells_[i+2];
       vcl_cout << "tree input[" << i/4 << "]("
                << cells_[i]   << ' '
                << cells_[i+1] << ' '
                << cells_[i+2] << ' '
                << cells_[i+3];
 #if 0
+      int data_ptr = 16*cells_[i+2];
       if (data_ptr>0)
         vcl_cout << '[' << cell_data_[data_ptr] << ','
                  << cell_data_[data_ptr+1] << ','
