@@ -312,7 +312,8 @@ refine_main(__global  int4     *block_ptrs,     //3d block array
       //1. get current tree information
       int2 currRoot = tree_cells[gid*len_buffer + currRootIndex];
       int currBlkIndex = -1; 
-      if(currRoot.x < 0) {
+      output[gid] = abs(currRoot.x);
+      if(currRoot.x <= 0) {
         currBlkIndex = abs(currRoot.x);
       } 
       else {
