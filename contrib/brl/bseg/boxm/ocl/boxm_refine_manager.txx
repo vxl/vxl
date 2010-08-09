@@ -8,14 +8,14 @@
 #include <vcl_cstdio.h>
 #include <vgl/vgl_box_3d.h>
 
-//include for timing
+#ifdef DEBUG // include for timing
 #include <vul/vul_timer.h>
-
+#endif
 
 //: Initializes CPU side input buffers
-//put tree structure and data into arrays
-//initializes (cl_int*) cells_ and (cl_float*) cell_data_
-// also initializes (cl_int*) tree_results_ and (cl_float*) data_results_
+// Put tree structure and data into arrays
+// Initializes (cl_int*) cells_ and (cl_float*) cell_data_
+// Also initializes (cl_int*) tree_results_ and (cl_float*) data_results_
 template<class T>
 bool boxm_refine_manager<T>::init(tree_type *tree, float prob_thresh)
 {
@@ -126,9 +126,13 @@ bool boxm_refine_manager<T>::run_tree()
 
   //run this block on the GPU
   vcl_cout<<"---running on gpu "<<vcl_endl;
+#ifdef DEBUG
   vul_timer timer; timer.mark();
+#endif
   status = run_block();
+#ifdef DEBUG
   float gpu_time = (float) timer.all()/1e3f;
+#endif
   if (!this->check_val(status,CL_SUCCESS,"run_block failed"))
     return false;
 
@@ -145,7 +149,7 @@ bool boxm_refine_manager<T>::run_tree()
   //debug print method
   vcl_cout<<"---REFINE Stats:-----------------------------------\n"
           <<"---Tree Input Size (#cells) = "<<(*numcells_)<<'\n'
-          <<"---Tree Output Size (#cells) = "<<(*tree_results_size_)<<vcl_endl
+          <<"---Tree Output Size (#cells) = "<<(*tree_results_size_)<<'\n'
           <<"---Tree Buffer Size (#cells) = "<<(*tree_max_size_)<<vcl_endl;
   int numSplit = ((*tree_results_size_)-(*numcells_))/8;
   vcl_cout<<"---number of nodes that split = "<<numSplit<<'\n'
@@ -166,9 +170,8 @@ bool boxm_refine_manager<T>::run_tree()
   else
     vcl_cout<<"---TREE NOT IN CORRECT FORMAT ---"<<vcl_endl;
 
-
+#ifdef DEBUG
   //PROFILING INFORMATION FROM OPENCL
-#if 0
   float treeSize = 4*4*(*tree_results_size_)/(1024.0f*1024.0f); //tree size in MB
   float dataSize = 4*16*(*data_results_size_)/(1024.0f*1024.0f); //data size in MBs
   vcl_cout<<"---GLOBAL MEM BANDWITH RESULTS-----------------------\n"
@@ -177,16 +180,14 @@ bool boxm_refine_manager<T>::run_tree()
           <<"---GPU Time: "<<gpu_time<<" seconds\n"
           <<"---Refine Bandwidth ~~ "<<(treeSize+dataSize)/gpu_time<<" MB/sec\n"
           <<"-----------------------------------------------------"<<vcl_endl;
-#endif // 0
 
-#if 0
-  vcl_cout<<"VUL_TIMER: Global mem BANDWITH RESULTS\n"
-          <<"Size "<<16*(*tree_max_size_)<<" bytes in "<<gpu_time<<"sec"<<vcl_endl;
   float rate = (16.0f*(*tree_max_size_))/gpu_time;
-  vcl_cout<<" = "<<rate<<" bytes/sec\n"
+  vcl_cout<<"VUL_TIMER: Global mem BANDWITH RESULTS\n"
+          <<"Size "<<rate*gpu_time<<" bytes in "<<gpu_time<<" sec\n"
+          <<" = "<<rate<<" bytes/sec\n"
           <<" = "<<rate/float(1L<<20)<<" megabytes/sec"<<vcl_endl;
   boxm_ocl_utils<float>::print_tree_array(tree_results_, (*tree_results_size_), data_results_);
-#endif // 0
+#endif // DEBUG
 
   return true;
 }
