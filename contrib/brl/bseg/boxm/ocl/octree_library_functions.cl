@@ -60,6 +60,44 @@ uchar child_index(short4 code, short level)
   return ret;
 }
 
+//---------------------------------------------------------------------
+// tree cells are arranged into int2's.  first int is either parent_ptr
+// or negative block index, second is [child_ptr | data_ptr] (as shorts)
+//Note that data_ptrs are USHORTS, while child_ptrs are merely shorts
+//---------------------------------------------------------------------
+int get_child_ptr(int2 cell) {
+  short2 child_data = as_short2(cell.y);
+  return (int) child_data.y;
+}
+void set_child_ptr(int2 *cell, int child_ptr) {
+  short2 child_data = as_short2((*cell).y);
+  child_data.y = (short) child_ptr;
+  (*cell).y = as_int(child_data);
+} 
+int get_data_ptr(int2 cell) {
+  ushort2 child_data = as_ushort2(cell.y);
+  return (int) child_data.x;  
+}
+void set_data_ptr(int2 *cell, int data_ptr) {
+  ushort2 child_data = as_ushort2((*cell).y);
+  child_data.x = (short) data_ptr;
+  (*cell).y = as_int(child_data);
+}
+int2 pack_cell(int4 cell) {
+  int2 packed;
+  //first int gets negative index or parent pointer
+  packed.x = (cell.x < 0)? -1*cell.w : cell.x;
+  
+  //pack child and data pointer as two shorts
+  short child = (short) (cell.y);
+  ushort data = (ushort)(cell.z);
+  int packed_child_data = (child << 16) | data;
+  packed.y = packed_child_data;
+  
+  return packed;
+}
+
+
 #ifndef USEIMAGE
 //-----------------------------------------------------------------
 // Traverse from the specified root_cell to the cell specified by loc_code.
@@ -160,15 +198,13 @@ int traverse_woffset_mod_opt(__global int2* cells, int cell_ptr, short4 cell_loc
 
   //curr_cell's y has child pointer and data pointer packed
   int2 curr_cell = cells[cell_ptr];
-  short2 child_data = as_short2(curr_cell.y);
-  int child_ptr = (int) child_data.y;
 
   (*global_count)++;
   int curr_level = cell_loc_code.w;
   *found_loc_code = cell_loc_code;
-  while (level<curr_level && child_ptr>0)
+  while (level<curr_level && get_child_ptr(curr_cell)>0)
   {
-    int c_ptr = (child_ptr + buffoffset)%lenbuffer + bufferindex*lenbuffer;
+    int c_ptr = (get_child_ptr(curr_cell) + buffoffset)%lenbuffer + bufferindex*lenbuffer;
     uchar c_index = child_index(target_loc_code, curr_level);
     (*found_loc_code) =
       child_loc_code(c_index, curr_level-1, *found_loc_code);
@@ -176,8 +212,6 @@ int traverse_woffset_mod_opt(__global int2* cells, int cell_ptr, short4 cell_loc
 
     //update curr cell and child_ptr
     curr_cell = cells[c_ptr];
-    child_data = as_short2(curr_cell.y);
-    child_ptr = (int) child_data.y;
 
     (*global_count)++;
     found_cell_ptr = c_ptr;
@@ -402,15 +436,13 @@ int traverse_force_woffset_mod_opt(__global int2* cells, int cell_ptr, short4 ce
 
   //curr_cell's y has child pointer and data pointer packed
   int2 curr_cell = cells[cell_ptr];
-  short2 child_data = as_short2(curr_cell.y);
-  int child_ptr = (int) child_data.y;
 
   (*global_count)++;
   short4 curr_code = cell_loc_code;
   curr_code.w = curr_level;
-  while (level<curr_level && child_ptr>0)
+  while (level<curr_level && get_child_ptr(curr_cell)>0)
   {
-    int c_ptr = (child_ptr + buffoffset)%lenbuffer + bufferindex*lenbuffer;
+    int c_ptr = (get_child_ptr(curr_cell) + buffoffset)%lenbuffer + bufferindex*lenbuffer;
     short4 child_bit = (short4)(1);
     child_bit = child_bit << (short4)(curr_level-1);
     short4 code_diff = target_loc_code-curr_code;
@@ -426,10 +458,8 @@ int traverse_force_woffset_mod_opt(__global int2* cells, int cell_ptr, short4 ce
     curr_code = child_loc_code(c_index, curr_level-1, curr_code);
     c_ptr += c_index;
 
-    //up[date curr cell and child ptr
+    //update curr cell
     curr_cell = cells[c_ptr];
-    child_data = as_short2(curr_cell.y);
-    child_ptr = (int) child_data.y;
 
     found_cell_ptr = c_ptr;
     (*found_loc_code) = curr_code;

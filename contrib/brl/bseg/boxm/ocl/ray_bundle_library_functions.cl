@@ -769,7 +769,7 @@ void update_cell(float16 * data, float4 aux_data,float t_match, float init_sigma
         float mu2 = (*data).s9, sigma2 = (*data).sa;
         float w2=0.0f;
 
-        if((*data).s3>0.0f )
+        if(w0>0.0f && w1>0.0f)
             w2=1-(*data).s3-(*data).s7;  
 
         short Nobs0 = (short)(*data).s4, Nobs1 = (short)(*data).s8, Nobs2 = (short)(*data).sb; 
@@ -788,48 +788,5 @@ void update_cell(float16 * data, float4 aux_data,float t_match, float init_sigma
         (*data).s5=mu1; (*data).s6=sigma1, (*data).s7=w1;(*data).s8=(float)Nobs1;
         (*data).s9=mu2; (*data).sa=sigma2, (*data).sb=(float)Nobs2;
         (*data).sc=(float)Nobs_mix;
-    }
-}
-
-//takes in only the mixture components as a uchar8
-void update_cell_mixture(float * alpha, uchar8 * mixture, short4 * nobs, 
-                         float4 aux_data, float t_match, float init_sigma, float min_sigma)
-{
-    if (aux_data.x>1e-5)
-    {
-        float mu0 = (*mixture).s0/255.0, sigma0 = (*mixture).s1/255.0, w0 = (*mixture).s2/255.0;
-        float mu1 = (*mixture).s3/255.0, sigma1 = (*mixture).s4/255.0, w1 = (*mixture).s5/255.0;
-        float mu2 = (*mixture).s6/255.0, sigma2 = (*mixture).s7/255.0, w2 = 0.0f;
-
-        if(w0 > 0.0f )
-          w2=1-w0-w1;  
-
-        short Nobs0 = (*nobs).s0, Nobs1 = (*nobs).s1, Nobs2 = (*nobs).s2; 
-        float Nobs_mix = (float) ((*nobs).s3/10.0);  //needs to be a floating point number
-
-        update_gauss_3_mixture(aux_data.y/aux_data.x,
-                               aux_data.w/aux_data.x,
-                               t_match,
-                               init_sigma,min_sigma,
-                               &mu0,&sigma0,&w0,&Nobs0,
-                               &mu1,&sigma1,&w1,&Nobs1,
-                               &mu2,&sigma2,&w2,&Nobs2,
-                               &Nobs_mix);
-        
-        (*alpha) *= aux_data.z/aux_data.x;
-        (*mixture).s0 = (uchar) (mu0*255.0); 
-        (*mixture).s1 = (uchar) (sigma0*255.0); 
-        (*mixture).s2 = (uchar) (w0*255.0);
-        (*mixture).s3 = (uchar) (mu1*255.0);
-        (*mixture).s4 = (uchar) (sigma1*255.0);
-        (*mixture).s5 = (uchar) (w1*255.0);
-        (*mixture).s6 = (uchar) (mu2*255.0);
-        (*mixture).s7 = (uchar) (sigma2*255.0);
-        
-        (*nobs).s0 = Nobs0;
-        (*nobs).s1 = Nobs1;
-        (*nobs).s2 = Nobs2;
-        (*nobs).s3 = (short) (Nobs_mix*10);
-        
     }
 }

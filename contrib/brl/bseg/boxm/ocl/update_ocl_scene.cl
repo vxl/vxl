@@ -161,10 +161,8 @@ update_ocl_scene_opt(__global int4*    scene_dims,    // level of the root.
             ray_bundle_array[llid].x=llid;
             barrier(CLK_LOCAL_MEM_FENCE);
 
-            
             //int data_ptr =  block.x*lenbuffer+tree_array[curr_cell_ptr].z;
-            ushort2 child_data = as_ushort2(tree_array[curr_cell_ptr].y);
-            int data_ptr = block.x*lenbuffer + (int) child_data.x;
+            int data_ptr = block.x*lenbuffer + get_data_ptr(tree_array[curr_cell_ptr]);
 
             ////////////////////////////////////////////////////////
             // the place where the ray trace function can be applied
@@ -173,23 +171,15 @@ update_ocl_scene_opt(__global int4*    scene_dims,    // level of the root.
             {
                 //      /* cell data, i.e., alpha and app model is needed for some passes */
 #if %%
-                cached_data[llid].s0 = (float) (alpha_array[data_ptr]);
-                cached_data[llid].s1 = (float) ((float)mixture_array[data_ptr].s0/255.0);
-                cached_data[llid].s2 = (float) ((float)mixture_array[data_ptr].s1/255.0);
-                cached_data[llid].s3 = (float) ((float)mixture_array[data_ptr].s2/255.0);
-                cached_data[llid].s4 = (float) (num_obs_array[data_ptr].s0);
-                cached_data[llid].s5 = (float) ((float)mixture_array[data_ptr].s3/255.0);
-                cached_data[llid].s6 = (float) ((float)mixture_array[data_ptr].s4/255.0);
-                cached_data[llid].s7 = (float) ((float)mixture_array[data_ptr].s5/255.0);
-                cached_data[llid].s8 = (float) (num_obs_array[data_ptr].s1);
-                cached_data[llid].s9 = (float) ((float)mixture_array[data_ptr].s6/255.0);
-                cached_data[llid].sa = (float) ((float)mixture_array[data_ptr].s7/255.0);
-                cached_data[llid].sb = (float) (num_obs_array[data_ptr].s2);
-                cached_data[llid].sc = (float) (num_obs_array[data_ptr].s3/100.0);
-                cached_data[llid].sd = 0.0;
-                cached_data[llid].se = 0.0;
-                cached_data[llid].sf = 0.0;
-                //cached_data[llid] = sample_array[data_ptr];
+                float  alpha    = alpha_array[data_ptr];
+                float4 nobs     = convert_float4(num_obs_array[data_ptr]);
+                float8 mixture  = convert_float8(mixture_array[data_ptr]);
+                float16 datum = (float16) (alpha, 
+                               (mixture.s0/255.0), (mixture.s1/255.0), (mixture.s2/255.0), (nobs.s0), 
+                               (mixture.s3/255.0), (mixture.s4/255.0), (mixture.s5/255.0), (nobs.s1),
+                               (mixture.s6/255.0), (mixture.s7/255.0), (nobs.s2), (nobs.s3/100.0), 
+                               0.0, 0.0, 0.0);
+                cached_data[llid] = datum;
 #endif
                 cached_aux_data[llid] = aux_data_array[data_ptr];
             }
@@ -508,56 +498,31 @@ update_ocl_scene_main_opt(__global float*   alpha_array,
     int datasize= (*lenbuffer)*(*numbuffer);
     if (gid<datasize)
     {
+      //load global data into a register
       float  alpha    = alpha_array[gid];
-      //uchar8 mixture  = mixture_array[gid];
-      //ushort4 nobs    = nobs_array[gid];
       float4 aux_data = aux_data_array[gid];
       float4 nobs     = convert_float4(nobs_array[gid]);
       float8 mixture  = convert_float8(mixture_array[gid]);
+      float16 data = (float16) (alpha, 
+                     (mixture.s0/255.0), (mixture.s1/255.0), (mixture.s2/255.0), (nobs.s0), 
+                     (mixture.s3/255.0), (mixture.s4/255.0), (mixture.s5/255.0), (nobs.s1),
+                     (mixture.s6/255.0), (mixture.s7/255.0), (nobs.s2), (nobs.s3/100.0), 
+                     0.0, 0.0, 0.0);
       
-      float16 data; 
-      data.s0 = alpha;
-      data.s1 = (mixture.s0/255.0);
-      data.s2 = (mixture.s1/255.0);
-      data.s3 = (mixture.s2/255.0);
-      data.s4 = (nobs.s0);
-      data.s5 = (mixture.s3/255.0);
-      data.s6 = (mixture.s4/255.0);
-      data.s7 = (mixture.s5/255.0);
-      data.s8 = (nobs.s1);
-      data.s9 = (mixture.s6/255.0);
-      data.sa = (mixture.s7/255.0);
-      data.sb = (nobs.s2);
-      data.sc = (nobs.s3/100.0);
-      data.sd = 0.0;
-      data.se = 0.0;
-      data.sf = 0.0;
-      
+      //use aux data to update cells 
       if (aux_data.x>1e-10f)
         update_cell(&data, aux_data, 2.5f, 0.09f, 0.03f);
-        //update_cell_mixture(&alpha, &mixture, &nobs, aux_data, 2.5f, 0.09f, 0.03f);
 
+      //reset the cells in memory 
       alpha_array[gid]      = data.s0;
-      mixture_array[gid].s0 = (uchar) clamp(data.s1*255.0 + .5, 0.0, 255.0);
-      mixture_array[gid].s1 = (uchar) clamp(data.s2*255.0 + .5, 0.0, 255.0);
-      mixture_array[gid].s2 = (uchar) clamp(data.s3*255.0 + .5, 0.0, 255.0);
-      
-      mixture_array[gid].s3 = (uchar) clamp(data.s5*255.0 + .5, 0.0, 255.0);
-      mixture_array[gid].s4 = (uchar) clamp(data.s6*255.0 + .5, 0.0, 255.0);
-      mixture_array[gid].s5 = (uchar) clamp(data.s7*255.0 + .5, 0.0, 255.0);
-      
-      mixture_array[gid].s6 = (uchar) clamp(data.s9*255.0 + .5, 0.0, 255.0);
-      mixture_array[gid].s7 = (uchar) clamp(data.sa*255.0 + .5, 0.0, 255.0);
-      nobs_array[gid].s0    = (ushort) (data.s4);
-      nobs_array[gid].s1    = (ushort) (data.s8);
-      nobs_array[gid].s2    = (ushort) (data.sb);
-      nobs_array[gid].s3    = (ushort) ((float) data.sc*100.0);
-      
+      float8 post_mix       = (float8) (data.s1, data.s2, data.s3, 
+                                        data.s5, data.s6, data.s7, 
+                                        data.s9, data.sa)*255.0;
+      float4 post_nobs      = (float4) (data.s4, data.s8, data.sb, data.sc*100.0);
+      mixture_array[gid]    = convert_uchar8_sat_rte(post_mix);
+      nobs_array[gid]       = convert_ushort4_sat_rte(post_nobs);      
       aux_data_array[gid]   = (float4)0.0f;
 
-      //alpha_array[gid] = alpha;
-      //mixture_array[gid] = mixture;
-      //nobs_array[gid] = nobs;
     }
      if(gid==345) {
       output[0] = alpha_array[gid];
