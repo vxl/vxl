@@ -145,12 +145,13 @@ bool boxm_refine_manager<T>::run_tree()
   //debug print method
   vcl_cout<<"---REFINE Stats:-----------------------------------\n"
           <<"---Tree Input Size (#cells) = "<<(*numcells_)<<'\n'
-          <<"---Tree Output Size (#cells) = "<<(*tree_results_size_)<<vcl_endl;
+          <<"---Tree Output Size (#cells) = "<<(*tree_results_size_)<<vcl_endl
+          <<"---Tree Buffer Size (#cells) = "<<(*tree_max_size_)<<vcl_endl;
   int numSplit = ((*tree_results_size_)-(*numcells_))/8;
   vcl_cout<<"---number of nodes that split = "<<numSplit<<'\n'
           <<"----------------------------------------------------"<<vcl_endl;
 
-  //boxm_ocl_utils<T>::print_tree_array(tree_results_, (*tree_results_size_), data_results_);
+  boxm_ocl_utils::print_tree_array(tree_results_, (*tree_results_size_), data_results_);
 
   // Verify that the tree is formatted correctly
   vcl_vector<vnl_vector_fixed<int,4> > tree_vector;
@@ -167,7 +168,7 @@ bool boxm_refine_manager<T>::run_tree()
 
 
   //PROFILING INFORMATION FROM OPENCL
-#if 1
+#if 0
   float treeSize = 4*4*(*tree_results_size_)/(1024.0f*1024.0f); //tree size in MB
   float dataSize = 4*16*(*data_results_size_)/(1024.0f*1024.0f); //data size in MBs
   vcl_cout<<"---GLOBAL MEM BANDWITH RESULTS-----------------------\n"

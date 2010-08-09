@@ -107,9 +107,10 @@ bool
 boxm_update_ocl_scene_manager::build_refining_program()
 {
     vcl_string root = vcl_string(VCL_SOURCE_ROOT_DIR);
-    bool refn = this->load_kernel_source(root + "/contrib/brl/bseg/boxm/ocl/refine_blocks.cl");
+    bool octr = this->load_kernel_source(root + "/contrib/brl/bseg/boxm/ocl/octree_library_functions.cl");
+    bool refn = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/refine_blocks_opt.cl");
 
-    if (!refn) {
+    if (!refn || !octr) {
       vcl_cerr << "Error: boxm_ray_trace_manager : failed to load kernel source (helper functions)\n";
       return false;
     }
@@ -273,7 +274,7 @@ bool boxm_update_ocl_scene_manager::set_args(unsigned pass)
     return false;
   
   cl_int status = CL_SUCCESS;
-  if (pass==4)
+  if (pass==4)  // update_ocl_scene_main_(opt)
   {
     int i=0;
     //replace cell_data_ with cell_alpha, cell_num_obs, cell
@@ -303,7 +304,8 @@ bool boxm_update_ocl_scene_manager::set_args(unsigned pass)
       return false;
   }
 
-  if (pass == 2) { // norm image process //
+  if (pass == 2) 
+  { // norm image process //
     status = clSetKernelArg(kernels_[pass], 0,
                             sizeof(cl_mem), (void *)&image_buf_);
     if (this->check_val(status, CL_SUCCESS, "clSetKernelArg failed. (image array)")!=CHECK_SUCCESS)
@@ -318,7 +320,7 @@ bool boxm_update_ocl_scene_manager::set_args(unsigned pass)
     return this->check_val(status, CL_SUCCESS,
                            "clSetKernelArg failed. (image dimensions)")==CHECK_SUCCESS;
   }
-  if (pass==0 || pass ==1 || pass==3)
+  if (pass==0 || pass ==1 || pass==3) // update_ocl_scene (aux data passes)
   {
     int i=0;
     status = clSetKernelArg(kernels_[pass],i++,sizeof(cl_mem),(void *)&scene_dims_buf_);
@@ -419,7 +421,7 @@ bool boxm_update_ocl_scene_manager::set_args(unsigned pass)
     if (this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output debugger)")!=CHECK_SUCCESS)
       return false;
   }
-  if (pass==5)
+  if (pass==5) //ray_trace_ocl_scene(_opt)
   {
     int i=0;
     status = clSetKernelArg(kernels_[pass],i++,sizeof(cl_mem),(void *)&scene_dims_buf_);
@@ -484,7 +486,7 @@ bool boxm_update_ocl_scene_manager::set_args(unsigned pass)
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (input_image)"))
         return SDK_FAILURE;
   }
-  if(pass==6)
+  if(pass==6)  //refine_main_opt
   {
     int i=0;
     status = clSetKernelArg(kernels_[pass],i++,sizeof(cl_mem),(void *)&block_ptrs_buf_);
@@ -505,10 +507,18 @@ bool boxm_update_ocl_scene_manager::set_args(unsigned pass)
     status = clSetKernelArg(kernels_[pass],i++,sizeof(cl_mem),(void *)&cells_buf_);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cells_buf_)"))
         return SDK_FAILURE;
-    // data buffer
-    //status = clSetKernelArg(kernels_[pass],i++,sizeof(cl_mem),(void *)&cell_data_buf_);
-    //if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_data_buf_)"))
-        //return SDK_FAILURE;
+    //alpha buffer
+    status = clSetKernelArg(kernels_[pass], i++, sizeof(cl_mem), (void *)&cell_alpha_buf_);
+    if (this->check_val(status, CL_SUCCESS, "clSetKernelArg failed. (cell_alpha_buf_)")!=CHECK_SUCCESS)
+      return false;
+    //cell mixture buffer
+    status = clSetKernelArg(kernels_[pass], i++, sizeof(cl_mem), (void *)&cell_mixture_buf_);
+    if (this->check_val(status, CL_SUCCESS, "clSetKernelArg failed. (cell_mixture_buf_)")!=CHECK_SUCCESS)
+      return false;
+    //cell num obs buffer
+    status = clSetKernelArg(kernels_[pass], i++, sizeof(cl_mem), (void *)&cell_num_obs_buf_);
+    if (this->check_val(status, CL_SUCCESS, "clSetKernelArg failed. (cell_num_obs_buf_)")!=CHECK_SUCCESS)
+      return false;
     //mem pointers for the tree cells
     status = clSetKernelArg(kernels_[pass], i++, sizeof(cl_mem), (void*) &mem_ptrs_buf_);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (data buffer)"))
@@ -530,7 +540,7 @@ bool boxm_update_ocl_scene_manager::set_args(unsigned pass)
 
     // ---- create local memory arguments for caching whole blocks ----
     //local tree copy
-    status = clSetKernelArg(kernels_[pass], i++, sizeof(cl_int4)*585, 0);
+    status = clSetKernelArg(kernels_[pass], i++, sizeof(cl_int2)*585, 0);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local tree buffer)"))
         return false;
     status = clSetKernelArg(kernels_[pass], i++, sizeof(cl_mem),(void*) &output_debug_buf_);
@@ -710,22 +720,32 @@ bool boxm_update_ocl_scene_manager::online_processing()
           return false;
       }
       
-      //read some output
-      cl_event events[0];
-      int status = clEnqueueReadBuffer(command_queue_,output_debug_buf_,CL_TRUE,
-                                       0,numbuffer_*sizeof(cl_float),
-                                       output_debug_,
-                                       0,NULL,&events[0]);
-      if (!this->check_val(status,CL_SUCCESS,"clEnqueueReadBuffer (output buffer )failed."))
-        return false;
-      status = clWaitForEvents(1, &events[0]);
-      if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents (output read) failed."))
-        return false;
-      vcl_cout<<"OUTPUT: "
-              <<output_debug_[0]<<","
-              <<output_debug_[1]<<","
-              <<output_debug_[2]<<","
-              <<output_debug_[3]<<vcl_endl;
+      /******** read some output **************************************/
+      if(pass == 4) {  //only read for data setting pass
+        cl_event events[0];
+        int status = clEnqueueReadBuffer(command_queue_,output_debug_buf_,CL_TRUE,
+                                         0,numbuffer_*sizeof(cl_float),
+                                         output_debug_,
+                                         0,NULL,&events[0]);
+        if (!this->check_val(status,CL_SUCCESS,"clEnqueueReadBuffer (output buffer )failed."))
+          return false;
+        status = clWaitForEvents(1, &events[0]);
+        if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents (output read) failed."))
+          return false;
+        vcl_cout<<"OUTPUT: "<<vcl_endl
+                <<"  alpha:  "<<output_debug_[0]<<vcl_endl
+                <<"  gauss0: "<<output_debug_[1]<<","
+                <<output_debug_[2]<<","
+                <<output_debug_[3]<<vcl_endl
+                <<"  gauss1: "<<output_debug_[4]<<","
+                <<output_debug_[5]<<","
+                <<output_debug_[6]<<vcl_endl
+                <<"  gauss2: "<<output_debug_[7]<<","
+                <<output_debug_[8]<<vcl_endl
+                <<"  nobsmix:"<<output_debug_[9]<<vcl_endl;
+      }
+      /****************************************************************/
+
   }
   vcl_cout << "Timing Analysis\n"
            << "===============\n"
@@ -769,11 +789,31 @@ bool boxm_update_ocl_scene_manager::refine()
   this->set_workspace(pass);
   if (!this->run(pass))
       return false;
-  vcl_cout << "Timing Analysis\n"
-           << "===============\n"
-           << "openCL Running time "<<gpu_time_<<" ms" << vcl_endl
-      ;
-
+  vcl_cout << "===============\n"
+           << "Timing Analysis:\n"
+           << "openCL Running time "<<gpu_time_<<" ms" << vcl_endl;
+           
+  /******** read some output **************************************/
+  cl_event events[0];
+  int status = clEnqueueReadBuffer(command_queue_,output_debug_buf_,CL_TRUE,
+                                   0,numbuffer_*sizeof(cl_float),
+                                   output_debug_,
+                                   0,NULL,&events[0]);
+  if (!this->check_val(status,CL_SUCCESS,"clEnqueueReadBuffer (output buffer )failed."))
+    return false;
+  status = clWaitForEvents(1, &events[0]);
+  if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents (output read) failed."))
+    return false;
+  vcl_cout<<"Kernel OUTPUT: "<<vcl_endl;
+  for(int i=0; i<numbuffer_; i++) {
+    if(output_debug_[i] == -555 || output_debug_[i] == -666) 
+      vcl_cout<<"buffer @ "<<i<<" outputs "<<output_debug_[i]<<vcl_endl;
+    else 
+      vcl_cout<<output_debug_[i]<<", ";
+  }
+  vcl_cout<<vcl_endl;
+  /****************************************************************/
+  
   return true;
 }
 bool boxm_update_ocl_scene_manager::finish_online_processing()

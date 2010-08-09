@@ -18,6 +18,8 @@ static void test_gaussian_pdf(stat_test_driver<T>& driver)
 {
   boxm_stat_manager<T>::instance()->set_gauss_1d(0.5f, 1.0f);
   vcl_vector<float> data(1); data[0]=0.1f;
+  unsigned char cdat = (unsigned char) (data[0]*255.0 + .5);
+  data[0] = (float) (cdat/255.0);
   driver.setup_data(data);
   driver.setup_result_data(1);
 

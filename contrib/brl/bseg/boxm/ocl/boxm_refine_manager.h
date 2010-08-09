@@ -18,6 +18,7 @@ class boxm_refine_manager : public bocl_manager<boxm_refine_manager<T_data> >
 
     typedef boct_tree<short,T_data> tree_type;
     typedef boct_tree_cell<short,T_data> cell_type;
+    typedef boxm_scene<tree_type> scene_type;
 
     boxm_refine_manager() :
     program_(0),
@@ -39,6 +40,7 @@ class boxm_refine_manager : public bocl_manager<boxm_refine_manager<T_data> >
     //(cl_float*)data_,
     //(cl_int*) tree_max_size_
     //(cl_int*) numLevels_
+    bool init(scene_type* scene, float prob_thresh);
     bool init(tree_type* tree, float prob_thresh);
     bool init(int* cells, unsigned numcells, unsigned tree_max_size,
               float* data, unsigned data_size, unsigned data_max_size,

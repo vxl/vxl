@@ -158,11 +158,11 @@ bool boxm_render_ocl_scene_manager::set_args()
     return SDK_FAILURE;
 
   //image_gl_buf_ = clCreateBuffer(this->context_,
-  //                               CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
-  //                               wni_*wnj_*sizeof(cl_uint),
-  //                               image_gl_,&status);
+                                 //CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+                                 //wni_*wnj_*sizeof(cl_uint),
+                                 //image_gl_,&status);
   //if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (gl_image)"))
-  //    return SDK_FAILURE;
+      //return SDK_FAILURE;
 
 
   status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&image_gl_buf_);

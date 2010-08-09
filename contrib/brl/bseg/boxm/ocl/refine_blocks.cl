@@ -301,6 +301,7 @@ refine_main(__global  int4     *block_ptrs,     //3d block array
       int currTreeSize = block_ptrs[currBlkIndex].z;
                                     
       //2. copy current tree to local mem
+      //TODO asynch_workgroup_copy (will fire all threads) look at quick reference card
       //TODO Make sure your tree doesn't get corrupted because you don't clear out all 585 cells
       //maybe pass in a length to the refine function to make sure yo udon't go out of bounds.  
       for(int j=0; j<currTreeSize; j++) {
