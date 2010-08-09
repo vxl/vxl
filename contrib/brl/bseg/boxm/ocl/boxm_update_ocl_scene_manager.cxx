@@ -783,6 +783,17 @@ bool boxm_update_ocl_scene_manager::rendering()
 }
 bool boxm_update_ocl_scene_manager::refine()
 {
+  //--figure out refine buffer issue-------------------------------------
+  this->read_trees();
+  scene_->set_blocks(block_ptrs_);
+  scene_->set_tree_buffers_opt(cells_);
+  scene_->set_mem_ptrs(mem_ptrs_);
+  scene_->set_alpha_values(cell_alpha_);
+  scene_->set_mixture_values(cell_mixture_);
+  scene_->set_num_obs_values(cell_num_obs_);
+  //vcl_cout<<(*scene_)<<vcl_endl;
+  //-------------------------------------------------------------------
+  
   gpu_time_=0;
   unsigned pass = 6;
   this->set_args(pass);
@@ -807,12 +818,23 @@ bool boxm_update_ocl_scene_manager::refine()
   vcl_cout<<"Kernel OUTPUT: "<<vcl_endl;
   for(int i=0; i<numbuffer_; i++) {
     if(output_debug_[i] == -555 || output_debug_[i] == -666) 
-      vcl_cout<<"buffer @ "<<i<<" outputs "<<output_debug_[i]<<vcl_endl;
+      vcl_cout<<vcl_endl<<"buffer @ "<<i<<" outputs "<<output_debug_[i]<<" -> check this!"<<vcl_endl;
     else 
       vcl_cout<<output_debug_[i]<<", ";
   }
   vcl_cout<<vcl_endl;
   /****************************************************************/
+  
+  //--figure out refine buffer issue-------------------------------------
+  this->read_trees();
+  scene_->set_blocks(block_ptrs_);
+  scene_->set_tree_buffers_opt(cells_);
+  scene_->set_mem_ptrs(mem_ptrs_);
+  scene_->set_alpha_values(cell_alpha_);
+  scene_->set_mixture_values(cell_mixture_);
+  scene_->set_num_obs_values(cell_num_obs_);
+  //vcl_cout<<(*scene_)<<vcl_endl;
+  //-------------------------------------------------------------------
   
   return true;
 }
@@ -898,15 +920,12 @@ bool boxm_update_ocl_scene_manager::read_trees()
   cl_event events[2];
 
   // Enqueue readBuffers
-  int status = clEnqueueReadBuffer(command_queue_,cells_buf_,CL_TRUE,
-                                   0,cells_size_*sizeof(cl_int4),
+  int status = clEnqueueReadBuffer(command_queue_, cells_buf_, CL_TRUE,
+                                   0, cells_size_*sizeof(cl_int2),
                                    cells_,
                                    0,NULL,&events[0]);
 
   if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (cells )failed."))
-    return false;
-  status = clWaitForEvents(1, &events[0]);
-  if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents failed."))
     return false;
 
   status = clEnqueueReadBuffer(command_queue_,cell_alpha_buf_,CL_TRUE,
@@ -924,10 +943,10 @@ bool boxm_update_ocl_scene_manager::read_trees()
     return false;
 
   status = clEnqueueReadBuffer(command_queue_,cell_num_obs_buf_,CL_TRUE,
-                               0,cell_data_size_*sizeof(cl_uchar8),
+                               0,cell_data_size_*sizeof(cl_ushort4),
                                cell_num_obs_,
                                0,NULL,&events[0]);
-  if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (cell mixture )failed."))
+  if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (cell num obs )failed."))
     return false;
     
   status = clEnqueueReadBuffer(command_queue_,cell_aux_data_buf_,CL_TRUE,
@@ -935,20 +954,20 @@ bool boxm_update_ocl_scene_manager::read_trees()
                                cell_aux_data_,
                                0,NULL,&events[0]);
 
-  if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (cell data )failed."))
+  if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (cell aux )failed."))
     return false;
   status = clEnqueueReadBuffer(command_queue_,mem_ptrs_buf_,CL_TRUE,
                                0,numbuffer_*sizeof(cl_int2),
                                mem_ptrs_,
                                0,NULL,&events[0]);
 
-  if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (cell data )failed."))
+  if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (cell mem_ptrs )failed."))
     return false;
   status = clEnqueueReadBuffer(command_queue_,block_ptrs_buf_,CL_TRUE,
                                0,scene_x_*scene_y_*scene_z_*sizeof(cl_int4),
                                block_ptrs_,
                                0,NULL,&events[0]);
-  if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (cell data )failed."))
+  if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (cell block_ptrs )failed."))
     return false;
 
 
