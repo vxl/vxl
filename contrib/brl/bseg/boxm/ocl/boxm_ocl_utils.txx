@@ -385,6 +385,11 @@ void boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T> >* scene,
     if (data_buffers(0,i)[0] != data_buffers(0,0)[0])
       vcl_cout<<"block at "<<i<<" has alpha of "<<data_buffers(0,i)[0]<<vcl_endl;
   }
+  
+  vcl_cout<<"First root of each buffer's block back pointer:"<<vcl_endl;
+  for (int i=0; i<num_buffers; i++) {
+    vcl_cout<<tree_buffers(i, 0)[3]<<","<<tree_buffers(i,1)[3]<<vcl_endl;
+  }
   /****************************/
 
   //notify how many blocks needed to be initialized/there's enough space
