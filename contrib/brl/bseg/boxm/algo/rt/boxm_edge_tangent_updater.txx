@@ -242,7 +242,7 @@ bool boxm_edge_tangent_refine_updates<T_loc,APM,AUX>::refine_cells()
           int cent_j = int(v1+(v2-v1)/2.0);
 
           // check a neighborhood of 10x10 in the image to find the edgel that is nearest to this line segment
-          double angle_of_min;
+          double angle_of_min = 0.0;
           double dist = 10.0;
           for (int ii = cent_i - 10; ii < cent_i + 10; ii++) {
             if (ii < 0 || ii >= ni) continue;
