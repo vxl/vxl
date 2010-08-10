@@ -1,16 +1,15 @@
 #ifndef breg3d_homography_generator_h_
 #define breg3d_homography_generator_h_
-
 //:
 // \file
-// \brief // homography generator base class
-//           
+// \brief homography generator base class
+//
 // \author Daniel Crispell
-// \date 03/01/08
+// \date Mar 01, 2008
 // \verbatim
-// Modifications
-// 03/25/08 dec  moved to contrib/dec/breg3d
-// 08/09/10 jlm  moved to brl/bseg/bvxm/breg3d
+//  Modifications
+//   Mar 25 2008 dec  moved to contrib/dec/breg3d
+//   Aug 09 2010 jlm  moved to brl/bseg/bvxm/breg3d
 // \endverbatim
 
 
@@ -19,9 +18,9 @@
 
 class breg3d_homography_generator
 {
-public:
+ public:
 
-  breg3d_homography_generator() : use_mask0_(false), use_mask1_(false), compute_projective_(false) {};
+  breg3d_homography_generator() : use_mask0_(false), use_mask1_(false), compute_projective_(false) {}
 
   void set_image0(vil_image_view<float> *img0) { img0_ = img0; }
   void set_image1(vil_image_view<float> *img1) { img1_ = img1; }
@@ -32,7 +31,7 @@ public:
 
   virtual vimt_transform_2d compute_homography() = 0;
 
-protected:
+ protected:
   bool use_mask0_;
   bool use_mask1_;
   bool compute_projective_;
@@ -41,10 +40,7 @@ protected:
   vil_image_view<float> *img1_;
   vil_image_view<float> *mask0_;
   vil_image_view<float> *mask1_;
-
 };
-
-
 
 
 #endif

@@ -1,16 +1,15 @@
 #ifndef breg3d_ekf_camera_optimizer_state_h_
 #define breg3d_ekf_camera_optimizer_state_h_
-
 //:
 // \file
-// \brief // Representation of camera optimization Extended Kalman Filter state at step k
-//           
+// \brief Representation of camera optimization Extended Kalman Filter state at step k
+//
 // \author Daniel Crispell
-// \date 03/01/08
+// \date Mar 01, 2008
 // \verbatim
-// Modifications
-// 03/25/08 dec  moved to contrib/dec/breg3d
-// 08/09/10 jlm  moved to brl/bseg/bvxm/breg3d
+//  Modifications
+//   Mar 25 2008 dec  moved to contrib/dec/breg3d
+//   Aug 09 2010 jlm  moved to brl/bseg/bvxm/breg3d
 // \endverbatim
 
 #include <vcl_iostream.h>
@@ -23,21 +22,21 @@
 
 class breg3d_ekf_camera_optimizer_state
 {
-public:
+ public:
   // init constructor
-  breg3d_ekf_camera_optimizer_state(double t_scale, 
-    vgl_point_3d<double> base_point, vgl_rotation_3d<double> base_rot, 
+  breg3d_ekf_camera_optimizer_state(double t_scale,
+    vgl_point_3d<double> base_point, vgl_rotation_3d<double> base_rot,
     double init_translation_var, double init_rotation_var);
 
   // full constructor
-  breg3d_ekf_camera_optimizer_state(unsigned time_index, double t_scale, 
-    vgl_point_3d<double> base_point, vgl_rotation_3d<double> base_rot, 
+  breg3d_ekf_camera_optimizer_state(unsigned time_index, double t_scale,
+    vgl_point_3d<double> base_point, vgl_rotation_3d<double> base_rot,
     vnl_vector_fixed<double,6> xk, vnl_matrix_fixed<double,6,6> Pk)
-    : k_(time_index), base_point_(base_point), base_rotation_(base_rot), xk_(xk), Pk_(Pk), t_scale_(t_scale) {};
+    : k_(time_index), base_point_(base_point), base_rotation_(base_rot), xk_(xk), Pk_(Pk), t_scale_(t_scale) {}
 
   // default constructor
-  breg3d_ekf_camera_optimizer_state(){};
-  ~breg3d_ekf_camera_optimizer_state(){};
+  breg3d_ekf_camera_optimizer_state(){}
+  ~breg3d_ekf_camera_optimizer_state(){}
 
   // setters and getters
   unsigned k(){return k_;}
@@ -45,7 +44,7 @@ public:
   vnl_matrix_fixed<double,6,6> get_error_covariance(){return Pk_;}
   void set_state(vnl_vector_fixed<double,6> const& xk){xk_ = xk;}
   void set_error_covariance(vnl_matrix_fixed<double,6,6> const& Pk){Pk_ = Pk;}
-  // set error covariance assuming independant variables
+  // set error covariance assuming independent variables
   void set_error_covariance(double center_var, double rot_var);
   void set_base_point(vgl_point_3d<double> const& point) { base_point_ = point; }
   void set_base_rotation(vgl_rotation_3d<double> const& rot) { base_rotation_ = rot; }
@@ -59,10 +58,7 @@ public:
   bool operator == (breg3d_ekf_camera_optimizer_state const& other) const;
   bool operator < (breg3d_ekf_camera_optimizer_state const& other) const;
 
-
-
-
-private:
+ private:
   unsigned k_;
   vnl_matrix_fixed<double,6,6> Pk_;
   vnl_vector_fixed<double,6> xk_;
@@ -70,7 +66,7 @@ private:
   vgl_point_3d<double> base_point_;
   vgl_rotation_3d<double> base_rotation_;
 
-  // scale factor for translations. 
+  // scale factor for translations.
   double t_scale_;
 
   // IO functions

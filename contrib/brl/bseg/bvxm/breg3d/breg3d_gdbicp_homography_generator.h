@@ -2,14 +2,14 @@
 #define breg3d_gdbicp_homography_generator_h_
 //:
 // \file
-// \brief // gdbicp homography generator
-//           
+// \brief gdbicp homography generator
+//
 // \author Daniel Crispell
-// \date 03/01/08
+// \date Mar 01, 2008
 // \verbatim
-// Modifications
-// 03/25/08 dec  moved to contrib/dec/breg3d
-// 08/09/10 jlm  moved to brl/bseg/bvxm/breg3d
+//  Modifications
+//   Mar 25 2008 dec  moved to contrib/dec/breg3d
+//   Aug 09 2010 jlm  moved to brl/bseg/bvxm/breg3d
 // \endverbatim
 
 #include <vcl_string.h>
@@ -20,18 +20,14 @@
 
 class breg3d_gdbicp_homography_generator : public breg3d_homography_generator
 {
-public:
-  breg3d_gdbicp_homography_generator(){};
-  
+ public:
+  breg3d_gdbicp_homography_generator(){}
+
   virtual vimt_transform_2d compute_homography();
 
-private:
+ private:
   vimt_transform_2d parse_gdbicp_output(vcl_string filename);
-
-
 };
-
-
 
 
 #endif
