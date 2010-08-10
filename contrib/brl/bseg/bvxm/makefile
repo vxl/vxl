@@ -18,7 +18,7 @@ MANPAGE_SOURCES += bvxm_voxel_world_sptr.h
 MANPAGE_SOURCES += bvxm_von_mises_tangent_processor.txx
 SOURCES += bvxm_illum_util.cxx
 
-SUBDIRS += io pro algo grid
+SUBDIRS += io pro algo grid breg3d
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
