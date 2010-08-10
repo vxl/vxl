@@ -1,0 +1,68 @@
+#include "breg3d_lm_direct_homography_generator.h"
+
+#include <vnl/vnl_matrix.h>
+#include <vil/vil_image_view.h>
+#include <vimt/vimt_transform_2d.h>
+#include <vimt/vimt_image_2d_of.h>
+
+#include <vpgl/ihog/ihog_world_roi.h>
+#include <vpgl/ihog/ihog_minimizer.h>
+
+vimt_transform_2d breg3d_lm_direct_homography_generator::compute_homography()
+{
+  int border = 2;
+  ihog_world_roi roi(img0_->ni()- 2*border, img0_->nj()- 2*border,vgl_point_2d<double>(border,border));
+
+  vimt_transform_2d init_xform;
+  vnl_matrix<double> init_H(3,3);
+  init_H.set_identity();
+  if (this->compute_projective_) {
+    init_xform.set_projective(init_H);
+  } else {
+    init_xform.set_affine(init_H.extract(2,3,0,0));
+  }
+
+  ihog_minimizer *minimizer = 0;
+  // no masks
+  if (!use_mask0_ && !use_mask1_) {
+
+    vimt_image_2d_of<float> from_img(*img0_, init_xform);
+    vimt_image_2d_of<float> to_img(*img1_, vimt_transform_2d());
+    minimizer = new ihog_minimizer(from_img, to_img, roi);
+  }
+  // one mask
+  else if (!use_mask0_ || !use_mask1_) {
+    vimt_image_2d_of<float> from_img(*img0_, init_xform);
+    vimt_image_2d_of<float> to_img(*img1_, vimt_transform_2d());
+    if (use_mask0_) {
+      vimt_image_2d_of<float> mask_img(*mask0_, init_xform);
+      minimizer = new ihog_minimizer(from_img, to_img, mask_img, roi, false);
+    } 
+    else {
+      vimt_image_2d_of<float> mask_img(*mask1_, vimt_transform_2d());
+      minimizer = new ihog_minimizer(from_img, to_img, mask_img, roi, true);
+    }
+  }
+  // both masks
+  else {
+    vimt_image_2d_of<float> from_img(*img0_, init_xform);
+    vimt_image_2d_of<float> from_mask(*mask0_, init_xform);
+    vimt_image_2d_of<float> to_img(*img1_, vimt_transform_2d());
+    vimt_image_2d_of<float> to_mask(*mask1_, vimt_transform_2d());
+    minimizer = new ihog_minimizer(from_img, to_img, from_mask, to_mask, roi);
+  }
+
+  vcl_cout << " minimizing image error..";
+  minimizer->minimize(init_xform);
+  vcl_cout << "..done." << vcl_endl;
+  double curr_error = minimizer->get_end_error();
+  vcl_cout << "end error = " << curr_error << vcl_endl;
+  // computed homography maps pixels in current image to pixels in base image
+  //vnl_matrix<double> H = init_xform.inverse().matrix();
+
+  delete minimizer;
+
+  return init_xform;
+
+}
+

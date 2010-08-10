@@ -45,7 +45,7 @@ SUBDIRS( grid )
 SUBDIRS( io )
 SUBDIRS( pro )
 SUBDIRS( algo )
-
+SUBDIRS( breg3d )
 IF( BUILD_TESTING )
   SUBDIRS(tests)
 ENDIF( BUILD_TESTING )
