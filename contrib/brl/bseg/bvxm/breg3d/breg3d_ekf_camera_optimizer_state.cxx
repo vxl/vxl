@@ -1,4 +1,6 @@
 #include "breg3d_ekf_camera_optimizer_state.h"
+//:
+// \file
 
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_vector_fixed.h>
@@ -12,8 +14,8 @@
 
   // init constructor
 breg3d_ekf_camera_optimizer_state::breg3d_ekf_camera_optimizer_state(
-  double t_scale, 
-  vgl_point_3d<double> base_point, vgl_rotation_3d<double> base_rot, 
+  double t_scale,
+  vgl_point_3d<double> base_point, vgl_rotation_3d<double> base_rot,
   double init_translation_var, double init_rotation_var)
   : base_point_(base_point),base_rotation_(base_rot),k_(0),t_scale_(t_scale),xk_(0.0)
 {
@@ -48,25 +50,24 @@ void breg3d_ekf_camera_optimizer_state::set_error_covariance(double center_var, 
 }
 
 
-
 //: output description of state to stream.
 vcl_ostream& operator << (vcl_ostream& os, breg3d_ekf_camera_optimizer_state const& ekf_state)
 {
-  os << "k = " << ekf_state.k_ << vcl_endl;
-  os << "Pk = " << ekf_state.Pk_ << vcl_endl;
-  os << "xk = " << ekf_state.xk_ << vcl_endl;
+  os << "k = " << ekf_state.k_ << '\n'
+     << "Pk = " << ekf_state.Pk_ << '\n'
+     << "xk = " << ekf_state.xk_ << vcl_endl;
   return os;
 }
 
 bool breg3d_ekf_camera_optimizer_state::operator == (breg3d_ekf_camera_optimizer_state const& other) const
 {
-  return (other.k_ == this->k_);
+  return other.k_ == this->k_;
 }
 
 
 bool breg3d_ekf_camera_optimizer_state::operator < (breg3d_ekf_camera_optimizer_state const& other) const
 {
-  return (this->k_ < other.k_);
+  return this->k_ < other.k_;
 }
 
 
