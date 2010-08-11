@@ -71,6 +71,8 @@ bool boxm_ocl_update_tableau::init(boxm_ocl_scene * scene,
   scene_ = scene;
 
   count_=0;
+  curr_count_=0;
+  refine_count_ = 0;
   ////directory of cameras
   cam_files_ = cam_files;
   img_files_ = img_files;
@@ -171,6 +173,7 @@ bool boxm_ocl_update_tableau::save_model()
 bool boxm_ocl_update_tableau::refine_model()
 {
   vcl_cout<<"REFINING MODEL!!!"<<vcl_endl;
+  refine_count_++; curr_count_=0;
   boxm_update_ocl_scene_manager* updt_mgr = boxm_update_ocl_scene_manager::instance();
   return updt_mgr->refine();
 }
@@ -178,6 +181,7 @@ bool boxm_ocl_update_tableau::refine_model()
 bool boxm_ocl_update_tableau::update_model()
 {
   vcl_cout<<"UPDATING MODEL!!!"<<vcl_endl;
+  count_++; curr_count_++;
 
   //make sure you get a valid frame...
   if (curr_frame_ >= cam_files_.size()) curr_frame_ = 0;
@@ -266,6 +270,13 @@ bool boxm_ocl_update_tableau::handle(vgui_event const &e)
     glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, pbuffer_);
     glDrawPixels(ni_, nj_, GL_RGBA, GL_UNSIGNED_BYTE, 0);
     glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
+    
+    //update status
+    vcl_stringstream str;
+    str<<"Num Updates: "<<count_
+       <<"  Num Refines: "<<refine_count_
+       <<"  (updates since last refine: "<<curr_count_;
+    status_->write(str.str().c_str());
     return true;
   }
   //handle update command - keyboard press U

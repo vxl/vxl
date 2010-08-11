@@ -14,6 +14,8 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <bocl/bocl_utils.h>
 #include <vcl_vector.h>
+#include <vgui/vgui_statusbar.h>
+
 
 class boxm_ocl_update_tableau: public boxm_cam_tableau
 {
@@ -33,6 +35,8 @@ class boxm_ocl_update_tableau: public boxm_cam_tableau
 
     //:  set the GL buffer which needs to be displayed.
     void set_glbuffer(GLuint  pbuffer){pbuffer_=pbuffer;}
+    void set_statusbar(vgui_statusbar* status) { status_ = status; }
+
  protected:
     //render and update functions
     bool render_frame();
@@ -55,12 +59,17 @@ class boxm_ocl_update_tableau: public boxm_cam_tableau
     unsigned nj_;
     float prob_thresh_;
     vnl_random rand;
+    
     //list of cameras and images for update
     int curr_frame_;
     vcl_vector<vcl_string> cam_files_;
     vcl_vector<vcl_string> img_files_;
     bool do_update_;
-    int count_;
+    int count_, curr_count_, refine_count_;
+
+    //status bar for some info
+    vgui_statusbar* status_;
+
 };
 
 //: Create a smart-pointer to a boxm_ocl_update_tableau tableau.
