@@ -783,7 +783,7 @@ bool boxm_update_ocl_scene_manager::rendering()
 }
 bool boxm_update_ocl_scene_manager::refine()
 {
-  //read trees for mem_ptrs
+  //-read trees for mem_ptrs---TO BE DELTED -------
   this->read_trees();
   scene_->set_blocks(block_ptrs_);
   scene_->set_tree_buffers_opt(cells_);
@@ -792,6 +792,7 @@ bool boxm_update_ocl_scene_manager::refine()
   scene_->set_mixture_values(cell_mixture_);
   scene_->set_num_obs_values(cell_num_obs_);
   vcl_cout<<(*scene_)<<vcl_endl;
+  //----TO BE DELTED -------
   
   gpu_time_=0;
   unsigned pass = 6;
@@ -816,6 +817,7 @@ bool boxm_update_ocl_scene_manager::refine()
     return false;
 
   vcl_cout<<"Kernel OUTPUT: "<<vcl_endl;
+  this->read_trees();   //DEBUG PRINTER - can be deleted when fully working. 
   for(int i=0; i<numbuffer_; i++) {
     int startPtr = mem_ptrs_[2*i];
     int endPtr   = mem_ptrs_[2*i+1];

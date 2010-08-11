@@ -88,5 +88,10 @@ int main(int argc, char ** argv)
 
   update_tableau->init(&ocl_scene, ni(), nj(), pcam, cam_files, img_files,prob_thresh());
 
-  return  vgui::run(update_tableau, ni(), nj());
+  vgui_window* win = vgui::produce_window(ni(), nj(), "OpenCl Volume Visualizer");
+  win->get_adaptor()->set_tableau( update_tableau  ); 
+  update_tableau->set_statusbar(win->get_statusbar());
+  win->show();
+
+  return  vgui::run();
 }
