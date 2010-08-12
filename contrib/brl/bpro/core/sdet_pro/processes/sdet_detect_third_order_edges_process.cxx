@@ -34,16 +34,6 @@ bool sdet_detect_third_order_edges_process_cons(bprb_func_process& pro)
   return ok;
 }
 
-double angle_0_360(double angle)
-{
-  double ang = angle;
-  while (ang<0)
-    ang += (2.0*vnl_math::pi);
-  while (ang > 2.0*vnl_math::pi)
-    ang -= (2.0*vnl_math::pi);
-  return ang;
-}
-
 //: generates the edge map
 bool sdet_detect_third_order_edges_process(bprb_func_process& pro)
 {
@@ -103,7 +93,7 @@ bool sdet_detect_third_order_edges_process(bprb_func_process& pro)
 
     unsigned ix = (unsigned)x;
     unsigned iy = (unsigned)y;
-    double idir = angle_0_360(edgel.get_theta());
+    double idir = vnl_math::angle_0_to_2pi(edgel.get_theta());
 
     edge_img(ix, iy, 0) = static_cast<float>(x);
     edge_img(ix, iy, 1) = static_cast<float>(y);
