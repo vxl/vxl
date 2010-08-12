@@ -1,6 +1,4 @@
-// This is brl/bseg/boxm/ocl/boxm_ocl_camera_manager.txx
-#ifndef boxm_ocl_camera_manager_txx_
-#define boxm_ocl_camera_manager_txx_
+// This is brl/bseg/boxm/ocl/boxm_ocl_camera_manager.cxx
 #include "boxm_ocl_camera_manager.h"
 
 #include <vcl_fstream.h>
@@ -23,7 +21,7 @@ bool boxm_ocl_camera_manager::run()
     if (!this->check_val(status,CL_SUCCESS,"Falied in command queue creation" + error_to_string(status)))
         return false;
     vcl_size_t globalThreads[1];vcl_size_t localThreads[1];
-    
+
     globalThreads[0]=1;
     localThreads[0]=1;
     status = clEnqueueNDRangeKernel(command_queue_,this->kernel_, 1,NULL,globalThreads,localThreads,0,NULL,NULL);
@@ -49,6 +47,7 @@ bool boxm_ocl_camera_manager::run()
         return false;
     return true;
 }
+
 bool boxm_ocl_camera_manager::setup_point_data()
 {
     point_2d_ =(cl_float*) boxm_ocl_utils::alloc_aligned(1,sizeof(cl_float2), 16);
@@ -56,19 +55,22 @@ bool boxm_ocl_camera_manager::setup_point_data()
 
     return true;
 }
+
 void boxm_ocl_camera_manager::set_point2d(float u, float v)
 {
     point_2d_[0]=u;point_2d_[1]=v;
 }
+
 void boxm_ocl_camera_manager::set_point3d(float x, float y,float z)
 {
     point_3d_[0]=x;point_3d_[1]=y;point_3d_[2]=z;
 }
+
 bool boxm_ocl_camera_manager::clean_point_data()
 {
-    if(point_2d_)
+    if (point_2d_)
         boxm_ocl_utils::free_aligned(point_2d_);
-    if(point_3d_)
+    if (point_3d_)
         boxm_ocl_utils::free_aligned(point_3d_);
     return true;
 }
@@ -84,7 +86,6 @@ int boxm_ocl_camera_manager::set_point_buffers()
     return SDK_FAILURE;
   else
     return SDK_SUCCESS;
-
 }
 
 int boxm_ocl_camera_manager::release_point_buffers()
@@ -98,6 +99,7 @@ int boxm_ocl_camera_manager::release_point_buffers()
 
   return SDK_SUCCESS;
 }
+
 int boxm_ocl_camera_manager::setup_cam_buffer()
 {
   cl_int status = CL_SUCCESS;
@@ -114,7 +116,7 @@ int boxm_ocl_camera_manager::release_cam_buffer()
   cl_int status = clReleaseMemObject(cam_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject (input_cam_buf_) failed."))
     return SDK_FAILURE;
-  else{
+  else {
     cam_buf_=0;
     return SDK_SUCCESS;
   }
@@ -129,69 +131,65 @@ int boxm_ocl_camera_manager::setup_cam_inv_buffer()
   else
     return SDK_SUCCESS;
 }
+
 int boxm_ocl_camera_manager::release_cam_inv_buffer()
 {
   cl_int status = clReleaseMemObject(cam_inv_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject (cam_inv_buf_) failed."))
     return SDK_FAILURE;
-  else{
+  else {
     cam_inv_buf_=0;
     return SDK_SUCCESS;
   }
 }
 
-
-
-
-
-
 bool boxm_ocl_camera_manager::set_input_cam(vpgl_perspective_camera<double> * pcam)
 {
-    if (pcam)
+  if (pcam)
+  {
+    vnl_svd<double>* svd=pcam->svd();
+    vnl_matrix<double> Ut=svd->U().conjugate_transpose();
+    vnl_matrix<double> V=svd->V();
+    vnl_vector<double> Winv=svd->Winverse().diagonal();
+    cam_inv_=(cl_float *)boxm_ocl_utils::alloc_aligned(3,sizeof(cl_float16),16);
+
+    int cnt=0;
+    for (unsigned i=0;i<Ut.rows();i++)
     {
-        vnl_svd<double>* svd=pcam->svd();
-        vnl_matrix<double> Ut=svd->U().conjugate_transpose();
-        vnl_matrix<double> V=svd->V();
-        vnl_vector<double> Winv=svd->Winverse().diagonal();
-        cam_inv_=(cl_float *)boxm_ocl_utils::alloc_aligned(3,sizeof(cl_float16),16);
+      for (unsigned j=0;j<Ut.cols();j++)
+        cam_inv_[cnt++]=(cl_float)Ut(i,j);
 
-        int cnt=0;
-        for (unsigned i=0;i<Ut.rows();i++)
-        {
-            for (unsigned j=0;j<Ut.cols();j++)
-                cam_inv_[cnt++]=(cl_float)Ut(i,j);
-
-            cam_inv_[cnt++]=0;
-        }
-
-        for (unsigned i=0;i<V.rows();i++)
-            for (unsigned j=0;j<V.cols();j++)
-                cam_inv_[cnt++]=(cl_float)V(i,j);
-
-        for (unsigned i=0;i<Winv.size();i++)
-            cam_inv_[cnt++]=(cl_float)Winv(i);
-
-        vgl_point_3d<double> cam_center=pcam->get_camera_center();
-        cam_inv_[cnt++]=(cl_float)cam_center.x();
-        cam_inv_[cnt++]=(cl_float)cam_center.y();
-        cam_inv_[cnt++]=(cl_float)cam_center.z();
-
-        cam_=(cl_float *)boxm_ocl_utils::alloc_aligned(1,sizeof(cl_float16),16);
-        vnl_matrix<double> projection_matrix=pcam->get_matrix();
-        cnt=0;
-        for (unsigned i=0;i<projection_matrix.rows();i++)
-            for (unsigned j=0;j<projection_matrix.cols();j++)
-                cam_[cnt++]=(cl_float)projection_matrix(i,j);
-        return true;
+      cam_inv_[cnt++]=0;
     }
-    else {
-        vcl_cerr << "Error set_persp_camera() : Missing camera\n";
-        return false;
-    }
+
+    for (unsigned i=0;i<V.rows();i++)
+      for (unsigned j=0;j<V.cols();j++)
+        cam_inv_[cnt++]=(cl_float)V(i,j);
+
+    for (unsigned i=0;i<Winv.size();i++)
+      cam_inv_[cnt++]=(cl_float)Winv(i);
+
+    vgl_point_3d<double> cam_center=pcam->get_camera_center();
+    cam_inv_[cnt++]=(cl_float)cam_center.x();
+    cam_inv_[cnt++]=(cl_float)cam_center.y();
+    cam_inv_[cnt++]=(cl_float)cam_center.z();
+
+    cam_=(cl_float *)boxm_ocl_utils::alloc_aligned(1,sizeof(cl_float16),16);
+    vnl_matrix<double> projection_matrix=pcam->get_matrix();
+    cnt=0;
+    for (unsigned i=0;i<projection_matrix.rows();i++)
+      for (unsigned j=0;j<projection_matrix.cols();j++)
+        cam_[cnt++]=(cl_float)projection_matrix(i,j);
+    return true;
+  }
+  else {
+    vcl_cerr << "Error set_persp_camera() : Missing camera\n";
+    return false;
+  }
 }
+
 bool boxm_ocl_camera_manager::set_project_args()
 {
-
   if (!kernel_)
     return false;
   cl_int status = CL_SUCCESS;
@@ -224,19 +222,17 @@ bool boxm_ocl_camera_manager::set_backproject_args()
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (point_2d_buf_)"))
     return SDK_FAILURE;
   return SDK_SUCCESS;
-
 }
+
 bool boxm_ocl_camera_manager::clean_cam()
 {
+  if (cam_inv_)
+    boxm_ocl_utils::free_aligned(cam_inv_);
+  if (cam_)
+    boxm_ocl_utils::free_aligned(cam_);
 
-    if(cam_inv_)
-        boxm_ocl_utils::free_aligned(cam_inv_);
-    if(cam_)
-        boxm_ocl_utils::free_aligned(cam_);
-
-    return true;
+  return true;
 }
-
 
 
 int boxm_ocl_camera_manager::build_kernel_program()
@@ -275,14 +271,14 @@ int boxm_ocl_camera_manager::build_kernel_program()
   if (!this->check_val(status,
                        CL_SUCCESS,
                        error_to_string(status)))
-    {
-      vcl_size_t len;
-      char buffer[2048];
-      clGetProgramBuildInfo(program_, this->devices_[0],
-                            CL_PROGRAM_BUILD_LOG, sizeof(buffer), buffer, &len);
-      vcl_printf("%s\n", buffer);
-      return SDK_FAILURE;
-    }
+  {
+    vcl_size_t len;
+    char buffer[2048];
+    clGetProgramBuildInfo(program_, this->devices_[0],
+                          CL_PROGRAM_BUILD_LOG, sizeof(buffer), buffer, &len);
+    vcl_printf("%s\n", buffer);
+    return SDK_FAILURE;
+  }
   else
     return SDK_SUCCESS;
 }
@@ -314,11 +310,3 @@ int boxm_ocl_camera_manager::release_kernel()
   return SDK_SUCCESS;
 }
 
-
-
-
-
-#define boxm_ocl_camera_manager_INSTANTIATE(T) \
-  template class boxm_ocl_camera_manager<T >
-
-#endif
