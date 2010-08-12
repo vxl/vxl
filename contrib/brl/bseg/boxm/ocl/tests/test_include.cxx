@@ -1,4 +1,5 @@
 #include <boxm/ocl/boxm_change_detection_ocl_scene_manager.h>
+#include <boxm/ocl/boxm_ocl_camera_manager.h>
 #include <boxm/ocl/boxm_ocl_refine_scene.h>
 #include <boxm/ocl/boxm_ocl_render_expected.h>
 #include <boxm/ocl/boxm_ocl_scene.h>
