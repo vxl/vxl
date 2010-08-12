@@ -286,6 +286,9 @@ SOURCE=.\Templates/bocl_manager+boxm_render_ocl_scene_manager-.cxx
 # Begin Source File
 SOURCE=.\Templates/bocl_manager+boxm_change_detection_ocl_scene_manager-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/bocl_manager+boxm_ocl_camera_manager-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -351,6 +354,9 @@ SOURCE=.\boxm_render_ocl_scene_manager.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_change_detection_ocl_scene_manager.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_ocl_camera_manager.h
 # End Source File
 # End Group
 # End Target
