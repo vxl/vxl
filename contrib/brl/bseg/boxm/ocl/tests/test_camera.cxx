@@ -36,7 +36,7 @@ static void test_project()
   cam_mgr->set_point_buffers();
   cam_mgr->set_project_args();
   cam_mgr->run();
-  cam_mgr->release_point_buffers();
+  //cam_mgr->release_point_buffers();
   cam_mgr->release_cam_buffer();
 
   cam_mgr->release_kernel();
@@ -47,14 +47,14 @@ static void test_project()
   double u,v;
   cam->project(0.5,0.5,0.0,u,v);
 
+  vcl_cout<<"ground truth "<<u<<","<<v<<vcl_endl;
+
   good = good && u==results[0] && v==results[1];
   TEST("test_cam_project", good, true);
 
   if(!good)
-  vcl_cout << "test_cam_project" << results[i] << ' '
-                                 << results[i+1] << ' '
-                                 << results[i+2] << ' '
-                                 << results[i+3] << ")\n";
+  vcl_cout << "test_cam_project" << results[0] << ' '
+                                 << results[1] <<")\n";
 }
 
 void camera_tests()
