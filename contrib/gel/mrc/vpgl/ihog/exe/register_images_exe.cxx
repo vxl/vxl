@@ -6,7 +6,6 @@
 #include <vul/vul_file.h>
 #include <vul/vul_sequence_filename_map.h>
 #include <vul/vul_file_iterator.h>
-#include <vcl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
@@ -22,12 +21,12 @@
 #include <ihog/ihog_region_sptr.h>
 #include <vimt/vimt_transform_2d.h>
 #include <vimt/vimt_resample_bilin.h>
-#include <vbl/vbl_bounding_box.h>
 
 
 static void filenames_from_directory(vcl_string const& dirname,
                                      vcl_vector<vcl_string>& filenames)
-{  vcl_string s(dirname);
+{
+  vcl_string s(dirname);
   s += "/*.*";
   for (vul_file_iterator fit = s;fit; ++fit) {
     // check to see if file is a directory.
@@ -36,34 +35,35 @@ static void filenames_from_directory(vcl_string const& dirname,
     filenames.push_back(fit());
   }
 }
+
 static bool read_homographies(vcl_string const& filename, vcl_vector<vnl_matrix<double> >& homographies)
 {
-    vcl_ifstream ifile(filename.c_str(),vcl_ios::in);
-    vcl_cout<<"\n Reading Homographies "<<filename;
+  vcl_ifstream ifile(filename.c_str(),vcl_ios::in);
+  vcl_cout<<"\n Reading Homographies "<<filename;
 
-    if(!ifile)
-    {
-        vcl_cout<<"\n error opening file";
-        vcl_cout.flush();
-        return false;
-
-    }
-    char buffer[100];
-    while(ifile.getline(buffer,100))
-    {
-        vnl_matrix<double> p(3,3);
-        ifile>>p;
-        vcl_cout<<p;
-        homographies.push_back(p);
-        ifile.getline(buffer,100);
-    }
+  if (!ifile)
+  {
+    vcl_cout<<"\n error opening file";
     vcl_cout.flush();
-    return true;
+    return false;
+  }
+  char buffer[100];
+  while (ifile.getline(buffer,100))
+  {
+    vnl_matrix<double> p(3,3);
+    ifile>>p;
+    vcl_cout<<p;
+    homographies.push_back(p);
+    ifile.getline(buffer,100);
+  }
+  vcl_cout.flush();
+  return true;
 }
 
 static bool register_images(vcl_string const& homography_file,
-                     vcl_string const& image_indir,
-                     vcl_string const& image_outdir){
+                            vcl_string const& image_indir,
+                            vcl_string const& image_outdir)
+{
   int bimg_ni;
   int bimg_nj;
 
@@ -74,41 +74,41 @@ static bool register_images(vcl_string const& homography_file,
   vcl_vector<vnl_matrix<double> > homographies;
   read_homographies(homography_file, homographies);
   unsigned nframes = homographies.size();
-  if(!nframes)
-    {
-      vcl_cout << "no transforms to use in registration\n";
-      return false;
-    }
+  if (!nframes)
+  {
+    vcl_cout << "no transforms to use in registration\n";
+    return false;
+  }
   vcl_vector<vcl_string> in_filenames;
   filenames_from_directory(image_indir, in_filenames);
   unsigned n_infiles = in_filenames.size();
   unsigned infile_counter = 0;
-      //read the first image
-      bool no_valid_image = true;
-      vil_image_resource_sptr imgr;
-      while(no_valid_image)
-        {
-          imgr = 
-            vil_load_image_resource(in_filenames[infile_counter++].c_str());
-          no_valid_image = !imgr||imgr->ni()==0||imgr->nj()==0;
-          if(infile_counter>=n_infiles)
-            return false;
-        }
-      unsigned ni =  imgr->ni(), nj =  imgr->nj(); 
-      infile_counter = 0;//return to first frame
+  //read the first image
+  bool no_valid_image = true;
+  vil_image_resource_sptr imgr;
+  while (no_valid_image)
+  {
+    imgr =
+      vil_load_image_resource(in_filenames[infile_counter++].c_str());
+    no_valid_image = !imgr||imgr->ni()==0||imgr->nj()==0;
+    if (infile_counter>=n_infiles)
+      return false;
+  }
+  unsigned ni =  imgr->ni(), nj =  imgr->nj();
+  infile_counter = 0;//return to first frame
 
-  vcl_vector<vimt_transform_2d > xforms;  
-  for(unsigned i=0;i<nframes;i++)
-    {
-      vimt_transform_2d p;
-      p.set_affine(homographies[i].extract(2,3));
-      xforms.push_back(p);
-      box.update(p(0,0).x(),p(0,0).y());
-      box.update(p(0,nj).x(),p(0,nj).y());
-      box.update(p(ni,0).x(),p(ni,0).y());
-      box.update(p(ni,nj).x(),p(ni,nj).y());
-    }
-  
+  vcl_vector<vimt_transform_2d > xforms;
+  for (unsigned i=0;i<nframes;i++)
+  {
+    vimt_transform_2d p;
+    p.set_affine(homographies[i].extract(2,3));
+    xforms.push_back(p);
+    box.update(p(0,0).x(),p(0,0).y());
+    box.update(p(0,nj).x(),p(0,nj).y());
+    box.update(p(ni,0).x(),p(ni,0).y());
+    box.update(p(ni,nj).x(),p(ni,nj).y());
+  }
+
   bimg_ni=(int)vcl_ceil(box.max()[0]-box.min()[0]);
   bimg_nj=(int)vcl_ceil(box.max()[1]-box.min()[1]);
 
@@ -117,58 +117,60 @@ static bool register_images(vcl_string const& homography_file,
 
   vcl_string outfile = image_outdir + "/reg";
 
-  for(unsigned frame = 0;frame<nframes; ++frame)
+  for (unsigned frame = 0;frame<nframes; ++frame)
+  {
+    no_valid_image = true;
+    while (no_valid_image)
     {
-      no_valid_image = true;
-      while(no_valid_image)
-        {
-          imgr = 
-            vil_load_image_resource(in_filenames[infile_counter++].c_str());
-          no_valid_image = !imgr||imgr->ni()==0||imgr->nj()==0;
-          if(infile_counter>=n_infiles)
-            {
-              vcl_cout << "Number of homographies and input images do not match\n";
-              return false;
-            }
-        }
-      vil_image_view<float> curr_view = 
-        *vil_convert_cast(float(), imgr->get_view());  
-        vimt_transform_2d ftxform=xforms[frame].inverse();
-        vimt_image_2d_of<float> sample_im;
-
-        vgl_point_2d<double> p(-offset_i,-offset_j);
-        vgl_vector_2d<double> u(1,0);
-        vgl_vector_2d<double> v(0,1);
-
-        vimt_image_2d_of<float> curr_img(curr_view,ftxform);
-        vimt_resample_bilin(curr_img,sample_im,p,u,v,bimg_ni,bimg_nj);
-
-        vil_image_view<vxl_byte> temp;
-        vil_convert_stretch_range(sample_im.image(), temp);
-        vcl_string outname = vul_sprintf("%s%05d.%s", outfile.c_str(),
-                                         frame,
-                                         "tif");
-        vil_save(temp, outname.c_str());
+      imgr =
+        vil_load_image_resource(in_filenames[infile_counter++].c_str());
+      no_valid_image = !imgr||imgr->ni()==0||imgr->nj()==0;
+      if (infile_counter>=n_infiles)
+      {
+        vcl_cout << "Number of homographies and input images do not match\n";
+        return false;
+      }
     }
-    return false;
+    vil_image_view<float> curr_view =
+      *vil_convert_cast(float(), imgr->get_view());
+    vimt_transform_2d ftxform=xforms[frame].inverse();
+    vimt_image_2d_of<float> sample_im;
+
+    vgl_point_2d<double> p(-offset_i,-offset_j);
+    vgl_vector_2d<double> u(1,0);
+    vgl_vector_2d<double> v(0,1);
+
+    vimt_image_2d_of<float> curr_img(curr_view,ftxform);
+    vimt_resample_bilin(curr_img,sample_im,p,u,v,bimg_ni,bimg_nj);
+
+    vil_image_view<vxl_byte> temp;
+    vil_convert_stretch_range(sample_im.image(), temp);
+    vcl_string outname = vul_sprintf("%s%05d.%s", outfile.c_str(),
+                                     frame,
+                                     "tif");
+    vil_save(temp, outname.c_str());
+  }
+  return false;
 }
+
 int main(int argc,char * argv[])
 {
-    if(argc!=4)
+  if (argc!=4)
+  {
+    vcl_cout<<"Usage : register_images.exe homography_file image_in_dir image_out_dir\n";
+    return -1;
+  }
+  else
+  {
+    vcl_string homography_name(argv[1]);
+    vcl_string image_indir(argv[2]);
+    vcl_string image_outdir(argv[3]);
+    if (!register_images(homography_name, image_indir, image_outdir))
     {
-        vcl_cout<<"Usage : register_images.exe homography_file image_in_dir image_out_dir\n";
-        return -1;
+      vcl_cout << "Registration failed\n";
+      return -1;
     }
     else
-    {
-        vcl_string homography_name(argv[1]);
-        vcl_string image_indir(argv[2]);
-        vcl_string image_outdir(argv[3]);
-        if(!register_images(homography_name, image_indir, image_outdir))
-          {  
-            vcl_cout << "Registration failed \n";
-            return -1;
-          }
-        return 0;
-    }
+      return 0;
+  }
 }
