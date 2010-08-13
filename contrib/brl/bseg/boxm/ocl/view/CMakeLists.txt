@@ -11,6 +11,9 @@ IF(VGUI_FOUND)
 
   SET(boxm_ocl_view_sources
       boxm_ocl_draw_glbuffer_tableau.h 
+      boxm_ocl_rerender_tableau.h 
+      boxm_ocl_rerender_tableau_sptr.h
+      boxm_ocl_rerender_tableau.cxx 
       boxm_ocl_draw_glbuffer_tableau.cxx
       boxm_ocl_draw_glbuffer_tableau_sptr.h
       boxm_ocl_update_tableau.h 

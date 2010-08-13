@@ -30,7 +30,8 @@ class boxm_ocl_change_detection_tableau: public vgui_tableau
     bool init(boxm_ocl_scene * scene,
               vcl_vector<vcl_string> cam_files,
               vcl_vector<vcl_string> img_files,
-              vcl_vector<float> &hist);
+              vcl_vector<float> &hist,
+              vcl_string save_img_dir="");
 
     //:  set the GL buffer which needs to be displayed.
     void set_glbuffer(GLuint  pbuffer){pbuffer_=pbuffer;}
@@ -62,6 +63,8 @@ class boxm_ocl_change_detection_tableau: public vgui_tableau
     vil_image_view<float> obs_img_;
     vpgl_perspective_camera<double> *cam_;
     vcl_vector<float>  hist_;
+
+    vcl_string save_img_dir_;
 
 };
 

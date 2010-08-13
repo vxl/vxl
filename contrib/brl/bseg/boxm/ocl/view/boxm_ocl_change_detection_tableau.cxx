@@ -34,7 +34,7 @@
 #include <vil/vil_convert.h>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_load.h>
-
+#include <vul/vul_file.h>
 
 //: Constructor
 boxm_ocl_change_detection_tableau::boxm_ocl_change_detection_tableau()
@@ -54,7 +54,8 @@ boxm_ocl_change_detection_tableau::~boxm_ocl_change_detection_tableau()
 bool boxm_ocl_change_detection_tableau::init(boxm_ocl_scene * scene,
                                    vcl_vector<vcl_string> cam_files,
                                    vcl_vector<vcl_string> img_files,
-                                   vcl_vector<float> &hist)
+                                   vcl_vector<float> &hist,
+                                   vcl_string save_img_dir)
 {
   //set image dimensions, camera and scene
   scene_ = scene;
@@ -63,6 +64,7 @@ bool boxm_ocl_change_detection_tableau::init(boxm_ocl_scene * scene,
   cam_files_ = cam_files;
   img_files_ = img_files;
 
+  save_img_dir_=save_img_dir;
   hist_=hist;
   if(cam_files_.size()>0 && img_files_.size()>0)
   {
@@ -231,7 +233,6 @@ bool boxm_ocl_change_detection_tableau::change_detection()
         return -1;
     }
 
-    curr_frame_++ ;
 
     //run the opencl update business
     cd_mgr->set_input_image(floatimg);
@@ -239,8 +240,19 @@ bool boxm_ocl_change_detection_tableau::change_detection()
     cd_mgr->set_persp_camera(pcam);
     cd_mgr->write_persp_camera_buffers();
     cd_mgr->run();
+    if(vul_file::is_directory(save_img_dir_.c_str()))
+    {
+        cd_mgr->read_output_image();
+        vcl_string filename=vul_file::strip_directory(img_files_[curr_frame_].c_str());
+        filename=vul_file::strip_extension(filename.c_str());
+
+        vcl_cout<<"Saving to "<<filename<<vcl_endl;
+
+        cd_mgr->save_image(save_img_dir_+"/"+filename+".tiff");
+    }
     status = clEnqueueReleaseGLObjects(cd_mgr->command_queue_, 1, &cd_mgr->image_gl_buf_ , 0, 0, 0);
     clFinish( cd_mgr->command_queue_ );
+    curr_frame_++ ;
 
     return true;
 }
