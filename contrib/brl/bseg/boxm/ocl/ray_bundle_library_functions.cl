@@ -769,6 +769,7 @@ void update_cell(float16 * data, float4 aux_data,float t_match, float init_sigma
         float mu2 = (*data).s9, sigma2 = (*data).sa;
         float w2=0.0f;
 
+
         if(w0>0.0f && w1>0.0f)
             w2=1-(*data).s3-(*data).s7;  
 

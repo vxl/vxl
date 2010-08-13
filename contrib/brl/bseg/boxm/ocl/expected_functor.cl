@@ -58,11 +58,6 @@ void step_cell_render_opt(__global uchar8* cell_data, __global float* alpha_data
 {
   uchar8 data = cell_data[data_ptr];
   float alpha=alpha_data[data_ptr];
-
-  //float expected_int_cell = data.s0*data.s2+data.s3*data.s5+data.s6*(1-data.s2-data.s5);
-  //float expected_int_cell = (data.s0/255.0) * (data.s2/255.0)
-  //                         +(data.s3/255.0) * (data.s5/255.0)
-  //                         +(data.s6/255.0) * (1-data.s2/255.0 - data.s5/255.0);
   float expected_int_cell = ((data.s0) * (data.s2)
                            +(data.s3) * (data.s5)
                            +(data.s6) * (255.0 - data.s2 - data.s5))/255.0/255.0;
@@ -136,4 +131,12 @@ void step_cell_render_depth(__global float* alpha_data,int data_ptr,
   (*data_return).y = vis_prob_end;
   (*data_return).z = expected_depth;
   (*data_return).w = norm + omega;
+}
+void step_cell_visibility(__global float* cell_data, int data_ptr,
+                          float d, float * data_return)
+{
+  float alpha = cell_data[data_ptr];
+  float alpha_integral = (*data_return);
+  alpha_integral += alpha*d;
+  (*data_return) = alpha_integral;
 }
