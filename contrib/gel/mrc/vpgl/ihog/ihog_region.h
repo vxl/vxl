@@ -1,11 +1,11 @@
-// This is algo/ihog/ihog_region.h
+// This is gel/mrc/vpgl/ihog/ihog_region.h
 #ifndef ihog_region_h_
 #define ihog_region_h_
 //:
 // \file
 // \brief A class to represent region of an image to register.
 // \author Matt Leotta
-// \date 4/13/04
+// \date April 13, 2004
 //
 // \verbatim
 //  Modifications
@@ -22,11 +22,11 @@
 //: A quadrilateral region of an image
 class ihog_region : public vbl_ref_count
 {
-public:
+ public:
   //: Default Constructor
   ihog_region();
   //: Constructor
-  ihog_region( int ni, int nj );  
+  ihog_region( int ni, int nj );
 
   //: Destructor
   ~ihog_region(){}
@@ -41,23 +41,22 @@ public:
   void b_read(vsl_b_istream &is);
 
   //: Set the size of the world region
-  void set_world_size(int ni, int nj); 
+  void set_world_size(int ni, int nj);
   //: Return the widthin world coords
   int ni() const;
   //: Return the height in world coords
   int nj() const;
 
-  //: Returns a vector of four region corners in image coords 
+  //: Returns a vector of four region corners in image coords
   vcl_vector<vgl_point_2d<double> > corners() const;
 
   //: Return the transformation from world to image coords
   vimt_transform_2d xform() const;
 
-protected:
+ protected:
 
   //: The size of the image in world coords
   int ni_, nj_;
-
 };
 
 

@@ -1,12 +1,11 @@
-// This is breye1/bapl/ihog_world_roi_sptr.h
+// This is gel/mrc/vpgl/ihog/ihog_world_roi_sptr.h
 #ifndef ihog_world_roi_sptr_h_
 #define ihog_world_roi_sptr_h_
 //:
 // \file
 // \brief Smart pointer to a ihog_world_roi
 // \author Matthew Leotta, (mleotta@lems.brown.edu)
-// \date 4/24/04
-//
+// \date April 24, 2004
 
 class ihog_world_roi;
 

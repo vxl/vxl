@@ -1,8 +1,8 @@
-// This is vpgl/ihog/ihog_world_roi.cxx
+// This is gel/mrc/vpgl/ihog/ihog_region.cxx
+#include "ihog_region.h"
 //:
 // \file
 
-#include "ihog_region.h"
 #include <vgl/vgl_vector_2d.h>
 
 
@@ -20,16 +20,16 @@ ihog_region::ihog_region( int ni, int nj )
 
 
 //: Set the size of the world region
-void 
+void
 ihog_region::set_world_size(int ni, int nj)
 {
   ni_ = ni;
   nj_ = nj;
 }
 
- 
+
 //: Return the widthin world coords
-int 
+int
 ihog_region::ni() const
 {
   return ni_;
@@ -37,15 +37,15 @@ ihog_region::ni() const
 
 
 //: Return the height in world coords
-int 
+int
 ihog_region::nj() const
 {
   return nj_;
 }
 
 
-//: Returns a vector of four region corners in image coords 
-vcl_vector<vgl_point_2d<double> > 
+//: Returns a vector of four region corners in image coords
+vcl_vector<vgl_point_2d<double> >
 ihog_region::corners() const
 {
   vcl_vector<vgl_point_2d<double> > corners;
@@ -58,7 +58,7 @@ ihog_region::corners() const
 
 
 //: Return the transformation from world to image coords
-vimt_transform_2d 
+vimt_transform_2d
 ihog_region::xform() const
 {
   vimt_transform_2d xform;
@@ -68,7 +68,7 @@ ihog_region::xform() const
 
 
 //: Return IO version number;
-short 
+short
 ihog_region::version() const
 {
   return 1;
@@ -76,7 +76,7 @@ ihog_region::version() const
 
 
 //: Binary save self to stream.
-void 
+void
 ihog_region::b_write(vsl_b_ostream &os) const
 {
   vsl_b_write(os, version());
@@ -86,31 +86,27 @@ ihog_region::b_write(vsl_b_ostream &os) const
 
 
 //: Binary load self from stream.
-void 
+void
 ihog_region::b_read(vsl_b_istream &is)
 {
   if (!is) return;
 
   short ver;
   vsl_b_read(is, ver);
-  switch(ver)
+  switch (ver)
   {
-  case 1:
-  {
+   case 1:
     vsl_b_read(is, ni_);
     vsl_b_read(is, nj_);
     break;
-  }
 
-  default:
+   default:
     vcl_cerr << "I/O ERROR: ihog_region::b_read(vsl_b_istream&)\n"
              << "           Unknown version number "<< ver << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }
-
-
 
 
 //: Binary save ihog_region to stream.
@@ -147,5 +143,5 @@ vsl_b_read(vsl_b_istream &is, ihog_region* &r)
 void
 vsl_print_summary(vcl_ostream &os, const ihog_region* r)
 {
-  os << "ihog_region("<<r->ni()<<","<<r->nj()<<")";
+  os << "ihog_region("<<r->ni()<<','<<r->nj()<<')';
 }
