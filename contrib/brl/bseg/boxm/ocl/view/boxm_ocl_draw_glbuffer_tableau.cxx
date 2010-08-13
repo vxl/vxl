@@ -105,9 +105,9 @@ bool boxm_ocl_draw_glbuffer_tableau::init_ocl()
   ray_mgr->set_bundle_nj(bundle_dim);
   ray_mgr->init_ray_trace(scene_, &cam_, expected,false);
   bool good=true;  good = good && ray_mgr->set_scene_data()
-      && ray_mgr->set_all_blocks()
-      && ray_mgr->set_scene_data_buffers()
-      && ray_mgr->set_tree_buffers();
+                               && ray_mgr->set_all_blocks()
+                               && ray_mgr->set_scene_data_buffers()
+                               && ray_mgr->set_tree_buffers();
 
   // run the raytracing
   good = good && ray_mgr->set_persp_camera(&cam_)
@@ -134,14 +134,12 @@ bool boxm_ocl_draw_glbuffer_tableau::init_ocl()
                                                 pbuffer_,
                                                 &status);
   ray_mgr->set_kernel();
-  ray_mgr->set_args();
+  ray_mgr->set_args(0);
   ray_mgr->set_commandqueue();
   ray_mgr->set_workspace();
 
   return true;
 }
-
-
 //: Handles tableau events (drawing and keys)
 bool boxm_ocl_draw_glbuffer_tableau::handle(vgui_event const &e)
 {
