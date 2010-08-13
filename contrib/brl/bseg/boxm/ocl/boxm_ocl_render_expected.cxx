@@ -31,8 +31,8 @@ void boxm_opencl_ocl_scene_expected(boxm_ocl_scene &scene,
     return;
   }
   cl_float *results_p = results;
-  for (unsigned j = 0; j<nj; ++j)  
-    for (unsigned i = 0; i<ni; ++i) 
+  for (unsigned j = 0; j<nj; ++j)
+    for (unsigned i = 0; i<ni; ++i)
       expected(i,j) = *(results_p++); // expected intensity
 
 #if 0 //images for debuggin
@@ -42,6 +42,7 @@ void boxm_opencl_ocl_scene_expected(boxm_ocl_scene &scene,
   vil_save(mask,"f:/apl/img3.tiff");
 #endif
 }
+
 void boxm_ocl_scene_rerender(boxm_ocl_scene &scene,
                              vcl_vector<vcl_string> camfiles,
                              vcl_vector<vcl_string> imgfiles,
@@ -51,15 +52,15 @@ void boxm_ocl_scene_rerender(boxm_ocl_scene &scene,
     int bundle_dim=8;
     ray_mgr->set_bundle_ni(bundle_dim);
     ray_mgr->set_bundle_nj(bundle_dim);
-    
+
     int curr_frame=0;
     vpgl_perspective_camera<double>* prevcam = new vpgl_perspective_camera<double>;
     vpgl_perspective_camera<double>* currcam = new vpgl_perspective_camera<double>;
     vil_image_view<float> previmg;
     vil_image_view<float> currimg;
-    for(unsigned curr_frame=0;curr_frame<camfiles.size();curr_frame++)
+    for (unsigned curr_frame=0;curr_frame<camfiles.size();curr_frame++)
     {
-        if(curr_frame==0)
+        if (curr_frame==0)
         {
             // load camera an d image
             vcl_ifstream ifs(camfiles[curr_frame].c_str());
@@ -74,7 +75,7 @@ void boxm_ocl_scene_rerender(boxm_ocl_scene &scene,
             previmg.set_size(loaded_image->ni(), loaded_image->nj());
             if (vil_image_view<vxl_byte> *img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(loaded_image.ptr()))
                 vil_convert_stretch_range_limited(*img_byte ,previmg, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
-            else if(vil_image_view<float> *img_byte = dynamic_cast<vil_image_view<float>*>(loaded_image.ptr()))
+            else if (vil_image_view<float> *img_byte = dynamic_cast<vil_image_view<float>*>(loaded_image.ptr()))
                 previmg=*img_byte;
             else {
                 vcl_cerr << "Failed to load image " << imgfiles[curr_frame] << vcl_endl;
@@ -97,7 +98,7 @@ void boxm_ocl_scene_rerender(boxm_ocl_scene &scene,
             currimg.set_size(loaded_image->ni(), loaded_image->nj());
             if (vil_image_view<vxl_byte> *img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(loaded_image.ptr()))
                 vil_convert_stretch_range_limited(*img_byte ,currimg, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
-            else if(vil_image_view<float> *img_byte = dynamic_cast<vil_image_view<float>*>(loaded_image.ptr()))
+            else if (vil_image_view<float> *img_byte = dynamic_cast<vil_image_view<float>*>(loaded_image.ptr()))
                 currimg=*img_byte;
             else {
                 vcl_cerr << "Failed to load image " << imgfiles[curr_frame] << vcl_endl;

@@ -65,35 +65,44 @@ uchar child_index(short4 code, short level)
 // or negative block index, second is [child_ptr | data_ptr] (as shorts)
 //Note that data_ptrs are USHORTS, while child_ptrs are merely shorts
 //---------------------------------------------------------------------
-int get_child_ptr(int2 cell) {
+int get_child_ptr(int2 cell)
+{
   short2 child_data = as_short2(cell.y);
   return (int) child_data.y;
 }
-void set_child_ptr(int2 *cell, int child_ptr) {
+
+void set_child_ptr(int2 *cell, int child_ptr)
+{
   short2 child_data = as_short2((*cell).y);
   child_data.y = (short) child_ptr;
   (*cell).y = as_int(child_data);
-} 
-int get_data_ptr(int2 cell) {
-  ushort2 child_data = as_ushort2(cell.y);
-  return (int) child_data.x;  
 }
-void set_data_ptr(int2 *cell, int data_ptr) {
+
+int get_data_ptr(int2 cell)
+{
+  ushort2 child_data = as_ushort2(cell.y);
+  return (int) child_data.x;
+}
+
+void set_data_ptr(int2 *cell, int data_ptr)
+{
   ushort2 child_data = as_ushort2((*cell).y);
   child_data.x = (short) data_ptr;
   (*cell).y = as_int(child_data);
 }
-int2 pack_cell(int4 cell) {
+
+int2 pack_cell(int4 cell)
+{
   int2 packed;
   //first int gets negative index or parent pointer
   packed.x = (cell.x < 0)? -1*cell.w : cell.x;
-  
+
   //pack child and data pointer as two shorts
   short child = (short) (cell.y);
   ushort data = (ushort)(cell.z);
   int packed_child_data = (child << 16) | data;
   packed.y = packed_child_data;
-  
+
   return packed;
 }
 
@@ -1132,5 +1141,4 @@ uint rgbaFloatToInt(float4 rgba)
     rgba.z = clamp(rgba.z,0.0f,1.0f);
     rgba.w = clamp(rgba.w,0.0f,1.0f);
     return ((uint)(rgba.w*255.0f)<<24) | ((uint)(rgba.z*255.0f)<<16) | ((uint)(rgba.y*255.0f)<<8) | (uint)(rgba.x*255.0f);
-
 }

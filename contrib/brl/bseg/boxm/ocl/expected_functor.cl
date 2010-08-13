@@ -27,7 +27,7 @@ void step_cell(__global float16* cell_data, int data_ptr,
 
 //Uses float data
 void step_cell_render(__global float8* cell_data, __global float* alpha_data,int data_ptr,
-                     float d, float4 * data_return)
+                      float d, float4 * data_return)
 {
   float8 data = cell_data[data_ptr];
   float alpha=alpha_data[data_ptr];
@@ -59,8 +59,8 @@ void step_cell_render_opt(__global uchar8* cell_data, __global float* alpha_data
   uchar8 data = cell_data[data_ptr];
   float alpha=alpha_data[data_ptr];
   float expected_int_cell = ((data.s0) * (data.s2)
-                           +(data.s3) * (data.s5)
-                           +(data.s6) * (255.0 - data.s2 - data.s5))/255.0/255.0;
+                            +(data.s3) * (data.s5)
+                            +(data.s6) * (255.0 - data.s2 - data.s5))/255.0/255.0;
 
   if (alpha<0) return;
 
@@ -109,6 +109,7 @@ void step_cell_change_detection(__global float8* cell_data, __global float* alph
   (*data_return).z = change_density;
   (*data_return).w = intensity_norm + omega;
 }
+
 void step_cell_render_depth(__global float* alpha_data,int data_ptr,
                             float d,float depth, float4 * data_return)
 {
@@ -125,13 +126,14 @@ void step_cell_render_depth(__global float* alpha_data,int data_ptr,
 
   float vis_prob_end = exp(-alpha_integral);
   float omega = vis - vis_prob_end;
-  
+
   expected_depth += depth*omega;
   (*data_return).x = alpha_integral;
   (*data_return).y = vis_prob_end;
   (*data_return).z = expected_depth;
   (*data_return).w = norm + omega;
 }
+
 void step_cell_visibility(__global float* cell_data, int data_ptr,
                           float d, float * data_return)
 {

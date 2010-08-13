@@ -51,7 +51,7 @@ rerender_ocl_scene_opt(__global float   * depth_image_view1,
   // get image coordinates
   int i=0,j=0;  map_work_space_2d(&i,&j);
   int lenbuffer =(*len_buffer);
-  
+
   // rootlevel of the trees.
 
   // check to see if the thread corresponds to an actual pixel as in some cases #of threads will be more than the pixels.
@@ -116,12 +116,12 @@ rerender_ocl_scene_opt(__global float   * depth_image_view1,
     // tree offset is the root_ptr
     int root_ptr = block.x*lenbuffer+block.y;
     float4 local_ray_o= (ray_o-origin)/blockdims-convert_float4(curr_block_index);
-    
+
     // canonincal bounding box of the tree
     float4 block_entry_pt=(entry_pt-origin)/blockdims-convert_float4(curr_block_index);
     short4 entry_loc_code = loc_code(block_entry_pt, rootlevel);
     short4 curr_loc_code=(short4)-1;
-    
+
     // traverse to leaf cell that contains the entry point
     //curr_cell_ptr = traverse_force_woffset(tree_array, root_ptr, root, entry_loc_code,&curr_loc_code,&global_count,root_ptr);
     curr_cell_ptr = traverse_force_woffset_mod_opt(tree_array, root_ptr, root, entry_loc_code,&curr_loc_code,&global_count,lenbuffer,block.x,block.y);
@@ -132,10 +132,10 @@ rerender_ocl_scene_opt(__global float   * depth_image_view1,
     {
       //// current cell bounding box
       cell_bounding_box(curr_loc_code, rootlevel+1, &cell_min, &cell_max);
-     
+
       // check to see how close tnear and tfar are
       int hit = intersect_cell(local_ray_o, ray_d, cell_min, cell_max,&tnear, &tfar);
-     
+
       // special case whenray grazes edge or corner of cube
       if (fabs(tfar-tnear)<cellsize/10)
       {
@@ -164,7 +164,7 @@ rerender_ocl_scene_opt(__global float   * depth_image_view1,
       int data_ptr = block.x*lenbuffer + (int) child_data.x;
 
       //// distance must be multiplied by the dimension of the bounding box
-      float d = (tfar-tnear)*(blockdims.x);    
+      float d = (tfar-tnear)*(blockdims.x);
       step_cell_visibility(alpha_array,data_ptr,d,&data_return);
 
       // Added aliitle extra to the exit point
@@ -199,7 +199,6 @@ rerender_ocl_scene_opt(__global float   * depth_image_view1,
             curr_block_index=convert_int4((entry_pt-origin)/blockdims);
             curr_block_index.w=0;
         }
-
     }
     else
     {
@@ -215,13 +214,13 @@ rerender_ocl_scene_opt(__global float   * depth_image_view1,
   }
   float2 point2d=(float2)0.0f;
   float16 project_cam=(*camera_view2);
-  if(!project(project_cam,point3d,&point2d))
+  if (!project(project_cam,point3d,&point2d))
   {
       gl_rerender_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)0.0f);
       in_image[j*get_global_size(0)+i]=(float)0;
       return;
   }
-  if(point2d.x<0 || point2d.y<0 || point2d.x>=(*local_copy_imgdims).z || point2d.y>=(*local_copy_imgdims).w)
+  if (point2d.x<0 || point2d.y<0 || point2d.x>=(*local_copy_imgdims).z || point2d.y>=(*local_copy_imgdims).w)
   {
       gl_rerender_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)0.0f);
       in_image[j*get_global_size(0)+i]=(float)0.0;
@@ -233,7 +232,7 @@ rerender_ocl_scene_opt(__global float   * depth_image_view1,
  in_image[j*get_global_size(0)+i]=(float)weighted_intensity.x;
 }
 
-__kernel 
+__kernel
 void rerender_view(__read_only image2d_t in_image,     // input image which will be rendered on another view
                    __global float16* in_cam,       // has to be acutal camera + camera center;
                    __global float16* novel_cam,    // novel inv  camera
@@ -244,7 +243,7 @@ void rerender_view(__read_only image2d_t in_image,     // input image which will
 {
     uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
     // get image coordinates
-    int i=0,j=0;  
+    int i=0,j=0;
     map_work_space_2d(&i,&j);
     if (llid == 0 )
     {
@@ -254,7 +253,7 @@ void rerender_view(__read_only image2d_t in_image,     // input image which will
     }
     barrier(CLK_LOCAL_MEM_FENCE);
 
-    if (i>=(*imgdims).z || j>=(*imgdims).w) 
+    if (i>=(*imgdims).z || j>=(*imgdims).w)
         return;
 
     float4 ray_o=(float4)local_copy_cam[2].s4567;
@@ -263,7 +262,7 @@ void rerender_view(__read_only image2d_t in_image,     // input image which will
     float4 ray_d = backproject(i,j,local_copy_cam[0],
                                local_copy_cam[1],
                                local_copy_cam[2],ray_o);
-    if(depth_image[j*get_global_size(0)+i]<0.0f)
+    if (depth_image[j*get_global_size(0)+i]<0.0f)
     {
         gl_rerender_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)0.0f);
         return;
@@ -275,12 +274,12 @@ void rerender_view(__read_only image2d_t in_image,     // input image which will
     point3d.w=1;
     float2 point2d=0.0f;
     float16 project_cam=(*in_cam);
-    if(!project(project_cam,point3d,&point2d))
+    if (!project(project_cam,point3d,&point2d))
     {
         gl_rerender_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)0.0f);
         return;
     }
-    if(point2d.x<0 || point2d.y<0 || point2d.x>=(*imgdims).z || point2d.y>=(*imgdims).w)
+    if (point2d.x<0 || point2d.y<0 || point2d.x>=(*imgdims).z || point2d.y>=(*imgdims).w)
     {
         gl_rerender_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)point2d.x/1280);
         return;
