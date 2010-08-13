@@ -140,6 +140,9 @@ SOURCE=.\boxm_ocl_render_expected.cxx
 SOURCE=.\boxm_change_detection_ocl_scene_manager.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\boxm_ocl_camera_manager.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/bocl_manager+boxm_ray_trace_manager+boxm_sample+BOXM_APM_SIMPLE_GREY---.cxx
 # End Source File
 # Begin Source File
