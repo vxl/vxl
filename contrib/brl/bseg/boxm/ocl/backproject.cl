@@ -20,3 +20,18 @@ float4 backproject(unsigned i,unsigned j,float16 Ut,float16 V,float16 w, float4 
 
   return X;
 }
+
+
+bool project(float16 cam, float4 point3d, float2 * point2d)
+{
+    point3d.w=1;
+    float u = dot((float4)(cam.s0123),point3d);
+    float v = dot((float4)(cam.s4567),point3d);
+    
+    float denom=dot((float4)(cam.s89ab),point3d);
+
+    if(denom==0.0f)
+        return false;
+    (*point2d)=(float2)(u/denom,v/denom);
+    return true;
+}
