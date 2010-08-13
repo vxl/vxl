@@ -1,14 +1,5 @@
 #pragma OPENCL EXTENSION cl_khr_gl_sharing : enable
 
-uint rgbaFloatToInt(float4 rgba)
-{
-    rgba.x = clamp(rgba.x,0.0f,1.0f);
-    rgba.y = clamp(rgba.y,0.0f,1.0f);
-    rgba.z = clamp(rgba.z,0.0f,1.0f);
-    rgba.w = clamp(rgba.w,0.0f,1.0f);
-    return ((uint)(rgba.w*255.0f)<<24) | ((uint)(rgba.z*255.0f)<<16) | ((uint)(rgba.y*255.0f)<<8) | (uint)(rgba.x*255.0f);
-
-}
 
 //RAY_TRACE_OCL_SCENE_OPT
 //uses int2 tree cells and uchar8 mixture cells
@@ -28,7 +19,7 @@ ray_trace_ocl_scene_opt(__global int4    * scene_dims,  // level of the root.
                         __global uint4   * imgdims,   // dimensions of the image
                         __local  float16 * local_copy_cam,
                         __local  uint4   * local_copy_imgdims,
-                        //__global float4  * in_image,
+                        __global float  * in_image,
                         __global uint    * gl_image)    // input image and store vis_inf and pre_inf
 {
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
@@ -57,12 +48,14 @@ ray_trace_ocl_scene_opt(__global int4    * scene_dims,  // level of the root.
   // get image coordinates
   int i=0,j=0;  map_work_space_2d(&i,&j);
   int lenbuffer =(*len_buffer);
-  
+  //in_image[j*get_global_size(0)+i]=0.0f;
   // rootlevel of the trees.
 
   // check to see if the thread corresponds to an actual pixel as in some cases #of threads will be more than the pixels.
   if (i>=(*local_copy_imgdims).z || j>=(*local_copy_imgdims).w) {
     gl_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)(0.0,0.0,0.0,0.0));
+    in_image[j*get_global_size(0)+i]=(float)-1.0f;
+
     return;
   }
   float4 origin=(*scene_origin);
@@ -84,8 +77,15 @@ ray_trace_ocl_scene_opt(__global int4    * scene_dims,  // level of the root.
   int hit  = intersect_cell(ray_o, ray_d, cell_min, cell_max,&tnear, &tfar);
   if (!hit) {
     gl_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)(0.0,0.0,0.0,0.0));
+    in_image[j*get_global_size(0)+i]=(float)-1.0f;
+
     return;
   }
+
+  tnear=tnear>0?tnear:0;
+
+  float fardepth=tfar;
+
   entry_pt = ray_o + tnear*ray_d;
 
   int4 curr_block_index = convert_int4((entry_pt-origin)/blockdims);
@@ -93,6 +93,7 @@ ray_trace_ocl_scene_opt(__global int4    * scene_dims,  // level of the root.
   // handling the border case where a ray pierces the max side
   curr_block_index=curr_block_index+(curr_block_index==scenedims);
   int global_count=0;
+  float global_depth=tnear;
 
   while (!(any(curr_block_index<(int4)0) || any(curr_block_index>=(scenedims))))
   {
@@ -153,8 +154,8 @@ ray_trace_ocl_scene_opt(__global int4    * scene_dims,  // level of the root.
 
       //// distance must be multiplied by the dimension of the bounding box
       float d = (tfar-tnear)*(blockdims.x);
+      global_depth+=d;
       
-      //step_cell_render(sample_array,alpha_array,data_ptr,d,&data_return);
       // X:-) DO NOT DELETE THE LINE BELOW THIS IS A STRING REPLACEMNT
       /*$$step_cell$$*/
       // X:-)
@@ -205,9 +206,15 @@ ray_trace_ocl_scene_opt(__global int4    * scene_dims,  // level of the root.
         curr_block_index.w=0;
     }
   }
-  data_return.z+=(1-data_return.w)*0.5f;
+#ifdef DEPTH
+  data_return.z+=(1-data_return.w)*fardepth;
+#endif
+#ifdef INTENSITY
+  data_return.z+=(1-data_return.w)*1.0f;
+#endif
+
   gl_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)data_return.z);
-  //in_image[j*get_global_size(0)+i]=(float4)data_return;
+  in_image[j*get_global_size(0)+i]=(float)data_return.z;
 }
 
 
@@ -284,6 +291,9 @@ ray_trace_ocl_scene(__global int4     * scene_dims,  // level of the root.
   cell_min=origin;
   cell_max=blockdims*convert_float4(scenedims)+origin;
   int hit=intersect_cell(ray_o, ray_d, cell_min, cell_max,&tnear, &tfar);
+
+  //tnear=tnear>0?tnear:0;
+
   if (!hit)
   {
       gl_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)(0.0,0.0,0.0,0.0));
@@ -297,7 +307,7 @@ ray_trace_ocl_scene(__global int4     * scene_dims,  // level of the root.
   curr_block_index=curr_block_index+(curr_block_index==scenedims);
   int global_count=0;
 
-  float global_depth=0;
+  float global_depth=tnear;
   while (!(any(curr_block_index<(int4)0)|| any(curr_block_index>=(scenedims))))
   {
      // Ray tracing with in each block
@@ -402,9 +412,9 @@ ray_trace_ocl_scene(__global int4     * scene_dims,  // level of the root.
         curr_block_index.w=0;
     }
   }
-  data_return.z+=(1-data_return.w)*0.5f;
+  //data_return.z+=(1-data_return.w)*0.5f;
   gl_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)data_return.z);
-  in_image[j*get_global_size(0)+i]=(float4)data_return;
+  in_image[j*get_global_size(0)+i]=(float4)data_return.z;
 }
 
 
