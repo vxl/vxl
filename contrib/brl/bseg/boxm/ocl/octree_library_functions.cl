@@ -1125,3 +1125,12 @@ int neighbor(__read_only image2d_t cells,int cell_ptr,  short4 cell_loc_code,
 }
 
 #endif
+uint rgbaFloatToInt(float4 rgba)
+{
+    rgba.x = clamp(rgba.x,0.0f,1.0f);
+    rgba.y = clamp(rgba.y,0.0f,1.0f);
+    rgba.z = clamp(rgba.z,0.0f,1.0f);
+    rgba.w = clamp(rgba.w,0.0f,1.0f);
+    return ((uint)(rgba.w*255.0f)<<24) | ((uint)(rgba.z*255.0f)<<16) | ((uint)(rgba.y*255.0f)<<8) | (uint)(rgba.x*255.0f);
+
+}
