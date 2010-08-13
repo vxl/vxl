@@ -1,8 +1,7 @@
-// This is vpgl/ihog/ihog_world_roi.cxx
+// This is gel/mrc/vpgl/ihog/ihog_world_roi.cxx
+#include "ihog_world_roi.h"
 //:
 // \file
-
-#include "ihog_world_roi.h"
 
 #include <vimt/vimt_sample_grid_bilin.h>
 #include <vimt/vimt_resample_bilin.h>
@@ -10,16 +9,16 @@
 
 //: Constructor
 ihog_world_roi::ihog_world_roi( unsigned int n_u,  unsigned int n_v,
-                                  const vgl_point_2d< double > &  p0,  
-                                  const vgl_vector_2d< double > &  u,  
-                                  const vgl_vector_2d< double > &  v )
+                                const vgl_point_2d< double > &  p0,
+                                const vgl_vector_2d< double > &  u,
+                                const vgl_vector_2d< double > &  v )
  : n_u_(n_u), n_v_(n_v), p0_(p0), u_(u), v_(v)
 {
 }
 
 
 //: Sample the image in the ROI and return a vector of values
-vnl_vector<double> 
+vnl_vector<double>
 ihog_world_roi::sample( const vimt_image_2d_of<float>& image) const
 {
   vnl_vector<double> result;
@@ -29,7 +28,7 @@ ihog_world_roi::sample( const vimt_image_2d_of<float>& image) const
 
 
 //: Create a vector of weights for the sample of \p image
-//  weights are based on distance from the image boundaries
+//  Weights are based on distance from the image boundaries
 vnl_vector<double>
 ihog_world_roi::sample_weights( const vimt_image_2d_of<float>& image) const
 {
@@ -55,16 +54,14 @@ ihog_world_roi::sample_weights( const vimt_image_2d_of<float>& image) const
   }
   return result;
 }
-  
+
 
 //: Sample the image in the ROI and return an image
-vil_image_view<float> 
+vil_image_view<float>
 ihog_world_roi::resample( const vimt_image_2d_of<float>& image) const
 {
   vimt_image_2d_of<float> result;
   vimt_resample_bilin(image, result, p0_, u_, v_, n_u_, n_v_);
   return result.image();
 }
-
-
 
