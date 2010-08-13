@@ -8,7 +8,6 @@
 #include <vcl_cstdlib.h> // for "system" function
 
 #include <vul/vul_file.h>
-#include <vnl/vnl_matrix.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_save.h>
 #include <vil/vil_convert.h>
@@ -24,10 +23,10 @@ vimt_transform_2d breg3d_gdbicp_homography_generator::compute_homography()
 
   // create local dir for i/o
   vcl_string io_dirname("./temp_gdbicp_io");
-  if(!vul_file::exists(io_dirname)) {
+  if (!vul_file::exists(io_dirname)) {
     vcl_cout << "creating gdbicp io directory " << io_dirname << vcl_endl;
-    if(!vul_file::make_directory(io_dirname)) {
-      vcl_cerr << "error creating directory!" << vcl_endl;
+    if (!vul_file::make_directory(io_dirname)) {
+      vcl_cerr << "error creating directory!\n";
       return vimt_transform_2d();
     }
   }
@@ -64,16 +63,17 @@ vimt_transform_2d breg3d_gdbicp_homography_generator::compute_homography()
     vil_save(mask1_byte,mask1_fname.c_str());
   }
   vcl_stringstream command;
-  command << gdbicp_command << " " << img0_fname << " " << img1_fname << " ";
+  command << gdbicp_command << ' ' << img0_fname << ' ' << img1_fname << ' ';
   if (use_mask0_) {
-    command << "-mask_from " << mask0_fname << " ";
+    command << "-mask_from " << mask0_fname << ' ';
   }
   if (use_mask1_) {
-    command << "-mask_to " << mask1_fname << " ";
+    command << "-mask_to " << mask1_fname << ' ';
   }
   if (compute_projective_) {
     command << "-model 1 ";
-  } else {
+  }
+  else {
     command << "-model 0 ";
   }
   //command << "-no_render";
@@ -81,8 +81,8 @@ vimt_transform_2d breg3d_gdbicp_homography_generator::compute_homography()
   vcl_cout << "running " << command.str() << vcl_endl;
   int retval = vcl_system(command.str().c_str());
   if (retval) {
-    vcl_cerr << "vcl_system(" << command << ") returned " << retval << "." << vcl_endl;
-    vcl_cerr << "  make sure " << gdbicp_command << " is in your path." << vcl_endl;
+    vcl_cerr << "vcl_system(" << command << ") returned " << retval << ".\n"
+             << "  make sure " << gdbicp_command << " is in your path.\n";
     vul_file::change_directory(og_dir);
     return vimt_transform_2d();
   }
@@ -90,7 +90,7 @@ vimt_transform_2d breg3d_gdbicp_homography_generator::compute_homography()
   // read in output file
   vcl_string output_fname("mosaic_" + vul_file::strip_extension(img0_fname) +"_to_" + vul_file::strip_extension(img1_fname) + ".xform");
   if (!vul_file::exists(output_fname)) {
-    vcl_cerr << "error: output file " << output_fname << " does not exist!" << vcl_endl;
+    vcl_cerr << "error: output file " << output_fname << " does not exist!\n";
     vul_file::change_directory(og_dir);
     return vimt_transform_2d();
   }
@@ -105,7 +105,7 @@ vimt_transform_2d breg3d_gdbicp_homography_generator::parse_gdbicp_output(vcl_st
   vcl_ifstream ifs(filename.c_str());
 
   char curr_char = 0;
-  while(curr_char != '<' && ifs.good()) {
+  while (curr_char != '<' && ifs.good()) {
     ifs.read(&curr_char,1);
   }
   vcl_string htype;
@@ -120,17 +120,18 @@ vimt_transform_2d breg3d_gdbicp_homography_generator::parse_gdbicp_output(vcl_st
   if (compute_projective_) {
     // full projective transformation
     ifs >> H_centered;
-    vcl_cout << "H_centered = " << vcl_endl << H_centered << vcl_endl;
+    vcl_cout << "H_centered =\n" << H_centered << vcl_endl;
     ifs >> cx >> cy >> dx >> dy;
-  }else {
+  }
+  else {
     // affine transformation
     vnl_matrix_fixed<double,2,2> A;
     ifs >> A;
-    vcl_cout << "A = " << vcl_endl << A << vcl_endl;
+    vcl_cout << "A =\n" << A << vcl_endl;
     H_centered.fill(0.0);
     H_centered.update(A,0,0);
     H_centered(2,2) = 1.0;
-    vcl_cout << "H_centered = " << vcl_endl << H_centered << vcl_endl;
+    vcl_cout << "H_centered =\n" << H_centered << vcl_endl;
     ifs >> dx >> dy >> cx >> cy;
   }
   vcl_cout << "cx=" << cx << " cy=" << cy << " dx=" << dx << " dy=" << dy << vcl_endl;
