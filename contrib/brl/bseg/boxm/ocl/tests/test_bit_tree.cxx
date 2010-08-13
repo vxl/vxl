@@ -606,18 +606,18 @@ static void test_bit_tree()
   
   vcl_string root_dir = testlib_root_dir();
   
-  //prepare an octree for testing
-  boct_bit_tree test_tree = boct_bit_tree(open_cl_test_data::tree<float>()); 
-  vcl_cout<<"Bit Tree: "<<vcl_endl
-          <<test_tree<<vcl_endl;
+  ////prepare an octree for testing
+  //boct_bit_tree test_tree = boct_bit_tree(open_cl_test_data::tree<float>()); 
+  //vcl_cout<<"Bit Tree: "<<vcl_endl
+          //<<test_tree<<vcl_endl;
   
-  //load up the manager for testing
-  bit_tree_test_manager* test_mgr = bit_tree_test_manager::instance();
-  test_mgr->set_tree(test_tree.get_bits());
-  test_mgr->init_manager();
+  ////load up the manager for testing
+  //bit_tree_test_manager* test_mgr = bit_tree_test_manager::instance();
+  //test_mgr->set_tree(test_tree.get_bits());
+  //test_mgr->init_manager();
 
-  //Run first test
-  test_loc_code(test_mgr);
+  ////Run first test
+  //test_loc_code(test_mgr);
 
 }
 
