@@ -722,7 +722,7 @@ bool boxm_update_ocl_scene_manager::online_processing()
       
       /******** read some output **************************************/
       if(pass == 4) {  //only read for data setting pass
-        cl_event events[0];
+        cl_event events[1];
         int status = clEnqueueReadBuffer(command_queue_,output_debug_buf_,CL_TRUE,
                                          0,numbuffer_*sizeof(cl_float),
                                          output_debug_,
@@ -805,7 +805,7 @@ bool boxm_update_ocl_scene_manager::refine()
            << "openCL Running time "<<gpu_time_<<" ms" << vcl_endl;
            
   /******** read some output **************************************/
-  cl_event events[0];
+  cl_event events[1];
   int status = clEnqueueReadBuffer(command_queue_,output_debug_buf_,CL_TRUE,
                                    0,numbuffer_*sizeof(cl_float),
                                    output_debug_,
