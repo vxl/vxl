@@ -31,9 +31,14 @@ IF(GLEW_FOUND)
   ADD_EXECUTABLE( boxm_opencl_change_detection_view
   boxm_opencl_change_detection_view.cxx
   )
+  ADD_EXECUTABLE( boxm_ocl_rerender_view
+	boxm_ocl_rerender_view.cxx
+  )
 
  TARGET_LINK_LIBRARIES( boxm_ocl_render_view boxm_ocl  boxm_ocl_view vul vgui ${GLEW_LIBRARY} )
  TARGET_LINK_LIBRARIES( boxm_ocl_update_view boxm_ocl  boxm_ocl_view vul vgui ${GLEW_LIBRARY} )
+ TARGET_LINK_LIBRARIES( boxm_ocl_rerender_view boxm_ocl  boxm_ocl_view vul vgui ${GLEW_LIBRARY} )
+
  TARGET_LINK_LIBRARIES( boxm_opencl_change_detection_view boxm_ocl  boxm_ocl_view vul vgui ${GLEW_LIBRARY} )
  ENDIF(VGUI_FOUND)
 ENDIF(GLEW_FOUND)
@@ -50,5 +55,8 @@ ADD_EXECUTABLE( boxm_build_foreground_distribution_exe
  )
 TARGET_LINK_LIBRARIES( boxm_build_foreground_distribution_exe vcl vul bsta_algo )
 
-
+ADD_EXECUTABLE( boxm_ocl_rerender_adjacent_frames_exe
+  boxm_ocl_rerender_adjacent_frames.cxx
+ )
+TARGET_LINK_LIBRARIES( boxm_ocl_rerender_adjacent_frames_exe boxm_ocl vil vpgl_algo  vul )
 

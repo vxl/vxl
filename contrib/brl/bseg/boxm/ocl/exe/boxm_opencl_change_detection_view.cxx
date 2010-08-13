@@ -41,6 +41,8 @@ int main(int argc, char ** argv)
   vul_arg<vcl_string> img_dir("-imgdir", "Image directory", "");
   vul_arg<vcl_string> scene_file("-scene", "scene filename", ""); //ocl_scene xml file
   vul_arg<vcl_string> hist_file("-foregroundhist", "foreground histogram", ""); //ocl_scene xml file
+  vul_arg<vcl_string> save_img_dir("-saveimgdir", "Save image directory", ""); //ocl_scene xml file
+
   vul_arg_parse(argc, argv);
   if (!vul_file::is_directory(cam_dir().c_str()))
     return -1;
@@ -96,7 +98,7 @@ int main(int argc, char ** argv)
       }
       ifile.close();
   }
-  change_detection_tableau->init(&ocl_scene, cam_files, img_files,pdf);
+  change_detection_tableau->init(&ocl_scene, cam_files, img_files,pdf,save_img_dir());
 
   return  vgui::run(change_detection_tableau, 640,480);
 }
