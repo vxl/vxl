@@ -111,7 +111,7 @@ void boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T> >* scene,
   typedef vnl_vector_fixed<float, 16> float16;
   const int SMALL_BLK_INIT_LEVEL = 1, SMALL_BLK_MAX_LEVEL = 4;
   const int MAX_BYTES = max_mb*1024*1024;
-  const int BUFF_LENGTH = vcl_pow(2,16);
+  const int BUFF_LENGTH = vcl_pow((float)2,(float)16);
 
   /* report some current scene stats */
   vgl_point_3d<double> origin = scene->origin();
