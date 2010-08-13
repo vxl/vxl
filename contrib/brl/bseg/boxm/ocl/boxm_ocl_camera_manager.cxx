@@ -35,12 +35,19 @@ bool boxm_ocl_camera_manager::run()
   // Enqueue readBuffers
     status = clEnqueueReadBuffer(command_queue_,point_2d_buf_,CL_TRUE,
                                  0,sizeof(cl_float2),point_2d_,0,NULL,NULL);
-    if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (image_)failed."))
+    if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (point 2d)failed."))
         return false;
+    status = clFinish(command_queue_);
+    if (!this->check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status)))
+        return SDK_FAILURE;
+
     status = clEnqueueReadBuffer(command_queue_,point_3d_buf_,CL_TRUE,
-                                 0,sizeof(cl_float4),point_3d_,0,NULL,NULL);
-    if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (image_)failed."))
+                                 0,4*sizeof(cl_float),point_3d_,0,NULL,NULL);
+    if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (point 3d)failed."))
         return false;
+    status = clFinish(command_queue_);
+    if (!this->check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status)))
+        return SDK_FAILURE;
 
     status = clReleaseCommandQueue(command_queue_);
     if (!this->check_val(status,CL_SUCCESS,"clReleaseCommandQueue failed."))
@@ -63,7 +70,10 @@ void boxm_ocl_camera_manager::set_point2d(float u, float v)
 
 void boxm_ocl_camera_manager::set_point3d(float x, float y,float z)
 {
-    point_3d_[0]=x;point_3d_[1]=y;point_3d_[2]=z;
+    point_3d_[0]=x;
+    point_3d_[1]=y;
+    point_3d_[2]=z;
+    point_3d_[3]=1.0f;
 }
 
 bool boxm_ocl_camera_manager::clean_point_data()
@@ -78,10 +88,10 @@ bool boxm_ocl_camera_manager::clean_point_data()
 int boxm_ocl_camera_manager::set_point_buffers()
 {
   cl_int status = CL_SUCCESS;
-  point_2d_buf_ = clCreateBuffer(this->context_,CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(cl_mem),point_2d_,&status);
+  point_2d_buf_ = clCreateBuffer(this->context_,CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(cl_float2),point_2d_,&status);
   if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (stat input) failed."))
     return SDK_FAILURE;
-  point_3d_buf_ = clCreateBuffer(this->context_,CL_MEM_READ_WRITE| CL_MEM_COPY_HOST_PTR, sizeof(cl_mem),point_3d_,&status);
+  point_3d_buf_ = clCreateBuffer(this->context_,CL_MEM_READ_WRITE| CL_MEM_COPY_HOST_PTR, sizeof(cl_float4),point_3d_,&status);
   if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (stat input) failed."))
     return SDK_FAILURE;
   else
@@ -103,7 +113,7 @@ int boxm_ocl_camera_manager::release_point_buffers()
 int boxm_ocl_camera_manager::setup_cam_buffer()
 {
   cl_int status = CL_SUCCESS;
-  cam_buf_ = clCreateBuffer(this->context_,CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(cl_mem),cam_,&status);
+  cam_buf_ = clCreateBuffer(this->context_,CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(cl_float16),cam_,&status);
   if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (stat input) failed."))
     return SDK_FAILURE;
   else
