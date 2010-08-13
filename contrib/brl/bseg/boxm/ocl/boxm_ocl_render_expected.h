@@ -210,4 +210,9 @@ void boxm_opencl_ocl_scene_expected(boxm_ocl_scene &scene,
                                      vil_image_view<float> & mask,
                                      bool use_black_background = false);
 
+//: fuinction to rerender views on adjacent frames
+void boxm_ocl_scene_rerender(boxm_ocl_scene &scene,
+                             vcl_vector<vcl_string> camfiles,
+                             vcl_vector<vcl_string> imgfiles,
+                             vcl_string out_dir);
 #endif
