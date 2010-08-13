@@ -9,6 +9,8 @@
 #include <boxm/boxm_scene.h>
 #include <boxm/util/boxm_utils.h>
 #include <boxm/basic/boxm_block_vis_graph_iterator.h>
+#include <vil/vil_save.h>
+#include <vul/vul_file.h>
 
 //: Initializes CPU side input buffers
 //put tree structure and data into arrays
@@ -54,7 +56,6 @@ bool boxm_change_detection_ocl_scene_manager::set_kernel()
   if (!this->check_val(status,CL_SUCCESS,error_to_string(status))) {
     return false;
   }
-
   return true;
 }
 
@@ -97,7 +98,6 @@ bool boxm_change_detection_ocl_scene_manager::set_args()
   status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&numbuffer_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (lenbuffer_buf_)"))
     return SDK_FAILURE;
-
   // the length of buffer
   status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&lenbuffer_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (lenbuffer_buf_)"))
@@ -302,7 +302,20 @@ bool boxm_change_detection_ocl_scene_manager:: read_output_image()
   status = clReleaseEvent(events[0]);
   return this->check_val(status,CL_SUCCESS,"clReleaseEvent failed.")==1;
 }
+void boxm_change_detection_ocl_scene_manager::save_image(vcl_string img_filename)
+{
+    vil_image_view<float> oimage(output_img_.ni(),output_img_.nj());
 
+    for(unsigned i=0;i<output_img_.ni();i++)
+    {
+        for(unsigned j=0;j<output_img_.nj();j++)
+        {
+            oimage(i,j)=image_[(j*wni_+i)*4];
+        }
+    }
+
+    vil_save(oimage,img_filename.c_str());
+}
 
 bool boxm_change_detection_ocl_scene_manager:: read_trees()
 {

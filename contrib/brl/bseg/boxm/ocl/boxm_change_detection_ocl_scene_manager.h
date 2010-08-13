@@ -96,6 +96,7 @@ class boxm_change_detection_ocl_scene_manager : public bocl_manager<boxm_change_
   bool read_trees();
   void print_tree();
   void print_image();
+  void save_image(vcl_string img_filename);
 
   //: cleanup
   bool clean_update();
