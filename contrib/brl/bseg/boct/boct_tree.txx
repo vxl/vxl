@@ -647,8 +647,9 @@ void boct_tree<T_loc,T_data>::b_read(vsl_b_istream & is)
       if (curr_cell->code_.isequal(&code))
         curr_cell->set_data(cell_data);
       else
-        vcl_cerr << "WRONG ERROR CODE OR CELL FOUND!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
+        vcl_cerr << "First WRONG ERROR CODE OR CELL FOUND:"<<curr_cell->code_<<"!="<<code<<vcl_endl;
     }
+        
 
     this->root_=root;
     this->root_level_ = num_levels_ -1;
@@ -702,7 +703,7 @@ void boct_tree<T_loc,T_data>::b_read(vsl_b_istream & is)
       if (curr_cell->code_.isequal(&code))
         curr_cell->set_data(data);
       else
-        vcl_cerr << "WRONG ERROR CODE OR CELL FOUND!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
+        vcl_cerr << "WRONG ERROR CODE OR CELL FOUND: "<<curr_cell->code_<<" != "<<code<<vcl_endl;
     }
     delete[] read_buff;
 
