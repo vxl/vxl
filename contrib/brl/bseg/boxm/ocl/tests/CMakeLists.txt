@@ -18,6 +18,8 @@ SET(boxm_ocl_test_sources
     test_scene_io.cxx
     test_scene_convert.cxx
     test_camera.cxx
+    bit_tree_test_manager.h       bit_tree_test_manager.cxx
+    test_bit_tree.cxx
    )
 
 AUX_SOURCE_DIRECTORY(Templates boxm_ocl_test_sources)
@@ -38,6 +40,7 @@ ADD_TEST( test_file_io ${EXECUTABLE_OUTPUT_PATH}/boxm_ocl_test_all test_file_io 
 ADD_TEST( test_scene_io ${EXECUTABLE_OUTPUT_PATH}/boxm_ocl_test_all test_scene_io )
 ADD_TEST( test_scene_convert ${EXECUTABLE_OUTPUT_PATH}/boxm_ocl_test_all test_scene_convert )
 ADD_TEST( test_camera ${EXECUTABLE_OUTPUT_PATH}/boxm_ocl_test_all test_camera )
+ADD_TEST( test_bit_tree ${EXECUTABLE_OUTPUT_PATH}/boxm_ocl_test_all test_bit_tree )
 
 ADD_EXECUTABLE( boxm_ocl_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( boxm_ocl_test_include boxm_ocl boxm)

@@ -12,6 +12,8 @@ DECLARE( test_file_io );
 DECLARE( test_scene_io);
 DECLARE( test_scene_convert);
 DECLARE( test_camera);
+DECLARE( test_bit_tree); 
+
 void register_tests()
 {
   REGISTER( test_octree );
@@ -24,8 +26,9 @@ void register_tests()
   REGISTER( test_update );
   REGISTER( test_file_io );
   REGISTER( test_scene_io );
-  REGISTER( test_scene_convert);
+  REGISTER( test_scene_convert );
   REGISTER( test_camera);
+  REGISTER( test_bit_tree );
 }
 
 
