@@ -64,12 +64,12 @@ vimt3d_image_3d_of<T> vimt3d_crop(const vimt3d_image_3d_of<T>& im,
   unsigned ni = im.image().ni();
   unsigned nj = im.image().nj();
   unsigned nk = im.image().nk();
-  unsigned pix = vcl_min(vcl_max((unsigned) pi.x(), 0u), ni-1);
-  unsigned piy = vcl_min(vcl_max((unsigned) pi.y(), 0u), nj-1);
-  unsigned piz = vcl_min(vcl_max((unsigned) pi.z(), 0u), nk-1);
-  unsigned qix = vcl_min(vcl_max((unsigned) qi.x(), 0u), ni-1);
-  unsigned qiy = vcl_min(vcl_max((unsigned) qi.y(), 0u), nj-1);
-  unsigned qiz = vcl_min(vcl_max((unsigned) qi.z(), 0u), nk-1);
+  unsigned pix = vcl_min(vcl_max((int) pi.x(), 0), (int)ni-1);
+  unsigned piy = vcl_min(vcl_max((int) pi.y(), 0), (int)nj-1);
+  unsigned piz = vcl_min(vcl_max((int) pi.z(), 0), (int)nk-1);
+  unsigned qix = vcl_min(vcl_max((int) qi.x(), 0), (int)ni-1);
+  unsigned qiy = vcl_min(vcl_max((int) qi.y(), 0), (int)nj-1);
+  unsigned qiz = vcl_min(vcl_max((int) qi.z(), 0), (int)nk-1);
 
   // Crop image
   assert (qix>=pix && qiy>=piy && qiz>=piz);

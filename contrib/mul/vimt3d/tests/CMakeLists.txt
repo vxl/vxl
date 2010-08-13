@@ -14,6 +14,7 @@ ADD_EXECUTABLE( vimt3d_test_all
   test_gauss_reduce.cxx
   test_image_bounds_and_centre_3d.cxx
   test_reflect.cxx
+  test_crop.cxx
 )
 
 TARGET_LINK_LIBRARIES( vimt3d_test_all vimt3d vil3d mbl vgl vnl vpl vul vsl testlib )
@@ -30,6 +31,7 @@ ADD_TEST( vimt3d_test_gauss_reduce                ${EXECUTABLE_OUTPUT_PATH}/vimt
 ADD_TEST( vimt3d_test_resample                    ${EXECUTABLE_OUTPUT_PATH}/vimt3d_test_all test_resample )
 ADD_TEST( vimt3d_test_image_bounds_and_centre_3d  ${EXECUTABLE_OUTPUT_PATH}/vimt3d_test_all test_image_bounds_and_centre_3d )
 ADD_TEST( vimt3d_test_reflect                     ${EXECUTABLE_OUTPUT_PATH}/vimt3d_test_all test_reflect )
+ADD_TEST( vimt3d_test_crop                        ${EXECUTABLE_OUTPUT_PATH}/vimt3d_test_all test_crop )
 
 
 ADD_EXECUTABLE( vimt3d_test_include test_include.cxx )
