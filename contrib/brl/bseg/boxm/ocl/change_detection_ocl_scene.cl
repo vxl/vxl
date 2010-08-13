@@ -1,20 +1,13 @@
 #pragma OPENCL EXTENSION cl_khr_gl_sharing : enable
 
-uint rgbaFloatToInt(float4 rgba)
-{
-    rgba.x = clamp(rgba.x,0.0f,1.0f);
-    rgba.y = clamp(rgba.y,0.0f,1.0f);
-    rgba.z = clamp(rgba.z,0.0f,1.0f);
-    rgba.w = clamp(rgba.w,0.0f,1.0f);
-    return ((uint)(rgba.w*255.0f)<<24) | ((uint)(rgba.z*255.0f)<<16) | ((uint)(rgba.y*255.0f)<<8) | (uint)(rgba.x*255.0f);
-}
+
 
 __kernel
 void
-change_detection_ocl_scene(__global int4     * scene_dims,  // level of the root.
+change_detection_ocl_scene(__global int4    * scene_dims,  // level of the root.
                            __global float4  * scene_origin,
                            __global float4  * block_dims,
-                           __global int4     * block_ptrs,
+                           __global int4    * block_ptrs,
                            __global int     * root_level,
                            __global int     * num_buffer,
                            __global int     * len_buffer,
@@ -225,5 +218,5 @@ change_detection_ocl_scene(__global int4     * scene_dims,  // level of the root
   float4 outputval=(float4)(fg_belief,0,0,1);
 
   gl_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)outputval);
-  in_image[j*get_global_size(0)+i]=(float4)data_return;
+  in_image[j*get_global_size(0)+i]=(float4)fg_belief;
 }
