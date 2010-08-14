@@ -596,14 +596,7 @@ static void test_loc_code(bit_tree_test_manager* test_mgr)
 
 static void test_bit_tree()
 {
-  vcl_cout<<"Testing Bit Tree!"<<vcl_endl;
-  
-  int d = 0;
-  vcl_cout<<"Test 8^d d="<<d<<vcl_endl;
-  vcl_cout<<"vcl_pow: "<<vcl_pow(8,d)<<vcl_endl;
-  vcl_cout<<" 8<<(3*d) "<< (8<<(3*(d-1))) << vcl_endl;
-  
-  
+  vcl_cout<<"Testing Bit Tree"<<vcl_endl;
   vcl_string root_dir = testlib_root_dir();
   
   ////prepare an octree for testing
