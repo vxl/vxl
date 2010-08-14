@@ -98,17 +98,17 @@ int boct_bit_tree::traverse(const vgl_point_3d<double> p)
   int d = num_levels_-1; 
   
   //initialize BI to point to the first index of depth d
-  int bi = (int) ( (1.0/7.0) * (vcl_pow(8, d)-1) );
+  int bi = (int) ( (1.0/7.0) * (vcl_pow(8.0, d)-1) );
   
   //offset bi to point to the 'leaf bit' pointed to by the loc_code
   bi += offset; 
     
   //find the parent, if this parent is 0, keep going until you find pi=1
-  int pi = vcl_floor( (bi-1)/8 );
+  int pi = (int) vcl_floor( (bi-1)/8.0 );
   vcl_cout<<"    start Bit Index: "<<bi<<"  parent: "<<pi<<vcl_endl;
   while(bit_at(pi) == 0 && pi > 0) {
     bi = pi;
-    pi = vcl_floor((bi-1)/8);
+    pi = (int) vcl_floor((bi-1)/8.0);
   }
   
   //now that you have bi = valid leaf, return it's index and use it to find its data
@@ -152,7 +152,7 @@ int boct_bit_tree::get_data_index(int bit_index)
   int di = 1;
   
   //pi = floor((i-1)/8) (because child = 8i+1)
-  int pi = vcl_floor( (bit_index-1)/8 );
+  int pi = (int) vcl_floor( (bit_index-1)/8.0 );
 
   //check to make sure that the parent of this index is one, otherwise return failure;
   if(bit_at(pi) != 1) {

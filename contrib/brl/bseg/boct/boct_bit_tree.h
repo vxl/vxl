@@ -55,7 +55,7 @@ class boct_bit_tree
   //: returns depth (0,1,2,3) at given index
   //: note that cumulative nodes = (1/7) * (8^(n+) -1)
   int depth_at(int index) {  
-    return vcl_floor( vcl_log(7*(index)+1)/vcl_log(8) );
+    return (int) vcl_floor( vcl_log(7.0*(index)+1.0)/vcl_log(8.0) );
   }
   
   //: encodes a boct_tree<short, float> (for testing purposes)
