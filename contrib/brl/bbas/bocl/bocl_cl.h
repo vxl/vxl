@@ -18,9 +18,13 @@
 #include <CL/cl.h>
 #include <CL/cl_gl.h>
 
-#elif defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__) || defined(linux)
+#elif defined(UNIX) || defined(linux) 
 
 #include <CL/cl.h>
+
+#elif defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__)
+
+#include <OpenCL/cl.h>
 
 #else
 
