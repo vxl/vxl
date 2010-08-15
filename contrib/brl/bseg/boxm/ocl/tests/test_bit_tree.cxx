@@ -11,6 +11,9 @@ static void test_loc_code(bit_tree_test_manager* test_mgr)
     TEST("Run Kernel test_loc_code", false, true);
     return;
   }
+  else {
+    TEST("Run Kernel test_loc_code", true, true);
+  }
   cl_int* results = test_mgr->get_output();
   vcl_size_t size = 4*4;
   if (results) {
@@ -605,11 +608,14 @@ static void test_bit_tree()
 
   //load up the manager for testing
   bit_tree_test_manager* test_mgr = bit_tree_test_manager::instance();
+  TEST("bit_tree_test_manager::instance()", !test_mgr, false);
+  if (!test_mgr) return;
   test_mgr->set_tree(test_tree.get_bits());
-  test_mgr->init_manager();
+  bool init_mgr = test_mgr->init_manager();
+  TEST("bit_tree_test_manager::init_manager()", init_mgr, true);
 
   ////Run first test
-  test_loc_code(test_mgr);
+  if (init_mgr) test_loc_code(test_mgr);
 }
 
 TESTMAIN(test_bit_tree);
