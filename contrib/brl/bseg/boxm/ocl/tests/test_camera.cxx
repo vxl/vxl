@@ -40,21 +40,15 @@ static void test_project()
   cam_mgr->release_cam_buffer();
 
   cam_mgr->release_kernel();
-  bool good = true;
   cl_float* results = cam_mgr->point2d();
-  unsigned i=0;
 
   double u,v;
   cam->project(0.5,0.5,0.0,u,v);
 
-  vcl_cout<<"ground truth "<<u<<","<<v<<vcl_endl;
+  vcl_cout<<"ground truth: "<<u<<','<<v<<'\n'
+          << "test_cam_project: " << results[0] << ',' << results[1] <<vcl_endl;
 
-  good = good && u==results[0] && v==results[1];
-  TEST("test_cam_project", good, true);
-
-  if(!good)
-  vcl_cout << "test_cam_project" << results[0] << ' '
-                                 << results[1] <<")\n";
+  TEST("test_cam_project", u==results[0] && v==results[1], true);
 }
 
 void camera_tests()
@@ -65,27 +59,23 @@ void camera_tests()
   //==============================================================
   //END RAY BUNDLE TESTS
 }
+
 void init_test()
 {
   boxm_ocl_camera_manager* cam_mgr = boxm_ocl_camera_manager::instance();
   vcl_string root_dir = testlib_root_dir();
-  if (!cam_mgr->append_process_kernels(root_dir + "/contrib/brl/bseg/boxm/ocl/backproject.cl"))
-    return;
-  if (!cam_mgr->append_process_kernels(root_dir + "/contrib/brl/bseg/boxm/ocl/tests/test_cam_kernels.cl"))
-    return;
-  if (cam_mgr->build_kernel_program()!=SDK_SUCCESS)
-    return;
-
+  cam_mgr->append_process_kernels(root_dir + "/contrib/brl/bseg/boxm/ocl/backproject.cl")
+  &&
+  cam_mgr->append_process_kernels(root_dir + "/contrib/brl/bseg/boxm/ocl/tests/test_cam_kernels.cl")
+  &&
+  cam_mgr->build_kernel_program();
 }
 
 
 static void test_camera()
 {
-  bool good = true;
   init_test();
-
   camera_tests();
-
 }
 
 TESTMAIN(test_camera);
