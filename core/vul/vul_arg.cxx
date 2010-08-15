@@ -183,16 +183,17 @@ void vul_arg_info_list::display_help( char const*progname)
   if (progname)
     vcl_cerr << "Usage: " << progname << ' ';
   else
-    vcl_cerr << "Usage: aprog ";
+    vcl_cerr << "Usage: <prog_name> ";
 
   // Print "prog [-a int] string string"
   for (unsigned int i=0; i< args_.size(); i++) {
-    if (args_[i]->option()) {
+    if (! args_[i]->option_.empty()) {
       vcl_cerr << '[' << args_[i]->option();
       if (vcl_strlen(args_[i]->type_)> 0)
         vcl_cerr << ' ' << args_[i]->type_;
       vcl_cerr << "] ";
-    } else {
+    }
+    else {
       // options without switches are required.
       vcl_cerr << args_[i]->type_ << ' ';
     }
@@ -318,7 +319,8 @@ void vul_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecogn
         args_[i]->set_ = true;
         my_argv += advance;
         ++num_satisfied;
-      } else {
+      }
+      else {
         display_help(cmdname);
 
         vcl_cerr << "\nargParse::ERROR: Required arg " << (num_satisfied+1)
@@ -475,7 +477,8 @@ static int list_parse(vcl_list<int> &out, char ** argv)
       }
       for (int i = s; i <= e; i += d)
         out.push_back(i);
-    } else {
+    }
+    else {
       if (d > 0) {
         vcl_cerr << "WARNING: d > 0\n";
         d = -d;
