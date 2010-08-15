@@ -12,28 +12,6 @@
 #include <vsl/vsl_binary_io.h>
 
 
-  // init constructor
-breg3d_ekf_camera_optimizer_state::breg3d_ekf_camera_optimizer_state(
-  double t_scale,
-  vgl_point_3d<double> base_point, vgl_rotation_3d<double> base_rot,
-  double init_translation_var, double init_rotation_var)
-  : base_point_(base_point),base_rotation_(base_rot),k_(0),t_scale_(t_scale),xk_(0.0)
-{
-  set_error_covariance(init_translation_var,init_rotation_var);
-}
-
-
-vgl_rotation_3d<double> breg3d_ekf_camera_optimizer_state::get_rotation()
-{
-  return base_rotation_;
-}
-
-
-vgl_point_3d<double> breg3d_ekf_camera_optimizer_state::get_point()
-{
-  return base_point_;
-}
-
 void breg3d_ekf_camera_optimizer_state::set_error_covariance(double center_var, double rot_var)
 {
   Pk_.fill(0.0);

@@ -35,10 +35,10 @@
 
 
 breg3d_ekf_camera_optimizer::breg3d_ekf_camera_optimizer(double pos_var_predict, double rot_var_predict,
-                                                     double pos_var_measure, double rot_var_measure,
-                                                     double homography_var, double homography_var_t,
-                                                     bool use_gps, bool use_expected, bool use_proj_homography)
-                                                     : use_gps_(use_gps), use_expected_(use_expected), use_proj_homography_(use_proj_homography)
+                                                         double pos_var_measure, double rot_var_measure,
+                                                         double homography_var, double homography_var_t,
+                                                         bool use_gps, bool use_expected, bool use_proj_homography)
+  : use_gps_(use_gps), use_proj_homography_(use_proj_homography), use_expected_(use_expected)
 {
   // fill in prediction error covariance matrix
   prediction_error_covar_ = vnl_matrix<double>(6,6,0.0);
@@ -78,16 +78,17 @@ breg3d_ekf_camera_optimizer::~breg3d_ekf_camera_optimizer()
 }
 
 breg3d_ekf_camera_optimizer_state breg3d_ekf_camera_optimizer::optimize(bvxm_voxel_world_sptr const& vox_world,
-                                                                    vil_image_view_base_sptr &prev_img, bvxm_image_metadata &curr_img,
-                                                                    breg3d_ekf_camera_optimizer_state &prev_state, vcl_string apm_type, unsigned bin_idx)
+                                                                        vil_image_view_base_sptr &prev_img,
+                                                                        bvxm_image_metadata &curr_img,
+                                                                        breg3d_ekf_camera_optimizer_state &prev_state,
+                                                                        vcl_string apm_type, unsigned bin_idx)
 {
   breg3d_ekf_camera_optimizer_state state_og = prev_state;
   vpgl_perspective_camera<double>* cam_est =
     dynamic_cast<vpgl_perspective_camera<double>*>(curr_img.camera.ptr());
 
   if (!cam_est) {
-    vcl_cerr << "error: current camera estimate must be a vpgl_perspective_camera"
-             << " with at least the calibration matrix set.\n";
+    vcl_cerr << "error: current camera estimate must be a vpgl_perspective_camera with at least the calibration matrix set.\n";
     return prev_state;
   }
 
@@ -266,9 +267,9 @@ breg3d_ekf_camera_optimizer_state breg3d_ekf_camera_optimizer::optimize_once(bvx
     return prev_state;
   }
 
-
   vnl_vector<double> zh = this->img_homography(curr_img.img,prev_img,prev_mask,
-    curr_cam_perspective->get_calibration().get_matrix(),use_proj_homography_);
+                                               curr_cam_perspective->get_calibration().get_matrix(),
+                                               use_proj_homography_);
   vnl_vector<double> z(nmeasurements);
   z.update(zh,0);
 
@@ -337,7 +338,7 @@ breg3d_ekf_camera_optimizer_state breg3d_ekf_camera_optimizer::optimize_once(bvx
 
   // create new state
   breg3d_ekf_camera_optimizer_state curr_state(prev_state.k()+1,prev_state.t_scale(),
-    curr_center, curr_rot, x_post, P_post);
+                                               curr_center, curr_rot, x_post, P_post);
 
   return curr_state;
 }
@@ -361,7 +362,7 @@ vnl_vector<double> breg3d_ekf_camera_optimizer::img_homography(vil_image_view_ba
       }
       break;
     default:
-      vcl_cerr << "error: breg3d_ekf_camera_optimizer::img_homography : unsupported pixel type " << base_img_viewb->pixel_format() << vcl_endl;
+      vcl_cerr << "error: breg3d_ekf_camera_optimizer::img_homography : unsupported pixel type " << base_img_viewb->pixel_format() << '\n';
   }
 
   switch (img_viewb->pixel_format()) {
@@ -378,7 +379,7 @@ vnl_vector<double> breg3d_ekf_camera_optimizer::img_homography(vil_image_view_ba
       }
       break;
     default:
-      vcl_cerr << "error: breg3d_ekf_camera_optimizer::img_homography : unsupported pixel type " << img_viewb->pixel_format() << vcl_endl;
+      vcl_cerr << "error: breg3d_ekf_camera_optimizer::img_homography : unsupported pixel type " << img_viewb->pixel_format() << '\n';
   }
 
   // computed homography maps pixels in current image to pixels in base image
@@ -401,7 +402,7 @@ vnl_vector<double> breg3d_ekf_camera_optimizer::img_homography(vil_image_view_ba
 
   vcl_cout << "optimized homography =\n" << xform.inverse().matrix() << '\n'
            << "normalized homography =\n" << H << '\n'
-           << "homography lie coeffs = " << lie_vector << vcl_endl << vcl_endl;
+           << "homography lie coeffs = " << lie_vector << '\n' << vcl_endl;
 
   return lie_vector;
 }
@@ -496,15 +497,15 @@ vnl_matrix_fixed<double,4,4> breg3d_ekf_camera_optimizer::coeffs_to_matrix_SE3(v
   return M;
 }
 
-vnl_matrix_fixed<double,3,3> breg3d_ekf_camera_optimizer::coeffs_to_matrix_GA2(vnl_vector_fixed<double,6> const& a)
+vnl_matrix_fixed<double,3,3> breg3d_ekf_camera_optimizer::coeffs_to_matrix_GA2(vnl_vector_fixed<double,6> const& /*a*/)
 {
-  vcl_cout << "not implemented yet" << vcl_endl;
+  vcl_cerr << "breg3d_ekf_camera_optimizer::coeffs_to_matrix_GA2 not implemented yet\n";
   return vnl_matrix_fixed<double,3,3>(0.0);
 }
 
-vnl_matrix_fixed<double,3,3> breg3d_ekf_camera_optimizer::coeffs_to_matrix_P2(vnl_vector_fixed<double,8> const &a)
+vnl_matrix_fixed<double,3,3> breg3d_ekf_camera_optimizer::coeffs_to_matrix_P2(vnl_vector_fixed<double,8> const& /*a*/)
 {
-  vcl_cout << "not implemented yet" << vcl_endl;
+  vcl_cerr << "breg3d_ekf_camera_optimizer::coeffs_to_matrix_P2 not implemented yet\n";
   return vnl_matrix_fixed<double,3,3>(0.0);
 }
 
@@ -535,18 +536,18 @@ bool breg3d_ekf_camera_optimizer::logm_approx(vnl_matrix<double> const& A, vnl_m
       vcl_cerr << '\n'
                << "*************************************************************\n"
                << "ERROR: logm_approx did not converge.\n"
-               << "*************************************************************\n" << vcl_endl;
+               << "*************************************************************\n\n";
       return false;
     }
     Wpow = Wpow*W;
     vnl_matrix<double> term = -Wpow/i;
     term_norm = term.frobenius_norm();
     logA += term;
-    //vcl_cout << "iteration " << i <<": W = " << W << vcl_endl << "Wpow = " << Wpow << vcl_endl << "term = " << term << '\n'
-    //         << "logA = " << logA << vcl_endl;
+    //vcl_cout << "iteration " << i <<": W = " << W << '\n' << "Wpow = " << Wpow << '\n'
+    //         << "term = " << term << '\n' << "logA = " << logA << vcl_endl;
     ++i;
   }
-  vcl_cout << "logM converged in " << i << " iterations. " << vcl_endl;
+  vcl_cout << "logM converged in " << i << " iterations." << vcl_endl;
 
   return true;
 }

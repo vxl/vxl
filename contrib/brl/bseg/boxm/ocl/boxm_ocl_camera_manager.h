@@ -26,8 +26,7 @@ class boxm_ocl_camera_manager : public bocl_manager<boxm_ocl_camera_manager>
                              point_3d_(0)
   {}
 
-  ~boxm_ocl_camera_manager(){  
-      if (program_)clReleaseProgram(program_);}
+  ~boxm_ocl_camera_manager(){if (program_)clReleaseProgram(program_);}
 
   bool set_input_cam(vpgl_perspective_camera<double> * cam);
   bool clean_cam();
@@ -61,8 +60,8 @@ class boxm_ocl_camera_manager : public bocl_manager<boxm_ocl_camera_manager>
   cl_program program_;
   cl_command_queue command_queue_;
   cl_kernel kernel_;
-  cl_float* cam_inv_;
   cl_float* cam_;
+  cl_float* cam_inv_;
   cl_float* point_2d_;
   cl_float* point_3d_;
 

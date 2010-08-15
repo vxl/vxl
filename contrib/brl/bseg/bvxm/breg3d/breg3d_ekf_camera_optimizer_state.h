@@ -25,23 +25,31 @@ class breg3d_ekf_camera_optimizer_state
  public:
   // init constructor
   breg3d_ekf_camera_optimizer_state(double t_scale,
-    vgl_point_3d<double> base_point, vgl_rotation_3d<double> base_rot,
-    double init_translation_var, double init_rotation_var);
-
+                                    vgl_point_3d<double> base_point,
+                                    vgl_rotation_3d<double> base_rot,
+                                    double init_translation_var,
+                                    double init_rotation_var)
+    : k_(0),xk_(0.0),base_point_(base_point),base_rotation_(base_rot),t_scale_(t_scale)
+  {
+    set_error_covariance(init_translation_var,init_rotation_var);
+  }
   // full constructor
   breg3d_ekf_camera_optimizer_state(unsigned time_index, double t_scale,
-    vgl_point_3d<double> base_point, vgl_rotation_3d<double> base_rot,
-    vnl_vector_fixed<double,6> xk, vnl_matrix_fixed<double,6,6> Pk)
-    : k_(time_index), base_point_(base_point), base_rotation_(base_rot), xk_(xk), Pk_(Pk), t_scale_(t_scale) {}
+                                    vgl_point_3d<double> base_point,
+                                    vgl_rotation_3d<double> base_rot,
+                                    vnl_vector_fixed<double,6> xk,
+                                    vnl_matrix_fixed<double,6,6> Pk)
+    : k_(time_index), Pk_(Pk), xk_(xk), base_point_(base_point), base_rotation_(base_rot), t_scale_(t_scale) {}
 
   // default constructor
   breg3d_ekf_camera_optimizer_state(){}
+  // destructor
   ~breg3d_ekf_camera_optimizer_state(){}
 
   // setters and getters
-  unsigned k(){return k_;}
-  vnl_vector_fixed<double,6> get_state(){return xk_;}
-  vnl_matrix_fixed<double,6,6> get_error_covariance(){return Pk_;}
+  unsigned k() const {return k_;}
+  vnl_vector_fixed<double,6> get_state() const {return xk_;}
+  vnl_matrix_fixed<double,6,6> get_error_covariance() const {return Pk_;}
   void set_state(vnl_vector_fixed<double,6> const& xk){xk_ = xk;}
   void set_error_covariance(vnl_matrix_fixed<double,6,6> const& Pk){Pk_ = Pk;}
   // set error covariance assuming independent variables
@@ -49,10 +57,10 @@ class breg3d_ekf_camera_optimizer_state
   void set_base_point(vgl_point_3d<double> const& point) { base_point_ = point; }
   void set_base_rotation(vgl_rotation_3d<double> const& rot) { base_rotation_ = rot; }
 
-  double t_scale(){return t_scale_;}
+  double t_scale() const {return t_scale_;}
 
-  vgl_rotation_3d<double> get_rotation();
-  vgl_point_3d<double> get_point();
+  vgl_rotation_3d<double> get_rotation() const { return base_rotation_; }
+  vgl_point_3d<double> get_point() const { return base_point_; }
 
   // operators so we can store state in database
   bool operator == (breg3d_ekf_camera_optimizer_state const& other) const;
