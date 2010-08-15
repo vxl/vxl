@@ -33,15 +33,16 @@ vsol_polyline_2d::vsol_polyline_2d(vcl_vector<vsol_point_2d_sptr> const& new_ver
 {
   storage_=new vcl_vector<vsol_point_2d_sptr>(new_vertices);
   int n = storage_->size();
-  if (n<2)
-  {
+  if (n<1) {
     p0_ = 0;
     p1_ = 0;
-    return;
   }
-  p0_ = (*storage_)[0];
-  p1_ = (*storage_)[n-1];
+  else {
+    p0_ = (*storage_)[0];
+    p1_ = (*storage_)[n-1]; // might coincide with p0_
+  }
 }
+
 //---------------------------------------------------------------------------
 // Copy constructor
 //---------------------------------------------------------------------------
@@ -175,7 +176,7 @@ void vsol_polyline_2d::set_p0(vsol_point_2d_sptr const& new_p0)
 void vsol_polyline_2d::set_p1(vsol_point_2d_sptr const& new_p1)
 {
   p1_=new_p1;
-  storage_->push_back(p0_);
+  storage_->push_back(p1_);
 }
 
 //---------------------------------------------------------------------------
@@ -204,6 +205,7 @@ void vsol_polyline_2d::b_write(vsl_b_ostream &os) const
     vsl_b_write(os, *storage_);
   }
 }
+
 //: Binary load self from stream (not typically used)
 void vsol_polyline_2d::b_read(vsl_b_istream &is)
 {
@@ -224,16 +226,17 @@ void vsol_polyline_2d::b_read(vsl_b_istream &is)
    case 1: {
     vsl_b_read(is, *storage_);
     int n = storage_->size();
-    if (n<2)
-      break;
-    p0_=(*storage_)[0];
-    p1_=(*storage_)[n-1];
+    if (n>=1) {
+      p0_=(*storage_)[0];
+      p1_=(*storage_)[n-1]; // might coincide with p0_
+    }
     break;
    }
    default:
     vcl_cerr << "vsol_polyline_2d: unknown I/O version " << ver << '\n';
   }
 }
+
 //: Return IO version number;
 short vsol_polyline_2d::version() const
 {
