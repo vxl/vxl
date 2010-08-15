@@ -86,7 +86,7 @@ void boxm_render_image_rt(boxm_scene<boct_tree<T_loc, T_data > > &scene,
                           vpgl_camera_double_sptr cam,
                           vil_image_view<typename T_data::obs_datatype> &expected,
                           vil_image_view<float> & mask,
-                          int bin = -1, // FIXME - unused
+                          int /*bin*/ = -1,
                           bool use_black_background = false)
 {
   typedef boxm_aux_traits<BOXM_AUX_NULL>::sample_datatype sample_datatype;

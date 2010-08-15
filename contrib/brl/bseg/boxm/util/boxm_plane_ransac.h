@@ -2,13 +2,13 @@
 #define boxm_plane_ransac_h_
 //:
 // \file
-// \brief class to find the optimal intersecting 3D line of a set of 3D planes. 
+// \brief class to find the optimal intersecting 3D line of a set of 3D planes.
 //
 // \author G. Tunali
 //
 // \verbatim
 //  Modifications
-//    Ozge C. Ozcanli  July 7, 2010 : made some internal hard-coded defaults into parameters
+//   Ozge C. Ozcanli  July 7, 2010 : made some internal hard-coded defaults into parameters
 // \endverbatim
 
 #include <vgl/vgl_infinite_line_3d.h>
@@ -23,11 +23,12 @@
 #include <vcl_cstdlib.h> // for rand()
 #include <vcl_iostream.h>
 #include <vcl_list.h>
+
 #define ITER_MAX 100
 
 template <class T>
 bool boxm_plane_ransac(vcl_vector<boxm_edge_tangent_sample<T> > aux_samples,
-                       vcl_vector<T> weights,
+                       vcl_vector<T> /*weights*/,
                        vgl_infinite_line_3d<T>& line,
                        T &min_res, vgl_box_3d<double> cell_global_box,
                        unsigned int threshold, float ortho_thres = 0.01f, float volume_ratio = 128.0f)

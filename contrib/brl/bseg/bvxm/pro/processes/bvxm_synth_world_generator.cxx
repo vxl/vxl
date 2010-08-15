@@ -238,7 +238,7 @@ bvxm_synth_world_generator::generate_cameras_yz(vgl_box_3d<double>& world)
 bool bvxm_synth_world_generator::update(vgl_vector_3d<unsigned> grid_size,
                                         bvxm_voxel_world_sptr world,
                                         bvxm_voxel_grid<float>* intensity_grid,
-                                        bvxm_voxel_grid<float>* ocp_grid,
+                                        bvxm_voxel_grid<float>* ocp_grid, // FIXME - unused parameter
                                         bvxm_voxel_grid<apm_datatype>* apm_grid,
                                         vcl_vector<vpgl_camera_double_sptr>& cameras,
                                         vcl_vector <vil_image_view_base_sptr>& image_set,
@@ -347,8 +347,8 @@ void bvxm_synth_world_generator::gen_texture_map(vgl_box_3d<double> box,
   }
 }
 
-void bvxm_synth_world_generator::gen_voxel_world_2box(vgl_vector_3d<unsigned> grid_size,
-                                                      vgl_box_3d<double> voxel_world,
+void bvxm_synth_world_generator::gen_voxel_world_2box(vgl_vector_3d<unsigned> /*grid_size*/,
+                                                      vgl_box_3d<double> /*voxel_world*/,
                                                       bvxm_voxel_grid<float>* ocp_grid,
                                                       bvxm_voxel_grid<float>* intensity_grid,
                                                       unsigned minx, unsigned miny, unsigned minz,
@@ -457,8 +457,8 @@ void bvxm_synth_world_generator::gen_voxel_world_2box(vgl_vector_3d<unsigned> gr
   vcl_cout << "grid done." << vcl_endl;
 }
 
-void bvxm_synth_world_generator::gen_voxel_world_plane(vgl_vector_3d<unsigned> grid_size,
-                                                       vgl_box_3d<double> voxel_world,
+void bvxm_synth_world_generator::gen_voxel_world_plane(vgl_vector_3d<unsigned> /*grid_size*/,
+                                                       vgl_box_3d<double> /*voxel_world*/,
                                                        bvxm_voxel_grid<float>* ocp_grid,
                                                        bvxm_voxel_grid<float>* intensity_grid,
                                                        unsigned nx, unsigned ny, unsigned nz)
@@ -492,7 +492,8 @@ void bvxm_synth_world_generator::gen_voxel_world_plane(vgl_vector_3d<unsigned> g
           (*intensity_slab_it)(i,j,0) = 0.8f;
           (*ocp_slab_it)(i,j,0) = 1.0f;
           is << " x" ;
-        } else
+        }
+        else
           is << " 0";
       }
     }
@@ -502,7 +503,7 @@ void bvxm_synth_world_generator::gen_voxel_world_plane(vgl_vector_3d<unsigned> g
 
 bool
 bvxm_synth_world_generator::gen_lidar_2box(vgl_vector_3d<unsigned> grid_size,
-                                           bvxm_voxel_world_sptr world)
+                                           bvxm_voxel_world_sptr /*world*/)
 {
   vil_image_view<unsigned char> lidar(grid_size.x(), grid_size.y());
   lidar.fill((unsigned char)0);

@@ -55,7 +55,7 @@ void boxm_opencl_render_expected(boxm_scene<boct_tree<short, boxm_sample<APM> > 
   vil_image_view<float> img1(ni,nj);
   // render the image using the opencl raytrace manager
   boxm_ray_trace_manager<boxm_sample<APM> >* ray_mgr = boxm_ray_trace_manager<boxm_sample<APM> >::instance();
-  vcl_cout<<"In expected image "<<vcl_endl;
+  vcl_cout<<"In expected image"<<vcl_endl;
 
   ray_mgr->init_raytrace(&scene, cam, ni, nj, source_fnames,0,0,0);
 
@@ -79,7 +79,7 @@ void boxm_opencl_render_expected(boxm_scene<boct_tree<short, boxm_sample<APM> > 
   }
   float sum=0.0;
   vil_math_sum<float>(sum,mask,0);
-  vcl_cout<<"Data transferred from global memory "<<16/* for int4*4*/*sum/1000000000.0f<<" GBytes "<<vcl_endl;
+  vcl_cout<<"Data transferred from global memory "<<16/* for int4*4*/*sum/1000000000.0f<<" GBytes"<<vcl_endl;
 #if 0 //images for debuggin
   vil_save(img0,"f:/apl/img0.tiff");
   vil_save(img1,"f:/apl/img1.tiff");
@@ -139,7 +139,7 @@ void boxm_opencl_ray_bundle_expected(boxm_scene<boct_tree<short, boxm_sample<APM
   }
   float sum=0.0;
   vil_math_sum<float>(sum,mask,0);
-  vcl_cout<<"Data transferred from global memory "<<16/* for int4*4*/*sum/1000000000.0f<<" GBytes "<<vcl_endl;
+  vcl_cout<<"Data transferred from global memory "<<16/* for int4*4*/*sum/1000000000.0f<<" GBytes"<<vcl_endl;
 
 #if 0 //images for debuggin
   vil_save(img0,"f:/apl/img0.tiff");
@@ -160,7 +160,7 @@ void boxm_opencl_all_blocks_expected(boxm_scene<boct_tree<short, boxm_sample<APM
                                      vpgl_camera_double_sptr cam,
                                      vil_image_view<typename boxm_apm_traits<APM>::obs_datatype> &expected,
                                      vil_image_view<float> & mask,
-                                     bool use_black_background = false)
+                                     bool /*use_black_background*/ = false)
 {
   // set up the application-specific function to be called at every cell along a ray
 
@@ -188,27 +188,26 @@ void boxm_opencl_all_blocks_expected(boxm_scene<boct_tree<short, boxm_sample<APM
   cl_float *results_p = results;
   for (unsigned j = 0; j<nj; ++j)  {
     for (unsigned i = 0; i<ni; ++i) {
-        
       img0(i,j)=*(results_p++); // vis_inf
       img1(i,j)=*(results_p++); // vis_inf
       expected(i,j) = *(results_p++); // expected intensity
       mask(i,j) = *(results_p++); // 1 - vis_inf
-
     }
   }
 
-#if 0 //images for debuggin
+#if 0 //images for debugging
   vil_save(img0,"f:/apl/img0.tiff");
   vil_save(img1,"f:/apl/img1.tiff");
   vil_save(expected,"f:/apl/img2.tiff");
   vil_save(mask,"f:/apl/img3.tiff");
 #endif
 }
+
 void boxm_opencl_ocl_scene_expected(boxm_ocl_scene &scene,
-                                     vpgl_camera_double_sptr cam,
-                                     vil_image_view<float> &expected,
-                                     vil_image_view<float> & mask,
-                                     bool use_black_background = false);
+                                    vpgl_camera_double_sptr cam,
+                                    vil_image_view<float> &expected,
+                                    vil_image_view<float> & mask,
+                                    bool /*use_black_background*/ = false);
 
 //: fuinction to rerender views on adjacent frames
 void boxm_ocl_scene_rerender(boxm_ocl_scene &scene,

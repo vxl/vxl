@@ -22,19 +22,17 @@
 #include <vgl/vgl_intersection.h>
 #include "boxm_ocl_utils.h"
 
-
 template<class T>
 bool boxm_ray_bundle_trace_manager<T>::init_raytrace(boxm_scene<boct_tree<short,T > > *scene,
                                                      vpgl_camera_double_sptr cam,
                                                      unsigned int ni, unsigned int nj,
                                                      vcl_vector<vcl_string> functor_source_filenames,
-                                                     unsigned int i0, unsigned int j0, bool useimage)
+                                                     unsigned int /*i0*/, unsigned int /*j0*/, bool /*useimage*/)
 {
   scene_ = scene;
   cam_ = cam;
   ni_ = ni;
   nj_ = nj;
-
 
   // load base raytrace code
   if (!this->load_kernel_source(vcl_string(VCL_SOURCE_ROOT_DIR)

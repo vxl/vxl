@@ -69,8 +69,8 @@ void boxm_change_prob_rt(boxm_scene<boct_tree<T_loc, T_data > > &scene,
                          vpgl_camera_double_sptr cam,
                          vil_image_view<typename T_data::obs_datatype> &change_prob,
                          vil_image_view<float> & mask,
-                         int bin = -1,
-                         bool use_black_background = false)
+                         int /*bin*/ = -1,
+                         bool /*use_black_background*/ = false)
 {
   typedef boxm_aux_traits<BOXM_AUX_NULL>::sample_datatype sample_datatype;
   boxm_aux_scene<T_loc, T_data,boxm_rt_sample<sample_datatype> > aux_scene(&scene,boxm_aux_traits<BOXM_AUX_NULL>::storage_subdir(), boxm_aux_scene<T_loc, T_data,boxm_rt_sample<sample_datatype> >::LOAD);

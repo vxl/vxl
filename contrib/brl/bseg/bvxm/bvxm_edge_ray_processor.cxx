@@ -655,8 +655,8 @@ init_von_mises_edge_tangents(bvxm_image_metadata const& metadata0,
 //: update a von_mises edge tangent world
 bool bvxm_edge_ray_processor::
 update_von_mises_edge_tangents(bvxm_image_metadata const& metadata,
-                               double x0_interval,
-                               double cone_angle,
+                               double /*x0_interval*/,
+                               double /*cone_angle*/,
                                unsigned scale)
 {
   // extract the tangent-point images

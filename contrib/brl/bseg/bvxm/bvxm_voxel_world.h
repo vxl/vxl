@@ -560,7 +560,7 @@ bool bvxm_voxel_world::update_impl(bvxm_image_metadata const& metadata,
 
   bvxm_voxel_slab<obs_datatype> frame_backproj(grid_size.x(),grid_size.y(),1);
 
-  vcl_cout << "Pass 1: " << vcl_endl;
+  vcl_cout << "Pass 1:" << vcl_endl;
 
   // get occupancy probability grid
   bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0,scale_idx);
@@ -649,7 +649,7 @@ bool bvxm_voxel_world::update_impl(bvxm_image_metadata const& metadata,
   bvxm_util::write_slab_as_image(visX_accum,"visX_accum.tiff");
   bvxm_util::write_slab_as_image(preX_accum,"preX_accum.tiff");
 #endif
-  vcl_cout << vcl_endl << "Pass 2: " << vcl_endl;
+  vcl_cout << "\nPass 2:" << vcl_endl;
   PIvisX_slab_it = PIvisX.begin();
   preX_slab_it = preX.begin();
   typename bvxm_voxel_grid<ocp_datatype>::iterator ocp_slab_it2 = ocp_grid->begin();
@@ -684,7 +684,7 @@ bool bvxm_voxel_world::update_impl(bvxm_image_metadata const& metadata,
         *PX_it = max_vox_prob;
     }
   }
-  vcl_cout << vcl_endl << "done." << vcl_endl;
+  vcl_cout << "\ndone." << vcl_endl;
 
   if (return_prob) {
     // fill pixel_probabilities with preX_accum
@@ -1972,7 +1972,7 @@ bool bvxm_voxel_world::virtual_view(bvxm_image_metadata const& original_view,
                                     const vpgl_camera_double_sptr virtual_camera,
                                     vil_image_view_base_sptr &virtual_view,
                                     vil_image_view<float> &vis_prob,
-                                    unsigned bin_index, // FIXME - unused
+                                    unsigned /*bin_index*/,
                                     unsigned scale_idx)
 {
   typedef bvxm_voxel_traits<OCCUPANCY>::voxel_datatype ocp_datatype;
