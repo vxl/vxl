@@ -37,6 +37,8 @@ void test_cell_iterator()
   }
   
   TEST("Valid Test", result, true);
+  clean_up();
+
 }
 
 
