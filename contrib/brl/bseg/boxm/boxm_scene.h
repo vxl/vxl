@@ -176,6 +176,9 @@ class boxm_scene :public boxm_scene_base
   vcl_string gen_block_path(int x, int y, int z);
 
   void clean_scene();
+  
+  //: Print out the trees in the scene
+  void print();
 
   vgl_point_3d<double> rpc_origin() const { return rpc_origin_; }
 

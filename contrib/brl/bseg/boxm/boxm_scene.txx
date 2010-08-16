@@ -604,6 +604,19 @@ void boxm_scene<T>::clean_scene()
   }
 }
 
+template <class T>
+void boxm_scene<T>::print()
+{
+  boxm_block_iterator<T > iter=this->iterator();
+  iter.begin();
+  while (!iter.end()) {
+    if (this->load_block(iter.index().x(),iter.index().y(),iter.index().z())) {
+      get_active_block()->get_tree()->print();
+    }
+    iter++;
+  }
+}
+
 //: Load all blocks in bewteen min-max indeces. This method is private and the user needs to take care of unloading the blocks
 template <class T>
 bool boxm_scene<T>::load_blocks(vgl_point_3d<int> min_idx, vgl_point_3d<int> max_idx)
