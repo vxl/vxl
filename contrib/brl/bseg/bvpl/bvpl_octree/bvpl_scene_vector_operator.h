@@ -21,14 +21,14 @@
 class bvpl_scene_vector_operator
 {
  public:
-  //: Main interface function. Applies a vector of bvpl_kernels on a boxm_scene
+  //: Main interface function. Applies a vector of bvpl_kernels on a boxm_scene. Combines the responses on a single scene
   template<class T_data, class F >
   bool operate(boxm_scene<boct_tree<short, T_data> > &scene_in,
                bvpl_octree_vector_operator<T_data> * vec_opertor,
                F functor,
                bvpl_kernel_vector_sptr kernel_vector,
                boxm_scene<boct_tree<short, bvpl_octree_sample<T_data> > > &scene_out,
-              short level)
+              short level=0)
   {
     // iterate through the scene
     boxm_block_iterator<boct_tree<short, T_data> > iter_in = scene_in.iterator();
@@ -52,6 +52,7 @@ class bvpl_scene_vector_operator
     }
     return true;
   }
+  
 };
 
 #endif // bvpl_scene_vector_operator_h

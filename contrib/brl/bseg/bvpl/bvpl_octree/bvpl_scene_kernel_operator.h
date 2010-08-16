@@ -34,6 +34,7 @@ class bvpl_scene_kernel_operator
     iter_in.begin();
     iter_out.begin();
     for (; !iter_in.end(); iter_in++, iter_out++) {
+      //Isa: change to load block and neighbors 
       scene_in.load_block(iter_in.index());
       scene_out.load_block(iter_out.index());
       tree_type *tree_in= (*iter_in)->get_tree();
@@ -49,6 +50,26 @@ class bvpl_scene_kernel_operator
       oper.operate(functor, kernel, tree_out, level, cell_length);
       (*iter_out)->init_tree(tree_out);
       scene_out.write_active_block();
+    }
+  }
+  
+  // "Convolves" kernel with an input octree. The result is store in situ.
+  template<class T_data, class F>
+  void operate(boxm_scene<boct_tree<short, T_data > > &scene_in,
+               F functor, bvpl_kernel_sptr kernel, short level)
+  {
+    typedef boct_tree<short, T_data > tree_type;
+    boxm_block_iterator<tree_type> iter_in = scene_in.iterator();
+    iter_in.begin();
+    for (; !iter_in.end(); iter_in++) {
+      //Isa: change to load block and neighbors 
+      scene_in.load_block(iter_in.index());
+      tree_type *tree_in= (*iter_in)->get_tree();
+      
+      bvpl_octree_kernel_operator<T_data> oper(tree_in);
+      double cell_length = 1.0/(double)(1<<(tree_in->root_level() -level));
+      oper.operate(functor, kernel, level, cell_length);
+      scene_in.write_active_block();
     }
   }
 };

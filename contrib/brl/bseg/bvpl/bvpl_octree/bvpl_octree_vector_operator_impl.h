@@ -15,7 +15,7 @@
 #include "bvpl_octree_vector_operator.h"
 
 
-//: Class to apply a vector of kernels and functor to a grid, returning a grid of containing at each voxel the max response
+//: Class to apply a vector of kernels and functor to a grid, returning a grid containing at each voxel the max response
 template <class T_data>
 class bvpl_max_vector_operator: public bvpl_octree_vector_operator<T_data>
 {
