@@ -16,6 +16,7 @@ SET(bvgl_sources
  bvgl_change_obj_sptr.h
  bvgl_changes.h      bvgl_changes.cxx
  bvgl_changes_sptr.h
+ bvgl_point_3d_cmp.h
 )
 AUX_SOURCE_DIRECTORY(Templates bvgl_sources)
 
