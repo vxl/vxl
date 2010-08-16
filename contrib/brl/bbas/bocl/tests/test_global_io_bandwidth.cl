@@ -30,7 +30,7 @@ __kernel
 void
 test_workgroup_uncoalesced_read_bandwidth(__constant uint * len, __global float4* input_array,
                                           __global float* result_array, __global int * result_flag,
-                                          __local float* local_mem)
+                                          __local float4* local_mem,__local uint* localid)
 {
   int gid=get_global_id(0);
   int lid=get_local_id(0);
@@ -141,6 +141,36 @@ test_workgroup_coalesced_read_bandwidth_local_memory(__constant uint * len, __gl
       result_array[gid]=worksize;
   }
 }
+__kernel
+void
+test_workgroup_prefetch_bandwidth_local_memory(__constant uint * len, __global float4* input_array,
+                                                     __global float* result_array, __global int * result_flag,
+                                                     __local float4* local_mem, __local uint* firstthreadid)
+{
+  int gid=get_global_id(0);
+  int lid=get_local_id(0);
+  int globalsize=get_global_size(0);
+  int worksize=get_local_size(0);
+  bool flag=true;
+
+  if(lid==0)
+  {
+      (*firstthreadid)=gid;
+  }
+  barrier(CLK_LOCAL_MEM_FENCE);
+  event_t eventid = (event_t)0;
+  event_t e = async_work_group_copy(local_mem, input_array+gid, (size_t)worksize, eventid);
+  wait_group_events (1, &eventid);
+
+ 
+  flag=flag && local_mem[lid].x==(float)lid && local_mem[lid].y==0.0 && local_mem[lid].z==0.0 && local_mem[lid].w==0;
+  if (lid==0)
+  {
+    if (flag)
+      result_array[gid]=worksize;
+  }
+}
+
 #ifdef USEIMAGE
 const sampler_t RowSampler = CLK_NORMALIZED_COORDS_FALSE | CLK_ADDRESS_CLAMP ;
 

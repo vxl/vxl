@@ -39,6 +39,9 @@ class bocl_global_memory_bandwidth_manager : public bocl_manager<bocl_global_mem
 
   bool run_kernel_using_image();
 
+  //: diff from run_karnel allocated array of float4 in local memoty
+  bool run_kernel_prefetch();
+
   int build_kernel_program(bool useimage=false);
 
   int create_kernel(vcl_string const& name);
