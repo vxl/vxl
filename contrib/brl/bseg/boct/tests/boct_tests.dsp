@@ -218,9 +218,6 @@ SOURCE=.\test_driver.cxx
 SOURCE=.\test_find_neighbors.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_include.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\test_locate_point.cxx
 # End Source File
 # Begin Source File
@@ -237,6 +234,12 @@ SOURCE=.\test_clone_tree.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_tree_cell_reader.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_bit_tree.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_include.cxx
 # End Source File
 # End Group
 # End Target

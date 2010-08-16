@@ -137,6 +137,15 @@ SOURCE=.\test_scene_convert.cxx
 SOURCE=.\test_camera.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\bit_tree_test_manager.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_bit_tree.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_include.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/ray_bundle_test_driver+float-.cxx
 # End Source File
 # Begin Source File
@@ -167,7 +176,7 @@ SOURCE=.\Templates/bocl_manager+online_update_test_manager+boxm_sample+BOXM_APM_
 SOURCE=.\Templates/online_update_test_manager+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_include.cxx
+SOURCE=.\Templates/bocl_manager+bit_tree_test_manager.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -198,6 +207,9 @@ SOURCE=.\online_update_test_manager.txx
 # End Source File
 # Begin Source File
 SOURCE=.\online_update_test_manager.h
+# End Source File
+# Begin Source File
+SOURCE=.\bit_tree_test_manager.h
 # End Source File
 # End Group
 # End Target
