@@ -109,9 +109,9 @@ bool bvpl_scene_kernel_operator_process(bprb_func_process& pro)
     //parameters of the output scene are the same as those of the input scene
     boxm_scene<tree_type> *scene_out =
       new boxm_scene<tree_type>(scene_in->lvcs(), scene_in->origin(), scene_in->block_dim(), scene_in->world_dim());
-    scene_out->set_paths(output_path, "response_scene");
+    scene_out->set_paths(output_path, "gauss_response_scene");
     scene_out->set_appearance_model(BSTA_GAUSS_F1);
-    scene_out->write_scene("/response_scene.xml");
+    scene_out->write_scene("/gauss_response_scene.xml");
 
     if (functor_name == "gauss_convolution") {
       bvpl_gauss_convolution_functor functor;
