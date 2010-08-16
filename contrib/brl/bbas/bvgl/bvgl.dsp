@@ -131,6 +131,9 @@ SOURCE=.\bvgl_changes.h
 # Begin Source File
 SOURCE=.\bvgl_changes_sptr.h
 # End Source File
+# Begin Source File
+SOURCE=.\bvgl_point_3d_cmp.h
+# End Source File
 # End Group
 # End Target
 # End Project

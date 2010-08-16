@@ -93,7 +93,7 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\temp.cxx
+SOURCE=.\bvpl_scene_neighborhood_operator.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/bvpl_octree_sample+float-.cxx
@@ -145,6 +145,9 @@ SOURCE=.\bvpl_cell_data_traits.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvpl_octree_neighbors.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvpl_scene_neighborhood_operator.h
 # End Source File
 # End Group
 # End Target
