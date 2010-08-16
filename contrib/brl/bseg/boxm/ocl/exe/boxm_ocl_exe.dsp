@@ -98,12 +98,6 @@ LIB32=link.exe -lib
 SOURCE=.\boxm_opencl_render_expected_process_exe.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\boxm_opencl_update_exe.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\boxm_opencl_render_exe.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\boxm_opencl_render_ocl_scene_exe.cxx
 # End Source File
 # Begin Source File
