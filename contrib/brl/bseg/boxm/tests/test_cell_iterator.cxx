@@ -26,7 +26,6 @@ void test_cell_iterator()
       result = false;
       vcl_cerr << " Wrong data: " << cell->data() << vcl_endl;
     }
-    cell->print();
     ++iterator;
     cell = *iterator;
     num_cells ++;
