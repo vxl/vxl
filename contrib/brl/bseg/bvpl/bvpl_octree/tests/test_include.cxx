@@ -7,5 +7,6 @@
 #include <bvpl/bvpl_octree/bvpl_octree_vrml_util.h>
 #include <bvpl/bvpl_octree/bvpl_scene_vector_operator.h>
 #include <bvpl/bvpl_octree/bvpl_scene_kernel_operator.h>
+#include <bvpl/bvpl_octree/bvpl_scene_neighborhood_operator.h>
 
 int main() { return 0; }
