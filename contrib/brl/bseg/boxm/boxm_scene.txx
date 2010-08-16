@@ -34,7 +34,7 @@ boxm_scene<T>::boxm_scene(const bgeo_lvcs& lvcs,
   active_block_(vgl_point_3d<int>(-1,-1,-1)),
   save_internal_nodes_(save_internal_nodes),
   save_platform_independent_(save_platform_independent),
-  load_all_blocks_(load_all_blocks),
+  load_all_blocks_(load_all_blocks)
 {
   create_blocks(block_dim, world_dim);
 }
@@ -51,7 +51,7 @@ boxm_scene<T>::boxm_scene( const vgl_point_3d<double>& origin,
   active_block_(vgl_point_3d<int>(-1,-1,-1)),
   save_internal_nodes_(save_internal_nodes),
   save_platform_independent_(save_platform_independent),
-  load_all_blocks_(load_all_blocks))
+  load_all_blocks_(load_all_blocks)
 {
   create_blocks(block_dim, world_dim);
 }
@@ -65,7 +65,7 @@ boxm_scene<T>::boxm_scene(const boxm_scene& scene)
   active_block_(vgl_point_3d<int>(-1,-1,-1)),
   save_internal_nodes_(scene.save_internal_nodes()),
   save_platform_independent_(scene.save_platform_independent()),
-  load_all_blocks_(scene.load_all_blocks()))
+  load_all_blocks_(scene.load_all_blocks())
 {
   int x,y,z;
   scene.block_num(x,y,z);
@@ -107,7 +107,7 @@ block_dim_(block_dim),
 active_block_(vgl_point_3d<int>(-1,-1,-1)), 
 save_internal_nodes_(save_internal_nodes),
 save_platform_independent_(save_platform_independent),
-load_all_blocks_(load_all_blocks))
+load_all_blocks_(load_all_blocks)
 {
   create_blocks(block_dim, world_dim);
   set_octree_levels(max_level, init_level);
