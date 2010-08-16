@@ -15,7 +15,7 @@
 //           of retrieving the appropiate index of the big grid (where z is inverted).
 // \endverbatim
 //  \verbatim
-//                            Canonical Axis
+//                           
 //                                  (max_x, max_y, max_z)
 //                       O-----------O
 //                      /___________/|
@@ -32,6 +32,7 @@
 //    /
 //   /
 //  X - Canonical Axis
+//
 // \endverbatim
 
 #include "bvpl_kernel_factory.h"

@@ -33,20 +33,32 @@ void bvpl_edge3d_kernel_factory::create_canonical()
 
   typedef vgl_point_3d<float> point_3d;
   typedef bvpl_kernel_dispatch dispatch;
-
+  
+  //count number of + and -, so that voxels weights can be normalized
+  int n0=0;
+  int n1=0;
+  
   for (int x=min_x_; x<= max_x_; x++)
-  {
     for (int y= min_y_; y<= max_y_; y++)
-    {
       for (int z= min_z_; z<= max_z_; z++)
       {
         if (x < 0)
-          canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(-1)));
-        else if (x >=  0)
-          canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(1)));
+          n0++;
+        else
+          n1++;
       }
-    }
-  }
+    
+
+  for (int x=min_x_; x<= max_x_; x++)
+    for (int y= min_y_; y<= max_y_; y++)
+      for (int z= min_z_; z<= max_z_; z++)
+      {
+        if (x < 0)
+          canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(-1.0 / float(n0))));
+        else if (x >=  0)
+          canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(1.0/ float(n1))));
+      }
+    
   //set the dimension of the 3-d grid
   max_point_.set(max_x_,max_y_,max_z_);
   min_point_.set(min_x_,min_y_,min_z_);
