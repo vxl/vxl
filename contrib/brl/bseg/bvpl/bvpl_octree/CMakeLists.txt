@@ -16,11 +16,11 @@ SET(bvpl_octree_sources
     bvpl_octree_vector_operator.h
     bvpl_scene_kernel_operator.h
     bvpl_scene_vector_operator.h
-    bvpl_octree_sample.h              bvpl_octree_sample.txx
+    bvpl_octree_sample.h               bvpl_octree_sample.txx
     bvpl_octree_vrml_util.h
     bvpl_cell_data_traits.h
     bvpl_octree_neighbors.h
-    temp.cxx
+    bvpl_scene_neighborhood_operator.h bvpl_scene_neighborhood_operator.cxx
    )
 
 AUX_SOURCE_DIRECTORY(Templates bvpl_octree_sources)
