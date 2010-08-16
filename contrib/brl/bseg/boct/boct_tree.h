@@ -98,13 +98,20 @@ class boct_tree
   //: Returns the smallest cell that entirely contains a 3d region in octree coordinates [0,1)x[0,1)x[0,1)
   boct_tree_cell<T_loc,T_data>* locate_region(const vgl_box_3d<double>& r, bool check_out_of_bounds = false);
 
+  //: Returns all leaf cells entirely contained in 3d region in global coordinates 
+  void locate_region_leaves_global(const vgl_box_3d<double>& r, vcl_vector<boct_tree_cell<T_loc,T_data>*> &leaves)
+  {
+    boct_tree_cell<T_loc,T_data>* root = locate_region_global(r);
+    root->leaf_children(leaves);
+    return; 
+  }
+  
   //: Returns all leaf cells entirely contained in 3d region (in octree coordinates [0,1)x[0,1)x[0,1))
-  vcl_vector<boct_tree_cell<T_loc,T_data>*> locate_region_leaves(const vgl_box_3d<double>& r)
+  void locate_region_leaves(const vgl_box_3d<double>& r, vcl_vector<boct_tree_cell<T_loc,T_data>*> &leaves)
   {
     boct_tree_cell<T_loc,T_data>* root = locate_region(r);
-    vcl_vector<boct_tree_cell<T_loc,T_data>*> leaves;
     root->leaf_children(leaves);
-    return leaves;
+    return;
   }
 
   //: Return cell with a particular locational code
