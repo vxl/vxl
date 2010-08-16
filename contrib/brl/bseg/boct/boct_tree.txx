@@ -42,6 +42,7 @@ boct_tree<T_loc,T_data>::boct_tree(T_data data,short num_levels, short init_leve
     code.set_code(0,0,0);
     code.set_level(root_level_);
     root_=new boct_tree_cell<T_loc,T_data>( code);
+    root_->set_data(data);
   }
   init_levels--;
   while (init_levels > 0) {
@@ -49,10 +50,7 @@ boct_tree<T_loc,T_data>::boct_tree(T_data data,short num_levels, short init_leve
     cells = leaf_cells();
     for (unsigned i=0; i<cells.size(); i++) {
       boct_tree_cell<T_loc,T_data>* c = static_cast<boct_tree_cell<T_loc,T_data>*>(cells[i]);
-#if 1 // temporarily commented out? Now, "data" is an unused parameter!
-      T_data newdata=data;
-      c->set_data(newdata);
-#endif
+      c->set_data(data);
       c->split();
     }
     init_levels--;
