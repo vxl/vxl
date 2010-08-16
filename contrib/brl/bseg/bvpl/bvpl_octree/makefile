@@ -2,7 +2,7 @@ USES += contrib/brl contrib/brl/bbas contrib/brl/bseg core
 
 LIBRARY := bvpl_octree
 
-SOURCES += temp.cxx
+SOURCES += bvpl_scene_neighborhood_operator.cxx
 MANPAGE_SOURCES += bvpl_octree_vector_operator.h
 MANPAGE_SOURCES += bvpl_octree_vector_operator_impl.h
 MANPAGE_SOURCES += bvpl_octree_kernel_operator.h
