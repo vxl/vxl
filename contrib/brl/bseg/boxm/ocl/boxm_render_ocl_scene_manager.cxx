@@ -1,6 +1,6 @@
+#include "boxm_render_ocl_scene_manager.h"
 //:
 // \file
-#include "boxm_render_ocl_scene_manager.h"
 #include <vcl_where_root_dir.h>
 #include <boxm/ocl/boxm_ocl_utils.h>
 #include <vcl_cstdio.h>
@@ -10,6 +10,7 @@
 #include <boxm/basic/boxm_block_vis_graph_iterator.h>
 #include <bsta/bsta_histogram.h>
 #include <vil/vil_save.h>
+
 //: Initializes CPU side input buffers
 //put tree structure and data into arrays
 
@@ -52,7 +53,7 @@ bool boxm_render_ocl_scene_manager::init_ray_trace(boxm_ocl_scene *scene,
   else {
     vcl_cout<<"Using functor step_cell_render_opt"<<vcl_endl;
     functor = "step_cell_render_opt(mixture_array,alpha_array,data_ptr,d,&data_return);";
-    //functor="step_cell_render(sample_array,alpha_array,data_ptr,d,&data_return);";
+    // was: functor="step_cell_render(sample_array,alpha_array,data_ptr,d,&data_return);";
   }
 
   // assign the functor calling signature
@@ -67,8 +68,6 @@ bool boxm_render_ocl_scene_manager::init_ray_trace(boxm_ocl_scene *scene,
   }
   return !build_kernel_program(program_,render_depth);
 }
-
-
 
 
 bool boxm_render_ocl_scene_manager::set_kernel()
@@ -94,7 +93,7 @@ bool boxm_render_ocl_scene_manager::release_kernel()
 {
     if (kernels_.size()>0)
     {
-        for(unsigned i=0;i<kernels_.size();i++)
+        for (unsigned i=0;i<kernels_.size();i++)
         {
             cl_int status = clReleaseKernel(kernels_[i]);
             if (!this->check_val(status,CL_SUCCESS,error_to_string(status)))
@@ -111,7 +110,7 @@ bool boxm_render_ocl_scene_manager::set_args(unsigned kernel_index=0)
     return false;
   cl_int status = CL_SUCCESS;
 
-  if(kernel_index==0)
+  if (kernel_index==0)
   {
       int i=0;
       status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&scene_dims_buf_);
@@ -244,14 +243,14 @@ bool boxm_render_ocl_scene_manager::set_args(unsigned kernel_index=0)
       status = clSetKernelArg(kernels_[1],i++,sizeof(cl_mem),(void *)&rerender_image_buf_);
       if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (input_image)"))
           return 0;
-
-      //image_gl_buf_ = clCreateBuffer(this->context_,
-      //CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
-      //wni_*wnj_*sizeof(cl_uint),
-      //image_gl_,&status);
-      //if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (gl_image)"))
-      //return 0;
-
+#if 0
+      image_gl_buf_ = clCreateBuffer(this->context_,
+                                     CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+                                     wni_*wnj_*sizeof(cl_uint),
+                                     image_gl_,&status);
+      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (gl_image)"))
+          return 0;
+#endif
 
       status = clSetKernelArg(kernels_[1],i++,sizeof(cl_mem),(void *)&image_gl_buf_);
       if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (gl_image)"))
@@ -286,7 +285,6 @@ bool boxm_render_ocl_scene_manager::release_commandqueue()
 
 bool boxm_render_ocl_scene_manager::set_workspace()
 {
-
   globalThreads[0]=this->wni_;
   globalThreads[1]=this->wnj_;
 
@@ -297,10 +295,9 @@ bool boxm_render_ocl_scene_manager::set_workspace()
 }
 
 
-
 bool boxm_render_ocl_scene_manager::start(bool set_gl_buffer)
 {
-  bool good=true;  
+  bool good=true;
   good = good && this->set_scene_data()
               && this->set_all_blocks()
               && this->set_scene_data_buffers()
@@ -308,7 +305,7 @@ bool boxm_render_ocl_scene_manager::start(bool set_gl_buffer)
               && this->set_persp_camera()
               && this->set_input_image();
 
- if(set_gl_buffer)
+ if (set_gl_buffer)
     this->set_gl_buffer();
 
   good = good && this->set_persp_camera_buffers()
@@ -348,22 +345,22 @@ bool boxm_render_ocl_scene_manager::run(bool rerender)
   gpu_time_= (double)1.0e-6 * (tend - tstart); // convert nanoseconds to milliseconds
   vcl_cout<<"GPU time is "<<gpu_time_<<vcl_endl;
 
-  if(rerender)
+  if (rerender)
   {
-      status = clEnqueueNDRangeKernel(command_queue_,this->kernels_[1], 2,NULL,globalThreads,localThreads,0,NULL,&ceEvent);
-      if (!this->check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed. "+error_to_string(status)))
-          return SDK_FAILURE;
+    status = clEnqueueNDRangeKernel(command_queue_,this->kernels_[1], 2,NULL,globalThreads,localThreads,0,NULL,&ceEvent);
+    if (!this->check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed. "+error_to_string(status)))
+      return SDK_FAILURE;
 
-      status = clFinish(command_queue_);
-      if (!this->check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status)))
-          return SDK_FAILURE;
-
+    status = clFinish(command_queue_);
+    if (!this->check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status)))
+      return SDK_FAILURE;
   }
   return SDK_SUCCESS;
 }
+
 bool boxm_render_ocl_scene_manager::finish()
 {
-  bool good=true;  
+  bool good=true;
   good =good && release_tree_buffers()
              && read_output_image()
              && release_input_view_buffers()
@@ -372,7 +369,6 @@ bool boxm_render_ocl_scene_manager::finish()
   this->release_kernel();
   return good;
 }
-
 
 bool boxm_render_ocl_scene_manager::set_gl_buffer()
 {
@@ -385,6 +381,7 @@ bool boxm_render_ocl_scene_manager::set_gl_buffer()
         return false;
     return true;
 }
+
 bool boxm_render_ocl_scene_manager::run_scene()
 {
   bool good=true;
@@ -425,6 +422,7 @@ bool boxm_render_ocl_scene_manager::run_scene()
 #endif
   return good;
 }
+
 bool boxm_render_ocl_scene_manager::read_rerendered_image()
 {
   cl_event events[2];
@@ -468,22 +466,25 @@ bool boxm_render_ocl_scene_manager::read_output_image()
   status = clReleaseEvent(events[0]);
   return this->check_val(status,CL_SUCCESS,"clReleaseEvent failed.")==1;
 }
+
 void boxm_render_ocl_scene_manager::save_image(vcl_string img_filename)
 {
     vil_image_view<float> oimage(output_img_.ni(),output_img_.nj());
-    for(unsigned i=0;i<output_img_.ni();i++)
-        for(unsigned j=0;j<output_img_.nj();j++)
+    for (unsigned i=0;i<output_img_.ni();i++)
+        for (unsigned j=0;j<output_img_.nj();j++)
             oimage(i,j)=image_[(j*wni_+i)];
     vil_save(oimage,img_filename.c_str());
 }
+
 void boxm_render_ocl_scene_manager::save_rerender_image(vcl_string img_filename)
 {
     vil_image_view<float> oimage(output_img_.ni(),output_img_.nj());
-    for(unsigned i=0;i<output_img_.ni();i++)
-        for(unsigned j=0;j<output_img_.nj();j++)
+    for (unsigned i=0;i<output_img_.ni();i++)
+        for (unsigned j=0;j<output_img_.nj();j++)
             oimage(i,j)=rerender_image_[(j*wni_+i)];
     vil_save(oimage,img_filename.c_str());
 }
+
 bool boxm_render_ocl_scene_manager::read_trees()
 {
   cl_event events[2];
@@ -570,27 +571,29 @@ void boxm_render_ocl_scene_manager::print_image()
         vcl_cout<<image_[(j*img_dims_[2]+i)]<<' ';
       vcl_cout<<vcl_endl;
     }
-    //vcl_cout<<"Plane 1"<<vcl_endl;
-    //for (unsigned j=0;j<img_dims_[3];j++)
-    //{
-    //  for (unsigned i=0;i<img_dims_[2];i++)
-    //    vcl_cout<<image_[(j*img_dims_[2]+i)*4+1]<<' ';
-    //  vcl_cout<<vcl_endl;
-    //}
-    //vcl_cout<<"Plane 2"<<vcl_endl;
-    //for (unsigned j=0;j<img_dims_[3];j++)
-    //{
-    //  for (unsigned i=0;i<img_dims_[2];i++)
-    //    vcl_cout<<image_[(j*img_dims_[2]+i)*4+2]<<' ';
-    //  vcl_cout<<vcl_endl;
-    //}
-    //vcl_cout<<"Plane 3"<<vcl_endl;
-    //for (unsigned j=0;j<img_dims_[3];j++)
-    //{
-    //  for (unsigned i=0;i<img_dims_[2];i++)
-    //    vcl_cout<<image_[(j*img_dims_[2]+i)*4+3]<<' ';
-    //  vcl_cout<<vcl_endl;
-    //}
+#if 0
+    vcl_cout<<"Plane 1"<<vcl_endl;
+    for (unsigned j=0;j<img_dims_[3];j++)
+    {
+      for (unsigned i=0;i<img_dims_[2];i++)
+        vcl_cout<<image_[(j*img_dims_[2]+i)*4+1]<<' ';
+      vcl_cout<<vcl_endl;
+    }
+    vcl_cout<<"Plane 2"<<vcl_endl;
+    for (unsigned j=0;j<img_dims_[3];j++)
+    {
+      for (unsigned i=0;i<img_dims_[2];i++)
+        vcl_cout<<image_[(j*img_dims_[2]+i)*4+2]<<' ';
+      vcl_cout<<vcl_endl;
+    }
+    vcl_cout<<"Plane 3"<<vcl_endl;
+    for (unsigned j=0;j<img_dims_[3];j++)
+    {
+      for (unsigned i=0;i<img_dims_[2];i++)
+        vcl_cout<<image_[(j*img_dims_[2]+i)*4+3]<<' ';
+      vcl_cout<<vcl_endl;
+    }
+#endif // 0
   }
 }
 
@@ -657,15 +660,13 @@ int boxm_render_ocl_scene_manager::build_kernel_program(cl_program & program, bo
   else
     return SDK_SUCCESS;
 }
+
 bool boxm_render_ocl_scene_manager::set_external_image_cam_buffers(
                                       vil_image_view<obs_type> &external_image,
                                       vpgl_perspective_camera<double> * external_cam
-                                      )
+                                     )
 {
-
-
-
-    if(external_image.ni()>output_img_.ni() || external_image.nj()>output_img_.nj())
+    if (external_image.ni()>output_img_.ni() || external_image.nj()>output_img_.nj())
         return false;
 
     ext_image_=(cl_float *)boxm_ocl_utils::alloc_aligned(wni_*wnj_,sizeof(cl_float),16);
@@ -702,18 +703,18 @@ bool boxm_render_ocl_scene_manager::set_external_image_cam_buffers(
         return false;
 
     ext_image_buf_=clCreateImage2D(this->context_,
-                                    CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
-                                    &inputformat,wni_,wnj_,wni_*sizeof(cl_float),
-                                    ext_image_,&status);
+                                   CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
+                                   &inputformat,wni_,wnj_,wni_*sizeof(cl_float),
+                                   ext_image_,&status);
     if (!this->check_val(status,
                          CL_SUCCESS,
                          "clCreateBuffer (cell_array) failed."))
       return false;
     rerender_image_buf_ = clCreateBuffer(this->context_,
-                                            CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
-                                            wni_*wnj_*sizeof(cl_float),
-                                            rerender_image_,&status);
-    if(!this->check_val(status,CL_SUCCESS,"clCreateBuffer (image_buf_) failed."))
+                                         CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+                                         wni_*wnj_*sizeof(cl_float),
+                                         rerender_image_,&status);
+    if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (image_buf_) failed."))
         return false;
 
 
