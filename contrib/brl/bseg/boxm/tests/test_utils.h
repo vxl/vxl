@@ -1,8 +1,8 @@
 #ifndef test_utils_h_
 #define test_utils_h_
 //:
-// \brief: A file containing utility functions for other tests
 // \file
+// \brief  A file containing utility functions for other tests
 // \author Isabel Restrepo
 // \date 13-Aug-2010
 
