@@ -52,7 +52,7 @@ bool brec_prob_map_roc_compute_process(bprb_func_process& pro)
     return false;
   }
 
-  //: get input
+  // get input
   unsigned i = 0;
   vil_image_view_base_sptr temp = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view<float> frame = *vil_convert_cast(float(), temp);
@@ -94,12 +94,14 @@ bool brec_prob_map_roc_compute_process(bprb_func_process& pro)
   double pa[63]={0.0, 0.0001, 0.0002, 0.0003, 0.0004, 0.0005,  0.0006, 0.0007, 0.0008, 0.0009, 0.001, 0.005, 0.01, 0.05,  0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.82, 0.85, 0.87,0.88, 0.89, 0.9, 0.91, 0.92, 0.93, 0.94, 0.95, 0.96, 0.97, 0.98, 0.99, 0.992, 0.995, 0.997, 0.9975, 0.998,0.9982, 0.9985, 0.9987, 0.999, 0.9992, 0.9995, 0.9996, 0.99965, 0.9997, 0.99975, 0.99977, 0.9998, 0.99991, 0.99995, 0.999991, 0.999995, 0.9999991, 0.9999995, 0.99999991, 0.99999995, 1.0};
   //unsigned N = 58;
   //double pa[58]={0.0, 0.001, 0.002, 0.003, 0.004, 0.005, 0.006, 0.007, 0.008, 0.009, 0.01, 0.015, 0.02, 0.025, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.10, 0.13, 0.15, 0.17, 0.2, 0.23, 0.25, 0.27, 0.3, 0.33, 0.35, 0.37, 0.4, 0.43, 0.45, 0.47, 0.5, 0.53, 0.55, 0.57, 0.6, 0.63, 0.65, 0.67, 0.7, 0.73, 0.75, 0.77, 0.8, 0.83, 0.85, 0.87, 0.9, 0.93, 0.95, 0.97, 1.0};
-  /*unsigned N = 0;
+#if 0
+  unsigned N = 0;
   vcl_vector<double> pa;
   for (double th = 0.0; th <= 1.0; th+=0.002) {
     pa.push_back(th);
     N++;
-  }*/
+  }
+#endif // 0
 
   vcl_vector<double> fpr, tpr;
   for (unsigned ip = 0; ip<N; ++ip)
@@ -130,18 +132,17 @@ bool brec_prob_map_roc_compute_process(bprb_func_process& pro)
       best_dist = dist;
     }
     if (fpr[ip] >= 0.1 && !fpr_set) {
-      fpr_id = ip; 
+      fpr_id = ip;
       fpr_set = true;
     }
   }
 
 
-  vcl_cout << " threshold at fpr >= 0.1 is " << pa[fpr_id] << " and actual fpr is: " << fpr[fpr_id] << "\n";
-  vcl_cout.flush();
+  vcl_cout << " threshold at fpr >= 0.1 is " << pa[fpr_id] << " and actual fpr is: " << fpr[fpr_id] << vcl_endl;
 
-  pro.set_output_val<float>(0, (float)pa[best_id]); 
-  pro.set_output_val<float>(1, (float)pa[fpr_id]); 
-  
+  pro.set_output_val<float>(0, (float)pa[best_id]);
+  pro.set_output_val<float>(1, (float)pa[fpr_id]);
+
   vcl_ofstream of(out_file.c_str());
   of << "# brec_prob_map_roc_compute_process\n#line 1: threshold values\n#line 2: FPR values for thresholds\n#line 3: TPR values\n";
   for (unsigned ip = 0; ip<N; ++ip)
@@ -159,7 +160,7 @@ bool brec_prob_map_roc_compute_process(bprb_func_process& pro)
 }
 
 //: Process to construct ROC cumulatively over many images, computes FP and TP for a given image and outputs these values to be summed by an external process, e.g. through python
-//: Constructor
+//  Constructor
 bool brec_prob_map_roc_compute2_process_cons(bprb_func_process& pro)
 {
   //inputs
@@ -191,7 +192,7 @@ bool brec_prob_map_roc_compute2_process(bprb_func_process& pro)
     return false;
   }
 
-  //: get input
+  // get input
   unsigned i = 0;
   vil_image_view_base_sptr temp = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view<float> frame = *vil_convert_cast(float(), temp);
@@ -233,9 +234,9 @@ bool brec_prob_map_roc_compute2_process(bprb_func_process& pro)
   float nfored = (float)nfore, nbackd = (float)nback;
   //double fore_true_pos_frac = nfored/nfd;
   //double fore_false_pos_frac = (nbd-nbackd)/nbd;
-  
-  pro.set_output_val<float>(0, nfored); 
-  pro.set_output_val<float>(1, nbd-nbackd); 
+
+  pro.set_output_val<float>(0, nfored);
+  pro.set_output_val<float>(1, nbd-nbackd);
   pro.set_output_val<float>(2, nfd);
   pro.set_output_val<float>(3, nbd);
   return true;
