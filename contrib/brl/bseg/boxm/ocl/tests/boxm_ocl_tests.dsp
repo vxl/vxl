@@ -176,7 +176,7 @@ SOURCE=.\Templates/bocl_manager+online_update_test_manager+boxm_sample+BOXM_APM_
 SOURCE=.\Templates/online_update_test_manager+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bocl_manager+bit_tree_test_manager.cxx
+SOURCE=.\Templates/bocl_manager+bit_tree_test_manager-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
