@@ -12,6 +12,28 @@
 #include <boxm/util/boxm_utils.h>
 
 
+bool bit_tree_test_manager::init_arrays()
+{  
+  //set up buffers
+  bit_tree_ = (cl_uchar*)boxm_ocl_utils::alloc_aligned(16,sizeof(cl_uchar),16);
+  output_   = (cl_int*)  boxm_ocl_utils::alloc_aligned(16,sizeof(cl_float4),16);
+  return true;
+}
+
+//: init manager - initializes all opencl stuff (command queue, program, kernels... )
+bool bit_tree_test_manager::init_manager()
+{  
+  //create command queue 
+  bool good = this->create_command_queue();
+  //build program from source
+  good = this->build_test_program();
+  //create and set kernels using program
+  good = good && this->set_test_kernels();
+  //prepare cl_mem buffers 
+  good = good && this->set_buffers();
+  return good;
+}
+
 //: Builds the test program from the two cl files
 bool bit_tree_test_manager::build_test_program()
 {
@@ -34,9 +56,6 @@ bool bit_tree_test_manager::set_test_kernels()
   if (!this->release_kernels())
     return false;
 
-  if (!this->build_test_program())
-    return false;
-
   //5 kernels are:
 
   // test_loc_code
@@ -44,30 +63,30 @@ bool bit_tree_test_manager::set_test_kernels()
   if (this->check_val(status,CL_SUCCESS,error_to_string(status))!=CHECK_SUCCESS)
     return false;
   kernels_.push_back(kernel);
-
-  // test_traverse
+  
+  //test_bit_at
+  kernel = clCreateKernel(program_,"test_bit_at",&status);
+  if (this->check_val(status,CL_SUCCESS,error_to_string(status))!=CHECK_SUCCESS)
+    return false;
+  kernels_.push_back(kernel);
+  
+  //test traverse
   kernel = clCreateKernel(program_,"test_traverse",&status);
   if (this->check_val(status,CL_SUCCESS,error_to_string(status))!=CHECK_SUCCESS)
     return false;
   kernels_.push_back(kernel);
-
-  //test_traverse_to_level
-  kernel = clCreateKernel(program_,"test_traverse_to_level",&status);
-  if (this->check_val(status,CL_SUCCESS,error_to_string(status))!=CHECK_SUCCESS)
-    return false;
-  kernels_.push_back(kernel);
-
+  
   // test_traverse_force
   kernel = clCreateKernel(program_, "test_traverse_force", &status);
   if (this->check_val(status,CL_SUCCESS,error_to_string(status))!=CHECK_SUCCESS)
     return false;
   kernels_.push_back(kernel);
 
-  // test_traverse_force_local
-  kernel = clCreateKernel(program_, "test_traverse_force_local", &status);
-  if (this->check_val(status,CL_SUCCESS,error_to_string(status))!=CHECK_SUCCESS)
-    return false;
-  kernels_.push_back(kernel);
+  //// test_traverse_force_local
+  //kernel = clCreateKernel(program_, "test_traverse_force_local", &status);
+  //if (this->check_val(status,CL_SUCCESS,error_to_string(status))!=CHECK_SUCCESS)
+    //return false;
+  //kernels_.push_back(kernel);
 
 
   return true;
@@ -88,17 +107,19 @@ bool bit_tree_test_manager::set_kernel_args(unsigned pass)
                           sizeof(cl_mem), (void *) &bit_tree_buf_);
   if (this->check_val(status, CL_SUCCESS, "clSetKernelArg failed. (cell_data_buf_)")!=CHECK_SUCCESS)
     return false;
-  status = clSetKernelArg(kernels_[pass], i++,
-                          sizeof(cl_mem), (void *) &data_buf_);
-  if (this->check_val(status, CL_SUCCESS, "clSetKernelArg failed. (cell_aux_data_buf_)")!=CHECK_SUCCESS)
-    return false;
+ 
   status = clSetKernelArg(kernels_[pass], i++,
                           sizeof(cl_mem), (void *) &output_buf_);
-  if (this->check_val(status, CL_SUCCESS, "clSetKernelArg failed. (data array size)")!=CHECK_SUCCESS)
+  if (this->check_val(status, CL_SUCCESS, "clSetKernelArg failed. (data array )")!=CHECK_SUCCESS)
     return false;
 
   //if you're doing the fourth pass, add local buffer too
-  if (pass == 4) {
+  if (pass==1 || pass==2 || pass==3) {
+    status = clSetKernelArg(kernels_[pass], i++, 16*sizeof(cl_uchar), 0);
+    if (this->check_val(status, CL_SUCCESS, "clSetKernelArg failed. (local tree)")!=CHECK_SUCCESS)
+      return false;
+  }
+  else if (pass == 4) {
     status = clSetKernelArg(kernels_[pass], i++, 73*sizeof(cl_int4), 0);
     if (this->check_val(status, CL_SUCCESS, "clSetKernelArg failed. (data array size)")!=CHECK_SUCCESS)
       return false;
@@ -108,21 +129,22 @@ bool bit_tree_test_manager::set_kernel_args(unsigned pass)
 
 bool bit_tree_test_manager::set_buffers()
 {
+  //vcl_cout<<"Bit Tree Looks Like: "<<vcl_endl;
+  //for(int i=0; i<16; i++) {
+    //vcl_cout<<(unsigned int) bit_tree_[i] <<vcl_endl;
+  //}
+  
   cl_int status = 0;
   //bit tree buffer
   bit_tree_buf_ = clCreateBuffer(this->context_,CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                  sizeof(cl_uchar16),bit_tree_,&status);
-  if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (app density) failed."))
+  if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (bit_tree_buf) failed."))
     return false;
-  //data buffer
-  data_buf_ = clCreateBuffer(this->context_,CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
-                             50*sizeof(cl_float2), data_ ,&status);
-  if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (app density) failed."))
-    return false;
+    
   //output_buf_
-  output_buf_ = clCreateBuffer(this->context_,CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
-                               4*sizeof(cl_int4), output_ , &status);
-  if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (app density) failed."))
+  output_buf_ = clCreateBuffer(this->context_,CL_MEM_READ_WRITE,
+                               16*sizeof(cl_int4), NULL , &status);
+  if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (output_buf) failed."))
     return false;
   return true;
 }
@@ -131,17 +153,17 @@ bool bit_tree_test_manager::release_buffers()
 {
   //bit tree
   cl_int status = clReleaseMemObject(bit_tree_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject (app_density_buf_) failed."))
+  if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject (bit_tree_buf) failed."))
     return false;
 
   //data buffer
   status = clReleaseMemObject(data_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject (app_density_buf_) failed."))
+  if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject (data_buf) failed."))
     return false;
 
   //output buffer
   status = clReleaseMemObject(output_buf_);
-  if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject (app_density_buf_) failed."))
+  if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject (output_Buf) failed."))
     return false;
 
   return true;
@@ -151,9 +173,8 @@ bool bit_tree_test_manager::release_buffers()
 // Run Test Kernel functions -
 ////---------------------------------------------------------------------
 
-bool bit_tree_test_manager::run_test_loc_code()
+bool bit_tree_test_manager::run_test(unsigned pass)
 {
-  unsigned pass = 0;
   int CHECK_SUCCESS = 1;
   cl_int status = SDK_SUCCESS;
   this->set_kernel_args(pass);
@@ -186,7 +207,7 @@ bool bit_tree_test_manager::run_test_loc_code()
 
   //run it
   cl_event ceEvent;
-  status = clEnqueueNDRangeKernel(command_queue_, kernels_[pass], 2,
+  status = clEnqueueNDRangeKernel(command_queue_, kernels_[pass], 1,
                                   NULL,globalThreads,localThreads,0,
                                   NULL,&ceEvent);
   if (this->check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed. "+error_to_string(status))!=CHECK_SUCCESS)
@@ -211,7 +232,7 @@ cl_int* bit_tree_test_manager::get_output()
 
   // Enqueue readBuffers
   status = clEnqueueReadBuffer(command_queue_, output_buf_, CL_TRUE,
-                               0, 4*sizeof(cl_int4),
+                               0, 16*sizeof(cl_int4),
                                output_, 0, NULL, &events[0]);
 
   if (!this->check_val(status, CL_SUCCESS, "clEnqueueBuffer (output)failed."))
@@ -238,6 +259,7 @@ cl_int* bit_tree_test_manager::get_output()
  *******************************************/
 int bit_tree_test_manager::build_kernel_program(cl_program & program)
 {
+
   cl_int status = CL_SUCCESS;
   vcl_size_t sourceSize[] = { this->prog_.size() };
   if (!sourceSize[0]) return SDK_FAILURE;

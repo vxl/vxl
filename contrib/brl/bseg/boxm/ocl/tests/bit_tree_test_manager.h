@@ -23,7 +23,7 @@ class bit_tree_test_manager : public bocl_manager<bit_tree_test_manager>
 
   //: constructor
   bit_tree_test_manager() :
-    program_() {}
+    program_(0) {}
 
   //: destructor
   ~bit_tree_test_manager() {
@@ -31,26 +31,22 @@ class bit_tree_test_manager : public bocl_manager<bit_tree_test_manager>
       clReleaseProgram(program_);
   }
 
+  //: init buffers for bit_tree_manager
+  bool init_arrays();
+
   //: init bit_tree_manager
-  bool init_manager() {
-    return    this->build_test_program()
-           && this->set_test_kernels()
-           && this->set_buffers();
-  }
+  bool init_manager();
+
 
   //: run tests
-  bool run_test_loc_code();
-  bool run_test_traverse();
-  bool run_test_traverse_to_level();
-  bool run_test_traverse_force();
-  bool run_test_traverse_force_local();
+  bool run_test(unsigned pass);
 
   //: get output from OpenCL
   cl_int* get_output();
 
   //: set the tree
   bool set_tree(unsigned char* bit_tree) {
-    for (int i=0; i<16; ++i)
+    for (int i=0; i<16; i++)
       bit_tree_[i] = bit_tree[i];
     return true;
   }
@@ -58,25 +54,23 @@ class bit_tree_test_manager : public bocl_manager<bit_tree_test_manager>
   //: profiling information...
   double gpu_time_;
 
- protected:
-
-  //-------------------------------------------------------------------
-  // GPU side buffers
-  //-------------------------------------------------------------------
-  cl_uchar bit_tree_[16];
-  cl_float data_[100];
-  cl_int   output_[16];
-
-  //cl_mem buffers
-  cl_mem bit_tree_buf_;
-  cl_mem data_buf_;
-  cl_mem output_buf_;
-
   //-------------------------------------------------------------------
   //  Buffer setters
   //-------------------------------------------------------------------
   bool set_buffers();
   bool release_buffers();
+ protected:
+
+  //-------------------------------------------------------------------
+  // GPU side buffers
+  //-------------------------------------------------------------------
+  cl_uchar* bit_tree_;
+  cl_int*   output_;
+
+  //cl_mem buffers
+  cl_mem bit_tree_buf_;
+  cl_mem data_buf_;
+  cl_mem output_buf_;
 
   //-------------------------------------------------------------------
   // Kernel and program helpers
