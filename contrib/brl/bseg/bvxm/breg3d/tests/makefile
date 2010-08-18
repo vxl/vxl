@@ -7,6 +7,8 @@ TESTS += test_ekf_camera_optimizer_seq.cxx
 TESTS += test_homography_generator.cxx
 TESTS += test_ekf_camera_optimizer.cxx
 
+MINI_PROG_SOURCES += test_include.cxx
+
 #########################################
 include ${VXLROOT}/config/static-tests.mk
 #########################################
