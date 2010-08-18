@@ -9,6 +9,7 @@ TESTS += test_binary_io.cxx
 TESTS += test_block_iter.cxx
 TESTS += test_cell_iterator.cxx
 TESTS += test_region_finder.cxx
+TESTS += test_load_neighboring_blocks.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
