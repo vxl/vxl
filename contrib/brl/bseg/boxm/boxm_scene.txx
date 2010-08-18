@@ -341,25 +341,27 @@ bool boxm_scene<T>::load_block_and_neighbors(unsigned i, unsigned j, unsigned k)
     return false;
 
   active_block_.set(i,j,k);
-
   // Set unused blocks to null and load new blocks
   // this is to avoid rereading blocks that are already in memory
-  vcl_set<vgl_point_3d<int>, bvgl_point_3d_cmp<int> > active_neighbors  = neighboring_blocks(active_block_);
-  vcl_set<vgl_point_3d<int>, bvgl_point_3d_cmp<int> >  new_neighbors  = neighboring_blocks(vgl_point_3d<int>(i,j,k));
+  vcl_set<vgl_point_3d<int>, bvgl_point_3d_cmp<int> >  new_active_blocks  = neighboring_blocks(vgl_point_3d<int>(i,j,k));
+  new_active_blocks.insert(vgl_point_3d<int>(i,j,k));
   vcl_set<vgl_point_3d<int>, bvgl_point_3d_cmp<int> >  blocks_to_unload;
   vcl_set<vgl_point_3d<int>, bvgl_point_3d_cmp<int> >  blocks_to_load;
   bvgl_point_3d_cmp<int>  cmp;
-  vcl_set_difference(active_neighbors.begin(), active_neighbors.end(),
-                     new_neighbors.begin(), new_neighbors.end(),
+  vcl_set_difference(active_blocks_.begin(), active_blocks_.end(),
+                     new_active_blocks.begin(), new_active_blocks.end(),
                      vcl_insert_iterator<vcl_set<vgl_point_3d<int>, bvgl_point_3d_cmp<int> > >(blocks_to_unload, blocks_to_unload.begin()),
                      cmp);
 
-  vcl_set_difference(new_neighbors.begin(), new_neighbors.end(),
-                     active_neighbors.begin(), active_neighbors.end(),
+  vcl_set_difference(new_active_blocks.begin(), new_active_blocks.end(),
+                     active_blocks_.begin(), active_blocks_.end(),
                      vcl_insert_iterator<vcl_set<vgl_point_3d<int> , bvgl_point_3d_cmp<int> > > (blocks_to_load, blocks_to_load.begin()),
                      cmp);
+  
+  active_blocks_.clear();
+  active_blocks_ = new_active_blocks;
 
-  vcl_set<vgl_point_3d<int> >::iterator unload_it = blocks_to_unload.begin();
+  vcl_set<vgl_point_3d<int>, bvgl_point_3d_cmp<int> >::iterator unload_it = blocks_to_unload.begin();
 
   for (; unload_it!=blocks_to_unload.end(); unload_it++)
   {
@@ -605,6 +607,7 @@ void boxm_scene<T>::print()
   iter.begin();
   while (!iter.end()) {
     if (this->load_block(iter.index().x(),iter.index().y(),iter.index().z())) {
+      vcl_cout << "Printing Block : " <<  iter.index() << vcl_endl;
       get_active_block()->get_tree()->print();
     }
     iter++;
@@ -660,6 +663,29 @@ bool boxm_scene<T>::unload_blocks(vgl_point_3d<int> min_idx, vgl_point_3d<int> m
       }
   return true;
 }
+
+//: Unload active blocks.
+template <class T>
+void boxm_scene<T>::unload_active_blocks()
+{
+  if(active_blocks_.size()==0)
+    return;
+  
+  vcl_set<vgl_point_3d<int> >::iterator unload_it = active_blocks_.begin();
+  
+  for (; unload_it!=active_blocks_.end(); unload_it++)
+  {
+    boxm_block<T>* block = blocks_((*unload_it).x(),(*unload_it).y(),(*unload_it).z());
+    block->delete_tree();
+    block->set_tree(0);
+    
+  }
+  
+  active_blocks_.clear();
+  return;
+  
+}
+
 
 //: Locate all cells within a 3d region, which coordinates are given in scene coordinates
 template <class T>
@@ -806,8 +832,8 @@ boxm_cell_iterator<T>& boxm_cell_iterator<T>::begin()
 {
   block_iterator_.begin();
 
-  //load active block, retrieve pointer to all cells
-  block_iterator_.scene_->load_block(block_iterator_.index());
+  //load active block using function pointer, retrieve pointer to all cells
+  (block_iterator_.scene_->*block_loading_func_)(block_iterator_.index().x(),block_iterator_.index().y(),block_iterator_.index().z());
   cells_ = (*block_iterator_)->get_tree()->leaf_cells();
   cells_iterator_ = cells_.begin();
 
@@ -849,7 +875,8 @@ boxm_cell_iterator<T>& boxm_cell_iterator<T>::operator++()
     ++block_iterator_;
     if (!block_iterator_.end())
     {
-      block_iterator_.scene_->load_block(block_iterator_.index());
+      //load active block using function pointer, retrieve pointer to all cells
+      (block_iterator_.scene_->*block_loading_func_)(block_iterator_.index().x(),block_iterator_.index().y(),block_iterator_.index().z());
       cells_ = (*block_iterator_)->get_tree()->leaf_cells();
       cells_iterator_ = cells_.begin();
     }
@@ -870,6 +897,11 @@ boct_tree_cell<typename boxm_cell_iterator<T>::loc_type, typename boxm_cell_iter
   return *cells_iterator_;
 }
 
+template<class T>
+vgl_point_3d<double> boxm_cell_iterator<T>::global_origin()
+{
+  return (*block_iterator_)->get_tree()->global_origin(*cells_iterator_);
+}
 
 /******************************************* I/ O *******************************************************/
 
