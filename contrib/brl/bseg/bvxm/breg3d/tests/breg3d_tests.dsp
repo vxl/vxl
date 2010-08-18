@@ -223,6 +223,9 @@ SOURCE=.\test_ekf_camera_optimizer.cxx
 # Begin Source File
 SOURCE=.\test_ekf_camera_optimizer_seq.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_include.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
