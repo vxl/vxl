@@ -1,11 +1,12 @@
-//: Bit Tree library functions: These methods and structure mirror the 
-//  boct_bit_tree class in boct.  The bit tree is an octree with max 
-//  height of 4, who's structure is stored as an implicit bit data 
-//  structure, where each bit signifies that that node has been split: 
-//  i.e. 1 11110000 -> 3 level tree (root,1,2) where the 4 left most 
-//  nodes in level 1 have all split.  Number of nodes can be calculated 
-//  by sum(1-bits) + 1
+//:
 // \file
+//  Bit Tree library functions: These methods and structure mirror the
+//  boct_bit_tree class in boct.  The bit tree is an octree with max
+//  height of 4, who's structure is stored as an implicit bit data
+//  structure, where each bit signifies that that node has been split:
+//  i.e. 1 11110000 -> 3 level tree (root,1,2) where the 4 left most
+//  nodes in level 1 have all split.  Number of nodes can be calculated
+//  by sum(1-bits) + 1
 #define X_MIN (short4)(1,0,0,0);
 #define X_MAX (short4)(1,0,0,1);
 #define Y_MIN (short4)(0,1,0,0);
@@ -70,24 +71,24 @@ uchar child_index(short4 code, short level)
 //--------------------------------------------------------------------
 // returns size (number of data cells) for given tree
 //--------------------------------------------------------------------
-int num_cells(__local uchar* tree) 
+int num_cells(__local uchar* tree)
 {
   //count bits for each byte
   int count = 0 ;
-  for(int i=0; i<10; i++) {
+  for (int i=0; i<10; i++) {
     uchar n = tree[i];
     while (n)  {
       count++ ;
       n &= (n - 1) ;
     }
-  }  
+  }
   return 8*count+1;
 }
 
 //--------------------------------------------------------------------
 // returns the short offset of the data  //TEST THIS
 //--------------------------------------------------------------------
-ushort data_index(__local uchar* tree) 
+ushort data_index(__local uchar* tree)
 {
   //tree[10] and [11] should form the short that refers to data offset
   uchar2 chars = (uchar2) (tree[10], tree[11]);
@@ -102,7 +103,7 @@ int loc_code_to_index(short4 loc_code, int root_level)
 {
   int level = loc_code.w;
   int depth = root_level - level;
-  
+
   //need to map the location code to a number between 0 and 2^(num_levels-1)
   //note: i believe X needs to be the LSB, followed by Y and Z (Z,Y,X)
   ushort packed = 0;
@@ -127,21 +128,21 @@ int loc_code_to_index(short4 loc_code, int root_level)
 //---------------------------------------------------------------------
 // Tree Bit manipulation helper functions
 //---------------------------------------------------------------------
-uchar tree_bit_at(__local uchar* tree, int index) 
+uchar tree_bit_at(__local uchar* tree, int index)
 {
   //make sure it's in bounds - all higher cells are leaves and thus 0
-  if(index > 72) 
+  if (index > 72)
     return 0;
-  
-  //root is special case 
-  if(index == 0)
+
+  //root is special case
+  if (index == 0)
     return tree[0];
-    
+
   //second generation is sort of a special case (speeds up code)
-  if(index < 9)
+  if (index < 9)
     return (1<<(index-1) & tree[1]) ? 1 : 0;
-  
-  //third or 4th generation treated in same way, 
+
+  //third or 4th generation treated in same way,
   int i  = (int) (index-9.0)/8.0 + 2; //byte index i
   int bi = (index-9)%8;
   return (1<<bi & tree[i]) ? 1 : 0;
@@ -149,11 +150,11 @@ uchar tree_bit_at(__local uchar* tree, int index)
 
 void set_tree_bit_at(__local uchar* tree, int index, bool val)
 {
-  if (index > 72) 
+  if (index > 72)
     return;
-  
-  //zero is a special case, 
-  if(index == 0)
+
+  //zero is a special case,
+  if (index == 0)
     tree[0] = (val) ? 1 : 0;
 
   int byte_index = (int) (index-1.0)/8.0+1;
@@ -172,8 +173,8 @@ void set_tree_bit_at(__local uchar* tree, int index, bool val)
 // Return the array pointer to the resulting cell. If a leaf node is
 // encoutered during the traversal down the tree before the specified
 // code is reached, the leaf node index is returned.
-// takes in a uchar* bit tree. 
-// cell_loc_code is the start cell = usually the root.  
+// takes in a uchar* bit tree.
+// cell_loc_code is the start cell = usually the root.
 // cell_loc_code.w = start level = root_level (NUM_LEVELS-1)
 // found_cell_ptr = bit index of octree (will usually contain a 0)
 //-----------------------------------------------------------------
@@ -188,17 +189,17 @@ int traverse(__local uchar* tree, int cell_index, short4 cell_loc_code,
   uchar curr_cell    = tree_bit_at(tree, cell_index);
   int curr_level     = cell_loc_code.w;
   (*found_loc_code)  = cell_loc_code;
-  
-  while(target_level<curr_level && curr_cell == 1)
+
+  while (target_level<curr_level && curr_cell == 1)
   {
     //update found loc code (loc code belonging to correct child)
     uchar c_index     = child_index(target_loc_code, curr_level);
     (*found_loc_code) = child_loc_code(c_index, curr_level-1, *found_loc_code);
-    
+
     //update cell_index = first_child_index + child_offset
     cell_index = (cell_index*8+1) + (int) c_index; //8i+1 + c_index
     curr_cell  = tree_bit_at(tree, cell_index);
-    
+
     //decrement curr_level
     --curr_level;
   }
@@ -224,8 +225,8 @@ int traverse_force(__local uchar* tree, int cell_ptr, short4 cell_loc_code,
   int level = target_loc_code.w;
   if ( level < 0)
     return ret;
-  
-  //begin traversal 
+
+  //begin traversal
   int curr_level   = cell_loc_code.w;
   uchar curr_cell  = tree_bit_at(tree, cell_ptr); // the root of the tree to search
   short4 curr_code = cell_loc_code;
@@ -252,7 +253,7 @@ int traverse_force(__local uchar* tree, int cell_ptr, short4 cell_loc_code,
     //update cell_index = first_child_index + child_offset
     cell_ptr = (cell_ptr*8 + 1) + (int) c_index;
     curr_cell = tree_bit_at(tree, cell_ptr);
-    
+
     found_cell_ptr = cell_ptr;
     (*found_loc_code) = curr_code;
     --curr_level;
@@ -261,7 +262,8 @@ int traverse_force(__local uchar* tree, int cell_ptr, short4 cell_loc_code,
   return found_cell_ptr;
 }
 
-/*
+#if 0 // lots of lines commented out for now...
+
 // tree_offset is the root_ptr index and all the ptrs are offset relative to the root
 int traverse_force(__global int4* cells, int cell_ptr, short4 cell_loc_code,
                    short4 target_loc_code, short4* found_loc_code, int * global_count)
@@ -272,7 +274,7 @@ int traverse_force(__global int4* cells, int cell_ptr, short4 cell_loc_code,
   int level = target_loc_code.w;
   if ( level < 0)
     return ret;
-    
+
   int curr_level = cell_loc_code.w;
   int4 curr_cell = cells[cell_ptr]; // the root of the tree to search
   (*global_count)++;
@@ -362,11 +364,6 @@ int common_ancestor_woffset(__global int4* cells, int cell_ptr, short4 cell_loc_
   }
   return curr_cell_ptr;
 }
-
-
-//--------------------------------------------------------------------
-// Find the common ancestor of a cell given a binary difference
-//
 
 
 //-------------------------------------------------------------------
@@ -720,7 +717,7 @@ int cell_exit_point(float4 ray_org, float4 ray_dir,
 
 int cell_contains_exit_pt(int n_levels, short4 loc_code, float4 exit_pt)
 {
-  exit_pt.w = 0.0f; ///should be no side effects since arg is copied 
+  exit_pt.w = 0.0f; ///should be no side effects since arg is copied
   float4 cell_min, cell_max;
   cell_bounding_box(loc_code, n_levels, &cell_min, &cell_max);
   int4 test =isless(exit_pt , cell_min);
@@ -729,7 +726,7 @@ int cell_contains_exit_pt(int n_levels, short4 loc_code, float4 exit_pt)
   if (any(test)) return 0;
   return 1;
 }
-*/
+#endif // 0
 
 
 // end of library kernels
