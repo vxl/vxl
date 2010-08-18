@@ -91,16 +91,19 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cpp"
 # Begin Source File
-SOURCE=.\test_config.cxx
+SOURCE=.\test_driver.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_driver.cxx
+SOURCE=.\test_config.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vxl_echo.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_build_info.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_include.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
