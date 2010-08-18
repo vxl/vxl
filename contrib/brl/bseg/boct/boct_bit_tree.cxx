@@ -7,20 +7,19 @@
 //: default constructor
 boct_bit_tree::boct_bit_tree()
 {
+  bits_ = new unsigned char[16];
+  
   //initialize num levels, bits
   num_levels_ = 4;
   for (int i=0;i<16; i++)
     bits_[i] = 0;
-
-  //init data
-  float16 init(0.0);
-  for (int i=0; i<585; i++)
-    data_[i] = init;
 }
 
 //: constructor from an array of char bits
 boct_bit_tree::boct_bit_tree(char* bits)
 {
+  bits_ = new unsigned char[16];
+  
   //initialize num levels, bits
   num_levels_ = 4;
 
@@ -31,27 +30,19 @@ boct_bit_tree::boct_bit_tree(char* bits)
   //initialize bits
   for (int i=0;i<73; i++)
     this->set_bit_at(i, (bool) bits[i]);
-
-  //init data
-  float16 init(0.0);
-  for (int i=0; i<585; i++)
-    data_[i] = init;
 }
 
 //: Constructor from boct_tree<short, float> *
 boct_bit_tree::boct_bit_tree(boct_tree<short,float > * tree)
 {
+  bits_ = new unsigned char[16];
+  
   //initialize num levels, bits
   num_levels_ = 4;
 
   //zero out bits to start
   for (int i=0;i<16; i++)
     bits_[i] = 0;
-
-  //init data
-  float16 init(0.0);
-  for (int i=0; i<585; i++)
-    data_[i] = init;
 
   if (tree->number_levels() > 4) {
     vcl_cerr<<"Tree is too deep\n";
@@ -146,6 +137,32 @@ boct_bit_tree::loc_code_to_gen_offset(boct_loc_code<short> loc_code, int depth)
   return packed;
 }
 
+int boct_bit_tree::loc_code_to_index(boct_loc_code<short> loc_code, int root_level)
+{
+  int level = loc_code.level;
+  int depth = root_level - level;
+  
+  //index of first node at depth 
+  int level_index = (int) (int_pow(8, depth)-1) / 7;
+  
+  //need to map the location code to a number between 0 and 2^(num_levels-1)
+  //note: i believe X needs to be the LSB, followed by Y and Z (Z,Y,X)
+  int ri = root_level-1;
+  unsigned short packed = 0;
+  for (int i=depth; i>0; i--, ri--)  {
+    unsigned short mask = 1<<ri;
+    //get bit at mask
+    unsigned short mz = (mask & loc_code.z_loc_)>>ri;
+    unsigned short my = (mask & loc_code.y_loc_)>>ri;
+    unsigned short mx = (mask & loc_code.x_loc_)>>ri;
+    
+    packed += (mz << 3*i-1)
+            + (my << 3*i-2)
+            + (mx << 3*i-3); 
+  }
+  return level_index + packed;
+}
+
 //: Return cell with a particular locational code
 int boct_bit_tree::get_data_index(int bit_index)
 {
@@ -170,7 +187,7 @@ int boct_bit_tree::get_data_index(int bit_index)
     di += 8*bit_at(i);
 
   //offset for child...
-  di += (bit_index-1)%8;
+  di += (bit_index+8-1)%8;
 
   return di;
 }
@@ -195,16 +212,21 @@ int boct_bit_tree::size() const
 unsigned char
 boct_bit_tree::bit_at(int index)
 {
-  if (index > 72) {
-    vcl_cerr<<"No bit above 72, bad get call!\n";
-    return 1;
-  }
-  int bi = 0;
-  unsigned char mask = 0;
-  unsigned char byte = byte_at(index, mask, bi);
-  if (mask & byte)
-    return 1;
-  return 0;
+   //make sure it's in bounds - all higher cells are leaves and thus 0
+  if(index > 72)
+    return 0;
+  
+  //root is special case 
+  if(index == 0)
+    return bits_[0];
+    
+  //second generation is sort of a special case 
+  if(index < 9)
+    return (1<<(index-1) & bits_[1]) ? 1 : 0;
+  
+  int i  = (int) (index-9.0)/8.0 + 2; //byte index i
+  int bi = (index-9)%8;
+  return (1<<bi & bits_[i]) ? 1 : 0;
 }
 
 void
@@ -214,44 +236,16 @@ boct_bit_tree::set_bit_at(int index, bool val)
     vcl_cerr<<"No bit above 72, bad set call!\n";
     return;
   }
+  
+  //zero is a special case, 
+  if(index == 0)
+    bits_[0] = (val) ? 1 : 0;
 
-  //get the relevant byte
-  int byte_index = 0;
-  unsigned char mask = 0;
-  unsigned char byte = byte_at(index, mask, byte_index);
-
-  //set relevant bit (to set 1 or it with the mask)
+  int byte_index = (int) (index-1.0)/8.0+1;
+  int child_offset = (index-1)%8;
+  unsigned char mask = 1<<child_offset;
+  unsigned char byte = bits_[byte_index];
   bits_[byte_index] = (val)? (byte | mask) : (byte & (mask ^ 0xFF));
-}
-
-unsigned char
-boct_bit_tree::byte_at(int index, unsigned char &mask, int &i)
-{
-  if (index > 72) {
-    vcl_cerr<<"No bit above 72, bad get byte call!\n";
-    return 1;
-  }
-  //get the relevant byte
-  unsigned char byte;
-  int depth = this->depth_at(index);
-  i = 0;
-  if (depth==0) {
-    byte = bits_[depth];
-    mask = 1;
-    i=0;
-  }
-  else if (depth==1) {
-    byte = bits_[depth];
-    mask = 1<<(index-1);
-    i=1;
-  }
-  else {
-    i = (index-9)/8 + 2;  //fraction of 64 + 2...
-    byte = bits_[i];
-    int bi = (index-9) % 8;
-    mask = 1<<bi;
-  }
-  return byte;
 }
 
 // A local implementation for floor(log(a)/log(8)) with integer argument a;
@@ -274,8 +268,14 @@ int boct_bit_tree::depth_at(int index) const
 
 
 //------ I/O ----------------------------------------------------------
-vcl_ostream& operator <<(vcl_ostream &s, boct_bit_tree t)
+vcl_ostream& operator <<(vcl_ostream &s, boct_bit_tree &t)
 {
+  unsigned char* bits = t.get_bits();
+  s << "BOCT_BIT_TREE: " << vcl_endl
+    << "bytes: " << vcl_endl;
+  for(int i=0; i<16; i++)
+    s << "byte "<<i<<": "<< (int) bits[i] <<vcl_endl;
+  
   s << "Tree bits:\n"
     << "depth 0: "<< (int) (t.bit_at(0)) << vcl_endl;
 

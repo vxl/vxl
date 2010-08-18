@@ -26,16 +26,17 @@ class boct_bit_tree
 {
  public:
 
-  typedef vnl_vector_fixed<float,16> float16;
-  typedef vnl_vector_fixed<unsigned char,16> uchar16;
-
   //: Default constructor
   boct_bit_tree();
   boct_bit_tree(char* bits);
   boct_bit_tree(boct_tree<short,float > * tree);
 
   //: Destructor
-  ~boct_bit_tree() {}
+  ~boct_bit_tree() {
+    if(bits_) { 
+      delete[] bits_; bits_ = NULL;
+    }
+  }
 
   //: Returns index of data for given bit
   int get_data_index(int bit_index);
@@ -62,33 +63,28 @@ class boct_bit_tree
   //: maps location code to the finest level generation index
   //  I.e., [0,0,0]->0, [1,1,1]->7
   unsigned short loc_code_to_gen_offset(boct_loc_code<short> loc_code, int depth);
+  static int loc_code_to_index(boct_loc_code<short> loc_code, int root_level);
 
   //-- BIT manipulation wrapper functions ------------------------------
 
   //: returns value (0 or 1) of bit at given index (0,73);
   unsigned char bit_at(int index);
-  //: returns byte at given index (0,73), mask to get bit, byte index to set bit
-  unsigned char byte_at(int index, unsigned char &mask, int &i);
   //: sets bit at given index with bool value
   void set_bit_at(int index, bool val);
 
   //get bits and data
   unsigned char* get_bits() {return bits_; }
-  float16* get_data() {return data_; }
 
  private:
 
   //: Tree structure stored as "bits" = really a char array
-  unsigned char bits_[16];
-
-  //: data is in flat array - this should also maintain byte order
-  float16 data_[585];
+  unsigned char* bits_;
 
   //: Maximum number of levels in the octree
   short num_levels_;
 };
 
-vcl_ostream& operator <<(vcl_ostream &s, boct_bit_tree t);
+vcl_ostream& operator <<(vcl_ostream &s, boct_bit_tree &t);
 
 
 #endif // boct_bit_tree_h_
