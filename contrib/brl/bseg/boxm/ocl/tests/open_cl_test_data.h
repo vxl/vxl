@@ -24,6 +24,9 @@ class open_cl_test_data
   static boct_tree<short, T >* tree();
   
   template <class T>
+  static boct_tree<short, T >* four_tree();
+  
+  template <class T>
   static boct_tree<short, T >* simple_tree();
   
   template <class T>
@@ -115,6 +118,44 @@ boct_tree<short,T > * open_cl_test_data::simple_tree()
           <<"root level "<<ret_tree->root_level()<<vcl_endl
           <<"current finest level "<<ret_tree->finest_level()<<vcl_endl
           <<"-------------------------------------------------------"<<vcl_endl;
+  return ret_tree;
+}
+template <class T>
+boct_tree<short,T > * open_cl_test_data::four_tree()
+{
+  vcl_vector<boct_tree_cell<short, T > > leaves;
+  vcl_vector<vgl_point_3d<double> > pts;
+  pts.push_back(vgl_point_3d<double>(0,0,0));
+  pts.push_back(vgl_point_3d<double>(0.51,0,0));
+  pts.push_back(vgl_point_3d<double>(0,0.51,0));
+  pts.push_back(vgl_point_3d<double>(0.51,0.51,0));
+  pts.push_back(vgl_point_3d<double>(0,0,0.51));
+  pts.push_back(vgl_point_3d<double>(0.51,0,0.51));
+  pts.push_back(vgl_point_3d<double>(0.0,0.51,0.51));
+  pts.push_back(vgl_point_3d<double>(0.51,0.51,0.51));
+  vcl_vector<boct_loc_code<short> > leaf_codes;
+  unsigned n_levels = 4;
+  for (unsigned i = 0; i<8; ++i) {
+    boct_loc_code<short> loc(pts[i], n_levels-1);
+    vcl_cout << "code[" << i << "] = " << loc << '\n';
+    leaf_codes.push_back(loc);
+  }
+  for (unsigned i = 0; i<8; ++i) {
+    boct_tree_cell<short, T > leaf(leaf_codes[i]);
+    leaves.push_back(leaf);
+  }
+  boct_tree<short, T > *init_tree =
+    new boct_tree<short, T >(n_levels, 0);
+
+  boct_tree_cell<short, T > *root =
+    init_tree->construct_tree(leaves, init_tree->number_levels());
+
+  boct_tree<short, T > * ret_tree =
+    new boct_tree<short, T >(root, init_tree->number_levels());
+  delete init_tree;
+  set_data(ret_tree);
+  const vgl_box_3d<double> box(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
+  ret_tree->set_bbox(box);
   return ret_tree;
 }
 
