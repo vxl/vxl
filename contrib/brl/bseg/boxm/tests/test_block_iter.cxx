@@ -36,8 +36,6 @@ static void test_block_iter()
   scene.block_num(x,y,z);
   TEST("Number of blocks iterator visits", num_blocks, x*y*z);
   
-  boxm_cell_iterator<tree_type> cell_it = scene.cell_iterator();
-
 }
 
 TESTMAIN(test_block_iter);

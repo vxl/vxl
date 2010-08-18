@@ -13,7 +13,7 @@
 
 void init_tree(boct_tree<short,float> *tree, unsigned i);
 
-boxm_scene<boct_tree<short, float> >* create_scene();
+boxm_scene<boct_tree<short, float> >* create_scene(unsigned world_dimx = 2,unsigned world_dimy = 2,unsigned world_dimz = 2);
 
 void clean_up();
 

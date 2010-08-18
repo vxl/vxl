@@ -12,7 +12,7 @@ void test_cell_iterator()
   boxm_scene<boct_tree<short, float> > *scene = create_scene();
 
   //get the iterator
-  boxm_cell_iterator<boct_tree<short, float > > iterator = scene->cell_iterator();
+  boxm_cell_iterator<boct_tree<short, float > > iterator = scene->cell_iterator(&boxm_scene<boct_tree<short, float> >::load_block_and_neighbors);
   
   iterator.begin();
   
@@ -20,7 +20,7 @@ void test_cell_iterator()
   unsigned num_cells = 0;
   bool result = true;
 
-  while (cell) {
+  while (!iterator.end()) {
      
     if( (vcl_abs(cell->data() - 0.8) > 1e-7) && (vcl_abs(cell->data() - 0.5) > 1e-7) ){
       result = false;
