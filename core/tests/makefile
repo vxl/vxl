@@ -4,10 +4,13 @@ include ${VXLROOT}/core/testlib/config.mk
 # This is where configure will put test_build_info.h
 INCDIRS += $(RELOBJDIR)
 
-TESTMAIN = test_driver.cxx
+TESTMAIN := test_driver.cxx
 TESTS += test_config.cxx
 TESTS += test_build_info.cxx
+
+MINI_PROG_SOURCES += test_include.cxx
 MINI_PROG_SOURCES += vxl_echo.cxx
+
 MANPAGE_SOURCES += test_build_info.h.in
 
 #########################################
@@ -26,4 +29,3 @@ $(RELOBJDIR)/test_build_info.h: test_build_info.h.in
 	ln -s $(VXLROOT)/core/vnl $(RELOBJDIR)/core/vnl
 	ln -s $(VXLROOT)/core/vil/$(RELOBJDIR)/include/vil $(RELOBJDIR)/core/vil
 	touch $(RELOBJDIR)/Note.txt $(RELOBJDIR)/CMakeCache.txt $(RELOBJDIR)/CMakeError.log
-
