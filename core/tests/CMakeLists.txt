@@ -37,6 +37,8 @@ ADD_EXECUTABLE( core_test_all
 )
 TARGET_LINK_LIBRARIES( core_test_all testlib vcl )
 
+ADD_EXECUTABLE( vxl_test_include test_include.cxx )
+
 ADD_TEST( core_test_config ${EXECUTABLE_OUTPUT_PATH}/core_test_all test_config )
 ADD_TEST( core_test_build_info ${EXECUTABLE_OUTPUT_PATH}/core_test_all test_build_info )
 
