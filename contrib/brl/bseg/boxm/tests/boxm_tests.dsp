@@ -230,6 +230,9 @@ SOURCE=.\test_cell_iterator.cxx
 SOURCE=.\test_region_finder.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_load_neighboring_blocks.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group
