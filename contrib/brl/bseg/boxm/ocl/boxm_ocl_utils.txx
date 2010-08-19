@@ -533,8 +533,8 @@ void boxm_ocl_convert<T>::convert_bit_scene(boxm_scene<boct_tree<short, T> >* sc
 
   /* 5. Go through each block and convert it to smaller blocks */
   vbl_array_1d<unsigned short> blocksInBuffer(num_buffers+1, (unsigned short) 0);//# of blocks in each buffer
-  vnl_random random(9667566);
   boxm_block_iterator<tree_type> iter(scene);
+  vnl_random random(9667566);
   for (iter.begin(); !iter.end(); iter++) {
     vcl_cout<<"Converting big block at "<<iter.index()<<vcl_endl;
     vgl_point_3d<int> blk_ind = iter.index();
@@ -566,12 +566,12 @@ void boxm_ocl_convert<T>::convert_bit_scene(boxm_scene<boct_tree<short, T> >* sc
       vcl_vector<int4> cell_array; cell_array.push_back(arr_root);
       vcl_vector<float16> data_array; data_array.push_back(dat_init);
       boxm_ocl_convert<T>::copy_to_arrays(root, cell_array, data_array, 0);
-      //if(cell_array.size() != data_array.size()) {
-        //vcl_cerr<<"Data array and cell array do not match size: "
-                //<<"cell: "<<cell_array.size()
-                //<<" data: "<<data_array.size()
-        //return;
-      //}
+      if(cell_array.size()+1 != data_array.size()) {
+        vcl_cerr<<"Data array and cell array do not match size: "
+                <<"cell: "<<cell_array.size()
+                <<" data: "<<data_array.size();
+        return;
+      }
       tot_alloc += cell_array.size();
 
       //create bit tree (the bit tree now has the bit and data encoding)
@@ -579,35 +579,24 @@ void boxm_ocl_convert<T>::convert_bit_scene(boxm_scene<boct_tree<short, T> >* sc
       // data array are in the right order
       boct_bit_tree currTree(cell_array, data_array);
 
-      /* randomly place block into a buffer  */
-      //choose random buff index to start out with
-      int buffIndex = random.lrand32(0, num_buffers-1);
-      unsigned short start = mem_ptrs[buffIndex][0];
-      unsigned short end   = mem_ptrs[buffIndex][1];
-      int freeSpace = (start >= end)? start-end : BUFF_LENGTH - (end-start); //free cells in data buffer
-
-      //if there isn't enough space in this buffer, find another one
-      if (freeSpace < cell_array.size() || blocksInBuffer[buffIndex] >= blocks_per_buffer) {
-        int bCount = 0;
-        bool buffFound = false;
-        while (!buffFound && bCount < num_buffers*5) {
-          bCount++;
-          buffIndex = random.lrand32(0, num_buffers-1);
-          start=mem_ptrs[buffIndex][0];
-          end = mem_ptrs[buffIndex][1];
-          freeSpace = (start >= end)? start-end : BUFF_LENGTH - (end-start);
-          if (freeSpace >= cell_array.size() && blocksInBuffer[buffIndex] < blocks_per_buffer)
-            buffFound = true;
-        }
-        if (!buffFound) {
-          buffIndex = num_buffers; //use emergency space
-          vcl_cout<<"!!! using emergency space !!!"<<vcl_endl;
-        }
+      /* randomly (or deterministically if snapping) 
+       * place block into a buffer  */
+      bool rand = (max_mb>0);
+      int buffIndex = boxm_ocl_utils::getBufferIndex(rand, mem_ptrs, 
+                                                    blocksInBuffer, 
+                                                    BUFF_LENGTH,
+                                                    blocks_per_buffer,
+                                                    cell_array.size(),
+                                                    random);
+      if(buffIndex < 0) {
+        vcl_cout<<"boxm_ocl_utils::convert_scene: ERROR\n"
+                <<"BIG BLOCK @ "<<blk_ind<<", small block @ "<<sm_ind<<'\n'
+                <<" FILLED BUFFER. FAILED TO CREATE NEW SCENE.\n"; 
+         return;
       }
-
       //point block to chosen buffer
       int treeOffset = blocksInBuffer[buffIndex];   
-      ushort2 blk((unsigned short) 0);
+      ushort2 blk;
       blk[0] = buffIndex;            //buffer index
       blk[1] = treeOffset;           //tree offset to root
       blocks(i,j,k) = blk;
@@ -615,34 +604,18 @@ void boxm_ocl_convert<T>::convert_bit_scene(boxm_scene<boct_tree<short, T> >* sc
       //copy data into data buffer (keep track of start index for tree)
       float* data = currTree.get_data();
       unsigned short buffOffset = mem_ptrs[buffIndex][1]-1; //minus one cause mem_end points to one past the last one
-      start = mem_ptrs[buffIndex][0];
-      end   = mem_ptrs[buffIndex][1];
-      freeSpace = (start >= end)? start-end : BUFF_LENGTH - (end-start);
-      if (freeSpace >= cell_array.size()) {
-        for (unsigned int c=0; c<data_array.size(); ++c) {
-          //create float16 datum
-          float16 datum; 
-          for (unsigned int d=0; d<16; d++) 
-            datum[d] = data[16*c+d];
-          data_buffers(buffIndex, buffOffset+c) = datum;
-        }
-        //update end of tree data in mem_ptrs
-        mem_ptrs[buffIndex][1] += data_array.size();
+      unsigned short start = mem_ptrs[buffIndex][0];
+      unsigned short end   = mem_ptrs[buffIndex][1];
+      unsigned short freeSpace = (start >= end)? start-end : BUFF_LENGTH - (end-start);
+      for (unsigned int c=0; c<cell_array.size(); ++c) {
+        //create float16 datum
+        float16 datum; 
+        for (unsigned int d=0; d<16; d++) 
+          datum[d] = data[16*c+d];
+        data_buffers(buffIndex, buffOffset+c) = datum;
       }
-      else {
-        // all resources have been exhausted - this should never ever happen
-        vcl_cout<<"boxm_ocl_utils::convert_scene: ERROR\n"
-                <<"BIG BLOCK @ "<<blk_ind<<", small block @ "<<sm_ind<<'\n'
-                <<" FILLED BUFFER. FAILED TO CREATE NEW SCENE.\n"
-                <<"mem layout:"<<vcl_endl;
-        for (unsigned int i=0; i<mem_ptrs.size(); ++i) {
-          start = mem_ptrs[i][0];
-          end   = mem_ptrs[i][1];
-          freeSpace = (start >= end)? start-end : BUFF_LENGTH - (end-start);
-          vcl_cout<<" buff "<<i<<": "<<freeSpace<<" ["<<start<<','<<end<<']'<<vcl_endl;
-        }
-        return;
-      }
+      //update end of tree data in mem_ptrs
+      mem_ptrs[buffIndex][1] += cell_array.size();
       
       //copy tree into tree buffer (pack buffOffset into chars 10-11
       uchar16 treeBlk;
