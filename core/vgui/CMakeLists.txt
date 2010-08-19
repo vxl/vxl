@@ -49,6 +49,7 @@ IF (OPENGL_FOUND)
   INCLUDE(${CMAKE_ROOT}/Modules/FindQt.cmake)
   INCLUDE(${CMAKE_ROOT}/Modules/FindGTK.cmake)
   INCLUDE(${MODULE_PATH}/NewCMake/FindGTK2.cmake)
+  INCLUDE(${MODULE_PATH}/NewCMake/FindWin32SDK.cmake)
   IF(NOT MINGW)
     # MFC is not available in MinGW.
     # This should be fixed in FindMFC.cmake and then this IF can be removed
@@ -339,6 +340,33 @@ IF (QT_FOUND)
   ENDIF(VGUI_USE_QT)
 
 ENDIF (QT_FOUND)
+
+##################################################
+# Win32SDK
+##################################################
+
+IF (WIN32SDK_FOUND)
+
+  OPTION(VGUI_USE_WIN32SDK "Should Win32SDK support be compiled into vgui?" YES)
+
+  IF(VGUI_USE_WIN32SDK)
+
+    SET(vgui_win32sdk_sources
+      impl/win32/vgui_win32.cxx             impl/win32/vgui_win32.h
+      impl/win32/vgui_win32_adaptor.cxx     impl/win32/vgui_win32_adaptor.h
+      impl/win32/vgui_win32_cmdtarget.cxx   impl/win32/vgui_win32_cmdtarget.h
+      impl/win32/vgui_win32_dialog_impl.cxx impl/win32/vgui_win32_dialog_impl.h
+      impl/win32/vgui_win32_statusbar.cxx   impl/win32/vgui_win32_statusbar.h
+      impl/win32/vgui_win32_tag.cxx
+      impl/win32/vgui_win32_utils.h         impl/win32/vgui_win32_utils.cxx
+      impl/win32/vgui_win32_window.cxx      impl/win32/vgui_win32_window.h
+    )
+
+    SET( vgui_sources ${vgui_sources} ${vgui_win32sdk_sources} )
+
+  ENDIF(VGUI_USE_WIN32SDK)
+
+ENDIF (WIN32SDK_FOUND)
 
 ##################################################
 # MFC

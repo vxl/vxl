@@ -24,6 +24,13 @@
 #endif
 #undef OPENGL_XMESA_FOUND
 
+#cmakedefine WIN32SDK_FOUND
+#undef VGUI_WIN32SDK
+#ifdef WIN32SDK_FOUND
+#  define VGUI_WIN32SDK
+#endif
+#undef WIN32SDK_FOUND
+
 #cmakedefine MFC_FOUND
 #undef VGUI_MFC
 #ifdef MFC_FOUND
@@ -49,6 +56,8 @@
 #cmakedefine VGUI_USE_GLUT
 #undef VGUI_USE_QT
 #cmakedefine VGUI_USE_QT
+#undef VGUI_USE_WIN32SDK
+#cmakedefine VGUI_USE_WIN32SDK
 #undef VGUI_USE_MFC
 #cmakedefine VGUI_USE_MFC
 #undef VGUI_USE_WX

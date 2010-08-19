@@ -52,6 +52,7 @@ extern int vgui_Xm_tag_function();
 extern int vgui_qt_tag_function();
 extern int vgui_SDL_tag_function();
 extern int vgui_accelerate_x11_tag_function();
+extern int vgui_win32_tag_function();
 //extern int vgui_accelerate_mfc_tag_function();
 
 //: Registers all the available toolkit implementations.
@@ -91,6 +92,9 @@ int vgui_register_all_implementations()
 #endif
 #ifdef VGUI_USE_GLUT
   vgui_glut_tag_function();
+#endif
+#ifdef VGUI_USE_WIN32SDK
+  vgui_win32_tag_function();
 #endif
 
   return 0;
