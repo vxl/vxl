@@ -54,7 +54,8 @@ class boxm_render_bit_scene_manager : public bocl_manager<boxm_render_bit_scene_
     scene_x_(0),scene_y_(0),scene_z_(0),
     wni_(1), wnj_(1),
     output_img_(),
-    output_(0) {}
+    output_(0),
+    bit_lookup_(0) {}
 
   ~boxm_render_bit_scene_manager() {
     if (program_)
@@ -237,6 +238,8 @@ class boxm_render_bit_scene_manager : public bocl_manager<boxm_render_bit_scene_
   cl_uint    wni_;
   cl_uint    wnj_;
   
+  //bit lookup table
+  cl_uchar*  bit_lookup_;
   //debugger
   cl_float*  output_;
 
@@ -256,6 +259,7 @@ class boxm_render_bit_scene_manager : public bocl_manager<boxm_render_bit_scene_
   cl_mem   block_ptrs_buf_;
   cl_mem   block_dims_buf_;
 
+  cl_mem   bit_lookup_buf_;
   cl_mem   output_buf_;
   //------------------------------------------------------------------
   // scene and cam information in c++ format
