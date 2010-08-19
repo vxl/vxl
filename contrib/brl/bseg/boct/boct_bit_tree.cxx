@@ -3,12 +3,14 @@
 #include "boct_bit_tree.h"
 #include "boct_tree_cell.h"
 #include <vcl_iostream.h>
+#include <vcl_list.h>
 
 //: default constructor
 boct_bit_tree::boct_bit_tree()
 {
   bits_ = new unsigned char[16];
-  
+  data_ = new float[585*16];
+
   //initialize num levels, bits
   num_levels_ = 4;
   for (int i=0;i<16; i++)
@@ -19,7 +21,8 @@ boct_bit_tree::boct_bit_tree()
 boct_bit_tree::boct_bit_tree(char* bits)
 {
   bits_ = new unsigned char[16];
-  
+  data_ = new float[585*16];
+
   //initialize num levels, bits
   num_levels_ = 4;
 
@@ -36,7 +39,8 @@ boct_bit_tree::boct_bit_tree(char* bits)
 boct_bit_tree::boct_bit_tree(boct_tree<short,float > * tree)
 {
   bits_ = new unsigned char[16];
-  
+  data_ = new float[585*16];
+
   //initialize num levels, bits
   num_levels_ = 4;
 
@@ -53,6 +57,85 @@ boct_bit_tree::boct_bit_tree(boct_tree<short,float > * tree)
   this->encode(root, 0);
 }
 
+//: constructor from vcl_vector<int4>
+boct_bit_tree::boct_bit_tree(vcl_vector<int4> tree, vcl_vector<float16> data)
+{
+  bits_ = new unsigned char[16];
+  data_ = new float[585*16];
+  
+  //initialize num levels, bits
+  num_levels_ = 4;
+
+  //zero out bits to start
+  for (int i=0; i<16; i++)
+    bits_[i] = 0;
+  for (int i=0; i<585*16; i++)
+    data_[i] = 0.0;
+  
+  //encode tree
+  int4 root = tree[0];
+  this->encode(root, 0, tree);
+  
+  //encode data.. 
+  this->encode_data(tree, data);
+  
+  //run a comparison test to make sure the information is identical
+  if(!this->verify_tree(0, 0, tree,data)) {
+    vcl_cout<<"-----------------------------------------------"<<vcl_endl;
+    vcl_cout<<(*this)<<vcl_endl;
+    this->print_input_tree(tree, data);
+    vcl_cout<<"-----------------------------------------------"<<vcl_endl;
+  }
+}
+
+//Depth first search traversal, comparing children's data along the way...
+bool boct_bit_tree::verify_tree(int i, int node, vcl_vector<int4> tree, vcl_vector<float16> data)
+{
+  //make sure tree encoding is correct
+  int child = tree[node][1];
+  if( ((bit_at(i) == 1) && (child<0)) || ((bit_at(i) == 0) && (child>0)) ) {
+    vcl_cout<<"Bit at "<<i<<" is one, input child is null - BAD"<<vcl_endl;
+    return false;
+  }
+
+  if(bit_at(i) == 1) {
+    bool good = true;
+    for(int c=0; c<8; c++)
+      good = good && verify_tree(8*i+1+c, child+c, tree, data);
+    return good;
+  }
+  
+  float16 tree_dat = data[tree[node][2]]; 
+  int bit_dat  = get_data_index(i);
+  int same = true;
+  for(int j=0; j<16; j++) 
+    same = same && (data_[bit_dat+j] == tree_dat[j]);
+  
+  if(!same) 
+      vcl_cout<<"!! TREE ENCODING IS BAD AT BIT: "<<i<<" node "<<node<<vcl_endl;
+  return same;
+}
+
+
+//debug printer - should print tree depth first search wise
+void boct_bit_tree::print_input_tree(vcl_vector<int4> tree, vcl_vector<float16> data)
+{
+  vcl_cout<<"INPUT TREE: "<<vcl_endl;
+  
+  //print generation 1 data (root data)
+  int root_data = tree[0][2];
+  vcl_cout<<"root_data: "<<data[root_data]<<vcl_endl;
+  
+  //print generation 2 data 
+  int child = tree[0][1];
+  if(child > 0) {
+    for(int i=0; i<8; i++) {
+      int data_ptr = tree[child][2];
+      vcl_cout<<" child@"<<i+1<<": "<<data[data_ptr]<<vcl_endl;
+    }
+  }
+}
+
 //: helper recursive method encode
 void boct_bit_tree::encode(boct_tree_cell<short, float>* node, int i)
 {
@@ -65,6 +148,48 @@ void boct_bit_tree::encode(boct_tree_cell<short, float>* node, int i)
     boct_tree_cell<short, float>* children = node->children();
     for (unsigned c=0; c<8; c++) {
       this->encode(&children[c], (8*i+1)+c);
+    }
+  }
+}
+
+void boct_bit_tree::encode(int4 node, int i, vcl_vector<int4> tree)
+{
+  if (node[1] >= 0)
+  {
+    //set bit to 1
+    this->set_bit_at(i,1);
+    
+    //recur on each child
+    int child_ptr = node[1];
+    for(unsigned c=0; c<8; c++) {
+      this->encode(tree[child_ptr+c], (8*i+1)+c, tree);
+    }
+  }
+}
+
+void boct_bit_tree::encode_data(vcl_vector<int4> tree, vcl_vector<float16> data)
+{
+  int dataIndex = 0;
+
+  //run a BFS to re-order data items
+  vcl_list<int> open;
+  open.push_back(0);
+  while(!open.empty()) {
+    
+    int curr = open.front(); open.pop_front();
+    int4 currNode = tree[curr];
+    float16 currData = data[currNode[2]];
+    
+    //insert current node's data into array
+    for(int i=0; i<16; i++)
+      data_[dataIndex+i] = currData[i];
+    dataIndex += 16;
+
+    //enqueue child nodes
+    if(currNode[1] > 0) {
+      int childPtr = currNode[1];
+      for(int i=0; i<8; i++)
+        open.push_back(childPtr+i);
     }
   }
 }
@@ -173,7 +298,6 @@ int boct_bit_tree::get_data_index(int bit_index)
   //data index starts at 1
   int di = 1;
 
-  //pi = floor((i-1)/8) (because child = 8i+1)
   int pi = (bit_index-1)/8; // automatically rounding downwards
 
   //check to make sure that the parent of this index is one, otherwise return failure;
@@ -189,7 +313,7 @@ int boct_bit_tree::get_data_index(int bit_index)
   //offset for child...
   di += (bit_index+8-1)%8;
 
-  return di;
+  return di*16;   //times 16 because data is stored as 16 floats
 }
 
 //: return number of cells in this tree (size of data chunk)
@@ -271,32 +395,47 @@ int boct_bit_tree::depth_at(int index) const
 vcl_ostream& operator <<(vcl_ostream &s, boct_bit_tree &t)
 {
   unsigned char* bits = t.get_bits();
-  s << "BOCT_BIT_TREE: " << vcl_endl
-    << "bytes: " << vcl_endl;
-  for(int i=0; i<16; i++)
-    s << "byte "<<i<<": "<< (int) bits[i] <<vcl_endl;
+  float* data = t.get_data();
+  s << "BOCT_BIT_TREE: " << vcl_endl;
+    //<< "bytes: " << vcl_endl;
+  //for(int i=0; i<16; i++)
+    //s << "byte "<<i<<": "<< (int) bits[i] <<vcl_endl;
   
   s << "Tree bits:\n"
     << "depth 0: "<< (int) (t.bit_at(0)) << vcl_endl;
+  int dat_index = t.get_data_index(0);
+  s << "   data at 0 ("<<dat_index<<"):";
+  for(int i=0; i<16; i++)
+    s << data[dat_index+i] << " ";
+  s << '\n';
 
   //one
-  s << "depth 1: ";
-  for (int i=1; i<9; i++)
-    s<< (int) t.bit_at(i) << "  ";
-  s << '\n';
-
-  //two
-  s << "depth 2: ";
-  for (int i=9; i<73; i++)
-  {
-    if ((i-9)%16 == 0 && i != 9)
-      s<<"\n         ";
-    else if ((i-9)%8 == 0 && i != 9)
-      s<<"    ";
-
-    s << (int) t.bit_at(i) << ' ';
+  if(t.bit_at(0)) {
+    s << "depth 1: ";
+    for (int i=1; i<9; i++)
+      s<< (int) t.bit_at(i) << "  ";
+    s << '\n';
+    for(int i=1; i<9; i++) {
+      dat_index = t.get_data_index(i);
+      s << "   data at 1 ("<<dat_index<<"):";
+      for(int j=0; j<16; j++)
+        s << data[dat_index+j] << " ";
+      s << '\n';
+    }
   }
-  s << '\n';
+  
+  ////two
+  //s << "depth 2: ";
+  //for (int i=9; i<73; i++)
+  //{
+    //if ((i-9)%16 == 0 && i != 9)
+      //s<<"\n         ";
+    //else if ((i-9)%8 == 0 && i != 9)
+      //s<<"    ";
+
+    //s << (int) t.bit_at(i) << ' ';
+  //}
+  //s << '\n';
   return s;
 }
 

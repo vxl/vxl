@@ -21,20 +21,29 @@
 #include <vgl/vgl_box_3d.h>
 #include <vcl_bitset.h>
 #include <vcl_iosfwd.h>
+#include <vnl/vnl_vector_fixed.h>
+#include <vcl_vector.h>
 
 class boct_bit_tree
 {
+  typedef vnl_vector_fixed<int,4> int4;
+  typedef vnl_vector_fixed<float,16> float16;
+  
  public:
 
   //: Default constructor
   boct_bit_tree();
   boct_bit_tree(char* bits);
   boct_bit_tree(boct_tree<short,float > * tree);
+  boct_bit_tree(vcl_vector<int4> tree, vcl_vector<float16> data);
 
   //: Destructor
   ~boct_bit_tree() {
     if(bits_) { 
       delete[] bits_; bits_ = NULL;
+    }
+    if(data_) {
+      delete[] data_; data_ = NULL;
     }
   }
 
@@ -59,6 +68,10 @@ class boct_bit_tree
 
   //: encodes a boct_tree<short, float> (for testing purposes)
   void encode(boct_tree_cell<short, float>* node, int i);
+  void encode(int4 node, int i, vcl_vector<int4> tree);
+  void encode_data(vcl_vector<int4> tree, vcl_vector<float16> data);
+  bool verify_tree(int i, int node, vcl_vector<int4> tree, vcl_vector<float16> data);
+  void print_input_tree(vcl_vector<int4> tree, vcl_vector<float16> data);
 
   //: maps location code to the finest level generation index
   //  I.e., [0,0,0]->0, [1,1,1]->7
@@ -74,11 +87,15 @@ class boct_bit_tree
 
   //get bits and data
   unsigned char* get_bits() {return bits_; }
+  float* get_data() {return data_; }
 
  private:
 
   //: Tree structure stored as "bits" = really a char array
   unsigned char* bits_;
+  
+  //: data - kept as float 16... 
+  float* data_;
 
   //: Maximum number of levels in the octree
   short num_levels_;
