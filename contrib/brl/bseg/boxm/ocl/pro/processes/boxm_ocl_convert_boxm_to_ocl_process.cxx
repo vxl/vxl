@@ -31,14 +31,14 @@ bool boxm_ocl_convert_boxm_to_ocl_process_cons(bprb_func_process& pro)
   // process takes 4 inputs and no outputs
   // input[0]: inout scene binary file
   // input[1]: output scene dir
-  // input[2]: num buffers
-  // input[3]: max megabytes for OCL_Scene
+  // input[2]: max megabytes for OCL_Scene
+  // input[3]: boolean (true = bit tree, false = ocl_scene)
   vcl_vector<vcl_string> input_types_(n_inputs_);
   vcl_vector<vcl_string> output_types_(n_outputs_);
   input_types_[0] = "boxm_scene_base_sptr";
   input_types_[1] = "vcl_string";
   input_types_[2] = "int";
-  input_types_[3] = "int";
+  input_types_[3] = "bool";
 
   return pro.set_input_types(input_types_)
       && pro.set_output_types(output_types_);
@@ -57,8 +57,8 @@ bool boxm_ocl_convert_boxm_to_ocl_process(bprb_func_process& pro)
   unsigned i = 0;
   boxm_scene_base_sptr scene_ptr = pro.get_input<boxm_scene_base_sptr>(i++);
   vcl_string output_dir = pro.get_input<vcl_string>(i++);
-  int num_buffers = pro.get_input<int>(i++);
   int max_mb = pro.get_input<int>(i++);
+  bool bit_tree = pro.get_input<bool>(i++);
 
   // check the scene's appearance model
   switch (scene_ptr->appearence_model())
@@ -69,10 +69,18 @@ bool boxm_ocl_convert_boxm_to_ocl_process(bprb_func_process& pro)
       boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
 
       //convert
-      boxm_ocl_scene ocl_scene;
-      boxm_ocl_convert<boxm_sample<BOXM_APM_MOG_GREY> >::convert_scene(scene, num_buffers, ocl_scene, max_mb);
-      vcl_cout<<ocl_scene<<vcl_endl;
-      ocl_scene.save_scene(output_dir);
+      if(bit_tree) {
+        boxm_ocl_bit_scene bit_scene;
+        boxm_ocl_convert<boxm_sample<BOXM_APM_MOG_GREY> >::convert_bit_scene(scene, bit_scene, max_mb);
+        vcl_cout<<bit_scene<<vcl_endl;
+        bit_scene.save_scene(output_dir);
+      }
+      else {
+        boxm_ocl_scene ocl_scene;
+        boxm_ocl_convert<boxm_sample<BOXM_APM_MOG_GREY> >::convert_scene(scene, ocl_scene, max_mb);
+        vcl_cout<<ocl_scene<<vcl_endl;
+        ocl_scene.save_scene(output_dir);
+      }
       break;
     }
     case BOXM_APM_SIMPLE_GREY:

@@ -13,7 +13,6 @@
 #define Y_MAX (short4)(0,1,0,1);
 #define Z_MIN (short4)(0,0,1,0);
 #define Z_MAX (short4)(0,0,1,1);
-#define NUM_LEVELS 4
 
 // Note: in the code below the term "level" always refers to the
 // 'index' of the level. That is, if there are 5 levels in an octree
@@ -86,17 +85,6 @@ int num_cells(__local uchar* tree)
 }
 
 //--------------------------------------------------------------------
-// returns the short offset of the data  //TEST THIS
-//--------------------------------------------------------------------
-ushort data_index(__local uchar* tree)
-{
-  //tree[10] and [11] should form the short that refers to data offset
-  uchar2 chars = (uchar2) (tree[10], tree[11]);
-  ushort index = as_ushort(chars);
-  return index;
-}
-
-//--------------------------------------------------------------------
 // loc code to absolute index //UNTESTED
 //--------------------------------------------------------------------
 int loc_code_to_index(short4 loc_code, int root_level)
@@ -163,6 +151,43 @@ void set_tree_bit_at(__local uchar* tree, int index, bool val)
   unsigned char byte = tree[byte_index];
   tree[byte_index] = (val)? (byte | mask) : (byte & (mask ^ 0xFF));
 }
+
+//--------------------------------------------------------------------
+// returns the short offset of the data  //TEST THIS
+// unpacks offset (ushort) from tree[10] and tree[11],
+// also counts the bits until parent of index, adds it to the offset
+//--------------------------------------------------------------------
+ushort data_index(__local uchar* tree, int bit_index)
+{
+  ////Unpack data offset (offset to root data)
+  //tree[10] and [11] should form the short that refers to data offset
+  uchar2 chars = (uchar2) (tree[11], tree[10]);
+  ushort index = as_ushort(chars);
+  
+  ////calculate the current data offset (relative to the tree)
+  //root is special case - if bit_index is root, then return 0;
+  if (bit_index == 0)
+    return 0+index;
+
+  //data index starts at 1
+  ushort di = 1;
+  ushort pi = (bit_index-1)/8; // automatically rounding downwards
+
+  //check to make sure that the parent of this index is one, otherwise return failure;
+  if (tree_bit_at(tree, pi) != 1) 
+    return 0+index;
+
+  //add up bits that occur before the parent index
+  for (int i=0; i<pi; i++)
+    di += 8*tree_bit_at(tree,i);
+
+  //offset for child...
+  di += (bit_index+8-1)%8;
+
+  return di+index;  
+
+}
+
 
 //--------------------------------------------------------------------------
 // maps an offset and a depth to a location code
@@ -262,49 +287,7 @@ int traverse_force(__local uchar* tree, int cell_ptr, short4 cell_loc_code,
   return found_cell_ptr;
 }
 
-#if 0 // lots of lines commented out for now...
-
-// tree_offset is the root_ptr index and all the ptrs are offset relative to the root
-int traverse_force(__global int4* cells, int cell_ptr, short4 cell_loc_code,
-                   short4 target_loc_code, short4* found_loc_code, int * global_count)
-{
-  int found_cell_ptr = cell_ptr;
-  (*found_loc_code) = cell_loc_code;
-  int ret = (int)-1;
-  int level = target_loc_code.w;
-  if ( level < 0)
-    return ret;
-
-  int curr_level = cell_loc_code.w;
-  int4 curr_cell = cells[cell_ptr]; // the root of the tree to search
-  (*global_count)++;
-  short4 curr_code = cell_loc_code;
-  curr_code.w = curr_level;
-  while (level<curr_level && curr_cell.y>0)
-  {
-    int c_ptr = curr_cell.y;
-    short4 child_bit = (short4)(1);
-    child_bit = child_bit << (short4)(curr_level-1);
-    short4 code_diff = target_loc_code-curr_code;
-    // TODO: find a way to compute the following as a vector op
-    uchar c_index = 0;
-
-    if (code_diff.x >= child_bit.x)
-      c_index += 1;
-    if (code_diff.y >= child_bit.y)
-      c_index += 2;
-    if (code_diff.z >= child_bit.z)
-      c_index += 4;
-    curr_code = child_loc_code(c_index, curr_level-1, curr_code);
-    c_ptr += c_index;
-     curr_cell = cells[c_ptr];
-    found_cell_ptr = c_ptr;
-    (*found_loc_code) = curr_code;
-    --curr_level;
-    (*global_count)++;
-  }
-  return found_cell_ptr;
-}
+#if 0
 
 //--------------------------------------------------------------------
 // Find the common ancestor of a cell given a binary difference
@@ -459,6 +442,7 @@ int neighbor_woffset(__global int4* cells,int cell_ptr,  short4 cell_loc_code,
   return neighbor_ptr;
 }
 
+#endif
 
 //---------------------------------------------------------------------
 // The vector result for the exit face as a short vector in X, Y, Z
@@ -726,7 +710,14 @@ int cell_contains_exit_pt(int n_levels, short4 loc_code, float4 exit_pt)
   if (any(test)) return 0;
   return 1;
 }
-#endif // 0
 
+uint rgbaFloatToInt(float4 rgba)
+{
+    rgba.x = clamp(rgba.x,0.0f,1.0f);
+    rgba.y = clamp(rgba.y,0.0f,1.0f);
+    rgba.z = clamp(rgba.z,0.0f,1.0f);
+    rgba.w = clamp(rgba.w,0.0f,1.0f);
+    return ((uint)(rgba.w*255.0f)<<24) | ((uint)(rgba.z*255.0f)<<16) | ((uint)(rgba.y*255.0f)<<8) | (uint)(rgba.x*255.0f);
+}
 
 // end of library kernels

@@ -8,10 +8,12 @@
 #include <vcl_stack.h>
 
 #include <boct/boct_tree_cell.h>
+#include <boct/boct_bit_tree.h>
 #include <boxm/sample/boxm_sample.h>
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/boxm_scene.h>
 #include <boxm/ocl/boxm_ocl_scene.h>
+#include <boxm/ocl/boxm_ocl_bit_scene.h>
 
 template <class T>
 class boxm_ocl_convert
@@ -32,7 +34,11 @@ class boxm_ocl_convert
                              vcl_vector<vnl_vector_fixed<float, 16> >& data_array,
                              int cell_input_ptr);
 
-  static void convert_scene(boxm_scene<boct_tree<short, T> >* scene, int num_buffers, boxm_ocl_scene &ocl_scene, int max_mb);
+  static void convert_scene(boxm_scene<boct_tree<short, T> >* scene, boxm_ocl_scene &ocl_scene, int max_mb);
+  
+  
+  static void convert_bit_scene(boxm_scene<boct_tree<short, T> >* scene, boxm_ocl_bit_scene &ocl_scene, int max_mb);
+
 };
 
 class boxm_ocl_utils
