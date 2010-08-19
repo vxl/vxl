@@ -15,8 +15,8 @@
 bool bit_tree_test_manager::init_arrays()
 {  
   //set up buffers
-  bit_tree_ = (cl_uchar*)boxm_ocl_utils::alloc_aligned(16,sizeof(cl_uchar),16);
-  output_   = (cl_int*)  boxm_ocl_utils::alloc_aligned(16,sizeof(cl_float4),16);
+  bit_tree_ = (cl_uchar*) boxm_ocl_utils::alloc_aligned(16,sizeof(cl_uchar),16);
+  output_   = (cl_int*)   boxm_ocl_utils::alloc_aligned(16,sizeof(cl_float4),16);
   return true;
 }
 

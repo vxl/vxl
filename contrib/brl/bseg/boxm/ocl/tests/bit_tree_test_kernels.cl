@@ -61,15 +61,21 @@ void test_codes(int* i, int* n_codes, short4* code, short4* ncode)
 
 __kernel
 void
-test_traverse(__global uchar16* tree, __global int4* results, __local uchar* ltree)
+test_traverse(__global uchar* tree, __global int4* results, __local uchar* ltree)
 {
   //load global tree into local mem
+  event_t eventid = (event_t) 0;
+  event_t e = async_work_group_copy(ltree, tree, (size_t)16, eventid);
+  wait_group_events (1, &eventid);
+  
+/*
   uchar16 tbuff = (*tree);
   ltree[0] = tbuff.s0; ltree[1] = tbuff.s1; ltree[2] = tbuff.s2; ltree[3] = tbuff.s3; 
   ltree[4] = tbuff.s4; ltree[5] = tbuff.s5; ltree[6] = tbuff.s6; ltree[7] = tbuff.s7; 
   ltree[8] = tbuff.s8; ltree[9] = tbuff.s9; ltree[10] = tbuff.sa;ltree[11] = tbuff.sb; 
   ltree[12] = tbuff.sc;ltree[13] = tbuff.sd;ltree[14] = tbuff.se;ltree[15] = tbuff.sf;   
   
+*/
   short4 code, ncode;
   int n_codes = 0;
   int i= 0;

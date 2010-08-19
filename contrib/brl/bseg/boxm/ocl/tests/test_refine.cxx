@@ -214,7 +214,7 @@ bool test_refine_ocl_scene()
   scene_type scene2 = create_simple_scene();
   int num_buffers = 1;
   boxm_ocl_scene ocl_scene;
-  boxm_ocl_convert<data_type>::convert_scene(&scene2, num_buffers, ocl_scene, 100);
+  boxm_ocl_convert<data_type>::convert_scene(&scene2, ocl_scene, 100);
   vcl_cout<<ocl_scene<<vcl_endl;
 
   //create the manager and startup the refining
