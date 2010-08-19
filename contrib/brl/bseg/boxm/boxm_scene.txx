@@ -391,7 +391,7 @@ bool boxm_scene<T>::load_block_and_neighbors(unsigned i, unsigned j, unsigned k)
     block->set_tree(0);
   }
 
-  vcl_set<vgl_point_3d<int> >::iterator load_it = blocks_to_load.begin();
+  vcl_set<vgl_point_3d<int>, bvgl_point_3d_cmp<int> >::iterator load_it = blocks_to_load.begin();
 
   for (; load_it!=blocks_to_load.end(); load_it++)
   {
