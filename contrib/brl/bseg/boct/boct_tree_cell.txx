@@ -775,9 +775,9 @@ void boct_tree_cell<T_loc,T_data>::print()
   vcl_cout << "LEVEL=" << this->level()
            << " code=" << code_
            << " parent=" << parent_;
-#if 0
+
   vcl_cout << " data=" << data_;
-#endif
+
   if (is_leaf())
     vcl_cout << " LEAF" << vcl_endl;
   else {
