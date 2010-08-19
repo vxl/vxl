@@ -93,6 +93,21 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
+SOURCE=.\vbl_bit_array_2d.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vbl_bit_array_3d.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vbl_bool_ostream.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vbl_qsort.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vbl_sort.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vbl_array_1d+double-.cxx
 # End Source File
 # Begin Source File
@@ -133,12 +148,6 @@ SOURCE=.\Templates/vbl_array_3d+ushort-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_array_3d+void~-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vbl_bit_array_2d.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vbl_bit_array_3d.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_bounding_box+double.2-.cxx
@@ -204,13 +213,7 @@ SOURCE=.\Templates/vbl_array_3d+vcl_string-.cxx
 SOURCE=.\Templates/vbl_array_3d+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vbl_bool_ostream.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vbl_qsort.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vbl_sort.cxx
+SOURCE=.\Templates/vbl_array_1d+ushort-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"

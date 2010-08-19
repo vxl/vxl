@@ -143,6 +143,12 @@ SOURCE=.\boxm_change_detection_ocl_scene_manager.cxx
 SOURCE=.\boxm_ocl_camera_manager.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\boxm_render_bit_scene_manager.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_ocl_bit_scene.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/bocl_manager+boxm_ray_trace_manager+boxm_sample+BOXM_APM_SIMPLE_GREY---.cxx
 # End Source File
 # Begin Source File
@@ -153,9 +159,6 @@ SOURCE=.\Templates/bocl_manager+boxm_ray_trace_manager+boxm_sample+BOXM_APM_MOG_
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_io_array_2d+vnl_vector_fixed+float.3--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vnl_vector_fixed+float.16-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/boxm_ray_trace_manager+boxm_sample+BOXM_APM_SIMPLE_GREY--.cxx
@@ -257,9 +260,6 @@ SOURCE=.\Templates/vbl_array_3d+vnl_vector_fixed+int.4--.cxx
 SOURCE=.\Templates/vbl_io_array_3d+vnl_vector_fixed+int.4--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vnl_io_vector_fixed+int.4-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vbl_array_2d+vnl_vector_fixed+int.4--.cxx
 # End Source File
 # Begin Source File
@@ -267,12 +267,6 @@ SOURCE=.\Templates/vbl_array_2d+vnl_vector_fixed+float.16--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_io_array_2d+vnl_vector_fixed+float.16--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vnl_io_vector_fixed+float.16-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vnl_io_vector_fixed+int.2-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_io_array_1d+vnl_vector_fixed+int.2--.cxx
@@ -302,25 +296,16 @@ SOURCE=.\Templates/vbl_array_2d+vnl_vector_fixed+uchar.16--.cxx
 SOURCE=.\Templates/vbl_io_array_1d+vnl_vector_fixed+ushort.2--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vnl_io_vector_fixed+ushort.2--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vnl_io_vector_fixed+uchar.16--.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vbl_array_3d+vnl_vector_fixed+ushort.2--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vbl_io_array_1d+ushort--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vbl_array_1d+ushort--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_array_1d+vnl_vector_fixed+ushort.2--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_io_array_3d+vnl_vector_fixed+ushort.2--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bocl_manager+boxm_render_bit_scene_manager-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -390,6 +375,12 @@ SOURCE=.\boxm_change_detection_ocl_scene_manager.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_ocl_camera_manager.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_ocl_bit_scene.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_render_bit_scene_manager.h
 # End Source File
 # End Group
 # End Target

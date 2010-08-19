@@ -118,6 +118,9 @@ SOURCE=.\boxm_ocl_rerender_view.cxx
 # Begin Source File
 SOURCE=.\boxm_ocl_rerender_adjacent_frames.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\boxm_ocl_render_bit_view.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

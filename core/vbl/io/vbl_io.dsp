@@ -179,6 +179,9 @@ SOURCE=.\Templates/vbl_io_array_2d+vcl_vector+double--.cxx
 # Begin Source File
 SOURCE=.\Templates/vbl_io_array_2d+vcl_vector+float--.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_io_array_1d+ushort-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

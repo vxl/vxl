@@ -522,6 +522,30 @@ SOURCE=.\impl/qt4/vgui_qt_tag.cxx
 SOURCE=.\impl/qt4/vgui_qt_window.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\impl/win32/vgui_win32_utils.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\impl/win32/vgui_win32.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\impl/win32/vgui_win32_adaptor.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\impl/win32/vgui_win32_dialog_impl.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\impl/win32/vgui_win32_window.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\impl/win32/vgui_win32_tag.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\impl/win32/vgui_win32_cmdtarget.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\impl/win32/vgui_win32_statusbar.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vgui_parent_child_link.cxx
 # End Source File
 # Begin Source File
@@ -1186,6 +1210,27 @@ SOURCE=.\impl/wx/vgui_wx_statusbar.h
 # End Source File
 # Begin Source File
 SOURCE=.\impl/wx/vgui_wx_window.h
+# End Source File
+# Begin Source File
+SOURCE=.\impl/win32/vgui_win32_adaptor.h
+# End Source File
+# Begin Source File
+SOURCE=.\impl/win32/vgui_win32_dialog_impl.h
+# End Source File
+# Begin Source File
+SOURCE=.\impl/win32/vgui_win32_window.h
+# End Source File
+# Begin Source File
+SOURCE=.\impl/win32/vgui_win32_statusbar.h
+# End Source File
+# Begin Source File
+SOURCE=.\impl/win32/vgui_win32.h
+# End Source File
+# Begin Source File
+SOURCE=.\impl/win32/vgui_win32_cmdtarget.h
+# End Source File
+# Begin Source File
+SOURCE=.\impl/win32/vgui_win32_utils.h
 # End Source File
 # Begin Source File
 SOURCE=.\vgui_range_map.h

@@ -109,6 +109,9 @@ SOURCE=.\boxm_ocl_change_detection_tableau.cxx
 # Begin Source File
 SOURCE=.\boxm_ocl_rerender_tableau.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\boxm_ocl_render_bit_tableau.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -141,6 +144,12 @@ SOURCE=.\boxm_ocl_rerender_tableau.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_ocl_rerender_tableau_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_ocl_render_bit_tableau.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_ocl_render_bit_tableau_sptr.h
 # End Source File
 # End Group
 # End Target
