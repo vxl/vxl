@@ -1,4 +1,5 @@
 #include <boxm/ocl/boxm_change_detection_ocl_scene_manager.h>
+#include <boxm/ocl/boxm_ocl_bit_scene.h>
 #include <boxm/ocl/boxm_ocl_camera_manager.h>
 #include <boxm/ocl/boxm_ocl_refine_scene.h>
 #include <boxm/ocl/boxm_ocl_render_expected.h>
@@ -9,6 +10,7 @@
 #include <boxm/ocl/boxm_ray_trace_manager.h>
 #include <boxm/ocl/boxm_refine_manager.h>
 #include <boxm/ocl/boxm_refine_scene_manager.h>
+#include <boxm/ocl/boxm_render_bit_scene_manager.h>
 #include <boxm/ocl/boxm_render_image_manager.h>
 #include <boxm/ocl/boxm_render_ocl_scene_manager.h>
 #include <boxm/ocl/boxm_render_single_block_manager.h>
