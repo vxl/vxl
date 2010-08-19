@@ -1,4 +1,4 @@
-// This is vpgl/ihog/ihog_minimizer.cxx
+// This is gel/mrc/vpgl/ihog/ihog_minimizer.cxx
 //:
 // \file
 
@@ -21,7 +21,7 @@
 //: Constructor
 ihog_minimizer::ihog_minimizer( const vimt_image_2d_of<float>& image1,
                                   const vimt_image_2d_of<float>& image2,
-                                  const ihog_world_roi& roi ) 
+                                  const ihog_world_roi& roi )
                                   : end_error_(0.0), from_mask_(false), to_mask_(false)
 {
   vimt_gaussian_pyramid_builder_2d<float> builder;
@@ -29,7 +29,7 @@ ihog_minimizer::ihog_minimizer( const vimt_image_2d_of<float>& image1,
   ihog_world_roi roi_L(roi);
   int levels = 0;
 
-  while(roi_L.size_in_u() > min_level_size_ && roi_L.size_in_v() > min_level_size_){
+  while (roi_L.size_in_u() > min_level_size_ && roi_L.size_in_v() > min_level_size_){
     roi_pyramid_.push_back(roi_L);
     roi_L.set_size_in_u((roi_L.size_in_u()+1)/2);
     roi_L.set_size_in_v((roi_L.size_in_v()+1)/2);
@@ -37,9 +37,9 @@ ihog_minimizer::ihog_minimizer( const vimt_image_2d_of<float>& image1,
     roi_L.set_origin(p);
     ++levels;
   }
-  vcl_cout << "LEVELS = "<<levels<<"\n";
+  vcl_cout << "LEVELS = "<<levels<<'\n';
 
-  if(levels == 0){
+  if (levels == 0) {
     levels = 1;
     roi_pyramid_.push_back(roi_L);
   }
@@ -47,13 +47,13 @@ ihog_minimizer::ihog_minimizer( const vimt_image_2d_of<float>& image1,
   builder.set_max_levels(levels);
   builder.build(from_pyramid_, image1);
   builder.build(to_pyramid_, image2);
-
 }
+
 //: Constructor with a mask
 ihog_minimizer::ihog_minimizer( const vimt_image_2d_of<float>& image1,
                                   const vimt_image_2d_of<float>& image2,
                                   const vimt_image_2d_of<float>& image_mask,
-                                  const ihog_world_roi& roi, bool image1_mask ) 
+                                  const ihog_world_roi& roi, bool image1_mask )
                                   : end_error_(0.0), from_mask_(image1_mask), to_mask_(!image1_mask)
 {
   vimt_gaussian_pyramid_builder_2d<float> builder;
@@ -61,7 +61,7 @@ ihog_minimizer::ihog_minimizer( const vimt_image_2d_of<float>& image1,
   ihog_world_roi roi_L(roi);
   int levels = 0;
 
-  while(roi_L.size_in_u() > min_level_size_ && roi_L.size_in_v() > min_level_size_){
+  while (roi_L.size_in_u() > min_level_size_ && roi_L.size_in_v() > min_level_size_){
     roi_pyramid_.push_back(roi_L);
     roi_L.set_size_in_u((roi_L.size_in_u()+1)/2);
     roi_L.set_size_in_v((roi_L.size_in_v()+1)/2);
@@ -70,7 +70,7 @@ ihog_minimizer::ihog_minimizer( const vimt_image_2d_of<float>& image1,
     ++levels;
   }
 
-  if(levels == 0){
+  if (levels == 0){
     levels = 1;
     roi_pyramid_.push_back(roi_L);
   }
@@ -80,7 +80,8 @@ ihog_minimizer::ihog_minimizer( const vimt_image_2d_of<float>& image1,
   builder.build(to_pyramid_, image2);
   if (from_mask_) {
     builder.build(from_mask_pyramid_, image_mask);
-  } else {
+  }
+  else {
     builder.build(to_mask_pyramid_, image_mask);
   }
 }
@@ -92,14 +93,13 @@ ihog_minimizer::ihog_minimizer( const vimt_image_2d_of<float>& image1,
                                  const vimt_image_2d_of<float>& image2_mask,
                                  const ihog_world_roi& roi)
                                  : end_error_(0.0), from_mask_(true), to_mask_(true)
-                                 
 {
   vimt_gaussian_pyramid_builder_2d<float> builder;
 
   ihog_world_roi roi_L(roi);
   int levels = 0;
 
-  while(roi_L.size_in_u() > min_level_size_ && roi_L.size_in_v() > min_level_size_){
+  while (roi_L.size_in_u() > min_level_size_ && roi_L.size_in_v() > min_level_size_){
     roi_pyramid_.push_back(roi_L);
     roi_L.set_size_in_u((roi_L.size_in_u()+1)/2);
     roi_L.set_size_in_v((roi_L.size_in_v()+1)/2);
@@ -108,7 +108,7 @@ ihog_minimizer::ihog_minimizer( const vimt_image_2d_of<float>& image1,
     ++levels;
   }
 
-  if(levels == 0){
+  if (levels == 0){
     levels = 1;
     roi_pyramid_.push_back(roi_L);
   }
@@ -118,7 +118,6 @@ ihog_minimizer::ihog_minimizer( const vimt_image_2d_of<float>& image1,
   builder.build(to_pyramid_, image2);
   builder.build(from_mask_pyramid_, image1_mask);
   builder.build(to_mask_pyramid_, image2_mask);
-
 }
 
 
@@ -138,25 +137,25 @@ ihog_minimizer::minimize(vimt_transform_2d& xform)
   undo_xform.set_zoom_only(1.0/init_scale,1.0/init_scale,0.0,0.0);
   vimt_transform_2d undo_step;
   undo_step.set_zoom_only(0.5,0.5,0.0,0.0);
-  vcl_cout << "xform.origin = "<<xform.origin()<<"\n";
-  xform.set_origin( vgl_point_2d<double>(xform.origin().x()*init_scale, 
+  vcl_cout << "xform.origin = "<<xform.origin()<<'\n';
+  xform.set_origin( vgl_point_2d<double>(xform.origin().x()*init_scale,
                                      xform.origin().y()*init_scale) );
-  vcl_cout << "new xform.origin = "<<xform.origin()<<"\n";
+  vcl_cout << "new xform.origin = "<<xform.origin()<<'\n';
 
   //vnl_matlab_filewrite matlab("C:/MATLAB/work/vxl.mat");
   //vnl_matrix<double> result(50,50);
 
-  for(int L=from_pyramid_.hi(); L>=from_pyramid_.lo(); --L){
-    
-    xform.set_origin( vgl_point_2d<double>(xform.origin().x()*2.0, 
-                                       xform.origin().y()*2.0) );
+  for (int L=from_pyramid_.hi(); L>=from_pyramid_.lo(); --L)
+  {
+    xform.set_origin( vgl_point_2d<double>(xform.origin().x()*2.0,
+                                           xform.origin().y()*2.0) );
 
     undo_xform = undo_xform * undo_step;
     const vimt_image_2d_of<float>& image1
             = static_cast<const vimt_image_2d_of<float>&>(from_pyramid_(L));
     const vimt_image_2d_of<float>& image2
             = static_cast<const vimt_image_2d_of<float>&>(to_pyramid_(L));
-    
+
 
     vimt_image_2d_of<float> im1(image1);
     vimt_image_2d_of<float> im2(image2);
@@ -167,21 +166,22 @@ ihog_minimizer::minimize(vimt_transform_2d& xform)
 
     ihog_lsqr_cost_func *cost;
     // no masks
-    if(!from_mask_ && !to_mask_)
+    if (!from_mask_ && !to_mask_)
     {
       cost = new ihog_lsqr_cost_func(im1, im2, roi_pyramid_[L], xform);
     }
     // one mask
-    else if(from_mask_ || to_mask_) {
+    else if (from_mask_ || to_mask_) {
       if (from_mask_) {
         const vimt_image_2d_of<float>& image_mask
-          = static_cast<const vimt_image_2d_of<float>& >(from_mask_pyramid_(L));    
+          = static_cast<const vimt_image_2d_of<float>& >(from_mask_pyramid_(L));
         vimt_image_2d_of<float> immask(image_mask);
         immask.set_world2im(undo_xform*image_mask.world2im());
         cost = new ihog_lsqr_cost_func( im1, im2, immask, roi_pyramid_[L], xform, true);
-      } else {
+      }
+      else {
         const vimt_image_2d_of<float>& image_mask
-          = static_cast<const vimt_image_2d_of<float>& >(to_mask_pyramid_(L));    
+          = static_cast<const vimt_image_2d_of<float>& >(to_mask_pyramid_(L));
         vimt_image_2d_of<float> immask(image_mask);
         immask.set_world2im(undo_xform*image_mask.world2im());
         cost = new ihog_lsqr_cost_func( im1, im2, immask, roi_pyramid_[L], xform, false);
@@ -191,32 +191,29 @@ ihog_minimizer::minimize(vimt_transform_2d& xform)
     else
     {
       const vimt_image_2d_of<float>& from_image_mask
-        = static_cast<const vimt_image_2d_of<float>& >(from_mask_pyramid_(L));    
+        = static_cast<const vimt_image_2d_of<float>& >(from_mask_pyramid_(L));
       vimt_image_2d_of<float> f_immask(from_image_mask);
       f_immask.set_world2im(undo_xform*from_image_mask.world2im());
 
       const vimt_image_2d_of<float>& to_image_mask
-        = static_cast<const vimt_image_2d_of<float>& >(to_mask_pyramid_(L));    
+        = static_cast<const vimt_image_2d_of<float>& >(to_mask_pyramid_(L));
       vimt_image_2d_of<float> t_immask(to_image_mask);
       t_immask.set_world2im(undo_xform*to_image_mask.world2im());
 
       cost = new ihog_lsqr_cost_func( im1, im2, f_immask, t_immask, roi_pyramid_[L], xform);
     }
-    vnl_levenberg_marquardt min(*cost);
-    //min.set_x_tolerance(1e-16);
-    //min.set_f_tolerance(1.0);
-    //min.set_g_tolerance(1e-3);
-    min.set_trace(true);
-    //min.set_max_iterations(50);
+    vnl_levenberg_marquardt minimizer(*cost);
+    //minimizer.set_x_tolerance(1e-16);
+    //minimizer.set_f_tolerance(1.0);
+    //minimizer.set_g_tolerance(1e-3);
+    minimizer.set_trace(true);
+    //minimizer.set_max_iterations(50);
     xform.params(param);
-    min.minimize(param);
-    end_error_ = min.get_end_error();
+    minimizer.minimize(param);
+    end_error_ = minimizer.get_end_error();
     xform.set(param,form);
 
     delete cost;
   }
-  
 }
-
-
 
