@@ -162,30 +162,28 @@ ushort data_index(__local uchar* tree, int bit_index)
   ////Unpack data offset (offset to root data)
   //tree[10] and [11] should form the short that refers to data offset
   uchar2 chars = (uchar2) (tree[11], tree[10]);
-  ushort index = as_ushort(chars);
+  ushort root_offset = as_ushort(chars);
   
-  ////calculate the current data offset (relative to the tree)
-  //root is special case - if bit_index is root, then return 0;
-  if (bit_index == 0)
-    return 0+index;
-
+  //root is special case, return just the root offset
+  if(bit_index==0)
+    return root_offset;
+  
   //data index starts at 1
-  ushort di = 1;
-  ushort pi = (bit_index-1)/8; // automatically rounding downwards
+  int pi = (int) ((float)bit_index-1.0)/8.0; // automatically rounding downwards
 
   //check to make sure that the parent of this index is one, otherwise return failure;
-  if (tree_bit_at(tree, pi) != 1) 
-    return 0+index;
+  //if (tree_bit_at(tree, pi) != 1) 
+  //  return index;
 
   //add up bits that occur before the parent index
+  int di = 1;
   for (int i=0; i<pi; i++)
     di += 8*tree_bit_at(tree,i);
 
   //offset for child...
-  di += (bit_index+8-1)%8;
+  di += (bit_index-1)%8;
 
-  return di+index;  
-
+  return di+root_offset;  
 }
 
 

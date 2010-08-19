@@ -26,6 +26,7 @@ ray_trace_bit_scene(__global  int4    * scene_dims,
                     __global  float4  * output)    // input image and store vis_inf and pre_inf
 {
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
+  int lid = get_local_id(0);
 
   if (llid == 0 )
   {
@@ -112,11 +113,12 @@ ray_trace_bit_scene(__global  int4    * scene_dims,
     uchar16 tbuff = tree_array[root_ptr];
     local_tree[0] = tbuff.s0; local_tree[1] = tbuff.s1; local_tree[2] = tbuff.s2; local_tree[3] = tbuff.s3; 
     local_tree[4] = tbuff.s4; local_tree[5] = tbuff.s5; local_tree[6] = tbuff.s6; local_tree[7] = tbuff.s7; 
-    local_tree[8] = tbuff.s8; local_tree[9] = tbuff.s9; local_tree[10]= tbuff.sa;local_tree[11] = tbuff.sb; 
+    local_tree[8] = tbuff.s8; local_tree[9] = tbuff.s9;local_tree[10] = tbuff.sa;local_tree[11] = tbuff.sb; 
     local_tree[12]= tbuff.sc;local_tree[13] = tbuff.sd;local_tree[14] = tbuff.se;local_tree[15] = tbuff.sf;   
-    //event_t eventid = (event_t) 0;
-    //event_t e = async_work_group_copy(local_tree, &tree_array[root_ptr], (size_t)16, eventid);
-    //wait_group_events (1, &eventid);
+
+//    event_t eventid = (event_t) 0;
+//   event_t e = async_work_group_copy(local_tree, (uchar*) &tree_array[root_ptr], (size_t)16, eventid);
+//    wait_group_events (1, &eventid);
 
     float4 local_ray_o= (ray_o-origin)/blockdims-convert_float4(curr_block_index);
     
