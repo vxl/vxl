@@ -26,7 +26,8 @@ IF(OPENCL_FOUND)
       boxm_update_ocl_scene_manager.h boxm_update_ocl_scene_manager.cxx
       boxm_change_detection_ocl_scene_manager.h boxm_change_detection_ocl_scene_manager.cxx
       boxm_ocl_camera_manager.h boxm_ocl_camera_manager.cxx
-
+      boxm_ocl_bit_scene.h boxm_ocl_bit_scene.cxx 
+      boxm_render_bit_scene_manager.h boxm_render_bit_scene_manager.cxx
      )
 
   SET(bomx_ocl_cl_files
