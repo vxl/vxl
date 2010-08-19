@@ -692,7 +692,7 @@ void boxm_scene<T>::unload_active_blocks()
   if(active_blocks_.size()==0)
     return;
   
-  vcl_set<vgl_point_3d<int>,, bvgl_point_3d_cmp<int> >::iterator unload_it = active_blocks_.begin();
+  vcl_set<vgl_point_3d<int>, bvgl_point_3d_cmp<int> >::iterator unload_it = active_blocks_.begin();
   
   for (; unload_it!=active_blocks_.end(); unload_it++)
   {
