@@ -131,7 +131,7 @@ uchar tree_bit_at(int rIndex, __local uchar* tree, int index)
     return (1<<(index-1) & tree[rIndex+1]) ? 1 : 0;
 
   //third or 4th generation treated in same way,
-  int i  = (int) (index-9.0)/8.0 + 2; //byte index i
+  int i  = (int) ((index-9.0)/8.0 + 2); //byte index i
   int bi = (index-9)%8;
   return (1<<bi & tree[rIndex+i]) ? 1 : 0;
 }
@@ -157,20 +157,43 @@ void set_tree_bit_at(__local uchar* tree, int index, bool val)
 // unpacks offset (ushort) from tree[10] and tree[11],
 // also counts the bits until parent of index, adds it to the offset
 //--------------------------------------------------------------------
-ushort data_index(int rIndex, __local uchar* tree, int bit_index)
+ushort data_index(int rIndex, __local uchar* tree, int bit_index, __constant uchar* bit_lookup)
 {
   ////Unpack data offset (offset to root data)
   //tree[10] and [11] should form the short that refers to data offset
   uchar2 chars = (uchar2) (tree[rIndex+11], tree[rIndex+10]);
   ushort root_offset = as_ushort(chars);
   
-  //root is special case, return just the root offset
-  if(bit_index==0)
-    return root_offset;
+  //root and first gen are special case, return just the root offset + bit_index
+  if(bit_index < 9)
+    return root_offset+bit_index;
+ 
+  //otherwise get parent index, parent byte index and relative bit index
+  int pi      = (int) ((bit_index-1.0)/8.0);     // automatically rounding downwards
+  int byte_i  = (int) ((pi-1.0)/8.0 + 1);        //byte index for parent
+  int bit_i   = (pi-1)%8;                        //bit index for pi in byte_i
   
-  //data index starts at 1
-  int pi = (int) ((float)bit_index-1.0)/8.0; // automatically rounding downwards
+  //count bits for each byte before bit_i
+  int count = 0;
+  for(int i=0; i<byte_i; i++) {
+    uchar n = tree[rIndex+i];
+    count += bit_lookup[n];
+  }
+  
+  //count bits before bit_i in parent
+  uchar mask = 1;
+  for(int i=0; i<bit_i; i++) {
+    count += (mask & tree[rIndex+byte_i])?1:0;
+    mask = mask<<1;
+  }
 
+  
+  //relative index = num_bits*8 + 1;
+  count = 8*count+1 + (bit_index-1)%8;
+  return count+ root_offset;
+
+
+/*//CODE BELOW WORKS USING variable pi from above
   //check to make sure that the parent of this index is one, otherwise return failure;
   //if (tree_bit_at(tree, pi) != 1) 
   //  return -100;
@@ -184,6 +207,7 @@ ushort data_index(int rIndex, __local uchar* tree, int bit_index)
   di += (bit_index-1)%8;
 
   return di+root_offset;  
+*/
 }
 
 

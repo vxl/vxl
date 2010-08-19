@@ -23,7 +23,8 @@ ray_trace_bit_scene(__global  int4    * scene_dims,
                     __local   uint4   * local_copy_imgdims,
                     __global  float   * in_image,
                     __global  uint    * gl_image, 
-                    __global  float4  * output)    // input image and store vis_inf and pre_inf
+                    __global  float4  * output,
+                    __constant uchar   * bit_lookup)    // input image and store vis_inf and pre_inf
 {
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
 
@@ -128,7 +129,7 @@ ray_trace_bit_scene(__global  int4    * scene_dims,
     
     // traverse to leaf cell that contains the entry point
     //curr_cell_ptr = traverse_force_woffset(tree_array, root_ptr, root, entry_loc_code,&curr_loc_code,&global_count,root_ptr);
-    curr_cell_ptr = traverse(rIndex, local_tree, 0, root, entry_loc_code, &curr_loc_code, &global_count);
+    curr_cell_ptr = traverse_force(rIndex, local_tree, 0, root, entry_loc_code, &curr_loc_code, &global_count);
 
     // this cell is the first pierced by the ray
     // follow the ray through the cells until no neighbors are found
@@ -161,7 +162,7 @@ ray_trace_bit_scene(__global  int4    * scene_dims,
 
       //int data_ptr =  block.x*lenbuffer+tree_array[curr_cell_ptr].z;
       //data offset is ushort pointed to by tree + bit offset
-      ushort data_offset = data_index(rIndex, local_tree, curr_cell_ptr);
+      ushort data_offset = data_index(rIndex, local_tree, curr_cell_ptr, bit_lookup);
       int data_ptr = block.x*data_len + (int) data_offset;
 
       //// distance must be multiplied by the dimension of the bounding box
