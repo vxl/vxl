@@ -138,6 +138,27 @@ boxm_scene<T>::~boxm_scene()
   }
 }
 
+//: Returns a scene with the same structure and initialized with given value
+template<class T>
+void boxm_scene<T>::clone_blocks(boxm_scene<T> &scene_out, datatype data)
+{
+  boxm_block_iterator<T> iter(this);
+  boxm_block_iterator<T> iter_out = scene_out.iterator();
+  iter.begin();
+  iter_out.begin();
+  while (!iter.end())
+  {
+    load_block(iter.index());
+    T  *tree_out = (*iter)->get_tree()->clone();
+    tree_out->init_cells(data);
+    (*iter_out)->init_tree(tree_out);
+    scene_out.write_active_block();
+    ++iter;
+    ++iter_out;
+  }    
+  
+}
+
 
 template <class T>
 void boxm_scene<T>::write_active_block()
@@ -729,7 +750,26 @@ void boxm_scene<T>::cells_in_region(vgl_box_3d<double> box, vcl_vector<boct_tree
   return;
 }
 
-
+//: Locate point
+template <class T>
+boct_tree_cell<typename T::loc_type, typename T::datatype>* boxm_scene<T>::locate_point_in_memory(vgl_point_3d<double> &p)
+{
+  //get the indeces for the block containing this point
+  vgl_point_3d<int> block_idx;
+  if(!get_block_index(p, block_idx))
+    return NULL;
+  
+  //get the block, if block is not already in memory, return null
+  boxm_block<T>* block = blocks_(block_idx.x(), block_idx.y(), block_idx.z());
+  
+  if(!block){
+    vcl_cerr << " Cannot locate point, because block is not loaded in the  memory" << vcl_endl;
+    return NULL;
+  }
+  return block->get_tree()->locate_point_global(p);
+  
+  
+}
 /************************************************ BOXM_BLOCK_ITERATOR *******************************************/
 
 
@@ -843,7 +883,11 @@ boxm_cell_iterator<T>& boxm_cell_iterator<T>::begin()
 template <class T>
 bool boxm_cell_iterator<T>::end()
 {
-  return (block_iterator_.end() && (cells_iterator_ == cells_.end()));
+  if(cells_.empty())
+    return true;
+  else
+    return (block_iterator_.end() && (cells_iterator_ == cells_.end()));
+
 }
 
 template <class T>

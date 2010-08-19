@@ -146,10 +146,9 @@ class boxm_scene :public boxm_scene_base
   //: Return all cells in a region
   void cells_in_region(vgl_box_3d<double>, vcl_vector<boct_tree_cell<loc_type, datatype>* >& cells);
   
-  //: Locate point
-  boct_tree_cell<loc_type, datatype> locate_point(vgl_point_3d<double>& p);
+  //: Locate point in scene coordinates. Assumes that the block containing the point is already loaded into memory
+  boct_tree_cell<loc_type, datatype>* locate_point_in_memory(vgl_point_3d<double> &p);
   
-
   void set_block(vgl_point_3d<int> const& idx, boxm_block<T>* block)
   { blocks_(idx.x(),idx.y(),idx.z()) = block; active_block_=idx; }
 
@@ -183,6 +182,9 @@ class boxm_scene :public boxm_scene_base
   vcl_string gen_block_path(int x, int y, int z);
 
   void clean_scene();
+  
+  //: Returns a scene with the same structure and initialized with given value
+  void clone_blocks(boxm_scene<T> &scene_out, datatype data);
   
   //: Unload active blocks
   void unload_active_blocks();
