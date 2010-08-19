@@ -26,7 +26,6 @@ ray_trace_bit_scene(__global  int4    * scene_dims,
                     __global  float4  * output)    // input image and store vis_inf and pre_inf
 {
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
-  int lid = get_local_id(0);
 
   if (llid == 0 )
   {
@@ -110,14 +109,14 @@ ray_trace_bit_scene(__global  int4    * scene_dims,
     
     //get tree into local memory...
     //load global tree into local mem
+    int rIndex = llid*16;
     uchar16 tbuff = tree_array[root_ptr];
-    local_tree[0] = tbuff.s0; local_tree[1] = tbuff.s1; local_tree[2] = tbuff.s2; local_tree[3] = tbuff.s3; 
-    local_tree[4] = tbuff.s4; local_tree[5] = tbuff.s5; local_tree[6] = tbuff.s6; local_tree[7] = tbuff.s7; 
-    local_tree[8] = tbuff.s8; local_tree[9] = tbuff.s9;local_tree[10] = tbuff.sa;local_tree[11] = tbuff.sb; 
-    local_tree[12]= tbuff.sc;local_tree[13] = tbuff.sd;local_tree[14] = tbuff.se;local_tree[15] = tbuff.sf;   
-
+    local_tree[rIndex+0] = tbuff.s0; local_tree[rIndex+1] = tbuff.s1; local_tree[rIndex+2] = tbuff.s2; local_tree[rIndex+3] = tbuff.s3; 
+    local_tree[rIndex+4] = tbuff.s4; local_tree[rIndex+5] = tbuff.s5; local_tree[rIndex+6] = tbuff.s6; local_tree[rIndex+7] = tbuff.s7; 
+    local_tree[rIndex+8] = tbuff.s8; local_tree[rIndex+9] = tbuff.s9;local_tree[rIndex+10] = tbuff.sa;local_tree[rIndex+11] = tbuff.sb; 
+    local_tree[rIndex+12]= tbuff.sc;local_tree[rIndex+13] = tbuff.sd;local_tree[rIndex+14] = tbuff.se;local_tree[rIndex+15] = tbuff.sf;   
 //    event_t eventid = (event_t) 0;
-//   event_t e = async_work_group_copy(local_tree, (uchar*) &tree_array[root_ptr], (size_t)16, eventid);
+//    event_t e = async_work_group_copy(local_tree, (uchar*) &tree_array[root_ptr], (size_t)16, eventid);
 //    wait_group_events (1, &eventid);
 
     float4 local_ray_o= (ray_o-origin)/blockdims-convert_float4(curr_block_index);
@@ -129,7 +128,7 @@ ray_trace_bit_scene(__global  int4    * scene_dims,
     
     // traverse to leaf cell that contains the entry point
     //curr_cell_ptr = traverse_force_woffset(tree_array, root_ptr, root, entry_loc_code,&curr_loc_code,&global_count,root_ptr);
-    curr_cell_ptr = traverse(local_tree, 0, root, entry_loc_code, &curr_loc_code, &global_count);
+    curr_cell_ptr = traverse(rIndex, local_tree, 0, root, entry_loc_code, &curr_loc_code, &global_count);
 
     // this cell is the first pierced by the ray
     // follow the ray through the cells until no neighbors are found
@@ -151,7 +150,7 @@ ray_trace_bit_scene(__global  int4    * scene_dims,
 
         entry_loc_code = loc_code(block_entry_pt, rootlevel);
         //// traverse to leaf cell that contains the entry point
-        curr_cell_ptr = traverse(local_tree, 0, root, entry_loc_code, &curr_loc_code, &global_count);
+        curr_cell_ptr = traverse(rIndex, local_tree, 0, root, entry_loc_code, &curr_loc_code, &global_count);
         cell_bounding_box(curr_loc_code, rootlevel+1, &cell_min, &cell_max);
         hit = intersect_cell(local_ray_o, ray_d, cell_min, cell_max,&tnear, &tfar);
         if (hit)
@@ -162,7 +161,7 @@ ray_trace_bit_scene(__global  int4    * scene_dims,
 
       //int data_ptr =  block.x*lenbuffer+tree_array[curr_cell_ptr].z;
       //data offset is ushort pointed to by tree + bit offset
-      ushort data_offset = data_index(local_tree, curr_cell_ptr);
+      ushort data_offset = data_index(rIndex, local_tree, curr_cell_ptr);
       int data_ptr = block.x*data_len + (int) data_offset;
 
       //// distance must be multiplied by the dimension of the bounding box
@@ -182,7 +181,7 @@ ray_trace_bit_scene(__global  int4    * scene_dims,
 
       //// required exit location code
       short4 exit_loc_code = loc_code(exit_pt, rootlevel);
-      curr_cell_ptr = traverse_force(local_tree, 0, root, exit_loc_code, &curr_loc_code,&global_count);
+      curr_cell_ptr = traverse_force(rIndex, local_tree, 0, root, exit_loc_code, &curr_loc_code,&global_count);
 
       block_entry_pt = local_ray_o + (tfar)*ray_d;
     }

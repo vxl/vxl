@@ -161,8 +161,8 @@ bool boxm_render_bit_scene_manager::set_args(unsigned kernel_index=0)
       status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&img_dims_buf_);
       if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (Img dimensions)"))
           return 0;
-      //local copy of the tree
-      status = clSetKernelArg(kernels_[0],i++,16*sizeof(cl_uchar),0);
+      //local copy of the tree (one for each thread/ray)
+      status = clSetKernelArg(kernels_[0],i++,64*sizeof(cl_uchar16),0);
       if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local tree)"))
           return 0;
       //// output image buffer
