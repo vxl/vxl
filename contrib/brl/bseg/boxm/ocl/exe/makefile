@@ -9,6 +9,7 @@ MINI_PROG_SOURCES += boxm_opencl_change_detection_view.cxx
 MINI_PROG_SOURCES += boxm_build_foreground_distribution.cxx
 MINI_PROG_SOURCES += boxm_ocl_rerender_view.cxx
 MINI_PROG_SOURCES += boxm_ocl_rerender_adjacent_frames.cxx
+MINI_PROG_SOURCES += boxm_ocl_render_bit_view.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk

@@ -283,6 +283,17 @@ SOURCES += impl/mfc/vgui_dir_dialog.cxx
 SOURCES += impl/mfc/vgui_mfc_dialog_extensions_impl.cxx
 endif
 
+ifeq ($(HAS_WIN32),1)
+SOURCES += impl/win32/vgui_win32_utils.cxx
+SOURCES += impl/win32/vgui_win32.cxx
+SOURCES += impl/win32/vgui_win32_adaptor.cxx
+SOURCES += impl/win32/vgui_win32_dialog_impl.cxx
+SOURCES += impl/win32/vgui_win32_window.cxx
+SOURCES += impl/win32/vgui_win32_tag.cxx
+SOURCES += impl/win32/vgui_win32_cmdtarget.cxx
+SOURCES += impl/win32/vgui_win32_statusbar.cxx
+endif
+
 ifeq ($(HAS_WX),1)
 SOURCES += impl/wx/vgui_wx.cxx
 SOURCES += impl/wx/vgui_wx_adaptor.cxx

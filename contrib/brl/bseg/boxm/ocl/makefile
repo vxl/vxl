@@ -27,6 +27,8 @@ SOURCES += boxm_ocl_render_expected.cxx
 SOURCES += boxm_change_detection_ocl_scene_manager.cxx
 MANPAGE_SOURCES += boxm_ocl_camera_manager.h
 SOURCES += boxm_ocl_camera_manager.cxx
+SOURCES += boxm_render_bit_scene_manager.cxx
+SOURCES += boxm_ocl_bit_scene.cxx
 
 SUBDIRS += pro exe view
 

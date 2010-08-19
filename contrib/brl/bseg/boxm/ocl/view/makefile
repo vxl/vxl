@@ -8,11 +8,14 @@ SOURCES += boxm_ocl_draw_glbuffer_tableau.cxx
 SOURCES += boxm_ocl_update_tableau.cxx
 SOURCES += boxm_ocl_change_detection_tableau.cxx
 SOURCES += boxm_ocl_rerender_tableau.cxx
+SOURCES += boxm_ocl_render_bit_tableau.cxx
+
 MANPAGE_SOURCES += boxm_cam_tableau_sptr.h
 MANPAGE_SOURCES += boxm_ocl_update_tableau_sptr.h
 MANPAGE_SOURCES += boxm_ocl_draw_glbuffer_tableau_sptr.h
 MANPAGE_SOURCES += boxm_ocl_change_detection_tableau_sptr.h
 MANPAGE_SOURCES += boxm_ocl_rerender_tableau_sptr.h
+MANPAGE_SOURCES += boxm_ocl_render_bit_tableau_sptr.h
 
 ################################
 include ${VXLROOT}/config/top.mk
