@@ -18,6 +18,7 @@
 
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_box_3d.h>
+#include <vgl/vgl_intersection.h>
 #include <vsl/vsl_binary_io.h>
 
 template <class T_loc, class T_data>
@@ -102,7 +103,17 @@ class boct_tree
   void locate_region_leaves_global(const vgl_box_3d<double>& r, vcl_vector<boct_tree_cell<T_loc,T_data>*> &leaves)
   {
     boct_tree_cell<T_loc,T_data>* root = locate_region_global(r);
-    root->leaf_children(leaves);
+    vcl_vector<boct_tree_cell<T_loc,T_data>*> all_leaves;
+    root->leaf_children(all_leaves);
+    
+    //now check that the leaves are contained in the region
+    typename vcl_vector<boct_tree_cell<T_loc,T_data>*>::iterator it = all_leaves.begin();
+    for(; it!=all_leaves.end(); ++it)
+    {
+      if(!vgl_intersection(cell_bounding_box(*it),r).is_empty())
+        leaves.push_back(*it);
+    }
+    
     return; 
   }
   
