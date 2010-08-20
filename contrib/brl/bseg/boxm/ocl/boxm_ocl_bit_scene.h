@@ -2,8 +2,7 @@
 #define boxm_ocl_bit_scene_h_
 //:
 // \file
-// \brief  Small-block scene using bit trees, optimized for 
-//         opencl's memory scheme
+// \brief  Small-block scene using bit trees, optimized for opencl's memory scheme
 // \author Andrew Miller
 // \date   5 Jul 2010
 //
@@ -18,35 +17,35 @@
 #include <vsl/vsl_binary_io.h>
 #include <boxm/boxm_scene_parser.h>
 #include <boxm/boxm_apm_traits.h>
-class boxm_ocl_bit_scene 
+
+class boxm_ocl_bit_scene
 {
+    typedef vnl_vector_fixed<unsigned char, 16> uchar16;
+    typedef vnl_vector_fixed<float, 16>         float16;
+    typedef vnl_vector_fixed<unsigned short, 2> ushort2;
 
-  typedef vnl_vector_fixed<unsigned char, 16> uchar16;
-  typedef vnl_vector_fixed<float, 16> float16;
-  typedef vnl_vector_fixed<unsigned short, 2> ushort2;
-
-  public: 
-    //: default constructor 
+  public:
+    //: default constructor
     boxm_ocl_bit_scene(){}    //use init_scene with this
     //: initializes scene from xmlFile
     boxm_ocl_bit_scene(vcl_string filename);
-    //: copy constructor
+    //: "sort of" copy constructor
     boxm_ocl_bit_scene(boxm_ocl_bit_scene* scene);
-    
+
     ~boxm_ocl_bit_scene() { }
-    
+
     //: initializes scene given scene values
-    void init_scene(vbl_array_3d<ushort2> blocks, 
-                    vbl_array_2d<uchar16> tree_buffers, 
-                    vbl_array_2d<float16> data_buffers, 
-                    vbl_array_1d<ushort2> mem_ptrs, 
+    void init_scene(vbl_array_3d<ushort2> blocks,
+                    vbl_array_2d<uchar16> tree_buffers,
+                    vbl_array_2d<float16> data_buffers,
+                    vbl_array_1d<ushort2> mem_ptrs,
                     vbl_array_1d<unsigned short> blocks_in_buffers,
                     bgeo_lvcs lvcs,
                     vgl_point_3d<double> origin,
                     vgl_vector_3d<double> block_dim);
-    
+
     /* ocl_scene I/O */
-    bool load_scene(vcl_string filename);   
+    bool load_scene(vcl_string filename);
     bool save_scene(vcl_string dir);
     bool save();
     static short version_no() { return 1; }
@@ -64,7 +63,7 @@ class boxm_ocl_bit_scene
     void block_num(int &x, int &y, int &z){x=(int)blocks_.get_row1_count(); y=(int)blocks_.get_row2_count(); z=(int)blocks_.get_row3_count();}
     void block_dim(double &x, double &y, double &z){x=block_dim_.x(); y=block_dim_.y(); z=block_dim_.z();}
     void tree_buffer_shape(int &num, int &len){num=num_buffers_; len=tree_buff_length_;}
-    void data_buffer_shape(int &num, int &len){num=num_buffers_; len=data_buff_length_;} 
+    void data_buffer_shape(int &num, int &len){num=num_buffers_; len=data_buff_length_;}
     boxm_scene_parser parser() { return parser_; }
     bgeo_lvcs lvcs() { return lvcs_; }
     int max_mb() { return max_mb_; }
@@ -82,7 +81,7 @@ class boxm_ocl_bit_scene
     vbl_array_1d<ushort2> mem_ptrs_;
     vbl_array_1d<unsigned short> blocks_in_buffers_;
     vbl_array_2d<float16> data_buffers_;
-    
+
     //setters from 1 d int and float arrays
     void set_blocks(int* block_ptrs);
     void set_tree_buffers(int* tree_buffers);
@@ -92,20 +91,20 @@ class boxm_ocl_bit_scene
     void set_alpha_values(float* alpha_buffer);
     void set_mixture_values(unsigned char* mixtures);
     void set_num_obs_values(unsigned short* num_obs);
-    
-    //data compression getters 
+
+    //data compression getters
     void get_mixture(unsigned char* mixture);
     void get_alphas(float* alphas);
     void get_num_obs(unsigned short* num_obs);
     void get_tree_cells(unsigned char* cells);
     void get_block_ptrs(unsigned short* blocks);
     void get_mem_ptrs(int* blocks);
-    
+
   private:
 
-    bool init_existing_scene(); 
+    bool init_existing_scene();
     bool init_existing_data();
-    
+
     /* world scene information */
     bgeo_lvcs lvcs_;
     vgl_point_3d<double> origin_;
@@ -122,7 +121,7 @@ class boxm_ocl_bit_scene
 
     //actual local scene structure and data
     int num_buffers_, tree_buff_length_, data_buff_length_;
-    
+
     //pointers to each block, multiple tree buffers, and mem_ptrs for each tree_buffer
 
     /* model xml information */
@@ -135,4 +134,4 @@ vcl_ostream& operator <<(vcl_ostream &s, boxm_ocl_bit_scene& scene);
 void x_write(vcl_ostream &os, boxm_ocl_bit_scene& scene, vcl_string name);
 
 
-#endif //boxm_ocl_scene_h_
+#endif // boxm_ocl_bit_scene_h_
