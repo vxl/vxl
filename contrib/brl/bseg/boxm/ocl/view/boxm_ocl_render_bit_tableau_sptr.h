@@ -1,4 +1,4 @@
-// This is brl/bseg/boxm/ocl/view/boxm_ocl_rerender_tableau_sptr.h
+// This is brl/bseg/boxm/ocl/view/boxm_ocl_render_bit_tableau_sptr.h
 #ifndef boxm_ocl_render_bit_tableau_sptr_h_
 #define boxm_ocl_render_bit_tableau_sptr_h_
 //:
@@ -12,6 +12,4 @@
 class boxm_ocl_render_bit_tableau;
 typedef vgui_tableau_sptr_t<boxm_ocl_render_bit_tableau> boxm_ocl_render_bit_tableau_sptr;
 
-#endif // boxm_ocl_rerender_tableau_sptr_h_
-
-
+#endif // boxm_ocl_render_bit_tableau_sptr_h_
