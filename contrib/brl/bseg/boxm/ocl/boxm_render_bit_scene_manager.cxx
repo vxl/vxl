@@ -183,6 +183,10 @@ bool boxm_render_bit_scene_manager::set_args(unsigned kernel_index=0)
       status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&output_buf_);
       if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output)"))
           return 0;
+      //bit lookup buffer
+      status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&bit_lookup_buf_);
+      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output)"))
+          return 0;
   }
   else if (kernel_index==1)
   {
@@ -1039,6 +1043,7 @@ bool boxm_render_bit_scene_manager::set_all_blocks()
   trees_        = NULL;
   data_alpha_   = NULL;
   data_mixture_ = NULL;
+  bit_lookup_   = NULL;
   scene_->tree_buffer_shape(numbuffer_, tree_buffer_length_);
   scene_->data_buffer_shape(numbuffer_, data_buffer_length_);
   trees_size_   = numbuffer_*tree_buffer_length_;
@@ -1063,6 +1068,26 @@ bool boxm_render_bit_scene_manager::set_all_blocks()
   //allocate and initialize mix components
   data_mixture_ = (cl_uchar *) boxm_ocl_utils::alloc_aligned(data_size_,sizeof(cl_uchar8),16);
   scene_->get_mixture(data_mixture_);
+  
+  //allocate bit lookup hash table
+  bit_lookup_ = (cl_uchar *) boxm_ocl_utils::alloc_aligned(256,sizeof(cl_uchar),16);
+  unsigned char bits[] = { 0,   1,   1,   2,   1,   2,   2,   3,   1,   2,   2,   3,   2,   3,   3,   4,  
+                           1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5 , 
+                           1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5  ,
+                           2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
+                           1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5  ,
+                           2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
+                           2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
+                           3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7  ,
+                           1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5  ,
+                           2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
+                           2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
+                           3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7  ,
+                           2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
+                           3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7  ,
+                           3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7  ,
+                           4,   5,   5,   6,   5,   6,   6,   7,   5,   6,   6,   7,   6,   7,   7,   8 };
+  for(int i=0; i<256; i++) bit_lookup_[i] = bits[i];
 
   //---- debug alloc --------------------------------------------------
   output_ = NULL;
@@ -1087,10 +1112,13 @@ bool boxm_render_bit_scene_manager::clean_tree()
     boxm_ocl_utils::free_aligned(data_alpha_);
   if (output_)
     boxm_ocl_utils::free_aligned(output_);
+  if (bit_lookup_)
+    boxm_ocl_utils::free_aligned(bit_lookup_);
   data_buffer_length_=0;
   tree_buffer_length_=0;
   numbuffer_=0;
   output_ = 0;
+  bit_lookup_ = 0;
   return true;
 }
 
@@ -1117,6 +1145,13 @@ bool boxm_render_bit_scene_manager::set_tree_buffers()
                                      data_size_*sizeof(cl_uchar8),
                                      data_mixture_,&status);
   if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (cell mixture) failed."))
+    return false;
+    
+  bit_lookup_buf_ = clCreateBuffer(this->context_,
+                                   CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
+                                   256*sizeof(cl_uchar),
+                                   bit_lookup_,&status);
+  if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (bit_lookup) failed."))
     return false;
   
   output_buf_ = clCreateBuffer(this->context_,
@@ -1147,6 +1182,9 @@ bool boxm_render_bit_scene_manager::set_tree_buffers()
 bool boxm_render_bit_scene_manager::release_tree_buffers()
 {
   cl_int status;
+  status = clReleaseMemObject(bit_lookup_buf_);
+  if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (bit_lookup_buf_)."))
+    return false;
   status = clReleaseMemObject(trees_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (cells_buf_)."))
     return false;
