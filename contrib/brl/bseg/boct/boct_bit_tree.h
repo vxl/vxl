@@ -21,14 +21,13 @@
 #include <vgl/vgl_box_3d.h>
 #include <vcl_bitset.h>
 #include <vcl_iosfwd.h>
-#include <vnl/vnl_vector_fixed.h>
 #include <vcl_vector.h>
 
 class boct_bit_tree
 {
   typedef vnl_vector_fixed<int,4> int4;
   typedef vnl_vector_fixed<float,16> float16;
-  
+
  public:
 
   //: Default constructor
@@ -39,10 +38,10 @@ class boct_bit_tree
 
   //: Destructor
   ~boct_bit_tree() {
-    if(bits_) { 
+    if (bits_) {
       delete[] bits_; bits_ = NULL;
     }
-    if(data_) {
+    if (data_) {
       delete[] data_; data_ = NULL;
     }
   }
@@ -93,8 +92,8 @@ class boct_bit_tree
 
   //: Tree structure stored as "bits" = really a char array
   unsigned char* bits_;
-  
-  //: data - kept as float 16... 
+
+  //: data - kept as float 16...
   float* data_;
 
   //: Maximum number of levels in the octree
