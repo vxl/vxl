@@ -21,6 +21,20 @@ void test_load_neighboring_blocks()
     if (scene->load_block_and_neighbors(iter.index().x(),iter.index().y(),iter.index().z())) {
       vcl_cout << "Center blocks : "  << iter.index()<< vcl_endl;
       vcl_set<vgl_point_3d<int>, bvgl_point_3d_cmp<int> > active_blocks = scene->active_blocks();
+      
+      //iterate through the active blocks and check that their trees are in memory
+      vcl_set<vgl_point_3d<int>, bvgl_point_3d_cmp<int>  >::iterator it = active_blocks.begin();
+      
+      for (; it!=active_blocks.end(); it++){
+        boxm_block<boct_tree<short, float> > *block = scene->get_block(*it);
+        if(!block) 
+          result = false;
+        boct_tree<short, float> *tree = block->get_tree();
+        if(!tree)
+          result =false;
+      }
+      
+      
       unsigned sum =0;
       if (iter.index().x()>0 && iter.index().x()<3) sum++;
       if (iter.index().y()>0 && iter.index().y()<3) sum++;

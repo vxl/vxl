@@ -33,22 +33,23 @@ boxm_scene<boct_tree<short, float> >* create_scene(unsigned world_dimx,unsigned 
   scene->set_paths(scene_path, "test_scene");
   
   unsigned cell_index = 7;
-  for (unsigned x = 0; x<world_dimx; x++)
-    for(unsigned y = 0; y<world_dimy; y++)
-      for(unsigned z = 0; z<world_dimz; z++)
-      {
-        scene->load_block(x,y,z);
-        boxm_block<boct_tree<short, float> > *block = scene->get_active_block();
-        // Construct an empty tree with 3 maximum levels 1 levele initialized to 0.0
-        boct_tree<short,float> *tree = new boct_tree<short,float>(0.5f, 3, 1);
-        //tree->print();
-        init_tree(tree, cell_index);
-        //tree->print();
-        block->init_tree(tree);
-        scene->write_active_block();
-        if(cell_index == 0) cell_index = 7;
-        cell_index--;
-      }
+  boxm_block_iterator<boct_tree<short, float> > iter=scene->iterator();
+  iter.begin();
+  while(!iter.end())
+  {
+    scene->load_block(iter.index());
+    boxm_block<boct_tree<short, float> > *block = scene->get_active_block();
+    // Construct an empty tree with 3 maximum levels 1 levele initialized to 0.0
+    boct_tree<short,float> *tree = new boct_tree<short,float>(0.5f, 3, 1);
+    //tree->print();
+    init_tree(tree, cell_index);
+    //tree->print();
+    block->init_tree(tree);
+    scene->write_active_block();
+    if(cell_index == 0) cell_index = 7;
+    cell_index--;
+    ++iter;
+  }
   return scene;
 }
 
