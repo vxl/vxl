@@ -141,10 +141,10 @@ class boxm_scene :public boxm_scene_base
   //: what is the use of this?
   boxm_block<T>* get_block(unsigned i, unsigned j, unsigned k) { return blocks_(i,j,k); }
 
-  boxm_block<T>* get_block(vgl_point_3d<int>& idx) { return blocks_(idx.x(), idx.y(), idx.z()); }
+  boxm_block<T>* get_block(const vgl_point_3d<int>& idx) { return blocks_(idx.x(), idx.y(), idx.z()); }
   
-  //: Return all cells in a region
-  void cells_in_region(vgl_box_3d<double>, vcl_vector<boct_tree_cell<loc_type, datatype>* >& cells);
+  //: Return all leaf cells in a region
+  void leaves_in_region(vgl_box_3d<double>, vcl_vector<boct_tree_cell<loc_type, datatype>* >& cells);
   
   //: Locate point in scene coordinates. Assumes that the block containing the point is already loaded into memory
   boct_tree_cell<loc_type, datatype>* locate_point_in_memory(vgl_point_3d<double> &p);

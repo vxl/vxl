@@ -173,12 +173,17 @@ void boxm_scene<T>::write_active_block()
     vcl_cout << "Internal Nodes 2: " << save_internal_nodes_ << " save_platform_independent_ " << save_platform_independent_ << vcl_endl;
 #endif
     blocks_(x,y,z)->b_write(os, save_internal_nodes_, save_platform_independent_);
+    
     // delete the block's data
+#if 0 //Is this necessary? If so, let Isa know
     boxm_block<T>* block = blocks_(x,y,z);
     block->delete_tree();
     block->set_tree(0);
-    active_block_.set(-1,-1,-1);
+    active_b
+    lock_.set(-1,-1,-1);
+#endif
     os.close();
+
   }
 }
 
@@ -710,7 +715,7 @@ void boxm_scene<T>::unload_active_blocks()
 
 //: Locate all cells within a 3d region, which coordinates are given in scene coordinates
 template <class T>
-void boxm_scene<T>::cells_in_region(vgl_box_3d<double> box, vcl_vector<boct_tree_cell<typename T::loc_type, typename T::datatype>* > &cells)
+void boxm_scene<T>::leaves_in_region(vgl_box_3d<double> box, vcl_vector<boct_tree_cell<typename T::loc_type, typename T::datatype>* > &cells)
 {
   //load blocks intersecting the region
   vgl_point_3d<double> min_point = box.min_point();
@@ -725,13 +730,12 @@ void boxm_scene<T>::cells_in_region(vgl_box_3d<double> box, vcl_vector<boct_tree
   load_blocks(min_idx, max_idx);
 
   //traverse blocks. for each block get the cells intersects the portion of the region contained in the block
-  for (int i = min_idx.x(); i <= max_idx.x(); i++)
+  for (int k = min_idx.z(); k <= max_idx.z(); k++)
   {
     for (int j = min_idx.y(); j <= max_idx.y(); j++)
     {
-      for (int k = min_idx.z(); k <= max_idx.z(); k++)
+      for (int i = min_idx.x(); i <= max_idx.x();i++)
       {
-        vcl_vector<boct_tree_cell<loc_type, datatype>* > temp_cells;
         boxm_block<T>* block = blocks_(i,j,k);
         vgl_box_3d<double> local_box = vgl_intersection(get_block_bbox(i,j,k),box);
 
@@ -740,6 +744,8 @@ void boxm_scene<T>::cells_in_region(vgl_box_3d<double> box, vcl_vector<boct_tree
         vgl_box_3d<double> local_box_exclusive(local_box.min_point().x(), local_box.min_point().y(), local_box.min_point().z(),
                                                local_box.max_point().x()- 1e-7, local_box.max_point().y()- 1e-7,local_box.max_point().z()- 1e-7);
         T *tree = block->get_tree();
+        vcl_vector<boct_tree_cell<loc_type, datatype>* > temp_cells;
+        temp_cells.clear();
         tree->locate_region_leaves_global(local_box_exclusive, temp_cells);
         cells.insert(cells.end(), temp_cells.begin(), temp_cells.end());
       }
@@ -759,14 +765,29 @@ boct_tree_cell<typename T::loc_type, typename T::datatype>* boxm_scene<T>::locat
   if(!get_block_index(p, block_idx))
     return NULL;
   
+#if 0
+  vcl_cout << "Requesting blocks : "<< block_idx<< vcl_endl;
+  vcl_cout << "Active blocks : " << vcl_endl;
+  vcl_set<vgl_point_3d<int>, bvgl_point_3d_cmp<int> >::iterator it = active_blocks_.begin();
+  for (; it!=active_blocks_.end(); it++){
+    vcl_cout << *it << vcl_endl;
+    boxm_block<T > *block = get_block(*it);
+    if(!block) 
+      vcl_cerr << " NULL block" << vcl_endl;
+    T *tree = block->get_tree();
+    if(!tree)
+      vcl_cerr << " NULL tree" << vcl_endl;  
+  }
+#endif
+  
   //get the block, if block is not already in memory, return null
   boxm_block<T>* block = blocks_(block_idx.x(), block_idx.y(), block_idx.z());
-  
-  if(!block){
+  T *tree = block->get_tree();
+  if(!block || !tree){
     vcl_cerr << " Cannot locate point, because block is not loaded in the  memory" << vcl_endl;
     return NULL;
   }
-  return block->get_tree()->locate_point_global(p);
+  return tree->locate_point_global(p);
   
   
 }
@@ -877,6 +898,23 @@ boxm_cell_iterator<T>& boxm_cell_iterator<T>::begin()
   cells_ = (*block_iterator_)->get_tree()->leaf_cells();
   cells_iterator_ = cells_.begin();
 
+#if 0
+  vcl_set<vgl_point_3d<int>, bvgl_point_3d_cmp<int> > active_blocks = block_iterator_.scene_->active_blocks();
+  
+  //iterate through the active blocks and check that their trees are in memory
+  vcl_set<vgl_point_3d<int>, bvgl_point_3d_cmp<int>  >::iterator it = active_blocks.begin();
+  
+  for (; it!=active_blocks.end(); it++){
+    vcl_cout << " Active Block idx: " << *it << vcl_endl;
+    boxm_block< T > *block = block_iterator_.scene_->get_block(*it);
+    if(!block) 
+      vcl_cerr << " NULL block" << vcl_endl;
+    T *tree = block->get_tree();
+    if(!tree)
+      vcl_cerr << " NULL tree" << vcl_endl;  
+  }
+  
+#endif
   return *this;
 }
 
@@ -923,6 +961,24 @@ boxm_cell_iterator<T>& boxm_cell_iterator<T>::operator++()
       (block_iterator_.scene_->*block_loading_func_)(block_iterator_.index().x(),block_iterator_.index().y(),block_iterator_.index().z());
       cells_ = (*block_iterator_)->get_tree()->leaf_cells();
       cells_iterator_ = cells_.begin();
+      
+#if 0
+      vcl_set<vgl_point_3d<int>, bvgl_point_3d_cmp<int> > active_blocks = block_iterator_.scene_->active_blocks();
+      
+      //iterate through the active blocks and check that their trees are in memory
+      vcl_set<vgl_point_3d<int>, bvgl_point_3d_cmp<int>  >::iterator it = active_blocks.begin();
+      
+      for (; it!=active_blocks.end(); it++){
+        vcl_cout << " Active Block idx: " << *it << vcl_endl;
+        boxm_block< T > *block = block_iterator_.scene_->get_block(*it);
+        if(!block) 
+          vcl_cerr << " NULL block" << vcl_endl;
+        T *tree = block->get_tree();
+        if(!tree)
+          vcl_cerr << " NULL tree" << vcl_endl;  
+      }
+      
+#endif
     }
   }
   return *this;
