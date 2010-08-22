@@ -34,8 +34,8 @@ bool boxm_render_bit_scene_manager::init_ray_trace(boxm_ocl_bit_scene *scene,
                                     +"/contrib/brl/bseg/boxm/ocl/expected_functor.cl")||
       !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
                                     +"/contrib/brl/bseg/boxm/ocl/ray_bundle_library_functions.cl")||
-    //  !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-    //                                +"/contrib/brl/bseg/boxm/ocl/rerender.cl")||
+   // !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
+   //                               +"/contrib/brl/bseg/boxm/ocl/rerender.cl")||
       !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
                                     +"/contrib/brl/bseg/boxm/ocl/ray_trace_bit_scene.cl")) {
     vcl_cerr << "Error: boxm_ray_trace_manager : failed to load kernel source (helper functions)\n";
@@ -47,7 +47,7 @@ bool boxm_render_bit_scene_manager::init_ray_trace(boxm_ocl_bit_scene *scene,
 
   vcl_string functor="";
   if (render_depth) {
-    vcl_cout<<"Using Functor step_cell_render_depth = "<<vcl_endl;
+    vcl_cout<<"Using Functor step_cell_render_depth ="<<vcl_endl;
     functor="step_cell_render_depth(alpha_array,data_ptr,d,global_depth,&data_return);";
   }
   else {
@@ -79,27 +79,29 @@ bool boxm_render_bit_scene_manager::set_kernel()
   }
   kernels_.push_back(kernel0);
 
-  //cl_kernel kernel1 = clCreateKernel(program_,"rerender_ocl_scene_opt",&status);
-  //if (!this->check_val(status,CL_SUCCESS,error_to_string(status))) {
-    //return false;
-  //}
-  //kernels_.push_back(kernel1);
+#if 0
+  cl_kernel kernel1 = clCreateKernel(program_,"rerender_ocl_scene_opt",&status);
+  if (!this->check_val(status,CL_SUCCESS,error_to_string(status))) {
+    return false;
+  }
+  kernels_.push_back(kernel1);
+#endif
   return true;
 }
 
 
 bool boxm_render_bit_scene_manager::release_kernel()
 {
-    if (kernels_.size()>0)
+  if (kernels_.size()>0)
+  {
+    for (unsigned i=0;i<kernels_.size();i++)
     {
-        for (unsigned i=0;i<kernels_.size();i++)
-        {
-            cl_int status = clReleaseKernel(kernels_[i]);
-            if (!this->check_val(status,CL_SUCCESS,error_to_string(status)))
-                return false;
-        }
+      cl_int status = clReleaseKernel(kernels_[i]);
+      if (!this->check_val(status,CL_SUCCESS,error_to_string(status)))
+        return false;
     }
-    return true;
+  }
+  return true;
 }
 
 
@@ -111,169 +113,169 @@ bool boxm_render_bit_scene_manager::set_args(unsigned kernel_index=0)
 
   if (kernel_index==0)
   {
-      int i=0;
-      status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&scene_dims_buf_);
-      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (scene_dims_buf_)"))
-          return 0;
-      status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&scene_origin_buf_);
-      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (scene_orign_buf_)"))
-          return 0;
-      status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&block_dims_buf_);
-      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (block_dims_buf_)"))
-          return 0;
-      status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&block_ptrs_buf_);
-      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (block_ptrs_buf_)"))
-          return 0;
-      // root level buffer
-      status = clSetKernelArg(kernels_[0],i++,sizeof(cl_uint), &root_level_);
-      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (root_level_buf_)"))
-          return 0;
-      // the length of buffer
-      status = clSetKernelArg(kernels_[0],i++,sizeof(cl_int), &numbuffer_);
-      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (lenbuffer_buf_)"))
-          return 0;
-      // the length of tree buffer
-      status = clSetKernelArg(kernels_[0],i++,sizeof(cl_int), &tree_buffer_length_);
-      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (tree_lenbuffer_buf_)"))
-          return 0;
-      // the tree buffer
-      status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&trees_buf_);
-      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cells_buf_)"))
-          return 0;
-      // length of the data buffers
-      status = clSetKernelArg(kernels_[0],i++,sizeof(cl_int), &data_buffer_length_);
-      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (data_buffer_length_buf_)"))
-          return 0;
-      // alpha buffer
-      status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&data_alpha_buf_);
-      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_data_buf_)"))
-          return 0;
-      //mixture buffer
-      status = clSetKernelArg(kernels_[0], i++, sizeof(cl_mem), (void *)&data_mixture_buf_);
-      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_mixture_buf)"))
-          return 0;
+    int i=0;
+    status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&scene_dims_buf_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (scene_dims_buf_)"))
+      return 0;
+    status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&scene_origin_buf_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (scene_orign_buf_)"))
+      return 0;
+    status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&block_dims_buf_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (block_dims_buf_)"))
+      return 0;
+    status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&block_ptrs_buf_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (block_ptrs_buf_)"))
+      return 0;
+    // root level buffer
+    status = clSetKernelArg(kernels_[0],i++,sizeof(cl_uint), &root_level_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (root_level_buf_)"))
+      return 0;
+    // the length of buffer
+    status = clSetKernelArg(kernels_[0],i++,sizeof(cl_int), &numbuffer_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (lenbuffer_buf_)"))
+      return 0;
+    // the length of tree buffer
+    status = clSetKernelArg(kernels_[0],i++,sizeof(cl_int), &tree_buffer_length_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (tree_lenbuffer_buf_)"))
+      return 0;
+    // the tree buffer
+    status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&trees_buf_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cells_buf_)"))
+      return 0;
+    // length of the data buffers
+    status = clSetKernelArg(kernels_[0],i++,sizeof(cl_int), &data_buffer_length_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (data_buffer_length_buf_)"))
+      return 0;
+    // alpha buffer
+    status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&data_alpha_buf_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_data_buf_)"))
+      return 0;
+    //mixture buffer
+    status = clSetKernelArg(kernels_[0], i++, sizeof(cl_mem), (void *)&data_mixture_buf_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_mixture_buf)"))
+      return 0;
 
-      // camera buffer
-      status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&persp_cam_buf_);
-      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (data)"))
-          return 0;
-      // roi dimensions
-      status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&img_dims_buf_);
-      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (Img dimensions)"))
-          return 0;
-      //local copy of the tree (one for each thread/ray)
-      status = clSetKernelArg(kernels_[0],i++,64*sizeof(cl_uchar16),0);
-      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local tree)"))
-          return 0;
-      //// output image buffer
-      status = clSetKernelArg(kernels_[0],i++,3*sizeof(cl_float16),0);
-      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local cam)"))
-          return 0;
-      status = clSetKernelArg(kernels_[0],i++,sizeof(cl_uint4),0);
-      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local image dimensions)"))
-          return 0;
+    // camera buffer
+    status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&persp_cam_buf_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (data)"))
+      return 0;
+    // roi dimensions
+    status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&img_dims_buf_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (Img dimensions)"))
+      return 0;
+    //local copy of the tree (one for each thread/ray)
+    status = clSetKernelArg(kernels_[0],i++,64*sizeof(cl_uchar16),0);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local tree)"))
+      return 0;
+    //// output image buffer
+    status = clSetKernelArg(kernels_[0],i++,3*sizeof(cl_float16),0);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local cam)"))
+      return 0;
+    status = clSetKernelArg(kernels_[0],i++,sizeof(cl_uint4),0);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local image dimensions)"))
+      return 0;
 
-      status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&image_buf_);
-      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (input_image)"))
-          return 0;
-      status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&image_gl_buf_);
-      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (gl_image)"))
-          return 0;
-      //output buffer
-      status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&output_buf_);
-      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output)"))
-          return 0;
-      //bit lookup buffer
-      status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&bit_lookup_buf_);
-      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output)"))
-          return 0;
+    status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&image_buf_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (input_image)"))
+      return 0;
+    status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&image_gl_buf_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (gl_image)"))
+      return 0;
+    //output buffer
+    status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&output_buf_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output)"))
+      return 0;
+    //bit lookup buffer
+    status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&bit_lookup_buf_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output)"))
+      return 0;
   }
   else if (kernel_index==1)
   {
-      //: Set args for second kernel
-      int i=0;
-      // depth image buffer
-      status = clSetKernelArg(kernels_[1],i++,sizeof(cl_mem),(void *)&image_buf_);
-      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (block_ptrs_buf_)"))
-          return 0;
-      status = clSetKernelArg(kernels_[1],i++,sizeof(cl_mem),(void *)&ext_image_buf_);
-      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (orig_image_buf_)"))
-          return 0;
-      status = clSetKernelArg(kernels_[1],i++,sizeof(cl_mem),(void *)&ext_cam_buf_);
-      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (orig_cam_buf_)"))
-          return 0;
-      status = clSetKernelArg(kernels_[1],i++,sizeof(cl_mem),(void *)&scene_dims_buf_);
-      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (scene_dims_buf_)"))
-          return 0;
-      status = clSetKernelArg(kernels_[1],i++,sizeof(cl_mem),(void *)&scene_origin_buf_);
-      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (scene_orign_buf_)"))
-          return 0;
-      status = clSetKernelArg(kernels_[1],i++,sizeof(cl_mem),(void *)&block_dims_buf_);
-      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (block_dims_buf_)"))
-          return 0;
-      status = clSetKernelArg(kernels_[1],i++,sizeof(cl_mem),(void *)&block_ptrs_buf_);
-      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (block_ptrs_buf_)"))
-          return 0;
-      // root level buffer
-      status = clSetKernelArg(kernels_[1],i++,sizeof(cl_uint), &root_level_);
-      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (root_level_buf_)"))
-          return 0;
-      // the number of buffers
-      status = clSetKernelArg(kernels_[1],i++,sizeof(cl_int), &numbuffer_);
-      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (lenbuffer_buf_)"))
-          return 0;
-      // the length of the tree buffer
-      status = clSetKernelArg(kernels_[1],i++,sizeof(cl_int), &tree_buffer_length_);
-      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (lenbuffer_buf_)"))
-          return 0;
-      // the tree buffer
-      status = clSetKernelArg(kernels_[1],i++,sizeof(cl_mem),(void *)&trees_buf_);
-      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cells_buf_)"))
-          return 0;
-      // the length of the tree buffer
-      status = clSetKernelArg(kernels_[1],i++,sizeof(cl_int), &data_buffer_length_);
-      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (lenbuffer_buf_)"))
-          return 0;
-      // alpha buffer
-      status = clSetKernelArg(kernels_[1],i++,sizeof(cl_mem),(void *)&data_alpha_buf_);
-      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_data_buf_)"))
-          return 0;
-      //mixture buffer !!IS THIS NEEDED HERE?!!
-      
-      // camera buffer
-      status = clSetKernelArg(kernels_[1],i++,sizeof(cl_mem),(void *)&persp_cam_buf_);
-      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (data)"))
-          return 0;
-      // roi dimensions
-      status = clSetKernelArg(kernels_[1],i++,sizeof(cl_mem),(void *)&img_dims_buf_);
-      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (Img dimensions)"))
-          return 0;
-      //// output image buffer
-      status = clSetKernelArg(kernels_[1],i++,3*sizeof(cl_float16),0);
-      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local cam)"))
-          return 0;
-      status = clSetKernelArg(kernels_[1],i++,sizeof(cl_uint4),0);
-      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local image dimensions)"))
-          return 0;
-      status = clSetKernelArg(kernels_[1],i++,sizeof(cl_float4),0);
-      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local image dimensions)"))
-          return 0;
+    //: Set args for second kernel
+    int i=0;
+    // depth image buffer
+    status = clSetKernelArg(kernels_[1],i++,sizeof(cl_mem),(void *)&image_buf_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (block_ptrs_buf_)"))
+      return 0;
+    status = clSetKernelArg(kernels_[1],i++,sizeof(cl_mem),(void *)&ext_image_buf_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (orig_image_buf_)"))
+      return 0;
+    status = clSetKernelArg(kernels_[1],i++,sizeof(cl_mem),(void *)&ext_cam_buf_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (orig_cam_buf_)"))
+      return 0;
+    status = clSetKernelArg(kernels_[1],i++,sizeof(cl_mem),(void *)&scene_dims_buf_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (scene_dims_buf_)"))
+      return 0;
+    status = clSetKernelArg(kernels_[1],i++,sizeof(cl_mem),(void *)&scene_origin_buf_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (scene_orign_buf_)"))
+      return 0;
+    status = clSetKernelArg(kernels_[1],i++,sizeof(cl_mem),(void *)&block_dims_buf_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (block_dims_buf_)"))
+      return 0;
+    status = clSetKernelArg(kernels_[1],i++,sizeof(cl_mem),(void *)&block_ptrs_buf_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (block_ptrs_buf_)"))
+      return 0;
+    // root level buffer
+    status = clSetKernelArg(kernels_[1],i++,sizeof(cl_uint), &root_level_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (root_level_buf_)"))
+      return 0;
+    // the number of buffers
+    status = clSetKernelArg(kernels_[1],i++,sizeof(cl_int), &numbuffer_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (lenbuffer_buf_)"))
+      return 0;
+    // the length of the tree buffer
+    status = clSetKernelArg(kernels_[1],i++,sizeof(cl_int), &tree_buffer_length_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (lenbuffer_buf_)"))
+      return 0;
+    // the tree buffer
+    status = clSetKernelArg(kernels_[1],i++,sizeof(cl_mem),(void *)&trees_buf_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cells_buf_)"))
+      return 0;
+    // the length of the tree buffer
+    status = clSetKernelArg(kernels_[1],i++,sizeof(cl_int), &data_buffer_length_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (lenbuffer_buf_)"))
+      return 0;
+    // alpha buffer
+    status = clSetKernelArg(kernels_[1],i++,sizeof(cl_mem),(void *)&data_alpha_buf_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_data_buf_)"))
+      return 0;
+    //mixture buffer !!IS THIS NEEDED HERE?!!
 
-      status = clSetKernelArg(kernels_[1],i++,sizeof(cl_mem),(void *)&rerender_image_buf_);
-      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (input_image)"))
-          return 0;
+    // camera buffer
+    status = clSetKernelArg(kernels_[1],i++,sizeof(cl_mem),(void *)&persp_cam_buf_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (data)"))
+      return 0;
+    // roi dimensions
+    status = clSetKernelArg(kernels_[1],i++,sizeof(cl_mem),(void *)&img_dims_buf_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (Img dimensions)"))
+      return 0;
+    //// output image buffer
+    status = clSetKernelArg(kernels_[1],i++,3*sizeof(cl_float16),0);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local cam)"))
+      return 0;
+    status = clSetKernelArg(kernels_[1],i++,sizeof(cl_uint4),0);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local image dimensions)"))
+      return 0;
+    status = clSetKernelArg(kernels_[1],i++,sizeof(cl_float4),0);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local image dimensions)"))
+      return 0;
+
+    status = clSetKernelArg(kernels_[1],i++,sizeof(cl_mem),(void *)&rerender_image_buf_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (input_image)"))
+      return 0;
 #if 0
-      image_gl_buf_ = clCreateBuffer(this->context_,
-                                     CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
-                                     wni_*wnj_*sizeof(cl_uint),
-                                     image_gl_,&status);
-      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (gl_image)"))
-          return 0;
+    image_gl_buf_ = clCreateBuffer(this->context_,
+                                   CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+                                   wni_*wnj_*sizeof(cl_uint),
+                                   image_gl_,&status);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (gl_image)"))
+      return 0;
 #endif
 
-      status = clSetKernelArg(kernels_[1],i++,sizeof(cl_mem),(void *)&image_gl_buf_);
-      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (gl_image)"))
-          return 0;
+    status = clSetKernelArg(kernels_[1],i++,sizeof(cl_mem),(void *)&image_gl_buf_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (gl_image)"))
+      return 0;
   }
   return 1;
 }
@@ -283,10 +285,10 @@ bool boxm_render_bit_scene_manager::set_commandqueue()
 {
   cl_int status = CL_SUCCESS;
   command_queue_ = clCreateCommandQueue(this->context(),this->devices()[0],CL_QUEUE_PROFILING_ENABLE,&status);
-  if (!this->check_val(status,CL_SUCCESS,"Falied in command queue creation" + error_to_string(status)))
+  if (!this->check_val(status,CL_SUCCESS,"Failed in command queue creation" + error_to_string(status)))
     return false;
-
-  return true;
+  else
+    return true;
 }
 
 
@@ -331,13 +333,11 @@ bool boxm_render_bit_scene_manager::start(bool set_gl_buffer)
               && this->set_input_image_buffers()
               && this->set_image_dims_buffers();
 
-
   good= good  && this->set_kernel()
               && this->set_args(0);
 
    good=good  && this->set_commandqueue()
               && this->set_workspace();
-
 
   return good;
 }
@@ -365,27 +365,29 @@ bool boxm_render_bit_scene_manager::run(bool rerender)
   gpu_time_= (double)1.0e-6 * (tend - tstart); // convert nanoseconds to milliseconds
   vcl_cout<<"GPU time is "<<gpu_time_<<vcl_endl;
 
-  ////-------- DEBUG READ AND PRINT --------------------------------------
-  //cl_event events[2];
-  //status = clEnqueueReadBuffer(command_queue_,output_buf_,CL_TRUE,
-                               //0,numbuffer_*sizeof(cl_float4),
-                               //output_,
-                               //0,NULL,&events[0]);
-  
-  //// Wait for the read buffer to finish execution
-  //status = clWaitForEvents(1, &events[0]);
-  //if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents failed."))
-    //return false;
-  //status = clReleaseEvent(events[0]);
-  //vcl_cout<<"KERNEL OUTPUT: "<<vcl_endl;
-  //for(int i=0; i<1; i++)
-    //vcl_cout<<output_[4*i]<<" "
-            //<<output_[4*i+1]<<" "
-            //<<output_[4*i+2]<<" "
-            //<<output_[4*i+3]<<"\n";
-  //vcl_cout<<"MATCH?"<<vcl_endl;
-  //vcl_cout<<(int)scene_->tree_buffers_(4, 10)[0]<<" "<<(int)scene_->tree_buffers_(33,11)[0]<<vcl_endl;
-  ////--------------------------------------------------------------------
+#ifdef DEBUG
+  //-------- DEBUG READ AND PRINT --------------------------------------
+  cl_event events[2];
+  status = clEnqueueReadBuffer(command_queue_,output_buf_,CL_TRUE,
+                               0,numbuffer_*sizeof(cl_float4),
+                               output_,
+                               0,NULL,&events[0]);
+
+  // Wait for the read buffer to finish execution
+  status = clWaitForEvents(1, &events[0]);
+  if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents failed."))
+    return false;
+  status = clReleaseEvent(events[0]);
+  vcl_cout<<"KERNEL OUTPUT:"<<vcl_endl;
+  for (int i=0; i<1; i++)
+    vcl_cout<<output_[4*i]<<' '
+            <<output_[4*i+1]<<' '
+            <<output_[4*i+2]<<' '
+            <<output_[4*i+3]<<'\n';
+  vcl_cout<<"MATCH?\n"
+          <<(int)scene_->tree_buffers_(4, 10)[0]<<' '<<(int)scene_->tree_buffers_(33,11)[0]<<vcl_endl;
+  //--------------------------------------------------------------------
+#endif // DEBUG
 
   if (rerender)
   {
@@ -445,7 +447,9 @@ bool boxm_render_bit_scene_manager::run_scene()
   good =good && release_tree_buffers()
              && clean_tree()
              && read_output_image();
-  //this->print_image();
+#ifdef DEBUG
+  this->print_image();
+#endif
   good=good && release_input_view_buffers()
   //        && clean_input_view()
             && release_scene_data_buffers()
@@ -454,10 +458,10 @@ bool boxm_render_bit_scene_manager::run_scene()
   // release the command Queue
 
   this->release_kernel();
-#if 0
+#ifdef DEBUG
   vcl_cout << "Timing Analysis\n"
            << "===============\n"
-           <<"openCL Running time "<<gpu_time_<<" ms\n"
+           << "openCL Running time "<<gpu_time_<<" ms\n"
            << "Running block "<<total_gpu_time/1000<<"s\n"
            << "total block loading time = " << total_load_time << "s\n"
            << "total block processing time = " << total_raytrace_time << 's' << vcl_endl;
@@ -505,7 +509,7 @@ bool boxm_render_bit_scene_manager::read_output_image()
   status = clWaitForEvents(1, &events[0]);
   if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents failed."))
     return false;
-  
+
   return this->check_val(status,CL_SUCCESS,"clReleaseEvent failed.")==1;
 }
 
@@ -576,7 +580,7 @@ void boxm_render_bit_scene_manager::print_tree()
                << trees_[i+2] << ' '
                << trees_[i+3];
 
-#if 0
+#ifdef DEBUG
       int data_ptr = 16*cells_[i+2];
       if (data_ptr>0)
         vcl_cout << '[' << cell_data_[data_ptr] << ','
@@ -613,7 +617,7 @@ void boxm_render_bit_scene_manager::print_image()
         vcl_cout<<image_[(j*img_dims_[2]+i)]<<' ';
       vcl_cout<<vcl_endl;
     }
-#if 0
+#ifdef DEBUG
     vcl_cout<<"Plane 1"<<vcl_endl;
     for (unsigned j=0;j<img_dims_[3];j++)
     {
@@ -708,99 +712,96 @@ bool boxm_render_bit_scene_manager::set_external_image_cam_buffers(
                                       vpgl_perspective_camera<double> * external_cam
                                      )
 {
-    if (external_image.ni()>output_img_.ni() || external_image.nj()>output_img_.nj())
-        return false;
+  if (external_image.ni()>output_img_.ni() || external_image.nj()>output_img_.nj())
+    return false;
 
-    ext_image_=(cl_float *)boxm_ocl_utils::alloc_aligned(wni_*wnj_,sizeof(cl_float),16);
-    rerender_image_=(cl_float *)boxm_ocl_utils::alloc_aligned(wni_*wnj_,sizeof(cl_float),16);
+  ext_image_=(cl_float *)boxm_ocl_utils::alloc_aligned(wni_*wnj_,sizeof(cl_float),16);
+  rerender_image_=(cl_float *)boxm_ocl_utils::alloc_aligned(wni_*wnj_,sizeof(cl_float),16);
 
-    // pad the image
-    for (unsigned i=0;i<external_image.ni();i++)
-        for (unsigned j=0;j<external_image.nj();j++)
-            ext_image_[(j*wni_+i)]=external_image(i,j);
-    for (unsigned i=0;i<wni_;i++)
-        for (unsigned j=0;j<wnj_;j++)
-            rerender_image_[(j*wni_+i)]=0.0f;
+  // pad the image
+  for (unsigned i=0;i<external_image.ni();i++)
+    for (unsigned j=0;j<external_image.nj();j++)
+      ext_image_[(j*wni_+i)]=external_image(i,j);
+  for (unsigned i=0;i<wni_;i++)
+    for (unsigned j=0;j<wnj_;j++)
+      rerender_image_[(j*wni_+i)]=0.0f;
 
+  ext_cam_=(cl_float *)boxm_ocl_utils::alloc_aligned(1,sizeof(cl_float16),16);
+  vnl_matrix<double> projection_matrix=external_cam->get_matrix();
+  int cnt=0;
+  for (unsigned i=0;i<projection_matrix.rows();i++)
+    for (unsigned j=0;j<projection_matrix.cols();j++)
+      ext_cam_[cnt++]=(cl_float)projection_matrix(i,j);
 
-    ext_cam_=(cl_float *)boxm_ocl_utils::alloc_aligned(1,sizeof(cl_float16),16);
-    vnl_matrix<double> projection_matrix=external_cam->get_matrix();
-    int cnt=0;
-    for (unsigned i=0;i<projection_matrix.rows();i++)
-        for (unsigned j=0;j<projection_matrix.cols();j++)
-            ext_cam_[cnt++]=(cl_float)projection_matrix(i,j);
+  ext_cam_[cnt++]=external_cam->camera_center().x();
+  ext_cam_[cnt++]=external_cam->camera_center().y();
+  ext_cam_[cnt++]=external_cam->camera_center().z();
+  ext_cam_[cnt++]=0;
 
-    ext_cam_[cnt++]=external_cam->camera_center().x();
-    ext_cam_[cnt++]=external_cam->camera_center().y();
-    ext_cam_[cnt++]=external_cam->camera_center().z();
-    ext_cam_[cnt++]=0;
+  cl_int status=0;
 
+  cl_image_format inputformat;
+  inputformat.image_channel_data_type=CL_FLOAT;
+  inputformat.image_channel_order=CL_INTENSITY;
+  if (wni_>this->image2d_max_width_|| wnj_>this->image2d_max_height_)
+    return false;
 
-    cl_int status=0;
+  ext_image_buf_=clCreateImage2D(this->context_,
+                                 CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
+                                 &inputformat,wni_,wnj_,wni_*sizeof(cl_float),
+                                 ext_image_,&status);
+  if (!this->check_val(status,
+             CL_SUCCESS,
+             "clCreateBuffer (cell_array) failed."))
+    return false;
+  rerender_image_buf_ = clCreateBuffer(this->context_,
+                                       CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+                                       wni_*wnj_*sizeof(cl_float),
+                                       rerender_image_,&status);
+  if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (image_buf_) failed."))
+    return false;
 
-    cl_image_format inputformat;
-    inputformat.image_channel_data_type=CL_FLOAT;
-    inputformat.image_channel_order=CL_INTENSITY;
-    if (wni_>this->image2d_max_width_|| wnj_>this->image2d_max_height_)
-        return false;
-
-    ext_image_buf_=clCreateImage2D(this->context_,
-                                   CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
-                                   &inputformat,wni_,wnj_,wni_*sizeof(cl_float),
-                                   ext_image_,&status);
-    if (!this->check_val(status,
-                         CL_SUCCESS,
-                         "clCreateBuffer (cell_array) failed."))
-      return false;
-    rerender_image_buf_ = clCreateBuffer(this->context_,
-                                         CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
-                                         wni_*wnj_*sizeof(cl_float),
-                                         rerender_image_,&status);
-    if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (image_buf_) failed."))
-        return false;
-
-
-    ext_cam_buf_ = clCreateBuffer(this->context_,CL_MEM_READ_ONLY | CL_MEM_USE_HOST_PTR, sizeof(cl_float16),ext_cam_,&status);
-    if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (cam inverse) failed."))
-        return false;
-    return true;
+  ext_cam_buf_ = clCreateBuffer(this->context_,CL_MEM_READ_ONLY | CL_MEM_USE_HOST_PTR, sizeof(cl_float16),ext_cam_,&status);
+  if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (cam inverse) failed."))
+    return false;
+  return true;
 }
 
 bool boxm_render_bit_scene_manager::set_scene_data()
 {
-    return set_scene_dims()
-        && set_scene_origin()
-        && set_block_dims()
-        && set_block_ptrs()
-        && set_root_level();
+  return set_scene_dims()
+      && set_scene_origin()
+      && set_block_dims()
+      && set_block_ptrs()
+      && set_root_level();
 }
 
 
 bool boxm_render_bit_scene_manager::clean_scene_data()
 {
-    return clean_scene_dims()
-        && clean_scene_origin()
-        && clean_block_dims()
-        && clean_block_ptrs()
-        && clean_root_level();
+  return clean_scene_dims()
+      && clean_scene_origin()
+      && clean_block_dims()
+      && clean_block_ptrs()
+      && clean_root_level();
 }
 
 
 bool boxm_render_bit_scene_manager::set_scene_data_buffers()
 {
-    return set_scene_dims_buffers()
-        && set_scene_origin_buffers()
-        && set_block_dims_buffers()
-        && set_block_ptrs_buffers();
+  return set_scene_dims_buffers()
+      && set_scene_origin_buffers()
+      && set_block_dims_buffers()
+      && set_block_ptrs_buffers();
 }
 
 
 bool boxm_render_bit_scene_manager::release_scene_data_buffers()
 {
-    return release_scene_dims_buffers()
-        && release_scene_origin_buffers()
-        && release_block_dims_buffers()
-        && release_block_ptrs_buffers();
+  return release_scene_dims_buffers()
+      && release_scene_origin_buffers()
+      && release_block_dims_buffers()
+      && release_block_ptrs_buffers();
 }
 
 
@@ -808,7 +809,7 @@ bool boxm_render_bit_scene_manager::set_root_level()
 {
   if (scene_==NULL)
   {
-    vcl_cout<<"Scene is Missing "<<vcl_endl;
+    vcl_cout<<"Scene is Missing"<<vcl_endl;
     return false;
   }
   root_level_=scene_->max_level()-1;
@@ -827,7 +828,7 @@ bool boxm_render_bit_scene_manager::set_scene_origin()
 {
   if (scene_==NULL)
   {
-    vcl_cout<<"Scene is Missing "<<vcl_endl;
+    vcl_cout<<"Scene is Missing"<<vcl_endl;
     return false;
   }
   vgl_point_3d<double> orig=scene_->origin();
@@ -874,7 +875,7 @@ bool boxm_render_bit_scene_manager::set_scene_dims()
 {
   if (scene_==NULL)
   {
-    vcl_cout<<"Scene is Missing "<<vcl_endl;
+    vcl_cout<<"Scene is Missing"<<vcl_endl;
     return false;
   }
   scene_->block_num(scene_x_,scene_y_,scene_z_);
@@ -920,7 +921,7 @@ bool boxm_render_bit_scene_manager::set_block_dims()
 {
   if (scene_==NULL)
   {
-    vcl_cout<<"Scene is Missing "<<vcl_endl;
+    vcl_cout<<"Scene is Missing"<<vcl_endl;
     return false;
   }
   double x,y,z;
@@ -968,7 +969,7 @@ bool boxm_render_bit_scene_manager::set_block_ptrs()
 {
   if (scene_==NULL)
   {
-    vcl_cout<<"Scene is Missing "<<vcl_endl;
+    vcl_cout<<"Scene is Missing"<<vcl_endl;
     return false;
   }
   scene_->block_num(scene_x_,scene_y_,scene_z_);
@@ -1052,8 +1053,8 @@ bool boxm_render_bit_scene_manager::set_all_blocks()
   /******* debug print **************/
   int cellBytes = sizeof(cl_uchar16);
   int dataBytes = sizeof(cl_uchar8)+sizeof(cl_float);
-  vcl_cout<<"Optimized sizes: "<<vcl_endl
-          <<"    cells: "<<(float)trees_size_*cellBytes/1024.0/1024.0<<" MB"<<vcl_endl
+  vcl_cout<<"Optimized sizes:\n"
+          <<"    cells: "<<(float)trees_size_*cellBytes/1024.0/1024.0<<" MB\n"
           <<"    data:  "<<(float)data_size_*dataBytes/1024.0/1024.0<<" MB"<<vcl_endl;
   /**********************************/
 
@@ -1068,11 +1069,11 @@ bool boxm_render_bit_scene_manager::set_all_blocks()
   //allocate and initialize mix components
   data_mixture_ = (cl_uchar *) boxm_ocl_utils::alloc_aligned(data_size_,sizeof(cl_uchar8),16);
   scene_->get_mixture(data_mixture_);
-  
+
   //allocate bit lookup hash table
   bit_lookup_ = (cl_uchar *) boxm_ocl_utils::alloc_aligned(256,sizeof(cl_uchar),16);
-  unsigned char bits[] = { 0,   1,   1,   2,   1,   2,   2,   3,   1,   2,   2,   3,   2,   3,   3,   4,  
-                           1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5 , 
+  unsigned char bits[] = { 0,   1,   1,   2,   1,   2,   2,   3,   1,   2,   2,   3,   2,   3,   3,   4,
+                           1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5 ,
                            1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5  ,
                            2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
                            1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5  ,
@@ -1087,12 +1088,12 @@ bool boxm_render_bit_scene_manager::set_all_blocks()
                            3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7  ,
                            3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7  ,
                            4,   5,   5,   6,   5,   6,   6,   7,   5,   6,   6,   7,   6,   7,   7,   8 };
-  for(int i=0; i<256; i++) bit_lookup_[i] = bits[i];
+  for (int i=0; i<256; i++) bit_lookup_[i] = bits[i];
 
   //---- debug alloc --------------------------------------------------
   output_ = NULL;
   output_ = (cl_float*) boxm_ocl_utils::alloc_aligned(numbuffer_,sizeof(cl_float4),16);
-  for(int i=0; i<numbuffer_*4; i++) output_[i] = 0.0;
+  for (int i=0; i<numbuffer_*4; i++) output_[i] = 0.0;
   //-------------------------------------------------------------------
 
   if (trees_== NULL|| data_mixture_ == NULL || data_alpha_==NULL) {
@@ -1146,18 +1147,18 @@ bool boxm_render_bit_scene_manager::set_tree_buffers()
                                      data_mixture_,&status);
   if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (cell mixture) failed."))
     return false;
-    
+
   bit_lookup_buf_ = clCreateBuffer(this->context_,
                                    CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                    256*sizeof(cl_uchar),
                                    bit_lookup_,&status);
   if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (bit_lookup) failed."))
     return false;
-  
+
   output_buf_ = clCreateBuffer(this->context_,
-                              CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
-                              numbuffer_*sizeof(cl_float4),
-                              output_,&status);
+                               CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+                               numbuffer_*sizeof(cl_float4),
+                               output_,&status);
   if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (tree) failed."))
     return false;
 
@@ -1167,11 +1168,11 @@ bool boxm_render_bit_scene_manager::set_tree_buffers()
   int mixBytes   = data_size_*sizeof(cl_uchar8);
   int blockBytes = scene_x_*scene_y_*scene_z_*sizeof(cl_ushort2);
   float MB = (cellBytes + alphaBytes + mixBytes + blockBytes)/1024.0/1024.0;
-  vcl_cout<<"GPU Mem allocated: "<<vcl_endl
-          <<"   cells: "<<cellBytes<<" bytes"<<vcl_endl
-          <<"   alpha: "<<alphaBytes<<" bytes"<<vcl_endl
-          <<"   mix  : "<<mixBytes<<" bytes"<<vcl_endl
-          <<"   block: "<<blockBytes<<" bytes"<<vcl_endl
+  vcl_cout<<"GPU Mem allocated:\n"
+          <<"   cells: "<<cellBytes<<" bytes\n"
+          <<"   alpha: "<<alphaBytes<<" bytes\n"
+          <<"   mix  : "<<mixBytes<<" bytes\n"
+          <<"   block: "<<blockBytes<<" bytes\n"
           <<"TOTAL: "<<MB<<"MB"<<vcl_endl;
   /************************************/
 
