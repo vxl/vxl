@@ -205,6 +205,9 @@ SOURCE=.\test_na.cxx
 SOURCE=.\test_sparse_matrix.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_pow_log.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group
