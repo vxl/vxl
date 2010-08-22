@@ -19,11 +19,11 @@ LRESULT vgui_win32_window::WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARA
 LRESULT vgui_win32_window::DefWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
   // Note: must NOT call DefWindowProc(hwnd, message, wParam, lParam);
-  return 0; 
+  return 0;
 }
 
-vgui_win32_window::vgui_win32_window(HINSTANCE hInst, const char *appName, 
-  int width, int height, vgui_menu const &menubar, char const *title)
+vgui_win32_window::vgui_win32_window(HINSTANCE hInst, const char *appName,
+                                     int width, int height, vgui_menu const &menubar, char const *title)
 : _cx(width), _cy(height), first_show(true)
 {
   initWindow(hInst, appName, width, height, title);
@@ -33,24 +33,24 @@ vgui_win32_window::vgui_win32_window(HINSTANCE hInst, const char *appName,
   SetMenu(_hwnd, _hMenu);
 }
 
-vgui_win32_window::vgui_win32_window(HINSTANCE hInst, const char *appName, 
-  int width, int height, char const *title) 
+vgui_win32_window::vgui_win32_window(HINSTANCE hInst, const char *appName,
+                                     int width, int height, char const *title)
 : _cx(width), _cy(height), first_show(true)
 {
   initWindow(hInst, appName, width, height, title);
 }
 
-void vgui_win32_window::initWindow(HINSTANCE hInst, const char *appName, 
-  int width, int height, char const *title)
+void vgui_win32_window::initWindow(HINSTANCE hInst, const char *appName,
+                                   int width, int height, char const *title)
 {
   _hMenu = NULL;
   _hAccel = NULL;
 
   // In VGUI applications, the window size (width, height) passed from
-  // vgui::produce_window is usually the image size. Whereas the width 
+  // vgui::produce_window is usually the image size. Whereas the width
   // and height arguments in function CreateWindow is the window size
   // including UIs like title bar, menu bar, status bar and window frame.
-  // Therefore it's better to take account of the dimension of these 
+  // Therefore it's better to take account of the dimension of these
   // UIs so that the entire image can be shown.
 
   // Get the size of UIs
@@ -77,18 +77,18 @@ void vgui_win32_window::initWindow(HINSTANCE hInst, const char *appName,
     _cy = cyScreenSize-(cyCaption+cyMenu+2*cySizeFrame);
   }
 
-  _hwnd = CreateWindow(appName,	            // window class name
-                       title,	            // window caption
-                       WS_OVERLAPPEDWINDOW,	// window style
-                       CW_USEDEFAULT,       // intial x position
-                       CW_USEDEFAULT,       // intial y position
+  _hwnd = CreateWindow(appName,             // window class name
+                       title,               // window caption
+                       WS_OVERLAPPEDWINDOW, // window style
+                       CW_USEDEFAULT,       // initial x position
+                       CW_USEDEFAULT,       // initial y position
                        win_width,           // window width
                        win_height,          // window height
                        NULL,                // parent window handle
                        NULL,                // window menu handle
                        hInst,               // program instance handle
                        NULL                 // creation parameters
-                       );
+                      );
   _adaptor = new vgui_win32_adaptor(_hwnd, this);
   _statusbar = new vgui_win32_statusbar(_hwnd);
   vgui::out.rdbuf(_statusbar->statusbuf); // redirect to status bar.
@@ -114,11 +114,11 @@ vgui_win32_window::~vgui_win32_window()
 // Display the window.
 void vgui_win32_window::show()
 {
-  ShowWindow(_hwnd, SW_SHOW); 
+  ShowWindow(_hwnd, SW_SHOW);
   UpdateWindow(_hwnd);
 
-  // These two message are posted so that the embedded adaptor can 
-  // obtain its size at the application startup. 
+  // These two message are posted so that the embedded adaptor can
+  // obtain its size at the application startup.
   // The reason to do so is that the WM_SIZE message and the WM_PAINT
   // message sent at application initialization stage cannot be reached to
   // either vgui_win32_window or vgui_win32_adaptor, which is unborn then.
@@ -144,7 +144,6 @@ void vgui_win32_window::reposition(int x, int y)
 {
   _wx = x; _wy = y;
   MoveWindow(_hwnd, _wx, _wy, _cx, _cy, TRUE);
-
 }
 
 
@@ -162,16 +161,15 @@ void vgui_win32_window::set_menubar(vgui_menu const &menu)
   _hMenu = vgui_win32_utils::instance()->vgui_menu_to_win32ex(menu, callbacks, &_hAccel);
   SetMenu(_hwnd, _hMenu);
   // The changed menu won't be updated unless it is forced to be redrawn.
-  DrawMenuBar(_hwnd); 
+  DrawMenuBar(_hwnd);
 }
 
 
 // If true, activate the statusbar (if it exists).
 void vgui_win32_window::set_statusbar(bool on)
 {
-  if ( _statusbar ) 
+  if ( _statusbar )
     _statusbar->setVisible(on);
-
 }
 
 
@@ -232,9 +230,8 @@ void vgui_win32_window::menu_dispatcher(int menuId)
 
   // Make sure nID is in the relevant range, and
   // call the callback function associated with the menu item "menuId"
-  if ( menuId >= MENU_ID_START && menuId < MENU_ID_START+item_count ) 
+  if ( menuId >= MENU_ID_START && menuId < MENU_ID_START+item_count )
     callbacks[menuId-MENU_ID_START]->execute();
-
 }
 
 // Handle messages that are related to vgui_window.
@@ -248,7 +245,7 @@ BOOL vgui_win32_window::OnCmdMsg(UINT message, WPARAM wParam, LPARAM lParam)
       _cx = LOWORD(lParam);
       _cy = HIWORD(lParam);
       // redraw status bar
-      SendMessage(_statusbar->getWindowHandle(), WM_SIZE, wParam, lParam); 
+      SendMessage(_statusbar->getWindowHandle(), WM_SIZE, wParam, lParam);
       break;
 
     case WM_COMMAND: // child window and menu message
@@ -256,7 +253,7 @@ BOOL vgui_win32_window::OnCmdMsg(UINT message, WPARAM wParam, LPARAM lParam)
       return TRUE;
 
     case WM_CLOSE:
-      delete _adaptor; 
+      delete _adaptor;
       _adaptor = 0;
       break;
 

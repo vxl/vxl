@@ -19,7 +19,7 @@ vgui_menu vgui_win32_adaptor::last_popup;
 BEGIN_MESSAGE_MAP(vgui_win32_adaptor, vgui_win32_cmdtarget)
 END_MESSAGE_MAP()
 
-vgui_win32_adaptor::vgui_win32_adaptor(HWND hwnd, vgui_window *win) 
+vgui_win32_adaptor::vgui_win32_adaptor(HWND hwnd, vgui_window *win)
   : _hwnd(hwnd), _win(win),
   _redraw_posted(true),
   _overlay_redraw_posted(true),
@@ -43,7 +43,7 @@ vgui_win32_adaptor::~vgui_win32_adaptor()
   dispatch_to_tableau(vgui_DESTROY);
 
   if ( _hglrc )  {
-    // make the rendering context not current 
+    // make the rendering context not current
     wglMakeCurrent( NULL, NULL );
     // delete the rendering context
     wglDeleteContext(_hglrc);
@@ -52,7 +52,6 @@ vgui_win32_adaptor::~vgui_win32_adaptor()
 
   // Clear pointers to context-menu callback functions
   popup_callbacks.clear();
-
 }
 
 // TODO: This function is not called yet.
@@ -78,7 +77,6 @@ void vgui_win32_adaptor::post_redraw()
     PostMessage(_hwnd, WM_SIZE, 0, MAKELPARAM(width, height));
   }
   _redraw_posted = true;
-
 }
 
 // Redraw overlay buffer
@@ -97,7 +95,7 @@ void vgui_win32_adaptor::post_overlay_redraw()
 // TODO: This function is not called yet.
 void vgui_win32_adaptor::post_idle_request()
 {
-  _idle_request_posted = true; 
+  _idle_request_posted = true;
 }
 
 //void post_message(char const *, void const *);
@@ -114,17 +112,16 @@ void vgui_win32_adaptor::post_destroy()
 // TODO: This function is not called yet.
 // kill an existing timer
 void vgui_win32_adaptor::kill_timer(int timer)
-{ 
+{
   if ( _tid == timer )
     KillTimer(_hwnd, timer);  // we only kill our own timer.
-
 }
 
 
 HGLRC vgui_win32_adaptor::setup_for_gl(HDC hdc)
 {
   // Set up pixel format.
-  PIXELFORMATDESCRIPTOR pfd = 
+  PIXELFORMATDESCRIPTOR pfd =
   {
     sizeof(PIXELFORMATDESCRIPTOR),
     1,
@@ -137,31 +134,31 @@ HGLRC vgui_win32_adaptor::setup_for_gl(HDC hdc)
     16,                 // 16-bit depth buffer
     0,                  // no stencil buffer
     0,                  // no aux buffers
-    PFD_MAIN_PLANE,		// main layer
-    0,	
+    PFD_MAIN_PLANE,     // main layer
+    0,
     0, 0, 0
   };
 
-  int  selected_pf = ChoosePixelFormat(hdc, &pfd);   
+  int  selected_pf = ChoosePixelFormat(hdc, &pfd);
   if ( selected_pf == 0 ) {
     MessageBox(NULL, TEXT("Failed to ChoosePixelFormat"), TEXT("Error"),
                MB_ICONERROR | MB_OK);
     vcl_cerr << "Failed to ChoosePixelFormat (error code:" << GetLastError() << ")\n";
     return 0;
   }
-   
+
   if ( !SetPixelFormat(hdc, selected_pf, &pfd) ) {
-    MessageBox(NULL, TEXT("Failed to SetPixelFormat"), TEXT("Error"), 
+    MessageBox(NULL, TEXT("Failed to SetPixelFormat"), TEXT("Error"),
                MB_ICONERROR | MB_OK);
     vcl_cerr << "Failed to SetPixelFormat (error code:" << GetLastError() << ")\n";
     return 0;
   }
 
-  // Create a OpenGL rendering context, which is suitable for drawing 
+  // Create a OpenGL rendering context, which is suitable for drawing
   // on the device referenced by _hdc.
   HGLRC hglrc = wglCreateContext(hdc);
   if ( !hglrc ) {
-    MessageBox(NULL, TEXT("wglCreateContext failed"), TEXT("Error"), 
+    MessageBox(NULL, TEXT("wglCreateContext failed"), TEXT("Error"),
                MB_ICONERROR | MB_OK);
     vcl_cerr << "wglCreateContext failed (error code:" << GetLastError() << ")\n";
     return 0;
@@ -169,7 +166,7 @@ HGLRC vgui_win32_adaptor::setup_for_gl(HDC hdc)
 
   // Make all subsequent OpenGL calls to be drawn on the device context _hdc.
   if ( !wglMakeCurrent(hdc, hglrc) ) {
-    MessageBox(NULL, TEXT("wglMakeCurrent failed"), TEXT("Error"), 
+    MessageBox(NULL, TEXT("wglMakeCurrent failed"), TEXT("Error"),
                MB_ICONERROR | MB_OK);
     vcl_cerr << "wglMakeCurrent failed (error code:" << GetLastError() << ")\n";
     return 0;
@@ -178,7 +175,7 @@ HGLRC vgui_win32_adaptor::setup_for_gl(HDC hdc)
   // Specify black as clear color
   glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
   // Sepcify the back of the buffer as clear depth
-  glClearDepth(1.0f); 
+  glClearDepth(1.0f);
 
   glEnable(GL_DEPTH_TEST);
   //glEnable(GL_BLEND);
@@ -205,11 +202,11 @@ BOOL vgui_win32_adaptor::OnCmdMsg(UINT message, WPARAM wParam, LPARAM lParam)
       break;
     case WM_KEYDOWN:
       OnKeyDown(wParam, lParam);
-      //vcl_cerr << "tableau: message WM_KEYDOWN received." << vcl_endl;
+      //vcl_cerr << "tableau: message WM_KEYDOWN received.\n";
       return TRUE;
     case WM_KEYUP:
       OnKeyUp(wParam, lParam);
-      //vcl_cerr << "tableau: message WM_KEYUP received." << vcl_endl;
+      //vcl_cerr << "tableau: message WM_KEYUP received.\n";
       return TRUE;
     case WM_LBUTTONDOWN:
       OnLButtonDown(wParam, lParam);
@@ -235,7 +232,7 @@ BOOL vgui_win32_adaptor::OnCmdMsg(UINT message, WPARAM wParam, LPARAM lParam)
 #ifdef WM_MOUSEWHEEL
     case WM_MOUSEWHEEL:
       OnMouseWheel(wParam, lParam);
-      //vcl_cerr << "tableau: message WM_MOUSEWHEEL received." << vcl_endl;
+      //vcl_cerr << "tableau: message WM_MOUSEWHEEL received.\n";
       return TRUE;
 #endif
     case WM_COMMAND: // child window and menu message
@@ -245,7 +242,7 @@ BOOL vgui_win32_adaptor::OnCmdMsg(UINT message, WPARAM wParam, LPARAM lParam)
       break;
   }
 
-  return FALSE; 
+  return FALSE;
 }
 
 void vgui_win32_adaptor::menu_dispatcher(int menuId)
@@ -253,10 +250,9 @@ void vgui_win32_adaptor::menu_dispatcher(int menuId)
   int item_count = popup_callbacks.size();
 
   // Make sure nID is in the relevant range
-  if ( menuId >= POPUPMENU_ID_START && menuId < POPUPMENU_ID_START+item_count ) 
+  if ( menuId >= POPUPMENU_ID_START && menuId < POPUPMENU_ID_START+item_count )
     // Call the callback function associated with the menu item "menuId"
     popup_callbacks[menuId-POPUPMENU_ID_START]->execute();
-
 }
 
 void vgui_win32_adaptor::OnSize(WPARAM wParam, LPARAM lParam)
@@ -264,7 +260,7 @@ void vgui_win32_adaptor::OnSize(WPARAM wParam, LPARAM lParam)
   // Get size of rendering area
   width  = LOWORD(lParam);
   height = HIWORD(lParam);
- 
+
   // Resize scrollbars according to the window size and rendered image size
   // that take into account of zooming.
   vgui_tableau_sptr imtab = vgui_find_below_by_type_name(
@@ -274,7 +270,7 @@ void vgui_win32_adaptor::OnSize(WPARAM wParam, LPARAM lParam)
   if ( imtab && vrtab ) {
     int im_width, im_height;
 
-    vgui_image_tableau_sptr im; 
+    vgui_image_tableau_sptr im;
     im.vertical_cast(imtab);
     vgui_viewer2D_tableau_sptr vr;
     vr.vertical_cast(vrtab);
@@ -300,7 +296,6 @@ void vgui_win32_adaptor::OnSize(WPARAM wParam, LPARAM lParam)
 
   dispatch_to_tableau(vgui_RESHAPE);
   post_redraw();
-
 }
 
 void vgui_win32_adaptor::OnPaint()
@@ -317,7 +312,7 @@ void vgui_win32_adaptor::OnPaint()
     this->make_current();
     vgui_macro_report_errors;
     // The following line forces a redraw to erase the previous overlay
-    dispatch_to_tableau(vgui_event(vgui_DRAW)); 
+    dispatch_to_tableau(vgui_event(vgui_DRAW));
     dispatch_to_tableau(vgui_event(vgui_DRAW_OVERLAY));
     vgui_macro_report_errors;
     _overlay_redraw_posted = false;
@@ -358,7 +353,7 @@ void vgui_win32_adaptor::OnHScroll(UINT message, WPARAM wParam, LPARAM lParam)
     default:
       break;
   }
-  
+
   // Set the position and then retrieve it. Due to adjustments
   // by Windows it may not be the same as the value set.
   si.fMask = SIF_POS;
@@ -369,7 +364,7 @@ void vgui_win32_adaptor::OnHScroll(UINT message, WPARAM wParam, LPARAM lParam)
   if ( si.nPos != iHorzPos ) {
     e.type = vgui_HSCROLL;
     e.data = &si.nPos;
-    dispatch_to_tableau(e); 
+    dispatch_to_tableau(e);
 
     ScrollWindow(_hwnd, 0, (iHorzPos-si.nPos), NULL, NULL);
     UpdateWindow(_hwnd);
@@ -414,7 +409,7 @@ void vgui_win32_adaptor::OnVScroll(UINT message, WPARAM wParam, LPARAM lParam)
     default:
       break;
   }
-  
+
   // Set the position and then retrieve it. Due to adjustments
   // by Windows it may not be the same as the value set.
   si.fMask = SIF_POS;
@@ -425,7 +420,7 @@ void vgui_win32_adaptor::OnVScroll(UINT message, WPARAM wParam, LPARAM lParam)
   if ( si.nPos != iVertPos ) {
     e.type = vgui_VSCROLL;
     e.data = &si.nPos;
-    dispatch_to_tableau(e); 
+    dispatch_to_tableau(e);
 
     ScrollWindow(_hwnd, 0, (iVertPos-si.nPos), NULL, NULL);
     UpdateWindow(_hwnd);
@@ -491,13 +486,13 @@ void vgui_win32_adaptor::OnMouseMove(WPARAM wParam, LPARAM lParam)
 void vgui_win32_adaptor::OnMouseWheel(WPARAM wParam, LPARAM lParam)
 {
   short delta = HIWORD(wParam);
-  domouse( delta > 0 ? vgui_WHEEL_UP : vgui_WHEEL_DOWN, 
-    vgui_BUTTON_NULL, LOWORD(wParam), LOWORD(lParam), HIWORD(lParam));
+  domouse( delta > 0 ? vgui_WHEEL_UP : vgui_WHEEL_DOWN,
+           vgui_BUTTON_NULL, LOWORD(wParam), LOWORD(lParam), HIWORD(lParam));
 }
 
 // Translate a win32 key into the corresponding VGUI key
-void vgui_win32_adaptor::translate_key(UINT nChar, UINT nFlags, 
-  int *the_key, int *the_ascii_char)
+void vgui_win32_adaptor::translate_key(UINT nChar, UINT nFlags,
+                                       int *the_key, int *the_ascii_char)
 {
   if (nFlags & 256) { // The 8-th bit is the extended key
     // Extended key, such as a function key or a key on hte numeric keypad.
@@ -585,8 +580,8 @@ void vgui_win32_adaptor::translate_key(UINT nChar, UINT nFlags,
 }
 
 // Translate a Windows message into corresponding vgui event.
-vgui_event vgui_win32_adaptor::translate_message(WPARAM wParam, 
-  LPARAM lParam, vgui_event_type evtype)
+vgui_event vgui_win32_adaptor::translate_message(WPARAM wParam,
+                                                 LPARAM lParam, vgui_event_type evtype)
 {
   vgui_event ev(evtype);
 
@@ -622,16 +617,16 @@ void vgui_win32_adaptor::domouse(vgui_event_type et, vgui_button b, UINT nFlags,
   e.button = b;
 
   // Double-check the button. This op may correct the wrong calling argument.
-  if (nFlags & MK_LBUTTON) 
+  if (nFlags & MK_LBUTTON)
     e.button = vgui_LEFT;
-  if (nFlags & MK_MBUTTON) 
+  if (nFlags & MK_MBUTTON)
     e.button = vgui_MIDDLE;
-  if (nFlags & MK_RBUTTON) 
+  if (nFlags & MK_RBUTTON)
     e.button = vgui_RIGHT;
 
-  if (nFlags & MK_SHIFT)   
+  if (nFlags & MK_SHIFT)
     e.modifier = vgui_modifier((int)e.modifier | vgui_SHIFT);
-  if (nFlags & MK_CONTROL) 
+  if (nFlags & MK_CONTROL)
     e.modifier = vgui_modifier((int)e.modifier | vgui_CTRL);
 
   e.wx = x;
@@ -651,7 +646,7 @@ void vgui_win32_adaptor::domouse(vgui_event_type et, vgui_button b, UINT nFlags,
 
     POINT point;
     point.x = x; point.y = y;
-    // TrackPopupMenu requires screen coordinates whereas (x,y) is 
+    // TrackPopupMenu requires screen coordinates whereas (x,y) is
     // client coordinates.
     ClientToScreen(_hwnd, &point);
     HMENU hPopupMenu = GetSubMenu(hMenu, 0);
@@ -660,6 +655,7 @@ void vgui_win32_adaptor::domouse(vgui_event_type et, vgui_button b, UINT nFlags,
   else
     dispatch_to_tableau(e);
 
+# if 0 // explained below:
   // Grabbing the mouse here causes an issue with code that runs
   // another instance of the event loop in response to the event (sent
   // by the dispatch_to_tableau call above).  An example if
@@ -669,14 +665,16 @@ void vgui_win32_adaptor::domouse(vgui_event_type et, vgui_button b, UINT nFlags,
   // the time, as it is being done here.  If we want, we may consider
   // putting this in the interface.  However, given vgui's goals of
   // being a light & thin wrapper, I don't think that's a good idea.
-  //
-  // // Grab mouse?
-  // {
-     //if (et == vgui_BUTTON_DOWN) {
-     //  SetCapture(_hwnd);
-     //} else if (et != vgui_MOTION) {
-     //  ReleaseCapture();
-     //}
-  // }
+
+  // Grab mouse?
+  {
+    if (et == vgui_BUTTON_DOWN) {
+      SetCapture(_hwnd);
+    }
+    else if (et != vgui_MOTION) {
+      ReleaseCapture();
+    }
+  }
+#endif // 0
 }
 
