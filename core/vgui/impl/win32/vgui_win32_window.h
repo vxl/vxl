@@ -1,12 +1,12 @@
 // This is core/vgui/impl/win32/vgui_win32_window.h
-
 #ifndef vgui_win32_window_h_
 #define vgui_win32_window_h_
-
-// The Win32 Application Programming Interfaces (API) implementation of 
-// vgui_window.
-// author: Lianqing Yu
-
+//:
+// \file
+// \brief The Win32 Application Programming Interfaces (API) implementation of vgui_window.
+// \author Lianqing Yu
+// \date   July 30, 2009
+//
 // Modifications:
 // July 30, 2009              Initial version
 
@@ -17,16 +17,16 @@
 #include <vgui/impl/win32/vgui_win32_cmdtarget.h>
 
 #include <windows.h>
- 
+
 class vgui_win32_window : public vgui_window, public vgui_win32_cmdtarget
 {
-public:
+ public:
   // Constructors. application instance handle and name are required
-  // to create a window in Win32 programming. 
-  vgui_win32_window(HINSTANCE hInst, const char *appname, int width, 
-    int height, vgui_menu const &menubar, char const *title);
-  vgui_win32_window(HINSTANCE hInst, const char *appname, int width, 
-    int height, char const *title);
+  // to create a window in Win32 programming.
+  vgui_win32_window(HINSTANCE hInst, const char *appname, int width,
+                    int height, vgui_menu const &menubar, char const *title);
+  vgui_win32_window(HINSTANCE hInst, const char *appname, int width,
+                    int height, char const *title);
   ~vgui_win32_window();
 
   // Public functions for accessing members.
@@ -48,20 +48,20 @@ public:
   //: Get the default adaptor (if it exists).
   virtual vgui_adaptor *get_adaptor() { return _adaptor; }
 
-// TODO: This function is not called yet.
   //: Get the status bar (if it exists).
+  // TODO: This function is not called yet.
   virtual vgui_statusbar *get_statusbar() { return _statusbar; }
 
 
   //: Display the window.
   virtual void show();
 
-// TODO: This function is not called yet.
   //: Hide the window from view.
+  // TODO: This function is not called yet.
   virtual void hide() { ShowWindow(_hwnd, SW_HIDE); }
 
-// TODO: This function is not called yet.
   //: Turn the window into an icon.
+  // TODO: This function is not called yet.
   virtual void iconify() { ShowWindow(_hwnd, SW_MINIMIZE); }
 
   //: If true, activate horizontal scrollbar (if it exists).
@@ -76,8 +76,8 @@ public:
   //: Move the window to the new given x,y position.
   virtual void reposition(int, int);
 
-// TODO: This function is not called yet.
   //: Use the given text as the window title (if the window has a title).
+  // TODO: This function is not called yet.
   virtual void set_title(vcl_string const &t) { SetWindowText(_hwnd, t.c_str()); }
 
   //: Set the position of the horizontal scrollbar, returns old position
@@ -93,28 +93,30 @@ public:
   // Called within message processing loop.
   void menu_dispatcher(int menuId);
 
-  //void OnCreate();
-  //void OnClose();
-  //void OnTimer();
+#if 0
+  void OnCreate();
+  void OnClose();
+  void OnTimer();
+#endif
 
-protected:
-  HWND  _hwnd;  // application window handle
-  HMENU _hMenu; // application menu handle
+ protected:
+  HWND  _hwnd;  //!< application window handle
+  HMENU _hMenu; //!< application menu handle
   HACCEL _hAccel; // accelerator handle
-  vcl_vector<vgui_command_sptr> callbacks; // commands called by menu items
+  vcl_vector<vgui_command_sptr> callbacks; //!< commands called by menu items
 
-private:
+ private:
   // Create window and initialize class members.
-  void initWindow(HINSTANCE hInst, const char *appname, int width, 
-    int height, char const *title);
+  void initWindow(HINSTANCE hInst, const char *appname, int width,
+                  int height, char const *title);
 
   vgui_win32_adaptor *_adaptor;
   vgui_win32_statusbar *_statusbar;
 
-  int      _wx, _wy; // window position (wx, wy)
-  unsigned _cx, _cy; // and client area size (cx, cy).
-  bool first_show;   // indicate if the member function show() 
-                     // is called for the first time
+  int      _wx, _wy; //!< window position (wx, wy)
+  unsigned _cx, _cy; //!< and client area size (cx, cy).
+  bool first_show;   //!< indicate if the member function show()
+                     //!< is called for the first time
 
   DECLARE_MESSAGE_MAP()
 };
