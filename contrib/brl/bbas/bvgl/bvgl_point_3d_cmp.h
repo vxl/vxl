@@ -1,10 +1,9 @@
-// This is bvgl_point_3d_cmp.h
+// This is brl/bbas/bvgl/bvgl_point_3d_cmp.h
 #ifndef bvgl_point_3d_cmp_h
 #define bvgl_point_3d_cmp_h
-
 //:
 // \file
-// \brief A class that implements the dbrec3d_part concept for composite parts (i.e non-leafs). 
+// \brief A class that implements the dbrec3d_part concept for composite parts (i.e non-leafs).
 // \author Isabel Restrepo mir@lems.brown.edu
 // \date  27-Jul-2010.
 //
@@ -18,9 +17,9 @@
 template <class T>
 class bvgl_point_3d_cmp : public vcl_binary_function<vgl_point_3d<T>, vgl_point_3d<T>, bool>
 {
-public:
+ public:
   bvgl_point_3d_cmp() {}
-  
+
   bool operator()(vgl_point_3d<T> const& v0, vgl_point_3d<T> const& v1) const
   {
     if (v0.z() != v1.z())
@@ -31,4 +30,5 @@ public:
       return v0.x() < v1.x();
   }
 };
+
 #endif
