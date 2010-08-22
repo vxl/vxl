@@ -43,6 +43,7 @@ ADD_EXECUTABLE( vnl_test_all
   test_crs_index.cxx
   test_sparse_lst_sqr_function.cxx
   test_sparse_matrix.cxx
+  test_pow_log.cxx
 )
 
 IF(CMAKE_COMPILER_IS_GNUCXX)
@@ -94,6 +95,7 @@ ADD_TEST( vnl_test_crs_index              ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all
 ADD_TEST(vnl_test_sparse_lst_sqr_function ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_sparse_lst_sqr_function)
 ADD_TEST( vnl_test_power                  ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_power                  )
 ADD_TEST( vnl_test_sparse_matrix          ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_sparse_matrix          )
+ADD_TEST(test_pow_log                     ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_pow_log                )
 
 ADD_EXECUTABLE(vnl_test_include test_include.cxx)
 TARGET_LINK_LIBRARIES(vnl_test_include vnl)
