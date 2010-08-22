@@ -4,6 +4,8 @@
 
 #include <vcl_algorithm.h> // for vcl_find
 #include <vcl_cstdio.h> // for vcl_sprintf
+#include <vcl_cstddef.h> // for vcl_size_t
+#include <vcl_cstring.h> // for vcl_strlen()
 #include <vcl_iostream.h>
 #include <vgui/internals/vgui_simple_field.h>
 #include <vgui/internals/vgui_file_field.h>
@@ -12,18 +14,17 @@
 extern LRESULT CALLBACK globalDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
 vgui_win32_dialog_impl::vgui_win32_dialog_impl(const char* name, HWND hWnd)
-  : vgui_dialog_impl(name), ok_clicked(false), is_modal(true), 
+  : vgui_dialog_impl(name), ok_clicked(false), is_modal(true),
   hWndParent(hWnd), hWnd(NULL)
 {
   inline_tableaus.clear();
   fb_ids.clear();
   cc_ids.clear();
-
 }
 
 vgui_win32_dialog_impl::~vgui_win32_dialog_impl()
 {
-  for ( vcl_vector<inline_tab_data>::iterator 
+  for ( vcl_vector<inline_tab_data>::iterator
         it = inline_tableaus.begin(); it != inline_tableaus.end(); ++it )
     delete it->adaptor;
 }
@@ -35,12 +36,10 @@ struct vgui_win32_dialog_choice
   int index;
 };
 
-
-//: Make a choice widget
+// Make a choice widget
 void* vgui_win32_dialog_impl::choice_field_widget(const char* /*txt*/,
-                              const vcl_vector<vcl_string>& labels, int& val) 
+                                                  const vcl_vector<vcl_string>& labels, int& val)
 {
-
   vgui_win32_dialog_choice *ch = new vgui_win32_dialog_choice;
   ch->names = labels;
   ch->index = val;
@@ -57,7 +56,7 @@ struct vgui_win32_dialog_inline_tab
 };
 
 // Make a tableau widget.
-void* vgui_win32_dialog_impl::inline_tableau_widget(const vgui_tableau_sptr tab, 
+void* vgui_win32_dialog_impl::inline_tableau_widget(const vgui_tableau_sptr tab,
                                                     unsigned width, unsigned height)
 {
   vgui_win32_dialog_inline_tab* tab_data = new vgui_win32_dialog_inline_tab;
@@ -68,10 +67,10 @@ void* vgui_win32_dialog_impl::inline_tableau_widget(const vgui_tableau_sptr tab,
 }
 
 // Find out the size of the dialog box needed
-void vgui_win32_dialog_impl::FindDialogSize(int &width, int &height, 
-  int &max_length, int &fbsr_count, 
-  int cxChar, int cyChar, int width_sep, int height_sep, 
-  int button_length, int edit_length, int browser_length)
+void vgui_win32_dialog_impl::FindDialogSize(int &width, int &height,
+                                            int &max_length, int &fbsr_count,
+                                            int cxChar, int cyChar, int width_sep, int height_sep,
+                                            int button_length, int edit_length, int browser_length)
 {
   // Minimum dialog size
   int cyCaption = GetSystemMetrics(SM_CYCAPTION);
@@ -81,7 +80,7 @@ void vgui_win32_dialog_impl::FindDialogSize(int &width, int &height,
   fbsr_count = 0;
 
   // Count the length of OK and Cancel button first.
-  if (ok_button_text_.size() > 0) 
+  if (ok_button_text_.size() > 0)
     max_length += button_length+width_sep;
   if (cancel_button_text_.size() > 0)
     max_length += button_length+width_sep;
@@ -96,7 +95,7 @@ void vgui_win32_dialog_impl::FindDialogSize(int &width, int &height,
          l.type == string_elem || l.type == choice_elem ||
          l.type == color_csr || l.type == inline_color_csr ) {
       // a label and a edit box.
-      int field_length = strlen(field->label.c_str()) + edit_length;
+      int field_length = vcl_strlen(field->label.c_str()) + edit_length;
       if (max_length<field_length)
         max_length = field_length;
       height += height_sep;
@@ -106,12 +105,12 @@ void vgui_win32_dialog_impl::FindDialogSize(int &width, int &height,
     else if (l.type == bool_elem )
     {
       // a label
-      int field_length = strlen(field->label.c_str());
+      int field_length = vcl_strlen(field->label.c_str());
       if (max_length<field_length)
         max_length = field_length;
       height += height_sep;
     }
-    else if ( l.type == text_msg ) 
+    else if ( l.type == text_msg )
     {
       // one or several lines of text
       char *text, *next_text;
@@ -119,16 +118,16 @@ void vgui_win32_dialog_impl::FindDialogSize(int &width, int &height,
 
       text = (char *)field->label.c_str();
       while ( text ) {
-        next_text = strchr(text, '\n');
+        next_text = vcl_strchr(text, '\n');
         if ( next_text )
           field_length = next_text-text;
         else
-          field_length = strlen(text);
+          field_length = vcl_strlen(text);
         if (max_length<field_length)
           max_length = field_length;
         height += height_sep;
         text = next_text ? next_text+1 : NULL;
-      }  
+      }
     }
     else if (l.type == inline_tabl)
     {
@@ -142,7 +141,7 @@ void vgui_win32_dialog_impl::FindDialogSize(int &width, int &height,
     else if (l.type == file_bsr || l.type == inline_file_bsr)
     {
       // a label, a edit box, and a "Browse..." button
-      int field_length = strlen(field->label.c_str()) + browser_length;
+      int field_length = vcl_strlen(field->label.c_str()) + browser_length;
       if (max_length<field_length)
         max_length = field_length;
       height += 2*height_sep;
@@ -182,16 +181,16 @@ bool vgui_win32_dialog_impl::ask()
   RECT rect;
 
   // Find out the size of the dialog box needed
-  FindDialogSize(width, height, max_length, fbsr_count, cxChar, cyChar, 
-    width_sep, height_sep, button_length, edit_length, browser_length);
- 
+  FindDialogSize(width, height, max_length, fbsr_count, cxChar, cyChar,
+                 width_sep, height_sep, button_length, edit_length, browser_length);
+
   HINSTANCE hInstance = (HINSTANCE)GetWindowLong(hWndParent, GWL_HINSTANCE);
-  // Get the position and size of the parent window to position the 
+  // Get the position and size of the parent window to position the
   // popup dialog box.
   GetWindowRect(hWndParent, &rect);
-  hWnd = CreateWindow(TEXT("vgui_win32_dialog"), name.c_str(), 
+  hWnd = CreateWindow(TEXT("vgui_win32_dialog"), name.c_str(),
                       WS_CAPTION | WS_POPUP | WS_SYSMENU | DS_MODALFRAME,
-                      rect.left+10, rect.top+10, width, height, 
+                      rect.left+10, rect.top+10, width, height,
                       hWndParent, NULL, hInstance, NULL);
   if ( hWnd == NULL )
     MessageBox(NULL, TEXT("Fail to create dialog box window!"),
@@ -206,7 +205,7 @@ bool vgui_win32_dialog_impl::ask()
   // Ok button
   if (ok_button_text_.size() > 0) {
     CreateWindow(TEXT("BUTTON"), (char*)ok_button_text_.c_str(),
-                 WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, x, y, cx, cy, 
+                 WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, x, y, cx, cy,
                  hWnd, (HMENU)IDOK, hInstance, NULL);
   }
 
@@ -214,7 +213,7 @@ bool vgui_win32_dialog_impl::ask()
   if (cancel_button_text_.size() > 0) {
     x += cx+width_sep*cxChar;
     CreateWindow(TEXT("BUTTON"), (char*)cancel_button_text_.c_str(),
-                 WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, x, y, cx, cy, 
+                 WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, x, y, cx, cy,
                  hWnd, (HMENU)IDCANCEL, hInstance, NULL);
   }
 
@@ -240,7 +239,7 @@ bool vgui_win32_dialog_impl::ask()
       cx = field->label.size()*cxChar;
       cy = edit_height;
       CreateWindow(TEXT("STATIC"), (char*)field->label.c_str(),
-                   WS_CHILD | WS_VISIBLE | SS_LEFT, x, y, cx, cy, 
+                   WS_CHILD | WS_VISIBLE | SS_LEFT, x, y, cx, cy,
                    hWnd, (HMENU)IDC_STATIC, hInstance, NULL);
 
       // Now set the line editor next
@@ -249,7 +248,7 @@ bool vgui_win32_dialog_impl::ask()
       cx = edit_length*cxChar;
       WORD wDlgCtrlId = DLG_ID_START + ctrl_count++;
       CreateWindow(TEXT("EDIT"), (char*)field->current_value().c_str(),
-                   WS_CHILD | WS_VISIBLE | ES_LEFT|ES_AUTOHSCROLL, x, y, cx, cy, 
+                   WS_CHILD | WS_VISIBLE | ES_LEFT|ES_AUTOHSCROLL, x, y, cx, cy,
                    hWnd, (HMENU)wDlgCtrlId, hInstance, NULL);
       x = savex;
     }
@@ -260,12 +259,11 @@ bool vgui_win32_dialog_impl::ask()
       cy = button_height;
       WORD wDlgCtrlId = DLG_ID_START + ctrl_count++;
       CreateWindow(TEXT("BUTTON"), (char*)field->label.c_str(),
-                   WS_CHILD | WS_VISIBLE | BS_AUTOCHECKBOX, x, y, cx, cy, 
+                   WS_CHILD | WS_VISIBLE | BS_AUTOCHECKBOX, x, y, cx, cy,
                    hWnd, (HMENU)wDlgCtrlId, hInstance, NULL);
       // set check status
       vgui_bool_field *bfield = static_cast<vgui_bool_field*>(field);
       CheckDlgButton(hWnd, wDlgCtrlId, bfield->var ? BST_CHECKED : BST_UNCHECKED);
-
     }
 
     else if (l.type == choice_elem)
@@ -275,7 +273,7 @@ bool vgui_win32_dialog_impl::ask()
       cy = edit_height;
       // Set static text first
       CreateWindow(TEXT("STATIC"), (char*)field->label.c_str(),
-                   WS_CHILD | WS_VISIBLE | SS_LEFT, x, y, cx, cy, 
+                   WS_CHILD | WS_VISIBLE | SS_LEFT, x, y, cx, cy,
                    hWnd, (HMENU)IDC_STATIC, hInstance, NULL);
 
       // Then the combobox
@@ -287,8 +285,8 @@ bool vgui_win32_dialog_impl::ask()
       cy = ch->names.size() * cyChar;
       WORD wDlgCtrlId = DLG_ID_START + ctrl_count++;
       hCtrlWnd = CreateWindow(TEXT("COMBOBOX"), "",
-                   WS_CHILD | WS_VISIBLE | WS_VSCROLL | CBS_DROPDOWNLIST, x, y, cx, cy, 
-                   hWnd, (HMENU)wDlgCtrlId, hInstance, NULL);
+                              WS_CHILD | WS_VISIBLE | WS_VSCROLL | CBS_DROPDOWNLIST, x, y, cx, cy,
+                              hWnd, (HMENU)wDlgCtrlId, hInstance, NULL);
 
       x = savex;
 
@@ -310,11 +308,11 @@ bool vgui_win32_dialog_impl::ask()
       text = (char *)field->label.c_str();
       cx = 0; cy = 0;
       while ( text ) {
-        next_text = strchr(text, '\n');
+        next_text = vcl_strchr(text, '\n');
         if ( next_text )
           field_length = next_text-text;
         else
-          field_length = strlen(text);
+          field_length = vcl_strlen(text);
         if (cx<field_length)
           cx = field_length;
         cy++;
@@ -323,7 +321,7 @@ bool vgui_win32_dialog_impl::ask()
       cx *= cxChar;
       cy *= edit_height;
       CreateWindow(TEXT("STATIC"), (char*)field->label.c_str(),
-                   WS_CHILD | WS_VISIBLE | SS_LEFT, x, y, cx, cy, 
+                   WS_CHILD | WS_VISIBLE | SS_LEFT, x, y, cx, cy,
                    hWnd, (HMENU)IDC_STATIC, hInstance, NULL);
     }
 
@@ -334,7 +332,7 @@ bool vgui_win32_dialog_impl::ask()
       cy = edit_height;
       // Set static text first
       CreateWindow(TEXT("STATIC"), (char*)field->label.c_str(),
-                   WS_CHILD | WS_VISIBLE | SS_LEFT, x, y, cx, cy, 
+                   WS_CHILD | WS_VISIBLE | SS_LEFT, x, y, cx, cy,
                    hWnd, (HMENU)IDC_STATIC, hInstance, NULL);
 
       // Next set the line editor
@@ -346,7 +344,7 @@ bool vgui_win32_dialog_impl::ask()
         cx = edit_length*cxChar;
       WORD wDlgCtrlId = DLG_ID_START + ctrl_count++;
       CreateWindow(TEXT("EDIT"), (char*)field->current_value().c_str(),
-                   WS_CHILD | WS_VISIBLE | ES_LEFT|ES_AUTOHSCROLL, x, y, cx, cy, 
+                   WS_CHILD | WS_VISIBLE | ES_LEFT|ES_AUTOHSCROLL, x, y, cx, cy,
                    hWnd, (HMENU)wDlgCtrlId, hInstance, NULL);
 
       // Third, add a browse button
@@ -356,14 +354,14 @@ bool vgui_win32_dialog_impl::ask()
       wDlgCtrlId = DLG_ID_START + ctrl_count++;
       if ( l.type == file_bsr || l.type == inline_file_bsr ) {
         CreateWindow(TEXT("BUTTON"), "Browse...",
-                     WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, x, y, cx, cy, 
+                     WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, x, y, cx, cy,
                      hWnd, (HMENU)wDlgCtrlId, hInstance, NULL);
         fb_ids.push_back(wDlgCtrlId);
       }
-      else { 
+      else {
         CreateWindow(TEXT("BUTTON"), "Colour...",
-                   WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, x, y, cx, cy, 
-                   hWnd, (HMENU)wDlgCtrlId, hInstance, NULL);
+                     WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, x, y, cx, cy,
+                     hWnd, (HMENU)wDlgCtrlId, hInstance, NULL);
         cc_ids.push_back(wDlgCtrlId);
       }
 
@@ -379,8 +377,8 @@ bool vgui_win32_dialog_impl::ask()
       cy = short(tab_data->height);
       WORD wDlgCtrlId = DLG_ID_START + ctrl_count++;
       hCtrlWnd = CreateWindow(TEXT("vgui_win32_inline_tab"), "",
-                   WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, x, y, cx, cy, 
-                   hWnd, (HMENU)wDlgCtrlId, hInstance, NULL);
+                              WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, x, y, cx, cy,
+                              hWnd, (HMENU)wDlgCtrlId, hInstance, NULL);
 
       y += cy-height_sep;
       cy = savecy;
@@ -397,22 +395,20 @@ bool vgui_win32_dialog_impl::ask()
       the_tab.hWnd    = hCtrlWnd;
       the_tab.adaptor = adptr;
       inline_tableaus.push_back(the_tab);
-
     }
   }
 
   // Show the dialog box.
   ShowWindow(hWnd, SW_SHOW);
   UpdateWindow(hWnd);
-  // Show inline tableaus 
-  for ( size_t i = 0; i < inline_tableaus.size(); i++ )
+  // Show inline tableaus
+  for ( vcl_size_t i = 0; i < inline_tableaus.size(); i++ )
     inline_tableaus[i].adaptor->post_redraw();
 
   // Enter the message loop.
   run();
 
   return ok_clicked;
-
 }
 
 void vgui_win32_dialog_impl::run()
@@ -423,7 +419,6 @@ void vgui_win32_dialog_impl::run()
     TranslateMessage(&msg);
     DispatchMessage(&msg);
   }
-
 }
 
 // Handle messages that are related to vgui_dialog_impl.
@@ -483,7 +478,7 @@ void vgui_win32_dialog_impl::OnOK()
   // Update values of all elements.
   control_count = 0;
   for (vcl_vector<element>::iterator e_iter = elements.begin();
-           e_iter != elements.end(); ++e_iter) {
+       e_iter != elements.end(); ++e_iter) {
     element l = *e_iter;
     vgui_dialog_field *field = l.field;
     ctrl_id = DLG_ID_START+control_count;
@@ -492,7 +487,7 @@ void vgui_win32_dialog_impl::OnOK()
     if ( l.type == int_elem ||
          l.type == long_elem ||
          l.type == float_elem ||
-         l.type == double_elem || 
+         l.type == double_elem ||
          l.type == string_elem ) { // a line/multiline edit
       GetWindowText(hWndCtrl, buf, MAX_PATH);
       field->update_value(buf);
@@ -523,15 +518,12 @@ void vgui_win32_dialog_impl::OnOK()
     else if ( l.type == inline_tabl ) { // a tab
       control_count++;
     }
-
   }
-
 }
 
 void vgui_win32_dialog_impl::OnCancel()
 {
   ok_clicked = false;
-
 }
 
 // Open a file open dialog box.
@@ -548,19 +540,19 @@ BOOL vgui_win32_dialog_impl::OnBrowse(HWND hDlg, WORD wCtrlId)
   ofn.lpstrFilter       = szFilter;
   ofn.lpstrCustomFilter = NULL;
   ofn.nMaxCustFilter    = 0;
-  ofn.nFilterIndex      = 0; 
+  ofn.nFilterIndex      = 0;
   ofn.lpstrFile         = szFileName;
-  ofn.nMaxFile          = MAX_PATH; 
+  ofn.nMaxFile          = MAX_PATH;
   ofn.lpstrFileTitle    = szTitleName;
-  ofn.nMaxFileTitle     = MAX_PATH; 
-  ofn.lpstrInitialDir   = NULL; 
-  ofn.lpstrTitle        = NULL; 
+  ofn.nMaxFileTitle     = MAX_PATH;
+  ofn.lpstrInitialDir   = NULL;
+  ofn.lpstrTitle        = NULL;
   ofn.Flags             = OFN_CREATEPROMPT;
-  ofn.nFileOffset       = 0; 
-  ofn.nFileExtension    = 0; 
-  ofn.lpstrDefExt       = NULL; 
-  ofn.lCustData         = 0; 
-  ofn.lpfnHook          = NULL; 
+  ofn.nFileOffset       = 0;
+  ofn.nFileExtension    = 0;
+  ofn.lpstrDefExt       = NULL;
+  ofn.lCustData         = 0;
+  ofn.lpfnHook          = NULL;
   ofn.lpTemplateName    = NULL;
 
   if ( GetOpenFileName(&ofn) )
@@ -589,16 +581,15 @@ BOOL vgui_win32_dialog_impl::OnColor(HWND hDlg, WORD wCtrlId, LPTSTR lpColor)
 
   if ( ChooseColor(&cc) ) {
     vcl_sprintf(buffer, "%3d", GetRValue(cc.rgbResult));
-    strColor += buffer; 
+    strColor += buffer;
     vcl_sprintf(buffer, " %3d", GetGValue(cc.rgbResult));
-    strColor += buffer; 
+    strColor += buffer;
     vcl_sprintf(buffer, " %3d", GetBValue(cc.rgbResult));
-    strColor += buffer; 
+    strColor += buffer;
     SetWindowText(GetDlgItem(hDlg, wCtrlId-1), strColor.c_str());
   }
 
   return TRUE;
-
 }
 
 // Convert a color that is defined in string format "lpColor" to equivalent
@@ -607,21 +598,21 @@ COLORREF vgui_win32_dialog_impl::ColorStringToRGB(LPTSTR lpColor)
 {
   int r, g, b;
 
-  if ( strcmp(lpColor, "red") == 0 )
+  if ( vcl_strcmp(lpColor, "red") == 0 )
     return RGB(255, 0, 0);
-  if ( strcmp(lpColor, "green") == 0 )
+  if ( vcl_strcmp(lpColor, "green") == 0 )
     return RGB(0, 255, 0);
-  if ( strcmp(lpColor, "blue") == 0 )
+  if ( vcl_strcmp(lpColor, "blue") == 0 )
     return RGB(0, 0, 255);
-  if ( strcmp(lpColor, "yellow") == 0 )
+  if ( vcl_strcmp(lpColor, "yellow") == 0 )
     return RGB(255, 255, 0);
-  if ( strcmp(lpColor, "pink") == 0 )
+  if ( vcl_strcmp(lpColor, "pink") == 0 )
     return RGB(255, 0, 255);
-  if ( strcmp(lpColor, "cyan") == 0 )
+  if ( vcl_strcmp(lpColor, "cyan") == 0 )
     return RGB(0, 255, 255);
-  if ( strcmp(lpColor, "black") == 0 )
+  if ( vcl_strcmp(lpColor, "black") == 0 )
     return RGB(0, 0, 0);
-  if ( strcmp(lpColor, "white") == 0 )
+  if ( vcl_strcmp(lpColor, "white") == 0 )
     return RGB(255, 255, 255);
 
   int ret = vcl_sscanf(lpColor, TEXT("%d%d%d"), &r, &g, &b);
@@ -634,24 +625,22 @@ COLORREF vgui_win32_dialog_impl::ColorStringToRGB(LPTSTR lpColor)
 inline bool vgui_win32_dialog_impl::IsFileBrowserButton(unsigned short ctrl_id)
 {
   vcl_vector<unsigned short>::iterator result;
-  
-  result = vcl_find(fb_ids.begin(), fb_ids.end(), ctrl_id);
-  return result == fb_ids.end() ? false : true; 
-}
 
+  result = vcl_find(fb_ids.begin(), fb_ids.end(), ctrl_id);
+  return result == fb_ids.end() ? false : true;
+}
 
 inline bool vgui_win32_dialog_impl::IsColorChooserButton(unsigned short ctrl_id)
 {
   vcl_vector<unsigned short>::iterator result;
-  
-  result = vcl_find(cc_ids.begin(), cc_ids.end(), ctrl_id);
-  return result == cc_ids.end() ? false : true; 
 
+  result = vcl_find(cc_ids.begin(), cc_ids.end(), ctrl_id);
+  return result == cc_ids.end() ? false : true;
 }
 
 vgui_win32_adaptor* vgui_win32_dialog_impl::find_adaptor(unsigned short ctrl_id)
 {
-  for ( size_t i = 0; i < inline_tableaus.size(); i++ )
+  for ( vcl_size_t i = 0; i < inline_tableaus.size(); i++ )
     if ( ctrl_id == inline_tableaus[i].childId )
       return inline_tableaus[i].adaptor;
 
