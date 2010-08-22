@@ -30,8 +30,8 @@ class vgui_win32_window : public vgui_window, public vgui_win32_cmdtarget
   ~vgui_win32_window();
 
   // Public functions for accessing members.
-  HWND getWindowHandle() { return _hwnd; }
-  HACCEL getAccelHandle() { return _hAccel; }
+  HWND getWindowHandle() { return hwnd_; }
+  HACCEL getAccelHandle() { return hAccel_; }
 
  //: Put the given menu in the menubar (if it exists).
   virtual void set_menubar(vgui_menu const &);
@@ -42,15 +42,15 @@ class vgui_win32_window : public vgui_window, public vgui_win32_cmdtarget
   //: Set the default adaptor (if it exists) to the given vgui_adaptor.
   //  These refer to the default/current adaptor, if that makes
   //  sense. It is not a requirement that it should make sense.
-  virtual void set_adaptor(vgui_adaptor *adaptor) { /*_adaptor = adaptor;*/ }
+  virtual void set_adaptor(vgui_adaptor *adaptor) { /*adaptor_ = adaptor;*/ }
 
 
   //: Get the default adaptor (if it exists).
-  virtual vgui_adaptor *get_adaptor() { return _adaptor; }
+  virtual vgui_adaptor *get_adaptor() { return adaptor_; }
 
   //: Get the status bar (if it exists).
   // TODO: This function is not called yet.
-  virtual vgui_statusbar *get_statusbar() { return _statusbar; }
+  virtual vgui_statusbar *get_statusbar() { return statusbar_; }
 
 
   //: Display the window.
@@ -58,11 +58,11 @@ class vgui_win32_window : public vgui_window, public vgui_win32_cmdtarget
 
   //: Hide the window from view.
   // TODO: This function is not called yet.
-  virtual void hide() { ShowWindow(_hwnd, SW_HIDE); }
+  virtual void hide() { ShowWindow(hwnd_, SW_HIDE); }
 
   //: Turn the window into an icon.
   // TODO: This function is not called yet.
-  virtual void iconify() { ShowWindow(_hwnd, SW_MINIMIZE); }
+  virtual void iconify() { ShowWindow(hwnd_, SW_MINIMIZE); }
 
   //: If true, activate horizontal scrollbar (if it exists).
   virtual void enable_hscrollbar(bool);
@@ -78,7 +78,7 @@ class vgui_win32_window : public vgui_window, public vgui_win32_cmdtarget
 
   //: Use the given text as the window title (if the window has a title).
   // TODO: This function is not called yet.
-  virtual void set_title(vcl_string const &t) { SetWindowText(_hwnd, t.c_str()); }
+  virtual void set_title(vcl_string const &t) { SetWindowText(hwnd_, t.c_str()); }
 
   //: Set the position of the horizontal scrollbar, returns old position
   virtual int set_hscrollbar(int pos);
@@ -100,9 +100,9 @@ class vgui_win32_window : public vgui_window, public vgui_win32_cmdtarget
 #endif
 
  protected:
-  HWND  _hwnd;  //!< application window handle
-  HMENU _hMenu; //!< application menu handle
-  HACCEL _hAccel; // accelerator handle
+  HWND  hwnd_;  //!< application window handle
+  HMENU hMenu_; //!< application menu handle
+  HACCEL hAccel_; // accelerator handle
   vcl_vector<vgui_command_sptr> callbacks; //!< commands called by menu items
 
  private:
@@ -110,11 +110,11 @@ class vgui_win32_window : public vgui_window, public vgui_win32_cmdtarget
   void initWindow(HINSTANCE hInst, const char *appname, int width,
                   int height, char const *title);
 
-  vgui_win32_adaptor *_adaptor;
-  vgui_win32_statusbar *_statusbar;
+  vgui_win32_adaptor *adaptor_;
+  vgui_win32_statusbar *statusbar_;
 
-  int      _wx, _wy; //!< window position (wx, wy)
-  unsigned _cx, _cy; //!< and client area size (cx, cy).
+  int      wx_, wy_; //!< window position (wx, wy)
+  unsigned cx_, cy_; //!< and client area size (cx, cy).
   bool first_show;   //!< indicate if the member function show()
                      //!< is called for the first time
 

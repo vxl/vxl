@@ -80,14 +80,14 @@ class vgui_win32 : public vgui_toolkit
   // Pump a message from the thread's message queue and process it.
   BOOL PumpMessage();
 
-  static vgui_win32 *_instance; // or put this member into instance().
+  static vgui_win32 *instance_; // or put this member into instance().
 
   // The four arguments of WinMain() are put here as class members.
-  HINSTANCE _hInstance; // application instance handle
-  HINSTANCE _hPrevInstance;
-  PSTR      _szCmdLine;
-  int       _iCmdShow;
-  char     *_szAppName;
+  HINSTANCE hInstance_; // application instance handle
+  HINSTANCE hPrevInstance_;
+  PSTR      szCmdLine_;
+  int       iCmdShow_;
+  char     *szAppName_;
 
   // Save pointers to vgui_win32_window for access and free at app exit.
   vcl_vector<vgui_window*> windows_to_delete;

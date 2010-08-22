@@ -8,8 +8,8 @@
 // (Create if necessary and) return singleton instance of this class.
 vgui_win32_utils* vgui_win32_utils::instance()
 {
-  static vgui_win32_utils _instance;
-  return &_instance;
+  static vgui_win32_utils instance_;
+  return &instance_;
 }
 
 

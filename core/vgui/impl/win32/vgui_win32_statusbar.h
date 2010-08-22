@@ -27,10 +27,10 @@ class vgui_win32_statusbar : public vgui_statusbar
   ~vgui_win32_statusbar();
 
   //: show or hide status bar.
-  void setVisible(bool visible) { ShowWindow(_hwnd, visible?SW_SHOW:SW_HIDE); }
+  void setVisible(bool visible) { ShowWindow(hwnd_, visible?SW_SHOW:SW_HIDE); }
 
   //: Get window handle of status bar
-  HWND getWindowHandle() { return _hwnd; }
+  HWND getWindowHandle() { return hwnd_; }
 
   //: Append given text (of given length) to the status bar
   virtual int write(const char* text, int n);
@@ -44,9 +44,9 @@ class vgui_win32_statusbar : public vgui_statusbar
  private:
   static int statusBarID;
 
-  HWND _hwndParent; //!< parent (main) window of the status bar.
-  HWND _hwnd;
-  int _numPanes; //!< number of panes (parts)
+  HWND hwndParent_; //!< parent (main) window of the status bar.
+  HWND hwnd_;
+  int numPanes_; //!< number of panes (parts)
 };
 
 #endif // vgui_win32_statusbar_h_

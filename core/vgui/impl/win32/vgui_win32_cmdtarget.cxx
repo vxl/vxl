@@ -32,10 +32,10 @@ const AFX_MSGMAP* vgui_win32_cmdtarget::GetMessageMap() const
 const AFX_MSGMAP vgui_win32_cmdtarget::messageMap =
 {
     NULL,
-    &vgui_win32_cmdtarget::_messageEntries[0]
+    &vgui_win32_cmdtarget::messageEntries_[0]
 };
 
-const AFX_MSGMAP_ENTRY vgui_win32_cmdtarget::_messageEntries[] =
+const AFX_MSGMAP_ENTRY vgui_win32_cmdtarget::messageEntries_[] =
 {
     { 0, 0, 0, 0, AfxSig_end, 0 }  // no entries
 };

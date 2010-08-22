@@ -20,16 +20,16 @@ BEGIN_MESSAGE_MAP(vgui_win32_adaptor, vgui_win32_cmdtarget)
 END_MESSAGE_MAP()
 
 vgui_win32_adaptor::vgui_win32_adaptor(HWND hwnd, vgui_window *win)
-  : _hwnd(hwnd), _win(win),
-  _redraw_posted(true),
-  _overlay_redraw_posted(true),
-  _idle_request_posted(false)
+  : hwnd_(hwnd), win_(win),
+  redraw_posted_(true),
+  overlay_redraw_posted_(true),
+  idle_request_posted_(false)
 {
   // Get the device context for the client area of the specified window hwnd.
-  _hdc = GetDC(hwnd);
+  hdc_ = GetDC(hwnd);
 
   // Set up OpenGL environment
-  _hglrc = setup_for_gl(_hdc);
+  hglrc_ = setup_for_gl(hdc_);
 }
 
 vgui_win32_adaptor::~vgui_win32_adaptor()
@@ -42,13 +42,13 @@ vgui_win32_adaptor::~vgui_win32_adaptor()
   // vgui_projection_inspector::inspect() would fail.
   dispatch_to_tableau(vgui_DESTROY);
 
-  if ( _hglrc )  {
+  if ( hglrc_ )  {
     // make the rendering context not current
     wglMakeCurrent( NULL, NULL );
     // delete the rendering context
-    wglDeleteContext(_hglrc);
+    wglDeleteContext(hglrc_);
   }
-  ReleaseDC(_hwnd, _hdc);
+  ReleaseDC(hwnd_, hdc_);
 
   // Clear pointers to context-menu callback functions
   popup_callbacks.clear();
@@ -58,44 +58,44 @@ vgui_win32_adaptor::~vgui_win32_adaptor()
 void vgui_win32_adaptor::post_timer(float tm, int id)
 {
   // Create at timer
-  _tid = id;
-  SetTimer(_hwnd, _tid, (unsigned int)tm, NULL);
+  tid_ = id;
+  SetTimer(hwnd_, tid_, (unsigned int)tm, NULL);
 }
 
 
 // Redraw the rendering area.
 void vgui_win32_adaptor::post_redraw()
 {
-  if ( !_redraw_posted ) {
+  if ( !redraw_posted_ ) {
     RECT rect;
-    if ( GetUpdateRect(_hwnd, &rect, FALSE) )
-      InvalidateRect(_hwnd, &rect, FALSE); // update a region if possible
+    if ( GetUpdateRect(hwnd_, &rect, FALSE) )
+      InvalidateRect(hwnd_, &rect, FALSE); // update a region if possible
     else
-      InvalidateRect(_hwnd, NULL, FALSE);  // entire client area
+      InvalidateRect(hwnd_, NULL, FALSE);  // entire client area
     // Redraw scroll bars to reflect to changed image size.
     // This operation might be put in vgui_view2D_tableau.
-    PostMessage(_hwnd, WM_SIZE, 0, MAKELPARAM(width, height));
+    PostMessage(hwnd_, WM_SIZE, 0, MAKELPARAM(width, height));
   }
-  _redraw_posted = true;
+  redraw_posted_ = true;
 }
 
 // Redraw overlay buffer
 void vgui_win32_adaptor::post_overlay_redraw()
 {
-  if ( !_overlay_redraw_posted ) {
+  if ( !overlay_redraw_posted_ ) {
     RECT rect;
-    if ( GetUpdateRect(_hwnd, &rect, FALSE) )
-      InvalidateRect(_hwnd, &rect, FALSE); // update a region if possible
+    if ( GetUpdateRect(hwnd_, &rect, FALSE) )
+      InvalidateRect(hwnd_, &rect, FALSE); // update a region if possible
     else
-      InvalidateRect(_hwnd, NULL, FALSE);  // entire client area
+      InvalidateRect(hwnd_, NULL, FALSE);  // entire client area
   }
-  _overlay_redraw_posted = true;
+  overlay_redraw_posted_ = true;
 }
 
 // TODO: This function is not called yet.
 void vgui_win32_adaptor::post_idle_request()
 {
-  _idle_request_posted = true;
+  idle_request_posted_ = true;
 }
 
 //void post_message(char const *, void const *);
@@ -106,15 +106,15 @@ void vgui_win32_adaptor::post_destroy()
   // Do not send WM_DESTROY so as to give parent vgui_window
   // a chance to give focus to other vgui_window(s).
   // See vgui/examples/example_multiple_windows.
-  PostMessage(_hwnd, WM_CLOSE, 0, 0);
+  PostMessage(hwnd_, WM_CLOSE, 0, 0);
 }
 
 // TODO: This function is not called yet.
 // kill an existing timer
 void vgui_win32_adaptor::kill_timer(int timer)
 {
-  if ( _tid == timer )
-    KillTimer(_hwnd, timer);  // we only kill our own timer.
+  if ( tid_ == timer )
+    KillTimer(hwnd_, timer);  // we only kill our own timer.
 }
 
 
@@ -155,7 +155,7 @@ HGLRC vgui_win32_adaptor::setup_for_gl(HDC hdc)
   }
 
   // Create a OpenGL rendering context, which is suitable for drawing
-  // on the device referenced by _hdc.
+  // on the device referenced by hdc_.
   HGLRC hglrc = wglCreateContext(hdc);
   if ( !hglrc ) {
     MessageBox(NULL, TEXT("wglCreateContext failed"), TEXT("Error"),
@@ -164,7 +164,7 @@ HGLRC vgui_win32_adaptor::setup_for_gl(HDC hdc)
     return 0;
   }
 
-  // Make all subsequent OpenGL calls to be drawn on the device context _hdc.
+  // Make all subsequent OpenGL calls to be drawn on the device context hdc_.
   if ( !wglMakeCurrent(hdc, hglrc) ) {
     MessageBox(NULL, TEXT("wglMakeCurrent failed"), TEXT("Error"),
                MB_ICONERROR | MB_OK);
@@ -286,12 +286,12 @@ void vgui_win32_adaptor::OnSize(WPARAM wParam, LPARAM lParam)
     si.nMax = 100;
     si.nPage = 100.*width/im_width;
     si.nPos = -100.*vr->token.offsetX/width;
-    SetScrollInfo(_hwnd, SB_HORZ, &si, TRUE);
+    SetScrollInfo(hwnd_, SB_HORZ, &si, TRUE);
 
     // Save horizontal scroll bar range and page size
     si.nPage = 100.*height/im_height;
     si.nPos = -100.*vr->token.offsetY/height;
-    SetScrollInfo(_hwnd, SB_VERT, &si, TRUE);
+    SetScrollInfo(hwnd_, SB_VERT, &si, TRUE);
   }
 
   dispatch_to_tableau(vgui_RESHAPE);
@@ -300,22 +300,22 @@ void vgui_win32_adaptor::OnSize(WPARAM wParam, LPARAM lParam)
 
 void vgui_win32_adaptor::OnPaint()
 {
-  if ( _redraw_posted ) {
+  if ( redraw_posted_ ) {
     this->make_current();
     vgui_macro_report_errors;
     dispatch_to_tableau(vgui_event(vgui_DRAW));
     vgui_macro_report_errors;
-    _redraw_posted = false;
+    redraw_posted_ = false;
   }
 
-  if ( _overlay_redraw_posted ) {
+  if ( overlay_redraw_posted_ ) {
     this->make_current();
     vgui_macro_report_errors;
     // The following line forces a redraw to erase the previous overlay
     dispatch_to_tableau(vgui_event(vgui_DRAW));
     dispatch_to_tableau(vgui_event(vgui_DRAW_OVERLAY));
     vgui_macro_report_errors;
-    _overlay_redraw_posted = false;
+    overlay_redraw_posted_ = false;
   }
 
   swap_buffers();
@@ -330,7 +330,7 @@ void vgui_win32_adaptor::OnHScroll(UINT message, WPARAM wParam, LPARAM lParam)
   // Get all the vertical scroll bar information
   si.cbSize = sizeof(si);
   si.fMask = SIF_ALL;
-  GetScrollInfo(_hwnd, SB_HORZ, &si);
+  GetScrollInfo(hwnd_, SB_HORZ, &si);
 
   // Save the position for comparison later on
   iHorzPos = si.nPos;
@@ -357,8 +357,8 @@ void vgui_win32_adaptor::OnHScroll(UINT message, WPARAM wParam, LPARAM lParam)
   // Set the position and then retrieve it. Due to adjustments
   // by Windows it may not be the same as the value set.
   si.fMask = SIF_POS;
-  SetScrollInfo(_hwnd, SB_HORZ, &si, TRUE);
-  GetScrollInfo(_hwnd, SB_HORZ, &si);
+  SetScrollInfo(hwnd_, SB_HORZ, &si, TRUE);
+  GetScrollInfo(hwnd_, SB_HORZ, &si);
 
   // If the position has changed, scroll the window and update it
   if ( si.nPos != iHorzPos ) {
@@ -366,8 +366,8 @@ void vgui_win32_adaptor::OnHScroll(UINT message, WPARAM wParam, LPARAM lParam)
     e.data = &si.nPos;
     dispatch_to_tableau(e);
 
-    ScrollWindow(_hwnd, 0, (iHorzPos-si.nPos), NULL, NULL);
-    UpdateWindow(_hwnd);
+    ScrollWindow(hwnd_, 0, (iHorzPos-si.nPos), NULL, NULL);
+    UpdateWindow(hwnd_);
   }
 }
 
@@ -380,7 +380,7 @@ void vgui_win32_adaptor::OnVScroll(UINT message, WPARAM wParam, LPARAM lParam)
   // Get all the vertical scroll bar information
   si.cbSize = sizeof(si);
   si.fMask = SIF_ALL;
-  GetScrollInfo(_hwnd, SB_VERT, &si);
+  GetScrollInfo(hwnd_, SB_VERT, &si);
 
   // Save the position for comparison later on
   iVertPos = si.nPos;
@@ -413,8 +413,8 @@ void vgui_win32_adaptor::OnVScroll(UINT message, WPARAM wParam, LPARAM lParam)
   // Set the position and then retrieve it. Due to adjustments
   // by Windows it may not be the same as the value set.
   si.fMask = SIF_POS;
-  SetScrollInfo(_hwnd, SB_VERT, &si, TRUE);
-  GetScrollInfo(_hwnd, SB_VERT, &si);
+  SetScrollInfo(hwnd_, SB_VERT, &si, TRUE);
+  GetScrollInfo(hwnd_, SB_VERT, &si);
 
   // If the position has changed, scroll the window and update it
   if ( si.nPos != iVertPos ) {
@@ -422,8 +422,8 @@ void vgui_win32_adaptor::OnVScroll(UINT message, WPARAM wParam, LPARAM lParam)
     e.data = &si.nPos;
     dispatch_to_tableau(e);
 
-    ScrollWindow(_hwnd, 0, (iVertPos-si.nPos), NULL, NULL);
-    UpdateWindow(_hwnd);
+    ScrollWindow(hwnd_, 0, (iVertPos-si.nPos), NULL, NULL);
+    UpdateWindow(hwnd_);
   }
 }
 
@@ -648,9 +648,9 @@ void vgui_win32_adaptor::domouse(vgui_event_type et, vgui_button b, UINT nFlags,
     point.x = x; point.y = y;
     // TrackPopupMenu requires screen coordinates whereas (x,y) is
     // client coordinates.
-    ClientToScreen(_hwnd, &point);
+    ClientToScreen(hwnd_, &point);
     HMENU hPopupMenu = GetSubMenu(hMenu, 0);
-    TrackPopupMenu(hPopupMenu, TPM_RIGHTBUTTON, point.x, point.y, 0, _hwnd, NULL);
+    TrackPopupMenu(hPopupMenu, TPM_RIGHTBUTTON, point.x, point.y, 0, hwnd_, NULL);
   }
   else
     dispatch_to_tableau(e);
@@ -669,7 +669,7 @@ void vgui_win32_adaptor::domouse(vgui_event_type et, vgui_button b, UINT nFlags,
   // Grab mouse?
   {
     if (et == vgui_BUTTON_DOWN) {
-      SetCapture(_hwnd);
+      SetCapture(hwnd_);
     }
     else if (et != vgui_MOTION) {
       ReleaseCapture();

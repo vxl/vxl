@@ -12,8 +12,8 @@
 // TODO: vgui_win32_cmdtarget is not fully developed yet and for now not
 // used in the Win32 SDK implementation of VGUI.
 
-#ifndef _vgui_win32_cmdtarget_h
-#define _vgui_win32_cmdtarget_h
+#ifndef vgui_win32_cmdtarget_h_
+#define vgui_win32_cmdtarget_h_
 
 #include <windows.h>
 
@@ -27,7 +27,7 @@ struct AFX_MSGMAP
 
 #define DECLARE_MESSAGE_MAP() \
 private: \
-  static const AFX_MSGMAP_ENTRY _messageEntries[]; \
+  static const AFX_MSGMAP_ENTRY messageEntries_[]; \
 protected: \
   static const AFX_MSGMAP messageMap; \
   virtual const AFX_MSGMAP* GetMessageMap() const;
@@ -37,8 +37,8 @@ protected: \
   { return &theClass::messageMap; } \
   const AFX_MSGMAP theClass::messageMap = \
   { &(baseClass::messageMap), \
-   (AFX_MSGMAP_ENTRY*) &(theClass::_messageEntries) }; \
-  const AFX_MSGMAP_ENTRY theClass::_messageEntries[] = \
+   (AFX_MSGMAP_ENTRY*) &(theClass::messageEntries_) }; \
+  const AFX_MSGMAP_ENTRY theClass::messageEntries_[] = \
   {
 
 #define END_MESSAGE_MAP() \
@@ -81,4 +81,4 @@ struct AFX_MSGMAP_ENTRY  // MFC 4.0 format
   AFX_PMSG pfn;  // routine to call (or special value)
 };
 
-#endif // _vgui_win32_cmdtarget_h
+#endif // vgui_win32_cmdtarget_h_

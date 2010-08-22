@@ -7,9 +7,9 @@ int vgui_win32_statusbar::statusBarID = 200;
 
 vgui_win32_statusbar::vgui_win32_statusbar(HWND hwndParent, int numPanes) 
   : statusbuf(new vgui_statusbuf(this)), out(statusbuf),
-     _hwndParent(hwndParent), _numPanes(numPanes)
+     hwndParent_(hwndParent), numPanes_(numPanes)
 {
-  _hwnd = CreateWindowEx(
+  hwnd_ = CreateWindowEx(
          0L,                                       // no extended styles
          STATUSCLASSNAME,                          // status bar
          "",                                       // no text 
@@ -19,7 +19,7 @@ vgui_win32_statusbar::vgui_win32_statusbar(HWND hwndParent, int numPanes)
          (HMENU)statusBarID,                       // window ID
          (HINSTANCE)GetWindowLong(hwndParent, GWL_HINSTANCE), // instance
          NULL);                                    // window data
-  if ( _hwnd == NULL )
+  if ( hwnd_ == NULL )
     MessageBox(NULL, TEXT("Fail to create status bar"), TEXT("Error"), 
                MB_ICONERROR | MB_OK);
 
@@ -28,7 +28,7 @@ vgui_win32_statusbar::vgui_win32_statusbar(HWND hwndParent, int numPanes)
 vgui_win32_statusbar::~vgui_win32_statusbar()
 {
   delete statusbuf;
-  DestroyWindow(_hwnd);
+  DestroyWindow(hwnd_);
 }
 
 int vgui_win32_statusbar::write(const char* text, int n)
@@ -41,7 +41,7 @@ int vgui_win32_statusbar::write(const char* text, int n)
       start_new = true;
     }
     else if (start_new == true){
-      SendMessage(_hwnd, SB_SETTEXT, 0, (LPARAM)(LPSTR)linebuffer.c_str());
+      SendMessage(hwnd_, SB_SETTEXT, 0, (LPARAM)(LPSTR)linebuffer.c_str());
       linebuffer = "";
       linebuffer += text[0];
       start_new = false;
@@ -52,7 +52,7 @@ int vgui_win32_statusbar::write(const char* text, int n)
   else {
     linebuffer.append(text, n);
     if (linebuffer.find('\n')) {
-      SendMessage(_hwnd, SB_SETTEXT, 0, (LPARAM)(LPSTR)linebuffer.c_str());
+      SendMessage(hwnd_, SB_SETTEXT, 0, (LPARAM)(LPSTR)linebuffer.c_str());
       linebuffer = "";
     }
   }
@@ -63,7 +63,7 @@ int vgui_win32_statusbar::write(const char* text, int n)
 int vgui_win32_statusbar::write(const char* text)
 {
   linebuffer = text;
-  SendMessage(_hwnd, SB_SETTEXT, 0, (LPARAM)(LPSTR)linebuffer.c_str());
+  SendMessage(hwnd_, SB_SETTEXT, 0, (LPARAM)(LPSTR)linebuffer.c_str());
 
   return 1;
 }

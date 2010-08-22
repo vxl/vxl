@@ -71,11 +71,11 @@ public:
 
 
   // getting the window.
-  virtual vgui_window *get_window() const { return _win; } 
+  virtual vgui_window *get_window() const { return win_; } 
 
   // various buffer behaviour.
-  virtual void swap_buffers() { SwapBuffers(_hdc); }
-  virtual void make_current() { wglMakeCurrent(_hdc, _hglrc); }
+  virtual void swap_buffers() { SwapBuffers(hdc_); }
+  virtual void make_current() { wglMakeCurrent(hdc_, hglrc_); }
 
   // Message handling function
   virtual BOOL OnCmdMsg(UINT message, WPARAM wParam, LPARAM lParam);
@@ -110,12 +110,12 @@ protected:
   // Handle mouse event
   void domouse(vgui_event_type t, vgui_button b, UINT nFlags, int x, int y);
 
-  HWND   _hwnd;  // main window handle
-  HGLRC  _hglrc; // OpenGL rendering context
-  HDC    _hdc;   // device context 
-  int    _tid;   // timer identifier
+  HWND   hwnd_;  // main window handle
+  HGLRC  hglrc_; // OpenGL rendering context
+  HDC    hdc_;   // device context 
+  int    tid_;   // timer identifier
 
-  vgui_window *_win; // the window that contains this adaptor
+  vgui_window *win_; // the window that contains this adaptor
 
   static vgui_menu last_popup;
   vcl_vector<vgui_command_sptr> popup_callbacks; // commands called by popup menu items
@@ -124,16 +124,15 @@ private:
   HGLRC setup_for_gl(HDC);
 
   // True while a redraw event has been requested but not implemented.
-  bool _redraw_posted;
+  bool redraw_posted_;
 
   // True while a overlay redraw event has been requested but not implemented.
-  bool _overlay_redraw_posted;
+  bool overlay_redraw_posted_;
 
   // True while an idle time has been requested but not implemented.
-  bool _idle_request_posted;
+  bool idle_request_posted_;
 
   DECLARE_MESSAGE_MAP()
-
 };
 
 #endif // vgui_win32_adaptor_h_

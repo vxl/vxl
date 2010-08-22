@@ -8,25 +8,25 @@
 #include "vgui_win32_window.h"
 #include "vgui_win32_dialog_impl.h"
 
-vgui_win32* vgui_win32::_instance = 0;
+vgui_win32* vgui_win32::instance_ = 0;
 
 // Return a single instance of vgui_win32.
 vgui_win32* vgui_win32::instance()
 {
-  if ( _instance == 0 )
-    _instance = new vgui_win32();
+  if ( instance_ == 0 )
+    instance_ = new vgui_win32();
 
-  return _instance;
+  return instance_;
 }
 
 vgui_win32::vgui_win32()
 {
-  _hInstance = GetModuleHandle(NULL);
-  _hPrevInstance = NULL;
-  _szCmdLine = NULL;
-  _iCmdShow = SW_SHOW;
+  hInstance_ = GetModuleHandle(NULL);
+  hPrevInstance_ = NULL;
+  szCmdLine_ = NULL;
+  iCmdShow_ = SW_SHOW;
 
-  _szAppName = NULL;
+  szAppName_ = NULL;
 
   windows_to_delete.clear();
   current_window = NULL;
@@ -42,7 +42,7 @@ vgui_win32::~vgui_win32()
 // Process command line arguments
 BOOL vgui_win32::ProcessShellCommand(int argc, char **argv)
 {
-  // We set _szAppName to be the app name.
+  // We set szAppName_ to be the app name.
   char *p, *q = argv[0];
 
   // Skip path
@@ -51,17 +51,17 @@ BOOL vgui_win32::ProcessShellCommand(int argc, char **argv)
   p = vcl_strstr(q, ".exe");
   // Now q points to the app name.
   if (p)
-    _szAppName = (char *)malloc(sizeof(char)*(p-q+1));
+    szAppName_ = (char *)malloc(sizeof(char)*(p-q+1));
   else // .exe is not provided.
-    _szAppName = (char *)malloc(sizeof(char)*(1+vcl_strlen(q)));
+    szAppName_ = (char *)malloc(sizeof(char)*(1+vcl_strlen(q)));
 
-  if ( _szAppName == NULL )
+  if ( szAppName_ == NULL )
     return FALSE;
   if (p) *p = 0;
-  vcl_strcpy(_szAppName, q);
+  vcl_strcpy(szAppName_, q);
 
-  // Convert argv into _szCmdLine
-  _szCmdLine = GetCommandLine();
+  // Convert argv into szCmdLine_
+  szCmdLine_ = GetCommandLine();
 
   return TRUE;
 }
@@ -75,12 +75,12 @@ void vgui_win32::init(int &argc, char **argv)
   wndclass.lpfnWndProc   = globalWndProc;
   wndclass.cbClsExtra    = 0;
   wndclass.cbWndExtra    = 0;
-  wndclass.hInstance     = _hInstance;
+  wndclass.hInstance     = hInstance_;
   wndclass.hIcon         = LoadIcon(NULL, IDI_APPLICATION);
   wndclass.hCursor       = LoadCursor(NULL, IDC_ARROW);
   wndclass.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
-  wndclass.lpszMenuName  = _szAppName;
-  wndclass.lpszClassName = _szAppName;
+  wndclass.lpszMenuName  = szAppName_;
+  wndclass.lpszClassName = szAppName_;
 
   if ( !RegisterClass(&wndclass) ) {
     vcl_cerr << "Fail to register window class for main window.\n";
@@ -92,8 +92,8 @@ void vgui_win32::init(int &argc, char **argv)
   wndclass.lpfnWndProc   = globalDialogProc;
   wndclass.cbClsExtra    = 0;
   wndclass.cbWndExtra    = 0;
-  wndclass.hInstance     = _hInstance;
-  wndclass.hIcon         = LoadIcon(_hInstance, IDI_APPLICATION);
+  wndclass.hInstance     = hInstance_;
+  wndclass.hIcon         = LoadIcon(hInstance_, IDI_APPLICATION);
   wndclass.hCursor       = LoadCursor(NULL, IDC_ARROW);
   wndclass.hbrBackground = (HBRUSH)(COLOR_BTNFACE+1);
   wndclass.lpszMenuName  = NULL;
@@ -110,8 +110,8 @@ void vgui_win32::init(int &argc, char **argv)
   wndclass.lpfnWndProc   = globalTableauProc;
   wndclass.cbClsExtra    = 0;
   wndclass.cbWndExtra    = 0;
-  wndclass.hInstance     = _hInstance;
-  wndclass.hIcon         = LoadIcon(_hInstance, IDI_APPLICATION);
+  wndclass.hInstance     = hInstance_;
+  wndclass.hIcon         = LoadIcon(hInstance_, IDI_APPLICATION);
   wndclass.hCursor       = LoadCursor(NULL, IDC_ARROW);
   wndclass.hbrBackground = (HBRUSH)(COLOR_WINDOW+1);
   wndclass.lpszMenuName  = NULL;
@@ -136,7 +136,7 @@ vgui_window* vgui_win32::produce_window(int width, int height,
                                         vgui_menu const &menubar,
                                         char const *title)
 {
-  vgui_window* a_window = new vgui_win32_window(_hInstance, _szAppName, width, height, menubar, title);
+  vgui_window* a_window = new vgui_win32_window(hInstance_, szAppName_, width, height, menubar, title);
   windows_to_delete.push_back(a_window);
   current_window = a_window;
   return a_window;
@@ -145,7 +145,7 @@ vgui_window* vgui_win32::produce_window(int width, int height,
 vgui_window* vgui_win32::produce_window(int width, int height,
                                         char const *title)
 {
-  vgui_window* a_window = new vgui_win32_window(_hInstance, _szAppName, width, height, title);
+  vgui_window* a_window = new vgui_win32_window(hInstance_, szAppName_, width, height, title);
   windows_to_delete.push_back(a_window);
   current_window = a_window;
   return a_window;
