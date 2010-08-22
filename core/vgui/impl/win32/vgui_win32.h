@@ -3,7 +3,7 @@
 #ifndef vgui_win32_h_
 #define vgui_win32_h_
 
-// The Win32 Application Programming Interfaces (API) implementation of 
+// The Win32 Application Programming Interfaces (API) implementation of
 // vgui_toolkit.
 // author: Lianqing Yu
 
@@ -12,7 +12,7 @@
 
 // Notes:
 // vgui_win32 acts like CWinThread and CWinApp in MFC. It performs program
-// initialization/termination, process message loops, and deal with 
+// initialization/termination, process message loops, and deal with
 // command line arguments.
 
 // Enable Windows XP (or later) visual styles for common controls
@@ -25,12 +25,12 @@
 // 1. add_event()
 
 
-// Provide functions for (a) controlling event loop, 
+// Provide functions for (a) controlling event loop,
 //                       (b) translating Win32's event system to vgui_event.
 
 class vgui_win32 : public vgui_toolkit
 {
-public:
+ public:
   ~vgui_win32();
 
   // Window management functions.
@@ -71,8 +71,7 @@ public:
   virtual void add_event(vgui_event const &);
   virtual void quit();
 
-
-protected:
+ protected:
   vgui_win32();
 
   // Process command line arguments
@@ -86,7 +85,7 @@ protected:
   // The four arguments of WinMain() are put here as class members.
   HINSTANCE _hInstance; // application instance handle
   HINSTANCE _hPrevInstance;
-  PSTR      _szCmdLine; 
+  PSTR      _szCmdLine;
   int       _iCmdShow;
   char     *_szAppName;
 

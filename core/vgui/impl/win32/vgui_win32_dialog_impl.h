@@ -3,7 +3,7 @@
 #ifndef vgui_win32_dialog_impl_h_
 #define vgui_win32_dialog_impl_h_
 
-// The Win32 Application Programming Interfaces (API) implementation of 
+// The Win32 Application Programming Interfaces (API) implementation of
 // vgui_dialog_impl.
 // author: Lianqing Yu
 
@@ -32,7 +32,7 @@ typedef struct tag_inline_tab_data
 
 class vgui_win32_dialog_impl : public vgui_dialog_impl
 {
-public:
+ public:
   vgui_win32_dialog_impl(const char*, HWND hWndParent = NULL);
   ~vgui_win32_dialog_impl();
 
@@ -43,7 +43,7 @@ public:
   void modal(bool m) { is_modal = m; }
   bool ask();
   virtual void run();
-  
+
   // Virtual message handling functions
   virtual LRESULT DialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
   virtual void OnOK();
@@ -57,7 +57,7 @@ public:
   // TODO: fix me.
   vgui_win32_adaptor* get_current_tab() { return inline_tableaus.front().adaptor; }
 
-protected:
+ protected:
   COLORREF ColorStringToRGB(LPTSTR lpColor);
 
   bool ok_clicked;
@@ -67,17 +67,17 @@ protected:
                    // used to create dialog box
   HWND hWnd; // window handle of this dialog box.
 
-private:
+ private:
   // Find out the size of the dialog box.
-  void FindDialogSize(int &width, int &height, 
-    int &max_length, int &fbsr_count,
-    int cxChar, int cyChar, int width_sep, int height_sep, 
-    int button_length, int edit_length, int browser_length);
+  void FindDialogSize(int &width, int &height,
+                      int &max_length, int &fbsr_count,
+                      int cxChar, int cyChar, int width_sep, int height_sep,
+                      int button_length, int edit_length, int browser_length);
 
-  // Determine if the control with identifier "ctrl_id" 
+  // Determine if the control with identifier "ctrl_id"
   // is a file browser button.
   bool IsFileBrowserButton(unsigned short ctrl_id);
-  // Determine if the control with identifier "ctrl_id" 
+  // Determine if the control with identifier "ctrl_id"
   // is a color chooser button.
   bool IsColorChooserButton(unsigned short ctrl_id);
   // Find the inline adaptor with identifier "ctrl_id".
@@ -86,7 +86,7 @@ private:
   // Save information of all inline tableaus added in the dialog box.
   vcl_vector<inline_tab_data> inline_tableaus;
 
-  // Save identifiers of file-browser/color-chooser buttons so that 
+  // Save identifiers of file-browser/color-chooser buttons so that
   // OnBrowse/OnColor are called when these buttons are clicked.
   vcl_vector<unsigned short> fb_ids, cc_ids;
 };
