@@ -2,27 +2,27 @@
 
 #include "vgui_win32_utils.h"
 #include <vcl_iostream.h>
-#include <assert.h>
+#include <vcl_cassert.h>
+#include <vcl_cstddef.h> // for vcl_size_t
 
 // (Create if necessary and) return singleton instance of this class.
 vgui_win32_utils* vgui_win32_utils::instance()
 {
   static vgui_win32_utils _instance;
   return &_instance;
-
 }
 
 
-// Convert a vgui_menu to equivalent MENUTEMPLATE strucuture used by 
+// Convert a vgui_menu to equivalent MENUTEMPLATE structure used by
 // Win32 function LoadMenuIndirect.
-HMENU vgui_win32_utils::vgui_menu_to_win32(vgui_menu const &vguimenu, 
-  vcl_vector<vgui_command_sptr> &callbacks_, HACCEL *hAccel, bool isPopup)
+HMENU vgui_win32_utils::vgui_menu_to_win32(vgui_menu const &vguimenu,
+                                           vcl_vector<vgui_command_sptr> &callbacks_, HACCEL *hAccel, bool isPopup)
 {
   HMENU hMenu;
   MENUITEMTEMPLATEHEADER *pMenuHeader;
   MENUITEMTEMPLATE *pMenuItem;
 
-  // Note that the MENUITEMTEMPLATE structures are variable in length, 
+  // Note that the MENUITEMTEMPLATE structures are variable in length,
   // Therefore we allocate capacity*sizeof(char) initially.
   menu_capacity = 1024;    // in unit of unsigned char
   item_count = 0;
@@ -34,13 +34,13 @@ HMENU vgui_win32_utils::vgui_menu_to_win32(vgui_menu const &vguimenu,
 
   pMenu = (unsigned char *)malloc(sizeof(MENUITEMTEMPLATEHEADER) + menu_capacity);
   if ( pMenu == NULL ) {
-    vcl_cerr << "Memory allocation error" << vcl_endl;
+    vcl_cerr << "Memory allocation error\n";
     return NULL;
   }
 
   pAccel = (ACCEL *)malloc(sizeof(ACCEL)*accel_capacity);
   if ( pAccel == NULL )
-    vcl_cerr << "Memory allocation error" << vcl_endl;
+    vcl_cerr << "Memory allocation error\n";
 
   // Fill up the MENUITEMTEMPLATEHEADER structure.
   pMenuHeader = (MENUITEMTEMPLATEHEADER *)pMenu;
@@ -63,7 +63,7 @@ HMENU vgui_win32_utils::vgui_menu_to_win32(vgui_menu const &vguimenu,
   if ( !hMenu )
      ShowErrorMessage(GetLastError());
 
-  if ( !isPopup ) // create an accelerator table for non-popup menu. 
+  if ( !isPopup ) // create an accelerator table for non-popup menu.
     *hAccel = CreateAcceleratorTable(pAccel, accel_count);
 
   free(pMenu);
@@ -92,11 +92,11 @@ int vgui_win32_utils::addMenuItems(vgui_menu const &vguimenu, int offset_in, boo
 
     // MENUITEMTEMPLATE does not have separator.
     if (vguimenu[i].is_separator() ||
-        vguimenu[i].is_toggle_button()) 
+        vguimenu[i].is_toggle_button())
       continue;
 
     stride = 0;
-    pMenuItem->mtOption = 0; 
+    pMenuItem->mtOption = 0;
     stride += sizeof(pMenuItem->mtOption);
     if ( i == vguimenu.size()-1 )
       pMenuItem->mtOption |= MF_END; // indiate this is the last menu item
@@ -110,7 +110,7 @@ int vgui_win32_utils::addMenuItems(vgui_menu const &vguimenu, int offset_in, boo
       addAccelerator(menuItemText, vguimenu[i], menuItemID);
 
       // Copy the menu item text.
-      size_t j;
+      vcl_size_t j;
       pMenuItemText = pMenuItem->mtString;
       for ( j = 0; j < menuItemText.size(); j++ )
         *(pMenuItemText+j) = (WCHAR)menuItemText.c_str()[j];
@@ -119,14 +119,14 @@ int vgui_win32_utils::addMenuItems(vgui_menu const &vguimenu, int offset_in, boo
 
       // Add the associated callback function pointer to the callback list.
       callbacks.push_back(vguimenu[i].cmnd);
-    } 
+    }
     else if (vguimenu[i].is_submenu()) {
       pMenuItem->mtOption |= MF_POPUP;
 
       menuItemText = vguimenu[i].name;
-      size_t j; 
-      // Note that the MENUITEMTEMPLATE structure for an item that opens a 
-      // drop-down menu or submenu does not contain the mtID member. 
+      vcl_size_t j;
+      // Note that the MENUITEMTEMPLATE structure for an item that opens a
+      // drop-down menu or submenu does not contain the mtID member.
       pMenuItemText = (WCHAR *)&pMenuItem->mtID;
       for ( j = 0; j < menuItemText.size(); j++ )
         *(pMenuItemText+j) = menuItemText.c_str()[j];
@@ -135,7 +135,6 @@ int vgui_win32_utils::addMenuItems(vgui_menu const &vguimenu, int offset_in, boo
 
       // Call itself recursively for submenu
       stride += addMenuItems(*vguimenu[i].menu, offset+stride, is_popup);
-
     }
 
     offset += stride;
@@ -149,27 +148,26 @@ int vgui_win32_utils::addMenuItems(vgui_menu const &vguimenu, int offset_in, boo
       menu_capacity <<= 1; // double the capacity.
       pMenu = (unsigned char *)realloc(pMenu, sizeof(MENUITEMTEMPLATEHEADER)+menu_capacity);
       if ( pMenu == NULL ) {
-        vcl_cerr << "Memory allocation error" << vcl_endl;
+        vcl_cerr << "Memory allocation error\n";
         return 0;
       }
     }
-
   }
 
   return offset - offset_in;
 }
 
-// Convert a vgui_menu to equivalent extended MENUTEMPLATE strucuture used by 
+// Convert a vgui_menu to equivalent extended MENUTEMPLATE structure used by
 // Win32 function LoadMenuIndirect.
-HMENU vgui_win32_utils::vgui_menu_to_win32ex(vgui_menu const &vguimenu, 
-  vcl_vector<vgui_command_sptr> &callbacks_, HACCEL *hAccel, bool isPopup)
+HMENU vgui_win32_utils::vgui_menu_to_win32ex(vgui_menu const &vguimenu,
+                                             vcl_vector<vgui_command_sptr> &callbacks_, HACCEL *hAccel, bool isPopup)
 {
   HMENU hMenu;
   MENUEX_TEMPLATE_HEADER *pMenuHeader;
   MENUEX_TEMPLATE_ITEM *pMenuItem;
 
-  // Note that the MENUEX_TEMPLATE_ITEM structures are variable in length, 
-  // but are aligned on DWORD boundaries. Therefore we allocate 
+  // Note that the MENUEX_TEMPLATE_ITEM structures are variable in length,
+  // but are aligned on DWORD boundaries. Therefore we allocate
   // capacity*sizeof(WORD) initially.
   menu_capacity = 1024;
   item_count = 0;
@@ -181,13 +179,13 @@ HMENU vgui_win32_utils::vgui_menu_to_win32ex(vgui_menu const &vguimenu,
 
   pMenu = (unsigned char *)malloc(sizeof(MENUEX_TEMPLATE_HEADER) + menu_capacity);
   if ( pMenu == NULL ) {
-    vcl_cerr << "Memory allocation error" << vcl_endl;
+    vcl_cerr << "Memory allocation error\n";
     return NULL;
   }
 
   pAccel = (ACCEL *)malloc(sizeof(ACCEL)*accel_capacity);
   if ( pAccel == NULL )
-    vcl_cerr << "Memory allocation error" << vcl_endl;
+    vcl_cerr << "Memory allocation error\n";
 
   // Fill up the MENUEX_TEMPLATE_HEADER structure.
   pMenuHeader = (MENUEX_TEMPLATE_HEADER *)pMenu;
@@ -219,7 +217,7 @@ HMENU vgui_win32_utils::vgui_menu_to_win32ex(vgui_menu const &vguimenu,
   if ( !hMenu )
      ShowErrorMessage(GetLastError());
 
-  if ( !isPopup ) // create an accelerator table for non-popup menu. 
+  if ( !isPopup ) // create an accelerator table for non-popup menu.
     *hAccel = CreateAcceleratorTable(pAccel, accel_count);
 
   free(pMenu);
@@ -249,7 +247,7 @@ int vgui_win32_utils::addMenuItemsEx(vgui_menu const &vguimenu, int offset_in, b
 
     // indiate this is the last menu item
     last_item = (i == vguimenu.size()-1) ? true : false;
- 
+
     pMenuItem->dwType = MFT_STRING;
     stride += sizeof(pMenuItem->dwType);
     pMenuItem->dwState = MFS_ENABLED;
@@ -265,12 +263,12 @@ int vgui_win32_utils::addMenuItemsEx(vgui_menu const &vguimenu, int offset_in, b
       stride += sizeof(pMenuItem->szText);
       if ( stride % 4 ) { // aligned on DWORD boundary.
         stride += 4;
-        stride &= ~3; 
+        stride &= ~3;
       }
     }
     else if (vguimenu[i].is_command()) {
       int menuItemID = is_popup ? POPUPMENU_ID_START+item_count++ : MENU_ID_START+item_count++;
-      pMenuItem->menuId = menuItemID; 
+      pMenuItem->menuId = menuItemID;
 
       pMenuItem->bResInfo = last_item ? 0x80 : 0;
       stride += sizeof(pMenuItem->bResInfo);
@@ -280,7 +278,7 @@ int vgui_win32_utils::addMenuItemsEx(vgui_menu const &vguimenu, int offset_in, b
 
       // Copy the menu item text.
       pMenuItemText = (WCHAR *)&pMenuItem->szText;
-      size_t j;
+      vcl_size_t j;
       for ( j = 0; j < menuItemText.size(); j++ )
         *(pMenuItemText+j) = menuItemText.c_str()[j];
       *(pMenuItemText+j) = 0;
@@ -289,20 +287,19 @@ int vgui_win32_utils::addMenuItemsEx(vgui_menu const &vguimenu, int offset_in, b
 
       if ( stride % 4 ) { // aligned on DWORD boundary.
         stride += 4;
-        stride &= ~3; 
+        stride &= ~3;
       }
 
       // Add the associated callback function pointer to the callback list.
       callbacks.push_back(vguimenu[i].cmnd);
-
     }
     else if (vguimenu[i].is_submenu()) {
       pMenuItem->bResInfo = last_item ? 0x80 | 0x01 : 0x01;
       stride += sizeof(pMenuItem->bResInfo);
-      
+
       menuItemText = vguimenu[i].name;
       pMenuItemText = (WCHAR *)&pMenuItem->szText;
-      size_t j;
+      vcl_size_t j;
       for ( j = 0; j < menuItemText.size(); j++ )
         *(pMenuItemText+j) = menuItemText.c_str()[j];
       *(pMenuItemText+j) = 0;
@@ -310,7 +307,7 @@ int vgui_win32_utils::addMenuItemsEx(vgui_menu const &vguimenu, int offset_in, b
 
       if ( stride % 4 ) { // aligned on DWORD boundary.
         stride += 4;
-        stride &= ~3; 
+        stride &= ~3;
       }
 
       DWORD* dwHelpId = (DWORD *)(pMenu+offset+stride);
@@ -335,18 +332,17 @@ int vgui_win32_utils::addMenuItemsEx(vgui_menu const &vguimenu, int offset_in, b
       menu_capacity <<= 1; // double the capacity.
       pMenu = (unsigned char *)realloc(pMenu, sizeof(MENUEX_TEMPLATE_HEADER) + menu_capacity);
       if ( pMenu == NULL ) {
-        vcl_cerr << "Memory allocation error" << vcl_endl;
+        vcl_cerr << "Memory allocation error\n";
         return NULL;
       }
     }
-
   }
 
   return offset-offset_in;
 }
 
-inline void vgui_win32_utils::addAccelerator(vcl_string &menuItemText, 
-  vgui_menu_item const &vguimenu, int menuItemId)
+inline void vgui_win32_utils::addAccelerator(vcl_string &menuItemText,
+                                             vgui_menu_item const &vguimenu, int menuItemId)
 {
   ACCEL *pa = pAccel+accel_count;
   pa->cmd = menuItemId;
@@ -379,19 +375,17 @@ inline void vgui_win32_utils::addAccelerator(vcl_string &menuItemText,
        pa->key = key;
     }
     else {
-      menuItemText += vgui_key_to_string(key);  
+      menuItemText += vgui_key_to_string(key);
       pa->key = vgui_key_to_virt_key(key);
     }
     // Deal with the case of buffer overflow.
     if (++accel_count >= accel_capacity) {
       accel_capacity <<= 1; // double the capacity.
       pAccel = (ACCEL *)realloc(pAccel, sizeof(ACCEL)*accel_capacity);
-      if ( pAccel == NULL ) 
-        vcl_cerr << "Memory allocation error" << vcl_endl;
+      if ( pAccel == NULL )
+        vcl_cerr << "Memory allocation error\n";
     }
- 
   }
-
 }
 
 
@@ -431,7 +425,7 @@ inline vcl_string vgui_win32_utils::vgui_key_to_string(vgui_key key)
       str = "Up"; break;
     case vgui_CURSOR_RIGHT:
       str = "Right"; break;
-    case vgui_CURSOR_DOWN:  
+    case vgui_CURSOR_DOWN:
       str = "Down"; break;
     case vgui_PAGE_UP:
       str = "PageUp"; break;
@@ -470,7 +464,7 @@ UINT vgui_win32_utils::vgui_key_to_virt_key(vgui_key key)
     case vgui_F10:
     case vgui_F11:
     case vgui_F12:
-      virt_key = VK_F1 + key - vgui_F1; 
+      virt_key = VK_F1 + key - vgui_F1;
       break;
     case vgui_CURSOR_LEFT:
       virt_key = VK_LEFT; break;
@@ -478,7 +472,7 @@ UINT vgui_win32_utils::vgui_key_to_virt_key(vgui_key key)
       virt_key = VK_UP; break;
     case vgui_CURSOR_RIGHT:
       virt_key = VK_RIGHT; break;
-    case vgui_CURSOR_DOWN:  
+    case vgui_CURSOR_DOWN:
       virt_key = VK_DOWN; break;
     case vgui_PAGE_UP:
       virt_key = VK_PRIOR; break;
@@ -501,15 +495,15 @@ UINT vgui_win32_utils::vgui_key_to_virt_key(vgui_key key)
 
 void vgui_win32_utils::ShowErrorMessage(DWORD dwErrorNo)
 {
-   LPSTR lpBuffer;    
-   FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER  | 
-           FORMAT_MESSAGE_IGNORE_INSERTS  | 
-           FORMAT_MESSAGE_FROM_SYSTEM,
-           NULL,
-           dwErrorNo,
-           LANG_NEUTRAL,
-           (LPTSTR) & lpBuffer,
-           0 ,
-           NULL);
+   LPSTR lpBuffer;
+   FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER  |
+                 FORMAT_MESSAGE_IGNORE_INSERTS  |
+                 FORMAT_MESSAGE_FROM_SYSTEM,
+                 NULL,
+                 dwErrorNo,
+                 LANG_NEUTRAL,
+                 (LPTSTR) & lpBuffer,
+                 0 ,
+                 NULL);
   vcl_cerr << lpBuffer;
 }
