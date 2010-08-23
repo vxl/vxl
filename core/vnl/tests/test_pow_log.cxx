@@ -32,7 +32,7 @@ inline static double int_pow(double a, int b)
 // makes no sense, but in that case a "very negative" value is returned.
 inline static int log8(unsigned int a)
 {
-  if (a==0) return -0x80000000L; // stands for minus infinity
+  if (a==0) return -0x7fffffffL-1L; // stands for minus infinity
   int r = 0;
   while (a >= 8) ++r, a>>=3; // divide by 8
   return r;
@@ -46,7 +46,7 @@ static void test_int_pow()
   TEST("Even exponent of -1", int_pow(-1, 12346U), 1);
   TEST("Odd exponent of -1", int_pow(-1, 12345U), -1);
   TEST("Large power of 2", int_pow(2, 30U), 0x40000000);
-  TEST("Power of 2 with overflow", int_pow(2, 31U), -0x80000000L);
+  TEST("Power of 2 with overflow", int_pow(2, 31U), (int)(-0x80000000L));
   TEST("Power of 2 with even more overflow", int_pow(2, 32U), 0);
   TEST("Just a \"random\" case...", int_pow(-19, 7U), -893871739);
 }
@@ -79,6 +79,7 @@ static void test_log()
   TEST("log(511)", log8(511), 2);
   TEST("log(512)", log8(512), 3);
   TEST("log(0x7fffffff)", log8(0x7fffffff), 10);
+  TEST("log(0)", log8(0) < -0x7fffffffL, true);
 }
 
 static void test_pow_log()
