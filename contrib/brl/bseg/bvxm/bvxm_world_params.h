@@ -47,7 +47,7 @@ class bvxm_world_params : public vbl_ref_count
     bgeo_lvcs_sptr lvcs = bgeo_lvcs_sptr(0),
     float min_ocp_prob = 0.001f,
     float max_ocp_prob = 0.999f,
-    unsigned max_scale = 0,
+    unsigned max_scale = 1,
     vgl_vector_3d<float> basex = vgl_vector_3d<float>(1.0f,0.0f,0.0f),
     vgl_vector_3d<float> basey = vgl_vector_3d<float>(0.0f,1.0f,0.0f),
     vgl_vector_3d<float> basez = vgl_vector_3d<float>(0.0f,0.0f,1.0f));

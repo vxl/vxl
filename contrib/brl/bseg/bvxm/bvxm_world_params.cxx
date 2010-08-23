@@ -17,6 +17,7 @@ bvxm_world_params::bvxm_world_params()
   base_z_ = vgl_vector_3d<float>(0.0f,0.0f,1.0f);
   rpc_origin_ = vgl_point_3d<float>(0.0,0.0,0.0);
   edges_n_normal_ = 0.0f;
+  max_scale_ = 1;
 };
 
 
@@ -80,6 +81,7 @@ void bvxm_world_params::b_write(vsl_b_ostream & os) const
   vsl_b_write(os, base_x_);
   vsl_b_write(os, base_y_);
   vsl_b_write(os, base_z_);
+  vsl_b_write(os, max_scale_);
 }
 
 
