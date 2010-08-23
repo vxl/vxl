@@ -92,8 +92,6 @@ class boxm_render_bit_scene_manager : public bocl_manager<boxm_render_bit_scene_
   bool release_input_view_buffers();
   bool clean_input_view();
 
-  bool set_external_image_cam_buffers(vil_image_view<obs_type> &external_image,
-                                      vpgl_perspective_camera<double> * external_cam);
   //: set the tree, data , aux_data and bbox
   bool set_tree_buffers();
   bool release_tree_buffers();
@@ -108,7 +106,6 @@ class boxm_render_bit_scene_manager : public bocl_manager<boxm_render_bit_scene_
   float gpu_time() {return gpu_time_; }
 
   bool read_output_image();
-  bool read_rerendered_image();
   bool read_trees();
   void print_tree();
   void print_image();
@@ -119,23 +116,18 @@ class boxm_render_bit_scene_manager : public bocl_manager<boxm_render_bit_scene_
   // cl/gl image
   cl_float * output_image() {return image_;}
   cl_float * image_;
-  cl_float * ext_image_;
-  cl_float * rerender_image_;
   cl_uint  * image_gl_;
   cl_mem     image_buf_;
-  cl_mem     ext_image_buf_;
-  cl_mem     ext_cam_buf_;
   cl_mem     image_gl_buf_;
-  cl_mem     rerender_image_buf_;
 
   bool start(bool set_gl_buffer=false);
   //: helper functions
   bool run(bool rerender=false);
   bool set_gl_buffer();
+  bool release_gl_buffer();
   bool finish();
 
   void save_image(vcl_string img_filename);
-  void save_rerender_image(vcl_string img_filename);
 
   // Set up Scene
   bool set_scene_dims();

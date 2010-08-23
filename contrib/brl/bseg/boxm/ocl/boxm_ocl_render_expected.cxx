@@ -123,3 +123,47 @@ void boxm_ocl_scene_rerender(boxm_ocl_scene &scene,
 
   ray_mgr->finish();
 }
+
+void boxm_opencl_bit_scene_expected(boxm_ocl_bit_scene &scene,
+                                    vpgl_camera_double_sptr cam,
+                                    vil_image_view<float> &expected,
+                                    vil_image_view<float> & mask,
+                                    bool /*use_black_background*/)
+{
+  // set up the application-specific function to be called at every cell along a ray
+
+  const unsigned int ni = expected.ni();
+  const unsigned int nj = expected.nj();
+  vil_image_view<float> img0(ni,nj);
+  vil_image_view<float> img1(ni,nj);
+  // render the image using the opencl raytrace manager
+  boxm_render_bit_scene_manager* ray_mgr = boxm_render_bit_scene_manager::instance();
+  int bundle_dim=8;
+  ray_mgr->set_bundle_ni(bundle_dim);
+  ray_mgr->set_bundle_nj(bundle_dim);
+  ray_mgr->init_ray_trace(&scene, cam, expected, false);
+  ray_mgr->run_scene();
+  ray_mgr->save_image("test.tiff");
+
+  // extract expected image and mask from OpenCL output data
+  cl_float* results = ray_mgr->output_image();
+  if (!results) {
+    vcl_cerr << "Error : boxm_opencl_render_expected : ray_mgr->ray_results() returned NULL\n";
+    return;
+  }
+  cl_float *results_p = results;
+  for (unsigned j = 0; j<nj; ++j) {
+    for (unsigned i = 0; i<ni; ++i) {
+      expected(i,j) = *(results_p++); // expected intensity
+    }
+  }
+
+#if 1 //images for debuggin
+  vil_save(img0,"/media/VXL/img0.tiff");
+  vil_save(img1,"/media/VXL/img1.tiff");
+  vil_save(expected,"/media/VXL/expected.tiff");
+  vil_save(mask,"/media/VXL/img3.tiff");
+#endif
+
+}
+
