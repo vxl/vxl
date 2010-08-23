@@ -39,7 +39,6 @@ boxm_ocl_render_bit_tableau::boxm_ocl_render_bit_tableau()
     nj_=480;
 }
 
-
 //: initialize tableau properties
 bool boxm_ocl_render_bit_tableau::init(boxm_ocl_bit_scene * scene, 
                                        unsigned ni, unsigned nj, 
@@ -150,8 +149,8 @@ bool boxm_ocl_render_bit_tableau::handle(vgui_event const &e)
         do_init_ocl = false;
       }
 
-      vcl_cout<<"Cam center: "<<cam_.get_camera_center()<<'\n'
-              <<"stare point: "<<stare_point_<<vcl_endl;
+      //vcl_cout<<"Cam center: "<<cam_.get_camera_center()<<'\n'
+      //        <<"stare point: "<<stare_point_<<vcl_endl;
       //vcl_cout<<cam_<<vcl_endl;
       float gpu_time = this->render_frame();
       this->setup_gl_matrices();
