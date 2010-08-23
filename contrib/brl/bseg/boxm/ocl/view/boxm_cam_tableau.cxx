@@ -100,7 +100,7 @@ bool boxm_cam_tableau::mouse_down(int x, int y, vgui_button /*button*/, vgui_mod
 //: called on mouse movement while mousedown is true
 bool boxm_cam_tableau::mouse_drag(int x, int y, vgui_button button, vgui_modifier modifier)
 {
-  vcl_cout<<"Cam @ "<<cam_.get_camera_center()<<vcl_endl;
+  //vcl_cout<<"Cam @ "<<cam_.get_camera_center()<<vcl_endl;
   // SPINNING
   if (c_mouse_rotate(button, modifier)) {
 
@@ -131,7 +131,7 @@ bool boxm_cam_tableau::mouse_drag(int x, int y, vgui_button button, vgui_modifie
     cam_.set_camera_center(newCenter);
     cam_.look_at(stare_point_);
 
-    vcl_cout<<cam_;
+    //vcl_cout<<cam_;
     this->post_redraw();
     return true;
   }
@@ -157,7 +157,7 @@ bool boxm_cam_tableau::mouse_drag(int x, int y, vgui_button button, vgui_modifie
 
   // TRANSLATION
   if (c_mouse_translate(button, modifier)) {
-    vcl_cout<<"Translating: begin ("<<beginx<<','<<beginy<<") -> ("<<x<<','<<y<<')'<<vcl_endl;
+    //vcl_cout<<"Translating: begin ("<<beginx<<','<<beginy<<") -> ("<<x<<','<<y<<')'<<vcl_endl;
 
     //get viewport height, and mouse dx, dy
     GLint vp[4];
@@ -181,7 +181,7 @@ bool boxm_cam_tableau::mouse_drag(int x, int y, vgui_button button, vgui_modifie
     wp1 += cam_center - vgl_point_3d<double>(0,0,0);
     vgl_vector_3d<double> worldVec = scale * normalized(wp0-wp1);
 
-    vcl_cout<<"  new cam center: "<<cam_center + worldVec<<vcl_endl;
+    //vcl_cout<<"  new cam center: "<<cam_center + worldVec<<vcl_endl;
     stare_point_ += worldVec;
     cam_.set_camera_center(cam_center + worldVec);
 

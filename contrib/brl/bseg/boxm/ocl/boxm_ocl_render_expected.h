@@ -16,6 +16,8 @@
 #include <boxm/ocl/boxm_ray_bundle_trace_manager.h>
 #include <boxm/ocl/boxm_render_image_manager.h>
 #include <boxm/ocl/boxm_render_ocl_scene_manager.h>
+#include <boxm/ocl/boxm_ocl_bit_scene.h>
+#include <boxm/ocl/boxm_render_bit_scene_manager.h>
 #include <vcl_where_root_dir.h>
 #include <vcl_iostream.h>
 
@@ -214,4 +216,11 @@ void boxm_ocl_scene_rerender(boxm_ocl_scene &scene,
                              vcl_vector<vcl_string> camfiles,
                              vcl_vector<vcl_string> imgfiles,
                              vcl_string out_dir);
+                             
+//: function to render bit scene 
+void boxm_opencl_bit_scene_expected(boxm_ocl_bit_scene &scene,
+                                    vpgl_camera_double_sptr cam,
+                                    vil_image_view<float> &expected,
+                                    vil_image_view<float> & mask,
+                                    bool /*use_black_background*/ = false);
 #endif

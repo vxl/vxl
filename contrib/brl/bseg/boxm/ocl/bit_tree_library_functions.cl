@@ -128,12 +128,12 @@ uchar tree_bit_at(int rIndex, __local uchar* tree, int index)
 
   //second generation is sort of a special case (speeds up code)
   if (index < 9)
-    return (1<<(index-1) & tree[rIndex+1]) ? 1 : 0;
+    return (1<<(index-1) & tree[rIndex+1])>>(index-1); // ? 1 : 0;
 
   //third or 4th generation treated in same way,
-  int i  = (int) ((index-9.0)/8.0 + 2); //byte index i
+  int i  = ((index-9)/8 + 2); //byte index i
   int bi = (index-9)%8;
-  return (1<<bi & tree[rIndex+i]) ? 1 : 0;
+  return (1<<bi & tree[rIndex+i])>>bi; // ? 1 : 0;
 }
 
 void set_tree_bit_at(__local uchar* tree, int index, bool val)
@@ -169,9 +169,9 @@ ushort data_index(int rIndex, __local uchar* tree, int bit_index, __constant uch
     return root_offset+bit_index;
  
   //otherwise get parent index, parent byte index and relative bit index
-  int pi      = (int) ((bit_index-1.0)/8.0);     // automatically rounding downwards
-  int byte_i  = (int) ((pi-1.0)/8.0 + 1);        //byte index for parent
-  int bit_i   = (pi-1)%8;                        //bit index for pi in byte_i
+  int pi      = (bit_index-1)>>3;     // automatically rounding downwards
+  int byte_i  = (pi-1)/8 + 1;        //byte index for parent
+  int bit_i   = (pi-1)%8;              //bit index for pi in byte_i
   
   //count bits for each byte before bit_i
   int count = 0;
@@ -237,7 +237,7 @@ int traverse(int rIndex, __local uchar* tree, int cell_index, short4 cell_loc_co
   int curr_level     = cell_loc_code.w;
   (*found_loc_code)  = cell_loc_code;
 
-  while (target_level<curr_level && curr_cell == 1)
+  while (target_level<curr_level && curr_cell)
   {
     //update found loc code (loc code belonging to correct child)
     uchar c_index     = child_index(target_loc_code, curr_level);
@@ -281,7 +281,7 @@ int traverse_force(int rIndex, __local uchar* tree, int cell_ptr, short4 cell_lo
   (*global_count)++;
 
   //if the curr cell has children go to the correct one
-  while (level<curr_level && curr_cell == 1)
+  while (level<curr_level && curr_cell)
   {
     //update found loc code (loc code belonging to correct child)
     short4 child_bit = (short4)(1);
@@ -289,12 +289,15 @@ int traverse_force(int rIndex, __local uchar* tree, int cell_ptr, short4 cell_lo
     short4 code_diff = target_loc_code-curr_code;
     // TODO: find a way to compute the following as a vector op
     uchar c_index = 0;
-    if (code_diff.x >= child_bit.x)
-      c_index += 1;
-    if (code_diff.y >= child_bit.y)
-      c_index += 2;
-    if (code_diff.z >= child_bit.z)
-      c_index += 4;
+    c_index = (uchar) (code_diff.x >= child_bit.x) +
+              (uchar) ((code_diff.y >= child_bit.y)<<1) +
+              (uchar) ((code_diff.z >= child_bit.z)<<2);
+   // if (code_diff.x >= child_bit.x)
+   //   c_index += 1;
+   // if (code_diff.y >= child_bit.y)
+   //   c_index += 2;
+   // if (code_diff.z >= child_bit.z)
+   //   c_index += 4;
     curr_code = child_loc_code(c_index, curr_level-1, curr_code);
 
     //update cell_index = first_child_index + child_offset
