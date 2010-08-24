@@ -121,6 +121,7 @@ class boxm_render_ocl_scene_manager : public bocl_manager<boxm_render_ocl_scene_
   //: helper functions
   bool run(bool rerender=false);
   bool set_gl_buffer();
+  bool release_gl_buffer();
   bool finish();
 
   void save_image(vcl_string img_filename);

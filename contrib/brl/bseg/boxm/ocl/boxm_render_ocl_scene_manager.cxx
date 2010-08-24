@@ -355,6 +355,7 @@ bool boxm_render_ocl_scene_manager::run(bool rerender)
     if (!this->check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status)))
       return SDK_FAILURE;
   }
+  clReleaseEvent(ceEvent);
   return SDK_SUCCESS;
 }
 
@@ -382,6 +383,13 @@ bool boxm_render_ocl_scene_manager::set_gl_buffer()
     return true;
 }
 
+bool boxm_render_ocl_scene_manager::release_gl_buffer()
+{
+  vcl_cout<<"release gl_buffer called"<<vcl_endl;
+  cl_int status;
+  status = clReleaseMemObject(image_gl_buf_);
+  return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (gl_buffer).")==1;
+}
 bool boxm_render_ocl_scene_manager::run_scene()
 {
   bool good=true;
@@ -394,6 +402,7 @@ bool boxm_render_ocl_scene_manager::run_scene()
   good=good && set_input_view()
             && set_input_view_buffers();
   this->set_kernel();
+  this->set_gl_buffer(); 
   this->set_args();
   this->set_commandqueue();
   this->set_workspace();
@@ -407,11 +416,18 @@ bool boxm_render_ocl_scene_manager::run_scene()
   good=good && release_input_view_buffers()
   //        && clean_input_view()
             && release_scene_data_buffers()
+            && release_gl_buffer()
             && clean_scene_data();
+  
 
   // release the command Queue
-
   this->release_kernel();
+  this->release_commandqueue();
+  if (program_){
+    vcl_cout<<"release: program"<<vcl_endl;
+    clReleaseProgram(program_);
+  }
+  clReleaseContext(this->context_);
 #if 0
   vcl_cout << "Timing Analysis\n"
            << "===============\n"
