@@ -102,6 +102,9 @@ SOURCE=.\test_resample_nearest.cxx
 # Begin Source File
 SOURCE=.\test_round.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_pyramid_image_view.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

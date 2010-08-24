@@ -704,6 +704,9 @@ SOURCE=.\Templates/vil_image_view+vil_rgba+bool--.cxx
 # Begin Source File
 SOURCE=.\Templates/vil_rgba+bool-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_pyramid_image_view+float-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -1090,6 +1093,12 @@ SOURCE=.\file_formats/vil_j2k_nitf2_pyramid_image_resource.h
 # End Source File
 # Begin Source File
 SOURCE=.\file_formats/vil_j2k_pyramid_image_resource.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil_pyramid_image_view.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil_pyramid_image_view.txx
 # End Source File
 # Begin Source File
 SOURCE=.\vil_config.h.in
