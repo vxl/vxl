@@ -27,6 +27,7 @@ SOURCES += vil_memory_image.cxx
 
 SOURCES += vil_image_list.cxx
 SOURCES += vil_pyramid_image_resource.cxx
+MANPAGE_SOURCES += vil_pyramid_image_view.txx
 MANPAGE_SOURCES += vil_pyramid_image_resource_sptr.h
 
 MANPAGE_SOURCES += vil_border.h

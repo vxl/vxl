@@ -26,6 +26,7 @@ TESTS += test_stream.cxx
 PARAMS_test_stream := file_read_data
 TESTS += test_image_list.cxx
 TESTS += test_pyramid_image_resource.cxx
+TESTS += test_pyramid_image_view.cxx
 TESTS += test_4_plane_tiff.cxx
 
 # image operations
