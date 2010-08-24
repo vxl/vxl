@@ -1336,6 +1336,7 @@ foreach $f (@FILES)
     $file_ =~ s!^contrib/!!; $file_ =~ s!/CORE/!/core/!;
     &msg(1, "has // This is $filename, should be $file_")
       unless ($filename eq $file_ ||
+              'gel/mrc/'.$filename eq $file_ ||
               ($file_ =~ m!/bocl\b! && $file_ =~ m!$filename$!) ||
               ($filename eq "contrib/$file_" && !$printed));
   }
