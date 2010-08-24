@@ -1,22 +1,7 @@
-// This is core/vil/tests/test_image_view.cxx
+// This is core/vil/tests/test_pyramid_image_view.cxx
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
-#include <vcl_functional.h>
-#include <vxl_config.h> // for vxl_byte
-#include <vil/vil_crop.h>
-#include <vil/vil_copy.h>
-#include <vil/vil_print.h>
-#include <vil/vil_plane.h>
-#include <vil/vil_convert.h>
-#include <vil/vil_transpose.h>
-#include <vil/vil_view_as.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_pyramid_image_view.h>
-#include <vil/vil_new.h>
-#include <vil/vil_load.h>
-#include <vil/vil_fill.h>
-#include <vil/vil_save.h>
 
 
 static void test_pyramid_image_view()
@@ -29,7 +14,7 @@ static void test_pyramid_image_view()
   vil_image_view_base_sptr img = new vil_image_view<float>(10,10,1);
   v.add_view(img, 1.0);
   TEST_EQUAL("Add View", v.nlevels(), 1);
-  
+
   vil_image_view<float> black_img(120,120,1);
   black_img.fill(1.0);
   vil_image_view_base_sptr black_img_sptr = new vil_image_view<float>(black_img);
