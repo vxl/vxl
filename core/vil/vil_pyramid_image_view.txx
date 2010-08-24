@@ -5,9 +5,9 @@
 #include <vil/vil_image_view.h>
 
 template <class T>
-vil_pyramid_image_view<T>::vil_pyramid_image_view(unsigned levels, unsigned ni, 
+vil_pyramid_image_view<T>::vil_pyramid_image_view(unsigned levels, unsigned ni,
                                                   unsigned nj, unsigned n_planes)
-                                                  : nlevels_(levels), max_levels_(256)
+  : nlevels_(levels), max_levels_(256)
 {
   images_.resize(levels);
   scales_.resize(levels);
@@ -25,22 +25,21 @@ template <class T>
 vil_pyramid_image_view<T>::vil_pyramid_image_view(vil_image_view_base_sptr image, unsigned levels)
 : nlevels_(levels), max_levels_(256)
 {
- 
   vil_image_view<T>* img=dynamic_cast<vil_image_view<T>*>(image.ptr());
   if (!img)
     return;
-  
+
   // it works with grey scale images
   if (img->nplanes() != 1)
     return;
-    
+
   images_.resize(levels);
   scales_.resize(levels);
   unsigned i=image->ni()/2, j=image->nj()/2;
   double scale=1.0;
   images_[0] = image;
-  scales_[0] = 1.0;  
-    
+  scales_[0] = 1.0;
+
   for (unsigned l=1; l<levels && !limit_reached(i,j); l++) {
     // scale down the image
     scale/=2.0;
@@ -54,7 +53,7 @@ vil_pyramid_image_view<T>::vil_pyramid_image_view(vil_image_view_base_sptr image
 }
 
 template <class T>
-vil_pyramid_image_view<T>::vil_pyramid_image_view(vcl_vector<vil_image_view_base_sptr> const& images, 
+vil_pyramid_image_view<T>::vil_pyramid_image_view(vcl_vector<vil_image_view_base_sptr> const& images,
                                                   vcl_vector<double> const& scales)
 {
   nlevels_=images.size();
@@ -95,7 +94,7 @@ void vil_pyramid_image_view<T>::add_view(vil_image_view_base_sptr &image, double
 }
 
 template <class T>
-const vil_pyramid_image_view<T>& 
+const vil_pyramid_image_view<T>&
 vil_pyramid_image_view<T>::operator=(const vil_pyramid_image_view<T>& rhs)
 {
   this->images_.resize(rhs.nlevels());
@@ -107,17 +106,17 @@ vil_pyramid_image_view<T>::operator=(const vil_pyramid_image_view<T>& rhs)
 }
 
 template <class T>
-void vil_pyramid_image_view<T>::scale_down(const vil_image_view<T>& image_in, 
+void vil_pyramid_image_view<T>::scale_down(const vil_image_view<T>& image_in,
                                            vil_image_view_base_sptr& image_out)
 {
   unsigned ni=image_in.ni();
   unsigned nj=image_in.nj();
   unsigned ii=ni/2;
   unsigned jj=nj/2;
-  
+
  // image_out = new vil_image_view<T>(ii, jj);
   vil_image_view<T>* img = new vil_image_view<T>(ii, jj);
-  for (unsigned i=0; i<ii; i++) 
+  for (unsigned i=0; i<ii; i++)
     for (unsigned j=0; j<jj; j++) {
       // get the 2x2 neighborhood
       unsigned pos_i=i/2;
