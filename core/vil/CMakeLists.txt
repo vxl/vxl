@@ -40,7 +40,7 @@ ENDIF(JPEG_FOUND)
 ################################
 # JPEG 2000
 ################################
-INCLUDE( ${MODULE_PATH}/NewCMake/FindECW.cmake )
+INCLUDE( ${MODULE_PATH}/NewCMake/FindECW_WD.cmake )
 IF(ECW_FOUND)
   SET( vil_sources ${vil_sources}
     file_formats/vil_j2k_image.h           file_formats/vil_j2k_image.cxx
@@ -135,6 +135,7 @@ SET( vil_sources ${vil_sources}
   vil_cached_image_resource.cxx         vil_cached_image_resource.h
   vil_pyramid_image_resource.cxx        vil_pyramid_image_resource.h
                                         vil_pyramid_image_resource_sptr.h
+  vil_pyramid_image_view.txx            vil_pyramid_image_view.h
   vil_image_list.cxx                    vil_image_list.h
   # file format readers/writers (see above for conditional ones)
 
