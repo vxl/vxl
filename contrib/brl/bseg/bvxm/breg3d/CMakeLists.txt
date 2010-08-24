@@ -19,10 +19,9 @@ SET(breg3d_sources
 
 ADD_LIBRARY(breg3d ${breg3d_sources})
 
-TARGET_LINK_LIBRARIES(breg3d bvxm vpgl vpgl_algo ihog vil vnl bgeo vgl vgl_algo vsol brip brdb vimt)
+TARGET_LINK_LIBRARIES(breg3d bvxm vpgl vpgl_algo ihog bgeo vsol brip brdb vimt vil vnl vgl_algo vgl vnl_algo vul)
 
 SUBDIRS(pro)
 SUBDIRS(tests)
+
 ENDIF(BUILD_MUL)
-
-

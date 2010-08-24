@@ -16,5 +16,5 @@ IF(EXPAT_FOUND)
 
   ADD_LIBRARY(bvxm_algo_pro ${bvxm_algo_pro_sources} )
 
-  TARGET_LINK_LIBRARIES(bvxm_algo_pro bvxm_algo bprb brdb)
+  TARGET_LINK_LIBRARIES(bvxm_algo_pro bvxm_algo bprb brdb vul)
 ENDIF(EXPAT_FOUND)
