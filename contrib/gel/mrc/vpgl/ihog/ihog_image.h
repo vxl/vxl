@@ -1,33 +1,34 @@
 #ifndef ihog_image_H_
 #define ihog_image_H_
-
+//:
+// \file
 #include "ihog_transform_2d.h"
 #include <vil/vil_image_view.h>
 
 template <class T>
-class ihog_image 
+class ihog_image
 {
-private:
+ private:
   vil_image_view<T> image_;
   ihog_transform_2d xform_;
-public:
+ public:
   //: Default constructor
   //  Creates an empty one-plane image.
- ihog_image() {}
+  ihog_image() {}
 
 
   //: Construct an image of size (ni, nj, np) with optional world_to_image transform.
- ihog_image(unsigned ni, unsigned nj, unsigned np=1,
-                   const ihog_transform_2d& w2i=ihog_transform_2d())
+  ihog_image(unsigned ni, unsigned nj, unsigned np=1,
+             const ihog_transform_2d& w2i=ihog_transform_2d())
     : xform_(w2i), image_(ni, nj, np) {}
 
 
   //: Construct from a view and optional world-to-image transform (takes copies of both).
-  explicit ihog_image(const vil_image_view<T>& view, 
-                   const ihog_transform_2d& w2i=ihog_transform_2d())
+  explicit ihog_image(const vil_image_view<T>& view,
+                      const ihog_transform_2d& w2i=ihog_transform_2d())
     : xform_(w2i), image_(view) {}
 
-  
+
   //: Destructor
   virtual ~ihog_image() {}
 
