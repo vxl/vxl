@@ -362,6 +362,13 @@ bool vgl_h_matrix_2d<T>::is_euclidean() const
   return R.absolute_value_max() <= 10*vcl_numeric_limits<T>::epsilon();
 }
 
+template <class T>
+bool vgl_h_matrix_2d<T>::is_identity() const
+{
+  return t12_matrix_.is_identity();
+      
+}
+
 //-------------------------------------------------------------------
 template <class T>
 bool vgl_h_matrix_2d<T>::
@@ -547,6 +554,39 @@ vgl_h_matrix_2d<T>::get_translation_vector() const
   return vnl_vector_fixed<T,2>(p.x(), p.y());
 }
 
+template <class T> 
+void vgl_h_matrix_2d<T>::b_write(vsl_b_ostream& bfs) const
+{
+  vsl_b_write(bfs,version_no());
+  vsl_b_write(bfs,t12_matrix_[0][0]); vsl_b_write(bfs,t12_matrix_[0][1]); vsl_b_write(bfs,t12_matrix_[0][2]);
+  vsl_b_write(bfs,t12_matrix_[1][0]); vsl_b_write(bfs,t12_matrix_[1][1]); vsl_b_write(bfs,t12_matrix_[1][2]);
+  vsl_b_write(bfs,t12_matrix_[2][0]); vsl_b_write(bfs,t12_matrix_[2][1]); vsl_b_write(bfs,t12_matrix_[2][2]);
+}
+
+template <class T> 
+void vgl_h_matrix_2d<T>::b_read(vsl_b_istream& bfs)
+{
+  if (!bfs) return;
+
+    short version;
+    vsl_b_read(bfs,version);
+    switch (version) {
+    case 1:
+        T xx,xy,xt,yx,yy,yt,tx,ty,tt;
+        vsl_b_read(bfs,xx); vsl_b_read(bfs,xy); vsl_b_read(bfs,xt);
+        vsl_b_read(bfs,yx); vsl_b_read(bfs,yy); vsl_b_read(bfs,yt);
+        vsl_b_read(bfs,tx); vsl_b_read(bfs,ty); vsl_b_read(bfs,tt);
+        t12_matrix_[0][0]=xx; t12_matrix_[0][1]=xy; t12_matrix_[0][2]=xt;
+        t12_matrix_[1][0]=yx; t12_matrix_[1][1]=yy; t12_matrix_[1][2]=yt;
+        t12_matrix_[2][0]=tx; t12_matrix_[2][0]=ty; t12_matrix_[2][2]=tt;
+        break;
+    default:
+        vcl_cerr << "I/O ERROR: vgl_h_matrix_2d::b_read(vsl_b_istream&)\n"
+                 << "           Unknown version number "<< version << '\n';
+        bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+        return;
+    }
+}
 
 //----------------------------------------------------------------------------
 #undef VGL_H_MATRIX_2D_INSTANTIATE

@@ -23,6 +23,7 @@
 #include <vgl/vgl_homg_line_2d.h>
 #include <vgl/vgl_conic.h>
 #include <vcl_iosfwd.h>
+#include <vsl/vsl_binary_io.h>
 
 //:
 // A class to hold a plane-to-plane projective transformation matrix
@@ -133,10 +134,9 @@ class vgl_h_matrix_2d
   // \end{array}\right]$
   void set_affine(const vnl_matrix<T>& M23);
 
-
   bool is_rotation() const;
   bool is_euclidean() const;
-
+  bool is_identity() const;
 
   //: transformation to projective basis (canonical frame)
   // Compute the homography that takes the input set of points to the
@@ -174,10 +174,26 @@ class vgl_h_matrix_2d
 
   bool read(vcl_istream& s);
   bool read(char const* filename);
+
+  void b_write(vsl_b_ostream& bfs) const;
+  void b_read(vsl_b_istream& bfs);
+  short version_no() const { return 1; }
 };
 
 template <class T> vcl_ostream& operator<<(vcl_ostream& s, vgl_h_matrix_2d<T> const& h);
 template <class T> vcl_istream& operator>>(vcl_istream& s, vgl_h_matrix_2d<T>&       h);
+
+template <class T> void vsl_b_write(vsl_b_ostream &os, vgl_h_matrix_2d<T> const* t)
+{
+  if (t==0) {
+    vsl_b_write(os, false); // Indicate null pointer stored
+  }
+  else{
+    vsl_b_write(os,true); // Indicate non-null pointer stored
+    t->b_write(os);
+  }
+}
+
 
 #define VGL_H_MATRIX_2D_INSTANTIATE(T) extern "please include vgl/algo/vgl_h_matrix_2d.txx first"
 
