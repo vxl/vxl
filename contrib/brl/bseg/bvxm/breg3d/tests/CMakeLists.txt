@@ -6,7 +6,7 @@ ADD_EXECUTABLE( breg3d_test_all
 )
 
 TARGET_LINK_LIBRARIES( breg3d_test_all breg3d bvxm testlib vpgl bsta bsta_algo vgl_algo vil vgl vnl vbl vul vcl)
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/frame_00000.png ${CMAKE_CURRENT_BINARY_DIR}/frame_00000.png COPYONLY )
+
 ADD_TEST( breg3d_test_ekf_camera_optimizer     ${EXECUTABLE_OUTPUT_PATH}/breg3d_test_all   test_ekf_camera_optimizer)
 ADD_TEST( breg3d_test_ekf_camera_optimizer_seq ${EXECUTABLE_OUTPUT_PATH}/breg3d_test_all   test_ekf_camera_optimizer_seq)
 ADD_TEST( breg3d_test_homography_generator     ${EXECUTABLE_OUTPUT_PATH}/breg3d_test_all   test_homography_generator)
