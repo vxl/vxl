@@ -1,3 +1,5 @@
+//Tests bit tree OpenCL traverse, traverse_force and others
+//will run ocl scene comparison as well. 
 #include <testlib/testlib_test.h>
 #include <testlib/testlib_root_dir.h>
 #include "open_cl_test_data.h"
@@ -6,6 +8,7 @@
 #include <boct/boct_tree_cell.h>
 #include <boct/boct_loc_code.h>
 #include "bit_tree_test_manager.h"
+#include "ocl_scene_test_manager.h"
 
 
 static void test_loc_code(bit_tree_test_manager* test_mgr)
@@ -76,6 +79,7 @@ static void test_bit_at(bit_tree_test_manager* test_mgr)
     }
   }
 }
+
 static void test_traverse(bit_tree_test_manager* test_mgr, boct_tree<short, float>* tree)
 {
   bool good = false;
@@ -106,7 +110,7 @@ static void test_traverse(bit_tree_test_manager* test_mgr, boct_tree<short, floa
                 (code.z_loc_ == results[8*i+2]) &&
                 (code.level  == results[8*i+3]);
     
-    if(!same) {
+    if(same) {
       vcl_cout << "result: ["
                << results[8*i] << ' '
                << results[8*i+1] << ' '
@@ -185,6 +189,67 @@ static void test_traverse_force(bit_tree_test_manager* test_mgr, boct_tree<short
   vcl_cout<<"Time spent traverse_force "<<test_mgr->gpu_time_/(10000.0)<<" ms"<<vcl_endl;
 }
 
+static void compare_traverse()
+{  
+  /////////////////////////////////////////////////////////////////////
+  //// 1. test bit_tree traverse
+  /////////////////////////////////////////////////////////////////////
+  bit_tree_test_manager* test_mgr = bit_tree_test_manager::instance();
+  if(!test_mgr){
+    vcl_cout<<"bit_tree_test instance failed"<<vcl_endl;
+    return;
+  }
+  test_mgr->init_arrays();
+  
+  //set tree in manager
+  boct_tree<short, float>* btree = open_cl_test_data::four_tree<float>();
+  boct_bit_tree test_tree = boct_bit_tree(btree);
+  test_mgr->set_tree(test_tree.get_bits());
+  test_mgr->init_manager();
+  
+  //run traverse;
+  bool good=test_mgr->run_test(2); 
+  TEST("Bit tree traverse runs ", good, true);
+  cl_int* results = test_mgr->get_output();
+  for(int i=0; i<16; i++)
+    vcl_cout<<results[i]<<vcl_endl;
+
+  
+  /////////////////////////////////////////////////////////////////////
+  //// 2. test ocl scene tree
+  /////////////////////////////////////////////////////////////////////
+  ocl_scene_test_manager* ocl_mgr = ocl_scene_test_manager::instance();
+  if(!ocl_mgr) {
+    vcl_cout<<"OCL Manager instance failed"<<vcl_endl;
+    return;
+  }
+  ocl_mgr->init_arrays();
+  
+  //set up tree
+  typedef vnl_vector_fixed<int,4> int4;
+  typedef vnl_vector_fixed<float,16> float16;
+  int4 arr_root(0);
+  arr_root[0] = -1; //no parent for root
+  arr_root[1] = -1; // no children yet
+  vcl_vector<int4> cell_array;
+  cell_array.push_back(arr_root);
+  vcl_vector<float16> data_array;
+  float16 dat_init(0.0);
+  data_array.push_back(dat_init);
+  boxm_ocl_convert<float>::copy_to_arrays(btree->root(), cell_array, data_array, 0);
+  ocl_mgr->set_tree(cell_array);
+  
+  //run traverse;
+  ocl_mgr->init_manager();
+  good = ocl_mgr->run_test(0);
+  TEST("Ocl tree traverse runs ", good, true);
+  results = ocl_mgr->get_output();
+  for(int i=0; i<16; i++)
+    vcl_cout<<results[i]<<vcl_endl;
+  
+}
+
+
 static void test_bit_tree()
 {
   vcl_cout<<"Testing Bit Tree"<<vcl_endl;
@@ -211,16 +276,19 @@ static void test_bit_tree()
   TEST("bit_tree_test_manager::init_manager()", init_mgr, true);
 
   //Run first test
-  if (init_mgr) test_loc_code(test_mgr);
+  //if (init_mgr) test_loc_code(test_mgr);
   
   //run bit_at test
-  if (init_mgr) test_bit_at(test_mgr);
+  //if (init_mgr) test_bit_at(test_mgr);
   
   //traverse test...
-  if (init_mgr) test_traverse(test_mgr, boct_tree);
+  //if (init_mgr) test_traverse(test_mgr, boct_tree);
   
   //traverse force test ... 
-  if (init_mgr) test_traverse_force(test_mgr, boct_tree);
+  //if (init_mgr) test_traverse_force(test_mgr, boct_tree);
+  
+  //comparison test:
+  compare_traverse();
 }
 
 TESTMAIN(test_bit_tree);

@@ -1,5 +1,5 @@
-#ifndef bit_tree_test_manager_h_
-#define bit_tree_test_manager_h_
+#ifndef ocl_scene_test_manager_h_
+#define ocl_scene_test_manager_h_
 //:
 // \file
 #include <vcl_string.h>
@@ -11,27 +11,30 @@
 #include <bocl/bocl_utils.h>
 #include <boxm/boxm_scene.h>
 #include <boxm/boxm_apm_traits.h>
-
 #include <vil/vil_image_view.h>
 
-class bit_tree_test_manager : public bocl_manager<bit_tree_test_manager>
+class ocl_scene_test_manager : public bocl_manager<ocl_scene_test_manager>
 {
+ 
+  
  public:
 
   //(data_type and tree_type)
+  typedef vnl_vector_fixed<int,2> int2; 
+  typedef vnl_vector_fixed<int,4> int4;
   typedef vnl_vector_fixed<float,16> float16;
 
   //: constructor
-  bit_tree_test_manager() :
+  ocl_scene_test_manager() :
     program_(0) {}
 
   //: destructor
-  ~bit_tree_test_manager() {
+  ~ocl_scene_test_manager() {
     if (program_)
       clReleaseProgram(program_);
   }
 
-  //: init buffers for bit_tree_manager
+  //: init buffers for ocl scene
   bool init_arrays();
 
   //: init bit_tree_manager
@@ -45,11 +48,7 @@ class bit_tree_test_manager : public bocl_manager<bit_tree_test_manager>
   cl_int* get_output();
 
   //: set the tree
-  bool set_tree(unsigned char* bit_tree) {
-    for (int i=0; i<16; i++)
-      bit_tree_[i] = bit_tree[i];
-    return true;
-  }
+  bool set_tree(vcl_vector<int4> ocl_tree);  
 
   //: profiling information...
   double gpu_time_;
@@ -62,15 +61,13 @@ class bit_tree_test_manager : public bocl_manager<bit_tree_test_manager>
  protected:
 
   //-------------------------------------------------------------------
-  // GPU side buffers
+  // CPU/GPU side buffers
   //-------------------------------------------------------------------
-  cl_uchar* bit_tree_;
-  cl_uchar* bit_lookup_;
-  cl_int*   output_;
+  cl_int*   ocl_tree_;
+  cl_int*   output_; 
 
   //cl_mem buffers
-  cl_mem bit_tree_buf_;
-  cl_mem bit_lookup_buf_;
+  cl_mem ocl_tree_buf_;
   cl_mem output_buf_;
 
   //-------------------------------------------------------------------
@@ -92,4 +89,4 @@ class bit_tree_test_manager : public bocl_manager<bit_tree_test_manager>
   cl_command_queue command_queue_;
 };
 
-#endif // bit_tree_test_manager_h_
+#endif // ocl_scene_test_manager_h_

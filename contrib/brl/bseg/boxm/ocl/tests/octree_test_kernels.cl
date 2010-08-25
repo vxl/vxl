@@ -32,6 +32,7 @@ void test_codes(int* i, int* n_codes, short4* code, short4* ncode)
 {
   short4 codes[8], ncodes[8];
   *n_codes = 8;
+
   codes[0]=(short4)(0,0,0,0);   ncodes[0]=(short4)(1,0,0,0);
   codes[1]=(short4)(2,0,0,0);   ncodes[1]=(short4)(3,0,0,0);
   codes[2]=(short4)(0,2,0,0);   ncodes[2]=(short4)(0,3,0,0);

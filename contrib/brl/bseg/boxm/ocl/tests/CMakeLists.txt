@@ -20,6 +20,7 @@ SET(boxm_ocl_test_sources
     test_camera.cxx
     bit_tree_test_manager.h       bit_tree_test_manager.cxx
     test_bit_tree.cxx
+    ocl_scene_test_manager.h      ocl_scene_test_manager.cxx
    )
 
 AUX_SOURCE_DIRECTORY(Templates boxm_ocl_test_sources)
