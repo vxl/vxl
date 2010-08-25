@@ -11,7 +11,7 @@ SET( register_images_exe_sources
    )
 
 ADD_EXECUTABLE( register_images_exe  ${register_images_exe_sources})
-TARGET_LINK_LIBRARIES(register_images_exe bsta vimt vbl vul vil vnl)
+TARGET_LINK_LIBRARIES(register_images_exe ihog bsta vbl vul vil)
 
 ADD_EXECUTABLE (compute_homographies_exe compute_homographies_exe.cxx)
-TARGET_LINK_LIBRARIES(compute_homographies_exe ihog bsta vimt vbl vul vil vnl)
+TARGET_LINK_LIBRARIES(compute_homographies_exe ihog bsta vbl vul)

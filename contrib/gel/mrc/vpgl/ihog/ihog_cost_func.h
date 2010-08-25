@@ -15,9 +15,9 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_cost_function.h>
 #include <vil/vil_image_view.h>
-#include <ihog/ihog_world_roi.h>
-#include <vimt/vimt_image_2d_of.h>
-#include <vimt/vimt_transform_2d.h>
+#include "ihog_world_roi.h"
+#include "ihog_image.h"
+#include "ihog_transform_2d.h"
 
 //: A cost function for registering video frames by minimizing square difference in intensities
 class ihog_cost_func : public vnl_cost_function
@@ -27,13 +27,13 @@ class ihog_cost_func : public vnl_cost_function
   ihog_cost_func( const vil_image_view<float>& image1,
                   const vil_image_view<float>& image2,
                   const ihog_world_roi& roi,
-                  const vimt_transform_2d& init_xform );
+                  const ihog_transform_2d& init_xform );
   //: Constructor
   ihog_cost_func( const vil_image_view<float>& image1,
                   const vil_image_view<float>& image2,
                   const vil_image_view<float>& mask,
                   const ihog_world_roi& roi,
-                  const vimt_transform_2d& init_xform );
+                  const ihog_transform_2d& init_xform );
   //: The main function.
   virtual double f(vnl_vector<double> const& x);
 
@@ -41,10 +41,10 @@ class ihog_cost_func : public vnl_cost_function
   vil_image_view<float> last_xformed_image();
 
  protected:
-  vimt_image_2d_of<float> from_image_;
-  vimt_image_2d_of<float> to_image_;
+  ihog_image<float> from_image_;
+  ihog_image<float> to_image_;
   ihog_world_roi roi_;
-  vimt_transform_2d::Form form_;
+  ihog_transform_2d::Form form_;
   vil_image_view<bool> mask_image_;
 };
 

@@ -20,8 +20,6 @@
 #include <ihog/ihog_transform_2d_sptr.h>
 #include <ihog/ihog_region.h>
 #include <ihog/ihog_region_sptr.h>
-#include <vimt/vimt_transform_2d.h>
-#include <vimt/vimt_resample_bilin.h>
 #include <vcl_cassert.h>
 
 
@@ -58,14 +56,14 @@ static bool write_homographies(vcl_string const& filename,
   return true;
 }
 
-static vimt_transform_2d
+static ihog_transform_2d
 register_image(vil_image_view<float> & curr_view,
                vil_image_view<float> & last_view,
                vcl_string transform_type ="Affine")
 {
   // do registration
   vul_timer time;
-  vimt_transform_2d init_xform;
+  ihog_transform_2d init_xform;
   unsigned ni = curr_view.ni(), nj = curr_view.nj();
   if (transform_type  ==  "Identity")
   {
@@ -77,7 +75,7 @@ register_image(vil_image_view<float> & curr_view,
   {
     vnl_vector<double> T(2);
     T[0]=0.0000001;   T[1]=0.0000001;
-    init_xform.set(T, vimt_transform_2d::Translation);
+    init_xform.set(T, ihog_transform_2d::Translation);
   }
   else if (transform_type ==  "ZoomOnly")
   {
@@ -87,14 +85,16 @@ register_image(vil_image_view<float> & curr_view,
   {
     vnl_vector<double> R(3);
     R[0]=0.0000001;   R[1]=0.0;  R[2]=0.0;
-    init_xform.set(R, vimt_transform_2d::RigidBody);
+    init_xform.set(R, ihog_transform_2d::RigidBody);
   }
+#if 0
   else if (transform_type ==  "Similarity")
   {
     vnl_vector<double> S(4);
     S[0]=1.0000001;   S[1]=0.0;  S[2]=0.0; S[3]=0.0;
-    init_xform.set(S, vimt_transform_2d::Similarity);
+    init_xform.set(S, ihog_transform_2d::Similarity);
   }
+#endif
   else if (transform_type ==  "Affine")
   {
     vnl_matrix<double> A(2,3);
@@ -110,14 +110,16 @@ register_image(vil_image_view<float> & curr_view,
     P[2][0] = 0.0;  P[2][1] = 0.0;  P[2][2] = 1.0000001;
     init_xform.set_projective(P);
   }
+#if 0
   else if (transform_type ==  "Reflection")
   {
     vgl_point_2d<double> m1(0, 0), m2(1,0);
     init_xform.set_reflection(m1, m2);
   }
+#endif
   else {
     vcl_cout << "Unrecoverable error:\n"
-             << " Unknown vimt transform type " << transform_type << '\n';
+             << " Unknown ihog transform type " << transform_type << '\n';
     assert(false);
   }
 
@@ -126,8 +128,8 @@ register_image(vil_image_view<float> & curr_view,
                      vgl_point_2d<double>(border,border),
                      vgl_vector_2d<double>(0.99,0.0),
                      vgl_vector_2d<double>(0.0,0.99));
-  vimt_image_2d_of<float> last_img(last_view, vimt_transform_2d());
-  vimt_image_2d_of<float> curr_img(curr_view, init_xform);
+  ihog_image<float> last_img(last_view, ihog_transform_2d());
+  ihog_image<float> curr_img(curr_view, init_xform);
   ihog_minimizer minimizer(last_img, curr_img, roi);
   minimizer.minimize(init_xform);
   vcl_cout << "Registration in  " << time.real() << " msecs\n";
@@ -139,7 +141,7 @@ static bool compute_homogs(vcl_string const& image_indir,
                            vcl_string const& homg_file
                           )
 {
-  vimt_transform_2d total_xform;
+  ihog_transform_2d total_xform;
   total_xform.set_identity();
   vcl_vector<vnl_matrix<double> > homographies;
   vcl_vector<vcl_string> in_filenames;
@@ -172,7 +174,7 @@ static bool compute_homogs(vcl_string const& image_indir,
       continue;
     vil_image_view<float> float_curr_view = *vil_convert_cast(float(), imgr->get_view());
     vcl_cout << "Registering frame " << frame++ << '\n'<< vcl_flush;
-    vimt_transform_2d xform = register_image(float_curr_view,
+    ihog_transform_2d xform = register_image(float_curr_view,
                                              float_last_view,
                                              transform_type);
     total_xform = total_xform * xform.inverse();

@@ -19,8 +19,8 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vgl/vgl_box_2d.h>
-#include <vimt/vimt_image_2d_of.h>
-#include <ihog/ihog_region_sptr.h>
+#include "ihog_image.h"
+#include "ihog_region_sptr.h"
 
 
 //: A class to compute super resolved images
@@ -28,7 +28,7 @@ class ihog_super_res
 {
 public:
   //: Constructor
-  ihog_super_res(vcl_vector<vimt_image_2d_of<vxl_byte> >& images, int block_size=10);
+  ihog_super_res(vcl_vector<ihog_image<vxl_byte> >& images, int block_size=10);
 
   //: Destructor
   ~ihog_super_res(){}
@@ -61,7 +61,7 @@ protected:
   ihog_region_sptr region_;
 
   //: The input images
-  vcl_vector<vimt_image_2d_of<vxl_byte> >& images_;
+  vcl_vector<ihog_image<vxl_byte> >& images_;
 
   //: block size
   int bsi_;

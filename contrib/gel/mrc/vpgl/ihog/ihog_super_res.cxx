@@ -20,12 +20,11 @@
 #include <vil/vil_math.h>
 #include <vcl_sstream.h>
 #include <vcl_iomanip.h>
-#include <vimt/vimt_sample_grid_bilin.h>
 #include <vnl/algo/vnl_qr.h>
 
 
 //: Constructor
-ihog_super_res::ihog_super_res(vcl_vector<vimt_image_2d_of<vxl_byte> >& images,
+ihog_super_res::ihog_super_res(vcl_vector<ihog_image<vxl_byte> >& images,
                                int block_size)
  : images_(images), bsi_(block_size), bsj_(block_size), blur_(0.0)
 {
@@ -84,9 +83,9 @@ ihog_super_res::compute_region(double area_mag)
 {
   double total_area = 0.0;
   double aspect_ratio = 0.0;
-  typedef vcl_vector<vimt_image_2d_of<vxl_byte> >::const_iterator image_itr;
+  typedef vcl_vector<ihog_image<vxl_byte> >::const_iterator image_itr;
   for(image_itr itr = images_.begin(); itr!=images_.end(); ++itr){
-    vimt_transform_2d xform = itr->world2im();
+    ihog_transform_2d xform = itr->world2im();
 
     vgl_point_2d<double> points[4];
     points[0] = xform(vgl_point_2d<double>(0,0));
@@ -148,7 +147,7 @@ ihog_super_res::compute_weights( int index,
                                  vcl_list<vnl_vector<double> >& weights,
                                  const vgl_box_2d<int>& bounds) const
 {
-  vimt_transform_2d xform = images_[index].world2im() * region_->xform();
+  ihog_transform_2d xform = images_[index].world2im() * region_->xform();
   vil_image_view<vxl_byte> image(images_[index].image());
 
   vgl_point_2d<double> points[4];

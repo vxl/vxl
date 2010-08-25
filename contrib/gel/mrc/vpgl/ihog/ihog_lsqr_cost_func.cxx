@@ -10,10 +10,10 @@
 
 
 //: Constructor
-ihog_lsqr_cost_func::ihog_lsqr_cost_func( const vimt_image_2d_of<float>& image1,
-                                            const vimt_image_2d_of<float>& image2,
+ihog_lsqr_cost_func::ihog_lsqr_cost_func( const ihog_image<float>& image1,
+                                            const ihog_image<float>& image2,
                                             const ihog_world_roi& roi,
-                                            const vimt_transform_2d& init_xform )
+                                            const ihog_transform_2d& init_xform )
  : vnl_least_squares_function(1,1),
    from_image_(image1),
    to_image_(image2),
@@ -31,11 +31,11 @@ ihog_lsqr_cost_func::ihog_lsqr_cost_func( const vimt_image_2d_of<float>& image1,
 }
 
 
-ihog_lsqr_cost_func::ihog_lsqr_cost_func( const vimt_image_2d_of<float>& image1,
-                                            const vimt_image_2d_of<float>& image2,
-                                            const vimt_image_2d_of<float>& mask,
+ihog_lsqr_cost_func::ihog_lsqr_cost_func( const ihog_image<float>& image1,
+                                            const ihog_image<float>& image2,
+                                            const ihog_image<float>& mask,
                                             const ihog_world_roi& roi,
-                                            const vimt_transform_2d& init_xform, bool image1_mask)
+                                            const ihog_transform_2d& init_xform, bool image1_mask)
  : vnl_least_squares_function(1,1),
    from_image_(image1),
    to_image_(image2),
@@ -58,12 +58,12 @@ ihog_lsqr_cost_func::ihog_lsqr_cost_func( const vimt_image_2d_of<float>& image1,
   
 }
 
-ihog_lsqr_cost_func::ihog_lsqr_cost_func(const vimt_image_2d_of<float>& image1,
-                                           const vimt_image_2d_of<float>& image2,
-                                           const vimt_image_2d_of<float>& mask1,
-                                           const vimt_image_2d_of<float>& mask2,
+ihog_lsqr_cost_func::ihog_lsqr_cost_func(const ihog_image<float>& image1,
+                                           const ihog_image<float>& image2,
+                                           const ihog_image<float>& mask1,
+                                           const ihog_image<float>& mask2,
                                            const ihog_world_roi& roi,
-                                           const vimt_transform_2d& init_xform)
+                                           const ihog_transform_2d& init_xform)
  : vnl_least_squares_function(1,1),
    from_image_(image1),
    to_image_(image2),
@@ -90,9 +90,9 @@ ihog_lsqr_cost_func::ihog_lsqr_cost_func(const vimt_image_2d_of<float>& image1,
 void 
 ihog_lsqr_cost_func::f(vnl_vector<double> const& x, vnl_vector<double>& fx)
 {
-  vimt_transform_2d new_xform;
+  ihog_transform_2d new_xform;
   new_xform.set(x, form_);
-  vimt_image_2d_of<float> test_image(to_image_);
+  ihog_image<float> test_image(to_image_);
   test_image.set_world2im(new_xform*to_image_.world2im());
   vnl_vector<double> to_samples = roi_.sample(test_image);
 
@@ -102,7 +102,7 @@ ihog_lsqr_cost_func::f(vnl_vector<double> const& x, vnl_vector<double>& fx)
       mask_samples = roi_.sample(from_mask_image_);
     }
     if (to_mask_) {
-      vimt_image_2d_of<float> mask_test_image(to_mask_image_);
+      ihog_image<float> mask_test_image(to_mask_image_);
       mask_test_image.set_world2im(new_xform*to_image_.world2im());
       vnl_vector<double> to_mask_samples = roi_.sample(mask_test_image);
       // NORMALIZE based on number of pixels in sum

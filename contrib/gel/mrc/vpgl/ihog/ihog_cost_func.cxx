@@ -14,9 +14,9 @@
 ihog_cost_func::ihog_cost_func( const vil_image_view<float>& image1,
                                   const vil_image_view<float>& image2,
                                   const ihog_world_roi& roi,
-                                  const vimt_transform_2d& init_xform )
+                                  const ihog_transform_2d& init_xform )
  : vnl_cost_function(1),
-   from_image_(image1, vimt_transform_2d()),
+   from_image_(image1, ihog_transform_2d()),
    to_image_(image2, init_xform),
    roi_(roi),
    form_(init_xform.form())
@@ -38,9 +38,9 @@ ihog_cost_func::ihog_cost_func( const vil_image_view<float>& image1,
                                   const vil_image_view<float>& image2,
                                   const vil_image_view<float>& maskimage,
                                   const ihog_world_roi& roi,
-                                  const vimt_transform_2d& init_xform )
+                                  const ihog_transform_2d& init_xform )
  : vnl_cost_function(1),
-   from_image_(image1, vimt_transform_2d()),
+   from_image_(image1, ihog_transform_2d()),
    to_image_(image2, init_xform),
    roi_(roi),
    form_(init_xform.form())
@@ -59,7 +59,7 @@ ihog_cost_func::ihog_cost_func( const vil_image_view<float>& image1,
 double
 ihog_cost_func::f(vnl_vector<double> const& x)
 {
-  vimt_transform_2d new_xform;
+  ihog_transform_2d new_xform;
   new_xform.set(x, form_);
   to_image_.set_world2im(new_xform);
 
@@ -70,7 +70,7 @@ ihog_cost_func::f(vnl_vector<double> const& x)
   double total_weight = 0.0;
   double rms = 0.0;
   if(mask_image_){
-  vimt_image_2d_of<float> mimage_(mask_image_,vimt_transform_2d()); 
+  ihog_image<float> mimage_(mask_image_,ihog_transform_2d()); 
   vnl_vector<double> s3 = roi_.sample(mimage_);
 
   for(unsigned int i=0; i<s1.size(); ++i){

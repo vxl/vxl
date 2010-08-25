@@ -16,31 +16,31 @@
 #include <vnl/vnl_least_squares_function.h>
 #include <vil/vil_image_view.h>
 #include <ihog/ihog_world_roi.h>
-#include <vimt/vimt_image_2d_of.h>
-#include <vimt/vimt_transform_2d.h>
+#include <ihog/ihog_image.h>
+#include <ihog/ihog_transform_2d.h>
 
 //: A least squares cost function for registering video frames by minimizing square difference in intensities
 class ihog_lsqr_cost_func : public vnl_least_squares_function
 {
  public:
   //: Constructor (no masks)
-  ihog_lsqr_cost_func(const vimt_image_2d_of<float>& image1,
-                      const vimt_image_2d_of<float>& image2,
+  ihog_lsqr_cost_func(const ihog_image<float>& image1,
+                      const ihog_image<float>& image2,
                       const ihog_world_roi& roi,
-                      const vimt_transform_2d& init_xform );
+                      const ihog_transform_2d& init_xform );
   //: Constructor (one mask)
-  ihog_lsqr_cost_func(const vimt_image_2d_of<float>& image1,
-                      const vimt_image_2d_of<float>& image2,
-                      const vimt_image_2d_of<float>& mask,
+  ihog_lsqr_cost_func(const ihog_image<float>& image1,
+                      const ihog_image<float>& image2,
+                      const ihog_image<float>& mask,
                       const ihog_world_roi& roi,
-                      const vimt_transform_2d& init_xform, bool image1_mask = false );
+                      const ihog_transform_2d& init_xform, bool image1_mask = false );
   //: Constructor (two masks)
-  ihog_lsqr_cost_func(const vimt_image_2d_of<float>& image1,
-                      const vimt_image_2d_of<float>& image2,
-                      const vimt_image_2d_of<float>& mask1,
-                      const vimt_image_2d_of<float>& mask2,
+  ihog_lsqr_cost_func(const ihog_image<float>& image1,
+                      const ihog_image<float>& image2,
+                      const ihog_image<float>& mask1,
+                      const ihog_image<float>& mask2,
                       const ihog_world_roi& roi,
-                      const vimt_transform_2d& init_xform);
+                      const ihog_transform_2d& init_xform);
 
 
   //: The main function.
@@ -52,13 +52,13 @@ class ihog_lsqr_cost_func : public vnl_least_squares_function
   vil_image_view<float> last_xformed_image();
 
  protected:
-  vimt_image_2d_of<float> from_image_;
-  vimt_image_2d_of<float> to_image_;
-  vimt_image_2d_of<float> from_mask_image_;
-  vimt_image_2d_of<float> to_mask_image_;
+  ihog_image<float> from_image_;
+  ihog_image<float> to_image_;
+  ihog_image<float> from_mask_image_;
+  ihog_image<float> to_mask_image_;
 
   ihog_world_roi roi_;
-  vimt_transform_2d::Form form_;
+  ihog_transform_2d::Form form_;
   vnl_vector<double> from_samples_;
 
   bool from_mask_; //!< true if mask associated with from_image_

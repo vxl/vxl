@@ -3,10 +3,10 @@
 #include <ihog/ihog_lsqr_cost_func.h>
 #include <ihog/ihog_cost_func.h>
 #include <ihog/ihog_minimizer.h>
+#include <ihog/ihog_transform_2d.h>
 #include <vcl_cstdlib.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vnl/algo/vnl_amoeba.h>
-#include <vimt/vimt_transform_2d.h>
 #include <vil/algo/vil_gauss_filter.h>
 #include <vnl/vnl_matlab_filewrite.h>
 #include <vil/vil_convert.h>
@@ -21,11 +21,11 @@ void test_lsqr_min( const vil_image_view<float>& img1,
                           vgl_vector_2d<double>(0.0,0.95));
   //ihog_world_roi test_roi(255,255);
 
-  vimt_transform_2d init_xform;
+  ihog_transform_2d init_xform;
   init_xform.set_rigid_body (1.0,1.0,0.0);
 
-  vimt_image_2d_of<float> image1(img1, vimt_transform_2d());
-  vimt_image_2d_of<float> image2(img1, vimt_transform_2d());
+  ihog_image<float> image1(img1, ihog_transform_2d());
+  ihog_image<float> image2(img1, ihog_transform_2d());
   ihog_lsqr_cost_func test_cost_func(image1, image2, test_roi, init_xform);
 
   vnl_matrix<double> result(50,50);
@@ -78,7 +78,7 @@ void test_amoeba_min( const vil_image_view<float>& img1,
 {
   ihog_world_roi test_roi(255,255);
 
-  vimt_transform_2d init_xform;
+  ihog_transform_2d init_xform;
   init_xform.set_translation(1.0,0.0);
 
   ihog_cost_func test_cost_func(img1, img2, test_roi, init_xform);
@@ -137,12 +137,12 @@ void test_minimizer( const vil_image_view<float>& img1,
                           vgl_vector_2d<double>(0.0,0.99));
   //ihog_world_roi test_roi(255,255);
 
-  vimt_transform_2d init_xform;
+  ihog_transform_2d init_xform;
   init_xform.set_rigid_body(0.174532, 0.0, 0.0);
 
 
-  vimt_image_2d_of<float> image1(img1, vimt_transform_2d());
-  vimt_image_2d_of<float> image2(img1, vimt_transform_2d());
+  ihog_image<float> image1(img1, ihog_transform_2d());
+  ihog_image<float> image2(img1, ihog_transform_2d());
   ihog_minimizer minimizer(image1, image2, test_roi);
 
   vul_timer time;

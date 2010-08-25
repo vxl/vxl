@@ -1,6 +1,6 @@
 #include <vcl_string.h>
 #include <vcl_vector.h>
-#include<vcl_cstdio.h>
+#include <vcl_cstdio.h>
 #include <vbl/vbl_bounding_box.h>
 #include <vul/vul_sprintf.h>
 #include <vul/vul_file.h>
@@ -19,8 +19,7 @@
 #include <ihog/ihog_transform_2d_sptr.h>
 #include <ihog/ihog_region.h>
 #include <ihog/ihog_region_sptr.h>
-#include <vimt/vimt_transform_2d.h>
-#include <vimt/vimt_resample_bilin.h>
+#include <ihog/ihog_sample_grid_bilin.h>
 
 
 static void filenames_from_directory(vcl_string const& dirname,
@@ -97,10 +96,10 @@ static bool register_images(vcl_string const& homography_file,
   unsigned ni =  imgr->ni(), nj =  imgr->nj();
   infile_counter = 0;//return to first frame
 
-  vcl_vector<vimt_transform_2d > xforms;
+  vcl_vector<ihog_transform_2d > xforms;
   for (unsigned i=0;i<nframes;i++)
   {
-    vimt_transform_2d p;
+    ihog_transform_2d p;
     p.set_affine(homographies[i].extract(2,3));
     xforms.push_back(p);
     box.update(p(0,0).x(),p(0,0).y());
@@ -133,15 +132,15 @@ static bool register_images(vcl_string const& homography_file,
     }
     vil_image_view<float> curr_view =
       *vil_convert_cast(float(), imgr->get_view());
-    vimt_transform_2d ftxform=xforms[frame].inverse();
-    vimt_image_2d_of<float> sample_im;
+    ihog_transform_2d ftxform=xforms[frame].inverse();
+    ihog_image<float> sample_im;
 
     vgl_point_2d<double> p(-offset_i,-offset_j);
     vgl_vector_2d<double> u(1,0);
     vgl_vector_2d<double> v(0,1);
 
-    vimt_image_2d_of<float> curr_img(curr_view,ftxform);
-    vimt_resample_bilin(curr_img,sample_im,p,u,v,bimg_ni,bimg_nj);
+    ihog_image<float> curr_img(curr_view,ftxform);
+    ihog_resample_bilin(curr_img,sample_im,p,u,v,bimg_ni,bimg_nj);
 
     vil_image_view<vxl_byte> temp;
     vil_convert_stretch_range(sample_im.image(), temp);

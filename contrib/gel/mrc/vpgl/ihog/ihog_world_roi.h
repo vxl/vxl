@@ -17,11 +17,11 @@
 #include <vgl/vgl_vector_2d.h>
 #include <vnl/vnl_vector.h>
 #include <vil/vil_image_view.h>
-#include <vimt/vimt_image_2d_of.h>
+#include <ihog/ihog_image.h>
 
 //:A class to represent a region of interest in world coordinates.
 // This class holds the parameters of a uniform grid in the world
-// coordinate system.  The roi is used to resample vimt images.
+// coordinate system.  The roi is used to resample the images.
 
 class ihog_world_roi : public vbl_ref_count
 {
@@ -33,14 +33,14 @@ class ihog_world_roi : public vbl_ref_count
                   const vgl_vector_2d< double > &  v = vgl_vector_2d< double >(0.0, 1.0) );
 
   //: Sample the image in the ROI and return a vector of values
-  vnl_vector<double> sample( const vimt_image_2d_of<float>& image) const;
+  vnl_vector<double> sample( const ihog_image<float>& image) const;
 
   //: Create a vector of weights for the sample of \p image
   //  Weights are based on distance from the image boundaries
-  vnl_vector<double> sample_weights( const vimt_image_2d_of<float>& image) const;
+  vnl_vector<double> sample_weights( const ihog_image<float>& image) const;
 
   //: Sample the image in the ROI and return an image
-  vil_image_view<float> resample( const vimt_image_2d_of<float>& image) const;
+  vil_image_view<float> resample( const ihog_image<float>& image) const;
 
   //: Return the size of the grid in the u direction
   unsigned int size_in_u() const { return n_u_; }

@@ -58,10 +58,10 @@ ihog_region::corners() const
 
 
 //: Return the transformation from world to image coords
-vimt_transform_2d
+ihog_transform_2d
 ihog_region::xform() const
 {
-  vimt_transform_2d xform;
+  ihog_transform_2d xform;
   xform.set_zoom_only(1.0/ni_, 1.0/nj_, 0.0, 0.0);
   return xform;
 }

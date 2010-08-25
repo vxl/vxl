@@ -16,8 +16,8 @@
 #include <vsl/vsl_binary_io.h>
 #include <vbl/vbl_ref_count.h>
 #include <vgl/vgl_point_2d.h>
-#include <vimt/vimt_transform_2d.h>
-#include <ihog/ihog_world_roi_sptr.h>
+#include "ihog_transform_2d.h"
+#include "ihog_world_roi_sptr.h"
 
 //: A quadrilateral region of an image
 class ihog_region : public vbl_ref_count
@@ -51,7 +51,7 @@ class ihog_region : public vbl_ref_count
   vcl_vector<vgl_point_2d<double> > corners() const;
 
   //: Return the transformation from world to image coords
-  vimt_transform_2d xform() const;
+  ihog_transform_2d xform() const;
 
  protected:
 
