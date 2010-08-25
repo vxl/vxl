@@ -61,12 +61,12 @@ class boxm_ocl_utils
   static bool verify_format(vcl_vector<vnl_vector_fixed<int, 4> > cell_array);
 
   static int getBufferIndex(bool rand, 
-                           vbl_array_1d<ushort2> mem_ptrs,
-                           vbl_array_1d<unsigned short> blocksInBuffer,
-                           int BUFF_LENGTH,
-                           int blocks_per_buffer,
-                           int tree_size,
-                           vnl_random random);
+                            vbl_array_1d<ushort2> mem_ptrs,
+                            vbl_array_1d<unsigned short> blocksInBuffer,
+                            int BUFF_LENGTH,
+                            int blocks_per_buffer,
+                            int tree_size,
+                            vnl_random random);
 
   // Binary read and writes for a tree.
   static cl_int* readtree(vcl_string tree_file, unsigned int & tree_size );
