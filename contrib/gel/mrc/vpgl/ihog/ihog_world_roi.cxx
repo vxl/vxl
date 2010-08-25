@@ -5,7 +5,7 @@
 
 #include "ihog_sample_grid_bilin.h"
 #include <vil/vil_resample_bilin.h>
-
+#include <vcl_cassert.h>
 
 //: Constructor
 ihog_world_roi::ihog_world_roi( unsigned int n_u,  unsigned int n_v,
