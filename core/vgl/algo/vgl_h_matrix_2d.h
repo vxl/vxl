@@ -10,6 +10,7 @@
 //
 // \verbatim
 //  Modifications
+//   16 Aug 2010 - Gamze Tunali - added is_identity(), b_read(), b_write(),vsl_b_write()
 //   22 Oct 2002 - Peter Vanroose - added vgl_homg_point_2d interface
 //   23 Oct 2002 - Peter Vanroose - using fixed 3x3 matrices throughout
 //   22 Mar 2003 - J.L. Mundy - preparing for upgrade to vgl
