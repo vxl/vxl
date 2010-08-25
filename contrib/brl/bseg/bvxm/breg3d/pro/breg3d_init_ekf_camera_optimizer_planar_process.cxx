@@ -124,7 +124,7 @@ bool breg3d_init_ekf_camera_optimizer_planar_process::execute()
 
   h_gen->set_image0(img0_float);
   h_gen->set_image1(img1_float);
-  vimt_transform_2d H = h_gen->compute_homography();
+  ihog_transform_2d H = h_gen->compute_homography();
 
   vcl_cout << "H = " << vcl_endl << H.matrix() << vcl_endl;
 

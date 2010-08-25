@@ -13,7 +13,7 @@
 // \endverbatim
 
 
-#include <vimt/vimt_transform_2d.h>
+#include <ihog/ihog_transform_2d.h>
 #include <vil/vil_image_view.h>
 
 class breg3d_homography_generator
@@ -29,7 +29,7 @@ class breg3d_homography_generator
   //: set generator to compute a projective transformation.  default is affine.
   void set_projective(bool use_projective) {compute_projective_ = use_projective; }
 
-  virtual vimt_transform_2d compute_homography() = 0;
+  virtual ihog_transform_2d compute_homography() = 0;
 
  protected:
   bool use_mask0_;

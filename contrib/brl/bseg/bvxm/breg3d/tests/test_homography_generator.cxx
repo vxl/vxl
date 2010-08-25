@@ -17,9 +17,9 @@
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 
-#include <vimt/vimt_transform_2d.h>
-#include <vimt/vimt_image_2d_of.h>
-#include <vimt/vimt_resample_bilin.h>
+#include <ihog/ihog_transform_2d.h>
+#include <ihog/ihog_image.h>
+#include <ihog/ihog_sample_grid_bilin.h>
 
 #include "../breg3d_homography_generator.h"
 #include "../breg3d_lm_direct_homography_generator.h"
@@ -49,22 +49,22 @@ static void test_homography_generator()
   HA(0,0) = vcl_cos(rot_angle);    HA(0,1) = vcl_sin(rot_angle);  HA(0,2) =  -20.0;
   HA(1,0) = -vcl_sin(rot_angle);  HA(1,1) = vcl_cos(rot_angle) ; HA(1,2) = 30.0;
 
-  vimt_transform_2d xform_in;
+  ihog_transform_2d xform_in;
   xform_in.set_affine(HA);
 
   // warp image with homography
-  vimt_image_2d_of<float> sample_im;
-  vimt_image_2d_of<float> sample_mask;
+  ihog_image<float> sample_im;
+  ihog_image<float> sample_mask;
   vgl_point_2d<double> p(0,0);
   vgl_vector_2d<double> u(1,0);
   vgl_vector_2d<double> v(0,1);
 
-  vimt_image_2d_of<float> curr_img(img0,xform_in.inverse());
-  vimt_resample_bilin(curr_img,sample_im,p,u,v,ni,nj);
+  ihog_image<float> curr_img(img0,xform_in.inverse());
+  ihog_resample_bilin(curr_img,sample_im,p,u,v,ni,nj);
   vil_image_view<float> warped_img = sample_im.image();
 
-  vimt_image_2d_of<float> curr_mask(mask0,xform_in.inverse());
-  vimt_resample_bilin(curr_mask,sample_mask,p,u,v,ni,nj);
+  ihog_image<float> curr_mask(mask0,xform_in.inverse());
+  ihog_resample_bilin(curr_mask,sample_mask,p,u,v,ni,nj);
   vil_image_view<float> warped_mask = sample_mask.image();
 
   // debug
@@ -81,7 +81,7 @@ static void test_homography_generator()
   db_gen.set_image1(&warped_img);
   db_gen.set_mask1(&warped_mask);
   db_gen.set_projective(false);
-  vimt_transform_2d xform_out2 = db_gen.compute_homography();
+  ihog_transform_2d xform_out2 = db_gen.compute_homography();
 
   // compute homography with direct optimizer
   breg3d_lm_direct_homography_generator lm_gen;
@@ -89,18 +89,18 @@ static void test_homography_generator()
   lm_gen.set_image1(&warped_img);
   lm_gen.set_mask1(&warped_mask);
   lm_gen.set_projective(false);
-  vimt_transform_2d xform_out1 = lm_gen.compute_homography();
+  ihog_transform_2d xform_out1 = lm_gen.compute_homography();
 
 
   // debug: warp images back to original with computed homographies
-  vimt_image_2d_of<float> sample_im1, sample_im2;
+  ihog_image<float> sample_im1, sample_im2;
 
-  vimt_image_2d_of<float> og_img1(img0,xform_out1.inverse());
-  vimt_resample_bilin(og_img1,sample_im1,p,u,v,ni,nj);
+  ihog_image<float> og_img1(img0,xform_out1.inverse());
+  ihog_resample_bilin(og_img1,sample_im1,p,u,v,ni,nj);
   vil_image_view<float> warped_img1 = sample_im1.image();
 
-  vimt_image_2d_of<float> og_img2(img0,xform_out2.inverse());
-  vimt_resample_bilin(og_img2,sample_im2,p,u,v,ni,nj);
+  ihog_image<float> og_img2(img0,xform_out2.inverse());
+  ihog_resample_bilin(og_img2,sample_im2,p,u,v,ni,nj);
   vil_image_view<float> warped_img2 = sample_im2.image();
 
   vil_convert_cast(warped_img1,byte_image);

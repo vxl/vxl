@@ -22,7 +22,7 @@
 #include <vpgl/vpgl_perspective_camera.h>
 
 // for computing homography
-#include <vimt/vimt_transform_2d.h>
+#include <ihog/ihog_transform_2d.h>
 #include <vpgl/ihog/ihog_world_roi.h>
 #include <vpgl/ihog/ihog_minimizer.h>
 #include <brip/brip_vil_float_ops.h>
@@ -387,7 +387,7 @@ vnl_vector<double> breg3d_ekf_camera_optimizer::img_homography(vil_image_view_ba
   homography_gen_->set_image1(&img_view);
   homography_gen_->set_mask1(&mask_view);
   homography_gen_->set_projective(use_proj_homography_);
-  vimt_transform_2d xform = homography_gen_->compute_homography();
+  ihog_transform_2d xform = homography_gen_->compute_homography();
 
   // convert to normalized camera matrix
   vnl_matrix<double> invK = vnl_matrix_inverse<double>(K);

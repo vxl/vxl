@@ -15,7 +15,7 @@
 #include <bprb/bprb_process.h>
 
 #include <vil/vil_image_view.h>
-#include <vimt/vimt_transform_2d.h>
+#include <ihog/ihog_transform_2d.h>
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <bvxm/bvxm_voxel_world.h>
@@ -49,7 +49,7 @@ class breg3d_ekf_camera_optimize_process : public bprb_process
    vnl_matrix<double> homography_jacobian_t(bvxm_voxel_world_sptr world, vpgl_perspective_camera<double>* cam, vil_image_view_base_sptr &expected_view);
 
    //: calculate a homography between two images
-   vimt_transform_2d calculate_homography(vil_image_view_base_sptr &base_img, vil_image_view_base_sptr &img, vil_image_view_base_sptr &mask);
+   ihog_transform_2d calculate_homography(vil_image_view_base_sptr &base_img, vil_image_view_base_sptr &img, vil_image_view_base_sptr &mask);
 };
 
 

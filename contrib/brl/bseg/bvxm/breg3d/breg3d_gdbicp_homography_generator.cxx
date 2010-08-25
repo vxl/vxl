@@ -11,12 +11,12 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_save.h>
 #include <vil/vil_convert.h>
-#include <vimt/vimt_transform_2d.h>
+#include <ihog/ihog_transform_2d.h>
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_matrix_fixed.h>
 
-vimt_transform_2d breg3d_gdbicp_homography_generator::compute_homography()
+ihog_transform_2d breg3d_gdbicp_homography_generator::compute_homography()
 {
   // this command must be in path.
   vcl_string gdbicp_command("gdbicp");
@@ -27,7 +27,7 @@ vimt_transform_2d breg3d_gdbicp_homography_generator::compute_homography()
     vcl_cout << "creating gdbicp io directory " << io_dirname << vcl_endl;
     if (!vul_file::make_directory(io_dirname)) {
       vcl_cerr << "error creating directory!\n";
-      return vimt_transform_2d();
+      return ihog_transform_2d();
     }
   }
   // move to io directory
@@ -84,7 +84,7 @@ vimt_transform_2d breg3d_gdbicp_homography_generator::compute_homography()
     vcl_cerr << "vcl_system(" << command << ") returned " << retval << ".\n"
              << "  make sure " << gdbicp_command << " is in your path.\n";
     vul_file::change_directory(og_dir);
-    return vimt_transform_2d();
+    return ihog_transform_2d();
   }
 
   // read in output file
@@ -92,15 +92,15 @@ vimt_transform_2d breg3d_gdbicp_homography_generator::compute_homography()
   if (!vul_file::exists(output_fname)) {
     vcl_cerr << "error: output file " << output_fname << " does not exist!\n";
     vul_file::change_directory(og_dir);
-    return vimt_transform_2d();
+    return ihog_transform_2d();
   }
-  vimt_transform_2d xform = parse_gdbicp_output(output_fname);
+  ihog_transform_2d xform = parse_gdbicp_output(output_fname);
 
   vul_file::change_directory(og_dir);
   return xform;
 }
 
-vimt_transform_2d breg3d_gdbicp_homography_generator::parse_gdbicp_output(vcl_string filename)
+ihog_transform_2d breg3d_gdbicp_homography_generator::parse_gdbicp_output(vcl_string filename)
 {
   vcl_ifstream ifs(filename.c_str());
 
@@ -145,7 +145,7 @@ vimt_transform_2d breg3d_gdbicp_homography_generator::parse_gdbicp_output(vcl_st
   vnl_matrix_fixed<double,3,3> H = D*H_centered*C;
   vcl_cout << "H = " << H << vcl_endl;
 
-  vimt_transform_2d xform;
+  ihog_transform_2d xform;
   if (compute_projective_) {
     xform.set_projective(H);
   }
