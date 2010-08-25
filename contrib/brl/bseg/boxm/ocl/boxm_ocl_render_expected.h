@@ -47,7 +47,7 @@ void boxm_opencl_render_expected(boxm_scene<boct_tree<short, boxm_sample<APM> > 
 {
   // set up the application-specific function to be called at every cell along a ray
   vcl_string expected_img_functor_fname = vcl_string(VCL_SOURCE_ROOT_DIR)
-    +"/contrib/brl/bseg/boxm/ocl/expected_functor.cl";
+    +"/contrib/brl/bseg/boxm/ocl/cl/expected_functor.cl";
   vcl_vector<vcl_string> source_fnames;
   source_fnames.push_back(expected_img_functor_fname);
 
@@ -104,7 +104,7 @@ void boxm_opencl_ray_bundle_expected(boxm_scene<boct_tree<short, boxm_sample<APM
 {
   // set up the application-specific function to be called at every cell along a ray
   vcl_string expected_img_functor_fname = vcl_string(VCL_SOURCE_ROOT_DIR)
-    +"/contrib/brl/bseg/boxm/ocl/expected_functor.cl";
+    +"/contrib/brl/bseg/boxm/ocl/cl/expected_functor.cl";
   vcl_vector<vcl_string> source_fnames;
   source_fnames.push_back(expected_img_functor_fname);
 

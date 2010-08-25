@@ -64,7 +64,7 @@ void init_test()
 {
   boxm_ocl_camera_manager* cam_mgr = boxm_ocl_camera_manager::instance();
   vcl_string root_dir = testlib_root_dir();
-  cam_mgr->append_process_kernels(root_dir + "/contrib/brl/bseg/boxm/ocl/backproject.cl")
+  cam_mgr->append_process_kernels(root_dir + "/contrib/brl/bseg/boxm/ocl/cl/backproject.cl")
   &&
   cam_mgr->append_process_kernels(root_dir + "/contrib/brl/bseg/boxm/ocl/tests/test_cam_kernels.cl")
   &&

@@ -396,7 +396,7 @@ void stat_tests(stat_test_driver<T>& test_driver)
 {
   boxm_stat_manager<T>* stat_mgr = boxm_stat_manager<T>::instance();
   vcl_string root_dir = testlib_root_dir();
-  if (!stat_mgr->load_kernel_source(root_dir + "/contrib/brl/bseg/boxm/ocl/statistics_library_functions.cl"))
+  if (!stat_mgr->load_kernel_source(root_dir + "/contrib/brl/bseg/boxm/ocl/cl/statistics_library_functions.cl"))
     return;
   if (!stat_mgr->append_process_kernels(root_dir + "/contrib/brl/bseg/boxm/ocl/tests/stat_test_kernels.cl"))
     return;

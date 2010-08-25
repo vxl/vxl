@@ -585,13 +585,17 @@ void ray_bundle_tests(ray_bundle_test_driver<T>& test_driver)
 {
   boxm_ray_trace_manager<T>* ray_mgr = boxm_ray_trace_manager<T>::instance();
   vcl_string root_dir = testlib_root_dir();
-  if (!ray_mgr->load_kernel_source(root_dir + "/contrib/brl/bseg/boxm/ocl/octree_library_functions.cl"))
+  if (!ray_mgr->load_kernel_source(root_dir + "/contrib/brl/bseg/boxm/ocl/cl/loc_code_library_functions.cl"))
     return;
-  if (!ray_mgr->append_process_kernels(root_dir + "/contrib/brl/bseg/boxm/ocl/statistics_library_functions.cl"))
+  if (!ray_mgr->append_process_kernels(root_dir + "/contrib/brl/bseg/boxm/ocl/cl/cell_utils.cl"))
     return;
-  if (!ray_mgr->append_process_kernels(root_dir + "/contrib/brl/bseg/boxm/ocl/backproject.cl"))
+  if (!ray_mgr->append_process_kernels(root_dir + "/contrib/brl/bseg/boxm/ocl/cl/octree_library_functions.cl"))
     return;
-  if (!ray_mgr->append_process_kernels(root_dir + "/contrib/brl/bseg/boxm/ocl/ray_bundle_library_functions.cl"))
+  if (!ray_mgr->append_process_kernels(root_dir + "/contrib/brl/bseg/boxm/ocl/cl/statistics_library_functions.cl"))
+    return;
+  if (!ray_mgr->append_process_kernels(root_dir + "/contrib/brl/bseg/boxm/ocl/cl/backproject.cl"))
+    return;
+  if (!ray_mgr->append_process_kernels(root_dir + "/contrib/brl/bseg/boxm/ocl/cl/ray_bundle_library_functions.cl"))
     return;
   if (!ray_mgr->append_process_kernels(root_dir + "/contrib/brl/bseg/boxm/ocl/tests/ray_bundle_test_kernels.cl"))
     return;

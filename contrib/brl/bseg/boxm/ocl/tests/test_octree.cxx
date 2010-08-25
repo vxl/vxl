@@ -587,7 +587,11 @@ void tree_tests(octree_test_driver<T>& test_driver)
   boxm_ray_trace_manager<T>* ray_mgr = boxm_ray_trace_manager<T>::instance();
   vcl_string root_dir = testlib_root_dir();
   test_driver.set_buffers();
-  if (!ray_mgr->load_kernel_source(root_dir + "/contrib/brl/bseg/boxm/ocl/octree_library_functions.cl"))
+  if (!ray_mgr->load_kernel_source(root_dir + "/contrib/brl/bseg/boxm/ocl/cl/loc_code_library_functions.cl"))
+    return;
+  if (!ray_mgr->append_process_kernels(root_dir + "/contrib/brl/bseg/boxm/ocl/cl/cell_utils.cl"))
+    return;
+  if (!ray_mgr->append_process_kernels(root_dir + "/contrib/brl/bseg/boxm/ocl/cl/octree_library_functions.cl"))
     return;
   if (!ray_mgr->append_process_kernels(root_dir + "/contrib/brl/bseg/boxm/ocl/tests/octree_test_kernels.cl"))
     return;
@@ -600,14 +604,14 @@ void tree_tests(octree_test_driver<T>& test_driver)
   test_traverse(test_driver);
   test_traverse_to_level(test_driver);
   test_traverse_force(test_driver);
-  //test_traverse_force_local(test_driver);
-  //test_cell_bounding_box(test_driver);
-  //test_intersect_cell(test_driver);
-  //test_common_ancestor(test_driver);
-  //test_cell_exit_face(test_driver);
-  //test_neighbor(test_driver);
-  //test_cell_contains_exit_pt(test_driver);
-  //test_ray_trace(test_driver);
+  test_traverse_force_local(test_driver);
+  test_cell_bounding_box(test_driver);
+  test_intersect_cell(test_driver);
+  test_common_ancestor(test_driver);
+  test_cell_exit_face(test_driver);
+  test_neighbor(test_driver);
+  test_cell_contains_exit_pt(test_driver);
+  test_ray_trace(test_driver);
   //==============================================================
   //END OCTREE TESTS
   test_driver.cleanup_tree_test();

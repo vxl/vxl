@@ -61,15 +61,13 @@ void test_codes(int* i, int* n_codes, short4* code, short4* ncode)
 
 __kernel
 void
-test_traverse(__global uchar16* tree, __global int4* results, __local uchar* ltree, __constant uchar * bit_lookup)
+test_traverse(__global int4* tree, __global int4* results, __local uchar* ltree, __constant uchar * bit_lookup)
 {
   
   //event_t eventid = (event_t) 0;
   //event_t e = async_work_group_copy(ltree, tree, (size_t)1, eventid);
   //wait_group_events (1, &eventid);  
 
- 
-  
   short4 code, ncode;
   int n_codes = 0;
   int i= 0;
@@ -84,7 +82,8 @@ test_traverse(__global uchar16* tree, __global int4* results, __local uchar* ltr
     short4 root = (short4)(0,0,0,3); //rootlevel is 3 in these bit trees
     for (int k=0;k<10000;k++)
     {
-      uchar16 tbuff = (*tree);
+      int4 ibuff = (*tree);
+      uchar16 tbuff = as_uchar16(ibuff);
       ltree[0] = tbuff.s0; ltree[1] = tbuff.s1; ltree[2] = tbuff.s2; ltree[3] = tbuff.s3; 
       ltree[4] = tbuff.s4; ltree[5] = tbuff.s5; ltree[6] = tbuff.s6; ltree[7] = tbuff.s7; 
       ltree[8] = tbuff.s8; ltree[9] = tbuff.s9; ltree[10] = tbuff.sa;ltree[11] = tbuff.sb; 

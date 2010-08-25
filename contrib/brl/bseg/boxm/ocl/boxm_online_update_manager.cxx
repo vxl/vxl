@@ -53,13 +53,15 @@ bool boxm_online_update_manager::
 build_program(vcl_string const& functor, bool use_cell_data)
 {
   vcl_string root = vcl_string(VCL_SOURCE_ROOT_DIR);
-  bool octr = this->load_kernel_source(root + "/contrib/brl/bseg/boxm/ocl/octree_library_functions.cl");
-  bool bpr  = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/backproject.cl");
-  bool stat = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/statistics_library_functions.cl");
-  bool rbun = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/ray_bundle_library_functions.cl");
-  bool main = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/update_main.cl");
+  bool locc = this->load_kernel_source(root + "/contrib/brl/bseg/boxm/ocl/cl/loc_code_library_functions.cl");
+  bool cell = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/cell_utils.cl");
+  bool octr = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/octree_library_functions.cl");
+  bool bpr  = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/backproject.cl");
+  bool stat = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/statistics_library_functions.cl");
+  bool rbun = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/ray_bundle_library_functions.cl");
+  bool main = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/update_main.cl");
 
-  if (!octr||!bpr||!stat||!rbun||!main) {
+  if (!octr||!bpr||!stat||!rbun||!main||!locc||!cell) {
     vcl_cerr << "Error: boxm_ray_trace_manager : failed to load kernel source (helper functions)\n";
     return false;
   }

@@ -198,57 +198,57 @@ static void compare_traverse()
   /////////////////////////////////////////////////////////////////////////
   //////// 1. test bit_tree traverse
   /////////////////////////////////////////////////////////////////////////
-  //bit_tree_test_manager* test_mgr = bit_tree_test_manager::instance();
-  //if(!test_mgr){
-    //vcl_cout<<"bit_tree_test instance failed"<<vcl_endl;
-    //return;
-  //}
-  //test_mgr->init_arrays();
+  bit_tree_test_manager* test_mgr = bit_tree_test_manager::instance();
+  if(!test_mgr){
+    vcl_cout<<"bit_tree_test instance failed"<<vcl_endl;
+    return;
+  }
+  test_mgr->init_arrays();
   
-  ////set tree in manager
-  //boct_bit_tree test_tree = boct_bit_tree(btree);
-  //test_mgr->set_tree(test_tree.get_bits());
-  //test_mgr->init_manager();
+  //set tree in manager
+  boct_bit_tree test_tree = boct_bit_tree(btree);
+  test_mgr->set_tree(test_tree.get_bits());
+  test_mgr->init_manager();
   
-  ////run traverse;
-  //good=test_mgr->run_test(2); 
-  //TEST("Bit tree traverse runs ", good, true);
-  //results = test_mgr->get_output();
-  //for(int i=0; i<16; i++)
-    //vcl_cout<<results[i]<<vcl_endl;
+  //run traverse;
+  good=test_mgr->run_test(2); 
+  TEST("Bit tree traverse runs ", good, true);
+  results = test_mgr->get_output();
+  for(int i=0; i<16; i++)
+    vcl_cout<<results[i]<<vcl_endl;
 
   
   /////////////////////////////////////////////////////////////////////
   //// 2. test ocl scene tree
   /////////////////////////////////////////////////////////////////////
-  ocl_scene_test_manager* ocl_mgr = ocl_scene_test_manager::instance();
-  if(!ocl_mgr) {
-    vcl_cout<<"OCL Manager instance failed"<<vcl_endl;
-    return;
-  }
-  ocl_mgr->init_arrays();
+  //ocl_scene_test_manager* ocl_mgr = ocl_scene_test_manager::instance();
+  //if(!ocl_mgr) {
+    //vcl_cout<<"OCL Manager instance failed"<<vcl_endl;
+    //return;
+  //}
+  //ocl_mgr->init_arrays();
   
-  //set up tree
-  typedef vnl_vector_fixed<int,4> int4;
-  typedef vnl_vector_fixed<float,16> float16;
-  int4 arr_root(0);
-  arr_root[0] = -1; //no parent for root
-  arr_root[1] = -1; // no children yet
-  vcl_vector<int4> cell_array;
-  cell_array.push_back(arr_root);
-  vcl_vector<float16> data_array;
-  float16 dat_init(0.0);
-  data_array.push_back(dat_init);
-  boxm_ocl_convert<float>::copy_to_arrays(btree->root(), cell_array, data_array, 0);
-  ocl_mgr->set_tree(cell_array);
+  ////set up tree
+  //typedef vnl_vector_fixed<int,4> int4;
+  //typedef vnl_vector_fixed<float,16> float16;
+  //int4 arr_root(0);
+  //arr_root[0] = -1; //no parent for root
+  //arr_root[1] = -1; // no children yet
+  //vcl_vector<int4> cell_array;
+  //cell_array.push_back(arr_root);
+  //vcl_vector<float16> data_array;
+  //float16 dat_init(0.0);
+  //data_array.push_back(dat_init);
+  //boxm_ocl_convert<float>::copy_to_arrays(btree->root(), cell_array, data_array, 0);
+  //ocl_mgr->set_tree(cell_array);
   
-  //run traverse;
-  ocl_mgr->init_manager();
-  good = ocl_mgr->run_test(0);
-  TEST("Ocl tree traverse runs ", good, true);
-  results = ocl_mgr->get_output();
-  for(int i=0; i<16; i++)
-    vcl_cout<<results[i]<<vcl_endl;
+  ////run traverse;
+  //ocl_mgr->init_manager();
+  //good = ocl_mgr->run_test(0);
+  //TEST("Ocl tree traverse runs ", good, true);
+  //results = ocl_mgr->get_output();
+  //for(int i=0; i<16; i++)
+    //vcl_cout<<results[i]<<vcl_endl;
   
 }
 

@@ -31,12 +31,12 @@ IF(OPENCL_FOUND)
      )
 
   SET(bomx_ocl_cl_files
-      octree_library_functions.cl
-      ray_trace_main.cl
-      refine_main.cl
-      expected_functor.cl
-      ray_bundle_library_functions.cl
-      update_main.cl
+      cl/octree_library_functions.cl
+      cl/ray_trace_main.cl
+      cl/refine_main.cl
+      cl/expected_functor.cl
+      cl/ray_bundle_library_functions.cl
+      cl/update_main.cl
      )
   AUX_SOURCE_DIRECTORY(Templates boxm_ocl_sources)
   ADD_LIBRARY(boxm_ocl ${boxm_ocl_sources} ${bomx_ocl_cl_files})

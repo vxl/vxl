@@ -33,13 +33,15 @@ bool boxm_update_ocl_scene_manager::
 build_program(vcl_string const& functor, bool use_cell_data)
 {
   vcl_string root = vcl_string(VCL_SOURCE_ROOT_DIR);
-  bool octr = this->load_kernel_source(root + "/contrib/brl/bseg/boxm/ocl/octree_library_functions.cl");
-  bool bpr  = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/backproject.cl");
-  bool stat = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/statistics_library_functions.cl");
-  bool rbun = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/ray_bundle_library_functions.cl");
-  bool main = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/update_ocl_scene.cl");
+  bool locc = this->load_kernel_source(root + "/contrib/brl/bseg/boxm/ocl/cl/loc_code_library_functions.cl");
+  bool cell = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/cell_utils.cl");
+  bool octr = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/octree_library_functions.cl");
+  bool bpr  = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/backproject.cl");
+  bool stat = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/statistics_library_functions.cl");
+  bool rbun = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/ray_bundle_library_functions.cl");
+  bool main = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/update_ocl_scene.cl");
 
-  if (!octr||!bpr||!stat||!rbun||!main) {
+  if (!octr||!bpr||!stat||!rbun||!main||!locc||!cell) {
     vcl_cerr << "Error: boxm_ray_trace_manager : failed to load kernel source (helper functions)\n";
     return false;
   }
@@ -72,14 +74,16 @@ bool
 boxm_update_ocl_scene_manager::build_rendering_program()
 {
     vcl_string root = vcl_string(VCL_SOURCE_ROOT_DIR);
-    bool octr = this->load_kernel_source(root + "/contrib/brl/bseg/boxm/ocl/octree_library_functions.cl");
-    bool bpr  = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/backproject.cl");
-    bool stat = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/statistics_library_functions.cl");
-    bool exp  = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/expected_functor.cl");
-    bool rbun = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/ray_bundle_library_functions.cl");
-    bool main = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/ray_trace_ocl_scene.cl");
+    bool locc = this->load_kernel_source(root + "/contrib/brl/bseg/boxm/ocl/cl/loc_code_library_functions.cl");
+    bool cell = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/cell_utils.cl");
+    bool octr = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/octree_library_functions.cl");
+    bool bpr  = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/backproject.cl");
+    bool stat = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/statistics_library_functions.cl");
+    bool exp  = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/expected_functor.cl");
+    bool rbun = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/ray_bundle_library_functions.cl");
+    bool main = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/ray_trace_ocl_scene.cl");
 
-    if (!octr||!bpr||!exp||!stat||!rbun||!main) {
+    if (!octr||!bpr||!exp||!stat||!rbun||!main||!locc||!cell) {
         vcl_cerr << "Error: boxm_ray_trace_manager : failed to load kernel source (helper functions)\n";
         return false;
     }
@@ -107,10 +111,12 @@ bool
 boxm_update_ocl_scene_manager::build_refining_program()
 {
     vcl_string root = vcl_string(VCL_SOURCE_ROOT_DIR);
-    bool octr = this->load_kernel_source(root + "/contrib/brl/bseg/boxm/ocl/octree_library_functions.cl");
-    bool refn = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/refine_blocks_opt.cl");
+    bool locc = this->load_kernel_source(root + "/contrib/brl/bseg/boxm/ocl/cl/loc_code_library_functions.cl");
+    bool cell = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/cell_utils.cl");
+    bool octr = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/octree_library_functions.cl");
+    bool refn = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/refine_blocks_opt.cl");
 
-    if (!refn || !octr) {
+    if (!refn || !octr || !locc || !cell) {
       vcl_cerr << "Error: boxm_ray_trace_manager : failed to load kernel source (helper functions)\n";
       return false;
     }

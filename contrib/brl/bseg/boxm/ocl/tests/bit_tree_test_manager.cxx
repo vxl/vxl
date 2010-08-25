@@ -56,10 +56,12 @@ bool bit_tree_test_manager::init_manager()
 bool bit_tree_test_manager::build_test_program()
 {
   vcl_string root = vcl_string(VCL_SOURCE_ROOT_DIR);
-  bool bitr = this->load_kernel_source(root + "/contrib/brl/bseg/boxm/ocl/bit_tree_library_functions.cl");
+  bool locc = this->load_kernel_source(root + "/contrib/brl/bseg/boxm/ocl/cl/loc_code_library_functions.cl");
+  bool cell = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/cell_utils.cl");
+  bool bitr = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/bit_tree_library_functions.cl");
   bool test = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/tests/bit_tree_test_kernels.cl");
 
-  if (!bitr || !test) {
+  if (!bitr || !test || !locc || !cell) {
     vcl_cerr << "Error: bit_tree_test_manager : failed to load kernel source (helper functions)\n";
     return false;
   }

@@ -24,20 +24,24 @@ bool boxm_render_ocl_scene_manager::init_ray_trace(boxm_ocl_scene *scene,
   output_img_=obs;
 
   // Code for Pass_0
-  if (!this->load_kernel_source(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                +"/contrib/brl/bseg/boxm/ocl/octree_library_functions.cl") ||
+  if (!this->load_kernel_source(vcl_string(VCL_SOURCE_ROOT_DIR) 
+                                + "/contrib/brl/bseg/boxm/ocl/cl/loc_code_library_functions.cl") ||
       !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                    +"/contrib/brl/bseg/boxm/ocl/backproject.cl")||
+                                + "/contrib/brl/bseg/boxm/ocl/cl/cell_utils.cl") ||
       !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                    +"/contrib/brl/bseg/boxm/ocl/statistics_library_functions.cl")||
+                                +"/contrib/brl/bseg/boxm/ocl/cl/octree_library_functions.cl") ||
       !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                    +"/contrib/brl/bseg/boxm/ocl/expected_functor.cl")||
+                                    +"/contrib/brl/bseg/boxm/ocl/cl/backproject.cl")||
       !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                    +"/contrib/brl/bseg/boxm/ocl/ray_bundle_library_functions.cl")||
+                                    +"/contrib/brl/bseg/boxm/ocl/cl/statistics_library_functions.cl")||
       !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                    +"/contrib/brl/bseg/boxm/ocl/rerender.cl")||
+                                    +"/contrib/brl/bseg/boxm/ocl/cl/expected_functor.cl")||
       !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                    +"/contrib/brl/bseg/boxm/ocl/ray_trace_ocl_scene.cl")) {
+                                    +"/contrib/brl/bseg/boxm/ocl/cl/ray_bundle_library_functions.cl")||
+      !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
+                                    +"/contrib/brl/bseg/boxm/ocl/cl/rerender.cl")||
+      !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
+                                    +"/contrib/brl/bseg/boxm/ocl/cl/ray_trace_ocl_scene.cl")) {
     vcl_cerr << "Error: boxm_ray_trace_manager : failed to load kernel source (helper functions)\n";
     return false;
   }
