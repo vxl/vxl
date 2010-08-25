@@ -10,7 +10,7 @@
 //
 // \verbatim
 //  Modifications
-//   16 Aug 2010 - Gamze Tunali - added is_identity(), b_read(), b_write(),vsl_b_write()
+//   16 Aug 2010 - Gamze Tunali - added is_identity()
 //   22 Oct 2002 - Peter Vanroose - added vgl_homg_point_2d interface
 //   23 Oct 2002 - Peter Vanroose - using fixed 3x3 matrices throughout
 //   22 Mar 2003 - J.L. Mundy - preparing for upgrade to vgl
@@ -24,7 +24,6 @@
 #include <vgl/vgl_homg_line_2d.h>
 #include <vgl/vgl_conic.h>
 #include <vcl_iosfwd.h>
-#include <vsl/vsl_binary_io.h>
 
 //:
 // A class to hold a plane-to-plane projective transformation matrix
@@ -175,26 +174,10 @@ class vgl_h_matrix_2d
 
   bool read(vcl_istream& s);
   bool read(char const* filename);
-
-  void b_write(vsl_b_ostream& bfs) const;
-  void b_read(vsl_b_istream& bfs);
-  short version_no() const { return 1; }
 };
 
 template <class T> vcl_ostream& operator<<(vcl_ostream& s, vgl_h_matrix_2d<T> const& h);
 template <class T> vcl_istream& operator>>(vcl_istream& s, vgl_h_matrix_2d<T>&       h);
-
-template <class T> void vsl_b_write(vsl_b_ostream &os, vgl_h_matrix_2d<T> const* t)
-{
-  if (t==0) {
-    vsl_b_write(os, false); // Indicate null pointer stored
-  }
-  else{
-    vsl_b_write(os,true); // Indicate non-null pointer stored
-    t->b_write(os);
-  }
-}
-
 
 #define VGL_H_MATRIX_2D_INSTANTIATE(T) extern "please include vgl/algo/vgl_h_matrix_2d.txx first"
 
