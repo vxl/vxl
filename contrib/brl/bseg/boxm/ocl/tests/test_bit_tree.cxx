@@ -191,28 +191,31 @@ static void test_traverse_force(bit_tree_test_manager* test_mgr, boct_tree<short
 
 static void compare_traverse()
 {  
-  /////////////////////////////////////////////////////////////////////
-  //// 1. test bit_tree traverse
-  /////////////////////////////////////////////////////////////////////
-  bit_tree_test_manager* test_mgr = bit_tree_test_manager::instance();
-  if(!test_mgr){
-    vcl_cout<<"bit_tree_test instance failed"<<vcl_endl;
-    return;
-  }
-  test_mgr->init_arrays();
-  
-  //set tree in manager
   boct_tree<short, float>* btree = open_cl_test_data::four_tree<float>();
-  boct_bit_tree test_tree = boct_bit_tree(btree);
-  test_mgr->set_tree(test_tree.get_bits());
-  test_mgr->init_manager();
+  bool good = false;
+  cl_int* results;
   
-  //run traverse;
-  bool good=test_mgr->run_test(2); 
-  TEST("Bit tree traverse runs ", good, true);
-  cl_int* results = test_mgr->get_output();
-  for(int i=0; i<16; i++)
-    vcl_cout<<results[i]<<vcl_endl;
+  /////////////////////////////////////////////////////////////////////////
+  //////// 1. test bit_tree traverse
+  /////////////////////////////////////////////////////////////////////////
+  //bit_tree_test_manager* test_mgr = bit_tree_test_manager::instance();
+  //if(!test_mgr){
+    //vcl_cout<<"bit_tree_test instance failed"<<vcl_endl;
+    //return;
+  //}
+  //test_mgr->init_arrays();
+  
+  ////set tree in manager
+  //boct_bit_tree test_tree = boct_bit_tree(btree);
+  //test_mgr->set_tree(test_tree.get_bits());
+  //test_mgr->init_manager();
+  
+  ////run traverse;
+  //good=test_mgr->run_test(2); 
+  //TEST("Bit tree traverse runs ", good, true);
+  //results = test_mgr->get_output();
+  //for(int i=0; i<16; i++)
+    //vcl_cout<<results[i]<<vcl_endl;
 
   
   /////////////////////////////////////////////////////////////////////
@@ -255,25 +258,25 @@ static void test_bit_tree()
   vcl_cout<<"Testing Bit Tree"<<vcl_endl;
   vcl_string root_dir = testlib_root_dir();
 
-  //load up the manager for testing
-  bit_tree_test_manager* test_mgr = bit_tree_test_manager::instance();
-  TEST("bit_tree_test_manager::instance()", !test_mgr, false);
-  if (!test_mgr) return;
+  ////load up the manager for testing
+  //bit_tree_test_manager* test_mgr = bit_tree_test_manager::instance();
+  //TEST("bit_tree_test_manager::instance()", !test_mgr, false);
+  //if (!test_mgr) return;
 
-  //prepare an octree for testing
-  boct_tree<short, float>* boct_tree = open_cl_test_data::four_tree<float>();
-  //boct_tree->print(); 
+  ////prepare an octree for testing
+  //boct_tree<short, float>* boct_tree = open_cl_test_data::four_tree<float>();
+  ////boct_tree->print(); 
   
-  //prepare boct_bit_tree (test_tree)
-  boct_bit_tree test_tree = boct_bit_tree(boct_tree);
-  //vcl_cout<<"Bit Tree:"<<'\n'<<test_tree<<vcl_endl;
+  ////prepare boct_bit_tree (test_tree)
+  //boct_bit_tree test_tree = boct_bit_tree(boct_tree);
+  ////vcl_cout<<"Bit Tree:"<<'\n'<<test_tree<<vcl_endl;
   
-  //set test tree and initialize manager
-  bool init_arrays = test_mgr->init_arrays();
-  unsigned char* bits = test_tree.get_bits();
-  test_mgr->set_tree(bits);
-  bool init_mgr = test_mgr->init_manager();
-  TEST("bit_tree_test_manager::init_manager()", init_mgr, true);
+  ////set test tree and initialize manager
+  //bool init_arrays = test_mgr->init_arrays();
+  //unsigned char* bits = test_tree.get_bits();
+  //test_mgr->set_tree(bits);
+  //bool init_mgr = test_mgr->init_manager();
+  //TEST("bit_tree_test_manager::init_manager()", init_mgr, true);
 
   //Run first test
   //if (init_mgr) test_loc_code(test_mgr);

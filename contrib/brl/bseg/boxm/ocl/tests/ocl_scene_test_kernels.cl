@@ -21,6 +21,7 @@ test_ocl_traverse(__global int2* tree, __global int4* results, __local int2* ltr
   //event_t eventid = (event_t) 0;
   //event_t e = async_work_group_copy(ltree, tree, (size_t) 137, eventid);
   //wait_group_events (1, &eventid);
+  //int4 a = tree[0];
   
   short4 code, ncode;
   int n_codes = 0;
@@ -39,7 +40,7 @@ test_ocl_traverse(__global int2* tree, __global int4* results, __local int2* ltr
       cell_ptr = traverse_woffset_mod_opt(tree, 0, root, code, &found_loc_code, &global_count, 1000, 0, 0);
       data_ptr = get_data_ptr(tree[cell_ptr]);
       //cell_ptr = traverse(0, ltree, 0, root, code, &found_loc_code, &global_count); 
-      
+      results[0] = k; //to stop caching. 
     }
     int4 res = convert_int4(found_loc_code);
     results[2*i]=res;
