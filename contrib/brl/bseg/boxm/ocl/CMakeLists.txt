@@ -19,7 +19,6 @@ IF(OPENCL_FOUND)
       boxm_ocl_render_expected.h        boxm_ocl_render_expected.cxx
       boxm_stat_manager.h boxm_stat_manager.txx
       boxm_online_update_manager.h boxm_online_update_manager.cxx
-      boxm_render_single_block_manager.h boxm_render_single_block_manager.cxx
       boxm_refine_scene_manager.h boxm_refine_scene_manager.cxx
       boxm_ocl_scene.h boxm_ocl_scene.cxx
       boxm_render_ocl_scene_manager.h boxm_render_ocl_scene_manager.cxx
@@ -41,7 +40,7 @@ IF(OPENCL_FOUND)
   AUX_SOURCE_DIRECTORY(Templates boxm_ocl_sources)
   ADD_LIBRARY(boxm_ocl ${boxm_ocl_sources} ${bomx_ocl_cl_files})
 
-  TARGET_LINK_LIBRARIES(boxm_ocl bocl boxm boxm_util boxm_sample boxm_basic boct bprb bgeo vnl vnl_algo vbl_io vpgl vgl vil vbl vul ${OPENCL_LIBRARIES})
+  TARGET_LINK_LIBRARIES(boxm_ocl bocl boxm boxm_util boxm_sample boxm_basic boct bprb bgeo vnl vnl_algo vbl_io vpgl vgl vil vbl vul vsl vnl_io ${OPENCL_LIBRARIES})
 
   SUBDIRS(tests)
   SUBDIRS(pro)
