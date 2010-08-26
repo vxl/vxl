@@ -394,10 +394,10 @@ int boct_bit_tree::depth_at(int index) const
 //------ I/O ----------------------------------------------------------
 vcl_ostream& operator <<(vcl_ostream &s, boct_bit_tree &t)
 {
-  unsigned char* bits = t.get_bits();
   float* data = t.get_data();
   s << "BOCT_BIT_TREE:" << vcl_endl;
 #ifdef DEBUG
+  unsigned char* bits = t.get_bits();
   s << "bytes: " << vcl_endl;
   for (int i=0; i<16; i++)
     s << "byte "<<i<<": "<< (int) bits[i] <<vcl_endl;
