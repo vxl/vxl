@@ -10,7 +10,7 @@
 #include <boxm/basic/boxm_block_vis_graph_iterator.h>
 #include <bsta/bsta_histogram.h>
 #include <vil/vil_save.h>
-
+#include <vcl_cstdlib.h>
 //: Initializes CPU side input buffers
 //put tree structure and data into arrays
 
@@ -33,7 +33,7 @@ bool boxm_render_bit_scene_manager::init_ray_trace(boxm_ocl_bit_scene *scene,
       !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
                                     +"/contrib/brl/bseg/boxm/ocl/cl/backproject.cl")||
       !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                    +"/contrib/brl/bseg/boxm/ocl/cl/statistics_library_functions.cl")||
+                                    +"/contrib/brl/bseg/boxm/ocl/ray_bundle_library_functions.cl")||
       !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
                                     +"/contrib/brl/bseg/boxm/ocl/cl/expected_functor.cl")||
       !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
@@ -670,6 +670,11 @@ int boxm_render_bit_scene_manager::build_kernel_program(cl_program & program, bo
     options+="-D DEPTH";
   else
     options+="-D INTENSITY";
+
+  if(vcl_strstr(this->platform_name,"ATI"))
+       options+="-D ATI";
+  if(vcl_strstr(this->platform_name,"NVIDIA"))
+       options+="-D NVIDIA";
 
   vcl_cout<<"create: program"<<vcl_endl;
   program = clCreateProgramWithSource(this->context_,
