@@ -33,7 +33,7 @@ class boxm_render_bit_scene_manager : public bocl_manager<boxm_render_bit_scene_
     data_alpha_(0),
     data_mixture_(0),
     data_size_(0),
-    //shape of buffers 
+    //shape of buffers
     numbuffer_(0),
     tree_buffer_length_(0),
     data_buffer_length_(0),
@@ -47,15 +47,15 @@ class boxm_render_bit_scene_manager : public bocl_manager<boxm_render_bit_scene_
     offset_x_(0),
     offset_y_(0),
     tree_bbox_(0),
-    // camera information 
+    // camera information
     persp_cam_(0),
     ext_cam_(0),
     bni_(1), bnj_(1),
     scene_x_(0),scene_y_(0),scene_z_(0),
     wni_(1), wnj_(1),
-    output_img_(),
+    bit_lookup_(0),
     output_(0),
-    bit_lookup_(0) {}
+    output_img_() {}
 
   ~boxm_render_bit_scene_manager() {
     if (program_)
@@ -79,7 +79,7 @@ class boxm_render_bit_scene_manager : public bocl_manager<boxm_render_bit_scene_
   bool set_commandqueue();
   bool release_commandqueue();
   bool set_workspace();
-  
+
   //: set  root level
   bool set_scene_data();
   bool set_scene_data_buffers();
@@ -195,7 +195,7 @@ class boxm_render_bit_scene_manager : public bocl_manager<boxm_render_bit_scene_
   cl_uchar  * data_mixture_;
   cl_uint     data_size_;       //numbuffers_*data_buffer_length_;
 
-  //shape of buffers 
+  //shape of buffers
   cl_int numbuffer_;
   cl_int tree_buffer_length_;
   cl_int data_buffer_length_;
@@ -212,11 +212,11 @@ class boxm_render_bit_scene_manager : public bocl_manager<boxm_render_bit_scene_
   //offset for non-overlapping sections
   cl_uint    offset_x_;
   cl_uint    offset_y_;
-  
+
   // bounding box for each tree
   cl_float * tree_bbox_;
 
-  // camera information 
+  // camera information
   cl_float * persp_cam_;
   cl_float * ext_cam_;
   cl_uint    bni_;
@@ -229,7 +229,7 @@ class boxm_render_bit_scene_manager : public bocl_manager<boxm_render_bit_scene_
   // greater than or equal to image dimensions
   cl_uint    wni_;
   cl_uint    wnj_;
-  
+
   //bit lookup table
   cl_uchar*  bit_lookup_;
   //debugger
