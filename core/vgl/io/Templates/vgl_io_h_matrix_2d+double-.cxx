@@ -1,0 +1,4 @@
+// Instantiation of IO for vgl_h_matrix_2d<double>
+#include <vgl/io/vgl_io_h_matrix_2d.txx>
+
+VGL_IO_H_MATRIX_2D_INSTANTIATE(double);
