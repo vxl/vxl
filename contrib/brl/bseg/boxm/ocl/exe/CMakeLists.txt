@@ -56,6 +56,9 @@ ADD_EXECUTABLE( boxm_ocl_rerender_adjacent_frames_exe
  )
 TARGET_LINK_LIBRARIES( boxm_ocl_rerender_adjacent_frames_exe boxm_ocl vil vpgl_algo  vul )
 
+ADD_EXECUTABLE( boxm_ocl_change_detection_roc_exe boxm_ocl_change_detection_roc.cxx)
+TARGET_LINK_LIBRARIES( boxm_ocl_change_detection_roc_exe  boxm_ocl vil vpgl_algo  vul )
+
 ADD_EXECUTABLE( boxm_ocl_render_bit_exe 
   boxm_ocl_render_bit_exe.cxx
 )
