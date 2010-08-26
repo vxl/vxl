@@ -603,9 +603,7 @@ void boxm_ocl_convert<T>::convert_bit_scene(boxm_scene<boct_tree<short, T> >* sc
 
       //copy data into data buffer (keep track of start index for tree)
       float* data = currTree.get_data();
-      unsigned short buffOffset = mem_ptrs[buffIndex][1]-1; //minus one cause mem_end points to one past the last one
-      unsigned short start = mem_ptrs[buffIndex][0];
-      unsigned short end   = mem_ptrs[buffIndex][1];
+      unsigned short buffOffset = mem_ptrs[buffIndex][1]-1; //minus one, because mem_end points to one past the last one
       for (unsigned int c=0; c<cell_array.size(); ++c) {
         //create float16 datum
         float16 datum;
