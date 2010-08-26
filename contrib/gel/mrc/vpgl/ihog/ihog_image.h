@@ -16,18 +16,15 @@ class ihog_image
   //  Creates an empty one-plane image.
   ihog_image() {}
 
-
   //: Construct an image of size (ni, nj, np) with optional world_to_image transform.
   ihog_image(unsigned ni, unsigned nj, unsigned np=1,
              const ihog_transform_2d& w2i=ihog_transform_2d())
     : xform_(w2i), image_(ni, nj, np) {}
 
-
   //: Construct from a view and optional world-to-image transform (takes copies of both).
   explicit ihog_image(const vil_image_view<T>& view,
                       const ihog_transform_2d& w2i=ihog_transform_2d())
-    : xform_(w2i), image_(view) {}
-
+    : image_(view), xform_(w2i) {}
 
   //: Destructor
   virtual ~ihog_image() {}
