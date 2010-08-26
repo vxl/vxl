@@ -498,8 +498,8 @@ foreach my $dir (@DIRS)
     delete $hsources{$s};
     unless (exists $hfiles{$s})
     {
-      if (-f "$dir/$s") { print "$s\tis missing from filelist in $0 for $dir" unless ($shell); }
-      else              { &removing_message("$s", $cmakef, '# !!'); }
+      if (!-f "$dir/$s") { &removing_message("$s", $cmakef, '# !!'); }
+#     else               { print "$s\tis missing from filelist in $0 for $dir" unless ($shell); }
     }
     delete $hfiles{$s};
     unless (exists $hsource{$s})
