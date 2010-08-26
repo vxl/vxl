@@ -83,7 +83,7 @@ void boxm_ocl_scene_rerender(boxm_ocl_scene &scene,
       ray_mgr->init_ray_trace(&scene, prevcam, previmg,true);
       ray_mgr->start(true);
     }
-    else
+    //else
     {
       vcl_ifstream ifs(camfiles[curr_frame].c_str());
       if (!ifs.is_open()) {
@@ -116,7 +116,7 @@ void boxm_ocl_scene_rerender(boxm_ocl_scene &scene,
       vcl_cout<<"Saving to "<<filename<<vcl_endl;
       ray_mgr->save_rerender_image(out_dir+"/"+filename+".tiff");
 
-      *prevcam=*currcam;
+      (*prevcam)=(*currcam);
       previmg=currimg;
     }
   }
