@@ -111,6 +111,12 @@ SOURCE=.\ihog_world_roi.cxx
 SOURCE=.\ihog_minimizer.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\ihog_transform_2d.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\ihog_sample_grid_bilin.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+ihog_world_roi-.cxx
 # End Source File
 # Begin Source File
@@ -157,6 +163,12 @@ SOURCE=.\ihog_cost_func.h
 # End Source File
 # Begin Source File
 SOURCE=.\ihog_minimizer.h
+# End Source File
+# Begin Source File
+SOURCE=.\ihog_image.h
+# End Source File
+# Begin Source File
+SOURCE=.\ihog_sample_grid_bilin.h
 # End Source File
 # End Group
 # End Target
