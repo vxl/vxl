@@ -98,25 +98,22 @@ LIB32=link.exe -lib
 SOURCE=.\boxm_ocl_utils.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\octree_library_functions.cl
+SOURCE=.\cl/octree_library_functions.cl
 # End Source File
 # Begin Source File
-SOURCE=.\expected_functor.cl
+SOURCE=.\cl/expected_functor.cl
 # End Source File
 # Begin Source File
-SOURCE=.\ray_trace_main.cl
+SOURCE=.\cl/ray_trace_main.cl
 # End Source File
 # Begin Source File
-SOURCE=.\refine_main.cl
+SOURCE=.\cl/refine_main.cl
 # End Source File
 # Begin Source File
-SOURCE=.\ray_bundle_library_functions.cl
+SOURCE=.\cl/ray_bundle_library_functions.cl
 # End Source File
 # Begin Source File
-SOURCE=.\update_main.cl
-# End Source File
-# Begin Source File
-SOURCE=.\boxm_render_single_block_manager.cxx
+SOURCE=.\cl/update_main.cl
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_online_update_manager.cxx
@@ -245,9 +242,6 @@ SOURCE=.\Templates/bocl_manager+boxm_render_image_manager+boxm_sample+BOXM_APM_S
 SOURCE=.\Templates/bocl_manager+boxm_online_update_manager-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bocl_manager+boxm_render_single_block_manager-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/bocl_manager+boxm_refine_scene_manager-.cxx
 # End Source File
 # Begin Source File
@@ -354,9 +348,6 @@ SOURCE=.\boxm_render_image_manager.txx
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_online_update_manager.h
-# End Source File
-# Begin Source File
-SOURCE=.\boxm_render_single_block_manager.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_refine_scene_manager.h

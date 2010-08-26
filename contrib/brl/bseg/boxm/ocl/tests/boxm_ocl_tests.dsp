@@ -101,6 +101,12 @@ SOURCE=.\test_driver.cxx
 SOURCE=.\open_cl_test_data.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\bit_tree_test_manager.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\ocl_scene_test_manager.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_octree.cxx
 # End Source File
 # Begin Source File
@@ -135,9 +141,6 @@ SOURCE=.\test_scene_convert.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_camera.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bit_tree_test_manager.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_bit_tree.cxx
@@ -178,6 +181,9 @@ SOURCE=.\Templates/online_update_test_manager+float-.cxx
 # Begin Source File
 SOURCE=.\Templates/bocl_manager+bit_tree_test_manager-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/bocl_manager+ocl_scene_test_manager-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -210,6 +216,9 @@ SOURCE=.\online_update_test_manager.h
 # End Source File
 # Begin Source File
 SOURCE=.\bit_tree_test_manager.h
+# End Source File
+# Begin Source File
+SOURCE=.\ocl_scene_test_manager.h
 # End Source File
 # End Group
 # End Target
