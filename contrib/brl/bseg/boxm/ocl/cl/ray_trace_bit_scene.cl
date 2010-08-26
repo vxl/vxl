@@ -1,4 +1,7 @@
-#pragma OPENCL EXTENSION cl_khr_gl_sharing : enable
+#if NVIDIA
+ #pragma OPENCL EXTENSION cl_khr_gl_sharing : enable
+#endif
+
 //RAY_TRACE_BIT_SCENE
 //uses uchar16 tree cells and uchar8 mixture cells
 __kernel
@@ -463,3 +466,4 @@ ray_trace_bit_scene_opt(__global  int4    * scene_dims,
   //output[0] = (float4) ((float) tree_len, (float) data_len, (float) num_buffer, 0.0);
 }
 
+>>>>>>> .r29368

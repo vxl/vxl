@@ -1,5 +1,10 @@
-const sampler_t RowSampler = CLK_NORMALIZED_COORDS_FALSE | CLK_ADDRESS_CLAMP_TO_EDGE | CLK_FILTER_NEAREST;
+#if ATI
+__constant sampler_t RowSampler = CLK_NORMALIZED_COORDS_FALSE | CLK_ADDRESS_CLAMP_TO_EDGE | CLK_FILTER_NEAREST;
+#endif
 
+#if NVIDIA
+const sampler_t RowSampler = CLK_NORMALIZED_COORDS_FALSE | CLK_ADDRESS_CLAMP_TO_EDGE | CLK_FILTER_NEAREST;
+#endif
 //RAY_TRACE_OCL_SCENE_OPT
 //uses int2 tree cells and uchar8 mixture cells
 __kernel
@@ -226,64 +231,73 @@ rerender_ocl_scene_opt(__global float   * depth_image_view1,
       in_image[j*get_global_size(0)+i]=(float)0.0;
       return;
   }
+#if 0
  float4 weighted_intensity=read_imagef(intensity_image_view2,RowSampler,point2d);
  weighted_intensity*=exp(-data_return);
  gl_rerender_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)weighted_intensity);
  in_image[j*get_global_size(0)+i]=(float)weighted_intensity.x;
+#endif
+
+#if 1
+ if(exp(-data_return)>0.5)
+    in_image[j*get_global_size(0)+i]=(float)point2d.x;
+ else
+     in_image[j*get_global_size(0)+i]=(float)-1.0f;
+#endif
 }
 
-__kernel
-void rerender_view(__read_only image2d_t in_image,     // input image which will be rendered on another view
-                   __global float16* in_cam,       // has to be acutal camera + camera center;
-                   __global float16* novel_cam,    // novel inv  camera
-                   __global float* depth_image,
-                   __global uint4* imgdims,
-                   __global uint * gl_rerender_image,
-                   __local  float16 * local_copy_cam)
-{
-    uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
-    // get image coordinates
-    int i=0,j=0;
-    map_work_space_2d(&i,&j);
-    if (llid == 0 )
-    {
-        local_copy_cam[0]=novel_cam[0];  // conjugate transpose of U
-        local_copy_cam[1]=novel_cam[1];  // V
-        local_copy_cam[2]=novel_cam[2];  // Winv(first4) and ray_origin(last four)
-    }
-    barrier(CLK_LOCAL_MEM_FENCE);
-
-    if (i>=(*imgdims).z || j>=(*imgdims).w)
-        return;
-
-    float4 ray_o=(float4)local_copy_cam[2].s4567;
-    ray_o.w=1.0f;
-
-    float4 ray_d = backproject(i,j,local_copy_cam[0],
-                               local_copy_cam[1],
-                               local_copy_cam[2],ray_o);
-    if (depth_image[j*get_global_size(0)+i]<0.0f)
-    {
-        gl_rerender_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)0.0f);
-        return;
-    }
-
-    float4 point3d=ray_o+depth_image[j*get_global_size(0)+i]*ray_d;
-
-
-    point3d.w=1;
-    float2 point2d=0.0f;
-    float16 project_cam=(*in_cam);
-    if (!project(project_cam,point3d,&point2d))
-    {
-        gl_rerender_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)0.0f);
-        return;
-    }
-    if (point2d.x<0 || point2d.y<0 || point2d.x>=(*imgdims).z || point2d.y>=(*imgdims).w)
-    {
-        gl_rerender_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)point2d.x/1280);
-        return;
-    }
-    gl_rerender_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)read_imagef(in_image,RowSampler,point2d));
-    return;
-}
+//__kernel
+//void rerender_view(__read_only image2d_t in_image,     // input image which will be rendered on another view
+//                   __global float16* in_cam,       // has to be acutal camera + camera center;
+//                   __global float16* novel_cam,    // novel inv  camera
+//                   __global float* depth_image,
+//                   __global uint4* imgdims,
+//                   __global uint * gl_rerender_image,
+//                   __local  float16 * local_copy_cam)
+//{
+//    uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
+//    // get image coordinates
+//    int i=0,j=0;
+//    map_work_space_2d(&i,&j);
+//    if (llid == 0 )
+//    {
+//        local_copy_cam[0]=novel_cam[0];  // conjugate transpose of U
+//        local_copy_cam[1]=novel_cam[1];  // V
+//        local_copy_cam[2]=novel_cam[2];  // Winv(first4) and ray_origin(last four)
+//    }
+//    barrier(CLK_LOCAL_MEM_FENCE);
+//
+//    if (i>=(*imgdims).z || j>=(*imgdims).w)
+//        return;
+//
+//    float4 ray_o=(float4)local_copy_cam[2].s4567;
+//    ray_o.w=1.0f;
+//
+//    float4 ray_d = backproject(i,j,local_copy_cam[0],
+//                               local_copy_cam[1],
+//                               local_copy_cam[2],ray_o);
+//    if (depth_image[j*get_global_size(0)+i]<0.0f)
+//    {
+//        gl_rerender_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)0.0f);
+//        return;
+//    }
+//
+//    float4 point3d=ray_o+depth_image[j*get_global_size(0)+i]*ray_d;
+//
+//
+//    point3d.w=1;
+//    float2 point2d=0.0f;
+//    float16 project_cam=(*in_cam);
+//    if (!project(project_cam,point3d,&point2d))
+//    {
+//        gl_rerender_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)0.0f);
+//        return;
+//    }
+//    if (point2d.x<0 || point2d.y<0 || point2d.x>=(*imgdims).z || point2d.y>=(*imgdims).w)
+//    {
+//        gl_rerender_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)point2d.x/1280);
+//        return;
+//    }
+//    gl_rerender_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)read_imagef(in_image,RowSampler,point2d));
+//    return;
+//}

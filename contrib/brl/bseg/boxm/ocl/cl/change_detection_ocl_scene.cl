@@ -216,7 +216,7 @@ change_detection_ocl_scene(__global int4    * scene_dims,  // level of the root.
       fg_belief=foreground_density_val/(foreground_density_val+data_return.z)-data_return.z/(2*foreground_density_val);
   }
   float4 outputval=(float4)(fg_belief,0,0,1);
-
+  //float4 outputval=(float4)(1-data_return.z/(1+data_return.z),1-data_return.z/(1+data_return.z),1-data_return.z/(1+data_return.z),1);
   gl_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)outputval);
-  in_image[j*get_global_size(0)+i]=(float4)fg_belief;
+  in_image[j*get_global_size(0)+i]=(float4)outputval.x;
 }
