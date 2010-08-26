@@ -4,13 +4,13 @@
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_inverse.h>
+#include <vgl/io/vgl_io_h_matrix_2d.h>
 
 void ihog_transform_2d::b_write(vsl_b_ostream& bfs) const
 {
     vsl_b_write(bfs,version_no());
     vsl_b_write(bfs,int(form_));
-    const vgl_h_matrix_2d<double> m(t12_matrix_);
-    vsl_b_write(bfs,&m);
+    vsl_b_write(bfs,vgl_h_matrix_2d<double>(t12_matrix_));
 }
 
 void ihog_transform_2d::b_read(vsl_b_istream& bfs)
@@ -23,7 +23,7 @@ void ihog_transform_2d::b_read(vsl_b_istream& bfs)
     switch (version) {
     case 1:
         vsl_b_read(bfs,f); form_=Form(f);
-        vgl_h_matrix_2d<double>::b_read(bfs);
+        vsl_b_read(bfs, (vgl_h_matrix_2d<double>&)(*this));
         break;
     default:
         vcl_cerr << "I/O ERROR: ihog_transform_2d::b_read(vsl_b_istream&)\n"
