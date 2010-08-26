@@ -7,6 +7,7 @@ MANPAGE_SOURCES += ray_bundle_test_driver.txx
 MANPAGE_SOURCES += stat_test_driver.txx
 MANPAGE_SOURCES += online_update_test_manager.txx
 SOURCES += bit_tree_test_manager.cxx
+SOURCES += ocl_scene_test_manager.cxx
 
 TESTS += test_octree.cxx
 TESTS += test_expected_image.cxx

@@ -4,20 +4,13 @@ LIBRARY := boxm-ocl
 
 SOURCES += boxm_ocl_utils.cxx
 MANPAGE_SOURCES += boxm_ocl_utils.txx
-SOURCES += octree_library_functions.cl
 MANPAGE_SOURCES += boxm_ray_trace_manager.txx
 MANPAGE_SOURCES += boxm_ocl_render_expected.h
-SOURCES += expected_functor.cl
-SOURCES += ray_trace_main.cl
 MANPAGE_SOURCES += boxm_stat_manager.txx
-SOURCES += refine_main.cl
-SOURCES += ray_bundle_library_functions.cl
 MANPAGE_SOURCES += boxm_ocl_refine_scene.h
 MANPAGE_SOURCES += boxm_ray_bundle_trace_manager.txx
 MANPAGE_SOURCES += boxm_refine_manager.txx
-SOURCES += update_main.cl
 MANPAGE_SOURCES += boxm_render_image_manager.txx
-SOURCES += boxm_render_single_block_manager.cxx
 SOURCES += boxm_online_update_manager.cxx
 SOURCES += boxm_refine_scene_manager.cxx
 SOURCES += boxm_ocl_scene.cxx
@@ -29,6 +22,13 @@ MANPAGE_SOURCES += boxm_ocl_camera_manager.h
 SOURCES += boxm_ocl_camera_manager.cxx
 SOURCES += boxm_render_bit_scene_manager.cxx
 SOURCES += boxm_ocl_bit_scene.cxx
+
+SOURCES += cl/octree_library_functions.cl
+SOURCES += cl/ray_trace_main.cl
+SOURCES += cl/update_main.cl
+SOURCES += cl/refine_main.cl
+SOURCES += cl/ray_bundle_library_functions.cl
+SOURCES += cl/expected_functor.cl
 
 SUBDIRS += pro exe view
 
