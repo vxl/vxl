@@ -19,7 +19,7 @@ AUX_SOURCE_DIRECTORY(Templates ihog_sources)
 
 ADD_LIBRARY(ihog  ${ihog_sources})
 
-TARGET_LINK_LIBRARIES(ihog vnl vil vbl vgl_io vgl_algo vil_algo vsl)
+TARGET_LINK_LIBRARIES(ihog vnl vil vbl vgl_io vgl_algo vil_algo vsl vul)
 
 IF( BUILD_EXAMPLES )
 #  SUBDIRS( examples )
