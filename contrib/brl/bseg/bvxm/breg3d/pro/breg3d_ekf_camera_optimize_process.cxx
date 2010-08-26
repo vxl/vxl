@@ -116,7 +116,7 @@ bool breg3d_ekf_camera_optimize_process::execute()
   // get appearance model type
   vcl_string apm_type = input5->value();
   // get bin index
-  unsigned bin_idx = input6->value();
+  unsigned bin_idx = input6->value(); // FIXME: unused
 
   // get parameters
   double rot_var_measure, pos_var_measure;
