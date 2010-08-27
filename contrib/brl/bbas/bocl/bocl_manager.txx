@@ -72,6 +72,9 @@ bool bocl_manager<T>::initialize_cl()
     vcl_cerr << "bocl_manager: clGetPlatformIDs (call 2) returned " << status << '\n';
     return false;
   }
+
+  vcl_size_t ret_size;
+  
   bool gpu_found=false;
   bool cpu_found=false;
 
@@ -79,8 +82,11 @@ bool bocl_manager<T>::initialize_cl()
   //: First checking for GPU
   for (unsigned i=0;i<num_platforms;i++)
   {
+
     if ( clGetDeviceIDs(platform_id[i], CL_DEVICE_TYPE_GPU, 1, &device, NULL)== CL_SUCCESS)
     {
+        clGetPlatformInfo(platform_id[i],CL_PLATFORM_NAME,sizeof(platform_name),platform_name,&ret_size);
+
       gpu_found=true;
       break;
     }
@@ -279,6 +285,7 @@ bool bocl_manager<T>::initialize_cl()
 
   unsigned size = sizeof(vcl_size_t);
   vcl_cout << "Context Description\n"
+           << "Platform Name: "<<platform_name <<'\n'
            << " Number of devices: " << number_devices_ << '\n'
            << " Number of compute units: " << max_compute_units_ << '\n'
            << " Maximum clock frequency: " << max_clock_freq_/1000.0 << " GHz\n"
