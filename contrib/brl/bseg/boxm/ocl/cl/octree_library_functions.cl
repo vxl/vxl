@@ -1,9 +1,12 @@
-
 //---------------------------------------------------------------------
+//:
+// \file
+//
 // tree cells are arranged into int2's.  first int is either parent_ptr
 // or negative block index, second is [child_ptr | data_ptr] (as shorts)
-//Note that data_ptrs are USHORTS, while child_ptrs are merely shorts
+// Note that data_ptrs are USHORTS, while child_ptrs are merely shorts
 //---------------------------------------------------------------------
+
 int get_child_ptr(int2 cell)
 {
   short2 child_data = as_short2(cell.y);
@@ -804,5 +807,4 @@ int neighbor(__read_only image2d_t cells,int cell_ptr,  short4 cell_loc_code,
   return neighbor_ptr;
 }
 
-#endif
-
+#endif // USEIMAGE
