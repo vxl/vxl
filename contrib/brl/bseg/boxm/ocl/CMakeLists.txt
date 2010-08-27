@@ -29,7 +29,7 @@ IF(OPENCL_FOUND)
       boxm_render_bit_scene_manager.h boxm_render_bit_scene_manager.cxx
      )
 
-  SET(bomx_ocl_cl_files
+  SET(boxm_ocl_cl_files
       cl/octree_library_functions.cl
       cl/ray_trace_main.cl
       cl/refine_main.cl
@@ -38,7 +38,7 @@ IF(OPENCL_FOUND)
       cl/update_main.cl
      )
   AUX_SOURCE_DIRECTORY(Templates boxm_ocl_sources)
-  ADD_LIBRARY(boxm_ocl ${boxm_ocl_sources} ${bomx_ocl_cl_files})
+  ADD_LIBRARY(boxm_ocl ${boxm_ocl_sources} ${boxm_ocl_cl_files})
 
   TARGET_LINK_LIBRARIES(boxm_ocl bocl boxm boxm_util boxm_sample boxm_basic boct bprb bgeo vnl vnl_algo vbl_io vpgl vgl vil vbl vul vsl vnl_io ${OPENCL_LIBRARIES})
 
