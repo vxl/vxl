@@ -800,6 +800,21 @@ SOURCE=.\Templates/vnl_matrix_fixed+float.4.20-.cxx
 # Begin Source File
 SOURCE=.\Templates/vnl_vector_fixed+float.16-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_vector+ushort-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_vector_fixed+ushort.2-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_c_vector+ushort-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_matrix+ushort-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_vector_fixed+uchar.16-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
