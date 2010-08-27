@@ -13,7 +13,6 @@
 #include <vil/vil_math.h>
 #include <vcl_cstdlib.h>
 
-
 #include <vnl/vnl_matlab_filewrite.h>
 
 
@@ -21,7 +20,7 @@
 ihog_minimizer::ihog_minimizer( const ihog_image<float>& image1,
                                 const ihog_image<float>& image2,
                                 const ihog_world_roi& roi )
-                                : end_error_(0.0), from_mask_(false), to_mask_(false)
+  : end_error_(0.0), from_mask_(false), to_mask_(false)
 {
   ihog_world_roi roi_L(roi);
   int levels = 0;
@@ -52,10 +51,10 @@ ihog_minimizer::ihog_minimizer( const ihog_image<float>& image1,
 
 //: Constructor with a mask
 ihog_minimizer::ihog_minimizer( const ihog_image<float>& image1,
-                                  const ihog_image<float>& image2,
-                                  const ihog_image<float>& image_mask,
-                                  const ihog_world_roi& roi, bool image1_mask )
-                                  : end_error_(0.0), from_mask_(image1_mask), to_mask_(!image1_mask)
+                                const ihog_image<float>& image2,
+                                const ihog_image<float>& image_mask,
+                                const ihog_world_roi& roi, bool image1_mask )
+  : end_error_(0.0), from_mask_(image1_mask), to_mask_(!image1_mask)
 {
   ihog_world_roi roi_L(roi);
   int levels = 0;
@@ -82,11 +81,12 @@ ihog_minimizer::ihog_minimizer( const ihog_image<float>& image1,
   from_pyramid_=vil_pyramid_image_view<float>(image1.image());
   to_pyramid_=vil_pyramid_image_view<float>(image2.image());
   if (from_mask_) {
-    from_mask_pyramid_.set_max_level(levels); 
+    from_mask_pyramid_.set_max_level(levels);
     from_mask_pyramid_=vil_pyramid_image_view<float>(image_mask.image());
     mask_form1_=image_mask.world2im();
-  } else {
-    to_mask_pyramid_.set_max_level(levels); 
+  }
+  else {
+    to_mask_pyramid_.set_max_level(levels);
     to_mask_pyramid_=vil_pyramid_image_view<float>(image_mask.image());
     mask_form2_=image_mask.world2im();
   }
@@ -94,11 +94,11 @@ ihog_minimizer::ihog_minimizer( const ihog_image<float>& image1,
 
 //: Constructor with two masks
 ihog_minimizer::ihog_minimizer( const ihog_image<float>& image1,
-                                 const ihog_image<float>& image2,
-                                 const ihog_image<float>& image1_mask,
-                                 const ihog_image<float>& image2_mask,
-                                 const ihog_world_roi& roi)
-                                 : end_error_(0.0), from_mask_(true), to_mask_(true)
+                                const ihog_image<float>& image2,
+                                const ihog_image<float>& image1_mask,
+                                const ihog_image<float>& image2_mask,
+                                const ihog_world_roi& roi)
+  : end_error_(0.0), from_mask_(true), to_mask_(true)
 {
   ihog_world_roi roi_L(roi);
   int levels = 0;
@@ -142,7 +142,9 @@ ihog_minimizer::minimize(ihog_transform_2d& xform)
 
   vnl_vector<double> param, fx;
   xform.params(param);
-  double init_scale = vcl_pow(0.5,from_pyramid_.nlevels()+1);
+  // the expression 1.0/(1<<X) is a bit more efficient than std::pow(0.5,X),
+  // and it avoids having to #include <cmath> :       -- PVr
+  double init_scale = 1.0/(1<<(from_pyramid_.nlevels()+1));
 
   ihog_transform_2d undo_xform;
   undo_xform.set_zoom_only(1.0/init_scale,1.0/init_scale,0.0,0.0);
@@ -164,7 +166,6 @@ ihog_minimizer::minimize(ihog_transform_2d& xform)
     undo_xform = undo_xform * undo_step;
     ihog_image<float> image1(from_pyramid_(L),form1_);
     ihog_image<float> image2(to_pyramid_(L),form2_);
-
 
     ihog_image<float> im1(image1);
     ihog_image<float> im2(image2);
