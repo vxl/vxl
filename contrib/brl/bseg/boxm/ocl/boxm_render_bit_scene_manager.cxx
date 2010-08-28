@@ -671,10 +671,12 @@ int boxm_render_bit_scene_manager::build_kernel_program(cl_program & program, bo
   else
     options+="-D INTENSITY";
 
-  if(vcl_strstr(this->platform_name,"ATI"))
-       options+="-D ATI";
-  if(vcl_strstr(this->platform_name,"NVIDIA"))
-       options+="-D NVIDIA";
+#if 0
+  if (vcl_strstr(this->platform_name,"ATI"))
+    options+="-D ATI";
+  if (vcl_strstr(this->platform_name,"NVIDIA"))
+    options+="-D NVIDIA";
+#endif
 
   vcl_cout<<"create: program"<<vcl_endl;
   program = clCreateProgramWithSource(this->context_,
