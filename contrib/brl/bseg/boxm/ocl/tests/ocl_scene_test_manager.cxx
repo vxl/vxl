@@ -13,7 +13,7 @@
 
 
 bool ocl_scene_test_manager::init_arrays()
-{  
+{
   //set up buffers
   ocl_tree_ = (cl_int*) boxm_ocl_utils::alloc_aligned(137,sizeof(cl_int2),16);
   output_   = (cl_int*) boxm_ocl_utils::alloc_aligned(16,sizeof(cl_float4),16);
@@ -22,14 +22,14 @@ bool ocl_scene_test_manager::init_arrays()
 
 //: init manager - initializes all opencl stuff (command queue, program, kernels... )
 bool ocl_scene_test_manager::init_manager()
-{  
-  //create command queue 
+{
+  //create command queue
   bool good = this->create_command_queue();
   //build program from source
   good = this->build_test_program();
   //create and set kernels using program
   good = good && this->set_test_kernels();
-  //prepare cl_mem buffers 
+  //prepare cl_mem buffers
   good = good && this->set_buffers();
   return good;
 }
@@ -52,21 +52,21 @@ bool ocl_scene_test_manager::build_test_program()
 
 bool ocl_scene_test_manager::set_tree(vcl_vector<int4> ocl_tree)
 {
- //init tree structure
+  //init tree structure
   int index=0;
-  for (int i = 0; i<ocl_tree.size(); i++) {
-    
+  for (unsigned int i = 0; i<ocl_tree.size(); ++i)
+  {
     //if node is root put the negative block pointer, otherwise parent
     int4 node = ocl_tree[i];
     int block   =  node[3];
     int parent  =  node[0];
-    int slotOne = (parent < 0) ? -1*block : parent; 
-      
+    int slotOne = (parent < 0) ? -1*block : parent;
+
     //pack child and data pointer as two shorts
     short child = (short)  node[1];
-    unsigned short data = (unsigned short)  node[2]; 
+    unsigned short data = (unsigned short)  node[2];
     int packed_child_data = (child << 16) | data;
-      
+
     //pack em in the cells
     ocl_tree_[index++] = slotOne;
     ocl_tree_[index++] = packed_child_data;
@@ -82,14 +82,14 @@ bool ocl_scene_test_manager::set_test_kernels()
   if (!this->release_kernels())
     return false;
 
-  //2 test kernels 
-    
+  //2 test kernels
+
   //test traverse
   cl_kernel kernel = clCreateKernel(program_,"test_ocl_traverse",&status);
   if (this->check_val(status,CL_SUCCESS,error_to_string(status))!=CHECK_SUCCESS)
     return false;
   kernels_.push_back(kernel);
-  
+
   // test_traverse_force
   kernel = clCreateKernel(program_, "test_ocl_traverse_force", &status);
   if (this->check_val(status,CL_SUCCESS,error_to_string(status))!=CHECK_SUCCESS)
@@ -112,7 +112,7 @@ bool ocl_scene_test_manager::set_kernel_args(unsigned pass)
                           sizeof(cl_mem), (void *) &ocl_tree_buf_);
   if (this->check_val(status, CL_SUCCESS, "clSetKernelArg failed. (cell_data_buf_)")!=CHECK_SUCCESS)
     return false;
- 
+
   status = clSetKernelArg(kernels_[pass], i++,
                           sizeof(cl_mem), (void *) &output_buf_);
   if (this->check_val(status, CL_SUCCESS, "clSetKernelArg failed. (data array )")!=CHECK_SUCCESS)
@@ -121,7 +121,7 @@ bool ocl_scene_test_manager::set_kernel_args(unsigned pass)
   status = clSetKernelArg(kernels_[pass], i++, 137*sizeof(cl_int2), 0);
   if (this->check_val(status, CL_SUCCESS, "clSetKernelArg failed. (local tree)")!=CHECK_SUCCESS)
     return false;
- 
+
   return true;
 }
 
@@ -134,7 +134,7 @@ bool ocl_scene_test_manager::set_buffers()
                                  137*sizeof(cl_int2),ocl_tree_,&status);
   if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (bit_tree_buf) failed."))
     return false;
-    
+
   //output_buf_
   output_buf_ = clCreateBuffer(this->context_,CL_MEM_READ_WRITE,
                                16*sizeof(cl_int4), NULL , &status);
@@ -242,13 +242,12 @@ cl_int* ocl_scene_test_manager::get_output()
 // Below are standard OpenCL Functions (that may belong in BOCL_manger
 //---------------------------------------------------------------------
 
-/*******************************************
- * build_kernel_program - builds kernel program
- * from source (a vcl string)
- *******************************************/
+/************************************************/
+/* build_kernel_program - builds kernel program */
+/* from source (a vcl string)                   */
+/************************************************/
 int ocl_scene_test_manager::build_kernel_program(cl_program & program)
 {
-
   cl_int status = CL_SUCCESS;
   vcl_size_t sourceSize[] = { this->prog_.size() };
   if (!sourceSize[0]) return SDK_FAILURE;
