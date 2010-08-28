@@ -1,6 +1,7 @@
 #include <testlib/testlib_test.h>
 #include <testlib/testlib_root_dir.h>
 #include <bocl/bocl_global_memory_bandwidth_manager.h>
+
 bool test_single_thread_read_bandwidth_image(unsigned len, float & bandwidth)
 {
   vcl_string root_dir = testlib_root_dir();
@@ -344,7 +345,7 @@ bool test_workgroup_prefetch_bandwidth_local_memory(int len, float & bandwidth)
 
   float sum=0.0;
   cl_float * result_array=mgr->result_array();
-  for (unsigned i=0;i<len;i++)
+  for (int i=0;i<len;++i)
     sum+=result_array[i];
 
   mgr->clean_array();
@@ -358,7 +359,6 @@ bool test_workgroup_prefetch_bandwidth_local_memory(int len, float & bandwidth)
   TEST("Run Kernel test_workgroup_coalesced_read_bandwidth_local_memory", false, true);
   return false;
 }
-
 
 
 static void test_global_io_bandwidth()
