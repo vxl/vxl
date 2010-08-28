@@ -1,4 +1,4 @@
-expatpp Prog Docs.txt
+===== expatpp_Prog_Docs.txt =====
 
 How to add new handlers to expatpp when they are added to expat.
 -----------------------------------------------------------------
@@ -18,14 +18,13 @@ typedef void (*XML_XmlDeclHandler) (void                *userData,
 We add a virtual method of expatpp to match XML_XmlDeclHandler and a static function
 with the same signature XML_XmlDeclHandlerCallback
 
-The XML_SetXmlDeclHandler will need to be invoked in the expatpp ctor, passing in 
+The XML_SetXmlDeclHandler will need to be invoked in the expatpp ctor, passing in
 xmlDeclHandlerCallback as the handler function.
-
 
 
 Using with PocketPC
 -------------------
 Make sure _POCKETPC is defined in your project.
 It has only been tested by including the files into the PPC project, rather than
-attempting to build a library or DLL, so you also need to define COMPILED_FROM_DSP 
+attempting to build a library or DLL, so you also need to define COMPILED_FROM_DSP
 and XML_STATIC, as you do in any project which uses the expat files directly.
