@@ -43,11 +43,12 @@ bool bmsh3d_load_xyz(bmsh3d_pt_set* pointset, const char* file)
   assert (pointset->vertexmap().size() == 0);
 
   // Read in (x, y, z) points.
-  int ret;
+  int ret = 0;
   do {
     double x, y, z;
     ret = vcl_fscanf(fp, "%lf %lf %lf\n", &x, &y, &z);
     if (ret != EOF) {
+      if (ret != 3) return false;
       bmsh3d_vertex* V = pointset->_new_vertex();
       V->get_pt().set(x, y, z);
       pointset->_add_vertex(V);
@@ -103,6 +104,7 @@ bool bmsh3d_load_xyz(vcl_vector<vgl_point_3d<double> >& pts, const char* file)
     double x, y, z;
     ret = vcl_fscanf(fp, "%lf %lf %lf\n", &x, &y, &z);
     if (ret != EOF) {
+      if (ret != 3) return false;
       P.set(x, y, z);
       pts.push_back(P);
     }
@@ -156,6 +158,7 @@ bool bmsh3d_load_xyz(vcl_vector<vcl_pair<int, vgl_point_3d<double> > >& idpts, c
     double x, y, z;
     ret = vcl_fscanf(fp, "%lf %lf %lf\n", &x, &y, &z);
     if (ret != EOF) {
+      if (ret != 3) return false;
       P.set(x, y, z);
       idpts.push_back(vcl_pair<int, vgl_point_3d<double> > (id, P));
       ++id;
@@ -206,7 +209,7 @@ bool bmsh3d_load_xyzn1(vcl_vector<vcl_pair<vgl_point_3d<double>, vgl_vector_3d<d
 
   // Read in # points
   unsigned int num_pts;
-  int ret = vcl_fscanf(fp, "%d\n", &num_pts); assert (ret == 1);
+  int ret = vcl_fscanf(fp, "%d\n", &num_pts); if (ret != 1) return false;
 
   // Read in (x, y, z) points.
   vgl_point_3d<double> P;
@@ -216,6 +219,7 @@ bool bmsh3d_load_xyzn1(vcl_vector<vcl_pair<vgl_point_3d<double>, vgl_vector_3d<d
     // w is the local feature size, not used.
     ret = vcl_fscanf(fp, "%lf %lf %lf %lf %lf %lf\n", &x, &y, &z, &nx, &ny, &nz);
     if (ret != EOF) {
+      if (ret != 6) return false;
       P.set(x, y, z);
       N.set(nx, ny, nz);
       ori_pts.push_back(vcl_pair<vgl_point_3d<double>, vgl_vector_3d<double> >(P, N));
@@ -283,6 +287,7 @@ bool bmsh3d_load_xyznw(vcl_vector<vcl_pair<vgl_point_3d<double>, vgl_vector_3d<d
     // w is the local feature size, not used.
     ret = vcl_fscanf(fp, "%lf %lf %lf %lf %lf %lf %lf\n", &x, &y, &z, &nx, &ny, &nz, &w);
     if (ret != EOF) {
+      if (ret != 7) return false;
       P.set(x, y, z);
       N.set(nx, ny, nz);
       ori_pts.push_back(vcl_pair<vgl_point_3d<double>, vgl_vector_3d<double> >(P, N));
@@ -339,17 +344,17 @@ bool bmsh3d_load_p3d(bmsh3d_pt_set* pointset, const char* file)
   assert (pointset->vertexmap().size() == 0); // clear();
 
   unsigned int dim;
-  int ret = vcl_fscanf(fp, "%u\n", &dim); assert (ret==1);
+  int ret = vcl_fscanf(fp, "%u\n", &dim); if (ret!=1) return false;
   assert (dim==3);
   unsigned int numGenes;
-  ret = vcl_fscanf(fp, "%u\n", &numGenes); assert (ret==1);
+  ret = vcl_fscanf(fp, "%u\n", &numGenes); if (ret!=1) return false;
 
   vcl_cerr << "  loading " << file << " : " << numGenes << " points ...\n";
 
   for (unsigned int i=0; i<numGenes; ++i) {
     bmsh3d_vertex* v = pointset->_new_vertex();
     double x, y, z;
-    ret = vcl_fscanf(fp, "%lf %lf %lf\n", &x, &y, &z); assert (ret==3);
+    ret = vcl_fscanf(fp, "%lf %lf %lf\n", &x, &y, &z); if (ret!=3) return false;
     v->get_pt().set (x, y, z);
 
     pointset->_add_vertex(v);
@@ -397,10 +402,10 @@ bool bmsh3d_load_p3d(vcl_vector<vgl_point_3d<double> >& pts, const char* file)
   assert (pts.size() == 0);
 
   unsigned int dim;
-  int ret = vcl_fscanf(fp, "%u\n", &dim); assert (ret==1);
+  int ret = vcl_fscanf(fp, "%u\n", &dim); if (ret!=1) return false;
   assert (dim==3);
   unsigned int numGenes;
-  ret = vcl_fscanf(fp, "%u\n", &numGenes); assert (ret==1);
+  ret = vcl_fscanf(fp, "%u\n", &numGenes); if (ret!=1) return false;
   pts.resize (numGenes);
   vcl_cerr << "  loading " << file << " : "
            << numGenes << " points into a vector storage...\n";
@@ -408,7 +413,7 @@ bool bmsh3d_load_p3d(vcl_vector<vgl_point_3d<double> >& pts, const char* file)
   for (unsigned int i=0; i<numGenes; ++i) {
     vgl_point_3d<double> P;
     double x, y, z;
-    ret = vcl_fscanf(fp, "%lf %lf %lf\n", &x, &y, &z); assert (ret==3);
+    ret = vcl_fscanf(fp, "%lf %lf %lf\n", &x, &y, &z); if (ret!=3) return false;
     P.set (x, y, z);
     pts[i] = P;
   }
@@ -456,10 +461,10 @@ bool bmsh3d_load_p3d(vcl_vector<vcl_pair<int, vgl_point_3d<double> > >& idpts,
   assert (idpts.size() == 0);
 
   unsigned int dim;
-  int ret = vcl_fscanf(fp, "%u\n", &dim); assert (ret==1);
+  int ret = vcl_fscanf(fp, "%u\n", &dim); if (ret!=1) return false;
   assert (dim==3);
   unsigned int numGenes;
-  ret = vcl_fscanf(fp, "%u\n", &numGenes); assert (ret==1);
+  ret = vcl_fscanf(fp, "%u\n", &numGenes); if (ret!=1) return false;
 
   vcl_cerr << "  loading " << file << " : "
            << numGenes << " points into a vector storage...\n";
@@ -467,7 +472,7 @@ bool bmsh3d_load_p3d(vcl_vector<vcl_pair<int, vgl_point_3d<double> > >& idpts,
   for (unsigned int i=0; i<numGenes; ++i) {
     vgl_point_3d<double> P;
     double x, y, z;
-    ret = vcl_fscanf(fp, "%lf %lf %lf\n", &x, &y, &z); assert (ret==3);
+    ret = vcl_fscanf(fp, "%lf %lf %lf\n", &x, &y, &z); if (ret!=3) return false;
     P.set (x, y, z);
 
     idpts.push_back(vcl_pair<int, vgl_point_3d<double> > (i, P));
@@ -516,10 +521,10 @@ int read_num_genes_sphere_from_file(const char* pcFile_P3D)
   }
 
   int dim;
-  int ret = vcl_fscanf(fp, "%d\n", &dim); assert (ret==1);
+  int ret = vcl_fscanf(fp, "%d\n", &dim); if (ret!=1) return false;
   assert (dim==3);
   int numGenes;
-  ret = vcl_fscanf(fp, "%d\n", &numGenes); assert (ret==1);
+  ret = vcl_fscanf(fp, "%d\n", &numGenes); if (ret!=1) return false;
   vcl_fclose(fp);
 
   vcl_cerr << "  reading data from " << pcFile_P3D << ": "
@@ -741,8 +746,8 @@ bool bmsh3d_load_ply2(bmsh3d_mesh* M, const char* file)
   }
 
   unsigned int vertex_N, face_N;
-  int ret = vcl_fscanf(fp, "%d\n", &vertex_N); assert (ret==1);
-  ret = vcl_fscanf(fp, "%d\n", &face_N); assert (ret==1);
+  int ret = vcl_fscanf(fp, "%d\n", &vertex_N); if (ret!=1) return false;
+      ret = vcl_fscanf(fp, "%d\n", &face_N); if (ret!=1) return false;
 
   vcl_cerr << "  loading " << file << " :\n\t" << vertex_N << " points, "
            << face_N << " faces ...\n";
@@ -751,10 +756,10 @@ bool bmsh3d_load_ply2(bmsh3d_mesh* M, const char* file)
   for (unsigned int i=0; i<vertex_N; ++i) {
     bmsh3d_vertex* point = M->_new_vertex();
 
-    ret = vcl_fscanf(fp, "%lf ", &p[0]); assert (ret==1);
-    ret = vcl_fscanf(fp, "%lf ", &p[1]); assert (ret==1);
-    ret = vcl_fscanf(fp, "%lf ", &p[2]); assert (ret==1);
-    ret = vcl_fscanf(fp, "\n"); assert (ret==0);
+    ret = vcl_fscanf(fp, "%lf ", &p[0]); if (ret!=1) return false;
+    ret = vcl_fscanf(fp, "%lf ", &p[1]); if (ret!=1) return false;
+    ret = vcl_fscanf(fp, "%lf ", &p[2]); if (ret!=1) return false;
+    ret = vcl_fscanf(fp, "\n"); if (ret!=0) return false;
     point->get_pt().set (p);
 
     M->_add_vertex(point);
@@ -764,16 +769,16 @@ bool bmsh3d_load_ply2(bmsh3d_mesh* M, const char* file)
     bmsh3d_face* F = M->_new_face();
 
     int num_pt_per_face;
-    ret = vcl_fscanf(fp, "%d", &num_pt_per_face); assert (ret==1);
+    ret = vcl_fscanf(fp, "%d", &num_pt_per_face); if (ret!=1) return false;
     for (int j=0; j<num_pt_per_face; ++j) {
       int ind;
-      ret = vcl_fscanf(fp, " %d", &ind); assert (ret==1);
+      ret = vcl_fscanf(fp, " %d", &ind); if (ret!=1) return false;
 
       bmsh3d_vertex* V = M->vertexmap(ind);
       F->_ifs_add_vertex(V);
       V->set_meshed(true);
     }
-    ret = vcl_fscanf(fp, "\n"); assert (ret==0);
+    ret = vcl_fscanf(fp, "\n"); if (ret!=0) return false;
 
     M->_add_face(F);
   }
@@ -796,18 +801,18 @@ bool bmsh3d_load_ply2_v(bmsh3d_mesh* M, const char* file)
     return false;
   }
   unsigned int vertex_N, face_N;
-  int ret = vcl_fscanf(fp, "%d\n", &vertex_N); assert(ret==1);
-  ret = vcl_fscanf(fp, "%d\n", &face_N); assert(ret==1);
+  int ret = vcl_fscanf(fp, "%d\n", &vertex_N); if (ret!=1) return false;
+      ret = vcl_fscanf(fp, "%d\n", &face_N); if (ret!=1) return false;
   vcl_cerr << "  bmsh3d_load_ply2_v() " << file << ":\n\t"
            << vertex_N << " points, " << face_N << " faces ...\n";
 
   double p[3];
   for (unsigned int i=0; i<vertex_N; ++i) {
     bmsh3d_vertex* V = M->_new_vertex();
-    ret = vcl_fscanf(fp, "%lf ", &p[0]); assert(ret==1);
-    ret = vcl_fscanf(fp, "%lf ", &p[1]); assert(ret==1);
-    ret = vcl_fscanf(fp, "%lf ", &p[2]); assert(ret==1);
-    ret = vcl_fscanf(fp, "\n"); assert (ret==0);
+    ret = vcl_fscanf(fp, "%lf ", &p[0]); if (ret!=1) return false;
+    ret = vcl_fscanf(fp, "%lf ", &p[1]); if (ret!=1) return false;
+    ret = vcl_fscanf(fp, "%lf ", &p[2]); if (ret!=1) return false;
+    ret = vcl_fscanf(fp, "\n"); if (ret!=0) return false;
     V->get_pt().set (p);
     M->_add_vertex(V);
   }
@@ -831,8 +836,8 @@ bool bmsh3d_load_ply2_f(bmsh3d_mesh* M, const char* file)
   }
 
   unsigned int vertex_N, face_N;
-  int ret = vcl_fscanf(fp, "%d\n", &vertex_N); assert (ret==1);
-  ret = vcl_fscanf(fp, "%d\n", &face_N); assert (ret==1);
+  int ret = vcl_fscanf(fp, "%d\n", &vertex_N); if (ret!=1) return false;
+  ret = vcl_fscanf(fp, "%d\n", &face_N); if (ret!=1) return false;
 
   vcl_cerr << "  bmsh3d_load_ply2_f(" << file << "):\n"
            << "\tSkip " << vertex_N << " points and load " << face_N << " faces ...\n";
@@ -841,10 +846,10 @@ bool bmsh3d_load_ply2_f(bmsh3d_mesh* M, const char* file)
   double p[3];
   for (unsigned int i=0; i<vertex_N; ++i) {
     bmsh3d_vertex* V = M->vertexmap(i);
-    ret = vcl_fscanf(fp, "%lf ", &p[0]); assert(ret==1);
-    ret = vcl_fscanf(fp, "%lf ", &p[1]); assert(ret==1);
-    ret = vcl_fscanf(fp, "%lf ", &p[2]); assert(ret==1);
-    ret = vcl_fscanf(fp, "\n"); assert (ret==0);
+    ret = vcl_fscanf(fp, "%lf ", &p[0]); if (ret!=1) return false;
+    ret = vcl_fscanf(fp, "%lf ", &p[1]); if (ret!=1) return false;
+    ret = vcl_fscanf(fp, "%lf ", &p[2]); if (ret!=1) return false;
+    ret = vcl_fscanf(fp, "\n");          if (ret!=0) return false;
     // assert that M has exactly these vertices.
     assert (vcl_fabs(V->pt().x() - p[0]) < TINY_ERROR);
     assert (vcl_fabs(V->pt().y() - p[1]) < TINY_ERROR);
@@ -856,16 +861,16 @@ bool bmsh3d_load_ply2_f(bmsh3d_mesh* M, const char* file)
     bmsh3d_face* F = M->_new_face();
 
     int num_pt_per_face;
-    ret = vcl_fscanf(fp, "%d", &num_pt_per_face); assert(ret==1);
+    ret = vcl_fscanf(fp, "%d", &num_pt_per_face); if (ret!=1) return false;
     for (int j=0; j<num_pt_per_face; ++j) {
       int ind;
-      ret = vcl_fscanf(fp, " %d", &ind); assert(ret==1);
+      ret = vcl_fscanf(fp, " %d", &ind); if (ret!=1) return false;
 
       bmsh3d_vertex* V = M->vertexmap(ind);
       F->_ifs_add_vertex(V);
       V->set_meshed(true);
     }
-    ret = vcl_fscanf(fp, "\n"); assert (ret==0);
+    ret = vcl_fscanf(fp, "\n"); if (ret!=0) return false;
 
     M->_add_face(F);
   }
@@ -972,20 +977,20 @@ bool bmsh3d_load_m(bmsh3d_mesh* M, const char* file)
   }
 
   // Read in mesh vertices.
-  int ret;
   do {
-    int id, ret2;
+    int id;
     char type[128];
     double x, y, z, r, g, b;
     int tri[3];
-    ret = vcl_fscanf(fp, "%s", type);
+    int ret = vcl_fscanf(fp, "%s", type);
     if (ret == EOF)
       break;
+    if (ret != 1) return false;
 
     if (vcl_strcmp(type, "Vertex")==0) {
-      ret2 = vcl_fscanf(fp, "%d %lf %lf %lf {rgb=(%lf %lf %lf)}\n",
-                        &id, &x, &y, &z, &r, &g, &b);
-      assert (ret2==7);
+      ret = vcl_fscanf(fp, "%d %lf %lf %lf {rgb=(%lf %lf %lf)}\n",
+                       &id, &x, &y, &z, &r, &g, &b);
+      if (ret!=7) return false;
 
       bmsh3d_vertex* V = M->_new_vertex();
       V->set_id (id);
@@ -996,7 +1001,7 @@ bool bmsh3d_load_m(bmsh3d_mesh* M, const char* file)
         M->set_vertex_id_counter(id+1);
     }
     else if (vcl_strcmp(type, "Face")==0) {
-      ret2 = vcl_fscanf(fp, "%d %d %d %d\n", &id, &tri[0], &tri[1], &tri[2]); assert (ret2==4);
+      ret = vcl_fscanf(fp, "%d %d %d %d\n", &id, &tri[0], &tri[1], &tri[2]); if (ret!=4) return false;
       bmsh3d_face* F = M->_new_face();
       for (int i=0; i<3; ++i) {
         bmsh3d_vertex* V = M->vertexmap(tri[i]);
@@ -1006,7 +1011,7 @@ bool bmsh3d_load_m(bmsh3d_mesh* M, const char* file)
       M->_add_face(F);
     }
   }
-  while (ret != EOF);
+  while (true); // jumping out of this loop with "break" when at EOF
 
   vcl_fclose(fp);
   vcl_cerr << "  done.\n";
