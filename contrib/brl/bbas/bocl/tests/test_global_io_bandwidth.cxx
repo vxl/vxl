@@ -340,7 +340,7 @@ bool test_workgroup_prefetch_bandwidth_local_memory(int len, float & bandwidth)
     TEST("Run Kernel test_workgroup_prefetch_bandwidth_local_memory", false, true);
     return false;
   }
-  cl_int* result_flag = mgr->result_flag();
+  // cl_int* result_flag = mgr->result_flag(); // unused
   bandwidth=(float)4*(len*4)/mgr->time_taken()/(1024*1024);
 
   float sum=0.0;
