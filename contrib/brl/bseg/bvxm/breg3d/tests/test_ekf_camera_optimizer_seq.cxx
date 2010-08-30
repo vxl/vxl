@@ -44,7 +44,7 @@ static void init_ground_plane(double plane_z, double plane_std, bvxm_voxel_world
 
     ocp_datatype min_prob = vox_world->get_params()->min_occupancy_prob();
     ocp_datatype max_prob = vox_world->get_params()->max_occupancy_prob();
-    ocp_datatype plane_prob = 
+    ocp_datatype plane_prob =
       (ocp_datatype)(vnl_math::sqrt1_2 * vnl_math::two_over_sqrtpi * (0.5/plane_std) * vcl_exp(-(((z-groundz)*(z-groundz))/(2*plane_std*plane_std))));
     if (plane_prob < min_prob)
       plane_prob = min_prob;
@@ -108,7 +108,7 @@ static void test_ekf_camera_optimizer_seq()
       // just make some squares of constant color
       else if ( (i > 10) && (i < 90) && (j > 10) && (j < 90) ) {
         plane_img(i,j) = 0.7f;
-      } 
+      }
       else if ((i > 110) && (i < 190) && (j > 10) && (j < 90) ) {
         plane_img(i,j) = 0.5f;
       }
@@ -196,14 +196,13 @@ static void test_ekf_camera_optimizer_seq()
     // write matrices to the text file.
     vcl_ofstream ofs(cam_fname.str().c_str());
     if (!ofs.is_open()) {
-      vcl_cerr << "Failed to open file " << cam_fname.str() << vcl_endl;
+      vcl_cerr << "Failed to open file " << cam_fname.str() << '\n';
     }
-    ofs << cam_persp->get_calibration().get_matrix() << vcl_endl;
-    ofs << R << vcl_endl;
+    ofs << cam_persp->get_calibration().get_matrix() << '\n'
+        << R << vcl_endl;
     vnl_vector_fixed<double,3> T = -R*vnl_vector_fixed<double,3>(center.x(),center.y(),center.z());
     ofs << T << vcl_endl;
     ofs.close();
-
   }
 
   // generate synthetic images
@@ -227,7 +226,7 @@ static void test_ekf_camera_optimizer_seq()
 
   // create an empty world for registration
   bvxm_world_params_sptr params_reg = new bvxm_world_params();
-  params->set_params(reg_dir, corner, num_voxels, voxel_length, 0, 0.001, 0.999);
+  params->set_params(reg_dir, corner, num_voxels, voxel_length, 0, 0.001f, 0.999f);
   bvxm_voxel_world_sptr vox_world_reg = new bvxm_voxel_world(params);
   vox_world_reg->clean_grids();
   bvxm_voxel_grid_base_sptr ocp_base = vox_world->get_grid<OCCUPANCY>(0,0);
@@ -257,7 +256,7 @@ static void test_ekf_camera_optimizer_seq()
     vil_save(*img,fname.str().c_str());
   }
   // END TEMP DEBUG
-  
+
 
   // optimize the positions of the rest of the cameras
   for (unsigned n=1; n<ncameras; ++n) {
@@ -270,22 +269,22 @@ static void test_ekf_camera_optimizer_seq()
     vgl_point_3d<double> center_est = opt_state.get_point();
     vgl_rotation_3d<double> rot_est = opt_state.get_rotation();
 
-    vcl_cout << "camera " << n-1 << " center   : " << cam0->get_camera_center() << vcl_endl;
-    vcl_cout << "camera " << n-1 << " rotation : " << vcl_endl << cam0->get_rotation().as_rodrigues() << vcl_endl;
-    vcl_cout << "camera " << n << " center   : " << cam1->get_camera_center() << vcl_endl;
-    vcl_cout << "camera " << n << " rotation : " << vcl_endl << cam1->get_rotation().as_rodrigues() << vcl_endl;
+    vcl_cout << "camera " << n-1 << " center   : " << cam0->get_camera_center() << '\n'
+             << "camera " << n-1 << " rotation :\n" << cam0->get_rotation().as_rodrigues() << '\n'
+             << "camera " << n << " center   : " << cam1->get_camera_center() << '\n'
+             << "camera " << n << " rotation :\n" << cam1->get_rotation().as_rodrigues() << '\n'
 
-    vcl_cout << "est. center      : " << center_est << vcl_endl;
-    vcl_cout << "est. rotation    : " << vcl_endl << rot_est.as_rodrigues() << vcl_endl;
+             << "est. center      : " << center_est << '\n'
+             << "est. rotation    :\n" << rot_est.as_rodrigues() << vcl_endl;
 
     vgl_vector_3d<double> center_off = center_est - cam1->get_camera_center();
     vgl_rotation_3d<double> rot_off(rot_est.as_rodrigues() - cam1->get_rotation().as_rodrigues());
 
     vcl_stringstream test_string_center;
-    test_string_center << "Camera Center Convergence Error (frame " << n << ")";
+    test_string_center << "Camera Center Convergence Error (frame " << n << ')';
     TEST_NEAR(test_string_center.str().c_str(),center_off.length(),0.0, 0.1);
     vcl_stringstream test_string_rot;
-    test_string_rot << "Camera Rotation Convergence Error (frame " << n << ")";
+    test_string_rot << "Camera Rotation Convergence Error (frame " << n << ')';
     TEST_NEAR(test_string_rot.str().c_str(),rot_off.as_rodrigues().magnitude(),0.0, 0.005);
 
     // debug - generate expected image from camera n true position
@@ -301,7 +300,7 @@ static void test_ekf_camera_optimizer_seq()
     // write matrices to the text file.
     vcl_ofstream ofs(cam_est_fname.str().c_str());
     if (!ofs.is_open()) {
-      vcl_cerr << "Failed to open file " << cam_est_fname.str() << vcl_endl;
+      vcl_cerr << "Failed to open file " << cam_est_fname.str() << '\n';
     }
     vpgl_perspective_camera<double> cam_est(cam0->get_calibration(),center_est,rot_est);
     ofs << cam_est.get_calibration().get_matrix() << vcl_endl;
@@ -317,13 +316,12 @@ static void test_ekf_camera_optimizer_seq()
     img_meta.img = images[n];
     //vox_world_reg->update<APM_MOG_GREY>(img_meta,0);
 
+#if 0
     // save voxel world
-    //vox_world_reg->save_occupancy_raw<APM_MOG_GREY>(model_dir + "/ocp_reg.raw");
-
+    vox_world_reg->save_occupancy_raw<APM_MOG_GREY>(model_dir + "/ocp_reg.raw");
+#endif
   }
   return;
-
 }
 
-
-  TESTMAIN( test_ekf_camera_optimizer_seq );
+TESTMAIN( test_ekf_camera_optimizer_seq );
