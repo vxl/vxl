@@ -31,8 +31,6 @@ void ihog_transform_2d::b_read(vsl_b_istream& bfs)
         bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
         return;
     }
-
-    //inv_uptodate_ = false;
 }
 
 vgl_point_2d<double>  ihog_transform_2d::origin() const
@@ -45,7 +43,6 @@ void ihog_transform_2d::set_origin(const vgl_point_2d<double> & p )
     t12_matrix_[0][2] = p.x()*t12_matrix_[2][2];
     t12_matrix_[1][2] = p.y()*t12_matrix_[2][2];
     if (form_ == Identity) form_=Translation;
-    //inv_uptodate_=false;
 }
 
 void ihog_transform_2d::set_projective(const vnl_matrix<double>& m)
@@ -114,15 +111,15 @@ void ihog_transform_2d::set(const vnl_vector<double>& v, Form form)
             set_identity();
             break;
         case (Translation):
-            if (n!=2) return;//setCheck(2,n,"Translation");
+            if (n!=2) return;
             set_translation(v_data[0],v_data[1]);
             break;
         case (RigidBody):
-            if (n!=3) return;//setCheck(3,n,"RigidBody");
+            if (n!=3) return;
             set_rigid_body(v_data[0],v_data[1],v_data[2]);
             break;
         case (Affine):
-            if (n!=6) return;//setCheck(6,n,"Affine");
+            if (n!=6) return;
             { vnl_matrix<double> M23(2,3,6,v_data);
               vgl_h_matrix_2d<double>::set_affine(M23); }
 #if 0
@@ -156,6 +153,7 @@ void ihog_transform_2d::set_rigid_body(double theta, double t_x, double t_y)
     set_rotation(theta);
     set_translation(t_x,t_y);
   }
+  form_=RigidBody;
 }
 
 //: Sets to be 2D affine transformation T(x,y)=p+x.u+y.v
@@ -221,137 +219,6 @@ ihog_transform_2d ihog_transform_2d::inverse() const
 
   return ihog_transform_2d(result,form_);
 }
-
-#if 0
-//: Transform composition (L*R)(x) = L(R(x))
-ihog_transform_2d ihog_transform_2d::operator*(const ihog_transform_2d& L, const ihog_transform_2d& R)
-{
-    // Default is identity_
-    ihog_transform_2d T;
-    vnl_matrix_fixed<double,3,3> m(L.get_matrix()*R.get_matrix());
-    T.set(m);
-    if (L.form() == ihog_transform_2d::Identity)
-        return R;
-    else if (R.form() == ihog_transform_2d::Identity)
-        return L;
-    else if (L.form() == ihog_transform_2d::Translation)
-    {
-        T = R;
-
-        if (R.form() == ihog_transform_2d::Projective)
-        {
-            t12_matrix_[0][0] += L.get(0,2)*R.get(2,0));
-            t12_matrix_[0][1] += L.get(0,2)*R.get(2,1));
-            t12_matrix_[0][2] += L.get(0,2)*R.get(2,2));
-
-            t12_matrix_[1][0] += L.get(1,2)*R.get(2,0));
-            t12_matrix_[1][1] += L.get(1,2)*R.get(2,1));
-            t12_matrix_[1][2] += L.get(1,2)*R.get(2,2));
-        }
-        else
-        {
-            t12_matrix_[0][2] += L.get(0,2);
-            t12_matrix_[1][2] += L.yt_;
-        }
-    }
-    else if (R.form() == ihog_transform_2d::Translation)
-    {
-        T = L;
-
-        T.xt_ += L.xx_*R.xt_ +
-                L.xy_*R.yt_;
-        T.yt_ += L.yx_*R.xt_ +
-                L.yy_*R.yt_;
-        T.tt_ += L.tx_*R.xt_ +
-                L.ty_*R.yt_;
-    }
-    else
-    {
-        if (R.form() == ihog_transform_2d::Projective ||
-            L.form() == ihog_transform_2d::Projective)
-        {
-            // full monty_...
-            T.xx_ = L.xx_*R.xx_ + L.xy_*R.yx_ + L.xt_*R.tx_;
-            T.xy_ = L.xx_*R.xy_ + L.xy_*R.yy_ + L.xt_*R.ty_;
-            T.xt_ = L.xx_*R.xt_ + L.xy_*R.yt_ + L.xt_*R.tt_;
-            T.yx_ = L.yx_*R.xx_ + L.yy_*R.yx_ + L.yt_*R.tx_;
-            T.yy_ = L.yx_*R.xy_ + L.yy_*R.yy_ + L.yt_*R.ty_;
-            T.yt_ = L.yx_*R.xt_ + L.yy_*R.yt_ + L.yt_*R.tt_;
-            T.tx_ = L.tx_*R.xx_ + L.ty_*R.yx_ + L.tt_*R.tx_;
-            T.ty_ = L.tx_*R.xy_ + L.ty_*R.yy_ + L.tt_*R.ty_;
-            T.tt_ = L.tx_*R.xt_ + L.ty_*R.yt_ + L.tt_*R.tt_;
-        }
-        else
-        {
-            // Affine, Similarity, Reflection
-            // ZoomOnly, RigidBody
-            T.xx_ = L.xx_*R.xx_ + L.xy_*R.yx_;
-            T.xy_ = L.xx_*R.xy_ + L.xy_*R.yy_;
-            T.xt_ = L.xx_*R.xt_ + L.xy_*R.yt_ + L.xt_;
-            T.yx_ = L.yx_*R.xx_ + L.yy_*R.yx_;
-            T.yy_ = L.yx_*R.xy_ + L.yy_*R.yy_;
-            T.yt_ = L.yx_*R.xt_ + L.yy_*R.yt_ + L.yt_;
-        }
-
-                            // now set the type using the type of L and R
-        if (R.form() == L.form())
-            T.form_ = R.form();
-        else
-        {
-            if      (R.form() == ihog_transform_2d::Projective ||
-                     L.form() == ihog_transform_2d::Projective)
-                T.form_ = ihog_transform_2d::Projective;
-            else if (R.form() == ihog_transform_2d::Affine ||
-                     L.form() == ihog_transform_2d::Affine)
-                T.form_ = ihog_transform_2d::Affine;
-            else if (R.form() == ihog_transform_2d::Reflection ||
-                     L.form() == ihog_transform_2d::Reflection)
-                T.form_ = ihog_transform_2d::Affine;
-            else if (R.form() == ihog_transform_2d::Similarity ||
-                     L.form() == ihog_transform_2d::Similarity)
-                T.form_ = ihog_transform_2d::Similarity;
-            else if (R.form() == ihog_transform_2d::RigidBody ||
-                     L.form() == ihog_transform_2d::RigidBody)
-            {
-                if (R.form() == ihog_transform_2d::ZoomOnly) {
-                    if (R.xx_ == R.yy_)
-                        T.form_ = ihog_transform_2d::Similarity;
-                    else
-                        T.form_ = ihog_transform_2d::Affine;
-                }
-                else if (L.form() == ihog_transform_2d::ZoomOnly) {
-                    if (L.xx_ == L.yy_)
-                        T.form_ = ihog_transform_2d::Similarity;
-                    else
-                        T.form_ = ihog_transform_2d::Affine;
-                }
-                else
-                    T.form_ = ihog_transform_2d::RigidBody;
-            }
-            else if (R.form() == ihog_transform_2d::ZoomOnly ||
-                     L.form() == ihog_transform_2d::ZoomOnly)
-                T.form_ = ihog_transform_2d::ZoomOnly;
-            else
-                T.form_ = ihog_transform_2d::Translation;
-        }
-
-        // make sure det == 1 for rigid body (prevents
-        // accumulated rounding errors)
-        if (T.form_ == ihog_transform_2d::RigidBody)
-        {
-            double det = T.xx_*T.yy_ - T.xy_*T.yx_;
-            T.xx_ /= det;
-            T.xy_ /= det;
-            T.yx_ /= det;
-            T.yy_ /= det;
-        }
-    }
-
-    T.inv_uptodate_ = false;
-
-    return T;
-}
-#endif // 0
 
 vgl_point_2d<double> ihog_transform_2d::operator()(double x, double y) const
 {
