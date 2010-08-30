@@ -158,7 +158,7 @@ ihog_minimizer::minimize(ihog_transform_2d& xform)
   //vnl_matlab_filewrite matlab("C:/MATLAB/work/vxl.mat");
   //vnl_matrix<double> result(50,50);
 
-  for (int L=from_pyramid_.nlevels(); L>=0; --L)
+  for (int L=from_pyramid_.nlevels()-1; L>=0; --L)
   {
     xform.set_origin( vgl_point_2d<double>(xform.origin().x()*2.0,
                                            xform.origin().y()*2.0) );
