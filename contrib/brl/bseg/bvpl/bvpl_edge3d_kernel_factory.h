@@ -37,7 +37,7 @@
 
 #include "bvpl_kernel_factory.h"
 #include <vcl_iostream.h>
-
+#include <bxml/bxml_document.h>
 
 class bvpl_edge3d_kernel_factory : public bvpl_kernel_factory
 {
@@ -46,9 +46,13 @@ class bvpl_edge3d_kernel_factory : public bvpl_kernel_factory
   bvpl_edge3d_kernel_factory();
 
   //: Constructs constructor from min and max positions on each axis
-  bvpl_edge3d_kernel_factory(int min_x, int max_x, int min_y, int max_y, int min_z, int max_z);
+  bvpl_edge3d_kernel_factory(int min_x, int max_x, int min_y, int max_y, int min_z, int max_z, double voxel_length = 1.0);
 
   virtual ~bvpl_edge3d_kernel_factory() {}
+  
+  static vcl_string name() {return "edge3d"; }
+
+  static bvpl_kernel_sptr parse_xml_element(bxml_data_sptr d);
 
  private:
 
@@ -63,6 +67,7 @@ class bvpl_edge3d_kernel_factory : public bvpl_kernel_factory
   int max_z_;
 
   static const unsigned max_size_ = 71;
+
 };
 
 #endif

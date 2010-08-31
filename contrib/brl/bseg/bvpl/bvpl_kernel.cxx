@@ -7,6 +7,8 @@
 #include <vcl_fstream.h>
 #include <vcl_string.h>
 
+#include "bvpl_edge3d_kernel_factory.h"
+
 unsigned bvpl_kernel::id_cnt=0;
 
 //: Saves the kernel to ascii file
@@ -94,4 +96,42 @@ bool bvpl_kernel::save_raw(vcl_string filename)
 
   delete[] data_array;
   return true;
+}
+
+
+//: Return an xml element
+bxml_data_sptr bvpl_kernel::xml_element()
+{
+  bxml_element *kernel = new bxml_element("bvpl_kernel");
+  kernel->append_text("\n");
+  kernel->set_attribute("factory", name_);
+  kernel->set_attribute("min_x" , min_point_.x());
+  kernel->set_attribute("max_x" , max_point_.x());
+  
+  kernel->set_attribute("min_y" , min_point_.y());
+  kernel->set_attribute("max_y" , max_point_.y());
+  
+  
+  kernel->set_attribute("min_z" , min_point_.z());
+  kernel->set_attribute("max_z" , max_point_.z());
+  
+  kernel->set_attribute("axix_x", axis_[0]);
+  kernel->set_attribute("axix_y", axis_[1]);
+  kernel->set_attribute("axix_z", axis_[2]);
+  
+  kernel->set_attribute("angle", angle_);
+  return kernel;
+}
+
+bvpl_kernel_sptr bvpl_kernel::parse_xml_element(bxml_data_sptr d)
+{
+  //try each factory
+  bvpl_kernel_sptr kernel = NULL;
+  
+  kernel = bvpl_edge3d_kernel_factory::parse_xml_element(d);
+  
+  if(kernel)
+    return kernel;
+  else 
+    return false;
 }

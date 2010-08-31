@@ -14,7 +14,7 @@ bvpl_kernel
 bvpl_kernel_factory::create()
 {
   bvpl_kernel_iterator iter = interpolate(rotate(angle_));
-  bvpl_kernel kernel(iter, rotation_axis_, angle_,dim(), min_point_, max_point_);
+  bvpl_kernel kernel(iter, rotation_axis_, angle_,dim(), min_point_, max_point_,factory_name_,voxel_length_);
 
   return kernel;
 }
@@ -24,7 +24,7 @@ bvpl_kernel
 bvpl_kernel_factory::create(vnl_float_3 rotation_axis, float angle)
 {
   this->set_rotation_axis(rotation_axis);
-  return bvpl_kernel(interpolate(rotate(angle)), rotation_axis_, angle_, dim(), min_point_, max_point_);
+  return bvpl_kernel(interpolate(rotate(angle)), rotation_axis_, angle_, dim(), min_point_, max_point_,factory_name_,voxel_length_);
 }
 
 //: Rounds coordinates of kernel to the nearest integer

@@ -18,6 +18,10 @@
 #include <vbl/vbl_ref_count.h>
 #include "bvpl_kernel_iterator.h"
 #include <vgl/vgl_vector_3d.h>
+#include <bxml/bxml_document.h>
+
+class bvpl_kernel;
+typedef vbl_smart_ptr<bvpl_kernel> bvpl_kernel_sptr;
 
 //: A simple class to hold bvpl_kernel_iterator and its bounding cube
 class bvpl_kernel: public vbl_ref_count
@@ -26,8 +30,8 @@ class bvpl_kernel: public vbl_ref_count
   //: Default constructor
   bvpl_kernel() {id_=++id_cnt;}
   //: Constructor
-  bvpl_kernel(bvpl_kernel_iterator kernel, vnl_float_3 axis, float angle, vgl_vector_3d<int> dim, vgl_point_3d<int> min_pt, vgl_point_3d<int> max_pt)
-  : kernel_(kernel),axis_(axis), angle_(angle),dim_(dim),min_point_(min_pt),max_point_(max_pt)
+  bvpl_kernel(bvpl_kernel_iterator kernel, vnl_float_3 axis, float angle, vgl_vector_3d<int> dim, vgl_point_3d<int> min_pt, vgl_point_3d<int> max_pt, vcl_string name = "", double voxel_length = 1.0)
+  : kernel_(kernel),axis_(axis), angle_(angle),dim_(dim),min_point_(min_pt),max_point_(max_pt),name_(name),voxel_length_(voxel_length)
   {
 #ifdef DEBUG
     vcl_cout << "Creating kernel with axis, anle, dim, max, min =\n" << axis_ << '\n' << angle_<< '\n' << dim_<< '\n' <<max_point_<< '\n' << min_point_ << '\n';
@@ -43,6 +47,8 @@ class bvpl_kernel: public vbl_ref_count
   vgl_vector_3d<int> dim()const {return dim_;}
   vgl_point_3d<int> min_point() const {return min_point_;}
   vgl_point_3d<int> max_point() const {return max_point_;}
+  //: Return the length of a voxel in global coordinates
+  double voxel_length() const {return voxel_length_;}
   vgl_vector_3d<int> offset()
   {
     int x=0;
@@ -65,7 +71,7 @@ class bvpl_kernel: public vbl_ref_count
       vgl_point_3d<int> coord =kernel_.index();
       float val= ((*kernel_).c_);
 
-      vcl_cout.precision(2);
+      //vcl_cout.precision(2);
       vcl_cout << coord << "  " << val<< vcl_endl;
       ++kernel_;
     }
@@ -74,6 +80,12 @@ class bvpl_kernel: public vbl_ref_count
   void print_to_file(vcl_string filename);
 
   bool save_raw(vcl_string filename);
+  
+  //: Return an xml element
+  bxml_data_sptr xml_element();
+  
+  //: Read an xml element
+  static bvpl_kernel_sptr parse_xml_element(bxml_data_sptr d);
 
   // Returns a sum of kernel values. Useful to check if they add up to zero
   float cum_sum()
@@ -100,9 +112,12 @@ class bvpl_kernel: public vbl_ref_count
   vgl_point_3d<int> min_point_;
   vgl_point_3d<int> max_point_;
   unsigned int id_;
+  //: Identifying string
+  vcl_string name_;
+  //: Length of a voxel in global coordinates
+  double voxel_length_;
 };
 
-typedef vbl_smart_ptr<bvpl_kernel> bvpl_kernel_sptr;
 
 //: A simple class to hold a vector of kernels
 class bvpl_kernel_vector : public vbl_ref_count
@@ -173,7 +188,8 @@ class bvpl_kernel_vector : public vbl_ref_count
   //: vector of kernel
   vcl_vector< bvpl_kernel_sptr> kernels_;
 };
-
 typedef vbl_smart_ptr<bvpl_kernel_vector> bvpl_kernel_vector_sptr;
+
+
 
 #endif // bvpl_kernel_h

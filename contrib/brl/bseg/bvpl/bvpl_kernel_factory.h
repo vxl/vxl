@@ -117,6 +117,12 @@ class bvpl_kernel_factory
   //: Angular resolutions
   float angular_resolution_;
 
+  //: Length of a voxel in global coordinates
+  double voxel_length_;
+  
+  //: Name that identifies the kernel e.g "edge3d", "gauss"
+  vcl_string factory_name_;
+  
   //: Creates canonical(default) kernel.
   //  It is decribed by a canonical axis of rotation and a canonical parallel axis
   //  This is the main function implemented by the children.
