@@ -110,6 +110,8 @@ SET(mbl_sources
   mbl_sample_stats_1d.cxx              mbl_sample_stats_1d.h
 
   mbl_mask.cxx                         mbl_mask.h
+
+  mbl_eps_writer.cxx                   mbl_eps_writer.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates mbl_sources)
