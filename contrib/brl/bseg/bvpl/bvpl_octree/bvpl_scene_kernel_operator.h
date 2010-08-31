@@ -20,6 +20,21 @@
 class bvpl_scene_kernel_operator
 {
  public:
+  //: "Convolves" kernel with an input octree, storing the output in an output octree.
+  //  This function only iterate through leaf_cells at level 0; 
+  template<class T_data, class F>
+  void operate(boxm_scene<boct_tree<short, T_data > > &scene_in,
+               F functor,
+               bvpl_kernel_sptr kernel,
+               boxm_scene<boct_tree<short, T_data > > &scene_out);
+  
+  //: Performs in-situ non-maxima suppression over the area occupied by the kernel
+  template<class T_data, class F>
+  void local_non_maxima_suppression(boxm_scene<boct_tree<short, T_data > > &scene_in,
+                                    F functor,
+                                    bvpl_kernel_sptr kernel);
+  
+#if 0 //Depracated
   // "Convolves" kernel with an input octree, storing the output in an output octree.
   template<class T_data, class F>
   void operate(boxm_scene<boct_tree<short, T_data > > &scene_in,
@@ -30,7 +45,7 @@ class bvpl_scene_kernel_operator
   {
     typedef boct_tree<short, T_data > tree_type;
     boxm_block_iterator<tree_type> iter_in = scene_in.iterator();
-    boxm_block_iterator<tree_type> iter_out = scene_out.iterator();;
+    boxm_block_iterator<tree_type> iter_out = scene_out.iterator();
     iter_in.begin();
     iter_out.begin();
     for (; !iter_in.end(); iter_in++, iter_out++) {
@@ -52,26 +67,138 @@ class bvpl_scene_kernel_operator
       scene_out.write_active_block();
     }
   }
+#endif
   
-  // "Convolves" kernel with an input octree. The result is store in situ.
-  template<class T_data, class F>
-  void operate(boxm_scene<boct_tree<short, T_data > > &scene_in,
-               F functor, bvpl_kernel_sptr kernel, short level)
-  {
-    typedef boct_tree<short, T_data > tree_type;
-    boxm_block_iterator<tree_type> iter_in = scene_in.iterator();
-    iter_in.begin();
-    for (; !iter_in.end(); iter_in++) {
-      //Isa: change to load block and neighbors 
-      scene_in.load_block(iter_in.index());
-      tree_type *tree_in= (*iter_in)->get_tree();
-      
-      bvpl_octree_kernel_operator<T_data> oper(tree_in);
-      double cell_length = 1.0/(double)(1<<(tree_in->root_level() -level));
-      oper.operate(functor, kernel, level, cell_length);
-      scene_in.write_active_block();
-    }
-  }
+
 };
+
+
+template<class T_data, class F>
+void bvpl_scene_kernel_operator::operate(boxm_scene<boct_tree<short, T_data > > &scene_in,
+                                         F functor,
+                                         bvpl_kernel_sptr kernel,
+                                         boxm_scene<boct_tree<short, T_data > > &scene_out)
+{
+  //(1)Traverse input scene and for every leaf cell, (2) request a region around it, and (3) apply the functor
+  
+  //(1) Traverse the scene - is there an easy way to modify the cell iterator so to only use leaf cells at level 0;
+  boxm_cell_iterator<boct_tree<short, T_data > > iterator = scene_in.cell_iterator(&boxm_scene<boct_tree<short, T_data > >::load_block_and_neighbors);
+  iterator.begin();
+
+  boxm_cell_iterator<boct_tree<short, T_data > > out_iter = scene_out.cell_iterator(&boxm_scene<boct_tree<short, T_data > >::load_block);
+  out_iter.begin();
+  
+  bvpl_kernel_iterator kernel_iter = kernel->iterator();
+  
+  double cell_length = kernel->voxel_length();
+  
+  while ( !(iterator.end() || out_iter.end()) ) {
+    
+    boct_tree_cell<short,T_data> *center_cell = *iterator; 
+    boct_tree_cell<short,T_data> *out_center_cell = *out_iter; 
+    boct_loc_code<short> out_code = out_center_cell->get_code();
+    boct_loc_code<short> in_code = center_cell->get_code();
+    
+    //if level and location code of cells isn't the same then continue
+    if((center_cell->level() != out_center_cell->level()) || !(in_code.isequal(&out_code))){
+      vcl_cerr << " Input and output cells don't have the same structure " << vcl_endl;
+      ++iterator;
+      ++out_iter;
+      continue;
+    }
+   
+    //we are only interested in finest resolution
+    if(!center_cell->level() == 0 || !center_cell->is_leaf()){
+      ++iterator;
+      ++out_iter;
+      continue;
+    }
+    
+    vgl_point_3d<double> center_cell_origin = iterator.global_origin();
+
+    kernel_iter.begin(); // reset the kernel iterator
+    while (!kernel_iter.isDone())
+    {
+      vgl_point_3d<int> kernel_idx = kernel_iter.index();
+      
+      vgl_point_3d<double> kernel_cell_origin(center_cell_origin.x() + (double)kernel_idx.x()*cell_length + 1.0e-7,
+                                              center_cell_origin.y() + (double)kernel_idx.y()*cell_length + 1.0e-7,
+                                              center_cell_origin.z() + (double)kernel_idx.z()*cell_length + 1.0e-7);
+      
+      boct_tree_cell<short,T_data> *this_cell = scene_in.locate_point_in_memory(kernel_cell_origin);
+      
+      if (this_cell) {
+        bvpl_kernel_dispatch d = *kernel_iter;
+        T_data val = this_cell->data();
+        functor.apply(val, d);
+      }
+      else {
+        break;
+      }
+
+      ++kernel_iter;
+    }
+        
+    out_center_cell->set_data(functor.result());
+    ++iterator;
+    ++out_iter;
+  }
+}
+
+template<class T_data, class F>
+void bvpl_scene_kernel_operator::local_non_maxima_suppression(boxm_scene<boct_tree<short, T_data > > &scene_in,
+                                                              F functor,
+                                                              bvpl_kernel_sptr kernel)
+{
+ // //(1)Traverse input scene and for every leaf cell, (2) request a region around it, and (3) apply the functor
+//  
+//  //(1) Traverse the scene - is there an easy way to modify the cell iterator so to only use leaf cells at level 0;
+//  boxm_cell_iterator<boct_tree<short, T_data > > iterator = scene_in.cell_iterator(&boxm_scene<boct_tree<short, T_data > >::load_block_and_neighbors);
+//  iterator.begin();
+//  
+//  bvpl_kernel_iterator kernel_iter = kernel->iterator();
+//  
+//  double cell_length = kernel->voxel_length();
+//  
+//  while ( !(iterator.end()) ) {
+//    
+//    boct_tree_cell<short,T_data> *center_cell = *iterator; 
+//   
+//    //we are only interested in finest resolution
+//    if(!center_cell->level() == 0 || !center_cell->is_leaf()){
+//      ++iterator;
+//      continue;
+//    }
+//    
+//    vgl_point_3d<double> center_cell_origin = iterator.global_origin();
+//    
+//    kernel_iter.begin(); // reset the kernel iterator
+//    while (!kernel_iter.isDone())
+//    {
+//      vgl_point_3d<int> kernel_idx = kernel_iter.index();
+//      
+//      vgl_point_3d<double> kernel_cell_origin(center_cell_origin.x() + (double)kernel_idx.x()*cell_length + 1.0e-7,
+//                                              center_cell_origin.y() + (double)kernel_idx.y()*cell_length + 1.0e-7,
+//                                              center_cell_origin.z() + (double)kernel_idx.z()*cell_length + 1.0e-7);
+//      
+//      boct_tree_cell<short,T_data> *this_cell = scene_in.locate_point_in_memory(kernel_cell_origin);
+//      
+//      if (this_cell) {
+//        bvpl_kernel_dispatch d = *kernel_iter;
+//        T_data val = this_cell->data();
+//        functor.apply(val, d);
+//      }
+//      else {
+//        break;
+//      }
+//      
+//      ++kernel_iter;
+//    }
+//    
+//    out_center_cell->set_data(functor.result());
+//    ++iterator;
+//    ++out_iter;
+//  }
+}
 
 #endif // bvpl_scene_kernel_operator_h
