@@ -165,11 +165,11 @@ void boxm_scene<T>::write_active_block()
 {
   if (valid_index(active_block_)&& (!load_all_blocks_))
   {
-    vcl_cout<<"Load All blocks "<<load_all_blocks_<<vcl_endl;
     int x=active_block_.x(), y=active_block_.y(), z=active_block_.z();
     vcl_string path = gen_block_path(x,y,z);
     vsl_b_ofstream os(path);
-#if 0
+#ifdef DEBUG
+    vcl_cout<<"Load All blocks "<<load_all_blocks_<<vcl_endl;
     vcl_cout << "Internal Nodes 2: " << save_internal_nodes_ << " save_platform_independent_ " << save_platform_independent_ << vcl_endl;
 #endif
     blocks_(x,y,z)->b_write(os, save_internal_nodes_, save_platform_independent_);
@@ -220,7 +220,9 @@ boxm_block<T>* boxm_scene<T>::get_block(vgl_point_3d<double>& p)
     return blocks_(i,j,k);
   }
   else {
+#ifdef DEBUG
     vcl_cerr << "Point " << p << " is out of world " << world << '\n';
+#endif
     return 0;
   }
 }
@@ -248,7 +250,9 @@ bool boxm_scene<T>::get_block_index(vgl_point_3d<double>& p, vgl_point_3d<int> &
     return true;
   }
   else {
+#ifdef DEBUG
     vcl_cerr << "Point " << p << " is out of world " << world << '\n';
+#endif
     return false;
   }
 }
@@ -727,7 +731,8 @@ void boxm_scene<T>::leaves_in_region(vgl_box_3d<double> box, vcl_vector<boct_tre
   vgl_point_3d<int> max_idx;
   get_block_index(max_point, max_idx);
 
-  load_blocks(min_idx, max_idx);
+  if (!load_blocks(min_idx, max_idx))
+    return;
 
   //traverse blocks. for each block get the cells intersects the portion of the region contained in the block
   for (int k = min_idx.z(); k <= max_idx.z(); k++)
