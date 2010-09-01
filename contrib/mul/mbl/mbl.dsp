@@ -240,6 +240,9 @@ SOURCE=.\mbl_mask.cxx
 SOURCE=.\mbl_parse_keyword_list.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\mbl_eps_writer.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/mbl_data_wrapper+double-.cxx
 # End Source File
 # Begin Source File
@@ -670,6 +673,9 @@ SOURCE=.\mbl_mask.h
 # End Source File
 # Begin Source File
 SOURCE=.\mbl_parse_keyword_list.h
+# End Source File
+# Begin Source File
+SOURCE=.\mbl_eps_writer.h
 # End Source File
 # End Group
 # End Target
