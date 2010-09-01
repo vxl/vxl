@@ -143,7 +143,7 @@ bool bvpl_plane_propagate_process(bprb_func_process& pro)
         }
       }
     }
-    bvpl_kernel_sptr kernel= new bvpl_kernel(k_iter, vnl_float_3(0,0,1), 0.0f, vgl_vector_3d<int>(3,3,3),min_pt,max_pt);
+    bvpl_kernel_sptr kernel= new bvpl_kernel(k_iter, vnl_float_3(0,0,1), vnl_float_3(0,1,0), 0.0f, vgl_vector_3d<int>(3,3,3),min_pt,max_pt);
     
     boxm_block_iterator<tree_type> iter(scene);
     boxm_block_iterator<tree_type> output_iter(output_scene);

@@ -76,7 +76,7 @@ static void test_octree_neighbors()
       }
     }
   }
-  bvpl_kernel_sptr kernel= new bvpl_kernel(iter, vnl_float_3(0,0,1), 0.0f, vgl_vector_3d<int>(3,3,3), min_pt,max_pt);
+  bvpl_kernel_sptr kernel= new bvpl_kernel(iter, vnl_float_3(0,0,1), vnl_float_3(0,1,0),0.0f, vgl_vector_3d<int>(3,3,3), min_pt,max_pt);
 
   vcl_vector<boct_tree_cell<short,float>*> leaves = tree->leaf_cells();
   bvpl_octree_neighbors<float> neighb(tree);
