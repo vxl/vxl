@@ -121,19 +121,26 @@ bool boxm_render_bit_scene_manager::set_args(unsigned kernel_index=0)
   if (kernel_index==0)
   {
     //create a render scene info
-    RenderSceneInfo info;
-    info.scene_origin = (cl_float4) { scene_origin_[0], scene_origin_[1], scene_origin_[2], scene_origin_[3] };      // scene origin (point)
-    info.scene_dims   = (cl_int4)   { scene_dims_[0], scene_dims_[1],scene_dims_[2],scene_dims_[3] };              // number of blocks in each dimension
-    info.block_len    = block_dims_[0];    // size of each block (can only be 1 number now that we've established blocks are cubes)
+    RenderSceneInfo* info = new RenderSceneInfo;
+    info->scene_origin = (cl_float4) { scene_origin_[0], scene_origin_[1], scene_origin_[2], scene_origin_[3] };      // scene origin (point)
+    info->scene_dims   = (cl_int4)   { scene_dims_[0], scene_dims_[1],scene_dims_[2],scene_dims_[3] };              // number of blocks in each dimension
+    info->block_len    = block_dims_[0];    // size of each block (can only be 1 number now that we've established blocks are cubes)
 
     //tree meta information 
-    info.root_level   = root_level_;                // root_level of trees
-    info.num_buffer   = numbuffer_;                 // number of buffers (both data and tree)
-    info.tree_buffer_length = tree_buffer_length_;  // length of tree buffer (number of cells/trees)
-    info.data_buffer_length = data_buffer_length_;   
+    info->root_level   = root_level_;                // root_level of trees
+    info->num_buffer   = numbuffer_;                 // number of buffers (both data and tree)
+    info->tree_buffer_length = tree_buffer_length_;  // length of tree buffer (number of cells/trees)
+    info->data_buffer_length = data_buffer_length_;   
+    
+    scene_info_buf_ = clCreateBuffer(this->context_,
+                                    CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+                                    sizeof(RenderSceneInfo),
+                                    info,&status);
+    if (!this->check_val(status,CL_SUCCESS,"scene info buff failed."))
+      return 0;
     
     int i=0;
-    status = clSetKernelArg(kernels_[0],i++,sizeof(RenderSceneInfo), &info);
+    status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem), (void *)&scene_info_buf_);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (render scene info)"))
       return 0;    
     

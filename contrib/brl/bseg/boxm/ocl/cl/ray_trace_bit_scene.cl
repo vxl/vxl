@@ -7,7 +7,7 @@
 //uses int2 tree cells and uchar8 mixture cells
 __kernel
 void
-ray_trace_bit_scene_opt(RenderSceneInfo     info,
+ray_trace_bit_scene_opt(__global  RenderSceneInfo * info,
                         __global  ushort2 * block_ptrs,
                         __global  uchar16 * tree_array,
                         __global  float   * alpha_array,
@@ -60,21 +60,21 @@ ray_trace_bit_scene_opt(RenderSceneInfo     info,
                                    ray_o);
   
   //load scene information into registers (runs faster with tree_len, data_len and rootlevel in local variables)
-  int tree_len  = info.tree_buffer_length;
-  int data_len  = info.data_buffer_length;
-  int rootlevel = info.root_level;
+  int tree_len  = info->tree_buffer_length;
+  int data_len  = info->data_buffer_length;
+  int rootlevel = info->root_level;
   float4 data_return = (float4) (0.0f,1.0f,0.0f,0.0f);
   float cellsize = 1.0/((float)(1<<rootlevel));   //for checking the grazing conditions
   float epsilon = cellsize/10.0;                  //epsilon is a tenth of the smallest cell side length
 
   //// small block dimensions, full scene dimensions...
-  float block_len = info.block_len;
-  int4 scenedims  = info.scene_dims;
+  float block_len = info->block_len;
+  int4 scenedims  = info->scene_dims;
   scenedims.w = 1;  //for safety purposes
 
   //// scene bounding box
   // Do we need cell_min AND cell_max... won't it suffice to have cell_min and cell_size?
-  float4 cell_min = info.scene_origin;
+  float4 cell_min = info->scene_origin;
   float  cell_len = block_len; 
 
   //get parameters tnear and tfar for the cell and this ray
@@ -92,7 +92,7 @@ ray_trace_bit_scene_opt(RenderSceneInfo     info,
   //calculate the index of the intersected block
   //float4 exit_pt;
   float4 entry_pt = ray_o + tnear*ray_d;
-  int4 curr_block_index = convert_int4( (entry_pt - info.scene_origin)/(float4)(block_len, block_len, block_len, 1.0));
+  int4 curr_block_index = convert_int4( (entry_pt - info->scene_origin)/(float4)(block_len, block_len, block_len, 1.0));
 
   // handling the border case where a ray pierces the max side
   curr_block_index   = curr_block_index + (curr_block_index == scenedims);
@@ -126,11 +126,11 @@ ray_trace_bit_scene_opt(RenderSceneInfo     info,
     local_tree[rIndex+12] = tbuff.sc; local_tree[rIndex+13] = tbuff.sd; local_tree[rIndex+14] = tbuff.se; local_tree[rIndex+15] = tbuff.sf;   
 
     //local ray origin (can compute first term outside loop)
-    float4 local_ray_o = (ray_o - info.scene_origin)/block_len - convert_float4(curr_block_index);
+    float4 local_ray_o = (ray_o - info->scene_origin)/block_len - convert_float4(curr_block_index);
     
     //entry point in local block coordinates (need to ensure that this point is actually
     //between (0,1) for xyz
-    float4 block_entry_pt = (entry_pt - info.scene_origin)/block_len - convert_float4(curr_block_index);
+    float4 block_entry_pt = (entry_pt - info->scene_origin)/block_len - convert_float4(curr_block_index);
     //exit_pt = block_entry_pt;
     
     //--------------------------------------------------------------------------
@@ -179,7 +179,7 @@ ray_trace_bit_scene_opt(RenderSceneInfo     info,
     // finding the next block
     //--------------------------------------------------------------------------
     // block bounding box
-    cell_min = block_len * convert_float4(curr_block_index) + info.scene_origin;
+    cell_min = block_len * convert_float4(curr_block_index) + info->scene_origin;
     cell_len = block_len;
     if (!intersect_cell(ray_o, ray_d, cell_min, (float4) cell_len, &tnear, &tfar))
     {
@@ -191,7 +191,7 @@ ray_trace_bit_scene_opt(RenderSceneInfo     info,
         if (tfar-tnear < block_len/100)
         {
             entry_pt = entry_pt + block_len/2 *ray_d;
-            curr_block_index   = convert_int4((entry_pt-info.scene_origin)/block_len);
+            curr_block_index   = convert_int4((entry_pt-info->scene_origin)/block_len);
             curr_block_index.w = 0;
         }
 
@@ -204,7 +204,7 @@ ray_trace_bit_scene_opt(RenderSceneInfo     info,
             break;
         if (any(-1*(isless(fabs(entry_pt-cell_min+cell_len),(float4)block_len/100.0f)*isless(fabs(ray_d),(float4)1e-3))))
             break;
-        curr_block_index   = convert_int4(floor((entry_pt+(block_len/20.0f)*ray_d-info.scene_origin)/block_len));
+        curr_block_index   = convert_int4(floor((entry_pt+(block_len/20.0f)*ray_d-info->scene_origin)/block_len));
         curr_block_index.w = 0;
     }
   }

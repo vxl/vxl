@@ -138,6 +138,8 @@ class boxm_render_bit_scene_manager : public bocl_manager<boxm_render_bit_scene_
   bool set_block_dims_buffers();
   bool set_block_ptrs();
   bool set_block_ptrs_buffers();
+  bool set_scene_info();
+  bool set_scene_info_buffer();
 
   //clean up scene
   bool clean_scene_dims();
@@ -201,6 +203,7 @@ class boxm_render_bit_scene_manager : public bocl_manager<boxm_render_bit_scene_
   cl_int data_buffer_length_;
 
   //other scene info
+  RenderSceneInfo * scene_info_;
   cl_int   * scene_dims_;
   cl_float * scene_origin_;
   cl_float * block_dims_;
@@ -238,6 +241,7 @@ class boxm_render_bit_scene_manager : public bocl_manager<boxm_render_bit_scene_
   //------------------------------------------------------------------
   // GPU side pointers to cl memory
   //------------------------------------------------------------------
+  cl_mem   scene_info_buf_;
   cl_mem   trees_buf_;
   cl_mem   data_alpha_buf_;
   cl_mem   data_mixture_buf_;
