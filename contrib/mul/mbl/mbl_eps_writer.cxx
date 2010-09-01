@@ -1,19 +1,20 @@
+#include "mbl_eps_writer.h"
 //:
 // \file
 // \brief Class to generate simple EPS files containing images and lines
 // \author Tim Cootes
 
-#include "mbl_eps_writer.h"
 #include <vil/vil_plane.h>
 #include <vil/vil_crop.h>
 #include <vcl_algorithm.h>
+#include <vcl_cassert.h>
 
 //=======================================================================
 // Dflt ctor
 //=======================================================================
 
 mbl_eps_writer::mbl_eps_writer()
-  : sx_(1.0),sy_(1.0),nx_(100),ny_(100)
+  : nx_(100.0),ny_(100.0),sx_(1.0),sy_(1.0)
 {
 }
 
@@ -44,7 +45,7 @@ void mbl_eps_writer::set_grey_shade(double shade)
 //: Define colour of subsequent lines r,g,b in [0,1]
 void mbl_eps_writer::set_rgb(double r, double g, double b)
 {
-  ofs_<<r<<" "<<g<<" "<<b<<" setrgbcolor\n";
+  ofs_<<r<<' '<<g<<' '<<b<<" setrgbcolor\n";
 }
 
 //: Set colour of subsequent graphics using a named colour
@@ -85,16 +86,16 @@ bool mbl_eps_writer::open(const char* path, double nx, double ny)
   ofs_.open(path,vcl_ios_out);
   if (!ofs_) return false;
 
-  ofs_<<"%!PS-Adobe-1.0\n";
-  ofs_<<"%%Creator: mbl_eps_writer\n";
-//  ofs_<<"%%Title: shapes"<<vcl_endl;
-  ofs_<<"%%BoundingBox: 0 0 "<<nx<<" "<<ny<<vcl_endl;
+  ofs_<<"%!PS-Adobe-1.0\n"
+      <<"%%Creator: mbl_eps_writer\n"
+  //  <<"%%Title: shapes\n"
+      <<"%%BoundingBox: 0 0 "<<nx<<' '<<ny<<'\n'
 
-  ofs_<<"gsave\n";
-  ofs_<<"% Define some simple macros to save space\n";
-  ofs_<<"/M {moveto} def\n";
-  ofs_<<"/L {lineto} def\n\n";
-  ofs_<<"/CP {closepath} def\n\n";
+      <<"gsave\n"
+      <<"% Define some simple macros to save space\n"
+      <<"/M {moveto} def\n"
+      <<"/L {lineto} def\n\n"
+      <<"/CP {closepath} def\n\n";
 
   nx_ = nx; ny_=ny;
 
@@ -103,10 +104,10 @@ bool mbl_eps_writer::open(const char* path, double nx, double ny)
 
 //: Creates file and draws image, setting bounding box to that of image
 //  Sets scaling to pixel widths, so that subsequent points are
-//  interpretted in pixel units.
-bool mbl_eps_writer::open(const char* path, 
-          const vil_image_view<vxl_byte>& image,
-          double pixel_width_x, double pixel_width_y)
+//  interpreted in pixel units.
+bool mbl_eps_writer::open(const char* path,
+                          const vil_image_view<vxl_byte>& image,
+                          double pixel_width_x, double pixel_width_y)
 {
   if (!open(path,image.ni()*pixel_width_x,image.nj()*pixel_width_y))
     return false;
@@ -131,45 +132,45 @@ void mbl_eps_writer::set_line_width(double w)
 }
 
 
-//: Draws cicle of radius r around p
+//: Draws circle of radius r around p
 void mbl_eps_writer::draw_circle(const vgl_point_2d<double>& p, double r)
 {
-  ofs_<<"newpath\n"<<vcl_endl;
-  ofs_<<sx_*p.x()<<" "<<ny_-sy_*p.y()<<" "<<sx_*r<<" "<<"0 360 arc CP\n"<<vcl_endl;
-  ofs_<<"stroke"<<vcl_endl;
+  ofs_<<"newpath\n\n"
+      <<sx_*p.x()<<' '<<ny_-sy_*p.y()<<' '<<sx_*r<<" 0 360 arc CP\n\n"
+      <<"stroke"<<vcl_endl;
 }
 
 //: Draws disk of radius r around p
 void mbl_eps_writer::draw_disk(const vgl_point_2d<double>& p, double r)
 {
-  ofs_<<"newpath\n";
-  ofs_<<sx_*p.x()<<" "<<ny_-sy_*p.y()<<" "<<sx_*r<<" "<<"0 360 arc CP fill\n";
-  ofs_<<"stroke"<<vcl_endl;
+  ofs_<<"newpath\n"
+      <<sx_*p.x()<<' '<<ny_-sy_*p.y()<<' '<<sx_*r<<" 0 360 arc CP fill\n"
+      <<"stroke"<<vcl_endl;
 }
 
 //: Draws line segment from p1 to p2
 void mbl_eps_writer::draw_line(const vgl_point_2d<double>& p1, const vgl_point_2d<double>& p2)
 {
-  ofs_<<"newpath"<<vcl_endl;
-  ofs_<<sx_*p1.x()<<" "<<ny_-sy_*p1.y()<<" M ";
-  ofs_<<sx_*p2.x()<<" "<<ny_-sy_*p2.y()<<" L\n";
-  ofs_<<"stroke\n";
+  ofs_<<"newpath\n"
+      <<sx_*p1.x()<<' '<<ny_-sy_*p1.y()<<" M "
+      <<sx_*p2.x()<<' '<<ny_-sy_*p2.y()<<" L\n"
+      <<"stroke\n";
 }
 
 //: Draws polygon connecting points.
 //  If closed, then adds line joining last to first point.
 //  If filled, then fills with current colour/greyshade.
 void mbl_eps_writer::draw_polygon(const vcl_vector<vgl_point_2d<double> >& pts,
-                                   bool closed, bool filled)
+                                  bool closed, bool filled)
 {
   if (pts.size()<2) return;
-  ofs_<<"newpath"<<vcl_endl;
-  ofs_<<sx_*pts[0].x()<<" "<<ny_-sy_*pts[0].y()<<" M ";
+  ofs_<<"newpath\n"
+      <<sx_*pts[0].x()<<' '<<ny_-sy_*pts[0].y()<<" M ";
   for (unsigned i=1;i<pts.size();++i)
-    ofs_<<sx_*pts[i].x()<<" "<<ny_-sy_*pts[i].y()<<" L\n";
+    ofs_<<sx_*pts[i].x()<<' '<<ny_-sy_*pts[i].y()<<" L\n";
   if (closed)
   {
-    ofs_<<sx_*pts[0].x()<<" "<<ny_-sy_*pts[0].y()<<" L CP\n";
+    ofs_<<sx_*pts[0].x()<<' '<<ny_-sy_*pts[0].y()<<" L CP\n";
   }
   if (filled) ofs_<<"fill ";
   ofs_<<"stroke\n";
@@ -177,8 +178,8 @@ void mbl_eps_writer::draw_polygon(const vcl_vector<vgl_point_2d<double> >& pts,
 
 
 //: Writes first plane of image in hex format to os
-void mbl_eps_writer::write_image_data(vcl_ostream& os, 
-                      const vil_image_view<vxl_byte>& image)
+void mbl_eps_writer::write_image_data(vcl_ostream& os,
+                                      const vil_image_view<vxl_byte>& image)
 {
   unsigned ni=image.ni(),nj=image.nj();
   ofs_<<"{<";
@@ -189,15 +190,15 @@ void mbl_eps_writer::write_image_data(vcl_ostream& os,
     {
       ofs_<<vcl_hex<<int(image(i,j))/16<<int(image(i,j))%16;
     }
-    ofs_<<"\n";
+    ofs_<<vcl_endl;
   }
-  ofs_<<">}\n";
-  ofs_<<vcl_dec;  // Ensure returns to decimal
+  ofs_<<">}\n"
+      <<vcl_dec;  // Ensure returns to decimal
 }
 
 void mbl_eps_writer::draw_image(const vil_image_view<vxl_byte>& image,
-                       double tx, double ty,
-                       double pixel_width_x, double pixel_width_y)
+                                double tx, double ty,
+                                double pixel_width_x, double pixel_width_y)
 {
   unsigned ni=image.ni(),nj=image.nj();
 
@@ -234,22 +235,22 @@ void mbl_eps_writer::draw_grey_image_block(
 {
   assert(image.ni()<256);
   assert(image.nj()<256);
-  ofs_<<"gsave\n";
-  ofs_<<sx_*tx<<" "<<ny_-sy_*ty<<" translate\n";
+  ofs_<<"gsave\n"
+      <<sx_*tx<<' '<<ny_-sy_*ty<<" translate\n";
   unsigned ni=image.ni(),nj=image.nj();
-  ofs_<<sx_*ni*pixel_width_x<<" -"<<sy_*nj*pixel_width_y<<" scale\n";
-  ofs_<<ni<<" "<<nj<<" % Image size\n";
-  ofs_<<"8 % Bits per pixel\n";
-  ofs_<<"[ "<<ni<<" 0 0 "<<nj<<" 0 0]\n";  // Transformation (unit sqr to pixels)
+  ofs_<<sx_*ni*pixel_width_x<<" -"<<sy_*nj*pixel_width_y<<" scale\n"
+      <<ni<<' '<<nj<<" % Image size\n"
+      <<"8 % Bits per pixel\n"
+      <<"[ "<<ni<<" 0 0 "<<nj<<" 0 0]\n";  // Transformation (unit sqr to pixels)
   // Now draw the image data
   write_image_data(ofs_,image);
 
-  ofs_<<"image\n";
-  ofs_<<"grestore\n";
+  ofs_<<"image\n"
+      <<"grestore\n";
 }
 
 //: Creates a colour image with given pixel widths
-//  image assumed to be a 3 plane image.
+//  Image assumed to be a 3 plane image.
 void mbl_eps_writer::draw_rgb_image_block(
                        const vil_image_view<vxl_byte>& image,
                        double tx, double ty,
@@ -258,27 +259,27 @@ void mbl_eps_writer::draw_rgb_image_block(
   assert(image.ni()<256);
   assert(image.nj()<256);
 
-  ofs_<<"gsave\n";
-  ofs_<<sx_*tx<<" "<<ny_-sy_*ty<<" translate\n";
+  ofs_<<"gsave\n"
+      <<sx_*tx<<' '<<ny_-sy_*ty<<" translate\n";
   unsigned ni=image.ni(),nj=image.nj();
-  ofs_<<sx_*ni*pixel_width_x<<" -"<<sy_*nj*pixel_width_y<<" scale\n";
-  ofs_<<ni<<" "<<nj<<" % Image size\n";
-  ofs_<<"8 % Bits per pixel\n";
-  ofs_<<"[ "<<ni<<" 0 0 "<<nj<<" 0 0]\n";  // Transformation (unit sqr to pixels)
+  ofs_<<sx_*ni*pixel_width_x<<" -"<<sy_*nj*pixel_width_y<<" scale\n"
+      <<ni<<' '<<nj<<" % Image size\n"
+      <<"8 % Bits per pixel\n"
+      <<"[ "<<ni<<" 0 0 "<<nj<<" 0 0]\n";  // Transformation (unit sqr to pixels)
   // Now draw the image data
   write_image_data(ofs_,vil_plane(image,0));  // Red
   write_image_data(ofs_,vil_plane(image,1));  // Green
   write_image_data(ofs_,vil_plane(image,2));  // Blue
 
-  ofs_<<"true 3 colorimage\n";
-  ofs_<<"grestore\n";
+  ofs_<<"true 3 colorimage\n"
+      <<"grestore\n";
 }
 
 //: Creates an image  at (tx,ty) with given pixel widths
 //  Size in points given by sx(),sy() * given values.
 void mbl_eps_writer::draw_image_block(const vil_image_view<vxl_byte>& image,
-                       double tx, double ty,
-                       double pixel_width_x, double pixel_width_y)
+                                      double tx, double ty,
+                                      double pixel_width_x, double pixel_width_y)
 {
   if (image.nplanes()==1)
     draw_grey_image_block(image,tx,ty,pixel_width_x,pixel_width_y);
