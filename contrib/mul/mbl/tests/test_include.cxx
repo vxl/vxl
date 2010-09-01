@@ -18,6 +18,7 @@
 #include <mbl/mbl_data_wrapper_mixer.h>
 #include <mbl/mbl_draw_line.h>
 #include <mbl/mbl_dyn_prog.h>
+#include <mbl/mbl_eps_writer.h>
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_file_data_collector.h>
 #include <mbl/mbl_file_data_wrapper.h>
