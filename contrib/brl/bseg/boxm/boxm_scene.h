@@ -92,6 +92,9 @@ class boxm_scene :public boxm_scene_base
   //: Returns the active block(in memory)
   boxm_block<T>* get_active_block();
   
+  //: Resturns the index of active block
+  vgl_point_3d<int> active_block() { return active_block_; }
+  
   //: Returns the indeces of active neighbors;
   vcl_set<vgl_point_3d<int>, bvgl_point_3d_cmp<int> >& active_blocks(){ return active_blocks_;}
 
