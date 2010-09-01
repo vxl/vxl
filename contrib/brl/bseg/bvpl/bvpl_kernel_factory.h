@@ -99,6 +99,8 @@ class bvpl_kernel_factory
 
   //: Rotation axis of kernel_
   vnl_float_3 rotation_axis_;
+  
+  vnl_float_3 parallel_axis_;
 
   // parallel_axis_ define a coordinate system for each kernel.
   // The vector (parallel_axis_ - rotation_axis_) defines the direction of the minor axis of the kernel

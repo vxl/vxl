@@ -14,7 +14,7 @@ bvpl_kernel
 bvpl_kernel_factory::create()
 {
   bvpl_kernel_iterator iter = interpolate(rotate(angle_));
-  bvpl_kernel kernel(iter, rotation_axis_, angle_,dim(), min_point_, max_point_,factory_name_,voxel_length_);
+  bvpl_kernel kernel(iter, rotation_axis_, parallel_axis_, angle_,dim(), min_point_, max_point_,factory_name_,voxel_length_);
 
   return kernel;
 }
@@ -24,7 +24,7 @@ bvpl_kernel
 bvpl_kernel_factory::create(vnl_float_3 rotation_axis, float angle)
 {
   this->set_rotation_axis(rotation_axis);
-  return bvpl_kernel(interpolate(rotate(angle)), rotation_axis_, angle_, dim(), min_point_, max_point_,factory_name_,voxel_length_);
+  return bvpl_kernel(interpolate(rotate(angle)), rotation_axis_, parallel_axis_, angle_, dim(), min_point_, max_point_,factory_name_,voxel_length_);
 }
 
 //: Rounds coordinates of kernel to the nearest integer
@@ -113,11 +113,11 @@ void bvpl_kernel_factory::set_rotation_axis( vnl_float_3 rotation_axis)
   if (angular_resolution_ < vcl_numeric_limits<float>::epsilon())
     return;
 
-  vnl_float_3 parallel_axis = r_align.as_matrix() * canonical_parallel_axis_;
+  parallel_axis_ = r_align.as_matrix() * canonical_parallel_axis_;
 
   //spherical coordinates of the parallel axis.
   float /* theta_p = vcl_atan2(parallerl_axis[1],parallerl_axis[0]), //azimuth, unused */
-        phi_p = vcl_acos(parallel_axis[2]/radius); //zenith
+        phi_p = vcl_acos(parallel_axis_[2]/radius); //zenith
 
   //parallel axis needs to be rotated to have same polar angle as rotation axis
 
@@ -131,14 +131,15 @@ void bvpl_kernel_factory::set_rotation_axis( vnl_float_3 rotation_axis)
     vgl_rotation_3d<float> r_correct(vnl_quaternion<float>(rotation_axis, correction_phi));
     // rotate correction_phi around new axis of rotation. This position is the 0-rotation.
     kernel_ = rotate(r_correct);
+    parallel_axis_ = r_correct.as_matrix() * parallel_axis_;
     return;
   }
   else
   { //make sure parallel axis is aligned with y-axis
     for ( unsigned i = 0; i < 3; ++i ){
-      if ( vcl_abs(parallel_axis[i] - canonical_parallel_axis_[i]) >  vcl_numeric_limits<float>::epsilon() ){
+      if ( vcl_abs(parallel_axis_[i] - canonical_parallel_axis_[i]) >  vcl_numeric_limits<float>::epsilon() ){
         vcl_cerr << "Error when aligning rotation axis to the z axis\n" ;
-        vcl_cout << "Parallel axis: "<< parallel_axis << vcl_endl
+        vcl_cout << "Parallel axis: "<< parallel_axis_ << vcl_endl
                  << "Canonical parallel axis " << canonical_parallel_axis_ << vcl_endl;
         return;
       }

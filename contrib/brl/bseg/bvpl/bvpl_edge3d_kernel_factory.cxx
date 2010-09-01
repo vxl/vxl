@@ -27,7 +27,7 @@ min_x_(min_x),max_x_(max_x),min_y_(min_y),max_y_(max_y),min_z_(min_z),max_z_(max
   angle_ = 0.0f;
   voxel_length_ = voxel_length;
   rotation_axis_ = canonical_rotation_axis_;
-  //parallel_axis_ = canonical_parallel_axis_;
+  parallel_axis_ = canonical_parallel_axis_;
   create_canonical();
 }
 

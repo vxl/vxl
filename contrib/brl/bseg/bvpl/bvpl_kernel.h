@@ -30,8 +30,8 @@ class bvpl_kernel: public vbl_ref_count
   //: Default constructor
   bvpl_kernel() {id_=++id_cnt;}
   //: Constructor
-  bvpl_kernel(bvpl_kernel_iterator kernel, vnl_float_3 axis, float angle, vgl_vector_3d<int> dim, vgl_point_3d<int> min_pt, vgl_point_3d<int> max_pt, vcl_string name = "", double voxel_length = 1.0)
-  : kernel_(kernel),axis_(axis), angle_(angle),dim_(dim),min_point_(min_pt),max_point_(max_pt),name_(name),voxel_length_(voxel_length)
+  bvpl_kernel(bvpl_kernel_iterator kernel, vnl_float_3 axis, vnl_float_3 aux_axis, float angle, vgl_vector_3d<int> dim, vgl_point_3d<int> min_pt, vgl_point_3d<int> max_pt, vcl_string name = "", double voxel_length = 1.0)
+  : kernel_(kernel),axis_(axis),aux_axis_(aux_axis), angle_(angle),dim_(dim),min_point_(min_pt),max_point_(max_pt),name_(name),voxel_length_(voxel_length)
   {
 #ifdef DEBUG
     vcl_cout << "Creating kernel with axis, anle, dim, max, min =\n" << axis_ << '\n' << angle_<< '\n' << dim_<< '\n' <<max_point_<< '\n' << min_point_ << '\n';
@@ -42,6 +42,7 @@ class bvpl_kernel: public vbl_ref_count
   ~bvpl_kernel() {}
   bvpl_kernel_iterator iterator(){return kernel_;}
   vnl_float_3 axis() const {return axis_;}
+  vnl_float_3 aux_axis() const {return aux_axis_;}
   float angle() const {return angle_;}
   vnl_float_3 scale() const {return scale_;}
   vgl_vector_3d<int> dim()const {return dim_;}
@@ -105,7 +106,11 @@ class bvpl_kernel: public vbl_ref_count
 
  private:
   bvpl_kernel_iterator kernel_;
+  //: Orientation axis
   vnl_float_3 axis_;
+  //: Auxiliary axis - used to define a coordinate system
+  vnl_float_3 aux_axis_;
+  //: Angle of rotation about main axis
   float angle_;
   vnl_float_3 scale_;
   vgl_vector_3d<int> dim_;
