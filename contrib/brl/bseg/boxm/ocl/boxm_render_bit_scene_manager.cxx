@@ -25,22 +25,24 @@ bool boxm_render_bit_scene_manager::init_ray_trace(boxm_ocl_bit_scene *scene,
 
   // Code for Pass_0
   if (!this->load_kernel_source(vcl_string(VCL_SOURCE_ROOT_DIR) 
-                                + "/contrib/brl/bseg/boxm/ocl/cl/loc_code_library_functions.cl") ||
+                                    + "/contrib/brl/bseg/boxm/ocl/cl/scene_info.cl") ||
+      //!this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
+      //                              + "/contrib/brl/bseg/boxm/ocl/cl/float3.cl") || 
       !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                + "/contrib/brl/bseg/boxm/ocl/cl/cell_utils.cl") ||
+                                    + "/contrib/brl/bseg/boxm/ocl/cl/cell_utils.cl") ||
       !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                +"/contrib/brl/bseg/boxm/ocl/cl/bit_tree_library_functions.cl") ||
+                                    +"/contrib/brl/bseg/boxm/ocl/cl/bit_tree_library_functions.cl") ||
       !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
                                     +"/contrib/brl/bseg/boxm/ocl/cl/backproject.cl")||
       !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                    +"/contrib/brl/bseg/boxm/ocl/ray_bundle_library_functions.cl")||
+                                    +"/contrib/brl/bseg/boxm/ocl/cl/statistics_library_functions.cl")||
       !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
                                     +"/contrib/brl/bseg/boxm/ocl/cl/expected_functor.cl")||
       !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
                                     +"/contrib/brl/bseg/boxm/ocl/cl/ray_bundle_library_functions.cl")||
       !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
                                     +"/contrib/brl/bseg/boxm/ocl/cl/ray_trace_bit_scene.cl")) {
-    vcl_cerr << "Error: boxm_ray_trace_manager : failed to load kernel source (helper functions)\n";
+    vcl_cerr << "Error: boxm_render_bit_scene_manager : failed to load kernel source (helper functions)\n";
     return false;
   }
 
@@ -76,7 +78,7 @@ bool boxm_render_bit_scene_manager::set_kernel()
 {
   cl_int status = CL_SUCCESS;  kernels_.clear();
   vcl_cout<<"create: kernel0"<<vcl_endl;
-  cl_kernel kernel0 = clCreateKernel(program_,"ray_trace_bit_scene",&status);
+  cl_kernel kernel0 = clCreateKernel(program_,"ray_trace_bit_scene_opt",&status);
   if (!this->check_val(status,CL_SUCCESS,error_to_string(status))) {
     return false;
   }
@@ -118,39 +120,33 @@ bool boxm_render_bit_scene_manager::set_args(unsigned kernel_index=0)
 
   if (kernel_index==0)
   {
+    //create a render scene info
+    RenderSceneInfo info;
+    info.scene_origin = (cl_float4) { scene_origin_[0], scene_origin_[1], scene_origin_[2], scene_origin_[3] };      // scene origin (point)
+    info.scene_dims   = (cl_int4)   { scene_dims_[0], scene_dims_[1],scene_dims_[2],scene_dims_[3] };              // number of blocks in each dimension
+    info.block_len    = block_dims_[0];    // size of each block (can only be 1 number now that we've established blocks are cubes)
+
+    //tree meta information 
+    info.root_level   = root_level_;                // root_level of trees
+    info.num_buffer   = numbuffer_;                 // number of buffers (both data and tree)
+    info.tree_buffer_length = tree_buffer_length_;  // length of tree buffer (number of cells/trees)
+    info.data_buffer_length = data_buffer_length_;   
+    
     int i=0;
-    status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&scene_dims_buf_);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (scene_dims_buf_)"))
-      return 0;
-    status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&scene_origin_buf_);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (scene_orign_buf_)"))
-      return 0;
-    status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&block_dims_buf_);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (block_dims_buf_)"))
-      return 0;
+    status = clSetKernelArg(kernels_[0],i++,sizeof(RenderSceneInfo), &info);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (render scene info)"))
+      return 0;    
+    
+    //block pointers
     status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&block_ptrs_buf_);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (block_ptrs_buf_)"))
       return 0;
-    // root level buffer
-    status = clSetKernelArg(kernels_[0],i++,sizeof(cl_uint), &root_level_);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (root_level_buf_)"))
-      return 0;
-    // the length of buffer
-    status = clSetKernelArg(kernels_[0],i++,sizeof(cl_int), &numbuffer_);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (lenbuffer_buf_)"))
-      return 0;
-    // the length of tree buffer
-    status = clSetKernelArg(kernels_[0],i++,sizeof(cl_int), &tree_buffer_length_);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (tree_lenbuffer_buf_)"))
-      return 0;
+
     // the tree buffer
     status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&trees_buf_);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cells_buf_)"))
       return 0;
-    // length of the data buffers
-    status = clSetKernelArg(kernels_[0],i++,sizeof(cl_int), &data_buffer_length_);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (data_buffer_length_buf_)"))
-      return 0;
+
     // alpha buffer
     status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&data_alpha_buf_);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_data_buf_)"))
@@ -667,16 +663,14 @@ int boxm_render_bit_scene_manager::build_kernel_program(cl_program & program, bo
 
   vcl_string options="";
   if (render_depth)
-    options+="-D DEPTH";
+    options+="-D DEPTH ";
   else
-    options+="-D INTENSITY";
+    options+="-D INTENSITY ";
 
-#if 0
-  if (vcl_strstr(this->platform_name,"ATI"))
-    options+="-D ATI";
-  if (vcl_strstr(this->platform_name,"NVIDIA"))
-    options+="-D NVIDIA";
-#endif
+  if(vcl_strstr(this->platform_name,"ATI"))
+    options+="-D ATI ";
+  if(vcl_strstr(this->platform_name,"NVIDIA"))
+    options+="-D NVIDIA ";
 
   vcl_cout<<"create: program"<<vcl_endl;
   program = clCreateProgramWithSource(this->context_,

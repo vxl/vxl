@@ -34,25 +34,23 @@ int loc_code_to_index(short4 loc_code, int root_level)
   int level = loc_code.w;
   int depth = root_level - level;
 
+  //index of first node at depth
+  int level_index = (int) (1>>(3*depth)-1) / 7;
+
   //need to map the location code to a number between 0 and 2^(num_levels-1)
   //note: i believe X needs to be the LSB, followed by Y and Z (Z,Y,X)
+  int ri = root_level-1;
   ushort packed = 0;
-  ushort mask = 1;
-  for (int i=0; i<depth-1; i++) {
-    ushort mz = (mask & loc_code.z); //>>i;
-    ushort my = (mask & loc_code.y); //>>i;
-    ushort mx = (mask & loc_code.x); //>>i;
+  for (int i=depth; i>0; i--, ri--)  {
+    ushort mask = 1<<ri;
+    //get bit at mask
+    ushort4 mxyz = (mask & loc_code)>>ri;
 
-    //vcl_cout<<"Packed = "<<packed<< "   mask: "<<mask<<'\n'
-    //        <<mz<<' '<<my<<' '<<mx<<vcl_endl;
-    //note that mz is shifted to the right i times, and then left
-    //3*i times... can just shift to the left 2*i times..
-    packed += (mx <<  2*i)
-            + (my << (2*i + 1))
-            + (mz << (2*i + 2));
-    mask <<= 1;
+    packed += (mxyz.z << (3*i-1))
+            + (mxyz.y << (3*i-2))
+            + (mxyz.x << (3*i-3));
   }
-  return packed;
+  return level_index + packed;
 }
 
 //---------------------------------------------------------------------
@@ -131,16 +129,15 @@ ushort data_index(int rIndex, __local uchar* tree, int bit_index, __constant uch
 {
   ////Unpack data offset (offset to root data)
   //tree[10] and [11] should form the short that refers to data offset
-  uchar2 chars = (uchar2) (tree[rIndex+11], tree[rIndex+10]);
-  ushort root_offset = as_ushort(chars);
+  ushort root_offset = as_ushort((uchar2) (tree[rIndex+11], tree[rIndex+10]));
   
   //root and first gen are special case, return just the root offset + bit_index
   if(bit_index < 9)
     return root_offset+bit_index;
  
   //otherwise get parent index, parent byte index and relative bit index
-  int pi      = (bit_index-1)>>3;     // automatically rounding downwards
-  int byte_i  = (pi-1)/8 + 1;        //byte index for parent
+  int pi      = (bit_index-1)>>3;      // automatically rounding downwards
+  int byte_i  = (pi-1)/8 + 1;          //byte index for parent
   int bit_i   = (pi-1)%8;              //bit index for pi in byte_i
   
   //count bits for each byte before bit_i
@@ -151,40 +148,159 @@ ushort data_index(int rIndex, __local uchar* tree, int bit_index, __constant uch
   }
   
   //count bits before bit_i in parent
-  uchar mask = 1;
-  for(int i=0; i<bit_i; i++) {
-    count += (mask & tree[rIndex+byte_i])?1:0;
-    mask = mask<<1;
-  }
-
+  uchar n = tree[rIndex+byte_i] << (8-bit_i);
+  count += bit_lookup[n];
   
   //relative index = num_bits*8 + 1;
   count = 8*count+1 + (bit_index-1)%8;
   return count+ root_offset;
-
-
-/*//CODE BELOW WORKS USING variable pi from above
-  //check to make sure that the parent of this index is one, otherwise return failure;
-  //if (tree_bit_at(tree, pi) != 1) 
-  //  return -100;
-
-  //add up bits that occur before the parent index
-  int di = 1;
-  for (int i=0; i<pi; i++)
-    di += 8*tree_bit_at(rIndex, tree,i);
-
-  //offset for child...
-  di += (bit_index-1)%8;
-
-  return di+root_offset;  
-*/
 }
 
 
-//--------------------------------------------------------------------------
-// maps an offset and a depth to a location code
-//-------------------------------------------------------------------------
+//-----------------------------------------------------------------
+// New traverse: uses only target point and returns cell index
+// this can also easily return the level
+// perhaps can also return data index
+//-----------------------------------------------------------------
+int traverse_opt(int rIndex, __local uchar* tree, float4 p, float4 *cell_min, float4* cell_max )
+{
+  // vars to replace "tree_bit_at"
+  uchar curr_bit        = tree[rIndex];   //store root bit
+  int curr_child_offset = 0;              //root offset is 0
+  int curr_depth        = 0;              //root depth is 0
+  
+  //bit index to be returned
+  int bit_index = 0;
+  uchar4 code = (uchar4) 1;
+  
+  //clamp point
+  float4 point = clamp(p, 0.0001, 0.9999);
 
+  // while the curr node has children
+  while(curr_bit && curr_depth < 3) {
+    
+    //determine child offset and bit index for given point
+    point += point;                                             //point = point*2
+    code = (convert_uchar4_rtn(point) & (uchar4) 1);            //code.xyz = lsb of floor(point.xyz)
+    code <<= ((uchar4) (0,1,2,0));                     
+    int c_offset = code.x + code.y + code.z;                    //c_index = binary(zyx)
+    bit_index = (8*bit_index + 1) + c_offset;                   //i = 8i + 1 + c_index
+    
+    //update value of curr_bit and level
+    int curr_byte = (curr_depth + 1) + curr_child_offset; 
+    curr_bit  = (1<<c_offset) & tree[rIndex+curr_byte];
+    curr_child_offset = c_offset;
+    curr_depth++;
+  }
+  
+  // calculate cell bounding box 
+  float4 cell_size = (float4) (1.0 / (float) (1<<curr_depth));      //likely to be correct
+  (*cell_min) = floor(point) * cell_size;    //cell_min is bottom left point
+  (*cell_max) = (*cell_min) + cell_size;
+  (*cell_min).w = 0.0f;   (*cell_max).w = 0.0f;
+
+  return bit_index;
+}
+
+//-----------------------------------------------------------------
+// New traverse: uses only target point and returns cell index
+// this can also easily return the level
+// perhaps can also return data index
+//-----------------------------------------------------------------
+int traverse_opt_len(int rIndex, __local uchar* tree, float4 p, float4 *cell_min, float* cell_len )
+{
+  // vars to replace "tree_bit_at"
+  uchar curr_bit        = tree[rIndex];   //store root bit
+  int curr_child_offset = 0;              //root offset is 0
+  int curr_depth        = 0;              //root depth is 0
+  
+  //bit index to be returned
+  int bit_index = 0;
+  uchar4 code = (uchar4) 1;
+  
+  //clamp point
+  float4 point = clamp(p, 0.0001, 0.9999);
+
+  // while the curr node has children
+  while(curr_bit && curr_depth < 3) {
+    
+    //determine child offset and bit index for given point
+    point += point;                                             //point = point*2
+    code = (convert_uchar4_rtn(point) & (uchar4) 1);            //code.xyz = lsb of floor(point.xyz)
+    code <<= ((uchar4) (0,1,2,0));                     
+    int c_offset = code.x + code.y + code.z;                    //c_index = binary(zyx)
+    bit_index = (8*bit_index + 1) + c_offset;                   //i = 8i + 1 + c_index
+    
+    //update value of curr_bit and level
+    int curr_byte = (curr_depth + 1) + curr_child_offset; 
+    curr_bit  = (1<<c_offset) & tree[rIndex+curr_byte];
+    curr_child_offset = c_offset;
+    curr_depth++;
+  }
+  
+  // calculate cell bounding box 
+  //float4 cell_size = (float4) (1.0 / (float) (1<<curr_depth));      //likely to be correct
+  //(*cell_min) = floor(point) * cell_size;    //cell_min is bottom left point
+  //(*cell_max) = (*cell_min) + cell_size;
+  //(*cell_min).w = 0.0f;   (*cell_max).w = 0.0f;
+  (*cell_len) = 1.0 / (float) (1<<curr_depth);
+  (*cell_min) = floor(point) * (*cell_len);
+  (*cell_min).w = 0.0f;
+
+  return bit_index;
+}
+
+#if 0
+//-----------------------------------------------------------------
+// New traverse: uses only target point and returns cell index
+// this can also easily return the level
+// perhaps can also return data index
+//-----------------------------------------------------------------
+int traverse_opt_len_float3(int rIndex, __local uchar* tree, float4 p, float3 *cell_min, float* cell_len )
+{
+  // vars to replace "tree_bit_at"
+  uchar curr_bit        = tree[rIndex];   //store root bit
+  int curr_child_offset = 0;              //root offset is 0
+  int curr_depth        = 0;              //root depth is 0
+  
+  //bit index to be returned
+  int bit_index = 0;
+  uchar4 code = (uchar4) 1;
+  
+  //clamp point
+  float4 point = clamp(p, 0.0001, 0.9999);
+
+  // while the curr node has children
+  while(curr_bit && curr_depth < 3) {
+    
+    //determine child offset and bit index for given point
+    point += point;                                             //point = point*2
+    code = (convert_uchar4_rtn(point) & (uchar4) 1);            //code.xyz = lsb of floor(point.xyz)
+    code <<= ((uchar4) (0,1,2,0));                     
+    int c_offset = code.x + code.y + code.z;                    //c_index = binary(zyx)
+    bit_index = (8*bit_index + 1) + c_offset;                   //i = 8i + 1 + c_index
+    
+    //update value of curr_bit and level
+    int curr_byte = (curr_depth + 1) + curr_child_offset; 
+    curr_bit  = (1<<c_offset) & tree[rIndex+curr_byte];
+    curr_child_offset = c_offset;
+    curr_depth++;
+  }
+  
+  // calculate cell bounding box 
+  //float4 cell_size = (float4) (1.0 / (float) (1<<curr_depth));      //likely to be correct
+  //(*cell_min) = floor(point) * cell_size;    //cell_min is bottom left point
+  //(*cell_max) = (*cell_min) + cell_size;
+  //(*cell_min).w = 0.0f;   (*cell_max).w = 0.0f;
+  (*cell_len) = 1.0 / (float) (1<<curr_depth);
+  point = floor(point) * (*cell_len);
+  (*cell_min) = (float3) {point.x, point.y, point.z};
+
+  return bit_index;
+}
+#endif
+
+#if 0
 //-----------------------------------------------------------------
 // Traverse from the specified root_cell to the cell specified by loc_code.
 // Return the array pointer to the resulting cell. If a leaf node is
@@ -195,6 +311,7 @@ ushort data_index(int rIndex, __local uchar* tree, int bit_index, __constant uch
 // cell_loc_code.w = start level = root_level (NUM_LEVELS-1)
 // found_cell_ptr = bit index of octree (will usually contain a 0)
 //-----------------------------------------------------------------
+
 int traverse(int rIndex, __local uchar* tree, int cell_index, short4 cell_loc_code,
              short4 target_loc_code, short4* found_loc_code, int * global_count)
 {
@@ -281,8 +398,6 @@ int traverse_force(int rIndex, __local uchar* tree, int cell_ptr, short4 cell_lo
   }
   return found_cell_ptr;
 }
-
-#if 0
 
 //--------------------------------------------------------------------
 // Find the common ancestor of a cell given a binary difference
