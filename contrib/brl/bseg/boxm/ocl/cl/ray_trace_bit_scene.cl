@@ -7,7 +7,7 @@
 //uses int2 tree cells and uchar8 mixture cells
 __kernel
 void
-ray_trace_bit_scene_opt(__global  RenderSceneInfo * info,
+ray_trace_bit_scene_opt(__global  RenderSceneInfo   * info,
                         __global  ushort2 * block_ptrs,
                         __global  uchar16 * tree_array,
                         __global  float   * alpha_array,

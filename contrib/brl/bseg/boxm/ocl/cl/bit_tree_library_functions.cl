@@ -137,8 +137,9 @@ ushort data_index(int rIndex, __local uchar* tree, int bit_index, __constant uch
  
   //otherwise get parent index, parent byte index and relative bit index
   int pi      = (bit_index-1)>>3;      // automatically rounding downwards
-  int byte_i  = (pi-1)/8 + 1;          //byte index for parent
-  int bit_i   = (pi-1)%8;              //bit index for pi in byte_i
+  int a       = (pi-1)>>3; 
+  int byte_i  = a + 1;          //byte index for parent
+  int bit_i   = (pi-1)-(a<<3);              //bit index for pi in byte_i
   
   //count bits for each byte before bit_i
   int count = 0;

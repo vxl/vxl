@@ -426,7 +426,7 @@ void map_work_space_2d_offset(int* mapped_id0,
     (*mapped_id1) = (2*group_id1+offset1)*ls1 + lid1;
 }
 
-
+#if 0
 // Determine initial ray bundle entry points for the entire tree bounding box
 // This operation can be done by all the work items in parallel. Note that
 // the ray direction is the same in global and local cell coordinates,
@@ -463,6 +463,7 @@ int ray_entry_point(__local float16* cam, __local float4* cam_center,
 
     return 1;
 }
+#endif
 
 /*
 *  Accumulate ray segment length and the weighted observation
