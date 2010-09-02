@@ -51,6 +51,7 @@ class boct_bit_tree
 
   //: traverse tree to get leaf index that contains point
   int traverse(const vgl_point_3d<double> p);
+  int traverse_opt(const vgl_point_3d<double> p);
 
   //: Return cell with a particular locational code
   int get_cell( boct_loc_code<short>& code);

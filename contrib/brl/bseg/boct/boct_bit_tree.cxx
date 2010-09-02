@@ -208,35 +208,87 @@ int boct_bit_tree::traverse(const vgl_point_3d<double> p)
 {
   vcl_cout<<"Traverse to point "<<p
           <<" through "<<num_levels_<<" levels"<<vcl_endl;
-
+  
   //find location code for point
-  boct_loc_code<short> loc_code = boct_loc_code<short>(p, num_levels_-1);
+  boct_loc_code<short> target_code = boct_loc_code<short>(p, num_levels_-1);
+  int target_level = target_code.level;
+  if (target_level < 0)
+    return -1;
 
-  //get offset in max generation
-  unsigned short offset = this->loc_code_to_gen_offset(loc_code, num_levels_);
+  //initialize current cell (curr_cell = has_children?)
+  unsigned char curr_cell = this->bit_at(0);
+  int cell_index = 0;
+  int curr_level = num_levels_-1;  //root level
+  boct_loc_code<short> found_code = target_code;
+  while (target_level<curr_level && curr_cell)
+  {
+    //update found loc code (loc code belonging to correct child)
+    short c_index = target_code.child_index(curr_level);
+    found_code    = found_code.child_loc_code(c_index, curr_level-1);
 
-  //starting at maximum level, look for parent bit to be equal to 1
-  unsigned int d = num_levels_-1;
+    //update cell_index = first_child_index + child_offset
+    cell_index = (cell_index*8+1) + (int) c_index; //8i+1 + c_index
+    curr_cell  = this->bit_at(cell_index);
 
-  //initialize BI to point to the first index of depth d
-  int bi = (int_pow(8, d)-1) / 7;
-
-  //offset bi to point to the 'leaf bit' pointed to by the loc_code
-  bi += offset;
-
-  //find the parent, if this parent is 0, keep going until you find pi=1
-  int pi = (bi-1)/8; // automatically rounding downwards, since bi is integer
-  vcl_cout<<"    start Bit Index: "<<bi<<"  parent: "<<pi<<vcl_endl;
-  while (bit_at(pi) == 0 && pi > 0) {
-    bi = pi;
-    pi = (bi-1)/8;
+    //decrement curr_level
+    --curr_level;
   }
+  return cell_index;
+  
+  ////get offset in max generation
+  //unsigned short offset = this->loc_code_to_gen_offset(loc_code, num_levels_);
 
-  //now that you have bi = valid leaf, return it's index and use it to find its data
-  return bi;
+  ////starting at maximum level, look for parent bit to be equal to 1
+  //unsigned int d = num_levels_-1;
+
+  ////initialize BI to point to the first index of depth d
+  //int bi = (int_pow(8, d)-1) / 7;
+
+  ////offset bi to point to the 'leaf bit' pointed to by the loc_code
+  //bi += offset;
+
+  ////find the parent, if this parent is 0, keep going until you find pi=1
+  //int pi = (bi-1)/8; // automatically rounding downwards, since bi is integer
+  //vcl_cout<<"    start Bit Index: "<<bi<<"  parent: "<<pi<<vcl_endl;
+  //while (bit_at(pi) == 0 && pi > 0) {
+    //bi = pi;
+    //pi = (bi-1)/8;
+  //}
+
+  ////now that you have bi = valid leaf, return it's index and use it to find its data
+  //return bi;
+}
+
+int boct_bit_tree::traverse_opt(const vgl_point_3d<double> p)
+{
+  /* Pseudo code for new optimized traverse algo 
+   * i = 0;
+   * point p;
+   * int code;
+   * while(bit_at(i) == 1)
+   *    p *= 2;
+   *    code = (int) p;
+   *    c_index = code & 1; (LSB)
+   *    i = 2i+1 + c_index;
+   * 
+   */
+  
+  int bit_index = 0;
+  vnl_vector_fixed<double,3> point;
+  point[0] = p.x(), point[1] = p.y(), point[2] = p.z();
+  while(bit_at(bit_index) == 1) {
+    point += point; 
+    unsigned c_x = ((unsigned) point[0]) & 1; 
+    unsigned c_y = ((unsigned) point[1]) & 1;
+    unsigned c_z = ((unsigned) point[2]) & 1;
+    int c_index = c_x + (c_y<<1) + (c_z<<2); 
+    bit_index = (8*bit_index + 1) + c_index;
+  }
+  return bit_index;
 }
 
 
+//TODO This isn't debugged
 unsigned short
 boct_bit_tree::loc_code_to_gen_offset(boct_loc_code<short> loc_code, int depth)
 {
@@ -287,6 +339,7 @@ int boct_bit_tree::loc_code_to_index(boct_loc_code<short> loc_code, int root_lev
   }
   return level_index + packed;
 }
+
 
 //: Return cell with a particular locational code
 int boct_bit_tree::get_data_index(int bit_index)
