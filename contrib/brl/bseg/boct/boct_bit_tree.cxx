@@ -208,7 +208,7 @@ int boct_bit_tree::traverse(const vgl_point_3d<double> p)
 {
   vcl_cout<<"Traverse to point "<<p
           <<" through "<<num_levels_<<" levels"<<vcl_endl;
-  
+
   //find location code for point
   boct_loc_code<short> target_code = boct_loc_code<short>(p, num_levels_-1);
   int target_level = target_code.level;
@@ -234,54 +234,54 @@ int boct_bit_tree::traverse(const vgl_point_3d<double> p)
     --curr_level;
   }
   return cell_index;
-  
-  ////get offset in max generation
-  //unsigned short offset = this->loc_code_to_gen_offset(loc_code, num_levels_);
+#if 0
+  //get offset in max generation
+  unsigned short offset = this->loc_code_to_gen_offset(loc_code, num_levels_);
 
-  ////starting at maximum level, look for parent bit to be equal to 1
-  //unsigned int d = num_levels_-1;
+  //starting at maximum level, look for parent bit to be equal to 1
+  unsigned int d = num_levels_-1;
 
-  ////initialize BI to point to the first index of depth d
-  //int bi = (int_pow(8, d)-1) / 7;
+  //initialize BI to point to the first index of depth d
+  int bi = (int_pow(8, d)-1) / 7;
 
-  ////offset bi to point to the 'leaf bit' pointed to by the loc_code
-  //bi += offset;
+  //offset bi to point to the 'leaf bit' pointed to by the loc_code
+  bi += offset;
 
-  ////find the parent, if this parent is 0, keep going until you find pi=1
-  //int pi = (bi-1)/8; // automatically rounding downwards, since bi is integer
-  //vcl_cout<<"    start Bit Index: "<<bi<<"  parent: "<<pi<<vcl_endl;
-  //while (bit_at(pi) == 0 && pi > 0) {
-    //bi = pi;
-    //pi = (bi-1)/8;
-  //}
+  //find the parent, if this parent is 0, keep going until you find pi=1
+  int pi = (bi-1)/8; // automatically rounding downwards, since bi is integer
+  vcl_cout<<"    start Bit Index: "<<bi<<"  parent: "<<pi<<vcl_endl;
+  while (bit_at(pi) == 0 && pi > 0) {
+    bi = pi;
+    pi = (bi-1)/8;
+  }
 
-  ////now that you have bi = valid leaf, return it's index and use it to find its data
-  //return bi;
+  //now that you have bi = valid leaf, return it's index and use it to find its data
+  return bi;
+#endif // 0
 }
 
 int boct_bit_tree::traverse_opt(const vgl_point_3d<double> p)
 {
-  /* Pseudo code for new optimized traverse algo 
-   * i = 0;
-   * point p;
-   * int code;
-   * while(bit_at(i) == 1)
-   *    p *= 2;
-   *    code = (int) p;
-   *    c_index = code & 1; (LSB)
-   *    i = 2i+1 + c_index;
-   * 
-   */
-  
+  // Pseudo code for new optimized traverse algo:
+  // i = 0;
+  // point p;
+  // int code;
+  // while (bit_at(i) == 1)
+  //    p *= 2;
+  //    code = (int) p;
+  //    c_index = code & 1; (LSB)
+  //    i = 2i+1 + c_index;
+  // endwhile
+
   int bit_index = 0;
   vnl_vector_fixed<double,3> point;
   point[0] = p.x(), point[1] = p.y(), point[2] = p.z();
-  while(bit_at(bit_index) == 1) {
-    point += point; 
-    unsigned c_x = ((unsigned) point[0]) & 1; 
+  while (bit_at(bit_index) == 1) {
+    point += point;
+    unsigned c_x = ((unsigned) point[0]) & 1;
     unsigned c_y = ((unsigned) point[1]) & 1;
     unsigned c_z = ((unsigned) point[2]) & 1;
-    int c_index = c_x + (c_y<<1) + (c_z<<2); 
+    int c_index = c_x + (c_y<<1) + (c_z<<2);
     bit_index = (8*bit_index + 1) + c_index;
   }
   return bit_index;
@@ -401,7 +401,7 @@ boct_bit_tree::bit_at(int index)
   if (index < 9)
     return (1<<(index-1) & bits_[1]) ? 1 : 0;
 
-  int i  = (int) (index-9.0)/8.0 + 2; //byte index i
+  int i  = (index-9)/8 + 2; //byte index i
   int bi = (index-9)%8;
   return (1<<bi & bits_[i]) ? 1 : 0;
 }
@@ -418,7 +418,7 @@ boct_bit_tree::set_bit_at(int index, bool val)
   if (index == 0)
     bits_[0] = (val) ? 1 : 0;
 
-  int byte_index = (int) (index-1.0)/8.0+1;
+  int byte_index =   (index-1)/8+1;
   int child_offset = (index-1)%8;
   unsigned char mask = 1<<child_offset;
   unsigned char byte = bits_[byte_index];
@@ -432,7 +432,7 @@ boct_bit_tree::set_bit_at(int index, bool val)
 // makes no sense, but in that case a "very negative" value is returned.
 inline static int int_log8(unsigned int a)
 {
-  if (a==0) return -0x80000000; // stands for minus infinity
+  if (a==0) return -0x80000000L; // stands for minus infinity
   int r = 0;
   while (a >= 8) ++r, a>>=3; // divide by 8
   return r;
