@@ -274,24 +274,7 @@ int intersect_cell(float4 ray_o, float4 ray_d, float4 cell_min, float4 cell_dims
 //------------------------------------------------------------------------------
 int intersect_cell_opt(float4 ray_o, float4 ray_d, float4 ray_d_inv, float4 cell_min, float4 cell_dims, float *tnear, float *tfar)
 {
-  const float epsilon = exp2(-23);
-  
-  if (fabs(ray_d) < epsilon) ray_d = copysign(epsilon, ray_d);
-
-  // Precompute the coefficients of tx(x), ty(y), and tz(z).
-  // The octree is assumed to reside at coordinates [0, 1].
-  float4 invRay = 1.0f / ray_d;
-  float4 t_bias = invRay * ray_o; 
-
-  // Initialize the active span of t-values.
-  float t_min = fmaxf(fmaxf(2.0f * tx_coef - tx_bias, 2.0f * ty_coef - ty_bias), 2.0f * tz_coef - tz_bias);
-  float t_max = fminf(fminf(tx_coef - tx_bias, ty_coef - ty_bias), tz_coef - tz_bias);
-  float h = t_max;
-  t_min = fmaxf(t_min, 0.0f);
-  t_max = fminf(t_max, 1.0f);
-  
-  
-  
+ 
   // compute intersection of ray with all six cell planes
   float4 tmin = ray_d_inv * (cell_min - ray_o);
   float4 tmax = tmin + ray_d_inv*cell_dims;
