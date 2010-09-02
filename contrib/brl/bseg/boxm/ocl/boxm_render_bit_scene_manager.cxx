@@ -41,7 +41,7 @@ bool boxm_render_bit_scene_manager::init_ray_trace(boxm_ocl_bit_scene *scene,
       !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
                                     +"/contrib/brl/bseg/boxm/ocl/cl/ray_bundle_library_functions.cl")||
       !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                    +"/contrib/brl/bseg/boxm/ocl/cl/ray_trace_bit_scene.cl")) {
+                                    +"/contrib/brl/bseg/boxm/ocl/cl/ray_trace_bit_scene_opt.cl")) {
     vcl_cerr << "Error: boxm_render_bit_scene_manager : failed to load kernel source (helper functions)\n";
     return false;
   }
@@ -120,6 +120,7 @@ bool boxm_render_bit_scene_manager::set_args(unsigned kernel_index=0)
 
   if (kernel_index==0)
   {
+    //Temporary hack for scene info - to be put in another method
     //create a render scene info
     RenderSceneInfo* info = new RenderSceneInfo;
     info->scene_origin = *((cl_float4*)scene_origin_);  // scene origin (point)
@@ -144,8 +145,13 @@ bool boxm_render_bit_scene_manager::set_args(unsigned kernel_index=0)
     int i=0;
     status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem), (void *)&scene_info_buf_);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (render scene info)"))
+      return 0;    
+      
+    //local copy of the scene info
+    status = clSetKernelArg(kernels_[0],i++,sizeof(RenderSceneInfo),0);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local scene info)"))
       return 0;
-
+    
     //block pointers
     status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&block_ptrs_buf_);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (block_ptrs_buf_)"))
@@ -174,9 +180,10 @@ bool boxm_render_bit_scene_manager::set_args(unsigned kernel_index=0)
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (Img dimensions)"))
       return 0;
     //local copy of the tree (one for each thread/ray)
-    status = clSetKernelArg(kernels_[0],i++,64*sizeof(cl_uchar16),0);
+    status = clSetKernelArg(kernels_[0],i++,this->bni_*this->bnj_*sizeof(cl_uchar16),0);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local tree)"))
       return 0;
+
     //// output image buffer
     status = clSetKernelArg(kernels_[0],i++,3*sizeof(cl_float16),0);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local cam)"))
