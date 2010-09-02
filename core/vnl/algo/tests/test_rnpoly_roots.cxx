@@ -153,12 +153,65 @@ static void single_fourth_degree()
           "\t 4557.60 +0.00 i"<<vcl_endl;
 }
 
+static void scaled_fourth_degree()
+{
+  const unsigned int dim = 1; // one-dimensional problem setting
+  vnl_vector<double> coeffs(5);
+  // Coefficients from generating co-variance matrix for the following set of points:
+  //   9  -253 -1187
+  // -45  -222  -740
+  // -98  -223  -750
+  coeffs[0]=1;
+  coeffs[1]=0;
+  coeffs[2]=-4061462907.703703;
+  coeffs[3]=0.0678;
+  coeffs[4]=4121959965347122688.0;
+
+  // Scale before computing roots:
+  double factor = vcl_sqrt(vcl_sqrt(coeffs[4]/coeffs[0]));
+  // this is the 4th root of the scale difference between first and last coef
+  double mfactor = 1.0;
+  for (int i=0; i<=4; ++i) coeffs[i]/=mfactor, mfactor*=factor;
+
+  vnl_matrix<unsigned int> pol(5,dim, 0);
+  pol(0,0) = 4; pol(1,0) = 3;  pol(2,0) = 2;  pol(3,0) = 1;  pol(4,0) = 0;
+  vnl_real_npolynomial monom1(coeffs,pol);
+  vcl_vector<vnl_real_npolynomial*> l(1, &monom1);
+  vnl_rnpoly_solve solver(l);
+  vcl_vector<vnl_vector<double>*> realVal = solver.real();
+  vcl_vector<vnl_vector<double>*> imagVal = solver.imag();
+
+  // Scale back the roots:
+  vcl_vector<vnl_vector<double>*>::iterator rp, ip;
+  for (rp=realVal.begin(),ip=imagVal.begin(); rp!=realVal.end(); ++rp,++ip)
+  {
+    for (unsigned int i=0; i<dim; ++i)
+    {
+      vnl_vector<double>& rootr = *(*rp); rootr *= factor;
+      vnl_vector<double>& rooti = *(*ip); rooti *= factor;
+    }
+  }
+
+  TEST("Real part of roots has size 4", realVal.size(), 4);
+  TEST("Imag part of roots has size 4", imagVal.size(), 4);
+  TEST("Dimensions should match", realVal[0]->size(), dim);
+
+  vcl_cout << vcl_setprecision(2) << vcl_fixed;
+  print_roots(solver);
+  vcl_cout<<"Actual roots should be\n"
+          "\t-44576.0 +0.00 i\n"
+          "\t-45546.0 +0.00 i\n"
+          "\t 44546.0 +0.00 i\n"
+          "\t 45576.0 +0.00 i"<<vcl_endl;
+}
+
 
 static void test_rnpoly_roots()
 {
   unit_circles_intersect();
   ellipses_intersect();
   single_fourth_degree();
+  scaled_fourth_degree();
 }
 
 TESTMAIN(test_rnpoly_roots);
