@@ -24,10 +24,10 @@ bool boxm_render_bit_scene_manager::init_ray_trace(boxm_ocl_bit_scene *scene,
   output_img_=obs;
 
   // Code for Pass_0
-  if (!this->load_kernel_source(vcl_string(VCL_SOURCE_ROOT_DIR) 
+  if (!this->load_kernel_source(vcl_string(VCL_SOURCE_ROOT_DIR)
                                     + "/contrib/brl/bseg/boxm/ocl/cl/scene_info.cl") ||
       //!this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-      //                              + "/contrib/brl/bseg/boxm/ocl/cl/float3.cl") || 
+      //                              + "/contrib/brl/bseg/boxm/ocl/cl/float3.cl") ||
       !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
                                     + "/contrib/brl/bseg/boxm/ocl/cl/cell_utils.cl") ||
       !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
@@ -122,28 +122,30 @@ bool boxm_render_bit_scene_manager::set_args(unsigned kernel_index=0)
   {
     //create a render scene info
     RenderSceneInfo* info = new RenderSceneInfo;
-    info->scene_origin = (cl_float4) { scene_origin_[0], scene_origin_[1], scene_origin_[2], scene_origin_[3] };      // scene origin (point)
-    info->scene_dims   = (cl_int4)   { scene_dims_[0], scene_dims_[1],scene_dims_[2],scene_dims_[3] };              // number of blocks in each dimension
+    info->scene_origin = *((cl_float4*)scene_origin_);  // scene origin (point)
+    // was: info->scene_origin = (cl_float4) { scene_origin_[0], scene_origin_[1], scene_origin_[2], scene_origin_[3] };
+    info->scene_dims   = *((cl_int4*)scene_dims_);      // number of blocks in each dimension
+    // was: info->scene_dims   = (cl_int4) { scene_dims_[0], scene_dims_[1],scene_dims_[2],scene_dims_[3] };
     info->block_len    = block_dims_[0];    // size of each block (can only be 1 number now that we've established blocks are cubes)
 
-    //tree meta information 
+    //tree meta information
     info->root_level   = root_level_;                // root_level of trees
     info->num_buffer   = numbuffer_;                 // number of buffers (both data and tree)
     info->tree_buffer_length = tree_buffer_length_;  // length of tree buffer (number of cells/trees)
-    info->data_buffer_length = data_buffer_length_;   
-    
+    info->data_buffer_length = data_buffer_length_;
+
     scene_info_buf_ = clCreateBuffer(this->context_,
-                                    CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
-                                    sizeof(RenderSceneInfo),
-                                    info,&status);
+                                     CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+                                     sizeof(RenderSceneInfo),
+                                     info,&status);
     if (!this->check_val(status,CL_SUCCESS,"scene info buff failed."))
       return 0;
-    
+
     int i=0;
     status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem), (void *)&scene_info_buf_);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (render scene info)"))
-      return 0;    
-    
+      return 0;
+
     //block pointers
     status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&block_ptrs_buf_);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (block_ptrs_buf_)"))
@@ -448,7 +450,7 @@ bool boxm_render_bit_scene_manager::release_gl_buffer()
 bool boxm_render_bit_scene_manager::run_scene()
 {
   //set up image gl buf for arguments sake
-  
+
   bool good=true;
   vcl_string error_message="";
   good=good && set_scene_data()
@@ -459,7 +461,7 @@ bool boxm_render_bit_scene_manager::run_scene()
   good=good && set_input_view()
             && set_input_view_buffers();
   this->set_kernel();
-  this->set_gl_buffer(); 
+  this->set_gl_buffer();
   this->set_args();
   this->set_commandqueue();
   this->set_workspace();
@@ -674,9 +676,9 @@ int boxm_render_bit_scene_manager::build_kernel_program(cl_program & program, bo
   else
     options+="-D INTENSITY ";
 
-  if(vcl_strstr(this->platform_name,"ATI"))
+  if (vcl_strstr(this->platform_name,"ATI"))
     options+="-D ATI ";
-  if(vcl_strstr(this->platform_name,"NVIDIA"))
+  if (vcl_strstr(this->platform_name,"NVIDIA"))
     options+="-D NVIDIA ";
 
   vcl_cout<<"create: program"<<vcl_endl;
