@@ -102,7 +102,7 @@ bvpl_kernel_sptr bvpl_edge3d_kernel_factory::parse_xml_element(bxml_data_sptr d)
   gp_root->get_attribute("axix_z", axis_z);
 
   gp_root->get_attribute("angle", angle);
-  bvpl_edge3d_kernel_factory factory(int(min_x), int(max_x), int(min_y), int(max_y), int(min_z), int(max_z));
+  bvpl_edge3d_kernel_factory factory((int)min_x, (int)max_x, (int)min_y, (int)max_y, (int)min_z, (int)max_z);
   factory.set_rotation_axis(vnl_float_3(axis_x,axis_y,axis_z));
   factory.set_angle(angle);
 
