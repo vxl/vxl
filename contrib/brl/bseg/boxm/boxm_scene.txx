@@ -149,6 +149,7 @@ void boxm_scene<T>::clone_blocks(boxm_scene<T> &scene_out, datatype data)
   while (!iter.end())
   {
     load_block(iter.index());
+    scene_out.load_block(iter_out.index());
     T  *tree_out = (*iter)->get_tree()->clone();
     tree_out->init_cells(data);
     (*iter_out)->init_tree(tree_out);
@@ -435,6 +436,42 @@ bool boxm_scene<T>::valid_index(vgl_point_3d<int> idx)
   vgl_point_3d<int> max_p(blocks_.get_row1_count(), blocks_.get_row2_count(), blocks_.get_row3_count());
   vgl_box_3d<int> bbox(min_p, max_p);
   return bbox.contains(idx);
+}
+
+
+//: Return the finest level in the scene
+template <class T>
+short boxm_scene<T>::finest_level()
+{
+  //iterate through the blocks requesting the finest level
+  boxm_block_iterator<T > iter=this->iterator();
+  iter.begin();
+  short finest_level = this->max_tree_level_;
+  while (!iter.end()) {
+    if (this->load_block(iter.index().x(),iter.index().y(),iter.index().z())) {
+      vcl_cout << "Printing Block : " <<  iter.index() << vcl_endl;
+      short this_level = get_active_block()->get_tree()->finest_level();
+      if(this_level < finest_level)
+        finest_level = this_level;
+    }
+    iter++;
+  }
+  
+  return finest_level;
+  
+}
+
+//: Return the length of finest-level cell in the scene
+template <class T>
+double  boxm_scene<T>::finest_cell_length()
+{
+  double local_cell_length = 1.0/(double)(1<<((this->max_tree_level_ -1) - finest_level()));
+  
+  if ((vcl_abs(block_dim_.x() - block_dim_.y()) > 1.0e-7)   || (vcl_abs(block_dim_.x() - block_dim_.z()) > 1.0e-7))
+    vcl_cerr << "Warning: In boxm_scene::finest_cell_lenght, cells aren't cubical, returning lenght along x direction " << vcl_endl;
+  
+  return local_cell_length * block_dim_.x();
+  
 }
 
 
@@ -940,6 +977,8 @@ boxm_cell_iterator<T>& boxm_cell_iterator<T>::begin()
   (block_iterator_.scene_->*block_loading_func_)(block_iterator_.index().x(),block_iterator_.index().y(),block_iterator_.index().z());
   cells_ = (*block_iterator_)->get_tree()->leaf_cells();
   cells_iterator_ = cells_.begin();
+  
+  vcl_cout << "Cell iterator: # of cells: " << cells_.size() << vcl_endl;
 
 #if 0
   vcl_set<vgl_point_3d<int>, bvgl_point_3d_cmp<int> > active_blocks = block_iterator_.scene_->active_blocks();

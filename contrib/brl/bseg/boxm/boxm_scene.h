@@ -162,6 +162,7 @@ class boxm_scene :public boxm_scene_base
   void load_scene(boxm_scene_parser& parser);
 
   void force_write_blocks();
+  
   static short version_no() { return 1; }
 
   boxm_block_iterator<T> iterator() { boxm_block_iterator<T> iter(this); return iter; }
@@ -175,6 +176,7 @@ class boxm_scene :public boxm_scene_base
   bool valid_index(vgl_point_3d<int> idx);
 
   void set_pinit(float pinit){pinit_=pinit;}
+  
   float pinit(){return pinit_;}
 
   vgl_box_3d<double> get_block_bbox(vgl_point_3d<int>& idx){return get_block_bbox(idx.x(), idx.y(), idx.z());}
@@ -194,7 +196,13 @@ class boxm_scene :public boxm_scene_base
   
   //: Print out the trees in the scene
   void print();
-
+  
+  //: Return the finest level in the scene
+  short finest_level();
+  
+  //: Return the length of finest-level cell in the scene
+  double finest_cell_length();
+  
   vgl_point_3d<double> rpc_origin() const { return rpc_origin_; }
 
   void set_rpc_origin(vgl_point_3d<double>& new_rpc_origin) {
