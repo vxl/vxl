@@ -79,13 +79,12 @@ bool bvpl_scene_kernel_operator_process(bprb_func_process& pro)
   vcl_string datatype = pro.get_input<vcl_string>(i++);
   vcl_string functor_name = pro.get_input<vcl_string>(i++);
   vcl_string output_path = pro.get_input<vcl_string>(i++);
-  short level = 0;
+  //short level = 0;
 
   //print inputs
   vcl_cout << "In bvpl_scene_kernel_operator:\n"
-           << "Datatype:     " << datatype << vcl_endl
-           << "Functor Name: " << functor_name << vcl_endl
-           << "Resolution:   " << level << vcl_endl;
+  << "Datatype:     " << datatype << vcl_endl
+  << "Functor Name: " << functor_name << vcl_endl;
 
   //check input's validity
   if (!scene_base.ptr()) {
@@ -117,7 +116,7 @@ bool bvpl_scene_kernel_operator_process(bprb_func_process& pro)
       bvpl_gauss_convolution_functor functor;
       bvpl_scene_kernel_operator scene_oper;
       //operate on scene
-      //scene_oper.operate(*scene_in, functor, kernel, *scene_out, level);
+      scene_oper.operate(*scene_in, functor, kernel, *scene_out);
       scene_ptr = scene_out;
       pro.set_output_val<boxm_scene_base_sptr>(0, scene_ptr);
       return true;
@@ -126,7 +125,7 @@ bool bvpl_scene_kernel_operator_process(bprb_func_process& pro)
       bvpl_positive_gauss_conv_functor functor;
       bvpl_scene_kernel_operator scene_oper;
       //operate on scene
-      //scene_oper.operate(*scene_in, functor, kernel, *scene_out, level);
+      scene_oper.operate(*scene_in, functor, kernel, *scene_out);
       scene_ptr = scene_out;
       pro.set_output_val<boxm_scene_base_sptr>(0, scene_ptr);
       return true;
@@ -149,7 +148,7 @@ bool bvpl_scene_kernel_operator_process(bprb_func_process& pro)
       bvpl_edge_algebraic_mean_functor<float> functor;
       bvpl_scene_kernel_operator scene_oper;
       //operate on scene
-      //scene_oper.operate(*scene_in, functor, kernel, *scene_out, level);
+      scene_oper.operate(*scene_in, functor, kernel, *scene_out);
       scene_ptr = scene_out;
       pro.set_output_val<boxm_scene_base_sptr>(0, scene_ptr);
       return true;
