@@ -19,7 +19,7 @@
 namespace bvpl_create_edge3d_kernel_process_globals
 {
   //the specs of this kernel are specified as parameters
-  const unsigned n_inputs_ = 10;
+  const unsigned n_inputs_ = 11;
   const unsigned n_outputs_ = 1;
 }
 
@@ -41,6 +41,7 @@ bool bvpl_create_edge3d_kernel_process_cons(bprb_func_process& pro)
   input_types_[7] = "float";
   input_types_[8] = "float";
   input_types_[9] = "float";
+  input_types_[10] = "double";
 
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0]="bvpl_kernel_sptr";
@@ -72,10 +73,11 @@ bool bvpl_create_edge3d_kernel_process(bprb_func_process& pro)
   float axis_z = pro.get_input<float>(i++);
   float angle = pro.get_input<float>(i++);
 
+  double voxel_length = pro.get_input<double>(i++);
   vnl_float_3 axis(axis_x,axis_y, axis_z);
 
   //Create the factory
-  bvpl_edge3d_kernel_factory factory(min_x, max_x,min_y,max_y,min_z,max_z);
+  bvpl_edge3d_kernel_factory factory(min_x, max_x,min_y,max_y,min_z,max_z, voxel_length);
   factory.set_rotation_axis(axis);
   factory.set_angle(angle);
 

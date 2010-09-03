@@ -23,7 +23,7 @@
 
 namespace bvpl_create_edge3d_kernel_vector_process_globals
 {
-  const unsigned n_inputs_ = 6;
+  const unsigned n_inputs_ = 7;
   const unsigned n_outputs_ = 1;
 }
 
@@ -41,6 +41,7 @@ bool bvpl_create_edge3d_kernel_vector_process_cons(bprb_func_process& pro)
   input_types_[3] = "int";
   input_types_[4] = "int";
   input_types_[5] = "int";
+  input_types_[6] = "double";  //voxel-length
 
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "bvpl_kernel_vector_sptr";
@@ -66,9 +67,10 @@ bool bvpl_create_edge3d_kernel_vector_process(bprb_func_process& pro)
   int max_y = pro.get_input<int>(i++);
   int min_z = pro.get_input<int>(i++);
   int max_z = pro.get_input<int>(i++);
+  double voxel_length = pro.get_input<double>(i++);
 
   //Create the factory and get the vector of kernels
-  bvpl_edge3d_kernel_factory factory(min_x, max_x,min_y,max_y,min_z,max_z);
+  bvpl_edge3d_kernel_factory factory(min_x, max_x,min_y,max_y,min_z,max_z, voxel_length);
   bvpl_create_directions_c dir;
   bvpl_kernel_vector_sptr kernels = factory.create_kernel_vector(dir);
   pro.set_output_val<bvpl_kernel_vector_sptr>(0, kernels);
