@@ -536,7 +536,9 @@ template <class T_loc,class T_data>
 void boct_tree<T_loc,T_data>::b_write(vsl_b_ostream & os, bool save_internal_nodes, bool platform_independent)
 {
   short v = version_no(save_internal_nodes, platform_independent);
+#ifdef DEBUG
   vcl_cout << "Writing tree binary version: " << v << vcl_endl;
+#endif
 
   if (v == 3) {
     // save the cells and data in an efficient (but platform-dependent) way
