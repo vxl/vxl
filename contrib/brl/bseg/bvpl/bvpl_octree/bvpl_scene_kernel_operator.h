@@ -72,14 +72,18 @@ class bvpl_scene_kernel_operator
 
 };
 
-
+//: Operates a kernel on a scene by : (1)Traverse input scene and for every leaf cell, (2) request a region around it, and (3) apply the functor
 template<class T_data, class F>
 void bvpl_scene_kernel_operator::operate(boxm_scene<boct_tree<short, T_data > > &scene_in,
                                          F functor,
                                          bvpl_kernel_sptr kernel,
                                          boxm_scene<boct_tree<short, T_data > > &scene_out)
 {
-  //(1)Traverse input scene and for every leaf cell, (2) request a region around it, and (3) apply the functor
+  double cell_length = kernel->voxel_length();
+  short finest_level = scene_in.finest_level();
+  vcl_cout << "bvpl_scene_kernel_operator: Operating on cells at level: " << finest_level << " and length: " << cell_length << vcl_endl;
+
+  scene_in.clone_blocks(scene_out, T_data());
   
   //(1) Traverse the scene - is there an easy way to modify the cell iterator so to only use leaf cells at level 0;
   boxm_cell_iterator<boct_tree<short, T_data > > iterator = scene_in.cell_iterator(&boxm_scene<boct_tree<short, T_data > >::load_block_and_neighbors);
@@ -89,8 +93,6 @@ void bvpl_scene_kernel_operator::operate(boxm_scene<boct_tree<short, T_data > > 
   out_iter.begin();
   
   bvpl_kernel_iterator kernel_iter = kernel->iterator();
-  
-  double cell_length = kernel->voxel_length();
   
   while ( !(iterator.end() || out_iter.end()) ) {
     
@@ -108,7 +110,7 @@ void bvpl_scene_kernel_operator::operate(boxm_scene<boct_tree<short, T_data > > 
     }
    
     //we are only interested in finest resolution
-    if(!center_cell->level() == 0 || !center_cell->is_leaf()){
+    if((!(center_cell->level() == finest_level)) || !center_cell->is_leaf()){
       ++iterator;
       ++out_iter;
       continue;

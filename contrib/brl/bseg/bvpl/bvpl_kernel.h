@@ -50,6 +50,7 @@ class bvpl_kernel: public vbl_ref_count
   vgl_point_3d<int> max_point() const {return max_point_;}
   //: Return the length of a voxel in global coordinates
   double voxel_length() const {return voxel_length_;}
+  void set_voxel_length(double length) {voxel_length_=length;}
   vgl_vector_3d<int> offset()
   {
     int x=0;

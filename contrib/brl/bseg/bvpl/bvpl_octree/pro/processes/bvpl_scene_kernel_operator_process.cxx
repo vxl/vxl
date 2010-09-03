@@ -104,10 +104,12 @@ bool bvpl_scene_kernel_operator_process(bprb_func_process& pro)
     typedef bsta_num_obs<bsta_gauss_f1> gauss_type;
     typedef boct_tree<short, gauss_type > tree_type;
     boxm_scene<tree_type> *scene_in = static_cast<boxm_scene<tree_type>* > (scene_base.as_pointer());
+    double finest_cell_length = scene_in->finest_cell_length();
+    kernel->set_voxel_length(finest_cell_length);
 
     //parameters of the output scene are the same as those of the input scene
     boxm_scene<tree_type> *scene_out =
-      new boxm_scene<tree_type>(scene_in->lvcs(), scene_in->origin(), scene_in->block_dim(), scene_in->world_dim());
+      new boxm_scene<tree_type>(scene_in->lvcs(), scene_in->origin(), scene_in->block_dim(), scene_in->world_dim(), scene_in->max_level(), scene_in->init_level());
     scene_out->set_paths(output_path, "gauss_response_scene");
     scene_out->set_appearance_model(BSTA_GAUSS_F1);
     scene_out->write_scene("/gauss_response_scene.xml");
@@ -136,10 +138,11 @@ bool bvpl_scene_kernel_operator_process(bprb_func_process& pro)
   {
     typedef boct_tree<short, float > tree_type;
     boxm_scene<tree_type> *scene_in = static_cast<boxm_scene<tree_type>* > (scene_base.as_pointer());
-
+    double finest_cell_length = scene_in->finest_cell_length();
+    kernel->set_voxel_length(finest_cell_length);
     //parameters of the output scene are the same as those of the input scene
     boxm_scene<tree_type> *scene_out =
-      new boxm_scene<tree_type>(scene_in->lvcs(), scene_in->origin(), scene_in->block_dim(), scene_in->world_dim());
+      new boxm_scene<tree_type>(scene_in->lvcs(), scene_in->origin(), scene_in->block_dim(), scene_in->world_dim(), scene_in->max_level(), scene_in->init_level());
     scene_out->set_paths(output_path, "response_scene");
     scene_out->set_appearance_model(BOXM_FLOAT);
     scene_out->write_scene("/float_response_scene.xml");
