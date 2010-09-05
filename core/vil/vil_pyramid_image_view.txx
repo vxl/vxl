@@ -3,6 +3,7 @@
 
 #include "vil_pyramid_image_view.h"
 #include <vil/vil_image_view.h>
+#include <vil/vil_resample_bilin.h>
 
 template <class T>
 vil_pyramid_image_view<T>::vil_pyramid_image_view(unsigned levels, unsigned ni,
@@ -111,20 +112,11 @@ void vil_pyramid_image_view<T>::scale_down(const vil_image_view<T>& image_in,
 {
   unsigned ni=image_in.ni();
   unsigned nj=image_in.nj();
-  unsigned ii=ni/2;
-  unsigned jj=nj/2;
-
- // image_out = new vil_image_view<T>(ii, jj);
-  vil_image_view<T>* img = new vil_image_view<T>(ii, jj);
-  for (unsigned i=0; i<ii; i++)
-    for (unsigned j=0; j<jj; j++) {
-      // get the 2x2 neighborhood
-      unsigned pos_i=i/2;
-      unsigned pos_j=j/2;
-      float v = 0.25f*(image_in(pos_i,pos_j)+image_in(pos_i+1,pos_j)+image_in(pos_i,pos_j+1)+image_in(pos_i+1,pos_j+1));
-      (*img)(i,j)=v;
-     }
-   image_out=img;
+  unsigned ni2=ni/2;
+  unsigned nj2=nj/2;
+  vil_image_view<T>* half_size = new vil_image_view<T>(ni2, nj2);
+  vil_resample_bilin(image_in, *half_size, ni2, nj2);
+  image_out = half_size;
 }
 
 
