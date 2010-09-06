@@ -1,4 +1,5 @@
 #include <testlib/testlib_test.h>
+#include <testlib/testlib_root_dir.h>
 #include <vcl_iostream.h>
 #include <vcl_string.h>
 #include <vcl_vector.h>
@@ -29,7 +30,11 @@ static void test_homography_generator()
 {
   START("breg3d_homography_generator test");
 
-  vil_image_view_base_sptr img0_base = vil_load("./frame_00000.png");
+  vcl_string root_dir = testlib_root_dir();
+  vcl_string image_file =
+    root_dir + "/contrib/gel/mrc/vpgl/ihog/tests/dalmation.tif";
+
+  vil_image_view_base_sptr img0_base = vil_load(image_file.c_str());
   if (!img0_base) {
     vcl_cerr << "error loading image." << vcl_endl;
     TEST("FAILED TO LOAD TEST IMAGE",false,true);

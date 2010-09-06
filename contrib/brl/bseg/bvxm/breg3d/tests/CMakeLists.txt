@@ -3,6 +3,7 @@ ADD_EXECUTABLE( breg3d_test_all
   test_ekf_camera_optimizer.cxx
   test_ekf_camera_optimizer_seq.cxx
   test_homography_generator.cxx
+  test_ekf_existing_world.cxx
 )
 
 TARGET_LINK_LIBRARIES( breg3d_test_all breg3d bvxm testlib vpgl bsta bsta_algo vgl_algo vil vgl vnl vbl vul vcl)
