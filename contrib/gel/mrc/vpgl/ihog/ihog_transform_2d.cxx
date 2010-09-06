@@ -57,6 +57,7 @@ void ihog_transform_2d::set_zoom_only(double s_x, double s_y, double t_x, double
     t12_matrix_[0][0]=s_x;
     t12_matrix_[1][1]=s_y;
     set_translation(t_x,t_y);
+    form_ = Affine;
 #if 0
     xx_=s_x;   yy_=s_y;   tt_=1.0;
     xt_=t_x;   yt_=t_y;

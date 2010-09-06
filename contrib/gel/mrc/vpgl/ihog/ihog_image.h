@@ -2,6 +2,16 @@
 #define ihog_image_H_
 //:
 // \file
+// \brief An image with an associated transformation
+// \author Matt Leotta
+// \date 4/14/04
+//
+// \verbatim
+//  Modifications
+//  8/2010
+//  G.Tunali  removed dependency on vimt
+// \endverbatim
+// var
 #include "ihog_transform_2d.h"
 #include <vil/vil_image_view.h>
 

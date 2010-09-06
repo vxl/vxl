@@ -50,9 +50,10 @@ void ihog_sample_grid_bilin(vnl_vector<double>& vec,
 
     vil_sample_grid_bilin(vec_data,image.image(),im_p0.x(),im_p0.y(),
                           im_u.x(),im_u.y(),im_v.x(),im_v.y(),n1,n2);
+  
     return;
   }
-
+  
   // Otherwise do more fiddly projective calculations
 
   // Check that all the grid points are within the image.

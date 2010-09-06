@@ -1,18 +1,19 @@
 # vpgl/ihog/CMakeLists.txt
-# Brown video registration library
+# image homography registration library
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc/vpgl)
 INCLUDE_DIRECTORIES( ${VXL_MUL_INCLUDE_DIR} )
 
 SET(ihog_sources
    ihog_world_roi.cxx         ihog_world_roi.h          ihog_world_roi_sptr.h  
-   ihog_region.cxx            ihog_region.h             ihog_region_sptr.h   
+#   ihog_region.cxx            ihog_region.h             ihog_region_sptr.h   
    ihog_transform_2d.cxx      ihog_transform_2d.h       ihog_transform_2d_sptr.h     
    ihog_cost_func.cxx         ihog_cost_func.h  
    ihog_minimizer.cxx         ihog_minimizer.h 
    ihog_lsqr_cost_func.cxx    ihog_lsqr_cost_func.h 
-   ihog_super_res.cxx         ihog_super_res.h
+#   ihog_super_res.cxx         ihog_super_res.h
    ihog_sample_grid_bilin.cxx ihog_sample_grid_bilin.h
    ihog_image.h
+   ihog_utils.h               ihog_utils.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates ihog_sources)

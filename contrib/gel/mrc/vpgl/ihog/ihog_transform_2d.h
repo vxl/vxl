@@ -3,13 +3,13 @@
 #define ihog_transform_2d_h_
 //:
 // \file
-// \brief A vgl_h_matrix_2d with ref_counting
+// \brief An extension of vgl_h_matrix_2d to provide transform specializations
 // \author Matt Leotta
 // \date 4/27/04
 //
 // \verbatim
 //  Modifications
-//   None
+//  G.Tunali 8/2010 Removed dependency on vimt 
 // \endverbatim
 
 #include <vbl/vbl_ref_count.h>
@@ -40,7 +40,7 @@ public:
   ~ihog_transform_2d(){}
 
   Form form() const {return form_;}
-
+  void set_form(const Form form){form_ = form;}
   vnl_matrix_fixed<double,3,3> matrix() const { return t12_matrix_; }
 
   void set(vnl_matrix_fixed<double,3,3> const& t_matrix) { vgl_h_matrix_2d<double>::set(t_matrix); }
@@ -128,6 +128,18 @@ inline ihog_transform_2d operator*(const ihog_transform_2d& L, const ihog_transf
   ihog_transform_2d T;
   vnl_matrix_fixed<double,3,3> m(L.get_matrix()*R.get_matrix());
   T.set(m);
+  if(L.form()==ihog_transform_2d::Projective||
+     R.form()==ihog_transform_2d::Projective)
+    {T.set_form(ihog_transform_2d::Projective); return T;}
+  if(L.form()==ihog_transform_2d::Affine||
+     R.form()==ihog_transform_2d::Affine)
+  {T.set_form(ihog_transform_2d::Affine); return T;}
+  if(L.form()==ihog_transform_2d::RigidBody||
+     R.form()==ihog_transform_2d::RigidBody)
+  {T.set_form(ihog_transform_2d::RigidBody); return T;}
+  if(L.form()==ihog_transform_2d::Translation||
+     R.form()==ihog_transform_2d::Translation)
+  {T.set_form(ihog_transform_2d::Translation); return T;}
   return T;
 }
 

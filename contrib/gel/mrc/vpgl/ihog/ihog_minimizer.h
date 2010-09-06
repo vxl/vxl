@@ -3,7 +3,7 @@
 #define ihog_minimizer_h_
 //:
 // \file
-// \brief Minimize registration error at mulitiple scales 
+// \brief Find image homography by minimizing squared intensity diff 
 // \author Matt Leotta
 // \date 4/14/04
 //
@@ -11,7 +11,10 @@
 //  Modifications
 //   None
 // \endverbatim
-
+// The homgraphic transform between images is determined by minimizing the
+// sum of squared differences. The ihog transform represents a range of
+// transform generality, from pure translation to projective. The solution
+// is found by refining across a pyramid of image scales.
 #include <vnl/vnl_vector.h>
 #include <vil/vil_image_view.h>
 #include <ihog/ihog_world_roi.h>
@@ -41,24 +44,33 @@ public:
                    const ihog_image<float>& image2_mask,
                    const ihog_world_roi& roi);
 
+  //: custom set functions
+  void set_image1_mask(ihog_image<float>& mask);
+  void set_image2_mask(ihog_image<float>& mask);
+    
   //: Run the minimization
   void minimize(ihog_transform_2d& xform);
 
   double get_end_error(){return end_error_;}
-
-
+  //:debug purposes
+  vil_pyramid_image_view<float>& from_pyr(){return from_pyramid_;}
+  vil_pyramid_image_view<float>& to_pyr(){return to_pyramid_;}
+  
 protected:
   vil_pyramid_image_view<float> from_pyramid_;
   vil_pyramid_image_view<float> to_pyramid_;
   vil_pyramid_image_view<float> from_mask_pyramid_;
   vil_pyramid_image_view<float> to_mask_pyramid_;
-  ihog_transform_2d form1_;
-  ihog_transform_2d form2_;
-  ihog_transform_2d mask_form1_;
-  ihog_transform_2d mask_form2_;
+  // vimt_pyramid has w2img transforms but not worth making another class
+  vcl_vector<ihog_transform_2d> w2img1_;
+  vcl_vector<ihog_transform_2d> w2img2_;
+  vcl_vector<ihog_transform_2d> w2mask_img1_;
+  vcl_vector<ihog_transform_2d> w2mask_img2_;
+
   vcl_vector<ihog_world_roi> roi_pyramid_;
 
-  static const unsigned min_level_size_ = 256;
+  //  static const unsigned min_level_size_ = 256;
+  static const unsigned min_level_size_ = 128;
   double end_error_; 
   bool from_mask_; // true if mask is associated with from_pyramid_
   bool to_mask_; // true if mask is associated with to_pyramid_

@@ -9,7 +9,8 @@
 //
 // \verbatim
 //  Modifications
-//   None
+//  removed depencency on vimt
+//  G. Tunali 8/2010
 // \endverbatim
 
 #include <vnl/vnl_vector.h>

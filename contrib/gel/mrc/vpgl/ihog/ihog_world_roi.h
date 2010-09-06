@@ -9,7 +9,8 @@
 //
 // \verbatim
 //  Modifications
-//   None
+//  dependency on vimt removed
+//  G. Tunali 8/2010
 // \endverbatim
 
 #include <vbl/vbl_ref_count.h>

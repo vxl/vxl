@@ -1,197 +1,111 @@
 #include <testlib/testlib_test.h>
-#include <ihog/ihog_world_roi.h>
-#include <ihog/ihog_lsqr_cost_func.h>
-#include <ihog/ihog_cost_func.h>
-#include <ihog/ihog_minimizer.h>
-#include <ihog/ihog_transform_2d.h>
-#include <vcl_cstdlib.h>
-#include <vnl/algo/vnl_levenberg_marquardt.h>
-#include <vnl/algo/vnl_amoeba.h>
-#include <vil/algo/vil_gauss_filter.h>
-#include <vnl/vnl_matlab_filewrite.h>
+#include <testlib/testlib_root_dir.h>
+#include <vcl_iostream.h>
+#include <vcl_string.h>
+#include <vcl_vector.h>
+#include <vul/vul_file.h>
+
+#include <vgl/vgl_vector_3d.h>
+#include <vgl/vgl_point_3d.h>
+
+#include <vil/vil_image_view.h>
+#include <vil/vil_image_view_base.h>
+#include <vil/vil_save.h>
+#include <vil/vil_load.h>
 #include <vil/vil_convert.h>
-#include <vul/vul_timer.h>
 
+#include <vnl/vnl_math.h>
+#include <vpgl/vpgl_camera.h>
+#include <vpgl/vpgl_perspective_camera.h>
 
-void test_lsqr_min( const vil_image_view<float>& img1,
-                    const vil_image_view<float>& img2 )
+#include <ihog/ihog_transform_2d.h>
+#include <ihog/ihog_world_roi.h>
+#include <ihog/ihog_image.h>
+#include <ihog/ihog_sample_grid_bilin.h>
+#include <ihog/ihog_minimizer.h>
+
+static void test_minimizer()
 {
-  ihog_world_roi test_roi(255,255,vgl_point_2d<double>(0.0,0.0),
-                          vgl_vector_2d<double>(0.95,0.0),
-                          vgl_vector_2d<double>(0.0,0.95));
-  //ihog_world_roi test_roi(255,255);
-
-  ihog_transform_2d init_xform;
-  init_xform.set_rigid_body (1.0,1.0,0.0);
-
-  ihog_image<float> image1(img1, ihog_transform_2d());
-  ihog_image<float> image2(img1, ihog_transform_2d());
-  ihog_lsqr_cost_func test_cost_func(image1, image2, test_roi, init_xform);
-
-  vnl_matrix<double> result(50,50);
-  vnl_vector<double> param(3), fx;
-  param[0] = 0.0;
-  for (int i=0; i<50; ++i) {
-    for (int j=0; j<50; ++j) {
-      param[1] = (i-25)/4.0-5;  param[2] = (j-25)/4.0-5;
-      vcl_cout << param << "   \t -> ";
-      test_cost_func.f(param,fx);
-      vcl_cout << fx.rms() << vcl_endl;
-      result[i][j] = fx.rms();
-    }
+  START("ihog minimizer test");
+  vcl_string root_dir = testlib_root_dir();
+  vcl_string image_file =
+    root_dir + "/contrib/gel/mrc/vpgl/ihog/tests/dalmation.tif";
+  vil_image_view_base_sptr img0_base = vil_load(image_file.c_str());
+  if (!img0_base) {
+    vcl_cerr << "error loading image." << vcl_endl;
+    TEST("FAILED TO LOAD TEST IMAGE",false,true);
+    return;
   }
-  vnl_matlab_filewrite matlab("C:/MATLAB/work/vxl.mat");
-  matlab.write(result,"result");
+  vil_image_view<vxl_byte> *img0_byte = dynamic_cast<vil_image_view<vxl_byte>*>(img0_base.ptr());
+  unsigned ni = img0_byte->ni(), nj = img0_byte->nj();
+  vil_image_view<float> img0(ni,nj);
+  vil_convert_cast(*img0_byte,img0);
+  vil_image_view<float> mask0(ni,nj);
+  mask0.fill(1.0f);
 
-  vnl_matrix<float> f1(img1.top_left_ptr(), img1.ni(), img1.nj());
-  vnl_matrix<float> f2(img2.top_left_ptr(), img2.ni(), img2.nj());
-  matlab.write(f1, "img1");
-  matlab.write(f2, "img2");
+  // construct arbitrary homography
+  vnl_matrix_fixed<double,2,3> HA;
+  double rot_angle = 0.15;
+  double tx = -20.0, ty = 30.0;
+  HA(0,0) = vcl_cos(rot_angle);   HA(0,1) = vcl_sin(rot_angle);  HA(0,2) = tx;
+  HA(1,0) = -vcl_sin(rot_angle);  HA(1,1) = vcl_cos(rot_angle) ; HA(1,2) = ty;
 
-#if 0
-  vil_image_view<float> test_image;
-  param[0] = 10;  param[1] = -10;
-  test_cost_func.f(param,fx);
-  test_image = test_cost_func.last_xformed_image();
-  vnl_matrix<float> test_m(test_image.top_left_ptr(), test_image.ni(), test_image.nj());
-  matlab.write(test_m, "test");
-#endif // 0
-  vnl_levenberg_marquardt test_minimizer(test_cost_func);
-  test_minimizer.set_verbose(true);
-  test_minimizer.set_trace(true);
+  ihog_transform_2d xform_in;
+  xform_in.set_affine(HA);
 
-  vnl_vector<double> init_params(3);
-  init_params[0] = 0.02;
-  init_params[1] = -5;
-  init_params[2] = -5;
+  // warp image with homography
+  ihog_image<float> sample_im;
+  ihog_image<float> sample_mask;
+  vgl_point_2d<double> p(0,0);
+  vgl_vector_2d<double> u(1,0);
+  vgl_vector_2d<double> v(0,1);
 
-  test_minimizer.minimize(init_params);
+  ihog_image<float> curr_img(img0,xform_in.inverse());
+  ihog_resample_bilin(curr_img,sample_im,p,u,v,ni,nj);
+  vil_image_view<float> warped_img = sample_im.image();
 
-  test_minimizer.diagnose_outcome();
-
-  TEST("Levenberg Marquardt",true,true);
-}
-
-
-void test_amoeba_min( const vil_image_view<float>& img1,
-                      const vil_image_view<float>& img2 )
-{
-  ihog_world_roi test_roi(255,255);
-
+  ihog_image<float> curr_mask(mask0,xform_in.inverse());
+  ihog_resample_bilin(curr_mask,sample_mask,p,u,v,ni,nj);
+  vil_image_view<float> warped_mask = sample_mask.image();
+#if 0 //for debug 
+  vil_image_view<vxl_byte> byte_image(ni,nj);
+  vil_convert_cast(img0,byte_image);
+  vil_save(byte_image,"img0.tiff");
+  vil_convert_cast(warped_img,byte_image);
+  vil_save(byte_image,"img1.tiff");
+  vil_save(warped_mask,"mask.tiff");
+#endif
+  int border = 2;
+  ihog_world_roi roi(img0.ni()- 2*border, 
+                     img0.nj()- 2*border,
+                     vgl_point_2d<double>(border,border));
   ihog_transform_2d init_xform;
-  init_xform.set_translation(1.0,0.0);
+  vnl_matrix<double> init_H(3,3);
+  init_H.set_identity();
+  init_xform.set_affine(init_H.extract(2,3,0,0));
 
-  ihog_cost_func test_cost_func(img1, img2, test_roi, init_xform);
-
-  vnl_matrix<double> result(50,50);
-  vnl_vector<double> param(2);
-#if 0
-  for (int i=0; i<50; ++i) {
-    for (int j=0; j<50; ++j) {
-      param[0] = (i-25)/4.0-5;  param[1] = (j-25)/4.0-5;
-      vcl_cout << param << "   \t -> ";
-      double cost = test_cost_func.f(param);
-      vcl_cout << cost << vcl_endl;
-      result[i][j] = cost;
-    }
-  }
-#endif // 0
-  vnl_matlab_filewrite matlab("C:/MATLAB/work/vxl.mat");
-  matlab.write(result,"result");
-
-  vnl_matrix<float> f1(img1.top_left_ptr(), img1.ni(), img1.nj());
-  vnl_matrix<float> f2(img2.top_left_ptr(), img2.ni(), img2.nj());
-  matlab.write(f1, "img1");
-  matlab.write(f2, "img2");
-#if 0
-  vil_image_view<float> test_image;
-  param[0] = 10;  param[1] = -10;
-  test_cost_func.f(param,fx);
-  test_image = test_cost_func.last_xformed_image();
-  vnl_matrix<float> test_m(test_image.top_left_ptr(), test_image.ni(), test_image.nj());
-  matlab.write(test_m, "test");
-#endif // 0
-  vnl_amoeba test_minimizer(test_cost_func);
-  test_minimizer.set_max_iterations(50);
-
-  vnl_vector<double> init_params(2);
-  init_params[0] = -5.0;
-  init_params[1] = -5.0;
-
-  vul_timer time;
-  test_minimizer.minimize(init_params);
-
-  vcl_cout << "result " << init_params << '\n'
-           << " in " << test_minimizer.get_num_evaluations() << " iterations"
-           << " and " << time.real() << " msec" << vcl_endl;
-
-  TEST("Amoeba",true,true);
-}
-
-
-void test_minimizer( const vil_image_view<float>& img1,
-                     const vil_image_view<float>& img2 )
-{
-  ihog_world_roi test_roi(200,200,vgl_point_2d<double>(20.0,20.0),
-                          vgl_vector_2d<double>(0.99,0.0),
-                          vgl_vector_2d<double>(0.0,0.99));
-  //ihog_world_roi test_roi(255,255);
-
-  ihog_transform_2d init_xform;
-  init_xform.set_rigid_body(0.174532, 0.0, 0.0);
-
-
-  ihog_image<float> image1(img1, ihog_transform_2d());
-  ihog_image<float> image2(img1, ihog_transform_2d());
-  ihog_minimizer minimizer(image1, image2, test_roi);
-
-  vul_timer time;
+  ihog_image<float> from_img(img0, init_xform);
+  ihog_image<float> to_img(warped_img, ihog_transform_2d());
+  ihog_image<float> mask_img(warped_mask, ihog_transform_2d()); 
+  ihog_minimizer minimizer(from_img, to_img, mask_img, roi, false);
   minimizer.minimize(init_xform);
+  double error = minimizer.get_end_error();
+  vcl_cout << "end_error = " << error << '\n';
 
-  vcl_cout << "result " << init_xform << '\n'
-           << " in " << time.real() << " msec" << vcl_endl;
+  vcl_cout << "original homography: " << vcl_endl;
+  vcl_cout << xform_in.matrix() << vcl_endl << vcl_endl;
 
-  TEST("Minimizer",true,true);
+  vcl_cout << "lm generated homography: " << vcl_endl;
+  vcl_cout << init_xform.matrix() << vcl_endl << vcl_endl;
+  //test result
+  vgl_point_2d<double> p0 = init_xform.origin();
+  vgl_vector_2d<double> du = init_xform.delta(p0, vgl_vector_2d<double>(1,0));
+  double ang = vcl_acos(du.x());
+  double err_ang = vcl_fabs(ang-rot_angle);
+  double err_trans = (vcl_fabs(p0.x()-tx) + vcl_fabs(p0.y()-ty))/100;
+  TEST_NEAR("rigid_body trans",err_ang+err_trans,0.0, 0.01);
 }
 
 
-MAIN( test_minimizer )
-{
-  START ("Minimizer");
 
-  vil_image_view<vxl_byte> frame1(255,255);
-  vil_image_view<vxl_byte> frame2(255,255);
-  frame1.fill(255);
-  frame2.fill(255);
-
-  unsigned off_j = 10;
-  unsigned off_i = 7;
-  for (unsigned j=0;j<255+off_j;++j){
-    for (unsigned i=0;i<255+off_i;++i){
-      unsigned char rand_I = (unsigned char)(vcl_rand());
-      char noise= char(vcl_rand())/32;
-      //vcl_cout << int(noise) << ", ";
-      if (i<255 && j<255)
-        frame1(i,j) = rand_I;
-      if (i>=off_i && j>=off_j)
-        frame2(i-off_i,j-off_j) = rand_I+noise;
-    }
-  }
-  vil_image_view<double> d_frame1, d_frame2;
-  vil_convert_stretch_range(frame1, d_frame1, 0.0, 1.0);
-  vil_convert_stretch_range(frame2, d_frame2, 0.0, 1.0);
-
-  vil_image_view<float> f_frame1, f_frame2;
-  vil_convert_cast(d_frame1, f_frame1);
-  vil_convert_cast(d_frame2, f_frame2);
-
-  vil_gauss_filter_5tap(f_frame1,f_frame1,vil_gauss_filter_5tap_params(1));
-  vil_gauss_filter_5tap(f_frame2,f_frame2,vil_gauss_filter_5tap_params(1));
-
-  //test_lsqr_min(f_frame1, f_frame2);
-  //test_amoeba_min(f_frame1, f_frame2);
-
-  test_minimizer(f_frame1, f_frame2);
-
-  SUMMARY();
-}
+TESTMAIN( test_minimizer );

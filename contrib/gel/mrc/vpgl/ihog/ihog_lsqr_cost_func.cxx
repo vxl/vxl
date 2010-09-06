@@ -27,7 +27,6 @@ ihog_lsqr_cost_func::ihog_lsqr_cost_func( const ihog_image<float>& image1,
   from_samples_ = roi_.sample(from_image_);
   int number_of_residuals = from_samples_.size(); 
   use_gradient_ = false;
-  vnl_least_squares_function::init(params.size(), number_of_residuals);
 }
 
 
@@ -55,7 +54,7 @@ ihog_lsqr_cost_func::ihog_lsqr_cost_func( const ihog_image<float>& image1,
   int number_of_residuals = from_samples_.size(); 
   use_gradient_ = false;
   vnl_least_squares_function::init(params.size(), number_of_residuals);
-  
+  vnl_least_squares_function::init(params.size(), number_of_residuals);
 }
 
 ihog_lsqr_cost_func::ihog_lsqr_cost_func(const ihog_image<float>& image1,

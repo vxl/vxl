@@ -14,8 +14,22 @@
 #include <vcl_cstdlib.h>
 
 #include <vnl/vnl_matlab_filewrite.h>
-
-
+// generate a pyramid of transforms corresponding to the vil_image_pyramid
+static  vcl_vector<ihog_transform_2d> 
+w2img_pyramid(ihog_transform_2d const& w2img, int n_levels)
+{
+  ihog_transform_2d temp = w2img;
+  vcl_vector<ihog_transform_2d> ret;
+  ret.push_back(w2img);
+  ihog_transform_2d scaling;
+  scaling.set_zoom_only(0.5,0,0);
+  for(int i = 1; i<n_levels; ++i)
+    {
+      temp = scaling*temp;
+      ret.push_back(temp);
+    }
+  return ret;
+}
 //: Constructor
 ihog_minimizer::ihog_minimizer( const ihog_image<float>& image1,
                                 const ihog_image<float>& image2,
@@ -33,20 +47,20 @@ ihog_minimizer::ihog_minimizer( const ihog_image<float>& image1,
     roi_L.set_origin(p);
     ++levels;
   }
-  vcl_cout << "LEVELS = "<<levels<<'\n';
 
   if (levels == 0) {
     levels = 1;
     roi_pyramid_.push_back(roi_L);
   }
 
-  form1_=image1.world2im();
-  form2_=image2.world2im();
 
-  from_pyramid_.set_max_level(levels);
-  to_pyramid_.set_max_level(levels);
-  from_pyramid_=vil_pyramid_image_view<float>(image1.image());
-  to_pyramid_=vil_pyramid_image_view<float>(image2.image());
+  w2img1_ = w2img_pyramid(image1.world2im(), levels);
+  w2img2_ = w2img_pyramid(image2.world2im(), levels);
+    vil_image_view_base_sptr i1sptr = 
+      new vil_image_view<float>(image1.image());
+  from_pyramid_=vil_pyramid_image_view<float>(i1sptr,levels);
+  vil_image_view_base_sptr i2sptr = new vil_image_view<float>(image2.image());
+  to_pyramid_=vil_pyramid_image_view<float>(i2sptr,levels);
 }
 
 //: Constructor with a mask
@@ -73,22 +87,28 @@ ihog_minimizer::ihog_minimizer( const ihog_image<float>& image1,
     roi_pyramid_.push_back(roi_L);
   }
 
-  form1_=image1.world2im();
-  form2_=image2.world2im();
+  w2img1_ = w2img_pyramid(image1.world2im(), levels);
+  w2img2_ = w2img_pyramid(image2.world2im(), levels);
 
-  from_pyramid_.set_max_level(levels);
-  to_pyramid_.set_max_level(levels);
-  from_pyramid_=vil_pyramid_image_view<float>(image1.image());
-  to_pyramid_=vil_pyramid_image_view<float>(image2.image());
+    vil_image_view_base_sptr i1sptr = 
+      new vil_image_view<float>(image1.image());
+  from_pyramid_=vil_pyramid_image_view<float>(i1sptr,levels);
+    vil_image_view_base_sptr i2sptr = 
+      new vil_image_view<float>(image2.image());
+  to_pyramid_=vil_pyramid_image_view<float>(i2sptr,levels);
+  
   if (from_mask_) {
-    from_mask_pyramid_.set_max_level(levels);
-    from_mask_pyramid_=vil_pyramid_image_view<float>(image_mask.image());
-    mask_form1_=image_mask.world2im();
+    vil_image_view_base_sptr m1sptr = 
+      new vil_image_view<float>(image_mask.image());
+    from_mask_pyramid_=vil_pyramid_image_view<float>(m1sptr,levels);
+    w2mask_img1_ = w2img_pyramid(image_mask.world2im(), levels);
   }
   else {
-    to_mask_pyramid_.set_max_level(levels);
-    to_mask_pyramid_=vil_pyramid_image_view<float>(image_mask.image());
-    mask_form2_=image_mask.world2im();
+    vil_image_view_base_sptr m2sptr = 
+      new vil_image_view<float>(image_mask.image());
+    from_mask_pyramid_=vil_pyramid_image_view<float>(m2sptr,levels);
+    to_mask_pyramid_=vil_pyramid_image_view<float>(m2sptr,levels);
+    w2mask_img2_ = w2img_pyramid(image_mask.world2im(), levels);
   }
 }
 
@@ -116,47 +136,63 @@ ihog_minimizer::ihog_minimizer( const ihog_image<float>& image1,
     levels = 1;
     roi_pyramid_.push_back(roi_L);
   }
+  w2img1_ = w2img_pyramid(image1.world2im(), levels);
+  w2img2_ = w2img_pyramid(image2.world2im(), levels);
+  w2mask_img1_ = w2img_pyramid(image1_mask.world2im(), levels);
+  w2mask_img2_ = w2img_pyramid(image2_mask.world2im(), levels);
+    vil_image_view_base_sptr i1sptr = 
+      new vil_image_view<float>(image1.image());
+  from_pyramid_=vil_pyramid_image_view<float>(i1sptr,levels);
+    vil_image_view_base_sptr i2sptr = 
+      new vil_image_view<float>(image2.image());
+  to_pyramid_=vil_pyramid_image_view<float>(i2sptr,levels);
 
-  form1_=image1.world2im();
-  form2_=image2.world2im();
-  mask_form1_=image1_mask.world2im();
-  mask_form2_=image2_mask.world2im();
-  from_pyramid_.set_max_level(levels);
-  to_pyramid_.set_max_level(levels);
-  from_mask_pyramid_.set_max_level(levels);
-  to_mask_pyramid_.set_max_level(levels);
-  from_pyramid_=vil_pyramid_image_view<float>(image1.image());
-  to_pyramid_=vil_pyramid_image_view<float>(image2.image());
-  from_mask_pyramid_=vil_pyramid_image_view<float>(image1_mask.image());
-  to_mask_pyramid_=vil_pyramid_image_view<float>(image2_mask.image());
+    vil_image_view_base_sptr m1sptr = 
+      new vil_image_view<float>(image1_mask.image());
+    from_mask_pyramid_=vil_pyramid_image_view<float>(m1sptr,levels);
+    vil_image_view_base_sptr m2sptr = 
+      new vil_image_view<float>(image2_mask.image());
+    to_mask_pyramid_=vil_pyramid_image_view<float>(m2sptr,levels);
 }
 
+void ihog_minimizer::set_image1_mask(ihog_image<float>& mask)
+{
+  int levels = from_pyramid_.nlevels();
+  vil_image_view_base_sptr msptr = 
+    new vil_image_view<float>(mask.image());
 
+  from_mask_pyramid_=vil_pyramid_image_view<float>(msptr,levels);
+  w2mask_img1_ = w2img_pyramid(mask.world2im(), levels);
+  from_mask_=true;
+}
+
+void ihog_minimizer::set_image2_mask(ihog_image<float>& mask)
+{
+  int levels = to_pyramid_.nlevels();
+  vil_image_view_base_sptr msptr = 
+    new vil_image_view<float>(mask.image());
+  to_mask_pyramid_=vil_pyramid_image_view<float>(msptr,levels);
+  w2mask_img2_ = w2img_pyramid(mask.world2im(), levels);
+  to_mask_=true;
+}
 //: The main function.
 void
 ihog_minimizer::minimize(ihog_transform_2d& xform)
 {
-  //xform.set_rigid_body(1.0, 0.0, 0.0);
-
   ihog_transform_2d::Form form = xform.form();
-
+  int n_levels = from_pyramid_.nlevels();
   vnl_vector<double> param, fx;
   xform.params(param);
   // the expression 1.0/(1<<X) is a bit more efficient than std::pow(0.5,X),
   // and it avoids having to #include <cmath> :       -- PVr
-  double init_scale = 1.0/(1<<(from_pyramid_.nlevels()+1));
+  double init_scale = 1.0/(1<<n_levels);
 
   ihog_transform_2d undo_xform;
-  undo_xform.set_zoom_only(1.0/init_scale,1.0/init_scale,0.0,0.0);
+  undo_xform.set_zoom_only(1.0/init_scale,0.0,0.0);
   ihog_transform_2d undo_step;
-  undo_step.set_zoom_only(0.5,0.5,0.0,0.0);
-  vcl_cout << "xform.origin = "<<xform.origin()<<'\n';
+  undo_step.set_zoom_only(0.5,0.0,0.0);
   xform.set_origin( vgl_point_2d<double>(xform.origin().x()*init_scale,
                                      xform.origin().y()*init_scale) );
-  vcl_cout << "new xform.origin = "<<xform.origin()<<'\n';
-
-  //vnl_matlab_filewrite matlab("C:/MATLAB/work/vxl.mat");
-  //vnl_matrix<double> result(50,50);
 
   for (int L=from_pyramid_.nlevels()-1; L>=0; --L)
   {
@@ -164,8 +200,8 @@ ihog_minimizer::minimize(ihog_transform_2d& xform)
                                            xform.origin().y()*2.0) );
 
     undo_xform = undo_xform * undo_step;
-    ihog_image<float> image1(from_pyramid_(L),form1_);
-    ihog_image<float> image2(to_pyramid_(L),form2_);
+    ihog_image<float> image1(from_pyramid_(L),w2img1_[L]);
+    ihog_image<float> image2(to_pyramid_(L),w2img2_[L]);
 
     ihog_image<float> im1(image1);
     ihog_image<float> im2(image2);
@@ -183,13 +219,13 @@ ihog_minimizer::minimize(ihog_transform_2d& xform)
     // one mask
     else if (from_mask_ || to_mask_) {
       if (from_mask_) {
-        ihog_image<float> image_mask(from_mask_pyramid_(L),mask_form1_);
+        ihog_image<float> image_mask(from_mask_pyramid_(L),w2mask_img1_[L]);
         ihog_image<float> immask(image_mask);
         immask.set_world2im(undo_xform*image_mask.world2im());
         cost = new ihog_lsqr_cost_func( im1, im2, immask, roi_pyramid_[L], xform, true);
       }
       else {
-        ihog_image<float> image_mask(to_mask_pyramid_(L),mask_form2_);
+        ihog_image<float> image_mask(to_mask_pyramid_(L),w2mask_img2_[L]);
         ihog_image<float> immask(image_mask);
         immask.set_world2im(undo_xform*image_mask.world2im());
         cost = new ihog_lsqr_cost_func( im1, im2, immask, roi_pyramid_[L], xform, false);
@@ -198,11 +234,11 @@ ihog_minimizer::minimize(ihog_transform_2d& xform)
     // both masks
     else
     {
-      ihog_image<float> from_image_mask(from_mask_pyramid_(L),mask_form1_);
+      ihog_image<float> from_image_mask(from_mask_pyramid_(L),w2mask_img1_[L]);
       ihog_image<float> f_immask(from_image_mask);
       f_immask.set_world2im(undo_xform*from_image_mask.world2im());
 
-      ihog_image<float> to_image_mask(to_mask_pyramid_(L),mask_form2_);
+      ihog_image<float> to_image_mask(to_mask_pyramid_(L),w2mask_img2_[L]);
       ihog_image<float> t_immask(to_image_mask);
       t_immask.set_world2im(undo_xform*to_image_mask.world2im());
 
@@ -218,16 +254,6 @@ ihog_minimizer::minimize(ihog_transform_2d& xform)
     minimizer.minimize(param);
     end_error_ = minimizer.get_end_error();
     xform.set(param,form);
-
-    // scale the transformations for the next level;
-    ihog_transform_2d scaling;
-    scaling.set_zoom_only(0.5,0,0);
-    form1_=scaling * image1.world2im();
-    form2_=scaling * image2.world2im();
-    if (from_mask_)
-      mask_form1_=scaling * image1.world2im();
-    if (to_mask_)
-      mask_form2_=scaling * image2.world2im();
     delete cost;
   }
 }
