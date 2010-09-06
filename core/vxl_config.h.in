@@ -127,6 +127,8 @@
 # define vxl_ieee_128 void
 #endif
 
+#cmakedefine VXL_ADDRESS_BITS  @VXL_ADDRESS_BITS@
+
 /* -------------------- operating system services */
 
 #define VXL_HAS_PTHREAD_H         @VXL_HAS_PTHREAD_H@

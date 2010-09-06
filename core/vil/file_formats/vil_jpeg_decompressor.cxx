@@ -14,6 +14,7 @@
 #include "vil_jpeg_source_mgr.h"
 #include <vil/vil_stream.h>
 #include <vcl_iostream.h>
+#include <vxl_config.h>
 
 #define trace if (true) { } else vcl_cerr
 
@@ -44,6 +45,16 @@ vil_jpeg_decompressor::vil_jpeg_decompressor(vil_stream *s)
 
   // construct the decompression object :
   jpeg_create_decompress(&jobj);
+
+  // Increase the amount of memory that can be used. 
+  // Default (1Mb) was too small.  
+#if defined(VXL_ADDRESS_BITS) && VXL_ADDRESS_BITS == 32
+  jobj.mem->max_memory_to_use = 300 * 1024 * 1024;
+#elif defined(VXL_ADDRESS_BITS) && VXL_ADDRESS_BITS == 64
+  jobj.mem->max_memory_to_use = 1024 * 1024 * 1024;
+#else
+  /* use the default memory settings */
+#endif
 
   // we need to read the header here, in order to get parameters such as size.
   //

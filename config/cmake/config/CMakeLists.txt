@@ -366,6 +366,13 @@ ELSE(HAVE_UNISTD_H)
   SET(VXL_UNISTD_HAS_GETPID 1)
 ENDIF(HAVE_UNISTD_H)
 
+#
+# Check the address model of the build, i.e. 32-bit (4-byte) or 64-bit (8-byte). 
+# The type of size_t is directly related to address model on most machines and compilers.
+# Hence, we detect the size of size_t instead.  
+#
+check_type_size(size_t  VXL_SIZEOF_SIZE_T)
+MATH(EXPR VXL_ADDRESS_BITS 8*${VXL_SIZEOF_SIZE_T} )
 
 #
 # Check numeric_limits infinity stuff

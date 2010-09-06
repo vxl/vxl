@@ -14,6 +14,7 @@
 #include "vil_jpeg_destination_mgr.h"
 #include <vil/vil_stream.h>
 #include <vcl_iostream.h>
+#include <vxl_config.h>
 
 vil_jpeg_compressor::vil_jpeg_compressor(vil_stream *s)
   : stream(s)
@@ -29,6 +30,16 @@ vil_jpeg_compressor::vil_jpeg_compressor(vil_stream *s)
 
   // construct the compression object :
   jpeg_create_compress(&jobj);
+
+  // Increase the amount of memory that can be used. 
+  // Default (1Mb) was too small.  
+#if defined(VXL_ADDRESS_BITS) && VXL_ADDRESS_BITS == 32
+  jobj.mem->max_memory_to_use = 300 * 1024 * 1024;
+#elif defined(VXL_ADDRESS_BITS) && VXL_ADDRESS_BITS == 64
+  jobj.mem->max_memory_to_use = 1024 * 1024 * 1024;
+#else
+  /* use the default memory settings */
+#endif
 
   // set the data destination
   vil_jpeg_stream_dst_set(&jobj, stream);
