@@ -14,6 +14,7 @@
 #include <vnl/vnl_random.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_3x3.h>
+#include <vnl/vnl_double_2x2.h>
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_math.h>
 
@@ -1700,7 +1701,7 @@ static  vnl_random random;
 
         // test on transfer error
         vnl_vector<double> pt(2);
-        vnl_double_3x3 trans_error = est->transfer_error_covar( inhomo(p[2].as_ref()) );
+        vnl_double_2x2 trans_error = est->transfer_error_covar( inhomo(p[2].as_ref()) );
         vcl_cout << "transfer error at this point:" << trans_error << vcl_endl;
       }
       // error STD = 0.5
@@ -2062,7 +2063,8 @@ static  vnl_random random;
 void
 test_rad_dis_homo2d_lm()
 {
-  vnl_double_3x3 H(vnl_matrix_identity), initH(H);
+  vnl_double_3x3 H;  H.set_identity();
+  vnl_double_3x3 initH(H);
   const double k1_from = -1e-6;
   const double k1_to = 0;
   vnl_vector<double> centre(2,0.0);
