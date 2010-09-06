@@ -156,52 +156,21 @@ inv_map( const vnl_vector<double>& to,
          vnl_vector<double>& from,
          vnl_vector<double>& from_next_est) const
 {
-  const double epsilon = 0.01;
-  const double eps_squared = epsilon*epsilon;
-  int t=0;
-  const int max_t = 50;  //  Generally, only one or two iterations should be needed.
-  assert (to.size() == from.size());
-  vnl_vector<double> to_est = this->map_location(from);
-  vnl_matrix<double> approx_A_inv;
-  vnl_vector<double> homo_from_delta(3,1);
-  vnl_vector<double> from_delta(2,1);
+  vnl_double_3 homo_to(to[0]-to_centre_[0], to[1]-to_centre_[1], 1.0);
 
-  while ( vnl_vector_ssd(to, to_est) > eps_squared && t<max_t )
-  {
-    ++t;
+  // apply inverse homography
+  vnl_matrix_fixed<double, 3, 3> Hinv = vnl_inverse(H_);
+  vnl_double_3 homo_from = Hinv * homo_to;
 
-    // compute the inverse of the approximated affine from the jacobian
-    vnl_matrix_fixed<double,2,3> J = homo_jacobian(from);
-    vnl_svd<double> svd(J.as_ref());
-    approx_A_inv = svd.inverse();
-
-    // Increase "from" by approx_A^-1*(to-to_est).  "homo_from_delta"
-    // provides the correct direction, but its magnitude is
-    // arbitrary. To get around the problem, we take (to -
-    // to_est).two_norm() as an indication of the magnitude.
-
-    homo_from_delta = approx_A_inv * (to - to_est);
-    homo_from_delta /= homo_from_delta[2];
-    from_delta[0] = homo_from_delta[0];
-    from_delta[1] = homo_from_delta[1];
-    from += from_delta.normalize()*(to - to_est).two_norm()*0.95;
-    to_est = this->map_location(from);
-  }
-  if ( t > max_t )
-    DebugMacro( 0, " rgrl_trans_homography2d::inv_map() -- no convergence\n");
+  from[0] = homo_from[0]/homo_from[2]+from_centre_[0];
+  from[1] = homo_from[1]/homo_from[2]+from_centre_[1];
 
   if ( initialize_next ) {
-    if ( t == 0 ) { //approx_A_inv not yet calculated
-      vnl_matrix_fixed<double,2,3> J = homo_jacobian(from);
-      vnl_svd<double> svd(J.as_ref());
-      approx_A_inv = svd.inverse();
-    }
-    vnl_vector<double> homo_from_delta(3,1);
-    homo_from_delta = approx_A_inv * to_delta;
-    if (homo_from_delta[2] < 0)
-      homo_from_delta *= -1;
-    from_next_est[0] = from[0] + homo_from_delta[0]*to_delta.two_norm();
-    from_next_est[1] = from[1] + homo_from_delta[1]*to_delta.two_norm();
+    homo_to[0] += to_delta[0];
+    homo_to[1] += to_delta[1];
+    homo_from = Hinv * homo_to;
+    from_next_est[0] = homo_from[0]/homo_from[2]+from_centre_[0];
+    from_next_est[1] = homo_from[1]/homo_from[2]+from_centre_[1];
   }
 }
 
