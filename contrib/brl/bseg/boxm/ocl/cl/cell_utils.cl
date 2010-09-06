@@ -274,30 +274,18 @@ int intersect_cell(float4 ray_o, float4 ray_d, float4 cell_min, float4 cell_dims
 //------------------------------------------------------------------------------
 int intersect_cell_opt(float4 ray_o, float4 ray_d, float4 ray_d_inv, float4 cell_min, float4 cell_dims, float *tnear, float *tfar)
 {
- 
+
   // compute intersection of ray with all six cell planes
   float4 tmin = ray_d_inv * (cell_min - ray_o);
   float4 tmax = tmin + ray_d_inv*cell_dims;
   //float4 tmax = ray_d_inv * (cell_min + cell_dims - ray_o);
+
 
   // re-order intersections to find smallest and largest on each axis
   // minimum t values for either bounding plane
   float4 tmin_s =   min(tmax, tmin);
   // maximum t values for either bounding plane
   float4 tmax_s =   max(tmax, tmin);
-
-  if (ray_d.x == 0.0f) {
-    tmin_s.x = -3.4e38f;
-    tmax_s.x = 3.4e38f;
-  }
-  if (ray_d.y == 0.0f) {
-    tmin_s.y = -3.4e38f;
-    tmax_s.y = 3.4e38f;
-  }
-  if (ray_d.z == 0.0f) {
-    tmin_s.z = -3.4e38f;
-    tmax_s.z = 3.4e38f;
-  }
 
   // find the largest tmin and the smallest tmax
   float largest_tmin  =   max(  max(tmin_s.x, tmin_s.y),   max(tmin_s.x, tmin_s.z));
