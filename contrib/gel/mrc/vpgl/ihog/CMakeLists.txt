@@ -6,7 +6,6 @@ INCLUDE_DIRECTORIES( ${VXL_MUL_INCLUDE_DIR} )
 SET(ihog_sources
    ihog_world_roi.cxx         ihog_world_roi.h          ihog_world_roi_sptr.h  
    ihog_transform_2d.cxx      ihog_transform_2d.h       ihog_transform_2d_sptr.h     
-   ihog_cost_func.cxx         ihog_cost_func.h  
    ihog_minimizer.cxx         ihog_minimizer.h 
    ihog_lsqr_cost_func.cxx    ihog_lsqr_cost_func.h 
    ihog_sample_grid_bilin.cxx ihog_sample_grid_bilin.h

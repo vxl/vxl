@@ -1,8 +1,6 @@
-#include <vpgl/ihog/ihog_cost_func.h>
 #include <vpgl/ihog/ihog_image.h>
 #include <vpgl/ihog/ihog_lsqr_cost_func.h>
 #include <vpgl/ihog/ihog_minimizer.h>
-#include <vpgl/ihog/ihog_region.h>
 #include <vpgl/ihog/ihog_sample_grid_bilin.h>
 #include <vpgl/ihog/ihog_transform_2d.h>
 #include <vpgl/ihog/ihog_world_roi.h>

@@ -3,8 +3,6 @@
 // \file
 
 #include "ihog_minimizer.h"
-
-#include <ihog/ihog_cost_func.h>
 #include <ihog/ihog_lsqr_cost_func.h>
 #include <vil/vil_convert.h>
 #include <vil/algo/vil_gauss_filter.h>
