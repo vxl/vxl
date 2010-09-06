@@ -18,8 +18,6 @@
 #include <ihog/ihog_world_roi.h>
 #include <ihog/ihog_transform_2d.h>
 #include <ihog/ihog_transform_2d_sptr.h>
-#include <ihog/ihog_region.h>
-#include <ihog/ihog_region_sptr.h>
 #include <vcl_cassert.h>
 
 
