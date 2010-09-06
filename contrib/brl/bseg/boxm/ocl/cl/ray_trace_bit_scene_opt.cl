@@ -96,10 +96,12 @@ ray_trace_bit_scene_opt(__global   RenderSceneInfo    * info,
   //----------------------------------------------------------------------------
   while(tblock < tfar) 
   {
-    // Ray tracing with in each block
-    
+    //-------------------------------------------------------------------------
+    // get small block and necessary information
+    //-------------------------------------------------------------------------
     //find entry point (adjusted) and the current block index
     float4 pos = ray_o + (tblock+epsilon)*ray_d;
+    
     int4 curr_block_index = convert_int4_rtn((pos-linfo->origin)/linfo->block_len);  //floor[ (point-origin)/block_len ]
     curr_block_index += (curr_block_index == linfo->dims);  // make sure curr_block index falls in [0, 192)
     curr_block_index -= (curr_block_index == -1);           // make sure curr_block index falls in [0, 192)
@@ -113,10 +115,7 @@ ray_trace_bit_scene_opt(__global   RenderSceneInfo    * info,
     //t values found for intersection become ill-defined, and may cause an infinite block loop
     if(!hit || texit <= tblock)
       break;
-    
-    //-------------------------------------------------------------------------
-    // ray trace small block (octree raytrace)
-    //-------------------------------------------------------------------------
+      
     ushort2 block = block_ptrs[curr_block_index.z
                               +curr_block_index.y*(linfo->dims.z)
                               +curr_block_index.x*(linfo->dims.y)*(linfo->dims.z)];
@@ -132,23 +131,22 @@ ray_trace_bit_scene_opt(__global   RenderSceneInfo    * info,
     local_tree[rIndex+8]  = tbuff.s8; local_tree[rIndex+9]  = tbuff.s9; local_tree[rIndex+10] = tbuff.sa; local_tree[rIndex+11] = tbuff.sb; 
     local_tree[rIndex+12] = tbuff.sc; local_tree[rIndex+13] = tbuff.sd; local_tree[rIndex+14] = tbuff.se; local_tree[rIndex+15] = tbuff.sf;   
 
-    //local ray origin (can compute first term outside loop)
-    //float4 local_ray_o = (ray_o-linfo->origin)/linfo->block_len - convert_float4(curr_block_index);
-    
     //entry point in local block coordinates (point should be in [0,1]) 
-    float4 block_entry_pt = (pos-linfo->origin)/linfo->block_len - convert_float4(curr_block_index);
-    float4 local_ray_o = block_entry_pt;
+    float4 block_pos = (pos-linfo->origin)/linfo->block_len - convert_float4(curr_block_index);
+    float4 local_ray_o = block_pos; 
+    
+    //setting local_ray_o to block_pos allows ttree to start at 0, ttree_exit is texit scaled
     ttree = 0.0;
-    ttreeexit = (texit-tblock)/linfo->tree_len;
-    while (ttree < ttreeexit)
+    float ttree_exit = (texit-tblock- 2*epsilon)/linfo->block_len;
+    while (ttree < ttree_exit)
     {
       // traverse to leaf cell that contains the entry point, set bounding box
-      int curr_cell_ptr = traverse_opt_len(rIndex, local_tree, block_entry_pt, &cell_min, &cell_len);
+      int curr_cell_ptr = traverse_opt_len(rIndex, local_tree, block_pos, &cell_min, &cell_len);
 
       // check to see how close tnear and tfar are
-      float t0, ttree;
-      int tree_hit = intersect_cell_opt(local_ray_o, ray_d, ray_d_inv, cell_min, (float4) cell_len, &t0, &ttree);
-      if (!tree_hit)
+      float t0, t1;
+      int tree_hit = intersect_cell_opt(local_ray_o, ray_d, ray_d_inv, cell_min, (float4) cell_len, &t0, &t1);
+      if (!tree_hit || t1 <= ttree)
         break;
 
       //data offset is ushort pointed to by tree + bit offset
@@ -156,8 +154,8 @@ ray_trace_bit_scene_opt(__global   RenderSceneInfo    * info,
       int data_ptr = block.x * linfo->data_len + (int) data_offset;
 
       //// distance must be multiplied by the dimension of the bounding box
-      float d = (ttree-t0)*linfo->block_len;
-      global_depth += (ttree-t0)*linfo->block_len;
+      float d = (t1-t0)*linfo->block_len;
+      global_depth += (t1-t0)*linfo->block_len;
       
       //-----------------------------------------------------------------------
       // RAY TRACE SPECIFIC FUNCTION replaces the step cell functor below
@@ -167,12 +165,11 @@ ray_trace_bit_scene_opt(__global   RenderSceneInfo    * info,
       //-----------------------------------------------------------------------
 
       // Added a litle extra to the exit point
-      block_entry_pt   = local_ray_o + (ttree + tree_epsilon)*ray_d; 
-      block_entry_pt.w = 0.5;
+      block_pos   = local_ray_o + (t1 + tree_epsilon)*ray_d; 
+      block_pos.w = 0.5;
 
-      // if the ray pierces the volume surface then terminate the ray
-      if (any(block_entry_pt>=(float4)1.0f)|| any(block_entry_pt<=(float4)0.0f))
-        break;
+      //update current t parameter
+      ttree = t1;
     }
     
     //--------------------------------------------------------------------------
