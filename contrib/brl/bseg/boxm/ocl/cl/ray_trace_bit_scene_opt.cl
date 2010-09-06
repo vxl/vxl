@@ -61,7 +61,7 @@ ray_trace_bit_scene_opt(__global   RenderSceneInfo    * info,
                                    ray_o);
   //thresh ray direction components - too small a treshhold causes axis aligned 
   //viewpoints to hang in infinite loop (block loop)
-  float thresh = exp2(-8.0f); 
+  float thresh = exp2(-12.0f); 
   if (fabs(ray_d.x) < thresh) ray_d.x = copysign(thresh, ray_d.x);
   if (fabs(ray_d.y) < thresh) ray_d.y = copysign(thresh, ray_d.y);
   if (fabs(ray_d.z) < thresh) ray_d.z = copysign(thresh, ray_d.z);
@@ -70,11 +70,11 @@ ray_trace_bit_scene_opt(__global   RenderSceneInfo    * info,
 
   // pixel values/depth map to be returned
   float4 data_return = (float4) (0.0f,1.0f,0.0f,0.0f);
-  float epsilon = linfo->block_len/100.0;
+  float epsilon = linfo->block_len/100.0;                    //block epsilon
   float tree_epsilon = 1.0/((float)(1<<linfo->root_level));  //side length of the finest cell 
-  tree_epsilon = tree_epsilon/10.0;                               //epsilon is a tenth of the smallest cell side length, for grazing condtions...
+  tree_epsilon = tree_epsilon/10.0;                          //tree epsilon is a tenth of the smallest cell side length, for grazing condtions...
 
-  //get parameters tnear and tfar for the cell and this ray
+  //get parameters tnear and tfar for the scene
   float tblock = 0.0f, tfar = 0.0f;
   if (!intersect_cell_opt(ray_o, ray_d, ray_d_inv, linfo->origin, linfo->block_len*convert_float4(linfo->dims), &tblock, &tfar)) {
     gl_image[j*get_global_size(0)+i] = rgbaFloatToInt((float4)(0.0,0.0,0.0,0.0));
@@ -84,6 +84,9 @@ ray_trace_bit_scene_opt(__global   RenderSceneInfo    * info,
   //make sure tnear is at least 0...
   tblock = (tblock > 0) ? tblock : 0;
   
+  //make sure tfar is within the last block so texit surpasses it (and breaks from the outer loop)
+  tfar = tfar - epsilon;   
+  
   //used for depth map 
   float global_depth = tblock;
 
@@ -91,33 +94,33 @@ ray_trace_bit_scene_opt(__global   RenderSceneInfo    * info,
   // Begin traversing the blocks, break when any curr_block_index value is
   // illegal (not between 0 and scenedims)
   //----------------------------------------------------------------------------
-  //int curr_cell_ptr = -1;
-  float blkCount = 0.0;
-  while(tblock < tfar && blkCount < 400) 
+  while(tblock < tfar) 
   {
-    blkCount++;
     // Ray tracing with in each block
     
     //find entry point (adjusted) and the current block index
     float4 pos = ray_o + (tblock+epsilon)*ray_d;
     int4 curr_block_index = convert_int4_rtn((pos-linfo->origin)/linfo->block_len);  //floor[ (point-origin)/block_len ]
-    curr_block_index.w = 0;
-  
+    curr_block_index += (curr_block_index == linfo->dims);  // make sure curr_block index falls in [0, 192)
+    curr_block_index -= (curr_block_index == -1);           // make sure curr_block index falls in [0, 192)
+    
     //find curr block exit point (to increment tblock and break out of tree loop)
     float4 cell_min = linfo->block_len * convert_float4(curr_block_index) + linfo->origin; cell_min.w = 0.0;
     float  cell_len = linfo->block_len;
-    float texit, tnada; 
-    intersect_cell_opt(ray_o, ray_d, ray_d_inv, cell_min, (float4) cell_len, &tnada, &texit);
-    
+    float texit, ttree; 
+    int hit = intersect_cell_opt(ray_o, ray_d, ray_d_inv, cell_min, (float4) cell_len, &ttree, &texit);
+    //check to make sure that the ray is progressing.  When rays are close to axis aligned, 
+    //t values found for intersection become ill-defined, and may cause an infinite block loop
+    if(!hit || texit <= tblock)
+      break;
     //-------------------------------------------------------------------------
     // ray trace small block (octree raytrace)
     // BIG BUG: 
     //  - narrowed down to:
+    //      - Curr Block Index is out of bounds - returns gibberish block value
     //      - TREE_PTR is greater than tree_len*num_buffer (illegal some how)
     //      - DATA_PTR is either greater than data_len*num_buffer or it's less than0
     //-------------------------------------------------------------------------
-
-    // grab intersected block: 3-d index to 1-d index
     ushort2 block = block_ptrs[curr_block_index.z
                               +curr_block_index.y*(linfo->dims.z)
                               +curr_block_index.x*(linfo->dims.y)*(linfo->dims.z)];
@@ -127,13 +130,7 @@ ray_trace_bit_scene_opt(__global   RenderSceneInfo    * info,
     
     //load global tree into local mem
     int rIndex = llid*16;
-    uchar16 tbuff;
-    if(root_ptr < linfo->tree_len*linfo->num_buffer)
-      tbuff = tree_array[root_ptr];
-    else 
-      tbuff = (uchar16) 0;
-    output[0] = convert_float4(tbuff.s0123);
-
+    uchar16 tbuff = tree_array[root_ptr];
     local_tree[rIndex+0]  = tbuff.s0; local_tree[rIndex+1]  = tbuff.s1; local_tree[rIndex+2]  = tbuff.s2; local_tree[rIndex+3]  = tbuff.s3; 
     local_tree[rIndex+4]  = tbuff.s4; local_tree[rIndex+5]  = tbuff.s5; local_tree[rIndex+6]  = tbuff.s6; local_tree[rIndex+7]  = tbuff.s7; 
     local_tree[rIndex+8]  = tbuff.s8; local_tree[rIndex+9]  = tbuff.s9; local_tree[rIndex+10] = tbuff.sa; local_tree[rIndex+11] = tbuff.sb; 
@@ -142,8 +139,7 @@ ray_trace_bit_scene_opt(__global   RenderSceneInfo    * info,
     //local ray origin (can compute first term outside loop)
     float4 local_ray_o = (ray_o-linfo->origin)/linfo->block_len - convert_float4(curr_block_index);
     
-    //entry point in local block coordinates (need to ensure that this point is actually
-    //between (0,1) for xyz
+    //entry point in local block coordinates (point should be in [0,1]) 
     float4 block_entry_pt = (pos-linfo->origin)/linfo->block_len - convert_float4(curr_block_index);
     while (true)
     {
@@ -152,8 +148,8 @@ ray_trace_bit_scene_opt(__global   RenderSceneInfo    * info,
 
       // check to see how close tnear and tfar are
       float t0, t1;
-      int hit = intersect_cell_opt(local_ray_o, ray_d, ray_d_inv, cell_min, (float4) cell_len, &t0, &t1);
-      if (!hit)
+      int tree_hit = intersect_cell_opt(local_ray_o, ray_d, ray_d_inv, cell_min, (float4) cell_len, &t0, &t1);
+      if (!tree_hit)
         break;
 
       //data offset is ushort pointed to by tree + bit offset
@@ -174,21 +170,17 @@ ray_trace_bit_scene_opt(__global   RenderSceneInfo    * info,
       //-----------------------------------------------------------------------
 
       // Added a litle extra to the exit point
-      block_entry_pt   = local_ray_o + (tfar + tree_epsilon)*ray_d; 
+      block_entry_pt   = local_ray_o + (t1 + tree_epsilon)*ray_d; 
       block_entry_pt.w = 0.5;
 
       // if the ray pierces the volume surface then terminate the ray
       if (any(block_entry_pt>=(float4)1.0f)|| any(block_entry_pt<=(float4)0.0f))
         break;
-
     }
-
+    
     //--------------------------------------------------------------------------
     // finding the next block (using exit point already found before tree loop)
     //--------------------------------------------------------------------------
-
-    //if(texit < tblock)
-    //  break;
     tblock = texit;
   }
 #ifdef DEPTH
@@ -201,9 +193,6 @@ ray_trace_bit_scene_opt(__global   RenderSceneInfo    * info,
   gl_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)data_return.z);
   //gl_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)blkCount/400.0);
   in_image[j*get_global_size(0)+i]=(float)data_return.z;
-    
-  //output[0] = (float4) ((float) tree_len, (float) data_len, (float) num_buffer, 0.0);
-  //output[0] = (float4) linfo->tree_len;
 }
 
 #endif
