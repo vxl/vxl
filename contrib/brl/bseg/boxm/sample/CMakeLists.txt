@@ -25,7 +25,7 @@ IF( BUILD_TESTING )
 #  SUBDIRS(tests)
 ENDIF( BUILD_TESTING )
 
-TARGET_LINK_LIBRARIES(boxm_sample boxm_basic boxm vgl_io bsta vil vgl vbl vsl vcl)
+TARGET_LINK_LIBRARIES(boxm_sample boxm vgl_io bsta vil vgl vbl vsl vcl)
 
 #processors for the samples
 SUBDIRS(algo)
