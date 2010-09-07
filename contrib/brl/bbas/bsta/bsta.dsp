@@ -215,6 +215,9 @@ SOURCE=.\Templates/bsta_kent+double-.cxx
 # Begin Source File
 SOURCE=.\Templates/bsta_gaussian_indep+double.4-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/bsta_gaussian_full+double.2-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
