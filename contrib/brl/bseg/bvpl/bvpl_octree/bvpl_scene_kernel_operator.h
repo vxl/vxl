@@ -147,60 +147,66 @@ void bvpl_scene_kernel_operator::operate(boxm_scene<boct_tree<short, T_data > > 
   }
 }
 
+//: Applies non-maxina suppression on the region occupied by the kernel. The output is stored in situ. 
+//(1)Traverse input scene and for every leaf cell, (2) request a region around it, and (3) apply the functor
 template<class T_data, class F>
 void bvpl_scene_kernel_operator::local_non_maxima_suppression(boxm_scene<boct_tree<short, T_data > > &scene_in,
                                                               F functor,
                                                               bvpl_kernel_sptr kernel)
 {
- // //(1)Traverse input scene and for every leaf cell, (2) request a region around it, and (3) apply the functor
-//  
-//  //(1) Traverse the scene - is there an easy way to modify the cell iterator so to only use leaf cells at level 0;
-//  boxm_cell_iterator<boct_tree<short, T_data > > iterator = scene_in.cell_iterator(&boxm_scene<boct_tree<short, T_data > >::load_block_and_neighbors);
-//  iterator.begin();
-//  
-//  bvpl_kernel_iterator kernel_iter = kernel->iterator();
-//  
-//  double cell_length = kernel->voxel_length();
-//  
-//  while ( !(iterator.end()) ) {
-//    
-//    boct_tree_cell<short,T_data> *center_cell = *iterator; 
-//   
-//    //we are only interested in finest resolution
-//    if(!center_cell->level() == 0 || !center_cell->is_leaf()){
-//      ++iterator;
-//      continue;
-//    }
-//    
-//    vgl_point_3d<double> center_cell_origin = iterator.global_origin();
-//    
-//    kernel_iter.begin(); // reset the kernel iterator
-//    while (!kernel_iter.isDone())
-//    {
-//      vgl_point_3d<int> kernel_idx = kernel_iter.index();
-//      
-//      vgl_point_3d<double> kernel_cell_origin(center_cell_origin.x() + (double)kernel_idx.x()*cell_length + 1.0e-7,
-//                                              center_cell_origin.y() + (double)kernel_idx.y()*cell_length + 1.0e-7,
-//                                              center_cell_origin.z() + (double)kernel_idx.z()*cell_length + 1.0e-7);
-//      
-//      boct_tree_cell<short,T_data> *this_cell = scene_in.locate_point_in_memory(kernel_cell_origin);
-//      
-//      if (this_cell) {
-//        bvpl_kernel_dispatch d = *kernel_iter;
-//        T_data val = this_cell->data();
-//        functor.apply(val, d);
-//      }
-//      else {
-//        break;
-//      }
-//      
-//      ++kernel_iter;
-//    }
-//    
-//    out_center_cell->set_data(functor.result());
-//    ++iterator;
-//    ++out_iter;
-//  }
+  short finest_level = scene_in.finest_level();
+  double cell_length = kernel->voxel_length();
+  
+  //(1) Traverse the scene - is there an easy way to modify the cell iterator so to only use leaf cells at level 0;
+  boxm_cell_iterator<boct_tree<short, T_data > > iterator = scene_in.cell_iterator(&boxm_scene<boct_tree<short, T_data > >::load_block_and_neighbors);
+  iterator.begin();
+  
+  bvpl_kernel_iterator kernel_iter = kernel->iterator();
+  
+  while ( !(iterator.end()) ) {
+    
+    boct_tree_cell<short,T_data> *center_cell = *iterator; 
+   
+    //we are only interested in finest resolution
+    if(!center_cell->level() == finest_level || !center_cell->is_leaf()){
+      ++iterator;
+      continue;
+    }
+    T_data this_data = center_cell->data();
+    
+    //vgl_point_3d<double> center_cell_origin = iterator.global_origin();
+    vgl_point_3d<double> center_cell_center = this_data.location();
+    if(!functor.init(this_data)){
+      ++iterator;
+      continue;
+    }
+    
+    kernel_iter.begin(); // reset the kernel iterator
+    while (!kernel_iter.isDone())
+    {
+      vgl_point_3d<int> kernel_idx = kernel_iter.index();
+      
+      vgl_point_3d<double> kernel_cell_center(center_cell_center.x() + (double)kernel_idx.x()*cell_length,
+                                              center_cell_center.y() + (double)kernel_idx.y()*cell_length,
+                                              center_cell_center.z() + (double)kernel_idx.z()*cell_length);
+      
+      boct_tree_cell<short,T_data> *this_cell = scene_in.locate_point_in_memory(kernel_cell_center);
+      
+      if (this_cell) {
+        //bvpl_kernel_dispatch d = *kernel_iter;
+        T_data val = this_cell->data();
+        functor.apply(val);
+      }
+      else {
+        break;
+      }
+      
+      ++kernel_iter;
+    }
+    
+    center_cell->set_data(functor.result());
+    ++iterator;
+  }
 }
 
 #endif // bvpl_scene_kernel_operator_h
