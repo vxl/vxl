@@ -64,7 +64,7 @@ bvpl_kernel_factory::interpolate(kernel_type const& kernel)
   return kernel_out;
 }
 
-//: Aligns the edge along direction of "axis"
+//: Rotates  the kernel so that its cannonical axis is set to "axis"
 void bvpl_kernel_factory::set_rotation_axis( vnl_float_3 rotation_axis)
 {
   // rotation axis should be unit vector
@@ -111,7 +111,10 @@ void bvpl_kernel_factory::set_rotation_axis( vnl_float_3 rotation_axis)
   // Rotate parallel axis to determine the zero rotation along rotation axis
   // This makes no sense if the angular resolution is zero
   if (angular_resolution_ < vcl_numeric_limits<float>::epsilon())
-    return;
+  {
+    vcl_cerr << "Angular resolution is 0, if this is intentional, then the kernel factory is not checking\n";
+  //  return;
+  }
 
   parallel_axis_ = r_align.as_matrix() * canonical_parallel_axis_;
 
@@ -160,7 +163,9 @@ bvpl_kernel_factory::rotate(float angle)
     if (mag > double(0))
     {
       vnl_quaternion<float> q(rotation_axis_/mag,angle);
-      return this->rotate(vgl_rotation_3d<float>(q));
+      vgl_rotation_3d<float> r(q);
+      parallel_axis_ = r.as_matrix()*parallel_axis_;
+      return this->rotate(r);
     }
     else
       vcl_cout << "magnitude of rotation axis is zero, returning without modifying kernel\n";

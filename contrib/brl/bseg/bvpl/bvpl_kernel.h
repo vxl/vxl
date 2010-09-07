@@ -68,6 +68,10 @@ class bvpl_kernel: public vbl_ref_count
 
   void print()
   {
+    vcl_cout << "***************Printing bvpl_kernel **********************\n"
+    << "Axis: " << axis_ << "\n"
+    << "Aux-axis: " << aux_axis_ << "\n"
+    << "Angle: " << angle_ << "\n";
     kernel_.begin();
     while (!kernel_.isDone()) {
       vgl_point_3d<int> coord =kernel_.index();
