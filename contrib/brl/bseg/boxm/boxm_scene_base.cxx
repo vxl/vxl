@@ -21,5 +21,6 @@ bool boxm_scene_base::load_scene(vcl_string filename, boxm_scene_parser& parser)
   app_model_ = boxm_apm_types::str_to_enum(parser.app_model().data());
   multi_bin_ = parser.multi_bin();
   parser.levels(max_tree_level_, init_tree_level_);
+  filename_ = filename;
   return true;
 }

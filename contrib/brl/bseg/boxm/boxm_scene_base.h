@@ -25,7 +25,7 @@ class boxm_scene_base : public vbl_ref_count
  public:
   boxm_scene_base()
   : app_model_(BOXM_APM_UNKNOWN), multi_bin_(false), tree_level_set_(false),
-    scene_path_(""), block_pref_(""), max_tree_level_(0), init_tree_level_(0) {}
+    scene_path_(""), filename_(""), block_pref_(""), max_tree_level_(0), init_tree_level_(0) {}
 
   virtual ~boxm_scene_base() {}
 
@@ -36,11 +36,19 @@ class boxm_scene_base : public vbl_ref_count
   void set_appearance_model(boxm_apm_type model) { app_model_ = model; }
 
   void set_bin_option(bool multi_bin) { multi_bin_ = multi_bin; }
+  
   void set_octree_levels(unsigned max, unsigned init, bool tree_level_set=true)
-  { max_tree_level_=max; init_tree_level_=init; tree_level_set_=tree_level_set; }
+  { 
+    max_tree_level_=max; 
+    init_tree_level_=init; 
+    tree_level_set_=tree_level_set;
+  }
 
-  void set_paths(vcl_string scene_path, vcl_string block_prefix)
-  { scene_path_ = scene_path;  block_pref_=block_prefix; }
+  void set_paths(vcl_string scene_path, vcl_string block_prefix)  
+  { 
+    scene_path_ = scene_path;
+    block_pref_=block_prefix; 
+  }
 
   bool multi_bin() const { return multi_bin_; }
 
@@ -49,9 +57,12 @@ class boxm_scene_base : public vbl_ref_count
   unsigned max_level() const { return max_tree_level_; }
 
   unsigned init_level() const { return init_tree_level_; }
+  
+  vcl_string filename() const { return filename_; } 
 
   virtual vgl_box_3d<double> get_world_bbox() {return vgl_box_3d<double>();}
- protected:
+
+protected:
   boxm_apm_type app_model_;
 
   bool multi_bin_;
@@ -60,6 +71,8 @@ class boxm_scene_base : public vbl_ref_count
   bool tree_level_set_;
 
   vcl_string scene_path_;
+  
+  vcl_string filename_;
 
   vcl_string block_pref_;
 
