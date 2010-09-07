@@ -6,12 +6,11 @@ VERSION := 1.0
 SOURCES += ihog_minimizer.cxx
 SOURCES += ihog_cost_func.cxx
 SOURCES += ihog_lsqr_cost_func.cxx
-SOURCES += ihog_region.cxx
-SOURCES += ihog_super_res.cxx
 SOURCES += ihog_world_roi.cxx
 SOURCES += ihog_transform_2d.cxx
 SOURCES += ihog_sample_grid_bilin.cxx
 MANPAGE_SOURCES += ihog_image.h
+SOURCES += ihog_utils.cxx
 
 MANPAGE_SOURCES += ihog_region_sptr.h
 MANPAGE_SOURCES += ihog_transform_2d_sptr.h

@@ -6,6 +6,7 @@ TESTMAIN := test_driver.cxx
 TESTS += test_ekf_camera_optimizer_seq.cxx
 TESTS += test_homography_generator.cxx
 TESTS += test_ekf_camera_optimizer.cxx
+TESTS += test_ekf_existing_world.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
