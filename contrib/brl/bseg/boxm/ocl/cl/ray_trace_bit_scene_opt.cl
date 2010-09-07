@@ -104,13 +104,13 @@ ray_trace_bit_scene_opt(__global   RenderSceneInfo    * info,
     
     //curr block index (var later used as cell_min):
     float4 cell_min = floor((pos-linfo->origin)/linfo->block_len); 
-    cell_min += convert_float4(cell_min == convert_float4(linfo->dims));
+    cell_min += convert_float4(cell_min == convert_float4(linfo->dims));   //checks to make sure block index isn't 192 or -1
     cell_min -= convert_float4(cell_min == -1.0);
     
     //load current block/tree 
     ushort2 block = block_ptrs[convert_int(cell_min.z +
                                            cell_min.y*(linfo->dims.z) +
-                                           cell_min.x*(linfo->dims.y)*(linfo->dims.z))];
+                                           cell_min.x*(linfo->dims.y) * (linfo->dims.z))];
     // tree offset is the root_ptr
     int root_ptr = (int) block.x * linfo->tree_len + (int) block.y;
     int rIndex = llid*16;
@@ -132,33 +132,34 @@ ray_trace_bit_scene_opt(__global   RenderSceneInfo    * info,
     
     //get scene level t exit value.  check to make sure that the ray is progressing. 
     //When rays are close to axis aligned, t values found for intersection become ill-defined, causing an infinite block loop
-    float texit, ttree; 
-    int hit = intersect_cell_opt(ray_o, ray_d, ray_d_inv, cell_min, (float4) cell_len, &ttree, &texit);
-    if(!hit || texit <= tblock)
-      break;
+    if(ray_d.x > 0) cell_min.x = cell_min.x+cell_len;
+    if(ray_d.y > 0) cell_min.y = cell_min.y+cell_len;
+    if(ray_d.z > 0) cell_min.z = cell_min.z+cell_len;
+    float texit = calc_t_exit(ray_o, ray_d_inv, cell_min); 
+    if(texit <= tblock) break; //need this check to make sure the ray is progressing
 
     //ttree starts at 0, ttree_exit is t exit value in the tree level (scaled from scene level)
-    ttree = 0.0;
     texit = (texit-tblock-2*epsilon)/linfo->block_len;
-    //float ttree_exit = (texit-tblock- 2*epsilon)/linfo->block_len;
+    float ttree = 0.0;
     while (ttree < texit)
     {
       // traverse to leaf cell that contains the entry point, set bounding box
       int curr_cell_ptr = traverse_opt_len(rIndex, local_tree, pos, &cell_min, &cell_len);
 
       // check to see how close tnear and tfar are
-      float t0, t1;
-      int tree_hit = intersect_cell_opt(local_ray_o, ray_d, ray_d_inv, cell_min, (float4) cell_len, &t0, &t1);
-      if (!tree_hit || t1 <= ttree)
-        break;
+      if(ray_d.x > 0) cell_min.x = cell_min.x+cell_len;
+      if(ray_d.y > 0) cell_min.y = cell_min.y+cell_len;
+      if(ray_d.z > 0) cell_min.z = cell_min.z+cell_len;
+      float t1 = calc_t_exit(local_ray_o, ray_d_inv, cell_min);
+      if(t1 <= ttree) break;
 
       //data offset is ushort pointed to by tree + bit offset
       ushort data_offset = data_index(rIndex, local_tree, curr_cell_ptr, bit_lookup);
       int data_ptr = block.x * linfo->data_len + (int) data_offset;
 
       //// distance must be multiplied by the dimension of the bounding box
-      float d = (t1-t0)*linfo->block_len;
-      global_depth += (t1-t0)*linfo->block_len;
+      float d = (t1-ttree)*linfo->block_len;
+      global_depth += (t1-ttree)*linfo->block_len;
       
       //-----------------------------------------------------------------------
       // RAY TRACE SPECIFIC FUNCTION replaces the step cell functor below
@@ -182,6 +183,7 @@ ray_trace_bit_scene_opt(__global   RenderSceneInfo    * info,
     texit = texit*linfo->block_len + tblock + 2*epsilon;
     tblock = texit;
   }
+  
 #ifdef DEPTH
   data_return.z+=(1-data_return.w)*tfar;
 #endif
@@ -190,7 +192,6 @@ ray_trace_bit_scene_opt(__global   RenderSceneInfo    * info,
 #endif
 
   gl_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)data_return.z);
-  //gl_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)blkCount/400.0);
   in_image[j*get_global_size(0)+i]=(float)data_return.z;
 }
 

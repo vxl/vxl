@@ -208,7 +208,7 @@ int traverse_opt(int rIndex, __local uchar* tree, float4 p, float4 *cell_min, fl
 // this can also easily return the level
 // perhaps can also return data index
 //-----------------------------------------------------------------
-int traverse_opt_len(int rIndex, __local uchar* tree, float4 p, float4 *cell_min, float* cell_len )
+int traverse_opt_len(int rIndex, __local uchar* tree, float4 point, float4 *cell_min, float* cell_len )
 {
   // vars to replace "tree_bit_at"
   uchar curr_bit        = tree[rIndex];   //store root bit
@@ -220,7 +220,7 @@ int traverse_opt_len(int rIndex, __local uchar* tree, float4 p, float4 *cell_min
   uchar4 code = (uchar4) 1;
   
   //clamp point
-  float4 point = clamp(p, 0.0001, 0.9999);
+  point = clamp(point, 0.0001, 0.9999);
 
   // while the curr node has children
   while(curr_bit && curr_depth < 3) {
@@ -240,10 +240,6 @@ int traverse_opt_len(int rIndex, __local uchar* tree, float4 p, float4 *cell_min
   }
   
   // calculate cell bounding box 
-  //float4 cell_size = (float4) (1.0 / (float) (1<<curr_depth));      //likely to be correct
-  //(*cell_min) = floor(point) * cell_size;    //cell_min is bottom left point
-  //(*cell_max) = (*cell_min) + cell_size;
-  //(*cell_min).w = 0.0f;   (*cell_max).w = 0.0f;
   (*cell_len) = 1.0 / (float) (1<<curr_depth);
   (*cell_min) = floor(point) * (*cell_len);
   (*cell_min).w = 0.0f;
