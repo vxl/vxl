@@ -222,7 +222,7 @@ SOURCE=.\Templates/vil3d_tricub_interp+float-.cxx
 SOURCE=.\Templates/vil3d_tricub_interp+int_32-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil3d_tricub_interp+uint-.cxx
+SOURCE=.\Templates/vil3d_tricub_interp+uint_16-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vil3d_tricub_interp+uint_32-.cxx

@@ -99,12 +99,6 @@ SOURCE=.\ihog_lsqr_cost_func.cxx
 SOURCE=.\ihog_cost_func.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\ihog_region.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\ihog_super_res.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\ihog_world_roi.cxx
 # End Source File
 # Begin Source File
@@ -112,6 +106,9 @@ SOURCE=.\ihog_minimizer.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\ihog_transform_2d.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\ihog_utils.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\ihog_sample_grid_bilin.cxx
@@ -125,12 +122,6 @@ SOURCE=.\Templates/vbl_smart_ptr+ihog_transform_2d-.cxx
 # Begin Source File
 SOURCE=.\Templates/vbl_io_smart_ptr+ihog_transform_2d-.cxx
 # End Source File
-# Begin Source File
-SOURCE=.\Templates/vbl_io_smart_ptr+ihog_region-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+ihog_region-.cxx
-# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -138,22 +129,10 @@ SOURCE=.\Templates/vbl_smart_ptr+ihog_region-.cxx
 SOURCE=.\ihog_lsqr_cost_func.h
 # End Source File
 # Begin Source File
-SOURCE=.\ihog_region.h
-# End Source File
-# Begin Source File
-SOURCE=.\ihog_super_res.h
-# End Source File
-# Begin Source File
 SOURCE=.\ihog_region_sptr.h
 # End Source File
 # Begin Source File
-SOURCE=.\ihog_transform_2d_sptr.h
-# End Source File
-# Begin Source File
 SOURCE=.\ihog_transform_2d.h
-# End Source File
-# Begin Source File
-SOURCE=.\ihog_world_roi_sptr.h
 # End Source File
 # Begin Source File
 SOURCE=.\ihog_world_roi.h
@@ -168,7 +147,16 @@ SOURCE=.\ihog_minimizer.h
 SOURCE=.\ihog_image.h
 # End Source File
 # Begin Source File
+SOURCE=.\ihog_utils.h
+# End Source File
+# Begin Source File
 SOURCE=.\ihog_sample_grid_bilin.h
+# End Source File
+# Begin Source File
+SOURCE=.\ihog_transform_2d_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\ihog_world_roi_sptr.h
 # End Source File
 # End Group
 # End Target

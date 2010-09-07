@@ -270,9 +270,6 @@ SOURCE=.\Templates/vnl_io_matrix_fixed+float.3.4-.cxx
 SOURCE=.\Templates/vnl_io_matrix_fixed+float.4.20-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vnl_io_vector_fixed+ushort.2-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vnl_io_vector_fixed+int.2-.cxx
 # End Source File
 # Begin Source File
