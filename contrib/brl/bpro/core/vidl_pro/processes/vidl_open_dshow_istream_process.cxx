@@ -1,5 +1,5 @@
 // This is brl/bpro/core/vidl_pro/processes/vidl_open_dshow_istream_process.cxx
-#if HAS_DIRECTSHOW
+#if defined(HAS_DIRECTSHOW) && HAS_DIRECTSHOW
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -52,4 +52,4 @@ bool vidl_open_dshow_istream_process(bprb_func_process& pro)
   return true;
 }
 
-#endif // HAS_DIRECTSHOW
+#endif // defined(HAS_DIRECTSHOW) && HAS_DIRECTSHOW

@@ -816,7 +816,7 @@ int main(int argc, char ** argv)
 #ifdef VCL_WIN32
   vidl_vil1_io::register_codec(new vidl_vil1_avicodec);
 #endif
-#if HAS_MPEG
+#ifdef HAS_MPEG
   vidl_vil1_io::register_codec(new oxp_vidl_mpeg_codec);
 #endif
 
