@@ -330,9 +330,8 @@ bool boxm_scene<T>::load_block(unsigned i, unsigned j, unsigned k)
   {
     // this does not save the active block so make sure to save it first
     if (valid_index(active_block_)) {
-      if (active_block_ == vgl_point_3d<int>(i,j,k))
-        return true;
-      else {
+      if (!(active_block_ == vgl_point_3d<int>(i,j,k)))
+      {
         int x=active_block_.x(), y=active_block_.y(), z=active_block_.z();
         boxm_block<T>* block = blocks_(x,y,z);
         block->delete_tree();
@@ -522,6 +521,7 @@ void boxm_scene<T>::write_scene(vcl_string filename)
   vcl_string fullpath=scene_path_+ filename;
   vcl_ofstream os(fullpath.c_str());
   x_write(os, *this, "boxm_scene");
+  this->filename_ = filename;
   os.close();
 }
 
@@ -783,8 +783,23 @@ void boxm_scene<T>::unload_active_blocks()
     block->set_tree(0);
     
   }
-  
   active_blocks_.clear();
+
+  
+  if(valid_index(active_block_))
+  {
+    boxm_block<T>* block = blocks_(active_block_.x(), active_block_.y(),active_block_.z());
+    block->delete_tree();
+    block->set_tree(0);
+    active_block_ = vgl_point_3d<int>(-1,-1,-1);
+    
+  }
+    
+    
+  
+  //unload active block
+  
+  
   return;
   
 }
@@ -971,6 +986,8 @@ boxm_block<T>*  boxm_block_iterator<T>::operator->()
 template <class T>
 boxm_cell_iterator<T>& boxm_cell_iterator<T>::begin()
 {
+  //unload all blocks from memory
+  block_iterator_.scene_->unload_active_blocks();
   block_iterator_.begin();
 
   //load active block using function pointer, retrieve pointer to all cells
