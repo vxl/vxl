@@ -295,6 +295,15 @@ int intersect_cell_opt(float4 ray_o, float4 ray_d, float4 ray_d_inv, float4 cell
   return smallest_tmax > largest_tmin;
 }
 
+//-----------------------------------------------------------------------------
+// find exit tvalue given an array of exit faces
+//-----------------------------------------------------------------------------
+float calc_t_exit(float4 ray_o, float4 ray_d_inv, float4 exit_planes)
+{
+  float4 tvec = (exit_planes - ray_o) * ray_d_inv;
+  return min(min(tvec.x, tvec.y), tvec.z);
+}
+
 //--------------------------------------------------------------------------
 // Find the ray entry point to a box that encloses the entire octree
 // Returns 0 if there is no intersection.
