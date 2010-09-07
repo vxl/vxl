@@ -4,13 +4,14 @@ INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc/vpgl)
 INCLUDE_DIRECTORIES( ${VXL_MUL_INCLUDE_DIR} )
 
 SET(ihog_sources
-   ihog_world_roi.cxx         ihog_world_roi.h          ihog_world_roi_sptr.h  
-   ihog_transform_2d.cxx      ihog_transform_2d.h       ihog_transform_2d_sptr.h     
-   ihog_minimizer.cxx         ihog_minimizer.h 
-   ihog_lsqr_cost_func.cxx    ihog_lsqr_cost_func.h 
+   ihog_world_roi.cxx         ihog_world_roi.h          ihog_world_roi_sptr.h
+   ihog_transform_2d.cxx      ihog_transform_2d.h       ihog_transform_2d_sptr.h
+   ihog_minimizer.cxx         ihog_minimizer.h
+   ihog_lsqr_cost_func.cxx    ihog_lsqr_cost_func.h
    ihog_sample_grid_bilin.cxx ihog_sample_grid_bilin.h
-   ihog_image.h
-   ihog_utils.h               ihog_utils.cxx
+                              ihog_image.h
+   ihog_utils.cxx             ihog_utils.h
+   ihog_cost_func.cxx         ihog_cost_func.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates ihog_sources)
