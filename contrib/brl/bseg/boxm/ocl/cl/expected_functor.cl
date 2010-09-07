@@ -57,7 +57,7 @@ void step_cell_render_opt(__global uchar8* cell_data, __global float* alpha_data
                           float d, float4 * data_return)
 {
   uchar8 data = cell_data[data_ptr];
-  float alpha=alpha_data[data_ptr];
+  float alpha = alpha_data[data_ptr];
   float expected_int_cell = ((data.s0) * (data.s2)
                             +(data.s3) * (data.s5)
                             +(data.s6) * (255.0 - data.s2 - data.s5))/255.0/255.0;
