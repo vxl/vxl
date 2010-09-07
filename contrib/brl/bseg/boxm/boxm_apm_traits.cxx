@@ -14,6 +14,8 @@ const char* boxm_apm_types::app_model_strings[]  = { "apm_mog_grey",
                                                      "edge_line",
                                                      "edge_tangent_line",
                                                      "scalar_float",
+                                                     "dbrec3d_part_instance",
+                                                     "dbrec3d_pair_composite_instance",
                                                      "apm_na",
                                                      "apm_unknown" };
 
