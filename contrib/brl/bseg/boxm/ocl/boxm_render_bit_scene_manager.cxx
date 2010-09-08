@@ -41,7 +41,7 @@ bool boxm_render_bit_scene_manager::init_ray_trace(boxm_ocl_bit_scene *scene,
       !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
                                     +"/contrib/brl/bseg/boxm/ocl/cl/ray_bundle_library_functions.cl")||
       !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                    +"/contrib/brl/bseg/boxm/ocl/cl/ray_trace_bit_scene_opt.cl")) {
+                                    +"/contrib/brl/bseg/boxm/ocl/cl/ray_trace_bit_scene_float3.cl")) {
     vcl_cerr << "Error: boxm_render_bit_scene_manager : failed to load kernel source (helper functions)\n";
     return false;
   }
@@ -199,13 +199,14 @@ bool boxm_render_bit_scene_manager::set_args(unsigned kernel_index=0)
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (gl_image)"))
       return 0;
     //output buffer
-    status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&output_buf_);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output)"))
-      return 0;
+    //status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&output_buf_);
+    //if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output)"))
+      //return 0;
     //bit lookup buffer
     status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&bit_lookup_buf_);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output)"))
       return 0;
+
   }
   else if (kernel_index==1)
   {
@@ -687,6 +688,8 @@ int boxm_render_bit_scene_manager::build_kernel_program(cl_program & program, bo
     options+="-D ATI ";
   if (vcl_strstr(this->platform_name,"NVIDIA"))
     options+="-D NVIDIA ";
+    
+  options += "cl-opt-disable";
 
   vcl_cout<<"create: program"<<vcl_endl;
   program = clCreateProgramWithSource(this->context_,
