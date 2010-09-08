@@ -27,5 +27,6 @@ DECLARE_FUNC_CONS(vil_two_planes_composite_process);
 DECLARE_FUNC_CONS(bil_compass_edge_detector_process);
 DECLARE_FUNC_CONS(vil_resample_process);
 DECLARE_FUNC_CONS(vil_filter_image_process);
+DECLARE_FUNC_CONS(vil_blob_detection_process);
 
 #endif
