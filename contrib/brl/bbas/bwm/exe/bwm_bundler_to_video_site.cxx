@@ -113,10 +113,12 @@ bool axis_align_scene(vcl_vector<bwm_video_corr_sptr> & corrs,
   }
   vgl_point_3d<double> center(sumx/corrs.size(),sumy/corrs.size(),sumz/corrs.size());
   vnl_vector_fixed<double,3> tr(center.x(),center.y(),center.z());
+  vcl_vector<vgl_homg_point_3d<double> > xformed_points;
   for (unsigned i=0;i<corrs.size();i++)
   {
     vgl_point_3d<double> p(corrs[i]->world_pt());
     corrs[i]->set_world_pt(vgl_point_3d<double>(p.x()-center.x(),p.y()-center.y(),p.z()-center.z()));
+    xformed_points.push_back(vgl_homg_point_3d<double>(p.x()-center.x(),p.y()-center.y(),p.z()-center.z()));
   }
   vcl_vector<vpgl_perspective_camera<double> > new_cams;
   int up=0;
@@ -158,6 +160,14 @@ bool axis_align_scene(vcl_vector<bwm_video_corr_sptr> & corrs,
   }
   for (unsigned i=0;i<cams.size();i++)
     cams[i]=new_cams[i];
+
+  vgl_fit_plane_3d<double> fit_plane1(xformed_points);
+  if (!fit_plane1.fit(1e6))
+      return false;
+
+  vgl_homg_plane_3d<double> plane1=fit_plane1.get_plane();
+  vcl_cout<<"Plane "<<plane1;
+
   return true;
 }
 
