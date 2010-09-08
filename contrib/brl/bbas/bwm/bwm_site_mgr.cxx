@@ -1102,14 +1102,18 @@ static void save_video_world_points_vrml_impl(vcl_ofstream& os, vgl_box_3d<doubl
   }
   vcl_vector<vgl_point_3d<double> > pts;
   vcl_vector<bwm_video_corr_sptr> corrs = obv->corrs();
+  int cnt=0;
   for (vcl_vector<bwm_video_corr_sptr>::iterator cit = corrs.begin();
        cit!= corrs.end(); ++cit)
   {
+    if((++cnt)%10==0)
+    {
     bwm_video_corr_sptr corr = *cit;
     if (!corr || !corr->world_pt_valid()) continue;
     vgl_point_3d<double> pt = corr->world_pt();
     if (box.contains(pt))
       pts.push_back(pt);
+    }
   }
   if (!pts.size())
     return;
@@ -1200,11 +1204,13 @@ static void save_video_cameras_vrml_impl(vcl_ofstream& os, vgl_box_3d<double> bo
   unsigned cam_number = cam_istr->camera_number();
   cam_istr->seek_camera(0);
   vcl_vector<vpgl_perspective_camera<double> > cams;
+  int cnt=0;
   while (true) {
     vpgl_perspective_camera<double>* cam = cam_istr->current_camera();
     vcl_cout<<cam->get_camera_center();
-    if (box.contains(cam->get_camera_center()))
-      cams.push_back(*cam);
+    if(cnt++>170 )
+        if (box.contains(cam->get_camera_center()))
+            cams.push_back(*cam);
 
     if (!cam_istr->advance())
       break;

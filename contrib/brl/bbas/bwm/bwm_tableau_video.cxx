@@ -132,27 +132,30 @@ void bwm_tableau_video::extract_world_plane()
 }
 void bwm_tableau_video::extract_neighborhoods()
 {
-  static unsigned radius = 1;
+  static unsigned radius_x = 1;
+  static unsigned radius_y = 1;
   vcl_string path = "";
   vcl_string ext = "*.nbh";
-  vgui_dialog nbh_dlg("2-class neighborhoods (select 2 corrs)");
+  vgui_dialog nbh_dlg("Neighborhoods (select 2 corrs)");
   nbh_dlg.file("Neighborhood file", ext, path);
-  nbh_dlg.field("Nbhd radius", radius);
+  nbh_dlg.field("Nbhd radius along x ", radius_x);
+  nbh_dlg.field("Nbhd radius along y ", radius_y);
   if (!nbh_dlg.ask())
     return;
   vcl_vector<vcl_vector<vnl_matrix<float> > > nhds;
-  if(!my_observer_->extract_neighborhoods(radius,  nhds)){
+  if(!my_observer_->extract_neighborhoods(radius_x,radius_y,  nhds)){
     vcl_cerr << "extract neighborhoods failed \n";    
     return;
   }
 
-  unsigned dim = 2*radius+1;
+  unsigned dimx = 2*radius_x+1;
+  unsigned dimy = 2*radius_y+1;
   vcl_ofstream os(path.c_str());
   if(!os.is_open()){
     vcl_cerr << "invalid output path for neighborhoods \n";    
     return;
   }
-  os << "dim: " << dim << '\n';
+  os << "dim: " << dimx <<" "<<dimy<< '\n';
   os << "n_tracks: " << nhds.size() << '\n';
   for( unsigned c = 0; c<nhds.size(); ++c)
     {    

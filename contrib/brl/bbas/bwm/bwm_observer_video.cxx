@@ -293,7 +293,7 @@ bool bwm_observer_video::find_selected_video_corr(unsigned& frame,
   if (!cross)
     return false;
   vcl_map<unsigned, vcl_map<unsigned, bwm_soview2D_cross*> >::iterator fit =
-    corr_soview_map_.begin();
+                                                                corr_soview_map_.begin();
   bool found = false;
   for (; fit != corr_soview_map_.end()&&!found; ++fit)
     for (vcl_map<unsigned, bwm_soview2D_cross*>::iterator mit = (*fit).second.begin();
@@ -724,7 +724,7 @@ bool bwm_observer_video::extract_world_plane(vgl_plane_3d<double>&  plane)
 
 //: extract two-class neighborhoods from a video stream
 bool bwm_observer_video::
-extract_neighborhoods(unsigned nhd_radius,
+extract_neighborhoods(unsigned nhd_radius_x,unsigned nhd_radius_y,
                       vcl_vector<vcl_vector<vnl_matrix<float> > >& nhds)
 {
   vcl_vector<vgui_soview2D*> selected =
@@ -736,7 +736,8 @@ extract_neighborhoods(unsigned nhd_radius,
   }
 
   nhds.clear();
-  int rd = nhd_radius;
+  int rd_x = nhd_radius_x;
+  int rd_y = nhd_radius_y;
   vcl_vector<bwm_video_corr_sptr> corrs;
   unsigned frame;
   unsigned corr_index;
@@ -768,7 +769,8 @@ extract_neighborhoods(unsigned nhd_radius,
     return false;
   if (!video_istr_||!video_istr_->is_open()||!video_istr_->is_seekable())
     return false;
-  unsigned dim = 2*nhd_radius +1;
+  unsigned dim_x = 2*nhd_radius_x +1;
+  unsigned dim_y = 2*nhd_radius_y +1;
 
   for (unsigned i = 0; i<corrs.size(); ++i)
   {
@@ -785,16 +787,17 @@ extract_neighborhoods(unsigned nhd_radius,
     // assume for now there are no problems with image boundaries
     vgl_point_2d<double> pt;
     if (corr->match(index, pt)) {
-      int u = static_cast<unsigned>(pt.x()),
-        v = static_cast<unsigned>(pt.y());
-      vnl_matrix<float> nb(dim, dim);
-      for (int ir = -rd; ir<= rd; ++ir)
-        for (int ic = -rd; ic<= rd; ++ic)
-        {
-          int r = nhd_radius+ir, c = nhd_radius+ic;
-          nb[r][c]=fimg(u+ic, v+ir);
-        }
-      temp.push_back(nb);
+        int u = static_cast<unsigned>(pt.x()),
+            v = static_cast<unsigned>(pt.y());
+        vnl_matrix<float> nb(dim_y, dim_x);
+        for (int ir = -rd_y; ir<= rd_y; ++ir)
+            for (int ic = -rd_x; ic<= rd_x; ++ic)
+            {
+                int r = nhd_radius_y+ir, c = nhd_radius_x+ic;
+                nb[r][c]=fimg(u+ic, v+ir);
+            }
+
+        temp.push_back(nb);
     }
     if (!video_istr_->advance())
       break;

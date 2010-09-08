@@ -103,7 +103,7 @@ class bwm_observer_video : public bwm_observer_cam
   bwm_video_cam_istream_sptr camera_stream() {return  cam_istr_;}
 
   //: extract neighborhoods around correspondences for the stream
-  bool extract_neighborhoods(unsigned nbd_radius,
+  bool extract_neighborhoods(unsigned nbd_radius_x,unsigned nbd_radius_y,
                              vcl_vector<vcl_vector<vnl_matrix<float> > >& nhds);
 
   //: extract histograms of each frame
