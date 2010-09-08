@@ -52,6 +52,7 @@ void step_cell_render(__global float8* cell_data, __global float* alpha_data,int
   (*data_return).w = intensity_norm + omega;
 }
 
+#if 0
 //optimized data version
 void step_cell_render_opt(__global uchar8* cell_data, __global float* alpha_data, int data_ptr,
                           float d, float4 * data_return)
@@ -79,7 +80,51 @@ void step_cell_render_opt(__global uchar8* cell_data, __global float* alpha_data
   (*data_return).z = expected_int;
   (*data_return).w = intensity_norm + omega;
 }
+#endif
 
+//optimized data version
+void step_cell_render_opt(__global uchar8 * cell_data, 
+                          __global float  * alpha_data, 
+                          int data_ptr, float d, 
+                          float4 * data_return)
+{
+  //check to see if alpha is legit
+  float alpha = alpha_data[data_ptr];
+  if (alpha<0) return;
+
+  //load up mixture model data and calculate expected int cell
+  uchar8 data = cell_data[data_ptr];
+  float expected_int_cell = ((data.s0) * (data.s2)
+                            +(data.s3) * (data.s5)
+                            +(data.s6) * (255.0 - data.s2 - data.s5))/255.0/255.0;
+
+
+  //float expected_int_cell = data.s3;
+  //float alpha_integral = (*data_return).x;
+  //float vis            = (*data_return).y;
+  //float expected_int   = (*data_return).z;
+  //float intensity_norm = (*data_return).w;
+
+  (*data_return).x += alpha*d;
+  float vis_prob_end = exp(-(*data_return).x);
+  float omega = (*data_return).y - vis_prob_end;
+  (*data_return).z += expected_int_cell*omega;
+  //(*data_return).x = alpha_integral;
+  (*data_return).y = vis_prob_end;
+  //(*data_return).z = expected_int;
+  (*data_return).w +=  omega;
+  
+/*
+  //data_return = (alpha_int, vis, expected_int, intensity_norm);
+  (*data_return).x += alpha*d;                      //calc alpha_integral
+  float vis_prob_end = exp(-(*data_return).x);
+  //float omega = (*data_return).y - vis_prob_end;
+  //(*data_return).z += expected_int_cell*omega;      //calc expected_int
+  (*data_return).y = vis_prob_end;
+  //(*data_return).w += omega;
+*/
+
+}
 
 void step_cell_change_detection(__global float8* cell_data, __global float* alpha_data,int data_ptr,
                                 float d, float4 * data_return, float img_intensity)

@@ -15,6 +15,12 @@ uint rgbaFloatToInt(float4 rgba)
     return ((uint)(rgba.w*255.0f)<<24) | ((uint)(rgba.z*255.0f)<<16) | ((uint)(rgba.y*255.0f)<<8) | (uint)(rgba.x*255.0f);
 }
 
+uint intensityFloatToInt(float intensity)
+{
+    intensity = clamp(intensity, 0.0f, 1.0f);
+    return ((uint)(intensity*255.0f)<<24) | ((uint)(intensity*255.0f)<<16) | ((uint)(intensity*255.0f)<<8) | (uint)(intensity*255.0f);
+}
+
 //---------------------------------------------------------------------
 // The vector result for the exit face as a short vector in X, Y, Z
 // The element corresponding to the exit coordinate has the value 1
@@ -280,6 +286,38 @@ int intersect_cell_opt(float4 ray_o, float4 ray_d, float4 ray_d_inv, float4 cell
   float4 tmax = tmin + ray_d_inv*cell_dims;
   //float4 tmax = ray_d_inv * (cell_min + cell_dims - ray_o);
 
+  // re-order intersections to find smallest and largest on each axis
+  // minimum t values for either bounding plane
+  float4 tmin_s =   min(tmax, tmin);
+  // maximum t values for either bounding plane
+  float4 tmax_s =   max(tmax, tmin);
+
+  // find the largest tmin and the smallest tmax
+  float largest_tmin  =   max(  max(tmin_s.x, tmin_s.y),   max(tmin_s.x, tmin_s.z));
+  float smallest_tmax =   min(  min(tmax_s.x, tmax_s.y),   min(tmax_s.x, tmax_s.z));
+  *tnear = largest_tmin;
+  *tfar = smallest_tmax;
+  return smallest_tmax > largest_tmin;
+}
+
+
+
+/*
+//------------------------------------------------------------------------------
+// Intersect scene takes in 3 floats for ray o, ray d, ray d inv
+//------------------------------------------------------------------------------
+void intersect_scene(float ray_ox, float ray_oy, float ray_oz,
+                     float ray_dx, float ray_dy, float ray_dz, 
+                     //float min_fx, float min_fy, float min_fz,
+                     //float max_fx, float max_fy, float max_fz,
+                     float4 min_face, float4 max_face,
+                     float *tnear, float *tfar)
+{
+
+  // compute intersection of ray with all six cell planes
+  float4 tmin = ray_d_inv * (cell_min - ray_o);
+  float4 tmax = tmin + ray_d_inv*cell_dims;
+  //float4 tmax = ray_d_inv * (cell_min + cell_dims - ray_o);
 
   // re-order intersections to find smallest and largest on each axis
   // minimum t values for either bounding plane
@@ -294,6 +332,8 @@ int intersect_cell_opt(float4 ray_o, float4 ray_d, float4 ray_d_inv, float4 cell
   *tfar = smallest_tmax;
   return smallest_tmax > largest_tmin;
 }
+*/
+
 
 //-----------------------------------------------------------------------------
 // find exit tvalue given an array of exit faces
