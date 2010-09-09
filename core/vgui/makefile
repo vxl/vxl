@@ -172,6 +172,7 @@ SOURCES += internals/vgui_overlay_helper.cxx
 SOURCES += internals/vgui_multiply_4x4.cxx
 SOURCES += internals/vgui_transpose_4x4.cxx
 SOURCES += internals/vgui_draw_line.cxx
+MANPAGE_SOURCES += internals/vgui_button_field.h
 
 # extra header files
 MANPAGE_SOURCES += vgui_fwd.h

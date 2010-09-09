@@ -12,7 +12,6 @@ SOURCES += ihog_sample_grid_bilin.cxx
 MANPAGE_SOURCES += ihog_image.h
 SOURCES += ihog_utils.cxx
 
-MANPAGE_SOURCES += ihog_region_sptr.h
 MANPAGE_SOURCES += ihog_transform_2d_sptr.h
 MANPAGE_SOURCES += ihog_world_roi_sptr.h
 

@@ -12,6 +12,7 @@ MANPAGE_SOURCES += boxm_upload_mesh.h
 MANPAGE_SOURCES += boxm_refine.h
 MANPAGE_SOURCES += boxm_init_scene.h
 MANPAGE_SOURCES += boxm_save_scene_raw.h
+MANPAGE_SOURCES += boxm_compute_scene_difference.h
 
 SUBDIRS += pro rt sp
 

@@ -22,6 +22,9 @@ MANPAGE_SOURCES += boxm_ocl_camera_manager.h
 SOURCES += boxm_ocl_camera_manager.cxx
 SOURCES += boxm_render_bit_scene_manager.cxx
 SOURCES += boxm_ocl_bit_scene.cxx
+SOURCES += boxm_re_render_ocl_scene_manager.cxx
+SOURCES += boxm_render_probe_manager.cxx
+MANPAGE_SOURCES += boxm_render_probe_manager_sptr.h
 
 SOURCES += cl/octree_library_functions.cl
 SOURCES += cl/ray_trace_main.cl

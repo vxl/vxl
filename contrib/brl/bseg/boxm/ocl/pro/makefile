@@ -10,6 +10,9 @@ SOURCES += processes/boxm_ocl_refine_process.cxx
 SOURCES += processes/boxm_ocl_ray_bundle_expected_process.cxx
 SOURCES += processes/boxm_ocl_ray_bundle_all_blocks_expected_process.cxx
 SOURCES += processes/boxm_ocl_convert_boxm_to_ocl_process.cxx
+SOURCES += processes/boxm_ocl_run_render_probe_process.cxx
+SOURCES += processes/boxm_ocl_finish_render_probe_process.cxx
+SOURCES += processes/boxm_ocl_init_render_probe_process.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk

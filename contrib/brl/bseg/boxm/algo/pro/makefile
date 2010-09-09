@@ -14,6 +14,7 @@ SOURCES += processes/boxm_refine_scene_process.cxx
 SOURCES += processes/boxm_roi_init_process.cxx
 SOURCES += processes/boxm_replace_const_app_process.cxx
 SOURCES += processes/boxm_render_expected_edge_vrml_process.cxx
+SOURCES += processes/boxm_compute_scene_difference_process.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk

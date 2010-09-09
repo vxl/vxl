@@ -2,8 +2,7 @@ USES += contrib/brl contrib/brl/bbas contrib/brl/bseg core
 
 LIBRARY := boxm
 
-SOURCES += dummy.cxx
-
+SOURCES += boxm_util_data_types.cxx
 MANPAGE_SOURCES += boxm_block_vis_graph_iterator.txx
 MANPAGE_SOURCES += boxm_block_vis_graph_node.h
 MANPAGE_SOURCES += boxm_cell_vis_graph_iterator.h
