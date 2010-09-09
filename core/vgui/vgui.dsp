@@ -705,6 +705,18 @@ SOURCE=.\internals/vgui_transpose_4x4.h
 SOURCE=.\internals/vgui_un_project.h
 # End Source File
 # Begin Source File
+SOURCE=.\internals/vgui_parent_child_link_data.h
+# End Source File
+# Begin Source File
+SOURCE=.\internals/vgui_gl_selection_macros.h
+# End Source File
+# Begin Source File
+SOURCE=.\internals/vgui_dialog_extensions_impl.h
+# End Source File
+# Begin Source File
+SOURCE=.\internals/vgui_button_field.h
+# End Source File
+# Begin Source File
 SOURCE=.\vgui.h
 # End Source File
 # Begin Source File
@@ -1128,54 +1140,6 @@ SOURCE=.\vgui_viewer3D_tableau_sptr.h
 SOURCE=.\impl/glut/menu_hack.h
 # End Source File
 # Begin Source File
-SOURCE=.\vgui_displaylist2D_tableau.h
-# End Source File
-# Begin Source File
-SOURCE=.\vgui_displaylist3D_tableau.h
-# End Source File
-# Begin Source File
-SOURCE=.\vgui_easy2D_tableau.h
-# End Source File
-# Begin Source File
-SOURCE=.\vgui_easy3D_tableau.h
-# End Source File
-# Begin Source File
-SOURCE=.\vgui_enhance_tableau.h
-# End Source File
-# Begin Source File
-SOURCE=.\vgui_loader_tableau.h
-# End Source File
-# Begin Source File
-SOURCE=.\vgui_satellite_tableau.h
-# End Source File
-# Begin Source File
-SOURCE=.\vgui_tview_tableau.h
-# End Source File
-# Begin Source File
-SOURCE=.\vgui_viewer3D_tableau.h
-# End Source File
-# Begin Source File
-SOURCE=.\vgui_font.h
-# End Source File
-# Begin Source File
-SOURCE=.\vgui_font_bitmap.h
-# End Source File
-# Begin Source File
-SOURCE=.\vgui_font_sptr.h
-# End Source File
-# Begin Source File
-SOURCE=.\vgui_font_textured.h
-# End Source File
-# Begin Source File
-SOURCE=.\internals/vgui_parent_child_link_data.h
-# End Source File
-# Begin Source File
-SOURCE=.\internals/vgui_gl_selection_macros.h
-# End Source File
-# Begin Source File
-SOURCE=.\vgui_vil_image_renderer.h
-# End Source File
-# Begin Source File
 SOURCE=.\impl/gtk2/vgui_gtk2.h
 # End Source File
 # Begin Source File
@@ -1233,6 +1197,51 @@ SOURCE=.\impl/win32/vgui_win32_cmdtarget.h
 SOURCE=.\impl/win32/vgui_win32_utils.h
 # End Source File
 # Begin Source File
+# Begin Source File
+SOURCE=.\impl/mfc/vgui_dir_dialog.h
+# End Source File
+# Begin Source File
+SOURCE=.\impl/mfc/vgui_mfc_dialog_extensions_impl.h
+# End Source File
+# Begin Source File
+SOURCE=.\vgui_displaylist2D_tableau.h
+# End Source File
+# Begin Source File
+SOURCE=.\vgui_displaylist3D_tableau.h
+# End Source File
+# Begin Source File
+SOURCE=.\vgui_easy2D_tableau.h
+# End Source File
+# Begin Source File
+SOURCE=.\vgui_easy3D_tableau.h
+# End Source File
+# Begin Source File
+SOURCE=.\vgui_enhance_tableau.h
+# End Source File
+# Begin Source File
+SOURCE=.\vgui_loader_tableau.h
+# End Source File
+# Begin Source File
+SOURCE=.\vgui_satellite_tableau.h
+# End Source File
+# Begin Source File
+SOURCE=.\vgui_tview_tableau.h
+# End Source File
+# Begin Source File
+SOURCE=.\vgui_viewer3D_tableau.h
+# End Source File
+# Begin Source File
+SOURCE=.\vgui_font.h
+# End Source File
+# Begin Source File
+SOURCE=.\vgui_font_bitmap.h
+# End Source File
+# Begin Source File
+SOURCE=.\vgui_font_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\vgui_font_textured.h
+# End Source File
 SOURCE=.\vgui_range_map.h
 # End Source File
 # Begin Source File
@@ -1254,16 +1263,10 @@ SOURCE=.\vgui_slider_tableau.h
 SOURCE=.\vgui_slider_tableau_sptr.h
 # End Source File
 # Begin Source File
-SOURCE=.\impl/mfc/vgui_dir_dialog.h
-# End Source File
-# Begin Source File
-SOURCE=.\impl/mfc/vgui_mfc_dialog_extensions_impl.h
-# End Source File
-# Begin Source File
-SOURCE=.\internals/vgui_dialog_extensions_impl.h
-# End Source File
-# Begin Source File
 SOURCE=.\vgui_dialog_extensions.h
+# End Source File
+# Begin Source File
+SOURCE=.\vgui_vil_image_renderer.h
 # End Source File
 # Begin Source File
 SOURCE=.\vgui_config.h.in

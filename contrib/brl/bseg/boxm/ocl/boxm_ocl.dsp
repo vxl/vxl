@@ -146,6 +146,12 @@ SOURCE=.\boxm_render_bit_scene_manager.cxx
 SOURCE=.\boxm_ocl_bit_scene.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\boxm_re_render_ocl_scene_manager.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_render_probe_manager.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/bocl_manager+boxm_ray_trace_manager+boxm_sample+BOXM_APM_SIMPLE_GREY---.cxx
 # End Source File
 # Begin Source File
@@ -301,6 +307,18 @@ SOURCE=.\Templates/vbl_io_array_3d+vnl_vector_fixed+ushort.2--.cxx
 # Begin Source File
 SOURCE=.\Templates/bocl_manager+boxm_render_bit_scene_manager-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+boxm_render_probe_manager-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_io_smart_ptr+boxm_render_probe_manager-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bocl_manager+boxm_re_render_ocl_scene_manager-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bocl_manager+boxm_render_probe_manager-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -372,6 +390,15 @@ SOURCE=.\boxm_ocl_bit_scene.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_render_bit_scene_manager.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_re_render_ocl_scene_manager.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_render_probe_manager_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_render_probe_manager.h
 # End Source File
 # End Group
 # End Target

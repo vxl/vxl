@@ -112,6 +112,18 @@ SOURCE=.\processes/boxm_ocl_ray_bundle_all_blocks_expected_process.cxx
 # Begin Source File
 SOURCE=.\processes/boxm_ocl_convert_boxm_to_ocl_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\processes/boxm_ocl_run_render_probe_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm_ocl_finish_render_probe_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm_ocl_init_render_probe_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/brdb_value+boxm_render_probe_manager_sptr-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

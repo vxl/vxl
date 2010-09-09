@@ -122,6 +122,9 @@ SOURCE=.\processes/boxm_replace_const_app_process.cxx
 # Begin Source File
 SOURCE=.\processes/boxm_render_expected_edge_vrml_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\processes/boxm_compute_scene_difference_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

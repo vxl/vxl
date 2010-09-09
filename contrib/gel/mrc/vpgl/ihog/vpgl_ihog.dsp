@@ -129,9 +129,6 @@ SOURCE=.\Templates/vbl_io_smart_ptr+ihog_transform_2d-.cxx
 SOURCE=.\ihog_lsqr_cost_func.h
 # End Source File
 # Begin Source File
-SOURCE=.\ihog_region_sptr.h
-# End Source File
-# Begin Source File
 SOURCE=.\ihog_transform_2d.h
 # End Source File
 # Begin Source File

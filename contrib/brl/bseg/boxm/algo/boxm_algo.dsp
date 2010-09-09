@@ -125,6 +125,9 @@ SOURCE=.\boxm_init_scene.h
 # Begin Source File
 SOURCE=.\boxm_save_scene_raw.h
 # End Source File
+# Begin Source File
+SOURCE=.\boxm_compute_scene_difference.h
+# End Source File
 # End Group
 # End Target
 # End Project

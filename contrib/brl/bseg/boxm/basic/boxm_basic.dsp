@@ -95,7 +95,7 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\dummy.cxx
+SOURCE=.\boxm_util_data_types.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/boxm_block_iterator+boct_tree+short.bsta_num_obs+bsta_gauss_f1---.cxx
@@ -163,6 +163,15 @@ SOURCE=.\Templates/boxm_cell_vis_graph_iterator+short.boxm_inf_line_sample+float
 # Begin Source File
 SOURCE=.\Templates/boxm_cell_vis_graph_iterator+short.boxm_edge_sample+float--.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_io_smart_ptr+boxm_array_1d_float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/brdb_value+boxm_array_1d_float_sptr-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+boxm_array_1d_float-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -189,6 +198,9 @@ SOURCE=.\boxm_cell_vis_graph_iterator.txx
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_num_rays_functor.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_util_data_types.h
 # End Source File
 # End Group
 # End Target
