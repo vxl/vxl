@@ -7,4 +7,4 @@ class boxm_render_probe_manager;
 
 typedef vbl_smart_ptr<boxm_render_probe_manager> boxm_render_probe_manager_sptr;
 
-#endif // btrk_mi_track_sptr_h
+#endif // boxm_render_probe_manager_sptr_h
