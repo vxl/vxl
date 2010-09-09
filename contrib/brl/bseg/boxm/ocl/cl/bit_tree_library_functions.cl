@@ -178,13 +178,13 @@ ushort data_index_opt(int rIndex, __local uchar* tree, ushort bit_index, __const
   //count bits for each byte before bit_i
   ushort count = 0;
   for(int i=0; i<b_i.y; ++i) {
-    uchar n = tree[rIndex+i];
-    count += bit_lookup[n];
+    b_i.z = tree[rIndex+i];               //b_i.z is now just an aux value
+    count += bit_lookup[b_i.z];
   }
   
   //count bits before bit_i in parent
-  uchar n = tree[rIndex+b_i.y] << (8-b_i.x);
-  count   += bit_lookup[n];
+  b_i.z = tree[rIndex+b_i.y] << (8-b_i.x);
+  count += bit_lookup[b_i.z];
   
   //relative index = num_bits*8 + 1;
   count = 8*count+1 + (b_i.w);
@@ -282,6 +282,53 @@ int traverse_opt_len(int rIndex, __local uchar* tree, float4 point, float4 *cell
 
 //takes three floats instaed of float4s
 //TODO optimize point here - makei t a float 3 instead of a float4
+ushort traverse_three(int rIndex, __local uchar* tree, 
+                      float pointx, float pointy, float pointz, 
+                      float *cell_minx, float *cell_miny, float *cell_minz, float *cell_len )
+{
+  // vars to replace "tree_bit_at"
+  //force 1 register: curr = (bit, child_offset, depth, c_offset)
+  uchar4 curr = (uchar4) (tree[rIndex], 0, 0, 0);
+  
+  //bit index to be returned
+  ushort bit_index = 0;
+  
+  //clamp point
+  pointx = clamp(pointx, 0.0001, 0.9999);
+  pointy = clamp(pointy, 0.0001, 0.9999);
+  pointz = clamp(pointz, 0.0001, 0.9999);
+
+  // while the curr node has children
+  while(curr.x && curr.z < 3) {
+    //determine child offset and bit index for given point
+    pointx += pointx;                                             //point = point*2
+    pointy += pointy;
+    pointz += pointz;                                           
+    uchar4 code =  (uchar4) (convert_uchar_rtn(pointx) & 1, 
+                             convert_uchar_rtn(pointy) & 1,
+                             convert_uchar_rtn(pointz) & 1, 0);   //code.xyz = lsb of floor(point.xyz)
+    curr.w = code.x + (code.y<<1) + (code.z<<2);                  //c_index = binary(zyx)    
+    bit_index = (8*bit_index + 1) + curr.w;                       //i = 8i + 1 + c_index
+    
+    //update value of curr_bit and level
+    curr.x = (1<<curr.w) & tree[rIndex+ (curr.z+1+curr.y)];      //int curr_byte = (curr.z + 1) + curr.y; 
+    curr.y = curr.w;
+    curr.z++;
+  }
+  
+  // calculate cell bounding box 
+  (*cell_len) = 1.0 / (float) (1<<curr.z);
+  (*cell_minx) = floor(pointx) * (*cell_len);
+  (*cell_miny) = floor(pointy) * (*cell_len);
+  (*cell_minz) = floor(pointz) * (*cell_len);
+  return bit_index;
+}
+
+
+
+#if 0
+//takes three floats instaed of float4s
+//TODO optimize point here - makei t a float 3 instead of a float4
 ushort traverse_three(int rIndex, __local uchar* tree, float4 point, 
                    float *cell_minx, float *cell_miny, float *cell_minz, float *cell_len )
 {
@@ -319,7 +366,6 @@ ushort traverse_three(int rIndex, __local uchar* tree, float4 point,
   return bit_index;
 }
 
-#if 0
 //-----------------------------------------------------------------
 // New traverse: uses only target point and returns cell index
 // this can also easily return the level

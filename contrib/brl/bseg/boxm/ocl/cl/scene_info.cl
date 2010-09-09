@@ -10,12 +10,14 @@ typedef struct
   float4    origin;                   // scene origin (point)
   int4      dims;                     // number of blocks in each dimension
   float     block_len;                // size of each block (can only be 1 number now that we've established blocks are cubes)
+  float     epsilon; 
 
   //tree meta information 
   int       root_level;               // root_level of trees
   int       num_buffer;               // number of buffers (both data and tree)
   int       tree_len;                 // length of tree buffer (number of cells/trees)
   int       data_len;                 // length of data buffer (number of cells)
+  
 } RenderSceneInfo;   
 
 

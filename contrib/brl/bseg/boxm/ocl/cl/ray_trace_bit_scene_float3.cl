@@ -17,6 +17,7 @@ ray_trace_bit_scene_opt(__global   RenderSceneInfo    * info,
                         __local    uint4              * local_copy_imgdims,
                         __global   float              * in_image,
                         __global   uint               * gl_image, 
+                        __local    int                * imIndex,
                         //__global   float4             * output,
                         __constant uchar              * bit_lookup)    // input image and store vis_inf and pre_inf
 {
@@ -28,7 +29,7 @@ ray_trace_bit_scene_opt(__global   RenderSceneInfo    * info,
   // check for validity before proceeding
   //----------------------------------------------------------------------------
   int i=0,j=0;  map_work_space_2d(&i,&j);
-  int imIndex = j*get_global_size(0)+i; 
+  imIndex[llid] = j*get_global_size(0)+i;     //locally store the final index to save a register
 
   //only copy in camera once to local memory (sync threads)
   if (llid == 0 ) {
@@ -46,8 +47,8 @@ ray_trace_bit_scene_opt(__global   RenderSceneInfo    * info,
   // check to see if the thread corresponds to an actual pixel as in some 
   // cases #of threads will be more than the pixels.
   if (i>=(*local_copy_imgdims).z || j>=(*local_copy_imgdims).w) {
-    gl_image[imIndex] = rgbaFloatToInt((float4)(0.0,0.0,0.0,0.0));
-    in_image[imIndex] = (float)-1.0f;
+    gl_image[imIndex[llid]] = rgbaFloatToInt((float4)(0.0,0.0,0.0,0.0));
+    in_image[imIndex[llid]] = (float)-1.0f;
     return;
   }
   
@@ -70,16 +71,16 @@ ray_trace_bit_scene_opt(__global   RenderSceneInfo    * info,
   if (fabs(ray_d.y) < thresh) ray_d.y = copysign(thresh, ray_d.y);
   if (fabs(ray_d.z) < thresh) ray_d.z = copysign(thresh, ray_d.z);
   ray_d.w = 0.0; ray_d = normalize(ray_d);
-  //float4 ray_d_inv = 1.0/ray_d;
 
   //store float 3's
   float ray_ox = ray_o.x;     float ray_oy = ray_o.y;     float ray_oz = ray_o.z;
   float ray_dx = ray_d.x;     float ray_dy = ray_d.y;     float ray_dz = ray_d.z;
-  //float ray_ix = ray_d_inv.x; float ray_iy = ray_d_inv.y; float ray_iz = ray_d_inv.z;
 
   // pixel values/depth map to be returned
-  float4 data_return = (float4) (0.0f,1.0f,0.0f,0.0f);
-  float epsilon = linfo->block_len/100.0;                    //block epsilon
+  //float4 data_return = (float4) (0.0f,1.0f,0.0f,0.0f);
+  float alpha_int = 0.0f;
+  float expected_int = 0.0f;
+  float intensity_norm = 0.0f;
 
   //determine the minimum face:
   //get parameters tnear and tfar for the scene
@@ -92,15 +93,15 @@ ray_trace_bit_scene_opt(__global   RenderSceneInfo    * info,
   float min_facez = (ray_dz < 0.0) ? (linfo->block_len*linfo->dims.z) : 0.0;
   float tblock = max(max( (min_facex-ray_ox)*(1.0/ray_dx), (min_facey-ray_oy)*(1.0/ray_dy)), (min_facez-ray_oz)*(1.0/ray_dz));
   if (tfar <= tblock) {
-    gl_image[imIndex] = rgbaFloatToInt((float4)(0.0,0.0,0.0,0.0));
-    in_image[imIndex] = (float)-1.0f;
+    gl_image[imIndex[llid]] = rgbaFloatToInt((float4)(0.0,0.0,0.0,0.0));
+    in_image[imIndex[llid]] = (float)-1.0f;
     return;
   }
   //make sure tnear is at least 0...
   tblock = (tblock > 0) ? tblock : 0;
   
   //make sure tfar is within the last block so texit surpasses it (and breaks from the outer loop)
-  tfar = tfar - epsilon;   
+  tfar = tfar - linfo->epsilon;   
   
   //used for depth map 
   float global_depth = tblock;
@@ -117,14 +118,14 @@ ray_trace_bit_scene_opt(__global   RenderSceneInfo    * info,
     // of position based on ray_o or local ray o and the current t value
     //-------------------------------------------------------------------------
     //find entry point (adjusted) and the current block index
-    float posx = ray_ox + (tblock+epsilon)*ray_dx;
-    float posy = ray_oy + (tblock+epsilon)*ray_dy;
-    float posz = ray_oz + (tblock+epsilon)*ray_dz;
+    float posx = (ray_ox + (tblock + linfo->epsilon)*ray_dx) / linfo->block_len;
+    float posy = (ray_oy + (tblock + linfo->epsilon)*ray_dy) / linfo->block_len;
+    float posz = (ray_oz + (tblock + linfo->epsilon)*ray_dz) / linfo->block_len;
     
     //curr block index (var later used as cell_min), check to make sure block index isn't 192 or -1
-    float cell_minx = floor(posx/linfo->block_len);
-    float cell_miny = floor(posy/linfo->block_len);
-    float cell_minz = floor(posz/linfo->block_len);
+    float cell_minx = floor(posx);
+    float cell_miny = floor(posy);
+    float cell_minz = floor(posz);
     cell_minx = (cell_minx > linfo->dims.x) ? cell_minx-1.0 : cell_minx;
     cell_minx = (cell_minx < 0.0)           ? cell_minx+1.0 : cell_minx;
     cell_miny = (cell_miny > linfo->dims.y) ? cell_miny-1.0 : cell_miny;
@@ -136,7 +137,7 @@ ray_trace_bit_scene_opt(__global   RenderSceneInfo    * info,
     ushort2 block = block_ptrs[convert_int(cell_minz + (cell_miny + cell_minx*linfo->dims.y)*linfo->dims.z)];
 
     // tree offset is the root_ptr
-    int root_ptr = (int) block.x * linfo->tree_len + (int) block.y;
+    int root_ptr = block.x * linfo->tree_len + block.y;
     uchar16 tbuff = tree_array[root_ptr];
     int rIndex = llid*16;
     local_tree[rIndex+0]  = tbuff.s0; local_tree[rIndex+1]  = tbuff.s1; local_tree[rIndex+2]  = tbuff.s2; local_tree[rIndex+3]  = tbuff.s3; 
@@ -144,17 +145,12 @@ ray_trace_bit_scene_opt(__global   RenderSceneInfo    * info,
     local_tree[rIndex+8]  = tbuff.s8; local_tree[rIndex+9]  = tbuff.s9; local_tree[rIndex+10] = tbuff.sa; local_tree[rIndex+11] = tbuff.sb; 
     local_tree[rIndex+12] = tbuff.sc; local_tree[rIndex+13] = tbuff.sd; local_tree[rIndex+14] = tbuff.se; local_tree[rIndex+15] = tbuff.sf;   
     
-    //entry point in local block coordinates (point should be in [0,1]) 
+    //local ray origin is entry point (point should be in [0,1]) 
     //(note that cell_min is the current block index at this point)
     //setting local_ray_o to block_pos allows ttree to start at 0
-    posx = posx/linfo->block_len - cell_minx;
-    posy = posy/linfo->block_len - cell_miny;
-    posz = posz/linfo->block_len - cell_minz;
-
-    //float4 local_ray_o = pos; 
-    float lrayx = posx;
-    float lrayy = posy;
-    float lrayz = posz;
+    float lrayx = (posx - cell_minx);
+    float lrayy = (posy - cell_miny);
+    float lrayz = (posz - cell_minz);
     
     //cell_min now equals block lower left corner. 
     cell_minx = linfo->block_len * cell_minx;
@@ -167,56 +163,63 @@ ray_trace_bit_scene_opt(__global   RenderSceneInfo    * info,
     cell_minx = (ray_dx > 0) ? cell_minx+cell_len : cell_minx; 
     cell_miny = (ray_dy > 0) ? cell_miny+cell_len : cell_miny; 
     cell_minz = (ray_dz > 0) ? cell_minz+cell_len : cell_minz; 
-    //float texit = min(min( (cell_minx-ray_ox)*ray_ix, (cell_miny-ray_oy)*ray_iy), (cell_minz-ray_oz)*ray_iz);
     float texit = min(min( (cell_minx-ray_ox)*(1.0/ray_dx), (cell_miny-ray_oy)*(1.0/ray_dy)), (cell_minz-ray_oz)*(1.0/ray_dz));
     if(texit <= tblock) break; //need this check to make sure the ray is progressing
 
     //ttree starts at 0, ttree_exit is t exit value in the tree level (scaled from scene level)
-    texit = (texit-tblock-2*epsilon)/linfo->block_len;
+    texit = (texit-tblock-2*linfo->epsilon)/linfo->block_len;
+
     float ttree = 0.0;
     while (ttree < texit)
     {
+      
+      // point in tree coordinates
+      posx = (lrayx + (ttree+linfo->epsilon)*ray_dx);
+      posy = (lrayy + (ttree+linfo->epsilon)*ray_dy);
+      posz = (lrayz + (ttree+linfo->epsilon)*ray_dz);
+      
       // traverse to leaf cell that contains the entry point, set bounding box
-      int data_ptr = traverse_three(rIndex, local_tree, (float4) (posx,posy,posz,.5), &cell_minx, &cell_miny, &cell_minz, &cell_len);
+      int data_ptr = traverse_three(rIndex, local_tree, 
+                                    posx,
+                                    posy,
+                                    posz, 
+                                    &cell_minx, &cell_miny, &cell_minz, &cell_len);
 
       // check to see how close tnear and tfar are
       cell_minx = (ray_dx > 0) ? cell_minx+cell_len : cell_minx; 
       cell_miny = (ray_dy > 0) ? cell_miny+cell_len : cell_miny; 
       cell_minz = (ray_dz > 0) ? cell_minz+cell_len : cell_minz;
-      //float t1 = min(min( (cell_minx-lrayx)*ray_ix, (cell_miny-lrayy)*ray_iy), (cell_minz-lrayz)*ray_iz);
       float t1 = min(min( (cell_minx-lrayx)*(1.0/ray_dx), (cell_miny-lrayy)*(1.0/ray_dy)), (cell_minz-lrayz)*(1.0/ray_dz));
 
       //data offset is ushort pointed to by tree + bit offset
-      //ushort data_offset = data_index_opt(rIndex, local_tree, curr_cell_ptr, bit_lookup);
       data_ptr = data_index_opt(rIndex, local_tree, data_ptr, bit_lookup);
       data_ptr = block.x * linfo->data_len + data_ptr;
 
       //// distance must be multiplied by the dimension of the bounding box
       float d = (t1-ttree)*linfo->block_len;
       global_depth += d;
-    
+
+#if 0
       //-----------------------------------------------------------------------
       // RAY TRACE SPECIFIC FUNCTION replaces the step cell functor below
       // X:-) DO NOT DELETE THE LINE BELOW THIS IS A STRING REPLACEMNT
       /*$$step_cell$$*/
       // X:-)
       //-----------------------------------------------------------------------
-      
-      // Added a litle extra to the exit point
-      posx = lrayx + (t1+epsilon)*ray_dx;
-      posy = lrayy + (t1+epsilon)*ray_dy;
-      posz = lrayz + (t1+epsilon)*ray_dz;
+#endif
+      step_cell_render_opt(mixture_array, alpha_array, data_ptr, d, 
+                          &alpha_int, &expected_int, &intensity_norm);
 
       //update current t parameter
       if(t1 <= ttree) break;
       ttree = t1;
     }
-    
+
     //--------------------------------------------------------------------------
     // finding the next block (using exit point already found before tree loop)
     //--------------------------------------------------------------------------
     //scale texit back up
-    texit = texit*linfo->block_len + tblock + 2*epsilon;
+    texit = texit*linfo->block_len + tblock + 2*linfo->epsilon;
     tblock = texit;
   }
   
@@ -224,10 +227,8 @@ ray_trace_bit_scene_opt(__global   RenderSceneInfo    * info,
   data_return.z+=(1-data_return.w)*tfar;
 #endif
 #ifdef INTENSITY
-  data_return.z+=(1-data_return.w)*1.0f;
+  expected_int += (1.0-intensity_norm)*1.0f;
 #endif
-
-  gl_image[imIndex]=rgbaFloatToInt((float4)data_return.z);
-  in_image[imIndex]=(float)data_return.z;
-  
+  gl_image[imIndex[llid]] = rgbaFloatToInt((float4) expected_int);
+  in_image[imIndex[llid]] = expected_int;
 }

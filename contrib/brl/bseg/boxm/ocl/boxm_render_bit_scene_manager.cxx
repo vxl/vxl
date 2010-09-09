@@ -128,6 +128,7 @@ bool boxm_render_bit_scene_manager::set_args(unsigned kernel_index=0)
     info->scene_dims   = *((cl_int4*)scene_dims_);      // number of blocks in each dimension
     // was: info->scene_dims   = (cl_int4) { scene_dims_[0], scene_dims_[1],scene_dims_[2],scene_dims_[3] };
     info->block_len    = block_dims_[0];    // size of each block (can only be 1 number now that we've established blocks are cubes)
+    info->epsilon      = (info->block_len)/100.0;
 
     //tree meta information
     info->root_level   = root_level_;                // root_level of trees
@@ -198,6 +199,11 @@ bool boxm_render_bit_scene_manager::set_args(unsigned kernel_index=0)
     status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&image_gl_buf_);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (gl_image)"))
       return 0;
+    //local local integer for the image
+    status = clSetKernelArg(kernels_[0],i++,this->bni_*this->bnj_*sizeof(cl_int),0);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (im_index local)"))
+      return 0; 
+      
     //output buffer
     //status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&output_buf_);
     //if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output)"))
@@ -689,7 +695,9 @@ int boxm_render_bit_scene_manager::build_kernel_program(cl_program & program, bo
   if (vcl_strstr(this->platform_name,"NVIDIA"))
     options+="-D NVIDIA ";
     
-  options += "cl-opt-disable";
+  //options += " -cl-opt-disable";
+  //options += " -cl-nv-maxrregcount=34 ";
+  options += " -cl-fast-relaxed-math ";
 
   vcl_cout<<"create: program"<<vcl_endl;
   program = clCreateProgramWithSource(this->context_,
@@ -706,7 +714,7 @@ int boxm_render_bit_scene_manager::build_kernel_program(cl_program & program, bo
   status = clBuildProgram(program,
                           1,
                           this->devices_,
-                          "",
+                          options.c_str(),
                           NULL,
                           NULL);
   if (!this->check_val(status,
