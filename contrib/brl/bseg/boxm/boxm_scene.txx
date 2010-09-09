@@ -159,7 +159,23 @@ void boxm_scene<T>::clone_blocks(boxm_scene<T> &scene_out, datatype data)
   }    
   
 }
-
+template<class T>
+void boxm_scene<T>::clone_blocks(boxm_scene<T> &scene_out)
+{
+  boxm_block_iterator<T> iter(this);
+  boxm_block_iterator<T> iter_out = scene_out.iterator();
+  iter.begin();
+  iter_out.begin();
+  while (!iter.end())
+  {
+    load_block(iter.index());
+    T  *tree_out = (*iter)->get_tree()->clone();
+    (*iter_out)->init_tree(tree_out);
+    scene_out.write_active_block();
+    ++iter;
+    ++iter_out;
+  }    
+}
 
 template <class T>
 void boxm_scene<T>::write_active_block()

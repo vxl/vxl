@@ -190,7 +190,8 @@ class boxm_scene :public boxm_scene_base
   
   //: Returns a scene with the same structure and initialized with given value
   void clone_blocks(boxm_scene<T> &scene_out, datatype data);
-  
+  //: Returns a scene with the same structure
+  void clone_blocks(boxm_scene<T> &scene_out);  
   //: Unload active blocks
   void unload_active_blocks();
   
