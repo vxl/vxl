@@ -7,7 +7,7 @@ SET(boxm_basic_sources
     boxm_raytrace_function.h
     boxm_seg_length_functor.h
     boxm_num_rays_functor.h
-    dummy.cxx
+    boxm_util_data_types.h boxm_util_data_types.cxx
    )
 
 AUX_SOURCE_DIRECTORY(Templates boxm_basic_sources)
