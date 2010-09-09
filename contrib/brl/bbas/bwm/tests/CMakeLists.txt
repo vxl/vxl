@@ -10,8 +10,8 @@ ADD_EXECUTABLE( bwm_test_all
               )
 TARGET_LINK_LIBRARIES(bwm_test_all bwm bwm_algo vnl_algo vnl vgl testlib)
 
-ADD_TEST(test_move_proj_plane ${EXECUTABLE_OUTPUT_PATH}/bwm_test_all test_move_proj_plane ${CMAKE_CURRENT_SOURCE_DIR} )
-ADD_TEST(test_delaunay ${EXECUTABLE_OUTPUT_PATH}/bwm_test_all test_delaunay)
+ADD_TEST(bwm_test_move_proj_plane ${EXECUTABLE_OUTPUT_PATH}/bwm_test_all test_move_proj_plane ${CMAKE_CURRENT_SOURCE_DIR} )
+ADD_TEST(bwm_test_delaunay ${EXECUTABLE_OUTPUT_PATH}/bwm_test_all test_delaunay)
 
 ADD_EXECUTABLE(bwm_test_include test_include.cxx)
 TARGET_LINK_LIBRARIES(bwm_test_include bwm bwm_algo)

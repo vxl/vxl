@@ -10,9 +10,9 @@ ADD_EXECUTABLE( bbgm_pro_test_all
 
 TARGET_LINK_LIBRARIES( bbgm_pro_test_all bbgm_pro bbgm bsta_algo bsta vil_pro brdb vnl vil vpl testlib )
 
-ADD_TEST( bbgm_test_io                 ${EXECUTABLE_OUTPUT_PATH}/bbgm_pro_test_all test_io )
-ADD_TEST( bbgm_test_update_dist_image  ${EXECUTABLE_OUTPUT_PATH}/bbgm_pro_test_all test_update_dist_image )
-#ADD_TEST( bbgm_test_neighborhood_ops   ${EXECUTABLE_OUTPUT_PATH}/bbgm_pro_test_all test_neighborhood_ops )
+ADD_TEST( bbgm_pro_test_io                 ${EXECUTABLE_OUTPUT_PATH}/bbgm_pro_test_all test_io )
+ADD_TEST( bbgm_pro_test_update_dist_image  ${EXECUTABLE_OUTPUT_PATH}/bbgm_pro_test_all test_update_dist_image )
+#ADD_TEST( bbgm_pro_test_neighborhood_ops   ${EXECUTABLE_OUTPUT_PATH}/bbgm_pro_test_all test_neighborhood_ops )
 
 ADD_EXECUTABLE( bbgm_pro_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( bbgm_pro_test_include bbgm_pro bbgm)
