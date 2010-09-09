@@ -5,6 +5,8 @@
 
 static PyObject *register_processes(PyObject *self, PyObject *args);
 static PyObject *register_datatypes(PyObject *self, PyObject *args);
-static PyMethodDef boxm_batch_methods[METHOD_NUM+2];
+static PyObject *get_boxm_array_1d_float(PyObject * self, PyObject *args);
+
+static PyMethodDef boxm_batch_methods[METHOD_NUM+3];
 
 #endif

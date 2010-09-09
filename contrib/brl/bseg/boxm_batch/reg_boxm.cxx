@@ -1,7 +1,7 @@
 #include "reg_boxm.h"
 #include <bprb/bprb_macros.h>
 #include <bprb/bprb_batch_process_manager.h>
-
+#include <brdb/brdb_selection.h>
 // processes
 #include <vil_pro/vil_register.h>
 #include <vpgl_pro/vpgl_register.h>
@@ -16,6 +16,7 @@
 #include <bvpl/bvpl_octree/pro/bvpl_octree_register.h>
 #include <bsta/pro/bsta_register.h>
 
+#include <boxm/basic/boxm_util_data_types.h>
 PyObject *
 register_processes(PyObject *self, PyObject *args)
 {
@@ -55,6 +56,50 @@ register_datatypes(PyObject *self, PyObject *args)
   return Py_None;
 }
 
+
+PyObject *get_boxm_array_1d_float(PyObject * /*self*/, PyObject *args)
+{
+  unsigned id;
+  boxm_array_1d_float_sptr value;
+  if (!PyArg_ParseTuple(args, "i:get_boxm_array_1d_float", &id))
+    return NULL;
+
+  vcl_string relation_name = "boxm_array_1d_float_sptr_data";
+
+  // query to get the data
+  brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id);
+  brdb_selection_sptr selec = DATABASE->select(relation_name, Q);
+  PyObject *array_1d=0;
+  if (selec->size()!=1) {
+    vcl_cout << "in get_boxm_array_1d_float() - no relation with type" << relation_name << " id: " << id << vcl_endl;
+
+    return array_1d;
+  }
+
+  brdb_value_sptr brdb_value;
+  if (!selec->get_value(vcl_string("value"), brdb_value)) {
+    vcl_cout << "in get_boxm_array_1d_float() didn't get value\n";
+    return array_1d;
+  }
+
+  if (!brdb_value) {
+    vcl_cout << "in get_boxm_array_1d_float() - null value\n";
+    return array_1d;
+  }
+
+  brdb_value_t<boxm_array_1d_float_sptr>* result_out = static_cast<brdb_value_t<boxm_array_1d_float_sptr>* >(brdb_value.ptr());
+  value = result_out->value();
+
+  array_1d = PyList_New(value->data_array.size());
+  PyObject *x;
+  for(unsigned i=0;i<value->data_array.size();i++)
+  {
+    x=PyFloat_FromDouble((double)value->data_array[i]);
+    PyList_SetItem(array_1d, i,x);//Py_DECREF(x);
+  }
+  Py_INCREF(array_1d);
+  return array_1d;
+}
 PyMODINIT_FUNC
 initboxm_batch(void)
 {
@@ -71,12 +116,20 @@ initboxm_batch(void)
   reg_data.ml_doc = "register_datatypes() insert tables in the database for each type";
   reg_data.ml_flags = METH_VARARGS;
 
+  PyMethodDef get_boxm_array_1d_float_func;
+  get_boxm_array_1d_float_func.ml_name = "get_boxm_array_1d_float";
+  get_boxm_array_1d_float_func.ml_meth = get_boxm_array_1d_float;
+  get_boxm_array_1d_float_func.ml_doc = "get_boxm_array_1d_float() Get 1-d array in python";
+  get_boxm_array_1d_float_func.ml_flags = METH_VARARGS;
+
   boxm_batch_methods[0]=reg_pro;
   boxm_batch_methods[1]=reg_data;
+  boxm_batch_methods[2]=get_boxm_array_1d_float_func;
 
   for (int i=0; i<METHOD_NUM; ++i) {
-    boxm_batch_methods[i+2]=batch_methods[i];
+    boxm_batch_methods[i+3]=batch_methods[i];
   }
 
   Py_InitModule("boxm_batch", boxm_batch_methods);
 }
+
