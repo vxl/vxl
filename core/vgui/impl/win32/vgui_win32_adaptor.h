@@ -1,34 +1,32 @@
 // This is core/vgui/impl/win32/vgui_win32_adaptor.h
-
 #ifndef vgui_win32_adaptor_h_
 #define vgui_win32_adaptor_h_
-
-// The Win32 Application Programming Interfaces (API) implementation of 
-// vgui_adaptor.
-// author: Lianqing Yu
-
-// Modifications:
-// July 29, 2009              Initial version
-
+//:
+// \file
+// \brief The Win32 Application Programming Interfaces (API) implementation of vgui_adaptor.
+// \author Lianqing Yu
+// \date July 29, 2009              Initial version
+//
 // TODO issues:
 // 1. idle_slot.
 // 2. Should the timer be created in the constructor, in case post_timer is
 //    never called? Qt impl. does this but MFC impl. does not.
 // 3. How to implement post_message?
 
-
 #include <windows.h>
 
 #include <vgui/vgui_adaptor.h>
 #include <vgui/internals/vgui_adaptor_mixin.h>
 #include <vgui/impl/win32/vgui_win32_cmdtarget.h>
+#include <vcl_map.h>
 
 class vgui_win32_window;
+class vgui_win32_internal_timer;
 
 class vgui_win32_adaptor : public vgui_adaptor, public vgui_adaptor_mixin,
-  public vgui_win32_cmdtarget
+                           public vgui_win32_cmdtarget
 {
-public:
+ public:
   typedef vgui_adaptor_mixin mixin;
 
   vgui_win32_adaptor(HWND hwnd, vgui_window *win = 0);
@@ -87,6 +85,7 @@ public:
   //void OnDestroy();
   void OnSize(WPARAM wParam, LPARAM lParam);
   void OnPaint();
+  void OnTimer(WPARAM wParam, LPARAM lParam);
   void OnHScroll(UINT message, WPARAM wParam, LPARAM lParam);
   void OnVScroll(UINT message, WPARAM wParam, LPARAM lParam);
   void OnKeyDown(WPARAM wParam, LPARAM lParam);
@@ -101,10 +100,10 @@ public:
   void OnMouseMove(WPARAM wParam, LPARAM lParam);
   void OnMouseWheel(WPARAM wParam, LPARAM lParam);
 
-protected:
+ protected:
   // Translate a win32 message into the corresponding VGUI event.
   vgui_event translate_message(WPARAM wParam, LPARAM lParam, 
-    vgui_event_type evtype = vgui_EVENT_NULL);
+                               vgui_event_type evtype = vgui_EVENT_NULL);
   // Translate a win32 key into the corresponding VGUI key
   void translate_key(UINT nChar, UINT nFlags, int *key, int *ascii_char);
   // Handle mouse event
@@ -117,10 +116,13 @@ protected:
 
   vgui_window *win_; // the window that contains this adaptor
 
+  // map of timers currently in use.
+  vcl_map<unsigned int, vgui_win32_internal_timer> timers_;
+
   static vgui_menu last_popup;
   vcl_vector<vgui_command_sptr> popup_callbacks; // commands called by popup menu items
 
-private:
+ private:
   HGLRC setup_for_gl(HDC);
 
   // True while a redraw event has been requested but not implemented.
@@ -133,6 +135,17 @@ private:
   bool idle_request_posted_;
 
   DECLARE_MESSAGE_MAP()
+};
+
+class vgui_win32_internal_timer
+{
+ public:
+  vgui_win32_internal_timer() : timer_id(0), callback_ptr(0) {}
+  vgui_win32_internal_timer(unsigned int id, void *p) 
+  : timer_id(id), callback_ptr(p) {}
+
+  unsigned int timer_id;
+  void* callback_ptr;
 };
 
 #endif // vgui_win32_adaptor_h_

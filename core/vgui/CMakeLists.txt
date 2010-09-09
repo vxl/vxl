@@ -171,6 +171,7 @@ SET(vgui_sources
   internals/vgui_simple_field.h      internals/vgui_simple_field.cxx
   internals/vgui_string_field.h
   internals/vgui_file_field.h
+  internals/vgui_button_field.h
 
   # statusbar classes
   vgui_statusbuf.cxx            vgui_statusbuf.h

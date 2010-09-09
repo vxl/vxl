@@ -5,12 +5,13 @@
 //:
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
-// \date   23 Oct 99
+// \date   23 Oct 1999
 // \brief  See vgui_dialog.h for a description of this file.
 
 #include "vgui_dialog.h"
 #include <vgui/vgui.h>
 #include <vgui/vgui_tableau_sptr.h>
+#include <vgui/vgui_command.h>
 #include <vgui/internals/vgui_dialog_impl.h>
 
 //-----------------------------------------------------------------------------
@@ -37,6 +38,23 @@ bool vgui_dialog::ask()
     return impl->ask();
 
   return false;
+}
+
+void vgui_dialog::pushbutton(vgui_command_sptr cmnd, const char *label, const void* icon)
+{
+  if (impl) impl->pushbutton_field(cmnd, label, icon);
+}
+
+void vgui_dialog::pushbutton(vgui_dialog_callback_no_client_data f, const char *label, const void* icon)
+{
+  vgui_command* cfunc = new vgui_command_cfunc(f);
+  pushbutton(cfunc, label, icon);
+}
+
+void vgui_dialog::pushbutton(vgui_dialog_callback f, void const *client_data, const char *label, const void* icon)
+{
+  vgui_command* cfunc = new vgui_command_cfunc(f, client_data);
+  pushbutton(cfunc, label, icon);
 }
 
 void vgui_dialog::checkbox(const char* txt, bool& v)
@@ -138,4 +156,9 @@ void vgui_dialog::set_ok_button(const char* txt)
 void vgui_dialog::set_modal(const bool is_modal)
 {
   if (impl) impl->modal(is_modal);
+}
+
+void vgui_dialog::line_break()
+{
+  if (impl) impl->line_break();
 }

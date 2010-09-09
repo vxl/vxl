@@ -12,19 +12,21 @@
 //
 // \verbatim
 //  Modifications
-//   K.Y.McGaul  25-JAN-00    Moved field functions to this class to save repetition.
+//   K.Y.McGaul  25-JAN-2000  Moved field functions to this class to save repetition.
 //                            Added virtual ..._widget functions.
 //                            Added text_message function.
-//   K.Y.McGaul  27-JAN-00    Added modal function.
-//   Marko Bacic 11-JUL-00    Added support for inline file browser
-//   Marko Bacic 12-JUL-00    Added support for inline color chooser
-//   Joris S.    09-NOV-00    Fixed weird color browser things
-//   K.Y.McGaul  22-MAY-01    Added tableau field.
+//   K.Y.McGaul  27-JAN-2000  Added modal function.
+//   Marko Bacic 11-JUL-2000  Added support for inline file browser
+//   Marko Bacic 12-JUL-2000  Added support for inline color chooser
+//   Joris Sch.  09-NOV-2000  Fixed weird color browser things
+//   K.Y.McGaul  22-MAY-2001  Added tableau field.
+//   Lianqing Yu 02-JAN-2010  Added push button.
 // \endverbatim
 
 #include <vcl_string.h>
 #include <vcl_vector.h>
 #include <vgui/vgui_tableau.h>
+#include <vgui/vgui_command_sptr.h>
 
 class vgui_dialog_field;
 
@@ -83,6 +85,12 @@ class vgui_dialog_impl
   //: Add a tableau (OpenGL area) to the dialog box.
   void inline_tab(const vgui_tableau_sptr tab, unsigned width, unsigned height);
 
+  //: Add a line break to the dialog box
+  void line_break();
+
+  //: Add a push button field to the dialog box.
+  void pushbutton_field(vgui_command_sptr cmnd, const char* label, const void* icon);
+
   //: Pointer to a GUI widget for a bool field.
   virtual void* bool_field_widget(const char*, bool&);
 
@@ -122,6 +130,9 @@ class vgui_dialog_impl
   //: Pointer to a GUI widget for a tableau (OpenGL area).
   virtual void* inline_tableau_widget(const vgui_tableau_sptr tab, unsigned width, unsigned height);
 
+  //: Pointer to a GUI widget for a push button.
+  virtual void* pushbutton_field_widget(const char*, const void*);
+
   //: Set the modality of the dialog box.
   //  True makes the dialog modal (i.e. the dialog 'grabs' all events) and
   //  this is the default.  WARNING: It is dangerous to make a dialog that
@@ -141,7 +152,7 @@ class vgui_dialog_impl
   enum element_type {bool_elem, int_elem, long_elem, float_elem,
                      double_elem, string_elem, choice_elem, text_msg,
                      file_bsr, color_csr,inline_file_bsr,inline_color_csr,
-                     inline_tabl, dir_bsr, line_br, unknown};
+                     inline_tabl, dir_bsr, line_br, button_elem, unknown};
 
   //: Data associated with each field in the dialog box.
   //  The representation of a dialog box in vgui is simply as a list
@@ -170,6 +181,8 @@ class vgui_dialog_impl
   vcl_vector<element> elements;
   vcl_string cancel_button_text_;
   vcl_string ok_button_text_;
+
+  bool use_line_break;
 };
 
 #endif // vgui_dialog_impl_h_

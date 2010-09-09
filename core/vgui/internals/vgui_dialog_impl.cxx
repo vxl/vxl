@@ -5,9 +5,8 @@
 //:
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
-// \date   25 Oct 99
+// \date   25 Oct 1999
 // \brief  See vgui_dialog_impl.h for a description of this file
-//
 
 #include "vgui_dialog_impl.h"
 #include <vcl_iostream.h>
@@ -15,12 +14,14 @@
 #include <vgui/internals/vgui_simple_field.h>
 #include <vgui/internals/vgui_string_field.h>
 #include <vgui/internals/vgui_file_field.h>
+#include <vgui/internals/vgui_button_field.h>
 #include <vgui/vgui_tableau_sptr.h>
 
 vgui_dialog_impl::vgui_dialog_impl(const char* n)
   : name(n)
   , cancel_button_text_("Cancel")
   , ok_button_text_("OK")
+  , use_line_break(false)
 {
   assert(n);
 }
@@ -44,6 +45,20 @@ void vgui_dialog_impl::bool_field(const char* txt, bool& val)
   element l;
   l.type = bool_elem;
   l.widget = bool_field_widget(txt, val);
+  l.field = field;
+
+  elements.push_back(l);
+}
+
+//------------------------------------------------------------------------------
+//: Add a push button field to the dialog box.
+void vgui_dialog_impl::pushbutton_field(vgui_command_sptr cmnd, const char* txt, const void* icon)
+{
+  vgui_button_field *field = new vgui_button_field(cmnd, txt);
+
+  element l;
+  l.type = button_elem;
+  l.widget = pushbutton_field_widget(txt, icon);
   l.field = field;
 
   elements.push_back(l);
@@ -213,6 +228,14 @@ void vgui_dialog_impl::text_message(const char* txt)
   elements.push_back(l);
 }
 
+void vgui_dialog_impl::line_break()
+{
+  element l;
+  l.type = line_br;
+
+  elements.push_back(l);
+}
+
 void* vgui_dialog_impl::bool_field_widget(const char*, bool&) { return 0; }
 void* vgui_dialog_impl::int_field_widget(const char*, int&) { return 0; }
 void* vgui_dialog_impl::long_field_widget(const char*, long&) { return 0; }
@@ -226,6 +249,7 @@ void* vgui_dialog_impl::inline_file_browser_widget(const char*, vcl_string&, vcl
 void* vgui_dialog_impl::color_chooser_widget(const char* txt, vcl_string& val) { return string_field_widget(txt, val); }
 void* vgui_dialog_impl::inline_color_chooser_widget(const char* txt, vcl_string& val) { return string_field_widget(txt, val); }
 void* vgui_dialog_impl::inline_tableau_widget(const vgui_tableau_sptr, unsigned /*width*/, unsigned /*height*/) { return 0; }
+void* vgui_dialog_impl::pushbutton_field_widget(const char*, const void*) { return 0; }
 
 //------------------------------------------------------------------------------
 //: Changes the modality of the dialog.  True makes the dialog modal

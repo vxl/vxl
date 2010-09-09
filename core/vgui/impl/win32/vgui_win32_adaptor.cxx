@@ -1,10 +1,10 @@
 // This is core/vgui/impl/win32/vgui_win32_adaptor.cxx
-
 #include "vgui_win32_adaptor.h"
 #include "vgui_win32_utils.h"
 
 #include <vcl_iostream.h>
 #include <vcl_cstring.h> // for vcl_memset
+#include <vcl_utility.h> // for vcl_pair
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_macro.h>
@@ -20,7 +20,7 @@ BEGIN_MESSAGE_MAP(vgui_win32_adaptor, vgui_win32_cmdtarget)
 END_MESSAGE_MAP()
 
 vgui_win32_adaptor::vgui_win32_adaptor(HWND hwnd, vgui_window *win)
-  : hwnd_(hwnd), win_(win),
+  : hwnd_(hwnd), win_(win), tid_(0),
   redraw_posted_(true),
   overlay_redraw_posted_(true),
   idle_request_posted_(false)
@@ -42,7 +42,7 @@ vgui_win32_adaptor::~vgui_win32_adaptor()
   // vgui_projection_inspector::inspect() would fail.
   dispatch_to_tableau(vgui_DESTROY);
 
-  if ( hglrc_ )  {
+  if ( hglrc_ ) {
     // make the rendering context not current
     wglMakeCurrent( NULL, NULL );
     // delete the rendering context
@@ -52,14 +52,22 @@ vgui_win32_adaptor::~vgui_win32_adaptor()
 
   // Clear pointers to context-menu callback functions
   popup_callbacks.clear();
+
+  // Kill the timer
+  if ( tid_ )
+    kill_timer(tid_);
 }
 
-// TODO: This function is not called yet.
-void vgui_win32_adaptor::post_timer(float tm, int id)
+void vgui_win32_adaptor::post_timer(float timeout, int name)
 {
-  // Create at timer
-  tid_ = id;
-  SetTimer(hwnd_, tid_, (unsigned int)tm, NULL);
+  vcl_map<unsigned int, vgui_win32_internal_timer>::iterator it = timers_.find(name);
+  if ( it == timers_.end() ) { // Create at timer if it does rxist
+    unsigned int tid = SetTimer(hwnd_, name, (unsigned int)timeout, NULL);
+    if ( tid ) { // function fails to create a timer if tid==0
+      vgui_win32_internal_timer it(tid, NULL);
+      timers_.insert(vcl_pair<unsigned int, vgui_win32_internal_timer>(name, it));
+    }
+  }
 }
 
 
@@ -109,12 +117,15 @@ void vgui_win32_adaptor::post_destroy()
   PostMessage(hwnd_, WM_CLOSE, 0, 0);
 }
 
-// TODO: This function is not called yet.
 // kill an existing timer
-void vgui_win32_adaptor::kill_timer(int timer)
+void vgui_win32_adaptor::kill_timer(int name)
 {
-  if ( tid_ == timer )
-    KillTimer(hwnd_, timer);  // we only kill our own timer.
+  vcl_map<unsigned int, vgui_win32_internal_timer>::iterator it = timers_.find(name);
+  if ( it == timers_.end() ) // return if such a timer does not exist
+    return;
+
+  KillTimer(hwnd_, it->second.timer_id);
+  timers_.erase(it);
 }
 
 
@@ -187,13 +198,17 @@ HGLRC vgui_win32_adaptor::setup_for_gl(HDC hdc)
 // Handling messages that is related to vgui_adaptor.
 BOOL vgui_win32_adaptor::OnCmdMsg(UINT message, WPARAM wParam, LPARAM lParam)
 {
-  switch ( message ) {
+  switch ( message )
+  {
     case WM_SIZE:
       OnSize(wParam, lParam);
       break;
     case WM_PAINT:
       OnPaint();
      break;
+    case WM_TIMER:
+      OnTimer(wParam, lParam);
+      break;
     case WM_HSCROLL:
       OnHScroll(message, wParam, lParam);
       break;
@@ -264,9 +279,9 @@ void vgui_win32_adaptor::OnSize(WPARAM wParam, LPARAM lParam)
   // Resize scrollbars according to the window size and rendered image size
   // that take into account of zooming.
   vgui_tableau_sptr imtab = vgui_find_below_by_type_name(
-    this->get_tableau(), "vgui_image_tableau");
+                              this->get_tableau(), "vgui_image_tableau");
   vgui_tableau_sptr vrtab = vgui_find_below_by_type_name(
-    this->get_tableau(), "vgui_viewer2D_tableau");
+                              this->get_tableau(), "vgui_viewer2D_tableau");
   if ( imtab && vrtab ) {
     int im_width, im_height;
 
@@ -319,6 +334,13 @@ void vgui_win32_adaptor::OnPaint()
   }
 
   swap_buffers();
+}
+
+void vgui_win32_adaptor::OnTimer(WPARAM wParam, LPARAM lParam)
+{
+  vgui_event e(vgui_TIMER);
+  e.timer_id = wParam;
+  dispatch_to_tableau(e);
 }
 
 void vgui_win32_adaptor::OnHScroll(UINT message, WPARAM wParam, LPARAM lParam)
@@ -666,15 +688,15 @@ void vgui_win32_adaptor::domouse(vgui_event_type et, vgui_button b, UINT nFlags,
   // putting this in the interface.  However, given vgui's goals of
   // being a light & thin wrapper, I don't think that's a good idea.
 
-  // Grab mouse?
-  {
-    if (et == vgui_BUTTON_DOWN) {
-      SetCapture(hwnd_);
-    }
-    else if (et != vgui_MOTION) {
-      ReleaseCapture();
-    }
-  }
+   // Grab mouse?
+   {
+     if (et == vgui_BUTTON_DOWN) {
+       SetCapture(hwnd_);
+     }
+     else if (et != vgui_MOTION) {
+       ReleaseCapture();
+     }
+   }
 #endif // 0
 }
 

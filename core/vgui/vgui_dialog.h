@@ -19,11 +19,14 @@
 //   11-JUL-2000 Marko Bacic - Added inline file browser
 //   12-JUL-2000 Marko Bacic - Added inline color chooser
 //   26-APR-2002 K.Y.McGaul - Converted to doxygen style comments.
+//   02-JAN-2010 Lianqing Yu - Added controls including push button.
 // \endverbatim
 
 #include <vcl_string.h>
 #include <vcl_vector.h>
 #include <vgui/vgui_tableau.h>
+#include <vgui/vgui_command_sptr.h>
+
 class vgui_dialog_impl;
 
 //: Abstract dialog class
@@ -48,13 +51,22 @@ class vgui_dialog_impl;
 //   send_order(the_table, the_dressing, has_mayo);
 // \endcode
 
+typedef void (*vgui_dialog_callback)(void const* client_data);
+typedef void (*vgui_dialog_callback_no_client_data)();
+
 class vgui_dialog
 {
  public:
 
   //: Constructor - takes the title of the dialog box.
   vgui_dialog(const char* name);
- virtual ~vgui_dialog();
+  virtual ~vgui_dialog();
+
+  // A push button is oftern shown with a label and/or a icon/bitmap
+  // and a command is executed when the button is clicked.
+  void pushbutton(vgui_command_sptr cmnd, const char *label, const void* icon);
+  void pushbutton(vgui_dialog_callback_no_client_data f, const char *label, const void* icon);
+  void pushbutton(vgui_dialog_callback f, void const *client_data, const char *label, const void* icon);
 
   void checkbox(const char*, bool&);
 
@@ -93,6 +105,8 @@ class vgui_dialog
 
   //: Text message
   void message(const char*);
+
+  void line_break();
 
   //: Display a tableau in the dialog
   void inline_tableau(const vgui_tableau_sptr tab, unsigned width,
