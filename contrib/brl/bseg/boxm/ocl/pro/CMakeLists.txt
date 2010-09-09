@@ -16,7 +16,8 @@ IF(EXPAT_FOUND)
   )
 
   AUX_SOURCE_DIRECTORY(processes boxm_ocl_pro_sources)
-
+  AUX_SOURCE_DIRECTORY(Templates boxm_ocl_pro_sources)
+ 
   ADD_LIBRARY(boxm_ocl_pro ${boxm_ocl_pro_sources} )
 
   TARGET_LINK_LIBRARIES(boxm_ocl_pro boxm_ocl boxm boxm_sample bprb brdb brip sdet vsol vil)

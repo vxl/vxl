@@ -28,6 +28,9 @@ IF(VGUI_FOUND)
       boxm_ocl_render_bit_tableau.h
       boxm_ocl_render_bit_tableau.cxx
       boxm_ocl_render_bit_tableau_sptr.h
+      boxm_ocl_re_render_2_tableau.h 
+      boxm_ocl_re_render_2_tableau_sptr.h
+      boxm_ocl_re_render_2_tableau.cxx 
      )
 
   

@@ -29,11 +29,16 @@ IF(GLEW_FOUND)
   ADD_EXECUTABLE( boxm_ocl_render_bit_view
   boxm_ocl_render_bit_view.cxx
   )
+  ADD_EXECUTABLE( boxm_ocl_re_render_2
+  boxm_ocl_re_render_2.cxx
+ )
 
  TARGET_LINK_LIBRARIES( boxm_ocl_render_view boxm_ocl  boxm_ocl_view vul vgui ${GLEW_LIBRARY} )
  TARGET_LINK_LIBRARIES( boxm_ocl_update_view boxm_ocl  boxm_ocl_view vul vgui ${GLEW_LIBRARY} )
  TARGET_LINK_LIBRARIES( boxm_ocl_rerender_view boxm_ocl  boxm_ocl_view vul vgui ${GLEW_LIBRARY} )
  TARGET_LINK_LIBRARIES( boxm_ocl_render_bit_view boxm_ocl  boxm_ocl_view vul vgui ${GLEW_LIBRARY} )
+ TARGET_LINK_LIBRARIES( boxm_ocl_re_render_2 boxm_ocl_view vul vgui ${GLEW_LIBRARY} )
+
 
  TARGET_LINK_LIBRARIES( boxm_opencl_change_detection_view boxm_ocl  boxm_ocl_view vul vgui ${GLEW_LIBRARY} )
  ENDIF(VGUI_FOUND)
@@ -63,3 +68,4 @@ ADD_EXECUTABLE( boxm_ocl_render_bit_exe
   boxm_ocl_render_bit_exe.cxx
 )
 TARGET_LINK_LIBRARIES( boxm_ocl_render_bit_exe boxm_ocl vil vpgl_algo vul )
+
