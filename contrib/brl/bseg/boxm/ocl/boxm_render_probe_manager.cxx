@@ -11,9 +11,9 @@
 //put tree structure and data into arrays
 
 bool boxm_render_probe_manager::init_ray_trace(boxm_ocl_scene *scene,
-                      vpgl_camera_double_sptr cam,
-                      unsigned i,
-                      unsigned j)
+                                               vpgl_camera_double_sptr cam,
+                                               unsigned i,
+                                               unsigned j)
 {
   scene_ = scene;
   cam_ = cam;
@@ -21,12 +21,12 @@ bool boxm_render_probe_manager::init_ray_trace(boxm_ocl_scene *scene,
   j_=(int)j;
 
   // Code for Pass_0
-  if (!this->load_kernel_source(vcl_string(VCL_SOURCE_ROOT_DIR) 
+  if (!this->load_kernel_source(vcl_string(VCL_SOURCE_ROOT_DIR)
                                 + "/contrib/brl/bseg/boxm/ocl/cl/loc_code_library_functions.cl") ||
       !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                + "/contrib/brl/bseg/boxm/ocl/cl/cell_utils.cl") ||
+                                    + "/contrib/brl/bseg/boxm/ocl/cl/cell_utils.cl") ||
       !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                +"/contrib/brl/bseg/boxm/ocl/cl/octree_library_functions.cl") ||
+                                    +"/contrib/brl/bseg/boxm/ocl/cl/octree_library_functions.cl") ||
       !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
                                     +"/contrib/brl/bseg/boxm/ocl/cl/backproject.cl")||
       !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
@@ -50,56 +50,56 @@ bool boxm_render_probe_manager::setup_online_processing()
   int bundle_dim = 1;
   this->set_bundle_ni(bundle_dim);
   this->set_bundle_nj(bundle_dim);
-  bool good=true;  
+  bool good=true;
   good = good && this->set_scene_data()
               && this->set_all_blocks()
               && this->set_scene_data_buffers()
               && this->set_tree_buffers()
               && this->set_rayoutput()
               && this->set_rayoutput_buffers();
-  if(vpgl_perspective_camera<double> * cam=dynamic_cast<vpgl_perspective_camera<double>* >(cam_.ptr()))
+  if (vpgl_perspective_camera<double> * cam=dynamic_cast<vpgl_perspective_camera<double>* >(cam_.ptr()))
   {
-      // run the raytracing
-      good = good && this->set_persp_camera(cam)
-                  && this->set_persp_camera_buffers();
+    // run the raytracing
+    good = good && this->set_persp_camera(cam)
+                && this->set_persp_camera_buffers();
 
-      good=good && this->set_kernel();
-      this->set_args();
-      this->set_commandqueue();
-      this->set_workspace();
+    good=good && this->set_kernel();
+    this->set_args();
+    this->set_commandqueue();
+    this->set_workspace();
 
-      vcl_cout<<"Setup Successful";
+    vcl_cout<<"Setup Successful";
 
-      return good;
+    return good;
   }
-  else 
+  else
     return false;
 }
 
 bool boxm_render_probe_manager::online_processing(vpgl_camera_double_sptr & camera)
 {
-    if(vpgl_perspective_camera<double> * cam=dynamic_cast<vpgl_perspective_camera<double>* >(camera.ptr()))
-    {
-        this->set_persp_camera(cam);
-        this->write_persp_camera_buffers();
-        this->run();
-        return true;
-    }
-    return false;
+  if (vpgl_perspective_camera<double> * cam=dynamic_cast<vpgl_perspective_camera<double>* >(camera.ptr()))
+  {
+      this->set_persp_camera(cam);
+      this->write_persp_camera_buffers();
+      this->run();
+      return true;
+  }
+  return false;
 }
 
 void boxm_render_probe_manager::getoutputarray(vcl_vector<float> & out)
 {
-    for(unsigned i=0;i<raydepth_;i++)
-        if(rayoutput_[i]>-1)
-        out.push_back(rayoutput_[i]);
+  for (unsigned i=0;i<raydepth_;i++)
+    if (rayoutput_[i]>-1)
+      out.push_back(rayoutput_[i]);
 }
 
 
 bool boxm_render_probe_manager::finish_online_processing()
 {
   bool good=true;
- 
+
   good=good && this->release_scene_data_buffers();
   good=good && this->clean_scene_data()
             && this->release_rayoutput_buffers()
@@ -114,7 +114,7 @@ bool boxm_render_probe_manager::finish_online_processing()
 
 bool boxm_render_probe_manager::set_kernel()
 {
-  cl_int status = CL_SUCCESS;  
+  cl_int status = CL_SUCCESS;
   kernel_ = clCreateKernel(program_,"single_ray_probe_opt",&status);
   if (!this->check_val(status,CL_SUCCESS,error_to_string(status))) {
     return false;
@@ -273,9 +273,8 @@ bool boxm_render_probe_manager::run_scene()
 
   good =good && release_tree_buffers()
              && clean_tree()
-            && release_scene_data_buffers()
-            && clean_scene_data();
-  
+             && release_scene_data_buffers()
+             && clean_scene_data();
 
   // release the command Queue
   this->release_kernel();
@@ -304,31 +303,30 @@ bool boxm_render_probe_manager::set_rayoutput()
  for (unsigned i=0;i<raydepth_;i++)
      rayoutput_[i]=-1.0;
    return true;
-
 }
+
 bool boxm_render_probe_manager::set_rayoutput_buffers()
 {
   cl_int status;
   rayoutput_buf_ = clCreateBuffer(this->context_,
-                                   CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
-                                   raydepth_*sizeof(cl_float),
-                                   rayoutput_,&status);
+                                  CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+                                  raydepth_*sizeof(cl_float),
+                                  rayoutput_,&status);
   return this->check_val(status,CL_SUCCESS,"clCreateBuffer (rayoutput_) failed.")==1;
-
 }
+
 bool boxm_render_probe_manager::release_rayoutput_buffers()
 {
     cl_int status;
     status = clReleaseMemObject(rayoutput_buf_);
     return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (rayoutput_buf_).")==1;
-
 }
+
 bool boxm_render_probe_manager::clean_rayoutput()
 {
     if (rayoutput_)
         boxm_ocl_utils::free_aligned(rayoutput_);
     return true;
-
 }
 
 bool boxm_render_probe_manager::read_output_array()
@@ -353,8 +351,6 @@ bool boxm_render_probe_manager::read_output_array()
 }
 
 
-
-
 int boxm_render_probe_manager::build_kernel_program(cl_program & program)
 {
   cl_int status = CL_SUCCESS;
@@ -374,9 +370,9 @@ int boxm_render_probe_manager::build_kernel_program(cl_program & program)
   options+="-D INTENSITY";
 
 
-  if(vcl_strstr(this->platform_name,"ATI"))
+  if (vcl_strstr(this->platform_name,"ATI"))
        options+="-D ATI";
-  if(vcl_strstr(this->platform_name,"NVIDIA"))
+  if (vcl_strstr(this->platform_name,"NVIDIA"))
        options+="-D NVIDIA";
 
   program = clCreateProgramWithSource(this->context_,
@@ -924,9 +920,6 @@ bool boxm_render_probe_manager::release_persp_camera_buffers()
   status = clReleaseMemObject(persp_cam_buf_);
   return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (persp_cam_buf_).")==1;
 }
-
-
-
 
 
 //: Binary write multi_tracker scene to stream
