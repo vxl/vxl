@@ -13,8 +13,12 @@
 #include <boxm/ocl/boxm_render_bit_scene_manager.h>
 #include <boxm/ocl/boxm_render_image_manager.h>
 #include <boxm/ocl/boxm_render_ocl_scene_manager.h>
+#include <boxm/ocl/boxm_render_probe_manager.h>
+#include <boxm/ocl/boxm_re_render_ocl_scene_manager.h>
 #include <boxm/ocl/boxm_stat_manager.h>
 #include <boxm/ocl/boxm_update_ocl_scene_manager.h>
+
+#include <boxm/ocl/boxm_render_probe_manager_sptr.h>
 
 #include <boxm/ocl/pro/boxm_ocl_processes.h>
 #include <boxm/ocl/pro/boxm_ocl_register.h>

@@ -1,3 +1,4 @@
+#include <boxm/algo/boxm_compute_scene_difference.h>
 #include <boxm/algo/boxm_compute_scene_statistics.h>
 #include <boxm/algo/boxm_crop_scene.h>
 #include <boxm/algo/boxm_fill_in_mesh.h>
