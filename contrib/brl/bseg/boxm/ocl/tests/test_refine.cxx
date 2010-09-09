@@ -22,7 +22,7 @@ bool test_refine_apl()
   typedef vnl_vector_fixed<int,4> int4;
   typedef vnl_vector_fixed<float,16> float16;
 
-  vcl_cout<<"Comparing single block of APL scene "<<vcl_endl;
+  vcl_cout<<"Comparing single block of APL scene"<<vcl_endl;
 
   //load apl scene
   vcl_string cpu_path = "/media/VXL/data/APl/try4/scene_refined/scene.xml";
@@ -198,8 +198,8 @@ boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > > create_simple_sce
 //: Test refine on a simple ocl scene
 bool test_refine_ocl_scene()
 {
-  vcl_cout<<vcl_endl<<"Testing multi block refine "<<vcl_endl;
-  float prob_thresh = .001;
+  vcl_cout<<"\nTesting multi block refine"<<vcl_endl;
+  float prob_thresh = .001f;
 
   //set up multiple blocks of small trees
   typedef boxm_sample<BOXM_APM_MOG_GREY> data_type;
@@ -212,7 +212,6 @@ bool test_refine_ocl_scene()
 
   //GPU refine test
   scene_type scene2 = create_simple_scene();
-  int num_buffers = 1;
   boxm_ocl_scene ocl_scene;
   boxm_ocl_convert<data_type>::convert_scene(&scene2, ocl_scene, 100);
   vcl_cout<<ocl_scene<<vcl_endl;
@@ -322,7 +321,7 @@ bool test_refine_simple_scene()
     for (int j=0; j<16; j++)
       ssd += (datum[j]-data[dataIndex+j])*(datum[j]-data[dataIndex+j]);
   }
-  TEST("CPU/GPU refine tree output same data ", (ssd<10e-8), true);
+  TEST("CPU/GPU refine tree output same data ", ssd < 1e-7, true);
   vcl_cout<<"SSD between cpu/gpu data = "<<ssd<<vcl_endl;
 
   // free memory used by the manager
