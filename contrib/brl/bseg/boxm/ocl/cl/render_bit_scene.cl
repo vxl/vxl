@@ -17,7 +17,7 @@ ray_trace_bit_scene_opt(__constant  RenderSceneInfo    * linfo,
                         __local     int                * imIndex,
                         __local     float              * tfar,
                         //__global   float4             * output,
-                        __constant uchar              * bit_lookup)    // input image and store vis_inf and pre_inf
+                        __constant  uchar              * bit_lookup)    // input image and store vis_inf and pre_inf
 {
   //get local id (0-63 for an 8x8) of this patch 
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
@@ -28,6 +28,7 @@ ray_trace_bit_scene_opt(__constant  RenderSceneInfo    * linfo,
   //----------------------------------------------------------------------------
   int i=0,j=0;  map_work_space_2d(&i,&j);
   imIndex[llid] = j*get_global_size(0)+i;     //locally store the final index to save a register
+  int imI = imIndex[llid];
 
   // check to see if the thread corresponds to an actual pixel as in some 
   // cases #of threads will be more than the pixels.
@@ -91,8 +92,10 @@ ray_trace_bit_scene_opt(__constant  RenderSceneInfo    * linfo,
   // Begin traversing the blocks, break when any curr_block_index value is
   // illegal (not between 0 and scenedims)
   //----------------------------------------------------------------------------
+  float blkCount = 0.0;
   while(tblock < tfar[llid]) 
   {
+    blkCount++;
     //-------------------------------------------------------------------------
     // get small block and necessary information
     // Note: Can probably eliminate posx,posy,posz and replace with just a calc
@@ -151,16 +154,14 @@ ray_trace_bit_scene_opt(__constant  RenderSceneInfo    * linfo,
     if(texit <= tblock) break; //need this check to make sure the ray is progressing
 
     //ttree starts at 0, ttree_exit is t exit value in the tree level (scaled from scene level)
-    texit = (texit-tblock-2*linfo->epsilon);
-
+    texit = (texit - tblock -.05);
     float ttree = 0.0;
     while (ttree < texit)
     {
-      
       // point in tree coordinates
-      posx = (lrayx + (ttree+linfo->epsilon)*ray_dx);
-      posy = (lrayy + (ttree+linfo->epsilon)*ray_dy);
-      posz = (lrayz + (ttree+linfo->epsilon)*ray_dz);
+      posx = (lrayx + (ttree + .05)*ray_dx);
+      posy = (lrayy + (ttree + .05)*ray_dy);
+      posz = (lrayz + (ttree + .05)*ray_dz);
       
       // traverse to leaf cell that contains the entry point, set bounding box
       float cell_len;
@@ -181,7 +182,7 @@ ray_trace_bit_scene_opt(__constant  RenderSceneInfo    * linfo,
       data_ptr = block.x * linfo->data_len + data_ptr;
 
       //// distance must be multiplied by the dimension of the bounding box
-      float d = (t1-ttree);
+      float d = (t1-ttree) * linfo->block_len;
       ttree = t1;
 #if 0
       //-----------------------------------------------------------------------
@@ -202,7 +203,7 @@ ray_trace_bit_scene_opt(__constant  RenderSceneInfo    * linfo,
     // finding the next block (using exit point already found before tree loop)
     //--------------------------------------------------------------------------
     //scale texit back up
-    texit = texit + tblock + 2*linfo->epsilon;
+    texit = texit + tblock + .05;
     tblock = texit;
   }
 
@@ -213,6 +214,7 @@ ray_trace_bit_scene_opt(__constant  RenderSceneInfo    * linfo,
 #ifdef INTENSITY
   expected_int += (1.0-intensity_norm)*1.0f;
 #endif
-  gl_image[imIndex[llid]] = rgbaFloatToInt((float4) expected_int);
-  in_image[imIndex[llid]] = expected_int;
+  gl_image[imI] = rgbaFloatToInt((float4) expected_int);
+  //gl_image[imI] = rgbaFloatToInt((float4) blkCount/400.0);
+  in_image[imI] = expected_int;
 }
