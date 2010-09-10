@@ -86,10 +86,11 @@ void step_cell_render_opt(__global uchar8* cell_data, __global float* alpha_data
 //optimized data version
 void step_cell_render_opt(__global uchar8 * cell_data, 
                           __global float  * alpha_data, 
-                          int data_ptr, float d, 
-                          float *alpha_int,
-                          float *expected_i,
-                          float *intensity_n)
+                                   int      data_ptr, 
+                                   float    d, 
+                                   float  * alpha_int,
+                                   float  * expected_i,
+                                   float  * intensity_n)
 {
   uchar8 data = cell_data[data_ptr];
   float alpha = alpha_data[data_ptr];
