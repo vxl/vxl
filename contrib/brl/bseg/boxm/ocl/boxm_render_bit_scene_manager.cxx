@@ -128,7 +128,7 @@ bool boxm_render_bit_scene_manager::set_args(unsigned kernel_index=0)
     info->scene_dims   = *((cl_int4*)scene_dims_);      // number of blocks in each dimension
     // was: info->scene_dims   = (cl_int4) { scene_dims_[0], scene_dims_[1],scene_dims_[2],scene_dims_[3] };
     info->block_len    = block_dims_[0];    // size of each block (can only be 1 number now that we've established blocks are cubes)
-    info->epsilon      = (info->block_len)/100.0;
+    info->epsilon      = 1.0/100.0;
 
     //tree meta information
     info->root_level   = root_level_;                // root_level of trees
