@@ -26,8 +26,8 @@ void vimt3d_save_transform(vil3d_image_resource_sptr &ir,
                            const vimt3d_transform_3d& trans, 
                            bool use_millimetres /*=false*/)
 {
-  if (dynamic_cast<vimt3d_vil3d_v3i_image *>(ir.ptr()) )//|| 
-   // dynamic_cast<vimt3d_vil3d_v3m_image *>(ir.ptr()) )
+  if (dynamic_cast<vimt3d_vil3d_v3i_image *>(ir.ptr()) || 
+    dynamic_cast<vimt3d_vil3d_v3m_image *>(ir.ptr()) )
   {
     vgl_vector_3d<double> vox_per_mm = trans.delta(vgl_point_3d<double>(0,0,0), 
                                                    vgl_vector_3d<double>(1.0, 1.0, 1.0));
