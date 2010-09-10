@@ -4,19 +4,18 @@
 
 __kernel
 void
-ray_trace_bit_scene_opt(__constant   RenderSceneInfo    * linfo,
-                        //__local    RenderSceneInfo    * linfo,
-                        __global   ushort2            * block_ptrs,
-                        __global   uchar16            * tree_array,
-                        __global   float              * alpha_array,
-                        __global   uchar8             * mixture_array,
-                        __global   float16            * local_copy_cam, // camera orign and SVD of inverse of camera matrix
-                        __global   uint4              * local_copy_imgdims,   // dimensions of the image
-                        __local    uchar              * local_tree,
-                        __global   float              * in_image,
-                        __global   uint               * gl_image, 
-                        __local    int                * imIndex,
-                        __local    float              * tfar,
+ray_trace_bit_scene_opt(__constant  RenderSceneInfo    * linfo,
+                        __global    ushort2            * block_ptrs,
+                        __global    uchar16            * tree_array,
+                        __global    float              * alpha_array,
+                        __global    uchar8             * mixture_array,
+                        __global    float16            * camera, // camera orign and SVD of inverse of camera matrix
+                        __global    uint4              * imgdims,   // dimensions of the image
+                        __local     uchar              * local_tree,
+                        __global    float              * in_image,
+                        __global    uint               * gl_image, 
+                        __local     int                * imIndex,
+                        __local     float              * tfar,
                         //__global   float4             * output,
                         __constant uchar              * bit_lookup)    // input image and store vis_inf and pre_inf
 {
@@ -30,22 +29,9 @@ ray_trace_bit_scene_opt(__constant   RenderSceneInfo    * linfo,
   int i=0,j=0;  map_work_space_2d(&i,&j);
   imIndex[llid] = j*get_global_size(0)+i;     //locally store the final index to save a register
 
-  //only copy in camera once to local memory (sync threads)
-  if (llid == 0 ) {
-    //local_copy_cam[0] = persp_cam[0];  // conjugate transpose of U
-    //local_copy_cam[1] = persp_cam[1];  // V
-    //local_copy_cam[2] = persp_cam[2];  // Winv(first4) and ray_origin(last four)
-    //(*local_copy_imgdims) = (*imgdims);
-    
-    //load scene information into local vars
-    //(*linfo) = (*info);
-    //linfo->dims.w = 1;  //for safety purposes
-  }
-  barrier(CLK_LOCAL_MEM_FENCE);
-  
   // check to see if the thread corresponds to an actual pixel as in some 
   // cases #of threads will be more than the pixels.
-  if (i>=(*local_copy_imgdims).z || j>=(*local_copy_imgdims).w) {
+  if (i>=(*imgdims).z || j>=(*imgdims).w) {
     gl_image[imIndex[llid]] = rgbaFloatToInt((float4)(0.0,0.0,0.0,0.0));
     in_image[imIndex[llid]] = (float)-1.0f;
     return;
@@ -56,12 +42,10 @@ ray_trace_bit_scene_opt(__constant   RenderSceneInfo    * linfo,
   // BEGIN RAY TRACE
   //----------------------------------------------------------------------------
   // ray origin, ray direction, inverse ray direction (make sure ray direction is never axis aligned)
-  float4 ray_o = (float4) local_copy_cam[2].s4567; ray_o.w = 1.0f;
-  float4 ray_d = backproject(i, j, local_copy_cam[0],
-                                   local_copy_cam[1],
-                                   local_copy_cam[2], 
-                                   ray_o);
+  float4 ray_o = (float4) camera[2].s4567; ray_o.w = 1.0f;
+  float4 ray_d = backproject(i, j, camera[0], camera[1], camera[2], ray_o);
   ray_o = ray_o - linfo->origin; ray_o.w = 1.0f; //translate ray o to zero out scene origin
+  ray_o = ray_o/linfo->block_len; ray_o.w = 1.0f;
 
   //thresh ray direction components - too small a treshhold causes axis aligned 
   //viewpoints to hang in infinite loop (block loop)
@@ -83,13 +67,13 @@ ray_trace_bit_scene_opt(__constant   RenderSceneInfo    * linfo,
 
   //determine the minimum face:
   //get parameters tnear and tfar for the scene
-  float max_facex = (ray_dx > 0.0) ? (linfo->block_len*linfo->dims.x) : 0.0;
-  float max_facey = (ray_dy > 0.0) ? (linfo->block_len*linfo->dims.y) : 0.0;
-  float max_facez = (ray_dz > 0.0) ? (linfo->block_len*linfo->dims.z) : 0.0;
+  float max_facex = (ray_dx > 0.0) ? (linfo->dims.x) : 0.0;
+  float max_facey = (ray_dy > 0.0) ? (linfo->dims.y) : 0.0;
+  float max_facez = (ray_dz > 0.0) ? (linfo->dims.z) : 0.0;
   tfar[llid] = min(min( (max_facex-ray_ox)*(1.0/ray_dx), (max_facey-ray_oy)*(1.0/ray_dy)), (max_facez-ray_oz)*(1.0/ray_dz));
-  float min_facex = (ray_dx < 0.0) ? (linfo->block_len*linfo->dims.x) : 0.0;
-  float min_facey = (ray_dy < 0.0) ? (linfo->block_len*linfo->dims.y) : 0.0;
-  float min_facez = (ray_dz < 0.0) ? (linfo->block_len*linfo->dims.z) : 0.0;
+  float min_facex = (ray_dx < 0.0) ? (linfo->dims.x) : 0.0;
+  float min_facey = (ray_dy < 0.0) ? (linfo->dims.y) : 0.0;
+  float min_facez = (ray_dz < 0.0) ? (linfo->dims.z) : 0.0;
   float tblock = max(max( (min_facex-ray_ox)*(1.0/ray_dx), (min_facey-ray_oy)*(1.0/ray_dy)), (min_facez-ray_oz)*(1.0/ray_dz));
   if (tfar[llid] <= tblock) {
     gl_image[imIndex[llid]] = rgbaFloatToInt((float4)(0.0,0.0,0.0,0.0));
@@ -115,9 +99,9 @@ ray_trace_bit_scene_opt(__constant   RenderSceneInfo    * linfo,
     // of position based on ray_o or local ray o and the current t value
     //-------------------------------------------------------------------------
     //find entry point (adjusted) and the current block index
-    float posx = (ray_ox + (tblock + linfo->epsilon)*ray_dx) / linfo->block_len;
-    float posy = (ray_oy + (tblock + linfo->epsilon)*ray_dy) / linfo->block_len;
-    float posz = (ray_oz + (tblock + linfo->epsilon)*ray_dz) / linfo->block_len;
+    float posx = (ray_ox + (tblock + linfo->epsilon)*ray_dx);
+    float posy = (ray_oy + (tblock + linfo->epsilon)*ray_dy);
+    float posz = (ray_oz + (tblock + linfo->epsilon)*ray_dz);
     
     //curr block index (var later used as cell_min), check to make sure block index isn't 192 or -1
     float cell_minx = floor(posx);
@@ -150,21 +134,24 @@ ray_trace_bit_scene_opt(__constant   RenderSceneInfo    * linfo,
     float lrayz = (posz - cell_minz);
     
     //cell_min now equals block lower left corner. 
-    cell_minx = linfo->block_len * cell_minx;
-    cell_miny = linfo->block_len * cell_miny;
-    cell_minz = linfo->block_len * cell_minz;
+    //cell_minx = linfo->block_len * cell_minx;
+    //cell_miny = linfo->block_len * cell_miny;
+    //cell_minz = linfo->block_len * cell_minz;
     //float cell_len = linfo->block_len;
     
     //get scene level t exit value.  check to make sure that the ray is progressing. 
     //When rays are close to axis aligned, t values found for intersection become ill-defined, causing an infinite block loop
-    cell_minx = (ray_dx > 0) ? cell_minx+linfo->block_len : cell_minx; 
-    cell_miny = (ray_dy > 0) ? cell_miny+linfo->block_len : cell_miny; 
-    cell_minz = (ray_dz > 0) ? cell_minz+linfo->block_len : cell_minz; 
+    //cell_minx = (ray_dx > 0) ? cell_minx+linfo->block_len : cell_minx; 
+    //cell_miny = (ray_dy > 0) ? cell_miny+linfo->block_len : cell_miny; 
+    //cell_minz = (ray_dz > 0) ? cell_minz+linfo->block_len : cell_minz; 
+    cell_minx = (ray_dx > 0) ? cell_minx+1.0 : cell_minx; 
+    cell_miny = (ray_dy > 0) ? cell_miny+1.0 : cell_miny; 
+    cell_minz = (ray_dz > 0) ? cell_minz+1.0 : cell_minz; 
     float texit = min(min( (cell_minx-ray_ox)*(1.0/ray_dx), (cell_miny-ray_oy)*(1.0/ray_dy)), (cell_minz-ray_oz)*(1.0/ray_dz));
     if(texit <= tblock) break; //need this check to make sure the ray is progressing
 
     //ttree starts at 0, ttree_exit is t exit value in the tree level (scaled from scene level)
-    texit = (texit-tblock-2*linfo->epsilon)/linfo->block_len;
+    texit = (texit-tblock-2*linfo->epsilon);
 
     float ttree = 0.0;
     while (ttree < texit)
@@ -194,7 +181,7 @@ ray_trace_bit_scene_opt(__constant   RenderSceneInfo    * linfo,
       data_ptr = block.x * linfo->data_len + data_ptr;
 
       //// distance must be multiplied by the dimension of the bounding box
-      float d = (t1-ttree)*linfo->block_len;
+      float d = (t1-ttree);
       ttree = t1;
 #if 0
       //-----------------------------------------------------------------------
@@ -215,7 +202,7 @@ ray_trace_bit_scene_opt(__constant   RenderSceneInfo    * linfo,
     // finding the next block (using exit point already found before tree loop)
     //--------------------------------------------------------------------------
     //scale texit back up
-    texit = texit*linfo->block_len + tblock + 2*linfo->epsilon;
+    texit = texit + tblock + 2*linfo->epsilon;
     tblock = texit;
   }
 

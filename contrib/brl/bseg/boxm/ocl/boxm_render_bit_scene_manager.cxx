@@ -41,7 +41,7 @@ bool boxm_render_bit_scene_manager::init_ray_trace(boxm_ocl_bit_scene *scene,
       !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
                                     +"/contrib/brl/bseg/boxm/ocl/cl/ray_bundle_library_functions.cl")||
       !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                    +"/contrib/brl/bseg/boxm/ocl/cl/ray_trace_bit_scene_float3.cl")) {
+                                    +"/contrib/brl/bseg/boxm/ocl/cl/render_bit_scene.cl")) {
     vcl_cerr << "Error: boxm_render_bit_scene_manager : failed to load kernel source (helper functions)\n";
     return false;
   }
