@@ -63,6 +63,7 @@ class segv_vil_menus
   SEGV_VIL_DLL_DATA static void beaudet_callback();
   SEGV_VIL_DLL_DATA static void parallel_coverage_callback();
   SEGV_VIL_DLL_DATA static void gradient_mag_angle_callback();
+  SEGV_VIL_DLL_DATA static void fft_callback();
   //JIM METHOD
   SEGV_VIL_DLL_DATA static void project_points_callback();
   //--JIM METHOD

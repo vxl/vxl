@@ -83,7 +83,7 @@ class segv_vil_segmentation_manager : public vgui_wrapper_tableau
   void beaudet();
   void parallel_coverage();
   void gradient_mag_angle();
-
+  void fft();
   // -- segmentation --
 
   void threshold_image();

@@ -60,6 +60,11 @@ void segv_vil_menus::gradient_mag_angle_callback()
   segv_vil_segmentation_manager::instance()->gradient_mag_angle();
 }
 
+void segv_vil_menus::fft_callback()
+{
+  segv_vil_segmentation_manager::instance()->fft();
+}
+
 void segv_vil_menus::harris_corners_callback()
 {
   segv_vil_segmentation_manager::instance()->harris_corners();
@@ -289,6 +294,7 @@ vgui_menu segv_vil_menus::get_menu()
   menuops.add("Extrema", extrema_callback);
   menuops.add("Rotational Extrema", rot_extrema_callback);
   menuops.add("GradMagAngle", gradient_mag_angle_callback);
+  menuops.add("FFT", fft_callback);
   //Top level menu layout
   menubar.add( "File", menufile);
   menubar.add( "View", menuview);
