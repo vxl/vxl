@@ -25,6 +25,7 @@ ihog_lsqr_cost_func::ihog_lsqr_cost_func( const ihog_image<float>& image1,
   init_xform.params(params);
   from_samples_ = roi_.sample(from_image_);
   use_gradient_ = false;
+  int number_of_residuals = from_samples_.size();
   vnl_least_squares_function::init(params.size(), number_of_residuals);
 }
 
