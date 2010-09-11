@@ -1,7 +1,6 @@
 //Tests bit tree OpenCL traverse, traverse_force and others
 //will run ocl scene comparison as well.
 #include <testlib/testlib_test.h>
-#include <testlib/testlib_root_dir.h>
 #include "open_cl_test_data.h"
 #include <boct/boct_bit_tree.h>
 #include <boct/boct_tree.h>
@@ -254,7 +253,6 @@ static void compare_traverse()
 static void test_bit_tree()
 {
   vcl_cout<<"Testing Bit Tree"<<vcl_endl;
-  vcl_string root_dir = testlib_root_dir();
 
 #if 0 // most tests are commented out for the time being ...
   //load up the manager for testing

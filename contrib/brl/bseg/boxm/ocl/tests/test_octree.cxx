@@ -585,17 +585,13 @@ template <class T>
 void tree_tests(octree_test_driver<T>& test_driver)
 {
   boxm_ray_trace_manager<T>* ray_mgr = boxm_ray_trace_manager<T>::instance();
-  vcl_string root_dir = testlib_root_dir();
+  vcl_string source_dir = testlib_root_dir()+"/contrib/brl/bseg/boxm/ocl/cl/";
   test_driver.set_buffers();
-  if (!ray_mgr->load_kernel_source(root_dir + "/contrib/brl/bseg/boxm/ocl/cl/loc_code_library_functions.cl"))
-    return;
-  if (!ray_mgr->append_process_kernels(root_dir + "/contrib/brl/bseg/boxm/ocl/cl/cell_utils.cl"))
-    return;
-  if (!ray_mgr->append_process_kernels(root_dir + "/contrib/brl/bseg/boxm/ocl/cl/octree_library_functions.cl"))
-    return;
-  if (!ray_mgr->append_process_kernels(root_dir + "/contrib/brl/bseg/boxm/ocl/tests/octree_test_kernels.cl"))
-    return;
-  if (test_driver.build_program()!=SDK_SUCCESS)
+  if (!ray_mgr->load_kernel_source(source_dir + "loc_code_library_functions.cl") ||
+      !ray_mgr->append_process_kernels(source_dir + "cell_utils.cl") ||
+      !ray_mgr->append_process_kernels(source_dir + "octree_library_functions.cl") ||
+      !ray_mgr->append_process_kernels(source_dir + "../tests/octree_test_kernels.cl") ||
+      test_driver.build_program()!=SDK_SUCCESS)
     return;
 
   //START TESTS
@@ -619,7 +615,6 @@ void tree_tests(octree_test_driver<T>& test_driver)
 
 static void test_octree()
 {
-  vcl_string root_dir = testlib_root_dir();
   octree_test_driver<float > test_driver;
 
   boxm_ray_trace_manager<float >* ray_mgr = boxm_ray_trace_manager<float >::instance();

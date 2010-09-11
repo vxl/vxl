@@ -1,5 +1,4 @@
 #include <testlib/testlib_test.h>
-#include <testlib/testlib_root_dir.h>
 
 #include "open_cl_test_data.h"
 #include "online_update_test_manager.h"
@@ -17,7 +16,7 @@
 
 template<unsigned n>
 bool near_eq(vnl_vector_fixed<float, n> v1,
-                    vnl_vector_fixed<float, n> v2, float tol)
+             vnl_vector_fixed<float, n> v2, float tol)
 {
   return (v1-v2).magnitude() <= tol;
 }
@@ -39,7 +38,6 @@ vpgl_camera_double_sptr test_camera()
 
 static void test_update_upto_pass_4()
 {
-  vcl_string root_dir = testlib_root_dir();
   online_update_test_manager<boxm_sample<BOXM_APM_MOG_GREY> >* updt_mgr =
     online_update_test_manager<boxm_sample<BOXM_APM_MOG_GREY> >::instance();
 
@@ -81,7 +79,6 @@ static void test_update_upto_pass_4()
 
 static void test_update_upto_pass_5()
 {
-  vcl_string root_dir = testlib_root_dir();
   online_update_test_manager<boxm_sample<BOXM_APM_MOG_GREY> >* updt_mgr =
     online_update_test_manager<boxm_sample<BOXM_APM_MOG_GREY> >::instance();
 

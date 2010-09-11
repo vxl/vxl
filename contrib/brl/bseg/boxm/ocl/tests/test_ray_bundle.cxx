@@ -584,22 +584,15 @@ template <class T>
 void ray_bundle_tests(ray_bundle_test_driver<T>& test_driver)
 {
   boxm_ray_trace_manager<T>* ray_mgr = boxm_ray_trace_manager<T>::instance();
-  vcl_string root_dir = testlib_root_dir();
-  if (!ray_mgr->load_kernel_source(root_dir + "/contrib/brl/bseg/boxm/ocl/cl/loc_code_library_functions.cl"))
-    return;
-  if (!ray_mgr->append_process_kernels(root_dir + "/contrib/brl/bseg/boxm/ocl/cl/cell_utils.cl"))
-    return;
-  if (!ray_mgr->append_process_kernels(root_dir + "/contrib/brl/bseg/boxm/ocl/cl/octree_library_functions.cl"))
-    return;
-  if (!ray_mgr->append_process_kernels(root_dir + "/contrib/brl/bseg/boxm/ocl/cl/statistics_library_functions.cl"))
-    return;
-  if (!ray_mgr->append_process_kernels(root_dir + "/contrib/brl/bseg/boxm/ocl/cl/backproject.cl"))
-    return;
-  if (!ray_mgr->append_process_kernels(root_dir + "/contrib/brl/bseg/boxm/ocl/cl/ray_bundle_library_functions.cl"))
-    return;
-  if (!ray_mgr->append_process_kernels(root_dir + "/contrib/brl/bseg/boxm/ocl/tests/ray_bundle_test_kernels.cl"))
-    return;
-  if (test_driver.build_program()!=SDK_SUCCESS)
+  vcl_string source_dir = testlib_root_dir()+"/contrib/brl/bseg/boxm/ocl/cl/";
+  if (!ray_mgr->load_kernel_source(source_dir + "loc_code_library_functions.cl") ||
+      !ray_mgr->append_process_kernels(source_dir + "cell_utils.cl") ||
+      !ray_mgr->append_process_kernels(source_dir + "octree_library_functions.cl") ||
+      !ray_mgr->append_process_kernels(source_dir + "statistics_library_functions.cl") ||
+      !ray_mgr->append_process_kernels(source_dir + "backproject.cl") ||
+      !ray_mgr->append_process_kernels(source_dir + "ray_bundle_library_functions.cl") ||
+      !ray_mgr->append_process_kernels(source_dir + "../tests/ray_bundle_test_kernels.cl") ||
+      test_driver.build_program()!=SDK_SUCCESS)
     return;
 
   //START TESTS
@@ -624,7 +617,6 @@ void ray_bundle_tests(ray_bundle_test_driver<T>& test_driver)
 static void test_ray_bundle()
 {
   bool good = true;
-  vcl_string root_dir = testlib_root_dir();
   ray_bundle_test_driver<float > test_driver;
   boxm_ray_trace_manager<float >* ray_mgr = boxm_ray_trace_manager<float >::instance();
   ray_mgr->set_tree(open_cl_test_data::tree<float>());
@@ -635,7 +627,6 @@ static void test_ray_bundle()
   if (good)ray_bundle_tests(test_driver);
   else { TEST("ray_bundle_test_driver", true, false); }
   ray_mgr->clean_tree_input_buffers();
-
 }
 
 TESTMAIN(test_ray_bundle);

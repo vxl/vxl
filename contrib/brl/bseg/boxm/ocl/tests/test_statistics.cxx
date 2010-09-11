@@ -395,12 +395,10 @@ template <class T>
 void stat_tests(stat_test_driver<T>& test_driver)
 {
   boxm_stat_manager<T>* stat_mgr = boxm_stat_manager<T>::instance();
-  vcl_string root_dir = testlib_root_dir();
-  if (!stat_mgr->load_kernel_source(root_dir + "/contrib/brl/bseg/boxm/ocl/cl/statistics_library_functions.cl"))
-    return;
-  if (!stat_mgr->append_process_kernels(root_dir + "/contrib/brl/bseg/boxm/ocl/tests/stat_test_kernels.cl"))
-    return;
-  if (test_driver.build_program()!=SDK_SUCCESS)
+  vcl_string source_dir = testlib_root_dir()+"/contrib/brl/bseg/boxm/ocl/cl/";
+  if (!stat_mgr->load_kernel_source(source_dir + "statistics_library_functions.cl") ||
+      !stat_mgr->append_process_kernels(source_dir + "../tests/stat_test_kernels.cl") ||
+      test_driver.build_program()!=SDK_SUCCESS)
     return;
 
   //START TESTS
@@ -420,7 +418,6 @@ void stat_tests(stat_test_driver<T>& test_driver)
 static void test_statistics()
 {
   bool good = true;
-  vcl_string root_dir = testlib_root_dir();
   stat_test_driver<float > test_driver;
   good = test_driver.init();
   if (good) stat_tests(test_driver);
