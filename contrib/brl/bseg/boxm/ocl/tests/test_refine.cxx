@@ -25,12 +25,13 @@ bool test_refine_apl()
   vcl_cout<<"Comparing single block of APL scene"<<vcl_endl;
 
   //load apl scene
-  vcl_string cpu_path = "/media/VXL/data/APl/try4/scene_refined/scene.xml";
+  vcl_string source_dir = testlib_root_dir()+"/contrib/brl/bseg/boxm/ocl/tests/";
+  vcl_string cpu_path = source_dir+"scene.xml";
   boxm_ocl_scene cpu_scene(cpu_path);
   vcl_cout<<cpu_scene<<vcl_endl;
   cpu_scene.save();
 
-  vcl_string gpu_path = "/media/VXL/data/APl/try4/small_block_refined/scene.xml";
+  vcl_string gpu_path = source_dir+"small_block_refined_scene.xml";
   boxm_ocl_scene gpu_scene(gpu_path);
 
   //compare data scene printing
@@ -110,7 +111,7 @@ boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > > create_simple_sce
   scene_type scene(lvcs, origin, block_dim, world_dim);
   scene.set_appearance_model(BOXM_APM_MOG_GREY);
 
-  vcl_string scene_dir = vcl_string(VCL_SOURCE_ROOT_DIR)+"/contrib/brl/bseg/boxm/ocl/tests/boxm_scene1";
+  vcl_string scene_dir = "boxm_scene1";
   vcl_string xml_path = scene_dir + "/scene1.xml";
   scene.set_paths(scene_dir, "block");
   vul_file::make_directory(scene_dir);

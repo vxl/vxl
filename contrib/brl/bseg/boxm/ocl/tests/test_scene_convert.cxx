@@ -1,8 +1,6 @@
 #include <testlib/testlib_test.h>
 //:
 // \file
-#include <testlib/testlib_root_dir.h>
-#include <vcl_where_root_dir.h>
 #include <boxm/boxm_scene.h>
 #include <boxm/ocl/boxm_ocl_scene.h>
 #include <boxm/ocl/boxm_ocl_utils.h>
@@ -22,7 +20,7 @@ boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > > create_scene()
   scene_type scene(lvcs, origin, block_dim, world_dim);
   scene.set_appearance_model(BOXM_APM_MOG_GREY);
 
-  vcl_string scene_dir = vcl_string(VCL_SOURCE_ROOT_DIR)+"/contrib/brl/bseg/boxm/ocl/tests/boxm_scene1";
+  vcl_string scene_dir = "boxm_scene1";
   vcl_string xml_path = scene_dir + "/scene1.xml";
   scene.set_paths(scene_dir, "block");
   vul_file::make_directory(scene_dir);
