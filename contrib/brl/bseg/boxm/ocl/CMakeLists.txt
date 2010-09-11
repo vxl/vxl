@@ -26,18 +26,37 @@ IF(OPENCL_FOUND)
       boxm_update_ocl_scene_manager.h boxm_update_ocl_scene_manager.cxx
       boxm_change_detection_ocl_scene_manager.h boxm_change_detection_ocl_scene_manager.cxx
       boxm_ocl_camera_manager.h boxm_ocl_camera_manager.cxx
-      boxm_ocl_bit_scene.h boxm_ocl_bit_scene.cxx 
+      boxm_ocl_bit_scene.h boxm_ocl_bit_scene.cxx
       boxm_render_bit_scene_manager.h boxm_render_bit_scene_manager.cxx
-      boxm_render_probe_manager.h boxm_render_probe_manager.cxx boxm_render_probe_manager_sptr.h 
+      boxm_render_probe_manager.h boxm_render_probe_manager.cxx boxm_render_probe_manager_sptr.h
      )
 
   SET(boxm_ocl_cl_files
-      cl/octree_library_functions.cl
-      cl/ray_trace_main.cl
-      cl/refine_main.cl
+      cl/backproject.cl
+      cl/bit_tree_library_functions.cl
+      cl/cell_utils.cl
+      cl/change_detection_ocl_scene.cl
       cl/expected_functor.cl
+      cl/loc_code_library_functions.cl
+      cl/octree_library_functions.cl
       cl/ray_bundle_library_functions.cl
+      cl/ray_bundle_trace_main.cl
+      cl/ray_trace_all_blocks.cl
+      cl/ray_trace_bit_scene.cl
+      cl/ray_trace_bit_scene_float3.cl
+      cl/ray_trace_bit_scene_opt.cl
+      cl/ray_trace_main.cl
+      cl/ray_trace_ocl_scene.cl
+      cl/refine_blocks.cl
+      cl/refine_blocks_opt.cl
+      cl/refine_main.cl
+      cl/refine_main_opt.cl
+      cl/render_bit_scene.cl
+      cl/rerender.cl
+      cl/scene_info.cl
+      cl/statistics_library_functions.cl
       cl/update_main.cl
+      cl/update_ocl_scene.cl
      )
   AUX_SOURCE_DIRECTORY(Templates boxm_ocl_sources)
   ADD_LIBRARY(boxm_ocl ${boxm_ocl_sources} ${boxm_ocl_cl_files})
