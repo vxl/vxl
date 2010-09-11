@@ -1,7 +1,6 @@
 #ifndef boxm_ocl_test_data_h_
 #define boxm_ocl_test_data_h_
 
-#include <vcl_where_root_dir.h>
 #include <boxm/sample/algo/boxm_mog_grey_processor.h>
 #include <boxm/sample/algo/boxm_simple_grey_processor.h>
 #include <boxm/sample/boxm_sample.h>
@@ -22,13 +21,13 @@ class open_cl_test_data
  public:
   template <class T>
   static boct_tree<short, T >* tree();
-  
+
   template <class T>
   static boct_tree<short, T >* four_tree();
-  
+
   template <class T>
   static boct_tree<short, T >* simple_tree();
-  
+
   template <class T>
   static void save_tree(vcl_string const& tree_path);
 
@@ -94,32 +93,34 @@ boct_tree<short,T > * open_cl_test_data::simple_tree()
   short max_level = 4;
   short init_level = 3;
   T v((float)0.1);
-  boct_tree<short, T >* ret_tree = 
+  boct_tree<short, T >* ret_tree =
     new boct_tree<short, T >(v, max_level, init_level);
-  
+
   vcl_vector<boct_tree_cell<short, T >* > tleaves = ret_tree->leaf_cells();
   vcl_size_t i = 0;
   typename vcl_vector<boct_tree_cell<short, T >* >::iterator lit = tleaves.begin();
   for (; lit!= tleaves.end(); ++lit, ++i)
   {
-    if(i==0 || i==25 || i==40 || i==55) {
+    if (i==0 || i==25 || i==40 || i==55) {
       T v((float)2.0);
       (*lit)->set_data(v);
-    } else {
+    }
+    else {
       T v((float)0.1);
       (*lit)->set_data(v);
     }
   }
-  
+
   const vgl_box_3d<double> box(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
   ret_tree->set_bbox(box);
-  vcl_cout<<"Test Tree Stats ---------------------------------------"<<vcl_endl
-          <<"num levels (max) "<<ret_tree->number_levels()<<vcl_endl
-          <<"root level "<<ret_tree->root_level()<<vcl_endl
-          <<"current finest level "<<ret_tree->finest_level()<<vcl_endl
+  vcl_cout<<"Test Tree Stats ---------------------------------------\n"
+          <<"num levels (max) "<<ret_tree->number_levels()<<'\n'
+          <<"root level "<<ret_tree->root_level()<<'\n'
+          <<"current finest level "<<ret_tree->finest_level()<<'\n'
           <<"-------------------------------------------------------"<<vcl_endl;
   return ret_tree;
 }
+
 template <class T>
 boct_tree<short,T > * open_cl_test_data::four_tree()
 {
@@ -158,7 +159,6 @@ boct_tree<short,T > * open_cl_test_data::four_tree()
   ret_tree->set_bbox(box);
   return ret_tree;
 }
-
 
 
 template <class T>

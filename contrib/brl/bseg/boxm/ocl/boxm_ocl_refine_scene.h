@@ -11,7 +11,6 @@
 #include <bocl/bocl_cl.h>
 #include <boxm/ocl/boxm_refine_manager.h>
 
-#include <vcl_where_root_dir.h>
 #include <vcl_iostream.h>
 
 //includes for comparison to cpu
