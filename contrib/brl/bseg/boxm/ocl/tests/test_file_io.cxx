@@ -1,5 +1,4 @@
 #include <testlib/testlib_test.h>
-#include <testlib/testlib_root_dir.h>
 
 #include "open_cl_test_data.h"
 #include <boct/boct_tree.h>
@@ -52,8 +51,8 @@ static void test_tree_read_write()
         for (unsigned k = 0; k<16; ++k)
             cell_data[i+k]=data_array[j][k];
 
-    vcl_string  treefile="./treefile.bin";
-    vcl_string  treedatafile="./datafile.bin";
+    vcl_string  treefile="treefile.bin";
+    vcl_string  treedatafile="datafile.bin";
 
     boxm_ocl_utils::writetree(treefile,cells,cells_size);
     boxm_ocl_utils::writetreedata(treedatafile,cell_data,cell_data_size);
