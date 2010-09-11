@@ -90,7 +90,7 @@ bool boxm_refine_manager<T>::init_kernel()
 {
   //load kernel source main
   if (!this->load_kernel_source(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                    +"/contrib/brl/bseg/boxm/ocl/refine_main.cl")) {
+                                    +"/contrib/brl/bseg/boxm/ocl/cl/refine_main.cl")) {
     vcl_cerr << "Error: boxm_refine_manager : failed to load kernel source (main function)\n";
     return false;
   }

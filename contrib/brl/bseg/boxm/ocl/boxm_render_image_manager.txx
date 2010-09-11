@@ -29,17 +29,17 @@ bool boxm_render_image_manager<T>::init_ray_trace(boxm_scene<boct_tree<short,T >
 
   // Code for Pass_0
   if (!this->load_kernel_source(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                +"/contrib/brl/bseg/boxm/ocl/octree_library_functions.cl") ||
+                                +"/contrib/brl/bseg/boxm/ocl/cl/octree_library_functions.cl") ||
       !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                    +"/contrib/brl/bseg/boxm/ocl/backproject.cl")||
+                                    +"/contrib/brl/bseg/boxm/ocl/cl/backproject.cl")||
       !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                    +"/contrib/brl/bseg/boxm/ocl/expected_functor.cl")||
+                                    +"/contrib/brl/bseg/boxm/ocl/cl/expected_functor.cl")||
       !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                    +"/contrib/brl/bseg/boxm/ocl/statistics_library_functions.cl")||
+                                    +"/contrib/brl/bseg/boxm/ocl/cl/statistics_library_functions.cl")||
       !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                    +"/contrib/brl/bseg/boxm/ocl/ray_bundle_library_functions.cl")||
+                                    +"/contrib/brl/bseg/boxm/ocl/cl/ray_bundle_library_functions.cl")||
       !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                    +"/contrib/brl/bseg/boxm/ocl/ray_trace_all_blocks.cl")) {
+                                    +"/contrib/brl/bseg/boxm/ocl/cl/ray_trace_all_blocks.cl")) {
     vcl_cerr << "Error: boxm_ray_trace_manager : failed to load kernel source (helper functions)\n";
     return false;
   }
@@ -255,7 +255,7 @@ bool boxm_render_image_manager<T>::run_scene()
 
   this->release_kernel();
   vcl_cout << "Timing Analysis\n"
-           << "===============" << vcl_endl
+           << "===============\n"
 #ifdef DEBUG
            <<"openCL Running time "<<gpu_time_<<" ms\n"
            << "Running block "<<total_gpu_time/1000<<"s\n"

@@ -90,10 +90,10 @@ bool boxm_refine_scene_manager::setup_scene_data()
   vbl_array_2d<float16>::iterator data_iter;
   int datIndex = 0;
   for (data_iter=scene_->data_buffers_.begin(); data_iter!=scene_->data_buffers_.end(); data_iter++) {
-    if(datIndex == 6614*16) {
+    if (datIndex == 6614*16) {
       vcl_cout<<"data item 6614 = "<<(*data_iter)<<vcl_endl;
     }
-    for(int j=0; j<16; j++) {
+    for (int j=0; j<16; j++) {
       data_cells_[datIndex++]=(*data_iter)[j];
     }
   }
@@ -110,10 +110,10 @@ bool boxm_refine_scene_manager::setup_scene_data()
 
   //scene_dims_   = (cl_int*)   boxm_ocl_utils::alloc_aligned(1, sizeof(cl_int4), 16);
   //scene_origin_ = (cl_float*) boxm_ocl_utils::alloc_aligned(1, sizeof(cl_int4), 16);
-  
+
   //output buffer
   output_       = (cl_float*) boxm_ocl_utils::alloc_aligned(10, sizeof(cl_float), 16);
-  for(int i=0; i<10; i++)
+  for (int i=0; i<10; i++)
     output_[i] = 0;
   return true;
 }
@@ -299,9 +299,9 @@ bool boxm_refine_scene_manager::run_refine()
   gpu_time = (tend-tstart)/1e9f;  //gpu time in seconds
 
   //opencl output_
-  vcl_cout<<"---OPENCL KERNEL OUTPUT: ";
-  for(int i=0; i<10; i++) 
-    vcl_cout<<output_[i]<<",";
+  vcl_cout<<"---OPENCL KERNEL OUTPUT: " << output_[0];
+  for (int i=1; i<10; ++i)
+    vcl_cout<<','<<output_[i];
   vcl_cout<<vcl_endl;
 
 
@@ -351,7 +351,7 @@ bool boxm_refine_scene_manager::read_buffers()
                                0, NULL, &events[eventI++]);
   if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (block_ptrs_results_)failed."))
     return false;
-    
+
   //read mem_ptrs_
   status = clEnqueueReadBuffer(command_queue_, mem_ptrs_buf_, CL_TRUE,
                                0, numbuffer_*sizeof(cl_int2),
@@ -487,7 +487,7 @@ bool boxm_refine_scene_manager::init_kernel()
 {
   //load kernel source main
   if (!this->load_kernel_source(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                    +"/contrib/brl/bseg/boxm/ocl/refine_blocks.cl")) {
+                                    +"/contrib/brl/bseg/boxm/ocl/cl/refine_blocks.cl")) {
     vcl_cerr << "Error: boxm_refine_manager : failed to load kernel source (main function)\n";
     return false;
   }
