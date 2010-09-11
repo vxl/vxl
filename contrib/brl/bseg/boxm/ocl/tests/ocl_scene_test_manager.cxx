@@ -3,7 +3,7 @@
 //:
 // \file
 #include "ocl_scene_test_manager.h"
-#include <vcl_where_root_dir.h>
+#include <testlib/testlib_root_dir.h>
 #include <boxm/ocl/boxm_ocl_utils.h>
 #include <bocl/bocl_utils.h>
 #include <vcl_cstdio.h>
@@ -37,11 +37,11 @@ bool ocl_scene_test_manager::init_manager()
 //: Builds the test program from the two cl files
 bool ocl_scene_test_manager::build_test_program()
 {
-  vcl_string root = vcl_string(VCL_SOURCE_ROOT_DIR);
-  bool locc = this->load_kernel_source(root + "/contrib/brl/bseg/boxm/ocl/cl/loc_code_library_functions.cl");
-  bool cell = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/cell_utils.cl");
-  bool bitr = this->load_kernel_source(root + "/contrib/brl/bseg/boxm/ocl/cl/octree_library_functions.cl");
-  bool test = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/tests/ocl_scene_test_kernels.cl");
+  vcl_string source_dir = testlib_root_dir()+"/contrib/brl/bseg/boxm/ocl/cl/";
+  bool locc = this->load_kernel_source(source_dir+"loc_code_library_functions.cl");
+  bool cell = this->append_process_kernels(source_dir+"cell_utils.cl");
+  bool bitr = this->load_kernel_source(source_dir+"octree_library_functions.cl");
+  bool test = this->append_process_kernels(source_dir+"../tests/ocl_scene_test_kernels.cl");
 
   if (!bitr || !test || !locc || !cell) {
     vcl_cerr << "Error: ocl_scene_test_manager : failed to load kernel source (helper functions)\n";

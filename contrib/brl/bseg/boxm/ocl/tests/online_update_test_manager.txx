@@ -3,7 +3,7 @@
 //:
 // \file
 #include "online_update_test_manager.h"
-#include <vcl_where_root_dir.h>
+#include <testlib/testlib_root_dir.h>
 #include <boxm/ocl/boxm_ocl_utils.h>
 #include <bocl/bocl_utils.h>
 #include <vcl_cstdio.h>
@@ -50,14 +50,14 @@ template<class T>
 bool online_update_test_manager<T>::
 build_program(vcl_string const& functor, bool use_cell_data)
 {
-  vcl_string root = vcl_string(VCL_SOURCE_ROOT_DIR);
-  bool locc = this->load_kernel_source(root + "/contrib/brl/bseg/boxm/ocl/cl/loc_code_library_functions.cl");
-  bool cell = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/cell_utils.cl");
-  bool octr = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/octree_library_functions.cl");
-  bool bpr  = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/backproject.cl");
-  bool stat = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/statistics_library_functions.cl");
-  bool rbun = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/ray_bundle_library_functions.cl");
-  bool main = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/update_main.cl");
+  vcl_string source_dir = testlib_root_dir()+"/contrib/brl/bseg/boxm/ocl/cl/";
+  bool locc = this->load_kernel_source(source_dir+"loc_code_library_functions.cl");
+  bool cell = this->append_process_kernels(source_dir+"cell_utils.cl");
+  bool octr = this->append_process_kernels(source_dir+"octree_library_functions.cl");
+  bool bpr  = this->append_process_kernels(source_dir+"backproject.cl");
+  bool stat = this->append_process_kernels(source_dir+"statistics_library_functions.cl");
+  bool rbun = this->append_process_kernels(source_dir+"ray_bundle_library_functions.cl");
+  bool main = this->append_process_kernels(source_dir+"update_main.cl");
 
   if (!octr||!bpr||!stat||!rbun||!main||!locc||!cell) {
     vcl_cerr << "Error: boxm_ray_trace_manager : failed to load kernel source (helper functions)\n";

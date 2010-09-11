@@ -3,7 +3,7 @@
 //:
 // \file
 #include "bit_tree_test_manager.h"
-#include <vcl_where_root_dir.h>
+#include <testlib/testlib_root_dir.h>
 #include <boxm/ocl/boxm_ocl_utils.h>
 #include <bocl/bocl_utils.h>
 #include <vcl_cstdio.h>
@@ -13,7 +13,7 @@
 
 
 bool bit_tree_test_manager::init_arrays()
-{  
+{
   //set up buffers
   bit_tree_ = (cl_uchar*) boxm_ocl_utils::alloc_aligned(16,sizeof(cl_uchar),16);
   output_   = (cl_int*)   boxm_ocl_utils::alloc_aligned(16,sizeof(cl_float4),16);
@@ -40,14 +40,14 @@ bool bit_tree_test_manager::init_arrays()
 
 //: init manager - initializes all opencl stuff (command queue, program, kernels... )
 bool bit_tree_test_manager::init_manager()
-{  
-  //create command queue 
+{
+  //create command queue
   bool good = this->create_command_queue();
   //build program from source
   good = this->build_test_program();
   //create and set kernels using program
   good = good && this->set_test_kernels();
-  //prepare cl_mem buffers 
+  //prepare cl_mem buffers
   good = good && this->set_buffers();
   return good;
 }
@@ -55,11 +55,11 @@ bool bit_tree_test_manager::init_manager()
 //: Builds the test program from the two cl files
 bool bit_tree_test_manager::build_test_program()
 {
-  vcl_string root = vcl_string(VCL_SOURCE_ROOT_DIR);
-  bool locc = this->load_kernel_source(root + "/contrib/brl/bseg/boxm/ocl/cl/loc_code_library_functions.cl");
-  bool cell = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/cell_utils.cl");
-  bool bitr = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/bit_tree_library_functions.cl");
-  bool test = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/tests/bit_tree_test_kernels.cl");
+  vcl_string source_dir = testlib_root_dir()+"/contrib/brl/bseg/boxm/ocl/cl/";
+  bool locc = this->load_kernel_source(source_dir+"loc_code_library_functions.cl");
+  bool cell = this->append_process_kernels(source_dir+"cell_utils.cl");
+  bool bitr = this->append_process_kernels(source_dir+"bit_tree_library_functions.cl");
+  bool test = this->append_process_kernels(source_dir+"../tests/bit_tree_test_kernels.cl");
 
   if (!bitr || !test || !locc || !cell) {
     vcl_cerr << "Error: bit_tree_test_manager : failed to load kernel source (helper functions)\n";
@@ -83,19 +83,19 @@ bool bit_tree_test_manager::set_test_kernels()
   if (this->check_val(status,CL_SUCCESS,error_to_string(status))!=CHECK_SUCCESS)
     return false;
   kernels_.push_back(kernel);
-  
+
   //test_bit_at
   kernel = clCreateKernel(program_,"test_bit_at",&status);
   if (this->check_val(status,CL_SUCCESS,error_to_string(status))!=CHECK_SUCCESS)
     return false;
   kernels_.push_back(kernel);
-  
+
   //test traverse
   kernel = clCreateKernel(program_,"test_traverse",&status);
   if (this->check_val(status,CL_SUCCESS,error_to_string(status))!=CHECK_SUCCESS)
     return false;
   kernels_.push_back(kernel);
-  
+
   // test_traverse_force
   kernel = clCreateKernel(program_, "test_traverse_force", &status);
   if (this->check_val(status,CL_SUCCESS,error_to_string(status))!=CHECK_SUCCESS)
@@ -127,7 +127,7 @@ bool bit_tree_test_manager::set_kernel_args(unsigned pass)
                           sizeof(cl_mem), (void *) &bit_tree_buf_);
   if (this->check_val(status, CL_SUCCESS, "clSetKernelArg failed. (cell_data_buf_)")!=CHECK_SUCCESS)
     return false;
- 
+
   status = clSetKernelArg(kernels_[pass], i++,
                           sizeof(cl_mem), (void *) &output_buf_);
   if (this->check_val(status, CL_SUCCESS, "clSetKernelArg failed. (data array )")!=CHECK_SUCCESS)
@@ -153,19 +153,19 @@ bool bit_tree_test_manager::set_kernel_args(unsigned pass)
 bool bit_tree_test_manager::set_buffers()
 {
   cl_int status = 0;
-  
+
   //bit tree buffer
   bit_tree_buf_ = clCreateBuffer(this->context_,CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
                                  sizeof(cl_uchar16),bit_tree_,&status);
   if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (bit_tree_buf) failed."))
     return false;
-  
+
   //bit lookup buffer
-  bit_lookup_buf_ = clCreateBuffer(this->context_, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,  
+  bit_lookup_buf_ = clCreateBuffer(this->context_, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                    256*sizeof(cl_uchar),bit_lookup_,&status);
   if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (bit_lookup) failed."))
     return false;
-    
+
   //output_buf_
   output_buf_ = clCreateBuffer(this->context_,CL_MEM_READ_WRITE,
                                16*sizeof(cl_int4), NULL , &status);
@@ -284,7 +284,6 @@ cl_int* bit_tree_test_manager::get_output()
  *******************************************/
 int bit_tree_test_manager::build_kernel_program(cl_program & program)
 {
-
   cl_int status = CL_SUCCESS;
   vcl_size_t sourceSize[] = { this->prog_.size() };
   if (!sourceSize[0]) return SDK_FAILURE;
