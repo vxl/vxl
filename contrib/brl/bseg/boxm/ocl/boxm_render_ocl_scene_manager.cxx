@@ -24,24 +24,16 @@ bool boxm_render_ocl_scene_manager::init_ray_trace(boxm_ocl_scene *scene,
   output_img_=obs;
 
   // Code for Pass_0
-  if (!this->load_kernel_source(vcl_string(VCL_SOURCE_ROOT_DIR) 
-                                + "/contrib/brl/bseg/boxm/ocl/cl/loc_code_library_functions.cl") ||
-      !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                + "/contrib/brl/bseg/boxm/ocl/cl/cell_utils.cl") ||
-      !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                +"/contrib/brl/bseg/boxm/ocl/cl/octree_library_functions.cl") ||
-      !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                    +"/contrib/brl/bseg/boxm/ocl/cl/backproject.cl")||
-      !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                    +"/contrib/brl/bseg/boxm/ocl/cl/statistics_library_functions.cl")||
-      !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                    +"/contrib/brl/bseg/boxm/ocl/cl/expected_functor.cl")||
-      !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                    +"/contrib/brl/bseg/boxm/ocl/cl/ray_bundle_library_functions.cl")||
-      !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                    +"/contrib/brl/bseg/boxm/ocl/cl/rerender.cl")||
-      !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                    +"/contrib/brl/bseg/boxm/ocl/cl/ray_trace_ocl_scene.cl")) {
+  vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm/ocl/cl/";
+  if (!this->load_kernel_source(source_dir+"loc_code_library_functions.cl") ||
+      !this->append_process_kernels(source_dir+"cell_utils.cl") ||
+      !this->append_process_kernels(source_dir+"octree_library_functions.cl") ||
+      !this->append_process_kernels(source_dir+"backproject.cl")||
+      !this->append_process_kernels(source_dir+"statistics_library_functions.cl")||
+      !this->append_process_kernels(source_dir+"expected_functor.cl")||
+      !this->append_process_kernels(source_dir+"ray_bundle_library_functions.cl")||
+      !this->append_process_kernels(source_dir+"rerender.cl")||
+      !this->append_process_kernels(source_dir+"ray_trace_ocl_scene.cl")) {
     vcl_cerr << "Error: boxm_ray_trace_manager : failed to load kernel source (helper functions)\n";
     return false;
   }
@@ -394,6 +386,7 @@ bool boxm_render_ocl_scene_manager::release_gl_buffer()
   status = clReleaseMemObject(image_gl_buf_);
   return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (gl_buffer).")==1;
 }
+
 bool boxm_render_ocl_scene_manager::run_scene()
 {
   bool good=true;
@@ -406,7 +399,7 @@ bool boxm_render_ocl_scene_manager::run_scene()
   good=good && set_input_view()
             && set_input_view_buffers();
   this->set_kernel();
-  this->set_gl_buffer(); 
+  this->set_gl_buffer();
   this->set_args();
   this->set_commandqueue();
   this->set_workspace();
@@ -422,7 +415,7 @@ bool boxm_render_ocl_scene_manager::run_scene()
             && release_scene_data_buffers()
             && release_gl_buffer()
             && clean_scene_data();
-  
+
 
   // release the command Queue
   this->release_kernel();
@@ -650,10 +643,10 @@ int boxm_render_ocl_scene_manager::build_kernel_program(cl_program & program, bo
     options+="-D INTENSITY";
 
 #if 0
-  if(vcl_strstr(this->platform_name,"ATI"))
-       options+="-D ATI";
-  if(vcl_strstr(this->platform_name,"NVIDIA"))
-       options+="-D NVIDIA";
+  if (vcl_strstr(this->platform_name,"ATI"))
+    options+="-D ATI";
+  if (vcl_strstr(this->platform_name,"NVIDIA"))
+    options+="-D NVIDIA";
 #endif
 
   program = clCreateProgramWithSource(this->context_,
@@ -690,8 +683,7 @@ int boxm_render_ocl_scene_manager::build_kernel_program(cl_program & program, bo
 
 bool boxm_render_ocl_scene_manager::set_external_image_cam_buffers(
                                       vil_image_view<obs_type> &external_image,
-                                      vpgl_perspective_camera<double> * external_cam
-                                     )
+                                      vpgl_perspective_camera<double> * external_cam)
 {
     if (external_image.ni()>output_img_.ni() || external_image.nj()>output_img_.nj())
         return false;
@@ -1151,7 +1143,7 @@ bool boxm_render_ocl_scene_manager::set_tree_buffers()
           <<"TOTAL: "<<MB<<"MB"<<vcl_endl;
   /************************************/
 
- return true;
+  return true;
 }
 
 

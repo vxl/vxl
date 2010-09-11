@@ -21,22 +21,15 @@ bool boxm_render_probe_manager::init_ray_trace(boxm_ocl_scene *scene,
   j_=(int)j;
 
   // Code for Pass_0
-  if (!this->load_kernel_source(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                + "/contrib/brl/bseg/boxm/ocl/cl/loc_code_library_functions.cl") ||
-      !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                    + "/contrib/brl/bseg/boxm/ocl/cl/cell_utils.cl") ||
-      !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                    +"/contrib/brl/bseg/boxm/ocl/cl/octree_library_functions.cl") ||
-      !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                    +"/contrib/brl/bseg/boxm/ocl/cl/backproject.cl")||
-      !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                    +"/contrib/brl/bseg/boxm/ocl/cl/statistics_library_functions.cl")||
-      !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                    +"/contrib/brl/bseg/boxm/ocl/cl/expected_functor.cl")||
-      !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                    +"/contrib/brl/bseg/boxm/ocl/cl/ray_bundle_library_functions.cl")||
-      !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                    +"/contrib/brl/bseg/boxm/ocl/cl/ray_trace_ocl_scene.cl")) {
+  vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm/ocl/cl/";
+  if (!this->load_kernel_source(source_dir+"loc_code_library_functions.cl") ||
+      !this->append_process_kernels(source_dir+"cell_utils.cl") ||
+      !this->append_process_kernels(source_dir+"octree_library_functions.cl") ||
+      !this->append_process_kernels(source_dir+"backproject.cl")||
+      !this->append_process_kernels(source_dir+"statistics_library_functions.cl")||
+      !this->append_process_kernels(source_dir+"expected_functor.cl")||
+      !this->append_process_kernels(source_dir+"ray_bundle_library_functions.cl")||
+      !this->append_process_kernels(source_dir+"ray_trace_ocl_scene.cl")) {
     vcl_cerr << "Error: boxm_ray_trace_manager : failed to load kernel source (helper functions)\n";
     return false;
   }

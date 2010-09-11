@@ -24,24 +24,16 @@ bool boxm_render_bit_scene_manager::init_ray_trace(boxm_ocl_bit_scene *scene,
   output_img_=obs;
 
   // Code for Pass_0
-  if (!this->load_kernel_source(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                    + "/contrib/brl/bseg/boxm/ocl/cl/scene_info.cl") ||
-      //!this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-      //                              + "/contrib/brl/bseg/boxm/ocl/cl/float3.cl") ||
-      !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                    + "/contrib/brl/bseg/boxm/ocl/cl/cell_utils.cl") ||
-      !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                    +"/contrib/brl/bseg/boxm/ocl/cl/bit_tree_library_functions.cl") ||
-      !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                    +"/contrib/brl/bseg/boxm/ocl/cl/backproject.cl")||
-      !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                    +"/contrib/brl/bseg/boxm/ocl/cl/statistics_library_functions.cl")||
-      !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                    +"/contrib/brl/bseg/boxm/ocl/cl/expected_functor.cl")||
-      !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                    +"/contrib/brl/bseg/boxm/ocl/cl/ray_bundle_library_functions.cl")||
-      !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                    +"/contrib/brl/bseg/boxm/ocl/cl/render_bit_scene.cl")) {
+  vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm/ocl/cl/";
+  if (!this->load_kernel_source(source_dir+"scene_info.cl") ||
+      //!this->append_process_kernels(source_dir+"float3.cl") ||
+      !this->append_process_kernels(source_dir+"cell_utils.cl") ||
+      !this->append_process_kernels(source_dir+"bit_tree_library_functions.cl") ||
+      !this->append_process_kernels(source_dir+"backproject.cl")||
+      !this->append_process_kernels(source_dir+"statistics_library_functions.cl")||
+      !this->append_process_kernels(source_dir+"expected_functor.cl")||
+      !this->append_process_kernels(source_dir+"ray_bundle_library_functions.cl")||
+      !this->append_process_kernels(source_dir+"render_bit_scene.cl")) {
     vcl_cerr << "Error: boxm_render_bit_scene_manager : failed to load kernel source (helper functions)\n";
     return false;
   }
@@ -146,13 +138,13 @@ bool boxm_render_bit_scene_manager::set_args(unsigned kernel_index=0)
     int i=0;
     status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem), (void *)&scene_info_buf_);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (render scene info)"))
-      return 0;    
-      
+      return 0;
+
     //local copy of the scene info
     //status = clSetKernelArg(kernels_[0],i++,sizeof(RenderSceneInfo),0);
     //if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local scene info)"))
       //return 0;
-    
+
     //block pointers
     status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&block_ptrs_buf_);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (block_ptrs_buf_)"))
@@ -202,12 +194,12 @@ bool boxm_render_bit_scene_manager::set_args(unsigned kernel_index=0)
     //local local integer for the image
     status = clSetKernelArg(kernels_[0],i++,this->bni_*this->bnj_*sizeof(cl_int),0);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (im_index local)"))
-      return 0; 
+      return 0;
     //local local tfar for the ray
     status = clSetKernelArg(kernels_[0],i++,this->bni_*this->bnj_*sizeof(cl_float),0);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (im_index local)"))
-      return 0; 
-      
+      return 0;
+
     //output buffer
     //status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&output_buf_);
     //if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output)"))
@@ -216,7 +208,6 @@ bool boxm_render_bit_scene_manager::set_args(unsigned kernel_index=0)
     status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&bit_lookup_buf_);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output)"))
       return 0;
-
   }
   else if (kernel_index==1)
   {
@@ -356,17 +347,17 @@ bool boxm_render_bit_scene_manager::start(bool set_gl_buffer)
               && this->set_persp_camera()
               && this->set_input_image();
 
- if (set_gl_buffer)
+  if (set_gl_buffer)
     this->set_gl_buffer();
 
   good = good && this->set_persp_camera_buffers()
               && this->set_input_image_buffers()
               && this->set_image_dims_buffers();
 
-  good= good  && this->set_kernel()
+  good = good && this->set_kernel()
               && this->set_args(0);
 
-   good=good  && this->set_commandqueue()
+  good = good && this->set_commandqueue()
               && this->set_workspace();
 
   return good;
@@ -668,11 +659,7 @@ bool boxm_render_bit_scene_manager::clean_update()
   return true;
 }
 
-/*******************************************
- * build_kernel_program - builds kernel program
- * from source (a vcl string)
- *******************************************/
-
+//: builds kernel program from source (a vcl_string)
 int boxm_render_bit_scene_manager::build_kernel_program(cl_program & program, bool render_depth)
 {
   cl_int status = CL_SUCCESS;
@@ -698,7 +685,7 @@ int boxm_render_bit_scene_manager::build_kernel_program(cl_program & program, bo
     options+="-D ATI ";
   if (vcl_strstr(this->platform_name,"NVIDIA"))
     options+="-D NVIDIA ";
-    
+
   //options += " -cl-opt-disable";
   //options += " -cl-nv-maxrregcount=34 ";
   options += " -cl-fast-relaxed-math ";
@@ -1155,7 +1142,7 @@ bool boxm_render_bit_scene_manager::set_tree_buffers()
           <<"TOTAL: "<<MB<<"MB"<<vcl_endl;
   /************************************/
 
- return true;
+  return true;
 }
 
 

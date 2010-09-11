@@ -25,24 +25,16 @@ bool boxm_change_detection_ocl_scene_manager::init_ray_trace(boxm_ocl_scene *sce
   obs_img_ =obs;
   output_img_=cd;
 
-
   // Code for Pass_0
-  if (!this->load_kernel_source(vcl_string(VCL_SOURCE_ROOT_DIR) 
-                                + "/contrib/brl/bseg/boxm/ocl/cl/loc_code_library_functions.cl") ||
-      !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                + "/contrib/brl/bseg/boxm/ocl/cl/cell_utils.cl") ||
-      !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                +"/contrib/brl/bseg/boxm/ocl/cl/octree_library_functions.cl") ||
-      !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                    +"/contrib/brl/bseg/boxm/ocl/cl/backproject.cl")||
-      !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                    +"/contrib/brl/bseg/boxm/ocl/cl/statistics_library_functions.cl")||
-      !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                    +"/contrib/brl/bseg/boxm/ocl/cl/expected_functor.cl")||
-      !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                    +"/contrib/brl/bseg/boxm/ocl/cl/ray_bundle_library_functions.cl")||
-      !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                    +"/contrib/brl/bseg/boxm/ocl/cl/change_detection_ocl_scene.cl")) {
+  vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm/ocl/cl/";
+  if (!this->load_kernel_source(source_dir+"loc_code_library_functions.cl") ||
+      !this->append_process_kernels(source_dir+"cell_utils.cl") ||
+      !this->append_process_kernels(source_dir+"octree_library_functions.cl") ||
+      !this->append_process_kernels(source_dir+"backproject.cl")||
+      !this->append_process_kernels(source_dir+"statistics_library_functions.cl")||
+      !this->append_process_kernels(source_dir+"expected_functor.cl")||
+      !this->append_process_kernels(source_dir+"ray_bundle_library_functions.cl")||
+      !this->append_process_kernels(source_dir+"change_detection_ocl_scene.cl")) {
     vcl_cerr << "Error: boxm_ray_trace_manager : failed to load kernel source (helper functions)\n";
     return false;
   }
@@ -306,19 +298,20 @@ bool boxm_change_detection_ocl_scene_manager:: read_output_image()
   status = clReleaseEvent(events[0]);
   return this->check_val(status,CL_SUCCESS,"clReleaseEvent failed.")==1;
 }
+
 void boxm_change_detection_ocl_scene_manager::save_image(vcl_string img_filename)
 {
-    vil_image_view<float> oimage(output_img_.ni(),output_img_.nj());
+  vil_image_view<float> oimage(output_img_.ni(),output_img_.nj());
 
-    for(unsigned i=0;i<output_img_.ni();i++)
+  for (unsigned i=0;i<output_img_.ni();i++)
+  {
+    for (unsigned j=0;j<output_img_.nj();j++)
     {
-        for(unsigned j=0;j<output_img_.nj();j++)
-        {
-            oimage(i,j)=image_[(j*wni_+i)*4];
-        }
+      oimage(i,j)=image_[(j*wni_+i)*4];
     }
+  }
 
-    vil_save(oimage,img_filename.c_str());
+  vil_save(oimage,img_filename.c_str());
 }
 
 bool boxm_change_detection_ocl_scene_manager:: read_trees()
@@ -441,11 +434,7 @@ bool boxm_change_detection_ocl_scene_manager::clean_update()
   return true;
 }
 
-/*******************************************
- * build_kernel_program - builds kernel program
- * from source (a vcl string)
- *******************************************/
-
+//: builds kernel program from source (a vcl_string)
 int boxm_change_detection_ocl_scene_manager::build_kernel_program(cl_program & program)
 {
   cl_int status = CL_SUCCESS;

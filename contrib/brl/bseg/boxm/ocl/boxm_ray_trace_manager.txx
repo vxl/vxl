@@ -37,14 +37,11 @@ bool boxm_ray_trace_manager<T>::init_raytrace(boxm_scene<boct_tree<short,T > > *
   j0_ = j0;
   useimage_=useimage;
   // load base raytrace code
-  if (!this->load_kernel_source(vcl_string(VCL_SOURCE_ROOT_DIR) 
-                                + "/contrib/brl/bseg/boxm/ocl/cl/loc_code_library_functions.cl") ||
-      !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                + "/contrib/brl/bseg/boxm/ocl/cl/cell_utils.cl") ||
-      !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                +"/contrib/brl/bseg/boxm/ocl/cl/octree_library_functions.cl") ||
-      !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                    +"/contrib/brl/bseg/boxm/ocl/cl/backproject.cl")) {
+  vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm/ocl/cl/";
+  if (!this->load_kernel_source(source_dir+"loc_code_library_functions.cl") ||
+      !this->append_process_kernels(source_dir+"cell_utils.cl") ||
+      !this->append_process_kernels(source_dir+"octree_library_functions.cl") ||
+      !this->append_process_kernels(source_dir+"backproject.cl")) {
     vcl_cerr << "Error: boxm_ray_trace_manager : failed to load kernel source (helper functions)\n";
     return false;
   }
@@ -60,8 +57,7 @@ bool boxm_ray_trace_manager<T>::init_raytrace(boxm_scene<boct_tree<short,T > > *
       return false;
     }
   }
-  if (!this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
-                                    +"/contrib/brl/bseg/boxm/ocl/cl/ray_trace_main.cl")) {
+  if (!this->append_process_kernels(source_dir+"ray_trace_main.cl")) {
     vcl_cerr << "Error: boxm_ray_trace_manager : failed to load kernel source (main function)\n";
     return false;
   }
