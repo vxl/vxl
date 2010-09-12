@@ -46,6 +46,7 @@
 *
 * Computational functionality:
 * - vnl_definite_integral : computes the surface area under a given function
+*   (see also vnl_simpson_integral in vnl_algo)
 *
 * Simple matrix operations
 * - vnl_transpose : transpose of a matrix for direct use in a multiplication
@@ -97,13 +98,15 @@
 *
 * Optimisation routines include:
 * - vnl_amoeba : Downhill simplex algorithm
-* - vnl_lsqr
-* - vnl_brent_minimizer  (For 1D optimization)
+* - vnl_lsqr : least squares algorithm for (large, sparse) linear systems
+* - vnl_sparse_lu : LU decomposition to solve a (sparse) linear system
+* - vnl_brent_minimizer : minimizes a 1D function without using derivatives
+* - vnl_powell : minimizes an N-D function without using derivatives
 * - vnl_conjugate_gradient
-* - vnl_lbfgs
-* - vnl_levenberg_marquardt
-* - vnl_powell
-* - vnl_bracket_minimum (To bracket a minimum of a 1D function)
+* - vnl_lbfgs, vnl_lbfgsb : Broyden Fletcher Goldfarb Shannon minimization
+* - vnl_levenberg_marquardt and vnl_sparse_lm : Levenberg-Marquardt nonlinear least squares
+* - vnl_bracket_minimum : bracket a minimum of a 1D function
+* - vnl_solve_qp : several quadratic programming problem solving functions
 *
 * Support for manipulating polynomials:
 * - vnl_rnpoly_solve
@@ -118,6 +121,7 @@
 * - vnl_adjugate : return the adjugate (or adjoint) matrix
 * - vnl_convolve
 * - vnl_chi_squared : CDF of chi-squared distribution
+* - vnl_fit_parabola : given three points, return 2nd degree fitting polynomial
 *
 * \section Lead Developers
 * Gehua Yang and Peter Vanroose are responsible for co-ordinating significant changes to vnl.
