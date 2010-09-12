@@ -4,6 +4,8 @@
 #include <vnl/vnl_sample.h>
 #include <vul/vul_get_timestamp.h> // to generate a random number
 
+static double eps = 0.02;
+
 static void test_sample_uniform()
 {
   vcl_cout << "*************** sample uniform ***************\n";
@@ -21,14 +23,14 @@ static void test_sample_uniform()
   for (unsigned i=0; i<N; ++i)
     X_bar += X[i];
   X_bar /= N;
-  TEST_NEAR("sample mean", X_bar, (a+b)*0.5, 0.01*a);
+  TEST_NEAR("sample mean", X_bar, (a+b)*0.5, eps*a);
 
   // sample standard deviation
   double sigma_bar = 0;
   for (unsigned i=0; i<N; ++i)
     sigma_bar += vnl_math_sqr(X[i] - X_bar);
   sigma_bar = vcl_sqrt(sigma_bar / (N-1));
-  TEST_NEAR("sample stddev", sigma_bar, (b-a)/vcl_sqrt(12.0), 0.1*a);
+  TEST_NEAR("sample stddev", sigma_bar, (b-a)/vcl_sqrt(12.0), eps*a);
 
   int seed; vul_get_timestamp(seed,seed);
   vcl_cout << "seed is " << seed << vcl_endl;
@@ -41,9 +43,9 @@ static void test_sample_uniform()
   // And now in one go, with the handy "range filling" sampler:
   vnl_sample_uniform(X, X+N, a, b);
   X_bar=0; for (unsigned i=0; i<N; ++i) X_bar += X[i]; X_bar /= N;
-  TEST_NEAR("sample mean", X_bar, (a+b)*0.5, 0.01*a);
+  TEST_NEAR("sample mean", X_bar, (a+b)*0.5, eps*a);
   sigma_bar=0; for (unsigned i=0; i<N; ++i) sigma_bar += vnl_math_sqr(X[i] - X_bar);
-  TEST_NEAR("sample stddev", vcl_sqrt(sigma_bar/(N-1)), (b-a)/vcl_sqrt(12.0), 0.1*a);
+  TEST_NEAR("sample stddev", vcl_sqrt(sigma_bar/(N-1)), (b-a)/vcl_sqrt(12.0), eps*a);
 }
 
 static void test_sample_normal()
@@ -63,14 +65,14 @@ static void test_sample_normal()
   for (unsigned i=0; i<N; ++i)
     X_bar += X[i];
   X_bar /= N;
-  TEST_NEAR("sample mean", X_bar, mu, 0.05);
+  TEST_NEAR("sample mean", X_bar, mu, eps*sigma);
 
   // sample standard deviation
   double sigma_bar = 0;
   for (unsigned i=0; i<N; ++i)
     sigma_bar += vnl_math_sqr(X[i] - X_bar);
   sigma_bar = vcl_sqrt(sigma_bar / (N-1));
-  TEST_NEAR("sample stddev", sigma_bar, sigma, 0.05);
+  TEST_NEAR("sample stddev", sigma_bar, sigma, eps*sigma);
 
   int seed; vul_get_timestamp(seed,seed);
   vcl_cout << "seed is " << seed << vcl_endl;
@@ -83,9 +85,9 @@ static void test_sample_normal()
   // And now in one go, with the handy "range filling" sampler:
   vnl_sample_normal(X, X+N, mu, sigma);
   X_bar=0; for (unsigned i=0; i<N; ++i) X_bar += X[i]; X_bar /= N;
-  TEST_NEAR("sample mean", X_bar, mu, 0.05);
+  TEST_NEAR("sample mean", X_bar, mu, eps*sigma);
   sigma_bar=0; for (unsigned i=0; i<N; ++i) sigma_bar += vnl_math_sqr(X[i] - X_bar);
-  TEST_NEAR("sample stddev", vcl_sqrt(sigma_bar/(N-1)), sigma, 0.05);
+  TEST_NEAR("sample stddev", vcl_sqrt(sigma_bar/(N-1)), sigma, eps*sigma);
 }
 
 static void test_sample_binomial()
@@ -105,21 +107,21 @@ static void test_sample_binomial()
   for (unsigned i=0; i<N; ++i)
     X_bar += X[i];
   X_bar /= N;
-  TEST_NEAR("sample mean", X_bar, n*(1-p), 0.1);
+  TEST_NEAR("sample mean", X_bar, n*(1-p), eps);
 
   // sample standard deviation
   double sigma_bar_sqr = 0;
   for (unsigned i=0; i<N; ++i)
     sigma_bar_sqr += vnl_math_sqr(X[i] - X_bar);
   sigma_bar_sqr /= N-1;
-  TEST_NEAR("sample stddev squared", sigma_bar_sqr, p*(1-p)*n, 0.01*n);
+  TEST_NEAR("sample stddev squared", sigma_bar_sqr, p*(1-p)*n, eps*n);
 
   // And now in one go, with the handy "range filling" sampler:
   vnl_sample_binomial(X, X+N, n, p);
   X_bar=0; for (unsigned i=0; i<N; ++i) X_bar += X[i]; X_bar /= N;
-  TEST_NEAR("sample mean", X_bar, n*(1-p), 0.1);
+  TEST_NEAR("sample mean", X_bar, n*(1-p), eps);
   sigma_bar_sqr=0; for (unsigned i=0; i<N; ++i) sigma_bar_sqr += vnl_math_sqr(X[i] - X_bar);
-  TEST_NEAR("sample stddev squared", sigma_bar_sqr /= N-1, p*(1-p)*n, 0.01*n);
+  TEST_NEAR("sample stddev squared", sigma_bar_sqr /= N-1, p*(1-p)*n, eps*n);
 }
 
 static void test_sample_bernoulli()
@@ -138,21 +140,21 @@ static void test_sample_bernoulli()
   for (unsigned i=0; i<N; ++i)
     X_bar += X[i];
   X_bar /= N;
-  TEST_NEAR("sample mean", X_bar, 1-p, 0.1);
+  TEST_NEAR("sample mean", X_bar, 1-p, eps);
 
   // sample standard deviation
   double sigma_bar_sqr = 0;
   for (unsigned i=0; i<N; ++i)
     sigma_bar_sqr += vnl_math_sqr(X[i] - X_bar);
   sigma_bar_sqr /= N-1;
-  TEST_NEAR("sample stddev squared", sigma_bar_sqr, p*(1-p), 0.01);
+  TEST_NEAR("sample stddev squared", sigma_bar_sqr, p*(1-p), eps);
 
   // And now in one go, with the handy "range filling" sampler:
   vnl_sample_bernoulli(X, X+N, p);
   X_bar=0; for (unsigned i=0; i<N; ++i) X_bar += X[i]; X_bar /= N;
-  TEST_NEAR("sample mean", X_bar, 1-p, 0.1);
+  TEST_NEAR("sample mean", X_bar, 1-p, eps);
   sigma_bar_sqr=0; for (unsigned i=0; i<N; ++i) sigma_bar_sqr += vnl_math_sqr(X[i] - X_bar);
-  TEST_NEAR("sample stddev squared", sigma_bar_sqr /= N-1, p*(1-p), 0.01);
+  TEST_NEAR("sample stddev squared", sigma_bar_sqr /= N-1, p*(1-p), eps);
 }
 
 static void test_sample()
