@@ -167,7 +167,7 @@ SOURCE=.\Templates/boxm_cell_vis_graph_iterator+short.boxm_edge_sample+float--.c
 SOURCE=.\Templates/vbl_io_smart_ptr+boxm_array_1d_float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/brdb_value+boxm_array_1d_float_sptr-.cxx
+SOURCE=.\Templates/brdb_value_t+boxm_array_1d_float_sptr-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+boxm_array_1d_float-.cxx

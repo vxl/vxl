@@ -98,24 +98,6 @@ LIB32=link.exe -lib
 SOURCE=.\boxm_ocl_utils.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\cl/octree_library_functions.cl
-# End Source File
-# Begin Source File
-SOURCE=.\cl/expected_functor.cl
-# End Source File
-# Begin Source File
-SOURCE=.\cl/ray_trace_main.cl
-# End Source File
-# Begin Source File
-SOURCE=.\cl/refine_main.cl
-# End Source File
-# Begin Source File
-SOURCE=.\cl/ray_bundle_library_functions.cl
-# End Source File
-# Begin Source File
-SOURCE=.\cl/update_main.cl
-# End Source File
-# Begin Source File
 SOURCE=.\boxm_online_update_manager.cxx
 # End Source File
 # Begin Source File
@@ -150,6 +132,81 @@ SOURCE=.\boxm_re_render_ocl_scene_manager.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_render_probe_manager.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\cl/octree_library_functions.cl
+# End Source File
+# Begin Source File
+SOURCE=.\cl/expected_functor.cl
+# End Source File
+# Begin Source File
+SOURCE=.\cl/ray_trace_main.cl
+# End Source File
+# Begin Source File
+SOURCE=.\cl/refine_main.cl
+# End Source File
+# Begin Source File
+SOURCE=.\cl/ray_bundle_library_functions.cl
+# End Source File
+# Begin Source File
+SOURCE=.\cl/update_main.cl
+# End Source File
+# Begin Source File
+SOURCE=.\cl/refine_main_opt.cl
+# End Source File
+# Begin Source File
+SOURCE=.\cl/ray_bundle_trace_main.cl
+# End Source File
+# Begin Source File
+SOURCE=.\cl/loc_code_library_functions.cl
+# End Source File
+# Begin Source File
+SOURCE=.\cl/change_detection_ocl_scene.cl
+# End Source File
+# Begin Source File
+SOURCE=.\cl/rerender.cl
+# End Source File
+# Begin Source File
+SOURCE=.\cl/ray_trace_bit_scene.cl
+# End Source File
+# Begin Source File
+SOURCE=.\cl/render_bit_scene.cl
+# End Source File
+# Begin Source File
+SOURCE=.\cl/bit_tree_library_functions.cl
+# End Source File
+# Begin Source File
+SOURCE=.\cl/ray_trace_ocl_scene.cl
+# End Source File
+# Begin Source File
+SOURCE=.\cl/refine_blocks_opt.cl
+# End Source File
+# Begin Source File
+SOURCE=.\cl/ray_trace_all_blocks.cl
+# End Source File
+# Begin Source File
+SOURCE=.\cl/update_ocl_scene.cl
+# End Source File
+# Begin Source File
+SOURCE=.\cl/statistics_library_functions.cl
+# End Source File
+# Begin Source File
+SOURCE=.\cl/scene_info.cl
+# End Source File
+# Begin Source File
+SOURCE=.\cl/ray_trace_bit_scene_float3.cl
+# End Source File
+# Begin Source File
+SOURCE=.\cl/ray_trace_bit_scene_opt.cl
+# End Source File
+# Begin Source File
+SOURCE=.\cl/backproject.cl
+# End Source File
+# Begin Source File
+SOURCE=.\cl/cell_utils.cl
+# End Source File
+# Begin Source File
+SOURCE=.\cl/refine_blocks.cl
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/bocl_manager+boxm_ray_trace_manager+boxm_sample+BOXM_APM_SIMPLE_GREY---.cxx

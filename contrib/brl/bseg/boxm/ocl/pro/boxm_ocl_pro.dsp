@@ -122,7 +122,7 @@ SOURCE=.\processes/boxm_ocl_finish_render_probe_process.cxx
 SOURCE=.\processes/boxm_ocl_init_render_probe_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/brdb_value+boxm_render_probe_manager_sptr-.cxx
+SOURCE=.\Templates/brdb_value_t+boxm_render_probe_manager_sptr-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
