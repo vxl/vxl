@@ -2113,13 +2113,14 @@ void segv_vil_segmentation_manager::fft()
   dlg.checkbox("Display FFT Mag?", use_mag);
   if (!dlg.ask())
     return;
-  vil_image_view<float> mag, phase;
   vil_image_view<float> fview = brip_vil_float_ops::convert_to_float(img);  
   vil_image_view<float> fview_p2;
   if(!brip_vil_float_ops::resize_to_power_of_two(fview, fview_p2))
     return;
-  brip_vil_float_ops::fourier_transform(fview_p2, mag, phase);
+  vil_image_view<float> magr, phase;
+  brip_vil_float_ops::fourier_transform(fview_p2, magr, phase);
   if(use_mag)
-    this->add_image(vil_new_image_resource_of_view(mag));
-  this->add_image(vil_new_image_resource_of_view(phase));
+    this->add_image(vil_new_image_resource_of_view(magr));
+  else
+    this->add_image(vil_new_image_resource_of_view(phase));
 }
