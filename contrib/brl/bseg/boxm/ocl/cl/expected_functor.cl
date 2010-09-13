@@ -137,6 +137,7 @@ void step_cell_render_opt(__global uchar8 * cell_data,
 }
 #endif
 
+
 void step_cell_change_detection(__global float8* cell_data, __global float* alpha_data,int data_ptr,
                                 float d, float4 * data_return, float img_intensity)
 {

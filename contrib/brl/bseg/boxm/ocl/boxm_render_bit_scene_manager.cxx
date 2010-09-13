@@ -140,11 +140,6 @@ bool boxm_render_bit_scene_manager::set_args(unsigned kernel_index=0)
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (render scene info)"))
       return 0;
 
-    //local copy of the scene info
-    //status = clSetKernelArg(kernels_[0],i++,sizeof(RenderSceneInfo),0);
-    //if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local scene info)"))
-      //return 0;
-
     //block pointers
     status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&block_ptrs_buf_);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (block_ptrs_buf_)"))
@@ -177,27 +172,11 @@ bool boxm_render_bit_scene_manager::set_args(unsigned kernel_index=0)
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local tree)"))
       return 0;
 
-    // local cam
-    //status = clSetKernelArg(kernels_[0],i++,3*sizeof(cl_float16),0);
-    //if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local cam)"))
-      //return 0;
-    //status = clSetKernelArg(kernels_[0],i++,sizeof(cl_uint4),0);
-    //if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local image dimensions)"))
-      //return 0;
-
     status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&image_buf_);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (input_image)"))
       return 0;
     status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&image_gl_buf_);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (gl_image)"))
-      return 0;
-    //local local integer for the image
-    status = clSetKernelArg(kernels_[0],i++,this->bni_*this->bnj_*sizeof(cl_int),0);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (im_index local)"))
-      return 0;
-    //local local tfar for the ray
-    status = clSetKernelArg(kernels_[0],i++,this->bni_*this->bnj_*sizeof(cl_float),0);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (im_index local)"))
       return 0;
 
     //output buffer

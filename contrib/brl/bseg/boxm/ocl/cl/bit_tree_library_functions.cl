@@ -281,7 +281,9 @@ ushort traverse_three(int rIndex, __local uchar* tree,
 {
   // vars to replace "tree_bit_at"
   //force 1 register: curr = (bit, child_offset, depth, c_offset)
-  uchar4 curr = (uchar4) (tree[rIndex], 0, 0, 0);
+  int curr_bit = convert_int(tree[rIndex]);
+  int child_offset = 0;
+  int depth = 0;  
   
   //bit index to be returned
   ushort bit_index = 0;
@@ -292,25 +294,25 @@ ushort traverse_three(int rIndex, __local uchar* tree,
   pointz = clamp(pointz, 0.0001, 0.9999);
 
   // while the curr node has children
-  while(curr.x && curr.z < 3) {
+  while(curr_bit && depth < 3) {
     //determine child offset and bit index for given point
     pointx += pointx;                                             //point = point*2
     pointy += pointy;
     pointz += pointz;                                           
-    uchar4 code =  (uchar4) (convert_uchar_rtn(pointx) & 1, 
-                             convert_uchar_rtn(pointy) & 1,
-                             convert_uchar_rtn(pointz) & 1, 0);   //code.xyz = lsb of floor(point.xyz)
-    curr.w = code.x + (code.y<<1) + (code.z<<2);                  //c_index = binary(zyx)    
-    bit_index = (8*bit_index + 1) + curr.w;                       //i = 8i + 1 + c_index
+    int4 code =  (int4) (convert_int_rtn(pointx) & 1, 
+                         convert_int_rtn(pointy) & 1,
+                         convert_int_rtn(pointz) & 1, 0);         //code.xyz = lsb of floor(point.xyz)
+    int c_index = code.x + (code.y<<1) + (code.z<<2);             //c_index = binary(zyx)    
+    bit_index = (8*bit_index + 1) + c_index;                      //i = 8i + 1 + c_index
     
     //update value of curr_bit and level
-    curr.x = (1<<curr.w) & tree[rIndex+ (curr.z+1+curr.y)];      //int curr_byte = (curr.z + 1) + curr.y; 
-    curr.y = curr.w;
-    curr.z++;
+    curr_bit = (1<<c_index) & tree[rIndex + (depth+1 + child_offset)];      //int curr_byte = (curr.z + 1) + curr.y; 
+    child_offset = c_index;
+    depth++;
   }
   
   // calculate cell bounding box 
-  (*cell_len) = 1.0 / (float) (1<<curr.z);
+  (*cell_len) = 1.0 / (float) (1<<depth);
   (*cell_minx) = floor(pointx) * (*cell_len);
   (*cell_miny) = floor(pointy) * (*cell_len);
   (*cell_minz) = floor(pointz) * (*cell_len);

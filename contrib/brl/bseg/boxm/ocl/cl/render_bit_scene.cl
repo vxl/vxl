@@ -11,8 +11,8 @@ ray_trace_bit_scene_opt(__constant  RenderSceneInfo    * linfo,
                         __global    int4               * tree_array,
                         __global    float              * alpha_array,
                         __global    uchar8             * mixture_array,
-                        __global    float16            * camera, // camera orign and SVD of inverse of camera matrix
-                        __global    uint4              * imgdims,   // dimensions of the image
+                        __global    float16            * camera,        // camera orign and SVD of inverse of camera matrix
+                        __global    uint4              * imgdims,       // dimensions of the image
                         __local     uchar16            * local_tree,
                         __global    float              * in_image,
                         __global    uint               * gl_image, 
@@ -163,7 +163,7 @@ ray_trace_bit_scene_opt(__constant  RenderSceneInfo    * linfo,
 
       //expected_int+=data_ptr;
       step_cell_render_opt2(mixture_array, alpha_array, data_ptr, d, 
-                          &vis, &expected_int, &intensity_norm);
+                            &vis, &expected_int, &intensity_norm);
       if(d <= 0.0) break;
     }
 #endif
