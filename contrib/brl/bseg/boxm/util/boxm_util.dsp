@@ -113,9 +113,6 @@ SOURCE=.\boxm_utils.cxx
 SOURCE=.\boxm_sigma_normalizer.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\boxm_merge_mog.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\boxm_test_util.cxx
 # End Source File
 # Begin Source File
@@ -141,9 +138,6 @@ SOURCE=.\boxm_vrml_util.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_triangle_interpolation_iterator.h
-# End Source File
-# Begin Source File
-SOURCE=.\boxm_merge_mog.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_plane_ransac.h

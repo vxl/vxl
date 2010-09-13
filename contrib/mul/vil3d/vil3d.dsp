@@ -129,6 +129,9 @@ SOURCE=.\file_formats/vil3d_analyze_format.cxx
 SOURCE=.\file_formats/vil3d_gen_synthetic.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\file_formats/vil3d_meta_image_format.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vil3d_image_view+byte-.cxx
 # End Source File
 # Begin Source File
@@ -367,6 +370,9 @@ SOURCE=.\file_formats/vil3d_analyze_format.h
 # End Source File
 # Begin Source File
 SOURCE=.\file_formats/vil3d_gen_synthetic.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil3d_meta_image_format.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil3d_chord.h
