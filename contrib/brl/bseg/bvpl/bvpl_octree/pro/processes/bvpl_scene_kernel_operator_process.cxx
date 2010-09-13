@@ -130,6 +130,11 @@ bool bvpl_scene_kernel_operator_process(bprb_func_process& pro)
       scene_oper.operate(*scene_in, functor, kernel, *scene_out);
       scene_ptr = scene_out;
       pro.set_output_val<boxm_scene_base_sptr>(0, scene_ptr);
+      
+      //clean memory
+      scene_in->unload_active_blocks();
+      scene_out->unload_active_blocks();
+      
       return true;
     }
       return false;
