@@ -81,7 +81,29 @@ void step_cell_render_opt(__global uchar8* cell_data, __global float* alpha_data
   (*data_return).w = intensity_norm + omega;
 }
 #endif
-
+void step_cell_render_opt2(__global int2 * cell_data, 
+                          __global float  * alpha_data, 
+                                   int      data_ptr, 
+                                   float    d, 
+                                   float  * vis,
+                                   float  * expected_i,
+                                   float  * intensity_n)
+{
+  float alpha = alpha_data[data_ptr];
+  float diff_omega=exp(-alpha*d);
+  float expected_int_cell=0.0f;
+  if(diff_omega<0.995)
+  {
+      uchar8 data = as_uchar8(cell_data[data_ptr]);
+      expected_int_cell = ((data.s0) * (data.s2)
+                          +(data.s3) * (data.s5)
+                          +(data.s6) * (255.0 - data.s2 - data.s5))/255.0/255.0;
+  }
+  float omega=(*vis)*(1-diff_omega);
+  (*vis)*=diff_omega;
+  (*intensity_n) +=  omega;
+  (*expected_i)+=expected_int_cell*omega;
+}
 #if 1
 //optimized data version
 void step_cell_render_opt(__global uchar8 * cell_data, 

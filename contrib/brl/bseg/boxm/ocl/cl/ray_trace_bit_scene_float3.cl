@@ -5,7 +5,6 @@
 __kernel
 void
 ray_trace_bit_scene_opt(__constant   RenderSceneInfo    * linfo,
-                        //__local    RenderSceneInfo    * linfo,
                         __global   ushort2            * block_ptrs,
                         __global   uchar16            * tree_array,
                         __global   float              * alpha_array,
@@ -17,7 +16,6 @@ ray_trace_bit_scene_opt(__constant   RenderSceneInfo    * linfo,
                         __global   uint               * gl_image, 
                         __local    int                * imIndex,
                         __local    float              * tfar,
-                        //__global   float4             * output,
                         __constant uchar              * bit_lookup)    // input image and store vis_inf and pre_inf
 {
   //get local id (0-63 for an 8x8) of this patch 

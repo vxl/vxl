@@ -119,7 +119,99 @@ int load_data_using_loc_codes(__local uchar*    ray_bundle_array, /* bundle poin
     return 1;
 }
 
+int load_data_using_cell_ptrs(__local uchar*    ray_bundle_array, /* bundle pointer array */
+                              __local int*   cell_ptrs)
+                              // __local float16*  cached_data)
+{
+    uchar nbi = (uchar)get_local_size(0);
+    uchar nbj = (uchar)get_local_size(1);
+    uchar llid = (uchar)(get_local_id(0) + nbi*get_local_id(1));
 
+    /* initialize pointer to local id */
+    ray_bundle_array[llid]=llid;
+    barrier(CLK_LOCAL_MEM_FENCE);
+
+    int count=0;
+    // clear the cache
+    //serialized with thread 0 doing all the work
+    if (llid==0) {
+        for (uchar j = 0; j<nbj; ++j)
+            for (uchar i = 0; i<nbi; ++i)
+            {
+                uchar indx = i + nbi*j;
+                if (cell_ptrs[indx]>-1)
+                {
+                    //ray_bundle_array[indx]=(uchar)indx;
+                    /* load data */
+                    uchar org_ptr = 0;
+                    uchar tptr = indx;
+
+                    bool found = false;
+                    /* j = 0 */
+                    if (j==0) {/* for first row, only left neighbor is valid */
+                        if (i>0)/* except in first column */
+                        {
+                            tptr = indx-1;
+                            org_ptr = ray_bundle_array[tptr];
+                            if (cell_ptrs[tptr]==cell_ptrs[indx] ) {
+                                ray_bundle_array[indx]=org_ptr;
+                                found = true;
+                                count++;
+                            }
+                        }
+                    }
+                    if (!found&&j>0) {
+                        /* above neighbor is always valid for j>0*/
+                        tptr = indx - nbi;
+                        org_ptr = ray_bundle_array[tptr];
+                        if (cell_ptrs[tptr]==cell_ptrs[indx] ) {
+                            ray_bundle_array[indx]=org_ptr;
+                            found = true;
+                            count++;
+                        }
+                        /* more than one column and upper right neighbor */
+                        if (!found&&i<(nbi-1)&&nbi>1) {
+                            tptr = indx - nbi + 1;
+                            org_ptr = ray_bundle_array[tptr];
+                            if (cell_ptrs[tptr]==cell_ptrs[indx] )
+                            {
+                                ray_bundle_array[indx]=org_ptr;
+                                found = true;
+                                count++;
+                            }
+                        }
+                        // upper left neighbor is valid for i>0 and j>0
+                        if (!found&&i>0) {
+                            tptr = indx - nbi - 1;
+                            org_ptr = ray_bundle_array[tptr];
+                            if (cell_ptrs[tptr]==cell_ptrs[indx] )
+                            {
+                                ray_bundle_array[indx]=org_ptr;
+                                found = true;
+                                count++;
+                            }
+                        }
+                        // left neighbor is valid for i>0
+                        if (!found&&i>0) {
+                            tptr = indx -  1;
+                            org_ptr = ray_bundle_array[tptr];
+                            if (cell_ptrs[tptr]==cell_ptrs[indx] ){
+                                ray_bundle_array[indx]=org_ptr;
+                                found = true;
+                                count++;
+                            }
+                        }
+                    }
+                }
+            }
+    }
+    /* This function only inserts single ray_bundle_array pointers to access the
+    * data in a read-only mode, e.g., for expected image generation
+    */
+    barrier(CLK_LOCAL_MEM_FENCE);
+
+    return count;
+}
 /*
 * Function for updating states and pointers for load_data_mutable
 */

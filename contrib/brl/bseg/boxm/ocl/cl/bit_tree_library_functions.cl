@@ -158,37 +158,30 @@ ushort data_index(int rIndex, __local uchar* tree, int bit_index, __constant uch
 }
 
 //optimized to use minimal registers
-ushort data_index_opt(int rIndex, __local uchar* tree, ushort bit_index, __constant uchar* bit_lookup)
+int data_index_opt(int rIndex, __local uchar* tree, ushort bit_index, __constant uchar* bit_lookup)
 {
   ////Unpack data offset (offset to root data)
   //tree[10] and [11] should form the short that refers to data offset
-  //root and first gen are special case, return just the root offset + bit_index
+  //root and first gen are special case, return just the root offset + bit_index 
+  int count_offset=(int)as_ushort((uchar2) (tree[rIndex+11], tree[rIndex+10]));
   if(bit_index < 9)
-    return as_ushort((uchar2) (tree[rIndex+11], tree[rIndex+10])) + bit_index;
+    return count_offset + bit_index;
  
   //otherwise get parent index, parent byte index and relative bit index
-  // b_i = (bit_index, byte_index, aux int, parent_index)
-  uchar4 b_i = (uchar4) (0,0,0,0);
-  b_i.w = (bit_index-1)>>3;               //int pi = (bit_index-1)>>3;
-  b_i.z = (b_i.w-1)>>3;                   //int a  = (pi-1)>>3; 
-  b_i.y = b_i.z+1;                        //int byte_i  = a + 1;    
-  b_i.x = (b_i.w-1) - (b_i.z<<3);         //int bit_i   = (pi-1)-(a<<3); 
-  b_i.w = (bit_index-1)%8;                //int c_offset = (bit_index-1)%8;
+  uchar oneuplevel=(bit_index-1)>>3;
+  uchar byte_index= ((oneuplevel-1)>>3) +1;
 
-  //count bits for each byte before bit_i
-  ushort count = 0;
-  for(int i=0; i<b_i.y; ++i) {
-    b_i.z = tree[rIndex+i];               //b_i.z is now just an aux value
-    count += bit_lookup[b_i.z];
-  }
-  
-  //count bits before bit_i in parent
-  b_i.z = tree[rIndex+b_i.y] << (8-b_i.x);
-  count += bit_lookup[b_i.z];
-  
-  //relative index = num_bits*8 + 1;
-  count = 8*count+1 + (b_i.w);
-  return count + as_ushort((uchar2) (tree[rIndex+11], tree[rIndex+10]));
+  uchar sub_bit_index=8-((oneuplevel-1)&(8-1));
+  int count=0;
+  for(int i=0;i<byte_index;i++)
+        count += bit_lookup[tree[rIndex+i]];
+
+  uchar temp=tree[rIndex+byte_index]<<sub_bit_index;
+  count=count+bit_lookup[temp];
+  uchar finestleveloffset=(bit_index-1)&(8-1);
+  count = 8*count+1 +finestleveloffset;
+
+  return count + count_offset;
 }
 
 //-----------------------------------------------------------------
