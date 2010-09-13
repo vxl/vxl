@@ -16,6 +16,12 @@
 #include <brdb/brdb_value.h>
 
 
+#include <bsta/bsta_attributes.h>
+#include <bsta/bsta_mixture_fixed.h>
+#include <bsta/bsta_gauss_f1.h>
+#include <bsta/bsta_gauss_if3.h>
+
+
 namespace boxm_scene_to_bvxm_grid_process_globals
 {
   const unsigned n_inputs_ = 4;
@@ -63,6 +69,10 @@ bool boxm_scene_to_bvxm_grid_process(bprb_func_process& pro)
   unsigned resolution_level = pro.get_input<short>(2);
   bool enforce_level = pro.get_input<bool>(3);
 
+  static const unsigned int n_gaussian_modes_ = 3;
+  typedef bsta_num_obs<bsta_gauss_f1> gauss_type_f1;
+  typedef bsta_num_obs<bsta_mixture_fixed<gauss_type_f1, n_gaussian_modes_> > mix_gauss_f1_type;
+  
   //check input's validity
   if (!scene_base.ptr())
   {
@@ -78,14 +88,17 @@ bool boxm_scene_to_bvxm_grid_process(bprb_func_process& pro)
   }
   else if ( boxm_scene< boct_tree<short, bsta_num_obs<bsta_gauss_f1> > > *scene= dynamic_cast<boxm_scene< boct_tree<short, bsta_num_obs<bsta_gauss_f1> > > * >(scene_base.as_pointer()))
   {
-    if (!scene)
-      vcl_cerr << "what's going on\n";
-
     bvxm_voxel_grid<bsta_num_obs<bsta_gauss_f1> > *grid = boxm_scene_to_bvxm_grid(*scene, filepath, resolution_level, enforce_level);
     pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid);
     return true;
   }
-
+  else if( boxm_scene< boct_tree<short, mix_gauss_f1_type > > *scene= 
+          dynamic_cast<boxm_scene< boct_tree<short, mix_gauss_f1_type > > * >(scene_base.as_pointer()))
+  {
+    bvxm_voxel_grid<mix_gauss_f1_type > *grid = boxm_scene_to_bvxm_grid(*scene, filepath, resolution_level, enforce_level);
+    pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid);
+    return true;
+  }
   else
   {
     vcl_cerr << "It's not possible to convert input scene to a bvxm grid\n";
