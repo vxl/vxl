@@ -31,6 +31,7 @@ SOURCES += file_formats/vil3d_dicom.cxx
 SOURCES += file_formats/vil3d_slice_list.cxx
 SOURCES += file_formats/vil3d_analyze_format.cxx
 SOURCES += file_formats/vil3d_gen_synthetic.cxx
+SOURCES += file_formats/vil3d_meta_image_format.cxx
 
 SOURCES += vil3d_crop.cxx
 MANPAGE_SOURCES += vil3d_clamp.h

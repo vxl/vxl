@@ -2,7 +2,7 @@ USES += contrib/brl contrib/brl/bbas contrib/brl/bseg core
 
 LIBRARY := boxm-algo
 
-SOURCES += dummy.cxx
+SOURCES += boxm_merge_mog.cxx
 MANPAGE_SOURCES += boxm_crop_scene.h
 MANPAGE_SOURCES += boxm_fill_internal_cells.h
 MANPAGE_SOURCES += boxm_fill_in_mesh.h
@@ -13,6 +13,7 @@ MANPAGE_SOURCES += boxm_refine.h
 MANPAGE_SOURCES += boxm_init_scene.h
 MANPAGE_SOURCES += boxm_save_scene_raw.h
 MANPAGE_SOURCES += boxm_compute_scene_difference.h
+MANPAGE_SOURCES += boxm_split_sample.h
 
 SUBDIRS += pro rt sp
 
