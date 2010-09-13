@@ -94,11 +94,11 @@ static void test_sample_binomial()
 {
   vcl_cout << "*************** sample binomial ***************\n";
   unsigned const N = 100000;
-  double n = 10;
+  int n = 10;
   double p = 0.4;
   vnl_sample_reseed(); // initialise the random seed in a random way
 
-  short unsigned int X[N];
+  int X[N];
   for (unsigned i=0; i<N; ++i)
     X[i] = vnl_sample_binomial(n, p);
 
@@ -131,7 +131,7 @@ static void test_sample_bernoulli()
   double p = 0.7;
   vnl_sample_reseed(); // initialise the random seed in a random way
 
-  short unsigned int X[N];
+  int X[N];
   for (unsigned i=0; i<N; ++i)
     X[i] = vnl_sample_bernoulli(p);
 
