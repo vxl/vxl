@@ -142,20 +142,19 @@ ray_trace_bit_scene_opt(__constant  RenderSceneInfo    * linfo,
       posz = (lrayz + (ttree + EPSILON)*ray_dz);
       
       // traverse to leaf cell that contains the entry point, set bounding box
+      ////data offset is ushort pointed to by tree + bit offset
       float cell_len;
       int data_ptr = traverse_three((llid<<4), local_tree, 
                                     posx,posy,posz, 
                                     &cell_minx, &cell_miny, &cell_minz, &cell_len);
+      data_ptr = data_index_opt( (llid<<4), local_tree, data_ptr, bit_lookup);
+      data_ptr = block.x * linfo->data_len + data_ptr;
       
       // check to see how close tnear and tfar are
       cell_minx = (ray_dx > 0) ? cell_minx+cell_len : cell_minx; 
       cell_miny = (ray_dy > 0) ? cell_miny+cell_len : cell_miny; 
       cell_minz = (ray_dz > 0) ? cell_minz+cell_len : cell_minz;
       float t1 = min(min( (cell_minx-lrayx)*inv_x, (cell_miny-lrayy)*inv_y), (cell_minz-lrayz)*inv_z);
-
-      ////data offset is ushort pointed to by tree + bit offset
-      data_ptr = data_index_opt( (llid<<4), local_tree, data_ptr, bit_lookup);
-      data_ptr = block.x * linfo->data_len + data_ptr;
 
       //// distance must be multiplied by the dimension of the bounding box
       float d = (t1-ttree) * linfo->block_len;
@@ -164,7 +163,7 @@ ray_trace_bit_scene_opt(__constant  RenderSceneInfo    * linfo,
       //expected_int+=data_ptr;
       step_cell_render_opt2(mixture_array, alpha_array, data_ptr, d, 
                             &vis, &expected_int, &intensity_norm);
-      if(d <= 0.0) break;
+      if(d <= 0) break;
     }
 #endif
     //--------------------------------------------------------------------------
