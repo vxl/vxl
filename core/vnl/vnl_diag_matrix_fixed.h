@@ -40,7 +40,7 @@ class vnl_diag_matrix_fixed
   vnl_vector_fixed<T,N> diagonal_;
 
  public:
-  vnl_diag_matrix_fixed() {}
+  vnl_diag_matrix_fixed() : diagonal_() {}
 
 
   //: Construct a diagonal matrix with diagonal elements equal to value.

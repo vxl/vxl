@@ -30,7 +30,7 @@ class vnl_crs_index
   typedef vcl_vector<idx_pair> sparse_vector;
 
   //: Constructor - default
-  vnl_crs_index() : num_cols_(0) {}
+  vnl_crs_index() : num_cols_(0), col_idx_(), row_ptr_() {}
 
   //: Constructor - from a binary mask
   vnl_crs_index(const vcl_vector<vcl_vector<bool> >& mask);
