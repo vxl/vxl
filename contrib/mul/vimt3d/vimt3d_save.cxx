@@ -8,6 +8,7 @@
 #include <vil3d/vil3d_image_resource.h>
 #include <vil3d/vil3d_new.h>
 #include <vil3d/vil3d_save.h>
+#include <vil3d/file_formats/vil3d_meta_image_format.h>
 #include <vimt3d/vimt3d_transform_3d.h>
 #include <vimt3d/vimt3d_image_3d.h>
 #include <vimt3d/vimt3d_vil3d_v3i.h>
@@ -48,6 +49,16 @@ void vimt3d_save_transform(vil3d_image_resource_sptr &ir,
     else
       static_cast<vimt3d_vil3d_v3m_image &>(*ir).set_world2im(tr);
 
+  }
+  else if (dynamic_cast<vil3d_meta_image *>(ir.ptr()) )
+  {
+    vgl_vector_3d<double> vx_size = trans.delta(vgl_point_3d<double>(0.0,0.0,0.0),
+                                                vgl_vector_3d<double>(1.0,1.0,1.0));
+    double ox = trans.matrix()(0,3);
+    double oy = trans.matrix()(1,3);
+    double oz = trans.matrix()(2,3);
+    static_cast<vil3d_meta_image *>(ir.ptr())->set_offset(ox,oy,oz,
+                                                    1/vx_size.x(),1/vx_size.y(),1/vx_size.z());
   }
   else
   {

@@ -13,6 +13,7 @@
 #include <vil3d/file_formats/vil3d_analyze_format.h>
 #include <vil3d/file_formats/vil3d_gipl_format.h>
 #include <vil3d/file_formats/vil3d_slice_list.h>
+#include <vil3d/file_formats/vil3d_meta_image_format.h>
 
 #if 0 // commented out
 
@@ -56,6 +57,7 @@ class vil3d_file_formats
     v.push_back(new vil3d_analyze_format);
     v.push_back(new vil3d_gipl_format);
     v.push_back(new vil3d_slice_list_format);
+    v.push_back(new vil3d_meta_image_format);
   }
   ~vil3d_file_formats()
   {

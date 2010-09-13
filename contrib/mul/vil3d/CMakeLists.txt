@@ -39,11 +39,12 @@ SET(vil3d_sources
     vil3d_tricub_interp.h            vil3d_tricub_interp.txx
     vil3d_chord.h
 
-    file_formats/vil3d_gipl_format.h     file_formats/vil3d_gipl_format.cxx
-    file_formats/vil3d_dicom.h           file_formats/vil3d_dicom.cxx
-    file_formats/vil3d_slice_list.h      file_formats/vil3d_slice_list.cxx
-    file_formats/vil3d_analyze_format.h  file_formats/vil3d_analyze_format.cxx
-    file_formats/vil3d_gen_synthetic.h   file_formats/vil3d_gen_synthetic.cxx
+    file_formats/vil3d_gipl_format.h        file_formats/vil3d_gipl_format.cxx
+    file_formats/vil3d_dicom.h              file_formats/vil3d_dicom.cxx
+    file_formats/vil3d_slice_list.h         file_formats/vil3d_slice_list.cxx
+    file_formats/vil3d_analyze_format.h     file_formats/vil3d_analyze_format.cxx
+    file_formats/vil3d_gen_synthetic.h      file_formats/vil3d_gen_synthetic.cxx
+    file_formats/vil3d_meta_image_format.h  file_formats/vil3d_meta_image_format.cxx
 )
 AUX_SOURCE_DIRECTORY(Templates vil3d_sources)
 

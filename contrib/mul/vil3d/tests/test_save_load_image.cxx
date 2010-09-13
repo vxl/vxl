@@ -279,6 +279,9 @@ static void test_save_load_image()
   vil3d_test_image_type("hdr", image32, voxel_size);
   vil3d_test_image_type("hdr", imagefloat, voxel_size);
 
+  vil3d_test_image_type("mhd", image8, voxel_size);
+  vil3d_test_image_type("mhd", image16, voxel_size);
+
 #if 0 // v3i is only defined in vimt3d
   vil3d_test_image_type("v3i", image1, voxel_size);
   vil3d_test_image_type("v3i", image8, voxel_size);
