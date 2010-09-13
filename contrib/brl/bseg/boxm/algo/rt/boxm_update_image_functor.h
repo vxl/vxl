@@ -49,7 +49,8 @@ class boxm_update_image_functor_pass_2
     vis_img_(i,j) = vis_prob_end;
     aux_val.vis_+=seg_len*vis_img_(i,j);
 
-    aux_val.updatefactor_+=(((pre_img_(i,j)+vis_img_(i,j)*PI)/norm_(i,j))* seg_len);
+    if(norm_(i,j)>1e-10f)
+        aux_val.updatefactor_+=(((pre_img_(i,j)+vis_img_(i,j)*PI)/norm_(i,j))* seg_len);
 
     return true;
   }
