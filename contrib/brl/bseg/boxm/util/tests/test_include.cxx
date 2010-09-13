@@ -1,5 +1,4 @@
 #include <boxm/util/boxm_cell_data_traits.h>
-#include <boxm/util/boxm_merge_mog.h>
 #include <boxm/util/boxm_plane_ransac.h>
 #include <boxm/util/boxm_quad_scan_iterator.h>
 #include <boxm/util/boxm_rational_camera_utils.h>

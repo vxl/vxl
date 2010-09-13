@@ -1,7 +1,6 @@
 # brl/bseg/boxm/util/CMakeLists.txt
 INCLUDE_DIRECTORIES( ${MUL_INCLUDE_DIR} )
 SET(boxm_util_sources
-    boxm_merge_mog.h                        boxm_merge_mog.cxx
     boxm_cell_data_traits.h                 boxm_cell_data_traits.cxx
     boxm_plane_ransac.h
     boxm_quad_scan_iterator.h               boxm_quad_scan_iterator.cxx

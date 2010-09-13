@@ -17,3 +17,9 @@ bsta_num_obs<bsta_gauss_f1> boxm_zero_val<short, bsta_num_obs<bsta_gauss_f1> >()
 {
   return bsta_num_obs<bsta_gauss_f1>();
 }
+
+template <>
+mix_gauss_f1_type boxm_zero_val<short, mix_gauss_f1_type>()
+{
+  return mix_gauss_f1_type();
+}
