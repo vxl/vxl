@@ -107,7 +107,7 @@ static void test_sample_binomial()
   for (unsigned i=0; i<N; ++i)
     X_bar += X[i];
   X_bar /= N;
-  TEST_NEAR("sample mean", X_bar, n*(1-p), eps);
+  TEST_NEAR("sample mean", X_bar, n*(1-p), eps*n);
 
   // sample standard deviation
   double sigma_bar_sqr = 0;
@@ -119,7 +119,7 @@ static void test_sample_binomial()
   // And now in one go, with the handy "range filling" sampler:
   vnl_sample_binomial(X, X+N, n, p);
   X_bar=0; for (unsigned i=0; i<N; ++i) X_bar += X[i]; X_bar /= N;
-  TEST_NEAR("sample mean", X_bar, n*(1-p), eps);
+  TEST_NEAR("sample mean", X_bar, n*(1-p), eps*n);
   sigma_bar_sqr=0; for (unsigned i=0; i<N; ++i) sigma_bar_sqr += vnl_math_sqr(X[i] - X_bar);
   TEST_NEAR("sample stddev squared", sigma_bar_sqr /= N-1, p*(1-p)*n, eps*n);
 }
