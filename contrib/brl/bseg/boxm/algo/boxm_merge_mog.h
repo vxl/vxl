@@ -1,4 +1,4 @@
-// This is brl/bseg/boxm/util/boxm_merge_mog.h
+// This is brl/bseg/boxm/algo/boxm_merge_mog.h
 #ifndef boxm_merge_mog_h_
 #define boxm_merge_mog_h_
 //:
