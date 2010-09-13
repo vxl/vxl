@@ -10,6 +10,8 @@ SET(boxm_algo_sources
     boxm_save_block_raw.h
     boxm_save_scene_raw.h
     boxm_upload_mesh.h
+    boxm_merge_mog.h                        boxm_merge_mog.cxx
+    boxm_split_sample.h
     boxm_compute_scene_difference.h
     dummy.cxx
    )

@@ -41,7 +41,7 @@ class boxm_render_expected_edge_image_functor
                         T_aux /*aux_val*/)
   {
     // compute segment length
-    const float seg_len = (float)(s1-s0).length(); // FIXME: unused...
+    //const float seg_len = (float)(s1-s0).length(); // FIXME: unused...
 
     // TODO: revise with segment length
     const float exp  = cell_value.edge_prob_;

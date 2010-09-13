@@ -77,7 +77,7 @@ bool boxm_render_expected_edge_process(bprb_func_process& pro)
   float n_normal = pro.get_input<float>(i++);
   // number of updates
   unsigned num_updates = pro.get_input<unsigned>(i++);
-  float threshold = pro.get_input<float>(i++); // FIXME: unused; see line 138
+  //float threshold = pro.get_input<float>(i++); // FIXME: unused; see line 138
   vil_image_view_base_sptr img;
   vil_image_view_base_sptr img_mask;
 
