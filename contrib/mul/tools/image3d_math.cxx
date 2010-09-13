@@ -812,7 +812,7 @@ void store__poly__string(opstack_t& s)
 
 void recall__string(opstack_t& s)
 {
-  assert(s.size() >= 2);
+  assert(s.size() >= 1);
 
   const vcl_string& o1 = s[0].as_string();
   named_store_t::const_iterator it = named_store.find(o1);
@@ -1562,7 +1562,7 @@ void signed_distance_transform__image_3d_of_int(opstack_t& s)
 
 void sum__double__double(opstack_t& s)
 {
-  assert(s.size() > 1);
+  assert(s.size() >= 2);
   double o1(s[1].as_double());
   double o2(s[0].as_double());
 
@@ -1572,7 +1572,7 @@ void sum__double__double(opstack_t& s)
 
 void diff__double__double(opstack_t& s)
 {
-  assert(s.size() > 1);
+  assert(s.size() >= 2);
   double o1(s[1].as_double());
   double o2(s[0].as_double());
 
@@ -1582,7 +1582,7 @@ void diff__double__double(opstack_t& s)
 
 void product__double__double(opstack_t& s)
 {
-  assert(s.size() > 1);
+  assert(s.size() >= 2);
   double o1(s[1].as_double());
   double o2(s[0].as_double());
 
@@ -1592,7 +1592,7 @@ void product__double__double(opstack_t& s)
 
 void quotient__double__double(opstack_t& s)
 {
-  assert(s.size() > 1);
+  assert(s.size() >= 2);
   double o1(s[1].as_double());
   double o2(s[0].as_double());
 
@@ -1603,7 +1603,7 @@ void quotient__double__double(opstack_t& s)
 
 void fill__image_3d_of_float__double(opstack_t& s)
 {
-  assert(s.size() >= 1);
+  assert(s.size() >= 2);
   vimt3d_image_3d_of<float> o1(s[1].as_image_3d_of_float());
   double o2(s[0].as_double());
 
@@ -1615,7 +1615,7 @@ void fill__image_3d_of_float__double(opstack_t& s)
 
 void fill__image_3d_of_int__double(opstack_t& s)
 {
-  assert(s.size() >= 1);
+  assert(s.size() >= 2);
   vimt3d_image_3d_of<int> o1(s[1].as_image_3d_of_int());
   double o2(s[0].as_double());
 
@@ -1626,7 +1626,7 @@ void fill__image_3d_of_int__double(opstack_t& s)
 
 void local_z_normalise__image_3d_of_float__double(opstack_t& s)
 {
-  assert(s.size() >= 1);
+  assert(s.size() >= 2);
   double o1(s[0].as_double());
   vimt3d_image_3d_of<float> o2(s[1].as_image_3d_of_float());
 
@@ -1646,6 +1646,7 @@ void local_z_normalise__image_3d_of_float__double(opstack_t& s)
 
 void clamp_above__image_3d_of_float__double__double(opstack_t& s)
 {
+  assert(s.size() >= 3);
   vimt3d_image_3d_of<float> o1(s[2].as_image_3d_of_float());
 
   vil3d_clamp_above(o1.image(), static_cast<float>(s[1].as_double()),
@@ -1657,6 +1658,7 @@ void clamp_above__image_3d_of_float__double__double(opstack_t& s)
 
 void clamp_below__image_3d_of_float__double__double(opstack_t& s)
 {
+  assert(s.size() >= 3);
   vimt3d_image_3d_of<float> o1(s[2].as_image_3d_of_float());
 
   vil3d_clamp_below(o1.image(), static_cast<float>(s[1].as_double()),
@@ -1668,6 +1670,7 @@ void clamp_below__image_3d_of_float__double__double(opstack_t& s)
 
 void clamp_above__image_3d_of_int__double__double(opstack_t& s)
 {
+  assert(s.size() >= 3);
   vimt3d_image_3d_of<int> o1(s[2].as_image_3d_of_int());
 
   vil3d_clamp_above(o1.image(), static_cast<int>(s[1].as_double()),
@@ -1679,6 +1682,7 @@ void clamp_above__image_3d_of_int__double__double(opstack_t& s)
 
 void clamp_below__image_3d_of_int__double__double(opstack_t& s)
 {
+  assert(s.size() >= 3);
   vimt3d_image_3d_of<int> o1(s[2].as_image_3d_of_int());
 
   vil3d_clamp_below(o1.image(), static_cast<int>(s[1].as_double()),
