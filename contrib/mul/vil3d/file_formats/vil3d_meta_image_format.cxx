@@ -39,6 +39,18 @@ inline void vil3d_meta_image_swap16(char *a, unsigned n)
   }
 }
 
+
+inline void vil3d_meta_image_swap64(char *a, unsigned n)
+{
+  for (unsigned i = 0; i < n * 2; i += 2)
+  {
+    char c = a[i]; a[i] = a[i+7]; a[i+7] = c;
+    c = a[i+1]; a[i+1] = a[i+6]; a[i+6] = c;
+    c = a[i+2]; a[i+2] = a[i+5]; a[i+5] = c;
+    c = a[i+3]; a[i+3] = a[i+4]; a[i+4] = c;
+  }
+}
+
 /*
  * Header stuff
  */
@@ -396,6 +408,8 @@ bool vil3d_meta_image_header::check_next_header_line(const vcl_string &nxt_line)
       pformat_ = VIL_PIXEL_FORMAT_INT_16;
     else if (elem_type_ == "MET_UCHAR")
       pformat_ = VIL_PIXEL_FORMAT_BYTE;
+    else if (elem_type_ == "MET_DOUBLE")
+      pformat_ = VIL_PIXEL_FORMAT_DOUBLE;
     else
     {
       vcl_cerr << "Unsupported element type specified\n";
@@ -603,7 +617,8 @@ vil3d_image_resource_sptr vil3d_meta_image_format::make_output_image(const char 
                                                                      vil_pixel_format format) const
 {
   if (format != VIL_PIXEL_FORMAT_BYTE   &&
-      format != VIL_PIXEL_FORMAT_INT_16 )
+      format != VIL_PIXEL_FORMAT_INT_16 &&
+      format != VIL_PIXEL_FORMAT_DOUBLE )
   {
     vcl_cerr << "vil3d_meta_image_format::make_output_image() WARNING\n"
              << "  Unable to deal with pixel format : " << format << vcl_endl;
@@ -620,6 +635,8 @@ vil3d_image_resource_sptr vil3d_meta_image_format::make_output_image(const char 
   case VIL_PIXEL_FORMAT_BYTE: header.set_element_type("MET_UCHAR");
                               break;
   case VIL_PIXEL_FORMAT_INT_16: header.set_element_type("MET_SHORT");
+                              break;
+  case VIL_PIXEL_FORMAT_DOUBLE: header.set_element_type("MET_DOUBLE");
                               break;
   default:
       vcl_cerr << "vil3d_meta_image_format::make_output_image() WARNING\n"
@@ -764,6 +781,13 @@ vil3d_image_view_base_sptr vil3d_meta_image::get_copy_view(unsigned int i0, unsi
       vil3d_meta_image_swap16((char *)(im.origin_ptr()), ni*nj*nk);
     return new vil3d_image_view<vxl_int_16>(im);
    }
+   case VIL_PIXEL_FORMAT_DOUBLE:
+   {
+    read_data_of_type(double);
+    if (header_.need_swap())
+      vil3d_meta_image_swap64((char *)(im.origin_ptr()), ni*nj*nk);
+    return new vil3d_image_view<double>(im);
+   }
    default:
     vcl_cout<<"ERROR: vil3d_meta_image_format::get_copy_view()\n"
             <<"Can't deal with pixel type " << pixel_format() << vcl_endl;
@@ -812,6 +836,17 @@ bool vil3d_meta_image::put_view(const vil3d_image_view_base &im,
     if (header_.need_swap())
       vil3d_meta_image_swap16((char *)(view_copy.origin_ptr()), ni()*nj()*nk()*nplanes());
     os->write(view_copy.origin_ptr(),ni()*nj()*nk()*nplanes()*sizeof(vxl_int_16));
+    // Should check that write was successful
+    return true;
+   }
+   case VIL_PIXEL_FORMAT_DOUBLE:
+   {
+     header_.check_need_swap();
+    vil3d_image_view<double> view_copy(ni(),nj(),nk(),nplanes());
+    vil3d_copy_reformat(static_cast<const vil3d_image_view<double>&>(im),view_copy);
+    if (header_.need_swap())
+      vil3d_meta_image_swap64((char *)(view_copy.origin_ptr()), ni()*nj()*nk()*nplanes());
+    os->write(view_copy.origin_ptr(),ni()*nj()*nk()*nplanes()*sizeof(double));
     // Should check that write was successful
     return true;
    }
