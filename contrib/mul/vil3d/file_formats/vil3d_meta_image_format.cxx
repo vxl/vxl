@@ -212,7 +212,7 @@ void vil3d_meta_image_header::set_pixel_format(const vil_pixel_format format)
   pformat_ = format;
 }
 
-const vil_pixel_format vil3d_meta_image_header::pixel_format(void) const
+vil_pixel_format vil3d_meta_image_header::pixel_format(void) const
 {
   return pformat_;
 }
@@ -476,8 +476,8 @@ bool vil3d_meta_image_header::set_header_offset(const vcl_string &offs)
   pos=offs.find_first_not_of(" ",epos);
   if (pos != vcl_string::npos)
   {
-     vcl_cerr << "Offset contains more than three values.\n";
-     return false;
+    vcl_cerr << "Offset contains more than three values.\n";
+    return false;
   }
   header_valid_ = true;
   return true;
@@ -515,8 +515,8 @@ bool vil3d_meta_image_header::set_header_dim_size(const vcl_string &dims)
   pos=dims.find_first_not_of(" ",epos);
   if (pos != vcl_string::npos)
   {
-     vcl_cerr << "Dim Size contains more than three values.\n";
-     return false;
+    vcl_cerr << "Dim Size contains more than three values.\n";
+    return false;
   }
   // For now only deal with 1 plane
   nplanes_=1;
@@ -556,8 +556,8 @@ bool vil3d_meta_image_header::set_header_voxel_size(const vcl_string &vsize)
   pos=vsize.find_first_not_of(" ",epos);
   if (pos != vcl_string::npos)
   {
-     vcl_cerr << "Element Spacing/Size contains more than three values.\n";
-     return false;
+    vcl_cerr << "Element Spacing/Size contains more than three values.\n";
+    return false;
   }
   header_valid_ = true;
   return true;
@@ -665,9 +665,8 @@ vil3d_image_resource_sptr vil3d_meta_image_format::make_output_image(const char 
 // Construct an image
 //===================================================================
 vil3d_meta_image::vil3d_meta_image(const vil3d_meta_image_header &header,
-                                   const vcl_string &fname) :
-header_(header),
-fpath_(fname)
+                                   const vcl_string &fname)
+: header_(header), fpath_(fname)
 {
   // No code necessary
 }
@@ -830,7 +829,7 @@ bool vil3d_meta_image::put_view(const vil3d_image_view_base &im,
    }
    case VIL_PIXEL_FORMAT_INT_16:
    {
-     header_.check_need_swap();
+    header_.check_need_swap();
     vil3d_image_view<vxl_int_16> view_copy(ni(),nj(),nk(),nplanes());
     vil3d_copy_reformat(static_cast<const vil3d_image_view<vxl_int_16>&>(im),view_copy);
     if (header_.need_swap())
@@ -841,7 +840,7 @@ bool vil3d_meta_image::put_view(const vil3d_image_view_base &im,
    }
    case VIL_PIXEL_FORMAT_DOUBLE:
    {
-     header_.check_need_swap();
+    header_.check_need_swap();
     vil3d_image_view<double> view_copy(ni(),nj(),nk(),nplanes());
     vil3d_copy_reformat(static_cast<const vil3d_image_view<double>&>(im),view_copy);
     if (header_.need_swap())

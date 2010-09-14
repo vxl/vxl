@@ -16,8 +16,7 @@
 
 class vil3d_meta_image_header
 {
-public:
-
+ public:
   vil3d_meta_image_header(void);
   ~vil3d_meta_image_header(void);
 
@@ -48,7 +47,7 @@ public:
   const vcl_string &image_fname(void) const;
 
   void set_pixel_format(const vil_pixel_format format);
-  const vil_pixel_format pixel_format(void) const;
+  vil_pixel_format pixel_format(void) const;
 
   void clear(void);
 
@@ -63,7 +62,7 @@ public:
   void check_need_swap(void);
   bool need_swap(void) const;
 
-private:
+ private:
 
   // Functions to help with header reading/writing
   bool check_next_header_line(const vcl_string &nxt_line);
@@ -123,16 +122,16 @@ class vil3d_meta_image_format : public vil3d_file_format
 // Use vil3d_meta_image_format instead.
 class vil3d_meta_image: public vil3d_image_resource
 {
-private:
+ private:
   vil3d_meta_image_header header_;
   vcl_string fpath_;
 
   //: Methods for reading/writing image
   bool write_image();
 
-public:
-   vil3d_meta_image(const vil3d_meta_image_header &header,
-                    const vcl_string &fname);
+ public:
+  vil3d_meta_image(const vil3d_meta_image_header &header,
+                   const vcl_string &fname);
 
   virtual ~vil3d_meta_image();
 
