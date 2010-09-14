@@ -2,23 +2,23 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
 // \brief Reader/Writer for meta image format images.
 // \author Chris Wolstenholme - Imorphics Ltd
 // This file contains classes for reading and writing meta image format images
 // Three key components are
-//   vil3d_meta_image_header: Structure to contain header information
-//   vil3d_meta_image: Resource object which interfaces to the file,
+// * vil3d_meta_image_header: Structure to contain header information
+// * vil3d_meta_image: Resource object which interfaces to the file,
 //                        allowing reading and writing via the get_copy_image()
 //                        and put_image() functions
-//   vil3d_meta_image_format: Object to create an appropriate vil3d_meta_image
+// * vil3d_meta_image_format: Object to create an appropriate vil3d_meta_image
 //
-//   The main work of loading and saving happens in vil3d_meta_image
+// The main work of loading and saving happens in vil3d_meta_image
 
 #include "vil3d_meta_image_format.h"
 #include <vcl_cstring.h>
+#include <vcl_cstdlib.h> // for std::atoi() and atof()
 #include <vcl_iostream.h>
 #include <vul/vul_file.h>
 #include <vil/vil_stream_fstream.h>
@@ -54,7 +54,7 @@ vox_size_i_(1.0), vox_size_j_(1.0), vox_size_k_(1.0),
 dim_size_i_(0), dim_size_j_(0), dim_size_k_(0), nplanes_(1),
 need_swap_(false)
 {
-  // No contruction code
+  // No construction code
 }
 
 //===================================================================
@@ -261,19 +261,19 @@ bool vil3d_meta_image_header::write_header(const vcl_string &header_fname) const
   if (!ofs)
     return false;
 
-  ofs << "ObjectType = Image\n";
-  ofs << "NDims = 3\n";
-  ofs << "BinaryData = True\n";
-  ofs << "BinaryDataByteOrderMSB = " << ((byte_order_msb_) ? "True" : "False") << "\n";
-  ofs << "CompressedData = False\n";
-  ofs << "TransformMatrix = 1 0 0 0 1 0 0 0 1\n";
-  ofs << "Offset = " << offset_i_ << " " << offset_j_ << " " << offset_k_ << "\n";
-  ofs << "CenterOfRotation = 0 0 0\n";
-  ofs << "AnatomicalOrientation = RAI\n";
-  ofs << "ElementSpacing = " << vox_size_i_ << " " << vox_size_j_ << " " << vox_size_k_ << "\n";
-  ofs << "DimSize = " << dim_size_i_ << " " << dim_size_j_ << " " << dim_size_k_ << "\n";
-  ofs << "ElementType = " << elem_type_ << "\n";
-  ofs << "ElementDataFile = " << vul_file::strip_directory(im_file_) << "\n";
+  ofs << "ObjectType = Image\n"
+      << "NDims = 3\n"
+      << "BinaryData = True\n"
+      << "BinaryDataByteOrderMSB = " << ((byte_order_msb_) ? "True" : "False") << '\n'
+      << "CompressedData = False\n"
+      << "TransformMatrix = 1 0 0 0 1 0 0 0 1\n"
+      << "Offset = " << offset_i_ << ' ' << offset_j_ << ' ' << offset_k_ << '\n'
+      << "CenterOfRotation = 0 0 0\n"
+      << "AnatomicalOrientation = RAI\n"
+      << "ElementSpacing = " << vox_size_i_ << ' ' << vox_size_j_ << ' ' << vox_size_k_ << '\n'
+      << "DimSize = " << dim_size_i_ << ' ' << dim_size_j_ << ' ' << dim_size_k_ << '\n'
+      << "ElementType = " << elem_type_ << '\n'
+      << "ElementDataFile = " << vul_file::strip_directory(im_file_) << vcl_endl;
 
   ofs.close();
   return true;
@@ -284,15 +284,15 @@ bool vil3d_meta_image_header::write_header(const vcl_string &header_fname) const
 //===================================================================
 void vil3d_meta_image_header::print_header(vcl_ostream &os) const
 {
-  os << "\n============= Meta Image Header Summary Begin =============\n";
-  os << "vil3d_meta_image_header - byte order is msb: " << ((byte_order_msb_) ? "true" : "false") << "\n";
-  os << "vil3d_meta_image_header - offset " << offset_i_ << ", " << offset_j_ << ", " << offset_k_ << "\n";
-  os << "vil3d_meta_image_header - voxel size: " << vox_size_i_ << ", " << vox_size_j_ << ", " << vox_size_k_ << "\n";
-  os << "vil3d_meta_image_header - dimension size: " << dim_size_i_ << ", " << dim_size_j_ << ", " << dim_size_k_ << "\n";
-  os << "vil3d_meta_image_header - nplanes: " << nplanes_ << "\n";
-  os << "vil3d_meta_image_header - element type: " << elem_type_ << "\n";
-  os << "vil3d_meta_image_header - image file: " << im_file_ << "\n";
-  os << "============= Meta Image Header Summary End =============\n\n";
+  os << "\n============= Meta Image Header Summary Begin =============\n"
+     << "vil3d_meta_image_header - byte order is msb: " << ((byte_order_msb_) ? "true" : "false") << '\n'
+     << "vil3d_meta_image_header - offset " << offset_i_ << ", " << offset_j_ << ", " << offset_k_ << '\n'
+     << "vil3d_meta_image_header - voxel size: " << vox_size_i_ << ", " << vox_size_j_ << ", " << vox_size_k_ << '\n'
+     << "vil3d_meta_image_header - dimension size: " << dim_size_i_ << ", " << dim_size_j_ << ", " << dim_size_k_ << '\n'
+     << "vil3d_meta_image_header - nplanes: " << nplanes_ << '\n'
+     << "vil3d_meta_image_header - element type: " << elem_type_ << '\n'
+     << "vil3d_meta_image_header - image file: " << im_file_ << '\n'
+     << "============= Meta Image Header Summary End =============\n" << vcl_endl;
 }
 
 //===================================================================
@@ -338,16 +338,16 @@ bool vil3d_meta_image_header::check_next_header_line(const vcl_string &nxt_line)
   {
     if (val != "Image")
     {
-      vcl_cerr << "Loader only handles Image Types." << vcl_endl;
+      vcl_cerr << "Loader only handles Image Types.\n";
       return false;
     }
   }
   else if (nxt_line.find("NDims")!= vcl_string::npos)
   {
-    unsigned int nd = atoi(val.c_str());
+    unsigned int nd = vcl_atoi(val.c_str());
     if (nd != 3)
     {
-      vcl_cerr << "Loader only handles 3D Images." << vcl_endl;
+      vcl_cerr << "Loader only handles 3D Images.\n";
       return false;
     }
   }
@@ -361,7 +361,7 @@ bool vil3d_meta_image_header::check_next_header_line(const vcl_string &nxt_line)
   {
     if (val=="True")
     {
-      vcl_cerr << "Loader does not handle compressed data" << vcl_endl;
+      vcl_cerr << "Loader does not handle compressed data\n";
       return false;
     }
   }
@@ -369,8 +369,8 @@ bool vil3d_meta_image_header::check_next_header_line(const vcl_string &nxt_line)
   {
     if (val != "1 0 0 0 1 0 0 0 1")
     {
-      vcl_cout << "Loader only handles identity in TransformMatrix." << vcl_endl;
-      vcl_cout << "Transformation ignored." << vcl_endl;
+      vcl_cout << "Loader only handles identity in TransformMatrix.\n"
+               << "Transformation ignored." << vcl_endl;
     }
   }
   else if (nxt_line.find("Offset")!= vcl_string::npos) // If there is another field at some point with Offset in the name check them before this one!
@@ -398,7 +398,7 @@ bool vil3d_meta_image_header::check_next_header_line(const vcl_string &nxt_line)
       pformat_ = VIL_PIXEL_FORMAT_BYTE;
     else
     {
-      vcl_cerr << "Unsupported element type specified" << vcl_endl;
+      vcl_cerr << "Unsupported element type specified\n";
       return false;
     }
     header_valid_ = true;
@@ -437,32 +437,32 @@ bool vil3d_meta_image_header::set_header_offset(const vcl_string &offs)
   epos=offs.find_first_of(" ");
   if (epos==vcl_string::npos)
   {
-    vcl_cerr << "Offset does not contain three values." << vcl_endl;
+    vcl_cerr << "Offset does not contain three values.\n";
     return false;
   }
 
-  offset_i_=atof(offs.substr(0,epos).c_str());
+  offset_i_=vcl_atof(offs.substr(0,epos).c_str());
   pos=offs.find_first_not_of(" ",epos);
   epos=offs.find_first_of(" ",pos);
   if (pos==vcl_string::npos || epos==vcl_string::npos)
   {
-    vcl_cerr << "Offset does not contain three values." << vcl_endl;
+    vcl_cerr << "Offset does not contain three values.\n";
     return false;
   }
 
-  offset_j_=atof(offs.substr(pos,epos).c_str());
+  offset_j_=vcl_atof(offs.substr(pos,epos).c_str());
   pos=offs.find_first_not_of(" ",epos);
   if (pos==vcl_string::npos)
   {
-    vcl_cerr << "Offset does not contain three values." << vcl_endl;
+    vcl_cerr << "Offset does not contain three values.\n";
     return false;
   }
-  offset_k_=atof(offs.substr(pos).c_str());
+  offset_k_=vcl_atof(offs.substr(pos).c_str());
   epos = offs.find_first_of(" ",pos);
   pos=offs.find_first_not_of(" ",epos);
   if (pos != vcl_string::npos)
   {
-     vcl_cerr << "Offset contains more than three values." << vcl_endl;
+     vcl_cerr << "Offset contains more than three values.\n";
      return false;
   }
   header_valid_ = true;
@@ -478,30 +478,30 @@ bool vil3d_meta_image_header::set_header_dim_size(const vcl_string &dims)
   epos=dims.find_first_of(" ");
   if (epos==vcl_string::npos)
   {
-    vcl_cerr << "Dim Size does not contain three values." << vcl_endl;
+    vcl_cerr << "Dim Size does not contain three values.\n";
     return false;
   }
-  dim_size_i_=atoi(dims.substr(0,epos).c_str());
+  dim_size_i_=vcl_atoi(dims.substr(0,epos).c_str());
   pos=dims.find_first_not_of(" ",epos);
   epos=dims.find_first_of(" ",pos);
   if (pos==vcl_string::npos || epos==vcl_string::npos)
   {
-    vcl_cerr << "Dim Size does not contain three values." << vcl_endl;
+    vcl_cerr << "Dim Size does not contain three values.\n";
     return false;
   }
-  dim_size_j_=atoi(dims.substr(pos,epos).c_str());
+  dim_size_j_=vcl_atoi(dims.substr(pos,epos).c_str());
   pos=dims.find_first_not_of(" ",epos);
   if (pos==vcl_string::npos)
   {
-    vcl_cerr << "Dim Size does not contain three values." << vcl_endl;
+    vcl_cerr << "Dim Size does not contain three values.\n";
     return false;
   }
-  dim_size_k_=atoi(dims.substr(pos).c_str());
+  dim_size_k_=vcl_atoi(dims.substr(pos).c_str());
   epos = dims.find_first_of(" ",pos);
   pos=dims.find_first_not_of(" ",epos);
   if (pos != vcl_string::npos)
   {
-     vcl_cerr << "Dim Size contains more than three values." << vcl_endl;
+     vcl_cerr << "Dim Size contains more than three values.\n";
      return false;
   }
   // For now only deal with 1 plane
@@ -519,30 +519,30 @@ bool vil3d_meta_image_header::set_header_voxel_size(const vcl_string &vsize)
   epos=vsize.find_first_of(" ");
   if (epos==vcl_string::npos)
   {
-    vcl_cerr << "Element Spacing/Size does not contain three values." << vcl_endl;
+    vcl_cerr << "Element Spacing/Size does not contain three values.\n";
     return false;
   }
-  vox_size_i_=atof(vsize.substr(0,epos).c_str());
+  vox_size_i_=vcl_atof(vsize.substr(0,epos).c_str());
   pos=vsize.find_first_not_of(" ",epos);
   epos=vsize.find_first_of(" ",pos);
   if (pos==vcl_string::npos || epos==vcl_string::npos)
   {
-    vcl_cerr << "Element Spacing/Size does not contain three values." << vcl_endl;
+    vcl_cerr << "Element Spacing/Size does not contain three values.\n";
     return false;
   }
-  vox_size_j_=atof(vsize.substr(pos,epos).c_str());
+  vox_size_j_=vcl_atof(vsize.substr(pos,epos).c_str());
   pos=vsize.find_first_not_of(" ",epos);
   if (pos==vcl_string::npos)
   {
-    vcl_cerr << "Element Spacing/Size does not contain three values." << vcl_endl;
+    vcl_cerr << "Element Spacing/Size does not contain three values.\n";
     return false;
   }
-  vox_size_k_=atof(vsize.substr(pos).c_str());
+  vox_size_k_=vcl_atof(vsize.substr(pos).c_str());
   epos = vsize.find_first_of(" ",pos);
   pos=vsize.find_first_not_of(" ",epos);
   if (pos != vcl_string::npos)
   {
-     vcl_cerr << "Element Spacing/Size contains more than three values." << vcl_endl;
+     vcl_cerr << "Element Spacing/Size contains more than three values.\n";
      return false;
   }
   header_valid_ = true;
@@ -585,7 +585,7 @@ vil3d_image_resource_sptr vil3d_meta_image_format::make_input_image(const char *
 {
   vil3d_meta_image_header header;
   vcl_string filename(fname);
-  
+
   if (!header.read_header(fname)) return 0;
   vcl_cout<<"vil3d_meta_image_format::make_input_image() Header: "<<header<<vcl_endl;
 
@@ -596,10 +596,10 @@ vil3d_image_resource_sptr vil3d_meta_image_format::make_input_image(const char *
 // Create an output image
 //===================================================================
 vil3d_image_resource_sptr vil3d_meta_image_format::make_output_image(const char *filename,
-                                                                     unsigned int ni, 
-                                                                     unsigned int nj, 
-                                                                     unsigned int nk, 
-                                                                     unsigned int nplanes, 
+                                                                     unsigned int ni,
+                                                                     unsigned int nj,
+                                                                     unsigned int nk,
+                                                                     unsigned int nplanes,
                                                                      vil_pixel_format format) const
 {
   if (format != VIL_PIXEL_FORMAT_BYTE   &&
@@ -623,7 +623,7 @@ vil3d_image_resource_sptr vil3d_meta_image_format::make_output_image(const char 
                               break;
   default:
       vcl_cerr << "vil3d_meta_image_format::make_output_image() WARNING\n"
-             << "  Unable to deal with pixel format : " << format << vcl_endl;
+               << "  Unable to deal with pixel format : " << format << vcl_endl;
       return 0;
   }
 
@@ -645,11 +645,11 @@ vil3d_image_resource_sptr vil3d_meta_image_format::make_output_image(const char 
  */
 
 //===================================================================
-// Contruct an image
+// Construct an image
 //===================================================================
 vil3d_meta_image::vil3d_meta_image(const vil3d_meta_image_header &header,
                                    const vcl_string &fname) :
-header_(header), 
+header_(header),
 fpath_(fname)
 {
   // No code necessary
@@ -735,9 +735,10 @@ vil3d_image_view_base_sptr vil3d_meta_image::get_copy_view(unsigned int i0, unsi
                                                            unsigned int k0, unsigned int nk) const
 {
   // Can only cope with loading whole image at present.
-  if (i0!=0 || int(ni)!=header_.ni() ||
-      j0!=0 || int(nj)!=header_.nj() ||
-      k0!=0 || int(nk)!=header_.nk()   ) return 0;
+  if (i0!=0 || ni!=header_.ni() ||
+      j0!=0 || nj!=header_.nj() ||
+      k0!=0 || nk!=header_.nk()   )
+    return 0;
 
   vcl_string image_data_path=header_.image_fname();
   vil_smart_ptr<vil_stream> is = new vil_stream_fstream(image_data_path.c_str(),"r");
@@ -773,9 +774,9 @@ vil3d_image_view_base_sptr vil3d_meta_image::get_copy_view(unsigned int i0, unsi
 //===================================================================
 // Put view
 //===================================================================
-bool vil3d_meta_image::put_view(const vil3d_image_view_base &im, 
-                                unsigned int i0, 
-                                unsigned int j0, 
+bool vil3d_meta_image::put_view(const vil3d_image_view_base &im,
+                                unsigned int i0,
+                                unsigned int j0,
                                 unsigned int k0)
 {
   if (!view_fits(im, i0, j0, k0))
