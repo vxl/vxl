@@ -38,7 +38,7 @@ public:
   //: get the number of relations 
   int size() const;
 
-  //: clear the database
+  //: clear the database - this removes all relations
   void clear();
 
   //: check whether a relation exists
