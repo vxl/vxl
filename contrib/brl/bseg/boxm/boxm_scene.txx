@@ -72,6 +72,7 @@ boxm_scene<T>::boxm_scene(const boxm_scene& scene)
   create_blocks(block_dim_, vgl_vector_3d<unsigned>(x,y,z));
 }
 
+
 template <class T>
 void boxm_scene<T>::create_blocks(const vgl_vector_3d<double>& /*block_dim*/,
                                   const vgl_vector_3d<unsigned>& world_dim)
@@ -159,6 +160,8 @@ void boxm_scene<T>::clone_blocks(boxm_scene<T> &scene_out, datatype data)
   }    
   
 }
+
+//: Returns a scene with the same structure and data
 template<class T>
 void boxm_scene<T>::clone_blocks(boxm_scene<T> &scene_out)
 {
@@ -537,7 +540,7 @@ void boxm_scene<T>::write_scene(vcl_string filename)
   vcl_string fullpath=scene_path_+ filename;
   vcl_ofstream os(fullpath.c_str());
   x_write(os, *this, "boxm_scene");
-  this->filename_ = filename;
+  this->filename_ = fullpath;
   os.close();
 }
 
@@ -626,7 +629,6 @@ bool boxm_scene<T>::parse_config(boxm_scene_parser& parser)
   save_internal_nodes_ =parser.save_internal_nodes();
   save_platform_independent_ = parser.save_platform_independent();
   load_all_blocks_ = parser.load_all_blocks();
-
   pinit_=parser.p_init();
 #if 0
   vcl_cout << "Internal Nodes 1: " << save_internal_nodes_ << vcl_endl;
