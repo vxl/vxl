@@ -68,6 +68,10 @@ class boxm_scene :public boxm_scene_base
 
   //: Copy constructor
   boxm_scene(const boxm_scene& scene);
+  
+  //: Constructor from base_scene
+  boxm_scene(const boxm_scene_base& scene_base):
+  boxm_scene_base(scene_base),active_block_(vgl_point_3d<int>(-1,-1,-1)), save_internal_nodes_(false), save_platform_independent_(true) {}
 
   //: Destructor
   ~boxm_scene();
@@ -190,8 +194,10 @@ class boxm_scene :public boxm_scene_base
   
   //: Returns a scene with the same structure and initialized with given value
   void clone_blocks(boxm_scene<T> &scene_out, datatype data);
-  //: Returns a scene with the same structure
+  
+  //: Returns a scene with the same structure and data
   void clone_blocks(boxm_scene<T> &scene_out);  
+  
   //: Unload active blocks
   void unload_active_blocks();
   
