@@ -28,14 +28,14 @@ class bvpl_kernel: public vbl_ref_count
 {
  public:
   //: Default constructor
-  bvpl_kernel() {id_=++id_cnt;}
+  bvpl_kernel(){id_=++id_cnt;}
   //: Constructor
   bvpl_kernel(bvpl_kernel_iterator kernel, vnl_float_3 axis, vnl_float_3 aux_axis, float angle, vgl_vector_3d<int> dim, vgl_point_3d<int> min_pt, vgl_point_3d<int> max_pt, vcl_string name = "", double voxel_length = 1.0)
   : kernel_(kernel),axis_(axis),aux_axis_(aux_axis), angle_(angle),dim_(dim),min_point_(min_pt),max_point_(max_pt),name_(name),voxel_length_(voxel_length)
   {
-#ifdef DEBUG
+//#ifdef DEBUG
     vcl_cout << "Creating kernel with axis, anle, dim, max, min =\n" << axis_ << '\n' << angle_<< '\n' << dim_<< '\n' <<max_point_<< '\n' << min_point_ << '\n';
-#endif
+//#endif
     id_=++id_cnt;
   }
   //: Destructor
@@ -51,6 +51,7 @@ class bvpl_kernel: public vbl_ref_count
   //: Return the length of a voxel in global coordinates
   double voxel_length() const {return voxel_length_;}
   void set_voxel_length(double length) {voxel_length_=length;}
+  void set_xml_element(bxml_data_sptr x_data) {factory_data_ = x_data; }
   vgl_vector_3d<int> offset()
   {
     int x=0;
@@ -126,6 +127,8 @@ class bvpl_kernel: public vbl_ref_count
   vcl_string name_;
   //: Length of a voxel in global coordinates
   double voxel_length_;
+  bxml_data_sptr factory_data_;
+
 };
 
 

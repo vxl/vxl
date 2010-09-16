@@ -36,10 +36,14 @@
 #include <vcl_utility.h>
 #include <vnl/vnl_float_3.h>
 #include <vgl/algo/vgl_rotation_3d.h>
+#include <vbl/vbl_ref_count.h>
+
+class bvpl_kernel_factory;
+typedef vbl_smart_ptr<bvpl_kernel_factory> bvpl_kernel_factory_sptr;
 
 
 //: A factory of bvpl_kernels
-class bvpl_kernel_factory
+class bvpl_kernel_factory: public vbl_ref_count
 {
  public:
   //Default constructor. Initialize constant member variables
@@ -78,11 +82,18 @@ class bvpl_kernel_factory
   //: returns the rectangular dimensions around the kernel center
   vgl_vector_3d<int> dim();
 
-  /******************Batch Method ***********************/
   //: Creates a vector of kernels as specified by func
   template <class F>
   bvpl_kernel_vector_sptr create_kernel_vector(F func);
+  
+  //: Return an xml element
+  virtual bxml_data_sptr xml_element()
+  { 
+    vcl_cout << "Calling xml write in parent class, xml data will be NULL " << vcl_endl;
+    return NULL;
+  }
 
+  virtual bvpl_kernel_factory_sptr self(){return this;}
 
  protected:
 
@@ -139,6 +150,7 @@ class bvpl_kernel_factory
   //: Rotates "class-kernel_" using the given rotation matrix
   kernel_type rotate(vgl_rotation_3d<float> R);
 };
+
 
 template <class F>
 bvpl_kernel_vector_sptr bvpl_kernel_factory::create_kernel_vector(F func)

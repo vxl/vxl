@@ -7,7 +7,10 @@
 #include <vcl_fstream.h>
 #include <vcl_string.h>
 
+#include <bxml/bxml_find.h>
+
 #include "bvpl_edge3d_kernel_factory.h"
+
 
 unsigned bvpl_kernel::id_cnt=0;
 
@@ -104,34 +107,41 @@ bxml_data_sptr bvpl_kernel::xml_element()
 {
   bxml_element *kernel = new bxml_element("bvpl_kernel");
   kernel->append_text("\n");
-  kernel->set_attribute("factory", name_);
-  kernel->set_attribute("min_x" , min_point_.x());
-  kernel->set_attribute("max_x" , max_point_.x());
+  if(!factory_data_)
+    return NULL;
+  //bxml_data_sptr factory_data = factory_->xml_element();
+  kernel->append_data(factory_data_);
+  kernel->append_text("\n");
+  kernel->set_attribute("voxel_length", voxel_length_);
   
-  kernel->set_attribute("min_y" , min_point_.y());
-  kernel->set_attribute("max_y" , max_point_.y());
-  
-  
-  kernel->set_attribute("min_z" , min_point_.z());
-  kernel->set_attribute("max_z" , max_point_.z());
-  
-  kernel->set_attribute("axix_x", axis_[0]);
-  kernel->set_attribute("axix_y", axis_[1]);
-  kernel->set_attribute("axix_z", axis_[2]);
-  
-  kernel->set_attribute("angle", angle_);
   return kernel;
 }
 
 bvpl_kernel_sptr bvpl_kernel::parse_xml_element(bxml_data_sptr d)
 {
+  bxml_element query("bvpl_kernel");
+  
+  bxml_data_sptr root = bxml_find_by_name(d, query);
+  if (!root || root->type() != bxml_data::ELEMENT) {
+    return NULL;
+  }
+  bxml_element* gp_root = dynamic_cast<bxml_element*>(root.ptr());
+  
+  //get the variables
+  double voxel_length =0.0f;
+  
+  gp_root->get_attribute("voxel_length", voxel_length );
   //try each factory
   bvpl_kernel_sptr kernel = NULL;
   
   kernel = bvpl_edge3d_kernel_factory::parse_xml_element(d);
   
-  if(kernel)
+  if(kernel){
+    kernel->set_voxel_length(voxel_length);
     return kernel;
+  }
   else 
-    return false;
+    return NULL;
+  
+  
 }

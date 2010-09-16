@@ -47,11 +47,21 @@ class bvpl_edge3d_kernel_factory : public bvpl_kernel_factory
 
   //: Constructs constructor from min and max positions on each axis
   bvpl_edge3d_kernel_factory(int min_x, int max_x, int min_y, int max_y, int min_z, int max_z, double voxel_length = 1.0);
+  
+  bvpl_edge3d_kernel_factory(const bvpl_edge3d_kernel_factory& other):
+  min_x_(other.min_x_),max_x_(other.max_x_),min_y_(other.min_y_),max_y_(other.max_y_),min_z_(other.min_z_),max_z_(other.max_z_){};
+  //:Copy Constructor
 
   virtual ~bvpl_edge3d_kernel_factory() {}
   
   static vcl_string name() {return "edge3d"; }
+  
+  virtual bvpl_kernel_factory_sptr self(){return new bvpl_edge3d_kernel_factory(*this);}
 
+  //: Return an xml element
+  virtual bxml_data_sptr xml_element();
+  
+  //: Parse an xml element
   static bvpl_kernel_sptr parse_xml_element(bxml_data_sptr d);
 
  private:
