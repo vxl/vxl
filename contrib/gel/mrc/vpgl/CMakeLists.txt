@@ -47,3 +47,5 @@ SUBDIRS(ihog)
 ENDIF(BUILD_MUL)
 # Geographic utilities
 SUBDIRS(bgeo)
+#camera view sphere
+SUBDIRS(vsph)
