@@ -27,6 +27,10 @@ class brdb_database_manager
 
   //: a unique id
   static unsigned id() {return id_++;}
+  
+  //: clear all relations
+  static bool clear_all();
+  
   //: clear all relations except
   static bool clear_all_except(const vcl_set<vcl_string>& relation_names);
 

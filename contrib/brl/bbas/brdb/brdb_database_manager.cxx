@@ -28,6 +28,22 @@ brdb_database_sptr brdb_database_manager::instance()
   return brdb_database_manager::instance_;
 }
 
+//: clear all relations 
+bool
+brdb_database_manager::clear_all()
+{
+  vcl_set<vcl_string> all_relation_names = instance()->get_all_relation_names();
+  
+  // go through all names, if not in relation_names, remove them
+  for (vcl_set<vcl_string>::iterator itr = all_relation_names.begin(); itr != all_relation_names.end(); ++itr)
+  {
+      if (instance()->exists((*itr)))
+        instance()->clear_relation((*itr));
+  }
+  
+  return true;
+}
+
 
 //: clear all relations except
 bool
