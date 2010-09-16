@@ -70,11 +70,34 @@ void bvpl_edge3d_kernel_factory::create_canonical()
   return;
 }
 
+//: Return an xml element
+bxml_data_sptr bvpl_edge3d_kernel_factory::xml_element()
+{
+  bxml_element *factory = new bxml_element("bvpl_edge3d_kernel_factory");
+  factory->append_text("\n");
+
+  factory->set_attribute("min_x" , min_x_);
+  factory->set_attribute("max_x" , max_x_);
+  
+  factory->set_attribute("min_y" , min_y_);
+  factory->set_attribute("max_y" , max_y_);
+  
+  
+  factory->set_attribute("min_z" , min_z_);
+  factory->set_attribute("max_z" , max_z_);
+  
+  factory->set_attribute("axix_x", this->rotation_axis_[0]);
+  factory->set_attribute("axix_y", this->rotation_axis_[1]);
+  factory->set_attribute("axix_z", this->rotation_axis_[2]);
+  
+  factory->set_attribute("angle", this->angle_);
+  return factory;
+}
 
 //: Read an xml element
 bvpl_kernel_sptr bvpl_edge3d_kernel_factory::parse_xml_element(bxml_data_sptr d)
 {
-  bxml_element query("bvpl_kernel");
+  bxml_element query("bvpl_edge3d_kernel_factory");
   bxml_data_sptr root = bxml_find_by_name(d, query);
   if (!root || root->type() != bxml_data::ELEMENT) {
     return NULL;
@@ -82,11 +105,9 @@ bvpl_kernel_sptr bvpl_edge3d_kernel_factory::parse_xml_element(bxml_data_sptr d)
 
   bxml_element* gp_root = dynamic_cast<bxml_element*>(root.ptr());
 
-  if (gp_root->attribute("factory")!=name())
-    return NULL;
-
   //get the variables
-  float min_x, max_x, min_y, max_y, min_z, max_z, axis_x, axis_y, axis_z, angle;
+  int min_x, max_x, min_y, max_y, min_z, max_z;
+  float axis_x, axis_y, axis_z, angle;
 
   gp_root->get_attribute("min_x" , min_x);
   gp_root->get_attribute("max_x" , max_x);
@@ -102,10 +123,13 @@ bvpl_kernel_sptr bvpl_edge3d_kernel_factory::parse_xml_element(bxml_data_sptr d)
   gp_root->get_attribute("axix_z", axis_z);
 
   gp_root->get_attribute("angle", angle);
-  bvpl_edge3d_kernel_factory factory((int)min_x, (int)max_x, (int)min_y, (int)max_y, (int)min_z, (int)max_z);
+  bvpl_edge3d_kernel_factory factory(min_x, max_x, min_y, max_y, min_z, max_z);
   factory.set_rotation_axis(vnl_float_3(axis_x,axis_y,axis_z));
   factory.set_angle(angle);
 
-  return new bvpl_kernel(factory.create());
+  bvpl_kernel_sptr kernel = new bvpl_kernel(factory.create());
+  kernel->set_xml_element(factory.xml_element());
+  return kernel;
 }
+
 
