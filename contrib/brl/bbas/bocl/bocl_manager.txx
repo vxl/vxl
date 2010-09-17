@@ -9,6 +9,8 @@
 #include <vcl_utility.h>
 #include <vcl_fstream.h>
 #include <vcl_sstream.h>
+#include <bocl/bocl_utils.h>
+#include <vcl_cstdio.h>
 
 
 //: Insure only one instance is created
@@ -79,15 +81,21 @@ bool bocl_manager<T>::initialize_cl()
   bool cpu_found=false;
 
   cl_device_id device;
+  cl_device_id gpus[2];
+  cl_uint numGPUs;
   //: First checking for GPU
   for (unsigned i=0;i<num_platforms;i++)
   {
 
-    if ( clGetDeviceIDs(platform_id[i], CL_DEVICE_TYPE_GPU, 1, &device, NULL)== CL_SUCCESS)
+    if ( clGetDeviceIDs(platform_id[i], CL_DEVICE_TYPE_GPU, 2, gpus, &numGPUs)== CL_SUCCESS)
     {
         clGetPlatformInfo(platform_id[i],CL_PLATFORM_NAME,sizeof(platform_name),platform_name,&ret_size);
 
       gpu_found=true;
+      vcl_cout<<"Found "<<numGPUs<<" GPUs"<<vcl_endl;
+      //use the second GPU if it's there...
+      device = (numGPUs > 1)? gpus[1] : gpus[0];
+      //device = gpus[0]; 
       break;
     }
   }
@@ -147,7 +155,21 @@ bool bocl_manager<T>::initialize_cl()
     return false;
 
   vcl_size_t max_work_group_size = 0;
+  
   // Get device specific information
+  char vendor[512];
+  status = clGetDeviceInfo(devices_[0],
+                           CL_DEVICE_VENDOR,
+                           sizeof(vendor),
+                           (void*) vendor,
+                           NULL);
+
+  if (!this->check_val(status,
+                       CL_SUCCESS,
+                       "clGetDeviceInfo CL_DEVICE_VENDOR failed."))
+    return false;
+
+
   status = clGetDeviceInfo(devices_[0],
                            CL_DEVICE_MAX_WORK_GROUP_SIZE,
                            sizeof(vcl_size_t),
@@ -361,6 +383,48 @@ void* bocl_manager<T>::allocate_host_mem(vcl_size_t size)
 #else
   return memalign(16, size);
 #endif
+}
+
+template<class T>
+int bocl_manager<T>::build_kernel_program(cl_program & program, vcl_string options)
+{
+  cl_int status = CL_SUCCESS;
+  vcl_size_t sourceSize[] = { this->prog_.size() };
+  if (!sourceSize[0]) return SDK_FAILURE;
+  if (program) {
+    status = clReleaseProgram(program);
+    program = 0;
+    if (!this->check_val(status, CL_SUCCESS, "clReleaseProgram failed."))
+      return SDK_FAILURE;
+  }
+  const char * source = this->prog_.c_str();
+
+  program = clCreateProgramWithSource(this->context_, 
+                                      1, 
+                                      &source,  
+                                      sourceSize,
+                                      &status);
+  if (!this->check_val(status,CL_SUCCESS,"clCreateProgramWithSource failed."))
+    return SDK_FAILURE;
+
+  // create a cl program executable for all the devices specified
+  status = clBuildProgram(program,
+                          1,
+                          this->devices_,
+                          options.c_str(),
+                          NULL,
+                          NULL);
+  if (!this->check_val(status, CL_SUCCESS, error_to_string(status)))
+  {
+    vcl_size_t len;
+    char buffer[2048];
+    clGetProgramBuildInfo(program, this->devices_[0],
+                          CL_PROGRAM_BUILD_LOG, sizeof(buffer), buffer, &len);
+    vcl_printf("%s\n", buffer);
+    return SDK_FAILURE;
+  }
+  else
+    return SDK_SUCCESS;
 }
 
 
