@@ -177,6 +177,7 @@ bool boxm_update_bit_tableau::refine_model()
   //refine_count_++; curr_count_=0;
   //boxm_update_bit_scene_manager* updt_mgr = boxm_update_bit_scene_manager::instance();
   //return updt_mgr->refine();
+return false;
 }
 //: calls on update manager to update model
 bool boxm_update_bit_tableau::update_model()
