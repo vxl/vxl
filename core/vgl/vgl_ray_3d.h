@@ -96,6 +96,13 @@ vcl_ostream&  operator<<(vcl_ostream& s, const vgl_ray_3d<Type>& p);
 // \relatesalso vgl_ray_3d
 template <class Type>
 vcl_istream&  operator>>(vcl_istream& is,  vgl_ray_3d<Type>& p);
+//: public functions
+template <class Type>
+//: angle between rays
+double angle(vgl_ray_3d<Type> const& r0, vgl_ray_3d<Type> const& r1)
+{
+  return angle(r0.direction(), r1.direction());
+} 
 #define VGL_RAY_3D_INSTANTIATE(T) extern "please include vgl/vgl_ray_3d.txx first"
 
 #endif // vgl_ray_3d_h_
