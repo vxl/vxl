@@ -430,7 +430,7 @@ bool boxm_update_bit_scene_manager::build_rendering_program()
     options+="-D ATI ";
   if (vcl_strstr(this->platform_name,"NVIDIA"))
     options+="-D NVIDIA ";
-  options += " -cl-fast-relaxed-math ";
+  //options += " -cl-fast-relaxed-math ";
   
   // assign the functor calling signature
   vcl_string::size_type pos_start = this->prog_.find(patt);
@@ -548,14 +548,14 @@ bool boxm_update_bit_scene_manager::set_args()
   status = clSetKernelArg(render_kernel_,i++,sizeof(cl_mem),(void *)&image_gl_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (gl_image)"))
     return 0;
-  //output buffer
-  //status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&output_buf_);
-  //if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output)"))
-    //return 0;
   //bit lookup buffer
   status = clSetKernelArg(render_kernel_,i++,sizeof(cl_mem),(void *)&bit_lookup_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output)"))
     return 0;
+  //output float buffer (one float for each buffer)
+  status = clSetKernelArg(render_kernel_,i++,sizeof(cl_mem),(void *)&output_debug_buf_);
+  if (this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output debugger)")!=CHECK_SUCCESS)
+    return false;
   //END RENDER ARGS ------------------------------------------------------------
 
 
@@ -955,17 +955,35 @@ bool boxm_update_bit_scene_manager::update()
         return false;
       vcl_cout<<" in "<<gpu_time_<<" ms"<<vcl_endl;
 
-      if(pass == 1) {
-        cl_event events[1];
-        int status = clEnqueueReadBuffer(command_queue_, image_buf_, CL_TRUE, 0, 
-                                         this->wni_*this->wnj_*sizeof(cl_float4),
-                                         image_, 0, NULL, &events[0]);
-        if (!this->check_val(status,CL_SUCCESS,"clEnqueueReadBuffer (output buffer )failed."))
-          return false;
-        status = clWaitForEvents(1, &events[0]);
-        if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents (output read) failed."))
-          return false;
+      //if(pass == 1) {
+        //cl_event events[1];
+        //int status = clEnqueueReadBuffer(command_queue_, image_buf_, CL_TRUE, 0, 
+                                         //this->wni_*this->wnj_*sizeof(cl_float4),
+                                         //image_, 0, NULL, &events[0]);
+        //if (!this->check_val(status,CL_SUCCESS,"clEnqueueReadBuffer (read)failed."))
+          //return false;
+        //status = clWaitForEvents(1, &events[0]);
+        //if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents (output read) failed."))
+          //return false;
+        //this->save_image();
+      //}
+      cl_event events[1];
+      int status = clEnqueueReadBuffer(command_queue_, output_debug_buf_, CL_TRUE, 0, 
+                                       scene_info_->num_buffer*sizeof(cl_float),
+                                       output_debug_, 0, NULL, &events[0]);
+      if (!this->check_val(status,CL_SUCCESS,"clEnqueueReadBuffer (output buffer )failed."))
+        return false;
+      status = clWaitForEvents(1, &events[0]);
+      if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents (output read) failed."))
+        return false;
+      vcl_cout<<"KERNEL OUTPUT: "<<vcl_endl;
+      for(int i=0; i<4; i++) {
+        for(int j=0; j<4; j++) {
+          vcl_cout<<output_debug_[4*i+j]<<" ";
+        }
+        vcl_cout<<'\n';
       }
+      
 #if 0
       if(pass == 4) {  //only read for data setting pass
         cl_event events[1];
@@ -1117,10 +1135,10 @@ void boxm_update_bit_scene_manager::save_image()
       img3(i,j)=image_[(j*this->wni_+i)*4+3];
 
 
-  vil_save(img0,"f:/APL/img0.tiff");
-  vil_save(img1,"f:/APL/img1.tiff");
-  vil_save(img2,"f:/APL/img2.tiff");
-  vil_save(img3,"f:/APL/img3.tiff");
+  vil_save(img0,"/media/VXL/img0.tiff");
+  vil_save(img1,"/media/VXL/img1.tiff");
+  vil_save(img2,"/media/VXL/img2.tiff");
+  vil_save(img3,"/media/VXL/img3.tiff");
 }
 
 bool boxm_update_bit_scene_manager::read_output_image()

@@ -153,6 +153,10 @@ update_bit_scene_opt(__constant  RenderSceneInfo    * linfo,
       int data_ptr = traverse_three((llid<<4), local_tree, 
                                     posx,posy,posz, 
                                     &cell_minx, &cell_miny, &cell_minz, &cell_len);
+      if(data_ptr != 0) {
+        output[0] = -666;
+        output[1] = -666;
+      } 
       data_ptr = data_index_opt( (llid<<4), local_tree, data_ptr, bit_lookup);
       data_ptr = block.x * linfo->data_len + data_ptr;
       
@@ -234,11 +238,14 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
                       __global float            * output)
 {
     int gid=get_global_id(0);
-    int datasize= info->data_len * info->num_buffer;
+    int datasize = info->data_len * info->num_buffer;
     if (gid<datasize)
     {
-      //load global data into a register
+      //if alpha is less than zero don't update
       float  alpha    = alpha_array[gid];
+      if(alpha <= 0.0) return;
+      
+      //load global data into registers
       float4 aux_data = aux_data_array[gid];
       float4 nobs     = convert_float4(nobs_array[gid]);
       float8 mixture  = convert_float8(mixture_array[gid]);
@@ -261,11 +268,13 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
       mixture_array[gid]    = convert_uchar8_sat_rte(post_mix);
       nobs_array[gid]       = convert_ushort4_sat_rte(post_nobs);      
       aux_data_array[gid]   = (float4)0.0f;
-
     }
     
-#if 0
+#if 1 
     if(gid==345) {
+      output[0] = info->data_len; 
+      output[1] = info->num_buffer;
+/*
       output[0] = alpha_array[gid];
       output[1] = (float) (mixture_array[gid].s0/255.0); //mu0
       output[2] = (float) (mixture_array[gid].s1/255.0); //sig0
@@ -277,6 +286,7 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
       output[8] = (float) (mixture_array[gid].s7/255.0); //sig2
 
       output[9] = (float) (nobs_array[gid].s3/100.0);
+*/
     }
 #endif
     

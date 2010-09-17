@@ -14,9 +14,10 @@ ray_trace_bit_scene_opt(__constant  RenderSceneInfo    * linfo,
                         __global    float16            * camera,        // camera orign and SVD of inverse of camera matrix
                         __global    uint4              * imgdims,       // dimensions of the image
                         __local     uchar16            * local_tree,
-                        __global    float              * in_image,
+                        __global    float              * in_image,      // input image and store vis_inf and pre_inf
                         __global    uint               * gl_image, 
-                        __constant  uchar              * bit_lookup)    // input image and store vis_inf and pre_inf
+                        __constant  uchar              * bit_lookup, 
+                        __global    float              * output)    
 {
   //get local id (0-63 for an 8x8) of this patch 
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
@@ -31,8 +32,8 @@ ray_trace_bit_scene_opt(__constant  RenderSceneInfo    * linfo,
   // check to see if the thread corresponds to an actual pixel as in some 
   // cases #of threads will be more than the pixels.
   if (i>=(*imgdims).z || j>=(*imgdims).w) {
-    gl_image[imI] = rgbaFloatToInt((float4)(0.0,0.0,0.0,0.0));
-    in_image[imI] = (float)-1.0f;
+    //gl_image[imI] = rgbaFloatToInt((float4)(0.0,0.0,0.0,0.0));
+    //in_image[imI] = (float)-1.0f;
     return;
   }
   

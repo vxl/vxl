@@ -186,6 +186,8 @@ bool boxm_update_bit_tableau::update_model()
   count_++; curr_count_++;
 
   //make sure you get a valid frame...
+  if(curr_frame_ >= cam_files_.size())
+    curr_frame_ = 0;
   //curr_frame_=rand.lrand32(0,cam_files_.size()-1);
 
   vcl_cout<<"Cam "<<cam_files_[curr_frame_]

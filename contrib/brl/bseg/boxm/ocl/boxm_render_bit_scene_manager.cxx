@@ -190,15 +190,14 @@ bool boxm_render_bit_scene_manager::set_args(unsigned kernel_index=0)
     status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&image_gl_buf_);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (gl_image)"))
       return 0;
-
-    //output buffer
-    //status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&output_buf_);
-    //if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output)"))
-      //return 0;
     //bit lookup buffer
     status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&bit_lookup_buf_);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output)"))
       return 0;
+    //output buffer
+    status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&output_buf_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output)"))
+      return 0;  
   }
   else if (kernel_index==1)
   {
