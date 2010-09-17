@@ -65,6 +65,11 @@ class vgl_homg_line_3d_2_points
   //: Infinite point: the intersection of the line with the plane at infinity
   inline vgl_homg_point_3d<Type> point_infinite()const{return point_infinite_;}
 
+  //: The point at infinity defines the direction of the line
+  inline vgl_vector_3d<Type> direction() const{
+    vgl_vector_3d<Type> dir(point_infinite_.x(), point_infinite_.y(),
+                            point_infinite_.z());
+  return dir/static_cast<Type>(dir.length());}
   //: Assignment
   inline void set(vgl_homg_point_3d<Type> const& p1, vgl_homg_point_3d<Type> const& p2)
   { point_finite_ = p1; point_infinite_ = p2; force_point2_infinite(); }
