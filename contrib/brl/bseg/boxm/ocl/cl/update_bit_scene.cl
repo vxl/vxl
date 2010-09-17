@@ -1,23 +1,33 @@
 #if NVIDIA
  #pragma OPENCL EXTENSION cl_khr_gl_sharing : enable
 #endif
-
 #define EPSILON .0125
-
+                       
 __kernel
 void
-ray_trace_bit_scene_opt(__constant  RenderSceneInfo    * linfo,
-                        __global    ushort2            * block_ptrs,
-                        __global    int4               * tree_array,
-                        __global    float              * alpha_array,
-                        __global    uchar8             * mixture_array,
-                        __global    float16            * camera,        // camera orign and SVD of inverse of camera matrix
-                        __global    uint4              * imgdims,       // dimensions of the image
-                        __local     uchar16            * local_tree,
-                        __global    float              * in_image,
-                        __global    uint               * gl_image, 
-                        __constant  uchar              * bit_lookup)    // input image and store vis_inf and pre_inf
+update_bit_scene_opt(__constant  RenderSceneInfo    * linfo,
+                     __global    ushort2            * block_ptrs,
+                     __global    int4               * tree_array,       // tree structure for each block
+                     __global    float              * alpha_array,      // alpha for each block
+                     __global    uchar8             * mixture_array,    // mixture for each block
+                     __global    ushort4            * num_obs_array,    // num obs for each block
+                     __global    float4             * aux_data_array,   // aux data used between passes
+                     __constant  uchar              * bit_lookup,       // used to get data_index
+                     __local     uchar16            * local_tree,       // cache current tree into local memory
+                     __global    float16            * camera,           // camera orign and SVD of inverse of camera matrix
+                     __global    uint4              * imgdims,          // dimensions of the input image
+                     __global    float4             * in_image,         // the input image
+                     __global    int                * offsetfactor,     // ??
+                     __global    int                * offset_x,         // offset to the left and right (which one of the four blocks)
+                     __global    int                * offset_y,         
+                     __local     uchar4             * ray_bundle_array,   //gives information for which ray takes over in the workgroup
+                     __local     int                * cell_ptrs,          //local list of cell_ptrs (cells that are hit by this workgroup
+                     __local     float16            * cached_data,        //
+                     __local     float4             * cached_aux_data,
+                     __local     float4             * image_vect,          // input image and store vis_inf and pre_inf
+                     __global    float              * output)    
 {
+
   //get local id (0-63 for an 8x8) of this patch 
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
   
@@ -25,16 +35,17 @@ ray_trace_bit_scene_opt(__constant  RenderSceneInfo    * linfo,
   // get image coordinates and camera, 
   // check for validity before proceeding
   //----------------------------------------------------------------------------
-  int i=0,j=0;  map_work_space_2d(&i,&j);
-  int imI = j*get_global_size(0)+i;     //locally store the final index to save a register
+  int i=0,j=0; map_work_space_2d_offset(&i,&j,(*offset_x),(*offset_y));
 
   // check to see if the thread corresponds to an actual pixel as in some 
   // cases #of threads will be more than the pixels.
   if (i>=(*imgdims).z || j>=(*imgdims).w) {
-    gl_image[imI] = rgbaFloatToInt((float4)(0.0,0.0,0.0,0.0));
-    in_image[imI] = (float)-1.0f;
     return;
   }
+  int factor=(*offsetfactor);
+  image_vect[llid] = in_image[j*get_global_size(0)*factor+i];
+  barrier(CLK_LOCAL_MEM_FENCE);
+
   
   //----------------------------------------------------------------------------
   // we know i,j map to a point on the image,
@@ -74,8 +85,6 @@ ray_trace_bit_scene_opt(__constant  RenderSceneInfo    * linfo,
   float min_facez = (ray_dz < 0.0) ? (linfo->dims.z) : 0.0;
   float tblock = max(max( (min_facex-ray_ox)*(1.0/ray_dx), (min_facey-ray_oy)*(1.0/ray_dy)), (min_facez-ray_oz)*(1.0/ray_dz));
   if (tfar <= tblock) {
-    gl_image[imI] = rgbaFloatToInt((float4)(0.0,0.0,0.0,0.0));
-    in_image[imI] = (float)-1.0f;
     return;
   }
   //make sure tnear is at least 0...
@@ -159,9 +168,44 @@ ray_trace_bit_scene_opt(__constant  RenderSceneInfo    * linfo,
       float d = (t1-ttree) * linfo->block_len;
       ttree = t1;
 
-      //expected_int+=data_ptr;
-      step_cell_render_opt2(mixture_array, alpha_array, data_ptr, d, 
-                            &vis, &expected_int, &intensity_norm);
+      //keep track of cells being hit
+      cell_ptrs[llid]=data_ptr;
+      ray_bundle_array[llid].x=llid;
+      barrier(CLK_LOCAL_MEM_FENCE);
+
+      ////////////////////////////////////////////////////////
+      // the place where the ray trace function can be applied
+      load_data_mutable_using_cell_ptrs(ray_bundle_array,cell_ptrs);
+      if (ray_bundle_array[llid].x==llid)
+      {
+          //      /* cell data, i.e., alpha and app model is needed for some passes */
+#if %%
+          float  alpha    = alpha_array[data_ptr];
+          float4 nobs     = convert_float4(num_obs_array[data_ptr]);
+          float8 mixture  = convert_float8(mixture_array[data_ptr]);
+          float16 datum = (float16) (alpha, 
+                         (mixture.s0/255.0), (mixture.s1/255.0), (mixture.s2/255.0), (nobs.s0), 
+                         (mixture.s3/255.0), (mixture.s4/255.0), (mixture.s5/255.0), (nobs.s1),
+                         (mixture.s6/255.0), (mixture.s7/255.0), (nobs.s2), (nobs.s3/100.0), 
+                         0.0, 0.0, 0.0);
+          cached_data[llid] = datum;
+#endif
+          cached_aux_data[llid] = aux_data_array[data_ptr];
+      }
+      barrier(CLK_LOCAL_MEM_FENCE);
+      
+      /**********************************************
+       * no function pointers in OpenCL (spec 8.6a)
+       * instead, user must provide source with a function named "step_cell" */
+      $$step_cell$$;
+      /*********************************************/
+      
+      if (ray_bundle_array[llid].x==llid)
+      {
+          /* note that sample data is not changed during ray tracing passes */
+          aux_data_array[data_ptr]=(float4)cached_aux_data[llid] ;
+      }
+      in_image[j*get_global_size(0)*factor+i] = image_vect[llid];
       if(d <= 0) break;
     }
 #endif
@@ -173,14 +217,67 @@ ray_trace_bit_scene_opt(__constant  RenderSceneInfo    * linfo,
     tblock = texit;
   }
 
-  
-#ifdef DEPTH
-  data_return.z+=(1-data_return.w)*tfar;
-#endif
-#ifdef INTENSITY
-  expected_int += (1.0-intensity_norm)*1.0f;
-#endif
-  gl_image[imI] = rgbaFloatToInt((float4) expected_int);
-  //gl_image[imI] = rgbaFloatToInt((float4) blkCount/400.0);
-  in_image[imI] = expected_int;
 }
+
+
+
+__kernel
+void
+update_bit_scene_main(__global RenderSceneInfo  * info,
+                      __global float            * alpha_array,
+                      __global uchar8           * mixture_array,
+                      __global ushort4          * nobs_array,
+                      __global float4           * aux_data_array,
+                      __global float            * output)
+{
+    int gid=get_global_id(0);
+    int datasize= info->tree_len * info->num_buffer;
+    if (gid<datasize)
+    {
+      //load global data into a register
+      float  alpha    = alpha_array[gid];
+      float4 aux_data = aux_data_array[gid];
+      float4 nobs     = convert_float4(nobs_array[gid]);
+      float8 mixture  = convert_float8(mixture_array[gid]);
+      float16 data = (float16) (alpha, 
+                     (mixture.s0/255.0), (mixture.s1/255.0), (mixture.s2/255.0), (nobs.s0), 
+                     (mixture.s3/255.0), (mixture.s4/255.0), (mixture.s5/255.0), (nobs.s1),
+                     (mixture.s6/255.0), (mixture.s7/255.0), (nobs.s2), (nobs.s3/100.0), 
+                     0.0, 0.0, 0.0);
+      
+      //use aux data to update cells 
+      if (aux_data.x>1e-10f)
+        update_cell(&data, aux_data, 2.5f, 0.09f, 0.03f);
+
+      //reset the cells in memory 
+      alpha_array[gid]      = data.s0;
+      float8 post_mix       = (float8) (data.s1, data.s2, data.s3, 
+                                        data.s5, data.s6, data.s7, 
+                                        data.s9, data.sa)*255.0;
+      float4 post_nobs      = (float4) (data.s4, data.s8, data.sb, data.sc*100.0);
+      mixture_array[gid]    = convert_uchar8_sat_rte(post_mix);
+      nobs_array[gid]       = convert_ushort4_sat_rte(post_nobs);      
+      aux_data_array[gid]   = (float4)0.0f;
+
+    }
+    
+#if 0
+    if(gid==345) {
+      output[0] = alpha_array[gid];
+      output[1] = (float) (mixture_array[gid].s0/255.0); //mu0
+      output[2] = (float) (mixture_array[gid].s1/255.0); //sig0
+      output[3] = (float) (mixture_array[gid].s2/255.0); //w0
+      output[4] = (float) (mixture_array[gid].s3/255.0); //mu1
+      output[5] = (float) (mixture_array[gid].s4/255.0); //sig1
+      output[6] = (float) (mixture_array[gid].s5/255.0); //w1
+      output[7] = (float) (mixture_array[gid].s6/255.0); //mu2
+      output[8] = (float) (mixture_array[gid].s7/255.0); //sig2
+
+      output[9] = (float) (nobs_array[gid].s3/100.0);
+    }
+#endif
+    
+}
+
+
+

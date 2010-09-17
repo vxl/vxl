@@ -20,7 +20,7 @@ ray_trace_ocl_scene_opt(__global int4    * scene_dims,  // level of the root.
                         __global uint4   * imgdims,   // dimensions of the image
                         __local  float16 * local_copy_cam,
                         __local  uint4   * local_copy_imgdims,
-                        __global float  * in_image,
+                        //__global float   * in_image,
                         __global uint    * gl_image)    // input image and store vis_inf and pre_inf
 {
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
@@ -49,14 +49,13 @@ ray_trace_ocl_scene_opt(__global int4    * scene_dims,  // level of the root.
   // get image coordinates
   int i=0,j=0;  map_work_space_2d(&i,&j);
   int lenbuffer =(*len_buffer);
-  in_image[j*get_global_size(0)+i]=0.0f;
+  //in_image[j*get_global_size(0)+i]=0.0f;
   // rootlevel of the trees.
 
   // check to see if the thread corresponds to an actual pixel as in some cases #of threads will be more than the pixels.
   if (i>=(*local_copy_imgdims).z || j>=(*local_copy_imgdims).w) {
     gl_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)(0.0,0.0,0.0,0.0));
-    in_image[j*get_global_size(0)+i]=(float)-1.0f;
-
+    //in_image[j*get_global_size(0)+i]=(float)-1.0f;
     return;
   }
   float4 origin=(*scene_origin);
@@ -79,7 +78,6 @@ ray_trace_ocl_scene_opt(__global int4    * scene_dims,  // level of the root.
   if (!hit) {
     gl_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)(0.0,0.0,0.0,0.0));
     //in_image[j*get_global_size(0)+i]=(float)-1.0f;
-
     return;
   }
 
@@ -95,7 +93,6 @@ ray_trace_ocl_scene_opt(__global int4    * scene_dims,  // level of the root.
   curr_block_index=curr_block_index+(curr_block_index==scenedims);
   int global_count=0;
   float global_depth=tnear;
-
   while (!(any(curr_block_index<(int4)0) || any(curr_block_index>=(scenedims))))
   {
      // Ray tracing with in each block
@@ -211,12 +208,13 @@ ray_trace_ocl_scene_opt(__global int4    * scene_dims,  // level of the root.
   data_return.z+=(1-data_return.w)*fardepth;
 #endif
 #ifdef INTENSITY
-  data_return.z+=(1-data_return.w)*1.0f;
+  data_return.z+=(1-data_return.w)*.5f;
 #endif
-
+  data_return.z+=(1-data_return.w)*.5f;
   gl_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)data_return.z);
-  in_image[j*get_global_size(0)+i]=(float)data_return.z;
+  //in_image[j*get_global_size(0)+i]=(float)data_return.z;
 }
+
 __kernel
 void
 single_ray_probe_opt(__global int4    * scene_dims,  // level of the root.

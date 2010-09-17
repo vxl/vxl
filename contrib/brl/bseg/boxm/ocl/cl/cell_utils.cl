@@ -235,6 +235,7 @@ int intersect_cell(float4 ray_o, float4 ray_d, float4 cell_min, float4 cell_max,
 }
 #endif
 
+#if 0
 //------------------------------------------------------------------------------
 // New Intersect Cell takes in ray origin, ray direction, cell min and cell 
 // dimension (doesn't not assume cubic volume).  Doesn't use cell_max
@@ -300,7 +301,7 @@ int intersect_cell_opt(float4 ray_o, float4 ray_d, float4 ray_d_inv, float4 cell
   *tfar = smallest_tmax;
   return smallest_tmax > largest_tmin;
 }
-
+#endif
 
 
 /*
