@@ -192,7 +192,7 @@ void cell_bounding_box(short4 loc_code, int n_levels,
 }
 
 
-#if 0
+#if 1
 //--------------------------------------------------------------------------
 // Given the ray origin, ray_o and its direction, ray_d and the cell min
 // and max points, find the ray parameters, tnear and tfar that correspond
@@ -240,6 +240,7 @@ int intersect_cell(float4 ray_o, float4 ray_d, float4 cell_min, float4 cell_max,
 // dimension (doesn't not assume cubic volume).  Doesn't use cell_max
 // Lots of redundant code - everything here depends on RAY_D
 //------------------------------------------------------------------------------
+#if 0
 int intersect_cell(float4 ray_o, float4 ray_d, float4 cell_min, float4 cell_dims, float *tnear, float *tfar)
 {
   // compute intersection of ray with all six cell planes
@@ -272,7 +273,7 @@ int intersect_cell(float4 ray_o, float4 ray_d, float4 cell_min, float4 cell_dims
   *tfar = smallest_tmax;
   return smallest_tmax > largest_tmin;
 }
-
+#endif
 //------------------------------------------------------------------------------
 // Optimized intersect cell takes in ray origin, ray direction, cell min and cell 
 // dimension (doesn't not assume cubic volume).  Doesn't use cell_max
