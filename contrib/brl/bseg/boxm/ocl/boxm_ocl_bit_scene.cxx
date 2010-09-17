@@ -267,8 +267,6 @@ void boxm_ocl_bit_scene::set_blocks(unsigned short* block_ptrs)
   for (iter = blocks_.begin(); iter != blocks_.end(); iter++) {
     (*iter)[0] = block_ptrs[index++];
     (*iter)[1] = block_ptrs[index++];
-    (*iter)[2] = block_ptrs[index++];
-    (*iter)[3] = block_ptrs[index++];
   }
 }
 
