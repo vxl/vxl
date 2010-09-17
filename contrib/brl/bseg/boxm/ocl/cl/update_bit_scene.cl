@@ -17,14 +17,14 @@ update_bit_scene_opt(__constant  RenderSceneInfo    * linfo,
                      __global    float16            * camera,           // camera orign and SVD of inverse of camera matrix
                      __global    uint4              * imgdims,          // dimensions of the input image
                      __global    float4             * in_image,         // the input image
-                     __global    int                * offsetfactor,     // ??
-                     __global    int                * offset_x,         // offset to the left and right (which one of the four blocks)
-                     __global    int                * offset_y,         
-                     __local     uchar4             * ray_bundle_array,   //gives information for which ray takes over in the workgroup
-                     __local     int                * cell_ptrs,          //local list of cell_ptrs (cells that are hit by this workgroup
-                     __local     float16            * cached_data,        //
+                     __global    int                * offsetfactor,     // 
+                     __global    int                * offset_x,         // offset to the left and 
+                     __global    int                * offset_y,         // right (which one of the four blocks)
+                     __local     uchar4             * ray_bundle_array, //gives information for which ray takes over in the workgroup
+                     __local     int                * cell_ptrs,        //local list of cell_ptrs (cells that are hit by this workgroup
+                     __local     float16            * cached_data,      //
                      __local     float4             * cached_aux_data,
-                     __local     float4             * image_vect,          // input image and store vis_inf and pre_inf
+                     __local     float4             * image_vect,       // input image and store vis_inf and pre_inf
                      __global    float              * output)    
 {
 
@@ -98,10 +98,8 @@ update_bit_scene_opt(__constant  RenderSceneInfo    * linfo,
   // Begin traversing the blocks, break when any curr_block_index value is
   // illegal (not between 0 and scenedims)
   //----------------------------------------------------------------------------
-  float blkCount = 0.0;
   while(tblock < tfar) 
   {
-    blkCount++;
     //-------------------------------------------------------------------------
     // get small block and necessary information
     // Note: Can probably eliminate posx,posy,posz and replace with just a calc
@@ -167,9 +165,12 @@ update_bit_scene_opt(__constant  RenderSceneInfo    * linfo,
       //// distance must be multiplied by the dimension of the bounding box
       float d = (t1-ttree) * linfo->block_len;
       ttree = t1;
+      
+      //if cell dist is less than zero, break out of tree loop
+      if(d <= 0) break;
 
       //keep track of cells being hit
-      cell_ptrs[llid]=data_ptr;
+      cell_ptrs[llid] = data_ptr;
       ray_bundle_array[llid].x=llid;
       barrier(CLK_LOCAL_MEM_FENCE);
 
@@ -206,9 +207,11 @@ update_bit_scene_opt(__constant  RenderSceneInfo    * linfo,
           aux_data_array[data_ptr]=(float4)cached_aux_data[llid] ;
       }
       in_image[j*get_global_size(0)*factor+i] = image_vect[llid];
-      if(d <= 0) break;
+
+
     }
 #endif
+
     //--------------------------------------------------------------------------
     // finding the next block (using exit point already found before tree loop)
     //--------------------------------------------------------------------------
@@ -231,7 +234,7 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
                       __global float            * output)
 {
     int gid=get_global_id(0);
-    int datasize= info->tree_len * info->num_buffer;
+    int datasize= info->data_len * info->num_buffer;
     if (gid<datasize)
     {
       //load global data into a register

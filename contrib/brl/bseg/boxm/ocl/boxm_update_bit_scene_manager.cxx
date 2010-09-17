@@ -955,6 +955,17 @@ bool boxm_update_bit_scene_manager::update()
         return false;
       vcl_cout<<" in "<<gpu_time_<<" ms"<<vcl_endl;
 
+      if(pass == 1) {
+        cl_event events[1];
+        int status = clEnqueueReadBuffer(command_queue_, image_buf_, CL_TRUE, 0, 
+                                         this->wni_*this->wnj_*sizeof(cl_float4),
+                                         image_, 0, NULL, &events[0]);
+        if (!this->check_val(status,CL_SUCCESS,"clEnqueueReadBuffer (output buffer )failed."))
+          return false;
+        status = clWaitForEvents(1, &events[0]);
+        if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents (output read) failed."))
+          return false;
+      }
 #if 0
       if(pass == 4) {  //only read for data setting pass
         cl_event events[1];
