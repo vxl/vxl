@@ -28,6 +28,9 @@ IF(VGUI_FOUND)
       boxm_ocl_render_bit_tableau.h
       boxm_ocl_render_bit_tableau.cxx
       boxm_ocl_render_bit_tableau_sptr.h
+      boxm_update_bit_tableau.h
+      boxm_update_bit_tableau.cxx
+      boxm_update_bit_tableau_sptr.h
      )
 
   ADD_LIBRARY(boxm_ocl_view ${boxm_ocl_view_sources} )
