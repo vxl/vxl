@@ -32,6 +32,7 @@ DECLARE( test_triangle_3d_line_intersection );
 DECLARE( test_rtree );
 DECLARE( test_ellipsoid );
 DECLARE( test_infinite_line_3d );
+DECLARE( test_ray_3d );
 
 void
 register_tests()
@@ -68,6 +69,7 @@ register_tests()
   REGISTER( test_rtree );
   REGISTER( test_ellipsoid );
   REGISTER( test_infinite_line_3d );
+  REGISTER( test_ray_3d );
 }
 
 DEFINE_MAIN;

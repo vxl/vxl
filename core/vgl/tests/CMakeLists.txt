@@ -35,6 +35,7 @@ ADD_EXECUTABLE( vgl_test_all
   test_rtree.cxx
   test_ellipsoid.cxx
   test_infinite_line_3d.cxx
+  test_ray_3d.cxx
 )
 TARGET_LINK_LIBRARIES( vgl_test_all vgl_algo vgl testlib )
 

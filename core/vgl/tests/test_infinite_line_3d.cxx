@@ -1,8 +1,7 @@
 // Some tests for vgl_line_segment_3d
-// Kevin de Souza, Aug 2005.
+// J.L. Mundy July 2009
 
 #include <vcl_iostream.h>
-// not used? #include <vcl_limits.h>
 #include <testlib/testlib_test.h>
 #include <vgl/vgl_infinite_line_3d.h>
 
