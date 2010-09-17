@@ -52,6 +52,18 @@ bool boxm_render_bit_scene_manager::init_ray_trace(boxm_ocl_bit_scene *scene,
     // was: functor="step_cell_render(sample_array,alpha_array,data_ptr,d,&data_return);";
   }
 
+  //compilation options
+  vcl_string options="";
+  if (render_depth)
+    options+="-D DEPTH ";
+  else
+    options+="-D INTENSITY ";
+  if (vcl_strstr(this->platform_name,"ATI"))
+    options+="-D ATI ";
+  if (vcl_strstr(this->platform_name,"NVIDIA"))
+    options+="-D NVIDIA ";
+  options += " -cl-fast-relaxed-math ";
+
   // assign the functor calling signature
   vcl_string::size_type pos_start = this->prog_.find(patt);
   vcl_string::size_type n1 = patt.size();
@@ -60,9 +72,9 @@ bool boxm_render_bit_scene_manager::init_ray_trace(boxm_ocl_bit_scene *scene,
     if (!n2)
       return false;
     this->prog_ = this->prog_.replace(pos_start, n1, functor.c_str(), n2);
-    return this->build_kernel_program(program_)==SDK_SUCCESS;
+    return this->build_kernel_program(program_, options)==SDK_SUCCESS;
   }
-  return !build_kernel_program(program_,render_depth);
+  return !build_kernel_program(program_, options);
 }
 
 
@@ -637,71 +649,6 @@ bool boxm_render_bit_scene_manager::clean_update()
 {
   return true;
 }
-
-//: builds kernel program from source (a vcl_string)
-int boxm_render_bit_scene_manager::build_kernel_program(cl_program & program, bool render_depth)
-{
-  cl_int status = CL_SUCCESS;
-  vcl_size_t sourceSize[] = { this->prog_.size() };
-  if (!sourceSize[0]) return SDK_FAILURE;
-  if (program) {
-    status = clReleaseProgram(program);
-    program = 0;
-    if (!this->check_val(status,
-      CL_SUCCESS,
-      "clReleaseProgram failed."))
-      return SDK_FAILURE;
-  }
-  const char * source = this->prog_.c_str();
-
-  vcl_string options="";
-  if (render_depth)
-    options+="-D DEPTH ";
-  else
-    options+="-D INTENSITY ";
-
-  if (vcl_strstr(this->platform_name,"ATI"))
-    options+="-D ATI ";
-  if (vcl_strstr(this->platform_name,"NVIDIA"))
-    options+="-D NVIDIA ";
-
-  //options += " -cl-opt-disable";
-  //options += " -cl-nv-maxrregcount=34 ";
-  options += " -cl-fast-relaxed-math ";
-
-  vcl_cout<<"create: program"<<vcl_endl;
-  program = clCreateProgramWithSource(this->context_,
-                                      1,
-                                      &source,
-                                      sourceSize,
-                                      &status);
-  if (!this->check_val(status,
-                       CL_SUCCESS,
-                       "clCreateProgramWithSource failed."))
-    return SDK_FAILURE;
-
-  // create a cl program executable for all the devices specified
-  status = clBuildProgram(program,
-                          1,
-                          this->devices_,
-                          options.c_str(),
-                          NULL,
-                          NULL);
-  if (!this->check_val(status,
-                       CL_SUCCESS,
-                       error_to_string(status)))
-  {
-    vcl_size_t len;
-    char buffer[2048];
-    clGetProgramBuildInfo(program, this->devices_[0],
-                          CL_PROGRAM_BUILD_LOG, sizeof(buffer), buffer, &len);
-    vcl_printf("%s\n", buffer);
-    return SDK_FAILURE;
-  }
-  else
-    return SDK_SUCCESS;
-}
-
 
 bool boxm_render_bit_scene_manager::set_scene_data()
 {

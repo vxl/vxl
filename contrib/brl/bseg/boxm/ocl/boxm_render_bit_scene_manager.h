@@ -26,7 +26,7 @@ class boxm_render_bit_scene_manager : public bocl_manager<boxm_render_bit_scene_
 
   boxm_render_bit_scene_manager() :
     program_(0),        //cl program created from source
-    //model info
+                        //model info
     block_ptrs_(0),     //3D array of ushort2 pointers
     trees_(0),          //2D array of uchar
     trees_size_(0),
@@ -139,7 +139,7 @@ class boxm_render_bit_scene_manager : public bocl_manager<boxm_render_bit_scene_
   bool set_block_ptrs();
   bool set_block_ptrs_buffers();
   bool set_scene_info();
-  bool set_scene_info_buffer();
+  bool set_scene_info_buffers();
 
   //clean up scene
   bool clean_scene_dims();
@@ -172,8 +172,8 @@ class boxm_render_bit_scene_manager : public bocl_manager<boxm_render_bit_scene_
 
   bool set_offset_buffers(int off_x, int off_y);
   bool release_offset_buffers();
+
   //open cl side helper functions
-  int build_kernel_program(cl_program & program, bool render_depth=false);
   cl_kernel kernel(int kernelindex) {return kernels_[kernelindex];}
 
   //necessary CL items
@@ -208,6 +208,7 @@ class boxm_render_bit_scene_manager : public bocl_manager<boxm_render_bit_scene_
   cl_float * scene_origin_;
   cl_float * block_dims_;
   cl_uint    root_level_;
+
 
   // image dimensions
   cl_uint  * img_dims_;

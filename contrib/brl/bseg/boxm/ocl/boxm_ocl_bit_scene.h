@@ -19,14 +19,14 @@
 #include <boxm/boxm_apm_traits.h>
 #include <bocl/bocl_cl.h>
 
-//RENDER SCENE INFO STRUCT - merors 
+//RENDER SCENE INFO STRUCT - mirrors ocl RenderSceneInfo 
 typedef struct
 {
   //world information  
   cl_float4    scene_origin;             // scene origin (point)
   cl_int4      scene_dims;               // number of blocks in each dimension
-  cl_float     block_len;               // size of each block (can only be 1 number now that we've established blocks are cubes)
-  cl_float     epsilon;                 // block_len/100.0 (placed here to avoid using a register)
+  cl_float     block_len;                // size of each block (can only be 1 number now that we've established blocks are cubes)
+  cl_float     epsilon;                  // block_len/100.0 (placed here to avoid using a register)
 
   //tree meta information 
   cl_int       root_level;               // root_level of trees
@@ -101,10 +101,9 @@ class boxm_ocl_bit_scene
     vbl_array_2d<float16> data_buffers_;
 
     //setters from 1 d int and float arrays
-    void set_blocks(int* block_ptrs);
-    void set_tree_buffers(int* tree_buffers);
-    void set_tree_buffers_opt(int* tree_buffers);
-    void set_mem_ptrs(int* mem_ptrs);
+    void set_blocks(unsigned short* block_ptrs);
+    void set_tree_buffers(unsigned char* tree_buffers);
+    void set_mem_ptrs(unsigned short* mem_ptrs);
     void set_data_values(float* data_buffer);     //non opt
     void set_alpha_values(float* alpha_buffer);
     void set_mixture_values(unsigned char* mixtures);
@@ -116,7 +115,7 @@ class boxm_ocl_bit_scene
     void get_num_obs(unsigned short* num_obs);
     void get_tree_cells(unsigned char* cells);
     void get_block_ptrs(unsigned short* blocks);
-    void get_mem_ptrs(int* blocks);
+    void get_mem_ptrs(unsigned short* mem_ptrs);
 
   private:
 

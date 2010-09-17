@@ -257,12 +257,13 @@ bool boxm_ocl_bit_scene::init_existing_data()
 }
 
 
-#if 0
-//SETTERS from int and float arrays
-void boxm_ocl_scene::set_blocks(int* block_ptrs)
+//--------------------------------------------------------------------
+// Setters: flat arrays to scene values
+//--------------------------------------------------------------------
+void boxm_ocl_bit_scene::set_blocks(unsigned short* block_ptrs)
 {
   int index = 0;
-  vbl_array_3d<int4>::iterator iter;
+  vbl_array_3d<ushort2>::iterator iter;
   for (iter = blocks_.begin(); iter != blocks_.end(); iter++) {
     (*iter)[0] = block_ptrs[index++];
     (*iter)[1] = block_ptrs[index++];
@@ -271,54 +272,27 @@ void boxm_ocl_scene::set_blocks(int* block_ptrs)
   }
 }
 
-void boxm_ocl_scene::set_tree_buffers(int* tree_buffers)
+void boxm_ocl_bit_scene::set_tree_buffers(unsigned char* tree_buffers)
 {
   int index = 0;
-  vbl_array_2d<int4>::iterator iter;
+  vbl_array_2d<uchar16>::iterator iter;
   for (iter = tree_buffers_.begin(); iter != tree_buffers_.end(); iter++) {
-    (*iter)[0] = tree_buffers[index++];
-    (*iter)[1] = tree_buffers[index++];
-    (*iter)[2] = tree_buffers[index++];
-    (*iter)[3] = tree_buffers[index++];
+    for(int c=0; c<16; c++) 
+      (*iter)[c] = tree_buffers[index++];
   }
 }
 
-void boxm_ocl_scene::set_tree_buffers_opt(int* tree_buffers)
+void boxm_ocl_bit_scene::set_mem_ptrs(unsigned short* mem_ptrs)
 {
   int index = 0;
-  vbl_array_2d<int4>::iterator iter;
-  for (iter = tree_buffers_.begin(); iter != tree_buffers_.end(); iter++) {
-    //if it's a root, store block pointer
-    if (tree_buffers[index] < 0) {
-      (*iter)[0] = -1;
-      (*iter)[3] = vcl_abs(tree_buffers[index]);
-    }
-    else {
-      (*iter)[0] = tree_buffers[index];
-      (*iter)[3] = -1;
-    }
-    index++;
-
-    //split the second int into two shorts, cast back to ints...
-    int data_child = tree_buffers[index++];
-    unsigned short dataInd = (unsigned short) data_child & 0xFFFF;// this is 0^16 1^16 in binary
-    short childInd         = (short) (data_child >> 16);
-    (*iter)[1] = (int) childInd;
-    (*iter)[2] = (int) dataInd;
-  }
-}
-
-void boxm_ocl_scene::set_mem_ptrs(int* mem_ptrs)
-{
-  int index = 0;
-  vbl_array_2d<int2>::iterator iter;
+  vbl_array_2d<ushort2>::iterator iter;
   for (iter = mem_ptrs_.begin(); iter != mem_ptrs_.end(); iter++) {
     (*iter)[0] = mem_ptrs[index++];
     (*iter)[1] = mem_ptrs[index++];
   }
 }
 
-void boxm_ocl_scene::set_data_values(float* data_buffer)
+void boxm_ocl_bit_scene::set_data_values(float* data_buffer)
 {
   int datIndex = 0;
   vbl_array_2d<float16>::iterator iter;
@@ -328,7 +302,7 @@ void boxm_ocl_scene::set_data_values(float* data_buffer)
   }
 }
 
-void boxm_ocl_scene::set_alpha_values(float* alpha_buffer)
+void boxm_ocl_bit_scene::set_alpha_values(float* alpha_buffer)
 {
   int index = 0;
   vbl_array_2d<float16>::iterator iter;
@@ -337,7 +311,7 @@ void boxm_ocl_scene::set_alpha_values(float* alpha_buffer)
   }
 }
 
-void boxm_ocl_scene::set_mixture_values(unsigned char* mixtures)
+void boxm_ocl_bit_scene::set_mixture_values(unsigned char* mixtures)
 {
   int index = 0;
   vbl_array_2d<float16>::iterator iter;
@@ -353,7 +327,7 @@ void boxm_ocl_scene::set_mixture_values(unsigned char* mixtures)
   }
 }
 
-void boxm_ocl_scene::set_num_obs_values(unsigned short* num_obs)
+void boxm_ocl_bit_scene::set_num_obs_values(unsigned short* num_obs)
 {
   int index = 0;
   vbl_array_2d<float16>::iterator iter;
@@ -364,34 +338,6 @@ void boxm_ocl_scene::set_num_obs_values(unsigned short* num_obs)
     (*iter)[12] = (float) num_obs[index++];
   }
 }
-
-//data compression getters
-
-void boxm_ocl_scene::get_num_obs(unsigned short* num_obs)
-{
-  //init data arrays
-  int index = 0;
-  vbl_array_2d<float16>::iterator iter;
-  for (iter = data_buffers_.begin(); iter != data_buffers_.end(); iter++)
-  {
-    num_obs[index++] = (unsigned short) (*iter)[4];
-    num_obs[index++] = (unsigned short) (*iter)[8];
-    num_obs[index++] = (unsigned short) (*iter)[11];
-    num_obs[index++] = (unsigned short) (*iter)[12];
-  }
-}
-
-void boxm_ocl_scene::get_mem_ptrs(int* mem_ptrs)
-{
-  int index = 0;
-  vbl_array_1d<int2>::iterator mem_iter;
-  for (mem_iter = mem_ptrs_.begin(); mem_iter != mem_ptrs_.end(); mem_iter++) {
-    mem_ptrs[index++] = (*mem_iter)[0];
-    mem_ptrs[index++] = (*mem_iter)[1];
-  }
-}
-
-#endif
 
 //--------------------------------------------------------------------
 // Getters: information to flat arrays (compresses some data)
@@ -444,6 +390,32 @@ void boxm_ocl_bit_scene::get_mixture(unsigned char* mixture)
     mixture[indexmix++] = (unsigned char) (255.0 * (*iter)[10]);
   }
 }
+
+void boxm_ocl_bit_scene::get_num_obs(unsigned short* num_obs)
+{
+  //init data arrays
+  int index = 0;
+  vbl_array_2d<float16>::iterator iter;
+  for (iter = data_buffers_.begin(); iter != data_buffers_.end(); iter++)
+  {
+    num_obs[index++] = (unsigned short) (*iter)[4];
+    num_obs[index++] = (unsigned short) (*iter)[8];
+    num_obs[index++] = (unsigned short) (*iter)[11];
+    num_obs[index++] = (unsigned short) (*iter)[12];
+  }
+}
+
+void boxm_ocl_bit_scene::get_mem_ptrs(unsigned short* mem_ptrs)
+{  
+  int index=0;
+  vbl_array_1d<ushort2>::iterator iter;
+  for (iter = mem_ptrs_.begin(); iter != mem_ptrs_.end(); iter++)
+  {
+    mem_ptrs[index++] = (*iter)[0];
+    mem_ptrs[index++] = (*iter)[1];
+  } 
+}
+
 
 
 //---------------------------------------------------------------------
