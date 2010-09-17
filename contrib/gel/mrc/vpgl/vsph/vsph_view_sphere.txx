@@ -13,7 +13,7 @@ unsigned vsph_view_sphere<T>::add_view(T view)
   
   // make sure that the view point is on the sphere
   vsph_sph_point_3d p = view.view_point();
-  coord_sys_->move(p);
+  coord_sys_->move_point(p);
   view.set_view_point(p);
   return id;
 }
@@ -60,8 +60,8 @@ T vsph_view_sphere<T>::find_closest(unsigned id, int& uid)
 		  min_dist = dist;
 	      uid = it->first;
 	    } 
-        it++;
       }
+      it++;
     }
   }
   if (uid > -1)
@@ -93,8 +93,28 @@ T vsph_view_sphere<T>::find_closest(vgl_point_3d<double> p, int &uid)
     return T();  
 }
 
-#undef VSPH_VIEW_SPHERE_INSTANTIATE
+template <class T>
+void vsph_view_sphere<T>::print(vcl_ostream& os) const
+{
+  os << "vsph_view_sphere: " << size() << "\n";
+  vcl_map<unsigned, T>::const_iterator it = views_.begin();
+  
+  while (it != views_.end()) {
+    os << "(" << it->first << ") " << it->second << vcl_endl;
+    it++;
+  }
+  os << vcl_endl;
+}
+#if 0
+template <class T> 
+vcl_ostream& operator<<(vcl_ostream& os, vsph_view_sphere<T> const& vs)
+{
+  vs.print(os);
+  return os;
+}
+#endif
 #define VSPH_VIEW_SPHERE_INSTANTIATE(T) \
 template class vsph_view_sphere<T>
+//template vcl_ostream& operator<<(vcl_ostream&, vsph_view_sphere<T> const&)
 
 #endif  //vsph_view_sphere_txx_

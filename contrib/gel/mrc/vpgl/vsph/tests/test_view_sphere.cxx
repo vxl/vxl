@@ -27,6 +27,7 @@ static void test_view_sphere()
   vsph_spherical_coord_sptr coord=new vsph_spherical_coord(origin, radius);
 
   vsph_view_sphere<vsph_view_point<double> > vs(coord);
+  vsph_view_sphere<vsph_view_point<double> >::iterator it;
  
   double theta=vnl_math::pi/4.0;
   double phi=vnl_math::pi/4.0;
@@ -42,11 +43,39 @@ static void test_view_sphere()
 
   theta=vnl_math::pi/2.0;
   phi=0;
-  double* val2 = new double(1.0);
+  double* val2 = new double(2.0);
   vsph_view_point<double> vp2=create_view_point(radius,theta,phi,val2);
   vs.add_view(vp2);
   
   // test the iterators
+  it = vs.begin();
+  int count=0;
+  bool good=true;
+  while (it != vs.end()) {
+	good = good && (int(it->first) == count);
+	vcl_cout << it->first << vcl_endl;
+	it->second.print(vcl_cout);
+    count++;
+	it++;
+  }
+  
+  TEST_EQUAL("Number of views by the iterator",  count, vs.size());
+  TEST_EQUAL("The data at the view points are correct",  good, true);
+
+  // test the closest view point
+  int uid;
+  vs.find_closest(1, uid);
+  TEST_EQUAL("Test find_closest(i)",  uid, 0);
+  vs.find_closest(vgl_point_3d<double>(0,0,10), uid);
+  TEST_EQUAL("Test find_closest(p)",  uid, 1);
+
+  // test remove view
+  vs.remove_view(1);
+  TEST_EQUAL("Test remove view",  vs.size(), 2);
+
+  delete val0;
+  delete val1;
+  delete val2;
 }
 
 TESTMAIN(test_view_sphere);

@@ -14,6 +14,7 @@
 
 #include "vsph_spherical_coord_sptr.h"
 
+#include <vcl_iostream.h>
 #include <vgl/vgl_point_3d.h>
 
 template <class T> 
@@ -33,6 +34,8 @@ public:
   //: removes the view with the given id
   bool remove_view(unsigned id);
 
+  unsigned size() const { return views_.size(); }
+
   //: finds the nearest view to the given point already in the saved ones
   // if uid is -1, it is unsuccessful
   T find_closest(unsigned i, int &uid);
@@ -42,18 +45,16 @@ public:
   T find_closest(vgl_point_3d<double> p, int &uid);
 
   //: Iterators
-  typedef T* iterator;
-  iterator begin() { it_= views_.begin(); return &(it_->second); }
-  iterator end() { it_=views_.end(); return 0; }
-  iterator next() { it_++; if (it_!=views_.end()) return &(it_->second); else return 0; }
+  typedef typename vcl_map<unsigned, T>::iterator iterator;
+  iterator begin() { return views_.begin(); } 
+  iterator end() { return views_.end(); }
+  
+  //: Const Iterators
+  typedef typename vcl_map<unsigned, T>::const_iterator const_iterator;
+  const_iterator begin() const { vcl_map<unsigned, T>::const_iterator it=views_.begin(); return it; } 
+  const_iterator end() const { vcl_map<unsigned, T>::const_iterator it=views_.end(); return it; }
 
-#if 0
-  //: const Iterators
-  typedef T const* const_iterator;
-  const_iterator begin() const { const_it_= views_.begin(); return &(const_it_->second); }
-  const_iterator end() const { const_it_=views_.end(); return 0; }
-  const_iterator next() const { const_it_++; if (const_it_!=views_.end()) return &(const_it_->second); else return 0; }
-#endif
+  void print(vcl_ostream& os) const;
 
 protected:
 
@@ -71,8 +72,15 @@ private:
   unsigned next_id() { return uid_++; }
 
   //: keeps the current location of the iterator
-  typename vcl_map<unsigned, T>::iterator it_;
-  typename vcl_map<unsigned, T>::const_iterator const_it_;
+ // typename vcl_map<unsigned, T>::iterator it_;
+ // typename vcl_map<unsigned, T>::const_iterator const_it_;
 };
+
+template <class T> 
+vcl_ostream& operator<<(vcl_ostream& os, vsph_view_sphere<T> const& vs) 
+{ 
+  vs.print(os); 
+  return os; 
+}
 
 #endif
