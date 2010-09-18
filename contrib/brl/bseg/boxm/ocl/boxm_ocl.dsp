@@ -209,6 +209,9 @@ SOURCE=.\cl/cell_utils.cl
 SOURCE=.\cl/refine_blocks.cl
 # End Source File
 # Begin Source File
+SOURCE=.\boxm_update_bit_scene_manager.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/bocl_manager+boxm_ray_trace_manager+boxm_sample+BOXM_APM_SIMPLE_GREY---.cxx
 # End Source File
 # Begin Source File
@@ -376,6 +379,9 @@ SOURCE=.\Templates/bocl_manager+boxm_re_render_ocl_scene_manager-.cxx
 # Begin Source File
 SOURCE=.\Templates/bocl_manager+boxm_render_probe_manager-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/bocl_manager+boxm_update_bit_scene_manager-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -456,6 +462,9 @@ SOURCE=.\boxm_render_probe_manager_sptr.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_render_probe_manager.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_update_bit_scene_manager.h
 # End Source File
 # End Group
 # End Target
