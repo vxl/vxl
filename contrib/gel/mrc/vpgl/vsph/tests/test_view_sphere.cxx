@@ -52,11 +52,11 @@ static void test_view_sphere()
   int count=0;
   bool good=true;
   while (it != vs.end()) {
-	good = good && (int(it->first) == count);
-	vcl_cout << it->first << vcl_endl;
-	it->second.print(vcl_cout);
-    count++;
-	it++;
+    good = good && (int(it->first) == count);
+    vcl_cout << it->first << vcl_endl;
+    it->second.print(vcl_cout);
+    ++count;
+    ++it;
   }
   
   TEST_EQUAL("Number of views by the iterator",  count, vs.size());
