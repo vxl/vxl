@@ -55,12 +55,13 @@ vgui_menu::vgui_menu(vgui_menu const &that)
   operator=(that);
 }
 
-void vgui_menu::operator=(vgui_menu const &that)
+vgui_menu& vgui_menu::operator=(vgui_menu const &that)
 {
   if (this != &that) {
     clear();
     this->include(that);
   }
+  return *this;
 }
 
 //--------------------------------------------------------------------------------

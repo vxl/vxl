@@ -34,7 +34,7 @@ struct vpl_mutex
 
   // disallow assignment.
   vpl_mutex(vpl_mutex const &) { }
-  void operator=(vpl_mutex const &) { }
+  vpl_mutex& operator=(vpl_mutex const &) { return *this; }
 };
 
 #else

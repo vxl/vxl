@@ -18,7 +18,7 @@ class vil1_stream_url : public vil1_stream
   vil1_stream *u_; // underlying stream
   // Make private to prevent use.
   vil1_stream_url(vil1_stream_url const &): vil1_stream() { }
-  void operator=(vil1_stream_url const &) { }
+  vil1_stream_url& operator=(vil1_stream_url const &) { return *this; }
  public:
   vil1_stream_url(char const *);
   ~vil1_stream_url();

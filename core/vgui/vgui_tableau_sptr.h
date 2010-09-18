@@ -24,7 +24,7 @@ struct vgui_tableau_sptr_t : public B {
   vgui_tableau_sptr_t(): B() {}
   vgui_tableau_sptr_t(T* p): B(p) {}
   vgui_tableau_sptr_t(vgui_tableau_sptr_t<T> const& r): B(r) {}
-  void operator=(vgui_tableau_sptr_t<T> const& r) { B::operator=(r); }
+  vgui_tableau_sptr_t<T>& operator=(vgui_tableau_sptr_t<T> const& r) { B::operator=(r); return *this; }
   T* operator->() const { return (T*)this->as_pointer(); }
   T& operator*() const { return *((T*)this->as_pointer()); }
 };

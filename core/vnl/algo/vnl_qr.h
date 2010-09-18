@@ -75,7 +75,7 @@ class vnl_qr
 
   // Disallow assignment.
   vnl_qr(const vnl_qr<T> &) { }
-  void operator=(const vnl_qr<T> &) { }
+  vnl_qr<T>& operator=(const vnl_qr<T> &) { return *this; }
 };
 
 //: Compute determinant of matrix "M" using QR.

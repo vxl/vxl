@@ -107,7 +107,7 @@ class vgui_menu
   vgui_menu(vgui_menu const &);
 
   //: Make this menu equal to the given menu.
-  void operator=(vgui_menu const &);
+  vgui_menu& operator=(vgui_menu const &);
 
   //: Destructor - clears the menu.
   ~vgui_menu() { clear(); }

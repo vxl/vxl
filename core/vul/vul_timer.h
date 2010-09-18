@@ -77,10 +77,9 @@ class vul_timer
   void print(vcl_ostream& s);
 
  private:
-  //: disallow.
+  // disallow assigning to objects of this class:
   vul_timer(vul_timer const &) { }
-  //: NYI
-  void operator=(vul_timer const &) { }
+  vul_timer& operator=(vul_timer const &) { return *this; }
 };
 
 #endif // vul_timer_h

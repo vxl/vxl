@@ -148,7 +148,7 @@ template < class DataType >
 }
 
 template < class DataType >
-  bool vipl_section_container< DataType > ::operator=( const vipl_section_container< DataType >& b)
+  vipl_section_container< DataType >& vipl_section_container< DataType > ::operator=( const vipl_section_container< DataType >& b)
 {
   if (this != &b) {
     if (hsthe != this) FILTER_IMPTR_DEC_REFCOUNT(hsthe);
@@ -157,7 +157,7 @@ template < class DataType >
     put_imgsz(b.imgsz());
     put_secsz(b.secsz());
   }
-  return false;
+  return *this;
 }
 
 template < class DataType >

@@ -59,7 +59,7 @@ class vgui_observable
   vgui_observable(vgui_observable const&) { }
 
   //: Disallow assignment.
-  void operator=(vgui_observable const&) { }
+  vgui_observable& operator=(vgui_observable const&) { return *this; }
 };
 
 #endif // vgui_observable_h_

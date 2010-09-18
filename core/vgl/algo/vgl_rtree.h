@@ -353,7 +353,7 @@ class vgl_rtree
  private:
   node *root;
   // disallow assignment
-  void operator=(vgl_rtree<V, B, C> const &) { }
+  vgl_rtree<V, B, C>& operator=(vgl_rtree<V, B, C> const &) { return *this; }
   vgl_rtree(vgl_rtree<V, B, C> const &) { }
 };
 

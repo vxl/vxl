@@ -64,8 +64,9 @@ class vipl_section_container
   // STL demands a few methods
   virtual bool operator!=( const vipl_section_container< DataType >& b) const;
 
-  // STL demands it
-  virtual bool operator=( const vipl_section_container< DataType >& b) ;
+  // STL demands this
+  virtual vipl_section_container<DataType>& operator=( const vipl_section_container< DataType >& b);
+
   virtual int size() const ;
   virtual int max_size() const ;
   virtual bool empty() ;

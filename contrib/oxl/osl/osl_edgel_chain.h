@@ -19,7 +19,7 @@ struct osl_edgel_chain
   osl_edgel_chain();
   osl_edgel_chain(unsigned int n_);
   osl_edgel_chain(osl_edgel_chain const &);
-  void operator=(osl_edgel_chain const &);
+  osl_edgel_chain& operator=(osl_edgel_chain const &);
   ~osl_edgel_chain();
   void SetLength(unsigned int);
 

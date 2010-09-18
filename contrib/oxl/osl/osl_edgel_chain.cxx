@@ -42,13 +42,14 @@ osl_edgel_chain::osl_edgel_chain(osl_edgel_chain const &that)
   }
 }
 
-void osl_edgel_chain::operator=(osl_edgel_chain const &that)
+osl_edgel_chain& osl_edgel_chain::operator=(osl_edgel_chain const &that)
 {
   vcl_cerr << __FILE__ ": assignment to osl_edgel_chain\n";
   if (this != &that) {
     this->~osl_edgel_chain();
     new (this) osl_edgel_chain(that);
   }
+  return *this;
 }
 
 osl_edgel_chain::~osl_edgel_chain()

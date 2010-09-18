@@ -208,8 +208,9 @@ class vul_arg_info_list
   void display_help( char const* progname= 0);
 
  private:
+  // Disallow assigning to objects of this class:
   vul_arg_info_list(vul_arg_info_list const &) {}
-  void operator=(vul_arg_info_list const &) {}
+  vul_arg_info_list& operator=(vul_arg_info_list const &) { return *this; }
 };
 
 #if defined(VCL_KAI) || defined(VCL_COMO) || defined(VCL_ICC)
