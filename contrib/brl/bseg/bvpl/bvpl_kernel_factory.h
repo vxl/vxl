@@ -32,6 +32,7 @@
 
 #include "bvpl_kernel.h"
 #include "bvpl_kernel_iterator.h"
+#include <vcl_iostream.h>
 #include <vcl_map.h>
 #include <vcl_utility.h>
 #include <vnl/vnl_float_3.h>
@@ -85,11 +86,11 @@ class bvpl_kernel_factory: public vbl_ref_count
   //: Creates a vector of kernels as specified by func
   template <class F>
   bvpl_kernel_vector_sptr create_kernel_vector(F func);
-  
+
   //: Return an xml element
   virtual bxml_data_sptr xml_element()
-  { 
-    vcl_cout << "Calling xml write in parent class, xml data will be NULL " << vcl_endl;
+  {
+    vcl_cout << "Calling xml write in parent class, xml data will be NULL" << vcl_endl;
     return NULL;
   }
 
@@ -110,7 +111,7 @@ class bvpl_kernel_factory: public vbl_ref_count
 
   //: Rotation axis of kernel_
   vnl_float_3 rotation_axis_;
-  
+
   vnl_float_3 parallel_axis_;
 
   // parallel_axis_ define a coordinate system for each kernel.
@@ -132,10 +133,10 @@ class bvpl_kernel_factory: public vbl_ref_count
 
   //: Length of a voxel in global coordinates
   double voxel_length_;
-  
+
   //: Name that identifies the kernel e.g "edge3d", "gauss"
   vcl_string factory_name_;
-  
+
   //: Creates canonical(default) kernel.
   //  It is decribed by a canonical axis of rotation and a canonical parallel axis
   //  This is the main function implemented by the children.
