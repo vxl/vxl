@@ -16,6 +16,7 @@
 #include <boxm/ocl/boxm_render_probe_manager.h>
 #include <boxm/ocl/boxm_re_render_ocl_scene_manager.h>
 #include <boxm/ocl/boxm_stat_manager.h>
+#include <boxm/ocl/boxm_update_bit_scene_manager.h>
 #include <boxm/ocl/boxm_update_ocl_scene_manager.h>
 
 #include <boxm/ocl/boxm_render_probe_manager_sptr.h>
