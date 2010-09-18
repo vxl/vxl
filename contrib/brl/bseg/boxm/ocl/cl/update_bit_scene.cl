@@ -150,7 +150,7 @@ update_bit_scene_opt(__constant  RenderSceneInfo    * linfo,
       // traverse to leaf cell that contains the entry point, set bounding box
       ////data offset is ushort pointed to by tree + bit offset
       float cell_len;
-      int data_ptr = traverse_three((llid<<4), local_tree, 
+      int data_ptr = traverse_three(&local_tree[llid], 
                                     posx,posy,posz, 
                                     &cell_minx, &cell_miny, &cell_minz, &cell_len);
       if(data_ptr != 0) {

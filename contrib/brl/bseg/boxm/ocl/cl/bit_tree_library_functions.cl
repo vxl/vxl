@@ -184,6 +184,31 @@ int data_index_opt(int rIndex, __local uchar* tree, ushort bit_index, __constant
   return count + count_offset;
 }
 
+//optimized to use cumulative sum counts
+int data_index_opt2(__local uchar* tree, ushort bit_index, __constant uchar* bit_lookup, __local uchar* cumsum, int *cumIndex)
+{
+  //root and first gen are special case, return just the root offset + bit_index 
+  int count_offset=(int)as_ushort((uchar2) (tree[11], tree[10]));
+  if(bit_index < 9)
+    return count_offset + bit_index;
+    
+  //otherwise get parent index, parent byte index and relative bit index
+  uchar oneuplevel        = (bit_index-1)>>3;           //Bit_index of parent bit
+  uchar byte_index        = ((oneuplevel-1)>>3) +1;     //byte_index of parent bit
+  uchar sub_bit_index     = 8-((oneuplevel-1)&(8-1));   //[0-7] bit index of parent bit
+
+  for(int i=(*cumIndex); i<byte_index; i++) {
+    cumsum[i] = cumsum[i-1] + bit_lookup[tree[i]];
+    (*cumIndex) = i;
+  }
+
+  uchar bits_before_parent = tree[byte_index]<<sub_bit_index; //number of bits before parent bit [0-6] in parent byte
+  bits_before_parent       = bit_lookup[bits_before_parent];
+  uchar finestleveloffset = (bit_index-1)&(8-1);              //[0-7] bit index of cell being looked up (@bit_index)
+  int count = (cumsum[byte_index-1] + bits_before_parent)*8 + 1 + finestleveloffset; 
+  return count + count_offset;
+}
+
 //-----------------------------------------------------------------
 // New traverse: uses only target point and returns cell index
 // this can also easily return the level
@@ -275,13 +300,13 @@ int traverse_opt_len(int rIndex, __local uchar* tree, float4 point, float4 *cell
 
 //takes three floats instaed of float4s
 //TODO optimize point here - makei t a float 3 instead of a float4
-ushort traverse_three(int rIndex, __local uchar* tree, 
+ushort traverse_three(__local uchar* tree, 
                       float pointx, float pointy, float pointz, 
                       float *cell_minx, float *cell_miny, float *cell_minz, float *cell_len )
 {
   // vars to replace "tree_bit_at"
   //force 1 register: curr = (bit, child_offset, depth, c_offset)
-  int curr_bit = convert_int(tree[rIndex]);
+  int curr_bit = convert_int(tree[0]);
   int child_offset = 0;
   int depth = 0;  
   
@@ -306,7 +331,7 @@ ushort traverse_three(int rIndex, __local uchar* tree,
     bit_index = (8*bit_index + 1) + c_index;                      //i = 8i + 1 + c_index
     
     //update value of curr_bit and level
-    curr_bit = (1<<c_index) & tree[rIndex + (depth+1 + child_offset)];      //int curr_byte = (curr.z + 1) + curr.y; 
+    curr_bit = (1<<c_index) & tree[(depth+1 + child_offset)];      //int curr_byte = (curr.z + 1) + curr.y; 
     child_offset = c_index;
     depth++;
   }

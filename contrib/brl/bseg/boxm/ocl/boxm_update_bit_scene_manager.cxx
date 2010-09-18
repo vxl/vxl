@@ -550,6 +550,10 @@ bool boxm_update_bit_scene_manager::set_args()
   status = clSetKernelArg(render_kernel_,i++,sizeof(cl_mem),(void *)&bit_lookup_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output)"))
     return 0;
+  //cum sum lookup buffer
+  status = clSetKernelArg(render_kernel_,i++,this->bni_*this->bnj_*11*sizeof(cl_uchar), 0);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cumsum buff)"))
+    return 0;
   //output float buffer (one float for each buffer)
   status = clSetKernelArg(render_kernel_,i++,sizeof(cl_mem),(void *)&output_debug_buf_);
   if (this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output debugger)")!=CHECK_SUCCESS)
