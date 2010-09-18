@@ -96,15 +96,16 @@ T vsph_view_sphere<T>::find_closest(vgl_point_3d<double> p, int &uid)
 template <class T>
 void vsph_view_sphere<T>::print(vcl_ostream& os) const
 {
-  os << "vsph_view_sphere: " << size() << "\n";
-  vcl_map<unsigned, T>::const_iterator it = views_.begin();
+  os << "vsph_view_sphere: " << size() << vcl_endl;
+  typename const_iterator it = views_.begin();
 
   while (it != views_.end()) {
-    os << "(" << it->first << ") " << it->second << vcl_endl;
+    os << '(' << it->first << ") " << it->second << vcl_endl;
     it++;
   }
   os << vcl_endl;
 }
+
 #if 0
 template <class T>
 vcl_ostream& operator<<(vcl_ostream& os, vsph_view_sphere<T> const& vs)
@@ -113,8 +114,9 @@ vcl_ostream& operator<<(vcl_ostream& os, vsph_view_sphere<T> const& vs)
   return os;
 }
 #endif
+
 #define VSPH_VIEW_SPHERE_INSTANTIATE(T) \
-template class vsph_view_sphere<T>
-//template vcl_ostream& operator<<(vcl_ostream&, vsph_view_sphere<T> const&)
+template class vsph_view_sphere<T >
+//template vcl_ostream& operator<<(vcl_ostream&, vsph_view_sphere<T > const&)
 
 #endif  //vsph_view_sphere_txx_
