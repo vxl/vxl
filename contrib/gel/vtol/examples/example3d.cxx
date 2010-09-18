@@ -78,7 +78,7 @@ class example_vertex_3d : public vtol_vertex
   bool operator==(V const& v) const { return !v.cast_to_vertex_2d() && operator==((T const&)v); }
   bool operator==(S const&  ) const { return false; } // could be worked out better; see vtol_vertex_2d.cxx
   T& operator=(T const& v) { x_=v.x();y_=v.y();z_=v.z(); return *this; }
-  V& operator=(V const& v) { if (!v.cast_to_vertex_2d()) return operator=((T const&)v); else return *this; }
+  T& operator=(V const& v) { if (!v.cast_to_vertex_2d()) operator=((T const&)v); return *this; }
 
   virtual vtol_edge_sptr new_edge(vtol_vertex_sptr const& v)
   {

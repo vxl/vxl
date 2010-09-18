@@ -74,7 +74,7 @@ class bbgm_image_of : public bbgm_image_base
     public:
       iterator(dist* ptr) : ptr_(ptr) {}
       iterator(const iterator& other) : ptr_(other.ptr_) {}
-      void operator++() { ++ptr_; }
+      iterator& operator++() { ++ptr_; return *this; }
       dist& operator*(){ return *ptr_; }
       dist* operator -> () { return ptr_; }
       bool operator==(const iterator& other) { return ptr_ == other.ptr_; }
@@ -89,7 +89,7 @@ class bbgm_image_of : public bbgm_image_base
     public:
       const_iterator(const dist* ptr) : ptr_(ptr) {}
       const_iterator(const const_iterator& other) : ptr_(other.ptr_) {}
-      void operator++() { ++ptr_; }
+      const_iterator& operator++() { ++ptr_; return *this; }
       const dist& operator*(){ return *ptr_; }
       const dist* operator -> () { return ptr_; }
       bool operator==(const const_iterator& other) { return ptr_ == other.ptr_; }

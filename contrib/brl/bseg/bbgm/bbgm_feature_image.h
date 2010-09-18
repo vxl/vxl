@@ -78,7 +78,7 @@ class bbgm_feature_image : public bbgm_feature_image_base
     public:
       iterator(f_type_* ptr) : ptr_(ptr) {}
       iterator(const iterator& other) : ptr_(other.ptr_) {}
-      void operator++() { ++ptr_; }
+      iterator& operator++() { ++ptr_; return *this; }
       f_type_& operator*(){ return *ptr_; }
       f_type_* operator -> () { return ptr_; }
       bool operator==(const iterator& other) { return ptr_ == other.ptr_; }
@@ -93,7 +93,7 @@ class bbgm_feature_image : public bbgm_feature_image_base
     public:
       const_iterator(const f_type_* ptr) : ptr_(ptr) {}
       const_iterator(const const_iterator& other) : ptr_(other.ptr_) {}
-      void operator++() { ++ptr_; }
+      const_iterator& operator++() { ++ptr_; return *this; }
       const f_type_& operator*(){ return *ptr_; }
       const f_type_* operator -> () { return ptr_; }
       bool operator==(const const_iterator& other) { return ptr_ == other.ptr_; }
