@@ -19,7 +19,7 @@ static void test_spherical_coord()
 
   // convert back to spherical
   vsph_sph_point_3d sp;
-  coord.spherical_coord(point,sp); 
+  coord.spherical_coord(point,sp);
 
   TEST_NEAR("radius", radius, sp.radius_, 1e-03);
   TEST_NEAR("theta", theta, sp.theta_, 1e-03);
@@ -39,14 +39,14 @@ static void test_spherical_coord()
   diff = vgl_distance(point, test_p2);
   TEST_NEAR("Conversion 2 ", diff, 0.0, 0.01);
 
-  // test cart(10,0.5,0.7)-->sp(10.04, 1.501, 0.04996) 
+  // test cart(10,0.5,0.7)-->sp(10.04, 1.501, 0.04996)
   vgl_point_3d<double> test_p3(10,0.5,0.7);
   vsph_sph_point_3d sp3;
   coord.spherical_coord(test_p3, sp3);
   diff = vgl_distance(vgl_point_3d<double>(sp3.radius_,sp3.theta_,sp3.phi_), vgl_point_3d<double>(10.04, 1.501, 0.04996));
   TEST_NEAR("Reverse Conversion 1 ", diff, 0.0, 0.01);
 
-  // test cart(2, 2, 2)-->sp(3.464, 0.9553, 0.7854) 
+  // test cart(2, 2, 2)-->sp(3.464, 0.9553, 0.7854)
   vgl_point_3d<double> test_p4(2, 2, 2);
   vsph_sph_point_3d sp4;
   coord.spherical_coord(test_p4, sp4);
