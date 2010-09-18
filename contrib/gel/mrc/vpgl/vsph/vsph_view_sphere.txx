@@ -42,7 +42,7 @@ bool vsph_view_sphere<T>::remove_view(unsigned id)
 template <class T>
 T vsph_view_sphere<T>::find_closest(unsigned id, int& uid)
 {
-  vcl_map<unsigned, T>::iterator it = views_.find(id);
+  typename vcl_map<unsigned, T>::iterator it = views_.find(id);
   if (it != views_.end()) {
     vsph_sph_point_3d vp = it->second.view_point();
     vgl_point_3d<double> p = coord_sys_->cart_coord(vp);
@@ -73,7 +73,7 @@ T vsph_view_sphere<T>::find_closest(unsigned id, int& uid)
 template <class T>
 T vsph_view_sphere<T>::find_closest(vgl_point_3d<double> p, int &uid)
 {
-  vcl_map<unsigned, T>::iterator it = views_.begin();
+  typename vcl_map<unsigned, T>::iterator it = views_.begin();
   double min_dist=1e20;
   uid=-1;
 
