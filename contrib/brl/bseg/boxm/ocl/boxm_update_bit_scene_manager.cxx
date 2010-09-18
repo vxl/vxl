@@ -1,4 +1,3 @@
-
 //:
 // \file
 #include "boxm_update_bit_scene_manager.h"
@@ -12,8 +11,8 @@
 #include <boxm/basic/boxm_block_vis_graph_iterator.h>
 #include <vil/vil_save.h>
 
-//: Initializes Host side input buffers
-//put tree structure and data into arrays
+//: Initializes host side input buffers
+//  Put tree structure and data into arrays
 bool boxm_update_bit_scene_manager::init_scene(boxm_ocl_bit_scene *scene,
                                                vpgl_camera_double_sptr cam,
                                                vil_image_view<float> &obs,
@@ -24,25 +23,25 @@ bool boxm_update_bit_scene_manager::init_scene(boxm_ocl_bit_scene *scene,
     return false;
   }
   scene_ = scene;
-  
+
   //set scene information
   scene_info_ = new RenderSceneInfo();
   int blkX, blkY, blkZ;
-  scene->block_num(blkX, blkY, blkZ); 
+  scene->block_num(blkX, blkY, blkZ);
   int numblocks = blkX*blkY*blkZ;
   vcl_cout<<"Block size "<<(float)numblocks*16/1024.0/1024.0<<"MB"<<vcl_endl;
   scene->tree_buffer_shape(scene_info_->num_buffer, scene_info_->tree_buffer_length);
   scene->data_buffer_shape(scene_info_->num_buffer, scene_info_->data_buffer_length);
-  
+
   //set block length, epsilon and root level
-  double lenX, lenY, lenZ; 
+  double lenX, lenY, lenZ;
   scene->block_dim(lenX,lenY,lenZ);
   scene_info_->block_len = (float) lenX;    // size of each block (can only be 1 number now that we've established blocks are cubes)
   scene_info_->epsilon   = 1.0f/100.0f;
   scene_info_->root_level = scene->max_level() - 1;
-  
+
   //set origin and scene dimensions
-  scene_info_->scene_dims.s[0]   = blkX;  
+  scene_info_->scene_dims.s[0]   = blkX;
   scene_info_->scene_dims.s[1]   = blkY;
   scene_info_->scene_dims.s[2]   = blkZ;
   scene_info_->scene_dims.s[3]   = 1;
@@ -51,20 +50,20 @@ bool boxm_update_bit_scene_manager::init_scene(boxm_ocl_bit_scene *scene,
   scene_info_->scene_origin.s[1]= (float) origin.y();
   scene_info_->scene_origin.s[2]= (float) origin.z();
   scene_info_->scene_origin.s[3]= (float) 0.0;
-  
+
   //allocate and initialize 3d blocks
   block_ptrs_ = (cl_ushort*) boxm_ocl_utils::alloc_aligned(numblocks, sizeof(cl_ushort2),16);
-  scene->get_block_ptrs(block_ptrs_);  
-  
+  scene->get_block_ptrs(block_ptrs_);
+
   //1d array of memory pointers
   mem_ptrs_   = (cl_ushort*) boxm_ocl_utils::alloc_aligned(scene_info_->num_buffer, sizeof(cl_ushort2), 16);
-  scene->get_mem_ptrs(mem_ptrs_); 
-  
+  scene->get_mem_ptrs(mem_ptrs_);
+
   //tree cells (each are uchar16)
   int numCells = scene_info_->num_buffer * scene_info_->tree_buffer_length;
   cells_ = (cl_uchar*) boxm_ocl_utils::alloc_aligned(numCells , sizeof(cl_uchar16), 16);
   scene->get_tree_cells(cells_);
-  
+
   //allocate the data items, initialize them from scene
   int numData = scene_info_->num_buffer * scene_info_->data_buffer_length;
   cell_alpha_   = (cl_float *) boxm_ocl_utils::alloc_aligned(numData,sizeof(cl_float),16);
@@ -77,8 +76,8 @@ bool boxm_update_bit_scene_manager::init_scene(boxm_ocl_bit_scene *scene,
   for (unsigned i=0;i<numData*4;)   //init aux data to zero
     for (unsigned j=0;j<4;j++)
       cell_aux_data_[i++]=0.0;
-      
-      
+
+
   //allocate and initialize bit lookup
   bit_lookup_ = (cl_uchar *) boxm_ocl_utils::alloc_aligned(256,sizeof(cl_uchar),16);
   unsigned char bits[] = { 0,   1,   1,   2,   1,   2,   2,   3,   1,   2,   2,   3,   2,   3,   3,   4,
@@ -97,31 +96,31 @@ bool boxm_update_bit_scene_manager::init_scene(boxm_ocl_bit_scene *scene,
                            3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7  ,
                            3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7  ,
                            4,   5,   5,   6,   5,   6,   6,   7,   5,   6,   6,   7,   6,   7,   7,   8 };
-  for (int i=0; i<256; i++) bit_lookup_[i] = bits[i];    
-      
+  for (int i=0; i<256; i++) bit_lookup_[i] = bits[i];
+
   //initialize output_debug_;
   output_debug_ = (cl_float*) boxm_ocl_utils::alloc_aligned(scene_info_->num_buffer, sizeof(cl_float), 16);
   for(int i=0; i<scene_info_->num_buffer; i++) output_debug_[i] = 0;
- 
-  //initialize cam, input image and prob_thresh 
+
+  //initialize cam, input image and prob_thresh
   cam_ = cam;
   input_img_ = obs;
   wni_=(cl_uint)RoundUp(input_img_.ni(),bni_);
   wnj_=(cl_uint)RoundUp(input_img_.nj(),bnj_);
   prob_thresh_=prob_thresh;
-  
+
   /****** size output **********/
   vcl_cout<<"Numbuffer "<<scene_info_->num_buffer<<", "
           <<" Len buffer "<<scene_info_->tree_buffer_length<<", "
           <<"  total tree cells "<<numCells<<", "
           <<"  total data cells "<<numData<<vcl_endl;
   /****** size output **********/
-  
-  
+
+
   this->set_scene_buffers();
-  
+
   //TODO SET UP CAMERA, IMAGE, OFFSET, ALL OTHER BUFFERS AND STUFF THAT YOU NEED
-  
+
   return true;
 }
 
@@ -138,13 +137,13 @@ bool boxm_update_bit_scene_manager::uninit_scene()
   boxm_ocl_utils::free_aligned(output_debug_);
   if(scene_info_) delete scene_info_;
   this->clean_scene_buffers();
-    
+
   //TODO CLEANUP CAMERA, IMAGE, OFFSET, ALL OTHER BUFFERS AND STUFF THAT YOU NEED
-  
+
   return true;
 }
 
-//INIT_UPDATE allocates and initializes host side buffers, 
+//INIT_UPDATE allocates and initializes host side buffers,
 //this is called after to allocate and initialize gpu side buffers
 bool boxm_update_bit_scene_manager::set_scene_buffers()
 {
@@ -152,12 +151,12 @@ bool boxm_update_bit_scene_manager::set_scene_buffers()
   //create the scene info buffer
   scene_info_buf_ = clCreateBuffer(this->context_,
                                    CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
-                                   sizeof(RenderSceneInfo), 
+                                   sizeof(RenderSceneInfo),
                                    scene_info_,
                                    &status);
   if (!this->check_val(status, CL_SUCCESS, "clCreateBuffer (scene info) failed."))
     return false;
-    
+
   //memory pointers for each tree buffer
   mem_ptrs_buf_ = clCreateBuffer(this->context_,
                                  CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR,
@@ -166,7 +165,7 @@ bool boxm_update_bit_scene_manager::set_scene_buffers()
                                  &status);
   if (!this->check_val(status, CL_SUCCESS, "clCreateBuffer (mem_ptrs_) failed."))
     return false;
-  
+
   //block pointers
   int numBlks = scene_info_->scene_dims.s[0] * scene_info_->scene_dims.s[1] * scene_info_->scene_dims.s[2];
   block_ptrs_buf_ = clCreateBuffer(this->context_,
@@ -176,7 +175,7 @@ bool boxm_update_bit_scene_manager::set_scene_buffers()
                                    &status);
   if (!this->check_val(status, CL_SUCCESS, "clCreateBuffer (block_ptrs) failed."))
     return false;
-    
+
   //trees
   int numCells = scene_info_->tree_buffer_length * scene_info_->num_buffer;
   cells_buf_ = clCreateBuffer(this->context_,
@@ -196,7 +195,7 @@ bool boxm_update_bit_scene_manager::set_scene_buffers()
                                    &status);
   if (!this->check_val(status, CL_SUCCESS, "clCreateBuffer (alpha_cells) failed."))
     return false;
-   
+
   //data (mixture)
   cell_mixture_buf_ = clCreateBuffer(this->context_,
                                     CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR,
@@ -204,8 +203,8 @@ bool boxm_update_bit_scene_manager::set_scene_buffers()
                                     cell_mixture_,
                                     &status);
   if (!this->check_val(status, CL_SUCCESS, "clCreateBuffer (cell_mixture) failed."))
-    return false;  
-    
+    return false;
+
   //data (num_obs)
   cell_num_obs_buf_ = clCreateBuffer(this->context_,
                                     CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR,
@@ -213,8 +212,8 @@ bool boxm_update_bit_scene_manager::set_scene_buffers()
                                     cell_num_obs_,
                                     &status);
   if (!this->check_val(status, CL_SUCCESS, "clCreateBuffer (cell_num_obs) failed."))
-    return false;  
-    
+    return false;
+
   //data (aux_data)
   cell_aux_data_buf_ = clCreateBuffer(this->context_,
                                       CL_MEM_READ_WRITE,
@@ -222,7 +221,7 @@ bool boxm_update_bit_scene_manager::set_scene_buffers()
                                       NULL,
                                       &status);
   if (!this->check_val(status, CL_SUCCESS, "clCreateBuffer (cell_aux_data) failed."))
-    return false;  
+    return false;
 
 
   //bit lookup buf to go to constant mem
@@ -242,7 +241,7 @@ bool boxm_update_bit_scene_manager::set_scene_buffers()
                                     &status);
   if(! this->check_val(status, CL_SUCCESS, "clCreateBuffer (output_debug_buf) failed."))
     return false;
-    
+
   /** GPU MEMORY INFO **********************/
   float cellMB    = (float) numCells*sizeof(cl_uchar16)/1024.0/1024.0;
   float alphaMB   = (float) datCells*sizeof(cl_float)/1024.0/1024.0;
@@ -267,7 +266,7 @@ bool boxm_update_bit_scene_manager::clean_scene_buffers()
   cl_int status;
   status = clReleaseMemObject(scene_info_buf_);
   bool good = this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (scene_info_buf_).");
-  
+
   status = clReleaseMemObject(mem_ptrs_buf_);
   good = good && this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (mem_ptrs_buf_).");
 
@@ -296,22 +295,21 @@ bool boxm_update_bit_scene_manager::clean_scene_buffers()
 }
 
 
-//: Does the non-buffer setup (sets kernels, sets kernel args,
-// sets commandqueue, sets workspace
+//: Does the non-buffer setup (sets kernels, sets kernel args, sets commandqueue, sets workspace)
 bool boxm_update_bit_scene_manager::setup_online_processing()
 {
   bool good=true;
   vcl_string error_message="";
-  good = set_offset_buffers(0,0,2); 
-  
+  good = set_offset_buffers(0,0,2);
+
   // set persp cam and input_image host buffers
   good = good && set_persp_camera()
-              && set_input_image(); 
+              && set_input_image();
 
   // set persp camand input_image gpu buffers
   good = good && set_persp_camera_buffers()
               && set_input_image_buffers()
-              && set_image_dims_buffers(); 
+              && set_image_dims_buffers();
 
   //now that all buffers are set, compile kernels, queue, and set args
   good = good && this->set_kernels()
@@ -332,7 +330,7 @@ bool boxm_update_bit_scene_manager::finish_online_processing()
   scene_->set_mixture_values(cell_mixture_);
   scene_->set_num_obs_values(cell_num_obs_);
 
-    
+
   //NEED TO:
   //- release offset buffers
   //- release persp cam, input image, image_dims (and buffers)
@@ -348,7 +346,7 @@ bool boxm_update_bit_scene_manager::set_kernels()
   int CHECK_SUCCESS = 1;
   if (!this->release_kernels())
     return false;
-    
+
   // pass 0 (seg lens)
   if (!this->build_update_program("seg_len_obs(d,image_vect,ray_bundle_array,cached_aux_data)", false))
     return false;
@@ -356,21 +354,21 @@ bool boxm_update_bit_scene_manager::set_kernels()
   if (this->check_val(status,CL_SUCCESS,error_to_string(status))!=CHECK_SUCCESS)
     return false;
   update_kernels_.push_back(kernel);
-  
+
   // pass 1
   if (!this->build_update_program("pre_infinity(d,image_vect,ray_bundle_array, cached_data, cached_aux_data)", true))
     return false;
   kernel = clCreateKernel(program_,"update_bit_scene_opt",&status);
-  if (this->check_val(status,CL_SUCCESS,error_to_string(status))!=CHECK_SUCCESS)    
+  if (this->check_val(status,CL_SUCCESS,error_to_string(status))!=CHECK_SUCCESS)
     return false;
   update_kernels_.push_back(kernel);
-  
+
   //pass 2 norm image (pre-requisite to C++ pass 2)
   kernel = clCreateKernel(program_,"proc_norm_image",&status);
   if (this->check_val(status,CL_SUCCESS,error_to_string(status))!=CHECK_SUCCESS)
     return false;
   update_kernels_.push_back(kernel);
-  
+
   // pass 3 Bayes ratio (pass 2 in C++)
   if (!this->build_update_program("bayes_ratio(d,image_vect,ray_bundle_array, cached_data, cached_aux_data)", true))
     return false;
@@ -378,14 +376,14 @@ bool boxm_update_bit_scene_manager::set_kernels()
   if (this->check_val(status,CL_SUCCESS,error_to_string(status))!=CHECK_SUCCESS)
     return false;
   update_kernels_.push_back(kernel);
-    
+
   // pass 4 update_ocl_scene_main
   kernel = clCreateKernel(program_,"update_bit_scene_main",&status);
   if (this->check_val(status,CL_SUCCESS,error_to_string(status))!=CHECK_SUCCESS)
   return false;
   update_kernels_.push_back(kernel);
-  
-  
+
+
   //create and render kernel
   if (!this->build_rendering_program()) return false;
   render_kernel_ = clCreateKernel(program_,"ray_trace_bit_scene_opt",&status);
@@ -394,7 +392,7 @@ bool boxm_update_bit_scene_manager::set_kernels()
 
   //create and set refining kernel
   if (!this->build_refining_program()) return false;
-  refine_kernel_ = clCreateKernel(program_,"refine_main", &status); 
+  refine_kernel_ = clCreateKernel(program_,"refine_main", &status);
   if (this->check_val(status,CL_SUCCESS,error_to_string(status))!=CHECK_SUCCESS)
     return false;
 
@@ -402,7 +400,7 @@ bool boxm_update_bit_scene_manager::set_kernels()
 }
 
 bool boxm_update_bit_scene_manager::build_rendering_program()
-{  
+{
   //append render source code
   vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm/ocl/cl/";
   if (!this->load_kernel_source(source_dir+"scene_info.cl") ||
@@ -416,13 +414,13 @@ bool boxm_update_bit_scene_manager::build_rendering_program()
     vcl_cerr << "Error: boxm_update_bit_scene_manager : failed to load kernel source (helper functions)\n";
     return false;
   }
-  
+
   //replace step_cell functor with the correct one... opt
   // transfer cell data from global to local memory if use_cell_data_ == true
   vcl_cout<<"Using functor step_cell_render_opt"<<vcl_endl;
   vcl_string patt = "/*$$step_cell$$*/";
   vcl_string functor = "step_cell_render_opt(mixture_array,alpha_array,data_ptr,d,&data_return);";
-  
+
   //compilation options
   vcl_string options="";
   options+="-D INTENSITY ";
@@ -431,7 +429,7 @@ bool boxm_update_bit_scene_manager::build_rendering_program()
   if (vcl_strstr(this->platform_name,"NVIDIA"))
     options+="-D NVIDIA ";
   //options += " -cl-fast-relaxed-math ";
-  
+
   // assign the functor calling signature
   vcl_string::size_type pos_start = this->prog_.find(patt);
   vcl_string::size_type n1 = patt.size();
@@ -442,7 +440,7 @@ bool boxm_update_bit_scene_manager::build_rendering_program()
     this->prog_ = this->prog_.replace(pos_start, n1, functor.c_str(), n2);
     return this->build_kernel_program(program_, options)==SDK_SUCCESS;
   }
-  
+
   return this->build_kernel_program(program_, options)==SDK_SUCCESS;
 }
 
@@ -508,7 +506,7 @@ bool boxm_update_bit_scene_manager::set_args()
 {
   int CHECK_SUCCESS = 1;
   cl_int status = CL_SUCCESS;
-  
+
   //set render args ------------------------------------------------------------
   int i=0;
   status = clSetKernelArg(render_kernel_,i++,sizeof(cl_mem), (void *)&scene_info_buf_);
@@ -598,7 +596,7 @@ bool boxm_update_bit_scene_manager::set_args()
     //local copy of the tree (one for each thread/ray)
     status = clSetKernelArg(update_kernels_[pass],i++,this->bni_*this->bnj_*sizeof(cl_uchar16),0);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local tree)"))
-      return 0;  
+      return 0;
     // camera buffer
     status = clSetKernelArg(update_kernels_[pass],i++,sizeof(cl_mem),(void *)&persp_cam_buf_);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (data)"))
@@ -611,7 +609,7 @@ bool boxm_update_bit_scene_manager::set_args()
     status = clSetKernelArg(update_kernels_[pass],i++,sizeof(cl_mem),(void *)&image_buf_);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (input_image)"))
       return 0;
-    // offset factor 
+    // offset factor
     status = clSetKernelArg(update_kernels_[pass],i++,sizeof(cl_mem),(void *)&factor_buf_);
     if (this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (factor_buf_)")!=CHECK_SUCCESS)
       return false;
@@ -649,7 +647,7 @@ bool boxm_update_bit_scene_manager::set_args()
   }
   //END ray trace update pass args -------------------------------------------------
 
-  
+
 
   //set pass 4 args ------------------------------------------------------------
   unsigned pass = 4; i=0;
@@ -688,7 +686,7 @@ bool boxm_update_bit_scene_manager::set_args()
   if (this->check_val(status, CL_SUCCESS, "clSetKernelArg failed. (remote surface appearance)")!=CHECK_SUCCESS)
     return false;
   status = clSetKernelArg(update_kernels_[pass], i++, sizeof(cl_mem), (void *)&img_dims_buf_);
-  if (this->check_val(status, CL_SUCCESS, "clSetKernelArg failed. (image dimensions)")!=CHECK_SUCCESS)  
+  if (this->check_val(status, CL_SUCCESS, "clSetKernelArg failed. (image dimensions)")!=CHECK_SUCCESS)
     return false;
   //END pass 2 args ------------------------------------------------------------
 
@@ -706,21 +704,21 @@ bool boxm_update_bit_scene_manager::release_kernels()
 {
   cl_int status = CL_SUCCESS;
   int CHECK_SUCCESS = 1;
-  
+
   //release render
   if(render_kernel_) {
     status = clReleaseKernel(render_kernel_);
     if (this->check_val(status,CL_SUCCESS,"clReleaseKernel (render) failed.")!=CHECK_SUCCESS)
       return false;
   }
-  
+
   //release refine
   if(refine_kernel_) {
     status = clReleaseKernel(refine_kernel_);
     if (this->check_val(status,CL_SUCCESS,"clReleaseKernel (refine) failed.")!=CHECK_SUCCESS)
       return false;
   }
-  
+
   //release update kernels
   for (unsigned i = 0; i<update_kernels_.size(); ++i) {
     if (update_kernels_[i]) {
@@ -850,26 +848,26 @@ bool boxm_update_bit_scene_manager::set_workspace(cl_kernel kernel, unsigned pas
   if (!this->check_val(status,CL_SUCCESS,"clGetKernelWorkGroupInfo CL_KERNEL_WORK_GROUP_SIZE, failed."))
     return false;
 
-  if (pass==0 || pass==1 || pass==3) //: passes for computing aux
+  if (pass==0 || pass==1 || pass==3) // passes for computing aux
   {
       globalThreads[0]=this->wni_/2; globalThreads[1]=this->wnj_/2;
       localThreads[0] =this->bni_  ; localThreads[1] =this->bnj_  ;
   }
-  else if (pass==2)//: pass for normalizing image
+  else if (pass==2) // pass for normalizing image
   {
       globalThreads[0]=this->wni_;globalThreads[1]=this->wnj_;
       localThreads[0] =this->bni_;localThreads[0] =this->bnj_;
   }
-  else if (pass==4)  //: pass for updating data from aux data
+  else if (pass==4)  // pass for updating data from aux data
   {
     int numbuf = scene_info_->num_buffer;
     int datlen = scene_info_->data_buffer_length;
     globalThreads[0] = RoundUp(numbuf*datlen,64);
     globalThreads[1] = 1;
-    localThreads[0]  = 64;                              
+    localThreads[0]  = 64;
     localThreads[1]  = 1;
   }
-  
+
   else if (pass==5)
   {
       globalThreads[0] = this->wni_;
@@ -936,7 +934,7 @@ bool boxm_update_bit_scene_manager::run(cl_kernel kernel, unsigned pass)
       status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
       gpu_time_+= (double)1.0e-6 * (tend - tstart); // convert nanoseconds to milliseconds
   }
-  
+
   if (this->check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status))!=CHECK_SUCCESS)
     return false;
   return true;
@@ -957,7 +955,7 @@ bool boxm_update_bit_scene_manager::update()
 
       //if(pass == 1) {
         //cl_event events[1];
-        //int status = clEnqueueReadBuffer(command_queue_, image_buf_, CL_TRUE, 0, 
+        //int status = clEnqueueReadBuffer(command_queue_, image_buf_, CL_TRUE, 0,
                                          //this->wni_*this->wnj_*sizeof(cl_float4),
                                          //image_, 0, NULL, &events[0]);
         //if (!this->check_val(status,CL_SUCCESS,"clEnqueueReadBuffer (read)failed."))
@@ -968,7 +966,7 @@ bool boxm_update_bit_scene_manager::update()
         //this->save_image();
       //}
       cl_event events[1];
-      int status = clEnqueueReadBuffer(command_queue_, output_debug_buf_, CL_TRUE, 0, 
+      int status = clEnqueueReadBuffer(command_queue_, output_debug_buf_, CL_TRUE, 0,
                                        scene_info_->num_buffer*sizeof(cl_float),
                                        output_debug_, 0, NULL, &events[0]);
       if (!this->check_val(status,CL_SUCCESS,"clEnqueueReadBuffer (output buffer )failed."))
@@ -983,11 +981,11 @@ bool boxm_update_bit_scene_manager::update()
         }
         vcl_cout<<'\n';
       }
-      
+
 #if 0
       if(pass == 4) {  //only read for data setting pass
         cl_event events[1];
-        int status = clEnqueueReadBuffer(command_queue_, output_debug_buf_, CL_TRUE, 0, 
+        int status = clEnqueueReadBuffer(command_queue_, output_debug_buf_, CL_TRUE, 0,
                                          scene_info_->num_buffer*sizeof(cl_float),
                                          output_debug_, 0, NULL, &events[0]);
         if (!this->check_val(status,CL_SUCCESS,"clEnqueueReadBuffer (output buffer )failed."))
@@ -1057,7 +1055,7 @@ bool boxm_update_bit_scene_manager::refine()
   scene_->set_num_obs_values(cell_num_obs_);
   vcl_cout<<(*scene_)<<vcl_endl;
   //----TO BE DELTED -------
-  
+
   gpu_time_=0;
   unsigned pass = 6;
   this->set_args(pass);
@@ -1067,7 +1065,7 @@ bool boxm_update_bit_scene_manager::refine()
   vcl_cout << "===============\n"
            << "Timing Analysis:\n"
            << "openCL Running time "<<gpu_time_<<" ms" << vcl_endl;
-           
+
   /******** read some output **************************************/
   cl_event events[1];
   int status = clEnqueueReadBuffer(command_queue_,output_debug_buf_,CL_TRUE, 0,
@@ -1080,7 +1078,7 @@ bool boxm_update_bit_scene_manager::refine()
     return false;
 
   vcl_cout<<"Kernel OUTPUT: "<<vcl_endl;
-  this->read_scene();   //DEBUG PRINTER - can be deleted when fully working. 
+  this->read_scene();   //DEBUG PRINTER - can be deleted when fully working.
   for(int i=0; i<scene_info_->num_buffer; i++) {
     int startPtr = mem_ptrs_[2*i];
     int endPtr   = mem_ptrs_[2*i+1];
@@ -1091,12 +1089,12 @@ bool boxm_update_bit_scene_manager::refine()
               <<"mem_ptrs = "<<startPtr<<","<<endPtr<<vcl_endl;
     }
     else if(output_debug_[i] == -665) {
-      vcl_cout<<"buffer @ "<<i<<" is out of space PRE refine "          
+      vcl_cout<<"buffer @ "<<i<<" is out of space PRE refine "
               <<"freeSpace = "<<freeSpace<<"  "
               <<"mem_ptrs = "<<startPtr<<","<<endPtr<<vcl_endl;
     }
     else if(output_debug_[i] == -555) {
-      vcl_cout<<"buffer @ "<<i<<" has bad block pointer!!! "          
+      vcl_cout<<"buffer @ "<<i<<" has bad block pointer!!! "
               <<"freeSpace = "<<freeSpace<<"  "
               <<"mem_ptrs = "<<startPtr<<","<<endPtr<<vcl_endl;
     }
@@ -1169,7 +1167,7 @@ bool boxm_update_bit_scene_manager::read_scene()
   cl_event events[2];
 
   // Enqueue readBuffers
-  int numCells = scene_info_->tree_buffer_length * scene_info_->num_buffer; 
+  int numCells = scene_info_->tree_buffer_length * scene_info_->num_buffer;
   int status = clEnqueueReadBuffer(command_queue_, cells_buf_, CL_TRUE,
                                    0, numCells*sizeof(cl_uchar16),
                                    cells_,
@@ -1178,14 +1176,14 @@ bool boxm_update_bit_scene_manager::read_scene()
   if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (cells )failed."))
     return false;
 
-  int datCells = scene_info_->data_buffer_length * scene_info_->num_buffer; 
+  int datCells = scene_info_->data_buffer_length * scene_info_->num_buffer;
   status = clEnqueueReadBuffer(command_queue_,cell_alpha_buf_,CL_TRUE,
                                0,datCells*sizeof(cl_float),
                                cell_alpha_,
                                0,NULL,&events[0]);
   if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (cell alpha )failed."))
     return false;
-    
+
   status = clEnqueueReadBuffer(command_queue_,cell_mixture_buf_,CL_TRUE,
                                0,datCells*sizeof(cl_uchar8),
                                cell_mixture_,
@@ -1199,22 +1197,22 @@ bool boxm_update_bit_scene_manager::read_scene()
                                0,NULL,&events[0]);
   if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (cell num obs )failed."))
     return false;
-    
+
   status = clEnqueueReadBuffer(command_queue_,cell_aux_data_buf_,CL_TRUE,
                                0,datCells*sizeof(cl_float4),
                                cell_aux_data_,
                                0,NULL,&events[0]);
   if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (cell aux )failed."))
     return false;
-    
+
   status = clEnqueueReadBuffer(command_queue_,mem_ptrs_buf_,CL_TRUE,
                                0,scene_info_->num_buffer*sizeof(cl_int2),
                                mem_ptrs_,
                                0,NULL,&events[0]);
   if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (cell mem_ptrs )failed."))
     return false;
-  
-  int numBlocks = scene_info_->scene_dims.s[0] * scene_info_->scene_dims.s[1] * scene_info_->scene_dims.s[2]; 
+
+  int numBlocks = scene_info_->scene_dims.s[0] * scene_info_->scene_dims.s[1] * scene_info_->scene_dims.s[2];
   status = clEnqueueReadBuffer(command_queue_,block_ptrs_buf_,CL_TRUE,
                                0,numBlocks*sizeof(cl_ushort2),
                                block_ptrs_,
