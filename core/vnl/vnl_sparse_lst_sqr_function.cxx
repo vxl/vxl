@@ -35,6 +35,7 @@ vnl_sparse_lst_sqr_function::vnl_sparse_lst_sqr_function(
                                  unsigned int num_residuals_per_e,
                                  UseGradient g)
  : failure(false),
+   residual_indices_(),
    indices_a_(num_a+1,0),
    indices_b_(num_b+1,0),
    indices_e_(num_a*num_b+1,0),

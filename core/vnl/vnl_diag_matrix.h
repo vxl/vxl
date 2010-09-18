@@ -40,7 +40,7 @@ class vnl_diag_matrix
   vnl_vector<T> diagonal_;
 
  public:
-  vnl_diag_matrix() {}
+  vnl_diag_matrix() : diagonal_() {}
 
   //: Construct an empty diagonal matrix.
   vnl_diag_matrix(unsigned nn) : diagonal_(nn) {}

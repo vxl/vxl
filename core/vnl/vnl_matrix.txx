@@ -102,10 +102,8 @@
 #endif
 
 // This macro allocates and initializes the dynamic storage used by a vnl_matrix.
-#define vnl_matrix_alloc_blah(rowz_, colz_) \
+#define vnl_matrix_alloc_blah() \
 do { \
-  this->num_rows = (rowz_); \
-  this->num_cols = (colz_); \
   if (this->num_rows && this->num_cols) { \
     /* Allocate memory to hold the row pointers */ \
     this->data = vnl_c_vector<T>::allocate_Tptr(this->num_rows); \
@@ -140,18 +138,20 @@ do { \
 
 template<class T>
 vnl_matrix<T>::vnl_matrix (unsigned rowz, unsigned colz)
+: num_rows(rowz), num_cols(colz)
 {
   vnl_matrix_construct_hack();
-  vnl_matrix_alloc_blah(rowz, colz);
+  vnl_matrix_alloc_blah();
 }
 
 //: Creates a matrix with given number of rows and columns, and initialize all elements to value. O(m*n).
 
 template<class T>
 vnl_matrix<T>::vnl_matrix (unsigned rowz, unsigned colz, T const& value)
+: num_rows(rowz), num_cols(colz)
 {
   vnl_matrix_construct_hack();
-  vnl_matrix_alloc_blah(rowz, colz);
+  vnl_matrix_alloc_blah();
   for (unsigned int i = 0; i < rowz; ++ i)
     for (unsigned int j = 0; j < colz; ++ j)
       this->data[i][j] = value;
@@ -160,9 +160,10 @@ vnl_matrix<T>::vnl_matrix (unsigned rowz, unsigned colz, T const& value)
 //: r rows, c cols, special type.  Currently implements "identity" and "null".
 template <class T>
 vnl_matrix<T>::vnl_matrix(unsigned r, unsigned c, vnl_matrix_type t)
+: num_rows(r), num_cols(c)
 {
   vnl_matrix_construct_hack();
-  vnl_matrix_alloc_blah(r, c);
+  vnl_matrix_alloc_blah();
   switch (t) {
    case vnl_matrix_identity:
     assert(r == c);
@@ -186,9 +187,10 @@ vnl_matrix<T>::vnl_matrix(unsigned r, unsigned c, vnl_matrix_type t)
 
 template<class T>
 vnl_matrix<T>::vnl_matrix (unsigned rowz, unsigned colz, unsigned n, T const values[])
+: num_rows(rowz), num_cols(colz)
 {
   vnl_matrix_construct_hack();
-  vnl_matrix_alloc_blah(rowz, colz);
+  vnl_matrix_alloc_blah();
   if (n > rowz*colz)
     n = rowz*colz;
   T *dst = this->data[0];
@@ -202,9 +204,10 @@ vnl_matrix<T>::vnl_matrix (unsigned rowz, unsigned colz, unsigned n, T const val
 
 template<class T>
 vnl_matrix<T>::vnl_matrix (T const* datablck, unsigned rowz, unsigned colz)
+: num_rows(rowz), num_cols(colz)
 {
   vnl_matrix_construct_hack();
-  vnl_matrix_alloc_blah(rowz, colz);
+  vnl_matrix_alloc_blah();
   unsigned int n = rowz*colz;
   T *dst = this->data[0];
   for (unsigned int k=0; k<n; ++k)
@@ -217,10 +220,11 @@ vnl_matrix<T>::vnl_matrix (T const* datablck, unsigned rowz, unsigned colz)
 
 template<class T>
 vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const& from)
+: num_rows(from.num_rows), num_cols(from.num_cols)
 {
   vnl_matrix_construct_hack();
   if (from.data) {
-    vnl_matrix_alloc_blah(from.num_rows, from.num_cols);
+    vnl_matrix_alloc_blah();
     unsigned int n = this->num_rows * this->num_cols;
     T *dst = this->data[0];
     T const *src = from.data[0];
@@ -238,6 +242,7 @@ vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const& from)
 
 template<class T>
 vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const &A, vnl_matrix<T> const &B, vnl_tag_add)
+: num_rows(A.num_rows), num_cols(A.num_cols)
 {
 #ifndef NDEBUG
   if (A.num_rows != B.num_rows || A.num_cols != B.num_cols)
@@ -245,7 +250,7 @@ vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const &A, vnl_matrix<T> const &B, vnl_t
 #endif
 
   vnl_matrix_construct_hack();
-  vnl_matrix_alloc_blah(A.num_rows, A.num_cols);
+  vnl_matrix_alloc_blah();
 
   unsigned int n = A.num_rows * A.num_cols;
   T const *a = A.data[0];
@@ -258,6 +263,7 @@ vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const &A, vnl_matrix<T> const &B, vnl_t
 
 template<class T>
 vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const &A, vnl_matrix<T> const &B, vnl_tag_sub)
+: num_rows(A.num_rows), num_cols(A.num_cols)
 {
 #ifndef NDEBUG
   if (A.num_rows != B.num_rows || A.num_cols != B.num_cols)
@@ -265,7 +271,7 @@ vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const &A, vnl_matrix<T> const &B, vnl_t
 #endif
 
   vnl_matrix_construct_hack();
-  vnl_matrix_alloc_blah(A.num_rows, A.num_cols);
+  vnl_matrix_alloc_blah();
 
   unsigned int n = A.num_rows * A.num_cols;
   T const *a = A.data[0];
@@ -278,9 +284,10 @@ vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const &A, vnl_matrix<T> const &B, vnl_t
 
 template<class T>
 vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const &M, T s, vnl_tag_mul)
+: num_rows(M.num_rows), num_cols(M.num_cols)
 {
   vnl_matrix_construct_hack();
-  vnl_matrix_alloc_blah(M.num_rows, M.num_cols);
+  vnl_matrix_alloc_blah();
 
   unsigned int n = M.num_rows * M.num_cols;
   T const *m = M.data[0];
@@ -292,9 +299,10 @@ vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const &M, T s, vnl_tag_mul)
 
 template<class T>
 vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const &M, T s, vnl_tag_div)
+: num_rows(M.num_rows), num_cols(M.num_cols)
 {
   vnl_matrix_construct_hack();
-  vnl_matrix_alloc_blah(M.num_rows, M.num_cols);
+  vnl_matrix_alloc_blah();
 
   unsigned int n = M.num_rows * M.num_cols;
   T const *m = M.data[0];
@@ -306,9 +314,10 @@ vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const &M, T s, vnl_tag_div)
 
 template<class T>
 vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const &M, T s, vnl_tag_add)
+: num_rows(M.num_rows), num_cols(M.num_cols)
 {
   vnl_matrix_construct_hack();
-  vnl_matrix_alloc_blah(M.num_rows, M.num_cols);
+  vnl_matrix_alloc_blah();
 
   unsigned int n = M.num_rows * M.num_cols;
   T const *m = M.data[0];
@@ -320,9 +329,10 @@ vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const &M, T s, vnl_tag_add)
 
 template<class T>
 vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const &M, T s, vnl_tag_sub)
+: num_rows(M.num_rows), num_cols(M.num_cols)
 {
   vnl_matrix_construct_hack();
-  vnl_matrix_alloc_blah(M.num_rows, M.num_cols);
+  vnl_matrix_alloc_blah();
 
   unsigned int n = M.num_rows * M.num_cols;
   T const *m = M.data[0];
@@ -334,6 +344,7 @@ vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const &M, T s, vnl_tag_sub)
 
 template<class T>
 vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const &A, vnl_matrix<T> const &B, vnl_tag_mul)
+: num_rows(A.num_rows), num_cols(B.num_cols)
 {
 #ifndef NDEBUG
   if (A.num_cols != B.num_rows)
@@ -345,7 +356,7 @@ vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const &A, vnl_matrix<T> const &B, vnl_t
   unsigned int n = B.num_cols;
 
   vnl_matrix_construct_hack();
-  vnl_matrix_alloc_blah(l, n);
+  vnl_matrix_alloc_blah();
 
   for (unsigned int i=0; i<l; ++i) {
     for (unsigned int k=0; k<n; ++k) {
@@ -404,11 +415,13 @@ bool vnl_matrix<T>::set_size (unsigned rowz, unsigned colz)
 
     // else, simply release old storage and allocate new.
     vnl_matrix_free_blah;
-    vnl_matrix_alloc_blah(rowz, colz);
+    this->num_rows = rowz; this->num_cols = colz;
+    vnl_matrix_alloc_blah();
   }
   else {
     // This happens if the matrix is default constructed.
-    vnl_matrix_alloc_blah(rowz, colz);
+    this->num_rows = rowz; this->num_cols = colz;
+    vnl_matrix_alloc_blah();
   }
 
   return true;

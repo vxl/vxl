@@ -11,7 +11,7 @@
 
 //: Constructor - from a binary mask
 vnl_crs_index::vnl_crs_index(const vcl_vector<vcl_vector<bool> >& mask)
- : num_cols_(mask[0].size()), row_ptr_(mask.size()+1,0)
+ : num_cols_(mask[0].size()), col_idx_(), row_ptr_(mask.size()+1,0)
 {
   int k=0;
   for (unsigned int i=0; i<mask.size(); ++i){
