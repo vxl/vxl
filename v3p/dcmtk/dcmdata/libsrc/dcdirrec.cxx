@@ -1019,7 +1019,7 @@ OFCondition DcmDirectoryRecord::purgeReferencedFile()
             }
             delete[] localFileName;
         } else                            // no referenced file exists
-            ;  // do nothing
+        {   ;  } // do nothing
     } else
         l_error = EC_IllegalCall;
 
