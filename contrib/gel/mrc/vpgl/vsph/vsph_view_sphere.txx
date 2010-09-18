@@ -2,6 +2,7 @@
 #define vsph_view_sphere_txx_
 
 #include "vsph_view_sphere.h"
+#include "vsph_view_point.h"
 #include <vgl/vgl_distance.h>
 
 template <class T>
@@ -97,7 +98,7 @@ template <class T>
 void vsph_view_sphere<T>::print(vcl_ostream& os) const
 {
   os << "vsph_view_sphere: " << size() << vcl_endl;
-  typename const_iterator it = views_.begin();
+  const_iterator it = views_.begin();
 
   while (it != views_.end()) {
     os << '(' << it->first << ") " << it->second << vcl_endl;

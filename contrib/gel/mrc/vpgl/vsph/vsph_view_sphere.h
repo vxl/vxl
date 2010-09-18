@@ -51,8 +51,8 @@ class vsph_view_sphere
 
   //: Const Iterator
   typedef typename vcl_map<unsigned, T>::const_iterator const_iterator;
-  const_iterator begin() const { typename const_iterator it=views_.begin(); return it; }
-  const_iterator end() const   { typename const_iterator it=views_.end();   return it; }
+  const_iterator begin() const { const_iterator it=views_.begin(); return it; }
+  const_iterator end() const   { const_iterator it=views_.end();   return it; }
 
   void print(vcl_ostream& os) const;
 
