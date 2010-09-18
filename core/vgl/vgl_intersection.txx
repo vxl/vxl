@@ -15,6 +15,7 @@
 #include <vgl/vgl_line_3d_2_points.h>
 #include <vgl/vgl_line_segment_2d.h>
 #include <vgl/vgl_line_segment_3d.h>
+#include <vgl/vgl_ray_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_box_3d.h>
@@ -157,7 +158,37 @@ bool vgl_intersection(vgl_box_3d<T> const& box,
   else
     return false;
 }
+//: Return true if ray intersects box. If so, compute intersection points.
+// If ray origin is inside box then p0==p1
+// \relatesalso vgl_box_3d
+// \relatesalso vgl_ray_3d
+template <class T>
+bool vgl_intersection(vgl_box_3d<T> const& box,
+                      vgl_ray_3d<T> const& ray,
+                      vgl_point_3d<T>& p0,
+                      vgl_point_3d<T>& p1)
+{
+  // convert ray to infinite line
+  vgl_infinite_line_3d<T> linf(ray.origin(), ray.direction());
+  bool good_inter = vgl_intersection(box, linf, p0, p1);
+  if(!good_inter) return false;
+  // check if ray origin is inside the box
+  vgl_point_3d<T> org = ray.origin();
+  vgl_vector_3d<T> dir = ray.direction();
+  if(!box.contains(org))
+    //check if the intersection points are in the ray domain
+    return ray.contains(p0)&&ray.contains(p1);
 
+  //ray origin is inside the box so find the intersection point in the
+  //positive ray domain
+  if(ray.contains(p0)){
+    p1 = p0; return true;
+  }
+  if(ray.contains(p1)){
+    p0 = p1; return true;
+  }
+  return false;
+}
 //: Return true if a box and plane intersect in 3D
 // \relatesalso vgl_plane_3d
 // \relatesalso vgl_box_3d
@@ -490,7 +521,18 @@ bool vgl_intersection(vgl_infinite_line_3d<T> const& l1,
   i_pnt = vgl_intersection(l21, l22);
   return l1.contains(i_pnt) && l2.contains(i_pnt);
 }
-
+template <class T>
+bool vgl_intersection(vgl_ray_3d<T> const& r1,
+                      vgl_ray_3d<T> const& r2,
+                      vgl_point_3d<T>& i_pnt)
+{
+  vgl_line_3d_2_points<T> l21(r1.origin(),r1.origin()+r1.direction());
+  vgl_line_3d_2_points<T> l22(r2.origin(),r2.origin()+r2.direction());
+  if (!concurrent(l21, l22))
+    return false;
+  i_pnt = vgl_intersection(l21, l22);
+  return r1.contains(i_pnt)&&r2.contains(i_pnt);
+}
 //: Return the intersection point of a line and a plane.
 // \relatesalso vgl_line_3d_2_points
 // \relatesalso vgl_plane_3d
@@ -933,13 +975,14 @@ template vcl_vector<vgl_point_3d<T > > vgl_intersection(vgl_box_3d<T > const&,vc
 template vcl_vector<vgl_point_3d<T > > vgl_intersection(vcl_vector<vgl_point_3d<T > > const&,vgl_box_3d<T > const&); \
 template bool vgl_intersection(vgl_box_2d<T > const&,vgl_line_2d<T > const&,vgl_point_2d<T >&,vgl_point_2d<T >&); \
 template bool vgl_intersection(vgl_box_3d<T > const&,vgl_plane_3d<T > const&); \
-template bool vgl_intersection(vgl_box_3d<T > const&,vgl_infinite_line_3d<T > const&,vgl_point_3d<T >&,vgl_point_3d<T >&)
-
+template bool vgl_intersection(vgl_box_3d<T > const&,vgl_infinite_line_3d<T > const&,vgl_point_3d<T >&,vgl_point_3d<T >&);\
+template bool vgl_intersection(vgl_box_3d<T > const&,vgl_ray_3d<T > const&,vgl_point_3d<T >&,vgl_point_3d<T >&)
 #undef VGL_INTERSECTION_INSTANTIATE
 #define VGL_INTERSECTION_INSTANTIATE(T) \
 template vgl_point_3d<T > vgl_intersection(vgl_line_3d_2_points<T > const&,vgl_line_3d_2_points<T > const&); \
 template bool vgl_intersection(vgl_line_segment_3d<T > const&,vgl_line_segment_3d<T > const&,vgl_point_3d<T >&); \
 template bool vgl_intersection(vgl_line_3d_2_points<T > const&,vgl_line_segment_3d<T > const&,vgl_point_3d<T >&); \
+template bool vgl_intersection(vgl_ray_3d<T > const&,vgl_ray_3d<T > const&,vgl_point_3d<T >&); \
 template vgl_point_3d<T > vgl_intersection(vgl_line_3d_2_points<T > const&,vgl_plane_3d<T > const&); \
 template bool vgl_intersection(vgl_line_segment_3d<T > const&,vgl_plane_3d<T > const&,vgl_point_3d<T >&); \
 template bool vgl_intersection(vgl_infinite_line_3d<T > const&,vgl_plane_3d<T > const&,vgl_point_3d<T >&); \

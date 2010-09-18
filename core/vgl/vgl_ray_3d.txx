@@ -16,7 +16,8 @@ bool vgl_ray_3d<Type>::contains(const vgl_point_3d<Type>& p ) const
   if(len>vgl_tolerance<Type>::position)
     return false;
   Type dp = dot_product(t_, pcls-p0_);
-  return  dp >= -(vgl_tolerance<Type>::position);
+  Type tol = vgl_tolerance<Type>::position;
+  return  dp >= -tol;
 }
 
 

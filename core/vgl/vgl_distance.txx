@@ -171,49 +171,49 @@ template <class T>
 double vgl_distance_origin(vgl_homg_line_2d<T> const& l)
 {
   if (l.c() == 0) return 0.0; // no call to sqrt if not necessary
-  else return vcl_abs(l.c()) / vcl_sqrt( l.a()*l.a()+l.b()*l.b() );
+  else return vcl_abs(static_cast<double>(l.c())) / vcl_sqrt(static_cast<double>( l.a()*l.a()+l.b()*l.b() ));
 }
 
 template <class T>
 double vgl_distance_origin(vgl_line_2d<T> const& l)
 {
   if (l.c() == 0) return 0.0; // no call to sqrt if not necessary
-  else return vcl_abs(l.c()) / vcl_sqrt( l.a()*l.a()+l.b()*l.b() );
+  else return vcl_abs(static_cast<double>(l.c())) / vcl_sqrt(static_cast<double>( l.a()*l.a()+l.b()*l.b() ));
 }
 
 template <class T>
 double vgl_distance_origin(vgl_homg_plane_3d<T> const& pl)
 {
   if (pl.d() == 0) return 0.0; // no call to sqrt if not necessary
-  else return vcl_abs(pl.d()) / vcl_sqrt( pl.a()*pl.a()+pl.b()*pl.b()+pl.c()*pl.c() );
+  else return vcl_abs(static_cast<double>(pl.d())) / vcl_sqrt(static_cast<double>( pl.a()*pl.a()+pl.b()*pl.b()+pl.c()*pl.c()) );
 }
 
 template <class T>
 double vgl_distance_origin(vgl_plane_3d<T> const& pl)
 {
   if (pl.d() == 0) return 0.0; // no call to sqrt if not necessary
-  else return vcl_abs(pl.d()) / vcl_sqrt( pl.a()*pl.a()+pl.b()*pl.b()+pl.c()*pl.c() );
+  else return vcl_abs(static_cast<double>(pl.d())) / vcl_sqrt(static_cast<double>( pl.a()*pl.a()+pl.b()*pl.b()+pl.c()*pl.c()) );
 }
 
 template <class T>
 double vgl_distance_origin(vgl_homg_line_3d_2_points<T> const& l)
 {
   vgl_homg_point_3d<T> q = vgl_closest_point_origin(l);
-  return vcl_sqrt(square(q.x())+square(q.y())+square(q.z()))/q.w();
+  return vcl_sqrt(static_cast<double>(square(q.x())+square(q.y())+square(q.z())))/q.w();
 }
 
 template <class T>
 double vgl_distance_origin(vgl_line_3d_2_points<T> const& l)
 {
   vgl_point_3d<T> q = vgl_closest_point_origin(l);
-  return vcl_sqrt(square(q.x())+square(q.y())+square(q.z()));
+  return vcl_sqrt(static_cast<double>(square(q.x())+square(q.y())+square(q.z())));
 }
 
 template <class T>
 double vgl_distance(vgl_homg_point_1d<T>const& p1,
                     vgl_homg_point_1d<T>const& p2)
 {
-  return vcl_abs(p1.x()/p1.w() - p2.x()/p2.w());
+  return vcl_abs(static_cast<double>(p1.x()/p1.w() - p2.x()/p2.w()));
 }
 
 template <class T>
@@ -221,7 +221,7 @@ double vgl_distance(vgl_line_2d<T> const& l, vgl_point_2d<T> const& p)
 {
   T num = l.a()*p.x() + l.b()*p.y() + l.c();
   if (num == 0) return 0.0; // no call to sqrt if not necessary
-  else return vcl_abs(num) / vcl_sqrt(l.a()*l.a() + l.b()*l.b());
+  else return vcl_abs(static_cast<double>(num)) / vcl_sqrt(static_cast<double>(l.a()*l.a() + l.b()*l.b()));
 }
 
 template <class T>
@@ -229,7 +229,7 @@ double vgl_distance(vgl_homg_line_2d<T> const& l, vgl_homg_point_2d<T> const& p)
 {
   T num = l.a()*p.x() + l.b()*p.y() + l.c()*p.w();
   if (num == 0) return 0.0; // always return 0 when point on line, even at infinity
-  else return vcl_abs(num) / vcl_sqrt(l.a()*l.a() + l.b()*l.b()) / p.w(); // could be inf
+  else return vcl_abs(static_cast<double>(num)) / vcl_sqrt(static_cast<double>(l.a()*l.a() + l.b()*l.b())) / p.w(); // could be inf
 }
 
 template <class T>
@@ -237,7 +237,7 @@ double vgl_distance(vgl_plane_3d<T> const& l, vgl_point_3d<T> const& p)
 {
   T num = l.nx()*p.x() + l.ny()*p.y() + l.nz()*p.z() + l.d();
   if (num == 0) return 0.0; // no call to sqrt if not necessary
-  else return vcl_abs(num) / vcl_sqrt(l.nx()*l.nx() + l.ny()*l.ny() + l.nz()*l.nz());
+  else return vcl_abs(static_cast<double>(num)) / vcl_sqrt(static_cast<double>(l.nx()*l.nx() + l.ny()*l.ny() + l.nz()*l.nz()));
 }
 
 template <class T>
@@ -245,7 +245,7 @@ double vgl_distance(vgl_homg_plane_3d<T> const& l, vgl_homg_point_3d<T> const& p
 {
   T num = l.nx()*p.x() + l.ny()*p.y() + l.nz()*p.z() + l.d()*p.w();
   if (num == 0) return 0.0; // always return 0 when point on plane, even at infinity
-  else return vcl_abs(num/p.w()) / vcl_sqrt(l.nx()*l.nx() + l.ny()*l.ny() + l.nz()*l.nz());
+  else return vcl_abs(static_cast<double>(num/p.w())) / vcl_sqrt(static_cast<double>(l.nx()*l.nx() + l.ny()*l.ny() + l.nz()*l.nz()));
 }
 
 template <class T>

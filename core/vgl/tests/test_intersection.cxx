@@ -13,6 +13,7 @@
 #include <vgl/vgl_intersection.h>
 #include <vgl/vgl_line_3d_2_points.h>
 #include <vgl/vgl_line_segment_3d.h>
+#include <vgl/vgl_ray_3d.h>
 #include <vgl/algo/vgl_intersection.h>
 
 static void test_plane_intersection()
@@ -219,6 +220,13 @@ static void test_lines_intersect_in_tol()
   TEST("Line Intersection 6b", vgl_intersection(p2,p1,q1,q2), true);
   TEST("Line Intersection 6c", vgl_intersection(p1,p2,q2,q1), true);
   TEST("Line Intersection 6d", vgl_intersection(p2,p1,q2,q1), true);
+  //Test 3-d line intersection
+  vgl_point_3d<double> pl00(0,0,0), pl01(1,1,1);
+  vgl_point_3d<double> pl10(1,1,1), pl11(1,1,2), pint;
+  vgl_ray_3d<double> r0(pl00, pl01);
+  vgl_ray_3d<double> r1(pl10, pl11);
+  TEST("3-d Ray Intersection", vgl_intersection(r0, r1, pint), true);
+  TEST("3-d Ray Intersection Point", pint==pl01, true);
 }
 
 static void test_box_2d_intersection()
@@ -316,6 +324,16 @@ static void test_box_3d_intersection()
   if (good) {
     TEST_NEAR("generic line intersection points",length(ip0-ip1),3.464101615137,1.0e-6);
   }
+  //Test intersection of ray with box_3d.
+  vgl_point_3d<double> pr0(-1,-1,-1), pr1(2,2,2);
+  vgl_ray_3d<double> ry(pr0, pr1);
+  good = vgl_intersection<double>(bd0, ry, ip0, ip1);
+  TEST("ray intersect box from outside", good, true);
+  vgl_point_3d<double> pr2(0.5, 0.5, 0.5);
+  vgl_ray_3d<double> ry1(pr2, pr1);
+  good = vgl_intersection<double>(bd0, ry1, ip0, ip1);
+  good = good&&ip0==ip1;
+  TEST("ray intersect box from inside", good, true);
 }
 
 static void test_box_poly_intersection()

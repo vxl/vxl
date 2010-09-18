@@ -95,6 +95,12 @@ bool vgl_intersection(vgl_infinite_line_3d<T> const& l1,
                       vgl_infinite_line_3d<T> const& l2,
                       vgl_point_3d<T>& i_pnt);
 
+//: Return the intersection point of rays. Returns false if rays are parallel or intersect outside of positive ray domain
+// \relatesalso vgl_ray_3d
+template <class T>
+bool vgl_intersection(vgl_ray_3d<T> const& r1,
+                      vgl_ray_3d<T> const& r2,
+                      vgl_point_3d<T>& i_pnt);
 
 //: Return the intersection point of two lines. Return false if lines are parallel
 // \relatesalso vgl_line_2d
@@ -213,7 +219,14 @@ bool vgl_intersection(vgl_box_3d<T> const& box,
                       vgl_infinite_line_3d<T> const& line,
                       vgl_point_3d<T>& p0,
                       vgl_point_3d<T>& p1);
-
+//: Return true if ray intersects box. If so, compute intersection points.
+// If ray origin is inside box then p0==p1
+// \relatesalso vgl_ray_3d
+template <class T>
+bool vgl_intersection(vgl_box_3d<T> const& box,
+                      vgl_ray_3d<T> const& ray,
+                      vgl_point_3d<T>& p0,
+                      vgl_point_3d<T>& p1);
 //: Return true if a box and plane intersect in 3D
 // \relatesalso vgl_plane_3d
 // \relatesalso vgl_box_3d
