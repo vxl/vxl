@@ -24,6 +24,8 @@ SOURCES += boxm_render_bit_scene_manager.cxx
 SOURCES += boxm_ocl_bit_scene.cxx
 SOURCES += boxm_re_render_ocl_scene_manager.cxx
 SOURCES += boxm_render_probe_manager.cxx
+SOURCES += boxm_update_bit_scene_manager.cxx
+
 MANPAGE_SOURCES += boxm_render_probe_manager_sptr.h
 
 # These OpenCL-files are runtime plugins:
