@@ -96,7 +96,7 @@ LIB32=link.exe -lib
 SOURCE=.\vsph_spherical_coord.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_smart_pointer+vsph_spherical_coord-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vsph_spherical_coord-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vsph_view_sphere+vsph_view_point+double--.cxx

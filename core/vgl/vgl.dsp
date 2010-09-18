@@ -398,6 +398,15 @@ SOURCE=.\Templates/vgl_ray_3d+double-.cxx
 # Begin Source File
 SOURCE=.\Templates/vgl_ray_3d+float-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_ray_3d+int-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_distance+int-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_closest_point+int-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
