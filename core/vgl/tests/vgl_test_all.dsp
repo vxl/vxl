@@ -87,9 +87,6 @@ LINK32=link.exe
 SOURCE=.\test_driver.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_include.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\test_area.cxx
 # End Source File
 # Begin Source File
@@ -184,6 +181,12 @@ SOURCE=.\test_ellipsoid.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_infinite_line_3d.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_ray_3d.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_include.cxx
 # End Source File
 # End Group
 # End Target
