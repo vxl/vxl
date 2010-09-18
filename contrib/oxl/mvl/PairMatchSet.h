@@ -94,7 +94,7 @@ class PairMatchSet : public MatchSet
     //: Return false if the iterator has not yet enumerated all matches.
     bool operator!() const { return match_index_ < c_->size() ? false : true; }
    private:
-    iterator& operator ++ (int /*postfix*/);// { abort(); return *this; }
+    iterator operator++ (int /*postfix*/);// { abort(); return *this; }
   };
   // ******* END ITERATOR
 

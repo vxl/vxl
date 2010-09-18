@@ -14,7 +14,7 @@
 
 #include <mvl/MatchSet.h>
 
-PairMatchSet::iterator& PairMatchSet::iterator::operator ++ (int /*postfix*/)
+PairMatchSet::iterator PairMatchSet::iterator::operator++ (int /*postfix*/)
 {
   vcl_abort();
   return *this;

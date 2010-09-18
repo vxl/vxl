@@ -46,25 +46,25 @@ class PairMatchMultiIterator
   //: Construct a PairMatchMultiIterator which will scan all matches in a PairMatchMulti
   PairMatchMultiIterator(PairMatchMulti const& pmm);
 
-//: Return true if the iterator is still valid.
+  //: Return true if the iterator is still valid.
   operator safe_bool () const
     { return (first_ != last_)? VCL_SAFE_BOOL_TRUE : 0; }
 
-//: Return false if the iterator is still valid.
+  //: Return false if the iterator is still valid.
   bool operator!() const
     { return (first_ != last_)? false : true; }
 
-//: Advance to the next match.
+  //: Advance to the next match.
   PairMatchMultiIterator& operator ++ (/*prefix*/) { ++first_; return *this; }
 
-//: Return the first component of the match pointed to by the iterator.
+  //: Return the first component of the match pointed to by the iterator.
   int get_i1() const { return (*first_).first; }
 
-//: Return the second component of the match pointed to by the iterator.
+  //: Return the second component of the match pointed to by the iterator.
   int get_i2() const { return (*first_).second; }
 
  private:
-  PairMatchMultiIterator& operator ++ (int /*postfix*/) {vcl_abort(); return *this;}
+  PairMatchMultiIterator operator++ (int /*postfix*/) { vcl_abort(); return *this; }
 };
 
 #endif // PairMatchMultiIterator_h_

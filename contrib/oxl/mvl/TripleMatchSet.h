@@ -92,7 +92,7 @@ class TripleMatchSet : public MatchSet
     bool isfull() const;
     operator bool () const;
    private:
-    iterator& operator ++ (int /*postfix*/) { vcl_abort(); return *this; }
+    iterator operator ++ (int /*postfix*/) { vcl_abort(); return *this; }
 
    protected:
     const TripleMatchSet* c_;

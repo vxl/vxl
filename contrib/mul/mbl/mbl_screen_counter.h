@@ -31,7 +31,7 @@ public:
 
 //: Mark event
 // This is a postfix increment operator
-  void operator++ (int); 
+  mbl_screen_counter operator++ (int); 
 };
 
 #endif // mbl_screen_counter_h_

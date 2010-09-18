@@ -14,7 +14,7 @@ count_(0), symbol_('a'), skip_(1), os_(os)
 
 //: Mark event
 // This is a postfix increment operator
-void mbl_screen_counter::operator++ (int)
+mbl_screen_counter mbl_screen_counter::operator++ (int)
 {
   count_++;
   if (count_ % skip_ == 0) os_ << symbol_ << vcl_flush;
@@ -25,4 +25,5 @@ void mbl_screen_counter::operator++ (int)
     symbol_++;
     os_ << "\nReached " << count_ << ". Each '" << symbol_ << "' = " << skip_ << ":";
   }
+  return *this;
 }
