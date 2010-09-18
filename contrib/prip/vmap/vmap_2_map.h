@@ -302,7 +302,7 @@ class vmap_2_map_dart_base_iterator
   }
 
   //: ith dart following on the sequence.
-  self_type & operator+(int i)
+  self_type operator+(int i)
   {
     it_+=i ;
     return *this ;

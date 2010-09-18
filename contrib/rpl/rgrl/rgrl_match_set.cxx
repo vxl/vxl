@@ -561,7 +561,7 @@ operator++()
   return *this;
 }
 
-rgrl_match_set_from_iterator&
+rgrl_match_set_from_iterator
 rgrl_match_set_from_iterator::
 operator+(int RHS)
 {
@@ -661,7 +661,7 @@ operator++()
   return *this;
 }
 
-rgrl_match_set_from_to_iterator&
+rgrl_match_set_from_to_iterator
 rgrl_match_set_from_to_iterator::
 operator+(int RHS)
 {
@@ -774,7 +774,7 @@ operator++()
   return *this;
 }
 
-rgrl_match_set_const_from_iterator&
+rgrl_match_set_const_from_iterator
 rgrl_match_set_const_from_iterator::
 operator+(int RHS)
 {
@@ -879,7 +879,7 @@ operator++()
   return *this;
 }
 
-rgrl_match_set_const_from_to_iterator&
+rgrl_match_set_const_from_to_iterator
 rgrl_match_set_const_from_to_iterator::
 operator+(int RHS)
 {

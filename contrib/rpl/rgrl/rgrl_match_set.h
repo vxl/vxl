@@ -245,7 +245,7 @@ class rgrl_match_set_from_iterator
   rgrl_match_set_from_iterator( );
 
   rgrl_match_set_from_iterator& operator++();
-  rgrl_match_set_from_iterator& operator+( int );
+  rgrl_match_set_from_iterator operator+( int );
 
   bool operator==( const rgrl_match_set_from_iterator& other ) const;
   bool operator!=( const rgrl_match_set_from_iterator& other ) const;
@@ -301,7 +301,7 @@ class rgrl_match_set_const_from_iterator
 
   rgrl_match_set_const_from_iterator& operator++();
   rgrl_match_set_const_from_iterator operator++( int );
-  rgrl_match_set_const_from_iterator& operator+( int );
+  rgrl_match_set_const_from_iterator operator+( int );
 
   bool operator==( const rgrl_match_set_const_from_iterator& other ) const;
   bool operator!=( const rgrl_match_set_const_from_iterator& other ) const;
@@ -347,7 +347,7 @@ class rgrl_match_set_from_to_iterator
 
   //:
   rgrl_match_set_from_to_iterator& operator++();
-  rgrl_match_set_from_to_iterator& operator+(int RHS);
+  rgrl_match_set_from_to_iterator operator+(int RHS);
 
   bool operator==( const rgrl_match_set_from_to_iterator& other ) const;
   bool operator!=( const rgrl_match_set_from_to_iterator& other ) const;
@@ -404,7 +404,7 @@ class rgrl_match_set_const_from_to_iterator
 
   //:
   self_type& operator++();
-  self_type& operator+(int RHS);
+  self_type operator+(int RHS);
 
   bool operator==( const self_type& other ) const;
   bool operator!=( const self_type& other ) const;

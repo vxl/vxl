@@ -248,7 +248,7 @@ class vpyr_2_pyramid_level_dart_base_iterator : protected FD
   }
 
   //:  Next dart.
-  self_type & operator+ (int i)
+  self_type operator+ (int i)
   {
     it_+=i;
     this->set_link();
