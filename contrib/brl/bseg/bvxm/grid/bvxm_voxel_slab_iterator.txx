@@ -67,12 +67,30 @@ bvxm_voxel_slab_iterator<T>& bvxm_voxel_slab_iterator<T>::operator++()
 }
 
 template <class T>
-bvxm_voxel_slab_iterator<T>& bvxm_voxel_slab_iterator<T>::operator+ (unsigned const &rhs)
+bvxm_voxel_slab_iterator<T> bvxm_voxel_slab_iterator<T>::operator++(int) // postfix
 {
   // commit prev slice to memory
   this->storage_->put_slab();
 
-  this->slice_idx_+=rhs;
+  bvxm_voxel_slab_iterator<T> r = *this;
+
+  ++this->slice_idx_;
+  if (this->slice_idx_ >= static_cast<int>(this->grid_size_.z())) {
+    this->slab_ = this->end_slab_;
+  }
+  else {
+    this->slab_ = this->storage_->get_slab(this->slice_idx_,this->slab_thickness_);
+  }
+  return r; // previous content of *this
+}
+
+template <class T>
+bvxm_voxel_slab_iterator<T>& bvxm_voxel_slab_iterator<T>::operator+=(unsigned const &rhs)
+{
+  // commit prev slice to memory
+  this->storage_->put_slab();
+
+  this->slice_idx_ += rhs;
   if (this->slice_idx_ >= static_cast<int>(this->grid_size_.z())) {
     this->slab_ = this->end_slab_;
   }
@@ -80,6 +98,40 @@ bvxm_voxel_slab_iterator<T>& bvxm_voxel_slab_iterator<T>::operator+ (unsigned co
     this->slab_ = this->storage_->get_slab(this->slice_idx_,this->slab_thickness_);
   }
   return *this;
+}
+
+template <class T>
+bvxm_voxel_slab_iterator<T>& bvxm_voxel_slab_iterator<T>::operator-=(unsigned const &rhs)
+{
+  // commit prev slice to memory
+  this->storage_->put_slab();
+
+  this->slice_idx_ -= rhs;
+  if (this->slice_idx_ >= static_cast<int>(this->grid_size_.z())) {
+    this->slab_ = this->end_slab_;
+  }
+  else {
+    this->slab_ = this->storage_->get_slab(this->slice_idx_,this->slab_thickness_);
+  }
+  return *this;
+}
+
+template <class T>
+bvxm_voxel_slab_iterator<T> bvxm_voxel_slab_iterator<T>::operator+(unsigned const &rhs)
+{
+  // commit prev slice to memory
+  this->storage_->put_slab();
+
+  bvxm_voxel_slab_iterator<T> r = *this;
+
+  r.slice_idx_+=rhs;
+  if (r.slice_idx_ >= static_cast<int>(r.grid_size_.z())) {
+    r.slab_ = r.end_slab_;
+  }
+  else {
+    r.slab_ = r.storage_->get_slab(r.slice_idx_,r.slab_thickness_);
+  }
+  return r;
 }
 
 template <class T>
@@ -91,7 +143,8 @@ bvxm_voxel_slab_iterator<T>& bvxm_voxel_slab_iterator<T>::operator--()
   --this->slice_idx_;
   if (this->slice_idx_ < 0) {
     this->slab_ = this->end_slab_;
-  } else {
+  }
+  else {
     this->slab_ = this->storage_->get_slab(this->slice_idx_,this->slab_thickness_);
   }
   return *this;
@@ -155,7 +208,8 @@ bvxm_voxel_slab_const_iterator<T>& bvxm_voxel_slab_const_iterator<T>::operator--
   --this->slice_idx_;
   if (this->slice_idx_ < 0) {
     this->slab_ = this->end_slab_;
-  } else {
+  }
+  else {
     this->slab_ = this->storage_->get_slab(this->slice_idx_,this->slab_thickness_);
   }
   return *this;
