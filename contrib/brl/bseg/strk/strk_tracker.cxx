@@ -277,7 +277,7 @@ bool strk_tracker::compute_motion(strk_correlated_face* cf,
     if (x<0||x>=width||y<0||y>=height)
       continue;
     float Ii = image_i_(x,y);
-    float dI = Ii-face->I();
+    float dI = float(Ii-face->I());
     float Ix = cf->Ix(i), Iy = cf->Iy(i);
     double Ith = (-Ix*(y-yo)+Iy*(x-xo));
     double Isc = (Ix*(x-xo)+Iy*(y-yo));
@@ -355,7 +355,7 @@ double strk_tracker::compute_angle_motion(strk_correlated_face* cf)
     if (x<0||x>=width||y<0||y>=height)
       continue;
     float Ii = image_i_(x,y);
-    float dI = Ii-face->I();
+    float dI = float(Ii-face->I());
     float Ix = cf->Ix(i), Iy = cf->Iy(i);
     double Ith = (-Ix*(y-yo)+Iy*(x-xo));
     sn += dI*Ith;
@@ -384,7 +384,7 @@ compute_scale_motion(strk_correlated_face* cf, double& sx, double& sy)
     if (x<0||x>=width||y<0||y>=height)
       continue;
     float Ii = image_i_(x,y);
-    float dI = Ii-face->I();
+    float dI = float(Ii-face->I());
     float Ix = cf->Ix(i), Iy = cf->Iy(i);
     float dx = float(x-xo), dy = float(y-yo); // local x,y
     xxIxIx += dx*dx*Ix*Ix;
@@ -415,7 +415,7 @@ double strk_tracker::compute_correlation(strk_correlated_face* cf)
     if (x<0||x>=width||y<0||y>=height)
       continue;
     float Ii = image_i_(x,y);
-    float dI = Ii-face->I();
+    float dI = float(Ii-face->I());
     c += dI*dI;
     i++;
   }
@@ -484,10 +484,10 @@ void strk_tracker::correlate_face(strk_correlated_face* cf)
 vtol_intensity_face_sptr
 strk_tracker::generate_sample(vtol_intensity_face_sptr const& seed)
 {
-  float x = (2*search_radius_)*float(rand()/(RAND_MAX+1.f)) - search_radius_;
-  float y = (2*search_radius_)*float(rand()/(RAND_MAX+1.f)) - search_radius_;
-  float theta = (2*angle_range_)*float(rand()/(RAND_MAX+1.f)) - angle_range_;
-  float s = (2*scale_range_)*float(rand()/(RAND_MAX+1.f)) - scale_range_;
+  float x = (2*search_radius_)  *float(rand())/(float(RAND_MAX)+1.f) - search_radius_;
+  float y = (2*search_radius_)  *float(rand())/(float(RAND_MAX)+1.f) - search_radius_;
+  float theta = (2*angle_range_)*float(rand())/(float(RAND_MAX)+1.f) - angle_range_;
+  float s = (2*scale_range_)    *float(rand())/(float(RAND_MAX)+1.f) - scale_range_;
   float scale = 1+s;
   return this->transform_face(seed, x, y, theta, scale);
 }
@@ -542,7 +542,7 @@ void strk_tracker::transform_sample_in_place(strk_correlated_face* sample,
   vcl_vector<vtol_vertex_sptr> verts;
   face->vertices(verts);
   for (vcl_vector<vtol_vertex_sptr>::iterator vit = verts.begin();
-      vit != verts.end(); vit++)
+       vit != verts.end(); vit++)
   {
     vtol_vertex_2d_sptr v = (*vit)->cast_to_vertex_2d();
     if (!v)

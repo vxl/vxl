@@ -219,7 +219,7 @@ static void test_bvxm_normalize_image_process()
 
   //: test voxel_slab operations
   bvxm_voxel_slab<float> weights(ni, nj, 1);
-  weights.fill(1.0f/(ni * nj));
+  weights.fill(1.0f/float(ni * nj));
   sum = bvxm_util::sum_slab(weights);
   TEST_NEAR("check slab sum", sum, 1.0f, 0.01);
 

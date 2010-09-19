@@ -29,7 +29,7 @@ boxm_ocl_scene::boxm_ocl_scene(vbl_array_3d<int4> blocks,
                                vgl_point_3d<double> origin,
                                vgl_vector_3d<double> block_dim)
 {
-  this->init_scene(blocks, tree_buffers, data_buffers, 
+  this->init_scene(blocks, tree_buffers, data_buffers,
                    mem_ptrs, lvcs, origin, block_dim);
 }
 
@@ -38,7 +38,7 @@ boxm_ocl_scene::boxm_ocl_scene(vcl_string filename)
 {
   //default values for blank scene init
   max_mb_ = 400;
-  pinit_ = .01;
+  pinit_ = .01f;
 
   //load the scene xml file
   this->load_scene(filename);
@@ -179,17 +179,17 @@ bool boxm_ocl_scene::load_scene(vcl_string filename)
   }
 
   /* store scene and world meta data */
-  //path (directory where you can find the scene.xml file) 
-  vcl_string dir, pref; 
+  //path (directory where you can find the scene.xml file)
+  vcl_string dir, pref;
   parser_.paths(dir, pref);
   path_ = dir;
-  
+
   //lvcs, origin, block dimension
   parser_.lvcs(lvcs_);
   origin_ = parser_.origin();
   rpc_origin_ = parser_.origin();
   block_dim_ = parser_.block_dim();
-  
+
   //init levels
   unsigned max, init;
   parser_.levels(max, init);
@@ -235,13 +235,13 @@ bool boxm_ocl_scene::init_existing_scene()
   vsl_b_read(is, blocks_);
   vsl_b_read(is, mem_ptrs_);
   is.close();
-  
+
   //initialize max_mb based blockSize+treeSize+dataSize
   int numBlocks = blocks_.get_row1_count() * blocks_.get_row2_count() * blocks_.get_row3_count();
   int blockBytes = numBlocks * sizeof(int) * 4;
   int buffBytes = tree_buff_length_ * num_tree_buffers_ * sizeof(int) * 4;
   int dataBytes = tree_buff_length_ * num_tree_buffers_ * sizeof(float) * 16;
-  max_mb_ = vcl_ceil( (blockBytes + buffBytes + dataBytes)/1024.0/1024.0 ); 
+  max_mb_ = (int)vcl_ceil( (blockBytes + buffBytes + dataBytes)/1024.0/1024.0 );
   return true;
 }
 
@@ -274,14 +274,14 @@ bool boxm_ocl_scene::init_empty_scene()
   /* compute total number of cells that can be allocated given max_mb */
   int MAX_BYTES = max_mb_ * 1024 * 1024;
   int total_blocks = blk_nums.x() * blk_nums.y() * blk_nums.z();
-  int freeBytes = MAX_BYTES-total_blocks*4*sizeof(int); 
-  int sizeofCell = 4*sizeof(int) + 20*sizeof(float); 
+  int freeBytes = MAX_BYTES-total_blocks*4*sizeof(int);
+  int sizeofCell = 4*sizeof(int) + 20*sizeof(float);
   int num_cells = (int) (freeBytes/sizeofCell);
-  vcl_cout<<"Max Bytes "<<MAX_BYTES<<vcl_endl;
-  vcl_cout<<"Num cells "<<num_cells<<vcl_endl;
+  vcl_cout<<"Max Bytes "<<MAX_BYTES<<'\n'
+          <<"Num cells "<<num_cells<<vcl_endl;
   tree_buff_length_ = (int) (num_cells / num_tree_buffers_);
   vcl_cout<<"Tree shape: "<<num_tree_buffers_<<" by "<<tree_buff_length_<<" cells"<<vcl_endl;
-  
+
   //tree buffers
   int4 init_cell(-1);
   tree_buffers_ = vbl_array_2d<int4>(num_tree_buffers_, tree_buff_length_, init_cell);
@@ -299,8 +299,8 @@ bool boxm_ocl_scene::init_empty_scene()
   vnl_random random(9667566);
   for (unsigned int i=0; i<blk_nums.x(); ++i) {
     for (unsigned int j=0; j<blk_nums.y(); ++j) {
-      for (unsigned int k=0; k<blk_nums.z(); ++k) {
-       
+      for (unsigned int k=0; k<blk_nums.z(); ++k)
+      {
         //randomly choose a buffer, and get the first free spot in memory (update blocks)
         int buffIndex = random.lrand32(0, num_tree_buffers_-1);
         int buffOffset = mem_ptrs_[buffIndex][1]-1; //minus one cause mem_end points to one past the last one
@@ -323,7 +323,7 @@ bool boxm_ocl_scene::init_empty_scene()
         //put data in memory
         float16 datum(0.0f);
         float bboxLen = (float) block_dim_.x();
-        float alpha_init = (-1.0/bboxLen) * vcl_log(1.0-pinit_);
+        float alpha_init = (-1.0f/bboxLen) * vcl_log(1.0f-pinit_);
         datum[0] = alpha_init;
         data_buffers_[buffIndex][buffOffset] = datum;
 
@@ -348,6 +348,7 @@ bool boxm_ocl_scene::init_empty_scene()
 
   return true;
 }
+
 //: initializes scene data assuming that the tree structure has already been initialized
 bool boxm_ocl_scene::init_empty_data()
 {
@@ -374,7 +375,7 @@ void boxm_ocl_scene::set_tree_buffers(int* tree_buffers)
 {
   int index = 0;
   vbl_array_2d<int4>::iterator iter;
-  for(iter = tree_buffers_.begin(); iter != tree_buffers_.end(); iter++) {
+  for (iter = tree_buffers_.begin(); iter != tree_buffers_.end(); iter++) {
     (*iter)[0] = tree_buffers[index++];
     (*iter)[1] = tree_buffers[index++];
     (*iter)[2] = tree_buffers[index++];
@@ -386,10 +387,10 @@ void boxm_ocl_scene::set_tree_buffers_opt(int* tree_buffers)
 {
   int index = 0;
   vbl_array_2d<int4>::iterator iter;
-  for(iter = tree_buffers_.begin(); iter != tree_buffers_.end(); iter++) {
-    
+  for (iter = tree_buffers_.begin(); iter != tree_buffers_.end(); iter++)
+  {
     //if it's a root, store block pointer
-    if(tree_buffers[index] < 0) {
+    if (tree_buffers[index] < 0) {
       (*iter)[0] = -1;
       (*iter)[3] = vcl_abs(tree_buffers[index]);
     }
@@ -398,14 +399,14 @@ void boxm_ocl_scene::set_tree_buffers_opt(int* tree_buffers)
       (*iter)[3] = -1;
     }
     index++;
-    
+
     //split the second int into two shorts, cast back to ints...
     int data_child = tree_buffers[index++];
     unsigned short dataInd = (unsigned short) data_child & 0xFFFF;// this is 0^16 1^16 in binary
     short childInd         = (short) (data_child >> 16);
     (*iter)[1] = (int) childInd;
     (*iter)[2] = (int) dataInd;
-  } 
+  }
 }
 
 void boxm_ocl_scene::set_mem_ptrs(int* mem_ptrs)
@@ -452,7 +453,8 @@ void boxm_ocl_scene::set_mixture_values(unsigned char* mixtures)
     (*iter)[10]= (float) (mixtures[index++]/255.0);
   }
 }
-void boxm_ocl_scene::set_num_obs_values(unsigned short* num_obs) 
+
+void boxm_ocl_scene::set_num_obs_values(unsigned short* num_obs)
 {
   int index = 0;
   vbl_array_2d<float16>::iterator iter;
@@ -464,12 +466,12 @@ void boxm_ocl_scene::set_num_obs_values(unsigned short* num_obs)
   }
 }
 
-//data compression getters 
+//data compression getters
 void boxm_ocl_scene::get_mixture(unsigned char* mixture)
 {
   int indexmix = 0;
   vbl_array_2d<float16>::iterator iter;
-  for(iter = data_buffers_.begin(); iter != data_buffers_.end(); iter++)
+  for (iter = data_buffers_.begin(); iter != data_buffers_.end(); iter++)
   {
     mixture[indexmix++] = (unsigned char) (255.0 * (*iter)[1]);
     mixture[indexmix++] = (unsigned char) (255.0 * (*iter)[2]);
@@ -482,12 +484,12 @@ void boxm_ocl_scene::get_mixture(unsigned char* mixture)
   }
 }
 
-void boxm_ocl_scene::get_alphas(float* alphas) 
+void boxm_ocl_scene::get_alphas(float* alphas)
 {
   //init data arrays
   int index = 0;
   vbl_array_2d<float16>::iterator iter;
-  for(iter = data_buffers_.begin(); iter != data_buffers_.end(); iter++)
+  for (iter = data_buffers_.begin(); iter != data_buffers_.end(); iter++)
     alphas[index++] = (*iter)[0];
 }
 
@@ -496,7 +498,7 @@ void boxm_ocl_scene::get_num_obs(unsigned short* num_obs)
   //init data arrays
   int index = 0;
   vbl_array_2d<float16>::iterator iter;
-  for(iter = data_buffers_.begin(); iter != data_buffers_.end(); iter++)
+  for (iter = data_buffers_.begin(); iter != data_buffers_.end(); iter++)
   {
     num_obs[index++] = (unsigned short) (*iter)[4];
     num_obs[index++] = (unsigned short) (*iter)[8];
@@ -505,7 +507,7 @@ void boxm_ocl_scene::get_num_obs(unsigned short* num_obs)
   }
 }
 
-void boxm_ocl_scene::get_tree_cells(int* cells) 
+void boxm_ocl_scene::get_tree_cells(int* cells)
 {
   //init tree structure
   int index=0;
@@ -516,42 +518,42 @@ void boxm_ocl_scene::get_tree_cells(int* cells)
     //cells[index++]=(*iter)[1];
     //cells[index++]=(*iter)[2];
     //cells[index++]=(*iter)[3];
-    
+
     //if node is root put the negative block pointer, otherwise parent
     int block = (*iter)[3];
     int parent = (*iter)[0];
     int slotOne;
-    slotOne = (parent < 0) ? -1*block : parent; 
-    
+    slotOne = (parent < 0) ? -1*block : parent;
+
     //pack child and data pointer as two shorts
     short child = (short) (*iter)[1];
-    unsigned short data = (unsigned short) (*iter)[2]; 
+    unsigned short data = (unsigned short) (*iter)[2];
     int packed_child_data = (child << 16) | data;
-    
+
     //pack em in the cells
     cells[index++] = slotOne;
     cells[index++] = packed_child_data;
   }
-  
+
   //Bit packing tree cell unsigned ints:
   //int0: either negative block index or positive parent index
   //packing/unpacking experiment - use this in CL code
   short child = -1;
   unsigned short data = 23;
   int packed_child = (child << 16) | data;
-  vcl_cout<<"Packed child data: "<<packed_child<<vcl_endl;
-  vcl_cout<<"Child in hex: "<<vcl_hex<<child<<vcl_endl;
-  vcl_cout<<"data in hex : "<<vcl_hex<<data<<vcl_endl;
-  vcl_cout<<"packed child in hex: "<<vcl_hex<<packed_child<<vcl_endl;
-  
+  vcl_cout<<"Packed child data: "<<packed_child<<'\n'
+          <<"Child in hex: "<<vcl_hex<<child<<'\n'
+          <<"data in hex : "<<vcl_hex<<data<<'\n'
+          <<"packed child in hex: "<<vcl_hex<<packed_child<<vcl_endl;
+
   // Unpack with shifts and masking using "and"
   unsigned short udata = (unsigned short) packed_child & 0xFFFF; // this is 0^16 1^16 in binary
   short uchild = (short) (packed_child >> 16); // this is 1^16 0^16 in binary
-  vcl_cout<<"unpacked data : "<<vcl_dec<<udata<<vcl_endl
+  vcl_cout<<"unpacked data : "<<vcl_dec<<udata<<'\n'
           <<"unpacked child: "<<vcl_dec<<uchild<<vcl_endl;
-
 }
-void boxm_ocl_scene::get_block_ptrs(int* blocks) 
+
+void boxm_ocl_scene::get_block_ptrs(int* blocks)
 {
   int index=0;
   vbl_array_3d<int4>::iterator iter;
@@ -565,7 +567,7 @@ void boxm_ocl_scene::get_block_ptrs(int* blocks)
     blocks[index++] = (*iter)[1];
     blocks[index++] = (*iter)[2];
     blocks[index++]= (*iter)[3];
-  }  
+  }
 }
 
 void boxm_ocl_scene::get_mem_ptrs(int* mem_ptrs)
@@ -575,7 +577,7 @@ void boxm_ocl_scene::get_mem_ptrs(int* mem_ptrs)
   for (mem_iter = mem_ptrs_.begin(); mem_iter != mem_ptrs_.end(); mem_iter++) {
     mem_ptrs[index++] = (*mem_iter)[0];
     mem_ptrs[index++] = (*mem_iter)[1];
-  }  
+  }
 }
 
 /******************************** XML WRITE **************************/
@@ -620,18 +622,18 @@ void x_write(vcl_ostream &os, boxm_ocl_scene& scene, vcl_string name)
   tree.add_attribute("max", (int) scene.max_level());
   tree.add_attribute("init", (int) scene.init_level());
   tree.x_write(os);
-  
-  //write max MB for scene 
+
+  //write max MB for scene
   vsl_basic_xml_element max_mb(MAX_MB_TAG);
   max_mb.add_attribute("mb", (int) scene.max_mb());
   max_mb.x_write(os);
-  
+
   //write p_init for scene
   vsl_basic_xml_element pinit(P_INIT_TAG);
   pinit.add_attribute("val", (float) scene.pinit());
   pinit.x_write(os);
 
-  //write number of buffers 
+  //write number of buffers
   int num, len;
   scene.tree_buffer_shape(num,len);
   vsl_basic_xml_element buffers(TREE_INIT_TAG);
@@ -664,7 +666,7 @@ vcl_ostream& operator <<(vcl_ostream &s, boxm_ocl_scene& scene)
   int sizeData = 16*sizeof(float)*num*len;
   double scene_size = (sizeBlks + sizeTree + sizeData)/1024.0/1024.0;
   s <<"---OCL_SCENE--------------------------------\n"
-    <<"path: "<<scene.path()<<vcl_endl
+    <<"path: "<<scene.path()<<'\n'
     <<"blocks:  [block_nums "<<x_num<<','<<y_num<<','<<z_num<<"] "
     <<"[blk_dim "<<x_dim<<','<<y_dim<<','<<z_dim<<"]\n"
     <<"blk levels: [init level "<<scene.init_level()<<"] "
@@ -681,7 +683,7 @@ vcl_ostream& operator <<(vcl_ostream &s, boxm_ocl_scene& scene)
   vbl_array_2d<float16> data_buffers = scene.data_buffers();
   vbl_array_2d<int4> tree_buffers = scene.tree_buffers();
   vbl_array_1d<int2> mem_ptrs = scene.mem_ptrs();
-  s << "free space: "<<vcl_endl;
+  s << "free space:"<<vcl_endl;
   for (unsigned int i=0; i<mem_ptrs.size(); ++i) {
     int start=mem_ptrs[i][0];
     int end = mem_ptrs[i][1];

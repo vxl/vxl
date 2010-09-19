@@ -75,6 +75,7 @@ bvpl_create_directions_b::bvpl_create_directions_b()
 
   save_directions_map("directions_b.svg");
 }
+
 bvpl_create_directions_c::bvpl_create_directions_c()
 {
   double theta = 0.0;
@@ -98,7 +99,7 @@ bvpl_create_directions_c::bvpl_create_directions_c()
   }
   //when zenith is pi/3 traverse all hemisphere
   phi = vnl_math::pi/3;
-  
+
   for (theta=0.0;theta < 2.0f*float(vnl_math::pi)-1e-5; theta +=theta_res)
   {
     axis[0] = float(vcl_cos(theta) * vcl_sin(phi));
@@ -108,7 +109,7 @@ bvpl_create_directions_c::bvpl_create_directions_c()
     angles_.push_back(0.0f);
   }
   phi = vnl_math::pi/4;
-  
+
   for (theta=0.0;theta < 2.0f*float(vnl_math::pi)-1e-5; theta +=theta_res)
   {
     axis[0] = float(vcl_cos(theta) * vcl_sin(phi));
@@ -145,7 +146,7 @@ void bvpl_create_directions_base::save_directions_map(vcl_string outfile)
     os_dir<<'['<<vcl_setw(3)<<(*iter1)[0]<<','<<vcl_setw(3)<<(*iter1)[1]<<','<<vcl_setw(3)<<(*iter1)[2]<<','<<vcl_setw(2)<<*iter2<<']';
     bsvg_text* t = new bsvg_text(os_dir.str());
     t->set_font_size(15);
-    t->set_location(10.0f, 15.0f*(i+1));
+    t->set_location(10.0f, 15.0f*float(i+1));
 
     doc.add_element(t);
   }
@@ -183,10 +184,9 @@ bvpl_main_plane_corner_dirs::bvpl_main_plane_corner_dirs()
 
 bvpl_all_corner_dirs::bvpl_all_corner_dirs()
 {
-  
   double theta = 0.0;
   double phi = 0.0;
-  
+
   //polar phi=0
   vnl_float_3 axis(0.0f, 0.0f, 1.0f);
   double angle_res = vnl_math::pi_over_4;
@@ -195,9 +195,9 @@ bvpl_all_corner_dirs::bvpl_all_corner_dirs()
     axes_.push_back(axis);
     angles_.push_back(float(angle));
   }
-  
+
   double theta_res = vnl_math::pi_over_4;
-    
+
   //when phi is pi/4 traverse all hemisphere
   phi = (vnl_math::pi_over_4);
   for (double angle =0.0; angle<2.0*vnl_math::pi-1e-5; angle+=angle_res)
@@ -211,8 +211,8 @@ bvpl_all_corner_dirs::bvpl_all_corner_dirs()
       angles_.push_back(float(angle));
     }
   }
- 
-  
+
+
   //when zenith is pi/2 we only traverse half a hemisphere
   phi = double(vnl_math::pi_over_2);
   for (theta =0.0;theta < (vnl_math::pi)-1e-5; theta +=theta_res)
@@ -224,7 +224,7 @@ bvpl_all_corner_dirs::bvpl_all_corner_dirs()
       axis[2] = float(vcl_cos(phi));
       axes_.push_back(axis);
       angles_.push_back(float(angle));
-    }  
+    }
   }
    vcl_cout << "************" << angles_.size() << vcl_endl;
   save_directions_map("directions_c.svg");
@@ -233,10 +233,9 @@ bvpl_all_corner_dirs::bvpl_all_corner_dirs()
 
 bvpl_pi_over_2_corner_dirs::bvpl_pi_over_2_corner_dirs()
 {
-  
   double theta = 0.0;
   double phi = 0.0;
-  
+
   //polar phi=0
   vnl_float_3 axis(0.0f, 0.0f, 1.0f);
   double angle_res = vnl_math::pi_over_2;
@@ -245,10 +244,10 @@ bvpl_pi_over_2_corner_dirs::bvpl_pi_over_2_corner_dirs()
     axes_.push_back(axis);
     angles_.push_back(float(angle));
   }
-  
+
   double theta_res = vnl_math::pi_over_2;
-  
- 
+
+
   //when zenith is pi/2 we only traverse half a hemisphere
   phi = double(vnl_math::pi_over_2);
   for (theta =0.0;theta < (vnl_math::pi)-1e-5; theta +=theta_res)
@@ -260,7 +259,7 @@ bvpl_pi_over_2_corner_dirs::bvpl_pi_over_2_corner_dirs()
       axis[2] = float(vcl_cos(phi));
       axes_.push_back(axis);
       angles_.push_back(float(angle));
-    }  
+    }
   }
   vcl_cout << "************" << angles_.size() << vcl_endl;
   save_directions_map("directions_90.svg");

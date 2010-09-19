@@ -101,7 +101,7 @@ bool brec_prob_map_threshold_process(bprb_func_process& pro)
 
   vcl_cout << "----------------------------------\n"
            << "\tthres: " << thres << '\n'
-           << "\tnumber of CHANGE PIXELS: " << count << " out of " << ni*nj << " pixels: %" << ((float)count/(ni*nj))*100.0f << vcl_endl
+           << "\tnumber of CHANGE PIXELS: " << count << " out of " << ni*nj << " pixels: %" << (float)count/float(ni*nj)*100.0f << vcl_endl
            << "----------------------------------\n";
 
   pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<vxl_byte>(out));

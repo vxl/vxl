@@ -1071,7 +1071,7 @@ bool bvxm_voxel_world::update_point_cloud(vcl_vector<vgl_point_3d<float> > & poi
   {
     vgl_vector_3d<float> index=(points[i]-params_->corner())/params_->voxel_length();
 
-    unsigned k=(unsigned)vcl_floor(grid_size.z()-1-index.z());
+    unsigned k=(unsigned)vcl_floor(grid_size.z()-1.f-index.z());
     unsigned x=(unsigned)vcl_floor(index.x());
     unsigned y=(unsigned)vcl_floor(index.y());
 
@@ -1092,7 +1092,7 @@ bool bvxm_voxel_world::update_point_cloud(vcl_vector<vgl_point_3d<float> > & poi
         ocp_slab_it=ocp_grid->slab_iterator(minz,maxz-minz+1);
       }
 
-      vnl_vector_fixed<float,3> m(index.x(), index.y(),grid_size.z()-1- index.z());
+      vnl_vector_fixed<float,3> m(index.x(), index.y(), grid_size.z() -1.f -index.z());
       bsta_gauss_if3 gauss(m, cov);
       for (unsigned ind_k=minz;ind_k<=maxz;ind_k++)
       {
@@ -1100,8 +1100,8 @@ bool bvxm_voxel_world::update_point_cloud(vcl_vector<vgl_point_3d<float> > & poi
         {
           for (unsigned ind_j=miny;ind_j<=maxy;ind_j++)
           {
-            vnl_vector_fixed<float,3> min_vec(ind_i-0.5f,ind_j-0.5f,ind_k-0.5f);
-            vnl_vector_fixed<float,3> max_vec(ind_i+0.5f,ind_j+0.5f,ind_k+0.5f);
+            vnl_vector_fixed<float,3> min_vec((float)ind_i-0.5f,(float)ind_j-0.5f,(float)ind_k-0.5f);
+            vnl_vector_fixed<float,3> max_vec((float)ind_i+0.5f,(float)ind_j+0.5f,(float)ind_k+0.5f);
 
             float p1 = gauss.probability(min_vec,max_vec);
             (*ocp_slab_it)(ind_i,ind_j,ind_k-minz) *= 1-p1;

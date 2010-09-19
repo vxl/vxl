@@ -318,18 +318,18 @@ bool brec_part_hierarchy::draw_to_ps(unsigned N, vcl_string output_img, float ra
   // draw the primitives
   float y = 5.0f + radius;
   for (unsigned i = 0; i < dummy_primitive_instances_.size(); i++) {
-    float x = 5.0f + radius + i*(2*radius);
+    float x = y + float(i*2)*radius;
     draw_instance_to_ps(f, dummy_primitive_instances_[i], x, y, 0.0f, 1.0f, 0.0f);
   }
 
-  for (unsigned l = 1; l <= hl; l++) {
-    float rad_l = (l+1)*radius;
-    y += l*radius + rad_l;
+  for (unsigned l = 1; l <= hl; ++l) {
+    float rad_l = float(l+1)*radius;
+    y += float(2*l+1)*radius;
 
     unsigned cnt = 0;
     for (vertex_iterator it = this->vertices_begin(); it != this->vertices_end(); it++) {
       if ((*it)->layer_ == l) {
-        float x = 5.0f + rad_l + cnt*(2*rad_l);
+        float x = 5.0f + float(cnt*2+1)*rad_l;
         brec_part_base_sptr p = (*it);
         draw_part_to_ps(f, p, x, y, 0.0f, 1.0f, 0.0f, N, this);
         cnt++;
@@ -340,7 +340,7 @@ bool brec_part_hierarchy::draw_to_ps(unsigned N, vcl_string output_img, float ra
   // Draw a horizontal red line of length 300
   f.set_fg_color(1.f,0.f,0.f);
   f.set_line_width(0.2f);
-  f.line(0.0f, -(y + hl*radius + (hl+1)*radius), 300.f, -(y + hl*radius + (hl+1)*radius)); // (x1,y1,x2,y2)
+  f.line(0.0f, -(y + float(2*hl+1)*radius), 300.f, -(y + float(2*hl+1)*radius)); // (x1,y1,x2,y2)
 
   f.close();
   return true;

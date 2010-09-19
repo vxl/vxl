@@ -53,7 +53,7 @@ static void test_update_upto_pass_4()
   vil_image_view<float> img(8,8);
   for (unsigned j =0; j<8; ++j)
     for (unsigned i =0; i<8; ++i)
-      img(i,j) = static_cast<float>((i+j+1)/15.0f);
+      img(i,j) = static_cast<float>(i+j+1)/15.0f;
   updt_mgr->set_bundle_ni(2);
   updt_mgr->set_bundle_nj(2);
   updt_mgr->set_block_items(block,cam,img);
@@ -94,7 +94,7 @@ static void test_update_upto_pass_5()
   vil_image_view<float> img(8,8);
   for (unsigned j =0; j<8; ++j)
     for (unsigned i =0; i<8; ++i)
-      img(i,j) = static_cast<float>((i+j+1)/15.0f);
+      img(i,j) = static_cast<float>(i+j+1)/15.0f;
   updt_mgr->set_bundle_ni(2);
   updt_mgr->set_bundle_nj(2);
   updt_mgr->set_block_items(block,cam,img);
@@ -129,7 +129,7 @@ void update_with_opencl(vcl_vector<vnl_vector_fixed<float, 16> > & updated_tree)
     s.set_appearance_model(BOXM_APM_MOG_GREY);
     s.set_octree_levels(3,3);
     s.set_path("./","oneblock");
-    s.set_pinit(0.01);
+    s.set_pinit(0.01f);
 
     s.clean_scene();
     boxm_init_scene<BOXM_APM_MOG_GREY>(s);
@@ -138,7 +138,7 @@ void update_with_opencl(vcl_vector<vnl_vector_fixed<float, 16> > & updated_tree)
     vil_image_view<float> img(8,8);
     for (unsigned j =0; j<8; ++j)
         for (unsigned i =0; i<8; ++i)
-            img(i,j) = static_cast<float>((i+j+1)/15.0f);
+            img(i,j) = static_cast<float>(i+j+1)/15.0f;
 
    online_update_test_manager<boxm_sample<BOXM_APM_MOG_GREY> >* updt_mgr =
        online_update_test_manager<boxm_sample<BOXM_APM_MOG_GREY> >::instance();
@@ -164,7 +164,7 @@ void update_with_boxm_cpp(vcl_vector<vnl_vector_fixed<float, 16> > & updated_tre
     s.set_appearance_model(BOXM_APM_MOG_GREY);
     s.set_octree_levels(3,3);
     s.set_path("./","oneblock");
-    s.set_pinit(0.01);
+    s.set_pinit(0.01f);
     s.clean_scene();
     boxm_init_scene<BOXM_APM_MOG_GREY>(s);
 
@@ -173,7 +173,7 @@ void update_with_boxm_cpp(vcl_vector<vnl_vector_fixed<float, 16> > & updated_tre
     vil_image_view<float> img(8,8);
     for (unsigned j =0; j<8; ++j)
         for (unsigned i =0; i<8; ++i)
-            img(i,j) = static_cast<float>((i+j+1)/15.0f);
+            img(i,j) = static_cast<float>(i+j+1)/15.0f;
 
     boxm_update_image_rt<short, boxm_sample<BOXM_APM_MOG_GREY> >(s,cam,img,false);
 
@@ -200,7 +200,7 @@ static void test_update_with_cpp_implementation()
     bool flag=true;
     if (tree_data_opencl.size()==tree_data_boxm_cpp.size())
         for (unsigned i=0;i<tree_data_opencl.size();i++)
-            if (!near_eq<16>(tree_data_opencl[i],tree_data_boxm_cpp[i],0.2))
+            if (!near_eq<16>(tree_data_opencl[i],tree_data_boxm_cpp[i],0.2f))
                 flag=false;
 
     TEST("GPU update matches the c++ update", flag, true);

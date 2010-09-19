@@ -38,7 +38,7 @@ void fill_in_data(vbl_array_3d<data_type> & data,data_type min_p, data_type max_
     {
       for (unsigned k=0;k<nk;k++)
       {
-        if ((i-ci)*axis[0]+(j-cj)*axis[1]+(k-ck)*axis[2]>=0)
+        if (((float)i-ci)*axis[0]+((float)j-cj)*axis[1]+((float)k-ck)*axis[2]>=0.f)
           data(i,j,k)=max_p;
         else
           data(i,j,k)=min_p;
@@ -55,16 +55,17 @@ void fill_in_data(vbl_array_3d<bsta_gauss_f1> & data,bsta_gauss_f1 min_p, bsta_g
   unsigned nj=data.get_row2_count();
   unsigned nk=data.get_row3_count();
 
-  float ci=ni*0.5f;
-  float cj=nj*0.5f;
-  float ck=nk*0.5f;
+  float ci=float(ni)*0.5f;
+  float cj=float(nj)*0.5f;
+  float ck=float(nk)*0.5f;
   for (unsigned i=0;i<ni;i++)
   {
     for (unsigned j=0;j<nj;j++)
     {
       for (unsigned k=0;k<nk;k++)
       {
-        if ((i-ci)*axis[0]+(j-cj)*axis[1]+(k-ck)*axis[2]>=-1 && ((i-ci)*axis[0]+(j-cj)*axis[1]+(k-ck)*axis[2]<=1))
+        if (((float)i-ci)*axis[0]+((float)j-cj)*axis[1]+((float)k-ck)*axis[2]>=-1.f &&
+            ((float)i-ci)*axis[0]+((float)j-cj)*axis[1]+((float)k-ck)*axis[2]<=1.f)
           data(i,j,k)=max_p;
         else
           data(i,j,k)=min_p;

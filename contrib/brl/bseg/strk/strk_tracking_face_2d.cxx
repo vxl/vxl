@@ -1047,7 +1047,7 @@ vcl_vector<float> strk_tracking_face_2d::random_intensities(int& n_pix)
   unsigned short const* pix = intf_->Ij();
   for (int i = 0; i<n_pix; ++i)
   {
-    float x = (n_pix-1)*float(vcl_rand()/(RAND_MAX+1.0));
+    float x = (n_pix-1)*float(vcl_rand())/(float(RAND_MAX)+1.f);
     int ni = (int)x;
     if (ni>Np-1)
       ni = Np-1;
@@ -1148,7 +1148,7 @@ bool strk_tracking_face_2d::random_colors(int& n_pix,
   //generate a random pixel index on [0, npix-1]
   for (int i = 0; i<n_pix; ++i)
   {
-    float x = (n_pix-1)*float(vcl_rand()/(RAND_MAX+1.0));
+    float x = (n_pix-1)*float(vcl_rand())/(float(RAND_MAX)+1.f);
     int ni = (int)x;
     if (ni>Np-1)
       ni = Np-1;

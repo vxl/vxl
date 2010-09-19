@@ -247,7 +247,7 @@ inline void vil_math_sum(sumT& sum, const vil_image_view<imT>& im, unsigned p)
   for (;row!=row_end;row+=jstep)
   {
     const imT* v_end = row + row_len;
-    for (const imT* v = row;v!=v_end;v+=istep) sum+=*v;
+    for (const imT* v = row;v!=v_end;v+=istep) sum+=(sumT)(*v);
   }
 }
 
@@ -258,7 +258,7 @@ inline void vil_math_mean(sumT& mean, const vil_image_view<imT>& im, unsigned p)
 {
   if (im.size()==0) { mean=0; return; }
   vil_math_sum(mean,im,p);
-  mean/=(im.ni()*im.nj());
+  mean/=(sumT)(im.ni()*im.nj());
 }
 
 // helper function for reporting an error without cluttering the
@@ -309,8 +309,8 @@ inline void vil_math_mean_and_variance(sumT& mean, sumT& var, const vil_image_vi
   if (im.size()==0) { mean=0; var=0; return; }
   sumT sum,sum_sq;
   vil_math_sum_squares(sum,sum_sq,im,p);
-  mean = sum/(im.ni()*im.nj());
-  var = sum_sq/(im.ni()*im.nj()) - mean*mean;
+  mean = sum/float(im.ni()*im.nj());
+  var = sum_sq/float(im.ni()*im.nj()) - mean*mean;
 }
 
 //: Functor class to compute square roots (returns zero if x<0)
@@ -850,7 +850,7 @@ inline void vil_math_image_abs_difference(const vil_image_view<aT>& imA,
       for (unsigned i=0;i<ni;++i,pixelA+=istepA,pixelB+=istepB,pixelS+=istepS)
       {
         // The following construction works for all types, including unsigned
-        *pixelS = (sumT)(*pixelA>*pixelB?(*pixelA-*pixelB):(*pixelB-*pixelA));
+        *pixelS = (*pixelA>*pixelB)?(sumT)(*pixelA-*pixelB):(sumT)(*pixelB-*pixelA);
       }
     }
   }
@@ -995,7 +995,7 @@ inline void vil_math_integral_image(const vil_image_view<aT>& imA,
     *pixelS = 0;
     pixelS+=istepS;
     for (unsigned i=1;i<ni1;++i,pixelA+=istepA,pixelS+=istepS)
-    { sum+= *pixelA; *pixelS=sum + pixelS[prev_j];}
+    { sum+= (sumT)(*pixelA); *pixelS=sum + pixelS[prev_j];}
   }
 }
 
@@ -1061,7 +1061,7 @@ inline void vil_math_integral_sqr_image(const vil_image_view<aT>& imA,
     pixelS2+=istepS2;
     for (unsigned i=1;i<ni1;++i,pixelA+=istepA,pixelS+=istepS,pixelS2+=istepS2)
     {
-      sum+= *pixelA;
+      sum+= (sumT)(*pixelA);
       *pixelS=sum + pixelS[prev_j];
       sum2+=sumT(*pixelA)*sumT(*pixelA);
       *pixelS2 = sum2 + pixelS2[prev_j2];

@@ -90,7 +90,7 @@ unsigned s=3;
             vgl_sphere_3d<float> sphere((float)i,(float)j,(float)k,0.5f);
             write_vrml_sphere(str, sphere, (*grid_it)(i,j),(*grid_it)(i,j),(*grid_it)(i,j),1-(*grid_it)(i,j));
 #endif
-            vgl_sphere_3d<float> sphere((float)i/s,(float)j/s,(float)k/s,0.4f);
+            vgl_sphere_3d<float> sphere((float)i/(float)s,(float)j/(float)s,(float)k/(float)s,0.4f);
             bvrml_write::write_vrml_sphere(str, sphere, 1,0,0,0);
           }
         }
@@ -107,7 +107,7 @@ void bvxm_vrml_voxel_grid::write_vrml_grid_as_spheres(vcl_ofstream& str, bvxm_vo
     for (unsigned i=0; i<(*grid_it).nx(); i+=s) {
       for (unsigned j=0; j < (*grid_it).ny(); j+=s) {
         if ((*grid_it)(i,j)[3]/255.0f > threshold) {
-          vgl_sphere_3d<float> sphere((float)i/s,(float)j/s,(float)k/s,0.5f);
+          vgl_sphere_3d<float> sphere((float)i/(float)s,(float)j/(float)s,(float)k/(float)s,0.5f);
           bvrml_write::write_vrml_sphere(str, sphere, 1,0,0,0);
         }
       }

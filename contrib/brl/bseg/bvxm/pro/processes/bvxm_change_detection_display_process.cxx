@@ -140,9 +140,9 @@ bool bvxm_change_detection_display_process(bprb_func_process& pro)
         this_prob = prob_image( i,j )/(prob_thresh);
       }
 
-      output_image0(i,j,0) = static_cast<unsigned char>(vcl_floor( input_image(i,j)*this_prob + 255*(1-this_prob) ));
-      output_image0(i,j,1) = static_cast<unsigned char>(vcl_floor( input_image(i,j)*this_prob ));
-      output_image0(i,j,2) = static_cast<unsigned char>(vcl_floor( input_image(i,j)*this_prob ));
+      output_image0(i,j,0) = static_cast<unsigned char>(vcl_floor( float(input_image(i,j))*this_prob + 255.f*(1.f-this_prob) ));
+      output_image0(i,j,1) = static_cast<unsigned char>(vcl_floor( float(input_image(i,j))*this_prob ));
+      output_image0(i,j,2) = static_cast<unsigned char>(vcl_floor( float(input_image(i,j))*this_prob ));
 
       if (mask_image(i,j)) {
         original_prob_byte = prob_img_byte(i,j);

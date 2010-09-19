@@ -208,7 +208,7 @@ void boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T> >* scene,
 
   // 3. set up 2d array of data buffers (add one buffer for emergencies)
   float16 dat_init(0.0f);
-  dat_init[1] = .1;
+  dat_init[1] = 0.1f;
   vbl_array_2d<float16> data_buffers(num_buffers+1, BUFF_LENGTH, dat_init);
 
   // 4. set up 1d array of mem ptrs
@@ -353,7 +353,7 @@ void boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T> >* scene,
         tree_buffers(buffIndex, buffOffset) = blk_root;
 
         //put data in memory
-        float pinit = .01;
+        float pinit = .01f;
         float16 datum(0.0f);
         float bboxLen = (float) block_dim_small.x();
         float alpha_init = (-1.0/bboxLen) * vcl_log(1.0-pinit);
@@ -524,7 +524,7 @@ void boxm_ocl_convert<T>::convert_bit_scene(boxm_scene<boct_tree<short, T> >* sc
   vbl_array_2d<uchar16> tree_buffers(num_buffers+1, blocks_per_buffer, tree_init);
 
   // 3. set up 2d array of data buffers (add one buffer for emergencies)
-  float16 dat_init(0.0f); dat_init[1] = .1;
+  float16 dat_init(0.0f); dat_init[1] = .1f;
   vbl_array_2d<float16> data_buffers(num_buffers+1, BUFF_LENGTH, dat_init);
 
   // 4. set up 1d array of mem ptrs

@@ -172,10 +172,10 @@ void bvpl_direction_to_color_map::make_svg_color_map(vcl_string outfile)
     os_dir<<'['<<vcl_setw(5)<<iter1->second.x()<<','<<vcl_setw(5)<<iter1->second.y()<<','<<vcl_setw(5)<<iter1->second.z()<<']';
     bsvg_text* t = new bsvg_text(os_dir.str());
     t->set_font_size(15);
-    t->set_location(10.0f, 15.0f*(i+1));
+    t->set_location(10.0f, 15.0f*float(i+1));
 
     bsvg_ellipse* e1 = new bsvg_ellipse(25, 7);
-    e1->set_location(250.0f, 15.0f*(i+1));
+    e1->set_location(250.0f, 15.0f*float(i+1));
     e1->set_fill_color(os.str());
     doc.add_element(e1);
     doc.add_element(t);
@@ -374,7 +374,7 @@ void bvpl_convert_id_grid_to_hsv_grid(bvxm_voxel_grid<int> *id_grid,
 
 void bvpl_write_colors_to_svg(bvpl_kernel_vector_sptr kernel_vector, vcl_vector<float> hue_vector, vcl_string outfile)
 {
-  bsvg_document doc(600.f, hue_vector.size()*20.f);
+  bsvg_document doc(600.f, float(hue_vector.size())*20.f);
 
   vcl_vector<float>::iterator iter = hue_vector.begin();
 
@@ -394,10 +394,10 @@ void bvpl_write_colors_to_svg(bvpl_kernel_vector_sptr kernel_vector, vcl_vector<
     os_dir<<'['<<i<<']'<< '['<<vcl_setw(2)<<kernel_vector->kernels_[i]->axis()<<']'<<'['<<vcl_setw(2)<<kernel_vector->kernels_[i]->angle()<<']' ;//<< '['<<(int)r << ',' << (int)g<< ',' << (int)b<<']';
     bsvg_text* t = new bsvg_text(os_dir.str());
     t->set_font_size(15);
-    t->set_location(10.0f, 15.0f*(i+1));
+    t->set_location(10.0f, 15.0f*float(i+1));
 
     bsvg_ellipse* e1 = new bsvg_ellipse(25, 7);
-    e1->set_location(400.0f, 15.0f*(i+1));
+    e1->set_location(400.0f, 15.0f*float(i+1));
     e1->set_fill_color(os.str());
     doc.add_element(e1);
     doc.add_element(t);

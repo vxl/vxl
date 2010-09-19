@@ -105,12 +105,12 @@ void bvxm_util::bilinear_weights(vgl_h_matrix_2d<double> invH, unsigned nx_out, 
     // calculate weights and pixel values
     unsigned x0 = (unsigned)vcl_floor(pix_in_x);
     unsigned x1 = (unsigned)vcl_ceil(pix_in_x);
-    float x0_weight = (float)(x1 - pix_in_x);
-    float x1_weight = (float)(1.0f - x0_weight);
+    float x0_weight = (float)x1 - pix_in_x;
+    float x1_weight = 1.0f - (float)x0_weight;
     unsigned y0 = (unsigned)vcl_floor(pix_in_y);
     unsigned y1 = (unsigned)vcl_ceil(pix_in_y);
-    float y0_weight = (float)(y1 - pix_in_y);
-    float y1_weight = (float)(1.0f - y0_weight);
+    float y0_weight = (float)y1 - pix_in_y;
+    float y1_weight = 1.0f - (float)y0_weight;
     xvals.set_column(n,vnl_vector_fixed<unsigned,4>(x0,x0,x1,x1).as_ref());
     yvals.set_column(n,vnl_vector_fixed<unsigned,4>(y0,y1,y0,y1).as_ref());
     weights.set_column(n,vnl_vector_fixed<float,4>(x0_weight*y0_weight,

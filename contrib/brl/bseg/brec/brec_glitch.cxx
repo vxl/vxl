@@ -18,7 +18,7 @@ brec_glitch::square_glitch_mask_img(int c_size)
   vil_image_view<vxl_byte> map_img(c_size_outer, c_size_outer);
   map_img.fill(0);
   unsigned cnt = 0;
-  int dif = (int)vcl_floor((c_size_outer-c_size)/2.0f+0.5f);
+  int dif = (c_size_outer-c_size+1)/2;
   for (int i = dif; i < (int)(dif+c_size); i++)
     for (int j = dif; j < (int)(dif+c_size); j++) {
       map_img(i,j) = 100;

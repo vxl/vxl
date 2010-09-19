@@ -92,7 +92,7 @@ void brec_part_hierarchy_learner::initialize_layer0_as_gaussians(int ndirs, floa
   n_ = n; // visualization parameter to plot histograms into m files
   // stats for bright operators
   float theta = 0.0f;
-  float theta_inc = 180.0f/ndirs;
+  float theta_inc = 180.0f/(float)ndirs;
   unsigned type_cnt = 0;
 
   vcl_vector<vbl_array_2d<bool> > masks;
@@ -486,7 +486,7 @@ bool brec_part_hierarchy_learner::layer_n_fit_distributions(unsigned class_id, u
     brec_part_instance_sptr layer_n_part = (qit->second).first;
 
     unsigned d_nbins = d_hist->nbins();
-    float d_delta = float(radius_/d_nbins);
+    float d_delta = radius_/float(d_nbins);
 
     // create 1D marginalized distance sample set from nD set
     bsta_sample_set<double,1> d_set;
@@ -523,9 +523,9 @@ bool brec_part_hierarchy_learner::layer_n_fit_distributions(unsigned class_id, u
     else {
       // now replace the histogram with the mean shift fitted one
       for (unsigned aa = 0; aa < d_nbins; aa++) {
-        float pt = (aa+1)*d_delta;
+        float pt = float(aa+1)*d_delta;
         double val = d_out_dist.prob_density(pt);
-        d_hist->upcount((aa+1)*d_delta, val);
+        d_hist->upcount(float(aa+1)*d_delta, val);
       }
     }
 
@@ -553,9 +553,9 @@ bool brec_part_hierarchy_learner::layer_n_fit_distributions(unsigned class_id, u
     else {
       // now replace the histogram with the mean shift fitted one
       for (unsigned aa = 0; aa < a_nbins; aa++) {
-        float pt = (aa+1)*a_delta;
+        float pt = float(aa+1)*a_delta;
         double val = a_out_dist.prob_density(pt);
-        a_hist->upcount((aa+1)*a_delta, val);
+        a_hist->upcount(float(aa+1)*a_delta, val);
       }
     }
 

@@ -203,7 +203,7 @@ bool brec_detect_hierarchy_process(bprb_func_process& pro)
   pro.set_output_val<vil_image_view_base_sptr>(4, out_map_sptr4);
 
 
-  vcl_cout << " whole process took: " << t2.real() / (60*1000.0f) << " mins.\n";
+  vcl_cout << " whole process took: " << t2.real() / 60000.0 << " mins.\n";
 
   return true;
 }

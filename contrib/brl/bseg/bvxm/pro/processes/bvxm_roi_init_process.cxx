@@ -129,7 +129,7 @@ bool bvxm_roi_init_process_globals::roi_init( vcl_string const& image_path,
   int dimy = dims.y();
   int dimz = dims.z();
   double min_position[3];
-  float voxel_length = world_params->voxel_length();
+  double voxel_length = world_params->voxel_length();
   min_position[0] = world_params->corner().x();
   min_position[1] = world_params->corner().y();
   min_position[2] = world_params->corner().z();

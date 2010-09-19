@@ -38,8 +38,8 @@ bvxm_world_params::set_params(
   float min_ocp_prob,
   float max_ocp_prob,
   unsigned max_scale,
-  vgl_vector_3d<float> basex, 
-  vgl_vector_3d<float> basey, 
+  vgl_vector_3d<float> basex,
+  vgl_vector_3d<float> basey,
   vgl_vector_3d<float> basez)
 {
   model_dir_ = model_dir;
@@ -57,9 +57,9 @@ bvxm_world_params::set_params(
 
 vgl_box_3d<double> bvxm_world_params::world_box_local()
 {
-  double xdim = num_voxels_.x()*voxel_length_;
-  double ydim = num_voxels_.y()*voxel_length_;
-  double zdim = num_voxels_.z()*voxel_length_;
+  double xdim = double(num_voxels_.x())*voxel_length_;
+  double ydim = double(num_voxels_.y())*voxel_length_;
+  double zdim = double(num_voxels_.z())*voxel_length_;
   double c[3];
   c[0] = corner_.x();
   c[1] = corner_.y();
@@ -87,11 +87,10 @@ void bvxm_world_params::b_write(vsl_b_ostream & os) const
 
 void bvxm_world_params::b_read(vsl_b_istream & is)
 {
-
   unsigned ver = version();
   switch (ver)
   {
-  case 1: {
+   case 1:
     vsl_b_read(is,model_dir_);
     vsl_b_read(is,corner_);
     vsl_b_read(is,num_voxels_);
@@ -100,27 +99,24 @@ void bvxm_world_params::b_read(vsl_b_istream & is)
     vsl_b_read(is,min_occupancy_prob_);
     vsl_b_read(is,max_occupancy_prob_);
     break;
-          }
-  default: {
+   default:
     vsl_b_read(is, ver);
-    switch(ver) {
-  case 2: {
-    vsl_b_read(is,model_dir_);
-    vsl_b_read(is,corner_);
-    vsl_b_read(is,num_voxels_);
-    vsl_b_read(is,voxel_length_);
-    lvcs_->b_read(is);
-    vsl_b_read(is,min_occupancy_prob_);
-    vsl_b_read(is,max_occupancy_prob_);
-    vsl_b_read(is, base_x_);
-    vsl_b_read(is, base_y_);
-    vsl_b_read(is, base_z_);
-    break;
-          }
-  default:
-    vcl_cout << "In bvxm_world_params::b_read() - Version not supported\n";
+    switch (ver) {
+     case 2:
+      vsl_b_read(is,model_dir_);
+      vsl_b_read(is,corner_);
+      vsl_b_read(is,num_voxels_);
+      vsl_b_read(is,voxel_length_);
+      lvcs_->b_read(is);
+      vsl_b_read(is,min_occupancy_prob_);
+      vsl_b_read(is,max_occupancy_prob_);
+      vsl_b_read(is, base_x_);
+      vsl_b_read(is, base_y_);
+      vsl_b_read(is, base_z_);
+      break;
+     default:
+      vcl_cout << "In bvxm_world_params::b_read() - Version not supported\n";
     }
-           }
   }
 }
 
@@ -129,19 +125,20 @@ vcl_ostream&  operator << (vcl_ostream& os, bvxm_world_params const& params)
 {
   if (!params.lvcs_) {
     os << params.model_dir_ << vcl_endl
-     << params.corner_.x() << ' ' << params.corner_.y() << ' ' << params.corner_.z() << vcl_endl
-     << params.num_voxels_.x() << ' ' << params.num_voxels_.y() << ' ' << params.num_voxels_.z() << vcl_endl
-     << params.voxel_length_ << vcl_endl
-     << params.min_occupancy_prob_ << vcl_endl
-     << params.max_occupancy_prob_ << vcl_endl;
-  } else {
+       << params.corner_.x() << ' ' << params.corner_.y() << ' ' << params.corner_.z() << vcl_endl
+       << params.num_voxels_.x() << ' ' << params.num_voxels_.y() << ' ' << params.num_voxels_.z() << vcl_endl
+       << params.voxel_length_ << vcl_endl
+       << params.min_occupancy_prob_ << vcl_endl
+       << params.max_occupancy_prob_ << vcl_endl;
+  }
+  else {
     os << params.model_dir_ << vcl_endl
-     << params.corner_.x() << ' ' << params.corner_.y() << ' ' << params.corner_.z() << vcl_endl
-     << params.num_voxels_.x() << ' ' << params.num_voxels_.y() << ' ' << params.num_voxels_.z() << vcl_endl
-     << params.voxel_length_ << vcl_endl
-     << *(params.lvcs_) << vcl_endl
-     << params.min_occupancy_prob_ << vcl_endl
-     << params.max_occupancy_prob_ << vcl_endl;
+       << params.corner_.x() << ' ' << params.corner_.y() << ' ' << params.corner_.z() << vcl_endl
+       << params.num_voxels_.x() << ' ' << params.num_voxels_.y() << ' ' << params.num_voxels_.z() << vcl_endl
+       << params.voxel_length_ << vcl_endl
+       << *(params.lvcs_) << vcl_endl
+       << params.min_occupancy_prob_ << vcl_endl
+       << params.max_occupancy_prob_ << vcl_endl;
   }
 
   return os;

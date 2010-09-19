@@ -130,7 +130,7 @@ bool brec_recognize_structure_process(bprb_func_process& pro)
   vil_image_view_base_sptr out_map_sptr1 = new vil_image_view<vxl_byte>(output_img);
   pro.set_output_val<vil_image_view_base_sptr>(1, out_map_sptr1);
 
-  vcl_cout << " whole process took: " << t2.real() / (60*1000.0f) << " mins.\n";
+  vcl_cout << " whole process took: " << t2.real() / 60000.0 << " mins.\n";
 
   return true;
 }
@@ -157,7 +157,8 @@ bool brec_recognize_structure2_process_cons(bprb_func_process& pro)
     output_types.push_back("vil_image_view_base_sptr");      // output map overlayed on orig view as a byte image
     output_types.push_back("brec_part_hierarchy_detector_sptr");      // output map overlayed on orig view as a byte image
     return pro.set_output_types(output_types);
-  } else
+  }
+  else
     return false;
 }
 
@@ -207,7 +208,8 @@ bool brec_recognize_structure2_process(bprb_func_process& pro)
   if (training) {
     vcl_cout << "detect instances for training\n";
     hd->detect(img, fg_prob_map, angle, brec_detector_methods::DENSITY_FOR_TRAINING);
-  } else {
+  }
+  else {
     vcl_cout << "detect instances for testing\n";
     hd->detect(img, fg_prob_map, angle, brec_detector_methods::POSTERIOR, detection_radius);
   }
@@ -228,7 +230,7 @@ bool brec_recognize_structure2_process(bprb_func_process& pro)
 
   pro.set_output_val<brec_part_hierarchy_detector_sptr>(2, hd);
 
-  vcl_cout << " whole process took: " << t2.real() / (60*1000.0f) << " mins.\n";
+  vcl_cout << " whole process took: " << t2.real() / 60000.0 << " mins.\n";
 
   return true;
 }

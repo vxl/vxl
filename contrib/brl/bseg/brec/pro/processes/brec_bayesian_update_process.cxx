@@ -94,7 +94,7 @@ bool brec_bayesian_update_process(bprb_func_process& pro)
   vil_image_view_base_sptr out_map_sptr2 = new vil_image_view<vxl_byte>(out_b);
   pro.set_output_val<vil_image_view_base_sptr>(1, out_map_sptr2);
 
-  vcl_cout << " whole process took: " << t2.real() / (60*1000.0f) << " mins.\n";
+  vcl_cout << " whole process took: " << t2.real() / 60000.0 << " mins.\n";
 
   return true;
 }

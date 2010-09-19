@@ -175,7 +175,7 @@ static void test_ekf_camera_optimizer_seq()
     double centery = -vcl_sin(a + vnl_math::pi_over_2)*path_radius - (path_dist_to_scene - path_radius);
     double centerz = h;
     vgl_point_3d<double> center(centerx,centery,centerz);
-    vnl_vector_fixed<double,3> lz((nx*voxel_length/2) - centerx, (ny*voxel_length/2) - centery, 0.0 - centerz);
+    vnl_vector_fixed<double,3> lz((nx*double(voxel_length)/2) - centerx, (ny*double(voxel_length)/2) - centery, 0.0 - centerz);
     lz = lz.normalize();
     vnl_vector_fixed<double,3> ly1(0.0, 0.0, -1.0);
     vnl_vector_fixed<double,3> lx = vnl_cross_3d(ly1,lz);

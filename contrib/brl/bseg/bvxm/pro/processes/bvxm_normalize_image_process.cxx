@@ -148,7 +148,7 @@ template <bvxm_voxel_type APM_T>
 
   // use the weight slab below to calculate total probability
   bvxm_voxel_slab<float> weights(ni_, nj_, 1);
-  weights.fill(1.f/(ni_ * nj_));
+  weights.fill(1.f/float(ni_ * nj_));
 
   a = 1.f;
   b = 0.f;

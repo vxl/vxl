@@ -48,9 +48,9 @@ void fill_in_data(bvxm_voxel_grid<float> *grid, float min_p, float max_p, vnl_fl
   unsigned nj=grid_dim.y();
   unsigned nk=grid_dim.z();
 
-  float ci=ni*0.5f;
-  float cj=nj*0.5f;
-  float ck=nk*0.5f;
+  float ci=float(ni)*0.5f;
+  float cj=float(nj)*0.5f;
+  float ck=float(nk)*0.5f;
 
   unsigned slab_idx = 0;
   bvxm_voxel_grid<float>::iterator grid_it = grid->slab_iterator(slab_idx,nk);
@@ -60,7 +60,7 @@ void fill_in_data(bvxm_voxel_grid<float> *grid, float min_p, float max_p, vnl_fl
     {
       for (unsigned k=margin;k<nk-margin;k++)
       {
-        if ((i-ci)*axis[0]+(j-cj)*axis[1]+(k-ck)*axis[2]>=0)
+        if (((float)i-ci)*axis[0]+((float)j-cj)*axis[1]+((float)k-ck)*axis[2]>=0.f)
           (*grid_it)(i,j,k)=max_p;
         else
           (*grid_it)(i,j,k)=min_p;
@@ -76,9 +76,9 @@ bool check_data(bvxm_voxel_grid<int> *grid, vnl_float_3 axis, int id, int margin
   unsigned nj=grid_dim.y();
   unsigned nk=grid_dim.z();
 
-  float ci=ni*0.5f;
-  float cj=nj*0.5f;
-  float ck=nk*0.5f;
+  float ci=float(ni)*0.5f;
+  float cj=float(nj)*0.5f;
+  float ck=float(nk)*0.5f;
 
   bool result = true;
 
@@ -90,11 +90,11 @@ bool check_data(bvxm_voxel_grid<int> *grid, vnl_float_3 axis, int id, int margin
     {
       for (unsigned k=margin;k<nk-margin;k++)
       {
-        if (((i-ci)*axis[0]+(j-cj)*axis[1]+(k-ck)*axis[2]>-1) && ((i-ci)*axis[0]+(j-cj)*axis[1]+(k-ck)*axis[2] <1))
+        if ((((float)i-ci)*axis[0]+((float)j-cj)*axis[1]+((float)k-ck)*axis[2]>=-1.f) &&
+            (((float)i-ci)*axis[0]+((float)j-cj)*axis[1]+((float)k-ck)*axis[2]<= 1.f))
         {
           result = result && (*grid_it)(i,j,k)==id;
           vcl_cout << "id at center " << i << j << k << " is " <<(*grid_it)(i,j,k) << vcl_endl;
-
         }
       }
     }
@@ -109,9 +109,9 @@ bool check_non_max(bvxm_voxel_grid<float> *grid, int margin)
   unsigned nj=grid_dim.y();
   unsigned nk=grid_dim.z();
 
-  float ci=ni*0.5f;
-  float cj=nj*0.5f;
-  float ck=nk*0.5f;
+  float ci=(float)ni*0.5f;
+  float cj=(float)nj*0.5f;
+  float ck=(float)nk*0.5f;
 
   bool result = true;
 
@@ -123,7 +123,7 @@ bool check_non_max(bvxm_voxel_grid<float> *grid, int margin)
     {
       for (unsigned k=margin;k<nk-margin;k++)
       {
-       if ( i == (unsigned int)ci && j == (unsigned int)cj && k == (unsigned int)ck)
+        if ( i == (unsigned int)ci && j == (unsigned int)cj && k == (unsigned int)ck)
         {
           vcl_cout << "Response at center " << i << j << k << "is " << (*grid_it)(i,j,k) << vcl_endl;
           result = result && ((*grid_it)(i,j,k) > 1e-2);
@@ -188,8 +188,8 @@ void test_non_max_suppression()
   bvxm_voxel_grid<float> *grid = new bvxm_voxel_grid<float> (vgl_vector_3d<unsigned>(4,4,4));
   int target_id = 9;
   vnl_float_3 target_axis = kernel_vec->kernels_[target_id]->axis();
-  vcl_cout << "taget axis " << target_axis << vcl_endl;
-  vcl_cout << "taget axis " << kernel_vec->kernels_[1]->axis() << vcl_endl;
+  vcl_cout << "target axis " << target_axis << '\n'
+           << "target axis " << kernel_vec->kernels_[1]->axis() << vcl_endl;
   fill_in_data(grid, 0.01f, 0.99f, target_axis,0);
 
   //Run all the kernels
@@ -225,43 +225,38 @@ void test_keep_top_responses()
   grid3->initialize_data(3.0f);
   bvxm_voxel_grid<float> *grid4=new bvxm_voxel_grid<float>(grid_size);
   grid4->initialize_data(4.0f);
-  
+
   bvxm_voxel_grid<vnl_vector_fixed<float,3> > *resp = new bvxm_voxel_grid<vnl_vector_fixed<float,3> >(grid_size);
   bvxm_voxel_grid<vnl_vector_fixed<int,3> > *id_grid = new bvxm_voxel_grid<vnl_vector_fixed<int,3> >(grid_size);
-  
+
   bvpl_discriminative_non_max_suppression vec_oper;
   vec_oper.keep_top_responses(resp, grid1,id_grid, 1);
   vec_oper.keep_top_responses(resp, grid2,id_grid, 2);
   vec_oper.keep_top_responses(resp, grid3,id_grid, 3);
   vec_oper.keep_top_responses(resp, grid4,id_grid, 4);
-  
+
   //check top responses
   bvxm_voxel_grid<vnl_vector_fixed<float,3> >::iterator resp_it= resp->begin();
   bvxm_voxel_grid<vnl_vector_fixed<int,3> >::iterator id_it= id_grid->begin();
   bool result = true;
   vnl_vector_fixed<float,3> sample_resp(4.0f, 3.0f,2.0f);
   vnl_vector_fixed<int,3> sample_id(4,3,2);
-  for(; resp_it!=resp->end(); ++resp_it, ++ id_it)
+  for (; resp_it!=resp->end(); ++resp_it, ++ id_it)
   {
     bvxm_voxel_slab<vnl_vector_fixed<float,3> >::iterator resp_slab_it= resp_it->begin();
     bvxm_voxel_slab<vnl_vector_fixed<int,3> >::iterator id_slab_it= id_it->begin();
-    for(; resp_slab_it!=resp_it->end(); ++resp_slab_it, ++ id_slab_it)
+    for (; resp_slab_it!=resp_it->end(); ++resp_slab_it, ++ id_slab_it)
     {
       result = result && (*resp_slab_it == sample_resp) && (*id_slab_it == sample_id);
     }
   }
 
   TEST("Keep top responses", true, result);
-  
 }
-
-
 
 
 void test_local_non_max()
 {
-
-  
 }
 
 MAIN(test_bvpl_vector_operator)

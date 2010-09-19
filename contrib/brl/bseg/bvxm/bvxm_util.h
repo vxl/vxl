@@ -216,12 +216,12 @@ void bvxm_util::warp_slab_bilinear(bvxm_voxel_slab<M> const& slab_in,
         // calculate weights and pixel values
         unsigned x0 = (unsigned)vcl_floor(pix_in_x);
         unsigned x1 = (unsigned)vcl_ceil(pix_in_x);
-        float x0_weight = (float)(x1 - pix_in_x);
-        float x1_weight = (float)(1.0f - x0_weight);
+        float x0_weight = (float)x1 - pix_in_x;
+        float x1_weight = 1.0f - (float)x0_weight;
         unsigned y0 = (unsigned)vcl_floor(pix_in_y);
         unsigned y1 = (unsigned)vcl_ceil(pix_in_y);
-        float y0_weight = (float)(y1 - pix_in_y);
-        float y1_weight = (float)(1.0f - y0_weight);
+        float y0_weight = (float)y1 - pix_in_y;
+        float y1_weight = 1.0f - (float)y0_weight;
         vnl_vector_fixed<unsigned,4>xvals(x0,x0,x1,x1);
         vnl_vector_fixed<unsigned,4>yvals(y0,y1,y0,y1);
         vnl_vector_fixed<float,4> weights(x0_weight*y0_weight,
@@ -798,7 +798,7 @@ void bvxm_util::smooth_gaussian(bvxm_voxel_slab<T> &slab, float stdx, float stdy
 
   // fill in kernel
   for (unsigned i=0; i<kernel_size_x; ++i) {
-    kernel_1dx[i] = (float)(vnl_math::sqrt1_2 * vnl_math::two_over_sqrtpi * (0.5/stdx) * vcl_exp(-((((float)i-kernel_radius_x)*((float)i-kernel_radius_x))/(2*stdx*stdx))));
+    kernel_1dx[i] = (float)(vnl_math::sqrt1_2 * vnl_math::two_over_sqrtpi * (0.5/stdx) * vcl_exp(-(((i-kernel_radius_x)*(i-kernel_radius_x))/(2.0*stdx*stdx))));
   }
   // normalize kernel in case taps dont sum to exactly one
   kernel_1dx = kernel_1dx / kernel_1dx.sum();
@@ -808,7 +808,7 @@ void bvxm_util::smooth_gaussian(bvxm_voxel_slab<T> &slab, float stdx, float stdy
   vnl_vector<float> kernel_1dy(kernel_size_y);
   // fill in kernel
   for (unsigned i=0; i<kernel_size_y; ++i) {
-    kernel_1dy[i] = (float)(vnl_math::sqrt1_2 * vnl_math::two_over_sqrtpi * (0.5/stdy) * vcl_exp(-((((float)i-kernel_radius_y)*((float)i-kernel_radius_y))/(2*stdy*stdy))));
+    kernel_1dy[i] = (float)(vnl_math::sqrt1_2 * vnl_math::two_over_sqrtpi * (0.5/stdy) * vcl_exp(-(((i-kernel_radius_y)*(i-kernel_radius_y))/(2.0*stdy*stdy))));
   }
   // normalize kernel in case taps dont sum to exactly one
   kernel_1dy = kernel_1dy / kernel_1dy.sum();

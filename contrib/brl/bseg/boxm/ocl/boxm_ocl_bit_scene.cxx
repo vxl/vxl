@@ -27,7 +27,7 @@ boxm_ocl_bit_scene::boxm_ocl_bit_scene(vcl_string filename)
 {
   //default values for blank scene init
   max_mb_ = 400;
-  pinit_ = .01;
+  pinit_ = .01f;
 
   //load the scene xml file
   this->load_scene(filename);
@@ -205,7 +205,7 @@ bool boxm_ocl_bit_scene::load_scene(vcl_string filename)
   if (loaded)
     vcl_cout<<"existing scene initialized"<<vcl_endl;
   else {
-    vcl_cerr<<"!!!! Bad scene - not initialized !!!!!"<<vcl_endl;
+    vcl_cerr<<"!!!! Bad scene - not initialized !!!!!\n";
     return false;
   }
   return true;
@@ -236,7 +236,7 @@ bool boxm_ocl_bit_scene::init_existing_scene()
   int blockBytes = numBlocks * sizeof(short) * 2;
   int buffBytes = tree_buff_length_ * num_buffers_ * sizeof(char) * 16;
   int dataBytes = data_buff_length_ * num_buffers_ * sizeof(float) * 16;
-  max_mb_ = vcl_ceil( (blockBytes + buffBytes + dataBytes)/1024.0/1024.0 );
+  max_mb_ = (int)vcl_ceil( (blockBytes + buffBytes + dataBytes)/1024.0/1024.0 );
   return true;
 }
 
@@ -275,7 +275,7 @@ void boxm_ocl_bit_scene::set_tree_buffers(unsigned char* tree_buffers)
   int index = 0;
   vbl_array_2d<uchar16>::iterator iter;
   for (iter = tree_buffers_.begin(); iter != tree_buffers_.end(); iter++) {
-    for(int c=0; c<16; c++) 
+    for (int c=0; c<16; c++)
       (*iter)[c] = tree_buffers[index++];
   }
 }
@@ -404,16 +404,15 @@ void boxm_ocl_bit_scene::get_num_obs(unsigned short* num_obs)
 }
 
 void boxm_ocl_bit_scene::get_mem_ptrs(unsigned short* mem_ptrs)
-{  
+{
   int index=0;
   vbl_array_1d<ushort2>::iterator iter;
   for (iter = mem_ptrs_.begin(); iter != mem_ptrs_.end(); iter++)
   {
     mem_ptrs[index++] = (*iter)[0];
     mem_ptrs[index++] = (*iter)[1];
-  } 
+  }
 }
-
 
 
 //---------------------------------------------------------------------
