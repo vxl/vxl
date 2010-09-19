@@ -22,7 +22,7 @@ void vsph_sph_point_3d::print(vcl_ostream& os) const
 }
 
 vsph_spherical_coord::vsph_spherical_coord(vgl_point_3d<double> origin, double radius)
-: origin_(origin), radius_(radius)
+: radius_(radius), origin_(origin)
 {
 }
 
