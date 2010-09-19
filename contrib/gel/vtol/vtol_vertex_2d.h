@@ -146,7 +146,7 @@ class vtol_vertex_2d : public vtol_vertex
   //: Assignment of `this' with `other' (copy the point not the links)
   //---------------------------------------------------------------------------
   virtual vtol_vertex_2d& operator=(const vtol_vertex_2d &other);
-  vtol_vertex& operator=(const vtol_vertex &other); // virtual of vtol_vertex
+  vtol_vertex_2d& operator=(const vtol_vertex &other); // virtual of vtol_vertex
 
   //***************************************************************************
   // Replaces dynamic_cast<T>

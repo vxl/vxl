@@ -225,7 +225,7 @@ vtol_vertex_2d &vtol_vertex_2d::operator=(const vtol_vertex_2d &other)
   return *this;
 }
 
-vtol_vertex& vtol_vertex_2d::operator=(const vtol_vertex &other)
+vtol_vertex_2d& vtol_vertex_2d::operator=(const vtol_vertex &other)
 {
   if (this!=&other)
   {
