@@ -93,7 +93,7 @@ float bvxm_lidar_processor::prob_density(vil_image_view_base_sptr lidar,
         if (vil_image_view<float> *img_view = dynamic_cast<vil_image_view<float>*>(lidar.ptr()))
           d = (*img_view)(ni, nj);
       }
-      vnl_vector_fixed<float,3> m(ni+0.5f, nj+0.5f, d-2);
+      vnl_vector_fixed<float,3> m((float)ni+0.5f, (float)nj+0.5f, d-2.f);
       bsta_gauss_if3 gauss(m, covar);
       float p1 = gauss.probability(min_vec,max_vec);
       p *= 1.0f - p1;

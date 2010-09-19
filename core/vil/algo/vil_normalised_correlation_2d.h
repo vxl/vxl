@@ -50,8 +50,8 @@ inline accumT vil_norm_corr_2d_at_pt(const srcT *src_im, vcl_ptrdiff_t s_istep,
   }
 
   long n=ni*nj*np;
-  mean/=n;
-  accumT var = sum_sq/n - mean*mean;
+  mean/=(accumT)n;
+  accumT var = sum_sq/(accumT)n - mean*mean;
   return var<=0 ? 0 : sum/vcl_sqrt(var);
 }
 

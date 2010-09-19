@@ -28,12 +28,12 @@ void save_slice(const vil_image_view<float>& image,
                 vcl_string path)
 {
   // Resize so that image has square pixels
-  double w=vcl_min(wi,wj);
+  float w=vcl_min(wi,wj);
   unsigned ni=vnl_math_rnd(image.ni()*wi/w);
   unsigned nj=vnl_math_rnd(image.nj()*wj/w);
 
   vil_image_view<float> image2;
-  if (ni==nj) 
+  if (ni==nj)
     image2=image;
   else
     vil_resample_bilin(image,image2,ni,nj);
@@ -43,16 +43,16 @@ void save_slice(const vil_image_view<float>& image,
   unsigned jlo=vnl_math_rnd(nj*border);
   unsigned jhi=nj-1-jlo;
 
-  vil_image_view<float> cropped_image 
+  vil_image_view<float> cropped_image
      = vil_crop(image2,ilo,1+ihi-ilo, jlo,1+jhi-jlo);
   // Ignore image size in first test
   vil_image_view<vxl_byte> byte_im;
   vil_convert_stretch_range(cropped_image,byte_im);
 
   if (vil_save(byte_im,path.c_str()))
-    vcl_cerr<<"Saved image to "<<path<<vcl_endl;
+    vcl_cerr<<"Saved image to "<<path<<'\n';
   else
-    vcl_cerr<<"Failed to save image to "<<path<<vcl_endl;
+    vcl_cerr<<"Failed to save image to "<<path<<'\n';
 }
 
 int main(int argc, char** argv)
@@ -76,7 +76,7 @@ int main(int argc, char** argv)
   vil3d_image_resource_sptr im_res = vil3d_load_image_resource(image_path().c_str());
   if (im_res==0)
   {
-    vcl_cerr<<"Failed to load in image from "<<image_path()<<vcl_endl;
+    vcl_cerr<<"Failed to load in image from "<<image_path()<<'\n';
     return 1;
   }
 
@@ -89,14 +89,14 @@ int main(int argc, char** argv)
 //  vil3d_image_view_base_sptr im_ptr = im_res->get_view();
 
   // Load the image data and cast to float
-  vil3d_image_view<float> image3d 
+  vil3d_image_view<float> image3d
     = vil3d_convert_cast(float(),im_res->get_view());
 
   if (image3d.size()==0)
 
   vcl_cout<<"Image3D: "<<image3d<<vcl_endl;
   {
-    vcl_cerr<<"Failed to load in image from "<<image_path()<<vcl_endl;
+    vcl_cerr<<"Failed to load in image from "<<image_path()<<'\n';
     return 1;
   }
 

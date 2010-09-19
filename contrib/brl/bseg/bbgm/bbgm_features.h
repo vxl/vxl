@@ -259,12 +259,12 @@ class bbgm_pair_group_feature
     {
       unsigned short ci, cj;
       pit->center(ci, cj);
-      cif += ci;
-      cjf += cj;
+      cif += (float)ci;
+      cjf += (float)cj;
     }
     if (!np) return;
-    ci_ = static_cast<unsigned short>(cif/np);
-    cj_ = static_cast<unsigned short>(cjf/np);
+    ci_ = static_cast<unsigned short>(cif/(float)np);
+    cj_ = static_cast<unsigned short>(cjf/(float)np);
     p_=p;
   }
   //: set probability with existing vertices

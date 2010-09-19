@@ -68,10 +68,10 @@ void bil_detect_ridges(const vil_image_view<float>& Ix,
 
   for (unsigned j =0; j < nj; j++) {
     for (unsigned i =0; i < ni; i++) {
-      double y_ind_p = j + epsilon*max_eigen_y(i,j);
-      double y_ind_m = j - epsilon*max_eigen_y(i,j);
-      double x_ind_p = i + epsilon*max_eigen_x(i,j);
-      double x_ind_m = i - epsilon*max_eigen_x(i,j);
+      double y_ind_p = (double)j + epsilon*max_eigen_y(i,j);
+      double y_ind_m = (double)j - epsilon*max_eigen_y(i,j);
+      double x_ind_p = (double)i + epsilon*max_eigen_x(i,j);
+      double x_ind_m = (double)i - epsilon*max_eigen_x(i,j);
       Ix_plus_e(i,j)  = (float)vil_bilin_interp_safe(x_ind_p , y_ind_p , xdata , ni , nj , x_istep , x_jstep);
       Iy_plus_e(i,j)  = (float)vil_bilin_interp_safe(x_ind_p , y_ind_p , ydata , ni , nj , y_istep , y_jstep);
       Ix_minus_e(i,j) = (float)vil_bilin_interp_safe(x_ind_m , y_ind_m , xdata , ni , nj , x_istep , x_jstep);
@@ -98,7 +98,7 @@ void bil_detect_ridges(const vil_image_view<float>& Ix,
   // compute rho
   vil_image_view<float> rho(ni,nj);
 
-#define SIGN(X) (X < 0? -1 : (X==0 ? 0 : 1))
+#define SIGN(X) (X < 0? -1.f : (X==0 ? 0.f : 1.f))
   for (unsigned j =0; j < nj; j++) {
     for (unsigned i =0; i < ni; i++) {
       rho(i,j) = -0.5f*SIGN(max_lambda(i,j))*vcl_abs(SIGN(gI_dot_nu_plus_e(i,j)) - SIGN(gI_dot_nu_minus_e(i,j)));

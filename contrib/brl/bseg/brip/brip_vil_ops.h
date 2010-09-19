@@ -54,7 +54,7 @@ brip_sqrt_grad_singular_values(const vil_image_view<T>& input, vil_image_view<T>
         // calculate the absolute value of the determinate (should work of all types)
         T IxIxIyIy = IxIx*IyIy;
         T IxIy2 = IxIy*IxIy;
-        T abs_det = (IxIxIyIy>IxIy2?(IxIxIyIy-IxIy2):(IxIy2-IxIxIyIy))/N;
+        T abs_det = (IxIxIyIy>IxIy2?(IxIxIyIy-IxIy2):(IxIy2-IxIxIyIy))/(T)N;
         vil_math_sqrt_functor vil_sqrt;
         output(i,j,p)=vil_sqrt(abs_det);
       }

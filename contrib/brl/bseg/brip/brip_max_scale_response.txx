@@ -150,7 +150,7 @@ void brip_max_scale_response<T>::compute_trace_pyramid()
 //the specified scale ratio to the image with location i.
 static unsigned loci(unsigned i, float scale_ratio)
 {
-  float pos = scale_ratio*i;
+  float pos = scale_ratio*(float)i;
   unsigned ival = static_cast<unsigned>(pos+0.5f);
   return ival;
 }

@@ -168,7 +168,7 @@ bool bvxm_estimate_camera_process(bprb_func_process& pro)
   vpgl_perspective_camera<double> *cam_est = new vpgl_perspective_camera<double>(*cam_init);
   vgl_vector_3d<float> vox_dim(dx,dy,dz);
   vgl_vector_3d<float> world_dim((float)nx,(float)ny,(float)nz);
-  vgl_box_3d<double> box(sx,sy,sz+nz*dz,sx+nx*dx,sy+ny*dy,sz);
+  vgl_box_3d<double> box(sx,sy,sz+double(nz)*dz,sx+double(nx)*dx,sy+double(ny)*dy,sz);
 
   // create the functor that finds edges
   bvxm_expected_edge_functor func(&data, box, vox_dim, world_dim);

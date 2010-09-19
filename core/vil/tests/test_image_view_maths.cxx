@@ -213,7 +213,7 @@ static void test_image_view_maths_byte()
   // Create original image
   for (int y=0;y<ny;++y)
     for (int x=0;x<nx;++x)
-      orig_image(x,y)=1.25f*x;
+      orig_image(x,y)=1.25f*float(x);
 
   vil_print_all( vcl_cout, orig_image );
 
@@ -225,7 +225,7 @@ static void test_image_view_maths_byte()
   // create correct variance norm image
   for (int y=0;y<ny;++y)
     for (int x=0;x<nx;++x)
-      correct_var_norm_image(x,y)=(x-2.f)/ (float)vcl_sqrt(2.0);
+      correct_var_norm_image(x,y)=float(x-2)/(float)vcl_sqrt(2.0f);
 
   double diff2=0;
   for (int y=0;y<ny;++y)

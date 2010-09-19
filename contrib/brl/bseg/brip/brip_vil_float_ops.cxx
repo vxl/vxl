@@ -497,8 +497,8 @@ non_maximum_suppression(vil_image_view<float> const& input,
       {
         //if so sub-pixel interpolate (3x3) and output results
         brip_vil_float_ops::interpolate_center(neighborhood, dx, dy);
-        x_pos.push_back(x+dx);
-        y_pos.push_back(y+dy);
+        x_pos.push_back((float)x+dx);
+        y_pos.push_back((float)y+dy);
         value.push_back(max_v);
       }
     }
@@ -805,9 +805,9 @@ brip_vil_float_ops::grad_matrix_NxN(vil_image_view<float> const& input,
           xy += gx*gy;
           yy += gy*gy;
         }
-      IxIx(x,y) = xx/N;
-      IxIy(x,y) = xy/N;
-      IyIy(x,y) = yy/N;
+      IxIx(x,y) = xx/(float)N;
+      IxIy(x,y) = xy/(float)N;
+      IyIy(x,y) = yy/(float)N;
     }
   brip_vil_float_ops::fill_x_border(IxIx, ni, 0.0f);
   brip_vil_float_ops::fill_y_border(IxIx, ni, 0.0f);
@@ -893,7 +893,7 @@ brip_vil_float_ops::sqrt_grad_singular_values(vil_image_view<float>& input,
           IxIy += gx*gy;
           IyIy += gy*gy;
         }
-      float det = (IxIx*IyIy-IxIy*IxIy)/N;
+      float det = (IxIx*IyIy-IxIy*IxIy)/(float)N;
       output(x,y)=vcl_sqrt(vcl_fabs(det));
     }
   brip_vil_float_ops::fill_x_border(output, n, 0.0f);
@@ -1165,7 +1165,7 @@ lucas_kanade_motion_on_view(vil_image_view<float> const& curr_frame,
       IyIt += gy*dt;
     }
   //Divide by the number of pixels in the neighborhood
-  IxIx/=N;  IxIy/=N; IyIy/=N; IxIt/=N; IyIt/=N; dsum/=N;
+  IxIx/=(float)N;  IxIy/=(float)N; IyIy/=(float)N; IxIt/=(float)N; IyIt/=(float)N; dsum/=(float)N;
   float det = float(IxIx*IyIy-IxIy*IxIy);
   //Eliminate small motion factors
   float dif = vcl_sqrt(dsum);
@@ -1496,7 +1496,7 @@ convert_to_byte(vil_image_view<unsigned short> const& image,
   for (unsigned r = 0; r<nj; r++)
     for (unsigned c = 0; c<ni; c++)
     {
-      float v = (image(c, r)-min_val)*range;
+      float v = float(image(c, r)-min_val)*range;
       if (v>255)
         v=255;
       if (v<0)
@@ -2506,7 +2506,7 @@ spatial_frequency_filter(vil_image_view<float> const& input,
     {
       float gb = gaussian_blocking_filter(dir_fx, dir_fy, f0,
                                           radius,
-                                          fx-Ofx, fy-Ofy);
+                                          (float)fx-Ofx, (float)fy-Ofy);
       bmag(fx,fy) = mag(fx,fy)*gb;
     }
   if (output_fourier_mag)
@@ -2834,7 +2834,7 @@ cross_correlate(vil_image_view<float> const& image1,
   for (int y0 = -10*radius; y0<=10*radius; ++y0)
     for (int x0 = -10*radius; x0<=10*radius; ++x0)
     {
-      float xp = x+0.1f*x0, yp = y+0.1f*y0;
+      float xp = x+0.1f*(float)x0, yp = y+0.1f*(float)y0;
       double v1 =
         brip_vil_float_ops::bilinear_interpolation(image1, xp, yp);
       double v2 =

@@ -24,8 +24,8 @@ static void test_bil_scale_image()
   vil_image_view<float> gaussian(img_size,img_size);
   for (unsigned int i=0; i<img_size; ++i) {
     for (unsigned int j=0; j<img_size; ++j) {
-      float x = (i - float(img_size/2));
-      float y = (j - float(img_size/2));
+      float x = (float)i - float(img_size)*0.5f;
+      float y = (float)j - float(img_size)*0.5f;
       gaussian(i,j) = (float)vcl_exp(-(x*x+y*y)/(2.0f*sigma*sigma));
     }
   }
@@ -56,8 +56,8 @@ static void test_bil_scale_image()
   vcl_cout << "  scale \t actual \t expected \t error"<<vcl_endl;
   for (unsigned int oc=0; oc<gauss_scale.octaves(); ++oc) {
     for (unsigned int lvl=0; lvl<gauss_scale.levels(); ++lvl) {
-      float x = img_size/2.0f;
-      float y = img_size/2.0f;
+      float x = (float)img_size*0.5f;
+      float y = x;
 
       float scale = gauss_scale.scale(oc,lvl);
       const vil_image_view<float>& image = dog_scale(oc,lvl);

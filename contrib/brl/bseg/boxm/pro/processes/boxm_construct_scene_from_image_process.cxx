@@ -53,7 +53,7 @@ namespace boxm_construct_scene_from_image_process_globals
     base_ni = mni; base_nj = mnj;
     vcl_vector<boct_loc_code<short> > leaf_codes;
     vcl_vector<float> image_int;
-    float upper_v=(mnj-1)*rnj;
+    float upper_v=float(mnj-1)*rnj;
     for (unsigned j=0; j<mnj; ++j)
       for (unsigned i=0; i<mni; ++i)
       {
@@ -108,7 +108,8 @@ namespace boxm_construct_scene_from_image_process_globals
         if (found) {
           boxm_sample<BOXM_APM_SIMPLE_GREY> data(1.0f,boxm_sample<BOXM_APM_SIMPLE_GREY>::apm_datatype(image_int[found_k],0.0008f));
           cell_grey_ptr->set_data(data);
-        }else{
+        }
+        else {
           boxm_sample<BOXM_APM_SIMPLE_GREY> data(0.0f,boxm_sample<BOXM_APM_SIMPLE_GREY>::apm_datatype(0.0f,0.0008f));
           cell_grey_ptr->set_data(data);
         }
@@ -120,7 +121,8 @@ namespace boxm_construct_scene_from_image_process_globals
           typedef boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_processor aproc;
           aproc::update(data.appearance(),image_int[found_k],1.0);
           cell_mog_grey_ptr->set_data(data);
-        }else{
+        }
+        else {
           boxm_sample<BOXM_APM_MOG_GREY> data(0.0f);
           cell_mog_grey_ptr->set_data(data);
         }

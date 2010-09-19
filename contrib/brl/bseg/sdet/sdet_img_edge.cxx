@@ -343,7 +343,7 @@ sdet_img_edge::detect_edge_line_fitted(vil_image_view<vxl_byte> img,
     vsol_digital_curve_2d_sptr dc = new vsol_digital_curve_2d(samples);
 
     // now sample length many samples along the line
-    float inc = 1.0f/length;
+    float inc = 1.0f/(float)length;
     for (float index = 0.0f; index <= 1.0f; index += inc) {
       vgl_point_2d<double> pt = dc->interp((double)index);
 

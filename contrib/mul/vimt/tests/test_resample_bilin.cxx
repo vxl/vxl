@@ -36,7 +36,7 @@ static void test_resample_bilin()
   vil_print_all(vcl_cout, image0.image());
 
   vimt_resample_bilin_smoothing_edge_extend(image0, image1, vgl_point_2d<double>(0,0),
-    vgl_vector_2d<double>(1,0), vgl_vector_2d<double>(0,1), ni/2, nj/2);
+                                            vgl_vector_2d<double>(1,0), vgl_vector_2d<double>(0,1), ni/2, nj/2);
 
   vcl_cout << "\n\n\nimage 1: " << image1 << vcl_setw(3);
   vil_print_all(vcl_cout, image1.image());
@@ -50,13 +50,13 @@ static void test_resample_bilin()
 
   for (unsigned y=0;y<image2.image().nj();++y)
     for (unsigned x=0;x<image2.image().ni();++x)
-      image2.image()(x,y) = x+y*10.0f + 30.0f*((x+y)%2);
+      image2.image()(x,y) = x+y*10.0f + (((x+y)%2) ? 30.0f : 0.0f);
 
   vcl_cout << "image 2: " << image2 << vcl_setw(3) << vcl_right;
   vil_print_all(vcl_cout, image2.image());
 
   vimt_resample_bilin_smoothing_edge_extend(image2, image3, vgl_point_2d<double>(0,0),
-    vgl_vector_2d<double>(0,2), vgl_vector_2d<double>(2,0), ni/4, nj/4);
+                                            vgl_vector_2d<double>(0,2), vgl_vector_2d<double>(2,0), ni/4, nj/4);
 
   vcl_cout << "image 3: " << image3 << vcl_setw(3);
   vil_print_all(vcl_cout, image3.image());

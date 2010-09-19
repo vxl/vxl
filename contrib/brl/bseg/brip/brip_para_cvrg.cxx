@@ -355,7 +355,7 @@ float brip_para_cvrg::parallel_coverage(vcl_vector<float> const& input_array)
     }
   if (n_peaks<2)
     return 0;
-  return proj_sum/(n_peaks);
+  return proj_sum/float(n_peaks);
 }
 
 

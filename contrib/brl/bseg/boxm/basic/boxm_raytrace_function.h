@@ -294,7 +294,7 @@ class boxm_raytrace_function
                         vgl_point_3d<double> enter_pt(0.0,0.0,0.0);
                         vgl_point_3d<double> exit_pt;
                         // add 0.5 to get center of pixel
-                        generate_ray(i + 0.5f, j + 0.5f, block_bb, ray_origin, direction);
+                        generate_ray((float)i + 0.5f, (float)j + 0.5f, block_bb, ray_origin, direction);
                         if (!entry_point(block_bb,ray_origin,direction,enter_pt))
                             continue;
                         // normalize the entry point to [0,1]

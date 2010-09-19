@@ -68,7 +68,8 @@ bool sdet_detect_third_order_edges_process(bprb_func_process& pro)
   if (input_image.nplanes() == 3) {
     vcl_cout << "Input image has 3 planes, applying color edge detector!\n";
     det.apply_color(input_image);
-  } else {
+  }
+  else {
     det.apply(input_image);
   }
 
@@ -159,8 +160,8 @@ bool sdet_detect_third_order_edges_dt_process(bprb_func_process& pro)
   dp.grad_op_ = 0; dp.conv_algo_ = 0; dp.pfit_type_ = 0;
   dp.sigma_ = 1.0; dp.thresh_ = 2.0;
   dp.interp_factor_ = 1;
-  dp.adapt_thresh_ = false; 
-  
+  dp.adapt_thresh_ = false;
+
   pro.parameters()->get_value( "grad_op", dp.grad_op_);
   pro.parameters()->get_value( "conv_algo", dp.conv_algo_);
   pro.parameters()->get_value( "int_factor" , dp.interp_factor_);
@@ -173,20 +174,21 @@ bool sdet_detect_third_order_edges_dt_process(bprb_func_process& pro)
   if (input_image.nplanes() == 3) {
     vcl_cout << "Input image has 3 planes, applying color edge detector!\n";
     det.apply_color(input_image);
-  } else {
+  }
+  else {
     det.apply(input_image);
   }
   vcl_vector<vdgl_edgel> edgels = det.edgels();
 
   vcl_vector<vsol_line_2d_sptr> line_segs;
   det.line_segs(line_segs);
-  
+
   unsigned ni = input_image.ni();
   unsigned nj = input_image.nj();
   vbl_array_2d<vtol_edge_2d_sptr> vtol_edges(ni, nj);
   for (unsigned k = 0; k < edgels.size(); k++) {
     vdgl_edgel edgel = edgels[k];
-    
+
     double x = edgel.x();
     double y = edgel.y();
 
@@ -204,7 +206,7 @@ bool sdet_detect_third_order_edges_dt_process(bprb_func_process& pro)
   for (unsigned i = 0; i < ni; i++) {
     for (unsigned j = 0; j < nj; j++) {
       float distf = ec.distance(j,i);
-      if (out_imgf(i,j) > distf) 
+      if (out_imgf(i,j) > distf)
         out_imgf(i,j) = distf;
     }
   }
@@ -214,8 +216,8 @@ bool sdet_detect_third_order_edges_dt_process(bprb_func_process& pro)
   vil_math_image_difference(diff_img, out_imgf, sum_img);
 
   //: scale to 0-255 range
-  //vil_math_scale_values(out_imgf, 255.0f/max_dist_threshold);
-  vil_math_scale_values(sum_img, 255.0f/max_dist_threshold);
+  //vil_math_scale_values(out_imgf, 255.0f/(float)max_dist_threshold);
+  vil_math_scale_values(sum_img, 255.0f/(float)max_dist_threshold);
   vil_image_view<vxl_byte> out_img(ni, nj);
   //vil_convert_cast(out_imgf, out_img);
   vil_convert_cast(sum_img, out_img);
