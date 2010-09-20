@@ -119,7 +119,7 @@ ray_trace_bit_scene_opt(__constant  RenderSceneInfo    * linfo,
     //initialize cumsum buffer and cumIndex
     cumsum[llid*11] = local_tree[llid].s0;
     int cumIndex = 1;
-    //barrier(CLK_LOCAL_MEM_FENCE);
+    barrier(CLK_LOCAL_MEM_FENCE);
 
     //local ray origin is entry point (point should be in [0,1]) 
     //(note that cell_min is the current block index at this point)
