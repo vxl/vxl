@@ -144,6 +144,9 @@ SOURCE=.\test_ray_intersect.cxx
 SOURCE=.\test_camera_from_box.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_camera_bounds.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group
