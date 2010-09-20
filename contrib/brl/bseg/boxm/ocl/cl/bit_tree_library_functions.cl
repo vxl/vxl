@@ -170,9 +170,8 @@ int data_index_opt2(__local uchar* tree, ushort bit_index, __constant uchar* bit
   uchar byte_index        = ((oneuplevel-1)>>3) +1;     //byte_index of parent bit
   uchar sub_bit_index     = 8-((oneuplevel-1)&(8-1));   //[0-7] bit index of parent bit
 
-  for(int i=(*cumIndex); i<byte_index; i++) {
-    cumsum[i] = cumsum[i-1] + bit_lookup[tree[i]];
-    (*cumIndex) = i;
+  for(; (*cumIndex) < byte_index; ++(*cumIndex))  {
+    cumsum[(*cumIndex)] = cumsum[(*cumIndex)-1] + bit_lookup[tree[(*cumIndex)]];
   }
 
   uchar bits_before_parent = tree[byte_index]<<sub_bit_index; //number of bits before parent bit [0-6] in parent byte
