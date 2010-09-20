@@ -7,6 +7,7 @@
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_plane_3d.h>
+#include <vgl/vgl_intersection.h>
 #include <vpgl/algo/vpgl_invmap_cost_function.h>
 #include "vpgl_backproject.h"
 
@@ -45,6 +46,25 @@ bool vpgl_ray::ray(const vpgl_camera<double>*  cam,
   r.set(tr[0], tr[1], tr[2]);
   return true;
 }
+//construct a ray at a 3-d point with an origin lying in the origin_z plane
+bool vpgl_ray::ray(const vpgl_camera<double>*  cam,
+                   vgl_point_3d<double> const& point_3d,
+                   double origin_z,
+                   vgl_ray_3d<double>& ray)
+{
+  vgl_plane_3d<double> pl(0.0, 0.0, 1.0, -origin_z);
+  vgl_vector_3d<double> dir;
+  bool success = vpgl_ray::ray(cam, point_3d, dir);
+  if(!success) return false;
+  // create an infinite line along dir
+  vgl_infinite_line_3d<double> infl(point_3d, dir);
+  vgl_point_3d<double> origin;
+  // intersect with the z plane
+  if(!vgl_intersection(infl, pl, origin))
+    return false;
+  ray.set(origin, dir);
+  return true;
+}
 
 bool vpgl_ray::ray(vpgl_rational_camera<double> const& rcam,
                    vnl_double_3 const& point_3d,
@@ -62,8 +82,23 @@ bool vpgl_ray::ray(vpgl_rational_camera<double> const& rcam,
     const vpgl_camera<double>*  cam =
       static_cast<const vpgl_camera<double>* >(&rcam);
 
-    return vpgl_ray::ray(cam, point_3d, ray);
+   return vpgl_ray::ray(cam,point_3d,ray);
 }
+
+bool vpgl_ray::ray(vpgl_rational_camera<double> const& rcam,
+                   vgl_point_3d<double> const& point_3d,
+                   vgl_ray_3d<double>& ray)
+{
+  double z_off = rcam.offset(vpgl_rational_camera<double>::Z_INDX);
+  double z_scale = rcam.scale(vpgl_rational_camera<double>::Z_INDX);
+  double zmax = z_off + z_scale;
+
+    const vpgl_camera<double>*  cam =
+      static_cast<const vpgl_camera<double>* >(&rcam);
+
+   return vpgl_ray::ray(cam,point_3d,zmax,ray);
+}
+
 
 // compute a ray in local Cartesian coordinates for a local rational cam
 bool vpgl_ray::ray(vpgl_local_rational_camera<double> const& lrcam,
@@ -100,6 +135,17 @@ bool vpgl_ray::ray(vpgl_local_rational_camera<double> const& lrcam,
   dir = mid_point - origin;
   dir/=dir.length();//unit vector
 
+  return true;
+}
+//: compute a ray in local Cartesian coordinates at a given (u, v)
+bool vpgl_ray::ray(vpgl_local_rational_camera<double> const& lrcam,
+                   const double u, const double v, 
+                   vgl_ray_3d<double>& ray)
+{
+  vgl_point_3d<double> origin; vgl_vector_3d<double> dir;
+  bool success = vpgl_ray::ray(lrcam, u, v, origin, dir);
+  if(!success) return false;
+  ray.set(origin, dir);
   return true;
 }
 // compute a ray in local Cartesian coordinates for a local rational cam
@@ -140,5 +186,15 @@ bool vpgl_ray::plane_ray(vpgl_local_rational_camera<double> const& lrcam,
 
   plane=vgl_plane_3d<double>(point1,point2,mid_point1);
 
+  return true;
+}
+
+bool vpgl_ray::ray(vpgl_perspective_camera<double> const& cam,
+                   vgl_point_3d<double> const& world_pt,
+                   vgl_ray_3d<double>& ray)
+{
+  if(cam.is_behind_camera(vgl_homg_point_3d<double>(world_pt.x(), world_pt.y(), world_pt.z())))
+    return false;
+  ray = vgl_ray_3d<double>(cam.camera_center(), world_pt);
   return true;
 }
