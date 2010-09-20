@@ -1,20 +1,17 @@
-
+#include "boxm_re_render_ocl_scene_manager.h"
 //:
 // \file
-#include "boxm_re_render_ocl_scene_manager.h"
 #include <vcl_where_root_dir.h>
 #include <boxm/ocl/boxm_ocl_utils.h>
 #include <vcl_cstdio.h>
 #include <vul/vul_timer.h>
 #include <boxm/boxm_block.h>
 #include <boxm/boxm_scene.h>
-#include <boxm/util/boxm_utils.h>
 #include <boxm/basic/boxm_block_vis_graph_iterator.h>
 #include <vil/vil_save.h>
+
 //: Initializes CPU side input buffers
 //put tree structure and data into arrays
-
-
 bool boxm_re_render_ocl_scene_manager::init_re_render(boxm_ocl_scene *scene,
                                                       vpgl_camera_double_sptr cam,
                                                       vil_image_view<float> &obs)
@@ -577,17 +574,17 @@ bool boxm_re_render_ocl_scene_manager::set_workspace(unsigned pass)
   if (!this->check_val(status,CL_SUCCESS,"clGetKernelWorkGroupInfo CL_KERNEL_WORK_GROUP_SIZE, failed."))
     return 0;
 
-  if (pass==0 || pass==1 || pass==3) //: passes for computing aux
+  if (pass==0 || pass==1 || pass==3) // passes for computing aux
   {
       globalThreads[0]=this->wni_/2; globalThreads[1]=this->wnj_/2;
       localThreads[0] =this->bni_  ; localThreads[1] =this->bnj_  ;
   }
-  if (pass==2)//: pass for normalizing image
+  if (pass==2) // pass for normalizing image
   {
       globalThreads[0]=this->wni_;globalThreads[1]=this->wnj_;
       localThreads[0] =this->bni_;localThreads[0] =this->bnj_;
   }
-  if (pass==4)  //: pass for updating data from aux data
+  if (pass==4)  // pass for updating data from aux data
   {
     globalThreads[0]=RoundUp(numbuffer_*lenbuffer_,64);globalThreads[1]=1;
     localThreads[0]=64;                              localThreads[1]=1;

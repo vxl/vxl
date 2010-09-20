@@ -1,5 +1,4 @@
 #include <testlib/testlib_test.h>
-#include <boxm/util/boxm_utils.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_box_3d.h>

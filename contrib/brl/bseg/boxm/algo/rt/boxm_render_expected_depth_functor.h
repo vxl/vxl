@@ -5,7 +5,6 @@
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/boxm_aux_scene.h>
 #include <boxm/basic/boxm_raytrace_function.h>
-#include <boxm/util/boxm_utils.h>
 #include <boxm/sample/boxm_rt_sample.h>
 
 #include <vil/vil_transform.h>

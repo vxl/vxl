@@ -6,7 +6,6 @@
 #include <boct/boct_tree_cell.h>
 #include <boxm/boxm_block.h>
 #include <boxm/boxm_scene.h>
-#include <boxm/util/boxm_utils.h>
 #include <imesh/imesh_mesh.h>
 #include <vpgl/bgeo/bgeo_lvcs.h>
 #include <vgl/vgl_box_3d.h>
@@ -35,7 +34,8 @@ void boxm_upload_mesh_into_block(boxm_block<boct_tree<T_loc, T_data> > *block,
         lvcs.global_to_local(vertices(v_id,0), vertices(v_id,1), vertices(v_id,2),
                              bgeo_lvcs::wgs84,lx,ly,lz);
         v=vgl_point_3d<double>(lx,ly,lz);
-      } else
+      }
+      else
         v=vgl_point_3d<double>(vertices(v_id,0), vertices(v_id,1), vertices(v_id,2));
       bb_global.add(v);
       vgl_vector_3d<double> diff = v-block_bb.min_point();   // get the value according to the block origin
@@ -94,7 +94,8 @@ void boxm_upload_mesh_into_block(boxm_block<boct_tree<short, boxm_sample<BOXM_AP
         lvcs.global_to_local(vertices(v_id,0), vertices(v_id,1), vertices(v_id,2),
                              bgeo_lvcs::wgs84,lx,ly,lz);
         v=vgl_point_3d<double>(lx,ly,lz);
-      } else
+      }
+      else
         v=vgl_point_3d<double>(vertices(v_id,0), vertices(v_id,1), vertices(v_id,2));
       bb_global.add(v);
       vgl_vector_3d<double> diff = v-block_bb.min_point();   // get the value according to the block origin
@@ -132,6 +133,7 @@ void boxm_upload_mesh_into_block(boxm_block<boct_tree<short, boxm_sample<BOXM_AP
     }
   }
 }
+
 //: calls all the blocks for drawing meshes
 template <class T_loc, class T_data>
 void boxm_upload_mesh_into_scene(boxm_scene<boct_tree<T_loc, T_data > > &scene,

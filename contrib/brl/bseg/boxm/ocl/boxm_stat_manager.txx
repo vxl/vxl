@@ -12,7 +12,6 @@
 #include <vcl_cstdio.h>
 #include <vcl_cassert.h>
 #include <vbl/io/vbl_io_array_2d.h>
-#include <boxm/util/boxm_utils.h>
 #include <vul/vul_timer.h>
 #include "boxm_ocl_utils.h"
 
@@ -30,7 +29,6 @@ void boxm_stat_manager<T>::clear_stat_input()
 template<class T>
 bool boxm_stat_manager<T>::setup_stat_input()
 {
-
 #if defined (_WIN32)
   stat_input_ = (cl_float*)_aligned_malloc(this->input_size()* sizeof(cl_float), 16);
 #elif defined(__APPLE__)
@@ -40,10 +38,10 @@ bool boxm_stat_manager<T>::setup_stat_input()
 #endif
 
   if (stat_input_ == NULL)
-    {
-      vcl_cout << "Failed to allocate host memory. (stat_input)\n";
-      return SDK_FAILURE;
-    }
+  {
+    vcl_cout << "Failed to allocate host memory. (stat_input)\n";
+    return SDK_FAILURE;
+  }
   this->clear_stat_input();
 
   return true;
@@ -53,17 +51,18 @@ template<class T>
 bool boxm_stat_manager<T>::clean_stat_input()
 {
   if (stat_input_)
-    {
+  {
 #ifdef _WIN32
-      _aligned_free(stat_input_);
+    _aligned_free(stat_input_);
 #else
-      free(stat_input_);
+    free(stat_input_);
 #endif
-      stat_input_ = NULL;
-    }
+    stat_input_ = NULL;
+  }
   input_size_ = 0;
   return true;
 }
+
 template<class T>
 void boxm_stat_manager<T>::clear_stat_data()
 {
@@ -87,13 +86,13 @@ bool boxm_stat_manager<T>::setup_stat_data(vcl_vector<float> const& data)
 #endif
 
   if (stat_data_ == NULL)
-    {
-      vcl_cout << "Failed to allocate host memory. (stat_data)\n";
-      return SDK_FAILURE;
-    }
+  {
+    vcl_cout << "Failed to allocate host memory. (stat_data)\n";
+    return SDK_FAILURE;
+  }
   this->clear_stat_data();
   stat_data_[0]=static_cast<float>(data.size());
-  for(unsigned i = 1; i<this->data_size(); ++i)
+  for (unsigned i = 1; i<this->data_size(); ++i)
     stat_data_[i] = data[i-1];
   return true;
 }
@@ -102,14 +101,14 @@ template<class T>
 bool boxm_stat_manager<T>::clean_stat_data()
 {
   if (stat_data_)
-    {
+  {
 #ifdef _WIN32
-      _aligned_free(stat_data_);
+    _aligned_free(stat_data_);
 #else
-      free(stat_data_);
+    free(stat_data_);
 #endif
-      stat_data_ = NULL;
-    }
+    stat_data_ = NULL;
+  }
   data_size_ = 0;
   return true;
 }
@@ -124,10 +123,10 @@ void boxm_stat_manager<T>::clear_stat_results()
       stat_results_[i]=0.0f;
   }
 }
+
 template<class T>
 bool boxm_stat_manager<T>::setup_stat_results()
 {
-
 #if defined (_WIN32)
   stat_results_ = (cl_float*)_aligned_malloc(this->result_size()* sizeof(cl_float), 16);
 #elif defined(__APPLE__)
@@ -137,10 +136,10 @@ bool boxm_stat_manager<T>::setup_stat_results()
 #endif
 
   if (stat_results_ == NULL)
-    {
-      vcl_cout << "Failed to allocate host memory. (stat_results)\n";
-      return SDK_FAILURE;
-    }
+  {
+    vcl_cout << "Failed to allocate host memory. (stat_results)\n";
+    return SDK_FAILURE;
+  }
   this->clear_stat_results();
 
   return true;
@@ -150,14 +149,14 @@ template<class T>
 bool boxm_stat_manager<T>::clean_stat_results()
 {
   if (stat_results_)
-    {
+  {
 #ifdef _WIN32
-      _aligned_free(stat_results_);
+    _aligned_free(stat_results_);
 #else
-      free(stat_results_);
+    free(stat_results_);
 #endif
-      stat_results_ = NULL;
-    }
+    stat_results_ = NULL;
+  }
   result_size_ = 0;
   return true;
 }
@@ -179,7 +178,7 @@ int boxm_stat_manager<T>::clean_stat_input_buffer()
   cl_int status = clReleaseMemObject(stat_input_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject (stat_input_buf_) failed."))
     return SDK_FAILURE;
-  else{
+  else {
     stat_input_buf_=0;
     return SDK_SUCCESS;
   }
@@ -202,7 +201,7 @@ int boxm_stat_manager<T>::clean_stat_data_buffer()
   cl_int status = clReleaseMemObject(stat_data_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject (stat_data_buf_) failed."))
     return SDK_FAILURE;
-  else{
+  else {
     stat_data_buf_=0;
     return SDK_SUCCESS;
   }
@@ -211,11 +210,8 @@ int boxm_stat_manager<T>::clean_stat_data_buffer()
 template <class T>
 int boxm_stat_manager<T>::setup_stat_results_buffer()
 {
-
   cl_int   status;
-
   this->clear_stat_results();
-
   stat_results_buf_ = clCreateBuffer(this->context(),
                                      CL_MEM_WRITE_ONLY | CL_MEM_COPY_HOST_PTR,
                                      result_size_* sizeof(cl_float),
@@ -225,8 +221,8 @@ int boxm_stat_manager<T>::setup_stat_results_buffer()
                        CL_SUCCESS,
                        "clCreateBuffer failed. (stat_results)"))
     return SDK_FAILURE;
-    
-  return SDK_SUCCESS;   
+  else
+    return SDK_SUCCESS;
 }
 
 template<class T>
@@ -235,7 +231,7 @@ int boxm_stat_manager<T>::clean_stat_results_buffer()
   cl_int status = clReleaseMemObject(stat_results_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject (stat_results_buf_) failed."))
     return SDK_FAILURE;
-  else{
+  else {
     stat_results_buf_=0;
     return SDK_SUCCESS;
   }
@@ -282,14 +278,14 @@ int boxm_stat_manager<T>::build_kernel_program(bool useimage)
   if (!this->check_val(status,
                        CL_SUCCESS,
                        error_to_string(status)))
-    {
-      vcl_size_t len;
-      char buffer[2048];
-      clGetProgramBuildInfo(program_, this->devices_[0],
-                            CL_PROGRAM_BUILD_LOG, sizeof(buffer), buffer, &len);
-      vcl_printf("%s\n", buffer);
-      return SDK_FAILURE;
-    }
+  {
+    vcl_size_t len;
+    char buffer[2048];
+    clGetProgramBuildInfo(program_, this->devices_[0],
+                          CL_PROGRAM_BUILD_LOG, sizeof(buffer), buffer, &len);
+    vcl_printf("%s\n", buffer);
+    return SDK_FAILURE;
+  }
   else
     return SDK_SUCCESS;
 }
@@ -323,7 +319,8 @@ int boxm_stat_manager<T>::release_kernel()
 
 
 template<class T>
-void boxm_stat_manager<T>::set_gauss_1d(float mean, float sigma){
+void boxm_stat_manager<T>::set_gauss_1d(float mean, float sigma)
+{
   this->clean_stat_input();
   this->set_input_size(2);
   this->setup_stat_input();
@@ -331,8 +328,9 @@ void boxm_stat_manager<T>::set_gauss_1d(float mean, float sigma){
   stat_input_[1]=sigma;
   this->setup_stat_input_buffer();
 }
+
 template<class T>
-void boxm_stat_manager<T>::set_init_gauss_1d(float mean, float sigma, 
+void boxm_stat_manager<T>::set_init_gauss_1d(float mean, float sigma,
                                              float min_sigma, float rho)
 {
   this->clean_stat_input();
@@ -344,11 +342,12 @@ void boxm_stat_manager<T>::set_init_gauss_1d(float mean, float sigma,
   stat_input_[3]=rho;
   this->setup_stat_input_buffer();
 }
+
 template<class T>
 void boxm_stat_manager<T>::
 set_gauss_3_mixture_1d(float mu0, float sigma0, float w0,
-                              float mu1, float sigma1, float w1,
-                              float mu2, float sigma2, float w2)
+                       float mu1, float sigma1, float w1,
+                       float mu2, float sigma2, float w2)
 {
   this->clean_stat_input();
   this->set_input_size(9);
@@ -358,11 +357,12 @@ set_gauss_3_mixture_1d(float mu0, float sigma0, float w0,
   stat_input_[6]=mu2;  stat_input_[7]=sigma2;  stat_input_[8]=w2;
   this->setup_stat_input_buffer();
 }
+
 template<class T>
 void boxm_stat_manager<T>::
 set_insert_gauss_3_mix_1d(float init_weight, float init_sigma,
-                          float mu0, float sigma0, float w0, 
-                          float mu1, float sigma1, float w1, 
+                          float mu0, float sigma0, float w0,
+                          float mu1, float sigma1, float w1,
                           float mu2, float sigma2, float w2 )
 {
   this->clean_stat_input();
@@ -374,11 +374,12 @@ set_insert_gauss_3_mix_1d(float init_weight, float init_sigma,
   stat_input_[8]=mu2;  stat_input_[9]=sigma2;  stat_input_[10]=w2;
   this->setup_stat_input_buffer();
 }
+
 template<class T>
 void boxm_stat_manager<T>::
 set_update_gauss_3_mix_1d(float weight, float init_sigma,
                           float min_sigma, float t_match,
-                          float mu0, float sigma0, float w0, 
+                          float mu0, float sigma0, float w0,
                           float mu1, float sigma1, float w1,
                           float mu2, float sigma2, float w2)
 {
@@ -392,10 +393,11 @@ set_update_gauss_3_mix_1d(float weight, float init_sigma,
   stat_input_[10]=mu2;  stat_input_[11]=sigma2;  stat_input_[12]=w2;
   this->setup_stat_input_buffer();
 }
+
 template<class T>
 void boxm_stat_manager<T>::print_results()
 {
-  for(unsigned i = 0; i<result_size_; ++i)
+  for (unsigned i = 0; i<result_size_; ++i)
     vcl_cout << "r[" << i << "] " << (float)stat_results_[i] << '\n';
 }
 

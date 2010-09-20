@@ -1,12 +1,9 @@
 #include <testlib/testlib_test.h>
 
-#include <boxm/util/boxm_test_util.h>
-
 #include <boxm/sample/boxm_sample.h>
 #include <boxm/boxm_scene.h>
 #include <boxm/algo/boxm_save_scene_raw.h>
 #include <boxm/algo/boxm_refine.h>
-#include <boxm/util/boxm_utils.h>
 #include <boct/boct_tree_cell.h>
 
 #include <vgl/vgl_point_3d.h>
@@ -33,7 +30,7 @@ static int test_save_scene_raw()
   os.close();
 
   unsigned max_level=10, init_level=3;
-  
+
   boxm_block_iterator<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > > iter(&scene);
   // default model
   bsta_gauss_f1 simple_gauss_f1(0.0f,0.1f);
@@ -92,7 +89,8 @@ static int test_save_scene_raw()
     boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > * tree;
     if (iter.index().x()==0 && iter.index().y()==0 && iter.index().z()==0) {
       tree = new boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> >(max_level,init_level);
-    } else {
+    }
+    else {
       tree=new boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> >(max_level,init_level-1);
     }
     boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> >* cel11=tree->locate_point(vgl_point_3d<double>(0.01,0.01,0.9));

@@ -7,7 +7,6 @@
 #include <boct/boct_tree.h>
 #include <boxm/boxm_scene.h>
 #include <boxm/sample/boxm_sample.h>
-#include <boxm/util/boxm_utils.h>
 #include <boxm/basic/boxm_block_vis_graph_iterator.h>
 #include <boxm/basic/boxm_cell_vis_graph_iterator.h>
 #include <boxm/sample/algo/boxm_mog_grey_processor.h>

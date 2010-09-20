@@ -8,7 +8,6 @@
 #include <boct/boct_loc_code.h>
 
 #include <boxm/boxm_scene.h>
-#include <boxm/util/boxm_utils.h>
 
 #include <vil/vil_save.h>
 #include <vil/vil_load.h>

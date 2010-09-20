@@ -6,14 +6,13 @@
 #include <vcl_cstdio.h>
 #include <boxm/boxm_block.h>
 #include <boxm/boxm_scene.h>
-#include <boxm/util/boxm_utils.h>
 #include <boxm/basic/boxm_block_vis_graph_iterator.h>
 #include <bsta/bsta_histogram.h>
 #include <vil/vil_save.h>
 #include <vcl_cstdlib.h>
+
 //: Initializes CPU side input buffers
 //put tree structure and data into arrays
-
 bool boxm_render_bit_scene_manager::init_ray_trace(boxm_ocl_bit_scene *scene,
                                                    vpgl_camera_double_sptr cam,
                                                    vil_image_view<float> &obs,
@@ -205,11 +204,11 @@ bool boxm_render_bit_scene_manager::set_args(unsigned kernel_index=0)
     //output buffer
     status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&output_buf_);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output)"))
-      return 0;  
+      return 0;
   }
   else if (kernel_index==1)
   {
-    //: Set args for second kernel
+    // Set args for second kernel
     int i=0;
     // depth image buffer
     status = clSetKernelArg(kernels_[1],i++,sizeof(cl_mem),(void *)&image_buf_);

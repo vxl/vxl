@@ -1,13 +1,12 @@
+#include "boxm_update_bit_scene_manager.h"
 //:
 // \file
-#include "boxm_update_bit_scene_manager.h"
 #include <vcl_where_root_dir.h>
 #include <boxm/ocl/boxm_ocl_utils.h>
 #include <vcl_cstdio.h>
 #include <vul/vul_timer.h>
 #include <boxm/boxm_block.h>
 #include <boxm/boxm_scene.h>
-#include <boxm/util/boxm_utils.h>
 #include <boxm/basic/boxm_block_vis_graph_iterator.h>
 #include <vil/vil_save.h>
 

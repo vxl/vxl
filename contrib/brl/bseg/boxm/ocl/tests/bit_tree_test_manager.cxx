@@ -9,7 +9,6 @@
 #include <vcl_cstdio.h>
 #include <vcl_string.h>
 #include <vul/vul_timer.h>
-#include <boxm/util/boxm_utils.h>
 
 
 bool bit_tree_test_manager::init_arrays()

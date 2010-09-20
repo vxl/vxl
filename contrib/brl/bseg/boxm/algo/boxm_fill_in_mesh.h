@@ -6,7 +6,6 @@
 #include <boct/boct_tree_cell.h>
 #include <boxm/boxm_block.h>
 #include <boxm/boxm_scene.h>
-#include <boxm/util/boxm_utils.h>
 #include <imesh/imesh_mesh.h>
 #include <imesh/imesh_operations.h>
 #include <vpgl/bgeo/bgeo_lvcs.h>

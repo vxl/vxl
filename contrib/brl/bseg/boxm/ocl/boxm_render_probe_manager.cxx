@@ -4,12 +4,10 @@
 #include <vcl_where_root_dir.h>
 #include <boxm/ocl/boxm_ocl_utils.h>
 #include <vcl_cstdio.h>
-#include <boxm/util/boxm_utils.h>
 #include <vil/vil_save.h>
 
 //: Initializes CPU side input buffers
 //put tree structure and data into arrays
-
 bool boxm_render_probe_manager::init_ray_trace(boxm_ocl_scene *scene,
                                                vpgl_camera_double_sptr cam,
                                                unsigned i,

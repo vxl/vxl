@@ -1,7 +1,5 @@
 #include <testlib/testlib_test.h>
-#include <boxm/util/boxm_test_util.h>
 
-#include <boxm/util/boxm_utils.h>
 #include <boxm/sample/boxm_sample.h>
 #include <boxm/boxm_scene.h>
 #include <boxm/algo/boxm_upload_mesh.h>

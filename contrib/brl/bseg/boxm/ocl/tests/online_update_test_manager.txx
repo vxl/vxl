@@ -11,7 +11,6 @@
 #include <vul/vul_timer.h>
 #include <boxm/boxm_block.h>
 #include <boxm/boxm_scene.h>
-#include <boxm/util/boxm_utils.h>
 #include <boxm/basic/boxm_block_vis_graph_iterator.h>
 #include <vpgl/vpgl_perspective_camera.h>
 
