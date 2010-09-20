@@ -117,7 +117,7 @@ ray_trace_bit_scene_opt(__constant  RenderSceneInfo    * linfo,
     local_tree[llid] = as_uchar16(tree_array[root_ptr]);
     
     //initialize cumsum buffer and cumIndex
-    cumsum[llid*11] = local_tree[llid].s0;
+    cumsum[llid*10] = local_tree[llid].s0;
     int cumIndex = 1;
     barrier(CLK_LOCAL_MEM_FENCE);
 
@@ -153,7 +153,7 @@ ray_trace_bit_scene_opt(__constant  RenderSceneInfo    * linfo,
       int data_ptr = traverse_three(&local_tree[llid], 
                                     posx,posy,posz, 
                                     &cell_minx, &cell_miny, &cell_minz, &cell_len);
-      data_ptr = data_index_opt2(&local_tree[llid], data_ptr, bit_lookup, &cumsum[llid*11], &cumIndex);
+      data_ptr = data_index_opt2(&local_tree[llid], data_ptr, bit_lookup, &cumsum[llid*10], &cumIndex);
       data_ptr = block.x * linfo->data_len + data_ptr;
       
       // check to see how close tnear and tfar are

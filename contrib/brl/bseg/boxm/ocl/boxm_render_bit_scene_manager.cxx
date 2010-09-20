@@ -195,7 +195,7 @@ bool boxm_render_bit_scene_manager::set_args(unsigned kernel_index=0)
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output)"))
       return 0;
     //cum sum lookup buffer
-    status = clSetKernelArg(kernels_[0],i++,this->bni_*this->bnj_*11*sizeof(cl_uchar), 0);
+    status = clSetKernelArg(kernels_[0],i++,this->bni_*this->bnj_*10*sizeof(cl_uchar), 0);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cumsum buff)"))
       return 0;
     //imIndex buffer
