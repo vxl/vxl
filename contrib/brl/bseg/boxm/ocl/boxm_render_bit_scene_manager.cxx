@@ -198,6 +198,10 @@ bool boxm_render_bit_scene_manager::set_args(unsigned kernel_index=0)
     status = clSetKernelArg(kernels_[0],i++,this->bni_*this->bnj_*11*sizeof(cl_uchar), 0);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cumsum buff)"))
       return 0;
+    //imIndex buffer
+    status = clSetKernelArg(kernels_[0],i++,this->bni_*this->bnj_*sizeof(cl_int), 0);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (imIndex buff)"))
+      return 0;
     //output buffer
     status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&output_buf_);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output)"))
@@ -399,8 +403,8 @@ bool boxm_render_bit_scene_manager::run(bool rerender)
             <<output_[4*i+1]<<' '
             <<output_[4*i+2]<<' '
             <<output_[4*i+3]<<'\n';
-  vcl_cout<<"MATCH?\n"
-          <<(int)scene_->tree_buffers_(4, 10)[0]<<' '<<(int)scene_->tree_buffers_(33,11)[0]<<vcl_endl;
+  //vcl_cout<<"MATCH?\n"
+  //        <<(int)scene_->tree_buffers_(4, 10)[0]<<' '<<(int)scene_->tree_buffers_(33,11)[0]<<vcl_endl;
   //--------------------------------------------------------------------
 #endif // DEBUG
 

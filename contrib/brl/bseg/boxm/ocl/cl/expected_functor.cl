@@ -58,8 +58,7 @@ void step_cell_render_opt2(__global int2   * cell_data,
                                     int      data_ptr, 
                                     float    d, 
                                     float  * vis,
-                                    float  * expected_i,
-                                    float  * intensity_n)
+                                    float  * expected_i)
 {
   float alpha = alpha_data[data_ptr];
   float diff_omega=exp(-alpha*d);
@@ -73,7 +72,6 @@ void step_cell_render_opt2(__global int2   * cell_data,
   }
   float omega=(*vis)*(1-diff_omega);
   (*vis)*=diff_omega;
-  (*intensity_n) +=  omega;
   (*expected_i)+=expected_int_cell*omega;
 }
 

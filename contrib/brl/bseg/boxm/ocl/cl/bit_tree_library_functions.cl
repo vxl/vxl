@@ -77,33 +77,6 @@ uchar tree_bit_at(int rIndex, __local uchar* tree, int index)
   return (1<<bi & tree[rIndex+i])>>bi; // ? 1 : 0;
 }
 
-/*
-uchar tree_bit_at(int rIndex, __local uchar* tree, int index)
-{
-  //make sure it's in bounds - all higher cells are leaves and thus 0
-  if (index > 72)
-    return 0;
- 
-  //root is special case
-  if (index == 0)
-    return tree[rIndex+0];
- 
-  //second generation is sort of a special case (speeds up code)
-  if (index < 9)
-    return (1<<(index-1) & tree[rIndex+1])>>(index-1); // ? 1 : 0;
- 
-  int temp=(index-9);
-  temp=temp>>3;
-  int i=temp+2;
-  int bi =temp- temp<<3;
-  //third or 4th generation treated in same way,
-  //int i  = ((index-9)/8 + 2); //byte index i
-  //int bi = (index-9)%8;
-  return (1<<bi & tree[rIndex+i])>>bi; // ? 1 : 0;
-}
-*/
-
-
 void set_tree_bit_at(__local uchar* tree, int index, bool val)
 {
   if (index > 72)
@@ -188,9 +161,9 @@ int data_index_opt(int rIndex, __local uchar* tree, ushort bit_index, __constant
 int data_index_opt2(__local uchar* tree, ushort bit_index, __constant uchar* bit_lookup, __local uchar* cumsum, int *cumIndex)
 {
   //root and first gen are special case, return just the root offset + bit_index 
-  int count_offset=(int)as_ushort((uchar2) (tree[11], tree[10]));
+  int count = (int)as_ushort((uchar2) (tree[11], tree[10]));
   if(bit_index < 9)
-    return count_offset + bit_index;
+    return count + bit_index;
     
   //otherwise get parent index, parent byte index and relative bit index
   uchar oneuplevel        = (bit_index-1)>>3;           //Bit_index of parent bit
@@ -205,9 +178,111 @@ int data_index_opt2(__local uchar* tree, ushort bit_index, __constant uchar* bit
   uchar bits_before_parent = tree[byte_index]<<sub_bit_index; //number of bits before parent bit [0-6] in parent byte
   bits_before_parent       = bit_lookup[bits_before_parent];
   uchar finestleveloffset = (bit_index-1)&(8-1);              //[0-7] bit index of cell being looked up (@bit_index)
-  int count = (cumsum[byte_index-1] + bits_before_parent)*8 + 1 + finestleveloffset; 
-  return count + count_offset;
+  count += (cumsum[byte_index-1] + bits_before_parent)*8 + 1 + finestleveloffset; 
+  return count;
+
 }
+
+
+#if 1
+//takes three floats instaed of float4s
+//TODO optimize point here - makei t a float 3 instead of a float4
+ushort traverse_three(__local uchar* tree, 
+                      float pointx, float pointy, float pointz, 
+                      float *cell_minx, float *cell_miny, float *cell_minz, float *cell_len )
+{
+  // vars to replace "tree_bit_at"
+  //force 1 register: curr = (bit, child_offset, depth, c_offset)
+  int curr_bit = convert_int(tree[0]);
+  int child_offset = 0;
+  int depth = 0;  
+  
+  //bit index to be returned
+  ushort bit_index = 0;
+  
+  //clamp point
+  pointx = clamp(pointx, 0.0001, 0.9999);
+  pointy = clamp(pointy, 0.0001, 0.9999);
+  pointz = clamp(pointz, 0.0001, 0.9999);
+
+  // while the curr node has children
+  while(curr_bit && depth < 3) {
+    //determine child offset and bit index for given point
+    pointx += pointx;                                             //point = point*2
+    pointy += pointy;
+    pointz += pointz;                                           
+    int4 code =  (int4) (convert_int_rtn(pointx) & 1, 
+                         convert_int_rtn(pointy) & 1,
+                         convert_int_rtn(pointz) & 1, 0);         //code.xyz = lsb of floor(point.xyz)
+    int c_index = code.x + (code.y<<1) + (code.z<<2);             //c_index = binary(zyx)    
+    bit_index = (8*bit_index + 1) + c_index;                      //i = 8i + 1 + c_index
+    
+    //update value of curr_bit and level
+    curr_bit = (1<<c_index) & tree[(depth+1 + child_offset)];      //int curr_byte = (curr.z + 1) + curr.y; 
+    child_offset = c_index;
+    depth++;
+  }
+  
+  // calculate cell bounding box 
+  (*cell_len) = 1.0 / (float) (1<<depth);
+  (*cell_minx) = floor(pointx) * (*cell_len);
+  (*cell_miny) = floor(pointy) * (*cell_len);
+  (*cell_minz) = floor(pointz) * (*cell_len);
+  return bit_index;
+}
+
+#endif
+
+
+#if 0
+//takes three floats instaed of float4s
+//TODO optimize point here - makei t a float 3 instead of a float4
+ushort traverse_three(__local uchar* tree, 
+                      float pointx, float pointy, float pointz, 
+                      float *cell_minx, float *cell_miny, float *cell_minz, float *cell_len )
+{
+  // vars to replace "tree_bit_at"
+  //force 1 register
+  // curr = (bit, child_offset, depth, c_offset)
+  uchar4 curr = (uchar4) (tree[0], 0, 0, 0);
+  
+  //bit index to be returned
+  ushort bit_index = 0;
+  
+  //clamp point
+  pointx = clamp(pointx, 0.0001, 0.9999);
+  pointy = clamp(pointy, 0.0001, 0.9999);
+  pointz = clamp(pointz, 0.0001, 0.9999);
+
+  // while the curr node has children
+  while(curr.x && curr.z < 3) {
+    //determine child offset and bit index for given point
+    pointx += pointx;                                             //point = point*2
+    pointy += pointy;
+    pointz += pointz;       
+    uchar4 code = (uchar4) (convert_uchar_rtn(pointx) & 1, 
+                            convert_uchar_rtn(pointy) & 1,
+                            convert_uchar_rtn(pointz) & 1, 0);  //code.xyz = lsb of floor(point.xyz)
+    curr.w = code.x + (code.y<<1) + (code.z<<2);                //c_index = binary(zyx)    
+    bit_index = (8*bit_index + 1) + curr.w;                     //i = 8i + 1 + c_index
+    
+    //update value of curr_bit and level
+    //int curr_byte = (curr.z + 1) + curr.y; 
+    curr.x  = (1<<curr.w) & tree[(curr.z+1+curr.y)];
+    curr.y = curr.w;
+    curr.z++;
+  }
+  
+  // calculate cell bounding box 
+  (*cell_len) = 1.0 / (float) (1<<curr.z);
+  (*cell_minx) = floor(pointx) * (*cell_len);
+  (*cell_miny) = floor(pointy) * (*cell_len);
+  (*cell_minz) = floor(pointz) * (*cell_len);
+  return bit_index;
+}
+#endif
+
+#if 0
 
 //-----------------------------------------------------------------
 // New traverse: uses only target point and returns cell index
@@ -298,93 +373,6 @@ int traverse_opt_len(int rIndex, __local uchar* tree, float4 point, float4 *cell
   return bit_index;
 }
 
-//takes three floats instaed of float4s
-//TODO optimize point here - makei t a float 3 instead of a float4
-ushort traverse_three(__local uchar* tree, 
-                      float pointx, float pointy, float pointz, 
-                      float *cell_minx, float *cell_miny, float *cell_minz, float *cell_len )
-{
-  // vars to replace "tree_bit_at"
-  //force 1 register: curr = (bit, child_offset, depth, c_offset)
-  int curr_bit = convert_int(tree[0]);
-  int child_offset = 0;
-  int depth = 0;  
-  
-  //bit index to be returned
-  ushort bit_index = 0;
-  
-  //clamp point
-  pointx = clamp(pointx, 0.0001, 0.9999);
-  pointy = clamp(pointy, 0.0001, 0.9999);
-  pointz = clamp(pointz, 0.0001, 0.9999);
-
-  // while the curr node has children
-  while(curr_bit && depth < 3) {
-    //determine child offset and bit index for given point
-    pointx += pointx;                                             //point = point*2
-    pointy += pointy;
-    pointz += pointz;                                           
-    int4 code =  (int4) (convert_int_rtn(pointx) & 1, 
-                         convert_int_rtn(pointy) & 1,
-                         convert_int_rtn(pointz) & 1, 0);         //code.xyz = lsb of floor(point.xyz)
-    int c_index = code.x + (code.y<<1) + (code.z<<2);             //c_index = binary(zyx)    
-    bit_index = (8*bit_index + 1) + c_index;                      //i = 8i + 1 + c_index
-    
-    //update value of curr_bit and level
-    curr_bit = (1<<c_index) & tree[(depth+1 + child_offset)];      //int curr_byte = (curr.z + 1) + curr.y; 
-    child_offset = c_index;
-    depth++;
-  }
-  
-  // calculate cell bounding box 
-  (*cell_len) = 1.0 / (float) (1<<depth);
-  (*cell_minx) = floor(pointx) * (*cell_len);
-  (*cell_miny) = floor(pointy) * (*cell_len);
-  (*cell_minz) = floor(pointz) * (*cell_len);
-  return bit_index;
-}
-
-
-
-#if 0
-//takes three floats instaed of float4s
-//TODO optimize point here - makei t a float 3 instead of a float4
-ushort traverse_three(int rIndex, __local uchar* tree, float4 point, 
-                   float *cell_minx, float *cell_miny, float *cell_minz, float *cell_len )
-{
-  // vars to replace "tree_bit_at"
-  //force 1 register
-  // curr = (bit, child_offset, depth, c_offset)
-  uchar4 curr = (uchar4) (tree[rIndex], 0, 0, 0);
-  
-  //bit index to be returned
-  ushort bit_index = 0;
-  
-  //clamp point
-  point = clamp(point, 0.0001, 0.9999);
-
-  // while the curr node has children
-  while(curr.x && curr.z < 3) {
-    //determine child offset and bit index for given point
-    point += point;                                             //point = point*2
-    uchar4 code = (convert_uchar4_rtn(point) & (uchar4) 1);     //code.xyz = lsb of floor(point.xyz)
-    curr.w = code.x + (code.y<<1) + (code.z<<2);                //c_index = binary(zyx)    
-    bit_index = (8*bit_index + 1) + curr.w;                     //i = 8i + 1 + c_index
-    
-    //update value of curr_bit and level
-    //int curr_byte = (curr.z + 1) + curr.y; 
-    curr.x  = (1<<curr.w) & tree[rIndex+ (curr.z+1+curr.y)];
-    curr.y = curr.w;
-    curr.z++;
-  }
-  
-  // calculate cell bounding box 
-  (*cell_len) = 1.0 / (float) (1<<curr.z);
-  (*cell_minx) = floor(point.x) * (*cell_len);
-  (*cell_miny) = floor(point.y) * (*cell_len);
-  (*cell_minz) = floor(point.z) * (*cell_len);
-  return bit_index;
-}
 
 //-----------------------------------------------------------------
 // New traverse: uses only target point and returns cell index
