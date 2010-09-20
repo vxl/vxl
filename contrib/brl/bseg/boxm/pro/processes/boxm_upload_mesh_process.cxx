@@ -21,6 +21,7 @@
 #include <boxm/boxm_scene_base.h>
 #include <boxm/algo/boxm_upload_mesh.h>
 #include <boxm/algo/boxm_fill_in_mesh.h>
+#include <boxm/util/boxm_utils.h>
 #include <boxm/boxm_scene.h>
 #include <boct/boct_tree.h>
 #include <vul/vul_file_iterator.h>
