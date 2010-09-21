@@ -21,6 +21,7 @@
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/algo/vgl_rotation_3d.h>
+#include <vgl/vgl_ray_3d.h>
 #include <vcl_iosfwd.h>
 
 #include "vpgl_proj_camera.h"
@@ -82,6 +83,16 @@ class vpgl_perspective_camera : public vpgl_proj_camera<T>
 
   //: Finite backprojection.
   vgl_line_3d_2_points<T> backproject( const vgl_point_2d<T>& image_point ) const;
+  //: Finite backprojection.
+  vgl_line_3d_2_points<T> backproject(T u, T v) const
+    {return backproject(vgl_point_2d<T>(u, v));}
+
+  //: Finite ray backprojection.
+  vgl_ray_3d<T> backproject_ray( const vgl_point_2d<T>& image_point ) const;
+
+  //: Finite ray backprojection at u v.
+  vgl_ray_3d<T> backproject_ray(T u, T v) const
+    {return backproject_ray(vgl_point_2d<T>(u, v));}
 
   //: Compute the principal axis.
   // i.e. the vector perpendicular to the image plane pointing towards the front of the camera.
@@ -101,7 +112,7 @@ class vpgl_perspective_camera : public vpgl_proj_camera<T>
   const vgl_rotation_3d<T>& get_rotation() const{ return R_; }
 
   //: Rotate the camera about its center such that it looks at the given point
-  //  The camera should also be rotated about its principle axis such that
+  //  The camera should also be rotated about its principal axis such that
   //  the vertical image direction is closest to \p up in the world
   void look_at(const vgl_homg_point_3d<T>& point,
                const vgl_vector_3d<T>& up = vgl_vector_3d<T>(0,0,1));
