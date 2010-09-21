@@ -15,6 +15,7 @@
 #include <vgl/vgl_homg_line_3d_2_points.h>
 #include <vgl/vgl_homg_plane_3d.h>
 #include <vgl/algo/vgl_h_matrix_3d.h>
+#include <vgl/vgl_ray_3d.h>
 
 static void test_proj_camera()
 {
@@ -73,6 +74,13 @@ static void test_proj_camera()
   vgl_homg_line_3d_2_points<double> l3 = P1.backproject( y3 );
   vgl_homg_point_2d<double> y3b = P1.project( l3.point_finite() );
   TEST_NEAR( "point backprojection", y3.x() * y3b.w(), y3b.x() * y3.w(), 1e-06 );
+  vgl_ray_3d<double> r = P1.backproject_ray( y3);
+  vgl_point_3d<double> c(P1.camera_center()); 
+  bool org = c==r.origin();
+  vgl_vector_3d<double> dirr = r.direction();
+  double dp = dot_product(l3.direction(), dirr);
+  TEST("Ray Origin", org, true);
+  TEST_NEAR("backprojected ray direction", dp, 1.0, 0.001);
   //Point backprojection - ray direction
   double actual_cam_list[12] ={437.5, 128.5575, -153.20889, 20153.20898,
                                0.0,  -206.5869, -434.42847, 20434.42968,

@@ -122,6 +122,9 @@ class vpgl_proj_camera : public vpgl_camera<T>
   { return project( world_line ); }
 
   //: Find the 3d ray that goes through the camera center and the provided image point.
+virtual  vgl_ray_3d<T> backproject_ray( const vgl_homg_point_2d<T>& image_point ) const;
+
+  //: Find the 3d ray that goes through the camera center and the provided image point.
 virtual  vgl_homg_line_3d_2_points<T> backproject( const vgl_homg_point_2d<T>& image_point ) const;
 
 

@@ -8,6 +8,7 @@
 #include <vcl_iostream.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_ray_3d.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/io/vnl_io_matrix_fixed.h>
 #include <vsl/vsl_binary_loader.h>
@@ -150,7 +151,20 @@ vgl_homg_line_3d_2_points<T> vpgl_proj_camera<T>::backproject(
     return vgl_homg_line_3d_2_points<T>( camera_center(), wp );
   return vgl_homg_line_3d_2_points<T>( wp, camera_center() );
 }
-
+  //: Find the 3d ray that goes through the camera center and the provided image point.
+template <class T>
+vgl_ray_3d<T> vpgl_proj_camera<T>::backproject_ray(const vgl_homg_point_2d<T>& image_point ) const{
+  vnl_vector_fixed<T,4> vnl_wp = svd()->solve(
+    vnl_vector_fixed<T,3>( image_point.x(), image_point.y(), image_point.w() ).as_ref() );
+  vgl_homg_point_3d<T> wp( vnl_wp[0], vnl_wp[1], vnl_wp[2], vnl_wp[3] );
+  //in this case the world point defines a direction
+  if ( wp.ideal(.000001f) ){
+    vgl_vector_3d<T> dir(wp.x(), wp.y(), wp.z());
+    return vgl_ray_3d<T>(this->camera_center(), dir);
+  }
+  vgl_point_3d<T> wpn(wp);//normalizes
+  return vgl_ray_3d<T>(this->camera_center(), wpn);
+}
 
 //------------------------------------
 template <class T>

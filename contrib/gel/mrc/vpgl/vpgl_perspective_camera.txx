@@ -93,7 +93,13 @@ vgl_line_3d_2_points<T> vpgl_perspective_camera<T>::backproject(
   return vgl_line_3d_2_points<T>( camera_center_, wp );
 }
 
-
+template <class T>
+vgl_ray_3d<T> vpgl_perspective_camera<T>::
+backproject_ray( const vgl_point_2d<T>& image_point ) const
+{
+  vgl_line_3d_2_points<T> l2 = this->backproject(image_point);
+  return vgl_ray_3d<T>(l2.point1(), l2.direction());
+}
 //-------------------------------------------
 template <class T>
 vgl_vector_3d<T> vpgl_perspective_camera<T>::principal_axis() const
