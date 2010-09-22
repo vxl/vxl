@@ -5,9 +5,9 @@ void step_cell(__global float16* cell_data, int data_ptr,
   float16 data = cell_data[data_ptr];
   // TODO - fix it
 
-  float expected_int_cell = data.s1*data.s3+data.s5*data.s7+data.s9*(1-data.s3-data.s7);
+  float expected_int_cell = data.s1*data.s3+data.s5*data.s7+data.s9*(1.0f-data.s3-data.s7);
 
-  if (data.s0<0) return;
+  if (data.s0<0.0f) return;
 
   //float expected_int_cell = data.s3;
   float alpha_integral = (*data_return).x;
@@ -33,9 +33,9 @@ void step_cell_render_opt(__global uchar8* cell_data, __global float* alpha_data
   float alpha = alpha_data[data_ptr];
   float expected_int_cell = ((data.s0) * (data.s2)
                             +(data.s3) * (data.s5)
-                            +(data.s6) * (255.0 - data.s2 - data.s5))/255.0/255.0;
+                            +(data.s6) * (255.0f - data.s2 - data.s5))/255.0f/255.0f;
 
-  if (alpha<0) return;
+  if (alpha<0.0f) return;
 
   //float expected_int_cell = data.s3;
   float alpha_integral = (*data_return).x;
@@ -53,6 +53,7 @@ void step_cell_render_opt(__global uchar8* cell_data, __global float* alpha_data
   (*data_return).w = intensity_norm + omega;
 }
 
+#ifndef CYCLECOUNT
 void step_cell_render_opt2(__global int2   * cell_data, 
                            __global float  * alpha_data, 
                                     int      data_ptr, 
@@ -63,17 +64,44 @@ void step_cell_render_opt2(__global int2   * cell_data,
   float alpha = alpha_data[data_ptr];
   float diff_omega=exp(-alpha*d);
   float expected_int_cell=0.0f;
-  if(diff_omega<0.995)
+  if(diff_omega<0.995f)
   {
       uchar8 data = as_uchar8(cell_data[data_ptr]);
       expected_int_cell = ((data.s0) * (data.s2)
                           +(data.s3) * (data.s5)
-                          +(data.s6) * (255.0 - data.s2 - data.s5))/255.0/255.0;
+                          +(data.s6) * (255.0f - data.s2 - data.s5))*1.53787005e-5f; // 1/255.0f/255.0f;
   }
-  float omega=(*vis)*(1-diff_omega);
-  (*vis)*=diff_omega;
+  float omega=(*vis) * (1.0f - diff_omega);
+  (*vis) *= diff_omega;
   (*expected_i)+=expected_int_cell*omega;
 }
+#else
+void step_cell_render_opt2(__global int2   * cell_data, 
+                           __global float  * alpha_data, 
+                                    int      data_ptr, 
+                                    float    d, 
+                                    float  * vis,
+                                    float  * expected_i,
+                                    int    * cycleCount)
+{
+  float alpha = alpha_data[data_ptr];
+  float diff_omega=exp(-alpha*d);
+  float expected_int_cell=0.0f;
+  *cycleCount += 11;
+  if(diff_omega<0.995f)
+  {
+      uchar8 data = as_uchar8(cell_data[data_ptr]);
+      expected_int_cell = ((data.s0) * (data.s2)
+                          +(data.s3) * (data.s5)
+                          +(data.s6) * (255.0f - data.s2 - data.s5))/255.0f/255.0f;
+      *cycleCount += 12;
+  }
+  float omega=(*vis) * (1.0f - diff_omega);
+  (*vis) *= diff_omega;
+  (*expected_i)+=expected_int_cell*omega;
+  *cycleCount += 9;
+}
+#endif
 
 #if 0
 //Uses float data
@@ -85,7 +113,7 @@ void step_cell_render(__global float8* cell_data, __global float* alpha_data,int
 
   float expected_int_cell = data.s0*data.s2+data.s3*data.s5+data.s6*(1-data.s2-data.s5);
 
-  if (alpha<0) return;
+  if (alpha < 0.0f) return;
 
   //float expected_int_cell = data.s3;
   float alpha_integral = (*data_return).x;

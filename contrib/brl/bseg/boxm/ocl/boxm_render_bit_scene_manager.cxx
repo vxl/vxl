@@ -363,10 +363,8 @@ bool boxm_render_bit_scene_manager::start(bool set_gl_buffer)
 
 bool boxm_render_bit_scene_manager::run(bool rerender)
 {
-  cl_int status = CL_SUCCESS;
-
   // set up a command queue
-
+  cl_int status = CL_SUCCESS;
   cl_event ceEvent;
   status = clEnqueueNDRangeKernel(command_queue_,this->kernels_[0], 2,NULL,globalThreads,localThreads,0,NULL,&ceEvent);
 
@@ -383,8 +381,77 @@ bool boxm_render_bit_scene_manager::run(bool rerender)
   vcl_cout<<"GPU time is "<<gpu_time_<<vcl_endl;
   status = clReleaseEvent(ceEvent);
 
-#ifdef DEBUG
-  //-------- DEBUG READ AND PRINT --------------------------------------
+#if 0
+  float wasted[250];
+  for(int i=0; i<250; i++) wasted[i] = 0.0;
+   
+  for(int layer = 0; layer < 250; layer++) {
+    vcl_cout<<"Layer: "<<layer<<vcl_endl;
+    
+    //set final arg (layer cutoff)
+    status = clSetKernelArg(kernels_[0], 14, sizeof(cl_int), &layer);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (layer number)"))
+      return 0;
+    status = clEnqueueNDRangeKernel(command_queue_,this->kernels_[0], 2,NULL,globalThreads,localThreads,0,NULL,&ceEvent);
+    if (!this->check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed. "+error_to_string(status)))
+      return SDK_FAILURE;
+    status = clFinish(command_queue_);
+    if (!this->check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status)))
+      return SDK_FAILURE;
+    cl_ulong tstart,tend;
+    status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
+    status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
+    gpu_time_= (double)1.0e-6 * (tend - tstart); // convert nanoseconds to milliseconds
+    vcl_cout<<"GPU time is "<<gpu_time_<<vcl_endl;
+    status = clReleaseEvent(ceEvent);
+    
+    
+    //-------- Calc wasted cycle statistics ------------------------------------
+    this->read_output_image();
+    float wastedCycles = 0.0;
+    
+    //for each work group, offset by (wi,wj)
+    for(int row=0; row<this->wnj_; row+=8) {
+      for(int col=0; col<this->wni_; col+=8) {
+        
+        //calculate the max clock time
+        float maxClock = 0;
+        for(int i=0; i<this->bni_; i++) {
+          for(int j=0; j<this->bnj_; j++) {
+            int index = this->wni_*(i+row) + (j+col); 
+            if(image_[index] > maxClock)
+              maxClock = image_[index];
+          }
+        } 
+        
+        //find ave distance to max clock cycle over threadblock
+        float sum = 0;
+        for(int i=0; i<this->bni_; i++) {
+          for(int j=0; j<this->bnj_; j++) {
+            int index = this->wni_*(i+row) + (j+col); 
+            sum += (maxClock - image_[index]);
+          }
+        } 
+        sum = sum / (this->bnj_*this->bni_);
+        wastedCycles += sum;
+      }
+    }
+    wasted[layer] = wastedCycles;
+  }
+  for(int i=0; i<250; i++)
+    vcl_cout<<wasted[i]<<"   ";
+  vcl_cout<<'\n';
+  
+  
+  float total = 0.0;
+  for(int i=0; i<250; i++)
+    total += wasted[i];
+  vcl_cout<<"TOTAL NUMBER OF CYCLES FOR RENDER: "<<total<<vcl_endl;
+
+  
+#endif
+
+#ifdef DEBUG  
   cl_event events[2];
   status = clEnqueueReadBuffer(command_queue_,output_buf_,CL_TRUE,
                                0,numbuffer_*sizeof(cl_float4),
@@ -507,7 +574,6 @@ bool boxm_render_bit_scene_manager::run_scene()
 
 bool boxm_render_bit_scene_manager::read_output_image()
 {
-  vcl_cout<<"READING OUTPUT IMAGE "<<vcl_endl;
   cl_event events[1];
 
   // Enqueue readBuffers

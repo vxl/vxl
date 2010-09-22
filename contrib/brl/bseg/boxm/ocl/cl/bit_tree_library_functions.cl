@@ -157,11 +157,17 @@ int data_index_opt(int rIndex, __local uchar* tree, ushort bit_index, __constant
   return count + count_offset;
 }
 
+
+
+//If cyclecount isn't defined, i.e. you're not keeping track, define different functions
+#ifndef CYCLECOUNT
+
 //optimized to use cumulative sum counts
 int data_index_opt2(__local uchar* tree, ushort bit_index, __constant uchar* bit_lookup, __local uchar* cumsum, int *cumIndex)
 {
   //root and first gen are special case, return just the root offset + bit_index 
   int count = (int)as_ushort((uchar2) (tree[11], tree[10]));
+  
   if(bit_index < 9)
     return count + bit_index;
     
@@ -182,13 +188,11 @@ int data_index_opt2(__local uchar* tree, ushort bit_index, __constant uchar* bit
 
 }
 
-
-#if 1
 //takes three floats instaed of float4s
 //TODO optimize point here - makei t a float 3 instead of a float4
 ushort traverse_three(__local uchar* tree, 
                       float pointx, float pointy, float pointz, 
-                      float *cell_minx, float *cell_miny, float *cell_minz, float *cell_len )
+                      float *cell_minx, float *cell_miny, float *cell_minz, float *cell_len)
 {
   // vars to replace "tree_bit_at"
   //force 1 register: curr = (bit, child_offset, depth, c_offset)
@@ -200,9 +204,88 @@ ushort traverse_three(__local uchar* tree,
   ushort bit_index = 0;
   
   //clamp point
-  pointx = clamp(pointx, 0.0001, 0.9999);
-  pointy = clamp(pointy, 0.0001, 0.9999);
-  pointz = clamp(pointz, 0.0001, 0.9999);
+  pointx = clamp(pointx, 0.0001f, 0.9999f);
+  pointy = clamp(pointy, 0.0001f, 0.9999f);
+  pointz = clamp(pointz, 0.0001f, 0.9999f);
+  
+  // while the curr node has children
+  while(curr_bit && depth < 3) {
+    //determine child offset and bit index for given point
+    pointx += pointx;                                             //point = point*2
+    pointy += pointy;
+    pointz += pointz;                                           
+    int4 code =  (int4) (convert_int_rtn(pointx) & 1, 
+                         convert_int_rtn(pointy) & 1,
+                         convert_int_rtn(pointz) & 1, 0);         //code.xyz = lsb of floor(point.xyz)
+    int c_index = code.x + (code.y<<1) + (code.z<<2);             //c_index = binary(zyx)    
+    bit_index = (8*bit_index + 1) + c_index;                      //i = 8i + 1 + c_index
+    
+    //update value of curr_bit and level
+    curr_bit = (1<<c_index) & tree[(depth+1 + child_offset)];      //int curr_byte = (curr.z + 1) + curr.y; 
+    child_offset = c_index;
+    depth++;
+    
+  }
+  // calculate cell bounding box 
+  (*cell_len) = 1.0 / (float) (1<<depth);
+  (*cell_minx) = floor(pointx) * (*cell_len);
+  (*cell_miny) = floor(pointy) * (*cell_len);
+  (*cell_minz) = floor(pointz) * (*cell_len);
+  return bit_index;
+}
+
+#else
+//optimized to use cumulative sum counts
+int data_index_opt2(__local uchar* tree, ushort bit_index, __constant uchar* bit_lookup, __local uchar* cumsum, int *cumIndex, int *cycleCount)
+{
+  //root and first gen are special case, return just the root offset + bit_index 
+  int count = (int)as_ushort((uchar2) (tree[11], tree[10]));
+  *cycleCount+=8;
+  
+  if(bit_index < 9)
+    return count + bit_index;
+    
+  //otherwise get parent index, parent byte index and relative bit index
+  uchar oneuplevel        = (bit_index-1)>>3;           //Bit_index of parent bit
+  uchar byte_index        = ((oneuplevel-1)>>3) +1;     //byte_index of parent bit
+  uchar sub_bit_index     = 8-((oneuplevel-1)&(8-1));   //[0-7] bit index of parent bit
+  *cycleCount += 12;
+
+  for(; (*cumIndex) < byte_index; ++(*cumIndex))  {
+    cumsum[(*cumIndex)] = cumsum[(*cumIndex)-1] + bit_lookup[tree[(*cumIndex)]];
+    *cycleCount += 14;
+  }
+
+  uchar bits_before_parent = tree[byte_index]<<sub_bit_index; //number of bits before parent bit [0-6] in parent byte
+  bits_before_parent       = bit_lookup[bits_before_parent];
+  uchar finestleveloffset = (bit_index-1)&(8-1);              //[0-7] bit index of cell being looked up (@bit_index)
+  count += (cumsum[byte_index-1] + bits_before_parent)*8 + 1 + finestleveloffset; 
+  *cycleCount += 17;
+  return count;
+
+}
+
+//takes three floats instaed of float4s
+//TODO optimize point here - makei t a float 3 instead of a float4
+ushort traverse_three(__local uchar* tree, 
+                      float pointx, float pointy, float pointz, 
+                      float *cell_minx, float *cell_miny, float *cell_minz, float *cell_len, int *cycleCount)
+{
+  // vars to replace "tree_bit_at"
+  //force 1 register: curr = (bit, child_offset, depth, c_offset)
+  int curr_bit = convert_int(tree[0]);
+  int child_offset = 0;
+  int depth = 0;  
+  
+  //bit index to be returned
+  ushort bit_index = 0;
+  
+  //clamp point
+  pointx = clamp(pointx, 0.0001f, 0.9999f);
+  pointy = clamp(pointy, 0.0001f, 0.9999f);
+  pointz = clamp(pointz, 0.0001f, 0.9999f);
+  
+  *cycleCount += 15; 
 
   // while the curr node has children
   while(curr_bit && depth < 3) {
@@ -220,6 +303,8 @@ ushort traverse_three(__local uchar* tree,
     curr_bit = (1<<c_index) & tree[(depth+1 + child_offset)];      //int curr_byte = (curr.z + 1) + curr.y; 
     child_offset = c_index;
     depth++;
+    
+    *cycleCount += 32;
   }
   
   // calculate cell bounding box 
@@ -227,9 +312,9 @@ ushort traverse_three(__local uchar* tree,
   (*cell_minx) = floor(pointx) * (*cell_len);
   (*cell_miny) = floor(pointy) * (*cell_len);
   (*cell_minz) = floor(pointz) * (*cell_len);
+  *cycleCount += 24; 
   return bit_index;
 }
-
 #endif
 
 
