@@ -72,9 +72,8 @@ bool boxm_update_bit_scene_manager::init_scene(boxm_ocl_bit_scene *scene,
   scene->get_alphas(cell_alpha_);
   scene->get_mixture(cell_mixture_);
   scene->get_num_obs(cell_num_obs_);
-  for (int i=0;i<numData*4;)   //init aux data to zero
-    for (int j=0;j<4;++i,++j)
-      cell_aux_data_[i]=0.0;
+  for(int i=0; i<numData*4; i++)   //init aux data to zero
+    cell_aux_data_[i] = 0.0; 
 
   //allocate and initialize bit lookup
   bit_lookup_ = (cl_uchar *) boxm_ocl_utils::alloc_aligned(256,sizeof(cl_uchar),16);
@@ -213,9 +212,9 @@ bool boxm_update_bit_scene_manager::set_scene_buffers()
 
   //data (aux_data)
   cell_aux_data_buf_ = clCreateBuffer(this->context_,
-                                      CL_MEM_READ_WRITE,
+                                      CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR,
                                       datCells * sizeof(cl_float4),
-                                      NULL,
+                                      cell_aux_data_,
                                       &status);
   if (!this->check_val(status, CL_SUCCESS, "clCreateBuffer (cell_aux_data) failed."))
     return false;
