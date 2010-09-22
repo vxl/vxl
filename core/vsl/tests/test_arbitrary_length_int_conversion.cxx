@@ -168,6 +168,7 @@ void test_explicit_int_io()
 
   vcl_stringstream ss(vcl_ios_in | vcl_ios_out | vcl_ios_binary);
   const char *b= ss.str().c_str();
+  TEST("stringstream buffer is available (and empty)", b[0], '\0');
   {
     vsl_b_ostream bss(&ss);
     TEST("Created stringstream for writing", (!bss), false);
@@ -177,7 +178,8 @@ void test_explicit_int_io()
       vsl_b_write_uint_64(bss, i*mult);
     }
   }
-  TEST("stringstream buffer is available (and empty)", b[0], '\0');
+  // 6 bytes vsl_overhead
+  TEST_NEAR("stringstream buffer is expected length", ss.str().size(), 65536*10+6,0);
 
   vcl_stringstream ss2(ss.str());
   {
