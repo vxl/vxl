@@ -163,23 +163,8 @@ void test_explicit_int_io()
            << "**********************************\n";
 
   unsigned long i;
+  const vcl_size_t mult = 1ull << 48;
 
-  vsl_b_ofstream bfs_out("vsl_explicit_int_io_test.bvl.tmp");
-  TEST("Created vsl_explicit_int_io_test.bvl.tmp for writing",
-       (!bfs_out), false);
-  for (i = 0; i < 65536; ++i)
-    vsl_b_write_uint_16(bfs_out, i);
-  bfs_out.close();
-
-  vsl_b_ifstream bfs_in("vsl_explicit_int_io_test.bvl.tmp");
-  TEST("Opened vsl_explicit_int_io_test.bvl.tmp for reading",
-       (!bfs_in), false);
-  for (i = 0; i < 65536; ++i)
-  {
-    unsigned long n;
-    vsl_b_read_uint_16(bfs_in, n);
-    if (n != i) break;
-  }
 
   vcl_stringstream ss(vcl_ios_in | vcl_ios_out | vcl_ios_binary);
   const char *b= ss.str().c_str();
@@ -187,7 +172,10 @@ void test_explicit_int_io()
     vsl_b_ostream bss(&ss);
     TEST("Created stringstream for writing", (!bss), false);
     for (i = 0; i < 65536; ++i)
+    {
       vsl_b_write_uint_16(bss, i);
+      vsl_b_write_uint_64(bss, i*mult);
+    }
   }
   TEST("stringstream buffer is available (and empty)", b[0], '\0');
 
@@ -200,17 +188,17 @@ void test_explicit_int_io()
       unsigned long n;
       vsl_b_read_uint_16(bss, n);
       if (n != i) break;
+      vcl_size_t n64;
+      vsl_b_read_uint_64(bss, n64);
+      if (n64 != i*mult) break;
     }
-    TEST("Finished reading file successfully", (!bss), false);
+    TEST("Finished reading stringstream successfully", (!bss), false);
   }
 
   TEST("Checking that the results are correct", i, 65536);
   if (i != 65536)
     vcl_cout << "Failed at number " << i <<vcl_endl;
-  TEST("Finished reading file successfully", (!bfs_in), false);
-  bfs_in.close();
 
-  vpl_unlink ("vsl_explicit_int_io_test.bvl.tmp");
 }
 
 
@@ -256,9 +244,9 @@ void test_extreme_int_io()
 
 void test_arbitrary_length_int_conversion()
 {
+  test_explicit_int_io();
   test_arbitrary_length_int_conversion_ushort();
   test_arbitrary_length_int_conversion_short();
-  test_explicit_int_io();
   test_extreme_int_io();
 //  test_arbitrary_length_int_conversion_int();
 }

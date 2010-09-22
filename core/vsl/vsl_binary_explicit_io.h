@@ -677,4 +677,37 @@ inline void vsl_b_read_int_16(vsl_b_istream& is, long& n )
 }
 
 
+//: Write a vcl_size_t as 64 bits to vsl_b_ostream
+// Will assert if your vcl_size_t cannot be represented in 64 bits (e.g. on some 128 bit
+// platforms).
+//
+// Warning: This function should be used infrequently and carefully. Under
+// all normal circumstances, the generic vsl_b_read and vsl_b_write in
+// vsl_binary_io.h will be perfectly adequate.
+//
+// You must use vsl_b_read_uint_64() to read the value saved with this
+// function.
+inline void vsl_b_write_uint_64(vsl_b_ostream& os, vcl_size_t n )
+{
+  assert(sizeof(vcl_size_t) <= 8 || (n >> 32) >> 32 == 0);
+  vsl_swap_bytes(( char* )&n, sizeof(long) );
+  os.os().write( ( char* )&n, 8 );
+}
+
+//: Read a vcl_size_t as 64 bits from vsl_b_istream
+//
+// Warning: This function should be used infrequently and carefully. Under
+// all normal circumstances, the generic vsl_b_read and vsl_b_write in
+// vsl_binary_io.h will be perfectly adequate.
+//
+// This function will only read values saved using vsl_b_write_uint_64().
+inline void vsl_b_read_uint_64(vsl_b_istream& is, vcl_size_t& n )
+{
+  n = 0;
+  is.is().read( ( char* )&n, 8 );
+  vsl_swap_bytes(( char* )&n, sizeof(long) );
+}
+
+
+
 #endif // vsl_binary_explicit_io_h_
