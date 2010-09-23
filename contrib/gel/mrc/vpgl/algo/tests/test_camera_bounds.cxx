@@ -1,5 +1,6 @@
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
+#include <vcl_fstream.h>
 #include <vgl/vgl_point_3d.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vgl/vgl_box_2d.h>
@@ -11,7 +12,59 @@
 #include <vpgl/algo/vpgl_project.h>
 #include <vpgl/algo/vpgl_backproject.h>
 #include <vpgl/algo/vpgl_camera_bounds.h>
+#if 0 //debug
+static void 
+write_points_vrml(vcl_ofstream& str, 
+                  vcl_vector<vgl_point_3d<double> > const& pts3d)
+{
 
+  str << "#VRML V2.0 utf8\n"
+      << "Background {\n"
+      << "  skyColor [ 0 0 0 ]\n"
+      << "  groundColor [ 0 0 0 ]\n"
+      << "}\n"
+      << "PointLight {\n"
+      << "  on FALSE\n"
+      << "  intensity 1\n"
+      << "ambientIntensity 0\n"
+      << "color 1 1 1\n"
+      << "location 0 0 0\n"
+      << "attenuation 1 0 0\n"
+      << "radius 100\n"
+      << "}\n";
+
+  str << "Shape {\n"
+      << "  appearance NULL\n"
+      << "    geometry PointSet {\n"
+      << "      color NULL\n"
+      << "      coord Coordinate{\n"
+      << "       point[\n";
+  int n = pts3d.size();
+  for (int i =0; i<n; i++)
+    str << -pts3d[i].x() << ' ' << pts3d[i].y() << ' ' << pts3d[i].z() << '\n';
+  str << "   ]\n  }\n }\n}\n";
+
+  str << "Transform {\n"
+      << "translation " << 0 << ' ' << 0 << ' '
+      << ' ' << 0 << '\n'
+      << "children [\n"
+      << "Shape {\n"
+      << " appearance Appearance{\n"
+      << "   material Material\n"
+      << "    {\n"
+      << "      diffuseColor " << 0 << ' ' << 1 << ' ' << 0 << '\n'
+      << "      transparency " << 0 << '\n'
+      << "    }\n"
+      << "  }\n"
+      << " geometry Sphere\n"
+      <<   "{\n"
+      << "  radius " << 0.95 << '\n'
+      <<  "   }\n"
+      <<  "  }\n"
+      <<  " ]\n"
+      << "}\n";
+}
+#endif
 
 static void test_camera_bounds()
 {
@@ -67,20 +120,46 @@ static void test_camera_bounds()
   pixel_interval = vpgl_camera_bounds::rotation_angle_interval(Cs);
   vcl_cout << " pixel angle interval (deg) - scaled K "<< pixel_interval*rad_to_deg << '\n'; 
   TEST_NEAR("pixel interval (deg) -Ks ", pixel_interval*rad_to_deg, 2.54606,
-          1.0e-005);
+            1.0e-005);
   vpgl_camera_bounds::pixel_solid_angle(Cs, static_cast<unsigned>(scl*640), 
                                         static_cast<unsigned>(scl*360),
                                         cone_axis,half_ang, sang);
   vcl_cout << " pixel  - Ks "<< cone_axis << '\n' 
            << " half angle (deg)" << half_ang*rad_to_deg
            << " solid_ang (ster) = " << sang << '\n';
- TEST_NEAR("pixel bounds - Ks", sang, 0.000114845, 1.0e-008);
+  TEST_NEAR("pixel bounds - Ks", sang, 0.000114845, 1.0e-008);
 
   vpgl_camera_bounds::image_solid_angle(Cs,cone_axis,half_ang, sang);
   vcl_cout << " image -Ks "<< cone_axis << '\n' 
            << " half angle " << half_ang*rad_to_deg
            << " solid_ang = " << sang << '\n';
   TEST_NEAR("image bounds -Ks", sang, 0.434238, 1.0e-006);
+  // test sphere samples
+  unsigned npts = 400;
+  principal_ray_scan prs(0.785, npts);
+#if 0 //debug
+  vcl_vector<vgl_point_3d<double> > pts;
+  for(prs.reset(); prs.next();)
+    {
+      vcl_cout << "theta = " << prs.theta()*180.0/vnl_math::pi 
+               << " phi = " << prs.phi()*180.0/vnl_math::pi << '\n';
+      pts.push_back(prs.pt_on_unit_sphere());
+    }
+  vcl_ofstream os("c:/images/Calibration/sphere.wrl");
+  write_points_vrml(os, pts);
+  os.close();
+#endif
+  //0.366254 -0.0426265 0.60335
+  unsigned indx = 200;
+  double ang_pr = 1.0/vcl_sqrt(2.0);
+  vgl_point_3d<double> pt =  prs.pt_on_unit_sphere(indx), zaxis(0.0, 0.0, 1.0);
+  vgl_rotation_3d<double> rot = prs.rot(indx, ang_pr);
+  vgl_point_3d<double> rot_z = rot*zaxis;
+  vcl_cout << "theta = " << prs.theta(indx)*180.0/vnl_math::pi  
+           << " phi = " << prs.phi(indx)*180.0/vnl_math::pi << '\n';
+  vcl_cout << " pt on unit sphere " << pt << '\n';
+  vcl_cout << " rotated zaxis " << rot_z << '\n';
+  TEST_NEAR("rotation scan", rot_z.x(), pt.x(), 1.0e-4);
 }
 
 TESTMAIN(test_camera_bounds);
