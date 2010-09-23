@@ -28,14 +28,14 @@ static void test_spherical_coord()
   // test sp(2,0.2,1.0) --> cart(0.2147, 0.3343, 1.960)
   vsph_sph_point_3d sp1(2,0.2,1.0);
   vgl_point_3d<double> test_p1(0.2147, 0.3343, 1.960);
-  point=sp1.cart_coord();
+  point=coord.cart_coord(sp1);
   double diff = vgl_distance(point, test_p1);
   TEST_NEAR("Conversion 1 ", diff, 0.0, 0.01);
 
   // test sp(2,-0.2,1.0) --> cart(-0.2147, -0.3343, 1.960)
   vsph_sph_point_3d sp2(2,-0.2,1.0);
   vgl_point_3d<double> test_p2(-0.2147, -0.3343, 1.960);
-  point=sp2.cart_coord();
+  point=coord.cart_coord(sp2);
   diff = vgl_distance(point, test_p2);
   TEST_NEAR("Conversion 2 ", diff, 0.0, 0.01);
 
