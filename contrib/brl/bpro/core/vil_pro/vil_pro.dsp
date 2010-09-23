@@ -168,6 +168,9 @@ SOURCE=.\processes/bil_compass_edge_detector_process.cxx
 SOURCE=.\processes/vil_blob_detection_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/vil_pixelwise_roc_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+vil_image_view_base_sptr-.cxx
 # End Source File
 # End Group
