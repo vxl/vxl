@@ -12,7 +12,4 @@
 #include <brdb/brdb_query.h>
 #include <brdb/brdb_query_aptr.h>
 
-int main() 
-{
-  return 0; 
-}
+int main() { return 0; }
