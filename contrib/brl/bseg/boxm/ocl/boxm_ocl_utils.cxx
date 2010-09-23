@@ -249,20 +249,44 @@ int boxm_ocl_utils::getBufferIndex(bool rand,
   }
   
   //NON RANDOM algo: find buffer that is the least full, put tree there.
-  int buffIndex = 0;
-  int mostSpace = 0;
+  //revision: depending on size of tree, find different type of buffer
+  
+  //non random algo... filling buffers from top down
+  
+  //if it's a big tree, just find hte emptiest buffer
+  int buffIndex = 0; 
   bool validFound = false;
-  for(int i=0; i<num_buffers+1; i++) {
-    unsigned short start = mem_ptrs[i][0];
-    unsigned short end   = mem_ptrs[i][1];
-    unsigned short num   = blocksInBuffer[i]; 
-    int freeSpace = (start >= end)? start-end : BUFF_LENGTH - (end-start);   
-    if(freeSpace > mostSpace && num < blocks_per_buffer) {
-      buffIndex = i;
-      mostSpace = freeSpace;
-      validFound = true;
+  if(tree_size >= 73) {
+    int mostSpace = 0;
+    for(int i=0; i<num_buffers+1; i++) {
+      unsigned short start = mem_ptrs[i][0];
+      unsigned short end   = mem_ptrs[i][1];
+      unsigned short num   = blocksInBuffer[i]; 
+      int freeSpace = (start >= end)? start-end : BUFF_LENGTH - (end-start);   
+      if(freeSpace > mostSpace && num < blocks_per_buffer && freeSpace >= tree_size) {
+        buffIndex = i;
+        mostSpace = freeSpace;
+        validFound = true;
+      }
     }
   }
+  
+  //otherwise find the emptiest tree buffer
+  else {
+    int fewestBlocks = blocks_per_buffer+1;
+    for(int i=0; i<num_buffers+1; i++) {
+      unsigned short start = mem_ptrs[i][0];
+      unsigned short end   = mem_ptrs[i][1];
+      unsigned short num   = blocksInBuffer[i]; 
+      int freeSpace = (start >= end)? start-end : BUFF_LENGTH - (end-start); 
+      if(num < fewestBlocks &&  freeSpace >= tree_size && num < blocks_per_buffer) {
+        buffIndex = i;
+        fewestBlocks = num;
+        validFound = true;      
+      }
+    }
+  }
+  
   if(!validFound)  {
     vcl_cout<<"OUT OF SPACE!!!! (DETERMINISTIC)"<<vcl_endl;
     for (unsigned int i=0; i<mem_ptrs.size(); ++i) {

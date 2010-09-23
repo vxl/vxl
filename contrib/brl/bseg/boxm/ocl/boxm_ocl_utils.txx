@@ -533,6 +533,7 @@ void boxm_ocl_convert<T>::convert_bit_scene(boxm_scene<boct_tree<short, T> >* sc
 
   // 5. Go through each block and convert it to smaller blocks
   vbl_array_1d<unsigned short> blocksInBuffer(num_buffers+1, (unsigned short) 0);//# of blocks in each buffer
+  
   boxm_block_iterator<tree_type> iter(scene);
   vnl_random random(9667566);
   for (iter.begin(); !iter.end(); iter++) {
@@ -568,7 +569,7 @@ void boxm_ocl_convert<T>::convert_bit_scene(boxm_scene<boct_tree<short, T> >* sc
       boxm_ocl_convert<T>::copy_to_arrays(root, cell_array, data_array, 0);
       if (cell_array.size()+1 != data_array.size()) {
         vcl_cerr<<"Data array and cell array do not match size: "
-                <<"cell: "<<cell_array.size()
+                <<" cell: "<<cell_array.size()
                 <<" data: "<<data_array.size();
         return;
       }
