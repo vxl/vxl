@@ -5,16 +5,6 @@
 
 #define RADIUS_THRESH 0.0001
 
-vgl_point_3d<double> vsph_sph_point_3d::cart_coord() const
-{
-  double x,y,z;
-  x = radius_*vcl_sin(theta_)*vcl_cos(phi_);
-  y = radius_*vcl_sin(theta_)*vcl_sin(phi_);
-  z = radius_*vcl_cos(theta_);
-  // translate the point based on the origin
-  vgl_point_3d<double> p(x,y,z);
-  return p;
-}
 
 void vsph_sph_point_3d::print(vcl_ostream& os) const
 {
@@ -30,7 +20,12 @@ void vsph_spherical_coord::spherical_coord(vgl_point_3d<double> cp, vsph_sph_poi
 {
   double radius=0.0, theta=0.0, phi=0.0;
 
-  radius = vcl_sqrt(cp.x()*cp.x()+cp.y()*cp.y()+cp.z()*cp.z());
+  // move the point to the spherical coordinate system
+  double x = cp.x() - origin_.x();
+  double y = cp.y() - origin_.y();
+  double z = cp.z() - origin_.z();
+
+  radius = vcl_sqrt(x*x+y*y+z*z);
 
   // if radius is zero, the rsult does not make sense
   if (vcl_abs(radius) < RADIUS_THRESH) {
@@ -38,8 +33,8 @@ void vsph_spherical_coord::spherical_coord(vgl_point_3d<double> cp, vsph_sph_poi
     return;
   }
 
-  phi = vcl_atan2(cp.y(),cp.x());
-  theta = vcl_acos(cp.z()/radius);
+  phi = vcl_atan2(y,x);
+  theta = vcl_acos(z/radius);
   sp.set(radius, theta, phi);
 }
 
@@ -51,13 +46,14 @@ vcl_ostream& operator<<(vcl_ostream& os, vsph_sph_point_3d const& p)
 
 vgl_point_3d<double> vsph_spherical_coord::cart_coord(vsph_sph_point_3d const& p) const
 {
-  vgl_point_3d<double> c = p.cart_coord();
-  // translate the point from the origin
-  double x = c.x()+origin_.x();
-  double y = c.y()+origin_.y();
-  double z = c.z()+origin_.z();
-  vgl_point_3d<double> res(x, y, z);
-  return res;
+
+  double x,y,z;
+  x = radius_*vcl_sin(p.theta_)*vcl_cos(p.phi_);
+  y = radius_*vcl_sin(p.theta_)*vcl_sin(p.phi_);
+  z = radius_*vcl_cos(p.theta_);
+  // translate the point based on the origin
+  vgl_point_3d<double> c(x+origin_.x(),y+origin_.y(),z+origin_.z());
+  return c;
 }
 
 bool vsph_spherical_coord::move_point(vsph_sph_point_3d& p)

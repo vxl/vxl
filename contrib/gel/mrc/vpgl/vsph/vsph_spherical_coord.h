@@ -22,15 +22,9 @@ class vsph_sph_point_3d
   vsph_sph_point_3d() : radius_(1.0), theta_(0.0), phi_(0.0) {}
   vsph_sph_point_3d(double r, double theta, double phi) : radius_(r), theta_(theta), phi_(phi) {}
 
-  //: constructs from a 3d point in cartesian coordinate system
-  vsph_sph_point_3d(vgl_point_3d<double> p);
-
   ~vsph_sph_point_3d(){}
 
   void set(double r, double theta, double phi) { radius_=r; theta_=theta; phi_=phi; }
-
-  //: converts to cartesian coordinates
-  vgl_point_3d<double> cart_coord() const;
 
   void print(vcl_ostream& os) const;
 
@@ -53,12 +47,23 @@ class vsph_spherical_coord : public vbl_ref_count
 
   vsph_spherical_coord(vgl_point_3d<double> origin, double radius);
 
+  //: Copy constructor
+  vsph_spherical_coord(vsph_spherical_coord const& rhs) 
+    : origin_(rhs.origin_), radius_(rhs.radius_) {}
+
   // Destructor
   virtual ~vsph_spherical_coord() {}
 
   //***************************************************************************
   // Methods
   //***************************************************************************
+
+  double radius() const { return radius_; }
+
+  vgl_point_3d<double> origin() const { return origin_; }
+
+  vsph_sph_point_3d create_point(double theta, double phi) { return vsph_sph_point_3d(radius_,theta,phi); }
+
   void spherical_coord(vgl_point_3d<double> cp, vsph_sph_point_3d& sp);
 
   //: converts to cartesian coordinate
