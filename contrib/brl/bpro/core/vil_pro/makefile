@@ -31,6 +31,7 @@ SOURCES += processes/vil_filter_image_process.cxx
 SOURCES += processes/vil_resample_process.cxx
 SOURCES += processes/bil_compass_edge_detector_process.cxx
 SOURCES += processes/vil_blob_detection_process.cxx
+SOURCES += processes/vil_pixelwise_roc_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
