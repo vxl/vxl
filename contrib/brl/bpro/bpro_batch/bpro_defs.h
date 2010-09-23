@@ -23,6 +23,7 @@ py_funcs("remove_data",remove_data,METH_VARARGS,"remove_data(i) remove data with
 py_funcs("remove_data_obj",remove_data_obj,METH_VARARGS,"remove_data_obj(i) remove data with obj.id from db"),
 py_funcs("print_db",print_db,METH_VARARGS,"print_db() print the database"),
 py_funcs("clear",clear,METH_VARARGS,"clear() clear the database tables"),
+py_funcs("get_bbas_1d_array_float",get_bbas_1d_array_float,METH_VARARGS,"get_bbas_1d_array_float(i) set the database 1d array"),
 
 #undef py_funcs
 

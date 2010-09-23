@@ -18,3 +18,7 @@ SUBDIRS(bvgl_pro)
 
 # sdet process classes
 SUBDIRS(sdet_pro)
+
+# bbas process classes
+SUBDIRS(bbas_pro)
+

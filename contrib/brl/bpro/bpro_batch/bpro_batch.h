@@ -20,7 +20,7 @@ typedef struct
   char* type;
 } dbvalue;
 
-const int METHOD_NUM = 24;
+const int METHOD_NUM = 25;
 void register_basic_datatypes();
 extern PyMethodDef batch_methods[];
 
