@@ -20,7 +20,6 @@
 #include "bocl_cl.h"
 #include <vcl_cstddef.h>
 #if !defined(__APPLE__)
-#include <CL/cl_gl.h>
 #include <malloc.h>
 #endif
 #define SDK_SUCCESS 0
