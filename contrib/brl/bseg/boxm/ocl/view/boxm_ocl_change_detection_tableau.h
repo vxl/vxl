@@ -6,6 +6,8 @@
 // \brief A tableau to view updating octree models in real time
 // \author Andrew Miller
 // \date July 14, 2010
+
+#include "boxm_ocl_include_glew.h"
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_event_condition.h>
 #include <boxm/ocl/view/boxm_ocl_change_detection_tableau_sptr.h>
