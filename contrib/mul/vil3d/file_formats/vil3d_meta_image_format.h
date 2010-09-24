@@ -160,7 +160,7 @@ class vil3d_meta_image: public vil3d_image_resource
   virtual bool set_voxel_size(float/*i*/,float/*j*/,float/*k*/);
 
   //: Set the offset
-  //: \note also sets the voxel size to vx_i, vx_j and vx_k to ensure consistency
+  // \note also sets the voxel size to vx_i, vx_j and vx_k to ensure consistency
   void set_offset(const double i, const double j, const double k,
                   const double vx_i, const double vx_j, const double vx_k);
 

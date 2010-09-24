@@ -22,15 +22,15 @@ template <class T>
 class vsph_view_sphere
 {
  public:
-   //: default constructor
+  //: default constructor
   vsph_view_sphere() : uid_(0) {}
 
-  //:constructor, creates with a spherical coordinate sytem
-  vsph_view_sphere(vsph_spherical_coord_sptr cs) 
+  //:constructor, creates with a spherical coordinate system
+  vsph_view_sphere(vsph_spherical_coord_sptr cs)
     : coord_sys_(cs),uid_(0) { }
 
   //: constructor, creates a sphere from a bounding box, centered at the box center
-  vsph_view_sphere(vgl_box_3d<double> bb, double radius) 
+  vsph_view_sphere(vgl_box_3d<double> bb, double radius)
     : coord_sys_(new vsph_spherical_coord(bb.centroid(),radius)),uid_(0) { }
 
   //: copy constructor
@@ -46,8 +46,7 @@ class vsph_view_sphere
   //: creates a view point at a given 3d point, it will be translated to the surface of the sphere
   unsigned add_view(vgl_point_3d<double> center);
 
-  //: adds uniformly placed viewpoints on the sphere in the area defines 
-  // by elevation angle cap_angle, and the viewpoints are at most point_angle apart
+  //: adds uniformly placed viewpoints on the sphere in the area defined by elevation angle cap_angle, and the viewpoints are at most point_angle apart
   // It uses iterative triangle division on octahedron until the point angle is achieved
   void add_uniform_views(double cap_angle, double point_angle);
 

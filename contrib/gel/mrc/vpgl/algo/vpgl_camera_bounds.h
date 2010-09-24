@@ -20,15 +20,16 @@
 class vpgl_camera_bounds
 {
  public:
-  //: the solid angle for a pixel, applies only to perspective camera
-  // cone is tangent to pixel. Angles in radians and steradians
+  //: the solid angle for a pixel.
+  // Applies only to perspective camera. Cone is tangent to pixel. Angles in radians and steradians
   static void pixel_solid_angle(vpgl_perspective_camera<double> const& cam,
                                 unsigned u, unsigned v,
                                 vgl_ray_3d<double>& cone_axis,
                                 double& cone_half_angle,
                                 double& solid_angle);
 
-  //: the solid angle for an image, applies only to perspective camera
+  //: the solid angle for an image.
+  // Applies only to perspective camera.
   // the cone axis passes through principal point, i.e. principal ray.
   // the cone is tangent to the square defined by the image diagonal
   // angles in radians and steradians
@@ -37,8 +38,8 @@ class vpgl_camera_bounds
                                 double& cone_half_angle,
                                 double& solid_angle);
 
-  //: the solid angle for a scene bounding box, the cone is tangent 
-  // to the 3-d scene box
+  //: the solid angle for a scene bounding box.
+  // The cone is tangent to the 3-d scene box.
   // angles in radians and steradians
   static bool box_solid_angle(vpgl_perspective_camera<double> const& cam,
                               vgl_box_3d<double> const& box,
@@ -46,39 +47,38 @@ class vpgl_camera_bounds
                               double& cone_half_angle,
                               double& solid_angle);
 
-  //: The angular interval of the rotation about the principal axis 
-  //  that bounds a pixel at the smallest image radius, i.e.,
-  //  1/2 the smallest image dimension. The angular wedge is tangent to
-  //  the pixel
+  //: The angular interval of the rotation about the principal axis that bounds a pixel at the smallest image radius, i.e., 1/2 the smallest image dimension.
+  //  The angular wedge is tangent to the pixel
   static double //0.366254 -0.0426265 0.60335
     rotation_angle_interval(vpgl_perspective_camera<double> const& cam);
 
  private:
-  //: constructor private - static methods only
+  //: constructor private - class contains static methods only
   vpgl_camera_bounds();
+  //: destructor private - class contains static methods only
   ~vpgl_camera_bounds();
 };
+
 //: scan the principal ray over a cone defined by the half apex angle
-//  it is assumed the cone axis is the positive z direction.
-//  returns a 3-d rotation from the positive z direction to the current
-//  iterator rotation state. The the cone is scanned in uniform steps
-// defined by the increment
+//  It is assumed that the cone axis is the positive z direction.
+//  Returns a 3-d rotation from the positive z direction to the current
+//  iterator rotation state. The cone is scanned in uniform steps
+//  defined by the increment
 class principal_ray_scan
 {
  public:
   principal_ray_scan(double cone_half_angle, unsigned& n_samples);
-  ~principal_ray_scan(){}
+  ~principal_ray_scan() {}
   //: number of scan states
   unsigned n_states(){return theta_.size();}
   //: reset the scan state
   void reset();
   //:the next scan state. Returns false if done
   bool next();
-  //: the rotation corresponding to the current state of the principal ray
+  //: the rotation corresponding to the current state of the principal ray.
   //  alpha is rotation about the principal ray -pi<alpha<=pi
-  vgl_rotation_3d<double> rot(double alpha = 0.0)
-    {return rot(index_, alpha);}
-  // rotation for a given scan index
+  vgl_rotation_3d<double> rot(double alpha = 0.0) {return rot(index_, alpha);}
+  //: rotation for a given scan index
   vgl_rotation_3d<double> rot(unsigned i, double alpha = 0.0);
   //: theta - spherical elevation angle for current state
   double theta(){return theta_[index_];}
@@ -99,4 +99,5 @@ class principal_ray_scan
   vcl_vector<double> theta_;
   vcl_vector<double> phi_;
 };
+
 #endif // vpgl_camera_bounds_h_
