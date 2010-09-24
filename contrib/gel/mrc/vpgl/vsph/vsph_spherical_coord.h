@@ -48,8 +48,8 @@ class vsph_spherical_coord : public vbl_ref_count
   vsph_spherical_coord(vgl_point_3d<double> origin, double radius);
 
   //: Copy constructor
-  vsph_spherical_coord(vsph_spherical_coord const& rhs) 
-    : origin_(rhs.origin_), radius_(rhs.radius_) {}
+  vsph_spherical_coord(vsph_spherical_coord const& rhs)
+    : radius_(rhs.radius_), origin_(rhs.origin_) {}
 
   // Destructor
   virtual ~vsph_spherical_coord() {}

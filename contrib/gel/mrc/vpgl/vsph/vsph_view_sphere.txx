@@ -9,7 +9,7 @@
 #include <vgl/vgl_line_segment_3d.h>
 
 template <class T>
-class vsph_view_sphere::vsph_view_sphere(vgl_box_3d<double> bb, double radius)
+vsph_view_sphere<T>::vsph_view_sphere(vgl_box_3d<double> bb, double radius)
   : coord_sys_(new vsph_spherical_coord(bb.centroid(),radius)),uid_(0) { }
 
 template <class T>
