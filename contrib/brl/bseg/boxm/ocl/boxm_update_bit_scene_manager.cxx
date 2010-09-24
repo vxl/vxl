@@ -40,10 +40,10 @@ bool boxm_update_bit_scene_manager::init_scene(boxm_ocl_bit_scene *scene,
   scene_info_->root_level = scene->max_level() - 1;
 
   //set origin and scene dimensions
-  scene_info_->scene_dims.s[0]   = blkX;
-  scene_info_->scene_dims.s[1]   = blkY;
-  scene_info_->scene_dims.s[2]   = blkZ;
-  scene_info_->scene_dims.s[3]   = 1;
+  scene_info_->scene_dims.s[0]= blkX;
+  scene_info_->scene_dims.s[1]= blkY;
+  scene_info_->scene_dims.s[2]= blkZ;
+  scene_info_->scene_dims.s[3]= 1;
   vgl_point_3d<double> origin = scene->origin();
   scene_info_->scene_origin.s[0]= (float) origin.x();
   scene_info_->scene_origin.s[1]= (float) origin.y();
