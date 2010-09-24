@@ -31,11 +31,12 @@ IF(VGUI_FOUND)
       boxm_update_bit_tableau.h
       boxm_update_bit_tableau.cxx
       boxm_update_bit_tableau_sptr.h
+      boxm_ocl_include_glew.h
      )
 
   ADD_LIBRARY(boxm_ocl_view ${boxm_ocl_view_sources} )
 
-  TARGET_LINK_LIBRARIES(boxm_ocl_view bocl boxm boxm_ocl boxm_util boxm_sample boxm_basic boct bprb bgeo vnl vnl_algo vbl_io vpgl vgl vil vbl vul ${OPENCL_LIBRARIES} ${GLEW_LIBRARY})
+  TARGET_LINK_LIBRARIES(boxm_ocl_view bocl boxm boxm_ocl boxm_util boxm_sample boxm_basic boct bprb bgeo vnl vnl_algo vbl_io vpgl vgl vil vbl vul ${GLEW_LIBRARY} ${OPENCL_LIBRARIES} )
 
 ENDIF(VGUI_FOUND)
 ENDIF(GLEW_FOUND)

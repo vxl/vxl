@@ -6,6 +6,7 @@
 // \brief A tableau to view octree models in real time
 // \author Vishal Jain
 // \date Aug 11, 2010
+#include "boxm_ocl_include_glew.h"
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_event_condition.h>
 #include <boxm/ocl/view/boxm_cam_tableau.h>

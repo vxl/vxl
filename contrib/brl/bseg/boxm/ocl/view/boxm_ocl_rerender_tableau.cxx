@@ -1,21 +1,3 @@
-#ifdef UNIX
-    #if defined(__APPLE__) || defined(MACOSX)
-        #include <OpenGL/OpenGL.h>
-    #else
-        #include <GL/glew.h>
-        #include <GL/glx.h>
-    #endif
-#endif
-
-#if defined(WIN32)
-    #include <GL/glew.h>
-    #include <windows.h>
-#endif
-#if defined (__APPLE__) || defined(MACOSX)
-  #define GL_SHARING_EXTENSION "cl_APPLE_gl_sharing"
-#else
-  #define GL_SHARING_EXTENSION "cl_khr_gl_sharing"
-#endif
 #include <boxm/ocl/view/boxm_ocl_rerender_tableau.h>
 //:
 // \file
@@ -90,6 +72,14 @@ bool boxm_ocl_rerender_tableau::init_ocl()
       CL_WGL_HDC_KHR, (cl_context_properties) wglGetCurrentDC(),
       CL_CONTEXT_PLATFORM, (cl_context_properties) platform_id[0],
       0
+  };
+#elif defined(__APPLE__) || defined(MACOSX)
+  CGLContextObj kCGLContext = CGLGetCurrentContext();
+  CGLShareGroupObj kCGLShareGroup = CGLGetShareGroup(kCGLContext);
+  cl_context_properties props[] =
+  {
+    CL_CONTEXT_PROPERTY_USE_CGL_SHAREGROUP_APPLE, (cl_context_properties)kCGLShareGroup,
+    0
   };
 #else
   cl_context_properties props[] =
