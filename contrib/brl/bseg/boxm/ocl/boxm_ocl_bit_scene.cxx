@@ -501,11 +501,11 @@ vcl_ostream& operator <<(vcl_ostream &s, boxm_ocl_bit_scene& scene)
   scene.block_dim(x_dim, y_dim, z_dim);
 
   //Calculate size of scene (as it sits on disk, and as it sits on gpu)
-  int sizeBlks = 2*sizeof(short)*x_num*y_num*z_num; //both on disk and gpu
-  int sizeTree = 16*sizeof(char)*num*tree_len; //both disk and gpu
-  int sizeDataDisk = 16*sizeof(float)*num*data_len;
-  int sizeDataUpdate = (5*sizeof(float)+8*sizeof(char)+4*sizeof(short))*num*data_len;
-  int sizeDataRender = (sizeof(float) + 8*sizeof(char))*num*data_len;
+  long sizeBlks = 2*sizeof(short)*x_num*y_num*z_num; //both on disk and gpu
+  long sizeTree = 16*sizeof(char)*num*tree_len; //both disk and gpu
+  long sizeDataDisk = 16*sizeof(float)*num*data_len;
+  long sizeDataUpdate = (5*sizeof(float)+8*sizeof(char)+4*sizeof(short))*num*data_len;
+  long sizeDataRender = (sizeof(float) + 8*sizeof(char))*num*data_len;
   double disk_size = (sizeBlks + sizeTree + sizeDataDisk)/1024.0/1024.0;
   double update_size = (sizeBlks + sizeTree + sizeDataUpdate)/1024.0/1024.0;
   double render_size = (sizeBlks + sizeTree + sizeDataRender)/1024.0/1024.0;
