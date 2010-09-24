@@ -111,15 +111,15 @@ bool boct_bit_tree::verify_tree(int i, int node, vcl_vector<int4> tree, vcl_vect
   float culprit1, culprit2;
   int numCulprits = 0;
   for (int j=0; j<16; j++) {
-    float diff = vcl_fabs(data_[bit_dat+j] - tree_dat[j]); 
-    
+    float diff = vcl_fabs(data_[bit_dat+j] - tree_dat[j]);
+
     //if diff is nan, then set both values to zero, and return same
-    if(diff != diff) {
+    if (diff != diff) {
       data_[bit_dat+j] = 0.0;
       tree_dat[j] = 0.0;
       same = same && true;
     }
-    else if(diff < 1e-5) {
+    else if (diff < 1e-5) {
       same = same && true;
     }
     else {
@@ -144,28 +144,29 @@ void boct_bit_tree::print_input_tree(vcl_vector<int4> tree, vcl_vector<float16> 
   vcl_cout<<"root: "<<tree[0]<<" dat:"<<data[root_data]<<vcl_endl;
 
   //print generation 2 data
-  vcl_cout<<" depth 1: "<<vcl_endl;
+  vcl_cout<<" depth 1:"<<vcl_endl;
   int child = tree[0][1];
   if (child > 0) {
     for (int i=0; i<8; i++) {
       int data_ptr = tree[child+i][2];
-      vcl_cout<<" child@"<<i+1<<":"<<tree[child+i]<<" dat:"<<data[data_ptr]<<vcl_endl;
+      vcl_cout<<" child@"<<i+1<<':'<<tree[child+i]<<" dat:"<<data[data_ptr]<<vcl_endl;
     }
   }
-  
+
+#if 0
   //print generation 3 ...
-  //vcl_cout<<" depth 2: "<<vcl_endl;
-  //if (child > 0 {
-    //for(int i=0; i<8; i++) {
-      //int gchild = tree[child+i][1];
-      //if(gchild > 0) {
-        //for(int j=0; j<8; j++) {
-          
-        //}
-      //}
-    //}
-  //}
-  
+  vcl_cout<<" depth 2:"<<vcl_endl;
+  if (child > 0) {
+    for (int i=0; i<8; i++) {
+      int gchild = tree[child+i][1];
+      if (gchild > 0) {
+        for (int j=0; j<8; j++) {
+          //???
+        }
+      }
+    }
+  }
+#endif // 0
 }
 
 //: helper recursive method encode
