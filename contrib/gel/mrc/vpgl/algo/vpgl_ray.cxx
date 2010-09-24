@@ -1,6 +1,7 @@
 // This is gel/mrc/vpgl/algo/vpgl_ray.cxx
 #include "vpgl_ray.h"
-//
+//:
+// \file
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_4.h>
@@ -46,6 +47,7 @@ bool vpgl_ray::ray(const vpgl_camera<double>*  cam,
   r.set(tr[0], tr[1], tr[2]);
   return true;
 }
+
 //construct a ray at a 3-d point with an origin lying in the origin_z plane
 bool vpgl_ray::ray(const vpgl_camera<double>*  cam,
                    vgl_point_3d<double> const& point_3d,
@@ -55,12 +57,12 @@ bool vpgl_ray::ray(const vpgl_camera<double>*  cam,
   vgl_plane_3d<double> pl(0.0, 0.0, 1.0, -origin_z);
   vgl_vector_3d<double> dir;
   bool success = vpgl_ray::ray(cam, point_3d, dir);
-  if(!success) return false;
+  if (!success) return false;
   // create an infinite line along dir
   vgl_infinite_line_3d<double> infl(point_3d, dir);
   vgl_point_3d<double> origin;
   // intersect with the z plane
-  if(!vgl_intersection(infl, pl, origin))
+  if (!vgl_intersection(infl, pl, origin))
     return false;
   ray.set(origin, dir);
   return true;
@@ -137,22 +139,24 @@ bool vpgl_ray::ray(vpgl_local_rational_camera<double> const& lrcam,
 
   return true;
 }
+
 //: compute a ray in local Cartesian coordinates at a given (u, v)
 bool vpgl_ray::ray(vpgl_local_rational_camera<double> const& lrcam,
-                   const double u, const double v, 
+                   const double u, const double v,
                    vgl_ray_3d<double>& ray)
 {
   vgl_point_3d<double> origin; vgl_vector_3d<double> dir;
   bool success = vpgl_ray::ray(lrcam, u, v, origin, dir);
-  if(!success) return false;
+  if (!success) return false;
   ray.set(origin, dir);
   return true;
 }
+
 // compute a ray in local Cartesian coordinates for a local rational cam
 bool vpgl_ray::plane_ray(vpgl_local_rational_camera<double> const& lrcam,
-                   const vgl_point_2d<double> image_point1,
-                   const vgl_point_2d<double> image_point2,
-                   vgl_plane_3d<double>& plane)
+                         const vgl_point_2d<double> image_point1,
+                         const vgl_point_2d<double> image_point2,
+                         vgl_plane_3d<double>& plane)
 {
   // find the horizontal plane at the top of the 3-d region
   // of valid RPC projection
@@ -193,7 +197,7 @@ bool vpgl_ray::ray(vpgl_perspective_camera<double> const& cam,
                    vgl_point_3d<double> const& world_pt,
                    vgl_ray_3d<double>& ray)
 {
-  if(cam.is_behind_camera(vgl_homg_point_3d<double>(world_pt.x(), world_pt.y(), world_pt.z())))
+  if (cam.is_behind_camera(vgl_homg_point_3d<double>(world_pt.x(), world_pt.y(), world_pt.z())))
     return false;
   ray = vgl_ray_3d<double>(cam.camera_center(), world_pt);
   return true;
