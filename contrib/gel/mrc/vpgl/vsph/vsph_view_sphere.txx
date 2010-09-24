@@ -3,10 +3,14 @@
 
 #include "vsph_view_sphere.h"
 #include "vsph_view_point.h"
+#include "vsph_spherical_coord.h"
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_line_segment_3d.h>
 
+template <class T>
+class vsph_view_sphere::vsph_view_sphere(vgl_box_3d<double> bb, double radius)
+  : coord_sys_(new vsph_spherical_coord(bb.centroid(),radius)),uid_(0) { }
 
 template <class T>
 unsigned vsph_view_sphere<T>::add_view(T view)
@@ -39,7 +43,7 @@ void vsph_view_sphere<T>::add_uniform_views(double cap_angle, double point_angle
   // create a octahedron on the sphere, define 6 points for the vertices of the triangles
   double radius = coord_sys_->radius();
   vgl_point_3d<double> center = coord_sys_->origin();
-  
+
   vcl_vector<vgl_point_3d<double> > verts;
   vgl_point_3d<double> v1(center.x(),center.y(),center.z()+radius); verts.push_back(v1);
   vgl_point_3d<double> v2(center.x(),center.y(),center.z()-radius); verts.push_back(v2);
@@ -47,41 +51,41 @@ void vsph_view_sphere<T>::add_uniform_views(double cap_angle, double point_angle
   vgl_point_3d<double> v4(-1*radius+center.x(),center.y(),center.z()); verts.push_back(v4);
   vgl_point_3d<double> v5(center.x(),center.y()+radius,center.z()); verts.push_back(v5);
   vgl_point_3d<double> v6(center.x(),center.y()-radius,center.z()); verts.push_back(v6);
-  
+
   // vector of triangles (vector of 3 points, only indices of the vertices kept)
   vcl_vector<vcl_vector<int> > triangles;
-  
+
   vcl_vector<int> tri1;
   tri1.push_back(0); tri1.push_back(2); tri1.push_back(4); triangles.push_back(tri1);
-  
+
   vcl_vector<int> tri2;
   tri2.push_back(0); tri2.push_back(4); tri2.push_back(3); triangles.push_back(tri2);
-  
+
   vcl_vector<int> tri3;
   tri3.push_back(0); tri3.push_back(3); tri3.push_back(5); triangles.push_back(tri3);
-  
+
   vcl_vector<int> tri4;
   tri4.push_back(0); tri4.push_back(5); tri4.push_back(2); triangles.push_back(tri4);
-  
+
   vcl_vector<int> tri5;
   tri5.push_back(1); tri5.push_back(2); tri5.push_back(4); triangles.push_back(tri5);
-  
+
   vcl_vector<int> tri6;
   tri6.push_back(1); tri6.push_back(3); tri6.push_back(4); triangles.push_back(tri6);
-  
+
   vcl_vector<int> tri7;
   tri7.push_back(1); tri7.push_back(5); tri7.push_back(3); triangles.push_back(tri7);
-  
+
   vcl_vector<int> tri8;
   tri8.push_back(1); tri8.push_back(2); tri8.push_back(5); triangles.push_back(tri8);
 
   // iteratively refine the triangles
   // check the angle between two vertices (of the same triangle),
   // use the center of the spheriacl coordinate system
-  vgl_vector_3d<double> vector1=verts[triangles[0][0]]-center; 
-  vgl_vector_3d<double> vector2=verts[triangles[0][1]]-center; 
+  vgl_vector_3d<double> vector1=verts[triangles[0][0]]-center;
+  vgl_vector_3d<double> vector2=verts[triangles[0][1]]-center;
   double a = angle(vector1, vector2);
-  
+
   while (a > point_angle) {
     vcl_vector<vcl_vector<int> >  new_triangles;
     int ntri=triangles.size();
@@ -92,25 +96,25 @@ void vsph_view_sphere<T>::add_uniform_views(double cap_angle, double point_angle
         int next=j+1; if (next == 3) next=0;
         vgl_line_segment_3d<double> edge1(verts[triangles[i][j]],verts[triangles[i][next]]);
         vgl_point_3d<double> mid=edge1.point_t(0.5);
-        
+
         // move the point onto the surface of the sphere
         vsph_sph_point_3d sv;
         coord_sys_->spherical_coord(mid, sv);
         coord_sys_->move_point(sv);
         mid = coord_sys_->cart_coord(sv);
-        
+
         // add a new vertex for mid points of the edges of the triangle
         int idx = verts.size();
         verts.push_back(mid);
-        
+
         points.push_back(triangles[i][j]);  // existing vertex of the bigger triangle
         points.push_back(idx);              // new mid-point vertex
       }
-      
+
       // add new samller 4 triangles instead of the old big one
       /******************************
                    /\
-                  /  \   
+                  /  \
                  /    \
                 /      \
                /--------\
@@ -120,7 +124,7 @@ void vsph_view_sphere<T>::add_uniform_views(double cap_angle, double point_angle
            /       \/       \
            -------------------
       *******************************/
-      
+
       vcl_vector<int> list(3); list[0]=points[0]; list[1]=points[5]; list[2]=points[1];
       new_triangles.push_back(list);
       list[0]=points[1]; list[1]=points[3]; list[2]=points[2];
@@ -131,8 +135,8 @@ void vsph_view_sphere<T>::add_uniform_views(double cap_angle, double point_angle
       new_triangles.push_back(list);
     }
     // check the angle again to see if the threashold is met
-    vgl_vector_3d<double> vector1=verts[new_triangles[0][0]]-center; 
-    vgl_vector_3d<double> vector2=verts[new_triangles[0][1]]-center; 
+    vgl_vector_3d<double> vector1=verts[new_triangles[0][0]]-center;
+    vgl_vector_3d<double> vector2=verts[new_triangles[0][1]]-center;
     a = angle(vector1, vector2);
     triangles.clear();
     triangles=new_triangles;
@@ -155,14 +159,14 @@ void vsph_view_sphere<T>::add_uniform_views(double cap_angle, double point_angle
             add_view(view);
           }
         // no views yet, add the first one..
-        } else {
+        }
+        else {
           T view(sv);
           add_view(view);
         }
       }
     }
   }
-
 }
 
 template <class T>
