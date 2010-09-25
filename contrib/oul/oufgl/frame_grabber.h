@@ -10,6 +10,9 @@
 
 #ifndef OTAGO_frame_grabber__h_INCLUDED
 #define OTAGO_frame_grabber__h_INCLUDED
+
+#include <vil1/vil1_memory_image.h>
+
 //----------------------------------------------------------------------
 // This is the base class for frame grabbers. It is a pure virtual
 // class that acts as an interface really. Subclasses should provide
