@@ -149,12 +149,11 @@ static void test_camera_bounds()
   write_points_vrml(os, pts);
   os.close();
 #endif
-  //0.366254 -0.0426265 0.60335
   unsigned indx = 200;
   double ang_pr = 1.0/vcl_sqrt(2.0);
   vgl_point_3d<double> pt =  prs.pt_on_unit_sphere(indx), zaxis(0.0, 0.0, 1.0);
   vgl_rotation_3d<double> rot = prs.rot(indx, ang_pr);
-  vgl_point_3d<double> rot_z = rot*zaxis;
+  vgl_point_3d<double> rot_z = (rot.transpose())*zaxis;
   vcl_cout << "theta = " << prs.theta(indx)*180.0/vnl_math::pi  
            << " phi = " << prs.phi(indx)*180.0/vnl_math::pi << '\n';
   vcl_cout << " pt on unit sphere " << pt << '\n';
