@@ -29,7 +29,7 @@ IF( PYTHON_FOUND )
           reg_bbgm.cxx          reg_bbgm.h
         )
 
-        ADD_LIBRARY(bbgm_batch MODULE ${bbgm_batch_sources})
+        ADD_LIBRARY(bbgm_batch SHARED ${bbgm_batch_sources})
 
         IF(WIN32)
           #library has to have different name depending on debug or release version.
@@ -52,6 +52,11 @@ IF( PYTHON_FOUND )
         IF(PYTHON_LIBRARIES)
           TARGET_LINK_LIBRARIES( bbgm_batch optimized ${PYTHON_LIBRARY})
         ENDIF(PYTHON_LIBRARIES)
+
+        IF( BUILD_TESTING )
+          SUBDIRS(tests)
+        ENDIF( BUILD_TESTING )
+
       ENDIF(GEOTIFF_FOUND )
     ENDIF(TIFF_FOUND )
   ENDIF( EXPAT_FOUND )

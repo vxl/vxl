@@ -10,7 +10,6 @@ IF(WIN32)
  SET(CMAKE_MFC_FLAG 6)
 ENDIF(WIN32)
 
-
 SET(pop_sources
     pop_edge.cxx                    pop_edge.h
     pop_geometric_cost_function.cxx pop_geometric_cost_function.h
@@ -32,6 +31,10 @@ ADD_LIBRARY(pop ${pop_sources})
 INSTALL_TARGETS(/lib pop)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/gel/pop ${pop_sources})
 TARGET_LINK_LIBRARIES( pop vcl vnl vgl vnl_algo vgl_algo)
+
+IF( BUILD_TESTING )
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTING )
 
 IF( BUILD_EXAMPLES )
   SUBDIRS( examples )

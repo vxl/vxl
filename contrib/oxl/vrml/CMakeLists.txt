@@ -11,3 +11,7 @@ SET(vrml_sources
 
 ADD_LIBRARY(vrml ${vrml_sources})
 TARGET_LINK_LIBRARIES(vrml vul)
+
+IF( BUILD_TESTING )
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTING )

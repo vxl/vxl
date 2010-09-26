@@ -48,5 +48,9 @@ IF(BUILD_RPL) # bmvv_f_manager.cxx needs rpl/rrel
  # the main executable
  SUBDIRS(mvbin)
 
+ IF( BUILD_TESTING )
+   SUBDIRS(tests)
+ ENDIF( BUILD_TESTING )
+
 ENDIF(BUILD_RPL)
 ENDIF(HAS_VGUI)

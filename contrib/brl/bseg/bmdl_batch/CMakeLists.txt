@@ -29,7 +29,7 @@ IF( PYTHON_FOUND )
           reg_bmdl.cxx          reg_bmdl.h
         )
 
-        ADD_LIBRARY(bmdl_batch MODULE ${bmdl_batch_sources})
+        ADD_LIBRARY(bmdl_batch SHARED ${bmdl_batch_sources})
 
         IF(WIN32)
           #library has to have different name depending on debug or release version.
@@ -48,6 +48,11 @@ IF( PYTHON_FOUND )
         IF(PYTHON_LIBRARIES)
           TARGET_LINK_LIBRARIES( bmdl_batch optimized ${PYTHON_LIBRARY})
         ENDIF(PYTHON_LIBRARIES)
+
+        IF( BUILD_TESTING )
+          SUBDIRS(tests)
+        ENDIF( BUILD_TESTING )
+
     ENDIF(GEOTIFF_FOUND )
    ENDIF(TIFF_FOUND )
   ENDIF( EXPAT_FOUND )

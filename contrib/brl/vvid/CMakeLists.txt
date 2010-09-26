@@ -45,7 +45,7 @@ IF(HAS_VGUI)
 
  # check if we have the camera libraries and assemble accordingly
  IF(HAS_CMU1394CAMERA)
-  ADD_LIBRARY(vvid ${vvid_sources} ${cmu_camera_sources})  
+  ADD_LIBRARY(vvid ${vvid_sources} ${cmu_camera_sources})
  ELSE(HAS_CMU1394CAMERA)
   ADD_LIBRARY(vvid ${vvid_sources})
  ENDIF(HAS_CMU1394CAMERA)
@@ -60,5 +60,9 @@ IF(HAS_VGUI)
 
  # the main executables
  SUBDIRS(bin)
+
+ IF( BUILD_TESTING )
+   SUBDIRS(tests)
+ ENDIF( BUILD_TESTING )
 
 ENDIF(HAS_VGUI)

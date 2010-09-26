@@ -9,7 +9,7 @@ SET(expat_sources
   xmltok.c        xmltok.h
   xmlrole.c       xmlrole.h
   xmltok_impl.h
-  ascii.h              
+  ascii.h
   asciitab.h
   iasciitab.h
   nametab.h
@@ -41,5 +41,9 @@ CONFIGURE_FILE(${expat_SOURCE_DIR}/expat.h ${expat_BINARY_DIR}/expat.h)
 
 ADD_LIBRARY(expat ${expat_sources})
 INSTALL_TARGETS(/lib expat)
+
+IF( BUILD_TESTING )
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTING )
 
 ENDIF(NOT VXL_USING_NATIVE_EXPAT)

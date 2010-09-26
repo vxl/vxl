@@ -21,3 +21,7 @@ INSTALL_TARGETS(/lib gst)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/gel/gst ${gst_sources})
 
 TARGET_LINK_LIBRARIES(gst vbl)
+
+IF( BUILD_TESTING )
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTING )

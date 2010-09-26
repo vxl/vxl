@@ -83,6 +83,10 @@ TARGET_LINK_LIBRARIES(vsrl vtol vdgl vgl vil1 vnl vgel)
 # vgel uses mvl from oxl
 INCLUDE_DIRECTORIES(${OXL_INCLUDE_DIR})
 
+IF( BUILD_TESTING )
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTING )
+
 IF (BUILD_EXAMPLES)
   SUBDIRS(examples)
 ENDIF (BUILD_EXAMPLES)

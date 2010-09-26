@@ -23,3 +23,7 @@ ADD_LIBRARY(ouml ${ouml_sources})
 INSTALL_TARGETS(/lib ouml)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/oul/ouml ${ouml_sources})
 TARGET_LINK_LIBRARIES( ouml vgl vnl_algo vnl_io vnl vil1 vsl vpl )
+
+IF( BUILD_TESTING )
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTING )

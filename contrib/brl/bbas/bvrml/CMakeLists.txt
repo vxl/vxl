@@ -8,3 +8,7 @@ SET(bvrml_sources
 ADD_LIBRARY(bvrml  ${bvrml_sources})
 
 TARGET_LINK_LIBRARIES(bvrml vgl)
+
+IF( BUILD_TESTING )
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTING )

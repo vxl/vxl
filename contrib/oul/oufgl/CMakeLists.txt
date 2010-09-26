@@ -19,4 +19,8 @@ INSTALL_TARGETS(/lib oufgl)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/oul/oufgl ${oufgl_sources})
 TARGET_LINK_LIBRARIES( oufgl vil vil1 rt)
 
+IF( BUILD_TESTING )
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTING )
+
 SUBDIRS(examples)

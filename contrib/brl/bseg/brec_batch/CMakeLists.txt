@@ -19,7 +19,6 @@ IF( PYTHON_FOUND )
       reg_brec.cxx          reg_brec.h
     )
 
-    #ADD_LIBRARY(bmdl_batch MODULE ${bmdl_batch_sources})
     ADD_LIBRARY(brec_batch SHARED ${brec_batch_sources})
 
     IF(WIN32)
@@ -40,6 +39,11 @@ IF( PYTHON_FOUND )
     IF(PYTHON_LIBRARIES)
       TARGET_LINK_LIBRARIES( brec_batch optimized ${PYTHON_LIBRARY})
     ENDIF(PYTHON_LIBRARIES)
+
+    IF( BUILD_TESTING )
+      SUBDIRS(tests)
+    ENDIF( BUILD_TESTING )
+
   ENDIF( EXPAT_FOUND )
 ENDIF( PYTHON_FOUND )
 

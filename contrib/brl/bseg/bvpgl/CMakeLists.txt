@@ -1,7 +1,6 @@
 # bseg/bvpgl/CMakeLists.txt
 # additional Photogrammetry Library.
 
-
 INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR}/mrc)
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bseg )
@@ -16,3 +15,7 @@ AUX_SOURCE_DIRECTORY(Templates bvpgl_sources)
 ADD_LIBRARY(bvpgl ${bvpgl_sources})
 SET_TARGET_PROPERTIES( bvpgl PROPERTIES LINKER_LANGUAGE C)
 TARGET_LINK_LIBRARIES( bvpgl vpgl brip vnl vgl vil vul vbl vcl)
+
+IF( BUILD_TESTING )
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTING )

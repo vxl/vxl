@@ -14,4 +14,8 @@ IF( EXPAT_FOUND )
   ADD_LIBRARY( expatpp ${expatpp_sources} )
   TARGET_LINK_LIBRARIES( expatpp ${EXPAT_LIBRARIES} )
 
+  IF( BUILD_TESTING )
+    SUBDIRS(tests)
+  ENDIF( BUILD_TESTING )
+
 ENDIF( EXPAT_FOUND )

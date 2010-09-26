@@ -29,3 +29,7 @@ IF(BUILD_OXL)
 ENDIF(BUILD_OXL)
 
 TARGET_LINK_LIBRARIES(gkll vgel_kl vtol vidl_vil1 vil1 vbl)
+
+IF( BUILD_TESTING )
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTING )

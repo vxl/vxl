@@ -21,3 +21,7 @@ TARGET_LINK_LIBRARIES(bmdl vil_algo imesh vgl_algo vgl vnl vil)
 
 #process lib
 SUBDIRS(pro)
+
+IF( BUILD_TESTING )
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTING )

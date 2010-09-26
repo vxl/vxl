@@ -25,6 +25,10 @@ INSTALL_TARGETS(/lib gmvl)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/gel/gmvl ${gmvl_sources})
 TARGET_LINK_LIBRARIES(gmvl vtol vil1 vnl vbl vcl)
 
+IF( BUILD_TESTING )
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTING )
+
 IF (BUILD_EXAMPLES)
   SUBDIRS(examples)
 ENDIF (BUILD_EXAMPLES)

@@ -22,7 +22,7 @@ IF( PYTHON_FOUND )
        reg_boxm.h   reg_boxm.cxx
      )
 
-    ADD_LIBRARY(boxm_batch MODULE ${boxm_batch_sources})
+    ADD_LIBRARY(boxm_batch SHARED ${boxm_batch_sources})
 
     #library has to have different name depending on debug or release version.
     IF(WIN32)
@@ -47,6 +47,11 @@ IF( PYTHON_FOUND )
     IF(PYTHON_LIBRARIES)
       TARGET_LINK_LIBRARIES( boxm_batch optimized ${PYTHON_LIBRARY})
     ENDIF(PYTHON_LIBRARIES)
+
+    IF( BUILD_TESTING )
+      SUBDIRS(tests)
+    ENDIF( BUILD_TESTING )
+
   ENDIF( EXPAT_FOUND )
 ENDIF( PYTHON_FOUND )
 
