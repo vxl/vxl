@@ -15,4 +15,6 @@
 #include <vepl2/vepl2_x_gradient.h>
 #include <vepl2/vepl2_y_gradient.h>
 
+#include <vepl2/accessors/vipl_accessors_vil_image_view_base.h>
+
 int main() { return 0; }
