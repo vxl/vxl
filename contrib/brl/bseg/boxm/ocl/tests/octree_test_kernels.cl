@@ -223,8 +223,8 @@ test_intersect_cell(__global int4* cells, __global float2* cell_data,
   int i= 0;
   int j=0;
   int n_levels = 3;
-  float4 ray_o=(-2.0f,0.1f,0.1f,1.0f);
-  float4 ray_d=(0.99f,0.1f,0.1f,1.0f);
+  float4 ray_o={-2.0f,0.1f,0.1f,1.0f};
+  float4 ray_d={0.99f,0.1f,0.1f,1.0f};
   float tnear=0.0f,tfar=0.0f;
   //determine the number of codes
   test_codes(&i, &n_codes, &code, &ncode);
@@ -418,7 +418,7 @@ test_ray_trace(__global int4* cells, __global float2* cell_data,
 
       if ( fabs(tfar-tnear)<cellsize/100)
       {
-        entry_pt=entry_pt+dir[i]*cellsize/2;
+        entry_pt=entry_pt+ dir[i]*(float4)(cellsize/2);
         entry_loc_code = loc_code(entry_pt, root.w);
         ////traverse to leaf cell that contains the entry point
         curr_cell_ptr = traverse_force(cells, root_ptr, root, entry_loc_code,&curr_loc_code,&global_count);
