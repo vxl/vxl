@@ -2,7 +2,7 @@
 ADD_EXECUTABLE( boxm_opencl_render_expected_process
   boxm_opencl_render_expected_process_exe.cxx
  )
-TARGET_LINK_LIBRARIES( boxm_opencl_render_expected_process boxm_pro  boxm_ocl boxm_ocl_pro vil_pro vpgl_pro boxm_algo_rt_pro vul )
+TARGET_LINK_LIBRARIES( boxm_opencl_render_expected_process bbas_pro boxm_pro  boxm_ocl boxm_ocl_pro vil_pro vpgl_pro boxm_algo_rt_pro vul )
 
 
 INCLUDE( ${BRL_MODULE_PATH}/FindGLEW.cmake )
