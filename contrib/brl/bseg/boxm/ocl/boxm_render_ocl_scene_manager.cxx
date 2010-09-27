@@ -161,9 +161,9 @@ bool boxm_render_ocl_scene_manager::set_args(unsigned kernel_index=0)
       if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local image dimensions)"))
           return 0;
 
-      status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&image_buf_);
-      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (input_image)"))
-          return 0;
+      //status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&image_buf_);
+      //if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (input_image)"))
+      //    return 0;
       status = clSetKernelArg(kernels_[0],i++,sizeof(cl_mem),(void *)&image_gl_buf_);
       if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (gl_image)"))
           return 0;
