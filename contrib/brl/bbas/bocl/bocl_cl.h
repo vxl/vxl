@@ -19,6 +19,7 @@
   #define GL_SHARING_EXTENSION "cl_khr_gl_sharing"
 #elif defined(UNIX) || defined(linux) 
   #include <CL/cl.h>
+  #include <CL/cl_gl.h>
   #define GL_SHARING_EXTENSION "cl_khr_gl_sharing"
 #elif defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__)
   #include <OpenCL/cl.h>
