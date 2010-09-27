@@ -68,8 +68,8 @@ bool bocl_manager<T>::initialize_cl()
     vcl_cerr << "bocl_manager: warning: found " << num_platforms << "OpenCL platforms. Using the first\n";
   }
   // Get the first platform ID
-  cl_platform_id platform_id[2];
-  status = clGetPlatformIDs (2, platform_id, NULL);
+  cl_platform_id platform_id[num_platforms];
+  status = clGetPlatformIDs (num_platforms, platform_id, NULL);
   if (status != CL_SUCCESS) {
     vcl_cerr << "bocl_manager: clGetPlatformIDs (call 2) returned " << status << '\n';
     return false;
@@ -134,6 +134,7 @@ bool bocl_manager<T>::initialize_cl()
                        CL_SUCCESS,
                        "clGetContextInfo failed."))
     return false;
+  
   number_devices_ = device_list_size/sizeof(cl_device_id);
 
   // Now allocate memory for device list based on the size we got earlier
@@ -308,6 +309,7 @@ bool bocl_manager<T>::initialize_cl()
   unsigned size = sizeof(vcl_size_t);
   vcl_cout << "Context Description\n"
            << "Platform Name: "<<platform_name <<'\n'
+           << "Device vendor: " << vendor << '\n' 
            << " Number of devices: " << number_devices_ << '\n'
            << " Number of compute units: " << max_compute_units_ << '\n'
            << " Maximum clock frequency: " << max_clock_freq_/1000.0 << " GHz\n"
