@@ -414,6 +414,15 @@ void boxm_ocl_bit_scene::get_mem_ptrs(unsigned short* mem_ptrs)
   }
 }
 
+void boxm_ocl_bit_scene::get_blocks_in_buffers(unsigned short* blks_in_buffers)
+{
+  int index=0;
+  vbl_array_1d<ushort>::iterator iter;
+  for (iter = blocks_in_buffers_.begin(); iter != blocks_in_buffers_.end(); iter++)
+  {
+    blks_in_buffers[index++] = (*iter);
+  }
+}
 
 //---------------------------------------------------------------------
 // NON CLASS FUNCTIONS

@@ -165,6 +165,7 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   RenderSceneInfo * scene_info_;      //world origin, dimensions, block len, buffer size all packed in here
   cl_ushort       * block_ptrs_;      //(int4) 3d array, points to (buff,offset) for each block
   cl_ushort       * mem_ptrs_;        //(int2) points to tree_cells_ free mem
+  cl_ushort       * blocks_in_buffers_; //(ushort) number of blocks in each buffer
   cl_uchar        * cells_;           //(int2) packed tree cell data
   
   /* optimized data format in 4 buffers */
@@ -216,6 +217,7 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   cl_mem    scene_info_buf_;
   cl_mem    block_ptrs_buf_;
   cl_mem    mem_ptrs_buf_;
+  cl_mem    blocks_in_buffers_buf_;
   cl_mem    cells_buf_;
   cl_mem    cell_alpha_buf_;
   cl_mem    cell_mixture_buf_;
