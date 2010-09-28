@@ -14,7 +14,6 @@
 #include "boxm_ray_trace_manager.h"
 //#include <boxm/ocl/boxm_stack_ray_trace_manager.h>
 #include <boxm/ocl/boxm_ray_bundle_trace_manager.h>
-#include <boxm/ocl/boxm_render_image_manager.h>
 #include <boxm/ocl/boxm_render_ocl_scene_manager.h>
 #include <boxm/ocl/boxm_ocl_bit_scene.h>
 #include <boxm/ocl/boxm_render_bit_scene_manager.h>
@@ -157,53 +156,6 @@ void boxm_opencl_ray_bundle_expected(boxm_scene<boct_tree<short, boxm_sample<APM
 }
 
 
-template <boxm_apm_type APM>
-void boxm_opencl_all_blocks_expected(boxm_scene<boct_tree<short, boxm_sample<APM> > > &scene,
-                                     vpgl_camera_double_sptr cam,
-                                     vil_image_view<typename boxm_apm_traits<APM>::obs_datatype> &expected,
-                                     vil_image_view<float> & mask,
-                                     bool /*use_black_background*/ = false)
-{
-  // set up the application-specific function to be called at every cell along a ray
-
-  const unsigned int ni = expected.ni();
-  const unsigned int nj = expected.nj();
-  vil_image_view<float> img0(ni,nj);
-  vil_image_view<float> img1(ni,nj);
-  // render the image using the opencl raytrace manager
-  boxm_render_image_manager<boxm_sample<APM> >* ray_mgr = boxm_render_image_manager<boxm_sample<APM> >::instance();
-  int bundle_dim=8;
-  ray_mgr->set_bundle_ni(bundle_dim);
-  ray_mgr->set_bundle_nj(bundle_dim);
-  //ray_mgr->set_work_space_ni((int)RoundUp(ni,bundle_dim));
-  //ray_mgr->set_work_space_nj((int)RoundUp(nj,bundle_dim));
-  ray_mgr->init_ray_trace(&scene, cam, expected);
-
-  ray_mgr->run_scene();
-
-  // extract expected image and mask from OpenCL output data
-  cl_float* results = ray_mgr->output_image();
-  if (!results) {
-    vcl_cerr << "Error : boxm_opencl_render_expected : ray_mgr->ray_results() returned NULL\n";
-    return;
-  }
-  cl_float *results_p = results;
-  for (unsigned j = 0; j<nj; ++j)  {
-    for (unsigned i = 0; i<ni; ++i) {
-      img0(i,j)=*(results_p++); // vis_inf
-      img1(i,j)=*(results_p++); // vis_inf
-      expected(i,j) = *(results_p++); // expected intensity
-      mask(i,j) = *(results_p++); // 1 - vis_inf
-    }
-  }
-
-#if 0 //images for debugging
-  vil_save(img0,"f:/apl/img0.tiff");
-  vil_save(img1,"f:/apl/img1.tiff");
-  vil_save(expected,"f:/apl/img2.tiff");
-  vil_save(mask,"f:/apl/img3.tiff");
-#endif
-}
 
 void boxm_opencl_ocl_scene_expected(boxm_ocl_scene &scene,
                                     vpgl_camera_double_sptr cam,
