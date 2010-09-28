@@ -153,10 +153,12 @@ update_bit_scene_opt(__constant  RenderSceneInfo    * linfo,
       int data_ptr = traverse_three(&local_tree[llid], 
                                     posx,posy,posz, 
                                     &cell_minx, &cell_miny, &cell_minz, &cell_len);
+/*
       if(data_ptr != 0) {
         output[0] = -666;
         output[1] = -666;
       } 
+*/
       data_ptr = data_index_opt( (llid<<4), local_tree, data_ptr, bit_lookup);
       data_ptr = block.x * linfo->data_len + data_ptr;
       

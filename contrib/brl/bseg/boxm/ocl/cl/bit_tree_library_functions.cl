@@ -27,6 +27,32 @@ int num_cells(__local uchar* tree)
 }
 
 //--------------------------------------------------------------------
+// returns depth at particular index i for an octree
+// this can be replaced by an expression
+//--------------------------------------------------------------------
+int get_depth(int i) {
+  
+  //root
+  if(i==0)
+    return 0;
+  
+  //1st gen
+  if(i < 9)
+    return 1;
+  
+  //2nd gen
+  if(i < 73)
+    return 2;
+  
+  //3rd gen...
+  if(i < 585)
+    return 3;
+  
+  if(i < 4681)
+    return 4;
+}
+
+//--------------------------------------------------------------------
 // loc code to absolute index //UNTESTED
 //--------------------------------------------------------------------
 int loc_code_to_index(short4 loc_code, int root_level)
@@ -57,7 +83,7 @@ int loc_code_to_index(short4 loc_code, int root_level)
 // Tree Bit manipulation helper functions
 //---------------------------------------------------------------------
 
-uchar tree_bit_at(int rIndex, __local uchar* tree, int index)
+uchar tree_bit_at(__local uchar* tree, int index)
 {
   //make sure it's in bounds - all higher cells are leaves and thus 0
   if (index > 72)
@@ -65,16 +91,19 @@ uchar tree_bit_at(int rIndex, __local uchar* tree, int index)
 
   //root is special case
   if (index == 0)
-    return tree[rIndex+0];
+    return tree[0];
 
   //second generation is sort of a special case (speeds up code)
   if (index < 9)
-    return (1<<(index-1) & tree[rIndex+1])>>(index-1); // ? 1 : 0;
+    return (1<<(index-1) & tree[1])>>(index-1); // ? 1 : 0;
 
   //third or 4th generation treated in same way,
-  int i  = ((index-9)/8 + 2); //byte index i
-  int bi = (index-9)%8;
-  return (1<<bi & tree[rIndex+i])>>bi; // ? 1 : 0;
+  int a = (index-9)>>3; 
+  int i = a+2;
+  int bi = (index-9) - (a<<3);
+  // int i  = ((index-9)/8 + 2);          //byte index i
+  //int bi = (index-9)%8;
+  return (1<<bi & tree[i])>>bi; // ? 1 : 0;
 }
 
 void set_tree_bit_at(__local uchar* tree, int index, bool val)
@@ -86,7 +115,7 @@ void set_tree_bit_at(__local uchar* tree, int index, bool val)
   if (index == 0)
     tree[0] = (val) ? 1 : 0;
 
-  int byte_index = (int) (index-1.0)/8.0+1;
+  int byte_index = convert_int((index-1.0)/8.0+1);
   int child_offset = (index-1)%8;
   unsigned char mask = 1<<child_offset;
   unsigned char byte = tree[byte_index];

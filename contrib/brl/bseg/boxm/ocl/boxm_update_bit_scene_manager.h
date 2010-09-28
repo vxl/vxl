@@ -139,7 +139,9 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   bool run(cl_kernel, unsigned pass);
   
   //: sets args for each kernel (should only be called once)
-  bool set_args();
+  bool set_render_args();
+  bool set_refine_args();
+  bool set_update_args(unsigned pass);
 
   //: set/release command_queue
   bool set_commandqueue();

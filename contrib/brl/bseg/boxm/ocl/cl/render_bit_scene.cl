@@ -186,7 +186,7 @@ ray_trace_bit_scene_opt(__constant  RenderSceneInfo    * linfo,
   data_return.z+=(1.0f-data_return.w)*tfar;
 #endif
 #ifdef INTENSITY
-  expected_int += vis;
+  expected_int += vis*0.5f;
 #endif
   gl_image[imIndex[llid]] = rgbaFloatToInt((float4) expected_int);
   in_image[imIndex[llid]] = expected_int;
