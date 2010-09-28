@@ -150,6 +150,19 @@ bool boxm_ocl_render_bit_tableau::handle(vgui_event const &e)
       glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, pbuffer_);
       glDrawPixels(ni_, nj_, GL_RGBA, GL_UNSIGNED_BYTE, 0);
       glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
+      //glPushMatrix();
+
+      //vnl_random rand;
+      //for(unsigned i=0;i<100000;i++)
+      //{
+      //    glColor3f(rand.drand32(),rand.drand32(),rand.drand32());
+      //    glBegin (GL_LINES);
+      //    glVertex2f (rand.drand32(-1.0,1.0),rand.drand32(-1.0,1.0));
+      //    glVertex2f (rand.drand32(-1.0,1.0), rand.drand32(-1.0,1.0));
+      //    glEnd ();
+      //}
+      //glPopMatrix();
+
 
       //calculate and write fps to status
       vcl_stringstream str;
