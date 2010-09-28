@@ -116,6 +116,7 @@ class boxm_ocl_bit_scene
     void get_tree_cells(unsigned char* cells);
     void get_block_ptrs(unsigned short* blocks);
     void get_mem_ptrs(unsigned short* mem_ptrs);
+    void get_blocks_in_buffers(unsigned short* blks_in_buffers);
 
   private:
 
