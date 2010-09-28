@@ -38,7 +38,6 @@ IF(OPENCL_FOUND)
       cl/loc_code_library_functions.cl
       cl/octree_library_functions.cl
       cl/ray_bundle_library_functions.cl
-      cl/ray_bundle_trace_main.cl
       cl/ray_trace_bit_scene.cl
       cl/ray_trace_bit_scene_float3.cl
       cl/ray_trace_bit_scene_opt.cl
