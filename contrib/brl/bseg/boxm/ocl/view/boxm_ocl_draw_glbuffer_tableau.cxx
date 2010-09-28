@@ -2,7 +2,7 @@
 #include <boxm/ocl/view/boxm_ocl_draw_glbuffer_tableau.h>
 //:
 // \file
-#include <boxm/ocl/boxm_render_image_manager.h>
+
 #include <boxm/ocl/boxm_render_ocl_scene_manager.h>
 #include <boxm/ocl/boxm_update_ocl_scene_manager.h>
 
