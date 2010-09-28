@@ -164,7 +164,36 @@ void step_cell_change_detection(__global float8* cell_data, __global float* alph
   (*data_return).z = change_density;
   (*data_return).w = intensity_norm + omega;
 }
+void step_cell_change_detection_uchar8(__global uchar8* cell_data, __global float* alpha_data,int data_ptr,
+                                float d, float4 * data_return, float img_intensity)
+{
+  uchar8 uchar_data = cell_data[data_ptr];
+  float alpha=alpha_data[data_ptr];
 
+  if (alpha<0) return;
+
+  //float expected_int_cell = data.s3;
+  float alpha_integral = (*data_return).x;
+  float vis            = (*data_return).y;
+  float change_density = (*data_return).z;
+  float intensity_norm = (*data_return).w;
+
+  float8 data= convert_float8(uchar_data)/255.0f;
+
+  float prob_den=gauss_3_mixture_prob_density(img_intensity,
+                                              data.s0,data.s1,data.s2,
+                                              data.s3,data.s4,data.s5,
+                                              data.s6,data.s7,1-data.s2-data.s5);
+
+  alpha_integral += alpha*d;
+  float vis_prob_end = exp(-alpha_integral);
+  float omega = vis - vis_prob_end;
+  change_density += prob_den*omega;
+  (*data_return).x = alpha_integral;
+  (*data_return).y = vis_prob_end;
+  (*data_return).z = change_density;
+  (*data_return).w = intensity_norm + omega;
+}
 void step_cell_render_depth(__global float* alpha_data,int data_ptr,
                             float d,float depth, float4 * data_return)
 {

@@ -11,8 +11,8 @@ change_detection_ocl_scene(__global int4    * scene_dims,  // level of the root.
                            __global int     * root_level,
                            __global int     * num_buffer,
                            __global int     * len_buffer,
-                           __global int4    * tree_array,
-                           __global float8  * sample_array,
+                           __global int2    * tree_array,
+                           __global uchar8  * sample_array,
                            __global float   * alpha_array,
                            __global float16 * persp_cam, // camera orign and SVD of inverse of camera matrix
                            __global uint4   * imgdims,   // dimensions of the image
@@ -20,8 +20,8 @@ change_detection_ocl_scene(__global int4    * scene_dims,  // level of the root.
                            __local  uint4   * local_copy_imgdims,
                            __global float   * obs_image,
                            __global float4  * in_image,
-                           __global uint    * gl_image,
-                           __global float   * fg_pdf_)    // input image and store vis_inf and pre_inf
+                           __global uint    * gl_image)
+                               // input image and store vis_inf and pre_inf
 {
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
 
@@ -82,6 +82,9 @@ change_detection_ocl_scene(__global int4    * scene_dims,  // level of the root.
       gl_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)(0.0,0.0,0.0,0.0));
       return;
   }
+  tnear=tnear>0?tnear:0;
+  float fardepth=tfar;
+
   entry_pt=ray_o + tnear*ray_d;
 
   int4 curr_block_index=convert_int4((entry_pt-origin)/blockdims);
@@ -108,7 +111,7 @@ change_detection_ocl_scene(__global int4    * scene_dims,  // level of the root.
     short4 entry_loc_code = loc_code(block_entry_pt, rootlevel);
     short4 curr_loc_code=(short4)-1;
     // traverse to leaf cell that contains the entry point
-    curr_cell_ptr = traverse_force_woffset_mod(tree_array, root_ptr, root, entry_loc_code,&curr_loc_code,&global_count,lenbuffer,block.x,block.y);
+    curr_cell_ptr = traverse_force_woffset_mod_opt(tree_array, root_ptr, root, entry_loc_code,&curr_loc_code,&global_count,lenbuffer,block.x,block.y);
 
     // this cell is the first pierced by the ray
     // follow the ray through the cells until no neighbors are found
@@ -130,7 +133,7 @@ change_detection_ocl_scene(__global int4    * scene_dims,  // level of the root.
 
         entry_loc_code = loc_code(block_entry_pt, rootlevel);
         //// traverse to leaf cell that contains the entry point
-        curr_cell_ptr = traverse_woffset_mod(tree_array, root_ptr, root, entry_loc_code,&curr_loc_code,&global_count,lenbuffer,block.x,block.y);
+        curr_cell_ptr = traverse_woffset_mod_opt(tree_array, root_ptr, root, entry_loc_code,&curr_loc_code,&global_count,lenbuffer,block.x,block.y);
         cell_bounding_box(curr_loc_code, rootlevel+1, &cell_min, &cell_max);
         hit = intersect_cell(local_ray_o, ray_d, cell_min, cell_max,&tnear, &tfar);
         if (hit)
@@ -139,11 +142,12 @@ change_detection_ocl_scene(__global int4    * scene_dims,  // level of the root.
       if (!hit)
           break;
 
-      int data_ptr =  block.x*lenbuffer+tree_array[curr_cell_ptr].z;
+      ushort2 child_data = as_ushort2(tree_array[curr_cell_ptr].y);
+      int data_ptr = block.x*lenbuffer + (int) child_data.x;
 
       //// distance must be multiplied by the dimension of the bounding box
       float d = (tfar-tnear)*(blockdims.x);
-      step_cell_change_detection(sample_array,alpha_array,data_ptr,d,&data_return,intensity);
+      step_cell_change_detection_uchar8(sample_array,alpha_array,data_ptr,d,&data_return,intensity);
 
 
       // Added aliitle extra to the exit point
@@ -155,7 +159,7 @@ change_detection_ocl_scene(__global int4    * scene_dims,  // level of the root.
 
       //// required exit location code
       short4 exit_loc_code = loc_code(exit_pt, rootlevel);
-      curr_cell_ptr = traverse_force_woffset_mod(tree_array, root_ptr, root,exit_loc_code, &curr_loc_code,&global_count,lenbuffer,block.x,block.y);
+      curr_cell_ptr = traverse_force_woffset_mod_opt(tree_array, root_ptr, root,exit_loc_code, &curr_loc_code,&global_count,lenbuffer,block.x,block.y);
 
       block_entry_pt = local_ray_o + (tfar)*ray_d;
     }
@@ -200,11 +204,12 @@ change_detection_ocl_scene(__global int4    * scene_dims,  // level of the root.
   float bg_belief=0.0f;
   float fg_belief=0.0f;
 
-  int fg_hist_index=(int)(intensity/0.05);
-  if(fg_hist_index==20)
-    fg_hist_index=19;
+  //int fg_hist_index=(int)(intensity/0.05);
+  //if(fg_hist_index==20)
+  //  fg_hist_index=19;
 
-  float foreground_density_val=fg_pdf_[fg_hist_index];
+
+  float foreground_density_val=1.0f;//fg_pdf_[fg_hist_index];
   if(data_return.z>foreground_density_val)
   { 
       bg_belief=data_return.z/(data_return.z+foreground_density_val)-foreground_density_val/(2*data_return.z);
@@ -215,7 +220,7 @@ change_detection_ocl_scene(__global int4    * scene_dims,  // level of the root.
       bg_belief=0.0;
       fg_belief=foreground_density_val/(foreground_density_val+data_return.z)-data_return.z/(2*foreground_density_val);
   }
-  float4 outputval=(float4)(fg_belief,0,0,1);
+  float4 outputval=(float4)(bg_belief,0,0,1);
   //float4 outputval=(float4)(1-data_return.z/(1+data_return.z),1-data_return.z/(1+data_return.z),1-data_return.z/(1+data_return.z),1);
   gl_image[j*get_global_size(0)+i]=rgbaFloatToInt((float4)outputval);
   in_image[j*get_global_size(0)+i]=(float4)outputval.x;
