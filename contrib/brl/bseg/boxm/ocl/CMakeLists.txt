@@ -41,7 +41,6 @@ IF(OPENCL_FOUND)
       cl/octree_library_functions.cl
       cl/ray_bundle_library_functions.cl
       cl/ray_bundle_trace_main.cl
-      cl/ray_trace_all_blocks.cl
       cl/ray_trace_bit_scene.cl
       cl/ray_trace_bit_scene_float3.cl
       cl/ray_trace_bit_scene_opt.cl
