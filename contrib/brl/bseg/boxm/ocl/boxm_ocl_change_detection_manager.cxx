@@ -35,7 +35,7 @@ bool boxm_ocl_change_detection_manager::init_ray_trace(boxm_ocl_scene *scene,
       !this->append_process_kernels(source_dir+"expected_functor.cl")||
       !this->append_process_kernels(source_dir+"ray_bundle_library_functions.cl")||
       !this->append_process_kernels(source_dir+"change_detection_ocl_scene.cl")) {
-    vcl_cerr << "Error: boxm_ray_trace_manager : failed to load kernel source (helper functions)\n";
+    vcl_cerr << "Error: boxm_ocl_change_detection_manager : failed to load kernel source (helper functions)\n";
     return false;
   }
 
@@ -60,7 +60,7 @@ bool boxm_ocl_change_detection_manager::init_ray_trace(boxm_ocl_scene *scene,
       !this->append_process_kernels(source_dir+"expected_functor.cl")||
       !this->append_process_kernels(source_dir+"ray_bundle_library_functions.cl")||
       !this->append_process_kernels(source_dir+"change_detection_ocl_scene.cl")) {
-    vcl_cerr << "Error: boxm_ray_trace_manager : failed to load kernel source (helper functions)\n";
+    vcl_cerr << "Error: boxm_ocl_change_detection_manager : failed to load kernel source (helper functions)\n";
     return false;
   }
 

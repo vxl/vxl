@@ -37,7 +37,7 @@ build_program(vcl_string const& functor, bool use_cell_data)
   bool main = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/update_ocl_scene.cl");
 
   if (!octr||!bpr||!stat||!rbun||!main||!locc||!cell) {
-    vcl_cerr << "Error: boxm_ray_trace_manager : failed to load kernel source (helper functions)\n";
+    vcl_cerr << "Error: boxm_re_render_ocl_scene_manager : failed to load kernel source (helper functions)\n";
     return false;
   }
   vcl_string patt = "$$step_cell$$", empty = "", zero = "0", one = "1";
@@ -79,7 +79,7 @@ boxm_re_render_ocl_scene_manager::build_rendering_program()
     bool main = this->append_process_kernels(root + "/contrib/brl/bseg/boxm/ocl/cl/ray_trace_ocl_scene.cl");
 
     if (!octr||!bpr||!exp||!stat||!rbun||!main||!locc||!cell) {
-        vcl_cerr << "Error: boxm_ray_trace_manager : failed to load kernel source (helper functions)\n";
+        vcl_cerr << "Error: boxm_re_render_ocl_scene_manager : failed to load kernel source (helper functions)\n";
         return false;
     }
 

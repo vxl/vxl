@@ -32,7 +32,7 @@ bool boxm_render_ocl_scene_manager::init_ray_trace(boxm_ocl_scene *scene,
       !this->append_process_kernels(source_dir+"ray_bundle_library_functions.cl")||
       !this->append_process_kernels(source_dir+"rerender.cl")||
       !this->append_process_kernels(source_dir+"ray_trace_ocl_scene.cl")) {
-    vcl_cerr << "Error: boxm_ray_trace_manager : failed to load kernel source (helper functions)\n";
+    vcl_cerr << "Error: boxm_render_ocl_scene_manager : failed to load kernel source (helper functions)\n";
     return false;
   }
 
