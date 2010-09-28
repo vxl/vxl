@@ -50,7 +50,8 @@ class boxm_render_probe_manager : public bocl_manager<boxm_render_probe_manager 
   bool init_ray_trace(boxm_ocl_scene *scene,
                       vpgl_camera_double_sptr cam,
                       unsigned i,
-                      unsigned j);
+                      unsigned j,
+                      float intensity);
   bool setup_online_processing();
   bool online_processing(vpgl_camera_double_sptr & camera);
   bool finish_online_processing();
@@ -137,10 +138,12 @@ class boxm_render_probe_manager : public bocl_manager<boxm_render_probe_manager 
   bool clean_root_level();
 
   void set_ij(int i,int j){i_=i;j_=j;}
+  void set_intensity(float intensity){intensity_=intensity;}
+  float get_output(){return *output_;}
   //open cl side helper functions
   int build_kernel_program(cl_program & program);
   cl_kernel kernel() {return kernel_;}
-  void getoutputarray(vcl_vector<float> & out);
+  void getoutputarray(vcl_vector< vcl_vector<float> > & out);
 
   //necessary CL items
   cl_program program_;
@@ -219,13 +222,17 @@ class boxm_render_probe_manager : public bocl_manager<boxm_render_probe_manager 
   cl_mem   block_ptrs_buf_;
   cl_mem   block_dims_buf_;
 
-  cl_mem   rayoutput_buf_;
+  cl_mem  output_buf_;
+
+  cl_mem rayoutput_buf_[10]  ;
   boxm_ocl_scene * scene_;
   vpgl_camera_double_sptr cam_;
-  float *  rayoutput_;
+  float *  rayoutput_[10]  ;
   cl_int i_;
   cl_int j_;
   unsigned raydepth_;
+  cl_float intensity_;
+  cl_float * output_;
 
   vcl_size_t globalThreads[2];
   vcl_size_t localThreads[2] ;

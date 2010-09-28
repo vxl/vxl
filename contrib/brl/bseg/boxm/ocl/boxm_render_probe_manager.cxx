@@ -11,24 +11,33 @@
 bool boxm_render_probe_manager::init_ray_trace(boxm_ocl_scene *scene,
                                                vpgl_camera_double_sptr cam,
                                                unsigned i,
-                                               unsigned j)
+                                               unsigned j,
+                                               float intensity=0.0f)
 {
   scene_ = scene;
   cam_ = cam;
   i_=(int)i;
   j_=(int)j;
+  intensity_=intensity;
 
   // Code for Pass_0
-  vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm/ocl/cl/";
-  if (!this->load_kernel_source(source_dir+"loc_code_library_functions.cl") ||
-      !this->append_process_kernels(source_dir+"cell_utils.cl") ||
-      !this->append_process_kernels(source_dir+"octree_library_functions.cl") ||
-      !this->append_process_kernels(source_dir+"backproject.cl")||
-      !this->append_process_kernels(source_dir+"statistics_library_functions.cl")||
-      !this->append_process_kernels(source_dir+"expected_functor.cl")||
-      !this->append_process_kernels(source_dir+"ray_bundle_library_functions.cl")||
-      !this->append_process_kernels(source_dir+"ray_trace_ocl_scene.cl")) {
-    vcl_cerr << "Error: boxm_ray_trace_manager : failed to load kernel source (helper functions)\n";
+  if (!this->load_kernel_source(vcl_string(VCL_SOURCE_ROOT_DIR)
+                                + "/contrib/brl/bseg/boxm/ocl/cl/loc_code_library_functions.cl") ||
+      !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
+                                    + "/contrib/brl/bseg/boxm/ocl/cl/cell_utils.cl") ||
+      !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
+                                    +"/contrib/brl/bseg/boxm/ocl/cl/octree_library_functions.cl") ||
+      !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
+                                    +"/contrib/brl/bseg/boxm/ocl/cl/backproject.cl")||
+      !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
+                                    +"/contrib/brl/bseg/boxm/ocl/cl/statistics_library_functions.cl")||
+      !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
+                                    +"/contrib/brl/bseg/boxm/ocl/cl/expected_functor.cl")||
+      !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
+                                    +"/contrib/brl/bseg/boxm/ocl/cl/ray_bundle_library_functions.cl")||
+      !this->append_process_kernels(vcl_string(VCL_SOURCE_ROOT_DIR)
+                                    +"/contrib/brl/bseg/boxm/ocl/cl/ray_trace_ocl_scene.cl")) {
+    vcl_cerr << "Error: boxm_render_ocl_scene_manager : failed to load kernel source (helper functions)\n";
     return false;
   }
 
@@ -79,11 +88,13 @@ bool boxm_render_probe_manager::online_processing(vpgl_camera_double_sptr & came
   return false;
 }
 
-void boxm_render_probe_manager::getoutputarray(vcl_vector<float> & out)
+void boxm_render_probe_manager::getoutputarray(vcl_vector< vcl_vector<float> >& out)
 {
-  for (unsigned i=0;i<raydepth_;i++)
-    if (rayoutput_[i]>-1)
-      out.push_back(rayoutput_[i]);
+    out.resize(10);
+    for(unsigned j=0;j<10;j++)
+        for (unsigned i=0;i<raydepth_;i++)
+            if (rayoutput_[j][i]>-1)
+                out[j].push_back(rayoutput_[j][i]);
 }
 
 
@@ -180,9 +191,18 @@ bool boxm_render_probe_manager::set_args()
     status = clSetKernelArg(kernel_, i++, sizeof(cl_int),&j_);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (j) buffer)"))
         return SDK_FAILURE;
-    status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&rayoutput_buf_);
+    status = clSetKernelArg(kernel_, i++, sizeof(cl_float),&intensity_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (intensity) buffer)"))
+        return SDK_FAILURE;
+    for(unsigned cnt=0;cnt<10;cnt++)
+    {
+    status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&rayoutput_buf_[cnt]);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (input_image)"))
         return 0;
+    }
+    status = clSetKernelArg(kernel_, i++, sizeof(cl_mem),(void*)&output_buf_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output) buffer)"))
+        return SDK_FAILURE;
 
    return true;
 }
@@ -289,55 +309,83 @@ bool boxm_render_probe_manager::run_scene()
 bool boxm_render_probe_manager::set_rayoutput()
 {
  raydepth_=1000;
- rayoutput_=(float*)boxm_ocl_utils::alloc_aligned(raydepth_,sizeof(float),16);
+ for(unsigned j=0;j<10;j++)
+ {
+ rayoutput_[j]=(float*)boxm_ocl_utils::alloc_aligned(raydepth_,sizeof(float),16);
 
  for (unsigned i=0;i<raydepth_;i++)
-     rayoutput_[i]=-1.0;
-   return true;
+     rayoutput_[j][i]=-1.0;
+ }  
+
+ output_=(float*)boxm_ocl_utils::alloc_aligned(1,sizeof(float),16);
+ output_[0]=0.0f;
+ return true;
 }
 
 bool boxm_render_probe_manager::set_rayoutput_buffers()
 {
   cl_int status;
-  rayoutput_buf_ = clCreateBuffer(this->context_,
+  for(unsigned i=0;i<10;i++)
+  {
+  rayoutput_buf_[i] = clCreateBuffer(this->context_,
                                   CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
                                   raydepth_*sizeof(cl_float),
-                                  rayoutput_,&status);
+                                  rayoutput_[i],&status);
+
+  output_buf_=clCreateBuffer(this->context_,
+                                  CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+                                  sizeof(cl_float),output_,&status);
+  }
   return this->check_val(status,CL_SUCCESS,"clCreateBuffer (rayoutput_) failed.")==1;
 }
 
 bool boxm_render_probe_manager::release_rayoutput_buffers()
 {
     cl_int status;
-    status = clReleaseMemObject(rayoutput_buf_);
+    for(unsigned i=0;i<10;i++)
+        status = clReleaseMemObject(rayoutput_buf_[i]);
+
+    status = clReleaseMemObject(output_buf_);
+
     return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (rayoutput_buf_).")==1;
 }
 
 bool boxm_render_probe_manager::clean_rayoutput()
 {
     if (rayoutput_)
-        boxm_ocl_utils::free_aligned(rayoutput_);
+        for(unsigned i=0;i<10;i++)
+            boxm_ocl_utils::free_aligned(rayoutput_[i]);
     return true;
 }
 
 bool boxm_render_probe_manager::read_output_array()
 {
   cl_event events[2];
+ int status =-1;
+  for(unsigned i=0;i<10;i++)
+  {
+      // Enqueue readBuffers
+     status= clEnqueueReadBuffer(command_queue_,rayoutput_buf_[i],CL_TRUE,
+                                       0,this->raydepth_*sizeof(cl_float),
+                                       rayoutput_[i], 0,NULL,&events[0]);
 
-  // Enqueue readBuffers
-  int status = clEnqueueReadBuffer(command_queue_,rayoutput_buf_,CL_TRUE,
-                                   0,this->raydepth_*sizeof(cl_float),
-                                   rayoutput_, 0,NULL,&events[0]);
+      if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (image_)failed."))
+          return false;
+
+      // Wait for the read buffer to finish execution
+      status = clWaitForEvents(1, &events[0]);
+      if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents failed."))
+          return false;
+
+      status = clReleaseEvent(events[0]);
+  }
+  status= clEnqueueReadBuffer(command_queue_,output_buf_,CL_TRUE,
+                              0,sizeof(cl_float),
+                              output_, 0,NULL,NULL);
 
   if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (image_)failed."))
-    return false;
+      return false;
 
-  // Wait for the read buffer to finish execution
-  status = clWaitForEvents(1, &events[0]);
-  if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents failed."))
-    return false;
-
-  status = clReleaseEvent(events[0]);
   return this->check_val(status,CL_SUCCESS,"clReleaseEvent failed.")==1;
 }
 
