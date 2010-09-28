@@ -85,13 +85,22 @@ bool boxm_ocl_convert_boxm_to_ocl_process(bprb_func_process& pro)
     }
     case BOXM_APM_SIMPLE_GREY:
     {
-      //convert
-      boxm_ocl_scene ocl_scene;
-      //typedef boct_tree<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > type;
-      //boxm_ocl_convert<boxm_sample<BOXM_APM_SIMPLE_GREY> >::convert_scene(dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer()), num_buffers, ocl_scene, max_mb);
-      vcl_cout<<ocl_scene<<vcl_endl;
-      ocl_scene.save_scene(output_dir);
-      break;
+        typedef boct_tree<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > type;
+        boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
+
+      if(bit_tree) {
+        boxm_ocl_bit_scene bit_scene;
+        boxm_ocl_convert<boxm_sample<BOXM_APM_SIMPLE_GREY> >::convert_bit_scene(scene, bit_scene, max_mb);
+        vcl_cout<<bit_scene<<vcl_endl;
+        bit_scene.save_scene(output_dir);
+      }
+      else {
+        boxm_ocl_scene ocl_scene;
+        boxm_ocl_convert<boxm_sample<BOXM_APM_SIMPLE_GREY> >::convert_scene(scene, ocl_scene, max_mb);
+        vcl_cout<<ocl_scene<<vcl_endl;
+        ocl_scene.save_scene(output_dir);
+      }
+       break;
     }
     default:
     {

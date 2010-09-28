@@ -67,7 +67,7 @@ bool boxm_ocl_init_render_probe_process(bprb_func_process& pro)
   unsigned pj = pro.get_input<unsigned>(i++);
   boxm_render_probe_manager* mgr = boxm_render_probe_manager::instance();
 
-  mgr->init_ray_trace(&scene,cam,pi,pj);
+  mgr->init_ray_trace(&scene,cam,pi,pj,0.0f);
   mgr->setup_online_processing();
 
   pro.set_output_val<boxm_render_probe_manager_sptr>(0,boxm_render_probe_manager_sptr(mgr));
