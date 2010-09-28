@@ -486,7 +486,7 @@ build_update_program(vcl_string const& functor, bool use_cell_data)
   bool main = this->append_process_kernels(root + "update_bit_scene.cl");
 
   if (!octr||!bpr||!stat||!rbun||!main||!locc||!cell) {
-    vcl_cerr << "Error: boxm_ray_trace_manager : failed to load kernel source (helper functions)\n";
+    vcl_cerr << "Error: boxm_update_bit_scene_manager : failed to load kernel source (helper functions)\n";
     return false;
   }
   vcl_string patt = "$$step_cell$$", empty = "", zero = "0", one = "1";
