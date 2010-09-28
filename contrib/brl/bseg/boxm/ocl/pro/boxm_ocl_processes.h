@@ -13,5 +13,7 @@ DECLARE_FUNC_CONS(boxm_ocl_convert_boxm_to_ocl_process);
 DECLARE_FUNC_CONS(boxm_ocl_init_render_probe_process);
 DECLARE_FUNC_CONS(boxm_ocl_run_render_probe_process);
 DECLARE_FUNC_CONS(boxm_ocl_finish_render_probe_process);
-
+DECLARE_FUNC_CONS(boxm_ocl_init_change_detection_process);
+DECLARE_FUNC_CONS(boxm_ocl_run_change_detection_process);
+DECLARE_FUNC_CONS(boxm_ocl_finish_change_detection_process);
 #endif
