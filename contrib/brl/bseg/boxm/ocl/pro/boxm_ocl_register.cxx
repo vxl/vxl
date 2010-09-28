@@ -20,7 +20,6 @@ void boxm_ocl_register::register_process()
 {
     REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_ocl_ray_bundle_expected_process,"boxmOclRayBundleExpectedProcess");
     REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_ocl_refine_process,"boxmOclRefineProcess");
-    REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_ocl_render_all_blocks_expected_process,"boxmOclRenderAllBlocksExpectedProcess");
     REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_ocl_convert_boxm_to_ocl_process,"boxmOclConvertBoxmToOclProcess");
     REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_ocl_init_render_probe_process,"boxmOclInitRenderProbeProcess");
     REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_ocl_run_render_probe_process,"boxmOclRunRenderProbeProcess");
