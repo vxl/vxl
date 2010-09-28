@@ -2,7 +2,7 @@
 //:
 // \file
 
-#include <boxm/ocl/boxm_change_detection_ocl_scene_manager.h>
+#include <boxm/ocl/boxm_ocl_change_detection_manager.h>
 
 #include <boxm/ocl/boxm_ocl_utils.h>
 #include <vpgl/vpgl_calibration_matrix.h>
@@ -91,8 +91,8 @@ bool boxm_ocl_change_detection_tableau::init_ocl()
   }
 
   //initialize the render manager
-  boxm_change_detection_ocl_scene_manager* cd_mgr
-      = boxm_change_detection_ocl_scene_manager::instance();
+  boxm_ocl_change_detection_manager* cd_mgr
+      = boxm_ocl_change_detection_manager::instance();
   int status=0;
   cl_platform_id platform_id[1];
   status = clGetPlatformIDs (1, platform_id, NULL);
@@ -151,9 +151,6 @@ bool boxm_ocl_change_detection_tableau::init_ocl()
       && cd_mgr->set_input_image()
       && cd_mgr->set_input_image_buffers()
       && cd_mgr->set_image_dims_buffers();
-
-  good= good && cd_mgr->set_foreground_pdf(hist_)
-             && cd_mgr->set_foreground_pdf_buffers();
   //need to set ray trace
   //delete old buffer
   if (pbuffer_) {
@@ -194,7 +191,7 @@ bool boxm_ocl_change_detection_tableau::change_detection()
     vcl_cout<<"Cam "<<cam_files_[curr_frame_]<<" Image "<<img_files_[curr_frame_]<<vcl_endl;
 
     //load up the update manager instance
-    boxm_change_detection_ocl_scene_manager* cd_mgr = boxm_change_detection_ocl_scene_manager::instance();
+    boxm_ocl_change_detection_manager* cd_mgr = boxm_ocl_change_detection_manager::instance();
     cl_int status = clEnqueueAcquireGLObjects(cd_mgr->command_queue_, 1,
         &cd_mgr->image_gl_buf_ , 0, 0, 0);
     if (!cd_mgr->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (input_image)"+error_to_string(status)))
@@ -228,6 +225,7 @@ bool boxm_ocl_change_detection_tableau::change_detection()
     cd_mgr->set_persp_camera(pcam);
     cd_mgr->write_persp_camera_buffers();
     cd_mgr->run();
+
     if(vul_file::is_directory(save_img_dir_.c_str()))
     {
         cd_mgr->read_output_image();

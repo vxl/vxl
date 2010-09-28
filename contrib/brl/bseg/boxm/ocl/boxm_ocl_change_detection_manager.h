@@ -1,5 +1,5 @@
-#ifndef boxm_change_detection_ocl_scene_manager_h_
-#define boxm_change_detection_ocl_scene_manager_h_
+#ifndef boxm_ocl_change_detection_manager_h_
+#define boxm_ocl_change_detection_manager_h_
 //:
 // \file
 #include <vcl_string.h>
@@ -12,10 +12,10 @@
 #include <boxm/ocl/boxm_ocl_scene.h>
 
 #include <vil/vil_image_view.h>
-#include <vpgl/vpgl_perspective_camera.h>
+#include <vpgl/vpgl_proj_camera.h>
 #include <vul/vul_file_iterator.h>
 
-class boxm_change_detection_ocl_scene_manager : public bocl_manager<boxm_change_detection_ocl_scene_manager >
+class boxm_ocl_change_detection_manager : public bocl_manager<boxm_ocl_change_detection_manager >, public vbl_ref_count
 {
   typedef vnl_vector_fixed<int, 4> int4;
   typedef vnl_vector_fixed<float, 16> float16;
@@ -24,14 +24,14 @@ class boxm_change_detection_ocl_scene_manager : public bocl_manager<boxm_change_
  public:
   typedef float obs_type;
 
-  boxm_change_detection_ocl_scene_manager() :
+  boxm_ocl_change_detection_manager() :
     program_(0),
     block_ptrs_(0),
     scene_dims_(0),
     block_dims_(0),
     cells_(0),
     cells_size_(0),
-    cell_data_(0),
+    cell_mixture_(0),
     cell_alpha_(0),
     cell_data_size_(0),
     numbuffer_(0),
@@ -45,7 +45,7 @@ class boxm_change_detection_ocl_scene_manager : public bocl_manager<boxm_change_
     wni_(1), wnj_(1),
     output_img_() {}
 
-  ~boxm_change_detection_ocl_scene_manager() {
+  ~boxm_ocl_change_detection_manager() {
     if (program_)
       clReleaseProgram(program_);
   }
@@ -55,10 +55,17 @@ class boxm_change_detection_ocl_scene_manager : public bocl_manager<boxm_change_
                       vpgl_camera_double_sptr cam,
                       vil_image_view<float> &obs,
                       vil_image_view<float> &cd);
+  bool init_ray_trace(boxm_ocl_scene *scene,unsigned ni, unsigned nj);
+
   //: 2d workgroup
   void set_bundle_ni(unsigned bundle_x) {bni_=bundle_x;}
   void set_bundle_nj(unsigned bundle_y) {bnj_=bundle_y;}
 
+  bool start();
+  bool change_detection(vpgl_camera_double_sptr cam,
+                        vil_image_view_base_sptr img,
+                        vil_image_view_base_sptr& output);
+  bool finish();
   //: run update
   bool run_scene();
   bool set_args();
@@ -93,6 +100,8 @@ class boxm_change_detection_ocl_scene_manager : public bocl_manager<boxm_change_
   float gpu_time() {return gpu_time_; }
 
   bool read_output_image();
+  vil_image_view_base_sptr get_output_image();
+
   bool read_trees();
   void print_tree();
   void print_image();
@@ -136,7 +145,7 @@ class boxm_change_detection_ocl_scene_manager : public bocl_manager<boxm_change_
 
   // Set up Camera
   bool set_persp_camera();
-  bool set_persp_camera(vpgl_perspective_camera<double> * pcam);
+  bool set_persp_camera(vpgl_proj_camera<double> * pcam);
 
   bool set_persp_camera_buffers();
   bool write_persp_camera_buffers();
@@ -190,7 +199,7 @@ class boxm_change_detection_ocl_scene_manager : public bocl_manager<boxm_change_
   cl_uint  cells_size_;
 
   //array of data pointed to by tree
-  cl_float* cell_data_;
+  cl_uchar* cell_mixture_;
   cl_float* cell_alpha_;
   //cl_half* cell_data_;
   cl_uint  cell_data_size_;
@@ -261,5 +270,14 @@ class boxm_change_detection_ocl_scene_manager : public bocl_manager<boxm_change_
   //gpu time
   float gpu_time_;
 };
+//: Binary write boxm_render_probe_manager scene to stream
+void vsl_b_write(vsl_b_ostream & os, boxm_ocl_change_detection_manager const& mgr);
 
-#endif // boxm_change_detection_ocl_scene_manager_h_
+//: Binary load boxm_render_probe_manager scene from stream.
+void vsl_b_read(vsl_b_istream & is, boxm_ocl_change_detection_manager &mgr);
+
+void vsl_b_read(vsl_b_istream& is, boxm_ocl_change_detection_manager* p);
+
+//: Binary write  scene pointer to stream
+void vsl_b_write(vsl_b_ostream& os, const boxm_ocl_change_detection_manager* &p);
+#endif // boxm_ocl_change_detection_manager_h_

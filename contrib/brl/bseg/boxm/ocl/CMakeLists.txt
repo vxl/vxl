@@ -24,7 +24,7 @@ IF(OPENCL_FOUND)
       boxm_render_ocl_scene_manager.h boxm_render_ocl_scene_manager.cxx
       boxm_re_render_ocl_scene_manager.h boxm_re_render_ocl_scene_manager.cxx
       boxm_update_ocl_scene_manager.h boxm_update_ocl_scene_manager.cxx
-      boxm_change_detection_ocl_scene_manager.h boxm_change_detection_ocl_scene_manager.cxx
+      boxm_ocl_change_detection_manager.h boxm_ocl_change_detection_manager.cxx boxm_ocl_change_detection_manager_sptr.h
       boxm_ocl_camera_manager.h boxm_ocl_camera_manager.cxx
       boxm_ocl_bit_scene.h boxm_ocl_bit_scene.cxx
       boxm_render_bit_scene_manager.h boxm_render_bit_scene_manager.cxx

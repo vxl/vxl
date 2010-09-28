@@ -1,0 +1,10 @@
+#ifndef boxm_ocl_change_detection_manager_sptr_h
+#define boxm_ocl_change_detection_manager_sptr_h
+
+class boxm_ocl_change_detection_manager;
+
+#include <vbl/vbl_smart_ptr.h>
+
+typedef vbl_smart_ptr<boxm_ocl_change_detection_manager> boxm_ocl_change_detection_manager_sptr;
+
+#endif //boxm_ocl_change_detection_manager_sptr_h
