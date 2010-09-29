@@ -56,7 +56,9 @@ bool boxm_ocl_render_bit_tableau::init_ocl()
       vcl_cout<<error_to_string(status);
       return 0;
   }
-
+  
+  //create OpenCL context 
+  cl_context ComputeContext;
 #ifdef WIN32
   cl_context_properties props[] =
   {
@@ -65,14 +67,20 @@ bool boxm_ocl_render_bit_tableau::init_ocl()
       CL_CONTEXT_PLATFORM, (cl_context_properties) platform_id[0],
       0
   };
+  //create OpenCL context with display properties determined above
+  ComputeContext = clCreateContext(props, 1, &ray_mgr->devices()[0], NULL, NULL, &status);
 #elif defined(__APPLE__) || defined(MACOSX)
-  CGLContextObj kCGLContext = CGLGetCurrentContext();
+  CGLContextObj kCGLContext = CGLGetCurrentContext();              
   CGLShareGroupObj kCGLShareGroup = CGLGetShareGroup(kCGLContext);
-  cl_context_properties props[] =
-  {
-    CL_CONTEXT_PROPERTY_USE_CGL_SHAREGROUP_APPLE, (cl_context_properties)kCGLShareGroup,
-    0
+  
+  cl_context_properties props[] = { 
+    CL_CONTEXT_PROPERTY_USE_CGL_SHAREGROUP_APPLE, (cl_context_properties)kCGLShareGroup, 
+    CL_CONTEXT_PLATFORM, (cl_context_properties) platform_id[0],
+    0 
   };
+  //create a CL context from a CGL share group - no GPU devices must be passed, 
+  //all CL compliant devices in the CGL share group will be used to create the context. more info in cl_gl_ext.h
+  ComputeContext = clCreateContext(props, 0, 0, NULL, NULL, &status);
 #else
   cl_context_properties props[] =
   {
@@ -81,12 +89,53 @@ bool boxm_ocl_render_bit_tableau::init_ocl()
       CL_CONTEXT_PLATFORM, (cl_context_properties) platform_id[0],
       0
   };
+  ComputeContext = clCreateContext(props, 1, &ray_mgr->devices()[0], NULL, NULL, &status);
 #endif
 
-  //create OpenCL context with display properties determined above
-  ray_mgr->context_ = clCreateContext(props, 1, &ray_mgr->devices()[0], NULL, NULL, &status);
+  if (status!=CL_SUCCESS) {
+    vcl_cout<<"Error: Failed to create a compute CL/GL context!" << error_to_string(status) <<vcl_endl;
+    return 0;
+  }
+  
+#ifdef DEBUG 
+  // Check that CLGL devices are found
+  unsigned int device_count;
+  cl_device_id device_ids[16];
 
-//  initialize ray trace using the input camera
+  size_t returned_size;
+  err = clGetContextInfo(ComputeContext, CL_CONTEXT_DEVICES, sizeof(device_ids), device_ids, &returned_size);
+  if(err)
+  {
+      vcl_cout << "Error: Failed to retrieve compute devices for context!\n";
+      return 0;
+  }
+  
+  device_count = returned_size / sizeof(cl_device_id);
+  
+  unsigned i = 0;
+  bool device_found = 0;
+  cl_device_type device_type;	
+  for(i = 0; i < device_count; i++) 
+  {
+      clGetDeviceInfo(device_ids[i], CL_DEVICE_TYPE, sizeof(cl_device_type), &device_type, NULL);
+      if(device_type == CL_DEVICE_TYPE_GPU) 
+      {
+          device_found = true;
+          break;
+      }	
+  }
+  
+  if(!device_found)
+  {
+      vcl_cout<<"Error: Failed to locate compute device!\n";
+      return 0;
+  }
+#endif
+  
+  //set the OpenCL context with display properties determined above
+  ray_mgr->context_ = ComputeContext;  
+
+  //initialize ray trace using the input camera
   int bundle_dim = 8;
   ray_mgr->set_bundle_ni(bundle_dim);
   ray_mgr->set_bundle_nj(bundle_dim);
