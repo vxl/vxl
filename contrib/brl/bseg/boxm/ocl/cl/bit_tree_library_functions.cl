@@ -70,7 +70,7 @@ int loc_code_to_index(short4 loc_code, int root_level)
   for (int i=depth; i>0; i--, ri--)  {
     ushort mask = 1<<ri;
     //get bit at mask
-    ushort4 mxyz = (mask & loc_code)>>ri;
+   ushort4 mxyz = ((short4) mask & loc_code)>>ri; 
 
     packed += (mxyz.z << (3*i-1))
             + (mxyz.y << (3*i-2))
