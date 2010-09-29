@@ -61,34 +61,48 @@ bool boxm_ocl_draw_glbuffer_tableau::init_ocl()
       return 0;
   }
 
+  //create OpenCL context 
+  cl_context compute_context;
 #ifdef WIN32
   cl_context_properties props[] =
   {
-      CL_GL_CONTEXT_KHR, (cl_context_properties) wglGetCurrentContext(),
-      CL_WGL_HDC_KHR, (cl_context_properties) wglGetCurrentDC(),
-      CL_CONTEXT_PLATFORM, (cl_context_properties) platform_id[0],
-      0
-  };
-#elif defined(__APPLE__) || defined(MACOSX)
-  CGLContextObj kCGLContext = CGLGetCurrentContext();
-  CGLShareGroupObj kCGLShareGroup = CGLGetShareGroup(kCGLContext);
-  cl_context_properties props[] =
-  {
-    CL_CONTEXT_PROPERTY_USE_CGL_SHAREGROUP_APPLE, (cl_context_properties)kCGLShareGroup,
+    CL_GL_CONTEXT_KHR, (cl_context_properties) wglGetCurrentContext(),
+    CL_WGL_HDC_KHR, (cl_context_properties) wglGetCurrentDC(),
+    CL_CONTEXT_PLATFORM, (cl_context_properties) platform_id[0],
     0
   };
+  //create OpenCL context with display properties determined above
+  compute_context = clCreateContext(props, 1, &ray_mgr->devices()[0], NULL, NULL, &status);
+#elif defined(__APPLE__) || defined(MACOSX)
+  CGLContextObj kCGLContext = CGLGetCurrentContext();              
+  CGLShareGroupObj kCGLShareGroup = CGLGetShareGroup(kCGLContext);
+  
+  cl_context_properties props[] = { 
+    CL_CONTEXT_PROPERTY_USE_CGL_SHAREGROUP_APPLE, (cl_context_properties)kCGLShareGroup, 
+    CL_CONTEXT_PLATFORM, (cl_context_properties) platform_id[0],
+    0 
+  };
+  //create a CL context from a CGL share group - no GPU devices must be passed, 
+  //all CL compliant devices in the CGL share group will be used to create the context. more info in cl_gl_ext.h
+  compute_context = clCreateContext(props, 0, 0, NULL, NULL, &status);
 #else
   cl_context_properties props[] =
   {
-      CL_GL_CONTEXT_KHR, (cl_context_properties)glXGetCurrentContext(),
-      CL_GLX_DISPLAY_KHR, (cl_context_properties)glXGetCurrentDisplay(),
-      CL_CONTEXT_PLATFORM, (cl_context_properties) platform_id[0],
-      0
+    CL_GL_CONTEXT_KHR, (cl_context_properties)glXGetCurrentContext(),
+    CL_GLX_DISPLAY_KHR, (cl_context_properties)glXGetCurrentDisplay(),
+    CL_CONTEXT_PLATFORM, (cl_context_properties) platform_id[0],
+    0
   };
+  compute_context = clCreateContext(props, 1, &ray_mgr->devices()[0], NULL, NULL, &status);
 #endif
+  
+  if (status!=CL_SUCCESS) {
+    vcl_cout<<"Error: Failed to create a compute CL/GL context!" << error_to_string(status) <<vcl_endl;
+    return 0;
+  }
 
-  //create OpenCL context with display properties determined above
-  ray_mgr->context_ = clCreateContext(props, 1, &ray_mgr->devices()[0], NULL, NULL, &status);
+  //set OpenCL context with display properties determined above
+  ray_mgr->context_ = compute_context;
 
 //  initialize ray trace using the input camera
   int bundle_dim = 8;
