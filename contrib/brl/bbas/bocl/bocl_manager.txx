@@ -305,11 +305,24 @@ bool bocl_manager<T>::initialize_cl()
                        CL_SUCCESS,
                        "clGetDeviceInfo CL_DEVICE_IMAGE_SUPPORT failed."))
             return false;
+ 
+  char extensions[512];
+  status = clGetDeviceInfo(devices_[0],
+                           CL_DEVICE_EXTENSIONS,
+                           sizeof(extensions),
+                           (void*) extensions,
+                           NULL);
+  
+  if (!this->check_val(status,
+                       CL_SUCCESS,
+                       "clGetDeviceInfo CL_DEVICE_IMAGE_SUPPORT failed."))
+    return false;
 
   unsigned size = sizeof(vcl_size_t);
-  vcl_cout << "Context Description\n"
-           << "Platform Name: "<<platform_name <<'\n'
-           << "Device vendor: " << vendor << '\n' 
+  vcl_cout << " Context Description\n"
+           << " Platform Name: "<<platform_name <<'\n'
+           << " Device vendor: " << vendor << '\n' 
+           << " Device extensions: " << extensions << 'n'
            << " Number of devices: " << number_devices_ << '\n'
            << " Number of compute units: " << max_compute_units_ << '\n'
            << " Maximum clock frequency: " << max_clock_freq_/1000.0 << " GHz\n"
