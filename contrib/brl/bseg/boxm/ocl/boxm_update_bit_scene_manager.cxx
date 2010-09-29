@@ -109,6 +109,7 @@ bool boxm_update_bit_scene_manager::init_scene(boxm_ocl_bit_scene *scene,
   wni_=(cl_uint)RoundUp(input_img_.ni(),bni_);
   wnj_=(cl_uint)RoundUp(input_img_.nj(),bnj_);
   prob_thresh_=prob_thresh;
+  use_gl_=true;
 
   /****** size output **********/
   vcl_cout<<"Numbuffer "<<scene_info_->num_buffer
@@ -123,6 +124,122 @@ bool boxm_update_bit_scene_manager::init_scene(boxm_ocl_bit_scene *scene,
 
   return true;
 }
+
+bool boxm_update_bit_scene_manager::init_scene(boxm_ocl_bit_scene *scene,
+                                               unsigned ni,
+                                               unsigned nj,
+                                               float prob_thresh=0.3)
+{
+  if (scene==NULL) {
+    vcl_cout<<"Scene is Missing"<<vcl_endl;
+    return false;
+  }
+  scene_ = scene;
+
+  //set scene information
+  scene_info_ = new RenderSceneInfo();
+  int blkX, blkY, blkZ;
+  scene->block_num(blkX, blkY, blkZ);
+  int numblocks = blkX*blkY*blkZ;
+  vcl_cout<<"Block size "<<(float)numblocks*16/1024.0/1024.0<<"MB"<<vcl_endl;
+  scene->tree_buffer_shape(scene_info_->num_buffer, scene_info_->tree_buffer_length);
+  scene->data_buffer_shape(scene_info_->num_buffer, scene_info_->data_buffer_length);
+
+  //set block length, epsilon and root level
+  double lenX, lenY, lenZ;
+  scene->block_dim(lenX,lenY,lenZ);
+  scene_info_->block_len = (float) lenX;    // size of each block (can only be 1 number now that we've established blocks are cubes)
+  scene_info_->epsilon   = 1.0f/100.0f;
+  scene_info_->root_level = scene->max_level() - 1;
+
+  //set origin and scene dimensions
+  scene_info_->scene_dims.s[0]= blkX;
+  scene_info_->scene_dims.s[1]= blkY;
+  scene_info_->scene_dims.s[2]= blkZ;
+  scene_info_->scene_dims.s[3]= 1;
+  vgl_point_3d<double> origin = scene->origin();
+  scene_info_->scene_origin.s[0]= (float) origin.x();
+  scene_info_->scene_origin.s[1]= (float) origin.y();
+  scene_info_->scene_origin.s[2]= (float) origin.z();
+  scene_info_->scene_origin.s[3]= (float) 0.0;
+
+  //allocate and initialize 3d blocks
+  block_ptrs_ = (cl_ushort*) boxm_ocl_utils::alloc_aligned(numblocks, sizeof(cl_ushort2),16);
+  scene->get_block_ptrs(block_ptrs_);
+
+  //1d array of memory pointers
+  mem_ptrs_   = (cl_ushort*) boxm_ocl_utils::alloc_aligned(scene_info_->num_buffer, sizeof(cl_ushort2), 16);
+  scene->get_mem_ptrs(mem_ptrs_);
+  
+  //1d array of number of blocks in each buffer
+  blocks_in_buffers_ = (cl_ushort*)  boxm_ocl_utils::alloc_aligned(scene_info_->num_buffer, sizeof(cl_ushort), 16);
+  scene->get_blocks_in_buffers(blocks_in_buffers_);
+
+  //tree cells (each are uchar16)
+  int numCells = scene_info_->num_buffer * scene_info_->tree_buffer_length;
+  cells_ = (cl_uchar*) boxm_ocl_utils::alloc_aligned(numCells , sizeof(cl_uchar16), 16);
+  scene->get_tree_cells(cells_);
+
+  //allocate the data items, initialize them from scene
+  int numData = scene_info_->num_buffer * scene_info_->data_buffer_length;
+  cell_alpha_   = (cl_float *) boxm_ocl_utils::alloc_aligned(numData,sizeof(cl_float),16);
+  cell_mixture_ = (cl_uchar *) boxm_ocl_utils::alloc_aligned(numData,sizeof(cl_uchar8),16);
+  cell_num_obs_ = (cl_ushort*) boxm_ocl_utils::alloc_aligned(numData,sizeof(cl_ushort4),16);
+  cell_aux_data_= (cl_float *) boxm_ocl_utils::alloc_aligned(numData,sizeof(cl_float4),16);
+  scene->get_alphas(cell_alpha_);
+  scene->get_mixture(cell_mixture_);
+  scene->get_num_obs(cell_num_obs_);
+  for(int i=0; i<numData*4; i++)   //init aux data to zero
+    cell_aux_data_[i] = 0.0; 
+
+  //allocate and initialize bit lookup
+  bit_lookup_ = (cl_uchar *) boxm_ocl_utils::alloc_aligned(256,sizeof(cl_uchar),16);
+  unsigned char bits[] = { 0,   1,   1,   2,   1,   2,   2,   3,   1,   2,   2,   3,   2,   3,   3,   4,
+                           1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5 ,
+                           1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5  ,
+                           2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
+                           1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5  ,
+                           2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
+                           2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
+                           3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7  ,
+                           1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5  ,
+                           2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
+                           2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
+                           3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7  ,
+                           2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
+                           3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7  ,
+                           3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7  ,
+                           4,   5,   5,   6,   5,   6,   6,   7,   5,   6,   6,   7,   6,   7,   7,   8 };
+  for (int i=0; i<256; i++) bit_lookup_[i] = bits[i];
+
+  //initialize output_debug_;
+  output_debug_ = (cl_float*) boxm_ocl_utils::alloc_aligned(scene_info_->num_buffer, sizeof(cl_float), 16);
+  for (int i=0; i<scene_info_->num_buffer; i++) output_debug_[i] = 0;
+
+  //initialize cam, input image and prob_thresh
+  cam_ = new vpgl_perspective_camera<double>();
+  input_img_.set_size(ni,nj);
+  input_img_.fill(0.0f);
+  wni_=(cl_uint)RoundUp((int)ni,bni_);
+  wnj_=(cl_uint)RoundUp((int)nj,bnj_);
+
+  prob_thresh_=prob_thresh;
+
+  use_gl_=false;
+  /****** size output **********/
+  vcl_cout<<"Numbuffer "<<scene_info_->num_buffer
+          <<",  Len buffer "<<scene_info_->tree_buffer_length
+          <<",   total tree cells "<<numCells
+          <<",   total data cells "<<numData<<vcl_endl;
+  /****** size output **********/
+
+  this->set_scene_buffers();
+
+  //TODO SET UP CAMERA, IMAGE, OFFSET, ALL OTHER BUFFERS AND STUFF THAT YOU NEED
+
+  return true;
+}
+
 
 bool boxm_update_bit_scene_manager::uninit_scene()
 {
@@ -308,11 +425,9 @@ bool boxm_update_bit_scene_manager::setup_online_processing()
   bool good=true;
   vcl_string error_message="";
   good = set_offset_buffers(0,0,2);
-
   // set persp cam and input_image host buffers
-  good = good && set_persp_camera()
-              && set_input_image();
-
+  good = good && set_persp_camera();
+  good = good && set_input_image();
   // set persp camand input_image gpu buffers
   good = good && set_persp_camera_buffers()
               && set_input_image_buffers()
@@ -321,8 +436,6 @@ bool boxm_update_bit_scene_manager::setup_online_processing()
   //now that all buffers are set, compile kernels, queue, and set args
   good = good && this->set_kernels()
               && this->set_commandqueue(); 
-              
-              //&& this->set_args();
   return good;
 }
 
@@ -555,6 +668,15 @@ bool boxm_update_bit_scene_manager::set_render_args()
   status = clSetKernelArg(render_kernel_,i++,sizeof(cl_mem),(void *)&image_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (input_image)"))
     return 0;
+  if(!use_gl_)
+  {
+  image_gl_buf_ = clCreateBuffer(this->context_,
+                                 CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+                                 wni_*wnj_*sizeof(cl_uint),
+                                 image_gl_,&status);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (gl_image)"))
+      return 0;
+  }
   status = clSetKernelArg(render_kernel_,i++,sizeof(cl_mem),(void *)&image_gl_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (gl_image)"))
     return 0;
@@ -1198,7 +1320,16 @@ bool boxm_update_bit_scene_manager::refine()
 
   return true;
 }
+vil_image_view_base_sptr boxm_update_bit_scene_manager::get_output_image()
+{
+  vil_image_view<float> * oimage=new vil_image_view<float>(this->wni_,this->wnj_);
 
+  for (unsigned i=0;i<oimage->ni();i++)
+    for (unsigned j=0;j<oimage->nj();j++)
+      (*oimage)(i,j)=image_[(j*wni_+i)];
+
+  return oimage;
+}
 
 void boxm_update_bit_scene_manager::save_image()
 {
@@ -1337,7 +1468,7 @@ bool boxm_update_bit_scene_manager::save_scene()
 }
 
 
-bool boxm_update_bit_scene_manager::set_persp_camera(vpgl_perspective_camera<double> * pcam)
+bool boxm_update_bit_scene_manager::set_persp_camera(vpgl_proj_camera<double> * pcam)
 {
   if (pcam)
   {
@@ -1363,7 +1494,7 @@ bool boxm_update_bit_scene_manager::set_persp_camera(vpgl_perspective_camera<dou
     for (unsigned i=0;i<Winv.size();i++)
       persp_cam_[cnt++]=(cl_float)Winv(i);
 
-    vgl_point_3d<double> cam_center=pcam->get_camera_center();
+    vgl_point_3d<double> cam_center=pcam->camera_center();
     persp_cam_[cnt++]=(cl_float)cam_center.x();
     persp_cam_[cnt++]=(cl_float)cam_center.y();
     persp_cam_[cnt++]=(cl_float)cam_center.z();
@@ -1378,8 +1509,8 @@ bool boxm_update_bit_scene_manager::set_persp_camera(vpgl_perspective_camera<dou
 
 bool boxm_update_bit_scene_manager::set_persp_camera()
 {
-  if (vpgl_perspective_camera<double>* pcam =
-      dynamic_cast<vpgl_perspective_camera<double>*>(cam_.ptr()))
+  if (vpgl_proj_camera<double>* pcam =
+      dynamic_cast<vpgl_proj_camera<double>*>(cam_.ptr()))
   {
     vnl_svd<double>* svd=pcam->svd();
 
@@ -1405,7 +1536,7 @@ bool boxm_update_bit_scene_manager::set_persp_camera()
     for (unsigned i=0;i<Winv.size();i++)
       persp_cam_[cnt++]=(cl_float)Winv(i);
 
-    vgl_point_3d<double> cam_center=pcam->get_camera_center();
+    vgl_point_3d<double> cam_center=pcam->camera_center();
     persp_cam_[cnt++]=(cl_float)cam_center.x();
     persp_cam_[cnt++]=(cl_float)cam_center.y();
     persp_cam_[cnt++]=(cl_float)cam_center.z();
@@ -1461,7 +1592,8 @@ bool boxm_update_bit_scene_manager::set_input_image()
 {
   image_=(cl_float *)boxm_ocl_utils::alloc_aligned(wni_*wnj_,sizeof(cl_float4),16);
   img_dims_=(cl_uint *)boxm_ocl_utils::alloc_aligned(1,sizeof(cl_uint4),16);
-
+  if(!use_gl_)
+      image_gl_=(cl_uint *)boxm_ocl_utils::alloc_aligned(wni_*wnj_,sizeof(cl_uint),16);
   for (unsigned i=0;i<wni_*wnj_*4;i++)
         image_[i]=0.0;
   // pad the image
@@ -1641,3 +1773,23 @@ bool boxm_update_bit_scene_manager::release_offset_buffers()
   return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (offset_y_buf_).")==1;
 }
 
+//: Binary write bit scene to stream
+void vsl_b_write(vsl_b_ostream& /*os*/, boxm_update_bit_scene_manager const& /*bit_scene*/)
+{
+}
+
+
+//: Binary load boxm scene from stream.
+void vsl_b_read(vsl_b_istream& /*is*/, boxm_update_bit_scene_manager& /*bit_scene*/)
+{
+}
+
+//: Binary write boxm scene pointer to stream
+void vsl_b_read(vsl_b_istream& /*is*/, boxm_update_bit_scene_manager* /*ph*/)
+{
+}
+
+//: Binary write boxm scene pointer to stream
+void vsl_b_write(vsl_b_ostream& /*os*/, boxm_update_bit_scene_manager* const& /*ph*/)
+{
+}

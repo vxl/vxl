@@ -15,7 +15,7 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vul/vul_file_iterator.h>
 
-class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_manager>
+class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_manager>, public vbl_ref_count
 {
   typedef vnl_vector_fixed<int, 4> int4;
   typedef vnl_vector_fixed<float, 16> float16;
@@ -27,7 +27,8 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   boxm_update_bit_scene_manager() :
     program_(0),
     render_kernel_(0),
-    refine_kernel_(0) {}
+    refine_kernel_(0),
+    use_gl_(true){}
   ~boxm_update_bit_scene_manager() {
     if (program_)
       clReleaseProgram(program_);
@@ -42,6 +43,11 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
                   vpgl_camera_double_sptr cam,
                   vil_image_view<float> &obs,
                   float prob_thresh);
+  bool init_scene(boxm_ocl_bit_scene *scene,
+                  unsigned ni,
+                  unsigned nj,
+                  float prob_thresh);
+
   bool uninit_scene(); 
   bool setup_online_processing();
   bool finish_online_processing();
@@ -55,7 +61,7 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   bool update();
   
   //: before calling render and update, make sure persp cam is set (maybe combine w/ above methods for simplicity)
-  bool set_persp_camera(vpgl_perspective_camera<double> * pcam);
+  bool set_persp_camera(vpgl_proj_camera<double> * pcam);
   bool write_persp_camera_buffers();
 
   //: before calling update, make sure input image, image dimensions and camera are set
@@ -69,6 +75,8 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   
   //Enqueues a read command for output image and scene.  saves image/scene
   bool read_output_image();
+  vil_image_view_base_sptr get_output_image();
+
   bool read_scene();
   void save_image();
   bool save_scene();
@@ -249,6 +257,17 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   float gpu_time_;
   vcl_size_t globalThreads[2];
   vcl_size_t localThreads[2];
+  bool use_gl_;
 };
+//: Binary write boxm_update_bit_scene_manager scene to stream
+void vsl_b_write(vsl_b_ostream & os, boxm_update_bit_scene_manager const& mgr);
+
+//: Binary load boxm_update_bit_scene_manager scene from stream.
+void vsl_b_read(vsl_b_istream & is, boxm_update_bit_scene_manager &mgr);
+
+void vsl_b_read(vsl_b_istream& is, boxm_update_bit_scene_manager* p);
+
+//: Binary write  scene pointer to stream
+void vsl_b_write(vsl_b_ostream& os, const boxm_update_bit_scene_manager* &p);
 
 #endif // boxm_update_bit_scene_manager_h_
