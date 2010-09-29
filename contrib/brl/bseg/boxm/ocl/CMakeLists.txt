@@ -11,8 +11,6 @@ IF(OPENCL_FOUND)
 
   SET(boxm_ocl_sources
       boxm_ray_trace_manager.h boxm_ray_trace_manager.txx
-      boxm_refine_manager.h boxm_refine_manager.txx
-      boxm_ocl_refine_scene.h
       boxm_ocl_utils.h boxm_ocl_utils.txx boxm_ocl_utils.cxx
       boxm_ocl_render_expected.h        boxm_ocl_render_expected.cxx
       boxm_stat_manager.h boxm_stat_manager.txx
@@ -45,8 +43,6 @@ IF(OPENCL_FOUND)
       cl/ray_trace_ocl_scene.cl
       cl/refine_blocks.cl
       cl/refine_blocks_opt.cl
-      cl/refine_main.cl
-      cl/refine_main_opt.cl
       cl/render_bit_scene.cl
       cl/rerender.cl
       cl/scene_info.cl
