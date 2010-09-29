@@ -111,9 +111,9 @@ bool boxm_ocl_change_detection_manager::change_detection(vpgl_camera_double_sptr
         this->run();
         this->read_output_image();
         output=this->get_output_image();
-        vil_image_view<float> output_float=static_cast<vil_image_view<float> *>(output.ptr());
+        vil_image_view<float> * output_float=static_cast<vil_image_view<float> *>(output.ptr());
         vil_image_view<vxl_byte> * byteimg=new vil_image_view<vxl_byte>(img->ni(), img->nj(), 1);
-        vil_convert_stretch_range_limited<float>(output_float,*byteimg,0.0f,1.0f,0,255);
+        vil_convert_stretch_range_limited<float>(*output_float,*byteimg,0.0f,1.0f,0,255);
 
         output=byteimg;
     }
