@@ -172,9 +172,6 @@ double clsfy_random_forest_builder::build(clsfy_classifier_base& classifier,
 
     for (i=0;i<ntrees_;++i)
     {
-        if (i %10 == 0)
-            vcl_cout<<"Building tree "<<i<<vcl_endl;
-
         select_data(vin,outputs,bootstrapped_inputs,bootstrapped_outputs);
 
         clsfy_binary_tree_builder builder;

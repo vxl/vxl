@@ -64,6 +64,7 @@ void clsfy_random_forest::class_probabilities(vcl_vector<double>& outputs,
 
     vcl_vector<double > classProbs(1,0.0);
     vcl_vector<double > meanProbs(1,0.0);
+
     while (treeIter != treeIterEnd)
     {
         const clsfy_classifier_base* pTree=(*treeIter).ptr();
@@ -209,7 +210,7 @@ void clsfy_random_forest::b_read(vsl_b_istream& bfs)
             trees_.reserve(n);
             for (unsigned i=0; i<n;++i)
             {
-                vcl_cout<<"reading tree "<<i<<vcl_endl;
+//                vcl_cout<<"reading tree "<<i<<vcl_endl;
                 mbl_cloneable_ptr< clsfy_classifier_base> tree(new clsfy_binary_tree);
                 trees_.push_back(tree);
                 trees_.back()->b_read(bfs);
