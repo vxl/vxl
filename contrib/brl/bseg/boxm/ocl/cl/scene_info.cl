@@ -21,4 +21,11 @@ typedef struct
 } RenderSceneInfo;   
 
 
+typedef struct 
+{
+    float x;
+    float y;
+    float z;
+} point3d;
+
 
