@@ -24,7 +24,7 @@ IF(OPENCL_FOUND)
       boxm_ocl_bit_scene.h boxm_ocl_bit_scene.cxx
       boxm_render_bit_scene_manager.h boxm_render_bit_scene_manager.cxx
       boxm_render_probe_manager.h boxm_render_probe_manager.cxx boxm_render_probe_manager_sptr.h
-      boxm_update_bit_scene_manager.h boxm_update_bit_scene_manager.cxx
+      boxm_update_bit_scene_manager.h boxm_update_bit_scene_manager.cxx boxm_update_bit_scene_manager_sptr.h
      )
 
   SET(boxm_ocl_cl_files
