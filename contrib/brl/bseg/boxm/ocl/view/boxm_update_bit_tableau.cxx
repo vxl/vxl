@@ -161,11 +161,11 @@ bool boxm_update_bit_tableau::save_model()
 }
 bool boxm_update_bit_tableau::refine_model()
 {
-  //vcl_cout<<"REFINING MODEL!!!"<<vcl_endl;
-  //refine_count_++; curr_count_=0;
-  //boxm_update_bit_scene_manager* updt_mgr = boxm_update_bit_scene_manager::instance();
-  //return updt_mgr->refine();
-return false;
+  vcl_cout<<"REFINING MODEL!!!"<<vcl_endl;
+  refine_count_++; curr_count_=0;
+  boxm_update_bit_scene_manager* updt_mgr = boxm_update_bit_scene_manager::instance();
+  return updt_mgr->refine();
+  return false;
 }
 //: calls on update manager to update model
 bool boxm_update_bit_tableau::update_model()
@@ -176,7 +176,7 @@ bool boxm_update_bit_tableau::update_model()
   //make sure you get a valid frame...
   if(curr_frame_ >= cam_files_.size())
     curr_frame_ = 0;
-  //curr_frame_=rand.lrand32(0,cam_files_.size()-1);
+  curr_frame_=rand.lrand32(0,cam_files_.size()-1);
 
   vcl_cout<<"Cam "<<cam_files_[curr_frame_]
           <<"Image "<<img_files_[curr_frame_]<<vcl_endl;
@@ -265,7 +265,7 @@ bool boxm_update_bit_tableau::handle(vgui_event const &e)
     vcl_stringstream str;
     str<<"Num Updates: "<<count_
        <<"  Num Refines: "<<refine_count_
-       <<"  (updates since last refine: "<<curr_count_;
+       <<"  (updates since last refine: "<<curr_count_<<")";
     status_->write(str.str().c_str());
     return true;
   }
