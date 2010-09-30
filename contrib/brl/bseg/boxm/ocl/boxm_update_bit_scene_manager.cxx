@@ -117,7 +117,7 @@ bool boxm_update_bit_scene_manager::init_scene(boxm_ocl_bit_scene *scene,
           <<",   total tree cells "<<numCells
           <<",   total data cells "<<numData<<vcl_endl;
   /****** size output **********/
-
+  point_3d_=(cl_float *) boxm_ocl_utils::alloc_aligned(3,sizeof(cl_float),16);
   this->set_scene_buffers();
 
   //TODO SET UP CAMERA, IMAGE, OFFSET, ALL OTHER BUFFERS AND STUFF THAT YOU NEED
@@ -232,7 +232,7 @@ bool boxm_update_bit_scene_manager::init_scene(boxm_ocl_bit_scene *scene,
           <<",   total tree cells "<<numCells
           <<",   total data cells "<<numData<<vcl_endl;
   /****** size output **********/
-
+  point_3d_=(cl_float *) boxm_ocl_utils::alloc_aligned(3,sizeof(cl_float),16);
   this->set_scene_buffers();
 
   //TODO SET UP CAMERA, IMAGE, OFFSET, ALL OTHER BUFFERS AND STUFF THAT YOU NEED
@@ -355,6 +355,14 @@ bool boxm_update_bit_scene_manager::set_scene_buffers()
                                    256*sizeof(cl_uchar),
                                    bit_lookup_,&status);
   if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (bit_lookup) failed."))
+    return false;
+  //Output debugger
+  point_3d_buf_ = clCreateBuffer(this->context_,
+                                     CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR,
+                                     sizeof(cl_float)*3,
+                                     point_3d_,
+                                     &status);
+  if (! this->check_val(status, CL_SUCCESS, "clCreateBuffer (point_3d_buf_) failed."))
     return false;
 
   //Output debugger
@@ -524,6 +532,15 @@ bool boxm_update_bit_scene_manager::set_kernels()
     vcl_cout<<"REfine failed to build "<<vcl_endl;
     return false;
   }
+  if (!this->build_query_point_program()) {
+      vcl_cout<<"refine program failed to build"<<vcl_endl;
+      return false;
+  }
+  query_point_kernel_ = clCreateKernel(program_,"query_bit_scene",&status);
+  if (this->check_val(status,CL_SUCCESS,error_to_string(status))!=CHECK_SUCCESS) {
+    vcl_cout<<"Query kernel failed to build"<<vcl_endl;
+    return false;
+  }
 
   return true;
 }
@@ -586,9 +603,20 @@ bool boxm_update_bit_scene_manager::build_refining_program()
     }
     return this->build_kernel_program(program_,"")==SDK_SUCCESS;
 }
+bool boxm_update_bit_scene_manager::build_query_point_program()
+{
+    vcl_string root = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm/ocl/cl/" ;
+    bool info = this->load_kernel_source(root + "scene_info.cl");
+    bool bitr = this->append_process_kernels(root + "bit_tree_library_functions.cl");
+    bool refn = this->append_process_kernels(root + "query_bit_scene.cl");
 
-bool boxm_update_bit_scene_manager::
-build_update_program(vcl_string const& functor, bool use_cell_data)
+    if (!info || !bitr || !refn) {
+      vcl_cerr << "Error: boxm_update_bit_scene_manager : failed to load kernel source (build_query_point_program functions)\n";
+      return false;
+    }
+    return this->build_kernel_program(program_,"")==SDK_SUCCESS;
+}
+bool boxm_update_bit_scene_manager::build_update_program(vcl_string const& functor, bool use_cell_data)
 {
   vcl_string root = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm/ocl/cl/";
   bool locc = this->load_kernel_source(    root + "scene_info.cl"  );
@@ -626,6 +654,59 @@ build_update_program(vcl_string const& functor, bool use_cell_data)
     return this->build_kernel_program(program_,"")==SDK_SUCCESS;
   }
   return false;
+}
+
+bool boxm_update_bit_scene_manager::set_query_point_args()
+{
+  int CHECK_SUCCESS = 1;
+  cl_int status = CL_SUCCESS;
+  int i=0;
+    status = clSetKernelArg(query_point_kernel_,i++,sizeof(cl_mem),(void *)&scene_info_buf_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (render scene info)"))
+      return 0;
+    //block pointers
+    status = clSetKernelArg(query_point_kernel_,i++,sizeof(cl_mem),(void *)&block_ptrs_buf_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (block_ptrs_buf_)"))
+      return 0;
+    // the tree buffer
+    status = clSetKernelArg(query_point_kernel_,i++,sizeof(cl_mem),(void *)&cells_buf_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cells_buf_)"))
+      return 0;
+    // alpha buffer
+    status = clSetKernelArg(query_point_kernel_,i++,sizeof(cl_mem),(void *)&cell_alpha_buf_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_data_buf_)"))
+      return 0;
+    //mixture buffer
+    status = clSetKernelArg(query_point_kernel_, i++, sizeof(cl_mem), (void *)&cell_mixture_buf_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_mixture_buf)"))
+      return 0;
+    //cell num obs buffer
+    status = clSetKernelArg(query_point_kernel_, i++, sizeof(cl_mem), (void *)&cell_num_obs_buf_);
+    if (!this->check_val(status, CL_SUCCESS, "clSetKernelArg failed. (cell_num_obs_buf_)"))
+      return 0;
+    //cell aux data buffer
+    status = clSetKernelArg(query_point_kernel_,i++,sizeof(cl_mem),(void *)&cell_aux_data_buf_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_data_buf_)"))
+      return 0;
+    //bit lookup buffer
+    status = clSetKernelArg(query_point_kernel_,i++,sizeof(cl_mem),(void *)&bit_lookup_buf_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output)"))
+      return 0;
+    //local copy of the tree (one for each thread/ray)
+    status = clSetKernelArg(query_point_kernel_,i++,this->bni_*this->bnj_*sizeof(cl_uchar16),0);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local tree)"))
+      return 0;
+    //output float buffer (one float for each buffer)
+    status = clSetKernelArg(query_point_kernel_,i++,sizeof(cl_mem),(void *)&point_3d_buf_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (Input 3d query point )"))
+      return false;
+
+    //output float buffer (one float for each buffer)
+    status = clSetKernelArg(query_point_kernel_,i++,sizeof(cl_mem),(void *)&output_debug_buf_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output debugger)"))
+      return false;
+    
+  return true;
 }
 
 
@@ -907,6 +988,11 @@ bool boxm_update_bit_scene_manager::release_kernels()
 {
   cl_int status = CL_SUCCESS;
   int CHECK_SUCCESS = 1;
+  if (query_point_kernel_) {
+    status = clReleaseKernel(query_point_kernel_);
+    if (this->check_val(status,CL_SUCCESS,"clReleaseKernel (query_point_kernel_) failed.")!=CHECK_SUCCESS)
+      return false;
+  }
 
   //release render
   if (render_kernel_) {
@@ -1085,6 +1171,14 @@ bool boxm_update_bit_scene_manager::set_workspace(cl_kernel kernel, unsigned pas
       localThreads[0]  = 1;
       localThreads[1]  = 1;
   }
+  else if (pass==7)
+  {
+      globalThreads[0] = 1;
+      globalThreads[1] = 1;
+      localThreads[0]  = 1;
+      localThreads[1]  = 1;
+
+  }
   if (used_local_memory > this->total_local_memory())
   {
     vcl_cout << "Unsupported: Insufficient local memory on device.\n";
@@ -1127,7 +1221,7 @@ bool boxm_update_bit_scene_manager::run(cl_kernel kernel, unsigned pass)
       }
   }
   //everything else just runs once
-  if (pass==2 || pass ==4 || pass==5 || pass==6)
+  if (pass==2 || pass ==4 || pass==5 || pass==6|| pass==7)
   {
       cl_event ceEvent =0;
       status = clEnqueueNDRangeKernel(this->command_queue_, kernel, 2, NULL, globalThreads, localThreads, 0, NULL, &ceEvent);
@@ -1171,22 +1265,22 @@ bool boxm_update_bit_scene_manager::update()
         this->save_image();
       }
 #endif // 0
-      cl_event events[1];
-      int status = clEnqueueReadBuffer(command_queue_, output_debug_buf_, CL_TRUE, 0,
-                                       scene_info_->num_buffer*sizeof(cl_float),
-                                       output_debug_, 0, NULL, &events[0]);
-      if (!this->check_val(status,CL_SUCCESS,"clEnqueueReadBuffer (output buffer )failed."))
-        return false;
-      status = clWaitForEvents(1, &events[0]);
-      if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents (output read) failed."))
-        return false;
-      vcl_cout<<"KERNEL OUTPUT: "<<vcl_endl;
-      for (int i=0; i<4; i++) {
-        for (int j=0; j<4; j++) {
-          vcl_cout<<output_debug_[4*i+j]<<' ';
-        }
-        vcl_cout<<vcl_endl;
-      }
+      //cl_event events[1];
+      //int status = clEnqueueReadBuffer(command_queue_, output_debug_buf_, CL_TRUE, 0,
+      //                                 scene_info_->num_buffer*sizeof(cl_float),
+      //                                 output_debug_, 0, NULL, &events[0]);
+      //if (!this->check_val(status,CL_SUCCESS,"clEnqueueReadBuffer (output buffer )failed."))
+      //  return false;
+      //status = clWaitForEvents(1, &events[0]);
+      //if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents (output read) failed."))
+      //  return false;
+      //vcl_cout<<"KERNEL OUTPUT: "<<vcl_endl;
+      //for (int i=0; i<4; i++) {
+      //  for (int j=0; j<4; j++) {
+      //    vcl_cout<<output_debug_[4*i+j]<<' ';
+      //  }
+      //  vcl_cout<<vcl_endl;
+      //}
 
 #if 0
       if (pass == 4) {  //only read for data setting pass
@@ -1246,7 +1340,28 @@ bool boxm_update_bit_scene_manager::rendering()
 
   return true;
 }
+bool boxm_update_bit_scene_manager::query_point(vgl_point_3d<float> p)
+{
+  gpu_time_=0;
+  unsigned pass = 7;
+  point_3d_[0]=p.x();
+  point_3d_[1]=p.y();
+  point_3d_[2]=p.z();
+  cl_int status=clEnqueueWriteBuffer(command_queue_,point_3d_buf_,CL_TRUE, 0,3*sizeof(cl_float), point_3d_, 0, 0, 0);
+  if (!this->check_val(status,CL_SUCCESS,"clEnqueueWriteBuffer (point_3d_buf_) failed."))
+    return false;
+  clFinish(command_queue_);
 
+  this->set_query_point_args();
+  this->set_workspace(query_point_kernel_, pass);
+  if (!this->run(query_point_kernel_, pass))
+      return false;
+  vcl_cout << "Timing Analysis\n"
+           << "===============\n"
+           << "openCL Running time "<<gpu_time_<<" ms" << vcl_endl;
+
+  return true;
+}
 bool boxm_update_bit_scene_manager::refine()
 {
 
@@ -1771,6 +1886,42 @@ bool boxm_update_bit_scene_manager::release_offset_buffers()
   status = clReleaseMemObject(offset_y_buf_);
   return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (offset_y_buf_).")==1;
 }
+
+bool boxm_update_bit_scene_manager::read_output_debug()
+{
+    cl_event events[2];
+    int status =-1;
+    // Enqueue readBuffers
+    status= clEnqueueReadBuffer(command_queue_,output_debug_buf_,CL_TRUE,
+                                0,scene_info_->num_buffer*sizeof(cl_float),
+                                output_debug_, 0,NULL,&events[0]);
+
+    if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (image_)failed."))
+        return false;
+
+    // Wait for the read buffer to finish execution
+    status = clWaitForEvents(1, &events[0]);
+    if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents failed."))
+        return false;
+
+    status = clReleaseEvent(events[0]);
+    if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents failed."))
+        return false;
+
+    return true;
+}
+bool boxm_update_bit_scene_manager::get_output_debug_array(vcl_vector<float> & data)
+{
+    vcl_cout<<"Num buffers "<<scene_info_->num_buffer<<"\n";
+    for(int i=0;i<scene_info_->num_buffer;i++)
+    {    if(output_debug_[i]==-1.0f)
+            break;
+
+            data.push_back(output_debug_[i]);
+    }
+    return true;
+}
+
 
 //: Binary write bit scene to stream
 void vsl_b_write(vsl_b_ostream& /*os*/, boxm_update_bit_scene_manager const& /*bit_scene*/)

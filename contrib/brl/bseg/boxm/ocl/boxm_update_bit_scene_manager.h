@@ -28,6 +28,7 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
     program_(0),
     render_kernel_(0),
     refine_kernel_(0),
+    query_point_kernel_(0),
     use_gl_(true){}
   ~boxm_update_bit_scene_manager() {
     if (program_)
@@ -59,6 +60,7 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   bool rendering();
   bool refine();
   bool update();
+  bool query_point(vgl_point_3d<float> p);
   
   //: before calling render and update, make sure persp cam is set (maybe combine w/ above methods for simplicity)
   bool set_persp_camera(vpgl_proj_camera<double> * pcam);
@@ -116,6 +118,7 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   cl_command_queue command_queue_;
   cl_kernel render_kernel_;
   cl_kernel refine_kernel_;
+  cl_kernel query_point_kernel_;
   vcl_vector<cl_kernel> update_kernels_;
   
   //----------------------------------------------------------------------------
@@ -126,7 +129,8 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   cl_mem     image_buf_;          //input image buf
   cl_uint  * image_gl_;           //gl image (expected image?)
   cl_mem     image_gl_buf_;       //gl image buf
-
+  bool read_output_debug();
+  bool get_output_debug_array(vcl_vector<float> & data);
  protected:
   //----------------------------------------------------------------------------
   // PROTECTED helper methods (no need for these to be public, makes api simpler)
@@ -142,7 +146,7 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   bool build_update_program(vcl_string const& functor, bool use_cell_data);
   bool build_rendering_program();
   bool build_refining_program();
-    
+  bool build_query_point_program();
   //: executes specified kernel
   bool run(cl_kernel, unsigned pass);
   
@@ -150,7 +154,7 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   bool set_render_args();
   bool set_refine_args();
   bool set_update_args(unsigned pass);
-
+  bool set_query_point_args();
   //: set/release command_queue
   bool set_commandqueue();
   bool release_commandqueue();
@@ -168,6 +172,8 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   bool set_image_dims_buffers();
   bool release_input_image_buffers();
   bool clean_input_image();
+
+
 
  /*****************************************
   * scene information
@@ -201,6 +207,7 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
 
   /* bounding box for each tree */
   cl_float * tree_bbox_;
+  cl_float * point_3d_;
 
   cl_float* app_density_;
   cl_mem    app_density_buf_;
@@ -242,6 +249,8 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   cl_mem    offset_x_buf_;
   cl_mem    offset_y_buf_;
   cl_mem    factor_buf_;
+
+  cl_mem   point_3d_buf_;
 
   /*debugger ... */
   cl_mem    output_debug_buf_;
