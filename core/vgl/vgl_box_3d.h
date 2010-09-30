@@ -30,6 +30,7 @@
 // \endverbatim
 
 #include <vcl_iosfwd.h>
+#include <vcl_vector.h>
 #include <vgl/vgl_fwd.h> // forward declare vgl_point_3d
 
 //: Represents a cartesian 3D box
@@ -147,6 +148,9 @@ class vgl_box_3d
 
   //: Return upper right corner of box
   vgl_point_3d<Type> max_point() const;
+  
+  //: Return the 8 vertices of the box
+  vcl_vector<vgl_point_3d<Type> > vertices() const;
 
   // Data Control--------------------------------------------------------------
 
