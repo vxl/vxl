@@ -199,7 +199,7 @@ bool boxm_ocl_change_detection_tableau::change_detection()
     vcl_cout<<"Change Detection!!!"<<vcl_endl;
 
     //make sure you get a valid frame...
-    if (curr_frame_ >= cam_files_.size()) curr_frame_ = 0;
+    if (curr_frame_ >= (int)cam_files_.size()) curr_frame_ = 0;
     vcl_cout<<"Cam "<<cam_files_[curr_frame_]<<" Image "<<img_files_[curr_frame_]<<vcl_endl;
 
     //load up the update manager instance
