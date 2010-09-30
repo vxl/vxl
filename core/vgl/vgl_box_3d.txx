@@ -334,6 +334,22 @@ vgl_point_3d<Type> vgl_box_3d<Type>::max_point() const
 }
 
 template <class Type>
+vcl_vector<vgl_point_3d<Type> > vgl_box_3d<Type>::vertices() const
+{
+  assert(!is_empty());
+  vcl_vector<vgl_point_3d<Type> > vertices;
+  vertices.push_back(vgl_point_3d<Type>(min_pos_[0], min_pos_[1], min_pos_[2]));
+  vertices.push_back(vgl_point_3d<Type>(max_pos_[0], min_pos_[1], min_pos_[2]));
+  vertices.push_back(vgl_point_3d<Type>(max_pos_[0], max_pos_[1], min_pos_[2]));
+  vertices.push_back(vgl_point_3d<Type>(min_pos_[0], max_pos_[1], min_pos_[2]));
+  vertices.push_back(vgl_point_3d<Type>(min_pos_[0], min_pos_[1], max_pos_[2]));
+  vertices.push_back(vgl_point_3d<Type>(max_pos_[0], min_pos_[1], max_pos_[2]));
+  vertices.push_back(vgl_point_3d<Type>(max_pos_[0], max_pos_[1], max_pos_[2]));
+  vertices.push_back(vgl_point_3d<Type>(min_pos_[0], max_pos_[1], max_pos_[2]));
+  return vertices;  
+}
+
+template <class Type>
 vcl_ostream& vgl_box_3d<Type>::write(vcl_ostream& s) const
 {
   return s << min_pos_[0] << ' ' << min_pos_[1] << ' ' << min_pos_[2] << ' '
