@@ -32,4 +32,5 @@ void boxm_ocl_register::register_process()
     REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_update_bit_scene_process,"boxmUpdateBitSceneProcess");
     REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_finish_update_bit_scene_process,"boxmFinishUpdateBitSceneProcess");
     REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_render_update_bit_scene_process,"boxmRenderUpdateBitSceneProcess");
+    REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_query_bit_scene_process,"boxmQueryBitSceneProcess");
 }

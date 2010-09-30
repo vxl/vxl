@@ -17,4 +17,5 @@ DECLARE_FUNC_CONS(boxm_init_update_bit_scene_process);
 DECLARE_FUNC_CONS(boxm_update_bit_scene_process);
 DECLARE_FUNC_CONS(boxm_finish_update_bit_scene_process);
 DECLARE_FUNC_CONS(boxm_render_update_bit_scene_process);
+DECLARE_FUNC_CONS(boxm_query_bit_scene_process);
 #endif

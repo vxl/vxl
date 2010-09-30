@@ -68,6 +68,9 @@ bool boxm_init_update_bit_scene_process(bprb_func_process& pro)
   mgr->set_bundle_ni(8);
   mgr->set_bundle_nj(8);
   mgr->init_scene(&scene,ni,nj,thresh);
+  if (!mgr->setup_norm_data(true, 0.5f, 0.25f))
+      return -1;
+
   mgr->setup_online_processing();
   pro.set_output_val<boxm_update_bit_scene_manager_sptr>(0,boxm_update_bit_scene_manager_sptr(mgr));
   return true;
