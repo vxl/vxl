@@ -8,5 +8,6 @@
 #include <bvpl/bvpl_octree/bvpl_scene_vector_operator.h>
 #include <bvpl/bvpl_octree/bvpl_scene_kernel_operator.h>
 #include <bvpl/bvpl_octree/bvpl_scene_neighborhood_operator.h>
+#include <bvpl/bvpl_octree/bvpl_scene_statistics.h>
 
 int main() { return 0; }
