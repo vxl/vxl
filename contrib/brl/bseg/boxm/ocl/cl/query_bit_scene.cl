@@ -10,12 +10,12 @@ query_bit_scene(__constant  RenderSceneInfo    * linfo,
                 __constant  uchar              * bit_lookup,       // used to get data_index
                 __local     uchar16            * local_tree,       // cache current tree into local memory
                 __global    point3d            * input_query,
-                __global    float              * output)    
+                __global    float              * output)
 {
     uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
     point3d query =(*input_query);
 
-    for(unsigned i=0;i<linfo->num_buffer;i++)
+    for (unsigned i=0;i<linfo->num_buffer;i++)
         output[i] = -1.0f;
     query.x=(query.x-linfo->origin.x)/linfo->block_len;
     query.y=(query.y-linfo->origin.y)/linfo->block_len;
@@ -25,10 +25,9 @@ query_bit_scene(__constant  RenderSceneInfo    * linfo,
     int block_index_y=(int)floor(query.y);
     int block_index_z=(int)floor(query.z);
 
-    if(block_index_x<0 || block_index_x>=linfo->dims.x)
-        return;
-    if(block_index_y<0 || block_index_y>=linfo->dims.y)return;
-    if(block_index_z<0 || block_index_z>=linfo->dims.z)return;
+    if (block_index_x<0 || block_index_x>=linfo->dims.x) return;
+    if (block_index_y<0 || block_index_y>=linfo->dims.y) return;
+    if (block_index_z<0 || block_index_z>=linfo->dims.z) return;
 
     ushort2 block = block_ptrs[convert_int(block_index_z + (block_index_y + block_index_x*linfo->dims.y)*linfo->dims.z)];
     int root_ptr = block.x * linfo->tree_len + block.y;
@@ -45,7 +44,7 @@ query_bit_scene(__constant  RenderSceneInfo    * linfo,
     data_ptr = block.x * linfo->data_len + data_ptr;
 
     output[0]    = alpha_array[data_ptr];
-    
+
     float8 mixture  = convert_float8(mixture_array[data_ptr]);
     output[1]=mixture.s0/255.0f;
     output[2]=mixture.s1/255.0f;
@@ -55,8 +54,4 @@ query_bit_scene(__constant  RenderSceneInfo    * linfo,
     output[6]=mixture.s5/255.0f;
     output[7]=mixture.s6/255.0f;
     output[8]=mixture.s7/255.0f;
-
-
-
-    
 }
