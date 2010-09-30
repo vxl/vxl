@@ -55,6 +55,7 @@ int get_depth(int i) {
 //--------------------------------------------------------------------
 // loc code to absolute index //UNTESTED
 //--------------------------------------------------------------------
+#if 0  //unused function that breaks Windows/OS X/Linux compatibility
 int loc_code_to_index(short4 loc_code, int root_level)
 {
   int level = loc_code.w;
@@ -70,7 +71,7 @@ int loc_code_to_index(short4 loc_code, int root_level)
   for (int i=depth; i>0; i--, ri--)  {
     ushort mask = 1<<ri;
     //get bit at mask
-   ushort4 mxyz = (ushort4)((short4) mask & loc_code)>>((ushort4) ri);
+    ushort4 mxyz = (mask & loc_code)>>ri;
 
     packed += (mxyz.z << (3*i-1))
             + (mxyz.y << (3*i-2))
@@ -78,6 +79,7 @@ int loc_code_to_index(short4 loc_code, int root_level)
   }
   return level_index + packed;
 }
+#endif
 
 //---------------------------------------------------------------------
 // Tree Bit manipulation helper functions
