@@ -3,7 +3,7 @@
 # ** DO NOT EDIT **
 
 # variables to REPLACE
-# 
+#
 # /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl/bseg" == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
 #  == override in output directory
@@ -14,16 +14,16 @@
 CFG=boxm_ocl - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "boxm_ocl.mak".
-!MESSAGE 
+!MESSAGE
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "boxm_ocl.mak" CFG="bmrf - Win32 Debug"
-!MESSAGE 
+!MESSAGE
 !MESSAGE Possible choices for configuration are:
-!MESSAGE 
+!MESSAGE
 !MESSAGE "boxm_ocl - Win32 Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE "boxm_ocl - Win32 Release" (based on "Win32 (x86) Static Library")
 # Begin Project
@@ -83,7 +83,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-!ENDIF 
+!ENDIF
 
 # Begin Target
 
@@ -96,9 +96,6 @@ LIB32=link.exe -lib
 # PROP Default_Filter "cxx"
 # Begin Source File
 SOURCE=.\boxm_ocl_utils.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\boxm_online_update_manager.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_refine_scene_manager.cxx
@@ -114,9 +111,6 @@ SOURCE=.\boxm_update_ocl_scene_manager.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_ocl_render_expected.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\boxm_change_detection_ocl_scene_manager.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_ocl_camera_manager.cxx
@@ -143,19 +137,10 @@ SOURCE=.\cl/expected_functor.cl
 SOURCE=.\cl/ray_trace_main.cl
 # End Source File
 # Begin Source File
-SOURCE=.\cl/refine_main.cl
-# End Source File
-# Begin Source File
 SOURCE=.\cl/ray_bundle_library_functions.cl
 # End Source File
 # Begin Source File
 SOURCE=.\cl/update_main.cl
-# End Source File
-# Begin Source File
-SOURCE=.\cl/refine_main_opt.cl
-# End Source File
-# Begin Source File
-SOURCE=.\cl/ray_bundle_trace_main.cl
 # End Source File
 # Begin Source File
 SOURCE=.\cl/loc_code_library_functions.cl
@@ -180,9 +165,6 @@ SOURCE=.\cl/ray_trace_ocl_scene.cl
 # End Source File
 # Begin Source File
 SOURCE=.\cl/refine_blocks_opt.cl
-# End Source File
-# Begin Source File
-SOURCE=.\cl/ray_trace_all_blocks.cl
 # End Source File
 # Begin Source File
 SOURCE=.\cl/update_ocl_scene.cl
@@ -210,6 +192,9 @@ SOURCE=.\cl/refine_blocks.cl
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_update_bit_scene_manager.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_ocl_change_detection_manager.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/bocl_manager+boxm_ray_trace_manager+boxm_sample+BOXM_APM_SIMPLE_GREY---.cxx
@@ -257,57 +242,6 @@ SOURCE=.\Templates/boxm_ocl_utils+boxm_sample+BOXM_APM_SIMPLE_GREY--.cxx
 SOURCE=.\Templates/bocl_manager+boxm_stat_manager+float--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/boxm_refine_manager+boxm_sample+BOXM_APM_SIMPLE_GREY--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bocl_manager+boxm_ray_bundle_trace_manager+boxm_sample+BOXM_APM_MOG_GREY---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/boxm_ray_bundle_trace_manager+boxm_sample+BOXM_APM_MOG_GREY--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bocl_manager+boxm_refine_manager+boxm_sample+BOXM_APM_MOG_GREY---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/boxm_ray_bundle_trace_manager+boxm_sample+BOXM_APM_SIMPLE_GREY--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bocl_manager+boxm_refine_manager+boxm_sample+BOXM_APM_SIMPLE_GREY---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/boxm_refine_manager+boxm_sample+BOXM_APM_MOG_GREY--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/boxm_refine_manager+float-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bocl_manager+boxm_ray_bundle_trace_manager+boxm_sample+BOXM_APM_SIMPLE_GREY---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bocl_manager+boxm_refine_manager+float--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/boxm_render_image_manager+boxm_sample+BOXM_APM_MOG_GREY--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bocl_manager+boxm_render_image_manager+float--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/boxm_render_image_manager+float-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/boxm_render_image_manager+boxm_sample+BOXM_APM_SIMPLE_GREY--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bocl_manager+boxm_render_image_manager+boxm_sample+BOXM_APM_MOG_GREY---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bocl_manager+boxm_render_image_manager+boxm_sample+BOXM_APM_SIMPLE_GREY---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bocl_manager+boxm_online_update_manager-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/bocl_manager+boxm_refine_scene_manager-.cxx
 # End Source File
 # Begin Source File
@@ -339,9 +273,6 @@ SOURCE=.\Templates/bocl_manager+boxm_update_ocl_scene_manager-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/bocl_manager+boxm_render_ocl_scene_manager-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bocl_manager+boxm_change_detection_ocl_scene_manager-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/bocl_manager+boxm_ocl_camera_manager-.cxx
@@ -382,6 +313,21 @@ SOURCE=.\Templates/bocl_manager+boxm_render_probe_manager-.cxx
 # Begin Source File
 SOURCE=.\Templates/bocl_manager+boxm_update_bit_scene_manager-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_io_smart_ptr+boxm_ocl_change_detection_manager-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_io_smart_ptr+boxm_update_bit_scene_manager-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bocl_manager+boxm_ocl_change_detection_manager-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+boxm_ocl_change_detection_manager-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+boxm_update_bit_scene_manager-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -407,30 +353,6 @@ SOURCE=.\boxm_stat_manager.h
 SOURCE=.\boxm_ocl_utils.txx
 # End Source File
 # Begin Source File
-SOURCE=.\boxm_ocl_refine_scene.h
-# End Source File
-# Begin Source File
-SOURCE=.\boxm_ray_bundle_trace_manager.h
-# End Source File
-# Begin Source File
-SOURCE=.\boxm_refine_manager.h
-# End Source File
-# Begin Source File
-SOURCE=.\boxm_ray_bundle_trace_manager.txx
-# End Source File
-# Begin Source File
-SOURCE=.\boxm_refine_manager.txx
-# End Source File
-# Begin Source File
-SOURCE=.\boxm_render_image_manager.h
-# End Source File
-# Begin Source File
-SOURCE=.\boxm_render_image_manager.txx
-# End Source File
-# Begin Source File
-SOURCE=.\boxm_online_update_manager.h
-# End Source File
-# Begin Source File
 SOURCE=.\boxm_refine_scene_manager.h
 # End Source File
 # Begin Source File
@@ -441,9 +363,6 @@ SOURCE=.\boxm_update_ocl_scene_manager.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_render_ocl_scene_manager.h
-# End Source File
-# Begin Source File
-SOURCE=.\boxm_change_detection_ocl_scene_manager.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_ocl_camera_manager.h
@@ -465,6 +384,15 @@ SOURCE=.\boxm_render_probe_manager.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_update_bit_scene_manager.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_ocl_change_detection_manager.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_ocl_change_detection_manager_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_update_bit_scene_manager_sptr.h
 # End Source File
 # End Group
 # End Target

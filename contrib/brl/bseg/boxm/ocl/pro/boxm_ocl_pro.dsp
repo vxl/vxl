@@ -3,7 +3,7 @@
 # ** DO NOT EDIT **
 
 # variables to REPLACE
-# 
+#
 # /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl/bseg" == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
 #  == override in output directory
@@ -14,16 +14,16 @@
 CFG=boxm_ocl_pro - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "boxm_ocl_pro.mak".
-!MESSAGE 
+!MESSAGE
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "boxm_ocl_pro.mak" CFG="bmrf - Win32 Debug"
-!MESSAGE 
+!MESSAGE
 !MESSAGE Possible choices for configuration are:
-!MESSAGE 
+!MESSAGE
 !MESSAGE "boxm_ocl_pro - Win32 Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE "boxm_ocl_pro - Win32 Release" (based on "Win32 (x86) Static Library")
 # Begin Project
@@ -83,7 +83,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-!ENDIF 
+!ENDIF
 
 # Begin Target
 
@@ -98,16 +98,7 @@ LIB32=link.exe -lib
 SOURCE=.\boxm_ocl_register.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\processes/boxm_ocl_render_expected_process.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\processes/boxm_ocl_refine_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\processes/boxm_ocl_ray_bundle_expected_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\processes/boxm_ocl_ray_bundle_all_blocks_expected_process.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\processes/boxm_ocl_convert_boxm_to_ocl_process.cxx
@@ -122,7 +113,34 @@ SOURCE=.\processes/boxm_ocl_finish_render_probe_process.cxx
 SOURCE=.\processes/boxm_ocl_init_render_probe_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/boxm_ocl_init_change_detection_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm_ocl_run_change_detection_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm_finish_update_bit_scene_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm_update_bit_scene_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm_render_update_bit_scene_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm_ocl_finish_change_detection_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm_init_update_bit_scene_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+boxm_render_probe_manager_sptr-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/brdb_value_t+boxm_update_bit_scene_manager_sptr-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/brdb_value_t+boxm_ocl_change_detection_manager_sptr-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"

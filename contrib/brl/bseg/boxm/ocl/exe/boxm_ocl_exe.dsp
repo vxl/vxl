@@ -3,7 +3,7 @@
 # ** DO NOT EDIT **
 
 # variables to REPLACE
-# 
+#
 # /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl/bseg" == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
 #  == override in output directory
@@ -14,16 +14,16 @@
 CFG=boxm_ocl_exe - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "boxm_ocl_exe.mak".
-!MESSAGE 
+!MESSAGE
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "boxm_ocl_exe.mak" CFG="bmrf - Win32 Debug"
-!MESSAGE 
+!MESSAGE
 !MESSAGE Possible choices for configuration are:
-!MESSAGE 
+!MESSAGE
 !MESSAGE "boxm_ocl_exe - Win32 Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE "boxm_ocl_exe - Win32 Release" (based on "Win32 (x86) Static Library")
 # Begin Project
@@ -83,7 +83,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-!ENDIF 
+!ENDIF
 
 # Begin Target
 
@@ -123,9 +123,6 @@ SOURCE=.\boxm_ocl_render_bit_view.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_ocl_render_bit_exe.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\boxm_ocl_change_detection_roc.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_ocl_update_bit_view.cxx
