@@ -134,6 +134,9 @@ SOURCE=.\processes/boxm_ocl_finish_change_detection_process.cxx
 SOURCE=.\processes/boxm_init_update_bit_scene_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/boxm_query_bit_scene_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+boxm_render_probe_manager_sptr-.cxx
 # End Source File
 # Begin Source File

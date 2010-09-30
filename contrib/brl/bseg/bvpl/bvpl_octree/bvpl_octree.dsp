@@ -149,6 +149,9 @@ SOURCE=.\bvpl_octree_neighbors.h
 # Begin Source File
 SOURCE=.\bvpl_scene_neighborhood_operator.h
 # End Source File
+# Begin Source File
+SOURCE=.\bvpl_scene_statistics.h
+# End Source File
 # End Group
 # End Target
 # End Project
