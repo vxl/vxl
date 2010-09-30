@@ -40,15 +40,15 @@ bool boxm_update_bit_scene_manager::init_scene(boxm_ocl_bit_scene *scene,
   scene_info_->root_level = scene->max_level() - 1;
 
   //set origin and scene dimensions
-  scene_info_->scene_dims.s[0]= blkX;
-  scene_info_->scene_dims.s[1]= blkY;
-  scene_info_->scene_dims.s[2]= blkZ;
-  scene_info_->scene_dims.s[3]= 1;
+  scene_info_->scene_dims[0]= blkX;
+  scene_info_->scene_dims[1]= blkY;
+  scene_info_->scene_dims[2]= blkZ;
+  scene_info_->scene_dims[3]= 1;
   vgl_point_3d<double> origin = scene->origin();
-  scene_info_->scene_origin.s[0]= (float) origin.x();
-  scene_info_->scene_origin.s[1]= (float) origin.y();
-  scene_info_->scene_origin.s[2]= (float) origin.z();
-  scene_info_->scene_origin.s[3]= (float) 0.0;
+  scene_info_->scene_origin[0]= (float) origin.x();
+  scene_info_->scene_origin[1]= (float) origin.y();
+  scene_info_->scene_origin[2]= (float) origin.z();
+  scene_info_->scene_origin[3]= (float) 0.0;
 
   //allocate and initialize 3d blocks
   block_ptrs_ = (cl_ushort*) boxm_ocl_utils::alloc_aligned(numblocks, sizeof(cl_ushort2),16);
@@ -153,15 +153,15 @@ bool boxm_update_bit_scene_manager::init_scene(boxm_ocl_bit_scene *scene,
   scene_info_->root_level = scene->max_level() - 1;
 
   //set origin and scene dimensions
-  scene_info_->scene_dims.s[0]= blkX;
-  scene_info_->scene_dims.s[1]= blkY;
-  scene_info_->scene_dims.s[2]= blkZ;
-  scene_info_->scene_dims.s[3]= 1;
+  scene_info_->scene_dims[0]= blkX;
+  scene_info_->scene_dims[1]= blkY;
+  scene_info_->scene_dims[2]= blkZ;
+  scene_info_->scene_dims[3]= 1;
   vgl_point_3d<double> origin = scene->origin();
-  scene_info_->scene_origin.s[0]= (float) origin.x();
-  scene_info_->scene_origin.s[1]= (float) origin.y();
-  scene_info_->scene_origin.s[2]= (float) origin.z();
-  scene_info_->scene_origin.s[3]= (float) 0.0;
+  scene_info_->scene_origin[0]= (float) origin.x();
+  scene_info_->scene_origin[1]= (float) origin.y();
+  scene_info_->scene_origin[2]= (float) origin.z();
+  scene_info_->scene_origin[3]= (float) 0.0;
 
   //allocate and initialize 3d blocks
   block_ptrs_ = (cl_ushort*) boxm_ocl_utils::alloc_aligned(numblocks, sizeof(cl_ushort2),16);
@@ -293,7 +293,7 @@ bool boxm_update_bit_scene_manager::set_scene_buffers()
     return false;
 
   //block pointers
-  int numBlks = scene_info_->scene_dims.s[0] * scene_info_->scene_dims.s[1] * scene_info_->scene_dims.s[2];
+  int numBlks = scene_info_->scene_dims[0] * scene_info_->scene_dims[1] * scene_info_->scene_dims[2];
   block_ptrs_buf_ = clCreateBuffer(this->context_,
                                    CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR,
                                    numBlks * sizeof(cl_ushort2),
@@ -764,7 +764,6 @@ bool boxm_update_bit_scene_manager::set_refine_args()
 
 bool boxm_update_bit_scene_manager::set_update_args(unsigned pass)
 {
-  int CHECK_SUCCESS = 1;
   cl_int status = CL_SUCCESS;
   int i=0; 
   
@@ -1434,7 +1433,7 @@ bool boxm_update_bit_scene_manager::read_scene()
   if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (cell mem_ptrs )failed."))
     return false;
 
-  int numBlocks = scene_info_->scene_dims.s[0] * scene_info_->scene_dims.s[1] * scene_info_->scene_dims.s[2];
+  int numBlocks = scene_info_->scene_dims[0] * scene_info_->scene_dims[1] * scene_info_->scene_dims[2];
   status = clEnqueueReadBuffer(command_queue_,block_ptrs_buf_,CL_TRUE,
                                0,numBlocks*sizeof(cl_ushort2),
                                block_ptrs_,

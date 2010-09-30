@@ -121,14 +121,23 @@ bool boxm_render_bit_scene_manager::set_args(unsigned kernel_index=0)
     return false;
   cl_int status = CL_SUCCESS;
 
+  
   if (kernel_index==0)
   {
     //Temporary hack for scene info - to be put in another method
     //create a render scene info
     RenderSceneInfo* info = new RenderSceneInfo;
-    info->scene_origin = *((cl_float4*)scene_origin_);  // scene origin (point)
+    info->scene_origin[0] = scene_origin_[0];
+    info->scene_origin[1] = scene_origin_[1];
+    info->scene_origin[2] = scene_origin_[2];
+    info->scene_origin[3] = scene_origin_[3];
+    // info->scene_origin = *((cl_float4*)scene_origin_);  // scene origin (point)
     // was: info->scene_origin = (cl_float4) { scene_origin_[0], scene_origin_[1], scene_origin_[2], scene_origin_[3] };
-    info->scene_dims   = *((cl_int4*)scene_dims_);      // number of blocks in each dimension
+    info->scene_dims[0] = scene_dims_[0];
+    info->scene_dims[1] = scene_dims_[1];
+    info->scene_dims[2] = scene_dims_[2];
+    info->scene_dims[3] = scene_dims_[3];
+    //info->scene_dims   = *((cl_int4*)scene_dims_);      // number of blocks in each dimension
     // was: info->scene_dims   = (cl_int4) { scene_dims_[0], scene_dims_[1],scene_dims_[2],scene_dims_[3] };
     info->block_len    = block_dims_[0];    // size of each block (can only be 1 number now that we've established blocks are cubes)
     info->epsilon      = 1.0/100.0;
