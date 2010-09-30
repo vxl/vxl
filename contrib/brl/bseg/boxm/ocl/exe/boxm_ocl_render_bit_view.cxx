@@ -79,5 +79,6 @@ int main(int argc, char ** argv)
     win->show();
    
     GLboolean bGLEW = glewIsSupported("GL_VERSION_2_0  GL_ARB_pixel_buffer_object");
+    vcl_cout << "GLEW is supported= " << bGLEW << vcl_endl;
     return vgui::run();
 }
