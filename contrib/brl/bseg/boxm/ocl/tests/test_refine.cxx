@@ -24,6 +24,7 @@ bool test_refine_apl()
   vcl_cout<<"Comparing single block of APL scene"<<vcl_endl;
 
   //load apl scene
+  vcl_cout << "test dir: " << testlib_root_dir() << vcl_endl;
   vcl_string source_dir = testlib_root_dir()+"/contrib/brl/bseg/boxm/ocl/tests/";
   vcl_string cpu_path = source_dir+"scene.xml";
   boxm_ocl_scene cpu_scene(cpu_path);
@@ -234,8 +235,7 @@ bool test_refine_simple_scene()
   // Set up test tree
   typedef boxm_sample<BOXM_APM_MOG_GREY> data_type;
   typedef boct_tree<short,data_type> tree_type;
-  tree_type* tree = open_cl_test_data::simple_tree<data_type>();
-  float prob_thresh = .3f;
+  
 
 #if 0  //NEED TO REIMPLEMENT THIS USING UPDATED REFINE MANAGER
   //-------- GPU side: refine the scene using the opencl refine manager -------
