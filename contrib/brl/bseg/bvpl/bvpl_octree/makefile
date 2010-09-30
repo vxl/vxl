@@ -12,6 +12,7 @@ MANPAGE_SOURCES += bvpl_octree_sample.txx
 MANPAGE_SOURCES += bvpl_octree_vrml_util.h
 MANPAGE_SOURCES += bvpl_cell_data_traits.h
 MANPAGE_SOURCES += bvpl_octree_neighbors.h
+MANPAGE_SOURCES += bvpl_scene_statistics.h
 
 SUBDIRS += pro
 

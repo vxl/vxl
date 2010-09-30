@@ -17,6 +17,7 @@ SOURCES += processes/boxm_update_bit_scene_process.cxx
 SOURCES += processes/boxm_render_update_bit_scene_process.cxx
 SOURCES += processes/boxm_ocl_finish_change_detection_process.cxx
 SOURCES += processes/boxm_init_update_bit_scene_process.cxx
+SOURCES += processes/boxm_query_bit_scene_process.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk
