@@ -245,8 +245,18 @@ bool bvxm_edge_ray_processor::expected_edge_image(bvxm_image_metadata const& cam
 
   int dof = (int)world_->num_observations<EDGES>(0,scale)-1;
   bvxm_voxel_slab<edges_datatype>::iterator expected_edge_image_it = expected_edge_image.begin();
+  double eei_min = vcl_numeric_limits<double>::max();
+  double eei_max = vcl_numeric_limits<double>::min();
   for (; expected_edge_image_it != expected_edge_image.end(); ++expected_edge_image_it) {
     (*expected_edge_image_it) = sdet_img_edge::convert_edge_statistics_to_probability((*expected_edge_image_it),n_normal,dof);
+    eei_min = vnl_math_min(eei_min,(double)(*expected_edge_image_it));
+    eei_max = vnl_math_max(eei_max,(double)(*expected_edge_image_it));
+  }
+
+  if(eei_min<eei_max){
+    for (; expected_edge_image_it != expected_edge_image.end(); ++expected_edge_image_it) {
+      (*expected_edge_image_it) = ((double)(*expected_edge_image_it)-eei_min)/(eei_max/eei_min);
+    }
   }
 
   // convert back to vil_image_view
