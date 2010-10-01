@@ -75,6 +75,8 @@ class sdet_img_edge
   static vbl_array_2d<float> get_spherical_gaussian_kernel(const int size, const float sigma);
 
   static float convert_edge_statistics_to_probability(float edge_statistic, float n_normal, int dof);
+
+  static void convert_true_edge_prob_to_edge_statistics(const vil_image_view<float>& img_tep,vil_image_view<float>& img_es);
 };
 
 #endif // sdet_img_edge_h_

@@ -487,6 +487,22 @@ void sdet_img_edge::estimate_edge_prob_image(const vil_image_view<vxl_byte>& img
   }
 }
 
+void sdet_img_edge::convert_true_edge_prob_to_edge_statistics(
+  const vil_image_view<float>& img_tep,
+  vil_image_view<float>& img_es)
+{
+  float img_mean,img_var;
+  vil_math_mean_and_variance(img_mean,img_var,img_tep,0);
+  img_var = vcl_sqrt(img_mean*img_var);
+
+  img_es.set_size(img_tep.ni(),img_tep.nj());
+
+  for (unsigned i=0; i<img_tep.ni(); i++) {
+    for (unsigned j=0; j<img_tep.nj(); j++) {
+      img_es(i,j) = ((img_tep(i,j)-img_mean)*(img_tep(i,j)-img_mean))/img_var;
+    }
+  } 
+}
 
 float sdet_img_edge::convert_edge_statistics_to_probability(float edge_statistic, float n_normal, int dof)
 {
@@ -494,10 +510,7 @@ float sdet_img_edge::convert_edge_statistics_to_probability(float edge_statistic
     return edge_statistic;
   }
 
-  if ((edge_statistic-n_normal)>0.0f) {
-    double chi_sq_stat = (double)vnl_math_sqr((edge_statistic-n_normal))/n_normal;
-    return (float)vnl_chi_squared_cumulative(chi_sq_stat,dof);
-  }
+  float prob = (float)vnl_chi_squared_cumulative(edge_statistic,dof);
 
-  return 0.0f;
+  return prob;
 }
