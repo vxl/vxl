@@ -87,14 +87,12 @@ bool bvxm_update_edges_process(bprb_func_process& pro)
 
   vil_image_view<float> edge_prob_image;
   sdet_img_edge::estimate_edge_prob_image(edge_image, edge_prob_image, edge_prob_mask_size, edge_prob_mask_sigma);
-  float edge_prob_image_mean;
-  vil_math_mean(edge_prob_image_mean,edge_prob_image,0);
+  vil_image_view<float> edge_stat_image;
+  sdet_img_edge::convert_true_edge_prob_to_edge_statistics(edge_prob_image,edge_stat_image);
 
-  vox_world->get_params()->increment_edges_n_normal(edge_prob_image_mean);
+  vil_image_view_base_sptr edge_stat_image_sptr = new vil_image_view<float>(edge_stat_image);
 
-  vil_image_view_base_sptr edge_prob_image_sptr = new vil_image_view<float>(edge_prob_image);
-
-  bvxm_image_metadata camera_metadata_out(edge_prob_image_sptr,camera_inp);
+  bvxm_image_metadata camera_metadata_out(edge_stat_image_sptr,camera_inp);
   bool result = edge_ray_proc.update_edges(camera_metadata_out,0);
 
   if (!result) {

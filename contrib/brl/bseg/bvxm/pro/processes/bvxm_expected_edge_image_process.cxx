@@ -10,6 +10,7 @@
 #include <bvxm/bvxm_image_metadata.h>
 #include <bvxm/bvxm_edge_ray_processor.h>
 #include <brip/brip_vil_float_ops.h>
+#include <sdet/sdet_img_edge.h>
 #include <vpgl/algo/vpgl_backproject.h>
 #include <vcl_cstdio.h>
 
@@ -21,7 +22,7 @@ bool bvxm_expected_edge_image_process_cons(bprb_func_process& pro)
   // process takes 4 inputs:
   //input[0]: The voxel world
   //input[1]: The current camera
-  //input[2]: An image specifying the size of the expected edge image
+  //input[2]: The edge image
   //input[3]: Scale of the image
 
   vcl_vector<vcl_string> input_types_(n_inputs_);
@@ -59,9 +60,10 @@ bool bvxm_expected_edge_image_process(bprb_func_process& pro)
   vpgl_camera_double_sptr camera_inp = pro.get_input<vpgl_camera_double_sptr>(1);
   bvxm_edge_ray_processor edge_proc(vox_world);
 
-  vil_image_view_base_sptr size_image_sptr = pro.get_input<vil_image_view_base_sptr>(2);
-  unsigned ni = size_image_sptr->ni();
-  unsigned nj = size_image_sptr->nj();
+  vil_image_view_base_sptr edge_image_sptr = pro.get_input<vil_image_view_base_sptr>(2);
+  unsigned ni = edge_image_sptr->ni();
+  unsigned nj = edge_image_sptr->nj();
+  vil_image_view<vxl_byte> edge_image(edge_image_sptr);
 
   // scale of image
   unsigned scale = pro.get_input<unsigned>(3);
@@ -80,16 +82,8 @@ bool bvxm_expected_edge_image_process(bprb_func_process& pro)
   edge_proc.expected_edge_image(camera_metadata_inp,img_eei_f_sptr,n_normal,scale);
 
   vil_image_view<vxl_byte> *img_eei_vb = new vil_image_view<vxl_byte>(ni,nj,1);
-  float min_val, max_val;
-  vil_math_value_range(*img_eei_f, min_val, max_val);
-  float min_max_diff = max_val - min_val;
-  if(min_max_diff > 0.0f){
-    for(unsigned i=0; i<ni; i++){
-      for(unsigned j=0; j<nj; j++){
-        (*img_eei_vb)(i,j) = (vxl_byte)(255.0f*((*img_eei_f)(i,j)-min_val)/(min_max_diff));
-      }
-    }
-  }
+  brip_vil_float_ops::normalize_to_interval<float,vxl_byte>(*img_eei_f,*img_eei_vb,0.0f,255.0f);
+
 
   pro.set_output_val<vil_image_view_base_sptr>(0, img_eei_f);
   pro.set_output_val<vil_image_view_base_sptr>(1, img_eei_vb);
