@@ -1,7 +1,6 @@
-// This is boxm_ocl_include_glew.h
+// This is brl/bseg/boxm/ocl/view/boxm_ocl_include_glew.h
 #ifndef boxm_ocl_include_glew_h
 #define boxm_ocl_include_glew_h
-
 //:
 // \file
 // \brief Platform independent includes for GLEW
@@ -13,22 +12,17 @@
 //   <none yet>
 // \endverbatim
 
-#ifdef UNIX
-  #include <GL/glew.h>
+#include <GL/glew.h>
+#if defined(UNIX)
   #include <GL/glx.h>
 #endif
-
 #if defined(WIN32)
-  #include <GL/glew.h>
   #include <windows.h>
 #endif
-
-#if defined (__APPLE__) || defined(MACOSX)
-  #include <GL/glew.h>
+#if defined(__APPLE__) || defined(MACOSX)
   #include <GL/glxew.h>
   #include <OpenGL/OpenGL.h>
   #include <OpenGL/CGLDevice.h>
 #endif
-
 
 #endif
