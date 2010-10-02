@@ -68,7 +68,7 @@ bool bocl_manager<T>::initialize_cl()
     vcl_cerr << "bocl_manager: warning: found " << num_platforms << "OpenCL platforms. Using the first\n";
   }
   // Get the first platform ID
-  cl_platform_id platform_id[num_platforms];
+  cl_platform_id platform_id[2];
   status = clGetPlatformIDs (num_platforms, platform_id, NULL);
   if (status != CL_SUCCESS) {
     vcl_cerr << "bocl_manager: clGetPlatformIDs (call 2) returned " << status << '\n';
