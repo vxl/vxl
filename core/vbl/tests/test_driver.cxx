@@ -12,6 +12,7 @@ DECLARE(vbl_test_smart_ptr);
 DECLARE(vbl_test_ref_count);
 DECLARE(vbl_test_scoped_ptr);
 DECLARE(vbl_test_shared_pointer);
+DECLARE(vbl_test_local_minima);
 
 void
 register_tests()
@@ -28,6 +29,7 @@ register_tests()
   REGISTER(vbl_test_ref_count);
   REGISTER(vbl_test_scoped_ptr);
   REGISTER(vbl_test_shared_pointer);
+ REGISTER(vbl_test_local_minima);
 }
 
 DEFINE_MAIN;

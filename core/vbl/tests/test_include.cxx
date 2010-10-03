@@ -25,5 +25,5 @@
 #include <vbl/vbl_qsort.h>
 #include <vbl/vbl_checked_delete.h>
 #include <vbl/vbl_scoped_ptr.h>
-
+#include <vbl/vbl_local_minima.h>
 int main() { return 0; }
