@@ -11,6 +11,7 @@
 #include <vsl/vsl_fwd.h>
 #include <vnl/vnl_vector.h>
 #include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_box_2d.h>
 #include <vimt/vimt_transform_2d.h>
 
 //: Set of 2D points, stored in a vnl_vector (x0,y0,x1,y1...)
@@ -23,6 +24,9 @@ class msm_points
 
   // Dflt ctor
   msm_points();
+
+  // Set to hold n points (initially all zero)
+  msm_points(unsigned n);
 
   // Destructor
   ~msm_points();
@@ -37,8 +41,17 @@ class msm_points
   //: Number of points
   unsigned size() const { return v_.size()/2; }
 
+  //: Set to hold n points (initially all (x,y))
+  void set_size(unsigned n, double x=0, double y=0);
+
+  //: Set point i
+  void set_point(unsigned i, double x, double y)
+  {
+    assert(i<size()); v_[2*i]=x; v_[2*i+1]=y;
+  }
+
   //: Return i-th point
-  vgl_point_2d<double> operator[](unsigned i)
+  vgl_point_2d<double> operator[](unsigned i) const
   {
     assert(i<size());
     return vgl_point_2d<double>(v_[2*i],v_[2*i+1]);
@@ -65,12 +78,19 @@ class msm_points
   //: Translate current points by (tx,ty)
   void translate_by(double tx, double ty);
 
+  //: Transform current points with similarity transform
+  //  (x,y) -> (ax-by+tx, bx+ay+ty);
+  void transform_by(double a, double b, double tx, double ty);
+
   //: Transform current points with t
   void transform_by(const vimt_transform_2d& t);
 
   //: Bounding box of points
   void get_bounds(vgl_point_2d<double>& b_lo,
                   vgl_point_2d<double>& b_hi) const;
+
+  //: Return bounding box of points
+  vgl_box_2d<double> bounds() const;
 
   //: Write out points to named text file
   //  Returns true if successful.
@@ -96,7 +116,7 @@ class msm_points
   void b_read(vsl_b_istream& bfs);
 
   //: Equality test
-  bool operator==(const msm_points& points);
+  bool operator==(const msm_points& points) const;
 };
 
 

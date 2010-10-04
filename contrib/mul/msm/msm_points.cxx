@@ -20,12 +20,29 @@ msm_points::msm_points()
 {
 }
 
+msm_points::msm_points(unsigned n)
+{
+  v_.set_size(n*2); v_.fill(0.0);
+}
+
 //=======================================================================
 // Destructor
 //=======================================================================
 
 msm_points::~msm_points()
 {
+}
+
+//: Set to hold n points (initially all (x,y))
+void msm_points::set_size(unsigned n, double x, double y)
+{
+  v_.set_size(n*2);
+  double* v=v_.data_block();
+  double* v_end=v+2*n;
+  for (;v!=v_end;v+=2) 
+  {
+    v[0]=x; v[1]=y;
+  }
 }
 
 //: Set this to be equal to supplied points
@@ -120,6 +137,21 @@ void msm_points::translate_by(double tx, double ty)
   }
 }
 
+//: Transform current points with similarity transform
+void msm_points::transform_by(double a, double b, double tx, double ty)
+{
+  if (tx==0.0 && ty==0.0) return;
+  double* v=v_.data_block();
+  double* end_v=v+2*size();
+  for (;v!=end_v;v+=2)
+  {
+    double x=v[0],y=v[1];
+    v[0]=a*x-b*y+tx;
+    v[1]=b*x+a*y+ty;
+  }
+}
+
+
 //: Transform current points with t
 void msm_points::transform_by(const vimt_transform_2d& t)
 {
@@ -156,8 +188,16 @@ void msm_points::get_bounds(vgl_point_2d<double>& b_lo,
   }
 }
 
+//: Return bounding box of points
+vgl_box_2d<double> msm_points::bounds() const
+{
+  vgl_point_2d<double> blo,bhi;
+  get_bounds(blo,bhi);
+  return vgl_box_2d<double>(blo,bhi);
+}
+
 //: Equality test
-bool msm_points::operator==(const msm_points& points)
+bool msm_points::operator==(const msm_points& points) const
 {
   if (points.v_.size()!=v_.size()) return false;
   if (size()==0) return true;
