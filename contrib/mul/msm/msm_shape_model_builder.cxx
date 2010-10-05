@@ -19,7 +19,7 @@
 //=======================================================================
 
 msm_shape_model_builder::msm_shape_model_builder()
-  : min_modes_(0),max_modes_(9999),var_prop_(0.98)
+  : var_prop_(0.98),min_modes_(0),max_modes_(9999)
 {
 }
 
@@ -45,7 +45,7 @@ void msm_shape_model_builder::set_param_limiter(const msm_param_limiter& p)
 }
 
 void msm_shape_model_builder::set_mode_choice(unsigned min, unsigned max,
-                    double var_proportion)
+                                              double var_proportion)
 {
   min_modes_ = min;
   max_modes_ = max;
@@ -84,7 +84,7 @@ void msm_shape_model_builder::build_model(
     data(&aligned_shape_vec[0],n);
 
   pca.build_about_mean(data,ref_mean_shape.vector(),
-                            modes,mode_var);
+                       modes,mode_var);
 
   param_limiter_->set_param_var(mode_var);
 
@@ -138,8 +138,7 @@ vcl_string msm_shape_model_builder::is_a() const
   // required if data is present in this class
 void msm_shape_model_builder::print_summary(vcl_ostream& os) const
 {
-  os<<vcl_endl;
-  os<<vsl_indent()<<"aligner: ";
+  os<<'\n'<<vsl_indent()<<"aligner: ";
   if (aligner_.isDefined()) os<<aligner_; else os<<"-";
   os<<vsl_indent()<< "param_limiter: ";
   if (param_limiter_.isDefined())

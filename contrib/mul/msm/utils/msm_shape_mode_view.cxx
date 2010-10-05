@@ -17,15 +17,14 @@
 
 msm_shape_mode_view::msm_shape_mode_view():
   shape_model_(0),
-  rel_scale_(0.95),
-  n_per_mode_(3),
-  sd_range_(3.0),
-  mode_(0),
-  overlap_shapes_(false),
   points_(3),
+  n_per_mode_(3),
+  mode_(0),
+  sd_range_(3.0),
+  rel_scale_(0.95),
+  overlap_shapes_(false),
   display_win_(0,255,0,128)
 {}
-
 
 
 //: When true, overlap all the shapes to highlight changes
@@ -92,7 +91,7 @@ void msm_shape_mode_view::compute_shapes()
 }
 
 //: Compute the shapes so they fit into current window
-void msm_shape_mode_view::compute_shapes(unsigned n_shapes, 
+void msm_shape_mode_view::compute_shapes(unsigned n_shapes,
                                          double range, bool vary_one)
 {
   if (mode_<=0) return;
