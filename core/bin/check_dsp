@@ -8,7 +8,9 @@ exec perl -l012 -w -x $0 ${1+"$@"}
 # which in turn should correspond to the SOURCE_FILES in CMakeLists.txt.
 #
 # Second purpose: if the current directory contains a file named
-# test_include.cxx, verify that it contains all .h files from the parent dir.
+# test_include.cxx, verify that it contains all .h files from the parent dir
+# (and of all subdirectories of that parent dir which have no test_include.cxx
+# for themselves).
 #
 # Command line argument(s): list of directories to check (default: all)
 # Command line switch: -s: generate output in the form of a shell script
@@ -42,13 +44,15 @@ else {
 
 foreach my $dir (@DIRS)
 {
+  # remove "makefiles" or "dsps" prefix:
+  $dir =~ s!^(makefiles|dsps)/!!;
   # make that the embedding directory, if this is not a directory name:
   $dir =~ s!/[^/]+$ !!x unless -d $dir;
   # remove possible slash at end of directory name:
   $dir =~ s![\\/]+$ !!x;
   # Now read directory content and open relevant files (like CMakeLists.txt, makefile and *.dsp)
   # Possibly, makefile is located in  the parallel source tree, viz. in "makefiles/$dir", instead of directly in $dir
-  # and similarly for *.dsp, in "dsps/$dir"; moreover, this is the first place to look. 
+  # and similarly for *.dsp, in "dsps/$dir"; moreover, this is the first place to look.
   next unless opendir BASEDIR,$dir;
   my @file_list = grep {! m/^(\..*|CVS)$/} readdir(BASEDIR);
   closedir(BASEDIR);
@@ -77,13 +81,26 @@ foreach my $dir (@DIRS)
     my %inc_files = ();
     my $prefix=$dir; $prefix =~ s![^/]*$ !!x; $prefix =~ s!^.*\b(vcl|core|contrib/brl/(bbas|bseg)|contrib/gel/mrc|contrib/[^/]*)/!!;
     if (opendir UPDIR,"$dir/..") {
-      foreach (grep {m/\.h(|xx)$/} readdir(UPDIR)) { ++ $updir_files{$prefix.$_} unless (m/\bdll\.h$/); } # || m/vidl1_(win|avifile)_avicodec/
+      foreach (grep {m/\.h(|xx)$/} readdir(UPDIR))
+      {
+        ++ $updir_files{$prefix.$_}
+          unless (m/\bdll\.h$/
+               || m/\b(i?ascii|latin1|utf8)tab\.h$/
+               || m/\bexpat(Dll)?Config\.h$/
+               || m/\bbpro_defs\.h$/
+               || m/\bmvl2_video_(from|to)_avi_(linux|windows)\.h$/
+                 );
+             # || m/vidl1_(win|avifile)_avicodec/
+      }
       closedir(UPDIR);
     }
-    foreach my $subdir (qw(algo io file_formats gui pro xio vpdt))
+    foreach my $subdir (qw(algo io file_formats gui pro xio vpdt filter section accessors vipl_with_section/accessors vipl_with_vbl_array_2d/accessors vipl_with_vnl_matrix/accessors))
     {
       if (! -d "$dir/../$subdir/tests" && opendir UPDIR,"$dir/../$subdir") {
-        foreach (grep {m/\.h(|xx)$/} readdir(UPDIR)) { ++ $updir_files{"$prefix$subdir/$_"}; }
+        foreach (grep {m/\.h(|xx)$/} readdir(UPDIR))
+        {
+          ++ $updir_files{"$prefix$subdir/$_"};
+        }
         closedir(UPDIR);
       }
     }
@@ -171,7 +188,7 @@ foreach my $dir (@DIRS)
       if (m/^\s*TESTMAIN\s*\:?\=\s*(\S+)/) {
         $testmain = $1;
       }
-      while (s/^\s*(SOURCES|MINI_PROG_SOURCES|TESTS|TESTMAIN)\s*\:?\=\s*(\S+)/$1=/) {
+      while (s/^\s*(SOURCES|CL_SOURCES|MINI_PROG_SOURCES|TESTS|TESTMAIN)\s*\:?\=\s*(\S+)/$1=/) {
         ++ $tests{$2} if ($1 eq 'TESTS');
         my $file = $2;
         print $shell ? '# ' : '' . "$file\tspecified in $makef does not exist"
@@ -186,7 +203,7 @@ foreach my $dir (@DIRS)
         ++ $hsources{$file};
         ++ $hsources{$file} if ($file =~ s/\.txx$/.h/ && -f "$dir/$file" && ! exists $hsources{$file});
       }
-      while (s/^\s*(SOURCES|MINI_PROG_SOURCES|TESTS)\s*\+\=\s*(\S+)/$1+=/)
+      while (s/^\s*(SOURCES|CL_SOURCES|MINI_PROG_SOURCES|TESTS)\s*\+\=\s*(\S+)/$1+=/)
       {
         my $file = $2;
         ++ $tests{$file} if ($1 eq 'TESTS');
