@@ -436,11 +436,12 @@ bool boxm_update_bit_scene_manager::setup_online_processing()
   // set persp cam and input_image host buffers
   good = good && set_persp_camera();
   good = good && set_input_image();
+  good = good && set_rayoutput();
   // set persp camand input_image gpu buffers
   good = good && set_persp_camera_buffers()
               && set_input_image_buffers()
               && set_image_dims_buffers();
-
+  good = good && set_rayoutput_buffers();
   //now that all buffers are set, compile kernels, queue, and set args
   good = good && this->set_kernels()
               && this->set_commandqueue();
@@ -459,6 +460,9 @@ bool boxm_update_bit_scene_manager::finish_online_processing()
   scene_->set_mixture_values(cell_mixture_);
   scene_->set_num_obs_values(cell_num_obs_);
 
+  
+  this->release_rayoutput_buffers();
+  this->clean_rayoutput();
   //NEED TO:
   //- release offset buffers
   //- release persp cam, input image, image_dims (and buffers)
@@ -541,6 +545,15 @@ bool boxm_update_bit_scene_manager::set_kernels()
     vcl_cout<<"Query kernel failed to build"<<vcl_endl;
     return false;
   }
+  if (!this->build_ray_probe_program()) {
+      vcl_cout<<"refine program failed to build"<<vcl_endl;
+      return false;
+  }
+  ray_probe_kernel_ = clCreateKernel(program_,"ray_probe",&status);
+  if (this->check_val(status,CL_SUCCESS,error_to_string(status))!=CHECK_SUCCESS) {
+    vcl_cout<<"ray_probe kernel failed to build"<<vcl_endl;
+    return false;
+  }
 
   return true;
 }
@@ -617,7 +630,29 @@ bool boxm_update_bit_scene_manager::build_query_point_program()
     }
     return this->build_kernel_program(program_,"")==SDK_SUCCESS;
 }
+<<<<<<< .mine
+bool boxm_update_bit_scene_manager::build_ray_probe_program()
+{
+  vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm/ocl/cl/";
+  if (!this->load_kernel_source(source_dir+"scene_info.cl") ||
+      !this->append_process_kernels(source_dir+"cell_utils.cl") ||
+      !this->append_process_kernels(source_dir+"bit_tree_library_functions.cl") ||
+      !this->append_process_kernels(source_dir+"backproject.cl")||
+      !this->append_process_kernels(source_dir+"statistics_library_functions.cl")||
+      !this->append_process_kernels(source_dir+"expected_functor.cl")||
+      !this->append_process_kernels(source_dir+"ray_bundle_library_functions.cl")||
+      !this->append_process_kernels(source_dir+"ray_probe.cl")) {
+    vcl_cerr << "Error: boxm_update_bit_scene_manager : failed to load kernel source (helper functions)\n";
+    return false;
+  }
+  return this->build_kernel_program(program_, "")==SDK_SUCCESS;
 
+}
+
+
+=======
+
+>>>>>>> .r29805
 bool boxm_update_bit_scene_manager::build_update_program(vcl_string const& functor, bool use_cell_data)
 {
   vcl_string root = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm/ocl/cl/";
@@ -778,7 +813,73 @@ bool boxm_update_bit_scene_manager::set_render_args()
   status = clSetKernelArg(render_kernel_,i++,sizeof(cl_mem),(void *)&output_debug_buf_);
   return this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output debugger)")==CHECK_SUCCESS;
 }
+bool boxm_update_bit_scene_manager::set_ray_probe_args(int pi, int pj, float intensity)
+{
+  int CHECK_SUCCESS = 1;
+  cl_int status = CL_SUCCESS;
+  int i=0;
+  status = clSetKernelArg(ray_probe_kernel_,i++,sizeof(cl_mem),(void *)&scene_info_buf_);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (render scene info)"))
+    return 0;
+  //block pointers
+  status = clSetKernelArg(ray_probe_kernel_,i++,sizeof(cl_mem),(void *)&block_ptrs_buf_);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (block_ptrs_buf_)"))
+    return 0;
+  // the tree buffer
+  status = clSetKernelArg(ray_probe_kernel_,i++,sizeof(cl_mem),(void *)&cells_buf_);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cells_buf_)"))
+    return 0;
+  // alpha buffer
+  status = clSetKernelArg(ray_probe_kernel_,i++,sizeof(cl_mem),(void *)&cell_alpha_buf_);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_data_buf_)"))
+    return 0;
+  //mixture buffer
+  status = clSetKernelArg(ray_probe_kernel_, i++,sizeof(cl_mem),(void *)&cell_mixture_buf_);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_mixture_buf)"))
+    return 0;
+  // camera buffer
+  status = clSetKernelArg(ray_probe_kernel_,i++,sizeof(cl_mem),(void *)&persp_cam_buf_);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (data)"))
+    return 0;
+  //local copy of the tree (one for each thread/ray)
+  status = clSetKernelArg(ray_probe_kernel_,i++,this->bni_*this->bnj_*sizeof(cl_uchar16),0);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local tree)"))
+    return 0;
+  //bit lookup buffer
+  status = clSetKernelArg(ray_probe_kernel_,i++,sizeof(cl_mem),(void *)&bit_lookup_buf_);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output)"))
+    return 0;
+  //cum sum lookup buffer
+  status = clSetKernelArg(ray_probe_kernel_,i++,this->bni_*this->bnj_*10*sizeof(cl_uchar), 0);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cumsum buff)"))
+    return 0;
+  //imIndex buffer
+  status = clSetKernelArg(ray_probe_kernel_,i++,this->bni_*this->bnj_*sizeof(cl_int), 0);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cumsum buff)"))
+    return 0;
+  status = clSetKernelArg(ray_probe_kernel_, i++, sizeof(cl_int),&pi);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (i) buffer)"))
+      return SDK_FAILURE;
+  status = clSetKernelArg(ray_probe_kernel_, i++, sizeof(cl_int),&pj);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (j) buffer)"))
+      return SDK_FAILURE;
+  status = clSetKernelArg(ray_probe_kernel_, i++, sizeof(cl_float),&intensity);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (intensity) buffer)"))
+      return SDK_FAILURE;
 
+  for(unsigned cnt=0;cnt<10;cnt++)
+  {
+      status = clSetKernelArg(ray_probe_kernel_,i++,sizeof(cl_mem),(void *)&rayoutput_buf_[cnt]);
+      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (input_image)"))
+          return 0;
+  }
+  //output float buffer (one float for each buffer)
+  status = clSetKernelArg(ray_probe_kernel_,i++,sizeof(cl_mem),(void *)&output_debug_buf_);
+  if (this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output debugger)")!=CHECK_SUCCESS)
+    return false;
+    
+  return true;
+}
 bool boxm_update_bit_scene_manager::set_refine_args()
 {
   //SET REFINE ARGS-------------------------------------------------------------
@@ -1177,6 +1278,14 @@ bool boxm_update_bit_scene_manager::set_workspace(cl_kernel kernel, unsigned pas
       localThreads[0]  = 1;
       localThreads[1]  = 1;
   }
+  else if (pass==8)
+  {
+      globalThreads[0] = 1;
+      globalThreads[1] = 1;
+      localThreads[0]  = 1;
+      localThreads[1]  = 1;
+
+  }
   if (used_local_memory > this->total_local_memory())
   {
     vcl_cout << "Unsupported: Insufficient local memory on device.\n";
@@ -1219,7 +1328,7 @@ bool boxm_update_bit_scene_manager::run(cl_kernel kernel, unsigned pass)
       }
   }
   //everything else just runs once
-  if (pass==2 || pass ==4 || pass==5 || pass==6|| pass==7)
+  if (pass==2 || pass ==4 || pass==5 || pass==6|| pass==7 || pass==8)
   {
       cl_event ceEvent =0;
       status = clEnqueueNDRangeKernel(this->command_queue_, kernel, 2, NULL, globalThreads, localThreads, 0, NULL, &ceEvent);
@@ -1357,7 +1466,28 @@ bool boxm_update_bit_scene_manager::query_point(vgl_point_3d<float> p)
 
   return true;
 }
+<<<<<<< .mine
+bool boxm_update_bit_scene_manager::ray_probe(unsigned i,unsigned j, float intensity)
+{
+  gpu_time_=0;
+  unsigned pass = 8;
+  this->set_ray_probe_args((int)i,(int)j, intensity);
+  this->set_workspace(ray_probe_kernel_, pass);
+  if (!this->run(ray_probe_kernel_, pass))
+      return false;
+  if(!this->read_output_array())
+      vcl_cout<<" No output "<<vcl_endl;
+  vcl_cout << "Timing Analysis\n"
+           << "===============\n"
+           << "openCL Running time "<<gpu_time_<<" ms" << vcl_endl;
 
+  return true;
+
+}
+
+=======
+
+>>>>>>> .r29805
 bool boxm_update_bit_scene_manager::refine()
 {
   gpu_time_=0;
@@ -1891,7 +2021,6 @@ bool boxm_update_bit_scene_manager::read_output_debug()
     status= clEnqueueReadBuffer(command_queue_,output_debug_buf_,CL_TRUE,
                                 0,scene_info_->num_buffer*sizeof(cl_float),
                                 output_debug_, 0,NULL,&events[0]);
-
     if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (image_)failed."))
         return false;
 
@@ -1920,6 +2049,86 @@ bool boxm_update_bit_scene_manager::get_output_debug_array(vcl_vector<float> & d
     return true;
 }
 
+bool boxm_update_bit_scene_manager::set_rayoutput()
+{
+ raydepth_=1000;
+ for(unsigned j=0;j<10;j++)
+ {
+ rayoutput_[j]=(float*)boxm_ocl_utils::alloc_aligned(raydepth_,sizeof(float),16);
+
+ for (unsigned i=0;i<raydepth_;i++)
+     rayoutput_[j][i]=-1.0;
+ }  
+ return true;
+}
+
+bool boxm_update_bit_scene_manager::set_rayoutput_buffers()
+{
+  cl_int status;
+  for(unsigned i=0;i<10;i++)
+  {
+  rayoutput_buf_[i] = clCreateBuffer(this->context_,
+                                  CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+                                  raydepth_*sizeof(cl_float),
+                                  rayoutput_[i],&status);
+
+  }
+  return this->check_val(status,CL_SUCCESS,"clCreateBuffer (rayoutput_) failed.")==1;
+}
+
+bool boxm_update_bit_scene_manager::release_rayoutput_buffers()
+{
+    cl_int status;
+    for(unsigned i=0;i<10;i++)
+        status = clReleaseMemObject(rayoutput_buf_[i]);
+
+
+    return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (rayoutput_buf_).")==1;
+}
+
+bool boxm_update_bit_scene_manager::clean_rayoutput()
+{
+    if (rayoutput_)
+        for(unsigned i=0;i<10;i++)
+            boxm_ocl_utils::free_aligned(rayoutput_[i]);
+    return true;
+}
+
+bool boxm_update_bit_scene_manager::read_output_array()
+{
+  cl_event events[2];
+ int status =-1;
+  for(unsigned i=0;i<10;i++)
+  {
+      // Enqueue readBuffers
+     status= clEnqueueReadBuffer(command_queue_,rayoutput_buf_[i],CL_TRUE,
+                                       0,this->raydepth_*sizeof(cl_float),
+                                       rayoutput_[i], 0,NULL,&events[0]);
+
+      if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (image_)failed."))
+          return false;
+
+      // Wait for the read buffer to finish execution
+      status = clWaitForEvents(1, &events[0]);
+      if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents failed."))
+          return false;
+
+      status = clReleaseEvent(events[0]);
+  }
+
+  return this->check_val(status,CL_SUCCESS,"clReleaseEvent failed.")==1;
+}
+
+void boxm_update_bit_scene_manager::getoutputarray(vcl_vector< vcl_vector<float> >& out)
+{
+    out.resize(10);
+    for(unsigned j=0;j<10;j++)
+        for (unsigned i=0;i<raydepth_;i++)
+            if (rayoutput_[j][i]>-1)
+                out[j].push_back(rayoutput_[j][i]);
+}
+
+
 
 //: Binary write bit scene to stream
 void vsl_b_write(vsl_b_ostream& /*os*/, boxm_update_bit_scene_manager const& /*bit_scene*/)
@@ -1938,6 +2147,4 @@ void vsl_b_read(vsl_b_istream& /*is*/, boxm_update_bit_scene_manager* /*ph*/)
 }
 
 //: Binary write boxm scene pointer to stream
-void vsl_b_write(vsl_b_ostream& /*os*/, boxm_update_bit_scene_manager* const& /*ph*/)
-{
-}
+void vsl_b_write(vsl_b_ostream& /*os*/, boxm_update_bit_scene_manager* const& /*ph*/){}

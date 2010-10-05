@@ -54,4 +54,13 @@ query_bit_scene(__constant  RenderSceneInfo    * linfo,
     output[6]=mixture.s5/255.0f;
     output[7]=mixture.s6/255.0f;
     output[8]=mixture.s7/255.0f;
+
+    output[9]=aux_data_array[data_ptr].s0;
+    output[10]=aux_data_array[data_ptr].s1;
+    output[11]=aux_data_array[data_ptr].s2;
+    output[12]=aux_data_array[data_ptr].s3;
+
+
+
+    
 }

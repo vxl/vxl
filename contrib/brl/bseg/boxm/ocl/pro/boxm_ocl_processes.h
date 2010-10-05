@@ -18,4 +18,6 @@ DECLARE_FUNC_CONS(boxm_update_bit_scene_process);
 DECLARE_FUNC_CONS(boxm_finish_update_bit_scene_process);
 DECLARE_FUNC_CONS(boxm_render_update_bit_scene_process);
 DECLARE_FUNC_CONS(boxm_query_bit_scene_process);
+DECLARE_FUNC_CONS(boxm_ray_probe_process);
+DECLARE_FUNC_CONS(boxm_generate_3d_point_process);
 #endif

@@ -29,7 +29,9 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
     render_kernel_(0),
     refine_kernel_(0),
     query_point_kernel_(0),
-    use_gl_(true){}
+    ray_probe_kernel_(0),
+    use_gl_(true),
+    raydepth_(1000){}
   ~boxm_update_bit_scene_manager() {
     if (program_)
       clReleaseProgram(program_);
@@ -61,6 +63,7 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   bool refine();
   bool update();
   bool query_point(vgl_point_3d<float> p);
+  bool ray_probe(unsigned i,unsigned j, float intensity);
   
   //: before calling render and update, make sure persp cam is set (maybe combine w/ above methods for simplicity)
   bool set_persp_camera(vpgl_proj_camera<double> * pcam);
@@ -119,6 +122,7 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   cl_kernel render_kernel_;
   cl_kernel refine_kernel_;
   cl_kernel query_point_kernel_;
+  cl_kernel ray_probe_kernel_;
   vcl_vector<cl_kernel> update_kernels_;
   
   //----------------------------------------------------------------------------
@@ -131,6 +135,14 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   cl_mem     image_gl_buf_;       //gl image buf
   bool read_output_debug();
   bool get_output_debug_array(vcl_vector<float> & data);
+
+  bool set_rayoutput();
+  bool set_rayoutput_buffers();
+  bool release_rayoutput_buffers();
+  bool clean_rayoutput();
+  bool read_output_array();
+  void getoutputarray(vcl_vector< vcl_vector<float> >& out);
+
  protected:
   //----------------------------------------------------------------------------
   // PROTECTED helper methods (no need for these to be public, makes api simpler)
@@ -147,6 +159,7 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   bool build_rendering_program();
   bool build_refining_program();
   bool build_query_point_program();
+  bool build_ray_probe_program();
   //: executes specified kernel
   bool run(cl_kernel, unsigned pass);
   
@@ -155,6 +168,7 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   bool set_refine_args();
   bool set_update_args(unsigned pass);
   bool set_query_point_args();
+  bool set_ray_probe_args(int i, int j, float intensity);
   //: set/release command_queue
   bool set_commandqueue();
   bool release_commandqueue();
@@ -254,6 +268,9 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
 
   /*debugger ... */
   cl_mem    output_debug_buf_;
+  cl_mem rayoutput_buf_[10]  ;
+  float *  rayoutput_[10]  ;
+  unsigned raydepth_;
 
  /*****************************************
   *helper member variables

@@ -576,7 +576,6 @@ void seg_len_obs(float seg_len, __local float4* image_vect,
     /* linear thread id */
     uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
     /* limit access to threads that do not own a connected region */
-
     if (ray_bundle_array[llid].x!=llid)
     {
         /* store seg_len in the corresponding aux data slot to be accessed
@@ -766,7 +765,7 @@ void bayes_ratio(float seg_len, __local float4* image_vect,
     *
     */
     if (active&& ray_bundle_array[llid].x==llid &&
-        cached_aux_data[llid].x > 1.0e-4f) {    /* if  too small, do nothing */
+        cached_aux_data[llid].x > 1.0e-10f) {    /* if  too small, do nothing */
             temp1 = cached_aux_data[llid].x; /* length sum */
             /* The mean intensity for the cell */
             temp2 = cached_aux_data[llid].y/temp1; /* mean observation */
@@ -866,7 +865,9 @@ void update_cell(float16 * data, float4 aux_data,float t_match, float init_sigma
         if(w0>0.0f && w1>0.0f)
             w2=1-(*data).s3-(*data).s7;  
 
-        short Nobs0 = (short)(*data).s4, Nobs1 = (short)(*data).s8, Nobs2 = (short)(*data).sb; 
+        short Nobs0 = (short)(*data).s4, 
+              Nobs1 = (short)(*data).s8, 
+              Nobs2 = (short)(*data).sb; 
         float Nobs_mix = (*data).sc;
 
         update_gauss_3_mixture(aux_data.y/aux_data.x,
