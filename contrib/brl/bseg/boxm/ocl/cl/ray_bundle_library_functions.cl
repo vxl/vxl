@@ -448,6 +448,8 @@ int load_data_mutable_using_cell_ptrs( __local uchar4*   ray_bundle_array, /* bu
 
     return 1;
 }
+
+
 ///*
 // *
 // * Map the 2-d group id so that the mapped ids step by 2x in both column

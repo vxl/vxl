@@ -474,13 +474,15 @@ bool boxm_update_bit_scene_manager::finish_online_processing()
 //: create the three sets of kernels used by this manager
 bool boxm_update_bit_scene_manager::set_kernels()
 {
+  vcl_cout<<"Setting kernels "<<vcl_endl;
   cl_int status = CL_SUCCESS;
   const int CHECK_SUCCESS = 1;
   if (!this->release_kernels())
     return false;
 
   // pass 0 (seg lens)
-  if (!this->build_update_program("seg_len_obs(d,image_vect,ray_bundle_array,cached_aux_data)", false))
+  //if (!this->build_update_program("seg_len_obs(d,image_vect,ray_bundle_array,cached_aux_data)", false))
+  if (!this->build_update_program("SEGLEN", false))
     return false;
   cl_kernel kernel = clCreateKernel(program_,"update_bit_scene_opt",&status);
   if (this->check_val(status,CL_SUCCESS,error_to_string(status))!=CHECK_SUCCESS)
@@ -488,32 +490,45 @@ bool boxm_update_bit_scene_manager::set_kernels()
   update_kernels_.push_back(kernel);
 
   // pass 1
-  if (!this->build_update_program("pre_infinity(d,image_vect,ray_bundle_array, cached_data, cached_aux_data)", true))
+  //if (!this->build_update_program("pre_infinity(d,image_vect,ray_bundle_array, cached_data, cached_aux_data)", true))
+  if (!this->build_update_program("PREINF", true))
     return false;
   kernel = clCreateKernel(program_,"update_bit_scene_opt",&status);
   if (this->check_val(status,CL_SUCCESS,error_to_string(status))!=CHECK_SUCCESS)
     return false;
   update_kernels_.push_back(kernel);
+  
+    vcl_cout<<"Set preinf kernel "<<vcl_endl;
+
 
   //pass 2 norm image (pre-requisite to C++ pass 2)
   kernel = clCreateKernel(program_,"proc_norm_image",&status);
   if (this->check_val(status,CL_SUCCESS,error_to_string(status))!=CHECK_SUCCESS)
     return false;
   update_kernels_.push_back(kernel);
+  
+      vcl_cout<<"Set proc norm kernel "<<vcl_endl;
+
 
   // pass 3 Bayes ratio (pass 2 in C++)
-  if (!this->build_update_program("bayes_ratio(d,image_vect,ray_bundle_array, cached_data, cached_aux_data)", true))
+  //if (!this->build_update_program("bayes_ratio(d,image_vect,ray_bundle_array, cached_data, cached_aux_data)", true))
+  if (!this->build_update_program("BAYES", true))
     return false;
   kernel = clCreateKernel(program_,"update_bit_scene_opt",&status);
   if (this->check_val(status,CL_SUCCESS,error_to_string(status))!=CHECK_SUCCESS)
     return false;
   update_kernels_.push_back(kernel);
+  
+      vcl_cout<<"Set bayes kernel "<<vcl_endl;
+
 
   // pass 4 update_ocl_scene_main
   kernel = clCreateKernel(program_,"update_bit_scene_main",&status);
   if (this->check_val(status,CL_SUCCESS,error_to_string(status))!=CHECK_SUCCESS)
     return false;
   update_kernels_.push_back(kernel);
+  
+  vcl_cout<<"Set all four update kernels"<<vcl_endl;
 
   //create and render kernel
   if (!this->build_rendering_program()) {
@@ -568,7 +583,8 @@ bool boxm_update_bit_scene_manager::build_rendering_program()
       !this->append_process_kernels(source_dir+"backproject.cl")||
       !this->append_process_kernels(source_dir+"statistics_library_functions.cl")||
       !this->append_process_kernels(source_dir+"expected_functor.cl")||
-      !this->append_process_kernels(source_dir+"ray_bundle_library_functions.cl")||
+      !this->append_process_kernels(source_dir+"ray_bundle_library_opt.cl")||
+      !this->append_process_kernels(source_dir+"cast_ray_bit.cl") ||
       !this->append_process_kernels(source_dir+"render_bit_scene.cl")) {
     vcl_cerr << "Error: boxm_update_bit_scene_manager : failed to load kernel source (helper functions)\n";
     return false;
@@ -587,6 +603,7 @@ bool boxm_update_bit_scene_manager::build_rendering_program()
     options+="-D ATI ";
   if (vcl_strstr(this->platform_name,"NVIDIA"))
     options+="-D NVIDIA ";
+  options += "-D RENDER ";
   //options += " -cl-fast-relaxed-math ";
 
   // assign the functor calling signature
@@ -630,7 +647,8 @@ bool boxm_update_bit_scene_manager::build_query_point_program()
     }
     return this->build_kernel_program(program_,"")==SDK_SUCCESS;
 }
-<<<<<<< .mine
+
+
 bool boxm_update_bit_scene_manager::build_ray_probe_program()
 {
   vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm/ocl/cl/";
@@ -649,10 +667,6 @@ bool boxm_update_bit_scene_manager::build_ray_probe_program()
 
 }
 
-
-=======
-
->>>>>>> .r29805
 bool boxm_update_bit_scene_manager::build_update_program(vcl_string const& functor, bool use_cell_data)
 {
   vcl_string root = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm/ocl/cl/";
@@ -661,35 +675,54 @@ bool boxm_update_bit_scene_manager::build_update_program(vcl_string const& funct
   bool octr = this->append_process_kernels(root + "bit_tree_library_functions.cl");
   bool bpr  = this->append_process_kernels(root + "backproject.cl");
   bool stat = this->append_process_kernels(root + "statistics_library_functions.cl");
-  bool rbun = this->append_process_kernels(root + "ray_bundle_library_functions.cl");
-  bool main = this->append_process_kernels(root + "update_bit_scene.cl");
+  bool ropt = this->append_process_kernels(root + "ray_bundle_library_opt.cl");
+  bool rayc = this->append_process_kernels(root + "cast_ray_bit.cl");
+  bool main = this->append_process_kernels(root + "update_bit_scene_opt.cl");
 
-  if (!octr||!bpr||!stat||!rbun||!main||!locc||!cell) {
+  if (!octr||!bpr||!stat||!main||!locc||!cell||!rayc||!ropt) {
     vcl_cerr << "Error: boxm_update_bit_scene_manager : failed to load kernel source (helper functions)\n";
     return false;
   }
-  vcl_string patt = "$$step_cell$$", empty = "", zero = "0", one = "1";
-  // transfer cell data from global to local memory if use_cell_data_ == true
-  vcl_string use = "%%";
-  vcl_string::size_type use_start = this->prog_.find(use);
-  if (use_start < this->prog_.size()) {
-    if (use_cell_data)
-      this->prog_ = this->prog_.replace (use_start, 2, one.c_str(), 1);
-    else
-      this->prog_ = this->prog_.replace (use_start, 2, zero.c_str(), 1);
-  }
-  else
-    return false;
+  
+  //compilation options
+  vcl_string options="";
+  options+="-D INTENSITY ";
+  if (vcl_strstr(this->platform_name,"ATI"))
+    options+="-D ATI ";
+  if (vcl_strstr(this->platform_name,"NVIDIA"))
+    options+="-D NVIDIA ";
+  
+  //choose update functor
+  if(vcl_strstr(functor.c_str(), "SEGLEN"))
+    options += "-D SEGLEN";
+  else if(vcl_strstr(functor.c_str(), "PREINF"))
+    options += "-D PREINF";
+  else if(vcl_strstr(functor.c_str(), "BAYES"))
+    options += "-D BAYES";
+
+  //vcl_string patt = "$$step_cell$$", empty = "", zero = "0", one = "1";
+  //// transfer cell data from global to local memory if use_cell_data_ == true
+  //vcl_string use = "%%";
+  //vcl_string::size_type use_start = this->prog_.find(use);
+  //if (use_start < this->prog_.size()) {
+    //if (use_cell_data)
+      //this->prog_ = this->prog_.replace (use_start, 2, one.c_str(), 1);
+    //else
+      //this->prog_ = this->prog_.replace (use_start, 2, zero.c_str(), 1);
+  //}
+  //else
+    //return false;
+    
   // assign the functor calling signature
-  vcl_string::size_type pos_start = this->prog_.find(patt);
-  vcl_string::size_type n1 = patt.size();
-  if (pos_start < this->prog_.size()) {
-    vcl_string::size_type n2 = functor.size();
-    if (!n2)
-      return false;
-    this->prog_ = this->prog_.replace(pos_start, n1, functor.c_str(), n2);
-    return this->build_kernel_program(program_,"")==SDK_SUCCESS;
-  }
+  //vcl_string::size_type pos_start = this->prog_.find(patt);
+  //vcl_string::size_type n1 = patt.size();
+  //if (pos_start < this->prog_.size()) {
+    //vcl_string::size_type n2 = functor.size();
+    //if (!n2)
+      //return false;
+    //this->prog_ = this->prog_.replace(pos_start, n1, functor.c_str(), n2);
+    return this->build_kernel_program(program_,options)==SDK_SUCCESS;
+  //}
   return false;
 }
 
@@ -946,7 +979,7 @@ bool boxm_update_bit_scene_manager::set_update_args(unsigned pass)
 {
   cl_int status = CL_SUCCESS;
   int i=0;
-
+  
   //set raytrace update args -------------------------------------------------
   if (pass==0 || pass==1 || pass==3)
   {
@@ -1028,6 +1061,14 @@ bool boxm_update_bit_scene_manager::set_update_args(unsigned pass)
     status = clSetKernelArg(update_kernels_[pass],i++,sizeof(cl_float4)*this->bni_*this->bnj_,0);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local image_vect)"))
       return false;
+    //cum sum lookup buffer
+    status = clSetKernelArg(update_kernels_[pass],i++,this->bni_*this->bnj_*10*sizeof(cl_uchar), 0);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cumsum buff)"))
+      return false;
+    //imIndex buffer
+    status = clSetKernelArg(update_kernels_[pass],i++,this->bni_*this->bnj_*sizeof(cl_int), 0);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (imindex buff)"))
+      return 0;
     //output float buffer (one float for each buffer)
     status = clSetKernelArg(update_kernels_[pass],i++,sizeof(cl_mem),(void *)&output_debug_buf_);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output debugger)"))
@@ -1303,7 +1344,7 @@ bool boxm_update_bit_scene_manager::run(cl_kernel kernel, unsigned pass)
   cl_int status = SDK_SUCCESS;
   cl_ulong tstart,tend;
 
-  gpu_time_ = 0.0;
+  //gpu_time_ = 0.0;
   //pass 0, 1, and 3 require four separate executions to run
   if (pass==0 || pass ==1 || pass==3)
   {
@@ -1337,7 +1378,7 @@ bool boxm_update_bit_scene_manager::run(cl_kernel kernel, unsigned pass)
       status = clFinish(command_queue_);
       status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
       status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
-      gpu_time_ = 1.0e-6f * float(tend - tstart); // convert nanoseconds to milliseconds
+      gpu_time_ += 1.0e-6f * float(tend - tstart); // convert nanoseconds to milliseconds
   }
 
   return this->check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status))==CHECK_SUCCESS;
@@ -1466,7 +1507,7 @@ bool boxm_update_bit_scene_manager::query_point(vgl_point_3d<float> p)
 
   return true;
 }
-<<<<<<< .mine
+
 bool boxm_update_bit_scene_manager::ray_probe(unsigned i,unsigned j, float intensity)
 {
   gpu_time_=0;
@@ -1482,12 +1523,8 @@ bool boxm_update_bit_scene_manager::ray_probe(unsigned i,unsigned j, float inten
            << "openCL Running time "<<gpu_time_<<" ms" << vcl_endl;
 
   return true;
-
 }
 
-=======
-
->>>>>>> .r29805
 bool boxm_update_bit_scene_manager::refine()
 {
   gpu_time_=0;

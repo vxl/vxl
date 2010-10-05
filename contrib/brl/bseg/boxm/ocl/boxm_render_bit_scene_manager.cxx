@@ -32,6 +32,7 @@ bool boxm_render_bit_scene_manager::init_ray_trace(boxm_ocl_bit_scene *scene,
       !this->append_process_kernels(source_dir+"statistics_library_functions.cl")||
       !this->append_process_kernels(source_dir+"expected_functor.cl")||
       !this->append_process_kernels(source_dir+"ray_bundle_library_functions.cl")||
+      !this->append_process_kernels(source_dir+"cast_ray_bit.cl") ||
       !this->append_process_kernels(source_dir+"render_bit_scene.cl")) {
     vcl_cerr << "Error: boxm_render_bit_scene_manager : failed to load kernel source (helper functions)\n";
     return false;
@@ -62,6 +63,7 @@ bool boxm_render_bit_scene_manager::init_ray_trace(boxm_ocl_bit_scene *scene,
   if (vcl_strstr(this->platform_name,"NVIDIA"))
     options+="-D NVIDIA ";
   options += " -cl-fast-relaxed-math ";
+  options += " -D RENDER";
 
   // assign the functor calling signature
   vcl_string::size_type pos_start = this->prog_.find(patt);
