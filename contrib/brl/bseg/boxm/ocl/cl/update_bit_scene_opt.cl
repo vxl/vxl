@@ -116,53 +116,38 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
     {
       //if alpha is less than zero don't update
       float  alpha    = alpha_array[gid];
-      if(alpha <= 0.0) return;
-      
-      //load global data into registers
-      float4 aux_data = aux_data_array[gid];
-      float4 nobs     = convert_float4(nobs_array[gid]);
-      float8 mixture  = convert_float8(mixture_array[gid]);
-      float16 data = (float16) (alpha, 
-                     (mixture.s0/255.0), (mixture.s1/255.0), (mixture.s2/255.0), (nobs.s0), 
-                     (mixture.s3/255.0), (mixture.s4/255.0), (mixture.s5/255.0), (nobs.s1),
-                     (mixture.s6/255.0), (mixture.s7/255.0), (nobs.s2), (nobs.s3/100.0), 
-                     0.0, 0.0, 0.0);
-      
-      //use aux data to update cells 
-      if (aux_data.x>1e-10f)
-        update_cell(&data, aux_data, 2.5f, 0.09f, 0.03f);
+      float  cell_min = info->block_len/(float)(1<<info->root_level);
 
-      //reset the cells in memory 
-      alpha_array[gid]      = data.s0;
-      float8 post_mix       = (float8) (data.s1, data.s2, data.s3, 
-                                        data.s5, data.s6, data.s7, 
-                                        data.s9, data.sa)*255.0;
-      float4 post_nobs      = (float4) (data.s4, data.s8, data.sb, data.sc*100.0);
-      mixture_array[gid]    = convert_uchar8_sat_rte(post_mix);
-      nobs_array[gid]       = convert_ushort4_sat_rte(post_nobs);      
+
+      float  alphamin = -log(1.0-0.0001)/cell_min;
+
+      if(alpha > 0.0) 
+      {
+          //load global data into registers
+          float4 aux_data = aux_data_array[gid];
+          float4 nobs     = convert_float4(nobs_array[gid]);
+          float8 mixture  = convert_float8(mixture_array[gid]);
+          float16 data = (float16) (alpha, 
+                         (mixture.s0/255.0), (mixture.s1/255.0), (mixture.s2/255.0), (nobs.s0), 
+                         (mixture.s3/255.0), (mixture.s4/255.0), (mixture.s5/255.0), (nobs.s1),
+                         (mixture.s6/255.0), (mixture.s7/255.0), (nobs.s2), (nobs.s3/100.0), 
+                         0.0, 0.0, 0.0);
+          
+          //use aux data to update cells 
+          if (aux_data.x>1e-10f)
+              update_cell(&data, aux_data, 2.5f, 0.09f, 0.03f);
+
+          //reset the cells in memory 
+          alpha_array[gid]      = max(alphamin,data.s0);
+          float8 post_mix       = (float8) (data.s1, data.s2, data.s3, 
+                                            data.s5, data.s6, data.s7, 
+                                            data.s9, data.sa)*255.0;
+          float4 post_nobs      = (float4) (data.s4, data.s8, data.sb, data.sc*100.0);
+          mixture_array[gid]    = convert_uchar8_sat_rte(post_mix);
+          nobs_array[gid]       = convert_ushort4_sat_rte(post_nobs);     
+      }
       aux_data_array[gid]   = (float4)0.0f;
     }
-    
-#if 1 
-    if(gid==345) {
-      output[0] = info->data_len; 
-      output[1] = info->num_buffer;
-/*
-      output[0] = alpha_array[gid];
-      output[1] = (float) (mixture_array[gid].s0/255.0); //mu0
-      output[2] = (float) (mixture_array[gid].s1/255.0); //sig0
-      output[3] = (float) (mixture_array[gid].s2/255.0); //w0
-      output[4] = (float) (mixture_array[gid].s3/255.0); //mu1
-      output[5] = (float) (mixture_array[gid].s4/255.0); //sig1
-      output[6] = (float) (mixture_array[gid].s5/255.0); //w1
-      output[7] = (float) (mixture_array[gid].s6/255.0); //mu2
-      output[8] = (float) (mixture_array[gid].s7/255.0); //sig2
-
-      output[9] = (float) (nobs_array[gid].s3/100.0);
-*/
-    }
-#endif
-    
 }
 
 
