@@ -79,7 +79,6 @@ ray_trace_bit_scene_opt(__constant  RenderSceneInfo    * linfo,
             
             //io info
             in_image, gl_image, output);
-                          
 }
 
 

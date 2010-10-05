@@ -118,7 +118,7 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
       float  alpha    = alpha_array[gid];
       float  cell_min = info->block_len/(float)(1<<info->root_level);
 
-
+      //minimum alpha value, don't let blocks get below this
       float  alphamin = -log(1.0-0.0001)/cell_min;
 
       if(alpha > 0.0) 

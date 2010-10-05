@@ -162,7 +162,6 @@ cast_ray(
 #ifdef SEGLEN
       //keep track of cells being hit
       cell_ptrs[llid] = data_ptr;
-      ray_bundle_array[llid].x=llid;
       barrier(CLK_LOCAL_MEM_FENCE);
 
       //segment the workgroup
@@ -236,7 +235,7 @@ cast_ray(
 ////////////////////////////////////////////////////////////////////////////////
 // END Step Cell Functor
 ////////////////////////////////////////////////////////////////////////////////
-
+      
     }
 
     //--------------------------------------------------------------------------

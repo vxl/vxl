@@ -51,6 +51,7 @@ int load_data_mutable_opt(__local short2  * ray_bundle_array,
   
   //initialize segmentation information 
   ray_bundle_array[llid] = (short2) (-1, 1);
+  barrier(CLK_LOCAL_MEM_FENCE);
   
   //first pass looks to the right neighbor (make sure you don't look for the last one)
   if(cell_ptrs[llid] == cell_ptrs[llid+1] && llid<lsize-1) {

@@ -145,23 +145,18 @@ refine_bit_scene(__constant  RenderSceneInfo    * linfo,
     //get the (absolute) index of the start and end pointers
     int preRefineStart = startPtr;
     int preRefineEnd   = endPtr;
+
+    //---- special case that may not be necessary ----------------------------
+    //0. if there aren't 585 cells in this buffer, quit refining 
+    int preFreeSpace = (startPtr >= endPtr) ? startPtr-endPtr : linfo->data_len - (endPtr-startPtr);
+    if(preFreeSpace < 585) {
+      output[gid] = -665;       
+      return;
+    }
+    //------------------------------------------------------------------------
     
     //Iterate over each tree in buffer=gid      
     for(int i=0; i<numBlocks; i++) {
-      
-/*
-      //---- special case that may not be necessary ----------------------------
-      //0. if there aren't 585 cells in this buffer, quit refining 
-      int preFreeSpace = (startPtr >= endPtr) ? startPtr-endPtr : linfo->data_len - (endPtr-startPtr);
-      if(preFreeSpace < 585) {
-        output[gid] = -665;       
-        mem_ptrs[gid].x = startPtr;   //store mem pointers before breaking
-        mem_ptrs[gid].y = endPtr;     //store mem pointers before breaking
-        break;
-      }
-      //------------------------------------------------------------------------
-*/
-
       
       //1. get current tree information
       (*local_tree)    = as_uchar16(tree_array[gid*linfo->tree_len + i]);
