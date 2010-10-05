@@ -137,6 +137,12 @@ SOURCE=.\processes/boxm_init_update_bit_scene_process.cxx
 SOURCE=.\processes/boxm_query_bit_scene_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/boxm_generate_3d_point_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm_ray_probe_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+boxm_render_probe_manager_sptr-.cxx
 # End Source File
 # Begin Source File
