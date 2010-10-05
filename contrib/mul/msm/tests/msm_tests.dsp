@@ -99,6 +99,21 @@ SOURCE=.\test_include.cxx
 # Begin Source File
 SOURCE=.\test_points.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_shape_model.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_wt_mat_2d.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_param_limiters.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_curves.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_aligners.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

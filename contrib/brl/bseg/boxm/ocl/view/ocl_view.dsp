@@ -160,6 +160,9 @@ SOURCE=.\boxm_update_bit_tableau.h
 # Begin Source File
 SOURCE=.\boxm_update_bit_tableau_sptr.h
 # End Source File
+# Begin Source File
+SOURCE=.\boxm_ocl_include_glew.h
+# End Source File
 # End Group
 # End Target
 # End Project

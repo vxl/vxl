@@ -93,11 +93,113 @@ LIB32=link.exe -lib
 # Begin Source File
 SOURCE=.\msm_points.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\msm_similarity_aligner.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\msm_add_all_loaders.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\msm_ref_shape_instance.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\msm_no_limiter.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\msm_wt_mat_2d.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\msm_translation_aligner.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\msm_shape_model_builder.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\msm_param_limiter.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\msm_shape_instance.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\msm_aligner.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\msm_curve.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\msm_shape_model.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\msm_box_limiter.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\msm_zoom_aligner.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\msm_ellipsoid_limiter.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_cloneables_factory+msm_param_limiter-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_binary_loader+msm_param_limiter-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_binary_loader+msm_aligner-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_cloneables_factory+msm_aligner-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
 SOURCE=.\msm_points.h
+# End Source File
+# Begin Source File
+SOURCE=.\msm_aligner.h
+# End Source File
+# Begin Source File
+SOURCE=.\msm_curve.h
+# End Source File
+# Begin Source File
+SOURCE=.\msm_shape_instance.h
+# End Source File
+# Begin Source File
+SOURCE=.\msm_box_limiter.h
+# End Source File
+# Begin Source File
+SOURCE=.\msm_shape_model_builder.h
+# End Source File
+# Begin Source File
+SOURCE=.\msm_no_limiter.h
+# End Source File
+# Begin Source File
+SOURCE=.\msm_add_all_loaders.h
+# End Source File
+# Begin Source File
+SOURCE=.\msm_similarity_aligner.h
+# End Source File
+# Begin Source File
+SOURCE=.\msm_ref_shape_instance.h
+# End Source File
+# Begin Source File
+SOURCE=.\msm_param_limiter.h
+# End Source File
+# Begin Source File
+SOURCE=.\msm_ellipsoid_limiter.h
+# End Source File
+# Begin Source File
+SOURCE=.\msm_wt_mat_2d.h
+# End Source File
+# Begin Source File
+SOURCE=.\msm_translation_aligner.h
+# End Source File
+# Begin Source File
+SOURCE=.\msm_shape_model.h
+# End Source File
+# Begin Source File
+SOURCE=.\msm_zoom_aligner.h
 # End Source File
 # End Group
 # End Target

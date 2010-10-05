@@ -215,6 +215,15 @@ SOURCE=.\Templates/vbl_array_3d+float-.cxx
 # Begin Source File
 SOURCE=.\Templates/vbl_array_1d+ushort-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_local_minima+unsigned-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_local_minima+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_local_minima+double-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -322,6 +331,12 @@ SOURCE=.\vbl_checked_delete.h
 # End Source File
 # Begin Source File
 SOURCE=.\vbl_scoped_ptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\vbl_local_minima.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vbl_local_minima.h
 # End Source File
 # End Group
 # End Target
