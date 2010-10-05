@@ -10,6 +10,7 @@
 #include "ocl_scene_test_manager.h"
 
 
+#if 0 // most tests are commented out for the time being ...
 static void test_loc_code(bit_tree_test_manager* test_mgr)
 {
   if (!test_mgr->run_test(0)) {
@@ -42,7 +43,9 @@ static void test_loc_code(bit_tree_test_manager* test_mgr)
     }
   }
 }
+#endif // 0
 
+#if 0 // most tests are commented out for the time being ...
 static void test_bit_at(bit_tree_test_manager* test_mgr)
 {
   bool good = test_mgr->run_test(1);
@@ -78,7 +81,9 @@ static void test_bit_at(bit_tree_test_manager* test_mgr)
     }
   }
 }
+#endif // 0
 
+#if 0 // most tests are commented out for the time being ...
 static void test_traverse(bit_tree_test_manager* test_mgr, boct_tree<short, float>* tree)
 {
   bool good = test_mgr->run_test(2);
@@ -134,7 +139,9 @@ static void test_traverse(bit_tree_test_manager* test_mgr, boct_tree<short, floa
   TEST("Test_traverse code results", good, true);
   vcl_cout<<"Time spent test_traverse "<<test_mgr->gpu_time_/(10000.0*8)<<" ms"<<vcl_endl;
 }
+#endif // 0
 
+#if 0 // most tests are commented out for the time being ...
 static void test_traverse_force(bit_tree_test_manager* test_mgr, boct_tree<short, float>* tree)
 {
   //test the execution
@@ -186,6 +193,7 @@ static void test_traverse_force(bit_tree_test_manager* test_mgr, boct_tree<short
   TEST("test_traverse_force_data", good, true);
   vcl_cout<<"Time spent traverse_force "<<test_mgr->gpu_time_/(10000.0)<<" ms"<<vcl_endl;
 }
+#endif // 0
 
 static void compare_traverse()
 {
