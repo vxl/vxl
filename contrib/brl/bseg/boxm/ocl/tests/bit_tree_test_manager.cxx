@@ -16,6 +16,7 @@ bool bit_tree_test_manager::init_arrays()
   //set up buffers
   bit_tree_ = (cl_uchar*) boxm_ocl_utils::alloc_aligned(16,sizeof(cl_uchar),16);
   output_   = (cl_int*)   boxm_ocl_utils::alloc_aligned(16,sizeof(cl_float4),16);
+  bbox_output_ = (cl_float*)  boxm_ocl_utils::alloc_aligned(16,sizeof(cl_float4),16);
   bit_lookup_ = (cl_uchar*) boxm_ocl_utils::alloc_aligned(256,sizeof(cl_uchar),16);
   unsigned char bits[] = { 0,   1,   1,   2,   1,   2,   2,   3,   1,   2,   2,   3,   2,   3,   3,   4,
                            1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5 ,
@@ -170,6 +171,12 @@ bool bit_tree_test_manager::set_buffers()
                                16*sizeof(cl_int4), NULL , &status);
   if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (output_buf) failed."))
     return false;
+    
+  //output_buf_
+  bbox_output_buf_ = clCreateBuffer(this->context_,CL_MEM_READ_WRITE,
+                                  16*sizeof(cl_float4), NULL , &status);
+  if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (bbox_output_buf) failed."))
+    return false;
   return true;
 }
 
@@ -271,6 +278,29 @@ cl_int* bit_tree_test_manager::get_output()
     return 0;
 
   return output_;
+}
+
+cl_float* bit_tree_test_manager::get_bbox_output()
+{
+  cl_event events[1];
+  cl_int status = 0;
+
+  // Enqueue readBuffers
+  status = clEnqueueReadBuffer(command_queue_, bbox_output_buf_, CL_TRUE,
+                               0, 16*sizeof(cl_float4),
+                               bbox_output_, 0, NULL, &events[0]);
+  if (!this->check_val(status, CL_SUCCESS, "clEnqueueBuffer (bbox_output)failed."))
+    return 0;
+
+  // Wait for the read buffer to finish execution
+  status = clWaitForEvents(1, &events[0]);
+  if (!this->check_val(status, CL_SUCCESS, "clWaitForEvents failed."))
+    return 0;
+  status = clReleaseEvent(events[0]);
+  if (!this->check_val(status,CL_SUCCESS,"clReleaseEvent failed."))
+    return 0;
+
+  return bbox_output_;
 }
 
 //---------------------------------------------------------------------

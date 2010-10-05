@@ -155,6 +155,53 @@ static void test_load_data_mutable_using_cell_ptrs(ray_bundle_test_driver<T>& dr
   driver.release_kernel();
 }
 
+template <class T>
+static void test_load_data_mutable_opt(ray_bundle_test_driver<T>& driver)
+{
+  driver.set_bundle_ni(2);
+  driver.set_bundle_nj(2);
+  driver.set_work_space_ni(8);
+  driver.set_work_space_nj(8);
+  if (driver.create_kernel("test_load_data_mutable_opt")!=SDK_SUCCESS) {
+    TEST("Create Kernel test_load_data_mutable_opt", false, true);
+    return;
+  }
+  if (driver.set_basic_test_args("use_char4")!=SDK_SUCCESS)
+    return;
+  vul_timer t;
+  t.mark();
+  if (driver.run_bundle_test_kernels()!=SDK_SUCCESS) {
+    TEST("Run Kernel test_load_data_mutable_opt", false, true);
+    return;
+  }
+  bool good = true;
+  cl_int* results = driver.tree_results();
+
+  vcl_size_t size = 10*4;
+  if (size<driver.tree_result_size_bytes() && results) {
+    int test[]={1,1,1,1,
+                -1,1,0,0,
+                -1,1,0,0,
+                -1,1,0,0,
+                -1,1,0,0,
+                1,1,1,1,
+                1,1,0,0,
+                2,0,0,0,
+                3,0,0,0,
+                -1,0,0,0};
+    for (vcl_size_t i= 0; i<size; i++)
+      good = good && results[i]==test[i];
+    TEST("test_load_data_mutable_opt", good, true);
+    if (!good)
+      for (vcl_size_t i= 0; i<size; i+=4)
+        vcl_cout << "test_load_data_mutable_opt(" << results[i] << ' '
+                 << results[i+1] << ' '
+                 << results[i+2] << ' '
+                 << results[i+3] << ")\n";
+  }
+  driver.release_kernel();
+}
+
 
 template <class T>
 static void test_seg_len_obs(ray_bundle_test_driver<T>& driver)
@@ -204,6 +251,56 @@ static void test_seg_len_obs(ray_bundle_test_driver<T>& driver)
   }
   driver.release_kernel();
 }
+
+template <class T>
+static void test_seg_len_obs_opt(ray_bundle_test_driver<T>& driver)
+{
+  driver.set_bundle_ni(2);
+  driver.set_bundle_nj(2);
+  driver.set_work_space_ni(8);
+  driver.set_work_space_nj(8);
+  if (driver.create_kernel("test_seg_len_obs_opt")!=SDK_SUCCESS) {
+    TEST("Create Kernel test_seg_len_obs_opt", false, true);
+    return;
+  }
+  // the string argument below means use uchar4 instead of char
+  // for the ray_bundle_array and add an additional argument
+  // which is an image bundle array
+  if (driver.set_basic_test_args("include_image_array")!=SDK_SUCCESS)
+    return;
+  if (driver.run_bundle_test_kernels()!=SDK_SUCCESS) {
+    TEST("Run kernel test_seg_len_obs_opt", false, true);
+    return;
+  }
+  bool good = true;
+  cl_int* results = driver.tree_results();
+
+  vcl_size_t size = 10*4;
+  if (size<driver.tree_result_size_bytes() && results) {
+    int test[]={1,1,1,1,
+                1,10,0,0,
+                2,40,0,0,
+                3,90,0,0,
+                4,160,0,0,
+                1,1,1,1,
+                11,310,0,0,
+                2,0,0,0,
+                3,0,0,0,
+                4,0,0,0};
+    for (vcl_size_t i= 0; i<size; i++)
+      good = good && results[i]==test[i];
+    TEST("test_seg_len_obs_opt", good, true);
+
+    if (!good)
+      for (vcl_size_t i= 0; i<size; i+=4)
+        vcl_cout << "test_seg_len_obs_opt_result(" << results[i] << ' '
+                 << results[i+1] << ' '
+                 << results[i+2] << ' '
+                 << results[i+3] << ")\n";
+  }
+  driver.release_kernel();
+}
+
 
 template <class T>
 static void test_pre_infinity(ray_bundle_test_driver<T>& driver)
@@ -260,6 +357,64 @@ static void test_pre_infinity(ray_bundle_test_driver<T>& driver)
   }
   driver.release_kernel();
 }
+
+
+template <class T>
+static void test_pre_infinity_opt(ray_bundle_test_driver<T>& driver)
+{
+  driver.set_bundle_ni(2);
+  driver.set_bundle_nj(2);
+  driver.set_work_space_ni(8);
+  driver.set_work_space_nj(8);
+  if (driver.create_kernel("test_pre_infinity_opt")!=SDK_SUCCESS) {
+    TEST("Create Kernel test_pre_infinity_opt", false, true);
+    return;
+  }
+  // the string argument below means use uchar4 instead of char
+  // for the ray_bundle_array and add an additional argument
+  // which is an image bundle array
+  if (driver.set_basic_test_args("include_image_array")!=SDK_SUCCESS)
+    return;
+  if (driver.run_bundle_test_kernels()!=SDK_SUCCESS) {
+    TEST("Run kernel test_pre_infinity", false, true);
+    return;
+  }
+  bool good = true;
+  cl_int* results = driver.tree_results();
+
+  vcl_size_t size = 18*4;
+  if (size<driver.tree_result_size_bytes() && results) {
+    int test[]={1,1,1,1,
+                1000,100,0,0,
+                1000,200,0,0,
+                1000,500,0,0,
+                1000,700,0,0,
+                100,693,500,3989,
+                200,1386,250,5984,
+                500,223,799,1595,
+                700,2302,99,7180,
+                1,1,1,1,
+                2500,1275,0,0,
+                500,0,0,0,
+                750,0,0,0,
+                1000,0,0,0,
+                500,173,840,467,
+                600,346,707,859,
+                400,519,594,1190,
+                550,693,500,1468};
+    for (vcl_size_t i= 0; i<size; i++)
+      good = good && results[i]==test[i];
+    TEST("test_pre_infinity_opt", good, true);
+    if (!good)
+      for (vcl_size_t i= 0; i<size; i+=4)
+        vcl_cout << "test_pre_infinity_result(" << results[i] << ' '
+                 << results[i+1] << ' '
+                 << results[i+2] << ' '
+                 << results[i+3] << ")\n";
+  }
+  driver.release_kernel();
+}
+
 
 template <class T>
 static void test_bayes_ratio(ray_bundle_test_driver<T>& driver)
@@ -318,6 +473,65 @@ static void test_bayes_ratio(ray_bundle_test_driver<T>& driver)
   }
   driver.release_kernel();
 }
+
+template <class T>
+static void test_bayes_ratio_opt(ray_bundle_test_driver<T>& driver)
+{
+  driver.set_bundle_ni(2);
+  driver.set_bundle_nj(2);
+  driver.set_work_space_ni(8);
+  driver.set_work_space_nj(8);
+  if (driver.create_kernel("test_bayes_ratio_opt")!=SDK_SUCCESS) {
+    TEST("Create Kernel test_bayes_ratio_opt", false, true);
+    return;
+  }
+  // the string argument below means use uchar4 instead of char
+  // for the ray_bundle_array and add an additional argument
+  // which is an image bundle array
+  if (driver.set_basic_test_args("include_image_array")!=SDK_SUCCESS)
+    return;
+  if (driver.run_bundle_test_kernels()!=SDK_SUCCESS) {
+    TEST("Run kernel test_bayes_ratio_opt", false, true);
+    return;
+  }
+  bool good = true;
+  cl_int* results = driver.tree_results();
+
+  vcl_size_t size = 18*4;
+  if (size<driver.tree_result_size_bytes() && results) {
+
+    int test[]={1,1,1,1,
+                1000,100,7978,500,
+                1000,200,7978,250,
+                1000,500,7978,799,
+                1000,700,7978,99,
+                1000,693,500,3989,
+                1000,1386,250,5984,
+                1000,223,799,1595,
+                1000,2302,99,7180,
+                1,1,1,1,
+                2500,1275,24466,2000,
+                2500,1275,0,0,
+                2500,1275,0,0,
+                2500,1275,0,0,
+                250,693,500,1468,
+                500,693,500,1468,
+                750,693,500,1468,
+                1000,693,500,1468};
+    for (vcl_size_t i= 0; i<size; i++)
+      good = good && results[i]==test[i];
+    TEST("test_bayes_ratio_opt", good, true);
+
+    if (!good)
+      for (vcl_size_t i= 0; i<size; i+=4)
+        vcl_cout << "test_bayes_ratio_result(" << results[i] << ' '
+                 << results[i+1] << ' '
+                 << results[i+2] << ' '
+                 << results[i+3] << ")\n";
+  }
+  driver.release_kernel();
+}
+
 
 template <class T>
 static void test_map_work_space(ray_bundle_test_driver<T>& driver)
@@ -591,6 +805,7 @@ void ray_bundle_tests(ray_bundle_test_driver<T>& test_driver)
       !ray_mgr->append_process_kernels(source_dir + "statistics_library_functions.cl") ||
       !ray_mgr->append_process_kernels(source_dir + "backproject.cl") ||
       !ray_mgr->append_process_kernels(source_dir + "ray_bundle_library_functions.cl") ||
+      !ray_mgr->append_process_kernels(source_dir + "ray_bundle_library_opt.cl") ||
       !ray_mgr->append_process_kernels(source_dir + "../tests/ray_bundle_test_kernels.cl") ||
       test_driver.build_program()!=SDK_SUCCESS)
     return;
@@ -598,15 +813,19 @@ void ray_bundle_tests(ray_bundle_test_driver<T>& test_driver)
   //START TESTS
   //================================================================
 
-  test_load_data_using_loc_codes(test_driver);
-  test_load_data_mutable_using_loc_codes(test_driver);
+  //test_load_data_using_loc_codes(test_driver);
+  //test_load_data_mutable_using_loc_codes(test_driver);
   test_load_data_mutable_using_cell_ptrs(test_driver);
+  test_load_data_mutable_opt(test_driver);
   test_map_work_space(test_driver);
-  test_ray_entry_point(test_driver);
+  //test_ray_entry_point(test_driver);
 
   test_seg_len_obs(test_driver);
+  test_seg_len_obs_opt(test_driver);
   test_pre_infinity(test_driver);
+  test_pre_infinity_opt(test_driver);
   test_bayes_ratio(test_driver);
+  test_bayes_ratio_opt(test_driver);
   test_norm_uniform(test_driver);
   test_norm_gauss(test_driver);
   //==============================================================

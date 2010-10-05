@@ -61,13 +61,12 @@ void test_codes(int* i, int* n_codes, short4* code, short4* ncode)
 
 __kernel
 void
-test_traverse(__global int4* tree, __global int4* results, __local uchar* ltree, __constant uchar * bit_lookup)
+test_traverse(__global int4* tree, __global int4* results, __global float4* bbox_results, __local uchar* ltree, __constant uchar * bit_lookup)
 {
   
   //event_t eventid = (event_t) 0;
   //event_t e = async_work_group_copy(ltree, tree, (size_t)1, eventid);
   //wait_group_events (1, &eventid);  
-
   short4 code, ncode;
   int n_codes = 0;
   int i= 0;
@@ -75,7 +74,13 @@ test_traverse(__global int4* tree, __global int4* results, __local uchar* ltree,
   test_codes(&i, &n_codes, &code, &ncode);
   short4 found_loc_code = (short4)(0,0,0,0);
   int global_count=0;
-  int cell_ptr =0, data_ptr=0;
+  int cell_ptr =0, data_ptr=0, cell_opt= 0;
+  float4 p = (float4) 1.0;
+  float4 cell_min = (float4) 0.0;
+  float4 cell_max = (float4) 0.0;
+  float4 cell_min_opt = (float4) 0.0;
+  float4 cell_max_opt = (float4) 0.0;
+  
   for (i = 0; i<8; ++i)
   {
     test_codes(&i, &n_codes, &code, &ncode);
@@ -90,15 +95,27 @@ test_traverse(__global int4* tree, __global int4* results, __local uchar* ltree,
       ltree[12] = tbuff.sc;ltree[13] = tbuff.sd;ltree[14] = tbuff.se;ltree[15] = tbuff.sf;   
       
       //load global tree into local mem
-      cell_ptr = traverse(0, ltree, 0, root, code, &found_loc_code, &global_count); 
-      data_ptr = data_index(0, ltree, cell_ptr, bit_lookup);
+      //cell_ptr = traverse(0, ltree, 0, root, code, &found_loc_code, &global_count); 
+      //cell_bounding_box(found_loc_code, 4, &cell_min, &cell_max);
+      //data_ptr = data_index(0, ltree, cell_ptr, bit_lookup);
       
-      results[0] = k; //TO fool the compiler's optimization into not caching local tree
+      p = convert_float4(code)/(float4)8.0; 
+      cell_opt = traverse_opt(0, ltree, p, &cell_min_opt, &cell_max_opt);
+      
+      //results[0] = k; //TO fool the compiler's optimization into not caching local tree
     }
+    //found loc code
     int4 res = convert_int4(found_loc_code);
     results[2*i]=res;
-    res = (int4)cell_ptr;
+    //next results are index 
+    res = (int4)(cell_opt, cell_opt, cell_ptr, cell_ptr);
     results[2*i+1]=res;
+
+    //store bounding box results
+    bbox_results[4*i]   = cell_min;
+    bbox_results[4*i+1] = cell_max;
+    bbox_results[4*i+2] = cell_min_opt;
+    bbox_results[4*i+3] = cell_max_opt;
   }
 }
 
@@ -127,24 +144,126 @@ test_traverse_force(__global uchar16* tree, __global int4* results, __local ucha
   //do 10,000 traverse_forces for good measure
   for (int k=0;k<10000;k++)
   {
-    cell_ptr = traverse_force(0, ltree, start_ptr, start_code, target_code, &found_loc_code, &global_count);
+    //cell_ptr = traverse_force(0, ltree, start_ptr, start_code, target_code, &found_loc_code, &global_count);
   }
   results[result_ptr++]=convert_int4(found_loc_code);
   results[result_ptr++]=(int4)cell_ptr;
 
   target_code = (short4)(0,2,0,0);
-  cell_ptr = traverse_force(0, ltree, start_ptr, start_code, target_code, &found_loc_code, &global_count);
+  //cell_ptr = traverse_force(0, ltree, start_ptr, start_code, target_code, &found_loc_code, &global_count);
   results[result_ptr++]=convert_int4(found_loc_code);
   results[result_ptr++]=(int4)cell_ptr;
 
   target_code = (short4)(0,0,2,0);
-  cell_ptr = traverse_force(0, ltree, start_ptr, start_code, target_code, &found_loc_code, &global_count);
+  //cell_ptr = traverse_force(0, ltree, start_ptr, start_code, target_code, &found_loc_code, &global_count);
   results[result_ptr++]=convert_int4(found_loc_code);
   results[result_ptr++]=(int4)cell_ptr;
 
   target_code = (short4)(2,2,2,0);
-  cell_ptr = traverse_force(0, ltree, start_ptr, start_code, target_code, &found_loc_code, &global_count);
+  //cell_ptr = traverse_force(0, ltree, start_ptr, start_code, target_code, &found_loc_code, &global_count);
   results[result_ptr++]=convert_int4(found_loc_code);
   results[result_ptr++]=(int4)cell_ptr;
-
 }
+
+#define TESTNUM 100000
+__kernel
+void test_float4(__global float4* out)
+{
+    out[0] = (float4) 0.0;
+    out[1] = (float4) 0.0;
+  
+    //do 10000 multiplications
+    for(int i=1; i<TESTNUM+1; i++) {
+      float4 a = (float4) ((float) i, 
+                           (float) i+1.5, 
+                           (float) i/2.3, 
+                           (float) 1);
+      float4 b = (float4) ((float) i-2.3, 
+                           (float) i+1.1, 
+                           (float) i/3.3, 
+                           (float) 1); 
+      float4 c = a*b;
+      out[0] += c;
+    }
+    //do 10000 multiplications
+    for(int i=1; i<TESTNUM+1; i++) {
+      float4 a = (float4) ((float) i, 
+                           (float) i+1.5, 
+                           (float) i/2.3, 
+                           (float) 1);
+      float4 b = (float4) ((float) i-2.3, 
+                           (float) i+1.1, 
+                           (float) i/3.3, 
+                           (float) 1); 
+      float4 c = a/b;
+      out[1] += c;
+    }
+    
+  
+}
+__kernel
+void test_float3(__global float4* out)
+{
+    out[0] = (float4) 0.0;
+    out[1] = (float4) 0.0;
+  
+    //do 10000 multiplications
+    for(int i=1; i<TESTNUM+1; i++) {
+      float ax = (float) i;
+      float ay = (float) i+1.5;
+      float az = (float) i/2.3;
+
+      float bx = (float) i-2.3;
+      float by = (float) i+1.1;
+      float bz = (float) i/3.3;
+
+      float cx = ax*bx;
+      float cy = ay*by;
+      float cz = az*bz;
+      out[0] += (float4) (cx, cy, cz, 1.0);
+    }
+    
+    //do 10000 multiplications
+    for(int i=1; i<TESTNUM+1; i++) {
+      float ax = (float) i;
+      float ay = (float) i+1.5;
+      float az = (float) i/2.3;
+
+      float bx = (float) i-2.3;
+      float by = (float) i+1.1;
+      float bz = (float) i/3.3;
+
+      float cx = ax/bx;
+      float cy = ay/by;
+      float cz = az/bz;
+      out[1] += (float4) (cx, cy, cz, 1.0);
+    }
+}
+
+
+__kernel
+void test_scene_info(RenderSceneInfo info, __global float4* out)
+{
+  out[0] = info.scene_origin;
+  out[1] = convert_float4(info.scene_dims);
+  out[2] = (float4) info.block_len;
+  
+  out[3] = (float4) info.root_level;
+  out[4] = (float4) info.num_buffer;
+  out[5] = (float4) info.tree_buffer_length;
+  out[6] = (float4) info.data_buffer_length;
+  
+  float3 a = (float3) {1.1, 2.2, 3.3};
+  float3 b = (float3) {.5, .6, .7};
+  float3 c = f3add(a,b);
+  out[0] = (float4) (c.x, c.y, c.z, 1.0);
+
+  
+  
+  int4 curr_block_index = (int4) (5, 5, 5, 1);
+  int4 scenedims = (int4) (5, 4, 4, 1);
+  int4 compare = (curr_block_index == scenedims);
+  out[0] = convert_float4(compare);
+  
+}
+

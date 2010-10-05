@@ -10,6 +10,7 @@
 #include <bocl/bocl_manager.h>
 #include <bocl/bocl_utils.h>
 #include <boxm/boxm_scene.h>
+#include <boxm/ocl/boxm_ocl_bit_scene.h>
 #include <boxm/boxm_apm_traits.h>
 
 #include <vil/vil_image_view.h>
@@ -43,6 +44,7 @@ class bit_tree_test_manager : public bocl_manager<bit_tree_test_manager>
 
   //: get output from OpenCL
   cl_int* get_output();
+  cl_float* get_bbox_output();
 
   //: set the tree
   bool set_tree(unsigned char* bit_tree) {
@@ -67,11 +69,13 @@ class bit_tree_test_manager : public bocl_manager<bit_tree_test_manager>
   cl_uchar* bit_tree_;
   cl_uchar* bit_lookup_;
   cl_int*   output_;
+  cl_float* bbox_output_;
 
   //cl_mem buffers
   cl_mem bit_tree_buf_;
   cl_mem bit_lookup_buf_;
   cl_mem output_buf_;
+  cl_mem bbox_output_buf_;
 
   //-------------------------------------------------------------------
   // Kernel and program helpers
