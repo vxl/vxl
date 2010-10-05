@@ -7,25 +7,40 @@ exec perl -w -x $0 ${1+"$@"}
 # which are not reflected in LINK_LIBRARIES() or TARGET_LINK_LIBRARIES() in
 # the corresponding CMakeLists.txt file
 #
-if (@ARGV) 
-{ 
-  @FILES = @ARGV; 
-} 
-else 
-{ 
-  $V = $ENV{VXLROOT}; 
-  if (!defined($V) && -d 'vcl' && -d 'core' && -d 'contrib') { 
-    $V = '.'; $DIRS = "vcl core contrib v3p/Qv"; 
-  } 
+if (@ARGV)
+{
+  @FILES = @ARGV;
+}
+else
+{
+  $V = $ENV{VXLROOT};
+  if (!defined($V) && -d 'vcl' && -d 'core' && -d 'contrib') {
+    $V = '.'; $DIRS = "vcl core contrib v3p/Qv";
+  }
   die "VXLROOT is not defined, and no command line arguments were given"
     unless (defined($V));
   chdir $V or die "Cannot chdir to $V";
-  $DIRS = "core/vpdl core/vcsl core/vgui core/vidl core/vidl1 core/vidl_vil1 contrib"; 
-  @FILES = grep {! m!contrib/conversions!} qx(find $DIRS \\\( -name .svn -prune \\\) -o -type f \\\( -name \\\*.cxx -o -name \\\*.txx -o -name \\\*.cc -o -name \\\*.cpp -o -name \\\*.c -o -name \\\*.h \\\) -print); 
+  $DIRS = "core/vpdl core/vcsl core/vgui core/vidl core/vidl1 core/vidl_vil1 contrib";
+  @FILES = grep {! m!contrib/conversions!} qx(find $DIRS \\\( -name .svn -prune \\\) -o -type f \\\( -name \\\*.cxx -o -name \\\*.txx -o -name \\\*.cc -o -name \\\*.cpp -o -name \\\*.c -o -name \\\*.h \\\) -print);
   chomp @FILES;
 }
 
-%patt = ('vgl' => 'vgl/vgl_', 'vgl_algo' => 'vgl/algo/vgl_', 'vnl' => 'vnl/vnl_', 'vnl_algo' => 'vnl/algo/vnl_', 'vbl' => 'vbl/vbl_', 'vil' => 'vil/vil_', 'vil_algo' => 'vil/algo/vil_', 'vul' => 'vul/vul_', 'vpl' => 'vpl/vpl_' );
+%patt = (
+ 'vgl'      => 'vgl/vgl_',
+ 'vgl_algo' => 'vgl/algo/vgl_',
+ 'vnl'      => 'vnl/vnl_',
+ 'vnl_algo' => 'vnl/algo/vnl_',
+ 'vbl'      => 'vbl/vbl_',
+ 'vil'      => 'vil/vil_',
+ 'vil_algo' => 'vil/algo/vil_',
+ 'vul'      => 'vul/vul_',
+ 'vpl'      => 'vpl/vpl_',
+ 'vbl_io'   => 'vbl/io/vbl_',
+ 'vgl_io'   => 'vgl/io/vgl_',
+ 'vil_io'   => 'vil/io/vil_',
+ 'vnl_io'   => 'vnl/io/vnl_',
+ 'vul_io'   => 'vul/io/vul_'
+);
 
 foreach $dir (keys %patt)
 {
