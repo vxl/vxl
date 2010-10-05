@@ -108,8 +108,6 @@ bool boct_bit_tree::verify_tree(int i, int node, vcl_vector<int4> tree, vcl_vect
   float16 tree_dat = data[tree[node][2]];
   int bit_dat  = get_data_index(i);
   bool same = true;
-  float culprit1, culprit2;
-  int numCulprits = 0;
   for (int j=0; j<16; j++) {
     float diff = vcl_fabs(data_[bit_dat+j] - tree_dat[j]);
 
@@ -117,13 +115,9 @@ bool boct_bit_tree::verify_tree(int i, int node, vcl_vector<int4> tree, vcl_vect
     if (diff != diff) {
       data_[bit_dat+j] = 0.0;
       tree_dat[j] = 0.0;
-      same = same && true;
     }
-    else if (diff < 1e-5) {
-      same = same && true;
-    }
-    else {
-      same = same && false;
+    else if (diff >= 1e-5) {
+      same = false;
     }
   }
 
@@ -137,7 +131,7 @@ bool boct_bit_tree::verify_tree(int i, int node, vcl_vector<int4> tree, vcl_vect
 //debug printer - should print tree depth first search wise
 void boct_bit_tree::print_input_tree(vcl_vector<int4> tree, vcl_vector<float16> data)
 {
-  vcl_cout<<"INPUT TREE: "<<vcl_endl;
+  vcl_cout<<"INPUT TREE:"<<vcl_endl;
 
   //print generation 1 data (root data)
   int root_data = tree[0][2];
@@ -484,7 +478,7 @@ vcl_ostream& operator <<(vcl_ostream &s, boct_bit_tree &t)
   s << "BOCT_BIT_TREE:" << vcl_endl;
 #ifdef DEBUG
   unsigned char* bits = t.get_bits();
-  s << "bytes: " << vcl_endl;
+  s << "bytes:" << vcl_endl;
   for (int i=0; i<16; i++)
     s << "byte "<<i<<": "<< (int) bits[i] <<vcl_endl;
 #endif
