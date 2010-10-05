@@ -10,6 +10,7 @@
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_exception.h>
 #include <vul/vul_string.h>
+#include <vcl_cassert.h>
 
 //=======================================================================
 msm_box_limiter::msm_box_limiter()
@@ -47,7 +48,7 @@ void msm_box_limiter::set_acceptance(double prop, unsigned n_modes)
   // In each dimension x^2 is distributed as chi-squared with one d.o.f.
   double t = msm_chi2_for_cum_prob(p,1);
 
-  set_n_sds(sqrt(t));
+  set_n_sds(vcl_sqrt(t));
 }
 
 

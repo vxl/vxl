@@ -10,7 +10,7 @@
 #include <vnl/io/vnl_io_vector.h>
 #include <vnl/io/vnl_io_matrix.h>
 #include <vcl_cstdlib.h>  // for vcl_atoi() & vcl_abort()
-
+#include <vcl_cassert.h>
 
 //=======================================================================
 // Dflt ctor
@@ -30,11 +30,11 @@ msm_shape_model::~msm_shape_model()
 
 //: Set up model
 void msm_shape_model::set(const msm_points& mean,
-           const vnl_matrix<double>& modes,
-           const vnl_vector<double>& mode_var,
-           const vnl_vector<double>& default_pose,
-           const msm_aligner& aligner,
-           const msm_param_limiter& param_limiter)
+                          const vnl_matrix<double>& modes,
+                          const vnl_vector<double>& mode_var,
+                          const vnl_vector<double>& default_pose,
+                          const msm_aligner& aligner,
+                          const msm_param_limiter& param_limiter)
 {
   assert(mean.size()%2==0);
   assert(mean.size()*2==modes.rows());

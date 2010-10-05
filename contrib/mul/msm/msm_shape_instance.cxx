@@ -4,6 +4,7 @@
 // \brief Representation of an instance of a shape model.
 // \author Tim Cootes
 
+#include <msm/msm_shape_model.h>
 #include <vcl_iostream.h>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_io.h>
@@ -12,7 +13,7 @@
 #include <vnl/algo/vnl_svd.h>
 
 #include <vcl_cstdlib.h>  // for vcl_atoi() & vcl_abort()
-#include <msm/msm_shape_model.h>
+#include <vcl_cassert.h>
 
 //=======================================================================
 // Dflt ctor
@@ -87,7 +88,7 @@ const msm_points& msm_shape_instance::points()
 //  Gaussian prior is to scale parameters by
 //  mode_var/(mode_var+rv), where rv is the res_var scaled
 //  to the reference frame.
-void msm_shape_instance::fit_to_points(const msm_points& pts, 
+void msm_shape_instance::fit_to_points(const msm_points& pts,
                                        double res_var)
 {
   // Catch case when fitting to self
@@ -113,7 +114,7 @@ void msm_shape_instance::fit_to_points(const msm_points& pts,
 //: Finds parameters and pose to best match to points
 //  Errors on point i are weighted by wts[i]
 void msm_shape_instance::fit_to_points_wt(const msm_points& pts,
-                        const vnl_vector<double>& wts)
+                                          const vnl_vector<double>& wts)
 {
   // Catch case when fitting to self
   if (&pts == &points_) return;
@@ -143,7 +144,7 @@ void msm_shape_instance::fit_to_points_wt(const msm_points& pts,
 //: Finds parameters and pose to best match to points
 //  Errors on point i are weighted by wt_mat[i] in target frame
 void msm_shape_instance::fit_to_points_wt_mat(const msm_points& pts,
-                        const vcl_vector<msm_wt_mat_2d>& wt_mat)
+                                              const vcl_vector<msm_wt_mat_2d>& wt_mat)
 {
   // Catch case when fitting to self
   if (&pts == &points_) return;
@@ -164,7 +165,7 @@ void msm_shape_instance::fit_to_points_wt_mat(const msm_points& pts,
     vnl_vector<double> pose_inv = model().aligner().inverse(pose_);
     model().aligner().apply_transform(pts,pose_inv,tmp_points_);
 
-    // Transform the weight matricies to the model frame
+    // Transform the weight matrices to the model frame
     // If A is 2x2 scale/rot component, then in model frame
     // error is (A*dx)'*W*(A*dx), thus:
     // wt_mat2[i] = A'*wt_mat[i]*A

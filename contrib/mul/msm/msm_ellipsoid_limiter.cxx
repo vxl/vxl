@@ -10,6 +10,7 @@
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_exception.h>
 #include <vul/vul_string.h>
+#include <vcl_cassert.h>
 
 //=======================================================================
 msm_ellipsoid_limiter::msm_ellipsoid_limiter()
@@ -35,7 +36,7 @@ void msm_ellipsoid_limiter::set_param_var(const vnl_vector<double>& v)
 //  limits so that on averate a proportion prop (in [0,1])
 //  are acceptable when using n_modes modes. If n_modes==0,
 //  then assume all available modes to be used.
-void msm_ellipsoid_limiter::set_acceptance(double prop, 
+void msm_ellipsoid_limiter::set_acceptance(double prop,
                                            unsigned n_modes)
 {
   assert(prop>=0 && prop<=1.0);
@@ -58,7 +59,7 @@ double msm_ellipsoid_limiter::mahalanobis(const vnl_vector<double>& b) const
 //  Finds closest point to y in tangent plane at initial b
 //  Replaces b with normalised version of this.
 double msm_ellipsoid_limiter::slide_closer(vnl_vector<double>& b,
-                      const vnl_vector<double>& y) const
+                                           const vnl_vector<double>& y) const
 {
   unsigned n=b.size();
   vnl_vector<double> u(n);  // u is normal vector at b
@@ -107,8 +108,7 @@ void msm_ellipsoid_limiter::apply_limit(vnl_vector<double>& b) const
 //: Print class to os
 void msm_ellipsoid_limiter::print_summary(vcl_ostream& os) const
 {
-  os<<" { M_max: "<<M_max_
-            <<" accept_prop: "<<accept_prop_<<" } ";
+  os<<" { M_max: "<<M_max_ <<" accept_prop: "<<accept_prop_<<" } ";
 }
 
 const static short version_no = 1;
@@ -169,6 +169,4 @@ void msm_ellipsoid_limiter::config_from_stream(vcl_istream &is)
   mbl_read_props_look_for_unused_props(
       "msm_ellipsoid_limiter::config_from_stream", props, mbl_read_props_type());
 }
-
-
 
