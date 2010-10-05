@@ -1365,10 +1365,12 @@ foreach $f (@FILES)
       if ($f !~ m!\b(v[cuibg]l|v3p|vidl)\b/! && $f !~ m!\bcore/vnl/vnl_math\.! &&
           ! ( $name eq 'e'                && $f =~ m!\bvgui/tests/test_popup\.cxx$! ) &&
           ! ( $name eq 'log10e'           && $f =~ m!\bvnl/algo/vnl_rnpoly_solve\.cxx$! ) &&
+          ! ( $name eq 'log10e'           && $f =~ m!\bvpgl/algo/tests/test_camera_bounds\.cxx$! ) &&
           ! ( $name eq 'sqrt2'            && $f =~ m!\brpl/rrel/rrel_misc\.cxx$! ) &&
           ! ( $name eq 'sqrt1_2'          && $f =~ m!\bgel/gevd/gevd_float_operators\.cxx$! ) &&
           ! ( $name eq 'sqrt1_2'          && $f =~ m!\bgel/mrc/vpgl/tests/test_affine_camera\.cxx$! ) &&
           ! ( $name eq 'pi'               && $f =~ m!\bbsta/algo/tests/test_von_mises_update\.cxx$! ) &&
+          ! ( $name eq 'pi_over_4'        && $f =~ m!\bvpgl/vsph/tests/test_spherical_coord\.cxx$! ) &&
           ! ( $name eq 'one_over_sqrt2pi' && $f =~ m!\bbsta/bsta_von_mises\.txx$! ) &&
           $cpp_file && $file_s =~ m!$cst! );
   }
