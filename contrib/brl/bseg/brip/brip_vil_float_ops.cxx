@@ -1892,14 +1892,14 @@ brip_vil_float_ops::combine_color_planes(vil_image_resource_sptr const& R,
   if (!R||!G||!B)
     return view;//return an empty view
   //determine the union of all the resources
-  vbl_bounding_box<unsigned short, 2> b;
-  unsigned short r_ni = R->ni(), r_nj = R->nj();
-  unsigned short g_ni = G->ni(), g_nj = G->nj();
-  unsigned short b_ni = B->ni(), b_nj = B->nj();
+  vbl_bounding_box<unsigned int, 2> b;
+  unsigned int r_ni = R->ni(), r_nj = R->nj();
+  unsigned int g_ni = G->ni(), g_nj = G->nj();
+  unsigned int b_ni = B->ni(), b_nj = B->nj();
   b.update(r_ni, r_nj);
   b.update(g_ni, g_nj);
   b.update(b_ni, b_nj);
-  unsigned short n_i = b.xmax(), n_j = b.ymax();
+  unsigned int n_i = b.xmax(), n_j = b.ymax();
   view.set_size(n_i, n_j);
   vil_rgb<vxl_byte> zero(0, 0, 0);
   vil_image_view<float> fR = brip_vil_float_ops::convert_to_float(R);
