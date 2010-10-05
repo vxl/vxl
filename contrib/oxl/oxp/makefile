@@ -52,6 +52,10 @@ endif
 MANPAGE_SOURCES += oxp_yuv_to_rgb.h
 MANPAGE_SOURCES += MapInverter.h
 
+ifndef NOTEST
+ SUBDIRS += tests
+endif
+
 ######################################
-include $(VXLROOT)/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################

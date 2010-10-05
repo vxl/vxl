@@ -28,7 +28,7 @@ USE_AVI := 1
 endif
 
 ifndef NOTEST
- SUBDIRS += examples
+ SUBDIRS += tests examples
 endif
 
 ######################################

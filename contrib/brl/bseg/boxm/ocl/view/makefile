@@ -10,6 +10,7 @@ SOURCES += boxm_ocl_change_detection_tableau.cxx
 SOURCES += boxm_ocl_rerender_tableau.cxx
 SOURCES += boxm_ocl_render_bit_tableau.cxx
 SOURCES += boxm_update_bit_tableau.cxx
+MANPAGE_SOURCES += boxm_ocl_include_glew.h
 
 MANPAGE_SOURCES += boxm_cam_tableau_sptr.h
 MANPAGE_SOURCES += boxm_ocl_update_tableau_sptr.h

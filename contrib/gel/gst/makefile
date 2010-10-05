@@ -14,6 +14,14 @@ MANPAGE_SOURCES += gst_edge_2d_sptr.h
 MANPAGE_SOURCES += gst_polygon_2d_sptr.h
 MANPAGE_SOURCES += gst_vertex_2d_sptr.h
 
-################################
-include ${VXLROOT}/config/top.mk
-################################
+#######################################
+include ${VXLROOT}/config/top-params.mk
+#######################################
+
+ifndef NOTEST
+ SUBDIRS += tests
+endif
+
+######################################
+include ${VXLROOT}/config/top-rules.mk
+######################################

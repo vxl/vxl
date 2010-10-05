@@ -12,6 +12,14 @@ MANPAGE_SOURCES += inlines.h
 MANPAGE_SOURCES += image_convert.txx
 SOURCES += CardinalSpline.cxx
 
-################################
-include ${VXLROOT}/config/top.mk
-################################
+#######################################
+include ${VXLROOT}/config/top-params.mk
+#######################################
+
+ifndef NOTEST
+ SUBDIRS += tests
+endif
+
+######################################
+include ${VXLROOT}/config/top-rules.mk
+######################################

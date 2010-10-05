@@ -23,6 +23,14 @@ SOURCES += vmal_track_lines.cxx
 MANPAGE_SOURCES += vmal_multi_view_data_edge_sptr.h
 MANPAGE_SOURCES += vmal_multi_view_data_vertex_sptr.h
 
-################################
-include ${VXLROOT}/config/top.mk
-################################
+#######################################
+include ${VXLROOT}/config/top-params.mk
+#######################################
+
+ifndef NOTEST
+SUBDIRS += tests
+endif
+
+######################################
+include ${VXLROOT}/config/top-rules.mk
+######################################

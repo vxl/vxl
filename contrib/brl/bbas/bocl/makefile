@@ -3,6 +3,7 @@ USES += contrib/brl contrib/brl/bbas
 LIBRARY := bocl
 
 MANPAGE_SOURCES += bocl_cl.h
+MANPAGE_SOURCES += bocl_cl_gl.h
 MANPAGE_SOURCES += bocl_manager.h
 MANPAGE_SOURCES += bocl_manager.txx
 SOURCES += bocl_utils.cxx

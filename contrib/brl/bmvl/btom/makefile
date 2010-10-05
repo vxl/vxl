@@ -8,6 +8,14 @@ MANPAGE_SOURCES += btom_gauss_cylinder_sptr.h
 SOURCES += btom_slice_simulator.cxx
 SOURCES += btom_slice_simulator_params.cxx
 
-################################
-include ${VXLROOT}/config/top.mk
-################################
+#######################################
+include ${VXLROOT}/config/top-params.mk
+#######################################
+
+ifndef NOTEST
+ SUBDIRS += tests
+endif
+
+######################################
+include ${VXLROOT}/config/top-rules.mk
+######################################

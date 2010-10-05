@@ -18,6 +18,7 @@ TESTS += vbl_test_triple.cxx
 TESTS += vbl_test_qsort.cxx
 TESTS += vbl_test_ref_count.cxx
 TESTS += vbl_test_scoped_ptr.cxx
+TESTS += vbl_test_local_minima.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
