@@ -1,7 +1,6 @@
 // This is bocl_cl.h
 #ifndef bocl_cl_h
 #define bocl_cl_h
-
 //:
 // \file
 // \brief  Platform-independent includes for OpenCL
@@ -13,11 +12,8 @@
 //   <none yet>
 // \endverbatim
 
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
-  #include <CL/cl.h>
-  #include <CL/cl_gl.h>
-  #define GL_SHARING_EXTENSION "cl_khr_gl_sharing"
-#elif defined(UNIX) || defined(linux) 
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || \
+    defined(UNIX) || defined(linux)
   #include <CL/cl.h>
   #include <CL/cl_gl.h>
   #define GL_SHARING_EXTENSION "cl_khr_gl_sharing"
@@ -29,7 +25,6 @@
 #else
   #include <opencl.h>
 #endif
-
 
 
 #endif //bocl_cl_h
