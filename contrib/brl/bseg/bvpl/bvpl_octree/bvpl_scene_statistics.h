@@ -12,6 +12,7 @@
 //   <none yet>
 // \endverbatim
 
+#include <bsta/bsta_histogram.h>
 
 template <class T_loc, class T_data>
 bool compute_scene_statistics(boxm_scene<boct_tree<T_loc, T_data > >& scene, bsta_histogram<float>& response_hist )//, bsta_histogram<float>& level_hist, unsigned& n_leaves)
@@ -22,7 +23,7 @@ bool compute_scene_statistics(boxm_scene<boct_tree<T_loc, T_data > >& scene, bst
 
   //(1) Traverse the leaves of the scene
   boxm_cell_iterator<boct_tree<short, T_data > > iterator =
-  scene_in.cell_iterator(&boxm_scene<boct_tree<short, T_data> >::load_block);
+  scene.cell_iterator(&boxm_scene<boct_tree<short, T_data> >::load_block);
 
   iterator.begin();
   float cell_count = 0;
@@ -39,8 +40,10 @@ bool compute_scene_statistics(boxm_scene<boct_tree<T_loc, T_data > >& scene, bst
   while (!iterator.end()) {
     boct_tree_cell<short,T_data> *cell = *iterator;
     //level_hist.upcount(static_cast<float>(level));
-    response_hist.upcount(static_cast<float>(cell->data().mean()));
+    response_hist.upcount(static_cast<float>(cell->data().mean()), 1.0f);
   }
 
   return true;
 }
+
+#endif // bvpl_scene_statistics_h
