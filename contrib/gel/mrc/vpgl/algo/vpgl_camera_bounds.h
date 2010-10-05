@@ -21,7 +21,9 @@ class vpgl_camera_bounds
 {
  public:
   //: the solid angle for a pixel.
-  // Applies only to perspective camera. Cone is tangent to pixel. Angles in radians and steradians
+  // Applies only to perspective camera.
+  // Cone is tangent to pixel.
+  // Angles in radians and steradians
   static void pixel_solid_angle(vpgl_perspective_camera<double> const& cam,
                                 unsigned u, unsigned v,
                                 vgl_ray_3d<double>& cone_axis,
@@ -29,33 +31,37 @@ class vpgl_camera_bounds
                                 double& solid_angle);
 
 
-  //: the solid angle (and cone half angle) for the pixel at the 
-  // principal point, applies only to a perspective camera 
-  // cone is tangent to the pixel.
-  //Angles in radians and steradians
+  //: the solid angle (and cone half angle) for the pixel at the  principal point.
+  // Applies only to a perspective camera.
+  // Cone is tangent to the pixel.
+  // Angles in radians and steradians
   static void pixel_solid_angle(vpgl_perspective_camera<double> const& cam,
                                 double& cone_half_angle,
                                 double& solid_angle);
 
-  //: the solid angle for an image, applies only to perspective camera
-  // the cone axis passes through principal point, i.e. principal ray.
-  // the cone is tangent to the square defined by the image diagonal
-  // angles in radians and steradians
+  //: the solid angle for an image.
+  // Applies only to perspective camera.
+  // The cone axis passes through principal point, i.e. principal ray.
+  // The cone is tangent to the square defined by the image diagonal.
+  // Angles in radians and steradians
   static void image_solid_angle(vpgl_perspective_camera<double> const& cam,
                                 vgl_ray_3d<double>& cone_axis,
                                 double& cone_half_angle,
                                 double& solid_angle);
 
 
-  //: the solid angle for an image, applies only to perspective camera
-  // same as above but code axis is not returned.
-  // angles in radians and steradians
+  //: the solid angle for an image.
+  // Applies only to perspective camera.
+  // The cone axis passes through principal point, i.e. principal ray.
+  // The cone is tangent to the square defined by the image diagonal.
+  // Code axis is not returned.
+  // Angles in radians and steradians
   static void image_solid_angle(vpgl_perspective_camera<double> const& cam,
                                 double& cone_half_angle,
                                 double& solid_angle);
-  //: the solid angle for a scene bounding box, the cone is tangent 
-  // to the 3-d scene box
-  // angles in radians and steradians
+  //: the solid angle for a scene bounding box.
+  // The cone is tangent to the 3-d scene box.
+  // Angles in radians and steradians
   static bool box_solid_angle(vpgl_perspective_camera<double> const& cam,
                               vgl_box_3d<double> const& box,
                               vgl_ray_3d<double>& cone_axis,
@@ -73,12 +79,12 @@ class vpgl_camera_bounds
   ~vpgl_camera_bounds();
 };
 
-//: scan the principal ray over a cone defined by the half apex angle
-//  it is assumed the cone axis is the positive z direction.
-//  returns a 3-d rotation from the positive z direction to the current
-//  iterator rotation state. The the cone is scanned in uniform steps
-// defined by the increment. The actual number of samples is returned
-// by n_samples. The input is the goal number of samples.
+//: scan the principal ray over a cone defined by the half apex angle.
+//  It is assumed the cone axis is the positive z direction.
+//  Returns a 3-d rotation from the positive z direction to the current
+//  iterator rotation state. The cone is scanned in uniform steps
+//  defined by the increment. The actual number of samples is returned
+//  by n_samples. The input is the goal number of samples.
 class principal_ray_scan
 {
  public:
@@ -90,9 +96,8 @@ class principal_ray_scan
   void reset();
   //:the next scan state. Returns false if done
   bool next();
-  //: the camera rotation corresponding to the current state of 
-  //  the principal ray. alpha is an additional rotation about 
-  // the principal ray -pi<alpha<=pi
+  //: the camera rotation corresponding to the current state of the principal ray.
+  // alpha is an additional rotation about the principal ray -pi<alpha<=pi
   vgl_rotation_3d<double> rot(double alpha = 0.0) {return rot(index_, alpha);}
   //: rotation for a given scan index
   vgl_rotation_3d<double> rot(unsigned i, double alpha = 0.0);
