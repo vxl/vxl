@@ -41,7 +41,7 @@ bool boxm_render_ocl_scene_manager::init_ray_trace(boxm_ocl_scene *scene,
 
   vcl_string functor="";
   if (render_depth) {
-    vcl_cout<<"Using Functor step_cell_render_depth = "<<vcl_endl;
+    vcl_cout<<"Using Functor step_cell_render_depth = "<<render_depth<<vcl_endl;
     functor="step_cell_render_depth(alpha_array,data_ptr,d,global_depth,&data_return);";
   }
   else {
@@ -336,7 +336,7 @@ bool boxm_render_ocl_scene_manager::run(bool rerender)
   cl_ulong tstart,tend;
   status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
   status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
-  gpu_time_= (double)1.0e-6 * (tend - tstart); // convert nanoseconds to milliseconds
+  gpu_time_= 1e-6f * float(tend - tstart); // convert nanoseconds to milliseconds
   vcl_cout<<"GPU time is "<<gpu_time_<<vcl_endl;
 
   if (rerender)
@@ -785,7 +785,7 @@ bool boxm_render_ocl_scene_manager::set_root_level()
 {
   if (scene_==NULL)
   {
-    vcl_cout<<"Scene is Missing "<<vcl_endl;
+    vcl_cout<<"Scene is Missing"<<vcl_endl;
     return false;
   }
   root_level_=scene_->max_level()-1;
@@ -804,7 +804,7 @@ bool boxm_render_ocl_scene_manager::set_scene_origin()
 {
   if (scene_==NULL)
   {
-    vcl_cout<<"Scene is Missing "<<vcl_endl;
+    vcl_cout<<"Scene is Missing"<<vcl_endl;
     return false;
   }
   vgl_point_3d<double> orig=scene_->origin();
@@ -851,7 +851,7 @@ bool boxm_render_ocl_scene_manager::set_scene_dims()
 {
   if (scene_==NULL)
   {
-    vcl_cout<<"Scene is Missing "<<vcl_endl;
+    vcl_cout<<"Scene is Missing"<<vcl_endl;
     return false;
   }
   scene_->block_num(scene_x_,scene_y_,scene_z_);
@@ -897,7 +897,7 @@ bool boxm_render_ocl_scene_manager::set_block_dims()
 {
   if (scene_==NULL)
   {
-    vcl_cout<<"Scene is Missing "<<vcl_endl;
+    vcl_cout<<"Scene is Missing"<<vcl_endl;
     return false;
   }
   double x,y,z;
@@ -945,7 +945,7 @@ bool boxm_render_ocl_scene_manager::set_block_ptrs()
 {
   if (scene_==NULL)
   {
-    vcl_cout<<"Scene is Missing "<<vcl_endl;
+    vcl_cout<<"Scene is Missing"<<vcl_endl;
     return false;
   }
   scene_->block_num(scene_x_,scene_y_,scene_z_);
@@ -1050,8 +1050,8 @@ bool boxm_render_ocl_scene_manager::set_all_blocks()
   /******* debug print **************/
   int cellBytes = sizeof(cl_int2);
   int dataBytes = sizeof(cl_uchar8)+sizeof(cl_float);
-  vcl_cout<<"Optimized sizes: "<<vcl_endl
-          <<"    cells: "<<(float)cells_size_*cellBytes/1024.0/1024.0<<"MB"<<vcl_endl
+  vcl_cout<<"Optimized sizes:\n"
+          <<"    cells: "<<(float)cells_size_*cellBytes/1024.0/1024.0<<"MB\n"
           <<"    data:  "<<(float)cells_size_*dataBytes/1024.0/1024.0<<"MB"<<vcl_endl;
   /**********************************/
 
@@ -1132,12 +1132,12 @@ bool boxm_render_ocl_scene_manager::set_tree_buffers()
   int alphaBytes = cell_data_size_*sizeof(cl_float);
   int mixBytes = cell_data_size_*sizeof(cl_uchar8);
   int blockBytes = scene_x_*scene_y_*scene_z_*sizeof(cl_int4);
-  float MB = (cellBytes + alphaBytes + mixBytes + blockBytes)/1024.0/1024.0;
-  vcl_cout<<"GPU Mem allocated: "<<vcl_endl
-          <<"   cells: "<<cellBytes<<" bytes"<<vcl_endl
-          <<"   alpha: "<<alphaBytes<<" bytes"<<vcl_endl
-          <<"   mix  : "<<mixBytes<<" bytes"<<vcl_endl
-          <<"   block: "<<blockBytes<<" bytes"<<vcl_endl
+  float MB = (cellBytes + alphaBytes + mixBytes + blockBytes)/1024.0f/1024.0f;
+  vcl_cout<<"GPU Mem allocated:\n"
+          <<"   cells: "<<cellBytes<<" bytes\n"
+          <<"   alpha: "<<alphaBytes<<" bytes\n"
+          <<"   mix  : "<<mixBytes<<" bytes\n"
+          <<"   block: "<<blockBytes<<" bytes\n"
           <<"TOTAL: "<<MB<<"MB"<<vcl_endl;
   /************************************/
 

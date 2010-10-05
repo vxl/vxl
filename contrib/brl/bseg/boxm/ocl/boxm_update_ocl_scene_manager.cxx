@@ -659,7 +659,7 @@ bool boxm_update_ocl_scene_manager::run(unsigned pass)
                   return false;
               status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
               status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
-              gpu_time_+= (double)1.0e-6 * (tend - tstart); // convert nanoseconds to milliseconds
+              gpu_time_+= 1e-6f * float(tend - tstart); // convert nanoseconds to milliseconds
           }
       }
   }
@@ -672,7 +672,7 @@ bool boxm_update_ocl_scene_manager::run(unsigned pass)
       status = clFinish(command_queue_);
       status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
       status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
-      gpu_time_+= (double)1.0e-6 * (tend - tstart); // convert nanoseconds to milliseconds
+      gpu_time_+= 1e-6f * float(tend - tstart); // convert nanoseconds to milliseconds
   }
   return this->check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status))==CHECK_SUCCESS;
 }
@@ -729,16 +729,16 @@ bool boxm_update_ocl_scene_manager::online_processing()
       status = clWaitForEvents(1, &events[0]);
       if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents (output read) failed."))
         return false;
-      vcl_cout<<"OUTPUT: "<<vcl_endl
-              <<"  alpha:  "<<output_debug_[0]<<vcl_endl
+      vcl_cout<<"OUTPUT:\n"
+              <<"  alpha:  "<<output_debug_[0]<<'\n'
               <<"  gauss0: "<<output_debug_[1]<<','
               <<output_debug_[2]<<','
-              <<output_debug_[3]<<vcl_endl
+              <<output_debug_[3]<<'\n'
               <<"  gauss1: "<<output_debug_[4]<<','
               <<output_debug_[5]<<','
-              <<output_debug_[6]<<vcl_endl
+              <<output_debug_[6]<<'\n'
               <<"  gauss2: "<<output_debug_[7]<<','
-              <<output_debug_[8]<<vcl_endl
+              <<output_debug_[8]<<'\n'
               <<"  nobsmix:"<<output_debug_[9]<<vcl_endl;
     }
     /****************************************************************/
@@ -813,7 +813,7 @@ bool boxm_update_ocl_scene_manager::refine()
   if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents (output read) failed."))
     return false;
 
-  vcl_cout<<"Kernel OUTPUT: "<<vcl_endl;
+  vcl_cout<<"Kernel OUTPUT:"<<vcl_endl;
   this->read_trees();   //DEBUG PRINTER - can be deleted when fully working.
   for (int i=0; i<numbuffer_; i++) {
     int startPtr = mem_ptrs_[2*i];
@@ -1569,13 +1569,13 @@ bool boxm_update_ocl_scene_manager::set_tree_buffers()
 
 
   /** GPU MEMORY INFO **********************/
-  float cellMB = (float)cells_size_*sizeof(cl_int2)/1024.0/1024.0;
-  float alphaMB = (float)cell_data_size_*sizeof(cl_float)/1024.0/1024.0;
-  float mixtureMB = (float)cell_data_size_*sizeof(cl_uchar8)/1024.0/1024.0;
-  float numobsMB = (float)cell_data_size_*sizeof(cl_ushort4)/1024.0/1024.0;
-  float auxMB = (float)cell_data_size_*sizeof(cl_float4)/1024.0/1024.0;
+  float cellMB = (float)cells_size_*sizeof(cl_int2)/1024.0f/1024.0f;
+  float alphaMB = (float)cell_data_size_*sizeof(cl_float)/1024.0f/1024.0f;
+  float mixtureMB = (float)cell_data_size_*sizeof(cl_uchar8)/1024.0f/1024.0f;
+  float numobsMB = (float)cell_data_size_*sizeof(cl_ushort4)/1024.0f/1024.0f;
+  float auxMB = (float)cell_data_size_*sizeof(cl_float4)/1024.0f/1024.0f;
   float total = cellMB + alphaMB + mixtureMB + numobsMB + auxMB;
-  vcl_cout<<"GPU Mem Allocated: "<<vcl_endl
+  vcl_cout<<"GPU Mem Allocated:\n"
           <<"    Cells    "<<cellMB<<"MB\n"
           <<"    Alpha    "<<alphaMB<<"MB\n"
           <<"    Mixture  "<<mixtureMB<<"MB\n"

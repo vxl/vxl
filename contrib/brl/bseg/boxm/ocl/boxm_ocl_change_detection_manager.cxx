@@ -16,9 +16,9 @@
 //put tree structure and data into arrays
 
 bool boxm_ocl_change_detection_manager::init_ray_trace(boxm_ocl_scene *scene,
-                                                             vpgl_camera_double_sptr cam,
-                                                             vil_image_view<float> &obs,
-                                                             vil_image_view<float> &cd)
+                                                       vpgl_camera_double_sptr cam,
+                                                       vil_image_view<float> &obs,
+                                                       vil_image_view<float> &cd)
 {
   scene_ = scene;
   cam_ = cam;
@@ -41,8 +41,9 @@ bool boxm_ocl_change_detection_manager::init_ray_trace(boxm_ocl_scene *scene,
 
   return !build_kernel_program(program_);
 }
+
 bool boxm_ocl_change_detection_manager::init_ray_trace(boxm_ocl_scene *scene,
-                                                       unsigned ni, 
+                                                       unsigned ni,
                                                        unsigned nj)
 {
   scene_ = scene;
@@ -69,16 +70,14 @@ bool boxm_ocl_change_detection_manager::init_ray_trace(boxm_ocl_scene *scene,
 
 bool boxm_ocl_change_detection_manager::start()
 {
-  bool good=true;  
+  bool good=true;
   good = good && this->set_scene_data()
               && this->set_all_blocks()
               && this->set_scene_data_buffers()
-              && this->set_tree_buffers();
+              && this->set_tree_buffers()
 
-  good == good && this->set_input_view()
-               && this->set_input_view_buffers();
-
-
+              && this->set_input_view()
+              && this->set_input_view_buffers();
 
   this->set_kernel();
   this->set_commandqueue();
@@ -91,18 +90,18 @@ bool boxm_ocl_change_detection_manager::change_detection(vpgl_camera_double_sptr
                                                          vil_image_view_base_sptr img,
                                                          vil_image_view_base_sptr& output)
 {
-    if(vpgl_proj_camera<double>* pcam = dynamic_cast<vpgl_proj_camera<double> *> (cam.ptr()))
+    if (vpgl_proj_camera<double>* pcam = dynamic_cast<vpgl_proj_camera<double> *> (cam.ptr()))
     {
         //load image from file
         vil_image_view<float> floatimg(img->ni(), img->nj(), 1);
         if (vil_image_view<vxl_byte> *img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(img.ptr()))
             vil_convert_stretch_range_limited(*img_byte ,floatimg, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
         else {
-            vcl_cerr << "Failed to load image " << vcl_endl;
+            vcl_cerr << "Failed to load image\n";
             return 0;
         }
         //run the opencl update business
-        
+
         this->set_input_image(floatimg);
         this->write_image_buffer();
         this->set_persp_camera(pcam);
@@ -122,26 +121,22 @@ bool boxm_ocl_change_detection_manager::change_detection(vpgl_camera_double_sptr
 
 bool boxm_ocl_change_detection_manager::finish()
 {
-  bool good=true;  
-
-  good = good && this->release_commandqueue();
-  good = good && this->release_kernel();
-  good = good && this->release_foreground_pdf_buffers();
-  good = good && this->clean_foreground_pdf();
-  good = good && this->release_input_image_buffers();
-  good = good && this->clean_input_image();
-  good = good && this->release_persp_camera_buffers();
-  good = good && this->clean_persp_camera();
-  good = good && this->release_scene_data_buffers();
-  good = good && this->clean_scene_data();
-  good = good && this->release_tree_buffers();
-  good = good && this->clean_tree();
-
-  return good;
+  return
+      this->release_commandqueue()
+   && this->release_kernel()
+   && this->release_foreground_pdf_buffers()
+   && this->clean_foreground_pdf()
+   && this->release_input_image_buffers()
+   && this->clean_input_image()
+   && this->release_persp_camera_buffers()
+   && this->clean_persp_camera()
+   && this->release_scene_data_buffers()
+   && this->clean_scene_data()
+   && this->release_tree_buffers()
+   && this->clean_tree();
 }
 
 //: update the tree
-
 bool boxm_ocl_change_detection_manager::set_kernel()
 {
   cl_int status = CL_SUCCESS;
@@ -225,7 +220,6 @@ bool boxm_ocl_change_detection_manager::set_args()
   status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&int_image_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (int_image_buf_)"))
     return SDK_FAILURE;
-
 
   status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&image_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (input_image)"))
@@ -326,7 +320,7 @@ bool boxm_ocl_change_detection_manager::run()
   cl_ulong tstart,tend;
   status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
   status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
-  gpu_time_= (double)1.0e-6 * (tend - tstart); // convert nanoseconds to milliseconds
+  gpu_time_= 1e-6f * (tend - tstart); // convert nanoseconds to milliseconds
   vcl_cout<<"GPU time is "<<gpu_time_<<vcl_endl;
   return SDK_SUCCESS;
 }
@@ -363,13 +357,14 @@ bool boxm_ocl_change_detection_manager::run_scene()
   // release the command Queue
 
   this->release_kernel();
+#ifdef DEBUG
   vcl_cout << "Timing Analysis\n"
            << "===============\n"
-           //<<"openCL Running time "<<gpu_time_<<" ms\n"
-  //       << "Running block "<<total_gpu_time/1000<<"s\n"
-  //       << "total block loading time = " << total_load_time << "s\n"
-  //       << "total block processing time = " << total_raytrace_time << 's' << vcl_endl
-  ;
+           <<"openCL Running time "<<gpu_time_<<" ms\n"
+           << "Running block "<<total_gpu_time/1000<<"s\n"
+           << "total block loading time = " << total_load_time << "s\n"
+           << "total block processing time = " << total_raytrace_time << 's' << vcl_endl;
+#endif
   return true;
 }
 
@@ -406,6 +401,7 @@ void boxm_ocl_change_detection_manager::save_image(vcl_string img_filename)
 
   vil_save(oimage,img_filename.c_str());
 }
+
 vil_image_view_base_sptr boxm_ocl_change_detection_manager::get_output_image()
 {
   vil_image_view<float> * oimage=new vil_image_view<float>(output_img_.ni(),output_img_.nj());
@@ -416,6 +412,7 @@ vil_image_view_base_sptr boxm_ocl_change_detection_manager::get_output_image()
 
   return oimage;
 }
+
 bool boxm_ocl_change_detection_manager:: read_trees()
 {
   cl_event events[2];
@@ -621,7 +618,7 @@ bool boxm_ocl_change_detection_manager::set_root_level()
 {
   if (scene_==NULL)
   {
-    vcl_cout<<"Scene is Missing "<<vcl_endl;
+    vcl_cout<<"Scene is Missing"<<vcl_endl;
     return false;
   }
   root_level_=scene_->max_level()-1;
@@ -640,7 +637,7 @@ bool boxm_ocl_change_detection_manager::set_scene_origin()
 {
   if (scene_==NULL)
   {
-    vcl_cout<<"Scene is Missing "<<vcl_endl;
+    vcl_cout<<"Scene is Missing"<<vcl_endl;
     return false;
   }
   vgl_point_3d<double> orig=scene_->origin();
@@ -687,7 +684,7 @@ bool boxm_ocl_change_detection_manager::set_scene_dims()
 {
   if (scene_==NULL)
   {
-    vcl_cout<<"Scene is Missing "<<vcl_endl;
+    vcl_cout<<"Scene is Missing"<<vcl_endl;
     return false;
   }
   scene_->block_num(scene_x_,scene_y_,scene_z_);
@@ -733,7 +730,7 @@ bool boxm_ocl_change_detection_manager::set_block_dims()
 {
   if (scene_==NULL)
   {
-    vcl_cout<<"Scene is Missing "<<vcl_endl;
+    vcl_cout<<"Scene is Missing"<<vcl_endl;
     return false;
   }
   double x,y,z;
@@ -781,7 +778,7 @@ bool boxm_ocl_change_detection_manager::set_block_ptrs()
 {
   if (scene_==NULL)
   {
-    vcl_cout<<"Scene is Missing "<<vcl_endl;
+    vcl_cout<<"Scene is Missing"<<vcl_endl;
     return false;
   }
   scene_->block_num(scene_x_,scene_y_,scene_z_);
@@ -886,9 +883,9 @@ bool boxm_ocl_change_detection_manager::set_all_blocks()
   /******* debug print **************/
   int cellBytes = sizeof(cl_int2);
   int dataBytes = sizeof(cl_uchar8)+sizeof(cl_float);
-  vcl_cout<<"Optimized sizes: "<<vcl_endl
-          <<"    cells: "<<(float)cells_size_*cellBytes/1024.0/1024.0<<"MB"<<vcl_endl
-          <<"    data:  "<<(float)cells_size_*dataBytes/1024.0/1024.0<<"MB"<<vcl_endl;
+  vcl_cout<<"Optimized sizes:\n"
+          <<"    cells: "<<(float)cells_size_*cellBytes/1024.0f/1024.0f<<"MB\n"
+          <<"    data:  "<<(float)cells_size_*dataBytes/1024.0f/1024.0f<<"MB"<<vcl_endl;
   /**********************************/
 
   //allocate and initialize tree cells
@@ -968,12 +965,12 @@ bool boxm_ocl_change_detection_manager::set_tree_buffers()
   int alphaBytes = cell_data_size_*sizeof(cl_float);
   int mixBytes = cell_data_size_*sizeof(cl_uchar8);
   int blockBytes = scene_x_*scene_y_*scene_z_*sizeof(cl_int4);
-  float MB = (cellBytes + alphaBytes + mixBytes + blockBytes)/1024.0/1024.0;
-  vcl_cout<<"GPU Mem allocated: "<<vcl_endl
-          <<"   cells: "<<cellBytes<<" bytes"<<vcl_endl
-          <<"   alpha: "<<alphaBytes<<" bytes"<<vcl_endl
-          <<"   mix  : "<<mixBytes<<" bytes"<<vcl_endl
-          <<"   block: "<<blockBytes<<" bytes"<<vcl_endl
+  float MB = (cellBytes + alphaBytes + mixBytes + blockBytes)/1024.0f/1024.0f;
+  vcl_cout<<"GPU Mem allocated:\n"
+          <<"   cells: "<<cellBytes<<" bytes\n"
+          <<"   alpha: "<<alphaBytes<<" bytes\n"
+          <<"   mix  : "<<mixBytes<<" bytes\n"
+          <<"   block: "<<blockBytes<<" bytes\n"
           <<"TOTAL: "<<MB<<"MB"<<vcl_endl;
   /************************************/
  return true;
@@ -1292,6 +1289,7 @@ bool boxm_ocl_change_detection_manager::clean_foreground_pdf()
 
   return true;
 }
+
 //: Binary write multi_tracker scene to stream
 void vsl_b_write(vsl_b_ostream& /*os*/, boxm_ocl_change_detection_manager const& /*multi_tracker*/)
 {

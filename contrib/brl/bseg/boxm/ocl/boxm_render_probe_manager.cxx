@@ -91,7 +91,7 @@ bool boxm_render_probe_manager::online_processing(vpgl_camera_double_sptr & came
 void boxm_render_probe_manager::getoutputarray(vcl_vector< vcl_vector<float> >& out)
 {
     out.resize(10);
-    for(unsigned j=0;j<10;j++)
+    for (unsigned j=0;j<10;j++)
         for (unsigned i=0;i<raydepth_;i++)
             if (rayoutput_[j][i]>-1)
                 out[j].push_back(rayoutput_[j][i]);
@@ -137,7 +137,7 @@ bool boxm_render_probe_manager::release_kernel()
 bool boxm_render_probe_manager::set_args()
 {
     cl_int status = CL_SUCCESS;
-      int i=0;
+    int i=0;
 
     status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&scene_dims_buf_);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (scene_dims_buf_)"))
@@ -194,7 +194,7 @@ bool boxm_render_probe_manager::set_args()
     status = clSetKernelArg(kernel_, i++, sizeof(cl_float),&intensity_);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (intensity) buffer)"))
         return SDK_FAILURE;
-    for(unsigned cnt=0;cnt<10;cnt++)
+    for (unsigned cnt=0;cnt<10;cnt++)
     {
     status = clSetKernelArg(kernel_,i++,sizeof(cl_mem),(void *)&rayoutput_buf_[cnt]);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (input_image)"))
@@ -204,7 +204,7 @@ bool boxm_render_probe_manager::set_args()
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output) buffer)"))
         return SDK_FAILURE;
 
-   return true;
+    return true;
 }
 
 
@@ -261,7 +261,7 @@ bool boxm_render_probe_manager::run()
   cl_ulong tstart,tend;
   status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
   status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
-  gpu_time_= (double)1.0e-6 * (tend - tstart); // convert nanoseconds to milliseconds
+  gpu_time_= 1e-6f * float(tend - tstart); // convert nanoseconds to milliseconds
   vcl_cout<<"GPU time is "<<gpu_time_<<vcl_endl;
 
   return SDK_SUCCESS;
@@ -308,33 +308,33 @@ bool boxm_render_probe_manager::run_scene()
 
 bool boxm_render_probe_manager::set_rayoutput()
 {
- raydepth_=1000;
- for(unsigned j=0;j<10;j++)
- {
- rayoutput_[j]=(float*)boxm_ocl_utils::alloc_aligned(raydepth_,sizeof(float),16);
+  raydepth_=1000;
+  for (unsigned j=0;j<10;j++)
+  {
+    rayoutput_[j]=(float*)boxm_ocl_utils::alloc_aligned(raydepth_,sizeof(float),16);
 
- for (unsigned i=0;i<raydepth_;i++)
-     rayoutput_[j][i]=-1.0;
- }  
+    for (unsigned i=0;i<raydepth_;i++)
+      rayoutput_[j][i]=-1.0;
+  }
 
- output_=(float*)boxm_ocl_utils::alloc_aligned(1,sizeof(float),16);
- output_[0]=0.0f;
- return true;
+  output_=(float*)boxm_ocl_utils::alloc_aligned(1,sizeof(float),16);
+  output_[0]=0.0f;
+  return true;
 }
 
 bool boxm_render_probe_manager::set_rayoutput_buffers()
 {
   cl_int status;
-  for(unsigned i=0;i<10;i++)
+  for (unsigned i=0;i<10;i++)
   {
-  rayoutput_buf_[i] = clCreateBuffer(this->context_,
-                                  CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
-                                  raydepth_*sizeof(cl_float),
-                                  rayoutput_[i],&status);
+    rayoutput_buf_[i] = clCreateBuffer(this->context_,
+                                       CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+                                       raydepth_*sizeof(cl_float),
+                                       rayoutput_[i],&status);
 
-  output_buf_=clCreateBuffer(this->context_,
-                                  CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
-                                  sizeof(cl_float),output_,&status);
+    output_buf_=clCreateBuffer(this->context_,
+                               CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+                               sizeof(cl_float),output_,&status);
   }
   return this->check_val(status,CL_SUCCESS,"clCreateBuffer (rayoutput_) failed.")==1;
 }
@@ -342,7 +342,7 @@ bool boxm_render_probe_manager::set_rayoutput_buffers()
 bool boxm_render_probe_manager::release_rayoutput_buffers()
 {
     cl_int status;
-    for(unsigned i=0;i<10;i++)
+    for (unsigned i=0;i<10;i++)
         status = clReleaseMemObject(rayoutput_buf_[i]);
 
     status = clReleaseMemObject(output_buf_);
@@ -353,7 +353,7 @@ bool boxm_render_probe_manager::release_rayoutput_buffers()
 bool boxm_render_probe_manager::clean_rayoutput()
 {
     if (rayoutput_)
-        for(unsigned i=0;i<10;i++)
+        for (unsigned i=0;i<10;i++)
             boxm_ocl_utils::free_aligned(rayoutput_[i]);
     return true;
 }
@@ -361,13 +361,13 @@ bool boxm_render_probe_manager::clean_rayoutput()
 bool boxm_render_probe_manager::read_output_array()
 {
   cl_event events[2];
- int status =-1;
-  for(unsigned i=0;i<10;i++)
+  int status =-1;
+  for (unsigned i=0;i<10;i++)
   {
       // Enqueue readBuffers
-     status= clEnqueueReadBuffer(command_queue_,rayoutput_buf_[i],CL_TRUE,
-                                       0,this->raydepth_*sizeof(cl_float),
-                                       rayoutput_[i], 0,NULL,&events[0]);
+      status= clEnqueueReadBuffer(command_queue_,rayoutput_buf_[i],CL_TRUE,
+                                  0,this->raydepth_*sizeof(cl_float),
+                                  rayoutput_[i], 0,NULL,&events[0]);
 
       if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (image_)failed."))
           return false;
@@ -399,8 +399,8 @@ int boxm_render_probe_manager::build_kernel_program(cl_program & program)
     status = clReleaseProgram(program);
     program = 0;
     if (!this->check_val(status,
-      CL_SUCCESS,
-      "clReleaseProgram failed."))
+                         CL_SUCCESS,
+                         "clReleaseProgram failed."))
       return SDK_FAILURE;
   }
   const char * source = this->prog_.c_str();
@@ -410,9 +410,9 @@ int boxm_render_probe_manager::build_kernel_program(cl_program & program)
 
 
   if (vcl_strstr(this->platform_name,"ATI"))
-       options+="-D ATI";
+    options+="-D ATI";
   if (vcl_strstr(this->platform_name,"NVIDIA"))
-       options+="-D NVIDIA";
+    options+="-D NVIDIA";
 
   program = clCreateProgramWithSource(this->context_,
                                       1,
@@ -490,7 +490,7 @@ bool boxm_render_probe_manager::set_root_level()
 {
   if (scene_==NULL)
   {
-    vcl_cout<<"Scene is Missing "<<vcl_endl;
+    vcl_cout<<"Scene is Missing"<<vcl_endl;
     return false;
   }
   root_level_=scene_->max_level()-1;
@@ -509,7 +509,7 @@ bool boxm_render_probe_manager::set_scene_origin()
 {
   if (scene_==NULL)
   {
-    vcl_cout<<"Scene is Missing "<<vcl_endl;
+    vcl_cout<<"Scene is Missing"<<vcl_endl;
     return false;
   }
   vgl_point_3d<double> orig=scene_->origin();
@@ -556,7 +556,7 @@ bool boxm_render_probe_manager::set_scene_dims()
 {
   if (scene_==NULL)
   {
-    vcl_cout<<"Scene is Missing "<<vcl_endl;
+    vcl_cout<<"Scene is Missing"<<vcl_endl;
     return false;
   }
   scene_->block_num(scene_x_,scene_y_,scene_z_);
@@ -602,7 +602,7 @@ bool boxm_render_probe_manager::set_block_dims()
 {
   if (scene_==NULL)
   {
-    vcl_cout<<"Scene is Missing "<<vcl_endl;
+    vcl_cout<<"Scene is Missing"<<vcl_endl;
     return false;
   }
   double x,y,z;
@@ -650,7 +650,7 @@ bool boxm_render_probe_manager::set_block_ptrs()
 {
   if (scene_==NULL)
   {
-    vcl_cout<<"Scene is Missing "<<vcl_endl;
+    vcl_cout<<"Scene is Missing"<<vcl_endl;
     return false;
   }
   scene_->block_num(scene_x_,scene_y_,scene_z_);
@@ -726,8 +726,8 @@ bool boxm_render_probe_manager::set_all_blocks()
   /******* debug print **************/
   int cellBytes = sizeof(cl_int2);
   int dataBytes = sizeof(cl_uchar8)+sizeof(cl_float);
-  vcl_cout<<"Optimized sizes: "<<vcl_endl
-          <<"    cells: "<<(float)cells_size_*cellBytes/1024.0/1024.0<<"MB"<<vcl_endl
+  vcl_cout<<"Optimized sizes:\n"
+          <<"    cells: "<<(float)cells_size_*cellBytes/1024.0/1024.0<<"MB\n"
           <<"    data:  "<<(float)cells_size_*dataBytes/1024.0/1024.0<<"MB"<<vcl_endl;
   /**********************************/
 
@@ -808,16 +808,16 @@ bool boxm_render_probe_manager::set_tree_buffers()
   int alphaBytes = cell_data_size_*sizeof(cl_float);
   int mixBytes = cell_data_size_*sizeof(cl_uchar8);
   int blockBytes = scene_x_*scene_y_*scene_z_*sizeof(cl_int4);
-  float MB = (cellBytes + alphaBytes + mixBytes + blockBytes)/1024.0/1024.0;
-  vcl_cout<<"GPU Mem allocated: "<<vcl_endl
-          <<"   cells: "<<cellBytes<<" bytes"<<vcl_endl
-          <<"   alpha: "<<alphaBytes<<" bytes"<<vcl_endl
-          <<"   mix  : "<<mixBytes<<" bytes"<<vcl_endl
-          <<"   block: "<<blockBytes<<" bytes"<<vcl_endl
+  float MB = (cellBytes + alphaBytes + mixBytes + blockBytes)/1024.0f/1024.0f;
+  vcl_cout<<"GPU Mem allocated:\n"
+          <<"   cells: "<<cellBytes<<" bytes\n"
+          <<"   alpha: "<<alphaBytes<<" bytes\n"
+          <<"   mix  : "<<mixBytes<<" bytes\n"
+          <<"   block: "<<blockBytes<<" bytes\n"
           <<"TOTAL: "<<MB<<"MB"<<vcl_endl;
   /************************************/
 
- return true;
+  return true;
 }
 
 

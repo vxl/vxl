@@ -121,7 +121,6 @@ bool boxm_render_bit_scene_manager::set_args(unsigned kernel_index=0)
     return false;
   cl_int status = CL_SUCCESS;
 
-  
   if (kernel_index==0)
   {
     //Temporary hack for scene info - to be put in another method
@@ -140,7 +139,7 @@ bool boxm_render_bit_scene_manager::set_args(unsigned kernel_index=0)
     //info->scene_dims   = *((cl_int4*)scene_dims_);      // number of blocks in each dimension
     // was: info->scene_dims   = (cl_int4) { scene_dims_[0], scene_dims_[1],scene_dims_[2],scene_dims_[3] };
     info->block_len    = block_dims_[0];    // size of each block (can only be 1 number now that we've established blocks are cubes)
-    info->epsilon      = 1.0/100.0;
+    info->epsilon      = 0.01f;
 
     //tree meta information
     info->root_level   = root_level_;                // root_level of trees
@@ -386,17 +385,18 @@ bool boxm_render_bit_scene_manager::run(bool rerender)
   cl_ulong tstart,tend;
   status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
   status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
-  gpu_time_= (double)1.0e-6 * (tend - tstart); // convert nanoseconds to milliseconds
+  gpu_time_= 1e-6f * float(tend - tstart); // convert nanoseconds to milliseconds
   vcl_cout<<"GPU time is "<<gpu_time_<<vcl_endl;
   status = clReleaseEvent(ceEvent);
 
 #if 0
   float wasted[250];
-  for(int i=0; i<250; i++) wasted[i] = 0.0;
-   
-  for(int layer = 0; layer < 250; layer++) {
+  for (int i=0; i<250; i++)
+    wasted[i] = 0.0;
+
+  for (int layer = 0; layer < 250; layer++) {
     vcl_cout<<"Layer: "<<layer<<vcl_endl;
-    
+
     //set final arg (layer cutoff)
     status = clSetKernelArg(kernels_[0], 14, sizeof(cl_int), &layer);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (layer number)"))
@@ -413,54 +413,50 @@ bool boxm_render_bit_scene_manager::run(bool rerender)
     gpu_time_= (double)1.0e-6 * (tend - tstart); // convert nanoseconds to milliseconds
     vcl_cout<<"GPU time is "<<gpu_time_<<vcl_endl;
     status = clReleaseEvent(ceEvent);
-    
-    
+
     //-------- Calc wasted cycle statistics ------------------------------------
     this->read_output_image();
     float wastedCycles = 0.0;
-    
+
     //for each work group, offset by (wi,wj)
-    for(int row=0; row<this->wnj_; row+=8) {
-      for(int col=0; col<this->wni_; col+=8) {
-        
+    for (int row=0; row<this->wnj_; row+=8) {
+      for (int col=0; col<this->wni_; col+=8) {
+
         //calculate the max clock time
         float maxClock = 0;
-        for(int i=0; i<this->bni_; i++) {
-          for(int j=0; j<this->bnj_; j++) {
-            int index = this->wni_*(i+row) + (j+col); 
-            if(image_[index] > maxClock)
+        for (int i=0; i<this->bni_; i++) {
+          for (int j=0; j<this->bnj_; j++) {
+            int index = this->wni_*(i+row) + (j+col);
+            if (image_[index] > maxClock)
               maxClock = image_[index];
           }
-        } 
-        
+        }
+
         //find ave distance to max clock cycle over threadblock
         float sum = 0;
-        for(int i=0; i<this->bni_; i++) {
-          for(int j=0; j<this->bnj_; j++) {
-            int index = this->wni_*(i+row) + (j+col); 
+        for (int i=0; i<this->bni_; i++) {
+          for (int j=0; j<this->bnj_; j++) {
+            int index = this->wni_*(i+row) + (j+col);
             sum += (maxClock - image_[index]);
           }
-        } 
+        }
         sum = sum / (this->bnj_*this->bni_);
         wastedCycles += sum;
       }
     }
     wasted[layer] = wastedCycles;
   }
-  for(int i=0; i<250; i++)
+  for (int i=0; i<250; i++)
     vcl_cout<<wasted[i]<<"   ";
   vcl_cout<<'\n';
-  
-  
+
   float total = 0.0;
-  for(int i=0; i<250; i++)
+  for (int i=0; i<250; i++)
     total += wasted[i];
   vcl_cout<<"TOTAL NUMBER OF CYCLES FOR RENDER: "<<total<<vcl_endl;
-
-  
 #endif
 
-#ifdef DEBUG  
+#ifdef DEBUG
   cl_event events[2];
   status = clEnqueueReadBuffer(command_queue_,output_buf_,CL_TRUE,
                                0,numbuffer_*sizeof(cl_float4),
@@ -1140,7 +1136,7 @@ bool boxm_render_bit_scene_manager::set_tree_buffers()
   int alphaBytes = data_size_*sizeof(cl_float);
   int mixBytes   = data_size_*sizeof(cl_uchar8);
   int blockBytes = scene_x_*scene_y_*scene_z_*sizeof(cl_ushort2);
-  float MB = (cellBytes + alphaBytes + mixBytes + blockBytes)/1024.0/1024.0;
+  float MB = (cellBytes + alphaBytes + mixBytes + blockBytes)/1024.0f/1024.0f;
   vcl_cout<<"GPU Mem allocated:\n"
           <<"   cells: "<<cellBytes<<" bytes\n"
           <<"   alpha: "<<alphaBytes<<" bytes\n"

@@ -195,7 +195,7 @@ void boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T> >* scene,
             <<"*** Max scene size not large enough to accommodate input scene\n"
             <<"*** cells allocated:   "<<num_buffers * BUFF_LENGTH<<'\n'
             <<"*** total scene cells: "<<total_tree_cells<<'\n'
-            <<"**************************************************"<<vcl_endl;
+            <<"**************************************************\n";
     return;
   }
 
@@ -356,7 +356,7 @@ void boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T> >* scene,
         float pinit = .01f;
         float16 datum(0.0f);
         float bboxLen = (float) block_dim_small.x();
-        float alpha_init = (-1.0/bboxLen) * vcl_log(1.0-pinit);
+        float alpha_init = (-1.0f/bboxLen) * vcl_log(1.0f-pinit);
         datum[0] = alpha_init;
         data_buffers(buffIndex, buffOffset) = datum;
 
@@ -533,7 +533,7 @@ void boxm_ocl_convert<T>::convert_bit_scene(boxm_scene<boct_tree<short, T> >* sc
 
   // 5. Go through each block and convert it to smaller blocks
   vbl_array_1d<unsigned short> blocksInBuffer(num_buffers+1, (unsigned short) 0);//# of blocks in each buffer
-  
+
   boxm_block_iterator<tree_type> iter(scene);
   vnl_random random(9667566);
   for (iter.begin(); !iter.end(); iter++) {
