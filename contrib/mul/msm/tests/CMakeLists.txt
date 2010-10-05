@@ -9,7 +9,7 @@ ADD_EXECUTABLE( msm_test_all
   test_curves.cxx
   test_param_limiters.cxx
 )
-TARGET_LINK_LIBRARIES( msm_test_all msm vgl testlib )
+TARGET_LINK_LIBRARIES( msm_test_all msm vgl vnl testlib )
 
 ADD_TEST( msm_test_points ${EXECUTABLE_OUTPUT_PATH}/msm_test_all test_points)
 ADD_TEST( msm_test_wt_mat_2d ${EXECUTABLE_OUTPUT_PATH}/msm_test_all test_wt_mat_2d)

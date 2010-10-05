@@ -19,7 +19,7 @@ SET(mcal_sources
 AUX_SOURCE_DIRECTORY(Templates mcal_sources)
 
 ADD_LIBRARY(mcal ${mcal_sources})
-TARGET_LINK_LIBRARIES(mcal mbl vnl vnl_algo vul)
+TARGET_LINK_LIBRARIES(mcal mbl vnl vnl_algo vnl_io vul)
 
 IF (BUILD_TESTING)
   SUBDIRS(tests)

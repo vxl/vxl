@@ -10,7 +10,7 @@ ADD_EXECUTABLE ( bmrf_test_all
   test_network.cxx
   test_network_builder.cxx
 )
-TARGET_LINK_LIBRARIES( bmrf_test_all bmrf vgl vil vbl vpl testlib )
+TARGET_LINK_LIBRARIES( bmrf_test_all bmrf vgl vil vbl_io vbl vpl testlib )
 
 ADD_TEST( bmrf_test_epi_point       ${EXECUTABLE_OUTPUT_PATH}/bmrf_test_all test_epi_point)
 ADD_TEST( bmrf_test_epi_seg         ${EXECUTABLE_OUTPUT_PATH}/bmrf_test_all test_epi_seg)

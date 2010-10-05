@@ -12,14 +12,12 @@ SET(brdb_sources
    brdb_selection.cxx                brdb_selection.h                brdb_selection_sptr.h
 )
 
-
-
 AUX_SOURCE_DIRECTORY(Templates brdb_sources)
 
 ADD_LIBRARY(brdb  ${brdb_sources})
 
 # brdb should not depend on any library that uses it
-TARGET_LINK_LIBRARIES(brdb vbl vsl)
+TARGET_LINK_LIBRARIES(brdb vbl_io vbl vsl)
 
 
 IF(BUILD_TESTING)

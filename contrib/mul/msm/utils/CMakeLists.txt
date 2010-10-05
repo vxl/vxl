@@ -16,10 +16,8 @@ SET(msm_utils_sources
 
 # AUX_SOURCE_DIRECTORY(Templates msm_utils_sources)
 ADD_LIBRARY(msm_utils ${msm_utils_sources} )
-TARGET_LINK_LIBRARIES(msm_utils msm)
+TARGET_LINK_LIBRARIES(msm_utils msm vgl)
 
-# SUBDIRS(tools)
-
-IF( BUILD_TESTING)
+#IF( BUILD_TESTING)
 #  SUBDIRS(tests)
-ENDIF( BUILD_TESTING)
+#ENDIF( BUILD_TESTING)

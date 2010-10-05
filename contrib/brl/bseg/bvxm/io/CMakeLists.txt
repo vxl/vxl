@@ -8,6 +8,4 @@ SET(bvxm_io_sources
 AUX_SOURCE_DIRECTORY(Templates bvxm_io_sources)
 
 ADD_LIBRARY(bvxm_io ${bvxm_io_sources})
-TARGET_LINK_LIBRARIES(bvxm_io bvxm vsl vbl vil vil_io)
-
-
+TARGET_LINK_LIBRARIES(bvxm_io bvxm vsl vbl vil vil_io vbl_io)

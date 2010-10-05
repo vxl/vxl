@@ -26,6 +26,6 @@ SET(bvxm_grid_pro_sources ${bvxm_grid_pro_sources})
 
 ADD_LIBRARY(bvxm_grid_pro ${bvxm_grid_pro_sources})
 
-TARGET_LINK_LIBRARIES(bvxm_grid_pro bvxm_grid bvxm_grid_io vul vgl imesh vnl)
+TARGET_LINK_LIBRARIES(bvxm_grid_pro bvxm_grid bvxm_grid_io vul vgl imesh vnl vbl_io)
 
 ENDIF(EXPAT_FOUND)

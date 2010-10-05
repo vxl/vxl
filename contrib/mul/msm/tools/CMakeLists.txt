@@ -1,10 +1,9 @@
-#
-# ./msm/tools/CMakeLists.txt
+# mul/msm/tools/CMakeLists.txt
 #
 #  Tim Cootes
 #
 
-LINK_LIBRARIES(msm msm_utils)
+LINK_LIBRARIES(msm msm_utils vil vgl vul)
 
 ADD_EXECUTABLE(msm_build_shape_model msm_build_shape_model.cxx)
 ADD_EXECUTABLE(msm_draw_shape_modes  msm_draw_shape_modes.cxx)

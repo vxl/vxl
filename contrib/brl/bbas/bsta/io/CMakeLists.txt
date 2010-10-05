@@ -20,4 +20,4 @@ SET(bsta_io_sources
 # should be uncommented
 
 #ADD_LIBRARY(bsta_io  ${bsta_io_sources})
-#TARGET_LINK_LIBRARIES(bsta_io bsta vnl_io vbl)
+#TARGET_LINK_LIBRARIES(bsta_io bsta vnl_io vbl_io vbl)
