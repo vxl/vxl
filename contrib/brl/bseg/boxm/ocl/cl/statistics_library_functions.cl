@@ -181,6 +181,40 @@ void sort_mix_3(float* mu0, float* sigma0, float* w0, short* Nobs0,
  * insert a new component in the mixture. The mixture is assumed
  * to be sorted so that if w2>0 the third component is the one replaced.
  */
+void insert_gauss_32(float x, float init_weight, float init_sigma, int* match, 
+                    float* mu0, float* sigma0, float* w0, short* Nobs0,
+                    float* mu1, float* sigma1, float* w1, short* Nobs1,
+                    float* mu2, float* sigma2, float* w2, short* Nobs2)
+{
+  if((*w1)>0.0f && (*sigma1)>0.0f)  /* replace the third component */
+    {
+      //float adjust = *w0 + *w1;
+      //adjust = (1.0f - init_weight)/adjust;
+      //*w0 = (*w0)*adjust; *w1 = (*w1)*adjust;
+      *mu2 = x;
+      *sigma2 = init_sigma;
+      *w2 = init_weight;
+      *Nobs2 = 1;
+      *match = 2;
+      return;
+    }else if((*w0)>0.0f){/* replace the second component */
+      //*w0 = (1.0f-init_weight);
+      *mu1 = x;
+      *sigma1 = init_sigma;
+      *w1 = init_weight;
+      *Nobs1 = 1;
+      *match = 1;
+      return;
+    }else{/* replace the first component */
+      /*note that in C++ the weights don't sum to 1?
+       see bsta_adaptive_updater.h - ::insert bug? */
+      *w0 = init_weight; /*init_weight in C++ */
+      *mu0 = x;
+      *sigma0 = init_sigma;
+      *Nobs0 = 1;
+      *match = 0;
+    }
+}
 void insert_gauss_3(float x, float init_weight, float init_sigma, int* match, 
                     float* mu0, float* sigma0, float* w0, short* Nobs0,
                     float* mu1, float* sigma1, float* w1, short* Nobs1,
@@ -295,5 +329,82 @@ void update_gauss_3_mixture(float x, float w, float t_match,
                mu1, sigma1, w1, Nobs1,
                mu2, sigma2, w2, Nobs2);
   }
+
+
 }
 
+void update_gauss_3_mixture2(float x, float w, float t_match,
+                            float init_sigma, float min_sigma,
+                            float* mu0, float* sigma0, float* w0, short* Nobs0,
+                            float* mu1, float* sigma1, float* w1, short* Nobs1,
+                            float* mu2, float* sigma2, float* w2, short* Nobs2,
+                            float* Nobs_mix) 
+{
+  if(w>0.0f)
+  {
+    int match = -1;
+  //(*Nobs_mix) += w;
+  float alpha = w*0.05f, tsq=t_match*t_match;
+  float weight = 0.0f, rho = 0.0f;
+  
+  /* test for a match of component 0 */
+  if(*w0>0.0f && (*sigma0)>0.0f){
+    weight = /*(1.0f-alpha)*/(*w0);
+    if(match<0 && 
+       ((x-*mu0)*(x-*mu0)/((*sigma0)*(*sigma0))) < tsq){
+      weight += alpha;
+      (*Nobs0)++;
+      rho = alpha;
+      update_gauss(x, rho, mu0, sigma0, min_sigma);
+      match = 0;
+    }
+    *w0 = weight;
+  }
+  ///* test for a match of component 1 */
+  if(*w1>0.0f && (*sigma1)>0.0f){
+    weight = /*(1.0f-alpha)*/(*w1);
+    if(match<0 && ((x-*mu1)*(x-*mu1)/((*sigma1)*(*sigma1))) < tsq){
+      weight += alpha;
+      (*Nobs1)++;
+      rho =  alpha;
+      update_gauss(x, rho, mu1, sigma1, min_sigma);
+      match = 1;
+    }
+    *w1 = weight;
+  }
+  /* test for a match of component 2 */
+  if(*w2>0.0f &&  (*sigma2)>0.0f){
+    weight = /*(1.0f-alpha)*/(*w2);
+    if(match<0 && ((x-*mu2)*(x-*mu2)/((*sigma2)*(*sigma2))) < tsq){
+      weight += alpha;
+      (*Nobs2)++;
+      rho = alpha;
+      update_gauss(x, rho, mu2, sigma2, min_sigma);
+      match = 2;
+    }
+    *w2 = weight;
+  }
+  /* If there were no matches then insert a new component */
+  if(match<0)
+    insert_gauss_32(x, alpha, init_sigma, &match,
+                   mu0, sigma0, w0, Nobs0, 
+                   mu1, sigma1, w1, Nobs1,
+                   mu2, sigma2, w2, Nobs2);
+
+  ///* If there is more than one component, sort the components with
+  // * respect to weight/sigma.  
+  // */
+  //if(match>0)
+    sort_mix_3(mu0, sigma0, w0, Nobs0, 
+               mu1, sigma1, w1, Nobs1,
+               mu2, sigma2, w2, Nobs2);
+  }
+  float sum_weights=(*w0)+(*w1)+(*w2);
+  if(sum_weights>1.0f)
+  {
+      (*w0)/=sum_weights;
+      (*w1)/=sum_weights;
+      (*w2)/=sum_weights;
+  }
+
+}
