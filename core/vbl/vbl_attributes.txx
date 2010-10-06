@@ -11,7 +11,7 @@ T minval(vbl_array_1d<T> const& in)
   T mval = vcl_numeric_limits<T>::max();
   vcl_size_t n = in.size();
   assert(n>0);
-  for(vbl_array_1d<T>::const_iterator it = in.begin();
+  for(typename vbl_array_1d<T>::const_iterator it = in.begin();
       it != in.end(); ++it){
     T v = *it;
     if(v<mval) mval = v;
@@ -25,7 +25,7 @@ T maxval(vbl_array_1d<T> const& in)
   T mval = vcl_numeric_limits<T>::min();
   vcl_size_t n = in.size();
   assert(n>0);
-  for(vbl_array_1d<T>::const_iterator it = in.begin();
+  for(typename vbl_array_1d<T>::const_iterator it = in.begin();
       it != in.end(); ++it){
     T v = *it;
     if(v>mval) mval = v;
@@ -39,7 +39,7 @@ void bounds(vbl_array_1d<T> const& in, T& min, T& max)
   max = vcl_numeric_limits<T>::min(); min = vcl_numeric_limits<T>::max();
   vcl_size_t n = in.size();
   assert(n>0);
-  for(vbl_array_1d<T>::const_iterator it = in.begin();
+  for(typename vbl_array_1d<T>::const_iterator it = in.begin();
       it != in.end(); ++it){
     T v = *it;
     if(v>max) max = v;
@@ -53,7 +53,7 @@ T mean(vbl_array_1d<T> const& in)
   T sum = T(0);
   vcl_size_t n = in.size();
   assert(n>0);
-  for(vbl_array_1d<T>::const_iterator it = in.begin();
+  for(typename vbl_array_1d<T>::const_iterator it = in.begin();
       it != in.end(); ++it) sum += *it;
   return sum/static_cast<T>(n);
 }
@@ -65,7 +65,7 @@ T minval(vbl_array_2d<T> const& in)
   T mval = vcl_numeric_limits<T>::max();
   vcl_size_t n = in.size();
   assert(n>0);
-  for(vbl_array_2d<T>::const_iterator it = in.begin();
+  for(typename vbl_array_2d<T>::const_iterator it = in.begin();
       it != in.end(); ++it){
     T v = *it;
     if(v<mval) mval = v;
@@ -79,7 +79,7 @@ T maxval(vbl_array_2d<T> const& in)
   T mval = vcl_numeric_limits<T>::min();
   vcl_size_t n = in.size();
   assert(n>0);
-  for(vbl_array_2d<T>::const_iterator it = in.begin();
+  for(typename vbl_array_2d<T>::const_iterator it = in.begin();
       it != in.end(); ++it){
     T v = *it;
     if(v>mval) mval = v;
@@ -93,7 +93,7 @@ void bounds(vbl_array_2d<T> const& in, T& min, T& max)
   max = vcl_numeric_limits<T>::min(); min = vcl_numeric_limits<T>::max();
   vcl_size_t n = in.size();
   assert(n>0);
-  for(vbl_array_2d<T>::const_iterator it = in.begin();
+  for(typename vbl_array_2d<T>::const_iterator it = in.begin();
       it != in.end(); ++it){
     T v = *it;
     if(v>max) max = v;
@@ -107,7 +107,7 @@ T mean(vbl_array_2d<T> const& in)
   T sum = T(0);
   vcl_size_t n = in.size();
   assert(n>0);
-  for(vbl_array_2d<T>::const_iterator it = in.begin();
+  for(typename vbl_array_2d<T>::const_iterator it = in.begin();
       it != in.end(); ++it) sum += *it;
   return sum/static_cast<T>(n);
 }
@@ -119,7 +119,7 @@ T minval(vbl_array_3d<T> const& in)
   T mval = vcl_numeric_limits<T>::max();
   vcl_size_t n = in.size();
   assert(n>0);
-  for(vbl_array_3d<T>::const_iterator it = in.begin();
+  for(typename vbl_array_3d<T>::const_iterator it = in.begin();
       it != in.end(); ++it){
     T v = *it;
     if(v<mval) mval = v;
@@ -133,7 +133,7 @@ T maxval(vbl_array_3d<T> const& in)
   T mval = vcl_numeric_limits<T>::min();
   vcl_size_t n = in.size();
   assert(n>0);
-  for(vbl_array_3d<T>::const_iterator it = in.begin();
+  for(typename vbl_array_3d<T>::const_iterator it = in.begin();
       it != in.end(); ++it){
     T v = *it;
     if(v>mval) mval = v;
@@ -147,7 +147,7 @@ void bounds(vbl_array_3d<T> const& in, T& min, T& max)
   max = vcl_numeric_limits<T>::min(); min = vcl_numeric_limits<T>::max();
   vcl_size_t n = in.size();
   assert(n>0);
-  for(vbl_array_3d<T>::const_iterator it = in.begin();
+  for(typename vbl_array_3d<T>::const_iterator it = in.begin();
       it != in.end(); ++it){
     T v = *it;
     if(v>max) max = v;
@@ -161,7 +161,7 @@ T mean(vbl_array_3d<T> const& in)
   T sum = T(0);
   vcl_size_t n = in.size();
   assert(n>0);
-  for(vbl_array_3d<T>::const_iterator it = in.begin();
+  for(typename vbl_array_3d<T>::const_iterator it = in.begin();
       it != in.end(); ++it) sum += *it;
   return sum/static_cast<T>(n);
 }

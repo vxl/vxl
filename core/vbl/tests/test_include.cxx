@@ -26,4 +26,5 @@
 #include <vbl/vbl_checked_delete.h>
 #include <vbl/vbl_scoped_ptr.h>
 #include <vbl/vbl_local_minima.h>
+#include <vbl/vbl_attributes.h>
 int main() { return 0; }
