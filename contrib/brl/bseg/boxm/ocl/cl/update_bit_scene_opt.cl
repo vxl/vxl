@@ -26,11 +26,9 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
                      __global    int                * offset_y,         // right (which one of the four blocks)
                      __local     short2             * ray_bundle_array, // gives information for which ray takes over in the workgroup
                      __local     int                * cell_ptrs,        // local list of cell_ptrs (cells that are hit by this workgroup
-                     __local     float16            * cached_data,      //
                      __local     float4             * cached_aux_data,
                      __local     float4             * image_vect,       // input image and store vis_inf and pre_inf
                      __local     uchar              * cumsum,           // cumulative sum for calculating data pointer
-                     __local     int                * imIndex,          // cached image index in local mem
                      __global    float              * output)    
 {
 
@@ -45,13 +43,8 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
   // get image coordinates and camera, 
   // check for validity before proceeding
   //----------------------------------------------------------------------------
-#ifdef PREINF
-  int i=0,j=0; map_work_space_2d(&i,&j);
-  int factor=1;
-#else
   int i=0,j=0; map_work_space_2d_offset(&i,&j,(*offset_x),(*offset_y));
   int factor=(*offsetfactor);
-#endif
 
   // check to see if the thread corresponds to an actual pixel as in some 
   // cases #of threads will be more than the pixels.
@@ -95,10 +88,10 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
             linfo, block_ptrs, tree_array, alpha_array, mixture_array, num_obs_array, aux_data_array, 
            
             //utility info
-            local_tree, bit_lookup, cumsum, imIndex,
+            local_tree, bit_lookup, cumsum, 0,
             
             //factor,raybund,ptrs,cache,cache,image_vect (all NULL)
-            factor, ray_bundle_array, cell_ptrs, cached_data, cached_aux_data, image_vect,
+            factor, ray_bundle_array, cell_ptrs, 0, cached_aux_data, image_vect,
             
             //io info
             in_image, 0, output);
@@ -108,48 +101,35 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
 __kernel
 void
 pre_inf_main(__constant  RenderSceneInfo    * linfo,
-                     __global    ushort2            * block_ptrs,
-                     __global    int4               * tree_array,       // tree structure for each block
-                     __global    float              * alpha_array,      // alpha for each block
-                     __global    uchar8             * mixture_array,    // mixture for each block
-                     __global    ushort4            * num_obs_array,    // num obs for each block
-                     __global    float4             * aux_data_array,   // aux data used between passes
-                     __constant  uchar              * bit_lookup,       // used to get data_index
-                     __local     uchar16            * local_tree,       // cache current tree into local memory
-                     __global    float16            * camera,           // camera orign and SVD of inverse of camera matrix
-                     __global    uint4              * imgdims,          // dimensions of the input image
-                     __global    float4             * in_image,         // the input image
-                     __global    int                * offsetfactor,     // 
-                     __global    int                * offset_x,         // offset to the left and 
-                     __global    int                * offset_y,         // right (which one of the four blocks)
-                     __local     short2             * ray_bundle_array, // gives information for which ray takes over in the workgroup
-                     __local     int                * cell_ptrs,        // local list of cell_ptrs (cells that are hit by this workgroup
-                     __local     float16            * cached_data,      //
-                     __local     float4             * cached_aux_data,
-                     __local     float4             * image_vect,       // input image and store vis_inf and pre_inf
-                     __local     uchar              * cumsum,           // cumulative sum for calculating data pointer
-                     __local     int                * imIndex,          // cached image index in local mem
-                     __global    float              * output)    
+             __global    ushort2            * block_ptrs,
+             __global    int4               * tree_array,       // tree structure for each block
+             __global    float              * alpha_array,      // alpha for each block
+             __global    uchar8             * mixture_array,    // mixture for each block
+             __global    ushort4            * num_obs_array,    // num obs for each block
+             __global    float4             * aux_data_array,   // aux data used between passes
+             __constant  uchar              * bit_lookup,       // used to get data_index
+             __local     uchar16            * local_tree,       // cache current tree into local memory
+             __global    float16            * camera,           // camera orign and SVD of inverse of camera matrix
+             __global    uint4              * imgdims,          // dimensions of the input image
+             __global    float4             * in_image,         // the input image
+             __global    int                * offsetfactor,     // 
+             __global    int                * offset_x,         // offset to the left and 
+             __global    int                * offset_y,         // right (which one of the four blocks)
+             __local     float4             * cached_aux_data,
+             __local     float4             * image_vect,       // input image and store vis_inf and pre_inf
+             __local     uchar              * cumsum,           // cumulative sum for calculating data pointer
+             __global    float              * output)    
 {
 
   //get local id (0-63 for an 8x8) of this patch 
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
   
-  //initialize pre-broken ray information (non broken rays will be re initialized)
-  ray_bundle_array[llid] = (short2) (-1, 0); 
-  cell_ptrs[llid] = -1;
-  
   //----------------------------------------------------------------------------
   // get image coordinates and camera, 
   // check for validity before proceeding
   //----------------------------------------------------------------------------
-#ifdef PREINF
   int i=0,j=0; map_work_space_2d(&i,&j);
   int factor=1;
-#else
-  int i=0,j=0; map_work_space_2d_offset(&i,&j,(*offset_x),(*offset_y));
-  int factor=(*offsetfactor);
-#endif
 
   // check to see if the thread corresponds to an actual pixel as in some 
   // cases #of threads will be more than the pixels.
@@ -193,10 +173,10 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
             linfo, block_ptrs, tree_array, alpha_array, mixture_array, num_obs_array, aux_data_array, 
            
             //utility info
-            local_tree, bit_lookup, cumsum, imIndex,
+            local_tree, bit_lookup, cumsum, 0,
             
             //factor,raybund,ptrs,cache,cache,image_vect (all NULL)
-            factor, ray_bundle_array, cell_ptrs, cached_data, cached_aux_data, image_vect,
+            factor, 0, 0, 0, cached_aux_data, image_vect,
             
             //io info
             in_image, 0, output);

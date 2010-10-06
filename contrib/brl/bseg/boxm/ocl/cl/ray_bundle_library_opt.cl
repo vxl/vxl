@@ -139,47 +139,44 @@ void seg_len_obs_opt(        float    seg_len,
 */
 void pre_infinity_opt(        float    seg_len, 
                       __local float4*  image_vect,
-                      __local short2*  ray_bundle_array,
-                      __local float16* cached_data,
+                              float16  datum,
                       __local float4*  cached_aux_data)
 {
     /* linear thread id */
     uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
-    //cached_data[llid].sd = seg_len;
     barrier(CLK_LOCAL_MEM_FENCE); /*wait for all threads to complete */
-    float temp1 = 0.0f, temp2 = 0.0f; /* minimize registers */
 
     /* if total length of rays is too small, do nothing */
     float PI = cached_aux_data[llid].x; /* length sum */
     if (PI>1.0e-10f)
     {
         /* The mean intensity for the cell */
-        temp2 = cached_aux_data[llid].y/PI; /* mean observation */
-        PI = gauss_3_mixture_prob_density(temp2,
-                                             cached_data[llid].s1,
-                                             cached_data[llid].s2,
-                                             cached_data[llid].s3,
-                                             cached_data[llid].s5,
-                                             cached_data[llid].s6,
-                                             cached_data[llid].s7,
-                                             cached_data[llid].s9,
-                                             cached_data[llid].sa,
-                                             (1.0f-cached_data[llid].s3
-                                             -cached_data[llid].s7)
+        float mean_obs = cached_aux_data[llid].y/PI; 
+        PI = gauss_3_mixture_prob_density(mean_obs,
+                                             datum.s1,
+                                             datum.s2,
+                                             datum.s3,
+                                             datum.s5,
+                                             datum.s6,
+                                             datum.s7,
+                                             datum.s9,
+                                             datum.sa,
+                                             (1.0f-datum.s3
+                                             -datum.s7)
                                             );/* PI */
     }
     barrier(CLK_LOCAL_MEM_FENCE); /*wait for all threads to complete */
 
     /* Calculate pre and vis infinity */
     /*alpha integral          alpha           *        seg_len      */
-    image_vect[llid].y += cached_data[llid].s0 * seg_len;
+    image_vect[llid].y += datum.s0 * seg_len;
 
-    temp2 = exp(-image_vect[llid].y); /* vis_prob_end */
+    float vis_prob_end = exp(-image_vect[llid].y); /* vis_prob_end */
 
     /* updated pre                      Omega         *       PI         */
-    image_vect[llid].w += (image_vect[llid].z - temp2) *  PI;
+    image_vect[llid].w += (image_vect[llid].z - vis_prob_end) *  PI;
     /* updated visibility probability */
-    image_vect[llid].z = temp2;
+    image_vect[llid].z = vis_prob_end;
     barrier(CLK_LOCAL_MEM_FENCE);
 }
 

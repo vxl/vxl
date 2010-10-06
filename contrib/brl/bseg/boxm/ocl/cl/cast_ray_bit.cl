@@ -179,9 +179,8 @@ cast_ray(
       in_image[j*get_global_size(0)*factor+i] = image_vect[llid];
 #endif
 #ifdef PREINF
+      
       //keep track of cells being hit
-      cell_ptrs[llid] = data_ptr;
-
       //cell data, i.e., alpha and app model is needed for some passes 
       float  alpha    = alpha_array[data_ptr];
       float4 nobs     = convert_float4(num_obs_array[data_ptr]);
@@ -191,12 +190,11 @@ cast_ray(
                       (mixture.s3/255.0), (mixture.s4/255.0), (mixture.s5/255.0), (nobs.s1),
                       (mixture.s6/255.0), (mixture.s7/255.0), (nobs.s2), (nobs.s3/100.0), 
                       0.0, 0.0, 0.0);
-      cached_data[llid] = datum;
       cached_aux_data[llid] = aux_data_array[data_ptr];
       barrier(CLK_LOCAL_MEM_FENCE);
 
       //calculate pre_infinity denomanator (shape of image)
-      pre_infinity_opt(d,image_vect,ray_bundle_array, cached_data, cached_aux_data);
+      pre_infinity_opt(d,image_vect, datum, cached_aux_data);
       
       //aux data doesn't need to be set, just in_image
       in_image[j*get_global_size(0)+i] = image_vect[llid];
