@@ -382,7 +382,7 @@ bool boxm_render_bit_scene_manager::run(bool rerender)
     return SDK_FAILURE;
 
   status = clFinish(command_queue_);
-  if (!this->check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status)))
+  if (!this->check_val(status,CL_SUCCESS,"clFinish in run failed."+error_to_string(status)))
     return SDK_FAILURE;
   cl_ulong tstart,tend;
   status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
@@ -1299,7 +1299,7 @@ bool boxm_render_bit_scene_manager::set_input_image()
   wni_=(cl_uint)RoundUp(output_img_.ni(),bni_);
   wnj_=(cl_uint)RoundUp(output_img_.nj(),bnj_);
 
-  image_=(cl_float *)boxm_ocl_utils::alloc_aligned(wni_*wnj_,sizeof(cl_float),16);
+  image_=(cl_float *)boxm_ocl_utils::alloc_aligned(wni_*wnj_,sizeof(cl_float4),16);
   image_gl_=(cl_uint*)boxm_ocl_utils::alloc_aligned(wni_*wnj_,sizeof(cl_uint),16);
 
   img_dims_=(cl_uint *)boxm_ocl_utils::alloc_aligned(1,sizeof(cl_uint4),16);
@@ -1344,7 +1344,7 @@ bool boxm_render_bit_scene_manager::set_input_image_buffers()
   vcl_cout<<"create: image_buf"<<vcl_endl;
   image_buf_ = clCreateBuffer(this->context_,
                               CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
-                              wni_*wnj_*sizeof(cl_float),
+                              wni_*wnj_*sizeof(cl_float4),
                               image_,&status);
   return this->check_val(status,CL_SUCCESS,"clCreateBuffer (image_buf_) failed.")==1;
 }
