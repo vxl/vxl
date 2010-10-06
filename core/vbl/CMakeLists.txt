@@ -33,6 +33,8 @@ SET( vbl_sources
 
   vbl_triple.txx              vbl_triple.h
   vbl_quadruple.txx           vbl_quadruple.h
+  vbl_local_minima.txx        vbl_local_minima.h
+  vbl_attributes.txx          vbl_attributes.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates vbl_sources)

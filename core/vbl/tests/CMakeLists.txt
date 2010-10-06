@@ -19,6 +19,7 @@ ADD_EXECUTABLE( vbl_test_all
   vbl_test_scoped_ptr.cxx
   vbl_test_shared_pointer.cxx
   vbl_test_local_minima.cxx
+  vbl_test_attributes.cxx
 )
 
 ADD_TEST( vbl_test_bounding_box    ${EXECUTABLE_OUTPUT_PATH}/vbl_test_all vbl_test_bounding_box )
@@ -34,5 +35,6 @@ ADD_TEST( vbl_test_ref_count       ${EXECUTABLE_OUTPUT_PATH}/vbl_test_all vbl_te
 ADD_TEST( vbl_test_scoped_ptr      ${EXECUTABLE_OUTPUT_PATH}/vbl_test_all vbl_test_scoped_ptr )
 ADD_TEST( vbl_test_shared_pointer  ${EXECUTABLE_OUTPUT_PATH}/vbl_test_all vbl_test_shared_pointer )
 ADD_TEST( vbl_test_local_minima  ${EXECUTABLE_OUTPUT_PATH}/vbl_test_all vbl_test_local_minima )
+ADD_TEST( vbl_test_attributes  ${EXECUTABLE_OUTPUT_PATH}/vbl_test_all vbl_test_attributes )
 ADD_EXECUTABLE( vbl_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vbl_test_include vbl )
