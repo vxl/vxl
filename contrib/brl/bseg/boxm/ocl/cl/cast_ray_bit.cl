@@ -199,8 +199,7 @@ cast_ray(
       pre_infinity_opt(d,image_vect,ray_bundle_array, cached_data, cached_aux_data);
       
       //aux data doesn't need to be set, just in_image
-      in_image[j*get_global_size(0)*factor+i] = image_vect[llid];
-
+      in_image[j*get_global_size(0)+i] = image_vect[llid];
 #endif
 #ifdef BAYES
 
@@ -256,6 +255,6 @@ cast_ray(
 
 #ifdef RENDER
   gl_image[imIndex[llid]] = rgbaFloatToInt((float4) expected_int);
-  in_image[imIndex[llid]] = expected_int;
+  in_image[imIndex[llid]] = (float4) expected_int;
 #endif
 }

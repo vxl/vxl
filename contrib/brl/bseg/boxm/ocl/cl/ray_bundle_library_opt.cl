@@ -145,17 +145,17 @@ void pre_infinity_opt(        float    seg_len,
 {
     /* linear thread id */
     uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
-    cached_data[llid].sd = seg_len;
+    //cached_data[llid].sd = seg_len;
     barrier(CLK_LOCAL_MEM_FENCE); /*wait for all threads to complete */
     float temp1 = 0.0f, temp2 = 0.0f; /* minimize registers */
 
     /* if total length of rays is too small, do nothing */
-    temp1 = cached_aux_data[llid].x; /* length sum */
-    if (temp1>1.0e-10f)
+    float PI = cached_aux_data[llid].x; /* length sum */
+    if (PI>1.0e-10f)
     {
         /* The mean intensity for the cell */
-        temp2 = cached_aux_data[llid].y/temp1; /* mean observation */
-        temp1 = gauss_3_mixture_prob_density(temp2,
+        temp2 = cached_aux_data[llid].y/PI; /* mean observation */
+        PI = gauss_3_mixture_prob_density(temp2,
                                              cached_data[llid].s1,
                                              cached_data[llid].s2,
                                              cached_data[llid].s3,
@@ -167,20 +167,17 @@ void pre_infinity_opt(        float    seg_len,
                                              (1.0f-cached_data[llid].s3
                                              -cached_data[llid].s7)
                                             );/* PI */
-            
-        /* temporary slot to store PI*/
-        cached_data[llid].se = temp1;
     }
     barrier(CLK_LOCAL_MEM_FENCE); /*wait for all threads to complete */
 
     /* Calculate pre and vis infinity */
     /*alpha integral          alpha           *        seg_len      */
-    image_vect[llid].y += cached_data[llid].s0*cached_data[llid].sd;
+    image_vect[llid].y += cached_data[llid].s0 * seg_len;
 
     temp2 = exp(-image_vect[llid].y); /* vis_prob_end */
 
     /* updated pre                      Omega         *       PI         */
-    image_vect[llid].w += (image_vect[llid].z - temp2)*cached_data[llid].se;
+    image_vect[llid].w += (image_vect[llid].z - temp2) *  PI;
     /* updated visibility probability */
     image_vect[llid].z = temp2;
     barrier(CLK_LOCAL_MEM_FENCE);

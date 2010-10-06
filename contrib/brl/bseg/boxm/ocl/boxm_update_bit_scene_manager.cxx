@@ -484,7 +484,7 @@ bool boxm_update_bit_scene_manager::set_kernels()
   //if (!this->build_update_program("seg_len_obs(d,image_vect,ray_bundle_array,cached_aux_data)", false))
   if (!this->build_update_program("SEGLEN", false))
     return false;
-  cl_kernel kernel = clCreateKernel(program_,"update_bit_scene_opt",&status);
+  cl_kernel kernel = clCreateKernel(program_,"seg_len_main",&status);
   if (this->check_val(status,CL_SUCCESS,error_to_string(status))!=CHECK_SUCCESS)
     return false;
   update_kernels_.push_back(kernel);
@@ -493,7 +493,7 @@ bool boxm_update_bit_scene_manager::set_kernels()
   //if (!this->build_update_program("pre_infinity(d,image_vect,ray_bundle_array, cached_data, cached_aux_data)", true))
   if (!this->build_update_program("PREINF", true))
     return false;
-  kernel = clCreateKernel(program_,"update_bit_scene_opt",&status);
+  kernel = clCreateKernel(program_,"pre_inf_main",&status);
   if (this->check_val(status,CL_SUCCESS,error_to_string(status))!=CHECK_SUCCESS)
     return false;
   update_kernels_.push_back(kernel);
@@ -514,7 +514,7 @@ bool boxm_update_bit_scene_manager::set_kernels()
   //if (!this->build_update_program("bayes_ratio(d,image_vect,ray_bundle_array, cached_data, cached_aux_data)", true))
   if (!this->build_update_program("BAYES", true))
     return false;
-  kernel = clCreateKernel(program_,"update_bit_scene_opt",&status);
+  kernel = clCreateKernel(program_,"bayes_main",&status);
   if (this->check_val(status,CL_SUCCESS,error_to_string(status))!=CHECK_SUCCESS)
     return false;
   update_kernels_.push_back(kernel);
@@ -1278,12 +1278,12 @@ bool boxm_update_bit_scene_manager::set_workspace(cl_kernel kernel, unsigned pas
   if (!this->check_val(status,CL_SUCCESS,"clGetKernelWorkGroupInfo CL_KERNEL_WORK_GROUP_SIZE, failed."))
     return false;
 
-  if (pass==0 || pass==1 || pass==3) // passes for computing aux
+  if (pass==0 || pass==3) // passes for computing aux
   {
       globalThreads[0]=this->wni_/2; globalThreads[1]=this->wnj_/2;
       localThreads[0] =this->bni_  ; localThreads[1] =this->bnj_  ;
   }
-  else if (pass==2) // pass for normalizing image
+  else if (pass==1 || pass==2) // pass preinf, and proc_norm_image
   {
       globalThreads[0]=this->wni_;globalThreads[1]=this->wnj_;
       localThreads[0] =this->bni_;localThreads[0] =this->bnj_;
@@ -1344,9 +1344,8 @@ bool boxm_update_bit_scene_manager::run(cl_kernel kernel, unsigned pass)
   cl_int status = SDK_SUCCESS;
   cl_ulong tstart,tend;
 
-  //gpu_time_ = 0.0;
   //pass 0, 1, and 3 require four separate executions to run
-  if (pass==0 || pass ==1 || pass==3)
+  if (pass==0 || pass==3)
   {
       for (unsigned k=0;k<2;k++)
       {
@@ -1369,7 +1368,7 @@ bool boxm_update_bit_scene_manager::run(cl_kernel kernel, unsigned pass)
       }
   }
   //everything else just runs once
-  if (pass==2 || pass ==4 || pass==5 || pass==6|| pass==7 || pass==8)
+  if (pass==1 || pass==2 || pass ==4 || pass==5 || pass==6 || pass==7 || pass==8)
   {
       cl_event ceEvent =0;
       status = clEnqueueNDRangeKernel(this->command_queue_, kernel, 2, NULL, globalThreads, localThreads, 0, NULL, &ceEvent);
@@ -1387,10 +1386,11 @@ bool boxm_update_bit_scene_manager::run(cl_kernel kernel, unsigned pass)
 
 bool boxm_update_bit_scene_manager::update()
 {
+  vcl_cout<<"Update called "<<vcl_endl;
   gpu_time_=0.0;
   for (unsigned pass = 0; pass<5; pass++)
   {
-      vcl_cout<<"RUNNING PASS: "<<pass;
+      vcl_cout<<"RUNNING PASS: "<<pass<<vcl_endl;
       this->set_update_args(pass);  //need to set args?
       this->set_workspace(update_kernels_[pass], pass);
       if (!this->run(update_kernels_[pass], pass))
@@ -1572,6 +1572,7 @@ bool boxm_update_bit_scene_manager::refine()
     vcl_cout<<"Buffer @"<<i<<": ["<<startPtr<<','<<endPtr<<"] ("
             <<freeSpace<<" free cells)  "
             <<output_debug_[i]<<" cells split"<<vcl_endl;
+    if(startPtr > endPtr) vcl_cout<<"     Rolled over Buffer... "<<vcl_endl;
     if (output_debug_[i] == -666) {
       vcl_cout<<"buffer @ "<<i<<" is out of space post refine. freeSpace = "<<freeSpace
               <<"  mem_ptrs = "<<startPtr<<','<<endPtr<<vcl_endl;
