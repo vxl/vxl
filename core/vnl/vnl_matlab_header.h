@@ -41,7 +41,7 @@ struct vnl_matlab_header
 namespace byteswap // byteswap routines, stolen from ITK
 {
  inline void
- swap32(void *ptr)
+ MySwap32(void *ptr)
  {
   char one_byte;
   char *p = reinterpret_cast<char *>(ptr);
@@ -49,7 +49,7 @@ namespace byteswap // byteswap routines, stolen from ITK
   one_byte = p[1]; p[1] = p[2]; p[2] = one_byte;
  }
  inline void
- swap64(void *ptr)
+ MySwap64(void *ptr)
  {
   char one_byte;
   char *p = reinterpret_cast<char *>(ptr);

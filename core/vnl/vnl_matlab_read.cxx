@@ -125,11 +125,11 @@ void vnl_matlab_readhdr::read_hdr()
   }
   if (need_swap)
   {
-    byteswap::swap32(&hdr.type);
-    byteswap::swap32(&hdr.rows);
-    byteswap::swap32(&hdr.cols);
-    byteswap::swap32(&hdr.imag);
-    byteswap::swap32(&hdr.namlen);
+    byteswap::MySwap32(&hdr.type);
+    byteswap::MySwap32(&hdr.rows);
+    byteswap::MySwap32(&hdr.cols);
+    byteswap::MySwap32(&hdr.imag);
+    byteswap::MySwap32(&hdr.namlen);
   }
   if (varname)
     delete [] varname;
@@ -177,7 +177,7 @@ bool vnl_matlab_readhdr::read_data(T &v) { \
   if (rows()!=1U || cols()!=1U) { vcl_cerr << "size0\n"; return false; } \
   vnl_matlab_read_data(s, &v, 1); \
   if (need_swap) { \
-    if (sizeof(v) == 4U) byteswap::swap32(&v); else byteswap::swap64(&v); \
+    if (sizeof(v) == 4U) byteswap::MySwap32(&v); else byteswap::MySwap64(&v); \
   } \
   data_read = true; return *this; \
 } \
@@ -187,7 +187,7 @@ bool vnl_matlab_readhdr::read_data(T *p) { \
   vnl_matlab_read_data(s, p, rows()*cols()); \
   if (need_swap) { \
     for (long i = 0; i < rows()*cols(); ++i) { \
-      if (sizeof(*p) == 4U) byteswap::swap32(&(p[i])); else byteswap::swap64(&(p[i])); \
+      if (sizeof(*p) == 4U) byteswap::MySwap32(&(p[i])); else byteswap::MySwap64(&(p[i])); \
     } \
   } \
   data_read = true; return *this; \
@@ -198,7 +198,7 @@ bool vnl_matlab_readhdr::read_data(T * const *m) { \
   vnl_matlab_read_data(s, tmp, rows()*cols()); \
   if (need_swap) { \
     for (long i = 0; i < rows()*cols(); ++i) { \
-      if (sizeof(T) == 4U) byteswap::swap32(&(tmp[i])); else byteswap::swap64(&(tmp[i])); \
+      if (sizeof(T) == 4U) byteswap::MySwap32(&(tmp[i])); else byteswap::MySwap64(&(tmp[i])); \
     } \
   } \
   int a, b; \
