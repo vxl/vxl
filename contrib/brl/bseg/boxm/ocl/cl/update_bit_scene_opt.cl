@@ -354,3 +354,30 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
 
 
 
+__kernel void proc_norm_image(__global float4* image, __global float4* p_inf,__global uint4   * imgdims)
+{
+    /* linear global id of the normalization image */
+    int lgid = get_global_id(0) + get_global_size(0)*get_global_id(1);
+
+    int i=0;
+    int j=0;
+    map_work_space_2d(&i,&j);
+    
+    if (i>=(*imgdims).z && j>=(*imgdims).w)
+        return;
+
+    float4 vect = image[j*get_global_size(0)+i];
+    float mult = (p_inf[0].x>0.0f) ? 1.0f :
+        gauss_prob_density(vect.x, p_inf[0].y, p_inf[0].z);
+    /* compute the norm image */
+    vect.x = vect.w + mult * vect.z;
+    /* the following  quantities have to be re-initialized before
+    *the bayes_ratio kernel is executed
+    */
+    vect.y = 0.0f;/* clear alpha integral */
+    vect.z = 1.0f; /* initial vis = 1.0 */
+    vect.w = 0.0f; /* initial pre = 0.0 */
+    /* write it back */
+    image[j*get_global_size(0)+i] = vect;
+}
+
