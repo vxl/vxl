@@ -1,4 +1,4 @@
-// This is mul/msm/tests/test_shape_models.cxx
+// This is mul/msm/tests/test_shape_model.cxx
 //=======================================================================
 //
 //  Copyright: (C) 2010 The University of Manchester
@@ -70,7 +70,6 @@ void test_shape_model()
   for (unsigned i=0;i<4;++i) wt_mat[i]*=(1+i);
   instance.fit_to_points_wt_mat(shapes[4],wt_mat);
   TEST("Wt.Mat.Fit is accurate",instance.points(),shapes[4]);
-
 }
 
 TESTMAIN(test_shape_model);
