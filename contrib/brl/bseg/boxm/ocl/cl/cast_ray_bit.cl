@@ -216,12 +216,12 @@ cast_ray(
                          (mixture.s3/255.0), (mixture.s4/255.0), (mixture.s5/255.0), (nobs.s1),
                          (mixture.s6/255.0), (mixture.s7/255.0), (nobs.s2), (nobs.s3/100.0), 
                          0.0, 0.0, 0.0);
-      cached_data[llid] = datum;
       cached_aux_data[llid] = aux_data_array[data_ptr];
       barrier(CLK_LOCAL_MEM_FENCE);
 
       //calculate bayes ratio
-      bayes_ratio_opt(d,image_vect,ray_bundle_array, cached_data, cached_aux_data); 
+      //bayes_ratio_opt(d,image_vect,ray_bundle_array, cached_data, cached_aux_data); 
+      bayes_ratio_opt2(d, image_vect, ray_bundle_array, cell_ptrs, datum, cached_aux_data);
        
       //set aux data (only one at time)
       if (ray_bundle_array[llid].y==1) {

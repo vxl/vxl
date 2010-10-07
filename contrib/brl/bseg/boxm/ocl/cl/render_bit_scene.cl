@@ -35,7 +35,7 @@ ray_trace_bit_scene_opt(__constant  RenderSceneInfo    * linfo,
   // cases #of threads will be more than the pixels.
   if (i>=(*imgdims).z || j>=(*imgdims).w) {
     gl_image[imIndex[llid]] = rgbaFloatToInt((float4)(0.0f,0.0f,0.0f,0.0f));
-    in_image[imIndex[llid]] = (float)-1.0f;
+    in_image[imIndex[llid]] = (float4)-1.0f;
     return;
   }
   
@@ -267,6 +267,6 @@ ray_trace_bit_scene_opt(__constant  RenderSceneInfo    * linfo,
   expected_int += vis*0.5f;
 #endif
   gl_image[imIndex[llid]] = rgbaFloatToInt((float4) expected_int);
-  in_image[imIndex[llid]] = expected_int;
+  in_image[imIndex[llid]] = (float4) expected_int;
 }
 #endif

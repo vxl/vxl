@@ -6,7 +6,8 @@
  #pragma OPENCL EXTENSION cl_khr_gl_sharing : enable
 #endif
 
-   
+
+#ifdef SEGLEN
 __kernel
 void
 seg_len_main(__constant  RenderSceneInfo    * linfo,
@@ -96,8 +97,9 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
             //io info
             in_image, 0, output);
 }
+#endif
 
-
+#ifdef PREINF
 __kernel
 void
 pre_inf_main(__constant  RenderSceneInfo    * linfo,
@@ -181,9 +183,9 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
             //io info
             in_image, 0, output);
 }
+#endif
 
-
-
+#ifdef BAYES
 __kernel
 void
 bayes_main(__constant  RenderSceneInfo    * linfo,
@@ -203,7 +205,6 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
                      __global    int                * offset_y,         // right (which one of the four blocks)
                      __local     short2             * ray_bundle_array, // gives information for which ray takes over in the workgroup
                      __local     int                * cell_ptrs,        // local list of cell_ptrs (cells that are hit by this workgroup
-                     __local     float16            * cached_data,      //
                      __local     float4             * cached_aux_data,
                      __local     float4             * image_vect,       // input image and store vis_inf and pre_inf
                      __local     uchar              * cumsum,           // cumulative sum for calculating data pointer
@@ -222,13 +223,8 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
   // get image coordinates and camera, 
   // check for validity before proceeding
   //----------------------------------------------------------------------------
-#ifdef PREINF
-  int i=0,j=0; map_work_space_2d(&i,&j);
-  int factor=1;
-#else
   int i=0,j=0; map_work_space_2d_offset(&i,&j,(*offset_x),(*offset_y));
   int factor=(*offsetfactor);
-#endif
 
   // check to see if the thread corresponds to an actual pixel as in some 
   // cases #of threads will be more than the pixels.
@@ -275,12 +271,12 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
             local_tree, bit_lookup, cumsum, imIndex,
             
             //factor,raybund,ptrs,cache,cache,image_vect (all NULL)
-            factor, ray_bundle_array, cell_ptrs, cached_data, cached_aux_data, image_vect,
+            factor, ray_bundle_array, cell_ptrs, 0, cached_aux_data, image_vect,
             
             //io info
             in_image, 0, output);
 }
-
+#endif
 
 
 __kernel

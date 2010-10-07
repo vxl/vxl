@@ -1209,10 +1209,6 @@ bool boxm_update_bit_scene_manager::set_update_args(unsigned pass)
     status = clSetKernelArg(update_kernels_[pass],i++,sizeof(cl_int)*this->bni_*this->bnj_,0);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local cell pointers)"))
       return false;
-    // cached data
-    status = clSetKernelArg(update_kernels_[pass],i++,sizeof(cl_float16)*this->bni_*this->bnj_,0);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local cached data)"))
-      return false;
     // cached aux data
     status = clSetKernelArg(update_kernels_[pass],i++,sizeof(cl_float4)*this->bni_*this->bnj_,0);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local cached aux data)"))
