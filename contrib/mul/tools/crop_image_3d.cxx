@@ -53,6 +53,7 @@ int main2(int argc, char*argv[])
   vul_arg<vcl_vector<double> > bbf("-bbf", "bounding box in image fraction e.g. 0.2,0.2,0.2,0.75,0.75,0.75");
   vul_arg<vcl_vector<double> > bbw("-bbw", "bounding box in world coords (x0,y0,z0,x1,y1,z1)");
   vul_arg<bool> use_mm("-mm", "World coords are in units of millimetres (default=metres)", false);
+  vul_arg<bool> ignore_bounds_errors("-ib", "adjust any bounding box values outside image to iamge edge", false);
   vul_arg_parse(argc, argv);
 
   // Log the program arguments
@@ -162,6 +163,16 @@ int main2(int argc, char*argv[])
   
   if (bbf.set())
   {
+    if (ignore_bounds_errors())
+    {
+      if (fx0 < 0) fx0=0;
+      if (fy0 < 0) fy0=0;
+      if (fz0 < 0) fz0=0;
+      if (fx0 > 1) fx1=1;
+      if (fy0 > 1) fy1=1;
+      if (fz0 > 1) fz1=1;
+    }
+
     // Convert image fraction values to voxel numbers 
 
     // Round lower bounds down
@@ -181,6 +192,15 @@ int main2(int argc, char*argv[])
     // Convert world coords values to voxel numbers 
     vgl_point_3d<double> imlo = w2i(vgl_point_3d<double>(x0,y0,z0));
     vgl_point_3d<double> imhi = w2i(vgl_point_3d<double>(x1,y1,z1));
+    if (ignore_bounds_errors())
+    {
+      imlo.set(vcl_max<double>(imlo.x(),0),
+        vcl_max<double>(imlo.y(),0),
+        vcl_max<double>(imlo.z(),0));
+      imhi.set(vcl_min<double>(imhi.x(),ir->ni()-1),
+        vcl_min<double>(imhi.y(),ir->nj()-1),
+        vcl_min<double>(imhi.z(),ir->nk()-1));
+    }
     // Round lower bounds down
     i0 = static_cast<unsigned>(vcl_floor(imlo.x()));
     j0 = static_cast<unsigned>(vcl_floor(imlo.y()));
@@ -189,9 +209,17 @@ int main2(int argc, char*argv[])
     unsigned i1 = static_cast<unsigned>(vcl_ceil(imhi.x()));
     unsigned j1 = static_cast<unsigned>(vcl_ceil(imhi.y()));
     unsigned k1 = static_cast<unsigned>(vcl_ceil(imhi.z()));
+
+
     ni = i1 - i0 + 1;
     nj = j1 - j0 + 1;
     nk = k1 - k0 + 1;
+  }
+  if (ignore_bounds_errors())
+  {
+    if (i0+ni > ir->ni()) ni=ir->ni() - i0;
+    if (j0+nj > ir->nj()) nj=ir->nj() - j0;
+    if (k0+nk > ir->nk()) nk=ir->nk() - k0;
   }
 
 
