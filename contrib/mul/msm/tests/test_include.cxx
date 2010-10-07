@@ -7,6 +7,7 @@
 #include <msm/msm_param_limiter.h>
 #include <msm/msm_points.h>
 #include <msm/msm_ref_shape_instance.h>
+#include <msm/msm_ref_shape_model.h>
 #include <msm/msm_shape_instance.h>
 #include <msm/msm_shape_model_builder.h>
 #include <msm/msm_shape_model.h>
