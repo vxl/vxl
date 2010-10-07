@@ -135,7 +135,8 @@ cast_ray(
                                     posx,posy,posz, 
                                     &cell_minx, &cell_miny, &cell_minz, &cell_len); 
       data_ptr = data_index_opt2(&local_tree[llid], data_ptr, bit_lookup, &cumsum[llid*10], &cumIndex);
-      data_ptr = block.x * linfo->data_len + data_ptr;
+      //HACKY BUG FIX: hard coded 16 here because data_len = 65536 = 2^16.  
+      data_ptr = (block.x*linfo->data_len) + (data_ptr - ((data_ptr>>16)<<16));  
       
       // check to see how close tnear and tfar are
       cell_minx = (ray_dx > 0.0f) ? cell_minx+cell_len : cell_minx; 
@@ -149,7 +150,6 @@ cast_ray(
       //// distance must be multiplied by the dimension of the bounding box
       float d = (t1-ttree) * linfo->block_len;
       ttree = t1;
-
 
 
 ////////////////////////////////////////////////////////////////////////////////

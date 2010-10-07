@@ -1546,12 +1546,12 @@ bool boxm_update_bit_scene_manager::update()
   gpu_time_=0.0;
   for (unsigned pass = 0; pass<5; pass++)
   {
-      vcl_cout<<"RUNNING PASS: "<<pass<<vcl_endl;
+      vcl_cout<<"  pass_"<<pass;
       this->set_update_args(pass);  //need to set args?
       this->set_workspace(update_kernels_[pass], pass);
       if (!this->run(update_kernels_[pass], pass))
         return false;
-      vcl_cout<<" in "<<gpu_time_<<" ms"<<vcl_endl;
+      vcl_cout<<"("<<gpu_time_<<"ms)  ";
 
 #if 0
       if (pass == 1) {
@@ -1607,9 +1607,7 @@ bool boxm_update_bit_scene_manager::update()
       }
 #endif
   }
-  vcl_cout << "Timing Analysis\n"
-           << "===============\n"
-           << "openCL Running time "<<gpu_time_<<" ms" << vcl_endl
+  vcl_cout << ":::: total update time:"<<gpu_time_<<" ms" << vcl_endl
 #ifdef DEBUG
            << "Running block "<<total_gpu_time/1000<<"s\n"
            << "total block loading time = " << total_load_time << "s\n"
@@ -1628,9 +1626,7 @@ bool boxm_update_bit_scene_manager::rendering()
   this->set_workspace(render_kernel_, pass);
   if (!this->run(render_kernel_, pass))
       return false;
-  vcl_cout << "Timing Analysis\n"
-           << "===============\n"
-           << "openCL Running time "<<gpu_time_<<" ms" << vcl_endl
+  vcl_cout << "Render Time: "<<gpu_time_<<" ms" << vcl_endl
 #ifdef DEBUG
            << "Running block "<<total_gpu_time/1000<<"s\n"
            << "total block loading time = " << total_load_time << "s\n"
@@ -1725,10 +1721,10 @@ bool boxm_update_bit_scene_manager::refine()
     int startPtr = mem_ptrs_[2*i];
     int endPtr   = mem_ptrs_[2*i+1];
     int freeSpace = (startPtr >= endPtr)? startPtr-endPtr : scene_info_->data_buffer_length - (endPtr-startPtr);
-    vcl_cout<<"Buffer @"<<i<<": ["<<startPtr<<','<<endPtr<<"] ("
-            <<freeSpace<<" free cells)  "
-            <<output_debug_[i]<<" cells split"<<vcl_endl;
-    if(startPtr > endPtr) vcl_cout<<"     Rolled over Buffer... "<<vcl_endl;
+    //vcl_cout<<"Buffer @"<<i<<": ["<<startPtr<<','<<endPtr<<"] ("
+            //<<freeSpace<<" free cells)  "
+            //<<output_debug_[i]<<" cells split"<<vcl_endl;
+    //if(startPtr > endPtr) vcl_cout<<"     Rolled over Buffer... "<<vcl_endl;
     if (output_debug_[i] == -666) {
       vcl_cout<<"buffer @ "<<i<<" is out of space post refine. freeSpace = "<<freeSpace
               <<"  mem_ptrs = "<<startPtr<<','<<endPtr<<vcl_endl;
@@ -1741,11 +1737,10 @@ bool boxm_update_bit_scene_manager::refine()
       vcl_cout<<"buffer @ "<<i<<" has bad block pointer!!! freeSpace = "<<freeSpace
               <<"  mem_ptrs = "<<startPtr<<','<<endPtr<<vcl_endl;
     }
-#if 0
-    else {
-      vcl_cout<<output_debug_[i]<<", ";
+    else if (output_debug_[i] == -663) {
+      vcl_cout<<"buffer @ "<<i<<" failed on refine!!! freeSpace = "<<freeSpace
+              <<"  mem_ptrs = "<<startPtr<<','<<endPtr<<vcl_endl;    
     }
-#endif
   }
   vcl_cout<<vcl_endl;
   /****************************************************************/

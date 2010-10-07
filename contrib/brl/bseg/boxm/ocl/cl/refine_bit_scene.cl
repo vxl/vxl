@@ -156,11 +156,12 @@ refine_bit_scene(__constant  RenderSceneInfo    * linfo,
     //------------------------------------------------------------------------
     
     //Iterate over each tree in buffer=gid      
-    for(int i=0; i<numBlocks; i++) {
+    for(int subIndex=0; subIndex<numBlocks; subIndex++) {
       
       //1. get current tree information
-      (*local_tree)    = as_uchar16(tree_array[gid*linfo->tree_len + i]);
-      (*refined_tree)  = (*local_tree);
+      uchar16 currTree = as_uchar16(tree_array[gid*linfo->tree_len + subIndex]);
+      (*local_tree)    = currTree; 
+      (*refined_tree)  = currTree;
       int currTreeSize = num_cells(local_tree);
          
       //initialize cumsum buffer and cumIndex
@@ -174,20 +175,22 @@ refine_bit_scene(__constant  RenderSceneInfo    * linfo,
                                 local_tree,
                                 refined_tree, 
                                 currTreeSize, 
-                                i,
+                                subIndex,
                                 alpha_array,
                                 prob_thresh, 
                                 cumsum,
                                 bit_lookup,
                                 output);
+      if(newSize != num_cells(refined_tree)) {
+        output[gid] = -663; 
+        return;
+      }
 
-                                
       //4. update start pointer (as data will be moved up to the end)
       startPtr = (startPtr+currTreeSize)%linfo->data_len;
       
       //5. if there's enough space, move tree
       int freeSpace = (startPtr >= endPtr)? startPtr-endPtr : linfo->data_len - (endPtr-startPtr);
-      
 
       //5.5 if the tree was refined (and it fits)
       if(newSize > currTreeSize && newSize <= freeSpace) {
@@ -198,9 +201,8 @@ refine_bit_scene(__constant  RenderSceneInfo    * linfo,
         uchar lo = (uchar)(buffOffset & 255);
         (*refined_tree).a = hi; 
         (*refined_tree).b = lo;
-        tree_array[gid*linfo->tree_len + i] = as_int4((*refined_tree));
+        tree_array[gid*linfo->tree_len + subIndex] = as_int4((*refined_tree));
         
-        //load data into local memory one at a time, reformat it, and put it back
         // or figure out a data index scheme so that you can rifle through each node... 
         int cumIndex  = 1;
         int oldDataPtr = data_index_opt2(local_tree, 0, bit_lookup, cumsum, &cumIndex); //old root offset within buffer
@@ -220,8 +222,8 @@ refine_bit_scene(__constant  RenderSceneInfo    * linfo,
           //--------------------------------------------------------------------
           //if parent bit is 1, then you're a valid cell
           int pj = (j-1)>>3;           //Bit_index of parent bit    
-          bool validCellOld = tree_bit_at(local_tree, pj) || (i==0); 
-          bool validCellNew = tree_bit_at(refined_tree, pj) || (i==0); 
+          bool validCellOld = tree_bit_at(local_tree, pj) || (j==0); 
+          bool validCellNew = tree_bit_at(refined_tree, pj) || (j==0); 
           if(validCellOld && validCellNew) {
         
             //move root data to new location
@@ -257,7 +259,7 @@ refine_bit_scene(__constant  RenderSceneInfo    * linfo,
         uchar lo = (uchar)(buffOffset & 255);
         (*refined_tree).a = hi; 
         (*refined_tree).b = lo;
-        tree_array[gid*linfo->tree_len + i] = as_int4((*refined_tree));
+        tree_array[gid*linfo->tree_len + subIndex] = as_int4((*refined_tree));
         
         //6b. move data up to end pointer
         int cumIndex  = 1;
@@ -277,7 +279,8 @@ refine_bit_scene(__constant  RenderSceneInfo    * linfo,
         //6c. update endPtr
         endPtr = (endPtr+currTreeSize)%linfo->data_len;
       }
-      //otherwise it looks like the buffer is full, 
+      
+      //THIS SHOULDN"T EVER HAPPEN, buffer is full even though the tree didn't refine! 
       else {
         //move start pointer back
         startPtr = (startPtr - currTreeSize + linfo->data_len)%linfo->data_len;
@@ -286,7 +289,6 @@ refine_bit_scene(__constant  RenderSceneInfo    * linfo,
         mem_ptrs[gid].y = endPtr; 
         break;
       }
-
 
     } //end for loop
 
