@@ -134,6 +134,9 @@ SOURCE=.\vbl_test_shared_pointer.cxx
 # Begin Source File
 SOURCE=.\vbl_test_local_minima.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\vbl_test_attributes.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

@@ -201,6 +201,12 @@ SOURCE=.\mbl_mask_on_mask.cxx
 # Begin Source File
 SOURCE=.\mbl_apply_mask_to_file.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\mbl_convert_indices_to_mask.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\mbl_convert_mask_to_indices.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
