@@ -7,6 +7,7 @@
 
 #include <msm/msm_ref_shape_model.h>
 #include <msm/msm_aligner.h>
+#include <vcl_iosfwd.h>
 
 //: Contains mean/modes etc of a shape model
 //  Container to hold the components of a statistical shape model.

@@ -7,13 +7,12 @@
 
 #include <msm/msm_param_limiter.h>
 #include <vnl/vnl_vector.h>
+#include <vcl_iosfwd.h>
 
 //: No limits applied to parameters
 class msm_no_limiter : public msm_param_limiter
 {
- private:
  public:
-
   msm_no_limiter();
 
   virtual ~msm_no_limiter() {}
@@ -31,7 +30,6 @@ class msm_no_limiter : public msm_param_limiter
   //: Define number of SDs to limit at
   void set_n_sds(double n_sds);
 
-
   //: Name of the class
   virtual vcl_string is_a() const;
 
@@ -46,7 +44,6 @@ class msm_no_limiter : public msm_param_limiter
 
   //: Load class from binary file stream
   virtual void b_read(vsl_b_istream& bfs);
-
 };
 
 #endif // msm_no_limiter_h_

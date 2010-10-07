@@ -7,6 +7,7 @@
 
 #include <msm/msm_param_limiter.h>
 #include <vnl/vnl_vector.h>
+#include <vcl_iosfwd.h>
 
 //: Force param.s to lie in ellipsoid defined by variances.
 //  An axis aligned ellipsoid is defined by the variances along

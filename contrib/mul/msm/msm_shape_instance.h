@@ -7,6 +7,7 @@
 
 #include <msm/msm_ref_shape_instance.h>
 #include <msm/msm_shape_model.h>
+#include <vcl_iosfwd.h>
 
 //: Representation of an instance of a shape model.
 //  Contains shape model parameters and the parameters of
