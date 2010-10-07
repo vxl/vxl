@@ -1,5 +1,6 @@
 #include <mbl/mbl_cloneables_factory.h>
-
+//:
+// \file
 #include <msm/msm_translation_aligner.h>
 #include <msm/msm_zoom_aligner.h>
 #include <msm/msm_similarity_aligner.h>
@@ -28,5 +29,4 @@ void msm_add_all_loaders()
   vsl_add_to_binary_loader(msm_no_limiter());
   vsl_add_to_binary_loader(msm_box_limiter());
   vsl_add_to_binary_loader(msm_ellipsoid_limiter());
-
 }
