@@ -134,9 +134,8 @@ cast_ray(
       int data_ptr = traverse_three(&local_tree[llid], 
                                     posx,posy,posz, 
                                     &cell_minx, &cell_miny, &cell_minz, &cell_len); 
-      data_ptr = data_index_opt2(&local_tree[llid], data_ptr, bit_lookup, &cumsum[llid*10], &cumIndex);
-      //HACKY BUG FIX: hard coded 16 here because data_len = 65536 = 2^16.  
-      data_ptr = (block.x*linfo->data_len) + (data_ptr - ((data_ptr>>16)<<16));  
+      data_ptr = data_index_opt2(&local_tree[llid], data_ptr, bit_lookup, &cumsum[llid*10], &cumIndex, linfo->data_len);
+      data_ptr = (block.x*linfo->data_len) + data_ptr;  
       
       // check to see how close tnear and tfar are
       cell_minx = (ray_dx > 0.0f) ? cell_minx+cell_len : cell_minx; 

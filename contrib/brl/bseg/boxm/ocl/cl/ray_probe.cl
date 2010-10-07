@@ -170,7 +170,7 @@ void ray_probe(__constant  RenderSceneInfo * linfo,
       int data_ptr = traverse_three(&local_tree[llid], 
                                     posx,posy,posz, 
                                     &cell_minx, &cell_miny, &cell_minz, &cell_len); 
-      data_ptr = data_index_opt2(&local_tree[llid], data_ptr, bit_lookup, &cumsum[llid*10], &cumIndex);
+      data_ptr = data_index_opt2(&local_tree[llid], data_ptr, bit_lookup, &cumsum[llid*10], &cumIndex, linfo->data_len);
       data_ptr = block.x * linfo->data_len + data_ptr;
       
       // check to see how close tnear and tfar are

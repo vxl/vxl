@@ -194,7 +194,7 @@ int data_index_opt(int rIndex, __local uchar* tree, ushort bit_index, __constant
 #ifndef CYCLECOUNT
 
 //optimized to use cumulative sum counts
-int data_index_opt2(__local uchar* tree, ushort bit_index, __constant uchar* bit_lookup, __local uchar* cumsum, int *cumIndex)
+int data_index_opt2(__local uchar* tree, ushort bit_index, __constant uchar* bit_lookup, __local uchar* cumsum, int *cumIndex, int data_len)
 {
   //root and first gen are special case, return just the root offset + bit_index 
   int count = (int)as_ushort((uchar2) (tree[11], tree[10]));
@@ -215,8 +215,9 @@ int data_index_opt2(__local uchar* tree, ushort bit_index, __constant uchar* bit
   bits_before_parent       = bit_lookup[bits_before_parent];
   uchar finestleveloffset = (bit_index-1)&(8-1);              //[0-7] bit index of cell being looked up (@bit_index)
   count += (cumsum[byte_index-1] + bits_before_parent)*8 + 1 + finestleveloffset; 
-  return count;
-
+  
+  //HARD CODED HACK TO ENSURE THAT COUNT IS LESS THAN DATALEN
+  return count - ((count>>16)<<16);
 }
 
 //takes three floats instaed of float4s

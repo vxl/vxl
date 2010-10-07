@@ -631,7 +631,20 @@ bool boxm_update_bit_scene_manager::build_refining_program()
       vcl_cerr << "Error: boxm_update_bit_scene_manager : failed to load kernel source (refine_bit_scene functions)\n";
       return false;
     }
-    return this->build_kernel_program(program_,"")==SDK_SUCCESS;
+    
+    vcl_string options = "";
+    if(scene_info_->root_level == 1) {
+      options = "-D MAXINNER=1";
+    } else if(scene_info_->root_level == 2) {
+      options = "-D MAXINNER=9";
+    } else if(scene_info_->root_level == 3) {
+      options = "-D MAXINNER=73";
+    } else {
+      vcl_cout<<"build_refining_program::root level is not 1, 2 or 3, invalid scene info"<<vcl_endl;
+      return false;
+    }
+    
+    return this->build_kernel_program(program_,options)==SDK_SUCCESS;
 }
 
 bool boxm_update_bit_scene_manager::build_query_point_program()
@@ -1739,6 +1752,14 @@ bool boxm_update_bit_scene_manager::refine()
     }
     else if (output_debug_[i] == -663) {
       vcl_cout<<"buffer @ "<<i<<" failed on refine!!! freeSpace = "<<freeSpace
+              <<"  mem_ptrs = "<<startPtr<<','<<endPtr<<vcl_endl;    
+    }
+    else if (output_debug_[i] == -662) {
+      vcl_cout<<"buffer @ "<<i<<" failed to initialize correct number of cells !!! freeSpace = "<<freeSpace
+              <<"  mem_ptrs = "<<startPtr<<','<<endPtr<<vcl_endl;    
+    }
+    else if (output_debug_[i] == -661) {
+      vcl_cout<<"buffer @ "<<i<<" valid old cell not valid new !!! freeSpace = "<<freeSpace
               <<"  mem_ptrs = "<<startPtr<<','<<endPtr<<vcl_endl;    
     }
   }
