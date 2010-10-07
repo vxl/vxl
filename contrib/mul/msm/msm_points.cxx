@@ -36,6 +36,7 @@ msm_points::~msm_points()
 //: Set to hold n points (initially all (x,y))
 void msm_points::set_size(unsigned n, double x, double y)
 {
+  if (n==size()) return;
   v_.set_size(n*2);
   double* v=v_.data_block();
   double* v_end=v+2*n;

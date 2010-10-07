@@ -11,13 +11,13 @@
 #include <mbl/mbl_cloneable_ptr.h>
 #include <vcl_iosfwd.h>
 
-class msm_shape_model;
+class msm_ref_shape_model;
 
 //: Representation of an instance of a shape model in ref frame.
 //  Includes functions to fit instances to sets of points
 //  and to generate sets of points.
 //
-//  By default, all shape parameters are used and params() returns
+//  By default, all shape parameters are used and params() returns 
 //  a vector of length equal to the full number of shape modes.
 //  To use fewer modes, create a parameter vector with the desired
 //  number, and call set_params(b).
@@ -27,7 +27,7 @@ class msm_ref_shape_instance
 {
  private:
   //: Shape model of which this is an instance
-  const msm_shape_model *model_;
+  const msm_ref_shape_model *model_;
 
   //: Model parameters
   vnl_vector<double> b_;
@@ -56,13 +56,13 @@ class msm_ref_shape_instance
   ~msm_ref_shape_instance();
 
   //: Set up model (retains pointer to model)
-  void set_shape_model(const msm_shape_model& model);
+  void set_shape_model(const msm_ref_shape_model& model);
 
   //: Define limits on parameters (clone taken)
   void set_param_limiter(const msm_param_limiter& limiter);
 
   //: Current object which limits parameters
-  const msm_param_limiter& param_limiter() const
+  const msm_param_limiter& param_limiter() const 
   { return param_limiter_; }
 
   //: Current object which limits parameters (non-const)
@@ -82,10 +82,10 @@ class msm_ref_shape_instance
   void set_to_mean();
 
   //: Pointer to current model
-  const msm_shape_model* model_ptr() const { return model_; }
+  const msm_ref_shape_model* model_ptr() const { return model_; }
 
   //: Reference to current model
-  const msm_shape_model& model() const
+  const msm_ref_shape_model& model() const 
   { assert(model_!=0); return *model_; }
 
   //: Current shape parameters
@@ -115,7 +115,7 @@ class msm_ref_shape_instance
   //  the shape parameters, and assume that wt_mat are
   //  inverse covariances.
   void fit_to_points_wt_mat(const msm_points& pts,
-                            const vcl_vector<msm_wt_mat_2d>& wt_mat);
+                        const vcl_vector<msm_wt_mat_2d>& wt_mat);
 
   //: Version number for I/O
   short version_no() const;

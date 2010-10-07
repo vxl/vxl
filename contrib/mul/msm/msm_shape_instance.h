@@ -6,7 +6,7 @@
 // \author Tim Cootes
 
 #include <msm/msm_ref_shape_instance.h>
-#include <vcl_iosfwd.h>
+#include <msm/msm_shape_model.h>
 
 //: Representation of an instance of a shape model.
 //  Contains shape model parameters and the parameters of
@@ -23,6 +23,9 @@
 class msm_shape_instance
 {
  private:
+  //: Shape model of which this is an instance
+  const msm_shape_model *model_;
+
   //: Shape in reference frame
   msm_ref_shape_instance ref_shape_;
 
@@ -54,11 +57,11 @@ class msm_shape_instance
 
   //: Pointer to current shape model
   const msm_shape_model* model_ptr() const
-  { return ref_shape_.model_ptr(); }
+  { return model_; }
 
   //: Reference to current model
   const msm_shape_model& model() const
-  { return ref_shape_.model(); }
+  { assert(model_!=0); return *model_; }
 
   //: Current pose parameters
   const vnl_vector<double>& pose() const { return pose_; }

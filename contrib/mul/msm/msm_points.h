@@ -42,6 +42,7 @@ class msm_points
   unsigned size() const { return v_.size()/2; }
 
   //: Set to hold n points (initially all (x,y))
+  //  If n==size() then does not change anything.
   void set_size(unsigned n, double x=0, double y=0);
 
   //: Set point i

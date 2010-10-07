@@ -7,6 +7,7 @@
 #include <vnl/vnl_vector.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vcl_cassert.h>
+#include <vcl_cstddef.h> // for std::size_t
 
 //=======================================================================
 

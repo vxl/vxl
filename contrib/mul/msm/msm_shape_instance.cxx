@@ -40,6 +40,7 @@ msm_shape_instance::~msm_shape_instance()
 //: Set up model (retains pointer to model)
 void msm_shape_instance::set_shape_model(const msm_shape_model& model)
 {
+  model_=&model;
   ref_shape_.set_shape_model(model);
   pose_ = model.default_pose();
 

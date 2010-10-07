@@ -12,7 +12,8 @@
 #include <vnl/algo/vnl_svd.h>
 
 #include <vcl_cstdlib.h>  // for vcl_atoi() & vcl_abort()
-#include <msm/msm_shape_model.h>
+#include <msm/msm_ref_shape_instance.h>
+#include <msm/msm_ref_shape_model.h>
 #include <msm/msm_no_limiter.h>
 #include <mbl/mbl_matxvec.h>
 #include <mbl/mbl_matrix_products.h>
@@ -36,7 +37,7 @@ msm_ref_shape_instance::~msm_ref_shape_instance()
 }
 
 //: Set up model (retains pointer to model)
-void msm_ref_shape_instance::set_shape_model(const msm_shape_model& model)
+void msm_ref_shape_instance::set_shape_model(const msm_ref_shape_model& model)
 {
   model_=&model;
 

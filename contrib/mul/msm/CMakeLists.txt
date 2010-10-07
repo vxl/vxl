@@ -12,6 +12,7 @@ doxygen_add_library(contrib/mul/msm
 SET(msm_sources
   msm_add_all_loaders.h       msm_add_all_loaders.cxx
   msm_points.h                msm_points.cxx
+  msm_ref_shape_model.h       msm_ref_shape_model.cxx
   msm_shape_model.h           msm_shape_model.cxx
   msm_shape_model_builder.h   msm_shape_model_builder.cxx
   msm_ref_shape_instance.h    msm_ref_shape_instance.cxx

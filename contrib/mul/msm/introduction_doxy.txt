@@ -25,13 +25,18 @@
 * where mean is the mean shape, P is a matrix of modes of variation
 * and b is a vector of shape parameters.
 *
-* This information, along with the aligner type used, is stored in
-* the msm_shape_model class.
+* This information is stored in the msm_ref_shape_model class.
+* The derived msm_shape_model class also stores information about
+* the msm_aligner and default pose associated with the model.
 *
 * The shape model can be built from a set of msm_points objects using
 * the msm_shape_model_builder.
 *
-* An instance of a shape is defined by 
+* An instance of a shape in the reference frame is defined by
+* the shape parameters, b.  
+* This is encoded in the msm_ref_shape_instance class.
+*
+* An instance of a shape in a target frame is defined by 
 * - A set of shape parameters, b
 * - A pose (the parameters defining the model to world frame transform)
 * This information is encoded in the msm_shape_instance class.
