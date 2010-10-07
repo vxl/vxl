@@ -6,6 +6,7 @@
 // \author Tim Cootes
 
 #include <vcl_cassert.h>
+#include <vcl_cstddef.h>
 #include <vcl_iosfwd.h>
 #include <vcl_string.h>
 #include <vsl/vsl_fwd.h>
@@ -42,7 +43,7 @@ class msm_curve
   ~msm_curve() {}
 
   //: Number of points defining the curve
-  size_t size() const { return index_.size(); }
+  vcl_size_t size() const { return index_.size(); }
 
   void set(const vcl_vector<unsigned>& index,
            bool open=true, vcl_string name="");
