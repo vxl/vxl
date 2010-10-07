@@ -20,6 +20,8 @@ static void vbl_test_attributes_1d()
   TEST("min,max,bounds 1d", mnv  == 0.04 && mxv  == 10.0
                          && mnvb == 0.04 && mxvb == 10.0, true);
   TEST_NEAR("mean 1d", mn, 1.615, 1e-10);
+  mn = median(v);
+  TEST("median 1d", mn, 1.0);
 }
 
 static void vbl_test_attributes_2d()
@@ -32,11 +34,11 @@ static void vbl_test_attributes_2d()
   double mnvb = 0.0, mxvb = 0.0;
   bounds(v, mnvb, mxvb);
   double mn = mean(v);
-  bool success = mnv == 0.04 && mxv == 10.0;
-  success = success && mnvb == 0.04 && mxvb == 10.0;
   TEST("min,max,bounds 2d", mnv  == 0.04 && mxv  == 10.0
                          && mnvb == 0.04 && mxvb == 10.0, true);
   TEST_NEAR("mean 2d", mn, 1.123, 1e-10);
+  mn = median(v);
+  TEST("median 2d", mn, 1.0);
 }
 
 static void vbl_test_attributes_3d()
@@ -49,11 +51,11 @@ static void vbl_test_attributes_3d()
   double mnvb = 0.0, mxvb = 0.0;
   bounds(v, mnvb, mxvb);
   double mn = mean(v);
-  bool success = mnv == 0.04 && mxv == 10.0;
-  success = success && mnvb == 0.04 && mxvb == 10.0;
   TEST("min,max,bounds 3d", mnv  == 0.04 && mxv  == 10.0
                          && mnvb == 0.04 && mxvb == 10.0, true);
-  TEST_NEAR(" mean 3d", mn, 1.03075, 1e-10);
+  TEST_NEAR("mean 3d", mn, 1.03075, 1e-10);
+  mn = median(v);
+  TEST("median 3d", mn, 1.0);
 }
 
 static void vbl_test_attributes()
