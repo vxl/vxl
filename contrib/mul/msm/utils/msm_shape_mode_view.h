@@ -7,7 +7,7 @@
 // \author Tim Cootes
 
 #include <vgl/vgl_box_2d.h>
-#include <msm/msm_shape_instance.h>
+#include <msm/msm_ref_shape_instance.h>
 
 class vsml_smv_graphics;
 
@@ -23,8 +23,8 @@ class vsml_smv_graphics;
 //  select which mode is required.
 class msm_shape_mode_view {
 private:
-  const msm_shape_model* shape_model_;
-  msm_shape_instance sm_inst_;
+  const msm_ref_shape_model* shape_model_;
+  msm_ref_shape_instance sm_inst_;
  
   vnl_vector<double> b_sd_;
   vnl_vector<double> b_;
@@ -57,10 +57,10 @@ public:
   virtual ~msm_shape_mode_view() {}
 
     //: Define shape model
-  void set_shape_model(const msm_shape_model&);
+  void set_shape_model(const msm_ref_shape_model&);
 
     //: Current shape model
-  const msm_shape_model& shape_model() const;
+  const msm_ref_shape_model& shape_model() const;
 
     //: When true, overlap all the shapes to highlight changes
   bool overlap_shapes() const { return overlap_shapes_; }

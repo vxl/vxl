@@ -5,7 +5,7 @@
 // \author Tim Cootes
 
 #include "msm_shape_mode_view.h"
-#include <msm/msm_shape_model.h>
+#include <msm/msm_ref_shape_model.h>
 #include <vcl_cmath.h>
 #include <vsl/vsl_indent.h>
 #include <vcl_cassert.h>
@@ -40,7 +40,7 @@ void msm_shape_mode_view::set_overlap_shapes(bool b)
 //: Define shape model
 //=======================================================================
 
-void msm_shape_mode_view::set_shape_model(const msm_shape_model& sm)
+void msm_shape_mode_view::set_shape_model(const msm_ref_shape_model& sm)
 {
   shape_model_ = &sm;
   sm_inst_.set_shape_model(*shape_model_);
@@ -78,7 +78,7 @@ void msm_shape_mode_view::set_display_width(double width)
 
 
 //: Current shape model
-const msm_shape_model& msm_shape_mode_view::shape_model() const
+const msm_ref_shape_model& msm_shape_mode_view::shape_model() const
 {
   assert(shape_model_!=0);
   return *shape_model_;
@@ -125,7 +125,7 @@ void msm_shape_mode_view::compute_shapes(unsigned n_shapes,
   {
     b_(mode_-1) = min_b + db*i;
     sm_inst_.set_params(b_);
-    points_[i]=sm_inst_.model_points();
+    points_[i]=sm_inst_.points();
     if (i==0)
       bbox=points_[i].bounds();
     else
