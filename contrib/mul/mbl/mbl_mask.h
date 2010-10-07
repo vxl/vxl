@@ -149,4 +149,18 @@ void mbl_load_mask(mbl_mask & mask, const char * filename);
 //: Load from file
 void mbl_load_mask(mbl_mask & mask, const vcl_string &filename);
 
+//: Convert a mask to a list of indices.
+// \param mask Input mask.
+// \retval inds List of (zero-based) indices i where mask[i]==true.
+void mbl_mask_to_indices(const mbl_mask& mask, vcl_vector<unsigned>& inds);
+
+//: Convert a list of indices to a mask.
+// \param inds List of (zero-based) indices.
+// \param n The length of the output mask.
+// \retval mask Output mask. mask[i]==true for all i in \a inds
+void mbl_indices_to_mask(const vcl_vector<unsigned>& inds, 
+                         const unsigned n, 
+                         mbl_mask& mask);
+
+
 #endif // mbl_mask_h_

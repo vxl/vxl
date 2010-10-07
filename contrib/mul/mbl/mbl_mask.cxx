@@ -188,3 +188,28 @@ void mbl_load_mask(mbl_mask & mask, const vcl_string &filename)
 {
   mbl_load_mask( mask, filename.c_str() );
 }
+
+
+//: Convert a mask to a list of indices.
+void mbl_mask_to_indices(const mbl_mask& mask, vcl_vector<unsigned>& inds)
+{
+  inds.clear();
+  for (unsigned i=0,n=mask.size(); i<n; ++i)
+  {
+    if (mask[i]) inds.push_back(i);
+  }
+}
+
+
+//: Convert a list of indices to a mask.
+void mbl_indices_to_mask(const vcl_vector<unsigned>& inds, 
+                         const unsigned n, 
+                         mbl_mask& mask)
+{
+  mask.resize(n, false);
+  for (unsigned i=0, m=inds.size(); i<m; ++i)
+  {
+    mask[inds[i]]=true;
+  }
+}
+

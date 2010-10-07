@@ -251,6 +251,19 @@ void test_mask()
   index_masks_match &= (masks[1] == mask2);
   index_masks_match &= (masks[2] == mask4);
   TEST("Correctness of masks from index set", index_masks_match, true);
+
+  // Test mbl_mask_to_indices() and mbl_indices_to_mask()
+  vcl_cout << "\nTesting mbl mask-indices conversions" << vcl_endl;
+  const unsigned n=10;
+  mbl_mask mask_true(n, false);
+  mask_true[1]=true; mask_true[3]=true; mask_true[6]=true; mask_true[8]=true;
+  vcl_vector<unsigned> inds, inds_true;
+  inds_true.push_back(1); inds_true.push_back(3); inds_true.push_back(6); inds_true.push_back(8); 
+  mbl_mask_to_indices(mask_true, inds);
+  TEST("mbl_mask_to_indices()", inds==inds_true, true);
+  mbl_mask mask;
+  mbl_indices_to_mask(inds_true, n, mask);
+  TEST("mbl_indices_to_mask()", mask==mask_true, true);
 }
 
 TESTMAIN(test_mask);
