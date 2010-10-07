@@ -33,6 +33,8 @@ MANPAGE_SOURCES += vbl_quadruple.txx
 MANPAGE_SOURCES += vbl_checked_delete.h
 MANPAGE_SOURCES += vbl_scoped_ptr.h
 
+MANPAGE_SOURCES += vbl_attributes.txx
+
 # debugging
 
 DEFINES += -DBUILDING_VBL_DLL

@@ -20,6 +20,7 @@ SOURCES += msm_shape_model.cxx
 SOURCES += msm_box_limiter.cxx
 SOURCES += msm_zoom_aligner.cxx
 SOURCES += msm_ellipsoid_limiter.cxx
+SOURCES += msm_ref_shape_model.cxx
 
 SUBDIRS += tools utils
 
