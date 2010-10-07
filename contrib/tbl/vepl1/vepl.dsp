@@ -1,4 +1,4 @@
-# Microsoft Developer Studio Project File - Name="vepl" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="vepl1" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
@@ -7,25 +7,25 @@
 # /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/tbl" == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
 #  == override in output directory
-# vepl  == name of output library
+# vepl1  == name of output library
 
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
 
-CFG=vepl - Win32 Debug
+CFG=vepl1 - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "vepl.mak".
+!MESSAGE NMAKE /f "vepl1.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "vepl.mak" CFG="vepl - Win32 Debug"
+!MESSAGE NMAKE /f "vepl1.mak" CFG="vepl1 - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "vepl - Win32 Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "vepl - Win32 Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "vepl1 - Win32 Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "vepl1 - Win32 Release" (based on "Win32 (x86) Static Library")
 # Begin Project
 # PROP AllowPerConfigDependencies 0
 # PROP Scc_ProjName ""
@@ -33,7 +33,7 @@ CFG=vepl - Win32 Debug
 CPP=cl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "vepl - Win32 Release"
+!IF  "$(CFG)" == "vepl1 - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -59,7 +59,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo
 
-!ELSEIF  "$(CFG)" == "vepl - Win32 Debug"
+!ELSEIF  "$(CFG)" == "vepl1 - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -87,8 +87,8 @@ LIB32=link.exe -lib
 
 # Begin Target
 
-# Name "vepl - Win32 Release"
-# Name "vepl - Win32 Debug"
+# Name "vepl1 - Win32 Release"
+# Name "vepl1 - Win32 Debug"
 
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
