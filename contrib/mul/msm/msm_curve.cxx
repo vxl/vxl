@@ -15,6 +15,7 @@
 #include <mbl/mbl_parse_keyword_list.h>
 #include <vul/vul_string.h>
 #include <vcl_iterator.h> // For vcl_back_inserter
+#include <vcl_cassert.h>
 
 // Default Constructor
 msm_curve::msm_curve()
@@ -78,7 +79,6 @@ void msm_curve::config_from_stream(vcl_istream& is)
   // Check for unused props
   mbl_read_props_look_for_unused_props(
       "msm_curve::config_from_stream", props, mbl_read_props_type());
-
 }
 
 //=======================================================================
@@ -90,7 +90,7 @@ void msm_curve::print_summary(vcl_ostream& os) const
   os<<" { name: "<<name_<<" open: ";
   if (open_) os<<"true"; else os<<"false";
   os<<" indices: { ";
-  for (unsigned i=0;i<index_.size();++i) os<<index_[i]<<" ";
+  for (unsigned i=0;i<index_.size();++i) os<<index_[i]<<' ';
   os<<"} } ";
 }
 
@@ -121,12 +121,11 @@ void msm_curve::b_read(vsl_b_istream& bfs)
       break;
     default:
       vcl_cerr << "msm_curve::b_read() :\n"
-               << "Unexpected version number " << version << vcl_endl;
+               << "Unexpected version number " << version << '\n';
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }
-
 
 
 //=======================================================================
@@ -181,7 +180,7 @@ msm_curves::msm_curves(unsigned lo, unsigned hi,
 //: Parse parameters in stream
 //  Expects
 // \verbatim
-// { 
+// {
 //   curve: { name: Chin open: true indices: { 0 1 2 3 4 5 6 } }
 //   curve: { name: Nose open: false indices: { 11 : 15 } }
 // }
@@ -217,7 +216,7 @@ bool msm_curves::read_text_file(const vcl_string& path)
   if (label!="curves:")
   {
     throw mbl_exception_parse_error("msm_curves::read_text_file: Expected 'curves', got: "+label);
-    return false; 
+    return false;
   }
   config_from_stream(ifs);
   return true;
@@ -226,12 +225,12 @@ bool msm_curves::read_text_file(const vcl_string& path)
 //: Stream output operator
 vcl_ostream& operator<<(vcl_ostream& os,const msm_curves& c)
 {
-  os<<"curves: {"<<vcl_endl;
+  os<<"curves: {\n";
   for (unsigned i=0;i<c.size();++i)
   {
     os<<"  curve: "<<c[i]<<vcl_endl;
   }
-  os<<"}"<<vcl_endl;
+  os<<'}'<<vcl_endl;
   return os;
 }
 
@@ -260,7 +259,7 @@ void vsl_b_read(vsl_b_istream& bfs, msm_curves& c)
       break;
     default:
       vcl_cerr << "vsl_b_read(bfs,msm_curves) :\n"
-               << "Unexpected version number " << version << vcl_endl;
+               << "Unexpected version number " << version << '\n';
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }

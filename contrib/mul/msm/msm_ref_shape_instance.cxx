@@ -4,7 +4,6 @@
 // \brief Representation of an instance of a shape model in ref frame.
 // \author Tim Cootes
 
-#include <vcl_iostream.h>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_io.h>
 #include <vnl/io/vnl_io_vector.h>
@@ -12,6 +11,9 @@
 #include <vnl/algo/vnl_svd.h>
 
 #include <vcl_cstdlib.h>  // for vcl_atoi() & vcl_abort()
+#include <vcl_iostream.h>
+#include <vcl_cassert.h>
+
 #include <msm/msm_ref_shape_instance.h>
 #include <msm/msm_ref_shape_model.h>
 #include <msm/msm_no_limiter.h>
@@ -115,7 +117,7 @@ void msm_ref_shape_instance::fit_to_points(const msm_points& pts,
   if (use_prior_ && pt_var>0.0)
   {
     const vnl_vector<double>& var = model().mode_var();
-    for (unsigned i=0;i<b_.size();++i) 
+    for (unsigned i=0;i<b_.size();++i)
       b_[i]*=var[i]/(var[i]+pt_var);
   }
 
@@ -123,10 +125,11 @@ void msm_ref_shape_instance::fit_to_points(const msm_points& pts,
 
   points_valid_=false;
 }
+
 void msm_calc_WP(const vnl_matrix<double>& P,
-             const vnl_vector<double>& wts,
-             unsigned n_modes,
-             vnl_matrix<double>& WP)
+                 const vnl_vector<double>& wts,
+                 unsigned n_modes,
+                 vnl_matrix<double>& WP)
 {
   unsigned nr = P.rows();
   assert(nr==wts.size()*2);
@@ -152,9 +155,9 @@ void msm_calc_WP(const vnl_matrix<double>& P,
 
 // Premultiply P by block diagonal composed of wt_mat
 void msm_calc_WP(const vnl_matrix<double>& P,
-             const vcl_vector<msm_wt_mat_2d>& wt_mat,
-             unsigned n_modes,
-             vnl_matrix<double>& WP)
+                 const vcl_vector<msm_wt_mat_2d>& wt_mat,
+                 unsigned n_modes,
+                 vnl_matrix<double>& WP)
 {
   unsigned nr = P.rows();
   assert(nr==wt_mat.size()*2);
@@ -203,11 +206,11 @@ void msm_solve_sym_eqn(const vnl_matrix<double>& M,
 
 // Solve weighted version of Pb=dx, ie P'WPb=P'Wdx
 void msm_solve_for_b(const vnl_matrix<double>& P,
-             const vnl_vector<double>& var,
-             const vnl_vector<double>& wts,
-             const vnl_vector<double>& dx,
-             unsigned n_modes,
-             vnl_vector<double>& b, bool use_prior)
+                     const vnl_vector<double>& var,
+                     const vnl_vector<double>& wts,
+                     const vnl_vector<double>& dx,
+                     unsigned n_modes,
+                     vnl_vector<double>& b, bool use_prior)
 {
   vnl_matrix<double> WP;
   msm_calc_WP(P,wts,n_modes,WP);
@@ -228,11 +231,11 @@ void msm_solve_for_b(const vnl_matrix<double>& P,
 // Solve weighted version of Pb=dx, ie P'WPb=P'Wdx
 // W is block diagonal, with blocks wt_mat[i] (symmetrix 2x2)
 void msm_solve_for_b(const vnl_matrix<double>& P,
-             const vnl_vector<double>& var,
-             const vcl_vector<msm_wt_mat_2d>& wt_mat,
-             const vnl_vector<double>& dx,
-             unsigned n_modes,
-             vnl_vector<double>& b, bool use_prior)
+                     const vnl_vector<double>& var,
+                     const vcl_vector<msm_wt_mat_2d>& wt_mat,
+                     const vnl_vector<double>& dx,
+                     unsigned n_modes,
+                     vnl_vector<double>& b, bool use_prior)
 {
   vnl_matrix<double> WP;
   msm_calc_WP(P,wt_mat,n_modes,WP);
@@ -253,7 +256,7 @@ void msm_solve_for_b(const vnl_matrix<double>& P,
 //: Finds parameters and pose to best match to points
 //  Errors on point i are weighted by wts[i]
 void msm_ref_shape_instance::fit_to_points_wt(const msm_points& pts,
-                        const vnl_vector<double>& wts)
+                                              const vnl_vector<double>& wts)
 {
   // Catch case when fitting to self
   if (&pts == &points_) return;
@@ -270,21 +273,23 @@ void msm_ref_shape_instance::fit_to_points_wt(const msm_points& pts,
 
   points_valid_=false;
 }
-/*
+
+#if 0
 // Calculates W2=T'WT where T is 2x2 matrix (a,-b;b,a)
 void msm_transform_wt_mat(const vnl_double_2x2& W,
-                     double a, double b, vnl_double_2x2& W2)
+                          double a, double b, vnl_double_2x2& W2)
 {
   W2(0,0)=a*a*W[0][0]+2*a*b*W[0][1]+b*b*W[1][1];
   W2(0,1)=a*a*W[0][1]+a*b*(W(1,1)-W[0][0])-b*b*W[0][1];
   W2(1,0)=W2(0,1);
   W2(1,1)=a*a*W[1][1]-2*a*b*W[0][1]+b*b*W[0][0];
 }
-*/
+#endif // 0
+
 //: Finds parameters and pose to best match to points
 //  Errors on point i are weighted by wt_mat[i] in target frame
 void msm_ref_shape_instance::fit_to_points_wt_mat(const msm_points& pts,
-                        const vcl_vector<msm_wt_mat_2d>& wt_mat)
+                                                  const vcl_vector<msm_wt_mat_2d>& wt_mat)
 {
   // Catch case when fitting to self
   if (&pts == &points_) return;
@@ -371,7 +376,6 @@ void msm_ref_shape_instance::b_read(vsl_b_istream& bfs)
 
   points_valid_=false;
   points_valid_=false;
-
 }
 
 

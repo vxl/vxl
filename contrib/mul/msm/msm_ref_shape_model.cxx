@@ -10,6 +10,7 @@
 #include <vnl/io/vnl_io_vector.h>
 #include <vnl/io/vnl_io_matrix.h>
 #include <vcl_cstdlib.h>  // for vcl_atoi() & vcl_abort()
+#include <vcl_cassert.h>
 
 
 //=======================================================================
@@ -30,9 +31,9 @@ msm_ref_shape_model::~msm_ref_shape_model()
 
 //: Set up model
 void msm_ref_shape_model::set(const msm_points& mean,
-           const vnl_matrix<double>& modes,
-           const vnl_vector<double>& mode_var,
-           const msm_param_limiter& param_limiter)
+                              const vnl_matrix<double>& modes,
+                              const vnl_vector<double>& mode_var,
+                              const msm_param_limiter& param_limiter)
 {
   assert(mean.size()%2==0);
   assert(mean.size()*2==modes.rows());
