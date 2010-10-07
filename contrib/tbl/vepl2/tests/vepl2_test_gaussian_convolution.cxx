@@ -5,7 +5,7 @@
 //  Test of the vepl2_gaussian_convolution function.
 //
 // \author Peter Vanroose, K.U.Leuven, ESAT/PSI
-// \date   7 October 2002, from vepl/tests
+// \date   7 October 2002, from vepl1/tests
 
 #include <vepl2/vepl2_gaussian_convolution.h>
 #include <vcl_iostream.h>

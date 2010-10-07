@@ -9,7 +9,7 @@
 //  vepl2_dyadic_dif() and vepl2_convert().
 //
 // \author Peter Vanroose, K.U.Leuven, ESAT/PSI
-// \date   7 October 2002, from vepl/examples
+// \date   7 October 2002, from vepl1/examples
 //
 #include <vepl2/vepl2_convert.h>
 #include <vepl2/vepl2_moment.h>

@@ -31,8 +31,8 @@
 * implementation.
 *
 * For the most common case, viz. input and output image are of type
-* \c vil_image_view<T>, have a look at the \c vepl library.
-* The old \c vil1 image representation is interfaced in \c vepl2.
+* \c vil_image_view<T>, have a look at the \c vepl2 library.
+* The old \c vil1 image representation is interfaced in \c vepl1.
 *
 * This library was originally designed by Terry Boult for the TargetJr
 * package, and then ported to vxl by Peter Vanroose.

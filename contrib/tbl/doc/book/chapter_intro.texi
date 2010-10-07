@@ -29,8 +29,12 @@ that are too large to fit in memory, loading and processing them in sections.
 It provides all this efficiently by being heavily templated. This can be somewhat
 intimidating, and so there is an alternative library ...
 
-@item vepl: The Easy Image Processing Library
+@item vepl1: The Easy Image Processing Library for use with vil1
 
-vepl provides simple functions to perform the most common image processing operations.
+vepl1 provides simple functions to perform the most common image processing operations.
+
+@item vepl2: The Easy Image Processing Library for use with vil
+
+vepl2 provides simple functions to perform the most common image processing operations.
 
 @end itemize

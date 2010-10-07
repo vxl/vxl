@@ -32,9 +32,9 @@
 #include <vtol/vtol_edge_2d.h>
 #include <vtol/vtol_edge_2d_sptr.h>
 #include <vtol/vtol_intensity_face.h>
-#include <vepl/vepl_gradient_mag.h>
-#include <vepl/vepl_gaussian_convolution.h>
-#include <vepl/vepl_threshold.h>
+#include <vepl1/vepl_gradient_mag.h>
+#include <vepl1/vepl_gaussian_convolution.h>
+#include <vepl1/vepl_threshold.h>
 #include <vsrl/vsrl_point_picker.h>
 #include <vsrl/vsrl_results_dense_matcher.h>
 #include <vsrl/vsrl_3d_output.h>

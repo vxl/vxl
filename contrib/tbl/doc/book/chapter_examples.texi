@@ -7,7 +7,7 @@ The image processing equivalent of "Hello world":
 #include <vcl_iostream.h>
 #include <vil1/vil1_load.h>
 #include <vil1/vil1_save.h>
-#include <vepl/vepl_gradient_mag.h>
+#include <vepl1/vepl_gradient_mag.h>
 
 int main(int argc, char** argv)
 @{

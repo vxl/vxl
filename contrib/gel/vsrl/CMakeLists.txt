@@ -4,7 +4,7 @@ doxygen_add_library(contrib/gel/vsrl
   DEPENDS
     contrib/brl/bseg/sdet
     contrib/gel/vgel
-    contrib/tbl/vepl
+    contrib/tbl/vepl1
     core/vgui
     core/vil1
     contrib/rpl/rsdl
@@ -34,7 +34,7 @@ SET(vsrl_sources
  vsrl_region_disparity.cxx      vsrl_region_disparity.h
 )
 
-# vsrl_manager depends on vgui, on tbl/vepl and on brl/bseg/sdet
+# vsrl_manager depends on vgui, on tbl/vepl1 and on brl/bseg/sdet
 # vsrl_menus and vsrl_point_picker depend on vgui
 INCLUDE( ${MODULE_PATH}/UseVGUI.cmake )
 
@@ -71,7 +71,7 @@ IF (HAS_VGUI)
  ENDIF (BUILD_BRL)
  TARGET_LINK_LIBRARIES(vsrl vgui)
  IF (BUILD_TBL)
-  TARGET_LINK_LIBRARIES(vsrl vepl)
+  TARGET_LINK_LIBRARIES(vsrl vepl1)
  ENDIF (BUILD_TBL)
  IF (BUILD_RPL)
   TARGET_LINK_LIBRARIES(vsrl rsdl)

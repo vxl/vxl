@@ -7,7 +7,7 @@
 //  The input and output vil_image_resources are directly passed to the filter.
 //
 // \author Peter Vanroose, K.U.Leuven, ESAT/PSI
-// \date   7 October 2002, from vepl/examples
+// \date   7 October 2002, from vepl1/examples
 //
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>

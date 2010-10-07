@@ -8,7 +8,7 @@
 //  When it is short, int or float, an implicit mapping is done to 0--255.
 //
 // \author Peter Vanroose, K.U.Leuven, ESAT/PSI
-// \date   7 October 2002, from vepl/examples
+// \date   7 October 2002, from vepl1/examples
 //
 #include <vepl2/vepl2_convert.h>
 #include <vil/vil_rgb.h>
