@@ -12,6 +12,7 @@
 #include <vil/vil_image_view.h>
 
 
+
 //: Create a view which is a decimated version of src.
 // Doesn't modify underlying data. O(1).
 // \relatesalso vil_image_view
@@ -23,8 +24,9 @@ inline vil_image_view<T> vil_decimate(const vil_image_view<T> &im, unsigned i_fa
                                       unsigned j_factor=0)
 {
   if (j_factor==0) j_factor=i_factor;
+  // use (n+d-1)/n instead of ceil((double)n/d) to calcualte sizes
   return vil_image_view<T>(im.memory_chunk(), im.top_left_ptr(),
-                           im.ni()/i_factor, im.nj()/j_factor, im.nplanes(),
+                           (im.ni()+i_factor-1u)/i_factor, (im.nj()+j_factor-1u)/j_factor, im.nplanes(),
                            im.istep()*i_factor, im.jstep()*j_factor, im.planestep());
 }
 

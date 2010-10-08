@@ -23,11 +23,12 @@ inline vil3d_image_view<T> vil3d_decimate(const vil3d_image_view<T> &im,
 {
   if (j_factor==0) j_factor=i_factor;
   if (k_factor==0) k_factor=i_factor;
+  // use (n+d-1)/n instead of ceil((double)n/d) to calcualte sizes
   return vil3d_image_view<T>(
-    im.memory_chunk(), im.origin_ptr(),
-    im.ni()/i_factor, im.nj()/j_factor,  im.nk()/k_factor,im.nplanes(),
+    im.memory_chunk(), im.origin_ptr(), (im.ni()+i_factor-1u)/i_factor,
+    (im.nj()+j_factor-1u)/j_factor,  (im.nk()-k_factor-1u)/k_factor, im.nplanes(),
     im.istep()*i_factor, im.jstep()*j_factor, im.kstep()*k_factor,
-    im.planestep());
+    im.planestep() );
 }
 
 #endif // vil3d_decimate_h_
