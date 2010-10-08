@@ -4,7 +4,6 @@
 // in the host "build_refine_program" function.  
 // Also macro "MAXCELLS" must be defined for moving refined data
 //------------------------------------------------------------------------------
-
 #pragma OPENCL EXTENSION cl_khr_global_int32_base_atomics : enable
 
 /////////////////////////////////////////////////////////////////
@@ -16,13 +15,13 @@
 // on the global level, so buffers, offsets are used
 /////////////////////////////////////////////////////////////////
 int refine_tree(__constant RenderSceneInfo * linfo, 
-                __local    uchar           * unrefined_tree,
-                __local    uchar           * refined_tree,
+                __local    uchar16         * unrefined_tree,
+                __local    uchar16         * refined_tree,
                            int               tree_size, 
                            int               blockIndex,
                 __global   float           * alpha_array,
                            float             prob_thresh, 
-                __local    uchar           * cumsum, 
+                //__local    uchar           * cumsum, 
                 __constant uchar           * bit_lookup,       // used to get data_index
                 __global   float           * output)
 {
@@ -31,7 +30,8 @@ int refine_tree(__constant RenderSceneInfo * linfo,
 
   //max alpha integrated
   float max_alpha_int = (-1)*log(1.0 - prob_thresh);      
-  int cumIndex = 1;
+  
+  //initialize cumsum buffer and cumIndex
   int numSplit = 0;
   
   //no need to do depth first search, just iterate and check each node along the way
@@ -51,7 +51,8 @@ int refine_tree(__constant RenderSceneInfo * linfo,
       float side_len = linfo->block_len/(float) (1<<currDepth);
      
       //get alpha value for this cell;
-      int dataIndex = data_index_opt2(unrefined_tree, i, bit_lookup, cumsum, &cumIndex, linfo->data_len); //gets offset within buffer
+      //int dataIndex = data_index_opt2(unrefined_tree, i, bit_lookup, cumsum, &cumIndex, linfo->data_len); //gets offset within buffer
+      int dataIndex = data_index_opt(0, unrefined_tree, i, bit_lookup); 
       float alpha   = alpha_array[gid*linfo->data_len + dataIndex];
          
       //integrate alpha value
@@ -97,7 +98,7 @@ refine_bit_scene(__constant  RenderSceneInfo    * linfo,
                  __global    ushort4            * num_obs_array,    // num obs for each block
                  
                  __constant  uchar              * bit_lookup,       // used to get data_index
-                 __local     uchar              * cumsum,           // cumulative sum helper for data pointer
+                 //__local     uchar              * cumsum,           // cumulative sum helper for data pointer
                  __local     uchar16            * local_tree,       // cache current tree into local memory
                  __local     uchar16            * refined_tree,     // refined tree (need old tree to move data over)
                   
@@ -108,9 +109,11 @@ refine_bit_scene(__constant  RenderSceneInfo    * linfo,
   //global id will be the tree buffer
   unsigned gid = get_group_id(0);
   unsigned lid = get_local_id(0);
+  uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
+
       
   //go through the tree array and refine it...
-  if(gid < linfo->num_buffer) 
+  if(gid < linfo->num_buffer && llid==0) 
   {
     output[gid] == 0.0;
 
@@ -131,7 +134,7 @@ refine_bit_scene(__constant  RenderSceneInfo    * linfo,
       return;
     }
     //------------------------------------------------------------------------
-    
+
     //Iterate over each tree in buffer=gid      
     for(int subIndex=0; subIndex<numBlocks; subIndex++) {
       
@@ -140,9 +143,6 @@ refine_bit_scene(__constant  RenderSceneInfo    * linfo,
       (*local_tree)    = currTree; 
       (*refined_tree)  = currTree;
       int currTreeSize = num_cells(local_tree);
-         
-      //initialize cumsum buffer and cumIndex
-      cumsum[0] = (*local_tree).s0;                     
 
       //2. determine number of data cells used, datasize = occupied space
       int dataSize = (endPtr > startPtr)? (endPtr-1)-startPtr: linfo->data_len - (startPtr-endPtr)-1;
@@ -155,9 +155,10 @@ refine_bit_scene(__constant  RenderSceneInfo    * linfo,
                                 subIndex,
                                 alpha_array,
                                 prob_thresh, 
-                                cumsum,
+                                //cumsum,
                                 bit_lookup,
                                 output);
+      //!!! assert that the refined tree matches the newsize !!!
       if(newSize != num_cells(refined_tree)) {
         output[gid] = -663; 
         return;
@@ -173,23 +174,21 @@ refine_bit_scene(__constant  RenderSceneInfo    * linfo,
       if(newSize > currTreeSize && newSize <= freeSpace) {
 
         //6a. update local tree's data pointer (store it back tree buffer)
-        ushort buffOffset = (endPtr-1 + linfo->data_len)%linfo->data_len;
+        ushort buffOffset = convert_ushort((endPtr-1 + linfo->data_len)%linfo->data_len);
         uchar hi = (uchar)(buffOffset >> 8);
         uchar lo = (uchar)(buffOffset & 255);
-        (*refined_tree).a = hi; 
-        (*refined_tree).b = lo;
+        (*refined_tree).sa = hi; 
+        (*refined_tree).sb = lo;
         tree_array[gid*linfo->tree_len + subIndex] = as_int4((*refined_tree));
                         
         //cache old data pointer and new data pointer
-        int cumIndex  = 1;
-        int oldDataPtr = data_index_opt2(local_tree, 0, bit_lookup, cumsum, &cumIndex, linfo->data_len); //old root offset within buffer
+        int oldDataPtr = data_index_opt(0, local_tree, 0, bit_lookup);
         int newDataPtr = convert_int(buffOffset);                                       //new root offset within buffer
         
         //next start moving cells, must zip through max number of cells
         int offset = gid*linfo->data_len;                   //absolute buffer offset
         float max_alpha_int = (-1)*log(1.0 - prob_thresh);  //used for new leaves...
-        int newInitCount = 0;
-        int oldCount = 0;
+        int newInitCount = 0; int oldCount = 0;             //counts used for assertions
         for(int j=0; j<MAXCELLS; j++) {
 
           //--------------------------------------------------------------------
@@ -202,7 +201,7 @@ refine_bit_scene(__constant  RenderSceneInfo    * linfo,
           //if parent bit is 1, then you're a valid cell
           int pj = (j-1)>>3;           //Bit_index of parent bit    
           bool validCellOld = (j==0) || tree_bit_at(local_tree, pj); 
-          bool validCellNew = (j==0) || tree_bit_at(refined_tree, pj) ; 
+          bool validCellNew = (j==0) || tree_bit_at(refined_tree, pj); 
           if(validCellOld && validCellNew) {
             oldCount++;
           
@@ -217,25 +216,29 @@ refine_bit_scene(__constant  RenderSceneInfo    * linfo,
           } 
           //case where it's a new leaf...
           else if(validCellNew) {
-            newInitCount++;
+            newInitCount++; 
   
             //calc new alpha
-            int currLevel = get_depth(j);
+            int currLevel = get_depth(j)+1;
             float side_len = linfo->block_len / (float) (1<<currLevel);
-            float new_alpha = max_alpha_int / side_len;  
+            float new_alpha = max_alpha_int / side_len;              
             alpha_array[offset+newDataPtr] = new_alpha;
 
             //store parent's data in child cells
             mixture_array[offset+newDataPtr] = (uchar8) 0;
             num_obs_array[offset+newDataPtr] = (ushort4) 0;
+
+            //update new data pointer
             newDataPtr = (newDataPtr+1)%linfo->data_len;
           }       
         }
-        //CHECK to see if difference in size 
+        
+        //!!! Assert that the number of new cells matches the difference in tree sizes !!!
         if( (newSize-currTreeSize) != newInitCount) {
           output[gid] = -662; 
           return;
         }
+        //!!! assert that newSize is equal to oldCells + newCells
         if( newSize != oldCount+newInitCount) {
           output[gid] = -661; 
           return;
@@ -243,6 +246,13 @@ refine_bit_scene(__constant  RenderSceneInfo    * linfo,
         
         //6c. update endPtr
         endPtr = (endPtr+newSize)%linfo->data_len;
+        
+        //!!! assert that end pointer+newsize = newDataPtr+1...
+        if(endPtr != (newDataPtr+1)%linfo->data_len) {
+          output[gid] = -660;
+          return;
+        }
+        
       }
       //otherwise just move the unrefined tree quickly
       else if(currTreeSize <= freeSpace) {
@@ -251,16 +261,16 @@ refine_bit_scene(__constant  RenderSceneInfo    * linfo,
         ushort buffOffset = (endPtr-1 + linfo->data_len)%linfo->data_len;
         uchar hi = (uchar)(buffOffset >> 8);
         uchar lo = (uchar)(buffOffset & 255);
-        (*refined_tree).a = hi; 
-        (*refined_tree).b = lo;
+        (*refined_tree).sa = hi; 
+        (*refined_tree).sb = lo;
         tree_array[gid*linfo->tree_len + subIndex] = as_int4((*refined_tree));
         
         //6b. move data up to end pointer
-        int cumIndex  = 1;
-        int oldDataPtr = data_index_opt2(local_tree, 0, bit_lookup, cumsum, &cumIndex, linfo->data_len); //old root offset within buffer
+        int oldDataPtr = data_index_opt(0, local_tree, 0, bit_lookup);
         int newDataPtr = buffOffset;   
         int offset = gid*linfo->data_len;                   //absolute buffer offset
         for(int j=0; j<currTreeSize; j++) {
+          
           alpha_array[offset + newDataPtr]   = alpha_array[offset + oldDataPtr];
           mixture_array[offset + newDataPtr] = mixture_array[offset + oldDataPtr];
           num_obs_array[offset + newDataPtr] = num_obs_array[offset + oldDataPtr];
@@ -272,7 +282,14 @@ refine_bit_scene(__constant  RenderSceneInfo    * linfo,
         
         //6c. update endPtr
         endPtr = (endPtr+currTreeSize)%linfo->data_len;
+        
+        //!!! assert that end pointer+newsize = newDataPtr+1...
+        if(endPtr != (newDataPtr+1)%linfo->data_len) {
+          output[gid] = -660;
+          return;
+        }
       }
+#if 0
       //THIS SHOULDN"T EVER HAPPEN, buffer is full even though the tree didn't refine! 
       else {
         //move start pointer back
@@ -282,6 +299,7 @@ refine_bit_scene(__constant  RenderSceneInfo    * linfo,
         mem_ptrs[gid].y = endPtr; 
         break;
       }
+#endif
 
     } //end for loop
 

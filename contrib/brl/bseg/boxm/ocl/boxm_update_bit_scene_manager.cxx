@@ -966,10 +966,10 @@ bool boxm_update_bit_scene_manager::set_refine_args()
   status = clSetKernelArg(refine_kernel_,i++,sizeof(cl_mem),(void *)&bit_lookup_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output)"))
     return 0;
-  //cum sum lookup buffer
-  status = clSetKernelArg(refine_kernel_,i++,this->bni_*this->bnj_*10*sizeof(cl_uchar), 0);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cumsum buff)"))
-    return 0;
+  ////cum sum lookup buffer
+  //status = clSetKernelArg(refine_kernel_,i++,10*64*sizeof(cl_uchar), 0);
+  //if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cumsum buff)"))
+    //return 0;
   //local copy of the tree (old copy)
   status = clSetKernelArg(refine_kernel_,i++,sizeof(cl_uchar16),0);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local tree)"))
@@ -1742,7 +1742,7 @@ bool boxm_update_bit_scene_manager::refine()
             //<<output_debug_[i]<<" cells split"<<vcl_endl;
     //if(startPtr > endPtr) vcl_cout<<"     Rolled over Buffer... "<<vcl_endl;
     if (output_debug_[i] == -666) {
-      vcl_cout<<"buffer @ "<<i<<" is out of space post refine. freeSpace = "<<freeSpace
+      vcl_cout<<"buffer @ "<<i<<" is out of space post refine (shouldn't happen). freeSpace = "<<freeSpace
               <<"  mem_ptrs = "<<startPtr<<','<<endPtr<<vcl_endl;
     }
     else if (output_debug_[i] == -665) {
@@ -1763,6 +1763,10 @@ bool boxm_update_bit_scene_manager::refine()
     }
     else if (output_debug_[i] == -661) {
       vcl_cout<<"buffer @ "<<i<<" newInit and old cells don't add up to newsize !!! freeSpace = "<<freeSpace
+              <<"  mem_ptrs = "<<startPtr<<','<<endPtr<<vcl_endl;    
+    }
+    else if (output_debug_[i] == -660) {
+      vcl_cout<<"buffer @ "<<i<<" end pointer and newdata pointer don't match "<<freeSpace
               <<"  mem_ptrs = "<<startPtr<<','<<endPtr<<vcl_endl;    
     }
   }

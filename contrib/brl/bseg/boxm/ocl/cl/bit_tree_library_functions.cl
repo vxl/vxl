@@ -88,7 +88,7 @@ int loc_code_to_index(short4 loc_code, int root_level)
 uchar tree_bit_at(__local uchar* tree, int index)
 {
   //make sure it's in bounds - all higher cells are leaves and thus 0
-  if (index > 72)
+  if (index > 72 || index < 0)
     return 0;
 
   //root is special case
@@ -110,12 +110,14 @@ uchar tree_bit_at(__local uchar* tree, int index)
 
 void set_tree_bit_at(__local uchar* tree, int index, bool val)
 {
-  if (index > 72)
+  if (index > 72 || index < 0)
     return;
 
   //zero is a special case,
-  if (index == 0)
+  if (index == 0) {
     tree[0] = (val) ? 1 : 0;
+    return;
+  }
 
   int byte_index = convert_int((index-1.0)/8.0+1);
   int child_offset = (index-1)%8;
@@ -169,7 +171,7 @@ int data_index_opt(int rIndex, __local uchar* tree, ushort bit_index, __constant
   //root and first gen are special case, return just the root offset + bit_index 
   int count_offset=(int)as_ushort((uchar2) (tree[rIndex+11], tree[rIndex+10]));
   if(bit_index < 9)
-    return count_offset + bit_index;
+    return (count_offset+bit_index) - (((count_offset+bit_index)>>16)<<16);
  
   //otherwise get parent index, parent byte index and relative bit index
   uchar oneuplevel=(bit_index-1)>>3;
@@ -185,9 +187,8 @@ int data_index_opt(int rIndex, __local uchar* tree, ushort bit_index, __constant
   uchar finestleveloffset=(bit_index-1)&(8-1);
   count = 8*count+1 +finestleveloffset;
 
-  return count + count_offset;
+  return (count_offset+count) - (((count_offset+count)>>16)<<16);
 }
-
 
 
 //If cyclecount isn't defined, i.e. you're not keeping track, define different functions
@@ -200,7 +201,7 @@ int data_index_opt2(__local uchar* tree, ushort bit_index, __constant uchar* bit
   int count = (int)as_ushort((uchar2) (tree[11], tree[10]));
   
   if(bit_index < 9)
-    return count + bit_index;
+    return (count+bit_index) - (((count+bit_index)>>16)<<16);
     
   //otherwise get parent index, parent byte index and relative bit index
   uchar oneuplevel        = (bit_index-1)>>3;           //Bit_index of parent bit
