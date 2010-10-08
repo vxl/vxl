@@ -10,28 +10,11 @@
 // \endverbatim
 
 #include "vsph_spherical_coord_sptr.h"
+#include "vsph_sph_point_3d.h"
 #include <vgl/vgl_point_3d.h>
 #include <vbl/vbl_ref_count.h>
+#include <vsl/vsl_binary_io.h>
 #include <vcl_iostream.h>
-
-//: a point in the spherical coordinate system
-class vsph_sph_point_3d
-{
- public:
-  //: Default constructor
-  vsph_sph_point_3d() : radius_(1.0), theta_(0.0), phi_(0.0) {}
-  vsph_sph_point_3d(double r, double theta, double phi) : radius_(r), theta_(theta), phi_(phi) {}
-
-  ~vsph_sph_point_3d(){}
-
-  void set(double r, double theta, double phi) { radius_=r; theta_=theta; phi_=phi; }
-
-  void print(vcl_ostream& os) const;
-
-  double radius_;
-  double theta_;
-  double phi_;
-};
 
 
 //: 3D coordinate system specified by distance rho, angles theta (azimuth) and phi (polar, zenith).
@@ -78,12 +61,17 @@ class vsph_spherical_coord : public vbl_ref_count
 
   void print(vcl_ostream& os) const;
 
+  void b_read(vsl_b_istream& is);
+
+  void b_write(vsl_b_ostream& os);
+
+  short version() { return 1; }
+
  private:
   double radius_;                // distance from the origin
   vgl_point_3d<double> origin_;  // the origin in cartesian coordinates
 };
 
-vcl_ostream& operator<<(vcl_ostream& os, vsph_sph_point_3d const& p);
 vcl_ostream& operator<<(vcl_ostream& os, vsph_spherical_coord const& p);
 vcl_ostream& operator<<(vcl_ostream& os, vsph_spherical_coord_sptr const& p);
 

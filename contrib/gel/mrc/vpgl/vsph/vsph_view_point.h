@@ -3,6 +3,7 @@
 
 #include <vcl_iostream.h>
 #include <vpgl/vpgl_camera.h>
+#include <vpgl/vpgl_perspective_camera.h>
 #include "vsph_spherical_coord.h"
 
 template <class T_data>
@@ -19,10 +20,19 @@ class vsph_view_point
   T_data* metadata() { return metadata_; }
   const T_data* metadata() const { return metadata_; }
 
+  void set_camera(vpgl_camera_double_sptr cam) { cam_=cam; }
+  vpgl_camera_double_sptr camera() const { return cam_; }
+
   void set_view_point(vsph_sph_point_3d p) { spher_coord_=p; }
   vsph_sph_point_3d view_point() const { return spher_coord_; }
 
   void print(vcl_ostream& os) const { os << " vsph_view_point: camera=" << cam_->type_name() << ",coordinates=" << spher_coord_ << ",data=" << *metadata_ << " " << vcl_endl; }
+
+  void b_read(vsl_b_istream& is);
+
+  void b_write(vsl_b_ostream& os);
+
+  short version() const { return 1; }
 
  private:
   vpgl_camera_double_sptr cam_;      // the camera looking from the view point
@@ -35,6 +45,32 @@ vcl_ostream& operator<<(vcl_ostream& os, vsph_view_point<T> const& vp)
 {
   vp.print(os);
   return os;
+}
+
+template <class T>
+void vsph_view_point<T>::b_read(vsl_b_istream& is)
+{
+  short version;
+  vsl_b_read(is, version);
+  switch (version) {
+    case 1:
+      vpgl_perspective_camera<double>* cam=new vpgl_perspective_camera<double>();
+      vsl_b_read(is, cam);
+      cam_=cam;
+      spher_coord_.b_read(is);
+      metadata_ = new T();
+      vsl_b_read(is, *metadata_);
+  }
+}
+
+template <class T>
+void vsph_view_point<T>::b_write(vsl_b_ostream& os)
+{
+  vsl_b_write(os, version());
+  vpgl_perspective_camera<double>* cam=dynamic_cast<vpgl_perspective_camera<double>*>(cam_.as_pointer());
+  vsl_b_write(os, cam);
+  spher_coord_.b_write(os);
+  vsl_b_write(os, *metadata_);
 }
 
 #endif

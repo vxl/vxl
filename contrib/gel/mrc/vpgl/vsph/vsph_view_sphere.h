@@ -18,6 +18,8 @@
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_box_3d.h>
 
+#include <vsl/vsl_binary_io.h>
+
 template <class T>
 class vsph_view_sphere
 {
@@ -55,6 +57,9 @@ class vsph_view_sphere
   //: returns the number of view points kept
   unsigned size() const { return views_.size(); }
 
+  //: returns the view point associated with unique id (uid), returns false if uid is non-existant
+  bool view_point(unsigned uid, T& vp)  const; 
+
   //: finds the nearest view to the given point already in the saved ones
   // If uid is -1, it is unsuccessful
   T find_closest(unsigned i, int &uid, double& dist);
@@ -62,6 +67,10 @@ class vsph_view_sphere
   //: finds the nearest view to the given arbitrary point
   // If uid is -1, it is unsuccessful
   T find_closest(vgl_point_3d<double> p, int &uid, double& dist);
+
+  //: finds the closest neighbors of the view point in the distance dist and 
+  // return them
+  void find_neighbors(unsigned uid, vcl_vector<T>& neighbors);
 
   //: assignment operator
   vsph_view_sphere<T>& operator=(vsph_view_sphere<T> const& rhs);
@@ -78,6 +87,12 @@ class vsph_view_sphere
 
   void print(vcl_ostream& os) const;
 
+  void b_read(vsl_b_istream& is);
+
+  void b_write(vsl_b_ostream& os) const;
+
+  short version() const { return 1; }
+
  protected:
 
   //: spherical coordinate system
@@ -91,13 +106,19 @@ class vsph_view_sphere
   unsigned uid_;
 
   unsigned next_id() { return uid_++; }
+
+  //: returns true if all the the angles between vertices of a triangle is smaller than angle
+  // list.size() should be 3
+  bool min_angle(vcl_vector<vgl_point_3d<double> > list, double angle);
 };
 
 template <class T>
-vcl_ostream& operator<<(vcl_ostream& os, vsph_view_sphere<T> const& vs)
-{
-  vs.print(os);
-  return os;
-}
+void vsl_b_read(vsl_b_istream& is, vsph_view_sphere<T>& vs);
+
+template <class T>
+void vsl_b_write(vsl_b_ostream& os, vsph_view_sphere<T> const& vs);
+
+template <class T>
+vcl_ostream& operator<<(vcl_ostream& os, vsph_view_sphere<T> const& vs);
 
 #endif

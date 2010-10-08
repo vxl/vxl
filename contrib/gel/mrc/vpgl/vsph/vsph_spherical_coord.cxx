@@ -1,15 +1,14 @@
 // This is gel/mrc/vpgl/vsph/vsph_spherical_coord.cxx
 #include "vsph_spherical_coord.h"
-#include "vcl_complex.h"
-#include "vcl_cmath.h"
+#include <vcl_complex.h>
+#include <vcl_cmath.h>
+
+#include <vgl/io/vgl_io_point_3d.h>
+
 
 #define RADIUS_THRESH 0.0001
 
 
-void vsph_sph_point_3d::print(vcl_ostream& os) const
-{
-  os << " vsph_sph_point_3d:[radius=" <<radius_ << ",theta=" << theta_ << ",phi=" << phi_ << "] ";
-}
 
 vsph_spherical_coord::vsph_spherical_coord(vgl_point_3d<double> origin, double radius)
 : radius_(radius), origin_(origin)
@@ -38,12 +37,6 @@ void vsph_spherical_coord::spherical_coord(vgl_point_3d<double> cp, vsph_sph_poi
   sp.set(radius, theta, phi);
 }
 
-vcl_ostream& operator<<(vcl_ostream& os, vsph_sph_point_3d const& p)
-{
-  p.print(os);
-  return os;
-}
-
 vgl_point_3d<double> vsph_spherical_coord::cart_coord(vsph_sph_point_3d const& p) const
 {
 
@@ -70,6 +63,29 @@ bool vsph_spherical_coord::move_point(vsph_sph_point_3d& p)
 void vsph_spherical_coord::print(vcl_ostream& os) const
 {
   os << " vsph_spherical_coord:[radius=" <<radius_ << ", origin=" << origin_ << "] ";
+}
+
+void vsph_spherical_coord::b_read(vsl_b_istream& is)
+{
+  short version;
+  vsl_b_read(is, version);
+  switch (version) {
+    case 1:
+      vsl_b_read(is, radius_);
+      vsl_b_read(is, origin_);
+    default:
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vsph_view_sphere<T>&)\n"
+               << "           Unknown version number "<< version << '\n';
+      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      break;
+  }
+}
+
+void vsph_spherical_coord::b_write(vsl_b_ostream& os)
+{
+  vsl_b_write(os, version());
+  vsl_b_write(os, radius_); 
+  vsl_b_write(os, origin_);
 }
 
 vcl_ostream& operator<<(vcl_ostream& os, vsph_spherical_coord const& p)
