@@ -98,3 +98,22 @@ write_camera(const vpgl_perspective_camera<double>*  cam)
   return true;
 }
 
+
+//: Write a camera to the stream
+// \retval false if the image could not be written
+bool
+bwm_video_cam_ostream::
+write_camera(const vpgl_proj_camera<double>*  cam)
+{
+  if (!cam)
+    return false;
+  vcl_string file_name = next_file_name();
+  ++index_;
+  vsl_b_ofstream bp_out(file_name.c_str());
+  if (!bp_out)
+    return false;
+  cam->b_write(bp_out);
+  bp_out.close();
+  return true;
+}
+

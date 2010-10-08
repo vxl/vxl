@@ -14,6 +14,7 @@
 //-----------------------------------------------------------------------------
 #include <vbl/vbl_ref_count.h>
 #include <vpgl/vpgl_perspective_camera.h>
+#include <vpgl/vpgl_proj_camera.h>
 
 class bwm_video_cam_ostream : public vbl_ref_count
 {
@@ -35,8 +36,8 @@ class bwm_video_cam_ostream : public vbl_ref_count
    ~bwm_video_cam_ostream() { close(); }
   //: Open the stream
    bool open(const vcl_string& directory,
-                    const vcl_string& name_format = "%05d",
-                    const unsigned int init_index = 0);
+             const vcl_string& name_format = "%05d",
+             const unsigned int init_index = 0);
 
   //: Close the stream
    void close();
@@ -53,6 +54,10 @@ class bwm_video_cam_ostream : public vbl_ref_count
   //: Write and image to the stream
   // \retval false if the image could not be written
   bool write_camera(const vpgl_perspective_camera<double>* cam);
+
+  //: Write and image to the stream
+  // \retval false if the image could not be written
+  bool write_camera(const vpgl_proj_camera<double>* cam);
 
  protected:
 
