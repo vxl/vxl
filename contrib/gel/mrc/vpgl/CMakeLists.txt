@@ -49,3 +49,5 @@ ENDIF(BUILD_MUL)
 SUBDIRS(bgeo)
 #camera view sphere
 SUBDIRS(vsph)
+##
+SUBDIRS(icam)
