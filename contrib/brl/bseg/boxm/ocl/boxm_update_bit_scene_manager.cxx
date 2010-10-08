@@ -634,11 +634,14 @@ bool boxm_update_bit_scene_manager::build_refining_program()
     
     vcl_string options = "";
     if(scene_info_->root_level == 1) {
-      options = "-D MAXINNER=1";
+      options += "-D MAXINNER=1 ";
+      options += "-D MAXCELLS=9 ";
     } else if(scene_info_->root_level == 2) {
-      options = "-D MAXINNER=9";
+      options += "-D MAXINNER=9 ";
+      options += "-D MAXCELLS=73 ";
     } else if(scene_info_->root_level == 3) {
-      options = "-D MAXINNER=73";
+      options += "-D MAXINNER=73 ";
+      options += "-D MAXCELLS=585 ";
     } else {
       vcl_cout<<"build_refining_program::root level is not 1, 2 or 3, invalid scene info"<<vcl_endl;
       return false;
@@ -1759,7 +1762,7 @@ bool boxm_update_bit_scene_manager::refine()
               <<"  mem_ptrs = "<<startPtr<<','<<endPtr<<vcl_endl;    
     }
     else if (output_debug_[i] == -661) {
-      vcl_cout<<"buffer @ "<<i<<" valid old cell not valid new !!! freeSpace = "<<freeSpace
+      vcl_cout<<"buffer @ "<<i<<" newInit and old cells don't add up to newsize !!! freeSpace = "<<freeSpace
               <<"  mem_ptrs = "<<startPtr<<','<<endPtr<<vcl_endl;    
     }
   }

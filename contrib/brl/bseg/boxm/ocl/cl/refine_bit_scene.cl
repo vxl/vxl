@@ -2,7 +2,7 @@
 // Refine bit scene 
 // NOTE: relies on preprocessor macro "MAXINNER" to be defined 
 // in the host "build_refine_program" function.  
-// as well as "MAXLEAVES" to be defined (for the refine and data movement loops)
+// Also macro "MAXCELLS" must be defined for moving refined data
 //------------------------------------------------------------------------------
 
 #pragma OPENCL EXTENSION cl_khr_global_int32_base_atomics : enable
@@ -171,7 +171,7 @@ refine_bit_scene(__constant  RenderSceneInfo    * linfo,
 
       //6. if the tree was refined (and it fits)
       if(newSize > currTreeSize && newSize <= freeSpace) {
-                
+
         //6a. update local tree's data pointer (store it back tree buffer)
         ushort buffOffset = (endPtr-1 + linfo->data_len)%linfo->data_len;
         uchar hi = (uchar)(buffOffset >> 8);
@@ -189,7 +189,8 @@ refine_bit_scene(__constant  RenderSceneInfo    * linfo,
         int offset = gid*linfo->data_len;                   //absolute buffer offset
         float max_alpha_int = (-1)*log(1.0 - prob_thresh);  //used for new leaves...
         int newInitCount = 0;
-        for(int j=0; j<585; j++) {
+        int oldCount = 0;
+        for(int j=0; j<MAXCELLS; j++) {
 
           //--------------------------------------------------------------------
           //4 Cases:
@@ -203,7 +204,8 @@ refine_bit_scene(__constant  RenderSceneInfo    * linfo,
           bool validCellOld = (j==0) || tree_bit_at(local_tree, pj); 
           bool validCellNew = (j==0) || tree_bit_at(refined_tree, pj) ; 
           if(validCellOld && validCellNew) {
-        
+            oldCount++;
+          
             //move root data to new location
             alpha_array[offset + newDataPtr]   = alpha_array[offset + oldDataPtr];
             mixture_array[offset + newDataPtr] = mixture_array[offset + oldDataPtr];
@@ -215,7 +217,8 @@ refine_bit_scene(__constant  RenderSceneInfo    * linfo,
           } 
           //case where it's a new leaf...
           else if(validCellNew) {
-
+            newInitCount++;
+  
             //calc new alpha
             int currLevel = get_depth(j);
             float side_len = linfo->block_len / (float) (1<<currLevel);
@@ -228,7 +231,16 @@ refine_bit_scene(__constant  RenderSceneInfo    * linfo,
             newDataPtr = (newDataPtr+1)%linfo->data_len;
           }       
         }
-      
+        //CHECK to see if difference in size 
+        if( (newSize-currTreeSize) != newInitCount) {
+          output[gid] = -662; 
+          return;
+        }
+        if( newSize != oldCount+newInitCount) {
+          output[gid] = -661; 
+          return;
+        }
+        
         //6c. update endPtr
         endPtr = (endPtr+newSize)%linfo->data_len;
       }
@@ -261,7 +273,6 @@ refine_bit_scene(__constant  RenderSceneInfo    * linfo,
         //6c. update endPtr
         endPtr = (endPtr+currTreeSize)%linfo->data_len;
       }
-      
       //THIS SHOULDN"T EVER HAPPEN, buffer is full even though the tree didn't refine! 
       else {
         //move start pointer back
