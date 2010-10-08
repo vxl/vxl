@@ -22,3 +22,6 @@ SUBDIRS(sdet_pro)
 # bbas process classes
 SUBDIRS(bbas_pro)
 
+#icam process class
+SUBDIRS(icam_pro)
+
