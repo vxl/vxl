@@ -13,6 +13,8 @@
 #include <msm/msm_translation_aligner.h>
 #include <msm/msm_zoom_aligner.h>
 #include <msm/msm_similarity_aligner.h>
+#include <vnl/vnl_vector.h>
+#include <vcl_cmath.h>
 
 void test_generic_aligner(const msm_aligner& aligner)
 {
@@ -159,7 +161,7 @@ void test_zoom_aligner()
 
   vnl_vector<double> pose1;
   aligner.calc_transform_wt_mat(points0,points1,wt_mat,pose1);
-  TEST_NEAR("wt_mat scale",pose1[0],vcl_log(2),1e-6);
+  TEST_NEAR("wt_mat scale",pose1[0],vcl_log(2.0),1e-6);
   TEST_NEAR("wt_mat x trans",pose1[1],2,1e-6);
   TEST_NEAR("wt_mat y trans",pose1[2],1,1e-6);
 
@@ -181,10 +183,8 @@ void test_zoom_aligner()
   msm_points points2;
   aligner.apply_transform(shapes[3],aligner.inverse(pose1),points2);
   vcl_cout<<"Dot1: "<<dot_product(ref_mean_shape.vector(),
-                                 points2.vector())<<vcl_endl;
-  vcl_cout<<"mean scale: "<<points2.scale()<<vcl_endl;
-
-
+                                  points2.vector())<<vcl_endl
+          <<"mean scale: "<<points2.scale()<<vcl_endl;
 }
 
 double msm_wt_mat_diff(const msm_points& pts0, const msm_points& pts1,
@@ -217,7 +217,7 @@ void test_similarity_aligner()
   points1.set_point(2, 0,2);
 
   vcl_vector<msm_wt_mat_2d> wt_mat(3);
-  wt_mat[0].set_axes(1,0, 1,1);   
+  wt_mat[0].set_axes(1,0, 1,1);
   wt_mat[1].set_axes(1,1, 0, 10);   // Constrain along (1,1)
   wt_mat[2].set_axes(1,1, 0, 10);   // Constrain along (1,1)
 
@@ -237,8 +237,8 @@ void test_similarity_aligner()
   wt_mat[0].set_axes(1,0, 100,  100);
   wt_mat[1].set_axes(1,1, 0, 100);   // Constrain to lie along (1,1)
   wt_mat[2].set_axes(1,1, 0, 100);   // Constrain to lie along (1,1)
-vcl_cout<<points0<<vcl_endl;
-vcl_cout<<points1<<vcl_endl;
+  vcl_cout<<points0<<vcl_endl
+          <<points1<<vcl_endl;
 
   aligner.calc_transform_wt_mat(points0,points1,wt_mat,pose1);
   TEST_NEAR("wt_mat a",pose1[0]+1,2,1e-6);
@@ -269,17 +269,15 @@ vcl_cout<<points1<<vcl_endl;
   TEST_NEAR("Aligned is orthogonal",
             dot_product(ref_mean_shape.vector(),
                         points2.vector()),1.0,1e-6);
-  
-
 }
 
 //=======================================================================
 
 void test_aligners()
 {
-  vcl_cout << "***********************\n"
+  vcl_cout << "**********************\n"
            << " Testing msm_aligners\n"
-           << "***********************\n";
+           << "**********************\n";
 
   test_translation_aligner();
   test_zoom_aligner();
