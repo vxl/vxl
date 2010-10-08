@@ -196,10 +196,10 @@ int main2(int argc, char*argv[])
     {
       imlo.set(vcl_max<double>(imlo.x(),0),
         vcl_max<double>(imlo.y(),0),
-        vcl_max<double>(imlo.z(),0));
+        vcl_max<double>(imlo.z(),0) );
       imhi.set(vcl_min<double>(imhi.x(),ir->ni()-1),
         vcl_min<double>(imhi.y(),ir->nj()-1),
-        vcl_min<double>(imhi.z(),ir->nk()-1));
+        vcl_min<double>(imhi.z(),ir->nk()-1) );
     }
     // Round lower bounds down
     i0 = static_cast<unsigned>(vcl_floor(imlo.x()));

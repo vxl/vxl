@@ -33,6 +33,7 @@
 #include <vil3d/vil3d_convert.h>
 #include <vil3d/vil3d_clamp.h>
 #include <vil3d/vil3d_math.h>
+#include <vil3d/vil3d_decimate.h>
 #include <vil3d/algo/vil3d_locally_z_normalise.h>
 #include <vimt3d/vimt3d_load.h>
 #include <vimt3d/vimt3d_save.h>
@@ -574,6 +575,31 @@ void voxel_size__image_3d_of_float(opstack_t& s)
   s.push_front(operand(voxel_size.x()));
   s.push_front(operand(voxel_size.y()));
   s.push_front(operand(voxel_size.z()));
+}
+
+
+//: Report the size of the image in pixels.
+void image_size__image_3d_of_int(opstack_t& s)
+{
+  assert(s.size() >= 1);
+  vimt3d_image_3d_of<int> o1(s[0].as_image_3d_of_int());
+
+  s.pop(1);
+  s.push_front(operand(o1.image().ni()));
+  s.push_front(operand(o1.image().nj()));
+  s.push_front(operand(o1.image().nk()));
+}
+
+//: Report the size of the image in pixels.
+void image_size__image_3d_of_float(opstack_t& s)
+{
+  assert(s.size() >= 1);
+  vimt3d_image_3d_of<float> o1(s[0].as_image_3d_of_float());
+
+  s.pop(1);
+  s.push_front(operand(o1.image().ni()));
+  s.push_front(operand(o1.image().nj()));
+  s.push_front(operand(o1.image().nk()));
 }
 
 //: Add voxels of two images together
@@ -1273,6 +1299,41 @@ void product__image_3d_of_float__image_3d_of_float(opstack_t& s)
   s.push_front(operand(result));
 }
 
+
+//: Delete specified entry from stack
+void del_stack__double(opstack_t& s)
+{
+  assert (s.size() >= 1);
+  double o1(s[0].as_double());
+  int index = vnl_math_rnd(o1);
+
+  if (o1 != index || o1 < 0)
+  {
+    vcl_cerr << "\nERROR: --del_stack Must give positive integer value.\n"
+      "At \"" << args_so_far << "\"<-- HERE\n"
+      "Stack is: \n" << vsl_stream_summary(s);
+    vcl_exit(1);
+  }
+  if (index==0)
+  {
+    vcl_cerr << "\nERROR: --del_stack Cannot delete top entry (index 0) on stack.\n"
+      "At \"" << args_so_far << "\"<-- HERE\n"
+      "Stack is: \n" << vsl_stream_summary(s);
+    vcl_exit(1);
+  }
+  if (index+1>s.size())
+  {
+    vcl_cerr << "\nERROR: --del_stack Stack too short to delete entry " << o1 << ".\n"
+      "At \"" << args_so_far << "\"<-- HERE\n"
+      "Stack is: \n" << vsl_stream_summary(s);
+    vcl_exit(1);
+  }
+
+  s.erase(s.begin()+index);
+
+  s.pop(1);
+}
+
 void copy__image_3d_of_float(opstack_t& s)
 {
   assert(s.size() >= 1);
@@ -1337,6 +1398,61 @@ void copy_coordinate_frame__image_3d_of_int__image_3d_of_int(opstack_t& s)
   result.world2im() = i_w2i;
 
   s.pop(2);
+  s.push_front(operand(result));
+}
+
+void decimate__image_3d_of_float__double__double__double(opstack_t& s)
+{
+  assert(s.size() >= 4);
+  vimt3d_image_3d_of<float> im(s[3].as_image_3d_of_float());
+  int si(vnl_math_rnd(s[2].as_double()));
+  int sj(vnl_math_rnd(s[1].as_double()));
+  int sk(vnl_math_rnd(s[0].as_double()));
+
+  if (si<=0 || sj<=0 || sk<=0)
+  {
+    vcl_cerr << "\nERROR: --decimate Spacings must be >= 1.\n"
+      "At \"" << args_so_far << "\"<-- HERE\n"
+      "Stack is: \n" << vsl_stream_summary(s);
+    vcl_exit(1);
+  }
+
+  vimt3d_transform_3d scale;
+  scale.set_zoom_only(1.0/si, 1.0/sj, 1.0/sk, 0, 0, 0);
+
+  vimt3d_image_3d_of<float> result(
+    vil3d_decimate(im.image(), si, sj, sk),
+    scale*im.world2im() );
+
+  s.pop(4);
+  s.push_front(operand(result));
+}
+
+
+void decimate__image_3d_of_int__double__double__double(opstack_t& s)
+{
+  assert(s.size() >= 4);
+  vimt3d_image_3d_of<int> im(s[3].as_image_3d_of_int());
+  int si(vnl_math_rnd(s[2].as_double()));
+  int sj(vnl_math_rnd(s[1].as_double()));
+  int sk(vnl_math_rnd(s[0].as_double()));
+
+  if (si <0 || sj < 0 || sk < 0)
+  {
+    vcl_cerr << "\nERROR: --decimate Cannot handle negative decimatino spacing.\n"
+      "At \"" << args_so_far << "\"<-- HERE\n"
+      "Stack is: \n" << vsl_stream_summary(s);
+    vcl_exit(1);
+  }
+
+  vimt3d_transform_3d scale;
+  scale.set_zoom_only(1.0/si, 1.0/sj, 1.0/sk, 0, 0, 0);
+
+  vimt3d_image_3d_of<int> result(
+    vil3d_decimate(im.image(), si, sj, sk),
+    scale*im.world2im() );
+
+  s.pop(4);
   s.push_front(operand(result));
 }
 
@@ -1778,6 +1894,15 @@ class operations
     add_operation("--copy-coordinate-frame", &copy_coordinate_frame__image_3d_of_float__image_3d_of_float,
                   function_type_t() << operand::e_image_3d_of_float << operand::e_image_3d_of_float,
                   "image_v image_c", "image", "create image that is voxels of image_v and the world to image transform of image_c");
+    add_operation("--decimate", &decimate__image_3d_of_int__double__double__double,
+                  function_type_t() << operand::e_image_3d_of_int << operand::e_double << operand::e_double << operand::e_double,
+                  "image sx sy sz", "image", "Decimate image in each direction with given integer spacing");
+    add_operation("--decimate", &decimate__image_3d_of_float__double__double__double,
+                  function_type_t() << operand::e_image_3d_of_float << operand::e_double << operand::e_double << operand::e_double,
+                  "image sx sy sz", "image", "Decimate image in each direction with given integer spacing");
+    add_operation("--del-stack", &del_stack__double,
+                  function_type_t()<< operand::e_double,
+                  "i", "", "Remove specified element from stack");
     add_operation("--diff", &diff__double__double,
                   function_type_t() << operand::e_double << operand::e_double,
                   "A B", "A-B", "Subtract values A minus B");
@@ -1796,6 +1921,12 @@ class operations
     add_operation("--help", &help,
                   no_operands,
                   "", "", "Display help");
+    add_operation("--image-size", &image_size__image_3d_of_int,
+                  function_type_t() << operand::e_image_3d_of_int,
+                  "image", "ni nj nk", "Number of voxels in each image direction.");
+    add_operation("--image-size", &image_size__image_3d_of_float,
+                  function_type_t() << operand::e_image_3d_of_float,
+                  "image", "ni nj nk", "Number of voxels in each image direction.");
     add_operation("--load-from-mat", &load_from_mat__string,
                   function_type_t() << operand::e_string,
                   "filename", "image", "Explicitly load image from ASCII Matlab file ");
