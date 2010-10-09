@@ -1,11 +1,11 @@
+#include "bbgm_features.h"
 //:
 // \file
-
-#include "bbgm_features.h"
 #include <vnl/io/vnl_io_vector_fixed.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/algo/vgl_convex_hull_2d.h>
 #include <brip/brip_line_generator.h>
+
 //===========================================================================
 // Methods for mask feature
 
@@ -42,8 +42,8 @@ pixels(unsigned i, unsigned j)
   m.set_angle_id(static_cast<brip_rect_mask::ang_id>(aid_));
   unsigned ni = m.ni(), nj = m.nj();
   int ri = (ni-1)/2, rj = (nj-1)/2;
-  for (int jj = -rj; jj<=rj; ++jj)
-    for (int ii = -ri; ii<=ri; ++ii)
+  for (int jj = -rj; jj<=rj; ++jj) {
+    for (int ii = -ri; ii<=ri; ++ii) {
       if (m(ii, jj)>0) {
         unsigned short pi = static_cast<unsigned short>(ii+i);
         unsigned short pj = static_cast<unsigned short>(jj+j);
@@ -53,6 +53,8 @@ pixels(unsigned i, unsigned j)
         }
         pix.push_back(vgl_point_2d<unsigned short>(pi, pj));
       }
+    }
+  }
   return pix;
 }
 
@@ -345,7 +347,7 @@ vcl_vector<vgl_point_2d<unsigned short> > bbgm_pair_group_feature::pixels()
     bbgm_mask_pair_feature mpf = *pit;
     vcl_vector<vgl_point_2d<unsigned short> > pixp = mpf.pixels();
     for (vcl_vector<vgl_point_2d<unsigned short> >::iterator pxt = pixp.begin();
-      pxt!= pixp.end(); ++pxt) {
+         pxt!= pixp.end(); ++pxt) {
       bool found = false;
       for (vcl_vector<vgl_point_2d<unsigned short> >::iterator pot = pix.begin();
            pot != pix.end()&&!found; ++pot)
