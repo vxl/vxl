@@ -6,7 +6,7 @@ doxygen_add_library(contrib/tbl/vepl1
   DESCRIPTION "Easy Image Processing Library using vil1 (deprecated)"
   )
 
-SET(vepl_sources
+SET(vepl1_sources
  vepl_threshold.cxx            vepl_threshold.h
  vepl_add_random_noise.cxx     vepl_add_random_noise.h
  vepl_monadic.cxx              vepl_monadic.h
@@ -28,7 +28,7 @@ SET(vepl_sources
 
 ADD_DEFINITIONS(-DINSTANTIATE_TEMPLATES)
 # [only when INSTANTIATE_TEMPLATES not defined:]
-# AUX_SOURCE_DIRECTORY(Templates vepl_sources)
+# AUX_SOURCE_DIRECTORY(Templates vepl1_sources)
 
 IF(CMAKE_COMPILER_IS_GNUCXX)
   SET_SOURCE_FILES_PROPERTIES(vepl_threshold.cxx PROPERTIES COMPILE_FLAGS -O2)
@@ -44,9 +44,9 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
   SET_SOURCE_FILES_PROPERTIES(Templates/vepl_convert+float-.cxx PROPERTIES COMPILE_FLAGS -O1)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
-ADD_LIBRARY(vepl1 ${vepl_sources})
+ADD_LIBRARY(vepl1 ${vepl1_sources})
 INSTALL_TARGETS(/lib vepl1)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/tbl/vepl1 ${vepl_sources})
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/tbl/vepl1 ${vepl1_sources})
 TARGET_LINK_LIBRARIES(vepl1 vipl vil1 ${CMAKE_THREAD_LIBS})
 
 IF (BUILD_EXAMPLES)

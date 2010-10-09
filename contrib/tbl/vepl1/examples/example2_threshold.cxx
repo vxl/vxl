@@ -40,7 +40,7 @@ main(int argc, char** argv)
   }
 
   // The threshold value:
-  vxl_byte threshold = (argc < 4) ? 128 : vxl_byte(vcl_atoi(argv[3]));
+  vxl_byte threshold = (argc < 4) ? vxl_byte(128) : vxl_byte(vcl_atoi(argv[3]));
 
   // perform thresholding:
   vil1_image out = vepl_threshold(in,threshold,0,255);
