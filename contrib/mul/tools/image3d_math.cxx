@@ -447,11 +447,10 @@ void help(opstack_t& )
     "List of commands:\n";
   print_operations(vcl_cout);
   vcl_cout << "{ and }:  Braces - for debugging, have no side effects.\n"
-    "usage: eg. { { v1 v2 --op1 } v3 --op2 }\n"
-    "       The braces can be used to delineate all the operands used by the\n"
-    "       operation preceeding the closing brace.\n"
-    "\n"
-    "+name: identical to \"name --recall\"\n";
+           << "usage: eg. { { v1 v2 --op1 } v3 --op2 }\n"
+           << "       The braces can be used to delineate all the operands used by the\n"
+           << "       operation preceeding the closing brace.\n\n"
+           << "+name: identical to \"name --recall\"\n";
   vcl_exit(3);
 }
 
@@ -468,7 +467,7 @@ void close_brace__brace(opstack_t& s)
     vcl_exit(1);
   }
   if (s.size() < 1 || s.last_pop() > s.size() ||
-    s.last_pop()==0 || !s[s.size() - s.last_pop()].is_open_brace() )
+      s.last_pop()==0 || !s[s.size() - s.last_pop()].is_open_brace() )
   {
     vcl_cerr << "\nERROR: No matching opening brace found for closing brace.\n";
     if (del_stack_brace_re.find(args_so_far))
@@ -478,7 +477,7 @@ void close_brace__brace(opstack_t& s)
       vcl_cerr << "      You cannot have two closing braces next to each other, since closing\n"
                   "      braces check the behaviour of the immediately preceeding operation.\n";
     vcl_cerr << "At \"" << args_so_far << "\"<-- HERE\n"
-      "Stack is: \n" << vsl_stream_summary(s);
+      "Stack is:\n" << vsl_stream_summary(s);
     vcl_exit(1);
   }
   s.erase(s.end() - s.last_pop());
@@ -713,7 +712,7 @@ void min__image_3d_of_float__image_3d_of_float(opstack_t& s)
   const vil3d_image_view<float>& o2_image = o2.image();
 
   vimt3d_image_3d_of<float> result(o1_image.ni(), o1_image.nj(), o1_image.nk(),
-                                 1, o1.world2im());
+                                   1, o1.world2im());
   vil3d_image_view<float> &result_image = result.image();
 
   for (unsigned k=0,nk=o1_image.nk();k<nk;++k)
@@ -758,7 +757,7 @@ void max__image_3d_of_float__image_3d_of_float(opstack_t& s)
   const vil3d_image_view<float>& o2_image = o2.image();
 
   vimt3d_image_3d_of<float> result(o1_image.ni(), o1_image.nj(), o1_image.nk(),
-                                 1, o1.world2im());
+                                   1, o1.world2im());
   vil3d_image_view<float> &result_image = result.image();
 
   for (unsigned k=0,nk=o1_image.nk();k<nk;++k)
@@ -1304,28 +1303,28 @@ void product__image_3d_of_float__image_3d_of_float(opstack_t& s)
 void del_stack__double(opstack_t& s)
 {
   assert (s.size() >= 1);
-  double o1(s[0].as_double());
-  int index = vnl_math_rnd(o1);
+  double o1 = s[0].as_double();
+  unsigned int index = vnl_math_rnd(o1);
 
   if (o1 != index || o1 < 0)
   {
     vcl_cerr << "\nERROR: --del_stack Must give positive integer value.\n"
       "At \"" << args_so_far << "\"<-- HERE\n"
-      "Stack is: \n" << vsl_stream_summary(s);
+      "Stack is:\n" << vsl_stream_summary(s);
     vcl_exit(1);
   }
   if (index==0)
   {
     vcl_cerr << "\nERROR: --del_stack Cannot delete top entry (index 0) on stack.\n"
       "At \"" << args_so_far << "\"<-- HERE\n"
-      "Stack is: \n" << vsl_stream_summary(s);
+      "Stack is:\n" << vsl_stream_summary(s);
     vcl_exit(1);
   }
   if (index+1>s.size())
   {
     vcl_cerr << "\nERROR: --del_stack Stack too short to delete entry " << o1 << ".\n"
       "At \"" << args_so_far << "\"<-- HERE\n"
-      "Stack is: \n" << vsl_stream_summary(s);
+      "Stack is:\n" << vsl_stream_summary(s);
     vcl_exit(1);
   }
 
@@ -1413,7 +1412,7 @@ void decimate__image_3d_of_float__double__double__double(opstack_t& s)
   {
     vcl_cerr << "\nERROR: --decimate Spacings must be >= 1.\n"
       "At \"" << args_so_far << "\"<-- HERE\n"
-      "Stack is: \n" << vsl_stream_summary(s);
+      "Stack is:\n" << vsl_stream_summary(s);
     vcl_exit(1);
   }
 
@@ -1441,7 +1440,7 @@ void decimate__image_3d_of_int__double__double__double(opstack_t& s)
   {
     vcl_cerr << "\nERROR: --decimate Cannot handle negative decimatino spacing.\n"
       "At \"" << args_so_far << "\"<-- HERE\n"
-      "Stack is: \n" << vsl_stream_summary(s);
+      "Stack is:\n" << vsl_stream_summary(s);
     vcl_exit(1);
   }
 
@@ -2110,7 +2109,7 @@ class operations
 
     if (range.first == range.second)
     {
-      vcl_cerr << "\nERROR: No such operation \"" << name << "\"\n."
+      vcl_cerr << "\nERROR: No such operation \"" << name << "\".\n"
                << "At \"" << args_so_far << "\"<-- HERE\n";
       vcl_exit(1);
     }
