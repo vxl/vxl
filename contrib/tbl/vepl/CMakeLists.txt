@@ -8,7 +8,7 @@ doxygen_add_library(contrib/tbl/vepl
 
 INCLUDE_DIRECTORIES(${MUL_INCLUDE_DIR})
 
-SET(vepl2_sources
+SET(vepl_sources
  vepl2_threshold.cxx            vepl2_threshold.h
  vepl2_add_random_noise.cxx     vepl2_add_random_noise.h
  vepl2_monadic.cxx              vepl2_monadic.h
@@ -34,7 +34,7 @@ SET(vepl2_sources
 
 ADD_DEFINITIONS(-DINSTANTIATE_TEMPLATES)
 # [only when INSTANTIATE_TEMPLATES not defined:]
-# AUX_SOURCE_DIRECTORY(Templates vepl2_sources)
+# AUX_SOURCE_DIRECTORY(Templates vepl_sources)
 
 IF(CMAKE_COMPILER_IS_GNUCXX)
   SET_SOURCE_FILES_PROPERTIES(vepl2_gaussian_convolution.cxx PROPERTIES COMPILE_FLAGS -O0)
@@ -51,9 +51,9 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
   SET_SOURCE_FILES_PROPERTIES(Templates/vepl2_convert+float-.cxx PROPERTIES COMPILE_FLAGS -O1)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
-ADD_LIBRARY(vepl ${vepl2_sources})
+ADD_LIBRARY(vepl ${vepl_sources})
 INSTALL_TARGETS(/lib vepl)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/tbl/vepl ${vepl2_sources})
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/tbl/vepl ${vepl_sources})
 TARGET_LINK_LIBRARIES(vepl vipl vil ${CMAKE_THREAD_LIBS})
 
 IF (BUILD_EXAMPLES)
