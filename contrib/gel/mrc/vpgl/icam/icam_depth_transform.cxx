@@ -3,24 +3,26 @@
 #include <vnl/vnl_vector_fixed.h>
 void icam_depth_transform::cache_k()
 {
-  k00_ = static_cast<float>(K_from_inv_[0][0]);   
-  k02_ = static_cast<float>(K_from_inv_[0][2]);  
+  k00_ = static_cast<float>(K_from_inv_[0][0]);
+  k02_ = static_cast<float>(K_from_inv_[0][2]);
   k11_ = static_cast<float>(K_from_inv_[1][1]);
   k12_ = static_cast<float>(K_from_inv_[1][2]);
 }
+
 void icam_depth_transform::cache_r()
 {
   vnl_matrix_fixed<double, 3, 3> R = rot_.as_matrix();
   r00_ = static_cast<float>(R[0][0]);
   r01_ = static_cast<float>(R[0][1]);
-  r02_ = static_cast<float>(R[0][2]);  
+  r02_ = static_cast<float>(R[0][2]);
   r10_ = static_cast<float>(R[1][0]);
   r11_ = static_cast<float>(R[1][1]);
-  r12_ = static_cast<float>(R[1][2]);  
+  r12_ = static_cast<float>(R[1][2]);
   r20_ = static_cast<float>(R[2][0]);
   r21_ = static_cast<float>(R[2][1]);
-  r22_ = static_cast<float>(R[2][2]);  
+  r22_ = static_cast<float>(R[2][2]);
 }
+
 void icam_depth_transform::set_k(vnl_matrix_fixed<double, 3, 3> const& K)
 {
   K_from_inv_ = vnl_inverse(K);
@@ -29,6 +31,7 @@ void icam_depth_transform::set_k(vnl_matrix_fixed<double, 3, 3> const& K)
   to_pu_ = K[0][2];
   to_pv_ = K[1][2];
 }
+
 void icam_depth_transform::
 set_k(vnl_matrix_fixed<double, 3, 3> const& K_from,
       vnl_matrix_fixed<double, 3, 3> const& K_to)
@@ -39,6 +42,7 @@ set_k(vnl_matrix_fixed<double, 3, 3> const& K_from,
   to_pu_ = K_to[0][2];
   to_pv_ = K_to[1][2];
 }
+
 vnl_matrix_fixed<double,3,3> icam_depth_transform::K_to()
 {
   vnl_matrix_fixed<double,3,3> ret(0.0);
@@ -49,63 +53,67 @@ vnl_matrix_fixed<double,3,3> icam_depth_transform::K_to()
   ret[2][2] = 1.0;
   return ret;
 }
+
 icam_depth_transform::
-icam_depth_transform(vnl_matrix_fixed<double, 3, 3> const& K, 
+icam_depth_transform(vnl_matrix_fixed<double, 3, 3> const& K,
                      vil_image_view<double> const& depth,
                      vgl_rotation_3d<double> const& rot,
                      vgl_vector_3d<double> const& trans,
                      bool adjust_to_fl
-                     ): depth_(depth), rot_(rot), trans_(trans), 
-                        adjust_to_fl_(adjust_to_fl)
+                    )
+  : adjust_to_fl_(adjust_to_fl), depth_(depth), rot_(rot), trans_(trans)
 {
   this->set_k(K);
   this->cache_r();
   scale_factors_.set_size(n_params());
   scale_factors_.fill(1.0);
 }
+
 icam_depth_transform::
-icam_depth_transform(vnl_matrix_fixed<double, 3, 3> const& K_from, 
-                     vnl_matrix_fixed<double, 3, 3> const& K_to, 
+icam_depth_transform(vnl_matrix_fixed<double, 3, 3> const& K_from,
+                     vnl_matrix_fixed<double, 3, 3> const& K_to,
                      vil_image_view<double> const& depth,
                      vgl_rotation_3d<double> const& rot,
                      vgl_vector_3d<double> const& trans,
                      bool adjust_to_fl
-                     ): depth_(depth), rot_(rot), trans_(trans),
-                        adjust_to_fl_(adjust_to_fl)
+                    )
+  : adjust_to_fl_(adjust_to_fl), depth_(depth), rot_(rot), trans_(trans)
 {
   this->set_k(K_from, K_to);
   this->cache_r();
   scale_factors_.set_size(n_params());
   scale_factors_.fill(1.0);
 }
+
 icam_depth_transform::
-icam_depth_transform(vnl_matrix_fixed<double, 3, 3> const& K_from, 
+icam_depth_transform(vnl_matrix_fixed<double, 3, 3> const& K_from,
                      double to_fl, double to_pu, double to_pv,
                      vil_image_view<double> const& depth,
                      vgl_rotation_3d<double> const& rot,
                      vgl_vector_3d<double> const& trans,
                      bool adjust_to_fl
-                     ): depth_(depth), to_fl_(to_fl), to_pu_(to_pu),
-                        to_pv_(to_pv),rot_(rot), trans_(trans),
-                        adjust_to_fl_(adjust_to_fl)
+                    )
+  : adjust_to_fl_(adjust_to_fl), depth_(depth),
+    to_fl_(to_fl), to_pu_(to_pu), to_pv_(to_pv), rot_(rot), trans_(trans)
 {
   this->set_k(K_from);
   this->cache_r();
   scale_factors_.set_size(n_params());
   scale_factors_.fill(1.0);
 }
+
 bool icam_depth_transform::transform(double from_u, double from_v,
                                      double& to_u, double& to_v) const
 {
   int ni = depth_.ni(), nj = depth_.nj();
-  if(from_u<0||from_v<0||from_u>=ni||from_v>=nj){
+  if (from_u<0||from_v<0||from_u>=ni||from_v>=nj) {
     to_u = 0.0; to_v = 0.0;
     return false;
   }
   // the depth at location (from_u, from_v)
-  float Z = static_cast<float>(depth_(static_cast<unsigned>(from_u), 
-	  static_cast<unsigned>(from_v)));
-  if(Z<1e-6){
+  float Z = static_cast<float>(depth_(static_cast<unsigned>(from_u),
+                                      static_cast<unsigned>(from_v)));
+  if (Z<1e-6) {
     to_u = 0.0; to_v = 0.0;
     return false;
   }
@@ -115,12 +123,12 @@ bool icam_depth_transform::transform(double from_u, double from_v,
   fw0 = k00_*static_cast<float>(from_u)+ k02_;
   fw1 = k11_*static_cast<float>(from_v)+ k12_;
   // trans/Z (note Z is reciprocal)
-  float t0=Z*static_cast<float>(trans_.x()), 
+  float t0=Z*static_cast<float>(trans_.x()),
     t1 = Z*static_cast<float>(trans_.y()),
     t2 = Z*static_cast<float>(trans_.z());
 
   float den = r20_*fw0 + r21_*fw1 + r22_+ t2;
-  if(den<1e-6){
+  if (den<1e-6) {
     to_u = 0.0; to_v = 0.0;
     return false;
   }
@@ -131,18 +139,18 @@ bool icam_depth_transform::transform(double from_u, double from_v,
   to_v = vt*to_fl_ + to_pv_;
   return true;
 }
+
 void icam_depth_transform::set_params(vnl_vector<double> const& params)
 {
   vnl_vector<double> unscl_params = element_quotient(params, scale_factors_);
   vnl_vector_fixed<double, 3> rodv;
-  for(unsigned i = 0; i<3; ++i)
+  for (unsigned i = 0; i<3; ++i)
     rodv[i]=unscl_params[i];
   rot_ = vgl_rotation_3d<double>(rodv);
   this->cache_r();
   trans_ = vgl_vector_3d<double>(unscl_params[3], unscl_params[4],
                                  unscl_params[5]);
-  if(adjust_to_fl_) to_fl_ = unscl_params[6];
-  
+  if (adjust_to_fl_) to_fl_ = unscl_params[6];
 }
 
 vnl_vector<double> icam_depth_transform::params()
@@ -150,12 +158,11 @@ vnl_vector<double> icam_depth_transform::params()
   unsigned np = this->n_params();
   vnl_vector<double> res(np),scl_res;
   vnl_vector_fixed<double, 3> rodv = rot_.as_rodrigues();
-  for(unsigned i = 0; i<3; ++i)
+  for (unsigned i = 0; i<3; ++i)
     res[i]=rodv[i];
   res[3]=trans_.x();   res[4]=trans_.y();   res[5]=trans_.z();
-  if(adjust_to_fl_) res[6] = to_fl_;
+  if (adjust_to_fl_) res[6] = to_fl_;
   scl_res = element_product(res, scale_factors_);
   return scl_res;
 }
 
-  
