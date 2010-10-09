@@ -1,18 +1,18 @@
 # DESCRIPTION:
 #
-#   This is the vepl2 library, containing the `easy' image processing
-# algorithm interface classes based on vipl, specialised for new vil (aka vil2).
+# This is the vepl library, containing the `easy' image processing
+#  algorithm interface classes based on vipl, specialised for vil.
 #
 # These classes are derived from the vipl classes with a similar name.
 #
 # The examples subdirectory contains example programs showing how to use the
-# filter classes with vil2 images.
+# filter classes with vil images.
 
 USES += contrib/tbl core
 # Make sure all template instantiations are available in this library:
 USE_IMPLICIT_TEMPLATES := 1
 
-LIBRARY := vepl2
+LIBRARY := vepl
 VERSION := 1.0
 
 MANPAGE_SOURCES += accessors/vipl_accessors_vil_image_view_base.txx

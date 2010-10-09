@@ -3,7 +3,7 @@
 # and also the "easy" image processing functions for vil, using those.
 
 # image processing
-SUBDIRS += vipl vepl1 vepl2
+SUBDIRS += vipl vepl vepl1
 
 ################################
 include ${VXLROOT}/config/top.mk

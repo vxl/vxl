@@ -1,13 +1,13 @@
 #   DESCRIPTION:
 #
-#   This is the vepl2/examples directory, containing examples programs for the
-# vepl2 (image processing) library.
+#   This is the vepl/examples directory, containing examples programs for the
+#   vepl ("easy" image processing with vil) library.
 #
-# This should make it clear how to use the vipl filter classes with The vil2
+# This should make it clear how to use the vipl filter classes with The vil
 # image classes.  Examples using those filter classes are in this directory.
 # - PVr.
 #
-#   DEPENDENCIES:  vepl2 vipl vil2
+#   DEPENDENCIES:  vepl vipl vil2
 
 USES += contrib/tbl core
 include ../config.mk
