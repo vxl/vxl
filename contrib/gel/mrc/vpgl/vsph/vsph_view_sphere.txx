@@ -106,7 +106,6 @@ void vsph_view_sphere<T>::add_uniform_views(double cap_angle, double point_angle
   // use the center of the spherical coordinate system
   vgl_vector_3d<double> vector1=verts[triangles[0][0]]-center;
   vgl_vector_3d<double> vector2=verts[triangles[0][1]]-center;
-  double a = angle(vector1, vector2);
 
   bool done=false;
   while (!done) {
@@ -176,7 +175,6 @@ void vsph_view_sphere<T>::add_uniform_views(double cap_angle, double point_angle
     // check the angle again to see if the threashold is met
     //vgl_vector_3d<double> vector1=verts[new_triangles[0][0]]-center;
     //vgl_vector_3d<double> vector2=verts[new_triangles[0][1]]-center;
-    //a = angle(vector1, vector2);
     triangles.clear();
     triangles=new_triangles;
   }
@@ -355,8 +353,7 @@ bool vsph_view_sphere<T>::min_angle(vcl_vector<vgl_point_3d<double> > list, doub
     if (next == list.size()) next = 0;
     vgl_vector_3d<double> vector1=list[i]-center;
     vgl_vector_3d<double> vector2=list[next]-center;
-    double a = angle(vector1, vector2);
-    if (a > point_angle)
+    if (angle(vector1, vector2) > point_angle)
       return false;
   }
 
