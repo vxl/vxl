@@ -47,7 +47,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /FD /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/tbl" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vepl_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/tbl" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vepl1_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -73,7 +73,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FD /c
 # ADD CPP /nologo /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /FD /GZ /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/tbl" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vepl_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/tbl" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vepl1_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -93,118 +93,118 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\Templates/vepl_convert+double-.cxx
+SOURCE=.\Templates/vepl1_convert+double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vepl_convert+float-.cxx
+SOURCE=.\Templates/vepl1_convert+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vepl_convert+int-.cxx
+SOURCE=.\Templates/vepl1_convert+int-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vepl_convert+short-.cxx
+SOURCE=.\Templates/vepl1_convert+short-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vepl_convert+uchar-.cxx
+SOURCE=.\Templates/vepl1_convert+uchar-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vepl_add_random_noise.cxx
+SOURCE=.\vepl1_add_random_noise.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vepl_dilate_disk.cxx
+SOURCE=.\vepl1_dilate_disk.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vepl_dyadic.cxx
+SOURCE=.\vepl1_dyadic.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vepl_erode_disk.cxx
+SOURCE=.\vepl1_erode_disk.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vepl_gaussian_convolution.cxx
+SOURCE=.\vepl1_gaussian_convolution.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vepl_gradient_dir.cxx
+SOURCE=.\vepl1_gradient_dir.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vepl_gradient_mag.cxx
+SOURCE=.\vepl1_gradient_mag.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vepl_histogram.cxx
+SOURCE=.\vepl1_histogram.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vepl_median.cxx
+SOURCE=.\vepl1_median.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vepl_moment.cxx
+SOURCE=.\vepl1_moment.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vepl_monadic.cxx
+SOURCE=.\vepl1_monadic.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vepl_sobel.cxx
+SOURCE=.\vepl1_sobel.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vepl_threshold.cxx
+SOURCE=.\vepl1_threshold.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vepl_x_gradient.cxx
+SOURCE=.\vepl1_x_gradient.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vepl_y_gradient.cxx
+SOURCE=.\vepl1_y_gradient.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
-SOURCE=.\vepl_add_random_noise.h
+SOURCE=.\vepl1_add_random_noise.h
 # End Source File
 # Begin Source File
-SOURCE=.\vepl_convert.h
+SOURCE=.\vepl1_convert.h
 # End Source File
 # Begin Source File
-SOURCE=.\vepl_convert.txx
+SOURCE=.\vepl1_convert.txx
 # End Source File
 # Begin Source File
-SOURCE=.\vepl_dilate_disk.h
+SOURCE=.\vepl1_dilate_disk.h
 # End Source File
 # Begin Source File
-SOURCE=.\vepl_dyadic.h
+SOURCE=.\vepl1_dyadic.h
 # End Source File
 # Begin Source File
-SOURCE=.\vepl_erode_disk.h
+SOURCE=.\vepl1_erode_disk.h
 # End Source File
 # Begin Source File
-SOURCE=.\vepl_gaussian_convolution.h
+SOURCE=.\vepl1_gaussian_convolution.h
 # End Source File
 # Begin Source File
-SOURCE=.\vepl_gradient_dir.h
+SOURCE=.\vepl1_gradient_dir.h
 # End Source File
 # Begin Source File
-SOURCE=.\vepl_gradient_mag.h
+SOURCE=.\vepl1_gradient_mag.h
 # End Source File
 # Begin Source File
-SOURCE=.\vepl_histogram.h
+SOURCE=.\vepl1_histogram.h
 # End Source File
 # Begin Source File
-SOURCE=.\vepl_median.h
+SOURCE=.\vepl1_median.h
 # End Source File
 # Begin Source File
-SOURCE=.\vepl_moment.h
+SOURCE=.\vepl1_moment.h
 # End Source File
 # Begin Source File
-SOURCE=.\vepl_monadic.h
+SOURCE=.\vepl1_monadic.h
 # End Source File
 # Begin Source File
-SOURCE=.\vepl_sobel.h
+SOURCE=.\vepl1_sobel.h
 # End Source File
 # Begin Source File
-SOURCE=.\vepl_threshold.h
+SOURCE=.\vepl1_threshold.h
 # End Source File
 # Begin Source File
-SOURCE=.\vepl_x_gradient.h
+SOURCE=.\vepl1_x_gradient.h
 # End Source File
 # Begin Source File
-SOURCE=.\vepl_y_gradient.h
+SOURCE=.\vepl1_y_gradient.h
 # End Source File
 # End Group
 # End Target
