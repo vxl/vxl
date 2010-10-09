@@ -705,10 +705,10 @@ bool boxm_render_ocl_scene_manager::set_external_image_cam_buffers(
         for (unsigned j=0;j<projection_matrix.cols();j++)
             ext_cam_[cnt++]=(cl_float)projection_matrix(i,j);
 
-    ext_cam_[cnt++]=external_cam->camera_center().x();
-    ext_cam_[cnt++]=external_cam->camera_center().y();
-    ext_cam_[cnt++]=external_cam->camera_center().z();
-    ext_cam_[cnt++]=0;
+    ext_cam_[cnt++]=float(external_cam->camera_center().x());
+    ext_cam_[cnt++]=float(external_cam->camera_center().y());
+    ext_cam_[cnt++]=float(external_cam->camera_center().z());
+    ext_cam_[cnt++]=0.f;
 
 
     cl_int status=0;
@@ -950,7 +950,7 @@ bool boxm_render_ocl_scene_manager::set_block_ptrs()
   }
   scene_->block_num(scene_x_,scene_y_,scene_z_);
   int numblocks=scene_x_*scene_y_*scene_z_;
-  vcl_cout<<"Block size "<<(float)numblocks*16/1024.0/1024.0<<"MB"<<vcl_endl;
+  vcl_cout<<"Block size "<<(float)numblocks*16.f/1024.0f/1024.0f<<"MB"<<vcl_endl;
 
   block_ptrs_=(cl_int*)boxm_ocl_utils::alloc_aligned(numblocks,sizeof(cl_int4),16);
   scene_->get_block_ptrs(block_ptrs_);
@@ -1051,8 +1051,8 @@ bool boxm_render_ocl_scene_manager::set_all_blocks()
   int cellBytes = sizeof(cl_int2);
   int dataBytes = sizeof(cl_uchar8)+sizeof(cl_float);
   vcl_cout<<"Optimized sizes:\n"
-          <<"    cells: "<<(float)cells_size_*cellBytes/1024.0/1024.0<<"MB\n"
-          <<"    data:  "<<(float)cells_size_*dataBytes/1024.0/1024.0<<"MB"<<vcl_endl;
+          <<"    cells: "<<(float)cells_size_*(float)cellBytes/1024.0f/1024.0f<<"MB\n"
+          <<"    data:  "<<(float)cells_size_*(float)dataBytes/1024.0f/1024.0f<<"MB"<<vcl_endl;
   /**********************************/
 
   //allocate and initialize tree cells
@@ -1132,7 +1132,7 @@ bool boxm_render_ocl_scene_manager::set_tree_buffers()
   int alphaBytes = cell_data_size_*sizeof(cl_float);
   int mixBytes = cell_data_size_*sizeof(cl_uchar8);
   int blockBytes = scene_x_*scene_y_*scene_z_*sizeof(cl_int4);
-  float MB = (cellBytes + alphaBytes + mixBytes + blockBytes)/1024.0f/1024.0f;
+  float MB = float(cellBytes + alphaBytes + mixBytes + blockBytes)/1024.0f/1024.0f;
   vcl_cout<<"GPU Mem allocated:\n"
           <<"   cells: "<<cellBytes<<" bytes\n"
           <<"   alpha: "<<alphaBytes<<" bytes\n"
