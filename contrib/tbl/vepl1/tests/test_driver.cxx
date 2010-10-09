@@ -6,14 +6,14 @@
 #include <vcl_string.h>
 #include <vxl_config.h> // for vxl_byte
 
-DECLARE( vepl_test_erode_disk );
-DECLARE( vepl_test_threshold );
+DECLARE( vepl1_test_erode_disk );
+DECLARE( vepl1_test_threshold );
 
 void
 register_tests()
 {
-  REGISTER( vepl_test_erode_disk );
-  REGISTER( vepl_test_threshold );
+  REGISTER( vepl1_test_erode_disk );
+  REGISTER( vepl1_test_threshold );
 }
 
 DEFINE_MAIN;

@@ -32,9 +32,9 @@
 #include <vtol/vtol_edge_2d.h>
 #include <vtol/vtol_edge_2d_sptr.h>
 #include <vtol/vtol_intensity_face.h>
-#include <vepl1/vepl_gradient_mag.h>
-#include <vepl1/vepl_gaussian_convolution.h>
-#include <vepl1/vepl_threshold.h>
+#include <vepl1/vepl1_gradient_mag.h>
+#include <vepl1/vepl1_gaussian_convolution.h>
+#include <vepl1/vepl1_threshold.h>
 #include <vsrl/vsrl_point_picker.h>
 #include <vsrl/vsrl_results_dense_matcher.h>
 #include <vsrl/vsrl_3d_output.h>
@@ -359,8 +359,8 @@ bool vsrl_manager::do_dense_matching()
   // If desired, we can do Gaussian smoothing.  This can be handy for
   // badly interlaced images.
   if (smoothing) {
-    vil1_image left = vepl_gaussian_convolution(imgL_,sig,cutoff);
-    vil1_image right = vepl_gaussian_convolution(imgR_,sig,cutoff);
+    vil1_image left = vepl1_gaussian_convolution(imgL_,sig,cutoff);
+    vil1_image right = vepl1_gaussian_convolution(imgR_,sig,cutoff);
     imgL_=left;
     imgR_=right;
   }
@@ -661,7 +661,7 @@ vsrl_manager::draw_vector_at(vgl_vector_2d<float>* vec, float x, float y, float 
 vil1_image
 vsrl_manager::show_gradient_mag(vil1_image* im_in)
 {
-  vil1_image im_out = vepl_gradient_mag(*im_in);
+  vil1_image im_out = vepl1_gradient_mag(*im_in);
   disp_img_ = im_out;  // this line lets us save out the image
   //  vil1_image scaled_image = scale_image(im_out);
   dimg_tab_->set_image(im_out);
@@ -1063,8 +1063,8 @@ void vsrl_manager::raw_correlation()
   gs_dialog.checkbox("Perform Gaussian Smoothing",smoothing);
   if (!gs_dialog.ask()) return;
   if (smoothing) {
-    vil1_image left = vepl_gaussian_convolution(imgL_,sig,cutoff);
-    vil1_image right = vepl_gaussian_convolution(imgR_,sig,cutoff);
+    vil1_image left = vepl1_gaussian_convolution(imgL_,sig,cutoff);
+    vil1_image right = vepl1_gaussian_convolution(imgR_,sig,cutoff);
     imgL_=left;
     imgR_=right;
   }
@@ -1411,7 +1411,7 @@ vsrl_manager::occlusion_map()
   output.write_output("out.dat");
   vil1_memory_image_of<unsigned char> range = output.get_unsigned_range_image();
   vil1_image scaled_rimage = scale_image(range);
-  vil1_image thresh_img = vepl_threshold(scaled_rimage,50,0,255);
+  vil1_image thresh_img = vepl1_threshold(scaled_rimage,50,0,255);
   //  this->show_gradient_mag(&scaled_rimage);
   disp_img_ = thresh_img;
   dimg_tab_->set_image(thresh_img);

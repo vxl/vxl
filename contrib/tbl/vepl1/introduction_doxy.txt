@@ -16,9 +16,9 @@
 * a particular IP filter is just a single line: e.g.:
 * \verbatim
 *   vil1_image im1 = vil1_load("filename"); // assume "ubyte" image
-*   vil1_image im2 = vepl_gradient_mag(im1);
-*   vil1_image im3 = vepl_median(im2, 1.5); // median filter with radius 1.5
-*   vil1_image im4 = vepl_threshold(im3, 59,0,255); // binary clipping at 59
+*   vil1_image im2 = vepl1_gradient_mag(im1);
+*   vil1_image im3 = vepl1_median(im2, 1.5); // median filter with radius 1.5
+*   vil1_image im4 = vepl1_threshold(im3, 59,0,255); // binary clipping at 59
 *   vil1_save(im4, "edges_image.pgm", "pnm");
 * \endverbatim
 */

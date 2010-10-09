@@ -9,7 +9,7 @@
 // \author Peter Vanroose, K.U.Leuven, ESAT/PSI
 // \date   15 May 2001, from vipl/examples
 //
-#include <vepl1/vepl_x_gradient.h>
+#include <vepl1/vepl1_x_gradient.h>
 
 // for I/O:
 #include <vil1/vil1_load.h>
@@ -17,7 +17,8 @@
 #include <vcl_iostream.h>
 
 int
-main(int argc, char** argv) {
+main(int argc, char** argv)
+{
   if (argc < 3)
   {
     vcl_cerr << "Syntax: example_x_gradient file_in file_out\n";
@@ -28,7 +29,7 @@ main(int argc, char** argv) {
   vil1_image in = vil1_load(argv[1]);
 
   // The filter:
-  vil1_image out = vepl_x_gradient(in);
+  vil1_image out = vepl1_x_gradient(in);
 
   // Write output:
   vil1_save(out, argv[2], "pnm");

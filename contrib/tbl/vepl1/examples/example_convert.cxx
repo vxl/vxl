@@ -1,6 +1,6 @@
 //:
 // \file
-//  This example program shows a typical use of the vepl_convert function on
+//  This example program shows a typical use of the vepl1_convert function on
 //  any image.  The input image (argv[1]) is converted to a ubyte image
 //  and written to argv[2] which is always a PGM file image.
 //  When the input image is RGB, its intensity is extracted.
@@ -13,7 +13,7 @@
 #include <vil1/vil1_memory_image_of.h>
 #include <vil1/vil1_rgb.h>
 
-#include <vepl1/vepl_convert.h> // this one last!
+#include <vepl1/vepl1_convert.h> // this one last!
 
 // for I/O:
 #include <vil1/vil1_load.h>
@@ -49,13 +49,14 @@ main(int argc, char** argv)
     vxl_byte dummy = 0;
     if (in.bits_per_component() == 8)
       vcl_cerr<<"Warning: no conversion necessary\n";
-    out_grey = vepl_convert(in, dummy);
+    out_grey = vepl1_convert(in, dummy);
     vil1_save(out_grey, argv[2], "pnm");
-    vcl_cout << "vepl_convert()ed grey image to PGM image " << argv[2] << vcl_endl;
-  } else if (in.planes() == 1 && in.components() == 3) { // colour (RGB)
-    out_rgb = vepl_convert(in,rgbcell());
+    vcl_cout << "vepl1_convert()ed grey image to PGM image " << argv[2] << vcl_endl;
+  }
+  else if (in.planes() == 1 && in.components() == 3) { // colour (RGB)
+    out_rgb = vepl1_convert(in,rgbcell());
     vil1_save(out_rgb, argv[2], "pnm");
-    vcl_cout << "vepl_convert()ed RGB image to PPM image " << argv[2] << vcl_endl;
+    vcl_cout << "vepl1_convert()ed RGB image to PPM image " << argv[2] << vcl_endl;
   }
   else vcl_cerr << "Cannot handle image with "<< in.planes() <<" planes and "<< in.components() <<" components\n";
 

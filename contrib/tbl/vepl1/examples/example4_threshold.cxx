@@ -1,6 +1,6 @@
 //:
 // \file
-//  This example program shows a typical use of the vepl_threshold function on
+//  This example program shows a typical use of the vepl1_threshold function on
 //  a ubyte image.  The input image (argv[1]) must be ubyte, and in that
 //  case is clipped (threshold value argv[3], default 10) to argv[2]
 //  which is always a PGM file image.
@@ -10,7 +10,7 @@
 //
 #include <vil1/vil1_memory_image_of.h>
 #include <vil1/vil1_pixel.h>
-#include <vepl1/vepl_threshold.h>
+#include <vepl1/vepl1_threshold.h>
 
 #include <vxl_config.h> // for vxl_byte
 typedef vil1_image img_type;
@@ -42,7 +42,7 @@ main(int argc, char** argv)
   vxl_byte threshold = (argc < 4) ? vxl_byte(64) : vxl_byte(vcl_atoi(argv[3]));
 
   // perform thresholding:
-  vepl_threshold(out,threshold,0,255); // NOTE THAT dst == src
+  vepl1_threshold(out,threshold,0,255); // NOTE THAT dst == src
 
   // Write output:
   vil1_save(out, argv[2], "pnm");

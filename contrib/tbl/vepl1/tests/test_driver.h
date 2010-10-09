@@ -1,5 +1,5 @@
-#ifndef vepl_test_driver_h_
-#define vepl_test_driver_h_
+#ifndef vepl1_test_driver_h_
+#define vepl1_test_driver_h_
 
 #include <vil1/vil1_image.h>
 #include <vcl_string.h>
@@ -30,4 +30,4 @@ bool difference(vil1_image const& a, vil1_image const& b, int v, vcl_string cons
   difference(i,r,v,m); \
   if (difference(i,r,0,"")) vcl_cout<<m<<" test FAILED: input image changed!\n"; }
 
-#endif // vepl_test_driver_h_
+#endif // vepl1_test_driver_h_

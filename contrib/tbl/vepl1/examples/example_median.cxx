@@ -10,7 +10,7 @@
 // \author Peter Vanroose, K.U.Leuven, ESAT/PSI
 // \date   15 May 2001, from vipl/examples
 //
-#include <vepl1/vepl_median.h>
+#include <vepl1/vepl1_median.h>
 
 // for I/O:
 #include <vil1/vil1_load.h>
@@ -19,7 +19,8 @@
 #include <vcl_cstdlib.h> // for atof()
 
 int
-main(int argc, char** argv) {
+main(int argc, char** argv)
+{
   if (argc < 3)
   {
     vcl_cerr << "Syntax: example_median file_in file_out [radius]\n";
@@ -33,7 +34,7 @@ main(int argc, char** argv) {
   float radius = (argc < 4) ? 1.5f : (float)vcl_atof(argv[3]);
 
   // The filter:
-  vil1_image out = vepl_median(in,radius);
+  vil1_image out = vepl1_median(in,radius);
 
   // Write output:
   vil1_save(out, argv[2], "pnm");
