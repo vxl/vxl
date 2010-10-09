@@ -96,6 +96,9 @@ LIB32=link.exe -lib
 SOURCE=.\vsph_spherical_coord.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vsph_sph_point_3d.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+vsph_spherical_coord-.cxx
 # End Source File
 # Begin Source File
@@ -118,6 +121,9 @@ SOURCE=.\vsph_spherical_coord.h
 # End Source File
 # Begin Source File
 SOURCE=.\vsph_view_point.h
+# End Source File
+# Begin Source File
+SOURCE=.\vsph_sph_point_3d.h
 # End Source File
 # End Group
 # End Target
