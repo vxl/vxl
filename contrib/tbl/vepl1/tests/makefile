@@ -7,8 +7,8 @@ include ${VXLROOT}/core/testlib/config.mk
 USE_IMPLICIT_TEMPLATES := 1
 
 TESTMAIN := test_driver.cxx
-TESTS += vepl_test_threshold.cxx
-TESTS += vepl_test_erode_disk.cxx
+TESTS += vepl1_test_threshold.cxx
+TESTS += vepl1_test_erode_disk.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
