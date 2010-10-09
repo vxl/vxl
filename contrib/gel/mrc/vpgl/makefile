@@ -25,7 +25,7 @@ MANPAGE_SOURCES += vpgl_local_rational_camera.txx
 #MANPAGE_SOURCES += vpgl_matrix_camera_sptr.h
 #MANPAGE_SOURCES += vpgl_perspective_camera_sptr.h
 
-SUBDIRS += io xio algo file_formats bgeo ihog vsph
+SUBDIRS += io xio algo file_formats bgeo ihog vsph icam
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

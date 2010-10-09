@@ -21,6 +21,9 @@ SUBDIRS += sdet_pro
 # bbas process classes
 SUBDIRS += bbas_pro
 
+# icam process classes
+SUBDIRS += icam_pro
+
 ################################
 include ${VXLROOT}/config/top.mk
 ################################

@@ -6,6 +6,7 @@ VERSION := 1.0
 SOURCES += vsph_spherical_coord.cxx
 MANPAGE_SOURCES += vsph_view_sphere.txx
 MANPAGE_SOURCES += vsph_view_point.h
+SOURCES += vsph_sph_point_3d.cxx
 
 MANPAGE_SOURCES += vsph_spherical_coord_sptr.h
 
