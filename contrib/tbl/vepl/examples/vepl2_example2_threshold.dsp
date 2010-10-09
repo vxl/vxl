@@ -1,4 +1,4 @@
-# Microsoft Developer Studio Project File - Name="vepl2_example_add_random_noise" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="vepl_example2_threshold" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
@@ -7,27 +7,27 @@
 #  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\contrib\tbl" == include path
 #  == override in output directory
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DINSTANTIATE_TEMPLATES -DINSTANTIATE_TEMPLATES == compiler defines
-# vepl2_example_add_random_noise  == name of output library
-#  /LIBPATH:$(VXLROOT)\lib\$(INTDIR)  /LIBPATH:$(VXLROOT)\lib\  vepl2.lib vil2.lib vipl.lib vnl.lib vil.lib ws2_32.lib tiff.lib png.lib zlib.lib jpeg.lib vcl.lib /STACK:10000000  == libraries linked in 
+# vepl_example2_threshold  == name of output library
+#  /LIBPATH:$(VXLROOT)\lib\$(INTDIR)  /LIBPATH:$(VXLROOT)\lib\  vepl.lib vipl.lib vnl.lib vil.lib ws2_32.lib tiff.lib png.lib zlib.lib jpeg.lib vcl.lib /STACK:10000000  == libraries linked in 
 # TARGTYPE "Win32 (x86) Application" 0x0103
 
-CFG=vepl2_example_add_random_noise - Win32 Debug
+CFG=vepl_example2_threshold - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "vepl2_example_add_random_noise.mak".
+!MESSAGE NMAKE /f "vepl_example2_threshold.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "vepl2_example_add_random_noise.mak" CFG="vepl2_example_add_random_noise - Win32 Debug"
+!MESSAGE NMAKE /f "vepl_example2_threshold.mak" CFG="vepl_example2_threshold - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "vepl2_example_add_random_noise - Win32 MinSizeRel" (based on "Win32 (x86) Application")
-!MESSAGE "vepl2_example_add_random_noise - Win32 Release" (based on "Win32 (x86) Application")
-!MESSAGE "vepl2_example_add_random_noise - Win32 RelWithDebInfo" (based on "Win32 (x86) Application")
-!MESSAGE "vepl2_example_add_random_noise - Win32 Debug" (based on "Win32 (x86) Application")
+!MESSAGE "vepl_example2_threshold - Win32 MinSizeRel" (based on "Win32 (x86) Application")
+!MESSAGE "vepl_example2_threshold - Win32 Release" (based on "Win32 (x86) Application")
+!MESSAGE "vepl_example2_threshold - Win32 RelWithDebInfo" (based on "Win32 (x86) Application")
+!MESSAGE "vepl_example2_threshold - Win32 Debug" (based on "Win32 (x86) Application")
 !MESSAGE 
 
 # Begin Project
@@ -38,7 +38,7 @@ CPP=cl.exe
 MTL=midl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "vepl2_example_add_random_noise - Win32 Release"
+!IF  "$(CFG)" == "vepl_example2_threshold - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -52,7 +52,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
 # ADD CPP /nologo  /D "WIN32"  /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\contrib\tbl" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DINSTANTIATE_TEMPLATES -DINSTANTIATE_TEMPLATES /D "vepl2_example_add_random_noise_EXPORTS"
+# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\contrib\tbl" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DINSTANTIATE_TEMPLATES -DINSTANTIATE_TEMPLATES /D "vepl_example2_threshold_EXPORTS"
 # ADD CPP /nologo /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2 -DCMAKE_INTDIR=\"Release\"
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -65,8 +65,7 @@ LINK32=link.exe
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /IGNORE:4089
 
 # ADD LINK32 /LIBPATH:$(VXLROOT)\lib\$(INTDIR)  /LIBPATH:$(VXLROOT)\lib\ 
-# ADD LINK32 vepl2.lib
-# ADD LINK32 vil2.lib
+# ADD LINK32 vepl.lib
 # ADD LINK32 vipl.lib
 # ADD LINK32 vnl.lib
 # ADD LINK32 vil.lib
@@ -78,7 +77,7 @@ LINK32=link.exe
 # ADD LINK32 vcl.lib
 # ADD LINK32 /STACK:10000000 
 
-!ELSEIF  "$(CFG)" == "vepl2_example_add_random_noise - Win32 Debug"
+!ELSEIF  "$(CFG)" == "vepl_example2_threshold - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -92,7 +91,7 @@ LINK32=link.exe
 # PROP Target_Dir ""
 # ADD BASE CPP   /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /GZ /c
 # ADD CPP /nologo  /D "WIN32"  /D "_DEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /GZ /c
-# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\contrib\tbl" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DINSTANTIATE_TEMPLATES -DINSTANTIATE_TEMPLATES /D "vepl2_example_add_random_noise_EXPORTS"
+# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\contrib\tbl" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DINSTANTIATE_TEMPLATES -DINSTANTIATE_TEMPLATES /D "vepl_example2_threshold_EXPORTS"
 # ADD CPP /nologo /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ -DCMAKE_INTDIR=\"Debug\"
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
@@ -107,8 +106,7 @@ LINK32=link.exe
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /IGNORE:4089
 
 # ADD LINK32 /LIBPATH:$(VXLROOT)\lib\$(INTDIR)  /LIBPATH:$(VXLROOT)\lib\ 
-# ADD LINK32 vepl2.lib
-# ADD LINK32 vil2.lib
+# ADD LINK32 vepl.lib
 # ADD LINK32 vipl.lib
 # ADD LINK32 vnl.lib
 # ADD LINK32 vil.lib
@@ -120,7 +118,7 @@ LINK32=link.exe
 # ADD LINK32 vcl.lib
 # ADD LINK32 /STACK:10000000 
 
-!ELSEIF  "$(CFG)" == "vepl2_example_add_random_noise - Win32 MinSizeRel"
+!ELSEIF  "$(CFG)" == "vepl_example2_threshold - Win32 MinSizeRel"
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
 # PROP BASE Output_Dir "MinSizeRel"
@@ -133,7 +131,7 @@ LINK32=link.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
 # ADD CPP /nologo  /D "WIN32"  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\contrib\tbl" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DINSTANTIATE_TEMPLATES -DINSTANTIATE_TEMPLATES /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\contrib\tbl" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DINSTANTIATE_TEMPLATES -DINSTANTIATE_TEMPLATES /D "vepl2_example_add_random_noise_EXPORTS"
+# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\contrib\tbl" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DINSTANTIATE_TEMPLATES -DINSTANTIATE_TEMPLATES /D "vepl_example2_threshold_EXPORTS"
 # ADD CPP /nologo /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O1 -DCMAKE_INTDIR=\"MinSizeRel\"
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -146,8 +144,7 @@ LINK32=link.exe
 # ADD LINK32  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /IGNORE:4089
 
 # ADD LINK32 /LIBPATH:$(VXLROOT)\lib\$(INTDIR)  /LIBPATH:$(VXLROOT)\lib\ 
-# ADD LINK32 vepl2.lib
-# ADD LINK32 vil2.lib
+# ADD LINK32 vepl.lib
 # ADD LINK32 vipl.lib
 # ADD LINK32 vnl.lib
 # ADD LINK32 vil.lib
@@ -159,7 +156,7 @@ LINK32=link.exe
 # ADD LINK32 vcl.lib
 # ADD LINK32 /STACK:10000000 
 
-!ELSEIF  "$(CFG)" == "vepl2_example_add_random_noise - Win32 RelWithDebInfo"
+!ELSEIF  "$(CFG)" == "vepl_example2_threshold - Win32 RelWithDebInfo"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -173,7 +170,7 @@ LINK32=link.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
 # ADD CPP /nologo  /D "WIN32"  /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\contrib\tbl" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DINSTANTIATE_TEMPLATES -DINSTANTIATE_TEMPLATES /D "vepl2_example_add_random_noise_EXPORTS"
+# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\contrib\tbl" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DINSTANTIATE_TEMPLATES -DINSTANTIATE_TEMPLATES /D "vepl_example2_threshold_EXPORTS"
 # ADD CPP /nologo /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /Zi /O2 -DCMAKE_INTDIR=\"RelWithDebInfo\"
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -186,8 +183,7 @@ LINK32=link.exe
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /IGNORE:4089
 
 # ADD LINK32 /LIBPATH:$(VXLROOT)\lib\$(INTDIR)  /LIBPATH:$(VXLROOT)\lib\ 
-# ADD LINK32 vepl2.lib
-# ADD LINK32 vil2.lib
+# ADD LINK32 vepl.lib
 # ADD LINK32 vipl.lib
 # ADD LINK32 vnl.lib
 # ADD LINK32 vil.lib
@@ -203,15 +199,15 @@ LINK32=link.exe
 
 # Begin Target
 
-# Name "vepl2_example_add_random_noise - Win32 Release"
-# Name "vepl2_example_add_random_noise - Win32 Debug"
-# Name "vepl2_example_add_random_noise - Win32 MinSizeRel"
-# Name "vepl2_example_add_random_noise - Win32 RelWithDebInfo"
+# Name "vepl_example2_threshold - Win32 Release"
+# Name "vepl_example2_threshold - Win32 Debug"
+# Name "vepl_example2_threshold - Win32 MinSizeRel"
+# Name "vepl_example2_threshold - Win32 RelWithDebInfo"
 
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\example_add_random_noise.cxx
+SOURCE=.\example2_threshold.cxx
 # End Source File
 # End Group
 # End Target
