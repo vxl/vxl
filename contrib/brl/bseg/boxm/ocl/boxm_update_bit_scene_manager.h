@@ -30,17 +30,17 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
     refine_kernel_(0),
     query_point_kernel_(0),
     ray_probe_kernel_(0),
-    use_gl_(true),
-    raydepth_(1000){}
+    raydepth_(1000),
+    use_gl_(true) {}
   ~boxm_update_bit_scene_manager() {
     if (program_)
       clReleaseProgram(program_);
   }
 
   //----------------------------------------------------------------------------
-  // Setup/deconstruct methods
+  // Setup/destruct methods
   //----------------------------------------------------------------------------
-  //allocates/deallocates host and gpu side scene buffers 
+  //allocates/deallocates host and gpu side scene buffers
   //(calls set and clean scene buffers)
   bool init_scene(boxm_ocl_bit_scene * scene,
                   vpgl_camera_double_sptr cam,
@@ -51,10 +51,10 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
                   unsigned nj,
                   float prob_thresh);
 
-  bool uninit_scene(); 
+  bool uninit_scene();
   bool setup_online_processing();
   bool finish_online_processing();
-  
+
   //----------------------------------------------------------------------------
   // Execute methods
   //----------------------------------------------------------------------------
@@ -64,7 +64,7 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   bool update();
   bool query_point(vgl_point_3d<float> p);
   bool ray_probe(unsigned i,unsigned j, float intensity);
-  
+
   //: before calling render and update, make sure persp cam is set (maybe combine w/ above methods for simplicity)
   bool set_persp_camera(vpgl_proj_camera<double> * pcam);
   bool write_persp_camera_buffers();
@@ -77,7 +77,6 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   void set_bundle_ni(unsigned bundle_x) {bni_=bundle_x;}
   void set_bundle_nj(unsigned bundle_y) {bnj_=bundle_y;}
 
-  
   //Enqueues a read command for output image and scene.  saves image/scene
   bool read_output_image();
   vil_image_view_base_sptr get_output_image();
@@ -85,15 +84,14 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   bool read_scene();
   void save_image();
   bool save_scene();
-  
-  
+
   //----------------------------------------------------------------------------
   // Get methods (unsure if when these are used)
   //----------------------------------------------------------------------------
   unsigned wni() const {return wni_;}
   unsigned wnj() const {return wnj_;}
   cl_float * output_image() {return image_;}
-    
+
   //---------------------------------------------------------------------------
   // Appearance density setup - this can be factored out of public and done
   // during setup
@@ -106,12 +104,12 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   cl_mem& app_density(){return app_density_buf_;}
   bool setup_norm_data(bool use_uniform=true,float mean = 0.0f, float sigma = 0.0f);
   bool clean_norm_data();
-  
+
   //set offset buffers (offset for update, making sure you don't run into the same
   //block twice
   bool set_offset_buffers(int off_x, int off_y, int factor);
   bool release_offset_buffers();
-  
+
   //----------------------------------------------------------------------------
   //necessary CL items (program, command queue and kernels
   //three separate groups of kernels for 3 separate functions
@@ -124,7 +122,7 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   cl_kernel query_point_kernel_;
   cl_kernel ray_probe_kernel_;
   vcl_vector<cl_kernel> update_kernels_;
-  
+
   //----------------------------------------------------------------------------
   // input image (can make this private too, have a setter)
   // MIGHT NEED A THIRD, one for writing out...
@@ -147,11 +145,11 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   //----------------------------------------------------------------------------
   // PROTECTED helper methods (no need for these to be public, makes api simpler)
   //----------------------------------------------------------------------------
-  
+
   //called by init/uninit: sets/cleans scene buffers
   bool set_scene_buffers();
   bool clean_scene_buffers();
-  
+
   //set kernels/build programs (set kernels calls build programs)
   bool set_kernels();
   bool release_kernels();
@@ -162,7 +160,7 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   bool build_ray_probe_program();
   //: executes specified kernel
   bool run(cl_kernel, unsigned pass);
-  
+
   //: sets args for each kernel (should only be called once)
   bool set_render_args();
   bool set_refine_args();
@@ -173,7 +171,7 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   bool set_commandqueue();
   bool release_commandqueue();
   bool set_workspace(cl_kernel kernel, unsigned pass);
-  
+
   //persp camera setup
   bool set_persp_camera();
   bool set_persp_camera_buffers();
@@ -187,8 +185,6 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   bool release_input_image_buffers();
   bool clean_input_image();
 
-
-
  /*****************************************
   * scene information
   *****************************************/
@@ -197,18 +193,18 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   cl_ushort       * mem_ptrs_;        //(int2) points to tree_cells_ free mem
   cl_ushort       * blocks_in_buffers_; //(ushort) number of blocks in each buffer
   cl_uchar        * cells_;           //(int2) packed tree cell data
-  
+
   /* optimized data format in 4 buffers */
   cl_float        * cell_alpha_;      //array of floats  (prob density)
   cl_uchar        * cell_mixture_;    //array of uchar8s (mixutre model)
   cl_ushort       * cell_num_obs_;    //array of short4s (num obs counts)
   cl_float        * cell_aux_data_;   //array of float4s (auxiliary data
-  
+
   /* other */
   cl_uchar        * bit_lookup_;
   cl_float          prob_thresh_;     //update prob thresh
   cl_float        * output_debug_;    //output for debugging
-  
+
  /*****************************************
   * update information
   *****************************************/
@@ -285,6 +281,7 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   vcl_size_t localThreads[2];
   bool use_gl_;
 };
+
 //: Binary write boxm_update_bit_scene_manager scene to stream
 void vsl_b_write(vsl_b_ostream & os, boxm_update_bit_scene_manager const& mgr);
 
