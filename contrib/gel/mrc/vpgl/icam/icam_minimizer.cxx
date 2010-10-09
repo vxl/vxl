@@ -76,7 +76,6 @@ icam_minimizer:: minimize(vgl_rotation_3d<double>& rot,
   dt_pyramid_.set_to_fl(to_fl);
   dt_pyramid_.set_rotation(rot);
   dt_pyramid_.set_translation(trans);
-  int n_levels = source_pyramid_.nlevels();
   vnl_vector<double> params, fx;
   for (int L=source_pyramid_.nlevels()-1; L>=0; --L)
     {
