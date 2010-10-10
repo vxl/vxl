@@ -117,6 +117,9 @@ SOURCE=.\icam_depth_trans_pyramid.cxx
 SOURCE=.\icam_utils.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\icam_transform_2d.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+icam_view_sphere-.cxx
 # End Source File
 # Begin Source File
@@ -148,6 +151,12 @@ SOURCE=.\icam_depth_trans_pyramid.h
 # End Source File
 # Begin Source File
 SOURCE=.\icam_utils.h
+# End Source File
+# Begin Source File
+SOURCE=.\icam_image.h
+# End Source File
+# Begin Source File
+SOURCE=.\icam_transform_2d.h
 # End Source File
 # End Group
 # End Target
