@@ -3,7 +3,16 @@
 #define icam_minimizer_h_
 //:
 // \file
-// \brief Find a camera using the depth image of known camera and minimizing squared intensity differences 
+// \brief Find a camera using the depth image of known camera and minimizing squared intensity differences
+// The camera is determined by minimizing the
+// sum of squared differences with respect to the image of a known camera.
+// The known camera is assumed to have the form K[I|0], i.e., the world
+// coordinate system is the same as the camera frame. A depth map, Z(u,v),
+// is given for the known camera. The rotation and translation parameters for
+// the unknown (to) camera with respect to the known (from) camera are
+// adjusted so as to minimize the least squared difference in intensity between
+// the from_image and to_image.
+//
 // \author J.L. Mundy
 // \date Sept. 6, 2010
 //
@@ -11,15 +20,7 @@
 //  Modifications
 //   None
 // \endverbatim
-// The camera is determined by minimizing the
-// sum of squared differences with respect to the image of a known camera.
-// The known camera is assumed to have the form K[I|0], i.e., the world 
-// coordinate system is the same as the camera frame. A depth map, Z(u,v),
-// is given for the known camera. The rotation and translation parameters for
-// the unknown (to) camera with respect to the known (from) camera are
-// adjusted so as to minimize the least squared difference in intensity between
-// the from_image and to_image.
-// 
+
 #include <vnl/vnl_vector.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_pyramid_image_view.h>
@@ -28,26 +29,26 @@
 #include <icam/icam_depth_transform.h>
 #include <icam/icam_depth_trans_pyramid.h>
 #include <icam/icam_cost_func.h>
-//: Minimize registration error at mulitiple scales 
-class icam_minimizer 
+
+//: Minimize registration error at multiple scales
+class icam_minimizer
 {
  public:
   //: Constructor, with all the parameters
-  icam_minimizer( const vil_image_view<float>& source_img,
-                  const vil_image_view<float>& dest_img,
-                  const icam_depth_transform& dt,
-                  unsigned min_level_size = 128);
-    
+  icam_minimizer(const vil_image_view<float>& source_img,
+                 const vil_image_view<float>& dest_img,
+                 const icam_depth_transform& dt,
+                 unsigned min_level_size = 128);
+
   //: Constructor, when source image is not known yet
-  icam_minimizer( const vil_image_view<float>& dest_img,
-                  const icam_depth_transform& dt,
-                  unsigned min_level_size = 128);
+  icam_minimizer(const vil_image_view<float>& dest_img,
+                 const icam_depth_transform& dt,
+                 unsigned min_level_size = 128);
 
   //: number of pyramid levels
-  unsigned n_levels(){return dt_pyramid_.n_levels();}
+  unsigned n_levels() const {return dt_pyramid_.n_levels();}
 
-  //: in the cases where source image is not know at construction, 
-  // it sets the image later
+  //: in the cases where source image is not know at construction, it sets the image later
   void set_source_img(const vil_image_view<float>& source_img);
 
   //: Run the minimization starting at input values
@@ -60,7 +61,6 @@ class icam_minimizer
                 double to_fl);
 
   double end_error(){return end_error_;}
-
 
   //: current parameter values
   double to_fl(){return dt_pyramid_.to_fl();}
@@ -87,38 +87,36 @@ class icam_minimizer
                                 );
 
   // ===============debug functions ===========
-  //: the average intensity difference for a given rotation,
-  //  translation and level
+
+  //: the average intensity difference for a given rotation, translation and level
   double error(vgl_rotation_3d<double>& rot,
                vgl_vector_3d<double>& trans, unsigned level);
 
-  //: the average intensity difference for a given rotation,
-  //  translation and level over a set of parameter values
+  //: the average intensity difference for a given rotation, translation and level over a set of parameter values
   vcl_vector<double> error(vgl_rotation_3d<double>& rot,
                            vgl_vector_3d<double>& trans, unsigned level,
                            unsigned param_index, double pmin,
                            double pmax, double pinc);
 
-  //:source images mapped to destination camera
-  // for a set of parameter values
+  //: source images mapped to destination camera for a set of parameter values
   vcl_vector<vil_image_view<float> > views(vgl_rotation_3d<double>& rot,
-                                           vgl_vector_3d<double>& trans, 
+                                           vgl_vector_3d<double>& trans,
                                            unsigned level,
                                            unsigned param_index, double pmin,
                                            double pmax, double pinc);
 
-  //:source image mapped to destination camera
+  //: source image mapped to destination camera
   vil_image_view<float> view(vgl_rotation_3d<double>& rot,
-                             vgl_vector_3d<double>& trans, 
+                             vgl_vector_3d<double>& trans,
                              unsigned level);
-  //:mask for source image mapped to destination camera
+  //: mask for source image mapped to destination camera
   vil_image_view<float> mask(vgl_rotation_3d<double>& rot,
-                             vgl_vector_3d<double>& trans, 
+                             vgl_vector_3d<double>& trans,
                              unsigned level);
   //: destination camera at level
   vpgl_perspective_camera<double> dest_cam(unsigned level);
 
-  //:destination image at level
+  //: destination image at level
   vil_image_view<float> dest(unsigned level){return dest_pyramid_(level);}
 
   //: the cost function for a given level
@@ -128,7 +126,7 @@ class icam_minimizer
   vil_pyramid_image_view<float> dest_pyramid_;
   icam_depth_trans_pyramid dt_pyramid_;
   unsigned min_level_size_;
-  double end_error_; 
+  double end_error_;
 };
 
 #endif // icam_minimizer_h_
