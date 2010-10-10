@@ -272,7 +272,7 @@ static void print_mix(unsigned b, float* results)
   }
 }
 
-static bool mix_eq(bsta_num_obs<bsta_mixture_fixed<bsta_num_obs<bsta_gauss_f1>, 3> > const& mix, unsigned b, float* results, float tol = 0.001)
+static bool mix_eq(bsta_num_obs<bsta_mixture_fixed<bsta_num_obs<bsta_gauss_f1>, 3> > const& mix, unsigned b, float* results, float tol = 0.001f)
 {
   float mu0=results[b],sigma0=results[b+1],w0=results[b+2],Nobs0=results[b+3];
   float mu1=results[b+4],sigma1=results[b+5],w1=results[b+6],Nobs1=results[b+7];
