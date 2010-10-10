@@ -393,37 +393,37 @@ class vgui_set_rangemap_command : public vgui_command
     int choice = rmp->band_map_;
     vgui_dialog rmp_dialog("Set Range Mapping Parameters");
     if (nc_ == 1) {
-      ranges[0] = rmp->min_L_;
-      ranges[1] = rmp->max_L_;
+      ranges[0] = double(rmp->min_L_);
+      ranges[1] = double(rmp->max_L_);
       rmp_dialog.field("Luminance Min ",ranges[0]);
       rmp_dialog.field("Luminance Max ",ranges[1]);
       rmp_dialog.field("Luminance Gamma ",rmp->gamma_L_);
     }
     if (nc_ == 3 || nc_ == 4) {
-      ranges[0] = rmp->min_R_;
-      ranges[1] = rmp->max_R_;
+      ranges[0] = double(rmp->min_R_);
+      ranges[1] = double(rmp->max_R_);
       rmp_dialog.field("R Min ",ranges[0]);
       rmp_dialog.field("R Max ",ranges[1]);
       rmp_dialog.field("R Gamma ",rmp->gamma_R_);
-      ranges[2] = rmp->min_G_;
-      ranges[3] = rmp->max_G_;
+      ranges[2] = double(rmp->min_G_);
+      ranges[3] = double(rmp->max_G_);
       rmp_dialog.field("G Min ",ranges[2]);
       rmp_dialog.field("G Max ",ranges[3]);
       rmp_dialog.field("G Gamma ",rmp->gamma_G_);
-      ranges[4] = rmp->min_B_;
-      ranges[5] = rmp->max_B_;
+      ranges[4] = double(rmp->min_B_);
+      ranges[5] = double(rmp->max_B_);
       rmp_dialog.field("B Min ",ranges[4]);
       rmp_dialog.field("B Max ",ranges[5]);
       rmp_dialog.field("B Gamma ",rmp->gamma_B_);
     }
     if (nc_==4) {
-      ranges[6] = rmp->min_X_;
-      ranges[7] = rmp->max_X_;
+      ranges[6] = double(rmp->min_X_);
+      ranges[7] = double(rmp->max_X_);
       rmp_dialog.field("X Min ",ranges[6]);
       rmp_dialog.field("X Max ",ranges[7]);
       rmp_dialog.field("X Gamma ",rmp->gamma_X_);
       vcl_vector<vcl_string> choices;
-      for(unsigned c = 0; c<vgui_range_map_params::END_m; ++c)
+      for (unsigned c = 0; c<vgui_range_map_params::END_m; ++c)
         choices.push_back(vgui_range_map_params::bmap[c]);
       rmp_dialog.choice("Band Map", choices, choice);
     }
@@ -450,7 +450,6 @@ class vgui_set_rangemap_command : public vgui_command
 
     //Setting the map with a new instance forces redraw
     tab_->set_mapping(rmp);
-
   }
 
   vgui_image_tableau_sptr tab_;
@@ -459,7 +458,7 @@ class vgui_set_rangemap_command : public vgui_command
 
 //----------------------------------------------------------------------------
 //: Builds a popup menu for the user to set range mapping parameters
-void vgui_image_tableau::get_popup(const vgui_popup_params& params,
+void vgui_image_tableau::get_popup(const vgui_popup_params& /*params*/,
                                    vgui_menu &menu)
 {
   vgui_menu submenu;
