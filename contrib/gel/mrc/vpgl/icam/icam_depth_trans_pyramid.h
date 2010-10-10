@@ -26,49 +26,44 @@
 class icam_depth_trans_pyramid
 {
  public:
-  icam_depth_trans_pyramid(): n_levels_(0){}
+  icam_depth_trans_pyramid(): n_levels_(0) {}
   icam_depth_trans_pyramid(icam_depth_transform & base_transform,
-                           unsigned n_levels
-                        );
+                           unsigned n_levels);
   icam_depth_trans_pyramid(vnl_matrix_fixed<double, 3, 3> const& K, 
                            vil_image_view<double> const& depth,
                            vgl_rotation_3d<double> const& rot,
                            vgl_vector_3d<double> const& trans,
                            unsigned n_levels,
-                           bool adjust_to_fl = false
-                           );
+                           bool adjust_to_fl = false);
   icam_depth_trans_pyramid(vnl_matrix_fixed<double, 3, 3> const& K_from,
                            vnl_matrix_fixed<double, 3, 3> const& K_to,
                            vil_image_view<double> const& depth,
                            vgl_rotation_3d<double> const& rot,
                            vgl_vector_3d<double> const& trans,
                            unsigned n_levels,
-                           bool adjust_to_fl = false
-                           );
+                           bool adjust_to_fl = false);
   icam_depth_trans_pyramid(vnl_matrix_fixed<double, 3, 3> const& K_from,
                            double to_fl, double to_pu, double to_pv,
                            vil_image_view<double> const& depth,
                            vgl_rotation_3d<double> const& rot,
                            vgl_vector_3d<double> const& trans,
                            unsigned n_levels,
-                           bool adjust_to_fl = false
-                           );
-  ~icam_depth_trans_pyramid(){}
-  //: determines the number of pyramid levels to reduce the smallest
-  //  image dimension to greater than or equal to min_size
+                           bool adjust_to_fl = false);
+  ~icam_depth_trans_pyramid() {}
+  //: determines the number of pyramid levels to reduce the smallest image dimension to greater than or equal to \a min_size
   static unsigned required_levels(unsigned ni,unsigned nj,
                                   unsigned min_size = 127);
-  unsigned n_levels(){return n_levels_;}
+  unsigned n_levels() const {return n_levels_;}
   void set_scale_factors(vnl_vector<double> const& scales)
-    { scale_factors_ = scales;}
+  { scale_factors_ = scales; }
   vnl_matrix_fixed<double, 3, 3>& calibration_matrix(unsigned level)
-    {return K_from_[level];}
+  { return K_from_[level]; }
   vnl_matrix_fixed<double, 3, 3>& from_calibration_matrix(unsigned level)
-    {return K_from_[level];}
+  { return K_from_[level]; }
   vnl_matrix_fixed<double, 3, 3> to_calibration_matrix(unsigned level)
-    {return K_to(level);}
+  { return K_to(level); }
   vil_image_view<double>& depth_map(unsigned level)
-    {return depth_pyramid_(level) ;}
+  { return depth_pyramid_(level); }
   void set_to_fl(double to_fl) {to_fl_ = to_fl;}
   void set_to_pu(double to_pu) {to_pu_ = to_pu;}
   void set_to_pv(double to_pv) {to_pv_ = to_pv;}

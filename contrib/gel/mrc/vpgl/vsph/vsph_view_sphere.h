@@ -4,6 +4,7 @@
 // \file
 // \brief  3D view sphere contains view points in a spherical coordinate system
 // \author Gamze Tunali
+// \date September 10, 2010
 //
 // \verbatim
 //  Modifications
@@ -27,7 +28,7 @@ class vsph_view_sphere
   //: default constructor
   vsph_view_sphere() : uid_(0) {}
 
-  //:constructor, creates with a spherical coordinate system
+  //: constructor, creates with a spherical coordinate system
   vsph_view_sphere(vsph_spherical_coord_sptr cs)
     : coord_sys_(cs),uid_(0) { }
 
@@ -44,38 +45,39 @@ class vsph_view_sphere
   //: returning the id of the newly added view
   unsigned add_view(T view);
 
-  //: creates a view point at a given 3d point, it will be translated to the surface of the sphere
+  //: creates a view point at a given 3d point.
+  //  It will be translated to the surface of the sphere
   unsigned add_view(vgl_point_3d<double> center);
 
-  //: adds uniformly placed viewpoints on the sphere in the area defined by elevation angle cap_angle, and the viewpoints are at most point_angle apart
+  //: adds uniformly placed viewpoints on the sphere in the area defined by elevation angle \a cap_angle, and the viewpoints are at most \a point_angle apart
   // It uses iterative triangle division on octahedron until the point angle is achieved
   void add_uniform_views(double cap_angle, double point_angle);
 
-  //: removes the view with the given id
+  //: removes the view with the given \a id
   bool remove_view(unsigned id);
 
   //: returns the number of view points kept
   unsigned size() const { return views_.size(); }
 
-  //: returns the view point associated with unique id (uid), returns false if uid is non-existant
-  bool view_point(unsigned uid, T& vp)  const; 
+  //: returns the view point associated with unique id \a uid.
+  //  Returns false if uid is non-existent
+  bool view_point(unsigned uid, T& vp)  const;
 
-  //: finds the nearest view to the given point already in the saved ones
-  // If uid is -1, it is unsuccessful
+  //: finds the nearest view to the i-th saved point
+  // If the returned \a uid is -1, the search is unsuccessful
   T find_closest(unsigned i, int &uid, double& dist);
 
-  //: finds the nearest view to the given arbitrary point
-  // If uid is -1, it is unsuccessful
+  //: finds the nearest view to the given arbitrary point \a p.
+  // If the returned \a uid is -1, the search is unsuccessful
   T find_closest(vgl_point_3d<double> p, int &uid, double& dist);
 
-  //: finds the closest neighbors of the view point in the distance dist and 
-  // return them
+  //: finds the closest neighbors of the view point \a uid and returns them in the second argument
   void find_neighbors(unsigned uid, vcl_vector<T>& neighbors);
 
   //: assignment operator
   vsph_view_sphere<T>& operator=(vsph_view_sphere<T> const& rhs);
 
-  //: Iterators
+  //: Iterator
   typedef typename vcl_map<unsigned, T>::iterator iterator;
   iterator begin() { return views_.begin(); }
   iterator end() { return views_.end(); }
@@ -107,7 +109,7 @@ class vsph_view_sphere
 
   unsigned next_id() { return uid_++; }
 
-  //: returns true if all the the angles between vertices of a triangle is smaller than angle
+  //: returns true if all the angles between vertices of a triangle are smaller than \a angle.
   // list.size() should be 3
   bool min_angle(vcl_vector<vgl_point_3d<double> > list, double angle);
 };
