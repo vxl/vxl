@@ -17,18 +17,19 @@
 #include <vil/vil_image_view.h>
 #include "icam_depth_transform.h"
 #include "icam_minimizer.h"
+#include <vcl_iostream.h>
 
 //: A class to hold image information of a viewpoint
-class icam_view_metadata 
+class icam_view_metadata
 {
  public:
 
    //: default constructor
    icam_view_metadata(){}
 
-   icam_view_metadata(vil_image_view<double> const& exp_img, 
-                      vil_image_view<double> const& depth_img, 
-                      icam_depth_transform const& dt) 
+   icam_view_metadata(vil_image_view<double> const& exp_img,
+                      vil_image_view<double> const& depth_img,
+                      icam_depth_transform const& dt)
                       : exp_img_(exp_img), depth_img_(depth_img)  { minimizer_=new icam_minimizer(exp_img, dt); }
 
    ~icam_view_metadata() { if (minimizer_) delete minimizer_; }
@@ -38,7 +39,7 @@ class icam_view_metadata
    //void set_expected_image(vil_image_view<double> img) { exp_image_=img; }
 
    //vil_pyr_image_view<double> depth_image() { return depth_img_; }
-   
+
    //void set_depth_image(vil_pyramid_image_view<double> img) { depth_image_=img; }
 
    void register_image(vil_image_view<double> const& source_img);
@@ -47,7 +48,7 @@ class icam_view_metadata
 
    double error() { return min_cost_; }
 
-   void print(vcl_ostream& os) const { os << " icam_view_metadata: " << vcl_endl; }
+   void print(vcl_ostream& os) const { os << "icam_view_metadata:" << vcl_endl; }
 
    void b_read(vsl_b_istream& is);
 
