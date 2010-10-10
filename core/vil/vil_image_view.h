@@ -58,10 +58,9 @@ class vil_image_view : public vil_image_view_base
   void release_memory() { ptr_ = 0; }
 
  public:
-
   //: Dflt ctor
   //  Creates an empty one-plane image.
-   vil_image_view(): top_left_(0),istep_(0),jstep_(0),planestep_(0) {}
+  vil_image_view(): top_left_(0),istep_(0),jstep_(0),planestep_(0) {}
 
   //: Create an image of ni x nj pixels in (n_planes * n_interleaved_planes) planes
   //  If n_interleaved_planes > 1, the planes are interleaved.
@@ -84,7 +83,7 @@ class vil_image_view : public vil_image_view_base
                  const T* top_left, unsigned ni, unsigned nj, unsigned nplanes,
                  vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_step, vcl_ptrdiff_t plane_step);
 
-  //: Copy construct.
+  //: Copy constructor.
   // The new object will point to the same underlying image as the rhs.
   vil_image_view(const vil_image_view<T>& rhs);
 
@@ -113,7 +112,7 @@ class vil_image_view : public vil_image_view_base
   //  Destructor
   virtual ~vil_image_view() {}
 
-  // Standard container stuff
+  // === Standard container stuff ===
   // This assumes that the data is arranged contiguously.
   // Is this assumption good?
 
@@ -123,7 +122,8 @@ class vil_image_view : public vil_image_view_base
   //: True if data all in one unbroken block and top_left_ptr() is lowest data address
   bool is_contiguous() const;
 
-  // iterators
+  // === iterators ===
+
   typedef T *iterator;
   inline iterator begin() { assert(is_contiguous()); return top_left_; }
   inline iterator end  () { assert(is_contiguous()); return top_left_ + size(); }
@@ -132,7 +132,7 @@ class vil_image_view : public vil_image_view_base
   inline const_iterator begin() const { assert(is_contiguous()); return top_left_; }
   inline const_iterator end  () const { assert(is_contiguous()); return top_left_ + size(); }
 
-  // arithmetic indexing stuff
+  // === arithmetic indexing stuff ===
 
   //: Pointer to the first (top left in plane 0) pixel.
   //  Note that this is not necessarily the lowest data memory address.
@@ -153,11 +153,11 @@ class vil_image_view : public vil_image_view_base
 
   //: Cast to bool is true if pointing at some data.
   operator safe_bool() const
-    { return (top_left_ != (T*)0)? VCL_SAFE_BOOL_TRUE : 0; }
+  { return (top_left_ != (T*)0)? VCL_SAFE_BOOL_TRUE : 0; }
 
   //: Return false if pointing at some data.
   bool operator!() const
-    { return (top_left_ != (T*)0)? false : true; }
+  { return (top_left_ != (T*)0)? false : true; }
 
   //: The number of bytes in the data
   inline unsigned size_bytes() const { return size() * sizeof(T); }
@@ -176,7 +176,7 @@ class vil_image_view : public vil_image_view_base
   // Typically used when creating new views of the data
   inline vil_memory_chunk_sptr& memory_chunk() { return ptr_; }
 
-  // Ordinary image indexing stuff.
+  // === Ordinary image indexing stuff. ===
 
   //: Return true if (i,j) is a valid index into this buffer.
   inline bool in_range(int i, int j) const
@@ -207,8 +207,7 @@ class vil_image_view : public vil_image_view_base
     assert(i<ni_); assert(j<nj_); assert(p<nplanes_);
     return top_left_[p*planestep_ + j*jstep_ + i*istep_]; }
 
-
-  // image stuff
+  // === image stuff ===
 
   //: resize current planes to ni x nj
   // If already correct size, this function returns quickly
