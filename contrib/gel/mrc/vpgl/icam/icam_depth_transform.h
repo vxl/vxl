@@ -76,14 +76,21 @@ class icam_depth_transform
   bool transform(double from_u, double from_v, double& to_u, double& to_v) const;
   bool transform(vgl_point_2d<double> const& from_p,
                  vgl_point_2d<double>& to_p ) const
-  { return false; }
+  { double u, v; bool r = transform(from_p.x(), from_p.y(), u, v); to_p.set(u,v); return r; }
+
   //: support for cost function
   unsigned n_params() {if (adjust_to_fl_)return 7; return 6;}
+
   //:
   // params are [a.vx, a.vy, a.vz, tx, ty, tz]
   // where a.v is a Rodriques vector (a angle of rotation, v rotation axis)
   // the projection for the "from" camera is K[R, t]
   void set_params(vnl_vector<double> const& params);
+
+  //:
+  // params are [a.vx, a.vy, a.vz, tx, ty, tz]
+  // where a.v is a Rodriques vector (a angle of rotation, v rotation axis)
+  // the projection for the "from" camera is K[R, t]
   vnl_vector<double> params();
 
  private:
