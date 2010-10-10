@@ -1,15 +1,15 @@
 #include "icam_view_sphere.h"
-
+//:
+// \file
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/algo/vpgl_camera_bounds.h>
 
 
 icam_view_sphere::icam_view_sphere(vgl_box_3d<double> bb, double radius)
 : view_sphere_(0)
-{ 
+{
   // create the view sphere
   view_sphere_ = new vsph_view_sphere<vsph_view_point<icam_view_metadata> > (bb, radius);
-  
 }
 
 void icam_view_sphere::create_view_points(double cap_angle, double view_angle)
@@ -31,7 +31,7 @@ void icam_view_sphere::cameras(vcl_map<unsigned, vpgl_camera_double_sptr> &camer
 }
 
 //: sets the images and depth images, associated with the view point id
-void icam_view_sphere::set_images(vcl_map<unsigned, vil_image_view<double> > images, 
+void icam_view_sphere::set_images(vcl_map<unsigned, vil_image_view<double> > images,
                                   vcl_map<unsigned,vil_image_view<double> > depth_images)
 {
   vcl_map<unsigned, vil_image_view<double> >::iterator it_imgs=images.begin();
@@ -54,14 +54,15 @@ void icam_view_sphere::set_images(vcl_map<unsigned, vil_image_view<double> > ima
           vp.set_metadata(data);
         }
       }
-    } else
-      vcl_cout << "icam_view_sphere::set_images -- ERROR! There is a missing depth image for image id=" << uid << vcl_endl; 
+    }
+    else
+      vcl_cout << "icam_view_sphere::set_images -- ERROR! There is a missing depth image for image id=" << uid << vcl_endl;
   }
 }
 
 void icam_view_sphere::register_image(vil_image_view<double> const& source_img)
 {
-  // try to find the best camera at each view point and at the end we will 
+  // try to find the best camera at each view point and at the end we will
   // have errors to compare on the view sphere
   vsph_view_sphere<vsph_view_point<icam_view_metadata> >::iterator it=view_sphere_->begin();
   while (it != view_sphere_->end()) {
@@ -79,10 +80,10 @@ void icam_view_sphere::find_local_minima(vcl_vector<vsph_view_point<icam_view_me
     vsph_view_point<icam_view_metadata> vp = it->second;
     unsigned vp_uid = it->first;
     double error=vp.metadata()->error();
-    
+
     // find the closest neighbors errors
     vcl_vector<vsph_view_point<icam_view_metadata> > neighbors;
-    view_sphere_->find_neighbors(vp_uid, neighbors);  
+    view_sphere_->find_neighbors(vp_uid, neighbors);
     // compare the errors with the neighbors
     bool smallest=true;
     for (unsigned i=0; i<neighbors.size(); i++) {
@@ -107,15 +108,15 @@ void icam_view_sphere::b_read(vsl_b_istream &is)
   vsl_b_read(is, version);
   switch (version)
   {
-    case 1: 
-      {
+    case 1:
+    {
       vsph_view_sphere<vsph_view_point<icam_view_metadata> > view_sphere;
       vsl_b_read(is, view_sphere);
       if (view_sphere_)
         *view_sphere_ = view_sphere;
-      else 
+      else
         view_sphere_=new vsph_view_sphere<vsph_view_point<icam_view_metadata> >(view_sphere);
-      }
+    }
     default:
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, icam_view_sphere&)\n"
                << "           Unknown version number "<< version << '\n';

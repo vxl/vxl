@@ -1,6 +1,7 @@
 #ifndef vsph_sph_point_3d_h_
 #define vsph_sph_point_3d_h_
-
+//:
+// \file
 #include <vsl/vsl_binary_io.h>
 #include <vcl_iostream.h>
 
