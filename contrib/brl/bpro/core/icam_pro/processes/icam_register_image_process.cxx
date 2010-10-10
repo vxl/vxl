@@ -1,5 +1,5 @@
-//This is gel/mrc/vpgl/icam/processes/icam_register_image_process.cxx
-#include <icam/icam_view_sphere.h>
+// This is brl/bpro/core/icam_pro/processes/icam_register_image_process.cxx
+
 //:
 // \file
 // \brief A process for generating cameras that view a scene
@@ -27,15 +27,15 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_load.h>
 
-//:global variables
+// global variables
 namespace icam_register_image_process_globals
 {
-  //this process takes no inputs
+  // this process takes 4 inputs and 1 output
   const unsigned n_inputs_ = 4;
   const unsigned n_outputs_ = 1;
 }
 
-//:sets input and output types
+//: sets input and output types
 bool icam_register_image_process_cons(bprb_func_process& pro)
 {
   using namespace icam_register_image_process_globals;
@@ -52,15 +52,15 @@ bool icam_register_image_process_cons(bprb_func_process& pro)
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
-//:creates a scene from parameters
+//: creates a scene from parameters
 bool icam_register_image_process(bprb_func_process& pro)
 {
-  if ( !pro.verify_inputs()){
+  if (!pro.verify_inputs()) {
     vcl_cout << pro.name() << "icam_register_image_process: invalid inputs" << vcl_endl;
     return false;
   }
   using namespace icam_register_image_process_globals;
-  
+
   int i=0;
   vcl_string exp_path = pro.get_input<vcl_string>(i++);
   vcl_string depth_path = pro.get_input<vcl_string>(i++);

@@ -1,5 +1,5 @@
-//This is gel/mrc/vpgl/icam/processes/icam_create_view_sphere_process.cxx
-#include <icam/icam_view_sphere.h>
+// This is brl/bpro/core/icam_pro/processes/icam_create_view_sphere_process.cxx
+
 //:
 // \file
 // \brief A process for generating cameras that view a scene
@@ -24,15 +24,15 @@
 #include <icam/icam_view_sphere.h>
 #include <icam/icam_view_metadata.h>
 
-//:global variables
+// global variables
 namespace icam_create_view_sphere_process_globals
 {
-  //this process takes no inputs
+  // this process takes 10 inputs and 2 outputs
   const unsigned n_inputs_ = 10;
   const unsigned n_outputs_ = 2;
 }
 
-//:sets input and output types
+//: sets input and output types
 bool icam_create_view_sphere_process_cons(bprb_func_process& pro)
 {
   using namespace icam_create_view_sphere_process_globals;
@@ -56,15 +56,15 @@ bool icam_create_view_sphere_process_cons(bprb_func_process& pro)
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
-//:creates a scene from parameters
+//: creates a scene from parameters
 bool icam_create_view_sphere_process(bprb_func_process& pro)
 {
-  if ( !pro.verify_inputs()){
+  if (!pro.verify_inputs()) {
     vcl_cout << pro.name() << "icam_create_view_sphere_process: invalid inputs" << vcl_endl;
     return false;
   }
   using namespace icam_create_view_sphere_process_globals;
-  
+
   int i=0;
   double elevation = pro.get_input<double>(i++);
   double view_angle = pro.get_input<double>(i++);
@@ -76,7 +76,7 @@ bool icam_create_view_sphere_process(bprb_func_process& pro)
   double orig_z = pro.get_input<double>(i++);
   double radius = pro.get_input<double>(i++);
   vcl_string path = pro.get_input<vcl_string>(i++);
-  
+
   vgl_box_3d<double> world_bb(orig_x, orig_y, orig_z, orig_x+dim_x, orig_y+dim_y, orig_z+dim_z);
   icam_view_sphere_sptr view_sphere =new icam_view_sphere(world_bb, radius);
 
@@ -91,10 +91,10 @@ bool icam_create_view_sphere_process(bprb_func_process& pro)
   fpath << path << "cameras.txt";
   vcl_ofstream file(fpath.str().c_str());
   if (!file.is_open()) {
-    vcl_cerr << "Failed to open file " << fpath.str() << vcl_endl;
+    vcl_cerr << "Failed to open file " << fpath.str() << '\n';
     return false;
   }
-  
+
   vcl_map<unsigned, vpgl_camera_double_sptr>::iterator it=cameras.begin();
   while (it != cameras.end()) {
     unsigned uid=it->first;
@@ -105,13 +105,13 @@ bool icam_create_view_sphere_process(bprb_func_process& pro)
     cam_path << /*path << */"camera" << uid << ".txt";
     vcl_ofstream ofs(cam_path.str().c_str());
     if (!file.is_open()) {
-      vcl_cerr << "Failed to open file " << cam_path.str() << vcl_endl;
+      vcl_cerr << "Failed to open file " << cam_path.str() << '\n';
       return false;
     }
     ofs << *pers_cam;
     ofs.close();
 
-    file << uid << " " << cam_path.str() << vcl_endl;
+    file << uid << ' ' << cam_path.str() << vcl_endl;
     it++;
   }
   file.close();
