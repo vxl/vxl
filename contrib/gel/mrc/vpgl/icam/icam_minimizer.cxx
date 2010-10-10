@@ -169,7 +169,7 @@ exhaustive_camera_search(vgl_box_3d<double> const& trans_box,
                          double& min_overlap_fraction)
 {
   double min_trans_cost = vnl_numeric_traits<double>::maxval;
-  double min_trans_overlap;
+  double min_trans_overlap = -1e99; // initialise to something smaller than min_allowed_overlap
   vnl_vector_fixed<double, 3> min_trans_rod;
   vgl_vector_3d<double> t, min_trans_trans;
   for (double x=trans_box.min_x(); x<=trans_box.max_x(); x+=trans_steps.x())
