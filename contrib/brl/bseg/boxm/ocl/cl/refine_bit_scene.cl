@@ -222,7 +222,7 @@ refine_bit_scene(__constant  RenderSceneInfo    * linfo,
             newInitCount++; 
   
             //calc new alpha
-            int currLevel = get_depth(j)+1;
+            int currLevel = get_depth(j);
             float side_len = linfo->block_len / (float) (1<<currLevel);
             float new_alpha = max_alpha_int / side_len;              
             alpha_array[offset+newDataPtr] = new_alpha;
@@ -249,7 +249,7 @@ refine_bit_scene(__constant  RenderSceneInfo    * linfo,
         }
         
         //6c. update endPtr
-        endPtr = (endPtr+newSize)%linfo->data_len;
+        endPtr = newDataPtr+1;//(endPtr+newSize)%linfo->data_len;
         
         //!!! assert that end pointer+newsize = newDataPtr+1...
         if(endPtr != (newDataPtr+1)%linfo->data_len) {
@@ -262,15 +262,15 @@ refine_bit_scene(__constant  RenderSceneInfo    * linfo,
       else if(currTreeSize <= freeSpace) {
         
         //6a. update local tree's data pointer (store it back tree buffer)
-        ushort buffOffset = (endPtr-1 + linfo->data_len)%linfo->data_len;
-        uchar hi = (uchar)(buffOffset >> 8);
+        ushort buffOffset = convert_ushort((endPtr-1 + linfo->data_len)%linfo->data_len);
+         int oldDataPtr = data_index_opt(0, local_tree, 0, bit_lookup);
+       uchar hi = (uchar)(buffOffset >> 8);
         uchar lo = (uchar)(buffOffset & 255);
-        (*refined_tree).sa = hi; 
-        (*refined_tree).sb = lo;
-        tree_array[gid*linfo->tree_len + subIndex] = as_int4((*refined_tree));
+        (*local_tree).sa = hi; 
+        (*local_tree).sb = lo;
+        tree_array[gid*linfo->tree_len + subIndex] = as_int4((*local_tree));
         
         //6b. move data up to end pointer
-        int oldDataPtr = data_index_opt(0, local_tree, 0, bit_lookup);
         int newDataPtr = buffOffset;   
         int offset = gid*linfo->data_len;                   //absolute buffer offset
         for(int j=0; j<currTreeSize; j++) {
@@ -293,7 +293,7 @@ refine_bit_scene(__constant  RenderSceneInfo    * linfo,
           return;
         }
       }
-#if 0
+#if 1
       //THIS SHOULDN"T EVER HAPPEN, buffer is full even though the tree didn't refine! 
       else {
         //move start pointer back
