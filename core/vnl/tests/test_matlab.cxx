@@ -42,17 +42,17 @@ void matlab_write_swapped(vcl_ostream &f,
   hdr.cols = 1;
   hdr.imag = 0;                 // not complex
   hdr.namlen = (unsigned long)vcl_strlen(name)+1L;
-  byteswap::MySwap32(&hdr.type);
-  byteswap::MySwap32(&hdr.rows);
-  byteswap::MySwap32(&hdr.cols);
-  byteswap::MySwap32(&hdr.imag);
-  byteswap::MySwap32(&hdr.namlen);
+  byteswap::swap32(&hdr.type);
+  byteswap::swap32(&hdr.rows);
+  byteswap::swap32(&hdr.cols);
+  byteswap::swap32(&hdr.imag);
+  byteswap::swap32(&hdr.namlen);
   f.write((char const *)&hdr, sizeof(hdr));
   f.write((char const *)name, vcl_strlen(name)+1);
   for (unsigned i = 0; i < size; ++i)
   {
     float dummy = array[i];
-    byteswap::MySwap32(&dummy);
+    byteswap::swap32(&dummy);
     f.write((char const *)&dummy,sizeof(dummy));
   }
 }

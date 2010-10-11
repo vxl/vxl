@@ -4,6 +4,10 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
+
+#undef swap32
+#undef swap64
+
 //:
 //  \file
 //  \brief MATLAB header structure
@@ -41,7 +45,7 @@ struct vnl_matlab_header
 namespace byteswap // byteswap routines, stolen from ITK
 {
  inline void
- MySwap32(void *ptr)
+ swap32(void *ptr)
  {
   char one_byte;
   char *p = reinterpret_cast<char *>(ptr);
@@ -49,7 +53,7 @@ namespace byteswap // byteswap routines, stolen from ITK
   one_byte = p[1]; p[1] = p[2]; p[2] = one_byte;
  }
  inline void
- MySwap64(void *ptr)
+ swap64(void *ptr)
  {
   char one_byte;
   char *p = reinterpret_cast<char *>(ptr);
