@@ -75,7 +75,8 @@ cast_ray(
   // Begin traversing the blocks, break when any curr_block_index value is
   // illegal (not between 0 and scenedims)
   //----------------------------------------------------------------------------
-  while(tblock < tfar && vis > 0.01f) 
+  float cellCount = 0.0f;
+  while(tblock < tfar) 
   {
     //-------------------------------------------------------------------------
     // get small block and necessary information
@@ -123,6 +124,7 @@ cast_ray(
     float ttree = 0.0f;                 
     while (ttree < texit)              
     {
+      cellCount++;
       // point in tree coordinates
       posx = (lrayx + (ttree + TREE_EPSILON)*ray_dx);  
       posy = (lrayy + (ttree + TREE_EPSILON)*ray_dy);   
@@ -176,6 +178,9 @@ cast_ray(
         aux_data_array[data_ptr]=(float4)cached_aux_data[llid];
       }
       in_image[j*get_global_size(0)*factor+i] = image_vect[llid];
+      
+      //reset cell_ptrs to negative one every time
+      cell_ptrs[llid] = -1;
 #endif
 #ifdef PREINF
       
@@ -226,6 +231,9 @@ cast_ray(
       if (ray_bundle_array[llid].y==1) {
         aux_data_array[data_ptr] = (float4)cached_aux_data[llid];
       }
+      
+      //reset cell_ptrs to -1 every time
+      cell_ptrs[llid] = -1;
 #endif 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -253,5 +261,6 @@ cast_ray(
 #ifdef RENDER
   gl_image[imIndex[llid]] = rgbaFloatToInt((float4) expected_int);
   in_image[imIndex[llid]] = (float4) expected_int;
+  //gl_image[imIndex[llid]] = rgbaFloatToInt((float4) cellCount/300.0f);
 #endif
 }

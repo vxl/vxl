@@ -49,8 +49,11 @@ int load_data_mutable_opt(__local short2  * ray_bundle_array,
   uchar row = (uchar)get_local_id(1);     //thread row
   uchar llid = (col + nbi*row);           //[0-nbi*nbj] index
   
-  //initialize segmentation information 
-  ray_bundle_array[llid] = (short2) (-1, 1);
+  //initialize segmentation information (if the ray isn't hitting a cell, make it a non-leader
+  if(cell_ptrs[llid] > 0)
+    ray_bundle_array[llid] = (short2) (-1, 1);
+  else
+    ray_bundle_array[llid] = (short2) (-1, 0);
   barrier(CLK_LOCAL_MEM_FENCE);
   
   //first pass looks to the right neighbor (make sure you don't look for the last one)

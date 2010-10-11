@@ -96,6 +96,7 @@ refine_bit_scene(__constant  RenderSceneInfo    * linfo,
                  __global    float              * alpha_array,      // alpha for each block
                  __global    uchar8             * mixture_array,    // mixture for each block
                  __global    ushort4            * num_obs_array,    // num obs for each block
+                 __global    float4             * aux_data_array,
                  
                  __constant  uchar              * bit_lookup,       // used to get data_index
                  //__local     uchar              * cumsum,           // cumulative sum helper for data pointer
@@ -133,6 +134,7 @@ refine_bit_scene(__constant  RenderSceneInfo    * linfo,
       output[gid] = -665;       
       return;
     }
+
     //------------------------------------------------------------------------
 
     //Iterate over each tree in buffer=gid      
@@ -209,6 +211,7 @@ refine_bit_scene(__constant  RenderSceneInfo    * linfo,
             alpha_array[offset + newDataPtr]   = alpha_array[offset + oldDataPtr];
             mixture_array[offset + newDataPtr] = mixture_array[offset + oldDataPtr];
             num_obs_array[offset + newDataPtr] = num_obs_array[offset + oldDataPtr];
+            aux_data_array[offset + newDataPtr] = (float4) 0.0f;
 
             //increment 
             oldDataPtr = (oldDataPtr+1)%linfo->data_len;
@@ -227,6 +230,7 @@ refine_bit_scene(__constant  RenderSceneInfo    * linfo,
             //store parent's data in child cells
             mixture_array[offset+newDataPtr] = (uchar8) 0;
             num_obs_array[offset+newDataPtr] = (ushort4) 0;
+            aux_data_array[offset + newDataPtr] = (float4) 0.0f;
 
             //update new data pointer
             newDataPtr = (newDataPtr+1)%linfo->data_len;

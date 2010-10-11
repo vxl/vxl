@@ -962,6 +962,10 @@ bool boxm_update_bit_scene_manager::set_refine_args()
   status = clSetKernelArg(refine_kernel_, i++, sizeof(cl_mem), (void *)&cell_num_obs_buf_);
   if (this->check_val(status, CL_SUCCESS, "clSetKernelArg failed. (cell_num_obs_buf_)")!=CHECK_SUCCESS)
     return 0;
+  //cell aux data buffer
+  status = clSetKernelArg(refine_kernel_,i++,sizeof(cl_mem),(void *)&cell_aux_data_buf_);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_data_buf_)"))
+    return 0;
   //bit lookup buffer
   status = clSetKernelArg(refine_kernel_,i++,sizeof(cl_mem),(void *)&bit_lookup_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output)"))
@@ -1719,7 +1723,6 @@ bool boxm_update_bit_scene_manager::refine()
 
 #endif
 #if 1
-
   /******** read some output **************************************/
   cl_event events[1];
   int status = clEnqueueReadBuffer(command_queue_,output_debug_buf_,CL_TRUE, 0,
@@ -1851,7 +1854,6 @@ bool boxm_update_bit_scene_manager::read_scene()
                                    0, numCells*sizeof(cl_uchar16),
                                    cells_,
                                    0,NULL,&events[0]);
-
   if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (cells )failed."))
     return false;
 
