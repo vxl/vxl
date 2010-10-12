@@ -62,6 +62,7 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   bool rendering();
   bool refine();
   bool update();
+  bool change_detection();
   bool query_point(vgl_point_3d<float> p);
   bool ray_probe(unsigned i,unsigned j, float intensity);
 
@@ -121,6 +122,7 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   cl_kernel refine_kernel_;
   cl_kernel query_point_kernel_;
   cl_kernel ray_probe_kernel_;
+  cl_kernel change_detection_kernel_;
   vcl_vector<cl_kernel> update_kernels_;
 
   //----------------------------------------------------------------------------
@@ -158,6 +160,7 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   bool build_refining_program();
   bool build_query_point_program();
   bool build_ray_probe_program();
+  bool build_change_detection_program();
   //: executes specified kernel
   bool run(cl_kernel, unsigned pass);
 
@@ -167,6 +170,7 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   bool set_update_args(unsigned pass);
   bool set_query_point_args();
   bool set_ray_probe_args(int i, int j, float intensity);
+  bool set_change_detection_args();
   //: set/release command_queue
   bool set_commandqueue();
   bool release_commandqueue();
