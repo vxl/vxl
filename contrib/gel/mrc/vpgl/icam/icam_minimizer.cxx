@@ -1,8 +1,8 @@
 // This is gel/mrc/vpgl/icam/icam_minimizer.cxx
+#include "icam_minimizer.h"
 //:
 // \file
 
-#include "icam_minimizer.h"
 #include <vcl_fstream.h>
 #include <vcl_sstream.h>
 #include <vbl/vbl_local_minima.h>
@@ -16,6 +16,7 @@
 #include <icam/icam_depth_trans_pyramid.h>
 #include <icam/icam_sample.h>
 #include <vpgl/algo/vpgl_camera_bounds.h>
+
 // for debug purposes --- REMOVE !! -----
 #if 1
 static vnl_vector_fixed<double, 3> min_roda(0.0204001, -0.0691839, -0.0725071);
@@ -35,37 +36,38 @@ static bool smallest_local_minima(vbl_array_3d<double> const& in,
                                   int & ix_min, int & iy_min,
                                   int & iz_min, double& min_s)
 {
-  int nz = in.get_row1_count(), ny = in.get_row2_count(), 
+  int nz = in.get_row1_count(), ny = in.get_row2_count(),
     nx = in.get_row3_count();
   vbl_array_3d<double> minima(nz, ny, nx);
   bool found_minima = local_minima(in, minima, min_thresh);
   // find minimum with lowest score
-  min_s = vnl_numeric_traits<double>::maxval;  
-  double global_min_s = vnl_numeric_traits<double>::maxval;  
-  for(int iz = 0; iz<nz; ++iz)
-    for(int iy = 0; iy<ny; ++iy)
-      for(int ix = 0; ix<nx; ++ix){
-        double s = in[iz][iy][ix];        
-        if(s<global_min_s)
+  min_s = vnl_numeric_traits<double>::maxval;
+  double global_min_s = vnl_numeric_traits<double>::maxval;
+  for (int iz = 0; iz<nz; ++iz)
+    for (int iy = 0; iy<ny; ++iy)
+      for (int ix = 0; ix<nx; ++ix) {
+        double s = in[iz][iy][ix];
+        if (s<global_min_s)
           global_min_s = s;
-        if(minima[iz][iy][ix]>0){
-
+        if (minima[iz][iy][ix]>0) {
 #if 0
           vcl_cout << "min(" << ix << ' ' << iy << ' ' << iz << ")= " << s << '\n';
 #endif
-          if(s<min_s) min_s = s;
+          if (s<min_s) min_s = s;
           ix_min = ix; iy_min = iy; iz_min = iz;
         }
       }
-  if(found_minima){
-    if(min_s>global_min_s)
-      vcl_cout << "Warning! local minimum not global minimum " 
+  if (found_minima) {
+    if (min_s>global_min_s)
+      vcl_cout << "Warning! local minimum not global minimum "
                << min_s << " > " << global_min_s << '\n';
-  }else{
-    vcl_cout << " No local minimum found \n";
+  }
+  else {
+    vcl_cout << " No local minimum found\n";
   }
   return found_minima;
 }
+
 //: Constructor
 icam_minimizer::icam_minimizer( const vil_image_view<float>& source_img,
                                 const vil_image_view<float>& dest_img,
@@ -73,47 +75,46 @@ icam_minimizer::icam_minimizer( const vil_image_view<float>& source_img,
                                 unsigned min_level_size,
                                 unsigned box_reduction_k,
                                 double local_min_thresh,
-                                vcl_string const& base_path
-                                )
-  : end_error_(0.0), min_level_size_(min_level_size), 
+                                vcl_string const& base_path)
+  : end_error_(0.0), min_level_size_(min_level_size),
     cam_search_valid_(false), box_reduction_k_(box_reduction_k),
     local_min_thresh_(local_min_thresh), base_path_(base_path)
 {
-
-  unsigned n_levels = 
+  unsigned n_levels =
     icam_depth_trans_pyramid::required_levels(dest_img.ni(), dest_img.nj(),
                                               min_level_size);
 
-  vil_image_view_base_sptr source_sptr = 
+  vil_image_view_base_sptr source_sptr =
     new vil_image_view<float>(source_img);
   source_pyramid_ = vil_pyramid_image_view<float>(source_sptr,n_levels);
   vil_image_view_base_sptr dest_sptr = new vil_image_view<float>(dest_img);
   dest_pyramid_=vil_pyramid_image_view<float>(dest_sptr,n_levels);
   dt_pyramid_ = icam_depth_trans_pyramid(const_cast<icam_depth_transform&>(dt),n_levels);
 }
+
 icam_minimizer::icam_minimizer(const vil_image_view<float>& dest_img,
                                const icam_depth_transform& dt,
                                unsigned min_level_size,
                                unsigned box_reduction_k,
                                double local_min_thresh,
                                vcl_string const& base_path)
-  : end_error_(0.0), min_level_size_(min_level_size), 
+  : end_error_(0.0), min_level_size_(min_level_size),
     cam_search_valid_(false), box_reduction_k_(box_reduction_k),
     local_min_thresh_(local_min_thresh), base_path_(base_path)
 {
-  unsigned n_levels = 
+  unsigned n_levels =
     icam_depth_trans_pyramid::required_levels(dest_img.ni(), dest_img.nj(),
                                               min_level_size);
   vil_image_view_base_sptr dest_sptr = new vil_image_view<float>(dest_img);
   dest_pyramid_=vil_pyramid_image_view<float>(dest_sptr,n_levels);
-  dt_pyramid_ = 
+  dt_pyramid_ =
     icam_depth_trans_pyramid(const_cast<icam_depth_transform&>(dt),n_levels);
 }
 
 void icam_minimizer::set_source_img(const vil_image_view<float>& source_img)
 {
   vil_image_view_base_sptr source_sptr = new vil_image_view<float>(source_img);
-  source_pyramid_ = 
+  source_pyramid_ =
     vil_pyramid_image_view<float>(source_sptr,dest_pyramid_.nlevels());
 }
 
@@ -141,32 +142,32 @@ icam_minimizer:: minimize(vgl_rotation_3d<double>& rot,
   int n_levels = source_pyramid_.nlevels();
   vnl_vector<double> params, fx;
   for (int L=source_pyramid_.nlevels()-1; L>=0; --L)
-    {
-    
+  {
 #if 0
-      vil_image_view<float>& source = source_pyramid_(L);
-      vil_image_view<float>& dest = dest_pyramid_(L);
-      vil_image_view<float> source_sm(source.ni(), source.nj());
-      vil_image_view<float> dest_sm(dest.ni(), dest.nj());
+    vil_image_view<float>& source = source_pyramid_(L);
+    vil_image_view<float>& dest = dest_pyramid_(L);
+    vil_image_view<float> source_sm(source.ni(), source.nj());
+    vil_image_view<float> dest_sm(dest.ni(), dest.nj());
 
-      vil_gauss_filter_5tap(source,source_sm,vil_gauss_filter_5tap_params(2));
-      vil_gauss_filter_5tap(dest,dest_sm,vil_gauss_filter_5tap_params(2));
-      icam_cost_func cost(source_sm, dest_sm, 
-                          dt_pyramid_.depth_trans(L));
+    vil_gauss_filter_5tap(source,source_sm,vil_gauss_filter_5tap_params(2));
+    vil_gauss_filter_5tap(dest,dest_sm,vil_gauss_filter_5tap_params(2));
+    icam_cost_func cost(source_sm, dest_sm,
+                        dt_pyramid_.depth_trans(L));
 #endif
-      // no masks
-      vnl_levenberg_marquardt minimizer(cost_fn(L));
-      //minimizer.set_x_tolerance(1e-16);
-      //minimizer.set_f_tolerance(1.0);
-      //minimizer.set_g_tolerance(1e-3);
-      minimizer.set_trace(true);
-      //minimizer.set_max_iterations(50);
-      params = dt_pyramid_.params();
-      minimizer.minimize(params);
-      end_error_ = minimizer.get_end_error();
-      dt_pyramid_.set_params(params);
-    }
+    // no masks
+    vnl_levenberg_marquardt minimizer(cost_fn(L));
+    //minimizer.set_x_tolerance(1e-16);
+    //minimizer.set_f_tolerance(1.0);
+    //minimizer.set_g_tolerance(1e-3);
+    minimizer.set_trace(true);
+    //minimizer.set_max_iterations(50);
+    params = dt_pyramid_.params();
+    minimizer.minimize(params);
+    end_error_ = minimizer.get_end_error();
+    dt_pyramid_.set_params(params);
+  }
 }
+
 bool icam_minimizer::
 exhaustive_rotation_search(vgl_vector_3d<double> const& trans,
                            unsigned level,
@@ -184,9 +185,9 @@ exhaustive_rotation_search(vgl_vector_3d<double> const& trans,
   double polar_inc = vpgl_camera_bounds::rotation_angle_interval(dcam);
   unsigned nangle_steps = static_cast<unsigned>(2.0*vnl_math::pi/polar_inc );
   // nangle_steps must be even to include ang = 0.0
-  if(nangle_steps%2) nangle_steps++;
-  vcl_cout << "Searching over " 
-           << static_cast<unsigned>(npts*nangle_steps) 
+  if (nangle_steps%2) nangle_steps++;
+  vcl_cout << "Searching over "
+           << static_cast<unsigned>(npts*nangle_steps)
            << " rotations\n" << vcl_flush;
   double polar_range = vnl_math::pi;
   // need to include zero polar rotation in the scan so revise polar inc
@@ -194,38 +195,39 @@ exhaustive_rotation_search(vgl_vector_3d<double> const& trans,
   vnl_vector_fixed<double,3> min_rod;
   icam_cost_func cost = this->cost_fn(level);
   vul_timer tim;
-  principal_ray_scan prs(image_cone_ang, npts); 
+  principal_ray_scan prs(image_cone_ang, npts);
   unsigned n_succ = 0;
   min_overlap_fraction = 0.0;
   min_cost = vnl_numeric_traits<double>::maxval;
-  for(prs.reset(); prs.next();){
-    for(double ang = -polar_range; ang<=polar_range; ang+=polar_inc)
-      {
-        vgl_rotation_3d<double> rot = prs.rot(ang);
-        vnl_vector_fixed<double, 3> rod = rot.as_rodrigues();
-        //double c = cost.error(rod, trans,min_allowed_overlap);
-        //double c = cost.entropy(rod, trans,min_allowed_overlap);
-        double c = cost.mutual_info(rod, trans,min_allowed_overlap);
-        if(c==vnl_numeric_traits<double>::maxval)
-          continue;
-        c = -c;
-        if(c<min_cost){
-          min_cost = c;
-          min_rod = rod;
-          min_overlap_fraction = cost.frac_samples();
-          n_succ++;
-        }
+  for (prs.reset(); prs.next();) {
+    for (double ang = -polar_range; ang<=polar_range; ang+=polar_inc)
+    {
+      vgl_rotation_3d<double> rot = prs.rot(ang);
+      vnl_vector_fixed<double, 3> rod = rot.as_rodrigues();
+      //double c = cost.error(rod, trans,min_allowed_overlap);
+      //double c = cost.entropy(rod, trans,min_allowed_overlap);
+      double c = cost.mutual_info(rod, trans,min_allowed_overlap);
+      if (c==vnl_numeric_traits<double>::maxval)
+        continue;
+      c = -c;
+      if (c<min_cost) {
+        min_cost = c;
+        min_rod = rod;
+        min_overlap_fraction = cost.frac_samples();
+        n_succ++;
       }
+    }
 #if 0
     vcl_cout << min_cost << ' ' << vcl_flush ;
 #endif
   }
   vcl_cout << "scan took " << tim.real()/1000.0 << " seconds\n" << vcl_flush;
 
-  if(n_succ==0) return false;
+  if (n_succ==0) return false;
   min_rot = vgl_rotation_3d<double>(min_rod);
   return true;
 }
+
 bool icam_minimizer::
 initialized_rot_search(vgl_vector_3d<double> const& trans,
                        vgl_rotation_3d<double>& initial_rot,
@@ -236,9 +238,9 @@ initialized_rot_search(vgl_vector_3d<double> const& trans,
                        double& min_cost,
                        double& min_overlap_fraction)
 {
-  vpgl_perspective_camera<double> idcam = 
+  vpgl_perspective_camera<double> idcam =
     this->dest_cam(initial_level);
-  vpgl_perspective_camera<double> sdcam = 
+  vpgl_perspective_camera<double> sdcam =
     this->dest_cam(search_level);
   double initial_pixel_cone_ang, initial_pixel_solid_ang;
   vpgl_camera_bounds::
@@ -251,55 +253,56 @@ initialized_rot_search(vgl_vector_3d<double> const& trans,
                       search_pixel_solid_ang);
   // is 3 enough?
   double search_space_cone_ang = 3*initial_pixel_cone_ang;
-  double search_space_solid_ang = 
+  double search_space_solid_ang =
     vpgl_camera_bounds::solid_angle(search_space_cone_ang);
   double ratio = search_space_solid_ang/search_pixel_solid_ang;
   unsigned npts = static_cast<unsigned>(ratio);
-  double polar_inc = 
+  double polar_inc =
     vpgl_camera_bounds::rotation_angle_interval(sdcam);
   double polar_range = 4.0*initial_polar_inc;//is 4 enough?
-  unsigned nangle_steps = 
+  unsigned nangle_steps =
     static_cast<unsigned>(polar_range/polar_inc);
   // nangle_steps must be even to include ang = 0.0
-  if(nangle_steps%2) nangle_steps++;
-  vcl_cout << "Searching over " 
-           << static_cast<unsigned>(npts*nangle_steps) 
+  if (nangle_steps%2) nangle_steps++;
+  vcl_cout << "Searching over "
+           << static_cast<unsigned>(npts*nangle_steps)
            << " rotations\n" << vcl_flush;
   polar_inc = polar_range/(static_cast<double>(nangle_steps));
-  principal_ray_scan prs(search_space_cone_ang, npts); 
+  principal_ray_scan prs(search_space_cone_ang, npts);
   unsigned n_succ = 0;
   min_overlap_fraction = 0.0;
   min_cost = vnl_numeric_traits<double>::maxval;
   icam_cost_func cost = this->cost_fn(search_level);
   vnl_vector_fixed<double,3> min_rod;
   vul_timer tim;
-  for(prs.reset(); prs.next();){
-    for(double ang = -(polar_range/2); ang<=(polar_range/2); ang+=polar_inc)
-      {
-        vgl_rotation_3d<double> rot = prs.rot(ang);
-        // pre or post multiply? Or something else?
-        vgl_rotation_3d<double> comp_rot = initial_rot*rot;
-        vnl_vector_fixed<double, 3> rod = comp_rot.as_rodrigues();
-        //double c = cost.error(rod, trans,min_allowed_overlap);
-        //double c = cost.entropy(rod, trans,min_allowed_overlap);
-        double c = cost.mutual_info(rod, trans,min_allowed_overlap);
-        if(c==vnl_numeric_traits<double>::maxval)
-          continue;
-        c = -c;
-        if(c<min_cost){
-          min_cost = c;
-          min_rod = rod;
-          min_overlap_fraction = cost.frac_samples();
-          n_succ++;
-        }
+  for (prs.reset(); prs.next();) {
+    for (double ang = -(polar_range/2); ang<=(polar_range/2); ang+=polar_inc)
+    {
+      vgl_rotation_3d<double> rot = prs.rot(ang);
+      // pre or post multiply? Or something else?
+      vgl_rotation_3d<double> comp_rot = initial_rot*rot;
+      vnl_vector_fixed<double, 3> rod = comp_rot.as_rodrigues();
+      //double c = cost.error(rod, trans,min_allowed_overlap);
+      //double c = cost.entropy(rod, trans,min_allowed_overlap);
+      double c = cost.mutual_info(rod, trans,min_allowed_overlap);
+      if (c==vnl_numeric_traits<double>::maxval)
+        continue;
+      c = -c;
+      if (c<min_cost) {
+        min_cost = c;
+        min_rod = rod;
+        min_overlap_fraction = cost.frac_samples();
+        n_succ++;
       }
+    }
   }
   vcl_cout << "scan took " << tim.real()/1000.0 << " seconds\n" << vcl_flush;
 
-  if(n_succ==0) return false;
+  if (n_succ==0) return false;
   min_rot = vgl_rotation_3d<double>(min_rod);
   return true;
 }
+
 void icam_minimizer::
 set_origin_step_delta(vgl_box_3d<double> const& trans_box,
                       vgl_vector_3d<double> const& trans_steps)
@@ -311,7 +314,7 @@ set_origin_step_delta(vgl_box_3d<double> const& trans_box,
   unsigned ny = static_cast<unsigned>(yspan/trans_steps.y());
   unsigned nz = static_cast<unsigned>(zspan/trans_steps.z());
   //need to include (0 0 0);
-  if(nx%2) nx++;  if(ny%2) ny++;  if(nz%2) nz++;
+  if (nx%2) ++nx;  if (ny%2) ++ny;  if (nz%2) ++nz;
   double dx = xspan/nx, dy = yspan/ny, dz = zspan/nz;
   box_origin_.set(trans_box.min_x(), trans_box.min_y(),trans_box.min_z());
   //cached items for subsequent processing
@@ -319,13 +322,13 @@ set_origin_step_delta(vgl_box_3d<double> const& trans_box,
   box_scores_ = vbl_array_3d<double>(nz+1, ny+1, nx+1);
   box_rotations_ = vbl_array_3d<vgl_rotation_3d<double> >(nz+1, ny+1, nx+1);
 }
+
 bool icam_minimizer::refine_minimum(int mx, int my, int mz,
                                     unsigned level,
                                     double min_allowed_overlap,
                                     vgl_vector_3d<double>& min_trans,
                                     double& min_cost)
 {
-
   int nz = box_scores_.get_row1_count(),ny = box_scores_.get_row2_count(),
     nx = box_scores_.get_row3_count();
   double mins = box_scores_[mz][my][mx];
@@ -333,29 +336,29 @@ bool icam_minimizer::refine_minimum(int mx, int my, int mz,
   bool valid = false;
   int inx = -1, iny = -1 , inz = -1;
   //find closest neighbor
-  for(int kz = -1; kz<=1; ++kz){
+  for (int kz = -1; kz<=1; ++kz) {
     int iz = mz+kz;
-    if(iz<0||iz>=nz)
+    if (iz<0||iz>=nz)
       continue;
-    for(int ky = -1; ky<=1; ++ky){
+    for (int ky = -1; ky<=1; ++ky) {
       int iy = my+ky;
-      if(iy<0||iy>=ny)
+      if (iy<0||iy>=ny)
         continue;
-      for(int kx = -1; kx<=1; ++kx)
+      for (int kx = -1; kx<=1; ++kx)
+      {
+        int ix = mx+kx;
+        if (ix<0||ix>=nx)
+          continue;
+        if (kx==0&&ky==0&&kz==0)
+          continue;
+        double diff = vcl_fabs(box_scores_[iz][iy][ix]-mins);
+        if (diff<min_diff)
         {
-          int ix = mx+kx;
-          if(ix<0||ix>=nx)
-            continue;
-          if(kx==0&&ky==0&&kz==0)
-            continue;
-          double diff = vcl_fabs(box_scores_[iz][iy][ix]-mins);
-          if(diff<min_diff)
-            {
-              min_diff = diff;
-              inx = ix; iny = iy; inz = iz;
-              valid = true;
-            }
+          min_diff = diff;
+          inx = ix; iny = iy; inz = iz;
+          valid = true;
         }
+      }
     }
   }
   // refine the estimates for translation and rotation
@@ -371,6 +374,7 @@ bool icam_minimizer::refine_minimum(int mx, int my, int mz,
   min_trans.set(xr, yr, zr);
   return valid;
 }
+
 bool icam_minimizer::
 exhaustive_camera_search(vgl_box_3d<double> const& trans_box,
                          vgl_vector_3d<double> const& trans_steps,
@@ -379,8 +383,7 @@ exhaustive_camera_search(vgl_box_3d<double> const& trans_box,
                          vgl_vector_3d<double>& min_trans,
                          vgl_rotation_3d<double>& min_rot,
                          double& min_cost,
-                         double& min_overlap_fraction
-                         )
+                         double& min_overlap_fraction)
 {
   //sets cached member variables
   this->set_origin_step_delta(trans_box, trans_steps);
@@ -393,52 +396,53 @@ exhaustive_camera_search(vgl_box_3d<double> const& trans_box,
   unsigned ix = 0, iy = 0, iz = 0;
   int mx = 0, my = 0, mz = 0;
   double x , y, z;
-  for(x=box_origin_.x(), ix = 0; ix<nx; x+=step_delta_.x(), ++ix)
-    for(y=box_origin_.y(), iy = 0; iy<ny; y+=step_delta_.y(), ++iy)
-      for(z=box_origin_.z(), iz = 0; iz<nz; z+=step_delta_.z(), ++iz)
-        {
-          t.set(x, y, z);
-          vgl_rotation_3d<double> rot;
-          double overlap, cost;
-          if(!exhaustive_rotation_search(t, level, min_allowed_overlap,
-                                         rot, cost, overlap) )
-            return false;
-          vnl_vector_fixed<double, 3> rotr = rot.as_rodrigues();
-          if(cost<min_trans_cost){
-            min_trans_trans = t;
-            min_trans_cost = cost;
-            min_trans_rod = rotr;
-            min_trans_overlap = overlap;
-            mx = ix; my = iy; mz = iz;
-          }
-          double t_dist = (t-min_trang).length();
-          double r_dist = (rotr - min_roda).magnitude();
-          vcl_cout << "t(" << x << ' ' << y << ' ' << z << ")["
-                   << t_dist << ' ' << r_dist << "] = " << cost << '\n';
-          vcl_cout << "-------> R(" << rotr[0] << ' ' << rotr[1] 
-                   << ' ' << rotr[2] << ")\n";
-          box_scores_[iz][iy][ix] = cost;
-          box_rotations_[iz][iy][ix]= rot;
+  for (x=box_origin_.x(), ix = 0; ix<nx; x+=step_delta_.x(), ++ix)
+    for (y=box_origin_.y(), iy = 0; iy<ny; y+=step_delta_.y(), ++iy)
+      for (z=box_origin_.z(), iz = 0; iz<nz; z+=step_delta_.z(), ++iz)
+      {
+        t.set(x, y, z);
+        vgl_rotation_3d<double> rot;
+        double overlap, cost;
+        if (!exhaustive_rotation_search(t, level, min_allowed_overlap,
+                                       rot, cost, overlap) )
+          return false;
+        vnl_vector_fixed<double, 3> rotr = rot.as_rodrigues();
+        if (cost<min_trans_cost) {
+          min_trans_trans = t;
+          min_trans_cost = cost;
+          min_trans_rod = rotr;
+          min_trans_overlap = overlap;
+          mx = ix; my = iy; mz = iz;
         }
+        double t_dist = (t-min_trang).length();
+        double r_dist = (rotr - min_roda).magnitude();
+        vcl_cout << "t(" << x << ' ' << y << ' ' << z << ")["
+                 << t_dist << ' ' << r_dist << "] = " << cost << '\n'
+                 << "-------> R(" << rotr[0] << ' ' << rotr[1]
+                 << ' ' << rotr[2] << ")\n";
+        box_scores_[iz][iy][ix] = cost;
+        box_rotations_[iz][iy][ix]= rot;
+      }
   //probably can't happen but just in case ...
-  if(min_trans_overlap<min_allowed_overlap) return false;
+  if (min_trans_overlap<min_allowed_overlap) return false;
   cam_search_valid_ = true;
   min_trans = min_trans_trans;
   min_rot = vgl_rotation_3d<double>(min_trans_rod);
   min_cost = min_trans_cost;
   min_overlap_fraction = min_trans_overlap;
-  if(base_path_!=""){
+  if (base_path_!="") {
     vcl_string path = base_path_ + "/box_top_lev.wrl";
     this->box_search_vrml(path, min_trang);
   }
   return true;
 }
+
 // The interval dx is defined by the initial box, initial step delta
 // and k the half width of the search space, i.e. 2k + 1 steps with
 // the initial translation, center_trans positioned at the k+1st cell
-// |<--- k --->|              
+// |<--- k --->|
 // [   |   |   | * |   |   |   ]
-// |dx | 
+// |dx |
 // |< --initial step delta --->|
 void icam_minimizer::
 reduce_search_box(vgl_vector_3d<double> const& center_trans,
@@ -450,20 +454,21 @@ reduce_search_box(vgl_vector_3d<double> const& center_trans,
     zc = center_trans.z();
   unsigned m = 2*box_reduction_k_;
   unsigned n = m+1;//total number of search steps
-  double dx = exf*initial_step_delta.x()/m, 
+  double dx = exf*initial_step_delta.x()/m,
     dy = exf*initial_step_delta.y()/m, dz = exf*initial_step_delta.z()/m;
   double off = box_reduction_k_;
-  // center the input translation  
+  // center the input translation
   box_origin_.set(xc-off*dx, yc-off*dy, zc-off*dz);
   step_delta_.set(dx, dy, dz);
   // recompute the number of steps
   box_scores_ = vbl_array_3d<double>(n, n, n);
   box_rotations_ = vbl_array_3d<vgl_rotation_3d<double> >(n, n, n);
 }
+
 bool icam_minimizer::
 pyramid_camera_search(vgl_vector_3d<double> const&
                       start_trans,
-                      vgl_rotation_3d<double> const& 
+                      vgl_rotation_3d<double> const&
                       start_rotation,
                       vgl_vector_3d<double> const&
                       start_step_delta,
@@ -474,8 +479,7 @@ pyramid_camera_search(vgl_vector_3d<double> const&
                       vgl_vector_3d<double>& min_trans,
                       vgl_rotation_3d<double>& min_rot,
                       double& min_cost,
-                      double& min_overlap_fraction
-                      )
+                      double& min_overlap_fraction)
 {
   double min_trans_overlap;
   vnl_vector_fixed<double, 3> min_trans_rod;
@@ -484,8 +488,9 @@ pyramid_camera_search(vgl_vector_3d<double> const&
   unsigned init_level = start_level;
   vgl_rotation_3d<double> init_rot = start_rotation;
   vgl_vector_3d<double> stepd = start_step_delta;
-  for(unsigned lev = start_level-1; lev>=final_level; --lev){
-    //sets box_origin_ and step delta, resizes box_scores and 
+  for (unsigned lev = start_level-1; lev>=final_level; --lev)
+  {
+    //sets box_origin_ and step delta, resizes box_scores and
     // box rotations
     this->reduce_search_box(min_trans, stepd);
     unsigned nz = box_scores_.get_row1_count();
@@ -493,81 +498,82 @@ pyramid_camera_search(vgl_vector_3d<double> const&
     unsigned nx = box_scores_.get_row3_count();
     double min_trans_cost = vnl_numeric_traits<double>::maxval;
     unsigned ix = 0, iy = 0, iz = 0;
-    for(x=box_origin_.x(),ix = 0; ix<nx; x+=step_delta_.x(), ++ix)
-      for(y=box_origin_.y(), iy = 0; iy<ny; y+=step_delta_.y(), ++iy)
-        for(z=box_origin_.z(),iz = 0; iz<nz; z+=step_delta_.z(), ++iz)
-          {
-            t.set(x, y, z);
-            vgl_rotation_3d<double> rot;
-            double overlap, cost;
-            if(!initialized_rot_search(t, init_rot,
-                                       init_level, lev,
-                                       min_allowed_overlap,
-                                       rot, cost, overlap))
-              return false;
-            vnl_vector_fixed<double, 3> rotr = rot.as_rodrigues();
-            if(cost<min_trans_cost){
-              min_trans_trans = t;
-              min_trans_cost = cost;
-              min_trans_rod = rotr;
-              min_trans_overlap = overlap;
-            }
-            double t_dist = (t-min_trang).length();
-            double r_dist = (rotr - min_roda).magnitude();
-            vcl_cout << "tp(" << x << ' ' << y << ' ' << z << ")["
-                     << t_dist << ' ' << r_dist << "] = " << cost << '\n';
-            box_scores_[iz][iy][ix] = cost;
-            box_rotations_[iz][iy][ix]= rot;
+    for (x=box_origin_.x(),ix = 0; ix<nx; x+=step_delta_.x(), ++ix)
+      for (y=box_origin_.y(), iy = 0; iy<ny; y+=step_delta_.y(), ++iy)
+        for (z=box_origin_.z(),iz = 0; iz<nz; z+=step_delta_.z(), ++iz)
+        {
+          t.set(x, y, z);
+          vgl_rotation_3d<double> rot;
+          double overlap, cost;
+          if (!initialized_rot_search(t, init_rot,
+                                     init_level, lev,
+                                     min_allowed_overlap,
+                                     rot, cost, overlap))
+            return false;
+          vnl_vector_fixed<double, 3> rotr = rot.as_rodrigues();
+          if (cost<min_trans_cost) {
+            min_trans_trans = t;
+            min_trans_cost = cost;
+            min_trans_rod = rotr;
+            min_trans_overlap = overlap;
           }
+          double t_dist = (t-min_trang).length();
+          double r_dist = (rotr - min_roda).magnitude();
+          vcl_cout << "tp(" << x << ' ' << y << ' ' << z << ")["
+                   << t_dist << ' ' << r_dist << "] = " << cost << '\n';
+          box_scores_[iz][iy][ix] = cost;
+          box_rotations_[iz][iy][ix]= rot;
+        }
     //probably can't happen but just in case ...
-    if(min_trans_overlap<min_allowed_overlap) return false;
+    if (min_trans_overlap<min_allowed_overlap) return false;
     vcl_cout << "completed pyramid level " << lev << '\n';
     cam_search_valid_ = true;
     double smallest_min;
 #if 0
-    if(lev == final_level){
+    if (lev == final_level) {
       vcl_cout << "Final box scores\n";
-      for(ix = 0; ix<nx; ++ix)
-        for(iy = 0; iy<ny; ++iy)
-          for(iz = 0; iz<nz; ++iz)
-            vcl_cout << "b[" << iz << "][" << iy << "][" << iz << "] = " 
+      for (ix = 0; ix<nx; ++ix)
+        for (iy = 0; iy<ny; ++iy)
+          for (iz = 0; iz<nz; ++iz)
+            vcl_cout << "b[" << iz << "][" << iy << "][" << iz << "] = "
                      << box_scores_[iz][iy][ix] << ";\n";
     }
 #endif
     vgl_vector_3d<double> smallest_min_trans;
     vgl_rotation_3d<double> smallest_min_rot;
     int mx = -1, my = -1, mz = -1;
-    if(this->smallest_local_minimum(local_min_thresh_, smallest_min, 
-                                    smallest_min_trans,
-                                    smallest_min_rot,
-                                    mx, my, mz))
-      vcl_cout << "smallest local min cost " << smallest_min 
-               << " at translation " << smallest_min_trans 
-               << "\nwith discrete rotation " 
+    if (this->smallest_local_minimum(local_min_thresh_, smallest_min,
+                                     smallest_min_trans,
+                                     smallest_min_rot,
+                                     mx, my, mz))
+      vcl_cout << "smallest local min cost " << smallest_min
+               << " at translation " << smallest_min_trans
+               << "\nwith discrete rotation "
                << smallest_min_rot.as_rodrigues() << '\n';
-    else{
+    else {
       vcl_cout << " no local minimum found in pyramid search\n";
       return false;
     }
-    if(refine)
-      if(refine_minimum(mx, my, mz, lev, min_allowed_overlap,
+    if (refine)
+      if (refine_minimum(mx, my, mz, lev, min_allowed_overlap,
                          smallest_min_trans,
-                         smallest_min)){
-        if(!initialized_rot_search(smallest_min_trans, smallest_min_rot,
+                         smallest_min)) {
+        if (!initialized_rot_search(smallest_min_trans, smallest_min_rot,
                                    init_level,
-                                   lev, 
+                                   lev,
                                    min_allowed_overlap,
-                                   smallest_min_rot, 
+                                   smallest_min_rot,
                                    smallest_min,
-                                   min_trans_overlap)){
+                                   min_trans_overlap)) {
           vcl_cout << "Rotation at level " << lev <<  " failed during refine\n";
           return false;
         }
-        vcl_cout << "refined local min cost " << smallest_min 
-                 << " at refined translation " << smallest_min_trans 
-                 << "\nwith discrete rotation " 
+        vcl_cout << "refined local min cost " << smallest_min
+                 << " at refined translation " << smallest_min_trans
+                 << "\nwith discrete rotation "
                  << smallest_min_rot.as_rodrigues() << '\n';
-      }else{
+      }
+      else {
         vcl_cout << " refinement failed at level " << lev << '\n';
         return false;
       }
@@ -575,11 +581,11 @@ pyramid_camera_search(vgl_vector_3d<double> const&
     min_rot = smallest_min_rot;
     min_cost = smallest_min;
     min_overlap_fraction = min_trans_overlap;
-    if(!refine)
+    if (!refine)
       vcl_cout << " minimum translation " << min_trans << '\n'
                << " minumum rotation " << min_trans_rod << '\n'
                << " minimum cost " << smallest_min << '\n';
-    if(base_path_!=""){
+    if (base_path_!="") {
       vcl_stringstream strm;
       strm << "/box_pyr_lev_"<< lev << ".wrl" << vcl_ends;
       vcl_string path = base_path_ + strm.str();
@@ -590,8 +596,8 @@ pyramid_camera_search(vgl_vector_3d<double> const&
     stepd = step_delta_;
   }
   return true;
-
 }
+
 bool icam_minimizer::
 camera_search( vgl_box_3d<double> const& trans_box,
                vgl_vector_3d<double> const& trans_steps,
@@ -604,7 +610,7 @@ camera_search( vgl_box_3d<double> const& trans_box,
                double& min_overlap)
 {
   unsigned top_level = dt_pyramid_.n_levels()-1;
-  if(!this->exhaustive_camera_search(trans_box,
+  if (!this->exhaustive_camera_search(trans_box,
                                      trans_steps,
                                      top_level,
                                      min_allowed_overlap,
@@ -618,40 +624,41 @@ camera_search( vgl_box_3d<double> const& trans_box,
   vgl_vector_3d<double> smallest_min_trans;
   vgl_rotation_3d<double> smallest_min_rot;
   int mx=-1, my=-1, mz=-1;
-  if(this->smallest_local_minimum(local_min_thresh_, smallest_min, 
+  if (this->smallest_local_minimum(local_min_thresh_, smallest_min,
                                   smallest_min_trans,
-								  smallest_min_rot,
+                                  smallest_min_rot,
                                   mx, my, mz))
 
-    vcl_cout << "smallest local min cost " << smallest_min 
-             << " at translation " << smallest_min_trans 
-             << "\nwith discrete rotation " 
+    vcl_cout << "smallest local min cost " << smallest_min
+             << " at translation " << smallest_min_trans
+             << "\nwith discrete rotation "
              << smallest_min_rot.as_rodrigues() << '\n';
-  else{
+  else {
     vcl_cout << " no local minimum found in top level search\n";
     return false;
   }
-  if(refine)
-    if(refine_minimum(mx, my, mz, top_level, min_allowed_overlap,
-                      smallest_min_trans, 
-                      smallest_min)){
-      if(!exhaustive_rotation_search(smallest_min_trans, top_level,
+  if (refine)
+    if (refine_minimum(mx, my, mz, top_level, min_allowed_overlap,
+                      smallest_min_trans,
+                      smallest_min)) {
+      if (!exhaustive_rotation_search(smallest_min_trans, top_level,
                                      min_allowed_overlap,
-                                     smallest_min_rot, 
-                                     smallest_min, min_overlap)){
+                                     smallest_min_rot,
+                                     smallest_min, min_overlap)) {
         vcl_cout << "Rotation at top level failed during refine\n";
         return false;
       }
-      vcl_cout << "refined local min cost " << smallest_min 
-               << " at refined translation " << smallest_min_trans 
-               << "\nwith discrete rotation " 
+      vcl_cout << "refined local min cost " << smallest_min
+               << " at refined translation " << smallest_min_trans
+               << "\nwith discrete rotation "
                << smallest_min_rot.as_rodrigues() << '\n';
-    }else{
+    }
+    else {
       vcl_cout << " refinement failed\n";
       return false;
     }
 
-  if(!this-> pyramid_camera_search(smallest_min_trans,
+  if (!this-> pyramid_camera_search(smallest_min_trans,
                                    smallest_min_rot,
                                    trans_steps,
                                    top_level,
@@ -665,17 +672,17 @@ camera_search( vgl_box_3d<double> const& trans_box,
     return false;
   return true;
 }
+
 double icam_minimizer::error(vgl_rotation_3d<double>& rot,
                              vgl_vector_3d<double>& trans,
                              unsigned level)
-
 {
   dt_pyramid_.set_rotation(rot);
   dt_pyramid_.set_translation(trans);
   icam_cost_func cost = cost_fn(level);
   return cost.error(rot.as_rodrigues(), trans);
 }
-  
+
 
 vcl_vector<double> icam_minimizer::error(vgl_rotation_3d<double>& rot,
                                          vgl_vector_3d<double>& trans,
@@ -691,7 +698,7 @@ vcl_vector<double> icam_minimizer::error(vgl_rotation_3d<double>& rot,
 }
 
 vcl_vector<vil_image_view<float> > icam_minimizer::views(vgl_rotation_3d<double>& rot,
-                                                         vgl_vector_3d<double>& trans, 
+                                                         vgl_vector_3d<double>& trans,
                                                          unsigned level,
                                                          unsigned param_index, double pmin,
                                                          double pmax, double pinc)
@@ -702,20 +709,21 @@ vcl_vector<vil_image_view<float> > icam_minimizer::views(vgl_rotation_3d<double>
   vcl_vector<vil_image_view<float> > res;
   vil_image_view<float>& source = source_pyramid_(level);
   unsigned n_samples;
-  for(double p = pmin; p<=pmax; p+=pinc)
-    {
-      params[param_index] = p;
-      dt_pyramid_.set_params(params);
-      icam_depth_transform dt = dt_pyramid_.depth_trans(level, true);
-      vil_image_view<float> trans_view, mask;
-      icam_sample::resample(source.ni(), source.nj(), source,
-                            dt, trans_view, mask, n_samples);
-      res.push_back(trans_view);
-    }
+  for (double p = pmin; p<=pmax; p+=pinc)
+  {
+    params[param_index] = p;
+    dt_pyramid_.set_params(params);
+    icam_depth_transform dt = dt_pyramid_.depth_trans(level, true);
+    vil_image_view<float> trans_view, mask;
+    icam_sample::resample(source.ni(), source.nj(), source,
+                          dt, trans_view, mask, n_samples);
+    res.push_back(trans_view);
+  }
   return res;
 }
+
 vil_image_view<float> icam_minimizer::view(vgl_rotation_3d<double>& rot,
-                                           vgl_vector_3d<double>& trans, 
+                                           vgl_vector_3d<double>& trans,
                                            unsigned level)
 {
   dt_pyramid_.set_rotation(rot);
@@ -730,8 +738,9 @@ vil_image_view<float> icam_minimizer::view(vgl_rotation_3d<double>& rot,
 }
 
 vil_image_view<float> icam_minimizer::mask(vgl_rotation_3d<double>& rot,
-                                           vgl_vector_3d<double>& trans, 
-                                           unsigned level){
+                                           vgl_vector_3d<double>& trans,
+                                           unsigned level)
+{
   dt_pyramid_.set_rotation(rot);
   dt_pyramid_.set_translation(trans);
   icam_depth_transform dt = dt_pyramid_.depth_trans(level, true);
@@ -752,7 +761,8 @@ vpgl_perspective_camera<double> icam_minimizer::dest_cam(unsigned level)
   vpgl_perspective_camera<double> cam(K, rot, trans);
   return cam;
 }
-static void write_vrml_sphere(vcl_ofstream& str, 
+
+static void write_vrml_sphere(vcl_ofstream& str,
                               vgl_point_3d<double> const& center,
                               double radius,
                               const double r, const double g, const double  b,
@@ -779,15 +789,16 @@ static void write_vrml_sphere(vcl_ofstream& str,
       <<  " ]\n"
       << "}\n";
 }
+
 bool icam_minimizer::box_search_vrml(vcl_string const& vrml_file,
                                      vgl_vector_3d<double> const& trans)
 {
-  if(!cam_search_valid_){
+  if (!cam_search_valid_) {
     vcl_cout << " No box search has been performed\n";
     return false;
   }
   vcl_ofstream str(vrml_file.c_str());
-  if(!str.is_open()){
+  if (!str.is_open()) {
     vcl_cout << " Can't open vrml output file " << vrml_file << '\n';
     return false;
   }
@@ -808,16 +819,16 @@ bool icam_minimizer::box_search_vrml(vcl_string const& vrml_file,
   double max_score = -vnl_numeric_traits<double>::maxval;
   double min_score = vnl_numeric_traits<double>::maxval;
   vbl_array_3d<double>::const_iterator bit = box_scores_.begin();
-  for(; bit<box_scores_.end(); ++bit)
-    {
-      double scr = *bit;
-      if(scr>max_score) max_score = scr;
-      if(scr<min_score) min_score = scr;
-    }
+  for (; bit<box_scores_.end(); ++bit)
+  {
+    double scr = *bit;
+    if (scr>max_score) max_score = scr;
+    if (scr<min_score) min_score = scr;
+  }
   double radius = step_delta_.x()/5.0;
   double ratio = 1.0f;
   bool varies = true;
-  if(max_score>min_score)
+  if (max_score>min_score)
     ratio = 1.0f/static_cast<double>((max_score-min_score));
   else varies = false;
   unsigned nz = box_scores_.get_row1_count(),ny = box_scores_.get_row2_count(),
@@ -830,34 +841,34 @@ bool icam_minimizer::box_search_vrml(vcl_string const& vrml_file,
   double dz = step_delta_.z();
   unsigned ix = 0, iy = 0, iz = 0;
   double x, y, z;
-  for(ix = 0, x = ox; ix<nx; ++ix, x+=dx)
-    for(iy = 0, y = oy; iy<ny; ++iy, y+=dy)
-      for(iz = 0, z = oz; iz<nz; ++iz, z+=dz)
-        {
-          double s = box_scores_[iz][iy][ix];
-          if(varies)
-            s = (s-min_score)*ratio;
-          else
-            s = 0.5;
-          // map s using a more rapid scale, e.g. 0.05
-          double den = 1.0 + vcl_pow(2.71828, (-0.5*s)/local_min_thresh_);
-          double ss = (2.0/den) -1.0;
-          vgl_point_3d<double> pt(x, y, z);
-          double r = radius*(0.1 + 0.9*ss);
+  for (ix = 0, x = ox; ix<nx; ++ix, x+=dx)
+    for (iy = 0, y = oy; iy<ny; ++iy, y+=dy)
+      for (iz = 0, z = oz; iz<nz; ++iz, z+=dz)
+      {
+        double s = box_scores_[iz][iy][ix];
+        if (varies)
+          s = (s-min_score)*ratio;
+        else
+          s = 0.5;
+        // map s using a more rapid scale, e.g. 0.05
+        double den = 1.0 + vcl_exp(-0.5*s/local_min_thresh_);
+        double ss = 2.0/den -1.0;
+        vgl_point_3d<double> pt(x, y, z);
+        double r = radius*(0.1 + 0.9*ss);
 #if 0
-          vcl_cout << " writing(x y z)["<< ix << ' ' << iy << ' ' << iz << "](" 
-                   << x << ' ' << y << ' ' << z << ") with score( " 
-                   << ss << "): " << s << '\n';
+        vcl_cout << " writing(x y z)["<< ix << ' ' << iy << ' ' << iz << "]("
+                 << x << ' ' << y << ' ' << z << ") with score( "
+                 << ss << "): " << s << '\n';
 #endif
-          write_vrml_sphere(str, pt, r, 1-ss, ss, 0.2f, 0.0f);
-        }
+        write_vrml_sphere(str, pt, r, 1-ss, ss, 0.2f, 0.0f);
+      }
   vgl_point_3d<double> act(trans.x(), trans.y(), trans.z());
   write_vrml_sphere(str, act, radius, 1.0, 0.0, 1.0, 0.0f);
   double min_cost;
   int ix_min = 0, iy_min =0, iz_min = 0;
-  bool found = smallest_local_minima(box_scores_, local_min_thresh_, 
+  bool found = smallest_local_minima(box_scores_, local_min_thresh_,
                                      ix_min, iy_min, iz_min, min_cost);
-  if(found){
+  if (found) {
     // convert to translation
     double mx = box_origin_.x() + ix_min*step_delta_.x();
     double my = box_origin_.y() + iy_min*step_delta_.y();
@@ -868,22 +879,22 @@ bool icam_minimizer::box_search_vrml(vcl_string const& vrml_file,
   str.close();
   return true;
 }
+
 bool icam_minimizer::smallest_local_minimum(double nbhd_cost_threshold,
                                             double& min_cost,
                                             vgl_vector_3d<double>& min_trans,
                                             vgl_rotation_3d<double>& min_rot,
                                             int& ix_min, int& iy_min,
-                                            int& iz_min
-                                            )
+                                            int& iz_min)
 {
-  if(!cam_search_valid_){
+  if (!cam_search_valid_) {
     vcl_cout << " No box search has been performed\n";
     return false;
-  }    
+  }
   ix_min = 0; iy_min =0; iz_min = 0;
-  bool found = smallest_local_minima(box_scores_, nbhd_cost_threshold, 
+  bool found = smallest_local_minima(box_scores_, nbhd_cost_threshold,
                                      ix_min, iy_min, iz_min, min_cost);
-  if(!found)
+  if (!found)
     return false;
   // convert to translation
   double x = box_origin_.x() + ix_min*step_delta_.x();
