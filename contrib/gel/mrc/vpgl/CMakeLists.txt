@@ -41,13 +41,12 @@ SUBDIRS(xio)
 SUBDIRS(file_formats)
 SUBDIRS(io)
 #image-based homography solver
-#currently uses mul/vimt
-IF(BUILD_MUL)
 SUBDIRS(ihog)
-ENDIF(BUILD_MUL)
+#image-based camera solver
+SUBDIRS(icam)
 # Geographic utilities
 SUBDIRS(bgeo)
 #camera view sphere
 SUBDIRS(vsph)
-##
-SUBDIRS(icam)
+
+
