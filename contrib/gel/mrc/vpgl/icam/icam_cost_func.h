@@ -16,6 +16,7 @@
 #include <vnl/vnl_least_squares_function.h>
 #include <vil/vil_image_view.h>
 #include <icam/icam_depth_transform.h>
+#include <vbl/vbl_array_2d.h>
 
 //: A cost function for registering video frames by minimizing square difference in intensities
 class icam_cost_func : public vnl_least_squares_function
@@ -41,9 +42,21 @@ class icam_cost_func : public vnl_least_squares_function
   vcl_vector<double> error(vnl_vector<double> const& x,
                            unsigned param_index, double pmin,
                            double pmax, double pinc);
+
+  vbl_array_2d<double> joint_probability(vnl_vector_fixed<double, 3> rodrigues,
+                                         vgl_vector_3d<double> trans);
+
+  double entropy(vnl_vector_fixed<double, 3> rodrigues,
+                 vgl_vector_3d<double> trans,
+                 double min_allowed_overlap = 0.01);
+
+  double mutual_info(vnl_vector_fixed<double, 3> rodrigues,
+                     vgl_vector_3d<double> trans,
+                     double min_allowed_overlap = 0.01);
+
   //: the fraction of potential number of samples
   double frac_samples()
-    {return (1.0*n_samples_)/(source_image_.ni()*source_image_.nj());}
+    {return (1.0*n_samples_)/max_samples_;}
 
   void samples(vnl_vector_fixed<double, 3> rodrigues,
                vgl_vector_3d<double> trans,
@@ -56,6 +69,7 @@ class icam_cost_func : public vnl_least_squares_function
   vil_image_view<float> dest_image_;
   vnl_vector<double> dest_samples_;
   icam_depth_transform dt_;
+  unsigned max_samples_;
   unsigned n_samples_;
 };
 

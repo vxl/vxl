@@ -104,6 +104,47 @@ static void test_minimizer()
   double err_ang = vcl_fabs(ang-rot_angle);
   double err_trans = (vcl_fabs(p0.x()-tx) + vcl_fabs(p0.y()-ty))/100;
   TEST_NEAR("rigid_body trans",err_ang+err_trans,0.0, 0.01);
+#if 0
+  vcl_string dest_file = "c:/images/calibration/frame_142.png";
+  vcl_string source_file = "c:/images/calibration/frame_145.png";
+  vil_image_view_base_sptr dest_img_base = vil_load(dest_file.c_str());
+  if (!dest_img_base) {
+    vcl_cerr << "error loading image." << vcl_endl;
+    return;
+  }
+  vil_image_view_base_sptr source_img_base = vil_load(source_file.c_str());
+  if (!source_img_base) {
+    vcl_cerr << "error loading image." << vcl_endl;
+    return;
+  }
+    vil_image_view<vxl_byte> *dest_img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(dest_img_base.ptr());
+  vil_image_view<vxl_byte> *source_img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(source_img_base.ptr());
+  unsigned ni_d = dest_img_byte->ni(), nj_d = dest_img_byte->nj();
+  vil_image_view<float> dest_img_flt(ni_d,nj_d);
+  vil_convert_cast(*dest_img_byte,dest_img_flt);
+  vil_image_view<float> source_img_flt(ni,nj);
+  vil_convert_cast(*source_img_byte,source_img_flt);
+
+  ihog_world_roi roid(ni_d - 2*border, 
+                      nj_d - 2*border,
+                      vgl_point_2d<double>(border,border));
+
+  ihog_transform_2d init_xform_d;
+  init_xform_d.set_affine(init_H.extract(2,3,0,0));
+  ihog_image<float> from_img_d(source_img_flt, init_xform_d);
+  ihog_image<float> to_img_d(dest_img_flt, ihog_transform_2d());
+  ihog_minimizer minimizer_d(from_img_d, to_img_d, roid);
+  minimizer_d.minimize(init_xform_d);
+  double error_d = minimizer_d.get_end_error();
+  vcl_cout << "end_error = " << error_d << '\n';
+  vcl_cout << "lm generated homography downtown: " << vcl_endl;
+  vcl_cout << init_xform_d.matrix() << vcl_endl << vcl_endl;  
+  // create mapped image
+  ihog_image<float> mapped_source;
+  ihog_resample_bilin(from_img_d, mapped_source, init_xform_d.inverse());
+  vil_save(mapped_source.image(),
+           "c:/images/calibration/hog_mapped_f145.tif");
+#endif
 }
 
 

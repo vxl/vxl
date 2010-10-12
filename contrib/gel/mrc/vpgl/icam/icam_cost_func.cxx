@@ -3,11 +3,11 @@
 // \file
 
 #include "icam_cost_func.h"
-#include "icam_sample.h"
-
 #include <vil/vil_math.h>
+#include <vbl/vbl_array_1d.h>
+#include <icam/icam_sample.h>
 #include <vnl/vnl_numeric_traits.h>
-
+#include <vcl_cassert.h>
 //: Constructor
 icam_cost_func::icam_cost_func( const vil_image_view<float>& source_img,
                                 const vil_image_view<float>& dest_img,
@@ -15,10 +15,12 @@ icam_cost_func::icam_cost_func( const vil_image_view<float>& source_img,
  : vnl_least_squares_function(1,1),
    source_image_(source_img),
    dest_image_(dest_img),
-   dt_(dt), n_samples_(0)
+   dt_(dt), n_samples_(0), max_samples_(1)
 {
   unsigned ni = dest_image_.ni()-2, nj = dest_image_.nj()-2;
-  dest_samples_.set_size(ni*nj);
+  max_samples_ = ni*nj;
+  assert(max_samples_>0);
+  dest_samples_.set_size(max_samples_);
   dest_samples_.fill(0.0);
   unsigned index = 0;
   for(unsigned j = 1; j<=nj; ++j)
@@ -107,4 +109,82 @@ vcl_vector<double> icam_cost_func::error(vnl_vector<double> const& x,
       }
     }
   return ret;
+}
+vbl_array_2d<double> icam_cost_func::
+joint_probability(vnl_vector_fixed<double, 3> rodrigues,
+                  vgl_vector_3d<double> trans)
+{
+  unsigned nbins = 16;
+  double scl = 1.0/(256.0/nbins);
+  vbl_array_2d<double> h(nbins, nbins, 0.0);
+  vnl_vector<double> pr(dt_.n_params());
+  vnl_vector<double> res;
+  pr[0]=rodrigues[0];   pr[1]=rodrigues[1];   pr[2]=rodrigues[2];
+  pr[3]=trans.x();   pr[4]=trans.y();   pr[5]=trans.z(); 
+  dt_.set_params(pr);
+  vnl_vector<double> from_samples, from_mask;
+  icam_sample::sample(dest_image_.ni(), dest_image_.nj(), source_image_,
+                      dt_, from_samples, from_mask, n_samples_);
+  //compute the intensity histogram
+  for(unsigned i = 0; i<from_samples.size(); ++i)
+    if(from_mask[i]>0.0){
+      unsigned id = static_cast<unsigned>(dest_samples_[i]*scl + 0.5),
+        is = static_cast<unsigned>(from_samples[i]*scl + 0.5);
+      if(id>nbins-1 || is> nbins-1)
+        continue;
+      h[id][is] += 1.0;
+    }
+  // convert to probability
+  for(unsigned r = 0; r<nbins; ++r)
+    for(unsigned c = 0; c<nbins; ++c)
+      h[r][c] /= n_samples_;
+  return h;
+}
+
+double icam_cost_func::entropy(vnl_vector_fixed<double, 3> rodrigues,
+			vgl_vector_3d<double> trans,
+               double min_allowed_overlap)
+{
+  vbl_array_2d<double> jp = this->joint_probability(rodrigues, trans);
+  if(this->frac_samples()<=min_allowed_overlap)
+    return vnl_numeric_traits<double>::maxval;
+  unsigned nr = jp.rows(), nc = jp.cols();
+  double ent = 0.0;
+  for(unsigned r = 0; r<nr; ++r)
+    for(unsigned c = 0; c<nc; ++c){
+      double p = jp[r][c];
+      if(p>0)
+        ent -= p*vcl_log(p);
+    }
+  ent /= vcl_log(2.0);//convert to bits
+  return ent;
+}
+double icam_cost_func::mutual_info(vnl_vector_fixed<double, 3> rodrigues,
+                   vgl_vector_3d<double> trans,
+                   double min_allowed_overlap)
+{
+  vbl_array_2d<double> jp = this->joint_probability(rodrigues, trans);
+   if(this->frac_samples()<=min_allowed_overlap)
+    return vnl_numeric_traits<double>::maxval;
+  unsigned nr = jp.rows(), nc = jp.cols();
+  //marginal distributions
+  vbl_array_1d<double> pmr(nc,0.0), pmc(nr, 0.0);
+  for(unsigned r = 0; r<nr; ++r)
+    for(unsigned c = 0; c<nc; ++c){
+      double p = jp[r][c];
+      pmr[c]+=p;
+      pmc[r]+=p;
+    }
+  double sum = 0.0;
+  for(unsigned r = 0; r<nr; ++r){
+	  double pc = pmc[r];
+	  if(pc==0) continue;
+      for(unsigned c = 0; c<nc; ++c){
+        double prc = jp[r][c];
+        double pr = pmr[c];
+        if(prc>0&&pr>0)
+          sum+= prc*vcl_log(prc/(pr*pc));
+      }
+  }
+  return sum/vcl_log(2.0);
 }
