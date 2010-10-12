@@ -3,7 +3,15 @@
 #define icam_minimizer_h_
 //:
 // \file
-// \brief Find a camera using the depth image of known camera and minimizing squared intensity differences 
+// \brief Find a camera using the depth image of known camera and minimizing squared intensity differences
+// The camera is determined by minimizing the
+// sum of squared differences with respect to the image of a known camera.
+// The known camera is assumed to have the form K[I|0], i.e., the world
+// coordinate system is the same as the camera frame. A depth map, Z(u,v),
+// is given for the known camera. The rotation and translation parameters for
+// the unknown (to) camera with respect to the known (from) camera are
+// adjusted so as to minimize the least squared difference in intensity between
+// the from_image and to_image.
 // \author J.L. Mundy
 // \date Sept. 6, 2010
 //
@@ -11,15 +19,7 @@
 //  Modifications
 //   None
 // \endverbatim
-// The camera is determined by minimizing the
-// sum of squared differences with respect to the image of a known camera.
-// The known camera is assumed to have the form K[I|0], i.e., the world 
-// coordinate system is the same as the camera frame. A depth map, Z(u,v),
-// is given for the known camera. The rotation and translation parameters for
-// the unknown (to) camera with respect to the known (from) camera are
-// adjusted so as to minimize the least squared difference in intensity between
-// the from_image and to_image.
-// 
+//
 #include <vcl_string.h>
 #include <vnl/vnl_vector.h>
 #include <vil/vil_image_view.h>
@@ -31,8 +31,9 @@
 #include <icam/icam_depth_transform.h>
 #include <icam/icam_depth_trans_pyramid.h>
 #include <icam/icam_cost_func.h>
-//: Minimize registration error at mulitiple scales 
-class icam_minimizer 
+
+//: Minimize registration error at multiple scales
+class icam_minimizer
 {
  public:
   //: Constructor with all the parameters
@@ -48,8 +49,8 @@ class icam_minimizer
                  const icam_depth_transform& dt,
                  unsigned min_level_size = 16,
                  unsigned box_reduction_k = 2,
-                  double local_min_thresh = 0.05,
-                  vcl_string const& base_path = "");
+                 double local_min_thresh = 0.05,
+                 vcl_string const& base_path = "");
   //: number of pyramid levels
   unsigned n_levels() const {return dt_pyramid_.n_levels();}
 
@@ -66,7 +67,7 @@ class icam_minimizer
                 vgl_vector_3d<double>& trans,
                 double to_fl);
 
-  double end_error(){return end_error_;}
+  double end_error() {return end_error_;}
 
 
   //: current parameter values
@@ -96,21 +97,20 @@ class icam_minimizer
                       double min_allowed_overlap,
                       vgl_vector_3d<double>& min_trans,
                       double& min_cost);
-             
 
- bool exhaustive_camera_search(vgl_box_3d<double> const& trans_box,
-                               vgl_vector_3d<double> const& trans_steps,
-                               unsigned level,
-                               double min_allowed_overlap,
-                               vgl_vector_3d<double>& min_trans,
-                               vgl_rotation_3d<double>& min_rot,
-                               double& min_cost,
-                               double& min_overlap_fraction
-                               );
+
+  bool exhaustive_camera_search(vgl_box_3d<double> const& trans_box,
+                                vgl_vector_3d<double> const& trans_steps,
+                                unsigned level,
+                                double min_allowed_overlap,
+                                vgl_vector_3d<double>& min_trans,
+                                vgl_rotation_3d<double>& min_rot,
+                                double& min_cost,
+                                double& min_overlap_fraction);
 
 bool  pyramid_camera_search(vgl_vector_3d<double> const&
                             start_trans,
-                            vgl_rotation_3d<double> const& 
+                            vgl_rotation_3d<double> const&
                             start_rotation,
                             vgl_vector_3d<double> const&
                             start_step_delta,
@@ -123,8 +123,8 @@ bool  pyramid_camera_search(vgl_vector_3d<double> const&
                             double& min_cost,
                             double& min_overlap_fraction);
 
-//: the full search function
- bool  camera_search( vgl_box_3d<double> const& trans_box,
+  //: the full search function
+  bool camera_search( vgl_box_3d<double> const& trans_box,
                       vgl_vector_3d<double> const& trans_steps,
                       unsigned final_level,
                       double min_allowed_overlap,
@@ -133,45 +133,42 @@ bool  pyramid_camera_search(vgl_vector_3d<double> const&
                       vgl_rotation_3d<double>& min_rot,
                       double& min_error,
                       double& min_overlap);
-                                
-  //: find the smallest cost in the camera box search that is also a 
-  //  local minimum.  Return false if no local minima occur
+
+  //: find the smallest cost in the camera box search that is also a local minimum.
+  //  Return false if no local minima occur
   bool smallest_local_minimum(double nbhd_cost_threshold,
                               double& min_cost,
                               vgl_vector_3d<double>& min_trans,
                               vgl_rotation_3d<double>& min_rot,
                               int& ix_min, int& iy_min,
-                              int& iz_min
-                              );
+                              int& iz_min);
 
   // ===============debug functions ===========
-  //: the average intensity difference for a given rotation,
-  //  translation and level
+
+  //: the average intensity difference for a given rotation, translation and level
   double error(vgl_rotation_3d<double>& rot,
                vgl_vector_3d<double>& trans, unsigned level);
 
-  //: the average intensity difference for a given rotation,
-  //  translation and level over a set of parameter values
+  //: the average intensity difference for a given rotation, translation and level over a set of parameter values
   vcl_vector<double> error(vgl_rotation_3d<double>& rot,
                            vgl_vector_3d<double>& trans, unsigned level,
                            unsigned param_index, double pmin,
                            double pmax, double pinc);
 
-  //:source images mapped to destination camera
-  // for a set of parameter values
+  //: source images mapped to destination camera for a set of parameter values
   vcl_vector<vil_image_view<float> > views(vgl_rotation_3d<double>& rot,
-                                           vgl_vector_3d<double>& trans, 
+                                           vgl_vector_3d<double>& trans,
                                            unsigned level,
                                            unsigned param_index, double pmin,
                                            double pmax, double pinc);
 
   //:source image mapped to destination camera
   vil_image_view<float> view(vgl_rotation_3d<double>& rot,
-                             vgl_vector_3d<double>& trans, 
+                             vgl_vector_3d<double>& trans,
                              unsigned level);
   //:mask for source image mapped to destination camera
   vil_image_view<float> mask(vgl_rotation_3d<double>& rot,
-                             vgl_vector_3d<double>& trans, 
+                             vgl_vector_3d<double>& trans,
                              unsigned level);
   //: destination camera at level
   vpgl_perspective_camera<double> dest_cam(unsigned level);
@@ -185,15 +182,14 @@ bool  pyramid_camera_search(vgl_vector_3d<double> const&
   //: display box search as a set of vrml spheres
   bool box_search_vrml(vcl_string const& vrml_file,
                        vgl_vector_3d<double> const& trans =
-                       vgl_vector_3d<double>()
-                       );
+                       vgl_vector_3d<double>());
 
  protected:
-  void set_origin_step_delta(vgl_box_3d<double> const&_trans_box,
+  void set_origin_step_delta(vgl_box_3d<double> const& trans_box,
                              vgl_vector_3d<double> const& trans_steps);
-  // |<--- k --->|              
+  // |<--- k --->|
   // [   |   |   | * |   |   |   ]
-  // |dx | 
+  // |dx |
   // |< --initial step delta --->|
   void reduce_search_box(vgl_vector_3d<double> const& center_trans,
                          vgl_vector_3d<double> const& initial_step_delta);
@@ -208,9 +204,8 @@ bool  pyramid_camera_search(vgl_vector_3d<double> const&
   vil_pyramid_image_view<float> dest_pyramid_;
   icam_depth_trans_pyramid dt_pyramid_;
   unsigned min_level_size_;
-  double end_error_; 
+  double end_error_;
   vcl_string base_path_;
 };
 
 #endif // icam_minimizer_h_
-
