@@ -50,7 +50,7 @@ int load_data_mutable_opt(__local short2  * ray_bundle_array,
   uchar llid = (col + nbi*row);           //[0-nbi*nbj] index
   
   //initialize segmentation information (if the ray isn't hitting a cell, make it a non-leader
-  if(cell_ptrs[llid] > 0)
+  if(cell_ptrs[llid] >=0)
     ray_bundle_array[llid] = (short2) (-1, 1);
   else
     ray_bundle_array[llid] = (short2) (-1, 0);
@@ -73,6 +73,7 @@ int load_data_mutable_opt(__local short2  * ray_bundle_array,
       if(cell_ptrs[llid] == cell_ptrs[i]) {
         ray_bundle_array[llid].x = i;         //NEXT pointer = i;
         ray_bundle_array[i].y    = 0;         //i is not a leader anymore
+        break;
       }
     }
   }

@@ -394,10 +394,10 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
           float4 nobs     = convert_float4(nobs_array[gid]);
           float8 mixture  = convert_float8(mixture_array[gid]);
           float16 data = (float16) (alpha, 
-                         (mixture.s0/255.0), (mixture.s1/255.0), (mixture.s2/255.0), (nobs.s0), 
-                         (mixture.s3/255.0), (mixture.s4/255.0), (mixture.s5/255.0), (nobs.s1),
-                         (mixture.s6/255.0), (mixture.s7/255.0), (nobs.s2), (nobs.s3/100.0), 
-                         0.0, 0.0, 0.0);
+                                    (mixture.s0/255.0), (mixture.s1/255.0), (mixture.s2/255.0), (nobs.s0), 
+                                    (mixture.s3/255.0), (mixture.s4/255.0), (mixture.s5/255.0), (nobs.s1),
+                                    (mixture.s6/255.0), (mixture.s7/255.0), (nobs.s2), (nobs.s3/100.0), 
+                                    0.0, 0.0, 0.0);
           
           //use aux data to update cells 
           if (aux_data.x>1e-10f)

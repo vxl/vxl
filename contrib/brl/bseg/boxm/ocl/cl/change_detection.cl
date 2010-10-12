@@ -1,13 +1,12 @@
 #if NVIDIA
  #pragma OPENCL EXTENSION cl_khr_gl_sharing : enable
 #endif
+#pragma OPENCL EXTENSION cl_khr_byte_addressable_store : enable
 
-//#define BLOCK_EPSILON .006125f
-//#define TREE_EPSILON  .005f
-
+#ifdef CHANGE
 __kernel
 void
-ray_trace_bit_scene_opt(__constant  RenderSceneInfo    * linfo,
+change_detecttion_scene(__constant  RenderSceneInfo    * linfo,
                         __global    ushort2            * block_ptrs,
                         __global    int4               * tree_array,
                         __global    float              * alpha_array,
@@ -16,7 +15,6 @@ ray_trace_bit_scene_opt(__constant  RenderSceneInfo    * linfo,
                         __global    uint4              * imgdims,       // dimensions of the image
                         __local     uchar16            * local_tree,
                         __global    float4             * in_image,      // input image and store vis_inf and pre_inf
-                        __global    uint               * gl_image, 
                         __constant  uchar              * bit_lookup, 
                         __local     uchar              * cumsum,        //cumulative sum helper for data pointer
                         __local     int                * imIndex,
@@ -34,7 +32,6 @@ ray_trace_bit_scene_opt(__constant  RenderSceneInfo    * linfo,
   // check to see if the thread corresponds to an actual pixel as in some 
   // cases #of threads will be more than the pixels.
   if (i>=(*imgdims).z || j>=(*imgdims).w) {
-    gl_image[imIndex[llid]] = rgbaFloatToInt((float4)(0.0f,0.0f,0.0f,0.0f));
     in_image[imIndex[llid]] = (float4)0.0f;
     return;
   }
@@ -69,7 +66,7 @@ ray_trace_bit_scene_opt(__constant  RenderSceneInfo    * linfo,
             ray_dx, ray_dy, ray_dz, 
 
             //scene info                                              //numobs and mixture null
-            linfo, block_ptrs, tree_array, alpha_array, mixture_array, 0, 0, 0, 
+            linfo, block_ptrs, tree_array, alpha_array, mixture_array, 0, 0, 0,
            
             //utility info
             local_tree, bit_lookup, cumsum, imIndex,
@@ -78,6 +75,7 @@ ray_trace_bit_scene_opt(__constant  RenderSceneInfo    * linfo,
             0, 0, 0, 0, 0, 0,
             
             //io info
-            in_image, gl_image, output);
+            in_image, 0, output);
 }
 
+#endif

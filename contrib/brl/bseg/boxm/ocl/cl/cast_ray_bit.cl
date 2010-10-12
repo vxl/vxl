@@ -49,6 +49,10 @@ cast_ray(
   // pixel values/depth map to be returned
   float vis = 1.0f;
   float expected_int = 0.0f;
+#ifdef CHANGE
+  float4 temp=in_image[imIndex[llid]];
+  float intensity=temp.x;
+#endif
 
   //determine the minimum face:
   //get parameters tnear and tfar for the scene
@@ -63,8 +67,9 @@ cast_ray(
   if (tfar <= tblock) {
 #ifdef RENDER
     gl_image[imIndex[llid]] = rgbaFloatToInt((float4)(0.0f,0.0f,0.0f,0.0f));
-    in_image[imIndex[llid]] = (float)-1.0f;
+    in_image[imIndex[llid]] = (float)0.0f;
 #endif
+
     return;
   }
   //make sure tnear is at least 0...
@@ -160,8 +165,10 @@ cast_ray(
 // Step Cell Functor
 ////////////////////////////////////////////////////////////////////////////////
 #ifdef RENDER
-      step_cell_render_opt2(mixture_array, alpha_array, data_ptr, d, 
-                            &vis, &expected_int);
+      step_cell_render_opt2(mixture_array, alpha_array, data_ptr, d, &vis, &expected_int);
+#endif
+#ifdef CHANGE
+      step_cell_change_detection_uchar8(mixture_array,alpha_array,data_ptr,d,&vis,&expected_int,intensity);
 #endif
 #ifdef SEGLEN
       //keep track of cells being hit
@@ -199,9 +206,9 @@ cast_ray(
       float4 nobs     = convert_float4(num_obs_array[data_ptr]);
       float8 mixture  = convert_float8(mixture_array[data_ptr]);
       float16 datum = (float16) (alpha, 
-                      (mixture.s0/255.0), (mixture.s1/255.0), (mixture.s2/255.0), (nobs.s0), 
-                      (mixture.s3/255.0), (mixture.s4/255.0), (mixture.s5/255.0), (nobs.s1),
-                      (mixture.s6/255.0), (mixture.s7/255.0), (nobs.s2), (nobs.s3/100.0), 
+                                 (mixture.s0/255.0), (mixture.s1/255.0), (mixture.s2/255.0), (nobs.s0), 
+                                 (mixture.s3/255.0), (mixture.s4/255.0), (mixture.s5/255.0), (nobs.s1),
+                                 (mixture.s6/255.0), (mixture.s7/255.0), (nobs.s2), (nobs.s3/100.0), 
                       0.0, 0.0, 0.0);
       //cached_aux_data[llid] = aux_data_array[data_ptr];
       float2 cl_beta  = cum_len_beta[data_ptr];
@@ -228,10 +235,10 @@ cast_ray(
       float4 nobs     = convert_float4(num_obs_array[data_ptr]);
       float8 mixture  = convert_float8(mixture_array[data_ptr]);
       float16 datum = (float16) (alpha, 
-                         (mixture.s0/255.0), (mixture.s1/255.0), (mixture.s2/255.0), (nobs.s0), 
-                         (mixture.s3/255.0), (mixture.s4/255.0), (mixture.s5/255.0), (nobs.s1),
-                         (mixture.s6/255.0), (mixture.s7/255.0), (nobs.s2), (nobs.s3/100.0), 
-                         0.0, 0.0, 0.0);
+                                 (mixture.s0/255.0), (mixture.s1/255.0), (mixture.s2/255.0), (nobs.s0), 
+                                 (mixture.s3/255.0), (mixture.s4/255.0), (mixture.s5/255.0), (nobs.s1),
+                                 (mixture.s6/255.0), (mixture.s7/255.0), (nobs.s2), (nobs.s3/100.0), 
+                                 0.0, 0.0, 0.0);
       //load aux data into local mem
       float2 cl_beta  = cum_len_beta[data_ptr];
       float2 mean_vis = convert_float2(mean_obs_cum_vis[data_ptr])/255.0f;
@@ -269,16 +276,32 @@ cast_ray(
   }
 
   
-#ifdef DEPTH
-  data_return.z+=(1.0f-data_return.w)*tfar;
-#endif
-#ifdef INTENSITY
-  expected_int += vis*0.5f;
+#ifdef CHANGE
+  expected_int+=vis;
+  float bg_belief=0.0f;
+  float fg_belief=0.0f;
+
+
+
+  float foreground_density_val=1.0f;
+  if(expected_int>foreground_density_val)
+  { 
+      bg_belief=expected_int/(expected_int+foreground_density_val)-foreground_density_val/(2*expected_int);
+      fg_belief=0.0;
+  }
+  else
+  {
+      bg_belief=0.0;
+      fg_belief=foreground_density_val/(foreground_density_val+expected_int)-expected_int/(2*foreground_density_val);
+  }
+
+  in_image[imIndex[llid]].w=(float)bg_belief;
 #endif
 
 #ifdef RENDER
+  expected_int += vis*0.5f;
+
   gl_image[imIndex[llid]] = rgbaFloatToInt((float4) expected_int);
   in_image[imIndex[llid]] = (float4) expected_int;
-  //gl_image[imIndex[llid]] = rgbaFloatToInt((float4) cellCount/300.0f);
 #endif
 }
