@@ -29,7 +29,6 @@ class icam_cost_func : public vnl_least_squares_function
 
 
   //: The main function.
-  //: The main function.
   //  Given the parameter vector x, compute the vector of residuals fx.
   //  Fx has been sized appropriately before the call.
   virtual void f(vnl_vector<double> const& x, vnl_vector<double>& fx);
@@ -63,7 +62,7 @@ class icam_cost_func : public vnl_least_squares_function
                vnl_vector<double>& trans_source,
                vnl_vector<double>& mask,
                vnl_vector<double>& dest);
-               
+
  protected:
   vil_image_view<float> source_image_;
   vil_image_view<float> dest_image_;
