@@ -182,7 +182,7 @@ bool boxm_update_bit_tableau::refine_model()
 //: calls on update manager to update model
 bool boxm_update_bit_tableau::update_model()
 {
-  vcl_cout<<"UPDATING MODEL!!!"<<vcl_endl;
+  //vcl_cout<<"UPDATING MODEL!!!"<<vcl_endl;
   count_++; curr_count_++;
 
   //make sure you get a valid frame...
@@ -190,8 +190,8 @@ bool boxm_update_bit_tableau::update_model()
     curr_frame_ = 0;
   curr_frame_=rand.lrand32(0,cam_files_.size()-1);
 
-  vcl_cout<<"Cam "<<cam_files_[curr_frame_]
-          <<"Image "<<img_files_[curr_frame_]<<vcl_endl;
+  //vcl_cout<<"Cam "<<cam_files_[curr_frame_]
+  //        <<"Image "<<img_files_[curr_frame_]<<vcl_endl;
 
   //load up the update manager instance
   boxm_update_bit_scene_manager* updt_mgr = boxm_update_bit_scene_manager::instance();
@@ -231,7 +231,7 @@ bool boxm_update_bit_tableau::update_model()
 //: calls on ray manager to render frame into the pbuffer_
 bool boxm_update_bit_tableau::render_frame()
 {
-    vcl_cout<<"RENDERING FRAME!"<<vcl_endl;
+    //vcl_cout<<"RENDERING FRAME!"<<vcl_endl;
     boxm_update_bit_scene_manager* ocl_mgr = boxm_update_bit_scene_manager::instance();
     cl_int status = clEnqueueAcquireGLObjects(ocl_mgr->command_queue_, 1,
                                               &ocl_mgr->image_gl_buf_ , 0, 0, 0);
@@ -260,9 +260,9 @@ bool boxm_update_bit_tableau::handle(vgui_event const &e)
       do_init_ocl_ = false;
     }
 
-    vcl_cout<<"redrawing\n"
-            <<"Cam center: "<<cam_.get_camera_center()<<'\n'
-            <<"stare point: "<<stare_point_<<vcl_endl;
+    //vcl_cout<<"redrawing\n"
+    //        <<"Cam center: "<<cam_.get_camera_center()<<'\n'
+    //        <<"stare point: "<<stare_point_<<vcl_endl;
     this->render_frame();
     this->setup_gl_matrices();
     glClear(GL_COLOR_BUFFER_BIT);
@@ -302,7 +302,7 @@ bool boxm_update_bit_tableau::handle(vgui_event const &e)
   else if (e.type == vgui_IDLE)
   {
     if (do_update_) {
-      vcl_cout<<"Idling - i will be updating scene"<<vcl_endl;
+      //vcl_cout<<"Idling - i will be updating scene"<<vcl_endl;
       this->update_model();
       this->post_redraw();
       return true;
