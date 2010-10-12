@@ -35,4 +35,5 @@ void boxm_ocl_register::register_process()
     REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_query_bit_scene_process,"boxmQueryBitSceneProcess");
     REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_ray_probe_process,"boxmRayProbeProcess");
     REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_generate_3d_point_process,"boxmGenerate3dPointProcess");
+    REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_change_detection_bit_scene_process,"boxmChangeDetectionBitSceneProcess");
 }
