@@ -88,6 +88,11 @@ class mbl_thin_plate_spline_2d
     //  called multiple times efficiently
   void set_source_pts(const vcl_vector<vgl_point_2d<double> >& source_pts);
 
+  //: Return current source points
+  const vcl_vector<vgl_point_2d<double> >& src_pts() const
+  { return src_pts_; }
+
+
     //: Sets up internal transformation to map source_pts onto dest_pts
   void build(const vcl_vector<vgl_point_2d<double> >& dest_pts);
 
