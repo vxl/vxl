@@ -68,9 +68,10 @@ principal_ray_scan::principal_ray_scan(double cone_half_angle,
   index_ = 0;
 }
 
-void principal_ray_scan::reset() { index_ = 0; }
+void principal_ray_scan::reset() { index_ = -1; }
 
-bool principal_ray_scan::next() { return ++index_<theta_.size(); }
+bool principal_ray_scan::next() 
+{return ++index_<static_cast<int>(theta_.size());}
 
 vgl_point_3d<double> principal_ray_scan::pt_on_unit_sphere(unsigned i)
 {
@@ -94,7 +95,16 @@ vgl_rotation_3d<double> principal_ray_scan::rot(unsigned i, double alpha)
   vgl_rotation_3d<double> R_about_axis(vr);
   return R_about_axis*R_axis;
 }
-
+double vpgl_camera_bounds::solid_angle(double cone_half_angle)
+{
+  return 2.0*vnl_math::pi*(1.0-vcl_cos(cone_half_angle));
+}
+double vpgl_camera_bounds::cone_half_angle(double solid_angle)
+{
+  double temp = solid_angle/(2.0*vnl_math::pi);
+  temp = vcl_acos(1.0-temp);
+  return temp;
+}
 // the solid angle for a pixel, applies only to perspective camera
 // cone is tangent to pixel
 void vpgl_camera_bounds::
@@ -109,7 +119,7 @@ pixel_solid_angle(vpgl_perspective_camera<double> const& cam,
   vgl_ray_3d<double> ul;
   ul = cam.backproject(u, v);
   cone_half_angle = angle(ul, cone_axis);
-  solid_angle = 2.0*vnl_math::pi*(1.0-vcl_cos(cone_half_angle));
+  solid_angle = vpgl_camera_bounds::solid_angle(cone_half_angle);
 }
 // solid angle at principal point
 void vpgl_camera_bounds::
@@ -137,7 +147,7 @@ image_solid_angle(vpgl_perspective_camera<double> const& cam,
   cone_axis = cam.backproject(pp);
   vgl_ray_3d<double> ul = cam.backproject(0.0, 0.0);
   cone_half_angle = angle(ul, cone_axis);
-  solid_angle = 2.0*vnl_math::pi*(1.0-vcl_cos(cone_half_angle));
+  solid_angle = vpgl_camera_bounds::solid_angle(cone_half_angle);
 }
 
 void vpgl_camera_bounds::
@@ -170,7 +180,7 @@ box_solid_angle(vpgl_perspective_camera<double> const& cam,
   double umin = b2d.min_x(), vmin = b2d.min_y();//assume corners are centered
   vgl_ray_3d<double> ul = cam.backproject(umin, vmin);
   cone_half_angle = angle(ul, cone_axis);
-  solid_angle = 2.0*vnl_math::pi*(1.0-vcl_cos(cone_half_angle));
+  solid_angle = vpgl_camera_bounds::solid_angle(cone_half_angle);
   return true;
 }
 

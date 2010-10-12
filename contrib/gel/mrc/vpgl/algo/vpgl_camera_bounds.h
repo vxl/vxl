@@ -71,7 +71,10 @@ class vpgl_camera_bounds
   //: The angular interval of the rotation about the principal axis that bounds a pixel at the smallest image radius, i.e., 1/2 the smallest image dimension.
   //  The angular wedge is tangent to the pixel
   static double rotation_angle_interval(vpgl_perspective_camera<double> const& cam);
+  //: conversion functions between solid angle and cone half angle
+  static double solid_angle(double cone_half_angle);
 
+  static double cone_half_angle(double solid_angle);
  private:
   //: constructor private - class contains static methods only
   vpgl_camera_bounds();
@@ -116,7 +119,7 @@ class principal_ray_scan
 
  private:
   principal_ray_scan(){};
-  unsigned index_;
+  int index_;
   vcl_vector<double> theta_;
   vcl_vector<double> phi_;
 };
