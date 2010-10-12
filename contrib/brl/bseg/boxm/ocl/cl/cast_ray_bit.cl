@@ -21,7 +21,10 @@ cast_ray(
           __global    float              * alpha_array,     //voxel density buffer
           __global    uchar8             * mixture_array,   //appearance model buffer
           __global    ushort4            * num_obs_array,   // num obs for each block
-          __global    float4             * aux_data_array,  // aux data used between passes
+          //__global    float4             * aux_data_array,  // aux data used between passes
+          __global    float2             * cum_len_beta,    // cumulative ray length and beta aux vars
+          __global    uchar2             * mean_obs_cum_vis, // mean_obs per cell and cumulative visibility
+
 
           //---- UTILITY ARGUMENTS----------------------------------------------
           __local     uchar16            * local_tree,      //local tree for traversing
@@ -167,15 +170,21 @@ cast_ray(
 
       //segment the workgroup
       load_data_mutable_opt(ray_bundle_array,cell_ptrs);
-      cached_aux_data[llid] = aux_data_array[data_ptr];
+      
+      //load aux data into local mem
+      float2 cl_beta  = cum_len_beta[data_ptr];
+      float2 mean_vis = convert_float2(mean_obs_cum_vis[data_ptr])/255.0f;
+      cached_aux_data[llid] = (float4) (cl_beta.x, mean_vis.x, cl_beta.y, mean_vis.y);
       barrier(CLK_LOCAL_MEM_FENCE);
       
-      //kernel
-      seg_len_obs_opt(d,image_vect,ray_bundle_array,cached_aux_data);
+      //kernel (seg len obs 2 keeps a running mean, to be converted to char)
+      seg_len_obs_opt2(d,image_vect,ray_bundle_array,cached_aux_data);
       
       //set aux data (only one at time)
       if (ray_bundle_array[llid].y==1) {
-        aux_data_array[data_ptr]=(float4)cached_aux_data[llid];
+        //aux_data_array[data_ptr]=(float4)cached_aux_data[llid];
+        cum_len_beta[data_ptr] = (float2) (cached_aux_data[llid].x, cached_aux_data[llid].z);
+        mean_obs_cum_vis[data_ptr] = convert_uchar2_sat_rte((float2) (cached_aux_data[llid].y, cached_aux_data[llid].w)*255.0f);
       }
       in_image[j*get_global_size(0)*factor+i] = image_vect[llid];
       
@@ -194,7 +203,10 @@ cast_ray(
                       (mixture.s3/255.0), (mixture.s4/255.0), (mixture.s5/255.0), (nobs.s1),
                       (mixture.s6/255.0), (mixture.s7/255.0), (nobs.s2), (nobs.s3/100.0), 
                       0.0, 0.0, 0.0);
-      cached_aux_data[llid] = aux_data_array[data_ptr];
+      //cached_aux_data[llid] = aux_data_array[data_ptr];
+      float2 cl_beta  = cum_len_beta[data_ptr];
+      float2 mean_vis = convert_float2(mean_obs_cum_vis[data_ptr])/255.0f;
+      cached_aux_data[llid] = (float4) (cl_beta.x, mean_vis.x, cl_beta.y, mean_vis.y);
       barrier(CLK_LOCAL_MEM_FENCE);
 
       //calculate pre_infinity denomanator (shape of image)
@@ -220,7 +232,11 @@ cast_ray(
                          (mixture.s3/255.0), (mixture.s4/255.0), (mixture.s5/255.0), (nobs.s1),
                          (mixture.s6/255.0), (mixture.s7/255.0), (nobs.s2), (nobs.s3/100.0), 
                          0.0, 0.0, 0.0);
-      cached_aux_data[llid] = aux_data_array[data_ptr];
+      //load aux data into local mem
+      float2 cl_beta  = cum_len_beta[data_ptr];
+      float2 mean_vis = convert_float2(mean_obs_cum_vis[data_ptr])/255.0f;
+      cached_aux_data[llid] = (float4) (cl_beta.x, mean_vis.x, cl_beta.y, mean_vis.y*cl_beta.x);
+      //cached_aux_data[llid] = aux_data_array[data_ptr];
       barrier(CLK_LOCAL_MEM_FENCE);
 
       //calculate bayes ratio
@@ -229,7 +245,9 @@ cast_ray(
        
       //set aux data (only one at time)
       if (ray_bundle_array[llid].y==1) {
-        aux_data_array[data_ptr] = (float4)cached_aux_data[llid];
+        //aux_data_array[data_ptr] = (float4)cached_aux_data[llid];
+        cum_len_beta[data_ptr] = (float2) (cached_aux_data[llid].x, cached_aux_data[llid].z);
+        mean_obs_cum_vis[data_ptr] = convert_uchar2_sat_rte((float2) (cached_aux_data[llid].y, cached_aux_data[llid].w/cl_beta.x)*255.0f);
       }
       
       //reset cell_ptrs to -1 every time

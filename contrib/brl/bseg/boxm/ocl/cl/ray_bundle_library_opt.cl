@@ -130,6 +130,51 @@ void seg_len_obs_opt(        float    seg_len,
     barrier(CLK_LOCAL_MEM_FENCE);
 }
 
+/*
+ * does same as above, but keeps running mean observation, stores it as a char
+ */
+void seg_len_obs_opt2(        float    seg_len, 
+                      __local float4 * image_vect,
+                      __local short2 * ray_bundle_array,
+                      __local float4 * cached_aux_data)
+{
+    /* linear thread id */
+    uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
+    
+    /* limit access to threads that do not own a connected region */
+    if (ray_bundle_array[llid].y == 0)
+    {
+        /* store seg_len in the corresponding aux data slot to be accessed
+        * by other threads since these aux_data items are not used, they
+        * can be cleared and used to store the seg_len of non-owner rays
+        */
+        cached_aux_data[llid] = (float4) (seg_len, 0.0f, 0.0f, 0.0f);
+    }
+    barrier(CLK_LOCAL_MEM_FENCE);
+    
+    /* now, limit access to the threads that own each connected region */
+    if (ray_bundle_array[llid].y == 1)
+    {
+      
+        //keep track of total length and running mean observation
+        float sum_len = seg_len; 
+        float sum_obs = (image_vect[llid].x)*seg_len; 
+
+        /* traverse the linked list and increment sums */
+        short next = ray_bundle_array[llid].x;  // linked list pointer 
+        while(next >= 0) {
+            sum_len += cached_aux_data[next].x;
+            sum_obs += (image_vect[next].x)*cached_aux_data[next].x;
+            next = ray_bundle_array[next].x;
+        }
+        //get previous total, add this contribution to the mean, re_divide
+        float total_obs = cached_aux_data[llid].x * cached_aux_data[llid].y; 
+        total_obs += sum_obs;
+        cached_aux_data[llid].x += sum_len;
+        cached_aux_data[llid].y = (total_obs/cached_aux_data[llid].x);
+    }
+    barrier(CLK_LOCAL_MEM_FENCE);
+}
 
 
 /*
@@ -154,7 +199,7 @@ void pre_infinity_opt(        float    seg_len,
     if (PI>1.0e-10f)
     {
         /* The mean intensity for the cell */
-        float mean_obs = cached_aux_data[llid].y/PI; 
+        float mean_obs = cached_aux_data[llid].y; 
         PI = gauss_3_mixture_prob_density(mean_obs,
                                              datum.s1,
                                              datum.s2,
@@ -314,7 +359,7 @@ void bayes_ratio_opt2(        float   seg_len,
     if (cached_aux_data[llid].x > 1.0e-4f) {    /* if  too small, do nothing */
         
         /* The mean intensity for the cell */
-        float mean_obs = cached_aux_data[llid].y/cached_aux_data[llid].x; /* mean observation */
+        float mean_obs = cached_aux_data[llid].y; /* mean observation */
         PI = gauss_3_mixture_prob_density(mean_obs,
                                           datum.s1,
                                           datum.s2,
@@ -383,6 +428,9 @@ void bayes_ratio_opt2(        float   seg_len,
     }
     barrier(CLK_LOCAL_MEM_FENCE); /*wait for all threads to complete */
 }
+
+
+
 
 ///*
 // *
@@ -473,7 +521,7 @@ void update_cell(float16 * data, float4 aux_data,float t_match, float init_sigma
         float Nobs_mix = (*data).sc;
 
         update_gauss_3_mixture(aux_data.y/aux_data.x,
-                               aux_data.w/aux_data.x,
+                               aux_data.w,
                                t_match,
                                init_sigma,min_sigma,
                                &mu0,&sigma0,&w0,&Nobs0,
