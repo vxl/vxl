@@ -21,4 +21,5 @@ DECLARE_FUNC_CONS(boxm_query_bit_scene_process);
 DECLARE_FUNC_CONS(boxm_ray_probe_process);
 DECLARE_FUNC_CONS(boxm_generate_3d_point_process);
 DECLARE_FUNC_CONS(boxm_change_detection_bit_scene_process);
+DECLARE_FUNC_CONS(boxm_init_bit_scene_process);
 #endif
