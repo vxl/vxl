@@ -19,6 +19,10 @@
 #include <boxm/boxm_apm_traits.h>
 #include <bocl/bocl_cl.h>
 
+//smart pointer stuff
+#include <vbl/vbl_ref_count.h>
+#include <vbl/vbl_smart_ptr.h>
+
 //RENDER SCENE INFO STRUCT - mirrors ocl RenderSceneInfo 
 typedef struct
 {
@@ -36,7 +40,7 @@ typedef struct
 } RenderSceneInfo;   
 
 
-class boxm_ocl_bit_scene
+class boxm_ocl_bit_scene : public vbl_ref_count
 {
     typedef vnl_vector_fixed<unsigned char, 16> uchar16;
     typedef vnl_vector_fixed<float, 16>         float16;
@@ -61,6 +65,9 @@ class boxm_ocl_bit_scene
                     bgeo_lvcs lvcs,
                     vgl_point_3d<double> origin,
                     vgl_vector_3d<double> block_dim);
+    
+    bool init_empty_scene();
+    void validate_data();
 
     /* ocl_scene I/O */
     bool load_scene(vcl_string filename);
@@ -147,9 +154,21 @@ class boxm_ocl_bit_scene
     vcl_string xml_path_;
 };
 
+//Smart_Pointer typedef for boxm_ocl_bit_scene
+typedef vbl_smart_ptr<boxm_ocl_bit_scene> boxm_ocl_bit_scene_sptr;
+
 
 vcl_ostream& operator <<(vcl_ostream &s, boxm_ocl_bit_scene& scene);
 void x_write(vcl_ostream &os, boxm_ocl_bit_scene& scene, vcl_string name);
+
+
+//: Binary write boxm_update_bit_scene_manager scene to stream
+void vsl_b_write(vsl_b_ostream & os, boxm_ocl_bit_scene const& scene);
+void vsl_b_write(vsl_b_ostream& os, const boxm_ocl_bit_scene* &p);
+
+//: Binary load boxm_update_bit_scene_manager scene from stream.
+void vsl_b_read(vsl_b_istream & is, boxm_ocl_bit_scene &scene);
+void vsl_b_read(vsl_b_istream& is, boxm_ocl_bit_scene* p);
 
 
 #endif // boxm_ocl_bit_scene_h_
