@@ -249,7 +249,7 @@ refine_bit_scene(__constant  RenderSceneInfo    * linfo,
         }
         
         //6c. update endPtr
-        endPtr = newDataPtr+1;//(endPtr+newSize)%linfo->data_len;
+        endPtr = (newDataPtr+1)%linfo->data_len;//(endPtr+newSize)%linfo->data_len;
         
         //!!! assert that end pointer+newsize = newDataPtr+1...
         if(endPtr != (newDataPtr+1)%linfo->data_len) {
@@ -261,35 +261,36 @@ refine_bit_scene(__constant  RenderSceneInfo    * linfo,
       //otherwise just move the unrefined tree quickly
       else if(currTreeSize <= freeSpace) {
 
-          //6a. update local tree's data pointer (store it back tree buffer)
-          ushort buffOffset = convert_ushort((endPtr-1 + linfo->data_len)%linfo->data_len);
-          int oldDataPtr = data_index_opt(0, local_tree, 0, bit_lookup);
-          uchar hi = (uchar)(buffOffset >> 8);
-          uchar lo = (uchar)(buffOffset & 255);
-          (*local_tree).sa = hi; 
-          (*local_tree).sb = lo;
-          tree_array[gid*linfo->tree_len + subIndex] = as_int4((*local_tree));
+        //6a. update local tree's data pointer (store it back tree buffer)
+        ushort buffOffset = convert_ushort((endPtr-1 + linfo->data_len)%linfo->data_len);
+        int oldDataPtr = data_index_opt(0, local_tree, 0, bit_lookup);
+        uchar hi = (uchar)(buffOffset >> 8);
+        uchar lo = (uchar)(buffOffset & 255);
+        (*local_tree).sa = hi; 
+        (*local_tree).sb = lo;
+        tree_array[gid*linfo->tree_len + subIndex] = as_int4((*local_tree));
 
-          //6b. move data up to end pointer
-          int newDataPtr = buffOffset;   
-          int offset = gid*linfo->data_len;                   //absolute buffer offset
-          for(int j=0; j<currTreeSize; j++) {
+        //6b. move data up to end pointer
+        int newDataPtr = buffOffset;   
+        int offset = gid*linfo->data_len;                   //absolute buffer offset
+        for(int j=0; j<currTreeSize; j++) {
 
-              alpha_array[offset + newDataPtr]   = alpha_array[offset + oldDataPtr];
-              mixture_array[offset + newDataPtr] = mixture_array[offset + oldDataPtr];
-              num_obs_array[offset + newDataPtr] = num_obs_array[offset + oldDataPtr];
+            alpha_array[offset + newDataPtr]   = alpha_array[offset + oldDataPtr];
+            mixture_array[offset + newDataPtr] = mixture_array[offset + oldDataPtr];
+            num_obs_array[offset + newDataPtr] = num_obs_array[offset + oldDataPtr];
 
-              //increment 
-              oldDataPtr = (oldDataPtr+1)%linfo->data_len;
-              newDataPtr = (newDataPtr+1)%linfo->data_len;
-          }
-        
+            //increment 
+            oldDataPtr = (oldDataPtr+1)%linfo->data_len;
+            newDataPtr = (newDataPtr+1)%linfo->data_len;
+        }
+      
+
         //6c. update endPtr
         endPtr = (endPtr+currTreeSize)%linfo->data_len;
         
         //!!! assert that end pointer+newsize = newDataPtr+1...
         if(endPtr != (newDataPtr+1)%linfo->data_len) {
-          output[gid] = -660;
+          output[gid] = -559;
           return;
         }
       }
