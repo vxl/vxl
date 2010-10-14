@@ -81,6 +81,7 @@ bool bvpl_create_edge3d_kernel_process(bprb_func_process& pro)
 
   bvpl_kernel_sptr kernel_sptr = new bvpl_kernel(factory.create());
   kernel_sptr->print();
+  kernel_sptr->save_raw("edge_kernel.raw");
   pro.set_output_val<bvpl_kernel_sptr>(0, kernel_sptr);
 
   return true;
