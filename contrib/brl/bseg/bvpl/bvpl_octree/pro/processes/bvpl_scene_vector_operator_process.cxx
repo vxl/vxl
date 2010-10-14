@@ -113,7 +113,7 @@ bool bvpl_scene_vector_operator_process(bprb_func_process& pro)
       if (functor_name == "edge_geometric_mean") {
         bvpl_edge_geometric_mean_functor<float> functor;
         bvpl_scene_vector_operator scene_oper;
-        scene_oper.operate(*scene_in, &max_oper, functor, kernel_vec, *scene_out, level);
+        scene_oper.operate(*scene_in, functor, kernel_vec, *scene_out);
         scene_ptr = scene_out;
         pro.set_output_val<boxm_scene_base_sptr>(0, scene_ptr);
         return true;
@@ -139,7 +139,7 @@ bool bvpl_scene_vector_operator_process(bprb_func_process& pro)
       if (functor_name == "gauss_convolution") {
         bvpl_gauss_convolution_functor functor;
         bvpl_scene_vector_operator scene_oper;
-        scene_oper.operate(*scene_in, &max_oper, functor, kernel_vec, *scene_out, level);
+        scene_oper.operate(*scene_in, functor, kernel_vec, *scene_out);
         scene_ptr = scene_out;
         pro.set_output_val<boxm_scene_base_sptr>(0, scene_ptr);
         return true;
