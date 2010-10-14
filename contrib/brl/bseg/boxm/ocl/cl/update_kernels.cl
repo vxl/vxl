@@ -16,7 +16,6 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
                      __global    float              * alpha_array,      // alpha for each block
                      __global    uchar8             * mixture_array,    // mixture for each block
                      __global    ushort4            * num_obs_array,    // num obs for each block
-                     //__global    float4             * aux_data_array,   // aux data used between passes
                      __global    float2             * cum_len_beta,    // cumulative ray length and beta aux vars
                      __global    uchar2             * mean_obs_cum_vis, // mean_obs per cell and cumulative visibility
                      __constant  uchar              * bit_lookup,       // used to get data_index
@@ -29,8 +28,8 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
                      __global    int                * offset_y,         // right (which one of the four blocks)
                      __local     short2             * ray_bundle_array, // gives information for which ray takes over in the workgroup
                      __local     int                * cell_ptrs,        // local list of cell_ptrs (cells that are hit by this workgroup
-                     __local     float4             * cached_aux_data,
-                     __local     float4             * image_vect,       // input image and store vis_inf and pre_inf
+                     __local     float2             * cached_aux_data,  // seg len cached aux data is only a float2
+                    // __local     float4             * image_vect,       // input image and store vis_inf and pre_inf
                      __local     uchar              * cumsum,           // cumulative sum for calculating data pointer
                      __global    float              * output)    
 {
@@ -54,7 +53,8 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
   if (i>=(*imgdims).z || j>=(*imgdims).w) {
     return;
   }
-  image_vect[llid] = in_image[j*get_global_size(0)*factor+i];
+  //image_vect[llid] = in_image[j*get_global_size(0)*factor+i];
+  float obs = in_image[j*get_global_size(0)*factor+i].x;
   barrier(CLK_LOCAL_MEM_FENCE);
 
   //----------------------------------------------------------------------------
@@ -94,7 +94,7 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
             local_tree, bit_lookup, cumsum, 0,
             
             //factor,raybund,ptrs,cache,cache,image_vect (all NULL)
-            factor, ray_bundle_array, cell_ptrs, 0, cached_aux_data, image_vect,
+            factor, ray_bundle_array, cell_ptrs, obs, cached_aux_data,
             
             //io info
             in_image, 0, output);
@@ -110,7 +110,6 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
              __global    float              * alpha_array,      // alpha for each block
              __global    uchar8             * mixture_array,    // mixture for each block
              __global    ushort4            * num_obs_array,    // num obs for each block
-             //__global    float4             * aux_data_array,   // aux data used between passes
              __global    float2             * cum_len_beta,    // cumulative ray length and beta aux vars
              __global    uchar2             * mean_obs_cum_vis, // mean_obs per cell and cumulative visibility
              __constant  uchar              * bit_lookup,       // used to get data_index
@@ -121,8 +120,6 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
              __global    int                * offsetfactor,     // 
              __global    int                * offset_x,         // offset to the left and 
              __global    int                * offset_y,         // right (which one of the four blocks)
-             __local     float4             * cached_aux_data,
-             __local     float4             * image_vect,       // input image and store vis_inf and pre_inf
              __local     uchar              * cumsum,           // cumulative sum for calculating data pointer
              __global    float              * output)    
 {
@@ -142,7 +139,8 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
   if (i>=(*imgdims).z || j>=(*imgdims).w) {
     return;
   }
-  image_vect[llid] = in_image[j*get_global_size(0)*factor+i];
+  //image_vect[llid] = in_image[j*get_global_size(0)*factor+i];
+  float4 inImage = in_image[j*get_global_size(0)*factor+i];
   barrier(CLK_LOCAL_MEM_FENCE);
 
   //----------------------------------------------------------------------------
@@ -182,7 +180,7 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
             local_tree, bit_lookup, cumsum, 0,
             
             //factor,raybund,ptrs,cache,cache,image_vect (all NULL)
-            factor, 0, 0, 0, cached_aux_data, image_vect,
+            factor, 0, 0, inImage,
             
             //io info
             in_image, 0, output);
@@ -198,7 +196,6 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
                      __global    float              * alpha_array,      // alpha for each block
                      __global    uchar8             * mixture_array,    // mixture for each block
                      __global    ushort4            * num_obs_array,    // num obs for each block
-                     //__global    float4             * aux_data_array,   // aux data used between passes
                      __global    float2             * cum_len_beta,    // cumulative ray length and beta aux vars
                      __global    uchar2             * mean_obs_cum_vis, // mean_obs per cell and cumulative visibility
                      __constant  uchar              * bit_lookup,       // used to get data_index
@@ -211,7 +208,6 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
                      __global    int                * offset_y,         // right (which one of the four blocks)
                      __local     short2             * ray_bundle_array, // gives information for which ray takes over in the workgroup
                      __local     int                * cell_ptrs,        // local list of cell_ptrs (cells that are hit by this workgroup
-                     __local     float4             * cached_aux_data,
                      __local     float4             * image_vect,       // input image and store vis_inf and pre_inf
                      __local     uchar              * cumsum,           // cumulative sum for calculating data pointer
                      __local     int                * imIndex,          // cached image index in local mem
@@ -277,7 +273,7 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
             local_tree, bit_lookup, cumsum, imIndex,
             
             //factor,raybund,ptrs,cache,cache,image_vect (all NULL)
-            factor, ray_bundle_array, cell_ptrs, 0, cached_aux_data, image_vect,
+            factor, ray_bundle_array, cell_ptrs, image_vect,
             
             //io info
             in_image, 0, output);
