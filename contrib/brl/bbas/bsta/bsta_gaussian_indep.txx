@@ -130,6 +130,15 @@ T bsta_gaussian_indep<T,n>::probability(const vnl_vector_fixed<T,n>& min_pt,
                                                    diag_covar_);
 }
 
+//: Gradient vector at this point
+template <class T, unsigned int n>
+vnl_vector_fixed<T,n> bsta_gaussian_indep<T,n>::gradient(const vnl_vector_fixed<T,n>& pt) const
+{
+  T pd = prob_density(pt);
+  vnl_vector_fixed<T,n> h((pt[0]-this->mean_[0])/diag_covar_[0], (pt[1] - this->mean_[1])/diag_covar_[1], (pt[2] - this->mean_[2])/diag_covar_[2]);
+  return -pd * h;
+}
+
 
 #define BSTA_GAUSSIAN_INDEP_INSTANTIATE(T,n) \
 template class bsta_gaussian_indep<T,n >
