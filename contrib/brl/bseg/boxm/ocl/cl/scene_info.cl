@@ -29,3 +29,10 @@ typedef struct
 } point3d;
 
 
+typedef struct
+{
+  float cum_len;
+  float beta;
+  uchar mean_obs;
+  uchar cum_vis;
+} AuxData;

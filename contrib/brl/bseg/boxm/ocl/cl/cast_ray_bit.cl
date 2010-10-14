@@ -217,10 +217,8 @@ cast_ray(
       float  alpha    = alpha_array[data_ptr];
       float8 mixture  = convert_float8(mixture_array[data_ptr])/255.0f;
 
-      //cached_aux_data[llid] = aux_data_array[data_ptr];
       float2 cl_beta  = cum_len_beta[data_ptr];
       float2 mean_vis = convert_float2(mean_obs_cum_vis[data_ptr])/255.0f;
-      //cached_aux_data[llid] = (float4) (cl_beta.x, mean_vis.x, cl_beta.y, mean_vis.y);
       barrier(CLK_LOCAL_MEM_FENCE);
 
       //calculate pre_infinity denomanator (shape of image)
@@ -250,7 +248,7 @@ cast_ray(
       barrier(CLK_LOCAL_MEM_FENCE);
 
       //calculate bayes ratio
-      bayes_ratio_opt2(d, cl_beta.x, mean_vis.x, &cell_vis, &cell_beta, image_vect, ray_bundle_array, cell_ptrs, alpha, mixture);
+      bayes_ratio_opt3(d, cl_beta.x, mean_vis.x, &cell_vis, &cell_beta, image_vect, ray_bundle_array, cell_ptrs, alpha, mixture);
        
       //set aux data (only one at time)
       if (ray_bundle_array[llid].y==1) {

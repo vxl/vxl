@@ -428,6 +428,99 @@ void bayes_ratio_opt2(        float   seg_len,
     barrier(CLK_LOCAL_MEM_FENCE); /*wait for all threads to complete */
 }
 
+void bayes_ratio_opt3(        float   seg_len, 
+                              float   cum_len,
+                              float   mean_obs,
+                              float * cell_vis,
+                              float * cell_beta,
+                      __local float4* image_vect,
+                      __local short2* ray_bundle_array,
+                      __local float*  cached_seg_len,
+                              float   alpha, 
+                              float8  mixture)
+{
+    /* linear thread id */
+    uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
+    
+    /* insert seg_len into the local cache (all threads) */
+    cached_seg_len[llid] = seg_len;
+    barrier(CLK_LOCAL_MEM_FENCE);
+
+    /* ray must be active after data is loaded */
+    float PI = 0.0;
+    
+    /* Compute PI for all threads */
+    if (cum_len > 1.0e-4f) {    /* if  too small, do nothing */
+        
+        /* The mean intensity for the cell */
+        PI = gauss_3_mixture_prob_density(mean_obs,
+                                             mixture.s0, 
+                                             mixture.s1, 
+                                             mixture.s2,
+                                             mixture.s3, 
+                                             mixture.s4, 
+                                             mixture.s5,
+                                             mixture.s6,
+                                             mixture.s7,
+                                             (1.0f-mixture.s2-mixture.s5)
+                                          );/* PI */
+    }
+    barrier(CLK_LOCAL_MEM_FENCE); /*wait for all threads to complete */
+    
+    /* Below, all active threads participate in updating the alpha integral,
+    * pre and vis images */
+    /*alpha integral         alpha * seg_len      */
+    image_vect[llid].y += alpha * seg_len;
+
+    float vis_prob_end = exp(-image_vect[llid].y); /* vis_prob_end */
+
+    /* updated pre                      Omega         *  PI         */
+    image_vect[llid].w += (image_vect[llid].z - vis_prob_end) * PI;
+
+    /* updated visibility probability */
+    image_vect[llid].z = vis_prob_end;
+    
+    barrier(CLK_LOCAL_MEM_FENCE); /*wait for all threads to complete */
+
+    /* region owner scans the region and computes Bayes ratio and weighted vis.
+    * The aux_data cell elements are assigned as:
+    *
+    *   [seg_len sum | weighted obs | update_ratio (beta) | weighted vis]
+    */
+    if (ray_bundle_array[llid].y==1) {
+        /* compute data for base ray cell */
+        /* cell.vis +=        vis(i,j)    *      seg_len */
+        (*cell_vis) += image_vect[llid].z * seg_len;
+        
+        /* Bayes ratio */
+        /* ( pre + PI*vis)/norm)*seg_len */
+        if(image_vect[llid].x>1e-10f)
+        {
+            (*cell_beta) +=
+                /*      pre(i,j)      + PI   *    vis(i,j) */
+                image_vect[llid].w*seg_len/image_vect[llid].x  + PI*image_vect[llid].z*seg_len/image_vect[llid].x;
+        }
+        /*     norm(i,j)        seg_len */
+
+        /* traverse the linked list and increment sums */
+        short next = ray_bundle_array[llid].x;  // linked list pointer 
+        while(next >= 0) {
+            
+            /*    cell.vis           +=     vis(i,j)      *      seg_len     */
+            (*cell_vis) += image_vect[next].z * cached_seg_len[next];
+            /* Bayes ratio */
+            /* ( pre + PI*vis)/norm)*seg_len */
+            if( image_vect[next].x>1e-10f)
+            {
+                (*cell_beta) +=
+                    (image_vect[next].w*cached_seg_len[next]/image_vect[next].x) + (PI*image_vect[next].z*cached_seg_len[next]/
+                    image_vect[next].x);
+            }
+            next = ray_bundle_array[next].x;
+        }
+    }
+    barrier(CLK_LOCAL_MEM_FENCE); /*wait for all threads to complete */
+}
 
 
 

@@ -72,7 +72,7 @@ bool boxm_update_bit_scene_manager::init_scene(boxm_ocl_bit_scene *scene,
   cell_alpha_   = (cl_float *) boxm_ocl_utils::alloc_aligned(numData,sizeof(cl_float),16);
   cell_mixture_ = (cl_uchar *) boxm_ocl_utils::alloc_aligned(numData,sizeof(cl_uchar8),16);
   cell_num_obs_ = (cl_ushort*) boxm_ocl_utils::alloc_aligned(numData,sizeof(cl_ushort4),16);
-  cell_aux_data_= (cl_float *) boxm_ocl_utils::alloc_aligned(numData,sizeof(cl_float4),16);
+  cell_aux_data_= (cl_float *) boxm_ocl_utils::alloc_aligned(numData,sizeof(cl_float2)+sizeof(cl_uchar2),16);
   scene->get_alphas(cell_alpha_);
   scene->get_mixture(cell_mixture_);
   scene->get_num_obs(cell_num_obs_);
@@ -194,7 +194,7 @@ bool boxm_update_bit_scene_manager::init_scene(boxm_ocl_bit_scene *scene,
   cell_alpha_   = (cl_float *) boxm_ocl_utils::alloc_aligned(numData,sizeof(cl_float),16);
   cell_mixture_ = (cl_uchar *) boxm_ocl_utils::alloc_aligned(numData,sizeof(cl_uchar8),16);
   cell_num_obs_ = (cl_ushort*) boxm_ocl_utils::alloc_aligned(numData,sizeof(cl_ushort4),16);
-  cell_aux_data_= (cl_float *) boxm_ocl_utils::alloc_aligned(numData,sizeof(cl_float4),16);
+  cell_aux_data_= (cl_float *) boxm_ocl_utils::alloc_aligned(numData,sizeof(cl_float2)+sizeof(cl_uchar2),16);
   scene->get_alphas(cell_alpha_);
   scene->get_mixture(cell_mixture_);
   scene->get_num_obs(cell_num_obs_);
@@ -361,7 +361,7 @@ bool boxm_update_bit_scene_manager::set_scene_buffers()
   //data (aux_data)
   cell_aux_data_buf_ = clCreateBuffer(this->context_,
                                       CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR,
-                                      datCells * sizeof(cl_float4),
+                                      datCells * (sizeof(cl_float2)+sizeof(cl_uchar2)),
                                       cell_aux_data_,
                                       &status);
   if (!this->check_val(status, CL_SUCCESS, "clCreateBuffer (cell_aux_data) failed."))
