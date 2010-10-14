@@ -144,7 +144,7 @@ rerender_ocl_scene_opt(__global float   * depth_image_view1,
       // special case whenray grazes edge or corner of cube
       if (fabs(tfar-tnear)<cellsize/10)
       {
-        block_entry_pt=block_entry_pt+ray_d*cellsize/2;
+        block_entry_pt=block_entry_pt+ray_d*(float4)(cellsize/2);;
         block_entry_pt.w=0.5;
         if (any(block_entry_pt>=(float4)1.0f)|| any(block_entry_pt<=(float4)0.0f))
             break;
