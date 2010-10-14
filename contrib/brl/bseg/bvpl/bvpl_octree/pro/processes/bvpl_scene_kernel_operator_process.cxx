@@ -16,6 +16,7 @@
 #include <bvpl/bvpl_edge_algebraic_mean_functor.h>
 #include <bvpl/bvpl_gauss_convolution_functor.h>
 #include <bvpl/bvpl_positive_gauss_conv_functor.h>
+#include <bvpl/bvpl_algebraic_functor.h>
 
 #include <bprb/bprb_parameters.h>
 
@@ -154,6 +155,15 @@ bool bvpl_scene_kernel_operator_process(bprb_func_process& pro)
 
     if (functor_name == "edge_algebraic_mean") {
       bvpl_edge_algebraic_mean_functor<float> functor;
+      bvpl_scene_kernel_operator scene_oper;
+      //operate on scene
+      scene_oper.operate(*scene_in, functor, kernel, *scene_out);
+      scene_ptr = scene_out;
+      pro.set_output_val<boxm_scene_base_sptr>(0, scene_ptr);
+      return true;
+    }
+    else if (functor_name == "algebraic") {
+      bvpl_algebraic_functor functor;
       bvpl_scene_kernel_operator scene_oper;
       //operate on scene
       scene_oper.operate(*scene_in, functor, kernel, *scene_out);
