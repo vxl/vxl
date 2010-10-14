@@ -5,6 +5,7 @@
 #include <bvpl/bvpl_edge3d_kernel_factory.h>
 #include <bvpl/bvpl_corner2d_kernel_factory.h>
 #include <bvpl/bvpl_gauss3d_xx_kernel_factory.h>
+#include <bvpl/bvpl_gauss3d_x_kernel_factory.h>
 #include <bvpl/bvpl_create_directions.h>
 
 #include <vnl/vnl_math.h>
@@ -83,7 +84,7 @@ bool test_edge3d()
 }
 
 //: A function to print some kernel to file and check whether they look ok
-void print_kernels()
+void print_gauss_xx_kernels()
 {
   float sigma1 = 10;
   float sigma2 = 15;
@@ -120,6 +121,44 @@ void print_kernels()
   }
 }
 
+//: A function to print some kernel to file and check whether they look ok
+void print_gauss_x_kernels()
+{
+  float sigma1 = 10;
+  float sigma2 = 15;
+  float sigma3 = 20;
+  bvpl_gauss3d_x_kernel_factory factory(sigma1, sigma2, sigma3);
+  
+  {
+    factory.set_rotation_axis( vnl_float_3(1, 1, 1));
+    bvpl_kernel kernel = factory.create();
+    
+    kernel.save_raw("gauss_111_kernel.raw");
+    //kernel.print_to_file("gauss_111_kernel.txt");
+    vcl_cout << "1 1 1 kernel " ;
+    kernel.cum_sum();
+  }
+  
+  {
+    factory.set_rotation_axis( vnl_float_3(0, 0, 1));
+    bvpl_kernel kernel = factory.create();
+    kernel.save_raw("gauss_001_kernel.raw");
+    //kernel.print_to_file("gauss_001_kernel.txt");
+    vcl_cout << "0 0 1 kernel " ;
+    kernel.cum_sum();
+  }
+  
+  {
+    factory.set_rotation_axis( vnl_float_3(0, 0, 1));
+    factory.set_angle(float(vnl_math::pi_over_2));
+    bvpl_kernel kernel = factory.create();
+    kernel.save_raw("gauss_001_90_kernel.raw");
+    //kernel.print_to_file("gauss_001_90_kernel.txt");
+    vcl_cout << "0 0 1 kernel, angle pi/2 " ;
+    kernel.cum_sum();
+  }
+}
+
 //: Prints to file the directions of the kernels
 //  The file can be read in MATLAB for vizualization
 void print_directions( bvpl_kernel_vector_sptr kernel_vector)
@@ -145,7 +184,7 @@ void print_directions( bvpl_kernel_vector_sptr kernel_vector)
   ofs.close();
 }
 
-bool test_gaussian()
+bool test_gaussian_xx()
 {
   float sigma1 = 1;
   float sigma2 = 1.5;
@@ -245,6 +284,110 @@ bool test_gaussian()
   return true;
 }
 
+bool test_gaussian_x()
+{
+  float sigma1 = 10;
+  float sigma2 = 15;
+  float sigma3 = 20;
+  bvpl_gauss3d_x_kernel_factory factory(sigma1, sigma2, sigma3);
+  {
+    bvpl_kernel kernel = factory.create();
+    vcl_cout << "Canonical kernel " ;
+    kernel.cum_sum();
+    kernel.save_raw("canonical.raw");
+  }
+  
+#if 1   //Comment this out if you whish to print kernels to raw file for vizualization
+  
+  print_gauss_x_kernels();
+#endif
+  
+  // test the kernel vector
+//  
+//  bvpl_create_directions_b dir;
+//  bvpl_kernel_vector_sptr kernel_3d_vecs = factory.create_kernel_vector(dir);
+//  
+//#if 0   //Comment this out if you whish to print kernels directions  for vizualization
+//  print_directions(kernel_vector);
+//#endif
+  
+  //check symmetry assumptions.
+  // 1. if kernel has two equal sigmas and it is aligned in the
+  // direction of unequal sigma, then it is symmetric around that axis.
+  bvpl_gauss3d_xx_kernel_factory factory2(1, 1.5);
+  factory2.set_rotation_axis( vnl_float_3(1, 0, 0));
+  bvpl_kernel kernel1 = factory2.create();
+  
+  factory2.set_rotation_axis( vnl_float_3(1, 0, 0));
+  factory2.set_angle(float(vnl_math::pi_over_2));
+  bvpl_kernel kernel2 = factory2.create();
+  
+  factory2.set_rotation_axis( vnl_float_3(-1, 0, 0));
+  bvpl_kernel kernel3 = factory2.create();
+  
+  //kernel1.save_raw("kernel1.raw");
+  //kernel2.save_raw("kernel2.raw");
+  //kernel1.print_to_file("kernel1.txt");
+  //kernel2.print_to_file("kernel2.txt");
+  
+  //check equality
+  bvpl_kernel_iterator kernel_iter1 = kernel1.iterator();
+  bvpl_kernel_iterator kernel_iter2 = kernel2.iterator();
+  bvpl_kernel_iterator kernel_iter3 = kernel3.iterator();
+  
+  //reset the iterator
+  kernel_iter1.begin();
+  kernel_iter2.begin();
+  kernel_iter3.begin();
+  
+  bool symmetric = true;
+  
+  while (!kernel_iter1.isDone()) {
+    vgl_point_3d<int> idx1 = kernel_iter1.index();
+    while (!kernel_iter2.isDone()) {
+      vgl_point_3d<int> idx2 = kernel_iter2.index();
+      if (idx1 == idx2)
+      {
+        bvpl_kernel_dispatch d1 = *kernel_iter1;
+        bvpl_kernel_dispatch d2 = *kernel_iter2;
+        if (d1.c_ - d2.c_ > vcl_numeric_limits<float>::epsilon())
+          symmetric = false;
+      }
+      ++kernel_iter2;
+    }
+    kernel_iter2.begin();
+    ++kernel_iter1;
+  }
+  
+  kernel_iter1.begin();
+  while (!kernel_iter1.isDone()) {
+    vgl_point_3d<int> idx1 = kernel_iter1.index();
+    while (!kernel_iter3.isDone()) {
+      vgl_point_3d<int> idx3= kernel_iter3.index();
+      if (idx1 == idx3)
+      {
+        bvpl_kernel_dispatch d1 = *kernel_iter1;
+        bvpl_kernel_dispatch d3 = *kernel_iter3;
+        if (d1.c_ - d3.c_ > vcl_numeric_limits<float>::epsilon())
+          symmetric = false;
+      }
+      ++kernel_iter3;
+    }
+    kernel_iter3.begin();
+    ++kernel_iter1;
+  }
+  
+  
+  TEST("Symmetry test", symmetric, true);
+  
+  
+  factory2.set_rotation_axis( vnl_float_3(-1, 0, 0));
+  
+  return true;
+}
+
+
+
 bool test_corner2d()
 {
   unsigned length = 5;
@@ -287,10 +430,11 @@ bool test_corner2d()
 
 static void test_bvpl_kernels()
 {
-  TEST("Test edge2d kernel",   true, test_edge2d());
-  TEST("Test edge3d kernel",   true, test_edge3d());
-  TEST("Test gauss kernel",    true, test_gaussian());
-  TEST("Test corner2d kernel", true, test_corner2d());
+  //TEST("Test edge2d kernel",   true, test_edge2d());
+  //TEST("Test edge3d kernel",   true, test_edge3d());
+  TEST("Test gauss_x kernel",  true, test_gaussian_x());
+ // TEST("Test gauss_xx kernel", true, test_gaussian_xx());
+  //TEST("Test corner2d kernel", true, test_corner2d());
 }
 
 TESTMAIN(test_bvpl_kernels);
