@@ -37,6 +37,16 @@ class bvpl_create_directions_base
   vcl_vector<vnl_float_3> axes_;
   vcl_vector<float> angles_;
 };
+
+//: Creates directions aligned the positive x,y,z axis
+class bvpl_create_directions_xyz : public bvpl_create_directions_base
+{
+public:
+  bvpl_create_directions_xyz();
+};
+
+
+
 //:
 // this class samples the
 // phi=0, theta=0;
