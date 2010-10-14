@@ -328,6 +328,12 @@ SOURCE=.\Templates/vbl_smart_ptr+boxm_ocl_change_detection_manager-.cxx
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+boxm_update_bit_scene_manager-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_io_smart_ptr+boxm_ocl_bit_scene-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+boxm_ocl_bit_scene-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

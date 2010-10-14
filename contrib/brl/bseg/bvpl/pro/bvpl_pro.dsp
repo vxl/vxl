@@ -177,6 +177,9 @@ SOURCE=.\processes/util/bvpl_convert_pair_to_hue_process.cxx
 SOURCE=.\processes/util/bvpl_load_pair_grid_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/bvpl_create_gauss3d_x_kernel_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+bvpl_kernel_sptr-.cxx
 # End Source File
 # Begin Source File

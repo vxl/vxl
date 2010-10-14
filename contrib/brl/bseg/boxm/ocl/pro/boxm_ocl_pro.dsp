@@ -143,6 +143,18 @@ SOURCE=.\processes/boxm_generate_3d_point_process.cxx
 SOURCE=.\processes/boxm_ray_probe_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\processes/boxm_change_detection_bit_scene_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm_init_bit_scene_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm_refine_bit_scene_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/boxm_clean_aux_data_scene_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+boxm_render_probe_manager_sptr-.cxx
 # End Source File
 # Begin Source File
@@ -150,6 +162,9 @@ SOURCE=.\Templates/brdb_value_t+boxm_update_bit_scene_manager_sptr-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/brdb_value_t+boxm_ocl_change_detection_manager_sptr-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/brdb_value_t+boxm_ocl_bit_scene_sptr-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"

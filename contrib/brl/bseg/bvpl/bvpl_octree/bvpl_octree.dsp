@@ -113,6 +113,12 @@ SOURCE=.\Templates/boct_tree+short.bvpl_octree_sample+float--.cxx
 # Begin Source File
 SOURCE=.\Templates/boct_tree+short.bvpl_octree_sample+bsta_num_obs+bsta_gauss_f1---.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm_block+boct_tree+short.vnl_vector_fixed+float.3---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boct_tree+short.vnl_vector_fixed+float.3--.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -155,4 +161,3 @@ SOURCE=.\bvpl_scene_statistics.h
 # End Group
 # End Target
 # End Project
-# Begin Source File
