@@ -198,6 +198,26 @@ class boxm_scene :public boxm_scene_base
   //: Returns a scene with the same structure and data
   void clone_blocks(boxm_scene<T> &scene_out);  
   
+  //: Returns a scene of a different type with the same structure  and initialized with given value
+  template <class T_out>
+  void clone_blocks_to_type(boxm_scene<T_out> &scene_out, typename boxm_scene<T_out>::datatype data )
+  {
+    boxm_block_iterator<T> iter(this);
+    boxm_block_iterator<T_out> iter_out = scene_out.iterator();
+    iter.begin();
+    iter_out.begin();
+    while (!iter.end())
+    {
+      load_block(iter.index());
+      T_out  *tree_out =(*iter)->get_tree()->template clone_to_type<typename boxm_scene<T_out>::datatype>();
+      (*iter_out)->init_tree(tree_out);
+      tree_out->init_cells(data);
+      scene_out.write_active_block();
+      ++iter;
+      ++iter_out;
+    }
+  }
+  
   //: Unload active blocks
   void unload_active_blocks();
   
