@@ -11,7 +11,7 @@ register_processes(PyObject *self, PyObject *args)
 {
   bvpl_register::register_process();
   bvxm_grid_register::register_process();
-
+  bvxm_algo_register::register_process();
   Py_INCREF(Py_None);
   return Py_None;
 }
@@ -22,7 +22,7 @@ register_datatypes(PyObject *self, PyObject *args)
   register_basic_datatypes();
   bvpl_register::register_datatype();
   bvxm_grid_register::register_datatype();
-
+  bvxm_algo_register::register_datatype();
   Py_INCREF(Py_None);
   return Py_None;
 }
