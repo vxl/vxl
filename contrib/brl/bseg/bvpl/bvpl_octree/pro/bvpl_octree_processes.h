@@ -10,5 +10,6 @@ DECLARE_FUNC_CONS(bvpl_save_vrml_process);
 DECLARE_FUNC_CONS(bvpl_create_scene_process);
 DECLARE_FUNC_CONS(bvpl_plane_propagate_process);
 DECLARE_FUNC_CONS(bvpl_nonmax_supp_process);
+DECLARE_FUNC_CONS(bvpl_compute_gauss_gradients);
 
 #endif
