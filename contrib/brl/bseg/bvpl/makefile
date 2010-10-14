@@ -31,6 +31,8 @@ SOURCES += bvpl_neighborhood_kernel_factory.cxx
 SOURCES += bvpl_positive_gauss_conv_functor.cxx
 SOURCES += bvpl_negative_gauss_conv_functor.cxx
 MANPAGE_SOURCES += bvpl_discriminative_non_max_suppression.h
+SOURCES += bvpl_gauss3d_x_kernel_factory.cxx
+SOURCES += bvpl_algebraic_functor.cxx
 
 SUBDIRS += pro io util bvpl_octree
 

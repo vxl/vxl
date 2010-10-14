@@ -20,6 +20,10 @@ SOURCES += processes/boxm_init_update_bit_scene_process.cxx
 SOURCES += processes/boxm_query_bit_scene_process.cxx
 SOURCES += processes/boxm_generate_3d_point_process.cxx
 SOURCES += processes/boxm_ray_probe_process.cxx
+SOURCES += processes/boxm_change_detection_bit_scene_process.cxx
+SOURCES += processes/boxm_init_bit_scene_process.cxx
+SOURCES += processes/boxm_refine_bit_scene_process.cxx
+SOURCES += processes/boxm_clean_aux_data_scene_process.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk
