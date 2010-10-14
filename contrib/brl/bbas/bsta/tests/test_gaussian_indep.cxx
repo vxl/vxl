@@ -43,6 +43,16 @@ void test_gaussian_indep_type(T epsilon, const vcl_string& type_name)
   T prob = static_cast<T>(1.0/vcl_sqrt(two_pi*two_pi*two_pi*gauss.det_covar()) * vcl_exp(-sqr_mah_dist/2));
   TEST_NEAR(("probability density <"+type_name+">").c_str(),
             gauss.prob_density(test_pt), prob, epsilon);
+  
+  T gradient_x = static_cast<T>(-prob);
+  TEST_NEAR(("gradient x <"+type_name+">").c_str(),
+            gauss.gradient(test_pt)[0], gradient_x, epsilon);
+  T gradient_y = static_cast<T>(-prob);
+  TEST_NEAR(("gradient y <"+type_name+">").c_str(),
+            gauss.gradient(test_pt)[1], gradient_y, epsilon);
+  T gradient_z = static_cast<T>(2.0*prob);
+  TEST_NEAR(("gradient z <"+type_name+">").c_str(),
+            gauss.gradient(test_pt)[2], gradient_z, epsilon);
 
   bsta_gaussian_indep<T,3> zero_var_gauss;
   TEST(("zero var mahalanobis dist <"+type_name+">").c_str(),
