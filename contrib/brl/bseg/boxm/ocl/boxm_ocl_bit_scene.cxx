@@ -119,22 +119,11 @@ void boxm_ocl_bit_scene::validate_data() {
           vcl_cout<<"Buffer "<<buff<<", tree"<<sb<<": NextDataPtr - CurrDataPtr doesn't match tree bit size \n"
                   <<"    bitSize: "<<count<<", ptrSize: "<<currSize<<vcl_endl;
         }
-        if(currSize != 9 && currSize!=1) {
-          sizeGood = false;
-          vcl_cout<<"Tree at "<<sb<<" size is: "<<count<<vcl_endl;
-        }
         if(startPtr != currDataPtr) {
           vcl_cout<<"Buffer "<<buff<<", tree "<<sb<<" doesn't match data pointer. "<<vcl_endl;
           buffGood = false;
         }
         
-        ////let's see how the data ended up for all the refined cells... 
-        if(currSize == 9) {
-          //vcl_cout<<"[buff,tree]="<<buff<<","<<sb<<": \n";
-          //for(int node=0; node<9; node++) {
-            //vcl_cout<<"   "<<data_buffers_[buff][currDataPtr+node]<<"\n";
-          //}
-        }
         startPtr = (startPtr + count) % data_buff_length_;
       }
       if(!buffGood)
@@ -460,9 +449,6 @@ bool boxm_ocl_bit_scene::init_empty_scene()
   parser_.levels(max, init);
   this->set_max_level(max);
   
-  //for debugging. 
-  vcl_cout<<"Initialized Scene (writing to disk...)"<<vcl_endl;
-  this->save();
   return true;
 }
 

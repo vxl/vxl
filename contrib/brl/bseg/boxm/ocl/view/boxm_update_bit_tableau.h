@@ -37,13 +37,15 @@ class boxm_update_bit_tableau: public boxm_cam_tableau
     //:  set the GL buffer which needs to be displayed.
     void set_glbuffer(GLuint  pbuffer) {pbuffer_=pbuffer;}
     void set_statusbar(vgui_statusbar* status) { status_ = status; }
-
+    
  protected:
     //render and update functions
     bool render_frame();
     bool update_model();
     bool refine_model();
     bool save_model();
+    bool save_image(vcl_string filename);
+    bool save_camera(vcl_string filename);
     bool init_ocl();
     bool do_init_ocl_;
 

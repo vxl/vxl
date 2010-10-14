@@ -404,7 +404,7 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
               update_cell(&data, aux_data, 2.5f, 0.09f, 0.03f);
 
           //reset the cells in memory 
-          alpha_array[gid]      = max(alphamin,data.s0);
+          alpha_array[gid]      = data.s0;//max(alphamin,data.s0);
           float8 post_mix       = (float8) (data.s1, data.s2, data.s3, 
                                             data.s5, data.s6, data.s7, 
                                             data.s9, data.sa)*255.0;
@@ -412,9 +412,15 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
           mixture_array[gid]    = convert_uchar8_sat_rte(post_mix);
           nobs_array[gid]       = convert_ushort4_sat_rte(post_nobs);     
       }
-      aux_data_array[gid]   = (float4)0.0f;
+      //aux_data_array[gid]   = (float4)0.0f;
     }
 }
+
+
+
+
+
+
 
 
 

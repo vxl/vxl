@@ -6,11 +6,13 @@ query_bit_scene(__constant  RenderSceneInfo    * linfo,
                 __global    float              * alpha_array,      // alpha for each block
                 __global    uchar8             * mixture_array,    // mixture for each block
                 __global    ushort4            * num_obs_array,    // num obs for each block
-                __global    float4             * aux_data_array,   // aux data used between passes
+                __global    float2             * cum_len_beta,   // aux data used between passes
+                __global    uchar2             * mean_obs_cum_vis,
                 __constant  uchar              * bit_lookup,       // used to get data_index
                 __local     uchar16            * local_tree,       // cache current tree into local memory
                 __global    point3d            * input_query,
-                __global    float              * output)
+                __global    float              * output
+                )
 {
     uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
     point3d query =(*input_query);
@@ -45,22 +47,17 @@ query_bit_scene(__constant  RenderSceneInfo    * linfo,
 
     output[0]    = alpha_array[data_ptr];
 
-    float8 mixture  = convert_float8(mixture_array[data_ptr]);
-    output[1]=mixture.s0/255.0f;
-    output[2]=mixture.s1/255.0f;
-    output[3]=mixture.s2/255.0f;
-    output[4]=mixture.s3/255.0f;
-    output[5]=mixture.s4/255.0f;
-    output[6]=mixture.s5/255.0f;
-    output[7]=mixture.s6/255.0f;
-    output[8]=mixture.s7/255.0f;
-
-    output[9]=aux_data_array[data_ptr].s0;
-    output[10]=aux_data_array[data_ptr].s1;
-    output[11]=aux_data_array[data_ptr].s2;
-    output[12]=aux_data_array[data_ptr].s3;
-
-
-
-    
+    uchar8 mixture  = mixture_array[data_ptr];
+    output[1]=(float)mixture.s0/255.0f;
+    output[2]=(float)mixture.s1/255.0f;
+    output[3]=(float)mixture.s2/255.0f;
+    output[4]=(float)mixture.s3/255.0f;
+    output[5]=(float)mixture.s4/255.0f;
+    output[6]=(float)mixture.s5/255.0f;
+    output[7]=(float)mixture.s6/255.0f;
+    output[8]=(float)mixture.s7/255.0f;
+    output[9]=(float)cum_len_beta[data_ptr].x;
+    output[10]=(float)cum_len_beta[data_ptr].y/cum_len_beta[data_ptr].x;
+    output[11]=(float)mean_obs_cum_vis[data_ptr].x/255.0;
+    output[12]=(float)mean_obs_cum_vis[data_ptr].y/255.0;
 }

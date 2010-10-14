@@ -30,7 +30,7 @@ bool boxm_init_update_bit_scene_process_cons(bprb_func_process& pro)
   // input[1]: prob_thresh
   // input[2]: output_directory
   vcl_vector<vcl_string> input_types_(n_inputs_);
-  input_types_[0] = "vcl_string";
+  input_types_[0] = "boxm_ocl_bit_scene_sptr";
   input_types_[1] = "unsigned";
   input_types_[2] = "unsigned";
   input_types_[3] = "float";
@@ -58,16 +58,15 @@ bool boxm_init_update_bit_scene_process(bprb_func_process& pro)
 
   // get the inputs
   unsigned i = 0;
-  vcl_string scene_file = pro.get_input<vcl_string>(i++);
+  boxm_ocl_bit_scene_sptr scene = pro.get_input<boxm_ocl_bit_scene_sptr>(i++);
   unsigned ni = pro.get_input<unsigned>(i++);
   unsigned nj = pro.get_input<unsigned>(i++);
   float thresh= pro.get_input<float>(i++);
-  boxm_ocl_bit_scene scene(scene_file);
 
   boxm_update_bit_scene_manager* mgr = boxm_update_bit_scene_manager::instance();
   mgr->set_bundle_ni(8);
   mgr->set_bundle_nj(8);
-  mgr->init_scene(&scene,ni,nj,thresh);
+  mgr->init_scene(scene.as_pointer(),ni,nj,thresh);
   if (!mgr->setup_norm_data(true, 0.5f, 0.25f))
       return -1;
 

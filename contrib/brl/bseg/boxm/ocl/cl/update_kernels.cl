@@ -374,11 +374,10 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
           nobs_array[gid]       = convert_ushort4_sat_rte(post_nobs);     
       }
       //aux_data_array[gid]   = (float4)0.0f;
-      cum_len_beta[gid] = (float2) 0.0f;
-      mean_obs_cum_vis[gid] = (uchar2) 0;
+      //cum_len_beta[gid] = (float2) 0.0f;
+      //mean_obs_cum_vis[gid] = (uchar2) 0;
     }
 }
-
 
 
 /*

@@ -14,8 +14,8 @@
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_load.h>
-
-
+#include <vgui/vgui_dialog.h>
+#include <vil/vil_save.h>
 //: Constructor
 boxm_update_bit_tableau::boxm_update_bit_tableau()
 {
@@ -225,6 +225,7 @@ bool boxm_update_bit_tableau::update_model()
   updt_mgr->set_persp_camera(pcam);
   updt_mgr->write_persp_camera_buffers();
   updt_mgr->update();
+  updt_mgr->clean_aux_data();
   return true;
 }
 
@@ -237,7 +238,7 @@ bool boxm_update_bit_tableau::render_frame()
                                               &ocl_mgr->image_gl_buf_ , 0, 0, 0);
     if (!ocl_mgr->check_val(status,CL_SUCCESS,"tableau::clEnqueueAcquiredGLObjects failed (render_frame)"+error_to_string(status)))
         return false;
-
+    vcl_cout<<cam_;
     //MAKE THIS JUST ONE METHOD< NOT THREE CALLS
     ocl_mgr->set_persp_camera(&cam_);
     ocl_mgr->write_persp_camera_buffers();
@@ -248,6 +249,35 @@ bool boxm_update_bit_tableau::render_frame()
 }
 
 
+bool boxm_update_bit_tableau::save_image(vcl_string filename)
+{
+    boxm_update_bit_scene_manager* ocl_mgr = boxm_update_bit_scene_manager::instance();
+    ocl_mgr->read_output_image();
+    vil_image_view_base_sptr img=ocl_mgr->get_output_image();
+    vil_image_view<unsigned char> byteimg(img->ni(),img->nj());
+    if(vil_image_view<float> * fimg=dynamic_cast<vil_image_view<float> *> (img.ptr()))
+    {
+        vil_convert_stretch_range_limited<float>(*fimg,byteimg,0.0f,1.0f,0,255);
+        vil_save(byteimg,filename.c_str());
+        return true;
+    }
+
+    return false;
+}
+bool boxm_update_bit_tableau::save_camera(vcl_string filename)
+{
+    boxm_update_bit_scene_manager* ocl_mgr = boxm_update_bit_scene_manager::instance();
+    vpgl_camera_double_sptr cam=ocl_mgr->get_camera();
+    if(vpgl_perspective_camera<double> * pcam
+        =dynamic_cast<vpgl_perspective_camera<double> *> (cam.ptr()))
+    {
+        vcl_ofstream ofile(filename.c_str());
+        ofile<<(*pcam);
+        ofile.close();
+        return true;
+    }
+    return false;
+}
 //--------------------- Event Handlers -------------------------------//
 
 //: Handles tableau events (drawing and keys)
@@ -297,7 +327,22 @@ bool boxm_update_bit_tableau::handle(vgui_event const &e)
     this->save_model();
     return true;
   }
+  else if (e.type == vgui_KEY_PRESS && e.key == vgui_key('f'))
+  {
+    vcl_string imgfile;
+    vcl_string camfile;
+    vcl_string regexpallfiles="*.*";
+    vcl_string regexptxtfiles="*.*";
+    vgui_dialog dlg("Save Expected Image and camera");
+    dlg.file("Image  Filename",regexpallfiles,imgfile);
+    dlg.file("Camera Filename",regexptxtfiles,camfile);
+    if(dlg.ask())
+    {
+        this->save_image(imgfile);
+        this->save_camera(camfile);
+    }
 
+  }
   //HANDLE idle events - do model updating
   else if (e.type == vgui_IDLE)
   {

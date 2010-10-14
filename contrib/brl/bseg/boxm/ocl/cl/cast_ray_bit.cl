@@ -280,9 +280,6 @@ cast_ray(
   expected_int+=vis;
   float bg_belief=0.0f;
   float fg_belief=0.0f;
-
-
-
   float foreground_density_val=1.0f;
   if(expected_int>foreground_density_val)
   { 

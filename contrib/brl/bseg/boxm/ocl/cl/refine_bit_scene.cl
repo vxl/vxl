@@ -249,7 +249,7 @@ refine_bit_scene(__constant  RenderSceneInfo    * linfo,
         }
         
         //6c. update endPtr
-        endPtr = (newDataPtr+1)%linfo->data_len;//(endPtr+newSize)%linfo->data_len;
+        endPtr = (newDataPtr+1)%linfo->data_len;
         
         //!!! assert that end pointer+newsize = newDataPtr+1...
         if(endPtr != (newDataPtr+1)%linfo->data_len) {

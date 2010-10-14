@@ -626,6 +626,16 @@ bool boxm_update_bit_scene_manager::set_kernels()
     vcl_cout<<"change_detecttion_scene kernel failed to build"<<vcl_endl;
     return false;
   }
+  if (!this->build_clean_aux_data_program()) {
+      vcl_cout<<"build_clean_aux_data_program  failed to build"<<vcl_endl;
+      return false;
+  }
+
+  clean_aux_data_kernel_ = clCreateKernel(program_,"clean_aux_data",&status);
+  if (this->check_val(status,CL_SUCCESS,error_to_string(status))!=CHECK_SUCCESS) {
+    vcl_cout<<"clean_aux_data kernel failed to build"<<vcl_endl;
+    return false;
+  }
 
 
   return true;
@@ -788,6 +798,18 @@ bool boxm_update_bit_scene_manager::build_ray_probe_program()
 
 }
 
+bool boxm_update_bit_scene_manager::build_clean_aux_data_program()
+{
+  vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm/ocl/cl/";
+  if (!this->load_kernel_source(source_dir+"scene_info.cl")||
+      !this->append_process_kernels(source_dir + "clean_aux_data.cl")) {
+    vcl_cerr << "Error: boxm_update_bit_scene_manager : failed to load kernel source (helper functions)\n";
+    return false;
+  }
+  return this->build_kernel_program(program_, "")==SDK_SUCCESS;
+
+}
+
 bool boxm_update_bit_scene_manager::build_update_program(vcl_string const& functor, bool use_cell_data)
 {
   vcl_string root = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm/ocl/cl/";
@@ -875,8 +897,12 @@ bool boxm_update_bit_scene_manager::set_query_point_args()
     if (!this->check_val(status, CL_SUCCESS, "clSetKernelArg failed. (cell_num_obs_buf_)"))
       return 0;
     //cell aux data buffer
-    status = clSetKernelArg(query_point_kernel_,i++,sizeof(cl_mem),(void *)&cell_aux_data_buf_);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_data_buf_)"))
+    status = clSetKernelArg(query_point_kernel_,i++,sizeof(cl_mem),(void *)&cell_cum_beta_buf_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_cum_beta_)"))
+      return 0;
+    //cell mean_vis 
+    status = clSetKernelArg(query_point_kernel_,i++,sizeof(cl_mem),(void *)&cell_mean_vis_buf_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_mean_vis_)"))
       return 0;
     //bit lookup buffer
     status = clSetKernelArg(query_point_kernel_,i++,sizeof(cl_mem),(void *)&bit_lookup_buf_);
@@ -1523,6 +1549,28 @@ bool boxm_update_bit_scene_manager::set_update_args(unsigned pass)
 }
 
 
+bool boxm_update_bit_scene_manager::set_clean_aux_data_args()
+{
+    cl_int status = CL_SUCCESS;
+    int i=0;
+
+    //set raytrace update args -------------------------------------------------
+    status = clSetKernelArg(clean_aux_data_kernel_,i++,sizeof(cl_mem),(void *)&scene_info_buf_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (render scene info)"))
+        return 0;
+    //cell cum_beta
+    status = clSetKernelArg(clean_aux_data_kernel_,i++,sizeof(cl_mem),(void *)&cell_cum_beta_buf_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_cum_beta_)"))
+        return 0;
+    //cell mean_vis 
+    status = clSetKernelArg(clean_aux_data_kernel_,i++,sizeof(cl_mem),(void *)&cell_mean_vis_buf_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_mean_vis_)"))
+        return 0;
+    return true;
+}
+
+
+
 bool boxm_update_bit_scene_manager::release_kernels()
 {
   cl_int status = CL_SUCCESS;
@@ -1556,6 +1604,20 @@ bool boxm_update_bit_scene_manager::release_kernels()
     }
   }
   update_kernels_.clear();
+
+  if(ray_probe_kernel_){
+    status = clReleaseKernel(ray_probe_kernel_);
+    if (this->check_val(status,CL_SUCCESS,"clReleaseKernel (ray_probe_kernel_) failed.")!=CHECK_SUCCESS)
+      return false;
+
+  }
+  if(clean_aux_data_kernel_){
+      status = clReleaseKernel(clean_aux_data_kernel_);
+      if (this->check_val(status,CL_SUCCESS,"clReleaseKernel (clean_aux_data_kernel_) failed.")!=CHECK_SUCCESS)
+          return false;
+
+  }
+
   return true;
 }
 
@@ -1686,7 +1748,7 @@ bool boxm_update_bit_scene_manager::set_workspace(cl_kernel kernel, unsigned pas
       globalThreads[0]=this->wni_;globalThreads[1]=this->wnj_;
       localThreads[0] =this->bni_;localThreads[0] =this->bnj_;
   }
-  else if (pass==1 || pass==5)  // pass for updating data from aux data
+  else if (pass==1 || pass==5|| pass==11)  // pass for updating data from aux data
   {
     int numbuf = scene_info_->num_buffer;
     int datlen = scene_info_->data_buffer_length;
@@ -1851,6 +1913,7 @@ bool boxm_update_bit_scene_manager::update()
       }
 #endif
   }
+
   vcl_cout << ":::: total update time:"<<gpu_time_<<" ms" << vcl_endl
 #ifdef DEBUG
            << "Running block "<<total_gpu_time/1000<<"s\n"
@@ -1880,6 +1943,18 @@ bool boxm_update_bit_scene_manager::rendering()
 
   return true;
 }
+bool boxm_update_bit_scene_manager::clean_aux_data()
+{
+  gpu_time_=0;
+  unsigned pass = 11;
+  this->set_clean_aux_data_args();
+  this->set_workspace(clean_aux_data_kernel_, pass);
+  if (!this->run(clean_aux_data_kernel_, pass))
+      return false;
+  vcl_cout << "Clean Aux data: "<<gpu_time_<<" ms" << vcl_endl;
+  return true;
+}
+
 
 bool boxm_update_bit_scene_manager::change_detection()
 {
@@ -2495,6 +2570,7 @@ bool boxm_update_bit_scene_manager::get_output_debug_array(vcl_vector<float> & d
             break;
 
             data.push_back(output_debug_[i]);
+            vcl_cout<<output_debug_[i]<<" ";
     }
     return true;
 }
