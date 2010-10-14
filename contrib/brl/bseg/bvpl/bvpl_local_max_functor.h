@@ -40,7 +40,7 @@ class bvpl_local_max_functor
 
   // Some additional functionalities
 
-  bool greater_than(T& val1, T& val2);
+  bool greater_than(const T& val1, const T& val2);
 
   static T min_response();
 
@@ -62,7 +62,7 @@ void bvpl_local_max_functor<bvxm_opinion>::init();
 template <>
 void bvpl_local_max_functor<bsta_num_obs<bsta_gauss_f1> >::init();
 template <>
-bool bvpl_local_max_functor<bsta_num_obs<bsta_gauss_f1> >::greater_than(bsta_num_obs<bsta_gauss_f1>& g1, bsta_num_obs<bsta_gauss_f1>& g2);
+bool bvpl_local_max_functor<bsta_num_obs<bsta_gauss_f1> >::greater_than(const bsta_num_obs<bsta_gauss_f1>& g1, const bsta_num_obs<bsta_gauss_f1>& g2);
 template <>
 bvxm_opinion bvpl_local_max_functor<bvxm_opinion >::min_response();
 template <>
@@ -118,7 +118,7 @@ T bvpl_local_max_functor<T>::result( T cur_val)
 
 //: Comparison function
 template <class T>
-bool bvpl_local_max_functor<T>::greater_than(T& val1, T& val2)
+bool bvpl_local_max_functor<T>::greater_than(const T& val1, const T& val2)
 {
   return val1-val2 > vcl_numeric_limits<T>::epsilon();
 }

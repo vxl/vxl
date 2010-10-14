@@ -16,7 +16,7 @@ void bvpl_local_max_functor<bsta_num_obs<bsta_gauss_f1> >::init()
 }
 
 template <>
-bool bvpl_local_max_functor<bsta_num_obs<bsta_gauss_f1> >::greater_than(bsta_num_obs<bsta_gauss_f1>& g1, bsta_num_obs<bsta_gauss_f1>& g2)
+bool bvpl_local_max_functor<bsta_num_obs<bsta_gauss_f1> >::greater_than(const bsta_num_obs<bsta_gauss_f1>& g1, const bsta_num_obs<bsta_gauss_f1>& g2)
 {
   return (g1.mean() - g2.mean()) > 0.0f;
   //return vcl_abs(g1.mean()) - vcl_abs(g2.mean()) > vcl_numeric_limits<float>::epsilon();
