@@ -9,6 +9,7 @@
 #include <boxm/algo/pro/boxm_algo_register.h>
 #include <bvxm/grid/pro/bvxm_grid_register.h>
 #include <vpgl_pro/vpgl_register.h>
+#include <bvxm/algo/pro/bvxm_algo_register.h>
 
 PyObject *
 register_processes(PyObject *self, PyObject *args)
@@ -19,6 +20,7 @@ register_processes(PyObject *self, PyObject *args)
   boxm_algo_register::register_process();
   bvxm_grid_register::register_process();
   vpgl_register::register_process();
+  bvxm_algo_register::register_process();
   Py_INCREF(Py_None);
   return Py_None;
 }
@@ -33,6 +35,7 @@ register_datatypes(PyObject *self, PyObject *args)
   boxm_algo_register::register_datatype();
   bvxm_grid_register::register_datatype();
   vpgl_register::register_datatype();
+  bvxm_algo_register::register_datatype();
   Py_INCREF(Py_None);
   return Py_None;
 }
