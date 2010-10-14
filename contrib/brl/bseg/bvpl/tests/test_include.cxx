@@ -1,3 +1,4 @@
+#include <bvpl/bvpl_algebraic_functor.h>
 #include <bvpl/bvpl_combined_neighb_operator.h>
 #include <bvpl/bvpl_corner2d_kernel_factory.h>
 #include <bvpl/bvpl_create_directions.h>
@@ -10,6 +11,7 @@
 #include <bvpl/bvpl_edge3d_kernel_factory.h>
 #include <bvpl/bvpl_find_surface_functor.h>
 #include <bvpl/bvpl_gauss_convolution_functor.h>
+#include <bvpl/bvpl_gauss3d_x_kernel_factory.h>
 #include <bvpl/bvpl_gauss3d_xx_kernel_factory.h>
 #include <bvpl/bvpl_kernel.h>
 #include <bvpl/bvpl_kernel_factory.h>
