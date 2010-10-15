@@ -14,7 +14,6 @@ class vsph_view_point
   vsph_view_point(vsph_sph_point_3d const& p) : cam_(0),spher_coord_(p),metadata_(0) {}
   vsph_view_point(vsph_sph_point_3d const& p,vpgl_camera_double_sptr cam) : cam_(cam), spher_coord_(p),metadata_(0) {}
   vsph_view_point(vsph_sph_point_3d const& p,vpgl_camera_double_sptr cam, T_data* metadata) : cam_(cam), spher_coord_(p), metadata_(metadata) {}
-  ~vsph_view_point() {}
 
   void set_metadata(T_data* metadata) { metadata_=metadata; }
   T_data* metadata() { return metadata_; }

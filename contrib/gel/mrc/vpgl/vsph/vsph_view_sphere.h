@@ -43,15 +43,15 @@ class vsph_view_sphere
   ~vsph_view_sphere() {}
 
   //: returning the id of the newly added view
-  unsigned add_view(T view);
+  unsigned add_view(T view, unsigned ni, unsigned nj);
 
   //: creates a view point at a given 3d point.
   //  It will be translated to the surface of the sphere
-  unsigned add_view(vgl_point_3d<double> center);
+  unsigned add_view(vgl_point_3d<double> center, unsigned ni, unsigned nj);
 
   //: adds uniformly placed viewpoints on the sphere in the area defined by elevation angle \a cap_angle, and the viewpoints are at most \a point_angle apart
   // It uses iterative triangle division on octahedron until the point angle is achieved
-  void add_uniform_views(double cap_angle, double point_angle);
+  void add_uniform_views(double cap_angle, double point_angle, unsigned ni, unsigned nj);
 
   //: removes the view with the given \a id
   bool remove_view(unsigned id);
@@ -61,7 +61,7 @@ class vsph_view_sphere
 
   //: returns the view point associated with unique id \a uid.
   //  Returns false if uid is non-existent
-  bool view_point(unsigned uid, T& vp)  const;
+  bool view_point(unsigned uid, T*& vp);
 
   //: finds the nearest view to the i-th saved point
   // If the returned \a uid is -1, the search is unsuccessful
@@ -110,7 +110,6 @@ class vsph_view_sphere
   unsigned next_id() { return uid_++; }
 
   //: returns true if all the angles between vertices of a triangle are smaller than \a angle.
-  // list.size() should be 3
   bool min_angle(vcl_vector<vgl_point_3d<double> > list, double angle);
 };
 

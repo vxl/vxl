@@ -14,7 +14,7 @@ vsph_view_sphere<T>::vsph_view_sphere(vgl_box_3d<double> bb, double radius)
   : coord_sys_(new vsph_spherical_coord(bb.centroid(),radius)),uid_(0) { }
 
 template <class T>
-unsigned vsph_view_sphere<T>::add_view(T view)
+unsigned vsph_view_sphere<T>::add_view(T view, unsigned ni, unsigned nj)
 {
   // make sure that the view point is on the sphere
   vsph_sph_point_3d p = view.view_point();
@@ -24,21 +24,55 @@ unsigned vsph_view_sphere<T>::add_view(T view)
   vpgl_perspective_camera<double>* cam = new vpgl_perspective_camera<double>();
   vgl_point_3d<double> camera_center = coord_sys_->cart_coord(p);
   cam->set_camera_center(camera_center);
-  cam->look_at(vgl_homg_point_3d<double>(coord_sys_->origin()));
+  vgl_point_2d<double> pp(ni/2., nj/2.);
+  vpgl_calibration_matrix<double> K(1.0,pp,900,900);
+  cam->set_calibration(K);
+  vgl_vector_3d<double> up(0.0, 1.0, 0.0);
+  if (vcl_fabs(p.theta_)<1.0e-3)
+    cam->look_at(vgl_homg_point_3d<double>(coord_sys_->origin()), up);
+  else
+    cam->look_at(vgl_homg_point_3d<double>(coord_sys_->origin()));
   view.set_camera(cam);
 
   // generate a new id
   unsigned id = next_id();
   views_[id] = view;
+  
+  /*******************************
+  if (id==9) {
+    p.phi_ += 0.02;
+    coord_sys_->move_point(p);
+    vpgl_perspective_camera<double>* cam = new vpgl_perspective_camera<double>();
+    vgl_point_3d<double> camera_center = coord_sys_->cart_coord(p);
+    cam->set_camera_center(camera_center);
+    vgl_point_2d<double> pp(ni/2., nj/2.);
+    vpgl_calibration_matrix<double> K(1.0,pp,900,900);
+    cam->set_calibration(K);
+    vgl_vector_3d<double> up(0.0, 1.0, 0.0);
+    if (vcl_fabs(p.theta_)<1.0e-3)
+      cam->look_at(vgl_homg_point_3d<double>(coord_sys_->origin()), up);
+    else
+      cam->look_at(vgl_homg_point_3d<double>(coord_sys_->origin()));
+    vcl_stringstream cam_path;
+    cam_path << "F:\\tests\\synthetic_solid\\test_view_sphere\\test_camera.txt";
+    vcl_ofstream ofs(cam_path.str().c_str());
+    if (!ofs.is_open()) {
+      vcl_cerr << "Failed to open file " << cam_path.str() << '\n';
+      return false;
+    }
+    ofs << *cam;
+    ofs.close();
+  }
+  ***************************/
   return id;
 }
 
 template <class T>
-bool vsph_view_sphere<T>::view_point(unsigned uid, T& vp)  const
+bool vsph_view_sphere<T>::view_point(unsigned uid, T*& vp)
 {
-  typename vcl_map<unsigned, T>::const_iterator it = views_.find(uid);
+  typename vcl_map<unsigned, T>::iterator it = views_.find(uid);
   if (it != views_.end()) {
-    vp = it->second;
+    vp = &(it->second);
     return true;
   }
   else {
@@ -48,19 +82,19 @@ bool vsph_view_sphere<T>::view_point(unsigned uid, T& vp)  const
 }
 
 template <class T>
-unsigned vsph_view_sphere<T>::add_view(vgl_point_3d<double> center)
+unsigned vsph_view_sphere<T>::add_view(vgl_point_3d<double> center, unsigned ni, unsigned nj)
 {
   // convert to spherical coordinates
   vsph_sph_point_3d sp;
   coord_sys_->spherical_coord(center, sp);
 
   T view(sp);
-  return add_view(view);
+  return add_view(view,ni,nj);
 }
 
 
 template <class T>
-void vsph_view_sphere<T>::add_uniform_views(double cap_angle, double point_angle)
+void vsph_view_sphere<T>::add_uniform_views(double cap_angle, double point_angle, unsigned ni, unsigned nj)
 {
   // create a octahedron on the sphere, define 6 points for the vertices of the triangles
   double radius = coord_sys_->radius();
@@ -70,7 +104,7 @@ void vsph_view_sphere<T>::add_uniform_views(double cap_angle, double point_angle
   vgl_point_3d<double> v1(center.x(),center.y(),center.z()+radius); verts.push_back(v1);
   vgl_point_3d<double> v2(center.x(),center.y(),center.z()-radius); verts.push_back(v2);
   vgl_point_3d<double> v3(center.x()+radius,center.y(),center.z()); verts.push_back(v3);
-  vgl_point_3d<double> v4(-1*radius+center.x(),center.y(),center.z()); verts.push_back(v4);
+  vgl_point_3d<double> v4(center.x()-radius,center.y(),center.z()); verts.push_back(v4);
   vgl_point_3d<double> v5(center.x(),center.y()+radius,center.z()); verts.push_back(v5);
   vgl_point_3d<double> v6(center.x(),center.y()-radius,center.z()); verts.push_back(v6);
 
@@ -193,13 +227,13 @@ void vsph_view_sphere<T>::add_uniform_views(double cap_angle, double point_angle
           // add if not already added
           if (dist > 0.0001) {
             T view(sv);
-            add_view(view);
+            add_view(view,ni,nj);
           }
         // no views yet, add the first one..
         }
         else {
           T view(sv);
-          add_view(view);
+          add_view(view,ni,nj);
         }
       }
     }
