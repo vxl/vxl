@@ -20,17 +20,17 @@ class icam_view_sphere : public vbl_ref_count
   ~icam_view_sphere(){ delete view_sphere_; }
 
   //: creates uniform view points on the view square and generates expected and depth images at each view point
-  void create_view_points(double cap_angle, double view_angle);
+  void create_view_points(double cap_angle, double view_angle, unsigned ni, unsigned nj);
 
   //: returns the cameras of the view points, associated with the view point id
   void cameras(vcl_map<unsigned, vpgl_camera_double_sptr> &cameras);
 
   //: sets the images and depth images, associated with the view point id
-  void set_images(vcl_map<unsigned, vil_image_view<double> > images,
+  void set_images(vcl_map<unsigned, vil_image_view<float> > images,
                   vcl_map<unsigned,vil_image_view<double> > depth_images);
 
   //: computes the camera registration errors for a given image
-  void register_image(vil_image_view<double> const& source_img);
+  void register_image(vil_image_view<float> const& source_img);
 
   //: computes the camera registration errors local minimas for a given image
   void find_local_minima(vcl_vector<vsph_view_point<icam_view_metadata> >& local_minima);
@@ -43,6 +43,8 @@ class icam_view_sphere : public vbl_ref_count
 
  private:
   vsph_view_sphere<vsph_view_point<icam_view_metadata> >* view_sphere_;
+
+  const double ICAM_LOCAL_MIN_THRESH_;
 };
 
 typedef vbl_smart_ptr<icam_view_sphere> icam_view_sphere_sptr;

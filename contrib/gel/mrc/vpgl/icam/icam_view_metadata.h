@@ -3,8 +3,8 @@
 #define icam_view_metadata_h_
 //:
 // \file
-// \brief A cost function for registering video cameras by minimizing square difference in intensities
-// \author J.L. Mundy
+// \brief  A class keeping the metadata associated with view point video cameras, like images
+// \author Gamze Tunali
 // \date Sept 6, 2010
 //
 // \verbatim
@@ -27,26 +27,18 @@ class icam_view_metadata
    //: default constructor
    icam_view_metadata(){}
 
-   icam_view_metadata(vil_image_view<double> const& exp_img,
+   icam_view_metadata(vil_image_view<float> const& exp_img,
                       vil_image_view<double> const& depth_img,
                       icam_depth_transform const& dt)
                       : exp_img_(exp_img), depth_img_(depth_img)  { minimizer_=new icam_minimizer(exp_img, dt); }
 
    ~icam_view_metadata() { if (minimizer_) delete minimizer_; }
 
-   //vil_image_view<double> expected_image() { return exp_img_; }
+   void register_image(vil_image_view<float> const& source_img);
 
-   //void set_expected_image(vil_image_view<double> img) { exp_image_=img; }
+   void compute_camera();
 
-   //vil_pyr_image_view<double> depth_image() { return depth_img_; }
-
-   //void set_depth_image(vil_pyramid_image_view<double> img) { depth_image_=img; }
-
-   void register_image(vil_image_view<double> const& source_img);
-
-   //void set_score(double s) { score_; }
-
-   double error() { return min_cost_; }
+   double error() { return error_; }
 
    void print(vcl_ostream& os) const { os << "icam_view_metadata:" << vcl_endl; }
 
@@ -58,18 +50,18 @@ class icam_view_metadata
 
  private:
    //: expected image pyramid
-   vil_image_view<double> exp_img_;
+   vil_image_view<float> exp_img_;
 
    //: depth image pyramid
    vil_image_view<double> depth_img_;
 
-   // source image that is being registered
-   vil_image_view<double> source_img_;
+   // destination image that is being registered
+   vil_image_view<float> source_img_;
 
    //: solver for the registration
    icam_minimizer* minimizer_;
 
-   double min_cost_;
+   double error_;
 };
 
 
