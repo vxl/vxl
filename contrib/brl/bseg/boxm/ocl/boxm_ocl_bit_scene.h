@@ -46,8 +46,6 @@ typedef struct
   cl_float   cell_beta;
   cl_uchar   mean_obs;
   cl_uchar   cum_vis;
-  cl_uchar   buff;
-  cl_uchar   buff2;
 } AuxData;
 
 class boxm_ocl_bit_scene : public vbl_ref_count

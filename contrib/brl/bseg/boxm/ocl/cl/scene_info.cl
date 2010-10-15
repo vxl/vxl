@@ -35,6 +35,4 @@ typedef struct
   float cell_beta;
   uchar mean_obs;
   uchar cum_vis;
-  uchar buff;
-  uchar buff2;
 } AuxData;
