@@ -25,7 +25,7 @@ unsigned vsph_view_sphere<T>::add_view(T view, unsigned ni, unsigned nj)
   vgl_point_3d<double> camera_center = coord_sys_->cart_coord(p);
   cam->set_camera_center(camera_center);
   vgl_point_2d<double> pp(ni/2., nj/2.);
-  vpgl_calibration_matrix<double> K(1.0,pp,900,900);
+  vpgl_calibration_matrix<double> K(1.0,pp);
   cam->set_calibration(K);
   vgl_vector_3d<double> up(0.0, 1.0, 0.0);
   if (vcl_fabs(p.theta_)<1.0e-3)
@@ -37,33 +37,6 @@ unsigned vsph_view_sphere<T>::add_view(T view, unsigned ni, unsigned nj)
   // generate a new id
   unsigned id = next_id();
   views_[id] = view;
-  
-  /*******************************
-  if (id==9) {
-    p.phi_ += 0.02;
-    coord_sys_->move_point(p);
-    vpgl_perspective_camera<double>* cam = new vpgl_perspective_camera<double>();
-    vgl_point_3d<double> camera_center = coord_sys_->cart_coord(p);
-    cam->set_camera_center(camera_center);
-    vgl_point_2d<double> pp(ni/2., nj/2.);
-    vpgl_calibration_matrix<double> K(1.0,pp,900,900);
-    cam->set_calibration(K);
-    vgl_vector_3d<double> up(0.0, 1.0, 0.0);
-    if (vcl_fabs(p.theta_)<1.0e-3)
-      cam->look_at(vgl_homg_point_3d<double>(coord_sys_->origin()), up);
-    else
-      cam->look_at(vgl_homg_point_3d<double>(coord_sys_->origin()));
-    vcl_stringstream cam_path;
-    cam_path << "F:\\tests\\synthetic_solid\\test_view_sphere\\test_camera.txt";
-    vcl_ofstream ofs(cam_path.str().c_str());
-    if (!ofs.is_open()) {
-      vcl_cerr << "Failed to open file " << cam_path.str() << '\n';
-      return false;
-    }
-    ofs << *cam;
-    ofs.close();
-  }
-  ***************************/
   return id;
 }
 
