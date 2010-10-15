@@ -28,7 +28,7 @@
 namespace icam_create_view_sphere_process_globals
 {
   // this process takes 10 inputs and 2 outputs
-  const unsigned n_inputs_ = 10;
+  const unsigned n_inputs_ = 12;
   const unsigned n_outputs_ = 2;
 }
 
@@ -47,6 +47,8 @@ bool icam_create_view_sphere_process_cons(bprb_func_process& pro)
   input_types_[i++] = "double";   // origin_y of the box
   input_types_[i++] = "double";   // origin_z of the box
   input_types_[i++] = "double";   // radius of the view sphere
+  input_types_[i++] = "unsigned"; // ni of image
+  input_types_[i++] = "unsigned"; // nj of image
   input_types_[i++] = "vcl_string"; // the folder path to save the camera files and the txt file inluding the names
 
   vcl_vector<vcl_string> output_types_(n_outputs_);
@@ -75,13 +77,15 @@ bool icam_create_view_sphere_process(bprb_func_process& pro)
   double orig_y = pro.get_input<double>(i++);
   double orig_z = pro.get_input<double>(i++);
   double radius = pro.get_input<double>(i++);
+  unsigned ni = pro.get_input<unsigned>(i++);
+  unsigned nj = pro.get_input<unsigned>(i++);
   vcl_string path = pro.get_input<vcl_string>(i++);
 
   vgl_box_3d<double> world_bb(orig_x, orig_y, orig_z, orig_x+dim_x, orig_y+dim_y, orig_z+dim_z);
   icam_view_sphere_sptr view_sphere =new icam_view_sphere(world_bb, radius);
 
   // generate the view points-cameras
-  view_sphere->create_view_points(elevation, view_angle);
+  view_sphere->create_view_points(elevation, view_angle, ni, nj);
 
   vcl_map<unsigned, vpgl_camera_double_sptr> cameras;
   view_sphere->cameras(cameras);
