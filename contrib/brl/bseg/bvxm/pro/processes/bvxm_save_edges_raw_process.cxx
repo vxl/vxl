@@ -15,11 +15,12 @@
 
 bool bvxm_save_edges_raw_process_cons(bprb_func_process& pro)
 {
-  // process takes 3 inputs:
+  // process takes 3 inputs and has no outputs:
   //input[0]: The voxel world
   //input[1]: The filename to write to
   //input[2]: Scale
-  unsigned n_inputs_ = 3;
+  unsigned int n_inputs_ = 3;
+  unsigned int n_outputs_ = 0;
 
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "bvxm_voxel_world_sptr";
@@ -30,7 +31,8 @@ bool bvxm_save_edges_raw_process_cons(bprb_func_process& pro)
 
 bool bvxm_save_edges_raw_process(bprb_func_process& pro)
 {
-  unsigned n_inputs_ = 3;
+  unsigned int n_inputs_ = 3;
+  unsigned int n_outputs_ = 0;
   if (pro.n_inputs()<n_inputs_)
   {
     vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;

@@ -18,7 +18,8 @@
 //: global variables/functions
 namespace bvxm_locate_region_process_globals
 {
-  const unsigned n_inputs_ = 6;
+  const unsigned int n_inputs_ = 6;
+  const unsigned int n_outputs_ = 0;
 }
 
 bool bvxm_locate_region_process_cons(bprb_func_process& pro);
