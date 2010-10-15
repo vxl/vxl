@@ -31,8 +31,10 @@ typedef struct
 
 typedef struct
 {
-  float cum_len;
-  float beta;
+  float cell_len;
+  float cell_beta;
   uchar mean_obs;
   uchar cum_vis;
+  uchar buff;
+  uchar buff2;
 } AuxData;

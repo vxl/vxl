@@ -207,7 +207,7 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   cl_float        * cell_alpha_;      //array of floats  (prob density)
   cl_uchar        * cell_mixture_;    //array of uchar8s (mixutre model)
   cl_ushort       * cell_num_obs_;    //array of short4s (num obs counts)
-  cl_float        * cell_aux_data_;   //array of float4s (auxiliary data
+  AuxData         * cell_aux_data_;   //array of float4s (auxiliary data
   cl_uchar        * cell_mean_vis_;   //mean obs and visibility aux data
   cl_float        * cell_cum_beta_;   //cum_length, beta aux data
 

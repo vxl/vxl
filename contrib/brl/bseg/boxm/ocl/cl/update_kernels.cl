@@ -16,8 +16,7 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
                      __global    float              * alpha_array,      // alpha for each block
                      __global    uchar8             * mixture_array,    // mixture for each block
                      __global    ushort4            * num_obs_array,    // num obs for each block
-                     __global    float2             * cum_len_beta,    // cumulative ray length and beta aux vars
-                     __global    uchar2             * mean_obs_cum_vis, // mean_obs per cell and cumulative visibility
+                     __global    AuxData            * aux_data_array,   //combined aux data array 
                      __constant  uchar              * bit_lookup,       // used to get data_index
                      __local     uchar16            * local_tree,       // cache current tree into local memory
                      __global    float16            * camera,           // camera orign and SVD of inverse of camera matrix
@@ -88,7 +87,7 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
             ray_dx, ray_dy, ray_dz, 
 
             //scene info                                              //numobs and mixture null
-            linfo, block_ptrs, tree_array, alpha_array, mixture_array, num_obs_array, cum_len_beta, mean_obs_cum_vis,
+            linfo, block_ptrs, tree_array, alpha_array, mixture_array, num_obs_array, aux_data_array,
            
             //utility info
             local_tree, bit_lookup, cumsum, 0,
@@ -110,8 +109,7 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
              __global    float              * alpha_array,      // alpha for each block
              __global    uchar8             * mixture_array,    // mixture for each block
              __global    ushort4            * num_obs_array,    // num obs for each block
-             __global    float2             * cum_len_beta,    // cumulative ray length and beta aux vars
-             __global    uchar2             * mean_obs_cum_vis, // mean_obs per cell and cumulative visibility
+             __global    AuxData            * aux_data_array,   //combined aux data array 
              __constant  uchar              * bit_lookup,       // used to get data_index
              __local     uchar16            * local_tree,       // cache current tree into local memory
              __global    float16            * camera,           // camera orign and SVD of inverse of camera matrix
@@ -174,7 +172,7 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
             ray_dx, ray_dy, ray_dz, 
 
             //scene info                                              //numobs and mixture null
-            linfo, block_ptrs, tree_array, alpha_array, mixture_array, num_obs_array, cum_len_beta, mean_obs_cum_vis,
+            linfo, block_ptrs, tree_array, alpha_array, mixture_array, num_obs_array, aux_data_array,
            
             //utility info
             local_tree, bit_lookup, cumsum, 0,
@@ -196,8 +194,7 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
                      __global    float              * alpha_array,      // alpha for each block
                      __global    uchar8             * mixture_array,    // mixture for each block
                      __global    ushort4            * num_obs_array,    // num obs for each block
-                     __global    float2             * cum_len_beta,    // cumulative ray length and beta aux vars
-                     __global    uchar2             * mean_obs_cum_vis, // mean_obs per cell and cumulative visibility
+                     __global    AuxData            * aux_data_array,   //combined aux data array 
                      __constant  uchar              * bit_lookup,       // used to get data_index
                      __local     uchar16            * local_tree,       // cache current tree into local memory
                      __global    float16            * camera,           // camera orign and SVD of inverse of camera matrix
@@ -208,9 +205,8 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
                      __global    int                * offset_y,         // right (which one of the four blocks)
                      __local     short2             * ray_bundle_array, // gives information for which ray takes over in the workgroup
                      __local     int                * cell_ptrs,        // local list of cell_ptrs (cells that are hit by this workgroup
-                     __local     float4             * image_vect,       // input image and store vis_inf and pre_inf
+                     __local     float              * image_vect,       // input image and store vis_inf and pre_inf
                      __local     uchar              * cumsum,           // cumulative sum for calculating data pointer
-                     __local     int                * imIndex,          // cached image index in local mem
                      __global    float              * output)    
 {
 
@@ -233,7 +229,11 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
   if (i>=(*imgdims).z || j>=(*imgdims).w) {
     return;
   }
-  image_vect[llid] = in_image[j*get_global_size(0)*factor+i];
+  float4 inImage = in_image[j*get_global_size(0)*factor+i];
+  float norm = inImage.x;
+  float vis  = inImage.z;
+  float pre  = inImage.w;
+  //image_vect[llid] = in_image[j*get_global_size(0)*factor+i];
   barrier(CLK_LOCAL_MEM_FENCE);
 
   //----------------------------------------------------------------------------
@@ -267,13 +267,13 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
             ray_dx, ray_dy, ray_dz, 
 
             //scene info                                              //numobs and mixture null
-            linfo, block_ptrs, tree_array, alpha_array, mixture_array, num_obs_array, cum_len_beta, mean_obs_cum_vis,
+            linfo, block_ptrs, tree_array, alpha_array, mixture_array, num_obs_array, aux_data_array,
            
             //utility info
-            local_tree, bit_lookup, cumsum, imIndex,
+            local_tree, bit_lookup, cumsum, 0,
             
             //factor,raybund,ptrs,cache,cache,image_vect (all NULL)
-            factor, ray_bundle_array, cell_ptrs, image_vect,
+            factor, ray_bundle_array, cell_ptrs, norm, vis, pre, image_vect,
             
             //io info
             in_image, 0, output);
@@ -324,9 +324,7 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
                       __global float            * alpha_array,
                       __global uchar8           * mixture_array,
                       __global ushort4          * nobs_array,
-                     //__global    float4             * aux_data_array,   // aux data used between passes
-                      __global float2           * cum_len_beta,    // cumulative ray length and beta aux vars
-                      __global uchar2           * mean_obs_cum_vis, // mean_obs per cell and cumulative visibility
+                      __global AuxData          * aux_data_array,   // aux data used between passes
                       __global float            * output)
 {
     int gid=get_global_id(0);
@@ -344,10 +342,8 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
       {
           //load global data into registers
           //load aux data into local mem
-          float2 cl_beta  = cum_len_beta[gid];
-          float2 mean_vis = convert_float2(mean_obs_cum_vis[gid])/255.0f;
-          float4 aux_data = (float4) (cl_beta.x, mean_vis.x*cl_beta.x, cl_beta.y, mean_vis.y);
-          //float4 aux_data = aux_data_array[gid];
+          AuxData ad = aux_data_array[gid];
+          float4 aux_data = (float4) (ad.cell_len, ad.mean_obs*ad.cell_len/255.0f, ad.cell_beta, convert_float(ad.cum_vis)/255.0f);
           float4 nobs     = convert_float4(nobs_array[gid]);
           float8 mixture  = convert_float8(mixture_array[gid]);
           float16 data = (float16) (alpha, 
@@ -369,9 +365,10 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
           mixture_array[gid]    = convert_uchar8_sat_rte(post_mix);
           nobs_array[gid]       = convert_ushort4_sat_rte(post_nobs);     
       }
-      //aux_data_array[gid]   = (float4)0.0f;
-      //cum_len_beta[gid] = (float2) 0.0f;
-      //mean_obs_cum_vis[gid] = (uchar2) 0;
+      AuxData zeros;
+      zeros.cell_len = 0.0f;      zeros.cell_beta = 0.0f;
+      zeros.mean_obs = (uchar) 0; zeros.cum_vis = (uchar) 0;
+      aux_data_array[gid]   = zeros;
     }
 }
 
