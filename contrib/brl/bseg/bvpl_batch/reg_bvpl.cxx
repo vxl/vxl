@@ -5,6 +5,7 @@
 // processes
 #include <bvpl/pro/bvpl_register.h>
 #include <bvxm/grid/pro/bvxm_grid_register.h>
+#include <bvxm/algo/pro/bvxm_algo_register.h>
 
 PyObject *
 register_processes(PyObject *self, PyObject *args)
