@@ -1,8 +1,3 @@
-/*
-#if NVIDIA
- #pragma OPENCL EXTENSION cl_khr_gl_sharing : enable
-#endif
-*/
 
 #define BLOCK_EPSILON .006125f
 #define TREE_EPSILON  .005f
@@ -21,10 +16,9 @@ cast_ray(
           __global    float              * alpha_array,     //voxel density buffer
           __global    uchar8             * mixture_array,   //appearance model buffer
           __global    ushort4            * num_obs_array,   // num obs for each block
-          
-#if defined(SEGLEN) || defined(PREINF) || defined(BAYES)
-          __global    AuxData            * aux_data_array, 
-#endif
+          __global    float2             * cum_len_beta,    // cumulative ray length and beta aux vars
+          __global    uchar2             * mean_obs_cum_vis,// mean_obs per cell and cumulative visibility
+
 
           //---- UTILITY ARGUMENTS----------------------------------------------
           __local     uchar16            * local_tree,      //local tree for traversing
@@ -44,16 +38,16 @@ cast_ray(
 #endif
 #ifdef SEGLEN
                       float                inImgObs,         //input image observation (no need for image_vect... )
-          __local     float2             * cached_aux_data,  //local data per ray in workgroup
+                      float                ray_vis, 
+          __local     float4             * cached_aux_data,  //local data per ray in workgroup
 #endif
 #ifdef PREINF  
                       float4               image_vect,      //input image and store vis_inf and pre_inf
 #endif
 #ifdef BAYES
                       float                norm,
-                      float                cum_vis,
-                      float                cum_pre,
-          __local     float4             * cached_beta,     //for use in bayes update algo
+                      float                ray_vis,
+                      float                ray_pre,
 #endif 
 
           //---- OUTPUT ARGUMENTS-----------------------------------------------
@@ -87,7 +81,6 @@ cast_ray(
     gl_image[imIndex[llid]] = rgbaFloatToInt((float4)(0.0f,0.0f,0.0f,0.0f));
     in_image[imIndex[llid]] = (float)0.0f;
 #endif
-
     return;
   }
   //make sure tnear is at least 0...
@@ -197,19 +190,24 @@ cast_ray(
       load_data_mutable_opt(ray_bundle_array,cell_ptrs);
       
       //load aux data into local mem
-      AuxData auxdat = aux_data_array[data_ptr]; 
-      cached_aux_data[llid] = (float2) (auxdat.cell_len, convert_float(auxdat.mean_obs)/255.0f);
-      
+      float  alpha    = alpha_array[data_ptr];
+      float2 cl_beta  = cum_len_beta[data_ptr];
+      float2 mean_vis = convert_float2(mean_obs_cum_vis[data_ptr])/255.0f;
+      cached_aux_data[llid] = (float4) (cl_beta.x, mean_vis.x, mean_vis.y, 0.0);  //leaders retain the mean obs and the cell length
       barrier(CLK_LOCAL_MEM_FENCE);
       
       //kernel (seg len obs 2 keeps a running mean, to be converted to char)
-      seg_len_obs_opt2(d, inImgObs,ray_bundle_array,cached_aux_data);
+      seg_len_obs_opt2(d, 
+                      alpha, 
+                      inImgObs,
+                      &ray_vis,
+                      ray_bundle_array,
+                      cached_aux_data);
       
       //set aux data (only one at time)
       if (ray_bundle_array[llid].y==1) {
-        auxdat.cell_len = cached_aux_data[llid].x;
-        auxdat.mean_obs = convert_uchar_sat_rte(cached_aux_data[llid].y*255.0f);
-        aux_data_array[data_ptr] = auxdat;
+        cum_len_beta[data_ptr] = (float2) (cached_aux_data[llid].x, 0.0f);
+        mean_obs_cum_vis[data_ptr] = convert_uchar2_sat_rte( (float2) (cached_aux_data[llid].y, cached_aux_data[llid].z)*255.0f);
       }
       
       //reset cell_ptrs to negative one every time (prevents invisible layer bug)
@@ -222,16 +220,12 @@ cast_ray(
       float  alpha    = alpha_array[data_ptr];
       float8 mixture  = convert_float8(mixture_array[data_ptr])/255.0f;
 
-      AuxData auxdat  = aux_data_array[data_ptr];
+      float2 cl_beta  = cum_len_beta[data_ptr];
+      float2 mean_vis = convert_float2(mean_obs_cum_vis[data_ptr])/255.0f;
       barrier(CLK_LOCAL_MEM_FENCE);
 
       //calculate pre_infinity denomanator (shape of image)
-      pre_infinity_opt( d, 
-                        auxdat.cell_len, 
-                        convert_float(auxdat.mean_obs)/255.0f,
-                        &image_vect, 
-                        alpha, 
-                        mixture);
+      pre_infinity_opt(d, cl_beta.x, mean_vis.x, &image_vect, alpha, mixture);
       
       //aux data doesn't need to be set, just in_image
       in_image[j*get_global_size(0)+i] = image_vect;
@@ -249,31 +243,27 @@ cast_ray(
       float8 mixture  = convert_float8(mixture_array[data_ptr])/255.0f;
       
       //load aux data into local mem
-      AuxData auxdat  = aux_data_array[data_ptr];
-      float cell_vis  = convert_float(auxdat.cum_vis)/255.0f;;
-      float cell_beta = auxdat.cell_beta;
+      float2 cl_beta  = cum_len_beta[data_ptr];
+      float2 mean_vis = convert_float2(mean_obs_cum_vis[data_ptr])/255.0f;
+      float cell_beta = cl_beta.y;
+      
       barrier(CLK_LOCAL_MEM_FENCE);
 
-      //calculate the bayes ratio
-      bayes_ratio_opt3 (d,
-                        auxdat.cell_len,
-                        convert_float(auxdat.mean_obs)/255.0f,
-                       &cum_pre,
-                       &cum_vis,
-                        norm,
-                       &cell_vis,
-                       &cell_beta,
+      //calculate bayes ratio
+      bayes_ratio_opt3( d, 
+                        mean_vis.x,
+                        &ray_pre,
+                        &ray_vis,
+                        norm, 
+                        &cell_beta,
                         ray_bundle_array,
-                        cell_ptrs,
-                        cached_beta,
-                        alpha,
+                        cell_ptrs, 
+                        alpha, 
                         mixture);
-
+                        
       //set aux data (only one at time)
       if (ray_bundle_array[llid].y==1) {
-        auxdat.cell_beta = cell_beta;
-        auxdat.cum_vis   = convert_uchar_sat_rte(255.0f*cell_vis/auxdat.cell_len);
-        aux_data_array[data_ptr] = auxdat;
+        cum_len_beta[data_ptr] = (float2) (cl_beta.x, cell_beta);
       }
       
       //reset cell_ptrs to -1 every time

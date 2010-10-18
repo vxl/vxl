@@ -68,8 +68,8 @@ ray_trace_bit_scene_opt(__constant  RenderSceneInfo    * linfo,
             ray_ox, ray_oy, ray_oz, 
             ray_dx, ray_dy, ray_dz, 
 
-            //scene info                               //numobs and mixture null
-            linfo, block_ptrs, tree_array, alpha_array, mixture_array, 0, 
+            //scene info                                              //numobs and mixture null
+            linfo, block_ptrs, tree_array, alpha_array, mixture_array, 0, 0, 0, 
            
             //utility info
             local_tree, bit_lookup, cumsum, imIndex,

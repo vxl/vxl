@@ -133,11 +133,14 @@ void seg_len_obs_opt(        float    seg_len,
 
 /*
  * does same as above, but keeps running mean observation, stores it as a char
+ * now calculates cell_visibility as well
  */
-void seg_len_obs_opt2(        float    seg_len, 
-                              float    obs,
+void seg_len_obs_opt2(        float    seg_len,         //length of ray through this cell
+                              float    alpha,           //cell alpha
+                              float    obs,             //observation for this ray
+                              float  * ray_vis,         //ray visibility (cumulative)
                       __local short2 * ray_bundle_array,
-                      __local float2 * cached_aux_data)
+                      __local float4 * cached_aux_data)
 {
     /* linear thread id */
     uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
@@ -150,8 +153,7 @@ void seg_len_obs_opt2(        float    seg_len,
          * aux_data items are not used, they can be cleared and used to 
          * store the seg_len of non-owner rays
          */
-        //cached_aux_data[llid] = (float4) (seg_len, 0.0f, 0.0f, 0.0f);
-        cached_aux_data[llid] = (float2) (seg_len, seg_len*obs);
+        cached_aux_data[llid] = (float4) (seg_len, seg_len*obs, seg_len*(*ray_vis), 0.0f);
     }
     barrier(CLK_LOCAL_MEM_FENCE);
     
@@ -159,23 +161,38 @@ void seg_len_obs_opt2(        float    seg_len,
     if (ray_bundle_array[llid].y == 1)
     {
       
-        //keep track of total length and running mean observation
+        //keep track of total length, running mean observation and running cell visibility
         float sum_len = seg_len; 
-        float sum_obs = obs*seg_len; 
+        float sum_obs = seg_len*obs;
+        float sum_vis = seg_len*(*ray_vis); 
 
         /* traverse the linked list and increment sums */
         short next = ray_bundle_array[llid].x;  // linked list pointer 
         while(next >= 0) {
             sum_len += cached_aux_data[next].x;
             sum_obs += cached_aux_data[next].y;
+            sum_vis += cached_aux_data[next].z;
             next = ray_bundle_array[next].x;
         }
+        
         //get previous total, add this contribution to the mean, re_divide
         float total_obs = cached_aux_data[llid].x * cached_aux_data[llid].y; 
         total_obs += sum_obs;
+        float total_vis = cached_aux_data[llid].x * cached_aux_data[llid].z;
+        total_vis += sum_vis;
+        
+        //total cell length
         cached_aux_data[llid].x += sum_len;
+        
+        //re normalize mean obs and cell_vis
         cached_aux_data[llid].y = (total_obs/cached_aux_data[llid].x);  //need a check to make sure this divide doesn't produce some nasty NANs
+        cached_aux_data[llid].z = (total_vis/cached_aux_data[llid].x);
     }
+    
+    /* updated visibility probability */
+    float temp=exp(-alpha * seg_len);
+    (*ray_vis) *= temp;
+    
     barrier(CLK_LOCAL_MEM_FENCE);
 }
 
@@ -200,16 +217,16 @@ void pre_infinity_opt(  float    seg_len,
     if (cum_len>1.0e-10f)
     {
         /* The mean intensity for the cell */
-        PI = gauss_3_mixture_prob_density(mean_obs,
-                                             mixture.s0, 
-                                             mixture.s1, 
-                                             mixture.s2,
-                                             mixture.s3, 
-                                             mixture.s4, 
-                                             mixture.s5,
-                                             mixture.s6,
-                                             mixture.s7,
-                                             (1.0f-mixture.s2-mixture.s5)
+        PI = gauss_3_mixture_prob_density( mean_obs,
+                                           mixture.s0, 
+                                           mixture.s1, 
+                                           mixture.s2,
+                                           mixture.s3, 
+                                           mixture.s4, 
+                                           mixture.s5,
+                                           mixture.s6,
+                                           mixture.s7,
+                                           (1.0f-mixture.s2-mixture.s5)
                                           );/* PI */
     }
 
@@ -219,7 +236,7 @@ void pre_infinity_opt(  float    seg_len,
 
     float vis_prob_end = exp(-(*image_vect).y); /* vis_prob_end */
 
-    /* updated pre                      Omega         *       PI         */
+    /* updated pre                      Omega         *   PI  */
     (*image_vect).w += ((*image_vect).z - vis_prob_end) *  PI;
     /* updated visibility probability */
     (*image_vect).z = vis_prob_end;
@@ -428,16 +445,12 @@ void bayes_ratio_opt2(        float   seg_len,
 /* Image vector 
  *  [norm | alpha_integral | vis | pre ] */
 void bayes_ratio_opt3(        float   seg_len, 
-                              float   cum_len,
                               float   mean_obs,
                               float * pre,
                               float * vis,
                               float   norm, 
-                              float * cell_vis,
                               float * cell_beta,
-                              //float4* image_vect,
                       __local short2* ray_bundle_array,
-                      __local float*  cached_seg_len,
                       __local float*  cached_beta,
                               float   alpha, 
                               float8  mixture)
@@ -445,26 +458,23 @@ void bayes_ratio_opt3(        float   seg_len,
     /* linear thread id */
     uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
     
-    /* insert seg_len into the local cache (all threads) */
-    cached_seg_len[llid] = (*vis) * seg_len;
-
     /* ray must be active after data is loaded */
     float PI = 0.0;
     
     /* Compute PI for all threads */
-    if (cum_len > 1.0e-4f) {    /* if  too small, do nothing */
+    if (seg_len > 1.0e-10f) {    /* if  too small, do nothing */
         
         /* The mean intensity for the cell */
         PI = gauss_3_mixture_prob_density(mean_obs,
-                                             mixture.s0, 
-                                             mixture.s1, 
-                                             mixture.s2,
-                                             mixture.s3, 
-                                             mixture.s4, 
-                                             mixture.s5,
-                                             mixture.s6,
-                                             mixture.s7,
-                                             (1.0f-mixture.s2-mixture.s5)
+                                           mixture.s0, 
+                                           mixture.s1, 
+                                           mixture.s2,
+                                           mixture.s3, 
+                                           mixture.s4, 
+                                           mixture.s5,
+                                           mixture.s6,
+                                           mixture.s7,
+                                           (1.0f-mixture.s2-mixture.s5)
                                           );/* PI */
     }
     
@@ -486,14 +496,13 @@ void bayes_ratio_opt3(        float   seg_len,
         short curr = convert_short(llid); //ray_bundle_array[llid].x;  // linked list pointer 
         while(curr >= 0) {
             
-            /*    cell.vis           +=     vis(i,j)      *      seg_len     */
-            (*cell_vis)  += /* image_vect[next].z */ cached_seg_len[curr];
             /* Bayes ratio */
             /* ( pre + PI*vis)/norm)*seg_len */
             (*cell_beta) += cached_beta[curr];
             curr = ray_bundle_array[curr].x;
         }
     }
+    
     //barrier(CLK_LOCAL_MEM_FENCE); /*wait for all threads to complete */
     /* Below, all active threads participate in updating the alpha integral,
     * pre and vis images */
@@ -507,6 +516,7 @@ void bayes_ratio_opt3(        float   seg_len,
     barrier(CLK_LOCAL_MEM_FENCE); /*wait for all threads to complete */
 
 }
+
 
 
 
@@ -582,36 +592,34 @@ void map_work_space_2d_offset(int* mapped_id0,
 
 
 
+/* Aux Data = [cell_len, mean_obs*cell_len, beta, cum_vis]  */
 void update_cell(float16 * data, float4 aux_data,float t_match, float init_sigma, float min_sigma)
 {
-    if (aux_data.x>1e-5)
-    {
-        float mu0 = (*data).s1, sigma0 = (*data).s2, w0 = (*data).s3;
-        float mu1 = (*data).s5, sigma1 = (*data).s6, w1 = (*data).s7;
-        float mu2 = (*data).s9, sigma2 = (*data).sa;
-        float w2=0.0f;
+    float mu0 = (*data).s1, sigma0 = (*data).s2, w0 = (*data).s3;
+    float mu1 = (*data).s5, sigma1 = (*data).s6, w1 = (*data).s7;
+    float mu2 = (*data).s9, sigma2 = (*data).sa;
+    float w2=0.0f;
 
 
-        if(w0>0.0f && w1>0.0f)
-            w2=1-(*data).s3-(*data).s7;  
+    if(w0>0.0f && w1>0.0f)
+        w2=1-(*data).s3-(*data).s7;  
 
-        short Nobs0 = (short)(*data).s4, Nobs1 = (short)(*data).s8, Nobs2 = (short)(*data).sb; 
-        float Nobs_mix = (*data).sc;
+    short Nobs0 = (short)(*data).s4, Nobs1 = (short)(*data).s8, Nobs2 = (short)(*data).sb; 
+    float Nobs_mix = (*data).sc;
 
-        update_gauss_3_mixture(aux_data.y/aux_data.x,
-                               aux_data.w,
-                               t_match,
-                               init_sigma,min_sigma,
-                               &mu0,&sigma0,&w0,&Nobs0,
-                               &mu1,&sigma1,&w1,&Nobs1,
-                               &mu2,&sigma2,&w2,&Nobs2,
-                               &Nobs_mix);
-        (*data).s0*=aux_data.z/aux_data.x;
-        (*data).s1=mu0; (*data).s2=sigma0, (*data).s3=w0;(*data).s4=(float)Nobs0;
-        (*data).s5=mu1; (*data).s6=sigma1, (*data).s7=w1;(*data).s8=(float)Nobs1;
-        (*data).s9=mu2; (*data).sa=sigma2, (*data).sb=(float)Nobs2;
-        (*data).sc=(float)Nobs_mix;
-    }
+    update_gauss_3_mixture(aux_data.y,              //mean observation
+                           aux_data.w,              //cell_visability
+                           t_match,
+                           init_sigma,min_sigma,
+                           &mu0,&sigma0,&w0,&Nobs0,
+                           &mu1,&sigma1,&w1,&Nobs1,
+                           &mu2,&sigma2,&w2,&Nobs2,
+                           &Nobs_mix);
+    (*data).s0 *= aux_data.z/aux_data.x;
+    (*data).s1=mu0; (*data).s2=sigma0, (*data).s3=w0;(*data).s4=(float)Nobs0;
+    (*data).s5=mu1; (*data).s6=sigma1, (*data).s7=w1;(*data).s8=(float)Nobs1;
+    (*data).s9=mu2; (*data).sa=sigma2, (*data).sb=(float)Nobs2;
+    (*data).sc=(float)Nobs_mix;
 }
 
 
