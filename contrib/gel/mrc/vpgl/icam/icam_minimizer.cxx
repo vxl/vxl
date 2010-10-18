@@ -155,7 +155,8 @@ icam_minimizer:: minimize(vgl_rotation_3d<double>& rot,
                         dt_pyramid_.depth_trans(L));
 #endif
     // no masks
-    vnl_levenberg_marquardt minimizer(cost_fn(L));
+    icam_cost_func cost = cost_fn(L);
+    vnl_levenberg_marquardt minimizer(cost);
     //minimizer.set_x_tolerance(1e-16);
     //minimizer.set_f_tolerance(1.0);
     //minimizer.set_g_tolerance(1e-3);
