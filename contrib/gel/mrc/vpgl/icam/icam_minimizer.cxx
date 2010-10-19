@@ -76,9 +76,9 @@ icam_minimizer::icam_minimizer( const vil_image_view<float>& source_img,
                                 unsigned box_reduction_k,
                                 double local_min_thresh,
                                 vcl_string const& base_path)
-  : end_error_(0.0), min_level_size_(min_level_size),
-    cam_search_valid_(false), box_reduction_k_(box_reduction_k),
-    local_min_thresh_(local_min_thresh), base_path_(base_path)
+  : box_reduction_k_(box_reduction_k), cam_search_valid_(false),
+    local_min_thresh_(local_min_thresh),
+    min_level_size_(min_level_size), end_error_(0.0), base_path_(base_path)
 {
   unsigned n_levels =
     icam_depth_trans_pyramid::required_levels(dest_img.ni(), dest_img.nj(),
@@ -98,9 +98,9 @@ icam_minimizer::icam_minimizer(const vil_image_view<float>& dest_img,
                                unsigned box_reduction_k,
                                double local_min_thresh,
                                vcl_string const& base_path)
-  : end_error_(0.0), min_level_size_(min_level_size),
-    cam_search_valid_(false), box_reduction_k_(box_reduction_k),
-    local_min_thresh_(local_min_thresh), base_path_(base_path)
+  : box_reduction_k_(box_reduction_k), cam_search_valid_(false),
+    local_min_thresh_(local_min_thresh),
+    min_level_size_(min_level_size), end_error_(0.0), base_path_(base_path)
 {
   unsigned n_levels =
     icam_depth_trans_pyramid::required_levels(dest_img.ni(), dest_img.nj(),
@@ -139,7 +139,6 @@ icam_minimizer:: minimize(vgl_rotation_3d<double>& rot,
   dt_pyramid_.set_to_fl(to_fl);
   dt_pyramid_.set_rotation(rot);
   dt_pyramid_.set_translation(trans);
-  int n_levels = source_pyramid_.nlevels();
   vnl_vector<double> params, fx;
   for (int L=source_pyramid_.nlevels()-1; L>=0; --L)
   {
@@ -151,8 +150,7 @@ icam_minimizer:: minimize(vgl_rotation_3d<double>& rot,
 
     vil_gauss_filter_5tap(source,source_sm,vil_gauss_filter_5tap_params(2));
     vil_gauss_filter_5tap(dest,dest_sm,vil_gauss_filter_5tap_params(2));
-    icam_cost_func cost(source_sm, dest_sm,
-                        dt_pyramid_.depth_trans(L));
+    icam_cost_func cost(source_sm, dest_sm, dt_pyramid_.depth_trans(L));
 #endif
     // no masks
     icam_cost_func cost = cost_fn(L);
@@ -546,11 +544,12 @@ pyramid_camera_search(vgl_vector_3d<double> const&
     if (this->smallest_local_minimum(local_min_thresh_, smallest_min,
                                      smallest_min_trans,
                                      smallest_min_rot,
-                                     mx, my, mz))
+                                     mx, my, mz)) {
       vcl_cout << "smallest local min cost " << smallest_min
                << " at translation " << smallest_min_trans
                << "\nwith discrete rotation "
                << smallest_min_rot.as_rodrigues() << '\n';
+    }
     else {
       vcl_cout << " no local minimum found in pyramid search\n";
       return false;
@@ -629,11 +628,12 @@ camera_search( vgl_box_3d<double> const& trans_box,
                                   smallest_min_trans,
                                   smallest_min_rot,
                                   mx, my, mz))
-
+  {
     vcl_cout << "smallest local min cost " << smallest_min
              << " at translation " << smallest_min_trans
              << "\nwith discrete rotation "
              << smallest_min_rot.as_rodrigues() << '\n';
+  }
   else {
     vcl_cout << " no local minimum found in top level search\n";
     return false;

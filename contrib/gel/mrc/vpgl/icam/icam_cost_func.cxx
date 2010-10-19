@@ -16,7 +16,7 @@ icam_cost_func::icam_cost_func( const vil_image_view<float>& source_img,
  : vnl_least_squares_function(1,1),
    source_image_(source_img),
    dest_image_(dest_img),
-   dt_(dt), n_samples_(0), max_samples_(1)
+   dt_(dt), max_samples_(1), n_samples_(0)
 {
   unsigned ni = dest_image_.ni()-2, nj = dest_image_.nj()-2;
   max_samples_ = ni*nj;
