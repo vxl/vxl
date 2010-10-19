@@ -91,7 +91,7 @@ unsigned s=3;
             write_vrml_sphere(str, sphere, (*grid_it)(i,j),(*grid_it)(i,j),(*grid_it)(i,j),1-(*grid_it)(i,j));
 #endif
             vgl_sphere_3d<float> sphere((float)i/(float)s,(float)j/(float)s,(float)k/(float)s,0.4f);
-            bvrml_write::write_vrml_sphere(str, sphere, (*grid_it)(i,j),(*grid_it)(i,j),(*grid_it)(i,j),0.5-(*grid_it)(i,j));
+            bvrml_write::write_vrml_sphere(str, sphere, (*grid_it)(i,j),(*grid_it)(i,j),(*grid_it)(i,j),0.5f-(*grid_it)(i,j));
           }
         }
       }
