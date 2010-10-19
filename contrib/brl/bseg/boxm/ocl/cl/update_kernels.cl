@@ -372,7 +372,7 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
  
           //use aux data to update cells 
           if (aux_data.x>1e-10f)
-              update_cell2(&alpha, &mixture, &weight3, &nobs, aux_data, 2.5f, 0.09f, 0.03f);
+              update_cell2(&alpha, &mixture, &weight3, aux_data, 2.5f, 0.09f, 0.03f);
 
           //OLD --------------------------------------------------------------------------------------
           //use aux data to update cells 

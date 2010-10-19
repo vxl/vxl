@@ -625,15 +625,17 @@ void update_cell(float16 * data, float4 aux_data,float t_match, float init_sigma
 }
 
 /* Aux Data = [cell_len, mean_obs*cell_len, beta, cum_vis]  */
-void update_cell2(float * alpha, float8 * mixture, float * weight3, float4 * nobs,
+void update_cell2(float * alpha, float8 * mixture, float * weight3,
                   float4 aux_data, float t_match, float init_sigma, float min_sigma)
 {
     float mu0 = (*mixture).s0, sigma0 = (*mixture).s1, w0 = (*mixture).s2;
     float mu1 = (*mixture).s3, sigma1 = (*mixture).s4, w1 = (*mixture).s5;
     float mu2 = (*mixture).s6, sigma2 = (*mixture).s7, w2 = (*weight3);
     
-    short Nobs0 = (short)(*nobs).s0, Nobs1 = (short)(*nobs).s1, Nobs2 = (short)(*nobs).s2; 
-    float Nobs_mix = (*nobs).s3;
+    //short Nobs0 = (short)(*nobs).s0, Nobs1 = (short)(*nobs).s1, Nobs2 = (short)(*nobs).s2; 
+    //float Nobs_mix = (*nobs).s3;
+    short Nobs0, Nobs1, Nobs2;
+    float Nobs_mix;
 
     update_gauss_3_mixture2( aux_data.y,              //mean observation
                              aux_data.w,              //cell_visability
@@ -649,9 +651,11 @@ void update_cell2(float * alpha, float8 * mixture, float * weight3, float4 * nob
     (*mixture).s3=mu1; (*mixture).s4=sigma1; (*mixture).s5=w1;
     (*mixture).s6=mu2; (*mixture).s7=sigma2; (*weight3)=w2; 
     
+/*
     //do we need nobs anymore?
     (*nobs).s0 = Nobs0; (*nobs).s1 = Nobs1; (*nobs).s2 = Nobs2;
     (*nobs).s0 = Nobs_mix;
+*/
 }
 
 

@@ -344,7 +344,7 @@ void update_gauss_3_mixture2(float x, float w, float t_match,
   {
     int match = -1;
   //(*Nobs_mix) += w;
-  float alpha = w*0.05f, tsq=t_match*t_match;
+  float alpha = w*0.25f, tsq=t_match*t_match;
   float weight = 0.0f, rho = 0.0f;
   
   /* test for a match of component 0 */

@@ -1171,6 +1171,10 @@ bool boxm_update_bit_scene_manager::set_refine_args()
   status = clSetKernelArg(refine_kernel_, i++, sizeof(cl_mem), (void *)&cell_mixture_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_mixture_buf)"))
     return 0;
+  //last weight buffer
+  status = clSetKernelArg(refine_kernel_, i++, sizeof(cl_mem), (void *)&cell_weight_buf_);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_mixture_buf)"))
+    return 0;
   //cell num obs buffer
   status = clSetKernelArg(refine_kernel_, i++, sizeof(cl_mem), (void *)&cell_num_obs_buf_);
   if (this->check_val(status, CL_SUCCESS, "clSetKernelArg failed. (cell_num_obs_buf_)")!=CHECK_SUCCESS)
