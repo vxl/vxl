@@ -80,7 +80,6 @@ bool bvpl_scene_vector_operator_process(bprb_func_process& pro)
   vcl_string operator_name = pro.get_input<vcl_string>(i++);
   vcl_string functor_name = pro.get_input<vcl_string>(i++);
   vcl_string output_path = pro.get_input<vcl_string>(i++);
-  short level = 0;
 
   //check input's validity
   if (!scene_base.ptr()) {
