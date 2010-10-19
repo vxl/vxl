@@ -42,10 +42,12 @@ typedef struct
 //aux data struct - mirrors ocl AuxData
 typedef struct
 {
-  cl_float   cell_len;
-  cl_float   cell_beta;
-  cl_uchar   mean_obs;
-  cl_uchar   cum_vis;
+  //cl_float   cell_len;
+  //cl_float   cell_beta;
+  //cl_uchar   mean_obs;
+  //cl_uchar   cum_vis;
+  cl_float   len_beta;
+  cl_uchar2   mean_vis;
 } AuxData;
 
 class boxm_ocl_bit_scene : public vbl_ref_count
