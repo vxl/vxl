@@ -73,11 +73,13 @@ bool boxm_update_bit_scene_manager::init_scene(boxm_ocl_bit_scene *scene,
   int numData = scene_info_->num_buffer * scene_info_->data_buffer_length;
   cell_alpha_   = (cl_float *) boxm_ocl_utils::alloc_aligned(numData,sizeof(cl_float),16);
   cell_mixture_ = (cl_uchar *) boxm_ocl_utils::alloc_aligned(numData,sizeof(cl_uchar8),16);
+  cell_weight_  = (cl_uchar *) boxm_ocl_utils::alloc_aligned(numData,sizeof(cl_uchar),16);
   cell_num_obs_ = (cl_ushort*) boxm_ocl_utils::alloc_aligned(numData,sizeof(cl_ushort4),16);
   cell_aux_data_= (AuxData *) boxm_ocl_utils::alloc_aligned(numData,sizeof(AuxData),16);
   scene->get_alphas(cell_alpha_);
   scene->get_mixture(cell_mixture_);
   scene->get_num_obs(cell_num_obs_);
+  for (int i=0; i<numData; i++) cell_weight_[i] = (cl_uchar) 0;
   for (int i=0; i<numData; i++) {   //init aux data to zero
     //cell_aux_data_[i].cell_len  = (cl_float) 0.0;
     //cell_aux_data_[i].cell_beta = (cl_float) 0.0;
@@ -204,11 +206,13 @@ bool boxm_update_bit_scene_manager::init_scene(boxm_ocl_bit_scene *scene,
   int numData = scene_info_->num_buffer * scene_info_->data_buffer_length;
   cell_alpha_   = (cl_float *) boxm_ocl_utils::alloc_aligned(numData,sizeof(cl_float),16);
   cell_mixture_ = (cl_uchar *) boxm_ocl_utils::alloc_aligned(numData,sizeof(cl_uchar8),16);
+  cell_weight_  = (cl_uchar *) boxm_ocl_utils::alloc_aligned(numData,sizeof(cl_uchar),16);
   cell_num_obs_ = (cl_ushort*) boxm_ocl_utils::alloc_aligned(numData,sizeof(cl_ushort4),16);
   cell_aux_data_= (AuxData *) boxm_ocl_utils::alloc_aligned(numData,sizeof(AuxData),16);
   scene->get_alphas(cell_alpha_);
   scene->get_mixture(cell_mixture_);
   scene->get_num_obs(cell_num_obs_);
+  for (int i=0; i<numData; i++) cell_weight_[i] = (cl_uchar) 0;
   for (int i=0; i<numData; i++) {   //init aux data to zero
     //cell_aux_data_[i].cell_len  = (cl_float) 0.0;
     //cell_aux_data_[i].cell_beta = (cl_float) 0.0;
@@ -367,6 +371,15 @@ bool boxm_update_bit_scene_manager::set_scene_buffers()
   if (!this->check_val(status, CL_SUCCESS, "clCreateBuffer (cell_mixture) failed."))
     return false;
 
+  //third weight (for uchar 9 implementation)
+  cell_weight_buf_ = clCreateBuffer(this->context_,
+                                     CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR,
+                                     datCells * sizeof(cl_uchar),
+                                     cell_weight_,
+                                     &status);
+  if (!this->check_val(status, CL_SUCCESS, "clCreateBuffer (cell_mixture) failed."))
+    return false;
+    
   //data (num_obs)
   cell_num_obs_buf_ = clCreateBuffer(this->context_,
                                      CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR,
@@ -578,7 +591,6 @@ bool boxm_update_bit_scene_manager::set_kernels()
     return false;
   update_kernels_.push_back(kernel);
   vcl_cout<<"Set bayes kernel "<<vcl_endl;
-
 
   // pass 5 update_ocl_scene_main
   kernel = clCreateKernel(program_,"update_bit_scene_main",&status);
@@ -1218,14 +1230,6 @@ bool boxm_update_bit_scene_manager::set_update_args(unsigned pass)
     status = clSetKernelArg(update_kernels_[pass],i++,sizeof(cl_mem),(void *)&cell_alpha_buf_);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_data_buf_)"))
       return 0;
-    //mixture buffer
-    status = clSetKernelArg(update_kernels_[pass], i++, sizeof(cl_mem), (void *)&cell_mixture_buf_);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_mixture_buf)"))
-      return 0;
-    //cell num obs buffer
-    status = clSetKernelArg(update_kernels_[pass], i++, sizeof(cl_mem), (void *)&cell_num_obs_buf_);
-    if (!this->check_val(status, CL_SUCCESS, "clSetKernelArg failed. (cell_num_obs_buf_)"))
-      return 0;
     //aux data
     //cum beta and mean vis buffers
     status = clSetKernelArg(update_kernels_[pass],i++,sizeof(cl_mem),(void *)&cell_cum_beta_buf_);
@@ -1310,6 +1314,10 @@ bool boxm_update_bit_scene_manager::set_update_args(unsigned pass)
     status = clSetKernelArg(update_kernels_[pass], i++, sizeof(cl_mem), (void *)&cell_mixture_buf_);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_mixture_buf)"))
       return 0;
+    //last weight buffer
+    status = clSetKernelArg(update_kernels_[pass], i++, sizeof(cl_mem), (void *)&cell_weight_buf_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_last_weight_buf_)"))
+      return 0;   
     //cell num obs buffer
     status = clSetKernelArg(update_kernels_[pass], i++, sizeof(cl_mem), (void *)&cell_num_obs_buf_);
     if (!this->check_val(status, CL_SUCCESS, "clSetKernelArg failed. (cell_num_obs_buf_)"))
@@ -1412,6 +1420,10 @@ bool boxm_update_bit_scene_manager::set_update_args(unsigned pass)
     status = clSetKernelArg(update_kernels_[pass], i++, sizeof(cl_mem), (void *)&cell_mixture_buf_);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_mixture_buf)"))
       return 0;
+    //last weight buffer
+    status = clSetKernelArg(update_kernels_[pass], i++, sizeof(cl_mem), (void *)&cell_weight_buf_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_last_weight_buf_)"))
+      return 0; 
     //cell num obs buffer
     status = clSetKernelArg(update_kernels_[pass], i++, sizeof(cl_mem), (void *)&cell_num_obs_buf_);
     if (!this->check_val(status, CL_SUCCESS, "clSetKernelArg failed. (cell_num_obs_buf_)"))
@@ -1497,6 +1509,10 @@ bool boxm_update_bit_scene_manager::set_update_args(unsigned pass)
     status = clSetKernelArg(update_kernels_[pass], i++, sizeof(cl_mem), (void *)&cell_mixture_buf_);
     if (!this->check_val(status, CL_SUCCESS, "clSetKernelArg failed. (cell_mixture_buf_)"))
       return false;
+    //last weight buffer
+    status = clSetKernelArg(update_kernels_[pass], i++, sizeof(cl_mem), (void *)&cell_weight_buf_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_last_weight_buf_)"))
+      return 0; 
     //num obs
     status = clSetKernelArg(update_kernels_[pass], i++, sizeof(cl_mem), (void *)&cell_num_obs_buf_);
     if (!this->check_val(status, CL_SUCCESS, "clSetKernelArg failed. (cell_num_obs_buf_)"))

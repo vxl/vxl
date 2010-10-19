@@ -60,19 +60,19 @@ change_detecttion_scene(__constant  RenderSceneInfo    * linfo,
   // we know i,j map to a point on the image, have calculated ray
   // BEGIN RAY TRACE
   //----------------------------------------------------------------------------
-  cast_ray( i, j,
-            ray_ox, ray_oy, ray_oz,
-            ray_dx, ray_dy, ray_dz,
+  cast_ray( i, j, 
+            ray_ox, ray_oy, ray_oz, 
+            ray_dx, ray_dy, ray_dz, 
 
-            //scene info                                              //numobs and mixture null
-            linfo, block_ptrs, tree_array, alpha_array, mixture_array, 0,
-
-            //utility info
-            local_tree, bit_lookup, cumsum, imIndex,
-
-            //factor,raybund,ptrs,cache,cache,image_vect (all NULL)
-            0, 0, 0, 0, 0, 0,
-
+            //scene info                                              //numobs, aux, aux
+            linfo, block_ptrs, tree_array, alpha_array, mixture_array, 0, 0, 0, 0, 
+           
+            //utility info                (factor)
+            local_tree, bit_lookup, cumsum, 0,
+            
+            //CHANGE SPECIFIC ARGS
+            imIndex,
+            
             //io info
             in_image, 0, output);
 }

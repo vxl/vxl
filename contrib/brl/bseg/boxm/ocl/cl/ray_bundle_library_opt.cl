@@ -210,7 +210,8 @@ void pre_infinity_opt(  float    seg_len,
                         float    mean_obs,
                         float4 * image_vect,
                         float    alpha,
-                        float8   mixture)
+                        float8   mixture,
+                        float    weight3)
 {
     /* if total length of rays is too small, do nothing */
     float PI = 0.0f;
@@ -226,12 +227,12 @@ void pre_infinity_opt(  float    seg_len,
                                            mixture.s5,
                                            mixture.s6,
                                            mixture.s7,
-                                           (1.0f-mixture.s2-mixture.s5)
+                                           weight3 //(1.0f-mixture.s2-mixture.s5)
                                           );/* PI */
     }
 
     /* Calculate pre and vis infinity */
-    /*alpha integral      alpha * seg_len      */
+    /*alpha integral += alpha * seg_len      */
     (*image_vect).y += alpha * seg_len;
 
     float vis_prob_end = exp(-(*image_vect).y); /* vis_prob_end */
@@ -453,7 +454,8 @@ void bayes_ratio_opt3(        float   seg_len,
                       __local short2* ray_bundle_array,
                       __local float*  cached_beta,
                               float   alpha, 
-                              float8  mixture)
+                              float8  mixture,
+                              float   weight3)
 {
     /* linear thread id */
     uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
@@ -474,7 +476,7 @@ void bayes_ratio_opt3(        float   seg_len,
                                            mixture.s5,
                                            mixture.s6,
                                            mixture.s7,
-                                           (1.0f-mixture.s2-mixture.s5)
+                                           weight3 //(1.0f-mixture.s2-mixture.s5)
                                           );/* PI */
     }
     
@@ -622,5 +624,34 @@ void update_cell(float16 * data, float4 aux_data,float t_match, float init_sigma
     (*data).sc=(float)Nobs_mix;
 }
 
+/* Aux Data = [cell_len, mean_obs*cell_len, beta, cum_vis]  */
+void update_cell2(float * alpha, float8 * mixture, float * weight3, float4 * nobs,
+                  float4 aux_data, float t_match, float init_sigma, float min_sigma)
+{
+    float mu0 = (*mixture).s0, sigma0 = (*mixture).s1, w0 = (*mixture).s2;
+    float mu1 = (*mixture).s3, sigma1 = (*mixture).s4, w1 = (*mixture).s5;
+    float mu2 = (*mixture).s6, sigma2 = (*mixture).s7, w2 = (*weight3);
+    
+    short Nobs0 = (short)(*nobs).s0, Nobs1 = (short)(*nobs).s1, Nobs2 = (short)(*nobs).s2; 
+    float Nobs_mix = (*nobs).s3;
+
+    update_gauss_3_mixture2( aux_data.y,              //mean observation
+                             aux_data.w,              //cell_visability
+                             t_match,                 
+                             init_sigma,min_sigma,
+                             &mu0,&sigma0,&w0,&Nobs0,
+                             &mu1,&sigma1,&w1,&Nobs1,
+                             &mu2,&sigma2,&w2,&Nobs2,
+                             &Nobs_mix);
+                           
+    (*alpha) *= aux_data.z/aux_data.x;
+    (*mixture).s0=mu0; (*mixture).s1=sigma0; (*mixture).s2=w0;
+    (*mixture).s3=mu1; (*mixture).s4=sigma1; (*mixture).s5=w1;
+    (*mixture).s6=mu2; (*mixture).s7=sigma2; (*weight3)=w2; 
+    
+    //do we need nobs anymore?
+    (*nobs).s0 = Nobs0; (*nobs).s1 = Nobs1; (*nobs).s2 = Nobs2;
+    (*nobs).s0 = Nobs_mix;
+}
 
 

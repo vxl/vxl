@@ -15,6 +15,7 @@ cast_ray(
           __global    int4               * tree_array,      //tree buffers (loaded as int4, but read as uchar16
           __global    float              * alpha_array,     //voxel density buffer
           __global    uchar8             * mixture_array,   //appearance model buffer
+          __global    uchar              * last_weight_array,//third weight for mixture model
           __global    ushort4            * num_obs_array,   // num obs for each block
           __global    float2             * cum_len_beta,    // cumulative ray length and beta aux vars
           __global    uchar2             * mean_obs_cum_vis,// mean_obs per cell and cumulative visibility
@@ -24,19 +25,15 @@ cast_ray(
           __local     uchar16            * local_tree,      //local tree for traversing
           __constant  uchar              * bit_lookup,      //0-255 num bits lookup table
           __local     uchar              * cumsum,          //cumulative sum helper for data pointer
-          __local     int                * imIndex,         //image index
                       int                  factor,          //factor
-          __local     short2             * ray_bundle_array,//gives information for which ray takes over in the workgroup
-          __local     int                * cell_ptrs,       //local list of cell_ptrs (cells that are hit by this workgroup
-
 
           //---- SEPARATE ARGS FOR EACH STEP CELL FUNCTOR... -------------------
 #if defined(CHANGE) || defined(RENDER)
-          __local     float16            * cached_data,     //local data per ray in workgroup
-          __local     float4             * cached_aux_data, //local aux data per ray in workgroup
-          __local     float4             * image_vect,      //input image and store vis_inf and pre_inf
+          __local     int                * imIndex,         //image index
 #endif
 #ifdef SEGLEN
+          __local     short2             * ray_bundle_array,//gives information for which ray takes over in the workgroup
+          __local     int                * cell_ptrs,       //local list of cell_ptrs (cells that are hit by this workgroup
                       float                inImgObs,         //input image observation (no need for image_vect... )
                       float                ray_vis, 
           __local     float4             * cached_aux_data,  //local data per ray in workgroup
@@ -45,6 +42,8 @@ cast_ray(
                       float4               image_vect,      //input image and store vis_inf and pre_inf
 #endif
 #ifdef BAYES
+          __local     short2             * ray_bundle_array,//gives information for which ray takes over in the workgroup
+          __local     int                * cell_ptrs,       //local list of cell_ptrs (cells that are hit by this workgroup
                       float                norm,
                       float                ray_vis,
                       float                ray_pre,
@@ -219,13 +218,14 @@ cast_ray(
       //cell data, i.e., alpha and app model is needed for some passes 
       float  alpha    = alpha_array[data_ptr];
       float8 mixture  = convert_float8(mixture_array[data_ptr])/255.0f;
+      float  weight3  = convert_float(last_weight_array[data_ptr])/255.0f;
 
       float2 cl_beta  = cum_len_beta[data_ptr];
       float2 mean_vis = convert_float2(mean_obs_cum_vis[data_ptr])/255.0f;
       barrier(CLK_LOCAL_MEM_FENCE);
 
       //calculate pre_infinity denomanator (shape of image)
-      pre_infinity_opt(d, cl_beta.x, mean_vis.x, &image_vect, alpha, mixture);
+      pre_infinity_opt(d, cl_beta.x, mean_vis.x, &image_vect, alpha, mixture, weight3);
       
       //aux data doesn't need to be set, just in_image
       in_image[j*get_global_size(0)+i] = image_vect;
@@ -241,6 +241,7 @@ cast_ray(
       //      /* cell data, i.e., alpha and app model is needed for some passes */
       float  alpha    = alpha_array[data_ptr];
       float8 mixture  = convert_float8(mixture_array[data_ptr])/255.0f;
+      float  weight3  = convert_float(last_weight_array[data_ptr])/255.0f;
       
       //load aux data into local mem
       float2 cl_beta  = cum_len_beta[data_ptr];
@@ -259,7 +260,8 @@ cast_ray(
                         ray_bundle_array,
                         cell_ptrs, 
                         alpha, 
-                        mixture);
+                        mixture,
+                        weight3);
                         
       //set aux data (only one at time)
       if (ray_bundle_array[llid].y==1) {
@@ -269,7 +271,6 @@ cast_ray(
       //reset cell_ptrs to -1 every time
       cell_ptrs[llid] = -1;
 #endif 
-
 ////////////////////////////////////////////////////////////////////////////////
 // END Step Cell Functor
 ////////////////////////////////////////////////////////////////////////////////
