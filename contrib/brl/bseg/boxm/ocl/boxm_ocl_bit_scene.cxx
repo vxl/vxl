@@ -76,64 +76,65 @@ void boxm_ocl_bit_scene::init_scene(vbl_array_3d<ushort2> blocks,
 }
 
 
-void boxm_ocl_bit_scene::validate_data() {
-    vcl_cout<<"Validating scene data: "<<vcl_endl;
-    vcl_cout<<"   num buffers: "<<num_buffers_<<vcl_endl;
-    
-    bool buffGood = true;
-    bool sizeGood = true;
-    bool sizeMatch = true;
-    for(int buff=0; buff<num_buffers_; buff++) {
-      if(blocks_in_buffers_[buff] < 2)
-        continue;
+void boxm_ocl_bit_scene::validate_data()
+{
+  vcl_cout<<"Validating scene data:\n"
+          <<"   num buffers: "<<num_buffers_<<vcl_endl;
 
-      //zip through every tree in the first buffer, verify it's data pointer
-      ushort2 memPtrs = mem_ptrs_[buff]; 
-      int startPtr = (int) memPtrs[0]; 
-      int endPtr = (int) memPtrs[1];
-      for(unsigned sb=0; sb<blocks_in_buffers_[buff]-1; sb++) {
-        
-        //grab tree
-        uchar16 currTree = tree_buffers_[buff][sb];
-        int hi = currTree[10]; int lo = currTree[11];
-        int currDataPtr = (hi<<8) | (lo); 
-        
-        //grab next data pointer
-        uchar16 nextTree = tree_buffers_[buff][sb+1];
-        hi = nextTree[10]; lo = nextTree[11];
-        int nextDataPtr = (hi<<8) | (lo); 
-        
-        //verify that diff in data pointers matches tree size
-        int count = 0 ;
-        for (int i=0; i<10; i++) {
-          unsigned char n = currTree[i];
-          while (n)  {
-            ++count;
-            n &= (n - 1) ;
-          }
+  bool buffGood = true;
+  bool sizeGood = true;
+  bool sizeMatch = true;
+  for (int buff=0; buff<num_buffers_; buff++)
+  {
+    if (blocks_in_buffers_[buff] < 2)
+      continue;
+
+    //zip through every tree in the first buffer, verify it's data pointer
+    ushort2 memPtrs = mem_ptrs_[buff];
+    int startPtr = (int) memPtrs[0];
+  //int endPtr = (int) memPtrs[1];
+    for (unsigned sb=0; sb+1<blocks_in_buffers_[buff]; ++sb)
+    {
+      //grab tree
+      uchar16 currTree = tree_buffers_[buff][sb];
+      int hi = currTree[10]; int lo = currTree[11];
+      int currDataPtr = (hi<<8) | (lo);
+
+      //grab next data pointer
+      uchar16 nextTree = tree_buffers_[buff][sb+1];
+      hi = nextTree[10]; lo = nextTree[11];
+      int nextDataPtr = (hi<<8) | (lo);
+
+      //verify that diff in data pointers matches tree size
+      int count = 0 ;
+      for (int i=0; i<10; i++) {
+        unsigned char n = currTree[i];
+        while (n)  {
+          ++count;
+          n &= (n - 1) ;
         }
-        count = 8*count+1;
-        int currSize = (nextDataPtr-currDataPtr + data_buff_length_) % data_buff_length_;
-        if(count != currSize) {
-          sizeMatch = false;
-          vcl_cout<<"Buffer "<<buff<<", tree"<<sb<<": NextDataPtr - CurrDataPtr doesn't match tree bit size \n"
-                  <<"    bitSize: "<<count<<", ptrSize: "<<currSize<<vcl_endl;
-        }
-        if(startPtr != currDataPtr) {
-          vcl_cout<<"Buffer "<<buff<<", tree "<<sb<<" doesn't match data pointer. "<<vcl_endl;
-          buffGood = false;
-        }
-        
-        startPtr = (startPtr + count) % data_buff_length_;
       }
-      if(!buffGood)
-        vcl_cout<<"Buffer "<<buff<<" has invalid pointers... "<<vcl_endl;
-      if(!sizeGood)
-        vcl_cout<<"Buffer "<<buff<<" has invalid tree size(not 1 or 9) ... "<<vcl_endl;
-      if(!sizeMatch)
-        vcl_cout<<"Buffer "<<buff<<" bit size doesn't match pointer difference ... "<<vcl_endl;
+      count = 8*count+1;
+      int currSize = (nextDataPtr-currDataPtr + data_buff_length_) % data_buff_length_;
+      if (count != currSize) {
+        sizeMatch = false;
+        vcl_cout<<"Buffer "<<buff<<", tree"<<sb<<": NextDataPtr - CurrDataPtr doesn't match tree bit size\n"
+                <<"    bitSize: "<<count<<", ptrSize: "<<currSize<<vcl_endl;
+      }
+      if (startPtr != currDataPtr) {
+        vcl_cout<<"Buffer "<<buff<<", tree "<<sb<<" doesn't match data pointer. "<<vcl_endl;
+        buffGood = false;
+      }
 
+      startPtr = (startPtr + count) % data_buff_length_;
     }
+    if (!buffGood)
+      vcl_cout<<"Buffer "<<buff<<" has invalid pointers... "<<vcl_endl;
+    if (!sizeGood)
+      vcl_cout<<"Buffer "<<buff<<" has invalid tree size(not 1 or 9) ... "<<vcl_endl;
+    if (!sizeMatch)
+      vcl_cout<<"Buffer "<<buff<<" bit size doesn't match pointer difference ... "<<vcl_endl;
+  }
 }
 
 // ===== Save to disk functions =====
@@ -270,7 +271,7 @@ bool boxm_ocl_bit_scene::load_scene(vcl_string filename)
     vcl_cout<<"existing scene initialized"<<vcl_endl;
     return true;
   }
-  
+
   //no scene files found at this point - initialize empty scene from xml file
   vcl_cout<<"block and data files not found, initializing empty scene...\n";
   bool initScene = this->init_empty_scene();
@@ -323,21 +324,21 @@ bool boxm_ocl_bit_scene::init_existing_data()
   return true;
 }
 
-//: initializes empty scene given 
+//: initializes empty scene given
 bool boxm_ocl_bit_scene::init_empty_scene()
 {
-  vcl_cout<<"Parser says max mb = "<<parser_.max_mb()<<vcl_endl;
-  vcl_cout<<"parser says block nums = "<<parser_.block_nums()<<vcl_endl;
+  vcl_cout<<"Parser says max mb = "<<parser_.max_mb()<<vcl_endl
+          <<"parser says block nums = "<<parser_.block_nums()<<vcl_endl;
   const int MAX_BYTES = parser_.max_mb()*1024*1024;
   const int BUFF_LENGTH = vcl_pow((float)2,(float)16); //65536
 
   //total number of (sub) blocks in the scene
-  int total_blocks =  parser_.block_nums().x()  
-                    * parser_.block_nums().y() 
-                    * parser_.block_nums().z();  
-                    
+  int total_blocks =  parser_.block_nums().x()
+                    * parser_.block_nums().y()
+                    * parser_.block_nums().z();
+
   int blockBytes = total_blocks*(2*sizeof(short) + 16*sizeof(char)); //16 byte tree, 4 byte blk_ptr
-  if(MAX_BYTES < blockBytes) {
+  if (MAX_BYTES < blockBytes) {
     vcl_cerr<<"**************************************************\n"
             <<"*** boxm_ocl_bit_scene::init_empty_scene: ERROR!!!!\n"
             <<"*** Max scene size not large enough to accommodate scene dimensions\n"
@@ -353,7 +354,7 @@ bool boxm_ocl_bit_scene::init_empty_scene()
                   2*sizeof(float) +   //aux data (cum_seg_len/beta)
                   2*sizeof(char);     //aux data (mean_obs/cum_vis)
   int num_cells = (int) (freeBytes/dataSize);                         //number of cells given maxmb
-  int num_buffers = (int) vcl_ceil( ((float)num_cells/(float)BUFF_LENGTH) );  
+  int num_buffers = (int) vcl_ceil( ((float)num_cells/(float)BUFF_LENGTH) );
   int blocks_per_buffer = (int) vcl_ceil((float)total_blocks/(float)num_buffers);
   if (num_buffers * BUFF_LENGTH <= total_blocks) {
     vcl_cerr<<"**************************************************\n"
@@ -364,7 +365,7 @@ bool boxm_ocl_bit_scene::init_empty_scene()
             <<"**************************************************"<<vcl_endl;
     return false;
   }
-  
+
   vcl_cout<<"OCL Scene buffer shape: ["
           <<num_buffers<<" buffers by "
           <<BUFF_LENGTH<<" cells ("
@@ -396,10 +397,9 @@ bool boxm_ocl_bit_scene::init_empty_scene()
   vbl_array_3d<ushort2>::iterator iter;
   for (iter = blocks.begin(); iter != blocks.end(); iter++)
   {
-    
-    //status for scene initialization 
+    //status for scene initialization
     int chunk = (int) (total_blocks/10);
-    if(index%chunk==0) vcl_cout<<'['<<index/chunk<<']'<<vcl_flush;
+    if (index%chunk==0) vcl_cout<<'['<<index/chunk<<']'<<vcl_flush;
 
     // randomly place block into a buffer
     bool rand = (parser_.max_mb()>0);
@@ -435,12 +435,12 @@ bool boxm_ocl_bit_scene::init_empty_scene()
     treeBlk[10] = hi; treeBlk[11] = lo;
     tree_buffers(buffIndex, treeOffset) = treeBlk;
     blocksInBuffer[buffIndex]++;
-    
+
     //count for print out
     index++;
   }
   vcl_cout<<vcl_endl;
-  
+
   //use the already existing init_scene method
   bgeo_lvcs lvcs;  parser_.lvcs(lvcs);
   this->init_scene(blocks, tree_buffers, data_buffers,
@@ -448,7 +448,7 @@ bool boxm_ocl_bit_scene::init_empty_scene()
   unsigned max, init;
   parser_.levels(max, init);
   this->set_max_level(max);
-  
+
   return true;
 }
 
@@ -564,15 +564,15 @@ void boxm_ocl_bit_scene::get_alphas(float* alphas)
   int index = 0;
   vbl_array_2d<float16>::iterator iter;
   for (iter = data_buffers_.begin(); iter != data_buffers_.end(); iter++) {
-    
-    //if((*iter)[0] == 0.0f) {
-      ////vcl_cout<<"alpha value at "<<index<<" is equal to zero"<<vcl_endl;
-      //alphas[index++] = 0.1f;
-      //continue;
-    //}
-    //if((*iter)[0] != (*iter)[0]) 
-      //vcl_cout<<"alpha value at "<<index<<" is NAN"<<vcl_endl;
-    
+#if 0
+    if ((*iter)[0] == 0.0f) {
+      vcl_cout<<"alpha value at "<<index<<" is equal to zero"<<vcl_endl;
+      alphas[index++] = 0.1f;
+      continue;
+    }
+    if ((*iter)[0] != (*iter)[0])
+      vcl_cout<<"alpha value at "<<index<<" is NAN"<<vcl_endl;
+#endif
     alphas[index++] = (*iter)[0];
   }
 }
@@ -820,8 +820,6 @@ vcl_ostream& operator <<(vcl_ostream &s, boxm_ocl_bit_scene& scene)
   }
 #endif
 }
-
-
 
 
 //: Binary write bit scene to stream
