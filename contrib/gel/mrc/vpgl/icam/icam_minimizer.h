@@ -22,12 +22,14 @@
 //
 #include <vcl_string.h>
 #include <vnl/vnl_vector.h>
+#include <vnl/vnl_math.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_pyramid_image_view.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vbl/vbl_array_3d.h>
+#include <vpgl/algo/vpgl_camera_bounds.h>
 #include <icam/icam_depth_transform.h>
 #include <icam/icam_depth_trans_pyramid.h>
 #include <icam/icam_cost_func.h>
@@ -44,6 +46,7 @@ class icam_minimizer
                   unsigned box_reduction_k = 2,
                   double local_min_thresh = 0.05,
                   vcl_string const& base_path = "");
+
   //: Constructor, when source image is not known yet
   icam_minimizer(const vil_image_view<float>& dest_img,
                  const icam_depth_transform& dt,
@@ -51,12 +54,19 @@ class icam_minimizer
                  unsigned box_reduction_k = 2,
                  double local_min_thresh = 0.05,
                  vcl_string const& base_path = "");
+
   //: number of pyramid levels
   unsigned n_levels() const {return dt_pyramid_.n_levels();}
 
   //: in the cases where source image is not know at construction, the image is set later
   void set_source_img(const vil_image_view<float>& source_img);
 
+  //: pricipal ray iterator for exhaustive search
+  principal_ray_scan pray_scan(unsigned level, unsigned& n_pts);
+
+  //: polar angle increment, the polar range is typically -pi <= a <= pi
+  double polar_inc(unsigned level, unsigned& nsteps,
+                   double polar_range = vnl_math::pi);
 
   //: Run the minimization starting at input values
   void minimize(vgl_rotation_3d<double>& rot,
@@ -173,17 +183,36 @@ bool  pyramid_camera_search(vgl_vector_3d<double> const&
   //: destination camera at level
   vpgl_perspective_camera<double> dest_cam(unsigned level);
 
+
+  //:source image at level
+  vil_image_view<float> source(unsigned level) 
+    {return source_pyramid_(level);}
+
   //:destination image at level
-  vil_image_view<float> dest(unsigned level){return dest_pyramid_(level);}
+  vil_image_view<float> dest(unsigned level) 
+    {return dest_pyramid_(level);}
+
+  //:depth image at level
+  vil_image_view<double> depth(unsigned level) 
+    {return dt_pyramid_.depth(level);}
+
+  //:inverse depth image at level
+  vil_image_view<double> inv_depth(unsigned level);
+
 
   //: the cost function for a given level
   icam_cost_func cost_fn(unsigned level);
+
+  //: the depth transform for a given level
+  icam_depth_transform depth_trans(unsigned level)
+    {return dt_pyramid_.depth_trans(level);}
 
   //: display box search as a set of vrml spheres
   bool box_search_vrml(vcl_string const& vrml_file,
                        vgl_vector_3d<double> const& trans =
                        vgl_vector_3d<double>());
-
+  vnl_matrix_fixed<double, 3, 3> to_calibration_matrix(unsigned level);
+  vnl_matrix_fixed<double, 3, 3> from_calibration_matrix_inv(unsigned level);
  protected:
   void set_origin_step_delta(vgl_box_3d<double> const& trans_box,
                              vgl_vector_3d<double> const& trans_steps);

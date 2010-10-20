@@ -45,6 +45,10 @@ class icam_cost_func : public vnl_least_squares_function
   vbl_array_2d<double> joint_probability(vnl_vector_fixed<double, 3> rodrigues,
                                          vgl_vector_3d<double> trans);
 
+  vbl_array_2d<double> 
+    joint_probability(vil_image_view<float> const& map_dest,
+                      vil_image_view<float> const& map_mask);
+
   double entropy(vnl_vector_fixed<double, 3> rodrigues,
                  vgl_vector_3d<double> trans,
                  double min_allowed_overlap = 0.01);
@@ -53,6 +57,9 @@ class icam_cost_func : public vnl_least_squares_function
                      vgl_vector_3d<double> trans,
                      double min_allowed_overlap = 0.01);
 
+  double mutual_info(vil_image_view<float> const& map_dest,
+                     vil_image_view<float> const& map_mask,
+                     double min_allowed_overlap = 0.01);
   //: the fraction of potential number of samples
   double frac_samples()
     {return (1.0*n_samples_)/max_samples_;}
@@ -70,6 +77,9 @@ class icam_cost_func : public vnl_least_squares_function
   icam_depth_transform dt_;
   unsigned max_samples_;
   unsigned n_samples_;
+  vbl_array_2d<double> joint_probability(vnl_vector<double> const& samples,
+                                         vnl_vector<double> const& mask);
+  double minfo(vbl_array_2d<double>& joint_prob);
 };
 
 #endif // icam_cost_func_h_

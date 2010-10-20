@@ -30,15 +30,16 @@ icam_cost_func::icam_cost_func( const vil_image_view<float>& source_img,
 #if 0
   vcl_cout << "dest samples\n";
 
-  int cent = dest_samples_.size()/2-ni/2;
-  for (int i = -4; i<=4; ++i)
-    vcl_cout << dest_samples_[i+cent] << ' ';
+
+  int cent = dest_samples_.size()/2-(dest_image_.ni()-2)/2;
+  for(int i = -10; i<=10; ++i)
+    vcl_cout << dest_samples_[i+cent] << '\n';
+
   vcl_cout << '\n';
 #endif
   use_gradient_ = false;
   vnl_least_squares_function::init(dt_.n_params(), dest_samples_.size());
 }
-
 
 //: The main function.
 //  Given the parameter vector x, compute the vector of residuals fx.
@@ -114,25 +115,17 @@ vcl_vector<double> icam_cost_func::error(vnl_vector<double> const& x,
 }
 
 vbl_array_2d<double> icam_cost_func::
-joint_probability(vnl_vector_fixed<double, 3> rodrigues,
-                  vgl_vector_3d<double> trans)
+joint_probability(vnl_vector<double> const& samples, vnl_vector<double> const& mask)
 {
   unsigned nbins = 16;
   double scl = 1.0/(256.0/nbins);
   vbl_array_2d<double> h(nbins, nbins, 0.0);
-  vnl_vector<double> pr(dt_.n_params());
-  vnl_vector<double> res;
-  pr[0]=rodrigues[0];   pr[1]=rodrigues[1];   pr[2]=rodrigues[2];
-  pr[3]=trans.x();   pr[4]=trans.y();   pr[5]=trans.z();
-  dt_.set_params(pr);
-  vnl_vector<double> from_samples, from_mask;
-  icam_sample::sample(dest_image_.ni(), dest_image_.nj(), source_image_,
-                      dt_, from_samples, from_mask, n_samples_);
+
   //compute the intensity histogram
-  for (unsigned i = 0; i<from_samples.size(); ++i)
-    if (from_mask[i]>0.0) {
+  for(unsigned i = 0; i<samples.size(); ++i)
+    if(mask[i]>0.0){
       unsigned id = static_cast<unsigned>(dest_samples_[i]*scl + 0.5),
-        is = static_cast<unsigned>(from_samples[i]*scl + 0.5);
+        is = static_cast<unsigned>(samples[i]*scl + 0.5);
       if (id>nbins-1 || is> nbins-1)
         continue;
       h[id][is] += 1.0;
@@ -144,38 +137,63 @@ joint_probability(vnl_vector_fixed<double, 3> rodrigues,
   return h;
 }
 
-double icam_cost_func::entropy(vnl_vector_fixed<double, 3> rodrigues,
-                               vgl_vector_3d<double> trans,
-                               double min_allowed_overlap)
+
+vbl_array_2d<double> icam_cost_func::
+joint_probability(vnl_vector_fixed<double, 3> rodrigues,
+                  vgl_vector_3d<double> trans)
 {
-  vbl_array_2d<double> jp = this->joint_probability(rodrigues, trans);
-  if (this->frac_samples()<=min_allowed_overlap)
-    return vnl_numeric_traits<double>::maxval;
-  unsigned nr = jp.rows(), nc = jp.cols();
-  double ent = 0.0;
-  for (unsigned r = 0; r<nr; ++r)
-    for (unsigned c = 0; c<nc; ++c) {
-      double p = jp[r][c];
-      if (p>0)
-        ent -= p*vcl_log(p);
-    }
-  ent /= vcl_log(2.0);//convert to bits
-  return ent;
+
+  vnl_vector<double> pr(dt_.n_params());
+  vnl_vector<double> res;
+  pr[0]=rodrigues[0];   pr[1]=rodrigues[1];   pr[2]=rodrigues[2];
+  pr[3]=trans.x();   pr[4]=trans.y();   pr[5]=trans.z(); 
+  dt_.set_params(pr);
+  vnl_vector<double> from_samples, from_mask;
+  icam_sample::sample(dest_image_.ni(), dest_image_.nj(), source_image_,
+                      dt_, from_samples, from_mask, n_samples_);
+
+  #if 0
+  vcl_cout << "Native produced ";
+  vcl_cout << "mapped/dest/mask samples \n";
+  int cent = dest_samples_.size()/2-(dest_image_.ni()-2)/2;
+  for(int i = -10; i<=10; ++i){
+    vcl_cout << from_samples[i+cent] << ' '
+             << dest_samples_[i+cent] << ' '
+                   << 50.0f*from_mask[i+cent] << '\n';
+  }
+#endif
+  return joint_probability(from_samples, from_mask);
 }
 
-double icam_cost_func::mutual_info(vnl_vector_fixed<double, 3> rodrigues,
-                                   vgl_vector_3d<double> trans,
-                                   double min_allowed_overlap)
+vbl_array_2d<double> 
+icam_cost_func::joint_probability(vil_image_view<float> const& map_dest,
+                                  vil_image_view<float> const& map_mask)
 {
-  vbl_array_2d<double> jp = this->joint_probability(rodrigues, trans);
-   if (this->frac_samples()<=min_allowed_overlap)
-    return vnl_numeric_traits<double>::maxval;
-  unsigned nr = jp.rows(), nc = jp.cols();
+  vnl_vector<double> from_samples, from_mask;
+  icam_sample::sample(map_dest, map_mask,from_samples, from_mask, n_samples_);
+
+  #if 0
+   vcl_cout << "GPU produced ";
+  vcl_cout << "mapped/dest/mask samples \n";
+  int cent = dest_samples_.size()/2-(dest_image_.ni()-2)/2;
+  for(int i = -10; i<=10; ++i){
+    vcl_cout << from_samples[i+cent] << ' '
+             << dest_samples_[i+cent] << ' '
+             << 50.0f*from_mask[i+cent] << '\n';
+  }
+#endif
+  return joint_probability(from_samples, from_mask);
+}
+
+double icam_cost_func::minfo(vbl_array_2d<double>& joint_prob)
+{
+  unsigned nr = joint_prob.rows(), nc = joint_prob.cols();
+
   //marginal distributions
   vbl_array_1d<double> pmr(nc,0.0), pmc(nr, 0.0);
   for (unsigned r = 0; r<nr; ++r)
     for (unsigned c = 0; c<nc; ++c) {
-      double p = jp[r][c];
+      double p = joint_prob[r][c];
       pmr[c]+=p;
       pmc[r]+=p;
     }
@@ -184,11 +202,31 @@ double icam_cost_func::mutual_info(vnl_vector_fixed<double, 3> rodrigues,
       double pc = pmc[r];
       if (pc==0) continue;
       for (unsigned c = 0; c<nc; ++c) {
-        double prc = jp[r][c];
+        double prc = joint_prob[r][c];
         double pr = pmr[c];
         if (prc>0&&pr>0)
           sum+= prc*vcl_log(prc/(pr*pc));
       }
   }
   return sum/vcl_log(2.0);
+}
+
+double icam_cost_func::mutual_info(vnl_vector_fixed<double, 3> rodrigues,
+                   vgl_vector_3d<double> trans,
+                   double min_allowed_overlap)
+{
+  vbl_array_2d<double> jp = this->joint_probability(rodrigues, trans);
+   if(this->frac_samples()<=min_allowed_overlap)
+    return vnl_numeric_traits<double>::maxval;
+   return this->minfo(jp);
+}
+
+double icam_cost_func::mutual_info(vil_image_view<float> const& map_dest,
+                                   vil_image_view<float> const& map_mask,
+                                   double min_allowed_overlap)
+{
+  vbl_array_2d<double> jp = this->joint_probability(map_dest, map_mask);
+   if(this->frac_samples()<=min_allowed_overlap)
+    return vnl_numeric_traits<double>::maxval;
+   return this->minfo(jp);
 }

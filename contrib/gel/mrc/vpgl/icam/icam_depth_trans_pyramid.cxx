@@ -39,6 +39,9 @@ void icam_depth_trans_pyramid::init(icam_depth_transform& base_transform,
   vnl_matrix_fixed<double, 3, 3> K_inv =
     base_transform.from_calibration_matrix_inv();
   K_from_.push_back(vnl_inverse(K_inv));
+  to_fl_ = base_transform.to_fl();
+  to_pu_ = base_transform.to_pu();
+  to_pv_ = base_transform.to_pv();
   vil_image_view_base_sptr depth_sptr = 
     new vil_image_view<double>(base_transform.depth_map());
   depth_pyramid_=vil_pyramid_image_view<double>(depth_sptr,n_levels);

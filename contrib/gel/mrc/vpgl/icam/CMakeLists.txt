@@ -25,3 +25,5 @@ TARGET_LINK_LIBRARIES(icam vsph vcl vnl vil vbl vgl_io vgl_algo vil_algo vsl vul
 IF(BUILD_TESTING)
   SUBDIRS(tests)
 ENDIF(BUILD_TESTING)
+
+SUBDIRS(icam_ocl)

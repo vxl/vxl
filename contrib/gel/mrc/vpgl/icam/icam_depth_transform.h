@@ -61,7 +61,8 @@ class icam_depth_transform
   void set_calibration_matrix(vnl_matrix_fixed<double, 3, 3> const& K_from,
                               vnl_matrix_fixed<double, 3, 3> const& K_to)
   { this->set_k(K_from, K_to); }
-  void set_depth_map(vil_image_view<double> const& depth){depth_ = depth;}
+  void set_depth_map(vil_image_view<double> const& depth)
+    {depth_ = depth; invert_depth(depth);}
   void set_rotation(vgl_rotation_3d<double> const& rot){rot_=rot;}
   void set_translation(vgl_vector_3d<double> const& trans){trans_ = trans;}
   vnl_matrix_fixed<double, 3, 3> calibration_matrix(){return K_to();}
@@ -69,6 +70,11 @@ class icam_depth_transform
   { return K_from_inv_; }
   vnl_matrix_fixed<double, 3, 3> to_calibration_matrix()
   { return K_to(); }
+
+  double to_fl() {return to_fl_;}
+  double to_pu() {return to_pu_;}
+  double to_pv() {return to_pv_;}
+
   vil_image_view<double>& depth_map(){return depth_ ;}
   vgl_rotation_3d<double> rotation(){return vgl_rotation_3d<double>(rot_);}
   vgl_vector_3d<double>& translation(){return trans_;}
@@ -99,10 +105,12 @@ class icam_depth_transform
   void set_k(vnl_matrix_fixed<double, 3, 3> const& K_from,
              vnl_matrix_fixed<double, 3, 3> const& K_to);
   vnl_matrix_fixed<double,3,3> K_to();
+  void invert_depth(vil_image_view<double> const& depth);
   // members
   bool adjust_to_fl_;
   vnl_matrix_fixed<double,3,3> K_from_inv_;
   vil_image_view<double> depth_;
+  vil_image_view<float> inv_depth_;
   //elements of the 'to' calibration matrix
   double to_fl_;
   double to_pu_;

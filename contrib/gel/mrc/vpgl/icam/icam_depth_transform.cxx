@@ -1,6 +1,7 @@
 #include <icam/icam_depth_transform.h>
 #include <vnl/vnl_inverse.h>
 #include <vnl/vnl_vector_fixed.h>
+#include <vnl/vnl_numeric_traits.h>
 void icam_depth_transform::cache_k()
 {
   k00_ = static_cast<float>(K_from_inv_[0][0]);
@@ -53,7 +54,21 @@ vnl_matrix_fixed<double,3,3> icam_depth_transform::K_to()
   ret[2][2] = 1.0;
   return ret;
 }
-
+void icam_depth_transform::invert_depth(vil_image_view<double> const& depth)
+{
+  unsigned ni = depth.ni(), nj = depth.nj();
+  float mval = vnl_numeric_traits<float>::maxval;
+  inv_depth_.set_size(ni, nj);
+  for(unsigned j = 0; j<nj; ++j)
+    for(unsigned i = 0; i<ni; ++i){
+      float z = static_cast<float>(depth(i,j));
+      if(z<1.0e-6f){
+        inv_depth_(i,j) = mval;
+        continue;
+      }
+      inv_depth_(i,j) = 1.0f/z;
+    }
+}
 icam_depth_transform::
 icam_depth_transform(vnl_matrix_fixed<double, 3, 3> const& K,
                      vil_image_view<double> const& depth,
@@ -61,12 +76,13 @@ icam_depth_transform(vnl_matrix_fixed<double, 3, 3> const& K,
                      vgl_vector_3d<double> const& trans,
                      bool adjust_to_fl
                     )
-  : adjust_to_fl_(adjust_to_fl), depth_(depth), rot_(rot), trans_(trans)
+  : adjust_to_fl_(adjust_to_fl), depth_(depth),rot_(rot), trans_(trans)
 {
   this->set_k(K);
   this->cache_r();
   scale_factors_.set_size(n_params());
   scale_factors_.fill(1.0);
+  this->invert_depth(depth);
 }
 
 icam_depth_transform::
@@ -77,12 +93,13 @@ icam_depth_transform(vnl_matrix_fixed<double, 3, 3> const& K_from,
                      vgl_vector_3d<double> const& trans,
                      bool adjust_to_fl
                     )
-  : adjust_to_fl_(adjust_to_fl), depth_(depth), rot_(rot), trans_(trans)
+  : adjust_to_fl_(adjust_to_fl), depth_(depth),rot_(rot), trans_(trans)
 {
   this->set_k(K_from, K_to);
   this->cache_r();
   scale_factors_.set_size(n_params());
   scale_factors_.fill(1.0);
+  this->invert_depth(depth);
 }
 
 icam_depth_transform::
@@ -93,39 +110,43 @@ icam_depth_transform(vnl_matrix_fixed<double, 3, 3> const& K_from,
                      vgl_vector_3d<double> const& trans,
                      bool adjust_to_fl
                     )
-  : adjust_to_fl_(adjust_to_fl), depth_(depth),
-    to_fl_(to_fl), to_pu_(to_pu), to_pv_(to_pv), rot_(rot), trans_(trans)
+  : adjust_to_fl_(adjust_to_fl),
+    to_fl_(to_fl), to_pu_(to_pu), to_pv_(to_pv), depth_(depth),
+    rot_(rot), trans_(trans)
 {
   this->set_k(K_from);
   this->cache_r();
   scale_factors_.set_size(n_params());
   scale_factors_.fill(1.0);
+  this->invert_depth(depth);
 }
 
 bool icam_depth_transform::transform(double from_u, double from_v,
                                      double& to_u, double& to_v) const
 {
+  float mval = vnl_numeric_traits<float>::maxval;
   int ni = depth_.ni(), nj = depth_.nj();
   if (from_u<0||from_v<0||from_u>=ni||from_v>=nj) {
     to_u = 0.0; to_v = 0.0;
     return false;
   }
-  // the depth at location (from_u, from_v)
-  float Z = static_cast<float>(depth_(static_cast<unsigned>(from_u),
-                                      static_cast<unsigned>(from_v)));
-  if (Z<1e-6) {
+  // the inverse depth at location (from_u, from_v)
+  float Zinv = inv_depth_(static_cast<unsigned>(from_u),
+                   static_cast<unsigned>(from_v));
+  if (Zinv==mval) {
     to_u = 0.0; to_v = 0.0;
     return false;
   }
-  Z = 1.0f/Z;
+
   //undo calibraion matrix to get the world image position of the from location
+  // note that kij_ are the elements of the inverse matrix
   float fw0, fw1;
   fw0 = k00_*static_cast<float>(from_u)+ k02_;
   fw1 = k11_*static_cast<float>(from_v)+ k12_;
-  // trans/Z (note Z is reciprocal)
-  float t0=Z*static_cast<float>(trans_.x()),
-    t1 = Z*static_cast<float>(trans_.y()),
-    t2 = Z*static_cast<float>(trans_.z());
+  // trans/Z (note Zinv is reciprocal depth)
+  float t0=Zinv*static_cast<float>(trans_.x()),
+    t1 = Zinv*static_cast<float>(trans_.y()),
+    t2 = Zinv*static_cast<float>(trans_.z());
 
   float den = r20_*fw0 + r21_*fw1 + r22_+ t2;
   if (den<1e-6) {

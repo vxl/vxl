@@ -36,6 +36,13 @@ class icam_sample
                        vil_image_view<float>& dest,
                        vil_image_view<float>& mask,
                        unsigned& n_samples);
+
+  //: samples from externally processed images
+  static void sample(vil_image_view<float> const& map_dest,
+                     vil_image_view<float> const& map_mask,
+                     vnl_vector<double>& samples,
+                     vnl_vector<double>& mask,
+                     unsigned& n_samples);
 };
 
 #endif // icam_sample_h_

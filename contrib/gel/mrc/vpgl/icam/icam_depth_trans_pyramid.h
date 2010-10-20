@@ -79,6 +79,8 @@ class icam_depth_trans_pyramid
   unsigned n_params(){return n_params_;}
   void set_params(vnl_vector<double> const& params);
   vnl_vector<double> params();
+  vil_image_view<double> depth(unsigned level) 
+    {return depth_pyramid_(level);}
  private:
   void init(icam_depth_transform& base_transform,
             unsigned n_levels);
