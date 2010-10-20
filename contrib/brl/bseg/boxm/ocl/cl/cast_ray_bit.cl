@@ -32,7 +32,7 @@ cast_ray(
           __local     int                * imIndex,         //image index
 #endif
 #ifdef SEGLEN
-          __constant  float16            * mat_cam, 
+          __global    float16            * mat_cam, 
           __local     short2             * ray_bundle_array,//gives information for which ray takes over in the workgroup
           __local     int                * cell_ptrs,       //local list of cell_ptrs (cells that are hit by this workgroup
                       float                inImgObs,         //input image observation (no need for image_vect... )
@@ -40,11 +40,11 @@ cast_ray(
           __local     float4             * cached_aux_data,  //local data per ray in workgroup
 #endif
 #ifdef PREINF  
-          __constant  float16            * mat_cam, 
+          __global    float16            * mat_cam, 
                       float4               image_vect,      //input image and store vis_inf and pre_inf
 #endif
 #ifdef BAYES
-          __constant  float16            * mat_cam, 
+          __global    float16            * mat_cam, 
           __local     short2             * ray_bundle_array,//gives information for which ray takes over in the workgroup
           __local     int                * cell_ptrs,       //local list of cell_ptrs (cells that are hit by this workgroup
                       float                norm,
@@ -95,10 +95,11 @@ cast_ray(
 //this projection loop is to ensure update starts far enough away for each ray
 //so we don't update the same cell and overwrite contents
 #if defined(SEGLEN) || defined(PREINF) || defined(BAYES)
-  float16 matcam = (*mat_cam);
-  bool blocks_too_big = true;
+  int count = 0;
+  bool blocks_too_big = true; 
   while(blocks_too_big)
   {
+    count++;
     //find entry point (adjusted) and the current block index
     float posx = (ray_ox + (tblock + TREE_EPSILON)*ray_dx);
     float posy = (ray_oy + (tblock + TREE_EPSILON)*ray_dy);
@@ -113,18 +114,16 @@ cast_ray(
     float max_u = -1.0f,  max_v = -1.0f;
     float min_u = 10e5f,  min_v = 10e5f;
     for(int i=0; i<8; ++i) {
-      float4 corner = (float4) (cell_minx + convert_float((uchar)1&i), 
-                                cell_miny + convert_float((uchar)2&i), 
-                                cell_minz + convert_float((uchar)4&i),
+      float4 corner = (float4) (cell_minx + convert_float( (1&i) ), 
+                                cell_miny + convert_float( (2&i)>>1 ), 
+                                cell_minz + convert_float( (4&i)>>2 ),
                                 1.0f);
-      float u = projectV(matcam, corner);
-      if(u > max_u) max_u = u;
-      if(u < min_u) min_u = u;
-
-/*
-      if(v > max_v) max_v = v;
-      if(v < min_v) min_v = v;
-*/
+      float2 uv;
+      project(mat_cam, corner, &uv);
+      if(uv.x > max_u) max_u = uv.x;
+      if(uv.x < min_u) min_u = uv.x;
+      if(uv.y > max_v) max_v = uv.y;
+      if(uv.y < min_v) min_v = uv.y;
     }
     //if the image range is small enough, stop here and start updating
     if(max_u - min_u < 8 && max_v-min_v < 8)
