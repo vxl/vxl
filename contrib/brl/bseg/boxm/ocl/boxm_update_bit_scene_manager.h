@@ -236,6 +236,7 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
 
   // camera
   cl_float * persp_cam_;
+  cl_float * persp_mat_;
 
   cl_uint bni_;
   cl_uint bnj_;
@@ -270,6 +271,7 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   /* update buffers */
   cl_mem    tree_bbox_buf_;
   cl_mem    persp_cam_buf_;
+  cl_mem    persp_mat_buf_;
   cl_mem    img_dims_buf_;
   cl_mem    offset_x_buf_;
   cl_mem    offset_y_buf_;

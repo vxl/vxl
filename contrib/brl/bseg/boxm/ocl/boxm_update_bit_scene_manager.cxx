@@ -549,6 +549,7 @@ bool boxm_update_bit_scene_manager::set_kernels()
   if (!this->release_kernels())
     return false;
 
+  vcl_cout<<"setting seg len kernel.. ."<<vcl_endl;
   // pass 0 (seg lens)
   //if (!this->build_update_program("seg_len_obs(d,image_vect,ray_bundle_array,cached_aux_data)", false))
   if (!this->build_update_program("SEGLEN", false))
@@ -1242,10 +1243,6 @@ bool boxm_update_bit_scene_manager::set_update_args(unsigned pass)
     status = clSetKernelArg(update_kernels_[pass],i++,sizeof(cl_mem),(void *)&cell_mean_vis_buf_);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_mean_vis_)"))
       return 0;  
-    ////cell aux datas 
-    //status = clSetKernelArg(update_kernels_[pass],i++,sizeof(cl_mem),(void *)&cell_aux_data_buf_);
-    //if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_mean_vis_)"))
-      //return 0; 
     //bit lookup buffer
     status = clSetKernelArg(update_kernels_[pass],i++,sizeof(cl_mem),(void *)&bit_lookup_buf_);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output)"))
@@ -1256,7 +1253,11 @@ bool boxm_update_bit_scene_manager::set_update_args(unsigned pass)
       return 0;
     // camera buffer
     status = clSetKernelArg(update_kernels_[pass],i++,sizeof(cl_mem),(void *)&persp_cam_buf_);
-    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (data)"))
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (persp_cam_buf_)"))
+      return 0;
+    // cam+matrix buffer
+    status = clSetKernelArg(update_kernels_[pass],i++,sizeof(cl_mem),(void *)&persp_mat_buf_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (pers_mat_buf_)"))
       return 0;
     // roi dimensions
     status = clSetKernelArg(update_kernels_[pass],i++,sizeof(cl_mem),(void *)&img_dims_buf_);
@@ -1349,6 +1350,10 @@ bool boxm_update_bit_scene_manager::set_update_args(unsigned pass)
     // camera buffer
     status = clSetKernelArg(update_kernels_[pass],i++,sizeof(cl_mem),(void *)&persp_cam_buf_);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (data)"))
+      return 0;
+    // cam+matrix buffer
+    status = clSetKernelArg(update_kernels_[pass],i++,sizeof(cl_mem),(void *)&persp_mat_buf_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (pers_mat_buf_)"))
       return 0;
     // roi dimensions
     status = clSetKernelArg(update_kernels_[pass],i++,sizeof(cl_mem),(void *)&img_dims_buf_);
@@ -1455,6 +1460,10 @@ bool boxm_update_bit_scene_manager::set_update_args(unsigned pass)
     // camera buffer
     status = clSetKernelArg(update_kernels_[pass],i++,sizeof(cl_mem),(void *)&persp_cam_buf_);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (data)"))
+      return 0;
+    // cam+matrix buffer
+    status = clSetKernelArg(update_kernels_[pass],i++,sizeof(cl_mem),(void *)&persp_mat_buf_);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (pers_mat_buf_)"))
       return 0;
     // roi dimensions
     status = clSetKernelArg(update_kernels_[pass],i++,sizeof(cl_mem),(void *)&img_dims_buf_);
@@ -2308,6 +2317,26 @@ bool boxm_update_bit_scene_manager::set_persp_camera(vpgl_proj_camera<double> * 
     persp_cam_[cnt++]=(cl_float)cam_center.x();
     persp_cam_[cnt++]=(cl_float)cam_center.y();
     persp_cam_[cnt++]=(cl_float)cam_center.z();
+    
+    //set up perspective camera matrix (translated by origin, scaled by blocksize
+    persp_mat_=(cl_float *)boxm_ocl_utils::alloc_aligned(1, sizeof(cl_float16),16);
+    vnl_matrix<double> p=pcam->get_matrix();
+    //translate the camera
+    for(int i=0; i<3; i++) {                            
+      p[i][3] += p[i][0]*scene_info_->scene_origin[0] + 
+                 p[i][1]*scene_info_->scene_origin[1] + 
+                 p[i][2]*scene_info_->scene_origin[2];
+    }
+    //scale the camera by blocksize
+    for(int i=0; i<3; i++) 
+      for(int j=0; j<3; j++) 
+        p[i][j] *= scene_info_->block_len;
+    //set the buffer
+    cnt=0;
+    for (unsigned i=0;i<p.rows();i++)
+      for (unsigned j=0;j<p.cols();j++)
+        persp_mat_[cnt++]=(cl_float)p(i,j);
+    
     return true;
   }
   else {
@@ -2350,6 +2379,27 @@ bool boxm_update_bit_scene_manager::set_persp_camera()
     persp_cam_[cnt++]=(cl_float)cam_center.x();
     persp_cam_[cnt++]=(cl_float)cam_center.y();
     persp_cam_[cnt++]=(cl_float)cam_center.z();
+    
+    
+    //set up perspective camera matrix (translated by origin, scaled by blocksize
+    persp_mat_=(cl_float *)boxm_ocl_utils::alloc_aligned(1, sizeof(cl_float16),16);
+    vnl_matrix<double> p=pcam->get_matrix();
+    //translate the camera
+    for(int i=0; i<3; i++) {                            
+      p[i][3] += p[i][0]*scene_info_->scene_origin[0] + 
+                 p[i][1]*scene_info_->scene_origin[1] + 
+                 p[i][2]*scene_info_->scene_origin[2];
+    }
+    //scale the camera by blocksize
+    for(int i=0; i<3; i++) 
+      for(int j=0; j<3; j++) 
+        p[i][j] *= scene_info_->block_len;
+    //set the buffer
+    cnt=0;
+    for (unsigned i=0;i<p.rows();i++)
+      for (unsigned j=0;j<p.cols();j++)
+        persp_mat_[cnt++]=(cl_float)p(i,j);
+    
     return true;
   }
   else {
@@ -2363,6 +2413,8 @@ bool boxm_update_bit_scene_manager::clean_persp_camera()
 {
   if (persp_cam_)
     boxm_ocl_utils::free_aligned(persp_cam_);
+  if (persp_mat_)
+    boxm_ocl_utils::free_aligned(persp_mat_);
   return true;
 }
 
@@ -2374,7 +2426,16 @@ bool boxm_update_bit_scene_manager::set_persp_camera_buffers()
                                   CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                   3*sizeof(cl_float16),
                                   persp_cam_,&status);
-  return this->check_val(status,CL_SUCCESS,"clCreateBuffer (persp_cam_buf_) failed.")==1;
+  if(!this->check_val(status,CL_SUCCESS,"clCreateBuffer (persp_cam_buf_) failed.")==1)
+    return false;
+  persp_mat_buf_ = clCreateBuffer(this->context_,
+                                  CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
+                                  sizeof(cl_float16),
+                                  persp_mat_,&status);
+  if(!this->check_val(status,CL_SUCCESS,"clCreateBuffer (persp_mat_) failed.")==1)
+    return false;
+  
+  return true;
 }
 
 
@@ -2383,6 +2444,10 @@ bool boxm_update_bit_scene_manager::write_persp_camera_buffers()
   cl_int status;
   status=clEnqueueWriteBuffer(command_queue_,persp_cam_buf_,CL_TRUE, 0,3*sizeof(cl_float16), persp_cam_, 0, 0, 0);
   if (!this->check_val(status,CL_SUCCESS,"clEnqueueWriteBuffer (persp_cam_buf_) failed."))
+    return false;
+    
+  status=clEnqueueWriteBuffer(command_queue_,persp_mat_buf_,CL_TRUE, 0,sizeof(cl_float16), persp_mat_, 0, 0, 0);
+  if (!this->check_val(status,CL_SUCCESS,"clEnqueueWriteBuffer (persp_mat_buf_) failed."))
     return false;
   clFinish(command_queue_);
 
@@ -2394,6 +2459,7 @@ bool boxm_update_bit_scene_manager::release_persp_camera_buffers()
 {
   cl_int status;
   status = clReleaseMemObject(persp_cam_buf_);
+  status = clReleaseMemObject(persp_mat_buf_);
   return this->check_val(status,CL_SUCCESS,"clReleaseMemObject failed (persp_cam_buf_).")==1;
 }
 
