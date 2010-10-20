@@ -32,6 +32,7 @@ cast_ray(
           __local     int                * imIndex,         //image index
 #endif
 #ifdef SEGLEN
+          __constant  float16            * mat_cam, 
           __local     short2             * ray_bundle_array,//gives information for which ray takes over in the workgroup
           __local     int                * cell_ptrs,       //local list of cell_ptrs (cells that are hit by this workgroup
                       float                inImgObs,         //input image observation (no need for image_vect... )
@@ -39,9 +40,11 @@ cast_ray(
           __local     float4             * cached_aux_data,  //local data per ray in workgroup
 #endif
 #ifdef PREINF  
+          __constant  float16            * mat_cam, 
                       float4               image_vect,      //input image and store vis_inf and pre_inf
 #endif
 #ifdef BAYES
+          __constant  float16            * mat_cam, 
           __local     short2             * ray_bundle_array,//gives information for which ray takes over in the workgroup
           __local     int                * cell_ptrs,       //local list of cell_ptrs (cells that are hit by this workgroup
                       float                norm,
@@ -87,6 +90,56 @@ cast_ray(
   
   //make sure tfar is within the last block so texit surpasses it (and breaks from the outer loop)
   tfar -= BLOCK_EPSILON;   
+  
+  
+//this projection loop is to ensure update starts far enough away for each ray
+//so we don't update the same cell and overwrite contents
+#if defined(SEGLEN) || defined(PREINF) || defined(BAYES)
+  float16 matcam = (*mat_cam);
+  bool blocks_too_big = true;
+  while(blocks_too_big)
+  {
+    //find entry point (adjusted) and the current block index
+    float posx = (ray_ox + (tblock + TREE_EPSILON)*ray_dx);
+    float posy = (ray_oy + (tblock + TREE_EPSILON)*ray_dy);
+    float posz = (ray_oz + (tblock + TREE_EPSILON)*ray_dz);
+    
+    //curr block index (var later used as cell_min), check to make sure block index isn't 192 or -1
+    float cell_minx = clamp(floor(posx), 0.0f, linfo->dims.x-1.0f);
+    float cell_miny = clamp(floor(posy), 0.0f, linfo->dims.y-1.0f);
+    float cell_minz = clamp(floor(posz), 0.0f, linfo->dims.z-1.0f);
+
+    //now project all 8 corners onto the image
+    float max_u = -1.0f,  max_v = -1.0f;
+    float min_u = 10e5f,  min_v = 10e5f;
+    for(int i=0; i<8; ++i) {
+      float4 corner = (float4) (cell_minx + convert_float((uchar)1&i), 
+                                cell_miny + convert_float((uchar)2&i), 
+                                cell_minz + convert_float((uchar)4&i),
+                                1.0f);
+      float u = projectV(matcam, corner);
+      if(u > max_u) max_u = u;
+      if(u < min_u) min_u = u;
+
+/*
+      if(v > max_v) max_v = v;
+      if(v < min_v) min_v = v;
+*/
+    }
+    //if the image range is small enough, stop here and start updating
+    if(max_u - min_u < 8 && max_v-min_v < 8)
+      blocks_too_big = false;
+
+    //get scene level t exit value.  check to make sure that the ray is progressing. 
+    //When rays are close to axis aligned, t values found for intersection become ill-defined, causing an infinite block loop
+    cell_minx = (ray_dx > 0) ? cell_minx+1.0f : cell_minx; 
+    cell_miny = (ray_dy > 0) ? cell_miny+1.0f : cell_miny; 
+    cell_minz = (ray_dz > 0) ? cell_minz+1.0f : cell_minz; 
+    float texit = min(min( (cell_minx-ray_ox)*(1.0f/ray_dx), (cell_miny-ray_oy)*(1.0f/ray_dy)), (cell_minz-ray_oz)*(1.0f/ray_dz));
+    if(texit <= tblock) break;
+    tblock = texit;
+  }
+#endif
   
   //used for depth map 
   //----------------------------------------------------------------------------

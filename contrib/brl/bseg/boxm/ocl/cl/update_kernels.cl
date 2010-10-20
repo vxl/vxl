@@ -14,11 +14,12 @@ seg_len_main(        __constant  RenderSceneInfo    * linfo,
                      __global    ushort2            * block_ptrs,
                      __global    int4               * tree_array,       // tree structure for each block
                      __global    float              * alpha_array,      // alpha for each block
-                     __global    float2             * cum_len_beta,    // cumulative ray length and beta aux vars
+                     __global    float2             * cum_len_beta,     // cumulative ray length and beta aux vars
                      __global    uchar2             * mean_obs_cum_vis, // mean_obs per cell and cumulative visibility
                      __constant  uchar              * bit_lookup,       // used to get data_index
                      __local     uchar16            * local_tree,       // cache current tree into local memory
                      __global    float16            * camera,           // camera orign and SVD of inverse of camera matrix
+                     __constant  float16            * cammat,           // translated camera matrix 
                      __global    uint4              * imgdims,          // dimensions of the input image
                      __global    float4             * in_image,         // the input image
                      __global    int                * offsetfactor,     // 
@@ -94,7 +95,7 @@ seg_len_main(        __constant  RenderSceneInfo    * linfo,
             
             //SEGLEN SPECIFIC ARGS
             //factor,raybund,ptrs,cache,cache,image_vect (all NULL)
-            ray_bundle_array, cell_ptrs, obs, vis, cached_aux_data, 
+            cammat, ray_bundle_array, cell_ptrs, obs, vis, cached_aux_data, 
             
             //io info
             in_image, 0, output);
@@ -116,6 +117,7 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
              __constant  uchar              * bit_lookup,       // used to get data_index
              __local     uchar16            * local_tree,       // cache current tree into local memory
              __global    float16            * camera,           // camera orign and SVD of inverse of camera matrix
+             __constant  float16            * cammat,           // translated camera matrix 
              __global    uint4              * imgdims,          // dimensions of the input image
              __global    float4             * in_image,         // the input image
              __global    int                * offsetfactor,     // 
@@ -181,7 +183,7 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
             local_tree, bit_lookup, cumsum, factor,
             
             //PREINF SPECIFIC ARGS
-            inImage,
+            cammat, inImage,
             
             //io info
             in_image, 0, output);
@@ -203,6 +205,7 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
            __constant  uchar              * bit_lookup,       // used to get data_index
            __local     uchar16            * local_tree,       // cache current tree into local memory
            __global    float16            * camera,           // camera orign and SVD of inverse of camera matrix
+           __constant  float16            * cammat,           // translated camera matrix 
            __global    uint4              * imgdims,          // dimensions of the input image
            __global    float4             * in_image,         // the input image
            __global    int                * offsetfactor,     // 
@@ -278,7 +281,7 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
             
             //BAYES SPECIFIC ARGUMENTS
             //factor,raybund,ptrs,cache,cache,image_vect (all NULL)
-            ray_bundle_array, cell_ptrs, norm, vis, pre,
+            cammat, ray_bundle_array, cell_ptrs, norm, vis, pre,
             
             //io info
             in_image, 0, output);
