@@ -19,13 +19,13 @@
 
 class icam_ocl_mem
 {
-public:
+ public:
   //: constructor that takes the context to start with
   icam_ocl_mem(const cl_context& context);
 
-  //: creates the memory for buffer 
-  bool create_buffer(const cl_mem_flags& flags,  size_t size,  void *host_ptr);
-  
+  //: creates the memory for buffer
+  bool create_buffer(const cl_mem_flags& flags,  vcl_size_t size,  void *host_ptr);
+
   //: sets the buffer int the kernel as the idxth argument
   bool set_kernel_arg(const cl_kernel& kernel, cl_uint idx);
 
@@ -35,12 +35,11 @@ public:
   //: returns a reference to the buffer
   cl_mem& buffer() { return buffer_; }
 
-private:
+ private:
   cl_mem buffer_;
   const cl_context& context_;
 
   int check_val(cl_int status, cl_int result, vcl_string message);
-
 };
 
 #endif
