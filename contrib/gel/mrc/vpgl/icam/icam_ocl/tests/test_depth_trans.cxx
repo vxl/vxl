@@ -29,18 +29,18 @@ bool test_ocl_search_manager()
   vcl_string cpp_mask_file = "c:/images/calibration/cpp_mask.tif";
   vil_image_view_base_sptr dest_img_base = vil_load(dest_file.c_str());
   if (!dest_img_base) {
-    vcl_cerr << "error loading image." << vcl_endl;
+    vcl_cerr << "error loading image.\n";
     return false;
   }
   vil_image_view_base_sptr source_img_base = vil_load(source_file.c_str());
   if (!source_img_base) {
-    vcl_cerr << "error loading image." << vcl_endl;
+    vcl_cerr << "error loading image.\n";
     return false;
   }
 
   vil_image_view_base_sptr depth_img_base = vil_load(depth_file.c_str());
   if (!depth_img_base) {
-    vcl_cerr << "error loading image." << vcl_endl;
+    vcl_cerr << "error loading image.\n";
     return false;
   }
   vil_image_view<vxl_byte> *dest_img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(dest_img_base.ptr());
@@ -51,7 +51,7 @@ bool test_ocl_search_manager()
   vil_convert_cast(*dest_img_byte,dest_img_flt);
   vil_image_view<float> source_img_flt(ni,nj);
   vil_convert_cast(*source_img_byte,source_img_flt);
-  vil_image_view<double> depth_img_dbl(ni, nj); 
+  vil_image_view<double> depth_img_dbl(ni, nj);
   vil_convert_cast(*depth_img_flt,depth_img_dbl);
 
   // ========================Camera 145 =====================
@@ -65,7 +65,7 @@ bool test_ocl_search_manager()
   vgl_vector_3d<double> tr(0.3207432455793182, 0.04231364883145655, -0.019929923492081336);
   vgl_vector_3d<double> tid(0.0, 0.0, 0.0), tbox(0.5, 0.0, 0.0);
   vnl_matrix_fixed<double, 3, 3> K(0.0);
-  K[0][0]=1871.2;   K[1][1]=1871.2; K[0][2] = 640.0; K[1][2]=360.0; K[2][2]=1.0;  
+  K[0][0]=1871.2;   K[1][1]=1871.2; K[0][2] = 640.0; K[1][2]=360.0; K[2][2]=1.0;
   //depth transform
   bool adjust_to_fl = false;
   icam_depth_transform dt(K, depth_img_dbl, Rr, tr, adjust_to_fl);
@@ -81,7 +81,7 @@ bool test_ocl_search_manager()
                            local_min_thresh, base_path);
   unsigned nl = minimizer.n_levels();
   unsigned lev = nl-1;
-  // check native C++ implementation  
+  // check native C++ implementation
   icam_cost_func cfn = minimizer.cost_fn(lev);
   double minfo_native = cfn.mutual_info(Rr.as_rodrigues(), tr, 0.5);
   vcl_cout << "Native minfo at correct transf " << minfo_native << '\n';
@@ -109,54 +109,53 @@ bool test_ocl_search_manager()
     return false;
   if (mgr->create_kernel("image_parallel_transf_search")!=SDK_SUCCESS)
     return false;
-  if(!mgr->setup_image_parallel_kernel())
+  if (!mgr->setup_image_parallel_kernel())
     return false;
   vul_timer t;
-  for(unsigned i = 0; i<67095; ++i){
+  for (unsigned i = 0; i<67095; ++i){
   mgr->set_image_parallel_transf(tr, Rr);
   mgr->copy_to_image_parallel_transf_buffers();
   if (mgr->run_kernel()!=SDK_SUCCESS)
     return false;
   }
-  vcl_cout << " search time " << t.real()/1000.0 << " seconds \n";
+  vcl_cout << " search time " << t.real()/1000.0 << " seconds\n";
   cl_int4 flag = mgr->image_para_flag();
-  vcl_cout << "Flag(" << flag.s[0] << ' ' << flag.s[1] << ' ' 
+  vcl_cout << "Flag(" << flag.s[0] << ' ' << flag.s[1] << ' '
            << flag.s[2] << ' ' << flag.s[3] << ")\n";
-  
+
   cl_float4 cres = mgr->image_para_result();
-  vcl_cout << "Image_Para(" << cres.s[0] << ' ' << cres.s[1] << ' ' 
+  vcl_cout << "Image_Para(" << cres.s[0] << ' ' << cres.s[1] << ' '
            << cres.s[2] << ' ' << cres.s[3] << ")\n";
   unsigned dni = mgr->dest_ni(), dnj = mgr->dest_nj();
-  vil_image_view<float> result(dni, dnj); 
-  vil_image_view<float> mask(dni, dnj); 
+  vil_image_view<float> result(dni, dnj);
+  vil_image_view<float> mask(dni, dnj);
   unsigned wsni = mgr->work_space_ni();
   cl_float* result_ar = mgr->result_array();
   cl_float* mask_ar = mgr->mask_array();
-  for(unsigned j = 0; j<dnj; ++j)
-    for(unsigned i = 0; i<dni; ++i)
-      {
-        unsigned indx = i + wsni*j;
-        result(i,j) = result_ar[indx];
-        mask(i,j)   = mask_ar[indx];
-      }
+  for (unsigned j = 0; j<dnj; ++j)
+    for (unsigned i = 0; i<dni; ++i)
+    {
+      unsigned indx = i + wsni*j;
+      result(i,j) = result_ar[indx];
+      mask(i,j)   = mask_ar[indx];
+    }
   vil_image_view<float> cpp_src = minimizer.source(lev);
   vil_image_view<float> cpp_map_dest;
   vil_image_view<float> cpp_map_mask;
-  icam_depth_transform dtc = minimizer.depth_trans(lev); 
+  icam_depth_transform dtc = minimizer.depth_trans(lev);
   dtc.set_rotation(Rr);
   dtc.set_translation(tr);
   unsigned nsmp;
-  icam_sample::resample(dni, dnj, cpp_src, dtc, cpp_map_dest, cpp_map_mask,
-                        nsmp);
+  icam_sample::resample(dni,dnj, cpp_src,dtc,cpp_map_dest,cpp_map_mask,nsmp);
   //test differences
   float dif = 0.0f;
   unsigned cnt = 0;
-  for(unsigned j = 1; j<(dnj-1); ++j)
-    for(unsigned i = 1; i<(dni-1); ++i)
-		if(cpp_map_mask(i,j)>0.0f&&mask(i,j)>0.0f){
+  for (unsigned j = 1; j<(dnj-1); ++j)
+    for (unsigned i = 1; i<(dni-1); ++i)
+      if (cpp_map_mask(i,j)>0.0f&&mask(i,j)>0.0f) {
         dif += vcl_fabs(cpp_map_dest(i,j)-result(i,j));
-		cnt++;
-		}
+        cnt++;
+      }
   vcl_cout << "total diff " << dif << " with fraction "<< 1.0*cnt/(dni*dnj)<< '\n';
   double minfo_gpu = cfn.mutual_info(result, mask,0.5);
   vcl_cout << "GPU minfo at correct transf " << minfo_gpu << '\n';

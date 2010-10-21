@@ -7,13 +7,13 @@ IF(OPENCL_FOUND)
   INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc/vpgl/icam )
 
   SET(icam_ocl_sources
-      icam_ocl_cl.h	
+      icam_ocl_cl.h
       icam_ocl_cl_gl.h
       icam_ocl_utils.h          icam_ocl_utils.cxx
       icam_ocl_manager.h        icam_ocl_manager.txx
       icam_ocl_search_manager.h icam_ocl_search_manager.cxx
       icam_ocl_mem.h            icam_ocl_mem.cxx
- )
+  )
   AUX_SOURCE_DIRECTORY(Templates icam_ocl_sources)
   ADD_LIBRARY(icam_ocl ${icam_ocl_sources} )
 
@@ -21,4 +21,5 @@ IF(OPENCL_FOUND)
 
 #tests
 SUBDIRS(tests)
+
 ENDIF(OPENCL_FOUND)
