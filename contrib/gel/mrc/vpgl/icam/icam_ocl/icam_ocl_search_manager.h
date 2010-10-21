@@ -9,6 +9,7 @@
 #include <vbl/vbl_array_2d.h>
 #include <icam_ocl/icam_ocl_manager.h>
 #include <icam_ocl/icam_ocl_utils.h>
+#include <icam_ocl/icam_ocl_mem.h>
 #include <icam/icam_minimizer.h>
 class icam_ocl_search_manager : public icam_ocl_manager<icam_ocl_search_manager> 
 {
@@ -20,7 +21,7 @@ class icam_ocl_search_manager : public icam_ocl_manager<icam_ocl_search_manager>
      sni_(0), snj_(0), dni_(0), dnj_(0)
     {}
 
-  ~icam_ocl_search_manager();
+  ~icam_ocl_search_manager(); 
 
 
    vcl_string program_source() const {return prog_;}
@@ -104,50 +105,50 @@ class icam_ocl_search_manager : public icam_ocl_manager<icam_ocl_search_manager>
   //source image
   cl_uint * cl_sni_;
   cl_uint * cl_snj_;
-  cl_mem   sni_buf_;
-  cl_mem   snj_buf_;
+  icam_ocl_mem*   sni_buf_;
+  icam_ocl_mem*   snj_buf_;
   cl_float4* Ks_; // source image K matrix
-  cl_mem   Ks_buf_;
+  icam_ocl_mem*   Ks_buf_;
   cl_float* source_array_;
-  cl_mem   source_array_buf_;
+  icam_ocl_mem*   source_array_buf_;
   //dest image
   unsigned dni_;
   unsigned dnj_;
   cl_uint * cl_dni_;
   cl_uint * cl_dnj_;
-  cl_mem   dni_buf_;
-  cl_mem   dnj_buf_;
+  icam_ocl_mem*   dni_buf_;
+  icam_ocl_mem*   dnj_buf_;
   cl_float4* Kdi_;// inverse  K matrix for destination image
-  cl_mem   Kdi_buf_;
+  icam_ocl_mem*   Kdi_buf_;
   cl_float* dest_array_;
-  cl_mem   dest_array_buf_;
+  icam_ocl_mem*   dest_array_buf_;
 
   // depth image, same dimensions as dest
   cl_float* depth_array_;
-  cl_mem   depth_array_buf_;
+  icam_ocl_mem*   depth_array_buf_;
 
   // result mapped image, same dimensions as dest
   cl_float* result_array_;
-  cl_mem   result_array_buf_;
+  icam_ocl_mem*   result_array_buf_;
 
   // result mask image, same dimensions as dest
   cl_float* mask_array_;
-  cl_mem   mask_array_buf_;
+  icam_ocl_mem*   mask_array_buf_;
 
   // search rotations
   vcl_vector<vgl_rotation_3d<double> > rotations_;
   cl_float4* rotation_;
-  cl_mem   rot_buf_;
+  icam_ocl_mem*   rot_buf_;
   // search translations 
   vcl_vector<vgl_vector_3d<double> > translations_;
   cl_float4* translation_;
-  cl_mem   trans_buf_;
+  icam_ocl_mem*   trans_buf_;
 
   // the result of the search
   cl_float4* image_para_result_;
   cl_int4 * image_para_flag_;
-  cl_mem   image_para_result_buf_;
-  cl_mem   image_para_flag_buf_;
+  icam_ocl_mem*   image_para_result_buf_;
+  icam_ocl_mem*   image_para_flag_buf_;
 };
 
 #endif // icam_ocl_search_manager_h_
