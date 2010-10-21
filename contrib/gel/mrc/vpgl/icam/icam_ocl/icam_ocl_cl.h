@@ -1,6 +1,6 @@
-// This is bocl_cl.h
-#ifndef bocl_cl_h
-#define bocl_cl_h
+// This is gel/mrc/vpgl/icam/icam_ocl/icam_ocl_cl.h
+#ifndef icam_ocl_cl_h
+#define icam_ocl_cl_h
 //:
 // \file
 // \brief  Platform-independent includes for OpenCL
@@ -27,4 +27,4 @@
 #endif
 
 
-#endif //bocl_cl_h
+#endif // icam_ocl_cl_h

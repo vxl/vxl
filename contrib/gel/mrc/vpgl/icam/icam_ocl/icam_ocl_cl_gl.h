@@ -1,7 +1,6 @@
-// This is bocl_cl_gl.h
-#ifndef bocl_cl_gl_h
-#define bocl_cl_gl_h
-
+// This is gel/mrc/vpgl/icam/icam_ocl/icam_ocl_cl_gl.h
+#ifndef icam_ocl_cl_gl_h
+#define icam_ocl_cl_gl_h
 //:
 // \file
 // \brief  Platform-independent includes for OpenCL/GL
@@ -16,7 +15,7 @@
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
 #include <CL/cl_gl.h>
 #define GL_SHARING_EXTENSION "cl_khr_gl_sharing"
-#elif defined(UNIX) || defined(linux) 
+#elif defined(UNIX) || defined(linux)
 #define GL_SHARING_EXTENSION "cl_khr_gl_sharing"
 #elif defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__)
 #include <OpenCL/cl_gl.h>

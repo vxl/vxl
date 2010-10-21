@@ -1,6 +1,6 @@
-// This is vpgl/icam/icam_ocl_manager.h
-#ifndef bocl_manager_h_
-#define bocl_manager_h_
+// This is gel/mrc/vpgl/icam/icam_ocl/icam_ocl_manager.h
+#ifndef icam_ocl_manager_h_
+#define icam_ocl_manager_h_
 //:
 // \file
 // \brief
@@ -44,7 +44,7 @@ class icam_ocl_manager
   cl_bool image_support_;            //!< image support
   cl_device_id *devices_;            //!< CL device list
   vcl_size_t image2d_max_width_;     //!< Ideal image dimensions
-  vcl_size_t image2d_max_height_;       
+  vcl_size_t image2d_max_height_;
   cl_char extensions_supported_[1000]; //! Support character addressing
   char platform_name[100];
  public:
@@ -83,9 +83,9 @@ class icam_ocl_manager
   bool write_program(vcl_string const& path);
   vcl_string program_source() const {return prog_;}
 
-  //build kernel program: 
+  //build kernel program:
   int build_kernel_program(cl_program & program, vcl_string options);
-  
+
   cl_bool image_support(){return image_support_;}
 
  protected:
