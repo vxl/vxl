@@ -66,6 +66,11 @@ cast_ray(
 #ifdef CHANGE
   float4 temp=in_image[imIndex[llid]];
   float intensity=temp.x;
+  float change_density_vacuous=0.0f;
+  float bmin=1.0f;
+  float bmax=0.0f;
+  float bsum=0.0f;
+  float ray_length=0.0f;
 #endif
 
   //determine the minimum face:
@@ -126,7 +131,7 @@ cast_ray(
       if(uv.y < min_v) min_v = uv.y;
     }
     //if the image range is small enough, stop here and start updating
-    if(max_u - min_u < 8 && max_v-min_v < 8)
+    if(max_u - min_u < 16 && max_v-min_v < 16)
       blocks_too_big = false;
 
     //get scene level t exit value.  check to make sure that the ray is progressing. 
@@ -146,6 +151,9 @@ cast_ray(
   // illegal (not between 0 and scenedims)
   //----------------------------------------------------------------------------
   float cellCount = 0.0f;
+#ifdef CHANGE
+  ray_length=(tfar-tblock)* linfo->block_len;
+#endif
   while(tblock < tfar && vis > .01f) 
   {
     //-------------------------------------------------------------------------
@@ -230,7 +238,7 @@ cast_ray(
       step_cell_render_opt2(mixture_array, alpha_array, data_ptr, d, &vis, &expected_int);
 #endif
 #ifdef CHANGE
-      step_cell_change_detection_uchar8(mixture_array,alpha_array,data_ptr,d,&vis,&expected_int,intensity);
+      step_cell_change_detection_sl(mixture_array,alpha_array,data_ptr,d,&vis,&expected_int,&change_density_vacuous,&bmin,&bmax,&bsum,intensity);
 #endif
 #ifdef SEGLEN
       //keep track of cells being hit
@@ -243,7 +251,7 @@ cast_ray(
       //load aux data into local mem
       float  alpha    = alpha_array[data_ptr];
       float2 cl_beta  = cum_len_beta[data_ptr];
-      float2 mean_vis = convert_float2(mean_obs_cum_vis[data_ptr])/255.0f;
+      float2 mean_vis = convert_float2(mean_obs_cum_vis[data_ptr])/255.0f;  
       cached_aux_data[llid] = (float4) (cl_beta.x, mean_vis.x, mean_vis.y, 0.0);  //leaders retain the mean obs and the cell length
       barrier(CLK_LOCAL_MEM_FENCE);
       
@@ -339,22 +347,40 @@ cast_ray(
 
   
 #ifdef CHANGE
-  expected_int+=vis;
-  float bg_belief=0.0f;
-  float fg_belief=0.0f;
-  float foreground_density_val=1.0f;
-  if(expected_int>foreground_density_val)
-  { 
-      bg_belief=expected_int/(expected_int+foreground_density_val)-foreground_density_val/(2*expected_int);
-      fg_belief=0.0;
-  }
-  else
-  {
-      bg_belief=0.0;
-      fg_belief=foreground_density_val/(foreground_density_val+expected_int)-expected_int/(2*foreground_density_val);
-  }
 
-  in_image[imIndex[llid]].w=(float)bg_belief;
+  float expected_vacuous=change_density_vacuous/ray_length;
+  float expected_min_max=(1-0.5)*bmin+0.5*bmax;
+
+  float u_vacuous=0.0;
+  if(expected_vacuous<expected_min_max)
+      u_vacuous=(expected_vacuous-bmin)/0.5;
+  if(expected_vacuous>=expected_min_max)
+      u_vacuous=(bmax-expected_vacuous)/(1-0.5);
+  if(expected_vacuous-0.5*u_vacuous>=0)
+      u_vacuous=expected_vacuous/0.5;
+
+  float u=u_vacuous*(1-bsum);
+
+  float b=expected_int-0.5*u;
+
+  in_image[imIndex[llid]]=(float4)(b,u,0,0);
+
+  //expected_int+=vis;
+  //float bg_belief=0.0f;
+  //float fg_belief=0.0f;
+  //float foreground_density_val=1.0f;
+  //if(expected_int>foreground_density_val)
+  //{ 
+  //    bg_belief=expected_int/(expected_int+foreground_density_val)-foreground_density_val/(2*expected_int);
+  //    fg_belief=0.0;
+  //}
+  //else
+  //{
+  //    bg_belief=0.0;
+  //    fg_belief=foreground_density_val/(foreground_density_val+expected_int)-expected_int/(2*foreground_density_val);
+  //}
+
+  //in_image[imIndex[llid]].w=(float)bg_belief;
 #endif
 
 #ifdef RENDER
