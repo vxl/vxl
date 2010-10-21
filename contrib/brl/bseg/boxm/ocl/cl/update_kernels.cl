@@ -19,7 +19,7 @@ seg_len_main(        __constant  RenderSceneInfo    * linfo,
                      __constant  uchar              * bit_lookup,       // used to get data_index
                      __local     uchar16            * local_tree,       // cache current tree into local memory
                      __global    float16            * camera,           // camera orign and SVD of inverse of camera matrix
-                     __constant  float16            * cammat,           // translated camera matrix 
+                     __global    float16            * cammat,           // translated camera matrix 
                      __global    uint4              * imgdims,          // dimensions of the input image
                      __global    float4             * in_image,         // the input image
                      __global    int                * offsetfactor,     // 
@@ -117,7 +117,7 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
              __constant  uchar              * bit_lookup,       // used to get data_index
              __local     uchar16            * local_tree,       // cache current tree into local memory
              __global    float16            * camera,           // camera orign and SVD of inverse of camera matrix
-             __constant  float16            * cammat,           // translated camera matrix 
+             __global    float16            * cammat,           // translated camera matrix 
              __global    uint4              * imgdims,          // dimensions of the input image
              __global    float4             * in_image,         // the input image
              __global    int                * offsetfactor,     // 
@@ -142,7 +142,6 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
   if (i>=(*imgdims).z || j>=(*imgdims).w) {
     return;
   }
-  //image_vect[llid] = in_image[j*get_global_size(0)*factor+i];
   float4 inImage = in_image[j*get_global_size(0)*factor+i];
   barrier(CLK_LOCAL_MEM_FENCE);
 
@@ -205,7 +204,7 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
            __constant  uchar              * bit_lookup,       // used to get data_index
            __local     uchar16            * local_tree,       // cache current tree into local memory
            __global    float16            * camera,           // camera orign and SVD of inverse of camera matrix
-           __constant  float16            * cammat,           // translated camera matrix 
+           __global    float16            * cammat,           // translated camera matrix 
            __global    uint4              * imgdims,          // dimensions of the input image
            __global    float4             * in_image,         // the input image
            __global    int                * offsetfactor,     // 
