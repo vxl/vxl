@@ -64,6 +64,7 @@ void step_cell_render_opt2(__global int2   * cell_data,
   float alpha = alpha_data[data_ptr];
   float diff_omega=exp(-alpha*d);
   float expected_int_cell=0.0f;
+  // for rendering only
   if(diff_omega<0.995f)
   {
       uchar8 data = as_uchar8(cell_data[data_ptr]);
@@ -136,34 +137,7 @@ void step_cell_render(__global float8* cell_data, __global float* alpha_data,int
 #endif
 
 
-//void step_cell_change_detection(__global float8* cell_data, __global float* alpha_data,int data_ptr,
-//                                float d, float4 * data_return, float img_intensity)
-//{
-//  float8 data = cell_data[data_ptr];
-//  float alpha=alpha_data[data_ptr];
-//
-//  if (alpha<0) return;
-//
-//  //float expected_int_cell = data.s3;
-//  float alpha_integral = (*data_return).x;
-//  float vis            = (*data_return).y;
-//  float change_density = (*data_return).z;
-//  float intensity_norm = (*data_return).w;
-//
-//  float prob_den=gauss_3_mixture_prob_density(img_intensity,
-//                                              data.s0,data.s1,data.s2,
-//                                              data.s3,data.s4,data.s5,
-//                                              data.s6,data.s7,1-data.s2-data.s5);
-//
-//  alpha_integral += alpha*d;
-//  float vis_prob_end = exp(-alpha_integral);
-//  float omega = vis - vis_prob_end;
-//  change_density += prob_den*omega;
-//  (*data_return).x = alpha_integral;
-//  (*data_return).y = vis_prob_end;
-//  (*data_return).z = change_density;
-//  (*data_return).w = intensity_norm + omega;
-//}
+
 void step_cell_change_detection_uchar8(__global uchar8* cell_data, __global float* alpha_data,int data_ptr,
                                 float d, float * vis,float * change_density, float img_intensity)
 {
@@ -183,6 +157,43 @@ void step_cell_change_detection_uchar8(__global uchar8* cell_data, __global floa
   float vis_prob_end = exp(-alpha*d);
   float omega = (*vis)*(1 - vis_prob_end);
   (*change_density) += prob_den*omega;
+  (*vis)=(*vis)*vis_prob_end;
+}
+void step_cell_change_detection_sl(__global uchar8* cell_data,
+                                   __global float* alpha_data,
+                                   int data_ptr,
+                                   float d, 
+                                   float * vis,
+                                   float * change_density,
+                                   float * change_density_vacuous,
+                                   float * bmin,
+                                   float * bmax,
+                                   float * bsum,
+                                   float img_intensity)
+{
+  uchar8 uchar_data = cell_data[data_ptr];
+  float alpha=alpha_data[data_ptr];
+
+  if (alpha<0) return;
+
+  float8 data= convert_float8(uchar_data)/255.0f;
+
+  float prob_den=gauss_3_mixture_prob_density(img_intensity,
+                                              data.s0,data.s1,data.s2,
+                                              data.s3,data.s4,data.s5,
+                                              data.s6,data.s7,1-data.s2-data.s5);
+
+
+  float vis_prob_end = exp(-alpha*d);
+  float omega = (*vis)*(1 - vis_prob_end);
+  if((*bmin)>omega)
+      (*bmin)=omega;
+  if((*bmax)<omega)
+      (*bmax)=omega;
+
+  (*bsum)+=omega;
+  (*change_density) += prob_den*omega;
+  (*change_density_vacuous)+=prob_den*d;
   (*vis)=(*vis)*vis_prob_end;
 }
 void step_cell_change_detection(__global uchar8* cell_data, __global float* alpha_data,int data_ptr,

@@ -187,11 +187,6 @@ void ray_probe(__constant  RenderSceneInfo * linfo,
       depthout[cnt]=global_depth;
       visout[cnt]=vis;
       step_cell_render_opt2(mixture_array, alpha_array, data_ptr, d,&vis, &expected_int);
-      //step_cell_render_opt(mixture_array,alpha_array,data_ptr,d,&data_return);
-      //step_cell_change_detection(mixture_array,alpha_array,data_ptr,d,&data_return);
-      //step_cell_change_detection_uchar8(mixture_array,alpha_array,data_ptr,d,&data_return,intensity);
-      //visout[cnt]-=data_return.y;
-      //visout[cnt]=1-exp(-alpha_array[data_ptr]*d);
       // Added aliitle extra to the exit point
       mean0[cnt]   =mixture_array[data_ptr].s0/255.0f;
       sigma0[cnt]  =mixture_array[data_ptr].s1/255.0f;
