@@ -1,6 +1,6 @@
 # icam open_cl library
 
-INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/findOpenCL.cmake )
+INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindOpenCL.cmake )
 IF(OPENCL_FOUND)
   ADD_DEFINITIONS(-DHAS_OPENCL=1)
   INCLUDE_DIRECTORIES( ${OPENCL_INCLUDE_PATH} )
