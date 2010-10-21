@@ -82,7 +82,7 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
 
   //Enqueues a read command for output image and scene.  saves image/scene
   bool read_output_image();
-  vil_image_view_base_sptr get_output_image();
+  vil_image_view_base_sptr get_output_image(int plane_num=0);
 
   bool read_scene();
   void save_image();

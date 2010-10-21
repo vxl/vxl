@@ -991,12 +991,11 @@ bool boxm_update_bit_scene_manager::set_render_args()
     return 0;
   if (!use_gl_)
   {
-  image_gl_buf_ = clCreateBuffer(this->context_,
-                                 CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
-                                 wni_*wnj_*sizeof(cl_uint),
-                                 image_gl_,&status);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (gl_image)"))
-      return 0;
+      image_gl_buf_ = clCreateBuffer(this->context_,
+                                     CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+                                     wni_*wnj_*sizeof(cl_uint),image_gl_,&status);
+      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (gl_image)"))
+          return 0;
   }
   status = clSetKernelArg(render_kernel_,i++,sizeof(cl_mem),(void *)&image_gl_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (gl_image)"))
@@ -2124,13 +2123,13 @@ bool boxm_update_bit_scene_manager::refine()
   return true;
 }
 
-vil_image_view_base_sptr boxm_update_bit_scene_manager::get_output_image()
+vil_image_view_base_sptr boxm_update_bit_scene_manager::get_output_image(int plane_num)
 {
   vil_image_view<float> * oimage=new vil_image_view<float>(this->wni_,this->wnj_);
 
   for (unsigned i=0;i<oimage->ni();i++)
     for (unsigned j=0;j<oimage->nj();j++)
-      (*oimage)(i,j)=image_[(j*wni_+i)*4+3];
+      (*oimage)(i,j)=image_[(j*wni_+i)*4+plane_num];
 
   return oimage;
 }
