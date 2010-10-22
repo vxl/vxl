@@ -7,7 +7,8 @@
 #include <vul/vul_sequence_filename_map.h>
 #include <vul/vul_file_iterator.h>
 #include <vul/vul_timer.h>
-#include <vnl/vnl_matrix.h>
+#include <vnl/vnl_double_3x3.h>
+#include <vnl/vnl_double_2x3.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <vil/vil_image_resource.h>
@@ -23,29 +24,30 @@
 
 static void filenames_from_directory(vcl_string const& dirname,
                                      vcl_vector<vcl_string>& filenames)
-{  vcl_string s(dirname);
- s += "/*.*";
- for (vul_file_iterator fit = s;fit; ++fit) {
-   // check to see if file is a directory.
-   if (vul_file::is_directory(fit()))
-     continue;
-   filenames.push_back(fit());
- }
+{
+  vcl_string s(dirname);
+  s += "/*.*";
+  for (vul_file_iterator fit = s;fit; ++fit) {
+    // check to see if file is a directory.
+    if (vul_file::is_directory(fit()))
+      continue;
+    filenames.push_back(fit());
+  }
 }
 
 static bool write_homographies(vcl_string const& filename,
-                               vcl_vector<vnl_matrix<double> > const& homographies)
+                               vcl_vector<vnl_double_3x3 > const& homographies)
 {
   vcl_ofstream ofile(filename.c_str(),vcl_ios::out);
   vcl_cout<<"\n Writing Homographies "<<filename;
 
   if (!ofile)
   {
-    vcl_cout<<"\n error opening output file" << vcl_endl;
+    vcl_cerr<<"\n error opening output file\n";
     return false;
   }
   unsigned frame = 0;
-  for (vcl_vector<vnl_matrix<double> >::const_iterator hit = homographies.begin();
+  for (vcl_vector<vnl_double_3x3 >::const_iterator hit = homographies.begin();
        hit != homographies.end(); ++hit, ++frame)
   {
     ofile <<"Frame No " << frame << '\n' << *hit;
@@ -65,9 +67,9 @@ register_image(vil_image_view<float> & curr_view,
   unsigned ni = curr_view.ni(), nj = curr_view.nj();
   if (transform_type  ==  "Identity")
   {
-    vcl_cout << "In ihog_compute_homograpy_process::"
+    vcl_cout << "In ihog/exe/compute_homographies_exe:"
              << " an identity transform doesn't make sense\n";
-    assert (false);
+    assert (!"Identity transform makes no sense");
   }
   else if (transform_type ==  "Translation")
   {
@@ -95,14 +97,14 @@ register_image(vil_image_view<float> & curr_view,
 #endif
   else if (transform_type ==  "Affine")
   {
-    vnl_matrix<double> A(2,3);
+    vnl_double_2x3 A;
     A[0][0] = 1.0;  A[0][1] = 0.0;  A[0][2] = 0.0;
     A[1][0] = 0.0;  A[1][1] = 1.0;  A[1][2] = 0.0;
     init_xform.set_affine(A);
   }
   else if (transform_type ==  "Projective")
   {
-    vnl_matrix<double> P(3,3);
+    vnl_double_3x3 P;
     P[0][0] = 1.0;  P[0][1] = 0.0;  P[0][2] = 0.0;
     P[1][0] = 0.0;  P[1][1] = 1.0;  P[1][2] = 0.0;
     P[2][0] = 0.0;  P[2][1] = 0.0;  P[2][2] = 1.0000001;
@@ -116,9 +118,9 @@ register_image(vil_image_view<float> & curr_view,
   }
 #endif
   else {
-    vcl_cout << "Unrecoverable error:\n"
+    vcl_cerr << "Unrecoverable error:\n"
              << " Unknown ihog transform type " << transform_type << '\n';
-    assert(false);
+    assert(!"Unrecoverable error");
   }
 
   int border = 10;
@@ -141,7 +143,7 @@ static bool compute_homogs(vcl_string const& image_indir,
 {
   ihog_transform_2d total_xform;
   total_xform.set_identity();
-  vcl_vector<vnl_matrix<double> > homographies;
+  vcl_vector<vnl_double_3x3 > homographies;
   vcl_vector<vcl_string> in_filenames;
   filenames_from_directory(image_indir, in_filenames);
   unsigned n_infiles = in_filenames.size();
@@ -176,7 +178,7 @@ static bool compute_homogs(vcl_string const& image_indir,
                                              float_last_view,
                                              transform_type);
     total_xform = total_xform * xform.inverse();
-    vnl_matrix<double> p=total_xform.matrix();
+    vnl_double_3x3 p=total_xform.matrix();
     homographies.push_back(p);
     float_last_view = float_curr_view;
   }
