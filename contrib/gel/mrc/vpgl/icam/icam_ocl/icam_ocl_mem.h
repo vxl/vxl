@@ -13,6 +13,7 @@
 
 #include "icam_ocl_cl.h"
 #include <vcl_string.h>
+#include <vcl_cstddef.h>
 
 #define MEM_SUCCESS 0
 #define MEM_FAILURE 1
