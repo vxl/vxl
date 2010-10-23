@@ -17,8 +17,8 @@ class icam_ocl_search_manager : public icam_ocl_manager<icam_ocl_search_manager>
 
 
   icam_ocl_search_manager()
-    : program_(0),time_in_secs_(0.0f), wgni_(0), wgnj_(0), wsni_(0), wsnj_(0),
-     sni_(0), snj_(0), dni_(0), dnj_(0)
+    : wgni_(0), wgnj_(0), wsni_(0), wsnj_(0), program_(0), time_in_secs_(0.0f),
+      sni_(0), snj_(0), dni_(0), dnj_(0)
     {}
 
   ~icam_ocl_search_manager(); 
