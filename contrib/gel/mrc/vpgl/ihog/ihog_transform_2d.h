@@ -9,17 +9,19 @@
 //
 // \verbatim
 //  Modifications
-//  G.Tunali 8/2010 Removed dependency on vimt 
+//  G.Tunali 8/2010 Removed dependency on vimt
 // \endverbatim
 
 #include <vbl/vbl_ref_count.h>
 #include <vgl/algo/vgl_h_matrix_2d.h>
+#include <vnl/vnl_double_3x3.h>
+#include <vnl/vnl_double_2x3.h>
 #include <vsl/vsl_binary_io.h>
 
 //: A quadrilateral region of an image
 class ihog_transform_2d : public vgl_h_matrix_2d<double>, public vbl_ref_count
 {
-public:
+ public:
   //: Defines form of transformation
   enum Form { Identity,
               Translation,
@@ -41,9 +43,9 @@ public:
 
   Form form() const {return form_;}
   void set_form(const Form form){form_ = form;}
-  vnl_matrix_fixed<double,3,3> matrix() const { return t12_matrix_; }
+  vnl_double_3x3 matrix() const { return t12_matrix_; }
 
-  void set(vnl_matrix_fixed<double,3,3> const& t_matrix) { vgl_h_matrix_2d<double>::set(t_matrix); }
+  void set(vnl_double_3x3 const& t_matrix) { vgl_h_matrix_2d<double>::set(t_matrix); }
 
   //: Sets transform using v (converse of params(v))
   void set(const vnl_vector<double>& v, Form); // Sets transform using v
@@ -61,7 +63,7 @@ public:
   void set_origin( const vgl_point_2d<double> & );
 
   //: Sets to be 2D projective transformation
-  void set_projective(const vnl_matrix<double>&);   // 3x3 matrix
+  void set_projective(vnl_double_3x3 const&);
 
   //: Sets the transformation to be separable affine.
   // x' = s_x.x + t_x,  y' = s_y.y + t_y
@@ -76,7 +78,7 @@ public:
   //   s: Scaling
   // t_x: Translation in x
   // t_y: Translation in y
-  void set_zoom_only(double s, double t_x, double t_y) { set_zoom_only(s,s,t_x,t_y); } 
+  void set_zoom_only(double s, double t_x, double t_y) { set_zoom_only(s,s,t_x,t_y); }
 
   //: Sets the transformation to rotation then translation.
   // theta: rotation
@@ -85,12 +87,12 @@ public:
   void set_rigid_body(double theta, double t_x, double t_y);
 
   //: Sets to be 2D affine transformation using 2x3 matrix
-  void set_affine(const vnl_matrix<double>&);
+  void set_affine(vnl_double_2x3 const&);
 
   //: Sets to be 2D affine transformation T(x,y)=p+x.u+y.v
   void set_affine(const vgl_point_2d<double> & p,
-                    const vgl_vector_2d<double> & u,
-                    const vgl_vector_2d<double> & v);
+                  const vgl_vector_2d<double> & u,
+                  const vgl_vector_2d<double> & v);
 
   //: Calculates inverse of this transformation
   ihog_transform_2d inverse() const;
@@ -100,14 +102,11 @@ public:
   // Returns: T(p+dp)-T(p)
   vgl_vector_2d<double>  delta(const vgl_point_2d<double> & p, const vgl_vector_2d<double> & dp) const;
 
-
   //: Fills v with parameters
   void params(vnl_vector<double>& v) const { params_of(v,form_); }
   //: Fills v with parameters of transform of type Form
   void params_of(vnl_vector<double>& v, Form) const;
- 
-  //friend ihog_transform_2d operator*(const ihog_transform_2d& L, const ihog_transform_2d& R);
- 
+
   //: Applies transformation to (x,y)
   vgl_point_2d<double>  operator()(double x, double y) const;
   //: Returns transformation applied to point p
@@ -118,7 +117,7 @@ public:
   void b_write(vsl_b_ostream& bfs) const;
   void b_read(vsl_b_istream& bfs);
   short version_no() const { return 1;}
-private:
+ private:
   Form form_;
 };
 
@@ -126,20 +125,20 @@ private:
 inline ihog_transform_2d operator*(const ihog_transform_2d& L, const ihog_transform_2d& R)
 {
   ihog_transform_2d T;
-  vnl_matrix_fixed<double,3,3> m(L.get_matrix()*R.get_matrix());
+  vnl_double_3x3 m(L.get_matrix()*R.get_matrix());
   T.set(m);
-  if(L.form()==ihog_transform_2d::Projective||
-     R.form()==ihog_transform_2d::Projective)
-    {T.set_form(ihog_transform_2d::Projective); return T;}
-  if(L.form()==ihog_transform_2d::Affine||
-     R.form()==ihog_transform_2d::Affine)
-  {T.set_form(ihog_transform_2d::Affine); return T;}
-  if(L.form()==ihog_transform_2d::RigidBody||
-     R.form()==ihog_transform_2d::RigidBody)
-  {T.set_form(ihog_transform_2d::RigidBody); return T;}
-  if(L.form()==ihog_transform_2d::Translation||
-     R.form()==ihog_transform_2d::Translation)
-  {T.set_form(ihog_transform_2d::Translation); return T;}
+  if (L.form()==ihog_transform_2d::Projective||
+      R.form()==ihog_transform_2d::Projective)
+  { T.set_form(ihog_transform_2d::Projective); return T; }
+  if (L.form()==ihog_transform_2d::Affine||
+      R.form()==ihog_transform_2d::Affine)
+  { T.set_form(ihog_transform_2d::Affine); return T; }
+  if (L.form()==ihog_transform_2d::RigidBody||
+      R.form()==ihog_transform_2d::RigidBody)
+  { T.set_form(ihog_transform_2d::RigidBody); return T; }
+  if (L.form()==ihog_transform_2d::Translation||
+      R.form()==ihog_transform_2d::Translation)
+  { T.set_form(ihog_transform_2d::Translation); return T; }
   return T;
 }
 
@@ -149,7 +148,7 @@ inline void vsl_b_write(vsl_b_ostream &os, ihog_transform_2d const* t)
   if (t==0) {
     vsl_b_write(os, false); // Indicate null pointer stored
   }
-  else{
+  else {
     vsl_b_write(os,true); // Indicate non-null pointer stored
     t->b_write(os);
   }

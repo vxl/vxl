@@ -32,7 +32,7 @@ static void test_minimizer()
     root_dir + "/contrib/gel/mrc/vpgl/ihog/tests/dalmation.tif";
   vil_image_view_base_sptr img0_base = vil_load(image_file.c_str());
   if (!img0_base) {
-    vcl_cerr << "error loading image." << vcl_endl;
+    vcl_cerr << "error loading image.\n";
     TEST("FAILED TO LOAD TEST IMAGE",false,true);
     return;
   }
@@ -67,7 +67,7 @@ static void test_minimizer()
   ihog_image<float> curr_mask(mask0,xform_in.inverse());
   ihog_resample_bilin(curr_mask,sample_mask,p,u,v,ni,nj);
   vil_image_view<float> warped_mask = sample_mask.image();
-#if 0 //for debug 
+#if 0 //for debug
   vil_image_view<vxl_byte> byte_image(ni,nj);
   vil_convert_cast(img0,byte_image);
   vil_save(byte_image,"img0.tiff");
@@ -76,27 +76,26 @@ static void test_minimizer()
   vil_save(warped_mask,"mask.tiff");
 #endif
   int border = 2;
-  ihog_world_roi roi(img0.ni()- 2*border, 
+  ihog_world_roi roi(img0.ni()- 2*border,
                      img0.nj()- 2*border,
                      vgl_point_2d<double>(border,border));
   ihog_transform_2d init_xform;
-  vnl_matrix<double> init_H(3,3);
-  init_H.set_identity();
-  init_xform.set_affine(init_H.extract(2,3,0,0));
+  vnl_double_2x3 init_H(1,0,0, 0,1,0);
+  init_xform.set_affine(init_H);
 
   ihog_image<float> from_img(img0, init_xform);
   ihog_image<float> to_img(warped_img, ihog_transform_2d());
-  ihog_image<float> mask_img(warped_mask, ihog_transform_2d()); 
+  ihog_image<float> mask_img(warped_mask, ihog_transform_2d());
   ihog_minimizer minimizer(from_img, to_img, mask_img, roi, false);
   minimizer.minimize(init_xform);
   double error = minimizer.get_end_error();
-  vcl_cout << "end_error = " << error << '\n';
+  vcl_cout << "end_error = " << error << '\n'
 
-  vcl_cout << "original homography: " << vcl_endl;
-  vcl_cout << xform_in.matrix() << vcl_endl << vcl_endl;
+           << "original homography:\n"
+           << xform_in.matrix() << vcl_endl << vcl_endl
 
-  vcl_cout << "lm generated homography: " << vcl_endl;
-  vcl_cout << init_xform.matrix() << vcl_endl << vcl_endl;
+           << "lm generated homography:\n"
+           << init_xform.matrix() << vcl_endl << vcl_endl;
   //test result
   vgl_point_2d<double> p0 = init_xform.origin();
   vgl_vector_2d<double> du = init_xform.delta(p0, vgl_vector_2d<double>(1,0));
@@ -109,12 +108,12 @@ static void test_minimizer()
   vcl_string source_file = "c:/images/calibration/frame_145.png";
   vil_image_view_base_sptr dest_img_base = vil_load(dest_file.c_str());
   if (!dest_img_base) {
-    vcl_cerr << "error loading image." << vcl_endl;
+    vcl_cerr << "error loading image.\n";
     return;
   }
   vil_image_view_base_sptr source_img_base = vil_load(source_file.c_str());
   if (!source_img_base) {
-    vcl_cerr << "error loading image." << vcl_endl;
+    vcl_cerr << "error loading image.\n";
     return;
   }
     vil_image_view<vxl_byte> *dest_img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(dest_img_base.ptr());
@@ -125,20 +124,20 @@ static void test_minimizer()
   vil_image_view<float> source_img_flt(ni,nj);
   vil_convert_cast(*source_img_byte,source_img_flt);
 
-  ihog_world_roi roid(ni_d - 2*border, 
+  ihog_world_roi roid(ni_d - 2*border,
                       nj_d - 2*border,
                       vgl_point_2d<double>(border,border));
 
   ihog_transform_2d init_xform_d;
-  init_xform_d.set_affine(init_H.extract(2,3,0,0));
+  init_xform_d.set_affine(init_H);
   ihog_image<float> from_img_d(source_img_flt, init_xform_d);
   ihog_image<float> to_img_d(dest_img_flt, ihog_transform_2d());
   ihog_minimizer minimizer_d(from_img_d, to_img_d, roid);
   minimizer_d.minimize(init_xform_d);
   double error_d = minimizer_d.get_end_error();
-  vcl_cout << "end_error = " << error_d << '\n';
-  vcl_cout << "lm generated homography downtown: " << vcl_endl;
-  vcl_cout << init_xform_d.matrix() << vcl_endl << vcl_endl;  
+  vcl_cout << "end_error = " << error_d << '\n'
+           << "lm generated homography downtown:\n"
+           << init_xform_d.matrix() << vcl_endl << vcl_endl;
   // create mapped image
   ihog_image<float> mapped_source;
   ihog_resample_bilin(from_img_d, mapped_source, init_xform_d.inverse());
@@ -146,7 +145,6 @@ static void test_minimizer()
            "c:/images/calibration/hog_mapped_f145.tif");
 #endif
 }
-
 
 
 TESTMAIN( test_minimizer );

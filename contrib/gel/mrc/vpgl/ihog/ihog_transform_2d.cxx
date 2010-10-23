@@ -1,8 +1,6 @@
 #include "ihog_transform_2d.h"
 //:
 // \file
-#include <vnl/vnl_matrix.h>
-#include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_inverse.h>
 #include <vgl/io/vgl_io_h_matrix_2d.h>
 
@@ -45,7 +43,7 @@ void ihog_transform_2d::set_origin(const vgl_point_2d<double> & p )
     if (form_ == Identity) form_=Translation;
 }
 
-void ihog_transform_2d::set_projective(const vnl_matrix<double>& m)
+void ihog_transform_2d::set_projective(const vnl_double_3x3& m)
 {
   t12_matrix_=m;
 }
@@ -121,7 +119,10 @@ void ihog_transform_2d::set(const vnl_vector<double>& v, Form form)
             break;
         case (Affine):
             if (n!=6) return;
-            { vnl_matrix<double> M23(2,3,6,v_data);
+            {
+              double xx = v_data[0], xy = v_data[1], xt = v_data[2],
+                     yx = v_data[3], yy = v_data[4], yt = v_data[5];
+              vnl_double_2x3 M23(xx,xy,xt,yx,yy,yt);
               vgl_h_matrix_2d<double>::set_affine(M23); }
 #if 0
             xx_ = v_data[0]; xy_ = v_data[1]; xt_ = v_data[2];
@@ -132,7 +133,7 @@ void ihog_transform_2d::set(const vnl_vector<double>& v, Form form)
             break;
         case (Projective):
             if (n!=9) return;//setCheck(9,n,"Projective");
-            { vnl_matrix_fixed<double,3,3> M33(v_data); t12_matrix_=M33; }
+            { t12_matrix_=vnl_double_3x3(v_data); }
 #if 0
             xx_ = v_data[0]; xy_ = v_data[1]; xt_ = v_data[2];
             yx_ = v_data[3]; yy_ = v_data[4]; yt_ = v_data[5];
@@ -172,16 +173,14 @@ void ihog_transform_2d::set_affine(const vgl_point_2d<double> & p,
 }
 
 //: Sets to be 2D affine transformation using 2x3 matrix
-void ihog_transform_2d::set_affine(const vnl_matrix<double>& M23)
+void ihog_transform_2d::set_affine(const vnl_double_2x3& M23)
 {
   if ((M23.rows()!=2) || (M23.columns()!=3)) {
     vcl_cerr<<"vimt_transform_2d::affine : Expect 2x3 matrix, got "<<M23.rows()<<" x "<<M23.columns()<<'\n';
     return;
   }
 
-  const double *const *m_data=M23.data_array();
-
-  if (m_data[0][0]*m_data[1][1] < m_data[0][1]*m_data[1][0]) {
+  if (M23[0][0]*M23[1][1] < M23[0][1]*M23[1][0]) {
     vcl_cerr << "vimt_transform_2d::affine :\n"
              << "sub (2x2) matrix should have positive determinant\n";
   }
@@ -216,8 +215,7 @@ ihog_transform_2d::delta(const vgl_point_2d<double>& p, const vgl_vector_2d<doub
 
 ihog_transform_2d ihog_transform_2d::inverse() const
 {
-  vnl_matrix_fixed<double,3,3> result = vnl_inverse(t12_matrix_);
-
+  vnl_double_3x3 result = vnl_inverse(t12_matrix_);
   return ihog_transform_2d(result,form_);
 }
 

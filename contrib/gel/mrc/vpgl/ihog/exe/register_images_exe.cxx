@@ -98,7 +98,9 @@ static bool register_images(vcl_string const& homography_file,
   for (unsigned i=0;i<nframes;i++)
   {
     ihog_transform_2d p;
-    p.set_affine(homographies[i].extract(2,3));
+    vnl_double_2x3 M23(homographies[i][0][0],homographies[i][0][1],homographies[i][0][2],
+                       homographies[i][1][0],homographies[i][1][1],homographies[i][1][2]);
+    p.set_affine(M23);
     xforms.push_back(p);
     box.update(p(0,0).x(),p(0,0).y());
     box.update(p(0,nj).x(),p(0,nj).y());
