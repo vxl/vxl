@@ -178,7 +178,7 @@ static bool compute_homogs(vcl_string const& image_indir,
                                              float_last_view,
                                              transform_type);
     total_xform = total_xform * xform.inverse();
-    vnl_double_3x3 p=total_xform.matrix();
+    vnl_double_3x3 p=total_xform.get_matrix();
     homographies.push_back(p);
     float_last_view = float_curr_view;
   }

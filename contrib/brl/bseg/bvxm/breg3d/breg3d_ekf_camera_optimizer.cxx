@@ -391,7 +391,7 @@ vnl_vector<double> breg3d_ekf_camera_optimizer::img_homography(vil_image_view_ba
 
   // convert to normalized camera matrix
   vnl_matrix<double> invK = vnl_matrix_inverse<double>(K);
-  vnl_matrix<double> H = invK * xform.inverse().matrix() * K;
+  vnl_matrix<double> H = invK * xform.inverse().get_matrix() * K;
 
   // now extract Lie Generator coefficients
   vnl_vector<double> lie_vector;
@@ -400,7 +400,7 @@ vnl_vector<double> breg3d_ekf_camera_optimizer::img_homography(vil_image_view_ba
   else
     lie_vector = matrix_to_coeffs_GA2(H);
 
-  vcl_cout << "optimized homography =\n" << xform.inverse().matrix() << '\n'
+  vcl_cout << "optimized homography =\n" << xform.inverse().get_matrix() << '\n'
            << "normalized homography =\n" << H << '\n'
            << "homography lie coeffs = " << lie_vector << '\n' << vcl_endl;
 

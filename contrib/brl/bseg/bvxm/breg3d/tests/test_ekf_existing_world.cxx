@@ -82,7 +82,7 @@ static void test_ekf_existing_world()
   lm_gen.set_mask1(&mask_m);
   lm_gen.set_projective(false);
   ihog_transform_2d xform = lm_gen.compute_homography();
-  vcl_cout << xform.matrix() << vcl_endl << vcl_endl;
+  vcl_cout << xform.get_matrix() << vcl_endl << vcl_endl;
  }
 
 

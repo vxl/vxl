@@ -92,10 +92,10 @@ static void test_minimizer()
   vcl_cout << "end_error = " << error << '\n'
 
            << "original homography:\n"
-           << xform_in.matrix() << vcl_endl << vcl_endl
+           << xform_in.get_matrix() << vcl_endl << vcl_endl
 
            << "lm generated homography:\n"
-           << init_xform.matrix() << vcl_endl << vcl_endl;
+           << init_xform.get_matrix() << vcl_endl << vcl_endl;
   //test result
   vgl_point_2d<double> p0 = init_xform.origin();
   vgl_vector_2d<double> du = init_xform.delta(p0, vgl_vector_2d<double>(1,0));
@@ -137,7 +137,7 @@ static void test_minimizer()
   double error_d = minimizer_d.get_end_error();
   vcl_cout << "end_error = " << error_d << '\n'
            << "lm generated homography downtown:\n"
-           << init_xform_d.matrix() << vcl_endl << vcl_endl;
+           << init_xform_d.get_matrix() << vcl_endl << vcl_endl;
   // create mapped image
   ihog_image<float> mapped_source;
   ihog_resample_bilin(from_img_d, mapped_source, init_xform_d.inverse());

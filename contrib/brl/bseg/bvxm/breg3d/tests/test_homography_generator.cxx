@@ -36,7 +36,7 @@ static void test_homography_generator()
 
   vil_image_view_base_sptr img0_base = vil_load(image_file.c_str());
   if (!img0_base) {
-    vcl_cerr << "error loading image." << vcl_endl;
+    vcl_cerr << "error loading image.\n";
     TEST("FAILED TO LOAD TEST IMAGE",false,true);
     return;
   }
@@ -96,7 +96,6 @@ static void test_homography_generator()
   lm_gen.set_projective(false);
   ihog_transform_2d xform_out1 = lm_gen.compute_homography();
 
-
   // debug: warp images back to original with computed homographies
   ihog_image<float> sample_im1, sample_im2;
 
@@ -113,18 +112,15 @@ static void test_homography_generator()
   vil_convert_cast(warped_img2,byte_image);
   vil_save(byte_image,"img1_db.tiff");
 
-
-  vcl_cout << "original homography: " << vcl_endl;
-  vcl_cout << xform_in.matrix() << vcl_endl << vcl_endl;
-  vcl_cout << "lm generated homography: " << vcl_endl;
-  vcl_cout << xform_out1.matrix() << vcl_endl << vcl_endl;
-  vcl_cout << "db generated homography: " << vcl_endl;
-  vcl_cout << xform_out2.matrix() << vcl_endl << vcl_endl;
-
+  vcl_cout << "original homography:\n"
+           << xform_in.get_matrix() << '\n' << '\n'
+           << "lm generated homography:\n"
+           << xform_out1.get_matrix() << '\n' << '\n'
+           << "db generated homography:\n"
+           << xform_out2.get_matrix() << '\n' << vcl_endl;
 
   return;
 }
-
 
 
 TESTMAIN( test_homography_generator );
