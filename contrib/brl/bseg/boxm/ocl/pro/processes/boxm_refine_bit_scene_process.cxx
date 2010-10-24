@@ -17,6 +17,7 @@
 #include <boxm/ocl/boxm_update_bit_scene_manager_sptr.h>
 #include <boxm/basic/boxm_util_data_types.h>
 #include <vil/vil_convert.h>
+
 namespace boxm_refine_bit_scene_process_globals
 {
   const unsigned n_inputs_ = 2;
@@ -26,27 +27,21 @@ namespace boxm_refine_bit_scene_process_globals
 bool boxm_refine_bit_scene_process_cons(bprb_func_process& pro)
 {
   using namespace boxm_refine_bit_scene_process_globals;
-  // process takes 3 inputs and has no outputs
+  // process takes 2 inputs and has no outputs
   // input[0]: update_scene_manager
-  // input[1]: camera
-  // input[2]: input image to update
+  // input[1]: ???
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm_update_bit_scene_manager_sptr";
   input_types_[1] = "float";
- 
-  if (!pro.set_input_types(input_types_))
-    return false;
-  
 
-  return true;
-
+  return pro.set_input_types(input_types_);
 }
 
 bool boxm_refine_bit_scene_process(bprb_func_process& pro)
 {
   using namespace boxm_refine_bit_scene_process_globals;
 
-  if ( pro.n_inputs() < n_inputs_ ){
+  if ( pro.n_inputs() < n_inputs_ ) {
     vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
     return false;
   }
@@ -54,7 +49,7 @@ bool boxm_refine_bit_scene_process(bprb_func_process& pro)
   // get the inputs
   unsigned i = 0;
   boxm_update_bit_scene_manager_sptr mgr     = pro.get_input<boxm_update_bit_scene_manager_sptr>(i++);
-  float                                t     = pro.get_input<float>(i++);
-  mgr->refine();
+  float                                t     = pro.get_input<float>(i++); // TODO: unused!
+  mgr->refine(); // TODO: unused!
   return true;
 }
