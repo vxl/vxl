@@ -133,39 +133,39 @@ encode_image_data(icam_minimizer& minimizer, unsigned level)
 void icam_ocl_search_manager::clean_image_data()
 {
   if (source_array_)
-    {
+  {
 #ifdef _WIN32
-      _aligned_free(source_array_);
+    _aligned_free(source_array_);
 #elif defined(__APPLE__)
-      free(source_array_);
+    free(source_array_);
 #else
-      source_array_ = NULL;
+    source_array_ = NULL;
 #endif
-    }
+  }
   *cl_sni_=0;   *cl_snj_=0;
 
   if (dest_array_)
-    {
+  {
 #ifdef _WIN32
-      _aligned_free(dest_array_);
+    _aligned_free(dest_array_);
 #elif defined(__APPLE__)
-      free(dest_array_);
+    free(dest_array_);
 #else
-      dest_array_ = NULL;
+    dest_array_ = NULL;
 #endif
-    }
+  }
   *cl_dni_=0;   *cl_dnj_=0;
 
   if (depth_array_)
-    {
+  {
 #ifdef _WIN32
-      _aligned_free(depth_array_);
+    _aligned_free(depth_array_);
 #elif defined(__APPLE__)
-      free(depth_array_);
+    free(depth_array_);
 #else
-      depth_array_ = NULL;
+    depth_array_ = NULL;
 #endif
-    }
+  }
 }
 
 void icam_ocl_search_manager::
@@ -224,9 +224,7 @@ create_image_parallel_transf_data()
 #else
   translation_ = (cl_float4*)memalign(16, sizeof(cl_float4));
 #endif
-  if (!translation_)
-    return false;
-  return true;
+  return bool(translation_);
 }
 
 bool icam_ocl_search_manager::
@@ -254,26 +252,26 @@ set_image_parallel_transf(vgl_vector_3d<double> const& tr,
 void icam_ocl_search_manager::clean_image_parallel_transf_data()
 {
   if (rotation_)
-    {
+  {
 #ifdef _WIN32
-      _aligned_free(rotation_);
+    _aligned_free(rotation_);
 #elif defined(__APPLE__)
-      free(rotation_);
+    free(rotation_);
 #else
-      rotation_ = NULL;
+    rotation_ = NULL;
 #endif
-    }
+  }
 
   if (translation_)
-    {
+  {
 #ifdef _WIN32
-      _aligned_free(translation_);
+    _aligned_free(translation_);
 #elif defined(__APPLE__)
-      free(translation_);
+    free(translation_);
 #else
-      translation_ = NULL;
+    translation_ = NULL;
 #endif
-    }
+  }
 }
 
 bool icam_ocl_search_manager::setup_image_parallel_result()
@@ -342,52 +340,51 @@ bool icam_ocl_search_manager::setup_image_parallel_result()
 void icam_ocl_search_manager::clean_image_parallel_result()
 {
   if (image_para_result_)
-    {
+  {
 #ifdef _WIN32
-      _aligned_free(image_para_result_);
+    _aligned_free(image_para_result_);
 #elif defined(__APPLE__)
-      free(image_para_result_);
+    free(image_para_result_);
 #else
-      image_para_result_ = NULL;
+    image_para_result_ = NULL;
 #endif
-    }
+  }
 
   if (image_para_flag_)
-    {
+  {
 #ifdef _WIN32
-      _aligned_free(image_para_flag_);
+    _aligned_free(image_para_flag_);
 #elif defined(__APPLE__)
-      free(image_para_flag_);
+    free(image_para_flag_);
 #else
-      image_para_flag_ = NULL;
+    image_para_flag_ = NULL;
 #endif
-    }
+  }
   if (result_array_)
-    {
+  {
 #ifdef _WIN32
-      _aligned_free(result_array_);
+    _aligned_free(result_array_);
 #elif defined(__APPLE__)
-      free(result_array_);
+    free(result_array_);
 #else
-      result_array_ = NULL;
+    result_array_ = NULL;
 #endif
-    }
+  }
 
   if (mask_array_)
-    {
+  {
 #ifdef _WIN32
-      _aligned_free(mask_array_);
+    _aligned_free(mask_array_);
 #elif defined(__APPLE__)
-      free(mask_array_);
+    free(mask_array_);
 #else
-      mask_array_ = NULL;
+    mask_array_ = NULL;
 #endif
-    }
+  }
 }
 
 bool icam_ocl_search_manager::copy_to_image_buffers()
 {
-  cl_int status = CL_SUCCESS;
   // Create and initialize memory objects
   // source array
   source_array_buf_ = new icam_ocl_mem(this->context_);
@@ -437,13 +434,12 @@ bool icam_ocl_search_manager::copy_to_image_buffers()
   if (depth_array_buf_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                                     dni_*dnj_*sizeof(cl_float),depth_array_))
     return SDK_FAILURE;
-
-  return CL_SUCCESS;
+  else
+    return CL_SUCCESS;
 }
 
 bool icam_ocl_search_manager::release_image_buffers()
 {
-  cl_int status = CL_SUCCESS;
   // source
   if (sni_buf_->release_memory())  return SDK_FAILURE;
   if (snj_buf_->release_memory())  return SDK_FAILURE;
@@ -493,13 +489,12 @@ bool icam_ocl_search_manager::copy_to_image_parallel_transf_buffers()
   status = clReleaseEvent(events[0]);
   if (!this->check_val(status,CL_SUCCESS,"clReleaseEvent (write transf ) failed."))
     return SDK_FAILURE;
-
-return CL_SUCCESS;
+  else
+    return CL_SUCCESS;
 }
 
 bool icam_ocl_search_manager::create_image_parallel_transf_buffers()
 {
-  cl_int status = CL_SUCCESS;
   // rotation
   rot_buf_ = new icam_ocl_mem(this->context_);
   if (rot_buf_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,sizeof(cl_float4),rotation_))
@@ -509,12 +504,12 @@ bool icam_ocl_search_manager::create_image_parallel_transf_buffers()
   trans_buf_ = new icam_ocl_mem(this->context_);
   if (trans_buf_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, sizeof(cl_float4),translation_))
     return SDK_FAILURE;
-  return CL_SUCCESS;
+  else
+    return CL_SUCCESS;
 }
 
 bool icam_ocl_search_manager::release_image_parallel_transf_buffers()
 {
-  cl_int status = CL_SUCCESS;
   // rotation
   if (rot_buf_->release_memory()) return SDK_FAILURE;
 
@@ -526,8 +521,6 @@ bool icam_ocl_search_manager::release_image_parallel_transf_buffers()
 
 bool icam_ocl_search_manager::create_image_parallel_result_buffers()
 {
-  cl_int status = CL_SUCCESS;
-
   //resulting image_para
   image_para_result_buf_ = new icam_ocl_mem(this->context_);
   if (image_para_result_buf_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,sizeof(cl_float4), image_para_result_))
@@ -544,19 +537,18 @@ bool icam_ocl_search_manager::create_image_parallel_result_buffers()
   mask_array_buf_ = new icam_ocl_mem(this->context_);
   if (mask_array_buf_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,wsni_*wsnj_*sizeof(cl_float),mask_array_))
     return SDK_FAILURE;
-
-  return CL_SUCCESS;
+  else
+    return CL_SUCCESS;
 }
 
 bool icam_ocl_search_manager::release_image_parallel_result_buffers()
 {
-  cl_int status = CL_SUCCESS;
   // release output result buffers
-  if (image_para_result_buf_->release_memory()) return SDK_FAILURE;
-  if (image_para_flag_buf_->release_memory()) return SDK_FAILURE;
-  if (result_array_buf_->release_memory()) return SDK_FAILURE;
-  if (mask_array_buf_->release_memory()) return SDK_FAILURE;
-  return SDK_SUCCESS;
+  if (image_para_result_buf_->release_memory())    return SDK_FAILURE;
+  else if (image_para_flag_buf_->release_memory()) return SDK_FAILURE;
+  else if (result_array_buf_->release_memory())    return SDK_FAILURE;
+  else if (mask_array_buf_->release_memory())      return SDK_FAILURE;
+  else return SDK_SUCCESS;
 }
 
 bool icam_ocl_search_manager::setup_image_parallel_kernel()
