@@ -38,6 +38,9 @@ SUBDIRS(bvrml)
 # Brown opencl library
 SUBDIRS(bocl)
 
+# Brown asychronous IO library
+SUBDIRS(baio)
+
 IF( BUILD_GEL )
   # spatial object algorithms
   SUBDIRS(bsol)
