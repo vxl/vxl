@@ -24,8 +24,10 @@ IF(UNIX)
    )
   ADD_LIBRARY(baio ${baio_sources})
   TARGET_LINK_LIBRARIES(baio rt)
+  
+  #tests
+  SUBDIRS(tests)
 ENDIF(UNIX)
 
 
-#tests
-SUBDIRS(tests)
+
