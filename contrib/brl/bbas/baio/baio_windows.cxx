@@ -38,6 +38,7 @@ baio_status baio::status()
   vcl_cout<<"baio::status is not yet implemented"<<vcl_endl;
   //need to query info_ variable for current aio status and return 
   //BAIO_IN_PROGRESS, BAIO_FINISEHD, or BAIO_ERROR
+  return baio_status::BAIO_ERROR;
 }
 
 char* baio::buffer() 
