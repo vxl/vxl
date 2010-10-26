@@ -2,6 +2,7 @@
 #include <vnl/vnl_inverse.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_numeric_traits.h>
+
 void icam_depth_transform::cache_k()
 {
   k00_ = static_cast<float>(K_from_inv_[0][0]);
@@ -54,28 +55,29 @@ vnl_matrix_fixed<double,3,3> icam_depth_transform::K_to()
   ret[2][2] = 1.0;
   return ret;
 }
+
 void icam_depth_transform::invert_depth(vil_image_view<double> const& depth)
 {
   unsigned ni = depth.ni(), nj = depth.nj();
   float mval = vnl_numeric_traits<float>::maxval;
   inv_depth_.set_size(ni, nj);
-  for(unsigned j = 0; j<nj; ++j)
-    for(unsigned i = 0; i<ni; ++i){
+  for (unsigned j = 0; j<nj; ++j)
+    for (unsigned i = 0; i<ni; ++i) {
       float z = static_cast<float>(depth(i,j));
-      if(z<1.0e-6f){
+      if (z<1.0e-6f) {
         inv_depth_(i,j) = mval;
         continue;
       }
       inv_depth_(i,j) = 1.0f/z;
     }
 }
+
 icam_depth_transform::
 icam_depth_transform(vnl_matrix_fixed<double, 3, 3> const& K,
                      vil_image_view<double> const& depth,
                      vgl_rotation_3d<double> const& rot,
                      vgl_vector_3d<double> const& trans,
-                     bool adjust_to_fl
-                    )
+                     bool adjust_to_fl)
   : adjust_to_fl_(adjust_to_fl), depth_(depth),rot_(rot), trans_(trans)
 {
   this->set_k(K);
@@ -91,8 +93,7 @@ icam_depth_transform(vnl_matrix_fixed<double, 3, 3> const& K_from,
                      vil_image_view<double> const& depth,
                      vgl_rotation_3d<double> const& rot,
                      vgl_vector_3d<double> const& trans,
-                     bool adjust_to_fl
-                    )
+                     bool adjust_to_fl)
   : adjust_to_fl_(adjust_to_fl), depth_(depth),rot_(rot), trans_(trans)
 {
   this->set_k(K_from, K_to);
@@ -108,10 +109,9 @@ icam_depth_transform(vnl_matrix_fixed<double, 3, 3> const& K_from,
                      vil_image_view<double> const& depth,
                      vgl_rotation_3d<double> const& rot,
                      vgl_vector_3d<double> const& trans,
-                     bool adjust_to_fl
-                    )
-  : adjust_to_fl_(adjust_to_fl),
-    to_fl_(to_fl), to_pu_(to_pu), to_pv_(to_pv), depth_(depth),
+                     bool adjust_to_fl)
+  : adjust_to_fl_(adjust_to_fl), depth_(depth),
+    to_fl_(to_fl), to_pu_(to_pu), to_pv_(to_pv),
     rot_(rot), trans_(trans)
 {
   this->set_k(K_from);
@@ -132,7 +132,7 @@ bool icam_depth_transform::transform(double from_u, double from_v,
   }
   // the inverse depth at location (from_u, from_v)
   float Zinv = inv_depth_(static_cast<unsigned>(from_u),
-                   static_cast<unsigned>(from_v));
+                          static_cast<unsigned>(from_v));
   if (Zinv==mval) {
     to_u = 0.0; to_v = 0.0;
     return false;
