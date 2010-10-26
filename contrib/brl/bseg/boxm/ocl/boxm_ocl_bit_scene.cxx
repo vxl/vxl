@@ -352,7 +352,7 @@ bool boxm_ocl_bit_scene::init_empty_scene()
                   4*sizeof(short) +   //numObs
                   sizeof(float) +     //alpha
                   2*sizeof(float) +   //aux data (cum_seg_len/beta)
-                  2*sizeof(char);     //aux data (mean_obs/cum_vis)
+                  4*sizeof(char);     //aux data (mean_obs/cum_vis)
   int num_cells = (int) (freeBytes/dataSize);                         //number of cells given maxmb
   int num_buffers = (int) vcl_ceil( ((float)num_cells/(float)BUFF_LENGTH) );
   int blocks_per_buffer = (int) vcl_ceil((float)total_blocks/(float)num_buffers);
@@ -398,7 +398,7 @@ bool boxm_ocl_bit_scene::init_empty_scene()
   for (iter = blocks.begin(); iter != blocks.end(); iter++)
   {
     //status for scene initialization
-    int chunk = (int) (total_blocks/10);
+    int chunk = (int) (total_blocks/10) +1;
     if (index%chunk==0) vcl_cout<<'['<<index/chunk<<']'<<vcl_flush;
 
     // randomly place block into a buffer
