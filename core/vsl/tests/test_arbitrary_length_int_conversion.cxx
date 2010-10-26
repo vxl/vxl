@@ -179,7 +179,7 @@ void test_explicit_int_io()
     }
   }
   // 6 bytes vsl_overhead
-  TEST_NEAR("stringstream buffer is expected length", ss.str().size(), 65536*10+6,0);
+  TEST_NEAR("stringstream buffer is expected length", (double)ss.str().size(), 65536.0*10+6,0);
 
   vcl_stringstream ss2(ss.str());
   {
