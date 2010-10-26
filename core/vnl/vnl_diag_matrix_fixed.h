@@ -16,6 +16,7 @@
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 //   Sep.2002 - Peter Vanroose - Added operator+, operator-, operator*
 //   Mar.2004 - Peter Vanroose - removed deprecated resize()
+//   Oct.2010 - Peter Vanroose - mutators and setters now return *this
 // \endverbatim
 
 #include <vcl_cassert.h>
@@ -65,7 +66,7 @@ class vnl_diag_matrix_fixed
 
   // Computations--------------------------------------------------------------
 
-  void invert_in_place();
+  inline vnl_diag_matrix_fixed& invert_in_place();
   T determinant() const;
   vnl_vector_fixed<T,N> solve(vnl_vector_fixed<T,N> const& b) const;
   void solve(vnl_vector_fixed<T,N> const& b, vnl_vector_fixed<T,N>* out) const;
@@ -97,7 +98,7 @@ class vnl_diag_matrix_fixed
   }
 
   //: Set all diagonal elements of matrix to specified value.
-  inline void fill_diagonal (T const& v) { diagonal_.fill(v); }
+  inline vnl_diag_matrix_fixed& fill_diagonal (T const& v) { diagonal_.fill(v); return *this; }
 
   // iterators
 
@@ -121,7 +122,7 @@ class vnl_diag_matrix_fixed
   // This is as good as a vnl_diag_matrix_fixed ctor for vnl_matrix_fixed:
   inline operator vnl_matrix_fixed<T,N,N> () const { return as_matrix_fixed(); }
 
-  inline void fill(T const &x) { diagonal_.fill(x); }
+  inline vnl_diag_matrix_fixed& fill(T const &x) { diagonal_.fill(x); return *this; }
 
   //: Return pointer to the diagonal elements as a contiguous 1D C array;
   inline T*       data_block()       { return diagonal_.data_block(); }
@@ -130,8 +131,8 @@ class vnl_diag_matrix_fixed
   //: Return diagonal elements as a vector
   inline vnl_vector_fixed<T,N> const& diagonal() const { return diagonal_; }
 
-  //: Set diagonal elements using vector
-  inline void set(vnl_vector_fixed<T,N> const& v)  { diagonal_=v; }
+  //: Set diagonal elements using vector, then return *this
+  inline vnl_diag_matrix_fixed& set(vnl_vector_fixed<T,N> const& v)  { diagonal_=v; return *this; }
 
  private:
   #if VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD
@@ -161,15 +162,16 @@ inline vnl_matrix_fixed<T,N,N> vnl_diag_matrix_fixed<T,N>::as_matrix_fixed() con
   return ret;
 }
 
-//: Invert a vnl_diag_matrix_fixed in-situ.
+//: Invert a vnl_diag_matrix_fixed in-situ, then returns *this.
 // Just replaces each element with its reciprocal.
 template <class T, unsigned int N>
-inline void vnl_diag_matrix_fixed<T,N>::invert_in_place()
+inline vnl_diag_matrix_fixed<T,N>& vnl_diag_matrix_fixed<T,N>::invert_in_place()
 {
   T* d = data_block();
   T one = T(1);
   for (unsigned i = 0; i < N; ++i)
     d[i] = one / d[i];
+  return *this;
 }
 
 //: Return determinant as product of diagonal values.

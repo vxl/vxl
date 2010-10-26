@@ -14,17 +14,17 @@
 //
 // \verbatim
 //  Modifications
-//     010796 AWF Implemented get_focal_point() - awf, july 96
-//     011096 AWF Added caching vnl_svd<double>
-//     260297 AWF Converted to use vnl_double_3x4
-//     110397 PVr Added operator==
-//     221002 Peter Vanroose - added vgl_homg_point_2d interface
-//     231002 Peter Vanroose - using fixed 3x4 matrices throughout
-//     250503 J.L.M. converted to pure vgl infrastructure and templated
-//            also made the interface a bit more consistent with
-//            plane projective transformations
-//     270603 Peter Vanroose - moved doc from .txx to .h
-//                           - implemented 3 NYI methods (get, set, set_rows)
+//   01 Jul 1996 AWF Implemented get_focal_point()
+//   01 Oct 1996 AWF Added caching vnl_svd<double>
+//   26 Feb 1997 AWF Converted to use vnl_double_3x4
+//   11 Mar 1997 PVr - Added operator==
+//   22 Oct 2002 Peter Vanroose - added vgl_homg_point_2d interface
+//   23 Oct 2002 Peter Vanroose - using fixed 3x4 matrices throughout
+//   25 May 2003 J.L.M. converted to pure vgl infrastructure and made templated
+//   25 May 2003 J.L.M. made the interface more consistent with plane projective transformations
+//   27 Jun 2003 Peter Vanroose - moved doc from .txx to .h
+//   27 Jun 2003 Peter Vanroose - implemented 3 NYI methods (get, set, set_rows)
+//   24 Oct 2010 Peter Vanroose - mutators and setters now return *this
 // \endverbatim
 
 #include <vcl_iosfwd.h>
@@ -134,11 +134,11 @@ class vgl_p_matrix
   // a la Hartley cheirality paper.
   bool is_behind_camera(vgl_homg_point_3d<T> const&);
   //: Change the overall sign of the P matrix.
-  void flip_sign();
+  vgl_p_matrix& flip_sign();
   //: Splendid hack that tries to detect if the P is an image-coords P or a normalized P.
   bool looks_conditioned();
   //: Scale P so determinant of first 3x3 is 1.
-  void fix_cheirality();
+  vgl_p_matrix& fix_cheirality();
 
   // Data Access---------------------------------------------------------------
 
@@ -156,7 +156,7 @@ class vgl_p_matrix
   //: Return the rows of P = [a b c]'.
   void get_rows(vnl_vector_fixed<T,4>* a, vnl_vector_fixed<T,4>* b, vnl_vector_fixed<T,4>* c) const;
   //: Set P = [a b c]' from its rows a, b, c.
-  void set_rows(const vnl_vector_fixed<T,4>& a, const vnl_vector_fixed<T,4>& b, const vnl_vector_fixed<T,4>& c);
+  vgl_p_matrix& set_rows(const vnl_vector_fixed<T,4>& a, const vnl_vector_fixed<T,4>& b, const vnl_vector_fixed<T,4>& c);
 
   //: Return the element of the matrix at the specified index pair
   T get(unsigned int row_index, unsigned int col_index) const;
@@ -168,22 +168,22 @@ class vgl_p_matrix
   void get(vnl_matrix_fixed<T, 3, 4>& p_matrix) const { p_matrix = p_matrix_; }
 
   //: Set the 3x4 projective matrix with the matrix in the C-array, p_matrix
-  void set(const T* p_matrix);
+  vgl_p_matrix& set(const T* p_matrix);
   //: Set the 3x4 projective matrix with the matrix in the C-array, p_matrix
-  void set(const T p_matrix [3][4]);
+  vgl_p_matrix& set(const T p_matrix [3][4]);
   //: Set the internal matrix using the vnl_matrix<double> p_matrix.
-  void set(const vnl_matrix<T>& p_matrix) { p_matrix_ = p_matrix; clear_svd(); }
+  vgl_p_matrix& set(const vnl_matrix<T>& p_matrix) { p_matrix_ = p_matrix; clear_svd(); return *this; }
   //: Set the internal matrix using the vnl_matrix<double> p_matrix.
-  void set(vnl_matrix_fixed<T,3,4> const& p_matrix) { p_matrix_ = p_matrix; clear_svd(); }
+  vgl_p_matrix& set(vnl_matrix_fixed<T,3,4> const& p_matrix) { p_matrix_ = p_matrix; clear_svd(); return *this; }
   //: Set from 3x3 matrix and 3x1 column vector of P = [A a].
-  void set(vnl_matrix_fixed<T,3,3> const& A, vnl_vector_fixed<T,3> const& a);
+  vgl_p_matrix& set(vnl_matrix_fixed<T,3,3> const& A, vnl_vector_fixed<T,3> const& a);
   //: Set from 3x3 matrix and 3x1 column vector of P = [A a].
-  void set(vnl_matrix<T> const& A, vnl_vector<T> const& a);
+  vgl_p_matrix& set(vnl_matrix<T> const& A, vnl_vector<T> const& a);
 
   const vnl_matrix_fixed<T, 3, 4>& get_matrix() const { return p_matrix_; }
 
   //: Set the camera to an identity projection. X->u, Y->v
-  void set_identity();
+  vgl_p_matrix& set_identity();
 
   // Utility Methods-----------------------------------------------------------
 

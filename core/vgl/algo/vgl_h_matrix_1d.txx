@@ -188,18 +188,22 @@ void vgl_h_matrix_1d<T>::get(vnl_matrix<T>* H) const
 
 //: Set to 2x2 row-stored matrix
 template <class T>
-void vgl_h_matrix_1d<T>::set(const T* H)
+vgl_h_matrix_1d<T>&
+vgl_h_matrix_1d<T>::set(const T* H)
 {
   T* data = t12_matrix_.data_block();
   for (int index = 0; index < 4; ++index)
     data[index] = *H++;
+  return *this;
 }
 
 //: Set to given vnl_matrix
 template <class T>
-void vgl_h_matrix_1d<T>::set(vnl_matrix_fixed<T,2,2> const& H)
+vgl_h_matrix_1d<T>&
+vgl_h_matrix_1d<T>::set(vnl_matrix_fixed<T,2,2> const& H)
 {
   t12_matrix_ = H;
+  return *this;
 }
 
 //-------------------------------------------------------------------

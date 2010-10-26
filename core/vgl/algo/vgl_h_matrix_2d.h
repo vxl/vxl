@@ -16,6 +16,7 @@
 //   22 Mar 2003 - J.L. Mundy - preparing for upgrade to vgl
 //   24 Jun 2003 - Peter Vanroose - added projective_basis() from 4 lines
 //   31 Jul 2010 - Peter Vanroose - made more similar to 1d and 3d variants
+//   24 Oct 2010 - Peter Vanroose - mutators and setters now return *this
 // \endverbatim
 
 #include <vcl_vector.h>
@@ -83,23 +84,23 @@ class vgl_h_matrix_2d
   vnl_matrix_fixed<T,3,3> const& get_matrix() const { return t12_matrix_; }
   vgl_h_matrix_2d get_inverse() const;
 
-  void set (unsigned int row_index, unsigned int col_index, const T value)
-  { t12_matrix_[row_index][col_index]=value; }
+  vgl_h_matrix_2d& set (unsigned int row_index, unsigned int col_index, const T value)
+  { t12_matrix_[row_index][col_index]=value; return *this; }
 
-  void set(const T *t_matrix);
-  void set(vnl_matrix_fixed<T,3,3> const& t_matrix);
+  vgl_h_matrix_2d& set(const T *t_matrix);
+  vgl_h_matrix_2d& set(vnl_matrix_fixed<T,3,3> const& t_matrix);
 
   // various affine transformations that set the corresponding parts of the matrix
 
   //:initialize the transformation to identity
-  void set_identity();
+  vgl_h_matrix_2d& set_identity();
 
   //: set T[0][2] = tx and T[1][2] = ty, other elements unaltered
-  void set_translation(const T tx, const T ty);
+  vgl_h_matrix_2d& set_translation(const T tx, const T ty);
 
   //: the upper 2x2 part of the matrix is replaced by a rotation matrix.
   // theta is in radians
-  void set_rotation(const T theta);
+  vgl_h_matrix_2d& set_rotation(const T theta);
 
   //: compose the current transform with a scaling transform, S.
   // $S = \left[ \begin{array}{ccc}
@@ -107,7 +108,7 @@ class vgl_h_matrix_2d
   //                                0 & s & 0 \\%
   //                                0 & 0 & 1
   // \end{array}\right]$                         , Ts = S*T.
-  void set_scale(const T scale);
+  vgl_h_matrix_2d& set_scale(const T scale);
 
   //: set the transform to a similarity mapping
   // Sim $ = \left[\begin{array}{ccc}
@@ -115,7 +116,7 @@ class vgl_h_matrix_2d
   //         \sin(\theta) &  \cos(\theta) & ty \\%
   //         0            &  0            & 1
   // \end{array}\right]$
-  void set_similarity(const T s, const T theta, const T tx, const T ty);
+  vgl_h_matrix_2d& set_similarity(const T s, const T theta, const T tx, const T ty);
 
   //: compose the transform with diagonal aspect transform.
   // $A = \left[ \begin{array}{ccc}
@@ -123,7 +124,7 @@ class vgl_h_matrix_2d
   //                                 0 & a & 0 \\%
   //                                 0 & 0 & 1
   // \end{array}\right]$                         , Ta = A*T.
-  void set_aspect_ratio(const T aspect_ratio);
+  vgl_h_matrix_2d& set_aspect_ratio(const T aspect_ratio);
 
 
   //: set the transform to a general affine transform matrix
@@ -132,7 +133,7 @@ class vgl_h_matrix_2d
   //                           a10 & a11 & a12 \\%
   //                           0   & 0   & 1
   // \end{array}\right]$
-  void set_affine(const vnl_matrix<T>& M23);
+  vgl_h_matrix_2d& set_affine(const vnl_matrix<T>& M23);
 
   bool is_rotation() const;
   bool is_euclidean() const;

@@ -16,6 +16,7 @@
 //  Modifications
 //   M. J. Leotta   2007-03-14 Moved from VPGL and implemented member functions
 //   Peter Vanroose 2009-06-11 Robustified the 2-vector constructors: input no longer needs to be unit-norm
+//   Peter Vanroose 2010-10-24 mutators and setters now return *this
 // \endverbatim
 
 #include <vnl/vnl_vector_fixed.h>
@@ -162,7 +163,7 @@ class vgl_rotation_3d
   // Operations:----------------------------------------
 
   //: Make the rotation the identity (i.e. no rotation)
-  void set_identity() { q_[0]=0; q_[1]=0; q_[2]=0; q_[3]=1; }
+  vgl_rotation_3d& set_identity() { q_[0]=0; q_[1]=0; q_[2]=0; q_[3]=1; return *this; }
 
   //: The inverse rotation
   vgl_rotation_3d<T> inverse() const { return vgl_rotation_3d<T>(q_.conjugate()); }

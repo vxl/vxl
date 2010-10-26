@@ -492,9 +492,10 @@ void vnl_sparse_matrix<T>::diag_AtA(vnl_vector<T> & result) const
 //: Set row in the matrix.
 
 template <class T>
-void vnl_sparse_matrix<T>::set_row(unsigned int r,
-                                   vcl_vector<int> const& colz,
-                                   vcl_vector<T> const& vals)
+vnl_sparse_matrix<T>&
+vnl_sparse_matrix<T>::set_row(unsigned int r,
+                              vcl_vector<int> const& colz,
+                              vcl_vector<T> const& vals)
 {
   assert (r < rows());
   assert (colz.size() == vals.size());
@@ -505,10 +506,12 @@ void vnl_sparse_matrix<T>::set_row(unsigned int r,
     rw[i] = vnl_sparse_matrix_pair<T>(colz[i], vals[i]);
   typedef typename vnl_sparse_matrix_pair<T>::less less;
   vcl_sort(rw.begin(), rw.end(), less());
+  return *this;
 }
 
 template <class T>
-vnl_sparse_matrix<T>& vnl_sparse_matrix<T>::vcat(vnl_sparse_matrix<T> const& A)
+vnl_sparse_matrix<T>&
+vnl_sparse_matrix<T>::vcat(vnl_sparse_matrix<T> const& A)
 {
   if (rs_ == 0) {
     rs_ = A.rs_;
@@ -539,12 +542,14 @@ T vnl_sparse_matrix<T>::sum_row(unsigned int r)
 }
 
 template <class T>
-void vnl_sparse_matrix<T>::scale_row(unsigned int r, T scale)
+vnl_sparse_matrix<T>&
+vnl_sparse_matrix<T>::scale_row(unsigned int r, T scale)
 {
   assert(r < rows());
   row& rw = elements[r];
   for (typename row::iterator ri = rw.begin(); ri != rw.end(); ++ri)
     (*ri).second *= scale;
+  return *this;
 }
 
 //------------------------------------------------------------
@@ -858,7 +863,7 @@ vnl_sparse_matrix<T>& vnl_sparse_matrix<T>::operator*=(vnl_sparse_matrix<T> cons
 //: Make each row of the matrix have unit norm.
 // All-zero rows are ignored.
 template<class T>
-void vnl_sparse_matrix<T>::normalize_rows()
+vnl_sparse_matrix<T>& vnl_sparse_matrix<T>::normalize_rows()
 {
   typedef typename vnl_numeric_traits<T>::abs_t Abs_t;
   typedef typename vnl_numeric_traits<T>::real_t Real_t;
@@ -894,6 +899,24 @@ void vnl_sparse_matrix<T>::normalize_rows()
       }
     }
   }
+  return *this;
+}
+
+//: Fill this matrix with 1s on the main diagonal and 0s elsewhere.
+template<class T>
+vnl_sparse_matrix<T>& vnl_sparse_matrix<T>::set_identity()
+{
+  // Iterate through the matrix rows, and set one at a time:
+  unsigned int rownum = 0;
+  for (typename vcl_vector<row>::iterator row_iter = elements.begin();
+       row_iter != elements.end() && rownum < cols();
+       ++row_iter, ++rownum)
+  {
+    row& rw = *row_iter;
+    rw.clear();
+    rw[0] = vnl_sparse_matrix_pair<T>(rownum,T(1));
+  }
+  return *this;
 }
 
 

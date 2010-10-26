@@ -14,6 +14,7 @@
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 //   Mar.2004 - Peter Vanroose - deprecated fixed-size constructors now compile only when VNL_CONFIG_LEGACY_METHODS==1
 //   Mar.2009 - Peter Vanroose - added arg_min() and arg_max()
+//   Oct.2010 - Peter Vanroose - mutators and setters now return *this
 // \endverbatim
 
 #include <vcl_iosfwd.h>
@@ -146,11 +147,11 @@ class vnl_vector
   inline T get(unsigned int i) const;
 
   //: Set all values to v
-  void fill(T const& v);
+  vnl_vector& fill(T const& v);
 
   //: Sets elements to ptr[i]
   //  Note: ptr[i] must be valid for i=0..size()-1
-  void copy_in(T const * ptr);
+  vnl_vector& copy_in(T const * ptr);
 
   //: Copy elements to ptr[i]
   //  Note: ptr[i] must be valid for i=0..size()-1
@@ -158,7 +159,7 @@ class vnl_vector
 
   //: Sets elements to ptr[i]
   //  Note: ptr[i] must be valid for i=0..size()-1
-  void set(T const *ptr) { copy_in(ptr); }
+  vnl_vector& set(T const *ptr) { return copy_in(ptr); }
 
   //: Return reference to the element at specified index.
   // There are assert style boundary checks - #define NDEBUG to turn them off.
@@ -333,7 +334,7 @@ class vnl_vector
 
   //: Reverse the order of the elements
   //  Element i swaps with element size()-1-i
-  void flip();
+  vnl_vector& flip();
 
   //: Set this to that and that to this
   void swap(vnl_vector<T> & that);

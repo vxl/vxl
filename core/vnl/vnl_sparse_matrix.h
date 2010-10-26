@@ -37,7 +37,7 @@
 //     T get(unsigned int, unsigned int)
 //     void put(unsigned int, unsigned int, T)
 //     void clear()
-//     void normalize_rows()
+//     vnl_sparse_matrix& normalize_rows()
 //     bool operator==()
 //     bool operator!=()
 //     unary minus of a matrix
@@ -51,6 +51,7 @@
 //     in-place scalar multiplication of a matrix
 //     scalar division of a matrix
 //     in-place scalar division of a matrix
+//   Peter Vanroose - Oct.2010 - Added set_identity()
 // \endverbatim
 
 #include <vcl_vector.h>
@@ -153,10 +154,10 @@ class vnl_sparse_matrix
   // Useful for forming Jacobi preconditioners for linear solvers.
   void diag_AtA(vnl_vector<T>& result) const;
 
-  //: Set a whole row at once. Much faster.
-  void set_row(unsigned int r,
-               vcl_vector<int> const& cols,
-               vcl_vector<T> const& vals);
+  //: Set a whole row at once. Much faster. Returns *this.
+  vnl_sparse_matrix& set_row(unsigned int r,
+                             vcl_vector<int> const& cols,
+                             vcl_vector<T> const& vals);
 
   //: Return row as vector of pairs
   //  Added to aid binary I/O
@@ -181,7 +182,7 @@ class vnl_sparse_matrix
   T sum_row(unsigned int r);
 
   //: Useful for normalizing row sums in convolution operators
-  void scale_row(unsigned int r, T scale);
+  vnl_sparse_matrix& scale_row(unsigned int r, T scale);
 
   //: Set all elements to null
   void clear() { elements.clear(); }
@@ -249,11 +250,29 @@ class vnl_sparse_matrix
   //: in-place scalar division
   vnl_sparse_matrix<T>& operator/=(T const& rhs);
 
-  //: Normalize each row so it is a unit vector.
-  //  Zero rows are ignored.
+  //: Sets this matrix to an identity matrix, then returns "*this".
+  //  Returning "*this" allows e.g. passing an identity matrix as argument to
+  //  a function f, without having to name the constructed matrix:
+  //  \code
+  //     f(vnl_sparse_matrix<double>(5000,5000).set_identity());
+  //  \endcode
+  //  Returning "*this" also allows "chaining" two or more operations:
+  //  e.g., to set a matrix to identity, then add an other matrix to it:
+  //  \code
+  //     M.set_identity() += M2;
+  //  \endcode
+  //  If the matrix is not square, anyhow set main diagonal to 1, the rest to 0.
+  vnl_sparse_matrix& set_identity();
+
+  //: Normalizes each row so it is a unit vector, and returns "*this".
+  //  Zero rows are not modified
+  //  Returning "*this" allows "chaining" two or more operations:
+  //  \code
+  //     M.normalize_rows() += M2;
+  //  \endcode
   //  Note that there is no method normalize_columns() since its implementation
   //  would be much more inefficient than normalize_rows()!
-  void normalize_rows();
+  vnl_sparse_matrix& normalize_rows();
 
   // These three methods are used to implement their operator() variants
   // They should ideally be protected, but for backward compatibility reasons

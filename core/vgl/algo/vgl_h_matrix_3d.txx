@@ -268,19 +268,21 @@ vgl_h_matrix_3d<T> vgl_h_matrix_3d<T>::get_inverse() const
 //: Set to 4x4 row-stored matrix
 //
 template <class T>
-void vgl_h_matrix_3d<T>::set (T const* H)
+vgl_h_matrix_3d<T>& vgl_h_matrix_3d<T>::set (T const* H)
 {
   T* data = t12_matrix_.data_block();
   for (int index = 0; index < 16; ++index)
     data[index] = *H++;
+  return *this;
 }
 
 //: Set to given vnl_matrix
 //
 template <class T>
-void vgl_h_matrix_3d<T>::set (vnl_matrix_fixed<T,4,4> const& H)
+vgl_h_matrix_3d<T>& vgl_h_matrix_3d<T>::set (vnl_matrix_fixed<T,4,4> const& H)
 {
   t12_matrix_ = H;
+  return *this;
 }
 
 //: Compute transform to projective basis given five points, no 4 coplanar
@@ -296,24 +298,26 @@ projective_basis(vcl_vector<vgl_homg_point_3d<T> > const& /*five_points*/)
 //: Set to identity
 //
 template <class T>
-void vgl_h_matrix_3d<T>::set_identity ()
+vgl_h_matrix_3d<T>& vgl_h_matrix_3d<T>::set_identity ()
 {
   t12_matrix_.set_identity();
+  return *this;
 }
 
 //: Set the (0,3) to (2,3) elements of the transform matrix
 template <class T>
-void vgl_h_matrix_3d<T>::set_translation(T tx, T ty, T tz)
+vgl_h_matrix_3d<T>& vgl_h_matrix_3d<T>::set_translation(T tx, T ty, T tz)
 {
   t12_matrix_(0, 3)  = tx;
   t12_matrix_(1, 3)  = ty;
   t12_matrix_(2, 3)  = tz;
+  return *this;
 }
 
 //: Set to rotation about an axis
 //
 template <class T>
-void vgl_h_matrix_3d<T>::
+vgl_h_matrix_3d<T>& vgl_h_matrix_3d<T>::
 set_rotation_about_axis(vnl_vector_fixed<T,3> const& axis, T angle)
 {
   vnl_quaternion<T> q(axis, angle);
@@ -323,6 +327,7 @@ set_rotation_about_axis(vnl_vector_fixed<T,3> const& axis, T angle)
   for (int c = 0; c<3; c++)
     for (int r = 0; r<3; r++)
       t12_matrix_[r][c]=R[c][r];
+  return *this;
 }
 
 //: Set to roll, pitch and yaw specified rotation.
@@ -331,7 +336,7 @@ set_rotation_about_axis(vnl_vector_fixed<T,3> const& axis, T angle)
 // - yaw is rotation about x
 //
 template <class T>
-void vgl_h_matrix_3d<T>::
+vgl_h_matrix_3d<T>& vgl_h_matrix_3d<T>::
 set_rotation_roll_pitch_yaw(T yaw, T pitch, T roll)
 {
   typedef typename vnl_numeric_traits<T>::real_t real_t;
@@ -347,13 +352,13 @@ set_rotation_roll_pitch_yaw(T yaw, T pitch, T roll)
   for (int c = 0; c<3; c++)
     for (int r = 0; r<3; r++)
       t12_matrix_[r][c]=R[c][r];
+  return *this;
 }
 
 //: Set to rotation specified by Euler angles
 //
 template <class T>
-void vgl_h_matrix_3d<T>::
-set_rotation_euler(T rz1, T ry, T rz2)
+vgl_h_matrix_3d<T>& vgl_h_matrix_3d<T>::set_rotation_euler(T rz1, T ry, T rz2)
 {
   typedef typename vnl_numeric_traits<T>::real_t real_t;
   real_t az1 = rz1/2, ay = ry/2, az2 = rz2/2;
@@ -368,15 +373,17 @@ set_rotation_euler(T rz1, T ry, T rz2)
   for (int c = 0; c<3; c++)
     for (int r = 0; r<3; r++)
       t12_matrix_[r][c]=R[c][r];
+  return *this;
 }
 
 template <class T>
-void 
-vgl_h_matrix_3d<T>::set_rotation_matrix(vnl_matrix_fixed<T, 3, 3> const& R)
+vgl_h_matrix_3d<T>& vgl_h_matrix_3d<T>::
+set_rotation_matrix(vnl_matrix_fixed<T, 3, 3> const& R)
 {
   for (unsigned r = 0; r<3; ++r)
     for (unsigned c = 0; c<3; ++c)
       t12_matrix_[r][c] = R[r][c];
+  return *this;
 }
 
 template <class T>
@@ -409,7 +416,7 @@ bool vgl_h_matrix_3d<T>::is_euclidean() const
 
 
 template <class T>
-vgl_h_matrix_3d<T> 
+vgl_h_matrix_3d<T>
 vgl_h_matrix_3d<T>::get_upper_3x3() const
 {
   //only sensible for affine transformations

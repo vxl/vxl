@@ -18,6 +18,7 @@
 //   22 Mar 2003 - J.L. Mundy - preparing for upgrade to vgl
 //   13 Jun 2004 - Peter Vanroose - added set_identity() and projective_basis()
 //   31 Jul 2010 - Peter Vanroose - made more similar to 2d and 3d variants
+//   24 Oct 2010 - Peter Vanroose - mutators and setters now return *this
 // \endverbatim
 
 #include <vcl_vector.h>
@@ -81,9 +82,9 @@ class vgl_h_matrix_1d
   // \endverbatim
   bool projective_basis(vcl_vector<vgl_homg_point_1d<T> > const& three_points);
 
-  void set_identity() { t12_matrix_.set_identity(); }
-  void set(T const* t_matrix);
-  void set(vnl_matrix_fixed<T,2,2> const& t_matrix);
+  vgl_h_matrix_1d& set_identity() { t12_matrix_.set_identity(); return *this; }
+  vgl_h_matrix_1d& set(T const* t_matrix);
+  vgl_h_matrix_1d& set(vnl_matrix_fixed<T,2,2> const& t_matrix);
 
   bool read(char const* filename);
   bool read(vcl_istream& s);

@@ -16,6 +16,7 @@
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 //   Sep.2002 - Peter Vanroose - Added operator+, operator-, operator*
 //   Mar.2004 - Peter Vanroose - removed deprecated resize()
+//   Oct.2010 - Peter Vanroose - mutators and setters now return *this
 // \endverbatim
 
 #include <vcl_cassert.h>
@@ -67,7 +68,7 @@ class vnl_diag_matrix
 
   // Computations--------------------------------------------------------------
 
-  void invert_in_place();
+  vnl_diag_matrix& invert_in_place();
   T determinant() const;
   vnl_vector<T> solve(vnl_vector<T> const& b) const;
   void solve(vnl_vector<T> const& b, vnl_vector<T>* out) const;
@@ -99,7 +100,7 @@ class vnl_diag_matrix
   }
 
   //: Set all diagonal elements of matrix to specified value.
-  inline void fill_diagonal (T const& v) { diagonal_.fill(v); }
+  inline vnl_diag_matrix& fill_diagonal (T const& v) { diagonal_.fill(v); return *this; }
 
   // iterators
 
@@ -126,7 +127,7 @@ class vnl_diag_matrix
   inline void set_size(int n) { diagonal_.set_size(n); }
 
   inline void clear() { diagonal_.clear(); }
-  inline void fill(T const &x) { diagonal_.fill(x); }
+  inline vnl_diag_matrix& fill(T const &x) { diagonal_.fill(x); return *this; }
 
   //: Return pointer to the diagonal elements as a contiguous 1D C array;
   inline T*       data_block()       { return diagonal_.data_block(); }
@@ -136,7 +137,7 @@ class vnl_diag_matrix
   inline vnl_vector<T> const& diagonal() const { return diagonal_; }
 
   //: Set diagonal elements using vector
-  inline void set(vnl_vector<T> const& v)  { diagonal_=v; }
+  inline vnl_diag_matrix& set(vnl_vector<T> const& v)  { diagonal_=v; return *this; }
 
  private:
   #if VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD
@@ -170,13 +171,14 @@ inline vnl_matrix<T> vnl_diag_matrix<T>::asMatrix() const
 //: Invert a vnl_diag_matrix in-situ.
 // Just replaces each element with its reciprocal.
 template <class T>
-inline void vnl_diag_matrix<T>::invert_in_place()
+inline vnl_diag_matrix<T>& vnl_diag_matrix<T>::invert_in_place()
 {
   unsigned len = diagonal_.size();
   T* d = data_block();
   T one = T(1);
   for (unsigned i = 0; i < len; ++i)
     d[i] = one / d[i];
+  return *this;
 }
 
 //: Return determinant as product of diagonal values.

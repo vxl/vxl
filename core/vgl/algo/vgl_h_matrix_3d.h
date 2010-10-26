@@ -14,6 +14,7 @@
 //   23 Oct 2002 - Peter Vanroose - using fixed 3x3 matrices throughout
 //   22 Mar 2003 - J. L. Mundy  - prep for moving to vgl
 //   31 Jul 2010 - Peter Vanroose - made more similar to 1d and 2d variants
+//   24 Oct 2010 - Peter Vanroose - mutators and setters now return *this
 // \endverbatim
 
 #include <vcl_vector.h>
@@ -70,18 +71,18 @@ class vgl_h_matrix_3d
   vnl_matrix_fixed<T,4,4> const& get_matrix() const { return t12_matrix_; }
   vgl_h_matrix_3d get_inverse() const;
 
-  void set (unsigned int row_index, unsigned int col_index, const T value)
-  { t12_matrix_[row_index][col_index]=value; }
+  vgl_h_matrix_3d& set (unsigned int row_index, unsigned int col_index, const T value)
+  { t12_matrix_[row_index][col_index]=value; return *this; }
 
-  void set(const T *t_matrix);
-  void set(vnl_matrix_fixed<T,4,4> const& t_matrix);
-  void set_identity();
-  void set_translation(T tx, T ty, T tz);
+  vgl_h_matrix_3d& set(const T *t_matrix);
+  vgl_h_matrix_3d& set(vnl_matrix_fixed<T,4,4> const& t_matrix);
+  vgl_h_matrix_3d& set_identity();
+  vgl_h_matrix_3d& set_translation(T tx, T ty, T tz);
   //: rotation angle is in radians
-  void set_rotation_about_axis(const vnl_vector_fixed<T,3>& axis, T angle);
-  void set_rotation_roll_pitch_yaw(T yaw, T pitch, T roll);
-  void set_rotation_euler(T rz1, T ry, T rz2);
-  void set_rotation_matrix(vnl_matrix_fixed<T, 3, 3> const& R);
+  vgl_h_matrix_3d& set_rotation_about_axis(const vnl_vector_fixed<T,3>& axis, T angle);
+  vgl_h_matrix_3d& set_rotation_roll_pitch_yaw(T yaw, T pitch, T roll);
+  vgl_h_matrix_3d& set_rotation_euler(T rz1, T ry, T rz2);
+  vgl_h_matrix_3d& set_rotation_matrix(vnl_matrix_fixed<T, 3, 3> const& R);
 
   bool is_rotation() const;
   bool is_euclidean() const;

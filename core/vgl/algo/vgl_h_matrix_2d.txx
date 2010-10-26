@@ -262,25 +262,28 @@ void vgl_h_matrix_2d<T>::get(vnl_matrix<T>* H) const
 
 //: Set to identity
 template <class T>
-void vgl_h_matrix_2d<T>::set_identity()
+vgl_h_matrix_2d<T>& vgl_h_matrix_2d<T>::set_identity()
 {
   t12_matrix_.set_identity();
+  return *this;
 }
 
 //: Set to 3x3 row-stored matrix
 template <class T>
-void vgl_h_matrix_2d<T>::set(const T* H)
+vgl_h_matrix_2d<T>& vgl_h_matrix_2d<T>::set(const T* H)
 {
   T* data = t12_matrix_.data_block();
   for (int index = 0; index < 9; ++index)
     data[index] = *H++;
+  return *this;
 }
 
 //: Set to given vnl_matrix
 template <class T>
-void vgl_h_matrix_2d<T>::set(vnl_matrix_fixed<T,3,3> const& H)
+vgl_h_matrix_2d<T>& vgl_h_matrix_2d<T>::set(vnl_matrix_fixed<T,3,3> const& H)
 {
   t12_matrix_ = H;
+  return *this;
 }
 
 //-------------------------------------------------------------------
@@ -366,7 +369,6 @@ template <class T>
 bool vgl_h_matrix_2d<T>::is_identity() const
 {
   return t12_matrix_.is_identity();
-      
 }
 
 //-------------------------------------------------------------------
@@ -436,19 +438,21 @@ vgl_h_matrix_2d<T> vgl_h_matrix_2d<T>::get_inverse() const
 
 //: Set the (0,2) and (1,2) elements of the transform matrix
 template <class T>
-void vgl_h_matrix_2d<T>::set_translation(const T tx, const T ty)
+vgl_h_matrix_2d<T>& vgl_h_matrix_2d<T>::set_translation(const T tx, const T ty)
 {
   t12_matrix_[0][2] = tx;   t12_matrix_[1][2] = ty;
+  return *this;
 }
 
 //: Set the upper 2x2 submatrix to a rotation matrix defined by theta
 template <class T>
-void vgl_h_matrix_2d<T>::set_rotation(const T theta)
+vgl_h_matrix_2d<T>& vgl_h_matrix_2d<T>::set_rotation(const T theta)
 {
   double theta_d = (double)theta;
   double c = vcl_cos(theta_d), s = vcl_sin(theta_d);
   t12_matrix_[0][0] = (T)c;   t12_matrix_[0][1] = -(T)s;
   t12_matrix_[1][0] = (T)s;   t12_matrix_[1][1] = (T)c;
+  return *this;
 }
 
 //: Compose the existing matrix with a uniform scale transformation
@@ -460,12 +464,14 @@ void vgl_h_matrix_2d<T>::set_rotation(const T theta)
 //        -     -
 // \endverbatim
 template <class T>
-void vgl_h_matrix_2d<T>::set_scale(const T scale)
+vgl_h_matrix_2d<T>& vgl_h_matrix_2d<T>::set_scale(const T scale)
 {
   for (unsigned r = 0; r<2; ++r)
     for (unsigned c = 0; c<3; ++c)
       t12_matrix_[r][c]*=scale;
+  return *this;
 }
+
 //: set the transform to a similarity mapping
 //        _                         _
 //       |sCos(theta) -sSin(theta) tx|
@@ -473,14 +479,15 @@ void vgl_h_matrix_2d<T>::set_scale(const T scale)
 //       |   0            0        1 |
 //        -                         -
 template <class T>
-void vgl_h_matrix_2d<T>::set_similarity(const T s, const T theta,
-                                        const T tx, const T ty)
+vgl_h_matrix_2d<T>& vgl_h_matrix_2d<T>::set_similarity(const T s, const T theta,
+                                                       const T tx, const T ty)
 {
   T a=s*vcl_cos(theta);
   T b=s*vcl_sin(theta);
   t12_matrix_[0][0] = a; t12_matrix_[0][1] = -b; t12_matrix_[0][2] = tx;
   t12_matrix_[1][0] = b; t12_matrix_[1][1] =  a; t12_matrix_[1][2] = ty;
   t12_matrix_[2][0]=T(0); t12_matrix_[2][1]=T(0); t12_matrix_[2][2] = T(1);
+  return *this;
 }
 
 //: Compose the existing matrix with an aspect ratio transform
@@ -492,24 +499,26 @@ void vgl_h_matrix_2d<T>::set_similarity(const T s, const T theta,
 //        -     -
 // \endverbatim
 template <class T>
-void vgl_h_matrix_2d<T>::set_aspect_ratio(const T aspect_ratio)
+vgl_h_matrix_2d<T>& vgl_h_matrix_2d<T>::set_aspect_ratio(const T aspect_ratio)
 {
   for (unsigned c = 0; c<3; ++c)
     t12_matrix_[1][c]*=aspect_ratio;
+  return *this;
 }
 
 
 template <class T>
-void vgl_h_matrix_2d<T>::set_affine(const vnl_matrix<T>& M23)
+vgl_h_matrix_2d<T>& vgl_h_matrix_2d<T>::set_affine(const vnl_matrix<T>& M23)
 {
-  for(unsigned r = 0; r<2; ++r)
-    for(unsigned c = 0; c<3; ++c)
+  for (unsigned r = 0; r<2; ++r)
+    for (unsigned c = 0; c<3; ++c)
       t12_matrix_[r][c] = M23[r][c];
   t12_matrix_[2][0] = T(0); t12_matrix_[2][1] = T(0);  t12_matrix_[2][2] = T(1);
+  return *this;
 }
 
 template <class T>
-vgl_h_matrix_2d<T> 
+vgl_h_matrix_2d<T>
 vgl_h_matrix_2d<T>::get_upper_2x2() const
 {
   //only sensible for affine transformations

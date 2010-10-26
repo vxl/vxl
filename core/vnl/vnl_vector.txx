@@ -353,19 +353,23 @@ vnl_vector<T> vnl_vector<T>::read(vcl_istream& s)
 //: Sets all elements of a vector to a specified fill value. O(n).
 
 template<class T>
-void vnl_vector<T>::fill (T const& value)
+vnl_vector<T>&
+vnl_vector<T>::fill (T const& value)
 {
   for (unsigned i = 0; i < this->num_elmts; i++)
     this->data[i] = value;
+  return *this;
 }
 
 //: Sets elements of a vector to those in an array. O(n).
 
 template<class T>
-void vnl_vector<T>::copy_in (T const *ptr)
+vnl_vector<T>&
+vnl_vector<T>::copy_in (T const *ptr)
 {
   for (unsigned i = 0; i < num_elmts; ++i)
     data[i] = ptr[i];
+  return *this;
 }
 
 //: Sets elements of an array to those in vector. O(n).
@@ -705,13 +709,15 @@ vnl_matrix<T> outer_product (vnl_vector<T> const& v1,
 //--------------------------------------------------------------------------------
 
 template <class T>
-void vnl_vector<T>::flip()
+vnl_vector<T>&
+vnl_vector<T>::flip()
 {
   for (unsigned i=0;i<num_elmts/2;i++) {
     T tmp=data[i];
     data[i]=data[num_elmts-1-i];
     data[num_elmts-1-i]=tmp;
   }
+  return *this;
 }
 
 template <class T>

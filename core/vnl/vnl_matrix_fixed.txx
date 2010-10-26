@@ -110,21 +110,23 @@ vnl_matrix_fixed<T,nrows,ncols>::equal( const T* a, const T* b )
 
 
 template<class T, unsigned nrows, unsigned ncols>
-void
+vnl_matrix_fixed<T,nrows,ncols>&
 vnl_matrix_fixed<T,nrows,ncols>::fill (T value)
 {
   for (unsigned int i = 0; i < nrows; i++)
     for (unsigned int j = 0; j < ncols; j++)
       this->data_[i][j] = value;
+  return *this;
 }
 
 
 template<class T, unsigned nrows, unsigned ncols>
-void
+vnl_matrix_fixed<T,nrows,ncols>&
 vnl_matrix_fixed<T,nrows,ncols>::fill_diagonal (T value)
 {
   for (unsigned int i = 0; i < nrows && i < ncols; i++)
     this->data_[i][i] = value;
+  return *this;
 }
 
 
@@ -236,13 +238,14 @@ vnl_matrix_fixed<T,nrows,ncols>::extract (vnl_matrix<T>& sub_matrix,
 
 
 template<class T, unsigned nrows, unsigned ncols>
-void
+vnl_matrix_fixed<T,nrows,ncols>&
 vnl_matrix_fixed<T,nrows,ncols>::copy_in(T const *p)
 {
   T* dp = this->data_block();
   unsigned int i = nrows * ncols;
   while (i--)
     *dp++ = *p++;
+  return *this;
 }
 
 template<class T, unsigned nrows, unsigned ncols>
@@ -255,26 +258,23 @@ void vnl_matrix_fixed<T,nrows,ncols>::copy_out(T *p) const
 }
 
 template<class T, unsigned nrows, unsigned ncols>
-void
+vnl_matrix_fixed<T,nrows,ncols>&
 vnl_matrix_fixed<T,nrows,ncols>::set_identity()
 {
-#ifndef NDEBUG
-  if (nrows != ncols) // Size?
-    vnl_error_matrix_nonsquare ("set_identity");
-#endif
   // Two simple loops are generally better than having a branch inside
   // the loop. Probably worth the O(n) extra writes.
-  for (unsigned int i = 0; i < nrows; i++)
-    for (unsigned int j = 0; j < ncols; j++)
+  for (unsigned int i = 0; i < nrows; ++i)
+    for (unsigned int j = 0; j < ncols; ++j)
       this->data_[i][j] = T(0);
-  for (unsigned int i = 0; i < nrows; i++)
+  for (unsigned int i = 0; i < nrows && i < ncols; ++i)
     this->data_[i][i] = T(1);
+  return *this;
 }
 
 //: Make each row of the matrix have unit norm.
 // All-zero rows are ignored.
 template<class T, unsigned nrows, unsigned ncols>
-void
+vnl_matrix_fixed<T,nrows,ncols>&
 vnl_matrix_fixed<T,nrows,ncols>::normalize_rows()
 {
   for (unsigned int i = 0; i < nrows; i++)
@@ -295,10 +295,11 @@ vnl_matrix_fixed<T,nrows,ncols>::normalize_rows()
       }
     }
   }
+  return *this;
 }
 
 template<class T, unsigned nrows, unsigned ncols>
-void
+vnl_matrix_fixed<T,nrows,ncols>&
 vnl_matrix_fixed<T,nrows,ncols>::normalize_columns()
 {
   for (unsigned int j = 0; j < ncols; j++) {  // For each column in the Matrix
@@ -318,10 +319,11 @@ vnl_matrix_fixed<T,nrows,ncols>::normalize_columns()
       }
     }
   }
+  return *this;
 }
 
 template<class T, unsigned nrows, unsigned ncols>
-void
+vnl_matrix_fixed<T,nrows,ncols>&
 vnl_matrix_fixed<T,nrows,ncols>::scale_row(unsigned row_index, T value)
 {
 #ifndef NDEBUG
@@ -330,10 +332,11 @@ vnl_matrix_fixed<T,nrows,ncols>::scale_row(unsigned row_index, T value)
 #endif
   for (unsigned int j = 0; j < ncols; j++)
     this->data_[row_index][j] *= value;
+  return *this;
 }
 
 template<class T, unsigned nrows, unsigned ncols>
-void
+vnl_matrix_fixed<T,nrows,ncols>&
 vnl_matrix_fixed<T,nrows,ncols>::scale_column(unsigned column_index, T value)
 {
 #ifndef NDEBUG
@@ -342,6 +345,7 @@ vnl_matrix_fixed<T,nrows,ncols>::scale_column(unsigned column_index, T value)
 #endif
   for (unsigned int j = 0; j < nrows; j++)
     this->data_[j][column_index] *= value;
+  return *this;
 }
 
 //: Returns a copy of n rows, starting from "row"
@@ -407,70 +411,78 @@ vnl_vector_fixed<T,nrows> vnl_matrix_fixed<T,nrows,ncols>::get_column(unsigned c
 //--------------------------------------------------------------------------------
 
 template<class T, unsigned nrows, unsigned ncols>
-void
+vnl_matrix_fixed<T,nrows,ncols>&
 vnl_matrix_fixed<T,nrows,ncols>::set_row(unsigned row_index, T const *v)
 {
   for (unsigned int j = 0; j < ncols; j++)
     this->data_[row_index][j] = v[j];
+  return *this;
 }
 
 template<class T, unsigned nrows, unsigned ncols>
-void
+vnl_matrix_fixed<T,nrows,ncols>&
 vnl_matrix_fixed<T,nrows,ncols>::set_row(unsigned row_index, vnl_vector<T> const &v)
 {
   set_row(row_index,v.data_block());
+  return *this;
 }
 
 template<class T, unsigned nrows, unsigned ncols>
-void
+vnl_matrix_fixed<T,nrows,ncols>&
 vnl_matrix_fixed<T,nrows,ncols>::set_row(unsigned row_index, vnl_vector_fixed<T,ncols> const &v)
 {
   set_row(row_index,v.data_block());
+  return *this;
 }
 
 template<class T, unsigned nrows, unsigned ncols>
-void
+vnl_matrix_fixed<T,nrows,ncols>&
 vnl_matrix_fixed<T,nrows,ncols>::set_row(unsigned row_index, T v)
 {
   for (unsigned int j = 0; j < ncols; j++)
     this->data_[row_index][j] = v;
+  return *this;
 }
 
 //--------------------------------------------------------------------------------
 
 template<class T, unsigned nrows, unsigned ncols>
-void
+vnl_matrix_fixed<T,nrows,ncols>&
 vnl_matrix_fixed<T,nrows,ncols>::set_column(unsigned column_index, T const *v)
 {
   for (unsigned int i = 0; i < nrows; i++)
     this->data_[i][column_index] = v[i];
+  return *this;
 }
 
 template<class T, unsigned nrows, unsigned ncols>
-void
+vnl_matrix_fixed<T,nrows,ncols>&
 vnl_matrix_fixed<T,nrows,ncols>::set_column(unsigned column_index, vnl_vector<T> const &v)
 {
   set_column(column_index,v.data_block());
+  return *this;
 }
 
 template<class T, unsigned nrows, unsigned ncols>
-void
+vnl_matrix_fixed<T,nrows,ncols>&
 vnl_matrix_fixed<T,nrows,ncols>::set_column(unsigned column_index, vnl_vector_fixed<T,nrows> const &v)
 {
   set_column(column_index,v.data_block());
+  return *this;
 }
 
 template<class T, unsigned nrows, unsigned ncols>
-void
+vnl_matrix_fixed<T,nrows,ncols>&
 vnl_matrix_fixed<T,nrows,ncols>::set_column(unsigned column_index, T v)
 {
   for (unsigned int j = 0; j < nrows; j++)
     this->data_[j][column_index] = v;
+  return *this;
 }
 
 
 template<class T, unsigned nrows, unsigned ncols>
-void
+vnl_matrix_fixed<T,nrows,ncols>&
 vnl_matrix_fixed<T,nrows,ncols>::set_columns(unsigned starting_column, vnl_matrix<T> const& m)
 {
 #ifndef NDEBUG
@@ -484,6 +496,7 @@ vnl_matrix_fixed<T,nrows,ncols>::set_columns(unsigned starting_column, vnl_matri
   for (unsigned int j = 0; j < m.cols(); ++j)
     for (unsigned int i = 0; i < nrows; i++)
       this->data_[i][starting_column + j] = m(i,j);
+  return *this;
 }
 
 
@@ -629,7 +642,7 @@ vnl_matrix_fixed<T,nrows,ncols>::read_ascii(vcl_istream& s)
 
 
 template <class T, unsigned nrows, unsigned ncols>
-void
+vnl_matrix_fixed<T,nrows,ncols>&
 vnl_matrix_fixed<T,nrows,ncols>::flipud()
 {
   for (unsigned int r1 = 0; 2*r1+1 < nrows; ++r1)
@@ -642,11 +655,12 @@ vnl_matrix_fixed<T,nrows,ncols>::flipud()
       this->data_[r2][c] = tmp;
     }
   }
+  return *this;
 }
 
 
 template <class T, unsigned nrows, unsigned ncols>
-void
+vnl_matrix_fixed<T,nrows,ncols>&
 vnl_matrix_fixed<T,nrows,ncols>::fliplr()
 {
   for (unsigned int c1 = 0; 2*c1+1 < ncols; ++c1)
@@ -659,6 +673,7 @@ vnl_matrix_fixed<T,nrows,ncols>::fliplr()
       this->data_[r][c2] = tmp;
     }
   }
+  return *this;
 }
 
 template <class T, unsigned nrows, unsigned ncols>
@@ -695,7 +710,8 @@ vnl_matrix_fixed<T,nrows,ncols>::operator_inf_norm() const
 
 //: Transpose square matrix M in place.
 template <class T, unsigned nrows, unsigned ncols>
-void vnl_matrix_fixed<T,nrows,ncols>::inplace_transpose()
+vnl_matrix_fixed<T,nrows,ncols>&
+vnl_matrix_fixed<T,nrows,ncols>::inplace_transpose()
 {
   assert(nrows==ncols); // cannot inplace_transpose non-square fixed size matrix
   for (unsigned i = 0; i < nrows; ++i)
@@ -705,6 +721,7 @@ void vnl_matrix_fixed<T,nrows,ncols>::inplace_transpose()
     this->data_[i][j] = this->data_[j][i];
     this->data_[j][i] = t;
   }
+  return *this;
 }
 
 // Workaround for argument deduction bug in VC6. See comment in .h
@@ -728,9 +745,9 @@ outer_product_fixed_calc_helper<VecA,VecB,RM>::calc( VecA const& a, VecB const& 
 };
 
 #define VNL_OUTER_PRODUCT_FIXED_INSTANTIATE( T, M, N ) \
- template struct outer_product_fixed_calc_helper< vnl_vector_fixed<T,M >, \
-                                                  vnl_vector_fixed<T,N >, \
-                                                  vnl_matrix_fixed<T,M,N > >
+template struct outer_product_fixed_calc_helper<vnl_vector_fixed<T,M >, \
+                                                vnl_vector_fixed<T,N >, \
+                                                vnl_matrix_fixed<T,M,N > >
 
 #else // no need for workaround; declare the function sanely.
 
@@ -746,15 +763,15 @@ outer_product(vnl_vector_fixed<T,m> const& a, vnl_vector_fixed<T,n> const& b)
 }
 
 #define VNL_OUTER_PRODUCT_FIXED_INSTANTIATE( T, M, N ) \
- template vnl_matrix_fixed<T,M,N > outer_product(vnl_vector_fixed<T,M > const&,\
-                                                 vnl_vector_fixed<T,N > const& )
+template vnl_matrix_fixed<T,M,N > outer_product(vnl_vector_fixed<T,M > const&,\
+                                                vnl_vector_fixed<T,N > const& )
 
 #endif // VC60 outer_product workaround
 
 
 #undef VNL_MATRIX_FIXED_INSTANTIATE
 #define VNL_MATRIX_FIXED_INSTANTIATE(T, M, N) \
-  template class vnl_matrix_fixed<T,M,N >; \
-  VNL_OUTER_PRODUCT_FIXED_INSTANTIATE( T, M, N )
+template class vnl_matrix_fixed<T,M,N >; \
+VNL_OUTER_PRODUCT_FIXED_INSTANTIATE( T, M, N )
 
 #endif // vnl_matrix_fixed_txx_

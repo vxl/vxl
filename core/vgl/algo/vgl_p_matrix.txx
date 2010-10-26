@@ -367,7 +367,7 @@ vgl_p_matrix<T>::get_rows(vnl_vector_fixed<T,4>* a,
 //----------------------------------------------------------------
 //
 template <class T>
-void
+vgl_p_matrix<T>&
 vgl_p_matrix<T>::set_rows(vnl_vector_fixed<T,4> const& a, vnl_vector_fixed<T,4> const& b, vnl_vector_fixed<T,4> const& c)
 {
   p_matrix_.put(0, 0, a(0));
@@ -384,37 +384,41 @@ vgl_p_matrix<T>::set_rows(vnl_vector_fixed<T,4> const& a, vnl_vector_fixed<T,4> 
   p_matrix_.put(2, 1, c(1));
   p_matrix_.put(2, 2, c(2));
   p_matrix_.put(2, 3, c(3));
+
+  return *this;
 }
 
 //-----------------------------------------------------------------------------
 //
 template <class T>
-void
+vgl_p_matrix<T>&
 vgl_p_matrix<T>::set(const T p_matrix [3][4])
 {
   for (int row_index = 0; row_index < 3; row_index++)
     for (int col_index = 0; col_index < 4; col_index++)
       p_matrix_. put(row_index, col_index, p_matrix [row_index][col_index]);
   clear_svd();
+  return *this;
 }
 
 //-----------------------------------------------------------------------------
 //
 template <class T>
-void
+vgl_p_matrix<T>&
 vgl_p_matrix<T>::set(const T *p)
 {
   for (int row_index = 0; row_index < 3; row_index++)
     for (int col_index = 0; col_index < 4; col_index++)
       p_matrix_. put(row_index, col_index, *p++);
   clear_svd();
+  return *this;
 }
 
 
 //----------------------------------------------------------------
 //
 template <class T>
-void
+vgl_p_matrix<T>&
 vgl_p_matrix<T>::set(vnl_matrix_fixed<T,3,3> const& A, vnl_vector_fixed<T,3> const& a)
 {
   p_matrix_(0,0) = A(0,0);
@@ -432,12 +436,14 @@ vgl_p_matrix<T>::set(vnl_matrix_fixed<T,3,3> const& A, vnl_vector_fixed<T,3> con
   p_matrix_(0,3) = a[0];
   p_matrix_(1,3) = a[1];
   p_matrix_(2,3) = a[2];
+
+  return *this;
 }
 
 //----------------------------------------------------------------
 //
 template <class T>
-void
+vgl_p_matrix<T>&
 vgl_p_matrix<T>::set(vnl_matrix<T> const& A, vnl_vector<T> const& a)
 {
   p_matrix_(0,0) = A(0,0);
@@ -455,12 +461,14 @@ vgl_p_matrix<T>::set(vnl_matrix<T> const& A, vnl_vector<T> const& a)
   p_matrix_(0,3) = a[0];
   p_matrix_(1,3) = a[1];
   p_matrix_(2,3) = a[2];
+
+  return *this;
 }
 
 //----------------------------------------------------------------
 //
 template <class T>
-void vgl_p_matrix<T>::set_identity()
+vgl_p_matrix<T>& vgl_p_matrix<T>::set_identity()
 {
   p_matrix_(0,0) = 1;
   p_matrix_(1,0) = 0;
@@ -477,10 +485,12 @@ void vgl_p_matrix<T>::set_identity()
   p_matrix_(0,3) = 0;
   p_matrix_(1,3) = 0;
   p_matrix_(2,3) = 0;
+
+  return *this;
 }
 
 template <class T>
-void
+vgl_p_matrix<T>&
 vgl_p_matrix<T>::fix_cheirality()
 {
   vnl_matrix_fixed<T,3,3> A;
@@ -502,6 +512,8 @@ vgl_p_matrix<T>::fix_cheirality()
   p_matrix_ *= scale;
   if (svd_)
     svd_->W() *= scale;
+
+  return *this;
 }
 
 template <class T>
@@ -515,11 +527,13 @@ bool vgl_p_matrix<T>::is_behind_camera(const vgl_homg_point_3d<T>& hX)
 }
 
 template <class T>
-void vgl_p_matrix<T>::flip_sign()
+vgl_p_matrix<T>&
+vgl_p_matrix<T>::flip_sign()
 {
   p_matrix_ *= -1;
   if (svd_)
     svd_->W() *= -1;
+  return *this;
 }
 
 template <class T>

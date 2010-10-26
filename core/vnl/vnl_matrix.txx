@@ -435,20 +435,22 @@ bool vnl_matrix<T>::set_size (unsigned rowz, unsigned colz)
 //: Sets all elements of matrix to specified value. O(m*n).
 
 template<class T>
-void vnl_matrix<T>::fill (T const& value)
+vnl_matrix<T>& vnl_matrix<T>::fill (T const& value)
 {
   for (unsigned int i = 0; i < this->num_rows; i++)
     for (unsigned int j = 0; j < this->num_cols; j++)
       this->data[i][j] = value;
+  return *this;
 }
 
 //: Sets all diagonal elements of matrix to specified value. O(n).
 
 template<class T>
-void vnl_matrix<T>::fill_diagonal (T const& value)
+vnl_matrix<T>& vnl_matrix<T>::fill_diagonal (T const& value)
 {
   for (unsigned int i = 0; i < this->num_rows && i < this->num_cols; i++)
     this->data[i][i] = value;
+  return *this;
 }
 
 #if 0
@@ -876,12 +878,13 @@ vnl_matrix<T> element_quotient (vnl_matrix<T> const& m1,
 //: Fill this matrix with the given data.
 //  We assume that p points to a contiguous rows*cols array, stored rowwise.
 template<class T>
-void vnl_matrix<T>::copy_in(T const *p)
+vnl_matrix<T>& vnl_matrix<T>::copy_in(T const *p)
 {
   T* dp = this->data[0];
   unsigned int n = this->num_rows * this->num_cols;
   while (n--)
     *dp++ = *p++;
+  return *this;
 }
 
 //: Fill the given array with this matrix.
@@ -895,47 +898,42 @@ void vnl_matrix<T>::copy_out(T *p) const
     *p++ = *dp++;
 }
 
-//: Fill this matrix with a row*row identity matrix.
+//: Fill this matrix with a matrix having 1s on the main diagonal and 0s elsewhere.
 template<class T>
-void vnl_matrix<T>::set_identity()
+vnl_matrix<T>& vnl_matrix<T>::set_identity()
 {
-#ifndef NDEBUG
-  if (this->num_rows != this->num_cols) // Size?
-    vnl_error_matrix_nonsquare ("set_identity");
-#endif
-  for (unsigned int i = 0; i < this->num_rows; i++)    // For each row in the Matrix
-    for (unsigned int j = 0; j < this->num_cols; j++)  // For each element in column
-      if (i == j)
-        this->data[i][j] = T(1);
-      else
-        this->data[i][j] = T(0);
+  for (unsigned int i = 0; i < this->num_rows; ++i)    // For each row in the Matrix
+    for (unsigned int j = 0; j < this->num_cols; ++j)  // For each element in column
+      this->data[i][j] = (i==j) ? T(1) : T(0);
+  return *this;
 }
 
 //: Make each row of the matrix have unit norm.
 // All-zero rows are ignored.
 template<class T>
-void vnl_matrix<T>::normalize_rows()
+vnl_matrix<T>& vnl_matrix<T>::normalize_rows()
 {
   typedef typename vnl_numeric_traits<T>::abs_t Abs_t;
   typedef typename vnl_numeric_traits<T>::real_t Real_t;
   typedef typename vnl_numeric_traits<Real_t>::abs_t abs_real_t;
-  for (unsigned int i = 0; i < this->num_rows; i++) {  // For each row in the Matrix
+  for (unsigned int i = 0; i < this->num_rows; ++i) {  // For each row in the Matrix
     Abs_t norm(0); // double will not do for all types.
-    for (unsigned int j = 0; j < this->num_cols; j++)  // For each element in row
+    for (unsigned int j = 0; j < this->num_cols; ++j)  // For each element in row
       norm += vnl_math_squared_magnitude(this->data[i][j]);
 
     if (norm != 0) {
       abs_real_t scale = abs_real_t(1)/(vcl_sqrt((abs_real_t)norm));
-      for (unsigned int j = 0; j < this->num_cols; j++)
+      for (unsigned int j = 0; j < this->num_cols; ++j)
         this->data[i][j] = T(Real_t(this->data[i][j]) * scale);
     }
   }
+  return *this;
 }
 
 //: Make each column of the matrix have unit norm.
 // All-zero columns are ignored.
 template<class T>
-void vnl_matrix<T>::normalize_columns()
+vnl_matrix<T>& vnl_matrix<T>::normalize_columns()
 {
   typedef typename vnl_numeric_traits<T>::abs_t Abs_t;
   typedef typename vnl_numeric_traits<T>::real_t Real_t;
@@ -951,11 +949,12 @@ void vnl_matrix<T>::normalize_columns()
         this->data[i][j] = T(Real_t(this->data[i][j]) * scale);
     }
   }
+  return *this;
 }
 
 //: Multiply row[row_index] by value
 template<class T>
-void vnl_matrix<T>::scale_row(unsigned row_index, T value)
+vnl_matrix<T>& vnl_matrix<T>::scale_row(unsigned row_index, T value)
 {
 #ifndef NDEBUG
   if (row_index >= this->num_rows)
@@ -963,11 +962,12 @@ void vnl_matrix<T>::scale_row(unsigned row_index, T value)
 #endif
   for (unsigned int j = 0; j < this->num_cols; j++)    // For each element in row
     this->data[row_index][j] *= value;
+  return *this;
 }
 
 //: Multiply column[column_index] by value
 template<class T>
-void vnl_matrix<T>::scale_column(unsigned column_index, T value)
+vnl_matrix<T>& vnl_matrix<T>::scale_column(unsigned column_index, T value)
 {
 #ifndef NDEBUG
   if (column_index >= this->num_cols)
@@ -975,6 +975,7 @@ void vnl_matrix<T>::scale_column(unsigned column_index, T value)
 #endif
   for (unsigned int j = 0; j < this->num_rows; j++)    // For each element in column
     this->data[j][column_index] *= value;
+  return *this;
 }
 
 //: Returns a copy of n rows, starting from "row"
@@ -1040,64 +1041,70 @@ vnl_vector<T> vnl_matrix<T>::get_column(unsigned column_index) const
 
 //: Set row[row_index] to data at given address. No bounds check.
 template<class T>
-void vnl_matrix<T>::set_row(unsigned row_index, T const *v)
+vnl_matrix<T>& vnl_matrix<T>::set_row(unsigned row_index, T const *v)
 {
   for (unsigned int j = 0; j < this->num_cols; j++)    // For each element in row
     this->data[row_index][j] = v[j];
+  return *this;
 }
 
 //: Set row[row_index] to given vector.
 template<class T>
-void vnl_matrix<T>::set_row(unsigned row_index, vnl_vector<T> const &v)
+vnl_matrix<T>& vnl_matrix<T>::set_row(unsigned row_index, vnl_vector<T> const &v)
 {
 #ifndef NDEBUG
   if (v.size() != this->num_cols)
     vnl_error_vector_dimension ("vnl_matrix::set_row", v.size(), this->num_cols);
 #endif
   set_row(row_index,v.data_block());
+  return *this;
 }
 
 //: Set row[row_index] to given value.
 template<class T>
-void vnl_matrix<T>::set_row(unsigned row_index, T v)
+vnl_matrix<T>& vnl_matrix<T>::set_row(unsigned row_index, T v)
 {
   for (unsigned int j = 0; j < this->num_cols; j++)    // For each element in row
     this->data[row_index][j] = v;
+  return *this;
 }
 
 //--------------------------------------------------------------------------------
 
 //: Set column[column_index] to data at given address.
 template<class T>
-void vnl_matrix<T>::set_column(unsigned column_index, T const *v)
+vnl_matrix<T>& vnl_matrix<T>::set_column(unsigned column_index, T const *v)
 {
   for (unsigned int i = 0; i < this->num_rows; i++)    // For each element in row
     this->data[i][column_index] = v[i];
+  return *this;
 }
 
 //: Set column[column_index] to given vector.
 template<class T>
-void vnl_matrix<T>::set_column(unsigned column_index, vnl_vector<T> const &v)
+vnl_matrix<T>& vnl_matrix<T>::set_column(unsigned column_index, vnl_vector<T> const &v)
 {
 #ifndef NDEBUG
   if (v.size() != this->num_rows)
     vnl_error_vector_dimension ("vnl_matrix::set_column", v.size(), this->num_rows);
 #endif
   set_column(column_index,v.data_block());
+  return *this;
 }
 
 //: Set column[column_index] to given value.
 template<class T>
-void vnl_matrix<T>::set_column(unsigned column_index, T v)
+vnl_matrix<T>& vnl_matrix<T>::set_column(unsigned column_index, T v)
 {
   for (unsigned int j = 0; j < this->num_rows; j++)    // For each element in row
     this->data[j][column_index] = v;
+  return *this;
 }
 
 
 //: Set columns starting at starting_column to given matrix
 template<class T>
-void vnl_matrix<T>::set_columns(unsigned starting_column, vnl_matrix<T> const& m)
+vnl_matrix<T>& vnl_matrix<T>::set_columns(unsigned starting_column, vnl_matrix<T> const& m)
 {
 #ifndef NDEBUG
   if (this->num_rows != m.num_rows ||
@@ -1110,6 +1117,7 @@ void vnl_matrix<T>::set_columns(unsigned starting_column, vnl_matrix<T> const& m
   for (unsigned int j = 0; j < m.num_cols; ++j)
     for (unsigned int i = 0; i < this->num_rows; i++)    // For each element in row
       this->data[i][starting_column + j] = m.data[i][j];
+  return *this;
 }
 
 //--------------------------------------------------------------------------------
@@ -1396,7 +1404,7 @@ void vnl_matrix<T>::swap(vnl_matrix<T> &that)
 
 //: Reverse order of rows.  Name is from Matlab, meaning "flip upside down".
 template <class T>
-void vnl_matrix<T>::flipud()
+vnl_matrix<T>& vnl_matrix<T>::flipud()
 {
   unsigned int n = this->rows();
   unsigned int colz = this->columns();
@@ -1411,11 +1419,12 @@ void vnl_matrix<T>::flipud()
       (*this)(r2, c) = tmp;
     }
   }
+  return *this;
 }
 
 //: Reverse order of columns.
 template <class T>
-void vnl_matrix<T>::fliplr()
+vnl_matrix<T>& vnl_matrix<T>::fliplr()
 {
   unsigned int n = this->cols();
   unsigned int rowz = this->rows();
@@ -1430,6 +1439,7 @@ void vnl_matrix<T>::fliplr()
       (*this)(r, c2) = tmp;
     }
   }
+  return *this;
 }
 
 // || M ||  = \max \sum | M   |
@@ -1584,7 +1594,7 @@ L80:
 //: Transpose matrix M in place.
 //  Works for rectangular matrices using an enormously clever algorithm from ACM TOMS.
 template <class T>
-void vnl_matrix<T>::inplace_transpose()
+vnl_matrix<T>& vnl_matrix<T>::inplace_transpose()
 {
   unsigned m = rows();
   unsigned n = columns();
@@ -1607,6 +1617,7 @@ void vnl_matrix<T>::inplace_transpose()
     for (unsigned i=0; i<n; ++i)
       data[i] = tmp + i * m;
   }
+  return *this;
 }
 
 //------------------------------------------------------------------------------

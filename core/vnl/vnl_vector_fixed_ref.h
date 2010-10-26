@@ -15,8 +15,9 @@
 //
 // \verbatim
 //  Modifications
-//   4-Jul-2003 Paul Smyth - general cleanup and rewrite; interface now as vnl_vector_fixed
-//   30-Mar-2009 Peter Vanroose - added arg_min() and arg_max()
+//    4-Jul-2003 - Paul Smyth - general cleanup and rewrite; interface now as vnl_vector_fixed
+//   30-Mar-2009 - Peter Vanroose - added arg_min() and arg_max()
+//   24-Oct-2010 - Peter Vanroose - mutators and setters now return *this
 // \endverbatim
 
 #include <vcl_cassert.h>
@@ -27,13 +28,12 @@
 template <class T, unsigned int n>
 class vnl_vector_fixed_ref_const
 {
- public:
-  typedef unsigned int size_type;
-
  protected:
   const T* data_;
 
  public:
+  typedef unsigned int size_type;
+
   vnl_vector_fixed_ref_const(vnl_vector_fixed<T,n> const& rhs) : data_(rhs.data_block()) {}
 
   explicit vnl_vector_fixed_ref_const(const T * dataptr) : data_(dataptr) {}
@@ -42,7 +42,6 @@ class vnl_vector_fixed_ref_const
 
   const T * data_block() const { return data_; }
 
- public:
   // Don't out-of-line the constructors, as the extra function call
   // adds a significant overhead. (memcpy is often implemented with a
   // couple of assembly instructions.)
@@ -335,16 +334,23 @@ class vnl_vector_fixed_ref : public vnl_vector_fixed_ref_const<T,n>
   void put (unsigned int i, T const& v) const { data_block()[i] = v; }
 
   //: Set all values to v
-  void fill( T const& v ) { for ( size_type i = 0; i < n; ++i ) data_block()[i] = v; }
+  vnl_vector_fixed_ref& fill( T const& v )
+  {
+    for ( size_type i = 0; i < n; ++i ) data_block()[i] = v;
+    return *this;
+  }
 
   //: Sets elements to ptr[i]
   //  Note: ptr[i] must be valid for i=0..size()-1
-  void copy_in( T const * ptr ) const { for ( size_type i = 0; i < n; ++i ) data_block()[i] = ptr[i]; }
+  vnl_vector_fixed_ref const& copy_in( T const * ptr ) const
+  {
+    for ( size_type i = 0; i < n; ++i ) data_block()[i] = ptr[i];
+    return *this;
+  }
 
   //: Sets elements to ptr[i]
   //  Note: ptr[i] must be valid for i=0..size()-1
-  void set( T const *ptr ) const { copy_in(ptr); }
-
+  vnl_vector_fixed_ref const& set( T const *ptr ) const { copy_in(ptr); return *this; }
 
   //: Return reference to the element at specified index.
   // There are assert style boundary checks - #define NDEBUG to turn them off.
@@ -375,7 +381,7 @@ class vnl_vector_fixed_ref : public vnl_vector_fixed_ref_const<T,n>
   //: Read from text stream
   bool read_ascii(vcl_istream& s) const;
 
-  void flip() const;
+  vnl_vector_fixed_ref const& flip() const;
 
   //:
   vnl_vector_fixed_ref<T,n> const & operator+=( T s ) const {
