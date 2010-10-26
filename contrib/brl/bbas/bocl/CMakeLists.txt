@@ -1,6 +1,6 @@
 # basic open_cl library
 
-INCLUDE( ${BRL_MODULE_PATH}/find_open_cl.cmake )
+INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindOpenCL.cmake )
 IF(OPENCL_FOUND)
   ADD_DEFINITIONS(-DHAS_OPENCL=1)
   INCLUDE_DIRECTORIES( ${OPENCL_INCLUDE_PATH} )
