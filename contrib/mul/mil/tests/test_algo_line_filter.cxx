@@ -11,22 +11,22 @@ static void print_out(int n,
                       const char* s2, mil_image_2d_of<unsigned char> b,
                       const char* s3, mil_image_2d_of<float> c)
 {
-  vcl_cout << "\n";
+  vcl_cout << '\n';
   vcl_cout.width(n+5); vcl_cout << s1;
   vcl_cout.width(n+5); vcl_cout << s2;
   vcl_cout.width(n+5); vcl_cout << s3;
   for (int j=0; j<n; ++j) {
     vcl_cout << "\n ";
     vcl_cout.width(1);
-    for (int i=0; i<n; ++i) vcl_cout << (int)(a(i,j)*9.9/(white-black));
+    for (int i=0; i<n; ++i) vcl_cout << (int)(a(i,j)*9.9/double(white-black));
     vcl_cout << "     ";
     vcl_cout.width(1);
     for (int i=0; i<n; ++i) vcl_cout << (int)b(i,j);
     vcl_cout << "     ";
     vcl_cout.width(1);
-    for (int i=0; i<n; ++i) vcl_cout << (int)(c(i,j)*9/(white-black)+0.5);
+    for (int i=0; i<n; ++i) vcl_cout << (int)(c(i,j)*9.f/float(white-black)+0.5f);
   }
-  vcl_cout << "\n";
+  vcl_cout << '\n';
   vcl_cout.width(0);
 }
 

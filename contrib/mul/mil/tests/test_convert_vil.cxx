@@ -20,7 +20,7 @@ void test_convert_vil()
   // Fill image with shaded squares
   for (int y=0;y<ny;++y)
     for (int x=0;x<nx;++x)
-      in_image(x,y)=0.1f*((x%10)+(y%10));
+      in_image(x,y)=0.1f*float((x%10)+(y%10));
 
   //out_image.deepCopy(image);
   //out_image.print_summary(vcl_cout);
@@ -60,7 +60,7 @@ void test_convert_vil()
   for (int p=0;p<3;++p)
     for (int y=0;y<ny;++y)
       for (int x=0;x<nx;++x)
-        c_in_image(x,y,p)=0.1f*((x%10)+(y%10));
+        c_in_image(x,y,p)=0.1f*float((x%10)+(y%10));
 
   //out_image.deepCopy(image);
   //out_image.print_summary(vcl_cout);

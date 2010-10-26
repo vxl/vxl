@@ -33,13 +33,13 @@ void test_algo_gaussian_filter_byte_float()
   bool fail=false;
   for (int i=2;i<n-2;++i)
     for (int j=2;j<n-2;++j)
-      if (vcl_fabs(dest(i,j)-src(i,j)) > 0.5) fail = true;
+      if (vcl_fabs(dest(i,j)-float(src(i,j))) > 0.5f) fail = true;
   TEST("Central areas close to original", fail, false);
 
   fail=false;
   for (int i=0;i<n;++i)
     for (int j=0;j<n;++j)
-      if (vcl_fabs(dest(i,j)-src(i,j)) > n/2)
+      if (vcl_fabs(dest(i,j)-float(src(i,j))) > float(n)*0.5f)
         fail = true;
   TEST("Central areas not so close to original", fail, false);
 

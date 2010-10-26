@@ -6,9 +6,9 @@
 
 void test_normalise_image_2d()
 {
-  vcl_cout << "********************************\n";
-  vcl_cout << " Testing mil_normalise_image_2d\n";
-  vcl_cout << "********************************\n";
+  vcl_cout << "********************************\n"
+           << " Testing mil_normalise_image_2d\n"
+           << "********************************\n";
 
   // test grey conversions
 
@@ -57,7 +57,7 @@ void test_normalise_image_2d()
   // create correct variance norm image
   for (int y=0;y<ny;++y)
     for (int x=0;x<nx;++x)
-      correct_var_norm_image(x,y)=(x-2.f)/ (float)vcl_sqrt(2.0);
+      correct_var_norm_image(x,y)=(float(x)-2.f)/vcl_sqrt(2.0f);
 
   double diff2=0;
   for (int y=0;y<ny;++y)

@@ -23,7 +23,7 @@ inline bool test_element_product(const vnl_vector<float> &vec, const vnl_vector<
     correct(i) = vec(i) * vec2(i);
 
   float err = vnl_vector_ssd(correct, result);
-  float neps = n*vcl_numeric_limits<float>::epsilon();
+  float neps = float(n)*vcl_numeric_limits<float>::epsilon();
   if (err < neps)
     return true;
   else
@@ -38,12 +38,12 @@ inline bool test_dot_product(const vnl_vector<float> &vec, const vnl_vector<floa
 {
   float val = dot_product(vec, vec2);
   unsigned n = vec.size();
-  float correct(0);
+  float correct = 0.f;
   for (unsigned i = 0; i < n; ++i)
     correct += vec(i) * vec2(i);
 
   float err = vcl_abs(correct-val);
-  float neps = n*vcl_numeric_limits<float>::epsilon();
+  float neps = float(n)*vcl_numeric_limits<float>::epsilon();
   if (err < neps)
     return true;
   else
@@ -62,7 +62,7 @@ inline bool test_euclid_dist_sq(const vnl_vector<float> &vec, const vnl_vector<f
     correct += vnl_math_sqr(vec(i) - vec2(i));
 
   float err = vcl_abs(correct-val);
-  float neps = n*vcl_sqrt(vcl_numeric_limits<float>::epsilon());
+  float neps = float(n)*vcl_sqrt(vcl_numeric_limits<float>::epsilon());
   if (err < neps)
     return true;
   else
@@ -87,7 +87,7 @@ inline bool test_matrix_x_vector(const vnl_matrix<float> &mat, const vnl_vector<
   }
 
   float err = vnl_vector_ssd(correct, result);
-  float neps = n*vcl_numeric_limits<float>::epsilon();
+  float neps = float(n)*vcl_numeric_limits<float>::epsilon();
   if (err < neps)
     return true;
   else
@@ -112,7 +112,7 @@ inline bool test_vector_x_matrix(const vnl_vector<float> &vec, const vnl_matrix<
   }
 
   float err = vnl_vector_ssd(correct, result);
-  float neps = n*vcl_numeric_limits<float>::epsilon();
+  float neps = float(n)*vcl_numeric_limits<float>::epsilon();
   if (err < neps)
     return true;
   else
@@ -131,7 +131,7 @@ inline bool test_sum(const vnl_vector<float> &vec)
     correct += vec(i);
 
   float err = vcl_abs(correct-val);
-  float neps = n*vcl_numeric_limits<float>::epsilon();
+  float neps = float(n)*vcl_numeric_limits<float>::epsilon();
   if (err < neps)
     return true;
   else
@@ -150,7 +150,7 @@ inline bool test_max(const vnl_vector<float> &vec)
     correct = vcl_max(vec(i), correct);
 
   float err = vcl_abs(correct-val);
-  float neps = n*vcl_numeric_limits<float>::epsilon();
+  float neps = float(n)*vcl_numeric_limits<float>::epsilon();
   if (err < neps)
     return true;
   else
@@ -169,7 +169,7 @@ inline bool test_min(const vnl_vector<float> &vec)
     correct = vcl_min(vec(i), correct);
 
   float err = vcl_abs(correct-val);
-  float neps = n*vcl_numeric_limits<float>::epsilon();
+  float neps = float(n)*vcl_numeric_limits<float>::epsilon();
   if (err < neps)
     return true;
   else
@@ -222,9 +222,9 @@ static void test_alignment_type()
 {
   vcl_cout << "*****************************************************\n"
            << "Testing vnl_sse alignment issues in with type " << typeid(float).name() << '\n'
-           << "*****************************************************\n";
-
-  vcl_cout << "VNL_CONFIG_ENABLE_SSE2 is " << VNL_CONFIG_ENABLE_SSE2 << vcl_endl;
+           << "*****************************************************\n"
+           << '\n'
+           << "VNL_CONFIG_ENABLE_SSE2 is " << VNL_CONFIG_ENABLE_SSE2 << vcl_endl;
 
   // Set up random data arrays.
   const unsigned ndata = 13; // not a multiple of 2

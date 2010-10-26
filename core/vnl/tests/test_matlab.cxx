@@ -69,7 +69,7 @@ static void test_matlab()
   vnl_vector<float> v(4);
   vnl_vector_fixed<float,4> vf;
   for (unsigned i=0; i<v.size(); ++i)
-    vf[i] = v[i] = 0.1f*i;
+    vf[i] = v[i] = 0.1f*float(i);
 
   vnl_matrix<double> M(3,4);
   vnl_matrix_fixed<double,3,4> Mf;
@@ -105,9 +105,9 @@ static void test_matlab()
       vnl_matlab_write(f, v.begin(), v.size(), "v");
       vnl_matlab_write(f, (double const * const *)M.data_array(), M.rows(), M.cols(), (char const *)"M");
 
-       // write swapped matlab file
-       vcl_ofstream f2(file2);
-       matlab_write_swapped(f2, v.begin(), v.size(), "v");
+      // write swapped matlab file
+      vcl_ofstream f2(file2);
+      matlab_write_swapped(f2, v.begin(), v.size(), "v");
     }
     {
       vcl_ifstream f(file);

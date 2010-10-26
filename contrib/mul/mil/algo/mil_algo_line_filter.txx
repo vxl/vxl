@@ -78,7 +78,7 @@ void mil_algo_line_filter<Type>::light_lines_3x3(mil_image_2d_of<unsigned char>&
       if (f3>max_f) { best_d=3; max_f=f3;}
       if (f4>max_f) { best_d=4; max_f=f4;}
 
-      float edge_s = 0.5f*max_f + (*i_row)/3.0f -(f1+f2+f3+f4)/6.0f;
+      float edge_s = 0.5f*max_f + float(*i_row)/3.0f -(f1+f2+f3+f4)/6.0f;
       if (edge_s>edge_thresh)
       {
         *d_row = best_d;
@@ -171,7 +171,7 @@ void mil_algo_line_filter<Type>::dark_lines_3x3(mil_image_2d_of<unsigned char>& 
       if (f3<min_f) { best_d=3; min_f=f3;}
       if (f4<min_f) { best_d=4; min_f=f4;}
 
-      float edge_s = (f1+f2+f3+f4)/6.0f - 0.5f*min_f - (*i_row)/3.0f;
+      float edge_s = (f1+f2+f3+f4)/6.0f - 0.5f*min_f - float(*i_row)/3.0f;
       if (edge_s>edge_thresh)
       {
         *d_row = best_d;
@@ -283,7 +283,7 @@ void mil_algo_line_filter<Type>::light_lines_5x5(mil_image_2d_of<unsigned char>&
       if (f4>max_f) { best_d=4; max_f=f4;}
 
         // Average on line - average off line
-      float edge_s = (17.0f/60) * max_f + 0.2f*(*i_row) -(f1+f2+f3+f4)/12;
+      float edge_s = (17.0f/60.f) * max_f + 0.2f*float(*i_row) -(f1+f2+f3+f4)/12.f;
       if (edge_s>edge_thresh)
       {
         *d_row = best_d;
@@ -418,6 +418,6 @@ void mil_algo_line_filter<Type>::dark_lines_5x5(mil_image_2d_of<unsigned char>& 
 
 #undef MIL_ALGO_LINE_FILTER_INSTANTIATE
 #define MIL_ALGO_LINE_FILTER_INSTANTIATE(T) \
- template class mil_algo_line_filter<T >
+template class mil_algo_line_filter<T >
 
 #endif // mil_algo_line_filter_txx_
