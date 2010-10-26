@@ -60,8 +60,7 @@ bool test_ocl_search_manager()
                  -0.073085399753, 0.997165853331, -0.017858933610000002,
                  0.06832371779200001, 0.02287012861500001, 0.997400346057};
   vnl_matrix_fixed<double, 3, 3> Mr(rv);
-  vgl_rotation_3d<double> Rr(Mr), Rid;
-  Rid.set_identity();
+  vgl_rotation_3d<double> Rr(Mr);
   vgl_vector_3d<double> tr(0.3207432455793182, 0.04231364883145655, -0.019929923492081336);
   vgl_vector_3d<double> tid(0.0, 0.0, 0.0), tbox(0.5, 0.0, 0.0);
   vnl_matrix_fixed<double, 3, 3> K(0.0);
@@ -104,7 +103,7 @@ bool test_ocl_search_manager()
     "/contrib/gel/mrc/vpgl/icam/icam_ocl/image_parallel_transf_search.cl";
   vcl_string path = root_dir + kern_path;
   if (!mgr->load_kernel_source(path))
-      return false;
+    return false;
   if (mgr->build_kernel_program()!=SDK_SUCCESS)
     return false;
   if (mgr->create_kernel("image_parallel_transf_search")!=SDK_SUCCESS)
@@ -112,11 +111,11 @@ bool test_ocl_search_manager()
   if (!mgr->setup_image_parallel_kernel())
     return false;
   vul_timer t;
-  for (unsigned i = 0; i<67095; ++i){
-  mgr->set_image_parallel_transf(tr, Rr);
-  mgr->copy_to_image_parallel_transf_buffers();
-  if (mgr->run_kernel()!=SDK_SUCCESS)
-    return false;
+  for (unsigned i = 0; i<67095; ++i) {
+    mgr->set_image_parallel_transf(tr, Rr);
+    mgr->copy_to_image_parallel_transf_buffers();
+    if (mgr->run_kernel()!=SDK_SUCCESS)
+      return false;
   }
   vcl_cout << " search time " << t.real()/1000.0 << " seconds\n";
   cl_int4 flag = mgr->image_para_flag();

@@ -32,21 +32,21 @@ static void test_minimizer()
   vcl_string source_file = "c:/images/calibration/frame_138.png";
   //  vcl_string source_file = "c:/images/calibration/frame_146.png";
   vcl_string depth_file = "c:/images/calibration/depth_142.tif";
-  
+
   vil_image_view_base_sptr dest_img_base = vil_load(dest_file.c_str());
   if (!dest_img_base) {
-    vcl_cerr << "error loading image." << vcl_endl;
+    vcl_cerr << "error loading image.\n";
     return;
   }
   vil_image_view_base_sptr source_img_base = vil_load(source_file.c_str());
   if (!source_img_base) {
-    vcl_cerr << "error loading image." << vcl_endl;
+    vcl_cerr << "error loading image.\n";
     return;
   }
 
   vil_image_view_base_sptr depth_img_base = vil_load(depth_file.c_str());
   if (!depth_img_base) {
-    vcl_cerr << "error loading image." << vcl_endl;
+    vcl_cerr << "error loading image.\n";
     return;
   }
   vil_image_view<vxl_byte> *dest_img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(dest_img_base.ptr());
@@ -57,7 +57,7 @@ static void test_minimizer()
   vil_convert_cast(*dest_img_byte,dest_img_flt);
   vil_image_view<float> source_img_flt(ni,nj);
   vil_convert_cast(*source_img_byte,source_img_flt);
-  vil_image_view<double> depth_img_dbl(ni, nj); 
+  vil_image_view<double> depth_img_dbl(ni, nj);
   vil_convert_cast(*depth_img_flt,depth_img_dbl);
   // ========================Camera 145 =====================
   // relative rotation for source camera
@@ -65,12 +65,11 @@ static void test_minimizer()
                  -0.073085399753, 0.997165853331, -0.017858933610000002,
                  0.06832371779200001, 0.02287012861500001, 0.997400346057};
   vnl_matrix_fixed<double, 3, 3> Mr(rv);
-  vgl_rotation_3d<double> Rr(Mr), Rid;
-  Rid.set_identity();
+  vgl_rotation_3d<double> Rr(Mr);
   vgl_vector_3d<double> tr(0.3207432455793182, 0.04231364883145655, -0.019929923492081336);
   vgl_vector_3d<double> tid(0.0, 0.0, 0.0), tbox(0.5, 0.0, 0.0);
   vnl_matrix_fixed<double, 3, 3> K(0.0);
-  K[0][0]=1871.2;   K[1][1]=1871.2; K[0][2] = 640.0; K[1][2]=360.0; K[2][2]=1.0;  
+  K[0][0]=1871.2;   K[1][1]=1871.2; K[0][2] = 640.0; K[1][2]=360.0; K[2][2]=1.0;
   // ========================Camera 138 =====================
   double rv138 [] = {0.996034852179, 0.043480236729, 0.07760390651200001,
                      0.042636569473, 0.999012669051, 0.01251074244199999,
@@ -79,13 +78,13 @@ static void test_minimizer()
   vgl_rotation_3d<double> Rr138(Mr138);
   vnl_vector_fixed<double,3> rr138 = Rr138.as_rodrigues();
   //=========================Camera 145 ================================
-  double rv145 [] = {0.992577, 0.0862514, -0.0857363, 
-                     -0.0888177, 0.995693, -0.0265857, 
+  double rv145 [] = {0.992577, 0.0862514, -0.0857363,
+                     -0.0888177, 0.995693, -0.0265857,
                      0.0830739, 0.0340026, 0.995963};
   vnl_matrix_fixed<double, 3, 3> Mr145(rv145);
   vgl_rotation_3d<double> Rr145(Mr145);
   vnl_vector_fixed<double,3> rr145 = Rr145.as_rodrigues();
- 
+
   bool adjust_to_fl = false;
   icam_depth_transform dt(K, depth_img_dbl, Rr, tr, adjust_to_fl);
   unsigned nparams = dt.n_params();
@@ -108,7 +107,7 @@ static void test_minimizer()
                            local_min_thresh, base_path);
   unsigned nl = minimizer.n_levels();
   unsigned lev = nl-1;
-  
+
   vgl_box_3d<double> trans_box;
   trans_box.add(vgl_point_3d<double>(-.5, -.5, -.5));
   trans_box.add(vgl_point_3d<double>(.5, .5, .5));
@@ -126,13 +125,13 @@ static void test_minimizer()
                                       full_min_rot,
                                       full_min_cost,
                                       full_min_overlap);
-  if(full){
-  vcl_cout << "full min error " << full_min_cost << '\n';
-  vcl_cout << "full min overlap " << full_min_overlap << '\n';
-  vcl_cout << "full min translation     " 
-           << full_min_trans << '\n';
-  vcl_cout << "full min rotation " 
-           << full_min_rot.as_rodrigues() << '\n';
+  if (full) {
+    vcl_cout << "full min error " << full_min_cost << '\n'
+             << "full min overlap " << full_min_overlap << '\n'
+             << "full min translation     "
+             << full_min_trans << '\n'
+             << "full min rotation "
+             << full_min_rot.as_rodrigues() << '\n';
   }
 }
 
