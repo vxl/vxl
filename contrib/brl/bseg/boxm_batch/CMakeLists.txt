@@ -1,6 +1,7 @@
 # contrib/brl/bseg/boxm_batch/CMakeLists.txt
-INCLUDE( ${BRL_MODULE_PATH}/find_open_cl.cmake ) # so we know whether to include gpu optimized processes
 INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindPython.cmake )
+INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindOpenCL.cmake )
+
 IF( PYTHON_FOUND )
     MESSAGE("${PYTHON_INCLUDE_DIRS}")
     MESSAGE("${Python_FRAMEWORKS}")
