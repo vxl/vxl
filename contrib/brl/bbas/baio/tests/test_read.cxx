@@ -3,7 +3,25 @@
 #include <baio/baio.h>
 #include <vcl_iostream.h> //for vcl_cout
 #include <vcl_fstream.h>  //for file open
+#include <stdlib.h>  //includes malloc
 
+
+static void test_read_helper(char* buffer)
+{
+  //tests to see if char* persists
+  //load from file asynch
+  int buffSize = 1024;
+  vcl_string root_dir = testlib_root_dir();
+  vcl_string test_file = root_dir + "/contrib/brl/bbas/baio/tests/test_file.txt"; 
+  baio aio;
+  aio.read(test_file, buffer, buffSize);
+  int numFlops = 0;
+  while(aio.status() == BAIO_IN_PROGRESS) {
+    numFlops += 4;
+  }
+  
+  buffer = aio.buffer();
+}
 
 static void test_read()
 {
@@ -31,8 +49,9 @@ static void test_read()
   }
   
   //load from file asynch
+  char* aio_buff = new char[buffSize];
   baio aio;
-  aio.read(test_file, buffSize);
+  aio.read(test_file, aio_buff, buffSize);
   int numFlops = 0;
   while(aio.status() == BAIO_IN_PROGRESS) {
     numFlops += 4;
@@ -41,11 +60,8 @@ static void test_read()
   
   //test asynchros-ness
   TEST("read is asynchronous/status works ", true, numFlops > 0);
-  
-  char* aio_buff = aio.buffer();
-  
-  
-  //Test same data read
+
+  //Test same data read  
   bool good = true;
   for(int i=0; i<buffSize; i++) {
     if(aio_buff[i] != tester[i]) {
@@ -54,6 +70,9 @@ static void test_read()
     }
   }
   TEST("data read matches synchronous data ", true, good);
+  
+  //cleanup
+  if(aio_buff) delete aio_buff;
   
 }
 

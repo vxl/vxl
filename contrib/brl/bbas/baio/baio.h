@@ -19,6 +19,7 @@
 //  Asynch IO wrapper class that handles aio in an object oriented, platform
 //  independent way.  Usage example:
 //
+//    char* buffer
 //    baio aio; aio.read("file.bin", BUFSIZE);
 //    /* other processing not blocked by I/O */
 //    //check to make sure aio is done
@@ -49,7 +50,7 @@ class baio
     ~baio();
 
     //: read bytes from file
-    void read(vcl_string filename, unsigned BUFSIZE);
+    void read(vcl_string filename, char* buff,  unsigned BUFSIZE);
     
     //: get object's status 
     baio_status status();

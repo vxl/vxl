@@ -25,12 +25,12 @@ baio::baio()
 
 baio::~baio()
 {
-  if(info_)
+  if(info_) 
     delete info_;
 }
 
 //: Opens and reads file asynchronously 
-void baio::read(vcl_string filename, unsigned BUFSIZE)
+void baio::read(vcl_string filename, char* buff, unsigned BUFSIZE)
 {
 
   // 1. call c open to get standard file handle
@@ -44,7 +44,7 @@ void baio::read(vcl_string filename, unsigned BUFSIZE)
   bzero( (char *) &(info_->my_aiocb), sizeof(struct aiocb) );
 
   // 3. Allocate a data buffer for the aiocb request 
-  info_->my_aiocb.aio_buf = malloc(BUFSIZE+1);
+  info_->my_aiocb.aio_buf = buff;
   if (!info_->my_aiocb.aio_buf) {
     vcl_cerr<<"baio (linux)::read could not allocate buffer of size "<<BUFSIZE<<vcl_endl;
     perror("malloc");

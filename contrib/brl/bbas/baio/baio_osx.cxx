@@ -25,7 +25,7 @@ baio::~baio()
 }
 
 //: Opens and reads file asynchronously 
-void baio::read(vcl_string filename, unsigned BUFSIZE)
+void baio::read(vcl_string filename, char* buffer, unsigned BUFSIZE)
 {
   vcl_cout<<"baio::read is not yet implemented"<<vcl_endl;
   // need to 
