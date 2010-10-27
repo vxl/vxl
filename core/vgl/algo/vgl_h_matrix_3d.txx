@@ -1,8 +1,6 @@
 // This is core/vgl/algo/vgl_h_matrix_3d.txx
 #ifndef vgl_h_matrix_3d_txx_
 #define vgl_h_matrix_3d_txx_
-//:
-// \file
 
 #include "vgl_h_matrix_3d.h"
 #include <vcl_iostream.h>
@@ -17,27 +15,6 @@
 #include <vnl/vnl_quaternion.h>
 #include <vnl/algo/vnl_svd.h>
 
-//--------------------------------------------------------------
-//
-//: Copy constructor
-template <class T>
-vgl_h_matrix_3d<T>::vgl_h_matrix_3d(vgl_h_matrix_3d<T> const& M)
-  : t12_matrix_(M.get_matrix())
-{
-}
-
-//--------------------------------------------------------------
-//
-//: Constructor, and implicit cast from vnl_matrix_fixed<T,4,4>
-template <class T>
-vgl_h_matrix_3d<T>::vgl_h_matrix_3d(vnl_matrix_fixed<T, 4, 4> const& M)
-{
-  t12_matrix_ = M;
-}
-
-//--------------------------------------------------------------
-//
-//: Constructor - calculate homography between two sets of 3D points (minimum 5)
 template <class T>
 vgl_h_matrix_3d<T>::vgl_h_matrix_3d(vcl_vector<vgl_homg_point_3d<T> > const& points1,
                                     vcl_vector<vgl_homg_point_3d<T> > const& points2)
@@ -78,18 +55,12 @@ vgl_h_matrix_3d<T>::vgl_h_matrix_3d(vcl_vector<vgl_homg_point_3d<T> > const& poi
   t12_matrix_ = vnl_matrix_fixed<T,4,4>(SVD.nullvector().data_block()); // 16-dim. nullvector
 }
 
-//--------------------------------------------------------------
-//
-//: Load H from ASCII vcl_istream.
 template <class T>
 vgl_h_matrix_3d<T>::vgl_h_matrix_3d(vcl_istream& s)
 {
   t12_matrix_.read_ascii(s);
 }
 
-//--------------------------------------------------------------
-//
-//: Load from file
 template <class T>
 vgl_h_matrix_3d<T>::vgl_h_matrix_3d(char const* filename)
 {
@@ -100,10 +71,6 @@ vgl_h_matrix_3d<T>::vgl_h_matrix_3d(char const* filename)
     t12_matrix_.read_ascii(f);
 }
 
-//--------------------------------------------------------------
-//
-//: Construct an affine vgl_h_matrix_3d from 3x3 M and 3x1 m.
-//
 template <class T>
 vgl_h_matrix_3d<T>::vgl_h_matrix_3d(vnl_matrix_fixed<T,3,3> const& M,
                                     vnl_vector_fixed<T,3> const& m)
@@ -118,20 +85,10 @@ vgl_h_matrix_3d<T>::vgl_h_matrix_3d(vnl_matrix_fixed<T,3,3> const& M,
   (t12_matrix_)(3,3) = 1;
 }
 
-//--------------------------------------------------------------
-//
-//: Construct from a 16-element row-storage array of double.
-template <class T>
-vgl_h_matrix_3d<T>::vgl_h_matrix_3d (T const* t_matrix)
-  : t12_matrix_ (t_matrix)
-{
-}
-
 // == OPERATIONS ==
 
 //-----------------------------------------------------------------------------
 //
-//:return the transformed point
 template <class T>
 vgl_homg_point_3d<T>
 vgl_h_matrix_3d<T>::operator()(vgl_homg_point_3d<T> const& x) const
@@ -142,9 +99,6 @@ vgl_h_matrix_3d<T>::operator()(vgl_homg_point_3d<T> const& x) const
   return vgl_homg_point_3d<T>(v2[0], v2[1], v2[2], v2[3]);
 }
 
-//-----------------------------------------------------------------------------
-//
-//: Return the preimage of a transformed plane
 template <class T>
 vgl_homg_plane_3d<T>
 vgl_h_matrix_3d<T>::preimage(vgl_homg_plane_3d<T> const& p) const
@@ -155,9 +109,6 @@ vgl_h_matrix_3d<T>::preimage(vgl_homg_plane_3d<T> const& p) const
   return vgl_homg_plane_3d<T>(v2[0], v2[1], v2[2], v2[3]);
 }
 
-//-----------------------------------------------------------------------------
-//
-//: Return the preimage of a transformed point (requires an inverse)
 template <class T>
 vgl_homg_point_3d<T>
 vgl_h_matrix_3d<T>::preimage(vgl_homg_point_3d<T> const& x) const
@@ -168,9 +119,6 @@ vgl_h_matrix_3d<T>::preimage(vgl_homg_point_3d<T> const& x) const
   return vgl_homg_point_3d<T>(v[0], v[1], v[2], v[3]);
 }
 
-//-----------------------------------------------------------------------------
-//
-//: Transform a plane (requires an inverse)
 template <class T>
 vgl_homg_plane_3d<T>
 vgl_h_matrix_3d<T>::operator()(vgl_homg_plane_3d<T> const& p) const
@@ -181,16 +129,12 @@ vgl_h_matrix_3d<T>::operator()(vgl_homg_plane_3d<T> const& p) const
   return vgl_homg_plane_3d<T>(v[0], v[1], v[2], v[3]);
 }
 
-//-----------------------------------------------------------------------------
-//
-//: Print H on vcl_ostream
 template <class T>
 vcl_ostream& operator<<(vcl_ostream& s, vgl_h_matrix_3d<T> const& h)
 {
   return s << h.get_matrix();
 }
 
-//: Load H from ASCII file.
 template <class T>
 bool vgl_h_matrix_3d<T>::read(vcl_istream& s)
 {
@@ -198,7 +142,6 @@ bool vgl_h_matrix_3d<T>::read(vcl_istream& s)
   return s.good() || s.eof();
 }
 
-//: Read H from file
 template <class T>
 bool vgl_h_matrix_3d<T>::read(char const* filename)
 {
@@ -208,7 +151,6 @@ bool vgl_h_matrix_3d<T>::read(char const* filename)
   return read(f);
 }
 
-//: Load H from ASCII file.
 template <class T>
 vcl_istream& operator>>(vcl_istream& s, vgl_h_matrix_3d<T>& H)
 {
@@ -218,18 +160,12 @@ vcl_istream& operator>>(vcl_istream& s, vgl_h_matrix_3d<T>& H)
 
 // == DATA ACCESS ==
 
-//-----------------------------------------------------------------------------
-//
-//: Get matrix element at (row_index, col_index)
 template <class T>
 T vgl_h_matrix_3d<T>::get (unsigned int row_index, unsigned int col_index) const
 {
   return t12_matrix_.get(row_index, col_index);
 }
 
-//-----------------------------------------------------------------------------
-//
-//: Fill t_matrix with contents of H
 template <class T>
 void vgl_h_matrix_3d<T>::get (T* t_matrix) const
 {
@@ -238,35 +174,24 @@ void vgl_h_matrix_3d<T>::get (T* t_matrix) const
     *t_matrix++ = data[index];
 }
 
-//-----------------------------------------------------------------------------
-//
-//: Fill t_matrix with contents of H
 template <class T>
 void vgl_h_matrix_3d<T>::get (vnl_matrix_fixed<T, 4, 4>* t_matrix) const
 {
   *t_matrix = t12_matrix_;
 }
 
-//-----------------------------------------------------------------------------
-//
-//: Fill t_matrix with contents of H
 template <class T>
 void vgl_h_matrix_3d<T>::get (vnl_matrix<T>* t_matrix) const
 {
   *t_matrix = t12_matrix_.as_ref(); // size 4x4
 }
 
-//-----------------------------------------------------------------------------
-//
-//: Return the inverse of this vgl_h_matrix_3d<T>.
 template <class T>
 vgl_h_matrix_3d<T> vgl_h_matrix_3d<T>::get_inverse() const
 {
   return vgl_h_matrix_3d<T>(vnl_inverse(t12_matrix_));
 }
 
-//: Set to 4x4 row-stored matrix
-//
 template <class T>
 vgl_h_matrix_3d<T>& vgl_h_matrix_3d<T>::set (T const* H)
 {
@@ -276,8 +201,6 @@ vgl_h_matrix_3d<T>& vgl_h_matrix_3d<T>::set (T const* H)
   return *this;
 }
 
-//: Set to given vnl_matrix
-//
 template <class T>
 vgl_h_matrix_3d<T>& vgl_h_matrix_3d<T>::set (vnl_matrix_fixed<T,4,4> const& H)
 {
@@ -285,8 +208,6 @@ vgl_h_matrix_3d<T>& vgl_h_matrix_3d<T>::set (vnl_matrix_fixed<T,4,4> const& H)
   return *this;
 }
 
-//: Compute transform to projective basis given five points, no 4 coplanar
-//
 template <class T>
 bool vgl_h_matrix_3d<T>::
 projective_basis(vcl_vector<vgl_homg_point_3d<T> > const& /*five_points*/)
@@ -295,8 +216,6 @@ projective_basis(vcl_vector<vgl_homg_point_3d<T> > const& /*five_points*/)
   return false;
 }
 
-//: Set to identity
-//
 template <class T>
 vgl_h_matrix_3d<T>& vgl_h_matrix_3d<T>::set_identity ()
 {
@@ -304,7 +223,6 @@ vgl_h_matrix_3d<T>& vgl_h_matrix_3d<T>::set_identity ()
   return *this;
 }
 
-//: Set the (0,3) to (2,3) elements of the transform matrix
 template <class T>
 vgl_h_matrix_3d<T>& vgl_h_matrix_3d<T>::set_translation(T tx, T ty, T tz)
 {
@@ -314,8 +232,6 @@ vgl_h_matrix_3d<T>& vgl_h_matrix_3d<T>::set_translation(T tx, T ty, T tz)
   return *this;
 }
 
-//: Set to rotation about an axis
-//
 template <class T>
 vgl_h_matrix_3d<T>& vgl_h_matrix_3d<T>::
 set_rotation_about_axis(vnl_vector_fixed<T,3> const& axis, T angle)
@@ -330,11 +246,6 @@ set_rotation_about_axis(vnl_vector_fixed<T,3> const& axis, T angle)
   return *this;
 }
 
-//: Set to roll, pitch and yaw specified rotation.
-// - roll is rotation about z
-// - pitch is rotation about y
-// - yaw is rotation about x
-//
 template <class T>
 vgl_h_matrix_3d<T>& vgl_h_matrix_3d<T>::
 set_rotation_roll_pitch_yaw(T yaw, T pitch, T roll)
@@ -355,8 +266,6 @@ set_rotation_roll_pitch_yaw(T yaw, T pitch, T roll)
   return *this;
 }
 
-//: Set to rotation specified by Euler angles
-//
 template <class T>
 vgl_h_matrix_3d<T>& vgl_h_matrix_3d<T>::set_rotation_euler(T rz1, T ry, T rz2)
 {

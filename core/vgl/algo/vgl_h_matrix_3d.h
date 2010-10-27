@@ -15,6 +15,7 @@
 //   22 Mar 2003 - J. L. Mundy  - prep for moving to vgl
 //   31 Jul 2010 - Peter Vanroose - made more similar to 1d and 2d variants
 //   24 Oct 2010 - Peter Vanroose - mutators and setters now return *this
+//   27 Oct 2010 - Peter Vanroose - moved Doxygen docs from .txx to .h
 // \endverbatim
 
 #include <vcl_vector.h>
@@ -35,27 +36,46 @@ class vgl_h_matrix_3d
  public:
   vgl_h_matrix_3d() {}
  ~vgl_h_matrix_3d() {}
-  vgl_h_matrix_3d(vgl_h_matrix_3d<T> const& M);
-  vgl_h_matrix_3d(vnl_matrix_fixed<T,4,4> const& M);
+  //: Copy constructor
+  vgl_h_matrix_3d(vgl_h_matrix_3d<T> const& M)
+  : t12_matrix_(M.get_matrix()) {}
+  //: Constructor from a 4x4 matrix, and implicit cast from vnl_matrix_fixed<T,4,4>
+  vgl_h_matrix_3d(vnl_matrix_fixed<T,4,4> const& M) { t12_matrix_ = M; }
+  //: Construct an affine vgl_h_matrix_3d from 3x3 M and 3x1 m.
   vgl_h_matrix_3d(vnl_matrix_fixed<T,3,3> const& M,
                   vnl_vector_fixed<T,3> const& m);
-  explicit vgl_h_matrix_3d(T const* t_matrix);
+  //: Constructor from 4x4 row-storage C-array
+  explicit vgl_h_matrix_3d(T const* t_matrix) : t12_matrix_(t_matrix) {}
+  //: Load from ASCII vcl_istream.
   explicit vgl_h_matrix_3d(vcl_istream& s);
+  //: Load from file
   explicit vgl_h_matrix_3d(char const* filename);
+  //: Constructor - calculate homography between two sets of 3D points (minimum 5)
   vgl_h_matrix_3d(vcl_vector<vgl_homg_point_3d<T> > const& points1,
                   vcl_vector<vgl_homg_point_3d<T> > const& points2);
 
   // Operations----------------------------------------------------------------
 
+  //: Return the transformed point given by $q = {\tt H} p$
   vgl_homg_point_3d<T> operator()(vgl_homg_point_3d<T> const& p) const;
+  //: Return the transformed point given by $q = {\tt H} p$
   vgl_homg_point_3d<T> operator* (vgl_homg_point_3d<T> const& p) const {return (*this)(p);}
+
   bool operator==(vgl_h_matrix_3d<T> const& M) const { return t12_matrix_ == M.get_matrix(); }
 
+  //: Return the preimage of a transformed plane: $m = {\tt H} l$
   vgl_homg_plane_3d<T> preimage(vgl_homg_plane_3d<T> const& l) const;
 
-  //the following require forming an inverse
-  vgl_homg_point_3d<T> preimage(vgl_homg_point_3d<T> const& p) const;
+  //the following require computing the inverse homography
+
+  //: Return the preimage of a transformed point: $p = {\tt H}^{-1} q$
+  // (requires an inverse)
+  vgl_homg_point_3d<T> preimage(vgl_homg_point_3d<T> const& q) const;
+  //: Return the transformed plane given by $m = {\tt H}^{-1} l$
+  // (requires an inverse)
   vgl_homg_plane_3d<T> operator()(vgl_homg_plane_3d<T> const& l) const;
+  //: Return the transformed plane given by $m = {\tt H}^{-1} l$
+  // (requires an inverse)
   vgl_homg_plane_3d<T> operator*(vgl_homg_plane_3d<T> const& l) const { return (*this)(l);}
 
   //:composition (*this) * H
@@ -64,30 +84,55 @@ class vgl_h_matrix_3d
 
   // Data Access---------------------------------------------------------------
 
-  T get (unsigned int row_index, unsigned int col_index) const;
-  void get (T* t_matrix) const;
-  void get (vnl_matrix_fixed<T, 4, 4>* t_matrix) const;
-  void get (vnl_matrix<T>* t_matrix) const;
+  //: Return the 4x4 homography matrix
   vnl_matrix_fixed<T,4,4> const& get_matrix() const { return t12_matrix_; }
+  //: Fill t_matrix with contents of the 4x4 homography matrix
+  void get (vnl_matrix_fixed<T, 4, 4>* t_matrix) const;
+  //: Deprecated; use the vnl_matrix_fixed variant instead
+  void get (vnl_matrix<T>* t_matrix) const;
+  //: Fill t_matrix with contents of the 4x4 homography matrix
+  void get (T* t_matrix) const;
+  //: Return an element from the 4x4 homography matrix
+  T get (unsigned int row_index, unsigned int col_index) const;
+  //: Return the inverse homography
   vgl_h_matrix_3d get_inverse() const;
 
+  //: Set an element of the 4x4 homography matrix
   vgl_h_matrix_3d& set (unsigned int row_index, unsigned int col_index, const T value)
   { t12_matrix_[row_index][col_index]=value; return *this; }
 
+  //: Set to 4x4 row-stored matrix
   vgl_h_matrix_3d& set(const T *t_matrix);
+  //: Set to given 4x4 matrix
   vgl_h_matrix_3d& set(vnl_matrix_fixed<T,4,4> const& t_matrix);
+
+  // various affine transformations that set the corresponding parts of the matrix
+
+  //: initialize the transformation to identity
   vgl_h_matrix_3d& set_identity();
+  //: set H[0][3] = tx, H[1][3] = ty, and H[2][3] = tz, other elements unaltered
   vgl_h_matrix_3d& set_translation(T tx, T ty, T tz);
-  //: rotation angle is in radians
-  vgl_h_matrix_3d& set_rotation_about_axis(const vnl_vector_fixed<T,3>& axis, T angle);
-  vgl_h_matrix_3d& set_rotation_roll_pitch_yaw(T yaw, T pitch, T roll);
-  vgl_h_matrix_3d& set_rotation_euler(T rz1, T ry, T rz2);
+  //: Just the upper 3x3 part of the matrix is replaced by a rotation matrix.
   vgl_h_matrix_3d& set_rotation_matrix(vnl_matrix_fixed<T, 3, 3> const& R);
+  //: Set to rotation about an axis
+  //  Just the upper 3x3 part of the matrix is replaced by a rotation matrix.
+  //  rotation angle theta is in radians
+  vgl_h_matrix_3d& set_rotation_about_axis(const vnl_vector_fixed<T,3>& axis, T theta);
+  //: Set to roll, pitch and yaw specified rotation.
+  // - roll is rotation about z
+  // - pitch is rotation about y
+  // - yaw is rotation about x
+  //  Just the upper 3x3 part of the matrix is replaced by a rotation matrix.
+  vgl_h_matrix_3d& set_rotation_roll_pitch_yaw(T yaw, T pitch, T roll);
+  //: Set to rotation specified by Euler angles
+  //  Just the upper 3x3 part of the matrix is replaced by a rotation matrix.
+  vgl_h_matrix_3d& set_rotation_euler(T rz1, T ry, T rz2);
 
   bool is_rotation() const;
   bool is_euclidean() const;
 
-  //: transformation to projective basis (canonical frame)
+  //: Compute transform to projective basis given five points, no 4 of which coplanar
+  // Transformation to projective basis (canonical frame)
   // Compute the homography that takes the input set of points to the
   // canonical frame.  The points act as the projective basis for
   // the canonical coordinate system.  In the canonical frame the points
@@ -111,12 +156,15 @@ class vgl_h_matrix_3d
   vgl_homg_point_3d<T> get_translation() const;
   vnl_vector_fixed<T, 3> get_translation_vector() const;
 
+  //: Load H from ASCII file.
   bool read(vcl_istream& s);
+  //: Read H from file
   bool read(char const* filename);
 };
 
-// stream I/O
+//: Print H on vcl_ostream
 template <class T> vcl_ostream& operator<<(vcl_ostream& s, vgl_h_matrix_3d<T> const& h);
+//: Load H from ASCII file.
 template <class T> vcl_istream& operator>>(vcl_istream& s, vgl_h_matrix_3d<T>&       h);
 
 #define VGL_H_MATRIX_3D_INSTANTIATE(T) extern "please include vgl/algo/vgl_h_matrix_3d.txx first"

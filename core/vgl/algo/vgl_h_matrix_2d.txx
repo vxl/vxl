@@ -1,8 +1,6 @@
 // This is core/vgl/algo/vgl_h_matrix_2d.txx
 #ifndef vgl_h_matrix_2d_txx_
 #define vgl_h_matrix_2d_txx_
-//:
-// \file
 
 #include "vgl_h_matrix_2d.h"
 #include <vnl/vnl_inverse.h>
@@ -13,22 +11,12 @@
 #include <vcl_fstream.h>
 #include <vcl_cassert.h>
 
-//: Copy constructor
-template <class T>
-vgl_h_matrix_2d<T>::vgl_h_matrix_2d(const vgl_h_matrix_2d<T>& M)
-  : t12_matrix_(M.get_matrix())
-{
-}
-
-
-//: Constructor from vcl_istream
 template <class T>
 vgl_h_matrix_2d<T>::vgl_h_matrix_2d(vcl_istream& s)
 {
   t12_matrix_.read_ascii(s);
 }
 
-//: Constructor from file
 template <class T>
 vgl_h_matrix_2d<T>::vgl_h_matrix_2d(char const* filename)
 {
@@ -39,25 +27,6 @@ vgl_h_matrix_2d<T>::vgl_h_matrix_2d(char const* filename)
     t12_matrix_.read_ascii(f);
 }
 
-//--------------------------------------------------------------
-//: Constructor, and implicit cast from vnl_matrix_fixed<T,3,3>
-template <class T>
-vgl_h_matrix_2d<T>::vgl_h_matrix_2d(vnl_matrix_fixed<T,3,3> const& M):
-  t12_matrix_(M)
-{
-}
-
-//--------------------------------------------------------------
-//: Constructor
-template <class T>
-vgl_h_matrix_2d<T>::vgl_h_matrix_2d(const T* H)
-  : t12_matrix_(H)
-{
-}
-
-//--------------------------------------------------------------
-//
-//: Constructor - calculate homography between two sets of 2D points (minimum 4)
 template <class T>
 vgl_h_matrix_2d<T>::vgl_h_matrix_2d(vcl_vector<vgl_homg_point_2d<T> > const& points1,
                                     vcl_vector<vgl_homg_point_2d<T> > const& points2)
@@ -91,10 +60,6 @@ vgl_h_matrix_2d<T>::vgl_h_matrix_2d(vcl_vector<vgl_homg_point_2d<T> > const& poi
   t12_matrix_ = vnl_matrix_fixed<T,3,3>(SVD.nullvector().data_block()); // 9-dim. nullvector
 }
 
-//--------------------------------------------------------------
-//
-//: Construct an affine vgl_h_matrix_2d from 2x2 M and 2x1 m.
-//
 template <class T>
 vgl_h_matrix_2d<T>::vgl_h_matrix_2d(vnl_matrix_fixed<T,2,2> const& M,
                                     vnl_vector_fixed<T,2> const& m)
@@ -193,23 +158,12 @@ vgl_h_matrix_2d<T>::operator()(vgl_homg_line_2d<T> const& l) const
   return vgl_homg_line_2d<T>(v[0], v[1], v[2]);
 }
 
-//-----------------------------------------------------------------------------
-//: Print H on vcl_ostream
 template <class T>
 vcl_ostream& operator<<(vcl_ostream& s, const vgl_h_matrix_2d<T>& h)
 {
   return s << h.get_matrix();
 }
 
-//: Read H from vcl_istream
-template <class T>
-vcl_istream& operator >> (vcl_istream& s, vgl_h_matrix_2d<T>& H)
-{
-  H.read(s);
-  return s;
-}
-
-//: Read H from vcl_istream
 template <class T>
 bool vgl_h_matrix_2d<T>::read(vcl_istream& s)
 {
@@ -217,7 +171,6 @@ bool vgl_h_matrix_2d<T>::read(vcl_istream& s)
   return s.good() || s.eof();
 }
 
-//: Read H from file
 template <class T>
 bool vgl_h_matrix_2d<T>::read(char const* filename)
 {
@@ -229,15 +182,12 @@ bool vgl_h_matrix_2d<T>::read(char const* filename)
 
 // == DATA ACCESS ==
 
-//-----------------------------------------------------------------------------
-//: Get matrix element at (row_index, col_index)
 template <class T>
 T vgl_h_matrix_2d<T>::get(unsigned int row_index, unsigned int col_index) const
 {
   return t12_matrix_. get(row_index, col_index);
 }
 
-//: Fill H with contents of this
 template <class T>
 void vgl_h_matrix_2d<T>::get(T* H) const
 {
@@ -246,21 +196,18 @@ void vgl_h_matrix_2d<T>::get(T* H) const
     *H++ = data[index];
 }
 
-//: Fill H with contents of this
 template <class T>
 void vgl_h_matrix_2d<T>::get(vnl_matrix_fixed<T,3,3>* H) const
 {
   *H = t12_matrix_;
 }
 
-//: Fill H with contents of this
 template <class T>
 void vgl_h_matrix_2d<T>::get(vnl_matrix<T>* H) const
 {
   *H = t12_matrix_.as_ref(); // size 3x3
 }
 
-//: Set to identity
 template <class T>
 vgl_h_matrix_2d<T>& vgl_h_matrix_2d<T>::set_identity()
 {
@@ -268,7 +215,6 @@ vgl_h_matrix_2d<T>& vgl_h_matrix_2d<T>::set_identity()
   return *this;
 }
 
-//: Set to 3x3 row-stored matrix
 template <class T>
 vgl_h_matrix_2d<T>& vgl_h_matrix_2d<T>::set(const T* H)
 {
@@ -278,7 +224,6 @@ vgl_h_matrix_2d<T>& vgl_h_matrix_2d<T>::set(const T* H)
   return *this;
 }
 
-//: Set to given vnl_matrix
 template <class T>
 vgl_h_matrix_2d<T>& vgl_h_matrix_2d<T>::set(vnl_matrix_fixed<T,3,3> const& H)
 {
@@ -428,7 +373,6 @@ projective_basis(vcl_vector<vgl_homg_line_2d<T> > const& lines
   return true;
 }
 
-//: Return the inverse
 template <class T>
 vgl_h_matrix_2d<T> vgl_h_matrix_2d<T>::get_inverse() const
 {
@@ -436,7 +380,6 @@ vgl_h_matrix_2d<T> vgl_h_matrix_2d<T>::get_inverse() const
 }
 
 
-//: Set the (0,2) and (1,2) elements of the transform matrix
 template <class T>
 vgl_h_matrix_2d<T>& vgl_h_matrix_2d<T>::set_translation(const T tx, const T ty)
 {
@@ -444,7 +387,6 @@ vgl_h_matrix_2d<T>& vgl_h_matrix_2d<T>::set_translation(const T tx, const T ty)
   return *this;
 }
 
-//: Set the upper 2x2 submatrix to a rotation matrix defined by theta
 template <class T>
 vgl_h_matrix_2d<T>& vgl_h_matrix_2d<T>::set_rotation(const T theta)
 {
@@ -455,14 +397,6 @@ vgl_h_matrix_2d<T>& vgl_h_matrix_2d<T>::set_rotation(const T theta)
   return *this;
 }
 
-//: Compose the existing matrix with a uniform scale transformation
-// \verbatim
-//        _     _
-//       |s  0  0|
-//  Hs = |0  s  0| Hinitial
-//       |0  0  1|
-//        -     -
-// \endverbatim
 template <class T>
 vgl_h_matrix_2d<T>& vgl_h_matrix_2d<T>::set_scale(const T scale)
 {
@@ -472,12 +406,6 @@ vgl_h_matrix_2d<T>& vgl_h_matrix_2d<T>::set_scale(const T scale)
   return *this;
 }
 
-//: set the transform to a similarity mapping
-//        _                         _
-//       |sCos(theta) -sSin(theta) tx|
-// Sim = |sSin(theta)  sCos(theta) ty|
-//       |   0            0        1 |
-//        -                         -
 template <class T>
 vgl_h_matrix_2d<T>& vgl_h_matrix_2d<T>::set_similarity(const T s, const T theta,
                                                        const T tx, const T ty)
@@ -490,14 +418,6 @@ vgl_h_matrix_2d<T>& vgl_h_matrix_2d<T>::set_similarity(const T s, const T theta,
   return *this;
 }
 
-//: Compose the existing matrix with an aspect ratio transform
-// \verbatim
-//        _     _
-//       |1  0  0|
-//  Hs = |0  r  0| Hinitial
-//       |0  0  1|
-//        -     -
-// \endverbatim
 template <class T>
 vgl_h_matrix_2d<T>& vgl_h_matrix_2d<T>::set_aspect_ratio(const T aspect_ratio)
 {
@@ -508,8 +428,19 @@ vgl_h_matrix_2d<T>& vgl_h_matrix_2d<T>::set_aspect_ratio(const T aspect_ratio)
 
 
 template <class T>
+vgl_h_matrix_2d<T>& vgl_h_matrix_2d<T>::set_affine(vnl_matrix_fixed<T,2,3> const& M23)
+{
+  for (unsigned r = 0; r<2; ++r)
+    for (unsigned c = 0; c<3; ++c)
+      t12_matrix_[r][c] = M23[r][c];
+  t12_matrix_[2][0] = T(0); t12_matrix_[2][1] = T(0);  t12_matrix_[2][2] = T(1);
+  return *this;
+}
+
+template <class T>
 vgl_h_matrix_2d<T>& vgl_h_matrix_2d<T>::set_affine(const vnl_matrix<T>& M23)
 {
+  assert (M23.rows()==2 && M23.columns()==3);
   for (unsigned r = 0; r<2; ++r)
     for (unsigned c = 0; c<3; ++c)
       t12_matrix_[r][c] = M23[r][c];

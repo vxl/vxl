@@ -1,8 +1,6 @@
 // This is core/vgl/algo/vgl_h_matrix_1d.txx
 #ifndef vgl_h_matrix_1d_txx_
 #define vgl_h_matrix_1d_txx_
-//:
-// \file
 
 #include "vgl_h_matrix_1d.h"
 #include <vgl/vgl_homg_point_1d.h>
@@ -13,15 +11,12 @@
 #include <vcl_fstream.h>
 #include <vcl_cassert.h>
 
-//: Copy constructor
 template <class T>
 vgl_h_matrix_1d<T>::vgl_h_matrix_1d(const vgl_h_matrix_1d<T>& M)
   : t12_matrix_(M.get_matrix())
 {
 }
 
-//--------------------------------------------------------------
-//: Constructor, and implicit cast from vnl_matrix_fixed<T,2,2>
 template <class T>
 vgl_h_matrix_1d<T>::vgl_h_matrix_1d(vnl_matrix_fixed<T,2,2> const& M)
   : t12_matrix_(M)
@@ -35,8 +30,6 @@ vgl_h_matrix_1d<T>::vgl_h_matrix_1d(const vgl_h_matrix_1d<T>& A,const vgl_h_matr
 {
 }
 
-//--------------------------------------------------------------
-//: Constructor
 template <class T>
 vgl_h_matrix_1d<T>::vgl_h_matrix_1d(const T* H)
   : t12_matrix_(H)
@@ -49,9 +42,6 @@ vgl_h_matrix_1d<T>::vgl_h_matrix_1d(vcl_istream &is)
   t12_matrix_.read_ascii(is);
 }
 
-//--------------------------------------------------------------
-//
-//: Constructor - calculate homography between two sets of 1D points (minimum 3)
 template <class T>
 vgl_h_matrix_1d<T>::vgl_h_matrix_1d(vcl_vector<vgl_homg_point_1d<T> > const& points1,
                                     vcl_vector<vgl_homg_point_1d<T> > const& points2)
@@ -82,7 +72,6 @@ vgl_h_matrix_1d<T>::vgl_h_matrix_1d(vcl_vector<vgl_homg_point_1d<T> > const& poi
 
 // == OPERATIONS ==
 
-//: Return the transformed point given by $x_2 = {\tt H} x_1$
 template <class T>
 vgl_homg_point_1d<T> vgl_h_matrix_1d<T>::operator()(const vgl_homg_point_1d<T>& x1) const
 {
@@ -90,7 +79,6 @@ vgl_homg_point_1d<T> vgl_h_matrix_1d<T>::operator()(const vgl_homg_point_1d<T>& 
   return vgl_homg_point_1d<T>(v[0], v[1]);
 }
 
-//: Return the transformed point given by $x_1 = {\tt H}^{-1} x_2$
 template <class T>
 vgl_homg_point_1d<T> vgl_h_matrix_1d<T>::preimage(const vgl_homg_point_1d<T>& x2) const
 {
@@ -99,8 +87,6 @@ vgl_homg_point_1d<T> vgl_h_matrix_1d<T>::preimage(const vgl_homg_point_1d<T>& x2
   return vgl_homg_point_1d<T>(v[0], v[1]);
 }
 
-//: Return the inverse
-//
 template <class T>
 vgl_h_matrix_1d<T> vgl_h_matrix_1d<T>::get_inverse() const
 {
@@ -108,14 +94,12 @@ vgl_h_matrix_1d<T> vgl_h_matrix_1d<T>::get_inverse() const
 }
 
 //-----------------------------------------------------------------------------
-//: Print H on vcl_ostream
 template <class T>
 vcl_ostream& operator<<(vcl_ostream& s, const vgl_h_matrix_1d<T>& h)
 {
   return s << h.get_matrix();
 }
 
-//: Read H from vcl_istream
 template <class T>
 vcl_istream& operator >> (vcl_istream& s, vgl_h_matrix_1d<T>& H)
 {
@@ -123,7 +107,6 @@ vcl_istream& operator >> (vcl_istream& s, vgl_h_matrix_1d<T>& H)
   return s;
 }
 
-//: Read H from vcl_istream
 template <class T>
 bool vgl_h_matrix_1d<T>::read(vcl_istream& s)
 {
@@ -132,7 +115,6 @@ bool vgl_h_matrix_1d<T>::read(vcl_istream& s)
 }
 
 
-//: Constructor from file
 template <class T>
 vgl_h_matrix_1d<T>::vgl_h_matrix_1d(char const* filename)
 {
@@ -143,7 +125,6 @@ vgl_h_matrix_1d<T>::vgl_h_matrix_1d(char const* filename)
     t12_matrix_.read_ascii(f);
 }
 
-//: Read H from file
 template <class T>
 bool vgl_h_matrix_1d<T>::read(char const* filename)
 {
@@ -156,14 +137,12 @@ bool vgl_h_matrix_1d<T>::read(char const* filename)
 // == DATA ACCESS ==
 
 //-----------------------------------------------------------------------------
-//: Get matrix element at (row_index, col_index)
 template <class T>
 T vgl_h_matrix_1d<T>::get(unsigned int row_index, unsigned int col_index) const
 {
   return t12_matrix_.get(row_index, col_index);
 }
 
-//: Fill H with contents of this
 template <class T>
 void vgl_h_matrix_1d<T>::get(T *H) const
 {
@@ -172,21 +151,18 @@ void vgl_h_matrix_1d<T>::get(T *H) const
     *H++ = data[index];
 }
 
-//: Fill H with contents of this
 template <class T>
 void vgl_h_matrix_1d<T>::get(vnl_matrix_fixed<T,2,2>* H) const
 {
   *H = t12_matrix_;
 }
 
-//: Fill H with contents of this
 template <class T>
 void vgl_h_matrix_1d<T>::get(vnl_matrix<T>* H) const
 {
   *H = t12_matrix_.as_ref(); // size 2x2
 }
 
-//: Set to 2x2 row-stored matrix
 template <class T>
 vgl_h_matrix_1d<T>&
 vgl_h_matrix_1d<T>::set(const T* H)
@@ -197,7 +173,6 @@ vgl_h_matrix_1d<T>::set(const T* H)
   return *this;
 }
 
-//: Set to given vnl_matrix
 template <class T>
 vgl_h_matrix_1d<T>&
 vgl_h_matrix_1d<T>::set(vnl_matrix_fixed<T,2,2> const& H)
