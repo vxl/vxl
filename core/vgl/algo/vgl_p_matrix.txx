@@ -470,22 +470,7 @@ vgl_p_matrix<T>::set(vnl_matrix<T> const& A, vnl_vector<T> const& a)
 template <class T>
 vgl_p_matrix<T>& vgl_p_matrix<T>::set_identity()
 {
-  p_matrix_(0,0) = 1;
-  p_matrix_(1,0) = 0;
-  p_matrix_(2,0) = 0;
-
-  p_matrix_(0,1) = 0;
-  p_matrix_(1,1) = 1;
-  p_matrix_(2,1) = 0;
-
-  p_matrix_(0,2) = 0;
-  p_matrix_(1,2) = 0;
-  p_matrix_(2,2) = 1;
-
-  p_matrix_(0,3) = 0;
-  p_matrix_(1,3) = 0;
-  p_matrix_(2,3) = 0;
-
+  p_matrix_.set_identity();
   return *this;
 }
 
