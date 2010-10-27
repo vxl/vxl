@@ -64,6 +64,7 @@ class vgl_p_matrix
   //: Construct from 3x3 matrix A and vector a. P = [A a].
   vgl_p_matrix(const vnl_matrix_fixed<T,3,3>& A, const vnl_vector_fixed<T,3>& a)
   : svd_(0) { set(A,a); }
+  //: Deprecated; use the vnl_matrix_fixed variant instead
   vgl_p_matrix(const vnl_matrix<T>& A, const vnl_vector<T>& a)
   : svd_(0) { set(A,a); }
 
@@ -147,9 +148,9 @@ class vgl_p_matrix
   bool operator==(vgl_p_matrix const& p) const { return p_matrix_ == p.get_matrix(); }
 
   //: Return the 3x3 matrix and 3x1 column vector of P = [A a].
-  void get(vnl_matrix<T>* A, vnl_vector<T>* a) const;
-  //: Return the 3x3 matrix and 3x1 column vector of P = [A a].
   void get(vnl_matrix_fixed<T,3,3>* A, vnl_vector_fixed<T,3>* a) const;
+  //: Deprecated; use the vnl_matrix_fixed variant instead
+  void get(vnl_matrix<T>* A, vnl_vector<T>* a) const;
 
   //: Return the rows of P = [a b c]'.
   void get_rows(vnl_vector<T>* a, vnl_vector<T>* b, vnl_vector<T>* c) const;
@@ -163,22 +164,22 @@ class vgl_p_matrix
   //: Return the 3x4 projection matrix in the C-array, c_matrix
   void get(T *c_matrix) const;
   //: Return the 3x4 projection matrix in p_matrix
-  void get(vnl_matrix<T>& p_matrix) const { p_matrix = p_matrix_.as_ref(); }
-  //: Return the 3x4 projection matrix in p_matrix
   void get(vnl_matrix_fixed<T, 3, 4>& p_matrix) const { p_matrix = p_matrix_; }
+  //: Deprecated; use the vnl_matrix_fixed variant instead
+  void get(vnl_matrix<T>& p_matrix) const { p_matrix = p_matrix_.as_ref(); }
 
-  //: Set the 3x4 projective matrix with the matrix in the C-array, p_matrix
-  vgl_p_matrix& set(const T* p_matrix);
-  //: Set the 3x4 projective matrix with the matrix in the C-array, p_matrix
-  vgl_p_matrix& set(const T p_matrix [3][4]);
-  //: Set the internal matrix using the vnl_matrix<double> p_matrix.
-  vgl_p_matrix& set(const vnl_matrix<T>& p_matrix) { p_matrix_ = p_matrix; clear_svd(); return *this; }
-  //: Set the internal matrix using the vnl_matrix<double> p_matrix.
+  //: Set the internal matrix using the 3x4 p_matrix.
   vgl_p_matrix& set(vnl_matrix_fixed<T,3,4> const& p_matrix) { p_matrix_ = p_matrix; clear_svd(); return *this; }
+  //: Deprecated; use the vnl_matrix_fixed variant instead
+  vgl_p_matrix& set(const vnl_matrix<T>& p_matrix) { p_matrix_ = p_matrix; clear_svd(); return *this; }
   //: Set from 3x3 matrix and 3x1 column vector of P = [A a].
   vgl_p_matrix& set(vnl_matrix_fixed<T,3,3> const& A, vnl_vector_fixed<T,3> const& a);
-  //: Set from 3x3 matrix and 3x1 column vector of P = [A a].
+  //: Deprecated; use the vnl_matrix_fixed variant instead
   vgl_p_matrix& set(vnl_matrix<T> const& A, vnl_vector<T> const& a);
+  //: Set the projective matrix with the matrix in the 3x4 C-array, p_matrix
+  vgl_p_matrix& set(const T* p_matrix);
+  //: Set the projective matrix with the matrix in the 3x4 C-array, p_matrix
+  vgl_p_matrix& set(const T p_matrix [3][4]);
 
   const vnl_matrix_fixed<T, 3, 4>& get_matrix() const { return p_matrix_; }
 
