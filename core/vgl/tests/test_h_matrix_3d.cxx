@@ -87,9 +87,7 @@ static void test_constructors()
 static void test_identity_transform()
 {
   vcl_cout << "Testing identity transform on point\n";
-  vnl_double_4x4 M;
-  M.set_identity();
-  vgl_h_matrix_3d<double> Id(M);
+  vgl_h_matrix_3d<double> Id(vnl_double_4x4().set_identity());
   vgl_homg_point_3d<double> p(4,3,2,1), pp;
   pp = Id(p);
   vcl_cout << "Id = " << Id << '\n'
@@ -132,8 +130,7 @@ static void test_projective_basis()
 
 static void test_rotation_about_axis()
 {
-  vgl_h_matrix_3d<double> R;
-  R.set_identity();
+  vgl_h_matrix_3d<double> R; R.set_identity();
   vnl_double_3 v(0,0,1.0);
   R.set_rotation_about_axis(v, .785398);//rotate 45 degrees
   vcl_cout << "Rotation Matrix\n" << R << '\n';
@@ -147,12 +144,12 @@ static void test_rotation_about_axis()
   TEST_NEAR("rotation",distance , 0.0, 1e-03);
 }
 
-static void test_compute_linear_points() 
+static void test_compute_linear_points()
 {
   vcl_cout << "\n=== Test the recovery of a general homography using the "
            << "linear algorithm ===\n";
   vcl_vector<vgl_homg_point_3d<double> > points1, points2;
-  
+
   //setup the first set of points,  no 4 of them should be co-planar
   vgl_homg_point_3d<double> p10(100.0, 50.0, 100.0), p11(100.0, 50.0, 200.0);
   vgl_homg_point_3d<double> p12(200.0, 50.0, 200.0), p13(100.0, 200.0, 200.0);
@@ -161,35 +158,35 @@ static void test_compute_linear_points()
   vgl_homg_point_3d<double> p16(300.0, 25.0, 250.0), p17(280.0, 100.0, 250.0);
 
   vgl_homg_point_3d<double> p18(250.0, 75.0, 300.0), p19(250.0, 75.0, 0.0);
-  
-  
+
+
   points1.push_back(p10); points1.push_back(p11); points1.push_back(p12);
   points1.push_back(p13); points1.push_back(p14); points1.push_back(p15);
   points1.push_back(p16); points1.push_back(p17); points1.push_back(p18);
   points1.push_back(p19);
 
   //: setup an initial homography
-  vgl_h_matrix_3d<double> H1; H1.set_identity(); H1.set_rotation_roll_pitch_yaw(45.0*(vnl_math::pi/180.0), 15.0*(vnl_math::pi/180.0), 10.0*(vnl_math::pi/180.0));
-  vgl_h_matrix_3d<double> H2; H2.set_identity(); H2.set_translation(5.0, 50.0, 150.0);
+  vgl_h_matrix_3d<double> H1; H1.set_identity().set_rotation_roll_pitch_yaw(45.0*(vnl_math::pi/180.0), 15.0*(vnl_math::pi/180.0), 10.0*(vnl_math::pi/180.0));
+  vgl_h_matrix_3d<double> H2; H2.set_identity().set_translation(5.0, 50.0, 150.0);
   vgl_h_matrix_3d<double> gt_H = H1*H2;
 
   vcl_cout << "The gt transform\n" << gt_H << '\n';
 
   //: transform the points
-  for (unsigned i = 0; i < points1.size(); i++) 
+  for (unsigned i = 0; i < points1.size(); i++)
     points2.push_back(gt_H(points1[i]));
 
   vgl_h_matrix_3d_compute_linear hmcl;
   vgl_h_matrix_3d<double> H = hmcl.compute(points1, points2);
 
   vcl_cout << "The resulting transform\n" << H << '\n';
-  
+
   vgl_homg_point_3d<double> p_test_hom(150.0, 75.0, 100.0);
   vgl_point_3d<double> p_test(p_test_hom);
   vgl_point_3d<double> p_test_mapped(gt_H(p_test_hom));
   vgl_point_3d<double> p_test_mapped2(H(p_test_hom));
-  vcl_cout << "supposed to map: " << p_test << " to " << p_test_mapped << vcl_endl;
-  vcl_cout << "maps: " << p_test_mapped2 << vcl_endl;
+  vcl_cout << "supposed to map: " << p_test << " to " << p_test_mapped << '\n'
+           << "maps: " << p_test_mapped2 << vcl_endl;
 
   double dist = vgl_distance(p_test_mapped, p_test_mapped2);
   vcl_cout << " dist: " << dist << vcl_endl;
@@ -207,23 +204,22 @@ static void test_compute_linear_points()
 
   points2.clear();
   //: transform the points
-  for (unsigned i = 0; i < points1.size(); i++) 
+  for (unsigned i = 0; i < points1.size(); i++)
     points2.push_back(gt_H2(points1[i]));
 
   vgl_h_matrix_3d_compute_linear hmcl2;
   vgl_h_matrix_3d<double> H2o = hmcl2.compute(points1, points2);
 
   vcl_cout << "The resulting transform\n" << H2o << '\n';
-  
+
   p_test_mapped = gt_H2(p_test_hom);
   p_test_mapped2 = H2o(p_test_hom);
-  vcl_cout << "supposed to map: " << p_test << " to " << p_test_mapped << vcl_endl;
-  vcl_cout << "maps: " << p_test_mapped2 << vcl_endl;
+  vcl_cout << "supposed to map: " << p_test << " to " << p_test_mapped << '\n'
+           << "maps: " << p_test_mapped2 << vcl_endl;
 
   dist = vgl_distance(p_test_mapped, p_test_mapped2);
   vcl_cout << " dist: " << dist << vcl_endl;
   TEST_NEAR("testing computed H2o", dist, 0.0, 5e-03);
-
 }
 
 static void test_h_matrix_3d()

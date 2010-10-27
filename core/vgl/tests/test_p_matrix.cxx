@@ -173,10 +173,8 @@ static void test_cheirality()
 
 static void test_homog_product()
 {
-  vgl_p_matrix<double> P;
-  vgl_h_matrix_3d<double> H;
-  P.set_identity();
-  H.set_identity();
+  vgl_p_matrix<double>    P; P.set_identity();
+  vgl_h_matrix_3d<double> H; H.set_identity();
 
   vgl_p_matrix<double> P2 = P * H;
 
@@ -187,8 +185,7 @@ static void test_identity_projection()
 {
   vcl_cout << "Testing identity projection for points\n";
   vgl_homg_point_3d<double> X0(40,20,20,1), X1(10,5,5,1);
-  vgl_p_matrix<double> P;
-  P.set_identity();
+  vgl_p_matrix<double> P; P.set_identity();
   //The identity camera
   ///////////////////
   //      1  0  0  0

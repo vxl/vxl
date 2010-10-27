@@ -104,8 +104,7 @@ void test_gaussian_sphere_type(T epsilon, const vcl_string& type_name)
     const vpdl_distribution<T>& dist = gauss;
 
     vnl_matrix_fixed<T,3,3> Strue;
-    Strue.set_identity();
-    Strue *= var;
+    Strue.fill(T(0)).fill_diagonal(var);
 
     // test indirect access to data members (compute full covariance)
     vnl_vector_fixed<T,3> m3;

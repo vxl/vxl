@@ -32,8 +32,8 @@ template <class T, unsigned int d>
 vnl_matrix_fixed<T,d,d> vnl_power(vnl_matrix_fixed<T,d,d> const& m, int n)
 {
   assert(n >= 0 || d <= 4); // to allow the use of vnl_inverse()
-  if (n == 0) {
-    vnl_matrix_fixed<T,d,d> r; r.set_identity(); return r; }
+  if (n == 0)
+    return vnl_matrix_fixed<T,d,d>().set_identity();
   else if (n == 1 || m.is_identity())
     return m;
   else if (n < 0)
@@ -60,8 +60,8 @@ vnl_matrix<T> vnl_power(vnl_matrix<T> const& m, int n)
 {
   assert(m.rows() == m.columns());
   assert(n >= 0 || m.rows() <= 4);
-  if (n == 0) {
-    vnl_matrix<T> r = m; r.set_identity(); return r; }
+  if (n == 0)
+    return vnl_matrix<T>(m.rows(),m.columns()).set_identity();
   else if (n == 1 || m.is_identity())
     return m;
   else if (n < 0 && m.rows() == 1)

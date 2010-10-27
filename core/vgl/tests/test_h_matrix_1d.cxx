@@ -15,8 +15,7 @@
 static void test_identity_transform()
 {
   vcl_cout << "\n=== Testing identity transform ===\n";
-  vnl_matrix_fixed<double,2,2> M; M.set_identity();
-  vgl_h_matrix_1d<double> Id(M);
+  vgl_h_matrix_1d<double> Id(vnl_matrix_fixed<double,2,2>().set_identity());
   vgl_homg_point_1d<double> p(3,2), pp = Id(p);
   vcl_cout << "Id\n" << Id << '\n'
            << "p =" << p << " , Id(p) = pp =" << pp << vcl_endl;
@@ -62,7 +61,7 @@ static void test_compute_linear()
   vcl_cout << "\n=== Test the recovery of a 2x scale transform using the linear algorithm ===\n";
   vcl_vector<vgl_homg_point_1d<double> > points1, points2;
   //setup points in frame 1
-  vgl_homg_point_1d<double> p10(0,1), p11(1,1), p12(3,2), p13(2,1); 
+  vgl_homg_point_1d<double> p10(0,1), p11(1,1), p12(3,2), p13(2,1);
   points1.push_back(p10); points1.push_back(p11); points1.push_back(p12); points1.push_back(p13);
 
   //setup points in frame 2
@@ -106,7 +105,7 @@ static void test_compute_optimize()
   vcl_cout << "\n=== Test the recovery of a 2x scale transform using the optimize algorithm ===\n";
   vcl_vector<vgl_homg_point_1d<double> > points1, points2;
   //setup points in frame 1
-  vgl_homg_point_1d<double> p10(0,1), p11(1,1), p12(3,2), p13(2,1); 
+  vgl_homg_point_1d<double> p10(0,1), p11(1,1), p12(3,2), p13(2,1);
   points1.push_back(p10); points1.push_back(p11); points1.push_back(p12); points1.push_back(p13);
 
   //setup points in frame 2

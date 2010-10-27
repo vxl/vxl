@@ -23,8 +23,7 @@
 static void test_identity_transform()
 {
   vcl_cout << "\n=== Testing identity transform on point ===\n";
-  vnl_matrix_fixed<double,3,3> M; M.set_identity();
-  vgl_h_matrix_2d<double> Id(M);
+  vgl_h_matrix_2d<double> Id(vnl_matrix_fixed<double,3,3>().set_identity());
   vgl_homg_point_2d<double> p(3,2,1), pp = Id(p);
   vcl_cout << "Id\n" << Id << '\n'
            << "p =" << p << " , Id(p) = pp =" << pp << '\n';
@@ -34,10 +33,9 @@ static void test_identity_transform()
 static void test_perspective_transform()
 {
   vcl_cout << "\n=== Testing perspective transform on point ===\n";
-  vnl_matrix_fixed<double,3,3> M;
-  M.put(0,0, 1.0);  M.put(0,1,  2.0); M.put(0,2, 1.0);
-  M.put(1,0, 0.5);  M.put(1,1, -2.0); M.put(1,2, 1.5);
-  M.put(2,0, 0.25); M.put(2,1,  3.0); M.put(2,2, 1.75);
+  double M[] = { 1.0,  2.0, 1.0,
+                 0.5, -2.0, 1.5,
+                 0.25, 3.0, 1.75 };
   vgl_h_matrix_2d<double> Tproj(M);
   vgl_homg_point_2d<double> p(3,2,1);
   vgl_homg_point_2d<double> pp = Tproj(p);
@@ -47,10 +45,10 @@ static void test_perspective_transform()
            << " , Tproj.preimage(pp) = ppp =" << ppp << '\n';
   TEST_NEAR("perspective", length(p-ppp) , 0.0, 1e-06);
 }
+
 static void test_transform_types()
 {
-  vgl_h_matrix_2d<double> h;
-  h.set_identity();
+  vgl_h_matrix_2d<double> h; h.set_identity();
   vgl_homg_point_2d<double> p(3.0,2.0,1.5), pp;
   pp = h(p);
   TEST_NEAR("identity", length(p-pp), 0.0, 1e-06);
@@ -318,8 +316,7 @@ static void test_set_transform()
   vcl_cout << "\n=== Test setting basic transforms =======\n";
   vgl_h_matrix_2d<double> H;
   vgl_homg_point_2d<double> p(1.0, 0.0);//point on the x axis
-  H.set_identity();
-  H.set_rotation(vnl_math::pi/2.0);
+  H.set_identity().set_rotation(vnl_math::pi/2.0);
   vgl_homg_point_2d<double> rp, sp , tp;
   rp = H(p);
   vcl_cout << "rotated point " << rp << '\n';
@@ -336,44 +333,44 @@ static void test_set_transform()
 
 static void test_compute_rigid_body()
 {
-    vgl_homg_point_2d<double> ps00(0,0);
-    vgl_homg_point_2d<double> ps01(1,0);
-    vgl_homg_point_2d<double> ps10(0,0);
-    vgl_homg_point_2d<double> ps11(0.707107,0.707107);
-    vcl_vector<vgl_homg_point_2d<double> > points0, points1;
-    points0.push_back(ps00);     points0.push_back(ps01);
-    points1.push_back(ps10);     points1.push_back(ps11);
-    vgl_h_matrix_2d_compute_rigid_body crb;
-    vgl_h_matrix_2d<double> RT = crb.compute(points0, points1);
-    vcl_cout << "Rotation, translation\n" << RT << '\n';
-    vnl_matrix_fixed<double, 3, 3> M = RT.get_matrix();
-    TEST_NEAR("rigid body pure rotation", M[0][0], 0.707107, 1.0e-6);
-    points0.clear();     points1.clear();
-    vgl_homg_point_2d<double> p00(-1,1);
-    vgl_homg_point_2d<double> p01(1,1);
-    vgl_homg_point_2d<double> p02(1,-1);
-    vgl_homg_point_2d<double> p03(-1,-1);
-    vgl_homg_point_2d<double> p04(0,0);
+  vgl_homg_point_2d<double> ps00(0,0);
+  vgl_homg_point_2d<double> ps01(1,0);
+  vgl_homg_point_2d<double> ps10(0,0);
+  vgl_homg_point_2d<double> ps11(0.707107,0.707107);
+  vcl_vector<vgl_homg_point_2d<double> > points0, points1;
+  points0.push_back(ps00);     points0.push_back(ps01);
+  points1.push_back(ps10);     points1.push_back(ps11);
+  vgl_h_matrix_2d_compute_rigid_body crb;
+  vgl_h_matrix_2d<double> RT = crb.compute(points0, points1);
+  vcl_cout << "Rotation, translation\n" << RT << '\n';
+  vnl_matrix_fixed<double, 3, 3> M = RT.get_matrix();
+  TEST_NEAR("rigid body pure rotation", M[0][0], 0.707107, 1.0e-6);
+  points0.clear();     points1.clear();
+  vgl_homg_point_2d<double> p00(-1,1);
+  vgl_homg_point_2d<double> p01(1,1);
+  vgl_homg_point_2d<double> p02(1,-1);
+  vgl_homg_point_2d<double> p03(-1,-1);
+  vgl_homg_point_2d<double> p04(0,0);
 
-    vgl_homg_point_2d<double> p10(998.862,500.839);
-    vgl_homg_point_2d<double> p11(1000.84,501.138);
-    vgl_homg_point_2d<double> p12(1001.14,499.161);
-    vgl_homg_point_2d<double> p13(999.161,498.862);
-    vgl_homg_point_2d<double> p14(1000, 500);
+  vgl_homg_point_2d<double> p10(998.862,500.839);
+  vgl_homg_point_2d<double> p11(1000.84,501.138);
+  vgl_homg_point_2d<double> p12(1001.14,499.161);
+  vgl_homg_point_2d<double> p13(999.161,498.862);
+  vgl_homg_point_2d<double> p14(1000, 500);
 
 
-    points0.push_back(p00);  points0.push_back(p01);
-    points0.push_back(p02);  points0.push_back(p03);
-    points0.push_back(p04);
+  points0.push_back(p00);  points0.push_back(p01);
+  points0.push_back(p02);  points0.push_back(p03);
+  points0.push_back(p04);
 
-    points1.push_back(p10);  points1.push_back(p11);
-    points1.push_back(p12);  points1.push_back(p13);
-    points1.push_back(p14);
-    RT = crb.compute(points0, points1);
-    vcl_cout << "Rotation, translation\n" << RT << '\n';
-     M = RT.get_matrix();
-     //0.149438
-    TEST_NEAR("rigid body rotation and translation", M[0][0], 0.988771, 1.0e-3);
+  points1.push_back(p10);  points1.push_back(p11);
+  points1.push_back(p12);  points1.push_back(p13);
+  points1.push_back(p14);
+  RT = crb.compute(points0, points1);
+  vcl_cout << "Rotation, translation\n" << RT << '\n';
+  M = RT.get_matrix();
+  //0.149438
+  TEST_NEAR("rigid body rotation and translation", M[0][0], 0.988771, 1.0e-3);
 }
 
 static void test_h_matrix_2d()

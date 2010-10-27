@@ -243,9 +243,7 @@ template <class T>
 vnl_matrix_fixed<T,4,4> vnl_quaternion<T>::rotation_matrix_transpose_4() const
 {
   vnl_matrix_fixed<T,4,4> rot;
-  rot.set_identity();
-  rot.update(this->rotation_matrix_transpose().as_ref());
-  return rot;
+  return rot.set_identity().update(this->rotation_matrix_transpose().as_ref());
 }
 
 //: Returns the conjugate of given quaternion, having same real and opposite imaginary parts.
