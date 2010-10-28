@@ -356,10 +356,10 @@ set_origin_step_delta(vgl_box_3d<double> const& trans_box,
 }
 
 bool icam_minimizer::refine_minimum(int mx, int my, int mz,
-                                    unsigned level,
-                                    double min_allowed_overlap,
+                                    unsigned /*level*/,              // FIXME: unused
+                                    double /* min_allowed_overlap*/, // FIXME: unused
                                     vgl_vector_3d<double>& min_trans,
-                                    double& min_cost)
+                                    double& /*min_cost*/)            // FIXME: unused
 {
   int nz = box_scores_.get_row1_count(),ny = box_scores_.get_row2_count(),
     nx = box_scores_.get_row3_count();
@@ -618,7 +618,7 @@ pyramid_camera_search(vgl_vector_3d<double> const&
     min_overlap_fraction = min_trans_overlap;
     if (!refine)
       vcl_cout << " minimum translation " << min_trans << '\n'
-               << " minumum rotation " << min_trans_rod << '\n'
+               << " minimum rotation " << min_trans_rod << '\n'
                << " minimum cost " << smallest_min << '\n';
     if (base_path_!="") {
       vcl_stringstream strm;

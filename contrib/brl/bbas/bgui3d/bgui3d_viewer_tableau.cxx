@@ -456,7 +456,7 @@ bgui3d_viewer_tableau::headlight() const
 
 //-------------Text2 Methods-------------------
 
-static void setTextCallback( void *data, SoSensor *sensor )
+static void setTextCallback( void *data, SoSensor * /*sensor*/ )
 {
   ((SoText2*)data)->string.deleteValues(0, 1);
 }

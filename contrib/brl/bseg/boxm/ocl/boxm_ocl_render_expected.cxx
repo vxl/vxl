@@ -6,7 +6,7 @@
 void boxm_opencl_ocl_scene_expected(boxm_ocl_scene &scene,
                                     vpgl_camera_double_sptr cam,
                                     vil_image_view<float> &expected,
-                                    vil_image_view<float> & mask,
+                                    vil_image_view<float> & /*mask*/,  // FIXME: unused
                                     bool /*use_black_background*/)
 {
   // set up the application-specific function to be called at every cell along a ray
@@ -35,7 +35,7 @@ void boxm_opencl_ocl_scene_expected(boxm_ocl_scene &scene,
     for (unsigned i = 0; i<ni; ++i)
       expected(i,j) = *(results_p++); // expected intensity
 
-#if 0 //images for debuggin
+#if 0 //images for debugging
   vil_save(img0,"f:/apl/img0.tiff");
   vil_save(img1,"f:/apl/img1.tiff");
   vil_save(expected,"f:/apl/img2.tiff");
@@ -164,6 +164,5 @@ void boxm_opencl_bit_scene_expected(boxm_ocl_bit_scene &scene,
   vil_save(expected,"/media/VXL/expected.tiff");
   vil_save(mask,"/media/VXL/img3.tiff");
 #endif
-
 }
 

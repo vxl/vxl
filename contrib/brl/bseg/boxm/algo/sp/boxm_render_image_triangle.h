@@ -43,7 +43,7 @@ template <class T_loc, class T_data>
 void boxm_render_image_splatting_triangle(boxm_scene<boct_tree<T_loc, T_data > > &scene,
                                           vpgl_camera_double_sptr cam,
                                           vil_image_view<typename T_data::obs_datatype> &expected,
-                                          vil_image_view<float> &mask,   // FIXME: use this param
+                                          vil_image_view<float> &/*mask*/, // FIXME: use this param
                                           int bin=-1,
                                           bool use_black_background = false)
 {

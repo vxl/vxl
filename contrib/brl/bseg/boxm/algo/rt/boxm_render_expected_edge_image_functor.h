@@ -35,8 +35,8 @@ class boxm_render_expected_edge_image_functor
   }
 
   inline bool step_cell(unsigned int i, unsigned int j,
-                        vgl_point_3d<double> s0,
-                        vgl_point_3d<double> s1,
+                        vgl_point_3d<double> /*s0*/, // currently unused, see below
+                        vgl_point_3d<double> /*s1*/,
                         boxm_edge_sample<typename boxm_apm_traits<APM>::obs_datatype> &cell_value,
                         T_aux /*aux_val*/)
   {

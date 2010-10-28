@@ -20,8 +20,9 @@ class boxm_num_rays_functor
     is_aux_=true;
   }
 
-  inline bool step_cell(unsigned int i, unsigned int j, vgl_point_3d<double> s0, vgl_point_3d<double> s1,
-                        boxm_sample<APM> &cell_value, // FIXME: unused...
+  inline bool step_cell(unsigned int /*i*/, unsigned int /*j*/,  // FIXME: both unused!
+                        vgl_point_3d<double> s0, vgl_point_3d<double> s1,
+                        boxm_sample<APM> & /*cell_value*/,       // FIXME: unused...
                         T_aux &aux_val)
   {
     const float seg_len = (float)(s1 - s0).length();

@@ -264,7 +264,8 @@ boxm_utils::visible_faces(vgl_box_3d<double> const& bbox, vpgl_camera_double_spt
 }
 
 boct_face_idx
-boxm_utils::visible_faces(vgl_box_3d<double> const& bbox, vpgl_camera_double_sptr camera,
+boxm_utils::visible_faces(vgl_box_3d<double> const& /*bbox*/, // FIXME: currently unused -- see commented out code
+                          vpgl_camera_double_sptr /*camera*/, // idem
                           double *xverts, double *yverts)
 {
   boct_face_idx face_idx = NONE;
