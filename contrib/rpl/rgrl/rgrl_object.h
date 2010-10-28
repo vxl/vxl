@@ -82,7 +82,7 @@ class rgrl_object
   //
   // This is an implementation of the subject/observer design
   // pattern. An observer is added by specifying an event to respond
-  // to and an rgrl_ommand to execute. It returns an unsigned long tag
+  // to and an rgrl_command to execute. It returns an unsigned long tag
   // which can be used later to remove the event or retrieve the
   // command.
   unsigned int add_observer( rgrl_event_sptr event, rgrl_command_sptr );

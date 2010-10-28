@@ -37,8 +37,8 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     dynamic_cast<const rgrl_trans_rigid*>(&cur_trans_in);
   assert(cur_trans);
 
-  // so we want to have some sort of state, but we dont really want to un-const-ize this method,
-  // so we implement a quick hack by making by using const_cast to change the value of stats
+  // so we want to have some sort of state, but we don't really want to un-const-ize this method,
+  // so we implement a quick hack by using const_cast to change the value of stats
   vcl_vector<vcl_vector<double> >* pp =
     const_cast<vcl_vector<vcl_vector<double> >* >(&stats);
 

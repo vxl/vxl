@@ -30,7 +30,7 @@ int main ()
     vcl_cout << "Got frame: " << im->ni() << 'x' << im->nj() << '\n';
   }
 
-  // Running backwards throught the image
+  // Running backwards through the image
   for (vidl1_movie::frame_iterator pframe = movie->last();
        pframe >= movie->first(); --pframe)
   {

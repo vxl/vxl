@@ -409,7 +409,7 @@ void draw_filled_polygon_geom_ (SoGroup* root, const vcl_vector<bmsh3d_vertex*>&
 //  Ming: We have two options to draw the IndexedFaceSet.
 //  Option 1: make the emissiveColor the same as diffuseColor
 //            The sheet will look continuously.
-//  Option 2: make the emissiveCOlor half value of diffuseColor (color/2)
+//  Option 2: make the emissiveColor half value of diffuseColor (color/2)
 //            to show indivial sheet elements.
 // draws a polygon with the specified color, drawstyle and transparency
 

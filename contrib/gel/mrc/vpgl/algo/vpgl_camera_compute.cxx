@@ -598,8 +598,8 @@ compute( const vcl_vector< vgl_point_2d<double> >& image_pts,
 //: Compute from two sets of corresponding 2D points (image and ground plane).
 // \param ground_pts are 2D points representing world points with Z=0
 // The calibration matrix of \a camera is enforced
-// This computation is simplier than the general case above and only requires 4 points
-// Put the resulting camera into camera, return true if successful.
+// This computation is simpler than the general case above and only requires 4 points
+// Put the resulting camera into \p camera, return true if successful.
 bool vpgl_perspective_camera_compute::
 compute( const vcl_vector< vgl_point_2d<double> >& image_pts,
          const vcl_vector< vgl_point_2d<double> >& ground_pts,

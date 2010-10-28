@@ -8,7 +8,7 @@
 // \verbatim
 //  Modifications
 //   23 Oct.2003 - Peter Vanroose - Added support for 64-bit int pixels
-// \endvarbatim
+// \endverbatim
 
 #include "vil_stream_write.h"
 #include <vil/vil_stream.h>

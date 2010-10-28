@@ -28,7 +28,7 @@ int main ()
     vcl_cout << "Got frame: " << im.width() << 'x' << im.height() << '\n';
   }
 
-  // Running backwards throught the image
+  // Running backwards through the image
   for (vidl_vil1_movie::frame_iterator pframe = movie->last();
        pframe >= movie->first(); --pframe)
   {

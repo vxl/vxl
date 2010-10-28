@@ -32,7 +32,7 @@ class icam_view_sphere : public vbl_ref_count
   //: computes the camera registration errors for a given image
   void register_image(vil_image_view<float> const& source_img);
 
-  //: computes the camera registration errors local minimas for a given image
+  //: computes the camera registration errors local minima for a given image
   void find_local_minima(vcl_vector<vsph_view_point<icam_view_metadata> >& local_minima);
 
   inline short version() const { return 1; }

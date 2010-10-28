@@ -39,7 +39,7 @@ bool operator==(vgui_grid_tableau_data const &a,
 
 //: A tableau which renders its child tableaux as a rectangular grid.
 //
-//  It is derived from vgui_poly_tableau but unlike vgui_poly_tablea, the
+//  It is derived from vgui_poly_tableau but unlike vgui_poly_tableau, the
 //  child tableaux of vgui_grid_tableau can only be laid out in an m by n
 //  rectangular grid.  Rows and columns are numbered starting from 0 with
 //  (0,0) in the top left and (m-1,n-1) in the bottom right.

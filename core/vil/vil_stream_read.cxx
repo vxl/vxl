@@ -17,7 +17,6 @@
 //                       (implementation was wrong for VXL_BIG_ENDIAN machines)
 //   Ian Scott, May 2003: rearrange explicit io, to allow for easier expansion.
 //   Peter Vanroose - 23 Oct.2003 - Added support for 64-bit int pixels
-// \endvarbatim
 // \endverbatim
 
 #include "vil_stream_read.h"

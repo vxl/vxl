@@ -2,7 +2,7 @@
 #define boxm_scene_h_
 //:
 // \file
-// \brief  The main class to keep the 3D world data. It is a grid of boxm_blocks containg octrees. 
+// \brief  The main class to keep the 3D world data. It is a grid of boxm_blocks containing octrees.
 //
 // \author Gamze Tunali
 // \date Apr 03, 2009
@@ -35,7 +35,7 @@ class boxm_scene :public boxm_scene_base
  public:
   typedef typename T::loc_type loc_type;
   typedef typename T::datatype datatype;
-  
+
   //: Default constructor
   boxm_scene() : active_block_(vgl_point_3d<int>(-1,-1,-1)), save_internal_nodes_(false), save_platform_independent_(true) {}
 
@@ -68,7 +68,7 @@ class boxm_scene :public boxm_scene_base
 
   //: Copy constructor
   boxm_scene(const boxm_scene& scene);
-  
+
   //: Constructor from base_scene
   boxm_scene(const boxm_scene_base& scene_base):
   boxm_scene_base(scene_base),active_block_(vgl_point_3d<int>(-1,-1,-1)), save_internal_nodes_(false), save_platform_independent_(true) {}
@@ -80,25 +80,25 @@ class boxm_scene :public boxm_scene_base
 
   bool discover_block(unsigned i, unsigned j, unsigned k);
 
-  //: Loads block into memory. 
+  //: Loads block into memory.
   // Returns true if the block bin file is found on disc, otherwise returns false and creates a new tree for the block
   bool load_block(unsigned i, unsigned j, unsigned k);
-  
-  //: Loads block into memory. 
+
+  //: Loads block into memory.
   bool load_block(vgl_point_3d<int> i) { return load_block(i.x(), i.y(), i.z()); }
-  
-  //: Loads a blcok and all its neighboring(adjacent) blocks
+
+  //: Loads a block and all its neighboring(adjacent) blocks
   bool load_block_and_neighbors(unsigned i, unsigned j, unsigned k);
 
   //: Write the active block to disk
   void write_active_block();
-  
+
   //: Returns the active block(in memory)
   boxm_block<T>* get_active_block();
-  
+
   //: Resturns the index of active block
   vgl_point_3d<int> active_block() { return active_block_; }
-  
+
   //: Returns the indeces of active neighbors;
   vcl_set<vgl_point_3d<int>, bvgl_point_3d_cmp<int> >& active_blocks(){ return active_blocks_;}
 
@@ -115,7 +115,7 @@ class boxm_scene :public boxm_scene_base
   bool save_platform_independent() const {return save_platform_independent_;}
 
   bool load_all_blocks() const {return load_all_blocks_;}
-  
+
   void block_num(int &x, int &y, int &z) const {
     x=(int) blocks_.get_row1_count();
     y=(int) blocks_.get_row2_count();
@@ -149,13 +149,13 @@ class boxm_scene :public boxm_scene_base
   boxm_block<T>* get_block(unsigned i, unsigned j, unsigned k) { return blocks_(i,j,k); }
 
   boxm_block<T>* get_block(const vgl_point_3d<int>& idx) { return blocks_(idx.x(), idx.y(), idx.z()); }
-  
+
   //: Return all leaf cells in a region
   void leaves_in_region(vgl_box_3d<double>, vcl_vector<boct_tree_cell<loc_type, datatype>* >& cells);
-  
+
   //: Locate point in scene coordinates. Assumes that the block containing the point is already loaded into memory
   boct_tree_cell<loc_type, datatype>* locate_point_in_memory(vgl_point_3d<double> &p);
-  
+
   void set_block(vgl_point_3d<int> const& idx, boxm_block<T>* block)
   { blocks_(idx.x(),idx.y(),idx.z()) = block; active_block_=idx; }
 
@@ -166,13 +166,13 @@ class boxm_scene :public boxm_scene_base
   void load_scene(boxm_scene_parser& parser);
 
   void force_write_blocks();
-  
+
   static short version_no() { return 1; }
 
   boxm_block_iterator<T> iterator() { boxm_block_iterator<T> iter(this); return iter; }
-  
+
   boxm_block_iterator<T> const_iterator() { const boxm_block_iterator<T> iter(this); return iter; }
-  
+
   boxm_cell_iterator<T> cell_iterator(bool (boxm_scene<T>::*block_loading_func)(unsigned,unsigned, unsigned)){ boxm_cell_iterator<T> cell_iter(this->iterator(), block_loading_func); return cell_iter; }
 
   virtual vgl_box_3d<double> get_world_bbox();
@@ -180,7 +180,7 @@ class boxm_scene :public boxm_scene_base
   bool valid_index(vgl_point_3d<int> idx);
 
   void set_pinit(float pinit){pinit_=pinit;}
-  
+
   float pinit(){return pinit_;}
 
   vgl_box_3d<double> get_block_bbox(vgl_point_3d<int>& idx){return get_block_bbox(idx.x(), idx.y(), idx.z());}
@@ -191,13 +191,13 @@ class boxm_scene :public boxm_scene_base
   vcl_string gen_block_path(int x, int y, int z);
 
   void clean_scene();
-  
+
   //: Returns a scene with the same structure and initialized with given value
   void clone_blocks(boxm_scene<T> &scene_out, datatype data);
-  
+
   //: Returns a scene with the same structure and data
-  void clone_blocks(boxm_scene<T> &scene_out);  
-  
+  void clone_blocks(boxm_scene<T> &scene_out);
+
   //: Returns a scene of a different type with the same structure  and initialized with given value
   template <class T_out>
   void clone_blocks_to_type(boxm_scene<T_out> &scene_out, typename boxm_scene<T_out>::datatype data )
@@ -217,19 +217,19 @@ class boxm_scene :public boxm_scene_base
       ++iter_out;
     }
   }
-  
+
   //: Unload active blocks
   void unload_active_blocks();
-  
+
   //: Print out the trees in the scene
   void print();
-  
+
   //: Return the finest level in the scene
   short finest_level();
-  
+
   //: Return the length of finest-level cell in the scene
   double finest_cell_length();
-  
+
   vgl_point_3d<double> rpc_origin() const { return rpc_origin_; }
 
   void set_rpc_origin(vgl_point_3d<double>& new_rpc_origin) {
@@ -246,15 +246,15 @@ class boxm_scene :public boxm_scene_base
   bgeo_lvcs lvcs_;
   vgl_point_3d<double> origin_;
   vgl_point_3d<double> rpc_origin_;
-  
+
   //: World dimensions of a block .e.g 1 meter x 1 meter x 1 meter
   vgl_vector_3d<double> block_dim_;
-  
+
   vbl_array_3d<boxm_block<T>*> blocks_;
 
   //: index of the blocks (3D array) that is active; only one active block at a time
   vgl_point_3d<int> active_block_;
-  
+
   //: if neighbors of the active block are loaded into memory, their indeces are stored in this set
   vcl_set<vgl_point_3d<int>, bvgl_point_3d_cmp<int> >  active_blocks_;
 
@@ -262,13 +262,13 @@ class boxm_scene :public boxm_scene_base
 
   //: Flag that indicates whether internal nodes of the trees should be saved
   bool save_internal_nodes_;
-  
+
   //: Flag that indicates whether the octree data should be saved in a platform-independent way (slower)
   bool save_platform_independent_;
-  
+
   //: Flag to load all the blocks in the memory
   bool load_all_blocks_;
-  
+
   //************** private methods
   void create_block(unsigned i, unsigned j, unsigned k);
 
@@ -276,50 +276,46 @@ class boxm_scene :public boxm_scene_base
   bool parse_config(boxm_scene_parser& parser);
 
   bool parse_xml_string(vcl_string xml, boxm_scene_parser& parser);
-  
+
   //: Load all blocks in bewteen min-max indeces. This method is private and the user needs to take care of unloading the blocks
   bool load_blocks(vgl_point_3d<int> min_idx, vgl_point_3d<int> max_idx);
-  
+
   //: Unload all blocks in bewteen min-max indeces.
   bool unload_blocks(vgl_point_3d<int> min_idx, vgl_point_3d<int> max_idx);
-  
- 
+
+
   //: A helper function to generate the indeces of neighboring blocks
   vcl_set<vgl_point_3d<int>, bvgl_point_3d_cmp<int> >  neighboring_blocks(vgl_point_3d<int> idx)
   {
     vcl_set<vgl_point_3d<int>, bvgl_point_3d_cmp<int> > neighbors;
-    for(int i = -1; i <= 1; i++)
+    for (int i = -1; i <= 1; i++)
     {
       int active_i = idx.x() + i;
-      if(active_i >= 0 && active_i < int(blocks_.get_row1_count()))
-        for(int j = -1; j <= 1; j++)
+      if (active_i >= 0 && active_i < int(blocks_.get_row1_count()))
+        for (int j = -1; j <= 1; j++)
         {
           int active_j = idx.y() + j;
-          if(active_j >= 0 && active_j < int(blocks_.get_row2_count()) )
-            for(int k = -1; k <= 1; k++)
+          if (active_j >= 0 && active_j < int(blocks_.get_row2_count()) )
+            for (int k = -1; k <= 1; k++)
             {
               int active_k = idx.z() + k;
-              if(active_k >= 0 && active_k < int(blocks_.get_row3_count()))
+              if (active_k >= 0 && active_k < int(blocks_.get_row3_count()))
                 neighbors.insert(vgl_point_3d<int>(active_i, active_j, active_k));
-              
             }
-          
         }
-    }  
+    }
     return neighbors;
   }
-  
 };
 
 template <class T>
 class boxm_block_iterator
 {
-  
   friend class boxm_cell_iterator<T>;
 
  public:
   boxm_block_iterator(boxm_scene<T>* const scene): i_(0), j_(0), k_(0), scene_(scene) {}
-  
+
   //: Copy constructor
   boxm_block_iterator(const boxm_block_iterator<T>& other): i_(other.i_), j_(other.j_), k_(other.k_), scene_(other.scene_) {}
 
@@ -360,59 +356,57 @@ class boxm_block_iterator
 template <class T>
 class boxm_cell_iterator
 {
-public:
+ public:
   typedef bool (boxm_scene<T>::*ptr2func)(unsigned, unsigned, unsigned);
   typedef typename T::loc_type loc_type;
   typedef typename T::datatype datatype;
-  
+
   //: Copy constructor
   boxm_cell_iterator(const boxm_cell_iterator<T>& other): block_iterator_(other.block_iterator_), cells_(other.cells_), block_loading_func_(other.block_loading_func_){}
-  
-  //: Constructor from a block iterator and function pointer to loading mechanism i.e load_active_block or active_bloack_and_neighbors
-  boxm_cell_iterator(boxm_block_iterator<T> iter, ptr2func block_loading_func): 
-  
+
+  //: Constructor from a block iterator and function pointer to loading mechanism i.e load_block() or load_block_and_neighbors()
+  boxm_cell_iterator(boxm_block_iterator<T> iter, ptr2func block_loading_func):
+
   block_iterator_(iter), block_loading_func_(block_loading_func){}
-    
+
   //: Destructor
   ~boxm_cell_iterator() {}
-  
+
   //: Iterator begin
   boxm_cell_iterator<T>& begin();
-  
+
   //: Iterator end
   bool end();
-  
+
   /*************** Operators ****************/
-  
+
   boxm_cell_iterator<T>& operator=( const boxm_cell_iterator<T>& that);
-  
+
   bool operator==(const boxm_cell_iterator<T>& that);
-  
+
   bool operator!=(const boxm_cell_iterator<T>& that);
-  
+
   //: Prefix increment. When the end of the block is reached, it writes the block to disk and loads the next one
-  boxm_cell_iterator<T>& operator++();  
-  
+  boxm_cell_iterator<T>& operator++();
+
   boct_tree_cell<loc_type, datatype>* operator*();
-  
+
   boct_tree_cell<loc_type, datatype>* operator->();
-  
+
   /*************** Data accessor *************/
   //: Return the global origin of the current cell
   vgl_point_3d<double> global_origin();
-  
- 
-private:
-  
+
+ private:
+
   boxm_block_iterator<T> block_iterator_;
-  
+
   vcl_vector<boct_tree_cell<loc_type ,datatype >* > cells_;
-  
+
   typename vcl_vector< boct_tree_cell<loc_type , datatype >* >::const_iterator cells_iterator_;
-  
+
   ptr2func block_loading_func_;
 };
-
 
 
 //: generates an XML file from the member variables

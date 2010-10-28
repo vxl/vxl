@@ -19,7 +19,7 @@
 //  Homography transformation
 //    Y=H(X)
 //
-// NOTE: everything is in 2D unhomogeneous coordinate,
+// NOTE: everything is in 2D non-homogeneous coordinates,
 //       therefore it is not linear
 
 class rgrl_trans_rad_dis_homo2d

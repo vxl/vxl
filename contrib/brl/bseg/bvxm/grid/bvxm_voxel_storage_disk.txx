@@ -30,7 +30,7 @@ bvxm_voxel_storage_disk<T>::bvxm_voxel_storage_disk(vcl_string storage_filename)
       return;
     }
     // read header and make sure that it matches given dimensions
-    // open the file with in and out flags so we dont truncate
+    // open the file with in and out flags so we don't truncate
 #ifdef BVXM_USE_FSTREAM64
     fio_ = new vil_stream_fstream64(storage_fname_.c_str(),"rw");
 #else
@@ -74,7 +74,7 @@ bvxm_voxel_storage_disk<T>::bvxm_voxel_storage_disk(vcl_string storage_filename,
       return;
     }
     // read header and make sure that it matches given dimensions
-    // open the file with in and out flags so we dont truncate
+    // open the file with in and out flags so we don't truncate
 #ifdef BVXM_USE_FSTREAM64
     fio_ = new vil_stream_fstream64(storage_fname_.c_str(),"rw");
 #else

@@ -28,10 +28,10 @@ class boct_tree
  public:
   //: Type of locational code
   typedef T_loc loc_type;
-  
+
   //: Datatype of the cells
   typedef T_data datatype;
-  
+
   //: Default constructor
   boct_tree() : num_levels_(0), root_level_(-1), max_val_(0), root_(0), global_bbox_() {}
 
@@ -44,7 +44,7 @@ class boct_tree
   //: Construct from bounding box, maximum number of levels and levels to initialize
   boct_tree(vgl_box_3d<double>  bbox,short num_levels, short init_levels=1);
 
-  //: Constructs form root ceel and maximum number of levels
+  //: Constructs from root cell and maximum number of levels
   boct_tree(boct_tree_cell<T_loc, T_data>* root, short num_levels)
   {
     root_ = root;
@@ -100,45 +100,45 @@ class boct_tree
   //: Returns the smallest cell that entirely contains a 3d region in octree coordinates [0,1)x[0,1)x[0,1)
   boct_tree_cell<T_loc,T_data>* locate_region(const vgl_box_3d<double>& r, bool check_out_of_bounds = false);
 
-  //: Returns all leaf cells entirely contained in 3d region in global coordinates 
+  //: Returns all leaf cells entirely contained in 3d region in global coordinates
   void locate_region_leaves_global(const vgl_box_3d<double>& r, vcl_vector<boct_tree_cell<T_loc,T_data>*> &leaves)
   {
     boct_tree_cell<T_loc,T_data>* root = locate_region_global(r);
     vcl_vector<boct_tree_cell<T_loc,T_data>*> all_leaves;
     root->leaf_children(all_leaves);
-    
+
     //now check that the leaves are contained in the region
     typename vcl_vector<boct_tree_cell<T_loc,T_data>*>::iterator it = all_leaves.begin();
-    for(; it!=all_leaves.end(); ++it)
+    for (; it!=all_leaves.end(); ++it)
     {
-      if(!vgl_intersection(cell_bounding_box(*it),r).is_empty())
+      if (!vgl_intersection(cell_bounding_box(*it),r).is_empty())
         leaves.push_back(*it);
     }
-    
-    return; 
+
+    return;
   }
-  
-  //: Returns all leaf cells entirely contained in 3d region in global coordinates 
+
+  //: Returns all leaf cells entirely contained in 3d region in global coordinates
   void locate_region_leaves_global_2(const vgl_box_3d<double>& r, vcl_vector<boct_tree_cell<T_loc,T_data>*> &leaves)
   {
     boct_tree_cell<T_loc,T_data>* root = locate_region_global(r);
     vcl_vector<boct_tree_cell<T_loc,T_data>*> all_leaves;
     root->leaf_children(all_leaves);
-    
+
     //now check that the leaves are contained in the region
     vgl_point_3d<double>  centroid = r.centroid();
     boct_tree_cell<T_loc,T_data> *centroid_cell = locate_point_global(centroid);
     double radius = vcl_sqrt(r.width()*r.width() + r.depth()*r.depth()+r.height()*r.height()) + 1e-7;
     typename vcl_vector<boct_tree_cell<T_loc,T_data>*>::iterator it = all_leaves.begin();
-    for(; it!=all_leaves.end(); ++it)
+    for (; it!=all_leaves.end(); ++it)
     {
-      if((global_origin(*it) - global_origin(centroid_cell)).length() < radius)
+      if ((global_origin(*it) - global_origin(centroid_cell)).length() < radius)
         leaves.push_back(*it);
     }
-    
-    return; 
+
+    return;
   }
-  
+
   //: Returns all leaf cells entirely contained in 3d region (in octree coordinates [0,1)x[0,1)x[0,1))
   void locate_region_leaves(const vgl_box_3d<double>& r, vcl_vector<boct_tree_cell<T_loc,T_data>*> &leaves)
   {

@@ -16,7 +16,7 @@
 // \verbatim
 //  Modifications:
 //   14-Jan-2007 Peter Vanroose - added vnl_matrix_fixed interface
-// \endvarbatim
+// \endverbatim
 
 //: Compute the exponential of a square matrix - fiddly form
 // \relatesalso vnl_matrix

@@ -1,8 +1,7 @@
-/* Copyright 2006-2009 Brad King, Chuck Stewart
-   Distributed under the Boost Software License, Version 1.0.
-   (See accompanying file rgtl_license_1_0.txt or copy at
-    http://www.boost.org/LICENSE_1_0.txt) */
-
+// Copyright 2006-2009 Brad King, Chuck Stewart
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file rgtl_license_1_0.txt or copy at
+//  http://www.boost.org/LICENSE_1_0.txt)
 #ifndef rgtl_object_array_triangles_3d_hxx
 #define rgtl_object_array_triangles_3d_hxx
 //:
@@ -22,7 +21,7 @@ class rgtl_serialize_access;
 //
 // This uses the point array structure to hold the triangle vertices
 // and provide an interface for storing the point locations.  It
-// additionally stores a list of thre point ids for each triangle.
+// additionally stores a list of three point ids for each triangle.
 class rgtl_object_array_triangles_3d: public rgtl_object_array_points<3>
 {
  public:

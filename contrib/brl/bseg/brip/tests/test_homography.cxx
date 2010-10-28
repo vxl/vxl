@@ -27,9 +27,9 @@ static void test_homography()
           input(x,y)=150;
   //first try simple rotation
   vnl_matrix_fixed<double,3, 3> M;
-  M[0][0]= 0.707;   M[0][1]= -0.707;   M[0][2]= 70.7;
-  M[1][0]= 0.707;   M[1][1]= 0.707;   M[1][2]= 0;
-  M[2][0]= 0;   M[2][1]= 0; M[2][2]= 1;
+  M[0][0]= 0.6; M[0][1]= -0.8; M[0][2]= 70.7;
+  M[1][0]= 0.8; M[1][1]=  0.6; M[1][2]= 0;
+  M[2][0]= 0;   M[2][1]= 0;    M[2][2]= 1;
   vgl_h_matrix_2d<double> H(M);
   vcl_cout << "H\n" << H << vcl_endl;
   if (!brip_vil1_float_ops::homography(input, H, out))
@@ -60,8 +60,8 @@ static void test_homography()
   vnl_matrix_fixed<double, 3,3> V = SVD.V();
   vcl_cout << "V\n" << V << '\n';
   vnl_vector_fixed<double, 3> nv = SVD.nullvector() ;
-  vcl_cout << "Nullvector " << nv << '\n';
-  vcl_cout << "nullresidue " << A*nv << '\n';
+  vcl_cout << "Nullvector " << nv << '\n'
+           << "nullresidue " << A*nv << '\n';
 #endif
 }
 

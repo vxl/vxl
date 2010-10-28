@@ -128,17 +128,17 @@ void print_gauss_x_kernels()
   float sigma2 = 15;
   float sigma3 = 20;
   bvpl_gauss3d_x_kernel_factory factory(sigma1, sigma2, sigma3);
-  
+
   {
     factory.set_rotation_axis( vnl_float_3(1, 1, 1));
     bvpl_kernel kernel = factory.create();
-    
+
     kernel.save_raw("gauss_111_kernel.raw");
     //kernel.print_to_file("gauss_111_kernel.txt");
     vcl_cout << "1 1 1 kernel " ;
     kernel.cum_sum();
   }
-  
+
   {
     factory.set_rotation_axis( vnl_float_3(0, 0, 1));
     bvpl_kernel kernel = factory.create();
@@ -147,7 +147,7 @@ void print_gauss_x_kernels()
     vcl_cout << "0 0 1 kernel " ;
     kernel.cum_sum();
   }
-  
+
   {
     factory.set_rotation_axis( vnl_float_3(0, 0, 1));
     factory.set_angle(float(vnl_math::pi_over_2));
@@ -160,14 +160,14 @@ void print_gauss_x_kernels()
 }
 
 //: Prints to file the directions of the kernels
-//  The file can be read in MATLAB for vizualization
+//  The file can be read in MATLAB for visualization
 void print_directions( bvpl_kernel_vector_sptr kernel_vector)
 {
   bvpl_kernel_vector::iterator vit = kernel_vector->kernels_.begin();
 
   vcl_cout <<"Writing to file axes in vector:" << vcl_endl;
 
-  vcl_string filename  = "kernel_axes.txt";
+  vcl_string filename = "kernel_axes.txt";
   vcl_fstream ofs(filename.c_str(), vcl_ios::out);
 
   if (!ofs.is_open()) {
@@ -196,7 +196,7 @@ bool test_gaussian_xx()
     kernel.cum_sum();
   }
 
-#if 0   //Comment this out if you whish to print kernels to raw file for vizualization
+#if 0   //Comment this out if you whish to print kernels to raw file for visualization
   print_kernels();
 #endif
 
@@ -205,7 +205,7 @@ bool test_gaussian_xx()
   bvpl_create_directions_b dir;
   bvpl_kernel_vector_sptr kernel_3d_vecs = factory.create_kernel_vector(dir);
 
-#if 0   //Comment this out if you whish to print kernels directions  for vizualization
+#if 0   //Comment this out if you whish to print kernels directions for visualization
   print_directions(kernel_vector);
 #endif
 
@@ -296,52 +296,52 @@ bool test_gaussian_x()
     kernel.cum_sum();
     kernel.save_raw("canonical.raw");
   }
-  
-#if 1   //Comment this out if you whish to print kernels to raw file for vizualization
-  
+
+#if 1   //Comment this out if you whish to print kernels to raw file for visualization
+
   print_gauss_x_kernels();
 #endif
-  
+
   // test the kernel vector
-//  
+//
 //  bvpl_create_directions_b dir;
 //  bvpl_kernel_vector_sptr kernel_3d_vecs = factory.create_kernel_vector(dir);
-//  
-//#if 0   //Comment this out if you whish to print kernels directions  for vizualization
+//
+//#if 0   //Comment this out if you whish to print kernels directions for visualization
 //  print_directions(kernel_vector);
 //#endif
-  
+
   //check symmetry assumptions.
   // 1. if kernel has two equal sigmas and it is aligned in the
   // direction of unequal sigma, then it is symmetric around that axis.
   bvpl_gauss3d_xx_kernel_factory factory2(1, 1.5);
   factory2.set_rotation_axis( vnl_float_3(1, 0, 0));
   bvpl_kernel kernel1 = factory2.create();
-  
+
   factory2.set_rotation_axis( vnl_float_3(1, 0, 0));
   factory2.set_angle(float(vnl_math::pi_over_2));
   bvpl_kernel kernel2 = factory2.create();
-  
+
   factory2.set_rotation_axis( vnl_float_3(-1, 0, 0));
   bvpl_kernel kernel3 = factory2.create();
-  
+
   //kernel1.save_raw("kernel1.raw");
   //kernel2.save_raw("kernel2.raw");
   //kernel1.print_to_file("kernel1.txt");
   //kernel2.print_to_file("kernel2.txt");
-  
+
   //check equality
   bvpl_kernel_iterator kernel_iter1 = kernel1.iterator();
   bvpl_kernel_iterator kernel_iter2 = kernel2.iterator();
   bvpl_kernel_iterator kernel_iter3 = kernel3.iterator();
-  
+
   //reset the iterator
   kernel_iter1.begin();
   kernel_iter2.begin();
   kernel_iter3.begin();
-  
+
   bool symmetric = true;
-  
+
   while (!kernel_iter1.isDone()) {
     vgl_point_3d<int> idx1 = kernel_iter1.index();
     while (!kernel_iter2.isDone()) {
@@ -358,7 +358,7 @@ bool test_gaussian_x()
     kernel_iter2.begin();
     ++kernel_iter1;
   }
-  
+
   kernel_iter1.begin();
   while (!kernel_iter1.isDone()) {
     vgl_point_3d<int> idx1 = kernel_iter1.index();
@@ -376,16 +376,15 @@ bool test_gaussian_x()
     kernel_iter3.begin();
     ++kernel_iter1;
   }
-  
-  
+
+
   TEST("Symmetry test", symmetric, true);
-  
-  
+
+
   factory2.set_rotation_axis( vnl_float_3(-1, 0, 0));
-  
+
   return true;
 }
-
 
 
 bool test_corner2d()
@@ -402,7 +401,7 @@ bool test_corner2d()
     kernel.cum_sum();
   }
 
-#if 0  //Comment this out if you whish to print kernels to raw file for vizualization
+#if 0  //Comment this out if you whish to print kernels to raw file for visualization
   {
     bvpl_corner2d_kernel_factory factory1(50,35,25);
     factory1.set_rotation_axis( vnl_float_3(0, 1, 0));
@@ -420,7 +419,7 @@ bool test_corner2d()
 //  bvpl_create_directions_b dir;
 //  bvpl_kernel_vector_sptr kernel_3d_vecs = factory.create_kernel_vector(dir);
 
-#if 0   //Comment this out if you whish to print kernels directions  for vizualization
+#if 0   //Comment this out if you whish to print kernels directions for visualization
   print_directions(kernel_vector);
 #endif
 

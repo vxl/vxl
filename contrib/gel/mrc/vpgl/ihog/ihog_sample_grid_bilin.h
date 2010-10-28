@@ -4,9 +4,9 @@
 // \file
 // \brief Grid sampling functions for 2D images
 // \author Tim Cootes
-// \verbtim
-//  migrated to ihog
-//  G. Tunali 8/2010
+// \verbatim
+//  Modifications
+//   migrated to ihog - G. Tunali  Aug.2010
 // \endverbatim
 #include <vil/vil_image_view.h>
 #include <vil/vil_resample_bilin.h>
@@ -89,9 +89,9 @@ inline void ihog_resample_bilin(
   ihog_utils::image_bounds(source_ni, source_nj, t, dest_ni, dest_nj, t_comp);
   //extract affine parameters
   vgl_point_2d<double> p_comp = t_comp.origin();
-  vgl_vector_2d<double> u_comp = 
+  vgl_vector_2d<double> u_comp =
     t_comp.delta(p_comp, vgl_vector_2d<double>(1,0));
-  vgl_vector_2d<double> v_comp = 
+  vgl_vector_2d<double> v_comp =
     t_comp.delta(p_comp, vgl_vector_2d<double>(0,1));
 
   //resample from source to destination
@@ -123,4 +123,5 @@ inline void ihog_resample_bilin(
   vgl_vector_2d<double> dv = tr.delta(p, vgl_vector_2d<double>(0,1));
   ihog_resample_bilin(src_image,dest_image, p, du, dv);
 }
+
 #endif // ihog_sample_grid_bilin_h_

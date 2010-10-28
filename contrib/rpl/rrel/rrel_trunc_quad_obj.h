@@ -3,7 +3,7 @@
 
 //:
 // \file
-// \author Chuck Stewaty (stewart@cs.rpi.edu)
+// \author Chuck Stewart (stewart@cs.rpi.edu)
 // \author Amitha Perera (perera@cs.rpi.edu)
 // \brief Truncated quadratic loss function
 

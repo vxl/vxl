@@ -47,7 +47,7 @@ bvxm_voxel_storage_disk_cached<T>::bvxm_voxel_storage_disk_cached(vcl_string sto
       return;
     }
     // read header and make sure that it matches given dimensions
-    // open the file with in and out flags so we dont truncate
+    // open the file with in and out flags so we don't truncate
 #ifdef BVXM_USE_FSTREAM64
     fio_ = new vil_stream_fstream64(storage_fname_.c_str(),"rw");
 #else
@@ -273,7 +273,7 @@ bool bvxm_voxel_storage_disk_cached<T>::fill_cache(unsigned start_slice_idx)
 template <class T>
 void bvxm_voxel_storage_disk_cached<T>::put_slab()
 {
-  // dont need to do anything here.
+  // don't need to do anything here.
   // data gets written to disk only before it is about to be replaced in cache
   return;
 }

@@ -7,12 +7,12 @@
 // \brief Implements a dynamic program in a 2-d array
 // Finds the mapping between two 1-d spaces (row and col).  Each element
 // of the array is a bdpg_node_sptr.  The node maintains the path information
-// as the dynamic program proceeds throught the array. Each element of a row
+// as the dynamic program proceeds through the array. Each element of a row
 // of the array looks back to the previous row and finds the ancestor with the
 // highest probability path. This choice is recorded in the node. At the last
 // row, the highest probability column can be backtraced to find the full path.
 //
-// The choice of preceeding paths is restricted to prevent the same column
+// The choice of preceding paths is restricted to prevent the same column
 // appearing more than once in a path.  This restriction corresponds to
 // the semantics that a row element should be assigned to exactly one column.
 //

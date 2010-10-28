@@ -89,13 +89,13 @@ class icam_depth_transform
 
   //:
   // params are [a.vx, a.vy, a.vz, tx, ty, tz]
-  // where a.v is a Rodriques vector (a angle of rotation, v rotation axis)
+  // where a.v is a Rodrigues vector (a angle of rotation, v rotation axis)
   // the projection for the "from" camera is K[R, t]
   void set_params(vnl_vector<double> const& params);
 
   //:
   // params are [a.vx, a.vy, a.vz, tx, ty, tz]
-  // where a.v is a Rodriques vector (a angle of rotation, v rotation axis)
+  // where a.v is a Rodrigues vector (a angle of rotation, v rotation axis)
   // the projection for the "from" camera is K[R, t]
   vnl_vector<double> params();
 

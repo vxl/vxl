@@ -8,7 +8,7 @@
 // \verbatim
 //  Modifications
 //   23 Oct.2003 - Peter Vanroose - Added support for 64-bit int pixels
-// \endvarbatim
+// \endverbatim
 
 #include <vxl_config.h> // for vxl_uint_32 etc.
 #include <vcl_complex.h>

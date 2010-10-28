@@ -27,7 +27,7 @@ namespace bvpl_save_vrml_process_globals
 
 //: process takes 3 inputs and has no outputs.
 // input[0]: The scene
-// input[1]: The vetor of kernels
+// input[1]: The vector of kernels
 // input[2]: Path to output vrml file
 // No outputs
 

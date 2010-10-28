@@ -426,7 +426,7 @@ int main(int argc, char** argv)
   vul_arg<vcl_string> out_cam_dir(arglist, "-out_cam_dir",
                                   "output_cams", "");
 
-  vul_arg<bool> dont_use_H(arglist, "-no_H", "dont find 3D to 3D transformation to map bundle adjusted world points back to gt world points", false);
+  vul_arg<bool> dont_use_H(arglist, "-no_H", "don't find 3D to 3D transformation to map bundle adjusted world points back to gt world points", false);
 
   vul_arg<bool> localize(arglist, "-localize", "convert global coords to local using LVCS", false);
   vul_arg<double> lat(arglist, "-lat", "lvcs latitude, e.g. 39.91", 39);

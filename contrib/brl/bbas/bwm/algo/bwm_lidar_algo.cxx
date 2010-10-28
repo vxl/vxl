@@ -94,7 +94,7 @@ void bwm_lidar_algo::label_lidar(vil_image_view<float> first_ret,
 
   veg = imdilate(imerode(veg0,ones(3)),ones(3));
 
-  % erode to try and disconect thin patches of trees
+  % erode to try and disconnect thin patches of trees
   bld0 = imerode(bld0,ones(3));
 
   labeled = bwlabel(bld0);
@@ -111,7 +111,7 @@ void bwm_lidar_algo::label_lidar(vil_image_view<float> first_ret,
   bld = bld2;
 
 
-  % dilate vegetation mask, dont overtake buldings
+  % dilate vegetation mask, don't overtake buldings
   veg = imdilate(veg,ones(3)) & ~bld;
 
   % swallow up any small unclassified points with ground

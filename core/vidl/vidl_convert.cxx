@@ -10,7 +10,7 @@
 // \verbatim
 //  Modifications
 //   10 Jul.2008 - Antonio Garrido - Added conversions for RGB_24(P),MONO8 and YUYV_422
-// \endvarbatim
+// \endverbatim
 //
 //-----------------------------------------------------------------------------
 
@@ -786,8 +786,8 @@ vidl_convert_wrap_in_view(const vidl_frame& frame)
       return new vil_image_view<bool>(chunk,top_left, ni,nj,np, i_step,j_step,p_step);
     }
     else if (format == VIDL_PIXEL_FORMAT_MONO_F32 ||
-              format == VIDL_PIXEL_FORMAT_RGB_F32 ||
-              format == VIDL_PIXEL_FORMAT_RGB_F32P) {
+             format == VIDL_PIXEL_FORMAT_RGB_F32 ||
+             format == VIDL_PIXEL_FORMAT_RGB_F32P) {
       const vxl_ieee_32* top_left = static_cast<const vxl_ieee_32*>(cf->data()) + top_left_offset;
       return new vil_image_view<float>(chunk,top_left, ni,nj,np, i_step,j_step,p_step);
     }

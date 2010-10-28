@@ -800,7 +800,7 @@ void bvxm_util::smooth_gaussian(bvxm_voxel_slab<T> &slab, float stdx, float stdy
   for (unsigned i=0; i<kernel_size_x; ++i) {
     kernel_1dx[i] = (float)(vnl_math::sqrt1_2 * vnl_math::two_over_sqrtpi * (0.5/stdx) * vcl_exp(-(((i-kernel_radius_x)*(i-kernel_radius_x))/(2.0*stdx*stdx))));
   }
-  // normalize kernel in case taps dont sum to exactly one
+  // normalize kernel in case taps don't sum to exactly one
   kernel_1dx = kernel_1dx / kernel_1dx.sum();
 
   unsigned kernel_radius_y = (unsigned)(stdy*3);
@@ -810,7 +810,7 @@ void bvxm_util::smooth_gaussian(bvxm_voxel_slab<T> &slab, float stdx, float stdy
   for (unsigned i=0; i<kernel_size_y; ++i) {
     kernel_1dy[i] = (float)(vnl_math::sqrt1_2 * vnl_math::two_over_sqrtpi * (0.5/stdy) * vcl_exp(-(((i-kernel_radius_y)*(i-kernel_radius_y))/(2.0*stdy*stdy))));
   }
-  // normalize kernel in case taps dont sum to exactly one
+  // normalize kernel in case taps don't sum to exactly one
   kernel_1dy = kernel_1dy / kernel_1dy.sum();
 
   bvxm_voxel_slab<T> slab_work(slab.nx(),slab.ny(),slab.nz());

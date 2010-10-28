@@ -7,7 +7,7 @@
 //  Modifications
 //   Feb.2003 - Ian Scott - Upgraded IO to use vsl_block_binary io
 //   23 Oct.2003 - Peter Vanroose - Added support for 64-bit int pixels
-// \endvarbatim
+// \endverbatim
 
 #include <vsl/vsl_block_binary.h>
 #include <vsl/vsl_complex_io.h>

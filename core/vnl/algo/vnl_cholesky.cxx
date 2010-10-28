@@ -33,7 +33,7 @@ vnl_cholesky::vnl_cholesky(vnl_matrix<double> const & M, Operation mode):
   assert(n == (int)(M.rows()));
   num_dims_rank_def_ = -1;
   if (vcl_fabs(M(0,n-1) - M(n-1,0)) > 1e-8) {
-    vcl_cerr << "vnl_cholesky: WARNING: unsymmetric: " << M << vcl_endl;
+    vcl_cerr << "vnl_cholesky: WARNING: non-symmetric: " << M << vcl_endl;
   }
 
   if (mode != estimate_condition) {

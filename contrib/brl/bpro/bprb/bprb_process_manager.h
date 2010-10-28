@@ -5,7 +5,7 @@
 //:
 // \file
 // \brief This file defines a class base process manager
-// It is templated to allow its childs to be singleton managers
+// It is templated to allow its children to be singleton managers
 // \author Isabel Restrepo
 // \date March 27, 2007
 //
@@ -27,7 +27,7 @@ class bprb_process_manager : public vbl_ref_count
 {
  public:
 
-   //: Destructor
+  //: Destructor
   virtual ~bprb_process_manager();
 
   //: Use this instead of constructor
@@ -50,9 +50,8 @@ class bprb_process_manager : public vbl_ref_count
 
   static T* instance_;
 
-   //: Initialize the static instance
+  //: Initialize the static instance
   void initialize();
-
 
   static vcl_map< vcl_string , bprb_process_sptr > process_map;
 

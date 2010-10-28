@@ -29,7 +29,7 @@
 //   2002-04-05 Peter Vanroose  axis() added
 //   2003-01-08 Peter Vanroose  moved static private methods to vsol_conic_2d.cxx
 //   2004-05-11 Joseph Mundy    added binary I/O methods
-//   2004-09-23 Ming-CHing Chang  Change cast_to_conic_2d() to cast_to_conic()
+//   2004-09-23 Ming-Ching Chang Changed cast_to_conic_2d() to cast_to_conic()
 // \endverbatim
 //*****************************************************************************
 

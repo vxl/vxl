@@ -16,7 +16,7 @@
 // \verbatim
 //  Modifications
 //   23 Oct.2003 - Peter Vanroose - Added support for 64-bit int pixels
-// \endvarbatim
+// \endverbatim
 
 #include "vil_image_view.h"
 #include <vcl_string.h>
@@ -271,15 +271,15 @@ VCL_DEFINE_SPECIALIZATION
 inline bool convert_planes_from_components(vil_image_view<vil_rgb<vxl_byte> > & lhs,
                                            const vil_image_view_base & rhs)
 {
-  if(rhs.nplanes() != 3)
+  if (rhs.nplanes() != 3)
     return false;
-  if(rhs.pixel_format()!=VIL_PIXEL_FORMAT_BYTE)
+  if (rhs.pixel_format()!=VIL_PIXEL_FORMAT_BYTE)
     return false;
   unsigned ni = rhs.ni(), nj = rhs.nj();
   const vil_image_view<vxl_byte> &rhsv = static_cast<const vil_image_view<vxl_byte>&>(rhs);
   lhs= *(new vil_image_view<vil_rgb<vxl_byte> >(ni, nj));
-  for(unsigned j = 0; j<nj; ++j)
-    for(unsigned i = 0; i<ni; ++i){
+  for (unsigned j = 0; j<nj; ++j)
+    for (unsigned i = 0; i<ni; ++i){
       lhs(i,j).r = rhsv(i,j,0); lhs(i, j).g = rhsv(i,j,1); lhs(i, j).b = rhsv(i,j,2);
     }
   return true;
@@ -289,15 +289,15 @@ VCL_DEFINE_SPECIALIZATION
 inline bool convert_planes_from_components(vil_image_view<vil_rgba<vxl_uint_16> > & lhs,
                                            const vil_image_view_base & rhs)
 {
-  if(rhs.nplanes() != 4)
+  if (rhs.nplanes() != 4)
     return false;
-  if(rhs.pixel_format()!=VIL_PIXEL_FORMAT_UINT_16)
+  if (rhs.pixel_format()!=VIL_PIXEL_FORMAT_UINT_16)
     return false;
   unsigned ni = rhs.ni(), nj = rhs.nj();
   const vil_image_view<vxl_uint_16> &rhsv = static_cast<const vil_image_view<vxl_uint_16>&>(rhs);
   lhs = *(new vil_image_view<vil_rgba<vxl_uint_16> >(ni, nj));
-  for(unsigned j = 0; j<nj; ++j)
-    for(unsigned i = 0; i<ni; ++i){
+  for (unsigned j = 0; j<nj; ++j)
+    for (unsigned i = 0; i<ni; ++i){
       lhs(i, j).r = rhsv(i,j,0); lhs(i, j).g = rhsv(i,j,1); lhs(i, j).b = rhsv(i,j,2);
       lhs(i, j).a = rhsv(i,j,3);
     }

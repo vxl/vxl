@@ -8,7 +8,7 @@
 // \date January 22, 2008
 //
 // The world has the ability to store voxel grids of any type defined in bvxm_voxel_traits.h.
-// These grids are accessable through the get_grid() method.
+// These grids are accessible through the get_grid() method.
 // A voxel_type which is an appearance model type must have an associated appearance model processor class.
 // The appearance model processor type needs to have the following methods:
 //
@@ -634,7 +634,7 @@ bool bvxm_voxel_world::update_impl(bvxm_image_metadata const& metadata,
       bvxm_util::add_slabs(PX_img,mask_slab,mask_slab);
     }
 
-    // note: doing scale and offset in image domain so invalid pixels become 1.0 and dont affect visX
+    // note: doing scale and offset in image domain so invalid pixels become 1.0 and don't affect visX
     typename bvxm_voxel_slab<float>::iterator PX_img_it = PX_img.begin();
     visX_accum_it = visX_accum.begin();
     for (; visX_accum_it != visX_accum.end(); ++visX_accum_it, ++PX_img_it) {
@@ -947,7 +947,7 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
       bvxm_util::add_slabs(PX_img,mask_slab,mask_slab);
     }
 
-    // note: doing scale and offset in image domain so invalid PLxels become 1.0 and dont affect visX
+    // note: doing scale and offset in image domain so invalid pixels become 1.0 and don't affect visX
     typename bvxm_voxel_slab<float>::iterator PX_img_it = PX_img.begin();
     visX_accum_it = visX_accum.begin();
     for (; visX_accum_it != visX_accum.end(); ++visX_accum_it, ++PX_img_it) {
@@ -1180,7 +1180,7 @@ bool bvxm_voxel_world::expected_image(bvxm_image_metadata const& camera,
   typename bvxm_voxel_grid<ocp_datatype>::const_iterator ocp_slab_it = ocp_grid->begin();
   typename bvxm_voxel_grid<apm_datatype>::const_iterator apm_slab_it = apm_grid->begin();
 
-  vcl_cout << "Generating Expected Image: " << vcl_endl;
+  vcl_cout << "Generating Expected Image:" << vcl_endl;
   for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++ocp_slab_it, ++apm_slab_it)
   {
     vcl_cout << '.';
@@ -1406,7 +1406,7 @@ bool bvxm_voxel_world::pixel_probability_density(bvxm_image_metadata const& obse
 
   bvxm_voxel_slab<obs_datatype> frame_backproj(grid_size.x(),grid_size.y(),1);
 
-  vcl_cout << "Pass 1: " << vcl_endl;
+  vcl_cout << "Pass 1:" << vcl_endl;
 
   // get occupancy probability grid
   bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0,scale_idx);
@@ -1467,7 +1467,7 @@ bool bvxm_voxel_world::pixel_probability_density(bvxm_image_metadata const& obse
 
     bvxm_util::add_slabs(PX_img,mask_slab,mask_slab);
 
-    // note: doing scale and offset in image domain so invalid pixels become 1.0 and dont affect visX
+    // note: doing scale and offset in image domain so invalid pixels become 1.0 and don't affect visX
     typename bvxm_voxel_slab<float>::iterator PX_img_it = PX_img.begin();
     visX_accum_it = visX_accum.begin();
     for (; visX_accum_it != visX_accum.end(); ++visX_accum_it, ++PX_img_it) {
@@ -1554,7 +1554,7 @@ bool bvxm_voxel_world::region_probability_density(bvxm_image_metadata const& obs
   bvxm_voxel_slab<obs_datatype> frame_backproj(grid_size.x(),grid_size.y(),1);
   bvxm_voxel_slab<float> mask_backproj(grid_size.x(),grid_size.y(),1);
 
-  vcl_cout << "Pass 1: " << vcl_endl;
+  vcl_cout << "Pass 1:" << vcl_endl;
 
   // get occupancy probability grid
   bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0,scale_idx);
@@ -2176,7 +2176,7 @@ bool bvxm_voxel_world::heightmap(bvxm_image_metadata const& virtual_camera, vil_
   typename bvxm_voxel_grid<ocp_datatype>::const_iterator ocp_slab_it = ocp_grid->begin();
   typename bvxm_voxel_grid<apm_datatype>::const_iterator apm_slab_it = apm_grid->begin();
 
-  vcl_cout << "generating height map from virtual camera: " << vcl_endl;
+  vcl_cout << "generating height map from virtual camera:" << vcl_endl;
   for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++ocp_slab_it, ++apm_slab_it)
   {
     vcl_cout << '.';
@@ -2233,7 +2233,7 @@ bool bvxm_voxel_world::heightmap(bvxm_image_metadata const& virtual_camera, vil_
   vil_structuring_element strel(strel_vec,strel_vec);
   vil_median(*heightmap_rough_img,heightmap_med_img,strel);
 
-  // detect inliers as points which dont vary drastically from the median image
+  // detect inliers as points which don't vary drastically from the median image
   vil_image_view<float> med_abs_diff(heightmap.ni(),heightmap.nj());
   vil_math_image_abs_difference(heightmap_med_img,*heightmap_rough_img,med_abs_diff);
   vil_image_view<bool> inliers(heightmap.ni(),heightmap.nj());

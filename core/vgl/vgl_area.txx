@@ -60,25 +60,25 @@ template <class T> T vgl_area_enforce_orientation(vgl_polygon<T> const& poly)
 {
   T area = T(0);
 
-  //now check containment and enforce correct signs
-  //if a sheet is inside an odd number of other sheets then it's a hole
+  // now check containment and enforce correct signs
+  // if a sheet is inside an odd number of other sheets then it's a hole
   for (unsigned t = 0; t < poly.num_sheets(); ++t)
   {
     const typename vgl_polygon<T>::sheet_t & test_pgon= poly[t];
     T t_area = T(0);
 
-    //first calculate all t_pgon's area using Green's theorem
+    // first calculate all test_pgon's area using Green's theorem
     for ( unsigned int i = 0, j = test_pgon.size()-1; i < test_pgon.size(); j=i++ )
       t_area += test_pgon[j].x() * test_pgon[i].y() - test_pgon[i].x() * test_pgon[j].y();
 
-    //test if one of t's points is inside the other sheets
-    //assume sheets don't  overlap!
+    // test if one of t's points is inside the other sheets
+    // assume sheets don't overlap!
     bool is_hole = false;
     T x = test_pgon[0].x();
     T y = test_pgon[0].y();
     for (unsigned s = 0; s < poly.num_sheets(); ++s)
     {
-      //dont check a sheet against itself
+      // don't check a sheet against itself
       if (s==t)
         continue;
 

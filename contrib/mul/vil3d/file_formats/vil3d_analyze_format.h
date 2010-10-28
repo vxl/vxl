@@ -8,7 +8,7 @@
 // \file
 // \brief Reader/Writer for analyze format images.
 // \author Tim Cootes - Manchester
-// (Based on old code whos provenance has been lost in the mists of time...)
+// (Based on old code whose provenance has been lost in the mists of time...)
 
 #include <vcl_iosfwd.h>
 #include <vil3d/vil3d_file_format.h>

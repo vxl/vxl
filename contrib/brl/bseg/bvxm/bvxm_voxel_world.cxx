@@ -384,7 +384,7 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
       bvxm_util::add_slabs(PX_img,mask_slab,mask_slab);
     }
 
-    // note: doing scale and offset in image domain so invalid PLxels become 1.0 and dont affect visX
+    // note: doing scale and offset in image domain so invalid pixels become 1.0 and don't affect visX
     bvxm_voxel_slab<float>::iterator PX_img_it = PX_img.begin();
     visX_accum_it = visX_accum.begin();
     for (; visX_accum_it != visX_accum.end(); ++visX_accum_it, ++PX_img_it) {
@@ -664,7 +664,7 @@ bool bvxm_voxel_world::heightmap(vpgl_camera_double_sptr virtual_camera, vil_ima
   vil_structuring_element strel(strel_vec,strel_vec);
   vil_median(*heightmap_rough_img,heightmap_med_img,strel);
 
-  // detect inliers as points which dont vary drastically from the median image
+  // detect inliers as points which don't vary drastically from the median image
   vil_image_view<float> med_abs_diff(heightmap.ni(),heightmap.nj());
   vil_math_image_abs_difference(heightmap_med_img,*heightmap_rough_img,med_abs_diff);
   vil_image_view<bool> inliers(heightmap.ni(),heightmap.nj());

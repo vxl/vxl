@@ -68,7 +68,7 @@ class vpgl_perspective_camera_compute
 {
  public:
   //: Compute from two sets of corresponding points.
-  // Put the resulting camera into camera, return true if successful.
+  // Put the resulting camera into \p camera, return true if successful.
   static bool compute( const vcl_vector< vgl_point_2d<double> >& image_pts,
                        const vcl_vector< vgl_point_3d<double> >& world_pts,
                        const vpgl_calibration_matrix<double>& K,
@@ -77,8 +77,8 @@ class vpgl_perspective_camera_compute
   //: Compute from two sets of corresponding 2D points (image and ground plane).
   // \param ground_pts are 2D points representing world points with Z=0
   // The calibration matrix of \a camera is enforced
-  // This computation is simplier than the general case above and only requires 4 points
-  // Put the resulting camera into camera, return true if successful.
+  // This computation is simpler than the general case above and only requires 4 points
+  // Put the resulting camera into \p camera, return true if successful.
   static bool compute( const vcl_vector< vgl_point_2d<double> >& image_pts,
                        const vcl_vector< vgl_point_2d<double> >& ground_pts,
                        vpgl_perspective_camera<double>& camera );

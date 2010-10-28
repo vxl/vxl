@@ -5,10 +5,8 @@
 // \file
 // \brief A class for update process of a voxel world.
 //
-// \author Vishal JAin
+// \author Vishal Jain
 // \date Nov 11, 2009
-// \verbatim
-// \endverbatim
 
 #include <bprb/bprb_func_process.h>
 

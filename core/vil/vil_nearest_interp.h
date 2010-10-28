@@ -102,7 +102,7 @@ inline T vil_nearest_interp(
 }
 
 
-//: Compute nearest_neighbourear interpolation at (x,y), with bound checks
+//: Compute nearest neighbour interpolation at (x,y), with bound checks
 //  Image is nx * ny array of Ts. x,y element is data[ystep*y+xstep*x]
 //  If (x,y) is outside safe interpolatable image region, nearest pixel value is returned.
 //  The safe interpolatable region is [-0.5,view.ni()-0.5)*[-0.5,view.nj()-0.5).
@@ -127,7 +127,7 @@ inline T vil_nearest_interp_safe_extend(double x, double y, const T* data,
 }
 
 
-//: Compute nearest_neighbourear interpolation at (x,y), with bound checks
+//: Compute nearest neighbour interpolation at (x,y), with bound checks
 //  If (x,y) is outside safe interpolatable image region, nearest pixel value is returned.
 //  The safe interpolatable region is [-0.5,view.ni()-0.5)*[-0.5,view.nj()-0.5).
 // \relatesalso vil_image_view

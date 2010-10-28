@@ -40,7 +40,7 @@ class vpgl_ray
                   vgl_point_3d<double> const& point_3d,
                   vgl_vector_3d<double>& ray);
 
-  //: vgl interface, origin_z defines an x-y plane wherin lies the ray origin
+  //: vgl interface, origin_z defines an x-y plane wherein lies the ray origin
   static bool ray(const vpgl_camera<double>*  cam,
                   vgl_point_3d<double> const& point_3d,
                   double origin_z,
@@ -69,12 +69,12 @@ class vpgl_ray
 
   //: compute a ray in local Cartesian coordinates at a given (u, v)
   static bool ray(vpgl_local_rational_camera<double> const& lrcam,
-                  const double u, const double v, 
+                  const double u, const double v,
                   vgl_point_3d<double>& origin, vgl_vector_3d<double>& dir);
 
   //: compute a ray in local Cartesian coordinates at a given (u, v)
   static bool ray(vpgl_local_rational_camera<double> const& lrcam,
-                  const double u, const double v, 
+                  const double u, const double v,
                   vgl_ray_3d<double>& ray);
 
   //: compute a ray in local Cartesian coordinates for a local rational cam
@@ -85,8 +85,8 @@ class vpgl_ray
 
   // ====== perspective camera =====
   static bool ray(vpgl_perspective_camera<double> const& cam,
-                   vgl_point_3d<double> const& world_pt,
-                   vgl_ray_3d<double>& ray);
+                  vgl_point_3d<double> const& world_pt,
+                  vgl_ray_3d<double>& ray);
 
  private:
   //: constructor private - static methods only

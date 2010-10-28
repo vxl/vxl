@@ -17,8 +17,8 @@
 //   8/5/2008 Isabel Restrepo -Added template class bvxm_voxel_traits_mc<unsigned dim, unsigned modes>
 //                             This class is in charge of proper instantiation of multi-channel appearance model processor
 //                            -Added bvxm_voxel_traits<APM_MOG_MC_3_3> : public bvxm_voxel_traits_mc<3,3>,
-//                             Everytime an user needs an mog appearance model with unexisting dimension of number
-//                             of gaussian modes, it needs to add an entry in the enum and and new class that looks as follows
+//                             Everytime a user needs a mog appearance model with nonexisting dimension of number
+//                             of gaussian modes, it needs to add an entry in the enum and and new class that looks as follows:
 //                             class bvxm_voxel_traits<APM_MOG_MC_DIM_MODES> : public bvxm_voxel_traits_mc<DIM,MODES> {};
 // \endverbatim
 //-----------------------------------------------------------------------------

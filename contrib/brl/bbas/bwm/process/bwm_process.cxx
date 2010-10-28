@@ -73,7 +73,7 @@ int bwm_process::StopBackgroundTask(int nTimeOut)
 
   if (lpBackgroundThread == NULL)
     return -1;
-  //I dont know why sometimes finished threads don't get signalled
+  //I don't know why sometimes finished threads don't get signalled
   if ((::WaitForSingleObject(hDoneBackgroundThreadEvent, 0) != WAIT_OBJECT_0) &&
       (::GetExitCodeThread(lpBackgroundThread->m_hThread, &dwExitCode) && dwExitCode==STILL_ACTIVE))
   {

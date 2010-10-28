@@ -12,7 +12,7 @@
 //
 // \verbatim
 //  Modifications
-//   23-OCT-1999 P.Pritchet - Initial version.
+//   23-OCT-1999 P.Pritchett - Initial version.
 //   25-JAN-2000 K.Y.McGaul - Added message() to allow text messages in dialogs.
 //   27-JAN-2000 K.Y.McGaul - Added set_modal() to allow non-modal dialogs.
 //   24-FEB-2000 K.Y.McGaul - Added file browser and color chooser.

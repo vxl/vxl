@@ -9,7 +9,7 @@
 // \verbatim
 //  Modifications
 //   23 Oct.2003 - Peter Vanroose - Added support for 64-bit int pixels
-// \endvarbatim
+// \endverbatim
 
 #include "vil_memory_image.h"
 #include <vcl_cassert.h>

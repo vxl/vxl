@@ -6,7 +6,7 @@
 //
 // \verbatim
 //  Modifications
-// \endvarbatim
+// \endverbatim
 
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h>

@@ -39,8 +39,8 @@ class vil_pyramid_image_view
     { images_.push_back(new vil_image_view<T>(image)); scales_.push_back(1.0); }
 
     //: Creates a pyramid of nlevels and sets the image at the scale 1.0.
-    // It creates smaller images for the smalles scales. Each image is
-    // half the the size of the previous image
+    // It creates smaller images for the smaller scales. Each image is
+    // half the size of the previous image
     vil_pyramid_image_view(vil_image_view_base_sptr image, unsigned nlevels);
 
     //: creates a pyramid of empty image views

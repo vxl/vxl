@@ -145,9 +145,8 @@ brdb_database::add_relation(const vcl_string& name, const brdb_relation_sptr& ne
   vcl_map<vcl_string, brdb_relation_sptr>::iterator itr = relations_.find(name);
   if (itr != relations_.end())
   {
-    vcl_cerr << "Database warning: trying to add a new relation "
-             << "which has a conflicting name with an existing relation. "
-             << name << vcl_endl;
+    vcl_cerr << "Database warning: trying to add a new relation " << name
+             << " which has a conflicting name with an existing relation\n";
     return false;
   }
   relations_[name] = new_relation;
@@ -206,7 +205,8 @@ brdb_database::join(const vcl_string& r1, const vcl_string& r2) const
 
   if (find_r1 == relations_.end() || find_r2 == relations_.end())
   {
-    vcl_cerr << "Database warning: trying to join relation that does not exist in database:" << r1 << " or " << r2 << vcl_endl;
+    vcl_cerr << "Database warning: trying to join relation that does not exist in database: "
+             << r1 << " or " << r2 << vcl_endl;
     return NULL;
   }
 
@@ -236,8 +236,8 @@ brdb_selection_sptr
 brdb_database::select(const vcl_string& relation_name, brdb_query_aptr q) const
 {
   if (!exists(relation_name)){
-    vcl_cerr << "Database warning: trying to select in an unexisting "
-             << "relation: " << relation_name << vcl_endl;
+    vcl_cerr << "Database warning: trying to select in a nonexisting relation: "
+             << relation_name << vcl_endl;
     return NULL;
   }
 
