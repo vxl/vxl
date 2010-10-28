@@ -47,3 +47,5 @@ TARGET_LINK_LIBRARIES( boxm_ocl_rerender_adjacent_frames_exe boxm_ocl vil vpgl_a
 ADD_EXECUTABLE( boxm_ocl_render_bit_exe boxm_ocl_render_bit_exe.cxx)
 TARGET_LINK_LIBRARIES( boxm_ocl_render_bit_exe boxm_ocl vil vpgl_algo vul )
 
+ADD_EXECUTABLE( boxm_ocl_update_bit_exe boxm_ocl_update_bit_exe.cxx)
+TARGET_LINK_LIBRARIES( boxm_ocl_update_bit_exe boxm_ocl vil vpgl_algo vul )
