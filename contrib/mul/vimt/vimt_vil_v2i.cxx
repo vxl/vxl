@@ -161,6 +161,14 @@ vimt_vil_v2i_image::vimt_vil_v2i_image(vil_stream* vs):
    case 1: {
     vimt_image *p_im=0;
     vsl_b_read(vslstream, p_im);
+    if (!vslstream)
+    {
+      delete p_im;
+      vil_exception_warning(vil_exception_corrupt_image_file("Constructor", "v2i", "", "Failed to read file correctly"));
+      im_=0;
+      return;
+    }
+
     im_ = dynamic_cast<vimt_image_2d *>(p_im);
     break;
    }

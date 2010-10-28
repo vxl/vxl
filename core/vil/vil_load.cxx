@@ -14,6 +14,7 @@
 #include <vil/vil_image_resource.h>
 #include <vil/vil_image_resource_plugin.h>
 #include <vil/vil_image_view.h>
+#include <vil/vil_exception.h>
 
 vil_image_resource_sptr vil_load_image_resource_raw(vil_stream *is,
                                                     bool verbose)
@@ -47,7 +48,21 @@ vil_image_resource_sptr vil_load_image_resource_raw(char const* filename,
   vil_smart_ptr<vil_stream> is = vil_open(filename, "r");
   vil_image_resource_sptr isp = 0;
   if (is)
+  {
+#ifdef VCL_HAS_EXCEPTIONS
+    try
+    {
+      isp = vil_load_image_resource_raw(is.as_pointer(), verbose);
+    }
+    catch (const vil_exception_corrupt_image_file &e)
+    {
+      throw vil_exception_corrupt_image_file(e.function_name, e.file_type, filename, e.details);
+    }
+#else
     isp = vil_load_image_resource_raw(is.as_pointer(), verbose);
+#endif
+  }
+
   if (!isp && verbose)
     vcl_cerr << __FILE__ ": Failed to load [" << filename << "]\n";
   return isp;
