@@ -629,6 +629,33 @@ void boxm_ocl_bit_scene::get_blocks_in_buffers(unsigned short* blks_in_buffers)
   }
 }
 
+
+
+//---- set single block's data
+void boxm_ocl_bit_scene::set_block_data(int x, int y, int z, float intensity)
+{
+    ushort2 offsets = blocks_(x,y,z);
+    unsigned short buffIndex = offsets[0];
+    unsigned short buffOffset = offsets[1];
+    uchar16 tree = tree_buffers_[buffIndex][buffOffset];
+    
+    //get data offset
+    //unsigned short hi  = (unsigned short) tree[10];
+    //unsigned short lo  = (unsigned short) tree[11];
+    //unsigned short dat = (hi<<8) | lo;
+
+    //make alpha larger, make mixture white or black
+    data_buffers_(buffIndex,buffOffset)[0] = 200.0f;   //alpha
+    data_buffers_(buffIndex,buffOffset)[1] = 0.0f;     //mu0
+    data_buffers_(buffIndex,buffOffset)[2] = 0.0f;     //sigma0
+    data_buffers_(buffIndex,buffOffset)[3] = 1.0f;     //w0
+    data_buffers_(buffIndex,buffOffset)[5] = 0.0f;     //
+    data_buffers_(buffIndex,buffOffset)[6] = 0.0f;
+    data_buffers_(buffIndex,buffOffset)[7] = 0.0f;
+    data_buffers_(buffIndex,buffOffset)[9] = 0.0f;    
+    data_buffers_(buffIndex,buffOffset)[10] = 1.0f;
+}
+
 //---------------------------------------------------------------------
 // NON CLASS FUNCTIONS
 //---------------------------------------------------------------------

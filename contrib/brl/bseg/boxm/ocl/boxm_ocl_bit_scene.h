@@ -110,6 +110,7 @@ class boxm_ocl_bit_scene : public vbl_ref_count
     void set_max_level(int max_level) { max_level_ = max_level; }
     void set_init_level(int init_level) { init_level_ = init_level; }
     void set_path(vcl_string dir) { path_ = dir; }
+    void set_block_data(int x, int y, int z, float intensity);
     vcl_string path() { return path_; }
     vbl_array_3d<ushort2> blocks_;
     vbl_array_2d<uchar16> tree_buffers_;
