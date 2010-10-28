@@ -13,6 +13,10 @@
 // \endverbatim
 
 #include <bsta/bsta_histogram.h>
+#include <boxm/boxm_scene.h>
+
+bool compute_scene_statistics(boxm_scene< boct_tree<short, vnl_vector_fixed<float,3> > > &scene, bsta_histogram<float> &response_hist );
+
 
 template <class T_loc, class T_data>
 bool compute_scene_statistics(boxm_scene<boct_tree<T_loc, T_data > >& scene, bsta_histogram<float>& response_hist )//, bsta_histogram<float>& level_hist, unsigned& n_leaves)
@@ -29,6 +33,7 @@ bool compute_scene_statistics(boxm_scene<boct_tree<T_loc, T_data > >& scene, bst
   float cell_count = 0;
   while (!iterator.end()) {
     cell_count++;
+    ++iterator;
   }
 
   float nbins = vcl_sqrt(cell_count);
@@ -41,6 +46,8 @@ bool compute_scene_statistics(boxm_scene<boct_tree<T_loc, T_data > >& scene, bst
     boct_tree_cell<short,T_data> *cell = *iterator;
     //level_hist.upcount(static_cast<float>(level));
     response_hist.upcount(static_cast<float>(cell->data().mean()), 1.0f);
+    ++iterator;
+
   }
 
   return true;
