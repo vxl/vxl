@@ -72,6 +72,9 @@ template <class T> class bsta_histogram : public bsta_histogram_base
 
   //: Total area under the histogram
   T area() const;
+  
+  //: The area under the histogram up to (excluding) the given bin
+  T cumulative_area(unsigned bin) const;
 
   //: Mean of distribution
   T mean() const;
@@ -117,6 +120,9 @@ template <class T> class bsta_histogram : public bsta_histogram_base
 
  //: Increase the count of the bin corresponding to val by mag
   void upcount(T val, T mag);
+  
+  //: Return the bin this element would fall on - it doesn't modify the current count
+  int bin_at_val(T val);
 
   //: set the count for a given bin
   void set_count(const unsigned bin, const T count)

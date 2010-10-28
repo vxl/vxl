@@ -83,12 +83,35 @@ void bsta_histogram<T>::upcount(T x, T mag)
 }
 
 template <class T>
+
+int bsta_histogram<T>::bin_at_val(T x)
+{
+  if (x<min_||x>max_)
+    return -1;
+  for (unsigned int i = 0; i<nbins_; i++)
+    if ((i+1)*delta_>=(x-min_))
+    {
+      return i;
+    }
+  return -1;
+}
+
+template <class T>
 void bsta_histogram<T>::compute_area() const
 {
   area_ =0;
   for (unsigned int i = 0; i<nbins_; i++)
     area_ += counts_[i];
   area_valid_ = true;
+}
+
+template <class T>
+T bsta_histogram<T>::cumulative_area(unsigned bin) const
+{
+  T area =0;
+  for (unsigned int i = 0; i<bin; i++)
+    area += counts_[i];
+  return area;
 }
 
 template <class T>
