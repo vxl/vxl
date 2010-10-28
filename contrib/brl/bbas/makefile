@@ -43,7 +43,7 @@ SUBDIRS += bsta
 # Brown dynamic programming library
 SUBDIRS += bdpg
 
-# 3D mesh library 
+# 3D mesh library
 SUBDIRS += bmsh3d
 
 # 3D modeling library
@@ -62,6 +62,8 @@ SUBDIRS += imesh
 SUBDIRS += bvrml
 
 SUBDIRS += bocl
+
+SUBDIRS += baio
 
 ################################
 include ${VXLROOT}/config/top.mk
