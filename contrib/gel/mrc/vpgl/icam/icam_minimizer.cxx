@@ -422,7 +422,7 @@ exhaustive_camera_search(vgl_box_3d<double> const& trans_box,
   unsigned nz = box_scores_.get_row1_count(),ny = box_scores_.get_row2_count(),
     nx = box_scores_.get_row3_count();
   double min_trans_cost = vnl_numeric_traits<double>::maxval;
-  double min_trans_overlap;
+  double min_trans_overlap = min_allowed_overlap; // avoids running with uninitialised value
   vnl_vector_fixed<double, 3> min_trans_rod;
   vgl_vector_3d<double> t, min_trans_trans;
   unsigned ix = 0, iy = 0, iz = 0;
@@ -514,7 +514,7 @@ pyramid_camera_search(vgl_vector_3d<double> const&
                       double& min_cost,
                       double& min_overlap_fraction)
 {
-  double min_trans_overlap;
+  double min_trans_overlap = min_allowed_overlap; // avoids running with uninitialised value
   vnl_vector_fixed<double, 3> min_trans_rod;
   vgl_vector_3d<double> t, min_trans_trans;
   double x , y, z;
