@@ -81,14 +81,13 @@ bool boxm_update_bit_scene_manager::init_scene(boxm_ocl_bit_scene *scene,
   scene->get_num_obs(cell_num_obs_);
   for (int i=0; i<numData; i++) cell_weight_[i] = (cl_uchar) 0;
   for (int i=0; i<numData; i++) {   //init aux data to zero
-    //cell_aux_data_[i].cell_len  = (cl_float) 0.0;
-    //cell_aux_data_[i].cell_beta = (cl_float) 0.0;
-    //cell_aux_data_[i].mean_obs  = (cl_uchar) 0;
-    //cell_aux_data_[i].cum_vis   = (cl_uchar) 0;
     cell_aux_data_[i].len_beta = (cl_float) 0.0;
-    //cell_aux_data_[i].len_beta.s[1] = (cl_float) 0.0;
     cell_aux_data_[i].mean_vis.s[0] = (cl_uchar) 0;
     cell_aux_data_[i].mean_vis.s[1] = (cl_uchar) 0;
+    cell_num_obs_[i*4]=0;
+    cell_num_obs_[i*4+1]=0;
+    cell_num_obs_[i*4+2]=0;
+    cell_num_obs_[i*4+3]=0;
   }
 
   //new aux data (2 floats, 2 floats);
@@ -222,7 +221,11 @@ bool boxm_update_bit_scene_manager::init_scene(boxm_ocl_bit_scene *scene,
     //cell_aux_data_[i].len_beta.s[1] = (cl_float) 0.0;
     cell_aux_data_[i].mean_vis.s[0] = (cl_uchar) 0;
     cell_aux_data_[i].mean_vis.s[1] = (cl_uchar) 0;
-  }
+     cell_num_obs_[i*4]=0;
+    cell_num_obs_[i*4+1]=0;
+    cell_num_obs_[i*4+2]=0;
+    cell_num_obs_[i*4+3]=0;
+ }
   //new aux data (2 floats, 2 floats);
   cell_cum_beta_ = (cl_float *) boxm_ocl_utils::alloc_aligned(numData,sizeof(cl_float2),16);
   cell_mean_vis_ = (cl_uchar *) boxm_ocl_utils::alloc_aligned(numData,sizeof(cl_uchar2),16);
@@ -815,7 +818,7 @@ bool boxm_update_bit_scene_manager::build_ray_probe_program()
       !this->append_process_kernels(source_dir+"backproject.cl")||
       !this->append_process_kernels(source_dir+"statistics_library_functions.cl")||
       !this->append_process_kernels(source_dir+"expected_functor.cl")||
-      !this->append_process_kernels(source_dir+"ray_bundle_library_functions.cl")||
+      !this->append_process_kernels(source_dir+"ray_bundle_library_opt.cl")||
       !this->append_process_kernels(source_dir+"ray_probe.cl")) {
     vcl_cerr << "Error: boxm_update_bit_scene_manager : failed to load kernel source (helper functions)\n";
     return false;
@@ -1239,7 +1242,10 @@ bool boxm_update_bit_scene_manager::set_update_args(unsigned pass)
       return false;
     //aux data
     //cum beta and mean vis buffers
-    status = clSetKernelArg(update_kernels_[pass],i++,sizeof(cl_mem),(void *)&cell_cum_beta_buf_);
+       status = clSetKernelArg(update_kernels_[pass], i++, sizeof(cl_mem), (void *)&cell_num_obs_buf_);
+    if (!this->check_val(status, CL_SUCCESS, "clSetKernelArg failed. (cell_num_obs_buf_)"))
+      return 0;
+ status = clSetKernelArg(update_kernels_[pass],i++,sizeof(cl_mem),(void *)&cell_cum_beta_buf_);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_mean_vis_)"))
       return false;
     status = clSetKernelArg(update_kernels_[pass],i++,sizeof(cl_mem),(void *)&cell_mean_vis_buf_);
@@ -1760,12 +1766,12 @@ bool boxm_update_bit_scene_manager::set_workspace(cl_kernel kernel, unsigned pas
   if (!this->check_val(status,CL_SUCCESS,"clGetKernelWorkGroupInfo CL_KERNEL_WORK_GROUP_SIZE, failed."))
     return false;
 
-  if (pass==0 || pass==4) // passes for computing aux
+  if ( pass==-1) // passes for computing aux
   {
     globalThreads[0]=this->wni_/2; globalThreads[1]=this->wnj_/2;
     localThreads[0] =this->bni_  ; localThreads[1] =this->bnj_  ;
   }
-  else if (pass==1 || pass==3) // pass preinf, and proc_norm_image
+  else if (pass==4||pass==0 ||pass==1 || pass==3) // pass preinf, and proc_norm_image
   {
     globalThreads[0]=this->wni_;globalThreads[1]=this->wnj_;
     localThreads[0] =this->bni_;localThreads[0] =this->bnj_;
@@ -1827,31 +1833,34 @@ bool boxm_update_bit_scene_manager::run(cl_kernel kernel, unsigned pass)
   cl_ulong tstart,tend;
 
   //pass 0, and 3 require four separate executions to run
-  if (pass==0 || pass==4)
+#if 0
+  if (  pass==4)
   {
-    for (unsigned k=0;k<2;k++)
-    {
-      for (unsigned l=0;l<2;l++)
+      for (unsigned k=0;k<2;k++)
       {
-        status=clEnqueueWriteBuffer(command_queue_,offset_y_buf_,0,0,sizeof(cl_uint),(void *)&k,0,0,0);
-        status=clEnqueueWriteBuffer(command_queue_,offset_x_buf_,0,0,sizeof(cl_uint),(void *)&l,0,0,0);
-        clFinish(command_queue_);
-        cl_event ceEvent=0;
-        status = clEnqueueNDRangeKernel(command_queue_, kernel, 2,NULL,globalThreads,localThreads,0,NULL,&ceEvent);
-        if (this->check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed. "+error_to_string(status))!=CHECK_SUCCESS)
-          return false;
-        status = clFinish(command_queue_);
-        if (this->check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status))!=CHECK_SUCCESS)
-          return false;
-        status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
-        status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
-        gpu_time_ += 1.0e-6f * float(tend - tstart); // convert nanoseconds to milliseconds
+          for (unsigned l=0;l<2;l++)
+          {
+              status=clEnqueueWriteBuffer(command_queue_,offset_y_buf_,0,0,sizeof(cl_uint),(void *)&k,0,0,0);
+              status=clEnqueueWriteBuffer(command_queue_,offset_x_buf_,0,0,sizeof(cl_uint),(void *)&l,0,0,0);
+              clFinish(command_queue_);
+              cl_event ceEvent=0;
+              status = clEnqueueNDRangeKernel(command_queue_, kernel, 2,NULL,globalThreads,localThreads,0,NULL,&ceEvent);
+              if (this->check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed. "+error_to_string(status))!=CHECK_SUCCESS)
+                  return false;
+              status = clFinish(command_queue_);
+              if (this->check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status))!=CHECK_SUCCESS)
+                  return false;
+              status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
+              status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
+              gpu_time_ += 1.0e-6f * float(tend - tstart); // convert nanoseconds to milliseconds
+          }
       }
-    }
   }
   //everything else just runs once
   else
+#endif
   {
+
     cl_event ceEvent =0;
     status = clEnqueueNDRangeKernel(this->command_queue_, kernel, 2, NULL, globalThreads, localThreads, 0, NULL, &ceEvent);
     if (this->check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed. "+error_to_string(status))!=CHECK_SUCCESS)
@@ -1881,37 +1890,8 @@ bool boxm_update_bit_scene_manager::update()
         return false;
       vcl_cout<<'('<<gpu_time_<<"ms)  ";
 
-#if 0
-      if (pass == 1) {
-        cl_event events[1];
-        int status = clEnqueueReadBuffer(command_queue_, image_buf_, CL_TRUE, 0,
-                                         this->wni_*this->wnj_*sizeof(cl_float4),
-                                         image_, 0, NULL, &events[0]);
-        if (!this->check_val(status,CL_SUCCESS,"clEnqueueReadBuffer (read)failed."))
-          return false;
-        status = clWaitForEvents(1, &events[0]);
-        if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents (output read) failed."))
-          return false;
-        this->save_image();
-      }
-      cl_event events[1];
-      int status = clEnqueueReadBuffer(command_queue_, output_debug_buf_, CL_TRUE, 0,
-                                       scene_info_->num_buffer*sizeof(cl_float),
-                                       output_debug_, 0, NULL, &events[0]);
-      if (!this->check_val(status,CL_SUCCESS,"clEnqueueReadBuffer (output buffer )failed."))
-        return false;
-      status = clWaitForEvents(1, &events[0]);
-      if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents (output read) failed."))
-        return false;
-      vcl_cout<<"KERNEL OUTPUT:"<<vcl_endl;
-      for (int i=0; i<4; i++) {
-        for (int j=0; j<4; j++) {
-          vcl_cout<<output_debug_[4*i+j]<<' ';
-        }
-        vcl_cout<<vcl_endl;
-      }
-
-      if (pass == 4) {  //only read for data setting pass
+      if(pass==4)
+      {
         cl_event events[1];
         int status = clEnqueueReadBuffer(command_queue_, output_debug_buf_, CL_TRUE, 0,
                                          scene_info_->num_buffer*sizeof(cl_float),
@@ -1921,19 +1901,49 @@ bool boxm_update_bit_scene_manager::update()
         status = clWaitForEvents(1, &events[0]);
         if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents (output read) failed."))
           return false;
-        vcl_cout<<"OUTPUT:\n"
-                <<"  alpha:  "<<output_debug_[0]<<'\n'
-                <<"  gauss0: "<<output_debug_[1]<<','
-                <<output_debug_[2]<<','
-                <<output_debug_[3]<<'\n'
-                <<"  gauss1: "<<output_debug_[4]<<','
-                <<output_debug_[5]<<','
-                <<output_debug_[6]<<'\n'
-                <<"  gauss2: "<<output_debug_[7]<<','
-                <<output_debug_[8]<<'\n'
-                <<"  nobsmix:"<<output_debug_[9]<<vcl_endl;
+        status = clEnqueueReadBuffer(command_queue_, cell_cum_beta_buf_, CL_TRUE, 0,
+                                         scene_info_->num_buffer*scene_info_->data_buffer_length*sizeof(cl_float2),
+                                         cell_cum_beta_, 0, NULL, &events[0]);
+        if (!this->check_val(status,CL_SUCCESS,"clEnqueueReadBuffer (output buffer )failed."))
+            return false;
+        status = clWaitForEvents(1, &events[0]);
+        if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents (output read) failed."))
+            return false;
+
+        status = clEnqueueReadBuffer(command_queue_, cell_mean_vis_buf_, CL_TRUE, 0,
+                                         scene_info_->num_buffer*scene_info_->data_buffer_length*sizeof(cl_uchar2),
+                                         cell_mean_vis_, 0, NULL, &events[0]);
+        if (!this->check_val(status,CL_SUCCESS,"clEnqueueReadBuffer (output buffer )failed."))
+            return false;
+        status = clWaitForEvents(1, &events[0]);
+        if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents (output read) failed."))
+            return false;
+        vcl_cout<<"\nOUTPUT: "<<output_debug_[1]<<'\n';
+
+        int slice_id=0;//scene_info_->scene_dims[2]-1;
+        vil_image_view<float> img(scene_info_->scene_dims[0],scene_info_->scene_dims[1]);
+        vil_image_view<float> img1(scene_info_->scene_dims[0],scene_info_->scene_dims[1]);
+
+        for(unsigned i=0;i<scene_info_->scene_dims[0];i++)
+        {
+            for(unsigned j=0;j<scene_info_->scene_dims[1];j++)
+            {
+               cl_ushort ptrs0= block_ptrs_[(slice_id 
+                                           +j*scene_info_->scene_dims[2] 
+                                           +i*scene_info_->scene_dims[2]*scene_info_->scene_dims[1])*2];
+               cl_ushort ptrs1= block_ptrs_[(slice_id 
+                                           +j*scene_info_->scene_dims[2] 
+                                           +i*scene_info_->scene_dims[2]*scene_info_->scene_dims[1])*2+1];
+               cl_uchar * tree=&cells_[(ptrs0*scene_info_->tree_buffer_length + ptrs1)*16];
+               boct_bit_tree bit_tree((char*)tree);
+
+               int data_index=ptrs0*scene_info_->data_buffer_length+ptrs1;
+               img(i,j)=(float)cell_cum_beta_[data_index*2];
+               img1(i,j)=(float)cell_cum_beta_[data_index*2+1];
+
+            }
+        }
       }
-#endif
   }
   vcl_cout << ":::: total gpu update time:"<<gpu_time_<<" ms\n"
            << ":::: total cpu update time:"<<(float)timer.all() / 1e3f<<" ms\n"
