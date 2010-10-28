@@ -4,10 +4,11 @@
 
 bool boxm_scene_base::load_scene(vcl_string filename, boxm_scene_parser& parser)
 {
+  
   if (filename.size() > 0) {
     vcl_FILE* xmlFile = vcl_fopen(filename.c_str(), "r");
     if (!xmlFile){
-    vcl_cerr << filename.c_str() << " error on opening\n";
+    vcl_cerr << filename.c_str() << " error on opening" << vcl_endl;
     return 0;
     }
     if (!parser.parseFile(xmlFile)) {
@@ -16,6 +17,8 @@ bool boxm_scene_base::load_scene(vcl_string filename, boxm_scene_parser& parser)
       return false;
     }
   }
+  else
+    vcl_cerr << " Filename is empty" << vcl_endl;
 
   parser.paths(scene_path_, block_pref_);
   app_model_ = boxm_apm_types::str_to_enum(parser.app_model().data());
