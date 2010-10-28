@@ -13,16 +13,29 @@ float gauss_3_mixture_prob_density(float x,
                                    float mu2, float sigma2, float w2)
 {
   float sum = 0.0f;
+  float sum_weights=0.0f;
   if(w0>0.0f && sigma0 >0.0f)
-    {
+  {
       sum += w0*gauss_prob_density(x, mu0, sigma0);
+      sum_weights+=w0;
       if(w1>0.0f && sigma1 >0.0f)
-        sum += w1*gauss_prob_density(x, mu1, sigma1);
-      if(w2>0.0f && sigma2 >0.0f)
-        sum += w2*gauss_prob_density(x, mu2, sigma2);
-    }
+      {
+          sum += w1*gauss_prob_density(x, mu1, sigma1);
+          sum_weights+=w1;
+
+          if(w2>0.0f && sigma2 >0.0f)
+          {
+              sum += w2*gauss_prob_density(x, mu2, sigma2);
+              sum_weights+=w2;
+          }
+          //if(sum_weights>0.0f)
+          //  sum/=sum_weights;
+      }
+  }
   else 
       sum=1.0f;
+
+
   return sum;
 }
 
@@ -344,7 +357,7 @@ void update_gauss_3_mixture2(float x, float w, float t_match,
   {
     int match = -1;
   //(*Nobs_mix) += w;
-  float alpha = w*0.25f, tsq=t_match*t_match;
+  float alpha = w*0.3f, tsq=t_match*t_match;
   float weight = 0.0f, rho = 0.0f;
   
   /* test for a match of component 0 */
@@ -386,7 +399,7 @@ void update_gauss_3_mixture2(float x, float w, float t_match,
   }
   /* If there were no matches then insert a new component */
   if(match<0)
-    insert_gauss_32(x, alpha, init_sigma, &match,
+    insert_gauss_32(x, w*0.1f, init_sigma, &match,
                    mu0, sigma0, w0, Nobs0, 
                    mu1, sigma1, w1, Nobs1,
                    mu2, sigma2, w2, Nobs2);

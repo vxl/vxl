@@ -1,3 +1,4 @@
+ #pragma OPENCL EXTENSION cl_khr_global_int32_base_atomics : enable
 
 #define BLOCK_EPSILON .006125f
 #define TREE_EPSILON  .005f
@@ -16,7 +17,7 @@ cast_ray(
           __global    float              * alpha_array,     //voxel density buffer
           __global    uchar8             * mixture_array,   //appearance model buffer
           __global    uchar              * last_weight_array,//third weight for mixture model
-          __global    ushort4            * num_obs_array,   // num obs for each block
+          __global    int                * num_obs_array,   // num obs for each block
           __global    float2             * cum_len_beta,    // cumulative ray length and beta aux vars
           __global    uchar2             * mean_obs_cum_vis,// mean_obs per cell and cumulative visibility
 
@@ -83,6 +84,8 @@ cast_ray(
   float min_facey = (ray_dy < 0.0f) ? (linfo->dims.y) : 0.0f;
   float min_facez = (ray_dz < 0.0f) ? (linfo->dims.z) : 0.0f;
   float tblock = max(max( (min_facex-ray_ox)*(1.0f/ray_dx), (min_facey-ray_oy)*(1.0f/ray_dy)), (min_facez-ray_oz)*(1.0f/ray_dz));
+
+
   if (tfar <= tblock) {
 #ifdef RENDER
     gl_image[imIndex[llid]] = rgbaFloatToInt((float4)(0.0f,0.0f,0.0f,0.0f));
@@ -97,53 +100,7 @@ cast_ray(
   tfar -= BLOCK_EPSILON;   
   
   
-//this projection loop is to ensure update starts far enough away for each ray
-//so we don't update the same cell and overwrite contents
-#if defined(SEGLEN) || defined(PREINF) || defined(BAYES)
-  int count = 0;
-  bool blocks_too_big = true; 
-  while(blocks_too_big)
-  {
-    count++;
-    //find entry point (adjusted) and the current block index
-    float posx = (ray_ox + (tblock + TREE_EPSILON)*ray_dx);
-    float posy = (ray_oy + (tblock + TREE_EPSILON)*ray_dy);
-    float posz = (ray_oz + (tblock + TREE_EPSILON)*ray_dz);
-    
-    //curr block index (var later used as cell_min), check to make sure block index isn't 192 or -1
-    float cell_minx = clamp(floor(posx), 0.0f, linfo->dims.x-1.0f);
-    float cell_miny = clamp(floor(posy), 0.0f, linfo->dims.y-1.0f);
-    float cell_minz = clamp(floor(posz), 0.0f, linfo->dims.z-1.0f);
 
-    //now project all 8 corners onto the image
-    float max_u = -1.0f,  max_v = -1.0f;
-    float min_u = 10e5f,  min_v = 10e5f;
-    for(int i=0; i<8; ++i) {
-      float4 corner = (float4) (cell_minx + convert_float( (1&i) ), 
-                                cell_miny + convert_float( (2&i)>>1 ), 
-                                cell_minz + convert_float( (4&i)>>2 ),
-                                1.0f);
-      float2 uv;
-      project(mat_cam, corner, &uv);
-      if(uv.x > max_u) max_u = uv.x;
-      if(uv.x < min_u) min_u = uv.x;
-      if(uv.y > max_v) max_v = uv.y;
-      if(uv.y < min_v) min_v = uv.y;
-    }
-    //if the image range is small enough, stop here and start updating
-    if(max_u - min_u < 16 && max_v-min_v < 16)
-      blocks_too_big = false;
-
-    //get scene level t exit value.  check to make sure that the ray is progressing. 
-    //When rays are close to axis aligned, t values found for intersection become ill-defined, causing an infinite block loop
-    cell_minx = (ray_dx > 0) ? cell_minx+1.0f : cell_minx; 
-    cell_miny = (ray_dy > 0) ? cell_miny+1.0f : cell_miny; 
-    cell_minz = (ray_dz > 0) ? cell_minz+1.0f : cell_minz; 
-    float texit = min(min( (cell_minx-ray_ox)*(1.0f/ray_dx), (cell_miny-ray_oy)*(1.0f/ray_dy)), (cell_minz-ray_oz)*(1.0f/ray_dz));
-    if(texit <= tblock) break;
-    tblock = texit;
-  }
-#endif
   
   //used for depth map 
   //----------------------------------------------------------------------------
@@ -243,6 +200,7 @@ cast_ray(
 #ifdef SEGLEN
       //keep track of cells being hit
       cell_ptrs[llid] = data_ptr;
+      cached_aux_data[llid] = (float4)0.0f;  //leaders retain the mean obs and the cell length
       barrier(CLK_LOCAL_MEM_FENCE);
 
       //segment the workgroup
@@ -250,10 +208,6 @@ cast_ray(
       
       //load aux data into local mem
       float  alpha    = alpha_array[data_ptr];
-      float2 cl_beta  = cum_len_beta[data_ptr];
-      float2 mean_vis = convert_float2(mean_obs_cum_vis[data_ptr])/255.0f;  
-      cached_aux_data[llid] = (float4) (cl_beta.x, mean_vis.x, mean_vis.y, 0.0);  //leaders retain the mean obs and the cell length
-      barrier(CLK_LOCAL_MEM_FENCE);
       
       //kernel (seg len obs 2 keeps a running mean, to be converted to char)
       seg_len_obs_opt2(d, 
@@ -264,11 +218,30 @@ cast_ray(
                       cached_aux_data);
       
       //set aux data (only one at time)
-      if (ray_bundle_array[llid].y==1) {
-        cum_len_beta[data_ptr] = (float2) (cached_aux_data[llid].x, 0.0f);
-        mean_obs_cum_vis[data_ptr] = convert_uchar2_sat_rte( (float2) (cached_aux_data[llid].y, cached_aux_data[llid].z)*255.0f);
+      if (ray_bundle_array[llid].y==1) 
+      {
+          int cnt=0;
+          while(true)
+          {
+              if(atom_cmpxchg(&num_obs_array[data_ptr*2],0,1)==0)
+              {
+                  float2 cl_beta  = cum_len_beta[data_ptr];
+                  float2 mean_vis = convert_float2(mean_obs_cum_vis[data_ptr])/255.0f;  
+                  cached_aux_data[llid].x=cached_aux_data[llid].x+cl_beta.x;
+                  if(cached_aux_data[llid].x>1e-10f)
+                  {
+                      mean_vis.x=(mean_vis.x*cl_beta.x+cached_aux_data[llid].y)/(cached_aux_data[llid].x);
+                      mean_vis.y=(mean_vis.y*cl_beta.x+cached_aux_data[llid].z)/(cached_aux_data[llid].x);
+                  }
+                  cum_len_beta[data_ptr] = (float2) (cached_aux_data[llid].x, 0.0f);
+                  mean_obs_cum_vis[data_ptr] = convert_uchar2_sat_rte(mean_vis*255.0f);
+                  atom_xchg(&num_obs_array[data_ptr*2],0);
+                  cnt=-1;
+              }
+              if(cnt=-1)
+                  break;
+          }
       }
-      
       //reset cell_ptrs to negative one every time (prevents invisible layer bug)
       cell_ptrs[llid] = -1;
 #endif
@@ -282,7 +255,6 @@ cast_ray(
 
       float2 cl_beta  = cum_len_beta[data_ptr];
       float2 mean_vis = convert_float2(mean_obs_cum_vis[data_ptr])/255.0f;
-      barrier(CLK_LOCAL_MEM_FENCE);
 
       //calculate pre_infinity denomanator (shape of image)
       pre_infinity_opt(d, cl_beta.x, mean_vis.x, &image_vect, alpha, mixture, weight3);
@@ -304,9 +276,8 @@ cast_ray(
       float  weight3  = convert_float(last_weight_array[data_ptr])/255.0f;
       
       //load aux data into local mem
-      float2 cl_beta  = cum_len_beta[data_ptr];
       float2 mean_vis = convert_float2(mean_obs_cum_vis[data_ptr])/255.0f;
-      float cell_beta = cl_beta.y;
+      float cell_beta =0;
       
       barrier(CLK_LOCAL_MEM_FENCE);
 
@@ -325,7 +296,24 @@ cast_ray(
                         
       //set aux data (only one at time)
       if (ray_bundle_array[llid].y==1) {
-        cum_len_beta[data_ptr] = (float2) (cl_beta.x, cell_beta);
+          int cnt=0;
+          while(true)
+          {
+              if(atom_cmpxchg(&num_obs_array[data_ptr*2],0,1)==0)
+              {
+                  float2 cl_beta  = cum_len_beta[data_ptr];
+                  cl_beta.y+=cell_beta;
+                  cum_len_beta[data_ptr] = cl_beta;
+                  atom_xchg(&num_obs_array[data_ptr*2],0);
+                  cnt=2000;
+              }
+              //barrier(CLK_GLOBAL_MEM_FENCE);
+              if(cnt=2000)
+                  break;
+              //cnt++;
+          }
+          if(cnt==1000)
+              output[1]=(float)-66;
       }
       
       //reset cell_ptrs to -1 every time

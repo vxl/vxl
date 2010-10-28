@@ -162,31 +162,31 @@ void seg_len_obs_opt2(        float    seg_len,         //length of ray through 
     {
       
         //keep track of total length, running mean observation and running cell visibility
-        float sum_len = seg_len; 
-        float sum_obs = seg_len*obs;
-        float sum_vis = seg_len*(*ray_vis); 
+        cached_aux_data[llid].x = seg_len; 
+        cached_aux_data[llid].y = seg_len*obs;
+        cached_aux_data[llid].z = seg_len*(*ray_vis); 
 
         /* traverse the linked list and increment sums */
         short next = ray_bundle_array[llid].x;  // linked list pointer 
         while(next >= 0) {
-            sum_len += cached_aux_data[next].x;
-            sum_obs += cached_aux_data[next].y;
-            sum_vis += cached_aux_data[next].z;
+            cached_aux_data[llid].x += cached_aux_data[next].x;
+            cached_aux_data[llid].y += cached_aux_data[next].y;
+            cached_aux_data[llid].z += cached_aux_data[next].z;
             next = ray_bundle_array[next].x;
         }
         
-        //get previous total, add this contribution to the mean, re_divide
-        float total_obs = cached_aux_data[llid].x * cached_aux_data[llid].y; 
-        total_obs += sum_obs;
-        float total_vis = cached_aux_data[llid].x * cached_aux_data[llid].z;
-        total_vis += sum_vis;
-        
-        //total cell length
-        cached_aux_data[llid].x += sum_len;
-        
-        //re normalize mean obs and cell_vis
-        cached_aux_data[llid].y = (total_obs/cached_aux_data[llid].x);  //need a check to make sure this divide doesn't produce some nasty NANs
-        cached_aux_data[llid].z = (total_vis/cached_aux_data[llid].x);
+        ////get previous total, add this contribution to the mean, re_divide
+        //float total_obs = cached_aux_data[llid].x * cached_aux_data[llid].y; 
+        //total_obs += sum_obs;
+        //float total_vis = cached_aux_data[llid].x * cached_aux_data[llid].z;
+        //total_vis += sum_vis;
+        //
+        ////total cell length
+        //cached_aux_data[llid].x += sum_len;
+        //
+        ////re normalize mean obs and cell_vis
+        //cached_aux_data[llid].y = (total_obs/cached_aux_data[llid].x);  //need a check to make sure this divide doesn't produce some nasty NANs
+        //cached_aux_data[llid].z = (total_vis/cached_aux_data[llid].x);
     }
     
     /* updated visibility probability */

@@ -14,6 +14,7 @@ seg_len_main(        __constant  RenderSceneInfo    * linfo,
                      __global    ushort2            * block_ptrs,
                      __global    int4               * tree_array,       // tree structure for each block
                      __global    float              * alpha_array,      // alpha for each block
+                     __global    int                * num_obs_array,    // num obs for each block
                      __global    float2             * cum_len_beta,     // cumulative ray length and beta aux vars
                      __global    uchar2             * mean_obs_cum_vis, // mean_obs per cell and cumulative visibility
                      __constant  uchar              * bit_lookup,       // used to get data_index
@@ -43,14 +44,21 @@ seg_len_main(        __constant  RenderSceneInfo    * linfo,
   // get image coordinates and camera, 
   // check for validity before proceeding
   //----------------------------------------------------------------------------
-  int i=0,j=0; map_work_space_2d_offset(&i,&j,(*offset_x),(*offset_y));
-  int factor=(*offsetfactor);
+  int i=0,j=0;
+  
+  //map_work_space_2d_offset(&i,&j,(*offset_x),(*offset_y));
+  //int factor=(*offsetfactor);
+  map_work_space_2d(&i,&j);
+  int factor=1;
 
   // check to see if the thread corresponds to an actual pixel as in some 
   // cases #of threads will be more than the pixels.
   if (i>=(*imgdims).z || j>=(*imgdims).w) {
     return;
   }
+  //if(i<320 || i>=328 || j<240 || j>=248)
+  //  return;
+
   float4 inImage = in_image[j*get_global_size(0)*factor+i];
   float obs = inImage.x;
   float vis = inImage.z;
@@ -88,7 +96,7 @@ seg_len_main(        __constant  RenderSceneInfo    * linfo,
             ray_dx, ray_dy, ray_dz, 
 
             //scene info                               mix,weight3,numobs,cum_len, mean_obs
-            linfo, block_ptrs, tree_array, alpha_array, 0, 0, 0, cum_len_beta, mean_obs_cum_vis,
+            linfo, block_ptrs, tree_array, alpha_array, 0, 0, num_obs_array, cum_len_beta, mean_obs_cum_vis,
            
             //utility info
             local_tree, bit_lookup, cumsum, factor,
@@ -198,7 +206,7 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
            __global    float              * alpha_array,      // alpha for each block
            __global    uchar8             * mixture_array,    // mixture for each block
            __global    uchar              * last_weight_array,//third weight for mixture model
-           __global    ushort4            * num_obs_array,    // num obs for each block
+           __global    int                * num_obs_array,    // num obs for each block
            __global    float2             * cum_len_beta,    // cumulative ray length and beta aux vars
            __global    uchar2             * mean_obs_cum_vis, // mean_obs per cell and cumulative visibility
            __constant  uchar              * bit_lookup,       // used to get data_index
@@ -227,8 +235,11 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
   // get image coordinates and camera, 
   // check for validity before proceeding
   //----------------------------------------------------------------------------
-  int i=0,j=0; map_work_space_2d_offset(&i,&j,(*offset_x),(*offset_y));
-  int factor=(*offsetfactor);
+  int i=0,j=0; 
+  //map_work_space_2d_offset(&i,&j,(*offset_x),(*offset_y));
+  //int factor=(*offsetfactor);
+  map_work_space_2d(&i,&j);
+  int factor=1;
 
   // check to see if the thread corresponds to an actual pixel as in some 
   // cases #of threads will be more than the pixels.
