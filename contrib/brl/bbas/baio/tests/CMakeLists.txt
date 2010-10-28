@@ -5,4 +5,7 @@ ADD_EXECUTABLE( baio_test_all
 
 TARGET_LINK_LIBRARIES( baio_test_all baio testlib)
 
-ADD_TEST( baio_test_read ${EXECUTABLE_OUTPUT_PATH}/baio_test_read  )
+ADD_TEST( baio_test_read ${EXECUTABLE_OUTPUT_PATH}/baio_test_all test_read )
+
+ADD_EXECUTABLE( baio_test_include test_include.cxx )
+TARGET_LINK_LIBRARIES( baio_test_include baio )
