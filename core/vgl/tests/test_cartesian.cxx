@@ -164,10 +164,10 @@ static void test_vector_3d()
   // Orthogonal vectors test case 1
   vgl_vector_3d<double> n1(1.0, 0.0, 0.0);
   check = 0.0;
-  tr[0] = n1.orthogonal_vectors(0.0);
-  tr[1] = n1.orthogonal_vectors(0.25);
-  tr[2] = n1.orthogonal_vectors(0.5);
-  tr[3] = n1.orthogonal_vectors(0.75);
+  tr[0] = orthogonal_vectors(n1,0.0);
+  tr[1] = orthogonal_vectors(n1,0.25);
+  tr[2] = orthogonal_vectors(n1,0.5);
+  tr[3] = orthogonal_vectors(n1,0.75);
   for (unsigned i = 0; i<4; ++i)
   {
     double d = dot_product<double>(n1, tr[i]);
@@ -180,10 +180,10 @@ static void test_vector_3d()
   // Orthogonal vectors test case 2
   vgl_vector_3d<double> n2(0.0, 1.0, 0.0);
   check = 0.0;
-  tr[0] = n2.orthogonal_vectors(0.0);
-  tr[1] = n2.orthogonal_vectors(0.25);
-  tr[2] = n2.orthogonal_vectors(0.5);
-  tr[3] = n2.orthogonal_vectors(0.75);
+  tr[0] = orthogonal_vectors(n2,0.0);
+  tr[1] = orthogonal_vectors(n2,0.25);
+  tr[2] = orthogonal_vectors(n2,0.5);
+  tr[3] = orthogonal_vectors(n2,0.75);
   for (unsigned i = 0; i<4; ++i)
   {
     double d = dot_product<double>(n2, tr[i]);
@@ -196,10 +196,10 @@ static void test_vector_3d()
   // Orthogonal vectors test case 3
   vgl_vector_3d<double> n3(0.0, 0.0, 1.0);
   check = 0.0;
-  tr[0] = n3.orthogonal_vectors(0.0);
-  tr[1] = n3.orthogonal_vectors(0.25);
-  tr[2] = n3.orthogonal_vectors(0.5);
-  tr[3] = n3.orthogonal_vectors(0.75);
+  tr[0] = orthogonal_vectors(n3,0.0);
+  tr[1] = orthogonal_vectors(n3,0.25);
+  tr[2] = orthogonal_vectors(n3,0.5);
+  tr[3] = orthogonal_vectors(n3,0.75);
   for (unsigned i = 0; i<4; ++i)
   {
     double d = dot_product<double>(n3, tr[i]);
@@ -212,10 +212,10 @@ static void test_vector_3d()
   // Orthogonal vectors test case 4
   vgl_vector_3d<double> n4(0.0, 1.0, 1.0); // NB input vector not normalized
   check = 0.0;
-  tr[0] = n4.orthogonal_vectors(0.0);
-  tr[1] = n4.orthogonal_vectors(0.25);
-  tr[2] = n4.orthogonal_vectors(0.5);
-  tr[3] = n4.orthogonal_vectors(0.75);
+  tr[0] = orthogonal_vectors(n4,0.0);
+  tr[1] = orthogonal_vectors(n4,0.25);
+  tr[2] = orthogonal_vectors(n4,0.5);
+  tr[3] = orthogonal_vectors(n4,0.75);
   for (unsigned i = 0; i<4; ++i)
   {
     double d = dot_product<double>(n4, tr[i]);
@@ -228,10 +228,10 @@ static void test_vector_3d()
   // Orthogonal vectors test case 5
   vgl_vector_3d<double> n5(1.0, 1.0, 0.0); // NB input vector not normalized
   check = 0.0;
-  tr[0] = n5.orthogonal_vectors(0.0);
-  tr[1] = n5.orthogonal_vectors(0.25);
-  tr[2] = n5.orthogonal_vectors(0.5);
-  tr[3] = n5.orthogonal_vectors(0.75);
+  tr[0] = orthogonal_vectors(n5,0.0);
+  tr[1] = orthogonal_vectors(n5,0.25);
+  tr[2] = orthogonal_vectors(n5,0.5);
+  tr[3] = orthogonal_vectors(n5,0.75);
   for (unsigned i = 0; i<4; ++i)
   {
     double d = dot_product<double>(n5, tr[i]);
