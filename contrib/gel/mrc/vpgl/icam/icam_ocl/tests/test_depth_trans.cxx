@@ -13,20 +13,21 @@
 #include <icam/icam_minimizer.h>
 #include <icam/icam_sample.h>
 
+
 bool test_ocl_search_manager()
 {
   //====================== Setup Minimizer ====================
   vcl_string root_dir = testlib_root_dir();
-  vcl_string dest_file = "c:/images/calibration/frame_142.png";
-  vcl_string source_file = "c:/images/calibration/frame_145.png";
+  vcl_string dest_file = "C:/temp/ImagesForGPUTest/frame_142.png";
+  vcl_string source_file = "C:/temp/ImagesForGPUTest/frame_145.png";
   //vcl_string source_file = "c:/images/calibration/frame_138.png";
   //  vcl_string source_file = "c:/images/calibration/frame_146.png";
-  vcl_string depth_file = "c:/images/calibration/depth_142.tif";
-  vcl_string result_file = "c:/images/calibration/gpu_result.tif";
-  vcl_string mask_file = "c:/images/calibration/gpu_mask.tif";
-  vcl_string cpp_src_file = "c:/images/calibration/cpp_src.tif";
-  vcl_string cpp_result_file = "c:/images/calibration/cpp_result.tif";
-  vcl_string cpp_mask_file = "c:/images/calibration/cpp_mask.tif";
+  vcl_string depth_file = "C:/temp/ImagesForGPUTest/depth_142.tif";
+  vcl_string result_file = "C:/temp/ImagesForGPUTest/gpu_result.tif";
+  vcl_string mask_file = "C:/temp/ImagesForGPUTest/gpu_mask.tif";
+  vcl_string cpp_src_file = "C:/temp/ImagesForGPUTest/cpp_src.tif";
+  vcl_string cpp_result_file = "C:/temp/ImagesForGPUTest/cpp_result.tif";
+  vcl_string cpp_mask_file = "C:/temp/ImagesForGPUTest/cpp_mask.tif";
   vil_image_view_base_sptr dest_img_base = vil_load(dest_file.c_str());
   if (!dest_img_base) {
     vcl_cerr << "error loading image.\n";
@@ -91,6 +92,7 @@ bool test_ocl_search_manager()
   //==============end of minimizer setup=============
 
   icam_ocl_search_manager* mgr = icam_ocl_search_manager::instance();
+  
   mgr->set_workgrp_ni(8);   mgr->set_workgrp_nj(8);
   mgr->encode_image_data(minimizer, lev);
   mgr->copy_to_image_buffers();
@@ -99,8 +101,8 @@ bool test_ocl_search_manager()
   mgr->create_image_parallel_transf_buffers();
   mgr->setup_image_parallel_result();
   mgr->create_image_parallel_result_buffers();
-  vcl_string kern_path =
-    "/contrib/gel/mrc/vpgl/icam/icam_ocl/image_parallel_transf_search.cl";
+  
+  vcl_string kern_path = "/contrib/gel/mrc/vpgl/icam/icam_ocl/image_parallel_transf_search.cl";
   vcl_string path = root_dir + kern_path;
   if (!mgr->load_kernel_source(path))
     return false;
@@ -110,6 +112,7 @@ bool test_ocl_search_manager()
     return false;
   if (!mgr->setup_image_parallel_kernel())
     return false;
+
   vul_timer t;
   for (unsigned i = 0; i<67095; ++i) {
     mgr->set_image_parallel_transf(tr, Rr);
@@ -164,9 +167,7 @@ bool test_ocl_search_manager()
   vil_save(cpp_map_dest, cpp_result_file.c_str());
   vil_save(cpp_map_mask, cpp_mask_file.c_str());
   mgr->release_queue();
-  mgr->release_image_buffers();
-  mgr->release_image_parallel_transf_buffers();
-  mgr->release_image_parallel_result_buffers();
+  mgr->release_buffers();
   mgr->clean_image_data();
   mgr->clean_image_parallel_transf_data();
   mgr->clean_image_parallel_result();

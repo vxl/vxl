@@ -7,21 +7,6 @@
 
 icam_ocl_search_manager::~icam_ocl_search_manager()
 {
-  delete sni_buf_;
-  delete snj_buf_;
-  delete Ks_buf_;
-  delete source_array_buf_;
-  delete dni_buf_;
-  delete dnj_buf_;
-  delete Kdi_buf_;
-  delete dest_array_buf_;
-  delete depth_array_buf_;
-  delete result_array_buf_;
-  delete mask_array_buf_;
-  delete rot_buf_;
-  delete trans_buf_;
-  delete image_para_result_buf_;
-  delete image_para_flag_buf_;
 }
 
 bool icam_ocl_search_manager::
@@ -387,107 +372,72 @@ bool icam_ocl_search_manager::copy_to_image_buffers()
 {
   // Create and initialize memory objects
   // source array
-  source_array_buf_ = new icam_ocl_mem(this->context_);
-  if (source_array_buf_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
-                            sni_*snj_*sizeof(cl_float),source_array_))
-    return SDK_FAILURE;
 
-  sni_buf_ = new icam_ocl_mem(this->context_);
-  if (sni_buf_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
-                            sizeof(cl_uint), cl_sni_))
-    return SDK_FAILURE;
+  vcl_vector<void*> arrs;
+  vcl_vector<unsigned int> sizes;
+  int i=kernel_->buffer_cnt();
 
-  snj_buf_ = new icam_ocl_mem(this->context_);
-  if (snj_buf_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
-                            sizeof(cl_uint), cl_snj_))
-    return SDK_FAILURE;
+  arrs.push_back(cl_sni_);sizes.push_back(sizeof(cl_uint));
+  buffer_map_[cl_sni_]=i++;
 
+  arrs.push_back(cl_snj_);sizes.push_back(sizeof(cl_uint));
+  buffer_map_[cl_snj_]=i++;
 
-  Ks_buf_ = new icam_ocl_mem(this->context_);
-  if (Ks_buf_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
-                            sizeof(cl_float4), Ks_))
-    return SDK_FAILURE;
+  arrs.push_back(Ks_);sizes.push_back(sizeof(cl_float4));
+  buffer_map_[Ks_]=i++;
 
-  // dest array
-  dest_array_buf_ = new icam_ocl_mem(this->context_);
-  if (dest_array_buf_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
-                                     dni_*dnj_*sizeof(cl_float),dest_array_))
-    return SDK_FAILURE;
+  arrs.push_back(source_array_);sizes.push_back(sni_*snj_*sizeof(cl_float));
+  buffer_map_[source_array_]=i++;
 
-  dni_buf_ = new icam_ocl_mem(this->context_);
-  if (dni_buf_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
-                            sizeof(cl_uint), cl_dni_))
-    return SDK_FAILURE;
+  arrs.push_back(cl_dni_);sizes.push_back(sizeof(cl_uint));
+  buffer_map_[cl_dni_]=i++;
 
-  dnj_buf_ = new icam_ocl_mem(this->context_);
-  if (dnj_buf_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
-                            sizeof(cl_uint), cl_dnj_))
-    return SDK_FAILURE;
+  arrs.push_back(cl_dnj_);sizes.push_back(sizeof(cl_uint));
+  buffer_map_[cl_dnj_]=i++;
 
-  Kdi_buf_ = new icam_ocl_mem(this->context_);
-  if (Kdi_buf_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
-                            sizeof(cl_float4), Kdi_))
-    return SDK_FAILURE;
+  arrs.push_back(Kdi_);sizes.push_back(sizeof(cl_float4));
+  buffer_map_[Kdi_]=i++;
 
-  // depth buffer
-  depth_array_buf_=new icam_ocl_mem(this->context_);
-  if (depth_array_buf_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
-                                    dni_*dnj_*sizeof(cl_float),depth_array_))
-    return SDK_FAILURE;
-  else
-    return CL_SUCCESS;
+  arrs.push_back(dest_array_);sizes.push_back(dni_*dnj_*sizeof(cl_float));
+  buffer_map_[dest_array_]=i++;
+
+  arrs.push_back(depth_array_); sizes.push_back(dni_*dnj_*sizeof(cl_float));
+  buffer_map_[depth_array_]=i++;
+
+  cl_int status;
+  status = kernel_->create_in_buffers(this->context_,arrs,sizes);
+
+  return status;
 }
 
-bool icam_ocl_search_manager::release_image_buffers()
+bool icam_ocl_search_manager::release_buffers()
 {
-  // source
-  if (sni_buf_->release_memory())  return SDK_FAILURE;
-  if (snj_buf_->release_memory())  return SDK_FAILURE;
-  if (Ks_buf_->release_memory())  return SDK_FAILURE;
-  if (source_array_buf_->release_memory())  return SDK_FAILURE;
-
-  // dest
-  if (dni_buf_->release_memory())  return SDK_FAILURE;
-  if (dnj_buf_->release_memory())  return SDK_FAILURE;
-  if (Kdi_buf_->release_memory())  return SDK_FAILURE;
-  if (dest_array_buf_->release_memory())  return SDK_FAILURE;
-
-  // depth
-  if (depth_array_buf_->release_memory())  return SDK_FAILURE;
-  return CL_SUCCESS;
+  return (kernel_->release_buffers());
 }
 
 bool icam_ocl_search_manager::copy_to_image_parallel_transf_buffers()
 {
   cl_int status = CL_SUCCESS;
   cl_event events[1];
-  status = clEnqueueWriteBuffer(command_queue_,
-                                rot_buf_->buffer(),CL_TRUE,
-                                0,sizeof(cl_float4),
-                                rotation_,
-                                0,NULL,&events[0]);
-  if (!this->check_val(status,
-                       CL_SUCCESS,
-                       "clCreateBuffer ( rotation ) failed."))
+
+  status = kernel_->enqueue_write_buffer(command_queue_, buffer_map_[rotation_],CL_TRUE,
+                                   0,sizeof(cl_float4), rotation_, 0,NULL,&events[0]);
+  if (!check_val(status,CL_SUCCESS,"clCreateBuffer ( rotation ) failed."))
     return SDK_FAILURE;
+
   // translation
-  status = clEnqueueWriteBuffer(command_queue_,
-                                trans_buf_->buffer(),CL_TRUE,
-                                0,sizeof(cl_float4),
-                                translation_,
-                                0,NULL,&events[0]);
-  if (!this->check_val(status,
-                       CL_SUCCESS,
-                       "clCreateBuffer ( translation ) failed."))
+  status = kernel_->enqueue_write_buffer(command_queue_,buffer_map_[translation_],CL_TRUE,
+                                   0,sizeof(cl_float4),translation_, 0,NULL,&events[0]);
+  if (!check_val(status,CL_SUCCESS,"clCreateBuffer ( translation ) failed."))
     return SDK_FAILURE;
 
   // Wait for the wriet buffer to finish execution
   status = clWaitForEvents(1, &events[0]);
-  if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents ( write transf ) failed."))
+  if (!check_val(status,CL_SUCCESS,"clWaitForEvents ( write transf ) failed."))
     return SDK_FAILURE;
 
   status = clReleaseEvent(events[0]);
-  if (!this->check_val(status,CL_SUCCESS,"clReleaseEvent (write transf ) failed."))
+  if (!check_val(status,CL_SUCCESS,"clReleaseEvent (write transf ) failed."))
     return SDK_FAILURE;
   else
     return CL_SUCCESS;
@@ -495,97 +445,63 @@ bool icam_ocl_search_manager::copy_to_image_parallel_transf_buffers()
 
 bool icam_ocl_search_manager::create_image_parallel_transf_buffers()
 {
-  // rotation
-  rot_buf_ = new icam_ocl_mem(this->context_);
-  if (rot_buf_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,sizeof(cl_float4),rotation_))
-    return SDK_FAILURE;
+  vcl_vector<void*> arrs;
+  vcl_vector<unsigned int> sizes;
 
-  // translation
-  trans_buf_ = new icam_ocl_mem(this->context_);
-  if (trans_buf_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, sizeof(cl_float4),translation_))
-    return SDK_FAILURE;
-  else
-    return CL_SUCCESS;
-}
+  int i=buffer_map_.size();
+  arrs.push_back(rotation_); sizes.push_back(sizeof(cl_float4));
+  buffer_map_[rotation_]=i++;
 
-bool icam_ocl_search_manager::release_image_parallel_transf_buffers()
-{
-  // rotation
-  if (rot_buf_->release_memory()) return SDK_FAILURE;
+  arrs.push_back(translation_); sizes.push_back(sizeof(cl_float4));
+  buffer_map_[translation_]=i++;
 
-  // translation
-  if (trans_buf_->release_memory()) return SDK_FAILURE;
-
-  return CL_SUCCESS;
+  cl_int status;
+  status = kernel_->create_in_buffers(this->context_,arrs,sizes);
+  return status;
 }
 
 bool icam_ocl_search_manager::create_image_parallel_result_buffers()
 {
-  //resulting image_para
-  image_para_result_buf_ = new icam_ocl_mem(this->context_);
-  if (image_para_result_buf_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,sizeof(cl_float4), image_para_result_))
-    return SDK_FAILURE;
+  vcl_vector<void*> arrs;
+  vcl_vector<unsigned int> sizes;
 
-  image_para_flag_buf_ = new icam_ocl_mem(this->context_);
-  if (image_para_flag_buf_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,sizeof(cl_int4),image_para_flag_))
-    return SDK_FAILURE;
+  int i=buffer_map_.size();
+  arrs.push_back(image_para_result_);  sizes.push_back(sizeof(cl_float4));
+  buffer_map_[image_para_result_]=i++;
 
-  result_array_buf_ = new icam_ocl_mem(this->context_);
-  if (result_array_buf_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,wsni_*wsnj_*sizeof(cl_float),result_array_))
-    return SDK_FAILURE;
+  arrs.push_back(image_para_flag_);  sizes.push_back(sizeof(cl_int4));
+  buffer_map_[image_para_flag_]=i++;
 
-  mask_array_buf_ = new icam_ocl_mem(this->context_);
-  if (mask_array_buf_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,wsni_*wsnj_*sizeof(cl_float),mask_array_))
-    return SDK_FAILURE;
-  else
-    return CL_SUCCESS;
-}
+  arrs.push_back(result_array_);  sizes.push_back(wsni_*wsnj_*sizeof(cl_float));
+  buffer_map_[result_array_]=i++;
 
-bool icam_ocl_search_manager::release_image_parallel_result_buffers()
-{
-  // release output result buffers
-  if (image_para_result_buf_->release_memory())    return SDK_FAILURE;
-  else if (image_para_flag_buf_->release_memory()) return SDK_FAILURE;
-  else if (result_array_buf_->release_memory())    return SDK_FAILURE;
-  else if (mask_array_buf_->release_memory())      return SDK_FAILURE;
-  else return SDK_SUCCESS;
+  arrs.push_back(mask_array_);  sizes.push_back(wsni_*wsnj_*sizeof(cl_float));
+  buffer_map_[mask_array_]=i++;
+
+  cl_int status;
+  status = kernel_->create_out_buffers(this->context_,arrs,sizes);
+  return status;
 }
 
 bool icam_ocl_search_manager::setup_image_parallel_kernel()
 {
   // -- Set appropriate arguments to the kernel --
   // source array args
-  cl_int status = CL_SUCCESS;
-
-  if (sni_buf_->set_kernel_arg(kernel_,0)) return SDK_FAILURE;
-  if (snj_buf_->set_kernel_arg(kernel_,1)) return SDK_FAILURE;
-  if (Ks_buf_->set_kernel_arg(kernel_,2)) return SDK_FAILURE;
-  if (source_array_buf_->set_kernel_arg(kernel_,3)) return SDK_FAILURE;
-  if (dni_buf_->set_kernel_arg(kernel_,4)) return SDK_FAILURE;
-  if (dnj_buf_->set_kernel_arg(kernel_,5)) return SDK_FAILURE;
-  if (Kdi_buf_->set_kernel_arg(kernel_,6)) return SDK_FAILURE;
-  if (dest_array_buf_->set_kernel_arg(kernel_,7)) return SDK_FAILURE;
-  if (depth_array_buf_->set_kernel_arg(kernel_,8)) return SDK_FAILURE;
-  if (rot_buf_->set_kernel_arg(kernel_,9)) return SDK_FAILURE;
-  if (trans_buf_->set_kernel_arg(kernel_,10)) return SDK_FAILURE;
-  if (image_para_result_buf_->set_kernel_arg(kernel_,11)) return SDK_FAILURE;
-  if (image_para_flag_buf_->set_kernel_arg(kernel_,12)) return SDK_FAILURE;
-  if (result_array_buf_->set_kernel_arg(kernel_,13)) return SDK_FAILURE;
-  if (mask_array_buf_->set_kernel_arg(kernel_,14)) return SDK_FAILURE;
+  cl_int status = kernel_->set_args();
 
   //=================== end of kernel arguments =======================
 
   cl_ulong used_local_memory;
-  status = clGetKernelWorkGroupInfo(this->kernel(),this->devices()[0],CL_KERNEL_LOCAL_MEM_SIZE,
+  status = clGetKernelWorkGroupInfo(kernel_->kernel(),this->devices()[0],CL_KERNEL_LOCAL_MEM_SIZE,
                                     sizeof(cl_ulong),&used_local_memory,NULL);
-  if (!this->check_val(status,CL_SUCCESS,"clGetKernelWorkGroupInfo CL_KERNEL_LOCAL_MEM_SIZE failed."))
+  if (!check_val(status,CL_SUCCESS,"clGetKernelWorkGroupInfo CL_KERNEL_LOCAL_MEM_SIZE failed."))
     return SDK_FAILURE;
 
   // determine the work group size
   cl_ulong kernel_work_group_size;
-  status = clGetKernelWorkGroupInfo(this->kernel(),this->devices()[0],CL_KERNEL_WORK_GROUP_SIZE,
+  status = clGetKernelWorkGroupInfo(kernel_->kernel(),this->devices()[0],CL_KERNEL_WORK_GROUP_SIZE,
                                     sizeof(cl_ulong),&kernel_work_group_size,NULL);
-  if (!this->check_val(status,CL_SUCCESS,"clGetKernelWorkGroupInfo CL_KERNEL_WORK_GROUP_SIZE, failed."))
+  if (!check_val(status,CL_SUCCESS,"clGetKernelWorkGroupInfo CL_KERNEL_WORK_GROUP_SIZE, failed."))
     return SDK_FAILURE;
   assert(this->workgrp_size()<= vcl_size_t(kernel_work_group_size));
 #if 0
@@ -600,7 +516,7 @@ bool icam_ocl_search_manager::setup_image_parallel_kernel()
 
   // set up a command queue
   command_queue_ = clCreateCommandQueue(this->context(),this->devices()[0],CL_QUEUE_PROFILING_ENABLE,&status);
-  return this->check_val(status,CL_SUCCESS,"Falied in command queue creation" + error_to_string(status));
+  return check_val(status,CL_SUCCESS,"Falied in command queue creation" + error_to_string(status));
 }
 
 bool icam_ocl_search_manager::run_kernel()
@@ -610,54 +526,47 @@ bool icam_ocl_search_manager::run_kernel()
   cl_int status = CL_SUCCESS;
   cl_event ceEvent;
 
-  status = clEnqueueNDRangeKernel(command_queue_,this->kernel_, 2,NULL,globalThreads,localThreads,0,NULL,&ceEvent);
+  status = clEnqueueNDRangeKernel(command_queue_,kernel_->kernel(), 2,NULL,globalThreads,localThreads,0,NULL,&ceEvent);
 
-  if (!this->check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed. "+error_to_string(status)))
+  if (!check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed. "+error_to_string(status)))
     return SDK_FAILURE;
 
   status = clFinish(command_queue_);
-  if (!this->check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status)))
+  if (!check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status)))
     return SDK_FAILURE;
 
   cl_event events[1];
-  status = clEnqueueReadBuffer(command_queue_,image_para_result_buf_->buffer(),CL_TRUE,
-                               0,sizeof(cl_float4),
-                               image_para_result_,
-                               0,NULL,&events[0]);
+  status = kernel_->enqueue_read_buffer(command_queue_,buffer_map_[image_para_result_],CL_TRUE,
+                                        0,sizeof(cl_float4),image_para_result_,0,NULL,&events[0]);
 
-  if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (image_para result )failed."))
+  if (!check_val(status,CL_SUCCESS,"clEnqueueBuffer (image_para result )failed."))
     return SDK_FAILURE;
-  status = clEnqueueReadBuffer(command_queue_,image_para_flag_buf_->buffer(),CL_TRUE,
-                               0,sizeof(cl_int4),
-                               image_para_flag_,
-                               0,NULL,&events[0]);
+  status = kernel_->enqueue_read_buffer(command_queue_,buffer_map_[image_para_flag_],CL_TRUE,
+                                        0,sizeof(cl_int4),image_para_flag_,0,NULL,&events[0]);
 
-  if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (image_para flag)failed."))
+  if (!check_val(status,CL_SUCCESS,"clEnqueueBuffer (image_para flag)failed."))
     return SDK_FAILURE;
 
 
-  status = clEnqueueReadBuffer(command_queue_,result_array_buf_->buffer(),CL_TRUE,
-                               0,wsni_*wsnj_*sizeof(cl_float),
-                               result_array_,
-                               0,NULL,&events[0]);
-  if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (result_array)failed."))
+  status = kernel_->enqueue_read_buffer(command_queue_,buffer_map_[result_array_],CL_TRUE,
+                               0,wsni_*wsnj_*sizeof(cl_float),result_array_,0,NULL,&events[0]);
+
+  if (!check_val(status,CL_SUCCESS,"clEnqueueBuffer (result_array)failed."))
     return SDK_FAILURE;
 
-  status = clEnqueueReadBuffer(command_queue_,mask_array_buf_->buffer(),CL_TRUE,
-                               0,wsni_*wsnj_*sizeof(cl_float),
-                               mask_array_,
-                               0,NULL,&events[0]);
+  status = kernel_->enqueue_read_buffer(command_queue_,buffer_map_[mask_array_],CL_TRUE,
+                               0,wsni_*wsnj_*sizeof(cl_float), mask_array_,0,NULL,&events[0]);
 
-  if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (mask_array)failed."))
+  if (!check_val(status,CL_SUCCESS,"clEnqueueBuffer (mask_array)failed."))
     return SDK_FAILURE;
 
   // Wait for the read buffer to finish execution
   status = clWaitForEvents(1, &events[0]);
-  if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents failed."))
+  if (!check_val(status,CL_SUCCESS,"clWaitForEvents failed."))
     return SDK_FAILURE;
 
   status = clReleaseEvent(events[0]);
-  if (!this->check_val(status,CL_SUCCESS,"clReleaseEvent failed."))
+  if (!check_val(status,CL_SUCCESS,"clReleaseEvent failed."))
     return SDK_FAILURE;
 
   return CL_SUCCESS;
@@ -667,7 +576,7 @@ bool icam_ocl_search_manager::release_queue()
 {
   // release the command Queue
   cl_int status = clReleaseCommandQueue(command_queue_);
-  if (!this->check_val(status,CL_SUCCESS,"clReleaseCommandQueue failed."))
+  if (!check_val(status,CL_SUCCESS,"clReleaseCommandQueue failed."))
     return SDK_FAILURE;
   ///
   return CL_SUCCESS;
@@ -681,33 +590,18 @@ int icam_ocl_search_manager::build_kernel_program()
   if (program_) {
     status = clReleaseProgram(program_);
     program_ = 0;
-    if (!this->check_val(status,
-                         CL_SUCCESS,
-                         "clReleaseProgram failed."))
+    if (!check_val(status,CL_SUCCESS,"clReleaseProgram failed."))
       return SDK_FAILURE;
   }
   const char * source = prog_.c_str();
 
-  program_ = clCreateProgramWithSource(this->context_,
-                                       1,
-                                       &source,
-                                       sourceSize,
-                                       &status);
-  if (!this->check_val(status,
-                       CL_SUCCESS,
-                       "clCreateProgramWithSource failed."))
+  program_ = clCreateProgramWithSource(this->context_,1,&source,sourceSize, &status);
+  if (!check_val(status,CL_SUCCESS,"clCreateProgramWithSource failed."))
     return SDK_FAILURE;
 
   // create a cl program executable for all the devices specified
-  status = clBuildProgram(program_,
-                          1,
-                          this->devices_,
-                          NULL,
-                          NULL,
-                          NULL);
-  if (!this->check_val(status,
-                       CL_SUCCESS,
-                       error_to_string(status)))
+  status = clBuildProgram(program_, 1, this->devices_,NULL,NULL,NULL);
+  if (!check_val(status, CL_SUCCESS, error_to_string(status)))
   {
     vcl_size_t len;
     char buffer[2048];
@@ -725,24 +619,15 @@ int icam_ocl_search_manager::create_kernel(vcl_string const& kernel_name)
 {
   cl_int status = CL_SUCCESS;
   // get a kernel object handle for a kernel with the given name
-  kernel_ = clCreateKernel(program_,kernel_name.c_str(),&status);
-  if (!this->check_val(status,CL_SUCCESS,error_to_string(status)))
-    return SDK_FAILURE;
-  else
-    return SDK_SUCCESS;
+  kernel_->create_kernel(program_,kernel_name.c_str(),status);
+  return status;
 }
 
 
 int icam_ocl_search_manager::release_kernel()
 {
-  cl_int status = SDK_SUCCESS;
-  if (kernel_)  {
-    status = clReleaseKernel(kernel_);
-  }
-  kernel_ = NULL;
-  if (!this->check_val(status,CL_SUCCESS,"clReleaseKernel failed."))
-    return SDK_FAILURE;
-  else
-    return SDK_SUCCESS;
+  cl_int status;
+  kernel_->release_kernel(status);
+  return status;
 }
 

@@ -22,10 +22,7 @@
 #if !defined(__APPLE__)
 #include <malloc.h>
 #endif
-#define SDK_SUCCESS 0
-#define SDK_FAILURE 1
-//#define GROUP_SIZE 64
-#define VECTOR_SIZE 4
+
 
 template <class T>
 class icam_ocl_manager
@@ -61,7 +58,7 @@ class icam_ocl_manager
 
   //: Initialise the opencl environment
   bool initialize_cl();
-
+#if 0
   //: Check for error returns
   int check_val(cl_int status, cl_int result, std::string message) {
     if (status != result) {
@@ -70,7 +67,7 @@ class icam_ocl_manager
     }
     return 1;
   }
-
+#endif
   vcl_size_t group_size() const {return max_work_group_size_;}
   cl_ulong total_local_memory() const {return total_local_memory_;}
   cl_context context() {return context_;}

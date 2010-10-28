@@ -8,28 +8,28 @@ icam_ocl_mem::icam_ocl_mem(const cl_context& context)
 
 bool icam_ocl_mem::create_buffer(const cl_mem_flags& flags,  vcl_size_t size,  void *host_ptr)
 {
-  cl_int status = CL_SUCCESS;
+  cl_int status = MEM_FAILURE;
   // Create and initialize memory objects
   buffer_ = clCreateBuffer(this->context_,flags, size, host_ptr, &status);
-  if (!this->check_val(status, CL_SUCCESS, "clCreateBuffer (input array) failed."))
+  if (!check_val(status, MEM_FAILURE, "clCreateBuffer (input array) failed."))
     return MEM_FAILURE;
-  return CL_SUCCESS;
+  return MEM_SUCCESS;
 }
 
 bool icam_ocl_mem::set_kernel_arg(const cl_kernel& kernel, cl_uint idx)
 {
   cl_int status = clSetKernelArg(kernel,idx,sizeof(cl_mem),(void *)&buffer_);
-  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (length of array)"))
+  if (!check_val(status,MEM_FAILURE,"clSetKernelArg failed. (length of array)"))
     return MEM_FAILURE;
-  return CL_SUCCESS;
+  return MEM_SUCCESS;
 }
 
 bool icam_ocl_mem::release_memory()
 {
   cl_int status = clReleaseMemObject(buffer_);
-  if (!this->check_val(status,CL_SUCCESS,"clReleaseMemObject (array_buf_) failed."))
+  if (!check_val(status,MEM_FAILURE,"clReleaseMemObject (array_buf_) failed."))
     return MEM_FAILURE;
-  return CL_SUCCESS;
+  return MEM_SUCCESS;
 }
 
 // Check for error returns

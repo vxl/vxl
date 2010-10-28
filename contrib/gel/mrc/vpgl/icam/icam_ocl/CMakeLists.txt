@@ -13,6 +13,7 @@ IF(OPENCL_FOUND)
       icam_ocl_manager.h        icam_ocl_manager.txx
       icam_ocl_search_manager.h icam_ocl_search_manager.cxx
       icam_ocl_mem.h            icam_ocl_mem.cxx
+      icam_ocl_kernel.h         icam_ocl_kernel.cxx
   )
   AUX_SOURCE_DIRECTORY(Templates icam_ocl_sources)
   ADD_LIBRARY(icam_ocl ${icam_ocl_sources} )

@@ -15,8 +15,8 @@
 #include <vcl_string.h>
 #include <vcl_cstddef.h>
 
-#define MEM_SUCCESS 0
-#define MEM_FAILURE 1
+#define MEM_SUCCESS 1
+#define MEM_FAILURE 0
 
 class icam_ocl_mem
 {

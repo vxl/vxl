@@ -10,16 +10,16 @@
 #include <icam_ocl/icam_ocl_manager.h>
 #include <icam_ocl/icam_ocl_utils.h>
 #include <icam_ocl/icam_ocl_mem.h>
+#include <icam_ocl/icam_ocl_kernel.h>
 #include <icam/icam_minimizer.h>
 class icam_ocl_search_manager : public icam_ocl_manager<icam_ocl_search_manager> 
 {
  public:
-
-
+   
   icam_ocl_search_manager()
     : wgni_(0), wgnj_(0), wsni_(0), wsnj_(0), program_(0), time_in_secs_(0.0f),
       sni_(0), snj_(0), dni_(0), dnj_(0)
-    {}
+    {kernel_ = new icam_ocl_kernel(); }
 
   ~icam_ocl_search_manager(); 
 
@@ -36,7 +36,7 @@ class icam_ocl_search_manager : public icam_ocl_manager<icam_ocl_search_manager>
   int release_kernel();
 
   float time_taken(){return time_in_secs_;}
-  cl_kernel kernel() {return kernel_;}
+  //cl_kernel kernel() {return kernel_;}
 
   //: 2d workgroup
   void set_workgrp_ni(unsigned ni){wgni_=ni;}
@@ -56,7 +56,7 @@ class icam_ocl_search_manager : public icam_ocl_manager<icam_ocl_search_manager>
   // source, destination and depth images
   bool encode_image_data(icam_minimizer& minimizer, unsigned level);
   bool copy_to_image_buffers();
-  bool release_image_buffers();
+  bool release_buffers();
   void clean_image_data();
   // precompute the translation and rotations in the search space
   void setup_transf_search_space(vgl_box_3d<double> const& trans_box,
@@ -76,14 +76,11 @@ class icam_ocl_search_manager : public icam_ocl_manager<icam_ocl_search_manager>
   bool create_image_parallel_transf_buffers();
   //: copy to cl buffers
   bool copy_to_image_parallel_transf_buffers();
-  //: release buffers
-  bool release_image_parallel_transf_buffers();
   //: deallocate cl data
   void clean_image_parallel_transf_data();
 
   bool setup_image_parallel_result();
   bool create_image_parallel_result_buffers();
-  bool release_image_parallel_result_buffers();
   void clean_image_parallel_result();
 
   cl_int4 image_para_flag() {return *image_para_flag_;}
@@ -97,7 +94,7 @@ class icam_ocl_search_manager : public icam_ocl_manager<icam_ocl_search_manager>
   cl_program program_;
 
   cl_command_queue command_queue_;
-  cl_kernel kernel_;
+  //cl_kernel kernel_;
   float time_in_secs_;
   //source dimensions
   unsigned sni_;
@@ -105,50 +102,42 @@ class icam_ocl_search_manager : public icam_ocl_manager<icam_ocl_search_manager>
   //source image
   cl_uint * cl_sni_;
   cl_uint * cl_snj_;
-  icam_ocl_mem*   sni_buf_;
-  icam_ocl_mem*   snj_buf_;
+  
   cl_float4* Ks_; // source image K matrix
-  icam_ocl_mem*   Ks_buf_;
   cl_float* source_array_;
-  icam_ocl_mem*   source_array_buf_;
+  
   //dest image
   unsigned dni_;
   unsigned dnj_;
   cl_uint * cl_dni_;
   cl_uint * cl_dnj_;
-  icam_ocl_mem*   dni_buf_;
-  icam_ocl_mem*   dnj_buf_;
   cl_float4* Kdi_;// inverse  K matrix for destination image
-  icam_ocl_mem*   Kdi_buf_;
   cl_float* dest_array_;
-  icam_ocl_mem*   dest_array_buf_;
 
   // depth image, same dimensions as dest
   cl_float* depth_array_;
-  icam_ocl_mem*   depth_array_buf_;
 
   // result mapped image, same dimensions as dest
   cl_float* result_array_;
-  icam_ocl_mem*   result_array_buf_;
-
+ 
   // result mask image, same dimensions as dest
   cl_float* mask_array_;
-  icam_ocl_mem*   mask_array_buf_;
 
   // search rotations
   vcl_vector<vgl_rotation_3d<double> > rotations_;
   cl_float4* rotation_;
-  icam_ocl_mem*   rot_buf_;
+  
   // search translations 
   vcl_vector<vgl_vector_3d<double> > translations_;
   cl_float4* translation_;
-  icam_ocl_mem*   trans_buf_;
 
   // the result of the search
   cl_float4* image_para_result_;
   cl_int4 * image_para_flag_;
-  icam_ocl_mem*   image_para_result_buf_;
-  icam_ocl_mem*   image_para_flag_buf_;
+
+  icam_ocl_kernel* kernel_;
+  vcl_map<void*, int> buffer_map_;
+
 };
 
 #endif // icam_ocl_search_manager_h_

@@ -119,7 +119,7 @@ bool icam_ocl_manager<T>::initialize_cl()
 
   //Create a context from the device ID
   context_ = clCreateContext(0, 1, &device, NULL, NULL, &status);
-  if (!this->check_val(status,CL_SUCCESS,"clCreateContextFromType failed.")) {
+  if (!check_val(status,CL_SUCCESS,"clCreateContextFromType failed.")) {
     return false;
   }
 
@@ -130,7 +130,7 @@ bool icam_ocl_manager<T>::initialize_cl()
                             0,
                             NULL,
                             &device_list_size);
-  if (!this->check_val(status,
+  if (!check_val(status,
                        CL_SUCCESS,
                        "clGetContextInfo failed."))
     return false;
@@ -150,7 +150,7 @@ bool icam_ocl_manager<T>::initialize_cl()
                             device_list_size,
                             devices_,
                             NULL);
-  if (!this->check_val(status,
+  if (!check_val(status,
                        CL_SUCCESS,
                        "clGetGetContextInfo failed."))
     return false;
@@ -165,7 +165,7 @@ bool icam_ocl_manager<T>::initialize_cl()
                            (void*) vendor,
                            NULL);
 
-  if (!this->check_val(status,
+  if (!check_val(status,
                        CL_SUCCESS,
                        "clGetDeviceInfo CL_DEVICE_VENDOR failed."))
     return false;
@@ -177,7 +177,7 @@ bool icam_ocl_manager<T>::initialize_cl()
                            (void*)&max_work_group_size,
                            NULL);
 
-  if (!this->check_val(status,
+  if (!check_val(status,
                        CL_SUCCESS,
                        "clGetDeviceInfo CL_DEVICE_MAX_WORK_GROUP_SIZE failed."))
     return false;
@@ -190,7 +190,7 @@ bool icam_ocl_manager<T>::initialize_cl()
                            (void*)&max_dimensions_,
                            NULL);
 
-  if (!this->check_val(status,
+  if (!check_val(status,
                        CL_SUCCESS,
                        "clGetDeviceInfo CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS failed."))
     return false;
@@ -204,7 +204,7 @@ bool icam_ocl_manager<T>::initialize_cl()
                            (void*)max_work_item_sizes_,
                            NULL);
 
-  if (!this->check_val(status,
+  if (!check_val(status,
                        CL_SUCCESS,
                        "clGetDeviceInfo CL_DEVICE_MAX_WORK_ITEM_SIZES failed."))
     return false;
@@ -215,7 +215,7 @@ bool icam_ocl_manager<T>::initialize_cl()
                            (void *)&total_local_memory_,
                            NULL);
 
-  if (!this->check_val(status,
+  if (!check_val(status,
                        CL_SUCCESS,
                        "clGetDeviceInfo CL_DEVICE_LOCAL_MEM_SIZE failed."))
     return false;
@@ -226,7 +226,7 @@ bool icam_ocl_manager<T>::initialize_cl()
                            (void *)&total_global_memory_,
                            NULL);
 
-  if (!this->check_val(status,
+  if (!check_val(status,
                        CL_SUCCESS,
                        "clGetDeviceInfo CL_DEVICE_GLOBAL_MEM_SIZE failed."))
     return false;
@@ -237,7 +237,7 @@ bool icam_ocl_manager<T>::initialize_cl()
                            (void *)&max_compute_units_,
                            NULL);
 
-  if (!this->check_val(status,
+  if (!check_val(status,
                        CL_SUCCESS,
                        "clGetDeviceInfo CL_DEVICE_MAX_COMPUTE_UNITS failed."))
     return false;
@@ -248,7 +248,7 @@ bool icam_ocl_manager<T>::initialize_cl()
                            (void *)&vector_width_short_,
                            NULL);
 
-  if (!this->check_val(status,
+  if (!check_val(status,
                        CL_SUCCESS,
                        "clGetDeviceInfo CL_DEVICE_PREFERRED_VECTOR_WIDTH_SHORT failed."))
     return false;
@@ -259,7 +259,7 @@ bool icam_ocl_manager<T>::initialize_cl()
                            (void *)&vector_width_float_,
                            NULL);
 
-  if (!this->check_val(status,
+  if (!check_val(status,
                        CL_SUCCESS,
                        "clGetDeviceInfo CL_DEVICE_PREFERRED_VECTOR_WIDTH_FLOAT failed."))
     return false;
@@ -270,7 +270,7 @@ bool icam_ocl_manager<T>::initialize_cl()
                            (void *)&max_clock_freq_,
                            NULL);
 
-  if (!this->check_val(status,
+  if (!check_val(status,
                        CL_SUCCESS,
                        "clGetDeviceInfo CL_DEVICE_MAX_CLOCK_FREQUENCY failed."))
     return false;
@@ -281,7 +281,7 @@ bool icam_ocl_manager<T>::initialize_cl()
                            (void *)&image_support_,
                            NULL);
 
-  if (!this->check_val(status,
+  if (!check_val(status,
                        CL_SUCCESS,
                        "clGetDeviceInfo CL_DEVICE_IMAGE_SUPPORT failed."))
     return false;
@@ -291,7 +291,7 @@ bool icam_ocl_manager<T>::initialize_cl()
                            (void *)&image2d_max_width_,
                            NULL);
 
-  if (!this->check_val(status,
+  if (!check_val(status,
                        CL_SUCCESS,
                        "clGetDeviceInfo CL_DEVICE_IMAGE_SUPPORT failed."))
     return false;
@@ -301,7 +301,7 @@ bool icam_ocl_manager<T>::initialize_cl()
                            (void *)&image2d_max_height_,
                            NULL);
 
-  if (!this->check_val(status,
+  if (!check_val(status,
                        CL_SUCCESS,
                        "clGetDeviceInfo CL_DEVICE_IMAGE_SUPPORT failed."))
             return false;
@@ -313,7 +313,7 @@ bool icam_ocl_manager<T>::initialize_cl()
                            (void*) extensions,
                            NULL);
   
-  if (!this->check_val(status,
+  if (!check_val(status,
                        CL_SUCCESS,
                        "clGetDeviceInfo CL_DEVICE_IMAGE_SUPPORT failed."))
     return false;
@@ -409,7 +409,7 @@ int icam_ocl_manager<T>::build_kernel_program(cl_program & program, vcl_string o
   if (program) {
     status = clReleaseProgram(program);
     program = 0;
-    if (!this->check_val(status, CL_SUCCESS, "clReleaseProgram failed."))
+    if (!check_val(status, CL_SUCCESS, "clReleaseProgram failed."))
       return SDK_FAILURE;
   }
   const char * source = this->prog_.c_str();
@@ -419,7 +419,7 @@ int icam_ocl_manager<T>::build_kernel_program(cl_program & program, vcl_string o
                                       &source,  
                                       sourceSize,
                                       &status);
-  if (!this->check_val(status,CL_SUCCESS,"clCreateProgramWithSource failed."))
+  if (!check_val(status,CL_SUCCESS,"clCreateProgramWithSource failed."))
     return SDK_FAILURE;
 
   // create a cl program executable for all the devices specified
@@ -429,7 +429,7 @@ int icam_ocl_manager<T>::build_kernel_program(cl_program & program, vcl_string o
                           options.c_str(),
                           NULL,
                           NULL);
-  if (!this->check_val(status, CL_SUCCESS, error_to_string(status)))
+  if (!check_val(status, CL_SUCCESS, error_to_string(status)))
   {
     vcl_size_t len;
     char buffer[2048];
