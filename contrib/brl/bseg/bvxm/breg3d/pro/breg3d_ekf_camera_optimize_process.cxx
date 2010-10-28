@@ -18,7 +18,7 @@
 
 breg3d_ekf_camera_optimize_process::breg3d_ekf_camera_optimize_process()
 {
-  // process takes 7 inputs: 
+  // process takes 7 inputs:
   //input[0]: The previous state estimate
   //input[1]: The previous image
   //input[2]: The current image
@@ -61,44 +61,41 @@ breg3d_ekf_camera_optimize_process::breg3d_ekf_camera_optimize_process()
   if (!parameters()->add("Position Measurement Variance", "position_measurement_variance", 1.0))
     vcl_cerr << "ERROR: Adding parameters in " << __FILE__ << vcl_endl;
 
-    // 
+  //
   if (!parameters()->add("Homography terms Variance", "homography_term_variance", 0.08))
     vcl_cerr << "ERROR: Adding parameters in " << __FILE__ << vcl_endl;
 
-      // 
+  //
   if (!parameters()->add("Homography translation terms Variance", "homography_translation_term_variance", 0.08))
     vcl_cerr << "ERROR: Adding parameters in " << __FILE__ << vcl_endl;
-
-
 }
 
 
 bool breg3d_ekf_camera_optimize_process::execute()
 {
-
   // Sanity check
-  if(!this->verify_inputs())
+  if (!this->verify_inputs())
     return false;
 
-  brdb_value_t<breg3d_ekf_camera_optimizer_state>* input0 = 
+  brdb_value_t<breg3d_ekf_camera_optimizer_state>* input0 =
       static_cast<brdb_value_t<breg3d_ekf_camera_optimizer_state>* >(input_data_[0].ptr());
 
-  brdb_value_t<vil_image_view_base_sptr>* input1 = 
+  brdb_value_t<vil_image_view_base_sptr>* input1 =
       static_cast<brdb_value_t<vil_image_view_base_sptr>* >(input_data_[1].ptr());
 
-    brdb_value_t<vil_image_view_base_sptr>* input2 = 
-      static_cast<brdb_value_t<vil_image_view_base_sptr>* >(input_data_[2].ptr());
+  brdb_value_t<vil_image_view_base_sptr>* input2 =
+    static_cast<brdb_value_t<vil_image_view_base_sptr>* >(input_data_[2].ptr());
 
-  brdb_value_t<vpgl_camera_double_sptr>* input3 = 
+  brdb_value_t<vpgl_camera_double_sptr>* input3 =
       static_cast<brdb_value_t<vpgl_camera_double_sptr>* >(input_data_[3].ptr());
 
-  brdb_value_t<bvxm_voxel_world_sptr>* input4 = 
+  brdb_value_t<bvxm_voxel_world_sptr>* input4 =
       static_cast<brdb_value_t<bvxm_voxel_world_sptr>* >(input_data_[4].ptr());
 
-  brdb_value_t<vcl_string>* input5 = 
+  brdb_value_t<vcl_string>* input5 =
       static_cast<brdb_value_t<vcl_string>* >(input_data_[5].ptr());
 
-  brdb_value_t<unsigned>* input6 = 
+  brdb_value_t<unsigned>* input6 =
       static_cast<brdb_value_t<unsigned>* >(input_data_[6].ptr());
 
   // get previous state
@@ -119,7 +116,7 @@ bool breg3d_ekf_camera_optimize_process::execute()
   unsigned bin_idx = input6->value(); // FIXME: unused
 
   // get parameters
-  double rot_var_measure, pos_var_measure;
+  double rot_var_measure=0, pos_var_measure=0;
   if (!parameters()->get_value(vcl_string("position_measurement_variance"), rot_var_measure)) {
     vcl_cout << "breg3d_init_ekf_camera_optimize_process::execute() -- problem in retrieving parameter rotation_variance\n";
     return false;
@@ -128,7 +125,7 @@ bool breg3d_ekf_camera_optimize_process::execute()
     vcl_cout << "breg3d_init_ekf_camera_optimize_process::execute() -- problem in retrieving parameter position_variance\n";
     return false;
   }
-  double rot_var_predict, pos_var_predict;
+  double rot_var_predict=0, pos_var_predict=0;
   if (!parameters()->get_value(vcl_string("position_prediction_variance"), rot_var_predict)) {
     vcl_cout << "breg3d_init_ekf_camera_optimize_process::execute() -- problem in retrieving parameter rotation_variance\n";
     return false;
@@ -137,7 +134,7 @@ bool breg3d_ekf_camera_optimize_process::execute()
     vcl_cout << "breg3d_init_ekf_camera_optimize_process::execute() -- problem in retrieving parameter position_variance\n";
     return false;
   }
-  double homography_var, homography_t_var;
+  double homography_var=0, homography_t_var=0;
   if (!parameters()->get_value(vcl_string("homography_term_variance"), homography_var)) {
     vcl_cout << "breg3d_init_ekf_camera_optimize_process::execute() -- problem in retrieving parameter homography_variance\n";
     return false;
@@ -149,19 +146,18 @@ bool breg3d_ekf_camera_optimize_process::execute()
 
 
   breg3d_ekf_camera_optimizer optimizer(pos_var_predict,rot_var_predict,
-                                      pos_var_measure,rot_var_measure,
-                                      homography_var,homography_t_var,false,true,false);
-  
+                                        pos_var_measure,rot_var_measure,
+                                        homography_var,homography_t_var,false,true,false);
 
   bvxm_image_metadata curr_metadata(curr_img,cam_est);
   breg3d_ekf_camera_optimizer_state curr_state = optimizer.optimize(vox_world,prev_img,curr_metadata,prev_state,apm_type);
 
   //store output
-  brdb_value_sptr output0 = 
+  brdb_value_sptr output0 =
     new brdb_value_t<breg3d_ekf_camera_optimizer_state>(curr_state);
   output_data_[0] = output0;
 
-  brdb_value_sptr output1 = 
+  brdb_value_sptr output1 =
     new brdb_value_t<vpgl_camera_double_sptr>(curr_metadata.camera);
   output_data_[1] = output1;
 
