@@ -13,6 +13,8 @@
 #include <bvpl/bvpl_create_directions.h>
 #include <bvpl/bvpl_algebraic_functor.h>
 #include <bvpl/bvpl_octree/bvpl_scene_vector_operator.h>
+#include <bvpl/bvpl_octree/bvpl_scene_statistics.h>
+
 
 #include <boxm/boxm_scene.h>
 
@@ -67,7 +69,7 @@ bool bvpl_compute_gauss_gradients(bprb_func_process& pro)
     new boxm_scene<grad_tree_type>(scene_in->lvcs(), scene_in->origin(), scene_in->block_dim(), scene_in->world_dim(), scene_in->max_level(), scene_in->init_level());
     scene_out->set_paths(output_path, "float_gradient_scene");
     scene_out->set_appearance_model(BOXM_FLOAT);
-    scene_out->write_scene("/float_gradient_scene.xml");
+    scene_out->write_scene("float_gradient_scene.xml");
 
     bvpl_algebraic_functor functor;
     bvpl_scene_vector_operator vector_oper;
@@ -76,7 +78,11 @@ bool bvpl_compute_gauss_gradients(bprb_func_process& pro)
     boxm_scene_base_sptr scene_ptr=new boxm_scene_base();
     scene_ptr = scene_out;
     pro.set_output_val<boxm_scene_base_sptr>(0, scene_ptr);
+    
+    bsta_histogram<float> magnitude_hist;
+    compute_scene_statistics(*scene_out, magnitude_hist);
+    vcl_cout << "Histogram: \n" << magnitude_hist << vcl_endl;
   }
-
+  
   return true;
 }
