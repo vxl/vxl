@@ -76,10 +76,7 @@ compute_from_points(vcl_vector<vgl_homg_point_3d<T> > const& points)
 {
   T cx, cy, cz, radius;
   this->center_of_mass(points, cx, cy, cz);
-  this->t12_matrix_.set_identity();
-  this->t12_matrix_.put(0,3, -cx);
-  this->t12_matrix_.put(1,3, -cy);
-  this->t12_matrix_.put(2,3, -cz);
+  vgl_h_matrix_3d<T>::set_identity().set_translation(-cx,-cy,-cz);
   vcl_vector<vgl_homg_point_3d<T> > temp;
   for (typename vcl_vector<vgl_homg_point_3d<T> >::const_iterator
        pit = points.begin(); pit != points.end(); pit++)
@@ -90,13 +87,7 @@ compute_from_points(vcl_vector<vgl_homg_point_3d<T> > const& points)
   //Points might be coincident
   if (!this->scale_xyzroot2(temp, radius))
     return false;
-  T scale = 1/radius;
-  this->t12_matrix_.put(0,0, scale);
-  this->t12_matrix_.put(1,1, scale);
-  this->t12_matrix_.put(2,2, scale);
-  this->t12_matrix_.put(0,3, -cx*scale);
-  this->t12_matrix_.put(1,3, -cy*scale);
-  this->t12_matrix_.put(2,3, -cz*scale);
+  vgl_h_matrix_3d<T>::set_scale(T(1)/radius);
   return true;
 }
 

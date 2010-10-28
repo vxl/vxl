@@ -76,8 +76,7 @@ compute_from_points(vcl_vector<vgl_homg_point_2d<T> > const& points,
 {
   T cx, cy;
   this->center_of_mass(points, cx, cy);
-  this->t12_matrix_.set_identity();
-  this->t12_matrix_.put(0,2, -cx);    this->t12_matrix_.put(1,2, -cy);
+  vgl_h_matrix_2d<T>::set_identity().set_translation(-cx,-cy);
   vcl_vector<vgl_homg_point_2d<T> > temp;
   for (typename vcl_vector<vgl_homg_point_2d<T> >::const_iterator
        pit = points.begin(); pit != points.end(); pit++)
@@ -87,27 +86,20 @@ compute_from_points(vcl_vector<vgl_homg_point_2d<T> > const& points,
   }
 
   if (isotropic) {
-    T radius = 1;
+    T radius = T(1);
     //Points might be coincident
     if (!this->scale_xyroot2(temp, radius))
       return false;
-    T scale = 1/radius;
-    this->t12_matrix_.put(0,0, scale);
-    this->t12_matrix_.put(1,1, scale);
-    this->t12_matrix_.put(0,2, -cx*scale);
-    this->t12_matrix_.put(1,2, -cy*scale);
+    vgl_h_matrix_2d<T>::set_scale(T(1)/radius);
     return true;
   }
   T sdx = 1, sdy = 1, c = 1, s = 0;
   if (!this->scale_aniostropic(temp, sdx, sdy, c, s))
     return false;
   T scx = 1/sdx, scy = 1/sdy;
-  this->t12_matrix_.put(0, 0, c*scx);
-  this->t12_matrix_.put(0, 1, -s*scx);
-  this->t12_matrix_.put(0, 2, (-c*scx*cx+s*scx*cy));
-  this->t12_matrix_.put(1, 0, s*scy);
-  this->t12_matrix_.put(1, 1, c*scy);
-  this->t12_matrix_.put(1, 2, (-s*scy*cx-c*scy*cy));
+  T data[] = { c*scx, -s*scx, -c*scx*cx +s*scx*cy,
+               s*scy,  c*scy, -s*scy*cx -c*scy*cy };
+  vgl_h_matrix_2d<T>::set_affine(vnl_matrix_fixed<T,2,3>(data));
   return true;
 }
 
