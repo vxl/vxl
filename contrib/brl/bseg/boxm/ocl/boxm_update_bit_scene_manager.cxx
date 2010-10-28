@@ -893,10 +893,9 @@ bool boxm_update_bit_scene_manager::build_update_program(vcl_string const& funct
     if (!n2)
       return false;
     this->prog_ = this->prog_.replace(pos_start, n1, functor.c_str(), n2);
-    return this->build_kernel_program(program_,options)==SDK_SUCCESS;
   }
 #endif
-  return false;
+    return this->build_kernel_program(program_,options)==SDK_SUCCESS;
 }
 
 bool boxm_update_bit_scene_manager::set_query_point_args()
