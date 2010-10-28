@@ -1,11 +1,12 @@
 // This is brl/bbas/baio/baio_unix.cxx
 #include "baio.h"
+//:
+// \file
 #include <vcl_iostream.h> //for vcl_cout
 
-
-//UNIX specific includes 
+//UNIX specific includes
 #include <aio.h>     //for aio_read
-#include <fcntl.h>   // for open (not really necessary   
+#include <fcntl.h>   // for open (not really necessary
 #include <iostream>  //for cout
 #include <strings.h> //includes bzero
 #include <stdlib.h>  //includes malloc
@@ -15,72 +16,64 @@
 
 //: baio_info struct: wrapper for status variables
 struct baio_info {
-  aiocb my_aiocb; 
+  aiocb my_aiocb;
 };
 
-baio::baio() 
+baio::baio()
 {
-  info_ = new baio_info();  
+  info_ = new baio_info();
 }
 
 baio::~baio()
 {
-  if(info_) 
+  if (info_)
     delete info_;
 }
 
-//: Opens and reads file asynchronously 
+//: Opens and reads file asynchronously
 void baio::read(vcl_string filename, char* buff, unsigned BUFSIZE)
 {
-
   // 1. call c open to get standard file handle
   int fhandle = open(filename.c_str(), O_RDONLY);
-  if (fhandle < 0) { 
+  if (fhandle < 0) {
     vcl_cerr<<"baio (linux)::read could not open file"<<filename<<vcl_endl;
     perror("open");
   }
-  
-  // 2. Zero out the aiocb structure (recommended) 
+
+  // 2. Zero out the aiocb structure (recommended)
   bzero( (char *) &(info_->my_aiocb), sizeof(struct aiocb) );
 
-  // 3. Allocate a data buffer for the aiocb request 
+  // 3. Allocate a data buffer for the aiocb request
   info_->my_aiocb.aio_buf = buff;
   if (!info_->my_aiocb.aio_buf) {
     vcl_cerr<<"baio (linux)::read could not allocate buffer of size "<<BUFSIZE<<vcl_endl;
     perror("malloc");
   }
-  
-  //4.  Initialize the necessary fields in the aiocb 
+
+  //4.  Initialize the necessary fields in the aiocb
   info_->my_aiocb.aio_fildes = fhandle;
   info_->my_aiocb.aio_nbytes = BUFSIZE;
   info_->my_aiocb.aio_offset = 0;
 
   //5.  Call AIO_READ using my_aiocb struct
   int STATUS = aio_read( &(info_->my_aiocb) );
-  if(STATUS < 0) {
+  if (STATUS < 0) {
     vcl_cerr<<"baio (linux)::read throws error on aio_read: "<<STATUS<<vcl_endl;
     perror("aio_read");
   }
 }
 
-baio_status baio::status() 
+baio_status baio::status()
 {
   int status = aio_error( &(info_->my_aiocb) );
-  if(status == EINPROGRESS) {
-    return BAIO_IN_PROGRESS; 
-  }
-  if(status == 0 ) {
-    return BAIO_FINISHED; 
-  }
-  if(status == ECANCELED) {
-    return BAIO_FINISHED; 
-  }
-  if(status < 0 ) {
-    return BAIO_ERROR; 
-  }
+  if (status == EINPROGRESS)    return BAIO_IN_PROGRESS;
+  else if (status == 0)         return BAIO_FINISHED;
+  else if (status == ECANCELED) return BAIO_FINISHED;
+  else if (status < 0 )         return BAIO_ERROR;
+  else                          return BAIO_ERROR;
 }
 
-char* baio::buffer() 
+char* baio::buffer()
 {
   return (char*) (info_->my_aiocb.aio_buf);
 }
