@@ -233,6 +233,15 @@ vgl_h_matrix_3d<T>& vgl_h_matrix_3d<T>::set_translation(T tx, T ty, T tz)
 }
 
 template <class T>
+vgl_h_matrix_3d<T>& vgl_h_matrix_3d<T>::set_scale(const T scale)
+{
+  for (unsigned r = 0; r<3; ++r)
+    for (unsigned c = 0; c<4; ++c)
+      t12_matrix_[r][c]*=scale;
+  return *this;
+}
+
+template <class T>
 vgl_h_matrix_3d<T>& vgl_h_matrix_3d<T>::
 set_rotation_about_axis(vnl_vector_fixed<T,3> const& axis, T angle)
 {

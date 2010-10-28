@@ -105,6 +105,12 @@ class vgl_h_matrix_1d
   vgl_h_matrix_1d& set(T const* t_matrix);
   //: Set to given 2x2 matrix
   vgl_h_matrix_1d& set(vnl_matrix_fixed<T,2,2> const& t_matrix);
+  //: compose the current transform with a uniform scaling transformation, S.
+  // $S = \left[ \begin{array}{cc}
+  //                                s & 0 \\%
+  //                                0 & 1
+  // \end{array}\right]$                         , Ts = S*T.
+  vgl_h_matrix_1d& set_scale(const T scale);
 
   //: Read H from file
   bool read(char const* filename);

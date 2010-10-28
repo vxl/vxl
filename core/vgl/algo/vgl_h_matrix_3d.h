@@ -112,6 +112,15 @@ class vgl_h_matrix_3d
   vgl_h_matrix_3d& set_identity();
   //: set H[0][3] = tx, H[1][3] = ty, and H[2][3] = tz, other elements unaltered
   vgl_h_matrix_3d& set_translation(T tx, T ty, T tz);
+  //: compose the current transform with a uniform scaling transformation, S.
+  // $S = \left[ \begin{array}{cccc}
+  //                           s & 0 & 0 & 0 \\%
+  //                           0 & s & 0 & 0 \\%
+  //                           0 & 0 & s & 0 \\%
+  //                           0 & 0 & 0 & 1
+  // \end{array}\right]$                         , Ts = S*T.
+  vgl_h_matrix_3d& set_scale(const T scale);
+
   //: Just the upper 3x3 part of the matrix is replaced by a rotation matrix.
   vgl_h_matrix_3d& set_rotation_matrix(vnl_matrix_fixed<T, 3, 3> const& R);
   //: Set to rotation about an axis

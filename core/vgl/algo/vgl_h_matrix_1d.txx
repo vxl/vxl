@@ -181,6 +181,14 @@ vgl_h_matrix_1d<T>::set(vnl_matrix_fixed<T,2,2> const& H)
   return *this;
 }
 
+template <class T>
+vgl_h_matrix_1d<T>& vgl_h_matrix_1d<T>::set_scale(const T scale)
+{
+  t12_matrix_[0][0]*=scale;
+  t12_matrix_[0][1]*=scale;
+  return *this;
+}
+
 //-------------------------------------------------------------------
 template <class T>
 bool vgl_h_matrix_1d<T>::
