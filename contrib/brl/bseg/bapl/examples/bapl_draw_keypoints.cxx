@@ -4,6 +4,7 @@
 
 #include <vcl_sstream.h>
 #include <vcl_iostream.h>
+#include <vcl_fstream.h>
 #include <vul/vul_arg.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
