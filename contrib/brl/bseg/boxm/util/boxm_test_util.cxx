@@ -19,16 +19,11 @@ perspective_to_rational(vpgl_perspective_camera<double>& cam_pers)
 {
   vnl_matrix_fixed<double,3,4> cam_pers_matrix = cam_pers.get_matrix();
   vcl_vector<double> neu_u,den_u,neu_v,den_v;
-  double x_scale = 1.0,
-         x_off = 0.0,
-         y_scale = 1.0,
-         y_off = 0.0,
-         z_scale = 1.0,
-         z_off = 0.0,
-         u_scale = 1.0,
-         u_off = 0.0,
-         v_scale = 1.0,
-         v_off = 0.0;
+  double x_scale = 1.0, x_off = 0.0,
+         y_scale = 1.0, y_off = 0.0,
+         z_scale = 1.0, z_off = 0.0,
+         u_scale = 1.0, u_off = 0.0,
+         v_scale = 1.0, v_off = 0.0;
 
   for (int i=0; i<20; i++) {
     neu_u.push_back(0.0);
