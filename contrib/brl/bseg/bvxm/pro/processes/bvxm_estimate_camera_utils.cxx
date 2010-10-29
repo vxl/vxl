@@ -28,14 +28,14 @@ void bvxm_camera_estimator::set_world_params(int nx, int ny, int nz, double sx, 
 
 void bvxm_camera_estimator::set_estimation_params(double theta_range, double theta_step, double phi_range, double phi_step, double rot_range, double rot_step, int max_iter_rot_angle)
 {
-   theta_range_ = theta_range;
-   theta_step_ = theta_step;
-   phi_range_ = phi_range;
-   phi_step_ = phi_step;
-   rot_range_ = rot_range;
-   rot_step_ = rot_step;
-   max_iter_rot_angle_ = max_iter_rot_angle;
-   estimation_params_set_ = true;
+  theta_range_ = theta_range;
+  theta_step_ = theta_step;
+  phi_range_ = phi_range;
+  phi_step_ = phi_step;
+  rot_range_ = rot_range;
+  rot_step_ = rot_step;
+  max_iter_rot_angle_ = max_iter_rot_angle;
+  estimation_params_set_ = true;
 }
 
 vil_image_view<float> bvxm_camera_estimator::convert_to_spherical_coordinates(const vil_image_view<float> &img,
@@ -240,18 +240,12 @@ double bvxm_camera_estimator::estimate_rotation_angle(const vil_image_view<float
     vgl_h_matrix_2d<double> H;
     vgl_h_matrix_2d<double> H_temp;
 
-    H.set_identity();
+    H.set_identity().set_translation(-center_x,-center_y);
 
-    H_temp.set_identity();
-    H_temp.set_translation(-center_x,-center_y);
+    H_temp.set_identity().set_rotation(curr_rot);
     H = H_temp*H;
 
-    H_temp.set_identity();
-    H_temp.set_rotation(curr_rot);
-    H = H_temp*H;
-
-    H_temp.set_identity();
-    H_temp.set_translation(center_x,center_y);
+    H_temp.set_identity().set_translation(center_x,center_y);
     H = H_temp*H;
 
     vil_image_view<float> img2_rot(img2.ni(),img2.nj());

@@ -163,10 +163,7 @@ breg3d_ekf_camera_optimizer_state breg3d_ekf_camera_optimizer::optimize(bvxm_vox
     dC(2,0) = prev_state.get_point().z() - substep_state.get_point().z();
 
     vnl_matrix_fixed<double,3,1> dT = substep_state.get_rotation().as_matrix()*(dC);
-    vnl_matrix_fixed<double,4,4> dE(0.0);
-    dE.update(dR,0,0);
-    dE.update(dT,0,3);
-    dE(3,3) = 1.0;
+    vnl_matrix_fixed<double,4,4> dE; dE.set_identity().update(dR,0,0).update(dT,0,3);
 
     vnl_vector_fixed<double,6> total_step = matrix_to_coeffs_SE3(dE);
     // scale down translation coefficients
@@ -206,7 +203,7 @@ breg3d_ekf_camera_optimizer_state breg3d_ekf_camera_optimizer::optimize_once(bvx
 
   // Project the error covariance ahead
   vnl_matrix_fixed<double,6,6> P_pred = prev_state.get_error_covariance() + prediction_error_covar_;
- // vnl_matrix_fixed<double,6,6> P_pred = prediction_error_covar_;
+  // vnl_matrix_fixed<double,6,6> P_pred = prediction_error_covar_;
 
   // get a planar approximation of the world
   vgl_plane_3d<double> world_plane = vox_world->fit_plane();
@@ -236,9 +233,7 @@ breg3d_ekf_camera_optimizer_state breg3d_ekf_camera_optimizer::optimize_once(bvx
   H.update(J,0,0);
 
   if (use_gps) {
-    vnl_matrix<double> I6(6,6);
-    I6.set_identity();
-    H.update(I6,nhomography,0);
+    H.update(vnl_matrix<double>(6,6).set_identity(),nhomography,0);
   }
 
   // Compute the Kalman Gain
@@ -309,9 +304,7 @@ breg3d_ekf_camera_optimizer_state breg3d_ekf_camera_optimizer::optimize_once(bvx
 
 
   // Update error covariance
-  vnl_matrix<double> I6(6,6);
-  I6.set_identity();
-  vnl_matrix_fixed<double,6,6> P_post = (I6 - K*H)*P_pred;
+  vnl_matrix_fixed<double,6,6> P_post = (vnl_matrix<double>(6,6).set_identity() - K*H)*P_pred;
 
   vcl_cout << "P_pred = " << P_pred << '\n'
            << "P_post = " << P_post << vcl_endl;

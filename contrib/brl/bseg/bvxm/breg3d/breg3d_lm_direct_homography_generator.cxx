@@ -15,12 +15,10 @@ ihog_transform_2d breg3d_lm_direct_homography_generator::compute_homography()
   ihog_world_roi roi(img0_->ni()- 2*border, img0_->nj()- 2*border,vgl_point_2d<double>(border,border));
 
   ihog_transform_2d init_xform;
-  if (this->compute_projective_) {
-    vnl_double_3x3 M; M.set_identity();
-    init_xform.set_projective(M);
-  }
+  if (this->compute_projective_)
+    init_xform.set_projective(vnl_double_3x3().set_identity());
   else
-    init_xform.set_affine(vnl_double_2x3(1,0,0, 0,1,0));
+    init_xform.set_affine(vnl_double_2x3().set_identity());
 
   ihog_minimizer *minimizer = 0;
   // no masks

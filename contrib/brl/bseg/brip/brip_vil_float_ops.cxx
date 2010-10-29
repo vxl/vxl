@@ -540,7 +540,7 @@ vil_image_resource_sptr brip_vil_float_ops::negate(vil_image_resource_sptr const
 
   vil_pixel_format fmt = imgr->pixel_format();
   switch (fmt)
-    {
+  {
 #define NEGATE_CASE(FORMAT, T) \
    case FORMAT: { \
     vil_image_view<T> view = imgr->get_copy_view(); \
@@ -549,16 +549,16 @@ vil_image_resource_sptr brip_vil_float_ops::negate(vil_image_resource_sptr const
     outr = vil_new_image_resource_of_view(view);  \
     break; \
                 }
-      NEGATE_CASE(VIL_PIXEL_FORMAT_BYTE, vxl_byte);
-      NEGATE_CASE(VIL_PIXEL_FORMAT_UINT_32, vxl_uint_32);
-      NEGATE_CASE(VIL_PIXEL_FORMAT_UINT_16, vxl_uint_16);
-      NEGATE_CASE(VIL_PIXEL_FORMAT_INT_16, vxl_int_16);
-      NEGATE_CASE(VIL_PIXEL_FORMAT_FLOAT, float);
-      NEGATE_CASE(VIL_PIXEL_FORMAT_DOUBLE, double);
+    NEGATE_CASE(VIL_PIXEL_FORMAT_BYTE, vxl_byte);
+    NEGATE_CASE(VIL_PIXEL_FORMAT_UINT_32, vxl_uint_32);
+    NEGATE_CASE(VIL_PIXEL_FORMAT_UINT_16, vxl_uint_16);
+    NEGATE_CASE(VIL_PIXEL_FORMAT_INT_16, vxl_int_16);
+    NEGATE_CASE(VIL_PIXEL_FORMAT_FLOAT, float);
+    NEGATE_CASE(VIL_PIXEL_FORMAT_DOUBLE, double);
 #undef NEGATE_CASE
-    default:
-      vcl_cout << "Unknown image format\n";
-    }
+   default:
+    vcl_cout << "Unknown image format\n";
+  }
   return outr;
 }
 
@@ -1043,7 +1043,7 @@ max_scale_trace_value(vil_image_view<float> input,
   for (unsigned r = 0; r<nj; ++r)
     for (unsigned c = 0; c<ni; ++c)
     {
-     difference_image(c,r) = vcl_abs(difference_image(c,r) - tr_normalized2(c,r));
+      difference_image(c,r) = vcl_abs(difference_image(c,r) - tr_normalized2(c,r));
     }
   double min_bd, max_bd;
   vil_math_value_range(difference_image,min_bd,max_bd);
@@ -2595,12 +2595,8 @@ bool brip_vil_float_ops::homography(vil_image_view<float> const& input,
     output_roi = new vsol_box_2d();
     output_roi->add_point(0, 0);
     output_roi->add_point(temp->width(), temp->height());
-    vnl_matrix_fixed<double,3,3> Mt = H.get_matrix();
-    vnl_matrix_fixed<double,3,3> t;
-    t[0][0]=1;  t[0][1]=0; t[0][2]=-temp->get_min_x();
-    t[1][0]=0;  t[1][1]=1; t[1][2]=-temp->get_min_y();
-    t[2][0]=0;  t[2][1]=0; t[2][2]=1;
-    Hinv = vgl_h_matrix_2d<double> (vnl_inverse(t*Mt));
+    vgl_h_matrix_2d<double> t; t.set_identity().set_translation(-temp->get_min_x(),-temp->get_min_y());
+    Hinv = (t*H).get_inverse();
   }
   else // Case II, the output image size is fixed so we have to find the
   {    // inverse mapping of the output roi and intersect with the input roi
@@ -2715,8 +2711,7 @@ brip_vil_float_ops::rotate(vil_image_view<float> const& input,
   double deg_to_rad = vnl_math::pi/180.0;
   double rang = deg_to_rad*ang;
   vgl_h_matrix_2d<double> H;
-  H.set_identity();
-  H.set_rotation(rang);
+  H.set_identity().set_rotation(rang);
   vil_image_view<float> temp;
   //The transform is adjusted to map the full input domain onto
   //the output image.
@@ -4221,8 +4216,7 @@ static void rotation_offset(int ni, int nj, float theta_deg,
   double deg_to_rad = vnl_math::pi/180.0;
   double rang = deg_to_rad*theta_deg;
   vgl_h_matrix_2d<double> H;
-  H.set_identity();
-  H.set_rotation(rang);
+  H.set_identity().set_rotation(rang);
   vsol_box_2d_sptr input_roi;
   vsol_polygon_2d_sptr input_poly, output_poly;
   input_roi = new vsol_box_2d();
@@ -4232,17 +4226,10 @@ static void rotation_offset(int ni, int nj, float theta_deg,
   if (!bsol_algs::homography(input_poly, H, output_poly))
     return;
   vsol_box_2d_sptr temp = output_poly->get_bounding_box();
-    vnl_matrix_fixed<double,3, 3> Mt = H.get_matrix();
-    vnl_matrix_fixed<double,3, 3> t, tMt;
-    t[0][0]=1;  t[0][1]=0; t[0][2]=-temp->get_min_x();
-    t[1][0]=0;  t[1][1]=1; t[1][2]=-temp->get_min_y();
-    t[2][0]=0;  t[2][1]=0; t[2][2]=1;
-    tMt = t*Mt;
-    vnl_vector_fixed<double, 3> org, torg;
-    org[0]=i; org[1]=j; org[2]=1.0;
-    torg = tMt*org;
-    ti = static_cast<int>(torg[0]);
-    tj = static_cast<int>(torg[1]);
+  vgl_h_matrix_2d<double> t; t.set_identity().set_translation(-temp->get_min_x(),-temp->get_min_y());
+  vgl_homg_point_2d<double> torg = (t*H)*vgl_homg_point_2d<double>(double(i),double(j));
+  ti = static_cast<int>(torg.x());
+  tj = static_cast<int>(torg.y());
 }
 
 vil_image_view<float> brip_vil_float_ops::

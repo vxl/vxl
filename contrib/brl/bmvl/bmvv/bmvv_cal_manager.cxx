@@ -415,11 +415,7 @@ void bmvv_cal_manager::save_camera()
 
 void bmvv_cal_manager::set_identity_camera()
 {
-  vnl_matrix_fixed<double,3,4> M;
-  M[0][0] = 1.0;   M[0][1] = 0.0; M[0][2] = 0.0; M[0][3] = 0.0;
-  M[1][0] = 0.0;   M[1][1] = 1.0; M[1][2] = 0.0; M[1][3] = 0.0;
-  M[2][0] = 0.0;   M[2][1] = 0.0; M[2][2] = 0.0; M[2][3] = 1.0;
-  cam_ = vgl_p_matrix<double>(M);
+  cam_.set_identity();
 }
 
 void bmvv_cal_manager::load_world()

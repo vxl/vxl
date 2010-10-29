@@ -35,11 +35,7 @@ void strk_tracking_face_2d::centroid(double& x, double& y) const
 
 static vnl_matrix_fixed<double,3,3> ident()
 {
-  vnl_matrix_fixed<double,3,3> M;
-  M[0][0] = 1.0;   M[0][1] = 0.0;   M[0][2] = 0.0;
-  M[1][0] = 0.0;   M[1][1] = 1.0;   M[1][2] = 0.0;
-  M[2][0] = 0.0;   M[2][1] = 0.0;   M[2][2] = 1.0;
-  return M;
+  return vnl_matrix_fixed<double,3,3>().set_identity();
 }
 
 void strk_tracking_face_2d::init_bins()
@@ -311,7 +307,7 @@ init_intensity_info(vtol_face_2d_sptr const& face,
     return;
   vgl_polygon_scan_iterator<double> psi(p, true);
 
-  //go throught the pixels once to gather statistics for the face Npix etc.
+  //go through the pixels once to gather statistics for the face Npix etc.
   for (psi.reset(); psi.next();)
     for (int x = psi.startx(); x<=psi.endx(); ++x)
     {
@@ -528,13 +524,8 @@ void strk_tracking_face_2d::transform(double tx, double ty, double theta, double
   }
   //update global transform
   vnl_matrix_fixed<double,3,3> Mt, Mt_inv, M, Mf;
-  Mt[0][0] = 1.0;   Mt[0][1] = 0.0;   Mt[0][2] = -xo;
-  Mt[1][0] = 0.0;   Mt[1][1] = 1.0;   Mt[1][2] = -yo;
-  Mt[2][0] = 0.0;   Mt[2][1] = 0.0;   Mt[2][2] = 1.0;
-
-  Mt_inv[0][0] = 1.0;   Mt_inv[0][1] = 0.0;   Mt_inv[0][2] = xo+tx;
-  Mt_inv[1][0] = 0.0;   Mt_inv[1][1] = 1.0;   Mt_inv[1][2] = yo+ty;
-  Mt_inv[2][0] = 0.0;   Mt_inv[2][1] = 0.0;   Mt_inv[2][2] = 1.0;
+  Mt.set_identity().set(0,2,-xo).set(1,2,-yo);
+  Mt_inv.set_identity().set(0,2,xo+tx).set(1,2,yo+ty);
 
   double scc = c*scale, scs = s*scale;
   M[0][0] =scc ;   M[0][1] = -scs;   M[0][2] = 0;

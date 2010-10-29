@@ -18,9 +18,7 @@ template <class T>
 vpgl_comp_rational_camera<T>::vpgl_comp_rational_camera():
   vpgl_rational_camera<T>()
 {
-  matrix_[0][0] = (T)1;   matrix_[0][1] = (T)0;   matrix_[0][2] = (T)0;
-  matrix_[1][0] = (T)0;   matrix_[1][1] = (T)1;   matrix_[1][2] = (T)0;
-  matrix_[2][0] = (T)0;   matrix_[2][1] = (T)0;   matrix_[2][2] = (T)1;
+  matrix_.set_identity();
 }
 
 //: Constructor from a rational camera and an affine matrix
@@ -36,12 +34,11 @@ vpgl_comp_rational_camera(vnl_matrix_fixed<T, 3,3> const& M,
 template <class T>
 vpgl_comp_rational_camera<T>::
 vpgl_comp_rational_camera(const T tu, const T tv,
-                          vpgl_rational_camera<T> const& rcam):
+                          vpgl_rational_camera<T> const& rcam) :
   vpgl_rational_camera<T>(rcam)
 {
-  matrix_[0][0] = (T)1;   matrix_[0][1] = (T)0;   matrix_[0][2] = tu;
-  matrix_[1][0] = (T)0;   matrix_[1][1] = (T)1;   matrix_[1][2] = tv;
-  matrix_[2][0] = (T)0;   matrix_[2][1] = (T)0;   matrix_[2][2] = (T)1;
+  matrix_.set_identity();
+  set_translation(tu,tv);
 }
 
 //: Constructor from translation rotation only first rotate then translate
@@ -52,7 +49,7 @@ vpgl_comp_rational_camera(const T tu, const T tv, const T angle_in_radians,
   vpgl_rational_camera<T>(rcam)
 {
   this->set_trans_rotation(tu, tv, angle_in_radians);
-  matrix_[2][0] = (T)0; matrix_[2][1] = (T)0;  matrix_[2][2] = (T)1;
+  set_translation(T(0),T(0));
 }
 
 //: Constructor with all transform parameters
@@ -64,7 +61,7 @@ vpgl_comp_rational_camera(const T tu, const T tv, const T angle_in_radians,
   vpgl_rational_camera<T>(rcam)
 {
   this->set_all(tu, tv, angle_in_radians, su, sv);
-  matrix_[2][0] = (T)0;   matrix_[2][1] = (T)0;   matrix_[2][2] = (T)1;
+  set_translation(T(0),T(0));
 }
 
 //: read from a file

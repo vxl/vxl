@@ -26,9 +26,7 @@ bugl_gaussian_point_3d<double> brct_structure_estimator::forward(
   vnl_double_2 z_pred = brct_algos::projection_3d_point(P_, Y);
   vnl_matrix_fixed<double, 3, 2> G = Q*H.transpose()*
     vnl_inverse(H*Q*H.transpose() + observe.get_covariant_matrix());
-  vnl_double_3x3 I;
-  I.set_identity();
-  Q = (I - G*H)*Q;
+  Q = (vnl_double_3x3().set_identity() - G*H)*Q;
   state.set_covariant_matrix(Q);
 
   vnl_double_2 z(observe.x(), observe.y());

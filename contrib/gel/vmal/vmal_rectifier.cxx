@@ -307,9 +307,7 @@ int vmal_rectifier::compute_initial_joint_epipolar_transforms (
   // Next, compute the mapping H' for the second image
 
   // First of all, translate the centre pixel to 0, 0
-  H0[0][0] = 1.0; H0[0][1] = 0.0; H0[0][2] = -ci;
-  H0[1][0] = 0.0; H0[1][1] = 1.0; H0[1][2] = -cj;
-  H0[2][0] = 0.0; H0[2][1] = 0.0; H0[2][2] = 1.0;
+  H0.set_identity().set(0,2,-ci).set(1,2,-cj);
 
   // Translate the epipole as well
   p1 = H0 * p1;
@@ -326,24 +324,18 @@ int vmal_rectifier::compute_initial_joint_epipolar_transforms (
   double c = vcl_cos (theta);
   double s = vcl_sin (theta);
 
-  vnl_double_3x3 T;
+  double t[] = { c,   s, 0.0,
+                -s,   c, 0.0,
+               0.0, 0.0, 1.0 };
+  vnl_double_3x3 T(t);
 
-  T[0][0] =   c; T[0][1] =   s; T[0][2] = 0.0;
-  T[1][0] =  -s; T[1][1] =   c; T[1][2] = 0.0;
-  T[2][0] = 0.0; T[2][1] = 0.0; T[2][2] = 1.0;
-
-    // Multiply things out
+  // Multiply things out
   H0 =  T * H0;
   p1 = T * p1;
   vnl_double_3 ep1=H0*epipoles_[0];
 
   // Now send the epipole to infinity
-  double x = p1[2]/p1[0];
-
-  vnl_double_3x3 E;
-  E[0][0] = 1.0; E[0][1] = 0.0; E[0][2] = 0.0;
-  E[1][0] = 0.0; E[1][1] = 1.0; E[1][2] = 0.0;
-  E[2][0] =  -x; E[2][1] = 0.0; E[2][2] = 1.0;
+  vnl_double_3x3 E; E.set_identity().set(2,0, -p1[2]/p1[0]);
 
   // Multiply things out.  Put the result in H0
   H0 = E * H0;
@@ -421,43 +413,37 @@ vnl_double_3x3 vmal_rectifier::affine_correction (
    int numpoints,
    const vnl_double_3x3 &H0,
    const vnl_double_3x3 &H1)
-  {
-   // Correct according to an affine transformation
-   // Finds the correction to H1 that would make it closest to H0
+{
+  // Correct according to an affine transformation
+  // Finds the correction to H1 that would make it closest to H0
 
   // Matrices for a linear least-squares problem
   vnl_matrix<double> E(numpoints, 3);
   vnl_vector<double> x(numpoints);
-   // Fill out the equations
-   for (int i=0; i<numpoints; i++)
-   {
-      // Compute the transformed points
-      vnl_double_3 u2hat = H1 * points1[i];
-      double uu2 = u2hat[0]/u2hat[2];
-      double vv2 = u2hat[1]/u2hat[2];
+  // Fill out the equations
+  for (int i=0; i<numpoints; i++)
+  {
+    // Compute the transformed points
+    vnl_double_3 u2hat = H1 * points1[i];
+    double uu2 = u2hat[0]/u2hat[2];
+    double vv2 = u2hat[1]/u2hat[2];
 
-      vnl_double_3 u1hat = H0 * points0[i];
-      double uu1 = u1hat[0]/u1hat[2];
+    vnl_double_3 u1hat = H0 * points0[i];
+    double uu1 = u1hat[0]/u1hat[2];
 
-      // Fill out the equation
-      E[i][0] = uu2;
-      E[i][1] = vv2;
-      E[i][2] = 1.0;
-      x[i] = uu1;
-   }
+    // Fill out the equation
+    E.set_row(i, vnl_double_3(uu2,vv2,1.0));
+    x[i] = uu1;
+  }
 
-   // Now solve the equations
-   vnl_svd<double> SVD(E);
-   vnl_double_3 a=SVD.solve(x);
+  // Now solve the equations
+  vnl_svd<double> SVD(E);
+  vnl_double_3 a=SVD.solve(x);
   // rhVector a = lin_solve(E, x);
 
-   // Now, make up a matrix A to do the transformation
-   vnl_double_3x3 A;
-   A.set_identity();
-   A[0][0] = a[0];  A[0][1] = a[1];  A[0][2] = a[2];
-
-   // This is the affine correction matrix to be returned
-   return A;
+  // Now, make up a matrix to do the transformation
+  // This is the affine correction matrix to be returned
+  return vnl_double_3x3().set_identity().set_row(0,a);
 }
 
 void vmal_rectifier::apply_affine_correction (
@@ -555,7 +541,7 @@ void vmal_rectifier::resample(vnl_double_3x3 H0, vnl_double_3x3 H1,
       ipointR[0]=j; ipointR[1]=i; ipointR[2]=1.0;
       opointL = H0 * ipointL;
       opointR = H1 * ipointR;
-      opointL /= opointL[2]; // unhomogenize the point... [x,y,1.0]
+      opointL /= opointL[2]; // inhomogenize the point... [x,y,1.0]
       opointR /= opointR[2];
       // save the extremes for image sizing and bounds checking
       boxL.update(opointL[0],opointL[1]);
@@ -587,7 +573,7 @@ void vmal_rectifier::resample(vnl_double_3x3 H0, vnl_double_3x3 H1,
       opointL[0]=j+boxL.min()[0]; opointL[1]=i+boxL.min()[1]; opointL[2]=1.0;
 
       // map it into the original image(s)
-      ipointL = H0inv * opointL; ipointL /= ipointL[2]; // unhomogenize
+      ipointL = H0inv * opointL; ipointL /= ipointL[2]; // inhomogenize
       ipointR = H1inv * opointL; ipointR /= ipointR[2];
 
       // Bounds checking...

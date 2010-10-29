@@ -57,8 +57,7 @@ vnl_double_3x3 vpgl_interpolate::expr(vnl_double_3x3 const& r)
   double norm_r = vcl_sqrt(r[0][1]*r[0][1]+r[0][2]*r[0][2]+r[1][2]*r[1][2]);
   if (norm_r<tol)//the case of an identity rotation
   {
-    ex.set_identity();
-    return ex;
+    return ex.set_identity();
   }
   double sin_r = vcl_sin(norm_r), cos_r = vcl_cos(norm_r);
   vnl_double_3x3 I, rsq = r*r;
@@ -76,8 +75,7 @@ vnl_double_3x3 vpgl_interpolate::A(vnl_double_3x3 const& r)
   double norm_r_cu = norm_r*norm_r_sq;
   if (norm_r<tol)//the case of an identity rotation
   {
-    a.set_identity();
-    return a;
+    return a.set_identity();
   }
   double sin_r = vcl_sin(norm_r), cos_r = vcl_cos(norm_r);
   vnl_double_3x3 I, rsq = r*r;
@@ -94,8 +92,7 @@ vnl_double_3x3 vpgl_interpolate::Ainv(vnl_double_3x3 const& r)
   double norm_r_sq = norm_r*norm_r;
   if (norm_r<tol)//the case of an identity rotation
   {
-    ainv.set_identity();
-    return ainv;
+    return ainv.set_identity();
   }
   double sin_r = vcl_sin(norm_r), cos_r = vcl_cos(norm_r);
   vnl_double_3x3 I, rsq = r*r;
@@ -154,11 +151,11 @@ void vpgl_interpolate::interpolateRt(vnl_double_3x3 R0,
     vnl_double_3x3 d_log_r = log_r*s;
     vnl_double_3x3 R = vpgl_interpolate::expr(log_r*s);
     Rintrp.push_back(R0*R);
-     vnl_double_3x3 a = vpgl_interpolate::A(d_log_r);
-     vnl_double_3x3 ainv = vpgl_interpolate::Ainv(d_log_r);
-     vnl_double_3 sadt = ainv*(s*dt);
-     vnl_double_3 dlt = a*sadt;
-     tintrp.push_back(t0+dlt);
+    vnl_double_3x3 a = vpgl_interpolate::A(d_log_r);
+    vnl_double_3x3 ainv = vpgl_interpolate::Ainv(d_log_r);
+    vnl_double_3 sadt = ainv*(s*dt);
+    vnl_double_3 dlt = a*sadt;
+    tintrp.push_back(t0+dlt);
   }
 }
 

@@ -15,36 +15,34 @@
 #include <vgl/algo/vgl_h_matrix_3d.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 
-static bool cams_near_equal(vpgl_perspective_camera<double> const& c1, 
+static bool cams_near_equal(vpgl_perspective_camera<double> const& c1,
                             vpgl_perspective_camera<double> const& c2,
                             double tolerance)
-{ 
+{
   vpgl_calibration_matrix<double> K1= c1.get_calibration(),
     K2 = c2.get_calibration();
   vgl_rotation_3d<double> R1 = c1.get_rotation(), R2 = c2.get_rotation();
-  vgl_point_3d<double> cc1 = c1.get_camera_center(), 
+  vgl_point_3d<double> cc1 = c1.get_camera_center(),
     cc2 = c2.get_camera_center();
   vnl_matrix_fixed<double, 3,3> Km1 = K1.get_matrix(), Km2 = K2.get_matrix();
   vnl_matrix_fixed<double, 3,3> Rm1 = R1.as_matrix(), Rm2 = R2.as_matrix();
-  for(unsigned r = 0; r<3; ++r)
-    for(unsigned c = 0; c<3; ++c){
-      if(vcl_fabs(Km1[r][c]-Km2[r][c])>tolerance) return false;
-      if(vcl_fabs(Rm1[r][c]-Rm2[r][c])>tolerance) return false;
+  for (unsigned r = 0; r<3; ++r)
+    for (unsigned c = 0; c<3; ++c) {
+      if (vcl_fabs(Km1[r][c]-Km2[r][c])>tolerance) return false;
+      if (vcl_fabs(Rm1[r][c]-Rm2[r][c])>tolerance) return false;
     }
-  if(vcl_fabs(cc1.x()-cc2.x())>tolerance) return false;
-  if(vcl_fabs(cc1.y()-cc2.y())>tolerance) return false;
-  if(vcl_fabs(cc1.z()-cc2.z())>tolerance) return false;
-  return true;
+  return vcl_fabs(cc1.x()-cc2.x())<=tolerance
+      && vcl_fabs(cc1.y()-cc2.y())<=tolerance
+      && vcl_fabs(cc1.z()-cc2.z())<=tolerance;
 }
+
 static void test_perspective_camera()
 {
-    //Construct the camera
-  vnl_double_3x3 m;
-  m[0][0]=2000;m[0][1]=0;m[0][2]=512;
-  m[1][0]=0;m[1][1]=2000;m[1][2]=384;
-  m[2][0]=0;m[2][1]=0;m[2][2]=1;
-
-  vpgl_calibration_matrix<double> K(m);
+  //Construct the camera
+  double data[] = { 2000,    0, 512,
+                       0, 2000, 384,
+                       0,    0,   1 };
+  vpgl_calibration_matrix<double> K = vnl_double_3x3(data);
   vgl_rotation_3d<double> R; // the identity
   vgl_homg_point_3d<double>center(0,0,-10.0);
   vpgl_perspective_camera<double> P(K, center, R);
@@ -63,13 +61,12 @@ static void test_perspective_camera()
 
   TEST_NEAR("test y projection of arbitrary point", hpa_2d.y()/hpa_2d.w(), 2384, 1e-06);
 
- //rotation angle in radians
+  //rotation angle in radians
   double theta = vnl_math::pi/4;//45 degrees
   //y axis is the rotation axis
   vnl_double_3 axis(0.0, 1.0, 0.0);
   vgl_h_matrix_3d<double> tr;
-  tr.set_identity();
-  tr.set_rotation_about_axis(axis, theta);
+  tr.set_identity().set_rotation_about_axis(axis, theta);
   vcl_cout <<"Rotation Matrix\n" << tr << '\n';
   vpgl_perspective_camera<double> P_rot =
     vpgl_perspective_camera<double>::postmultiply(P, tr);
@@ -156,11 +153,11 @@ static void test_perspective_camera()
   k[0][0] = 2200;   k[0][1] = 0;      k[0][2] = 640;
   k[1][0] = 0;      k[1][1] = 2200;   k[1][2] = 360;
   k[2][0] = 0;      k[2][1] = 0;      k[2][2] = 1;
-  
+
   Rm[0][0] =  0.739671;   Rm[0][1] = -0.654561;      Rm[0][2] =  0.156323;
   Rm[1][0] = -0.201219;   Rm[1][1] = -0.436776;      Rm[1][2] = -0.876777;
   Rm[2][0] =  0.642182;   Rm[2][1] =  0.617071;      Rm[2][2] = -0.45478;
-  
+
   vgl_rotation_3d<double> rot(Rm);
   vpgl_calibration_matrix<double> Ko(k);
   vpgl_perspective_camera<double> Po;
@@ -195,4 +192,3 @@ static void test_perspective_camera()
 }
 
 TESTMAIN(test_perspective_camera);
-

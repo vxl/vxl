@@ -10,7 +10,7 @@ static vgl_h_matrix_3d<double> plane_trans(vgl_plane_3d<double> const& plane,
                                            vgl_point_3d<double> const& ref_pt)
 {
   // get the translation that moves the plane to intersect with the origin
-  // note that calling plane.normal() pre-normalizes the vector so 
+  // note that calling plane.normal() pre-normalizes the vector so
   // scale factor is lost, so form normal directly
   vgl_vector_3d<double> n(plane.a(), plane.b(), plane.c());
   double mag = n.length();
@@ -32,13 +32,13 @@ static vgl_h_matrix_3d<double> plane_trans(vgl_plane_3d<double> const& plane,
   //This flip is here to standardize the reference point
   //(typically a camera center)
   //to be in the positive z half space of the x-y plane
-  if(tp.z()<0){
+  if (tp.z()<0) {
     vnl_matrix_fixed<double,3, 3> m(0.0);
     m[0][0] = -1.0; m[1][1] = 1.0; m[2][2]=-1.0;
     vgl_h_matrix_3d<double> Trflip;//180 degree rotation about the y axis
-    Trflip.set_identity(); Trflip.set_rotation_matrix(m);
+    Trflip.set_identity().set_rotation_matrix(m);
     Tr = Trflip*Tr;
-   }
+  }
   return Tr;
 }
 
@@ -91,6 +91,7 @@ homography_from_camera(vpgl_perspective_camera<double> const& cam,
     vpgl_camera_homographies::homography_to_camera(cam, plane);
   return H.get_inverse();
 }
+
 vpgl_perspective_camera<double> vpgl_camera_homographies::
 transform_camera_to_plane(vpgl_perspective_camera<double> const& cam,
                             vgl_plane_3d<double> const& plane)
@@ -100,7 +101,7 @@ transform_camera_to_plane(vpgl_perspective_camera<double> const& cam,
   vgl_h_matrix_3d<double> Tr = plane_trans(plane,cp);
   vgl_h_matrix_3d<double> Trinv = Tr.get_inverse();
   // postmultipy the camera by the inverse
-  vpgl_perspective_camera<double> tcam = 
+  vpgl_perspective_camera<double> tcam =
     vpgl_perspective_camera<double>::postmultiply(cam, Trinv);
   return tcam;
 }
@@ -125,13 +126,13 @@ transform_points_to_plane(vgl_plane_3d<double> const& plane,
 {
   vcl_vector<vgl_point_3d<double> > tr_pts;
   vgl_h_matrix_3d<double> Tr = plane_trans(plane, ref_point);
-  for(vcl_vector<vgl_point_3d<double> >::const_iterator pit = pts.begin();
-      pit != pts.end(); ++pit)
-    {
-      vgl_homg_point_3d<double> hp(*pit);
-      vgl_homg_point_3d<double> tr_hp = Tr(hp);
-      vgl_point_3d<double> trp(tr_hp);
-      tr_pts.push_back(trp);
-    }
+  for (vcl_vector<vgl_point_3d<double> >::const_iterator pit = pts.begin();
+       pit != pts.end(); ++pit)
+  {
+    vgl_homg_point_3d<double> hp(*pit);
+    vgl_homg_point_3d<double> tr_hp = Tr(hp);
+    vgl_point_3d<double> trp(tr_hp);
+    tr_pts.push_back(trp);
+  }
   return tr_pts;
 }

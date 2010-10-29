@@ -82,14 +82,8 @@ void kalman_filter::init_state_3d_estimation()
 
   // compute camera calibration matrix
   vnl_double_3x4 E1, E2;
-  E1[0][0] = 1;       E1[0][1] = 0;        E1[0][2] = 0;          E1[0][3] = 0;
-  E1[1][0] = 0;       E1[1][1] = 1;        E1[1][2] = 0;          E1[1][3] = 0;
-  E1[2][0] = 0;       E1[2][1] = 0;        E1[2][2] = 1;          E1[2][3] = 0;
-
-  E2[0][0] = 1;       E2[0][1] = 0;        E2[0][2] = 0;          E2[0][3] = T[0];
-  E2[1][0] = 0;       E2[1][1] = 1;        E2[1][2] = 0;          E2[1][3] = T[1];
-  E2[2][0] = 0;       E2[2][1] = 0;        E2[2][2] = 1;          E2[2][3] = T[2];
-
+  E1.set_identity();
+  E2.set_identity().set_column(3,T);
   vnl_double_3x4 P1 = K_*E1, P2 = K_*E2;
 
   // save the motion
@@ -100,11 +94,10 @@ void kalman_filter::init_state_3d_estimation()
   vnl_double_3 e = K_*T;
 
   // construct fundamental matrix between the first and second views.
-  vnl_double_3x3 F;
-  F[0][0] = 0;     F[0][1] = -e[2];  F[0][2] = e[1];
-  F[1][0] = e[2];  F[1][1] = 0;      F[1][2] = -e[0];
-  F[2][0] = -e[1]; F[2][1] = e[0];   F[2][2] = 0;
-
+  double data[] = { 0,   -e[2], e[1],
+                    e[2], 0,   -e[0],
+                   -e[1], e[0], 0   };
+  vnl_double_3x3 F(data);
   FMatrix FM(F);
 
   //
@@ -114,13 +107,11 @@ void kalman_filter::init_state_3d_estimation()
   // point matcher using epipolar geometry
   int c = trackers_.size();
 
-  vnl_double_3x3 Sigma3d;
-  vnl_double_2x2 Sigma2d;
-  Sigma2d.set_identity();
-  Sigma3d.set_identity();
+  vnl_double_2x2 Sigma2d; Sigma2d.set_identity();
+  vnl_double_3x3 Sigma3d; Sigma3d.set_identity();
   vcl_cout<<Sigma3d<<'\n';
 
-  for (int t =0; t<c; t++){
+  for (int t =0; t<c; t++) {
     vcl_vector<bugl_normal_point_3d_sptr> pts_3d;
 
     //assert(trackers_[t].size()== time_tick_.size());
@@ -147,9 +138,7 @@ void kalman_filter::init_state_3d_estimation()
         double index = i/double(npts);
         vgl_homg_point_2d<double> p1(dc0->get_x(index),dc0->get_y(index));
         vgl_point_2d<double> temp_p(p1);
-        vnl_double_2x2 sigma1;
-        sigma1.set_identity();
-        bugl_gaussian_point_2d<double> x1(temp_p, sigma1);
+        bugl_gaussian_point_2d<double> x1(temp_p, vnl_double_2x2().set_identity());
         int x0_index = bdgl_curve_algs:: closest_point(ec0, x1.x(), x1.y());
         double angle0 = (*ec0)[x0_index].get_theta();
 
@@ -216,10 +205,7 @@ void kalman_filter::init_covariant_matrix()
 
   // initialize Q0_ to let the variance on
   // velocity direction bigger
-  vnl_double_3x3 Sigma;
-
-  Sigma = 0; Sigma[0][0] = 1;
-  Sigma[1][1] = 0.25; Sigma[2][2] = 0.25;
+  vnl_double_3x3 Sigma(0.0); Sigma.fill_diagonal(0.25).put(0,0,1.0);
 
   vnl_double_3 xaxis(1, 0, 0);
   vnl_double_3 T(X_[0], X_[1], X_[2]);
@@ -237,12 +223,7 @@ void kalman_filter::init_covariant_matrix()
       Q0_[i][j] = Sigma[i][j];
 
   // initialize R
-  for (int i=0; i<2; i++)
-    for (int j=0; j<2; j++)
-      R_[i][j] = 0;
-
-  for (int i=0; i<2; i++)
-    R_[i][i] = 0.25;
+  R_.fill(0.0).fill_diagonal(0.25);
 }
 
 
@@ -256,18 +237,7 @@ void kalman_filter::init_cam_intrinsic()
 
 vnl_double_3x4 kalman_filter::get_projective_matrix(const vnl_double_3& v ) const
 {
-  vnl_double_3x4 M_ex;
-
-  for (int i=0; i<3; i++)
-    for (int j=0; j<3; j++)
-      M_ex[i][j] = 0;
-
-  for (int i=0; i<3; i++)
-    M_ex[i][i] = 1;
-
-  for (int i=0; i<3; i++)
-    M_ex[i][3] = v[i];
-
+  vnl_double_3x4 M_ex; M_ex.set_identity().set_column(3,v);
   return K_*M_ex;
 }
 
@@ -325,8 +295,7 @@ vnl_double_2 kalman_filter::projection(const vnl_double_3x4 &P, const vnl_double
 void kalman_filter::update_observes(const vnl_double_3x4 &P, int iframe)
 {
   observes_[iframe%queue_size_].resize(num_points_);
-  vnl_double_2x2 sigma;
-  sigma.set_identity();
+  vnl_double_2x2 I; I.set_identity();
 
   int c = trackers_.size();
   for (int t=0; t<c; t++){
@@ -338,7 +307,7 @@ void kalman_filter::update_observes(const vnl_double_3x4 &P, int iframe)
       vgl_point_2d<double> u = brct_algos::most_possible_point(trackers_[t][iframe], x);
       // set point
       observes_[iframe%queue_size_][pos].set_point(u);
-      observes_[iframe%queue_size_][pos].set_covariant_matrix(sigma);
+      observes_[iframe%queue_size_][pos].set_covariant_matrix(I);
     }
   }
 }
@@ -797,14 +766,8 @@ vgl_point_2d<double> kalman_filter::get_cur_epipole() const
 
   // compute camera calibration matrix
   vnl_double_3x4 E1, E2;
-  E1[0][0] = 1;       E1[0][1] = 0;        E1[0][2] = 0;          E1[0][3] = 0;
-  E1[1][0] = 0;       E1[1][1] = 1;        E1[1][2] = 0;          E1[1][3] = 0;
-  E1[2][0] = 0;       E1[2][1] = 0;        E1[2][2] = 1;          E1[2][3] = 0;
-
-  E2[0][0] = 1;       E2[0][1] = 0;        E2[0][2] = 0;          E2[0][3] = T[0];
-  E2[1][0] = 0;       E2[1][1] = 1;        E2[1][2] = 0;          E2[1][3] = T[1];
-  E2[2][0] = 0;       E2[2][1] = 0;        E2[2][2] = 1;          E2[2][3] = T[2];
-
+  E1.set_identity();
+  E2.set_identity().set_column(3, T);
   vnl_double_3x4 P1 = K_*E1, P2 = K_*E2;
 
   // compute epipole from velocity
@@ -843,21 +806,7 @@ double kalman_filter::matched_point_prob(vnl_double_2& z, vnl_double_2& z_pred)
 vnl_matrix_fixed<double, 6, 6> kalman_filter::get_transit_matrix(int i, int j)
 {
   assert(i>=0 && j>=0 && j>=i);
-  vnl_matrix_fixed<double, 6, 6> A;
-
   double dt = time_tick_[j] - time_tick_[i];
-
-  // fix the current problem of time stamp
-  for (int i=0; i<6; i++)
-    for (int j=0; j<6; j++)
-      A[i][j] = 0.0;
-
-  for (int i = 0; i<6; i++)
-    A[i][i] = 1;
-
-  for (int i=0; i<3; i++)
-    A[i][i+3] = dt;
-
-  return A;
+  return vnl_matrix_fixed<double,6,6>().set_identity().set(0,3,dt).set(1,4,dt).set(2,5,dt);
 }
 

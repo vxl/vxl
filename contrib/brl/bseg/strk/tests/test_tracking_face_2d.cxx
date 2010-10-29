@@ -116,12 +116,10 @@ static void test_tracking_face_2d(int argc, char* argv[])
   vcl_vector<vtol_vertex_sptr> chain_verts;
   outside_chain->vertices(chain_verts);
   vcl_vector<vtol_one_chain_sptr> chains;
+
+  vnl_matrix_fixed<double, 3, 3> T; T.set_identity();
+  vtol_face_2d_sptr trans_simple_f = btol_tracking_face_2d::transform(simple_f, T);
 #endif // 0
-  vnl_matrix_fixed<double, 3, 3> T;
-  T[0][0] = 1.0;   T[0][1] = 0.0;   T[0][2] = 0.0;
-  T[1][0] = 0.0;   T[1][1] = 1.0;   T[1][2] = 0.0;
-  T[2][0] = 0.0;   T[2][1] = 0.0;   T[2][2] = 1.0;
-  //vtol_face_2d_sptr trans_simple_f = btol_tracking_face_2d::transform(simple_f, T);
 
   int w = 100, h = 100;
   vil1_memory_image_of<float> model_image_uni(w, h), obs_image_uni(w, h), null;

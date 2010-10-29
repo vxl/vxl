@@ -14,7 +14,7 @@
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_line_2d.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
-#if 0
+#if 0 // Later we may use the vgpl f matrix but kill links to oxl now
 #include <mvl/FMatrix.h>
 #endif
 #include <vnl/vnl_inverse.h>
@@ -112,14 +112,9 @@ void brct_epi_reconstructor::init_state_3d_estimation()
   vnl_double_3x4 E0, E1;
 
   //camera for frame 0
-  E0[0][0] = 1;     E0[0][1] = 0;      E0[0][2] = 0;        E0[0][3] = 0;
-  E0[1][0] = 0;     E0[1][1] = 1;      E0[1][2] = 0;        E0[1][3] = 0;
-  E0[2][0] = 0;     E0[2][1] = 0;      E0[2][2] = 1;        E0[2][3] = 0;
-
+  E0.set_identity();
   //camera for frame 1
-  E1[0][0] = 1;     E1[0][1] = 0;      E1[0][2] = 0;        E1[0][3] = T[0];
-  E1[1][0] = 0;     E1[1][1] = 1;      E1[1][2] = 0;        E1[1][3] = T[1];
-  E1[2][0] = 0;     E1[2][1] = 0;      E1[2][2] = 1;        E1[2][3] = T[2];
+  E1.set_identity().set_column(3,T);
 
   vnl_double_3x4 P0 = K_*E0, P1 = K_*E1;
 
@@ -127,15 +122,15 @@ void brct_epi_reconstructor::init_state_3d_estimation()
   motions_[0] = vnl_double_3(0.0,0.0,0.0);
   motions_[1] = T;
 
+#if 0 // Later we may use the vgpl f matrix but kill links to oxl now
   // compute epipole from velocity
   vnl_double_3 e = K_*T;
 
   // construct fundamental matrix between the first and second views.
-  vnl_double_3x3 F;
-  F[0][0] = 0;     F[0][1] = -e[2];  F[0][2] = e[1];
-  F[1][0] = e[2];  F[1][1] = 0;      F[1][2] = -e[0];
-  F[2][0] = -e[1]; F[2][1] = e[0];   F[2][2] = 0;
-#if 0
+  double data[] = { 0,   -e[2], e[1],
+                    e[2], 0,   -e[0],
+                   -e[1], e[0], 0   };
+  vnl_double_3x3 F(data);
   FMatrix FM(F);
 #endif
   //
@@ -146,10 +141,8 @@ void brct_epi_reconstructor::init_state_3d_estimation()
   unsigned int c = tracks_.size();
   joe_observes_.resize(c);
   grad_angles_.resize(c);
-  vnl_double_3x3 Sigma3d;
-  vnl_double_2x2 Sigma2d;
-  Sigma2d.set_identity();
-  Sigma3d.set_identity();
+  vnl_double_2x2 Sigma2d; Sigma2d.set_identity();
+  vnl_double_3x3 Sigma3d; Sigma3d.set_identity();
   vcl_cout<<Sigma3d<<'\n';
   int k = 0;
   for (unsigned int t =0; t<c; ++t)
@@ -174,17 +167,15 @@ void brct_epi_reconstructor::init_state_3d_estimation()
 
       //construct the corresponding point
       vgl_point_2d<double> p0(dc0->get_x(index),dc0->get_y(index));
-      //later we my use vgpl f matrix
-      //      vgl_homg_point_2d<double> p0h(p0.x(), p0.y());
       double angle0 = dc0->get_theta(index);
-      vnl_double_2x2 sigma1;
-      sigma1.set_identity();
-      bugl_gaussian_point_2d<double> x0(p0, sigma1);
+      bugl_gaussian_point_2d<double> x0(p0, vnl_double_2x2().set_identity());
 
       //the epipolar line through the point
 
-      // Later we may use the vgpl f matrix but kill links to oxl now
-      //    vgl_line_2d<double> lr(FM.image2_epipolar_line(p0h));
+#if 0 // Later we may use the vgpl f matrix but kill links to oxl now
+      vgl_homg_point_2d<double> p0h(p0);
+      vgl_line_2d<double> lr(FM.image2_epipolar_line(p0h));
+#endif
       vgl_line_2d<double> lr;
 
       //Construct the corresponding point by intersecting
@@ -240,10 +231,7 @@ void brct_epi_reconstructor::init_covariant_matrix()
 
   // initialize Q0_ to let the variance on
   // velocity direction bigger
-  vnl_double_3x3 Sigma;
-
-  Sigma = 0; Sigma[0][0] = 1;
-  Sigma[1][1] = 0.25; Sigma[2][2] = 0.25;
+  vnl_double_3x3 Sigma; Sigma.set_identity().set(1,1,0.25).set(2,2,0.25);
 
   vnl_double_3 xaxis(1, 0, 0);
   vnl_double_3 T(X_[0], X_[1], X_[2]);
@@ -261,12 +249,7 @@ void brct_epi_reconstructor::init_covariant_matrix()
       Q0_[i][j] = Sigma[i][j];
 
   // initialize R
-  for (int i=0; i<2; i++)
-    for (int j=0; j<2; j++)
-      R_[i][j] = 0;
-
-  for (int i=0; i<2; i++)
-    R_[i][i] = 0.25;
+  R_.fill(0.0).fill_diagonal(0.25);
 }
 
 #if 0
@@ -282,7 +265,7 @@ void brct_epi_reconstructor::init_cam_intrinsic()
 void brct_epi_reconstructor::init_cam_intrinsic()
 {
   // set up the intrinsic matrix of the camera
-  K_[0][0] = 2100; K_[0][1] = 0;        K_[0][2] = 400;
+  K_[0][0] = 2100;     K_[0][1] = 0;    K_[0][2] = 400;
   K_[1][0] = 0;        K_[1][1] = 2100; K_[1][2] = 384;
   K_[2][0] = 0;        K_[2][1] = 0;    K_[2][2] = 1;
 }
@@ -290,18 +273,7 @@ void brct_epi_reconstructor::init_cam_intrinsic()
 
 vnl_double_3x4 brct_epi_reconstructor::get_projective_matrix(const vnl_double_3& v ) const
 {
-  vnl_double_3x4 M_ex;
-
-  for (int i=0; i<3; i++)
-    for (int j=0; j<3; j++)
-      M_ex[i][j] = 0;
-
-  for (int i=0; i<3; i++)
-    M_ex[i][i] = 1;
-
-  for (int i=0; i<3; i++)
-    M_ex[i][3] = v[i];
-
+  vnl_double_3x4 M_ex; M_ex.set_identity().set_column(3,v);
   return K_*M_ex;
 }
 
@@ -359,8 +331,7 @@ vnl_double_2 brct_epi_reconstructor::projection(const vnl_double_3x4 &P, const v
 void brct_epi_reconstructor::update_observes(const vnl_double_3x4 &P, int iframe)
 {
   observes_[iframe%queue_size_].resize(num_points_);
-  vnl_double_2x2 sigma;
-  sigma.set_identity();
+  vnl_double_2x2 I; I.set_identity();
 
   unsigned int c = tracks_.size();
   for (unsigned int t=0; t<c; ++t)
@@ -373,7 +344,7 @@ void brct_epi_reconstructor::update_observes(const vnl_double_3x4 &P, int iframe
       vgl_point_2d<double> u = brct_algos::most_possible_point(tracks_[t][iframe], x);
       // set point
       observes_[iframe%queue_size_][pos].set_point(u);
-      observes_[iframe%queue_size_][pos].set_covariant_matrix(sigma);
+      observes_[iframe%queue_size_][pos].set_covariant_matrix(I);
     }
   }
 }
@@ -383,14 +354,13 @@ bool brct_epi_reconstructor::match_point(vdgl_digital_curve_sptr const& dc,
                                          double grad_angle,
                                          bugl_gaussian_point_2d<double>& p)
 {
-  vnl_double_2x2 sigma;
-  sigma.set_identity();
+  vnl_double_2x2 I; I.set_identity();
   //construct the epipolar line through p0;
   vgl_point_2d<double> e((*e_)[0], (*e_)[1]), temp;
   vgl_line_2d<double> el(e, p0);
   if (!bdgl_curve_algs::match_intersection(dc, el, p0, grad_angle, temp))
     return false;
-  p = bugl_gaussian_point_2d<double>(temp, sigma);
+  p = bugl_gaussian_point_2d<double>(temp, I);
   return true;
 }
 
@@ -616,9 +586,7 @@ void brct_epi_reconstructor::inc()
       //
       Xpred = Xpred +  G_*(z - z_pred)*prob_[i];
 
-      vnl_matrix_fixed<double, 6, 6> I;
-      I.set_identity();
-      Q_ = (I - G_*H)*Qpred;
+      Q_ = (vnl_matrix_fixed<double,6,6>().set_identity() - G_*H)*Qpred;
     }
   }
 
@@ -1185,14 +1153,8 @@ vgl_point_2d<double> brct_epi_reconstructor::get_cur_epipole() const
 
   // compute camera calibration matrix
   vnl_double_3x4 E1, E2;
-  E1[0][0] = 1;       E1[0][1] = 0;        E1[0][2] = 0;          E1[0][3] = 0;
-  E1[1][0] = 0;       E1[1][1] = 1;        E1[1][2] = 0;          E1[1][3] = 0;
-  E1[2][0] = 0;       E1[2][1] = 0;        E1[2][2] = 1;          E1[2][3] = 0;
-
-  E2[0][0] = 1;       E2[0][1] = 0;        E2[0][2] = 0;          E2[0][3] = T[0];
-  E2[1][0] = 0;       E2[1][1] = 1;        E2[1][2] = 0;          E2[1][3] = T[1];
-  E2[2][0] = 0;       E2[2][1] = 0;        E2[2][2] = 1;          E2[2][3] = T[2];
-
+  E1.set_identity();
+  E2.set_identity().set_column(3, T);
   vnl_double_3x4 P1 = K_*E1, P2 = K_*E2;
 
   // compute epipole from velocity
@@ -1230,22 +1192,8 @@ double brct_epi_reconstructor::matched_point_prob(vnl_double_2& z, vnl_double_2&
 vnl_matrix_fixed<double, 6, 6> brct_epi_reconstructor::get_transit_matrix(int i, int j)
 {
   assert(i>=0 && j>=0 && j>=i);
-  vnl_matrix_fixed<double, 6, 6> A;
-
   double dt = time_tick_[j] - time_tick_[i];
-
-  // fix the current problem of time stamp
-  for (int i=0; i<6; i++)
-    for (int j=0; j<6; j++)
-      A[i][j] = 0.0;
-
-  for (int i = 0; i<6; i++)
-    A[i][i] = 1;
-
-  for (int i=0; i<3; i++)
-    A[i][i+3] = dt;
-
-  return A;
+  return vnl_matrix_fixed<double,6,6>().set_identity().set(0,3,dt).set(1,4,dt).set(2,5,dt);
 }
 
 void brct_epi_reconstructor::print_track(const int track_index, const int frame)

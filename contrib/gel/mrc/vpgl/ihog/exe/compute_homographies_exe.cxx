@@ -97,17 +97,12 @@ register_image(vil_image_view<float> & curr_view,
 #endif
   else if (transform_type ==  "Affine")
   {
-    vnl_double_2x3 A;
-    A[0][0] = 1.0;  A[0][1] = 0.0;  A[0][2] = 0.0;
-    A[1][0] = 0.0;  A[1][1] = 1.0;  A[1][2] = 0.0;
+    vnl_double_2x3 A; A.set_identity();
     init_xform.set_affine(A);
   }
   else if (transform_type ==  "Projective")
   {
-    vnl_double_3x3 P;
-    P[0][0] = 1.0;  P[0][1] = 0.0;  P[0][2] = 0.0;
-    P[1][0] = 0.0;  P[1][1] = 1.0;  P[1][2] = 0.0;
-    P[2][0] = 0.0;  P[2][1] = 0.0;  P[2][2] = 1.0000001;
+    vnl_double_3x3 P; P.set_identity().set(2,2, 1.0000001);
     init_xform.set_projective(P);
   }
 #if 0

@@ -94,12 +94,10 @@ static void test_camera_io()
 
     // ===========  Construct the camera
 
-    vnl_double_3x3 m;
-    m[0][0]=2000;m[0][1]=0;m[0][2]=512;
-    m[1][0]=0;m[1][1]=2000;m[1][2]=384;
-    m[2][0]=0;m[2][1]=0;m[2][2]=1;
-
-    vpgl_calibration_matrix<double> K(m);
+    double data[] = { 2000,    0, 512,
+                         0, 2000, 384,
+                         0,    0,   1 };
+    vpgl_calibration_matrix<double> K = vnl_double_3x3(data);
     vgl_homg_point_3d<double>center(0,0,-10.0);
 
     // rotation angle in radians
@@ -107,8 +105,7 @@ static void test_camera_io()
     // y axis is the rotation axis
     vnl_double_3 axis(0.0, 1.0, 0.0);
     vgl_h_matrix_3d<double> R;
-    R.set_identity();
-    R.set_rotation_about_axis(axis, theta);
+    R.set_identity().set_rotation_about_axis(axis, theta);
     vcl_cout <<"Rotation Matrix\n" << R << '\n';
     vpgl_perspective_camera<double> P(K, center, vgl_rotation_3d<double>(R));
 
@@ -164,8 +161,8 @@ static void test_camera_io()
     vpl_unlink("test_polymorphic_io.tmp");
 
     TEST("recovered camera type", vcl_string("vpgl_perspective_camera"),P_in2->is_a());
-    vcl_cout << "Original type: "             << P.is_a() << vcl_endl
-             << "Basepointer-referred type: " << Pbase->is_a() << vcl_endl
+    vcl_cout << "Original type: "             << P.is_a() << '\n'
+             << "Basepointer-referred type: " << Pbase->is_a() << '\n'
              << "Recovered camera type: "     << P_in2->is_a() << vcl_endl;
 
     vpgl_proj_camera<double> *Pdummy = Pbase->clone();
