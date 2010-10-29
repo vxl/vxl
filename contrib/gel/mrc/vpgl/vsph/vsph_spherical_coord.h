@@ -55,7 +55,7 @@ class vsph_spherical_coord : public vbl_ref_count
   //: converts to cartesian coordinate
   vgl_point_3d<double> cart_coord(double theta, double phi) const { return cart_coord(vsph_sph_point_3d(radius_,theta,phi)); }
 
-  //: moves the point onto the surface of the sphereon the ray from origin to the point
+  //: moves the point onto the surface of the sphere on the ray from origin to the point
   // Returns true if the point changed, false if it was already on the sphere
   bool move_point(vsph_sph_point_3d& p);
 

@@ -10,7 +10,7 @@
 class rgrl_object;
 class rgrl_event;
 
-//: rgrl_command is an implementation of the command design pattern that is usedin callbacks.
+//: rgrl_command is an implementation of the command design pattern that is used in callbacks.
 //
 //  rgrl_object implements the subject. When a subject needs to notify
 //  an observer, it does so using a rgrl_command. The \a execute(.)
