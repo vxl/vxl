@@ -1765,7 +1765,7 @@ bool boxm_update_bit_scene_manager::set_workspace(cl_kernel kernel, unsigned pas
   if (!this->check_val(status,CL_SUCCESS,"clGetKernelWorkGroupInfo CL_KERNEL_WORK_GROUP_SIZE, failed."))
     return false;
 
-  if ( pass==-1) // passes for computing aux
+  if ( pass==(unsigned int)(-1)) // passes for computing aux
   {
     globalThreads[0]=this->wni_/2; globalThreads[1]=this->wnj_/2;
     localThreads[0] =this->bni_  ; localThreads[1] =this->bnj_  ;
@@ -1833,33 +1833,32 @@ bool boxm_update_bit_scene_manager::run(cl_kernel kernel, unsigned pass)
 
   //pass 0, and 3 require four separate executions to run
 #if 0
-  if (  pass==4)
+  if (pass==4)
   {
-      for (unsigned k=0;k<2;k++)
+    for (unsigned k=0;k<2;k++)
+    {
+      for (unsigned l=0;l<2;l++)
       {
-          for (unsigned l=0;l<2;l++)
-          {
-              status=clEnqueueWriteBuffer(command_queue_,offset_y_buf_,0,0,sizeof(cl_uint),(void *)&k,0,0,0);
-              status=clEnqueueWriteBuffer(command_queue_,offset_x_buf_,0,0,sizeof(cl_uint),(void *)&l,0,0,0);
-              clFinish(command_queue_);
-              cl_event ceEvent=0;
-              status = clEnqueueNDRangeKernel(command_queue_, kernel, 2,NULL,globalThreads,localThreads,0,NULL,&ceEvent);
-              if (this->check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed. "+error_to_string(status))!=CHECK_SUCCESS)
-                  return false;
-              status = clFinish(command_queue_);
-              if (this->check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status))!=CHECK_SUCCESS)
-                  return false;
-              status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
-              status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
-              gpu_time_ += 1.0e-6f * float(tend - tstart); // convert nanoseconds to milliseconds
-          }
+        status=clEnqueueWriteBuffer(command_queue_,offset_y_buf_,0,0,sizeof(cl_uint),(void *)&k,0,0,0);
+        status=clEnqueueWriteBuffer(command_queue_,offset_x_buf_,0,0,sizeof(cl_uint),(void *)&l,0,0,0);
+        clFinish(command_queue_);
+        cl_event ceEvent=0;
+        status = clEnqueueNDRangeKernel(command_queue_, kernel, 2,NULL,globalThreads,localThreads,0,NULL,&ceEvent);
+        if (this->check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed. "+error_to_string(status))!=CHECK_SUCCESS)
+          return false;
+        status = clFinish(command_queue_);
+        if (this->check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status))!=CHECK_SUCCESS)
+          return false;
+        status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
+        status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
+        gpu_time_ += 1.0e-6f * float(tend - tstart); // convert nanoseconds to milliseconds
       }
+    }
   }
   //everything else just runs once
   else
 #endif
   {
-
     cl_event ceEvent =0;
     status = clEnqueueNDRangeKernel(this->command_queue_, kernel, 2, NULL, globalThreads, localThreads, 0, NULL, &ceEvent);
     if (this->check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed. "+error_to_string(status))!=CHECK_SUCCESS)
@@ -1882,67 +1881,66 @@ bool boxm_update_bit_scene_manager::update()
   for (unsigned pass = 0; pass<6; pass++)
   {
     if (pass == 2) continue;
-      vcl_cout<<"  pass_"<<pass;
-      this->set_update_args(pass);  //need to set args?
-      this->set_workspace(update_kernels_[pass], pass);
-      if (!this->run(update_kernels_[pass], pass))
+    vcl_cout<<"  pass_"<<pass;
+    this->set_update_args(pass);  //need to set args?
+    this->set_workspace(update_kernels_[pass], pass);
+    if (!this->run(update_kernels_[pass], pass))
+      return false;
+    vcl_cout<<'('<<gpu_time_<<"ms)  ";
+
+    if (pass==4)
+    {
+      cl_event events[1];
+      int status = clEnqueueReadBuffer(command_queue_, output_debug_buf_, CL_TRUE, 0,
+                                       scene_info_->num_buffer*sizeof(cl_float),
+                                       output_debug_, 0, NULL, &events[0]);
+      if (!this->check_val(status,CL_SUCCESS,"clEnqueueReadBuffer (output buffer )failed."))
         return false;
-      vcl_cout<<'('<<gpu_time_<<"ms)  ";
+      status = clWaitForEvents(1, &events[0]);
+      if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents (output read) failed."))
+        return false;
+      status = clEnqueueReadBuffer(command_queue_, cell_cum_beta_buf_, CL_TRUE, 0,
+                                   scene_info_->num_buffer*scene_info_->data_buffer_length*sizeof(cl_float2),
+                                   cell_cum_beta_, 0, NULL, &events[0]);
+      if (!this->check_val(status,CL_SUCCESS,"clEnqueueReadBuffer (output buffer )failed."))
+        return false;
+      status = clWaitForEvents(1, &events[0]);
+      if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents (output read) failed."))
+        return false;
 
-      if(pass==4)
+      status = clEnqueueReadBuffer(command_queue_, cell_mean_vis_buf_, CL_TRUE, 0,
+                                   scene_info_->num_buffer*scene_info_->data_buffer_length*sizeof(cl_uchar2),
+                                   cell_mean_vis_, 0, NULL, &events[0]);
+      if (!this->check_val(status,CL_SUCCESS,"clEnqueueReadBuffer (output buffer )failed."))
+        return false;
+      status = clWaitForEvents(1, &events[0]);
+      if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents (output read) failed."))
+        return false;
+      vcl_cout<<"\nOUTPUT: "<<output_debug_[1]<<'\n';
+
+      int slice_id=0;//scene_info_->scene_dims[2]-1;
+      vil_image_view<float> img(scene_info_->scene_dims[0],scene_info_->scene_dims[1]);
+      vil_image_view<float> img1(scene_info_->scene_dims[0],scene_info_->scene_dims[1]);
+
+      for (int i=0;i<scene_info_->scene_dims[0];++i)
       {
-        cl_event events[1];
-        int status = clEnqueueReadBuffer(command_queue_, output_debug_buf_, CL_TRUE, 0,
-                                         scene_info_->num_buffer*sizeof(cl_float),
-                                         output_debug_, 0, NULL, &events[0]);
-        if (!this->check_val(status,CL_SUCCESS,"clEnqueueReadBuffer (output buffer )failed."))
-          return false;
-        status = clWaitForEvents(1, &events[0]);
-        if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents (output read) failed."))
-          return false;
-        status = clEnqueueReadBuffer(command_queue_, cell_cum_beta_buf_, CL_TRUE, 0,
-                                         scene_info_->num_buffer*scene_info_->data_buffer_length*sizeof(cl_float2),
-                                         cell_cum_beta_, 0, NULL, &events[0]);
-        if (!this->check_val(status,CL_SUCCESS,"clEnqueueReadBuffer (output buffer )failed."))
-            return false;
-        status = clWaitForEvents(1, &events[0]);
-        if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents (output read) failed."))
-            return false;
-
-        status = clEnqueueReadBuffer(command_queue_, cell_mean_vis_buf_, CL_TRUE, 0,
-                                         scene_info_->num_buffer*scene_info_->data_buffer_length*sizeof(cl_uchar2),
-                                         cell_mean_vis_, 0, NULL, &events[0]);
-        if (!this->check_val(status,CL_SUCCESS,"clEnqueueReadBuffer (output buffer )failed."))
-            return false;
-        status = clWaitForEvents(1, &events[0]);
-        if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents (output read) failed."))
-            return false;
-        vcl_cout<<"\nOUTPUT: "<<output_debug_[1]<<'\n';
-
-        int slice_id=0;//scene_info_->scene_dims[2]-1;
-        vil_image_view<float> img(scene_info_->scene_dims[0],scene_info_->scene_dims[1]);
-        vil_image_view<float> img1(scene_info_->scene_dims[0],scene_info_->scene_dims[1]);
-
-        for(unsigned i=0;i<scene_info_->scene_dims[0];i++)
+        for (int j=0;j<scene_info_->scene_dims[1];++j)
         {
-            for(unsigned j=0;j<scene_info_->scene_dims[1];j++)
-            {
-               cl_ushort ptrs0= block_ptrs_[(slice_id 
-                                           +j*scene_info_->scene_dims[2] 
-                                           +i*scene_info_->scene_dims[2]*scene_info_->scene_dims[1])*2];
-               cl_ushort ptrs1= block_ptrs_[(slice_id 
-                                           +j*scene_info_->scene_dims[2] 
-                                           +i*scene_info_->scene_dims[2]*scene_info_->scene_dims[1])*2+1];
-               cl_uchar * tree=&cells_[(ptrs0*scene_info_->tree_buffer_length + ptrs1)*16];
-               boct_bit_tree bit_tree((char*)tree);
+          cl_ushort ptrs0= block_ptrs_[(slice_id
+                                        +j*scene_info_->scene_dims[2]
+                                        +i*scene_info_->scene_dims[2]*scene_info_->scene_dims[1])*2];
+          cl_ushort ptrs1= block_ptrs_[(slice_id
+                                        +j*scene_info_->scene_dims[2]
+                                        +i*scene_info_->scene_dims[2]*scene_info_->scene_dims[1])*2+1];
+          cl_uchar * tree=&cells_[(ptrs0*scene_info_->tree_buffer_length + ptrs1)*16];
+          boct_bit_tree bit_tree((char*)tree);
 
-               int data_index=ptrs0*scene_info_->data_buffer_length+ptrs1;
-               img(i,j)=(float)cell_cum_beta_[data_index*2];
-               img1(i,j)=(float)cell_cum_beta_[data_index*2+1];
-
-            }
+          int data_index=ptrs0*scene_info_->data_buffer_length+ptrs1;
+          img(i,j)=(float)cell_cum_beta_[data_index*2];
+          img1(i,j)=(float)cell_cum_beta_[data_index*2+1];
         }
       }
+    }
   }
   vcl_cout << ":::: total gpu update time:"<<gpu_time_<<" ms\n"
            << ":::: total cpu update time:"<<(float)timer.all() / 1e3f<<" ms\n"
@@ -1952,7 +1950,7 @@ bool boxm_update_bit_scene_manager::update()
            << "total block loading time = " << total_load_time << "s\n"
            << "total block processing time = " << total_raytrace_time << 's' << vcl_endl
 #endif
-      ;
+  ;
   return true;
 }
 
@@ -2003,7 +2001,7 @@ bool boxm_update_bit_scene_manager::change_detection()
            << "total block loading time = " << total_load_time << "s\n"
            << "total block processing time = " << total_raytrace_time << 's' << vcl_endl
 #endif
-      ;
+  ;
 
   return true;
 }
@@ -2071,9 +2069,9 @@ bool boxm_update_bit_scene_manager::refine()
   scene_->set_mixture_values(cell_mixture_);
   scene_->set_num_obs_values(cell_num_obs_);
   vcl_cout<<(*scene_)<<vcl_endl;
-  //----TO BE DELTED -------
-
+  //----TO BE DELETED -------
 #endif
+
 #if 1
   /******** read some output **************************************/
   cl_event events[1];

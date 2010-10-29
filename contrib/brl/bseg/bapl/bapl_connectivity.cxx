@@ -20,11 +20,11 @@ bool second_less( const bapl_keypoint_match_set_sptr& left, const bapl_keypoint_
 //: add this match set symmetrically, i.e. into the list of img id 1 as well img id 2, while adding for img id 2, reverse the keypoint pairs
 bool bapl_conn_table::add_sym(bapl_keypoint_match_set_sptr set)
 {
-  // first add match set directly for id1, id2: 
+  // first add match set directly for id1, id2:
   if (this->contains(set->id_left_, set->id_right_) || this->contains(set->id_right_, set->id_left_))
     return false;
 
-  bapl_conn& conn = conns_[set->id_left_];  
+  bapl_conn& conn = conns_[set->id_left_];
   bapl_conn::iterator p = lower_bound(conn.begin(), conn.end(), set, second_less);
   conn.insert(p, set);
 
@@ -41,14 +41,15 @@ bool bapl_conn_table::add_sym(bapl_keypoint_match_set_sptr set)
   conn_other.insert(p, e);
   return true;
 }
+
 //: add this match set
 bool bapl_conn_table::add(bapl_keypoint_match_set_sptr set)
 {
-  // first add match set directly for id1, id2: 
+  // first add match set directly for id1, id2:
   if (this->contains(set->id_left_, set->id_right_))
     return false;
 
-  bapl_conn& conn = conns_[set->id_left_];  
+  bapl_conn& conn = conns_[set->id_left_];
   bapl_conn::iterator p = lower_bound(conn.begin(), conn.end(), set, second_less);
   conn.insert(p, set);
   return true;
@@ -58,7 +59,7 @@ bool bapl_conn_table::add(bapl_keypoint_match_set_sptr set)
 void bapl_conn_table::make_symmetric()
 {
   for (unsigned i = 0; i < conns_.size(); i++) {
-    bapl_conn& conn = conns_[i];  
+    bapl_conn& conn = conns_[i];
     for (unsigned j = 0; j < conn.size(); j++) {
       bapl_keypoint_match_set_sptr ms = conn[j];
       //: reverse the match set
@@ -80,39 +81,41 @@ void bapl_conn_table::make_symmetric()
 bool bapl_conn_table::contains(int id1, int id2)
 {
   bapl_conn& conn = conns_[id1];
-  vcl_vector<bapl_key_match> matches; // dummy vector 
+  vcl_vector<bapl_key_match> matches; // dummy vector
   bapl_keypoint_match_set_sptr e = new bapl_keypoint_match_set(id1, id2, matches);
   vcl_pair<bapl_conn::const_iterator, bapl_conn::const_iterator> p = equal_range(conn.begin(), conn.end(), e, second_less);
   return (p.first != p.second); // true if not points to the end, false otherwise
 }
+
 void bapl_conn_table::print_table()
 {
   for (unsigned i = 0; i < conns_.size(); i++) {
     vcl_vector<bapl_keypoint_match_set_sptr> conn = conns_[i];
-    int crnt_id = 0; 
+    int crnt_id = 0;
     for (unsigned j = 0; j < conn.size(); j++) {
       int id2 = conn[j]->id_right_;
       while (id2 > crnt_id) {
         vcl_cout << "0 ";
         crnt_id++;
       }
-      vcl_cout << conn[j]->matches_.size() << " ";
+      vcl_cout << conn[j]->matches_.size() << ' ';
       crnt_id++;
     }
     vcl_cout << vcl_endl;
   }
 }
+
 void bapl_conn_table::print_table_with_matches()
 {
   for (unsigned i = 0; i < conns_.size(); i++) {
     vcl_vector<bapl_keypoint_match_set_sptr> conn = conns_[i];
     for (unsigned j = 0; j < conn.size(); j++) {
-      vcl_cout << conn[j]->id_left_ << " " << conn[j]->id_right_ << "\n";
-      vcl_cout << conn[j]->matches_.size() << "\n";
+      vcl_cout << conn[j]->id_left_ << ' ' << conn[j]->id_right_ << '\n';
+      vcl_cout << conn[j]->matches_.size() << '\n';
       for (unsigned k = 0; k < conn[j]->matches_.size(); k++) {
-        vcl_cout << conn[j]->matches_[k].first->id() << " " << conn[j]->matches_[k].second->id() << "\n";
+        vcl_cout << conn[j]->matches_[k].first->id() << ' ' << conn[j]->matches_[k].second->id() << '\n';
       }
-      vcl_cout << "\n";
+      vcl_cout << '\n';
     }
   }
 }
@@ -140,7 +143,7 @@ bool bapl_conn_table::compute_tracks(vcl_vector<bapl_track_data>& tracks, int ne
     }
   }
 
-  // clear all marks for new images 
+  // clear all marks for new images
   for (unsigned i = 0; i < num_images; i++) {
     // skip images with no neighbors
     int num_nbrs = (int)this->get_number_of_neighbors(i);
@@ -154,7 +157,7 @@ bool bapl_conn_table::compute_tracks(vcl_vector<bapl_track_data>& tracks, int ne
 
   int pt_idx = 0;
 
-  // sort all match lists 
+  // sort all match lists
   for (unsigned i = 0; i < num_images; i++) {
     bapl_conn& conn = conns_[i];
     for (unsigned j = 0; j < conn.size(); j++) {
@@ -168,7 +171,7 @@ bool bapl_conn_table::compute_tracks(vcl_vector<bapl_track_data>& tracks, int ne
   img_touched.reserve(num_images);
 
   for (unsigned int i = 0; i < num_images; i++) {
-	  int num_features = img_data_[i]->keys_.size();
+    int num_features = img_data_[i]->keys_.size();
 
     // skip images with no neighbors
     int num_nbrs = (int) this->get_number_of_neighbors(i);
@@ -176,12 +179,12 @@ bool bapl_conn_table::compute_tracks(vcl_vector<bapl_track_data>& tracks, int ne
     if (num_nbrs == 0)
       continue;
 
-	  for (int j = 0; j < num_features; j++) {
+    for (int j = 0; j < num_features; j++) {
       bapl_keypoint_sptr kp = img_data_[i]->keys_[j];
-	    bapl_image_key_vector features;
-	    vcl_queue<bapl_image_key> features_queue;
+      bapl_image_key_vector features;
+      vcl_queue<bapl_image_key> features_queue;
 
-	    if (img_data_key_flags_[i][j])
+      if (img_data_key_flags_[i][j])
        continue; // already visited this feature
 
       int num_touched = img_touched.size();
@@ -189,76 +192,77 @@ bool bapl_conn_table::compute_tracks(vcl_vector<bapl_track_data>& tracks, int ne
         img_visited[img_touched[k]] = false;
       img_touched.clear();
 
-	    // breadth first search given this feature 
+      // breadth first search given this feature
       img_data_key_flags_[i][j] = true;
 
-	    features.push_back(bapl_image_key(i, kp));
-	    features_queue.push(bapl_image_key(i, kp));
+      features.push_back(bapl_image_key(i, kp));
+      features_queue.push(bapl_image_key(i, kp));
 
       img_visited[i] = true;
       img_touched.push_back(i);
 
-	    int num_rounds = 0;
-	    while (!features_queue.empty()) {
-		    num_rounds++;
+      int num_rounds = 0;
+      while (!features_queue.empty()) {
+        num_rounds++;
 
-		    bapl_image_key feature = features_queue.front();
-		    features_queue.pop();
-		
-		    int img_id = feature.first;
-        int feature_id = feature.second->id();
+        bapl_image_key feature = features_queue.front();
+        features_queue.pop();
+
+        int img_id = feature.first;
+        unsigned int feature_id = feature.second->id();
 
         bapl_key_match dummy(feature.second, 0);
 
-		    int start_idx;
-		    if (img_id >= new_image_start) {
-		      start_idx = new_image_start;
-		    } else {
-		      start_idx = 0;
-		    }
+        int start_idx;
+        if (img_id >= new_image_start) {
+          start_idx = new_image_start;
+        } else {
+          start_idx = 0;
+        }
 
         bapl_conn &nbrs = this->get_neighbors(img_id);
 
         bapl_conn::iterator iter;
         for (iter = nbrs.begin(); iter != nbrs.end(); iter++) {
-          unsigned int k = (*iter)->id_right_; 
+          unsigned int k = (*iter)->id_right_;
           if (img_visited[k])
             continue;
 
-          // binary search for the feature 
+          // binary search for the feature
           vcl_pair<vcl_vector<bapl_key_match>::iterator, vcl_vector<bapl_key_match>::iterator > p;
           p = equal_range((*iter)->matches_.begin(), (*iter)->matches_.end(), dummy, compare_first);
 
-		      if (p.first == p.second)  continue;  
+          if (p.first == p.second)  continue;
           assert((p.first)->first->id() == feature_id);
           int second_id = (p.first)->second->id();
-          
+
           assert(second_id < (int)img_data_[k]->keys_.size());
 
           if (img_data_key_flags_[k][second_id])
             continue;
-          
+
           img_data_key_flags_[k][second_id] = true;
           features.push_back(bapl_image_key(k, (p.first)->second));
           features_queue.push(bapl_image_key(k, (p.first)->second));
-          
+
           img_visited[k] = true;
           img_touched.push_back(k);
         }
-      } 
+      }
 
-	    if (features.size() >= 2) {
-		    tracks.push_back(bapl_track_data(features));
-		    pt_idx++;
-	    } 
-    } 
-  } // for loop over images 
+      if (features.size() >= 2) {
+        tracks.push_back(bapl_track_data(features));
+        pt_idx++;
+      }
+    }
+  } // for loop over images
 
   vcl_cout << "Found " << tracks.size() << " points!\n";
   assert(pt_idx == (int) tracks.size());
 
   return true;
 }
+
 //: Print tracks as correspondences in BWM_VIDEO_SITE format for visualization
 void print_tracks(vcl_ostream& os, vcl_vector<bapl_track_data>& tracks, int img_width, int img_height)
 {
@@ -337,6 +341,4 @@ void vsl_b_write(vsl_b_ostream& os, const bapl_conn_table* &ph)
     vsl_b_write(os,*ph);
   }
 }
-
-
 
