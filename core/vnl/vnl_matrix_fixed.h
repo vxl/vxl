@@ -206,6 +206,9 @@ class vnl_matrix_fixed  VNL_MATRIX_FIXED_VCL60_WORKAROUND
   //: set element
   void put (unsigned r, unsigned c, T const& v) { (*this)(r,c) = v; }
 
+  //: set element, and return *this
+  vnl_matrix_fixed& set (unsigned r, unsigned c, T const& v) { (*this)(r,c) = v; return *this; }
+
   //: get element
   T    get (unsigned r, unsigned c) const { return (*this)(r,c); }
 
