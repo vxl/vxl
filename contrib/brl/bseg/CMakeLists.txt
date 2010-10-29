@@ -71,3 +71,5 @@ SUBDIRS(bvpl_octree_batch)
 #SUBDIRS(btpl_satellite_tools)
 
 SUBDIRS(bvpgl)
+
+SUBDIRS(bapl)
