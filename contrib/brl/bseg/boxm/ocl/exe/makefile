@@ -12,6 +12,7 @@ MINI_PROG_SOURCES += boxm_ocl_rerender_adjacent_frames.cxx
 MINI_PROG_SOURCES += boxm_ocl_render_bit_view.cxx
 MINI_PROG_SOURCES += boxm_ocl_render_bit_exe.cxx
 MINI_PROG_SOURCES += boxm_ocl_update_bit_view.cxx
+MINI_PROG_SOURCES += boxm_ocl_update_bit_exe.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk
