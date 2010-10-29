@@ -702,7 +702,7 @@ void FMatrix::set (const PMatrix& P2)
   set(e2x * A);
 }
 
-//: Set from one P matrix, the second.  The first is assumed to be [I O].
+//: Set from another FMatrix: this is just the assignment operator
 void FMatrix::set (const FMatrix& F)
 {
   *this = F;
