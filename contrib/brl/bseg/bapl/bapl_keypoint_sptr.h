@@ -30,7 +30,7 @@ struct bapl_keypoint_sptr_t : public B {
   bapl_keypoint_sptr_t(T* p): B(p) {}
   bapl_keypoint_sptr_t(bapl_keypoint_sptr_t<T> const& r): B(r) {}
   void operator=(bapl_keypoint_sptr_t<T> const& r) { B::operator=(r); }
-  T* operator->() const { return (T*)as_pointer(); }
+  T* operator->() const { return (T*)B::as_pointer(); }
 };
 #endif // DOXYGEN_SHOULD_SKIP_THIS
 
