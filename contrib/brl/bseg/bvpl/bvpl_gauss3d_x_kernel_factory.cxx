@@ -3,7 +3,7 @@
 // \file
 
 #include <vcl_algorithm.h>
-#include <vcl_cmath.h> // for std::sqrt() and std::exp()
+#include <vcl_cmath.h> // for std::sqrt() and std::exp() and std::floor()
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_float_3.h>
 #include <bsta/bsta_gauss_if3.h>
@@ -71,12 +71,12 @@ void bvpl_gauss3d_x_kernel_factory::create_canonical()
   typedef bvpl_kernel_dispatch dispatch;
 
   //This is the support of the kernel
-  float min_x = -3.0f*sigma1_;
-  float max_x =  3.0f*sigma1_;
-  float min_y = -2.0f*sigma2_;
-  float max_y =  2.0f*sigma2_;
-  float min_z = -2.0f*sigma3_;
-  float max_z =  2.0f*sigma3_;
+  float min_x = -vcl_floor(3.0f*sigma1_+0.01f);
+  float max_x =  vcl_floor(3.0f*sigma1_+0.01f);
+  float min_y = -vcl_floor(2.0f*sigma2_+0.01f);
+  float max_y =  vcl_floor(2.0f*sigma2_+0.01f);
+  float min_z = -vcl_floor(2.0f*sigma3_+0.01f);
+  float max_z =  vcl_floor(2.0f*sigma3_+0.01f);
 
   for (float x=min_x; x<= max_x; x+=1.f)
   {
@@ -91,8 +91,8 @@ void bvpl_gauss3d_x_kernel_factory::create_canonical()
   }
 
   //set the dimension of the 3-d grid
-  max_point_.set(max_x,max_y,max_z);
-  min_point_.set(min_x,min_y,min_z);
+  max_point_.set(int(max_x),int(max_y),int(max_z));
+  min_point_.set(int(min_x),int(min_y),int(min_z));
 
   //set the current kernel
   kernel_ = canonical_kernel_;
