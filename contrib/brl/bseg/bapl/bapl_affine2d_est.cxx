@@ -21,7 +21,7 @@ bapl_affine2d_est::bapl_affine2d_est( const vcl_vector< bapl_keypoint_match > & 
     p[0] = matches[i].first->location_i();
     p[1] = matches[i].first->location_j();
     from_pts_.push_back( p );
-    
+
     q[0] = matches[i].second->location_i();
     q[1] = matches[i].second->location_j();
     to_pts_.push_back( q );
@@ -110,14 +110,13 @@ bapl_affine2d_est :: compute_residuals( const vnl_vector<double>& params,
     inv_del_y = inv_trans_pt[ 1 ] - from_pts_[ i ][ 1 ];
     residuals [ i ] = vcl_sqrt( vnl_math_sqr(del_x)     + vnl_math_sqr(del_y)
                               + vnl_math_sqr(inv_del_x) + vnl_math_sqr(inv_del_y) );
-    
   }
 }
 
 
 bool
 bapl_affine2d_est :: weighted_least_squares_fit( vnl_vector<double>& params,
-                                                     vnl_matrix<double>& norm_covar,
+                                                     vnl_matrix<double>& /*norm_covar*/, // FIXME: unused parameter
                                                      const vcl_vector<double>* weights ) const
 {
   const vcl_vector<double> * w;
@@ -150,11 +149,11 @@ bapl_affine2d_est :: weighted_least_squares_fit( vnl_vector<double>& params,
   }
   else {
     params = ( svd.inverse() * b );
-    
+
     // invert normalization
-    for(int i=0; i<4; ++i)
+    for (int i=0; i<4; ++i)
       params[i] *= (avg_distance_to / avg_distance_from);
-      
+
     params[4] = avg_distance_to*params[4] + center_to[0]
                  - params[0]*center_from[0] - params[1]*center_from[1];
     params[5] = avg_distance_to*params[5] + center_to[1]
@@ -182,7 +181,7 @@ bapl_affine2d_est :: normalize( const vcl_vector< vnl_vector<double> >& pts,
 
   center.set_size(2);
   center.fill(0.0);
-  
+
   double sum_wgt = 0;
   unsigned int i;
 
