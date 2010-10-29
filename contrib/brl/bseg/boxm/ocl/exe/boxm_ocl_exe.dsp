@@ -127,6 +127,9 @@ SOURCE=.\boxm_ocl_render_bit_exe.cxx
 # Begin Source File
 SOURCE=.\boxm_ocl_update_bit_view.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\boxm_ocl_update_bit_exe.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

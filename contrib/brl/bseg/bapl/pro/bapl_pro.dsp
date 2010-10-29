@@ -1,31 +1,31 @@
-# Microsoft Developer Studio Project File - Name="icam_ocl" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="bapl_pro" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
 # variables to REPLACE
 # 
-# /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl/bseg" == include path
+# /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl" == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
 #  == override in output directory
-# icam_ocl  == name of output library
+# bapl_pro  == name of output library
 
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
 
-CFG=icam_ocl - Win32 Debug
+CFG=bapl_pro - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "icam_ocl.mak".
+!MESSAGE NMAKE /f "bapl_pro.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "icam_ocl.mak" CFG="bmrf - Win32 Debug"
+!MESSAGE NMAKE /f "bapl_pro.mak" CFG="vil2 - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "icam_ocl - Win32 Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "icam_ocl - Win32 Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "bapl_pro - Win32 Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "bapl_pro - Win32 Release" (based on "Win32 (x86) Static Library")
 # Begin Project
 # PROP AllowPerConfigDependencies 0
 # PROP Scc_ProjName ""
@@ -33,7 +33,7 @@ CFG=icam_ocl - Win32 Debug
 CPP=cl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "icam_ocl - Win32 Release"
+!IF  "$(CFG)" == "bapl_pro - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -47,7 +47,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /FD /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/gel" /I "$(VXLROOT)/contrib/gel/mrc" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "icam_ocl_tests_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "bapl_pro_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -59,7 +59,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo
 
-!ELSEIF  "$(CFG)" == "icam_ocl - Win32 Debug"
+!ELSEIF  "$(CFG)" == "bapl_pro - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -73,7 +73,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FD /c
 # ADD CPP /nologo /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /FD /GZ /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/gel" /I "$(VXLROOT)/contrib/gel/mrc" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "icam_ocl_tests_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "bapl_pro_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -87,52 +87,37 @@ LIB32=link.exe -lib
 
 # Begin Target
 
-# Name "icam_ocl - Win32 Release"
-# Name "icam_ocl - Win32 Debug"
+# Name "bapl_pro - Win32 Release"
+# Name "bapl_pro - Win32 Debug"
 
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\icam_ocl_utils.cxx
+SOURCE=.\bapl_register.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\icam_ocl_mem.cxx
+SOURCE=.\Templates/brdb_value_t+bapl_keypoint_set-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\icam_ocl_search_manager.cxx
+SOURCE=.\processes/bapl_connectivity_processes.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\icam_ocl_kernel.cxx
+SOURCE=.\Templates/brdb_value_t+bapl_connectivity-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/icam_ocl_manager+icam_ocl_search_manager-.cxx
+SOURCE=.\processes/bapl_extract_keypoints_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\processes/bapl_match_keypoints_process.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
-SOURCE=.\icam_ocl_utils.h
+SOURCE=.\bapl_processes.h
 # End Source File
 # Begin Source File
-SOURCE=.\icam_ocl_cl.h
-# End Source File
-# Begin Source File
-SOURCE=.\icam_ocl_manager.h
-# End Source File
-# Begin Source File
-SOURCE=.\icam_ocl_manager.txx
-# End Source File
-# Begin Source File
-SOURCE=.\icam_ocl_search_manager.h
-# End Source File
-# Begin Source File
-SOURCE=.\icam_ocl_cl_gl.h
-# End Source File
-# Begin Source File
-SOURCE=.\icam_ocl_mem.h
-# End Source File
-# Begin Source File
-SOURCE=.\icam_ocl_kernel.h
+SOURCE=.\bapl_register.h
 # End Source File
 # End Group
 # End Target

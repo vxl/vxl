@@ -96,6 +96,9 @@ LIB32=link.exe -lib
 SOURCE=.\bvpl_scene_neighborhood_operator.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\bvpl_scene_statistics.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/bvpl_octree_sample+float-.cxx
 # End Source File
 # Begin Source File
