@@ -34,7 +34,7 @@ class bvpl_kernel: public vbl_ref_count
   : kernel_(kernel),axis_(axis),aux_axis_(aux_axis), angle_(angle),dim_(dim),min_point_(min_pt),max_point_(max_pt),name_(name),voxel_length_(voxel_length)
   {
 //#ifdef DEBUG
-    vcl_cout << "Creating kernel with axis, anle, dim, max, min =\n" << axis_ << '\n' << angle_<< '\n' << dim_<< '\n' <<max_point_<< '\n' << min_point_ << '\n';
+    vcl_cout << "Creating kernel with axis, angle, dim, max, min = " << axis_ << ' ' << angle_<< ' ' << dim_<< ' ' <<max_point_<< ' ' << min_point_ << '\n';
 //#endif
     id_=++id_cnt;
   }
@@ -70,9 +70,9 @@ class bvpl_kernel: public vbl_ref_count
   void print()
   {
     vcl_cout << "***************Printing bvpl_kernel **********************\n"
-    << "Axis: " << axis_ << "\n"
-    << "Aux-axis: " << aux_axis_ << "\n"
-    << "Angle: " << angle_ << "\n";
+             << "Axis: " << axis_ << '\n'
+             << "Aux-axis: " << aux_axis_ << '\n'
+             << "Angle: " << angle_ << '\n';
     kernel_.begin();
     while (!kernel_.isDone()) {
       vgl_point_3d<int> coord =kernel_.index();
@@ -87,10 +87,10 @@ class bvpl_kernel: public vbl_ref_count
   void print_to_file(vcl_string filename);
 
   bool save_raw(vcl_string filename);
-  
+
   //: Return an xml element
   bxml_data_sptr xml_element();
-  
+
   //: Read an xml element
   static bvpl_kernel_sptr parse_xml_element(bxml_data_sptr d);
 
@@ -128,7 +128,6 @@ class bvpl_kernel: public vbl_ref_count
   //: Length of a voxel in global coordinates
   double voxel_length_;
   bxml_data_sptr factory_data_;
-
 };
 
 
@@ -201,8 +200,8 @@ class bvpl_kernel_vector : public vbl_ref_count
   //: vector of kernel
   vcl_vector< bvpl_kernel_sptr> kernels_;
 };
-typedef vbl_smart_ptr<bvpl_kernel_vector> bvpl_kernel_vector_sptr;
 
+typedef vbl_smart_ptr<bvpl_kernel_vector> bvpl_kernel_vector_sptr;
 
 
 #endif // bvpl_kernel_h
