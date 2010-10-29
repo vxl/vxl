@@ -30,7 +30,8 @@ bapl_lowe_keypoint::bapl_lowe_keypoint( bapl_lowe_pyramid_set_sptr pyramid_set,
 //: Constructor - do not extract descriptor from the pyramid but use the one that is passed, assumes the passed descriptor is normalized
 bapl_lowe_keypoint::bapl_lowe_keypoint(bapl_lowe_pyramid_set_sptr pyramid_set,
                                        double i , double j, double s, double o, vnl_vector_fixed<double, 128>& desc)
- : location_i_(i), location_j_(j), scale_(s), orientation_(o), descriptor_(desc)
+ : descriptor_(desc), pyramid_set_(pyramid_set), location_i_(i),
+   location_j_(j), scale_(s), orientation_(o)
 {
 }
 
