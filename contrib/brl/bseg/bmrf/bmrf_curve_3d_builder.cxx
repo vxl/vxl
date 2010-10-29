@@ -38,16 +38,13 @@ bmrf_curve_3d_builder::bmrf_curve_3d_builder(const bmrf_network_sptr& network)
 {
   // For our camera images are 1024 x 768
   // The focal length is 12.5mm / (6.25 um/pixel) = 2000 pixels
-  vnl_double_3x3 K;
-  K[0][0] = 2000;  K[0][1] = 0;     K[0][2] = 512;
-  K[1][0] = 0;     K[1][1] = 2000;  K[1][2] = 384;
-  K[2][0] = 0;     K[2][1] = 0;     K[2][2] = 1;
+  double data[] = { 2000, 0,    512,
+                    0,    2000, 384,
+                    0,    0,    1 };
+  vnl_double_3x3 K(data);
 
   // Use the identity camera by default
-  vnl_double_3x4 C;
-  C[0][0] = 1;  C[0][1] = 0;  C[0][2] = 0;  C[0][3] = 0;
-  C[1][0] = 0;  C[1][1] = 1;  C[1][2] = 0;  C[1][3] = 0;
-  C[2][0] = 0;  C[2][1] = 0;  C[2][2] = 1;  C[2][3] = 0;
+  vnl_double_3x4 C; C.set_identity();
   this->init_cameras(K*C);
 }
 

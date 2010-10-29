@@ -77,10 +77,7 @@ static void test_face_algs()
   TEST("vtol_face_algs::chain_constructor", all_equal, true);
 
   vcl_cout << "testing simply-connected face transformation\n";
-  vnl_matrix_fixed<double, 3, 3> T;
-  T[0][0] = 1.0;   T[0][1] = 0.0;   T[0][2] = 0.0;
-  T[1][0] = 0.0;   T[1][1] = 1.0;   T[1][2] = 0.0;
-  T[2][0] = 0.0;   T[2][1] = 0.0;   T[2][2] = 1.0;
+  vnl_matrix_fixed<double, 3, 3> T; T.set_identity();
 
   one_chain_list chains;
   chains.push_back(outside_chain);

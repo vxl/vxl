@@ -12,20 +12,19 @@
 
 static vnl_double_3x3 generate_K()
 {
-  vnl_double_3x3 K;
   // set up the intrinsic matrix of the camera
-  K[0][0] = -2000;     K[0][1] = 0;        K[0][2] = 512;
-  K[1][0] = 0;        K[1][1] = -2000;     K[1][2] = 384;
-  K[2][0] = 0;        K[2][1] = 0;        K[2][2] = 1;
-  return K;
+  double data[] = { -2000,     0, 512,
+                        0, -2000, 384,
+                        0,     0,   1 };
+  return vnl_double_3x3(data);
 }
 
 static vnl_double_3x4 generate_P(vnl_double_3x3 const & K)
 {
-  vnl_double_3x4 P;
-  P[0][0] = -0.25105;  P[0][1] = -0.9604;  P[0][2] = 0.00908; P[0][3] = 14.5064;
-  P[1][0] = -0.1;      P[1][1] = 0.0355;   P[1][2] = 0.99;    P[1][3] = -0.14;
-  P[2][0] = -0.96;     P[2][1] = 0.25;     P[2][2] = -0.1;    P[2][3] = 56.28;
+  double data[] = { -0.25105, -0.9604, 0.00908, 14.5064,
+                    -0.1,     0.0355,  0.99,    -0.14,
+                    -0.96,    0.25,    -0.1,    56.28 };
+  vnl_double_3x4 P(data);
   return K*P;
 }
 

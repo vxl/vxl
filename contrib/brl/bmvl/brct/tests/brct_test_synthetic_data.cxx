@@ -12,6 +12,9 @@
 #include <vdgl/vdgl_digital_curve_sptr.h>
 #include <vsol/vsol_point_2d.h>
 #include "../brct_epi_reconstructor.h"
+#include <vnl/vnl_double_3.h>
+#include <vnl/vnl_double_4.h>
+
 static double x1(double t)
 {
   return 0.707*t;
@@ -34,12 +37,11 @@ static double z2(double t)
 
 static vsol_point_2d_sptr project_point(vnl_double_3x4 const& P, const double x, const double y, const double z)
 {
-  vnl_matrix<double> X(4,1);
-  X[0][0]=x;   X[1][0]=y;   X[2][0]=z; X[3][0]=1;
-  vnl_matrix<double> p = P*X;
-  if (vcl_fabs(p[2][0])<1e-06)
+  vnl_double_4 X(x,y,z,1);
+  vnl_double_3 p = P*X;
+  if (vcl_fabs(p[2])<1e-06)
     return 0;
-  double u = p[0][0]/p[2][0], v = p[1][0]/p[2][0];
+  double u = p[0]/p[2], v = p[1]/p[2];
   return new vsol_point_2d(u, v);
 }
 
@@ -80,21 +82,16 @@ generate_tracks(vnl_double_3x4 const& P,
 
 static vnl_double_3x3 generate_K()
 {
-  vnl_double_3x3 K;
   // set up the intrinsic matrix of the camera
-  K[0][0] = 841.3804; K[0][1] = 0;        K[0][2] = 331.0916;
-  K[1][0] = 0;        K[1][1] = 832.7951; K[1][2] = 221.5451;
-  K[2][0] = 0;        K[2][1] = 0;        K[2][2] = 1;
-  return K;
+  double data[] = { 841.3804, 0,        331.0916,
+                    0,        832.7951, 221.5451,
+                    0,        0,        1 };
+  return vnl_double_3x3(data);
 }
 
 static vnl_double_3x4 generate_P(vnl_double_3x3 const & K)
 {
-  vnl_double_3x4 P;
-  P[0][0] = 1;       P[0][1] = 0;        P[0][2] = 0;          P[0][3] = 0;
-  P[1][0] = 0;       P[1][1] = 1;        P[1][2] = 0;          P[1][3] = 0;
-  P[2][0] = 0;       P[2][1] = 0;        P[2][2] = 1;          P[2][3] = 0;
-  return K*P;
+  return K * vnl_double_3x4().set_identity();
 }
 
 static void

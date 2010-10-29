@@ -111,14 +111,15 @@ static void test_fm_compute()
              (fm1_vnl-fm1est_vnl).frobenius_norm(), 0, 1 );
 
   //Part 2a: Test the 2 point algorithm
-  vnl_matrix_fixed<double,3,4> crm, clm;
-  clm[0][0]=1.0; clm[0][1]=0.0; clm[0][2]=0.0; clm[0][3]=0;
-  clm[1][0]=0.0; clm[1][1]=1.0; clm[1][2]=0.0; clm[1][3]=0;
-  clm[2][0]=0.0; clm[2][1]=1.0; clm[2][2]=1.0; clm[2][3]=0;
-  crm[0][0]=1.0; crm[0][1]=0.0; crm[0][2]=0.0; crm[0][3]=2;
-  crm[1][0]=0.0; crm[1][1]=1.0; crm[1][2]=0.0; crm[1][3]=4;
-  crm[2][0]=0.0; crm[2][1]=1.0; crm[2][2]=1.0; crm[2][3]=6;
-  vpgl_proj_camera<double> Ctl(clm), Ctr(crm);
+  double clm[] = { 1.0, 0.0, 0.0, 0,
+                   0.0, 1.0, 0.0, 0,
+                   0.0, 1.0, 1.0, 0 };
+  double crm[] = { 1.0, 0.0, 0.0, 2,
+                   0.0, 1.0, 0.0, 4,
+                   0.0, 1.0, 1.0, 6 };
+  
+  vpgl_proj_camera<double> Ctl = vnl_matrix_fixed<double,3,4>(clm),
+                           Ctr = vnl_matrix_fixed<double,3,4>(crm);
   vpgl_fundamental_matrix<double> fm3p( Ctr, Ctl );
   vnl_double_3x3 mideal = fm3p.get_matrix();
   vcl_cerr << "Two Point F Matrix Ideal:\n" << mideal; //DEBUG
