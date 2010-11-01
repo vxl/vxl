@@ -10,27 +10,27 @@
 #ifdef SEGLEN
 __kernel
 void
-seg_len_main(        __constant  RenderSceneInfo    * linfo,
-                     __global    ushort2            * block_ptrs,
-                     __global    int4               * tree_array,       // tree structure for each block
-                     __global    float              * alpha_array,      // alpha for each block
-                     __global    int                * num_obs_array,    // num obs for each block
-                     __global    float2             * cum_len_beta,     // cumulative ray length and beta aux vars
-                     __global    uchar2             * mean_obs_cum_vis, // mean_obs per cell and cumulative visibility
-                     __constant  uchar              * bit_lookup,       // used to get data_index
-                     __local     uchar16            * local_tree,       // cache current tree into local memory
-                     __global    float16            * camera,           // camera orign and SVD of inverse of camera matrix
-                     __global    float16            * cammat,           // translated camera matrix 
-                     __global    uint4              * imgdims,          // dimensions of the input image
-                     __global    float4             * in_image,         // the input image
-                     __global    int                * offsetfactor,     // 
-                     __global    int                * offset_x,         // offset to the left and 
-                     __global    int                * offset_y,         // right (which one of the four blocks)
-                     __local     short2             * ray_bundle_array, // gives information for which ray takes over in the workgroup
-                     __local     int                * cell_ptrs,        // local list of cell_ptrs (cells that are hit by this workgroup
-                     __local     float4             * cached_aux_data,  // seg len cached aux data is only a float2
-                     __local     uchar              * cumsum,           // cumulative sum for calculating data pointer
-                     __global    float              * output)    
+seg_len_main(__constant  RenderSceneInfo    * linfo,
+             __global    ushort2            * block_ptrs,
+             __global    int4               * tree_array,       // tree structure for each block
+             __global    float              * alpha_array,      // alpha for each block
+             __global    int                * num_obs_array,    // num obs for each block
+             __global    float2             * cum_len_beta,     // cumulative ray length and beta aux vars
+             __global    uchar2             * mean_obs_cum_vis, // mean_obs per cell and cumulative visibility
+             __constant  uchar              * bit_lookup,       // used to get data_index
+             __local     uchar16            * local_tree,       // cache current tree into local memory
+             __global    float16            * camera,           // camera orign and SVD of inverse of camera matrix
+             __global    float16            * cammat,           // translated camera matrix 
+             __global    uint4              * imgdims,          // dimensions of the input image
+             __global    float4             * in_image,         // the input image
+             __global    int                * offsetfactor,     // 
+             __global    int                * offset_x,         // offset to the left and 
+             __global    int                * offset_y,         // right (which one of the four blocks)
+             __local     short2             * ray_bundle_array, // gives information for which ray takes over in the workgroup
+             __local     int                * cell_ptrs,        // local list of cell_ptrs (cells that are hit by this workgroup
+             __local     float4             * cached_aux_data,  // seg len cached aux data is only a float2
+             __local     uchar              * cumsum,           // cumulative sum for calculating data pointer
+             __global    float              * output)    
 {
 
   //get local id (0-63 for an 8x8) of this patch 
@@ -320,7 +320,7 @@ proc_norm_image(__global float4* image, __global float4* p_inf,__global uint4   
     float mult = (p_inf[0].x>0.0f) ? 1.0f :
         gauss_prob_density(vect.x, p_inf[0].y, p_inf[0].z);
     /* compute the norm image */
-    vect.x = vect.w + mult * vect.z;
+    vect.x = vect.w + 1.0 * vect.z;
     /* the following  quantities have to be re-initialized before
     *the bayes_ratio kernel is executed
     */
@@ -369,7 +369,8 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
                                       cl_beta.y,            //beta (bayes update ratio)
                                       mean_vis.y);          //cell visability
           
-          float4 nobs     = convert_float4(nobs_array[gid]); nobs.s3 /= 100.0f;
+          //float4 nobs     = convert_float4(nobs_array[gid]); 
+          //nobs.s3 /= 100.0f;
           float8 mixture  = convert_float8(mixture_array[gid])/255.0f;
           float  weight3  = convert_float(last_weight_array[gid])/255.0f;
           

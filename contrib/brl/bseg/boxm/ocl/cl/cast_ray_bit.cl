@@ -67,11 +67,13 @@ cast_ray(
 #ifdef CHANGE
   float4 temp=in_image[imIndex[llid]];
   float intensity=temp.x;
+  float e_intensity=temp.y;
   float change_density_vacuous=0.0f;
   float bmin=1.0f;
   float bmax=0.0f;
   float bsum=0.0f;
   float ray_length=0.0f;
+  float e_expected_int=0.0f;
 #endif
 
   //determine the minimum face:
@@ -91,6 +93,7 @@ cast_ray(
     gl_image[imIndex[llid]] = rgbaFloatToInt((float4)(0.0f,0.0f,0.0f,0.0f));
     in_image[imIndex[llid]] = (float)0.0f;
 #endif
+
     return;
   }
   //make sure tnear is at least 0...
@@ -108,9 +111,7 @@ cast_ray(
   // illegal (not between 0 and scenedims)
   //----------------------------------------------------------------------------
   float cellCount = 0.0f;
-#ifdef CHANGE
-  ray_length=(tfar-tblock)* linfo->block_len;
-#endif
+
   while(tblock < tfar && vis > .01f) 
   {
     //-------------------------------------------------------------------------
@@ -195,7 +196,8 @@ cast_ray(
       step_cell_render_opt2(mixture_array, alpha_array, data_ptr, d, &vis, &expected_int);
 #endif
 #ifdef CHANGE
-      step_cell_change_detection_sl(mixture_array,alpha_array,data_ptr,d,&vis,&expected_int,&change_density_vacuous,&bmin,&bmax,&bsum,intensity);
+      //step_cell_change_detection_uchar8(mixture_array,alpha_array,data_ptr,d,&vis,&expected_int,intensity);
+      step_cell_change_detection_uchar8_w_expected(mixture_array,alpha_array,data_ptr,d,&vis,&expected_int,&e_expected_int,intensity,e_intensity);
 #endif
 #ifdef SEGLEN
       //keep track of cells being hit
@@ -336,39 +338,30 @@ cast_ray(
   
 #ifdef CHANGE
 
-  float expected_vacuous=change_density_vacuous/ray_length;
-  float expected_min_max=(1-0.5)*bmin+0.5*bmax;
 
-  float u_vacuous=0.0;
-  if(expected_vacuous<expected_min_max)
-      u_vacuous=(expected_vacuous-bmin)/0.5;
-  if(expected_vacuous>=expected_min_max)
-      u_vacuous=(bmax-expected_vacuous)/(1-0.5);
-  if(expected_vacuous-0.5*u_vacuous>=0)
-      u_vacuous=expected_vacuous/0.5;
+  expected_int+=vis;
+  e_expected_int+=vis;
+  float bg_belief=0.0f;
+  float fg_belief=0.0f;
+  float foreground_density_val=1.0f;
+  float pm=e_expected_int/(e_expected_int+1)-0.5*min(e_expected_int,1/e_expected_int);
+ 
+  // Bayesian
+  //fg_belief=foreground_density_val*pm/(foreground_density_val*pm+expected_int*pm+2*(1-pm));
 
-  float u=u_vacuous*(1-bsum);
+  if(expected_int>foreground_density_val)
+  { 
+      bg_belief=expected_int/(expected_int+foreground_density_val)-foreground_density_val/(2*expected_int);
+      fg_belief=0.0;
+  }
+  else
+  {
+      bg_belief=0.0;
+      fg_belief=(foreground_density_val/(foreground_density_val+expected_int)-expected_int/(2*foreground_density_val))*pm;
 
-  float b=expected_int-0.5*u;
+  }
 
-  in_image[imIndex[llid]]=(float4)(b,u,0,0);
-
-  //expected_int+=vis;
-  //float bg_belief=0.0f;
-  //float fg_belief=0.0f;
-  //float foreground_density_val=1.0f;
-  //if(expected_int>foreground_density_val)
-  //{ 
-  //    bg_belief=expected_int/(expected_int+foreground_density_val)-foreground_density_val/(2*expected_int);
-  //    fg_belief=0.0;
-  //}
-  //else
-  //{
-  //    bg_belief=0.0;
-  //    fg_belief=foreground_density_val/(foreground_density_val+expected_int)-expected_int/(2*foreground_density_val);
-  //}
-
-  //in_image[imIndex[llid]].w=(float)bg_belief;
+  in_image[imIndex[llid]].w=(float)fg_belief;
 #endif
 
 #ifdef RENDER
