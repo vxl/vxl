@@ -78,6 +78,7 @@ void boxm_ocl_bit_scene::init_scene(vbl_array_3d<ushort2> blocks,
 
 void boxm_ocl_bit_scene::validate_data()
 {
+#if 0
   vcl_cout<<"Validating scene data:\n"
           <<"   num buffers: "<<num_buffers_<<vcl_endl;
 
@@ -135,6 +136,48 @@ void boxm_ocl_bit_scene::validate_data()
     if (!sizeMatch)
       vcl_cout<<"Buffer "<<buff<<" bit size doesn't match pointer difference ... "<<vcl_endl;
   }
+#endif
+
+  vcl_cout<<"===SCENE STATS=================================="<<vcl_endl;
+  //simple count of cells 
+  unsigned char bits[] = { 0,   1,   1,   2,   1,   2,   2,   3,   1,   2,   2,   3,   2,   3,   3,   4,
+                           1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5 ,
+                           1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5  ,
+                           2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
+                           1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5  ,
+                           2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
+                           2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
+                           3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7  ,
+                           1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5  ,
+                           2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
+                           2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
+                           3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7  ,
+                           2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
+                           3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7  ,
+                           3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7  ,
+                           4,   5,   5,   6,   5,   6,   6,   7,   5,   6,   6,   7,   6,   7,   7,   8 };
+  int totalCells=0;
+  vbl_array_3d<ushort2>::iterator iter;
+  for (iter = blocks_.begin(); iter != blocks_.end(); iter++)
+  {
+    //in each block get the size of the tree - spit it out:
+    ushort2 offsets = (*iter);
+    unsigned short buffIndex = offsets[0];
+    unsigned short buffOffset = offsets[1];
+    uchar16 tree = tree_buffers_[buffIndex][buffOffset];
+    int numParents = 0; 
+    for(int i=0; i<10; i++) {
+      numParents += bits[tree[i]]; 
+    }
+    int treeCells = numParents*8 + 1;
+    totalCells += treeCells;
+  }
+  vcl_cout<<"TOTAL NUMBER OF CELLS IN SCENE = "<<totalCells<<vcl_endl;
+  
+  //theoretical voxel count
+  int numVoxels = blocks_.get_row1_count()*blocks_.get_row2_count()*blocks_.get_row3_count() * 8*8*8; 
+  vcl_cout<<"Theoretical Number of Voxels: "<<numVoxels<<vcl_endl;
+  vcl_cout<<"==============================================\n"<<vcl_endl;
 }
 
 // ===== Save to disk functions =====
@@ -328,9 +371,11 @@ bool boxm_ocl_bit_scene::init_existing_data()
 bool boxm_ocl_bit_scene::init_empty_scene()
 {
   vcl_cout<<"Parser says max mb = "<<parser_.max_mb()<<vcl_endl
-          <<"parser says block nums = "<<parser_.block_nums()<<vcl_endl;
+          <<"parser says block nums = "<<parser_.block_nums()<<vcl_endl
+          <<"parser says p_init = "<<parser_.p_init(); 
   const int MAX_BYTES = parser_.max_mb()*1024*1024;
   const int BUFF_LENGTH = vcl_pow((float)2,(float)16); //65536
+  const float ALPHA_INIT = vcl_log(1.0f - parser_.p_init()) / (parser_.block_dim().x()); 
 
   //total number of (sub) blocks in the scene
   int total_blocks =  parser_.block_nums().x()
@@ -425,7 +470,7 @@ bool boxm_ocl_bit_scene::init_empty_scene()
     (*iter) = blk;
 
     //put initial alpha value, update end of tree data in mem_ptrs;
-    data_buffers(buffIndex, dataOffset)[0] = 0.1f;
+    data_buffers(buffIndex, dataOffset)[0] = ALPHA_INIT;
     mem_ptrs[buffIndex][1]++;
 
     //copy tree into tree buffer (pack buffOffset into chars 10-11
