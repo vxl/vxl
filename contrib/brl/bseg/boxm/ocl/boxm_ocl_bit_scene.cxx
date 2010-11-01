@@ -375,7 +375,7 @@ bool boxm_ocl_bit_scene::init_empty_scene()
           <<"parser says p_init = "<<parser_.p_init(); 
   const int MAX_BYTES = parser_.max_mb()*1024*1024;
   const int BUFF_LENGTH = vcl_pow((float)2,(float)16); //65536
-  const float ALPHA_INIT = vcl_log(1.0f - parser_.p_init()) / (parser_.block_dim().x()); 
+  const float ALPHA_INIT = -vcl_log(1.0f - parser_.p_init()) / (parser_.block_dim().x()); 
 
   //total number of (sub) blocks in the scene
   int total_blocks =  parser_.block_nums().x()
