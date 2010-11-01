@@ -36,7 +36,8 @@ static vgl_h_matrix_3d<double> plane_trans(vgl_plane_3d<double> const& plane,
     vnl_matrix_fixed<double,3, 3> m(0.0);
     m[0][0] = -1.0; m[1][1] = 1.0; m[2][2]=-1.0;
     vgl_h_matrix_3d<double> Trflip;//180 degree rotation about the y axis
-    Trflip.set_identity().set_rotation_matrix(m);
+    Trflip.set_identity();
+	Trflip.set_rotation_matrix(m);
     Tr = Trflip*Tr;
   }
   return Tr;
