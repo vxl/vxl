@@ -47,7 +47,7 @@ typedef struct
   //cl_uchar   mean_obs;
   //cl_uchar   cum_vis;
   cl_float   len_beta;
-  cl_uchar2   mean_vis;
+  cl_uchar   mean_vis[2];
 } AuxData;
 
 class boxm_ocl_bit_scene : public vbl_ref_count

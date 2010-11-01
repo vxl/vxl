@@ -82,8 +82,8 @@ bool boxm_update_bit_scene_manager::init_scene(boxm_ocl_bit_scene *scene,
   for (int i=0; i<numData; i++) cell_weight_[i] = (cl_uchar) 0;
   for (int i=0; i<numData; i++) {   //init aux data to zero
     cell_aux_data_[i].len_beta = (cl_float) 0.0;
-    cell_aux_data_[i].mean_vis.s[0] = (cl_uchar) 0;
-    cell_aux_data_[i].mean_vis.s[1] = (cl_uchar) 0;
+    cell_aux_data_[i].mean_vis[0] = (cl_uchar) 0;
+    cell_aux_data_[i].mean_vis[1] = (cl_uchar) 0;
     cell_num_obs_[i*4]=0;
     cell_num_obs_[i*4+1]=0;
     cell_num_obs_[i*4+2]=0;
@@ -219,8 +219,8 @@ bool boxm_update_bit_scene_manager::init_scene(boxm_ocl_bit_scene *scene,
     //cell_aux_data_[i].cum_vis   = (cl_uchar) 0;
     cell_aux_data_[i].len_beta = (cl_float) 0.0;
     //cell_aux_data_[i].len_beta.s[1] = (cl_float) 0.0;
-    cell_aux_data_[i].mean_vis.s[0] = (cl_uchar) 0;
-    cell_aux_data_[i].mean_vis.s[1] = (cl_uchar) 0;
+    cell_aux_data_[i].mean_vis[0] = (cl_uchar) 0;
+    cell_aux_data_[i].mean_vis[1] = (cl_uchar) 0;
      cell_num_obs_[i*4]=0;
     cell_num_obs_[i*4+1]=0;
     cell_num_obs_[i*4+2]=0;
