@@ -26,19 +26,19 @@ encode_image_data(icam_minimizer& minimizer, unsigned level)
 #if defined (_WIN32)
   cl_nbins_ = (cl_uint*)_aligned_malloc(sizeof(cl_uint),16);
   source_array_=(cl_float*)_aligned_malloc(slen * sizeof(cl_float), 16);
-  Ks_ = (cl_float4*)_aligned_malloc(sizeof(cl_float4),16);
+  Ks_ = (cl_float*)_aligned_malloc(sizeof(cl_float)*4,16);
   cl_sni_=(cl_uint*)_aligned_malloc(sizeof(cl_uint),16);
   cl_snj_=(cl_uint*)_aligned_malloc(sizeof(cl_uint),16);
 #elif defined(__APPLE__)
   cl_nbins_=(cl_uint*)malloc(sizeof(cl_uint));
   source_array_ = (cl_float*)malloc(slen * sizeof(cl_float));
-  Ks_ = (cl_float4*)malloc(sizeof(cl_float4));
+  Ks_ = (cl_float*)malloc(sizeof(cl_float)*4);
   cl_sni_=(cl_uint*)malloc(sizeof(cl_uint));
   cl_snj_=(cl_uint*)malloc(sizeof(cl_uint));
 #else
   cl_nbins_=(cl_uint*)memalign(16,sizeof(cl_uint));
   source_array_ = (cl_float*)memalign(16, slen * sizeof(cl_float));
-  Ks_ = (cl_float4*)memalign(16,sizeof(cl_float4));
+  Ks_ = (cl_float*)memalign(16,sizeof(cl_float)*4);
   cl_sni_=(cl_uint*)memalign(16,sizeof(cl_uint));
   cl_snj_=(cl_uint*)memalign(16,sizeof(cl_uint));
 #endif
@@ -52,10 +52,10 @@ encode_image_data(icam_minimizer& minimizer, unsigned level)
 
   *cl_sni_ = sni_;   *cl_snj_ = snj_;
 
-  Ks_->s[0] = static_cast<float>(Ks[0][0]);
-  Ks_->s[1] = static_cast<float>(Ks[0][2]);
-  Ks_->s[2] = static_cast<float>(Ks[1][1]);
-  Ks_->s[3] = static_cast<float>(Ks[1][2]);
+  Ks_[0] = static_cast<float>(Ks[0][0]);
+  Ks_[1] = static_cast<float>(Ks[0][2]);
+  Ks_[2] = static_cast<float>(Ks[1][1]);
+  Ks_[3] = static_cast<float>(Ks[1][2]);
 
   //encode smoothed dest image
   vil_image_view<float> dest = minimizer.dest(level);
@@ -74,17 +74,17 @@ encode_image_data(icam_minimizer& minimizer, unsigned level)
   unsigned dlen = dni_*dnj_;
 #if defined (_WIN32)
   dest_array_=(cl_float*)_aligned_malloc(dlen * sizeof(cl_float), 16);
-  Kdi_ = (cl_float4*)_aligned_malloc(sizeof(cl_float4),16);
+  Kdi_ = (cl_float*)_aligned_malloc(sizeof(cl_float)*4,16);
   cl_dni_=(cl_uint*)_aligned_malloc(sizeof(cl_uint),16);
   cl_dnj_=(cl_uint*)_aligned_malloc(sizeof(cl_uint),16);
 #elif defined(__APPLE__)
   dest_array_ = (cl_float*)malloc(dlen * sizeof(cl_float));
-  Kdi_ = (cl_float4*)malloc(sizeof(cl_float4));
+  Kdi_ = (cl_float*)malloc(sizeof(cl_float)*4);
   cl_dni_=(cl_uint*)malloc(sizeof(cl_uint));
   cl_dnj_=(cl_uint*)malloc(sizeof(cl_uint));
 #else
   dest_array_ = (cl_float*)memalign(16, dlen * sizeof(cl_float));
-  Kdi_ = (cl_float4*)memalign(16,sizeof(cl_float4));
+  Kdi_ = (cl_float*)memalign(16,sizeof(cl_float)*4);
   cl_dni_=(cl_uint*)memalign(16,sizeof(cl_uint));
   cl_dnj_=(cl_uint*)memalign(16,sizeof(cl_uint));
 #endif
@@ -95,10 +95,10 @@ encode_image_data(icam_minimizer& minimizer, unsigned level)
     for (unsigned i = 0; i<dni_; ++i, dindex++)
       dest_array_[dindex] = dest_sm(i,j);
   *cl_dni_ = dni_;   *cl_dnj_ = dnj_;
-  Kdi_->s[0] = static_cast<float>(Kdi[0][0]);
-  Kdi_->s[1] = static_cast<float>(Kdi[0][2]);
-  Kdi_->s[2] = static_cast<float>(Kdi[1][1]);
-  Kdi_->s[3] = static_cast<float>(Kdi[1][2]);
+  Kdi_[0] = static_cast<float>(Kdi[0][0]);
+  Kdi_[1] = static_cast<float>(Kdi[0][2]);
+  Kdi_[2] = static_cast<float>(Kdi[1][1]);
+  Kdi_[3] = static_cast<float>(Kdi[1][2]);
 
   //encode depth image
   vil_image_view<double> depth = minimizer.inv_depth(level);
@@ -206,19 +206,19 @@ bool icam_ocl_search_manager::
 create_image_parallel_transf_data()
 {
 #if defined (_WIN32)
-  rotation_ =(cl_float4*)_aligned_malloc(sizeof(cl_float4), 16);
+  rotation_ =(cl_float*)_aligned_malloc(sizeof(cl_float)*4, 16);
 #elif defined(__APPLE__)
-  rotation_ = (cl_float4*)malloc(sizeof(cl_float4));
+  rotation_ = (cl_float*)malloc(sizeof(cl_float)*4);
 #else
-  rotation_ = (cl_float4*)memalign(16, sizeof(cl_float4));
+  rotation_ = (cl_float*)memalign(16, sizeof(cl_float)*4);
 #endif
 
 #if defined (_WIN32)
-  translation_=(cl_float4*)_aligned_malloc(sizeof(cl_float4),16);
+  translation_=(cl_float*)_aligned_malloc(sizeof(cl_float)*4,16);
 #elif defined(__APPLE__)
-  translation_ = (cl_float4*)malloc(sizeof(cl_float4));
+  translation_ = (cl_float*)malloc(sizeof(cl_float)*4);
 #else
-  translation_ = (cl_float4*)memalign(16, sizeof(cl_float4));
+  translation_ = (cl_float*)memalign(16, sizeof(cl_float)*4);
 #endif
   if(!translation_)
     return false;
@@ -232,17 +232,17 @@ set_image_parallel_transf(vgl_vector_3d<double> const& tr,
   if (!rotation_)
     return false;
   vnl_vector_fixed<double, 3> rod = rot.as_rodrigues();
-  rotation_->s[0]=static_cast<float>(rod[0]);
-  rotation_->s[1]=static_cast<float>(rod[1]);
-  rotation_->s[2]=static_cast<float>(rod[2]);
-  rotation_->s[3] = 0.0f;
+  rotation_[0]=static_cast<float>(rod[0]);
+  rotation_[1]=static_cast<float>(rod[1]);
+  rotation_[2]=static_cast<float>(rod[2]);
+  rotation_[3] = 0.0f;
 
   if (!translation_)
     return false;
-  translation_->s[0]=static_cast<float>(tr.x());
-  translation_->s[1]=static_cast<float>(tr.y());
-  translation_->s[2]=static_cast<float>(tr.z());
-  translation_->s[3] = 0.0f;
+  translation_[0]=static_cast<float>(tr.x());
+  translation_[1]=static_cast<float>(tr.y());
+  translation_[2]=static_cast<float>(tr.z());
+  translation_[3] = 0.0f;
 
   return true;
 }
@@ -275,20 +275,20 @@ create_rot_parallel_transf_data()
 {
   unsigned nrot = rotations_.size();
 #if defined (_WIN32)
-  rot_array_ =(cl_float4*)_aligned_malloc(nrot*sizeof(cl_float4), 16);
+  rot_array_ =(cl_float*)_aligned_malloc(nrot*sizeof(cl_float)*4, 16);
 #elif defined(__APPLE__)
-  rot_array_ = (cl_float4*)malloc(nrot*sizeof(cl_float4));
+  rot_array_ = (cl_float*)malloc(nrot*sizeof(cl_float)*4);
 #else
-  rot_array_ = (cl_float4*)memalign(16, nrot*sizeof(cl_float4));
+  rot_array_ = (cl_float*)memalign(16, nrot*sizeof(cl_float)*4);
 #endif
   if(!rot_array_) return false;
 
 #if defined (_WIN32)
-  translation_=(cl_float4*)_aligned_malloc(sizeof(cl_float4),16);
+  translation_=(cl_float*)_aligned_malloc(sizeof(cl_float)*4,16);
 #elif defined(__APPLE__)
-  translation_ = (cl_float4*)malloc(sizeof(cl_float4));
+  translation_ = (cl_float*)malloc(sizeof(cl_float)*4);
 #else
-  translation_ = (cl_float4*)memalign(16, sizeof(cl_float4));
+  translation_ = (cl_float*)memalign(16, sizeof(cl_float)*4);
 #endif
   if(!translation_)
     return false;
@@ -304,18 +304,18 @@ set_rot_parallel_transf_data(vgl_vector_3d<double> const& tr)
   for(unsigned i = 0; i<nrot; ++i)
     {
       vnl_vector_fixed<double, 3> rod = rotations_[i].as_rodrigues();
-      rot_array_[i].s[0]=static_cast<float>(rod[0]);
-      rot_array_[i].s[1]=static_cast<float>(rod[1]);
-      rot_array_[i].s[2]=static_cast<float>(rod[2]);
-      rot_array_[i].s[3]= 0.0f;
+      rot_array_[i*4]=static_cast<float>(rod[0]);
+      rot_array_[i*4+1]=static_cast<float>(rod[1]);
+      rot_array_[i*4+2]=static_cast<float>(rod[2]);
+      rot_array_[i*4+3]= 0.0f;
     }
 
   if (!translation_)
     return false;
-  translation_->s[0]=static_cast<float>(tr.x());
-  translation_->s[1]=static_cast<float>(tr.y());
-  translation_->s[2]=static_cast<float>(tr.z());
-  translation_->s[3] = 0.0f;
+  translation_[0]=static_cast<float>(tr.x());
+  translation_[1]=static_cast<float>(tr.y());
+  translation_[2]=static_cast<float>(tr.z());
+  translation_[3] = 0.0f;
 
   return true;
 
@@ -354,11 +354,11 @@ bool icam_ocl_search_manager::create_rot_parallel_transf_buffers()
   int i=buffer_map_.size();
   unsigned nrot = rotations_.size();
   vcl_cout << "arg[" << i << "] - rot (cl_float4)\n";
-  arrs.push_back(rot_array_); sizes.push_back(nrot*sizeof(cl_float4));
+  arrs.push_back(rot_array_); sizes.push_back(nrot*sizeof(cl_float)*4);
   buffer_map_[rot_array_]=i++;
 
   vcl_cout << "arg[" << i << "] - trans (cl_float4)\n";
-  arrs.push_back(translation_); sizes.push_back(sizeof(cl_float4));
+  arrs.push_back(translation_); sizes.push_back(sizeof(cl_float)*4);
   buffer_map_[translation_]=i++;
 
   cl_int status;
@@ -400,15 +400,15 @@ bool icam_ocl_search_manager::setup_image_parallel_result()
       mask_array_[k]=0.0f;
 
 #if defined (_WIN32)
-  image_para_result_=(cl_float4*)_aligned_malloc(sizeof(cl_float4), 16);
+  image_para_result_=(cl_float*)_aligned_malloc(sizeof(cl_float)*4, 16);
 #elif defined(__APPLE__)
-  image_para_result_ = (cl_float4*)malloc(sizeof(cl_float4));
+  image_para_result_ = (cl_float*)malloc(sizeof(cl_float)*4);
 #else
-  image_para_result_ = (cl_float4*)memalign(16, sizeof(cl_float4));
+  image_para_result_ = (cl_float*)memalign(16, sizeof(cl_float)*4);
 #endif
 
 #if defined (_WIN32)
-  image_para_flag_=(cl_int4*)_aligned_malloc( sizeof(cl_int4), 16);
+  image_para_flag_=(cl_int4*)_aligned_malloc( sizeof(cl_int), 16);
 #elif defined(__APPLE__)
   image_para_flag_ = (cl_int4*)malloc(sizeof(cl_int4));
 #else
@@ -419,10 +419,10 @@ bool icam_ocl_search_manager::setup_image_parallel_result()
     return false;
 
   // initialize image_para result
-  image_para_result_->s[0]=vnl_numeric_traits<float>::maxval;
-  image_para_result_->s[1]= 0.0f;
-  image_para_result_->s[2]= 0.0f;
-  image_para_result_->s[3] = 0.0f;
+  image_para_result_[0]=vnl_numeric_traits<float>::maxval;
+  image_para_result_[1]= 0.0f;
+  image_para_result_[2]= 0.0f;
+  image_para_result_[3] = 0.0f;
   // initialize flag
   for (unsigned i = 0; i<4; ++i)
     image_para_flag_->s[i] = 0;
@@ -480,7 +480,7 @@ bool icam_ocl_search_manager::setup_rot_parallel_result()
   unsigned n_rot = rotations_.size();
   // the result image
 #if defined (_WIN32)
-  minfo_array_=(cl_float*)_aligned_malloc(n_rot * sizeof(cl_float4), 16);
+  minfo_array_=(cl_float*)_aligned_malloc(n_rot * sizeof(cl_float)*4, 16);
 #elif defined(__APPLE__)
   minfo_array_ = (cl_float*)malloc(n_rot * sizeof(cl_float));
 #else
@@ -577,7 +577,7 @@ bool icam_ocl_search_manager::copy_to_image_buffers()
   buffer_map_[cl_snj_]=i++;
 
   vcl_cout << "arg[" << i << "] - Ks (cl_float4)\n";
-  arrs.push_back(Ks_);sizes.push_back(sizeof(cl_float4));
+  arrs.push_back(Ks_);sizes.push_back(sizeof(cl_float)*4);
   buffer_map_[Ks_]=i++;
 
   vcl_cout << "arg[" << i << "] - source (cl_float)\n";
@@ -593,7 +593,7 @@ bool icam_ocl_search_manager::copy_to_image_buffers()
   buffer_map_[cl_dnj_]=i++;
 
   vcl_cout << "arg[" << i << "] - Kdi (cl_float4)\n";
-  arrs.push_back(Kdi_);sizes.push_back(sizeof(cl_float4));
+  arrs.push_back(Kdi_);sizes.push_back(sizeof(cl_float)*4);
   buffer_map_[Kdi_]=i++;
 
   vcl_cout << "arg[" << i << "] - dest (cl_float)\n";
@@ -621,13 +621,13 @@ bool icam_ocl_search_manager::copy_to_image_parallel_transf_buffers()
   cl_event events[1];
 
   status = kernel_->enqueue_write_buffer(command_queue_, buffer_map_[rotation_],CL_TRUE,
-                                   0,sizeof(cl_float4), rotation_, 0,NULL,&events[0]);
+                                   0,sizeof(cl_float)*4, rotation_, 0,NULL,&events[0]);
   if (!check_val(status,CL_SUCCESS,"clCreateBuffer ( rotation ) failed."))
     return SDK_FAILURE;
 
   // translation
   status = kernel_->enqueue_write_buffer(command_queue_,buffer_map_[translation_],CL_TRUE,
-                                   0,sizeof(cl_float4),translation_, 0,NULL,&events[0]);
+                                   0,sizeof(cl_float)*4,translation_, 0,NULL,&events[0]);
   if (!check_val(status,CL_SUCCESS,"clCreateBuffer ( translation ) failed."))
     return SDK_FAILURE;
 
@@ -649,10 +649,10 @@ bool icam_ocl_search_manager::create_image_parallel_transf_buffers()
   vcl_vector<unsigned int> sizes;
 
   int i=buffer_map_.size();
-  arrs.push_back(rotation_); sizes.push_back(sizeof(cl_float4));
+  arrs.push_back(rotation_); sizes.push_back(sizeof(cl_float)*4);
   buffer_map_[rotation_]=i++;
 
-  arrs.push_back(translation_); sizes.push_back(sizeof(cl_float4));
+  arrs.push_back(translation_); sizes.push_back(sizeof(cl_float)*4);
   buffer_map_[translation_]=i++;
 
   cl_int status;
@@ -666,7 +666,7 @@ bool icam_ocl_search_manager::create_image_parallel_result_buffers()
   vcl_vector<unsigned int> sizes;
 
   int i=buffer_map_.size();
-  arrs.push_back(image_para_result_);  sizes.push_back(sizeof(cl_float4));
+  arrs.push_back(image_para_result_);  sizes.push_back(sizeof(cl_float)*4);
   buffer_map_[image_para_result_]=i++;
 
   arrs.push_back(image_para_flag_);  sizes.push_back(sizeof(cl_int4));
@@ -720,15 +720,15 @@ bool icam_ocl_search_manager::set_rot_parallel_local_args()
   int i = buffer_map_.size();
   // translation
   vcl_cout << "local arg[" << i << "] - translation (cl_float4)\n";
-  kernel_->set_local_arg(i++, sizeof(cl_float4));
+  kernel_->set_local_arg(i++, sizeof(cl_float)*4);
 
   // rows of the rotation matrix
   vcl_cout << "local arg[" << i << "] - r0 (cl_float4)\n";
-  kernel_->set_local_arg(i++, sizeof(cl_float4));
+  kernel_->set_local_arg(i++, sizeof(cl_float)*4);
   vcl_cout << "local arg[" << i << "] - r1 (cl_float4)\n";
-  kernel_->set_local_arg(i++, sizeof(cl_float4));
+  kernel_->set_local_arg(i++, sizeof(cl_float)*4);
   vcl_cout << "local arg[" << i << "] - r2 (cl_float4)\n";
-  kernel_->set_local_arg(i++, sizeof(cl_float4));
+  kernel_->set_local_arg(i++, sizeof(cl_float)*4);
 
   // dest histogram
   vcl_cout << "local arg[" << i << "] - mdhist (cl_uint)\n";
@@ -795,7 +795,7 @@ bool icam_ocl_search_manager::run_image_parallel_kernel()
 
   cl_event events[1];
   status = kernel_->enqueue_read_buffer(command_queue_,buffer_map_[image_para_result_],CL_TRUE,
-                                        0,sizeof(cl_float4),image_para_result_,0,NULL,&events[0]);
+                                        0,sizeof(cl_float)*4,image_para_result_,0,NULL,&events[0]);
 
   if (!check_val(status,CL_SUCCESS,"clEnqueueBuffer (image_para result )failed."))
     return SDK_FAILURE;

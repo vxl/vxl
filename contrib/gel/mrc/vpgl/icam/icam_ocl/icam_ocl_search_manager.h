@@ -107,7 +107,7 @@ class icam_ocl_search_manager : public icam_ocl_manager<icam_ocl_search_manager>
   void clean_rot_parallel_result();
 
   cl_int4 image_para_flag() {return *image_para_flag_;}
-  cl_float4 image_para_result() {return *image_para_result_;}
+  cl_float* image_para_result() {return image_para_result_;}
   cl_float* source_array() {return source_array_;}
   cl_float* result_array() {return result_array_;}
   cl_float* mask_array() {return mask_array_;}
@@ -132,7 +132,7 @@ class icam_ocl_search_manager : public icam_ocl_manager<icam_ocl_search_manager>
   cl_uint * cl_sni_;
   cl_uint * cl_snj_;
   
-  cl_float4* Ks_; // source image K matrix
+  cl_float* Ks_; // source image K matrix
   cl_float* source_array_;
   
   //dest image
@@ -140,7 +140,7 @@ class icam_ocl_search_manager : public icam_ocl_manager<icam_ocl_search_manager>
   unsigned dnj_;
   cl_uint * cl_dni_;
   cl_uint * cl_dnj_;
-  cl_float4* Kdi_;// inverse  K matrix for destination image
+  cl_float* Kdi_;// inverse  K matrix for destination image
   cl_float* dest_array_;
 
   // depth image, same dimensions as dest
@@ -154,14 +154,14 @@ class icam_ocl_search_manager : public icam_ocl_manager<icam_ocl_search_manager>
 
   // search rotations
   vcl_vector<vgl_rotation_3d<double> > rotations_;
-  cl_float4* rotation_;
-  cl_float4* rot_array_;
+  cl_float* rotation_;
+  cl_float* rot_array_;
   // search translations 
   vcl_vector<vgl_vector_3d<double> > translations_;
-  cl_float4* translation_;
+  cl_float* translation_;
 
   // the result of the search (image parallel)
-  cl_float4* image_para_result_;
+  cl_float* image_para_result_;
   cl_int4 * image_para_flag_;
 
   // the result of the search (rot parallel)
