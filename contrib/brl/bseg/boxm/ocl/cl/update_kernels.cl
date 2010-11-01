@@ -45,12 +45,17 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
   //----------------------------------------------------------------------------
   int i=0,j=0;
 
+  
   //map_work_space_2d_offset(&i,&j,(*offset_x),(*offset_y));
   //int factor=(*offsetfactor);
   map_work_space_2d(&i,&j);
   int factor=1;
 
-  // check to see if the thread corresponds to an actual pixel as in some
+
+  i=get_global_id(0);
+  j=get_global_id(1);
+  // check to see if the thread corresponds to an actual pixel as in some 
+
   // cases #of threads will be more than the pixels.
   if (i>=(*imgdims).z || j>=(*imgdims).w) {
     return;
@@ -144,6 +149,8 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
   //----------------------------------------------------------------------------
   int i=0,j=0; map_work_space_2d(&i,&j);
   int factor=1;
+  i=get_global_id(0);
+  j=get_global_id(1);
 
   // check to see if the thread corresponds to an actual pixel as in some
   // cases #of threads will be more than the pixels.
@@ -239,6 +246,8 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
   //int factor=(*offsetfactor);
   map_work_space_2d(&i,&j);
   int factor=1;
+  i=get_global_id(0);
+  j=get_global_id(1);
 
   // check to see if the thread corresponds to an actual pixel as in some
   // cases #of threads will be more than the pixels.
@@ -307,9 +316,15 @@ proc_norm_image(__global float4* image, __global float4* p_inf,__global uint4   
   // linear global id of the normalization image
   int lgid = get_global_id(0) + get_global_size(0)*get_global_id(1);
 
-  int i=0;
-  int j=0;
-  map_work_space_2d(&i,&j);
+    int i=0;
+    int j=0;
+    map_work_space_2d(&i,&j);
+      i=get_global_id(0);
+  j=get_global_id(1);
+
+    if (i>=(*imgdims).z && j>=(*imgdims).w)
+        return;
+
 
   if (i>=(*imgdims).z && j>=(*imgdims).w)
     return;
