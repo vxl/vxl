@@ -74,6 +74,9 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
 
   //: before calling update, make sure input image, image dimensions and camera are set
   bool set_input_image(vil_image_view<float>  obs);
+  bool set_input_image(vil_image_view<float>  obs1,
+                       vil_image_view<float>  obs2);
+
   bool write_image_buffer();
 
   //: set 2d workgroup size

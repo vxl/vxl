@@ -2138,7 +2138,7 @@ bool boxm_update_bit_scene_manager::refine()
 
 vil_image_view_base_sptr boxm_update_bit_scene_manager::get_output_image(int plane_num)
 {
-  vil_image_view<float> * oimage=new vil_image_view<float>(this->wni_,this->wnj_);
+  vil_image_view<float> * oimage=new vil_image_view<float>(input_img_.ni(),input_img_.nj());
 
   for (unsigned i=0;i<oimage->ni();i++)
     for (unsigned j=0;j<oimage->nj();j++)
@@ -2540,7 +2540,37 @@ bool boxm_update_bit_scene_manager::set_input_image(vil_image_view<float>  obs)
   else
     return true;
 }
+bool boxm_update_bit_scene_manager::set_input_image(vil_image_view<float>  obs1,
+                                                    vil_image_view<float>  obs2)
+{
+  for (unsigned i=0;i<wni_*wnj_*4;i++)
+    image_[i]=0.0;
 
+ // pad the image
+  for (unsigned i=0;i<obs1.ni();i++)
+  {
+    for (unsigned j=0;j<obs1.nj();j++)
+    {
+      image_[(j*wni_+i)*4]=obs1(i,j);
+      image_[(j*wni_+i)*4+1]=obs2(i,j);
+      image_[(j*wni_+i)*4+2]=1.0f;
+      image_[(j*wni_+i)*4+3]=0.0f;
+    }
+  }
+
+  img_dims_[0]=0;
+  img_dims_[1]=0;
+  img_dims_[2]=obs1.ni();
+  img_dims_[3]=obs1.nj();
+
+  if (image_==NULL || img_dims_==NULL)
+  {
+    vcl_cerr<<"Failed allocation of image or image dimensions\n";
+    return false;
+  }
+  else
+    return true;
+}
 bool boxm_update_bit_scene_manager::clean_input_image()
 {
   if (image_)
