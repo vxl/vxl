@@ -66,7 +66,7 @@ class boxm_ocl_utils
                             int BUFF_LENGTH,
                             int blocks_per_buffer,
                             int tree_size,
-                            vnl_random random);
+                            vnl_random& random);
 
   // Binary read and writes for a tree.
   static cl_int* readtree(vcl_string tree_file, unsigned int & tree_size );

@@ -197,18 +197,20 @@ int boxm_ocl_utils::getBufferIndex(bool rand,
                                    int BUFF_LENGTH,
                                    int blocks_per_buffer,
                                    int tree_size,
-                                   vnl_random random) 
+                                   vnl_random& random) 
 {
   int num_buffers = mem_ptrs.size()-1;
   if(rand) {
     //choose random buff index to start out with
     int buffIndex = random.lrand32(0, num_buffers-1);
+    //vcl_cout<<"Random buff chosen..."<<buffIndex<<vcl_endl;
     unsigned short start = mem_ptrs[buffIndex][0];
     unsigned short end   = mem_ptrs[buffIndex][1];
     int freeSpace = (start >= end)? start-end : BUFF_LENGTH - (end-start); //free cells in data buffer
 
     //if there isn't enough space in this buffer, find another one
     if (freeSpace < tree_size || blocksInBuffer[buffIndex] >= blocks_per_buffer) {
+      //vcl_cout<<"Not going with first buffer "<<vcl_endl;
       int bCount = 0;
       bool buffFound = false;
       while (!buffFound && bCount < num_buffers*3) {
@@ -221,6 +223,7 @@ int boxm_ocl_utils::getBufferIndex(bool rand,
           buffFound = true;
       }
       if (!buffFound) {
+        //vcl_cout<<"second attempt(s) didn't work, deterministically seeking buffer"<<vcl_endl;
         //resort to a deterministic search
         for(int bInt=0; bInt<num_buffers+1; bInt++) {
           unsigned short start = mem_ptrs[bInt][0];
