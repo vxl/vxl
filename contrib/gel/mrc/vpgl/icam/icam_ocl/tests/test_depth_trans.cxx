@@ -18,14 +18,14 @@ bool test_image_parallel_search()
 {
 //====================== Setup Minimizer ====================
   vcl_string root_dir = testlib_root_dir();
-  vcl_string dest_file = "C:/images/calibration/frame_142.png";
-  vcl_string source_file = "C:/images/calibration/frame_145.png";
-  vcl_string depth_file = "C:/images/calibration/depth_142.tif";
-  vcl_string result_file = "C:/images/calibration/gpu_result.tif";
-  vcl_string mask_file = "C:/images/calibration/gpu_mask.tif";
-  vcl_string cpp_src_file = "C:/images/calibration/cpp_src.tif";
-  vcl_string cpp_result_file = "C:/images/calibration/cpp_result.tif";
-  vcl_string cpp_mask_file = "C:/images/calibration/cpp_mask.tif";
+  vcl_string dest_file = "C:/temp/ImagesForGPUTest/frame_142.png";
+  vcl_string source_file = "C:/temp/ImagesForGPUTest/frame_145.png";
+  vcl_string depth_file = "C:/temp/ImagesForGPUTest/depth_142.tif";
+  vcl_string result_file = "C:/temp/ImagesForGPUTest/gpu_result.tif";
+  vcl_string mask_file = "C:/temp/ImagesForGPUTest/gpu_mask.tif";
+  vcl_string cpp_src_file = "C:/temp/ImagesForGPUTest/cpp_src.tif";
+  vcl_string cpp_result_file = "C:/temp/ImagesForGPUTest/cpp_result.tif";
+  vcl_string cpp_mask_file = "C:/temp/ImagesForGPUTest/cpp_mask.tif";
   vil_image_view_base_sptr dest_img_base = vil_load(dest_file.c_str());
   if (!dest_img_base) {
     vcl_cerr << "error loading image.\n";
@@ -72,7 +72,7 @@ bool test_image_parallel_search()
   unsigned min_pyramid_image_size = 16;
   unsigned box_reduction_k = 2;
   double local_min_thresh = 0.005;
-  //vcl_string base_path = "c:/images/calibration";
+  //vcl_string base_path = "C:/temp/ImagesForGPUTest";
   vcl_string base_path = "";
   icam_minimizer minimizer(source_img_flt, dest_img_flt, dt,
                            min_pyramid_image_size, box_reduction_k,
@@ -123,9 +123,9 @@ bool test_image_parallel_search()
   vcl_cout << "Flag(" << flag.s[0] << ' ' << flag.s[1] << ' '
            << flag.s[2] << ' ' << flag.s[3] << ")\n";
 
-  cl_float4 cres = mgr->image_para_result();
-  vcl_cout << "Image_Para(" << cres.s[0] << ' ' << cres.s[1] << ' '
-           << cres.s[2] << ' ' << cres.s[3] << ")\n";
+  cl_float* cres = mgr->image_para_result();
+  vcl_cout << "Image_Para(" << cres[0] << ' ' << cres[1] << ' '
+           << cres[2] << ' ' << cres[3] << ")\n";
   unsigned dni = mgr->dest_ni(), dnj = mgr->dest_nj();
   vil_image_view<float> result(dni, dnj);
   vil_image_view<float> mask(dni, dnj);
@@ -175,14 +175,14 @@ bool test_rot_parallel_search()
 {
 //====================== Setup Minimizer ====================
   vcl_string root_dir = testlib_root_dir();
-  vcl_string dest_file = "C:/images/calibration/frame_142.png";
-  vcl_string source_file = "C:/images/calibration/frame_145.png";
-  vcl_string depth_file = "C:/images/calibration/depth_142.tif";
-  vcl_string gpu_mdest_file = "C:/images/calibration/gpu_mdest.tif";
-  vcl_string mask_file = "C:/images/calibration/gpu_mask.tif";
-  vcl_string cpp_src_file = "C:/images/calibration/cpp_src.tif";
-  vcl_string cpp_result_file = "C:/images/calibration/cpp_result.tif";
-  vcl_string cpp_mask_file = "C:/images/calibration/cpp_mask.tif";
+  vcl_string dest_file = "C:/temp/ImagesForGPUTest/frame_142.png";
+  vcl_string source_file = "C:/temp/ImagesForGPUTest/frame_145.png";
+  vcl_string depth_file = "C:/temp/ImagesForGPUTest/depth_142.tif";
+  vcl_string gpu_mdest_file = "C:/temp/ImagesForGPUTest/gpu_mdest.tif";
+  vcl_string mask_file = "C:/temp/ImagesForGPUTest/gpu_mask.tif";
+  vcl_string cpp_src_file = "C:/temp/ImagesForGPUTest/cpp_src.tif";
+  vcl_string cpp_result_file = "C:/temp/ImagesForGPUTest/cpp_result.tif";
+  vcl_string cpp_mask_file = "C:/temp/ImagesForGPUTest/cpp_mask.tif";
   vil_image_view_base_sptr dest_img_base = vil_load(dest_file.c_str());
   if (!dest_img_base) {
     vcl_cerr << "error loading image.\n";
@@ -229,7 +229,7 @@ bool test_rot_parallel_search()
   unsigned min_pyramid_image_size = 16;
   unsigned box_reduction_k = 2;
   double local_min_thresh = 0.005;
-  //vcl_string base_path = "c:/images/calibration";
+  //vcl_string base_path = "C:/temp/ImagesForGPUTest";
   vcl_string base_path = "";
   icam_minimizer minimizer(source_img_flt, dest_img_flt, dt,
                            min_pyramid_image_size, box_reduction_k,
