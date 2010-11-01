@@ -1,4 +1,5 @@
 #include "icam_ocl_kernel.h"
+#include <vcl_iostream.h>
 
 
 bool icam_ocl_kernel::create_kernel(cl_program const& program, vcl_string const& kernel_name, cl_int& status)
@@ -65,6 +66,17 @@ bool icam_ocl_kernel::create_out_buffers(const cl_context& context,
     if (!buf->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizes[i], data[i]))
       return SDK_FAILURE;
     buffers_.push_back(buf);
+  }
+  return SDK_SUCCESS;
+}
+
+bool icam_ocl_kernel::set_local_arg(int arg_id, size_t arg_size)
+{
+  //  set local variable
+  cl_int status = clSetKernelArg(kernel_,arg_id,arg_size,0);
+  if(status!=SDK_SUCCESS){
+	  vcl_cout << "Set local kernel arg failed\n";
+	  return SDK_FAILURE;
   }
   return SDK_SUCCESS;
 }

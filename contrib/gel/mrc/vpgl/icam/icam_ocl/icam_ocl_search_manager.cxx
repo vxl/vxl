@@ -24,16 +24,19 @@ encode_image_data(icam_minimizer& minimizer, unsigned level)
   // source cl_memory array
   unsigned slen = sni_*snj_;
 #if defined (_WIN32)
+  cl_nbins_ = (cl_uint*)_aligned_malloc(sizeof(cl_uint),16);
   source_array_=(cl_float*)_aligned_malloc(slen * sizeof(cl_float), 16);
   Ks_ = (cl_float4*)_aligned_malloc(sizeof(cl_float4),16);
   cl_sni_=(cl_uint*)_aligned_malloc(sizeof(cl_uint),16);
   cl_snj_=(cl_uint*)_aligned_malloc(sizeof(cl_uint),16);
 #elif defined(__APPLE__)
+  cl_nbins_=(cl_uint*)malloc(sizeof(cl_uint));
   source_array_ = (cl_float*)malloc(slen * sizeof(cl_float));
   Ks_ = (cl_float4*)malloc(sizeof(cl_float4));
   cl_sni_=(cl_uint*)malloc(sizeof(cl_uint));
   cl_snj_=(cl_uint*)malloc(sizeof(cl_uint));
 #else
+  cl_nbins_=(cl_uint*)memalign(16,sizeof(cl_uint));
   source_array_ = (cl_float*)memalign(16, slen * sizeof(cl_float));
   Ks_ = (cl_float4*)memalign(16,sizeof(cl_float4));
   cl_sni_=(cl_uint*)memalign(16,sizeof(cl_uint));
@@ -41,6 +44,7 @@ encode_image_data(icam_minimizer& minimizer, unsigned level)
 #endif
   if (!source_array_)
     return false;
+  (*cl_nbins_) = this->nbins_;
   unsigned sindex = 0;
   for (unsigned j = 0; j<snj_; ++j)
     for (unsigned i = 0; i<sni_; ++i, sindex++)
@@ -190,7 +194,14 @@ setup_transf_search_space(vgl_box_3d<double> const& trans_box,
            << "Total search space " << n_rays*n_pangs*translations_.size()
            << " mappings\n";
 }
-
+//set all rotations to be the same value for testing purposes
+void icam_ocl_search_manager::
+setup_rot_debug_space(unsigned n_rotations,
+                      vgl_rotation_3d<double> const& rot)
+{
+  for(unsigned i =0; i<n_rotations; ++i)
+    rotations_.push_back(rot);
+}
 bool icam_ocl_search_manager::
 create_image_parallel_transf_data()
 {
@@ -209,7 +220,9 @@ create_image_parallel_transf_data()
 #else
   translation_ = (cl_float4*)memalign(16, sizeof(cl_float4));
 #endif
-  return bool(translation_);
+  if(!translation_)
+    return false;
+  return true;
 }
 
 bool icam_ocl_search_manager::
@@ -233,7 +246,6 @@ set_image_parallel_transf(vgl_vector_3d<double> const& tr,
 
   return true;
 }
-
 void icam_ocl_search_manager::clean_image_parallel_transf_data()
 {
   if (rotation_)
@@ -257,6 +269,101 @@ void icam_ocl_search_manager::clean_image_parallel_transf_data()
     translation_ = NULL;
 #endif
   }
+}
+bool icam_ocl_search_manager::
+create_rot_parallel_transf_data()
+{
+  unsigned nrot = rotations_.size();
+#if defined (_WIN32)
+  rot_array_ =(cl_float4*)_aligned_malloc(nrot*sizeof(cl_float4), 16);
+#elif defined(__APPLE__)
+  rot_array_ = (cl_float4*)malloc(nrot*sizeof(cl_float4));
+#else
+  rot_array_ = (cl_float4*)memalign(16, nrot*sizeof(cl_float4));
+#endif
+  if(!rot_array_) return false;
+
+#if defined (_WIN32)
+  translation_=(cl_float4*)_aligned_malloc(sizeof(cl_float4),16);
+#elif defined(__APPLE__)
+  translation_ = (cl_float4*)malloc(sizeof(cl_float4));
+#else
+  translation_ = (cl_float4*)memalign(16, sizeof(cl_float4));
+#endif
+  if(!translation_)
+    return false;
+  return true;
+}
+
+bool icam_ocl_search_manager::
+set_rot_parallel_transf_data(vgl_vector_3d<double> const& tr)
+{
+  unsigned nrot = rotations_.size();
+  if (!rot_array_)
+    return false;
+  for(unsigned i = 0; i<nrot; ++i)
+    {
+      vnl_vector_fixed<double, 3> rod = rotations_[i].as_rodrigues();
+      rot_array_[i].s[0]=static_cast<float>(rod[0]);
+      rot_array_[i].s[1]=static_cast<float>(rod[1]);
+      rot_array_[i].s[2]=static_cast<float>(rod[2]);
+      rot_array_[i].s[3]= 0.0f;
+    }
+
+  if (!translation_)
+    return false;
+  translation_->s[0]=static_cast<float>(tr.x());
+  translation_->s[1]=static_cast<float>(tr.y());
+  translation_->s[2]=static_cast<float>(tr.z());
+  translation_->s[3] = 0.0f;
+
+  return true;
+
+}
+
+void icam_ocl_search_manager::clean_rot_parallel_transf_data()
+{
+  if (rot_array_)
+  {
+#ifdef _WIN32
+    _aligned_free(rot_array_);
+#elif defined(__APPLE__)
+    free(rot_array_);
+#else
+    rot_array_ = NULL;
+#endif
+  }
+
+  if (translation_)
+  {
+#ifdef _WIN32
+    _aligned_free(translation_);
+#elif defined(__APPLE__)
+    free(translation_);
+#else
+    translation_ = NULL;
+#endif
+  }
+}
+
+bool icam_ocl_search_manager::create_rot_parallel_transf_buffers()
+{
+  vcl_vector<void*> arrs;
+  vcl_vector<unsigned int> sizes;
+
+  int i=buffer_map_.size();
+  unsigned nrot = rotations_.size();
+  vcl_cout << "arg[" << i << "] - rot (cl_float4)\n";
+  arrs.push_back(rot_array_); sizes.push_back(nrot*sizeof(cl_float4));
+  buffer_map_[rot_array_]=i++;
+
+  vcl_cout << "arg[" << i << "] - trans (cl_float4)\n";
+  arrs.push_back(translation_); sizes.push_back(sizeof(cl_float4));
+  buffer_map_[translation_]=i++;
+
+  cl_int status;
+  status = kernel_->create_in_buffers(this->context_,arrs,sizes);
+  return status == SDK_SUCCESS;
 }
 
 bool icam_ocl_search_manager::setup_image_parallel_result()
@@ -368,6 +475,90 @@ void icam_ocl_search_manager::clean_image_parallel_result()
   }
 }
 
+bool icam_ocl_search_manager::setup_rot_parallel_result()
+{
+  unsigned n_rot = rotations_.size();
+  // the result image
+#if defined (_WIN32)
+  minfo_array_=(cl_float*)_aligned_malloc(n_rot * sizeof(cl_float4), 16);
+#elif defined(__APPLE__)
+  minfo_array_ = (cl_float*)malloc(n_rot * sizeof(cl_float));
+#else
+  minfo_array_ = (cl_float*)memalign(16, n_rot * sizeof(cl_float));
+#endif
+  if (!minfo_array_)
+    return false;
+  for (unsigned i =0; i<n_rot; ++i)
+      minfo_array_[i]=0.0f;
+
+#if defined (_WIN32)
+  rot_para_flag_=(cl_int4*)_aligned_malloc( sizeof(cl_int4), 16);
+#elif defined(__APPLE__)
+  rot_para_flag_ = (cl_int4*)malloc(sizeof(cl_int4));
+#else
+  rot_para_flag_ = (cl_int4*)memalign(16, sizeof(cl_int4));
+#endif
+
+  if (!rot_para_flag_)
+    return false;
+  for (unsigned i = 0; i<4; ++i)
+    rot_para_flag_->s[i] = 0;
+  return true;
+
+}
+void icam_ocl_search_manager::clean_rot_parallel_result()
+{
+  if (rot_para_flag_)
+  {
+#ifdef _WIN32
+    _aligned_free(rot_para_flag_);
+#elif defined(__APPLE__)
+    free(rot_para_flag_);
+#else
+    rot_para_flag_ = NULL;
+#endif
+  }
+  if (minfo_array_)
+  {
+#ifdef _WIN32
+    _aligned_free(minfo_array_);
+#elif defined(__APPLE__)
+    free(minfo_array_);
+#else
+    minfo_array_ = NULL;
+#endif
+  }
+}
+
+bool icam_ocl_search_manager::create_rot_parallel_result_buffers()
+{
+  vcl_vector<void*> arrs;
+  vcl_vector<unsigned int> sizes;
+  unsigned n_rot = rotations_.size();
+  int i=buffer_map_.size();
+  vcl_cout << "output arg[" << i << "] - minfo (cl_float) \n";
+  arrs.push_back(minfo_array_);  sizes.push_back(n_rot*sizeof(cl_float));
+  buffer_map_[minfo_array_]=i++;
+
+  vcl_cout << "output arg[" << i << "] - rot_para_flag (cl_int4)\n";
+  arrs.push_back(rot_para_flag_);  sizes.push_back(sizeof(cl_int4));
+  buffer_map_[rot_para_flag_]=i++;
+
+  cl_int status;
+  status = kernel_->create_out_buffers(this->context_,arrs,sizes);
+  return status == SDK_SUCCESS;
+}
+bool icam_ocl_search_manager::set_nbins_buffer()
+{
+  vcl_vector<void*> arrs;
+  vcl_vector<unsigned int> sizes;
+  int i=kernel_->buffer_cnt();
+  vcl_cout << "arg[" << i << "] - nbins (cl_uint)\n";
+  arrs.push_back(cl_nbins_);sizes.push_back(sizeof(cl_uint));
+  buffer_map_[cl_nbins_]=i;
+  cl_int  status = kernel_->create_in_buffers(this->context_,arrs,sizes);
+  return status == SDK_SUCCESS;
+}
 bool icam_ocl_search_manager::copy_to_image_buffers()
 {
   // Create and initialize memory objects
@@ -377,37 +568,46 @@ bool icam_ocl_search_manager::copy_to_image_buffers()
   vcl_vector<unsigned int> sizes;
   int i=kernel_->buffer_cnt();
 
+  vcl_cout << "arg[" << i << "] - sni (cl_uint)\n";
   arrs.push_back(cl_sni_);sizes.push_back(sizeof(cl_uint));
   buffer_map_[cl_sni_]=i++;
 
+  vcl_cout << "arg[" << i << "] - snj (cl_uint)\n";
   arrs.push_back(cl_snj_);sizes.push_back(sizeof(cl_uint));
   buffer_map_[cl_snj_]=i++;
 
+  vcl_cout << "arg[" << i << "] - Ks (cl_float4)\n";
   arrs.push_back(Ks_);sizes.push_back(sizeof(cl_float4));
   buffer_map_[Ks_]=i++;
 
+  vcl_cout << "arg[" << i << "] - source (cl_float)\n";
   arrs.push_back(source_array_);sizes.push_back(sni_*snj_*sizeof(cl_float));
   buffer_map_[source_array_]=i++;
 
+  vcl_cout << "arg[" << i << "] - dni (cl_uint)\n";
   arrs.push_back(cl_dni_);sizes.push_back(sizeof(cl_uint));
   buffer_map_[cl_dni_]=i++;
 
+  vcl_cout << "arg[" << i << "] - dnj (cl_uint)\n";
   arrs.push_back(cl_dnj_);sizes.push_back(sizeof(cl_uint));
   buffer_map_[cl_dnj_]=i++;
 
+  vcl_cout << "arg[" << i << "] - Kdi (cl_float4)\n";
   arrs.push_back(Kdi_);sizes.push_back(sizeof(cl_float4));
   buffer_map_[Kdi_]=i++;
 
+  vcl_cout << "arg[" << i << "] - dest (cl_float)\n";
   arrs.push_back(dest_array_);sizes.push_back(dni_*dnj_*sizeof(cl_float));
   buffer_map_[dest_array_]=i++;
 
+  vcl_cout << "arg[" << i << "] - depth (cl_float)\n";
   arrs.push_back(depth_array_); sizes.push_back(dni_*dnj_*sizeof(cl_float));
   buffer_map_[depth_array_]=i++;
 
   cl_int status;
   status = kernel_->create_in_buffers(this->context_,arrs,sizes);
 
-  return status;
+  return status == SDK_SUCCESS;
 }
 
 bool icam_ocl_search_manager::release_buffers()
@@ -457,7 +657,7 @@ bool icam_ocl_search_manager::create_image_parallel_transf_buffers()
 
   cl_int status;
   status = kernel_->create_in_buffers(this->context_,arrs,sizes);
-  return status;
+  return status == SDK_SUCCESS;
 }
 
 bool icam_ocl_search_manager::create_image_parallel_result_buffers()
@@ -480,9 +680,8 @@ bool icam_ocl_search_manager::create_image_parallel_result_buffers()
 
   cl_int status;
   status = kernel_->create_out_buffers(this->context_,arrs,sizes);
-  return status;
+  return status == SDK_SUCCESS;
 }
-
 bool icam_ocl_search_manager::setup_image_parallel_kernel()
 {
   // -- Set appropriate arguments to the kernel --
@@ -504,10 +703,7 @@ bool icam_ocl_search_manager::setup_image_parallel_kernel()
   if (!check_val(status,CL_SUCCESS,"clGetKernelWorkGroupInfo CL_KERNEL_WORK_GROUP_SIZE, failed."))
     return SDK_FAILURE;
   assert(this->workgrp_size()<= vcl_size_t(kernel_work_group_size));
-#if 0
-  vcl_size_t globalThreads[]= {wsni_ , wsnj_};
-  vcl_size_t localThreads[] = {this->workgrp_ni(), this->workgrp_nj()};
-#endif
+
   if (used_local_memory > this->total_local_memory())
   {
     vcl_cout << "Unsupported: Insufficient local memory on device.\n";
@@ -516,10 +712,72 @@ bool icam_ocl_search_manager::setup_image_parallel_kernel()
 
   // set up a command queue
   command_queue_ = clCreateCommandQueue(this->context(),this->devices()[0],CL_QUEUE_PROFILING_ENABLE,&status);
-  return check_val(status,CL_SUCCESS,"Falied in command queue creation" + error_to_string(status));
+  return check_val(status,CL_SUCCESS,"Falied in command queue creation" + error_to_string(status))!=CL_SUCCESS;
 }
 
-bool icam_ocl_search_manager::run_kernel()
+bool icam_ocl_search_manager::set_rot_parallel_local_args()
+{
+  int i = buffer_map_.size();
+  // translation
+  vcl_cout << "local arg[" << i << "] - translation (cl_float4)\n";
+  kernel_->set_local_arg(i++, sizeof(cl_float4));
+
+  // rows of the rotation matrix
+  vcl_cout << "local arg[" << i << "] - r0 (cl_float4)\n";
+  kernel_->set_local_arg(i++, sizeof(cl_float4));
+  vcl_cout << "local arg[" << i << "] - r1 (cl_float4)\n";
+  kernel_->set_local_arg(i++, sizeof(cl_float4));
+  vcl_cout << "local arg[" << i << "] - r2 (cl_float4)\n";
+  kernel_->set_local_arg(i++, sizeof(cl_float4));
+
+  // dest histogram
+  vcl_cout << "local arg[" << i << "] - mdhist (cl_uint)\n";
+  kernel_->set_local_arg(i++, nbins_*sizeof(cl_uint));
+  // joint histogram
+  vcl_cout << "local arg[" << i << "] - joint hist (cl_uint)\n";
+  kernel_->set_local_arg(i++, nbins_*nbins_*sizeof(cl_uint));
+  // reduction buffer
+  vcl_cout << "local arg[" << i << "] - reduc_buf hist(cl_float)\n";
+  kernel_->set_local_arg(i, 2*this->workgrp_ni()*sizeof(cl_float));
+  return true;
+}
+
+bool icam_ocl_search_manager::setup_rot_parallel_kernel()
+{
+  // -- Set appropriate arguments to the kernel --
+  // source array args
+  cl_int status = kernel_->set_args();
+  if(status!=0) return false;
+  if(!this->set_rot_parallel_local_args())
+    return false;
+  //=================== end of kernel arguments =======================
+
+  cl_ulong used_local_memory;
+  status = clGetKernelWorkGroupInfo(kernel_->kernel(),this->devices()[0],CL_KERNEL_LOCAL_MEM_SIZE,
+                                    sizeof(cl_ulong),&used_local_memory,NULL);
+  if (!check_val(status,CL_SUCCESS,"clGetKernelWorkGroupInfo CL_KERNEL_LOCAL_MEM_SIZE failed."))
+    return SDK_FAILURE;
+
+  // determine the work group size
+  cl_ulong kernel_work_group_size;
+  status = clGetKernelWorkGroupInfo(kernel_->kernel(),this->devices()[0],CL_KERNEL_WORK_GROUP_SIZE,
+                                    sizeof(cl_ulong),&kernel_work_group_size,NULL);
+  if (!check_val(status,CL_SUCCESS,"clGetKernelWorkGroupInfo CL_KERNEL_WORK_GROUP_SIZE, failed."))
+    return SDK_FAILURE;
+  assert(this->workgrp_size()<= vcl_size_t(kernel_work_group_size));
+
+  if (used_local_memory > this->total_local_memory())
+  {
+    vcl_cout << "Unsupported: Insufficient local memory on device.\n";
+    return SDK_FAILURE;
+  }
+
+  // set up a command queue
+  command_queue_ = clCreateCommandQueue(this->context(),this->devices()[0],CL_QUEUE_PROFILING_ENABLE,&status);
+  return check_val(status,CL_SUCCESS,"Falied in command queue creation" + error_to_string(status))!=CL_SUCCESS;
+}
+
+bool icam_ocl_search_manager::run_image_parallel_kernel()
 {
   vcl_size_t globalThreads[]= {wsni_ , wsnj_};
   vcl_size_t localThreads[] = {this->workgrp_ni(), this->workgrp_nj()};
@@ -572,6 +830,47 @@ bool icam_ocl_search_manager::run_kernel()
   return CL_SUCCESS;
 }
 
+bool icam_ocl_search_manager::run_rot_parallel_kernel()
+{
+  vcl_size_t num_rot = rotations_.size();
+  vcl_size_t globalThreads[]= {num_rot*this->workgrp_ni()};
+  vcl_size_t localThreads[] = {this->workgrp_ni()};
+  cl_int status = CL_SUCCESS;
+  cl_event ceEvent;
+
+  status = clEnqueueNDRangeKernel(command_queue_,kernel_->kernel(), 1,NULL,globalThreads,localThreads,0,NULL,&ceEvent);
+
+  if (!check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed. "+error_to_string(status)))
+    return SDK_FAILURE;
+
+  status = clFinish(command_queue_);
+  if (!check_val(status,CL_SUCCESS,"clFinish failed."+error_to_string(status)))
+    return SDK_FAILURE;
+
+  cl_event events[1];
+  status = kernel_->enqueue_read_buffer(command_queue_,buffer_map_[minfo_array_],CL_TRUE,
+                                        0,num_rot*sizeof(cl_float),minfo_array_,0,NULL,&events[0]);
+
+  if (!check_val(status,CL_SUCCESS,"clEnqueueBuffer (rot_para result )failed."))
+    return SDK_FAILURE;
+  status = kernel_->enqueue_read_buffer(command_queue_,buffer_map_[rot_para_flag_],CL_TRUE,
+                                        0,sizeof(cl_int4),rot_para_flag_,0,NULL,&events[0]);
+
+  if (!check_val(status,CL_SUCCESS,"clEnqueueBuffer (image_para flag)failed."))
+    return SDK_FAILURE;
+
+
+  // Wait for the read buffer to finish execution
+  status = clWaitForEvents(1, &events[0]);
+  if (!check_val(status,CL_SUCCESS,"clWaitForEvents failed."))
+    return SDK_FAILURE;
+
+  status = clReleaseEvent(events[0]);
+  if (!check_val(status,CL_SUCCESS,"clReleaseEvent failed."))
+    return SDK_FAILURE;
+
+  return CL_SUCCESS;
+}
 bool icam_ocl_search_manager::release_queue()
 {
   // release the command Queue

@@ -21,6 +21,8 @@ public:
 
   bool create_out_buffers(const cl_context& context, vcl_vector<void*> data, vcl_vector<unsigned> sizes);
 
+  bool set_local_arg(int arg_id, size_t arg_size);
+
   bool enqueue_write_buffer(const cl_command_queue& queue, int idx,  cl_bool block_write,
                             size_t  offset,size_t  cnb, const void*  data, cl_uint num_events,
                             const cl_event* ev1, cl_event* ev2);

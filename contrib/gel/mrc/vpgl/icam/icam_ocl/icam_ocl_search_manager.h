@@ -17,8 +17,8 @@ class icam_ocl_search_manager : public icam_ocl_manager<icam_ocl_search_manager>
  public:
    
   icam_ocl_search_manager()
-    : wgni_(0), wgnj_(0), wsni_(0), wsnj_(0), program_(0), time_in_secs_(0.0f),
-      sni_(0), snj_(0), dni_(0), dnj_(0)
+    : wgni_(0), wgnj_(0), wsni_(0), wsnj_(0),program_(0), time_in_secs_(0.0f),
+    nbins_(0), sni_(0), snj_(0), dni_(0), dnj_(0)
     {kernel_ = new icam_ocl_kernel(); }
 
   ~icam_ocl_search_manager(); 
@@ -28,7 +28,8 @@ class icam_ocl_search_manager : public icam_ocl_manager<icam_ocl_search_manager>
   cl_program program() {return program_;}
 
 
-  bool run_kernel();
+  bool run_image_parallel_kernel();
+  bool run_rot_parallel_kernel();
 
   int build_kernel_program();
 
@@ -52,9 +53,12 @@ class icam_ocl_search_manager : public icam_ocl_manager<icam_ocl_search_manager>
   vcl_size_t dest_ni(){return dni_;}
   vcl_size_t dest_nj(){return dnj_;}
 
+  void set_nbins(unsigned nbins){nbins_ = nbins;}
+
     //------------------  icam specifics ------------------------
   // source, destination and depth images
   bool encode_image_data(icam_minimizer& minimizer, unsigned level);
+  bool set_nbins_buffer();
   bool copy_to_image_buffers();
   bool release_buffers();
   void clean_image_data();
@@ -63,13 +67,28 @@ class icam_ocl_search_manager : public icam_ocl_manager<icam_ocl_search_manager>
                                  vgl_vector_3d<double> const& trans_steps,
                                  icam_minimizer& minimizer,
                                  unsigned level);
+  // for debug purposes 
+  void  setup_rot_debug_space(unsigned n_rotations,
+                              vgl_rotation_3d<double> const& rot);
   //: create the cl data 
   bool create_image_parallel_transf_data();
   //: assign the cl data 
   bool set_image_parallel_transf(vgl_vector_3d<double> const& tr,
                                  vgl_rotation_3d<double> const& rot);
+  //: create the cl data for trans parallel
+  bool create_rot_parallel_transf_data();
+  //: set the cl data for trans parallel
+  bool set_rot_parallel_transf_data(vgl_vector_3d<double> const& tr);
+  //: deallocate rot parallel cl data
+  void clean_rot_parallel_transf_data();
+  //: create rot_parallel buffers
+  bool create_rot_parallel_transf_buffers();
+
   //: set up kernel - assign arguments, create command queue etc.
   bool setup_image_parallel_kernel();
+  //: set local args
+  bool set_rot_parallel_local_args();
+  bool setup_rot_parallel_kernel();
   //: release the command queue
   bool release_queue();
   //: create cl buffers
@@ -83,19 +102,29 @@ class icam_ocl_search_manager : public icam_ocl_manager<icam_ocl_search_manager>
   bool create_image_parallel_result_buffers();
   void clean_image_parallel_result();
 
+  bool setup_rot_parallel_result();
+  bool create_rot_parallel_result_buffers();
+  void clean_rot_parallel_result();
+
   cl_int4 image_para_flag() {return *image_para_flag_;}
   cl_float4 image_para_result() {return *image_para_result_;}
   cl_float* source_array() {return source_array_;}
   cl_float* result_array() {return result_array_;}
   cl_float* mask_array() {return mask_array_;}
+  cl_int4 rot_para_flag() {return *rot_para_flag_;}
+  cl_float* minfo_array(){return minfo_array_;}
  protected:
   unsigned wgni_, wgnj_;//work group size
   unsigned wsni_, wsnj_;//work group size
+
   cl_program program_;
 
   cl_command_queue command_queue_;
   //cl_kernel kernel_;
   float time_in_secs_;
+  //histogram bins
+  unsigned nbins_;
+  cl_uint* cl_nbins_;
   //source dimensions
   unsigned sni_;
   unsigned snj_;
@@ -126,14 +155,19 @@ class icam_ocl_search_manager : public icam_ocl_manager<icam_ocl_search_manager>
   // search rotations
   vcl_vector<vgl_rotation_3d<double> > rotations_;
   cl_float4* rotation_;
-  
+  cl_float4* rot_array_;
   // search translations 
   vcl_vector<vgl_vector_3d<double> > translations_;
   cl_float4* translation_;
 
-  // the result of the search
+  // the result of the search (image parallel)
   cl_float4* image_para_result_;
   cl_int4 * image_para_flag_;
+
+  // the result of the search (rot parallel)
+  // minfo result
+  cl_float* minfo_array_;
+  cl_int4 * rot_para_flag_;
 
   icam_ocl_kernel* kernel_;
   vcl_map<void*, int> buffer_map_;
