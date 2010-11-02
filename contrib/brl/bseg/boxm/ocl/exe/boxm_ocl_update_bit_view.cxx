@@ -65,7 +65,7 @@ int main(int argc, char ** argv)
 
   //get all of the cam and image files, sort them
   vcl_string camglob=cam_dir()+"/*.txt";
-  vcl_string imgglob=img_dir()+"/*.jpg";
+  vcl_string imgglob=img_dir()+"/*.*g";
   vul_file_iterator file_it(camglob.c_str());
   vul_file_iterator img_file_it(imgglob.c_str());
   vcl_vector<vcl_string> cam_files;
