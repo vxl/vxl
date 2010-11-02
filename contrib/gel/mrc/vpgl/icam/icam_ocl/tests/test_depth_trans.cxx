@@ -90,7 +90,7 @@ bool test_image_parallel_search()
   //==============end of minimizer setup=============
 
   icam_ocl_search_manager* mgr = icam_ocl_search_manager::instance();
-  
+
   mgr->set_workgrp_ni(8);   mgr->set_workgrp_nj(8);
   mgr->encode_image_data(minimizer, lev);
   mgr->copy_to_image_buffers();
@@ -99,7 +99,7 @@ bool test_image_parallel_search()
   mgr->create_image_parallel_transf_buffers();
   mgr->setup_image_parallel_result();
   mgr->create_image_parallel_result_buffers();
-  
+
   vcl_string kern_path = "/contrib/gel/mrc/vpgl/icam/icam_ocl/image_parallel_transf_search.cl";
   vcl_string path = root_dir + kern_path;
   if (!mgr->load_kernel_source(path))
@@ -119,9 +119,9 @@ bool test_image_parallel_search()
       return false;
   }
   vcl_cout << " search time " << t.real()/1000.0 << " seconds\n";
-  cl_int4 flag = mgr->image_para_flag();
-  vcl_cout << "Flag(" << flag.s[0] << ' ' << flag.s[1] << ' '
-           << flag.s[2] << ' ' << flag.s[3] << ")\n";
+  cl_int* flag = mgr->image_para_flag();
+  vcl_cout << "Flag(" << flag[0] << ' ' << flag[1] << ' '
+           << flag[2] << ' ' << flag[3] << ")\n";
 
   cl_float* cres = mgr->image_para_result();
   vcl_cout << "Image_Para(" << cres[0] << ' ' << cres[1] << ' '
@@ -171,6 +171,7 @@ bool test_image_parallel_search()
   mgr->clean_image_parallel_result();
   return true;
 }
+
 bool test_rot_parallel_search()
 {
 //====================== Setup Minimizer ====================
@@ -247,7 +248,7 @@ bool test_rot_parallel_search()
   //==============end of minimizer setup=============
 
   icam_ocl_search_manager* mgr = icam_ocl_search_manager::instance();
-  
+
   mgr->set_workgrp_ni(16);   mgr->set_workgrp_nj(0);
   mgr->set_nbins(16);
   mgr->encode_image_data(minimizer, lev);
@@ -260,7 +261,7 @@ bool test_rot_parallel_search()
   mgr->create_rot_parallel_transf_buffers();
   mgr->setup_rot_parallel_result();
   mgr->create_rot_parallel_result_buffers();
-  
+
   vcl_string kern_path = "/contrib/gel/mrc/vpgl/icam/icam_ocl/trans_parallel_transf_search.cl";
   vcl_string path = root_dir + kern_path;
   if (!mgr->load_kernel_source(path))
@@ -276,34 +277,34 @@ bool test_rot_parallel_search()
   if (mgr->run_rot_parallel_kernel()!=SDK_SUCCESS)
     return false;
   vcl_cout << " search time " << t.real()/1000.0 << " seconds\n";
-  cl_int4 flag = mgr->rot_para_flag();
-  vcl_cout << "Flag(" << flag.s[0] << ' ' << flag.s[1] << ' '
-           << flag.s[2] << ' ' << flag.s[3] << ")\n";
+  cl_int* flag = mgr->rot_para_flag();
+  vcl_cout << "Flag(" << flag[0] << ' ' << flag[1] << ' '
+           << flag[2] << ' ' << flag[3] << ")\n";
 
   cl_float* minfo = mgr->minfo_array();
 #if 0
   float sum = 0.0f;
-  for(unsigned i = 0; i<256; ++i)
+  for (unsigned i = 0; i<256; ++i)
     sum += minfo[i];
   vcl_cout << "sum joint = " << sum << '\n';
   sum = 0.0f;
-  for(unsigned i = 256; i<256+16; ++i)
+  for (unsigned i = 256; i<256+16; ++i)
     sum += minfo[i];
   vcl_cout << "sum marginal = " << sum << '\n';
 #endif
 
   unsigned dni = 16, dnj = 17;
-  for(unsigned i = 0; i< 2*dni; ++i)
+  for (unsigned i = 0; i< 2*dni; ++i)
     vcl_cout << minfo[i] << '\n';
 #if 0
   vil_image_view<float> md(dni, dnj);
   md.fill(0.0f);
-  for(unsigned j = 0; j<dnj; j++)
-    for(unsigned i = 0; i<dni; i++)
-      {
-        unsigned indx = i + dni*j;
-        md(i,j) = minfo[indx];
-      }
+  for (unsigned j = 0; j<dnj; j++)
+    for (unsigned i = 0; i<dni; i++)
+    {
+      unsigned indx = i + dni*j;
+      md(i,j) = minfo[indx];
+    }
   vil_save(md, gpu_mdest_file.c_str());
 #endif
   mgr->release_queue();

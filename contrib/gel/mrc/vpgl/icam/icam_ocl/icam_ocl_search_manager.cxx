@@ -194,14 +194,16 @@ setup_transf_search_space(vgl_box_3d<double> const& trans_box,
            << "Total search space " << n_rays*n_pangs*translations_.size()
            << " mappings\n";
 }
+
 //set all rotations to be the same value for testing purposes
 void icam_ocl_search_manager::
 setup_rot_debug_space(unsigned n_rotations,
                       vgl_rotation_3d<double> const& rot)
 {
-  for(unsigned i =0; i<n_rotations; ++i)
+  for (unsigned i =0; i<n_rotations; ++i)
     rotations_.push_back(rot);
 }
+
 bool icam_ocl_search_manager::
 create_image_parallel_transf_data()
 {
@@ -220,9 +222,10 @@ create_image_parallel_transf_data()
 #else
   translation_ = (cl_float*)memalign(16, sizeof(cl_float)*4);
 #endif
-  if(!translation_)
+  if (!translation_)
     return false;
-  return true;
+  else
+    return true;
 }
 
 bool icam_ocl_search_manager::
@@ -246,6 +249,7 @@ set_image_parallel_transf(vgl_vector_3d<double> const& tr,
 
   return true;
 }
+
 void icam_ocl_search_manager::clean_image_parallel_transf_data()
 {
   if (rotation_)
@@ -270,6 +274,7 @@ void icam_ocl_search_manager::clean_image_parallel_transf_data()
 #endif
   }
 }
+
 bool icam_ocl_search_manager::
 create_rot_parallel_transf_data()
 {
@@ -281,7 +286,7 @@ create_rot_parallel_transf_data()
 #else
   rot_array_ = (cl_float*)memalign(16, nrot*sizeof(cl_float)*4);
 #endif
-  if(!rot_array_) return false;
+  if (!rot_array_) return false;
 
 #if defined (_WIN32)
   translation_=(cl_float*)_aligned_malloc(sizeof(cl_float)*4,16);
@@ -290,9 +295,10 @@ create_rot_parallel_transf_data()
 #else
   translation_ = (cl_float*)memalign(16, sizeof(cl_float)*4);
 #endif
-  if(!translation_)
+  if (!translation_)
     return false;
-  return true;
+  else
+    return true;
 }
 
 bool icam_ocl_search_manager::
@@ -301,14 +307,14 @@ set_rot_parallel_transf_data(vgl_vector_3d<double> const& tr)
   unsigned nrot = rotations_.size();
   if (!rot_array_)
     return false;
-  for(unsigned i = 0; i<nrot; ++i)
-    {
-      vnl_vector_fixed<double, 3> rod = rotations_[i].as_rodrigues();
-      rot_array_[i*4]=static_cast<float>(rod[0]);
-      rot_array_[i*4+1]=static_cast<float>(rod[1]);
-      rot_array_[i*4+2]=static_cast<float>(rod[2]);
-      rot_array_[i*4+3]= 0.0f;
-    }
+  for (unsigned i = 0; i<nrot; ++i)
+  {
+    vnl_vector_fixed<double, 3> rod = rotations_[i].as_rodrigues();
+    rot_array_[i*4]=static_cast<float>(rod[0]);
+    rot_array_[i*4+1]=static_cast<float>(rod[1]);
+    rot_array_[i*4+2]=static_cast<float>(rod[2]);
+    rot_array_[i*4+3]= 0.0f;
+  }
 
   if (!translation_)
     return false;
@@ -318,7 +324,6 @@ set_rot_parallel_transf_data(vgl_vector_3d<double> const& tr)
   translation_[3] = 0.0f;
 
   return true;
-
 }
 
 void icam_ocl_search_manager::clean_rot_parallel_transf_data()
@@ -408,11 +413,11 @@ bool icam_ocl_search_manager::setup_image_parallel_result()
 #endif
 
 #if defined (_WIN32)
-  image_para_flag_=(cl_int4*)_aligned_malloc( sizeof(cl_int), 16);
+  image_para_flag_=(cl_int*)_aligned_malloc( sizeof(cl_int)*4, 16);
 #elif defined(__APPLE__)
-  image_para_flag_ = (cl_int4*)malloc(sizeof(cl_int4));
+  image_para_flag_ = (cl_int*)malloc(sizeof(cl_int)*4);
 #else
-  image_para_flag_ = (cl_int4*)memalign(16, sizeof(cl_int4));
+  image_para_flag_ = (cl_int*)memalign(16, sizeof(cl_int)*4);
 #endif
 
   if (!image_para_result_ || !image_para_flag_)
@@ -422,10 +427,10 @@ bool icam_ocl_search_manager::setup_image_parallel_result()
   image_para_result_[0]=vnl_numeric_traits<float>::maxval;
   image_para_result_[1]= 0.0f;
   image_para_result_[2]= 0.0f;
-  image_para_result_[3] = 0.0f;
+  image_para_result_[3]= 0.0f;
   // initialize flag
   for (unsigned i = 0; i<4; ++i)
-    image_para_flag_->s[i] = 0;
+    image_para_flag_[i] = 0;
   return true;
 }
 
@@ -492,20 +497,20 @@ bool icam_ocl_search_manager::setup_rot_parallel_result()
       minfo_array_[i]=0.0f;
 
 #if defined (_WIN32)
-  rot_para_flag_=(cl_int4*)_aligned_malloc( sizeof(cl_int4), 16);
+  rot_para_flag_=(cl_int*)_aligned_malloc( sizeof(cl_int)*4, 16);
 #elif defined(__APPLE__)
-  rot_para_flag_ = (cl_int4*)malloc(sizeof(cl_int4));
+  rot_para_flag_ = (cl_int*)malloc(sizeof(cl_int)*4);
 #else
-  rot_para_flag_ = (cl_int4*)memalign(16, sizeof(cl_int4));
+  rot_para_flag_ = (cl_int*)memalign(16, sizeof(cl_int)*4);
 #endif
 
   if (!rot_para_flag_)
     return false;
   for (unsigned i = 0; i<4; ++i)
-    rot_para_flag_->s[i] = 0;
+    rot_para_flag_[i] = 0;
   return true;
-
 }
+
 void icam_ocl_search_manager::clean_rot_parallel_result()
 {
   if (rot_para_flag_)
@@ -536,18 +541,19 @@ bool icam_ocl_search_manager::create_rot_parallel_result_buffers()
   vcl_vector<unsigned int> sizes;
   unsigned n_rot = rotations_.size();
   int i=buffer_map_.size();
-  vcl_cout << "output arg[" << i << "] - minfo (cl_float) \n";
+  vcl_cout << "output arg[" << i << "] - minfo (cl_float)\n";
   arrs.push_back(minfo_array_);  sizes.push_back(n_rot*sizeof(cl_float));
   buffer_map_[minfo_array_]=i++;
 
   vcl_cout << "output arg[" << i << "] - rot_para_flag (cl_int4)\n";
-  arrs.push_back(rot_para_flag_);  sizes.push_back(sizeof(cl_int4));
+  arrs.push_back(rot_para_flag_);  sizes.push_back(sizeof(cl_int)*4);
   buffer_map_[rot_para_flag_]=i++;
 
   cl_int status;
   status = kernel_->create_out_buffers(this->context_,arrs,sizes);
   return status == SDK_SUCCESS;
 }
+
 bool icam_ocl_search_manager::set_nbins_buffer()
 {
   vcl_vector<void*> arrs;
@@ -559,6 +565,7 @@ bool icam_ocl_search_manager::set_nbins_buffer()
   cl_int  status = kernel_->create_in_buffers(this->context_,arrs,sizes);
   return status == SDK_SUCCESS;
 }
+
 bool icam_ocl_search_manager::copy_to_image_buffers()
 {
   // Create and initialize memory objects
@@ -612,7 +619,7 @@ bool icam_ocl_search_manager::copy_to_image_buffers()
 
 bool icam_ocl_search_manager::release_buffers()
 {
-  return (kernel_->release_buffers());
+  return kernel_->release_buffers();
 }
 
 bool icam_ocl_search_manager::copy_to_image_parallel_transf_buffers()
@@ -621,13 +628,13 @@ bool icam_ocl_search_manager::copy_to_image_parallel_transf_buffers()
   cl_event events[1];
 
   status = kernel_->enqueue_write_buffer(command_queue_, buffer_map_[rotation_],CL_TRUE,
-                                   0,sizeof(cl_float)*4, rotation_, 0,NULL,&events[0]);
+                                         0,sizeof(cl_float)*4, rotation_, 0,NULL,&events[0]);
   if (!check_val(status,CL_SUCCESS,"clCreateBuffer ( rotation ) failed."))
     return SDK_FAILURE;
 
   // translation
   status = kernel_->enqueue_write_buffer(command_queue_,buffer_map_[translation_],CL_TRUE,
-                                   0,sizeof(cl_float)*4,translation_, 0,NULL,&events[0]);
+                                         0,sizeof(cl_float)*4,translation_, 0,NULL,&events[0]);
   if (!check_val(status,CL_SUCCESS,"clCreateBuffer ( translation ) failed."))
     return SDK_FAILURE;
 
@@ -669,7 +676,7 @@ bool icam_ocl_search_manager::create_image_parallel_result_buffers()
   arrs.push_back(image_para_result_);  sizes.push_back(sizeof(cl_float)*4);
   buffer_map_[image_para_result_]=i++;
 
-  arrs.push_back(image_para_flag_);  sizes.push_back(sizeof(cl_int4));
+  arrs.push_back(image_para_flag_);  sizes.push_back(sizeof(cl_int)*4);
   buffer_map_[image_para_flag_]=i++;
 
   arrs.push_back(result_array_);  sizes.push_back(wsni_*wsnj_*sizeof(cl_float));
@@ -682,6 +689,7 @@ bool icam_ocl_search_manager::create_image_parallel_result_buffers()
   status = kernel_->create_out_buffers(this->context_,arrs,sizes);
   return status == SDK_SUCCESS;
 }
+
 bool icam_ocl_search_manager::setup_image_parallel_kernel()
 {
   // -- Set appropriate arguments to the kernel --
@@ -747,8 +755,8 @@ bool icam_ocl_search_manager::setup_rot_parallel_kernel()
   // -- Set appropriate arguments to the kernel --
   // source array args
   cl_int status = kernel_->set_args();
-  if(status!=0) return false;
-  if(!this->set_rot_parallel_local_args())
+  if (status!=0) return false;
+  if (!this->set_rot_parallel_local_args())
     return false;
   //=================== end of kernel arguments =======================
 
@@ -800,20 +808,20 @@ bool icam_ocl_search_manager::run_image_parallel_kernel()
   if (!check_val(status,CL_SUCCESS,"clEnqueueBuffer (image_para result )failed."))
     return SDK_FAILURE;
   status = kernel_->enqueue_read_buffer(command_queue_,buffer_map_[image_para_flag_],CL_TRUE,
-                                        0,sizeof(cl_int4),image_para_flag_,0,NULL,&events[0]);
+                                        0,sizeof(cl_int)*4,image_para_flag_,0,NULL,&events[0]);
 
   if (!check_val(status,CL_SUCCESS,"clEnqueueBuffer (image_para flag)failed."))
     return SDK_FAILURE;
 
 
   status = kernel_->enqueue_read_buffer(command_queue_,buffer_map_[result_array_],CL_TRUE,
-                               0,wsni_*wsnj_*sizeof(cl_float),result_array_,0,NULL,&events[0]);
+                                        0,wsni_*wsnj_*sizeof(cl_float),result_array_,0,NULL,&events[0]);
 
   if (!check_val(status,CL_SUCCESS,"clEnqueueBuffer (result_array)failed."))
     return SDK_FAILURE;
 
   status = kernel_->enqueue_read_buffer(command_queue_,buffer_map_[mask_array_],CL_TRUE,
-                               0,wsni_*wsnj_*sizeof(cl_float), mask_array_,0,NULL,&events[0]);
+                                        0,wsni_*wsnj_*sizeof(cl_float), mask_array_,0,NULL,&events[0]);
 
   if (!check_val(status,CL_SUCCESS,"clEnqueueBuffer (mask_array)failed."))
     return SDK_FAILURE;
@@ -854,7 +862,7 @@ bool icam_ocl_search_manager::run_rot_parallel_kernel()
   if (!check_val(status,CL_SUCCESS,"clEnqueueBuffer (rot_para result )failed."))
     return SDK_FAILURE;
   status = kernel_->enqueue_read_buffer(command_queue_,buffer_map_[rot_para_flag_],CL_TRUE,
-                                        0,sizeof(cl_int4),rot_para_flag_,0,NULL,&events[0]);
+                                        0,sizeof(cl_int)*4,rot_para_flag_,0,NULL,&events[0]);
 
   if (!check_val(status,CL_SUCCESS,"clEnqueueBuffer (image_para flag)failed."))
     return SDK_FAILURE;
@@ -871,6 +879,7 @@ bool icam_ocl_search_manager::run_rot_parallel_kernel()
 
   return CL_SUCCESS;
 }
+
 bool icam_ocl_search_manager::release_queue()
 {
   // release the command Queue
