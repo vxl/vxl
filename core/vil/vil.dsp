@@ -93,52 +93,10 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\file_formats/vil_pnm.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\file_formats/vil_ras.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\vil_image_resource.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vil_memory_chunk.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vil_file_format.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\file_formats/vil_png.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\file_formats/vil_tiff.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\file_formats/vil_viffheader.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_image_view+bool-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_smart_ptr+vil_image_resource-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_smart_ptr+vil_memory_chunk-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_image_view+float-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_image_view+vil_rgb+float--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_image_view+vcl_complex+double--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_image_view+vcl_complex+float--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_smart_ptr+vil_stream-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vil_crop.cxx
@@ -150,139 +108,10 @@ SOURCE=.\vil_load.cxx
 SOURCE=.\vil_decimate.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil_sample_profile_bilin+float.double-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_sample_grid_bilin+float.double-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_smart_ptr+vil_image_view_base-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_image_view+byte-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_image_view+int_16-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_image_view+int_32-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_image_view+uint_32-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_image_view+vil_rgb+int_16--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_image_view+vil_rgb+int_32--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_image_view+vil_rgb+uint_32--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_sample_grid_bilin+byte.double-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_sample_profile_bilin+byte.double-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_image_view+uint_16-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_image_view+vil_rgb+byte--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_image_view+vil_rgb+uint_16--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_image_view+vil_rgb+double--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_image_view+vil_rgba+byte--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_image_view+double-.cxx
+SOURCE=.\vil_na.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vil_copy.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_copy+bool-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_copy+byte-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_copy+double-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_copy+float-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_copy+int_16-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_copy+int_32-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_copy+sbyte-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_copy+uint_16-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_copy+uint_32-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_copy+vil_rgb+byte--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_image_view+sbyte-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_image_view+vil_rgb+sbyte--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_resample_bilin+float.float-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_resample_bilin+byte.double-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_resample_bilin+byte.float-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_resample_bilin+float.double-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_resample_bilin+int_16.int_16-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_resample_bilin+uint_16.uint_16-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_resample_bilin+byte.byte-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_sample_grid_bilin+float.float-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_sample_grid_bilin+byte.float-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_image_view+vil_rgba+float--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\file_formats/vil_bmp.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\file_formats/vil_bmp_core_header.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\file_formats/vil_bmp_file_header.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\file_formats/vil_bmp_info_header.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vil_memory_image.cxx
@@ -310,84 +139,6 @@ SOURCE=.\vil_plane.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vil_print.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\file_formats/vil_jpeg.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\file_formats/vil_jpeg_compressor.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\file_formats/vil_jpeg_decompressor.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\file_formats/vil_jpeg_destination_mgr.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\file_formats/vil_jpeg_source_mgr.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_rgb+double-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_rgb+float-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_rgba+float-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_resample_bicub+byte.byte-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_resample_bicub+byte.double-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_resample_bicub+byte.float-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_resample_bicub+float.double-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_resample_bicub+int_16.int_16-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_resample_bicub+uint_16.uint_16-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_sample_grid_bicub+byte.double-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_sample_grid_bicub+float.double-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_sample_grid_bicub+float.float-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_sample_profile_bicub+byte.double-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_sample_profile_bicub+float.double-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_bicub_interp+byte-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_bicub_interp+double-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_bicub_interp+float-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_bicub_interp+int_16-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_bicub_interp+uint_16-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_copy+vcl_complex+double--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_copy+vcl_complex+float--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vil_open.cxx
@@ -430,6 +181,57 @@ SOURCE=.\vil_blocked_image_resource.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vil_cached_image_resource.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil_image_list.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil_math.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil_file_format.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_ras.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_pnm.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_png.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_tiff.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_viffheader.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_bmp.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_bmp_core_header.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_bmp_file_header.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_bmp_info_header.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_jpeg.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_jpeg_compressor.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_jpeg_decompressor.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_jpeg_destination_mgr.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_jpeg_source_mgr.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\file_formats/vil_dicom.cxx
@@ -519,12 +321,6 @@ SOURCE=.\file_formats/vil_pyramid_image_list.cxx
 SOURCE=.\vil_pyramid_image_resource.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil_image_list.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vil_math.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\file_formats/vil_geotiff_header.cxx
 # End Source File
 # Begin Source File
@@ -532,6 +328,213 @@ SOURCE=.\file_formats/vil_j2k_pyramid_image_resource.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\file_formats/vil_j2k_nitf2_pyramid_image_resource.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_image_view+bool-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_smart_ptr+vil_image_resource-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_smart_ptr+vil_memory_chunk-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_image_view+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_image_view+vil_rgb+float--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_image_view+vcl_complex+double--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_image_view+vcl_complex+float--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_smart_ptr+vil_stream-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_sample_profile_bilin+float.double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_sample_grid_bilin+float.double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_smart_ptr+vil_image_view_base-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_image_view+byte-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_image_view+int_16-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_image_view+int_32-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_image_view+uint_32-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_image_view+vil_rgb+int_16--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_image_view+vil_rgb+int_32--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_image_view+vil_rgb+uint_32--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_sample_grid_bilin+byte.double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_sample_profile_bilin+byte.double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_image_view+uint_16-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_image_view+vil_rgb+byte--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_image_view+vil_rgb+uint_16--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_image_view+vil_rgb+double--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_image_view+vil_rgba+byte--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_image_view+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_copy+bool-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_copy+byte-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_copy+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_copy+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_copy+int_16-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_copy+int_32-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_copy+sbyte-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_copy+uint_16-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_copy+uint_32-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_copy+vil_rgb+byte--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_image_view+sbyte-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_image_view+vil_rgb+sbyte--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_resample_bilin+float.float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_resample_bilin+byte.double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_resample_bilin+byte.float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_resample_bilin+float.double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_resample_bilin+int_16.int_16-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_resample_bilin+uint_16.uint_16-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_resample_bilin+byte.byte-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_sample_grid_bilin+float.float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_sample_grid_bilin+byte.float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_image_view+vil_rgba+float--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_rgb+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_rgb+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_rgba+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_resample_bicub+byte.byte-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_resample_bicub+byte.double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_resample_bicub+byte.float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_resample_bicub+float.double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_resample_bicub+int_16.int_16-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_resample_bicub+uint_16.uint_16-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_sample_grid_bicub+byte.double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_sample_grid_bicub+float.double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_sample_grid_bicub+float.float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_sample_profile_bicub+byte.double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_sample_profile_bicub+float.double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_bicub_interp+byte-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_bicub_interp+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_bicub_interp+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_bicub_interp+int_16-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_bicub_interp+uint_16-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_copy+vcl_complex+double--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_copy+vcl_complex+float--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vil_rotate+byte.byte-.cxx
@@ -1102,6 +1105,9 @@ SOURCE=.\vil_pyramid_image_view.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil_pyramid_image_view.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vil_na.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil_config.h.in

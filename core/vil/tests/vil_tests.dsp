@@ -7,9 +7,6 @@
 SOURCE=.\test_driver.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_include.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\test_file_format_read.cxx
 # End Source File
 # Begin Source File
@@ -104,6 +101,12 @@ SOURCE=.\test_round.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_pyramid_image_view.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_na.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_include.cxx
 # End Source File
 # End Group
 # End Target
