@@ -238,6 +238,7 @@ SET( vil_sources ${vil_sources}
   vil_color_table.h
   vil_fwd.h
   vil_round.h
+  vil_na.cxx                            vil_na.h
   
   # Streams
   vil_stream.cxx                        vil_stream.h

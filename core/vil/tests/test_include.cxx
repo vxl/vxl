@@ -34,6 +34,7 @@
 #include <vil/vil_memory_image.h>
 #include <vil/vil_nearest_interp.h>
 #include <vil/vil_new.h>
+#include <vil/vil_na.h>
 #include <vil/vil_open.h>
 #include <vil/vil_pixel_format.h>
 #include <vil/vil_plane.h>
