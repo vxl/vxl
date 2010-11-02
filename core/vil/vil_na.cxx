@@ -4,7 +4,7 @@
 #endif
 //:
 // \file
-// This file is a cut-and-paste of vil_na
+// This file is a cut-and-paste of vnl_na.cxx
 
 #include "vil_na.h"
 #include <vxl_config.h>
