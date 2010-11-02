@@ -21,6 +21,7 @@ SOURCES += vil_image_resource_plugin.cxx
 MANPAGE_SOURCES += vil_image_view.txx
 MANPAGE_SOURCES += vil_image_view_base.h
 SOURCES += vil_memory_chunk.cxx
+SOURCES += vil_na.cxx
 
 SOURCES += vil_file_format.cxx
 SOURCES += vil_memory_image.cxx

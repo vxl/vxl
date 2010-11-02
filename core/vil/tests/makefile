@@ -16,6 +16,7 @@ TESTS += test_memory_chunk.cxx
 TESTS += test_pixel_format.cxx
 TESTS += test_border.cxx
 TESTS += test_round.cxx
+TESTS += test_na.cxx
 
 # file format readers/writers
 TESTS += test_file_format_read.cxx
