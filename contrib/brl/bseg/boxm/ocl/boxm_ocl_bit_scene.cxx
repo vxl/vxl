@@ -136,7 +136,6 @@ void boxm_ocl_bit_scene::validate_data()
     if (!sizeMatch)
       vcl_cout<<"Buffer "<<buff<<" bit size doesn't match pointer difference ... "<<vcl_endl;
   }
-#endif
 
   vcl_cout<<"===SCENE STATS=================================="<<vcl_endl;
   //simple count of cells 
@@ -178,6 +177,30 @@ void boxm_ocl_bit_scene::validate_data()
   int numVoxels = blocks_.get_row1_count()*blocks_.get_row2_count()*blocks_.get_row3_count() * 8*8*8; 
   vcl_cout<<"Theoretical Number of Voxels: "<<numVoxels<<vcl_endl;
   vcl_cout<<"==============================================\n"<<vcl_endl;
+
+#endif
+
+  
+  //probe zero alpha values
+  int zeroCells=0;
+  vbl_array_3d<ushort2>::iterator iter;
+  for (iter = blocks_.begin(); iter != blocks_.end(); iter++)
+  {
+    //in each block get the size of the tree - spit it out:
+    ushort2 offsets = (*iter);
+    unsigned short buffIndex = offsets[0];
+    unsigned short buffOffset = offsets[1];
+    uchar16 tree = tree_buffers_[buffIndex][buffOffset];
+    
+    unsigned short hi  = (unsigned short) tree[10];
+    unsigned short lo  = (unsigned short) tree[11];
+    unsigned short dat = (hi<<8) | lo;
+    
+    if(dat != buffOffset)
+      vcl_cout<<"Dat: "<<dat<<" != "<<buffOffset;
+    
+  }
+
 }
 
 // ===== Save to disk functions =====
@@ -416,31 +439,36 @@ bool boxm_ocl_bit_scene::init_empty_scene()
           <<BUFF_LENGTH<<" cells ("
           <<blocks_per_buffer<<" trees per buffer)]. "
           <<"[total tree:"<<num_buffers*BUFF_LENGTH<<']'<<vcl_endl;
-
+          
   // 1. Set up 3D array of blocks (small blocks), assuming all blocks are similarly sized
   ushort2 blk_init(-1);
-  vbl_array_3d<ushort2> blocks(parser_.block_nums().x(), parser_.block_nums().y(), parser_.block_nums().z(), blk_init);
+  //vbl_array_3d<ushort2> blocks(parser_.block_nums().x(), parser_.block_nums().y(), parser_.block_nums().z(), blk_init);
+  blocks_ = vbl_array_3d<ushort2>(parser_.block_nums().x(), parser_.block_nums().y(), parser_.block_nums().z(), blk_init);
 
   // 2. set up 2d array of tree_buffers (add one buffer for emergencies)
   uchar16 tree_init((unsigned char) 0);
-  vbl_array_2d<uchar16> tree_buffers(num_buffers+1, blocks_per_buffer, tree_init);
+  //vbl_array_2d<uchar16> tree_buffers(num_buffers+1, blocks_per_buffer, tree_init);
+  tree_buffers_ = vbl_array_2d<uchar16>(num_buffers+1, blocks_per_buffer, tree_init);
 
   // 3. set up 2d array of data buffers (add one buffer for emergencies)
   float16 dat_init(0.0f); dat_init[1] = .1f;
-  vbl_array_2d<float16> data_buffers(num_buffers+1, BUFF_LENGTH, dat_init);
+  //vbl_array_2d<float16> data_buffers(num_buffers+1, BUFF_LENGTH, dat_init);
+  data_buffers_ = vbl_array_2d<float16>(num_buffers+1, BUFF_LENGTH, dat_init);
 
   // 4. set up 1d array of mem ptrs
   ushort2 mem_init; mem_init[0] = 0; mem_init[1] = 1;
-  vbl_array_1d<ushort2> mem_ptrs(num_buffers+1, mem_init);
+  //vbl_array_1d<ushort2> mem_ptrs(num_buffers+1, mem_init);
+  mem_ptrs_ = vbl_array_1d<ushort2>(num_buffers+1, mem_init);
 
   // 5. Go through each block and convert it to smaller blocks
-  vbl_array_1d<unsigned short> blocksInBuffer(num_buffers+1, (unsigned short) 0);//# of blocks in each buffer
+  //vbl_array_1d<unsigned short> blocksInBuffer(num_buffers+1, (unsigned short) 0);//# of blocks in each buffer
+  blocks_in_buffers_ = vbl_array_1d<unsigned short>(num_buffers+1, (unsigned short) 0);
 
   //iterate through each block, randomly place it somewhere
   int index=0;
   vnl_random random(9667566);
   vbl_array_3d<ushort2>::iterator iter;
-  for (iter = blocks.begin(); iter != blocks.end(); iter++)
+  for (iter = blocks_.begin(); iter != blocks_.end(); iter++)
   {
     //status for scene initialization
     int chunk = (int) (total_blocks/10) +1;
@@ -448,8 +476,8 @@ bool boxm_ocl_bit_scene::init_empty_scene()
 
     // randomly place block into a buffer
     bool rand = (parser_.max_mb()>0);
-    int buffIndex = boxm_ocl_utils::getBufferIndex(rand, mem_ptrs,
-                                                   blocksInBuffer,
+    int buffIndex = boxm_ocl_utils::getBufferIndex(rand, mem_ptrs_,
+                                                   blocks_in_buffers_,
                                                    BUFF_LENGTH,
                                                    blocks_per_buffer,
                                                    1,
@@ -462,24 +490,24 @@ bool boxm_ocl_bit_scene::init_empty_scene()
     }
 
     //point block to chosen buffer
-    unsigned short dataOffset = mem_ptrs[buffIndex][1]-1; //minus one, because mem_end points to one past the last one
-    unsigned short treeOffset = blocksInBuffer[buffIndex];
+    unsigned short dataOffset = mem_ptrs_[buffIndex][1]-1; //minus one, because mem_end points to one past the last one
+    unsigned short treeOffset = blocks_in_buffers_[buffIndex];
     ushort2 blk;
     blk[0] = buffIndex;            //buffer index
     blk[1] = treeOffset;           //tree offset to root
     (*iter) = blk;
 
     //put initial alpha value, update end of tree data in mem_ptrs;
-    data_buffers(buffIndex, dataOffset)[0] = ALPHA_INIT;
-    mem_ptrs[buffIndex][1]++;
+    data_buffers_(buffIndex, dataOffset)[0] = ALPHA_INIT;
+    mem_ptrs_[buffIndex][1]++;
 
     //copy tree into tree buffer (pack buffOffset into chars 10-11
     uchar16 treeBlk( (unsigned char) 0);
     unsigned char hi = (unsigned char)(dataOffset >> 8);
     unsigned char lo = (unsigned char)(dataOffset & 255);
     treeBlk[10] = hi; treeBlk[11] = lo;
-    tree_buffers(buffIndex, treeOffset) = treeBlk;
-    blocksInBuffer[buffIndex]++;
+    tree_buffers_(buffIndex, treeOffset) = treeBlk;
+    blocks_in_buffers_[buffIndex]++;
 
     //count for print out
     index++;
@@ -487,9 +515,17 @@ bool boxm_ocl_bit_scene::init_empty_scene()
   vcl_cout<<vcl_endl;
 
   //use the already existing init_scene method
-  bgeo_lvcs lvcs;  parser_.lvcs(lvcs);
-  this->init_scene(blocks, tree_buffers, data_buffers,
-                   mem_ptrs, blocksInBuffer, lvcs, parser_.origin(), parser_.block_dim());
+  bgeo_lvcs lvcs;  
+  
+  //copy all blocks
+  num_buffers_ = (int) tree_buffers_.rows();
+  tree_buff_length_ = (int) tree_buffers_.cols();
+  data_buff_length_ = (int) data_buffers_.cols();
+  parser_.lvcs(lvcs_);
+  origin_ = parser_.origin();
+  block_dim_ = parser_.block_dim();
+  //this->init_scene(blocks, tree_buffers, data_buffers,
+  //                 mem_ptrs, blocksInBuffer, lvcs, parser_.origin(), parser_.block_dim());
   unsigned max, init;
   parser_.levels(max, init);
   this->set_max_level(max);
@@ -605,18 +641,16 @@ void boxm_ocl_bit_scene::get_tree_cells(unsigned char* trees)
 
 void boxm_ocl_bit_scene::get_alphas(float* alphas)
 {
+
   //init data arrays
   int index = 0;
   vbl_array_2d<float16>::iterator iter;
   for (iter = data_buffers_.begin(); iter != data_buffers_.end(); iter++) {
 #if 0
-    if ((*iter)[0] == 0.0f) {
-      vcl_cout<<"alpha value at "<<index<<" is equal to zero"<<vcl_endl;
-      alphas[index++] = 0.1f;
-      continue;
-    }
+    if ((*iter)[0] == 0.0f) 
+      vcl_cout<<"alpha zero "<<vcl_endl;
     if ((*iter)[0] != (*iter)[0])
-      vcl_cout<<"alpha value at "<<index<<" is NAN"<<vcl_endl;
+      vcl_cout<<"alpha nan "<<vcl_endl;
 #endif
     alphas[index++] = (*iter)[0];
   }
