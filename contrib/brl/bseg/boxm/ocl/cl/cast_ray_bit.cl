@@ -18,6 +18,7 @@ cast_ray(
           __global    uchar8             * mixture_array,   //appearance model buffer
           __global    uchar              * last_weight_array,//third weight for mixture model
           __global    int                * num_obs_array,   // num obs for each block
+          __global    int                * lock_array,      // lock array for concurrent access/updating
           __global    float2             * cum_len_beta,    // cumulative ray length and beta aux vars
           __global    uchar2             * mean_obs_cum_vis,// mean_obs per cell and cumulative visibility
 
@@ -111,7 +112,6 @@ cast_ray(
   // illegal (not between 0 and scenedims)
   //----------------------------------------------------------------------------
   float cellCount = 0.0f;
-
   while(tblock < tfar && vis > .01f) 
   {
     //-------------------------------------------------------------------------
@@ -120,6 +120,7 @@ cast_ray(
     // of position based on ray_o or local ray o and the current t value
     //-------------------------------------------------------------------------
     //find entry point (adjusted) and the current block index
+    cellCount++;
     float posx = (ray_ox + (tblock + TREE_EPSILON)*ray_dx);
     float posy = (ray_oy + (tblock + TREE_EPSILON)*ray_dy);
     float posz = (ray_oz + (tblock + TREE_EPSILON)*ray_dz);
@@ -225,7 +226,7 @@ cast_ray(
           int cnt=0;
           while(true)
           {
-              if(atom_cmpxchg(&num_obs_array[data_ptr*2],0,1)==0)
+              if(atom_cmpxchg(&lock_array[data_ptr],0,1)==0)
               {
                   float2 cl_beta  = cum_len_beta[data_ptr];
                   float2 mean_vis = convert_float2(mean_obs_cum_vis[data_ptr])/255.0f;  
@@ -237,7 +238,7 @@ cast_ray(
                   }
                   cum_len_beta[data_ptr] = (float2) (cached_aux_data[llid].x, 0.0f);
                   mean_obs_cum_vis[data_ptr] = convert_uchar2_sat_rte(mean_vis*255.0f);
-                  atom_xchg(&num_obs_array[data_ptr*2],0);
+                  atom_xchg(&lock_array[data_ptr],0);
                   cnt=-1;
               }
               if(cnt=-1)
@@ -253,8 +254,9 @@ cast_ray(
       //cell data, i.e., alpha and app model is needed for some passes 
       float  alpha    = alpha_array[data_ptr];
       float8 mixture  = convert_float8(mixture_array[data_ptr])/255.0f;
-      float  weight3  = convert_float(last_weight_array[data_ptr])/255.0f;
-
+      //float  weight3  = convert_float(last_weight_array[data_ptr])/255.0f;
+      float weight3   = (1.0f-mixture.s2-mixture.s5);
+     
       float2 cl_beta  = cum_len_beta[data_ptr];
       float2 mean_vis = convert_float2(mean_obs_cum_vis[data_ptr])/255.0f;
 
@@ -275,7 +277,9 @@ cast_ray(
       //      /* cell data, i.e., alpha and app model is needed for some passes */
       float  alpha    = alpha_array[data_ptr];
       float8 mixture  = convert_float8(mixture_array[data_ptr])/255.0f;
-      float  weight3  = convert_float(last_weight_array[data_ptr])/255.0f;
+      //float  weight3  = convert_float(last_weight_array[data_ptr])/255.0f;
+      float weight3   = (1.0f-mixture.s2-mixture.s5);
+
       
       //load aux data into local mem
       float2 mean_vis = convert_float2(mean_obs_cum_vis[data_ptr])/255.0f;
@@ -301,12 +305,12 @@ cast_ray(
           int cnt=0;
           while(true)
           {
-              if(atom_cmpxchg(&num_obs_array[data_ptr*2],0,1)==0)
+              if(atom_cmpxchg(&lock_array[data_ptr],0,1)==0)
               {
                   float2 cl_beta  = cum_len_beta[data_ptr];
                   cl_beta.y+=cell_beta;
                   cum_len_beta[data_ptr] = cl_beta;
-                  atom_xchg(&num_obs_array[data_ptr*2],0);
+                  atom_xchg(&lock_array[data_ptr],0);
                   cnt=2000;
               }
               //barrier(CLK_GLOBAL_MEM_FENCE);
@@ -369,5 +373,6 @@ cast_ray(
 
   gl_image[imIndex[llid]] = rgbaFloatToInt((float4) expected_int);
   in_image[imIndex[llid]] = (float4) expected_int;
+  //output[imIndex[llid]] = cellCount;
 #endif
 }

@@ -14,7 +14,8 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
              __global    ushort2            * block_ptrs,
              __global    int4               * tree_array,       // tree structure for each block
              __global    float              * alpha_array,      // alpha for each block
-             __global    int                * num_obs_array,    // num obs for each block
+             __global    ushort4            * num_obs_array,    // num obs for each block
+             __global    int                * lock_array,       // lock array for concurrent update
              __global    float2             * cum_len_beta,     // cumulative ray length and beta aux vars
              __global    uchar2             * mean_obs_cum_vis, // mean_obs per cell and cumulative visibility
              __constant  uchar              * bit_lookup,       // used to get data_index
@@ -102,7 +103,7 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
             ray_dx, ray_dy, ray_dz,
 
             //scene info                               mix,weight3,numobs,cum_len, mean_obs
-            linfo, block_ptrs, tree_array, alpha_array, 0, 0, num_obs_array, cum_len_beta, mean_obs_cum_vis,
+            linfo, block_ptrs, tree_array, alpha_array, 0, 0, num_obs_array, lock_array, cum_len_beta, mean_obs_cum_vis,
 
             //utility info
             local_tree, bit_lookup, cumsum, factor,
@@ -191,7 +192,7 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
             ray_dx, ray_dy, ray_dz,
 
             //scene info                               (mixture array, weight3, numobs,    aux (cum_len), aux2(mean vis)
-            linfo, block_ptrs, tree_array, alpha_array, mixture_array, last_weight_array, num_obs_array, cum_len_beta, mean_obs_cum_vis,
+            linfo, block_ptrs, tree_array, alpha_array, mixture_array, last_weight_array, num_obs_array, 0, cum_len_beta, mean_obs_cum_vis,
 
             //utility info
             local_tree, bit_lookup, cumsum, factor,
@@ -213,7 +214,8 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
            __global    float              * alpha_array,      // alpha for each block
            __global    uchar8             * mixture_array,    // mixture for each block
            __global    uchar              * last_weight_array,//third weight for mixture model
-           __global    int                * num_obs_array,    // num obs for each block
+           __global    ushort4            * num_obs_array,    // num obs for each block
+           __global    int                * lock_array,       // lock array for concurrent update
            __global    float2             * cum_len_beta,    // cumulative ray length and beta aux vars
            __global    uchar2             * mean_obs_cum_vis, // mean_obs per cell and cumulative visibility
            __constant  uchar              * bit_lookup,       // used to get data_index
@@ -292,7 +294,7 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
             ray_dx, ray_dy, ray_dz,
 
             //scene info                                              //numobs and mixture null
-            linfo, block_ptrs, tree_array, alpha_array, mixture_array, last_weight_array, num_obs_array, cum_len_beta, mean_obs_cum_vis,
+            linfo, block_ptrs, tree_array, alpha_array, mixture_array, last_weight_array, num_obs_array, lock_array, cum_len_beta, mean_obs_cum_vis,
 
             //utility info
             local_tree, bit_lookup, cumsum, factor,
@@ -351,6 +353,7 @@ proc_norm_image(__global float4* image, __global float4* p_inf,__global uint4   
 
 // Update each cell using its aux data
 //
+#if 0
 __kernel
 void
 update_bit_scene_main(__global RenderSceneInfo  * info,
@@ -427,8 +430,8 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
   }
 }
 
-
-#if 0
+#endif
+#if 1
 __kernel
 void
 update_bit_scene_main(__global RenderSceneInfo  * info,

@@ -68,7 +68,7 @@ int load_data_mutable_opt(__local short2  * ray_bundle_array,
     
     //next row index
     int start = (row+1)*nbi;
-    int end   = start + col+1;
+    int end   = lsize; //start + col+1;
     for(int i=start; i<end; ++i) {
       if(cell_ptrs[llid] == cell_ptrs[i]) {
         ray_bundle_array[llid].x = i;         //NEXT pointer = i;

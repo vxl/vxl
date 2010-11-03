@@ -458,10 +458,10 @@ bool boxm_render_bit_scene_manager::run(bool rerender)
   vcl_cout<<"TOTAL NUMBER OF CYCLES FOR RENDER: "<<total<<vcl_endl;
 #endif
 
-#ifdef DEBUG
+#if 0
   cl_event events[2];
   status = clEnqueueReadBuffer(command_queue_,output_buf_,CL_TRUE,
-                               0,numbuffer_*sizeof(cl_float4),
+                               0,wni_*wnj_*sizeof(cl_float),
                                output_,
                                0,NULL,&events[0]);
 
@@ -470,14 +470,14 @@ bool boxm_render_bit_scene_manager::run(bool rerender)
   if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents failed."))
     return false;
   status = clReleaseEvent(events[0]);
-  vcl_cout<<"KERNEL OUTPUT:"<<vcl_endl;
-  for (int i=0; i<1; i++)
-    vcl_cout<<output_[4*i]<<' '
-            <<output_[4*i+1]<<' '
-            <<output_[4*i+2]<<' '
-            <<output_[4*i+3]<<'\n';
-  //vcl_cout<<"MATCH?\n"
-  //        <<(int)scene_->tree_buffers_(4, 10)[0]<<' '<<(int)scene_->tree_buffers_(33,11)[0]<<vcl_endl;
+  float sumCells = 0;
+  for(int i=0; i<wni_*wnj_; i++) {
+    sumCells += output_[i];
+  }
+  vcl_cout<<"SUM cells:    "<<sumCells<<vcl_endl;
+  vcl_cout<<"# cells/ray:  "<<sumCells/(wni_*wnj_)<<vcl_endl;
+  vcl_cout<<"#cells/sec:   "<<1000*sumCells/gpu_time_<<vcl_endl;
+ 
   //--------------------------------------------------------------------
 #endif // DEBUG
 
@@ -1060,12 +1060,6 @@ bool boxm_render_bit_scene_manager::set_all_blocks()
                            4,   5,   5,   6,   5,   6,   6,   7,   5,   6,   6,   7,   6,   7,   7,   8 };
   for (int i=0; i<256; i++) bit_lookup_[i] = bits[i];
 
-  //---- debug alloc --------------------------------------------------
-  output_ = NULL;
-  output_ = (cl_float*) boxm_ocl_utils::alloc_aligned(numbuffer_,sizeof(cl_float4),16);
-  for (int i=0; i<numbuffer_*4; i++) output_[i] = 0.0;
-  //-------------------------------------------------------------------
-
   if (trees_== NULL|| data_mixture_ == NULL || data_alpha_==NULL) {
     vcl_cout << "Failed to allocate host memory. (tree input)\n";
     return false;
@@ -1124,13 +1118,6 @@ bool boxm_render_bit_scene_manager::set_tree_buffers()
                                    256*sizeof(cl_uchar),
                                    bit_lookup_,&status);
   if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (bit_lookup) failed."))
-    return false;
-
-  output_buf_ = clCreateBuffer(this->context_,
-                               CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
-                               numbuffer_*sizeof(cl_float4),
-                               output_,&status);
-  if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (tree) failed."))
     return false;
 
   /******* debug print ***************/
@@ -1299,6 +1286,13 @@ bool boxm_render_bit_scene_manager::set_input_image()
   wni_=(cl_uint)RoundUp(output_img_.ni(),bni_);
   wnj_=(cl_uint)RoundUp(output_img_.nj(),bnj_);
 
+  //---- debug alloc --------------------------------------------------
+  output_ = NULL;
+  vcl_cout<<"output size = "<<wni_*wnj_<<vcl_endl;
+  output_ = (cl_float*) boxm_ocl_utils::alloc_aligned(wni_*wnj_,sizeof(cl_float),16);
+  for (int i=0; i<wni_*wnj_; i++) output_[i] = 0.0;
+  //-------------------------------------------------------------------
+
   image_=(cl_float *)boxm_ocl_utils::alloc_aligned(wni_*wnj_,sizeof(cl_float4),16);
   image_gl_=(cl_uint*)boxm_ocl_utils::alloc_aligned(wni_*wnj_,sizeof(cl_uint),16);
 
@@ -1346,6 +1340,13 @@ bool boxm_render_bit_scene_manager::set_input_image_buffers()
                               CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
                               wni_*wnj_*sizeof(cl_float4),
                               image_,&status);
+  output_buf_ = clCreateBuffer(this->context_,
+                               CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+                               wni_*wnj_*sizeof(cl_float),
+                               output_,&status);
+  if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (tree) failed."))
+    return false;
+                              
   return this->check_val(status,CL_SUCCESS,"clCreateBuffer (image_buf_) failed.")==1;
 }
 
