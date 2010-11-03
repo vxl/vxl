@@ -114,6 +114,7 @@ SET( vnl_sources
   vnl_block.cxx                vnl_block.h
   vnl_math.cxx                 vnl_math.h
   vnl_na.cxx                   vnl_na.h
+  vnl_c_na_vector.txx          vnl_c_na_vector.h
   vnl_copy.cxx                 vnl_copy.h
                                vnl_complex.h
   vnl_error.cxx                vnl_error.h

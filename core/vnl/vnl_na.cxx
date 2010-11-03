@@ -14,7 +14,7 @@
 // This returns the bit pattern 0x7ff00000000007a2, as used by Octave and R
 // Don't assume that any VXL functions will treat the value as NA rather than NaN, unless
 // explicitly documented.
-double vnl_na()
+double vnl_na(double)
 {
   double a;
 
@@ -35,12 +35,28 @@ double vnl_na()
   return a;
 }
 
+
+
+//: A particular qNaN to indicate not available.
+// This returns the bit pattern 0x7f8007a2
+// Don't assume that any VXL functions will treat the value as NA rather than NaN, unless
+// explicitly documented.
+float vnl_na(float)
+{
+  float a;
+
+  *reinterpret_cast<vxl_uint_32*>(&a) = 0x7f8007a2L;
+
+  return a;
+}
+
+
 //: True if parameter is specific NA qNaN.
 // Tests for bit pattern 0x7ff00000000007a2, as used by Octave and R
 bool vnl_na_isna(double x)
 {
 #if VXL_HAS_INT_64
-  return ((*reinterpret_cast<vxl_uint_64*>(&x))&0xfff7ffffffffffffLL)
+  return ((*reinterpret_cast<vxl_uint_64*>(&x))&0xfff7ffffffffffffLL) // ignore signalling bit
     == 0x7ff00000000007a2LL;
 #else
   return ((reinterpret_cast<vxl_int_32*>(&x)[hw]) & 0xffffffff) == 0x7ff00000 &&
@@ -48,9 +64,16 @@ bool vnl_na_isna(double x)
 #endif
 }
 
+//: True if parameter is specific NA qNaN.
+// Tests for bit pattern 0x7F8007a2
+bool vnl_na_isna(float x)
+{
+  return ((*reinterpret_cast<vxl_uint_32*>(&x))&0xffbfffffL) // ignore signalling bit
+    == 0x7f8007a2L;
+}
 
 //: Read a floating point number or "NA" from a stream.
-void vnl_na_double_extract(vcl_istream &is, double& x)
+template <class T> inline void vnl_na_extract_type(vcl_istream &is, T& x)
 {
   if (!is) return;
   is >> x;
@@ -73,13 +96,23 @@ void vnl_na_double_extract(vcl_istream &is, double& x)
     is.clear(vcl_ios::badbit);
     return;
   }
-  x = vnl_na();
+  x = vnl_na(T());
 }
 
-
+void vnl_na_extract(vcl_istream &is, double& x) { vnl_na_extract_type(is, x); }
+void vnl_na_extract(vcl_istream &is, float& x) { vnl_na_extract_type(is, x); }
 
 //: Write a floating point number or "NA" to a stream.
-void vnl_na_double_insert(vcl_ostream &os, double x)
+void vnl_na_insert(vcl_ostream &os, double x)
+{
+  if (vnl_na_isna(x))
+    os << "NA";
+  else
+    os << x;
+}
+
+//: Write a floating point number or "NA" to a stream.
+void vnl_na_insert(vcl_ostream &os, float x)
 {
   if (vnl_na_isna(x))
     os << "NA";

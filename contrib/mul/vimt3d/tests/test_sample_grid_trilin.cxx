@@ -3,6 +3,7 @@
 
 #include <vcl_iostream.h>
 #include <vnl/vnl_vector.h>
+#include <vnl/vnl_na.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vimt3d/vimt3d_sample_grid_trilin.h>
@@ -128,6 +129,19 @@ static void test_sample_grid_trilin()
     recon_image.image().fill(0);
     vimt3d_reconstruct_from_grid(recon_image,sample,p,v,w,u,ny-1,nz-1,nx-1,false);
     compare_images(image,recon_image);
+  }
+  {
+    vnl_vector<double> sample;
+    vgl_point_3d<double> icp(nx/2,ny/2,nz/2);
+    vgl_point_3d<double> cp=i2w(icp);
+    vimt3d_sample_grid_trilin_edgena(sample,image,cp,u,v,w,nx-1,ny-1,nz);
+
+    unsigned n=(nx-1)*(ny-1)*(nz);
+    TEST_NEAR("Expected sample size", sample.size(), n, 10);
+    unsigned finite_count=0;
+    for (unsigned i=0; i<n; ++i)
+      if (!vnl_na_isna(sample(i))) finite_count++;
+    TEST_NEAR("Expected number of non-na samples", finite_count, n/8, 8);
   }
 }
 

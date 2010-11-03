@@ -267,6 +267,69 @@ inline void vimt3d_sample_grid_trilin_ic_extend(
   }
 }
 
+//: Sample grid p+i.u+j.v+k.w safely in image coordinates using trilinear interpolation.
+//  Profile points are p+i.u+j.v+k.w, where i=[0..nu-1],j=[0..nv-1], k=[0..nw-1]
+//  Vector v is resized to nu*nv*nw*np elements, where np=image.n_planes().
+//  v[0]..v[np-1] are the values from point p
+//  Samples are taken along direction w first
+//  Points outside image are set to the nearest voxel's value.
+template <class imType, class vecType>
+inline void vimt3d_sample_grid_trilin_ic_edgena(
+  vnl_vector<vecType>& vec,
+  const vil3d_image_view<imType>& image,
+  const vgl_point_3d<double>& p0,
+  const vgl_vector_3d<double>& u,
+  const vgl_vector_3d<double>& v,
+  const vgl_vector_3d<double>& w,
+  unsigned nu, unsigned nv, unsigned nw)
+{
+  unsigned np = image.nplanes();
+  unsigned ni = image.ni();
+  unsigned nj = image.nj();
+  unsigned nk = image.nk();
+  vcl_ptrdiff_t istep = image.istep();
+  vcl_ptrdiff_t jstep = image.jstep();
+  vcl_ptrdiff_t kstep = image.kstep();
+  vcl_ptrdiff_t pstep = image.planestep();
+
+  vec.set_size(nu*nv*nw*np);
+  vecType* vc = vec.begin();
+
+  vgl_point_3d<double> p1 = p0;
+
+  if (np==1)
+  {
+    const imType* plane0 = image.origin_ptr();
+    for (unsigned i=0;i<nu;++i,p1+=u)
+    {
+      vgl_point_3d<double> p2 = p1;
+      for (unsigned j=0;j<nv;++j,p2+=v)
+      {
+        vgl_point_3d<double> p = p2;
+        // Sample each row (along w)
+        for (unsigned k=0;k<nw;++k,p+=w,++vc)
+          *vc = vil3d_trilin_interp_safe_edgena(p.x(),p.y(),p.z(),
+                                                plane0,ni,nj,nk,istep,jstep,kstep);
+      }
+    }
+  }
+  else
+  {
+    for (unsigned i=0;i<nu;++i,p1+=u)
+    {
+      vgl_point_3d<double> p2 = p1;
+      for (unsigned j=0;j<nv;++j,p2+=v)
+      {
+        vgl_point_3d<double> p = p2;
+        // Sample each row (along w)
+        for (unsigned l=0;l<nw;++l,p+=w)
+          for (unsigned k=0;k<np;++k,++vc)
+            *vc = vil3d_trilin_interp_safe_edgena(p.x(),p.y(),p.z(),
+                                                  image.origin_ptr()+k*pstep,ni,nj,nk,istep,jstep,kstep);
+      }
+    }
+  }
+}
 
 //: Sample grid p+i.u+j.v+k.w using trilinear interpolation in world coordinates.
 //  Profile points are p+i.u+j.v+k.w, where i=[0..nu-1],j=[0..nv-1], k=[0..nw-1]
@@ -299,6 +362,37 @@ void vimt3d_sample_grid_trilin_extend(
   return;
 }
 
+
+//: Sample grid p+i.u+j.v+k.w using trilinear interpolation in world coordinates.
+//  Profile points are p+i.u+j.v+k.w, where i=[0..nu-1],j=[0..nv-1], k=[0..nw-1]
+//  Vector v is resized to nu*nv*nw*np elements, where np=image.n_planes().
+//  v[0]..v[np-1] are the values from point p.
+//  Samples are taken along direction w first. Samples
+//  outside the image are set to the value of the nearest voxel's value.
+template <class imType, class vecType>
+void vimt3d_sample_grid_trilin_edgena(
+  vnl_vector<vecType>& vec,
+  const vimt3d_image_3d_of<imType>& image,
+  const vgl_point_3d<double>& p,
+  const vgl_vector_3d<double>& u,
+  const vgl_vector_3d<double>& v,
+  const vgl_vector_3d<double>& w,
+  unsigned nu, unsigned nv, unsigned nw)
+{
+  // convert to image coordinates
+  vgl_point_3d<double> im_p0 = image.world2im()(p);
+  vgl_vector_3d<double> im_u = image.world2im()(p+u)-im_p0;
+  vgl_vector_3d<double> im_v = image.world2im()(p+v)-im_p0;
+  vgl_vector_3d<double> im_w = image.world2im()(p+w)-im_p0;
+
+  // call image coordinate version of grid sampler
+  if (vimt3d_grid_in_image_ic(im_p0,im_u,im_v,im_w,nu,nv,nw,image.image()))
+    vimt3d_sample_grid_trilin_ic_no_checks(vec,image.image(),im_p0,im_u,im_v,im_w,nu,nv,nw);
+  else
+    vimt3d_sample_grid_trilin_ic_edgena(vec,image.image(),im_p0,im_u,im_v,im_w,nu,nv,nw);
+
+  return;
+}
 
 //: Sample grid p+i.u+j.v+k.w using trilinear interpolation in image coordinates.
 //  Profile points are p+i.u+j.v+k.w, where i=[0..nu-1],j=[0..nv-1], k=[0..nw-1]
@@ -334,6 +428,14 @@ template void vimt3d_sample_grid_trilin( \
   const vgl_vector_3d<double >& w, \
   unsigned nu, unsigned nv, unsigned nw); \
 template void vimt3d_sample_grid_trilin_extend( \
+  vnl_vector<vecType >& vec, \
+  const vimt3d_image_3d_of<imType >& image, \
+  const vgl_point_3d<double >& p, \
+  const vgl_vector_3d<double >& u, \
+  const vgl_vector_3d<double >& v, \
+  const vgl_vector_3d<double >& w, \
+  unsigned nu, unsigned nv, unsigned nw); \
+template void vimt3d_sample_grid_trilin_edgena( \
   vnl_vector<vecType >& vec, \
   const vimt3d_image_3d_of<imType >& image, \
   const vgl_point_3d<double >& p, \

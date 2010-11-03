@@ -8,6 +8,7 @@
 
 #include <vcl_cassert.h>
 #include <vcl_cstddef.h>
+#include <vil/vil_na.h>
 #include <vil3d/vil3d_image_view.h>
 
 //: Compute trilinear interpolation at (x,y,z), no bound checks
@@ -115,6 +116,18 @@ inline double vil3d_trilin_interp_safe_extend(double x, double y, double z, cons
   return vil3d_trilin_interp_raw(x,y,z,data,xstep,ystep,zstep);
 }
 
+//: Compute trilinear interpolation at (x,y), with bounds checks.
+//  Image is nx * ny array of Ts. x,y element is data[nx*y+x]
+//  If (x,y,z) is outside safe interpolatable image region, nearest pixel value is returned.
+template<class T>
+inline double vil3d_trilin_interp_safe_edgena(double x, double y, double z, const T* data,
+                                              unsigned nx, unsigned ny, unsigned nz,
+                                              vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep, vcl_ptrdiff_t zstep)
+{
+  if (x<0 || y<0 || z<0 ||
+    x>=nx-1 || y>=ny-1 || z>=nz-1) return vil_na();
+  return vil3d_trilin_interp_raw(x,y,z,data,xstep,ystep,zstep);
+}
 //: Compute trilinear interpolation at (x,y), using the nearest valid value if out of bounds
 //  If (x,y,z) is outside safe interpolatable image region, nearest pixel value is returned.
 template<class T>
