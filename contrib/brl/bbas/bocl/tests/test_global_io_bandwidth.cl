@@ -1,5 +1,73 @@
 #pragma OPENCL EXTENSION cl_khr_global_int32_base_atomics : enable
+__kernel
+void
+test_locking_mechanism(__global uint * len, __global float4* input_array,
+                                  __global float* result_array, 
+                                  __global int * result_flag,
+                                  __local float* local_mem)
+{
+  int gid=get_global_id(0);
+  int llid=get_local_id(0);
+  bool flag=true;
+  int cnt=0;
+  int cnt2=0;
+  int isactive=1;
 
+  while(isactive==1)
+  {
+      if(llid>0)
+          isactive=0;
+
+      if((*result_flag)==0 && isactive )
+      {
+          int old=atom_cmpxchg(result_flag,0,gid+1);
+          barrier(CLK_GLOBAL_MEM_FENCE);
+
+          if(old==0)
+          {
+              cnt2++;
+              float temp=result_array[0];
+              temp+=(gid+1);
+              result_array[0]=temp;
+              //atom_xchg(result_flag,0);
+              result_flag[0]=0;
+              isactive=0;
+          }
+          barrier(CLK_GLOBAL_MEM_FENCE);
+      }
+      cnt=cnt+1;
+  }
+  result_array[gid+1]=cnt2;
+}
+__kernel
+void
+test_atom_cmpxchg(__global uint * len, __global float4* input_array,
+                                  __global int* result_array, 
+                                  __global int * result_flag,
+                                  __local float* local_mem)
+{
+  int gid=get_global_id(0);
+
+  int lid=get_local_id(0);
+  int globalsize=get_global_size(0);
+  int worksize=get_local_size(0);
+
+  int groupid=get_group_id(0);
+  bool flag=true;
+
+  int cmp=as_int(444.0f);//convert_int(input_array[gid].x);
+  //result_array[gid]=cmp;
+  barrier(CLK_LOCAL_MEM_FENCE);
+
+  
+
+  int temp=atom_cmpxchg(&result_array[0],cmp,0);
+
+  if(temp==cmp)
+    result_array[gid]=10000;
+  else
+    result_array[gid]= 555;
+}
 __kernel
 void
 test_single_thread_read_bandwidth(__global uint * len, __global float4* input_array,

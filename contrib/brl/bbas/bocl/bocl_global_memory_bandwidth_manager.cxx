@@ -72,7 +72,7 @@ bool bocl_global_memory_bandwidth_manager::setup_result_array()
     result_array_[i]=0.0;
     i++;
   }
-
+  result_array_[0]=0.0;
   result_flag_[0]=0;
   if (result_array_)
     return true;
@@ -160,8 +160,8 @@ bool bocl_global_memory_bandwidth_manager::run_kernel()
   if (!this->check_val(status,CL_SUCCESS,"clGetKernelWorkGroupInfo CL_KERNEL_WORK_GROUP_SIZE, failed."))
     return SDK_FAILURE;
 
-  vcl_size_t globalThreads[]= {RoundUp(len_,this->group_size())};
-  vcl_size_t localThreads[] = {this->group_size()};
+  vcl_size_t globalThreads[]= {RoundUp(len_,64)};
+  vcl_size_t localThreads[] = {64};
 
   if (used_local_memory > this->total_local_memory())
   {
@@ -561,6 +561,14 @@ int bocl_global_memory_bandwidth_manager::build_kernel_program(bool useimage)
                             NULL,
                             NULL,
                             NULL);
+    unsigned char buffer[21740]; 
+    vcl_size_t length[10];
+    vcl_size_t bufflength=0;  
+    //clGetProgramInfo(program_,CL_PROGRAM_BINARY_SIZES,sizeof(vcl_size_t),&length,&bufflength);
+   // clGetProgramInfo(program_,CL_PROGRAM_BINARIES,21740,(void*)&buffer,&bufflength);
+   // vcl_cout<<length[0];
+    //int a;
+    //vcl_cin>>a;
     if (!this->check_val(status,
                          CL_SUCCESS,
                          error_to_string(status)))
@@ -603,6 +611,7 @@ int bocl_global_memory_bandwidth_manager::create_kernel(vcl_string const& kernel
   cl_int status = CL_SUCCESS;
   // get a kernel object handle for a kernel with the given name
   kernel_ = clCreateKernel(program_,kernel_name.c_str(),&status);
+
   if (!this->check_val(status,CL_SUCCESS,error_to_string(status)))
     return SDK_FAILURE;
   else

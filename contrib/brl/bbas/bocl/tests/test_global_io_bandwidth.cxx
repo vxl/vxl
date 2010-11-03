@@ -1,7 +1,77 @@
 #include <testlib/testlib_test.h>
 #include <testlib/testlib_root_dir.h>
 #include <bocl/bocl_global_memory_bandwidth_manager.h>
+bool test_atom_cmpxchg(unsigned len, float & bandwidth)
+{
+  vcl_string root_dir = testlib_root_dir();
+  bocl_global_memory_bandwidth_manager * mgr=bocl_global_memory_bandwidth_manager::instance();
+  if (!mgr->image_support())
+     return false;
+  mgr->setup_array(len);
+  mgr->setup_result_array();
+  if (!mgr->load_kernel_source(root_dir + "/contrib/brl/bbas/bocl/tests/test_global_io_bandwidth.cl"))
+    return false;
+  if (mgr->build_kernel_program(mgr->image_support())!=SDK_SUCCESS)
+    return false;
 
+  if (mgr->create_kernel("test_atom_cmpxchg")!=SDK_SUCCESS) {
+    TEST("Create Kernel test_atom_cmpxchg", false, true);
+    return false;
+  }
+  if (mgr->run_kernel()!=SDK_SUCCESS) {
+    TEST("Run Kernel test_atom_cmpxchg", false, true);
+    return false;
+  }
+  // cl_int* result_flag = mgr->result_flag(); // unused
+  bandwidth=(float)4/* image reades float4*/*(len*4)/mgr->time_taken()/(1024*1024);
+
+
+  float sum=0.0;
+  cl_int * result_array=(cl_int*)mgr->result_array();
+  for (unsigned i=0;i<len;++i)
+   vcl_cout<<result_array[i]<<" ";
+
+
+  mgr->clean_array();
+  mgr->clean_result_array();
+
+  return false;
+}
+bool test_locking_mechanism(unsigned len, float & bandwidth)
+{
+  vcl_string root_dir = testlib_root_dir();
+  bocl_global_memory_bandwidth_manager * mgr=bocl_global_memory_bandwidth_manager::instance();
+  if (!mgr->image_support())
+     return false;
+  mgr->setup_array(len);
+  mgr->setup_result_array();
+  if (!mgr->load_kernel_source(root_dir + "/contrib/brl/bbas/bocl/tests/test_global_io_bandwidth.cl"))
+    return false;
+  if (mgr->build_kernel_program(false))
+    return false;
+
+  if (mgr->create_kernel("test_locking_mechanism")!=SDK_SUCCESS) {
+    TEST("Create Kernel test_locking_mechanism", false, true);
+    return false;
+  }
+  if (mgr->run_kernel()!=SDK_SUCCESS) {
+    TEST("Run Kernel test_locking_mechanism", false, true);
+    return false;
+  }
+  // cl_int* result_flag = mgr->result_flag(); // unused
+  bandwidth=(float)4/* image reades float4*/*(len*4)/mgr->time_taken()/(1024*1024);
+
+
+  float sum=0.0;
+  cl_float * result_array=mgr->result_array();
+  for (unsigned i=0;i<128;++i)
+   vcl_cout<<result_array[i]<<" ";
+
+
+  mgr->clean_array();
+  mgr->clean_result_array();
+  return false;
+}
 bool test_single_thread_read_bandwidth_image(unsigned len, float & bandwidth)
 {
   vcl_string root_dir = testlib_root_dir();
@@ -365,6 +435,10 @@ static void test_global_io_bandwidth()
 {
   unsigned len=1024*1024;
   float bandwidth=0.0f;
+
+  test_atom_cmpxchg(4096,bandwidth);
+  test_locking_mechanism(1024,bandwidth);
+
   if (test_single_thread_read_bandwidth(len,bandwidth))
     vcl_cout<<" test_single_thread_read_bandwidth "<<bandwidth<<vcl_endl;
   if (test_workgroup_uncoalesced_read_bandwidth(len,bandwidth))
