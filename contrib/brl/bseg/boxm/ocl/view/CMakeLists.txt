@@ -25,6 +25,9 @@ IF(VGUI_FOUND)
       boxm_cam_tableau.h
       boxm_cam_tableau.cxx
       boxm_cam_tableau_sptr.h
+      boxm_vid_tableau.h
+      boxm_vid_tableau.cxx
+      boxm_vid_tableau_sptr.h
       boxm_ocl_render_bit_tableau.h
       boxm_ocl_render_bit_tableau.cxx
       boxm_ocl_render_bit_tableau_sptr.h

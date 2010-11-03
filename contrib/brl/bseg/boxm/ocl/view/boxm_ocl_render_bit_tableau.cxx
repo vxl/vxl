@@ -221,7 +221,7 @@ bool boxm_ocl_render_bit_tableau::handle(vgui_event const &e)
     return true;
   }
 
-  if (boxm_cam_tableau::handle(e))
+  if (boxm_vid_tableau::handle(e))
     return true;
 
   return false;

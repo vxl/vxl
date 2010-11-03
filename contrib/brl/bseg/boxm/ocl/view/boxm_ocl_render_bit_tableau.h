@@ -10,7 +10,7 @@
 #include "boxm_ocl_include_glew.h"
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_event_condition.h>
-#include <boxm/ocl/view/boxm_cam_tableau.h>
+#include <boxm/ocl/view/boxm_vid_tableau.h>
 #include <boxm/ocl/view/boxm_ocl_render_bit_tableau_sptr.h>
 #include <boxm/ocl/boxm_ocl_bit_scene.h>
 #include <boxm/boxm_scene_base.h>
@@ -19,7 +19,7 @@
 #include <vgui/vgui_statusbar.h>
 #include <vil/vil_image_view.h>
 
-class boxm_ocl_render_bit_tableau : public boxm_cam_tableau
+class boxm_ocl_render_bit_tableau : public boxm_vid_tableau
 {
  public:
   boxm_ocl_render_bit_tableau();
