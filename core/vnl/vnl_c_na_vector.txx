@@ -20,9 +20,30 @@ template <class T>
 T vnl_c_na_vector<T>::sum(T const* v, unsigned n)
 {
   T tot(0);
+  bool any_valid(false);
   for (const T* end = v+n; v != end; v++)
-    if (!vnl_na_isna(*v)) tot += *v++;
-  return tot;
+  {
+    if (!vnl_na_isna(*v))
+    {
+      tot += *v;
+      any_valid=true;
+    }
+  }
+  return any_valid ? tot : vnl_na(T());
+}
+
+template <class T>
+T vnl_c_na_vector<T>::mean(T const *p, unsigned n)
+{
+  T tot(0);
+  unsigned n_finite=0;
+  for (const T* end = p+n; p != end; p++)
+    if (!vnl_na_isna(*p))
+    {
+      tot += *p;
+      n_finite++;
+    }
+  return n_finite ? tot/abs_t(n_finite) : vnl_na(T());
 }
 
 
@@ -33,7 +54,7 @@ template <class T, class S>
 void vnl_c_na_vector_two_norm_squared(T const *p, unsigned n, S *out)
 {
   S val = 0;
-  bool any_valid=false;
+  bool any_valid(false);
   for(T const * end = p+n; p != end; p++)
   {
     if (!vnl_na_isna(*p))
@@ -59,18 +80,23 @@ void vnl_c_na_vector_rms_norm(T const *p, unsigned n, S *out)
     }
   }
   typedef typename vnl_numeric_traits<S>::real_t real_t;
-  *out = S(vcl_sqrt(real_t(val/n_finite)));
+  *out = n_finite : S(vcl_sqrt(real_t(val/n_finite))) : vnl_na(T());
 }
 
 template <class T, class S>
 void vnl_c_na_vector_one_norm(T const *p, unsigned n, S *out)
 {
-  *out = 0;
+  T val = 0;
+  bool any_valid(false);
   for (T const* end = p+n; p != end; p++)
   {
     if (!vnl_na_isna(*p))
-      *out += vnl_math_abs(*p++);
+    {
+      val += vnl_math_abs(*p++);
+      any_valid=true;
+    }
   }
+  *out = any_valid ? val : vnl_na(T());
 }
 
 template <class T, class S>
@@ -85,13 +111,14 @@ void vnl_c_na_vector_two_norm(T const *p, unsigned n, S *out)
 template <class T, class S>
 void vnl_c_na_vector_inf_norm(T const *p, unsigned n, S *out)
 {
-  *out = 0;
+  T val = 0;
   for (T const* end = p+n; p != end; p++)
   {
     S v = vnl_math_abs(*p);
-    if (*out > v)
-      *out = v;
+    if (v > val) // don't need to test for NA, because NA > x is always false.
+      v = val;
   }
+  *out = any_valid ? v : vnl_na(T());
 }
 
 

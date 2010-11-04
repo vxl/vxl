@@ -103,9 +103,11 @@ class vnl_c_na_vector
   static T min_value(T const *, unsigned);
   static unsigned arg_max(T const *, unsigned);
   static unsigned arg_min(T const *, unsigned);
+#endif
 
-  static T mean(T const *p, unsigned n) { return T(sum(p,n)/abs_t(n)); }
+  static T mean(T const *p, unsigned n);
 
+#if 0
   //: The standard deviation
   // This method uses the 1/(n-1) normalisation, assuming that your
   // data is a sample of a population.
@@ -114,11 +116,11 @@ class vnl_c_na_vector
 
   //: The sum of squared differences from the mean
   static T sum_sq_diff_means(T const* v, unsigned n);
+#endif
 
   //:  one_norm : sum of abs values
   static inline abs_t one_norm(T const *p, unsigned n)
   { abs_t val; vnl_c_na_vector_one_norm(p, n, &val); return val; }
-#endif
 
   //: two_norm : sqrt of sum of squared abs values
   static inline abs_t two_norm(T const *p, unsigned n)
