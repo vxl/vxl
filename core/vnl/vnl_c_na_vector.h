@@ -25,12 +25,12 @@
 
 // avoid messing about with aux_* functions for gcc 2.7 -- fsm
 #if 0
-template <class T, class S> void vnl_c_vector_inf_norm(T const *p, unsigned n, S *out);
-template <class T, class S> void vnl_c_vector_rms_norm(T const *p, unsigned n, S *out);
+template <class T, class S> void vnl_c_na_vector_inf_norm(T const *p, unsigned n, S *out);
+template <class T, class S> void vnl_c_na_vector_rms_norm(T const *p, unsigned n, S *out);
 #endif
-template <class T, class S> void vnl_c_vector_one_norm(T const *p, unsigned n, S *out);
-template <class T, class S> void vnl_c_vector_two_norm(T const *p, unsigned n, S *out);
-template <class T, class S> void vnl_c_vector_two_norm_squared(T const *p, unsigned n, S *out);
+template <class T, class S> void vnl_c_na_vector_one_norm(T const *p, unsigned n, S *out);
+template <class T, class S> void vnl_c_na_vector_two_norm(T const *p, unsigned n, S *out);
+template <class T, class S> void vnl_c_na_vector_two_norm_squared(T const *p, unsigned n, S *out);
 
 //: vnl_c_na_vector interfaces to NA-aware lowlevel memory-block operations.
 export template <class T>
@@ -42,7 +42,7 @@ class vnl_c_na_vector
 
   static T sum(T const* v, unsigned n);
   static inline abs_t squared_magnitude(T const *p, unsigned n)
-  { abs_t val; vnl_c_vector_two_norm_squared(p, n, &val); return val; }
+  { abs_t val; vnl_c_na_vector_two_norm_squared(p, n, &val); return val; }
 #if 0
   static void normalize(T *, unsigned n);
   static void apply(T const *, unsigned, T (*f)(T), T* v_out);
@@ -117,25 +117,25 @@ class vnl_c_na_vector
 
   //:  one_norm : sum of abs values
   static inline abs_t one_norm(T const *p, unsigned n)
-  { abs_t val; vnl_c_vector_one_norm(p, n, &val); return val; }
+  { abs_t val; vnl_c_na_vector_one_norm(p, n, &val); return val; }
 #endif
 
   //: two_norm : sqrt of sum of squared abs values
   static inline abs_t two_norm(T const *p, unsigned n)
-  { abs_t val; vnl_c_vector_two_norm(p, n, &val); return val; }
+  { abs_t val; vnl_c_na_vector_two_norm(p, n, &val); return val; }
 
   //: two_nrm2 : sum of squared abs values
   static inline abs_t two_nrm2(T const *p, unsigned n)
-  { abs_t val; vnl_c_vector_two_norm_squared(p, n, &val); return val; }
+  { abs_t val; vnl_c_na_vector_two_norm_squared(p, n, &val); return val; }
 
 #if 0
  //: inf_norm : max of abs values
   static inline abs_t inf_norm(T const *p, unsigned n)
-  { abs_t val; vnl_c_vector_inf_norm(p, n, &val); return val; }
+  { abs_t val; vnl_c_na_vector_inf_norm(p, n, &val); return val; }
 
   //: rms_norm : sqrt of mean sum of squared abs values
   static inline abs_t rms_norm(T const *p, unsigned n)
-  { abs_t val; vnl_c_vector_rms_norm(p, n, &val); return val; }
+  { abs_t val; vnl_c_na_vector_rms_norm(p, n, &val); return val; }
 
   //: Euclidean Distance between two vectors.
   // Sum of Differences squared.

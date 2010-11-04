@@ -20,7 +20,7 @@ template <class T>
 T vnl_c_na_vector<T>::sum(T const* v, unsigned n)
 {
   T tot(0);
-  for (unsigned i = 0; i < n; ++i)
+  for (const T* end = v+n; v != end; v++)
     if (!vnl_na_isna(*v)) tot += *v++;
   return tot;
 }
@@ -33,26 +33,28 @@ template <class T, class S>
 void vnl_c_na_vector_two_norm_squared(T const *p, unsigned n, S *out)
 {
   S val = 0;
-  T const* end = p+n;
-  while (p != end)
+  bool any_valid=false;
+  for(T const * end = p+n; p != end; p++)
   {
     if (!vnl_na_isna(*p))
-      val += S(vnl_math_squared_magnitude(*p++));
+    {
+      val += S(vnl_math_squared_magnitude(*p));
+      any_valid=true;
+    }
   }
-  *out = val;
+  *out = any_valid ? val : vnl_na(T());
 }
 
 template <class T, class S>
 void vnl_c_na_vector_rms_norm(T const *p, unsigned n, S *out)
 {
   S val = 0;
-  T const* end = p+n;
   unsigned n_finite=0;
-  while (p != end)
+  for (T const* end = p+n; p != end; p++)
   {
     if (!vnl_na_isna(*p))
     {
-      val += S(vnl_math_squared_magnitude(*p++));
+      val += S(vnl_math_squared_magnitude(*p));
       n_finite++;
     }
   }
@@ -64,10 +66,11 @@ template <class T, class S>
 void vnl_c_na_vector_one_norm(T const *p, unsigned n, S *out)
 {
   *out = 0;
-  T const* end = p+n;
-  while (p != end)
+  for (T const* end = p+n; p != end; p++)
+  {
     if (!vnl_na_isna(*p))
       *out += vnl_math_abs(*p++);
+  }
 }
 
 template <class T, class S>
@@ -83,9 +86,9 @@ template <class T, class S>
 void vnl_c_na_vector_inf_norm(T const *p, unsigned n, S *out)
 {
   *out = 0;
-  T const* end = p+n;
-  while (p != end) {
-    S v = vnl_math_abs(*p++);
+  for (T const* end = p+n; p != end; p++)
+  {
+    S v = vnl_math_abs(*p);
     if (*out > v)
       *out = v;
   }
@@ -97,11 +100,11 @@ void vnl_c_na_vector_inf_norm(T const *p, unsigned n, S *out)
 template<class T>
 vcl_ostream& print_na_vector(vcl_ostream& s, T const* v, unsigned size)
 {
-  if (size != 0) vnl_na_insert(s, v[0]);
-  for (unsigned i = 1; i < size; ++i)   // For each index in vector
+  if (size != 0) vnl_na_insert(s, *v++);
+  for (T const* end = v+size-1; v != end; v++)
   {
     s << ' ';
-    vnl_na_insert(s, v[i]);  // Output data element
+    vnl_na_insert(s, *v);  // Output data element
   }
   return s;
 }
