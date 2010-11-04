@@ -80,7 +80,7 @@ void vnl_c_na_vector_rms_norm(T const *p, unsigned n, S *out)
     }
   }
   typedef typename vnl_numeric_traits<S>::real_t real_t;
-  *out = n_finite : S(vcl_sqrt(real_t(val/n_finite))) : vnl_na(T());
+  *out = n_finite ? S(vcl_sqrt(real_t(val/n_finite))) : vnl_na(T());
 }
 
 template <class T, class S>
@@ -112,13 +112,17 @@ template <class T, class S>
 void vnl_c_na_vector_inf_norm(T const *p, unsigned n, S *out)
 {
   T val = 0;
+  bool any_valid(false);
   for (T const* end = p+n; p != end; p++)
   {
     S v = vnl_math_abs(*p);
     if (v > val) // don't need to test for NA, because NA > x is always false.
+    {
       v = val;
+      any_valid=true;
+    }
   }
-  *out = any_valid ? v : vnl_na(T());
+  *out = any_valid ? val : vnl_na(T());
 }
 
 
@@ -141,13 +145,9 @@ vcl_ostream& print_na_vector(vcl_ostream& s, T const* v, unsigned size)
 #define VNL_C_NA_VECTOR_INSTANTIATE_norm(T, S) \
 template void vnl_c_na_vector_two_norm_squared(T const *, unsigned, S *); \
 template void vnl_c_na_vector_two_norm(T const *, unsigned, S *); \
-template void vnl_c_na_vector_one_norm(T const *, unsigned, S *);
-
-#if 0
+template void vnl_c_na_vector_one_norm(T const *, unsigned, S *); \
 template void vnl_c_na_vector_rms_norm(T const *, unsigned, S *); \
-template void vnl_c_na_vector_na_two_norm(T const *, unsigned, S *); \
 template void vnl_c_na_vector_inf_norm(T const *, unsigned, S *)
-#endif
 
 #undef VNL_C_NA_VECTOR_INSTANTIATE_ordered
 #define VNL_C_NA_VECTOR_INSTANTIATE_ordered(T) \
