@@ -235,5 +235,10 @@ template void vil3d_sample_profile_trilin_extend(vecType* v, \
   const vil3d_image_view<imType >& image, \
   double x0, double y0, double z0,\
   double dx, double dy, double dz,\
+  unsigned n); \
+template void vil3d_sample_profile_trilin_edgena(vecType* v, \
+  const vil3d_image_view<imType >& image, \
+  double x0, double y0, double z0,\
+  double dx, double dy, double dz,\
   unsigned n)
 #endif // vil3d_sample_profile_trilin_txx_
