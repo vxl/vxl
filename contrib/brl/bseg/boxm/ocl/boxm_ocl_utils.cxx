@@ -304,3 +304,157 @@ int boxm_ocl_utils::getBufferIndex(bool rand,
   return buffIndex;
 }
 
+
+void boxm_ocl_utils::compare_bit_scenes(boxm_ocl_bit_scene* one, boxm_ocl_bit_scene* two) 
+{
+    vcl_cout<<"Comparing bit scenes"<<vcl_endl;
+    
+    //1. make sure block sizes/num are the same
+    int numX = one->blocks_.get_row1_count(); 
+    int numY = one->blocks_.get_row2_count();
+    int numZ = one->blocks_.get_row3_count();
+    if(numX != two->blocks_.get_row1_count() ||
+        numY != two->blocks_.get_row2_count() ||
+          numZ != two->blocks_.get_row3_count()) {
+              vcl_cout<<"Scene Sizes are different "<<vcl_endl;
+              return;
+    }
+    
+    
+    //2. compare alpha value for each block (by layer
+    double error = 0.0;
+    int cmpCount = 0;
+    int diffCount = 0;
+    int initCount = 0;
+    int numConvBigger = 0;
+    for(int i=0; i<numX; i++) {
+      for(int j=0; j<numY; j++) {
+        for(int k=0; k<numZ; k++) {
+          
+          cmpCount++;
+            
+          //get alpha data for block one
+          unsigned short buffIndex = one->blocks_(i,j,k)[0];
+          unsigned short buffOffset = one->blocks_(i,j,k)[1];
+          float alpha_one = one->data_buffers_(buffIndex,buffOffset)[0]; 
+          
+          //get alpha for block 2
+          buffIndex = two->blocks_(i,j,k)[0];
+          buffOffset = two->blocks_(i,j,k)[1];
+          float alpha_two = two->data_buffers_(buffIndex, buffOffset)[0]; 
+          
+          if(alpha_one >= 1.0f && alpha_two >= 1.0f) {
+            
+            if( vcl_fabs(alpha_one-alpha_two) > 1e-5f ) {
+              vcl_cout<<"DIFFERENCE at block "<<i<<','<<j<<','<<k
+                    <<";  alphas: "<<alpha_one<<","<<alpha_two<<vcl_endl;
+              diffCount++;
+                      
+              error += (double) (alpha_one-alpha_two)* (double) (alpha_one-alpha_two); 
+              if ( alpha_two > alpha_one )
+                numConvBigger ++ ;
+            } 
+            else {
+              initCount++;
+            }
+            
+          }
+          else {
+            initCount++;
+          }
+
+        }
+      }
+    }    
+    
+    vcl_cout<<"Blocks compared:   "<<cmpCount<<vcl_endl;
+    vcl_cout<<"differences found: "<<diffCount<<vcl_endl;
+    vcl_cout<<"converted bigger : "<<numConvBigger<<vcl_endl;
+    vcl_cout<<"blocks unchanged:  "<<initCount<<vcl_endl;
+    vcl_cout<<"Squared ERROR:     "<<error<<vcl_endl;
+    vcl_cout<<"mean sse     :     "<<error/cmpCount<<vcl_endl;
+
+  //vcl_cout<<"===SCENE STATS=================================="<<vcl_endl;
+  ////simple count of cells 
+  //unsigned char bits[] = { 0,   1,   1,   2,   1,   2,   2,   3,   1,   2,   2,   3,   2,   3,   3,   4,
+                           //1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5 ,
+                           //1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5  ,
+                           //2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
+                           //1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5  ,
+                           //2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
+                           //2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
+                           //3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7  ,
+                           //1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5  ,
+                           //2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
+                           //2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
+                           //3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7  ,
+                           //2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
+                           //3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7  ,
+                           //3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7  ,
+                           //4,   5,   5,   6,   5,   6,   6,   7,   5,   6,   6,   7,   6,   7,   7,   8 };
+  //int totalCells=0;
+  //vbl_array_3d<ushort2>::iterator iter;
+  //for (iter = blocks_.begin(); iter != blocks_.end(); iter++)
+  //{
+    ////in each block get the size of the tree - spit it out:
+    //ushort2 offsets = (*iter);
+    //unsigned short buffIndex = offsets[0];
+    //unsigned short buffOffset = offsets[1];
+    //uchar16 tree = tree_buffers_[buffIndex][buffOffset];
+    //int numParents = 0; 
+    //for(int i=0; i<10; i++) {
+      //numParents += bits[tree[i]]; 
+    //}
+    //int treeCells = numParents*8 + 1;
+    //totalCells += treeCells;
+  //}
+  //vcl_cout<<"TOTAL NUMBER OF CELLS IN SCENE = "<<totalCells<<vcl_endl;
+  
+  ////theoretical voxel count
+  //int numVoxels = blocks_.get_row1_count()*blocks_.get_row2_count()*blocks_.get_row3_count() * 8*8*8; 
+  //vcl_cout<<"Theoretical Number of Voxels: "<<numVoxels<<vcl_endl;
+  //vcl_cout<<"==============================================\n"<<vcl_endl;
+
+//#endif
+
+  
+  ////probe zero alpha values
+  //int zeroCells=0;
+  //vbl_array_3d<ushort2>::iterator iter;
+  //for (iter = blocks_.begin(); iter != blocks_.end(); iter++)
+  //{
+    ////in each block get the size of the tree - spit it out:
+    //ushort2 offsets = (*iter);
+    //unsigned short buffIndex = offsets[0];
+    //unsigned short buffOffset = offsets[1];
+    //uchar16 tree = tree_buffers_[buffIndex][buffOffset];
+    
+    //unsigned short hi  = (unsigned short) tree[10];
+    //unsigned short lo  = (unsigned short) tree[11];
+    //unsigned short dat = (hi<<8) | lo;
+    
+    //if(dat != buffOffset)
+      //vcl_cout<<"Dat: "<<dat<<" != "
+    
+}
+
+
+void boxm_ocl_utils::bit_lookup_table(unsigned char* bits) {
+  unsigned char b[] = { 0,   1,   1,   2,   1,   2,   2,   3,   1,   2,   2,   3,   2,   3,   3,   4,
+                       1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5 ,
+                       1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5  ,
+                       2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
+                       1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5  ,
+                       2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
+                       2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
+                       3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7  ,
+                       1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5  ,
+                       2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
+                       2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
+                       3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7  ,
+                       2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
+                       3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7  ,
+                       3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7  ,
+                       4,   5,   5,   6,   5,   6,   6,   7,   5,   6,   6,   7,   6,   7,   7,   8 };
+  for (int i=0; i<256; i++) bits[i] = b[i];
+}

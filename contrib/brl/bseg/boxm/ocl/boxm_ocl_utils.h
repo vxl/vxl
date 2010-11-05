@@ -74,6 +74,9 @@ class boxm_ocl_utils
   static bool writetreedata(vcl_string tree_data_file,cl_float* data_array, unsigned int  tree_data_size);
   static cl_float*  readtreedata(vcl_string tree_data_file,unsigned int & tree_data_size );
   
+  static void compare_bit_scenes(boxm_ocl_bit_scene* one, boxm_ocl_bit_scene* two); 
+  
+  static void bit_lookup_table(unsigned char* bits);
 };
 
 
