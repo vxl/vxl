@@ -50,24 +50,41 @@ int load_data_mutable_opt(__local short2  * ray_bundle_array,
   uchar llid = (col + nbi*row);           //[0-nbi*nbj] index
   
   //initialize segmentation information (if the ray isn't hitting a cell, make it a non-leader
-  if(cell_ptrs[llid] >=0)
+  if(cell_ptrs[llid] >= 0)
     ray_bundle_array[llid] = (short2) (-1, 1);
   else
     ray_bundle_array[llid] = (short2) (-1, 0);
   barrier(CLK_LOCAL_MEM_FENCE);
   
   //first pass looks to the right neighbor (make sure you don't look for the last one)
+/*
   if(cell_ptrs[llid] == cell_ptrs[llid+1] && llid<lsize-1) {
     ray_bundle_array[llid].x   = llid+1;      //NEXT pointer = llid+1
     ray_bundle_array[llid+1].y = 0;           //NEXT node is not a leader
   }
+*/
+ 
+  //make pass that looks through the right 
+  if(ray_bundle_array[llid].x == -1) {
+    int start = llid+1; 
+    int end   = lsize; 
+    for(int i=start; i<end; ++i) {
+      if(cell_ptrs[llid] == cell_ptrs[i]) {
+        ray_bundle_array[llid].x = i;         //NEXT pointer = i;
+        ray_bundle_array[i].y    = 0;         //i is not a leader anymore
+        break;
+      }
+    }
+  }
+
   barrier(CLK_LOCAL_MEM_FENCE);
 
+/*
   //second pass - start at the next row (don't look in the last row)
   if(ray_bundle_array[llid].x == -1 && row<nbi-1) {
     
     //next row index
-    int start = (row+1)*nbi;
+    int start = llid+1; //(row+1)*nbi;
     int end   = lsize; //start + col+1;
     for(int i=start; i<end; ++i) {
       if(cell_ptrs[llid] == cell_ptrs[i]) {
@@ -77,6 +94,7 @@ int load_data_mutable_opt(__local short2  * ray_bundle_array,
       }
     }
   }
+*/
   return 1;
 }
 
@@ -196,6 +214,44 @@ void seg_len_obs_opt2(        float    seg_len,         //length of ray through 
     barrier(CLK_LOCAL_MEM_FENCE);
 }
 
+
+void seg_len_obs_opt3(         float    seg_len, 
+                               float    obs,
+                       __local short2 * ray_bundle_array,
+                       __local float4 * cached_aux_data)
+{
+    /* linear thread id */
+    uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
+    
+    /* limit access to threads that do not own a connected region */
+    if (ray_bundle_array[llid].y == 0)
+    {
+        /* store seg_len in the corresponding aux data slot to be accessed
+        * by other threads since these aux_data items are not used, they
+        * can be cleared and used to store the seg_len of non-owner rays
+        */
+        cached_aux_data[llid] = (float4) (seg_len, seg_len*obs, 0.0f, 0.0f);
+    }
+    barrier(CLK_LOCAL_MEM_FENCE);
+    
+    /* now, limit access to the threads that own each connected region */
+    if (ray_bundle_array[llid].y == 1)
+    {
+        /* The region owner (base) is now the only active thread within the region*/
+        /* process the base ray */
+        cached_aux_data[llid].x += seg_len;                       // seg_len sum
+        cached_aux_data[llid].y += obs*seg_len;                   // weighted observations */
+
+        /* traverse the linked list and increment sums */
+        short next = ray_bundle_array[llid].x;  // linked list pointer 
+        while(next >= 0) {
+            cached_aux_data[llid].x += cached_aux_data[next].x;
+            cached_aux_data[llid].y += cached_aux_data[next].y;
+            next = ray_bundle_array[next].x;
+        }
+    }
+    barrier(CLK_LOCAL_MEM_FENCE);
+}
 
 /*
 *  Accumulate the pre and vis image arrays based on the cell data.
@@ -445,11 +501,11 @@ void bayes_ratio_opt2(        float   seg_len,
 
 /* Image vector 
  *  [norm | alpha_integral | vis | pre ] */
-void bayes_ratio_opt3(        float   seg_len, 
-                              float   mean_obs,
-                              float * pre,
-                              float * vis,
-                              float   norm, 
+void bayes_ratio_opt3(        float   seg_len,          // segment length for this ray
+                              float   mean_obs,         // mean observation for the currently intersected cell
+                              float * pre,              // ray pre
+                              float * vis,              // ray vis
+                              float   norm,             // normalization (pre_inf + vis_inf)
                               float * cell_beta,
                       __local short2* ray_bundle_array,
                       __local float*  cached_beta,

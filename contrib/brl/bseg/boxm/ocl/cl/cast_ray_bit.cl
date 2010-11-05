@@ -16,11 +16,16 @@ cast_ray(
           __global    int4               * tree_array,      //tree buffers (loaded as int4, but read as uchar16
           __global    float              * alpha_array,     //voxel density buffer
           __global    uchar8             * mixture_array,   //appearance model buffer
-          __global    uchar              * last_weight_array,//third weight for mixture model
-          __global    int                * num_obs_array,   // num obs for each block
-          __global    int                * lock_array,      // lock array for concurrent access/updating
-          __global    float2             * cum_len_beta,    // cumulative ray length and beta aux vars
-          __global    uchar2             * mean_obs_cum_vis,// mean_obs per cell and cumulative visibility
+          //__global    uchar              * last_weight_array,//third weight for mixture model
+          __global    ushort4            * num_obs_array,   // num obs for each block
+          
+          __global    int                * seg_len_array,    //four aux data arrays
+          __global    int                * mean_obs_array,
+          __global    int                * vis_array,
+          __global    int                * beta_array,
+          //__global    int                * lock_array,      // lock array for concurrent access/updating
+          //__global    float2             * cum_len_beta,    // cumulative ray length and beta aux vars
+          //__global    uchar2             * mean_obs_cum_vis,// mean_obs per cell and cumulative visibility
 
 
           //---- UTILITY ARGUMENTS----------------------------------------------
@@ -94,7 +99,7 @@ cast_ray(
     gl_image[imIndex[llid]] = rgbaFloatToInt((float4)(0.0f,0.0f,0.0f,0.0f));
     in_image[imIndex[llid]] = (float)0.0f;
 #endif
-
+    in_image[j*get_global_size(0)+i].x = 0.0f; 
     return;
   }
   //make sure tnear is at least 0...
@@ -103,8 +108,6 @@ cast_ray(
   //make sure tfar is within the last block so texit surpasses it (and breaks from the outer loop)
   tfar -= BLOCK_EPSILON;   
   
-  
-
   
   //used for depth map 
   //----------------------------------------------------------------------------
@@ -201,8 +204,16 @@ cast_ray(
       step_cell_change_detection_uchar8_w_expected(mixture_array,alpha_array,data_ptr,d,&vis,&expected_int,&e_expected_int,intensity,e_intensity);
 #endif
 #ifdef SEGLEN
+
       //keep track of cells being hit
       cell_ptrs[llid] = data_ptr;
+      
+      //SLOW and accurate method
+      int seg_int = convert_int_rte(d * SEGLEN_FACTOR);
+      atom_add(&seg_len_array[data_ptr], seg_int);  
+      int cum_obs = convert_int_rte(d * inImgObs * SEGLEN_FACTOR); 
+      atom_add(&mean_obs_array[data_ptr], cum_obs);
+/*
       cached_aux_data[llid] = (float4)0.0f;  //leaders retain the mean obs and the cell length
       barrier(CLK_LOCAL_MEM_FENCE);
 
@@ -212,39 +223,22 @@ cast_ray(
       //load aux data into local mem
       float  alpha    = alpha_array[data_ptr];
       
-      //kernel (seg len obs 2 keeps a running mean, to be converted to char)
-      seg_len_obs_opt2(d, 
-                      alpha, 
-                      inImgObs,
-                      &ray_vis,
-                      ray_bundle_array,
-                      cached_aux_data);
+      //back to normal mean of mean obs... 
+      seg_len_obs_opt3(d, inImgObs, ray_bundle_array, cached_aux_data);
+      barrier(CLK_LOCAL_MEM_FENCE);                
       
-      //set aux data (only one at time)
-      if (ray_bundle_array[llid].y==1) 
+      //set aux data here (for each leader.. )
+      if(ray_bundle_array[llid].y==1) 
       {
-          int cnt=0;
-          while(true)
-          {
-              if(atom_cmpxchg(&lock_array[data_ptr],0,1)==0)
-              {
-                  float2 cl_beta  = cum_len_beta[data_ptr];
-                  float2 mean_vis = convert_float2(mean_obs_cum_vis[data_ptr])/255.0f;  
-                  cached_aux_data[llid].x=cached_aux_data[llid].x+cl_beta.x;
-                  if(cached_aux_data[llid].x>1e-10f)
-                  {
-                      mean_vis.x=(mean_vis.x*cl_beta.x+cached_aux_data[llid].y)/(cached_aux_data[llid].x);
-                      mean_vis.y=(mean_vis.y*cl_beta.x+cached_aux_data[llid].z)/(cached_aux_data[llid].x);
-                  }
-                  cum_len_beta[data_ptr] = (float2) (cached_aux_data[llid].x, 0.0f);
-                  mean_obs_cum_vis[data_ptr] = convert_uchar2_sat_rte(mean_vis*255.0f);
-                  atom_xchg(&lock_array[data_ptr],0);
-                  cnt=-1;
-              }
-              if(cnt=-1)
-                  break;
-          }
+        //scale!
+        int seg_int = convert_int_rte(cached_aux_data[llid].x * SEGLEN_FACTOR); 
+        int cum_obs = convert_int_rte(cached_aux_data[llid].y * SEGLEN_FACTOR);  
+        
+        //atomically update the cells
+        atom_add(&seg_len_array[data_ptr], seg_int); 
+        atom_add(&mean_obs_array[data_ptr], cum_obs);
       }
+*/
       //reset cell_ptrs to negative one every time (prevents invisible layer bug)
       cell_ptrs[llid] = -1;
 #endif
@@ -254,42 +248,40 @@ cast_ray(
       //cell data, i.e., alpha and app model is needed for some passes 
       float  alpha    = alpha_array[data_ptr];
       float8 mixture  = convert_float8(mixture_array[data_ptr])/255.0f;
-      //float  weight3  = convert_float(last_weight_array[data_ptr])/255.0f;
-      float weight3   = (1.0f-mixture.s2-mixture.s5);
+      float  weight3  = (1.0f-mixture.s2-mixture.s5);
+      
+      float cum_len  = convert_float(seg_len_array[data_ptr])/SEGLEN_FACTOR; 
+      float mean_obs = convert_float(mean_obs_array[data_ptr])/SEGLEN_FACTOR;
+      mean_obs = mean_obs/cum_len;
      
-      float2 cl_beta  = cum_len_beta[data_ptr];
-      float2 mean_vis = convert_float2(mean_obs_cum_vis[data_ptr])/255.0f;
-
       //calculate pre_infinity denomanator (shape of image)
-      pre_infinity_opt(d, cl_beta.x, mean_vis.x, &image_vect, alpha, mixture, weight3);
+      pre_infinity_opt(d, cum_len, mean_obs, &image_vect, alpha, mixture, weight3);
       
       //aux data doesn't need to be set, just in_image
       in_image[j*get_global_size(0)+i] = image_vect;
 #endif
 #ifdef BAYES
 
+/*
       //keep track of cells being hit
       cell_ptrs[llid] = data_ptr;
       barrier(CLK_LOCAL_MEM_FENCE);
       load_data_mutable_opt(ray_bundle_array, cell_ptrs);
       
       //if this current thread is a segment leader...
-      //      /* cell data, i.e., alpha and app model is needed for some passes */
+      //cell data, i.e., alpha and app model is needed for some passes 
       float  alpha    = alpha_array[data_ptr];
       float8 mixture  = convert_float8(mixture_array[data_ptr])/255.0f;
-      //float  weight3  = convert_float(last_weight_array[data_ptr])/255.0f;
       float weight3   = (1.0f-mixture.s2-mixture.s5);
-
       
       //load aux data into local mem
-      float2 mean_vis = convert_float2(mean_obs_cum_vis[data_ptr])/255.0f;
+      //float2 mean_vis = convert_float2(mean_obs_cum_vis[data_ptr])/255.0f;
       float cell_beta =0;
-      
       barrier(CLK_LOCAL_MEM_FENCE);
 
       //calculate bayes ratio
       bayes_ratio_opt3( d, 
-                        mean_vis.x,
+                        mean_obs,
                         &ray_pre,
                         &ray_vis,
                         norm, 
@@ -297,33 +289,53 @@ cast_ray(
                         ray_bundle_array,
                         cell_ptrs, 
                         alpha, 
-                        mixture,
-                        weight3);
-                        
-      //set aux data (only one at time)
-      if (ray_bundle_array[llid].y==1) {
-          int cnt=0;
-          while(true)
-          {
-              if(atom_cmpxchg(&lock_array[data_ptr],0,1)==0)
-              {
-                  float2 cl_beta  = cum_len_beta[data_ptr];
-                  cl_beta.y+=cell_beta;
-                  cum_len_beta[data_ptr] = cl_beta;
-                  atom_xchg(&lock_array[data_ptr],0);
-                  cnt=2000;
-              }
-              //barrier(CLK_GLOBAL_MEM_FENCE);
-              if(cnt=2000)
-                  break;
-              //cnt++;
-          }
-          if(cnt==1000)
-              output[1]=(float)-66;
-      }
+                        mixture);
+*/
+    
+    //DEBUG beta calculation
+    float8 mixture  = convert_float8(mixture_array[data_ptr])/255.0f;
+    float weight3   = (1.0f-mixture.s2-mixture.s5);
+    
+    //load aux data
+    float cum_len  = convert_float(seg_len_array[data_ptr])/SEGLEN_FACTOR; 
+    float mean_obs = convert_float(mean_obs_array[data_ptr])/SEGLEN_FACTOR;
+    mean_obs = mean_obs/cum_len;
+    float PI = 0.0;
+    
+    /* Compute PI for all threads */
+    if (d > 1.0e-10f) {    /* if  too small, do nothing */
+        PI = gauss_3_mixture_prob_density(mean_obs,
+                                           mixture.s0, 
+                                           mixture.s1, 
+                                           mixture.s2,
+                                           mixture.s3, 
+                                           mixture.s4, 
+                                           mixture.s5,
+                                           mixture.s6,
+                                           mixture.s7,
+                                           weight3 );
+    }
+    
+    float ray_beta = (ray_pre + PI*ray_vis)*d/norm;
+    int beta_int = convert_int_rte(ray_beta * SEGLEN_FACTOR);
+    atom_add(&beta_array[data_ptr], beta_int);  
       
-      //reset cell_ptrs to -1 every time
-      cell_ptrs[llid] = -1;
+    float vis_cont = ray_vis * d;  
+    int vis_int  = convert_int_rte(vis_cont * SEGLEN_FACTOR); 
+    atom_add(&vis_array[data_ptr], vis_int);                       
+                            
+    //update ray_pre and ray_vis
+    // pre and vis images 
+    float alpha = alpha_array[data_ptr];
+    float temp  = exp(-alpha * d);
+    
+    /* updated pre                      Omega         *  PI         */
+    ray_pre += ray_vis*(1.0f-temp)*PI;//(image_vect[llid].z - vis_prob_end) * PI;
+    /* updated visibility probability */
+    ray_vis *= temp;
+    
+    //reset cell_ptrs to -1 every time
+    cell_ptrs[llid] = -1;
 #endif 
 ////////////////////////////////////////////////////////////////////////////////
 // END Step Cell Functor
@@ -375,4 +387,8 @@ cast_ray(
   in_image[imIndex[llid]] = (float4) expected_int;
   //output[imIndex[llid]] = cellCount;
 #endif
+  
+  //debug outputter
+  //in_image[j*get_global_size(0)+i].x = cum_d + vis*0.5f; 
+
 }

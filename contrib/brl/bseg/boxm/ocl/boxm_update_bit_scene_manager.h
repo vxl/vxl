@@ -51,6 +51,8 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
                   unsigned ni,
                   unsigned nj,
                   float prob_thresh);
+  
+  bool init_scene_buffers(boxm_ocl_bit_scene *scene); 
 
   bool uninit_scene();
   bool setup_online_processing();
@@ -209,12 +211,17 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   /* optimized data format in 4 buffers */
   cl_float        * cell_alpha_;      //array of floats  (prob density)
   cl_uchar        * cell_mixture_;    //array of uchar8s (mixutre model)
-  cl_uchar        * cell_weight_;     //last weight in the mixture model
+  //cl_uchar        * cell_weight_;     //last weight in the mixture model
   cl_ushort       * cell_num_obs_;    //array of short4s (num obs counts)
-  cl_int          * cell_lock_;
-  AuxData         * cell_aux_data_;   //array of float4s (auxiliary data
-  cl_uchar        * cell_mean_vis_;   //mean obs and visibility aux data
-  cl_float        * cell_cum_beta_;   //cum_length, beta aux data
+  //cl_int          * cell_lock_;
+  //cl_uchar        * cell_mean_vis_;   //mean obs and visibility aux data
+  //cl_float        * cell_cum_beta_;   //cum_length, beta aux data
+  
+  //integer auxiliary data... 
+  cl_int          * cell_seg_len_; 
+  cl_int          * cell_mean_obs_;
+  cl_int          * cell_beta_;
+  cl_int          * cell_vis_; 
 
   /* other */
   cl_uchar        * bit_lookup_;
@@ -265,13 +272,18 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   cl_mem    cells_buf_;
   cl_mem    cell_alpha_buf_;
   cl_mem    cell_mixture_buf_;
-  cl_mem    cell_weight_buf_;
+  //cl_mem    cell_weight_buf_;
   cl_mem    cell_num_obs_buf_;
-  cl_mem    cell_aux_data_buf_;
-  cl_mem    cell_cum_beta_buf_;
-  cl_mem    cell_mean_vis_buf_;
-  cl_mem    cell_lock_buf_;
+  //cl_mem    cell_cum_beta_buf_;
+  //cl_mem    cell_mean_vis_buf_;
+  //cl_mem    cell_lock_buf_;
   cl_mem    bit_lookup_buf_;
+  
+  //new integer aux data
+  cl_mem    cell_seg_len_buf_; 
+  cl_mem    cell_mean_obs_buf_;
+  cl_mem    cell_beta_buf_;
+  cl_mem    cell_vis_buf_; 
 
   /* update buffers */
   cl_mem    tree_bbox_buf_;
