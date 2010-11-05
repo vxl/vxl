@@ -27,7 +27,7 @@ template <class T>
 class vil_pyramid_image_view
 {
  public:
-    //: Default constructor, creates and empty list of pyramid
+    //: Default constructor, creates an empty list of pyramid
     vil_pyramid_image_view(): nlevels_(0), max_levels_(256) {}
 
     //: Creates a pyramid with one image only and it's scale is set to 1.0 (biggest)
@@ -79,7 +79,7 @@ class vil_pyramid_image_view
     // iterators
     typedef vil_image_view_base_sptr iterator;
     inline iterator begin() { return images_[0]; }
-    inline iterator end  () { return images_[images_.size()]; }
+    inline iterator end  () { return images_[images_.size()-1]; }
 
  protected:
     //: the list of image vieas
