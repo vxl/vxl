@@ -4,8 +4,6 @@
 #include <icam_ocl/icam_ocl_search_manager.h>
 #include <vil/algo/vil_gauss_filter.h>
 #include <vcl_cstdio.h>
-#include <bxml/bxml_document.h>
-#include <bxml/bxml_read.h>
 
 icam_ocl_search_manager::~icam_ocl_search_manager()
 {
