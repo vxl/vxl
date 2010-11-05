@@ -442,6 +442,63 @@ int icam_ocl_manager<T>::build_kernel_program(cl_program & program, vcl_string o
     return SDK_SUCCESS;
 }
 
+template<class T>
+bool icam_ocl_manager<T>::free_buffer(void* buffer)
+{
+  if (buffer) {
+#ifdef _WIN32
+    _aligned_free(buffer);
+#elif defined(__APPLE__)
+    free(buffer);
+#else
+    buffer = NULL;
+#endif
+    return true;
+  }
+  return false;
+}
+
+template<class T>
+bool icam_ocl_manager<T>::create_buffer(void** buffer,vcl_string type, int elm_size, int length)
+{
+  if (type.compare("cl_int") == 0) {
+#if defined (_WIN32)
+  *buffer=(cl_int*)_aligned_malloc( sizeof(cl_int)*elm_size, length);
+#elif defined(__APPLE__)
+  *buffer = (cl_int*)malloc(sizeof(cl_int)*elm_size);
+#else
+  *buffer = (cl_int*)memalign(length, sizeof(cl_int)*elm_size);
+#endif
+  } else if (type.compare("cl_uint") == 0) {
+#if defined (_WIN32)
+    *buffer = (cl_uint*)_aligned_malloc(elm_size*sizeof(cl_uint),length);
+#elif defined(__APPLE__)
+    *buffer =(cl_uint*)malloc(sizeof(cl_uint)*elm_size);
+#else
+    *buffer =(cl_uint*)memalign(length,sizeof(cl_uint)*elm_size);
+#endif
+  } else if (type.compare("cl_float") == 0) {
+#if defined (_WIN32)
+    *buffer = (cl_float*)_aligned_malloc(elm_size*sizeof(cl_float),length);
+#elif defined(__APPLE__)
+    *buffer =(cl_float*)malloc(sizeof(cl_float)*elm_size);
+#else
+    *buffer =(cl_float*)memalign(length,sizeof(cl_float)*elm_size);
+#endif
+  } else if (type.compare("cl_float4") == 0) {
+#if defined (_WIN32)
+    *buffer = (cl_float*)_aligned_malloc(elm_size*sizeof(cl_float)*4,length);
+#elif defined(__APPLE__)
+    *buffer =(cl_float*)malloc(sizeof(cl_float)*elm_size*4);
+#else
+    *buffer =(cl_float*)memalign(length,sizeof(cl_float)*elm_size*4);
+#endif
+  } else {
+    vcl_cout << "Buffer of type (" << type << "*) is not defined yet!" << vcl_endl;
+    return false;
+  }
+  return true;
+}
 
 #undef ICAM_OCL_MANAGER_INSTANTIATE
 #define ICAM_OCL_MANAGER_INSTANTIATE(T) \

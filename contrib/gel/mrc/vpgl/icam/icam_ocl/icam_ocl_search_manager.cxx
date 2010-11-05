@@ -4,6 +4,8 @@
 #include <icam_ocl/icam_ocl_search_manager.h>
 #include <vil/algo/vil_gauss_filter.h>
 #include <vcl_cstdio.h>
+#include <bxml/bxml_document.h>
+#include <bxml/bxml_read.h>
 
 icam_ocl_search_manager::~icam_ocl_search_manager()
 {
@@ -23,25 +25,12 @@ encode_image_data(icam_minimizer& minimizer, unsigned level)
 
   // source cl_memory array
   unsigned slen = sni_*snj_;
-#if defined (_WIN32)
-  cl_nbins_ = (cl_uint*)_aligned_malloc(sizeof(cl_uint),16);
-  source_array_=(cl_float*)_aligned_malloc(slen * sizeof(cl_float), 16);
-  Ks_ = (cl_float*)_aligned_malloc(sizeof(cl_float)*4,16);
-  cl_sni_=(cl_uint*)_aligned_malloc(sizeof(cl_uint),16);
-  cl_snj_=(cl_uint*)_aligned_malloc(sizeof(cl_uint),16);
-#elif defined(__APPLE__)
-  cl_nbins_=(cl_uint*)malloc(sizeof(cl_uint));
-  source_array_ = (cl_float*)malloc(slen * sizeof(cl_float));
-  Ks_ = (cl_float*)malloc(sizeof(cl_float)*4);
-  cl_sni_=(cl_uint*)malloc(sizeof(cl_uint));
-  cl_snj_=(cl_uint*)malloc(sizeof(cl_uint));
-#else
-  cl_nbins_=(cl_uint*)memalign(16,sizeof(cl_uint));
-  source_array_ = (cl_float*)memalign(16, slen * sizeof(cl_float));
-  Ks_ = (cl_float*)memalign(16,sizeof(cl_float)*4);
-  cl_sni_=(cl_uint*)memalign(16,sizeof(cl_uint));
-  cl_snj_=(cl_uint*)memalign(16,sizeof(cl_uint));
-#endif
+  create_buffer((void**) &cl_nbins_,"cl_uint",1,16);
+  create_buffer((void**)&source_array_,"cl_float",slen,16);
+  create_buffer((void**)&Ks_,"cl_float4",1,16);
+  create_buffer((void**)&cl_sni_,"cl_uint",1,16);
+  create_buffer((void**)&cl_snj_,"cl_uint",1,16);
+
   if (!source_array_)
     return false;
   (*cl_nbins_) = this->nbins_;
@@ -72,22 +61,11 @@ encode_image_data(icam_minimizer& minimizer, unsigned level)
 
   // dest cl_memory array
   unsigned dlen = dni_*dnj_;
-#if defined (_WIN32)
-  dest_array_=(cl_float*)_aligned_malloc(dlen * sizeof(cl_float), 16);
-  Kdi_ = (cl_float*)_aligned_malloc(sizeof(cl_float)*4,16);
-  cl_dni_=(cl_uint*)_aligned_malloc(sizeof(cl_uint),16);
-  cl_dnj_=(cl_uint*)_aligned_malloc(sizeof(cl_uint),16);
-#elif defined(__APPLE__)
-  dest_array_ = (cl_float*)malloc(dlen * sizeof(cl_float));
-  Kdi_ = (cl_float*)malloc(sizeof(cl_float)*4);
-  cl_dni_=(cl_uint*)malloc(sizeof(cl_uint));
-  cl_dnj_=(cl_uint*)malloc(sizeof(cl_uint));
-#else
-  dest_array_ = (cl_float*)memalign(16, dlen * sizeof(cl_float));
-  Kdi_ = (cl_float*)memalign(16,sizeof(cl_float)*4);
-  cl_dni_=(cl_uint*)memalign(16,sizeof(cl_uint));
-  cl_dnj_=(cl_uint*)memalign(16,sizeof(cl_uint));
-#endif
+  create_buffer((void**)&dest_array_, "cl_float", dlen, 16);
+  create_buffer((void**)&Kdi_, "cl_float4", 1, 16);
+  create_buffer((void**)&cl_dni_, "cl_uint", 1, 16);
+  create_buffer((void**)&cl_dnj_, "cl_uint", 1, 16);
+
   if (!dest_array_)
     return false;
   unsigned dindex = 0;
@@ -102,13 +80,7 @@ encode_image_data(icam_minimizer& minimizer, unsigned level)
 
   //encode depth image
   vil_image_view<double> depth = minimizer.inv_depth(level);
-#if defined (_WIN32)
-  depth_array_=(cl_float*)_aligned_malloc(dlen * sizeof(cl_float), 16);
-#elif defined(__APPLE__)
-  depth_array_ = (cl_float*)malloc(dlen * sizeof(cl_float));
-#else
-  depth_array_ = (cl_float*)memalign(16, dlen * sizeof(cl_float));
-#endif
+  create_buffer((void**)&depth_array_, "cl_float", dlen, 16);
   if (!depth_array_)
     return false;
   unsigned k = 0;
@@ -121,40 +93,13 @@ encode_image_data(icam_minimizer& minimizer, unsigned level)
 
 void icam_ocl_search_manager::clean_image_data()
 {
-  if (source_array_)
-  {
-#ifdef _WIN32
-    _aligned_free(source_array_);
-#elif defined(__APPLE__)
-    free(source_array_);
-#else
-    source_array_ = NULL;
-#endif
-  }
+  free_buffer(source_array_);
   *cl_sni_=0;   *cl_snj_=0;
 
-  if (dest_array_)
-  {
-#ifdef _WIN32
-    _aligned_free(dest_array_);
-#elif defined(__APPLE__)
-    free(dest_array_);
-#else
-    dest_array_ = NULL;
-#endif
-  }
+  free_buffer(dest_array_);
   *cl_dni_=0;   *cl_dnj_=0;
 
-  if (depth_array_)
-  {
-#ifdef _WIN32
-    _aligned_free(depth_array_);
-#elif defined(__APPLE__)
-    free(depth_array_);
-#else
-    depth_array_ = NULL;
-#endif
-  }
+  free_buffer(depth_array_);
 }
 
 void icam_ocl_search_manager::
@@ -207,21 +152,8 @@ setup_rot_debug_space(unsigned n_rotations,
 bool icam_ocl_search_manager::
 create_image_parallel_transf_data()
 {
-#if defined (_WIN32)
-  rotation_ =(cl_float*)_aligned_malloc(sizeof(cl_float)*4, 16);
-#elif defined(__APPLE__)
-  rotation_ = (cl_float*)malloc(sizeof(cl_float)*4);
-#else
-  rotation_ = (cl_float*)memalign(16, sizeof(cl_float)*4);
-#endif
-
-#if defined (_WIN32)
-  translation_=(cl_float*)_aligned_malloc(sizeof(cl_float)*4,16);
-#elif defined(__APPLE__)
-  translation_ = (cl_float*)malloc(sizeof(cl_float)*4);
-#else
-  translation_ = (cl_float*)memalign(16, sizeof(cl_float)*4);
-#endif
+  create_buffer((void**)&rotation_, "cl_float4", 1, 16);
+  create_buffer((void**)&translation_, "cl_float4", 1, 16);
   if (!translation_)
     return false;
   else
@@ -252,53 +184,21 @@ set_image_parallel_transf(vgl_vector_3d<double> const& tr,
 
 void icam_ocl_search_manager::clean_image_parallel_transf_data()
 {
-  if (rotation_)
-  {
-#ifdef _WIN32
-    _aligned_free(rotation_);
-#elif defined(__APPLE__)
-    free(rotation_);
-#else
-    rotation_ = NULL;
-#endif
-  }
-
-  if (translation_)
-  {
-#ifdef _WIN32
-    _aligned_free(translation_);
-#elif defined(__APPLE__)
-    free(translation_);
-#else
-    translation_ = NULL;
-#endif
-  }
+  free_buffer(rotation_);
+  free_buffer(translation_);
 }
 
 bool icam_ocl_search_manager::
 create_rot_parallel_transf_data()
 {
   unsigned nrot = rotations_.size();
-#if defined (_WIN32)
-  rot_array_ =(cl_float*)_aligned_malloc(nrot*sizeof(cl_float)*4, 16);
-#elif defined(__APPLE__)
-  rot_array_ = (cl_float*)malloc(nrot*sizeof(cl_float)*4);
-#else
-  rot_array_ = (cl_float*)memalign(16, nrot*sizeof(cl_float)*4);
-#endif
+  create_buffer((void**)&rot_array_, "cl_float4", nrot, 16);
   if (!rot_array_) return false;
 
-#if defined (_WIN32)
-  translation_=(cl_float*)_aligned_malloc(sizeof(cl_float)*4,16);
-#elif defined(__APPLE__)
-  translation_ = (cl_float*)malloc(sizeof(cl_float)*4);
-#else
-  translation_ = (cl_float*)memalign(16, sizeof(cl_float)*4);
-#endif
-  if (!translation_)
-    return false;
-  else
-    return true;
+  create_buffer((void**)&translation_, "cl_float4", 1, 16);
+  if (!translation_) return false;
+
+  return true;
 }
 
 bool icam_ocl_search_manager::
@@ -328,27 +228,8 @@ set_rot_parallel_transf_data(vgl_vector_3d<double> const& tr)
 
 void icam_ocl_search_manager::clean_rot_parallel_transf_data()
 {
-  if (rot_array_)
-  {
-#ifdef _WIN32
-    _aligned_free(rot_array_);
-#elif defined(__APPLE__)
-    free(rot_array_);
-#else
-    rot_array_ = NULL;
-#endif
-  }
-
-  if (translation_)
-  {
-#ifdef _WIN32
-    _aligned_free(translation_);
-#elif defined(__APPLE__)
-    free(translation_);
-#else
-    translation_ = NULL;
-#endif
-  }
+  free_buffer(rot_array_);
+  free_buffer(translation_);
 }
 
 bool icam_ocl_search_manager::create_rot_parallel_transf_buffers()
@@ -375,13 +256,7 @@ bool icam_ocl_search_manager::setup_image_parallel_result()
 {
   unsigned rlen =   wsni_*wsnj_;
   // the result image
-#if defined (_WIN32)
-  result_array_=(cl_float*)_aligned_malloc(rlen * sizeof(cl_float), 16);
-#elif defined(__APPLE__)
-  result_array_ = (cl_float*)malloc(rlen * sizeof(cl_float));
-#else
-  result_array_ = (cl_float*)memalign(16, rlen * sizeof(cl_float));
-#endif
+  create_buffer((void**)&result_array_, "cl_float", rlen, 16);
   if (!result_array_)
     return false;
   unsigned k = 0;
@@ -390,13 +265,7 @@ bool icam_ocl_search_manager::setup_image_parallel_result()
       result_array_[k]=0.0f;
 
   // the mask image
-#if defined (_WIN32)
-  mask_array_=(cl_float*)_aligned_malloc(rlen * sizeof(cl_float), 16);
-#elif defined(__APPLE__)
-  mask_array_ = (cl_float*)malloc(rlen * sizeof(cl_float));
-#else
-  mask_array_ = (cl_float*)memalign(16, rlen * sizeof(cl_float));
-#endif
+  create_buffer((void**)&mask_array_, "cl_float", rlen, 16);
   if (!mask_array_)
     return false;
   k = 0;
@@ -404,22 +273,8 @@ bool icam_ocl_search_manager::setup_image_parallel_result()
     for (unsigned i =0; i<wsni_; ++i, ++k)
       mask_array_[k]=0.0f;
 
-#if defined (_WIN32)
-  image_para_result_=(cl_float*)_aligned_malloc(sizeof(cl_float)*4, 16);
-#elif defined(__APPLE__)
-  image_para_result_ = (cl_float*)malloc(sizeof(cl_float)*4);
-#else
-  image_para_result_ = (cl_float*)memalign(16, sizeof(cl_float)*4);
-#endif
-
-#if defined (_WIN32)
-  image_para_flag_=(cl_int*)_aligned_malloc( sizeof(cl_int)*4, 16);
-#elif defined(__APPLE__)
-  image_para_flag_ = (cl_int*)malloc(sizeof(cl_int)*4);
-#else
-  image_para_flag_ = (cl_int*)memalign(16, sizeof(cl_int)*4);
-#endif
-
+  create_buffer((void**)&(void*&)image_para_result_, "cl_float4", 1, 16);
+  create_buffer((void**)&image_para_flag_, "cl_int", 4, 16);
   if (!image_para_result_ || !image_para_flag_)
     return false;
 
@@ -436,74 +291,23 @@ bool icam_ocl_search_manager::setup_image_parallel_result()
 
 void icam_ocl_search_manager::clean_image_parallel_result()
 {
-  if (image_para_result_)
-  {
-#ifdef _WIN32
-    _aligned_free(image_para_result_);
-#elif defined(__APPLE__)
-    free(image_para_result_);
-#else
-    image_para_result_ = NULL;
-#endif
-  }
-
-  if (image_para_flag_)
-  {
-#ifdef _WIN32
-    _aligned_free(image_para_flag_);
-#elif defined(__APPLE__)
-    free(image_para_flag_);
-#else
-    image_para_flag_ = NULL;
-#endif
-  }
-  if (result_array_)
-  {
-#ifdef _WIN32
-    _aligned_free(result_array_);
-#elif defined(__APPLE__)
-    free(result_array_);
-#else
-    result_array_ = NULL;
-#endif
-  }
-
-  if (mask_array_)
-  {
-#ifdef _WIN32
-    _aligned_free(mask_array_);
-#elif defined(__APPLE__)
-    free(mask_array_);
-#else
-    mask_array_ = NULL;
-#endif
-  }
+  free_buffer(image_para_result_);
+  free_buffer(image_para_flag_);
+  free_buffer(result_array_);
+  free_buffer(mask_array_);
 }
 
 bool icam_ocl_search_manager::setup_rot_parallel_result()
 {
   unsigned n_rot = rotations_.size();
   // the result image
-#if defined (_WIN32)
-  minfo_array_=(cl_float*)_aligned_malloc(n_rot * sizeof(cl_float)*4, 16);
-#elif defined(__APPLE__)
-  minfo_array_ = (cl_float*)malloc(n_rot * sizeof(cl_float));
-#else
-  minfo_array_ = (cl_float*)memalign(16, n_rot * sizeof(cl_float));
-#endif
+  create_buffer((void**)&minfo_array_, "cl_float4", n_rot, 16);
   if (!minfo_array_)
     return false;
   for (unsigned i =0; i<n_rot; ++i)
       minfo_array_[i]=0.0f;
 
-#if defined (_WIN32)
-  rot_para_flag_=(cl_int*)_aligned_malloc( sizeof(cl_int)*4, 16);
-#elif defined(__APPLE__)
-  rot_para_flag_ = (cl_int*)malloc(sizeof(cl_int)*4);
-#else
-  rot_para_flag_ = (cl_int*)memalign(16, sizeof(cl_int)*4);
-#endif
-
+  create_buffer((void**)&rot_para_flag_,"cl_int",4,16);
   if (!rot_para_flag_)
     return false;
   for (unsigned i = 0; i<4; ++i)
@@ -513,26 +317,8 @@ bool icam_ocl_search_manager::setup_rot_parallel_result()
 
 void icam_ocl_search_manager::clean_rot_parallel_result()
 {
-  if (rot_para_flag_)
-  {
-#ifdef _WIN32
-    _aligned_free(rot_para_flag_);
-#elif defined(__APPLE__)
-    free(rot_para_flag_);
-#else
-    rot_para_flag_ = NULL;
-#endif
-  }
-  if (minfo_array_)
-  {
-#ifdef _WIN32
-    _aligned_free(minfo_array_);
-#elif defined(__APPLE__)
-    free(minfo_array_);
-#else
-    minfo_array_ = NULL;
-#endif
-  }
+  free_buffer(rot_para_flag_);
+  free_buffer(minfo_array_);
 }
 
 bool icam_ocl_search_manager::create_rot_parallel_result_buffers()

@@ -168,6 +168,7 @@ class icam_ocl_search_manager : public icam_ocl_manager<icam_ocl_search_manager>
 
   icam_ocl_kernel* kernel_;
   vcl_map<void*, int> buffer_map_;
+
 };
 
 #endif // icam_ocl_search_manager_h_
