@@ -51,7 +51,7 @@ void mbl_mask_on_mask(const mbl_mask & A, mbl_mask & B)
   unsigned nB = 0;
   for (unsigned i = 0 ; i < B.size() ; ++i) nB += B[i];
   if (nA != nB)
-    throw vcl_runtime_error("Length of A mismatch with number of true elements of B");
+    throw mbl_exception_abort("mbl_mask: Length of A mismatch with number of true elements of B");
 
   for (unsigned i = 0, j = 0 ; i < B.size() ; ++i)
     if (B[i]) B[i] = A[j++];
@@ -99,18 +99,18 @@ void mbl_mask_logic_nand(const mbl_mask & A, mbl_mask & B)
 void mbl_mask_logic(const mbl_mask & A, mbl_mask & B, const vcl_string & operation)
 {
   if (A.size() != B.size())
-    throw vcl_runtime_error("mbl_mask_logic: Mask lengths differ");
+    throw mbl_exception_abort("mbl_mask_logic: Mask lengths differ");
 
   // Validate the operation to perform and parse into vector
 
   if (operation.length() != 4)
-    throw vcl_runtime_error("mbl_mask_logic: Operation must be of length 4");
+    throw mbl_exception_abort("mbl_mask_logic: Operation must be of length 4");
   vcl_vector<bool> op_rule(4);
   for (unsigned i = 0 ; i < 4 ; ++i)
   {
     if (operation[i] == '0') op_rule[i] = false;
     else if (operation[i] == '1') op_rule[i] = true;
-    else throw vcl_runtime_error("mbl_mask_logic: Invalid character in operation string - must contain only '0' or '1'");
+    else throw mbl_exception_abort("mbl_mask_logic: Invalid character in operation string - must contain only '0' or '1'");
   }
 
   // Apply the operation in place
