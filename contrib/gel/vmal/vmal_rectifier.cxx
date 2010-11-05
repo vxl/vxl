@@ -432,7 +432,7 @@ vnl_double_3x3 vmal_rectifier::affine_correction (
     double uu1 = u1hat[0]/u1hat[2];
 
     // Fill out the equation
-    E.set_row(i, vnl_double_3(uu2,vv2,1.0));
+    E.set_row(i, vnl_double_3(uu2,vv2,1.0).as_ref());
     x[i] = uu1;
   }
 
