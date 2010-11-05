@@ -21,26 +21,25 @@ bool vpgl_correct_rational_camera_process_cons(bprb_func_process& pro)
   //this process takes one input: the filename
   bool ok=false;
   vcl_vector<vcl_string> input_types;
-  input_types.push_back("vpgl_camera_double_sptr"); 
+  input_types.push_back("vpgl_camera_double_sptr");
   input_types.push_back("double");  // ofset x
   input_types.push_back("double");  // ofset y
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   vcl_vector<vcl_string> output_types;
-  output_types.push_back("vpgl_camera_double_sptr"); 
+  output_types.push_back("vpgl_camera_double_sptr");
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
-  
-  return true;
 
+  return true;
 }
 
 //: Execute the process
 bool vpgl_correct_rational_camera_process(bprb_func_process& pro)
 {
-  if (pro.n_inputs()< 1) {
-    vcl_cout << "lvpgl_load_rational_camera_process: The input number should be 1" << vcl_endl;
+  if (pro.n_inputs() != 1) {
+    vcl_cout << "vpgl_correct_rational_camera_process: The input number should be 1, not " pro.n_inputs() << vcl_endl;
     return false;
   }
 
@@ -55,7 +54,8 @@ bool vpgl_correct_rational_camera_process(bprb_func_process& pro)
     if (!cam_rational) {
       vcl_cerr << "In vpgl_correct_rational_camera_process() input is not of type: vpgl_rational_camera<double>\n";
       return false;
-    } else {
+    }
+    else {
       vcl_cout << "In vpgl_correct_rational_camera_process() - correcting rational camera..\n";
       vpgl_rational_camera<double> cam_out_rational(*cam_rational);
       double offset_u, offset_v;
@@ -67,7 +67,7 @@ bool vpgl_correct_rational_camera_process(bprb_func_process& pro)
       pro.set_output_val<vpgl_camera_double_sptr>(0, camera_out);
       return true;
     }
-  } 
+  }
 
   vcl_cout << "In vpgl_correct_rational_camera_process() - correcting LOCAL rational camera..\n";
   vpgl_local_rational_camera<double> cam_out_local_rational(*cam_local_rat);
@@ -78,13 +78,14 @@ bool vpgl_correct_rational_camera_process(bprb_func_process& pro)
   cam_out_local_rational.set_image_offset(offset_u,offset_v);
   vpgl_camera_double_sptr camera_out = new vpgl_local_rational_camera<double>(cam_out_local_rational);
   pro.set_output_val<vpgl_camera_double_sptr>(0, camera_out);
-  
+
   return true;
 }
 
 
-//: Take a list of rational cameras and a list of 2D image correspondences of the same 3D point location, 
-//  find that 3D location by triangulation, 
+//: Project and backproject a point and correct cameras by adjusting their 2D image offset.
+//  Take a list of rational cameras and a list of 2D image correspondences of the same 3D point location,
+//  find that 3D location by triangulation,
 //  project that point back to images and correct each camera by adjusting its 2D image offset so that they all project the 3D location to the same 2D location
 bool vpgl_correct_rational_cameras_process_cons(bprb_func_process& pro)
 {
@@ -98,16 +99,15 @@ bool vpgl_correct_rational_cameras_process_cons(bprb_func_process& pro)
                                     // .
                                     // .
                                     // .
-  input_types.push_back("vcl_string"); // output path to save the corrected cams, names will be input_cam_name_corrected.rpb 
+  input_types.push_back("vcl_string"); // output path to save the corrected cams, names will be input_cam_name_corrected.rpb
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   vcl_vector<vcl_string> output_types;
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
-  
-  return true;
 
+  return true;
 }
 
 //: Execute the process
@@ -130,26 +130,26 @@ bool vpgl_correct_rational_cameras_process(bprb_func_process& pro)
 
   vcl_vector<vpgl_rational_camera<double> > cams;
   vcl_vector<vgl_point_2d<double> > corrs;
-  
+
   vcl_vector<vcl_string> out_cam_names;
   vul_awk awk(ifs);
   for (; awk; ++awk)
   {
     vcl_stringstream line(awk.line());
-    vcl_string cam_path; 
+    vcl_string cam_path;
     ifs >> cam_path;
     if (cam_path.size() < 2) continue;
     double i, j;
     ifs >> i; ifs >> j;
-    vcl_cout << "reading cam: " << cam_path << " corr i: " << i << " " << j << vcl_endl;
+    vcl_cout << "reading cam: " << cam_path << " corr i: " << i << ' ' << j << vcl_endl;
     vcl_string img_name = vul_file::strip_directory(cam_path);
     img_name = vul_file::strip_extension(img_name);
     vcl_string out_cam_name = output_path + img_name + ".rpb";
     vcl_cout << "img name: " << out_cam_name << vcl_endl;
-    
-    
+
+
     vpgl_rational_camera<double> *ratcam = read_rational_camera<double>(cam_path);
-    
+
     if ( !ratcam ) {
       vcl_cerr << "Failed to load rational camera from file" << cam_path << vcl_endl;
       return false;
@@ -170,11 +170,10 @@ bool vpgl_correct_rational_cameras_process(bprb_func_process& pro)
   if (!vpgl_adjust_rational_trans_onept::adjust(cams, corrs, cam_trans,
                                                 intersection))
   {
-    vcl_cerr << "In vpgl_correct_rational_cameras_process - "
-             << " adjustment failed\n";
+    vcl_cerr<< "In vpgl_correct_rational_cameras_process - adjustment failed\n";
     return false;
   }
-  
+
   vcl_cout << "after adjustment 3D intersection point: " << intersection << vcl_endl;
 
   for (unsigned i = 0; i < cams.size(); i++) {
