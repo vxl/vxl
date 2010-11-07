@@ -8,6 +8,7 @@
 #include <vnl/vnl_bignum.h>
 #include <vnl/vnl_bignum_traits.h>
 #include <vnl/vnl_block.h>
+#include <vnl/vnl_c_na_vector.h>
 #include <vnl/vnl_c_vector.h>
 #include <vnl/vnl_complex.h>
 #include <vnl/vnl_complexify.h>
