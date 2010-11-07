@@ -43,14 +43,12 @@ class ihog_transform_2d : public vgl_h_matrix_2d<double>, public vbl_ref_count
 
   Form form() const {return form_;}
   void set_form(const Form form){form_ = form;}
-  vnl_double_3x3 matrix() const { return t12_matrix_; }
+  //vnl_double_3x3 matrix() const { return t12_matrix_; } -- use get_matrix() instead!
 
   void set(vnl_double_3x3 const& t_matrix) { vgl_h_matrix_2d<double>::set(t_matrix); }
 
   //: Sets transform using v (converse of params(v))
   void set(const vnl_vector<double>& v, Form); // Sets transform using v
-
-  //void set(const vgl_h_matrix_2d<double,3,3>& xform) {t12_matrix_ = xform; }
 
   //: Returns the coordinates of the origin.
   // I.e. operator()(vgl_point_2d<double> (0,0))
