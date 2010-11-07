@@ -44,16 +44,22 @@ class icam_minimizer
                   const icam_depth_transform& dt,
                   unsigned min_level_size = 16,
                   unsigned box_reduction_k = 2,
+                  double axis_search_cone_multiplier = 10.0,
+                  double polar_range_multiplier = 2.0,
                   double local_min_thresh = 0.05,
-                  vcl_string const& base_path = "");
+                  vcl_string const& base_path = "",
+                  bool verbose=false);
 
   //: Constructor, when source image is not known yet
   icam_minimizer(const vil_image_view<float>& dest_img,
                  const icam_depth_transform& dt,
                  unsigned min_level_size = 16,
                  unsigned box_reduction_k = 2,
+                 double axis_search_cone_multiplier = 10.0,
+                 double polar_range_multiplier = 2.0,
                  double local_min_thresh = 0.05,
-                 vcl_string const& base_path = "");
+                 vcl_string const& base_path = "",
+                 bool verbose=false);
 
   //: number of pyramid levels
   unsigned n_levels() const {return dt_pyramid_.n_levels();}
@@ -213,6 +219,20 @@ bool  pyramid_camera_search(vgl_vector_3d<double> const&
                        vgl_vector_3d<double>());
   vnl_matrix_fixed<double, 3, 3> to_calibration_matrix(unsigned level);
   vnl_matrix_fixed<double, 3, 3> from_calibration_matrix_inv(unsigned level);
+
+  void set_actual_translation(vgl_vector_3d<double> const& trans)
+    {actual_trans_ = trans;}
+
+  void set_actual_rotation(vgl_rotation_3d<double> const& rot)
+    {actual_rot_ = rot;}
+
+  void print_axis_search_info(unsigned level, vgl_rotation_3d<double> const& actual, 
+                              vgl_rotation_3d<double> const& init = vgl_rotation_3d<double>(),
+                              bool top_level = false);  
+
+  void print_polar_search_info(unsigned level, vgl_rotation_3d<double> const& actual, 
+                               vgl_rotation_3d<double> const& init = vgl_rotation_3d<double>(),
+                               bool top_level = false);
  protected:
   void set_origin_step_delta(vgl_box_3d<double> const& trans_box,
                              vgl_vector_3d<double> const& trans_steps);
@@ -223,6 +243,8 @@ bool  pyramid_camera_search(vgl_vector_3d<double> const&
   void reduce_search_box(vgl_vector_3d<double> const& center_trans,
                          vgl_vector_3d<double> const& initial_step_delta);
   unsigned box_reduction_k_;//defined above
+  double axis_search_cone_multiplier_;
+  double polar_range_multiplier_;
   bool cam_search_valid_;
   double local_min_thresh_;
   vgl_vector_3d<double> box_origin_;
@@ -235,6 +257,9 @@ bool  pyramid_camera_search(vgl_vector_3d<double> const&
   unsigned min_level_size_;
   double end_error_;
   vcl_string base_path_;
+  bool verbose_;
+  vgl_vector_3d<double> actual_trans_;
+  vgl_rotation_3d<double> actual_rot_;
 };
 
 #endif // icam_minimizer_h_

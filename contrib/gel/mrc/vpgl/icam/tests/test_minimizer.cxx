@@ -28,8 +28,8 @@ static void test_minimizer()
 {
   vcl_string root_dir = testlib_root_dir();
   vcl_string dest_file = "c:/images/calibration/frame_142.png";
-  //vcl_string source_file = "c:/images/calibration/frame_145.png";
-  vcl_string source_file = "c:/images/calibration/frame_138.png";
+  vcl_string source_file = "c:/images/calibration/frame_145.png";
+  //  vcl_string source_file = "c:/images/calibration/frame_138.png";
   //  vcl_string source_file = "c:/images/calibration/frame_146.png";
   vcl_string depth_file = "c:/images/calibration/depth_142.tif";
 
@@ -70,6 +70,24 @@ static void test_minimizer()
   vgl_vector_3d<double> tid(0.0, 0.0, 0.0), tbox(0.5, 0.0, 0.0);
   vnl_matrix_fixed<double, 3, 3> K(0.0);
   K[0][0]=1871.2;   K[1][1]=1871.2; K[0][2] = 640.0; K[1][2]=360.0; K[2][2]=1.0;
+  vnl_vector_fixed<double,3> rrd = Rr.as_rodrigues(), zaxis;;
+  double rang = rrd.magnitude();
+  zaxis[0]=0.0;  zaxis[1]=0.0;  zaxis[2]=1.0;
+  vcl_cout << "Cam rotation " << rrd << '\n';
+  vcl_cout << "Principal ray dir " << Rr*zaxis << '\n';
+  vnl_vector_fixed<double,3> rtop;
+  rtop[0]=0.0198205; rtop[1]= -0.109489; rtop[2]=-0.0896672;
+  double ang_top = rtop.magnitude();
+  vgl_rotation_3d<double> Rtop(rtop);
+  vcl_cout << "top cam axis(0.5,0,0) " << Rtop*zaxis << '\n'; 
+  vcl_cout << " axis angle diff (0.5, 0, 0) " << vpgl_camera_bounds::angle_between_rays(Rr, Rtop) << '\n';
+  vcl_cout << " diff in rotation about axis " << vpgl_camera_bounds::rot_about_ray(Rr, Rtop) << '\n';
+  vnl_vector_fixed<double,3> rfinal;
+  rfinal[0]=0.00942883; rfinal[1]=-0.0635162; rfinal[2]=-0.0676306;
+  vgl_rotation_3d<double> Rfinal(rfinal);
+  vcl_cout << "final(0.304688,0,0) " << Rfinal*zaxis << '\n'; 
+  vcl_cout << " axis angle diff level3 " << vpgl_camera_bounds::angle_between_rays(Rr, Rfinal) << '\n';
+  vcl_cout << " diff in rotation about axis " << vpgl_camera_bounds::rot_about_ray(Rr, Rfinal) << '\n';
   // ========================Camera 138 =====================
   double rv138 [] = {0.996034852179, 0.043480236729, 0.07760390651200001,
                      0.042636569473, 0.999012669051, 0.01251074244199999,
@@ -77,14 +95,16 @@ static void test_minimizer()
   vnl_matrix_fixed<double, 3, 3> Mr138(rv138);
   vgl_rotation_3d<double> Rr138(Mr138);
   vnl_vector_fixed<double,3> rr138 = Rr138.as_rodrigues();
-  //=========================Camera 145 ================================
-  double rv145 [] = {0.992577, 0.0862514, -0.0857363,
+  vgl_vector_3d<double> t138(-0.41081, -0.08859, 0.061291);
+  //=========================Camera 146 ================================
+  double rv146 [] = {0.992577, 0.0862514, -0.0857363,
                      -0.0888177, 0.995693, -0.0265857,
                      0.0830739, 0.0340026, 0.995963};
-  vnl_matrix_fixed<double, 3, 3> Mr145(rv145);
-  vgl_rotation_3d<double> Rr145(Mr145);
-  vnl_vector_fixed<double,3> rr145 = Rr145.as_rodrigues();
-
+  vnl_matrix_fixed<double, 3, 3> Mr146(rv146);
+  vgl_rotation_3d<double> Rr146(Mr146);
+  vnl_vector_fixed<double,3> rr146 = Rr146.as_rodrigues();
+  vgl_vector_3d<double> t146(0.429651, 0.051759, -0.02293);
+  //=============================================================
   bool adjust_to_fl = false;
   icam_depth_transform dt(K, depth_img_dbl, Rr, tr, adjust_to_fl);
   unsigned nparams = dt.n_params();
@@ -99,12 +119,20 @@ static void test_minimizer()
   // Typical parameters
   unsigned min_pyramid_image_size = 16;
   unsigned box_reduction_k = 2;
+  double axis_search_cone_multiplier = 10.0;
+  double polar_range_multiplier = 2.0;
   double local_min_thresh = 0.005;
   //vcl_string base_path = "c:/images/calibration";
   vcl_string base_path = "";
+  bool verbose = true;
   icam_minimizer minimizer(source_img_flt, dest_img_flt, dt,
                            min_pyramid_image_size, box_reduction_k,
-                           local_min_thresh, base_path);
+                           axis_search_cone_multiplier, polar_range_multiplier,
+                           local_min_thresh, base_path, verbose);
+  if(verbose){
+    minimizer.set_actual_translation(tr);
+    minimizer.set_actual_rotation(Rr);
+  }
   unsigned nl = minimizer.n_levels();
   unsigned lev = nl-1;
 
