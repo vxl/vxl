@@ -815,6 +815,12 @@ SOURCE=.\Templates/vnl_matrix+ushort-.cxx
 # Begin Source File
 SOURCE=.\Templates/vnl_vector_fixed+uchar.16-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_c_na_vector+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_c_na_vector+float-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -1252,6 +1258,12 @@ SOURCE=.\vnl_na.h
 # End Source File
 # Begin Source File
 SOURCE=.\vnl_beta.h
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_c_na_vector.h
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_c_na_vector.txx
 # End Source File
 # End Group
 # End Target
