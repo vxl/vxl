@@ -413,7 +413,9 @@ foreach my $dir (@DIRS)
   {
     if ($source_files{$s} > 1) {
       &duplicate_message($s, $cmakef, '# !!')
-        unless ($s eq 'impl/glut/menu_hack_none.cxx' || $s eq 'my_pyramid.cxx');
+        unless ($s eq 'impl/glut/menu_hack_none.cxx' ||
+                $s eq 'my_pyramid.cxx' ||
+                $s eq 'baio_unix.cxx')
     }
     delete $source_files{$s};
     unless (exists $sources{$s})
@@ -500,8 +502,8 @@ foreach my $dir (@DIRS)
   {
     if ($hsource_files{$s} > 1) {
       &duplicate_message($s, $cmakef, '# !!')
-        unless ($s eq 'vidl1_avicodec.h' || $s =~ m/\bFl_(blender|movie|twowin)_ui\.h$/
-             || $s eq 'my_pyramid.h' || $s eq 'my_pyramid_functions.txx');
+        unless ($s eq 'vidl1_avicodec.h' || $s =~ m/\bFl_(blender|movie|twowin)_ui\.h$/ ||
+                $s eq 'my_pyramid.h' || $s eq 'my_pyramid_functions.txx' || $s eq 'baio.h');
     }
     delete $hsource_files{$s};
     unless (exists $hsources{$s})
