@@ -39,7 +39,7 @@ bool vpgl_correct_rational_camera_process_cons(bprb_func_process& pro)
 bool vpgl_correct_rational_camera_process(bprb_func_process& pro)
 {
   if (pro.n_inputs() != 1) {
-    vcl_cout << "vpgl_correct_rational_camera_process: The input number should be 1, not " pro.n_inputs() << vcl_endl;
+    vcl_cout << "vpgl_correct_rational_camera_process: The input number should be 1, not " << pro.n_inputs() << vcl_endl;
     return false;
   }
 
