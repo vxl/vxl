@@ -41,6 +41,7 @@ SOURCES += vnl_alloc.cxx
 SOURCES += vnl_block.cxx
 SOURCES += vnl_math.cxx
 SOURCES += vnl_na.cxx
+MANPAGE_SOURCES += vnl_c_na_vector.txx
 SOURCES += vnl_copy.cxx
 MANPAGE_SOURCES += vnl_complex.h
 SOURCES += vnl_error.cxx
