@@ -332,9 +332,9 @@ void boxm_ocl_utils::compare_bit_scenes(boxm_ocl_bit_scene* one, boxm_ocl_bit_sc
   int diffCount = 0;
   int initCount = 0;
   int numConvBigger = 0;
-  for (int i=0; i<numX; i++) {
-    for (int j=0; j<numY; j++) {
-      for (int k=0; k<numZ; k++) {
+  for (unsigned int i=0; i<numX; i++) {
+    for (unsigned int j=0; j<numY; j++) {
+      for (unsigned int k=0; k<numZ; k++) {
         cmpCount++;
         //get alpha data for block one
         unsigned short buffIndex = one->blocks_(i,j,k)[0];
