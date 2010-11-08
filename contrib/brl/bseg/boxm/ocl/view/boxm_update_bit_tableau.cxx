@@ -218,6 +218,12 @@ bool boxm_update_bit_tableau::update_model()
   }
 
   curr_frame_++ ;
+  
+  //refine every SIX 
+  if(curr_count_ > 6) {
+    vcl_cout<<"refining"<<vcl_endl;
+    this->refine_model();
+  }
 
   //run the opencl update business (MAKE THIS JUST ONE METHOD, NOT FIVE CALLS)
   updt_mgr->set_input_image(floatimg);
