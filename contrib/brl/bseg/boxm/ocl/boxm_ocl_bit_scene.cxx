@@ -138,7 +138,7 @@ void boxm_ocl_bit_scene::validate_data()
   }
 
   vcl_cout<<"===SCENE STATS=================================="<<vcl_endl;
-  //simple count of cells 
+  //simple count of cells
   unsigned char bits[] = { 0,   1,   1,   2,   1,   2,   2,   3,   1,   2,   2,   3,   2,   3,   3,   4,
                            1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5 ,
                            1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5  ,
@@ -164,25 +164,23 @@ void boxm_ocl_bit_scene::validate_data()
     unsigned short buffIndex = offsets[0];
     unsigned short buffOffset = offsets[1];
     uchar16 tree = tree_buffers_[buffIndex][buffOffset];
-    int numParents = 0; 
-    for(int i=0; i<10; i++) {
-      numParents += bits[tree[i]]; 
+    int numParents = 0;
+    for (int i=0; i<10; i++) {
+      numParents += bits[tree[i]];
     }
     int treeCells = numParents*8 + 1;
     totalCells += treeCells;
   }
   vcl_cout<<"TOTAL NUMBER OF CELLS IN SCENE = "<<totalCells<<vcl_endl;
-  
+
   //theoretical voxel count
-  int numVoxels = blocks_.get_row1_count()*blocks_.get_row2_count()*blocks_.get_row3_count() * 8*8*8; 
-  vcl_cout<<"Theoretical Number of Voxels: "<<numVoxels<<vcl_endl;
-  vcl_cout<<"==============================================\n"<<vcl_endl;
+  int numVoxels = blocks_.get_row1_count()*blocks_.get_row2_count()*blocks_.get_row3_count() * 8*8*8;
+  vcl_cout<<"Theoretical Number of Voxels: "<<numVoxels<<vcl_endl
+          <<"==============================================\n"<<vcl_endl;
 
 #endif
 
-  
   //probe zero alpha values
-  int zeroCells=0;
   vbl_array_3d<ushort2>::iterator iter;
   for (iter = blocks_.begin(); iter != blocks_.end(); iter++)
   {
@@ -191,16 +189,14 @@ void boxm_ocl_bit_scene::validate_data()
     unsigned short buffIndex = offsets[0];
     unsigned short buffOffset = offsets[1];
     uchar16 tree = tree_buffers_[buffIndex][buffOffset];
-    
+
     unsigned short hi  = (unsigned short) tree[10];
     unsigned short lo  = (unsigned short) tree[11];
     unsigned short dat = (hi<<8) | lo;
-    
-    if(dat != buffOffset)
-      vcl_cout<<"Dat: "<<dat<<" != "<<buffOffset;
-    
-  }
 
+    if (dat != buffOffset)
+      vcl_cout<<"Dat: "<<dat<<" != "<<buffOffset;
+  }
 }
 
 // ===== Save to disk functions =====
@@ -395,10 +391,10 @@ bool boxm_ocl_bit_scene::init_empty_scene()
 {
   vcl_cout<<"Parser says max mb = "<<parser_.max_mb()<<vcl_endl
           <<"parser says block nums = "<<parser_.block_nums()<<vcl_endl
-          <<"parser says p_init = "<<parser_.p_init(); 
+          <<"parser says p_init = "<<parser_.p_init();
   const int MAX_BYTES = parser_.max_mb()*1024*1024;
   const int BUFF_LENGTH = vcl_pow((float)2,(float)16); //65536
-  const float ALPHA_INIT = -vcl_log(1.0f - parser_.p_init()) / (parser_.block_dim().x()); 
+  const float ALPHA_INIT = -vcl_log(1.0f - parser_.p_init()) / (parser_.block_dim().x());
 
   //total number of (sub) blocks in the scene
   int total_blocks =  parser_.block_nums().x()
@@ -412,7 +408,7 @@ bool boxm_ocl_bit_scene::init_empty_scene()
             <<"*** Max scene size not large enough to accommodate scene dimensions\n"
             <<"*** max bytes specified:  "<<MAX_BYTES<<'\n'
             <<"*** bytes needed:         "<<blockBytes<<'\n'
-            <<"**************************************************"<<vcl_endl;
+            <<"**************************************************\n";
     return false;
   }
   int freeBytes = MAX_BYTES - blockBytes;
@@ -430,7 +426,7 @@ bool boxm_ocl_bit_scene::init_empty_scene()
             <<"*** Max scene size not large enough to accommodate scene dimensions\n"
             <<"*** cells allocated:  "<<num_buffers * BUFF_LENGTH<<'\n'
             <<"*** total subblocks:  "<<total_blocks<<'\n'
-            <<"**************************************************"<<vcl_endl;
+            <<"**************************************************\n";
     return false;
   }
 
@@ -439,7 +435,7 @@ bool boxm_ocl_bit_scene::init_empty_scene()
           <<BUFF_LENGTH<<" cells ("
           <<blocks_per_buffer<<" trees per buffer)]. "
           <<"[total tree:"<<num_buffers*BUFF_LENGTH<<']'<<vcl_endl;
-          
+
   // 1. Set up 3D array of blocks (small blocks), assuming all blocks are similarly sized
   ushort2 blk_init(-1);
   //vbl_array_3d<ushort2> blocks(parser_.block_nums().x(), parser_.block_nums().y(), parser_.block_nums().z(), blk_init);
@@ -485,7 +481,7 @@ bool boxm_ocl_bit_scene::init_empty_scene()
     if (buffIndex < 0) {
       vcl_cout<<"boxm_ocl_bit_scene::InitEmptyScene: ERROR\n"
               <<" block @ absolute index: "<<index<<'\n'
-              <<" FILLED BUFFER. FAILED TO CREATE NEW SCENE.\n";
+              <<" FILLED BUFFER. FAILED TO CREATE NEW SCENE."<<vcl_endl;
       return false;
     }
 
@@ -515,8 +511,8 @@ bool boxm_ocl_bit_scene::init_empty_scene()
   vcl_cout<<vcl_endl;
 
   //use the already existing init_scene method
-  bgeo_lvcs lvcs;  
-  
+  bgeo_lvcs lvcs;
+
   //copy all blocks
   num_buffers_ = (int) tree_buffers_.rows();
   tree_buff_length_ = (int) tree_buffers_.cols();
@@ -641,13 +637,12 @@ void boxm_ocl_bit_scene::get_tree_cells(unsigned char* trees)
 
 void boxm_ocl_bit_scene::get_alphas(float* alphas)
 {
-
   //init data arrays
   int index = 0;
   vbl_array_2d<float16>::iterator iter;
   for (iter = data_buffers_.begin(); iter != data_buffers_.end(); iter++) {
 #if 0
-    if ((*iter)[0] == 0.0f) 
+    if ((*iter)[0] == 0.0f)
       vcl_cout<<"alpha zero "<<vcl_endl;
     if ((*iter)[0] != (*iter)[0])
       vcl_cout<<"alpha nan "<<vcl_endl;
@@ -709,7 +704,6 @@ void boxm_ocl_bit_scene::get_blocks_in_buffers(unsigned short* blks_in_buffers)
 }
 
 
-
 //---- set single block's data
 void boxm_ocl_bit_scene::set_block_data(int x, int y, int z, float intensity)
 {
@@ -717,7 +711,7 @@ void boxm_ocl_bit_scene::set_block_data(int x, int y, int z, float intensity)
     unsigned short buffIndex = offsets[0];
     unsigned short buffOffset = offsets[1];
     uchar16 tree = tree_buffers_[buffIndex][buffOffset];
-    
+
     //get data offset
     //unsigned short hi  = (unsigned short) tree[10];
     //unsigned short lo  = (unsigned short) tree[11];
@@ -731,7 +725,7 @@ void boxm_ocl_bit_scene::set_block_data(int x, int y, int z, float intensity)
     data_buffers_(buffIndex,buffOffset)[5] = 0.0f;     //
     data_buffers_(buffIndex,buffOffset)[6] = 0.0f;
     data_buffers_(buffIndex,buffOffset)[7] = 0.0f;
-    data_buffers_(buffIndex,buffOffset)[9] = 0.0f;    
+    data_buffers_(buffIndex,buffOffset)[9] = 0.0f;
     data_buffers_(buffIndex,buffOffset)[10] = 1.0f;
 }
 
@@ -861,9 +855,8 @@ vcl_ostream& operator <<(vcl_ostream &s, boxm_ocl_bit_scene& scene)
       <<"blks in buff: "<<numPer[i]<<vcl_endl;
     totalFreeCells+=freeSpace;
   }
-  s << "total free cells: " << totalFreeCells;
-  s << '\n'
-    <<"--------------------------------------------" << vcl_endl;
+  s << "total free cells: " << totalFreeCells
+    <<"\n--------------------------------------------" << vcl_endl;
 
   return s;
 
