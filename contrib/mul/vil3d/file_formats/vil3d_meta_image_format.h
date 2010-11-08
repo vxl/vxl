@@ -16,7 +16,8 @@
 
 class vil3d_meta_image_header
 {
- public:
+public:
+
   vil3d_meta_image_header(void);
   ~vil3d_meta_image_header(void);
 
@@ -62,7 +63,7 @@ class vil3d_meta_image_header
   void check_need_swap(void);
   bool need_swap(void) const;
 
- private:
+private:
 
   // Functions to help with header reading/writing
   bool check_next_header_line(const vcl_string &nxt_line);
@@ -122,16 +123,16 @@ class vil3d_meta_image_format : public vil3d_file_format
 // Use vil3d_meta_image_format instead.
 class vil3d_meta_image: public vil3d_image_resource
 {
- private:
+private:
   vil3d_meta_image_header header_;
   vcl_string fpath_;
 
   //: Methods for reading/writing image
   bool write_image();
 
- public:
-  vil3d_meta_image(const vil3d_meta_image_header &header,
-                   const vcl_string &fname);
+public:
+   vil3d_meta_image(const vil3d_meta_image_header &header,
+                    const vcl_string &fname);
 
   virtual ~vil3d_meta_image();
 
@@ -160,7 +161,7 @@ class vil3d_meta_image: public vil3d_image_resource
   virtual bool set_voxel_size(float/*i*/,float/*j*/,float/*k*/);
 
   //: Set the offset
-  // \note also sets the voxel size to vx_i, vx_j and vx_k to ensure consistency
+  //: \note also sets the voxel size to vx_i, vx_j and vx_k to ensure consistency
   void set_offset(const double i, const double j, const double k,
                   const double vx_i, const double vx_j, const double vx_k);
 

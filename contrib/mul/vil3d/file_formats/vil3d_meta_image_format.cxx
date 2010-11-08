@@ -27,6 +27,7 @@
 #include <vil3d/vil3d_image_resource.h>
 #include <vil3d/vil3d_new.h>
 #include <vil3d/vil3d_copy.h>
+#include <vcl_algorithm.h>
 
 /*
  * Helper functions
@@ -39,6 +40,14 @@ inline void vil3d_meta_image_swap16(char *a, unsigned n)
   }
 }
 
+inline void vil3d_meta_image_swap32(char *a, unsigned n)
+{
+  for (unsigned i = 0; i < n * 4; i += 4)
+  {
+    char c= a[i]; a[i] = a[i+3]; a[i+3] = c;
+    c = a[i+1]; a[i+1] = a[i+2]; a[i+2] = c;
+  }
+}
 
 inline void vil3d_meta_image_swap64(char *a, unsigned n)
 {
@@ -410,6 +419,8 @@ bool vil3d_meta_image_header::check_next_header_line(const vcl_string &nxt_line)
       pformat_ = VIL_PIXEL_FORMAT_BYTE;
     else if (elem_type_ == "MET_DOUBLE")
       pformat_ = VIL_PIXEL_FORMAT_DOUBLE;
+    else if (elem_type_ == "MET_FLOAT")
+      pformat_ = VIL_PIXEL_FORMAT_FLOAT;
     else
     {
       vcl_cerr << "Unsupported element type specified\n";
@@ -432,7 +443,7 @@ vcl_string vil3d_meta_image_header::get_header_value(const vcl_string &nxt_line)
 {
   vcl_string::size_type pos, epos;
   pos = nxt_line.find("=");
-  if (pos == vcl_string::npos)
+  if (pos == vcl_string::npos || pos == nxt_line.size()-1)
   {
     return "";
   }
@@ -476,8 +487,8 @@ bool vil3d_meta_image_header::set_header_offset(const vcl_string &offs)
   pos=offs.find_first_not_of(" ",epos);
   if (pos != vcl_string::npos)
   {
-    vcl_cerr << "Offset contains more than three values.\n";
-    return false;
+     vcl_cerr << "Offset contains more than three values.\n";
+     return false;
   }
   header_valid_ = true;
   return true;
@@ -515,8 +526,8 @@ bool vil3d_meta_image_header::set_header_dim_size(const vcl_string &dims)
   pos=dims.find_first_not_of(" ",epos);
   if (pos != vcl_string::npos)
   {
-    vcl_cerr << "Dim Size contains more than three values.\n";
-    return false;
+     vcl_cerr << "Dim Size contains more than three values.\n";
+     return false;
   }
   // For now only deal with 1 plane
   nplanes_=1;
@@ -556,8 +567,8 @@ bool vil3d_meta_image_header::set_header_voxel_size(const vcl_string &vsize)
   pos=vsize.find_first_not_of(" ",epos);
   if (pos != vcl_string::npos)
   {
-    vcl_cerr << "Element Spacing/Size contains more than three values.\n";
-    return false;
+     vcl_cerr << "Element Spacing/Size contains more than three values.\n";
+     return false;
   }
   header_valid_ = true;
   return true;
@@ -601,7 +612,7 @@ vil3d_image_resource_sptr vil3d_meta_image_format::make_input_image(const char *
   vcl_string filename(fname);
 
   if (!header.read_header(fname)) return 0;
-  vcl_cout<<"vil3d_meta_image_format::make_input_image() Header: "<<header<<vcl_endl;
+  //vcl_cout<<"vil3d_meta_image_format::make_input_image() Header: "<<header<<vcl_endl;
 
   return new vil3d_meta_image(header,filename);
 }
@@ -618,7 +629,8 @@ vil3d_image_resource_sptr vil3d_meta_image_format::make_output_image(const char 
 {
   if (format != VIL_PIXEL_FORMAT_BYTE   &&
       format != VIL_PIXEL_FORMAT_INT_16 &&
-      format != VIL_PIXEL_FORMAT_DOUBLE )
+      format != VIL_PIXEL_FORMAT_DOUBLE &&
+      format != VIL_PIXEL_FORMAT_FLOAT)
   {
     vcl_cerr << "vil3d_meta_image_format::make_output_image() WARNING\n"
              << "  Unable to deal with pixel format : " << format << vcl_endl;
@@ -637,6 +649,8 @@ vil3d_image_resource_sptr vil3d_meta_image_format::make_output_image(const char 
   case VIL_PIXEL_FORMAT_INT_16: header.set_element_type("MET_SHORT");
                               break;
   case VIL_PIXEL_FORMAT_DOUBLE: header.set_element_type("MET_DOUBLE");
+                              break;
+  case VIL_PIXEL_FORMAT_FLOAT: header.set_element_type("MET_FLOAT");
                               break;
   default:
       vcl_cerr << "vil3d_meta_image_format::make_output_image() WARNING\n"
@@ -665,8 +679,9 @@ vil3d_image_resource_sptr vil3d_meta_image_format::make_output_image(const char 
 // Construct an image
 //===================================================================
 vil3d_meta_image::vil3d_meta_image(const vil3d_meta_image_header &header,
-                                   const vcl_string &fname)
-: header_(header), fpath_(fname)
+                                   const vcl_string &fname) :
+header_(header),
+fpath_(fname)
 {
   // No code necessary
 }
@@ -787,6 +802,13 @@ vil3d_image_view_base_sptr vil3d_meta_image::get_copy_view(unsigned int i0, unsi
       vil3d_meta_image_swap64((char *)(im.origin_ptr()), ni*nj*nk);
     return new vil3d_image_view<double>(im);
    }
+   case VIL_PIXEL_FORMAT_FLOAT:
+   {
+    read_data_of_type(float);
+    if (header_.need_swap())
+      vil3d_meta_image_swap32((char *)(im.origin_ptr()), ni*nj*nk);
+    return new vil3d_image_view<float>(im);
+   }
    default:
     vcl_cout<<"ERROR: vil3d_meta_image_format::get_copy_view()\n"
             <<"Can't deal with pixel type " << pixel_format() << vcl_endl;
@@ -829,7 +851,7 @@ bool vil3d_meta_image::put_view(const vil3d_image_view_base &im,
    }
    case VIL_PIXEL_FORMAT_INT_16:
    {
-    header_.check_need_swap();
+     header_.check_need_swap();
     vil3d_image_view<vxl_int_16> view_copy(ni(),nj(),nk(),nplanes());
     vil3d_copy_reformat(static_cast<const vil3d_image_view<vxl_int_16>&>(im),view_copy);
     if (header_.need_swap())
@@ -840,12 +862,23 @@ bool vil3d_meta_image::put_view(const vil3d_image_view_base &im,
    }
    case VIL_PIXEL_FORMAT_DOUBLE:
    {
-    header_.check_need_swap();
+     header_.check_need_swap();
     vil3d_image_view<double> view_copy(ni(),nj(),nk(),nplanes());
     vil3d_copy_reformat(static_cast<const vil3d_image_view<double>&>(im),view_copy);
     if (header_.need_swap())
       vil3d_meta_image_swap64((char *)(view_copy.origin_ptr()), ni()*nj()*nk()*nplanes());
     os->write(view_copy.origin_ptr(),ni()*nj()*nk()*nplanes()*sizeof(double));
+    // Should check that write was successful
+    return true;
+   }
+   case VIL_PIXEL_FORMAT_FLOAT:
+   {
+     header_.check_need_swap();
+    vil3d_image_view<float> view_copy(ni(),nj(),nk(),nplanes());
+    vil3d_copy_reformat(static_cast<const vil3d_image_view<float>&>(im),view_copy);
+    if (header_.need_swap())
+      vil3d_meta_image_swap32((char *)(view_copy.origin_ptr()), ni()*nj()*nk()*nplanes());
+    os->write(view_copy.origin_ptr(),ni()*nj()*nk()*nplanes()*sizeof(float));
     // Should check that write was successful
     return true;
    }
