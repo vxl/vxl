@@ -191,26 +191,30 @@ cl_float * boxm_ocl_utils ::readtreedata(vcl_string tree_data_file, unsigned int
   return data_array;
 }
 
-int boxm_ocl_utils::getBufferIndex(bool rand, 
+int boxm_ocl_utils::getBufferIndex(bool rand,
                                    vbl_array_1d<ushort2> mem_ptrs,
                                    vbl_array_1d<unsigned short> blocksInBuffer,
                                    int BUFF_LENGTH,
                                    int blocks_per_buffer,
                                    int tree_size,
-                                   vnl_random& random) 
+                                   vnl_random& random)
 {
   int num_buffers = mem_ptrs.size()-1;
-  if(rand) {
+  if (rand) {
     //choose random buff index to start out with
     int buffIndex = random.lrand32(0, num_buffers-1);
-    //vcl_cout<<"Random buff chosen..."<<buffIndex<<vcl_endl;
+#ifdef DEBUG
+    vcl_cout<<"Random buff chosen..."<<buffIndex<<vcl_endl;
+#endif
     unsigned short start = mem_ptrs[buffIndex][0];
     unsigned short end   = mem_ptrs[buffIndex][1];
     int freeSpace = (start >= end)? start-end : BUFF_LENGTH - (end-start); //free cells in data buffer
 
     //if there isn't enough space in this buffer, find another one
     if (freeSpace < tree_size || blocksInBuffer[buffIndex] >= blocks_per_buffer) {
-      //vcl_cout<<"Not going with first buffer "<<vcl_endl;
+#ifdef DEBUG
+      vcl_cout<<"Not going with first buffer "<<vcl_endl;
+#endif
       int bCount = 0;
       bool buffFound = false;
       while (!buffFound && bCount < num_buffers*3) {
@@ -223,14 +227,16 @@ int boxm_ocl_utils::getBufferIndex(bool rand,
           buffFound = true;
       }
       if (!buffFound) {
-        //vcl_cout<<"second attempt(s) didn't work, deterministically seeking buffer"<<vcl_endl;
+#ifdef DEBUG
+        vcl_cout<<"second attempt(s) didn't work, deterministically seeking buffer"<<vcl_endl;
+#endif
         //resort to a deterministic search
-        for(int bInt=0; bInt<num_buffers+1; bInt++) {
+        for (int bInt=0; bInt<num_buffers+1; bInt++) {
           unsigned short start = mem_ptrs[bInt][0];
           unsigned short end   = mem_ptrs[bInt][1];
-          unsigned short num   = blocksInBuffer[bInt]; 
-          int freeSpace = (start >= end)? start-end : BUFF_LENGTH - (end-start); 
-          if(freeSpace >= tree_size && num < blocks_per_buffer) {
+          unsigned short num   = blocksInBuffer[bInt];
+          int freeSpace = (start >= end)? start-end : BUFF_LENGTH - (end-start);
+          if (freeSpace >= tree_size && num < blocks_per_buffer) {
             buffIndex = bInt;
             buffFound = true;
           }
@@ -250,47 +256,47 @@ int boxm_ocl_utils::getBufferIndex(bool rand,
     }
     return buffIndex;
   }
-  
+
   //NON RANDOM algo: find buffer that is the least full, put tree there.
   //revision: depending on size of tree, find different type of buffer
-  
+
   //non random algo... filling buffers from top down
-  
+
   //if it's a big tree, just find hte emptiest buffer
-  int buffIndex = 0; 
+  int buffIndex = 0;
   bool validFound = false;
-  if(tree_size >= 73) {
+  if (tree_size >= 73) {
     int mostSpace = 0;
-    for(int i=0; i<num_buffers+1; i++) {
+    for (int i=0; i<num_buffers+1; i++) {
       unsigned short start = mem_ptrs[i][0];
       unsigned short end   = mem_ptrs[i][1];
-      unsigned short num   = blocksInBuffer[i]; 
-      int freeSpace = (start >= end)? start-end : BUFF_LENGTH - (end-start);   
-      if(freeSpace > mostSpace && num < blocks_per_buffer && freeSpace >= tree_size) {
+      unsigned short num   = blocksInBuffer[i];
+      int freeSpace = (start >= end)? start-end : BUFF_LENGTH - (end-start);
+      if (freeSpace > mostSpace && num < blocks_per_buffer && freeSpace >= tree_size) {
         buffIndex = i;
         mostSpace = freeSpace;
         validFound = true;
       }
     }
   }
-  
+
   //otherwise find the emptiest tree buffer
   else {
     int fewestBlocks = blocks_per_buffer+1;
-    for(int i=0; i<num_buffers+1; i++) {
+    for (int i=0; i<num_buffers+1; i++) {
       unsigned short start = mem_ptrs[i][0];
       unsigned short end   = mem_ptrs[i][1];
-      unsigned short num   = blocksInBuffer[i]; 
-      int freeSpace = (start >= end)? start-end : BUFF_LENGTH - (end-start); 
-      if(num < fewestBlocks &&  freeSpace >= tree_size && num < blocks_per_buffer) {
+      unsigned short num   = blocksInBuffer[i];
+      int freeSpace = (start >= end)? start-end : BUFF_LENGTH - (end-start);
+      if (num < fewestBlocks &&  freeSpace >= tree_size && num < blocks_per_buffer) {
         buffIndex = i;
         fewestBlocks = num;
-        validFound = true;      
+        validFound = true;
       }
     }
   }
-  
-  if(!validFound)  {
+
+  if (!validFound)  {
     vcl_cout<<"OUT OF SPACE!!!! (DETERMINISTIC)"<<vcl_endl;
     for (unsigned int i=0; i<mem_ptrs.size(); ++i) {
       unsigned short start = mem_ptrs[i][0];
@@ -305,141 +311,135 @@ int boxm_ocl_utils::getBufferIndex(bool rand,
 }
 
 
-void boxm_ocl_utils::compare_bit_scenes(boxm_ocl_bit_scene* one, boxm_ocl_bit_scene* two) 
+void boxm_ocl_utils::compare_bit_scenes(boxm_ocl_bit_scene* one, boxm_ocl_bit_scene* two)
 {
-    vcl_cout<<"Comparing bit scenes"<<vcl_endl;
-    
-    //1. make sure block sizes/num are the same
-    int numX = one->blocks_.get_row1_count(); 
-    int numY = one->blocks_.get_row2_count();
-    int numZ = one->blocks_.get_row3_count();
-    if(numX != two->blocks_.get_row1_count() ||
-        numY != two->blocks_.get_row2_count() ||
-          numZ != two->blocks_.get_row3_count()) {
-              vcl_cout<<"Scene Sizes are different "<<vcl_endl;
-              return;
-    }
-    
-    
-    //2. compare alpha value for each block (by layer
-    double error = 0.0;
-    int cmpCount = 0;
-    int diffCount = 0;
-    int initCount = 0;
-    int numConvBigger = 0;
-    for(int i=0; i<numX; i++) {
-      for(int j=0; j<numY; j++) {
-        for(int k=0; k<numZ; k++) {
-          
-          cmpCount++;
-            
-          //get alpha data for block one
-          unsigned short buffIndex = one->blocks_(i,j,k)[0];
-          unsigned short buffOffset = one->blocks_(i,j,k)[1];
-          float alpha_one = one->data_buffers_(buffIndex,buffOffset)[0]; 
-          
-          //get alpha for block 2
-          buffIndex = two->blocks_(i,j,k)[0];
-          buffOffset = two->blocks_(i,j,k)[1];
-          float alpha_two = two->data_buffers_(buffIndex, buffOffset)[0]; 
-          
-          if(alpha_one >= 1.0f && alpha_two >= 1.0f) {
-            
-            if( vcl_fabs(alpha_one-alpha_two) > 1e-5f ) {
-              vcl_cout<<"DIFFERENCE at block "<<i<<','<<j<<','<<k
-                    <<";  alphas: "<<alpha_one<<","<<alpha_two<<vcl_endl;
-              diffCount++;
-                      
-              error += (double) (alpha_one-alpha_two)* (double) (alpha_one-alpha_two); 
-              if ( alpha_two > alpha_one )
-                numConvBigger ++ ;
-            } 
-            else {
-              initCount++;
-            }
-            
+  vcl_cout<<"Comparing bit scenes"<<vcl_endl;
+
+  //1. make sure block sizes/num are the same
+  unsigned int numX = one->blocks_.get_row1_count();
+  unsigned int numY = one->blocks_.get_row2_count();
+  unsigned int numZ = one->blocks_.get_row3_count();
+  if (numX != two->blocks_.get_row1_count() ||
+      numY != two->blocks_.get_row2_count() ||
+      numZ != two->blocks_.get_row3_count()) {
+    vcl_cout<<"Scene Sizes are different "<<vcl_endl;
+    return;
+  }
+
+  //2. compare alpha value for each block (by layer
+  double error = 0.0;
+  int cmpCount = 0;
+  int diffCount = 0;
+  int initCount = 0;
+  int numConvBigger = 0;
+  for (int i=0; i<numX; i++) {
+    for (int j=0; j<numY; j++) {
+      for (int k=0; k<numZ; k++) {
+        cmpCount++;
+        //get alpha data for block one
+        unsigned short buffIndex = one->blocks_(i,j,k)[0];
+        unsigned short buffOffset = one->blocks_(i,j,k)[1];
+        float alpha_one = one->data_buffers_(buffIndex,buffOffset)[0];
+        //get alpha for block 2
+        buffIndex = two->blocks_(i,j,k)[0];
+        buffOffset = two->blocks_(i,j,k)[1];
+        float alpha_two = two->data_buffers_(buffIndex, buffOffset)[0];
+
+        if (alpha_one >= 1.0f && alpha_two >= 1.0f) {
+          if ( vcl_fabs(alpha_one-alpha_two) > 1e-5f ) {
+            vcl_cout<<"DIFFERENCE at block "<<i<<','<<j<<','<<k
+                    <<";  alphas: "<<alpha_one<<','<<alpha_two<<vcl_endl;
+            diffCount++;
+
+            error += (double) (alpha_one-alpha_two)* (double) (alpha_one-alpha_two);
+            if ( alpha_two > alpha_one )
+              numConvBigger ++ ;
           }
           else {
             initCount++;
           }
-
+        }
+        else {
+          initCount++;
         }
       }
-    }    
-    
-    vcl_cout<<"Blocks compared:   "<<cmpCount<<vcl_endl;
-    vcl_cout<<"differences found: "<<diffCount<<vcl_endl;
-    vcl_cout<<"converted bigger : "<<numConvBigger<<vcl_endl;
-    vcl_cout<<"blocks unchanged:  "<<initCount<<vcl_endl;
-    vcl_cout<<"Squared ERROR:     "<<error<<vcl_endl;
-    vcl_cout<<"mean sse     :     "<<error/cmpCount<<vcl_endl;
+    }
+  }
 
-  //vcl_cout<<"===SCENE STATS=================================="<<vcl_endl;
-  ////simple count of cells 
-  //unsigned char bits[] = { 0,   1,   1,   2,   1,   2,   2,   3,   1,   2,   2,   3,   2,   3,   3,   4,
-                           //1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5 ,
-                           //1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5  ,
-                           //2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
-                           //1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5  ,
-                           //2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
-                           //2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
-                           //3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7  ,
-                           //1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5  ,
-                           //2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
-                           //2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
-                           //3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7  ,
-                           //2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
-                           //3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7  ,
-                           //3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7  ,
-                           //4,   5,   5,   6,   5,   6,   6,   7,   5,   6,   6,   7,   6,   7,   7,   8 };
-  //int totalCells=0;
-  //vbl_array_3d<ushort2>::iterator iter;
-  //for (iter = blocks_.begin(); iter != blocks_.end(); iter++)
-  //{
-    ////in each block get the size of the tree - spit it out:
-    //ushort2 offsets = (*iter);
-    //unsigned short buffIndex = offsets[0];
-    //unsigned short buffOffset = offsets[1];
-    //uchar16 tree = tree_buffers_[buffIndex][buffOffset];
-    //int numParents = 0; 
-    //for(int i=0; i<10; i++) {
-      //numParents += bits[tree[i]]; 
-    //}
-    //int treeCells = numParents*8 + 1;
-    //totalCells += treeCells;
-  //}
-  //vcl_cout<<"TOTAL NUMBER OF CELLS IN SCENE = "<<totalCells<<vcl_endl;
-  
-  ////theoretical voxel count
-  //int numVoxels = blocks_.get_row1_count()*blocks_.get_row2_count()*blocks_.get_row3_count() * 8*8*8; 
-  //vcl_cout<<"Theoretical Number of Voxels: "<<numVoxels<<vcl_endl;
-  //vcl_cout<<"==============================================\n"<<vcl_endl;
+  vcl_cout<<"Blocks compared:   "<<cmpCount<<vcl_endl
+          <<"differences found: "<<diffCount<<vcl_endl
+          <<"converted bigger : "<<numConvBigger<<vcl_endl
+          <<"blocks unchanged:  "<<initCount<<vcl_endl
+          <<"Squared ERROR:     "<<error<<vcl_endl
+          <<"mean sse     :     "<<error/cmpCount<<vcl_endl;
 
-//#endif
+#if 0
+  vcl_cout<<"===SCENE STATS=================================="<<vcl_endl;
+  //simple count of cells
+  unsigned char bits[] = { 0,   1,   1,   2,   1,   2,   2,   3,   1,   2,   2,   3,   2,   3,   3,   4,
+                           1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5 ,
+                           1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5  ,
+                           2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
+                           1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5  ,
+                           2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
+                           2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
+                           3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7  ,
+                           1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5  ,
+                           2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
+                           2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
+                           3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7  ,
+                           2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
+                           3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7  ,
+                           3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7  ,
+                           4,   5,   5,   6,   5,   6,   6,   7,   5,   6,   6,   7,   6,   7,   7,   8 };
+  int totalCells=0;
+  vbl_array_3d<ushort2>::iterator iter;
+  for (iter = blocks_.begin(); iter != blocks_.end(); iter++)
+  {
+    //in each block get the size of the tree - spit it out:
+    ushort2 offsets = (*iter);
+    unsigned short buffIndex = offsets[0];
+    unsigned short buffOffset = offsets[1];
+    uchar16 tree = tree_buffers_[buffIndex][buffOffset];
+    int numParents = 0;
+    for (int i=0; i<10; i++) {
+      numParents += bits[tree[i]];
+    }
+    int treeCells = numParents*8 + 1;
+    totalCells += treeCells;
+  }
+  vcl_cout<<"TOTAL NUMBER OF CELLS IN SCENE = "<<totalCells<<vcl_endl;
 
-  
-  ////probe zero alpha values
-  //int zeroCells=0;
-  //vbl_array_3d<ushort2>::iterator iter;
-  //for (iter = blocks_.begin(); iter != blocks_.end(); iter++)
-  //{
-    ////in each block get the size of the tree - spit it out:
-    //ushort2 offsets = (*iter);
-    //unsigned short buffIndex = offsets[0];
-    //unsigned short buffOffset = offsets[1];
-    //uchar16 tree = tree_buffers_[buffIndex][buffOffset];
-    
-    //unsigned short hi  = (unsigned short) tree[10];
-    //unsigned short lo  = (unsigned short) tree[11];
-    //unsigned short dat = (hi<<8) | lo;
-    
-    //if(dat != buffOffset)
-      //vcl_cout<<"Dat: "<<dat<<" != "
-    
+  //theoretical voxel count
+  int numVoxels = blocks_.get_row1_count()*blocks_.get_row2_count()*blocks_.get_row3_count() * 8*8*8;
+  vcl_cout<<"Theoretical Number of Voxels: "<<numVoxels<<vcl_endl
+          <<"==============================================\n"<<vcl_endl;
+#endif // 0
+
+  //probe zero alpha values
+  int zeroCells=0;
+  vbl_array_3d<ushort2>::iterator iter;
+  for (iter = blocks_.begin(); iter != blocks_.end(); iter++)
+  {
+    //in each block get the size of the tree - spit it out:
+    ushort2 offsets = (*iter);
+    unsigned short buffIndex = offsets[0];
+    unsigned short buffOffset = offsets[1];
+    uchar16 tree = tree_buffers_[buffIndex][buffOffset];
+
+    unsigned short hi  = (unsigned short) tree[10];
+    unsigned short lo  = (unsigned short) tree[11];
+    unsigned short dat = (hi<<8) | lo;
+
+    if (dat != buffOffset)
+      vcl_cout<<"Dat: "<<dat<<" != "
+  }
+#endif // 0
 }
 
 
-void boxm_ocl_utils::bit_lookup_table(unsigned char* bits) {
+void boxm_ocl_utils::bit_lookup_table(unsigned char* bits)
+{
   unsigned char b[] = { 0,   1,   1,   2,   1,   2,   2,   3,   1,   2,   2,   3,   2,   3,   3,   4,
                        1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5 ,
                        1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5  ,

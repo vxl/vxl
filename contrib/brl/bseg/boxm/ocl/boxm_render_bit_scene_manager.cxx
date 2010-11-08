@@ -471,13 +471,13 @@ bool boxm_render_bit_scene_manager::run(bool rerender)
     return false;
   status = clReleaseEvent(events[0]);
   float sumCells = 0;
-  for(int i=0; i<wni_*wnj_; i++) {
+  for (int i=0; i<wni_*wnj_; i++) {
     sumCells += output_[i];
   }
-  vcl_cout<<"SUM cells:    "<<sumCells<<vcl_endl;
-  vcl_cout<<"# cells/ray:  "<<sumCells/(wni_*wnj_)<<vcl_endl;
-  vcl_cout<<"#cells/sec:   "<<1000*sumCells/gpu_time_<<vcl_endl;
- 
+  vcl_cout<<"SUM cells:    "<<sumCells<<vcl_endl
+          <<"# cells/ray:  "<<sumCells/(wni_*wnj_)<<vcl_endl
+          <<"#cells/sec:   "<<1000*sumCells/gpu_time_<<vcl_endl;
+
   //--------------------------------------------------------------------
 #endif // DEBUG
 
@@ -1290,7 +1290,7 @@ bool boxm_render_bit_scene_manager::set_input_image()
   output_ = NULL;
   vcl_cout<<"output size = "<<wni_*wnj_<<vcl_endl;
   output_ = (cl_float*) boxm_ocl_utils::alloc_aligned(wni_*wnj_,sizeof(cl_float),16);
-  for (int i=0; i<wni_*wnj_; i++) output_[i] = 0.0;
+  for (unsigned int i=0; i<wni_*wnj_; ++i) output_[i] = 0.0;
   //-------------------------------------------------------------------
 
   image_=(cl_float *)boxm_ocl_utils::alloc_aligned(wni_*wnj_,sizeof(cl_float4),16);
@@ -1346,7 +1346,7 @@ bool boxm_render_bit_scene_manager::set_input_image_buffers()
                                output_,&status);
   if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (tree) failed."))
     return false;
-                              
+
   return this->check_val(status,CL_SUCCESS,"clCreateBuffer (image_buf_) failed.")==1;
 }
 
