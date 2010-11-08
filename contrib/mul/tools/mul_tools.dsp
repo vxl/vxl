@@ -279,6 +279,9 @@ SOURCE=.\reflect_image_3d.cxx
 # Begin Source File
 SOURCE=.\select_lines.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\convert_rotation_3d.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
