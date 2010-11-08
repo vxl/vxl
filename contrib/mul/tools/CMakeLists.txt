@@ -38,3 +38,6 @@ TARGET_LINK_LIBRARIES(reflect_image_3d vimt3d mbl)
 
 ADD_EXECUTABLE( select_lines select_lines.cxx )
 TARGET_LINK_LIBRARIES(select_lines mbl)
+
+ADD_EXECUTABLE( convert_rotation_3d convert_rotation_3d.cxx )
+TARGET_LINK_LIBRARIES(convert_rotation_3d mbl vgl_algo)
