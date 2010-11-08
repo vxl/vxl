@@ -9,6 +9,7 @@
 #include <vul/vul_timer.h>
 
 #include <vgl/vgl_vector_3d.h>
+#include <vgl/algo/vgl_rotation_3d.h>
 #include <vgl/vgl_point_3d.h>
 
 #include <vil/vil_image_view.h>
@@ -18,6 +19,8 @@
 #include <vil/vil_convert.h>
 
 #include <vnl/vnl_math.h>
+#include <vnl/vnl_double_3.h>
+#include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
@@ -27,11 +30,11 @@
 static void test_minimizer()
 {
   vcl_string root_dir = testlib_root_dir();
-  vcl_string dest_file = "c:/images/calibration/frame_142.png";
-  vcl_string source_file = "c:/images/calibration/frame_145.png";
-  //  vcl_string source_file = "c:/images/calibration/frame_138.png";
-  //  vcl_string source_file = "c:/images/calibration/frame_146.png";
-  vcl_string depth_file = "c:/images/calibration/depth_142.tif";
+  vcl_string dest_file = "C:/images/calibration/frame_142.png";
+  vcl_string source_file = "C:/images/calibration/frame_145.png";
+  //  vcl_string source_file = "C:/images/calibration/frame_138.png";
+  //  vcl_string source_file = "C:/images/calibration/frame_146.png";
+  vcl_string depth_file = "C:/images/calibration/depth_142.tif";
 
   vil_image_view_base_sptr dest_img_base = vil_load(dest_file.c_str());
   if (!dest_img_base) {
@@ -64,54 +67,50 @@ static void test_minimizer()
   double rv [] ={0.9949824417310001, 0.07167609924, -0.06980290590899998,
                  -0.073085399753, 0.997165853331, -0.017858933610000002,
                  0.06832371779200001, 0.02287012861500001, 0.997400346057};
-  vnl_matrix_fixed<double, 3, 3> Mr(rv);
+  vnl_double_3x3 Mr(rv);
   vgl_rotation_3d<double> Rr(Mr);
-  vgl_vector_3d<double> tr(0.3207432455793182, 0.04231364883145655, -0.019929923492081336);
-  vgl_vector_3d<double> tid(0.0, 0.0, 0.0), tbox(0.5, 0.0, 0.0);
-  vnl_matrix_fixed<double, 3, 3> K(0.0);
-  K[0][0]=1871.2;   K[1][1]=1871.2; K[0][2] = 640.0; K[1][2]=360.0; K[2][2]=1.0;
-  vnl_vector_fixed<double,3> rrd = Rr.as_rodrigues(), zaxis;;
-  double rang = rrd.magnitude();
-  zaxis[0]=0.0;  zaxis[1]=0.0;  zaxis[2]=1.0;
+  vnl_double_3 rrd = Rr.as_rodrigues();
   vcl_cout << "Cam rotation " << rrd << '\n';
+  vnl_double_3 zaxis(0.0, 0.0, 1.0);
   vcl_cout << "Principal ray dir " << Rr*zaxis << '\n';
-  vnl_vector_fixed<double,3> rtop;
-  rtop[0]=0.0198205; rtop[1]= -0.109489; rtop[2]=-0.0896672;
-  double ang_top = rtop.magnitude();
+  vnl_double_3 rtop(0.0198205, -0.109489, -0.0896672);
   vgl_rotation_3d<double> Rtop(rtop);
-  vcl_cout << "top cam axis(0.5,0,0) " << Rtop*zaxis << '\n'; 
-  vcl_cout << " axis angle diff (0.5, 0, 0) " << vpgl_camera_bounds::angle_between_rays(Rr, Rtop) << '\n';
-  vcl_cout << " diff in rotation about axis " << vpgl_camera_bounds::rot_about_ray(Rr, Rtop) << '\n';
-  vnl_vector_fixed<double,3> rfinal;
-  rfinal[0]=0.00942883; rfinal[1]=-0.0635162; rfinal[2]=-0.0676306;
+  vcl_cout << "top cam axis(0.5,0,0) " << Rtop*zaxis << '\n'
+           << " axis angle diff (0.5, 0, 0) " << vpgl_camera_bounds::angle_between_rays(Rr, Rtop) << '\n'
+           << " diff in rotation about axis " << vpgl_camera_bounds::rot_about_ray(Rr, Rtop) << '\n';
+  vnl_double_3 rfinal(0.00942883, -0.0635162, -0.0676306);
   vgl_rotation_3d<double> Rfinal(rfinal);
-  vcl_cout << "final(0.304688,0,0) " << Rfinal*zaxis << '\n'; 
-  vcl_cout << " axis angle diff level3 " << vpgl_camera_bounds::angle_between_rays(Rr, Rfinal) << '\n';
-  vcl_cout << " diff in rotation about axis " << vpgl_camera_bounds::rot_about_ray(Rr, Rfinal) << '\n';
+  vcl_cout << "final(0.00942883,-0.0635162,-0.0676306) " << Rfinal*zaxis << '\n'
+           << " axis angle diff level3 " << vpgl_camera_bounds::angle_between_rays(Rr, Rfinal) << '\n'
+           << " diff in rotation about axis " << vpgl_camera_bounds::rot_about_ray(Rr, Rfinal) << '\n';
   // ========================Camera 138 =====================
   double rv138 [] = {0.996034852179, 0.043480236729, 0.07760390651200001,
                      0.042636569473, 0.999012669051, 0.01251074244199999,
                      -0.07807192351699999, -0.009152332035, 0.996905943118};
-  vnl_matrix_fixed<double, 3, 3> Mr138(rv138);
+  vnl_double_3x3 Mr138(rv138);
   vgl_rotation_3d<double> Rr138(Mr138);
-  vnl_vector_fixed<double,3> rr138 = Rr138.as_rodrigues();
-  vgl_vector_3d<double> t138(-0.41081, -0.08859, 0.061291);
+  vnl_double_3 rr138 = Rr138.as_rodrigues();
+  vnl_double_3 t138(-0.41081, -0.08859, 0.061291);
+  TEST_NEAR("Rodrigues camera 138", (rr138-t138).magnitude(), 0.0, 1e-6);
   //=========================Camera 146 ================================
   double rv146 [] = {0.992577, 0.0862514, -0.0857363,
                      -0.0888177, 0.995693, -0.0265857,
                      0.0830739, 0.0340026, 0.995963};
-  vnl_matrix_fixed<double, 3, 3> Mr146(rv146);
+  vnl_double_3x3 Mr146(rv146);
   vgl_rotation_3d<double> Rr146(Mr146);
-  vnl_vector_fixed<double,3> rr146 = Rr146.as_rodrigues();
-  vgl_vector_3d<double> t146(0.429651, 0.051759, -0.02293);
+  vnl_double_3 rr146 = Rr146.as_rodrigues();
+  vnl_double_3 t146(0.429651, 0.051759, -0.02293);
+  TEST_NEAR("Rodrigues camera 146", (rr146-t146).magnitude(), 0.0, 1e-6);
   //=============================================================
   bool adjust_to_fl = false;
+  double rv640 [] = {1871.2, 0.0,    640.0,
+                     0.0,    1871.2, 360.0,
+                     0.0,    0.0,    1.0  };
+  vnl_double_3x3 K(rv640);
+  vgl_vector_3d<double> tr(0.3207432455793182, 0.04231364883145655, -0.019929923492081336);
   icam_depth_transform dt(K, depth_img_dbl, Rr, tr, adjust_to_fl);
-  unsigned nparams = dt.n_params();
-  vnl_vector<double> scales(nparams);
-  // may not be needed but normalizes parameter space
-  scales.fill(1.0);
-#if 0
+#if 0 // may not be needed but normalizes parameter space
+  vnl_vector<double> scales(dt.n_params()); scales.fill(1.0);
   scales[0]=10;   scales[1]=10;   scales[2]=10;   scales[3]=1;
   scales[4]=1;   scales[5]=1; scales[6]= 1/2000.0;
   dt.set_scale_factors(scales);
@@ -122,14 +121,14 @@ static void test_minimizer()
   double axis_search_cone_multiplier = 10.0;
   double polar_range_multiplier = 2.0;
   double local_min_thresh = 0.005;
-  //vcl_string base_path = "c:/images/calibration";
+  //vcl_string base_path = "C:/images/calibration";
   vcl_string base_path = "";
   bool verbose = true;
   icam_minimizer minimizer(source_img_flt, dest_img_flt, dt,
                            min_pyramid_image_size, box_reduction_k,
                            axis_search_cone_multiplier, polar_range_multiplier,
                            local_min_thresh, base_path, verbose);
-  if(verbose){
+  if (verbose) {
     minimizer.set_actual_translation(tr);
     minimizer.set_actual_rotation(Rr);
   }
