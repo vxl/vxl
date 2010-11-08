@@ -561,14 +561,15 @@ int bocl_global_memory_bandwidth_manager::build_kernel_program(bool useimage)
                             NULL,
                             NULL,
                             NULL);
-    unsigned char buffer[21740]; 
+#if 0
+    unsigned char buffer[21740];
     vcl_size_t length[10];
-    vcl_size_t bufflength=0;  
-    //clGetProgramInfo(program_,CL_PROGRAM_BINARY_SIZES,sizeof(vcl_size_t),&length,&bufflength);
-   // clGetProgramInfo(program_,CL_PROGRAM_BINARIES,21740,(void*)&buffer,&bufflength);
-   // vcl_cout<<length[0];
-    //int a;
-    //vcl_cin>>a;
+    vcl_size_t bufflength=0;
+    clGetProgramInfo(program_,CL_PROGRAM_BINARY_SIZES,sizeof(vcl_size_t),&length,&bufflength);
+    clGetProgramInfo(program_,CL_PROGRAM_BINARIES,21740,(void*)&buffer,&bufflength);
+    vcl_cout<<length[0];
+    int a; vcl_cin>>a;
+#endif // 0
     if (!this->check_val(status,
                          CL_SUCCESS,
                          error_to_string(status)))
