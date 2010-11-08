@@ -72,10 +72,14 @@ bool test_image_parallel_search()
   unsigned min_pyramid_image_size = 16;
   unsigned box_reduction_k = 2;
   double local_min_thresh = 0.005;
+  double axis_search_cone_multiplier = 10.0;
+  double polar_range_multiplier = 2.0;
   //vcl_string base_path = "C:/temp/ImagesForGPUTest";
   vcl_string base_path = "";
   icam_minimizer minimizer(source_img_flt, dest_img_flt, dt,
                            min_pyramid_image_size, box_reduction_k,
+                           axis_search_cone_multiplier,
+                           polar_range_multiplier,
                            local_min_thresh, base_path);
   unsigned nl = minimizer.n_levels();
   unsigned lev = nl-1;
@@ -230,10 +234,14 @@ bool test_rot_parallel_search()
   unsigned min_pyramid_image_size = 16;
   unsigned box_reduction_k = 2;
   double local_min_thresh = 0.005;
+  double axis_search_cone_multiplier = 10.0;
+  double polar_range_multiplier = 2.0;
   //vcl_string base_path = "C:/temp/ImagesForGPUTest";
   vcl_string base_path = "";
   icam_minimizer minimizer(source_img_flt, dest_img_flt, dt,
                            min_pyramid_image_size, box_reduction_k,
+                           axis_search_cone_multiplier,
+                           polar_range_multiplier,
                            local_min_thresh, base_path);
   unsigned nl = minimizer.n_levels();
   unsigned lev = nl-1;
@@ -293,10 +301,11 @@ bool test_rot_parallel_search()
   vcl_cout << "sum marginal = " << sum << '\n';
 #endif
 
-  unsigned dni = 16, dnj = 17;
+  unsigned dni = 16;
   for (unsigned i = 0; i< 2*dni; ++i)
     vcl_cout << minfo[i] << '\n';
 #if 0
+  unsigned dnj = 17;
   vil_image_view<float> md(dni, dnj);
   md.fill(0.0f);
   for (unsigned j = 0; j<dnj; j++)
