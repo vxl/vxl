@@ -70,7 +70,7 @@ principal_ray_scan::principal_ray_scan(double cone_half_angle,
 
 void principal_ray_scan::reset() { index_ = -1; }
 
-bool principal_ray_scan::next() 
+bool principal_ray_scan::next()
 {return ++index_<static_cast<int>(theta_.size());}
 
 vgl_point_3d<double> principal_ray_scan::pt_on_unit_sphere(unsigned i)
@@ -95,16 +95,19 @@ vgl_rotation_3d<double> principal_ray_scan::rot(unsigned i, double alpha)
   vgl_rotation_3d<double> R_about_axis(vr);
   return R_about_axis*R_axis;
 }
+
 double vpgl_camera_bounds::solid_angle(double cone_half_angle)
 {
   return 2.0*vnl_math::pi*(1.0-vcl_cos(cone_half_angle));
 }
+
 double vpgl_camera_bounds::cone_half_angle(double solid_angle)
 {
   double temp = solid_angle/(2.0*vnl_math::pi);
   temp = vcl_acos(1.0-temp);
   return temp;
 }
+
 // the solid angle for a pixel, applies only to perspective camera
 // cone is tangent to pixel
 void vpgl_camera_bounds::
@@ -121,19 +124,21 @@ pixel_solid_angle(vpgl_perspective_camera<double> const& cam,
   cone_half_angle = angle(ul, cone_axis);
   solid_angle = vpgl_camera_bounds::solid_angle(cone_half_angle);
 }
+
 // solid angle at principal point
 void vpgl_camera_bounds::
 pixel_solid_angle(vpgl_perspective_camera<double> const& cam,
-                                double& cone_half_angle,
-                                double& solid_angle)
+                  double& cone_half_angle,
+                  double& solid_angle)
 {
   vgl_point_2d<double> pp = (cam.get_calibration()).principal_point();
-  unsigned u = static_cast<unsigned>(pp.x()), 
-    v = static_cast<unsigned>(pp.y());
+  unsigned u = static_cast<unsigned>(pp.x()),
+           v = static_cast<unsigned>(pp.y());
   vgl_ray_3d<double> ray;
   vpgl_camera_bounds::pixel_solid_angle(cam, u, v, ray, cone_half_angle,
                                         solid_angle);
 }
+
 // the solid angle for an image, applies only to perspective camera
 // cone axis passes through principal point, i.e. principal ray.
 // tangent to a square defined by image diagonal
@@ -152,13 +157,14 @@ image_solid_angle(vpgl_perspective_camera<double> const& cam,
 
 void vpgl_camera_bounds::
 image_solid_angle(vpgl_perspective_camera<double> const& cam,
-                       double& cone_half_angle,
-                       double& solid_angle)
+                  double& cone_half_angle,
+                  double& solid_angle)
 {
   vgl_ray_3d<double> ray;
   vpgl_camera_bounds::image_solid_angle(cam, ray, cone_half_angle,
                                         solid_angle);
 }
+
   // the solid angle for a scene bounding box, the cone is tangent to the box
 bool vpgl_camera_bounds::
 box_solid_angle(vpgl_perspective_camera<double> const& cam,
@@ -195,4 +201,16 @@ rotation_angle_interval(vpgl_perspective_camera<double> const& cam)
   //half length is 0.5 (1/2 pixel)
   double half_angle = vcl_atan(0.5/rmin);
   return 2.0*half_angle;
+}
+
+double vpgl_camera_bounds::angle_between_rays(vgl_rotation_3d<double> const& ray1, vgl_rotation_3d<double> const& ray2)
+{
+  vcl_cerr << "vpgl_camera_bounds::angle_between_rays() not yet implemented!!!\n";
+  return -1.0;
+}
+
+double vpgl_camera_bounds::rot_about_ray(vgl_rotation_3d<double> const& ray1, vgl_rotation_3d<double> const& ray2)
+{
+  vcl_cerr << "vpgl_camera_bounds::rot_about_ray() not yet implemented!!!\n";
+  return -1.0;
 }

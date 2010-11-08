@@ -75,6 +75,10 @@ class vpgl_camera_bounds
   static double solid_angle(double cone_half_angle);
 
   static double cone_half_angle(double solid_angle);
+
+  static double angle_between_rays(vgl_rotation_3d<double> const& ray1, vgl_rotation_3d<double> const& ray2);
+
+  static double rot_about_ray(vgl_rotation_3d<double> const& ray1, vgl_rotation_3d<double> const& ray2);
  private:
   //: constructor private - class contains static methods only
   vpgl_camera_bounds();
