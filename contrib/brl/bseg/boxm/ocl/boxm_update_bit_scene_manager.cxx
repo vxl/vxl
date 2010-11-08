@@ -24,7 +24,7 @@ bool boxm_update_bit_scene_manager::init_scene(boxm_ocl_bit_scene *scene,
   wnj_=(cl_uint)RoundUp(input_img_.nj(),bnj_);
   prob_thresh_=prob_thresh;
   use_gl_=true;
-  return this->init_scene_buffers(scene); 
+  return this->init_scene_buffers(scene);
 }
 
 bool boxm_update_bit_scene_manager::init_scene(boxm_ocl_bit_scene *scene,
@@ -33,7 +33,7 @@ bool boxm_update_bit_scene_manager::init_scene(boxm_ocl_bit_scene *scene,
                                                float prob_thresh=0.3)
 {
   vcl_cout<<"Init scene from ni, nj, prob_thresh"<<vcl_endl;
-  
+
   //initialize cam, input image and prob_thresh
   cam_ = new vpgl_perspective_camera<double>();
   input_img_.set_size(ni,nj);
@@ -43,7 +43,7 @@ bool boxm_update_bit_scene_manager::init_scene(boxm_ocl_bit_scene *scene,
   vcl_cout<<"DIMS"<<wni_<<' '<<wnj_<<vcl_endl;
   prob_thresh_=prob_thresh;
 
-  return this->init_scene_buffers(scene); 
+  return this->init_scene_buffers(scene);
 }
 
 
@@ -108,15 +108,15 @@ bool boxm_update_bit_scene_manager::init_scene_buffers(boxm_ocl_bit_scene *scene
   cell_mean_obs_= (cl_int *)   boxm_ocl_utils::alloc_aligned(numData,sizeof(cl_int),16);
   cell_beta_    = (cl_int *)   boxm_ocl_utils::alloc_aligned(numData,sizeof(cl_int),16);
   cell_vis_     = (cl_int *)   boxm_ocl_utils::alloc_aligned(numData,sizeof(cl_int),16);
-  
+
   scene->get_alphas(cell_alpha_);
   scene->get_mixture(cell_mixture_);
   scene->get_num_obs(cell_num_obs_);
-  for (int i=0; i<numData; i++) {   
-  
+  for (int i=0; i<numData; i++) {
+
     //init num obs to zero
-    for(int j=0; j<4; j++) cell_num_obs_[4*i + j] = 0;
-  
+    for (int j=0; j<4; j++) cell_num_obs_[4*i + j] = 0;
+
     //init aux data to zero
     cell_seg_len_[i] = 0;
     cell_mean_obs_[i] = 0;
@@ -139,7 +139,7 @@ bool boxm_update_bit_scene_manager::init_scene_buffers(boxm_ocl_bit_scene *scene
 
   //allocate and initialize bit lookup
   bit_lookup_ = (cl_uchar *) boxm_ocl_utils::alloc_aligned(256,sizeof(cl_uchar),16);
-  boxm_ocl_utils::bit_lookup_table(bit_lookup_); 
+  boxm_ocl_utils::bit_lookup_table(bit_lookup_);
 
   //debug output (one for each buffer)
   output_debug_ = (cl_float*) boxm_ocl_utils::alloc_aligned(scene_info_->num_buffer, sizeof(cl_float), 16);
@@ -265,7 +265,7 @@ bool boxm_update_bit_scene_manager::set_scene_buffers()
                                      &status);
   if (!this->check_val(status, CL_SUCCESS, "clCreateBuffer (cell_num_obs) failed."))
     return false;
-      
+
   cell_seg_len_buf_ = clCreateBuffer(this->context_,
                                      CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR,
                                      datCells * sizeof(cl_int),
@@ -273,12 +273,12 @@ bool boxm_update_bit_scene_manager::set_scene_buffers()
                                      &status);
   if (!this->check_val(status, CL_SUCCESS, "clCreateBuffer (cell_seg_len) failed."))
     return false;
-    
+
   cell_mean_obs_buf_ = clCreateBuffer(this->context_,
-                                     CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR,
-                                     datCells * sizeof(cl_int),
-                                     cell_mean_obs_,
-                                     &status);
+                                      CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR,
+                                      datCells * sizeof(cl_int),
+                                      cell_mean_obs_,
+                                      &status);
   if (!this->check_val(status, CL_SUCCESS, "clCreateBuffer (clel_mean_obs) failed."))
     return false;
 
@@ -289,22 +289,22 @@ bool boxm_update_bit_scene_manager::set_scene_buffers()
                                      &status);
   if (!this->check_val(status, CL_SUCCESS, "clCreateBuffer (cell_beta) failed."))
     return false;
-    
+
   cell_vis_buf_    = clCreateBuffer(this->context_,
-                                     CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR,
-                                     datCells * sizeof(cl_int),
-                                     cell_vis_,
-                                     &status);
+                                    CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR,
+                                    datCells * sizeof(cl_int),
+                                    cell_vis_,
+                                    &status);
   if (!this->check_val(status, CL_SUCCESS, "clCreateBuffer (cell_vis) failed."))
     return false;
 
 #if 0
   ////lock (num_obs)
   cell_lock_buf_ = clCreateBuffer(this->context_,
-                                 CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR,
-                                 datCells * sizeof(cl_int),
-                                 cell_lock_,
-                                 &status);
+                                  CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR,
+                                  datCells * sizeof(cl_int),
+                                  cell_lock_,
+                                  &status);
   if (!this->check_val(status, CL_SUCCESS, "clCreateBuffer (cell_lock_buf) failed."))
     return false;
 
@@ -343,7 +343,7 @@ bool boxm_update_bit_scene_manager::set_scene_buffers()
                                    bit_lookup_,&status);
   if (!this->check_val(status,CL_SUCCESS,"clCreateBuffer (bit_lookup) failed."))
     return false;
-    
+
   //Output debugger
   point_3d_buf_ = clCreateBuffer(this->context_,
                                  CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR,
@@ -1423,7 +1423,7 @@ bool boxm_update_bit_scene_manager::set_update_args(unsigned pass)
     status = clSetKernelArg(update_kernels_[pass],i++,sizeof(cl_mem),(void *)&cell_beta_buf_);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_Beta)"))
       return false;
- 
+
 #if 0
     ////locking array
     //status = clSetKernelArg(update_kernels_[pass], i++, sizeof(cl_mem), (void *)&cell_lock_buf_);
@@ -1441,7 +1441,7 @@ bool boxm_update_bit_scene_manager::set_update_args(unsigned pass)
     //status = clSetKernelArg(update_kernels_[pass],i++,sizeof(cl_mem),(void *)&cell_aux_data_buf_);
     //if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_mean_vis_)"))
       //return false;
-#endif 
+#endif
     //bit lookup buffer
     status = clSetKernelArg(update_kernels_[pass],i++,sizeof(cl_mem),(void *)&bit_lookup_buf_);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output)"))
@@ -1597,13 +1597,17 @@ bool boxm_update_bit_scene_manager::set_clean_aux_data_args()
   status = clSetKernelArg(clean_aux_data_kernel_,i++,sizeof(cl_mem),(void *)&cell_beta_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_Beta)"))
     return false;
+#if 0
   //cell cum_beta
-  //status = clSetKernelArg(clean_aux_data_kernel_,i++,sizeof(cl_mem),(void *)&cell_cum_beta_buf_);
-  //if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_cum_beta_)"))
-    //return false;
-  ////cell mean_vis
-  //status = clSetKernelArg(clean_aux_data_kernel_,i++,sizeof(cl_mem),(void *)&cell_mean_vis_buf_);
-  //return this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_mean_vis_)");
+  status = clSetKernelArg(clean_aux_data_kernel_,i++,sizeof(cl_mem),(void *)&cell_cum_beta_buf_);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_cum_beta_)"))
+    return false;
+  //cell mean_vis
+  status = clSetKernelArg(clean_aux_data_kernel_,i++,sizeof(cl_mem),(void *)&cell_mean_vis_buf_);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_mean_vis_)"))
+    return false;
+#endif
+  return true;
 }
 
 
@@ -1942,7 +1946,7 @@ bool boxm_update_bit_scene_manager::update()
            << "total block processing time = " << total_raytrace_time << 's' << vcl_endl
 #endif
   ;
-  
+
 #if 0
   cl_event events[1];
   int numData = scene_info_->num_buffer * scene_info_->data_buffer_length;
@@ -1954,25 +1958,25 @@ bool boxm_update_bit_scene_manager::update()
   status = clWaitForEvents(1, &events[0]);
   if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents (cell mena obs read) failed."))
     return false;
-    
+
   vcl_cout<<"reassigning alpha"<<vcl_endl;
-  for(int i=0; i<numData; i++) 
-    cell_alpha_[i] = (cl_float) (cell_mean_obs_[i]/93206.7555f); 
-  
+  for (int i=0; i<numData; i++)
+    cell_alpha_[i] = (cl_float) (cell_mean_obs_[i]/93206.7555f);
+
   status = clEnqueueWriteBuffer(command_queue_, cell_alpha_buf_, CL_TRUE, 0,
-                                 numData*sizeof(cl_float),
-                                 cell_alpha_, 0, NULL, &events[0]);
+                                numData*sizeof(cl_float),
+                                cell_alpha_, 0, NULL, &events[0]);
   if (!this->check_val(status,CL_SUCCESS,"clEnqueueReadBuffer (cell alpha buffer )failed."))
     return false;
   status = clWaitForEvents(1, &events[0]);
   if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents (cell alpha write) failed."))
     return false;
-  
+
   //save output image
   read_output_image();
   save_image();
 #endif
-  
+
 
   return true;
 }
@@ -2264,7 +2268,7 @@ bool boxm_update_bit_scene_manager::read_scene()
                                0,NULL,&events[0]);
   if (!this->check_val(status,CL_SUCCESS,"clEnqueueBuffer (cell aux )failed."))
     return false;
- 
+
   //cum beta aux data
   status = clEnqueueReadBuffer(command_queue_,cell_cum_beta_buf_,CL_TRUE,
                                0,datCells*sizeof(cl_float2),
@@ -2564,6 +2568,7 @@ bool boxm_update_bit_scene_manager::set_input_image(vil_image_view<float>  obs)
   else
     return true;
 }
+
 bool boxm_update_bit_scene_manager::set_input_image(vil_image_view<float>  obs1,
                                                     vil_image_view<float>  obs2)
 {
@@ -2595,6 +2600,7 @@ bool boxm_update_bit_scene_manager::set_input_image(vil_image_view<float>  obs1,
   else
     return true;
 }
+
 bool boxm_update_bit_scene_manager::clean_input_image()
 {
   if (image_)
