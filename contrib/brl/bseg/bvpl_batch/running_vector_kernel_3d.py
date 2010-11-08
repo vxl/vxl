@@ -15,8 +15,8 @@ class dbvalue:
     self.type = type   # string
 
 #first creat an empty world.
-world_dir="d:/tests/lidar_edge_reg/";
-cwd_dir="d:/tests/lidar_edge_reg/";
+world_dir="D:/tests/lidar_edge_reg/";
+cwd_dir="D:/tests/lidar_edge_reg/";
 
 print("Load Voxel World");
 bvpl_batch.init_process("bvxmLoadGridProcess");
@@ -88,7 +88,4 @@ bvpl_batch.set_input_string(2,"belief");
 bvpl_batch.run_process();
 (world_id,world_type)= bvpl_batch.commit_output(0);
 edges3d_exp = dbvalue(world_id,world_type);
-
-
-
 

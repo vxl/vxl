@@ -141,8 +141,8 @@ breg3d_ekf_camera_optimizer_state breg3d_ekf_camera_optimizer::optimize(bvxm_vox
         vcl_cerr << "error: unsupported appearance model type " << apm_type << " !\n";
       }
       // optimize - do not use gps estimate (no new gps estimate for these sub-steps)
-      vil_save(*step_expected,"c:/research/registration/output/step_expected.tiff");
-      vil_save(step_mask,"c:/research/registration/output/step_expected_mask.tiff");
+      vil_save(*step_expected,"C:/research/registration/output/step_expected.tiff");
+      vil_save(step_mask,"C:/research/registration/output/step_expected_mask.tiff");
       substep_state = substep_optimizer.optimize_once(vox_world,step_expected,step_mask,curr_img,substep_state,false);
 
       step_vec.push_back(vpgl_perspective_camera<double>(cam_est->get_calibration(),substep_state.get_point(),substep_state.get_rotation()));
@@ -341,38 +341,36 @@ vnl_vector<double> breg3d_ekf_camera_optimizer::img_homography(vil_image_view_ba
 {
   vil_image_view<float> base_img_view, img_view;
 
-  switch (base_img_viewb->pixel_format()) {
-    case VIL_PIXEL_FORMAT_RGB_BYTE:
-      {
-        vil_image_view<vil_rgb<vxl_byte> > *img_rgb_byte = dynamic_cast<vil_image_view<vil_rgb<vxl_byte> >*>(base_img_viewb.ptr());
-        vil_convert_rgb_to_grey(*img_rgb_byte,base_img_view);
-      }
-      break;
-    case VIL_PIXEL_FORMAT_BYTE:
-      {
-        vil_image_view<vxl_byte> *img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(base_img_viewb.ptr());
-        vil_convert_stretch_range_limited(*img_byte,base_img_view,(vxl_byte)0,(vxl_byte)255,0.0f,1.0f);
-      }
-      break;
-    default:
-      vcl_cerr << "error: breg3d_ekf_camera_optimizer::img_homography : unsupported pixel type " << base_img_viewb->pixel_format() << '\n';
+  switch (base_img_viewb->pixel_format())
+  {
+   case VIL_PIXEL_FORMAT_RGB_BYTE: {
+    vil_image_view<vil_rgb<vxl_byte> > *img_rgb_byte = dynamic_cast<vil_image_view<vil_rgb<vxl_byte> >*>(base_img_viewb.ptr());
+    vil_convert_rgb_to_grey(*img_rgb_byte,base_img_view);
+    break;
+   }
+   case VIL_PIXEL_FORMAT_BYTE: {
+    vil_image_view<vxl_byte> *img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(base_img_viewb.ptr());
+    vil_convert_stretch_range_limited(*img_byte,base_img_view,(vxl_byte)0,(vxl_byte)255,0.0f,1.0f);
+    break;
+   }
+   default:
+    vcl_cerr << "error: breg3d_ekf_camera_optimizer::img_homography : unsupported pixel type " << base_img_viewb->pixel_format() << '\n';
   }
 
-  switch (img_viewb->pixel_format()) {
-    case VIL_PIXEL_FORMAT_RGB_BYTE:
-      {
-        vil_image_view<vil_rgb<vxl_byte> > *img_rgb_byte = dynamic_cast<vil_image_view<vil_rgb<vxl_byte> >*>(img_viewb.ptr());
-        vil_convert_rgb_to_grey(*img_rgb_byte,base_img_view);
-      }
-      break;
-    case VIL_PIXEL_FORMAT_BYTE:
-      {
-        vil_image_view<vxl_byte> *img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(img_viewb.ptr());
-        vil_convert_stretch_range_limited(*img_byte,img_view,(vxl_byte)0,(vxl_byte)255,0.0f,1.0f);
-      }
-      break;
-    default:
-      vcl_cerr << "error: breg3d_ekf_camera_optimizer::img_homography : unsupported pixel type " << img_viewb->pixel_format() << '\n';
+  switch (img_viewb->pixel_format())
+  {
+   case VIL_PIXEL_FORMAT_RGB_BYTE: {
+    vil_image_view<vil_rgb<vxl_byte> > *img_rgb_byte = dynamic_cast<vil_image_view<vil_rgb<vxl_byte> >*>(img_viewb.ptr());
+    vil_convert_rgb_to_grey(*img_rgb_byte,base_img_view);
+    break;
+   }
+   case VIL_PIXEL_FORMAT_BYTE: {
+    vil_image_view<vxl_byte> *img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(img_viewb.ptr());
+    vil_convert_stretch_range_limited(*img_byte,img_view,(vxl_byte)0,(vxl_byte)255,0.0f,1.0f);
+    break;
+   }
+   default:
+    vcl_cerr << "error: breg3d_ekf_camera_optimizer::img_homography : unsupported pixel type " << img_viewb->pixel_format() << '\n';
   }
 
   // computed homography maps pixels in current image to pixels in base image

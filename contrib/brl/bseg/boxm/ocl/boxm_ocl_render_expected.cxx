@@ -36,10 +36,10 @@ void boxm_opencl_ocl_scene_expected(boxm_ocl_scene &scene,
       expected(i,j) = *(results_p++); // expected intensity
 
 #if 0 //images for debugging
-  vil_save(img0,"f:/apl/img0.tiff");
-  vil_save(img1,"f:/apl/img1.tiff");
-  vil_save(expected,"f:/apl/img2.tiff");
-  vil_save(mask,"f:/apl/img3.tiff");
+  vil_save(img0,"F:/apl/img0.tiff");
+  vil_save(img1,"F:/apl/img1.tiff");
+  vil_save(expected,"F:/apl/img2.tiff");
+  vil_save(mask,"F:/apl/img3.tiff");
 #endif
 }
 

@@ -587,7 +587,7 @@ bool bvxm_voxel_world::update_impl(bvxm_image_metadata const& metadata,
     // backproject image onto voxel plane
     bvxm_util::warp_slab_bilinear(image_slab, H_plane_to_img[z], frame_backproj);
 #ifdef BVXM_DEBUG
-    bvxm_util::write_slab_as_image(frame_backproj,"c:/research/registration/output/frame_backproj.tiff");
+    bvxm_util::write_slab_as_image(frame_backproj,"C:/research/registration/output/frame_backproj.tiff");
 #endif
     // transform preX to voxel plane for this level
     bvxm_util::warp_slab_bilinear(preX_accum, H_plane_to_img[z], *preX_slab_it);
@@ -2047,8 +2047,8 @@ bool bvxm_voxel_world::virtual_view(bvxm_image_metadata const& original_view,
     // project visX_accum from image to virtual image
     bvxm_util::warp_slab_bilinear(visX_accum, H_virtual_img_to_img[z], visX_accum_virtual_proj);
 #ifdef BVXM_DEBUG
-    bvxm_util::write_slab_as_image(visX_accum,"c:/research/registration/output/visX_accum.tiff");
-    bvxm_util::write_slab_as_image(visX_accum_virtual,"c:/research/registration/output/visX_accum_virtual.tiff");
+    bvxm_util::write_slab_as_image(visX_accum,"C:/research/registration/output/visX_accum.tiff");
+    bvxm_util::write_slab_as_image(visX_accum_virtual,"C:/research/registration/output/visX_accum_virtual.tiff");
 #endif
     // project slice probabilities into virtual camera
     bvxm_voxel_slab<float> slice_prob_vimg(virtual_view->ni(),virtual_view->nj(),1);
@@ -2077,7 +2077,7 @@ bool bvxm_voxel_world::virtual_view(bvxm_image_metadata const& original_view,
       *visX_accum_it *= (1.0f - *PX_it);
     }
 #ifdef  BVXM_DEBUG
-    bvxm_util::write_slab_as_image(visX_accum,"c:/research/registration/output/visX_accum.tiff");
+    bvxm_util::write_slab_as_image(visX_accum,"C:/research/registration/output/visX_accum.tiff");
 #endif
   }
   vcl_cout << vcl_endl;
@@ -2246,8 +2246,8 @@ bool bvxm_voxel_world::heightmap(bvxm_image_metadata const& virtual_camera, vil_
   vil_threshold_above(*conf_img,conf_mask,conf_thresh);
 
 #ifdef HMAP_DEBUG
-  vil_save(*conf_img,"c:/research/registration/output/heightmap_conf.tiff");
-  vil_save(heightmap_med_img,"c:/research/registration/output/heightmap_med.tiff");
+  vil_save(*conf_img,"C:/research/registration/output/heightmap_conf.tiff");
+  vil_save(heightmap_med_img,"C:/research/registration/output/heightmap_med.tiff");
 #endif
 
   // initialize with rough heightmap
@@ -2278,7 +2278,7 @@ bool bvxm_voxel_world::heightmap(bvxm_image_metadata const& virtual_camera, vil_
   vil_median(heightmap_filtered_img,heightmap_filtered_med,strel);
 
 #ifdef HMAP_DEBUG
-  vil_save(heightmap_filtered_med,"c:/research/registration/output/heightmap_filtered.tiff");
+  vil_save(heightmap_filtered_med,"C:/research/registration/output/heightmap_filtered.tiff");
 #endif
 
   // convert back to unsigned

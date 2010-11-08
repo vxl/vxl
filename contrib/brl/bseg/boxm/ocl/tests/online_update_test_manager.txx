@@ -82,7 +82,9 @@ build_program(vcl_string const& functor, bool use_cell_data)
     if (!n2)
       return false;
     this->prog_ = this->prog_.replace(pos_start, n1, functor.c_str(), n2);
-    //write_program("c:/mundy/local-software/junk.cl");
+#if 0
+    write_program("C:/temp/junk.cl");
+#endif
     return this->build_kernel_program(program_)==SDK_SUCCESS;
   }
   return false;
@@ -595,10 +597,10 @@ void online_update_test_manager<T>::save_image()
       img3(i,j)=image_[(j*this->wni_+i)*4+3];
 
 
-  vil_save(img0,"f:/APL/img0.tiff");
-  vil_save(img1,"f:/APL/img1.tiff");
-  vil_save(img2,"f:/APL/img2.tiff");
-  vil_save(img3,"f:/APL/img3.tiff");
+  vil_save(img0,"F:/APL/img0.tiff");
+  vil_save(img1,"F:/APL/img1.tiff");
+  vil_save(img2,"F:/APL/img2.tiff");
+  vil_save(img3,"F:/APL/img3.tiff");
 }
 
 template<class T>

@@ -100,7 +100,7 @@ vpgl_rational_camera<double> construct_rational_camera()
 #if 0
 vpgl_rational_camera<double> read_rational_camera()
 {
-  vcl_string path = "c:/mundy/local-software/VXL/rational_camera/06MAR27155829-S2AS-005580823020_01_P001.RPB";
+  vcl_string path = "C:/images/calibration/rational_camera/06MAR27155829-S2AS-005580823020_01_P001.RPB";
   vpgl_rational_camera<double> rat_cam(path);
   return rat_cam;
 }

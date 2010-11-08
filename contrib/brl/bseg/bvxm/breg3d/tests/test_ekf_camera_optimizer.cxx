@@ -63,7 +63,7 @@ static void test_ekf_camera_optimizer()
       // just make some squares of constant color
       else if ( (i > 10) && (i < 90) && (j > 10) && (j < 90) ) {
         plane_img(i,j) = 0.7f;
-      } 
+      }
       else if ((i > 110) && (i < 190) && (j > 10) && (j < 90) ) {
         plane_img(i,j) = 0.5f;
       }
@@ -93,7 +93,7 @@ static void test_ekf_camera_optimizer()
   bvxm_voxel_grid<mog_type> *apm_grid = dynamic_cast<bvxm_voxel_grid<mog_type>*>(apm_base.ptr());
   // initialize the appearance model data to get rid of any previous data on disk
   apm_grid->initialize_data(bvxm_voxel_traits<APM_MOG_GREY>::initial_val());
-  
+
   bvxm_voxel_grid<mog_type>::iterator apm_it = apm_grid->begin();
   for (; apm_it != apm_grid->end(); ++apm_it) {
     apm_processor.update(*apm_it, plane_img, ones);
@@ -135,28 +135,28 @@ static void test_ekf_camera_optimizer()
   vox_world->expected_image<APM_MOG_GREY>(meta2,img2,mask);
 
   // debug: write out images
-  vil_save(*img0,"c:/research/registration/output/expected0.tiff");
-  vil_save(*img1,"c:/research/registration/output/expected1.tiff");
-  vil_save(*img2,"c:/research/registration/output/expected2.tiff");
+  vil_save(*img0,"C:/research/registration/output/expected0.tiff");
+  vil_save(*img1,"C:/research/registration/output/expected1.tiff");
+  vil_save(*img2,"C:/research/registration/output/expected2.tiff");
 
   // create a camera optimizer
   breg3d_ekf_camera_optimizer_state init_state(1e-3,center0,rot0,0.1,0.1);
   breg3d_ekf_camera_optimizer optimizer(20.0,20.0,0.01,0.01,0.01,0.01,false,true,false);
 
   bvxm_image_metadata img1_meta(img1,cam1);
-  breg3d_ekf_camera_optimizer_state end_state = 
+  breg3d_ekf_camera_optimizer_state end_state =
     optimizer.optimize(vox_world,img0,img1_meta,init_state);
 
   vgl_point_3d<double> center1_est = end_state.get_point();
   vgl_rotation_3d<double> rot1_est = end_state.get_rotation();
 
-  vcl_cout << "camera0 center   : " << center0 << vcl_endl;
-  vcl_cout << "camera0 rotation : " << vcl_endl << rot0.as_rodrigues() << vcl_endl;
-  vcl_cout << "camera1 center   : " << center1 << vcl_endl;
-  vcl_cout << "camera1 rotation : " << vcl_endl << rot1.as_rodrigues() << vcl_endl;
-  vcl_cout << "est. center      : " << center1_est << vcl_endl;
-  vcl_cout << "est. rotation    : " << vcl_endl << rot1_est.as_rodrigues() << vcl_endl;
-  
+  vcl_cout << "camera0 center   : " << center0 << vcl_endl
+           << "camera0 rotation : " << vcl_endl << rot0.as_rodrigues() << vcl_endl
+           << "camera1 center   : " << center1 << vcl_endl
+           << "camera1 rotation : " << vcl_endl << rot1.as_rodrigues() << vcl_endl
+           << "est. center      : " << center1_est << vcl_endl
+           << "est. rotation    : " << vcl_endl << rot1_est.as_rodrigues() << vcl_endl;
+
   vgl_vector_3d<double> center_off = center1_est - center1;
   vgl_rotation_3d<double> rot_off(rot1_est.as_rodrigues() - rot1.as_rodrigues());
 
@@ -172,13 +172,13 @@ static void test_ekf_camera_optimizer()
   vgl_point_3d<double> center2_est = end_state.get_point();
   vgl_rotation_3d<double> rot2_est = end_state.get_rotation();
 
-  vcl_cout << "camera1 center   : " << center1 << vcl_endl;
-  vcl_cout << "camera1 rotation : " << vcl_endl << rot1.as_rodrigues() << vcl_endl;
-  vcl_cout << "camera2 center   : " << center2 << vcl_endl;
-  vcl_cout << "camera2 rotation : " << vcl_endl << rot2.as_rodrigues() << vcl_endl;
-  vcl_cout << "est. center      : " << center2_est << vcl_endl;
-  vcl_cout << "est. rotation    : " << vcl_endl << rot2_est.as_rodrigues() << vcl_endl;
-  
+  vcl_cout << "camera1 center   : " << center1 << vcl_endl
+           << "camera1 rotation : " << vcl_endl << rot1.as_rodrigues() << vcl_endl
+           << "camera2 center   : " << center2 << vcl_endl
+           << "camera2 rotation : " << vcl_endl << rot2.as_rodrigues() << vcl_endl
+           << "est. center      : " << center2_est << vcl_endl
+           << "est. rotation    : " << vcl_endl << rot2_est.as_rodrigues() << vcl_endl;
+
   center_off = center2_est - center2;
   rot_off = vgl_rotation_3d<double>(rot2_est.as_rodrigues() - rot2.as_rodrigues());
 
@@ -187,7 +187,6 @@ static void test_ekf_camera_optimizer()
 
   return;
 }
-
 
 
 TESTMAIN( test_ekf_camera_optimizer );

@@ -86,7 +86,6 @@ class boxm_generate_opt_sample_functor_pass_2
   vil_image_view<typename boxm_apm_traits<APM>::obs_datatype> const& obs_;
   vil_image_view<float> const& Beta_denom_;
 
-  //vil_image_view<float> const& pre_inf_;
   vil_image_view<float> vis_img_;
   vil_image_view<float> pre_img_;
   vil_image_view<float> alpha_integral_;
@@ -122,7 +121,7 @@ void boxm_generate_opt_sample_rt(boxm_scene<boct_tree<T_loc, T_data > > &scene,
     if (black_background) {
         vcl_cout << "using black background model" << vcl_endl;
         typename T_data::obs_datatype black(0.0f);
-        float background_std_dev = 8.0f/255;//???????????? 4/255 Vishal's
+        float background_std_dev = 8.0f/255; // ???????????? 4/255 Vishal's
         typename T_data::apm_datatype background_apm(black, background_std_dev*background_std_dev,1.0f);
 
         float peak=T_data::apm_processor::expected_color(background_apm);
@@ -141,11 +140,11 @@ void boxm_generate_opt_sample_rt(boxm_scene<boct_tree<T_loc, T_data > > &scene,
     vil_math_image_product<float,float,float>(vis_inf,PI_inf,inf_term);
     vil_image_view<float> Beta_denom_img(obs.ni(), obs.nj());
     vil_math_image_sum<float,float,float>(pre_inf,inf_term,Beta_denom_img);
-#if 0
-    vil_save(vis_inf, "e:\\tests\\capitol\\vis_inf.tiff");
-    vil_save(pre_inf, "e:\\tests\\capitol\\pre_inf.tiff");
-    vil_save(Beta_denom_img, "e:\\tests\\capitol\\Beta_denom_img.tiff");
-    vil_save(pass_1_functor.alpha_integral_, "e:\\tests\\capitol\\alpha_integr.tiff");
+#ifdef DEBUG
+    vil_save(vis_inf, "E:/tests/capitol/vis_inf.tiff");
+    vil_save(pre_inf, "E:/tests/capitol/pre_inf.tiff");
+    vil_save(Beta_denom_img, "E:/tests/capitol/Beta_denom_img.tiff");
+    vil_save(pass_1_functor.alpha_integral_, "E:/tests/capitol/alpha_integr.tiff");
 #endif
     vcl_cout<<"PASS 2"<<vcl_endl;
     typedef boxm_generate_opt_sample_functor_pass_2<T_data::apm_type, sample_datatype> pass_2;
@@ -153,7 +152,9 @@ void boxm_generate_opt_sample_rt(boxm_scene<boct_tree<T_loc, T_data > > &scene,
     pass_2 pass_2_functor(obs,Beta_denom_img);
     raytracer_2.run(pass_2_functor);
 
-    //aux_scene.clean_scene();
+#if 0
+    aux_scene.clean_scene();
+#endif
     vcl_cout<<"DONE."<<vcl_endl;
 }
 

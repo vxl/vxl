@@ -148,13 +148,13 @@ void boxm_generate_opt3_sample(boxm_scene<boct_tree<T_loc, T_data > > &scene,
 {
   typedef boxm_opt3_sample<boxm_aux_traits<AUX_T>::APM_TYPE> aux_sample_datatype;
   boxm_aux_scene<T_loc, T_data, aux_sample_datatype> aux_scene(&scene, image_id, boxm_aux_scene<T_loc, T_data, aux_sample_datatype>::CLONE);
-
-  //typedef boxm_seg_length_functor<T_data::apm_type,sample_datatype>  pass_0;
-  //boxm_raytrace_function<pass_0,T_loc, T_data, sample_datatype> raytracer_0(scene,aux_scene,cam.ptr(),obs.ni(),obs.nj());
-  //vcl_cout<<"PASS 0"<<vcl_endl;
-  //pass_0 pass_0_functor(obs,obs.ni(),obs.nj());
-  //raytracer_0.run(pass_0_functor);
-
+#if 0
+  typedef boxm_seg_length_functor<T_data::apm_type,sample_datatype>  pass_0;
+  boxm_raytrace_function<pass_0,T_loc, T_data, sample_datatype> raytracer_0(scene,aux_scene,cam.ptr(),obs.ni(),obs.nj());
+  vcl_cout<<"PASS 0"<<vcl_endl;
+  pass_0 pass_0_functor(obs,obs.ni(),obs.nj());
+  raytracer_0.run(pass_0_functor);
+#endif
   vil_image_view<float> pre_inf(obs.ni(),obs.nj(),1);
   vil_image_view<float> vis_inf(obs.ni(),obs.nj(),1);
 
@@ -176,9 +176,10 @@ void boxm_generate_opt3_sample(boxm_scene<boct_tree<T_loc, T_data > > &scene,
     typename T_data::obs_mathtype black(0);
     const float black_std_dev = 8.0f/255;
     const gauss_type appearance_dist(black, black_std_dev);
-
-    //float peak=T_data::apm_processor::expected_color(background_apm);
-    //vcl_cout<<"Peak: "<<peak<<vcl_endl;
+#if 0
+    float peak=T_data::apm_processor::expected_color(background_apm);
+    vcl_cout<<"Peak: "<<peak<<vcl_endl;
+#endif
     typename vil_image_view<typename T_data::obs_datatype>::const_iterator img_it = obs.begin();
     typename vil_image_view<float>::iterator PI_it = PI_inf.begin();
     for (; img_it != obs.end(); ++img_it, ++PI_it) {
@@ -194,11 +195,11 @@ void boxm_generate_opt3_sample(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   }
   vil_math_image_sum<float,float,float>(pre_inf,inf_term,beta_denom_img);
 
-#if 0
-  vil_save(vis_inf, "e:\\tests\\capitol\\vis_inf.tiff");
-  vil_save(pre_inf, "e:\\tests\\capitol\\pre_inf.tiff");
-  vil_save(beta_denom_img, "e:\\tests\\capitol\\beta_denom_img.tiff");
-  vil_save(pass_1_functor.alpha_integral_, "e:\\tests\\capitol\\alpha_integr.tiff");
+#ifdef DEBUG
+  vil_save(vis_inf, "E:/tests/capitol/vis_inf.tiff");
+  vil_save(pre_inf, "E:/tests/capitol/pre_inf.tiff");
+  vil_save(beta_denom_img, "E:/tests/capitol/beta_denom_img.tiff");
+  vil_save(pass_1_functor.alpha_integral_, "E:/tests/capitol/alpha_integr.tiff");
 #endif
 
   vcl_cout<<"PASS 2"<<vcl_endl;
@@ -206,8 +207,9 @@ void boxm_generate_opt3_sample(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   boxm_raytrace_function<pass_2_functor_t, T_loc, T_data, aux_sample_datatype> raytracer_2(scene,aux_scene,cam.ptr(),obs.ni(),obs.nj());
   pass_2_functor_t pass_2_functor(obs, beta_denom_img);
   raytracer_2.run(pass_2_functor);
-
-  //aux_scene.clean_scene();
+#if 0
+  aux_scene.clean_scene();
+#endif
   vcl_cout<<"DONE."<<vcl_endl;
 }
 

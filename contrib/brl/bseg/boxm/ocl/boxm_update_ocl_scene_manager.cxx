@@ -892,10 +892,10 @@ void boxm_update_ocl_scene_manager::save_image()
       img3(i,j)=image_[(j*this->wni_+i)*4+3];
 
 
-  vil_save(img0,"f:/APL/img0.tiff");
-  vil_save(img1,"f:/APL/img1.tiff");
-  vil_save(img2,"f:/APL/img2.tiff");
-  vil_save(img3,"f:/APL/img3.tiff");
+  vil_save(img0,"F:/APL/img0.tiff");
+  vil_save(img1,"F:/APL/img1.tiff");
+  vil_save(img2,"F:/APL/img2.tiff");
+  vil_save(img3,"F:/APL/img3.tiff");
 }
 
 bool boxm_update_ocl_scene_manager::read_output_image()

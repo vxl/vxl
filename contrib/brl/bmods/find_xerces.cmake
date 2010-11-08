@@ -6,7 +6,7 @@
 #
 
 FIND_PATH(XERCES_BXML_INCLUDE_PATH dom/DOM.hpp
-          c:/TargetJr/xerces-c-src1_4_0/include
+          ${vxl_SOURCE_DIR}/../xerces-c-src1_4_0/include
           /usr/local/xerces-c-src1_4_0/include
           ${vxl_SOURCE_DIR}/v3p/xerces-c-src1_4_0/include
 )

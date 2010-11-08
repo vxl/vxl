@@ -117,8 +117,8 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, T_data > > &scene,
             // get probability density of mean observation
             float cell_PI = T_data::apm_processor::prob_density(sample.appearance(bin), cell_mean_obs);
             if (!((cell_PI >= 0) && (cell_PI < 1e8)) ) {
-              vcl_cout << vcl_endl << "cell_PI = " << cell_PI << vcl_endl
-                       << "  cell_obs = " << cell_mean_obs << vcl_endl
+              vcl_cout << "\ncell_PI = " << cell_PI << '\n'
+                       << "  cell_obs = " << cell_mean_obs << '\n'
                        << "  cell id = " << *cell_it << vcl_endl;
             }
             // fill obs probability density image
@@ -142,7 +142,7 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, T_data > > &scene,
 #if 0
         if (cnt == 70) {
           vcl_cout << "saving debug images" << vcl_endl;
-          vcl_string output_dir = "d:/vj/scripts/boxm/exp1/";
+          vcl_string output_dir = "D:/vj/scripts/boxm/exp1/";
           vil_save(len_seg,(output_dir + "len_seg.tiff").c_str());
           vil_save(alphas,(output_dir + "alphas.tiff").c_str());
           vil_save(alpha_integral,(output_dir + "alpha_integral.tiff").c_str());
@@ -259,8 +259,8 @@ void boxm_update_pass2(boxm_scene<boct_tree<T_loc, T_data > > &scene,
             float cell_PI = T_data::apm_processor::prob_density(sample.appearance(bin), cell_mean_obs);
 #if 0
             if (!((cell_PI >= 0) && (cell_PI < 1e8)) ) {
-              vcl_cout << vcl_endl << "cell_PI = " << cell_PI << vcl_endl
-                       << "  cell_obs = " << cell_mean_obs << vcl_endl
+              vcl_cout << "\ncell_PI = " << cell_PI << '\n'
+                       << "  cell_obs = " << cell_mean_obs << '\n'
                        << "  cell id = " << *cell_it << vcl_endl;
             }
 #endif // 0
@@ -361,7 +361,7 @@ void boxm_update(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   vil_image_view<float> norm_img(img.ni(), img.nj(), 1);
   boxm_update_pass1<T_loc,T_data>(scene, cam,img,norm_img,background_apm,bin);
   vcl_cout << "update: pass1 completed" << vcl_endl;
-  vil_save(norm_img,"d:/vj/scripts/boxm/exp1/norm.tiff");
+  vil_save(norm_img,"D:/vj/scripts/boxm/exp1/norm.tiff");
   boxm_update_pass2<T_loc,T_data>(scene, cam,img,norm_img,bin);
   vcl_cout << "update: pass2 completed" << vcl_endl;
 

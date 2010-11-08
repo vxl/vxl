@@ -11,7 +11,7 @@ class dbvalue:
 #first creat an empty world.
 print("Load Voxel World");
 bvpl_batch.init_process("bvxmLoadGridProcess");
-bvpl_batch.set_input_string(0,"d:/vj/scripts/Lidar_edges/ocp_200_100_0_250_200_100.vox");
+bvpl_batch.set_input_string(0,"D:/vj/scripts/Lidar_edges/ocp_200_100_0_250_200_100.vox");
 bvpl_batch.set_input_string(1,"float");
 bvpl_batch.run_process();
 (world_id,world_type)= bvpl_batch.commit_output(0);
@@ -30,7 +30,7 @@ bvpl_batch.set_input_from_db(0,world );
 bvpl_batch.set_input_from_db(1,kernel);
 bvpl_batch.set_input_string(2,"float");
 bvpl_batch.set_input_string(3,"edge2d");
-bvpl_batch.set_input_string(4,"d:/vj/scripts/Lidar_edges/x_conv.vox");
+bvpl_batch.set_input_string(4,"D:/vj/scripts/Lidar_edges/x_conv.vox");
 bvpl_batch.run_process();
 (result_x_world_id,result_x_world_type)= bvpl_batch.commit_output(0);
 result_x_world = dbvalue(result_x_world_id,result_x_world_type);
@@ -39,9 +39,7 @@ result_x_world = dbvalue(result_x_world_id,result_x_world_type);
 print("Writing World");
 bvpl_batch.init_process("bvxmSaveGridRawProcess");
 bvpl_batch.set_input_from_db(0,result_x_world);
-bvpl_batch.set_input_string(1,"d:/vj/scripts/Lidar_edges/x_crop_world.raw");
+bvpl_batch.set_input_string(1,"D:/vj/scripts/Lidar_edges/x_crop_world.raw");
 bvpl_batch.set_input_string(2,"float");
 bvpl_batch.run_process();
-
-
 

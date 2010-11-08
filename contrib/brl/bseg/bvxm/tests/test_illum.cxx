@@ -11,7 +11,7 @@ static void test_illum()
   START("bvxm illum utilities test");
 #if 0
   vcl_vector<vcl_vector<vnl_matrix<float> > > nhds;
-  bool good = bvxm_illum_util::load_surface_nhbds("e:/BaghdadIlum/white-side.txt",
+  bool good = bvxm_illum_util::load_surface_nhbds("E:/BaghdadIlum/white-side.txt",
                                                   nhds);
   // assume that each surface point has the same number of neighborhoods
   unsigned n_images = nhds[0].size();
@@ -33,7 +33,7 @@ static void test_illum()
   }
 #endif
 #if 0
-  vsl_b_ifstream is("e:/BaghdadIlum/bag_hists.vsl");
+  vsl_b_ifstream is("E:/BaghdadIlum/bag_hists.vsl");
   if (!is)
     return;
   unsigned n = 0;
@@ -82,7 +82,7 @@ static void test_illum()
   };
   vcl_vector<vnl_double_3> illumination_dirs(ill_dirs, ill_dirs+16);
 #if 0
-  bvxm_illum_util::load_illumination_dirs("c:/vxl/vxl/contrib/brl/bseg/bvxm/tests/illum_dirs.txt", illumination_dirs);
+  bvxm_illum_util::load_illumination_dirs("illum_dirs.txt", illumination_dirs);
 #endif
   vnl_double_4 model_params;
   double fitting_error;

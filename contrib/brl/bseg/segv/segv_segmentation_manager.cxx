@@ -504,7 +504,7 @@ void segv_segmentation_manager::gaussian()
 void segv_segmentation_manager::convolution()
 {
   vgui_dialog kernel_dlg("Load Kernel");
-  static vcl_string kernel_filename = "c:/images";
+  static vcl_string kernel_filename = "C:/images";
   static vcl_string ext = "*.*";
   kernel_dlg.file("Kernel Filename:", ext, kernel_filename);
   if (!kernel_dlg.ask())
@@ -1157,7 +1157,7 @@ void segv_segmentation_manager::compute_background_info()
     return;
   }
   static strk_region_info_params rip;
-  vgui_dialog bf_dialog("Background/Forground Entropy");
+  vgui_dialog bf_dialog("Background/Foreground Entropy");
   bf_dialog.field("Min Gradient Magnitude", rip.min_gradient_);
   bf_dialog.field("Parzen Sigma", rip.parzen_sigma_);
   bf_dialog.checkbox("Add Gradient Info", rip.gradient_info_);

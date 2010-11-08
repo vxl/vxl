@@ -784,7 +784,6 @@ void boxm_re_render_ocl_scene_manager::save_image()
   vil_image_view<float> img2(this->wni_,this->wnj_);
   vil_image_view<float> img3(this->wni_,this->wnj_);
 
-
   for (unsigned j=0;j<this->wnj_;j++)
     for (unsigned i=0;i<this->wni_;i++)
       img0(i,j)=image_[(j*this->wni_+i)*4];
@@ -798,11 +797,10 @@ void boxm_re_render_ocl_scene_manager::save_image()
     for (unsigned i=0;i<this->wni_;i++)
       img3(i,j)=image_[(j*this->wni_+i)*4+3];
 
-
-  vil_save(img0,"d:/img0.tiff");
-  vil_save(img1,"d:/img1.tiff");
-  vil_save(img2,"d:/img2.tiff");
-  vil_save(img3,"d:/img3.tiff");
+  vil_save(img0,"D:/img0.tiff");
+  vil_save(img1,"D:/img1.tiff");
+  vil_save(img2,"D:/img2.tiff");
+  vil_save(img3,"D:/img3.tiff");
 }
 
 bool boxm_re_render_ocl_scene_manager::read_output_image()

@@ -640,7 +640,7 @@ bool bvxm_voxel_world::heightmap(vpgl_camera_double_sptr virtual_camera, vil_ima
 
 #define HMAP_DEBUG
 #ifdef  HMAP_DEBUG
-  bvxm_util::write_slab_as_image(heightmap_rough,"c:/research/registration/output/heightmap_rough.tiff");
+  bvxm_util::write_slab_as_image(heightmap_rough,"C:/research/registration/output/heightmap_rough.tiff");
 #endif
   // now clean up height map
   unsigned n_smooth_iterations = 70;
@@ -677,8 +677,8 @@ bool bvxm_voxel_world::heightmap(vpgl_camera_double_sptr virtual_camera, vil_ima
   vil_threshold_above(*conf_img,conf_mask,conf_thresh);
 
 #ifdef HMAP_DEBUG
-  vil_save(*conf_img,"c:/research/registration/output/heightmap_conf.tiff");
-  vil_save(heightmap_med_img,"c:/research/registration/output/heightmap_med.tiff");
+  vil_save(*conf_img,"C:/research/registration/output/heightmap_conf.tiff");
+  vil_save(heightmap_med_img,"C:/research/registration/output/heightmap_med.tiff");
 #endif
 
   // initialize with rough heightmap
@@ -709,7 +709,7 @@ bool bvxm_voxel_world::heightmap(vpgl_camera_double_sptr virtual_camera, vil_ima
   vil_median(heightmap_filtered_img,heightmap_filtered_med,strel);
 
 #ifdef HMAP_DEBUG
-  vil_save(heightmap_filtered_med,"c:/research/registration/output/heightmap_filtered.tiff");
+  vil_save(heightmap_filtered_med,"C:/research/registration/output/heightmap_filtered.tiff");
 #endif
 
   // convert back to unsigned

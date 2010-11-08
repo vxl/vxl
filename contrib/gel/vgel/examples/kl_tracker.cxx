@@ -20,9 +20,9 @@ int main( int argc, char **argv)
   if (argc < 4)
     vcl_cerr << "Warning: you should give three image file names as command line arguments\n";
 
-  vcl_string file0 = (argc > 1) ? argv[1] : "c:/geoff/images/skull/a.000.jpg";
-  vcl_string file1 = (argc > 2) ? argv[2] : "c:/geoff/images/skull/a.001.jpg";
-  vcl_string file2 = (argc > 3) ? argv[3] : "c:/geoff/images/skull/a.002.jpg";
+  vcl_string file0 = (argc > 1) ? argv[1] : "C:/images/skull/a.000.jpg";
+  vcl_string file1 = (argc > 2) ? argv[2] : "C:/images/skull/a.001.jpg";
+  vcl_string file2 = (argc > 3) ? argv[3] : "C:/images/skull/a.002.jpg";
 
   vil_image_resource_sptr im0= vil_load_image_resource(file0.c_str());
   vil_image_resource_sptr im1= vil_load_image_resource(file1.c_str());
@@ -49,9 +49,9 @@ int main( int argc, char **argv)
   matched_points->get( 1,pts2);
   matched_points->get( 2,pts3);
 
-  vcl_cerr << pts1.size() << " "
-           << pts2.size() << " "
-           << pts3.size() << vcl_endl;
+  vcl_cerr << pts1.size() << ' '
+           << pts2.size() << ' '
+           << pts3.size() << '\n';
 
   return 0;
 }

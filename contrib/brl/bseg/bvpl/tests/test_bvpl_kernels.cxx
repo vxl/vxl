@@ -72,7 +72,7 @@ bool test_edge3d()
 #if 0
     vcl_ostringstream s;
     s.precision(2);
-    s << "d:/vj/scripts/Lidar_edges/test_masks/"
+    s << "D:/vj/scripts/Lidar_edges/test_masks/"
       << axis[0] << '_'
       << axis[1] << '_'
       << axis[2] << ".raw";
