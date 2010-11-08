@@ -43,13 +43,13 @@ class vgl_rotation_3d
   vgl_rotation_3d() : q_(0,0,0,1) {}
 
   //: Construct from a quaternion.
-  vgl_rotation_3d( const vnl_quaternion<T>& q ) : q_(q) { q_.normalize(); }
+  vgl_rotation_3d( vnl_quaternion<T> const& q ) : q_(q) { q_.normalize(); }
 
   //: Construct from Euler angles.
-  vgl_rotation_3d( const T& rx, const T& ry, const T& rz ) : q_(rx,ry,rz) {}
+  vgl_rotation_3d( T const& rx, T const& ry, T const& rz ) : q_(rx,ry,rz) {}
 
   //: Construct from a Rodrigues vector.
-  explicit vgl_rotation_3d( const vnl_vector_fixed<T,3>& rvector )
+  explicit vgl_rotation_3d( vnl_vector_fixed<T,3> const& rvector )
   {
     T mag = rvector.magnitude();
     if (mag > T(0))
@@ -58,18 +58,37 @@ class vgl_rotation_3d
       q_ = vnl_quaternion<T>(0,0,0,1);
   }
 
+  //: Construct from a Rodrigues vector.
+  vgl_rotation_3d& operator=( vnl_vector_fixed<T,3> const& rvector )
+  {
+    T mag = rvector.magnitude();
+    if (mag > T(0))
+      q_ = vnl_quaternion<T>(rvector/mag,mag);
+    else // identity rotation is a special case
+      q_ = vnl_quaternion<T>(0,0,0,1);
+    return *this;
+  }
+
   //: Construct from a 3x3 rotation matrix
-  explicit vgl_rotation_3d( const vnl_matrix_fixed<T,3,3>& matrix )
+  explicit vgl_rotation_3d( vnl_matrix_fixed<T,3,3> const& matrix )
     : q_(matrix.transpose()) {}
 
+  //: Construct from a 3x3 rotation matrix
+  vgl_rotation_3d& operator=( vnl_matrix_fixed<T,3,3> const& matrix )
+  { q_ = matrix.transpose(); return *this; }
+
   //: Construct from a vgl_h_matrix_3d.
-  explicit vgl_rotation_3d( const vgl_h_matrix_3d<T>& h )
+  explicit vgl_rotation_3d( vgl_h_matrix_3d<T> const& h )
     : q_(h.get_upper_3x3_matrix().transpose()) { assert(h.is_rotation()); }
+
+  //: Construct from a vgl_h_matrix_3d.
+  vgl_rotation_3d& operator=( vgl_h_matrix_3d<T> const& h )
+  { assert(h.is_rotation()); q_ = h.get_upper_3x3_matrix().transpose(); return *this; }
 
   //: Construct to rotate (direction of) vector a to vector b
   //  The input vectors need not be of unit length
-  vgl_rotation_3d(const vnl_vector_fixed<T,3>& a,
-                  const vnl_vector_fixed<T,3>& b)
+  vgl_rotation_3d(vnl_vector_fixed<T,3> const& a,
+                  vnl_vector_fixed<T,3> const& b)
   {
     vnl_vector_fixed<T,3> c = vnl_cross_3d(a, b);
     double aa = 0.0; if (dot_product(a, b) < 0) { aa = vnl_math::pi; c=-c; }
@@ -105,8 +124,8 @@ class vgl_rotation_3d
 
   //: Construct to rotate (direction of) vector a to vector b
   //  The input vectors need not be of unit length
-  explicit vgl_rotation_3d(const vgl_vector_3d<T>& a,
-                           const vgl_vector_3d<T>& b)
+  vgl_rotation_3d(vgl_vector_3d<T> const& a,
+                  vgl_vector_3d<T> const& b)
   {
     vnl_vector_fixed<T,3> na(a.x(), a.y(), a.z());
     vnl_vector_fixed<T,3> nb(b.x(), b.y(), b.z());
@@ -172,69 +191,69 @@ class vgl_rotation_3d
   vgl_rotation_3d<T> transpose() const { return this->inverse(); }
 
   //: Composition of two rotations.
-  vgl_rotation_3d<T> operator*( const vgl_rotation_3d<T>& first_rotation ) const
+  vgl_rotation_3d<T> operator*( vgl_rotation_3d<T> const& first_rotation ) const
   {
     return vgl_rotation_3d<T>( q_*first_rotation.q_ );
   }
 
   //: Rotate a homogeneous point.
-  vgl_homg_point_3d<T> operator*( const vgl_homg_point_3d<T>& p ) const
+  vgl_homg_point_3d<T> operator*( vgl_homg_point_3d<T> const& p ) const
   {
     vnl_vector_fixed<T,3> rp = q_.rotate(vnl_vector_fixed<T,3>(p.x(),p.y(),p.z()));
     return vgl_homg_point_3d<T>(rp[0],rp[1],rp[2],p.w());
   }
 
   //: Rotate a homogeneous plane.
-  vgl_homg_plane_3d<T> operator*( const vgl_homg_plane_3d<T>& p ) const
+  vgl_homg_plane_3d<T> operator*( vgl_homg_plane_3d<T> const& p ) const
   {
     vnl_vector_fixed<T,3> rp = q_.rotate(vnl_vector_fixed<T,3>(p.a(),p.b(),p.c()));
     return vgl_homg_plane_3d<T>(rp[0],rp[1],rp[2],p.d());
   }
 
   //: Rotate a homogeneous line.
-  vgl_homg_line_3d_2_points<T> operator*( const vgl_homg_line_3d_2_points<T>& l ) const
+  vgl_homg_line_3d_2_points<T> operator*( vgl_homg_line_3d_2_points<T> const& l ) const
   {
     return vgl_homg_line_3d_2_points<T>(this->operator*(l.point_finite()),
                                         this->operator*(l.point_infinite()));
   }
 
   //: Rotate a point.
-  vgl_point_3d<T> operator*( const vgl_point_3d<T>& p ) const
+  vgl_point_3d<T> operator*( vgl_point_3d<T> const& p ) const
   {
     vnl_vector_fixed<T,3> rp = q_.rotate(vnl_vector_fixed<T,3>(p.x(),p.y(),p.z()));
     return vgl_point_3d<T>(rp[0],rp[1],rp[2]);
   }
 
   //: Rotate a plane.
-  vgl_plane_3d<T> operator*( const vgl_plane_3d<T>& p ) const
+  vgl_plane_3d<T> operator*( vgl_plane_3d<T> const& p ) const
   {
     vnl_vector_fixed<T,3> rp = q_.rotate(vnl_vector_fixed<T,3>(p.a(),p.b(),p.c()));
     return vgl_plane_3d<T>(rp[0],rp[1],rp[2],p.d());
   }
 
   //: Rotate a line.
-  vgl_line_3d_2_points<T> operator*( const vgl_line_3d_2_points<T>& l ) const
+  vgl_line_3d_2_points<T> operator*( vgl_line_3d_2_points<T> const& l ) const
   {
     return vgl_line_3d_2_points<T>(this->operator*(l.point1()),
                                    this->operator*(l.point2()));
   }
 
   //: Rotate a line segment.
-  vgl_line_segment_3d<T> operator*( const vgl_line_segment_3d<T>& l ) const
+  vgl_line_segment_3d<T> operator*( vgl_line_segment_3d<T> const& l ) const
   {
     return vgl_line_segment_3d<T>(this->operator*(l.point1()),
                                   this->operator*(l.point2()));
   }
 
   //: Rotate a vgl vector.
-  vgl_vector_3d<T> operator*( const vgl_vector_3d<T>& v ) const
+  vgl_vector_3d<T> operator*( vgl_vector_3d<T> const& v ) const
   {
     vnl_vector_fixed<T,3> rv = q_.rotate(vnl_vector_fixed<T,3>(v.x(),v.y(),v.z()));
     return vgl_vector_3d<T>(rv[0],rv[1],rv[2]);
   }
 
   //: Rotate a vnl vector.
-  vnl_vector_fixed<T, 3> operator*( const vnl_vector_fixed<T,3>& v ) const
+  vnl_vector_fixed<T, 3> operator*( vnl_vector_fixed<T,3> const& v ) const
   {
     return q_.rotate(v);
   }
@@ -263,7 +282,7 @@ vcl_ostream& operator<<(vcl_ostream& s, vgl_rotation_3d<T> const& R)
 //: In-place rotation of a vector of homogeneous points
 // \note This is more efficient than calling vgl_rotation_3d::rotate() on each
 template <class T> inline
-void vgl_rotate_3d(const vgl_rotation_3d<T>& rot, vcl_vector<vgl_homg_point_3d<T> >& pts)
+void vgl_rotate_3d(vgl_rotation_3d<T> const& rot, vcl_vector<vgl_homg_point_3d<T> >& pts)
 {
   vnl_matrix_fixed<T,3,3> R = rot.as_3matrix();
   for (typename vcl_vector<vgl_homg_point_3d<T> >::iterator itr = pts.begin();
