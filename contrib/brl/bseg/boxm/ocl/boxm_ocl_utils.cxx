@@ -414,7 +414,6 @@ void boxm_ocl_utils::compare_bit_scenes(boxm_ocl_bit_scene* one, boxm_ocl_bit_sc
   int numVoxels = blocks_.get_row1_count()*blocks_.get_row2_count()*blocks_.get_row3_count() * 8*8*8;
   vcl_cout<<"Theoretical Number of Voxels: "<<numVoxels<<vcl_endl
           <<"==============================================\n"<<vcl_endl;
-#endif // 0
 
   //probe zero alpha values
   int zeroCells=0;
