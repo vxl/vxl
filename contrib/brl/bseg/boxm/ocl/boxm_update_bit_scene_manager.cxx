@@ -1109,9 +1109,9 @@ bool boxm_update_bit_scene_manager::set_refine_args()
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output)"))
     return false;
   ////cum sum lookup buffer
-  //status = clSetKernelArg(refine_kernel_,i++,10*64*sizeof(cl_uchar), 0);
-  //if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cumsum buff)"))
-    //return false;
+  status = clSetKernelArg(refine_kernel_,i++,16*sizeof(cl_uchar), 0);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cumsum buff)"))
+    return false;
   //local copy of the tree (old copy)
   status = clSetKernelArg(refine_kernel_,i++,sizeof(cl_uchar16),0);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local tree)"))

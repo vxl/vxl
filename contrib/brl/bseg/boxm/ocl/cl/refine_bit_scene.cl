@@ -21,7 +21,7 @@ int refine_tree(__constant RenderSceneInfo * linfo,
                            int               blockIndex,
                 __global   float           * alpha_array,
                            float             prob_thresh, 
-                //__local    uchar           * cumsum, 
+                __local    uchar           * cumsum, 
                 __constant uchar           * bit_lookup,       // used to get data_index
                 __global   float           * output)
 {
@@ -32,6 +32,8 @@ int refine_tree(__constant RenderSceneInfo * linfo,
   float max_alpha_int = (-1)*log(1.0 - prob_thresh);      
   
   //initialize cumsum buffer and cumIndex
+  cumsum[0] = (*unrefined_tree).s0;
+  int cumIndex = 1;
   int numSplit = 0;
   
   //no need to do depth first search, just iterate and check each node along the way
@@ -51,8 +53,8 @@ int refine_tree(__constant RenderSceneInfo * linfo,
       float side_len = linfo->block_len/(float) (1<<currDepth);
      
       //get alpha value for this cell;
-      //int dataIndex = data_index_opt2(unrefined_tree, i, bit_lookup, cumsum, &cumIndex, linfo->data_len); //gets offset within buffer
-      int dataIndex = data_index_opt(0, unrefined_tree, i, bit_lookup); 
+      int dataIndex = data_index_opt2(unrefined_tree, i, bit_lookup, cumsum, &cumIndex, linfo->data_len); //gets offset within buffer
+      //int dataIndex = data_index_opt(0, unrefined_tree, i, bit_lookup); 
       float alpha   = alpha_array[gid*linfo->data_len + dataIndex];
          
       //integrate alpha value
@@ -99,6 +101,7 @@ refine_bit_scene(__constant  RenderSceneInfo    * linfo,
                  __global    ushort4            * num_obs_array,    // num obs for each block
                  
                  __constant  uchar              * bit_lookup,       // used to get data_index
+                 __local     uchar              * cumsum,
                  __local     uchar16            * local_tree,       // cache current tree into local memory
                  __local     uchar16            * refined_tree,     // refined tree (need old tree to move data over)
                   
@@ -156,7 +159,7 @@ refine_bit_scene(__constant  RenderSceneInfo    * linfo,
                                 subIndex,
                                 alpha_array,
                                 prob_thresh, 
-                                //cumsum,
+                                cumsum,
                                 bit_lookup,
                                 output);
       //!!! assert that the refined tree matches the newsize !!!
