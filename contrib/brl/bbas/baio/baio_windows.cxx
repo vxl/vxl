@@ -1,55 +1,56 @@
 // This is brl/bbas/baio/baio_windows.cxx
 #include "baio.h"
+//:
+// \file
 #include <vcl_iostream.h> //for vcl_cout
+//windows specific includes
 #include <windows.h>
-//winodws specific includes 
 
 
 //: baio_info struct: wrapper for status variables
 struct baio_info {
-
   //insert status variable and data buffer
-    baio_info(){	
+  baio_info() {
     memset(&o, 0, sizeof(OVERLAPPED));
-	o.Offset = 0;
-	o.OffsetHigh = 0;
-	o.hEvent = 0;
-    buffer= 0;
-    fhandle=0;}
+    o.Offset = 0;
+    o.OffsetHigh = 0;
+    o.hEvent = 0;
+    buffer   = 0;
+    fhandle  = 0;
+    status   = false;
+  }
   OVERLAPPED o;
-  char* buffer; 
+  char* buffer;
   HANDLE fhandle;
   bool status;
 };
 
-baio::baio() 
+baio::baio()
 {
-  info_ = new baio_info();  
+  info_ = new baio_info();
 }
 
 baio::~baio()
 {
-  if(info_)
+  if (info_)
     delete info_;
 }
 
-//: Opens and reads file asynchronously 
+//: Opens and reads file asynchronously
 bool baio::read(vcl_string filename, char* buffer, unsigned BUFSIZE)
 {
-
-    info_->fhandle = CreateFile(filename.c_str(),
-                                 FILE_READ_DATA,
-                                 FILE_SHARE_READ, 
-                                 NULL, OPEN_EXISTING,
-                                 FILE_FLAG_NO_BUFFERING|FILE_FLAG_OVERLAPPED, NULL);
-  if (info_->fhandle== INVALID_HANDLE_VALUE) { 
+  info_->fhandle = CreateFile(filename.c_str(),
+                              FILE_READ_DATA,
+                              FILE_SHARE_READ,
+                              NULL, OPEN_EXISTING,
+                              FILE_FLAG_NO_BUFFERING|FILE_FLAG_OVERLAPPED, NULL);
+  if (info_->fhandle== INVALID_HANDLE_VALUE) {
     vcl_cerr<<"baio (Windows)::read could not open file"<<filename<<vcl_endl;
     perror("open");
   }
-  
 
   info_->buffer=buffer;
-  // 3. Allocate a data buffer for the aiocb request 
+  // 3. Allocate a data buffer for the aiocb request
   if (!info_->buffer) {
     vcl_cerr<<"baio (Windows)::read could not allocate buffer of size "<<BUFSIZE<<vcl_endl;
     perror("malloc");
@@ -59,24 +60,21 @@ bool baio::read(vcl_string filename, char* buffer, unsigned BUFSIZE)
 
   vcl_cout << "reading..." << vcl_endl;
   info_->status = ReadFile(info_->fhandle, info_->buffer, BUFSIZE, &bytesRead, &(info_->o));
-  return true;
-
+  return info_->status;
 }
 
-baio_status baio::status() 
+baio_status baio::status()
 {
   int status = HasOverlappedIoCompleted(&(info_->o));
-  if(!status) {
-    return BAIO_IN_PROGRESS; 
+  if (!status) {
+    return BAIO_IN_PROGRESS;
   }
-  if(status ) {
-    return BAIO_FINISHED; 
+  else {
+    return BAIO_FINISHED;
   }
-
-  return baio_status::BAIO_ERROR;
 }
 
-char* baio::buffer() 
+char* baio::buffer()
 {
   return info_->buffer;
 }
