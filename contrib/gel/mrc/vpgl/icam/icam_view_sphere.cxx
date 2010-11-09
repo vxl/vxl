@@ -6,7 +6,7 @@
 #include <vil/vil_save.h>
 
 icam_view_sphere::icam_view_sphere(vgl_box_3d<double> bb, double radius)
-: view_sphere_(0), ICAM_LOCAL_MIN_THRESH_(1000.0)
+: view_sphere_(0), ICAM_LOCAL_MIN_THRESH_(100)
 {
   // create the view sphere
   view_sphere_ = new vsph_view_sphere<vsph_view_point<icam_view_metadata> > (bb, radius);
@@ -30,33 +30,54 @@ void icam_view_sphere::cameras(vcl_map<unsigned, vpgl_camera_double_sptr> &camer
   }
 }
 
-//: sets the images and depth images, associated with the view point id
-void icam_view_sphere::set_images(vcl_map<unsigned, vil_image_view<float> > images,
-                                  vcl_map<unsigned,vil_image_view<double> > depth_images)
+void icam_view_sphere::set_cameras(vcl_map<unsigned, vpgl_camera_double_sptr> const &cameras)
 {
-  vcl_map<unsigned, vil_image_view<float> >::iterator it_imgs=images.begin();
-  vcl_map<unsigned, vil_image_view<double> >::iterator it_depths=depth_images.begin();
+  vsph_view_sphere<vsph_view_point<icam_view_metadata> >::iterator it=view_sphere_->begin();
+  vcl_map<unsigned, vpgl_camera_double_sptr>::const_iterator cam_it=cameras.begin();
+  while (it != view_sphere_->end() && cam_it != cameras.end()) {
+    vsph_view_point<icam_view_metadata> vp = it->second;
+    vpgl_camera_double_sptr cam = cam_it->second;
+    unsigned id = it->first;
+    vp.set_camera(cam);
+    vpgl_perspective_camera<double>* pers_cam = static_cast<vpgl_perspective_camera<double>*>(cam.as_pointer());
+    vgl_homg_point_3d<double> center = pers_cam->camera_center();
+    vsph_spherical_coord coord;
+    vsph_sph_point_3d sp;
+    coord.spherical_coord(center, sp);
+    vp.set_view_point(sp);
+    it++;
+    cam_it++;
+  }
+}
+
+//: sets the images and depth images, associated with the view point id
+void icam_view_sphere::set_images(vcl_map<unsigned, vil_image_view<float>*>& images,
+                                  vcl_map<unsigned,vil_image_view<double>*>& depth_images)
+{
+  vcl_map<unsigned, vil_image_view<float>*>::iterator it_imgs=images.begin();
+  vcl_map<unsigned, vil_image_view<double>*>::iterator it_depths=depth_images.begin();
   while (it_imgs != images.end()) {
     unsigned uid = it_imgs->first;
-    // make sure that there is a corresponding depth image
-    if (depth_images.find(uid) != depth_images.end()) {
-      vsph_view_point<icam_view_metadata>* vp;
-      if (view_sphere_->view_point(uid, vp)) {
-        // get the camera
-        vpgl_camera_double_sptr camera=vp->camera();
-        vpgl_perspective_camera<double>* cam = dynamic_cast<vpgl_perspective_camera<double>*> (camera.as_pointer());
-        if (cam) {
-          vnl_matrix_fixed<double, 3, 3> K = cam->get_calibration().get_matrix();
-          vgl_rotation_3d<double> rot;
-          vgl_vector_3d<double> t(0,0,0);
-          icam_depth_transform trans(K, depth_images[uid], rot, t);
-          icam_view_metadata* data = new icam_view_metadata(images[uid],depth_images[uid],trans);
-          vp->set_metadata(data);
+    if (images[uid]) {
+      // make sure that there is a corresponding depth image
+      if (depth_images.find(uid) != depth_images.end()) {
+        vsph_view_point<icam_view_metadata>* vp;
+        if (view_sphere_->view_point(uid, vp)) {
+          // get the camera
+          vpgl_camera_double_sptr camera=vp->camera();
+          vpgl_perspective_camera<double>* cam = dynamic_cast<vpgl_perspective_camera<double>*> (camera.as_pointer());
+          if (cam) {
+            vnl_matrix_fixed<double, 3, 3> K = cam->get_calibration().get_matrix();
+            vgl_rotation_3d<double> rot=cam->get_rotation();
+            vgl_vector_3d<double> t=cam->get_translation();
+            icam_depth_transform trans(K, *depth_images[uid], rot, t);
+            icam_view_metadata* data = new icam_view_metadata(*images[uid],*depth_images[uid],dt);
+            vp->set_metadata(data);
+          }
         }
-      }
+      } else
+        vcl_cout << "icam_view_sphere::set_images -- ERROR! There is a missing depth image for image id=" << uid << vcl_endl;
     }
-    else
-      vcl_cout << "icam_view_sphere::set_images -- ERROR! There is a missing depth image for image id=" << uid << vcl_endl;
     it_imgs++;
   }
 }
@@ -69,16 +90,34 @@ void icam_view_sphere::register_image(vil_image_view<float> const& dest_img)
   while (it != view_sphere_->end()) {
     vsph_view_point<icam_view_metadata> vp = it->second;
     icam_view_metadata* data=vp.metadata();
-    data->register_image(dest_img);
+    if (data)
+      data->register_image(dest_img);
     it++;
   }
   
   vcl_vector<vsph_view_point<icam_view_metadata> > local_min;
-  find_local_minima(local_min);
-
+ // find_local_minima(local_min);
+  /**************/
+  vsph_view_point<icam_view_metadata>* vp;
+  view_sphere_->view_point(142,vp);
+  vpgl_perspective_camera<double>* cam = (vpgl_perspective_camera<double>*)vp->camera().as_pointer();
+  vcl_cout << *cam;
+  local_min.push_back(*vp);
+  /*************/
+  double cam_error=1e10;
+  unsigned idx=-1;
   for (unsigned i=0; i<local_min.size(); i++) {
     vcl_cout << "Local MINIMA " << i << "--" << local_min[i].view_point() << vcl_endl;
-    local_min[i].metadata()->compute_camera();
+    icam_view_metadata* md = local_min[i].metadata();
+    md->compute_camera();
+    if (md->error() < cam_error) {
+      cam_error = md->error();
+      idx = i;
+    }
+  }
+
+  if (idx > -1) {
+    
   }
 }
 
@@ -89,6 +128,10 @@ void icam_view_sphere::find_local_minima(vcl_vector<vsph_view_point<icam_view_me
   while (it != view_sphere_->end()) {
     vsph_view_point<icam_view_metadata> vp = it->second;
     unsigned vp_uid = it->first;
+    if (!vp.metadata()) {
+      it++;
+      continue;
+    }
     double error=vp.metadata()->error();
 
     // find the closest neighbors' errors
@@ -100,6 +143,7 @@ void icam_view_sphere::find_local_minima(vcl_vector<vsph_view_point<icam_view_me
     for (unsigned i=0; i<neighbors.size(); i++) {
       vsph_view_point<icam_view_metadata> vp = neighbors[i];
       icam_view_metadata* data = vp.metadata();
+      if (data) {
       if (data->error() < error) {
         smallest=false;
       } else {
@@ -108,13 +152,13 @@ void icam_view_sphere::find_local_minima(vcl_vector<vsph_view_point<icam_view_me
           smallest_diff = diff;
       }
     }
-
+    }
     if (smallest) {
       // the smallest should be really different, and much smaller than the neighborhood
-      //if (smallest_diff > ICAM_LOCAL_MIN_THRESH_) {
+   //   if (smallest_diff > ICAM_LOCAL_MIN_THRESH_) {
         vcl_cout << " Selected-->" << vp_uid << " how far?=" << smallest_diff << vcl_endl;
         local_minima.push_back(vp);
-     // }
+   //   }
     }
 
     it++;

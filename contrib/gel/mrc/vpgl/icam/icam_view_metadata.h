@@ -29,8 +29,7 @@ class icam_view_metadata
 
    icam_view_metadata(vil_image_view<float> const& exp_img,
                       vil_image_view<double> const& depth_img,
-                      icam_depth_transform const& dt)
-                      : exp_img_(exp_img), depth_img_(depth_img)  { minimizer_=new icam_minimizer(exp_img, dt); }
+                      icam_depth_transform const& dt);
 
    ~icam_view_metadata() { if (minimizer_) delete minimizer_; }
 
@@ -49,15 +48,6 @@ class icam_view_metadata
    inline short version() const { return 1; }
 
  private:
-   //: expected image pyramid
-   vil_image_view<float> exp_img_;
-
-   //: depth image pyramid
-   vil_image_view<double> depth_img_;
-
-   // destination image that is being registered
-   vil_image_view<float> source_img_;
-
    //: solver for the registration
    icam_minimizer* minimizer_;
 

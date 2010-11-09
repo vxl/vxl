@@ -25,9 +25,11 @@ class icam_view_sphere : public vbl_ref_count
   //: returns the cameras of the view points, associated with the view point id
   void cameras(vcl_map<unsigned, vpgl_camera_double_sptr> &cameras);
 
+  void set_cameras(vcl_map<unsigned, vpgl_camera_double_sptr> const &cameras);
+
   //: sets the images and depth images, associated with the view point id
-  void set_images(vcl_map<unsigned, vil_image_view<float> > images,
-                  vcl_map<unsigned,vil_image_view<double> > depth_images);
+  void set_images(vcl_map<unsigned, vil_image_view<float>*>& images,
+                  vcl_map<unsigned,vil_image_view<double>*>& depth_images);
 
   //: computes the camera registration errors for a given image
   void register_image(vil_image_view<float> const& source_img);
