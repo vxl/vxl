@@ -37,7 +37,6 @@ void icam_view_sphere::set_cameras(vcl_map<unsigned, vpgl_camera_double_sptr> co
   while (it != view_sphere_->end() && cam_it != cameras.end()) {
     vsph_view_point<icam_view_metadata> vp = it->second;
     vpgl_camera_double_sptr cam = cam_it->second;
-    unsigned id = it->first;
     vp.set_camera(cam);
     vpgl_perspective_camera<double>* pers_cam = static_cast<vpgl_perspective_camera<double>*>(cam.as_pointer());
     vgl_homg_point_3d<double> center = pers_cam->camera_center();
@@ -75,7 +74,8 @@ void icam_view_sphere::set_images(vcl_map<unsigned, vil_image_view<float>*>& ima
             vp->set_metadata(data);
           }
         }
-      } else
+      }
+      else
         vcl_cout << "icam_view_sphere::set_images -- ERROR! There is a missing depth image for image id=" << uid << vcl_endl;
     }
     it_imgs++;
@@ -94,9 +94,11 @@ void icam_view_sphere::register_image(vil_image_view<float> const& dest_img)
       data->register_image(dest_img);
     it++;
   }
-  
+
   vcl_vector<vsph_view_point<icam_view_metadata> > local_min;
- // find_local_minima(local_min);
+#if 0
+  find_local_minima(local_min);
+#endif
   /**************/
   vsph_view_point<icam_view_metadata>* vp;
   view_sphere_->view_point(142,vp);
@@ -114,10 +116,6 @@ void icam_view_sphere::register_image(vil_image_view<float> const& dest_img)
       cam_error = md->error();
       idx = i;
     }
-  }
-
-  if (idx > -1) {
-    
   }
 }
 
@@ -139,28 +137,26 @@ void icam_view_sphere::find_local_minima(vcl_vector<vsph_view_point<icam_view_me
     view_sphere_->find_neighbors(vp_uid, neighbors);
     // compare the errors with the neighbors
     bool smallest=true;
-    double smallest_diff=10e6;
+    double smallest_diff=1e308;
     for (unsigned i=0; i<neighbors.size(); i++) {
       vsph_view_point<icam_view_metadata> vp = neighbors[i];
       icam_view_metadata* data = vp.metadata();
       if (data) {
-      if (data->error() < error) {
-        smallest=false;
-      } else {
-        double diff = data->error()-error;
-        if (smallest_diff > diff)
-          smallest_diff = diff;
+        if (data->error() < error) {
+          smallest=false;
+        }
+        else {
+          double diff = data->error()-error;
+          if (smallest_diff > diff)
+            smallest_diff = diff;
+        }
       }
     }
-    }
-    if (smallest) {
+    if (smallest) { // && smallest_diff > ICAM_LOCAL_MIN_THRESH_
       // the smallest should be really different, and much smaller than the neighborhood
-   //   if (smallest_diff > ICAM_LOCAL_MIN_THRESH_) {
-        vcl_cout << " Selected-->" << vp_uid << " how far?=" << smallest_diff << vcl_endl;
-        local_minima.push_back(vp);
-   //   }
+      vcl_cout << " Selected-->" << vp_uid << " how far?=" << smallest_diff << vcl_endl;
+      local_minima.push_back(vp);
     }
-
     it++;
   }
 }
