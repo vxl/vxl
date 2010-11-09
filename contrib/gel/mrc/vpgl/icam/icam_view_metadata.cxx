@@ -59,7 +59,7 @@ void icam_view_metadata::compute_camera()
   vgl_rotation_3d<double> min_rot;
   double min_overlap;
 
-  minimizer_->print();
+  //minimizer_->print();
 
   minimizer_->camera_search(trans_box,trans_steps,final_level-3,min_allowed_overlap,refine,min_trans,min_rot,error_,min_overlap); 
   vcl_cout << "ERROR " << error_ << vcl_endl;
