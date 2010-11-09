@@ -50,7 +50,7 @@ class baio
     ~baio();
 
     //: read bytes from file
-    void read(vcl_string filename, char* buff,  unsigned BUFSIZE);
+    bool read(vcl_string filename, char* buff,  unsigned BUFSIZE);
     
     //: get object's status 
     baio_status status();

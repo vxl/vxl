@@ -1,7 +1,7 @@
 // This is brl/bbas/baio/baio_windows.cxx
 #include "baio.h"
 #include <vcl_iostream.h> //for vcl_cout
-
+#include <windows.h>
 //winodws specific includes 
 
 
@@ -9,8 +9,17 @@
 struct baio_info {
 
   //insert status variable and data buffer
-  int status;
+    baio_info(){	
+    memset(&o, 0, sizeof(OVERLAPPED));
+	o.Offset = 0;
+	o.OffsetHigh = 0;
+	o.hEvent = 0;
+    buffer= 0;
+    fhandle=0;}
+  OVERLAPPED o;
   char* buffer; 
+  HANDLE fhandle;
+  bool status;
 };
 
 baio::baio() 
@@ -25,25 +34,50 @@ baio::~baio()
 }
 
 //: Opens and reads file asynchronously 
-void baio::read(vcl_string filename, char* buffer, unsigned BUFSIZE)
+bool baio::read(vcl_string filename, char* buffer, unsigned BUFSIZE)
 {
-  vcl_cout<<"baio::read is not yet implemented"<<vcl_endl;
-  // need to 
-  // - allocate a char* of size BUFSIZE to info_ variable
-  // - call asynch read
+
+    info_->fhandle = CreateFile(filename.c_str(),
+                                 FILE_READ_DATA,
+                                 FILE_SHARE_READ, 
+                                 NULL, OPEN_EXISTING,
+                                 FILE_FLAG_NO_BUFFERING|FILE_FLAG_OVERLAPPED, NULL);
+  if (info_->fhandle== INVALID_HANDLE_VALUE) { 
+    vcl_cerr<<"baio (Windows)::read could not open file"<<filename<<vcl_endl;
+    perror("open");
+  }
+  
+
+  info_->buffer=buffer;
+  // 3. Allocate a data buffer for the aiocb request 
+  if (!info_->buffer) {
+    vcl_cerr<<"baio (Windows)::read could not allocate buffer of size "<<BUFSIZE<<vcl_endl;
+    perror("malloc");
+  }
+  //
+  DWORD bytesRead = 0;
+
+  vcl_cout << "reading..." << vcl_endl;
+  info_->status = ReadFile(info_->fhandle, info_->buffer, BUFSIZE, &bytesRead, &(info_->o));
+  return true;
+
 }
 
 baio_status baio::status() 
 {
-  vcl_cout<<"baio::status is not yet implemented"<<vcl_endl;
-  //need to query info_ variable for current aio status and return 
-  //BAIO_IN_PROGRESS, BAIO_FINISEHD, or BAIO_ERROR
+  int status = HasOverlappedIoCompleted(&(info_->o));
+  if(!status) {
+    return BAIO_IN_PROGRESS; 
+  }
+  if(status ) {
+    return BAIO_FINISHED; 
+  }
+
   return baio_status::BAIO_ERROR;
 }
 
 char* baio::buffer() 
 {
-  vcl_cout<<"baio::buffer is not yet implemented"<<vcl_endl;
   return info_->buffer;
 }
 

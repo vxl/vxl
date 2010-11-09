@@ -8,6 +8,8 @@ IF(WIN32)
      )
   ADD_LIBRARY(baio ${baio_sources})
   TARGET_LINK_LIBRARIES(baio)
+  #tests
+  SUBDIRS(tests)
 ELSEIF(APPLE)
   SET(baio_sources
     baio_osx.cxx       baio.h

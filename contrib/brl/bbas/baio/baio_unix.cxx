@@ -31,7 +31,7 @@ baio::~baio()
 }
 
 //: Opens and reads file asynchronously
-void baio::read(vcl_string filename, char* buff, unsigned BUFSIZE)
+bool baio::read(vcl_string filename, char* buff, unsigned BUFSIZE)
 {
   // 1. call c open to get standard file handle
   int fhandle = open(filename.c_str(), O_RDONLY);
@@ -61,6 +61,7 @@ void baio::read(vcl_string filename, char* buff, unsigned BUFSIZE)
     vcl_cerr<<"baio (linux)::read throws error on aio_read: "<<STATUS<<vcl_endl;
     perror("aio_read");
   }
+  return true;
 }
 
 baio_status baio::status()
