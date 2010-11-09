@@ -3,10 +3,9 @@
 #include <baio/baio.h>
 #include <vcl_iostream.h> //for vcl_cout
 #include <vcl_fstream.h>  //for file open
-#include <stdlib.h>  //includes malloc
+#include <vcl_cstdlib.h>  //includes malloc
 
-
-static void test_read_helper(char* buffer)
+static int test_read_helper(char* buffer)
 {
   //tests to see if char* persists
   //load from file asynch
@@ -16,11 +15,11 @@ static void test_read_helper(char* buffer)
   baio aio;
   aio.read(test_file, buffer, buffSize);
   int numFlops = 0;
-  while(aio.status() == BAIO_IN_PROGRESS) {
+  while (aio.status() == BAIO_IN_PROGRESS) {
     numFlops += 4;
   }
-
   buffer = aio.buffer();
+  return numFlops;
 }
 
 static void test_read()
@@ -50,16 +49,11 @@ static void test_read()
 
   //load from file asynch
   char* aio_buff = new char[buffSize];
-  baio aio;
-  aio.read(test_file, aio_buff, buffSize);
-  int numFlops = 0;
-  while (aio.status() == BAIO_IN_PROGRESS) {
-    numFlops += 4;
-  }
+  int numFlops = test_read_helper(aio_buff);
   vcl_cout<<"Number of flops performed during ASYNC read: "<<numFlops<<vcl_endl;
 
   //test asynchros-ness
-  TEST("read is asynchronous/status works ", true, numFlops > 0);
+  TEST("read is asynchronous/status works", true, numFlops > 0);
 
   //Test same data read
   bool good = true;
