@@ -113,7 +113,6 @@ static void ellipses_intersect()
   TEST("There should be no real roots", r.size(), 0);
   TEST("and four imaginary roots", solver3.real().size(), 4);
   TEST("and equally many imaginary parts", solver3.imag().size(), 4);
-  TEST("Dimensions should match", r[0]->size(), dim);
   roots_r = solver3.real(); roots_i = solver3.imag();
   print_roots(solver);
 }
@@ -208,9 +207,13 @@ static void scaled_fourth_degree()
 
 static void test_rnpoly_roots()
 {
+  vcl_cout << "=========================== unit_circles_intersect ===========================\n";
   unit_circles_intersect();
+  vcl_cout << "============================= ellipses_intersect =============================\n";
   ellipses_intersect();
+  vcl_cout << "============================ single_fourth_degree ============================\n";
   single_fourth_degree();
+  vcl_cout << "============================ scaled_fourth_degree ============================\n";
   scaled_fourth_degree();
 }
 
