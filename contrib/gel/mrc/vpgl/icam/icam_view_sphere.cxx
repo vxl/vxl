@@ -70,7 +70,7 @@ void icam_view_sphere::set_images(vcl_map<unsigned, vil_image_view<float>*>& ima
             vnl_matrix_fixed<double, 3, 3> K = cam->get_calibration().get_matrix();
             vgl_rotation_3d<double> rot=cam->get_rotation();
             vgl_vector_3d<double> t=cam->get_translation();
-            icam_depth_transform trans(K, *depth_images[uid], rot, t);
+            icam_depth_transform dt(K, *depth_images[uid], rot, t);
             icam_view_metadata* data = new icam_view_metadata(*images[uid],*depth_images[uid],dt);
             vp->set_metadata(data);
           }
