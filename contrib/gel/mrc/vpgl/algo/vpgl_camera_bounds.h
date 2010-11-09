@@ -71,16 +71,17 @@ class vpgl_camera_bounds
   //: The angular interval of the rotation about the principal axis that bounds a pixel at the smallest image radius, i.e., 1/2 the smallest image dimension.
   //  The angular wedge is tangent to the pixel
   static double rotation_angle_interval(vpgl_perspective_camera<double> const& cam);
-  //: conversion functions between solid angle and cone half angle
+
+  //: conversion between solid angle and cone half angle
   static double solid_angle(double cone_half_angle);
 
+  //: conversion between solid angle and cone half angle
   static double cone_half_angle(double solid_angle);
 
-
-  //: angle between principal ray of one rotation and the principal ray of a second rotation 
-  // rotations are expressed as rodrigues vectors
+  //: angle between principal ray of one rotation and the principal ray of a second rotation
+  // Rotations \p r0 and \p r1 are expressed as Rodrigues vectors
   static double angle_between_rays(vgl_rotation_3d<double> const& r0, vgl_rotation_3d<double> const& r1);
-  // the rotation about the principal ray requred to go from r0 to r1
+  //: the rotation about the principal ray required to go from \p r0 to \p r1
   static double rot_about_ray(vgl_rotation_3d<double> const& r0, vgl_rotation_3d<double> const& r1);
 
  private:
@@ -108,17 +109,17 @@ class principal_ray_scan
   //:the next scan state. Returns false if done
   bool next();
   //: the camera rotation corresponding to the current state of the principal ray.
-  // alpha is an additional rotation about the principal ray -pi<alpha<=pi
+  // \p alpha is an additional rotation about the principal ray, $-\pi<\alpha<=\pi$, default 0.
   vgl_rotation_3d<double> rot(double alpha = 0.0) {return rot(index_, alpha);}
   //: rotation for a given scan index
   vgl_rotation_3d<double> rot(unsigned i, double alpha = 0.0);
-  //: theta - spherical elevation angle for current state
+  //: spherical elevation angle for current state
   double theta(){return theta_[index_];}
-  //: theta - spherical elevation angle for a given scan index
+  //: spherical elevation angle for a given scan index
   double theta(unsigned i){return theta_[i];}
-  //: phi - spherical azimuth angle for current state
+  //: spherical azimuth angle for current state
   double phi(){return phi_[index_];}
-  //: phi - spherical azimuth angle for a given scan index
+  //: spherical azimuth angle for a given scan index
   double phi(unsigned i){return phi_[i];}
   //: point on the unit sphere for current scan state
   vgl_point_3d<double> pt_on_unit_sphere(){return pt_on_unit_sphere(index_);}
@@ -126,7 +127,7 @@ class principal_ray_scan
   vgl_point_3d<double> pt_on_unit_sphere(unsigned i);
 
  private:
-  principal_ray_scan(){};
+  principal_ray_scan() {}
   int index_;
   vcl_vector<double> theta_;
   vcl_vector<double> phi_;
