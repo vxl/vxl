@@ -250,6 +250,7 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
            __global    int                * offset_y,         // right (which one of the four blocks)
            __local     short2             * ray_bundle_array, // gives information for which ray takes over in the workgroup
            __local     int                * cell_ptrs,        // local list of cell_ptrs (cells that are hit by this workgroup
+           __local     float              * cached_vis,       // cached vis used to sum up vis contribution locally
            __local     uchar              * cumsum,           // cumulative sum for calculating data pointer
            __global    float              * output)
 {
@@ -331,7 +332,7 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
 
             //BAYES SPECIFIC ARGUMENTS
             //factor,raybund,ptrs,cache,cache,image_vect (all NULL)
-            cammat, ray_bundle_array, cell_ptrs, norm, vis, pre,
+            cammat, ray_bundle_array, cell_ptrs, cached_vis, norm, vis, pre,
 
             //io info
             in_image, 0, output);

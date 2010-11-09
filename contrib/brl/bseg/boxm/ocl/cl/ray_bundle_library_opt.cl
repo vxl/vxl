@@ -503,26 +503,24 @@ void bayes_ratio_opt2(        float   seg_len,
  *  [norm | alpha_integral | vis | pre ] */
 void bayes_ratio_opt3(        float   seg_len,          // segment length for this ray
                               float   mean_obs,         // mean observation for the currently intersected cell
-                              float * pre,              // ray pre
-                              float * vis,              // ray vis
+                              float * ray_pre,              // ray pre
+                              float * ray_vis,              // ray vis
                               float   norm,             // normalization (pre_inf + vis_inf)
                               float * cell_beta,
+                              float * cell_vis, 
                       __local short2* ray_bundle_array,
                       __local float*  cached_beta,
+                      __local float*  cached_vis,
                               float   alpha, 
                               float8  mixture,
                               float   weight3)
 {
-    /* linear thread id */
+    // linear thread id
     uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
     
-    /* ray must be active after data is loaded */
+    // Compute PI for all threads 
     float PI = 0.0;
-    
-    /* Compute PI for all threads */
-    if (seg_len > 1.0e-10f) {    /* if  too small, do nothing */
-        
-        /* The mean intensity for the cell */
+    if (seg_len > 1.0e-10f) {   
         PI = gauss_3_mixture_prob_density(mean_obs,
                                            mixture.s0, 
                                            mixture.s1, 
@@ -532,14 +530,17 @@ void bayes_ratio_opt3(        float   seg_len,          // segment length for th
                                            mixture.s5,
                                            mixture.s6,
                                            mixture.s7,
-                                           weight3 //(1.0f-mixture.s2-mixture.s5)
-                                          );/* PI */
+                                           weight3 );
     }
-    
-    if( seg_len>1e-10f)
-        cached_beta[llid] = ((*pre) + PI*(*vis))*seg_len/norm;
-    else
+    //cache current vis and current beta
+    if( seg_len>1e-10f ) {
+        cached_beta[llid] = ((*ray_pre) + PI*(*ray_vis))*seg_len/norm;
+        cached_vis[llid] =  (*ray_vis) * seg_len;  
+    }
+    else {
         cached_beta[llid] = 0.0f;
+        cached_vis[llid] = 0.0f;
+    }
     barrier(CLK_LOCAL_MEM_FENCE); /*wait for all threads to complete */
 
     /* region owner scans the region and computes Bayes ratio and weighted vis.
@@ -557,26 +558,65 @@ void bayes_ratio_opt3(        float   seg_len,          // segment length for th
             /* Bayes ratio */
             /* ( pre + PI*vis)/norm)*seg_len */
             (*cell_beta) += cached_beta[curr];
+            (*cell_vis)  += cached_vis[curr]; 
             curr = ray_bundle_array[curr].x;
         }
     }
     
-    //barrier(CLK_LOCAL_MEM_FENCE); /*wait for all threads to complete */
-    /* Below, all active threads participate in updating the alpha integral,
-    * pre and vis images */
-    float temp=exp(-alpha * seg_len);
+    //update ray pre and vis
+    float temp = exp(-alpha * seg_len);
+    (*ray_pre) += (*ray_vis)*(1-temp)*PI;
+    (*ray_vis) *= temp;
     
-    /* updated pre                      Omega         *  PI         */
-    (*pre) += (*vis)*(1-temp)*PI;//(image_vect[llid].z - vis_prob_end) * PI;
-    /* updated visibility probability */
-    (*vis) *= temp;
-    
-    barrier(CLK_LOCAL_MEM_FENCE); /*wait for all threads to complete */
-
+    // wait for all threads to complete
+    barrier(CLK_LOCAL_MEM_FENCE); 
 }
 
 
 
+/* bayes ratio independent */
+void bayes_ratio_ind( float  seg_len,
+                      float  alpha,
+                      float8 mixture, 
+                      float  weight3, 
+                      float  cum_len,
+                      float  mean_obs,
+                      float  norm,
+                      float* ray_pre,
+                      float* ray_vis,
+                      float* ray_beta,
+                      float* vis_cont
+                      )
+{
+    float PI = 0.0;
+  
+    /* Compute PI for all threads */
+    if (seg_len > 1.0e-10f) {    /* if  too small, do nothing */
+        PI = gauss_3_mixture_prob_density(mean_obs,
+                                           mixture.s0, 
+                                           mixture.s1, 
+                                           mixture.s2,
+                                           mixture.s3, 
+                                           mixture.s4, 
+                                           mixture.s5,
+                                           mixture.s6,
+                                           mixture.s7,
+                                           weight3 );
+    }
+    
+    //calculate this ray's contribution to beta
+    (*ray_beta) = ((*ray_pre) + PI*(*ray_vis))*seg_len/norm;
+    (*vis_cont) = (*ray_vis) * seg_len;  
+                            
+    //update ray_pre and ray_vis
+    float temp  = exp(-alpha * seg_len);
+    
+    /* updated pre                      Omega         *  PI         */
+    (*ray_pre) += (*ray_vis)*(1.0f-temp)*PI;//(image_vect[llid].z - vis_prob_end) * PI;
+    /* updated visibility probability */
+    (*ray_vis) *= temp;
+
+}
 
 ///*
 // *

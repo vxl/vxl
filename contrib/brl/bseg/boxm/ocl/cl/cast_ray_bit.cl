@@ -54,6 +54,7 @@ cast_ray(
           __global    float16            * mat_cam, 
           __local     short2             * ray_bundle_array,//gives information for which ray takes over in the workgroup
           __local     int                * cell_ptrs,       //local list of cell_ptrs (cells that are hit by this workgroup
+          __local     float              * cached_vis,
                       float                norm,
                       float                ray_vis,
                       float                ray_pre,
@@ -205,23 +206,21 @@ cast_ray(
 #endif
 #ifdef SEGLEN
 
+
+      //SLOW and accurate method
+      //int seg_int = convert_int_rte(d * SEGLEN_FACTOR);
+      //atom_add(&seg_len_array[data_ptr], seg_int);  
+      //int cum_obs = convert_int_rte(d * inImgObs * SEGLEN_FACTOR); 
+      //atom_add(&mean_obs_array[data_ptr], cum_obs);
+
+      // --------- faster and less accurate method... --------------------------
       //keep track of cells being hit
       cell_ptrs[llid] = data_ptr;
-      
-      //SLOW and accurate method
-      int seg_int = convert_int_rte(d * SEGLEN_FACTOR);
-      atom_add(&seg_len_array[data_ptr], seg_int);  
-      int cum_obs = convert_int_rte(d * inImgObs * SEGLEN_FACTOR); 
-      atom_add(&mean_obs_array[data_ptr], cum_obs);
-/*
       cached_aux_data[llid] = (float4)0.0f;  //leaders retain the mean obs and the cell length
       barrier(CLK_LOCAL_MEM_FENCE);
 
-      //segment the workgroup
+      //segment workgroup
       load_data_mutable_opt(ray_bundle_array,cell_ptrs);
-      
-      //load aux data into local mem
-      float  alpha    = alpha_array[data_ptr];
       
       //back to normal mean of mean obs... 
       seg_len_obs_opt3(d, inImgObs, ray_bundle_array, cached_aux_data);
@@ -238,7 +237,8 @@ cast_ray(
         atom_add(&seg_len_array[data_ptr], seg_int); 
         atom_add(&mean_obs_array[data_ptr], cum_obs);
       }
-*/
+      //------------------------------------------------------------------------
+
       //reset cell_ptrs to negative one every time (prevents invisible layer bug)
       cell_ptrs[llid] = -1;
 #endif
@@ -262,7 +262,6 @@ cast_ray(
 #endif
 #ifdef BAYES
 
-/*
       //keep track of cells being hit
       cell_ptrs[llid] = data_ptr;
       barrier(CLK_LOCAL_MEM_FENCE);
@@ -274,9 +273,12 @@ cast_ray(
       float8 mixture  = convert_float8(mixture_array[data_ptr])/255.0f;
       float weight3   = (1.0f-mixture.s2-mixture.s5);
       
-      //load aux data into local mem
-      //float2 mean_vis = convert_float2(mean_obs_cum_vis[data_ptr])/255.0f;
-      float cell_beta =0;
+      //load aux data
+      float cum_len  = convert_float(seg_len_array[data_ptr])/SEGLEN_FACTOR; 
+      float mean_obs = convert_float(mean_obs_array[data_ptr])/SEGLEN_FACTOR;
+      mean_obs = mean_obs/cum_len;
+      float cell_beta = 0.0f;
+      float cell_vis  = 0.0f;
       barrier(CLK_LOCAL_MEM_FENCE);
 
       //calculate bayes ratio
@@ -286,13 +288,26 @@ cast_ray(
                         &ray_vis,
                         norm, 
                         &cell_beta,
+                        &cell_vis,
                         ray_bundle_array,
                         cell_ptrs, 
+                        cached_vis,
                         alpha, 
-                        mixture);
-*/
-    
-    //DEBUG beta calculation
+                        mixture, 
+                        weight3);
+          
+    //set aux data here (for each leader.. )
+    if(ray_bundle_array[llid].y==1) 
+    {
+      int beta_int = convert_int_rte(cell_beta * SEGLEN_FACTOR);
+      atom_add(&beta_array[data_ptr], beta_int);  
+      int vis_int  = convert_int_rte(cell_vis * SEGLEN_FACTOR); 
+      atom_add(&vis_array[data_ptr], vis_int);
+    }
+
+    /*
+    //slow beta calculation ----------------------------------------------------
+    float  alpha    = alpha_array[data_ptr];
     float8 mixture  = convert_float8(mixture_array[data_ptr])/255.0f;
     float weight3   = (1.0f-mixture.s2-mixture.s5);
     
@@ -300,39 +315,26 @@ cast_ray(
     float cum_len  = convert_float(seg_len_array[data_ptr])/SEGLEN_FACTOR; 
     float mean_obs = convert_float(mean_obs_array[data_ptr])/SEGLEN_FACTOR;
     mean_obs = mean_obs/cum_len;
-    float PI = 0.0;
     
-    /* Compute PI for all threads */
-    if (d > 1.0e-10f) {    /* if  too small, do nothing */
-        PI = gauss_3_mixture_prob_density(mean_obs,
-                                           mixture.s0, 
-                                           mixture.s1, 
-                                           mixture.s2,
-                                           mixture.s3, 
-                                           mixture.s4, 
-                                           mixture.s5,
-                                           mixture.s6,
-                                           mixture.s7,
-                                           weight3 );
-    }
-    
-    float ray_beta = (ray_pre + PI*ray_vis)*d/norm;
+    float ray_beta, vis_cont; 
+    bayes_ratio_ind( d, 
+                     alpha,
+                     mixture, 
+                     weight3, 
+                     cum_len, 
+                     mean_obs, 
+                     norm,
+                     &ray_pre, 
+                     &ray_vis, 
+                     &ray_beta, 
+                     &vis_cont); 
+  
+    //discretize and store beta and vis contribution
     int beta_int = convert_int_rte(ray_beta * SEGLEN_FACTOR);
     atom_add(&beta_array[data_ptr], beta_int);  
-      
-    float vis_cont = ray_vis * d;  
     int vis_int  = convert_int_rte(vis_cont * SEGLEN_FACTOR); 
-    atom_add(&vis_array[data_ptr], vis_int);                       
-                            
-    //update ray_pre and ray_vis
-    // pre and vis images 
-    float alpha = alpha_array[data_ptr];
-    float temp  = exp(-alpha * d);
-    
-    /* updated pre                      Omega         *  PI         */
-    ray_pre += ray_vis*(1.0f-temp)*PI;//(image_vect[llid].z - vis_prob_end) * PI;
-    /* updated visibility probability */
-    ray_vis *= temp;
+    atom_add(&vis_array[data_ptr], vis_int);         
+    //-------------------------------------------------------------------------- */          
     
     //reset cell_ptrs to -1 every time
     cell_ptrs[llid] = -1;

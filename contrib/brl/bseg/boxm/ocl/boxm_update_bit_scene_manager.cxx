@@ -1485,10 +1485,10 @@ bool boxm_update_bit_scene_manager::set_update_args(unsigned pass)
     status = clSetKernelArg(update_kernels_[pass],i++,sizeof(cl_int)*this->bni_*this->bnj_,0);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local cell pointers)"))
       return false;
-    // local image_vect
-    //status = clSetKernelArg(update_kernels_[pass],i++,sizeof(cl_float)*this->bni_*this->bnj_,0);
-    //if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local image_vect)"))
-      //return false;
+    // cached_vis
+    status = clSetKernelArg(update_kernels_[pass],i++,sizeof(cl_float)*this->bni_*this->bnj_,0);
+    if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local image_vect)"))
+      return false;
     //cum sum lookup buffer
     status = clSetKernelArg(update_kernels_[pass],i++,this->bni_*this->bnj_*10*sizeof(cl_uchar), 0);
     if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cumsum buff)"))
