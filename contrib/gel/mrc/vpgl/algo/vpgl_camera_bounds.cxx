@@ -203,14 +203,32 @@ rotation_angle_interval(vpgl_perspective_camera<double> const& cam)
   return 2.0*half_angle;
 }
 
-double vpgl_camera_bounds::angle_between_rays(vgl_rotation_3d<double> const& ray1, vgl_rotation_3d<double> const& ray2)
+double vpgl_camera_bounds::angle_between_rays(vgl_rotation_3d<double> const& r0,
+                                              vgl_rotation_3d<double> const& r1)
 {
-  vcl_cerr << "vpgl_camera_bounds::angle_between_rays() not yet implemented!!!\n";
-  return -1.0;
+  vnl_vector_fixed<double, 3> zaxis, a0, a1;
+  zaxis[0]=0.0;  zaxis[1]=0.0;  zaxis[2]=1.0;
+  vgl_rotation_3d<double> r0i = r0.inverse(), r1i = r1.inverse();
+  a0 = r0i*zaxis; a1 = r1i*zaxis;
+  double dp = dot_product(a0, a1);
+  return vcl_acos(dp);
 }
 
-double vpgl_camera_bounds::rot_about_ray(vgl_rotation_3d<double> const& ray1, vgl_rotation_3d<double> const& ray2)
+double vpgl_camera_bounds::
+rot_about_ray(vgl_rotation_3d<double> const& r0, vgl_rotation_3d<double> const& r1)
 {
-  vcl_cerr << "vpgl_camera_bounds::rot_about_ray() not yet implemented!!!\n";
-  return -1.0;
+  // find axes for each rotation
+  vnl_vector_fixed<double, 3> zaxis, a0, a1;
+  zaxis[0]=0.0;  zaxis[1]=0.0;  zaxis[2]=1.0;
+  vgl_rotation_3d<double> r0i = r0.inverse(), r1i = r1.inverse();
+  a0 = r0i*zaxis; a1 = r1i*zaxis;
+  // find the transforms that map the z-axis to each axis
+  vgl_rotation_3d<double> r0b(zaxis, a0), r1b(zaxis,a1);
+  //  find rotations about z axis
+  vgl_rotation_3d<double> r0_alpha = r0*r0b, r1_alpha = r1*r1b;
+  vnl_vector_fixed<double, 3> r0_alpha_rod = r0_alpha.as_rodrigues(), r1_alpha_rod = r1_alpha.as_rodrigues();
+  // get angle difference
+  double ang0 = r0_alpha_rod.magnitude(), ang1 = r1_alpha_rod.magnitude();
+  return vcl_fabs(ang0-ang1);
 }
+

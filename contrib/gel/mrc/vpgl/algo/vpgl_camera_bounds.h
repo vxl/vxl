@@ -76,9 +76,13 @@ class vpgl_camera_bounds
 
   static double cone_half_angle(double solid_angle);
 
-  static double angle_between_rays(vgl_rotation_3d<double> const& ray1, vgl_rotation_3d<double> const& ray2);
 
-  static double rot_about_ray(vgl_rotation_3d<double> const& ray1, vgl_rotation_3d<double> const& ray2);
+  //: angle between principal ray of one rotation and the principal ray of a second rotation 
+  // rotations are expressed as rodrigues vectors
+  static double angle_between_rays(vgl_rotation_3d<double> const& r0, vgl_rotation_3d<double> const& r1);
+  // the rotation about the principal ray requred to go from r0 to r1
+  static double rot_about_ray(vgl_rotation_3d<double> const& r0, vgl_rotation_3d<double> const& r1);
+
  private:
   //: constructor private - class contains static methods only
   vpgl_camera_bounds();
