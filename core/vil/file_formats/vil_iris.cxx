@@ -85,7 +85,7 @@ char const* vil_iris_file_format::tag() const
 
 /////////////////////////////////////////////////////////////////////////////
 
-vil_iris_generic_image::vil_iris_generic_image(vil_stream* is, char* imagename):
+vil_iris_generic_image::vil_iris_generic_image(vil_stream* is, char const* imagename):
   starttab_(0), lengthtab_(0), is_(is)
 {
   is_->ref();
@@ -512,7 +512,8 @@ void send_short(vil_stream* data, vxl_sint_16 s)
   if ( s < 0 ) {
     bits = static_cast<vxl_uint_16>(-s);
     bits = static_cast<vxl_uint_16>(~bits + 1);
-  } else {
+  }
+  else {
     bits = static_cast<vxl_uint_16>(s);
   }
 
@@ -538,7 +539,8 @@ void send_long(vil_stream* data, vxl_sint_32 s)
   if ( s < 0 ) {
     bits = -s;
     bits = ~bits + 1;
-  } else {
+  }
+  else {
     bits = s;
   }
 

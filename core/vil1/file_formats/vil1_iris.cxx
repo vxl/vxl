@@ -81,7 +81,7 @@ char const* vil1_iris_file_format::tag() const
 
 /////////////////////////////////////////////////////////////////////////////
 
-vil1_iris_generic_image::vil1_iris_generic_image(vil1_stream* is, char* imagename):
+vil1_iris_generic_image::vil1_iris_generic_image(vil1_stream* is, char const* imagename):
   starttab_(0), lengthtab_(0), is_(is)
 {
   is_->ref();

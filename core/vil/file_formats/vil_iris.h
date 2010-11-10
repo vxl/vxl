@@ -46,7 +46,7 @@ class vil_iris_generic_image : public vil_image_resource
   friend class vil_iris_file_format;
  public:
 
-  vil_iris_generic_image(vil_stream* is, char* imagename = "");
+  vil_iris_generic_image(vil_stream* is, char const* imagename = "");
   vil_iris_generic_image(vil_stream* is,
                          unsigned int ni, unsigned int nj, unsigned int planes,
                          vil_pixel_format format);
