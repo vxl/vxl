@@ -30,7 +30,7 @@ bool boxm_update_bit_scene_manager::init_scene(boxm_ocl_bit_scene *scene,
 bool boxm_update_bit_scene_manager::init_scene(boxm_ocl_bit_scene *scene,
                                                unsigned ni,
                                                unsigned nj,
-                                               float prob_thresh=0.3)
+                                               float prob_thresh)
 {
   vcl_cout<<"Init scene from ni, nj, prob_thresh"<<vcl_endl;
 
@@ -574,6 +574,20 @@ bool boxm_update_bit_scene_manager::set_kernels()
     vcl_cout<<"build_clean_aux_data_program  failed to build"<<vcl_endl;
     return false;
   }
+  if (!this->build_change_detection_old_program()) {
+      vcl_cout<<"build_change_detection program failed to build"<<vcl_endl;
+      return false;
+  }
+
+  change_detection_old_kernel_ = clCreateKernel(program_,"change_detecttion_scene",&status);
+  if (this->check_val(status,CL_SUCCESS,error_to_string(status))!=CHECK_SUCCESS) {
+    vcl_cout<<"change_detecttion_scene kernel failed to build"<<vcl_endl;
+    return false;
+  }
+  if (!this->build_clean_aux_data_program()) {
+    vcl_cout<<"build_clean_aux_data_program  failed to build"<<vcl_endl;
+    return false;
+  }
 
   clean_aux_data_kernel_ = clCreateKernel(program_,"clean_aux_data",&status);
   if (this->check_val(status,CL_SUCCESS,error_to_string(status))!=CHECK_SUCCESS) {
@@ -662,6 +676,51 @@ bool boxm_update_bit_scene_manager::build_change_detection_program()
     options+="-D NVIDIA ";
   options += "-D CHANGE ";
   //options += " -cl-fast-relaxed-math ";
+
+  // assign the functor calling signature
+  vcl_string::size_type pos_start = this->prog_.find(patt);
+  vcl_string::size_type n1 = patt.size();
+  if (pos_start < this->prog_.size()) {
+    vcl_string::size_type n2 = functor.size();
+    if (!n2)
+      return false;
+    this->prog_ = this->prog_.replace(pos_start, n1, functor.c_str(), n2);
+    return this->build_kernel_program(program_, options)==SDK_SUCCESS;
+  }
+
+  return this->build_kernel_program(program_, options)==SDK_SUCCESS;
+}
+bool boxm_update_bit_scene_manager::build_change_detection_old_program()
+{
+  //append render source code
+  vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm/ocl/cl/";
+  if (!this->load_kernel_source(source_dir+"scene_info.cl") ||
+      !this->append_process_kernels(source_dir+"cell_utils.cl") ||
+      !this->append_process_kernels(source_dir+"bit_tree_library_functions.cl") ||
+      !this->append_process_kernels(source_dir+"backproject.cl")||
+      !this->append_process_kernels(source_dir+"statistics_library_functions.cl")||
+      !this->append_process_kernels(source_dir+"expected_functor.cl")||
+      !this->append_process_kernels(source_dir+"ray_bundle_library_opt.cl")||
+      !this->append_process_kernels(source_dir+"cast_ray_bit.cl") ||
+      !this->append_process_kernels(source_dir+"change_detection.cl")) {
+    vcl_cerr << "Error: boxm_update_bit_scene_manager : failed to load kernel source (helper functions)\n";
+    return false;
+  }
+
+  //replace step_cell functor with the correct one... opt
+  // transfer cell data from global to local memory if use_cell_data_ == true
+  vcl_cout<<"Using functor step_cell_render_opt"<<vcl_endl;
+  vcl_string patt = "/*$$step_cell$$*/";
+  vcl_string functor = "step_cell_render_opt(mixture_array,alpha_array,data_ptr,d,&data_return);";
+
+  //compilation options
+  vcl_string options="";
+  if (vcl_strstr(this->platform_name,"ATI"))
+    options+="-D ATI ";
+  if (vcl_strstr(this->platform_name,"NVIDIA"))
+    options+="-D NVIDIA ";
+  options += "-D CHANGE ";
+  options += "-D CHANGE_OLD ";
 
   // assign the functor calling signature
   vcl_string::size_type pos_start = this->prog_.find(patt);
@@ -978,6 +1037,18 @@ bool boxm_update_bit_scene_manager::set_change_detection_args()
   status = clSetKernelArg(change_detection_kernel_,i++,sizeof(cl_mem),(void *)&image_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (input_image)"))
     return false;
+  if (!use_gl_)
+  {
+      image_gl_buf_ = clCreateBuffer(this->context_,
+                                      CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+                                      wni_*wnj_*sizeof(cl_uint),image_gl_,&status);
+      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (gl_image)"))
+          return false;
+  }
+  status = clSetKernelArg(change_detection_kernel_,i++,sizeof(cl_mem),(void *)&image_gl_buf_);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (gl_image)"))
+      return false;
+  
   //bit lookup buffer
   status = clSetKernelArg(change_detection_kernel_,i++,sizeof(cl_mem),(void *)&bit_lookup_buf_);
   if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output)"))
@@ -992,6 +1063,77 @@ bool boxm_update_bit_scene_manager::set_change_detection_args()
     return false;
   //output float buffer (one float for each buffer)
   status = clSetKernelArg(change_detection_kernel_,i++,sizeof(cl_mem),(void *)&output_debug_buf_);
+  return this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output debugger)")==CHECK_SUCCESS;
+
+
+  return true;
+}
+
+bool boxm_update_bit_scene_manager::set_change_detection_old_args()
+{
+  const int CHECK_SUCCESS = 1;
+  cl_int status = CL_SUCCESS;
+  int i=0;
+  status = clSetKernelArg(change_detection_old_kernel_,i++,sizeof(cl_mem),(void *)&scene_info_buf_);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (render scene info)"))
+    return false;
+  //block pointers
+  status = clSetKernelArg(change_detection_old_kernel_,i++,sizeof(cl_mem),(void *)&block_ptrs_buf_);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (block_ptrs_buf_)"))
+    return false;
+  // the tree buffer
+  status = clSetKernelArg(change_detection_old_kernel_,i++,sizeof(cl_mem),(void *)&cells_buf_);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cells_buf_)"))
+    return false;
+  //// alpha buffer
+  status = clSetKernelArg(change_detection_old_kernel_,i++,sizeof(cl_mem),(void *)&cell_alpha_buf_);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_data_buf_)"))
+    return false;
+  //mixture buffer
+  status = clSetKernelArg(change_detection_old_kernel_, i++,sizeof(cl_mem),(void *)&cell_mixture_buf_);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_mixture_buf)"))
+    return false;
+  //camera buffer
+  status = clSetKernelArg(change_detection_old_kernel_,i++,sizeof(cl_mem),(void *)&persp_cam_buf_);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (data)"))
+    return false;
+  // roi dimensions
+  status = clSetKernelArg(change_detection_old_kernel_,i++,sizeof(cl_mem),(void *)&img_dims_buf_);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (Img dimensions)"))
+    return false;
+  //local copy of the tree (one for each thread/ray)
+  status = clSetKernelArg(change_detection_old_kernel_,i++,this->bni_*this->bnj_*sizeof(cl_uchar16),0);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local tree)"))
+    return false;
+  status = clSetKernelArg(change_detection_old_kernel_,i++,sizeof(cl_mem),(void *)&image_buf_);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (input_image)"))
+    return false;
+  if (!use_gl_)
+  {
+      image_gl_buf_ = clCreateBuffer(this->context_,
+                                      CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+                                      wni_*wnj_*sizeof(cl_uint),image_gl_,&status);
+      if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (gl_image)"))
+          return false;
+  }
+  status = clSetKernelArg(change_detection_old_kernel_,i++,sizeof(cl_mem),(void *)&image_gl_buf_);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (gl_image)"))
+      return false;
+  
+  //bit lookup buffer
+  status = clSetKernelArg(change_detection_old_kernel_,i++,sizeof(cl_mem),(void *)&bit_lookup_buf_);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output)"))
+    return false;
+  //cum sum lookup buffer
+  status = clSetKernelArg(change_detection_old_kernel_,i++,this->bni_*this->bnj_*10*sizeof(cl_uchar), 0);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cumsum buff)"))
+    return false;
+  //imIndex buffer
+  status = clSetKernelArg(change_detection_old_kernel_,i++,this->bni_*this->bnj_*sizeof(cl_int), 0);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cumsum buff)"))
+    return false;
+  //output float buffer (one float for each buffer)
+  status = clSetKernelArg(change_detection_old_kernel_,i++,sizeof(cl_mem),(void *)&output_debug_buf_);
   return this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output debugger)")==CHECK_SUCCESS;
 
 
@@ -1785,7 +1927,7 @@ bool boxm_update_bit_scene_manager::set_workspace(cl_kernel kernel, unsigned pas
   else if (pass==4||pass==0 ||pass==1 || pass==3) // pass preinf, and proc_norm_image
   {
     globalThreads[0]=this->wni_;globalThreads[1]=this->wnj_;
-    localThreads[0] =this->bni_;localThreads[0] =this->bnj_;
+    localThreads[0] =this->bni_;localThreads[1] =this->bnj_;
   }
   else if (pass==2 || pass==5|| pass==11)  // pass for updating data from aux data
   {
@@ -1798,7 +1940,7 @@ bool boxm_update_bit_scene_manager::set_workspace(cl_kernel kernel, unsigned pas
   }
 
 
-  else if (pass==6|| pass==10)
+  else if (pass==6|| pass==10 || pass==12)
   {
     globalThreads[0] = this->wni_;
     globalThreads[1] = this->wnj_;
@@ -1899,7 +2041,13 @@ bool boxm_update_bit_scene_manager::update()
     if (!this->run(update_kernels_[pass], pass))
       return false;
     vcl_cout<<'('<<gpu_time_<<"ms)  ";
-
+    if (pass==3)
+    {
+    
+        this->read_output_image();
+        vil_image_view_base_sptr im= this->get_output_image(0);
+        vil_save(*im.ptr(), "f:/visdt/test/gpunorm.tiff");
+    }
     if (pass==4)
     {
       cl_event events[1];
@@ -2022,6 +2170,7 @@ bool boxm_update_bit_scene_manager::change_detection()
   this->set_workspace(change_detection_kernel_, pass);
   if (!this->run(change_detection_kernel_, pass))
     return false;
+
   vcl_cout << "Render Time: "<<gpu_time_<<" ms" << vcl_endl
 #ifdef DEBUG
            << "Running block "<<total_gpu_time/1000<<"s\n"
@@ -2032,7 +2181,25 @@ bool boxm_update_bit_scene_manager::change_detection()
 
   return true;
 }
+bool boxm_update_bit_scene_manager::change_detection_old()
+{
+  gpu_time_=0;
+  unsigned pass = 12;
+  this->set_change_detection_old_args();
+  this->set_workspace(change_detection_old_kernel_, pass);
+  if (!this->run(change_detection_old_kernel_, pass))
+    return false;
 
+  vcl_cout << "Render Time: "<<gpu_time_<<" ms" << vcl_endl
+#ifdef DEBUG
+           << "Running block "<<total_gpu_time/1000<<"s\n"
+           << "total block loading time = " << total_load_time << "s\n"
+           << "total block processing time = " << total_raytrace_time << 's' << vcl_endl
+#endif
+  ;
+
+  return true;
+}
 
 bool boxm_update_bit_scene_manager::query_point(vgl_point_3d<float> p)
 {
