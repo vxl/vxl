@@ -34,6 +34,10 @@ IF(VGUI_FOUND)
       boxm_update_bit_tableau.h
       boxm_update_bit_tableau.cxx
       boxm_update_bit_tableau_sptr.h
+      boxm_ocl_render_bit_tableau_sptr.h
+      boxm_change_detection_bit_tableau.h
+      boxm_change_detection_bit_tableau.cxx
+      boxm_change_detection_bit_tableau_sptr.h
       boxm_ocl_include_glew.h
      )
 
