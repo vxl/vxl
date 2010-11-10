@@ -15,6 +15,7 @@ change_detecttion_scene(__constant  RenderSceneInfo    * linfo,
                         __global    uint4              * imgdims,       // dimensions of the image
                         __local     uchar16            * local_tree,
                         __global    float4             * in_image,      // input image and store vis_inf and pre_inf
+                        __global    uint               * gl_image, 
                         __constant  uchar              * bit_lookup,
                         __local     uchar              * cumsum,        //cumulative sum helper for data pointer
                         __local     int                * imIndex,
@@ -76,7 +77,7 @@ change_detecttion_scene(__constant  RenderSceneInfo    * linfo,
             imIndex,
             
             //io info
-            in_image, 0, output);
+            in_image, gl_image, output);
 }
 
 #endif // CHANGE
