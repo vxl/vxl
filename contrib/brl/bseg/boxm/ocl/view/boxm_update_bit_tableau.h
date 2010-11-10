@@ -43,6 +43,7 @@ class boxm_update_bit_tableau: public boxm_cam_tableau
     bool render_frame();
     bool update_model();
     bool refine_model();
+    bool merge_model();
     bool save_model();
     bool save_image(vcl_string filename);
     bool save_camera(vcl_string filename);

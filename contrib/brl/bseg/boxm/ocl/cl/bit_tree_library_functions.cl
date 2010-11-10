@@ -53,6 +53,25 @@ int get_depth(int i) {
 }
 
 //--------------------------------------------------------------------
+// Returns whether or not a cell at 'i' has children that are all leaves
+//--------------------------------------------------------------------
+bool children_are_leaves(__local uchar* tree, int i)
+{
+  if(i==0)
+    return (tree[1] == 0); 
+  if(i<9)
+    return (tree[i+1] == 0);
+  
+  return true;
+/*
+  if(i > 72)
+    int ci = (i<<3) + 1;                   // bit index of first child
+    int bi = ((ci-1)>>3) +1;               //byte_index of parent bit
+    return (tree[bi] == 0);                 // if all bits at tree[bi] are 0, then they're all leaves...
+*/
+}
+
+//--------------------------------------------------------------------
 // loc code to absolute index //UNTESTED
 //--------------------------------------------------------------------
 #if 0  //unused function that breaks Windows/OS X/Linux compatibility

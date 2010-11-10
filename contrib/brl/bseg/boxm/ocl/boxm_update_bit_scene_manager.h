@@ -15,6 +15,24 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vul/vul_file_iterator.h>
 
+//PASS ENUM
+enum {
+  UPDATE_SEGLEN = 0,
+  UPDATE_PREINF = 1,
+  UPDATE_DIVIDE = 2,
+  UPDATE_PROC   = 3,
+  UPDATE_BAYES  = 4, 
+  UPDATE_CELL   = 5, 
+  RENDER_PASS   = 6, 
+  REFINE_PASS   = 7,
+  QUERY_POINT   = 8,
+  RAY_PROBE     = 9,
+  CHANGE_DETECT = 10,
+  CLEAN_AUX     = 11,
+  MERGE_PASS    = 12,
+  CHANGE_DETECT_OLD = 13
+}; 
+
 class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_manager>, public vbl_ref_count
 {
   typedef vnl_vector_fixed<int, 4> int4;
@@ -64,6 +82,7 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   //update, render, refine publicly callable methods
   bool rendering();
   bool refine();
+  bool merge();
   bool update();
   bool change_detection();
   bool change_detection_old();
@@ -128,6 +147,7 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   cl_command_queue command_queue_;
   cl_kernel render_kernel_;
   cl_kernel refine_kernel_;
+  cl_kernel merge_kernel_;
   cl_kernel query_point_kernel_;
   cl_kernel ray_probe_kernel_;
   cl_kernel change_detection_kernel_;
@@ -168,6 +188,7 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   bool build_update_program(vcl_string const& functor, bool use_cell_data);
   bool build_rendering_program();
   bool build_refining_program();
+  bool build_merging_program();
   bool build_query_point_program();
   bool build_ray_probe_program();
   bool build_change_detection_program();
@@ -179,6 +200,7 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   //: sets args for each kernel (should only be called once)
   bool set_render_args();
   bool set_refine_args();
+  bool set_merge_args();
   bool set_update_args(unsigned pass);
   bool set_query_point_args();
   bool set_ray_probe_args(int i, int j, float intensity);
@@ -230,6 +252,7 @@ class boxm_update_bit_scene_manager : public bocl_manager<boxm_update_bit_scene_
   /* other */
   cl_uchar        * bit_lookup_;
   cl_float          prob_thresh_;     //update prob thresh
+  cl_float          merge_thresh_;
   cl_float        * output_debug_;    //output for debugging
 
  /*****************************************

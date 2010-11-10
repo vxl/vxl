@@ -202,30 +202,60 @@ bool boxm_vid_tableau::mouse_drag(int x, int y, vgui_button button, vgui_modifie
   // TRANSLATION
   if (c_mouse_translate(button, modifier)) {
 
-    //get viewport height, and mouse dx, dy
-    GLint vp[4];
-    glGetIntegerv(GL_VIEWPORT, vp); // ok
-    double width = (double)vp[2];
-    double height = (double)vp[3];
+    ////get viewport height, and mouse dx, dy
+    //GLint vp[4];
+    //glGetIntegerv(GL_VIEWPORT, vp); // ok
+    //double width = (double)vp[2];
+    //double height = (double)vp[3];
+    //double dx = (beginx - x) / width;
+    //double dy = (beginy - y) / height;
+    //double scale = .5 * vcl_sqrt(vcl_pow(dx,2.0) + vcl_pow(dy,2.0));
+
+    ////get cam space points
+    //vgl_point_3d<double> p0(beginx/width, beginy/height, 0.0);
+    //vgl_point_3d<double> p1(x/width, y/height, 0.0);
+
+    ////transform points to world space
+    //vgl_point_3d<double> cam_center = cam_.get_camera_center();
+    //vgl_point_3d<double> wp0 = cam_.get_rotation().inverse()*p0;
+    //vgl_point_3d<double> wp1 = cam_.get_rotation().inverse()*p1;
+    //wp0 += cam_center - vgl_point_3d<double>(0,0,0);
+    //wp1 += cam_center - vgl_point_3d<double>(0,0,0);
+    //vgl_vector_3d<double> worldVec = scale * normalized(wp0-wp1);
+
+    ////vcl_cout<<"  new cam center: "<<cam_center + worldVec<<vcl_endl;
+    //stare_point_ += worldVec;
+    //cam_.set_camera_center(cam_center + worldVec);
+    
+    //get viewport height and width
+    GLdouble vp[4];
+    glGetDoublev(GL_VIEWPORT, vp); // ok
+    float width  = (float)vp[2];
+    float height = (float)vp[3];
+
+    // get mouse deltas
     double dx = (beginx - x) / width;
     double dy = (beginy - y) / height;
-    double scale = .5 * vcl_sqrt(vcl_pow(dx,2.0) + vcl_pow(dy,2.0));
 
-    //get cam space points
-    vgl_point_3d<double> p0(beginx/width, beginy/height, 0.0);
-    vgl_point_3d<double> p1(x/width, y/height, 0.0);
-
-    //transform points to world space
+    //cam location in spherical coordinates (this should be relative to the stare point
     vgl_point_3d<double> cam_center = cam_.get_camera_center();
-    vgl_point_3d<double> wp0 = cam_.get_rotation().inverse()*p0;
-    vgl_point_3d<double> wp1 = cam_.get_rotation().inverse()*p1;
-    wp0 += cam_center - vgl_point_3d<double>(0,0,0);
-    wp1 += cam_center - vgl_point_3d<double>(0,0,0);
-    vgl_vector_3d<double> worldVec = scale * normalized(wp0-wp1);
+    vgl_point_3d<double> origin(0.0f,0.0f,0.0f);
+    double rad = vgl_distance<double>(cam_center, origin);
+    double theta = vcl_acos(cam_center.z()/rad);
+    double phi = vcl_atan2(cam_center.y(), cam_center.x());
 
-    //vcl_cout<<"  new cam center: "<<cam_center + worldVec<<vcl_endl;
-    stare_point_ += worldVec;
-    cam_.set_camera_center(cam_center + worldVec);
+    //update theta by a function of dy
+    double angleScale = .1;
+    double newTheta = theta - dy * angleScale;
+    double newPhi = phi + dx * angleScale;
+    vgl_point_3d<double> newCenter(rad * vcl_sin(newTheta) * vcl_cos(newPhi),
+                                   rad * vcl_sin(newTheta) * vcl_sin(newPhi),
+                                   rad * vcl_cos(newTheta));
+    cam_.set_camera_center(newCenter);
+    cam_.look_at(stare_point_);
+
+    //vcl_cout<<cam_;
+    this->post_redraw();
 
     this->post_redraw();
     return true;

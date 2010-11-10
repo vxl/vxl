@@ -23,6 +23,7 @@ bool boxm_update_bit_scene_manager::init_scene(boxm_ocl_bit_scene *scene,
   wni_=(cl_uint)RoundUp(input_img_.ni(),bni_);
   wnj_=(cl_uint)RoundUp(input_img_.nj(),bnj_);
   prob_thresh_=prob_thresh;
+  merge_thresh_ = .15f;
   use_gl_=true;
   return this->init_scene_buffers(scene);
 }
@@ -42,6 +43,7 @@ bool boxm_update_bit_scene_manager::init_scene(boxm_ocl_bit_scene *scene,
   wnj_=(cl_uint)RoundUp((int)nj,bnj_);
   vcl_cout<<"DIMS"<<wni_<<' '<<wnj_<<vcl_endl;
   prob_thresh_=prob_thresh;
+  merge_thresh_ = .15f;
 
   return this->init_scene_buffers(scene);
 }
@@ -542,6 +544,19 @@ bool boxm_update_bit_scene_manager::set_kernels()
     vcl_cout<<"REfine failed to build"<<vcl_endl;
     return false;
   }
+  
+  //create and build merge kernel
+  if (!this->build_merging_program()) {
+    vcl_cout<<"refine program failed to build"<<vcl_endl;
+    return false;
+  }
+  merge_kernel_ = clCreateKernel(program_,"merge_bit_scene", &status);
+  if (this->check_val(status,CL_SUCCESS,error_to_string(status))!=CHECK_SUCCESS) {
+    vcl_cout<<"merge failed to build"<<vcl_endl;
+    return false;
+  }
+  
+  //create and set query point kernel
   if (!this->build_query_point_program()) {
     vcl_cout<<"refine program failed to build"<<vcl_endl;
     return false;
@@ -769,6 +784,40 @@ bool boxm_update_bit_scene_manager::build_refining_program()
 
   return this->build_kernel_program(program_,options)==SDK_SUCCESS;
 }
+
+bool boxm_update_bit_scene_manager::build_merging_program()
+{
+  vcl_string root = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm/ocl/cl/" ;
+  bool info = this->load_kernel_source(root + "scene_info.cl");
+  bool bitr = this->append_process_kernels(root + "bit_tree_library_functions.cl");
+  bool refn = this->append_process_kernels(root + "merge_bit_scene.cl");
+
+  if (!info || !bitr || !refn) {
+    vcl_cerr << "Error: boxm_update_bit_scene_manager : failed to load kernel source (merge_bit_scene functions)\n";
+    return false;
+  }
+
+  vcl_string options = "";
+  if (scene_info_->root_level == 1) {
+    options += "-D MAXINNER=1 ";
+    options += "-D MAXCELLS=9 ";
+  }
+  else if (scene_info_->root_level == 2) {
+    options += "-D MAXINNER=9 ";
+    options += "-D MAXCELLS=73 ";
+  }
+  else if (scene_info_->root_level == 3) {
+    options += "-D MAXINNER=73 ";
+    options += "-D MAXCELLS=585 ";
+  }
+  else {
+    vcl_cout<<"build_refining_program::root level is not 1, 2 or 3, invalid scene info"<<vcl_endl;
+    return false;
+  }
+
+  return this->build_kernel_program(program_,options)==SDK_SUCCESS;
+}
+
 
 bool boxm_update_bit_scene_manager::build_query_point_program()
 {
@@ -1268,6 +1317,76 @@ bool boxm_update_bit_scene_manager::set_refine_args()
     return false;
   //output float buffer (one float for each buffer)
   status = clSetKernelArg(refine_kernel_, i++,sizeof(cl_mem),(void *)&output_debug_buf_);
+  if (this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output debugger)")!=CHECK_SUCCESS)
+    return false;
+  //END REFINE ARGS-------------------------------------------------------------
+
+  return true;
+}
+
+bool boxm_update_bit_scene_manager::set_merge_args()
+{
+  //SET REFINE ARGS-------------------------------------------------------------
+  const int CHECK_SUCCESS = 1;
+  cl_int status = CL_SUCCESS;
+  int i=0;
+  status = clSetKernelArg(merge_kernel_,i++,sizeof(cl_mem), (void *)&scene_info_buf_);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (render scene info)"))
+    return false;
+  //mem_ptrs
+  status = clSetKernelArg(merge_kernel_,i++,sizeof(cl_mem), (void *)&mem_ptrs_buf_);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (mem pointers scene info)"))
+    return false;
+  //blocks in buffers
+  status = clSetKernelArg(merge_kernel_,i++,sizeof(cl_mem), (void *)&blocks_in_buffers_buf_);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (mem pointers scene info)"))
+    return false;
+  // the tree buffer
+  status = clSetKernelArg(merge_kernel_,i++,sizeof(cl_mem), (void *)&cells_buf_);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cells_buf_)"))
+    return false;
+  // alpha buffer
+  status = clSetKernelArg(merge_kernel_,i++,sizeof(cl_mem),(void *)&cell_alpha_buf_);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_data_buf_)"))
+    return false;
+  //mixture buffer
+  status = clSetKernelArg(merge_kernel_, i++, sizeof(cl_mem), (void *)&cell_mixture_buf_);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_mixture_buf)"))
+    return false;
+  //last weight buffer
+  //status = clSetKernelArg(refine_kernel_, i++, sizeof(cl_mem), (void *)&cell_weight_buf_);
+  //if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_mixture_buf)"))
+    //return false;
+  //cell num obs buffer
+  status = clSetKernelArg(merge_kernel_, i++, sizeof(cl_mem), (void *)&cell_num_obs_buf_);
+  if (this->check_val(status, CL_SUCCESS, "clSetKernelArg failed. (cell_num_obs_buf_)")!=CHECK_SUCCESS)
+    return false;
+  ////cell aux data buffer
+  //status = clSetKernelArg(refine_kernel_,i++,sizeof(cl_mem),(void *)&cell_aux_data_buf_);
+  //if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cell_data_buf_)"))
+    //return false;
+  //bit lookup buffer
+  status = clSetKernelArg(merge_kernel_,i++,sizeof(cl_mem),(void *)&bit_lookup_buf_);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output)"))
+    return false;
+  ////cum sum lookup buffer
+  status = clSetKernelArg(merge_kernel_,i++,16*sizeof(cl_uchar), 0);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (cumsum buff)"))
+    return false;
+  //local copy of the tree (old copy)
+  status = clSetKernelArg(merge_kernel_,i++,sizeof(cl_uchar16),0);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (local tree)"))
+    return false;
+  //local copy of the tree (refined copy)
+  status = clSetKernelArg(merge_kernel_,i++,sizeof(cl_uchar16),0);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (refined local tree)"))
+    return false;
+  //prob thresh for refine
+  status = clSetKernelArg(merge_kernel_, i++, sizeof(cl_float),  &merge_thresh_);
+  if (!this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (prob_thresh buffer)"))
+    return false;
+  //output float buffer (one float for each buffer)
+  status = clSetKernelArg(merge_kernel_, i++,sizeof(cl_mem),(void *)&output_debug_buf_);
   if (this->check_val(status,CL_SUCCESS,"clSetKernelArg failed. (output debugger)")!=CHECK_SUCCESS)
     return false;
   //END REFINE ARGS-------------------------------------------------------------
@@ -1919,55 +2038,54 @@ bool boxm_update_bit_scene_manager::set_workspace(cl_kernel kernel, unsigned pas
   if (!this->check_val(status,CL_SUCCESS,"clGetKernelWorkGroupInfo CL_KERNEL_WORK_GROUP_SIZE, failed."))
     return false;
 
-  if ( pass==(unsigned int)(-1)) // passes for computing aux
-  {
-    globalThreads[0]=this->wni_/2; globalThreads[1]=this->wnj_/2;
-    localThreads[0] =this->bni_  ; localThreads[1] =this->bnj_  ;
+  
+  switch(pass) {
+    case UPDATE_SEGLEN:
+    case UPDATE_PREINF:
+    case UPDATE_PROC:
+    case UPDATE_BAYES:
+    case RENDER_PASS:
+    case CHANGE_DETECT:
+    case CHANGE_DETECT_OLD: 
+          globalThreads[0] = this->wni_;
+          globalThreads[1] = this->wnj_;
+          localThreads[0]  = this->bni_;
+          localThreads[1]  = this->bnj_;
+          break;
+    case UPDATE_CELL: 
+    case CLEAN_AUX:
+    {
+          int numbuf = scene_info_->num_buffer;
+          int datlen = scene_info_->data_buffer_length;
+          globalThreads[0] = RoundUp(numbuf*datlen,64);
+          globalThreads[1] = 1;
+          localThreads[0]  = 64;
+          localThreads[1]  = 1;
+          break;
+    }
+    case REFINE_PASS:
+    case MERGE_PASS: 
+          globalThreads[0] = scene_info_->num_buffer;
+          globalThreads[1] = 1;
+          localThreads[0]  = 1;
+          localThreads[1]  = 1;
+          break;
+    case QUERY_POINT: 
+    case RAY_PROBE:
+          globalThreads[0] = 1;
+          globalThreads[1] = 1;
+          localThreads[0]  = 1;
+          localThreads[1]  = 1;
+          break;
   }
-  else if (pass==4||pass==0 ||pass==1 || pass==3) // pass preinf, and proc_norm_image
-  {
-    globalThreads[0]=this->wni_;globalThreads[1]=this->wnj_;
-    localThreads[0] =this->bni_;localThreads[1] =this->bnj_;
-  }
-  else if (pass==2 || pass==5|| pass==11)  // pass for updating data from aux data
-  {
-    int numbuf = scene_info_->num_buffer;
-    int datlen = scene_info_->data_buffer_length;
-    globalThreads[0] = RoundUp(numbuf*datlen,64);
-    globalThreads[1] = 1;
-    localThreads[0]  = 64;
-    localThreads[1]  = 1;
-  }
+  
+  //what is this for?
+  //if ( pass==(unsigned int)(-1)) // passes for computing aux
+  //{
+    //globalThreads[0]=this->wni_/2; globalThreads[1]=this->wnj_/2;
+    //localThreads[0] =this->bni_  ; localThreads[1] =this->bnj_  ;
+  //}
 
-
-  else if (pass==6|| pass==10 || pass==12)
-  {
-    globalThreads[0] = this->wni_;
-    globalThreads[1] = this->wnj_;
-    localThreads[0]  = this->bni_;
-    localThreads[1]  = this->bnj_;
-  }
-  else if (pass==7)
-  {
-    globalThreads[0] = scene_info_->num_buffer;
-    globalThreads[1] = 1;
-    localThreads[0]  = 1;
-    localThreads[1]  = 1;
-  }
-  else if (pass==8)
-  {
-    globalThreads[0] = 1;
-    globalThreads[1] = 1;
-    localThreads[0]  = 1;
-    localThreads[1]  = 1;
-  }
-  else if (pass==9)
-  {
-    globalThreads[0] = 1;
-    globalThreads[1] = 1;
-    localThreads[0]  = 1;
-    localThreads[1]  = 1;
-  }
   if (used_local_memory > this->total_local_memory())
   {
     vcl_cout << "Unsupported: Insufficient local memory on device.\n";
@@ -2041,7 +2159,9 @@ bool boxm_update_bit_scene_manager::update()
     if (!this->run(update_kernels_[pass], pass))
       return false;
     vcl_cout<<'('<<gpu_time_<<"ms)  ";
-    if (pass==3)
+   
+#if 0
+   if (pass==3)
     {
     
         this->read_output_image();
@@ -2084,6 +2204,8 @@ bool boxm_update_bit_scene_manager::update()
         }
       }
     }
+#endif
+  
   }
   vcl_cout << ":::: total gpu update time:"<<gpu_time_<<" ms\n"
            << ":::: total cpu update time:"<<(float)timer.all() / 1e3f<<" ms\n"
@@ -2133,10 +2255,9 @@ bool boxm_update_bit_scene_manager::update()
 bool boxm_update_bit_scene_manager::rendering()
 {
   gpu_time_=0;
-  unsigned pass = 6;
   this->set_render_args();
-  this->set_workspace(render_kernel_, pass);
-  if (!this->run(render_kernel_, pass))
+  this->set_workspace(render_kernel_, RENDER_PASS);
+  if (!this->run(render_kernel_, RENDER_PASS))
     return false;
   vcl_cout << "Render Time: "<<gpu_time_<<" ms" << vcl_endl
 #ifdef DEBUG
@@ -2152,23 +2273,20 @@ bool boxm_update_bit_scene_manager::rendering()
 bool boxm_update_bit_scene_manager::clean_aux_data()
 {
   gpu_time_=0;
-  unsigned pass = 11;
   this->set_clean_aux_data_args();
-  this->set_workspace(clean_aux_data_kernel_, pass);
-  if (!this->run(clean_aux_data_kernel_, pass))
+  this->set_workspace(clean_aux_data_kernel_, CLEAN_AUX);
+  if (!this->run(clean_aux_data_kernel_, CLEAN_AUX))
     return false;
   vcl_cout << "Clean Aux data: "<<gpu_time_<<" ms" << vcl_endl;
   return true;
 }
 
-
 bool boxm_update_bit_scene_manager::change_detection()
 {
   gpu_time_=0;
-  unsigned pass = 10;
   this->set_change_detection_args();
-  this->set_workspace(change_detection_kernel_, pass);
-  if (!this->run(change_detection_kernel_, pass))
+  this->set_workspace(change_detection_kernel_, CHANGE_DETECT);
+  if (!this->run(change_detection_kernel_, CHANGE_DETECT))
     return false;
 
   vcl_cout << "Render Time: "<<gpu_time_<<" ms" << vcl_endl
@@ -2184,19 +2302,10 @@ bool boxm_update_bit_scene_manager::change_detection()
 bool boxm_update_bit_scene_manager::change_detection_old()
 {
   gpu_time_=0;
-  unsigned pass = 12;
   this->set_change_detection_old_args();
-  this->set_workspace(change_detection_old_kernel_, pass);
-  if (!this->run(change_detection_old_kernel_, pass))
+  this->set_workspace(change_detection_old_kernel_, CHANGE_DETECT_OLD);
+  if (!this->run(change_detection_old_kernel_, CHANGE_DETECT_OLD))
     return false;
-
-  vcl_cout << "Render Time: "<<gpu_time_<<" ms" << vcl_endl
-#ifdef DEBUG
-           << "Running block "<<total_gpu_time/1000<<"s\n"
-           << "total block loading time = " << total_load_time << "s\n"
-           << "total block processing time = " << total_raytrace_time << 's' << vcl_endl
-#endif
-  ;
 
   return true;
 }
@@ -2204,7 +2313,6 @@ bool boxm_update_bit_scene_manager::change_detection_old()
 bool boxm_update_bit_scene_manager::query_point(vgl_point_3d<float> p)
 {
   gpu_time_=0;
-  unsigned pass = 8;
   point_3d_[0]=p.x();
   point_3d_[1]=p.y();
   point_3d_[2]=p.z();
@@ -2214,8 +2322,8 @@ bool boxm_update_bit_scene_manager::query_point(vgl_point_3d<float> p)
   clFinish(command_queue_);
 
   this->set_query_point_args();
-  this->set_workspace(query_point_kernel_, pass);
-  if (!this->run(query_point_kernel_, pass))
+  this->set_workspace(query_point_kernel_, QUERY_POINT);
+  if (!this->run(query_point_kernel_, QUERY_POINT))
     return false;
   vcl_cout << "Timing Analysis\n"
            << "===============\n"
@@ -2227,10 +2335,9 @@ bool boxm_update_bit_scene_manager::query_point(vgl_point_3d<float> p)
 bool boxm_update_bit_scene_manager::ray_probe(unsigned i,unsigned j, float intensity)
 {
   gpu_time_=0;
-  unsigned pass = 9;
   this->set_ray_probe_args((int)i,(int)j, intensity);
-  this->set_workspace(ray_probe_kernel_, pass);
-  if (!this->run(ray_probe_kernel_, pass))
+  this->set_workspace(ray_probe_kernel_, RAY_PROBE);
+  if (!this->run(ray_probe_kernel_, RAY_PROBE))
     return false;
   if (!this->read_output_array())
     vcl_cout<<" No output\n"<<vcl_endl;
@@ -2244,10 +2351,9 @@ bool boxm_update_bit_scene_manager::ray_probe(unsigned i,unsigned j, float inten
 bool boxm_update_bit_scene_manager::refine()
 {
   gpu_time_=0;
-  unsigned pass = 7;
   this->set_refine_args();
-  this->set_workspace(refine_kernel_, pass);
-  if (!this->run(refine_kernel_, pass))
+  this->set_workspace(refine_kernel_, REFINE_PASS);
+  if (!this->run(refine_kernel_, REFINE_PASS))
     return false;
   vcl_cout << "===============\n"
            << "Timing Analysis:\n"
@@ -2321,6 +2427,97 @@ bool boxm_update_bit_scene_manager::refine()
     else if (output_debug_[i] == -559) {
       vcl_cout<<"buffer @ "<<i<<" end pointer and new data pointer don't match unrefined "<<freeSpace
               <<"  mem_ptrs = "<<startPtr<<','<<endPtr<<vcl_endl;
+    }
+  }
+  vcl_cout<<vcl_endl;
+  /****************************************************************/
+#endif // 1
+
+  return true;
+}
+
+bool boxm_update_bit_scene_manager::merge()
+{
+  gpu_time_=0;
+  this->set_merge_args();
+  this->set_workspace(merge_kernel_, MERGE_PASS);
+  if (!this->run(merge_kernel_, MERGE_PASS))
+    return false;
+  vcl_cout << "===============\n"
+           << "Timing Analysis:\n"
+           << "openCL Running time "<<gpu_time_<<" ms" << vcl_endl;
+
+#if 0
+  //-read trees for mem_ptrs---TO BE DELTED -------
+  this->read_scene();
+  scene_->set_blocks(block_ptrs_);
+  scene_->set_tree_buffers_opt(cells_);
+  scene_->set_mem_ptrs(mem_ptrs_);
+  scene_->set_alpha_values(cell_alpha_);
+  scene_->set_mixture_values(cell_mixture_);
+  scene_->set_num_obs_values(cell_num_obs_);
+  vcl_cout<<(*scene_)<<vcl_endl;
+  //----TO BE DELETED -------
+#endif
+
+#if 1
+  /******** read some output **************************************/
+  cl_event events[1];
+  int status = clEnqueueReadBuffer(command_queue_,output_debug_buf_,CL_TRUE, 0,
+                                   scene_info_->num_buffer*sizeof(cl_float),
+                                   output_debug_, 0, NULL, &events[0]);
+  if (!this->check_val(status,CL_SUCCESS,"clEnqueueReadBuffer (output buffer )failed."))
+    return false;
+  status = clWaitForEvents(1, &events[0]);
+  if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents (output read) failed."))
+    return false;
+
+  vcl_cout<<"Kernel OUTPUT:"<<vcl_endl;
+  this->read_scene();   //DEBUG PRINTER - can be deleted when fully working.
+  for (int i=0; i<scene_info_->num_buffer; i++) {
+    int startPtr = mem_ptrs_[2*i];
+    int endPtr   = mem_ptrs_[2*i+1];
+    int freeSpace = (startPtr >= endPtr)? startPtr-endPtr : scene_info_->data_buffer_length - (endPtr-startPtr);
+#if 0
+    vcl_cout<<"Buffer @"<<i<<": ["<<startPtr<<','<<endPtr<<"] ("
+            <<freeSpace<<" free cells)  "
+            <<output_debug_[i]<<" cells split"<<vcl_endl;
+    if (startPtr > endPtr) vcl_cout<<"     Rolled over Buffer..."<<vcl_endl;
+#endif
+    if (output_debug_[i] == -666) {
+      vcl_cout<<"buffer @ "<<i<<" is out of space post merge (shouldn't happen). freeSpace = "<<freeSpace
+              <<"  mem_ptrs = "<<startPtr<<','<<endPtr<<vcl_endl;
+    }
+    else if (output_debug_[i] == -665) {
+      vcl_cout<<"buffer @ "<<i<<" is out of space PRE merge freeSpace = "<<freeSpace
+              <<"  mem_ptrs = "<<startPtr<<','<<endPtr<<vcl_endl;
+    }
+    else if (output_debug_[i] == -555) {
+      vcl_cout<<"buffer @ "<<i<<" has bad block pointer!!! freeSpace = "<<freeSpace
+              <<"  mem_ptrs = "<<startPtr<<','<<endPtr<<vcl_endl;
+    }
+    else if (output_debug_[i] == -663) {
+      vcl_cout<<"buffer @ "<<i<<" failed on refine!!! freeSpace = "<<freeSpace
+              <<"  mem_ptrs = "<<startPtr<<','<<endPtr<<vcl_endl;
+    }
+    else if (output_debug_[i] == -662) {
+      vcl_cout<<"buffer @ "<<i<<" failed to initialize correct number of cells !!! freeSpace = "<<freeSpace
+              <<"  mem_ptrs = "<<startPtr<<','<<endPtr<<vcl_endl;
+    }
+    else if (output_debug_[i] == -661) {
+      vcl_cout<<"buffer @ "<<i<<" newInit and old cells don't add up to newsize !!! freeSpace = "<<freeSpace
+              <<"  mem_ptrs = "<<startPtr<<','<<endPtr<<vcl_endl;
+    }
+    else if (output_debug_[i] == -660) {
+      vcl_cout<<"buffer @ "<<i<<" end pointer and newdata pointer don't match refined "<<freeSpace
+              <<"  mem_ptrs = "<<startPtr<<','<<endPtr<<vcl_endl;
+    }
+    else if (output_debug_[i] == -559) {
+      vcl_cout<<"buffer @ "<<i<<" end pointer and new data pointer don't match unrefined "<<freeSpace
+              <<"  mem_ptrs = "<<startPtr<<','<<endPtr<<vcl_endl;
+    }
+    else if (output_debug_[i] > 0.0f) {
+      vcl_cout<<"buffer @ "<<i<<" number of leaves merged: "<<output_debug_[i]<<vcl_endl;
     }
   }
   vcl_cout<<vcl_endl;

@@ -179,6 +179,12 @@ bool boxm_update_bit_tableau::refine_model()
   return updt_mgr->refine();
   return false;
 }
+bool boxm_update_bit_tableau::merge_model()
+{
+  vcl_cout<<"MERGING MODEL!!!"<<vcl_endl;
+  boxm_update_bit_scene_manager* updt_mgr = boxm_update_bit_scene_manager::instance();
+  return updt_mgr->merge();
+}
 //: calls on update manager to update model
 bool boxm_update_bit_tableau::update_model()
 {
@@ -326,6 +332,11 @@ bool boxm_update_bit_tableau::handle(vgui_event const &e)
   else if (e.type == vgui_KEY_PRESS && e.key == vgui_key('d')) {
     vcl_cout<<"refining"<<vcl_endl;
     this->refine_model();
+    return true;
+  }
+  else if (e.type == vgui_KEY_PRESS && e.key == vgui_key('m')) {
+    vcl_cout<<"merging"<<vcl_endl;
+    this->merge_model();
     return true;
   }
   else if (e.type == vgui_KEY_PRESS && e.key == vgui_key('s')) {
