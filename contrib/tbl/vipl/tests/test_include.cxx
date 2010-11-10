@@ -16,8 +16,20 @@
 #include <vipl/vipl_y_gradient.h>
 
 #include <vipl/accessors/vipl_accessors_vcl_vector.h>
+#undef VIPL_DECLARE_ACCESSORS
 #include <vipl/accessors/vipl_accessors_vil1_image.h>
+#undef VIPL_DECLARE_ACCESSORS
 #include <vipl/accessors/vipl_accessors_vil_image_view.h>
+#undef VIPL_DECLARE_ACCESSORS
+#undef FILTER_IMPTR_DEC_REFCOUNT
+#include <vipl/vipl_with_section/accessors/vipl_accessors_section.h>
+#undef VIPL_DECLARE_ACCESSORS
+#include <vipl/vipl_with_vbl_array_2d/accessors/vipl_accessors_vbl_array_2d.h>
+#undef VIPL_DECLARE_ACCESSORS
+#include <vipl/vipl_with_vnl_matrix/accessors/vipl_accessors_vnl_matrix.h>
+#undef VIPL_DECLARE_ACCESSORS
+#include <vipl/vipl_with_vnl_matrix/accessors/vipl_accessors_vnl_vector.h>
+#undef VIPL_DECLARE_ACCESSORS
 #include <vipl/filter/vipl_filter_2d.h>
 #include <vipl/filter/vipl_filter_abs.h>
 #include <vipl/filter/vipl_filter.h>
@@ -27,9 +39,5 @@
 #include <vipl/section/vipl_section_descriptor_2d.h>
 #include <vipl/section/vipl_section_descriptor.h>
 #include <vipl/section/vipl_section_iterator.h>
-#include <vipl/vipl_with_section/accessors/vipl_accessors_section.h>
-#include <vipl/vipl_with_vbl_array_2d/accessors/vipl_accessors_vbl_array_2d.h>
-#include <vipl/vipl_with_vnl_matrix/accessors/vipl_accessors_vnl_matrix.h>
-#include <vipl/vipl_with_vnl_matrix/accessors/vipl_accessors_vnl_vector.h>
 
 int main() { return 0; }
