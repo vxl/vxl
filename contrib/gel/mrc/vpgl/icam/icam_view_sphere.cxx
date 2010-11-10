@@ -35,15 +35,14 @@ void icam_view_sphere::set_cameras(vcl_map<unsigned, vpgl_camera_double_sptr> co
   vsph_view_sphere<vsph_view_point<icam_view_metadata> >::iterator it=view_sphere_->begin();
   vcl_map<unsigned, vpgl_camera_double_sptr>::const_iterator cam_it=cameras.begin();
   while (it != view_sphere_->end() && cam_it != cameras.end()) {
-    vsph_view_point<icam_view_metadata> vp = it->second;
     vpgl_camera_double_sptr cam = cam_it->second;
-    vp.set_camera(cam);
+    it->second.set_camera(cam);
     vpgl_perspective_camera<double>* pers_cam = static_cast<vpgl_perspective_camera<double>*>(cam.as_pointer());
     vgl_homg_point_3d<double> center = pers_cam->camera_center();
     vsph_spherical_coord coord;
     vsph_sph_point_3d sp;
     coord.spherical_coord(center, sp);
-    vp.set_view_point(sp);
+    it->second.set_view_point(sp);
     it++;
     cam_it++;
   }
@@ -96,16 +95,14 @@ void icam_view_sphere::register_image(vil_image_view<float> const& dest_img)
   }
 
   vcl_vector<vsph_view_point<icam_view_metadata> > local_min;
-#if 0
   find_local_minima(local_min);
-#endif
-  /**************/
+#if 0
   vsph_view_point<icam_view_metadata>* vp;
   view_sphere_->view_point(142,vp);
   vpgl_perspective_camera<double>* cam = (vpgl_perspective_camera<double>*)vp->camera().as_pointer();
   vcl_cout << *cam;
   local_min.push_back(*vp);
-  /*************/
+#endif
   double cam_error=1e10;
   unsigned idx=-1;
   for (unsigned i=0; i<local_min.size(); i++) {

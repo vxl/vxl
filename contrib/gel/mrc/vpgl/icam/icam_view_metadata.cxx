@@ -46,8 +46,10 @@ void icam_view_metadata::compute_camera()
   vil_image_view<float> image=this->minimizer_->dest(0);
   vil_save(image,"F:/tests/mundy-downtown/view_sphere/test/myimg.tiff");
 
-  vgl_box_3d<double> trans_box(-.5,-.5,-.5,.5,.5,.5); 
-  vgl_vector_3d<double>  trans_steps(0.5,0.5,0.5);
+  vgl_box_3d<double> trans_box;
+  trans_box.add(vgl_point_3d<double>(-.5, -.5, -.5));
+  trans_box.add(vgl_point_3d<double>(.5, .5, .5));
+  vgl_vector_3d<double> trans_steps(0.5, 0.5, 0.5);
 
   // take the coarsest level
   unsigned final_level = minimizer_->n_levels();
