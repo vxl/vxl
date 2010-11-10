@@ -1,31 +1,23 @@
-
+ #pragma OPENCL EXTENSION cl_khr_local_int32_base_atomics : enable
 void clear_array(uint n_bins, __local uint* array)
 {
   uint lid = get_local_id(0);
   uint wgsize = get_local_size(0);
-  uint n = n_bins/wgsize;
+  uint n = convert_uint(ceil((float)n_bins/(float)wgsize));
 
   for(uint i = 0; i<n; ++i)
-    array[lid + i*wgsize] = 0;
+   if(lid + i*wgsize < n_bins)
+      array[lid + i*wgsize] = 0;
 
-  uint nplus = n_bins%wgsize;
-  if(lid<nplus)
-    array[n*wgsize + lid]=0;
 }
 
 void update_array(__local uint* array, uint bin, uint lid)
 {
-  uint ltag = lid<<27;
-  uint count;
-  do{
-    count = array[bin] & 0x07FFFFFFU;
-    count = ltag | (count + 1);
-    array[bin] = count;
-  }while(array[bin] != count);
+    atom_inc(&array[bin]);
 }
 uint array_count(__local uint* array, uint bin)
 {
-  return array[bin] & 0x07FFFFFFU;
+  return array[bin];
 }
 /* extract a rotation matrix from the linear rodrigues vector array */
 
@@ -134,186 +126,95 @@ void map_to_dest(uint j,uint sni, uint snj, float4* Ks,
 {
 
   uint wgsize = get_local_size(0);
-  uint ngrps = dni/wgsize;
+  uint ngrps = convert_uint(ceil((float)dni/(float)wgsize));
   uint lid = get_local_id(0);
   uint off = dni*j;
   for(uint ig = 0; ig<ngrps; ++ig)
-    {
+  {
       uint i = ig*wgsize + lid;
-      
+
       if(i<(dni-1))
       {
-      float u=0.0f, v=0.0f, msk=1.0f;
-      dtrans(tr, r0, r1, r2,inv_depth, dni, dnj, 
-             Kdi, sni, snj, Ks, i, j, &u, &v, &msk);
-      int iu = floor(u), iv = floor(v);
-      bool in_src = iu>=0 && iv>=0 && iu<sni-1 && iv<snj-1;
-      float val = -1;
-      val = in_src ? bilin(source, sni, snj, u, v) : -1.0f;
-      msk = (val>=0.0f)&&i!=0 ? msk : 0.0f;
-      /*mdest_img[j*dni + i]=msk*val;*/
-      uint uval = (uint)(val*scl);
-      float dval = dest[i+off];
-      uint udval = (uint)(dval*scl);
-      uint hindx = uval + nbins*udval;
-      if(msk>0){
-        update_array(histogram, hindx, lid); 
-        update_array(mdhist, uval, lid); 
+          float u=0.0f, v=0.0f, msk=1.0f;
+          dtrans(tr, r0, r1, r2,inv_depth, dni, dnj, 
+              Kdi, sni, snj, Ks, i, j, &u, &v, &msk);
+          int iu = floor(u), iv = floor(v);
+          bool in_src = iu>=0 && iv>=0 && iu<sni-1 && iv<snj-1;
+          float val = -1;
+          val = in_src ? bilin(source, sni, snj, u, v) : -1.0f;
+          msk = (val>=0.0f)&&i!=0 ? msk : 0.0f;
+          /*mdest_img[j*dni + i]=msk*val;*/
+          uint uval = (uint)(val*scl);
+          float dval = dest[i+off];
+          uint udval = (uint)(dval*scl);
+          uint hindx = uval + nbins*udval;
+          if(msk>0){
+              update_array(histogram, hindx, lid); 
+              update_array(mdhist, uval, lid); 
+          }
       }
-        barrier(CLK_LOCAL_MEM_FENCE);
-      }
-    }
-  /* extra pixels to process */
-  uint nloc = dni%wgsize;
-  if(nloc>0){
-    uint i = ngrps*wgsize + lid;
-    if(i<(dni-1))
-      {
-      float u=0.0f, v=0.0f, msk=1.0f;
-      dtrans(tr, r0, r1, r2,inv_depth, dni, dnj, 
-             Kdi, sni, snj, Ks, i, j, &u, &v, &msk);
-      int iu = floor(u), iv = floor(v);
-      bool in_src = iu>=0 && iv>=0 && iu<sni-1 && iv<snj-1;
-      float val = -1;
-      val = in_src ? bilin(source, sni, snj, u, v) : -1.0f;
-      msk = val>=0.0f&&i!=0 ? msk : 0.0f;
-      /*mdest_img[j*dni + i]=msk*val;*/
-      uint uval = (uint)(val*scl);
-      float dval = dest[i+off];
-      uint udval = (uint)(dval*scl);
-      uint hindx = uval + nbins*udval;
-      if(msk>0){
-        update_array(histogram, hindx, lid); 
-        update_array(mdhist, uval, lid); 
-      }
-    }
+      barrier(CLK_LOCAL_MEM_FENCE);
   }
 }    
 
-/* the group size is greater than or equal to 1/2 the number of bins */
-/* initialize the entropy sum and the bin counts  */
-void H_init(uint n_bins, __local uint* hist, __local float* reduc_buf)
-{
-  uint half  = n_bins/2; /* assume divides evenly for now */
-  uint wgsize = get_local_size(0);
-  uint lid = get_local_id(0);
-  if(lid>=half)
-    return;
-  /*add the entropies into the buffer using half the threads */
-  float hi0 = (float)array_count(hist,lid); 
-  float hi1 = (float)array_count(hist,(lid+half));
-  float ent0 = hi0 > 0.0f ? hi0*log(hi0) : 0.0f;
-  float ent1 = hi1 > 0.0f ? hi1*log(hi1) : 0.0f;
-  reduc_buf[lid] = ent0 + ent1; /*entropy of counts */
-  reduc_buf[lid+wgsize] = hi0 + hi1;/* just the sum of counts*/
- }
 
-/* 
- *   if the work group size is < than 1/2 the number of bins      
- *        wg             wg              wg           partial wg
- * [---------------:---------------:---------------:------------] nbins
- *     \           /                /
- *      \         sum         /sum
- *       sum     /       /    
- *        \     sum entropy        sum counts
- *         [-----------------:------------------]  reduc_buf
- *          <---- wgsize ----><-----wgsize----->
- */
-void H_sum(uint n_bins, __local uint* hist, __local float* reduc_buf)
+void H_redsum(uint n_bins, __local uint* hist, __local float* reduc_buf)
 {
-  uint wgsize = get_local_size(0);
-  uint lid = get_local_id(0);
-  uint nsums = n_bins/wgsize;
-  /*move the first wgrp interval into the buffer */
-  float hi = (float)array_count(hist,lid);
-  float ent = hi>0.0f ? hi*log(hi) : 0.0f;
-  reduc_buf[lid] = ent; /*entropy of counts */
-  reduc_buf[lid+wgsize] = hi;/* just the sum of counts*/
-  barrier(CLK_LOCAL_MEM_FENCE);
-  /* step across and sum using each thread to add in parallel*/
-  uint off;
-  for(uint i = 1; i<nsums; ++i)
+    uint half  = n_bins/2; /* assume divides evenly for now */
+    uint wgsize = get_local_size(0);
+    uint lid = get_local_id(0);
+    uint n = convert_uint(ceil((float)n_bins/(float)wgsize));
+    reduc_buf[lid]=0.0;
+    reduc_buf[lid+wgsize]=0.0;
+    barrier(CLK_LOCAL_MEM_FENCE);
+    for(uint i=0;i<n;)
     {
-      off = lid+i*wgsize;
-      hi = (float)array_count(hist,off);
-      ent = hi>0.0f ? hi*log(hi) : 0.0f;
-      reduc_buf[lid]+=ent;
-      reduc_buf[lid+wgsize]+=hi;
-      barrier(CLK_LOCAL_MEM_FENCE);
+        if(lid+i*wgsize<n_bins)
+        {  /*add the entropies into the buffer using half the threads */
+            float hi0 = (float)array_count(hist,i*wgsize+lid); 
+            float ent0 = hi0 > 0.0f ? hi0*log(hi0) : 0.0f;
+            reduc_buf[lid] += ent0 ;//+ ent1; /*entropy of counts */
+            reduc_buf[lid+wgsize] += hi0 ;//+ hi1;/* just the sum of counts*/
+        }
+        barrier(CLK_LOCAL_MEM_FENCE);
+        i++;
     }
-  uint n_plus = n_bins%wgsize;
-  if(n_plus>0){
-    off = lid + nsums*wgsize;
-    if(off<n_bins){
-      hi = (float)array_count(hist,off);
-      ent = hi>0.0f ? hi*log(hi) : 0.0f;
-      reduc_buf[lid]+=ent;
-      reduc_buf[lid+wgsize]+=hi;
-    }
-  }
-}
-
-/* the work group size is greater than or equal to 1/2 the number of bins */
-/* sum using reduction - assume the reduc buf holds the entropies already*/
-void H_reduce(uint n_bins,  __local float* reduc_buf)
-{
-  uint half  = n_bins/2; /* assume divides evenly for now */
-  uint wgsize = get_local_size(0);
-  uint lid = get_local_id(0);
-  for(unsigned int s = half; s > 0; s >>= 1) 
+    half=wgsize/2;
+    for(unsigned int s =half; s > 0; ) 
     {
         if(lid < s) 
         {
             reduc_buf[lid] += reduc_buf[lid + s];
-            reduc_buf[lid+wgsize] += reduc_buf[lid+wgsize+s];
+            reduc_buf[lid+wgsize] += reduc_buf[lid+wgsize + s];
         }
         barrier(CLK_LOCAL_MEM_FENCE);
+        s>>=1;
     }
-  /* at this point the sums are available */
-  /* store in location 0 of the reduc_buf */
-  if(lid == 0){
-    float nsamp = reduc_buf[wgsize];
-    float entsum = reduc_buf[0];
-    float H = -(entsum/nsamp - log(nsamp));
-    reduc_buf[0]=H;
-  }
+    if(lid == 0){
+        float nsamp = reduc_buf[wgsize];
+        float entsum = reduc_buf[0];
+        float H = -(entsum/nsamp - log(nsamp));
+        reduc_buf[0]=H;
+    }
+    barrier(CLK_LOCAL_MEM_FENCE);
 }
-
+/* the group size is greater than or equal to 1/2 the number of bins */
+/* initialize the entropy sum and the bin counts  */
 float mutual_info(uint n_bins, __local uint* mdhist, __local uint* histogram,
                   __local float* reduc_buf)
 {
-  float H_mdest, H_joint;
+  float H_mdest=0.0, H_joint=0.0;
   uint wgsize = get_local_size(0);
   uint lid = get_local_id(0);
-  /* note that the size of reduc_buf is 2*wgsize */
-  /* entropy of mdhist */
-  if(wgsize >= n_bins/2){
-    H_init(n_bins, mdhist, reduc_buf);
-    barrier(CLK_LOCAL_MEM_FENCE);
-    H_reduce(n_bins/2, reduc_buf);
-  }else{
-    H_sum(n_bins, mdhist, reduc_buf);
-    barrier(CLK_LOCAL_MEM_FENCE);
-    H_reduce(wgsize, reduc_buf);
-  }
+  H_redsum(n_bins, mdhist, reduc_buf);
   barrier(CLK_LOCAL_MEM_FENCE);
-  H_mdest = reduc_buf[0];
-  clear_array(2*wgsize, reduc_buf);
+  H_mdest=reduc_buf[0];
+  ///*  joint entropy  */
+  H_redsum(n_bins*n_bins, histogram, reduc_buf);
   barrier(CLK_LOCAL_MEM_FENCE);
-  /*  joint entropy  */
-  if(wgsize >= n_bins*n_bins/2){
-    H_init(n_bins, histogram, reduc_buf);
-    barrier(CLK_LOCAL_MEM_FENCE);
-    H_reduce(n_bins*n_bins, reduc_buf);
-  }else{
-    H_sum(n_bins*n_bins, histogram, reduc_buf);
-    barrier(CLK_LOCAL_MEM_FENCE);
-    H_reduce(wgsize, reduc_buf);
-  }
-  barrier(CLK_LOCAL_MEM_FENCE);
-  H_joint = reduc_buf[0];
-  float minf = H_mdest - H_joint;
-  return -minf/log(2.0f);/* convert to bits */
+  H_joint=reduc_buf[0];
+  float minf = (H_mdest - H_joint);
+  return -minf/log(2.0f);//reduc_buf[0];/* convert to bits */
 }
 
 __kernel void 
@@ -362,9 +263,7 @@ trans_parallel_transf_search(__global uint* n_bins, /* histogram bins */
   barrier(CLK_LOCAL_MEM_FENCE);
   /* Clear the histogram */
   clear_array(nb*nb, histogram);
-  barrier(CLK_LOCAL_MEM_FENCE);
   clear_array(nb, mdhist);
-  barrier(CLK_LOCAL_MEM_FENCE);
   clear_array(2*wgsize, reduc_buf);
   barrier(CLK_LOCAL_MEM_FENCE);
   /* Map the destination image */
@@ -375,25 +274,19 @@ trans_parallel_transf_search(__global uint* n_bins, /* histogram bins */
     map_to_dest(j, snir, snjr, &Ksr, source, 
                 dnir, dnjr, &Kdir, dest, inv_depth,
                 tr, r0, r1, r2, nb, scl, mdhist, histogram, minfo);
-    barrier(CLK_LOCAL_MEM_FENCE);
+    //barrier(CLK_LOCAL_MEM_FENCE);
   }
   /* Compute mutual information and output locally*/
   barrier(CLK_LOCAL_MEM_FENCE);
 
 
-  float inf = mutual_info(nb, mdhist, histogram,
-                          reduc_buf);
-
-  barrier(CLK_LOCAL_MEM_FENCE);
+  float inf = mutual_info(nb, mdhist, histogram,reduc_buf);
+ // barrier(CLK_LOCAL_MEM_FENCE);
   if(lid == 0){
-#if 0
-    uint off = dnir*dnjr;
-    for(uint i = 0; i<16; ++i)
-      minfo[off + i]= array_count(mdhist, i);
-    *debug_flag = (int4)(100000.0*inf, 0, 0, 0);
-#endif
     float max_samp = dnir*dnjr, nsamp = reduc_buf[wgsize];
     float frac = nsamp/max_samp;
-    minfo[wgid] = frac>0.5f ? inf : 1e8f;
+    minfo[wgid] = frac>0.5f ? inf: 1e8f;
   }
+  barrier(CLK_LOCAL_MEM_FENCE);
+
 }
