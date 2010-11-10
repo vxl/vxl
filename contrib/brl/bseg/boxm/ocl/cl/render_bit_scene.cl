@@ -28,7 +28,9 @@ ray_trace_bit_scene_opt(__constant  RenderSceneInfo    * linfo,
   // check for validity before proceeding
   //----------------------------------------------------------------------------
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
-  int i=0,j=0;  map_work_space_2d(&i,&j);
+  int i=0,j=0;  
+  i=get_global_id(0);
+  j=get_global_id(1);
   imIndex[llid] = j*get_global_size(0)+i;
 
   // check to see if the thread corresponds to an actual pixel as in some 
