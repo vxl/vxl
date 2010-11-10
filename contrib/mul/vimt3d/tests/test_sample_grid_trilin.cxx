@@ -3,7 +3,7 @@
 
 #include <vcl_iostream.h>
 #include <vnl/vnl_vector.h>
-#include <vnl/vnl_na.h>
+#include <vil/vil_na.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vimt3d/vimt3d_sample_grid_trilin.h>
@@ -140,7 +140,7 @@ static void test_sample_grid_trilin()
     TEST_NEAR("Expected sample size", sample.size(), n, 10);
     unsigned finite_count=0;
     for (unsigned i=0; i<n; ++i)
-      if (!vnl_na_isna(sample(i))) finite_count++;
+      if (!vil_na_isna(sample(i))) finite_count++;
     TEST_NEAR("Expected number of non-na samples", finite_count, n/8, 8);
   }
 }
