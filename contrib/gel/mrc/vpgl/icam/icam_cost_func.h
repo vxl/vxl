@@ -57,6 +57,10 @@ class icam_cost_func : public vnl_least_squares_function
                      vgl_vector_3d<double> trans,
                      double min_allowed_overlap = 0.01);
 
+  double entropy_diff(vnl_vector_fixed<double, 3> rodrigues,
+                      vgl_vector_3d<double> trans,
+                      double min_allowed_overlap = 0.01);
+
   double mutual_info(vil_image_view<float> const& map_dest,
                      vil_image_view<float> const& map_mask,
                      double min_allowed_overlap = 0.01);
@@ -70,6 +74,8 @@ class icam_cost_func : public vnl_least_squares_function
                vnl_vector<double>& mask,
                vnl_vector<double>& dest);
 
+  vil_image_view<float> mapped_dest(vnl_vector_fixed<double, 3> rodrigues,
+                                    vgl_vector_3d<double> trans);
  protected:
   vil_image_view<float> source_image_;
   vil_image_view<float> dest_image_;
@@ -80,6 +86,7 @@ class icam_cost_func : public vnl_least_squares_function
   vbl_array_2d<double> joint_probability(vnl_vector<double> const& samples,
                                          vnl_vector<double> const& mask);
   double minfo(vbl_array_2d<double>& joint_prob);
+  double entropy_diff(vbl_array_2d<double>& joint_prob);
 };
 
 #endif // icam_cost_func_h_

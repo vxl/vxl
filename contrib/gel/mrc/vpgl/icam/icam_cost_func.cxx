@@ -124,8 +124,15 @@ joint_probability(vnl_vector<double> const& samples, vnl_vector<double> const& m
   //compute the intensity histogram
   for(unsigned i = 0; i<samples.size(); ++i)
     if(mask[i]>0.0){
+
+#if 0
       unsigned id = static_cast<unsigned>(dest_samples_[i]*scl + 0.5),
         is = static_cast<unsigned>(samples[i]*scl + 0.5);
+#endif
+      //match the gpu implementation, which does a floor operation
+      unsigned id = static_cast<unsigned>(vcl_floor(dest_samples_[i]*scl)),
+        is = static_cast<unsigned>(vcl_floor(samples[i]*scl));
+                                          
       if (id>nbins-1 || is> nbins-1)
         continue;
       h[id][is] += 1.0;
@@ -227,6 +234,64 @@ double icam_cost_func::mutual_info(vil_image_view<float> const& map_dest,
 {
   vbl_array_2d<double> jp = this->joint_probability(map_dest, map_mask);
    if(this->frac_samples()<=min_allowed_overlap)
-    return vnl_numeric_traits<double>::maxval;
+     return 0.0;
    return this->minfo(jp);
+}
+
+double icam_cost_func::entropy_diff(vbl_array_2d<double>& joint_prob)
+{
+	unsigned nr = joint_prob.rows(), nc = joint_prob.cols();
+  //marginal distribution for mapped dest intensities
+  vbl_array_1d<double> pmr(nc,0.0);
+  for (unsigned r = 0; r<nr; ++r)
+    for (unsigned c = 0; c<nc; ++c)
+      pmr[c]+=joint_prob[r][c];
+  double jsum = 0.0, msum = 0.0;
+  for(unsigned c = 0; c<nc; ++c)
+    {
+      double pr = pmr[c];
+#if 0
+      vcl_cout << pr << '\n';
+#endif
+        if(pr>0)
+          msum += pr*vcl_log(pr);
+    }
+  for (unsigned r = 0; r<nr; ++r) 
+    for (unsigned c = 0; c<nc; ++c) {
+        double prc = joint_prob[r][c];
+        if (prc>0)
+          jsum+= prc*vcl_log(prc);
+    }
+  double ent_dif = jsum - msum;
+  return -ent_dif/vcl_log(2.0);
+}
+
+double icam_cost_func::entropy_diff(vnl_vector_fixed<double, 3> rodrigues,
+                                    vgl_vector_3d<double> trans,
+                                    double min_allowed_overlap)
+{
+  vbl_array_2d<double> jp = this->joint_probability(rodrigues, trans);
+   if(this->frac_samples()<=min_allowed_overlap)
+     return 0.0;
+   return this->entropy_diff(jp);
+}
+
+
+vil_image_view<float> 
+icam_cost_func::mapped_dest(vnl_vector_fixed<double, 3> rodrigues,
+                            vgl_vector_3d<double> trans)
+{
+  vnl_vector<double> pr(dt_.n_params());
+  vnl_vector<double> res;
+  pr[0]=rodrigues[0];   pr[1]=rodrigues[1];   pr[2]=rodrigues[2];
+  pr[3]=trans.x();   pr[4]=trans.y();   pr[5]=trans.z(); 
+  dt_.set_params(pr);
+  vil_image_view<float> mdest, mask;
+  icam_sample::resample(dest_image_.ni(), dest_image_.nj(), source_image_,
+                        dt_, mdest, mask, n_samples_);
+  for(unsigned j = 0; j<dest_image_.nj(); ++j)
+    for(unsigned i = 0; i<dest_image_.ni(); ++i)
+      if(mask(i,j)==0.0f)
+        mdest(i,j) = 0.0f;
+  return mdest;
 }

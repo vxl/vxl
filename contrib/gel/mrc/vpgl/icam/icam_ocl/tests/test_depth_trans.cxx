@@ -18,14 +18,14 @@ bool test_image_parallel_search()
 {
 //====================== Setup Minimizer ====================
   vcl_string root_dir = testlib_root_dir();
-  vcl_string dest_file = "C:/temp/ImagesForGPUTest/frame_142.png";
-  vcl_string source_file = "C:/temp/ImagesForGPUTest/frame_145.png";
-  vcl_string depth_file = "C:/temp/ImagesForGPUTest/depth_142.tif";
-  vcl_string result_file = "C:/temp/ImagesForGPUTest/gpu_result.tif";
-  vcl_string mask_file = "C:/temp/ImagesForGPUTest/gpu_mask.tif";
-  vcl_string cpp_src_file = "C:/temp/ImagesForGPUTest/cpp_src.tif";
-  vcl_string cpp_result_file = "C:/temp/ImagesForGPUTest/cpp_result.tif";
-  vcl_string cpp_mask_file = "C:/temp/ImagesForGPUTest/cpp_mask.tif";
+  vcl_string dest_file = "C:/images/Calibration/frame_142.png";
+  vcl_string source_file = "C:/images/Calibration/frame_145.png";
+  vcl_string depth_file = "C:/images/Calibration/depth_142.tif";
+  vcl_string result_file = "C:/images/Calibration/gpu_result.tif";
+  vcl_string mask_file = "C:/images/Calibration/gpu_mask.tif";
+  vcl_string cpp_src_file = "C:/images/Calibration/cpp_src.tif";
+  vcl_string cpp_result_file = "C:/images/Calibration/cpp_result.tif";
+  vcl_string cpp_mask_file = "C:/images/Calibration/cpp_mask.tif";
   vil_image_view_base_sptr dest_img_base = vil_load(dest_file.c_str());
   if (!dest_img_base) {
     vcl_cerr << "error loading image.\n";
@@ -74,7 +74,7 @@ bool test_image_parallel_search()
   double local_min_thresh = 0.005;
   double axis_search_cone_multiplier = 10.0;
   double polar_range_multiplier = 2.0;
-  //vcl_string base_path = "C:/temp/ImagesForGPUTest";
+  //vcl_string base_path = "C:/images/Calibration";
   vcl_string base_path = "";
   icam_minimizer minimizer(source_img_flt, dest_img_flt, dt,
                            min_pyramid_image_size, box_reduction_k,
@@ -180,14 +180,15 @@ bool test_rot_parallel_search()
 {
 //====================== Setup Minimizer ====================
   vcl_string root_dir = testlib_root_dir();
-  vcl_string dest_file = "C:/temp/ImagesForGPUTest/frame_142.png";
-  vcl_string source_file = "C:/temp/ImagesForGPUTest/frame_145.png";
-  vcl_string depth_file = "C:/temp/ImagesForGPUTest/depth_142.tif";
-  vcl_string gpu_mdest_file = "C:/temp/ImagesForGPUTest/gpu_mdest.tif";
-  vcl_string mask_file = "C:/temp/ImagesForGPUTest/gpu_mask.tif";
-  vcl_string cpp_src_file = "C:/temp/ImagesForGPUTest/cpp_src.tif";
-  vcl_string cpp_result_file = "C:/temp/ImagesForGPUTest/cpp_result.tif";
-  vcl_string cpp_mask_file = "C:/temp/ImagesForGPUTest/cpp_mask.tif";
+  vcl_string dest_file = "C:/images/Calibration/frame_142.png";
+  vcl_string source_file = "C:/images/Calibration/frame_145.png";
+  vcl_string depth_file = "C:/images/Calibration/depth_142.tif";
+  vcl_string gpu_mdest_file = "C:/images/Calibration/gpu_mdest.tif";
+  vcl_string cpu_mdest_file = "C:/images/Calibration/cpu_mdest.tif";
+  vcl_string mask_file = "C:/images/Calibration/gpu_mask.tif";
+  vcl_string cpp_src_file = "C:/images/Calibration/cpp_src.tif";
+  vcl_string cpp_result_file = "C:/images/Calibration/cpp_result.tif";
+  vcl_string cpp_mask_file = "C:/images/Calibration/cpp_mask.tif";
   vil_image_view_base_sptr dest_img_base = vil_load(dest_file.c_str());
   if (!dest_img_base) {
     vcl_cerr << "error loading image.\n";
@@ -236,7 +237,7 @@ bool test_rot_parallel_search()
   double local_min_thresh = 0.005;
   double axis_search_cone_multiplier = 10.0;
   double polar_range_multiplier = 2.0;
-  //vcl_string base_path = "C:/temp/ImagesForGPUTest";
+  //vcl_string base_path = "C:/images/Calibration";
   vcl_string base_path = "";
   icam_minimizer minimizer(source_img_flt, dest_img_flt, dt,
                            min_pyramid_image_size, box_reduction_k,
@@ -247,8 +248,16 @@ bool test_rot_parallel_search()
   unsigned lev = nl-1;
   // check native C++ implementation
   icam_cost_func cfn = minimizer.cost_fn(lev);
-  double minfo_native = cfn.mutual_info(Rr.as_rodrigues(), tr, 0.5);
-  vcl_cout << "Native minfo at correct transf " << minfo_native << '\n';
+  //  double minfo_native = cfn.mutual_info(Rr.as_rodrigues(), tr, 0.5);
+  double ent_diff = cfn.entropy_diff(Rr.as_rodrigues(), tr, 0.5);
+  vcl_cout << "Entropy diff  at correct transf " << ent_diff << '\n';
+  ent_diff = cfn.entropy_diff(Rr.as_rodrigues(), tbox, 0.5);
+  vcl_cout << "Entropy diff  at (0.5, 0, 0) " << ent_diff << '\n';
+
+  // test mapping
+  vil_image_view<float> mdest_cp = cfn.mapped_dest(Rr.as_rodrigues(),tr);
+  unsigned dni = mdest_cp.ni(), dnj = mdest_cp.nj();
+  vil_save(mdest_cp, cpu_mdest_file.c_str());
   vgl_box_3d<double> trans_box;
   trans_box.add(vgl_point_3d<double>(-.5, -.5, -.5));
   trans_box.add(vgl_point_3d<double>(.5, .5, .5));
@@ -263,7 +272,8 @@ bool test_rot_parallel_search()
   mgr->set_nbins_buffer();
   mgr->copy_to_image_buffers();
   unsigned nrot  = 67095;
-  mgr->setup_rot_debug_space(nrot, Rr);
+  //  mgr->setup_rot_debug_space(nrot, Rr);
+  mgr->setup_transf_search_space(trans_box, trans_steps, minimizer, lev);
   mgr->create_rot_parallel_transf_data();
   mgr->set_rot_parallel_transf_data(tr);
   mgr->create_rot_parallel_transf_buffers();
@@ -284,12 +294,12 @@ bool test_rot_parallel_search()
   vul_timer t;
   if (mgr->run_rot_parallel_kernel()!=SDK_SUCCESS)
     return false;
-  vcl_cout << " search time " << t.real()/1000.0 << " seconds\n";
+  vcl_cout << "OpenCL search time " << t.real()/1000.0 << " seconds\n";
   cl_int* flag = mgr->rot_para_flag();
   vcl_cout << "Flag(" << flag[0] << ' ' << flag[1] << ' '
            << flag[2] << ' ' << flag[3] << ")\n";
 
-  cl_float* minfo = mgr->minfo_array();
+  //cl_float* minfo = mgr->minfo_array();
 #if 0
   float sum = 0.0f;
   for (unsigned i = 0; i<256; ++i)
@@ -299,23 +309,57 @@ bool test_rot_parallel_search()
   for (unsigned i = 256; i<256+16; ++i)
     sum += minfo[i];
   vcl_cout << "sum marginal = " << sum << '\n';
-#endif
+
 
   unsigned dni = 16;
   for (unsigned i = 0; i< 2*dni; ++i)
     vcl_cout << minfo[i] << '\n';
+#endif
 #if 0
-  unsigned dnj = 17;
   vil_image_view<float> md(dni, dnj);
   md.fill(0.0f);
+  float dif = 0.0f;
   for (unsigned j = 0; j<dnj; j++)
     for (unsigned i = 0; i<dni; i++)
     {
       unsigned indx = i + dni*j;
       md(i,j) = minfo[indx];
-    }
+	  if(md(i,j)>0.0f){
+		  float d = vcl_fabs(md(i,j) - mdest_cp(i,j));
+		  if(d>1.0f)
+        vcl_cout << "(" << i << ' ' << j << ") gp = " << md(i,j) << " cp = "
+                 << mdest_cp(i,j) << '\n';
+        dif += d;
+     }
+	}
   vil_save(md, gpu_mdest_file.c_str());
+  vcl_cout << " Absolute difference in mapped dest " << dif << '\n';
+
+  unsigned off = dni*dnj;
+  for(unsigned i = 0; i<16; ++i)
+    vcl_cout << minfo[off+i] << '\n';
 #endif
+  /* minimize entropy diff */
+  vgl_rotation_3d<double> min_rot;
+  vnl_vector_fixed<double,3> clrot, cpprot;
+  float min_ent;
+  mgr->find_min_rot(min_rot, min_ent);
+  clrot = min_rot.as_rodrigues();
+  vcl_cout << "Min ent dif " << min_ent << " at rotation " 
+           <<  clrot << '\n';
+  vcl_cout << " Actual rotation " << Rr.as_rodrigues() << '\n';
+  double cpp_minfo, ovl_frac;
+  t.mark();
+  minimizer.exhaustive_rotation_search(tr, lev, 0.5, min_rot,
+                                       cpp_minfo, ovl_frac);
+  cpprot = min_rot.as_rodrigues();
+  vcl_cout << "C++ search time " << t.real()/1000.0 << " seconds\n";
+  vcl_cout << "C++ minfo " << cpp_minfo << " at rotation " 
+           << cpprot << '\n';
+  vcl_cout << " Actual rotation " << Rr.as_rodrigues() << '\n';
+  double er = (cpprot - clrot).magnitude();
+  TEST_NEAR("CL vs C++ ", er, 0.0, 1e-4);
+  
   mgr->release_queue();
   mgr->release_buffers();
   mgr->clean_image_data();

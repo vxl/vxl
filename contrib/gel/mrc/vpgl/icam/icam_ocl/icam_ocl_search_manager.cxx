@@ -249,6 +249,23 @@ bool icam_ocl_search_manager::create_rot_parallel_transf_buffers()
   status = kernel_->create_in_buffers(this->context_,arrs,sizes);
   return status == SDK_SUCCESS;
 }
+bool icam_ocl_search_manager::
+find_min_rot(vgl_rotation_3d<double>& rot, float& min_entropy)
+{
+  cl_float* ent_dif = this->minfo_array();
+  if(!ent_dif)
+    return false;
+  unsigned nrot = rotations_.size();
+ min_entropy = vnl_numeric_traits<float>::maxval;
+  unsigned indx = 0;
+  for(unsigned i = 0; i<nrot; ++i)
+    if(ent_dif[i]<min_entropy){
+      min_entropy = ent_dif[i];
+      indx = i;
+    }
+  rot = rotations_[indx];
+  return true;
+}
 
 bool icam_ocl_search_manager::setup_image_parallel_result()
 {

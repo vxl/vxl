@@ -81,7 +81,8 @@ class icam_ocl_search_manager : public icam_ocl_manager<icam_ocl_search_manager>
   void clean_rot_parallel_transf_data();
   //: create rot_parallel buffers
   bool create_rot_parallel_transf_buffers();
-
+  //: find min entropy difference
+  bool find_min_rot(vgl_rotation_3d<double>& rot, float& min_entropy);
   //: set up kernel - assign arguments, create command queue etc.
   bool setup_image_parallel_kernel();
   //: set local args

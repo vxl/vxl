@@ -140,14 +140,18 @@ void map_to_dest(uint j,uint sni, uint snj, float4* Ks,
   for(uint ig = 0; ig<ngrps; ++ig)
     {
       uint i = ig*wgsize + lid;
+      
+      if(i<(dni-1))
+      {
       float u=0.0f, v=0.0f, msk=1.0f;
       dtrans(tr, r0, r1, r2,inv_depth, dni, dnj, 
              Kdi, sni, snj, Ks, i, j, &u, &v, &msk);
       int iu = floor(u), iv = floor(v);
-      bool in_src = iu>=0 && iv>=0 && iu<sni && iv<snj;
+      bool in_src = iu>=0 && iv>=0 && iu<sni-1 && iv<snj-1;
       float val = -1;
       val = in_src ? bilin(source, sni, snj, u, v) : -1.0f;
-      msk = val>=0.0f ? msk : 0.0f;
+      msk = (val>=0.0f)&&i!=0 ? msk : 0.0f;
+      /*mdest_img[j*dni + i]=msk*val;*/
       uint uval = (uint)(val*scl);
       float dval = dest[i+off];
       uint udval = (uint)(dval*scl);
@@ -156,21 +160,24 @@ void map_to_dest(uint j,uint sni, uint snj, float4* Ks,
         update_array(histogram, hindx, lid); 
         update_array(mdhist, uval, lid); 
       }
-      barrier(CLK_LOCAL_MEM_FENCE);
+        barrier(CLK_LOCAL_MEM_FENCE);
+      }
     }
   /* extra pixels to process */
   uint nloc = dni%wgsize;
   if(nloc>0){
     uint i = ngrps*wgsize + lid;
-    if(i<(dni-1)){
+    if(i<(dni-1))
+      {
       float u=0.0f, v=0.0f, msk=1.0f;
       dtrans(tr, r0, r1, r2,inv_depth, dni, dnj, 
              Kdi, sni, snj, Ks, i, j, &u, &v, &msk);
       int iu = floor(u), iv = floor(v);
-      bool in_src = iu>=0 && iv>=0 && iu<sni && iv<snj;
+      bool in_src = iu>=0 && iv>=0 && iu<sni-1 && iv<snj-1;
       float val = -1;
       val = in_src ? bilin(source, sni, snj, u, v) : -1.0f;
-      msk = val>=0.0f ? msk : 0.0f;
+      msk = val>=0.0f&&i!=0 ? msk : 0.0f;
+      /*mdest_img[j*dni + i]=msk*val;*/
       uint uval = (uint)(val*scl);
       float dval = dest[i+off];
       uint udval = (uint)(dval*scl);
@@ -306,7 +313,7 @@ float mutual_info(uint n_bins, __local uint* mdhist, __local uint* histogram,
   barrier(CLK_LOCAL_MEM_FENCE);
   H_joint = reduc_buf[0];
   float minf = H_mdest - H_joint;
-  return minf/log(2.0f);/* convert to bits */
+  return -minf/log(2.0f);/* convert to bits */
 }
 
 __kernel void 
@@ -344,7 +351,7 @@ trans_parallel_transf_search(__global uint* n_bins, /* histogram bins */
   uint nb = *n_bins;
   float4 Ksr = *Ks, Kdir = *Kdi;/* put in local registers*/
   uint snir = *sni, snjr = *snj, dnir = *dni, dnjr = *dnj;
-  float scl = nb/255.0f;
+  float scl = nb/256.0f;
   /* Thread 0 transfers transformation data to local memory */
   uint lid = get_local_id(0);
   if(lid == 0){
@@ -362,7 +369,7 @@ trans_parallel_transf_search(__global uint* n_bins, /* histogram bins */
   barrier(CLK_LOCAL_MEM_FENCE);
   /* Map the destination image */
   /* each thread processes the same row */
-  for(uint j = 0; j<(dnjr-1); ++j){
+  for(uint j = 1; j<(dnjr-1); ++j){
 
     /* Map to dest and update histogram */
     map_to_dest(j, snir, snjr, &Ksr, source, 
@@ -372,12 +379,21 @@ trans_parallel_transf_search(__global uint* n_bins, /* histogram bins */
   }
   /* Compute mutual information and output locally*/
   barrier(CLK_LOCAL_MEM_FENCE);
+
+
   float inf = mutual_info(nb, mdhist, histogram,
                           reduc_buf);
- 
+
   barrier(CLK_LOCAL_MEM_FENCE);
   if(lid == 0){
-    minfo[wgid] = inf;
-    *debug_flag = (int4)(1000.0f*inf,0,0,0);
+#if 0
+    uint off = dnir*dnjr;
+    for(uint i = 0; i<16; ++i)
+      minfo[off + i]= array_count(mdhist, i);
+    *debug_flag = (int4)(100000.0*inf, 0, 0, 0);
+#endif
+    float max_samp = dnir*dnjr, nsamp = reduc_buf[wgsize];
+    float frac = nsamp/max_samp;
+    minfo[wgid] = frac>0.5f ? inf : 1e8f;
   }
 }
