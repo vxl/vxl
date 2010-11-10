@@ -232,3 +232,17 @@ rot_about_ray(vgl_rotation_3d<double> const& r0, vgl_rotation_3d<double> const& 
   return vcl_fabs(ang0-ang1);
 }
 
+void vpgl_camera_bounds::
+relative_transf(vpgl_perspective_camera<double> const& c0,
+                vpgl_perspective_camera<double> const& c1,
+                vgl_rotation_3d<double>& rel_rot,
+                vgl_vector_3d<double>& rel_trans)
+{
+  vgl_vector_3d<double> t0 = c0.get_translation();
+  vgl_vector_3d<double> t1 = c1.get_translation();
+  vgl_rotation_3d<double> R0 = c0.get_rotation();
+  vgl_rotation_3d<double> R1 = c1.get_rotation();
+  rel_rot = R1*(R0.transpose());
+  vgl_vector_3d<double> td = rel_rot*t0;
+  rel_trans = -td + t1;
+}

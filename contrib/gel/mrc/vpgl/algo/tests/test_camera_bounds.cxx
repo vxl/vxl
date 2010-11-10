@@ -158,6 +158,42 @@ static void test_camera_bounds()
            << " pt on unit sphere " << pt << '\n'
            << " rotated zaxis " << rot_z << '\n';
   TEST_NEAR("rotation scan", rot_z.x(), pt.x(), 1.0e-4);
+
+  vnl_matrix_fixed<double, 3, 3> k;
+  k.set_identity();
+  vpgl_calibration_matrix<double> K01(k);
+  // test relative camera transform
+  // c142
+  double r0 [] ={   0.067851,  0.994060,  0.085090, 
+                    0.669585,  0.017856, -0.742521, 
+                   -0.739630,  0.107355, -0.664396 };
+  vnl_matrix_fixed<double, 3, 3> M0(r0);
+  vgl_rotation_3d<double> R0(M0);
+  vgl_vector_3d<double> t0(-0.013036, 0.387514, 4.134744);
+
+  //c 145
+  double r1 [] ={ 0.167131,  0.982859,  0.077819, 
+                  0.675937, -0.056764, -0.734770, 
+                 -0.717758,  0.175403, -0.673837 };
+                  
+  vnl_matrix_fixed<double, 3, 3> M1(r1);
+  vgl_rotation_3d<double> R1(M1);
+  vgl_vector_3d<double> t1(0.046931, 0.355840, 4.112037);
+ 
+  vpgl_perspective_camera<double> c0(K01, R0, t0);
+  vpgl_perspective_camera<double> c1(K01, R1, t1);
+
+  vgl_rotation_3d<double> Rrel;
+  vgl_vector_3d<double> trel;
+  vpgl_camera_bounds::relative_transf(c0, c1, Rrel, trel);
+  vnl_vector_fixed<double,3> Rrod = Rrel.as_rodrigues();
+  vnl_vector_fixed<double, 3> rod_act(0.020400079326396786,
+                                      -0.069183868389146475,
+                                      -0.072507096936119245);
+  vgl_vector_3d<double> trel_act(0.320743, 0.04231, -0.0199299);
+  double rod_er  = (Rrod-rod_act).magnitude();
+  double t_er  = (trel_act-trel).length();
+  TEST_NEAR("relative camera transform", rod_er + t_er, 0.0, 0.00001);
 }
 
 TESTMAIN(test_camera_bounds);
