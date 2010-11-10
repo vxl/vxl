@@ -30,6 +30,9 @@ IF(GLEW_FOUND)
   ADD_EXECUTABLE( boxm_ocl_update_bit_view boxm_ocl_update_bit_view.cxx)
   TARGET_LINK_LIBRARIES( boxm_ocl_update_bit_view boxm_ocl  boxm_ocl_view vul vgui ${GLEW_LIBRARY} )
 
+  ADD_EXECUTABLE( boxm_ocl_change_detection_bit_view boxm_ocl_change_detection_bit_view.cxx)
+  TARGET_LINK_LIBRARIES( boxm_ocl_change_detection_bit_view boxm_ocl_view vul vgui ${GLEW_LIBRARY} )
+
  ENDIF(VGUI_FOUND)
 ENDIF(GLEW_FOUND)
 
@@ -49,3 +52,5 @@ TARGET_LINK_LIBRARIES( boxm_ocl_render_bit_exe boxm_ocl vil vpgl_algo vul )
 
 ADD_EXECUTABLE( boxm_ocl_update_bit_exe boxm_ocl_update_bit_exe.cxx)
 TARGET_LINK_LIBRARIES( boxm_ocl_update_bit_exe boxm_ocl vil vpgl_algo vul )
+
+
