@@ -23,11 +23,6 @@ cast_ray(
           __global    int                * mean_obs_array,
           __global    int                * vis_array,
           __global    int                * beta_array,
-          //__global    int                * lock_array,      // lock array for concurrent access/updating
-          //__global    float2             * cum_len_beta,    // cumulative ray length and beta aux vars
-          //__global    uchar2             * mean_obs_cum_vis,// mean_obs per cell and cumulative visibility
-
-
           //---- UTILITY ARGUMENTS----------------------------------------------
           __local     uchar16            * local_tree,      //local tree for traversing
           __constant  uchar              * bit_lookup,      //0-255 num bits lookup table
@@ -72,14 +67,8 @@ cast_ray(
   float vis = 1.0f;
   float expected_int = 0.0f;
 #ifdef CHANGE
-  float4 temp=in_image[imIndex[llid]];
-  float intensity=temp.x;
-  float e_intensity=temp.y;
-  float change_density_vacuous=0.0f;
-  float bmin=1.0f;
-  float bmax=0.0f;
-  float bsum=0.0f;
-  float ray_length=0.0f;
+  float intensity=in_image[imIndex[llid]].x;
+  float e_intensity=in_image[imIndex[llid]].y;
   float e_expected_int=0.0f;
 #endif
 
@@ -115,7 +104,6 @@ cast_ray(
   // Begin traversing the blocks, break when any curr_block_index value is
   // illegal (not between 0 and scenedims)
   //----------------------------------------------------------------------------
-  float cellCount = 0.0f;
   while(tblock < tfar && vis > .01f) 
   {
     //-------------------------------------------------------------------------
@@ -124,7 +112,6 @@ cast_ray(
     // of position based on ray_o or local ray o and the current t value
     //-------------------------------------------------------------------------
     //find entry point (adjusted) and the current block index
-    cellCount++;
     float posx = (ray_ox + (tblock + TREE_EPSILON)*ray_dx);
     float posy = (ray_oy + (tblock + TREE_EPSILON)*ray_dy);
     float posz = (ray_oz + (tblock + TREE_EPSILON)*ray_dz);
@@ -165,7 +152,6 @@ cast_ray(
     float ttree = 0.0f;                 
     while (ttree < texit)              
     {
-      cellCount++;
       // point in tree coordinates
       posx = (lrayx + (ttree + TREE_EPSILON)*ray_dx);  
       posy = (lrayy + (ttree + TREE_EPSILON)*ray_dy);   
@@ -201,7 +187,6 @@ cast_ray(
       step_cell_render_opt2(mixture_array, alpha_array, data_ptr, d, &vis, &expected_int);
 #endif
 #ifdef CHANGE
-      //step_cell_change_detection_uchar8(mixture_array,alpha_array,data_ptr,d,&vis,&expected_int,intensity);
       step_cell_change_detection_uchar8_w_expected(mixture_array,alpha_array,data_ptr,d,&vis,&expected_int,&e_expected_int,intensity,e_intensity);
 #endif
 #ifdef SEGLEN
@@ -354,43 +339,38 @@ cast_ray(
   }
 
   
-#ifdef CHANGE
-
-
-  expected_int+=vis;
-  e_expected_int+=vis;
-  float bg_belief=0.0f;
-  float fg_belief=0.0f;
-  float foreground_density_val=1.0f;
+#if defined(CHANGE) 
+#if defined(CHANGE_OLD)
+  expected_int/=(1-vis);
+  float fgbelief=1.0/(1.0+expected_int);
+  uchar4 out;
+  out.x=convert_uchar(fgbelief*255.0);
+  out.y=convert_uchar(intensity*255.0);
+  out.z=0;
+  out.w=convert_uchar(255);
+  in_image[imIndex[llid]].w=fgbelief;
+  gl_image[imIndex[llid]] = as_uint(out);
+#else
+  expected_int/=(1-vis);
+  e_expected_int/=(1-vis);
   float pm=e_expected_int/(e_expected_int+1)-0.5*min(e_expected_int,1/e_expected_int);
- 
-  // Bayesian
-  //fg_belief=foreground_density_val*pm/(foreground_density_val*pm+expected_int*pm+2*(1-pm));
-
-  if(expected_int>foreground_density_val)
-  { 
-      bg_belief=expected_int/(expected_int+foreground_density_val)-foreground_density_val/(2*expected_int);
-      fg_belief=0.0;
-  }
-  else
-  {
-      bg_belief=0.0;
-      fg_belief=(foreground_density_val/(foreground_density_val+expected_int)-expected_int/(2*foreground_density_val))*pm;
-
-  }
-
-  in_image[imIndex[llid]].w=(float)fg_belief;
+  float fgbelief=1/(1+expected_int)-0.5*min(expected_int,1/expected_int);
+  //// Bayesian
+  uchar4 out;
+  out.x=convert_uchar(pm*fgbelief*255.0);
+  out.y=convert_uchar(intensity*255.0);
+  out.z=0;
+  out.w=convert_uchar(255);
+  in_image[imIndex[llid]].w=fgbelief;
+  gl_image[imIndex[llid]] = as_uint(out);
 #endif
-
+#endif
 #ifdef RENDER
   expected_int += vis*0.5f;
 
   gl_image[imIndex[llid]] = rgbaFloatToInt((float4) expected_int);
   in_image[imIndex[llid]] = (float4) expected_int;
-  //output[imIndex[llid]] = cellCount;
 #endif
   
-  //debug outputter
-  //in_image[j*get_global_size(0)+i].x = cum_d + vis*0.5f; 
 
 }
