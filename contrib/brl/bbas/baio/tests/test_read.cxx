@@ -24,12 +24,12 @@ static int test_read_helper(char* buffer)
 
 static void test_read()
 {
-  int buffSize = 1024;
+  const int buffSize = 1024;
   vcl_string root_dir = testlib_root_dir();
   vcl_string test_file = root_dir + "/contrib/brl/bbas/baio/tests/test_file.txt";
 
   //load from file with blocking
-  char tester[buffSize];
+  char* tester = new char[buffSize];
   int charCount = 0;
   vcl_string line;
   vcl_ifstream myfile(test_file.c_str());
@@ -65,7 +65,8 @@ static void test_read()
   }
   TEST("data read matches synchronous data ", true, good);
   //cleanup
-  if(aio_buff) delete aio_buff;
+  delete[] tester;
+  delete[] aio_buff;
 }
 
 TESTMAIN(test_read);
