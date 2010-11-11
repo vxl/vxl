@@ -83,14 +83,15 @@ cast_ray(
   float min_facez = (ray_dz < 0.0f) ? (linfo->dims.z) : 0.0f;
   float tblock = max(max( (min_facex-ray_ox)*(1.0f/ray_dx), (min_facey-ray_oy)*(1.0f/ray_dy)), (min_facez-ray_oz)*(1.0f/ray_dz));
 
-
+  bool isActive = true;
   if (tfar <= tblock) {
 #ifdef RENDER
     gl_image[imIndex[llid]] = rgbaFloatToInt((float4)(0.0f,0.0f,0.0f,0.0f));
     in_image[imIndex[llid]] = (float)0.0f;
 #endif
     in_image[j*get_global_size(0)+i].x = 0.0f; 
-    return;
+    //return; 
+    isActive = false;
   }
   //make sure tnear is at least 0...
   tblock = (tblock > 0.0f) ? tblock : 0.0f;
@@ -104,7 +105,7 @@ cast_ray(
   // Begin traversing the blocks, break when any curr_block_index value is
   // illegal (not between 0 and scenedims)
   //----------------------------------------------------------------------------
-  while(tblock < tfar && vis > .01f) 
+  while(tblock < tfar && vis > .01f && isActive) 
   {
     //-------------------------------------------------------------------------
     // get small block and necessary information

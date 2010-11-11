@@ -35,51 +35,55 @@ ray_trace_bit_scene_opt(__constant  RenderSceneInfo    * linfo,
 
   // check to see if the thread corresponds to an actual pixel as in some 
   // cases #of threads will be more than the pixels.
+  bool isActive = true;
   if (i>=(*imgdims).z || j>=(*imgdims).w) {
     gl_image[imIndex[llid]] = rgbaFloatToInt((float4)(0.0f,0.0f,0.0f,0.0f));
     in_image[imIndex[llid]] = (float4)0.0f;
-    return;
+    isActive = false;
+    //return;
   }
   
-  //----------------------------------------------------------------------------
-  // Calculate ray origin, and direction 
-  // (make sure ray direction is never axis aligned)
-  //----------------------------------------------------------------------------  
-  float4 ray_o = (float4) camera[2].s4567; ray_o.w = 1.0f;
-  float4 ray_d = backproject(i, j, camera[0], camera[1], camera[2], ray_o);
-  ray_o = ray_o - linfo->origin; ray_o.w = 1.0f; //translate ray o to zero out scene origin
-  ray_o = ray_o/linfo->block_len; ray_o.w = 1.0f;
+  if(isActive) {
+    //----------------------------------------------------------------------------
+    // Calculate ray origin, and direction 
+    // (make sure ray direction is never axis aligned)
+    //----------------------------------------------------------------------------  
+    float4 ray_o = (float4) camera[2].s4567; ray_o.w = 1.0f;
+    float4 ray_d = backproject(i, j, camera[0], camera[1], camera[2], ray_o);
+    ray_o = ray_o - linfo->origin; ray_o.w = 1.0f; //translate ray o to zero out scene origin
+    ray_o = ray_o/linfo->block_len; ray_o.w = 1.0f;
 
-  //thresh ray direction components - too small a treshhold causes axis aligned 
-  //viewpoints to hang in infinite loop (block loop)
-  float thresh = exp2(-12.0f); 
-  if (fabs(ray_d.x) < thresh) ray_d.x = copysign(thresh, ray_d.x);
-  if (fabs(ray_d.y) < thresh) ray_d.y = copysign(thresh, ray_d.y);
-  if (fabs(ray_d.z) < thresh) ray_d.z = copysign(thresh, ray_d.z);
-  ray_d.w = 0.0f; ray_d = normalize(ray_d);
-  
-  //store float 3's
-  float ray_ox = ray_o.x;     float ray_oy = ray_o.y;     float ray_oz = ray_o.z;
-  float ray_dx = ray_d.x;     float ray_dy = ray_d.y;     float ray_dz = ray_d.z;          
-  
-  //----------------------------------------------------------------------------
-  // we know i,j map to a point on the image, have calculated ray
-  // BEGIN RAY TRACE
-  //----------------------------------------------------------------------------  
-  cast_ray( i, j, 
-            ray_ox, ray_oy, ray_oz, 
-            ray_dx, ray_dy, ray_dz, 
+    //thresh ray direction components - too small a treshhold causes axis aligned 
+    //viewpoints to hang in infinite loop (block loop)
+    float thresh = exp2(-12.0f); 
+    if (fabs(ray_d.x) < thresh) ray_d.x = copysign(thresh, ray_d.x);
+    if (fabs(ray_d.y) < thresh) ray_d.y = copysign(thresh, ray_d.y);
+    if (fabs(ray_d.z) < thresh) ray_d.z = copysign(thresh, ray_d.z);
+    ray_d.w = 0.0f; ray_d = normalize(ray_d);
+    
+    //store float 3's
+    float ray_ox = ray_o.x;     float ray_oy = ray_o.y;     float ray_oz = ray_o.z;
+    float ray_dx = ray_d.x;     float ray_dy = ray_d.y;     float ray_dz = ray_d.z;          
+    
+    //----------------------------------------------------------------------------
+    // we know i,j map to a point on the image, have calculated ray
+    // BEGIN RAY TRACE
+    //----------------------------------------------------------------------------  
+    cast_ray( i, j, 
+              ray_ox, ray_oy, ray_oz, 
+              ray_dx, ray_dy, ray_dz, 
 
-            //scene info                                              //numobs, aux, aux
-            linfo, block_ptrs, tree_array, alpha_array, mixture_array, 0, 0, 0, 0, 0, 
-           
-            //utility info                (factor)
-            local_tree, bit_lookup, cumsum, 0,
-            
-            //RENDER SPECIFIC ARGS
-            imIndex,
-            
-            //io info
-            in_image, gl_image, output);
+              //scene info                                              //numobs, aux, aux
+              linfo, block_ptrs, tree_array, alpha_array, mixture_array, 0, 0, 0, 0, 0, 
+             
+              //utility info                (factor)
+              local_tree, bit_lookup, cumsum, 0,
+              
+              //RENDER SPECIFIC ARGS
+              imIndex,
+              
+              //io info
+              in_image, gl_image, output);
+    }
 }
 
