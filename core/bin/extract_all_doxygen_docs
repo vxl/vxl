@@ -1,0 +1,2 @@
+#! /bin/sh
+find core contrib -type f|fgrep -v /.svn/|xargs fgrep -l //:|xargs perl -n -e 'if ($a && !m!^\s*//\s*(.*\n)!) {$a="";} elsif ($a) {print $1;} if (m!^\s*//:\s*(.*\n)!) { print $1; $a=1; }'
