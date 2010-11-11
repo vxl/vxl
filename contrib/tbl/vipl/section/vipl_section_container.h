@@ -122,8 +122,8 @@ class vipl_section_container
   // raw_data_pointer is set.
   virtual bool is_pointer_safe() const ;
 
-  // Does the correct copy. Its a bit tricky due to the fact that
-  // an instance has a pointer to its ``real instance''
+  // Does the correct copy. It's a bit tricky due to the fact that
+  // an instance has a pointer to its ``real instance''.
  protected:
   virtual vipl_section_container< DataType >* virtual_copy() const ;
  public:

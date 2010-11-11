@@ -406,7 +406,7 @@ class vnl_vector_fixed
 #endif
   }
 
-  //: Return true if its finite
+  //: Return true if it's finite
   bool is_finite() const;
 
   //: Return true iff all the entries are zero.

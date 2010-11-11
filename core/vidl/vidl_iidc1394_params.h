@@ -23,7 +23,7 @@
 //: A parameters struct for IIDC 1394 camera streams
 //
 // The setter functions are provided for convenience, so that the
-// parameters can be set through an anonynous object.
+// parameters can be set through an anonymous object.
 // \code
 //   ostream.open( filename,
 //                 vidl_iidc1394_params()
@@ -147,7 +147,7 @@ struct vidl_iidc1394_params
   //: Describes the valid options for the parameters
   struct valid_options;
 
-  //: Describes a feature and it's set of options
+  //: Describes a feature and its set of options
   struct feature_options;
 
   //-------------------------------------------------------
@@ -199,7 +199,7 @@ struct vidl_iidc1394_params
 
 //=============================================================================
 
-//: Describes a feature and it's set of options
+//: Describes a feature and its set of options
 struct vidl_iidc1394_params::feature_options
 {
   feature_t       id;

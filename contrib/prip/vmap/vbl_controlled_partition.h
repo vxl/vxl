@@ -50,7 +50,7 @@ class vbl_controlled_partition
   //: Finds the representative of "i".
   int representative(int i) const ;
 
-  //: Sets "i" as the representative its set.
+  //: Sets "i" as the representative of its set.
   void set_as_representative(int i) ;
 
   //: Number of sets.

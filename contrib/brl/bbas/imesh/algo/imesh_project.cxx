@@ -86,7 +86,7 @@ imesh_distort_verts(const vcl_vector<vgl_point_2d<double> >& in_verts,
 }
 
 
-//: Render a triangle defined by it's vertices
+//: Render a triangle defined by its vertices
 void imesh_render_triangle(const vgl_point_2d<double>& v1,
                            const vgl_point_2d<double>& v2,
                            const vgl_point_2d<double>& v3,

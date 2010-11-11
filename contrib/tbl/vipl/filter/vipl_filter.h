@@ -390,7 +390,7 @@ class vipl_filter          : public vipl_filter_abs
 
   //:
   // Is the current apply section intersected with the ROA an empty
-  // region, if so we should not load it. If its empty there is no
+  // region, if so we should not load it. If it's empty there is no
   // guarantee that the section_start and section_end will not overlap.
   int is_section_within_ROA( int axis) const;
 

@@ -258,7 +258,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
 
 //:
 // Is the current apply section intersected with the ROA an empty region, if
-// so we should not load it. If its empty there is no guarantee that the
+// so we should not load it. If it's empty there is no guarantee that the
 // section_start and section_end will not overlap.
 template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, class PixelItr>
   int vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr >
@@ -278,7 +278,8 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
       return true;
   // if we make it this far, must be in
     }
-  } else {
+  }
+  else {
     // if we don't have an ROA we must be in it.
     if (!ROA())
       return true;
@@ -510,9 +511,9 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
       vcl_cerr << "Warning: input pointer is null returning image at index 0\n";
       return *inf()[0];
     }
-  } //else
-   vcl_cerr << "Warning: out of range is null, a new val, it will leak\n";
-   return *inf()[0];
+  }
+  vcl_cerr << "Warning: out of range is null, a new val, it will leak\n";
+  return *inf()[0];
 }
 
 //: Put the given pointer into output data at the given index location.
@@ -628,9 +629,11 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
     ref_filter_state() = Not_Ready;
     vcl_cerr << "Warning: filtering without valid input\n";
     return false;
-  } else if (UNCHANGED(input_state())) {
+  }
+  else if (UNCHANGED(input_state())) {
     ref_filter_state() |= Unchanged;
-  } else
+  }
+  else
     ref_filter_state() |= Ready;
   if (NOT_READY(output_state()) || (FILTER_OWNED(output_state()) &&
                                     CHANGED(input_state()))) {

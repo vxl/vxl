@@ -65,7 +65,7 @@ class vil3d_image_view : public vil3d_image_view_base
 
   //: Set this view to look at someone else's memory data.
   //  If the data goes out of scope then this view could be invalid, and
-  //  there's no way of knowing until its too late - so take care!
+  //  there's no way of knowing until it's too late - so take care!
   vil3d_image_view(const T* top_left,
                    unsigned ni, unsigned nj, unsigned nk, unsigned nplanes,
                    vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_step,

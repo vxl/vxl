@@ -153,7 +153,8 @@ vgl_homg_line_3d_2_points<T> vpgl_proj_camera<T>::backproject(
 }
   //: Find the 3d ray that goes through the camera center and the provided image point.
 template <class T>
-vgl_ray_3d<T> vpgl_proj_camera<T>::backproject_ray(const vgl_homg_point_2d<T>& image_point ) const{
+vgl_ray_3d<T> vpgl_proj_camera<T>::backproject_ray(const vgl_homg_point_2d<T>& image_point ) const
+{
   vnl_vector_fixed<T,4> vnl_wp = svd()->solve(
     vnl_vector_fixed<T,3>( image_point.x(), image_point.y(), image_point.w() ).as_ref() );
   vgl_homg_point_3d<T> wp( vnl_wp[0], vnl_wp[1], vnl_wp[2], vnl_wp[3] );
@@ -332,7 +333,7 @@ void fix_cheirality( vpgl_proj_camera<T>& /*camera*/ )
 
 //--------------------------------
 template <class T>
-void make_cannonical( vpgl_proj_camera<T>& camera )
+void make_canonical( vpgl_proj_camera<T>& camera )
 {
   vnl_matrix_fixed<T,3,4> can_cam( (T)0 );
   can_cam(0,0) = can_cam(1,1) = can_cam(2,2) = (T)1;
@@ -440,7 +441,7 @@ image_jacobians(const vpgl_proj_camera<T>& camera,
 template class vpgl_proj_camera<T >; \
 template vgl_h_matrix_3d<T > get_canonical_h( vpgl_proj_camera<T >& camera ); \
 template void fix_cheirality( vpgl_proj_camera<T >& camera ); \
-template void make_cannonical( vpgl_proj_camera<T >& camera ); \
+template void make_canonical( vpgl_proj_camera<T >& camera ); \
 template vpgl_proj_camera<T > premultiply( const vpgl_proj_camera<T >& in_camera, \
                                            const vnl_matrix_fixed<T,3,3>& transform ); \
 template vpgl_proj_camera<T > postmultiply(const vpgl_proj_camera<T >& in_camera, \

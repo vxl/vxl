@@ -25,7 +25,7 @@ IF(DIRECTSHOW_FOUND)
   INCLUDE_DIRECTORIES(${DIRECTSHOW_INCLUDE_DIRS})
 
   # For Euresys Multicam Driver's DirectShow source filter.
-  # - should I put this in a Module of it's own?
+  # - should I put this in a Module of its own?
   #INCLUDE( ${MODULE_PATH}/NewCMake/FindDirectShow_ESF.cmake )
   FIND_PATH(DIRECTSHOW_ESF_INCLUDE_DIR ESFilter.h
     "C:/Program Files/Euresys/MultiCam/Include"

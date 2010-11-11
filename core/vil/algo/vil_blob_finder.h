@@ -20,7 +20,7 @@
 //  order to avoid finding the same blob twice).  If the image is expendable,
 //  then the deep copy can be avoided using set_work_image(im).  In this
 //  case the supplied image (im) will be erased as the blob finder goes
-//  about it's humble task.
+//  about its humble task.
 //
 //  Where a blob has holes, only the outside of the blob is located.
 //  The algorithm will locate nested blobs (ie a blob within a hole

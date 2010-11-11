@@ -122,33 +122,28 @@ class vpgl_proj_camera : public vpgl_camera<T>
   { return project( world_line ); }
 
   //: Find the 3d ray that goes through the camera center and the provided image point.
-virtual  vgl_ray_3d<T> backproject_ray( const vgl_homg_point_2d<T>& image_point ) const;
+  virtual vgl_ray_3d<T> backproject_ray( const vgl_homg_point_2d<T>& image_point ) const;
 
   //: Find the 3d ray that goes through the camera center and the provided image point.
-virtual  vgl_homg_line_3d_2_points<T> backproject( const vgl_homg_point_2d<T>& image_point ) const;
+  virtual vgl_homg_line_3d_2_points<T> backproject( const vgl_homg_point_2d<T>& image_point ) const;
 
 
   //: Find the 3d plane that contains the camera center and the provided line in the image plane.
- vgl_homg_plane_3d<T> backproject( const vgl_homg_line_2d<T>& image_line ) const;
+  vgl_homg_plane_3d<T> backproject( const vgl_homg_line_2d<T>& image_line ) const;
 
 
   // Misc Camera Functions:-------------------
 
   //: Find the 3d coordinates of the center of the camera.
- virtual vgl_homg_point_3d<T> camera_center() const;
+  virtual vgl_homg_point_3d<T> camera_center() const;
 
   //: Find the world plane parallel to the image plane intersecting the camera center.
-virtual  vgl_homg_plane_3d<T> principal_plane() const{
-    return vgl_homg_plane_3d<T>( P_[2] ); }
+  virtual  vgl_homg_plane_3d<T> principal_plane() const{ return vgl_homg_plane_3d<T>( P_[2] ); }
 
   //: Find the image coordinates of the vanishing points of the world coordinate axes.
-  vgl_homg_point_2d<T> x_vanishing_point() const{
-    return vgl_homg_point_2d<T>( P_(0,0), P_(1,0), P_(2,0) ); }
-  vgl_homg_point_2d<T> y_vanishing_point() const{
-    return vgl_homg_point_2d<T>( P_(0,1), P_(1,1), P_(2,1) ); }
-  vgl_homg_point_2d<T> z_vanishing_point() const{
-    return vgl_homg_point_2d<T>( P_(0,2), P_(1,2), P_(2,2) ); }
-
+  vgl_homg_point_2d<T> x_vanishing_point() const{ return vgl_homg_point_2d<T>( P_(0,0), P_(1,0), P_(2,0) ); }
+  vgl_homg_point_2d<T> y_vanishing_point() const{ return vgl_homg_point_2d<T>( P_(0,1), P_(1,1), P_(2,1) ); }
+  vgl_homg_point_2d<T> z_vanishing_point() const{ return vgl_homg_point_2d<T>( P_(0,2), P_(1,2), P_(2,2) ); }
 
   // Getters and Setters:---------------------
 
@@ -164,7 +159,6 @@ virtual  vgl_homg_plane_3d<T> principal_plane() const{
   // matrices with improper form.
   virtual bool set_matrix( const vnl_matrix_fixed<T,3,4>& new_camera_matrix );
   virtual bool set_matrix( const T* new_camera_matrix );
-
 
   // I/O :---------------------
 
@@ -219,7 +213,7 @@ void fix_cheirality( vpgl_proj_camera<T>& camera );
 
 //: Set the camera matrix to [ I | 0 ].
 template <class T>
-void make_cannonical( vpgl_proj_camera<T>& camera );
+void make_canonical( vpgl_proj_camera<T>& camera );
 
 //: Pre-multiply this projection matrix with a 2-d projective transform.
 template <class T>

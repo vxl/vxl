@@ -242,7 +242,8 @@ template < class DataType >
     in_out.ref_i_curr_sec_start()[vipl_filter_abs::X_Axis()] += xi;
     in_out.ref_i_curr_sec_end()[vipl_filter_abs::X_Axis()] += xi;
     in_out.ref_i_curr_sec_size()[vipl_filter_abs::X_Axis()] = xi;
-  } else if (yi > 0) {
+  }
+  else if (yi > 0) {
     incremented_Y = 1;
     // typewriter "spring"
     in_out.ref_i_curr_sec_start()[vipl_filter_abs::X_Axis()] = 0;
@@ -275,7 +276,8 @@ template < class DataType >
         += section_size(vipl_filter_abs::X_Axis());
       in_out.ref_i_curr_sec_end()[vipl_filter_abs::X_Axis()]
         += section_size(vipl_filter_abs::X_Axis());
-    } else {
+    }
+    else {
       // we are in the "first" block so we have to include overlap stuff
       in_out.ref_i_curr_sec_start()[vipl_filter_abs::X_Axis()]
         += section_size(vipl_filter_abs::X_Axis())
@@ -292,7 +294,8 @@ template < class DataType >
     in_out.ref_i_curr_sec_size()[vipl_filter_abs::X_Axis()] =
       in_out.i_curr_sec_end()[vipl_filter_abs::X_Axis()]
       - in_out.i_curr_sec_start()[vipl_filter_abs::X_Axis()];
-  } else if (yi > 0) {
+  }
+  else if (yi > 0) {
     incremented_Y = 1;
     // typewriter "spring"
     in_out.ref_i_curr_sec_start()[vipl_filter_abs::X_Axis()] = 0;
@@ -389,8 +392,8 @@ template < class DataType >
   return false;
 }
 
-// Does the correct copy. Its a bit tricky due to the fact that an instance
-// has a pointer to its ``real instance''
+// Does the correct copy. It's a bit tricky due to the fact that an instance
+// has a pointer to its ``real instance''.
 template < class DataType >
    vipl_section_container< DataType >* vipl_section_container< DataType > ::virtual_copy() const
 {

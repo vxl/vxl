@@ -42,7 +42,7 @@ class m23d_ortho_flexible_builder
     vcl_vector<vgl_point_2d<double> > cog_;
 
     //: Centred version of the 2D views supplied to reconstruct()
-    //  Each 2D shape has been translated so that it's CoG is at the origin
+    //  Each 2D shape has been translated so that its CoG is at the origin
     vnl_matrix<double> P2Dc_;
 
     //: The 2ns x 3 matrix. Each 2x3 block is the projection for a given view.
@@ -127,7 +127,7 @@ class m23d_ortho_flexible_builder
     const vnl_matrix<double>& projections() const { return P_; }
 
     //: Centred version of the 2D views supplied to reconstruct()
-    //  Each 2D shape has been translated so that it's CoG is at the origin
+    //  Each 2D shape has been translated so that its CoG is at the origin
     const vnl_matrix<double>& centred_views() const { return P2Dc_; }
 
     //: The 2ns x 3 matrix. Each 2x3 block is the projection for a given view.

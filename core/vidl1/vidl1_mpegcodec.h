@@ -3,8 +3,9 @@
 #define vidl1_mpegcodec_h
 //:
 // \file
-//
 // \author l.e.galup
+// \date July 2002
+//
 //  this class sets up and executes the vidl1_mpegcodec_helper, which
 //  is a wrapped port of mpeg2dec. it accepts the vo open function ptr
 //  in the constructor. this was done this way to make it more extensible,
@@ -14,12 +15,11 @@
 //  1) load the file
 //  2) set the attributes. format, demux, ...
 //  3) then use get_section. the get section call will actualize
-//     initialize the helper class. its a one shot deal. once
+//     initialize the helper class. it's a one shot deal. once
 //     initialized, you are stuck with that roi. i could change
 //     this later, if it proves necessary.
 //
 //  this class works on both mpeg1 and mpeg2.
-// \date July 2002
 
 #include "vidl1_mpegcodec_helper.h"
 #include <vidl1/vidl1_codec.h>

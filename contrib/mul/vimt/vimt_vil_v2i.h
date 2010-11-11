@@ -7,7 +7,7 @@
 // \brief Reader/Writer for v2i format images.
 // \author Ian Scott - Manchester
 // v2i is a VXL specific format designed to store all the information that
-// can be stored in a vimt image. We don't recommed its use in general,
+// can be stored in a vimt image. We don't recommend its use in general,
 // having no wish to add to the plethora of badly designed image formats
 // out there. However, a means of being able to save, and reload a full
 // vil/vimt image using the standard vil_load_* API is very useful.
@@ -41,10 +41,10 @@ class vimt_vil_v2i_format: public vil_file_format
   //: Make a "generic_image" on which put_section may be applied.
   // The file may be opened immediately for writing so that a header can be written.
   virtual vil_image_resource_sptr make_output_image(vil_stream* vs,
-                                                      unsigned ni,
-                                                      unsigned nj,
-                                                      unsigned nplanes,
-                                                      enum vil_pixel_format);
+                                                    unsigned ni,
+                                                    unsigned nj,
+                                                    unsigned nplanes,
+                                                    enum vil_pixel_format);
 
   //: default filename tag for this image.
   virtual const char * tag() const {return "v2i";}
@@ -108,14 +108,14 @@ class vimt_vil_v2i_image: public vil_image_resource
   // multi-plane scalar-pixel view of the data.
   // \return 0 if unable to get view of correct size, or if resource is write-only.
   virtual vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
-                                                   unsigned j0, unsigned nj) const;
+                                                 unsigned j0, unsigned nj) const;
 
   //: Create a read/write view of a copy of this data.
   // This function will always return a
   // multi-plane scalar-pixel view of the data.
   // \return 0 if unable to get view of correct size, or if resource is write-only.
   virtual vil_image_view_base_sptr get_view(unsigned i0, unsigned ni,
-                                              unsigned j0, unsigned nj) const;
+                                            unsigned j0, unsigned nj) const;
 
   //: Put the data in this view back into the image source.
   // The view must be of scalar components. Assign your

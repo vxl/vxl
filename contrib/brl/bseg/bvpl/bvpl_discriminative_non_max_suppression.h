@@ -3,7 +3,7 @@
 #define bvpl_discriminative_non_max_suppression_h
 //:
 // \file
-// \brief  Methods to perform non-maxima suppression only on features of its on kind
+// \brief  Methods to perform non-maxima suppression only on features of its own kind
 // \author Isabel Restrepo mir@lems.brown.edu
 // \date  June 24, 2009
 //

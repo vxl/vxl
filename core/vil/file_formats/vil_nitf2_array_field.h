@@ -18,7 +18,7 @@ class vil_nitf2_date_time;
 
 //: Abstract class for array fields, i.e., fields that occur within a repeat loop.
 // Since repeat loops can be nested, this field can be multi-dimensional.
-// It's row dimensions don't even need to be same. One instance of this
+// Its row dimensions don't even need to be same. One instance of this
 // class "collects" all the values associated with a tag, even though they
 // may be interleaved among other values in the NITF file. This class
 // provides dimensional information and implements methods common to the

@@ -47,7 +47,7 @@ class m23d_ortho_rigid_builder
   vcl_vector<vgl_point_2d<double> > cog_;
 
   //: Centred version of the 2D views supplied to reconstruct()
-  //  Each 2D shape has been translated so that it's CoG is at the origin
+  //  Each 2D shape has been translated so that its CoG is at the origin
   vnl_matrix<double> P2Dc_;
 
 //=============================private functions================================
@@ -102,7 +102,7 @@ class m23d_ortho_rigid_builder
   const vnl_matrix<double>& projections() const { return P_; }
 
   //: Centred version of the 2D views supplied to reconstruct()
-  //  Each 2D shape has been translated so that it's CoG is at the origin
+  //  Each 2D shape has been translated so that its CoG is at the origin
   const vnl_matrix<double>& centred_views() const { return P2Dc_; }
 
   //: Return 3d pts given 3*np matrix

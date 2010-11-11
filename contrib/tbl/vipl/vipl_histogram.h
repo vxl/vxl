@@ -58,7 +58,7 @@
 //   The final attribute, checkrange is a boolean that determines if the
 //   histogram should do range checking on bin access.  This can be useful
 //   for float images. if a value is below the first image access or above
-//   the last, its set to the extremal value.
+//   the last, it's set to the extremal value.
 //
 //   Note it does not limit the maximum of bins so they may wrap around for
 //   unsigned and accessing a small number of bins from a large dynamic range

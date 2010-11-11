@@ -463,7 +463,7 @@ class bmsh3d_mesh : public bmsh3d_ifs_mesh
     return i_traverse_flag_;
   }
   //: increase the search flag, so that every element has lower value than the flag (unvisited).
-  //  Once visited, it's i_visited_ will be set to i_traverse_flag_ (visited)
+  //  Once visited, its i_visited_ will be set to i_traverse_flag_ (visited)
   int init_traverse() { return ++i_traverse_flag_; }
 
   void reset_traverse_v()

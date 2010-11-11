@@ -30,11 +30,11 @@ class vil_pyramid_image_view
     //: Default constructor, creates an empty list of pyramid
     vil_pyramid_image_view(): nlevels_(0), max_levels_(256) {}
 
-    //: Creates a pyramid with one image only and it's scale is set to 1.0 (biggest)
+    //: Creates a pyramid with one image only and its scale is set to 1.0 (biggest)
     vil_pyramid_image_view(vil_image_view_base_sptr image): nlevels_(1), max_levels_(256)
     { images_.push_back(image); scales_.push_back(1.0); }
 
-    //: Creates a pyramid with one image only and it's scale is set to 1.0 (biggest)
+    //: Creates a pyramid with one image only and its scale is set to 1.0 (biggest)
     vil_pyramid_image_view(const vil_image_view<T>& image): nlevels_(1), max_levels_(256)
     { images_.push_back(new vil_image_view<T>(image)); scales_.push_back(1.0); }
 

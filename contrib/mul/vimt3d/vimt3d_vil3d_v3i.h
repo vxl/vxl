@@ -9,7 +9,7 @@
 // \brief Reader/Writer for v3i format images.
 // \author Ian Scott - Manchester
 // v3i is a VXL specific format designed to store all the information that
-// can be stored in a vimt3d image. We don't recommed its use in general,
+// can be stored in a vimt3d image. We don't recommend its use in general,
 // having no wish to add to the plethora of badly designed image formats
 // out there. However, a means of being able to save, and reload a full
 // vil3d/vimt3d image using the standard vil3d_load_* API is very useful.
@@ -21,7 +21,7 @@
 // To use the v3i format with vil3d_load, vil3d_save, etc add
 // the following code at the start of your program
 // \verbatim
-//  vil3d_file_format::add_format(new vimt3d_vil3d_v3i_format);  
+//  vil3d_file_format::add_format(new vimt3d_vil3d_v3i_format);
 // \endverbatim
 
 
@@ -35,7 +35,7 @@
 // To use the v3i format with vil3d_load, vil3d_save, etc add
 // the following code at the start of your program
 // \verbatim
-//  vil3d_file_format::add_format(new vimt3d_vil3d_v3i_format);  
+//  vil3d_file_format::add_format(new vimt3d_vil3d_v3i_format);
 // \endverbatim
 class vimt3d_vil3d_v3i_format: public vil3d_file_format
 {
@@ -71,7 +71,7 @@ class vimt3d_vil3d_v3i_format: public vil3d_file_format
 // To use the v3i format with vil3d_load, vil3d_save, etc add
 // the following code at the start of your program
 // \verbatim
-//  vil3d_file_format::add_format(new vimt3d_vil3d_v3i_format);  
+//  vil3d_file_format::add_format(new vimt3d_vil3d_v3i_format);
 // \endverbatim
 class vimt3d_vil3d_v3i_image: public vil3d_image_resource
 {

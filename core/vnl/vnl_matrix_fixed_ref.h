@@ -5,130 +5,127 @@
 #pragma interface
 #endif
 //:
-//  \file
-//  \brief Fixed size stack-stored vnl_matrix
+// \file
+// \brief Fixed size stack-stored vnl_matrix
 //
-//  > > From: Amitha Perera [mailto:perera@cs.rpi.edu]
-//  > > Sent: Monday, October 07, 2002 3:18 PM
-//  > > Subject: vnl_vector_fixed_ref
-//  > >
-//  > > I'm working on separating vnl_vector and vnl_vector_fixed in the VXL
-//  > > tree, as I mailed a while ago to the vxl-maintainers list. I noticed
-//  > > that you'd committed a vnl_vector_fixed_ref class which doesn't seem
-//  > > to provide any additional functionality over vnl_vector_ref. May I
-//  > > remove it, or is there some use for it?
-//  > >
-//  > > FYI, the author is listed as "Paul P. Smyth, Vicon Motion
-//  > > Systems Ltd."
-//  > > and the comment is dated 02 May 2001.
+// vnl_matrix_fixed_ref is a fixed-size vnl_matrix for which the data space
+// has been supplied externally.  This is useful for two main tasks:
 //
-//  Paul Smyth <paul.smyth@vicon.com> writes:
-//  > The rationale behind it was that I had some (fast) algorithms for
-//  > matrix/vector operations that made use of compile-time knowledge of the
-//  > vector and matrix sizes.
-//  > This was typically appropriate when trying to interpret a fixed-size
-//  > subvector within a large vector of parameters as e.g. a translation.
-//  >
-//  > As I saw it, the various types of vector possible were: (with their current
-//  > names)
-//  > - pointer to memory, plus compile-time knowledge of vector size ( T*, and enum{size}) = vnl_vector_fixed_ref
-//  > - ownership of memory, plus compile-time size = vnl_vector_fixed
-//  > - pointer to memory, plus run-time only knowledge of size (T* and size()) = vnl_vector_ref
-//  > - ownership of memory, variably sized = vnl_vector
-//  >
-//  > I had a conversation with Andrew Fitzgibbon, where he reckoned that the best
-//  > thing to do with vnl vectors etc. was to create entirely separate types, and
-//  > routines for conversion between them (possibly implicitly), rather that
-//  > trying to establish a class hierarchy, which may add too many burdens in
-//  > terms of object size for small vectors/matrices.
-//  >
-//  > Sorry - I've now found the debate on the maintainers list!
-//  >
-//  > Anyway, I believe that vector_fixed_ref is very necessary, and that you
-//  > should be able to convert from a vector_fixed to a vector_fixed_ref - say
-//  > using an as_ref() member on vector_fixed or standalone function.
-//  > And I believe that for the restructured classes, vector_fixed_ref and
-//  > vector_fixed should not be related by inheritance, as that would place an
-//  > excessive burden on the size of vector_fixed.
-//  >
-//  > ------
-//  > Another issue - do you have a mechanism for dealing with const data safely?
-//  > {
-//  >   template<typename T, int n>
-//  >   vnl_vector_fixed_ref(T* i_Data);
-//  >
-//  >   void MyFunction(const vnl_vector<double> & Input)
-//  >   {
-//  >     // take a reference to the first 3 elements of Input
-//  >     vnl_vector_fixed_ref<double,3> ref(Input.begin());
-//  >     // compiler error - as making vector_fixed_ref from const
-//  > double *
-//  >   }
-//  > }
-//  >
-//  > The options appear to be
-//  > 1) Make a separate class vnl_vector_fixed_ref_const
-//  > 2) Make vnl_vector_fixed_ref so it can be instantiated with
-//  > vnl_vector_fixed_ref<double,n> AND vnl_vector_fixed_ref<const double,n>, and
-//  > gives appropriate behaviour - would probably require a to_const function
-//  > which generates vnl_vector_fixed_ref<const T,n> from
-//  > vnl_vector_fixed_ref<T,n>
-//  >
-//  > ------
-//  > Another note is that a number of routines that use vector_fixed currently
-//  > (e.g. cross_3d) should really use vector_fixed_ref as an input, because they
-//  > should be able to operate on fixed vector references as well as fixed
-//  > vectors.
-//  >
-//  > While I'm at it, has it been decided that the vnl_vector and vnl_vector_ref
-//  > classes are to remain unchanged? Because having vnl_vector as the base, and
-//  > vnl_vector_ref derived from it is a real pain in the backside. A vector
-//  > which may or may not own its own memory is a more general type than one
-//  > which does own it's own memory, and having vnl_vector as the base means that
-//  > all sorts of nastinesses can happen. Simply, a vector_ref Is-not a type of
-//  > vector.
-//  > If anything, it should be the other way round.
-//  >
-//  > void DoAssign(vnl_vector<double> & RefToMemoryIDontOwn, const vnl_vector<double> & NewContents)
-//  > {
-//  >   RefToMemoryIDontOwn = NewContents;
-//  > }
-//  >
-//  > void DeleteTwice()
-//  > {
-//  >   vnl_vector<double> vec1(3, 0); // size 3 - news 3*double
-//  >   vnl_vector<double> vec2(4,1); // size 4 news 4 * double
-//  >   vnl_vector_ref<double> ref_to_1(3,vec1.begin()); // copies pointer
-//  >   DoAssign(ref_to_1, vec2); // deletes memory owned by 1, news 4 * double
-//  >   // vec1 now points to deleted memory, and will crash when goes out of scope
-//  > }
-//  >
-//  > Maybe that issue isn't on your agenda - but it's a bit of a disaster. I know
-//  > that fixing this might break some code.
-//  >
-//  > ---------
-//  > Sorry for rolling all these things into one - I'd be interested to know what
-//  > you think. But please don't kill my vnl_vector_ref!
-//  >
-//  > Paul.
+// (a) Treating some row-based "C" matrix as a vnl_matrix in order to
+// perform vnl_matrix operations on it.
 //
-//    vnl_matrix_fixed_ref is a fixed-size vnl_matrix for which the data space
-//    has been supplied externally.  This is useful for two main tasks:
+// (b) Declaring a vnl_matrix that uses entirely stack-based storage for the
+// matrix.
 //
-//    (a) Treating some row-based "C" matrix as a vnl_matrix in order to
-//    perform vnl_matrix operations on it.
-//
-//    (b) Declaring a vnl_matrix that uses entirely stack-based storage for the
-//    matrix.
-//
-//    The big warning is that returning a vnl_matrix_fixed_ref pointer will free
-//    non-heap memory if deleted through a vnl_matrix pointer.  This should be
-//    very difficult though, as vnl_matrix_fixed_ref objects may not be constructed
-//    using operator new.  This in turn is plausible as the point is to avoid
-//    such calls.
+// The big warning is that returning a vnl_matrix_fixed_ref pointer will free
+// non-heap memory if deleted through a vnl_matrix pointer.  This should be
+// very difficult though, as vnl_matrix_fixed_ref objects may not be constructed
+// using operator new.  This in turn is plausible as the point is to avoid
+// such calls.
 //
 // \author Andrew W. Fitzgibbon, Oxford RRG
 // \date   04 Aug 1996
+//
+// Additional comments on the vnl_matrix_fixed_ref and vnl_vector_fixed_ref
+// classes, extracted from an email conversation between Paul P. Smyth,
+// Vicon Motion Systems Ltd., from May 02, 2001, and Amitha Perera
+// (who anwers the following on Monday, October 07, 2002):
+//
+// I'm working on separating vnl_vector and vnl_vector_fixed in the VXL
+// tree, as I mailed a while ago to the vxl-maintainers list. I noticed
+// that you'd committed a vnl_vector_fixed_ref class which doesn't seem
+// to provide any additional functionality over vnl_vector_ref. May I
+// remove it, or is there some use for it?
+//
+// Paul Smyth writes:
+// The rationale behind it was that I had some (fast) algorithms for
+// matrix/vector operations that made use of compile-time knowledge of the
+// vector and matrix sizes.
+// This was typically appropriate when trying to interpret a fixed-size
+// subvector within a large vector of parameters as e.g. a translation.
+//
+// As I saw it, the various types of vector possible were: (with their current
+// names)
+// - pointer to memory, plus compile-time knowledge of vector size ( T*, and enum{size}) = vnl_vector_fixed_ref
+// - ownership of memory, plus compile-time size = vnl_vector_fixed
+// - pointer to memory, plus run-time only knowledge of size (T* and size()) = vnl_vector_ref
+// - ownership of memory, variably sized = vnl_vector
+//
+// I had a conversation with Andrew Fitzgibbon, where he reckoned that the best
+// thing to do with vnl vectors etc. was to create entirely separate types, and
+// routines for conversion between them (possibly implicitly), rather that
+// trying to establish a class hierarchy, which may add too many burdens in
+// terms of object size for small vectors/matrices.
+//
+// Sorry - I've now found the debate on the maintainers list!
+//
+// Anyway, I believe that vector_fixed_ref is very necessary, and that you
+// should be able to convert from a vector_fixed to a vector_fixed_ref - say
+// using an as_ref() member on vector_fixed or standalone function.
+// And I believe that for the restructured classes, vector_fixed_ref and
+// vector_fixed should not be related by inheritance, as that would place an
+// excessive burden on the size of vector_fixed.
+//
+// ------
+// Another issue - do you have a mechanism for dealing with const data safely?
+// {
+//   template<typename T, int n>
+//   vnl_vector_fixed_ref(T* i_Data);
+//
+//   void MyFunction(const vnl_vector<double> & Input)
+//   {
+//     // take a reference to the first 3 elements of Input
+//     vnl_vector_fixed_ref<double,3> ref(Input.begin());
+//     // compiler error - as making vector_fixed_ref from const
+// double *
+//   }
+// }
+//
+// The options appear to be
+// 1) Make a separate class vnl_vector_fixed_ref_const
+// 2) Make vnl_vector_fixed_ref so it can be instantiated with
+// vnl_vector_fixed_ref<double,n> AND vnl_vector_fixed_ref<const double,n>, and
+// gives appropriate behaviour - would probably require a to_const function
+// which generates vnl_vector_fixed_ref<const T,n> from
+// vnl_vector_fixed_ref<T,n>
+//
+// ------
+// Another note is that a number of routines that use vector_fixed currently
+// (e.g. cross_3d) should really use vector_fixed_ref as an input, because they
+// should be able to operate on fixed vector references as well as fixed
+// vectors.
+//
+// While I'm at it, has it been decided that the vnl_vector and vnl_vector_ref
+// classes are to remain unchanged? Because having vnl_vector as the base, and
+// vnl_vector_ref derived from it is a real pain in the backside. A vector
+// which may or may not own its own memory is a more general type than one
+// which does own its own memory, and having vnl_vector as the base means that
+// all sorts of nastinesses can happen. Simply, a vector_ref Is-not a type of
+// vector.
+// If anything, it should be the other way round.
+//
+// void DoAssign(vnl_vector<double> & RefToMemoryIDontOwn, const vnl_vector<double> & NewContents)
+// {
+//   RefToMemoryIDontOwn = NewContents;
+// }
+//
+// void DeleteTwice()
+// {
+//   vnl_vector<double> vec1(3, 0); // size 3 - news 3*double
+//   vnl_vector<double> vec2(4,1); // size 4 news 4 * double
+//   vnl_vector_ref<double> ref_to_1(3,vec1.begin()); // copies pointer
+//   DoAssign(ref_to_1, vec2); // deletes memory owned by 1, news 4 * double
+//   // vec1 now points to deleted memory, and will crash when goes out of scope
+// }
+//
+// Maybe that issue isn't on your agenda - but it's a bit of a disaster. I know
+// that fixing this might break some code.
+//
+// ---------
+// Sorry for rolling all these things into one - I'd be interested to know what
+// you think. But please don't kill my vnl_vector_ref!
+//
+// Paul.
 //
 // \verbatim
 //  Modifications:

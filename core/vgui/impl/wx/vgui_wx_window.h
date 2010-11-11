@@ -23,12 +23,12 @@ class vgui_wx_statusbar;
 //-------------------------------------------------------------------------
 //: wxWidgets implementation of vgui_window.
 //
-// Creates a top-level window in wxWidgets and provides methods for it's
+// Creates a top-level window in wxWidgets and provides methods for its
 // management and customization.
 //-------------------------------------------------------------------------
 class vgui_wx_window : public vgui_window
 {
-public:
+ public:
   //: Constructor - create a new window.
   vgui_wx_window(int width, int height, const char* title);
 
@@ -88,7 +88,7 @@ public:
   //: Set the position of the vertical scrollbar, returns old position.
   virtual int set_vscrollbar(int pos);
 
-private:
+ private:
   //: Catch all constructor.
   void init_window();
 

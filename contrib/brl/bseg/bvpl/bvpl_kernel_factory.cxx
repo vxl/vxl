@@ -27,7 +27,7 @@ bvpl_kernel_factory::create(vnl_float_3 rotation_axis, float angle)
   this->set_rotation_axis(rotation_axis);
   bvpl_kernel kernel(interpolate(rotate(angle)), rotation_axis_, parallel_axis_, angle_, dim(), min_point_, max_point_,factory_name_,voxel_length_);
   kernel.set_xml_element(xml_element());
-  
+
   return kernel;
 }
 
@@ -68,7 +68,7 @@ bvpl_kernel_factory::interpolate(kernel_type const& kernel)
   return kernel_out;
 }
 
-//: Rotates  the kernel so that its cannonical axis is set to "axis"
+//: Rotates  the kernel so that its canonical axis is set to "axis"
 void bvpl_kernel_factory::set_rotation_axis( vnl_float_3 rotation_axis)
 {
   // rotation axis should be unit vector

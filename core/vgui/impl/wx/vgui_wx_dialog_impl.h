@@ -28,16 +28,16 @@ class wxSizer;
 //-------------------------------------------------------------------------
 //: wxWidgets implementation of vgui_dialog_impl.
 //
-// Creates a dialog box in wxWidgets and provides methods for it's
+// Creates a dialog box in wxWidgets and provides methods for its
 // customization.
 //-------------------------------------------------------------------------
 class vgui_wx_dialog_impl : public vgui_dialog_impl
 {
-public:
+ public:
   //: Constructor - create an empty dialog with the given title.
   vgui_wx_dialog_impl(const char* name);
 
-protected:
+ protected:
   //: Destructor.
   virtual ~vgui_wx_dialog_impl();
 
@@ -57,7 +57,7 @@ protected:
   //: Set the modality of the dialog box.
   virtual void modal(bool m) { is_modal_ = m; }
 
-private:
+ private:
   // private helpers
   void build_wx_dialog();
   void destroy_wx_dialog();

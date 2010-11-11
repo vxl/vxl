@@ -4,7 +4,7 @@
 // \file
 //  This example program shows a typical use of the gaussian convolution filter
 //  on a ubyte image.  The input image (argv[1]) must be ubyte, and in that
-//  case its convolved with a gaussian kernel and the result is written to
+//  case it's convolved with a gaussian kernel and the result is written to
 //  argv[2] which is always a PGM file image.
 //  Uses vipl_gaussian_convolution<vnl_matrix<ubyte>,vnl_matrix<ubyte>,ubyte,ubyte>.
 //  The conversion between vil_image_view<ubyte> and the in-memory vnl_matrix<ubyte>
