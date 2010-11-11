@@ -456,21 +456,20 @@ bool boxm_ocl_bit_scene::init_empty_scene()
   blocks_in_buffers_ = vbl_array_1d<unsigned short>(num_buffers+1, (unsigned short) 0);
 
   // 6. Go through each block (randomly) and place it in a buffer
-  
-  //6.a create a random 'iterator' 
+
+  //6.a create a random 'iterator'
   int randIndex[blocks_.size()];
-  for(int i=0; i<blocks_.size(); i++) randIndex[i] = i; 
-  boxm_ocl_utils::random_permutation(randIndex, blocks_.size()); 
+  for (unsigned int i=0; i<blocks_.size(); ++i) randIndex[i] = i;
+  boxm_ocl_utils::random_permutation(randIndex, blocks_.size());
 
   int index=0;
   vnl_random random(9667566);
   vbl_array_3d<ushort2>::iterator iter;
-  
-  for (int i=0; i<blocks_.size(); i++) 
+
+  for (unsigned int i=0; i<blocks_.size(); ++i)
+  // was: for (iter = blocks_.begin(); iter != blocks_.end(); ++iter)
   {
-    iter = blocks_.begin() + randIndex[i]; 
-  //for (iter = blocks_.begin(); iter != blocks_.end(); iter++)
-  // {
+    iter = blocks_.begin() + randIndex[i];
     //status for scene initialization
     int chunk = (int) (total_blocks/10) +1;
     if (index%chunk==0) vcl_cout<<'['<<index/chunk<<']'<<vcl_flush;
@@ -711,7 +710,7 @@ void boxm_ocl_bit_scene::get_blocks_in_buffers(unsigned short* blks_in_buffers)
 
 
 //---- set single block's data
-void boxm_ocl_bit_scene::set_block_data(int x, int y, int z, float intensity)
+void boxm_ocl_bit_scene::set_block_data(int x, int y, int z, float /*intensity*/)
 {
     ushort2 offsets = blocks_(x,y,z);
     unsigned short buffIndex = offsets[0];
