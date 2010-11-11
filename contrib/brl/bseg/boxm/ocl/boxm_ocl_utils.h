@@ -67,6 +67,7 @@ class boxm_ocl_utils
                             int blocks_per_buffer,
                             int tree_size,
                             vnl_random& random);
+  static void random_permutation(int* buffer, int size); 
 
   // Binary read and writes for a tree.
   static cl_int* readtree(vcl_string tree_file, unsigned int & tree_size );

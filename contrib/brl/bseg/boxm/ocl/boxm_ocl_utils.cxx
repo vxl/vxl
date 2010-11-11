@@ -311,6 +311,24 @@ int boxm_ocl_utils::getBufferIndex(bool rand,
 }
 
 
+void boxm_ocl_utils::random_permutation(int* buffer, int size)
+{
+  vnl_random random(9667566);
+  
+  //shuffle the buffer
+  for(int i=0; i<size; i++) 
+  {
+    //swap current value with random one after it
+    int curr = buffer[i]; 
+    int rInd = random.lrand32(i, size-1); 
+    buffer[i] = buffer[rInd];
+    buffer[rInd] = curr; 
+  }
+
+}
+
+
+
 void boxm_ocl_utils::compare_bit_scenes(boxm_ocl_bit_scene* one, boxm_ocl_bit_scene* two)
 {
   vcl_cout<<"Comparing bit scenes"<<vcl_endl;

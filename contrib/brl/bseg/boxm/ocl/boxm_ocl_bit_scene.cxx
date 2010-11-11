@@ -438,34 +438,39 @@ bool boxm_ocl_bit_scene::init_empty_scene()
 
   // 1. Set up 3D array of blocks (small blocks), assuming all blocks are similarly sized
   ushort2 blk_init(-1);
-  //vbl_array_3d<ushort2> blocks(parser_.block_nums().x(), parser_.block_nums().y(), parser_.block_nums().z(), blk_init);
   blocks_ = vbl_array_3d<ushort2>(parser_.block_nums().x(), parser_.block_nums().y(), parser_.block_nums().z(), blk_init);
 
   // 2. set up 2d array of tree_buffers (add one buffer for emergencies)
   uchar16 tree_init((unsigned char) 0);
-  //vbl_array_2d<uchar16> tree_buffers(num_buffers+1, blocks_per_buffer, tree_init);
   tree_buffers_ = vbl_array_2d<uchar16>(num_buffers+1, blocks_per_buffer, tree_init);
 
   // 3. set up 2d array of data buffers (add one buffer for emergencies)
   float16 dat_init(0.0f); dat_init[1] = .1f;
-  //vbl_array_2d<float16> data_buffers(num_buffers+1, BUFF_LENGTH, dat_init);
   data_buffers_ = vbl_array_2d<float16>(num_buffers+1, BUFF_LENGTH, dat_init);
 
   // 4. set up 1d array of mem ptrs
   ushort2 mem_init; mem_init[0] = 0; mem_init[1] = 1;
-  //vbl_array_1d<ushort2> mem_ptrs(num_buffers+1, mem_init);
   mem_ptrs_ = vbl_array_1d<ushort2>(num_buffers+1, mem_init);
 
-  // 5. Go through each block and convert it to smaller blocks
-  //vbl_array_1d<unsigned short> blocksInBuffer(num_buffers+1, (unsigned short) 0);//# of blocks in each buffer
+  // 5. set up blocks in buffers array (number of blocks in each buffer)
   blocks_in_buffers_ = vbl_array_1d<unsigned short>(num_buffers+1, (unsigned short) 0);
 
-  //iterate through each block, randomly place it somewhere
+  // 6. Go through each block (randomly) and place it in a buffer
+  
+  //6.a create a random 'iterator' 
+  int randIndex[blocks_.size()];
+  for(int i=0; i<blocks_.size(); i++) randIndex[i] = i; 
+  boxm_ocl_utils::random_permutation(randIndex, blocks_.size()); 
+
   int index=0;
   vnl_random random(9667566);
   vbl_array_3d<ushort2>::iterator iter;
-  for (iter = blocks_.begin(); iter != blocks_.end(); iter++)
+  
+  for (int i=0; i<blocks_.size(); i++) 
   {
+    iter = blocks_.begin() + randIndex[i]; 
+  //for (iter = blocks_.begin(); iter != blocks_.end(); iter++)
+  // {
     //status for scene initialization
     int chunk = (int) (total_blocks/10) +1;
     if (index%chunk==0) vcl_cout<<'['<<index/chunk<<']'<<vcl_flush;
@@ -509,6 +514,7 @@ bool boxm_ocl_bit_scene::init_empty_scene()
     index++;
   }
   vcl_cout<<vcl_endl;
+
 
   //use the already existing init_scene method
   bgeo_lvcs lvcs;
