@@ -18,26 +18,22 @@
 #include <vil/vil_save.h>
 //: Constructor
 boxm_change_detection_bit_tableau::boxm_change_detection_bit_tableau()
+: pbuffer_(0), ni_(640), nj_(480), curr_frame_(0), do_update_(true)
 {
-    pbuffer_=0;
-    ni_=640;
-    nj_=480;
-    curr_frame_ = 0;
-    do_update_ = true;
 }
 
 //: Destructor
 boxm_change_detection_bit_tableau::~boxm_change_detection_bit_tableau()
 {
-    vcl_cout<<"CHANGE DETECTION TABLEAU DESTROYED"<<vcl_endl;
+  vcl_cout<<"CHANGE DETECTION TABLEAU DESTROYED"<<vcl_endl;
 }
 
 //: initialize tableau properties
 bool boxm_change_detection_bit_tableau::init(boxm_ocl_bit_scene * scene,
-                                   unsigned ni, unsigned nj,
-                                   vcl_vector<vcl_string> cam_files,
-                                   vcl_vector<vcl_string> img_files,
-                                   vcl_vector<vcl_string> exp_img_files)
+                                             unsigned ni, unsigned nj,
+                                             vcl_vector<vcl_string> cam_files,
+                                             vcl_vector<vcl_string> img_files,
+                                             vcl_vector<vcl_string> exp_img_files)
 {
   //set image dimensions, camera and scene
   ni_ = ni;
@@ -77,8 +73,8 @@ bool boxm_change_detection_bit_tableau::init_ocl()
   cl_platform_id platform_id[1];
   status = clGetPlatformIDs (1, platform_id, NULL);
   if (status!=CL_SUCCESS) {
-      vcl_cout<<error_to_string(status)<<vcl_endl;
-      return 0;
+    vcl_cout<<error_to_string(status)<<vcl_endl;
+    return 0;
   }
 
   cl_context compute_context;
@@ -93,15 +89,15 @@ bool boxm_change_detection_bit_tableau::init_ocl()
   //create OpenCL context with display properties determined above
   compute_context = clCreateContext(props, 1, &updt_mgr->devices()[0], NULL, NULL, &status);
 #elif defined(__APPLE__) || defined(MACOSX)
-  CGLContextObj kCGLContext = CGLGetCurrentContext();              
+  CGLContextObj kCGLContext = CGLGetCurrentContext();
   CGLShareGroupObj kCGLShareGroup = CGLGetShareGroup(kCGLContext);
-  
-  cl_context_properties props[] = { 
-    CL_CONTEXT_PROPERTY_USE_CGL_SHAREGROUP_APPLE, (cl_context_properties)kCGLShareGroup, 
+
+  cl_context_properties props[] = {
+    CL_CONTEXT_PROPERTY_USE_CGL_SHAREGROUP_APPLE, (cl_context_properties)kCGLShareGroup,
     CL_CONTEXT_PLATFORM, (cl_context_properties) platform_id[0],
-    0 
+    0
   };
-  //create a CL context from a CGL share group - no GPU devices must be passed, 
+  //create a CL context from a CGL share group - no GPU devices must be passed,
   //all CL compliant devices in the CGL share group will be used to create the context. more info in cl_gl_ext.h
   compute_context = clCreateContext(props, 0, 0, NULL, NULL, &status);
 #else
@@ -114,29 +110,28 @@ bool boxm_change_detection_bit_tableau::init_ocl()
   };
   compute_context = clCreateContext(props, 1, &updt_mgr->devices()[0], NULL, NULL, &status);
 #endif
-  
+
   if (status!=CL_SUCCESS) {
     vcl_cout<<"Error: Failed to create a compute CL/GL context!" << error_to_string(status) <<vcl_endl;
     return 0;
   }
-  
+
   //set OpenCL context with display properties determined above
   updt_mgr->context_ = compute_context;
-  
- 
+
   // Set 2d workspace, scene, norm data and then all buffers
   int bundle_dim = 8;
   updt_mgr->set_bundle_ni(bundle_dim);
   updt_mgr->set_bundle_nj(bundle_dim);
   updt_mgr->init_scene(scene_, ni_,nj_);  //THIS SETS WNI AND WNJ used below
 
- 
+
   ///initialize update
   //need to set ray trace
   //delete old buffer
   if (pbuffer_) {
-      clReleaseMemObject(updt_mgr->image_buf_);
-      glDeleteBuffers(1, &pbuffer_);
+    clReleaseMemObject(updt_mgr->image_buf_);
+    glDeleteBuffers(1, &pbuffer_);
   }
 
   //generate glBuffer, and bind to ocl_mgr->image_gl_buf_
@@ -151,7 +146,7 @@ bool boxm_change_detection_bit_tableau::init_ocl()
                                                  pbuffer_,
                                                  &status);
 
-  //Finally create input image and persp cam buffers, set args and 
+  //Finally create input image and persp cam buffers, set args and
   updt_mgr->setup_online_processing();
   curr_frame_=0;
 
@@ -163,11 +158,13 @@ bool boxm_change_detection_bit_tableau::init_ocl()
 //: calls on update manager to change_detection
 bool boxm_change_detection_bit_tableau::change_detection()
 {
-  //vcl_cout<<"UPDATING MODEL!!!"<<vcl_endl;
+#ifdef DEBUG
+  vcl_cout<<"UPDATING MODEL!!!"<<vcl_endl;
+#endif
   count_++; curr_count_++;
 
   //make sure you get a valid frame...
-  if(curr_frame_ >= (int)cam_files_.size())
+  if (curr_frame_ >= (int)cam_files_.size())
     curr_frame_ = 0;
 
   vcl_cout<<"Cam "<<cam_files_[curr_frame_]
@@ -180,8 +177,8 @@ bool boxm_change_detection_bit_tableau::change_detection()
   vcl_ifstream ifs(cam_files_[curr_frame_].c_str());
   vpgl_perspective_camera<double>* pcam = new vpgl_perspective_camera<double>;
   if (!ifs.is_open()) {
-      vcl_cerr << "Failed to open file " << cam_files_[curr_frame_] << vcl_endl;
-      return -1;
+    vcl_cerr << "Failed to open file " << cam_files_[curr_frame_] << '\n';
+    return -1;
   }
   ifs >> *pcam;
 
@@ -195,7 +192,7 @@ bool boxm_change_detection_bit_tableau::change_detection()
     vil_convert_stretch_range_limited(*img_byte ,floatimg, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
   }
   else {
-    vcl_cerr << "Failed to load image " << img_files_[curr_frame_] << vcl_endl;
+    vcl_cerr << "Failed to load image " << img_files_[curr_frame_] << '\n';
     return -1;
   }
   if (vil_image_view<vxl_byte> *exp_img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(loaded_exp_image.ptr()))
@@ -203,21 +200,21 @@ bool boxm_change_detection_bit_tableau::change_detection()
     vil_convert_stretch_range_limited(*exp_img_byte ,exp_floatimg, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
   }
   else {
-    vcl_cerr << "Failed to load image " << exp_img_files_[curr_frame_] << vcl_endl;
+    vcl_cerr << "Failed to load image " << exp_img_files_[curr_frame_] << '\n';
     return -1;
   }
   curr_frame_++ ;
   cl_int status = clEnqueueAcquireGLObjects(updt_mgr->command_queue_, 1,
-      &updt_mgr->image_gl_buf_ , 0, 0, 0);
+                                            &updt_mgr->image_gl_buf_ , 0, 0, 0);
   if (!updt_mgr->check_val(status,CL_SUCCESS,"tableau::clEnqueueAcquiredGLObjects failed (render_frame)"+error_to_string(status)))
-      return false;
+    return false;
 
   //run the opencl update business (MAKE THIS JUST ONE METHOD, NOT FIVE CALLS)
   updt_mgr->set_input_image(floatimg,exp_floatimg);
   updt_mgr->write_image_buffer();
   updt_mgr->set_persp_camera(pcam);
   updt_mgr->write_persp_camera_buffers();
-  if(toggle_old_)
+  if (toggle_old_)
     updt_mgr->change_detection_old();
   else
     updt_mgr->change_detection();
@@ -241,9 +238,11 @@ bool boxm_change_detection_bit_tableau::handle(vgui_event const &e)
       do_init_ocl_ = false;
     }
 
-    //vcl_cout<<"redrawing\n"
-    //        <<"Cam center: "<<cam_.get_camera_center()<<'\n'
-    //        <<"stare point: "<<stare_point_<<vcl_endl;
+#ifdef DEBUG
+    vcl_cout<<"redrawing\n"
+            <<"Cam center: "<<cam_.get_camera_center()<<'\n'
+            <<"stare point: "<<stare_point_<<vcl_endl;
+#endif
     this->change_detection();
     this->setup_gl_matrices();
     glClear(GL_COLOR_BUFFER_BIT);
@@ -253,13 +252,13 @@ bool boxm_change_detection_bit_tableau::handle(vgui_event const &e)
     glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, pbuffer_);
     glDrawPixels(ni_, nj_, GL_RGBA, GL_UNSIGNED_BYTE, 0);
     glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
-    
+
     //update status
     vcl_stringstream str;
-    if(toggle_old_)
-        str<<"Old Change Detection: frame "<<curr_frame_;
+    if (toggle_old_)
+      str<<"Old Change Detection: frame "<<curr_frame_;
     else
-        str<<"Change Detection: frame "<<curr_frame_;
+      str<<"Change Detection: frame "<<curr_frame_;
     status_->write(str.str().c_str());
     return true;
   }
