@@ -145,7 +145,7 @@ bool boxm_update_bit_scene_manager::init_scene_buffers(boxm_ocl_bit_scene *scene
 
   //debug output (one for each buffer)
   output_debug_ = (cl_float*) boxm_ocl_utils::alloc_aligned(scene_info_->num_buffer, sizeof(cl_float), 16);
-  for (int i=0; i<scene_info_->num_buffer; i++) output_debug_[i] = 0;
+  for (int i=0; i<scene_info_->num_buffer; i++) output_debug_[i] = 0.0f;
 
   /****** size output **********/
   vcl_cout<<"Numbuffer "<<scene_info_->num_buffer
@@ -547,7 +547,7 @@ bool boxm_update_bit_scene_manager::set_kernels()
   
   //create and build merge kernel
   if (!this->build_merging_program()) {
-    vcl_cout<<"refine program failed to build"<<vcl_endl;
+    vcl_cout<<"merge program failed to build"<<vcl_endl;
     return false;
   }
   merge_kernel_ = clCreateKernel(program_,"merge_bit_scene", &status);
@@ -2065,18 +2065,23 @@ bool boxm_update_bit_scene_manager::set_workspace(cl_kernel kernel, unsigned pas
     }
     case REFINE_PASS:
     case MERGE_PASS: 
+    {
           globalThreads[0] = scene_info_->num_buffer;
           globalThreads[1] = 1;
           localThreads[0]  = 1;
           localThreads[1]  = 1;
+          vcl_cout<<"Merge threads: "<<globalThreads[0]<<vcl_endl;
           break;
+    }
     case QUERY_POINT: 
     case RAY_PROBE:
+    {
           globalThreads[0] = 1;
           globalThreads[1] = 1;
           localThreads[0]  = 1;
           localThreads[1]  = 1;
           break;
+    }
   }
   
   //what is this for?
@@ -2428,6 +2433,9 @@ bool boxm_update_bit_scene_manager::refine()
       vcl_cout<<"buffer @ "<<i<<" end pointer and new data pointer don't match unrefined "<<freeSpace
               <<"  mem_ptrs = "<<startPtr<<','<<endPtr<<vcl_endl;
     }
+    else if (output_debug_[i] > 0.0f) {
+      vcl_cout<<"buffer @ "<<i<<" refined: "<<output_debug_[i]<<" cells. "<<vcl_endl;
+    }
   }
   vcl_cout<<vcl_endl;
   /****************************************************************/
@@ -2478,12 +2486,7 @@ bool boxm_update_bit_scene_manager::merge()
     int startPtr = mem_ptrs_[2*i];
     int endPtr   = mem_ptrs_[2*i+1];
     int freeSpace = (startPtr >= endPtr)? startPtr-endPtr : scene_info_->data_buffer_length - (endPtr-startPtr);
-#if 0
-    vcl_cout<<"Buffer @"<<i<<": ["<<startPtr<<','<<endPtr<<"] ("
-            <<freeSpace<<" free cells)  "
-            <<output_debug_[i]<<" cells split"<<vcl_endl;
-    if (startPtr > endPtr) vcl_cout<<"     Rolled over Buffer..."<<vcl_endl;
-#endif
+
     if (output_debug_[i] == -666) {
       vcl_cout<<"buffer @ "<<i<<" is out of space post merge (shouldn't happen). freeSpace = "<<freeSpace
               <<"  mem_ptrs = "<<startPtr<<','<<endPtr<<vcl_endl;
@@ -2516,7 +2519,8 @@ bool boxm_update_bit_scene_manager::merge()
       vcl_cout<<"buffer @ "<<i<<" end pointer and new data pointer don't match unrefined "<<freeSpace
               <<"  mem_ptrs = "<<startPtr<<','<<endPtr<<vcl_endl;
     }
-    else if (output_debug_[i] > 0.0f) {
+    
+    if (output_debug_[i] > 0.0f) {
       vcl_cout<<"buffer @ "<<i<<" number of leaves merged: "<<output_debug_[i]<<vcl_endl;
     }
   }

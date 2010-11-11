@@ -530,7 +530,6 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
     mean_obs_cum_vis[gid] = (uchar2) 0;
 */
   }
-  output[0] = 111;
 }
 #endif
 

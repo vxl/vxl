@@ -58,7 +58,7 @@ int merge_tree( __constant RenderSceneInfo * linfo,
           max_alpha_int = alpha;
       }
       if(max_alpha_int < min_alpha && max_alpha_int > 0.0f) {
-        
+                
         ////////////////////////////////////////////////
         // MERGE CODE
         numMerged++;
@@ -69,7 +69,7 @@ int merge_tree( __constant RenderSceneInfo * linfo,
         int parentData  = data_index_opt2(unrefined_tree, i, bit_lookup, cumsum, &cumIndex, linfo->data_len);
         alpha_array[parentData + gid*linfo->data_len] = (max_alpha_int / pSide);
         
-        //change value of bit_at(i) to 1;
+        //change value of bit_at(i) to 0;
         set_tree_bit_at(refined_tree, i, false);
                 
         // END MERGE CODE
@@ -114,13 +114,12 @@ merge_bit_scene( __constant  RenderSceneInfo    * linfo,
   unsigned gid = get_group_id(0);
   unsigned lid = get_local_id(0);
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
-
-      
+  
   //go through the tree array and refine it...
-  if(gid < linfo->num_buffer && llid==0) 
+  if(gid < linfo->num_buffer) 
   {
-    output[gid] == 0.0;
-
+    output[gid] = 0.0f;
+    
     //cache some buffer variables in registers:
     int numBlocks = convert_int(blocks_in_buffers[gid]); //number of blocks in this buffer;
     int startPtr  = convert_int(mem_ptrs[gid].x);         //points to first element in data buffer
@@ -164,9 +163,9 @@ merge_bit_scene( __constant  RenderSceneInfo    * linfo,
         output[gid] = -661; 
         return;
       }
-      
+  
       //number of merged leaves...
-      output[gid] += (currTreeSize - newSize);
+      output[gid] += (currTreeSize-newSize);
 
       //4. update start pointer (as data will be moved up to the end)
       startPtr = (startPtr+currTreeSize)%linfo->data_len;
@@ -290,7 +289,7 @@ merge_bit_scene( __constant  RenderSceneInfo    * linfo,
           return;
         }
       }
-
+      
     } //end for loop
 
     //update mem pointers before returning
