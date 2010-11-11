@@ -90,8 +90,7 @@ cast_ray(
     in_image[imIndex[llid]] = (float)0.0f;
 #endif
     in_image[j*get_global_size(0)+i].x = 0.0f; 
-    //return; 
-    isActive = false;
+    return; 
   }
   //make sure tnear is at least 0...
   tblock = (tblock > 0.0f) ? tblock : 0.0f;
@@ -105,7 +104,7 @@ cast_ray(
   // Begin traversing the blocks, break when any curr_block_index value is
   // illegal (not between 0 and scenedims)
   //----------------------------------------------------------------------------
-  while(tblock < tfar && vis > .01f && isActive) 
+  while(tblock < tfar && vis > .01f) 
   {
     //-------------------------------------------------------------------------
     // get small block and necessary information

@@ -38,7 +38,6 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
 {
   //get local id (0-63 for an 8x8) of this patch
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
-  bool isActive = true; 
 
   //initialize pre-broken ray information (non broken rays will be re initialized)
   ray_bundle_array[llid] = (short2) (-1, 0);
@@ -59,74 +58,70 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
 
   // cases #of threads will be more than the pixels.
   if (i>=(*imgdims).z || j>=(*imgdims).w) {
-    isActive = false;
-    //return;
+    return;
   }
 #if 0
   if (i<320 || i>=328 || j<240 || j>=248)
     return;
 #endif
 
-  if(isActive) {
+  float4 inImage = in_image[j*get_global_size(0)*factor+i];
+  float obs = inImage.x;
+  float vis = inImage.z;
+  barrier(CLK_LOCAL_MEM_FENCE);
 
-    float4 inImage = in_image[j*get_global_size(0)*factor+i];
-    float obs = inImage.x;
-    float vis = inImage.z;
-    barrier(CLK_LOCAL_MEM_FENCE);
+  //----------------------------------------------------------------------------
+  // we know i,j map to a point on the image,
+  // BEGIN RAY TRACE
+  //----------------------------------------------------------------------------
+  // ray origin, ray direction, inverse ray direction (make sure ray direction is never axis aligned)
+  float4 ray_o = (float4) camera[2].s4567; ray_o.w = 1.0f;
+  float4 ray_d = backproject(i, j, camera[0], camera[1], camera[2], ray_o);
+  ray_o = ray_o - linfo->origin; ray_o.w = 1.0f; //translate ray o to zero out scene origin
+  ray_o = ray_o/linfo->block_len; ray_o.w = 1.0f;
 
-    //----------------------------------------------------------------------------
-    // we know i,j map to a point on the image,
-    // BEGIN RAY TRACE
-    //----------------------------------------------------------------------------
-    // ray origin, ray direction, inverse ray direction (make sure ray direction is never axis aligned)
-    float4 ray_o = (float4) camera[2].s4567; ray_o.w = 1.0f;
-    float4 ray_d = backproject(i, j, camera[0], camera[1], camera[2], ray_o);
-    ray_o = ray_o - linfo->origin; ray_o.w = 1.0f; //translate ray o to zero out scene origin
-    ray_o = ray_o/linfo->block_len; ray_o.w = 1.0f;
+  //thresh ray direction components - too small a treshhold causes axis aligned
+  //viewpoints to hang in infinite loop (block loop)
+  float thresh = exp2(-12.0f);
+  if (fabs(ray_d.x) < thresh) ray_d.x = copysign(thresh, ray_d.x);
+  if (fabs(ray_d.y) < thresh) ray_d.y = copysign(thresh, ray_d.y);
+  if (fabs(ray_d.z) < thresh) ray_d.z = copysign(thresh, ray_d.z);
+  ray_d.w = 0.0; ray_d = normalize(ray_d);
 
-    //thresh ray direction components - too small a treshhold causes axis aligned
-    //viewpoints to hang in infinite loop (block loop)
-    float thresh = exp2(-12.0f);
-    if (fabs(ray_d.x) < thresh) ray_d.x = copysign(thresh, ray_d.x);
-    if (fabs(ray_d.y) < thresh) ray_d.y = copysign(thresh, ray_d.y);
-    if (fabs(ray_d.z) < thresh) ray_d.z = copysign(thresh, ray_d.z);
-    ray_d.w = 0.0; ray_d = normalize(ray_d);
+  //store float 3's
+  float ray_ox = ray_o.x;     float ray_oy = ray_o.y;     float ray_oz = ray_o.z;
+  float ray_dx = ray_d.x;     float ray_dy = ray_d.y;     float ray_dz = ray_d.z;
 
-    //store float 3's
-    float ray_ox = ray_o.x;     float ray_oy = ray_o.y;     float ray_oz = ray_o.z;
-    float ray_dx = ray_d.x;     float ray_dy = ray_d.y;     float ray_dz = ray_d.z;
+  //----------------------------------------------------------------------------
+  // we know i,j map to a point on the image, have calculated ray
+  // BEGIN RAY TRACE
+  //----------------------------------------------------------------------------
 
-    //----------------------------------------------------------------------------
-    // we know i,j map to a point on the image, have calculated ray
-    // BEGIN RAY TRACE
-    //----------------------------------------------------------------------------
+  cast_ray( i, j,
+            ray_ox, ray_oy, ray_oz,
+            ray_dx, ray_dy, ray_dz,
 
-    cast_ray( i, j,
-              ray_ox, ray_oy, ray_oz,
-              ray_dx, ray_dy, ray_dz,
+            //scene info                              
+            linfo, 
+            block_ptrs, 
+            tree_array, 
+            alpha_array, 
+            0,              //mixture_array
+            num_obs_array,  //num_obs_arrya
+            seg_len_array,  //seg_len_array
+            mean_obs_array, //mean_obs_array,
+            0,              //vis_array
+            0,              //beta_array
 
-              //scene info                              
-              linfo, 
-              block_ptrs, 
-              tree_array, 
-              alpha_array, 
-              0,              //mixture_array
-              num_obs_array,  //num_obs_arrya
-              seg_len_array,  //seg_len_array
-              mean_obs_array, //mean_obs_array,
-              0,              //vis_array
-              0,              //beta_array
+            //utility info
+            local_tree, bit_lookup, cumsum, factor,
 
-              //utility info
-              local_tree, bit_lookup, cumsum, factor,
+            //SEGLEN SPECIFIC ARGS
+            //factor,raybund,ptrs,cache,cache,image_vect (all NULL)
+            cammat, ray_bundle_array, cell_ptrs, obs, vis, cached_aux_data,
 
-              //SEGLEN SPECIFIC ARGS
-              //factor,raybund,ptrs,cache,cache,image_vect (all NULL)
-              cammat, ray_bundle_array, cell_ptrs, obs, vis, cached_aux_data,
-
-              //io info
-              in_image, 0, output);
-  }
+            //io info
+            in_image, 0, output);
 }
 #endif
 
@@ -157,7 +152,6 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
 {
   //get local id (0-63 for an 8x8) of this patch
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
-  bool isActive = true;
   
   //----------------------------------------------------------------------------
   // get image coordinates and camera,
@@ -171,64 +165,61 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
   // check to see if the thread corresponds to an actual pixel as in some
   // cases #of threads will be more than the pixels.
   if (i>=(*imgdims).z || j>=(*imgdims).w) {
-    //return;
-    isActive = false;
+    return;
   }
   float4 inImage = in_image[j*get_global_size(0)*factor+i];
   barrier(CLK_LOCAL_MEM_FENCE);
 
-  if(isActive) {
-    //----------------------------------------------------------------------------
-    // we know i,j map to a point on the image,
-    // BEGIN RAY TRACE
-    //----------------------------------------------------------------------------
-    // ray origin, ray direction, inverse ray direction (make sure ray direction is never axis aligned)
-    float4 ray_o = (float4) camera[2].s4567; ray_o.w = 1.0f;
-    float4 ray_d = backproject(i, j, camera[0], camera[1], camera[2], ray_o);
-    ray_o = ray_o - linfo->origin; ray_o.w = 1.0f; //translate ray o to zero out scene origin
-    ray_o = ray_o/linfo->block_len; ray_o.w = 1.0f;
+  //----------------------------------------------------------------------------
+  // we know i,j map to a point on the image,
+  // BEGIN RAY TRACE
+  //----------------------------------------------------------------------------
+  // ray origin, ray direction, inverse ray direction (make sure ray direction is never axis aligned)
+  float4 ray_o = (float4) camera[2].s4567; ray_o.w = 1.0f;
+  float4 ray_d = backproject(i, j, camera[0], camera[1], camera[2], ray_o);
+  ray_o = ray_o - linfo->origin; ray_o.w = 1.0f; //translate ray o to zero out scene origin
+  ray_o = ray_o/linfo->block_len; ray_o.w = 1.0f;
 
-    //thresh ray direction components - too small a treshhold causes axis aligned
-    //viewpoints to hang in infinite loop (block loop)
-    float thresh = exp2(-12.0f);
-    if (fabs(ray_d.x) < thresh) ray_d.x = copysign(thresh, ray_d.x);
-    if (fabs(ray_d.y) < thresh) ray_d.y = copysign(thresh, ray_d.y);
-    if (fabs(ray_d.z) < thresh) ray_d.z = copysign(thresh, ray_d.z);
-    ray_d.w = 0.0; ray_d = normalize(ray_d);
+  //thresh ray direction components - too small a treshhold causes axis aligned
+  //viewpoints to hang in infinite loop (block loop)
+  float thresh = exp2(-12.0f);
+  if (fabs(ray_d.x) < thresh) ray_d.x = copysign(thresh, ray_d.x);
+  if (fabs(ray_d.y) < thresh) ray_d.y = copysign(thresh, ray_d.y);
+  if (fabs(ray_d.z) < thresh) ray_d.z = copysign(thresh, ray_d.z);
+  ray_d.w = 0.0; ray_d = normalize(ray_d);
 
-    //store float 3's
-    float ray_ox = ray_o.x;     float ray_oy = ray_o.y;     float ray_oz = ray_o.z;
-    float ray_dx = ray_d.x;     float ray_dy = ray_d.y;     float ray_dz = ray_d.z;
+  //store float 3's
+  float ray_ox = ray_o.x;     float ray_oy = ray_o.y;     float ray_oz = ray_o.z;
+  float ray_dx = ray_d.x;     float ray_dy = ray_d.y;     float ray_dz = ray_d.z;
 
-    //----------------------------------------------------------------------------
-    // we know i,j map to a point on the image, have calculated ray
-    // BEGIN RAY TRACE
-    //----------------------------------------------------------------------------
-    cast_ray( i, j,
-              ray_ox, ray_oy, ray_oz,
-              ray_dx, ray_dy, ray_dz,
+  //----------------------------------------------------------------------------
+  // we know i,j map to a point on the image, have calculated ray
+  // BEGIN RAY TRACE
+  //----------------------------------------------------------------------------
+  cast_ray( i, j,
+            ray_ox, ray_oy, ray_oz,
+            ray_dx, ray_dy, ray_dz,
 
-              //scene info                               
-              linfo, 
-              block_ptrs, 
-              tree_array, 
-              alpha_array, 
-              mixture_array,  //mixture_array
-              num_obs_array,  //num_obs_arrya
-              seg_len_array,  //seg_len_array
-              mean_obs_array, //mean_obs_array,
-              vis_array,      //vis_array
-              beta_array,     //beta_array
-              
-              //utility info
-              local_tree, bit_lookup, cumsum, factor,
+            //scene info                               
+            linfo, 
+            block_ptrs, 
+            tree_array, 
+            alpha_array, 
+            mixture_array,  //mixture_array
+            num_obs_array,  //num_obs_arrya
+            seg_len_array,  //seg_len_array
+            mean_obs_array, //mean_obs_array,
+            vis_array,      //vis_array
+            beta_array,     //beta_array
+            
+            //utility info
+            local_tree, bit_lookup, cumsum, factor,
 
-              //PREINF SPECIFIC ARGS
-              cammat, inImage,
+            //PREINF SPECIFIC ARGS
+            cammat, inImage,
 
-              //io info
-              in_image, 0, output);
-  }
+            //io info
+            in_image, 0, output);
 }
 #endif
 
@@ -287,7 +278,7 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
   bool isActive = true;
   if (i>=(*imgdims).z || j>=(*imgdims).w) {
     isActive = false;
-    //return;
+    return;
   }
   //image_vect[llid] = in_image[j*get_global_size(0)*factor+i];
   float4 inImage = in_image[j*get_global_size(0)*factor+i];
@@ -296,59 +287,57 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
   float pre  = inImage.w;
   barrier(CLK_LOCAL_MEM_FENCE);
 
-  if(isActive) {
-    //----------------------------------------------------------------------------
-    // we know i,j map to a point on the image,
-    // BEGIN RAY TRACE
-    //----------------------------------------------------------------------------
-    // ray origin, ray direction, inverse ray direction (make sure ray direction is never axis aligned)
-    float4 ray_o = (float4) camera[2].s4567; ray_o.w = 1.0f;
-    float4 ray_d = backproject(i, j, camera[0], camera[1], camera[2], ray_o);
-    ray_o = ray_o - linfo->origin; ray_o.w = 1.0f; //translate ray o to zero out scene origin
-    ray_o = ray_o/linfo->block_len; ray_o.w = 1.0f;
+  //----------------------------------------------------------------------------
+  // we know i,j map to a point on the image,
+  // BEGIN RAY TRACE
+  //----------------------------------------------------------------------------
+  // ray origin, ray direction, inverse ray direction (make sure ray direction is never axis aligned)
+  float4 ray_o = (float4) camera[2].s4567; ray_o.w = 1.0f;
+  float4 ray_d = backproject(i, j, camera[0], camera[1], camera[2], ray_o);
+  ray_o = ray_o - linfo->origin; ray_o.w = 1.0f; //translate ray o to zero out scene origin
+  ray_o = ray_o/linfo->block_len; ray_o.w = 1.0f;
 
-    //thresh ray direction components - too small a treshhold causes axis aligned
-    //viewpoints to hang in infinite loop (block loop)
-    float thresh = exp2(-12.0f);
-    if (fabs(ray_d.x) < thresh) ray_d.x = copysign(thresh, ray_d.x);
-    if (fabs(ray_d.y) < thresh) ray_d.y = copysign(thresh, ray_d.y);
-    if (fabs(ray_d.z) < thresh) ray_d.z = copysign(thresh, ray_d.z);
-    ray_d.w = 0.0; ray_d = normalize(ray_d);
+  //thresh ray direction components - too small a treshhold causes axis aligned
+  //viewpoints to hang in infinite loop (block loop)
+  float thresh = exp2(-12.0f);
+  if (fabs(ray_d.x) < thresh) ray_d.x = copysign(thresh, ray_d.x);
+  if (fabs(ray_d.y) < thresh) ray_d.y = copysign(thresh, ray_d.y);
+  if (fabs(ray_d.z) < thresh) ray_d.z = copysign(thresh, ray_d.z);
+  ray_d.w = 0.0; ray_d = normalize(ray_d);
 
-    //store float 3's
-    float ray_ox = ray_o.x;     float ray_oy = ray_o.y;     float ray_oz = ray_o.z;
-    float ray_dx = ray_d.x;     float ray_dy = ray_d.y;     float ray_dz = ray_d.z;
+  //store float 3's
+  float ray_ox = ray_o.x;     float ray_oy = ray_o.y;     float ray_oz = ray_o.z;
+  float ray_dx = ray_d.x;     float ray_dy = ray_d.y;     float ray_dz = ray_d.z;
 
-    //----------------------------------------------------------------------------
-    // we know i,j map to a point on the image, have calculated ray
-    // BEGIN RAY TRACE
-    //----------------------------------------------------------------------------
-    cast_ray( i, j,
-              ray_ox, ray_oy, ray_oz,
-              ray_dx, ray_dy, ray_dz,
+  //----------------------------------------------------------------------------
+  // we know i,j map to a point on the image, have calculated ray
+  // BEGIN RAY TRACE
+  //----------------------------------------------------------------------------
+  cast_ray( i, j,
+            ray_ox, ray_oy, ray_oz,
+            ray_dx, ray_dy, ray_dz,
 
-              //scene info       
-              linfo, 
-              block_ptrs, 
-              tree_array, 
-              alpha_array, 
-              mixture_array,  //mixture_array
-              num_obs_array,  //num_obs_arrya
-              seg_len_array,  //seg_len_array
-              mean_obs_array, //mean_obs_array,
-              vis_array,      //vis_array
-              beta_array,     //beta_array 
+            //scene info       
+            linfo, 
+            block_ptrs, 
+            tree_array, 
+            alpha_array, 
+            mixture_array,  //mixture_array
+            num_obs_array,  //num_obs_arrya
+            seg_len_array,  //seg_len_array
+            mean_obs_array, //mean_obs_array,
+            vis_array,      //vis_array
+            beta_array,     //beta_array 
 
-              //utility info
-              local_tree, bit_lookup, cumsum, factor,
+            //utility info
+            local_tree, bit_lookup, cumsum, factor,
 
-              //BAYES SPECIFIC ARGUMENTS
-              //factor,raybund,ptrs,cache,cache,image_vect (all NULL)
-              cammat, ray_bundle_array, cell_ptrs, cached_vis, norm, vis, pre,
+            //BAYES SPECIFIC ARGUMENTS
+            //factor,raybund,ptrs,cache,cache,image_vect (all NULL)
+            cammat, ray_bundle_array, cell_ptrs, cached_vis, norm, vis, pre,
 
-              //io info
-              in_image, 0, output);
-  }
+            //io info
+            in_image, 0, output);
 }
 #endif
 
