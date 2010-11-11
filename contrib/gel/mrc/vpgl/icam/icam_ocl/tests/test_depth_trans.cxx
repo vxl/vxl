@@ -256,7 +256,6 @@ bool test_rot_parallel_search()
 
   // test mapping
   vil_image_view<float> mdest_cp = cfn.mapped_dest(Rr.as_rodrigues(),tr);
-  unsigned dni = mdest_cp.ni(), dnj = mdest_cp.nj();
   vil_save(mdest_cp, cpu_mdest_file.c_str());
   vgl_box_3d<double> trans_box;
   trans_box.add(vgl_point_3d<double>(-.5, -.5, -.5));
@@ -271,8 +270,7 @@ bool test_rot_parallel_search()
   mgr->encode_image_data(minimizer, lev);
   mgr->set_nbins_buffer();
   mgr->copy_to_image_buffers();
-  unsigned nrot  = 67095;
-  //  mgr->setup_rot_debug_space(nrot, Rr);
+  // mgr->setup_rot_debug_space(67095, Rr);
   mgr->setup_transf_search_space(trans_box, trans_steps, minimizer, lev);
   mgr->create_rot_parallel_transf_data();
   mgr->set_rot_parallel_transf_data(tr);
@@ -299,8 +297,8 @@ bool test_rot_parallel_search()
   vcl_cout << "Flag(" << flag[0] << ' ' << flag[1] << ' '
            << flag[2] << ' ' << flag[3] << ")\n";
 
-  //cl_float* minfo = mgr->minfo_array();
 #if 0
+  cl_float* minfo = mgr->minfo_array();
   float sum = 0.0f;
   for (unsigned i = 0; i<256; ++i)
     sum += minfo[i];
@@ -310,12 +308,10 @@ bool test_rot_parallel_search()
     sum += minfo[i];
   vcl_cout << "sum marginal = " << sum << '\n';
 
-
-  unsigned dni = 16;
+  unsigned dni = mdest_cp.ni(), dnj = mdest_cp.nj();
   for (unsigned i = 0; i< 2*dni; ++i)
     vcl_cout << minfo[i] << '\n';
-#endif
-#if 0
+
   vil_image_view<float> md(dni, dnj);
   md.fill(0.0f);
   float dif = 0.0f;
@@ -324,42 +320,43 @@ bool test_rot_parallel_search()
     {
       unsigned indx = i + dni*j;
       md(i,j) = minfo[indx];
-	  if(md(i,j)>0.0f){
-		  float d = vcl_fabs(md(i,j) - mdest_cp(i,j));
-		  if(d>1.0f)
-        vcl_cout << "(" << i << ' ' << j << ") gp = " << md(i,j) << " cp = "
+      if (md(i,j)>0.0f) {
+        float d = vcl_fabs(md(i,j) - mdest_cp(i,j));
+        if (d>1.0f)
+        vcl_cout << '(' << i << ' ' << j << ") gp = " << md(i,j) << " cp = "
                  << mdest_cp(i,j) << '\n';
         dif += d;
-     }
-	}
+      }
+    }
   vil_save(md, gpu_mdest_file.c_str());
   vcl_cout << " Absolute difference in mapped dest " << dif << '\n';
 
   unsigned off = dni*dnj;
-  for(unsigned i = 0; i<16; ++i)
+  for (unsigned i = 0; i<16; ++i)
     vcl_cout << minfo[off+i] << '\n';
-#endif
-  /* minimize entropy diff */
+#endif // 0
+
+  // minimize entropy diff
   vgl_rotation_3d<double> min_rot;
   vnl_vector_fixed<double,3> clrot, cpprot;
   float min_ent;
   mgr->find_min_rot(min_rot, min_ent);
   clrot = min_rot.as_rodrigues();
-  vcl_cout << "Min ent dif " << min_ent << " at rotation " 
-           <<  clrot << '\n';
-  vcl_cout << " Actual rotation " << Rr.as_rodrigues() << '\n';
+  vcl_cout << "Min ent dif " << min_ent << " at rotation "
+           <<  clrot << '\n'
+           << " Actual rotation " << Rr.as_rodrigues() << '\n';
   double cpp_minfo, ovl_frac;
   t.mark();
   minimizer.exhaustive_rotation_search(tr, lev, 0.5, min_rot,
                                        cpp_minfo, ovl_frac);
   cpprot = min_rot.as_rodrigues();
-  vcl_cout << "C++ search time " << t.real()/1000.0 << " seconds\n";
-  vcl_cout << "C++ minfo " << cpp_minfo << " at rotation " 
-           << cpprot << '\n';
-  vcl_cout << " Actual rotation " << Rr.as_rodrigues() << '\n';
+  vcl_cout << "C++ search time " << t.real()/1000.0 << " seconds\n"
+           << "C++ minfo " << cpp_minfo << " at rotation "
+           << cpprot << '\n'
+           << " Actual rotation " << Rr.as_rodrigues() << '\n';
   double er = (cpprot - clrot).magnitude();
   TEST_NEAR("CL vs C++ ", er, 0.0, 1e-4);
-  
+
   mgr->release_queue();
   mgr->release_buffers();
   mgr->clean_image_data();
@@ -370,7 +367,7 @@ bool test_rot_parallel_search()
 
 static void test_depth_trans()
 {
-  //test_image_parallel_search();
+  test_image_parallel_search();
   test_rot_parallel_search();
 }
 
