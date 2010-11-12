@@ -53,8 +53,7 @@ int refine_tree(__constant RenderSceneInfo * linfo,
       float side_len = linfo->block_len/(float) (1<<currDepth);
      
       //get alpha value for this cell;
-      int dataIndex = data_index_opt2(unrefined_tree, i, bit_lookup, cumsum, &cumIndex, linfo->data_len); //gets offset within buffer
-      //int dataIndex = data_index_opt(0, unrefined_tree, i, bit_lookup); 
+      int dataIndex = data_index_cached(unrefined_tree, i, bit_lookup, cumsum, &cumIndex, linfo->data_len); //gets offset within buffer
       float alpha   = alpha_array[gid*linfo->data_len + dataIndex];
          
       //integrate alpha value
@@ -186,7 +185,7 @@ refine_bit_scene(__constant  RenderSceneInfo    * linfo,
         tree_array[gid*linfo->tree_len + subIndex] = as_int4((*refined_tree));
                         
         //cache old data pointer and new data pointer
-        int oldDataPtr = data_index_opt(0, local_tree, 0, bit_lookup);
+        int oldDataPtr = data_index(0, local_tree, 0, bit_lookup);
         int newDataPtr = convert_int(buffOffset);                                       //new root offset within buffer
         
         //next start moving cells, must zip through max number of cells
@@ -265,7 +264,7 @@ refine_bit_scene(__constant  RenderSceneInfo    * linfo,
 
         //6a. update local tree's data pointer (store it back tree buffer)
         ushort buffOffset = convert_ushort((endPtr-1 + linfo->data_len)%linfo->data_len);
-        int oldDataPtr = data_index_opt(0, local_tree, 0, bit_lookup);
+        int oldDataPtr = data_index(0, local_tree, 0, bit_lookup);
         uchar hi = (uchar)(buffOffset >> 8);
         uchar lo = (uchar)(buffOffset & 255);
         (*local_tree).sa = hi; 

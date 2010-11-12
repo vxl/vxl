@@ -99,126 +99,11 @@ int load_data_mutable_opt(__local short2  * ray_bundle_array,
 }
 
 
-/*
-*  Accumulate ray segment length and the weighted observation
-*  sums as each cell is accessed. It can be the case that multiple rays pass
-*  through the same cell. In order to avoid conflicts, only one thread
-*  is allowed to update the sums for such cells. The active thread is
-*  identified with the index of the base pointer of the multiple ray
-*  region in the bundle array. The argument image_vect is a linear array of
-*  float4 vectors corresponding to the index of the local ray bundle, in
-*  raster order. The layout of the vector is:
-*  [obs | alpha_integral | vis | pre ]
-*
-*/
-void seg_len_obs_opt(        float    seg_len, 
-                     __local float4 * image_vect,
-                     __local short2 * ray_bundle_array,
-                     __local float4 * cached_aux_data)
-{
-    /* linear thread id */
-    uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
-    
-    /* limit access to threads that do not own a connected region */
-    if (ray_bundle_array[llid].y == 0)
-    {
-        /* store seg_len in the corresponding aux data slot to be accessed
-        * by other threads since these aux_data items are not used, they
-        * can be cleared and used to store the seg_len of non-owner rays
-        */
-        cached_aux_data[llid] = (float4) (seg_len, 0.0f, 0.0f, 0.0f);
-    }
-    barrier(CLK_LOCAL_MEM_FENCE);
-    
-    /* now, limit access to the threads that own each connected region */
-    if (ray_bundle_array[llid].y == 1)
-    {
-        /* The region owner (base) is now the only active thread within the region*/
-        /* process the base ray */
-        cached_aux_data[llid].x += seg_len;                       // seg_len sum
-        cached_aux_data[llid].y += (image_vect[llid].x)*seg_len;  // weighted observations */
-
-        /* traverse the linked list and increment sums */
-        short next = ray_bundle_array[llid].x;  // linked list pointer 
-        while(next >= 0) {
-            cached_aux_data[llid].x += cached_aux_data[next].x;
-            cached_aux_data[llid].y += (image_vect[next].x)*cached_aux_data[next].x;
-            next = ray_bundle_array[next].x;
-        }
-    }
-    barrier(CLK_LOCAL_MEM_FENCE);
-}
-
-/*
- * does same as above, but keeps running mean observation, stores it as a char
- * now calculates cell_visibility as well
- */
-void seg_len_obs_opt2(        float    seg_len,         //length of ray through this cell
-                              float    alpha,           //cell alpha
-                              float    obs,             //observation for this ray
-                              float  * ray_vis,         //ray visibility (cumulative)
-                      __local short2 * ray_bundle_array,
-                      __local float4 * cached_aux_data)
-{
-    /* linear thread id */
-    uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
-    
-    /* limit access to threads that do not own a connected region */
-    if (ray_bundle_array[llid].y == 0)
-    {
-        /* store seg_len and weighteb observation in the corresponding 
-         * aux data slot to be accessed by other threads since these 
-         * aux_data items are not used, they can be cleared and used to 
-         * store the seg_len of non-owner rays
-         */
-        cached_aux_data[llid] = (float4) (seg_len, seg_len*obs, seg_len*(*ray_vis), 0.0f);
-    }
-    barrier(CLK_LOCAL_MEM_FENCE);
-    
-    /* now, limit access to the threads that own each connected region */
-    if (ray_bundle_array[llid].y == 1)
-    {
-      
-        //keep track of total length, running mean observation and running cell visibility
-        cached_aux_data[llid].x = seg_len; 
-        cached_aux_data[llid].y = seg_len*obs;
-        cached_aux_data[llid].z = seg_len*(*ray_vis); 
-
-        /* traverse the linked list and increment sums */
-        short next = ray_bundle_array[llid].x;  // linked list pointer 
-        while(next >= 0) {
-            cached_aux_data[llid].x += cached_aux_data[next].x;
-            cached_aux_data[llid].y += cached_aux_data[next].y;
-            cached_aux_data[llid].z += cached_aux_data[next].z;
-            next = ray_bundle_array[next].x;
-        }
-        
-        ////get previous total, add this contribution to the mean, re_divide
-        //float total_obs = cached_aux_data[llid].x * cached_aux_data[llid].y; 
-        //total_obs += sum_obs;
-        //float total_vis = cached_aux_data[llid].x * cached_aux_data[llid].z;
-        //total_vis += sum_vis;
-        //
-        ////total cell length
-        //cached_aux_data[llid].x += sum_len;
-        //
-        ////re normalize mean obs and cell_vis
-        //cached_aux_data[llid].y = (total_obs/cached_aux_data[llid].x);  //need a check to make sure this divide doesn't produce some nasty NANs
-        //cached_aux_data[llid].z = (total_vis/cached_aux_data[llid].x);
-    }
-    
-    /* updated visibility probability */
-    float temp=exp(-alpha * seg_len);
-    (*ray_vis) *= temp;
-    
-    barrier(CLK_LOCAL_MEM_FENCE);
-}
-
-
-void seg_len_obs_opt3(         float    seg_len, 
-                               float    obs,
-                       __local short2 * ray_bundle_array,
-                       __local float4 * cached_aux_data)
+/* sums up the ray contribution to the segment length and mean obs for each cell */
+void seg_len_obs_functor(          float    seg_len, 
+                                   float    obs,
+                           __local short2 * ray_bundle_array,
+                           __local float4 * cached_aux_data)
 {
     /* linear thread id */
     uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
@@ -299,221 +184,22 @@ void pre_infinity_opt(  float    seg_len,
     (*image_vect).z = vis_prob_end;
 }
 
-/*
- *  Compute the Bayes update ratio for alpha
- *  A vector of images is maintained image_vect that is updated as the rays
- *  step through the volume. The image vector is assigned as:
- *
- *  [norm | alpha_integral | vis | pre ]
- *
- */
-void bayes_ratio_opt(float seg_len, __local float4* image_vect,
-                     __local short2*   ray_bundle_array,
-                     __local float16*  cached_data,
-                     __local float4*  cached_aux_data)
-{
-    /* linear thread id */
-    uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
-    /* insert seg_len into the local cache. This step
-    is carried out by all threads */
-    cached_data[llid].sd = seg_len;
-    barrier(CLK_LOCAL_MEM_FENCE);
-
-    /* ray must be active after data is loaded */
-    float temp1 = 0.0f, temp2 = 0.0f; /* minimize registers */
-    
-    /* Compute PI for all threads */
-    if (cached_aux_data[llid].x > 1.0e-4f) {    /* if  too small, do nothing */
-        temp1 = cached_aux_data[llid].x; /* length sum */
-        /* The mean intensity for the cell */
-        temp2 = cached_aux_data[llid].y/temp1; /* mean observation */
-        temp1 = gauss_3_mixture_prob_density(temp2,
-                                            cached_data[llid].s1,
-                                            cached_data[llid].s2,
-                                            cached_data[llid].s3,
-                                            cached_data[llid].s5,
-                                            cached_data[llid].s6,
-                                            cached_data[llid].s7,
-                                            cached_data[llid].s9,
-                                            cached_data[llid].sa,
-                                            (1.0f-cached_data[llid].s3
-                                            -cached_data[llid].s7)
-                                            );/* PI */
-        /* temporary slot to store PI*/
-        cached_data[llid].se = temp1;
-    }
-    barrier(CLK_LOCAL_MEM_FENCE); /*wait for all threads to complete */
-    
-    /* Below, all active threads participate in updating the alpha integral,
-    * pre and vis images */
-    /*alpha integral          alpha           *        seg_len      */
-
-    /* region owner scans the region and computes Bayes ratio and weighted vis.
-    * The aux_data cell elements are assigned as:
-    *
-    *   [seg_len sum | weighted obs | update_ratio (beta) | weighted vis]
-    */
-    if (ray_bundle_array[llid].y==1) {
-        /* compute data for base ray cell */
-        /*   cell.vis         +=        vis(i,j)    *      seg_len */
-        cached_aux_data[llid].w += image_vect[llid].z*cached_data[llid].sd;
-        /* Bayes ratio */
-        /* ( pre + PI*vis)/norm)*seg_len */
-        if(image_vect[llid].x>1e-10f)
-        {
-            cached_aux_data[llid].z +=
-                /*      pre(i,j)        +        PI        *       vis(i,j) */
-                ((image_vect[llid].w + cached_data[llid].se*image_vect[llid].z)/image_vect[llid].x)*cached_data[llid].sd;
-        }
-        /*     norm(i,j)        seg_len */
-
-        /* traverse the linked list and increment sums */
-        short next = ray_bundle_array[llid].x;  // linked list pointer 
-        while(next >= 0) {
-            
-            /*    cell.vis           +=     vis(i,j)      *      seg_len     */
-            cached_aux_data[llid].w += image_vect[next].z*cached_data[next].sd;
-            /* Bayes ratio */
-            /* ( pre + PI*vis)/norm)*seg_len */
-            if( image_vect[next].x>1e-10f)
-            {
-                cached_aux_data[llid].z +=
-                    ((image_vect[next].w + cached_data[llid].se*image_vect[next].z)/
-                    image_vect[next].x)*cached_data[next].sd;
-            }
-            next = ray_bundle_array[next].x;
-        }
-    }
-    barrier(CLK_LOCAL_MEM_FENCE); /*wait for all threads to complete */
-    /* updated visibility probability */
-    image_vect[llid].y += cached_data[llid].s0*cached_data[llid].sd;
-
-    temp2 = exp(-image_vect[llid].y); /* vis_prob_end */
-
-    /* updated pre                      Omega         *       PI         */
-    image_vect[llid].w += (image_vect[llid].z - temp2)*cached_data[llid].se;
-
-
-    image_vect[llid].z = temp2;
-
-    barrier(CLK_LOCAL_MEM_FENCE); /*wait for all threads to complete */
-}
-
-/*
- * USES less local memory
- *  Compute the Bayes update ratio for alpha
- *  A vector of images is maintained image_vect that is updated as the rays
- *  step through the volume. The image vector is assigned as:
- *
- *  [norm | alpha_integral | vis | pre ]
- *
- */
-void bayes_ratio_opt2(        float   seg_len, 
-                              float   cum_len,
-                              float   mean_obs,
-                              float * cell_vis,
-                              float * cell_beta,
-                      __local float4* image_vect,
-                      __local short2* ray_bundle_array,
-                      __local float*  cached_seg_len,
-                              float   alpha, 
-                              float8  mixture)
-{
-    /* linear thread id */
-    uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
-    
-    /* insert seg_len into the local cache (all threads) */
-    cached_seg_len[llid] = seg_len;
-    barrier(CLK_LOCAL_MEM_FENCE);
-
-    /* ray must be active after data is loaded */
-    float PI = 0.0;
-    
-    /* Compute PI for all threads */
-    if (cum_len > 1.0e-4f) {    /* if  too small, do nothing */
-        
-        /* The mean intensity for the cell */
-        PI = gauss_3_mixture_prob_density(mean_obs,
-                                             mixture.s0, 
-                                             mixture.s1, 
-                                             mixture.s2,
-                                             mixture.s3, 
-                                             mixture.s4, 
-                                             mixture.s5,
-                                             mixture.s6,
-                                             mixture.s7,
-                                             (1.0f-mixture.s2-mixture.s5)
-                                          );/* PI */
-    }
-    barrier(CLK_LOCAL_MEM_FENCE); /*wait for all threads to complete */
-    
-    /* Below, all active threads participate in updating the alpha integral,*/
-     /* region owner scans the region and computes Bayes ratio and weighted vis.
-    * The aux_data cell elements are assigned as:
-    *
-    *   [seg_len sum | weighted obs | update_ratio (beta) | weighted vis]
-    */
-    if (ray_bundle_array[llid].y==1) {
-        /* compute data for base ray cell */
-        /* cell.vis +=        vis(i,j)    *      seg_len */
-        (*cell_vis) += image_vect[llid].z * seg_len;
-        
-        /* Bayes ratio */
-        /* ( pre + PI*vis)/norm)*seg_len */
-        if(image_vect[llid].x>1e-10f)
-        {
-            (*cell_beta) +=
-                /*      pre(i,j)      + PI   *    vis(i,j) */
-                ((image_vect[llid].w  + PI * image_vect[llid].z)/image_vect[llid].x)*seg_len;
-        }
-        /*     norm(i,j)        seg_len */
-
-        /* traverse the linked list and increment sums */
-        short next = ray_bundle_array[llid].x;  // linked list pointer 
-        while(next >= 0) {
-            
-            /*    cell.vis           +=     vis(i,j)      *      seg_len     */
-            (*cell_vis) += image_vect[next].z * cached_seg_len[next];
-            /* Bayes ratio */
-            /* ( pre + PI*vis)/norm)*seg_len */
-            if( image_vect[next].x>1e-10f)
-            {
-                (*cell_beta) +=
-                    ((image_vect[next].w + PI*image_vect[next].z)/
-                    image_vect[next].x)*cached_seg_len[next];
-            }
-            next = ray_bundle_array[next].x;
-        }
-    }
-    barrier(CLK_LOCAL_MEM_FENCE); /*wait for all threads to complete */
-    image_vect[llid].y += alpha * seg_len;
-
-    float vis_prob_end /*temp2*/ = exp(-image_vect[llid].y); /* vis_prob_end */
-
-    /* updated pre                      Omega         *  PI         */
-    image_vect[llid].w += (image_vect[llid].z - vis_prob_end) * PI;
-
-    /* updated visibility probability */
-    image_vect[llid].z = vis_prob_end;
-
-    barrier(CLK_LOCAL_MEM_FENCE); /*wait for all threads to complete */
-}
 
 /* Image vector 
  *  [norm | alpha_integral | vis | pre ] */
-void bayes_ratio_opt3(        float   seg_len,          // segment length for this ray
-                              float   mean_obs,         // mean observation for the currently intersected cell
-                              float * ray_pre,              // ray pre
-                              float * ray_vis,              // ray vis
-                              float   norm,             // normalization (pre_inf + vis_inf)
-                              float * cell_beta,
-                              float * cell_vis, 
-                      __local short2* ray_bundle_array,
-                      __local float*  cached_beta,
-                      __local float*  cached_vis,
-                              float   alpha, 
-                              float8  mixture,
-                              float   weight3)
+void bayes_ratio_functor(         float   seg_len,          // segment length for this ray
+                                  float   mean_obs,         // mean observation for the currently intersected cell
+                                  float * ray_pre,              // ray pre
+                                  float * ray_vis,              // ray vis
+                                  float   norm,             // normalization (pre_inf + vis_inf)
+                                  float * cell_beta,
+                                  float * cell_vis, 
+                          __local short2* ray_bundle_array,
+                          __local float*  cached_beta,
+                          __local float*  cached_vis,
+                                  float   alpha, 
+                                  float8  mixture,
+                                  float   weight3)
 {
     // linear thread id
     uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
@@ -572,9 +258,7 @@ void bayes_ratio_opt3(        float   seg_len,          // segment length for th
     barrier(CLK_LOCAL_MEM_FENCE); 
 }
 
-
-
-/* bayes ratio independent */
+/* bayes ratio independent functor (for independent rays) */
 void bayes_ratio_ind( float  seg_len,
                       float  alpha,
                       float8 mixture, 
@@ -585,8 +269,7 @@ void bayes_ratio_ind( float  seg_len,
                       float* ray_pre,
                       float* ray_vis,
                       float* ray_beta,
-                      float* vis_cont
-                      )
+                      float* vis_cont )
 {
     float PI = 0.0;
   

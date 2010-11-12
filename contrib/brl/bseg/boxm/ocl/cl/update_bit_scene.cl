@@ -159,7 +159,7 @@ update_bit_scene_opt(__constant  RenderSceneInfo    * linfo,
         output[1] = -666;
       } 
 */
-      data_ptr = data_index_opt( (llid<<4), local_tree, data_ptr, bit_lookup);
+      data_ptr = data_index( (llid<<4), local_tree, data_ptr, bit_lookup);
       data_ptr = block.x * linfo->data_len + data_ptr;
       
       // check to see how close tnear and tfar are

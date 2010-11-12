@@ -48,7 +48,7 @@ int merge_tree( __constant RenderSceneInfo * linfo,
       int ci = (i<<3)+1;
       int currDepth   = get_depth(ci);
       float side_len  = linfo->block_len/(float) (1<<currDepth);
-      int dataIndex   = data_index_opt2(unrefined_tree, ci, bit_lookup, cumsum, &cumIndex, linfo->data_len);
+      int dataIndex   = data_index_cached(unrefined_tree, ci, bit_lookup, cumsum, &cumIndex, linfo->data_len);
       float max_alpha_int = 0.0;
       for(int c=0; c<8; c++) {
         //alpha for this data index
@@ -66,7 +66,7 @@ int merge_tree( __constant RenderSceneInfo * linfo,
         //Set the alpha at the parent
         int pDepth      = get_depth(i);
         float pSide     = linfo->block_len/(float) (1<<pDepth);
-        int parentData  = data_index_opt2(unrefined_tree, i, bit_lookup, cumsum, &cumIndex, linfo->data_len);
+        int parentData  = data_index_cached(unrefined_tree, i, bit_lookup, cumsum, &cumIndex, linfo->data_len);
         alpha_array[parentData + gid*linfo->data_len] = (max_alpha_int / pSide);
         
         //change value of bit_at(i) to 0;
@@ -185,7 +185,7 @@ merge_bit_scene( __constant  RenderSceneInfo    * linfo,
         tree_array[gid*linfo->tree_len + subIndex] = as_int4((*refined_tree));
                         
         //cache old data pointer and new data pointer
-        int oldDataPtr = data_index_opt(0, local_tree, 0, bit_lookup);
+        int oldDataPtr = data_index(0, local_tree, 0, bit_lookup);
         int newDataPtr = convert_int(buffOffset);                                       //new root offset within buffer
         
         //next start moving cells, must zip through max number of cells
@@ -257,7 +257,7 @@ merge_bit_scene( __constant  RenderSceneInfo    * linfo,
 
         //6a. update local tree's data pointer (store it back tree buffer)
         ushort buffOffset = convert_ushort((endPtr-1 + linfo->data_len)%linfo->data_len);
-        int oldDataPtr = data_index_opt(0, local_tree, 0, bit_lookup);
+        int oldDataPtr = data_index(0, local_tree, 0, bit_lookup);
         uchar hi = (uchar)(buffOffset >> 8);
         uchar lo = (uchar)(buffOffset & 255);
         (*local_tree).sa = hi; 

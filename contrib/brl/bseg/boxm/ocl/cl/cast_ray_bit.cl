@@ -83,7 +83,6 @@ cast_ray(
   float min_facez = (ray_dz < 0.0f) ? (linfo->dims.z) : 0.0f;
   float tblock = max(max( (min_facex-ray_ox)*(1.0f/ray_dx), (min_facey-ray_oy)*(1.0f/ray_dy)), (min_facez-ray_oz)*(1.0f/ray_dz));
 
-  bool isActive = true;
   if (tfar <= tblock) {
 #ifdef RENDER
     gl_image[imIndex[llid]] = rgbaFloatToInt((float4)(0.0f,0.0f,0.0f,0.0f));
@@ -163,7 +162,7 @@ cast_ray(
       int data_ptr = traverse_three(&local_tree[llid], 
                                     posx,posy,posz, 
                                     &cell_minx, &cell_miny, &cell_minz, &cell_len); 
-      data_ptr = data_index_opt2(&local_tree[llid], data_ptr, bit_lookup, &cumsum[llid*10], &cumIndex, linfo->data_len);
+      data_ptr = data_index_cached(&local_tree[llid], data_ptr, bit_lookup, &cumsum[llid*10], &cumIndex, linfo->data_len);
       data_ptr = (block.x*linfo->data_len) + data_ptr;  
       
       // check to see how close tnear and tfar are
@@ -184,7 +183,7 @@ cast_ray(
 // Step Cell Functor
 ////////////////////////////////////////////////////////////////////////////////
 #ifdef RENDER
-      step_cell_render_opt2(mixture_array, alpha_array, data_ptr, d, &vis, &expected_int);
+      step_cell_render(mixture_array, alpha_array, data_ptr, d, &vis, &expected_int);
 #endif
 #ifdef CHANGE
       step_cell_change_detection_uchar8_w_expected(mixture_array,alpha_array,data_ptr,d,&vis,&expected_int,&e_expected_int,intensity,e_intensity);
@@ -208,7 +207,7 @@ cast_ray(
       load_data_mutable_opt(ray_bundle_array,cell_ptrs);
       
       //back to normal mean of mean obs... 
-      seg_len_obs_opt3(d, inImgObs, ray_bundle_array, cached_aux_data);
+      seg_len_obs_functor(d, inImgObs, ray_bundle_array, cached_aux_data);
       barrier(CLK_LOCAL_MEM_FENCE);                
       
       //set aux data here (for each leader.. )
@@ -267,19 +266,19 @@ cast_ray(
       barrier(CLK_LOCAL_MEM_FENCE);
 
       //calculate bayes ratio
-      bayes_ratio_opt3( d, 
-                        mean_obs,
-                        &ray_pre,
-                        &ray_vis,
-                        norm, 
-                        &cell_beta,
-                        &cell_vis,
-                        ray_bundle_array,
-                        cell_ptrs, 
-                        cached_vis,
-                        alpha, 
-                        mixture, 
-                        weight3);
+      bayes_ratio_functor( d, 
+                          mean_obs,
+                          &ray_pre,
+                          &ray_vis,
+                          norm, 
+                          &cell_beta,
+                          &cell_vis,
+                          ray_bundle_array,
+                          cell_ptrs, 
+                          cached_vis,
+                          alpha, 
+                          mixture, 
+                          weight3);
           
     //set aux data here (for each leader.. )
     if(ray_bundle_array[llid].y==1) 

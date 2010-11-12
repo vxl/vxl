@@ -170,7 +170,7 @@ void ray_probe(__constant  RenderSceneInfo * linfo,
       int data_ptr = traverse_three(&local_tree[llid], 
                                     posx,posy,posz, 
                                     &cell_minx, &cell_miny, &cell_minz, &cell_len); 
-      data_ptr = data_index_opt2(&local_tree[llid], data_ptr, bit_lookup, &cumsum[llid*10], &cumIndex, linfo->data_len);
+      data_ptr = data_index_cached(&local_tree[llid], data_ptr, bit_lookup, &cumsum[llid*10], &cumIndex, linfo->data_len);
       data_ptr = block.x * linfo->data_len + data_ptr;
       
       // check to see how close tnear and tfar are
@@ -186,7 +186,8 @@ void ray_probe(__constant  RenderSceneInfo * linfo,
       global_depth+=d;
       depthout[cnt]=global_depth;
       visout[cnt]=vis;
-      step_cell_render_opt2(mixture_array, alpha_array, data_ptr, d,&vis, &expected_int);
+      step_cell_render(mixture_array, alpha_array, data_ptr, d,&vis, &expected_int);
+      
       // Added aliitle extra to the exit point
       mean0[cnt]   =mixture_array[data_ptr].s0/255.0f;
       sigma0[cnt]  =mixture_array[data_ptr].s1/255.0f;

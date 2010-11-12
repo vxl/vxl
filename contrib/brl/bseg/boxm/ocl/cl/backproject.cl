@@ -1,3 +1,5 @@
+//: Backproject and project functions, using float16 for cameras
+
 float4 backproject(unsigned i,unsigned j,float16 Ut,float16 V,float16 w, float4 origin)
 {
   float4 inputpoint=(float4)((float)i+0.5f,(float)j+0.5f,1.0f,0.0f);

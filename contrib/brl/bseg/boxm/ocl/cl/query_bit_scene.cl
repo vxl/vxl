@@ -42,7 +42,7 @@ query_bit_scene(__constant  RenderSceneInfo    * linfo,
 
     float cell_minx,cell_miny,cell_minz,cell_len;
     int data_ptr = traverse_three(local_tree,query.x,query.y,query.z,&cell_minx, &cell_miny, &cell_minz, &cell_len);
-    data_ptr = data_index_opt( 0, local_tree, data_ptr, bit_lookup);
+    data_ptr = data_index( 0, local_tree, data_ptr, bit_lookup);
     data_ptr = block.x * linfo->data_len + data_ptr;
 
     output[0]    = alpha_array[data_ptr];

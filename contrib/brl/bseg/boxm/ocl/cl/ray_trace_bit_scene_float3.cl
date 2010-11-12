@@ -188,7 +188,7 @@ ray_trace_bit_scene_opt(__constant   RenderSceneInfo    * linfo,
       float t1 = min(min( (cell_minx-lrayx)*(1.0/ray_dx), (cell_miny-lrayy)*(1.0/ray_dy)), (cell_minz-lrayz)*(1.0/ray_dz));
 
       //data offset is ushort pointed to by tree + bit offset
-      data_ptr = data_index_opt( (llid<<4), local_tree, data_ptr, bit_lookup);
+      data_ptr = data_index( (llid<<4), local_tree, data_ptr, bit_lookup);
       data_ptr = block.x * linfo->data_len + data_ptr;
 
       //// distance must be multiplied by the dimension of the bounding box
