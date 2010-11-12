@@ -255,8 +255,6 @@ bool test_icam_ocl_minimizer()
   minimizer.set_workgroup_size(16);
   unsigned nl = minimizer.n_levels();
   unsigned lev = nl-1;
-  // check native C++ implementation
-  icam_cost_func cfn = minimizer.cost_fn(lev);
   vgl_box_3d<double> trans_box;
   trans_box.add(vgl_point_3d<double>(-.5, -.5, -.5));
   trans_box.add(vgl_point_3d<double>(.5, .5, .5));
@@ -287,7 +285,6 @@ bool test_icam_ocl_minimizer()
 static void test_depth_trans()
 {
   // test_image_parallel_search();
-   //test_rot_parallel_search();
   test_icam_ocl_minimizer();
 }
 
