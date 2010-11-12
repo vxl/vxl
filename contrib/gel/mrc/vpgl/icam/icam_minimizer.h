@@ -71,14 +71,14 @@ class icam_minimizer
   void set_nbins(unsigned nbins) {nbins_ = nbins;}
   unsigned nbins() { return nbins_;}
 
-  //: pricipal ray iterator for exhaustive search
+  //: principal ray iterator for exhaustive search
   principal_ray_scan pray_scan(unsigned level, unsigned& n_pts);
 
   //: polar angle increment for exhaustive search, the polar range is typically -pi <= a <= pi
   double polar_inc(unsigned level, unsigned& nsteps,
                    double polar_range = vnl_math::pi);
 
-  //: pricipal ray iterator for initialized search
+  //: principal ray iterator for initialized search
   principal_ray_scan initialized_pray_scan(unsigned initial_level,
                                            unsigned search_level,
                                            unsigned& n_pts);
@@ -101,30 +101,27 @@ class icam_minimizer
 
   double end_error() {return end_error_;}
 
-
   //: current parameter values
-  double to_fl(){return dt_pyramid_.to_fl();}
-  vgl_rotation_3d<double> rotation(){return dt_pyramid_.rotation();}
-  vgl_vector_3d<double> translation(){return dt_pyramid_.translation();}
+  double to_fl() {return dt_pyramid_.to_fl();}
+  vgl_rotation_3d<double> rotation() {return dt_pyramid_.rotation();}
+  vgl_vector_3d<double> translation() {return dt_pyramid_.translation();}
 
   //: exhaustive search for rotation, given the camera translation
-  // this virtual method is implemented in both C++ and in OpenCL
-  // setup and finish are particular to OpenCL to signal setup and 
+  // This virtual method is implemented in both C++ and in OpenCL
+  // setup and finish are particular to OpenCL to signal setup and
   // finish of GPU context and buffers
   virtual bool exhaustive_rotation_search(vgl_vector_3d<double> const& trans,
-                                        unsigned level,
-                                        double min_allowed_overlap,
+                                          unsigned level,
+                                          double min_allowed_overlap,
                                           vgl_rotation_3d<double>& min_rot,
                                           double& min_cost,
                                           double& min_overlap_fraction,
                                           bool setup,
                                           bool finish);
 
-
-  //: search for rotation about a given initial value, 
-  //  given the camera translation
-  // this virtual method is implemented in both C++ and in OpenCL
-  // setup and finish are particular to OpenCL to signal setup and 
+  //: search for rotation about a given initial value, given the camera translation
+  // This virtual method is implemented in both C++ and in OpenCL
+  // setup and finish are particular to OpenCL to signal setup and
   // finish of GPU context and buffers
  virtual bool initialized_rot_search(vgl_vector_3d<double> const& trans,
                                      vgl_rotation_3d<double>& initial_rot,
@@ -137,13 +134,11 @@ class icam_minimizer
                                      bool setup,
                                      bool finish);
 
-
   bool refine_minimum(int mx, int my, int mz,
                       unsigned level,
                       double min_allowed_overlap,
                       vgl_vector_3d<double>& min_trans,
                       double& min_cost);
-
 
   bool exhaustive_camera_search(vgl_box_3d<double> const& trans_box,
                                 vgl_vector_3d<double> const& trans_steps,
@@ -221,16 +216,13 @@ bool  pyramid_camera_search(vgl_vector_3d<double> const&
 
 
   //:source image at level
-  vil_image_view<float> source(unsigned level) 
-    {return source_pyramid_(level);}
+  vil_image_view<float> source(unsigned level) {return source_pyramid_(level);}
 
   //:destination image at level
-  vil_image_view<float> dest(unsigned level) 
-    {return dest_pyramid_(level);}
+  vil_image_view<float> dest(unsigned level) {return dest_pyramid_(level);}
 
   //:depth image at level
-  vil_image_view<double> depth(unsigned level) 
-    {return dt_pyramid_.depth(level);}
+  vil_image_view<double> depth(unsigned level) {return dt_pyramid_.depth(level);}
 
   //:inverse depth image at level
   vil_image_view<double> inv_depth(unsigned level);
@@ -240,8 +232,7 @@ bool  pyramid_camera_search(vgl_vector_3d<double> const&
   icam_cost_func cost_fn(unsigned level);
 
   //: the depth transform for a given level
-  icam_depth_transform depth_trans(unsigned level)
-    {return dt_pyramid_.depth_trans(level);}
+  icam_depth_transform depth_trans(unsigned level) {return dt_pyramid_.depth_trans(level);}
 
   //: display box search as a set of vrml spheres
   bool box_search_vrml(vcl_string const& vrml_file,
@@ -250,17 +241,15 @@ bool  pyramid_camera_search(vgl_vector_3d<double> const&
   vnl_matrix_fixed<double, 3, 3> to_calibration_matrix(unsigned level);
   vnl_matrix_fixed<double, 3, 3> from_calibration_matrix_inv(unsigned level);
 
-  void set_actual_translation(vgl_vector_3d<double> const& trans)
-    {actual_trans_ = trans;}
+  void set_actual_translation(vgl_vector_3d<double> const& trans) {actual_trans_ = trans;}
 
-  void set_actual_rotation(vgl_rotation_3d<double> const& rot)
-    {actual_rot_ = rot;}
+  void set_actual_rotation(vgl_rotation_3d<double> const& rot) {actual_rot_ = rot;}
 
-  void print_axis_search_info(unsigned level, vgl_rotation_3d<double> const& actual, 
+  void print_axis_search_info(unsigned level, vgl_rotation_3d<double> const& actual,
                               vgl_rotation_3d<double> const& init = vgl_rotation_3d<double>(),
-                              bool top_level = false);  
+                              bool top_level = false);
 
-  void print_polar_search_info(unsigned level, vgl_rotation_3d<double> const& actual, 
+  void print_polar_search_info(unsigned level, vgl_rotation_3d<double> const& actual,
                                vgl_rotation_3d<double> const& init = vgl_rotation_3d<double>(),
                                bool top_level = false);
  protected:
