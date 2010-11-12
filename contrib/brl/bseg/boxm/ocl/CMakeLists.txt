@@ -29,7 +29,7 @@ IF(OPENCL_FOUND)
 
   SET(boxm_ocl_cl_files
       cl/backproject.cl
-      cl/bit_tree_library_functions.cl
+      cl/bit/bit_tree_library_functions.cl
       cl/cell_utils.cl
       cl/change_detection_ocl_scene.cl
       cl/expected_functor.cl
@@ -43,7 +43,7 @@ IF(OPENCL_FOUND)
       cl/ray_trace_ocl_scene.cl
       cl/refine_blocks.cl
       cl/refine_blocks_opt.cl
-      cl/render_bit_scene.cl
+      cl/bit/render_bit_scene.cl
       cl/rerender.cl
       cl/scene_info.cl
       cl/statistics_library_functions.cl
