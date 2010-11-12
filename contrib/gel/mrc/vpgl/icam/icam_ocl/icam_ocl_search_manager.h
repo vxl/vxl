@@ -65,6 +65,13 @@ class icam_ocl_search_manager : public icam_ocl_manager<icam_ocl_search_manager>
                                  vgl_vector_3d<double> const& trans_steps,
                                  icam_minimizer& minimizer,
                                  unsigned level);
+  void setup_top_level_rot_search_space(icam_minimizer& minimizer,
+                                        unsigned level);
+
+  void setup_initialized_rot_search_space(icam_minimizer& minimizer,
+                                          vgl_rotation_3d<double> const& initial_rot,
+                                          unsigned initial_level,
+                                          unsigned search_level);
   // for debug purposes
   void  setup_rot_debug_space(unsigned n_rotations,
                               vgl_rotation_3d<double> const& rot);
@@ -94,6 +101,8 @@ class icam_ocl_search_manager : public icam_ocl_manager<icam_ocl_search_manager>
   bool create_image_parallel_transf_buffers();
   //: copy to cl buffers
   bool copy_to_image_parallel_transf_buffers();
+  //: copy trans value to buffer
+  bool copy_trans_to_buffer(  vgl_vector_3d<double> const& tr);
   //: deallocate cl data
   void clean_image_parallel_transf_data();
 

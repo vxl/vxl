@@ -25,7 +25,8 @@ class icam_cost_func : public vnl_least_squares_function
   //: Constructor
   icam_cost_func( const vil_image_view<float>& source_img,
                   const vil_image_view<float>& dest_img,
-                  const icam_depth_transform& dt);
+                  const icam_depth_transform& dt,
+                  unsigned nbins = 16);
 
 
   //: The main function.
@@ -83,6 +84,7 @@ class icam_cost_func : public vnl_least_squares_function
   icam_depth_transform dt_;
   unsigned max_samples_;
   unsigned n_samples_;
+  unsigned nbins_;
   vbl_array_2d<double> joint_probability(vnl_vector<double> const& samples,
                                          vnl_vector<double> const& mask);
   double minfo(vbl_array_2d<double>& joint_prob);

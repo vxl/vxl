@@ -99,14 +99,12 @@ void icam_ocl_search_manager::clean_image_data()
 
   free_buffer(depth_array_);
 }
-
+//set up rotations
 void icam_ocl_search_manager::
-setup_transf_search_space(vgl_box_3d<double> const& trans_box,
-                          vgl_vector_3d<double> const& trans_steps,
-                          icam_minimizer& minimizer,
-                          unsigned level)
+setup_top_level_rot_search_space(icam_minimizer& minimizer,
+                                 unsigned level)
 {
-  //set up rotations
+
   unsigned n_rays, n_pangs;
   principal_ray_scan prs = minimizer.pray_scan(level, n_rays);
   double polar_range = vnl_math::pi;
@@ -115,7 +113,35 @@ setup_transf_search_space(vgl_box_3d<double> const& trans_box,
   for (prs.reset(); prs.next();)
     for (double ang = -polar_range; ang<=polar_range; ang+=pl_inc)
       rotations_.push_back(prs.rot(ang));
-
+}
+void icam_ocl_search_manager::
+setup_initialized_rot_search_space(icam_minimizer& minimizer,
+                                   vgl_rotation_3d<double> const& initial_rot,
+                                   unsigned initial_level,
+                                   unsigned search_level)
+{
+  unsigned n_rays, n_pangs;
+  principal_ray_scan prs = minimizer.initialized_pray_scan(initial_level,
+                                                           search_level,
+                                                           n_rays);
+  double polar_range = vnl_math::pi, pl_inc = 0.0;
+  minimizer.initialized_polar_inc(initial_level, search_level
+                                  ,n_pangs, polar_range, pl_inc);
+  vcl_cout << "Initializing " << n_rays*n_pangs << " rotations\n";
+  for (prs.reset(); prs.next();)
+    for (double ang = -polar_range; ang<=polar_range; ang+=pl_inc){
+      vgl_rotation_3d<double> rot = prs.rot(ang);
+      vgl_rotation_3d<double> comp_rot = initial_rot*rot;
+      rotations_.push_back(comp_rot);
+    }
+}
+void icam_ocl_search_manager::
+setup_transf_search_space(vgl_box_3d<double> const& trans_box,
+                          vgl_vector_3d<double> const& trans_steps,
+                          icam_minimizer& minimizer,
+                          unsigned level)
+{
+  setup_top_level_rot_search_space(minimizer, level);
   // set up translations
   double xo = trans_box.min_x(),yo = trans_box.min_y(),zo = trans_box.min_y();
   double xspan = trans_box.max_x() - xo;
@@ -134,7 +160,7 @@ setup_transf_search_space(vgl_box_3d<double> const& trans_box,
       for (z=zo, iz = 0; iz<nz+1; z+=dz, ++iz)
         translations_.push_back(vgl_vector_3d<double>(x, y, z));
   vcl_cout << "Initializing " << translations_.size() << " translations\n"
-           << "Total search space " << n_rays*n_pangs*translations_.size()
+           << "Total search space " << rotations_.size()*translations_.size()
            << " mappings\n";
 }
 
@@ -206,13 +232,13 @@ set_rot_parallel_transf_data(vgl_vector_3d<double> const& tr)
   if (!rot_array_)
     return false;
   for (unsigned i = 0; i<nrot; ++i)
-  {
-    vnl_vector_fixed<double, 3> rod = rotations_[i].as_rodrigues();
-    rot_array_[i*4]=static_cast<float>(rod[0]);
-    rot_array_[i*4+1]=static_cast<float>(rod[1]);
-    rot_array_[i*4+2]=static_cast<float>(rod[2]);
-    rot_array_[i*4+3]= 0.0f;
-  }
+    {
+      vnl_vector_fixed<double, 3> rod = rotations_[i].as_rodrigues();
+      rot_array_[i*4]=static_cast<float>(rod[0]);
+      rot_array_[i*4+1]=static_cast<float>(rod[1]);
+      rot_array_[i*4+2]=static_cast<float>(rod[2]);
+      rot_array_[i*4+3]= 0.0f;
+    }
 
   if (!translation_)
     return false;
@@ -228,6 +254,8 @@ void icam_ocl_search_manager::clean_rot_parallel_transf_data()
 {
   free_buffer(rot_array_);
   free_buffer(translation_);
+  rotations_.clear();
+  translations_.clear();
 }
 
 bool icam_ocl_search_manager::create_rot_parallel_transf_buffers()
@@ -256,7 +284,7 @@ find_min_rot(vgl_rotation_3d<double>& rot, float& min_entropy)
   if(!ent_dif)
     return false;
   unsigned nrot = rotations_.size();
- min_entropy = vnl_numeric_traits<float>::maxval;
+  min_entropy = vnl_numeric_traits<float>::maxval;
   unsigned indx = 0;
   for(unsigned i = 0; i<nrot; ++i)
     if(ent_dif[i]<min_entropy){
@@ -320,7 +348,7 @@ bool icam_ocl_search_manager::setup_rot_parallel_result()
   if (!minfo_array_)
     return false;
   for (unsigned i =0; i<n_rot; ++i)
-      minfo_array_[i]=0.0f;
+    minfo_array_[i]=0.0f;
 
   create_buffer((void**)&rot_para_flag_,"cl_int",4,16);
   if (!rot_para_flag_)
@@ -420,7 +448,9 @@ bool icam_ocl_search_manager::copy_to_image_buffers()
 
 bool icam_ocl_search_manager::release_buffers()
 {
-  return kernel_->release_buffers();
+  bool res =  kernel_->release_buffers();
+  buffer_map_.clear();
+  return res;
 }
 
 bool icam_ocl_search_manager::copy_to_image_parallel_transf_buffers()
@@ -449,6 +479,24 @@ bool icam_ocl_search_manager::copy_to_image_parallel_transf_buffers()
     return SDK_FAILURE;
   else
     return CL_SUCCESS;
+}
+
+bool icam_ocl_search_manager::copy_trans_to_buffer(  vgl_vector_3d<double> const& tr)
+{
+  if(!translation_)
+    return false;
+  translation_[0]=static_cast<float>(tr.x());
+  translation_[1]=static_cast<float>(tr.y());
+  translation_[2]=static_cast<float>(tr.z());
+  translation_[3] = 0.0f;
+  cl_int status = CL_SUCCESS;
+  cl_event events[1];
+  // translation
+  status = kernel_->enqueue_write_buffer(command_queue_,buffer_map_[translation_],CL_TRUE,
+                                         0,sizeof(cl_float)*4,translation_, 0,NULL,&events[0]);
+  if (!check_val(status,CL_SUCCESS,"clCreateBuffer ( translation ) failed."))
+    return SDK_FAILURE;
+  return true;
 }
 
 bool icam_ocl_search_manager::create_image_parallel_transf_buffers()
@@ -514,10 +562,10 @@ bool icam_ocl_search_manager::setup_image_parallel_kernel()
   assert(this->workgrp_size()<= vcl_size_t(kernel_work_group_size));
 
   if (used_local_memory > this->total_local_memory())
-  {
-    vcl_cout << "Unsupported: Insufficient local memory on device.\n";
-    return SDK_FAILURE;
-  }
+    {
+      vcl_cout << "Unsupported: Insufficient local memory on device.\n";
+      return SDK_FAILURE;
+    }
 
   // set up a command queue
   command_queue_ = clCreateCommandQueue(this->context(),this->devices()[0],CL_QUEUE_PROFILING_ENABLE,&status);
@@ -576,10 +624,10 @@ bool icam_ocl_search_manager::setup_rot_parallel_kernel()
   assert(this->workgrp_size()<= vcl_size_t(kernel_work_group_size));
 
   if (used_local_memory > this->total_local_memory())
-  {
-    vcl_cout << "Unsupported: Insufficient local memory on device.\n";
-    return SDK_FAILURE;
-  }
+    {
+      vcl_cout << "Unsupported: Insufficient local memory on device.\n";
+      return SDK_FAILURE;
+    }
 
   // set up a command queue
   command_queue_ = clCreateCommandQueue(this->context(),this->devices()[0],CL_QUEUE_PROFILING_ENABLE,&status);
@@ -711,14 +759,14 @@ int icam_ocl_search_manager::build_kernel_program()
   // create a cl program executable for all the devices specified
   status = clBuildProgram(program_, 1, this->devices_,NULL,NULL,NULL);
   if (!check_val(status, CL_SUCCESS, error_to_string(status)))
-  {
-    vcl_size_t len;
-    char buffer[2048];
-    clGetProgramBuildInfo(program_, this->devices_[0],
-                          CL_PROGRAM_BUILD_LOG, sizeof(buffer), buffer, &len);
-    vcl_printf("%s\n", buffer);
-    return SDK_FAILURE;
-  }
+    {
+      vcl_size_t len;
+      char buffer[2048];
+      clGetProgramBuildInfo(program_, this->devices_[0],
+                            CL_PROGRAM_BUILD_LOG, sizeof(buffer), buffer, &len);
+      vcl_printf("%s\n", buffer);
+      return SDK_FAILURE;
+    }
 
   return SDK_SUCCESS;
 }
@@ -740,3 +788,4 @@ int icam_ocl_search_manager::release_kernel()
   return status;
 }
 
+  

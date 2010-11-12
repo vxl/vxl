@@ -30,7 +30,8 @@
 static void test_minimizer()
 {
   vcl_string root_dir = testlib_root_dir();
-  vcl_string dest_file = "C:/images/calibration/frame_142.png";
+    vcl_string dest_file = "C:/images/calibration/frame_142.png";
+  //vcl_string dest_file = "C:/images/calibration/expected142.tiff";
   vcl_string source_file = "C:/images/calibration/frame_145.png";
   //  vcl_string source_file = "C:/images/calibration/frame_138.png";
   //  vcl_string source_file = "C:/images/calibration/frame_146.png";
@@ -130,6 +131,7 @@ static void test_minimizer()
     minimizer.set_actual_translation(tr);
     minimizer.set_actual_rotation(Rr);
   }
+  minimizer.set_nbins(16);// number of histogram bins for computing entropy
   unsigned nl = minimizer.n_levels();
   unsigned lev = nl-1;
 

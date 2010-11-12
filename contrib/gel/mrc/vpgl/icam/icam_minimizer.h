@@ -67,12 +67,28 @@ class icam_minimizer
   //: in the cases where source image is not know at construction, the image is set later
   void set_source_img(const vil_image_view<float>& source_img);
 
+  //: number of histogram bins for computation of entropy
+  void set_nbins(unsigned nbins) {nbins_ = nbins;}
+  unsigned nbins() { return nbins_;}
+
   //: pricipal ray iterator for exhaustive search
   principal_ray_scan pray_scan(unsigned level, unsigned& n_pts);
 
-  //: polar angle increment, the polar range is typically -pi <= a <= pi
+  //: polar angle increment for exhaustive search, the polar range is typically -pi <= a <= pi
   double polar_inc(unsigned level, unsigned& nsteps,
                    double polar_range = vnl_math::pi);
+
+  //: pricipal ray iterator for initialized search
+  principal_ray_scan initialized_pray_scan(unsigned initial_level,
+                                           unsigned search_level,
+                                           unsigned& n_pts);
+
+  //: polar angle increment for initialized search
+  void initialized_polar_inc(unsigned initial_level,
+                             unsigned search_level,
+                             unsigned& nsteps,
+                             double& polar_range,
+                             double& polar_inc);
 
   //: Run the minimization starting at input values
   void minimize(vgl_rotation_3d<double>& rot,
@@ -92,21 +108,35 @@ class icam_minimizer
   vgl_vector_3d<double> translation(){return dt_pyramid_.translation();}
 
   //: exhaustive search for rotation, given the camera translation
-  bool exhaustive_rotation_search(vgl_vector_3d<double> const& trans,
-                                  unsigned level,
-                                  double min_allowed_overlap,
-                                  vgl_rotation_3d<double>& min_rot,
-                                  double& min_cost,
-                                  double& min_overlap_fraction);
+  // this virtual method is implemented in both C++ and in OpenCL
+  // setup and finish are particular to OpenCL to signal setup and 
+  // finish of GPU context and buffers
+  virtual bool exhaustive_rotation_search(vgl_vector_3d<double> const& trans,
+                                        unsigned level,
+                                        double min_allowed_overlap,
+                                          vgl_rotation_3d<double>& min_rot,
+                                          double& min_cost,
+                                          double& min_overlap_fraction,
+                                          bool setup,
+                                          bool finish);
 
-  bool initialized_rot_search(vgl_vector_3d<double> const& trans,
-                              vgl_rotation_3d<double>& initial_rot,
-                              unsigned initial_level,
-                              unsigned search_level,
-                              double min_allowed_overlap,
-                              vgl_rotation_3d<double>& min_rot,
-                              double& min_cost,
-                              double& min_overlap_fraction);
+
+  //: search for rotation about a given initial value, 
+  //  given the camera translation
+  // this virtual method is implemented in both C++ and in OpenCL
+  // setup and finish are particular to OpenCL to signal setup and 
+  // finish of GPU context and buffers
+ virtual bool initialized_rot_search(vgl_vector_3d<double> const& trans,
+                                     vgl_rotation_3d<double>& initial_rot,
+                                     unsigned initial_level,
+                                     unsigned search_level,
+                                     double min_allowed_overlap,
+                                     vgl_rotation_3d<double>& min_rot,
+                                     double& min_cost,
+                                     double& min_overlap_fraction,
+                                     bool setup,
+                                     bool finish);
+
 
   bool refine_minimum(int mx, int my, int mz,
                       unsigned level,
@@ -260,6 +290,7 @@ bool  pyramid_camera_search(vgl_vector_3d<double> const&
   bool verbose_;
   vgl_vector_3d<double> actual_trans_;
   vgl_rotation_3d<double> actual_rot_;
+  unsigned nbins_;
 };
 
 #endif // icam_minimizer_h_

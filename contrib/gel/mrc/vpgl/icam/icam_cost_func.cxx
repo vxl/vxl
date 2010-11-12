@@ -12,11 +12,12 @@
 //: Constructor
 icam_cost_func::icam_cost_func( const vil_image_view<float>& source_img,
                                 const vil_image_view<float>& dest_img,
-                                const icam_depth_transform& dt)
+                                const icam_depth_transform& dt,
+                                unsigned nbins)
  : vnl_least_squares_function(1,1),
    source_image_(source_img),
    dest_image_(dest_img),
-   dt_(dt), max_samples_(1), n_samples_(0)
+   dt_(dt), max_samples_(1), n_samples_(0), nbins_(nbins)
 {
   unsigned ni = dest_image_.ni()-2, nj = dest_image_.nj()-2;
   max_samples_ = ni*nj;
@@ -117,9 +118,8 @@ vcl_vector<double> icam_cost_func::error(vnl_vector<double> const& x,
 vbl_array_2d<double> icam_cost_func::
 joint_probability(vnl_vector<double> const& samples, vnl_vector<double> const& mask)
 {
-  unsigned nbins = 16;
-  double scl = 1.0/(256.0/nbins);
-  vbl_array_2d<double> h(nbins, nbins, 0.0);
+  double scl = 1.0/(256.0/nbins_);
+  vbl_array_2d<double> h(nbins_, nbins_, 0.0);
 
   //compute the intensity histogram
   for (unsigned i = 0; i<samples.size(); ++i)
@@ -133,13 +133,13 @@ joint_probability(vnl_vector<double> const& samples, vnl_vector<double> const& m
       unsigned id = static_cast<unsigned>(vcl_floor(dest_samples_[i]*scl)),
         is = static_cast<unsigned>(vcl_floor(samples[i]*scl));
 
-      if (id>nbins-1 || is> nbins-1)
+      if (id>nbins_-1 || is> nbins_-1)
         continue;
       h[id][is] += 1.0;
     }
   // convert to probability
-  for (unsigned r = 0; r<nbins; ++r)
-    for (unsigned c = 0; c<nbins; ++c)
+  for (unsigned r = 0; r<nbins_; ++r)
+    for (unsigned c = 0; c<nbins_; ++c)
       h[r][c] /= n_samples_;
   return h;
 }
