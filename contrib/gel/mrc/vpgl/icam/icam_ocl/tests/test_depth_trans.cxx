@@ -240,7 +240,7 @@ bool test_icam_ocl_minimizer()
   double polar_range_multiplier = 2.0;
   //vcl_string base_path = "C:/images/Calibration";
   vcl_string base_path = "";
-  bool verbose = true;
+  bool verbose = false;
   icam_ocl_minimizer minimizer(source_img_flt, dest_img_flt, dt,
                                min_pyramid_image_size, box_reduction_k,
                                axis_search_cone_multiplier,
@@ -255,6 +255,48 @@ bool test_icam_ocl_minimizer()
   minimizer.set_workgroup_size(16);
   unsigned nl = minimizer.n_levels();
   unsigned lev = nl-1;
+  bool setup = true, finish = false;
+  vgl_rotation_3d<double> min_rot;
+  double min_allowed_overlap = 0.5, gpu_ent_diff, min_overlap;
+  vul_timer t;
+  minimizer.exhaustive_rotation_search(tr, lev, min_allowed_overlap,
+                                       min_rot, gpu_ent_diff, min_overlap,
+                                       setup, finish);
+  vcl_cout << "OpenCL search time " << t.real()/1000.0 << " seconds\n";
+  setup = false;
+  finish = true;
+  double minfo;
+  minimizer.exhaustive_rotation_search(tr, lev, min_allowed_overlap,
+                                       min_rot, minfo, min_overlap,
+                                       setup, finish);
+  icam_minimizer non_gpu_minmzr(source_img_flt, dest_img_flt, dt,
+                               min_pyramid_image_size, box_reduction_k,
+                               axis_search_cone_multiplier,
+                               polar_range_multiplier,
+                                local_min_thresh, base_path, verbose);
+  if (verbose) {
+    non_gpu_minmzr.set_actual_translation(tr);
+    non_gpu_minmzr.set_actual_rotation(Rr);
+  }
+  non_gpu_minmzr.set_nbins(16);
+  t.mark();
+  vgl_rotation_3d<double> cpu_min_rot;
+  double cpu_min_cost;
+  setup = false;
+  finish = false;
+  non_gpu_minmzr.exhaustive_rotation_search(tr, lev, min_allowed_overlap,
+                                            cpu_min_rot, cpu_min_cost, 
+                                            min_overlap,
+                                            setup, finish);
+  vcl_cout << "CPU search time " << t.real()/1000.0 << " seconds\n";
+  vnl_vector_fixed<double, 3> gpu_rod = min_rot.as_rodrigues();
+  vnl_vector_fixed<double, 3> cpu_rod = cpu_min_rot.as_rodrigues();
+  double rer = (gpu_rod-cpu_rod).magnitude();
+  icam_cost_func cfn = minimizer.cost_fn(lev);
+  double cpu_ent_diff = cfn.entropy_diff(cpu_rod, tr);
+  double cer = vcl_fabs(gpu_ent_diff-cpu_ent_diff);
+  TEST_NEAR("gpu rotation search", rer+cer, 0.0, 1e-4);
+#if 0
   vgl_box_3d<double> trans_box;
   trans_box.add(vgl_point_3d<double>(-.5, -.5, -.5));
   trans_box.add(vgl_point_3d<double>(.5, .5, .5));
@@ -279,7 +321,7 @@ bool test_icam_ocl_minimizer()
              << "full min rotation "
              << full_min_rot.as_rodrigues() << '\n';
   }
-  //==============end of minimizer setup=============
+#endif
   return true;
 }
 static void test_depth_trans()
