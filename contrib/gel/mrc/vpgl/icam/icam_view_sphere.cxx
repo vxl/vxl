@@ -98,7 +98,7 @@ void icam_view_sphere::register_image(vil_image_view<float> const& dest_img)
   find_local_minima(local_min);
 #if 0
   vsph_view_point<icam_view_metadata>* vp;
-  view_sphere_->view_point(142,vp);
+  view_sphere_->view_point(2,vp);
   vpgl_perspective_camera<double>* cam = (vpgl_perspective_camera<double>*)vp->camera().as_pointer();
   vcl_cout << *cam;
   local_min.push_back(*vp);

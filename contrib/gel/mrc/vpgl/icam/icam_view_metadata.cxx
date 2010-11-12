@@ -43,9 +43,6 @@ void icam_view_metadata::register_image(vil_image_view<float> const& source_img)
 
 void icam_view_metadata::compute_camera()
 {
-  vil_image_view<float> image=this->minimizer_->dest(0);
-  vil_save(image,"F:/tests/mundy-downtown/view_sphere/test/myimg.tiff");
-
   vgl_box_3d<double> trans_box;
   trans_box.add(vgl_point_3d<double>(-.5, -.5, -.5));
   trans_box.add(vgl_point_3d<double>(.5, .5, .5));
@@ -60,8 +57,6 @@ void icam_view_metadata::compute_camera()
   vgl_vector_3d<double> min_trans;
   vgl_rotation_3d<double> min_rot;
   double min_overlap;
-
-  //minimizer_->print();
 
   minimizer_->camera_search(trans_box,trans_steps,final_level-3,min_allowed_overlap,refine,min_trans,min_rot,error_,min_overlap); 
   vcl_cout << "ERROR " << error_ << vcl_endl;
