@@ -56,6 +56,9 @@ SUBDIRS(boct)
 # octree based modeling
 SUBDIRS(boxm)
 
+# updated, gpu compatible octree based modeling
+SUBDIRS(boxm2)
+
 # octree based modeling python interface
 SUBDIRS(boxm_batch)
 

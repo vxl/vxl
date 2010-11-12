@@ -1,0 +1,12 @@
+<scene>
+<lvcs cs_name="wgs84" origin_lon="0.000000" origin_lat="0.000000" origin_elev="0.000000" lon_scale="0.000000" lat_scale="0.000000" local_XYZ_unit="meters" geo_angle_unit="degrees" local_origin_x="0.000000" local_origin_y="0.000000" theta="0.000000">
+</lvcs>
+<local_origin x="-2.450000" y="-2.350000" z="-0.400000">
+</local_origin>
+<blocks x_dimension="192" y_dimension="192" z_dimension="64">
+</blocks>
+<block_dimensions x="0.025000" y="0.025000" z="0.025000">
+</block_dimensions>
+<scene_paths path="/data_path/">
+</scene_paths>
+</scene>
