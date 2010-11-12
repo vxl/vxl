@@ -246,7 +246,8 @@ bool test_icam_ocl_minimizer()
                                axis_search_cone_multiplier,
                                polar_range_multiplier,
                                local_min_thresh, base_path, verbose);
-  minimizer.set_rot_kernel_path("c:/vxl/vxl/contrib/gel/mrc/vpgl/icam/icam_ocl/trans_parallel_transf_search.cl");
+  //c:/vxl/vxl/contrib/gel/mrc/vpgl/icam/icam_ocl/
+  minimizer.set_rot_kernel_path("trans_parallel_transf_search.cl");
   if (verbose) {
     minimizer.set_actual_translation(tr);
     minimizer.set_actual_rotation(Rr);
