@@ -66,7 +66,8 @@ static void test_perspective_camera()
   //y axis is the rotation axis
   vnl_double_3 axis(0.0, 1.0, 0.0);
   vgl_h_matrix_3d<double> tr;
-  tr.set_identity().set_rotation_about_axis(axis, theta);
+  tr.set_identity();
+  tr.set_rotation_about_axis(axis, theta);
   vcl_cout <<"Rotation Matrix\n" << tr << '\n';
   vpgl_perspective_camera<double> P_rot =
     vpgl_perspective_camera<double>::postmultiply(P, tr);
