@@ -2,22 +2,22 @@
 #include <vul/vul_timer.h>
 bool icam_ocl_minimizer::
 exhaustive_rotation_search(vgl_vector_3d<double> const& trans,
-                                   unsigned level,
-                                   double min_allowed_overlap,
-                                   vgl_rotation_3d<double>& min_rot,
-                                   double& min_cost,
-                                   double& min_overlap_fraction,
-                                   bool setup,
-                                   bool finish)
+                           unsigned level,
+                           double min_allowed_overlap,
+                           vgl_rotation_3d<double>& min_rot,
+                           double& min_cost,
+                           double& min_overlap_fraction,
+                           bool setup,
+                           bool finish)
 {
-  if(setup)
+  if (setup)
     init_opencl_rotation(level);
-  if(finish){
+  if (finish){
     finish_opencl();
-	return true;
+    return true;
   }
   search_mgr_->copy_trans_to_buffer(trans);
-  if(!run_rotation_kernel())
+  if (!run_rotation_kernel())
     return false;
   float min_costf;
   search_mgr_->find_min_rot(min_rot, min_costf);
@@ -38,14 +38,14 @@ initialized_rot_search(vgl_vector_3d<double> const& trans,
                        bool setup,
                        bool finish)
 {
-  if(setup)
+  if (setup)
     init_opencl_rotation(initial_rot, initial_level, search_level);
-  if(finish){
+  if (finish){
     finish_opencl();
-	return true;
+    return true;
   }
   search_mgr_->copy_trans_to_buffer(trans);
-  if(!run_rotation_kernel())
+  if (!run_rotation_kernel())
     return false;
   float min_costf;
   search_mgr_->find_min_rot(min_rot, min_costf);
@@ -117,6 +117,7 @@ bool icam_ocl_minimizer::run_rotation_kernel()
   vcl_cout << "OpenCL search time " << t.real()/1000.0 << " seconds\n";
   return true;
 }
+
 bool icam_ocl_minimizer::finish_opencl()
 {
   search_mgr_->release_queue();
