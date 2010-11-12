@@ -27,13 +27,13 @@ bool boxm_render_bit_scene_manager::init_ray_trace(boxm_ocl_bit_scene *scene,
   if (!this->load_kernel_source(source_dir+"scene_info.cl") ||
       //!this->append_process_kernels(source_dir+"float3.cl") ||
       !this->append_process_kernels(source_dir+"cell_utils.cl") ||
-      !this->append_process_kernels(source_dir+"bit_tree_library_functions.cl") ||
+      !this->append_process_kernels(source_dir+"bit/bit_tree_library_functions.cl") ||
       !this->append_process_kernels(source_dir+"backproject.cl")||
       !this->append_process_kernels(source_dir+"statistics_library_functions.cl")||
       !this->append_process_kernels(source_dir+"expected_functor.cl")||
       !this->append_process_kernels(source_dir+"ray_bundle_library_functions.cl")||
-      !this->append_process_kernels(source_dir+"cast_ray_bit.cl") ||
-      !this->append_process_kernels(source_dir+"render_bit_scene.cl")) {
+      !this->append_process_kernels(source_dir+"bit/cast_ray_bit.cl") ||
+      !this->append_process_kernels(source_dir+"bit/render_bit_scene.cl")) {
     vcl_cerr << "Error: boxm_render_bit_scene_manager : failed to load kernel source (helper functions)\n";
     return false;
   }

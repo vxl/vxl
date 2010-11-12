@@ -619,13 +619,13 @@ bool boxm_update_bit_scene_manager::build_rendering_program()
   vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm/ocl/cl/";
   if (!this->load_kernel_source(source_dir+"scene_info.cl") ||
       !this->append_process_kernels(source_dir+"cell_utils.cl") ||
-      !this->append_process_kernels(source_dir+"bit_tree_library_functions.cl") ||
+      !this->append_process_kernels(source_dir+"bit/bit_tree_library_functions.cl") ||
       !this->append_process_kernels(source_dir+"backproject.cl")||
       !this->append_process_kernels(source_dir+"statistics_library_functions.cl")||
       !this->append_process_kernels(source_dir+"expected_functor.cl")||
       !this->append_process_kernels(source_dir+"ray_bundle_library_opt.cl")||
-      !this->append_process_kernels(source_dir+"cast_ray_bit.cl") ||
-      !this->append_process_kernels(source_dir+"render_bit_scene.cl")) {
+      !this->append_process_kernels(source_dir+"bit/cast_ray_bit.cl") ||
+      !this->append_process_kernels(source_dir+"bit/render_bit_scene.cl")) {
     vcl_cerr << "Error: boxm_update_bit_scene_manager : failed to load kernel source (helper functions)\n";
     return false;
   }
@@ -666,12 +666,12 @@ bool boxm_update_bit_scene_manager::build_change_detection_program()
   vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm/ocl/cl/";
   if (!this->load_kernel_source(source_dir+"scene_info.cl") ||
       !this->append_process_kernels(source_dir+"cell_utils.cl") ||
-      !this->append_process_kernels(source_dir+"bit_tree_library_functions.cl") ||
+      !this->append_process_kernels(source_dir+"bit/bit_tree_library_functions.cl") ||
       !this->append_process_kernels(source_dir+"backproject.cl")||
       !this->append_process_kernels(source_dir+"statistics_library_functions.cl")||
       !this->append_process_kernels(source_dir+"expected_functor.cl")||
       !this->append_process_kernels(source_dir+"ray_bundle_library_opt.cl")||
-      !this->append_process_kernels(source_dir+"cast_ray_bit.cl") ||
+      !this->append_process_kernels(source_dir+"bit/cast_ray_bit.cl") ||
       !this->append_process_kernels(source_dir+"change_detection.cl")) {
     vcl_cerr << "Error: boxm_update_bit_scene_manager : failed to load kernel source (helper functions)\n";
     return false;
@@ -705,18 +705,19 @@ bool boxm_update_bit_scene_manager::build_change_detection_program()
 
   return this->build_kernel_program(program_, options)==SDK_SUCCESS;
 }
+
 bool boxm_update_bit_scene_manager::build_change_detection_old_program()
 {
   //append render source code
   vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm/ocl/cl/";
   if (!this->load_kernel_source(source_dir+"scene_info.cl") ||
       !this->append_process_kernels(source_dir+"cell_utils.cl") ||
-      !this->append_process_kernels(source_dir+"bit_tree_library_functions.cl") ||
+      !this->append_process_kernels(source_dir+"bit/bit_tree_library_functions.cl") ||
       !this->append_process_kernels(source_dir+"backproject.cl")||
       !this->append_process_kernels(source_dir+"statistics_library_functions.cl")||
       !this->append_process_kernels(source_dir+"expected_functor.cl")||
       !this->append_process_kernels(source_dir+"ray_bundle_library_opt.cl")||
-      !this->append_process_kernels(source_dir+"cast_ray_bit.cl") ||
+      !this->append_process_kernels(source_dir+"bit/cast_ray_bit.cl") ||
       !this->append_process_kernels(source_dir+"change_detection.cl")) {
     vcl_cerr << "Error: boxm_update_bit_scene_manager : failed to load kernel source (helper functions)\n";
     return false;
@@ -756,8 +757,8 @@ bool boxm_update_bit_scene_manager::build_refining_program()
 {
   vcl_string root = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm/ocl/cl/" ;
   bool info = this->load_kernel_source(root + "scene_info.cl");
-  bool bitr = this->append_process_kernels(root + "bit_tree_library_functions.cl");
-  bool refn = this->append_process_kernels(root + "refine_bit_scene.cl");
+  bool bitr = this->append_process_kernels(root + "bit/bit_tree_library_functions.cl");
+  bool refn = this->append_process_kernels(root + "bit/refine_bit_scene.cl");
 
   if (!info || !bitr || !refn) {
     vcl_cerr << "Error: boxm_update_bit_scene_manager : failed to load kernel source (refine_bit_scene functions)\n";
@@ -789,8 +790,8 @@ bool boxm_update_bit_scene_manager::build_merging_program()
 {
   vcl_string root = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm/ocl/cl/" ;
   bool info = this->load_kernel_source(root + "scene_info.cl");
-  bool bitr = this->append_process_kernels(root + "bit_tree_library_functions.cl");
-  bool refn = this->append_process_kernels(root + "merge_bit_scene.cl");
+  bool bitr = this->append_process_kernels(root + "bit/bit_tree_library_functions.cl");
+  bool refn = this->append_process_kernels(root + "bit/merge_bit_scene.cl");
 
   if (!info || !bitr || !refn) {
     vcl_cerr << "Error: boxm_update_bit_scene_manager : failed to load kernel source (merge_bit_scene functions)\n";
@@ -823,8 +824,8 @@ bool boxm_update_bit_scene_manager::build_query_point_program()
 {
   vcl_string root = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm/ocl/cl/" ;
   bool info = this->load_kernel_source(root + "scene_info.cl");
-  bool bitr = this->append_process_kernels(root + "bit_tree_library_functions.cl");
-  bool refn = this->append_process_kernels(root + "query_bit_scene.cl");
+  bool bitr = this->append_process_kernels(root + "bit/bit_tree_library_functions.cl");
+  bool refn = this->append_process_kernels(root + "bit/query_bit_scene.cl");
 
   if (!info || !bitr || !refn) {
     vcl_cerr << "Error: boxm_update_bit_scene_manager : failed to load kernel source (build_query_point_program functions)\n";
@@ -839,7 +840,7 @@ bool boxm_update_bit_scene_manager::build_ray_probe_program()
   vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm/ocl/cl/";
   if (!this->load_kernel_source(source_dir+"scene_info.cl") ||
       !this->append_process_kernels(source_dir+"cell_utils.cl") ||
-      !this->append_process_kernels(source_dir+"bit_tree_library_functions.cl") ||
+      !this->append_process_kernels(source_dir+"bit/bit_tree_library_functions.cl") ||
       !this->append_process_kernels(source_dir+"backproject.cl")||
       !this->append_process_kernels(source_dir+"statistics_library_functions.cl")||
       !this->append_process_kernels(source_dir+"expected_functor.cl")||
@@ -868,12 +869,12 @@ bool boxm_update_bit_scene_manager::build_update_program(vcl_string const& funct
   vcl_string root = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm/ocl/cl/";
   bool locc = this->load_kernel_source(    root + "scene_info.cl"  );
   bool cell = this->append_process_kernels(root + "cell_utils.cl");
-  bool octr = this->append_process_kernels(root + "bit_tree_library_functions.cl");
+  bool octr = this->append_process_kernels(root + "bit/bit_tree_library_functions.cl");
   bool bpr  = this->append_process_kernels(root + "backproject.cl");
   bool stat = this->append_process_kernels(root + "statistics_library_functions.cl");
   bool ropt = this->append_process_kernels(root + "ray_bundle_library_opt.cl");
-  bool rayc = this->append_process_kernels(root + "cast_ray_bit.cl");
-  bool main = this->append_process_kernels(root + "update_kernels.cl");
+  bool rayc = this->append_process_kernels(root + "bit/cast_ray_bit.cl");
+  bool main = this->append_process_kernels(root + "bit/update_kernels.cl");
 
   if (!octr||!bpr||!stat||!main||!locc||!cell||!rayc||!ropt) {
     vcl_cerr << "Error: boxm_update_bit_scene_manager : failed to load kernel source (helper functions)\n";
