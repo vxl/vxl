@@ -1,8 +1,12 @@
 USES += contrib/brl contrib/brl/bbas contrib/brl/bseg core
 
-LIBRARY := boxm_batch
+LIBRARY := boxm2
 
-SOURCES += reg_boxm.cxx
+SOURCES += boxm2_block.cxx
+SOURCES += boxm2_disk_io_mgr.cxx
+SOURCES += boxm2_scene_parser.cxx
+SOURCES += boxm2_storage_mgr.cxx
+SOURCES += boxm2_scene.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

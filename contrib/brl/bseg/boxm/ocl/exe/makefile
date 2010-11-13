@@ -13,6 +13,7 @@ MINI_PROG_SOURCES += boxm_ocl_render_bit_view.cxx
 MINI_PROG_SOURCES += boxm_ocl_render_bit_exe.cxx
 MINI_PROG_SOURCES += boxm_ocl_update_bit_view.cxx
 MINI_PROG_SOURCES += boxm_ocl_update_bit_exe.cxx
+MINI_PROG_SOURCES += boxm_ocl_change_detection_bit_view.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk

@@ -12,6 +12,7 @@ SOURCES += boxm_ocl_render_bit_tableau.cxx
 SOURCES += boxm_update_bit_tableau.cxx
 MANPAGE_SOURCES += boxm_ocl_include_glew.h
 SOURCES += boxm_vid_tableau.cxx
+SOURCES += boxm_change_detection_bit_tableau.cxx
 
 MANPAGE_SOURCES += boxm_cam_tableau_sptr.h
 MANPAGE_SOURCES += boxm_ocl_update_tableau_sptr.h
@@ -21,6 +22,7 @@ MANPAGE_SOURCES += boxm_ocl_rerender_tableau_sptr.h
 MANPAGE_SOURCES += boxm_ocl_render_bit_tableau_sptr.h
 MANPAGE_SOURCES += boxm_update_bit_tableau_sptr.h
 MANPAGE_SOURCES += boxm_vid_tableau_sptr.h
+MANPAGE_SOURCES += boxm_change_detection_bit_tableau_sptr.h
 
 ################################
 include ${VXLROOT}/config/top.mk

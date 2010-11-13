@@ -35,8 +35,6 @@ CL_SOURCES += cl/loc_code_library_functions.cl
 CL_SOURCES += cl/change_detection_ocl_scene.cl
 CL_SOURCES += cl/rerender.cl
 CL_SOURCES += cl/ray_trace_bit_scene.cl
-CL_SOURCES += cl/render_bit_scene.cl
-CL_SOURCES += cl/bit_tree_library_functions.cl
 CL_SOURCES += cl/ray_trace_ocl_scene.cl
 CL_SOURCES += cl/refine_blocks_opt.cl
 CL_SOURCES += cl/update_ocl_scene.cl
@@ -47,6 +45,9 @@ CL_SOURCES += cl/ray_trace_bit_scene_opt.cl
 CL_SOURCES += cl/backproject.cl
 CL_SOURCES += cl/cell_utils.cl
 CL_SOURCES += cl/refine_blocks.cl
+
+CL_SOURCES += cl/bit/render_bit_scene.cl
+CL_SOURCES += cl/bit/bit_tree_library_functions.cl
 
 SUBDIRS += pro exe view
 
