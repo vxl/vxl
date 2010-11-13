@@ -1,4 +1,4 @@
-# Microsoft Developer Studio Project File - Name="boxm_tests" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="boxm2_tests" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
@@ -7,27 +7,27 @@
 #  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\brl" /I "$(VXLROOT)\contrib\gel" /I "$(VXLROOT)\contrib\brl\bseg" == include path
 #  == override in output directory
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
-# boxm_tests  == name of output library
-#  /LIBPATH:$(VXLROOT)\lib\$(INTDIR)  /LIBPATH:$(VXLROOT)\lib\  boxm.lib vil1.lib vil.lib tiff.lib png.lib zlib.lib jpeg.lib vul.lib vnl_algo.lib vnl.lib netlib.lib vbl.lib vcl.lib /STACK:10000000  == libraries linked in 
+# boxm2_tests  == name of output library
+#  /LIBPATH:$(VXLROOT)\lib\$(INTDIR)  /LIBPATH:$(VXLROOT)\lib\  boxm2.lib vil1.lib vil.lib tiff.lib png.lib zlib.lib jpeg.lib vul.lib vnl_algo.lib vnl.lib netlib.lib vbl.lib vcl.lib /STACK:10000000  == libraries linked in 
 # TARGTYPE "Win32 (x86) Application" 0x0103
 
-CFG=boxm_tests - Win32 Debug
+CFG=boxm2_tests - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "boxm_tests.mak".
+!MESSAGE NMAKE /f "boxm2_tests.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "boxm_tests.mak" CFG="boxm_tests - Win32 Debug"
+!MESSAGE NMAKE /f "boxm2_tests.mak" CFG="boxm2_tests - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "boxm_tests - Win32 MinSizeRel" (based on "Win32 (x86) Application")
-!MESSAGE "boxm_tests - Win32 Release" (based on "Win32 (x86) Application")
-!MESSAGE "boxm_tests - Win32 RelWithDebInfo" (based on "Win32 (x86) Application")
-!MESSAGE "boxm_tests - Win32 Debug" (based on "Win32 (x86) Application")
+!MESSAGE "boxm2_tests - Win32 MinSizeRel" (based on "Win32 (x86) Application")
+!MESSAGE "boxm2_tests - Win32 Release" (based on "Win32 (x86) Application")
+!MESSAGE "boxm2_tests - Win32 RelWithDebInfo" (based on "Win32 (x86) Application")
+!MESSAGE "boxm2_tests - Win32 Debug" (based on "Win32 (x86) Application")
 !MESSAGE 
 
 # Begin Project
@@ -38,7 +38,7 @@ CPP=cl.exe
 MTL=midl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "boxm_tests - Win32 Release"
+!IF  "$(CFG)" == "boxm2_tests - Win32 Release"
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
 # PROP BASE Output_Dir "Release"
@@ -51,7 +51,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
 # ADD CPP /nologo  /D "WIN32"  /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\brl" /I "$(VXLROOT)\contrib\gel" /I "$(VXLROOT)\contrib\brl\bseg"   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "boxm_tests_EXPORTS"
+# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\brl" /I "$(VXLROOT)\contrib\gel" /I "$(VXLROOT)\contrib\brl\bseg"   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "boxm2_tests_EXPORTS"
 # ADD CPP /nologo /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2 -DCMAKE_INTDIR=\"Release\"
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -64,7 +64,7 @@ LINK32=link.exe
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /IGNORE:4089
 
 # ADD LINK32 /LIBPATH:$(VXLROOT)\lib\$(INTDIR)  /LIBPATH:$(VXLROOT)\lib\ 
-# ADD LINK32 boxm.lib
+# ADD LINK32 boxm2.lib
 # ADD LINK32 vil.lib
 # ADD LINK32 vil1.lib
 # ADD LINK32 tiff.lib
@@ -78,7 +78,7 @@ LINK32=link.exe
 # ADD LINK32 vbl.lib
 # ADD LINK32 vcl.lib
 # ADD LINK32 /STACK:10000000 
-!ELSEIF  "$(CFG)" == "boxm_tests - Win32 Debug"
+!ELSEIF  "$(CFG)" == "boxm2_tests - Win32 Debug"
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
 # PROP BASE Output_Dir "Debug"
@@ -91,7 +91,7 @@ LINK32=link.exe
 # PROP Target_Dir ""
 # ADD BASE CPP   /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /GZ /c
 # ADD CPP /nologo  /D "WIN32"  /D "_DEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /GZ /c
-# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\brl" /I "$(VXLROOT)\contrib\gel" /I "$(VXLROOT)\contrib\brl\bseg"   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "boxm_tests_EXPORTS"
+# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\brl" /I "$(VXLROOT)\contrib\gel" /I "$(VXLROOT)\contrib\brl\bseg"   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "boxm2_tests_EXPORTS"
 # ADD CPP /nologo /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ -DCMAKE_INTDIR=\"Debug\"
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
@@ -106,7 +106,7 @@ LINK32=link.exe
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /IGNORE:4089
 
 # ADD LINK32 /LIBPATH:$(VXLROOT)\lib\$(INTDIR)  /LIBPATH:$(VXLROOT)\lib\ 
-# ADD LINK32 boxm.lib
+# ADD LINK32 boxm2.lib
 # ADD LINK32 vil.lib
 # ADD LINK32 vil1.lib
 # ADD LINK32 tiff.lib
@@ -120,7 +120,7 @@ LINK32=link.exe
 # ADD LINK32 vbl.lib
 # ADD LINK32 vcl.lib
 # ADD LINK32 /STACK:10000000 
-!ELSEIF  "$(CFG)" == "boxm_tests - Win32 MinSizeRel"
+!ELSEIF  "$(CFG)" == "boxm2_tests - Win32 MinSizeRel"
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
 # PROP BASE Output_Dir "MinSizeRel"
@@ -133,7 +133,7 @@ LINK32=link.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
 # ADD CPP /nologo  /D "WIN32"  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\brl" /I "$(VXLROOT)\contrib\gel" /I "$(VXLROOT)\contrib\brl\bseg"   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\brl" /I "$(VXLROOT)\contrib\gel" /I "$(VXLROOT)\contrib\brl\bseg"   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "boxm_tests_EXPORTS"
+# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\brl" /I "$(VXLROOT)\contrib\gel" /I "$(VXLROOT)\contrib\brl\bseg"   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "boxm2_tests_EXPORTS"
 # ADD CPP /nologo /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O1 -DCMAKE_INTDIR=\"MinSizeRel\"
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -146,7 +146,7 @@ LINK32=link.exe
 # ADD LINK32  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /IGNORE:4089
 
 # ADD LINK32 /LIBPATH:$(VXLROOT)\lib\$(INTDIR)  /LIBPATH:$(VXLROOT)\lib\ 
-# ADD LINK32 boxm.lib
+# ADD LINK32 boxm2.lib
 # ADD LINK32 vil.lib
 # ADD LINK32 vil1.lib
 # ADD LINK32 tiff.lib
@@ -160,7 +160,7 @@ LINK32=link.exe
 # ADD LINK32 vbl.lib
 # ADD LINK32 vcl.lib
 # ADD LINK32 /STACK:10000000 
-!ELSEIF  "$(CFG)" == "boxm_tests - Win32 RelWithDebInfo"
+!ELSEIF  "$(CFG)" == "boxm2_tests - Win32 RelWithDebInfo"
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
 # PROP BASE Output_Dir "RelWithDebInfo"
@@ -173,7 +173,7 @@ LINK32=link.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
 # ADD CPP /nologo  /D "WIN32"  /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\brl" /I "$(VXLROOT)\contrib\gel" /I "$(VXLROOT)\contrib\brl\bseg"   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "boxm_tests_EXPORTS"
+# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\brl" /I "$(VXLROOT)\contrib\gel" /I "$(VXLROOT)\contrib\brl\bseg"   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "boxm2_tests_EXPORTS"
 # ADD CPP /nologo /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /Zi /O2 -DCMAKE_INTDIR=\"RelWithDebInfo\"
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -186,7 +186,7 @@ LINK32=link.exe
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /IGNORE:4089
 
 # ADD LINK32 /LIBPATH:$(VXLROOT)\lib\$(INTDIR)  /LIBPATH:$(VXLROOT)\lib\ 
-# ADD LINK32 boxm.lib
+# ADD LINK32 boxm2.lib
 # ADD LINK32 vil.lib
 # ADD LINK32 vil1.lib
 # ADD LINK32 tiff.lib
@@ -204,10 +204,10 @@ LINK32=link.exe
 
 # Begin Target
 
-# Name "boxm_tests - Win32 Release"
-# Name "boxm_tests - Win32 Debug"
-# Name "boxm_tests - Win32 MinSizeRel"
-# Name "boxm_tests - Win32 RelWithDebInfo"
+# Name "boxm2_tests - Win32 Release"
+# Name "boxm2_tests - Win32 Debug"
+# Name "boxm2_tests - Win32 MinSizeRel"
+# Name "boxm2_tests - Win32 RelWithDebInfo"
 
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
@@ -215,31 +215,10 @@ LINK32=link.exe
 SOURCE=.\test_driver.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_binary_io.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\test_block_iter.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\test_utils.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\test_cell_iterator.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\test_region_finder.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\test_load_neighboring_blocks.cxx
+SOURCE=.\test_scene.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_include.cxx
-# End Source File
-# End Group
-# Begin Group "Header Files"
-# PROP Default_Filter "h;txx"
-# Begin Source File
-SOURCE=.\test_utils.h
 # End Source File
 # End Group
 # End Target

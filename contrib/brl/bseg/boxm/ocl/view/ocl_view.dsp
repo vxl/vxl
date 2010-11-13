@@ -118,6 +118,9 @@ SOURCE=.\boxm_update_bit_tableau.cxx
 # Begin Source File
 SOURCE=.\boxm_vid_tableau.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\boxm_change_detection_bit_tableau.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -171,6 +174,12 @@ SOURCE=.\boxm_vid_tableau.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm_vid_tableau_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_change_detection_bit_tableau_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm_change_detection_bit_tableau.h
 # End Source File
 # End Group
 # End Target

@@ -155,10 +155,10 @@ SOURCE=.\cl/rerender.cl
 SOURCE=.\cl/ray_trace_bit_scene.cl
 # End Source File
 # Begin Source File
-SOURCE=.\cl/render_bit_scene.cl
+SOURCE=.\cl/bit/render_bit_scene.cl
 # End Source File
 # Begin Source File
-SOURCE=.\cl/bit_tree_library_functions.cl
+SOURCE=.\cl/bit/bit_tree_library_functions.cl
 # End Source File
 # Begin Source File
 SOURCE=.\cl/ray_trace_ocl_scene.cl

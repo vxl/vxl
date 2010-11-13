@@ -105,6 +105,9 @@ SOURCE=.\icam_ocl_search_manager.cxx
 SOURCE=.\icam_ocl_kernel.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\icam_ocl_minimizer.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/icam_ocl_manager+icam_ocl_search_manager-.cxx
 # End Source File
 # End Group
@@ -133,6 +136,9 @@ SOURCE=.\icam_ocl_mem.h
 # End Source File
 # Begin Source File
 SOURCE=.\icam_ocl_kernel.h
+# End Source File
+# Begin Source File
+SOURCE=.\icam_ocl_minimizer.h
 # End Source File
 # End Group
 # End Target
