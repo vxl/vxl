@@ -95,6 +95,12 @@ LIB32=link.exe -lib
 # Begin Source File
 SOURCE=.\baio_unix.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\baio_windows.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\baio_osx.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
