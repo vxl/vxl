@@ -150,7 +150,9 @@ void vil3d_test_image_type(char const* type_name, // type for image to read and 
       success = vil3d_save(image,
                            voxel_size[0], voxel_size[1], voxel_size[2],
                            fname.c_str());
-    TEST("save image", success, true);
+    if (!fail_save) {
+      TEST("save image", success, true);
+    }
   }
 
   // STEP 2) Read the image that was just saved to file
