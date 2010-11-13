@@ -7,20 +7,27 @@ IF(EXPAT_FOUND)
   INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
   INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/b3p/expatpp )
 
-  SET(boxm2_sources
-      boxm2_scene.cxx                 boxm2_scene.h
-      boxm2_block.cxx                 boxm2_block.h
-      boxm2_scene_parser.cxx          boxm2_scene_parser.h
-      boxm2_storage_mgr.cxx           boxm2_storage_mgr.h
-      boxm2_disk_io_mgr.cxx           boxm2_disk_io_mgr.h
-  )
+  INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindOpenCL.cmake )
+  IF(OPENCL_FOUND)
+    ADD_DEFINITIONS(-DHAS_OPENCL=1)
+    INCLUDE_DIRECTORIES( ${OPENCL_INCLUDE_PATH} )
+    INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
 
-  #AUX_SOURCE_DIRECTORY(Templates boxm_sources)
+    SET(boxm2_sources
+        boxm2_scene.cxx                 boxm2_scene.h
+        boxm2_block.cxx                 boxm2_block.h
+        boxm2_scene_parser.cxx          boxm2_scene_parser.h
+        boxm2_storage_mgr.cxx           boxm2_storage_mgr.h
+        boxm2_disk_io_mgr.cxx           boxm2_disk_io_mgr.h
+       )
 
-  ADD_LIBRARY(boxm2  ${boxm2_sources})
-  TARGET_LINK_LIBRARIES(boxm2 expatpp vpgl vgl vgl_xio vbl vsl vcl) #boct bsta brdb vgl_io vgl_xio vpgl vpgl_algo vsol expatpp vgl_algo vnl_algo vnl vgl vul vil vbl_io vbl vsl vpl vcl)
+    #AUX_SOURCE_DIRECTORY(Templates boxm_sources)
 
+    ADD_LIBRARY(boxm2  ${boxm2_sources})
+    TARGET_LINK_LIBRARIES(boxm2 expatpp vpgl vgl vgl_xio vbl vsl vcl) #boct bsta brdb vgl_io vgl_xio vpgl vpgl_algo vsol expatpp vgl_algo vnl_algo vnl vgl vul vil vbl_io vbl vsl vpl vcl)
 
-  #tests
-  SUBDIRS(tests)
+    #tests
+    SUBDIRS(tests)
+
+  ENDIF(OPENCL_FOUND)
 ENDIF(EXPAT_FOUND)
