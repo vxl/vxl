@@ -2,27 +2,33 @@
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR})
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
 
-IF(WIN32)
-  SET(baio_sources
-      baio_windows.cxx       baio.h
-     )
-  ADD_LIBRARY(baio ${baio_sources})
-  TARGET_LINK_LIBRARIES(baio)
-  #tests
-  SUBDIRS(tests)
-ELSEIF(APPLE)
-  SET(baio_sources
-    baio_osx.cxx       baio.h
+SET(baio_sources
+    baio.h
    )
-  ADD_LIBRARY(baio ${baio_sources})
-  TARGET_LINK_LIBRARIES(baio)
-ELSEIF(UNIX)
-  SET(baio_sources
-      baio_unix.cxx       baio.h
+
+IF(WIN32)
+  SET(baio_sources ${baio_sources}
+      baio_windows.cxx
      )
-  ADD_LIBRARY(baio ${baio_sources})
-  TARGET_LINK_LIBRARIES(baio rt)
-  #tests
-  SUBDIRS(tests)
+ELSEIF(APPLE)
+  SET(baio_sources ${baio_sources}
+      baio_osx.cxx
+     )
+ELSEIF(UNIX)
+  SET(baio_sources ${baio_sources}
+      baio_unix.cxx
+     )
 ENDIF(WIN32)
 
+ADD_LIBRARY(baio ${baio_sources})
+
+IF(WIN32)
+  TARGET_LINK_LIBRARIES(baio)
+ELSEIF(APPLE)
+  TARGET_LINK_LIBRARIES(baio)
+ELSEIF(UNIX)
+  TARGET_LINK_LIBRARIES(baio rt)
+ENDIF(WIN32)
+
+#tests
+SUBDIRS(tests)
