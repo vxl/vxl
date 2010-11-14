@@ -1,12 +1,13 @@
 #include <testlib/testlib_test.h>
 #include <testlib/testlib_root_dir.h>
 #include <bocl/bocl_global_memory_bandwidth_manager.h>
+
 bool test_atom_cmpxchg(unsigned len, float & bandwidth)
 {
   vcl_string root_dir = testlib_root_dir();
   bocl_global_memory_bandwidth_manager * mgr=bocl_global_memory_bandwidth_manager::instance();
   if (!mgr->image_support())
-     return false;
+    return false;
   mgr->setup_array(len);
   mgr->setup_result_array();
   if (!mgr->load_kernel_source(root_dir + "/contrib/brl/bbas/bocl/tests/test_global_io_bandwidth.cl"))
@@ -23,26 +24,24 @@ bool test_atom_cmpxchg(unsigned len, float & bandwidth)
     return false;
   }
   // cl_int* result_flag = mgr->result_flag(); // unused
-  bandwidth=(float)4/* image reades float4*/*(len*4)/mgr->time_taken()/(1024*1024);
+  bandwidth=(float)4/* image reads float4 */ *(len*4)/mgr->time_taken()/(1024*1024);
 
-
-  float sum=0.0;
   cl_int * result_array=(cl_int*)mgr->result_array();
   for (unsigned i=0;i<len;++i)
-   vcl_cout<<result_array[i]<<" ";
-
+    vcl_cout<<result_array[i]<<' ';
 
   mgr->clean_array();
   mgr->clean_result_array();
 
   return false;
 }
+
 bool test_locking_mechanism(unsigned len, float & bandwidth)
 {
   vcl_string root_dir = testlib_root_dir();
   bocl_global_memory_bandwidth_manager * mgr=bocl_global_memory_bandwidth_manager::instance();
   if (!mgr->image_support())
-     return false;
+    return false;
   mgr->setup_array(len);
   mgr->setup_result_array();
   if (!mgr->load_kernel_source(root_dir + "/contrib/brl/bbas/bocl/tests/test_global_io_bandwidth.cl"))
@@ -59,26 +58,24 @@ bool test_locking_mechanism(unsigned len, float & bandwidth)
     return false;
   }
   // cl_int* result_flag = mgr->result_flag(); // unused
-  bandwidth=(float)4/* image reades float4*/*(len*4)/mgr->time_taken()/(1024*1024);
+  bandwidth=(float)4/* image reads float4 */ *(len*4)/mgr->time_taken()/(1024*1024);
 
-
-  float sum=0.0;
   cl_float * result_array=mgr->result_array();
   for (unsigned i=0;i<128;++i)
-   vcl_cout<<result_array[i]<<" ";
-
+    vcl_cout<<result_array[i]<<' ';
 
   mgr->clean_array();
   mgr->clean_result_array();
   return false;
 }
+
 bool test_single_thread_read_bandwidth_image(unsigned len, float & bandwidth)
 {
   vcl_string root_dir = testlib_root_dir();
   bocl_global_memory_bandwidth_manager * mgr=bocl_global_memory_bandwidth_manager::instance();
-   if (!mgr->image_support())
-     return false;
- mgr->setup_array(len);
+  if (!mgr->image_support())
+    return false;
+  mgr->setup_array(len);
   mgr->setup_result_array();
   if (!mgr->load_kernel_source(root_dir + "/contrib/brl/bbas/bocl/tests/test_global_io_bandwidth.cl"))
     return false;
@@ -94,13 +91,12 @@ bool test_single_thread_read_bandwidth_image(unsigned len, float & bandwidth)
     return false;
   }
   // cl_int* result_flag = mgr->result_flag(); // unused
-  bandwidth=(float)4/* image reades float4*/*(len*4)/mgr->time_taken()/(1024*1024);
+  bandwidth=(float)4/* image reads float4 */ *(len*4)/mgr->time_taken()/(1024*1024);
 
-
-  float sum=0.0;
+  float sum=0.0f;
   cl_float * result_array=mgr->result_array();
   for (unsigned i=0;i<len;++i)
-  sum+=result_array[i];
+    sum+=result_array[i];
 
   mgr->clean_array();
   mgr->clean_result_array();
@@ -117,9 +113,9 @@ bool test_workgroup_coalesced_read_bandwidth_image(unsigned len, float & bandwid
 {
   vcl_string root_dir = testlib_root_dir();
   bocl_global_memory_bandwidth_manager * mgr=bocl_global_memory_bandwidth_manager::instance();
-   if (!mgr->image_support())
-     return false;
- mgr->setup_array(len);
+  if (!mgr->image_support())
+    return false;
+  mgr->setup_array(len);
   mgr->setup_result_array();
   if (!mgr->load_kernel_source(root_dir + "/contrib/brl/bbas/bocl/tests/test_global_io_bandwidth.cl"))
     return false;
@@ -135,13 +131,12 @@ bool test_workgroup_coalesced_read_bandwidth_image(unsigned len, float & bandwid
     return false;
   }
   // cl_int* result_flag = mgr->result_flag(); // unused
-  bandwidth=(float)4/*reads in float4 */*(len*4)/mgr->time_taken()/(1024*1024);
-
+  bandwidth=(float)4/*reads in float4*/ *(len*4)/mgr->time_taken()/(1024*1024);
 
   float sum=0.0;
   cl_float * result_array=mgr->result_array();
   for (unsigned i=0;i<len;++i)
-  sum+=result_array[i];
+    sum+=result_array[i];
 
   mgr->clean_array();
   mgr->clean_result_array();
@@ -175,7 +170,6 @@ bool test_single_thread_read_bandwidth(unsigned len, float & bandwidth)
   }
   // cl_int* result_flag = mgr->result_flag(); // unused
   bandwidth=(float)4*(len*4)/mgr->time_taken()/(1024*1024);
-
 
   float sum=0.0;
   cl_float * result_array=mgr->result_array();
@@ -214,7 +208,6 @@ bool test_workgroup_uncoalesced_read_bandwidth(unsigned len, float & bandwidth)
   }
   // cl_int* result_flag = mgr->result_flag(); // unused
   bandwidth=(float)4*(len*4)/mgr->time_taken()/(1024*1024);
-
 
   float sum=0.0;
   cl_float * result_array=mgr->result_array();
@@ -255,7 +248,6 @@ bool test_workgroup_coalesced_read_bandwidth(unsigned len, float & bandwidth)
   // cl_int* result_flag = mgr->result_flag(); // unused
   bandwidth=(float)4*(len*4)/mgr->time_taken()/(1024*1024);
 
-
   float sum=0.0;
   cl_float * result_array=mgr->result_array();
   for (unsigned i=0;i<len;++i)
@@ -293,7 +285,6 @@ bool test_single_thread_read_bandwidth_local_meory(unsigned len, float & bandwid
   }
   // cl_int* result_flag = mgr->result_flag(); // unused
   bandwidth=(float)4*(len*4)/mgr->time_taken()/(1024*1024);
-
 
   float sum=0.0;
   cl_float * result_array=mgr->result_array();
