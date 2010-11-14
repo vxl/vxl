@@ -115,7 +115,7 @@ bool icam_ocl_minimizer::run_rotation_kernel()
   if (search_mgr_->run_rot_parallel_kernel()!=SDK_SUCCESS)
     return false;
   if(verbose_)
-    vcl_cout << "OpenCL search time " << t.real()/1000.0 << " seconds\n";
+    vcl_cout << "OpenCL search time " << t.real()/1000.0 << " seconds\n" << vcl_flush;
   return true;
 }
 

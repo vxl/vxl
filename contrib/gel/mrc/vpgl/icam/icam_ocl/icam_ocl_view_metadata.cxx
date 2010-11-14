@@ -1,14 +1,15 @@
-#include "icam_view_metadata.h"
+#include "icam_ocl_view_metadata.h"
 
 #include <vgl/vgl_box_3d.h>
 #include <vil/vil_save.h>
 
-icam_view_metadata::icam_view_metadata(vil_image_view<float> const& exp_img,
+icam_ocl_view_metadata::icam_ocl_view_metadata(vil_image_view<float> const& exp_img,
                                        vil_image_view<double> const& depth_img,
                                        icam_depth_transform const& dt)
 { 
   
   unsigned nbins = 16;
+  unsigned wgsize = 16;
   unsigned min_pyramid_image_size = 16;
   unsigned box_reduction_k = 2;
   double local_min_thresh = 0.005;
@@ -17,15 +18,17 @@ icam_view_metadata::icam_view_metadata(vil_image_view<float> const& exp_img,
   bool verbose = true;
   vcl_string base_path = "";
 
-  minimizer_=new icam_minimizer(exp_img, dt, min_pyramid_image_size, 
-                                box_reduction_k, axis_search_cone_multiplier, 
-                                polar_range_multiplier, local_min_thresh, 
-                                base_path, verbose); 
+  minimizer_=new icam_ocl_minimizer(exp_img, dt, min_pyramid_image_size, 
+                                    box_reduction_k, axis_search_cone_multiplier, 
+                                    polar_range_multiplier, local_min_thresh, 
+                                    base_path, verbose); 
   minimizer_->set_nbins(nbins);
+  static_cast<icam_ocl_minimizer*>(minimizer_)->set_workgroup_size(wgsize);
+  static_cast<icam_ocl_minimizer*>(minimizer_)->set_rot_kernel_path("c:/vxl/vxl/contrib/gel/mrc/vpgl/icam/icam_ocl/trans_parallel_transf_search.cl");
   final_level_ = minimizer_->n_levels() - 3;
 }
 
-void icam_view_metadata::register_image(vil_image_view<float> const& source_img)
+void icam_ocl_view_metadata::register_image(vil_image_view<float> const& source_img)
 {
   // set the source to the minimizer
   minimizer_->set_source_img(source_img);
@@ -48,9 +51,8 @@ void icam_view_metadata::register_image(vil_image_view<float> const& source_img)
   vcl_cout << " registration cost " << cost_ << '\n'<< '\n';
 }
 
-void icam_view_metadata::refine_camera()
+void icam_ocl_view_metadata::refine_camera()
 {
-
 #if 0
   vil_image_view<float> image=this->minimizer_->dest(0);
   vil_save(image,"F:/tests/mundy-downtown/view_sphere/test/myimg.tiff");
@@ -74,7 +76,6 @@ void icam_view_metadata::refine_camera()
   vcl_cout << " min rotation " << min_rot_.as_rodrigues() << '\n';
   vcl_cout << " registration cost " << cost_ << '\n'<< '\n';
 
-
 #if 0
   vil_image_view<float> img = minimizer_->view(min_rot,min_trans,0);
   vcl_stringstream s;
@@ -84,29 +85,31 @@ void icam_view_metadata::refine_camera()
 #endif
 }
 
-void icam_view_metadata::b_read(vsl_b_istream& is)
+
+void icam_ocl_view_metadata::b_read(vsl_b_istream& is)
 {
-  short version;
-  vsl_b_read(is, version);
+  icam_view_metadata::b_read(is);
 }
 
-void icam_view_metadata::b_write(vsl_b_ostream& os) const
+void icam_ocl_view_metadata::b_write(vsl_b_ostream& os) const
 {
-  vsl_b_write(os, version());
+  icam_view_metadata::b_write(os);
 }
 
-vcl_ostream& operator<<(vcl_ostream& os, icam_view_metadata const& p)
+vcl_ostream& operator<<(vcl_ostream& os, icam_ocl_view_metadata const& p)
 {
   p.print(os);
   return os;
 }
 
-void vsl_b_read(vsl_b_istream& is, icam_view_metadata& p)
+void vsl_b_read(vsl_b_istream& is, icam_ocl_view_metadata& p)
 {
   p.b_read(is);
 }
 
-void vsl_b_write(vsl_b_ostream& os, icam_view_metadata const& p)
+void vsl_b_write(vsl_b_ostream& os, icam_ocl_view_metadata const& p)
 {
   p.b_write(os);
 }
+
+

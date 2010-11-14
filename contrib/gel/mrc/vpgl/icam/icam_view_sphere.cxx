@@ -86,12 +86,15 @@ void icam_view_sphere::register_image(vil_image_view<float> const& dest_img)
   // try to find the best camera at each view point and at the end we will
   // have errors to compare on the view sphere
   vsph_view_sphere<vsph_view_point<icam_view_metadata> >::iterator it=view_sphere_->begin();
+  unsigned index = 0;
   while (it != view_sphere_->end()) {
     vsph_view_point<icam_view_metadata> vp = it->second;
     icam_view_metadata* data=vp.metadata();
-    if (data)
+    if (data){
+      vcl_cout << "Evaluating viewpoint " << index << '\n';
       data->register_image(dest_img);
-    it++;
+    }
+    it++; index++;
   }
 
   vcl_vector<vsph_view_point<icam_view_metadata> > local_min;
@@ -103,14 +106,14 @@ void icam_view_sphere::register_image(vil_image_view<float> const& dest_img)
   vcl_cout << *cam;
   local_min.push_back(*vp);
 #endif
-  double cam_error=1e10;
+  double cam_cost=1e10;
   unsigned idx=-1;
   for (unsigned i=0; i<local_min.size(); i++) {
     vcl_cout << "Local MINIMA " << i << "--" << local_min[i].view_point() << vcl_endl;
     icam_view_metadata* md = local_min[i].metadata();
-    md->compute_camera();
-    if (md->error() < cam_error) {
-      cam_error = md->error();
+    md->refine_camera();
+    if (md->cost() < cam_cost) {
+      cam_cost = md->cost();
       idx = i;
     }
   }
@@ -127,7 +130,7 @@ void icam_view_sphere::find_local_minima(vcl_vector<vsph_view_point<icam_view_me
       it++;
       continue;
     }
-    double error=vp.metadata()->error();
+    double cost=vp.metadata()->cost();
 
     // find the closest neighbors' errors
     vcl_vector<vsph_view_point<icam_view_metadata> > neighbors;
@@ -139,11 +142,11 @@ void icam_view_sphere::find_local_minima(vcl_vector<vsph_view_point<icam_view_me
       vsph_view_point<icam_view_metadata> vp = neighbors[i];
       icam_view_metadata* data = vp.metadata();
       if (data) {
-        if (data->error() < error) {
+        if (data->cost() < cost) {
           smallest=false;
         }
         else {
-          double diff = data->error()-error;
+          double diff = data->cost()-cost;
           if (smallest_diff > diff)
             smallest_diff = diff;
         }

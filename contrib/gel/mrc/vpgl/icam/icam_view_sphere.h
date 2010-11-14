@@ -14,6 +14,7 @@ class icam_view_sphere : public vbl_ref_count
 {
  public:
   //: Constructor, creates a view sphere around the box, centered at box's center with radius
+  icam_view_sphere(): view_sphere_(0),ICAM_LOCAL_MIN_THRESH_(0.0){}
   icam_view_sphere(vgl_box_3d<double> bb, double radius);
 
   //: Destructor
@@ -28,11 +29,11 @@ class icam_view_sphere : public vbl_ref_count
   void set_cameras(vcl_map<unsigned, vpgl_camera_double_sptr> const &cameras);
 
   //: sets the images and depth images, associated with the view point id
-  void set_images(vcl_map<unsigned, vil_image_view<float>*>& images,
-                  vcl_map<unsigned,vil_image_view<double>*>& depth_images);
+  virtual void set_images(vcl_map<unsigned, vil_image_view<float>*>& images,
+                          vcl_map<unsigned,vil_image_view<double>*>& depth_images);
 
   //: computes the camera registration errors for a given image
-  void register_image(vil_image_view<float> const& source_img);
+  virtual void register_image(vil_image_view<float> const& source_img);
 
   //: computes the camera registration errors local minima for a given image
   void find_local_minima(vcl_vector<vsph_view_point<icam_view_metadata> >& local_minima);
@@ -43,7 +44,7 @@ class icam_view_sphere : public vbl_ref_count
 
   void b_write(vsl_b_ostream &os) const ;
 
- private:
+ protected:
   vsph_view_sphere<vsph_view_point<icam_view_metadata> >* view_sphere_;
 
   const double ICAM_LOCAL_MIN_THRESH_;

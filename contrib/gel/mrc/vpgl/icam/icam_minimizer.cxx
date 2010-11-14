@@ -226,10 +226,11 @@ exhaustive_rotation_search(vgl_vector_3d<double> const& trans,
       vnl_vector_fixed<double, 3> rod = rot.as_rodrigues();
       //double c = cost.error(rod, trans,min_allowed_overlap);
       //double c = cost.entropy(rod, trans,min_allowed_overlap);
-      double c = cost.mutual_info(rod, trans,min_allowed_overlap);
+      //double c = cost.mutual_info(rod, trans,min_allowed_overlap);
+      double c = cost.entropy_diff(rod, trans,min_allowed_overlap);
       if (c==vnl_numeric_traits<double>::maxval)
         continue;
-      c = -c;
+      //c = -c;
       if (c<min_cost) {
         min_cost = c;
         min_rod = rod;
@@ -332,10 +333,11 @@ initialized_rot_search(vgl_vector_3d<double> const& trans,
       vnl_vector_fixed<double, 3> rod = comp_rot.as_rodrigues();
       //double c = cost.error(rod, trans,min_allowed_overlap);
       //double c = cost.entropy(rod, trans,min_allowed_overlap);
-      double c = cost.mutual_info(rod, trans,min_allowed_overlap);
+      //double c = cost.mutual_info(rod, trans,min_allowed_overlap);
+      double c = cost.entropy_diff(rod, trans,min_allowed_overlap);
       if (c==vnl_numeric_traits<double>::maxval)
         continue;
-      c = -c;
+      //c = -c;
       if (c<min_cost) {
         min_cost = c;
         min_rod = rod;

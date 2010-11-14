@@ -15,6 +15,8 @@ IF(OPENCL_FOUND)
       icam_ocl_mem.h            icam_ocl_mem.cxx
       icam_ocl_kernel.h         icam_ocl_kernel.cxx
       icam_ocl_minimizer.h      icam_ocl_minimizer.cxx
+      icam_ocl_view_metadata.h  icam_ocl_view_metadata.cxx
+      icam_ocl_view_sphere.h	icam_ocl_view_sphere.cxx	
   )
   AUX_SOURCE_DIRECTORY(Templates icam_ocl_sources)
   ADD_LIBRARY(icam_ocl ${icam_ocl_sources} )

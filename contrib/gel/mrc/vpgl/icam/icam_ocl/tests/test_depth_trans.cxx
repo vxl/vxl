@@ -225,7 +225,7 @@ bool test_icam_ocl_minimizer()
   vnl_matrix_fixed<double, 3, 3> Mr(rv);
   vgl_rotation_3d<double> Rr(Mr);
   vgl_vector_3d<double> tr(0.3207432455793182, 0.04231364883145655, -0.019929923492081336);
-  vgl_vector_3d<double> tid(0.0, 0.0, 0.0), tbox(0.5, 0.0, 0.0);
+  vgl_vector_3d<double> tid(0.0, 0.0, 0.0), tbox(-0.5, -0.5, -0.5);
   vnl_matrix_fixed<double, 3, 3> K(0.0);
   K[0][0]=1871.2;   K[1][1]=1871.2; K[0][2] = 640.0; K[1][2]=360.0; K[2][2]=1.0;
   //depth transform

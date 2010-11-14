@@ -25,8 +25,8 @@
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/algo/vpgl_camera_bounds.h>
-#include <icam/icam_minimizer.h>
-#include <icam/icam_view_sphere.h>
+#include <icam_ocl/icam_ocl_minimizer.h>
+#include <icam_ocl/icam_ocl_view_sphere.h>
 
 #define elevation 0.2
 #define view_angle 0.5
@@ -76,10 +76,10 @@ bool load_image(vcl_string const& path, vil_image_view<T>*& image)
     return load_image(base_img, image);
 }
 
-void create_view_sphere(icam_view_sphere_sptr& view_sphere)
+void create_view_sphere(icam_ocl_view_sphere_sptr& view_sphere)
 {
   vgl_box_3d<double> world_bb(orig_x, orig_y, orig_z, orig_x+dim_x, orig_y+dim_y, orig_z+dim_z);
-  view_sphere =new icam_view_sphere(world_bb, radius);
+  view_sphere =new icam_ocl_view_sphere(world_bb, radius);
 
   // generate the view points-cameras
   view_sphere->create_view_points(elevation, view_angle, image_ni, image_nj);
@@ -139,7 +139,7 @@ static void test_minimizer()
     }
   }
 
-  icam_view_sphere_sptr view_sphere;
+  icam_ocl_view_sphere_sptr view_sphere;
   create_view_sphere(view_sphere);
   // set cameras
   vcl_map<unsigned, vpgl_camera_double_sptr> cam_map;

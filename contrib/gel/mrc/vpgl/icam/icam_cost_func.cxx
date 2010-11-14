@@ -273,7 +273,7 @@ double icam_cost_func::entropy_diff(vnl_vector_fixed<double, 3> rodrigues,
 {
   vbl_array_2d<double> jp = this->joint_probability(rodrigues, trans);
   if (this->frac_samples()<=min_allowed_overlap)
-    return 0.0;
+    return vnl_numeric_traits<double>::maxval;
   else
     return this->entropy_diff(jp);
 }
