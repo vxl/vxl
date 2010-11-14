@@ -21,7 +21,7 @@ IF(EXPAT_FOUND)
         boxm2_disk_io_mgr.cxx           boxm2_disk_io_mgr.h
        )
 
-    #AUX_SOURCE_DIRECTORY(Templates boxm_sources)
+    AUX_SOURCE_DIRECTORY(Templates boxm2_sources)
 
     ADD_LIBRARY(boxm2  ${boxm2_sources})
     TARGET_LINK_LIBRARIES(boxm2 expatpp vpgl vgl vgl_xio vbl vsl vcl) #boct bsta brdb vgl_io vgl_xio vpgl vpgl_algo vsol expatpp vgl_algo vnl_algo vnl vgl vul vil vbl_io vbl vsl vpl vcl)
