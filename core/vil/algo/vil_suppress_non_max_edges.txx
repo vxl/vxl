@@ -95,10 +95,14 @@ namespace {
   double interpolate_parabola(double y_1, double y_0, double y_2,
                               double& y_peak)
   {
-    double diff1 = y_2 - y_1;      // first derivative
+    y_peak = y_0;                       // initial peak
+    double diff1 = y_2 - y_1;           // first derivative
     double diff2 = 2 * y_0 - y_1 - y_2; // second derivative
-    y_peak = y_0 + diff1 * diff1 / (8 * diff2);        // interpolate y as max/min
-    return diff1 / (2 * diff2);   // interpolate x offset
+    // handle special case of zero offset
+    if (diff2 == 0.0)
+      return 0.0;
+    y_peak += diff1 * diff1 / (8 * diff2);  // interpolate y as max/min
+    return diff1 / (2 * diff2);             // interpolate x offset
   }
 }
 
