@@ -203,7 +203,7 @@ bool boxm_change_detection_bit_tableau::change_detection()
     vcl_cerr << "Failed to load image " << exp_img_files_[curr_frame_] << '\n';
     return -1;
   }
-  curr_frame_++ ;
+  //curr_frame_++ ;
   cl_int status = clEnqueueAcquireGLObjects(updt_mgr->command_queue_, 1,
                                             &updt_mgr->image_gl_buf_ , 0, 0, 0);
   if (!updt_mgr->check_val(status,CL_SUCCESS,"tableau::clEnqueueAcquiredGLObjects failed (render_frame)"+error_to_string(status)))
@@ -263,11 +263,19 @@ bool boxm_change_detection_bit_tableau::handle(vgui_event const &e)
     return true;
   }
   //handle update command - keyboard press U
-  else if (e.type == vgui_KEY_PRESS && e.key == vgui_key('c')) {
-    vcl_cout<<"Continuing update"<<vcl_endl;
-    do_update_ = true;
+  else if (e.type == vgui_KEY_PRESS && e.key == vgui_key('v')) {
+    vcl_cout<<"Going Backward"<<vcl_endl;
+    //do_update_ = true;
+    curr_frame_--;
     this->post_redraw();
   }
+  else if (e.type == vgui_KEY_PRESS && e.key == vgui_key('c')) {
+    vcl_cout<<"Going Forward"<<vcl_endl;
+    //do_update_ = true;
+    curr_frame_++;
+    this->post_redraw();
+  }
+
   else if (e.type == vgui_KEY_PRESS && e.key == vgui_key('t')) {
     vcl_cout<<"Continuing update"<<vcl_endl;
     toggle_old_ = !toggle_old_;
