@@ -35,6 +35,7 @@ change_detecttion_scene(__constant  RenderSceneInfo    * linfo,
   // cases #of threads will be more than the pixels.
   if (i>=(*imgdims).z || j>=(*imgdims).w) {
     in_image[imIndex[llid]] = (float4)0.0f;
+    gl_image[imIndex[llid]] = 0;
     return;
   }
 
