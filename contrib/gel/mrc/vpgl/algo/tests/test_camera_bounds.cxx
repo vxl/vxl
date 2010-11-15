@@ -194,6 +194,33 @@ static void test_camera_bounds()
   double rod_er  = (Rrod-rod_act).magnitude();
   double t_er  = (trel_act-trel).length();
   TEST_NEAR("relative camera transform", rod_er + t_er, 0.0, 0.00001);
-}
 
+  // c 3
+  double r3 [] ={   0.0,  1.0,  0.0, 
+                    0.671559,  0.0, -0.740951, 
+                   -0.740951,  0.0, -0.671559 };
+  vnl_matrix_fixed<double, 3, 3> M3(r3);
+  vgl_rotation_3d<double> R3(M3);
+  vgl_vector_3d<double> t3(0.25, 0.531426, 4.90929);
+  vpgl_perspective_camera<double> c3(K01, R3, t3);
+  vgl_rotation_3d<double> Rrel_3;
+  vgl_vector_3d<double> trel_3;
+  vpgl_camera_bounds::relative_transf(c3, c1, Rrel_3, trel_3);
+  vcl_cout << "Relative trans 3-145 " << trel_3 << '\n';
+  vcl_cout << "Relative rot_rod 3-145 " << Rrel_3.as_rodrigues() << '\n';
+
+
+double r239 [] ={0.134418, 0.990925,0.0,
+                 0.604004, -0.0819325, -0.792759,
+                 -0.785564, 0.106561, -0.609535};
+  vnl_matrix_fixed<double, 3, 3> M239(r239);
+  vgl_rotation_3d<double> R239(M239);
+  vgl_vector_3d<double> t239(0.294777, 0.508022, 4.89551);
+  vpgl_perspective_camera<double> c239(K01, R239, t239);
+  vgl_rotation_3d<double> Rrel_239;
+  vgl_vector_3d<double> trel_239;
+  vpgl_camera_bounds::relative_transf(c239, c1, Rrel_239, trel_239);
+  vcl_cout << "Relative trans 239-145 " << trel_239 << '\n';
+  vcl_cout << "Relative rot_rod 239-145 " << Rrel_239.as_rodrigues() << '\n';
+}
 TESTMAIN(test_camera_bounds);
