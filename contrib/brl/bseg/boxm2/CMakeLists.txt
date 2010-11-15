@@ -19,6 +19,7 @@ IF(EXPAT_FOUND)
         boxm2_scene_parser.cxx          boxm2_scene_parser.h
         boxm2_storage_mgr.cxx           boxm2_storage_mgr.h
         boxm2_disk_io_mgr.cxx           boxm2_disk_io_mgr.h
+        boxm2_block_id.h                boxm2_block_id.cxx
        )
 
     AUX_SOURCE_DIRECTORY(Templates boxm2_sources)

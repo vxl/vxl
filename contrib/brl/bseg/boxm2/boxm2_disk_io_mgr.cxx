@@ -1,4 +1,5 @@
 #include "boxm2_disk_io_mgr.h"
+#include "boxm2_block_id.h"
 
 // creates a BAIO object that loads/saves block data from disk
 void boxm2_disk_io_mgr::load_block(vcl_string dir, vgl_point_3d<int> block_id)
@@ -25,9 +26,9 @@ void boxm2_disk_io_mgr::load_block(vcl_string dir, vgl_point_3d<int> block_id)
 void boxm2_disk_io_mgr::save_block(vcl_string dir, boxm2_block* block)
 {
     //0. open up file for writing
-    vcl_ostringstream ns;  // Declare an output string stream.
-    ns << dir << "block." << block->block_id() << ".bin";
-    vcl_string filename = ns.str();
+    //vcl_ostringstream ns;  // Declare an output string stream.
+    //ns << dir << "block." << block->block_id() << ".bin";
+    //vcl_string filename = ns.str();
 
     //1. write number of blocks in each dimension as integers
 
