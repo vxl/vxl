@@ -5,7 +5,7 @@ IF(OPENCL_FOUND)
   ADD_DEFINITIONS(-DHAS_OPENCL=1)
   INCLUDE_DIRECTORIES( ${OPENCL_INCLUDE_PATH} )
   INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc/vpgl/icam )
- 
+
   SET(icam_ocl_sources
       icam_ocl_cl.h
       icam_ocl_cl_gl.h

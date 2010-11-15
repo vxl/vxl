@@ -15,7 +15,7 @@ class icam_ocl_view_sphere : public icam_view_sphere
  public:
   //: Constructor, creates a view sphere around the box, centered at box's center with radius
   icam_ocl_view_sphere(vgl_box_3d<double> bb, double radius)
-	  : icam_view_sphere(bb, radius){}
+  : icam_view_sphere(bb, radius){}
 
   //: Destructor
   ~icam_ocl_view_sphere(){}
