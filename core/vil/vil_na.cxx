@@ -44,7 +44,7 @@ bool vil_na_isna(double x)
   return ((*reinterpret_cast<vxl_uint_64*>(&x))&0xfff7ffffffffffffLL)
     == 0x7ff00000000007a2LL;
 #else
-  return ((reinterpret_cast<vxl_int_32*>(&x)[hw]) & 0xffffffff) == 0x7ff00000 &&
+  return ((reinterpret_cast<vxl_int_32*>(&x)[hw]) & 0xfff7ffff) == 0x7ff00000 &&
          reinterpret_cast<vxl_int_32*>(&x)[lw] == 0x000007a2;
 #endif
 }
