@@ -148,7 +148,7 @@ bool boxm_change_detection_bit_tableau::init_ocl()
 
   //Finally create input image and persp cam buffers, set args and
   updt_mgr->setup_online_processing();
-  curr_frame_=0;
+  curr_frame_=68;
 
   return true;
 }
