@@ -18,7 +18,7 @@
 #include <vil/vil_save.h>
 //: Constructor
 boxm_change_detection_bit_tableau::boxm_change_detection_bit_tableau()
-: pbuffer_(0), ni_(640), nj_(480), curr_frame_(0), do_update_(true)
+: pbuffer_(0), ni_(640), nj_(480), curr_frame_(68), do_update_(true)
 {
 }
 
@@ -49,7 +49,7 @@ bool boxm_change_detection_bit_tableau::init(boxm_ocl_bit_scene * scene,
 
   ////initialize OCL stuff
   do_init_ocl_ = true;
-  toggle_old_  = false;
+  toggle_old_  = true;
   return true;
 }
 
