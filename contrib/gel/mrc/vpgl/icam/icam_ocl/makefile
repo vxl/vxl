@@ -11,6 +11,8 @@ SOURCES += icam_ocl_search_manager.cxx
 MANPAGE_SOURCES += icam_ocl_manager.txx
 SOURCES += icam_ocl_kernel.cxx
 SOURCES += icam_ocl_minimizer.cxx
+SOURCES += icam_ocl_view_sphere.cxx
+SOURCES += icam_ocl_view_metadata.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

@@ -5,6 +5,7 @@ include ${VXLROOT}/core/testlib/config.mk
 TESTMAIN := test_driver.cxx
 
 TESTS += test_depth_trans.cxx
+TESTS += test_minimizer.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
