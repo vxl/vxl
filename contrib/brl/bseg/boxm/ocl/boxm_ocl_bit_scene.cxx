@@ -849,18 +849,21 @@ vcl_ostream& operator <<(vcl_ostream &s, boxm_ocl_bit_scene& scene)
   vbl_array_2d<uchar16> tree_buffers = scene.tree_buffers();
   vbl_array_1d<ushort2> mem_ptrs = scene.mem_ptrs();
   vbl_array_1d<unsigned short> numPer = scene.blocks_in_buffers();
-  s << "free space:"<<vcl_endl;
+  //s << "free space (abridged):"<<vcl_endl;
   int totalFreeCells = 0;
   for (unsigned int i=0; i<mem_ptrs.size(); ++i) {
     int start=mem_ptrs[i][0];
     int end = mem_ptrs[i][1];
     int freeSpace = (start >= end)? start-end : data_buffers.cols() - (end-start);
-    s <<"     buff["<<i<<"]="<<freeSpace<<" free cells, "
-      <<"ptrs @ ("<<mem_ptrs[i][0]<<", "<<mem_ptrs[i][1]<<")  "
-      <<"blks in buff: "<<numPer[i]<<vcl_endl;
+    //s <<"     buff["<<i<<"]="<<freeSpace<<" free cells, "
+      //<<"ptrs @ ("<<mem_ptrs[i][0]<<", "<<mem_ptrs[i][1]<<")  "
+      //<<"blks in buff: "<<numPer[i]<<vcl_endl;
     totalFreeCells+=freeSpace;
   }
+  long freeSpace = (5*sizeof(float)+8*sizeof(char)+4*sizeof(short))*totalFreeCells;
   s << "total free cells: " << totalFreeCells
+    << " (size: "<< freeSpace/1024.0f/1024.0f <<"MB )\n"
+    << " total number occupied cells: "<<num*data_len - totalFreeCells
     <<"\n--------------------------------------------" << vcl_endl;
 
   return s;
