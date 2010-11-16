@@ -344,7 +344,8 @@ cast_ray(
   float fgbelief=1.0/(1.0+expected_int);
   uchar4 out;
   out.x=convert_uchar(fgbelief*255.0);
-  out.y=convert_uchar(intensity*255.0);
+  float alpha=(1/(1+(3*fgbelief)));
+  out.y=convert_uchar(intensity*alpha*255.0);
   out.z=0;
   out.w=convert_uchar(255);
   in_image[imIndex[llid]].w=fgbelief;
@@ -357,7 +358,8 @@ cast_ray(
   //// Bayesian
   uchar4 out;
   out.x=convert_uchar(pm*fgbelief*255.0);
-  out.y=convert_uchar(intensity*255.0);
+  float alpha=(1/(1+(3*pm*fgbelief)));
+  out.y=convert_uchar(alpha*intensity*255.0);
   out.z=0;
   out.w=convert_uchar(255);
   in_image[imIndex[llid]].w=fgbelief;
