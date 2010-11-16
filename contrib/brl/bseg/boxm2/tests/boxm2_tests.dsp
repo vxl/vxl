@@ -218,6 +218,15 @@ SOURCE=.\test_driver.cxx
 SOURCE=.\test_scene.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_cache.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_io.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_wrappers.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

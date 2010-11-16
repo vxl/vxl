@@ -108,6 +108,15 @@ SOURCE=.\icam_ocl_kernel.cxx
 SOURCE=.\icam_ocl_minimizer.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\icam_ocl_view_sphere.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\icam_ocl_view_metadata.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+icam_ocl_view_sphere-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/icam_ocl_manager+icam_ocl_search_manager-.cxx
 # End Source File
 # End Group
@@ -139,6 +148,12 @@ SOURCE=.\icam_ocl_kernel.h
 # End Source File
 # Begin Source File
 SOURCE=.\icam_ocl_minimizer.h
+# End Source File
+# Begin Source File
+SOURCE=.\icam_ocl_view_sphere.h
+# End Source File
+# Begin Source File
+SOURCE=.\icam_ocl_view_metadata.h
 # End Source File
 # End Group
 # End Target

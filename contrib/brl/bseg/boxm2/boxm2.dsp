@@ -104,17 +104,44 @@ SOURCE=.\boxm2_disk_io_mgr.cxx
 SOURCE=.\boxm2_scene_parser.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\boxm2_storage_mgr.cxx
+SOURCE=.\boxm2_scene.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\boxm2_scene.cxx
+SOURCE=.\boxm2_cache.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_block_id.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_dumb_cache.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_asio_mgr.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_sio_mgr.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm2_array_3d+vnl_vector_fixed+uchar.16--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm2_array_1d+char-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm2_array_2d+vnl_vector_fixed+uchar.16--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_array_3d+vnl_vector_fixed+ushort.2--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm2_array_2d+int-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/boxm2_array_2d+vnl_vector_fixed+ushort.2--.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
-# Begin Source File
-SOURCE=.\boxm2_storage_mgr.h
-# End Source File
 # Begin Source File
 SOURCE=.\boxm2_scene_parser.h
 # End Source File
@@ -126,6 +153,39 @@ SOURCE=.\boxm2_scene.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_block.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_sio_mgr.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_array_2d.txx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_array_3d.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_asio_mgr.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_array_1d.txx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_cache.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_array_1d.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_block_id.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_array_2d.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_array_3d.txx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_dumb_cache.h
 # End Source File
 # End Group
 # End Target
