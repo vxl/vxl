@@ -1,7 +1,7 @@
 #include "msm_curve.h"
 //:
 // \file
-// \brief Represents 2x2 symmetric matrix, used as weight matrix
+// \brief List of points making a curve - for defining boundaries
 // \author Tim Cootes
 
 #include <vcl_iostream.h>
@@ -48,8 +48,16 @@ void msm_curve::set(unsigned lo, unsigned hi,
   name_=name;
 }
 
+//: Adds offset to index of every point
+//  Useful when concatenating models
+void msm_curve::add_index_offset(int offset)
+{
+  for (unsigned i=0;i<index_.size();++i)
+    index_[i]=unsigned (index_[i]+offset);
+}
+
 //: Equality test
-bool msm_curve::operator==(const msm_curve& c)
+bool msm_curve::operator==(const msm_curve& c) const
 {
   return (name_==c.name_) &&
          (open_==c.open_) &&

@@ -160,7 +160,7 @@ void draw_mode(msm_shape_mode_view& mode_view,
   vgl_box_2d<int> win_box = mode_view.display_window();
 
   vcl_stringstream ss;
-  ss<<params.base_name<<"_s"<<m<<".eps";
+  ss<<params.output_dir<<"/"<<params.base_name<<"_s"<<m<<".eps";
   mbl_eps_writer writer(ss.str().c_str(),
                         win_box.width(),win_box.height());
 
@@ -194,7 +194,7 @@ void draw_mode_frames(msm_shape_mode_view& mode_view,
     if (i>=n_shapes) f=2*n_shapes-2-i;
 
     vcl_stringstream ss;
-    ss<<params.base_name<<"_s"<<m<<"_";
+    ss<<params.output_dir<<"/"<<params.base_name<<"_s"<<m<<"_";
     if (i<10) ss<<"0";
     ss<<i<<".eps";
     mbl_eps_writer writer(ss.str().c_str(),

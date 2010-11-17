@@ -58,11 +58,21 @@ class msm_curve
   //: True if this is an open curve (else closed curve)
   bool open() const { return open_; }
 
+  //: Indicate if this is an open curve
+  void set_open(bool b) { open_=b; }
+
+  //: List of point indicies representing curve
+  vcl_vector<unsigned>& index() { return index_; }
+
   //: List of point indicies representing curve
   const vcl_vector<unsigned>& index() const { return index_; }
 
   unsigned operator[](unsigned i) const
   { assert(i<index_.size()); return index_[i]; }
+
+  //: Adds offset to index of every point
+  //  Useful when concatenating models
+  void add_index_offset(int offset);
 
   //: Parse parameters in stream
   //  Expects
@@ -83,7 +93,7 @@ class msm_curve
   void b_read(vsl_b_istream& bfs);
 
   //: Equality test
-  bool operator==(const msm_curve& curve);
+  bool operator==(const msm_curve& curve) const;
 };
 
 
