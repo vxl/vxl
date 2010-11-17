@@ -98,6 +98,8 @@ bool bsvg_plot_roc_process(bprb_func_process& pro)
     }
   }
 
+  xs.erase(xs.end()-1); // erase the last element, which is (1,1) pair as a convention
+  ys.erase(ys.end()-1);
   p.add_line(xs, ys, "red");
   bxml_write(out_name, p);
 
