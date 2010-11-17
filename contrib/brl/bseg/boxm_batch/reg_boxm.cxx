@@ -2,6 +2,7 @@
 #include <bprb/bprb_macros.h>
 #include <bprb/bprb_batch_process_manager.h>
 #include <brdb/brdb_selection.h>
+
 // processes
 #include <vil_pro/vil_register.h>
 #include <vpgl_pro/vpgl_register.h>
@@ -15,6 +16,7 @@
 #endif
 #include <bvpl/bvpl_octree/pro/bvpl_octree_register.h>
 #include <bsta/pro/bsta_register.h>
+#include <bapl/pro/bapl_register.h>
 
 #include <boxm/basic/boxm_util_data_types.h>
 PyObject *
@@ -32,6 +34,7 @@ register_processes(PyObject *self, PyObject *args)
   boxm_ocl_register::register_process();
 #endif
   bvpl_octree_register::register_process();
+  bapl_register::register_process();
   Py_INCREF(Py_None);
   return Py_None;
 }
@@ -52,6 +55,7 @@ register_datatypes(PyObject *self, PyObject *args)
 #endif
   bvpl_octree_register::register_datatype();
   bsta_register::register_datatype();
+  bapl_register::register_datatype();
   Py_INCREF(Py_None);
   return Py_None;
 }
