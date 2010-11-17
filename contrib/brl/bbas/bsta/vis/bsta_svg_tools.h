@@ -23,18 +23,36 @@ void write_svg(const bsta_histogram<T>& h, const vcl_string& outfile,
   bsvg_plot pl(width, height);
   if (false) pl.set_margin(margin); // TODO
   if (false) pl.set_font_size(font_size); // TODO
+  T min = h.min();
+  T max = h.max();
+  T delta = h.delta();
+  vcl_cout << "min: " << min << " max: " << max << vcl_endl;
+  T abs_min = T(10);
+  T abs_max = T(0);
+  for (unsigned a = 0; a < h.nbins(); a++) {
+    if (h.p(a) < min) abs_min = h.p(a);
+    if (h.p(a) > max) abs_max = h.p(a);
+  }
+  vcl_stringstream mss; mss << "abs min: " << abs_min << " max: " << abs_max;
+  vcl_stringstream mss2; mss2 << "ent: " << h.entropy();
+  bsvg_text* tmm = new bsvg_text(mss.str());
+  tmm->set_location(margin, margin);
+  pl.add_element(tmm);
+  bsvg_text* tmm2 = new bsvg_text(mss2.str());
+  tmm2->set_location(margin, margin+font_size);
+  pl.add_element(tmm2);
 
-  float min = float(h.min());
-  float delta = float(h.delta());
+  float minf = float(h.min());
+  float deltaf = float(h.delta());
 
   pl.add_axes(0, 1, 0, 1);
   pl.add_y_increments(0.1f);
 
   vcl_vector<float> ps;
   vcl_vector<float> x_labels;
-  for (unsigned i = 0; i < h.nbins(); ++i, min+=delta) {
+  for (unsigned i = 0; i < h.nbins(); ++i, minf+=deltaf) {
     ps.push_back(float(h.p(i)));
-    x_labels.push_back(min);
+    x_labels.push_back(minf);
   }
 
   pl.add_bars(ps, x_labels, true, "red");
