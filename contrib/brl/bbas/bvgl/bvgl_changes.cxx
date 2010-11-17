@@ -27,8 +27,6 @@ bvgl_changes::create_mask_from_objs(unsigned ni, unsigned nj, vcl_string change_
           continue;
         if (objs_[i]->type().compare(change_type)==0)
           (*mask)(u,v) = 255;
-        else  // don't care areas
-          (*mask)(u,v) = 125;
       }
     }
   }
