@@ -113,8 +113,9 @@ bsvg_plot make_simple_pie_chart()
   double pi = 3.14;
   p.add_splice(200.0f, 200.0f, 180.0f, 0.0f, (float)(pi*(80.0/180.0)), "red");
   p.add_splice(200.0f, 200.0f, 180.0f, (float)(pi*(100.0/180.0)), (float)(pi*(150.0/180.0)), "blue");
-  p.add_splice(200.0f, 200.0f, 180.0f, (float)(pi*(190.0/180.0)), (float)(pi*(270.0/180.0)), 255, 255, 0);
-  p.add_splice(200.0f, 200.0f, 90.0f, (float)(pi*(190.0/180.0)), (float)(pi*(270.0/180.0)), 255, 255, 200);
+  p.add_splice(200.0f, 200.0f, 180.0f, (float)(pi*(200.0/180.0)), (float)(pi*(270.0/180.0)), 255, 255, 0);
+  p.add_splice(200.0f, 200.0f, 90.0f, (float)(pi*(200.0/180.0)), (float)(pi*(270.0/180.0)), 255, 255, 200);
+  p.add_splice(200.0f, 200.0f, 90.0f, (float)(pi*(-180.0/180.0)), (float)(pi*(-160.0/180.0)), 255, 100, 200);
   return p;
 }
 
