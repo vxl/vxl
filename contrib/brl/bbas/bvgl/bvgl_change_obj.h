@@ -36,6 +36,9 @@ class bvgl_change_obj: public vbl_ref_count
 
   vgl_polygon<double> poly() const {return poly_; }
 
+  //: return the centroid of the polygon
+  void centroid(double &x, double& y) const;
+
   vcl_string type() const { return class_; }
   //void xml_read();
   //void xml_write();

@@ -21,6 +21,23 @@ bvgl_change_obj::version(  ) const
   return 1;
 }
 
+//: return the centroid of the polygon
+void bvgl_change_obj::centroid(double &x_cent, double &y_cent) const
+{
+  //: find the centre of this polygon
+  x_cent = 0.0, y_cent = 0.0;
+  int tot_size = 0;
+  for (unsigned s = 0; s < poly_.num_sheets(); s++) {
+    for (unsigned si = 0; si < poly_[s].size(); si++) {
+      x_cent += poly_[s][si].x();
+      y_cent += poly_[s][si].y();
+    }
+    tot_size += poly_[s].size(); 
+  }
+  x_cent /= tot_size;
+  y_cent /= tot_size;
+}
+
 //: binary IO write
 void bvgl_change_obj::b_write(vsl_b_ostream& os)
 {
