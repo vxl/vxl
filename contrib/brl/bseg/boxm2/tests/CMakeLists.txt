@@ -4,6 +4,7 @@ ADD_EXECUTABLE( boxm2_test_all
   test_cache.cxx
   test_io.cxx
   test_wrappers.cxx
+  test_data.cxx
  )
 
 TARGET_LINK_LIBRARIES( boxm2_test_all testlib boxm2) # boct vnl vpgl vgl_xio vgl_algo vil vgl vpl vul)
@@ -11,5 +12,5 @@ ADD_TEST( boxm2_test_scene      ${EXECUTABLE_OUTPUT_PATH}/boxm2_test_all  test_s
 ADD_TEST( boxm2_test_cache      ${EXECUTABLE_OUTPUT_PATH}/boxm2_test_all  test_cache  )
 ADD_TEST( boxm2_test_io         ${EXECUTABLE_OUTPUT_PATH}/boxm2_test_all  test_io  )
 ADD_TEST( boxm2_test_wrappers   ${EXECUTABLE_OUTPUT_PATH}/boxm2_test_all  test_wrappers  )
-
+ADD_TEST( boxm2_test_data   ${EXECUTABLE_OUTPUT_PATH}/boxm2_test_all  test_data  )
 ADD_EXECUTABLE( boxm2_test_include test_include.cxx )

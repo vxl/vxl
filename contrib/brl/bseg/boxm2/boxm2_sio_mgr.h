@@ -7,7 +7,7 @@
 #include <vcl_iostream.h>
 
 //: disk level storage class.
-//  handles all of the asynchronous IO read and write requests
+//  handles all of the synchronous IO read and write requests
 class boxm2_sio_mgr
 {
   public:

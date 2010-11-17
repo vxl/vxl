@@ -15,8 +15,9 @@ boxm2_block* boxm2_sio_mgr::load_block(vcl_string dir, boxm2_block_id block_id)
   else
     vcl_cerr<<"boxm2_sio_mgr:: cannot get file size for "<<dir<<vcl_endl;
   
+  const long nbytes=numBytes;
   //Read bytes into stream
-  char bytes[numBytes]; 
+  char * bytes=new char[nbytes]; 
   vcl_ifstream myFile (dir.c_str(), vcl_ios::in | vcl_ios::binary);
   myFile.read(bytes, numBytes);
   if (!myFile) {
@@ -33,7 +34,7 @@ boxm2_block* boxm2_sio_mgr::load_block(vcl_string dir, boxm2_block_id block_id)
 void boxm2_sio_mgr::save_block(vcl_string dir, boxm2_block* block)
 {
   vcl_cout<<"boxm2_sio_mgr::write save to file"<<vcl_endl;
-  char bytes[block->byte_count()]; 
+  char * bytes=new char[block->byte_count()]; 
   block->b_write(bytes); 
   
   //TODO come up with naming scheme
