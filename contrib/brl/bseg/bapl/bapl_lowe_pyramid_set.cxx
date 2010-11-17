@@ -1,9 +1,10 @@
-// This is algo/bapl/bapl_lowe_pyramid_set.cxx
+// This is brl/bseg/bapl/bapl_lowe_pyramid_set.cxx
 //:
 // \file
 
 #include "bapl_lowe_pyramid_set.h"
 #include <vcl_cmath.h>
+#include <vnl/vnl_math.h>
 #include <vil/vil_convert.h>
 #include <vil/vil_resample_bilin.h>
 #include <vil/vil_math.h>
@@ -15,7 +16,7 @@
 #include <vil/vil_save.h>
 #include <vil/vil_copy.h>
 #include <vcl_sstream.h>
-
+#include <vcl_cassert.h>
 
 //: Constructor
 bapl_lowe_pyramid_set::bapl_lowe_pyramid_set( const vil_image_resource_sptr& image,
@@ -28,12 +29,12 @@ bapl_lowe_pyramid_set::bapl_lowe_pyramid_set( const vil_image_resource_sptr& ima
    octave_size_(octave_size)
 {
   // determine the number of octaves if not provided
-  if( num_octaves == 0 ){
+  if ( num_octaves == 0 ) {
     int min_size = (image->ni() < image->nj())?image->ni():image->nj();
     min_size *= 2;
     num_octaves_ = 1;
-    //while( (min_size/=2) > 64) ++num_octaves_;
-    while( (min_size/=2) > 4) ++num_octaves_;
+    //while ( (min_size/=2) > 64) ++num_octaves_;
+    while ( (min_size/=2) > 4) ++num_octaves_;
 
     gauss_pyramid_.resize(num_octaves_);
     dog_pyramid_.resize(num_octaves_);
@@ -50,15 +51,15 @@ bapl_lowe_pyramid_set::bapl_lowe_pyramid_set( const vil_image_resource_sptr& ima
   vil_resample_bilin( vil_image_view<float>(*imagef), image2x, 0, 0, 0.5, 0, 0, 0.5,
                       2*imagef->ni(), 2*imagef->nj());
 
-  // correct for artifacts of upsampling at the border
+  // correct for artefacts of upsampling at the border
   int ni = image2x.ni(), nj = image2x.nj();
-  for(int i=0; i<ni-1; ++i)
+  for (int i=0; i<ni-1; ++i)
     image2x(i,nj-1) = image2x(i,nj-2);
-  for(int j=0; j<nj; ++j)
+  for (int j=0; j<nj; ++j)
     image2x(ni-1,j) = image2x(ni-2,j);
 
   //+++++++++++++++++++++++++++++++++++++++++++++
-  
+
   vil_image_view<float> temp;
 
   // Initial smoothing
@@ -68,8 +69,8 @@ bapl_lowe_pyramid_set::bapl_lowe_pyramid_set( const vil_image_resource_sptr& ima
   double reduction = vcl_sqrt(vcl_pow(2.0,2.0/octave_size_)-1);
 
   // create the Gaussian Pyramid
-  for(int lvl=0; lvl<num_octaves_; ++lvl){
-    for(unsigned oct=0; oct<octave_size; ++oct){
+  for (int lvl=0; lvl<num_octaves_; ++lvl) {
+    for (unsigned oct=0; oct<octave_size; ++oct) {
       vil_copy_deep(temp, gauss_pyramid_(lvl,oct));
       double scale = vcl_pow(2.0,double(oct)/octave_size_);
       double sigma = scale*reduction;
@@ -80,16 +81,15 @@ bapl_lowe_pyramid_set::bapl_lowe_pyramid_set( const vil_image_resource_sptr& ima
       int smaller = ni < nj ? ni : nj;
       if (size >= smaller) size = smaller - 1;
       brip_gauss_filter( gauss_pyramid_(lvl,oct), temp,
-                         sigma, size, vil_convolve_constant_extend );  
+                         sigma, size, vil_convolve_constant_extend );
       vil_math_image_difference( temp, gauss_pyramid_(lvl,oct), dog_pyramid_(lvl,oct));
     }
     temp = vil_decimate(temp,2);
   }
 
-
   // compute the gradient magnitude and orientation of each image in the gauss pyramid
-  for(int lvl=0; lvl<num_octaves_; ++lvl){
-    for(unsigned oct=0; oct<octave_size; ++oct){
+  for (int lvl=0; lvl<num_octaves_; ++lvl) {
+    for (unsigned oct=0; oct<octave_size; ++oct) {
       vil_orientations_from_sobel( gauss_pyramid_(lvl,oct),
                                    grad_orient_pyramid_(lvl,oct),
                                    grad_mag_pyramid_(lvl,oct) );
@@ -140,18 +140,16 @@ bapl_lowe_pyramid_set::pyramid_at( const bapl_lowe_pyramid<float> & pyramid,
   int octave = index/octave_size_;
   int sub_index = index%octave_size_;
 
-  if ( octave >= num_octaves_ ){
+  if ( octave >= num_octaves_ ) {
     octave = num_octaves_-1;
     sub_index = octave_size_-1;
   }
 
-  if( actual_scale ) *actual_scale = vcl_pow(2.0, octave-1);
-  if( rel_scale ) *rel_scale = vcl_pow(2.0, double(sub_index)/octave_size_);
+  if ( actual_scale ) *actual_scale = vcl_pow(2.0, octave-1);
+  if ( rel_scale ) *rel_scale = vcl_pow(2.0, double(sub_index)/octave_size_);
 
   return pyramid(octave, sub_index);
 }
-
-
 
 
 inline float gaussian( float x, float y)
@@ -174,31 +172,30 @@ bapl_lowe_pyramid_set::make_descriptor(bapl_lowe_keypoint* keypoint)
   double key_y = keypoint->location_j() / actual_scale;
   double key_orient = keypoint->orientation();
 
-  for (int hi=0; hi<4; ++hi){
-    for (int hj=0; hj<4; ++hj){
-      for (int i=4*hi; i<4*(hi+1); ++i){
-        for (int j=4*hj; j<4*(hj+1); ++j){
+  for (int hi=0; hi<4; ++hi) {
+    for (int hj=0; hj<4; ++hj) {
+      for (int i=4*hi; i<4*(hi+1); ++i) {
+        for (int j=4*hj; j<4*(hj+1); ++j) {
           double x = ( (i-7.5)*vcl_cos(key_orient)
                       -(j-7.5)*vcl_sin(key_orient)) * ref_scale;
           double y = ( (i-7.5)*vcl_sin(key_orient)
                       +(j-7.5)*vcl_cos(key_orient)) * ref_scale;
-          for(int c=0; c<4; ++c){ 
+          for (int c=0; c<4; ++c) {
             int xc = int(x+key_x) + c/2;
             int yc = int(y+key_y) + c%2;
             if ( xc>=0 && xc<int(grad_orient.ni()) &&
-                 yc>=0 && yc<int(grad_orient.nj()) ){
-
+                 yc>=0 && yc<int(grad_orient.nj()) ) {
               float interp_x = 1.0f - vcl_fabs( x+key_x - float(xc) );
               float interp_y = 1.0f - vcl_fabs( y+key_y - float(yc) );
-              float weight = grad_mag(xc,yc) * interp_x * interp_y 
+              float weight = grad_mag(xc,yc) * interp_x * interp_y
                            * gaussian((xc-key_x)/ref_scale, (yc-key_y)/ref_scale);
-              float orient = grad_orient(xc,yc)-key_orient+3.14159;
-              while(orient > 6.28319f) orient -= 6.28319f;
-              while(orient < 0.0f) orient += 6.28319f;
-              int bin = ((int(orient*15/(6.28319f))+1)/2)%8;
+              float orient = grad_orient(xc,yc)-key_orient+vnl_math::pi;
+              while (orient > float(2*vnl_math::pi)) orient -= float(2*vnl_math::pi);
+              while (orient < 0.0f)                  orient += float(2*vnl_math::pi);
+              int bin = ((int(orient*15/float(2*vnl_math::pi))+1)/2)%8;
               histograms[hi*32+hj*8+bin] += weight;
             }
-          } 
+          }
         }
       }
     }

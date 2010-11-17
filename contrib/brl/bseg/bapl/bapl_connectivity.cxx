@@ -1,4 +1,4 @@
-// This is bapl/bapl_connectivity.cxx
+// This is brl/bseg/bapl/bapl_connectivity.cxx
 //:
 // \file
 
@@ -9,11 +9,12 @@
 #include <bapl/bapl_lowe_keypoint.h>
 #include <vcl_algorithm.h>
 #include <vcl_queue.h>
+#include <vcl_cassert.h>
 
 //: For sorting keypoint_match_sets
-bool second_less( const bapl_keypoint_match_set_sptr& left, const bapl_keypoint_match_set_sptr& right)
+bool second_less( const bapl_keypoint_match_set_sptr& left_set, const bapl_keypoint_match_set_sptr& right_set)
 {
-  return left->id_right_ < right->id_right_;
+  return left_set->id_right_ < right_set->id_right_;
 }
 
 
@@ -76,7 +77,7 @@ void bapl_conn_table::make_symmetric()
 }
 
 
-//: check if vector of image id1 already contains a match set for image id2
+//: check if vector of image id1 already contains a match set for image id2.
 //  conn is kept sorted with respect to second image ids, binary search to see if set->id_right_ exists
 bool bapl_conn_table::contains(int id1, int id2)
 {
@@ -84,7 +85,7 @@ bool bapl_conn_table::contains(int id1, int id2)
   vcl_vector<bapl_key_match> matches; // dummy vector
   bapl_keypoint_match_set_sptr e = new bapl_keypoint_match_set(id1, id2, matches);
   vcl_pair<bapl_conn::const_iterator, bapl_conn::const_iterator> p = equal_range(conn.begin(), conn.end(), e, second_less);
-  return (p.first != p.second); // true if not points to the end, false otherwise
+  return p.first != p.second; // true if not points to the end, false otherwise
 }
 
 void bapl_conn_table::print_table()
@@ -110,8 +111,8 @@ void bapl_conn_table::print_table_with_matches()
   for (unsigned i = 0; i < conns_.size(); i++) {
     vcl_vector<bapl_keypoint_match_set_sptr> conn = conns_[i];
     for (unsigned j = 0; j < conn.size(); j++) {
-      vcl_cout << conn[j]->id_left_ << ' ' << conn[j]->id_right_ << '\n';
-      vcl_cout << conn[j]->matches_.size() << '\n';
+      vcl_cout << conn[j]->id_left_ << ' ' << conn[j]->id_right_ << '\n'
+               << conn[j]->matches_.size() << '\n';
       for (unsigned k = 0; k < conn[j]->matches_.size(); k++) {
         vcl_cout << conn[j]->matches_[k].first->id() << ' ' << conn[j]->matches_[k].second->id() << '\n';
       }
@@ -126,11 +127,12 @@ unsigned bapl_conn_table::get_number_of_neighbors(unsigned i)
   return conns_[i].size();
 }
 
-bool compare_first(const bapl_key_match &k1, const bapl_key_match &k2) {
-  return (k1.first->id() < k2.first->id());
+bool compare_first(const bapl_key_match &k1, const bapl_key_match &k2)
+{
+  return k1.first->id() < k2.first->id();
 }
 
-//: compute a set of tracks, each corresponding to a separate 3d point
+//: compute a set of tracks, each corresponding to a separate 3d point.
 //  assumes a symmetric connectivity table
 bool bapl_conn_table::compute_tracks(vcl_vector<bapl_track_data>& tracks, int new_image_start)
 {
@@ -211,14 +213,14 @@ bool bapl_conn_table::compute_tracks(vcl_vector<bapl_track_data>& tracks, int ne
         int img_id = feature.first;
         unsigned int feature_id = feature.second->id();
 
-		bapl_keypoint_sptr dummy_sptr;
+        bapl_keypoint_sptr dummy_sptr;
         bapl_key_match dummy(feature.second, dummy_sptr);
-		
-		
+
         int start_idx;
         if (img_id >= new_image_start) {
           start_idx = new_image_start;
-        } else {
+        }
+        else {
           start_idx = 0;
         }
 
@@ -268,11 +270,11 @@ bool bapl_conn_table::compute_tracks(vcl_vector<bapl_track_data>& tracks, int ne
 //: Print tracks as correspondences in BWM_VIDEO_SITE format for visualization
 void print_tracks(vcl_ostream& os, vcl_vector<bapl_track_data>& tracks, int img_width, int img_height)
 {
-  os << "<BWM_VIDEO_SITE name=\"\">\n";
-  os << "<videoPath path=\"\">\n</videoPath>\n";
-  os << "<cameraPath path=\"\">\n</cameraPath>\n";
-  os << "<videoSiteDir path=\"\">\n</videoSiteDir>\n";
-  os << "<Correspondences>\n";
+  os << "<BWM_VIDEO_SITE name=\"\">\n"
+     << "<videoPath path=\"\">\n</videoPath>\n"
+     << "<cameraPath path=\"\">\n</cameraPath>\n"
+     << "<videoSiteDir path=\"\">\n</videoSiteDir>\n"
+     << "<Correspondences>\n";
   for (unsigned i = 0; i < tracks.size(); i++) {
     os << "<Correspondence>\n";
     for (unsigned j = 0; j < tracks[i].views_.size(); j++) {
@@ -289,8 +291,8 @@ void print_tracks(vcl_ostream& os, vcl_vector<bapl_track_data>& tracks, int img_
     }
     os << "</Correspondence>\n";
   }
-  os << "</Correspondences>\n";
-  os << "</BWM_VIDEO_SITE>\n";
+  os << "</Correspondences>\n"
+     << "</BWM_VIDEO_SITE>\n";
 }
 
 

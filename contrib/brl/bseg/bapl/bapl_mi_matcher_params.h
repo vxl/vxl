@@ -1,34 +1,34 @@
-// This is algo/bapl/bapl_mi_matcher_params.h
+// This is brl/bseg/bapl/bapl_mi_matcher_params.h
 #ifndef bapl_mi_matcher_params_h_
 #define bapl_mi_matcher_params_h_
 //:
 // \file
-// \brief A block of parameters for the bapl_mi_matcher class 
+// \brief A block of parameters for the bapl_mi_matcher class
 // \author Matt Leotta
-// \date 10/15/03
+// \date October 15, 2003
 //
 // \verbatim
 //  Modifications
 //   None
 // \endverbatim
 
-#include<vcl_iostream.h>
+#include <vcl_iosfwd.h>
 
 //:A block of parameters for the bapl_mi_matcher class
 // The member variable are kept public here for easy access,
 // but the entire block will be a private member of bapl_mi_matcher
 // This class is essentially just a data block with a few added functions
 // for I/O and range validation.
-// 
+//
 
 class bapl_mi_matcher_params
 {
-public:
+ public:
   //: Constructor
   bapl_mi_matcher_params( unsigned num_samples=  10,
-                          double max_scale=       2.0, 
-                          double max_radius=     10.0, 
-                          double max_rotation=   45.0, 
+                          double max_scale=       2.0,
+                          double max_radius=     10.0,
+                          double max_rotation=   45.0,
                           double max_shear=      10.0 );
 
   //: Check the value of each member variable to see if it is in range
@@ -37,10 +37,11 @@ public:
   //: Fix any parameters that are out of range
   void correct_range();
 
-
   //: Number of random samples to generate
   unsigned num_samples_;
-  // --- Maximums of parameters for random affine tranformations ---
+
+  // --- Maxima of parameters for random affine transformations ---
+
   //: Maximum horizontal scale
   double max_sx_;
   //: Maximum verical scale

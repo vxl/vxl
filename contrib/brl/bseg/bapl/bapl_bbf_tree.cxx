@@ -1,13 +1,13 @@
-// This is algo/bapl/bapl_bbf_tree.cxx
+// This is brl/bseg/bapl/bapl_bbf_tree.cxx
+#include "bapl_bbf_tree.h"
 //:
 // \file
-
-#include "bapl_bbf_tree.h"
 
 #include <vcl_limits.h>
 #include <vcl_utility.h>
 #include <vcl_algorithm.h>
 #include <vcl_iostream.h>
+#include <vcl_cassert.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_vector.h>
 
@@ -75,13 +75,13 @@ bapl_bbf_dist_sq( const bapl_keypoint_sptr p, const bapl_bbf_box& b )
 //------------------------------------------------------------------------------
 
 
-//: Constuctor
+//: Constructor
 bapl_bbf_tree::bapl_bbf_tree(const vcl_vector< bapl_keypoint_sptr >& points, int points_per_leaf)
  : leaf_count_(0), leaves_examined_(0), internal_count_(0),
-   internal_examined_(0), points_(points) 
+   internal_examined_(0), points_(points)
 {
   assert(points_per_leaf > 0);
-  
+
   //  0. Consistency check
   for ( unsigned int i=1; i<points_.size(); ++i ) {
     assert( 128 == points_[i]->descriptor().size() );
@@ -92,7 +92,7 @@ bapl_bbf_tree::bapl_bbf_tree(const vcl_vector< bapl_keypoint_sptr >& points, int
   vnl_vector_fixed<double,128> low(-vcl_numeric_limits<double>::min());
   vnl_vector_fixed<double,128> high(vcl_numeric_limits<double>::max());
   bapl_bbf_box box( low, high );
-  
+
   // 2. create the vector of ids
   vcl_vector< int > indices( points_.size() );
   for ( unsigned int i=0; i<indices.size(); ++i ) indices[ i ] = i;
@@ -101,16 +101,16 @@ bapl_bbf_tree::bapl_bbf_tree(const vcl_vector< bapl_keypoint_sptr >& points, int
   root_ = build_tree( points_per_leaf, box, 0, indices );
 
   vcl_cout << "total leaves = " << leaf_count_ << vcl_endl
-           << "total interal = " << internal_count_ << vcl_endl;
+           << "total internal = " << internal_count_ << vcl_endl;
 }
 
 
 //: For sorting pairs by their first element
 bool
-first_less( const vcl_pair<double,int>& left,
-            const vcl_pair<double,int>& right )
+first_less( const vcl_pair<double,int>& left_pair,
+            const vcl_pair<double,int>& right_pair )
 {
-  return left.first < right.first;
+  return left_pair.first < right_pair.first;
 }
 
 
@@ -148,11 +148,11 @@ bapl_bbf_tree::build_tree( int points_per_leaf,
   // 5. Partition the vector and the bounding box along the dimension.
   unsigned int med_loc = (indices.size()-1) / 2;
   double median_value = (values[med_loc].first + values[med_loc+1].first) / 2;
-  
+
   bapl_bbf_box left_outer_box( outer_box ), right_outer_box( outer_box );
   left_outer_box.max_point_[dim] = median_value;
   right_outer_box.min_point_[dim] = median_value;
-  
+
   vcl_vector< int > left_indices( med_loc+1 ), right_indices( indices.size()-med_loc-1 );
   for ( i=0; i<=med_loc; ++i ) left_indices[i] = values[i].second;
   for ( ; i<indices.size(); ++i ) right_indices[i-med_loc-1] = values[i].second;
@@ -220,7 +220,7 @@ bapl_bbf_tree::n_nearest( const bapl_keypoint_sptr query_point,
   vcl_vector< int > closest_indices( n );
   this->n_nearest(query_point, closest_points, closest_indices, n, max_search_nodes);
 }
-                  
+
 //: Return an estimate of the n closest points to the query point
 void
 bapl_bbf_tree::n_nearest(const bapl_keypoint_sptr query_point,
@@ -235,11 +235,11 @@ bapl_bbf_tree::n_nearest(const bapl_keypoint_sptr query_point,
 
   if ( closest_indices.size() != (unsigned int)n )
     closest_indices.resize( n );
-    
+
   vcl_vector< double > sq_distances( n );
   vcl_vector< bapl_bbf_queue_entry > priority_queue;
   priority_queue.reserve( 100 );    // should be more than enough
-  
+
   int num_found = 0;
   double left_box_sq_dist, right_box_sq_dist;
   double sq_dist;
@@ -268,13 +268,13 @@ bapl_bbf_tree::n_nearest(const bapl_keypoint_sptr query_point,
 //   for ( i=0; i<priority_queue.size(); ++i )
 //     vcl_cout << "  " << i << ":  sq distance " << priority_queue[i].dist_
 //              << ", node depth " << priority_queue[i].node_->depth_ << vcl_endl;
-              
+
   bool first_leaf = true;
 
   do {
     // vcl_cout << "\ncurrent -- sq_dist " << sq_dist << ", depth: " << current->depth_
     //         << current->outer_box_ << "\ninner_box: "
-    //      << current->inner_box_ << "\n";
+    //      << current->inner_box_ << '\n';
     // vcl_cout << "heap size: " << heap_vec.size() << vcl_endl;
     if ( num_found < n || sq_dist < sq_distances[ num_found-1 ] ) {
       if ( ! current->left_ ) {  // a leaf node
@@ -328,7 +328,7 @@ bapl_bbf_tree::n_nearest(const bapl_keypoint_sptr query_point,
 //           << ", fraction = " << float(leaves_examined_) / leaf_count_
 //           << "\n     internal_examined_ = " << internal_examined_
 //           << ", fraction = " << float(internal_examined_) / internal_count_ << vcl_endl;
-           
+
   assert(num_found >= 0);
   if ( closest_points.size() != (unsigned int)num_found )
     closest_points.resize( num_found );
@@ -347,10 +347,12 @@ bapl_bbf_tree::update_closest( const bapl_keypoint_sptr query_point,
                                int & num_found )
 {
   assert(n>0);
-  // vcl_cout << "Update_closest for leaf " << vcl_endl;
-  // vcl_cout << " query_point = " << query_point << vcl_endl;
-  // vcl_cout << " inner bounding box = \n" << p->inner_box_ << vcl_endl;
-  // vcl_cout << " sq_dist = " << rsdl_dist_sq( query_point, p->inner_box_ ) << vcl_endl;
+#ifdef DEBUG
+  vcl_cout << "Update_closest for leaf " << vcl_endl
+           << " query_point = " << query_point << vcl_endl
+           << " inner bounding box =\n" << p->inner_box_ << vcl_endl
+           << " sq_dist = " << rsdl_dist_sq( query_point, p->inner_box_ ) << vcl_endl;
+#endif
 
   for ( unsigned int i=0; i < p->point_indices_.size(); ++i ) {  // check each id
     int id = p->point_indices_[i];
@@ -404,7 +406,7 @@ bapl_bbf_tree::bounded_at_leaf( const bapl_keypoint_sptr query_point,
 {
   assert(n>0);
   // vcl_cout << "bounded_at_leaf\n"
-  //          << "num_found = " << num_found << "\n";
+  //          << "num_found = " << num_found << '\n';
 
   if ( num_found != n ) {
     return false;

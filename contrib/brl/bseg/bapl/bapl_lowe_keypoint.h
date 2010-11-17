@@ -1,4 +1,4 @@
-// This is core/doc/bapl_lowe_keypoint.h
+// This is brl/bseg/bapl/bapl_lowe_keypoint.h
 #ifndef bapl_lowe_keypoint_h_
 #define bapl_lowe_keypoint_h_
 //:
@@ -7,22 +7,19 @@
 // \author Matthew Leotta, (mleotta@lems.brown.edu)
 // \date Sat Nov 8 2003
 //
-//
 // \verbatim
-//    Ozge C. Ozcanli -- Sep 15, 2010 -- added constructer with a descriptor vector
+//    Ozge C. Ozcanli -- Sep 15, 2010 -- added constructor with a descriptor vector
 // \endverbatim
 
 #include <bapl/bapl_keypoint.h>
 #include <bapl/bapl_lowe_keypoint_sptr.h>
 #include <bapl/bapl_lowe_pyramid_set_sptr.h>
 #include <vnl/vnl_vector_fixed.h>
-
-//: Brief description of the class
-// The long description starts here
+#include <vcl_iosfwd.h>
 
 class bapl_lowe_keypoint : public bapl_keypoint
 {
-public:
+ public:
   //: Constructor
   bapl_lowe_keypoint();
   //: Constructor
@@ -38,7 +35,7 @@ public:
 
   //: Accessor for the discriptor vector
   virtual const vnl_vector_fixed<double,128>& descriptor() const;
-  
+
   //: Accessor for the i location
   double location_i() const {return location_i_; }
   //: Accessor for the j location
@@ -59,15 +56,15 @@ public:
 
   //: Mutator for the discriptor vector
   void set_descriptor(const vnl_vector_fixed<double,128>& descriptor);
-  
+
   //: Print a summary of the keypoint data to a stream
   virtual void print_summary(vcl_ostream& os) const;
 
-protected:
+ protected:
   //: Normalize, threshold, and renormalize
   void normalize();
 
-private:
+ private:
   //: 128-dimensional descriptor vector
   vnl_vector_fixed<double,128> descriptor_;
 
@@ -96,7 +93,8 @@ struct bapl_lowe_keypoint_new : public bapl_lowe_keypoint_sptr
    : base(new bapl_lowe_keypoint(p,i,j,s,o)) { }
 };
 
-//: warning: does not read/write the bapl_lowe_pyramid_set, only the location, orientation and descriptor of the keypoint
+//:
+// warning: does not read/write the bapl_lowe_pyramid_set, only the location, orientation and descriptor of the keypoint.
 //  translate the coordinate frame with respect to image width and height if necessary, otherwise pass 0, 0
 bapl_lowe_keypoint_sptr read_from_file(vcl_istream& is, int len, int img_width = 0, int img_height = 0);
 
