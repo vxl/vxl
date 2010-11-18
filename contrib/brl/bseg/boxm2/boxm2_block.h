@@ -14,9 +14,9 @@
 // \date   26 Oct 2010
 //
 #include <boxm2/boxm2_block_id.h>
-#include <boxm2/boxm2_array_1d.h>
-#include <boxm2/boxm2_array_2d.h>
-#include <boxm2/boxm2_array_3d.h>
+#include <boxm2/basic/boxm2_array_1d.h>
+#include <boxm2/basic/boxm2_array_2d.h>
+#include <boxm2/basic/boxm2_array_3d.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vpgl/bgeo/bgeo_lvcs.h>
 #include <vgl/vgl_point_3d.h>
