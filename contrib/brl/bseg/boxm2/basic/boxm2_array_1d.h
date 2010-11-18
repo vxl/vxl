@@ -37,10 +37,20 @@ struct boxm2_array_1d
       // alignment guaranteed by 18.4.1.1
       begin_ = buffer;
       end_   = begin_ + n;
+      n_     = n; 
       for (size_type i=0; i<n; ++i)
         begin_[i] = v;
     }
+    
+    //: Assignment
+    boxm2_array_1d<T>& operator=(boxm2_array_1d<T> const &that) {
+      begin_ = that.begin_;
+      end_   = that.begin_ + that.n_;
+      n_     = that.n_;
+      return *this;
+    }
 
+    //: pointer based iterators
     iterator begin()  { return begin_; }
     iterator end()    { return end_; }
 

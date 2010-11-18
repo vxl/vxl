@@ -1,9 +1,11 @@
 #include <boxm2/boxm2_block.h>
 
-boxm2_block::boxm2_block(char* buff) 
+boxm2_block::boxm2_block(boxm2_block_id id, char* buff) 
 {
+  block_id_ = id;
+  buffer_ = buff;
   this->b_read(buff);
-}                 // NOT YET IMPLEMENTED
+}                 
 
 
 bool boxm2_block::b_read(char* buff) 
@@ -22,23 +24,57 @@ bool boxm2_block::b_read(char* buff)
     vcl_memcpy(&max_mb_, buff+bytes_read, sizeof(max_mb_));
     bytes_read += sizeof(max_mb_);
     
-    //1. read number of blocks in each dimension as integers
+    //2. read in sub block dimension, sub block num
+    double dims[4];
+    vcl_memcpy(&dims, buff+bytes_read, sizeof(dims)); 
+    bytes_read += sizeof(dims);
+    int    nums[4]; 
+    vcl_memcpy(&nums, buff+bytes_read, sizeof(nums));
+    bytes_read += sizeof(nums);
+    sub_block_dim_ = vgl_vector_3d<double>(dims[0], dims[1], dims[2]); 
+    sub_block_num_ = vgl_vector_3d<int>(nums[0], nums[1], nums[2]); 
 
+    //3.  read number of buffers
+    int numBuffers;
+    vcl_memcpy(&numBuffers, buff+bytes_read, sizeof(numBuffers));
+    bytes_read += sizeof(numBuffers);
+    
+    //3.a read length of tree buffers
+    int treeLen; 
+    vcl_memcpy(&treeLen, buff+bytes_read, sizeof(treeLen));
+    bytes_read += sizeof(treeLen);
+        
+    //4. setup big arrays (3d block of trees)
+    uchar16* treesBuff = (uchar16*) (buff+bytes_read); 
+    trees_     = boxm2_array_3d<uchar16>( sub_block_num_.x(), 
+                                          sub_block_num_.y(),
+                                          sub_block_num_.z(), 
+                                          treesBuff); 
+    bytes_read += sizeof(uchar16)*sub_block_num_.x()*sub_block_num_.y()*sub_block_num_.z();
+     
+    //5. 2d array of tree pointers
+    int* treePtrsBuff = (int*) (buff+bytes_read); 
+    tree_ptrs_ = boxm2_array_2d<int>( numBuffers, treeLen, treePtrsBuff); 
+    bytes_read += sizeof(int) * numBuffers * treeLen;
+    
+    //6. 1d aray of trees_in_buffers
+    ushort* treesCountBuff = (ushort*) (buff+bytes_read);
+    trees_in_buffers_ = boxm2_array_1d<ushort>(numBuffers, treesCountBuff);
+    bytes_read += sizeof(ushort) * numBuffers; 
+    
+    //7. 1d array of mem pointers
+    ushort2* memPtrsBuff = (ushort2*) (buff+bytes_read);
+    mem_ptrs_ = boxm2_array_1d<ushort2>(numBuffers, memPtrsBuff);
+    bytes_read += sizeof(ushort2) * numBuffers;
 
-    //2. read number of buffers
-
-    //3. read length of tree buffer
-
-    //4. read tree_ptrs_
-
-    //5. read tree_buffers_
-
-    //6. read trees_in_buffers
-  
-  return false; 
+    return true; 
 } 
 
 
+//: This type of writing is sort of counter intuitive, as the buffer
+//: just needs to be returned and written to disk. The first few calls
+//: ensure the meta data is lined up correctly.  To use this, just pass in
+//: the boxm2_block buffer. 
 bool boxm2_block::b_write(char* buff) 
 { 
     long bytes_written = 0; 
@@ -55,17 +91,25 @@ bool boxm2_block::b_write(char* buff)
     vcl_memcpy(buff+bytes_written, &max_mb_, sizeof(max_mb_)); 
     bytes_written += sizeof(max_mb_); 
     
-    //1. write number of blocks in each dimension as integers
+    //2. Write sub block dimension, sub block num
+    double dims[4] = {sub_block_dim_.x(), sub_block_dim_.y(), sub_block_dim_.z(), 0.0}; 
+    vcl_memcpy(buff+bytes_written, dims, 4 * sizeof(double));
+    bytes_written += 4 * sizeof(double);
+    
+    int nums[4] = {sub_block_num_.x(), sub_block_num_.y(), sub_block_num_.z(), 0 }; 
+    vcl_memcpy(buff+bytes_written, nums, 4 * sizeof(int));
+    bytes_written += 4 * sizeof(int);
+    
+    //3.  write number of buffers
+    int numBuffers = tree_ptrs_.rows();
+    vcl_memcpy(buff+bytes_written, &numBuffers, sizeof(numBuffers));
+    bytes_written += sizeof(numBuffers);
+    
+    //3.a write length of tree buffers
+    int treeLen = tree_ptrs_.cols();
+    vcl_memcpy(buff+bytes_written, &treeLen, sizeof(treeLen));
+    bytes_written += sizeof(treeLen);
 
-    //2. write number of buffers
-
-    //3. write length of tree buffer
-
-    //4. write tree_ptrs_
-
-    //5. write tree_buffers_
-
-    //6. write trees_in_buffers  
-  
+    //the arrays themselves should be already in the char buffer, so no need to copy  
     return true; 
 } 

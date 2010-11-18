@@ -56,11 +56,13 @@ class boxm2_block : public vbl_ref_count
  public:
 
   //: only available constructor - from directory and block_id
-  boxm2_block(char* buffer);
+  boxm2_block(boxm2_block_id id, char* buffer);
   boxm2_block();
 
   //: default destructor
-  ~boxm2_block() { }
+  ~boxm2_block() { 
+    if(buffer_) delete[] buffer_;
+  }
 
   //: all IO manipulates char buffers
   bool b_read(char* buffer);
@@ -70,19 +72,20 @@ class boxm2_block : public vbl_ref_count
   vcl_string              filename()          { return "block.bin"; }
 
   //: accessors
-  boxm2_block_id          block_id()          { return block_id_; }
-  boxm2_array_3d<uchar16> trees()             { return trees_; }
-  boxm2_array_2d<int>     tree_ptrs()         { return tree_ptrs_; }
-  boxm2_array_1d<ushort>  trees_in_buffers()  { return trees_in_buffers_; }
-  boxm2_array_1d<ushort2> mem_ptrs()          { return mem_ptrs_; }
-  vgl_vector_3d<double>   sub_block_dim()     { return sub_block_dim_; }
-  vgl_vector_3d<int>      sub_block_num()     { return sub_block_num_; }
-  int                     num_buffers()       { return tree_ptrs_.rows(); }
-  int                     tree_buff_length()  { return tree_ptrs_.cols(); }
-  int                     init_level()        { return init_level_; }
-  int                     max_level()         { return max_level_; }
-  int                     max_mb()            { return max_mb_; }
-  long                    byte_count()        { return byte_count_; }
+  boxm2_block_id            block_id()          { return block_id_; }
+  char*                     buffer()            { return buffer_; }
+  boxm2_array_3d<uchar16>&  trees()             { return trees_; }
+  boxm2_array_2d<int>&      tree_ptrs()         { return tree_ptrs_; }
+  boxm2_array_1d<ushort>&   trees_in_buffers()  { return trees_in_buffers_; }
+  boxm2_array_1d<ushort2>&  mem_ptrs()          { return mem_ptrs_; }
+  vgl_vector_3d<double>&    sub_block_dim()     { return sub_block_dim_; }
+  vgl_vector_3d<int>&       sub_block_num()     { return sub_block_num_; }
+  int                       num_buffers()       { return tree_ptrs_.rows(); }
+  int                       tree_buff_length()  { return tree_ptrs_.cols(); }
+  int                       init_level()        { return init_level_; }
+  int                       max_level()         { return max_level_; }
+  int                       max_mb()            { return max_mb_; }
+  long                      byte_count()        { return byte_count_; }
 
   //: mutators
   void set_block_id(boxm2_block_id id)  { block_id_ = id; }
@@ -95,6 +98,9 @@ class boxm2_block : public vbl_ref_count
 
   //: unique block id (currently 3D address)
   boxm2_block_id          block_id_;
+  
+  //: byte buffer 
+  char*                   buffer_; 
 
   //: number of bytes this block takes up (on disk and ram)
   long                    byte_count_;
@@ -116,10 +122,13 @@ class boxm2_block : public vbl_ref_count
 };
 
 
-//Smart_Pointer typedef for boxm2_block
+//: Smart_Pointer typedef for boxm2_block
 typedef vbl_smart_ptr<boxm2_block> boxm2_block_sptr;
 
+//: output stream 
 vcl_ostream& operator <<(vcl_ostream &s, boxm2_block& scene);
+
+//: write to xml file
 void x_write(vcl_ostream &os, boxm2_block& scene, vcl_string name);
 
 //: Binary write boxm_update_bit_scene_manager scene to stream

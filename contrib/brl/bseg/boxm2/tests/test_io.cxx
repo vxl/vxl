@@ -2,6 +2,7 @@
 // \file
 // \author Andy Miller
 // \date 26-Oct-2010
+#include <boxm2/boxm2_block_id.h>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_dumb_cache.h>
 #include <boxm2/boxm2_sio_mgr.h>
@@ -25,7 +26,7 @@ void test_io()
   vcl_memcpy(bsize+8, &init_level, sizeof(int));
   vcl_memcpy(bsize+12, &max_level, sizeof(int));
   vcl_memcpy(bsize+16, &max_mb, sizeof(int));
-  boxm2_block test_block(bsize);
+  boxm2_block test_block(boxm2_block_id(0,0,0), bsize);
   test_block.set_byte_count(50);
   boxm2_sio_mgr::save_block(test_file, &test_block);
 

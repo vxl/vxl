@@ -27,10 +27,8 @@ class boxm2_array_2d
 
   //: Assignment
   boxm2_array_2d<T>& operator=(boxm2_array_2d<T> const &that) {
-    resize(that.rows(), that.cols());
-    for (size_type i=0; i<num_rows_; ++i)
-      for (size_type j=0; j<num_cols_; ++j)
-        rows_[i][j] = that.rows_[i][j];
+    destruct(); 
+    construct(that.rows(), that.cols(), that.buffer_); 
     return *this;
   }
 
