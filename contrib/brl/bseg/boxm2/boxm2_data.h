@@ -16,11 +16,12 @@ class boxm2_data_base
  public:
     boxm2_data_base(unsigned char * data_buffer,
                     vcl_size_t length,
-                    boxm2_block_id id):data_buffer_(data_buffer),buffer_length_(length),id_(id){};
-    ~boxm2_data_base(){delete [] data_buffer_;}
+                    boxm2_block_id id)
+     : id_(id), data_buffer_(data_buffer), buffer_length_(length) {}
+
+    ~boxm2_data_base() { delete [] data_buffer_; } // FIXME: are you sure?!?
 
  protected:
-
     boxm2_block_id id_;
     unsigned char * data_buffer_;
     vcl_size_t buffer_length_;
@@ -37,7 +38,7 @@ class boxm2_data: boxm2_data_base
                boxm2_block_id id);
     ~boxm2_data();
 
-    boxm2_array_1d<datatype> * data(){return data_array_;}
+    boxm2_array_1d<datatype> * data() {return data_array_;}
 
  protected:
     boxm2_array_1d<datatype> * data_array_;
