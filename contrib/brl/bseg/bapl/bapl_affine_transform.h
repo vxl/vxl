@@ -1,11 +1,11 @@
-// This is algo/bapl/bapl_affine_transform.h
+// This is brl/bseg/bapl/bapl_affine_transform.h
 #ifndef bapl_affine_transform_h_
 #define bapl_affine_transform_h_
 //:
 // \file
 // \brief A class to represent affine transformations.
 // \author Matt Leotta
-// \date 10/14/03
+// \date Oct 14, 2003
 //
 // \verbatim
 //  Modifications
@@ -22,7 +22,7 @@
 
 class bapl_affine_transform
 {
-public:
+ public:
   //: Default Constructor
   bapl_affine_transform();
 
@@ -39,8 +39,8 @@ public:
 
   //: Apply the transformation
   inline void map(double from_x, double from_y, double& to_x, double& to_y) const
-  { 
-    vnl_double_2 to = this->map(vnl_double_2(from_x,from_y)); 
+  {
+    vnl_double_2 to = this->map(vnl_double_2(from_x,from_y));
     to_x = to[0];  to_y = to[1];
   }
 
@@ -56,12 +56,11 @@ public:
   //: Return the translation vector
   vnl_double_2 t() const { return t_; }
 
-
-private:
+ private:
   //: skew/scale/rotation components
   vnl_double_2x2 A_;
   //: translation components
   vnl_double_2 t_;
 };
 
-#endif // bapl_affine_transformation_h_
+#endif // bapl_affine_transform_h_

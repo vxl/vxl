@@ -1,4 +1,4 @@
-// This is bapl/bapl_connectivity.h
+// This is brl/bseg/bapl/bapl_connectivity.h
 #ifndef bapl_connectivity_h_
 #define bapl_connectivity_h_
 //:
@@ -6,7 +6,6 @@
 // \brief A class to build image connectivity graph, see Snavely, Seitz, Szeliski - Modeling the World from Internet Photo Collections.
 // \author Ozge C. Ozcanli, (ozge@lems.brown.edu)
 // \date Sep 21, 2010
-//
 //
 // \verbatim
 //   none
@@ -24,24 +23,24 @@ typedef vcl_vector< bapl_image_key > bapl_image_key_vector;
 //: class to hold point tracks (2d correspondences in each image for a single 3d point)
 class bapl_track_data : public vbl_ref_count
 {
-public:
+ public:
   bapl_track_data(bapl_image_key_vector& vec) : views_(vec) {}
 
   bapl_image_key_vector views_;
 };
 
 //: For sorting keypoint_match_sets
-bool second_less( const bapl_keypoint_match_set_sptr& left, const bapl_keypoint_match_set_sptr& right);
+bool second_less( const bapl_keypoint_match_set_sptr& left_set, const bapl_keypoint_match_set_sptr& right_set);
 
 //: a type to hold a list of matches to other images for an image, initially during construction connectivities of each image will be empty
-//  stores all the connectivities of this image to the other images in a set of images
+//  Stores all the connectivities of this image to the other images in a set of images
 typedef vcl_vector<bapl_keypoint_match_set_sptr> bapl_conn;
 
-//: Class to hold connectivities of each image in a list, 
-//  if an image does not have a conn to any other image then its bapl_conn vector will be empty
+//: Class to hold connectivities of each image in a list
+//  If an image does not have a conn to any other image then its bapl_conn vector will be empty
 class bapl_conn_table : public vbl_ref_count
 {
-public:
+ public:
   //: Constructor
   bapl_conn_table(int n_images) : conns_(n_images), img_data_(n_images), img_data_key_flags_(n_images, vcl_vector<bool>()) {}  // initialize with an empty connectivity
   //: add this match set symmetrically, i.e. into the list of img id 1 as well img id 2, while adding for img id 2, reverse the keypoint pairs
@@ -53,7 +52,7 @@ public:
 
   //: check if vector of image id1 already contains a match set for image id2
   bool contains(int id1, int id2);
-  
+
   //: make the table symmetric, only necessary if add() method is used as opposed to add_sym()
   void make_symmetric();
 
@@ -65,7 +64,7 @@ public:
   bapl_conn& get_neighbors(unsigned i) { return conns_[i]; }
 
   //: compute a set of tracks, each corresponding to a separate 3d point
-  //  assumes a symmetric connectivity table
+  //  Assumes a symmetric connectivity table
   bool compute_tracks(vcl_vector<bapl_track_data>& tracks, int new_image_start = 0);
 
   vcl_vector<bapl_conn> conns_;
@@ -85,5 +84,4 @@ void vsl_b_read(vsl_b_istream & is, bapl_conn_table &ph);
 void vsl_b_read(vsl_b_istream& is, bapl_conn_table* ph);
 void vsl_b_write(vsl_b_ostream& os, const bapl_conn_table* &ph);
 
-
-#endif // bapl_keypoint_set_h_
+#endif // bapl_connectivity_h_
