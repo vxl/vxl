@@ -1,4 +1,4 @@
-// This is brl/bseg/bapl/pro/processes/bapl_match_keypoints_process.cxx
+// This is brl/bseg/bapl/pro/processes/bapl_connectivity_processes.cxx
 
 //:
 // \file
@@ -23,8 +23,8 @@
 #include <vil/vil_convert.h>
 #include <vnl/vnl_random.h>
 
-//  sets up an empty table instance
 //: Constructor
+//  sets up an empty table instance
 bool bapl_create_conn_table_process_cons(bprb_func_process& pro)
 {
   bool ok=false;
@@ -55,8 +55,8 @@ bool bapl_create_conn_table_process(bprb_func_process& pro)
   return true;
 }
 
-//  add a match set to the table
 //: Constructor
+//  add a match set to the table
 bool bapl_add_match_set_process_cons(bprb_func_process& pro)
 {
   bool ok=false;
@@ -88,12 +88,12 @@ bool bapl_add_match_set_process(bprb_func_process& pro)
     return false;
   }
   vcl_cout << *tab << vcl_endl;
-  
+
   return true;
 }
 
-//  add a match set to the table
 //: Constructor
+//  add a match set to the table
 bool bapl_add_image_keys_process_cons(bprb_func_process& pro)
 {
   bool ok=false;
@@ -140,6 +140,7 @@ bool bapl_compute_tracks_process_cons(bprb_func_process& pro)
   if (!ok) return ok;
   return true;
 }
+
 bool bapl_compute_tracks_process(bprb_func_process& pro)
 {
   // Sanity check

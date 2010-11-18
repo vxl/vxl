@@ -1,16 +1,18 @@
 #ifndef boxm2_block_id_h_
 #define boxm2_block_id_h_
-
+//:
+// \file
 #include <vcl_iostream.h>
-//: boxm2_cache: top level storage (abstract) class - handles all block
-//  io, from both the cache/marshaller and the disk
+
+//: boxm2_cache: top level storage (abstract) class
+// - handles all block io, from both the cache/marshaller and the disk
 class boxm2_block_id
 {
   public:
     //indices are public
-    int i_; 
+    int i_;
     int j_;
-    int k_; 
+    int k_;
     inline int i() const { return i_; }
     inline int j() const { return j_; }
     inline int k() const { return k_; }
@@ -28,11 +30,9 @@ class boxm2_block_id
     //: Comparison
     inline bool operator==(boxm2_block_id const& v)const{return i_==v.i()&&j_==v.j()&&k_==v.k();}
     inline bool operator!=(boxm2_block_id const& v)const{return !operator==(v);}
-
 };
 
-//: scene output stream operator 
+//: scene output stream operator
 vcl_ostream& operator <<(vcl_ostream &s, boxm2_block_id& id);
 
 #endif //boxm2_block_id_h_
-
