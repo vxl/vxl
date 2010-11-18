@@ -1,12 +1,14 @@
 #ifndef boxm2_array_1d_h_
 #define boxm2_array_1d_h_
-
+//:
+// \file
 #include <vcl_new.h>
 #include <vcl_cassert.h>
 #include <vcl_iosfwd.h>
 #include <vcl_cstddef.h> // for ptrdiff_t and size_t
 
-//: A simple wrapper for a buffer. this class does not have ownership over data, 
+//: A simple wrapper for a buffer.
+//  This class does not have ownership over data,
 //  so this class does not delete or allocate any memory!
 template <class T>
 struct boxm2_array_1d
@@ -33,10 +35,10 @@ struct boxm2_array_1d
     //: Construct an array with n elements, all equal to v
     boxm2_array_1d(size_type n, T* buffer, const T &v) {
       // alignment guaranteed by 18.4.1.1
-      begin_ = buffer; 
+      begin_ = buffer;
       end_   = begin_ + n;
       for (size_type i=0; i<n; ++i)
-        begin_[i] = v; 
+        begin_[i] = v;
     }
 
     iterator begin()  { return begin_; }
@@ -67,8 +69,8 @@ struct boxm2_array_1d
 
   private:
     // begin_ <= end_ <= alloc_
-    T *begin_, *end_; 
-    size_type n_; 
+    T *begin_, *end_;
+    size_type n_;
 };
 
 export template <class T>

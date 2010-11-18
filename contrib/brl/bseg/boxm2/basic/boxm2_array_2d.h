@@ -1,10 +1,11 @@
 #ifndef boxm2_array_2d_h_
 #define boxm2_array_2d_h_
-
+//:
+// \file
 #include <vcl_iosfwd.h>
 #include <vcl_cstddef.h>
 
-//: simple wrapper for a 1D buffer (re interpretted as 2D)
+//: simple wrapper for a 1D buffer (re interpreted as 2D)
 template <class T>
 class boxm2_array_2d
 {
@@ -146,4 +147,4 @@ vcl_ostream& operator<<(vcl_ostream &, boxm2_array_2d<T> const &);
 #define BOXM2_ARRAY_2D_INSTANTIATE \
 extern "please include vbl/boxm2_array_2d.txx instead"
 
-#endif // boxm_array_2d_h_
+#endif // boxm2_array_2d_h_

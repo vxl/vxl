@@ -1,7 +1,8 @@
-// This is core/vbl/boxm2_array_3d.h
-#ifndef boxm2_array_3dh
-#define boxm2_array_3dh
-
+// This is brl/bseg/boxm2/basic/boxm2_array_3d.h
+#ifndef boxm2_array_3d_h_
+#define boxm2_array_3d_h_
+//:
+// \file
 #include <vcl_compiler.h>
 #include <vcl_cstddef.h>
 
@@ -14,7 +15,7 @@
 #endif
 
 //: Simple 3d wrapper over a 1D buffer
-// 
+//
 export template <class T>
 class boxm2_array_3d
 {
@@ -28,9 +29,9 @@ class boxm2_array_3d
   boxm2_array_3d(): element_(0), row1_count_(0), row2_count_(0), row3_count_(0)
   {}
 
-  boxm2_array_3d(size_type n1, size_type n2, size_type n3, T* buffer) 
-  { 
-    construct(n1, n2, n3, buffer); 
+  boxm2_array_3d(size_type n1, size_type n2, size_type n3, T* buffer)
+  {
+    construct(n1, n2, n3, buffer);
   }
 
   boxm2_array_3d(size_type n1, size_type n2, size_type n3, T* buffer, T const& fill_value)
@@ -39,7 +40,7 @@ class boxm2_array_3d
   }
 
   ~boxm2_array_3d () { destruct(); }
-  
+
   boxm2_array_3d<T>& operator=(boxm2_array_3d<T> const& that) {
     resize(that.row1_count_, that.row2_count_, that.row3_count_);
     set(that.data_block());
@@ -110,7 +111,7 @@ class boxm2_array_3d
   void destruct ();
 
  private:
-  T *  buffer_; 
+  T *  buffer_;
   T ***element_;
   size_type row1_count_;
   size_type row2_count_;
@@ -134,4 +135,4 @@ extern "please include vbl/boxm2_array_3d.txx instead"
 #define BOXM2_ARRAY_3D_IO_INSTANTIATE \
 extern "please include vbl/boxm2_array_3d.txx instead"
 
-#endif // boxm2_array_3dh
+#endif // boxm2_array_3d_h_
