@@ -1,8 +1,8 @@
-// This is bapl/bapl_keypoint_set.cxx
+// This is brl/bseg/bapl/bapl_keypoint_set.cxx
+#include "bapl_keypoint_set.h"
 //:
 // \file
 
-#include "bapl_keypoint_set.h"
 #include "bapl_keypoint.h"
 #include "bapl_lowe_keypoint.h"
 #include "bapl_lowe_keypoint_sptr.h"
@@ -56,7 +56,6 @@ void vsl_b_write(vsl_b_ostream& os, const bapl_keypoint_set* &ph)
 }
 
 
-
 //: Binary io, NOT IMPLEMENTED, signatures defined to use bapl_keypoint_match_set as a brdb_value
 void vsl_b_write(vsl_b_ostream & /*os*/, bapl_keypoint_match_set const & /*ph*/)
 {
@@ -107,7 +106,8 @@ void bapl_keypoint_match_set::prune_spurious_matches(vcl_vector<bapl_key_match>&
     vcl_set<int>::iterator it = helper.find(matches[ii].second->id());
     if (it == helper.end()) {
       helper.insert(matches[ii].second->id());
-    } else {
+    }
+    else {
       matches.erase(matches.begin() + ii);
       ii--;
       cnt--;
@@ -139,14 +139,13 @@ void bapl_keypoint_match_set::refine_matches(float outlier_threshold, vcl_vector
   vcl_cout << "\nRansac estimated fundamental matrix:\n" << fm_vnl << '\n';
   vcl_vector<bool> outliers = fmcr.outliers;
   vcl_vector<double> res = fmcr.residuals;
-  /*vcl_cout << "\noutliers\n";
+#ifdef DEBUG
+  vcl_cout << "\noutliers\n";
   for (unsigned i = 0; i<outliers.size(); ++i)
     vcl_cout << "O[" << i << "]= " << outliers[i]
              << "  e "<< res[i] <<  '\n';
-             */
-  
+#endif
   vcl_vector<vgl_homg_point_2d<double> > rpoints, lpoints;
-  
 
   //: prune the outliers
   for (unsigned i = 0; i<lpts.size(); ++i)
@@ -163,7 +162,7 @@ void bapl_keypoint_match_set::refine_matches(float outlier_threshold, vcl_vector
 #if 0 // not implemented yet
   //further refine F using Levenberg-Marquardt
   .. refinement code here ... should compute:  vnl_matrix_fixed<double, 3, 3> F_optimized
-  
+
   //: remove the matches that are outliers to the optimized F
   rrel_fm_problem estimator( rpts_refined, lpts_refined ); // class to be used to compute residuals
   vnl_vector<double> params;
@@ -189,9 +188,5 @@ void bapl_keypoint_match_set::refine_matches(float outlier_threshold, vcl_vector
 
   vcl_cout << "After F optimization found: " << matches_pruned2.size() << " matches, initial number was: " << matches_pruned.size() << "!\n";
 #endif
-
 }
-
-
-
 
