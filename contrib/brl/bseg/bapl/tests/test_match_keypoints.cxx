@@ -48,7 +48,7 @@ static void test_match_keypoints(int argc, char* argv[])
 
   vcl_string name1 = dir_base + "frame000.key";
   vcl_string name2 = dir_base + "frame001.key";
-  
+
   vcl_vector< bapl_keypoint_sptr > keypoints1, keypoints2;
   vcl_ifstream ifs1(name1.c_str());
   if (!ifs1.is_open()) {
@@ -60,7 +60,7 @@ static void test_match_keypoints(int argc, char* argv[])
   }
   int n; ifs1 >> n; int len; ifs1 >> len;
   for (int i = 0; i < n; i++) {
-    bapl_lowe_keypoint_sptr kp = read_from_file(ifs1, len); 
+    bapl_lowe_keypoint_sptr kp = read_from_file(ifs1, len);
     keypoints1.push_back(kp);
   }
   ifs1.close();
@@ -69,7 +69,7 @@ static void test_match_keypoints(int argc, char* argv[])
     bapl_lowe_keypoint_sptr kp = read_from_file(ifs2, len);
     keypoints2.push_back(kp);
   }
-  //: set ids of the keypoints as the order they're read from the file
+  // set ids of the keypoints as the order they're read from the file
   for (unsigned i = 0; i < keypoints1.size(); i++) {
     keypoints1[i]->set_id(i);
   }
@@ -78,7 +78,7 @@ static void test_match_keypoints(int argc, char* argv[])
   }
   vcl_cout << "loaded: " << keypoints1.size() << " keypoints in the first set!\n";
   vcl_cout << "loaded: " << keypoints2.size() << " keypoints in the second set!\n";
-  
+
   vul_timer t;
 
   bapl_bbf_tree bbf(keypoints2, 16);  // create a kd-tree for features of J (second image)
@@ -86,10 +86,10 @@ static void test_match_keypoints(int argc, char* argv[])
   vcl_vector<bapl_key_match> matches;
 
   for (unsigned i=0; i<keypoints1.size(); ++i) {  // for each feature in I (first image)
-    bapl_keypoint_sptr query = keypoints1[i];   
+    bapl_keypoint_sptr query = keypoints1[i];
     vcl_vector<bapl_keypoint_sptr> match;
     bbf.n_nearest(query, match, 2, 200);       // find its two nearest neighbors, 200 is parameter value used in bundler package
-    if( vnl_vector_ssd(query->descriptor(),match[0]->descriptor()) <
+    if ( vnl_vector_ssd(query->descriptor(),match[0]->descriptor()) <
         vnl_vector_ssd(query->descriptor(),match[1]->descriptor())*.6*.6) {   // 0.6 is parameter value used in bundler package
       bapl_key_match k_p(query, match[0]);
       matches.push_back(k_p);                      // accepted match
@@ -100,14 +100,14 @@ static void test_match_keypoints(int argc, char* argv[])
 
   vcl_vector<bapl_key_match> matches_pruned(matches);
   bapl_keypoint_match_set::prune_spurious_matches(matches_pruned);
-  vcl_cout << "After pruning found: " << matches_pruned.size() << "\n";
+  vcl_cout << "After pruning found: " << matches_pruned.size() << '\n';
   bapl_keypoint_match_set_sptr ms = new bapl_keypoint_match_set(0, 1, matches_pruned);
 
-  //: refine matches
+  // refine matches
   vcl_vector<bapl_key_match> matches_refined;
   ms->refine_matches(9.0f, matches_refined);
 
-  vcl_cout << "After refinement found: " << matches_refined.size() << "\n";
+  vcl_cout << "After refinement found: " << matches_refined.size() << '\n';
 }
 
 TESTMAIN_ARGS(test_match_keypoints)

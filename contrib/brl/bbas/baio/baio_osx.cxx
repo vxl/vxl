@@ -1,13 +1,15 @@
 // This is brl/bbas/baio/baio_osx.cxx
 #include "baio.h"
+//:
+// \file
 #include <vcl_iostream.h> //for vcl_cout
 
 //osx specific includes
 
 
 //: baio_info struct: wrapper for status variables
-struct baio_info {
-
+struct baio_info
+{
   //insert status variable and data buffer
   int status;
   char* buffer;

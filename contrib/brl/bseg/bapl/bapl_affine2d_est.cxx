@@ -1,6 +1,7 @@
-// This is algo/bapl/bapl_affine2d_est.cxx
+// This is brl/bseg/bapl/bapl_affine2d_est.cxx
 #include "bapl_affine2d_est.h"
-
+//:
+// \file
 #include <bapl/bapl_lowe_keypoint.h>
 
 #include <vnl/vnl_vector.h>
@@ -77,7 +78,7 @@ bapl_affine2d_est::fit_from_minimal_set( const vcl_vector<int>& point_indices,
 
 void
 bapl_affine2d_est :: compute_residuals( const vnl_vector<double>& params,
-                                            vcl_vector<double>& residuals ) const
+                                              vcl_vector<double>& residuals ) const
 {
   vnl_matrix< double > A(2,2);
   vnl_vector< double > t(2);
@@ -116,8 +117,8 @@ bapl_affine2d_est :: compute_residuals( const vnl_vector<double>& params,
 
 bool
 bapl_affine2d_est :: weighted_least_squares_fit( vnl_vector<double>& params,
-                                                     vnl_matrix<double>& /*norm_covar*/, // FIXME: unused parameter
-                                                     const vcl_vector<double>* weights ) const
+                                                 vnl_matrix<double>& /*norm_covar*/, // FIXME: unused parameter
+                                                 const vcl_vector<double>* weights ) const
 {
   const vcl_vector<double> * w;
   if ( weights )
@@ -172,10 +173,10 @@ bapl_affine2d_est :: weighted_least_squares_fit( vnl_vector<double>& params,
 
 void
 bapl_affine2d_est :: normalize( const vcl_vector< vnl_vector<double> >& pts,
-                                    const vcl_vector< double >& wgts,
-                                    vcl_vector< vnl_vector<double> > & norm_pts,
-                                    vnl_vector< double > & center,
-                                    double &avg_distance ) const
+                                const vcl_vector< double >& wgts,
+                                vcl_vector< vnl_vector<double> > & norm_pts,
+                                vnl_vector< double > & center,
+                                double &avg_distance ) const
 {
   norm_pts.resize( pts.size() );
 
