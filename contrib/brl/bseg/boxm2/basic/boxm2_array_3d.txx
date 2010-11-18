@@ -1,4 +1,4 @@
-// This is core/vbl/boxm2_array_3d.txx
+// This is brl/bseg/boxm2/basic/boxm2_array_3d.txx
 #ifndef boxm2_array_3d_txx_
 #define boxm2_array_3d_txx_
 
@@ -114,8 +114,6 @@ void boxm2_array_3d<T>::fill(T const& value)
 }
 
 //--------------------------------------------------------------------------------
-
-#include <vcl_iostream.h>
 
 template <class T>
 vcl_ostream & operator<<(vcl_ostream& os, boxm2_array_3d<T> const& A)

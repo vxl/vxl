@@ -1,4 +1,4 @@
-// This is core/vbl/boxm2_array_2d.txx
+// This is brl/bseg/boxm2/basic/boxm2_array_2d.txx
 #ifndef boxm2_array_2d_txx_
 #define boxm2_array_2d_txx_
 

@@ -1,4 +1,4 @@
-// This is core/vbl/vbl_array_1d.txx
+// This is brl/bseg/boxm2/basic/boxm2_array_1d.txx
 #ifndef boxm2_array_1d_txx_
 #define boxm2_array_1d_txx_
 
@@ -10,7 +10,7 @@ vcl_ostream& operator<< (vcl_ostream &os, boxm2_array_1d<T> const& array)
 {
   for (typename boxm2_array_1d<T>::const_iterator i=array.begin();
        i < array.end(); ++i)
-    os << (*i) << " ";
+    os << (*i) << ' ';
   os << vcl_endl;
 
   return os;
