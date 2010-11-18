@@ -14,32 +14,30 @@ IF(EXPAT_FOUND)
     INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
 
     SET(boxm2_sources
-        boxm2_scene.h                   boxm2_scene.cxx
-        boxm2_block.h                   boxm2_block.cxx
-	    boxm2_data.h boxm2_data_traits.h       boxm2_data.txx		
-        boxm2_scene_parser.h            boxm2_scene_parser.cxx
-        boxm2_asio_mgr.h                boxm2_asio_mgr.cxx
-        boxm2_sio_mgr.h                 boxm2_sio_mgr.cxx
-        boxm2_block_id.h                boxm2_block_id.cxx
-        boxm2_cache.h                   boxm2_cache.cxx
-        boxm2_dumb_cache.h              boxm2_dumb_cache.cxx
+        boxm2_scene.h          boxm2_scene.cxx
+        boxm2_block.h          boxm2_block.cxx
+        boxm2_data.h           boxm2_data.txx
+        boxm2_data_traits.h
+        boxm2_scene_parser.h   boxm2_scene_parser.cxx
+        boxm2_asio_mgr.h       boxm2_asio_mgr.cxx
+        boxm2_sio_mgr.h        boxm2_sio_mgr.cxx
+        boxm2_block_id.h       boxm2_block_id.cxx
+        boxm2_cache.h          boxm2_cache.cxx
+        boxm2_dumb_cache.h     boxm2_dumb_cache.cxx
 
-        boxm2_disk_io_mgr.h             boxm2_disk_io_mgr.cxx
-
+        boxm2_disk_io_mgr.h    boxm2_disk_io_mgr.cxx
        )
 
     AUX_SOURCE_DIRECTORY(Templates boxm2_sources)
 
     ADD_LIBRARY(boxm2  ${boxm2_sources})
-    TARGET_LINK_LIBRARIES(boxm2 expatpp vpgl vgl vgl_xio vbl vsl vcl baio) 
+    TARGET_LINK_LIBRARIES(boxm2 expatpp vpgl vgl vgl_xio vbl vsl vcl baio)
 
-
-    #basic 
+    #basic
     subdirs(basic)
 
     #tests
     SUBDIRS(tests)
-    
 
   ENDIF(OPENCL_FOUND)
 ENDIF(EXPAT_FOUND)
