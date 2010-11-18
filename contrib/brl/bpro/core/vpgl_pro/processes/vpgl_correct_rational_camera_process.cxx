@@ -2,7 +2,6 @@
 #include <bprb/bprb_func_process.h>
 //:
 // \file
-
 #include <bprb/bprb_parameters.h>
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
@@ -83,8 +82,9 @@ bool vpgl_correct_rational_camera_process(bprb_func_process& pro)
 }
 
 
-//: Take a list of rational cameras and a list of 2D image correspondences of the same 3D point location, 
-//  find that 3D location, 
+//:
+//  Take a list of rational cameras and a list of 2D image correspondences of the same 3D point location,
+//  find that 3D location,
 //  project that point back to images and correct each camera by adjusting its 2D image offset so that they all project the 3D location to the same 2D location
 bool vpgl_correct_rational_cameras_process_cons(bprb_func_process& pro)
 {
@@ -123,7 +123,7 @@ bool vpgl_correct_rational_cameras_process(bprb_func_process& pro)
 
   vcl_ifstream ifs(input_cams.c_str());
   if (!ifs) {
-    vcl_cerr<< " cannot open file: " << input_cams << vcl_endl;
+    vcl_cerr<< " cannot open file: " << input_cams << '\n';
     return false;
   }
 
@@ -150,7 +150,7 @@ bool vpgl_correct_rational_cameras_process(bprb_func_process& pro)
     vpgl_rational_camera<double> *ratcam = read_rational_camera<double>(cam_path);
 
     if ( !ratcam ) {
-      vcl_cerr << "Failed to load rational camera from file" << cam_path << vcl_endl;
+      vcl_cerr << "Failed to load rational camera from file" << cam_path << '\n';
       return false;
     }
     cams.push_back(*ratcam);
@@ -186,8 +186,9 @@ bool vpgl_correct_rational_cameras_process(bprb_func_process& pro)
 }
 
 
-//: Take a list of rational cameras and a list of 2D image correspondences of multiple 3D point locations, 
-//  find those 3D locations and camera adjustments by optimizing all of their projections back to the images, 
+//:
+//  Take a list of rational cameras and a list of 2D image correspondences of multiple 3D point locations,
+//  find those 3D locations and camera adjustments by optimizing all of their projections back to the images,
 bool vpgl_correct_rational_cameras_mult_corr_process_cons(bprb_func_process& pro)
 {
   //this process takes one input: the filename
@@ -195,13 +196,13 @@ bool vpgl_correct_rational_cameras_mult_corr_process_cons(bprb_func_process& pro
   vcl_vector<vcl_string> input_types;
   input_types.push_back("vcl_string");  // a file that lists the path to a camera on each line and i and j coordinate of the 3D world point
                                     // format of the file:
-                                    // n  # number of correspondences for each frame, 
+                                    // n  # number of correspondences for each frame,
                                     // full_path_cam_name_1 i_11 j_11 i_12 j_12 ... i_1n j_1n
                                     // full_path_cam_name_2 i_21 j_21 i_22 j_22 ... i_2n j_2n
                                     // .
                                     // .
                                     // .
-  input_types.push_back("vcl_string"); // output path to save the corrected cams, names will be input_cam_name_corrected.rpb 
+  input_types.push_back("vcl_string"); // output path to save the corrected cams, names will be input_cam_name_corrected.rpb
   input_types.push_back("float"); // radius in terms of pixels to search for camera translations
   input_types.push_back("int");   // number of intervals to break the radius into to generate the search space
   ok = pro.set_input_types(input_types);
@@ -210,9 +211,8 @@ bool vpgl_correct_rational_cameras_mult_corr_process_cons(bprb_func_process& pro
   vcl_vector<vcl_string> output_types;
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
-  
-  return true;
 
+  return true;
 }
 
 //: Execute the process
@@ -231,20 +231,21 @@ bool vpgl_correct_rational_cameras_mult_corr_process(bprb_func_process& pro)
 
   vcl_ifstream ifs(input_cams.c_str());
   if (!ifs) {
-    vcl_cerr<< " cannot open file: " << input_cams << vcl_endl;
+    vcl_cerr<< " cannot open file: " << input_cams << '\n';
     return false;
   }
-  int n; ifs >> n; vcl_cout << "will read: " << n << " correspondences for each frame from: "<< input_cams << vcl_endl;
+  int n; ifs >> n;
+  vcl_cout << "will read: " << n << " correspondences for each frame from "<< input_cams << vcl_endl;
 
   vcl_vector<vpgl_rational_camera<double> > cams;
   vcl_vector<vcl_vector<vgl_point_2d<double> > > corrs;
-  
+
   vcl_vector<vcl_string> out_cam_names;
   vul_awk awk(ifs);
   for (; awk; ++awk)
   {
     vcl_stringstream line(awk.line());
-    vcl_string cam_path; 
+    vcl_string cam_path;
     ifs >> cam_path;
     if (cam_path.size() < 2) continue;
     vcl_cout << "reading cam: " << cam_path << vcl_endl;
@@ -253,9 +254,9 @@ bool vpgl_correct_rational_cameras_mult_corr_process(bprb_func_process& pro)
     vcl_string out_cam_name = output_path + img_name + "_corrected.rpb";
     vcl_cout << "out cam name: " << out_cam_name << vcl_endl;
     vpgl_rational_camera<double> *ratcam = read_rational_camera<double>(cam_path);
-    
+
     if ( !ratcam ) {
-      vcl_cerr << "Failed to load rational camera from file" << cam_path << vcl_endl;
+      vcl_cerr << "Failed to load rational camera from file" << cam_path << '\n';
       return false;
     }
     cams.push_back(*ratcam);
@@ -267,7 +268,7 @@ bool vpgl_correct_rational_cameras_mult_corr_process(bprb_func_process& pro)
       ifs >> i; ifs >> j;
       vgl_point_2d<double> cor(i,j);
       corrs_frame.push_back(cor);
-    }    
+    }
     corrs.push_back(corrs_frame);
   }
 
@@ -279,11 +280,10 @@ bool vpgl_correct_rational_cameras_mult_corr_process(bprb_func_process& pro)
   vcl_vector<vgl_point_3d<double> > intersections;
   if (!vpgl_adjust_rational_trans_multiple_pts::adjust(cams, corrs, radius, interval_n, cam_trans, intersections))
   {
-    vcl_cerr << "In vpgl_correct_rational_cameras_process - "
-             << " adjustment failed\n";
+    vcl_cerr << "In vpgl_correct_rational_cameras_process - adjustment failed\n";
     return false;
   }
-  
+
   if (intersections.size() != n) return false;
   for (unsigned i = 0; i < intersections.size(); i++)
     vcl_cout << "after adjustment 3D intersection point: " << intersections[i] << vcl_endl;
@@ -298,7 +298,8 @@ bool vpgl_correct_rational_cameras_mult_corr_process(bprb_func_process& pro)
   return true;
 }
 
-//: Take a list of rational cameras and a list of 2D image correspondences of multiple 3D point locations, 
+//:
+//  Take a list of rational cameras and a list of 2D image correspondences of multiple 3D point locations,
 //  find those 3D locations and camera adjustments by optimizing all of their projections back to the images, use Lev-Marq, needs a good initialization within one pixel error
 bool vpgl_correct_rational_cameras_mult_corr_refine_process_cons(bprb_func_process& pro)
 {
@@ -307,22 +308,21 @@ bool vpgl_correct_rational_cameras_mult_corr_refine_process_cons(bprb_func_proce
   vcl_vector<vcl_string> input_types;
   input_types.push_back("vcl_string");  // a file that lists the path to a camera on each line and i and j coordinate of the 3D world point
                                     // format of the file:
-                                    // n  # number of correspondences for each frame, 
+                                    // n  # number of correspondences for each frame,
                                     // full_path_cam_name_1 i_11 j_11 i_12 j_12 ... i_1n j_1n
                                     // full_path_cam_name_2 i_21 j_21 i_22 j_22 ... i_2n j_2n
                                     // .
                                     // .
                                     // .
-  input_types.push_back("vcl_string"); // output path to save the corrected cams, names will be input_cam_name_corrected.rpb 
+  input_types.push_back("vcl_string"); // output path to save the corrected cams, names will be input_cam_name_corrected.rpb
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   vcl_vector<vcl_string> output_types;
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
-  
-  return true;
 
+  return true;
 }
 
 //: Execute the process
@@ -336,23 +336,24 @@ bool vpgl_correct_rational_cameras_mult_corr_refine_process(bprb_func_process& p
   // get the inputs
   vcl_string input_cams = pro.get_input<vcl_string>(0);
   vcl_string output_path  = pro.get_input<vcl_string>(1);
-  
+
   vcl_ifstream ifs(input_cams.c_str());
   if (!ifs) {
-    vcl_cerr<< " cannot open file: " << input_cams << vcl_endl;
+    vcl_cerr<< " cannot open file: " << input_cams << '\n';
     return false;
   }
-  int n; ifs >> n; vcl_cout << "will read: " << n << " correspondences for each frame from: "<< input_cams << vcl_endl;
+  int n; ifs >> n;
+  vcl_cout << "will read: " << n << " correspondences for each frame from "<< input_cams << vcl_endl;
 
   vcl_vector<vpgl_rational_camera<double> > cams;
   vcl_vector<vcl_vector<vgl_point_2d<double> > > corrs;
-  
+
   vcl_vector<vcl_string> out_cam_names;
   vul_awk awk(ifs);
   for (; awk; ++awk)
   {
     vcl_stringstream line(awk.line());
-    vcl_string cam_path; 
+    vcl_string cam_path;
     ifs >> cam_path;
     if (cam_path.size() < 2) continue;
     vcl_cout << "reading cam: " << cam_path << vcl_endl;
@@ -361,9 +362,9 @@ bool vpgl_correct_rational_cameras_mult_corr_refine_process(bprb_func_process& p
     vcl_string out_cam_name = output_path + img_name + "_corrected.rpb";
     vcl_cout << "out cam name: " << out_cam_name << vcl_endl;
     vpgl_rational_camera<double> *ratcam = read_rational_camera<double>(cam_path);
-    
+
     if ( !ratcam ) {
-      vcl_cerr << "Failed to load rational camera from file" << cam_path << vcl_endl;
+      vcl_cerr << "Failed to load rational camera from file" << cam_path << '\n';
       return false;
     }
     cams.push_back(*ratcam);
@@ -375,7 +376,7 @@ bool vpgl_correct_rational_cameras_mult_corr_refine_process(bprb_func_process& p
       ifs >> i; ifs >> j;
       vgl_point_2d<double> cor(i,j);
       corrs_frame.push_back(cor);
-    }    
+    }
     corrs.push_back(corrs_frame);
   }
 
@@ -387,11 +388,10 @@ bool vpgl_correct_rational_cameras_mult_corr_refine_process(bprb_func_process& p
   vcl_vector<vgl_point_3d<double> > intersections;
   if (!vpgl_adjust_rational_trans_multiple_pts::adjust_lev_marq(cams, corrs, cam_trans, intersections))
   {
-    vcl_cerr << "In vpgl_correct_rational_cameras_process - "
-             << " adjustment failed\n";
+    vcl_cerr << "In vpgl_correct_rational_cameras_process - adjustment failed\n";
     return false;
   }
-  
+
   if (intersections.size() != n) return false;
   for (unsigned i = 0; i < intersections.size(); i++)
     vcl_cout << "after adjustment 3D intersection point: " << intersections[i] << vcl_endl;
