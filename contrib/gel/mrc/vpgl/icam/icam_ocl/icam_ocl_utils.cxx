@@ -72,10 +72,12 @@ vcl_string error_to_string(cl_int  status )
     return output;
 }
 
-int check_val(cl_int status, cl_int result, std::string message) {
+int check_val(cl_int status, cl_int result, std::string message)
+{
   if (status != result) {
     vcl_cout << message << '\n';
     return 0;
   }
-  return 1;
+  else
+    return 1;
 }
