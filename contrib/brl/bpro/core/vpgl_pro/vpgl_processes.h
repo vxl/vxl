@@ -20,6 +20,8 @@ DECLARE_FUNC_CONS(vpgl_projective_to_rational_camera_process);
 DECLARE_FUNC_CONS(vpgl_correct_rational_camera_process);
 DECLARE_FUNC_CONS(vpgl_create_perspective_camera_process);
 DECLARE_FUNC_CONS(vpgl_save_perspective_camera_vrml_process);
-
+DECLARE_FUNC_CONS(vpgl_correct_rational_cameras_process);
+DECLARE_FUNC_CONS(vpgl_correct_rational_cameras_mult_corr_process);
+DECLARE_FUNC_CONS(vpgl_correct_rational_cameras_mult_corr_refine_process);
 
 #endif

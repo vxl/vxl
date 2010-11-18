@@ -9,6 +9,7 @@
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_proj_camera.h>
 #include <vnl/vnl_matrix_fixed.h>
+#include <vul/vul_file.h>
 
 //: Constructor
 bool vpgl_load_proj_camera_process_cons(bprb_func_process& pro)
@@ -39,6 +40,17 @@ bool vpgl_load_proj_camera_process(bprb_func_process& pro)
 
   // get the inputs
   vcl_string camera_filename = pro.get_input<vcl_string>(0);
+
+  vcl_string ext = vul_file::extension(camera_filename);
+  if (ext == ".vsl") { // load binary
+    vpgl_proj_camera<double>* procamp = new vpgl_proj_camera<double>();
+    vsl_b_ifstream ins(camera_filename.c_str());
+    procamp->b_read(ins);
+    ins.close();
+    vbl_smart_ptr<vpgl_camera<double> > procam = procamp;
+    pro.set_output_val<vpgl_camera_double_sptr>(0, procam);
+    return true;
+  }
 
   // read projection matrix from the file.
   vcl_ifstream ifs(camera_filename.c_str());
