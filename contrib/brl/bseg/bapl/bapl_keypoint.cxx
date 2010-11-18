@@ -1,4 +1,4 @@
-// This is algo/bapl/bapl_keypoint.cxx
+// This is brl/bseg/bapl/bapl_keypoint.cxx
 //:
 // \file
 
@@ -11,6 +11,4 @@ vcl_ostream& operator<< (vcl_ostream& os, bapl_keypoint const & k)
   k.print_summary(os);
   return os;
 }
-
-
 

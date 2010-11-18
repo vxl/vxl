@@ -1,11 +1,11 @@
-// This is algo/bapl/bapl_mi_matcher.h
+// This is brl/bseg/bapl/bapl_mi_matcher.h
 #ifndef bapl_mi_matcher_h_
 #define bapl_mi_matcher_h_
 //:
 // \file
-// \brief A class to find a matching ROI using mutual information 
+// \brief A class to find a matching ROI using mutual information
 // \author Matt Leotta
-// \date 10/14/03
+// \date Oct 14, 2003
 //
 // \verbatim
 //  Modifications
@@ -20,17 +20,17 @@
 class bapl_affine_roi;
 
 //:A class to match a base ROI (rectangular) to an affine ROI using mutual information.
-// 
+//
 
 class bapl_mi_matcher
 {
-public:
+ public:
   //: Constructor
   bapl_mi_matcher(vil_image_view<vxl_byte> src_image,
                   vil_image_view<vxl_byte> target_patch,
                   bapl_affine_transform init_xform,
                   bapl_mi_matcher_params params = bapl_mi_matcher_params());
-  
+
   //: Constructor
   bapl_mi_matcher(vil_image_view<vxl_byte> src_image,
                   bapl_affine_roi& roi,
@@ -44,7 +44,7 @@ public:
   //: Return the transformation of the best match
   bapl_affine_transform best_xform();
 
-private:
+ private:
   //: Default Constructor
   bapl_mi_matcher();
 

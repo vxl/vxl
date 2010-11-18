@@ -1,11 +1,11 @@
-// This is algo/bapl/bapl_affine_roi.h
+// This is brl/bseg/bapl/bapl_affine_roi.h
 #ifndef bapl_affine_roi_h_
 #define bapl_affine_roi_h_
 //:
 // \file
 // \brief A class to represent affine transformed region of interest.
 // \author Matt Leotta
-// \date 10/14/03
+// \date Oct 14, 2003
 //
 // \verbatim
 //  Modifications
@@ -22,10 +22,10 @@
 
 class bapl_affine_roi
 {
-public:
+ public:
   //: Constructor
   bapl_affine_roi(vil_image_view<vxl_byte> src_image,
-                  bapl_affine_transform xform, 
+                  bapl_affine_transform xform,
                   unsigned ni, unsigned nj );
 
   //: Returns the rectified image
@@ -33,8 +33,7 @@ public:
 
   const bapl_affine_transform& xform(){ return xform_; }
 
-
-private:
+ private:
   //: Default Constructor
   bapl_affine_roi();
 

@@ -1,9 +1,9 @@
-// This is breye/bapl/bapl_keypoint_set_sptr.h
+// This is brl/bseg/bapl/bapl_keypoint_set_sptr.h
 #ifndef bapl_keypoint_set_sptr_h_
 #define bapl_keypoint_set_sptr_h_
 //:
 // \file
-// \brief Smart pointer to a keypoint_set 
+// \brief Smart pointer to a keypoint_set
 // \author Ozge C. Ozcanli, (ozge@lems.brown.edu)
 // \date Sep 16, 2010
 //

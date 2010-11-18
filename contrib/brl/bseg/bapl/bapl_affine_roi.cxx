@@ -1,4 +1,4 @@
-// This is algo/bapl/bapl_affine_roi.cxx
+// This is brl/bseg/bapl/bapl_affine_roi.cxx
 //:
 // \file
 
@@ -7,7 +7,7 @@
 
 //: Constructor
 bapl_affine_roi::bapl_affine_roi(vil_image_view<vxl_byte> src_image,
-                                 bapl_affine_transform xform, 
+                                 bapl_affine_transform xform,
                                  unsigned ni, unsigned nj )
   :  rectified_valid_(false), src_img_(src_image), rectified_img_(ni,nj),
      xform_(xform)
@@ -15,10 +15,10 @@ bapl_affine_roi::bapl_affine_roi(vil_image_view<vxl_byte> src_image,
 
 
 //: Return the rectified image (calculate as needed)
-const vil_image_view<vxl_byte>& 
+const vil_image_view<vxl_byte>&
 bapl_affine_roi::rectified_image()
 {
-  if(!rectified_valid_)
+  if (!rectified_valid_)
     this->rectify();
   return rectified_img_;
 }
@@ -28,7 +28,6 @@ bapl_affine_roi::rectified_image()
 void
 bapl_affine_roi::rectify()
 {
-
   unsigned ni=rectified_img_.ni(), nj=rectified_img_.nj();
   vcl_ptrdiff_t istep=rectified_img_.istep(), jstep=rectified_img_.jstep();
 
@@ -38,7 +37,7 @@ bapl_affine_roi::rectify()
     for (unsigned i=0; i<ni; ++i,pixel+=istep){
       double x,y;
       xform_.map(i,j, x,y);
-      if( x>=0 && x<src_img_.ni() && y>=0 && y<src_img_.nj() )
+      if ( x>=0 && x<src_img_.ni() && y>=0 && y<src_img_.nj() )
         *pixel = src_img_(int(x), int(y));
       else
         *pixel = 0;

@@ -1,4 +1,4 @@
-// This is breye/bapl/bapl_keypoint.h
+// This is brl/bseg/bapl/bapl_keypoint.h
 #ifndef bapl_keypoint_h_
 #define bapl_keypoint_h_
 //:
@@ -19,7 +19,7 @@
 //: Base class for all affine patch keypoints
 class bapl_keypoint : public vbl_ref_count
 {
-public:
+ public:
   //: Constructor
   bapl_keypoint(){}
   //: Destructor
@@ -34,7 +34,7 @@ public:
   void set_id(unsigned id) { id_ = id; }
   unsigned id() { return id_; }
 
-protected:
+ protected:
   unsigned id_;
 };
 

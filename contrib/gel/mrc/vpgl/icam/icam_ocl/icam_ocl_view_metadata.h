@@ -1,4 +1,4 @@
-// This is gel/mrc/vpgl/icam/icam_ocl_view_metadata.h
+// This is gel/mrc/vpgl/icam/icam_ocl/icam_ocl_view_metadata.h
 #ifndef icam_ocl_view_metadata_h_
 #define icam_ocl_view_metadata_h_
 //:
@@ -29,8 +29,8 @@ class icam_ocl_view_metadata : public icam_view_metadata
    icam_ocl_view_metadata(){}
 
    icam_ocl_view_metadata(vil_image_view<float> const& exp_img,
-                      vil_image_view<double> const& depth_img,
-                      icam_depth_transform const& dt);
+                          vil_image_view<double> const& depth_img,
+                          icam_depth_transform const& dt);
 
    ~icam_ocl_view_metadata() { if (minimizer_) delete minimizer_; }
 
@@ -44,7 +44,6 @@ class icam_ocl_view_metadata : public icam_view_metadata
 
    void b_write(vsl_b_ostream& os) const ;
 
-
  private:
    //: solver for the registration
    icam_minimizer* minimizer_;
@@ -53,9 +52,10 @@ class icam_ocl_view_metadata : public icam_view_metadata
    double cost_;
    unsigned final_level_;
 };
+
 vcl_ostream& operator<<(vcl_ostream& os, icam_ocl_view_metadata const& p);
 void vsl_b_read(vsl_b_istream& is, icam_ocl_view_metadata& p);
 
 void vsl_b_write(vsl_b_ostream& os, icam_ocl_view_metadata const& p);
-#endif // icam_ocl_view_metadata_h_
 
+#endif // icam_ocl_view_metadata_h_

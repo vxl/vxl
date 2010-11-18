@@ -1,4 +1,4 @@
-// This is algo/bapl/bapl_lowe_pyramid.h
+// This is brl/bseg/bapl/bapl_lowe_pyramid.h
 #ifndef bapl_lowe_pyramid_h_
 #define bapl_lowe_pyramid_h_
 //:
@@ -18,9 +18,9 @@
 
 
 template< class T >
-class bapl_lowe_pyramid  
+class bapl_lowe_pyramid
 {
-public:
+ public:
   //: Constructor
   bapl_lowe_pyramid(unsigned octave_size=3, unsigned num_octaves=0);
 
@@ -35,14 +35,13 @@ public:
 
   //: create a 3x3x3 image estimating the 26 neighbors at location (i,j)
   vil_image_view< T > neighbors(unsigned index, unsigned x, unsigned y) const;
-  
-private:
+
+ private:
   //: The image data
   vcl_vector< vcl_vector< vil_image_view< T > > > data_;
-  
+
   //: Number of images per octave
   int octave_size_;
-
 };
 
 #endif // bapl_lowe_pyramid_h_

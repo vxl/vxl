@@ -1,4 +1,4 @@
-// This is bapl/bapl_keypoint_set.h
+// This is brl/bseg/bapl/bapl_keypoint_set.h
 #ifndef bapl_keypoint_set_h_
 #define bapl_keypoint_set_h_
 //:
@@ -19,7 +19,7 @@
 
 class bapl_keypoint_set : public vbl_ref_count
 {
-public:
+ public:
   //: Constructor
   bapl_keypoint_set(vcl_vector<bapl_keypoint_sptr> & keys) : keys_(keys) {}
 
@@ -37,7 +37,7 @@ typedef vcl_pair<bapl_keypoint_sptr, bapl_keypoint_sptr> bapl_key_match;
 
 class bapl_keypoint_match_set : public vbl_ref_count
 {
-public:
+ public:
   //: Constructor
   bapl_keypoint_match_set(int id_left, int id_right, vcl_vector<bapl_key_match> & matches) : id_left_(id_left), id_right_(id_right), matches_(matches) {}
 

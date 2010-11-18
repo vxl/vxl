@@ -1,4 +1,4 @@
-// This is algo/bapl/bapl_keypoint_extractor.h
+// This is brl/bseg/bapl/bapl_keypoint_extractor.h
 #ifndef bapl_keypoint_extractor_h_
 #define bapl_keypoint_extractor_h_
 //:
@@ -34,7 +34,7 @@ void bapl_dog_peaks( vcl_vector<vgl_point_3d<float> >& peak_pts,
 
 class bapl_lowe_orientation
 {
-public:
+ public:
   //: Constructor
   bapl_lowe_orientation(float sigma, unsigned num_bins);
   //: Compute the orientation at (x,y) using the gradient orientation and magnitude images
@@ -42,12 +42,10 @@ public:
                   const vil_image_view<float> & grad_orient,
                   const vil_image_view<float> & grad_mag,
                   vcl_vector<float> & orientations  );
-private:
+ private:
   float sigma_;
   unsigned num_bins_;
   float bin_scale_;
 };
-
-
 
 #endif // bapl_keypoint_extractor_h_

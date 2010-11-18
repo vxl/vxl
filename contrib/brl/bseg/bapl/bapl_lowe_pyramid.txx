@@ -1,4 +1,4 @@
-// This is algo/bapl/bapl_lowe_pyramid.txx
+// This is brl/bseg/bapl/bapl_lowe_pyramid.txx
 #ifndef bapl_lowe_pyramid_txx_
 #define bapl_lowe_pyramid_txx_
 //:
@@ -13,7 +13,7 @@ template < class T >
 bapl_lowe_pyramid<T>::bapl_lowe_pyramid(unsigned octave_size, unsigned num_octaves)
  : octave_size_(octave_size)
 {
-  for(unsigned i=0; i<num_octaves; ++i){
+  for (unsigned i=0; i<num_octaves; ++i){
     vcl_vector< vil_image_view< T > > octave( octave_size, vil_image_view< T >() );
     data_.push_back(octave);
   }
@@ -22,7 +22,7 @@ bapl_lowe_pyramid<T>::bapl_lowe_pyramid(unsigned octave_size, unsigned num_octav
 
 //: Resize the number of octaves in the pyramid
 template < class T >
-void 
+void
 bapl_lowe_pyramid<T>::resize(unsigned num_octaves)
 {
   // an empty octave
@@ -68,29 +68,29 @@ bapl_lowe_pyramid<T>::neighbors(unsigned index, unsigned x, unsigned y) const
 
   // Below level
   int scale = (b_oct < c_oct)?2:1; // need to scale by 2 if the image is large
-  for(int i=-1; i<2; ++i){
-    for(int j=-1; j<2; ++j){
+  for (int i=-1; i<2; ++i){
+    for (int j=-1; j<2; ++j){
       neighbors(i+1,j+1,0) = below((x>>b_oct)+i*scale, (y>>b_oct)+j*scale);
     }
   }
-  
+
   // Current level
-  for(int i=-1; i<2; ++i){
-    for(int j=-1; j<2; ++j){
+  for (int i=-1; i<2; ++i){
+    for (int j=-1; j<2; ++j){
       neighbors(i+1,j+1,1) = current((x>>c_oct)+i, (y>>c_oct)+j);
     }
   }
 
   // Above
-  for(int i=-1; i<2; ++i){
-    for(int j=-1; j<2; ++j){
+  for (int i=-1; i<2; ++i){
+    for (int j=-1; j<2; ++j){
       neighbors(i+1,j+1,2) = above((x>>a_oct)+i, (y>>a_oct)+j);
       // need to interpolate if the image is smaller
       if (a_oct > c_oct)
         neighbors(i+1,j+1,2) = ( above((x>>a_oct),(y>>a_oct)) + neighbors(i+1,j+1,2) )/2;
     }
   }
-  
+
   return neighbors;
 }
 

@@ -1,4 +1,4 @@
-// This is algo/bapl/bapl_lowe_pyramid_set.h
+// This is brl/bseg/bapl/bapl_lowe_pyramid_set.h
 #ifndef bapl_lowe_pyramid_set_h_
 #define bapl_lowe_pyramid_set_h_
 //:
@@ -25,27 +25,27 @@
 
 class bapl_lowe_pyramid_set : public vbl_ref_count
 {
-public:
+ public:
   //: Constructor
   // if \param num_octaves is zero the number of octaves is determined from the image size
-  bapl_lowe_pyramid_set( const vil_image_resource_sptr& image, 
+  bapl_lowe_pyramid_set( const vil_image_resource_sptr& image,
                          unsigned octave_size=3, unsigned num_octaves=0 );
 
   //: Accessor for the Gaussian pyramid
-  const vil_image_view<float>& gauss_at( float scale, 
-                                         float *actual_scale=0, 
+  const vil_image_view<float>& gauss_at( float scale,
+                                         float *actual_scale=0,
                                          float *rel_scale=0 ) const;
   //: Accessor for the Difference of Gaussians pyramid
-  const vil_image_view<float>& dog_at( float scale, 
-                                       float *actual_scale=0, 
+  const vil_image_view<float>& dog_at( float scale,
+                                       float *actual_scale=0,
                                        float *rel_scale=0 ) const;
   //: Accessor for the Gradient orientation pyramid
-  const vil_image_view<float>& grad_orient_at( float scale, 
-                                               float *actual_scale=0, 
+  const vil_image_view<float>& grad_orient_at( float scale,
+                                               float *actual_scale=0,
                                                float *rel_scale=0 ) const;
   //: Accessor for the Gradient magnitude pyramid
-  const vil_image_view<float>& grad_mag_at( float scale, 
-                                            float *actual_scale=0, 
+  const vil_image_view<float>& grad_mag_at( float scale,
+                                            float *actual_scale=0,
                                             float *rel_scale=0 ) const;
 
   //: Accessor for the Gaussian pyramid
@@ -77,13 +77,13 @@ public:
   //: Accessor for the size of an octave
   int octave_size() const { return octave_size_; }
 
-protected:
+ protected:
   //: Return image in the pyramid closest to scale, and adjust i and j if provided
   const vil_image_view<float>& pyramid_at( const bapl_lowe_pyramid<float> & pyramid,
-                                           float scale, float *actual_scale=0, 
+                                           float scale, float *actual_scale=0,
                                            float *rel_scale=0 ) const;
 
-private:
+ private:
   //: Gaussian pyramid
   bapl_lowe_pyramid<float> gauss_pyramid_;
   //: Difference of Gaussians pyramid
@@ -95,7 +95,6 @@ private:
 
   int num_octaves_;
   int octave_size_;
-
 };
 
 #endif // bapl_lowe_pyramid_set_h_

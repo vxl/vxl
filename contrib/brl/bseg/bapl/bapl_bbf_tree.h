@@ -1,4 +1,4 @@
-// This is algo/bapl/bapl_bbf_tree.h
+// This is brl/bseg/bapl/bapl_bbf_tree.h
 #ifndef bapl_bbf_tree_h_
 #define bapl_bbf_tree_h_
 //:
@@ -22,7 +22,7 @@
 //: A bounding box for BBF nodes
 class bapl_bbf_box
 {
-public:
+ public:
   //: Constructor
   bapl_bbf_box();
   bapl_bbf_box( const vnl_vector_fixed<double,128>& min_point,
@@ -56,18 +56,18 @@ class bapl_bbf_node : public vbl_ref_count
   //: Constructor for internal node
   bapl_bbf_node( const bapl_bbf_box& outer_box,
                  const bapl_bbf_box& inner_box,
-                unsigned int depth )
+                 unsigned int depth )
     : outer_box_(outer_box), inner_box_(inner_box), depth_(depth),
       point_indices_(0), left_(0), right_(0) {}
 
-  //: Constuctor for leaf node
+  //: Constructor for leaf node
   bapl_bbf_node( const bapl_bbf_box& outer_box,
                  const bapl_bbf_box& inner_box,
                  unsigned int depth,
                  const vcl_vector<int>& indices )
     : outer_box_(outer_box), inner_box_(inner_box), depth_(depth),
       point_indices_(indices), left_(0), right_(0) {}
-  
+
   //: Outer bounding box
   bapl_bbf_box outer_box_;
   //: Inner bounding box
@@ -86,15 +86,15 @@ class bapl_bbf_node : public vbl_ref_count
 // A light-weight class used in the priorty queue
 class bapl_bbf_queue_entry
 {
-public:
+ public:
   //: Constructor
   bapl_bbf_queue_entry() {}
   //: Constructor
   bapl_bbf_queue_entry( double dist, bapl_bbf_node_sptr node )
     : dist_(dist), node_(node) {}
   //: Used in sorting by distance
-  bool operator< ( const bapl_bbf_queue_entry& right ) const
-  { return right.dist_ < this->dist_; } 
+  bool operator< ( const bapl_bbf_queue_entry& right_entry ) const
+  { return right_entry.dist_ < this->dist_; }
 
   //: Distance to this node
   double dist_;
@@ -106,8 +106,8 @@ public:
 //: The BBF tree data structure
 class bapl_bbf_tree
 {
-public:
-  //: Constuctor
+ public:
+  //: Constructor
   bapl_bbf_tree( const vcl_vector< bapl_keypoint_sptr >& points,
                  int points_per_leaf=4 );
 
@@ -116,15 +116,15 @@ public:
                   vcl_vector< bapl_keypoint_sptr >& closest_points,
                   vcl_vector< int >& closest_indices,
                   int n=1, int max_search_nodes=-1 );
-  
+
   //: Return an estimate of the n closest points to the query point
   // \param n is the number of nearest nodes to return
   // \param max_search_nodes is the number of nodes to examine (-1 mean all)
   void n_nearest( const bapl_keypoint_sptr query_point,
                   vcl_vector< bapl_keypoint_sptr >& closest_points,
                   int n=1, int max_search_nodes=-1);
-  
-private:
+
+ private:
   //: Build the tree
   bapl_bbf_node_sptr build_tree( int points_per_leaf,
                                  const bapl_bbf_box& outer_box,

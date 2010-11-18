@@ -1,4 +1,5 @@
-// This is algo/bapl/bapl_make_pyramids.cxx
+// This is brl/bseg/bapl/examples/bapl_draw_keypoints.cxx
+
 //:
 // \file
 
@@ -10,8 +11,8 @@
 #include <vil/vil_save.h>
 #include <vil/vil_convert.h>
 #include <vil/vil_new.h>
-#include <bapl/bapl_keypoint.h>
 #include <bapl/bapl_lowe_keypoint.h>
+#include <bapl/bapl_keypoint.h>
 #include <bapl/bapl_keypoint_extractor.h>
 #include <ipts/ipts_draw.h>
 
@@ -36,7 +37,7 @@ int main( int argc, char* argv[] )
   vul_arg<vcl_string> out_path("-o","Output image");
   vul_arg_parse(argc, argv);
 
-  if(!in_path.set())
+  if (!in_path.set())
     vul_arg_display_usage_and_exit();
 
   bool extract = true;
@@ -57,11 +58,12 @@ int main( int argc, char* argv[] )
   if (extract) {
     vcl_cout << "Finding Keypoints" << vcl_endl;
     bapl_keypoint_extractor( grey_image_sptr, keypoints);
-  } else {
+  }
+  else {
     vcl_cout << "Reading Keypoints from file: " << key_path().c_str() << vcl_endl;
     vcl_ifstream ifs(key_path().c_str());
     if (!ifs.is_open()) {
-      vcl_cerr << "Failed to open file " << key_path().c_str() << vcl_endl;
+      vcl_cerr << "Failed to open file " << key_path().c_str() << '\n';
       return 0;
     }
     int n; ifs >> n; int len; ifs >> len;
@@ -69,13 +71,12 @@ int main( int argc, char* argv[] )
     for (int i = 0; i < n; i++) {
       float loc_x, loc_y, scale, orientation;
       ifs >> loc_x; ifs >> loc_y; ifs >> scale; ifs >> orientation;
-      
+
       vnl_vector_fixed<double, 128> desc;
       for (int j = 0; j < len; j++) {
         int val;
         ifs >> val;
         desc[j] = val;
-    
       }
       bapl_lowe_pyramid_set_sptr py;
       bapl_lowe_keypoint_sptr kp = new bapl_lowe_keypoint(py, loc_y, loc_x, scale, orientation, desc);
@@ -97,12 +98,11 @@ int main( int argc, char* argv[] )
   }
 
   vcl_cout << "Saving the results" << vcl_endl;
-  
+
   vil_save(color_img, out_path().c_str() );
 
 
   vcl_cout <<  "done!" <<vcl_endl;
   return 0;
 }
-
 

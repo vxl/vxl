@@ -1,4 +1,4 @@
-// This is algo/bapl/bapl_lowe_pyramid_set_sptr.h
+// This is brl/bseg/bapl/bapl_lowe_pyramid_set_sptr.h
 #ifndef bapl_lowe_pyramid_set_sptr_h_
 #define bapl_lowe_pyramid_set_sptr_h_
 //:

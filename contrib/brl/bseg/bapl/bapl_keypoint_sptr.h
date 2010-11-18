@@ -1,4 +1,4 @@
-// This is breye/bapl/bapl_keypoint_sptr.h
+// This is brl/bseg/bapl/bapl_keypoint_sptr.h
 #ifndef bapl_keypoint_sptr_h_
 #define bapl_keypoint_sptr_h_
 //:

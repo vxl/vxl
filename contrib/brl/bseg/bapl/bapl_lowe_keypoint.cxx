@@ -1,8 +1,8 @@
-// This is algo/bapl/bapl_lowe_keypoint.cxx
+// This is brl/bseg/bapl/bapl_lowe_keypoint.cxx
+#include "bapl_lowe_keypoint.h"
 //:
 // \file
 
-#include "bapl_lowe_keypoint.h"
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h>
 #include <bapl/bapl_lowe_pyramid_set.h>
@@ -11,7 +11,7 @@
 bapl_lowe_keypoint::bapl_lowe_keypoint()
 {
   // make a random keypoint
-  for( int i=0; i<128; ++i){
+  for ( int i=0; i<128; ++i){
     descriptor_[i] = vcl_rand();
   }
   this->normalize();
@@ -64,14 +64,14 @@ bapl_lowe_keypoint::normalize()
 {
   descriptor_.normalize();
   bool changed = false;
-  for( int i=0; i<128; ++i){
-    if( descriptor_[i] > 0.2 ){
+  for ( int i=0; i<128; ++i){
+    if ( descriptor_[i] > 0.2 ){
       descriptor_[i] = 0.2;
       changed = true;
     }
   }
-  
-  if( changed )
+
+  if ( changed )
     descriptor_.normalize();
 }
 
@@ -84,12 +84,12 @@ bapl_lowe_keypoint::print_summary(vcl_ostream& os) const
   //os << "               desc="<< descriptor_ << vcl_endl;
 }
 
-//: warning: does not read/write the bapl_lowe_pyramid_set, only the location, orientation and descriptor of the keypoint
-//  translate the coordinate frame with respect to image width and height if necessary, otherwise pass 0, 0
+//: translate the coordinate frame with respect to image width and height if necessary, otherwise pass 0, 0
+//  Warning: does not read/write the bapl_lowe_pyramid_set, only the location, orientation and descriptor of the keypoint
 bapl_lowe_keypoint_sptr read_from_file(vcl_istream& ifs, int len, int img_width, int img_height)
 {
   float loc_x, loc_y, scale, orientation;
-  ifs >> loc_x; ifs >> loc_y; ifs >> scale; ifs >> orientation;   
+  ifs >> loc_x; ifs >> loc_y; ifs >> scale; ifs >> orientation;
   if (img_height > 0 && img_width > 0) {
     loc_y = img_height - loc_y - 1.0f;
     loc_x -= 0.5*img_width;
@@ -103,7 +103,7 @@ bapl_lowe_keypoint_sptr read_from_file(vcl_istream& ifs, int len, int img_width,
   for (int j = 0; j < len; j++) {
     double val;
     ifs >> val;
-    desc[j] = val;  
+    desc[j] = val;
   }
   bapl_lowe_pyramid_set_sptr py;
   bapl_lowe_keypoint_sptr kp = new bapl_lowe_keypoint(py, loc_y, loc_x, scale, orientation, desc);

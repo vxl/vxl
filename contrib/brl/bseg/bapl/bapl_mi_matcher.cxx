@@ -1,8 +1,8 @@
-// This is algo/bapl/bapl_mi_matcher.cxx
+// This is brl/bseg/bapl/bapl_mi_matcher.cxx
+#include "bapl_mi_matcher.h"
 //:
 // \file
 
-#include "bapl_mi_matcher.h"
 #include <bapl/bapl_affine_roi.h>
 #include <bapl/bapl_affine_transform.h>
 #include <vcl_algorithm.h>
@@ -29,7 +29,6 @@ bapl_mi_matcher::bapl_mi_matcher(vil_image_view<vxl_byte> src_image,
 }
 
 
-  
 //: Constructor
 bapl_mi_matcher::bapl_mi_matcher(vil_image_view<vxl_byte> src_image,
                                  bapl_affine_roi& roi,
@@ -51,17 +50,17 @@ bapl_mi_matcher::generate()
   double mi;
   vcl_vector<bapl_match> hypotheses;
   // if this is the first iteration, initialize with the initial transformation
-  if(matches_.empty()){
+  if (matches_.empty()){
     mi = mutual_info(init_xform_);
     matches_.push_back(bapl_mi_matcher::bapl_match(mi,init_xform_));
   }
 
-  for( vcl_vector<bapl_match>::iterator m_itr = matches_.begin();
-       m_itr != matches_.end(); ++m_itr){
+  for ( vcl_vector<bapl_match>::iterator m_itr = matches_.begin();
+        m_itr != matches_.end(); ++m_itr) {
     // hypothesize that the transformation remains unchanged
     hypotheses.push_back(*m_itr);
     // make other random hypotheses
-    for(unsigned i=0; i<params_.num_samples_; ++i){
+    for (unsigned i=0; i<params_.num_samples_; ++i){
       bapl_affine_transform T = this->rand_transform();
       double mi = mutual_info(T);
       hypotheses.push_back(bapl_mi_matcher::bapl_match(mi,T));
@@ -71,10 +70,10 @@ bapl_mi_matcher::generate()
   vcl_sort(hypotheses.begin(), hypotheses.end());
 
   matches_.clear();
-  for(unsigned i=0; i<params_.num_samples_; ++i){
+  for (unsigned i=0; i<params_.num_samples_; ++i) {
     matches_.push_back(hypotheses[i]);
     vcl_cout << "MI" << i << ": " << hypotheses[i].mut_info << " - T: "
-             << hypotheses[i].xform.t() << " - A: "<< hypotheses[i].xform.A() << vcl_endl; 
+             << hypotheses[i].xform.t() << " - A: "<< hypotheses[i].xform.A() << vcl_endl;
   }
 }
 
@@ -95,7 +94,7 @@ bapl_mi_matcher::best_xform()
 inline double rand_double() { return 2.0*rand()/(double(RAND_MAX)) -1.0; }
 
 //: Generate a random transform (close to init_xform_)
-bapl_affine_transform 
+bapl_affine_transform
 bapl_mi_matcher::rand_transform()
 {
   double angle = params_.max_rotation_ang_*rand_double()*vnl_math::pi/180.0;
@@ -117,7 +116,7 @@ bapl_mi_matcher::rand_transform()
 
 
 //: Calculate the mutual information for the image at the transformed location
-double 
+double
 bapl_mi_matcher::mutual_info(const bapl_affine_transform& T)
 {
   bapl_affine_roi roi(src_img_, T, tgt_img_.ni(), tgt_img_.nj());
@@ -127,11 +126,10 @@ bapl_mi_matcher::mutual_info(const bapl_affine_transform& T)
   double match_entropy = brip_hist_entropy(histogram, match_sum);
 
   vcl_vector<vcl_vector<double> > joint_histogram;
-  double joint_sum = brip_joint_histogram(tgt_img_, roi.rectified_image(), 
-                                            joint_histogram, 0, 255, 16);
+  double joint_sum = brip_joint_histogram(tgt_img_, roi.rectified_image(),
+                                          joint_histogram, 0, 255, 16);
   double joint_entropy = brip_hist_entropy(joint_histogram, joint_sum);
 
   return tgt_entropy_ + match_entropy - joint_entropy;
 }
-
 

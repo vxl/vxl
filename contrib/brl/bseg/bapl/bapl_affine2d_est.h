@@ -1,4 +1,4 @@
-// This is algo/bapl/bapl_affine2d_est_h_
+// This is brl/bseg/bapl/bapl_affine2d_est.h
 #ifndef bapl_affine2d_est_h_
 #define bapl_affine2d_est_h_
 
@@ -22,15 +22,16 @@
 
 //: Class to maintain data and optimization model for 2d affine transform estimation.
 
-class bapl_affine2d_est : public rrel_estimation_problem {
-public:
+class bapl_affine2d_est : public rrel_estimation_problem
+{
+ public:
 
   //: Constructor from a vector of matches (pairs of keypoint smart pointers)
   bapl_affine2d_est( const vcl_vector< bapl_keypoint_match > & matches );
 
   //: Constructor from vnl_vectors
   bapl_affine2d_est( const vcl_vector< vnl_vector<double> > & from_pts,
-                         const vcl_vector< vnl_vector<double> > & to_pts );
+                     const vcl_vector< vnl_vector<double> > & to_pts );
 
   //: Destructor.
   virtual ~bapl_affine2d_est();
@@ -56,18 +57,18 @@ public:
                                    vnl_matrix<double>& norm_covar,
                                    const vcl_vector<double>* weights=0 ) const;
 
-public:  // testing / debugging utility
+ public:  // testing / debugging utility
     //: \brief Print information as a test utility.
   void print_points() const;
 
-protected:
+ protected:
   void normalize( const vcl_vector< vnl_vector<double> >& pts,
                   const vcl_vector< double >& wgts,
                   vcl_vector< vnl_vector<double> > & norm_pts,
                   vnl_vector< double > & center,
                   double &avg_distance ) const;
 
-protected:
+ protected:
   vcl_vector< vnl_vector< double > > from_pts_;
   vcl_vector< vnl_vector< double > > to_pts_;
 };
