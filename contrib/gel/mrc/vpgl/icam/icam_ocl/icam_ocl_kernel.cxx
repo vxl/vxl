@@ -39,8 +39,8 @@ void icam_ocl_kernel::release_kernel(cl_int& status)
 }
 
 bool icam_ocl_kernel::create_in_buffers(const cl_context& context,
-                                     vcl_vector<void*> data, 
-                                     vcl_vector<unsigned> sizes)
+                                        vcl_vector<void*> data,
+                                        vcl_vector<unsigned> sizes)
 {
   if (data.size() != sizes.size())
     return SDK_FAILURE;
@@ -56,8 +56,8 @@ bool icam_ocl_kernel::create_in_buffers(const cl_context& context,
 }
 
 bool icam_ocl_kernel::create_out_buffers(const cl_context& context,
-                                     vcl_vector<void*> data, 
-                                     vcl_vector<unsigned> sizes)
+                                         vcl_vector<void*> data,
+                                         vcl_vector<unsigned> sizes)
 {
   if (data.size() != sizes.size())
     return SDK_FAILURE;
@@ -70,25 +70,26 @@ bool icam_ocl_kernel::create_out_buffers(const cl_context& context,
   return SDK_SUCCESS;
 }
 
-bool icam_ocl_kernel::set_local_arg(int arg_id, size_t arg_size)
+bool icam_ocl_kernel::set_local_arg(int arg_id, vcl_size_t arg_size)
 {
   //  set local variable
   cl_int status = clSetKernelArg(kernel_,arg_id,arg_size,0);
-  if(status!=SDK_SUCCESS){
-	  vcl_cout << "Set local kernel arg failed\n";
-	  return SDK_FAILURE;
+  if (status!=SDK_SUCCESS){
+    vcl_cout << "Set local kernel arg failed\n";
+    return SDK_FAILURE;
   }
-  return SDK_SUCCESS;
+  else
+    return SDK_SUCCESS;
 }
 
-bool icam_ocl_kernel::enqueue_write_buffer(const cl_command_queue& queue, int idx, 
-                                    cl_bool block_write,
-                                    size_t  offset          /* offset */,
-                                    size_t  cnb             /* cb */,
-                                    const void*  data       /* ptr */,
-                                    cl_uint num_events      /* num_events_in_wait_list */,
-                                    const cl_event *  ev1   /* event_wait_list */,
-                                    cl_event *   ev2)
+bool icam_ocl_kernel::enqueue_write_buffer(const cl_command_queue& queue, int idx,
+                                           cl_bool block_write,
+                                           vcl_size_t  offset          /* offset */,
+                                           vcl_size_t  cnb             /* cb */,
+                                           const void*  data       /* ptr */,
+                                           cl_uint num_events      /* num_events_in_wait_list */,
+                                           const cl_event *  ev1   /* event_wait_list */,
+                                           cl_event *   ev2)
 {
   cl_int status = clEnqueueWriteBuffer(queue,buffers_[idx]->buffer(),block_write,
                                        offset,cnb,data,num_events,ev1,ev2);
@@ -99,11 +100,11 @@ bool icam_ocl_kernel::enqueue_write_buffer(const cl_command_queue& queue, int id
 }
 
 bool icam_ocl_kernel::enqueue_read_buffer(const cl_command_queue& queue, int idx, cl_bool block_read,
-                           size_t  offset,size_t  cnb, void*  data, cl_uint num_events,
-                           const cl_event* ev1, cl_event *ev2)
+                                          vcl_size_t  offset,vcl_size_t  cnb, void*  data, cl_uint num_events,
+                                          const cl_event* ev1, cl_event *ev2)
 {
   cl_int status = clEnqueueReadBuffer(queue,buffers_[idx]->buffer(),block_read,
-    offset,cnb,data,num_events,ev1,ev2);
+                                      offset,cnb,data,num_events,ev1,ev2);
 
   if (!check_val(status,CL_SUCCESS,"clCreateBuffer ( rotation ) failed."))
     return SDK_FAILURE;
@@ -112,8 +113,8 @@ bool icam_ocl_kernel::enqueue_read_buffer(const cl_command_queue& queue, int idx
 
 bool icam_ocl_kernel::release_buffers()
 {
-  for (unsigned i=0; i<buffers_.size(); i++) 
-    if (!buffers_[i]->release_memory())    
+  for (unsigned i=0; i<buffers_.size(); i++)
+    if (!buffers_[i]->release_memory())
       return SDK_FAILURE;
   return SDK_SUCCESS;
 }
@@ -121,7 +122,7 @@ bool icam_ocl_kernel::release_buffers()
 bool icam_ocl_kernel::set_args()
 {
   for (unsigned i=0; i<buffers_.size(); i++) {
-    if (!buffers_[i]->set_kernel_arg(kernel_,i)) 
+    if (!buffers_[i]->set_kernel_arg(kernel_,i))
       return SDK_FAILURE;
   }
   return SDK_SUCCESS;

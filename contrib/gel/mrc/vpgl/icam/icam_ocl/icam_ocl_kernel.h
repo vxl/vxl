@@ -3,14 +3,15 @@
 
 #include <vcl_string.h>
 #include <vcl_vector.h>
+#include <vcl_cstddef.h> // for std::size_t
 #include "icam_ocl_cl.h"
 #include "icam_ocl_mem.h"
 
 #include "icam_ocl_utils.h"
 
-class icam_ocl_kernel 
+class icam_ocl_kernel
 {
-public:
+ public:
   icam_ocl_kernel(){}
 
   ~icam_ocl_kernel();
@@ -21,14 +22,14 @@ public:
 
   bool create_out_buffers(const cl_context& context, vcl_vector<void*> data, vcl_vector<unsigned> sizes);
 
-  bool set_local_arg(int arg_id, size_t arg_size);
+  bool set_local_arg(int arg_id, vcl_size_t arg_size);
 
   bool enqueue_write_buffer(const cl_command_queue& queue, int idx,  cl_bool block_write,
-                            size_t  offset,size_t  cnb, const void*  data, cl_uint num_events,
+                            vcl_size_t  offset,vcl_size_t  cnb, const void*  data, cl_uint num_events,
                             const cl_event* ev1, cl_event* ev2);
 
   bool enqueue_read_buffer(const cl_command_queue& queue, int idx, cl_bool block_read,
-                           size_t  offset,size_t  cnb, void*  data, cl_uint num_events,
+                           vcl_size_t  offset,vcl_size_t  cnb, void*  data, cl_uint num_events,
                            const cl_event* ev1, cl_event *ev2);
 
   bool release_buffers();
@@ -41,11 +42,9 @@ public:
 
   int buffer_cnt() { return buffers_.size();}
 
-private:
+ private:
   cl_kernel kernel_;
   vcl_vector<icam_ocl_mem*> buffers_;
-  
 };
 
 #endif
-
