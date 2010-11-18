@@ -282,10 +282,12 @@ void test_block()
     }
     TEST("boxm2_block: mem_ptrs initialized properly", true, true);
 
-    //2. read in sub block dimension, sub block num
+    ////2. read in sub block dimension, sub block num
     boxm2_block* loaded = boxm2_sio_mgr::load_block(test_file, boxm2_block_id(0,0,0)); 
     test_block_equivalence(test_block, *loaded);
 
+    //clean up boxm2_block
+    delete loaded; 
 }
 
 
