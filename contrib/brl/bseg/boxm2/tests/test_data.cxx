@@ -27,17 +27,17 @@ void test_data_sio()
     boxm2_block_id id(0,0,0);
     char * buffer=reinterpret_cast<char *>(farray);
     boxm2_data<BOXM2_ALPHA> test_data(buffer, array_size*sizeof(float),id);
-    boxm2_sio_mgr::save_block_data<BOXM2_ALPHA>("d:/",id,&test_data);
+    boxm2_sio_mgr::save_block_data<BOXM2_ALPHA>("",id,&test_data);
     test_data.~boxm2_data();
 
     vcl_ostringstream ns;  // Declare an output string stream.
-    ns << "d:/" << boxm2_data_traits<BOXM2_ALPHA>::prefix() << id << ".bin";
+    ns << "" << boxm2_data_traits<BOXM2_ALPHA>::prefix() << id << ".bin";
     vcl_string filename = ns.str();
 
     unsigned long bytecount=vul_file::size(filename);
     TEST("Succesful Synchronous Write ",bytecount,array_size*sizeof(float));
 
-    boxm2_data_base * read_data=boxm2_sio_mgr::load_block_data<BOXM2_ALPHA>("d:/",id);
+    boxm2_data_base * read_data=boxm2_sio_mgr::load_block_data<BOXM2_ALPHA>("",id);
     char * bufferread=read_data->data_buffer();
     char * buffer_bkup=reinterpret_cast<char *>(farray_bkup);
 
@@ -68,7 +68,7 @@ void test_data_asio(){
     char * buffer=reinterpret_cast<char *>(farray);
     boxm2_data<BOXM2_ALPHA> test_data(buffer, array_size*sizeof(float),id);
     baio write_status;
-    asio_mgr.save_block_data<BOXM2_ALPHA>("d:/",id,&test_data,write_status);
+    asio_mgr.save_block_data<BOXM2_ALPHA>("",id,&test_data,write_status);
     int nflops=0;
     while(write_status.status()==BAIO_IN_PROGRESS)
         nflops++;
@@ -76,7 +76,7 @@ void test_data_asio(){
     test_data.~boxm2_data();
 
     vcl_ostringstream ns;  // Declare an output string stream.
-    ns << "d:/" << boxm2_data_traits<BOXM2_ALPHA>::prefix() << id << ".bin";
+    ns << "" << boxm2_data_traits<BOXM2_ALPHA>::prefix() << id << ".bin";
     vcl_string filename = ns.str();
 
     unsigned long bytecount=vul_file::size(filename);
@@ -84,7 +84,7 @@ void test_data_asio(){
 
 
     baio read_status;
-    asio_mgr.load_block_data<BOXM2_ALPHA>("d:/",id,read_status);
+    asio_mgr.load_block_data<BOXM2_ALPHA>("",id,read_status);
     while(read_status.status()==BAIO_IN_PROGRESS)
         nflops++;
 
