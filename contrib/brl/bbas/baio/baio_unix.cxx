@@ -31,7 +31,7 @@ baio::~baio()
 }
 
 //: Opens and reads file asynchronously
-bool baio::read(vcl_string filename, char* buff, unsigned BUFSIZE)
+bool baio::read(vcl_string filename, char* buff, long BUFSIZE)
 {
   // 1. call c open to get standard file handle
   int fhandle = open(filename.c_str(), O_RDONLY);
@@ -46,7 +46,7 @@ bool baio::read(vcl_string filename, char* buff, unsigned BUFSIZE)
   // 3. Allocate a data buffer for the aiocb request
   info_->my_aiocb.aio_buf = buff;
   if (!info_->my_aiocb.aio_buf) {
-    vcl_cerr<<"baio (linux)::read could not allocate buffer of size "<<BUFSIZE<<vcl_endl;
+    vcl_cerr<<"baio (linux)::read could not assign buffer of size "<<BUFSIZE<<vcl_endl;
     perror("malloc");
   }
 
@@ -64,6 +64,46 @@ bool baio::read(vcl_string filename, char* buff, unsigned BUFSIZE)
   return true;
 }
 
+//: opens and writes file asynchronously
+bool baio::write(vcl_string filename, char* buff, long BUFSIZE)
+{
+  // 1. call c open to get standard file handle
+  int fhandle = open(filename.c_str(), O_WRONLY);
+  if (fhandle < 0) {
+    vcl_cerr<<"baio (linux)::write could not open file"<<filename<<vcl_endl;
+    perror("open");
+  }
+
+  // 2. Zero out the aiocb structure (recommended)
+  bzero( (char *) &(info_->my_aiocb), sizeof(struct aiocb) );
+
+  // 3. Allocate a data buffer for the aiocb request
+  info_->my_aiocb.aio_buf = buff;
+  if (!info_->my_aiocb.aio_buf) {
+    vcl_cerr<<"baio (linux)::write could not assign buffer of size "<<BUFSIZE<<vcl_endl;
+    perror("malloc");
+  }
+
+  //4.  Initialize the necessary fields in the aiocb
+  info_->my_aiocb.aio_fildes = fhandle;
+  info_->my_aiocb.aio_nbytes = BUFSIZE;
+  info_->my_aiocb.aio_offset = 0;
+
+  //5.  Call AIO_READ using my_aiocb struct
+  int STATUS = aio_write( &(info_->my_aiocb) );
+  if (STATUS < 0) {
+    vcl_cerr<<"baio (linux)::write throws error on aio_read: "<<STATUS<<vcl_endl;
+    perror("aio_read");
+  }
+  return true;
+}
+
+//: closes file handle
+void baio::close_file()
+{
+   int erno = close(info_->my_aiocb.aio_fildes);  
+}
+
 baio_status baio::status()
 {
   int status = aio_error( &(info_->my_aiocb) );
@@ -79,3 +119,7 @@ char* baio::buffer()
   return (char*) (info_->my_aiocb.aio_buf);
 }
 
+long baio::buffer_size()
+{
+  return (long) (info_->my_aiocb.aio_nbytes); 
+}

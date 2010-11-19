@@ -50,9 +50,9 @@ class baio
     ~baio();
 
     //: read bytes from file
-    bool read(vcl_string filename, char* buff,  unsigned BUFSIZE);
+    bool read(vcl_string filename, char* buff, long BUFSIZE);
 
-    bool write(vcl_string filename, char* buff,  unsigned BUFSIZE);
+    bool write(vcl_string filename, char* buff, long BUFSIZE);
 
     void close_file();
 
@@ -61,6 +61,9 @@ class baio
     
     //: get data (assumes aio object is done)
     char* buffer();
+    
+    //: get bufer size (assumes aio object is done)
+    long buffer_size();
     
   private: 
     //: member variable needs to persist between read and status calls
