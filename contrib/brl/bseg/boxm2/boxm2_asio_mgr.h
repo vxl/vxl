@@ -25,10 +25,12 @@ class boxm2_asio_mgr
     void save_block(vcl_string dir, boxm2_block* block );
 
     //: creates a BAIO object that loads data from disk
-    template <boxm2_data_type data_type> void load_data(vcl_string dir, boxm2_block_id block_id);
+    template <boxm2_data_type data_type> 
+    void load_block_data(vcl_string dir, boxm2_block_id block_id, baio & aio_reader);
 
     //: creates a BAIO object that saves data to disk
-    template <boxm2_data_type data_type> void save_data(vcl_string dir, boxm2_block_id block_id , boxm2_data_base * block_data);
+    template <boxm2_data_type data_type> 
+    void save_block_data(vcl_string dir, boxm2_block_id block_id , boxm2_data_base * block_data,baio & aio_writer);
 
     //: returns load list (for updating cache)
     vcl_map<boxm2_block_id, baio> load_list() { return load_list_; }
@@ -42,15 +44,15 @@ class boxm2_asio_mgr
     // NEED TO KEEP TRACK OF DATA LOAD AND SAVES
     // TODO: Make a map to data_types as well
     vcl_map<boxm2_block_id, baio> load_list_;
-    vcl_map<boxm2_data_type, vcl_map<boxm2_block_id, baio>  > load_data_list_;
+    vcl_map<vcl_string, vcl_map<boxm2_block_id, baio>  > load_data_list_;
 
     //: list of asynchronous io saves
     vcl_map<boxm2_block_id, baio> save_list_;
-    vcl_map<boxm2_data_type, vcl_map<boxm2_block_id, baio> > save_data_list_;
+    vcl_map<vcl_string, vcl_map<boxm2_block_id, baio> > save_data_list_;
 };
 
 template <boxm2_data_type data_type>
-void boxm2_asio_mgr::load_data(vcl_string dir, boxm2_block_id block_id)
+void boxm2_asio_mgr::load_block_data(vcl_string dir, boxm2_block_id block_id, baio & aio_reader)
 {
     //0. open up file for writing
     vcl_ostringstream ns;  // Declare an output string stream.
@@ -59,14 +61,13 @@ void boxm2_asio_mgr::load_data(vcl_string dir, boxm2_block_id block_id)
 
     unsigned long buflength=vul_file::size(filename);
     char * buffer=new char[buflength];
-    baio aio_reader;
     aio_reader.read(filename,buffer,buflength);
-    load_data_list_[data_type][block_id]=baio;
-    return;
+    //load_data_list_[boxm2_data_traits<data_type>::prefix()][block_id]=aio_reader;
+    return ;
 }
 
 template <boxm2_data_type data_type>
-void boxm2_asio_mgr::save_data(vcl_string dir, boxm2_block_id block_id , boxm2_data_base * block_data)
+void boxm2_asio_mgr::save_block_data(vcl_string dir, boxm2_block_id block_id , boxm2_data_base * block_data,baio & aio_writer )
 {
     //0. open up file for writing
     vcl_ostringstream ns;  // Declare an output string stream.
@@ -75,10 +76,10 @@ void boxm2_asio_mgr::save_data(vcl_string dir, boxm2_block_id block_id , boxm2_d
 
     unsigned long buflength=vul_file::size(filename);
     char * buffer=new char[buflength];
-    baio aio_reader;
-    aio_reader.write(filename,block_data->data_buffer(),block_data->buffer_length());
-    save_data_list_[data_type][block_id]=baio;
-    return;
+    //baio aio_writer;
+    aio_writer.write(filename,block_data->data_buffer(),block_data->buffer_length());
+    //save_data_list_[boxm2_data_traits<data_type>::prefix()][block_id]=aio_writer;
+    return ;//aio_writer;
 }
 
 

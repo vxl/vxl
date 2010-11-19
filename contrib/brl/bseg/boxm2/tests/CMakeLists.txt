@@ -10,7 +10,7 @@ ADD_EXECUTABLE( boxm2_test_all
   test_utils.h  test_utils.cxx
  )
 
-TARGET_LINK_LIBRARIES( boxm2_test_all testlib boxm2  boxm2_basic) 
+TARGET_LINK_LIBRARIES( boxm2_test_all testlib boxm2  boxm2_basic vul) 
 ADD_TEST( boxm2_test_scene      ${EXECUTABLE_OUTPUT_PATH}/boxm2_test_all  test_scene  )
 ADD_TEST( boxm2_test_cache      ${EXECUTABLE_OUTPUT_PATH}/boxm2_test_all  test_cache  )
 ADD_TEST( boxm2_test_io         ${EXECUTABLE_OUTPUT_PATH}/boxm2_test_all  test_io  )

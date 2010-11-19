@@ -30,7 +30,7 @@ class boxm2_data_base
 };
 
 template <boxm2_data_type T>
-class boxm2_data: boxm2_data_base
+class boxm2_data: public boxm2_data_base
 {
  public:
     typedef typename boxm2_data_traits<T>::datatype datatype;

@@ -32,6 +32,7 @@ class boxm2_block_id
     //: Comparison
     inline bool operator==(boxm2_block_id const& v)const{return i_==v.i()&&j_==v.j()&&k_==v.k();}
     inline bool operator!=(boxm2_block_id const& v)const{return !operator==(v);}
+    inline bool operator<(boxm2_block_id const& v)const{ if(this->i_ > v.i()) return true; else return false;}
     
     //: to string
     vcl_string to_string(); 
