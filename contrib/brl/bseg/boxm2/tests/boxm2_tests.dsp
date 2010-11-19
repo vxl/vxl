@@ -227,6 +227,12 @@ SOURCE=.\test_io.cxx
 SOURCE=.\test_wrappers.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_block.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_data.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group
