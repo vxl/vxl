@@ -12,7 +12,53 @@
 #include <vnl/vnl_vector_fixed.h>
 
 #include <vcl_iostream.h>
+#include <vcl_string.h>
+#include <vcl_vector.h>
+#include <vcl_map.h>
+#include <vcl_algorithm.h>
 
+void test_block_id()
+{
+  vcl_vector<boxm2_block_id> list; 
+  vcl_map<boxm2_block_id, vcl_string> bmap; 
+  
+    boxm2_block_id zero(0,0,0); 
+    boxm2_block_id one(0,0,1); 
+    boxm2_block_id two(0,1,0); 
+    boxm2_block_id three(0,1,1); 
+    boxm2_block_id four(1,0,0); 
+    boxm2_block_id five(1,0,1); 
+    boxm2_block_id five2(1,0,1);
+    
+    list.push_back(three); 
+    list.push_back(two);
+    list.push_back(five); 
+    list.push_back(zero);
+    list.push_back(four);
+    list.push_back(one); 
+    
+    TEST("block_id equal    :      ", true, five==five); 
+    TEST("block_id !equal   :      ", true, five!=four); 
+    TEST("block_id less than:      ", true, two < four); 
+    TEST("block_id less than eq:   ", true, five<=five2); 
+    TEST("block_id less than eq:   ", true, four<= five); 
+    TEST("block_id greater than:   ", true, five > two); 
+    TEST("block_id greater than eq:", true, five2>=five);
+    TEST("block_id greater than eq:", true, four >=one);
+    
+    bmap[zero] = "zero";
+    bmap[three] = "three";
+    bmap[two] = "two";
+    bmap[five] = "five";
+    bmap[one] = "one";
+    bmap[four] = "four";
+    vcl_map<boxm2_block_id, vcl_string>::iterator iter;
+    for(iter = bmap.begin(); iter != bmap.end(); ++iter) {
+      boxm2_block_id b = (*iter).first; 
+      vcl_cout << b <<","<< (*iter).second <<vcl_endl;
+    }
+  
+}
 
 void test_block_equivalence(boxm2_block& a, boxm2_block& b)
 {
@@ -214,8 +260,10 @@ void test_block()
 
     //clean up boxm2_block
     delete loaded; 
-    
+  
     //clean up file left behind "tests/block_id.0.0.0.bin"
+    
+    test_block_id();
 }
 
 

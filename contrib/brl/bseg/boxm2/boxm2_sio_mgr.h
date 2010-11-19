@@ -6,7 +6,7 @@
 #include <boxm2/boxm2_block_id.h>
 #include <boxm2/boxm2_data_traits.h>
 #include <boxm2/boxm2_data.h>
-
+#include <vul/vul_file.h>
 #include <vcl_iostream.h>
 
 //: disk level storage class.
@@ -29,9 +29,8 @@ class boxm2_sio_mgr
     template <boxm2_data_type data_type> 
     static void save_block_data(vcl_string dir, boxm2_block_id block_id, boxm2_data<data_type> * block_data );
 
-    //TODO create data load and save functions
-
 };
+
 template <boxm2_data_type data_type> 
 boxm2_data_base *  boxm2_sio_mgr::load_block_data(vcl_string dir, boxm2_block_id block_id)
 {
@@ -66,7 +65,6 @@ void boxm2_sio_mgr::save_block_data(vcl_string dir, boxm2_block_id block_id, box
     myFile.write(bytes, block_data->buffer_length());  
     myFile.close();
     return;
-
 }
 
 #endif // boxm2_sio_mgr_h_

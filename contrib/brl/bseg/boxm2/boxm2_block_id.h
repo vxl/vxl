@@ -27,12 +27,21 @@ class boxm2_block_id
 
     //: assignment
     inline boxm2_block_id& operator=(boxm2_block_id const& v) {
-      i_=v.i(); j_=v.j(); k_=v.k(); return *this; }
+      i_=v.i(); j_=v.j(); k_=v.k(); return *this;
+    }
 
     //: Comparison
-    inline bool operator==(boxm2_block_id const& v)const{return i_==v.i()&&j_==v.j()&&k_==v.k();}
-    inline bool operator!=(boxm2_block_id const& v)const{return !operator==(v);}
-    inline bool operator<(boxm2_block_id const& v)const{ if(this->i_ > v.i()) return true; else return false;}
+    inline bool operator==(boxm2_block_id const& v) const { return i_==v.i()&&j_==v.j()&&k_==v.k(); }
+    inline bool operator!=(boxm2_block_id const& v) const { return !operator==(v); }
+    inline bool operator< (boxm2_block_id const& v) const {
+      if(i_<v.i()) return true;
+      if(i_==v.i() && j_<v.j()) return true;
+      if(i_==v.i() && j_==v.j() && k_<v.k()) return true;
+      return false;
+    } 
+    inline bool operator<=(boxm2_block_id const& v) const { return (operator<(v) || operator==(v)); }
+    inline bool operator> (boxm2_block_id const& v) const { return !operator<=(v); }
+    inline bool operator>=(boxm2_block_id const& v) const { return (operator>(v) || operator==(v)); }
     
     //: to string
     vcl_string to_string(); 

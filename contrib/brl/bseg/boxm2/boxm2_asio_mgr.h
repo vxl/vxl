@@ -10,7 +10,7 @@
 #include <vcl_vector.h>
 #include <vcl_map.h>
 #include <bbas/baio/baio.h>
-#include <vgl/vgl_point_3d.h>
+#include <vul/vul_file.h>
 
 //: disk level storage class.
 //  handles all of the asynchronous IO read and write requests
@@ -31,6 +31,12 @@ class boxm2_asio_mgr
     //: creates a BAIO object that saves data to disk
     template <boxm2_data_type data_type> 
     void save_block_data(vcl_string dir, boxm2_block_id block_id , boxm2_data_base * block_data,baio & aio_writer);
+    
+    //: returns a map of block pointers 
+    vcl_map<boxm2_block_id, boxm2_block*> get_loaded_blocks(); 
+
+    //: returns a map of data pointers
+    vcl_map<vcl_string, vcl_map<boxm2_block_id, boxm2_data_base*> > get_loaded_data_blocks(); 
 
     //: returns load list (for updating cache)
     vcl_map<boxm2_block_id, baio> load_list() { return load_list_; }
@@ -50,6 +56,7 @@ class boxm2_asio_mgr
     vcl_map<boxm2_block_id, baio> save_list_;
     vcl_map<vcl_string, vcl_map<boxm2_block_id, baio> > save_data_list_;
 };
+
 
 template <boxm2_data_type data_type>
 void boxm2_asio_mgr::load_block_data(vcl_string dir, boxm2_block_id block_id, baio & aio_reader)
