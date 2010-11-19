@@ -7,7 +7,6 @@
 #include <boxm2/boxm2_cache.h>
 #include <boxm2/boxm2_data.h>
 #include <boxm2/boxm2_data_traits.h>
-#include <boxm2/boxm2_disk_io_mgr.h>
 #include <boxm2/boxm2_dumb_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_scene_parser.h>

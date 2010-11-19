@@ -24,8 +24,6 @@ IF(EXPAT_FOUND)
         boxm2_block_id.h       boxm2_block_id.cxx
         boxm2_cache.h          boxm2_cache.cxx
         boxm2_dumb_cache.h     boxm2_dumb_cache.cxx
-
-        boxm2_disk_io_mgr.h    boxm2_disk_io_mgr.cxx
        )
 
     AUX_SOURCE_DIRECTORY(Templates boxm2_sources)
