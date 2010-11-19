@@ -51,7 +51,11 @@ class baio
 
     //: read bytes from file
     bool read(vcl_string filename, char* buff,  unsigned BUFSIZE);
-    
+
+    bool write(vcl_string filename, char* buff,  unsigned BUFSIZE);
+
+    void close_file();
+
     //: get object's status 
     baio_status status();
     

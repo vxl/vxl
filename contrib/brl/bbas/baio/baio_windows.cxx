@@ -62,6 +62,35 @@ bool baio::read(vcl_string filename, char* buffer, unsigned BUFSIZE)
   info_->status = ReadFile(info_->fhandle, info_->buffer, BUFSIZE, &bytesRead, &(info_->o));
   return info_->status;
 }
+//: Opens and reads file asynchronously
+bool baio::write(vcl_string filename, char* buffer, unsigned BUFSIZE)
+{
+  info_->fhandle = CreateFile(filename.c_str(),
+                              FILE_WRITE_DATA,
+                              FILE_SHARE_WRITE,
+                              NULL, CREATE_ALWAYS,
+                              FILE_FLAG_WRITE_THROUGH|FILE_FLAG_OVERLAPPED, NULL);
+  if (info_->fhandle== INVALID_HANDLE_VALUE) {
+    vcl_cerr<<"baio (Windows)::read could not open file"<<filename<<vcl_endl;
+    perror("open");
+  }
+
+  info_->buffer=buffer;
+  if (!info_->buffer) {
+    vcl_cerr<<"baio (Windows)::the buffer does not exist "<<BUFSIZE<<vcl_endl;
+  }
+  //
+  DWORD byteswritten = 0;
+
+  vcl_cout << "reading..." << vcl_endl;
+  info_->status = WriteFile(info_->fhandle, info_->buffer, BUFSIZE, &byteswritten, &(info_->o));
+  return info_->status;
+}
+void baio::close_file()
+{
+    CloseHandle(info_->fhandle);
+    
+}
 
 baio_status baio::status()
 {
