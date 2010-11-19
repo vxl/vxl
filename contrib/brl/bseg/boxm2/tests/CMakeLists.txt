@@ -6,6 +6,8 @@ ADD_EXECUTABLE( boxm2_test_all
   test_wrappers.cxx
   test_data.cxx
   test_block.cxx
+  
+  test_utils.h  test_utils.cxx
  )
 
 TARGET_LINK_LIBRARIES( boxm2_test_all testlib boxm2  boxm2_basic) 
