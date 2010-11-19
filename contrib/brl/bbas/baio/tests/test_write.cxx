@@ -35,7 +35,7 @@ static void test_write()
   char* out_tester = new char[buffSize];
   vnl_random rand;
   for(unsigned i=0;i<buffSize;i++)
-      in_tester[i]=(char)34;
+      in_tester[i]=(char)rand.lrand32(-127,127);
 
 
   baio aio;
@@ -50,7 +50,7 @@ static void test_write()
 
   int charCount = 0;
   vcl_string line;
-  vcl_ifstream myfile(test_file.c_str());
+  vcl_ifstream myfile(test_file.c_str(),vcl_ios::binary);
   if (myfile.is_open()) {
     while ( myfile.good() ) {
       getline (myfile,line);
