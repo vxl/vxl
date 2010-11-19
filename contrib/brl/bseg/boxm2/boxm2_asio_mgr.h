@@ -20,26 +20,27 @@ class boxm2_asio_mgr
 
     //: creates a BAIO object that loads block data from disk
     void load_block(vcl_string dir, boxm2_block_id block_id);
-    
+
     //: creates a BAIO object that saves block data to disk
     void save_block(vcl_string dir, boxm2_block* block );
 
     //: creates a BAIO object that loads data from disk
     template <boxm2_data_type data_type> void load_data(vcl_string dir, boxm2_block_id block_id);
-    
+
     //: creates a BAIO object that saves data to disk
     template <boxm2_data_type data_type> void save_data(vcl_string dir, boxm2_block_id block_id , boxm2_data_base * block_data);
 
     //: returns load list (for updating cache)
     vcl_map<boxm2_block_id, baio> load_list() { return load_list_; }
-    
+
     //: returns save list (for updating cache)
     vcl_map<boxm2_block_id, baio> save_list() { return save_list_; }
 
   private:
 
-    //: NEED TO KEEP TRACK OF DATA LOAD AND SAVES
-    //: list of asynchronous io loads TODO: Make a map to data_types as well
+    //: list of asynchronous io loads
+    // NEED TO KEEP TRACK OF DATA LOAD AND SAVES
+    // TODO: Make a map to data_types as well
     vcl_map<boxm2_block_id, baio> load_list_;
     vcl_map<boxm2_data_type, vcl_map<boxm2_block_id, baio>  > load_data_list_;
 
