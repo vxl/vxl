@@ -8,6 +8,8 @@ TESTS += test_scene.cxx
 TESTS += test_wrappers.cxx
 TESTS += test_cache.cxx
 TESTS += test_io.cxx
+TESTS += test_block.cxx
+TESTS += test_data.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
