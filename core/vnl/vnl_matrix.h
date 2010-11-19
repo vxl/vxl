@@ -520,7 +520,10 @@ class vnl_matrix
 
   //: Return true if all elements equal to zero, within given tolerance
   bool is_zero(double tol) const;
-
+ 
+  //:  Return true if all elements of both matrices are equal, within given tolerance
+  bool is_equal(vnl_matrix<T> const& rhs, double tol) const;
+  
   //: Return true if finite
   bool is_finite() const;
 

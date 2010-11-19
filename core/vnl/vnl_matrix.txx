@@ -1146,6 +1146,24 @@ bool vnl_matrix<T>::operator_eq(vnl_matrix<T> const& rhs) const
 }
 
 template <class T>
+bool vnl_matrix<T>::is_equal(vnl_matrix<T> const& rhs, double tol) const
+{
+  if (this == &rhs)                                      // same object => equal.
+    return true;
+  
+  if (this->num_rows != rhs.num_rows || this->num_cols != rhs.num_cols)
+    return false;                                        // different sizes => not equal.
+  
+  for (unsigned int i = 0; i < this->rows(); ++i)
+    for (unsigned int j = 0; j < this->columns(); ++j)
+      if (vnl_math_abs(this->data[i][j] - rhs.data[i][j]) > tol)
+        return false;                                    // difference greater than tol
+  
+  return true;
+}
+
+
+template <class T>
 bool vnl_matrix<T>::is_identity() const
 {
   T const zero(0);
