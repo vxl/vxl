@@ -17,7 +17,7 @@ enum boxm2_data_type
 };
 
 //: Pixel properties for templates.
-template <boxm2_data_type>
+template <boxm2_data_type type>
 class boxm2_data_traits;
 
 //: traits for a mixture of gaussian appearance model of gray-scale images
@@ -27,7 +27,7 @@ class boxm2_data_traits<BOXM2_ALPHA>
  public:
   typedef float datatype;
   vcl_size_t datasize(){return sizeof(datatype);};
-  vcl_string prefix(){ return "alpha";}
+  static vcl_string prefix(){ return "alpha";}
 };
 
 

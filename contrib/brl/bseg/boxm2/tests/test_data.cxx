@@ -18,9 +18,9 @@ void test_data()
   float * farray=new float[array_size];
   vnl_random rand;
   for(unsigned i =0;i<array_size;i++)
-    farray[i]=rand.drand32(0,1);
+    farray[i]=(float)rand.drand32(0,1);
 
-  unsigned char * buffer=reinterpret_cast<unsigned char *>(farray);
+  char * buffer=reinterpret_cast<char *>(farray);
   boxm2_data<BOXM2_ALPHA> test_data(buffer, array_size*sizeof(float),boxm2_block_id());
 
   boxm2_array_1d<float> *  out_test_data=test_data.data();

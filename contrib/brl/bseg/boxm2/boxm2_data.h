@@ -14,16 +14,18 @@
 class boxm2_data_base
 {
  public:
-    boxm2_data_base(unsigned char * data_buffer,
+    boxm2_data_base(char * data_buffer,
                     vcl_size_t length,
                     boxm2_block_id id)
      : id_(id), data_buffer_(data_buffer), buffer_length_(length) {}
 
     ~boxm2_data_base() { delete [] data_buffer_; } // FIXME: are you sure?!?
 
+    char * data_buffer(){return data_buffer_;}
+    vcl_size_t buffer_length(){return buffer_length_;}
  protected:
     boxm2_block_id id_;
-    unsigned char * data_buffer_;
+    char * data_buffer_;
     vcl_size_t buffer_length_;
 };
 
@@ -33,7 +35,7 @@ class boxm2_data: boxm2_data_base
  public:
     typedef typename boxm2_data_traits<T>::datatype datatype;
 
-    boxm2_data(unsigned char * data_buffer,
+    boxm2_data(char * data_buffer,
                vcl_size_t length,
                boxm2_block_id id);
     ~boxm2_data();
