@@ -2,22 +2,22 @@
 #include <vcl_fstream.h>  
 #include <sys/stat.h>  //for getting file sizes
 
-
 boxm2_block* boxm2_sio_mgr::load_block(vcl_string dir, boxm2_block_id block_id)
 {
-  vcl_cout<<"boxm2_sio_mgr::write load from file"<<vcl_endl;
+  vcl_string filepath = dir + block_id.to_string() + ".bin";
+  vcl_cout<<"boxm2_sio_mgr:: load from file:"<<filepath<<vcl_endl;
      
   //get file size
   long numBytes; 
   struct stat results;
-  if (stat(dir.c_str(), &results) == 0)
+  if (stat(filepath.c_str(), &results) == 0)
     numBytes = results.st_size;
   else
     vcl_cerr<<"boxm2_sio_mgr:: cannot get file size for "<<dir<<vcl_endl;
   
   //Read bytes into stream
   char * bytes = new char[numBytes]; 
-  vcl_ifstream myFile (dir.c_str(), vcl_ios::in | vcl_ios::binary);
+  vcl_ifstream myFile (filepath.c_str(), vcl_ios::in | vcl_ios::binary);
   myFile.read(bytes, numBytes);
   if (!myFile)
     vcl_cerr<<"boxm2_sio_mgr:: cannot read file "<<dir<<vcl_endl;
@@ -27,16 +27,15 @@ boxm2_block* boxm2_sio_mgr::load_block(vcl_string dir, boxm2_block_id block_id)
 }
     
     
-    
-    
 void boxm2_sio_mgr::save_block(vcl_string dir, boxm2_block* block)
 {
-  vcl_cout<<"boxm2_sio_mgr::write save to file: "<<dir<<vcl_endl;
-  char * bytes = block->buffer(); // new char[block->byte_count()]; 
+  vcl_string filepath = dir + block->block_id().to_string() + ".bin";
+  vcl_cout<<"boxm2_sio_mgr::write save to file: "<<filepath<<vcl_endl;
+  char * bytes = block->buffer(); 
   block->b_write(bytes); 
   
   //TODO come up with naming scheme
-  vcl_ofstream myFile (dir.c_str(), vcl_ios::out | vcl_ios::binary);
+  vcl_ofstream myFile (filepath.c_str(), vcl_ios::out | vcl_ios::binary);
   myFile.write(bytes, block->byte_count());  
   myFile.close();
 }

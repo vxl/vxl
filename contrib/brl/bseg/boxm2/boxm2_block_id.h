@@ -3,6 +3,8 @@
 //:
 // \file
 #include <vcl_iostream.h>
+#include <vcl_sstream.h>
+#include <vcl_string.h>
 
 //: boxm2_cache: top level storage (abstract) class
 // - handles all block io, from both the cache/marshaller and the disk
@@ -30,6 +32,9 @@ class boxm2_block_id
     //: Comparison
     inline bool operator==(boxm2_block_id const& v)const{return i_==v.i()&&j_==v.j()&&k_==v.k();}
     inline bool operator!=(boxm2_block_id const& v)const{return !operator==(v);}
+    
+    //: to string
+    vcl_string to_string(); 
 };
 
 //: scene output stream operator

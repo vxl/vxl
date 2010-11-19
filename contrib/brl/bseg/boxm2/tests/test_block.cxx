@@ -6,8 +6,11 @@
 #include <testlib/testlib_root_dir.h>
 
 #include <boxm2/boxm2_block.h>
+#include <boxm2/boxm2_block_id.h>
 #include <boxm2/boxm2_sio_mgr.h>
 #include <vnl/vnl_vector_fixed.h>
+
+#include <vcl_iostream.h>
 
 char* construct_block_test_stream()
 {
@@ -183,7 +186,7 @@ void test_block()
     
     //test xml file 
     vcl_string root_dir  = testlib_root_dir();
-    vcl_string test_file = root_dir + "/contrib/brl/bseg/boxm2/tests/block.bin"; 
+    vcl_string test_file = root_dir + "/contrib/brl/bseg/boxm2/tests/"; 
   
     //construct block from stream
     char* stream = construct_block_test_stream(); 
@@ -288,6 +291,8 @@ void test_block()
 
     //clean up boxm2_block
     delete loaded; 
+    
+    //clean up file left behind "tests/block_id.0.0.0.bin"
 }
 
 

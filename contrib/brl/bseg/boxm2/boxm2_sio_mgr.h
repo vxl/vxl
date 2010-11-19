@@ -13,10 +13,10 @@ class boxm2_sio_mgr
   public:
 
     //: loads block from disk
-    static boxm2_block* load_block(vcl_string dir, boxm2_block_id block_id); 
+    static boxm2_block*   load_block(vcl_string dir, boxm2_block_id block_id); 
     
     //: saves block to disk
-    static void save_block(vcl_string dir, boxm2_block* block );
+    static void           save_block(vcl_string dir, boxm2_block* block );
 
 
     //TODO create data load and save functions
