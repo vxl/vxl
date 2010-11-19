@@ -5,7 +5,7 @@
 //: scene output stream operator
 vcl_ostream& operator <<(vcl_ostream &s, boxm2_block_id& id)
 {
-  s << "block_id." << id.i() << '.' << id.j() << '.' << id.k();
+  s << "id_" << id.i() << '_' << id.j() << '_' << id.k();
   return s;
 }
 
