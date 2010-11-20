@@ -234,7 +234,7 @@ bool vpgl_correct_rational_cameras_mult_corr_process(bprb_func_process& pro)
     vcl_cerr<< " cannot open file: " << input_cams << '\n';
     return false;
   }
-  int n; ifs >> n;
+  unsigned int n; ifs >> n;
   vcl_cout << "will read: " << n << " correspondences for each frame from "<< input_cams << vcl_endl;
 
   vcl_vector<vpgl_rational_camera<double> > cams;
@@ -263,7 +263,7 @@ bool vpgl_correct_rational_cameras_mult_corr_process(bprb_func_process& pro)
     out_cam_names.push_back(out_cam_name);
 
     vcl_vector<vgl_point_2d<double> > corrs_frame;
-    for (int ii = 0; ii < n; ii++) {
+    for (unsigned int ii = 0; ii < n; ++ii) {
       double i, j;
       ifs >> i; ifs >> j;
       vgl_point_2d<double> cor(i,j);
@@ -342,7 +342,7 @@ bool vpgl_correct_rational_cameras_mult_corr_refine_process(bprb_func_process& p
     vcl_cerr<< " cannot open file: " << input_cams << '\n';
     return false;
   }
-  int n; ifs >> n;
+  unsigned int n; ifs >> n;
   vcl_cout << "will read: " << n << " correspondences for each frame from "<< input_cams << vcl_endl;
 
   vcl_vector<vpgl_rational_camera<double> > cams;
@@ -371,7 +371,7 @@ bool vpgl_correct_rational_cameras_mult_corr_refine_process(bprb_func_process& p
     out_cam_names.push_back(out_cam_name);
 
     vcl_vector<vgl_point_2d<double> > corrs_frame;
-    for (int ii = 0; ii < n; ii++) {
+    for (unsigned int ii = 0; ii < n; ++ii) {
       double i, j;
       ifs >> i; ifs >> j;
       vgl_point_2d<double> cor(i,j);
