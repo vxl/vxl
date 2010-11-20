@@ -3,15 +3,14 @@
 //:
 // \file
 #include <vcl_iostream.h> //for vcl_cout
+#include <vcl_cstdlib.h>  //includes malloc
+#include <vcl_cstdio.h>   // for std::perror
+#include <vcl_cerrno.h>   // for EINPROGRESS int
 
 //UNIX specific includes
 #include <aio.h>     //for aio_read
-#include <fcntl.h>   // for open (not really necessary
-#include <iostream>  //for cout
+//#include <fcntl.h>   // for open (not really necessary
 #include <strings.h> //includes bzero
-#include <stdlib.h>  //includes malloc
-#include <stdio.h>   // for perror
-#include <errno.h>   // for EINPROGRESS int
 
 
 //: baio_info struct: wrapper for status variables
@@ -37,7 +36,7 @@ bool baio::read(vcl_string filename, char* buff, long BUFSIZE)
   int fhandle = open(filename.c_str(), O_RDONLY);
   if (fhandle < 0) {
     vcl_cerr<<"baio (linux)::read could not open file"<<filename<<vcl_endl;
-    perror("open");
+    vcl_perror("open");
   }
 
   // 2. Zero out the aiocb structure (recommended)
@@ -47,7 +46,7 @@ bool baio::read(vcl_string filename, char* buff, long BUFSIZE)
   info_->my_aiocb.aio_buf = buff;
   if (!info_->my_aiocb.aio_buf) {
     vcl_cerr<<"baio (linux)::read could not assign buffer of size "<<BUFSIZE<<vcl_endl;
-    perror("malloc");
+    vcl_perror("malloc");
   }
 
   //4.  Initialize the necessary fields in the aiocb
@@ -59,7 +58,7 @@ bool baio::read(vcl_string filename, char* buff, long BUFSIZE)
   int STATUS = aio_read( &(info_->my_aiocb) );
   if (STATUS < 0) {
     vcl_cerr<<"baio (linux)::read throws error on aio_read: "<<STATUS<<vcl_endl;
-    perror("aio_read");
+    vcl_perror("aio_read");
   }
   return true;
 }
@@ -71,7 +70,7 @@ bool baio::write(vcl_string filename, char* buff, long BUFSIZE)
   int fhandle = open(filename.c_str(), O_WRONLY);
   if (fhandle < 0) {
     vcl_cerr<<"baio (linux)::write could not open file"<<filename<<vcl_endl;
-    perror("open");
+    vcl_perror("open");
   }
 
   // 2. Zero out the aiocb structure (recommended)
@@ -81,7 +80,7 @@ bool baio::write(vcl_string filename, char* buff, long BUFSIZE)
   info_->my_aiocb.aio_buf = buff;
   if (!info_->my_aiocb.aio_buf) {
     vcl_cerr<<"baio (linux)::write could not assign buffer of size "<<BUFSIZE<<vcl_endl;
-    perror("malloc");
+    vcl_perror("malloc");
   }
 
   //4.  Initialize the necessary fields in the aiocb
@@ -93,7 +92,7 @@ bool baio::write(vcl_string filename, char* buff, long BUFSIZE)
   int STATUS = aio_write( &(info_->my_aiocb) );
   if (STATUS < 0) {
     vcl_cerr<<"baio (linux)::write throws error on aio_read: "<<STATUS<<vcl_endl;
-    perror("aio_read");
+    vcl_perror("aio_read");
   }
   return true;
 }
@@ -101,7 +100,7 @@ bool baio::write(vcl_string filename, char* buff, long BUFSIZE)
 //: closes file handle
 void baio::close_file()
 {
-   int erno = close(info_->my_aiocb.aio_fildes);  
+  close(info_->my_aiocb.aio_fildes);
 }
 
 baio_status baio::status()
@@ -121,5 +120,5 @@ char* baio::buffer()
 
 long baio::buffer_size()
 {
-  return (long) (info_->my_aiocb.aio_nbytes); 
+  return (long) (info_->my_aiocb.aio_nbytes);
 }
