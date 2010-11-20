@@ -2845,7 +2845,7 @@ cross_correlate(vil_image_view<float> const& image1,
   return cc;
 }
 
-//: r0 is the image from from which to read the new intensity values.
+//: r0 is the image from which to read the new intensity values.
 //  \param r is the summing array row in which the values are to be accumulated
 static bool update_row(vil_image_view<float> const& image1,
                        vil_image_view<float> const& image2,

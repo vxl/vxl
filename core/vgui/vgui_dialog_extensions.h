@@ -28,7 +28,7 @@ class vgui_dialog_extensions_impl;
 // to be able to choose folders in addition to the files, and line breaks.
 // The tableau will be designed so that elements are placed on the same line
 // until a line break element is inserted. This allows to create more versatile
-// dialogs, by grouping elements one one line.
+// dialogs, by grouping elements on one line.
 //
 // A field in this context consists of a vcl_string label and a variable.
 // The dialog is then posted using the ask() method. If ask returns true then

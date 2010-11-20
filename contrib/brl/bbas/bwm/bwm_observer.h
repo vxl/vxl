@@ -36,7 +36,7 @@ class bwm_observer : public vgui_observer
   virtual void translate(vgl_vector_3d<double> T)=0;
 #endif
 
-  //: connect the the given face as an inner face to the selected face
+  //: connect the given face as an inner face to the selected face
   virtual void connect_inner_face(vsol_polygon_2d_sptr poly)=0;
 
   //: create the interior of an objects, as a smaller copy of the outer object

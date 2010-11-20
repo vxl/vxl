@@ -1,3 +1,4 @@
+#include "clsfy_direct_boost.h"
 //:
 // \file
 // \brief Classifier using adaboost on combinations of simple 1D classifiers
@@ -5,7 +6,6 @@
 
 //=======================================================================
 
-#include "clsfy_direct_boost.h"
 #include <vcl_string.h>
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
@@ -161,7 +161,7 @@ unsigned clsfy_direct_boost::classify(const vnl_vector<double> &v) const
 //=======================================================================
 
 //: Find the posterior probability of the input being in the positive class.
-// The result is is outputs(0)
+// The result is outputs(0)
 void clsfy_direct_boost::class_probabilities(vcl_vector<double> &outputs,
                                              const vnl_vector<double> &input) const
 {

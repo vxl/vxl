@@ -7,7 +7,6 @@
 //:
 // \file
 // \brief Templated component for voxel datatype details
-//
 // In most cases it is probably better to use vil_pixel_format.
 //
 // \author Isabel Restrepo
@@ -18,7 +17,7 @@
 //                             This class is in charge of proper instantiation of multi-channel appearance model processor
 //                            -Added bvxm_voxel_traits<APM_MOG_MC_3_3> : public bvxm_voxel_traits_mc<3,3>,
 //                             Everytime a user needs a mog appearance model with nonexisting dimension of number
-//                             of gaussian modes, it needs to add an entry in the enum and and new class that looks as follows:
+//                             of gaussian modes, it needs to add an entry in the enum and new class that looks as follows:
 //                             class bvxm_voxel_traits<APM_MOG_MC_DIM_MODES> : public bvxm_voxel_traits_mc<DIM,MODES> {};
 // \endverbatim
 //-----------------------------------------------------------------------------

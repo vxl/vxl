@@ -1576,7 +1576,7 @@ bool brip_vil1_float_ops::homography(vil1_memory_image_of<float> const & input,
   //the input and output image rois are consistent with the homography.
 
   // the bounding boxes corresponding to input and output rois
-  // We also construct polygons since homgraphies turn boxes into arbitrary
+  // We also construct polygons since homographies turn boxes into arbitrary
   // quadrilaterals.
   vsol_box_2d_sptr input_roi, output_roi;
   vsol_polygon_2d_sptr input_poly, output_poly;
@@ -1923,7 +1923,7 @@ cross_correlate(vil1_memory_image_of<float> const & image1,
   return cross_corr(area, sI1, sI2, sI1I1, sI2I2, sI1I2, intensity_thresh);
 }
 
-//: r0 is the image from from which to read the new intensity values
+//: r0 is the image from which to read the new intensity values
 //  r is the summing array row in which the values are to be accumulated
 static bool update_row(vil1_memory_image_of<float> const& image1,
                        vil1_memory_image_of<float> const& image2,

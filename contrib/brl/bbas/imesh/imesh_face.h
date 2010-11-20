@@ -293,7 +293,7 @@ class imesh_regular_face_array : public imesh_face_array_base
     }
   }
 
-  //: Add a face the the array
+  //: Add a face to the array
   void push_back(const imesh_regular_face<s>& f) { faces_.push_back(f); }
 
   //: Access face \param f

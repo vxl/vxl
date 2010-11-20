@@ -1,11 +1,10 @@
 #ifndef rrel_lms_obj_h_
 #define rrel_lms_obj_h_
-
 //:
 // \file
 // \author Chuck Stewart (stewart@cs.rpi.edu)
 // \brief The Least-Median-of-Squares (LMS) objective function
-// 
+//
 // \verbatim
 //   2004-04, Charlene Tsai (tsaic@cs.rpi.edu). Added scale(.) function.
 // \endverbatim
@@ -23,10 +22,11 @@
 //  residuals. This class is generalised to allow any inlier fraction
 //  (not just the median) from the order statistics.
 
-class rrel_lms_obj : public rrel_objective {
-public:
+class rrel_lms_obj : public rrel_objective
+{
+ public:
   //: Constructor.
-  //  \a num_sam_inst is the the minimum number of samples needed for
+  //  \a num_sam_inst is the minimum number of samples needed for
   //  a unique parameter estimate. That is, num_sam_inst should be set
   //  to rrel_estimation_problem::num_samples_to_instantiate(). \a
   //  inlier_frac is the minimum expected number of inlier
@@ -65,7 +65,7 @@ public:
   //  \sa rrel_util_median_abs_dev_scale(.)
   virtual double scale( vect_const_iter res_begin, vect_const_iter res_end ) const;
 
-protected:
+ protected:
   //: Number of samples needed for a unique fit = number of dependent residuals.
   unsigned int num_sam_inst_;
   double inlier_frac_;

@@ -69,7 +69,7 @@ vcl_string bgui3d_examiner_tableau::type_name() const {return "bgui3d_examiner_t
 // - 'h' with control sets the home view to the current view
 // - 'v' views the entire scene
 // - 'n' go to the next camera
-// - 'p' go the the previous camera
+// - 'p' go to the previous camera
 // - The cursors pan
 // - The cursors with 'control' spin
 // - The up and down cursors with shift zoom (dolly)
@@ -419,7 +419,7 @@ void bgui3d_examiner_tableau::pan(const SbVec2f& currpos, const SbVec2f &prevpos
 //: Zoom (actually dolly) the camera
 void bgui3d_examiner_tableau::zoom(float diffvalue)
 {
- if (scene_camera_ == NULL) return; // can happen for empty scenegraph
+  if (scene_camera_ == NULL) return; // can happen for empty scenegraph
 
   SbVec3f direction;
   scene_camera_->orientation.getValue().multVec(SbVec3f(0, 0, -1), direction);
@@ -505,7 +505,7 @@ void bgui3d_examiner_tableau::seek_to_point( SbVec2s pos )
   if (! scene_camera_)
     return;
 
-  // SoRayPickAction needs the the viewport to have origin (0,0)
+  // SoRayPickAction needs the viewport to have origin (0,0)
   SbViewportRegion v = get_viewport_region();
   v.setViewportPixels( SbVec2s(0,0), v.getViewportSizePixels() );
 

@@ -1,6 +1,5 @@
-#ifndef _section_h
-#define _section_h
-
+#ifndef section_h_
+#define section_h_
 //:
 // \file
 // \brief light-weight templated buffer of arbitrary dimensionality
@@ -56,22 +55,23 @@ template <class T> class section_ : public section__ { protected: section_():sec
 
 template <class T, uint N> class section_iterator; // forward declaration
 
-template <class T, uint N> class section : public section_<T> {
+template <class T, uint N> class section : public section_<T>
+{
 #ifdef __GNUC__
   friend class section_iterator<T,N>;
 #endif
 
-public:
+ public:
   typedef section_iterator<T,N> iterator;
 
-// DATA MEMBERS:
+  // DATA MEMBERS:
 
-public:
+ public:
   T*     buffer;       // allocated buffer can freely be accessed.
   uint   ROI_start[N]; // upper left corner of the region of interest.
   uint   ROI_end[N];   // lower right corner of the region of interest.
 
-private:
+ private:
   uint   size[N];    // size[0] to size[N-1]. Dimension 0 is run through
                      // first; the `slowest' increasing dimension is N-1
   vcl_size_t offset[N+1];// offset[i] gives the pointer difference between two
@@ -79,9 +79,9 @@ private:
                      // In addition, offset[N] gives the allocated size.
   bool   allocated;  // whether buffer is (to be) allocated by this class
 
-// ACCESS METHODS:
+  // ACCESS METHODS:
 
-public:
+ public:
   static uint   Dimensionality() { return N; }
   uint   const* Size()    const { return size; }
   uint   Size(uint i)     const { assert(i<N); return size[i]; }
@@ -102,16 +102,16 @@ public:
   uint   Position(const vcl_size_t pos, const uint i)  const { vcl_size_t p = pos % Offset(i+1); p /= Offset(i); return uint(p); }
   vcl_size_t ROI_start_pos()  const { return Position(ROI_start); }
   vcl_size_t ROI_end_pos()  const { return Position(ROI_end); }
-  
+
   const T* begin() const {return buffer;}
   T*       begin()       {return buffer;}
 
   const T* end() const {return buffer + GetSize();}
   T*       end()       {return buffer + GetSize();}
 
-// CONSTRUCTORS / DESTRUCTORS:
+  // CONSTRUCTORS / DESTRUCTORS:
 
-public:
+ public:
   section(const uint sz[N], T* b=0) { init(sz,b); }
   section(T* b=0) { assert(N==0); init(0,b); }
   section(uint sz0, T* b=0) { assert(N==1); uint sz[1]={sz0}; init(sz,b); }
@@ -121,8 +121,10 @@ public:
     init(s.Size(),0); vcl_memcpy(buffer,s.buffer,offset[N]*sizeof(T));
     for (uint i=0; i<N; ++i)ROI_start[i]=s.ROI_start[i],ROI_end[i]=s.ROI_end[i];
   }
-  ~section(){ if(allocated) delete[] buffer; }
-private:
+
+  ~section(){ if (allocated) delete[] buffer; }
+
+ private:
   // Moved this inline into class so VC50 can compile it.  Otherwise
   // it gets confused (poor darling) over the array with size N in the
   // argument.  Sigh.
@@ -136,22 +138,21 @@ private:
     if (allocated) buffer = new T[offset[N]]; else buffer = buf;
   }
 
+  // OPERATORS:
 
-// OPERATORS:
-
-public:
+ public:
   inline bool operator== (section<T,N> const&) const;
   inline section<T,N>& operator= (section<T,N> const&);
   T operator() (uint x0) { assert(N==1 && x0<size[0]); return buffer[x0]; }
   T operator() (uint x0, uint x1) {
-     assert(N==2 && x0<size[0] && x1<size[1]); return buffer[x0+x1*offset[1]]; }
+    assert(N==2 && x0<size[0] && x1<size[1]); return buffer[x0+x1*offset[1]]; }
   T operator() (uint x0, uint x1, uint x2) {
-     assert(N==3 && x0<size[0] && x1<size[1] && x2<size[2]);
-     return buffer[x0+x1*offset[1]+x2*offset[2]]; }
+    assert(N==3 && x0<size[0] && x1<size[1] && x2<size[2]);
+    return buffer[x0+x1*offset[1]+x2*offset[2]]; }
 
-// UTILITY FUNCTIONS:  (made members, just for the ease of instantiating)
+  // UTILITY FUNCTIONS:  (made members, just for the ease of instantiating)
 
-public:
+ public:
   //: Returns a newly allocated copy of this section.
   section<T,N> Copy() const {
     T* buf = new T[GetSize()];
@@ -162,7 +163,8 @@ public:
 };
 
 template <class T, uint N>
-bool section<T,N>::operator== (section<T,N> const& s) const {
+bool section<T,N>::operator== (section<T,N> const& s) const
+{
   {for (uint i=0; i<N; ++i) if (Size(i) != s.Size(i)) return false;}
   {for (uint i=0; i<N; ++i) if (ROI_start[i] != s.ROI_start[i]) return false;}
   {for (uint i=0; i<N; ++i) if (ROI_end[i] != s.ROI_end[i]) return false;}
@@ -172,7 +174,8 @@ bool section<T,N>::operator== (section<T,N> const& s) const {
 }
 
 template <class T, uint N>
-section<T,N>& section<T,N>::operator= (section<T,N> const& s) {
+section<T,N>& section<T,N>::operator= (section<T,N> const& s)
+{
   if (allocated) delete[] buffer;
   init(s.Size(),0); vcl_memcpy(buffer,s.buffer,offset[N]*sizeof(T));
   for (uint i=0; i<N; ++i) ROI_start[i]=s.ROI_start[i], ROI_end[i]=s.ROI_end[i];
@@ -180,13 +183,14 @@ section<T,N>& section<T,N>::operator= (section<T,N> const& s) {
 }
 #ifndef __SUNPRO_CC
 
-//: Returns part of this section, namely slice slice of dimension dim.
+//: Returns part of this section, namely a slice of dimension dim.
 // When dim = the last dimension (the default), no new allocation is made;
 // instead, the relevant part of the original buffer is used.  Beware!
 // (To avoid this, use Copy() afterwards, or set the copy parameter to true.)
 
 template <class T, uint N>
-section<T,N-1> Project(section<T,N> const& s, uint slice=0, int d=-1, bool copy=false) {
+section<T,N-1> Project(section<T,N> const& s, uint slice=0, int d=-1, bool copy=false)
+{
   uint dim = (d < 0) ? N-1 : d; // default: the last dimension
   assert(N > 0 && dim < N && slice < s.Size(dim));
   uint size[N-1];
@@ -212,13 +216,14 @@ section<T,N-1> Project(section<T,N> const& s, uint slice=0, int d=-1, bool copy=
 
 //: const iterator for a section<T,N>'s ROI, with optional additional ROI condition
 
-template <class T, uint N> class section_iterator {
+template <class T, uint N> class section_iterator
+{
   friend class section<T,N>;
-protected:
+ protected:
   section<T,N>* data;
   vcl_size_t pos;
 
-public:
+ public:
   section_iterator(section<T,N>& s) : data(&s), pos(s.ROI_start_pos()) {}
   T operator*() const { return data->buffer[pos]; }
   operator vcl_size_t() const { return pos; }
@@ -264,4 +269,5 @@ template section<T,1> Project(section<T,2> const&, uint, int, bool) // i.e., no 
 #define SECTION_INSTANTIATE(T) \
 SECTION_INSTANTIATE_NO_PROJ(T)
 #endif
-#endif // _section_h
+
+#endif // section_h_

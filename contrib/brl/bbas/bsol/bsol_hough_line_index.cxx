@@ -1,3 +1,4 @@
+#include "bsol_hough_line_index.h"
 //:
 // \file
 //
@@ -5,7 +6,6 @@
 //
 //-----------------------------------------------------------------------------
 
-#include "bsol_hough_line_index.h"
 #include <vcl_cmath.h>
 
 #ifdef VCL_VC_6
@@ -134,7 +134,7 @@ void bsol_hough_line_index::array_loc(vsol_line_2d_sptr const& line,
   double cx = -(midx-xs2)*vcl_sin(angrad);
   double cy =  (midy-ys2)*vcl_cos(angrad);
 
-  //We use the middle of the ranges as the origin to insure minium error
+  //We use the middle of the ranges as the origin to insure minimum error
   //Also, the distance index is guaranteed to be positive
   r = float(cx + cy + vcl_sqrt(xs2*xs2 + ys2*ys2));
 }
@@ -392,7 +392,7 @@ bsol_hough_line_index::lines_in_interval(vsol_line_2d_sptr const & l,
 
 //-----------------------------------------------------------------------------
 //
-//: Fill a list of vsol_line_2d_sptr(s) which are within angle_dist of of a given angle
+//: Fill a list of vsol_line_2d_sptr(s) which are within angle_dist of a given angle
 //
 //-----------------------------------------------------------------------------
 

@@ -17,7 +17,7 @@ vgl_h_matrix_2d_optimize_lmq(vgl_h_matrix_2d<double> const& initial_h)
 {
 }
 
-//: optimize the normalized projection problem problem
+//: optimize the normalized projection problem
 bool vgl_h_matrix_2d_optimize_lmq::
 optimize_h(vcl_vector<vgl_homg_point_2d<double> > const& points1,
            vcl_vector<vgl_homg_point_2d<double> > const& points2,

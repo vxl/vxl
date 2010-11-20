@@ -267,7 +267,7 @@ void vil_math_median_unimplemented();
 
 //: Median of elements in plane p of an image.
 //
-// For integral types, if the the median is half way between two
+// For integral types, if the median is half way between two
 // values, the result will be the floor of the average.
 //
 // \relatesalso vil_image_view
@@ -362,7 +362,6 @@ inline void vil_math_truncate_range(vil_image_view<T>& image, T min_v, T max_v)
 //: Functor class to scale by s
 class vil_math_scale_functor
 {
- private:
   double s_;
  public:
   vil_math_scale_functor(double s) : s_(s) {}

@@ -70,11 +70,11 @@ bool bwm_observer_vgui::handle(const vgui_event& e)
       e.modifier == vgui_SHIFT &&
       bwm_observer_mgr::instance()->in_corr_picking())
   {
-      float x,y;
-      pi.window_to_image_coordinates(e.wx, e.wy, x, y);
-      this->set_corr(x, y);
-      this->correspondence_action();
-      return true;
+    float x,y;
+    pi.window_to_image_coordinates(e.wx, e.wy, x, y);
+    this->set_corr(x, y);
+    this->correspondence_action();
+    return true;
   }
 
   return base::handle(e);
@@ -202,11 +202,11 @@ void bwm_observer_vgui::draw_mesh(bwm_observable_sptr observable,
     }
     else if (mode_ == MODE_EDGE)
     {
-       vcl_map<int, vsol_line_3d_sptr> edges = observable->extract_edges();
-       vcl_vector<vsol_point_3d_sptr> vertices = observable->extract_vertices();
+      vcl_map<int, vsol_line_3d_sptr> edges = observable->extract_edges();
+      vcl_vector<vsol_point_3d_sptr> vertices = observable->extract_vertices();
 
-       vcl_map<int, vsol_line_3d_sptr>::iterator iter = edges.begin();
-       while (iter != edges.end()) {
+      vcl_map<int, vsol_line_3d_sptr>::iterator iter = edges.begin();
+      while (iter != edges.end()) {
         // project the new object with the given camera
         int edge_id = iter->first;
         vsol_line_3d_sptr edge_3d = iter->second;
@@ -216,10 +216,10 @@ void bwm_observer_vgui::draw_mesh(bwm_observable_sptr observable,
         bgui_vsol_soview2D_line_seg* edge = this->add_vsol_line_2d(edge_2d, style);
         list[edge_id] = edge;
         iter++;
-       }
-       if (show_vertices_) {
+      }
+      if (show_vertices_) {
         draw_vertices(observable, list, false, vertx_list, vertx_xy_list);
-       }
+      }
     }
     else if (mode_ == MODE_VERTEX) {
 #if 0 // commented out
@@ -271,27 +271,27 @@ void bwm_observer_vgui::draw_mesh(bwm_observable_sptr observable,
       }
     }
     else if (mode_ == MODE_MESH) {
-       vcl_map<int, vsol_line_3d_sptr> edges = observable->extract_edges();
-       vcl_vector<vsol_point_3d_sptr> vertices = observable->extract_vertices();
-       vcl_map<int, vsol_polygon_3d_sptr> faces = observable->extract_faces();
+      vcl_map<int, vsol_line_3d_sptr> edges = observable->extract_edges();
+      vcl_vector<vsol_point_3d_sptr> vertices = observable->extract_vertices();
+      vcl_map<int, vsol_polygon_3d_sptr> faces = observable->extract_faces();
 
-       vcl_map<int, vsol_polygon_3d_sptr>::iterator iter = faces.begin();
-       vsol_group_2d_sptr group = new vsol_group_2d();
-       vcl_vector<vsol_polygon_2d_sptr> mesh;
-       while (iter != faces.end()) {
-         // project the new object with the given camera
-         int face_id = iter->first;
-         vsol_polygon_3d_sptr obj = iter->second;
-         vsol_polygon_2d_sptr poly_2d;
-         proj_poly(obj, poly_2d);
-         mesh.push_back(poly_2d);
-         iter++;
-       }
-       vsol_poly_set_2d_sptr p = new vsol_poly_set_2d(mesh);
-       list[0] = this->add_vsol_polygon_2d_set(p);
-       if (show_vertices_) {
+      vcl_map<int, vsol_polygon_3d_sptr>::iterator iter = faces.begin();
+      vsol_group_2d_sptr group = new vsol_group_2d();
+      vcl_vector<vsol_polygon_2d_sptr> mesh;
+      while (iter != faces.end()) {
+        // project the new object with the given camera
+        int face_id = iter->first;
+        vsol_polygon_3d_sptr obj = iter->second;
+        vsol_polygon_2d_sptr poly_2d;
+        proj_poly(obj, poly_2d);
+        mesh.push_back(poly_2d);
+        iter++;
+      }
+      vsol_poly_set_2d_sptr p = new vsol_poly_set_2d(mesh);
+      list[0] = this->add_vsol_polygon_2d_set(p);
+      if (show_vertices_) {
         draw_vertices(observable, list, false, vertx_list, vertx_xy_list);
-       }
+      }
     }
   }
 }
@@ -310,7 +310,7 @@ void bwm_observer_vgui::draw_vertices(bwm_observable_sptr observable,
     vertx_xy_list.push_back(new vsol_point_2d(v2d.x(), v2d.y()));
 
     if (list.size() == 0)
-        return ;
+      return ;
 
     vcl_map<unsigned, bgui_vsol_soview2D* >::iterator it = list.begin();
     bgui_vsol_soview2D* obj = it->second;
@@ -392,8 +392,8 @@ void bwm_observer_vgui::handle_update(vgui_message const& msg,
 
       // remove the vertices
       for (unsigned i=0; i<ov.size(); i++) {
-          this->remove(ov[i]);
-          //delete ov[i];
+        this->remove(ov[i]);
+        //delete ov[i];
       }
       objects_[observable] = poly_list;
       object_verts_[observable] = poly_verts;
@@ -485,7 +485,7 @@ void bwm_observer_vgui::remove_corr_pt()
 }
 
 
-//: finds the observable and the face id given by the the vgui soview2d id
+//: finds the observable and the face id given by the vgui soview2d id
 bwm_observable_sptr bwm_observer_vgui::find_object(unsigned soview2D_id, unsigned &face_id)
 {
   vcl_map<bwm_observable_sptr,

@@ -1,6 +1,5 @@
 #ifndef rrel_irls_h_
 #define rrel_irls_h_
-
 //:
 // \file
 // \author Chuck Stewart (stewart@cs.rpi.edu)
@@ -45,16 +44,16 @@ class rrel_wls_obj;
 //
 // (4) The parameters, the scale, both or neither may be initialized.
 //
-// See also rrel_estimation_problem and and rrel_wls_obj.
+// See also rrel_estimation_problem and rrel_wls_obj.
 
-class rrel_irls {
-private:
+class rrel_irls
+{
   //  default parameters
   static const double dflt_convergence_tol_;
   static const int dflt_max_iterations_;
   static const int dflt_iterations_for_scale_ ;
 
-public:
+ public:
   //: Constructor.
   rrel_irls( int max_iterations = dflt_max_iterations_ );
 
@@ -71,7 +70,7 @@ public:
 
   //: Set lower bound of scale estimate
   void set_scale_lower_bound( double lower_scale );
-  
+
   //: Set for no scale estimation.
   //  Scale must be initialized or supplied by the problem.
   void set_no_scale_est( );
@@ -157,13 +156,13 @@ public:
     //: \brief Print the set of parameters.
   void  print_params() const;
 
-private:
+ private:
   bool has_converged( const vcl_vector<double>& residuals,
                       const rrel_wls_obj* m_estimator,
                       const rrel_estimation_problem* problem,
                       vnl_vector<double>* params );
 
-protected:
+ protected:
   //  Parameters
   int max_iterations_;
   bool test_converge_;

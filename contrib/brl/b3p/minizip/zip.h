@@ -12,7 +12,7 @@
   For uncompress .zip file, look at unzip.h
 
 
-   I WAIT FEEDBACK at mail info@winimage.com
+   I AWAIT FEEDBACK at mail info@winimage.com
    Visit also http://www.winimage.com/zLibDll/unzip.html for evolution
 
    Condition of use and distribution are the same than zlib :
@@ -32,8 +32,6 @@
   2. Altered source versions must be plainly marked as such, and must not be
      misrepresented as being the original software.
   3. This notice may not be removed or altered from any source distribution.
-
-
 */
 
 /* for more info about .ZIP format, see
@@ -148,12 +146,12 @@ extern int ZEXPORT zipOpenNewFileInZip OF((zipFile file,
                        int level));
 /*
   Open a file in the ZIP for writing.
-  filename : the filename in zip (if NULL, '-' without quote will be used
+  filename : the filename in zip (if NULL, '-' without quote will be used)
   *zipfi contain supplemental information
   if extrafield_local!=NULL and size_extrafield_local>0, extrafield_local
-    contains the extrafield data the the local header
+    contains the extrafield data of the local header
   if extrafield_global!=NULL and size_extrafield_global>0, extrafield_global
-    contains the extrafield data the the local header
+    contains the extrafield data of the local header
   if comment != NULL, comment contain the comment string
   method contain the compression method (0 for store, Z_DEFLATED for deflate)
   level contain the level of compression (can be Z_DEFAULT_COMPRESSION)

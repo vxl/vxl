@@ -7,7 +7,7 @@
 // See vgui_glu.h
 // There used to be logic here to deal issues related to GLUT's use of
 // exit, but it appears to be unnecessary now. If the problem arises
-// again, have a look the the older versions of this source, and in
+// again, have a look at the older versions of this source, and in
 // the comments at the top of glut.h
 //  - Amitha Perera
 

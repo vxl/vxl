@@ -367,7 +367,7 @@ void osl_edge_detector::Thicken_threshold(int x, int y)
 // non-maximal suppression succeeded, and zero elsewhere, and extend the
 // values to all areas of the image. This is done using chamfer masks so that
 // the final threshold assigned at any one point (ie. a point that was
-// initially zero) is functionally dependent on the the strengths of the
+// initially zero) is functionally dependent on the strengths of the
 // nearest good edges. At present we linearly interpolate between the two
 // (approximately) closest edges.
 //

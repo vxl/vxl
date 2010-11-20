@@ -15,7 +15,7 @@
 #include <clsfy/clsfy_classifier_base.h>
 #include <vcl_iosfwd.h>
 
-//: A Binary k-Nearest Neighbour Neighbour classifier
+//: A Binary k-Nearest Neighbour classifier
 class clsfy_k_nearest_neighbour : public clsfy_classifier_base
 {
   //: The number of nearest neighbours to look for.

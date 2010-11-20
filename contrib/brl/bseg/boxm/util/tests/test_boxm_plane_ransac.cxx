@@ -3,7 +3,7 @@
 // \author Gamze Tunali
 // \brief  this code tests the function boxm_plane_ransac.
 //  Creates 10 planes that the same line goes through and 10 random planes
-//  which do not contain the plane. It makes sure it returns only the the
+//  which do not contain the plane. It makes sure it returns only the
 //  first 10 planes as the fittest ones.
 //
 // \date   March 25, 2010

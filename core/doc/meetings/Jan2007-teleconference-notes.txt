@@ -32,8 +32,8 @@ our program's running time and to avoid being limited by the memory IO
 bottleneck. Our program structure will remain largely sequential - in
 particular due to the use of fundamentally sequential non-linear
 optimisation algorithms. Initially at least, we can only think of a
-few VXL functions that we would like to multi-task. Most the the
-parallelism would happen in out private code.
+few VXL functions that we would like to multi-task. Most of the
+parallelism would happen in our private code.
 
 Amitha and Matt L. independently want to build a program based on
 strategies of algorithm blocks to do video processing. CSP approaches

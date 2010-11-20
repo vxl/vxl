@@ -547,7 +547,7 @@ extern zipFile ZEXPORT zipOpen2 (pathname, append, globalcomment, pzlib_filefunc
 
         uLong number_disk;          /* number of the current dist, used for
                                     spaning ZIP, unsupported, always 0*/
-        uLong number_disk_with_CD;  /* number the the disk with central dir, used
+        uLong number_disk_with_CD;  /* number of the disk with central dir, used
                                     for spaning ZIP, unsupported, always 0*/
         uLong number_entry;
         uLong number_entry_CD;      /* total number of entries in
@@ -866,7 +866,7 @@ extern int ZEXPORT zipOpenNewFileInZip3 (file, filename, zipfi,
             windowBits = -windowBits;
 
         err = deflateInit2(&zi->ci.stream, level,
-               Z_DEFLATED, windowBits, memLevel, strategy);
+                           Z_DEFLATED, windowBits, memLevel, strategy);
 
         if (err==Z_OK)
             zi->ci.stream_initialised = 1;
@@ -951,7 +951,7 @@ local int zipFlushWriteBuffer(zi)
         int t;
         for (i=0;i<zi->ci.pos_in_buffered_data;i++)
             zi->ci.buffered_data[i] = zencode(zi->ci.keys, zi->ci.pcrc_32_tab,
-                                       zi->ci.buffered_data[i],t);
+                                              zi->ci.buffered_data[i],t);
 #endif
     }
     if (ZWRITE(zi->z_filefunc,zi->filestream,zi->ci.buffered_data,zi->ci.pos_in_buffered_data)
@@ -1083,15 +1083,15 @@ extern int ZEXPORT zipCloseFileInZipRaw (file, uncompressed_size, crc32)
 
     ziplocal_putValue_inmemory(zi->ci.central_header+16,crc32,4); /*crc*/
     ziplocal_putValue_inmemory(zi->ci.central_header+20,
-                                compressed_size,4); /*compr size*/
+                               compressed_size,4); /*compr size*/
     if (zi->ci.stream.data_type == Z_ASCII)
         ziplocal_putValue_inmemory(zi->ci.central_header+36,(uLong)Z_ASCII,2);
     ziplocal_putValue_inmemory(zi->ci.central_header+24,
-                                uncompressed_size,4); /*uncompr size*/
+                               uncompressed_size,4); /*uncompr size*/
 
     if (err==ZIP_OK)
         err = add_data_in_datablock(&zi->central_dir,zi->ci.central_header,
-                                       (uLong)zi->ci.size_centralheader);
+                                    (uLong)zi->ci.size_centralheader);
     free(zi->ci.central_header);
 
     if (err==ZIP_OK)

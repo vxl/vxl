@@ -1,3 +1,4 @@
+#include "clsfy_mean_square_1d.h"
 //:
 // \file
 // \brief Simplest possible 1D classifier: A single thresholding function
@@ -5,7 +6,6 @@
 
 //=======================================================================
 
-#include "clsfy_mean_square_1d.h"
 #include <vcl_string.h>
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
@@ -20,7 +20,7 @@
 //=======================================================================
 
 //: Find the posterior probability of the input being in the positive class.
-// The result is is outputs(0)
+// The result is outputs(0)
 void clsfy_mean_square_1d::class_probabilities(vcl_vector<double> &outputs,
                                                double input) const
 {

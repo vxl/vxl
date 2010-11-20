@@ -185,7 +185,7 @@ vil1_memory_image::vil1_memory_image(void *buf, int w, int h,
 
 
 //: Reset this class's member variables from the image implementation
-// This is is useful if the impl object has been modified outside the control of this object.
+// This is useful if the impl object has been modified outside the control of this object.
 void vil1_memory_image::recache_from_impl()
 {
   cache_from_impl;

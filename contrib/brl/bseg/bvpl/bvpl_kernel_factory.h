@@ -4,23 +4,23 @@
 //:
 // \file
 // \brief  A base class for 3D kernel. The kernel is fully described by a rotation axis and an angle
-//         The children of this classes must create a kernel on a "canonical form" i.e. with a default
-//         axis of rotation and a complementary vector here called canonical_paralle_axis_.
+//  The children of this classes must create a kernel on a "canonical form" i.e. with a default
+//  axis of rotation and a complementary vector here called canonical_paralle_axis_.
 //
-//         If this two vector are seen as points on the unit sphere, then they lie on the same
-//         parallel (constant polar angle). These vectors determine the zero rotation position as follows:
-//         *  The rotation that transforms the canonical_rotation_axis to a new specified rotation axis,
-//            is applied to the kernel (Lets call such rotation R).
-//         *  The kernel is rotate around its new rotation such that R*canonical_parallel_axis achieves
-//            the same same polar angle as the new rotation axis
+//  If this two vector are seen as points on the unit sphere, then they lie on the same
+//  parallel (constant polar angle). These vectors determine the zero rotation position as follows:
+//  *  The rotation that transforms the canonical_rotation_axis to a new specified rotation axis,
+//     is applied to the kernel (Lets call such rotation R).
+//  *  The kernel is rotate around its new rotation such that R*canonical_parallel_axis achieves
+//     the same polar angle as the new rotation axis
 //
-//         Usage:
-//         The user can create a kernel in its canonical form through children constructors
-//         Then, the user call set_rotation_axis(), set_angle() and create() and if one wishes to use
-//         another angle with the same axis, it suffices to call set_angle(angle) and create().
-//         This will save computation time since the rotation_axis has already been set.
-//         Alternatively, the user can call create(axis, angle). This transforms the canonical kernel according
-//         to new parameters
+//  Usage:
+//  - The user can create a kernel in its canonical form through children constructors
+//  - Then, the user call set_rotation_axis(), set_angle() and create() and if one wishes to use
+//    another angle with the same axis, it suffices to call set_angle(angle) and create().
+//    This will save computation time since the rotation_axis has already been set.
+//  - Alternatively, the user can call create(axis, angle). This transforms the canonical kernel according
+//    to new parameters
 //
 // \author Isabel Restrepo mir@lems.brown.edu
 // \date  May 29, 2009
@@ -138,7 +138,7 @@ class bvpl_kernel_factory: public vbl_ref_count
   vcl_string factory_name_;
 
   //: Creates canonical(default) kernel.
-  //  It is decribed by a canonical axis of rotation and a canonical parallel axis
+  //  It is described by a canonical axis of rotation and a canonical parallel axis
   //  This is the main function implemented by the children.
   virtual void create_canonical()=0;
 

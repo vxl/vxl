@@ -230,7 +230,7 @@ vil_streampos vil_nitf2_image::get_offset_to_image_data_block_band(
   // a dataMask table.  In that case, we get some information from the table and
   // compute some ourselves.  Here are all the possible scenarios handled here:
   //   i_mode == "S" and have data_mask_table: just ask data_mask_table for the offset
-  //   i_mode == "S" and don't have data_mask_table: compute it ourselves vcl_right here
+  //   i_mode == "S" and don't have data_mask_table: compute it ourselves right here
   //   i_mode != "S" and have data_mask_table: ask the data_mask_table for offset to the
   //      block we want; then compute the offset to the band ourselves here
   //   i_mode != "S" and don't have data_mask_table: compute both band and block offset
@@ -322,7 +322,7 @@ char const * vil_nitf2_image::file_format() const
 {
 vil_nitf2_classification::file_version v = file_version();
   switch (v)
-    {
+  {
     case vil_nitf2_classification::V_UNKNOWN :
       return "unknown";
     case vil_nitf2_classification::V_NITF_10 :
@@ -333,7 +333,7 @@ vil_nitf2_classification::file_version v = file_version();
       return "nitf21";
     default:
       return "unknown";
-    }
+  }
 }
 
 const vil_nitf2_image_subheader* vil_nitf2_image::current_image_header() const
@@ -443,7 +443,7 @@ enum vil_pixel_format vil_nitf2_image::pixel_format () const
 
 unsigned int vil_nitf2_image::size_block_i() const
 {
-return current_image_header()->get_pixels_per_block_x();
+  return current_image_header()->get_pixels_per_block_x();
 }
 
 unsigned int vil_nitf2_image::size_block_j() const
@@ -566,7 +566,7 @@ template<> vil_memory_chunk_sptr maybe_byte_align_data< vcl_complex< float > > (
 //:
 //  This function handles the case where the actual bits per pixel per band
 //  is less then the actual bpppb AND where the data is vcl_left justified.  This
-//  shifts the data so that it it vcl_right justified.
+//  shifts the data so that it is right justified.
 //  As of now, this function is untests as I don't have any vcl_left justified data
 //  (the NITF spec discourages using it -- probably because it is such a PITA)
 template< class T >
@@ -614,7 +614,7 @@ vil_image_view_base_sptr get_block_vcl_internal(vil_pixel_format pix_format, vil
     }
   }
   else {
-    //in the rare case the the actual number of bits per pixel value (ABPP) is less than the number of bits
+    //in the rare case where the actual number of bits per pixel value (ABPP) is less than the number of bits
     //used in the data (NBPP) AND the data is vcl_left justified... then we correct that here
     if (need_to_right_justify)
       right_justify<T>(static_cast<T*>(image_memory->data()), image_memory->size()/sizeof(T), extra_bits);

@@ -52,8 +52,8 @@ bwm_observer_rat_cam::bwm_observer_rat_cam(bgui_image_tableau_sptr img,
   vil_image_resource_sptr img_res = bwm_utils::load_image(image_path, params);
 
   if (!img_res) {
-     bwm_utils::show_error("Image [" + image_path + "] is NOT found");
-     return;
+    bwm_utils::show_error("Image [" + image_path + "] is NOT found");
+    return;
   }
 
   img->set_image_resource(img_res, params);
@@ -137,11 +137,11 @@ vgl_vector_3d<double> bwm_observer_rat_cam::camera_direction()
   vgl_point_3d<double> p1,p2;
 
   if (!vpgl_backproject::bproj_plane(*rat_cam, img_pt, plane1, plane_point1, p1)) {
-     vcl_cerr << "Error: vpgl_backproject::broj_plane() failed.\n";
+    vcl_cerr << "Error: vpgl_backproject::broj_plane() failed.\n";
   }
 
   if (!vpgl_backproject::bproj_plane(*rat_cam, img_pt, plane2, plane_point2, p2)) {
-     vcl_cerr << "Error: vpgl_backproject::broj_plane() failed.\n";
+    vcl_cerr << "Error: vpgl_backproject::broj_plane() failed.\n";
   }
 
   // convert p1 and p2 to lvcs
@@ -179,7 +179,7 @@ void bwm_observer_rat_cam::center_pos()
   if (!params.ask())
     return;
 
-  // check the the valid range..
+  // check the valid range..
   if ((lat < -180.0) || (lat > 180.0) || (lon < -180.0) || (lon > 180.0)) {
     vgui_dialog error ("Error");
     error.message ("Please specify valid geographic coordinates in the range [-180, 180]" );
@@ -377,7 +377,7 @@ void bwm_observer_rat_cam::save_all()
 
   vcl_ofstream list_out(list_name.data());
   if (!list_out.good()) {
-    vcl_cerr << "error opening file "<< list_name <<vcl_endl;
+    vcl_cerr << "error opening file "<< list_name <<'\n';
     return;
   }
 

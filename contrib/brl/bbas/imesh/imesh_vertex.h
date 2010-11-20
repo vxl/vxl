@@ -228,7 +228,7 @@ class imesh_vertex_array : public imesh_vertex_array_base
     imesh_vertex_array_base::append(verts);
   }
 
-  //: Add a vertex the the array
+  //: Add a vertex to the array
   void push_back(const imesh_vertex<d>& v) { verts_.push_back(v); }
 
   //: Access a vertex

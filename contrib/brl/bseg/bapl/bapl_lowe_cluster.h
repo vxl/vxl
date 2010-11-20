@@ -19,7 +19,7 @@
 typedef vcl_pair< bapl_lowe_keypoint_sptr, bapl_lowe_keypoint_sptr > bapl_keypoint_match;
 
 //: This class clusters matches into bins
-// Hashing is according the the similarity transformation parameters
+// Hashing is according to the similarity transformation parameters
 // defined between the two keypoints.
 class bapl_lowe_clusterer
 {

@@ -1,12 +1,11 @@
 #include "vsrl_dynamic_program.h"
+// this class will perform a dynamic program
 #include <vcl_cstdlib.h>
 #include <vsrl/vsrl_token.h>
 #include <vsrl/vsrl_null_token.h>
 #include <vsrl/vsrl_parameters.h>
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
-
-// this class will perform a dynamic program
 
 // constructor
 vsrl_dynamic_program::vsrl_dynamic_program()
@@ -351,7 +350,7 @@ void vsrl_dynamic_program::compute_cost(int i, int j)
         //
         if (list2_[j]->null_token())
         {
-          // this is the the start of a new gap
+          // this is the start of a new gap
           num_null1=1;
         }
         else

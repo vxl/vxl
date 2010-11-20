@@ -55,7 +55,7 @@ void mesh_break_face(bmsh3d_mesh_mc* M, bmsh3d_face_mc* F,
                      bmsh3d_vertex* V1, bmsh3d_vertex* V2,
                      bmsh3d_face_mc* &F1, bmsh3d_face_mc* &F2);
 
-//: merges two meshes M1 amd M2 into M1. M1 and and M2 do not have any intersection
+//: merges two meshes M1 amd M2 into M1. M1 and M2 do not have any intersection
 void merge_mesh (bmsh3d_mesh_mc* M1, bmsh3d_mesh_mc* M2);
 bmsh3d_face* copy_inner_face(vcl_vector<bmsh3d_edge*> incident_edges,
                              bmsh3d_mesh_mc* mesh);

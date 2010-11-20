@@ -31,7 +31,7 @@ Reading data from an @code{mbl_data_wrapper} is straight forward.
     @}
 @end example
 
-You can do random access, using the the @code{set_index(int n)} method, but there is no guarantee that
+You can do random access, using the @code{set_index(int n)} method, but there is no guarantee that
 the underlying iterator supports this efficiently, so you should use sequential access where possible.
 The wrappers themselves do not support IO, because they are only wrappers - they do not own the
 wrapped data.

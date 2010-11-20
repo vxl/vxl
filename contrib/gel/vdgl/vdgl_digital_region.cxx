@@ -142,7 +142,7 @@ void vdgl_digital_region::ResetPixelData()
 //    Used to scan through a set of pixels and acquire mean values
 //    for coordinates and intensity.  This approach is necessary to
 //    accumulate scatter matrices which have zero mean. One scans
-//    the region pixels twice. First to get the means and and number of
+//    the region pixels twice. First to get the means and number of
 //    region pixels and then to insert the pixel data into fixed arrays
 void vdgl_digital_region::IncrementMeans(float x, float y,
                                          unsigned short pix)

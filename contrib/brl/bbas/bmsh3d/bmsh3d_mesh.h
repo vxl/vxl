@@ -446,7 +446,7 @@ class bmsh3d_mesh : public bmsh3d_ifs_mesh
 
   void IFS_to_MHE_bf(const bool skip_v0 = false);
 
-  //: Assume the the HE data structure for this mesh is complete
+  //: Assume the HE data structure for this mesh is complete
   //  This function build the IFS from the HE data structure.
   void build_face_IFS();
   void build_IFS_mesh();

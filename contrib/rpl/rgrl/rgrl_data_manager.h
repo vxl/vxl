@@ -102,7 +102,7 @@ class rgrl_data_manager_data_storage
     return estimators_.find( i ) != estimators_.end();
   }
 
-  //: Assume the key in in the map
+  //: Assume the key is in the map
   estimator_vector const& estimator_hierarchy(unsigned i) const
   {
     return estimators_.find( i )->second;

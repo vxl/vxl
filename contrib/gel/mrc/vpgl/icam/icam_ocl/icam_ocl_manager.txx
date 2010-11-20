@@ -76,7 +76,7 @@ bool icam_ocl_manager<T>::initialize_cl()
   }
 
   vcl_size_t ret_size;
-  
+
   bool gpu_found=false;
   bool cpu_found=false;
 
@@ -86,16 +86,15 @@ bool icam_ocl_manager<T>::initialize_cl()
   //: First checking for GPU
   for (unsigned i=0;i<num_platforms;i++)
   {
-
     if ( clGetDeviceIDs(platform_id[i], CL_DEVICE_TYPE_GPU, 2, gpus, &numGPUs)== CL_SUCCESS)
     {
-        clGetPlatformInfo(platform_id[i],CL_PLATFORM_NAME,sizeof(platform_name),platform_name,&ret_size);
+      clGetPlatformInfo(platform_id[i],CL_PLATFORM_NAME,sizeof(platform_name),platform_name,&ret_size);
 
       gpu_found=true;
       vcl_cout<<"Found "<<numGPUs<<" GPUs"<<vcl_endl;
       //use the second GPU if it's there...
       device = (numGPUs > 1)? gpus[1] : gpus[0];
-      //device = gpus[0]; 
+      //device = gpus[0];
       break;
     }
   }
@@ -111,7 +110,7 @@ bool icam_ocl_manager<T>::initialize_cl()
       }
     }
   }
-  // get an available GPU device from the the platform
+  // get an available GPU device from the platform
   // should we be using all if more than one available?
 
   if (!gpu_found && !cpu_found)
@@ -134,7 +133,7 @@ bool icam_ocl_manager<T>::initialize_cl()
                        CL_SUCCESS,
                        "clGetContextInfo failed."))
     return false;
-  
+
   number_devices_ = device_list_size/sizeof(cl_device_id);
 
   // Now allocate memory for device list based on the size we got earlier
@@ -156,7 +155,7 @@ bool icam_ocl_manager<T>::initialize_cl()
     return false;
 
   vcl_size_t max_work_group_size = 0;
-  
+
   // Get device specific information
   char vendor[512];
   status = clGetDeviceInfo(devices_[0],
@@ -305,14 +304,14 @@ bool icam_ocl_manager<T>::initialize_cl()
                        CL_SUCCESS,
                        "clGetDeviceInfo CL_DEVICE_IMAGE_SUPPORT failed."))
             return false;
- 
+
   char extensions[512];
   status = clGetDeviceInfo(devices_[0],
                            CL_DEVICE_EXTENSIONS,
                            sizeof(extensions),
                            (void*) extensions,
                            NULL);
-  
+
   if (!check_val(status,
                        CL_SUCCESS,
                        "clGetDeviceInfo CL_DEVICE_IMAGE_SUPPORT failed."))
@@ -321,7 +320,7 @@ bool icam_ocl_manager<T>::initialize_cl()
   unsigned size = sizeof(vcl_size_t);
   vcl_cout << " Context Description\n"
            << " Platform Name: "<<platform_name <<'\n'
-           << " Device vendor: " << vendor << '\n' 
+           << " Device vendor: " << vendor << '\n'
            << " Device extensions: " << extensions << 'n'
            << " Number of devices: " << number_devices_ << '\n'
            << " Number of compute units: " << max_compute_units_ << '\n'
@@ -414,9 +413,9 @@ int icam_ocl_manager<T>::build_kernel_program(cl_program & program, vcl_string o
   }
   const char * source = this->prog_.c_str();
 
-  program = clCreateProgramWithSource(this->context_, 
-                                      1, 
-                                      &source,  
+  program = clCreateProgramWithSource(this->context_,
+                                      1,
+                                      &source,
                                       sourceSize,
                                       &status);
   if (!check_val(status,CL_SUCCESS,"clCreateProgramWithSource failed."))
@@ -469,7 +468,8 @@ bool icam_ocl_manager<T>::create_buffer(void** buffer,vcl_string type, int elm_s
 #else
   *buffer = (cl_int*)memalign(length, sizeof(cl_int)*elm_size);
 #endif
-  } else if (type.compare("cl_uint") == 0) {
+  }
+  else if (type.compare("cl_uint") == 0) {
 #if defined (_WIN32)
     *buffer = (cl_uint*)_aligned_malloc(elm_size*sizeof(cl_uint),length);
 #elif defined(__APPLE__)
@@ -477,7 +477,8 @@ bool icam_ocl_manager<T>::create_buffer(void** buffer,vcl_string type, int elm_s
 #else
     *buffer =(cl_uint*)memalign(length,sizeof(cl_uint)*elm_size);
 #endif
-  } else if (type.compare("cl_float") == 0) {
+  }
+  else if (type.compare("cl_float") == 0) {
 #if defined (_WIN32)
     *buffer = (cl_float*)_aligned_malloc(elm_size*sizeof(cl_float),length);
 #elif defined(__APPLE__)
@@ -485,7 +486,8 @@ bool icam_ocl_manager<T>::create_buffer(void** buffer,vcl_string type, int elm_s
 #else
     *buffer =(cl_float*)memalign(length,sizeof(cl_float)*elm_size);
 #endif
-  } else if (type.compare("cl_float4") == 0) {
+  }
+  else if (type.compare("cl_float4") == 0) {
 #if defined (_WIN32)
     *buffer = (cl_float*)_aligned_malloc(elm_size*sizeof(cl_float)*4,length);
 #elif defined(__APPLE__)
@@ -493,7 +495,8 @@ bool icam_ocl_manager<T>::create_buffer(void** buffer,vcl_string type, int elm_s
 #else
     *buffer =(cl_float*)memalign(length,sizeof(cl_float)*elm_size*4);
 #endif
-  } else {
+  }
+  else {
     vcl_cout << "Buffer of type (" << type << "*) is not defined yet!" << vcl_endl;
     return false;
   }

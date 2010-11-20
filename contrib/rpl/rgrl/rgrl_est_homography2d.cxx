@@ -1,4 +1,5 @@
 #include "rgrl_est_homography2d.h"
+//
 #include "rgrl_trans_homography2d.h"
 #include "rgrl_match_set.h"
 
@@ -12,7 +13,7 @@ rgrl_est_homography2d::
 rgrl_est_homography2d( double condition_num_thrd )
   : condition_num_thrd_( condition_num_thrd )
 {
-   rgrl_estimator::set_param_dof( 8 );
+  rgrl_estimator::set_param_dof( 8 );
 }
 
 rgrl_transformation_sptr
@@ -21,7 +22,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
           rgrl_transformation const& /*cur_transform*/ ) const
 {
   // Normalization of the input data by s similarity transformation,
-  // such that the new center is the origin, and the the average
+  // such that the new center is the origin, and the average
   // distance from the origin is sqrt(2).
   //
   vcl_vector< vnl_vector<double> > norm_from_pts, norm_to_pts;
@@ -59,7 +60,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
 
     // check rank of H
     vnl_double_3x3 tmpH(normH);
-    if( vcl_abs(vnl_det(tmpH)) < 1e-8 ) 
+    if ( vcl_abs(vnl_det(tmpH)) < 1e-8 )
       return 0;
 
     vnl_matrix<double> to_scale_matrix_inv(3,3,vnl_matrix_identity);

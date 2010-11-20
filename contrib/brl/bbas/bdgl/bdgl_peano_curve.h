@@ -20,7 +20,7 @@ vcl_vector<vgl_point_2d<double> > rotate_2d(vcl_vector<vgl_point_2d<double> > in
 vcl_vector<vgl_point_2d<double> > trans_2d(vcl_vector<vgl_point_2d<double> > in, double tx, double ty);
 vcl_vector<vgl_point_2d<double> > scale_2d(vcl_vector<vgl_point_2d<double> > in, double s);
 
-//: Peano curve inscribed in a square of of length 4 centered at the origin.
+//: Peano curve inscribed in a square of length 4 centered at the origin.
 vcl_vector<vgl_point_2d<double> >  recurse_peano_curve(unsigned level);
 
 //: peano_curve on cube

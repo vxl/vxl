@@ -80,7 +80,7 @@ class vil_nitf2_image : public vil_blocked_image_resource
 
   virtual ~vil_nitf2_image();
 
-  //:return the image info the the current image
+  //:return the image info of the current image
   virtual unsigned nplanes() const;
   virtual unsigned ni() const;
   virtual unsigned nj() const;
@@ -250,7 +250,8 @@ T get_bits( const T* in_val, unsigned int i0, unsigned int ni )
     //why the for loop
     for ( int i = 0 ; i < strip_right ; i++ ) temp /= 2;
     //temp = temp >> strip_right;
-  } else if ( strip_right < 0 ){
+  }
+  else if ( strip_right < 0 ){
     //we didn't have enough bits in the first element of the in_val array
     //need to get some from the next element
     for ( int i = 0 ; i < (-strip_right) ; i++ ) temp *= 2;

@@ -137,7 +137,7 @@ void test_log()
     MBL_LOG(WARN, obj3, "Test");
 
 
-  // Check that is is possible to use a custom streambuf as the output destination, and
+  // Check that it is possible to use a custom streambuf as the output destination, and
   // that flushes indicate a terminating log message.
   mbl_logger obj4("obj4");
   MBL_LOG(WARN, obj4, "A split line" << vcl_endl << "message");

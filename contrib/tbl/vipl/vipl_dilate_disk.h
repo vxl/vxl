@@ -11,7 +11,7 @@
 //   Dilation is a morphological operation that replaces a pixel with the
 //   maximum value of its surrounding pixels, in a certain neighbourhood.
 //   Here, the neighbourhood is circular, with an arbitrary (float) radius,
-//   which is to be be passed to the constructor.
+//   which is to be passed to the constructor.
 //
 //   Note that the function max(DataIn,DataIn) is being used; for
 //   non-scalar data types (like colour pixels) an appropriate max() function

@@ -365,7 +365,7 @@ bgui3d_viewer_tableau::toggle_camera_type()
 void
 bgui3d_viewer_tableau::view_all()
 {
-    scene_camera_->viewAll( user_scene_root_, get_viewport_region() );
+  scene_camera_->viewAll( user_scene_root_, get_viewport_region() );
 }
 
 
@@ -606,7 +606,7 @@ bgui3d_viewer_tableau::set_clipping_planes()
       nearlimit = farval / 5000.0f;
     }
 
-    // adjust the near plane if the the value is too small.
+    // adjust the near plane if the value is too small.
     if (nearval < nearlimit) {
       nearval = nearlimit;
     }

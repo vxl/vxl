@@ -319,7 +319,7 @@ extern int ZEXPORT unzStringFileNameCompare (fileName1,fileName2,iCaseSensitivit
 
 /*
   Locate the Central directory of a zipfile (at the end, just before
-    the global comment)
+  the global comment)
 */
 local uLong unzlocal_SearchCentralDir OF((
     const zlib_filefunc_def* pzlib_filefunc_def,
@@ -382,9 +382,9 @@ local uLong unzlocal_SearchCentralDir(pzlib_filefunc_def,filestream)
 }
 
 /*
-  Open a Zip file. path contain the full pathname (by example,
+  Open a Zip file. path contain the full pathname (for example,
      on a Windows NT computer "c:\\test\\zlib114.zip" or on an Unix computer
-     "zlib/zlib114.zip".
+     "zlib/zlib114.zip").
      If the zipfile cannot be opened (file doesn't exist or in not valid), the
        return value is NULL.
      Else, the return value is a unzFile Handle, usable with other function
@@ -400,7 +400,7 @@ extern unzFile ZEXPORT unzOpen2 (path, pzlib_filefunc_def)
 
     uLong number_disk;          /* number of the current dist, used for
                                    spaning ZIP, unsupported, always 0*/
-    uLong number_disk_with_CD;  /* number the the disk with central dir, used
+    uLong number_disk_with_CD;  /* number of the disk with central dir, used
                                    for spaning ZIP, unsupported, always 0*/
     uLong number_entry_CD;      /* total number of entries in
                                    the central dir
@@ -1300,7 +1300,7 @@ extern int ZEXPORT unzReadCurrentFile  (file, buf, len)
                 return (iRead==0) ? UNZ_EOF : iRead;
 
             if (pfile_in_zip_read_info->stream.avail_out <
-                            pfile_in_zip_read_info->stream.avail_in)
+                pfile_in_zip_read_info->stream.avail_in)
                 uDoCopy = pfile_in_zip_read_info->stream.avail_out ;
             else
                 uDoCopy = pfile_in_zip_read_info->stream.avail_in ;

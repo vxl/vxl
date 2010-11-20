@@ -1,6 +1,5 @@
 #ifndef rrel_lts_obj_h_
 #define rrel_lts_obj_h_
-
 //:
 // \file
 // \author Chuck Stewart (stewart@cs.rpi.edu)
@@ -20,10 +19,11 @@
 //  inlier_frac is 0.5, but it could be any value.  The search
 //  algorithm is implemented in rrel_ran_sam_search.
 
-class rrel_lts_obj : public rrel_objective {
-public:
+class rrel_lts_obj : public rrel_objective
+{
+ public:
   //: Constructor.
-  //  \a num_sam_inst is the the minimum number of samples needed for
+  //  \a num_sam_inst is the minimum number of samples needed for
   //  a unique parameter estimate. That is, num_sam_inst should be set
   //  to rrel_estimation_problem::num_samples_to_instantiate(). \a
   //  inlier_frac is the minimum expected number of inlier
@@ -41,7 +41,7 @@ public:
                       vect_const_iter /* scale is unused */,
                       vnl_vector<double>* = 0 /* param vector is unused */ ) const;
 
-  //: Evaluate the objective function on homoscedastic residuals.  
+  //: Evaluate the objective function on homoscedastic residuals.
   //  \sa rrel_objective::fcn.
   virtual double fcn( vect_const_iter begin, vect_const_iter end,
                       double = 0 /* scale is unused */,
@@ -53,7 +53,7 @@ public:
   virtual bool requires_prior_scale() const
     { return false; }
 
-protected:
+ protected:
   //: Number of samples needed for a unique fit = number of dependent residuals.
   unsigned int num_sam_inst_;
   double inlier_frac_;

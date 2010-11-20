@@ -29,7 +29,7 @@ contains the core @vxl{x} libraries.
 in implementing @vxl{x}. @code{v3p/netlib} contains cleaned-up C
 versions of the high-quality Fortran code. @code{v3p/jpeg} and others
 contain image file format code used by vil. In theory, you don't need
-any of of the v3p libraries if you have locally installed versions. In
+any of the v3p libraries if you have locally installed versions. In
 practice, you need @code{v3p/netlib} but not the others.  the
 
 @item config/cmake

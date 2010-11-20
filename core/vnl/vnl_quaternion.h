@@ -82,7 +82,7 @@ class vnl_quaternion : public vnl_vector_fixed<T, 4>
   // \sa vnl_quaternion::axis()
   vnl_quaternion(vnl_vector_fixed<T,3> const& axis, double angle);
 
-  //: Construct quaternion from from 3x3 row-major matrix
+  //: Construct quaternion from 3x3 row-major matrix
   explicit vnl_quaternion(vnl_matrix_fixed<T,3,3> const& transform);
 
   //: Construct quaternion from a 3D vector
@@ -160,7 +160,7 @@ class vnl_quaternion : public vnl_vector_fixed<T, 4>
   vnl_vector_fixed<T,3> rotate(vnl_vector_fixed<T,3> const&) const;
 
   //: Rotation representation in Euler angles.
-  // The angles raturned will be [theta_X,theta_Y,theta_Z]
+  // The angles returned will be [theta_X,theta_Y,theta_Z]
   // where the final rotation is found be first applying theta_X radians
   // about the X axis, then theta_Y about the Y-axis, etc.
   // The axes stay in a fixed reference frame.

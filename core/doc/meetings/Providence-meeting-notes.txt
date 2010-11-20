@@ -258,7 +258,7 @@ Joe Mundy: VGUI should be promoted to vxl/vgui.  It will get better
 support as a top-level library.  Also, the vgui dead tendrils should
 be removed.
 
-Karen McGaul agreed to remove the the implementations other than the
+Karen McGaul agreed to remove the implementations other than the
 core implementations (gtk, qt, mfc) and to remove the event-loop code.
 
 There was agreement that the vgui improvement plan in Karen McGaul's

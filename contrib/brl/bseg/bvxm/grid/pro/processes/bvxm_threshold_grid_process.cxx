@@ -1,6 +1,5 @@
 //This is brl/bseg/bvxm/grid/pro/processes/bvxm_threshold_grid_process.cxx
 #include <bprb/bprb_func_process.h>
-
 //:
 // \file
 // \brief A process for thresholding the occupancy grid of a voxel world
@@ -64,7 +63,7 @@ bool bvxm_threshold_grid_process_cons(bprb_func_process& pro)
 }
 
 
-//: Given an input grid and a threshold, this process process returns two grids;
+//: Given an input grid and a threshold, this process returns two grids;
 //  One being the thresholded grid, the other being the mask such that
 //  original * mask = thresholded. All grids are disk based.
 bool bvxm_threshold_grid_process(bprb_func_process& pro)

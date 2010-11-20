@@ -43,7 +43,7 @@ class rgrl_initializer_inv_indexing
 
   //: Add the set of invariants from the fixed image and the set from one moving image
   //
-  //  Matches are sorted in order of descreasing distance. \a
+  //  Matches are sorted in order of decreasing distance. \a
   //  nn_radius has precedence over \a k_nn. If no neighbor falls in
   //  \a nn_radius, \a k_nn are taken.
   //
@@ -56,7 +56,7 @@ class rgrl_initializer_inv_indexing
 
   //: Add a set of invariants from the fixed image and multiple sets from multiple moving images
   //
-  //  Matches are sorted in order of descreasing distance. \a
+  //  Matches are sorted in order of decreasing distance. \a
   //  nn_radius has precedence over \a k_nn. If no neighbor falls in
   //  \a nn_radius, \a k_nn are taken.
   //
@@ -67,7 +67,7 @@ class rgrl_initializer_inv_indexing
                                   double nn_radius = 0,
                                   unsigned int k_nn = 1);
 
-  //: Set the index of the current moving image. Default is the the 0th moving-image
+  //: Set the index of the current moving image. Default is the 0th moving-image
   void set_current_moving_image( unsigned int moving_image_index);
 
   //: Return the matches for the given \a moving_image_index.

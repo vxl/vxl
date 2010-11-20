@@ -142,7 +142,7 @@ vcl_streamsize vul_redirector::put_passthru(char const* buf, vcl_streamsize n)
   return p->old_cerrbuf->sputn(buf, n);
 }
 
-//: Default action is just to pass text on the the old stream.
+//: Default action is just to pass text on the old stream.
 vcl_streamsize vul_redirector::putchunk(char const* buf, vcl_streamsize n)
 {
   return put_passthru(buf, n);
