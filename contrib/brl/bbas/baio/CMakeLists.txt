@@ -14,7 +14,7 @@ ELSEIF(APPLE)
   SET(baio_sources ${baio_sources}
       baio_osx.cxx
      )
-ELSEIF(UNIX)
+ELSE(WIN32)
   SET(baio_sources ${baio_sources}
       baio_unix.cxx
      )
@@ -22,13 +22,11 @@ ENDIF(WIN32)
 
 ADD_LIBRARY(baio ${baio_sources})
 
-IF(WIN32)
-  TARGET_LINK_LIBRARIES(baio)
-ELSEIF(APPLE)
-  TARGET_LINK_LIBRARIES(baio)
-ELSEIF(UNIX)
+IF(UNIX)
   TARGET_LINK_LIBRARIES(baio rt)
-ENDIF(WIN32)
+ELSE(UNIX)
+  TARGET_LINK_LIBRARIES(baio)
+ENDIF(UNIX)
 
 #tests
 SUBDIRS(tests)
