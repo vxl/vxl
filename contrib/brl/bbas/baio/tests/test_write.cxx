@@ -7,6 +7,7 @@
 #include <vnl/vnl_random.h>
 #include <vpl/vpl.h>
 
+#if 0 // currently unused static function
 static int test_write_helper(char* buffer)
 {
   //tests to see if char* persists
@@ -23,10 +24,11 @@ static int test_write_helper(char* buffer)
   buffer = aio.buffer();
   return numFlops;
 }
+#endif // 0
 
 static void test_write()
 {
-  const int buffSize = 1024*1024;
+  const unsigned int buffSize = 1024*1024;
   vcl_string root_dir = testlib_root_dir();
   vcl_string test_file = "./test_file_w.txt";
 
@@ -34,8 +36,8 @@ static void test_write()
   char* in_tester = new char[buffSize];
   char* out_tester = new char[buffSize];
   vnl_random rand;
-  for(unsigned i=0;i<buffSize;i++)
-      in_tester[i]=(char)rand.lrand32(-127,127);
+  for (unsigned i=0;i<buffSize;++i)
+    in_tester[i]=(char)rand.lrand32(-127,127);
 
 
   baio aio;
@@ -48,7 +50,7 @@ static void test_write()
   vcl_cout<<"Number of flops performed during ASYNC read: "<<num_flops<<vcl_endl;
 
 
-  int charCount = 0;
+  unsigned int charCount = 0;
   vcl_string line;
   vcl_ifstream myfile(test_file.c_str(),vcl_ios::binary);
   if (myfile.is_open()) {
@@ -56,28 +58,27 @@ static void test_write()
       getline (myfile,line);
       line += "\n";
       for (unsigned int i=0 ; i<line.length(); ++i) {
-        if (charCount > buffSize-1)
+        if (charCount+1 > buffSize)
           break;
         out_tester[charCount] = line[i];
-        charCount++;
+        ++charCount;
       }
     }
     myfile.close();
   }
 
   //test asynchros-ness
-  TEST("read is asynchronous/status write works", true, num_flops > 0);
+  TEST("read is asynchronous/status write works", num_flops > 0, true);
 
   //Test same data read
   bool good = true;
-  for (int i=0; i<buffSize; i++) {
+  for (unsigned int i=0; i<buffSize; ++i) {
     if (out_tester[i] != in_tester[i]) {
       good = false;
       vcl_cout<<(int) out_tester[i]<<"... "<<(int) in_tester[i]<<vcl_endl;
     }
-
   }
-  TEST("data read matches data ", true, good);
+  TEST("data read matches data", good, true);
   //cleanup
   delete[] in_tester;
   delete[] out_tester;
