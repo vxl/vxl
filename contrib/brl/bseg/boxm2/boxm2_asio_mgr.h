@@ -25,18 +25,18 @@ class boxm2_asio_mgr
     void save_block(vcl_string dir, boxm2_block* block );
 
     //: creates a BAIO object that loads data from disk
-    template <boxm2_data_type data_type> 
+    template <boxm2_data_type data_type>
     void load_block_data(vcl_string dir, boxm2_block_id block_id, baio & aio_reader);
 
     //: creates a BAIO object that saves data to disk
-    template <boxm2_data_type data_type> 
+    template <boxm2_data_type data_type>
     void save_block_data(vcl_string dir, boxm2_block_id block_id , boxm2_data_base * block_data,baio & aio_writer);
-    
-    //: returns a map of block pointers 
-    vcl_map<boxm2_block_id, boxm2_block*> get_loaded_blocks(); 
+
+    //: returns a map of block pointers
+    vcl_map<boxm2_block_id, boxm2_block*> get_loaded_blocks();
 
     //: returns a map of data pointers
-    vcl_map<vcl_string, vcl_map<boxm2_block_id, boxm2_data_base*> > get_loaded_data_blocks(); 
+    vcl_map<vcl_string, vcl_map<boxm2_block_id, boxm2_data_base*> > get_loaded_data_blocks();
 
     //: returns load list (for updating cache)
     vcl_map<boxm2_block_id, baio> load_list() { return load_list_; }
@@ -81,13 +81,9 @@ void boxm2_asio_mgr::save_block_data(vcl_string dir, boxm2_block_id block_id , b
     ns << dir << boxm2_data_traits<data_type>::prefix() << block_id << ".bin";
     vcl_string filename = ns.str();
 
-    unsigned long buflength=vul_file::size(filename);
-    char * buffer=new char[buflength];
-    //baio aio_writer;
     aio_writer.write(filename,block_data->data_buffer(),block_data->buffer_length());
     //save_data_list_[boxm2_data_traits<data_type>::prefix()][block_id]=aio_writer;
     return ;//aio_writer;
 }
-
 
 #endif // boxm2_asio_mgr_h_

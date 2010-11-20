@@ -42,8 +42,8 @@ void write_svg(const bsta_histogram<T>& h, const vcl_string& outfile,
   tmm2->set_location(margin, margin+font_size);
   pl.add_element(tmm2);
 
-  float minf = float(h.min());
-  float deltaf = float(h.delta());
+  float minf = float(min);
+  float deltaf = float(delta);
 
   pl.add_axes(0, 1, 0, 1);
   pl.add_y_increments(0.1f);
