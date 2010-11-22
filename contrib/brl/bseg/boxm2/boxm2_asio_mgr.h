@@ -67,7 +67,7 @@ void boxm2_asio_mgr::load_block_data(vcl_string dir, boxm2_block_id block_id, ba
     vcl_string filename = ns.str();
 
     unsigned long buflength=vul_file::size(filename);
-    char * buffer=new char[buflength];
+    char * buffer = new char[buflength];
     aio_reader.read(filename,buffer,buflength);
     //load_data_list_[boxm2_data_traits<data_type>::prefix()][block_id]=aio_reader;
     return ;

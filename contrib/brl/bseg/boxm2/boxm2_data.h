@@ -11,34 +11,44 @@
 #include <boxm2/boxm2_data_traits.h>
 #include <vcl_cstring.h>
 
+//: Generic, untemplated base class for data blocks
 class boxm2_data_base
 {
  public:
-    boxm2_data_base(char * data_buffer,
-                    vcl_size_t length,
-                    boxm2_block_id id)
+    boxm2_data_base(char * data_buffer, vcl_size_t length, boxm2_block_id id)
      : id_(id), data_buffer_(data_buffer), buffer_length_(length) {}
 
-    ~boxm2_data_base() { delete [] data_buffer_; } // FIXME: are you sure?!?
+    //: This destructor is correct - by our design the original data_buffer becomes OWNED by the data_base class
+    virtual ~boxm2_data_base() { delete [] data_buffer_; } 
 
-    char * data_buffer(){return data_buffer_;}
-    vcl_size_t buffer_length(){return buffer_length_;}
+    //: accessor for low level byte buffer kept by the data_base
+    char *      data_buffer()    { return data_buffer_; }
+    vcl_size_t  buffer_length()  { return buffer_length_; }
+    
  protected:
+    //: id for this particular block
     boxm2_block_id id_;
+    
+    //: byte buffer and it's size
     char * data_buffer_;
     vcl_size_t buffer_length_;
 };
 
+//: Specific, templated derived class for data blocks
 template <boxm2_data_type T>
 class boxm2_data: public boxm2_data_base
 {
+  
  public:
+  
+    //: type of data (float for alpha, bytes for mixture model, etc)
     typedef typename boxm2_data_traits<T>::datatype datatype;
 
-    boxm2_data(char * data_buffer,
-               vcl_size_t length,
-               boxm2_block_id id);
-    ~boxm2_data();
+    //: creats boxm2_data object from byte buffer and id
+    boxm2_data(char * data_buffer, vcl_size_t length, boxm2_block_id id);
+    
+    //: destructor
+    virtual ~boxm2_data();
 
     boxm2_array_1d<datatype> * data() {return data_array_;}
 

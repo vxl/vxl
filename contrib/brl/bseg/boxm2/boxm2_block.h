@@ -60,7 +60,7 @@ class boxm2_block : public vbl_ref_count
   boxm2_block();
 
   //: default destructor
-  ~boxm2_block() { 
+  virtual ~boxm2_block() { 
     if(buffer_) delete[] buffer_;
   }
 
