@@ -30,7 +30,7 @@ static void test_write()
 {
   const unsigned int buffSize = 1024*1024;
   vcl_string root_dir = testlib_root_dir();
-  vcl_string test_file = "./test_file_w.txt";
+  vcl_string test_file = root_dir + "/contrib/brl/bbas/baio/tests/test_file_w.txt";
 
   //load from file with blocking
   char* in_tester = new char[buffSize];
@@ -47,7 +47,7 @@ static void test_write()
     num_flops += 4;
   }
   aio.close_file();
-  vcl_cout<<"Number of flops performed during ASYNC read: "<<num_flops<<vcl_endl;
+  vcl_cout<<"Number of flops performed during ASYNC write: "<<num_flops<<vcl_endl;
 
 
   unsigned int charCount = 0;
@@ -75,7 +75,7 @@ static void test_write()
   for (unsigned int i=0; i<buffSize; ++i) {
     if (out_tester[i] != in_tester[i]) {
       good = false;
-      vcl_cout<<(int) out_tester[i]<<"... "<<(int) in_tester[i]<<vcl_endl;
+      //vcl_cout<<(int) out_tester[i]<<"... "<<(int) in_tester[i]<<vcl_endl;
     }
   }
   TEST("data read matches data", good, true);

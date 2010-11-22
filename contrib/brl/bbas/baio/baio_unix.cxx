@@ -67,9 +67,9 @@ bool baio::read(vcl_string filename, char* buff, long BUFSIZE)
 bool baio::write(vcl_string filename, char* buff, long BUFSIZE)
 {
   // 1. call c open to get standard file handle
-  int fhandle = open(filename.c_str(), O_WRONLY);
+  int fhandle = open(filename.c_str(), O_WRONLY | O_CREAT, 0666);
   if (fhandle < 0) {
-    vcl_cerr<<"baio (linux)::write could not open file"<<filename<<vcl_endl;
+    vcl_cerr<<"baio (linux)::write could not open file: "<<filename<<vcl_endl;
     vcl_perror("open");
   }
 
