@@ -1,18 +1,21 @@
 //: test utils to produce test blocks, data, scene, etc.
 #include "test_utils.h"
+#include <testlib/testlib_test.h>
 #include <vnl/vnl_vector_fixed.h>
 
-char* boxm2_test_utils::construct_block_test_stream()
+char* boxm2_test_utils::construct_block_test_stream(int numBuffers, 
+                                                    int treeLen, 
+                                                    int* nums, 
+                                                    double* dims, 
+                                                    int init_level,
+                                                    int max_level,
+                                                    int max_mb )
 {
     typedef vnl_vector_fixed<unsigned char, 16> uchar16; 
     typedef vnl_vector_fixed<unsigned short, 2> ushort2; 
     typedef unsigned short                      ushort; 
   
     //write size, init_level, max_level, max_mb
-    int numBuffers = 50;      
-    int treeLen = 1200; 
-    int nums[4] = { 30, 40, 50, 0 }; 
-    double dims[4] = { 0.2, 0.4, 0.6, 0.0 };  
     int numTrees = nums[0]*nums[1]*nums[2];
     long size = numTrees*(sizeof(int) + sizeof(uchar16)) +
                 numBuffers*(sizeof(ushort) + sizeof(ushort2)) +
@@ -23,9 +26,7 @@ char* boxm2_test_utils::construct_block_test_stream()
     for(int i=0; i<size; i++) bsize[i] = (char) 0; 
     int curr_byte = 0;
                 
-    int init_level = 1;  
-    int max_level  = 4; 
-    int max_mb     = 400; 
+    //write size, init_level, max_level, max_mb
     vcl_memcpy(bsize,   &size, sizeof(long));  
     curr_byte += sizeof(long); 
     vcl_memcpy(bsize+curr_byte, &init_level, sizeof(int)); 
@@ -80,3 +81,93 @@ char* boxm2_test_utils::construct_block_test_stream()
 
     return bsize;
 }
+
+
+void boxm2_test_utils::test_block_equivalence(boxm2_block& a, boxm2_block& b)
+{
+    typedef vnl_vector_fixed<unsigned char, 16> uchar16;
+    typedef vnl_vector_fixed<unsigned short, 2> ushort2;
+    typedef unsigned short                      ushort;
+
+    //: omitting ID for sake of ASIO testing
+    //if (a.block_id() != b.block_id()) {
+        //TEST("boxm2_block: id failed", true, false);
+        //return;
+    //}
+    if (a.num_buffers() != b.num_buffers()) {
+        TEST("boxm2_block: num buffers failed", true, false);
+        return;
+    }
+    if (a.tree_buff_length() != b.tree_buff_length()) {
+        TEST("boxm2_block: tree_buff_length failed", true, false);
+        return;
+    }
+    if (a.init_level() != b.init_level()) {
+      TEST("boxm2_block: init_level failed", true, false);
+      return;
+    }
+    if (a.max_level() != b.max_level()) {
+        TEST("boxm2_block: max_level failed", true, false);
+        return;
+    }
+    if (a.max_mb() != b.max_mb()) {
+        TEST("boxm2_block: max_mb failed", true, false);
+        return;
+    }
+    if (a.sub_block_dim() != b.sub_block_dim()) {
+        TEST("boxm2_block: sub_block_dim failed", true, false);
+        return;
+    }
+    if (a.sub_block_num() != b.sub_block_num()) {
+        TEST("boxm2_block: sub_block_num failed", true, false);
+        return;
+    }
+    TEST("boxm2_block: meta data from disk passed", true, true);
+
+    boxm2_array_3d<uchar16>&  treesa = a.trees();
+    boxm2_array_3d<uchar16>&  treesb = b.trees();
+    for (int i=0; i<a.sub_block_num().x(); i++) {
+      for (int j=0; j<a.sub_block_num().y(); j++) {
+        for (int k=0; k<a.sub_block_num().z(); k++) {
+          if (treesa[i][j][k] != treesb[i][j][k]) {
+            TEST("boxm2_block: trees not initialized properly", true, false);
+            return;
+          }
+        }
+      }
+    }
+    TEST("boxm2_block: trees initialized properly", true, true);
+
+    boxm2_array_2d<int>& treePtrsA = a.tree_ptrs();
+    boxm2_array_2d<int>& treePtrsB = b.tree_ptrs();
+    for (int i=0; i<a.num_buffers(); i++) {
+      for (int j=0; j<a.tree_buff_length(); j++) {
+        if (treePtrsA[i][j] != treePtrsB[i][j]) {
+          TEST("boxm2_block: trees ptrs not initialized properly", true, false);
+          return;
+        }
+      }
+    }
+    TEST("boxm2_block: tree ptrs initialized properly", true, true);
+
+    boxm2_array_1d<ushort> b_in_ba = a.trees_in_buffers();
+    boxm2_array_1d<ushort> b_in_bb = b.trees_in_buffers();
+    for (int i=0; i<a.num_buffers(); i++) {
+      if (b_in_ba[i] != b_in_bb[i]) {
+        TEST("boxm2_block: blocks in buffers not initialized properly", true, false);
+        return;
+      }
+    }
+    TEST("boxm2_block: blocks in buffers initialized properly", true, true);
+
+    boxm2_array_1d<ushort2> memPtrsA = a.mem_ptrs();
+    boxm2_array_1d<ushort2> memPtrsB = b.mem_ptrs();
+    for (int i=0; i<a.num_buffers(); i++) {
+      if (memPtrsA[i] != memPtrsB[i]) {
+        TEST("boxm2_block: mem_ptrs not initialized properly", true, false);
+        return;
+      }
+    }
+    TEST("boxm2_block: mem_ptrs initialized properly", true, true);
+}
+

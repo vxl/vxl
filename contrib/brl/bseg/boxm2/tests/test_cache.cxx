@@ -25,10 +25,24 @@ void test_cache()
   vcl_string test_dir = root_dir + "/contrib/brl/bseg/boxm2/tests/"; 
   
   //ensure blocks 0.0.0 - 1.1.1 are saved to disk
+  int numBuffers = 50;
+  int treeLen = 1200;
+  int init_level = 1;
+  int max_level  = 4;
+  int max_mb     = 400;
+  int nums[4] = { 30, 40, 50, 0 };
+  double dims[4] = { 0.2, 0.4, 0.6, 0.0 };
   for(int i=0; i<2; i++) {
     for(int j=0; j<2; j++) {
       for(int k=0; k<2; k++) {
-        boxm2_block b(boxm2_block_id(i,j,k), boxm2_test_utils::construct_block_test_stream());  
+        char* stream = boxm2_test_utils::construct_block_test_stream( numBuffers, 
+                                                                      treeLen, 
+                                                                      nums, 
+                                                                      dims, 
+                                                                      init_level,
+                                                                      max_level,
+                                                                      max_mb );
+        boxm2_block b(boxm2_block_id(i,j,k), stream);  
         boxm2_sio_mgr::save_block(test_dir, &b); 
       }
     }

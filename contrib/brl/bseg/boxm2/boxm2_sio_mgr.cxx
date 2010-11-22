@@ -29,7 +29,7 @@ void boxm2_sio_mgr::save_block(vcl_string dir, boxm2_block* block)
   char * bytes = block->buffer(); 
   block->b_write(bytes); 
   
-  //TODO come up with naming scheme
+  //: synchronously write to disk
   vcl_ofstream myFile (filepath.c_str(), vcl_ios::out | vcl_ios::binary);
   myFile.write(bytes, block->byte_count());  
   myFile.close();
