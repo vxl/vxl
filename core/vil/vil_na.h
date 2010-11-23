@@ -20,28 +20,35 @@
 // many uses will convert this to the non-signalling variant 0x7ff80000000007a2. vil_na_isna()
 // will accept either variant.
 //
-// You can read and write floating point values from a stream using standard operators
-// by using a conversion manipulator.
-// \verbatim
-// double x, y;
-// is >> x >> y;
-// os << x << ' ' << y;
-// \endverbatim
+// The single precision NA is stored as 0x7f8007a2. I cannot find any external support for
+// this or any other value for single precision NA. There is no automatic conversion between
+// the NA values during casting, promotion, etc. If you want to convert a float to double,
+// whilst preserving the NA-ness of the value, you will have to test for and set the new NA
+// value explicitly.
 //
 // This file is a cut-and-paste of the essential sections of vnl_na, since vil is not
 // allowed to depend upon vnl
 
 
+
+
 //: qNaN to indicate value Not Available.
 // Don't assume that any VXL functions will do something sensible in the face of NA, unless
 // explicitly documented.
-double   vil_na();
+double   vil_na(double dummy);
 
+//: qNaN to indicate value Not Available.
+// Don't assume that any VXL functions will do something sensible in the face of NA, unless
+// explicitly documented.
+float   vil_na(float dummy);
 
 //: True if parameter is specific NA qNaN.
 // Tests for bit pattern 0x7ff00000000007a2, as used by Octave and R
 bool vil_na_isna(double);
 
+//: True if parameter is specific NA qNaN.
+// Tests for bit pattern 0x7f8007a2
+bool vil_na_isna(float);
 
 
 #endif // vil_na_h_

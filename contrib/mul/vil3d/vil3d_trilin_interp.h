@@ -125,7 +125,7 @@ inline double vil3d_trilin_interp_safe_edgena(double x, double y, double z, cons
                                               vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep, vcl_ptrdiff_t zstep)
 {
   if (x<0 || y<0 || z<0 ||
-    x>=nx-1 || y>=ny-1 || z>=nz-1) return vil_na();
+    x>=nx-1 || y>=ny-1 || z>=nz-1) return vil_na(double());
   return vil3d_trilin_interp_raw(x,y,z,data,xstep,ystep,zstep);
 }
 //: Compute trilinear interpolation at (x,y), using the nearest valid value if out of bounds

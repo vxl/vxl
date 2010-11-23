@@ -53,7 +53,7 @@ float   vnl_na(float dummy);
 bool vnl_na_isna(double);
 
 //: True if parameter is specific NA qNaN.
-// Tests for bit pattern 0x7ff00000000007a2, as used by Octave and R
+// Tests for bit pattern 0x7f8007a2
 bool vnl_na_isna(float);
 
 
