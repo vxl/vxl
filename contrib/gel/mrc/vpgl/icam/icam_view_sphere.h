@@ -41,6 +41,9 @@ class icam_view_sphere : public vbl_ref_count
   //: given a camera, find the relative camera rotation and translations for each view point
   void camera_transf(vpgl_perspective_camera<double> const& cam);
 
+  // Writes the view points as small spheres into a vrml file
+  void vrml_write(vcl_string vrml_file);
+
   inline short version() const { return 1; }
 
   void b_read(vsl_b_istream &is);
