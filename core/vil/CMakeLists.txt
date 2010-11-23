@@ -262,6 +262,12 @@ ENDIF (WIN32 AND VXL_USE_LFS AND NOT CMAKE_CL_64)
 
 AUX_SOURCE_DIRECTORY(Templates vil_sources)
 
+IF(CMAKE_COMPILER_IS_GNUCXX)
+  SET_SOURCE_FILES_PROPERTIES(vil_na.cxx PROPERTIES COMPILE_FLAGS -O1)
+ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+
+
+
 # Some versions of Solaris (at least 5.8) has a brain-dead mechanism
 # for implementing DNS services, where the user of a library that uses
 # gethostbyname should link to -lnsl *before* linking to the
