@@ -64,14 +64,14 @@ char* boxm2_test_utils::construct_block_test_stream(int numBuffers,
     //fill in some blocks in buffers numbers
     ushort* treeCountBuff = (ushort*) (bsize + curr_byte); 
     for(int i=0; i<numBuffers; i++) 
-      treeCountBuff[i] = (ushort) 1200; 
+      treeCountBuff[i] = (ushort) treeLen; 
     curr_byte += sizeof(ushort) * numBuffers; 
     
     //7. 1d array of mem pointers
     ushort2* memPtrsBuff = (ushort2*) (bsize + curr_byte);
     for(int i=0; i<numBuffers; i++) {
       memPtrsBuff[i][0] = 0; 
-      memPtrsBuff[i][1] = 1201; 
+      memPtrsBuff[i][1] = treeLen+1; 
     }
     curr_byte += sizeof(ushort2) * numBuffers;
 

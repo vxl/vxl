@@ -70,13 +70,13 @@ void test_block()
     vcl_string test_file = root_dir + "/contrib/brl/bseg/boxm2/tests/";
 
     //construct block from stream
-    int numBuffers = 50;
-    int treeLen = 1200;
+    int nums[4] = { 64, 64, 64, 0 };
+    double dims[4] = { 0.5, 0.5, 0.5, 0.0 };
+    int numBuffers = 64;
+    int treeLen    = 64*64;
     int init_level = 1;
     int max_level  = 4;
     int max_mb     = 400;
-    int nums[4] = { 30, 40, 50, 0 };
-    double dims[4] = { 0.2, 0.4, 0.6, 0.0 };
     char* stream = boxm2_test_utils::construct_block_test_stream( numBuffers, 
                                                                   treeLen, 
                                                                   nums, 
@@ -162,7 +162,7 @@ void test_block()
     TEST("boxm2_block: blocks in buffers initialized properly", true, true);
 
     boxm2_array_1d<ushort2> memPtrs = test_block.mem_ptrs();
-    ushort2 memInit((ushort) 0); memInit[1] = 1201;
+    ushort2 memInit((ushort) 0); memInit[1] = treeLen+1;
     for (int i=0; i<numBuffers; i++) {
       if (memPtrs[i] != memInit) {
         TEST("boxm2_block: mem_ptrs not initialized properly", true, false);
@@ -179,7 +179,6 @@ void test_block()
     delete loaded;
 
     //clean up file left behind "tests/block_id.0.0.0.bin"
-
     test_block_id();
 }
 

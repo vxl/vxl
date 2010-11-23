@@ -18,43 +18,69 @@ void test_asio_data()
 {
   //: load one block from disk with blocking (like we'd imagine startup)'
   boxm2_data<BOXM2_ALPHA>* loaded = boxm2_sio_mgr::load_block_data<BOXM2_ALPHA>("",boxm2_block_id(0,0,0));
-  boxm2_data<BOXM2_ALPHA>* loaded2 =  boxm2_sio_mgr::load_block_data<BOXM2_ALPHA>("",boxm2_block_id(0,0,1));
+  boxm2_data<BOXM2_MOG3_GREY>* mog= boxm2_sio_mgr::load_block_data<BOXM2_MOG3_GREY>("",boxm2_block_id(0,0,0)); 
   
   //: send some ASIO requests to ASIO manager
   boxm2_asio_mgr mgr; 
-  mgr.load_block_data<BOXM2_ALPHA>("", boxm2_block_id(0,0,1));
-  mgr.load_block_data<BOXM2_ALPHA>("", boxm2_block_id(0,1,0)); 
-  mgr.load_block_data<BOXM2_ALPHA>("", boxm2_block_id(0,1,1)); 
-  mgr.load_block_data<BOXM2_ALPHA>("", boxm2_block_id(1,0,1)); 
-  mgr.load_block_data<BOXM2_ALPHA>("", boxm2_block_id(1,1,0)); 
-  mgr.load_block_data<BOXM2_ALPHA>("", boxm2_block_id(1,1,1)); 
-
+  for(int i=0; i<2; i++) {
+    for(int j=0; j<2; j++) {
+      for(int k=0; k<2; k++) {  
+        mgr.load_block_data<BOXM2_ALPHA>("", boxm2_block_id(i,j,k));
+        mgr.load_block_data<BOXM2_MOG3_GREY>("", boxm2_block_id(i,j,k));
+      }
+    }
+  }
+  
   //: check to see which block is ready, do some computation 
-  typedef vcl_map<boxm2_block_id, boxm2_data<BOXM2_ALPHA>* > maptype;
-  vcl_vector<boxm2_data<BOXM2_ALPHA>* > data_list; 
+  typedef vcl_map<boxm2_block_id, boxm2_data<BOXM2_ALPHA>* > alphamap_t;
+  typedef vcl_map<boxm2_block_id, boxm2_data<BOXM2_MOG3_GREY>* > mogmap_t;
+  vcl_vector<boxm2_data<BOXM2_MOG3_GREY>* > mog_list; 
+  vcl_vector<boxm2_data<BOXM2_ALPHA>* > alpha_list; 
   int flopCount = 0;
-  while(data_list.size() < 6)  {
-    maptype lmap = mgr.get_loaded_data<BOXM2_ALPHA>(); 
-    for(maptype::iterator iter = lmap.begin(); iter != lmap.end(); ++iter) 
-      data_list.push_back(iter->second); 
+  while(mog_list.size() < 8 || alpha_list.size() < 8)  {
+    
+    //find out the loaded alphas
+    alphamap_t lmap = mgr.get_loaded_data<BOXM2_ALPHA>(); 
+    for(alphamap_t::iterator iter = lmap.begin(); iter != lmap.end(); ++iter) 
+      alpha_list.push_back(iter->second); 
+      
+    //find out the loaded mog3s
+    mogmap_t mmap = mgr.get_loaded_data<BOXM2_MOG3_GREY>();
+    for(mogmap_t::iterator iter = mmap.begin(); iter != mmap.end(); ++iter) 
+      mog_list.push_back(iter->second); 
+    
+    //keep track of looping
     flopCount++; 
   }
   
-  //: report flop count and block ids
+  //: make sure id's are unique
   vcl_cout<<"flop count: "<<flopCount<<vcl_endl;
-  for(int i=0; i<data_list.size(); ++i) {
-    vcl_cout<<data_list[i]->block_id()<<vcl_endl;
+  for(int i=0; i<mog_list.size(); ++i) {
+    for(int j=0; j<mog_list.size(); ++j) {
+      if(i!=j && mog_list[i]->block_id() == mog_list[j]->block_id()) {
+        TEST("Non unique id's loaded in MOG3 list ", true, false); 
+        return;
+      }
+      if(i!=j && alpha_list[i]->block_id() == alpha_list[j]->block_id()) {
+        TEST("Non unique id's loaded in ALPHA list ", true, false); 
+        return;
+      }
+    }
   }
+  TEST("Id's are unique in both MOG and ALPHA loads ", true, true); 
+
   
   ////: test two of the blocks - make sure they're the same
-  boxm2_test_utils::test_data_equivalence<BOXM2_ALPHA>(*loaded, *loaded2); 
+  boxm2_test_utils::test_data_equivalence<BOXM2_ALPHA>(*loaded, *alpha_list[3]); 
+  boxm2_test_utils::test_data_equivalence<BOXM2_MOG3_GREY>(*mog, *mog_list[7]); 
 
   //: delete blocks loaded 
   delete loaded;
-  delete loaded2;
-  for(int i=0; i<data_list.size(); ++i)
-    if(data_list[i]) delete data_list[i];
-  
+  delete mog; 
+  for(int i=0; i<mog_list.size(); ++i)
+    if(mog_list[i]) delete mog_list[i];
+  for(int i=0; i<alpha_list.size(); ++i)
+    if(alpha_list[i]) delete alpha_list[i];
   
 }
 
@@ -105,13 +131,13 @@ void test_io()
   
   //: ensure 8 test blocks and 8 data blocks are saved to disk
   vnl_random rand;
-  int numBuffers = 50;
-  int treeLen = 1200;
+  int nums[4] = { 64, 64, 64, 0 };
+  double dims[4] = { 0.5, 0.5, 0.5, 0.0 };
+  int numBuffers = 64;
+  int treeLen    = 64*64;
   int init_level = 1;
   int max_level  = 4;
   int max_mb     = 400;
-  int nums[4] = { 30, 40, 50, 0 };
-  double dims[4] = { 0.2, 0.4, 0.6, 0.0 };
   for(int i=0; i<2; i++) {
     for(int j=0; j<2; j++) {
       for(int k=0; k<2; k++) {
@@ -129,23 +155,30 @@ void test_io()
   }
  
   //: save the same random data block 8 times
+  typedef vnl_vector_fixed<unsigned char, 8> uchar8; 
   const unsigned int array_size = 5*1024*1024; //roughly 20 megs for alpha 
   float * farray = new float[array_size]; 
-  for(unsigned c=0; c<array_size; ++c) 
-    farray[c] = (float) rand.drand32(0,100); 
+  uchar8* carray = new uchar8[array_size]; 
+  for(unsigned c=0; c<array_size; ++c) {
+    float rnd = (float) rand.drand32(0,100); 
+    farray[c] = rnd; 
+    carray[c] = uchar8((unsigned char) rnd); 
+  }
   char * buffer = reinterpret_cast<char *>(farray); 
+  char * cbuffer = reinterpret_cast<char *>(carray); 
   boxm2_data<BOXM2_ALPHA> test_data(buffer, array_size*sizeof(float), boxm2_block_id(0,0,0));
+  boxm2_data<BOXM2_MOG3_GREY> test_mog(cbuffer, array_size*sizeof(uchar8), boxm2_block_id(0,0,0));
   for(int i=0; i<2; i++) {
     for(int j=0; j<2; j++) {
       for(int k=0; k<2; k++) {
         boxm2_sio_mgr::save_block_data<BOXM2_ALPHA>("", boxm2_block_id(i,j,k), &test_data);
+        boxm2_sio_mgr::save_block_data<BOXM2_MOG3_GREY>("", boxm2_block_id(i,j,k), &test_mog);
       }
     }
   }
   
-  
   //: run some aio tests on blocks
-  //test_asio_blocks(); 
+  test_asio_blocks(); 
   test_asio_data(); 
 }
 

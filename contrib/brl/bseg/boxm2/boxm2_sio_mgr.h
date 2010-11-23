@@ -34,9 +34,8 @@ class boxm2_sio_mgr
 template <boxm2_data_type data_type> 
 boxm2_data<data_type> *  boxm2_sio_mgr::load_block_data(vcl_string dir, boxm2_block_id block_id)
 {
-    vcl_ostringstream ns;  // Declare an output string stream.
-    ns << dir << boxm2_data_traits<data_type>::prefix() << block_id << ".bin";
-    vcl_string filename = ns.str();
+    // file name
+    vcl_string filename = dir + boxm2_data_traits<data_type>::prefix() + "_" + block_id.to_string() + ".bin";
 
     //get file size
     unsigned long numBytes=vul_file::size(filename);
@@ -56,9 +55,7 @@ boxm2_data<data_type> *  boxm2_sio_mgr::load_block_data(vcl_string dir, boxm2_bl
 template <boxm2_data_type data_type> 
 void boxm2_sio_mgr::save_block_data(vcl_string dir, boxm2_block_id block_id, boxm2_data<data_type> * block_data )
 {
-    vcl_ostringstream ns;  // Declare an output string stream.
-    ns << dir << boxm2_data_traits<data_type>::prefix() << block_id << ".bin";
-    vcl_string filename = ns.str();
+    vcl_string filename = dir + boxm2_data_traits<data_type>::prefix() + "_" + block_id.to_string() + ".bin";
   
     char * bytes = block_data->data_buffer(); 
     vcl_ofstream myFile (filename.c_str(), vcl_ios::out | vcl_ios::binary);

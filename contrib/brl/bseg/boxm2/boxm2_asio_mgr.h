@@ -75,7 +75,7 @@ template <boxm2_data_type data_type>
 void boxm2_asio_mgr::load_block_data(vcl_string dir, boxm2_block_id block_id)
 {
     //: construct filename
-    vcl_string filename = dir + boxm2_data_traits<data_type>::prefix() + block_id.to_string() + ".bin"; 
+    vcl_string filename = dir + boxm2_data_traits<data_type>::prefix() + "_" + block_id.to_string() + ".bin"; 
 
     //: get file size
     unsigned long buflength=vul_file::size(filename);
@@ -99,7 +99,7 @@ template <boxm2_data_type data_type>
 void boxm2_asio_mgr::save_block_data(vcl_string dir, boxm2_block_id block_id , boxm2_data_base * block_data)
 {
     //0. open up file for writing
-    vcl_string filename = dir + boxm2_data_traits<data_type>::prefix() + block_id.to_string() + ".bin";
+    vcl_string filename = dir + boxm2_data_traits<data_type>::prefix() + "_" +  block_id.to_string() + ".bin";
 
     //: create baio object
     baio aio = new baio(); 
