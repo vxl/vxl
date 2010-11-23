@@ -10,10 +10,10 @@
 //: boxm2_cache: top level storage (abstract) class
 // - handles all block io, from both the cache/marshaller and the disk
 // TODO: needs some notion of scene size (number of blocks in each dimension ...)
-
-//: SOMETHING to discuss is whether generic blocks should be passed from cache
-//: or the specific templated blocks(as is implemented below).  either way, one of the two will have to 
-//: cast from generic to templated. 
+//
+//  SOMETHING to discuss is whether generic blocks should be passed from cache
+//  or the specific templated blocks(as is implemented below).  either way, one of the two will have to
+//  cast from generic to templated.
 class boxm2_cache
 {
   public:
@@ -23,11 +23,11 @@ class boxm2_cache
 
     //: returns data pointer to data specified by ID and data_type
     template <boxm2_data_type T>
-    boxm2_data<T>* get_data(boxm2_block_id id); 
+    boxm2_data<T>* get_data(boxm2_block_id id);
 
   protected:
-  
-    //: boxm2_asio_manager handles asio reqeusts
+
+    //: boxm2_asio_manager handles asio requests
     boxm2_asio_mgr io_mgr_;
 };
 
