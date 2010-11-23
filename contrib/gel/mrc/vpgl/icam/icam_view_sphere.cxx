@@ -81,7 +81,8 @@ void icam_view_sphere::set_images(vcl_map<unsigned, vil_image_view<float>*>& ima
   }
 }
 
-void icam_view_sphere::register_image(vil_image_view<float> const& dest_img)
+void icam_view_sphere::register_image(vil_image_view<float> const& dest_img, 
+                                      vpgl_perspective_camera<double>& test_cam)
 {
   // try to find the best camera at each view point and at the end we will
   // have errors to compare on the view sphere
@@ -110,6 +111,14 @@ void icam_view_sphere::register_image(vil_image_view<float> const& dest_img)
   unsigned idx=-1;
   for (unsigned i=0; i<local_min.size(); i++) {
     vcl_cout << "Local MINIMA " << i << "--" << local_min[i].view_point() << vcl_endl;
+    vpgl_perspective_camera<double>* cam = (vpgl_perspective_camera<double>*)local_min[i].camera().as_pointer();
+    vgl_rotation_3d<double> rel_rot;
+    vgl_vector_3d<double> rel_trans;
+    vpgl_camera_bounds::relative_transf(test_cam, *cam,rel_rot,rel_trans);
+    vcl_cout <<"***************************************" << vcl_endl;
+    vcl_cout << "Rel Rot=" << rel_rot << vcl_endl;
+    vcl_cout << "Rel trans=" << rel_trans << vcl_endl;
+    vcl_cout <<"***************************************" << vcl_endl;
     icam_view_metadata* md = local_min[i].metadata();
     md->refine_camera();
     if (md->cost() < cam_cost) {
@@ -158,6 +167,28 @@ void icam_view_sphere::find_local_minima(vcl_vector<vsph_view_point<icam_view_me
       local_minima.push_back(vp);
     }
     it++;
+  }
+}
+
+void icam_view_sphere::camera_transf(vpgl_perspective_camera<double> const& cam)
+{
+  vsph_view_sphere<vsph_view_point<icam_view_metadata> >::iterator it=view_sphere_->begin();
+  while (it != view_sphere_->end()) {
+    vsph_view_point<icam_view_metadata> vp = it->second;
+    if (!vp.metadata()) {
+      it++;
+      continue;
+    }
+    unsigned vp_uid = it->first;
+    vpgl_perspective_camera<double>* vp_cam = static_cast<vpgl_perspective_camera<double>*>(vp.camera().as_pointer());
+    vgl_rotation_3d<double> rel_rot;
+    vgl_vector_3d<double> rel_trans;
+    vpgl_camera_bounds::relative_transf(cam, *vp_cam,rel_rot,rel_trans);
+    vcl_cout <<"***************************************" << vcl_endl;
+    vcl_cout << "VIEW POINT " << vp_uid << vcl_endl;
+    vcl_cout << "Rel Rot=" << rel_rot << vcl_endl;
+    vcl_cout << "Rel trans=" << rel_trans << vcl_endl;
+    vcl_cout <<"***************************************" << vcl_endl;
   }
 }
 
