@@ -1015,7 +1015,7 @@ foreach $f (@FILES)
     | itege?ra\w*
     | intell\w*
     | intensit[^iy]\S*
-    | interat\S*
+    | intera[tl]\S*
     | inte[^glmnrsx]\S*
     | interes[^t]\S*
     | interfacess\S*
@@ -1388,7 +1388,7 @@ foreach $f (@FILES)
   if ($file_s =~ m!^\s*\#ifndef\s+(\S+)\s*\n\#define\s+\1\s*(\s.*)?\n!)
   {
     $guard = $1;
-    if (defined($inclusion_guards{"$guard"}))
+    if (defined($inclusion_guards{"$guard"}) && $f ne $inclusion_guards{"$guard"})
     {
       &msg(1, "has the same inclusion guard as " . $inclusion_guards{"$guard"} . "");
     }
@@ -1431,6 +1431,7 @@ foreach $f (@FILES)
                '1\.570[78]' => 'pi_over_2',
                '0\.785[34]' => 'pi_over_4',
                '0\.3183'    => 'one_over_pi',
+               '6\.283[12]' => '2*pi',
                '0\.6366'    => 'two_over_pi',
                '1\.128[34]' => 'two_over_sqrtpi',
                '0\.3989'    => 'one_over_sqrt2pi',
