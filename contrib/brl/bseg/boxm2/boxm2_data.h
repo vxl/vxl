@@ -16,14 +16,15 @@ class boxm2_data_base
 {
  public:
     boxm2_data_base(char * data_buffer, vcl_size_t length, boxm2_block_id id)
-     : id_(id), data_buffer_(data_buffer), buffer_length_(length) {}
+     : data_buffer_(data_buffer),  buffer_length_(length), id_(id) {}
 
     //: This destructor is correct - by our design the original data_buffer becomes OWNED by the data_base class
-    virtual ~boxm2_data_base() { delete [] data_buffer_; } 
+    virtual ~boxm2_data_base() { if(data_buffer_) delete [] data_buffer_; } 
 
     //: accessor for low level byte buffer kept by the data_base
-    char *      data_buffer()    { return data_buffer_; }
-    vcl_size_t  buffer_length()  { return buffer_length_; }
+    char *            data_buffer()    { return data_buffer_; }
+    vcl_size_t        buffer_length()  { return buffer_length_; }
+    boxm2_block_id&   block_id()       { return id_; }
     
  protected:
     //: id for this particular block
@@ -50,10 +51,11 @@ class boxm2_data: public boxm2_data_base
     //: destructor
     virtual ~boxm2_data();
 
-    boxm2_array_1d<datatype> * data() {return data_array_;}
+    //: data array accessor 
+    boxm2_array_1d<datatype> data() {return data_array_;}
 
  protected:
-    boxm2_array_1d<datatype> * data_array_;
+    boxm2_array_1d<datatype> data_array_;
 };
 
 #endif //boxm2_data_h

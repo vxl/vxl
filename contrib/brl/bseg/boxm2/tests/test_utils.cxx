@@ -1,7 +1,6 @@
 //: test utils to produce test blocks, data, scene, etc.
 #include "test_utils.h"
-#include <testlib/testlib_test.h>
-#include <vnl/vnl_vector_fixed.h>
+
 
 char* boxm2_test_utils::construct_block_test_stream(int numBuffers, 
                                                     int treeLen, 
@@ -170,4 +169,5 @@ void boxm2_test_utils::test_block_equivalence(boxm2_block& a, boxm2_block& b)
     }
     TEST("boxm2_block: mem_ptrs initialized properly", true, true);
 }
+
 

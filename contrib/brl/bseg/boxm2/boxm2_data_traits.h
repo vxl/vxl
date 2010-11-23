@@ -8,6 +8,7 @@
 // \date nov 17, 2010
 
 #include <vcl_string.h>
+#include <vnl/vnl_vector_fixed.h>
 
 enum boxm2_data_type
 {
@@ -28,6 +29,15 @@ class boxm2_data_traits<BOXM2_ALPHA>
   typedef float datatype;
   vcl_size_t datasize(){return sizeof(datatype);};
   static vcl_string prefix(){ return "alpha";}
+};
+
+template<>
+class boxm2_data_traits<BOXM2_MOG3_GREY>
+{
+ public:
+  typedef vnl_vector_fixed<unsigned char, 8> datatype;
+  vcl_size_t datasize(){return sizeof(datatype);};
+  static vcl_string prefix(){ return "boxm2_mog3_grey";}
 };
 
 

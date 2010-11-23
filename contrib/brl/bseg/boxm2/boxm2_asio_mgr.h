@@ -27,7 +27,7 @@ class boxm2_asio_mgr
     typedef vcl_map<vcl_string, data_ptr_list_t >         data_return_t;
   
   public:
-
+  
     //: creates a BAIO object that loads block data from disk
     void load_block(vcl_string dir, boxm2_block_id block_id);
 
@@ -36,11 +36,11 @@ class boxm2_asio_mgr
 
     //: creates a BAIO object that loads data from disk
     template <boxm2_data_type data_type>
-    void load_block_data(vcl_string dir, boxm2_block_id block_id, baio & aio_reader);
+    void load_block_data(vcl_string dir, boxm2_block_id block_id);
 
     //: creates a BAIO object that saves data to disk
     template <boxm2_data_type data_type>
-    void save_block_data(vcl_string dir, boxm2_block_id block_id , boxm2_data_base * block_data,baio & aio_writer);
+    void save_block_data(vcl_string dir, boxm2_block_id block_id , boxm2_data_base * block_data);
 
     //: Access the completed loads
     //: returns a map of block pointers (completed)
@@ -72,7 +72,7 @@ class boxm2_asio_mgr
 
 //: load_block_data creates and stores async request for data of data_type with block_id
 template <boxm2_data_type data_type>
-void boxm2_asio_mgr::load_block_data(vcl_string dir, boxm2_block_id block_id, baio & aio_reader)
+void boxm2_asio_mgr::load_block_data(vcl_string dir, boxm2_block_id block_id)
 {
     //: construct filename
     vcl_string filename = dir + boxm2_data_traits<data_type>::prefix() + block_id.to_string() + ".bin"; 
@@ -84,22 +84,29 @@ void boxm2_asio_mgr::load_block_data(vcl_string dir, boxm2_block_id block_id, ba
     char * buffer = new char[buflength];
     baio* aio = new baio(); 
     aio->read(filename, buffer, buflength);
+    
+    //: if map for this particular data type doesn't exist, initialize it
+    if( load_data_list_.find(boxm2_data_traits<data_type>::prefix()) == load_data_list_.end() )
+    {
+      vcl_map<boxm2_block_id, baio*> bmap; 
+      load_data_list_[boxm2_data_traits<data_type>::prefix()] = bmap; 
+    }
     load_data_list_[boxm2_data_traits<data_type>::prefix()][block_id] = aio;
 }
 
-
+//: creates async object that saves block
 template <boxm2_data_type data_type>
-void boxm2_asio_mgr::save_block_data(vcl_string dir, boxm2_block_id block_id , boxm2_data_base * block_data,baio & aio_writer )
+void boxm2_asio_mgr::save_block_data(vcl_string dir, boxm2_block_id block_id , boxm2_data_base * block_data)
 {
     //0. open up file for writing
-    vcl_ostringstream ns;  // Declare an output string stream.
-    ns << dir << boxm2_data_traits<data_type>::prefix() << block_id << ".bin";
-    vcl_string filename = ns.str();
+    vcl_string filename = dir + boxm2_data_traits<data_type>::prefix() + block_id.to_string() + ".bin";
 
-    aio_writer.write(filename,block_data->data_buffer(),block_data->buffer_length());
-    //save_data_list_[boxm2_data_traits<data_type>::prefix()][block_id]=aio_writer;
-    return ;//aio_writer;
+    //: create baio object
+    baio aio = new baio(); 
+    aio.write(filename, block_data->data_buffer(), block_data->buffer_length()); 
+    save_data_list_[boxm2_data_traits<data_type>::prefix()][block_id] = aio;
 }
+
 
 //: get block data of type this function is templated over
 template <boxm2_data_type data_type>
@@ -108,33 +115,33 @@ vcl_map<boxm2_block_id, boxm2_data<data_type>* > boxm2_asio_mgr::get_loaded_data
   //: map to return
   vcl_map<boxm2_block_id, boxm2_data<data_type>* > toReturn;
   
-  //: map to iterate over
-  vcl_map<boxm2_block_id, baio*> data_list = load_data_list_[boxm2_data_traits<data_type>::prefix()]; 
-  
-  //: iterate over map of current loads
-  vcl_map<boxm2_block_id, baio*>::iterator iter;  
-  for(iter=data_list.begin(); iter!=data_list.end(); ++iter) 
+  //: see if there even exists a sub-map with this particular data_type
+  if( load_data_list_.find(boxm2_data_traits<data_type>::prefix()) != load_data_list_.end() )
   {
-    //: get baio object and block id
-    baio*           aio = (*iter).second; 
-    boxm2_block_id  id  = (*iter).first; 
-    
-    if( aio->status() == BAIO_FINISHED ) 
+    //: iterate over map of current loads
+    vcl_map<boxm2_block_id, baio*>& data_list = load_data_list_[boxm2_data_traits<data_type>::prefix()]; //needs to be a reference, you idiot.
+    vcl_map<boxm2_block_id, baio*>::const_iterator iter;  
+    for(iter=data_list.begin(); iter!=data_list.end(); ++iter) 
     {
-      //: close baio file
-      aio->close_file(); 
-      
-      //: instantiate new block
-      boxm2_data<data_type>* dat = new boxm2_data<data_type>(aio->buffer(), aio->buffer_size(), id); 
-      toReturn[id] = dat;
-      
-      //: remove iter from the load list/delete aio
-      load_list_.erase(iter); 
-      delete aio; 
+      //: get baio object and block id
+      baio*           aio = (*iter).second; 
+      boxm2_block_id  id  = (*iter).first; 
+      if( aio->status() == BAIO_FINISHED ) 
+      {
+        //: close baio file
+        aio->close_file(); 
+        
+        //: instantiate new block
+        boxm2_data<data_type>* dat = new boxm2_data<data_type>(aio->buffer(), aio->buffer_size(), id); 
+        toReturn[id] = dat;
+        
+        //: remove iter from the load list/delete aio
+        delete aio; 
+        data_list.erase(id); 
+      }
     }
   }
   return toReturn; 
-
 }
 
 

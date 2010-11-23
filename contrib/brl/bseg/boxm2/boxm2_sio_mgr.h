@@ -23,7 +23,7 @@ class boxm2_sio_mgr
 
     //: load data from disk
     template <boxm2_data_type data_type> 
-    static boxm2_data_base *  load_block_data(vcl_string dir, boxm2_block_id block_id); 
+    static boxm2_data<data_type> *  load_block_data(vcl_string dir, boxm2_block_id block_id); 
     
     //: saves data to disk
     template <boxm2_data_type data_type> 
@@ -32,7 +32,7 @@ class boxm2_sio_mgr
 };
 
 template <boxm2_data_type data_type> 
-boxm2_data_base *  boxm2_sio_mgr::load_block_data(vcl_string dir, boxm2_block_id block_id)
+boxm2_data<data_type> *  boxm2_sio_mgr::load_block_data(vcl_string dir, boxm2_block_id block_id)
 {
     vcl_ostringstream ns;  // Declare an output string stream.
     ns << dir << boxm2_data_traits<data_type>::prefix() << block_id << ".bin";
