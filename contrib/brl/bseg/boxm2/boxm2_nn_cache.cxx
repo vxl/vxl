@@ -29,7 +29,7 @@ boxm2_nn_cache::~boxm2_nn_cache()
 //: realization of abstract "get_block(block_id)"
 boxm2_block* boxm2_nn_cache::get_block(boxm2_block_id id)
 {
-  //: first thing to do is to load all async requests into the cache
+  //first thing to do is to load all async requests into the cache
   this->finish_async_blocks(); 
   
   
@@ -80,7 +80,7 @@ void boxm2_nn_cache::update_block_cache(boxm2_block* blk)
 
 void boxm2_nn_cache::finish_async_blocks()
 {
-  //: get async block list and push it into the cache
+  // get async block list and push it into the cache
 
 }
 

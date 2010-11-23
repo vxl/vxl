@@ -39,10 +39,3 @@ void boxm2_dumb_cache::update_block_cache(boxm2_block* blk)
   cached_block_ = blk; 
 }
 
-
-
-////: realization of abstract "get_block(block_id)"
-//void boxm2_dumb_cache::update_cache(boxm2_block_id id)
-//{
-  //vcl_cout<<"Dumb Cache Update"<<vcl_endl;
-//}

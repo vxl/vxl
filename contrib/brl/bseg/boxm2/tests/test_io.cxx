@@ -16,11 +16,11 @@
 
 void test_asio_data()
 {
-  //: load one block from disk with blocking (like we'd imagine startup)'
+  // load one block from disk with blocking (like we'd imagine startup)'
   boxm2_data<BOXM2_ALPHA>* loaded = boxm2_sio_mgr::load_block_data<BOXM2_ALPHA>("",boxm2_block_id(0,0,0));
   boxm2_data<BOXM2_MOG3_GREY>* mog= boxm2_sio_mgr::load_block_data<BOXM2_MOG3_GREY>("",boxm2_block_id(0,0,0)); 
   
-  //: send some ASIO requests to ASIO manager
+  // send some ASIO requests to ASIO manager
   boxm2_asio_mgr mgr; 
   for(int i=0; i<2; i++) {
     for(int j=0; j<2; j++) {
@@ -31,7 +31,7 @@ void test_asio_data()
     }
   }
   
-  //: check to see which block is ready, do some computation 
+  // check to see which block is ready, do some computation 
   typedef vcl_map<boxm2_block_id, boxm2_data<BOXM2_ALPHA>* > alphamap_t;
   typedef vcl_map<boxm2_block_id, boxm2_data<BOXM2_MOG3_GREY>* > mogmap_t;
   vcl_vector<boxm2_data<BOXM2_MOG3_GREY>* > mog_list; 
@@ -53,7 +53,7 @@ void test_asio_data()
     flopCount++; 
   }
   
-  //: make sure id's are unique
+  // make sure id's are unique
   vcl_cout<<"flop count: "<<flopCount<<vcl_endl;
   for(int i=0; i<mog_list.size(); ++i) {
     for(int j=0; j<mog_list.size(); ++j) {
@@ -70,11 +70,11 @@ void test_asio_data()
   TEST("Id's are unique in both MOG and ALPHA loads ", true, true); 
 
   
-  ////: test two of the blocks - make sure they're the same
+  //// test two of the blocks - make sure they're the same
   boxm2_test_utils::test_data_equivalence<BOXM2_ALPHA>(*loaded, *alpha_list[3]); 
   boxm2_test_utils::test_data_equivalence<BOXM2_MOG3_GREY>(*mog, *mog_list[7]); 
 
-  //: delete blocks loaded 
+  // delete blocks loaded 
   delete loaded;
   delete mog; 
   for(int i=0; i<mog_list.size(); ++i)
@@ -86,10 +86,10 @@ void test_asio_data()
 
 static void test_asio_blocks()
 {
-  //: load one block from disk with blocking (like we'd imagine startup)'
+  // load one block from disk with blocking (like we'd imagine startup)'
   boxm2_block* loaded = boxm2_sio_mgr::load_block("", boxm2_block_id(0,0,0));
   
-  //: send some ASIO requests to ASIO manager
+  // send some ASIO requests to ASIO manager
   boxm2_asio_mgr mgr; 
   mgr.load_block("", boxm2_block_id(0,0,1));
   mgr.load_block("", boxm2_block_id(0,1,0)); 
@@ -98,7 +98,7 @@ static void test_asio_blocks()
   mgr.load_block("", boxm2_block_id(1,1,0)); 
   mgr.load_block("", boxm2_block_id(1,1,1)); 
 
-  //: check to see which block is ready, do some computation 
+  // check to see which block is ready, do some computation 
   vcl_vector<boxm2_block*> block_list; 
   int flopCount = 0;
   while(block_list.size() < 6)  {
@@ -110,16 +110,16 @@ static void test_asio_blocks()
     flopCount++; 
   }
   
-  //: report flop count and block ids
+  // report flop count and block ids
   vcl_cout<<"flop count: "<<flopCount<<vcl_endl;
   for(int i=0; i<block_list.size(); ++i) {
     vcl_cout<<block_list[i]->block_id()<<vcl_endl;
   }
   
-  //: test two of the blocks - make sure they're the same
+  // test two of the blocks - make sure they're the same
   boxm2_test_utils::test_block_equivalence(*loaded, *block_list[3]); 
 
-  //: delete blocks loaded 
+  // delete blocks loaded 
   delete loaded;
   for(int i=0; i<block_list.size(); ++i)
     delete block_list[i];
@@ -129,10 +129,10 @@ static void test_asio_blocks()
 void test_io()
 {
   
-  //: ensure 8 test blocks and 8 data blocks are saved to disk
+  // ensure 8 test blocks and 8 data blocks are saved to disk
   boxm2_test_utils::save_test_scene_to_disk(); 
   
-  //: run some aio tests on blocks
+  // run some aio tests on blocks
   test_asio_blocks(); 
   test_asio_data(); 
 }
