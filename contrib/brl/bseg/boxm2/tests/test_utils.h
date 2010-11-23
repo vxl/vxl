@@ -21,8 +21,12 @@ class boxm2_test_utils
                                               int max_level,
                                               int max_mb );
 
+    static void   save_test_scene_to_disk();
+  
     static void  test_block_equivalence(boxm2_block& a, boxm2_block& b);
 
+  
+  
     template <boxm2_data_type data_type>
     static void test_data_equivalence(boxm2_data<data_type>& a, boxm2_data<data_type>& b);
 };

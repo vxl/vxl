@@ -1,15 +1,16 @@
-#ifndef boxm2_dumb_cache_h_
-#define boxm2_dumb_cache_h_
+#ifndef boxm2_nn_cache_h_
+#define boxm2_nn_cache_h_
 //:
 // \file
 #include <boxm2/boxm2_cache.h>
 
-//: boxm2_dumb_cache - example realization of abstract cache class
-class boxm2_dumb_cache : boxm2_cache
+//: boxm2_nn_cache - an example cache that loads in the nearest neighbors of the
+//: requested block (asynchronously)
+class boxm2_nn_cache : boxm2_cache
 {
   public:
-    boxm2_dumb_cache(vcl_string dir) : cached_block_(0), scene_dir_(dir) {}
-    ~boxm2_dumb_cache(); 
+    boxm2_nn_cache(vcl_string dir) : scene_dir_(dir) {}
+    ~boxm2_nn_cache(); 
 
     //: returns block poitner to block specified by ID
     boxm2_block* get_block(boxm2_block_id id);
@@ -27,11 +28,20 @@ class boxm2_dumb_cache : boxm2_cache
     template <boxm2_data_type T>
     void update_data_cache(boxm2_data<T>* dat); 
     
-    //: dumb cache keeps one cached block, the last one used.  
-    boxm2_block* cached_block_; 
+    //: private helper that reads finished async jobs into the cache
+    void finish_async_blocks(); 
+    
+    //: helper method determines if this block is 
+    bool is_valid_id(boxm2_block_id); 
+    
+    //: keep a map of boxm2_block pointers (size will be limited to 9 blocks
+    vcl_map<boxm2_block_id, boxm2_block*> cached_blocks_; 
     
     //: keeps one copy of each type of cached data
-    vcl_map<vcl_string, boxm2_data_base* > cached_data_; 
+    vcl_map<vcl_string, vcl_map<boxm2_block_id, boxm2_data_base*> > cached_data_; 
+    
+    //: dimensions of the scene
+    vgl_vector_3d<int> block_num_; 
     
     //: directory where blocks are found
     vcl_string scene_dir_; 
@@ -40,8 +50,9 @@ class boxm2_dumb_cache : boxm2_cache
 
 //: get data by type and id
 template<boxm2_data_type T>
-boxm2_data<T>* boxm2_dumb_cache::get_data(boxm2_block_id id)
+boxm2_data<T>* boxm2_nn_cache::get_data(boxm2_block_id id)
 {
+/*
   if( cached_data_.find(boxm2_data_traits<T>::prefix()) != cached_data_.end() )
   {
     if(cached_data_[boxm2_data_traits<T>::prefix()]->block_id() == id)
@@ -52,12 +63,14 @@ boxm2_data<T>* boxm2_dumb_cache::get_data(boxm2_block_id id)
   boxm2_data<T>* loaded = boxm2_sio_mgr::load_block_data<T>(scene_dir_,id);
   this->update_data_cache<T>(loaded); 
   return loaded; 
+*/
 }
 
 //: update data cache by type
 template<boxm2_data_type T>
-void boxm2_dumb_cache::update_data_cache(boxm2_data<T>* dat)
+void boxm2_nn_cache::update_data_cache(boxm2_data<T>* dat)
 {
+/*
   vcl_map<vcl_string, boxm2_data_base* >::iterator iter; 
   iter = cached_data_.find(boxm2_data_traits<T>::prefix());
   if( iter != cached_data_.end() )
@@ -66,6 +79,7 @@ void boxm2_dumb_cache::update_data_cache(boxm2_data<T>* dat)
     if(old) delete old; 
   }
   cached_data_[boxm2_data_traits<T>::prefix()] = dat; 
+*/
 }
 
-#endif // boxm2_dumb_cache_h_
+#endif // boxm2_nn_cache_h_

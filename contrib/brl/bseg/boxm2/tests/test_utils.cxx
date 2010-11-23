@@ -1,5 +1,7 @@
 // test utils to produce test blocks, data, scene, etc.
 #include "test_utils.h"
+#include <vnl/vnl_random.h>
+#include <boxm2/boxm2_sio_mgr.h>
 
 
 char* boxm2_test_utils::construct_block_test_stream(int numBuffers,
@@ -79,6 +81,58 @@ char* boxm2_test_utils::construct_block_test_stream(int numBuffers,
       vcl_cerr<<"size "<<size<<" doesn't match offset "<<curr_byte<<'\n';
 
     return bsize;
+}
+
+
+void boxm2_test_utils::save_test_scene_to_disk()
+{
+  //: ensure 8 test blocks and 8 data blocks are saved to disk
+  vnl_random rand;
+  int nums[4] = { 64, 64, 64, 0 };
+  double dims[4] = { 0.5, 0.5, 0.5, 0.0 };
+  int numBuffers = 64;
+  int treeLen    = 64*64;
+  int init_level = 1;
+  int max_level  = 4;
+  int max_mb     = 400;
+  for(int i=0; i<2; i++) {
+    for(int j=0; j<2; j++) {
+      for(int k=0; k<2; k++) {
+        char* stream = boxm2_test_utils::construct_block_test_stream( numBuffers, 
+                                                                      treeLen, 
+                                                                      nums, 
+                                                                      dims, 
+                                                                      init_level,
+                                                                      max_level,
+                                                                      max_mb );
+        boxm2_block b(boxm2_block_id(i,j,k), stream);  
+        boxm2_sio_mgr::save_block("", &b); 
+      }
+    }
+  }
+ 
+  //: save the same random data block 8 times
+  typedef vnl_vector_fixed<unsigned char, 8> uchar8; 
+  const unsigned int array_size = 5*1024*1024; //roughly 20 megs for alpha 
+  float * farray = new float[array_size]; 
+  uchar8* carray = new uchar8[array_size]; 
+  for(unsigned c=0; c<array_size; ++c) {
+    float rnd = (float) rand.drand32(0,100); 
+    farray[c] = rnd; 
+    carray[c] = uchar8((unsigned char) rnd); 
+  }
+  char * buffer = reinterpret_cast<char *>(farray); 
+  char * cbuffer = reinterpret_cast<char *>(carray); 
+  boxm2_data<BOXM2_ALPHA> test_data(buffer, array_size*sizeof(float), boxm2_block_id(0,0,0));
+  boxm2_data<BOXM2_MOG3_GREY> test_mog(cbuffer, array_size*sizeof(uchar8), boxm2_block_id(0,0,0));
+  for(int i=0; i<2; i++) {
+    for(int j=0; j<2; j++) {
+      for(int k=0; k<2; k++) {
+        boxm2_sio_mgr::save_block_data<BOXM2_ALPHA>("", boxm2_block_id(i,j,k), &test_data);
+        boxm2_sio_mgr::save_block_data<BOXM2_MOG3_GREY>("", boxm2_block_id(i,j,k), &test_mog);
+      }
+    }
+  }  
 }
 
 

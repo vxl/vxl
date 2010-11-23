@@ -4,6 +4,7 @@
 // \date 26-Oct-2010
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_dumb_cache.h>
+#include <boxm2/boxm2_nn_cache.h>
 #include <boxm2/boxm2_sio_mgr.h>
 #include <boxm2/boxm2_block_id.h>
 #include <testlib/testlib_test.h>
@@ -18,52 +19,43 @@
 //: for stats
 #include <vul/vul_timer.h>
 
-void test_cache()
+void test_nn_cache()
+{
+  
+  
+}
+
+
+void test_dumb_cache()
 {
   //test xml file 
   vcl_string root_dir  = testlib_root_dir();
   vcl_string test_dir = root_dir + "/contrib/brl/bseg/boxm2/tests/"; 
   
   //ensure blocks 0.0.0 - 1.1.1 are saved to disk
-  int numBuffers = 50;
-  int treeLen = 1200;
-  int init_level = 1;
-  int max_level  = 4;
-  int max_mb     = 400;
-  int nums[4] = { 30, 40, 50, 0 };
-  double dims[4] = { 0.2, 0.4, 0.6, 0.0 };
-  for(int i=0; i<2; i++) {
-    for(int j=0; j<2; j++) {
-      for(int k=0; k<2; k++) {
-        char* stream = boxm2_test_utils::construct_block_test_stream( numBuffers, 
-                                                                      treeLen, 
-                                                                      nums, 
-                                                                      dims, 
-                                                                      init_level,
-                                                                      max_level,
-                                                                      max_mb );
-        boxm2_block b(boxm2_block_id(i,j,k), stream);  
-        boxm2_sio_mgr::save_block(test_dir, &b); 
-      }
-    }
-  }
+  boxm2_test_utils::save_test_scene_to_disk();
     
-  boxm2_dumb_cache cache;
-  vcl_cout<<"TEesting dumb cache"<<vcl_endl;
+  //: init cache
+  boxm2_dumb_cache dcache("");
   
+  //: check a few block values
+  vgl_vector_3d<int> nums; 
+  boxm2_block* blk = dcache.get_block(boxm2_block_id(0,0,1)); 
+  boxm2_data<BOXM2_ALPHA>* alph = dcache.get_data<BOXM2_ALPHA>(boxm2_block_id(0,0,1));
+  boxm2_data<BOXM2_MOG3_GREY>* mog = dcache.get_data<BOXM2_MOG3_GREY>(boxm2_block_id(0,0,1)); 
+  nums = blk->sub_block_num(); 
   
-  //delete .bin files
-  vul_file::delete_file_glob(test_dir + "*.bin");
+  //: get another
+  blk = dcache.get_block(boxm2_block_id(0,1,0)); 
+  alph = dcache.get_data<BOXM2_ALPHA>(boxm2_block_id(0,1,0)); 
+  mog = dcache.get_data<BOXM2_MOG3_GREY>(boxm2_block_id(0,1,0)); 
+  TEST("block carries same meta data: ", nums==blk->sub_block_num(), true); 
+}
 
-  //clean up .bin files
-  //get all of the cam and image files, sort them
-  vcl_string binglob = test_dir + "id*.bin";
-  vul_file_iterator file_it(binglob.c_str());
-  while (file_it) {
-    vcl_cout<<file_it()<<vcl_endl;
-    ++file_it; 
-  }
-  
+
+void test_cache()
+{
+  test_dumb_cache(); 
 }
 
 

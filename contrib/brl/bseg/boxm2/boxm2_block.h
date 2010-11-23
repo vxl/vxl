@@ -72,7 +72,7 @@ class boxm2_block : public vbl_ref_count
   vcl_string              filename()          { return "block.bin"; }
 
   //: accessors
-  boxm2_block_id&           block_id()          { return block_id_; }
+  boxm2_block_id&           block_id()          { return block_id_; }         //somehow make this a const return..
   char*                     buffer()            { return buffer_; }
   boxm2_array_3d<uchar16>&  trees()             { return trees_; }
   boxm2_array_2d<int>&      tree_ptrs()         { return tree_ptrs_; }

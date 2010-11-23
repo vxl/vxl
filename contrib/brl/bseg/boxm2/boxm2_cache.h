@@ -5,24 +5,30 @@
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_block_id.h>
 #include <boxm2/boxm2_asio_mgr.h>
+#include <boxm2/boxm2_sio_mgr.h>
 
 //: boxm2_cache: top level storage (abstract) class
 // - handles all block io, from both the cache/marshaller and the disk
 // TODO: needs some notion of scene size (number of blocks in each dimension ...)
+
+//: SOMETHING to discuss is whether generic blocks should be passed from cache
+//: or the specific templated blocks(as is implemented below).  either way, one of the two will have to 
+//: cast from generic to templated. 
 class boxm2_cache
 {
   public:
 
     //: returns block pointer to block specified by ID
-    virtual boxm2_block* get_block(boxm2_block_id id) = 0;
+    virtual boxm2_block*  get_block(boxm2_block_id id) = 0;
 
-    //: updates cache based on input id (will call async loads)
-    virtual void update_cache(boxm2_block_id id) = 0;
+    //: returns data pointer to data specified by ID and data_type
+    template <boxm2_data_type T>
+    boxm2_data<T>* get_data(boxm2_block_id id); 
 
   protected:
-
+  
     //: boxm2_asio_manager handles asio reqeusts
-    boxm2_asio_mgr io_mgr;
+    boxm2_asio_mgr io_mgr_;
 };
 
 #endif //boxm2_cache_h_
