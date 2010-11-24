@@ -54,11 +54,14 @@ void vsph_view_point<T>::b_read(vsl_b_istream& is)
   switch (version) {
     case 1:
       vpgl_perspective_camera<double>* cam=new vpgl_perspective_camera<double>();
-      vsl_b_read(is, cam);
-      cam_=cam;
-      spher_coord_.b_read(is);
-      metadata_ = new T();
-      vsl_b_read(is, *metadata_);
+      if (cam) { 
+        vsl_b_read(is, cam);
+        cam_=cam;
+        spher_coord_.b_read(is);
+        metadata_ = new T();
+        vsl_b_read(is, *metadata_);
+      } else
+        vcl_cout << "vsph_view_point<T>::b_write -- Camera type:" << cam_->type_name() << " is not supported yet!" << vcl_endl;
   }
 }
 
@@ -67,9 +70,12 @@ void vsph_view_point<T>::b_write(vsl_b_ostream& os)
 {
   vsl_b_write(os, version());
   vpgl_perspective_camera<double>* cam=dynamic_cast<vpgl_perspective_camera<double>*>(cam_.as_pointer());
-  vsl_b_write(os, cam);
-  spher_coord_.b_write(os);
-  vsl_b_write(os, *metadata_);
+  if (cam) {
+    vsl_b_write(os, cam);
+    spher_coord_.b_write(os);
+    vsl_b_write(os, *metadata_);
+  } else
+    vcl_cout << "vsph_view_point<T>::b_write -- Camera type:" << cam_->type_name() << " is not supported yet!" << vcl_endl;
 }
 
 #endif
