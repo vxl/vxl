@@ -118,7 +118,8 @@ vcl_map<boxm2_block_id, boxm2_data<data_type>* > boxm2_asio_mgr::get_loaded_data
   {
     // iterate over map of current loads
     vcl_map<boxm2_block_id, baio*>& data_list = load_data_list_[boxm2_data_traits<data_type>::prefix()]; //needs to be a reference, you idiot.
-    vcl_map<boxm2_block_id, baio*>::const_iterator iter;
+    vcl_map<boxm2_block_id, baio*>::iterator iter;
+    vcl_vector<vcl_map<boxm2_block_id, baio*>::iterator > to_delete; 
     for (iter=data_list.begin(); iter!=data_list.end(); ++iter)
     {
       // get baio object and block id
@@ -134,10 +135,14 @@ vcl_map<boxm2_block_id, boxm2_data<data_type>* > boxm2_asio_mgr::get_loaded_data
         toReturn[id] = dat;
 
         // remove iter from the load list/delete aio
+        to_delete.push_back(iter); 
         delete aio;
-        data_list.erase(id);
+        //data_list.erase(id);
       }
     }
+    
+    for(int i=0; i<to_delete.size(); i++)
+      data_list.erase(to_delete[i]); 
   }
   return toReturn;
 }

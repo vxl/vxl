@@ -45,6 +45,8 @@ void boxm2_asio_mgr::save_block(vcl_string dir, boxm2_block* block)
 //: returns a map of pointers to block pointers
 vcl_map<boxm2_block_id, boxm2_block*> boxm2_asio_mgr::get_loaded_blocks()
 {
+  vcl_vector<vcl_map<boxm2_block_id, baio*>::iterator> to_delete; 
+  
   vcl_map<boxm2_block_id, boxm2_block*> toReturn;
   vcl_map<boxm2_block_id, baio*>::iterator iter;
   for (iter=load_list_.begin(); iter!=load_list_.end(); ++iter)
@@ -63,9 +65,14 @@ vcl_map<boxm2_block_id, boxm2_block*> boxm2_asio_mgr::get_loaded_blocks()
       toReturn[id] = blk;
 
       // remove iter from the load list/delete aio
-      load_list_.erase(iter);
+      //load_list_.erase(iter);
+      to_delete.push_back(iter); 
       delete aio;
     }
   }
+  
+  for(int i=0; i<to_delete.size(); i++)
+    load_list_.erase(to_delete[i]); 
+  
   return toReturn;
 }
