@@ -24,6 +24,9 @@ class boxm2_asio_mgr
     typedef vcl_map<boxm2_block_id, boxm2_data_base*>     data_ptr_list_t;
     typedef vcl_map<vcl_string, block_list_t>             data_list_t;
     typedef vcl_map<vcl_string, data_ptr_list_t >         data_return_t;
+    
+    //: destructor
+    ~boxm2_asio_mgr();
 
     //: creates a BAIO object that loads block data from disk
     void load_block(vcl_string dir, boxm2_block_id block_id);

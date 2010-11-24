@@ -22,19 +22,31 @@
 void test_nn_cache()
 {
   
+  //init cache
+  boxm2_nn_cache cache("", vgl_vector_3d<int>(2,2,2));
+  
+  vul_timer t; t.mark();
+  boxm2_block* blk = cache.get_block(boxm2_block_id(0,0,0)); 
+  vcl_cout<<"cache return time: "<<t.all()<<vcl_endl;
+  
+  ////do some fake processing
+  t.mark();
+  while(t.all() < 1000.0f) ;
+  
+  t.mark(); 
+  blk = cache.get_block(boxm2_block_id(0,1,0)); 
+  vcl_cout<<"cache return time: "<<t.all()<<vcl_endl;
+
+  t.mark();
+  blk = cache.get_block(boxm2_block_id(1,1,0)); 
+  vcl_cout<<"cache return time: "<<t.all()<<vcl_endl;
   
 }
 
 
 void test_dumb_cache()
 {
-  //test xml file 
-  vcl_string root_dir  = testlib_root_dir();
-  vcl_string test_dir = root_dir + "/contrib/brl/bseg/boxm2/tests/"; 
-  
-  //ensure blocks 0.0.0 - 1.1.1 are saved to disk
-  boxm2_test_utils::save_test_scene_to_disk();
-    
+   
   // init cache
   boxm2_dumb_cache dcache("");
   
@@ -55,7 +67,11 @@ void test_dumb_cache()
 
 void test_cache()
 {
-  test_dumb_cache(); 
+  //ensure blocks 0.0.0 - 1.1.1 are saved to disk
+  //boxm2_test_utils::save_test_scene_to_disk();
+  
+  //test_dumb_cache(); 
+  test_nn_cache();
 }
 
 
