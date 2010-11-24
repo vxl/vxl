@@ -1,7 +1,7 @@
 # vpgl/icam/CMakeLists.txt
 # image-based camera registration library
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc/vpgl ${BRL_INCLUDE_DIR}/bbas )
-
+INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas/ )
 SET(icam_sources
     icam_cost_func.cxx         icam_cost_func.h
     icam_minimizer.cxx         icam_minimizer.h
@@ -19,7 +19,7 @@ AUX_SOURCE_DIRECTORY(Templates icam_sources)
 
 ADD_LIBRARY(icam  ${icam_sources})
 
-TARGET_LINK_LIBRARIES(icam vsph bvrml vcl vnl vil vbl vgl_io vgl_algo vil_algo vsl vul vpgl vpgl_algo vsl vbl)
+TARGET_LINK_LIBRARIES(icam vsph vcl vnl vil vbl vgl_io vgl_algo vil_algo vsl vul vpgl vpgl_algo vsl vbl bvrml)
 
 IF(BUILD_TESTING)
   SUBDIRS(tests)
