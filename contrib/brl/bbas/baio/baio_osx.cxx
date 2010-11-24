@@ -1,4 +1,4 @@
-// This is brl/bbas/baio/baio_unix.cxx
+// This is brl/bbas/baio/baio_osx.cxx
 #include "baio.h"
 //:
 // \file
@@ -14,7 +14,8 @@
 
 
 //: baio_info struct: wrapper for status variables
-struct baio_info {
+struct baio_info
+{
   aiocb my_aiocb;
 };
 
