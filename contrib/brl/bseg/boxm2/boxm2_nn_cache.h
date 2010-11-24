@@ -8,7 +8,7 @@
 class boxm2_nn_cache : boxm2_cache
 {
   public:
-    boxm2_nn_cache(vcl_string dir, vgl_vector_3d<int> bnum) : scene_dir_(dir), block_num_(bnum) {}
+    boxm2_nn_cache(vcl_string dir, vgl_vector_3d<int> bnum) : block_num_(bnum), scene_dir_(dir) {}
     ~boxm2_nn_cache();
 
     //: returns block poitner to block specified by ID
