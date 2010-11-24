@@ -1,10 +1,11 @@
 #include "boxm2_asio_mgr.h"
 //:
 // \file
-boxm2_asio_mgr::~boxm2_asio_mgr() 
+
+boxm2_asio_mgr::~boxm2_asio_mgr()
 {
   //flush unfinished block requests
-  vcl_vector<boxm2_block*> flush_list; 
+  vcl_vector<boxm2_block*> flush_list;
   typedef vcl_map<boxm2_block_id, boxm2_block*> maptype;
   while (load_list_.size() > 0)  {
     maptype lmap = this->get_loaded_blocks();
@@ -12,23 +13,23 @@ boxm2_asio_mgr::~boxm2_asio_mgr()
     for (iter = lmap.begin(); iter != lmap.end(); ++iter)
       flush_list.push_back(iter->second);
   }
-  for(int i=0; i<flush_list.size(); i++) {
-    if(flush_list[i]){
+  for (unsigned int i=0; i<flush_list.size(); ++i) {
+    if (flush_list[i]){
         vcl_cout<<"deleting "<<flush_list[i]->block_id()<<vcl_endl;
-       delete flush_list[i]; 
+       delete flush_list[i];
     }
   }
-  
-  
+
+
   //flush unfinished data requests
 }
 
 //: creates a BAIO object that loads/saves block data from disk
-//: make sure asio_mgr doesn't try to load a block that's already loading
+// Make sure asio_mgr doesn't try to load a block that's already loading
 void boxm2_asio_mgr::load_block(vcl_string dir, boxm2_block_id block_id)
 {
   //if it's not already loading...
-  if( load_list_.find(block_id) == load_list_.end())
+  if ( load_list_.find(block_id) == load_list_.end())
   {
     vcl_string filepath = dir + block_id.to_string() + ".bin";
     vcl_cout<<"boxm2_asio_mgr:: load requested from file:"<<filepath<<vcl_endl;
@@ -71,8 +72,8 @@ void boxm2_asio_mgr::save_block(vcl_string dir, boxm2_block* block)
 //: returns a map of pointers to block pointers
 vcl_map<boxm2_block_id, boxm2_block*> boxm2_asio_mgr::get_loaded_blocks()
 {
-  vcl_vector<vcl_map<boxm2_block_id, baio*>::iterator> to_delete; 
-  
+  vcl_vector<vcl_map<boxm2_block_id, baio*>::iterator> to_delete;
+
   vcl_map<boxm2_block_id, boxm2_block*> toReturn;
   vcl_map<boxm2_block_id, baio*>::iterator iter;
   for (iter=load_list_.begin(); iter!=load_list_.end(); ++iter)
@@ -92,13 +93,13 @@ vcl_map<boxm2_block_id, boxm2_block*> boxm2_asio_mgr::get_loaded_blocks()
 
       // remove iter from the load list/delete aio
       //load_list_.erase(iter);
-      to_delete.push_back(iter); 
+      to_delete.push_back(iter);
       delete aio;
     }
   }
-  
-  for(int i=0; i<to_delete.size(); i++)
-    load_list_.erase(to_delete[i]); 
-  
+
+  for (unsigned int i=0; i<to_delete.size(); ++i)
+    load_list_.erase(to_delete[i]);
+
   return toReturn;
 }
