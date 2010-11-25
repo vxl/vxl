@@ -111,7 +111,6 @@ struct tool_params
   //: Radius of points to display (if <0, then don't draw points)
   double point_radius;
 
-
   //: Parse named text file to read in data
   //  Throws a mbl_exception_parse_error if fails
   void read_from_file(const vcl_string& path);
@@ -143,7 +142,7 @@ void tool_params::read_from_file(const vcl_string& path)
   base_name=props.get_optional_property("base_name","./");
   output_dir=props.get_optional_property("output_dir","./");
   shape_model_path=props.get_optional_property("shape_model_path",
-                                       "shape_aam.bfs");
+                                               "shape_aam.bfs");
 
   if (make_movie) overlap_shapes=true;
 
@@ -160,7 +159,7 @@ void draw_mode(msm_shape_mode_view& mode_view,
   vgl_box_2d<int> win_box = mode_view.display_window();
 
   vcl_stringstream ss;
-  ss<<params.output_dir<<"/"<<params.base_name<<"_s"<<m<<".eps";
+  ss<<params.output_dir<<'/'<<params.base_name<<"_s"<<m<<".eps";
   mbl_eps_writer writer(ss.str().c_str(),
                         win_box.width(),win_box.height());
 
@@ -169,7 +168,7 @@ void draw_mode(msm_shape_mode_view& mode_view,
     writer.set_colour(params.point_colour);
     if (params.point_radius>0)
       msm_draw_points_to_eps(writer,mode_view.points()[i],
-                              params.point_radius);
+                             params.point_radius);
     writer.set_colour(params.line_colour);
     msm_draw_shape_to_eps(writer,mode_view.points()[i],curves);
   }
@@ -179,8 +178,8 @@ void draw_mode(msm_shape_mode_view& mode_view,
 
 //: Write a set of eps files defining a movie of the mode.
 void draw_mode_frames(msm_shape_mode_view& mode_view,
-               const msm_curves& curves,
-               tool_params& params)
+                      const msm_curves& curves,
+                      tool_params& params)
 {
   mode_view.compute_shapes();
   unsigned m = mode_view.mode();
@@ -194,16 +193,16 @@ void draw_mode_frames(msm_shape_mode_view& mode_view,
     if (i>=n_shapes) f=2*n_shapes-2-i;
 
     vcl_stringstream ss;
-    ss<<params.output_dir<<"/"<<params.base_name<<"_s"<<m<<"_";
-    if (i<10) ss<<"0";
+    ss<<params.output_dir<<'/'<<params.base_name<<"_s"<<m<<'_';
+    if (i<10) ss<<'0';
     ss<<i<<".eps";
     mbl_eps_writer writer(ss.str().c_str(),
-                        win_box.width(),win_box.height());
+                          win_box.width(),win_box.height());
 
     writer.set_colour(params.point_colour);
     if (params.point_radius>0)
       msm_draw_points_to_eps(writer,mode_view.points()[f],
-                              params.point_radius);
+                             params.point_radius);
     writer.set_colour(params.line_colour);
     msm_draw_shape_to_eps(writer,mode_view.points()[f],curves);
 
@@ -228,13 +227,13 @@ int main(int argc, char** argv)
   }
 
   tool_params params;
-  try 
-  { 
-    params.read_from_file(param_path()); 
+  try
+  {
+    params.read_from_file(param_path());
   }
   catch (mbl_exception_parse_error& e)
   {
-    vcl_cerr<<"Error: "<<e.what()<<vcl_endl;
+    vcl_cerr<<"Error: "<<e.what()<<'\n';
     return 1;
   }
 
@@ -243,7 +242,7 @@ int main(int argc, char** argv)
   if (!vsl_quick_file_load(shape_model,params.shape_model_path))
   {
     vcl_cerr<<"Failed to load shape model from "
-        <<params.shape_model_path<<vcl_endl;
+            <<params.shape_model_path<<'\n';
     return 2;
   }
 
@@ -251,11 +250,11 @@ int main(int argc, char** argv)
 
   msm_curves curves;
   if (!curves.read_text_file(params.curves_path))
-    vcl_cerr<<"Failed to read in curves from "<<params.curves_path<<vcl_endl;
+    vcl_cerr<<"Failed to read in curves from "<<params.curves_path<<'\n';
 
   msm_shape_mode_view mode_view;
   mode_view.set_shape_model(shape_model);
-/*
+#if 0
   // Estimate aspect ratio
   vgl_box_2d<double> bounds = shape_model.mean_points().bounds();
   double asp=bounds.height()/(1e-3+bounds.width());
@@ -268,7 +267,7 @@ int main(int argc, char** argv)
 
   int win_height=int(asp*params.width);
   mode_view.set_display_window(vgl_box_2d<int>(0,win_width, 0,win_height));
-*/
+#endif // 0
   mode_view.set_range(params.n_sds);
   mode_view.set_n_per_mode(params.n_per_mode);
   mode_view.set_overlap_shapes(params.overlap_shapes);
