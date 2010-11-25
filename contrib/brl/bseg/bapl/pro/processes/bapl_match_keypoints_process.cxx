@@ -71,11 +71,11 @@ bool bapl_match_keypoints_process(bprb_func_process& pro)
   vcl_vector<bapl_key_match> matches;
 
   for (unsigned i=0; i<keypoints1.size(); ++i) {  // for each feature in I (first image)
-    bapl_keypoint_sptr query = keypoints1[i];   
+    bapl_keypoint_sptr query = keypoints1[i];
     vcl_vector<bapl_keypoint_sptr> match;
     bbf.n_nearest(query, match, 2, 200);       // find its two nearest neighbors, 200 is parameter value used in bundler package
-    if( vnl_vector_ssd(query->descriptor(),match[0]->descriptor()) <
-        vnl_vector_ssd(query->descriptor(),match[1]->descriptor())*.6*.6) {   // 0.6*.6 is parameter value used in bundler package
+    if ( vnl_vector_ssd(query->descriptor(),match[0]->descriptor()) <
+         vnl_vector_ssd(query->descriptor(),match[1]->descriptor())*.6*.6) {   // 0.6*.6 is parameter value used in bundler package
       bapl_key_match k_p(query, match[0]);
       matches.push_back(k_p);                      // accepted match
     }
@@ -92,7 +92,6 @@ bool bapl_match_keypoints_process(bprb_func_process& pro)
 }
 
 //: Constructor
-//: assu,es
 bool bapl_match_display_process_cons(bprb_func_process& pro)
 {
   bool ok=false;
@@ -122,7 +121,7 @@ bool bapl_match_display_process(bprb_func_process& pro)
   // get the inputs
   unsigned i=0;
   vil_image_view_base_sptr input_image1_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
-  vil_image_view<vxl_byte> input_image1(input_image1_sptr);  
+  vil_image_view<vxl_byte> input_image1(input_image1_sptr);
 
   vil_image_view<vxl_byte> output_img1(input_image1.ni(), input_image1.nj(), 3);
   vil_image_view<vxl_byte> output_img1_r = vil_plane(output_img1, 0);
@@ -135,7 +134,8 @@ bool bapl_match_display_process(bprb_func_process& pro)
     output_img1_r.deep_copy(input_img1_r);
     output_img1_g.deep_copy(input_img1_g);
     output_img1_b.deep_copy(input_img1_b);
-  } else {
+  }
+  else {
     output_img1_r.deep_copy(input_image1);
     output_img1_g.deep_copy(input_image1);
     output_img1_b.deep_copy(input_image1);
@@ -154,13 +154,14 @@ bool bapl_match_display_process(bprb_func_process& pro)
     output_img2_r.deep_copy(input_img2_r);
     output_img2_g.deep_copy(input_img2_g);
     output_img2_b.deep_copy(input_img2_b);
-  } else {
+  }
+  else {
     output_img2_r.deep_copy(input_image2);
     output_img2_g.deep_copy(input_image2);
     output_img2_b.deep_copy(input_image2);
   }
 
-  
+
   bapl_keypoint_match_set_sptr match_set = pro.get_input<bapl_keypoint_match_set_sptr>(i++);
 
   vcl_vector<bapl_key_match>& matches = match_set->matches_;
@@ -172,7 +173,7 @@ bool bapl_match_display_process(bprb_func_process& pro)
     kp1.vertical_cast(m.first);
     bapl_lowe_keypoint_sptr kp2;
     kp2.vertical_cast(m.second);
-   
+
     vxl_byte color_r = (vxl_byte)rng.lrand32(0,255);
     vxl_byte color_g = (vxl_byte)rng.lrand32(0,255);
     vxl_byte color_b = (vxl_byte)rng.lrand32(0,255);
@@ -183,7 +184,7 @@ bool bapl_match_display_process(bprb_func_process& pro)
       ipts_draw_cross(output_img1_g, ii, jj, int(kp1->scale()+0.5), color_g);
       ipts_draw_cross(output_img1_b, ii, jj, int(kp1->scale()+0.5), color_b);
     }
-      
+
     ii = int(kp2->location_i()+0.5); jj = int(kp2->location_j()+0.5);
     if (ii >= 0 && jj >= 0 && ii < (int)input_image2.ni() && jj < (int)input_image2.nj()) {
       //ipts_draw_cross(output_img2, ii,jj,int(kp2->scale()+0.5), vxl_byte(255) );
@@ -192,7 +193,7 @@ bool bapl_match_display_process(bprb_func_process& pro)
       ipts_draw_cross(output_img2_b, ii, jj, int(kp2->scale()+0.5), color_b);
     }
   }
-  
+
   vil_image_view_base_sptr output_img1_sptr = new vil_image_view<vxl_byte>(output_img1);
   pro.set_output_val<vil_image_view_base_sptr>(0, output_img1_sptr);
   vil_image_view_base_sptr output_img2_sptr = new vil_image_view<vxl_byte>(output_img2);
@@ -201,8 +202,7 @@ bool bapl_match_display_process(bprb_func_process& pro)
   return true;
 }
 
-//: Refine a current set of keypoint matches by computing a fundamental matrix through robust estimation and eliminating outliers
-//: Constructor
+//: Constructor - Refine a current set of keypoint matches by computing a fundamental matrix through robust estimation and eliminating outliers
 bool bapl_refine_match_process_cons(bprb_func_process& pro)
 {
   bool ok=false;
@@ -235,14 +235,14 @@ bool bapl_refine_match_process(bprb_func_process& pro)
   float outlier_threshold = pro.get_input<float>(i++);
   int min_number_of_matches = pro.get_input<int>(i++);
   min_number_of_matches = min_number_of_matches < 9 ? 9 : min_number_of_matches;  // F computation requires at least 8 matches
-  
+
   vul_timer t;
   vcl_vector<bapl_key_match> matches_pruned;
-  
+
   if ((int)matches.size() >= min_number_of_matches) {  // compute F only if there are enough matches, otherwise prune all
     match_set->refine_matches(outlier_threshold, matches_pruned);
   }
-  
+
   vcl_cout << "Match Refinement took " << t.real()/(1000.0*60.0) << " mins.\n";
 
   //bapl_keypoint_match_set_sptr key_set = new bapl_keypoint_match_set(matches_pruned2);
@@ -254,13 +254,15 @@ bool bapl_refine_match_process(bprb_func_process& pro)
 
 
 //: Constructor
-//: inputs a simple text file:
+//  inputs a simple text file:
+// \verbatim
 //  <img 1 id> <img 2 id>
 //  <number of matches>
 //  <key id 1> <key id 2>
-//  . 
 //  .
 //  .
+//  .
+// \endverbatim
 //  assumes that the key ids are their order in the keypoint vector of the image
 bool bapl_load_match_process_cons(bprb_func_process& pro)
 {
@@ -294,9 +296,9 @@ bool bapl_load_match_process(bprb_func_process& pro)
   vcl_string input_match_file = pro.get_input<vcl_string>(i++);
   vcl_vector<bapl_keypoint_sptr>& keys1 = input1_sptr->keys_;
   vcl_vector<bapl_keypoint_sptr>& keys2 = input2_sptr->keys_;
-  
+
   vcl_vector<bapl_key_match> matches;
-  //: read the match file
+  // read the match file
   vcl_ifstream ifs(input_match_file.c_str());
   if (!ifs) {
     vcl_cout << "Cannot open: " << input_match_file << vcl_endl;
@@ -323,13 +325,15 @@ bool bapl_load_match_process(bprb_func_process& pro)
 }
 
 //: Constructor
-//: outputs a simple text file:
+//  outputs a simple text file:
+// \verbatim
 //  <img 1 id> <img 2 id>
 //  <number of matches>
 //  <key id 1> <key id 2>
-//  . 
 //  .
 //  .
+//  .
+// \endverbatim
 //  assumes that the key ids are their order in the keypoint vector of the image
 bool bapl_write_match_process_cons(bprb_func_process& pro)
 {
@@ -357,14 +361,14 @@ bool bapl_write_match_process(bprb_func_process& pro)
   unsigned i=0;
   bapl_keypoint_match_set_sptr input_sptr = pro.get_input<bapl_keypoint_match_set_sptr>(i++);
   vcl_string input_match_file = pro.get_input<vcl_string>(i++);
-  
+
   vcl_vector<bapl_key_match>& matches = input_sptr->matches_;
-  //: write the match file
+  // write the match file
   vcl_ofstream ofs(input_match_file.c_str());
-  ofs << input_sptr->id_left_ << " " << input_sptr->id_right_ << vcl_endl;
-  ofs << matches.size() << vcl_endl;
-  for (unsigned i = 0; i < matches.size(); i++) 
-    ofs << matches[i].first->id() << " " << matches[i].second->id() << vcl_endl;
+  ofs << input_sptr->id_left_ << ' ' << input_sptr->id_right_ << '\n'
+      << matches.size() << vcl_endl;
+  for (unsigned i = 0; i < matches.size(); i++)
+    ofs << matches[i].first->id() << ' ' << matches[i].second->id() << vcl_endl;
   return true;
 }
 
