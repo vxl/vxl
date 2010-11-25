@@ -96,19 +96,19 @@ LIB32=link.exe -lib
 SOURCE=.\bapl_register.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/brdb_value_t+bapl_keypoint_set-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\processes/bapl_connectivity_processes.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/brdb_value_t+bapl_connectivity-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\processes/bapl_extract_keypoints_process.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\processes/bapl_match_keypoints_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/brdb_value_t+bapl_conn_table_sptr-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/brdb_value_t+bapl_keypoint_set_sptr-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"

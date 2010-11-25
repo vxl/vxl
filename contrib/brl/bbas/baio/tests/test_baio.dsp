@@ -246,6 +246,9 @@ SOURCE=.\test_driver.cxx
 SOURCE=.\test_read.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_write.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

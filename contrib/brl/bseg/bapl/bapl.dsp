@@ -132,9 +132,6 @@ SOURCE=.\bapl_bbf_tree.cxx
 SOURCE=.\bapl_keypoint_extractor.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_io_smart_ptr+bapl_connectivity-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+bapl_bbf_node-.cxx
 # End Source File
 # Begin Source File
@@ -153,10 +150,13 @@ SOURCE=.\Templates/vnl_vector_fixed+double.128-.cxx
 SOURCE=.\Templates/bapl_lowe_pyramid+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+bapl_connectivity-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+bapl_keypoint-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+bapl_keypoint-.cxx
+SOURCE=.\Templates/vbl_io_smart_ptr+bapl_conn_table-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+bapl_conn_table-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"

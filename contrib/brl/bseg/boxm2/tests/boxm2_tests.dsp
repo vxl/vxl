@@ -233,7 +233,16 @@ SOURCE=.\test_block.cxx
 SOURCE=.\test_data.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_utils.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
+# End Source File
+# End Group
+# Begin Group "Header Files"
+# PROP Default_Filter "h;txx"
+# Begin Source File
+SOURCE=.\test_utils.h
 # End Source File
 # End Group
 # End Target
