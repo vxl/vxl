@@ -10,6 +10,7 @@ TESTS += test_cache.cxx
 TESTS += test_io.cxx
 TESTS += test_block.cxx
 TESTS += test_data.cxx
+SOURCES += test_utils.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
