@@ -6,6 +6,7 @@
 // \file
 #include "vnl_rnpoly_solve.h"
 
+#include <vnl/vnl_math.h> // for vnl_math::pi
 #include <vcl_cmath.h>
 #include <vcl_cassert.h>
 #ifdef DEBUG
@@ -49,7 +50,7 @@ class vnl_rnpoly_solve_cmplx
   { return *this = operator/(Y); }
 };
 
-static const double twopi = 6.2831853071795864769;
+static const double twopi = 2.0*vnl_math::pi;
 
 static const double epsilonB  = 2.e-03;
 static const vnl_rnpoly_solve_cmplx  epsilonZ  = vnl_rnpoly_solve_cmplx(1.e-04,1.e-04);
@@ -576,7 +577,8 @@ static int trace(vcl_vector<vnl_rnpoly_solve_cmplx>& x,
     {
       if (eps != epsilonS) step = step/4.0;
       eps = epsilonS;
-    }else
+    }
+    else
       eps = epsilonB;
 #ifdef DEBUG
     vcl_cout << "t=" << t << vcl_endl;
