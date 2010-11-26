@@ -21,7 +21,7 @@
 
 void test_nn_cache()
 {
-  
+    
   //init cache
   boxm2_nn_cache cache("", vgl_vector_3d<int>(2,2,2));
   
@@ -68,10 +68,13 @@ void test_dumb_cache()
 void test_cache()
 {
   //ensure blocks 0.0.0 - 1.1.1 are saved to disk
-  //boxm2_test_utils::save_test_scene_to_disk();
+  boxm2_test_utils::save_test_scene_to_disk();
   
   //test_dumb_cache(); 
   test_nn_cache();
+  
+  //clean up .bin blocks created above
+  boxm2_test_utils::delete_test_scene_from_disk();
 }
 
 

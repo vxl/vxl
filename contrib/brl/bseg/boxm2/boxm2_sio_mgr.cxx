@@ -14,8 +14,10 @@ boxm2_block* boxm2_sio_mgr::load_block(vcl_string dir, boxm2_block_id block_id)
   char * bytes = new char[numBytes];
   vcl_ifstream myFile (filepath.c_str(), vcl_ios::in | vcl_ios::binary);
   myFile.read(bytes, numBytes);
-  if (!myFile)
-    vcl_cerr<<"boxm2_sio_mgr:: cannot read file "<<dir<<vcl_endl;
+  if (!myFile) {
+    vcl_cerr<<"boxm2_sio_mgr:: cannot read file "<<filepath<<vcl_endl;
+    return NULL; 
+  }
 
   //instantiate new block
   return new boxm2_block(block_id, bytes);

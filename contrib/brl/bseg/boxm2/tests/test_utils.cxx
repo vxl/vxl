@@ -2,6 +2,7 @@
 #include "test_utils.h"
 #include <vnl/vnl_random.h>
 #include <boxm2/boxm2_sio_mgr.h>
+#include <vul/vul_file.h>
 
 
 char* boxm2_test_utils::construct_block_test_stream(int numBuffers,
@@ -105,7 +106,10 @@ void boxm2_test_utils::save_test_scene_to_disk()
                                                                       init_level,
                                                                       max_level,
                                                                       max_mb );
-        boxm2_block b(boxm2_block_id(i,j,k), stream);
+        boxm2_block_id id(i,j,k);                                                               
+        boxm2_block b(id, stream);
+        
+        vcl_cout<<"saving test block for "<<id<<vcl_endl;
         boxm2_sio_mgr::save_block("", &b);
       }
     }
@@ -128,13 +132,20 @@ void boxm2_test_utils::save_test_scene_to_disk()
   for (int i=0; i<2; i++) {
     for (int j=0; j<2; j++) {
       for (int k=0; k<2; k++) {
-        boxm2_sio_mgr::save_block_data<BOXM2_ALPHA>("", boxm2_block_id(i,j,k), &test_data);
-        boxm2_sio_mgr::save_block_data<BOXM2_MOG3_GREY>("", boxm2_block_id(i,j,k), &test_mog);
+        boxm2_block_id id(boxm2_block_id(i,j,k)); 
+        vcl_cout<<"saving alpha and mog3 test data for "<<id<<vcl_endl;
+        boxm2_sio_mgr::save_block_data<BOXM2_ALPHA>("", id, &test_data);
+        boxm2_sio_mgr::save_block_data<BOXM2_MOG3_GREY>("", id, &test_mog);
       }
     }
   }
 }
 
+void boxm2_test_utils::delete_test_scene_from_disk()
+{
+  //use vul_file to 
+  vul_file::delete_file_glob("*id_*.bin"); 
+}
 
 void boxm2_test_utils::test_block_equivalence(boxm2_block& a, boxm2_block& b)
 {
