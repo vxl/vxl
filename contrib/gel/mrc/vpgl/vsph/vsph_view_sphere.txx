@@ -8,6 +8,8 @@
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_line_segment_3d.h>
 #include <vpgl/vpgl_perspective_camera.h>
+#include <vnl/vnl_vector_fixed.h>
+#include <vnl/vnl_math.h>
 
 template <class T>
 vsph_view_sphere<T>::vsph_view_sphere(vgl_box_3d<double> bb, double radius)
@@ -192,7 +194,7 @@ void vsph_view_sphere<T>::add_uniform_views(double cap_angle, double point_angle
     for (int j=0; j<3; j++) {
       vsph_sph_point_3d sv;
       coord_sys_->spherical_coord(verts[triangles[i][j]], sv);
-      if ((sv.theta_ < cap_angle) && (sv.theta_ > 3.0*cap_angle/4.0)) 
+      if ((sv.theta_ < cap_angle) && (sv.theta_ > 3.0*cap_angle/4.0))
         if (sv.theta_ < cap_angle) {
           int uid;
           double dist;
@@ -292,13 +294,14 @@ void vsph_view_sphere<T>::print(vcl_ostream& os) const
   }
   os << vcl_endl;
 }
+
 template <class T>
 void vsph_view_sphere<T>::
 print_relative_cams(vpgl_camera_double_sptr const& target_cam,
                     double distance_thresh)
 {
   vpgl_perspective_camera<double>* pcam=
-    dynamic_cast<vpgl_perspective_camera<double>*>(target_cam.as_pointer());  
+    dynamic_cast<vpgl_perspective_camera<double>*>(target_cam.as_pointer());
   typename vcl_map<unsigned, T>::iterator it = views_.begin();
   vgl_point_3d<double> t = pcam->camera_center();
   while (it != views_.end()) {
@@ -311,17 +314,18 @@ print_relative_cams(vpgl_camera_double_sptr const& target_cam,
     if (vv.length() < distance_thresh) {
       (it->second).relative_transf(target_cam, rel_rot, rel_trans);
       vnl_vector_fixed<double, 3> rod = rel_rot.as_rodrigues();
-      vcl_cout <<"***************************************" << vcl_endl;
-      vcl_cout << "Viewpoint " << vp_id << '\n';
-      vcl_cout << vp.theta_*180.0/3.14159 << ' ' << vp.phi_*180.0/3.14159<< '\n';
-      vcl_cout << "Rel Rot[ " << rod.magnitude() <<" ]= " << rod << vcl_endl;
-      vcl_cout << "Rel trans[ "<< rel_trans.length()<< " ]= " 
-               << rel_trans << vcl_endl;
-      vcl_cout <<"***************************************" << vcl_endl;
+      const double deg_per_rad = 180.0/vnl_math::pi;
+      vcl_cout <<"***************************************\n"
+               << "Viewpoint " << vp_id << '\n'
+               << vp.theta_*deg_per_rad << ' ' << vp.phi_*deg_per_rad<< '\n'
+               << "Rel Rot[ " << rod.magnitude() <<" ]= " << rod << '\n'
+               << "Rel trans[ "<< rel_trans.length()<<" ]= "<< rel_trans << '\n'
+               <<"***************************************" << vcl_endl;
     }
     it++;
   }
 }
+
 template <class T>
 void vsph_view_sphere<T>::find_neighbors(unsigned id, vcl_vector<T >& neighbors)
 {
@@ -403,7 +407,7 @@ void vsph_view_sphere<T>::b_read(vsl_b_istream& is)
   short version;
   vsl_b_read(is, version);
   switch (version) {
-  case 1:
+   case 1:
     {
       coord_sys_->b_read(is);
       unsigned size, uid;
@@ -416,7 +420,7 @@ void vsph_view_sphere<T>::b_read(vsl_b_istream& is)
       }
       vsl_b_read(is, uid_);
     }
-  default:
+   default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vsph_view_sphere<T>&)\n"
              << "           Unknown version number "<< version << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
