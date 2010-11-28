@@ -14,11 +14,12 @@
 #include <vcl_map.h>
 
 #include "vsph_spherical_coord_sptr.h"
+#include "vsph_sph_point_3d.h"
 
 #include <vcl_iostream.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_box_3d.h>
-
+#include <vpgl/vpgl_perspective_camera.h>
 #include <vsl/vsl_binary_io.h>
 
 template <class T>
@@ -63,6 +64,14 @@ class vsph_view_sphere
   //  Returns false if uid is non-existent
   bool view_point(unsigned uid, T*& vp);
 
+  //: transforms a spherical coordinate to a cartesian coordinate
+  vgl_point_3d<double> cart_coord(vsph_sph_point_3d const& vp) const
+    {return coord_sys_->cart_coord(vp);}
+
+  //: transforms a cartesian coordinate to a spherical coordinate
+  vsph_sph_point_3d spher_coord(vgl_point_3d<double> const& cp) const
+    {vsph_sph_point_3d sp; coord_sys_->spherical_coord(cp, sp); return sp;}
+
   //: finds the nearest view to the i-th saved point
   // If the returned \a uid is -1, the search is unsuccessful
   T find_closest(unsigned i, int &uid, double& dist);
@@ -89,7 +98,12 @@ class vsph_view_sphere
 
   void print(vcl_ostream& os) const;
 
-  void b_read(vsl_b_istream& is);
+  //: for debug purposes
+  void print_relative_cams(vpgl_camera_double_sptr const& target_cam,
+                          double distance_thresh = 1.0);
+
+
+   void b_read(vsl_b_istream& is);
 
   void b_write(vsl_b_ostream& os) const;
 

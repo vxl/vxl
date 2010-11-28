@@ -5,7 +5,8 @@
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include "vsph_spherical_coord.h"
-
+#include <vgl/algo/vgl_rotation_3d.h>
+#include <vgl/vgl_vector_3d.h>
 template <class T_data>
 class vsph_view_point
 {
@@ -24,10 +25,15 @@ class vsph_view_point
 
   void set_view_point(vsph_sph_point_3d p) { spher_coord_=p; }
   vsph_sph_point_3d view_point() const { return spher_coord_; }
+  
 
   void print(vcl_ostream& os) const { os << " vsph_view_point: camera=" << cam_->type_name() << ",coordinates=" << spher_coord_ << ",data=" << *metadata_ << " " << vcl_endl; }
 
-  void b_read(vsl_b_istream& is);
+  void relative_transf(vpgl_camera_double_sptr const& cam,
+                       vgl_rotation_3d<double>& rel_rot, 
+                       vgl_vector_3d<double>& rel_trans) const;
+
+   void b_read(vsl_b_istream& is);
 
   void b_write(vsl_b_ostream& os);
 
@@ -77,5 +83,21 @@ void vsph_view_point<T>::b_write(vsl_b_ostream& os)
   } else
     vcl_cout << "vsph_view_point<T>::b_write -- Camera type:" << cam_->type_name() << " is not supported yet!" << vcl_endl;
 }
-
+template <class T>
+void vsph_view_point<T>::
+relative_transf(vpgl_camera_double_sptr const& cam,
+                vgl_rotation_3d<double>& rel_rot, 
+                vgl_vector_3d<double>& rel_trans) const
+{
+  vpgl_perspective_camera<double>* c1=dynamic_cast<vpgl_perspective_camera<double>*>(cam.as_pointer());  
+  vpgl_perspective_camera<double>* c0=dynamic_cast<vpgl_perspective_camera<double>*>(cam_.as_pointer());  
+  if(!c0||!c1) return;
+  vgl_vector_3d<double> t0 = c0->get_translation();
+  vgl_vector_3d<double> t1 = c1->get_translation();
+  vgl_rotation_3d<double> R0 = c0->get_rotation();
+  vgl_rotation_3d<double> R1 = c1->get_rotation();
+  rel_rot = R1*(R0.transpose());
+  vgl_vector_3d<double> td = rel_rot*t0;
+  rel_trans = -td + t1;
+}
 #endif
