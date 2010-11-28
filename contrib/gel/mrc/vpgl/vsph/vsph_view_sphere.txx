@@ -16,6 +16,20 @@ vsph_view_sphere<T>::vsph_view_sphere(vgl_box_3d<double> bb, double radius)
   : coord_sys_(new vsph_spherical_coord(bb.centroid(),radius)),uid_(0) { }
 
 template <class T>
+vgl_point_3d<double> vsph_view_sphere<T>::cart_coord(vsph_sph_point_3d const& vp) const
+{
+  return coord_sys_->cart_coord(vp);
+}
+
+template <class T>
+vsph_sph_point_3d vsph_view_sphere<T>::spher_coord(vgl_point_3d<double> const& cp) const
+{
+  vsph_sph_point_3d sp;
+  coord_sys_->spherical_coord(cp, sp);
+  return sp;
+}
+
+template <class T>
 unsigned vsph_view_sphere<T>::add_view(T view, unsigned ni, unsigned nj)
 {
   // make sure that the view point is on the sphere

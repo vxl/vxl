@@ -65,12 +65,10 @@ class vsph_view_sphere
   bool view_point(unsigned uid, T*& vp);
 
   //: transforms a spherical coordinate to a cartesian coordinate
-  vgl_point_3d<double> cart_coord(vsph_sph_point_3d const& vp) const
-    {return coord_sys_->cart_coord(vp);}
+  vgl_point_3d<double> cart_coord(vsph_sph_point_3d const& vp) const;
 
   //: transforms a cartesian coordinate to a spherical coordinate
-  vsph_sph_point_3d spher_coord(vgl_point_3d<double> const& cp) const
-    {vsph_sph_point_3d sp; coord_sys_->spherical_coord(cp, sp); return sp;}
+  vsph_sph_point_3d spher_coord(vgl_point_3d<double> const& cp) const;
 
   //: finds the nearest view to the i-th saved point
   // If the returned \a uid is -1, the search is unsuccessful
@@ -100,7 +98,7 @@ class vsph_view_sphere
 
   //: for debug purposes
   void print_relative_cams(vpgl_camera_double_sptr const& target_cam,
-                          double distance_thresh = 1.0);
+                           double distance_thresh = 1.0);
 
 
    void b_read(vsl_b_istream& is);
