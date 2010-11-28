@@ -82,8 +82,7 @@ void icam_view_sphere::set_images(vcl_map<unsigned, vil_image_view<float>*>& ima
   }
 }
 
-void icam_view_sphere::register_image(vil_image_view<float> const& dest_img, 
-                                      vpgl_perspective_camera<double>& test_cam)
+void icam_view_sphere::register_image(vil_image_view<float> const& dest_img)
 {
   // try to find the best camera at each view point and at the end we will
   // have errors to compare on the view sphere
@@ -112,14 +111,18 @@ void icam_view_sphere::register_image(vil_image_view<float> const& dest_img,
   unsigned idx=-1;
   for (unsigned i=0; i<local_min.size(); i++) {
     vcl_cout << "Local MINIMA " << i << "--" << local_min[i].view_point() << vcl_endl;
-    vpgl_perspective_camera<double>* cam = (vpgl_perspective_camera<double>*)local_min[i].camera().as_pointer();
+    vpgl_perspective_camera<double>* gt_cam = 
+      dynamic_cast<vpgl_perspective_camera<double>* >(ground_truth_cam_.as_pointer());
+    if(gt_cam){
+      vpgl_perspective_camera<double>* cam = (vpgl_perspective_camera<double>*)local_min[i].camera().as_pointer();
     vgl_rotation_3d<double> rel_rot;
     vgl_vector_3d<double> rel_trans;
-    vpgl_camera_bounds::relative_transf(test_cam, *cam,rel_rot,rel_trans);
+    vpgl_camera_bounds::relative_transf(*gt_cam, *cam,rel_rot,rel_trans);
     vcl_cout <<"***************************************" << vcl_endl;
     vcl_cout << "Rel Rot=" << rel_rot << vcl_endl;
     vcl_cout << "Rel trans=" << rel_trans << vcl_endl;
     vcl_cout <<"***************************************" << vcl_endl;
+    }
     icam_view_metadata* md = local_min[i].metadata();
     md->refine_camera();
     if (md->cost() < cam_cost) {
@@ -212,6 +215,23 @@ void icam_view_sphere::vrml_write(vcl_string vrml_file)
     vgl_point_3d<double> p_3d=c->cart_coord(v);
     bvrml_write::write_vrml_sphere(vrml_os, vgl_sphere_3d<float>(p_3d.x(),p_3d.y(),p_3d.z(),0.1),0,0,1,0.1);
     ++it;
+  }
+}
+
+  //: the mapped source image and actual destination image at a level
+void icam_view_sphere::mapped_image(unsigned viewpoint_id, 
+                                    vil_image_view<float> const& source_img,
+                                    vgl_rotation_3d<double>& rot,
+                                    vgl_vector_3d<double>& trans, 
+                                    unsigned level,
+                                    vil_image_view<float>& act_dest,
+                                    vil_image_view<float>& mapped_dest)
+{
+  vsph_view_point<icam_view_metadata>* vp;
+  if(view_sphere_->view_point(viewpoint_id, vp)){ 
+  icam_view_metadata* data=vp->metadata();
+  if (data)
+    data->mapped_image(source_img, rot, trans, level, act_dest, mapped_dest);
   }
 }
 

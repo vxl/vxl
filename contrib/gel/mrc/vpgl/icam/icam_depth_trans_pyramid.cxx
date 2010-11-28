@@ -133,12 +133,14 @@ vnl_vector<double> icam_depth_trans_pyramid::params()
 }
 
 icam_depth_transform icam_depth_trans_pyramid::depth_trans(unsigned level,
-                                                           bool smooth_map)
+                                                           bool smooth_map,
+                                                           double smooth_sigma)
 {
   vil_image_view<double>& dmap = this->depth_pyramid_(level);
   if(smooth_map){
     vil_image_view<double> dmap_sm(dmap.ni(), dmap.nj());
-    vil_gauss_filter_5tap(dmap,dmap_sm,vil_gauss_filter_5tap_params(2));
+    vil_gauss_filter_5tap(dmap,dmap_sm,
+                          vil_gauss_filter_5tap_params(smooth_sigma));
     icam_depth_transform dt(this->calibration_matrix(level), 
                             dmap_sm, rot_, trans_);
     dt.set_scale_factors(scale_factors_);

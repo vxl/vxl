@@ -12,6 +12,7 @@ icam_view_metadata::icam_view_metadata(vil_image_view<float> const& exp_img,
   unsigned min_pyramid_image_size = 16;
   unsigned box_reduction_k = 2;
   double local_min_thresh = 0.005;
+  double smooth_sigma = 1.0;
   double axis_search_cone_multiplier = 10.0;
   double polar_range_multiplier = 2.0;
   bool verbose = true;
@@ -20,8 +21,8 @@ icam_view_metadata::icam_view_metadata(vil_image_view<float> const& exp_img,
   minimizer_=new icam_minimizer(exp_img, dt, min_pyramid_image_size, 
                                 box_reduction_k, axis_search_cone_multiplier, 
                                 polar_range_multiplier, local_min_thresh, 
+                                smooth_sigma, nbins,
                                 base_path, verbose); 
-  minimizer_->set_nbins(nbins);
   final_level_ = minimizer_->n_levels() - 3;
 }
 
@@ -82,6 +83,19 @@ void icam_view_metadata::refine_camera()
   vcl_cout << "PATH=" << s.str().c_str() << vcl_endl;
   vil_save(img, s.str().c_str());
 #endif
+}
+
+void icam_view_metadata::mapped_image(vil_image_view<float> const& source_img,
+                                      vgl_rotation_3d<double>& rot,
+                                      vgl_vector_3d<double>& trans, 
+                                      unsigned level,
+                                      vil_image_view<float>& act_dest,
+                                      vil_image_view<float>& mapped_dest)
+{
+  // set the source to the minimizer
+  minimizer_->set_source_img(source_img);
+  act_dest = minimizer_->dest(level);
+  mapped_dest = minimizer_->view(rot, trans, level);
 }
 
 void icam_view_metadata::b_read(vsl_b_istream& is)

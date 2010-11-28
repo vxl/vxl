@@ -33,7 +33,7 @@ class icam_view_sphere : public vbl_ref_count
                           vcl_map<unsigned,vil_image_view<double>*>& depth_images);
 
   //: computes the camera registration errors for a given image
-  virtual void register_image(vil_image_view<float> const& source_img,vpgl_perspective_camera<double>& test_cam);
+  virtual void register_image(vil_image_view<float> const& source_img);
 
   //: computes the camera registration errors local minima for a given image
   void find_local_minima(vcl_vector<vsph_view_point<icam_view_metadata> >& local_minima);
@@ -41,9 +41,23 @@ class icam_view_sphere : public vbl_ref_count
   //: given a camera, find the relative camera rotation and translations for each view point
   void camera_transf(vpgl_perspective_camera<double> const& cam);
 
+  //: for debug purposes
+  void set_ground_truth_cam(vpgl_camera_double_sptr const& gt_cam)
+    {ground_truth_cam_ = gt_cam;}
+
   // Writes the view points as small spheres into a vrml file
   void vrml_write(vcl_string vrml_file);
 
+  //: the mapped source image and actual destination image at a level
+  void mapped_image(unsigned viewpoint_id, 
+                    vil_image_view<float> const& source_img,
+                    vgl_rotation_3d<double>& rot,
+                    vgl_vector_3d<double>& trans, unsigned level,
+                    vil_image_view<float>& act_dest,
+                    vil_image_view<float>& mapped_dest);
+
+
+  //: binary I/O
   inline short version() const { return 1; }
 
   void b_read(vsl_b_istream &is);
@@ -52,7 +66,8 @@ class icam_view_sphere : public vbl_ref_count
 
  protected:
   vsph_view_sphere<vsph_view_point<icam_view_metadata> >* view_sphere_;
-
+  //: for debugging - is the camera being searched for
+  vpgl_camera_double_sptr ground_truth_cam_;
   const double ICAM_LOCAL_MIN_THRESH_;
 };
 

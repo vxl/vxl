@@ -26,6 +26,8 @@ class icam_ocl_minimizer : public icam_minimizer
                       double axis_search_cone_multiplier = 10.0,
                       double polar_range_multiplier = 2.0,
                       double local_min_thresh = 0.05,
+                      double smooth_sigma = 1.0,
+                      unsigned nbins = 16,
                       vcl_string const& base_path = "",
                       bool verbose=false)
     : icam_minimizer(source_img,
@@ -36,6 +38,8 @@ class icam_ocl_minimizer : public icam_minimizer
                      axis_search_cone_multiplier,
                      polar_range_multiplier,
                      local_min_thresh,
+                     smooth_sigma,
+                     nbins,
                      base_path,
                      verbose)
     {search_mgr_ = icam_ocl_search_manager::instance();}
@@ -48,6 +52,8 @@ class icam_ocl_minimizer : public icam_minimizer
                      double axis_search_cone_multiplier = 10.0,
                      double polar_range_multiplier = 2.0,
                      double local_min_thresh = 0.05,
+                     double smooth_sigma = 1.0,
+                     unsigned nbins = 16,
                      vcl_string const& base_path = "",
                      bool verbose=false)
     : icam_minimizer(dest_img,
@@ -57,6 +63,8 @@ class icam_ocl_minimizer : public icam_minimizer
                      axis_search_cone_multiplier,
                      polar_range_multiplier,
                      local_min_thresh,
+                     smooth_sigma,
+                     nbins,
                      base_path,
                      verbose)
     {search_mgr_ = icam_ocl_search_manager::instance();}

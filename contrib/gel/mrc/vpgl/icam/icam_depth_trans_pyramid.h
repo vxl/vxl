@@ -75,7 +75,8 @@ class icam_depth_trans_pyramid
     return rot_;}
   void set_translation(vgl_vector_3d<double> const& trans){trans_ = trans;}
   vgl_vector_3d<double>& translation(){return trans_;}
-  icam_depth_transform depth_trans(unsigned level, bool smooth_map = false);
+  icam_depth_transform depth_trans(unsigned level, bool smooth_map = false,
+                                   double smooth_sigma = 1.0);
   unsigned n_params(){return n_params_;}
   void set_params(vnl_vector<double> const& params);
   vnl_vector<double> params();

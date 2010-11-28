@@ -39,6 +39,13 @@ class icam_view_metadata
 
    double cost() { return cost_; }
 
+   //: for debug purposes
+   void mapped_image(vil_image_view<float> const& source_img,
+                     vgl_rotation_3d<double>& rot,
+                     vgl_vector_3d<double>& trans, unsigned level,
+                     vil_image_view<float>& act_dest,
+                     vil_image_view<float>& mapped_dest);
+
    void print(vcl_ostream& os) const { os << "icam_view_metadata:" << vcl_endl; }
 
    void b_read(vsl_b_istream& is);

@@ -63,12 +63,15 @@ icam_minimizer::icam_minimizer( const vil_image_view<float>& source_img,
                                 double axis_search_cone_multiplier,
                                 double polar_range_multiplier,
                                 double local_min_thresh,
+                                double smooth_sigma,
+                                unsigned nbins,
                                 vcl_string const& base_path,
                                 bool verbose)
   : box_reduction_k_(box_reduction_k),
     axis_search_cone_multiplier_(axis_search_cone_multiplier),
     polar_range_multiplier_(polar_range_multiplier),
     cam_search_valid_(false), local_min_thresh_(local_min_thresh),
+    smooth_sigma_(smooth_sigma), nbins_(nbins),
     min_level_size_(min_level_size), end_error_(0.0),
     base_path_(base_path), verbose_(verbose)
 {
@@ -91,12 +94,15 @@ icam_minimizer::icam_minimizer(const vil_image_view<float>& dest_img,
                                double axis_search_cone_multiplier,
                                double polar_range_multiplier,
                                double local_min_thresh,
+                               double smooth_sigma,
+                               unsigned nbins,
                                vcl_string const& base_path,
                                bool verbose)
   : box_reduction_k_(box_reduction_k),
     axis_search_cone_multiplier_(axis_search_cone_multiplier),
     polar_range_multiplier_(polar_range_multiplier),
     cam_search_valid_(false), local_min_thresh_(local_min_thresh),
+    smooth_sigma_(smooth_sigma), nbins_(nbins),
     min_level_size_(min_level_size), end_error_(0.0), base_path_(base_path),
     verbose_(verbose)
 {
@@ -109,6 +115,18 @@ icam_minimizer::icam_minimizer(const vil_image_view<float>& dest_img,
     icam_depth_trans_pyramid(const_cast<icam_depth_transform&>(dt),n_levels);
 }
 
+void icam_minimizer::print_params()
+{
+  vcl_cout << "====== Minimizer Parameters =======\n"
+           << "min pyramid dimension " << min_level_size_ << '\n'
+           << "trans box reduction "   << box_reduction_k_ << '\n'
+           << "axis_search_mulitplier " << axis_search_cone_multiplier_ << '\n'
+           << "polar_searh_multiplier " << polar_range_multiplier_ << '\n'
+           << "local_min_thresh " << local_min_thresh_ << '\n'
+           << "smooth sigma " << smooth_sigma_ << '\n'
+           << "histogram bins " << nbins_ << '\n'
+           << "===================================\n";
+}
 void icam_minimizer::set_source_img(const vil_image_view<float>& source_img)
 {
   vil_image_view_base_sptr source_sptr = new vil_image_view<float>(source_img);
@@ -123,11 +141,17 @@ icam_cost_func icam_minimizer::cost_fn(unsigned level)
   vil_image_view<float> source_sm(source.ni(), source.nj());
   vil_image_view<float> dest_sm(dest.ni(), dest.nj());
 #if 1
-  vil_gauss_filter_5tap(source,source_sm,vil_gauss_filter_5tap_params(2));
-  vil_gauss_filter_5tap(dest,dest_sm,vil_gauss_filter_5tap_params(2));
-#endif
-  return icam_cost_func(source_sm, dest_sm,dt_pyramid_.depth_trans(level),
+  vil_gauss_filter_5tap(source,source_sm,
+                        vil_gauss_filter_5tap_params(smooth_sigma_));
+  vil_gauss_filter_5tap(dest,dest_sm,
+                        vil_gauss_filter_5tap_params(smooth_sigma_));
+
+  return icam_cost_func(source_sm, 
+                        dest_sm,dt_pyramid_.depth_trans(level,
+                                                        true, smooth_sigma_),
                         nbins_);
+#endif
+
 }
 
 //: The main function.
@@ -810,7 +834,8 @@ vcl_vector<vil_image_view<float> > icam_minimizer::views(vgl_rotation_3d<double>
   {
     params[param_index] = p;
     dt_pyramid_.set_params(params);
-    icam_depth_transform dt = dt_pyramid_.depth_trans(level, true);
+    icam_depth_transform dt = 
+      dt_pyramid_.depth_trans(level, true, smooth_sigma_);
     vil_image_view<float> trans_view, mask;
     icam_sample::resample(source.ni(), source.nj(), source,
                           dt, trans_view, mask, n_samples);
@@ -825,12 +850,14 @@ vil_image_view<float> icam_minimizer::view(vgl_rotation_3d<double>& rot,
 {
   dt_pyramid_.set_rotation(rot);
   dt_pyramid_.set_translation(trans);
-  icam_depth_transform dt = dt_pyramid_.depth_trans(level, true);
+  icam_depth_transform dt = 
+    dt_pyramid_.depth_trans(level, true, smooth_sigma_);
   vil_image_view<float>& source = source_pyramid_(level);
   vil_image_view<float> trans_view, mask;
   unsigned n_samples;
   icam_sample::resample(source.ni(), source.nj(), source,
                         dt, trans_view, mask, n_samples);
+
   return trans_view;
 }
 
@@ -840,7 +867,8 @@ vil_image_view<float> icam_minimizer::mask(vgl_rotation_3d<double>& rot,
 {
   dt_pyramid_.set_rotation(rot);
   dt_pyramid_.set_translation(trans);
-  icam_depth_transform dt = dt_pyramid_.depth_trans(level, true);
+  icam_depth_transform dt = 
+    dt_pyramid_.depth_trans(level, true, smooth_sigma_);
   vil_image_view<float>& source = source_pyramid_(level);
   vil_image_view<float> trans_view, mask;
   unsigned n_samples;

@@ -15,7 +15,7 @@ encode_image_data(icam_minimizer& minimizer, unsigned level)
   //encode smoothed source image
   vil_image_view<float> source = minimizer.source(level);
   sni_ = source.ni(); snj_ = source.nj();
-#if 1
+#if 0
   vil_image_view<float> source_sm(sni_, snj_);
   vil_gauss_filter_5tap(source,source_sm,vil_gauss_filter_5tap_params(2));
 #endif
@@ -35,7 +35,8 @@ encode_image_data(icam_minimizer& minimizer, unsigned level)
   unsigned sindex = 0;
   for (unsigned j = 0; j<snj_; ++j)
     for (unsigned i = 0; i<sni_; ++i, sindex++)
-      source_array_[sindex] = source_sm(i,j);
+      //      source_array_[sindex] = source_sm(i,j);
+      source_array_[sindex] = source(i,j);
 
   *cl_sni_ = sni_;   *cl_snj_ = snj_;
 
@@ -50,7 +51,7 @@ encode_image_data(icam_minimizer& minimizer, unsigned level)
   //work space dims must be a multiple of work group dims
   wsni_ = RoundUp(dni_, this->workgrp_ni());
   wsnj_ = RoundUp(dnj_, this->workgrp_nj());
-#if 1
+#if 0
   vil_image_view<float> dest_sm(dni_, dnj_);
   vil_gauss_filter_5tap(dest,dest_sm,vil_gauss_filter_5tap_params(2));
 #endif
@@ -69,7 +70,8 @@ encode_image_data(icam_minimizer& minimizer, unsigned level)
   unsigned dindex = 0;
   for (unsigned j = 0; j<dnj_; ++j)
     for (unsigned i = 0; i<dni_; ++i, dindex++)
-      dest_array_[dindex] = dest_sm(i,j);
+      //      dest_array_[dindex] = dest_sm(i,j);
+      dest_array_[dindex] = dest(i,j);
   *cl_dni_ = dni_;   *cl_dnj_ = dnj_;
   Kdi_[0] = static_cast<float>(Kdi[0][0]);
   Kdi_[1] = static_cast<float>(Kdi[0][2]);

@@ -47,6 +47,8 @@ class icam_minimizer
                   double axis_search_cone_multiplier = 10.0,
                   double polar_range_multiplier = 2.0,
                   double local_min_thresh = 0.05,
+                  double smooth_sigma = 1.0,
+                  unsigned nbins = 16,
                   vcl_string const& base_path = "",
                   bool verbose=false);
 
@@ -58,6 +60,8 @@ class icam_minimizer
                  double axis_search_cone_multiplier = 10.0,
                  double polar_range_multiplier = 2.0,
                  double local_min_thresh = 0.05,
+                 double smooth_sigma = 1.0,
+                 unsigned nbins = 16,
                  vcl_string const& base_path = "",
                  bool verbose=false);
 
@@ -67,9 +71,10 @@ class icam_minimizer
   //: in the cases where source image is not know at construction, the image is set later
   void set_source_img(const vil_image_view<float>& source_img);
 
-  //: number of histogram bins for computation of entropy
-  void set_nbins(unsigned nbins) {nbins_ = nbins;}
-  unsigned nbins() { return nbins_;}
+  bool verbose() {return verbose_;}
+
+  //: print parameters
+  void print_params();
 
   //: principal ray iterator for exhaustive search
   principal_ray_scan pray_scan(unsigned level, unsigned& n_pts);
@@ -266,6 +271,7 @@ bool  pyramid_camera_search(vgl_vector_3d<double> const&
   double polar_range_multiplier_;
   bool cam_search_valid_;
   double local_min_thresh_;
+  double smooth_sigma_;
   vgl_vector_3d<double> box_origin_;
   vgl_vector_3d<double> step_delta_;
   vbl_array_3d<double> box_scores_;

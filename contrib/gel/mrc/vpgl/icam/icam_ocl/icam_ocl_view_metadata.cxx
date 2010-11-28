@@ -13,6 +13,7 @@ icam_ocl_view_metadata::icam_ocl_view_metadata(vil_image_view<float> const& exp_
   unsigned min_pyramid_image_size = 16;
   unsigned box_reduction_k = 2;
   double local_min_thresh = 0.005;
+  double smooth_sigma = 1.0;
   double axis_search_cone_multiplier = 10.0;
   double polar_range_multiplier = 2.0;
   bool verbose = true;
@@ -20,9 +21,10 @@ icam_ocl_view_metadata::icam_ocl_view_metadata(vil_image_view<float> const& exp_
 
   minimizer_=new icam_ocl_minimizer(exp_img, dt, min_pyramid_image_size, 
                                     box_reduction_k, axis_search_cone_multiplier, 
-                                    polar_range_multiplier, local_min_thresh, 
+                                    polar_range_multiplier, local_min_thresh,
+                                    smooth_sigma,
+                                    nbins,
                                     base_path, verbose); 
-  minimizer_->set_nbins(nbins);
   static_cast<icam_ocl_minimizer*>(minimizer_)->set_workgroup_size(wgsize);
   static_cast<icam_ocl_minimizer*>(minimizer_)->set_rot_kernel_path("c:/vxl/vxl/contrib/gel/mrc/vpgl/icam/icam_ocl/trans_parallel_transf_search.cl");
   final_level_ = minimizer_->n_levels() - 3;
@@ -30,6 +32,8 @@ icam_ocl_view_metadata::icam_ocl_view_metadata(vil_image_view<float> const& exp_
 
 void icam_ocl_view_metadata::register_image(vil_image_view<float> const& source_img)
 {
+  if(minimizer_->verbose())
+        minimizer_->print_params();
   // set the source to the minimizer
   minimizer_->set_source_img(source_img);
 
