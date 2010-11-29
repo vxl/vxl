@@ -76,12 +76,14 @@ bool test_image_parallel_search()
   double polar_range_multiplier = 2.0;
   //vcl_string base_path = "C:/images/Calibration";
   vcl_string base_path = "";
+  double sigma=1.0;
+  unsigned int nbins=16;
   icam_minimizer minimizer(source_img_flt, dest_img_flt, dt,
                            min_pyramid_image_size, box_reduction_k,
                            axis_search_cone_multiplier,
                            polar_range_multiplier,
-                           local_min_thresh, base_path);
-  minimizer.set_nbins(16);
+                           local_min_thresh, sigma, nbins, base_path);
+
   unsigned nl = minimizer.n_levels();
   unsigned lev = nl-1;
   // check native C++ implementation
@@ -241,18 +243,20 @@ bool test_icam_ocl_minimizer()
   //vcl_string base_path = "C:/images/Calibration";
   vcl_string base_path = "";
   bool verbose = false;
+  double sigma=1.0;
+  unsigned int nbins=16;
   icam_ocl_minimizer minimizer(source_img_flt, dest_img_flt, dt,
                                min_pyramid_image_size, box_reduction_k,
                                axis_search_cone_multiplier,
                                polar_range_multiplier,
-                               local_min_thresh, base_path, verbose);
+                               local_min_thresh, sigma, nbins, base_path, verbose);
   //c:/vxl/vxl/contrib/gel/mrc/vpgl/icam/icam_ocl/
   minimizer.set_rot_kernel_path("trans_parallel_transf_search.cl");
   if (verbose) {
     minimizer.set_actual_translation(tr);
     minimizer.set_actual_rotation(Rr);
   }
-  minimizer.set_nbins(16);
+  
   minimizer.set_workgroup_size(16);
   unsigned nl = minimizer.n_levels();
   unsigned lev = nl-1;
@@ -270,16 +274,17 @@ bool test_icam_ocl_minimizer()
   minimizer.exhaustive_rotation_search(tr, lev, min_allowed_overlap,
                                        min_rot, minfo, min_overlap,
                                        setup, finish);
+
   icam_minimizer non_gpu_minmzr(source_img_flt, dest_img_flt, dt,
                                min_pyramid_image_size, box_reduction_k,
                                axis_search_cone_multiplier,
                                polar_range_multiplier,
-                                local_min_thresh, base_path, verbose);
+                               local_min_thresh, sigma, nbins, base_path, verbose);
   if (verbose) {
     non_gpu_minmzr.set_actual_translation(tr);
     non_gpu_minmzr.set_actual_rotation(Rr);
   }
-  non_gpu_minmzr.set_nbins(16);
+  
   t.mark();
   vgl_rotation_3d<double> cpu_min_rot;
   double cpu_min_cost;
