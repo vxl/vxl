@@ -4,7 +4,6 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/algo/vpgl_camera_bounds.h>
 #include <vil/vil_save.h>
-#include <bvrml/bvrml_write.h>
 
 icam_view_sphere::icam_view_sphere(vgl_box_3d<double> bb, double radius)
 : view_sphere_(0), ICAM_LOCAL_MIN_THRESH_(100)
