@@ -25,6 +25,13 @@ IF(EXPAT_FOUND)
         boxm2_cache.h          boxm2_cache.cxx
         boxm2_dumb_cache.h     boxm2_dumb_cache.cxx
         boxm2_nn_cache.h       boxm2_nn_cache.cxx
+		boxm2_opencl_processor.h 	boxm2_opencl_processor.cxx
+		boxm2_cpp_processor.h  		boxm2_cpp_processor.cxx
+		boxm2_processor.h
+		boxm2_process.h
+		boxm2_opencl_process_base.h
+		boxm2_cpp_process_base.h
+		boxm2_opencl_render_process.h
        )
 
     AUX_SOURCE_DIRECTORY(Templates boxm2_sources)
