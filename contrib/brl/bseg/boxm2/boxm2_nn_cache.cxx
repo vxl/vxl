@@ -2,7 +2,7 @@
 //:
 // \file
 
-//: destructor
+//: destructor flushes the memory for currently ongoing asynchronous requests
 boxm2_nn_cache::~boxm2_nn_cache()
 {
   this->finish_async_blocks();
@@ -26,7 +26,10 @@ boxm2_nn_cache::~boxm2_nn_cache()
     //go through individual map and delete
     for (db_i = dmap.begin(); db_i != dmap.end(); ++db_i) {
       boxm2_data_base* dat = (*db_i).second;
-      if (dat) delete dat;
+      if (dat) {
+         vcl_cout<<"Deleting data: "<<dat->block_id()<<vcl_endl;
+         delete dat;
+      }
     }
   }
 }
@@ -65,15 +68,7 @@ void boxm2_nn_cache::update_block_cache(boxm2_block* blk)
   vcl_cout<<"update block cache around: "<<center<<vcl_endl;
 
   //find neighbors in x,y plane (i,j)
-  vcl_vector<boxm2_block_id> neighbor_list;
-  for (int i=-1; i<=1; ++i) {
-    for (int j=-1; j<=1; ++j) {
-      boxm2_block_id id(center.i() + i, center.j() + j, center.k());
-      if (this->is_valid_id(id) && id!=center) {
-        neighbor_list.push_back(id);
-      }
-    }
-  }
+  vcl_vector<boxm2_block_id> neighbor_list = this->get_neighbor_list(center); 
 
   // initialize new cache with existing neighbor ptrs
   vcl_map<boxm2_block_id, boxm2_block*> new_cache;
@@ -100,10 +95,10 @@ void boxm2_nn_cache::update_block_cache(boxm2_block* blk)
   for (blk_i = cached_blocks_.begin(); blk_i != cached_blocks_.end(); ++blk_i)
   {
     boxm2_block_id bid = blk_i->first;
-    boxm2_block* blk = blk_i->second;
-    if (bid != center && blk) {
+    boxm2_block* d_blk = blk_i->second;
+    if (bid != center && d_blk) {
        vcl_cout<<"deleting "<<bid<<" from cache"<<vcl_endl;
-       delete blk;
+       delete d_blk;
     }
   }
   cached_blocks_.clear();
@@ -129,6 +124,37 @@ void boxm2_nn_cache::finish_async_blocks()
     else
       if (iter->second) delete iter->second;
   }
+}
+
+
+//: helper method returns a reference to correct data map (ensures one exists)
+vcl_map<boxm2_block_id, boxm2_data_base*>& boxm2_nn_cache::cached_data_map(vcl_string prefix)
+{
+  // if map for this particular data type doesn't exist, initialize it
+  if ( cached_data_.find(prefix) == cached_data_.end() )
+  {
+    vcl_map<boxm2_block_id, boxm2_data_base*> dmap;
+    cached_data_[prefix] = dmap;
+  }  
+  
+  //grab a reference to the map of cached_data_ and return it
+  vcl_map<boxm2_block_id, boxm2_data_base*>& data_map = cached_data_[prefix]; 
+  return data_map; 
+}
+
+//: returns a list of neighbors to center
+vcl_vector<boxm2_block_id> boxm2_nn_cache::get_neighbor_list(boxm2_block_id center)
+{
+  vcl_vector<boxm2_block_id> neighbor_list;  
+  for (int i=-1; i<=1; ++i) {
+    for (int j=-1; j<=1; ++j) {
+      boxm2_block_id id(center.i() + i, center.j() + j, center.k());
+      if (this->is_valid_id(id) && id!=center) {
+        neighbor_list.push_back(id);
+      }
+    }
+  }
+  return neighbor_list;
 }
 
 //: helper method says whether or not block id is valid

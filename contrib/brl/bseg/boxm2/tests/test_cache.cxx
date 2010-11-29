@@ -25,8 +25,10 @@ void test_nn_cache()
   //init cache
   boxm2_nn_cache cache("", vgl_vector_3d<int>(2,2,2));
   
+  vcl_cout<<"loading initial BLOCK and ALPHA "<<vcl_endl;
   vul_timer t; t.mark();
-  boxm2_block* blk = cache.get_block(boxm2_block_id(0,0,0)); 
+  boxm2_block*     blk = cache.get_block(boxm2_block_id(0,0,0)); 
+  boxm2_data<BOXM2_ALPHA>* dat = cache.get_data<BOXM2_ALPHA>(boxm2_block_id(0,0,0)); 
   vcl_cout<<"cache return time: "<<t.all()<<vcl_endl;
   
   ////do some fake processing
@@ -35,10 +37,12 @@ void test_nn_cache()
   
   t.mark(); 
   blk = cache.get_block(boxm2_block_id(0,1,0)); 
+  dat = cache.get_data<BOXM2_ALPHA>(boxm2_block_id(0,1,0)); 
   vcl_cout<<"cache return time: "<<t.all()<<vcl_endl;
 
   t.mark();
   blk = cache.get_block(boxm2_block_id(1,1,0)); 
+  dat = cache.get_data<BOXM2_ALPHA>(boxm2_block_id(1,1,0)); 
   vcl_cout<<"cache return time: "<<t.all()<<vcl_endl;
   
 }

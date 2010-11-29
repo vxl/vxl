@@ -15,6 +15,12 @@
 
 //: disk level storage class.
 //  handles all of the asynchronous IO read and write requests
+//  In order to request a block from disk asynchronously use the following syntax: '
+//    boxm2_asio_mgr mgr; 
+//    mgr.load_block(dir, block_id);
+//    <continue processing other stuff>
+//    vcl_map<boxm2_block_id, boxm2_block*> mgr.get_loaded_blocks(); 
+//  now you have a pointer to newly allocated blocks
 class boxm2_asio_mgr
 {
   public:
@@ -46,10 +52,14 @@ class boxm2_asio_mgr
     // \returns a map of block pointers (completed)
     block_return_t  get_loaded_blocks();
 
-    //:
-    // \returns a map of data pointers (completed)
+    //: access completed data loads
+    // \returns a map of data pointers (specific typed pointers)
     template <boxm2_data_type data_type>
-    vcl_map<boxm2_block_id, boxm2_data<data_type>* >   get_loaded_data();
+    vcl_map<boxm2_block_id, boxm2_data<data_type>* > get_loaded_data();
+    
+    //: access completed data loads
+    // \returns a map of data pointers (generic pointers)
+    vcl_map<boxm2_block_id, boxm2_data_base*> get_loaded_data_generic(vcl_string prefix); 
 
   private:
 
@@ -75,24 +85,34 @@ class boxm2_asio_mgr
 template <boxm2_data_type data_type>
 void boxm2_asio_mgr::load_block_data(vcl_string dir, boxm2_block_id block_id)
 {
+  // if map for this particular data type doesn't exist, initialize it
+  if ( load_data_list_.find(boxm2_data_traits<data_type>::prefix()) == load_data_list_.end() )
+  {
+    vcl_map<boxm2_block_id, baio*> bmap;
+    load_data_list_[boxm2_data_traits<data_type>::prefix()] = bmap;
+  }
+  
+  //get reference to specific data map
+  vcl_map<boxm2_block_id, baio*>& data_map = load_data_list_[boxm2_data_traits<data_type>::prefix()]; 
+  
+  //create BAIO object only if this data block is not already loading
+  if ( data_map.find(block_id) == data_map.end())
+  {
     // construct filename
     vcl_string filename = dir + boxm2_data_traits<data_type>::prefix() + "_" + block_id.to_string() + ".bin";
+    vcl_cout<<"boxm2_asio_mgr:: data load requested from file:"<<filename<<vcl_endl;
 
     // get file size
-    unsigned long buflength=vul_file::size(filename);
+    unsigned long buflength = vul_file::size(filename);
 
     // allocate buffer and read to it, store aio object in list
     char * buffer = new char[buflength];
     baio* aio = new baio();
     aio->read(filename, buffer, buflength);
 
-    // if map for this particular data type doesn't exist, initialize it
-    if ( load_data_list_.find(boxm2_data_traits<data_type>::prefix()) == load_data_list_.end() )
-    {
-      vcl_map<boxm2_block_id, baio*> bmap;
-      load_data_list_[boxm2_data_traits<data_type>::prefix()] = bmap;
-    }
-    load_data_list_[boxm2_data_traits<data_type>::prefix()][block_id] = aio;
+    //store the async request
+    data_map[block_id] = aio;
+  }
 }
 
 //: creates async object that saves block
@@ -140,10 +160,10 @@ vcl_map<boxm2_block_id, boxm2_data<data_type>* > boxm2_asio_mgr::get_loaded_data
         // remove iter from the load list/delete aio
         to_delete.push_back(iter); 
         delete aio;
-        //data_list.erase(id);
       }
     }
     
+    //delete loaded entries from data list after iterating through the list
     for(int i=0; i<to_delete.size(); i++)
       data_list.erase(to_delete[i]); 
   }

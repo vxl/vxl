@@ -8,10 +8,11 @@
 class boxm2_nn_cache : boxm2_cache
 {
   public:
+    //: construct with directory and scene dimensions (blocknum)
     boxm2_nn_cache(vcl_string dir, vgl_vector_3d<int> bnum) : block_num_(bnum), scene_dir_(dir) {}
     ~boxm2_nn_cache();
 
-    //: returns block poitner to block specified by ID
+    //: returns block pointer to block specified by ID
     boxm2_block* get_block(boxm2_block_id id);
 
     //: returns data pointer to data block specified by ID
@@ -25,10 +26,20 @@ class boxm2_nn_cache : boxm2_cache
 
     //: private update block cache method
     template <boxm2_data_type T>
-    void update_data_cache(boxm2_data<T>* dat);
+    void update_data_cache(boxm2_data_base* dat);
 
     //: private helper that reads finished async jobs into the cache
     void finish_async_blocks();
+    
+    //: finish async data
+    template<boxm2_data_type T>
+    void finish_async_data();
+
+    //: helper method returns a reference to correct data map (ensures one exists)
+    vcl_map<boxm2_block_id, boxm2_data_base*>& cached_data_map(vcl_string prefix);
+
+    //: returns a list of neighbors for a given ID
+    vcl_vector<boxm2_block_id> get_neighbor_list(boxm2_block_id center);
 
     //: helper method determines if this block is
     bool is_valid_id(boxm2_block_id);
@@ -51,34 +62,104 @@ class boxm2_nn_cache : boxm2_cache
 template<boxm2_data_type T>
 boxm2_data<T>* boxm2_nn_cache::get_data(boxm2_block_id id)
 {
-#if 0
-  if ( cached_data_.find(boxm2_data_traits<T>::prefix()) != cached_data_.end() )
+  //first thing to do is to load all async requests into the cache
+  this->finish_async_data<T>();
+
+  //grab a reference to the map of cached_data_
+  vcl_map<boxm2_block_id, boxm2_data_base*>& data_map = 
+    this->cached_data_map(boxm2_data_traits<T>::prefix()); 
+
+  //then look for the block you're requesting
+  if ( data_map.find(id) != data_map.end() )
   {
-    if (cached_data_[boxm2_data_traits<T>::prefix()]->block_id() == id)
-      return (boxm2_data<T>*) cached_data_[boxm2_data_traits<T>::prefix()];
+    //congrats you've found the data block in cache, update cache and return block
+    vcl_cout<<"DATA CACHE HIT! for "<<boxm2_data_traits<T>::prefix()<<vcl_endl;
+    this->update_data_cache<T>(data_map[id]);
+    return (boxm2_data<T>*) data_map[id];
   }
 
-  //otherwise load it from disk
-  boxm2_data<T>* loaded = boxm2_sio_mgr::load_block_data<T>(scene_dir_,id);
+  //otherwise it's a miss, load sync from disk, update cache
+  vcl_cout<<"Cache miss :( for "<<boxm2_data_traits<T>::prefix()<<vcl_endl;
+  boxm2_data<T>* loaded = boxm2_sio_mgr::load_block_data<T>(scene_dir_, id);
   this->update_data_cache<T>(loaded);
   return loaded;
-#endif // 0
 }
+
 
 //: update data cache by type
 template<boxm2_data_type T>
-void boxm2_nn_cache::update_data_cache(boxm2_data<T>* dat)
+void boxm2_nn_cache::update_data_cache(boxm2_data_base* dat)
 {
-#if 0
-  vcl_map<vcl_string, boxm2_data_base* >::iterator iter;
-  iter = cached_data_.find(boxm2_data_traits<T>::prefix());
-  if ( iter != cached_data_.end() )
+  //grab a reference to the map of cached_data
+  vcl_map<boxm2_block_id, boxm2_data_base*>& data_map = 
+    this->cached_data_map(boxm2_data_traits<T>::prefix()); 
+  
+  //determine the center
+  boxm2_block_id center = dat->block_id();
+  vcl_cout<<"update block cache around: "<<center<<vcl_endl;
+
+  //find neighbors in x,y plane (i,j)
+  vcl_vector<boxm2_block_id> neighbor_list = this->get_neighbor_list(center); 
+
+  // initialize new cache with existing neighbor ptrs
+  vcl_map<boxm2_block_id, boxm2_data_base*> new_cache;
+
+  //find neighbors in the cache already, store em
+  for (unsigned int i=0; i<neighbor_list.size(); ++i)
   {
-    boxm2_data_base* old = (*iter).second;
-    if (old) delete old;
+    boxm2_block_id id = neighbor_list[i];
+
+    //if cached_blocks_ has this neighbor, add it to new cache (delete from old)
+    if ( data_map.find(id) != data_map.end() )
+    {
+      new_cache[id] = data_map[id];
+      data_map.erase(id);
+    }
+    else //send an async request for this block
+    {
+      io_mgr_.load_block_data<T>(scene_dir_, id);
+    }
   }
-  cached_data_[boxm2_data_traits<T>::prefix()] = dat;
-#endif // 0
+
+  //only non-neighbors remain in existing cache, delete em
+  vcl_map<boxm2_block_id, boxm2_data_base*>::iterator blk_i;
+  for (blk_i = data_map.begin(); blk_i != data_map.end(); ++blk_i)
+  {
+    boxm2_block_id   bid = blk_i->first;
+    boxm2_data_base* blk = blk_i->second;
+    if (bid != center && blk) {
+       vcl_cout<<"deleting "<<bid<<" from cache"<<vcl_endl;
+       delete blk;
+    }
+  }
+  data_map.clear();
+
+  //store block passed in
+  new_cache[dat->block_id()] = dat;
+
+  //swap out cache
+  data_map = new_cache;
+}
+
+//: finish async data
+template<boxm2_data_type T>
+void boxm2_nn_cache::finish_async_data()
+{
+  //grab a reference to the map of cached_data_
+  vcl_map<boxm2_block_id, boxm2_data_base*>& data_map = 
+    this->cached_data_map(boxm2_data_traits<T>::prefix()); 
+  
+  // get async block list and push it into the cache
+  vcl_map<boxm2_block_id, boxm2_data_base*> lmap = io_mgr_.get_loaded_data_generic(boxm2_data_traits<T>::prefix());
+  vcl_map<boxm2_block_id, boxm2_data_base*>::iterator iter; 
+  for (iter = lmap.begin(); iter != lmap.end(); ++iter)
+  {
+    //if this block doesn't exist in the cache put it in (otherwise delete it)
+    if ( data_map.find(iter->first) == data_map.end() )
+      data_map[iter->first] = iter->second;
+    else
+      if (iter->second) delete iter->second;
+  }
 }
 
 #endif // boxm2_nn_cache_h_

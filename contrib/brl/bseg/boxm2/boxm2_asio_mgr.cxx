@@ -21,7 +21,28 @@ boxm2_asio_mgr::~boxm2_asio_mgr()
   }
 
 
-  //flush unfinished data requests
+  ////flush unfinished data requests
+  vcl_vector<boxm2_data_base*> flush_data_list;
+  typedef vcl_map<vcl_string, vcl_map<boxm2_block_id, baio*> > data_table_t;
+  data_table_t::iterator map_i;
+  for(map_i = load_data_list_.begin(); map_i != load_data_list_.end(); ++map_i) 
+  {
+    vcl_string prefix = map_i->first; 
+    vcl_map<boxm2_block_id, baio*>& data_map = map_i->second; 
+    while (data_map.size() > 0)  {
+      typedef vcl_map<boxm2_block_id, boxm2_data_base*> data_map_t;
+      data_map_t lmap = this->get_loaded_data_generic(prefix);
+      data_map_t::iterator iter;
+      for (iter = lmap.begin(); iter != lmap.end(); ++iter)
+        flush_data_list.push_back(iter->second);
+    }
+    for (unsigned int i=0; i<flush_data_list.size(); ++i) {
+      if (flush_data_list[i]){
+          vcl_cout<<"deleting "<<flush_data_list[i]->block_id()<<vcl_endl;
+         delete flush_data_list[i];
+      }
+    }
+  }
 }
 
 //: creates a BAIO object that loads/saves block data from disk
@@ -101,5 +122,46 @@ vcl_map<boxm2_block_id, boxm2_block*> boxm2_asio_mgr::get_loaded_blocks()
   for (unsigned int i=0; i<to_delete.size(); ++i)
     load_list_.erase(to_delete[i]);
 
+  return toReturn;
+}
+
+
+
+//: generic get loaded data
+vcl_map<boxm2_block_id, boxm2_data_base*> boxm2_asio_mgr::get_loaded_data_generic(vcl_string prefix)
+{
+  vcl_map<boxm2_block_id, boxm2_data_base*> toReturn;
+
+  // see if there even exists a sub-map with this particular data_type
+  if ( load_data_list_.find(prefix) != load_data_list_.end() )
+  {
+    // iterate over map of current loads
+    vcl_map<boxm2_block_id, baio*>& data_list = load_data_list_[prefix]; //needs to be a reference
+    vcl_map<boxm2_block_id, baio*>::iterator iter;
+    vcl_vector<vcl_map<boxm2_block_id, baio*>::iterator > to_delete; 
+    for (iter=data_list.begin(); iter!=data_list.end(); ++iter)
+    {
+      // get baio object and block id
+      baio*           aio = (*iter).second;
+      boxm2_block_id  id  = (*iter).first;
+      if ( aio->status() == BAIO_FINISHED )
+      {
+        // close baio file
+        aio->close_file();
+
+        // instantiate new block
+        boxm2_data_base* dat = new boxm2_data_base(aio->buffer(), aio->buffer_size(), id);
+        toReturn[id] = dat;
+
+        // remove iter from the load list/delete aio
+        to_delete.push_back(iter); 
+        delete aio;
+      }
+    }
+    
+    //delete loaded entries from data list
+    for(int i=0; i<to_delete.size(); i++)
+      data_list.erase(to_delete[i]); 
+  }
   return toReturn;
 }
