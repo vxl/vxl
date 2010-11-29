@@ -3,10 +3,10 @@
 // \author Andy Miller
 // \date 26-Oct-2010
 #include <boxm2/boxm2_block.h>
-#include <boxm2/boxm2_dumb_cache.h>
-#include <boxm2/boxm2_nn_cache.h>
-#include <boxm2/boxm2_sio_mgr.h>
 #include <boxm2/boxm2_block_id.h>
+#include <boxm2/io/boxm2_dumb_cache.h>
+#include <boxm2/io/boxm2_nn_cache.h>
+#include <boxm2/io/boxm2_sio_mgr.h>
 #include <testlib/testlib_test.h>
 #include <testlib/testlib_root_dir.h>
 #include "test_utils.h"
@@ -18,13 +18,17 @@
 
 //: for stats
 #include <vul/vul_timer.h>
+#include <sys/time.h>
+#include <stdio.h>
+#include <unistd.h>
 
 void test_nn_cache()
 {
-    
+
   //init cache
   boxm2_nn_cache cache("", vgl_vector_3d<int>(2,2,2));
-  
+
+  //simulate a render
   vcl_cout<<"loading initial BLOCK and ALPHA "<<vcl_endl;
   vul_timer t; t.mark();
   boxm2_block*     blk = cache.get_block(boxm2_block_id(0,0,0)); 
@@ -39,6 +43,10 @@ void test_nn_cache()
   blk = cache.get_block(boxm2_block_id(0,1,0)); 
   dat = cache.get_data<BOXM2_ALPHA>(boxm2_block_id(0,1,0)); 
   vcl_cout<<"cache return time: "<<t.all()<<vcl_endl;
+  
+  ////do some fake processing
+  t.mark();
+  while(t.all() < 1000.0f) ;
 
   t.mark();
   blk = cache.get_block(boxm2_block_id(1,1,0)); 

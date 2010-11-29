@@ -8,7 +8,7 @@
 
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_block_id.h>
-#include <boxm2/boxm2_sio_mgr.h>
+#include <boxm2/io/boxm2_sio_mgr.h>
 #include <vnl/vnl_vector_fixed.h>
 
 #include <vcl_iostream.h>

@@ -4,8 +4,8 @@
 // \file
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_block_id.h>
-#include <boxm2/boxm2_asio_mgr.h>
-#include <boxm2/boxm2_sio_mgr.h>
+#include <boxm2/io/boxm2_asio_mgr.h>
+#include <boxm2/io/boxm2_sio_mgr.h>
 
 //: boxm2_cache: top level storage (abstract) class
 // - handles all block io, from both the cache/marshaller and the disk

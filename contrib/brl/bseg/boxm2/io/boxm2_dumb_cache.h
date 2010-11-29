@@ -2,7 +2,7 @@
 #define boxm2_dumb_cache_h_
 //:
 // \file
-#include <boxm2/boxm2_cache.h>
+#include <boxm2/io/boxm2_cache.h>
 
 //: boxm2_dumb_cache - example realization of abstract cache class
 class boxm2_dumb_cache : boxm2_cache
