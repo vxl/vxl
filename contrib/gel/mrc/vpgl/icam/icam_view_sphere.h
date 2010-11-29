@@ -45,9 +45,6 @@ class icam_view_sphere : public vbl_ref_count
   void set_ground_truth_cam(vpgl_camera_double_sptr const& gt_cam)
     {ground_truth_cam_ = gt_cam;}
 
-  // Writes the view points as small spheres into a vrml file
-  void vrml_write(vcl_string vrml_file);
-
   //: the mapped source image and actual destination image at a level
   void mapped_image(unsigned viewpoint_id, 
                     vil_image_view<float> const& source_img,

@@ -196,28 +196,6 @@ void icam_view_sphere::camera_transf(vpgl_perspective_camera<double> const& cam)
   }
 }
 
-
-void icam_view_sphere::vrml_write(vcl_string vrml_file)
-{
-  vcl_ofstream vrml_os(vrml_file.c_str());
-  bvrml_write::write_vrml_header(vrml_os);
-  bvrml_write::write_vrml_line(vrml_os, vgl_point_3d<double>(0,0,0), vgl_vector_3d<double>(0,0,1),7,0,0,0);
-  vsph_view_sphere<vsph_view_point<icam_view_metadata> >::iterator it=view_sphere_->begin();
-  vsph_spherical_coord_sptr c=new vsph_spherical_coord;
-  while (it != view_sphere_->end()) {
-    vsph_view_point<icam_view_metadata> vp = it->second;
-    if (!vp.metadata()) {
-      it++;
-      continue;
-    }
-    vcl_cout << it->first << vcl_endl;
-    vsph_sph_point_3d v=it->second.view_point();
-    vgl_point_3d<double> p_3d=c->cart_coord(v);
-    bvrml_write::write_vrml_sphere(vrml_os, vgl_sphere_3d<float>(p_3d.x(),p_3d.y(),p_3d.z(),0.1),0,0,1,0.1);
-    ++it;
-  }
-}
-
   //: the mapped source image and actual destination image at a level
 void icam_view_sphere::mapped_image(unsigned viewpoint_id, 
                                     vil_image_view<float> const& source_img,
