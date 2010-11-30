@@ -18,62 +18,59 @@
 
 //: for stats
 #include <vul/vul_timer.h>
-#include <sys/time.h>
-#include <stdio.h>
-#include <unistd.h>
+#include <vcl_sys/time.h>
+#include <vcl_cstdio.h>
+//#include <unistd.h>
 
 void test_nn_cache()
 {
-
   //init cache
   boxm2_nn_cache cache("", vgl_vector_3d<int>(2,2,2));
 
   //simulate a render
-  vcl_cout<<"loading initial BLOCK and ALPHA "<<vcl_endl;
+  vcl_cout<<"loading initial BLOCK and ALPHA"<<vcl_endl;
   vul_timer t; t.mark();
-  boxm2_block*     blk = cache.get_block(boxm2_block_id(0,0,0)); 
-  boxm2_data<BOXM2_ALPHA>* dat = cache.get_data<BOXM2_ALPHA>(boxm2_block_id(0,0,0)); 
+  boxm2_block*     blk = cache.get_block(boxm2_block_id(0,0,0));
+  boxm2_data<BOXM2_ALPHA>* dat = cache.get_data<BOXM2_ALPHA>(boxm2_block_id(0,0,0));
   vcl_cout<<"cache return time: "<<t.all()<<vcl_endl;
-  
+
   ////do some fake processing
   t.mark();
-  while(t.all() < 1000.0f) ;
-  
-  t.mark(); 
-  blk = cache.get_block(boxm2_block_id(0,1,0)); 
-  dat = cache.get_data<BOXM2_ALPHA>(boxm2_block_id(0,1,0)); 
-  vcl_cout<<"cache return time: "<<t.all()<<vcl_endl;
-  
-  ////do some fake processing
-  t.mark();
-  while(t.all() < 1000.0f) ;
+  while (t.all() < 1000.0f) ;
 
   t.mark();
-  blk = cache.get_block(boxm2_block_id(1,1,0)); 
-  dat = cache.get_data<BOXM2_ALPHA>(boxm2_block_id(1,1,0)); 
+  blk = cache.get_block(boxm2_block_id(0,1,0));
+  dat = cache.get_data<BOXM2_ALPHA>(boxm2_block_id(0,1,0));
   vcl_cout<<"cache return time: "<<t.all()<<vcl_endl;
-  
+
+  ////do some fake processing
+  t.mark();
+  while (t.all() < 1000.0f) ;
+
+  t.mark();
+  blk = cache.get_block(boxm2_block_id(1,1,0));
+  dat = cache.get_data<BOXM2_ALPHA>(boxm2_block_id(1,1,0));
+  vcl_cout<<"cache return time: "<<t.all()<<vcl_endl;
 }
 
 
 void test_dumb_cache()
 {
-   
   // init cache
   boxm2_dumb_cache dcache("");
-  
+
   // check a few block values
-  vgl_vector_3d<int> nums; 
-  boxm2_block* blk = dcache.get_block(boxm2_block_id(0,0,1)); 
+  vgl_vector_3d<int> nums;
+  boxm2_block* blk = dcache.get_block(boxm2_block_id(0,0,1));
   boxm2_data<BOXM2_ALPHA>* alph = dcache.get_data<BOXM2_ALPHA>(boxm2_block_id(0,0,1));
-  boxm2_data<BOXM2_MOG3_GREY>* mog = dcache.get_data<BOXM2_MOG3_GREY>(boxm2_block_id(0,0,1)); 
-  nums = blk->sub_block_num(); 
-  
+  boxm2_data<BOXM2_MOG3_GREY>* mog = dcache.get_data<BOXM2_MOG3_GREY>(boxm2_block_id(0,0,1));
+  nums = blk->sub_block_num();
+
   // get another
-  blk = dcache.get_block(boxm2_block_id(0,1,0)); 
-  alph = dcache.get_data<BOXM2_ALPHA>(boxm2_block_id(0,1,0)); 
-  mog = dcache.get_data<BOXM2_MOG3_GREY>(boxm2_block_id(0,1,0)); 
-  TEST("block carries same meta data: ", nums==blk->sub_block_num(), true); 
+  blk = dcache.get_block(boxm2_block_id(0,1,0));
+  alph = dcache.get_data<BOXM2_ALPHA>(boxm2_block_id(0,1,0));
+  mog = dcache.get_data<BOXM2_MOG3_GREY>(boxm2_block_id(0,1,0));
+  TEST("block carries same meta data:", nums==blk->sub_block_num(), true);
 }
 
 
@@ -81,10 +78,10 @@ void test_cache()
 {
   //ensure blocks 0.0.0 - 1.1.1 are saved to disk
   boxm2_test_utils::save_test_scene_to_disk();
-  
-  //test_dumb_cache(); 
+
+  //test_dumb_cache();
   test_nn_cache();
-  
+
   //clean up .bin blocks created above
   boxm2_test_utils::delete_test_scene_from_disk();
 }
