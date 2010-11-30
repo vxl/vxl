@@ -458,7 +458,8 @@ bool boxm_ocl_bit_scene::init_empty_scene()
   // 6. Go through each block (randomly) and place it in a buffer
 
   //6.a create a random 'iterator'
-  int randIndex[blocks_.size()];
+  int sizeknown=blocks_.size();
+  int * randIndex=new int[sizeknown];
   for (unsigned int i=0; i<blocks_.size(); ++i) randIndex[i] = i;
   boxm_ocl_utils::random_permutation(randIndex, blocks_.size());
 
@@ -514,6 +515,7 @@ bool boxm_ocl_bit_scene::init_empty_scene()
   }
   vcl_cout<<vcl_endl;
 
+  delete [] randIndex;
 
   //use the already existing init_scene method
   bgeo_lvcs lvcs;
