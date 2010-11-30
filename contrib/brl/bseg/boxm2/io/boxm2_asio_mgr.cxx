@@ -20,15 +20,14 @@ boxm2_asio_mgr::~boxm2_asio_mgr()
     }
   }
 
-
   ////flush unfinished data requests
   vcl_vector<boxm2_data_base*> flush_data_list;
   typedef vcl_map<vcl_string, vcl_map<boxm2_block_id, baio*> > data_table_t;
   data_table_t::iterator map_i;
-  for(map_i = load_data_list_.begin(); map_i != load_data_list_.end(); ++map_i) 
+  for (map_i = load_data_list_.begin(); map_i != load_data_list_.end(); ++map_i)
   {
-    vcl_string prefix = map_i->first; 
-    vcl_map<boxm2_block_id, baio*>& data_map = map_i->second; 
+    vcl_string prefix = map_i->first;
+    vcl_map<boxm2_block_id, baio*>& data_map = map_i->second;
     while (data_map.size() > 0)  {
       typedef vcl_map<boxm2_block_id, boxm2_data_base*> data_map_t;
       data_map_t lmap = this->get_loaded_data_generic(prefix);
@@ -37,13 +36,14 @@ boxm2_asio_mgr::~boxm2_asio_mgr()
         flush_data_list.push_back(iter->second);
     }
     for (unsigned int i=0; i<flush_data_list.size(); ++i) {
-      if (flush_data_list[i]){
-          vcl_cout<<"deleting "<<flush_data_list[i]->block_id()<<vcl_endl;
-         delete flush_data_list[i];
+      if (flush_data_list[i]) {
+        vcl_cout<<"deleting "<<flush_data_list[i]->block_id()<<vcl_endl;
+        delete flush_data_list[i];
       }
     }
   }
 }
+
 
 //: creates a BAIO object that loads/saves block data from disk
 // Make sure asio_mgr doesn't try to load a block that's already loading
@@ -65,6 +65,7 @@ void boxm2_asio_mgr::load_block(vcl_string dir, boxm2_block_id block_id)
     load_list_[block_id] = aio;
   }
 }
+
 
 //: method of saving block
 void boxm2_asio_mgr::save_block(vcl_string dir, boxm2_block* block)
@@ -126,7 +127,6 @@ vcl_map<boxm2_block_id, boxm2_block*> boxm2_asio_mgr::get_loaded_blocks()
 }
 
 
-
 //: generic get loaded data
 vcl_map<boxm2_block_id, boxm2_data_base*> boxm2_asio_mgr::get_loaded_data_generic(vcl_string prefix)
 {
@@ -138,7 +138,7 @@ vcl_map<boxm2_block_id, boxm2_data_base*> boxm2_asio_mgr::get_loaded_data_generi
     // iterate over map of current loads
     vcl_map<boxm2_block_id, baio*>& data_list = load_data_list_[prefix]; //needs to be a reference
     vcl_map<boxm2_block_id, baio*>::iterator iter;
-    vcl_vector<vcl_map<boxm2_block_id, baio*>::iterator > to_delete; 
+    vcl_vector<vcl_map<boxm2_block_id, baio*>::iterator > to_delete;
     for (iter=data_list.begin(); iter!=data_list.end(); ++iter)
     {
       // get baio object and block id
@@ -154,14 +154,14 @@ vcl_map<boxm2_block_id, boxm2_data_base*> boxm2_asio_mgr::get_loaded_data_generi
         toReturn[id] = dat;
 
         // remove iter from the load list/delete aio
-        to_delete.push_back(iter); 
+        to_delete.push_back(iter);
         delete aio;
       }
     }
-    
+
     //delete loaded entries from data list
-    for(int i=0; i<to_delete.size(); i++)
-      data_list.erase(to_delete[i]); 
+    for (unsigned int i=0; i<to_delete.size(); ++i)
+      data_list.erase(to_delete[i]);
   }
   return toReturn;
 }

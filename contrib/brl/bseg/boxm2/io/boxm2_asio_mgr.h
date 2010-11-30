@@ -16,10 +16,10 @@
 //: disk level storage class.
 //  handles all of the asynchronous IO read and write requests
 //  In order to request a block from disk asynchronously use the following syntax: '
-//    boxm2_asio_mgr mgr; 
+//    boxm2_asio_mgr mgr;
 //    mgr.load_block(dir, block_id);
 //    <continue processing other stuff>
-//    vcl_map<boxm2_block_id, boxm2_block*> mgr.get_loaded_blocks(); 
+//    vcl_map<boxm2_block_id, boxm2_block*> mgr.get_loaded_blocks();
 //  now you have a pointer to newly allocated blocks
 class boxm2_asio_mgr
 {
@@ -30,7 +30,7 @@ class boxm2_asio_mgr
     typedef vcl_map<boxm2_block_id, boxm2_data_base*>     data_ptr_list_t;
     typedef vcl_map<vcl_string, block_list_t>             data_list_t;
     typedef vcl_map<vcl_string, data_ptr_list_t >         data_return_t;
-    
+
     //: destructor
     ~boxm2_asio_mgr();
 
@@ -56,10 +56,10 @@ class boxm2_asio_mgr
     // \returns a map of data pointers (specific typed pointers)
     template <boxm2_data_type data_type>
     vcl_map<boxm2_block_id, boxm2_data<data_type>* > get_loaded_data();
-    
+
     //: access completed data loads
     // \returns a map of data pointers (generic pointers)
-    vcl_map<boxm2_block_id, boxm2_data_base*> get_loaded_data_generic(vcl_string prefix); 
+    vcl_map<boxm2_block_id, boxm2_data_base*> get_loaded_data_generic(vcl_string prefix);
 
   private:
 
@@ -91,10 +91,10 @@ void boxm2_asio_mgr::load_block_data(vcl_string dir, boxm2_block_id block_id)
     vcl_map<boxm2_block_id, baio*> bmap;
     load_data_list_[boxm2_data_traits<data_type>::prefix()] = bmap;
   }
-  
+
   //get reference to specific data map
-  vcl_map<boxm2_block_id, baio*>& data_map = load_data_list_[boxm2_data_traits<data_type>::prefix()]; 
-  
+  vcl_map<boxm2_block_id, baio*>& data_map = load_data_list_[boxm2_data_traits<data_type>::prefix()];
+
   //create BAIO object only if this data block is not already loading
   if ( data_map.find(block_id) == data_map.end())
   {
@@ -142,7 +142,7 @@ vcl_map<boxm2_block_id, boxm2_data<data_type>* > boxm2_asio_mgr::get_loaded_data
     // iterate over map of current loads
     vcl_map<boxm2_block_id, baio*>& data_list = load_data_list_[boxm2_data_traits<data_type>::prefix()]; //needs to be a reference, you idiot.
     vcl_map<boxm2_block_id, baio*>::iterator iter;
-    vcl_vector<vcl_map<boxm2_block_id, baio*>::iterator > to_delete; 
+    vcl_vector<vcl_map<boxm2_block_id, baio*>::iterator > to_delete;
     for (iter=data_list.begin(); iter!=data_list.end(); ++iter)
     {
       // get baio object and block id
@@ -158,14 +158,14 @@ vcl_map<boxm2_block_id, boxm2_data<data_type>* > boxm2_asio_mgr::get_loaded_data
         toReturn[id] = dat;
 
         // remove iter from the load list/delete aio
-        to_delete.push_back(iter); 
+        to_delete.push_back(iter);
         delete aio;
       }
     }
-    
+
     //delete loaded entries from data list after iterating through the list
-    for(int i=0; i<to_delete.size(); i++)
-      data_list.erase(to_delete[i]); 
+    for (unsigned int i=0; i<to_delete.size(); ++i)
+      data_list.erase(to_delete[i]);
   }
   return toReturn;
 }
