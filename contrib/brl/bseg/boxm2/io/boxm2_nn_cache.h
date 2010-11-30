@@ -3,6 +3,7 @@
 //:
 // \file
 #include <boxm2/io/boxm2_cache.h>
+#include <vcl_iostream.h>
 
 //: an example cache that loads in the nearest neighbors of the requested block (asynchronously)
 class boxm2_nn_cache : boxm2_cache
@@ -30,7 +31,7 @@ class boxm2_nn_cache : boxm2_cache
 
     //: private helper that reads finished async jobs into the cache
     void finish_async_blocks();
-    
+
     //: finish async data
     template<boxm2_data_type T>
     void finish_async_data();
@@ -66,8 +67,8 @@ boxm2_data<T>* boxm2_nn_cache::get_data(boxm2_block_id id)
   this->finish_async_data<T>();
 
   //grab a reference to the map of cached_data_
-  vcl_map<boxm2_block_id, boxm2_data_base*>& data_map = 
-    this->cached_data_map(boxm2_data_traits<T>::prefix()); 
+  vcl_map<boxm2_block_id, boxm2_data_base*>& data_map =
+    this->cached_data_map(boxm2_data_traits<T>::prefix());
 
   //then look for the block you're requesting
   if ( data_map.find(id) != data_map.end() )
@@ -91,15 +92,15 @@ template<boxm2_data_type T>
 void boxm2_nn_cache::update_data_cache(boxm2_data_base* dat)
 {
   //grab a reference to the map of cached_data
-  vcl_map<boxm2_block_id, boxm2_data_base*>& data_map = 
-    this->cached_data_map(boxm2_data_traits<T>::prefix()); 
-  
+  vcl_map<boxm2_block_id, boxm2_data_base*>& data_map =
+    this->cached_data_map(boxm2_data_traits<T>::prefix());
+
   //determine the center
   boxm2_block_id center = dat->block_id();
   vcl_cout<<"update block cache around: "<<center<<vcl_endl;
 
   //find neighbors in x,y plane (i,j)
-  vcl_vector<boxm2_block_id> neighbor_list = this->get_neighbor_list(center); 
+  vcl_vector<boxm2_block_id> neighbor_list = this->get_neighbor_list(center);
 
   // initialize new cache with existing neighbor ptrs
   vcl_map<boxm2_block_id, boxm2_data_base*> new_cache;
@@ -146,12 +147,12 @@ template<boxm2_data_type T>
 void boxm2_nn_cache::finish_async_data()
 {
   //grab a reference to the map of cached_data_
-  vcl_map<boxm2_block_id, boxm2_data_base*>& data_map = 
-    this->cached_data_map(boxm2_data_traits<T>::prefix()); 
-  
+  vcl_map<boxm2_block_id, boxm2_data_base*>& data_map =
+    this->cached_data_map(boxm2_data_traits<T>::prefix());
+
   // get async block list and push it into the cache
   vcl_map<boxm2_block_id, boxm2_data_base*> lmap = io_mgr_.get_loaded_data_generic(boxm2_data_traits<T>::prefix());
-  vcl_map<boxm2_block_id, boxm2_data_base*>::iterator iter; 
+  vcl_map<boxm2_block_id, boxm2_data_base*>::iterator iter;
   for (iter = lmap.begin(); iter != lmap.end(); ++iter)
   {
     //if this block doesn't exist in the cache put it in (otherwise delete it)
