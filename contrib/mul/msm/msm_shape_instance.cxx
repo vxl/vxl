@@ -83,6 +83,15 @@ const msm_points& msm_shape_instance::points()
   return points_;
 }
 
+//: Returns approximate scale of points
+//  Actually returns scale of mean after applying current pose
+double msm_shape_instance::approx_points_scale() const
+{
+  double s = model().aligner().scale(pose_);
+  return model().ref_mean_points_scale() * s;
+}
+
+
 //: Finds parameters and pose to best match to points
 //  All points equally weighted.
 //  If res_var>0, and use_prior(), then effect of

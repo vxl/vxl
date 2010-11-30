@@ -31,6 +31,9 @@ class msm_ref_shape_model
   //: Mean of shape model
   msm_points mean_;
 
+  //: Scale of mean points (=mean_.scale())
+  double mean_points_scale_;
+
   //: Modes of variation
   vnl_matrix<double> modes_;
 
@@ -56,6 +59,10 @@ class msm_ref_shape_model
 
   //: Mean of shape model as vector
   const vnl_vector<double>& mean() const { return mean_.vector(); }
+
+  //: Scale of mean points in ref. frame (=mean_.scale())
+  double ref_mean_points_scale() const { return mean_points_scale_; }
+
 
   //: Mean of shape model as points
   const msm_points& mean_points() const { return mean_; }

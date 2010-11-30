@@ -18,6 +18,7 @@
 //=======================================================================
 
 msm_ref_shape_model::msm_ref_shape_model()
+  : mean_points_scale_(0)
 {
 }
 
@@ -39,6 +40,7 @@ void msm_ref_shape_model::set(const msm_points& mean,
   assert(mean.size()*2==modes.rows());
   assert(mode_var.size()==modes.columns());
   mean_ = mean;
+  mean_points_scale_ = mean.scale();
   modes_ = modes;
   mode_var_ = mode_var;
   param_limiter_ = param_limiter;
@@ -137,6 +139,8 @@ void msm_ref_shape_model::b_read(vsl_b_istream& bfs)
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
+
+  mean_points_scale_=mean_.scale();
 }
 
 

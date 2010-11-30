@@ -83,6 +83,10 @@ class msm_shape_instance
   //: Current shape (uses lazy evaluation)
   const msm_points& points();
 
+  //: Returns approximate scale of points
+  //  Actually returns scale of mean after applying current pose
+  double approx_points_scale() const;
+
   //: Current shape in model frame (uses lazy evaluation)
   const msm_points& model_points()
   { return ref_shape_.points(); }
