@@ -20,8 +20,8 @@ IF(EXPAT_FOUND)
         boxm2_data_traits.h
         boxm2_scene_parser.h      boxm2_scene_parser.cxx
         boxm2_block_id.h          boxm2_block_id.cxx
-        boxm2_opencl_processor.h 	boxm2_opencl_processor.cxx
-        boxm2_cpp_processor.h  		boxm2_cpp_processor.cxx
+        boxm2_opencl_processor.h  boxm2_opencl_processor.cxx
+        boxm2_cpp_processor.h     boxm2_cpp_processor.cxx
         boxm2_processor.h
         boxm2_process.h
         boxm2_opencl_process_base.h
@@ -32,11 +32,11 @@ IF(EXPAT_FOUND)
     AUX_SOURCE_DIRECTORY(Templates boxm2_sources)
 
     ADD_LIBRARY(boxm2  ${boxm2_sources})
-    TARGET_LINK_LIBRARIES(boxm2 boxm2_io expatpp vpgl vgl vgl_xio vbl vsl vcl)
+    TARGET_LINK_LIBRARIES(boxm2 boxm2_io boxm2_basic expatpp vpgl vgl vgl_xio vbl vsl vcl)
 
     #basic
     subdirs(basic)
-    
+
     #io
     subdirs(io)
 
