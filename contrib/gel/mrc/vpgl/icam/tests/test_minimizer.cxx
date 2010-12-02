@@ -41,31 +41,6 @@
 #define image_nj 720
 
 template <class T>
-bool load_image(vil_image_view_base_sptr const& base_img, vil_image_view<T>*& image)
-{
-  if (base_img->pixel_format() == VIL_PIXEL_FORMAT_FLOAT) {
-    vil_image_view<float>* fimage = static_cast<vil_image_view<float>*> (base_img.ptr());
-    image = new vil_image_view<T>(base_img->ni(), base_img->nj());
-    vil_convert_cast<float,T>(*fimage, *image);
-  }
-  else if (base_img->pixel_format() == VIL_PIXEL_FORMAT_BYTE) {
-    vil_image_view<vxl_byte>* byte_image = static_cast<vil_image_view<vxl_byte>*> (base_img.ptr());
-    image = new vil_image_view<T>(base_img->ni(), base_img->nj());
-    vil_convert_cast<vxl_byte,T>(*byte_image, *image);
-  }
-  else if (base_img->pixel_format() == VIL_PIXEL_FORMAT_DOUBLE) {
-    vil_image_view<double>* img = static_cast<vil_image_view<double>*> (base_img.ptr());
-    image = new vil_image_view<T>(base_img->ni(), base_img->nj());
-    vil_convert_cast<double,T>(*img, *image);
-  }
-  else {
-    vcl_cout << "icam_register_image_process -- image type " << base_img->pixel_format() << " is not supported!" << vcl_endl;
-    return false;
-  }
-  return true;
-}
-
-template <class T>
 bool load_image(vcl_string const& path, vil_image_view<T>*& image)
 {
   vcl_cout << path.c_str() << vcl_endl;
@@ -88,56 +63,31 @@ void create_view_sphere(icam_view_sphere_sptr& view_sphere)
 static void test_minimizer()
 {
   vcl_string root_dir = testlib_root_dir();
-  vcl_vector<vcl_string> image_f, depth_f, camera_f;
+  vcl_map<unsigned int, vcl_string> images, depth_images;
+  vcl_vector<vcl_string> camera_f;
 
   // view 0 
-  image_f.push_back("C:/images/Calibration/expected142.tiff");
-  depth_f.push_back("C:/images/Calibration/depth_142.tif");
+  images[0]="C:/images/Calibration/expected142.tiff";
+  depth_images[0]="C:/images/Calibration/depth_142.tif";
   camera_f.push_back("C:/images/Calibration/camera_00142.txt");
 
   // view 1
-  image_f.push_back("C:/images/Calibration/frame_142.png");
-  depth_f.push_back("C:/images/Calibration/depth_142.tif");
+  images[1]="C:/images/Calibration/frame_142.png";
+  depth_images[1]="C:/images/Calibration/depth_142.tif";
   camera_f.push_back("C:/images/Calibration/camera_00142.txt");
 
   // view 2(the closest one)
-  image_f.push_back("C:/images/Calibration/expected142.tiff");
-  depth_f.push_back("C:/images/Calibration/depth_142.tif");
+  images[2]="C:/images/Calibration/expected142.tiff";
+  depth_images[2]="C:/images/Calibration/depth_142.tif";
   camera_f.push_back("C:/images/Calibration/camera_00142.txt");
 
   //view 3
-  image_f.push_back("C:/images/Calibration/frame_142.png");
-  depth_f.push_back("C:/images/Calibration/depth_142.tif");
+  images[3]="C:/images/Calibration/frame_142.png";
+  depth_images[3]="C:/images/Calibration/depth_142.tif";
   camera_f.push_back("C:/images/Calibration/camera_00142.txt");
 
   // source image
   vcl_string source_file = "C:/images/Calibration/frame_145.png";
-
-  // set the images to view points
-  vcl_map<unsigned, vil_image_view<float>* > images;
-  vcl_map<unsigned, vil_image_view<double>* > depth_images;
-
-  // load dest images
-  for (unsigned i=0; i<image_f.size(); i++) {
-    vil_image_view<float> *image;
-    if (load_image<float>(image_f[i], image)) {
-      images[i] = image;
-    } else {
-      vcl_cerr << "error loading image.\n";
-      return;
-    }
-  }
-  
-  //load depth images
-  for (unsigned i=0; i<depth_f.size(); i++) {    
-    vil_image_view<double> *image;
-    if (load_image<double>(depth_f[i], image)) {
-      depth_images[i] = image;
-    } else {
-      vcl_cerr << "error loading image.\n";
-      return;
-    }
-  }
 
   icam_view_sphere_sptr view_sphere;
   create_view_sphere(view_sphere);
@@ -152,10 +102,10 @@ static void test_minimizer()
   view_sphere->set_cameras(cam_map);
 
   view_sphere->set_images(images, depth_images);
-
+  icam_minimizer_params params;
   vil_image_view<float> *source_img;
   if (load_image<float>(source_file, source_img)) {
-    view_sphere->register_image(*source_img);
+    view_sphere->register_image(*source_img, params);
   }
 }
 
