@@ -17,4 +17,4 @@ ADD_LIBRARY(boxm2_basic  ${boxm2_basic_sources})
 TARGET_LINK_LIBRARIES(boxm2_basic expatpp vpgl vgl vgl_xio vbl vsl vcl baio)
 
 #tests
-#SUBDIRS(tests)
+SUBDIRS(tests)
