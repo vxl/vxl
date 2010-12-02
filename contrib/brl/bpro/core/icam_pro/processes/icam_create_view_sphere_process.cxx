@@ -28,7 +28,7 @@
 namespace icam_create_view_sphere_process_globals
 {
   // this process takes 10 inputs and 2 outputs
-  const unsigned n_inputs_ = 12;
+  const unsigned n_inputs_ = 0;
   const unsigned n_outputs_ = 2;
 }
 
@@ -38,18 +38,6 @@ bool icam_create_view_sphere_process_cons(bprb_func_process& pro)
   using namespace icam_create_view_sphere_process_globals;
   unsigned i=0;
   vcl_vector<vcl_string> input_types_(n_inputs_);
-  input_types_[i++] = "double";   // sphere elevation angle
-  input_types_[i++] = "double";   // max degrees of view points that can be apart
-  input_types_[i++] = "int";      // dimension of x of box
-  input_types_[i++] = "int";      // dimension of y of box
-  input_types_[i++] = "int";      // dimension of z of box
-  input_types_[i++] = "double";   // origin_x of the box
-  input_types_[i++] = "double";   // origin_y of the box
-  input_types_[i++] = "double";   // origin_z of the box
-  input_types_[i++] = "double";   // radius of the view sphere
-  input_types_[i++] = "unsigned"; // ni of image
-  input_types_[i++] = "unsigned"; // nj of image
-  input_types_[i++] = "vcl_string"; // the folder path to save the camera files and the txt file inluding the names
 
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "vcl_string"; // the text file that contains the paths for the view point cameras
@@ -68,18 +56,22 @@ bool icam_create_view_sphere_process(bprb_func_process& pro)
   using namespace icam_create_view_sphere_process_globals;
 
   int i=0;
-  double elevation = pro.get_input<double>(i++);
-  double view_angle = pro.get_input<double>(i++);
-  int dim_x = pro.get_input<int>(i++);
-  int dim_y = pro.get_input<int>(i++);
-  int dim_z = pro.get_input<int>(i++);
-  double orig_x = pro.get_input<double>(i++);
-  double orig_y = pro.get_input<double>(i++);
-  double orig_z = pro.get_input<double>(i++);
-  double radius = pro.get_input<double>(i++);
-  unsigned ni = pro.get_input<unsigned>(i++);
-  unsigned nj = pro.get_input<unsigned>(i++);
-  vcl_string path = pro.get_input<vcl_string>(i++);
+  double elevation,view_angle,orig_x, orig_y, orig_z, radius;
+  double dim_x, dim_y, dim_z;
+  unsigned ni,nj;
+  vcl_string path="";
+  pro.parameters()->get_value("elevation", elevation);
+  pro.parameters()->get_value("view_angle", view_angle);
+  pro.parameters()->get_value("dim_x", dim_x);
+  pro.parameters()->get_value("dim_y", dim_y);
+  pro.parameters()->get_value("dim_z", dim_z);
+  pro.parameters()->get_value("orig_x", orig_x);
+  pro.parameters()->get_value("orig_y", orig_y);
+  pro.parameters()->get_value("orig_z", orig_z);
+  pro.parameters()->get_value("radius", radius);
+  pro.parameters()->get_value("image_ni", ni);
+  pro.parameters()->get_value("image_nj", nj);
+  pro.parameters()->get_value("camera_path", path);
 
   vgl_box_3d<double> world_bb(orig_x, orig_y, orig_z, orig_x+dim_x, orig_y+dim_y, orig_z+dim_z);
   icam_view_sphere_sptr view_sphere =new icam_view_sphere(world_bb, radius);
@@ -90,12 +82,9 @@ bool icam_create_view_sphere_process(bprb_func_process& pro)
   vcl_map<unsigned, vpgl_camera_double_sptr> cameras;
   view_sphere->cameras(cameras);
 
-  // save the cameras and write the path
-  vcl_stringstream fpath;
-  fpath << path << "cameras.txt";
-  vcl_ofstream file(fpath.str().c_str());
+  vcl_ofstream file(path.c_str());
   if (!file.is_open()) {
-    vcl_cerr << "Failed to open file " << fpath.str() << '\n';
+    vcl_cerr << "Failed to open file " << path << '\n';
     return false;
   }
 
@@ -106,22 +95,22 @@ bool icam_create_view_sphere_process(bprb_func_process& pro)
     vpgl_perspective_camera<double>* pers_cam = dynamic_cast<vpgl_perspective_camera<double>*>(cam.as_pointer());
 
     vcl_stringstream cam_path;
-    cam_path << /*path << */"camera" << uid << ".txt";
+    cam_path << "camera" << uid << ".txt";
     vcl_ofstream ofs(cam_path.str().c_str());
     if (!file.is_open()) {
-      vcl_cerr << "Failed to open file " << cam_path.str() << '\n';
+      vcl_cerr << "Failed to open file " << path << '\n';
       return false;
     }
     ofs << *pers_cam;
     ofs.close();
 
-    file << uid << ' ' << cam_path.str() << vcl_endl;
+    file << uid << " " << cam_path.str() << vcl_endl;
     it++;
   }
   file.close();
 
   // return the txt file (the lidt of camera paths)
-  pro.set_output_val<vcl_string>(0, fpath.str());
+  pro.set_output_val<vcl_string>(0,path);
   pro.set_output_val<icam_view_sphere_sptr>(1, view_sphere);
   return true;
 }

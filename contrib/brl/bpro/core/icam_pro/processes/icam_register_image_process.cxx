@@ -23,6 +23,7 @@
 
 #include <icam/icam_view_sphere.h>
 #include <icam/icam_view_metadata.h>
+#include <icam/icam_minimizer_params.h>
 
 #include <vil/vil_image_view.h>
 #include <vil/vil_load.h>
@@ -34,31 +35,6 @@ namespace icam_register_image_process_globals
   // this process takes 4 inputs and 1 output
   const unsigned n_inputs_ = 4;
   const unsigned n_outputs_ = 1;
-}
-
-template <class T>
-bool load_image(vil_image_view_base_sptr const& base_img, vil_image_view<T>*& image)
-{
-  if (base_img->pixel_format() == VIL_PIXEL_FORMAT_FLOAT) {
-    vil_image_view<float>* fimage = static_cast<vil_image_view<float>*> (base_img.ptr());
-    image = new vil_image_view<T>(base_img->ni(), base_img->nj());
-    vil_convert_cast<float,T>(*fimage, *image);
-  }
-  else if (base_img->pixel_format() == VIL_PIXEL_FORMAT_BYTE) {
-    vil_image_view<vxl_byte>* byte_image = static_cast<vil_image_view<vxl_byte>*> (base_img.ptr());
-    image = new vil_image_view<T>(base_img->ni(), base_img->nj());
-    vil_convert_cast<vxl_byte,T>(*byte_image, *image);
-  }
-  else if (base_img->pixel_format() == VIL_PIXEL_FORMAT_DOUBLE) {
-    vil_image_view<double>* img = static_cast<vil_image_view<double>*> (base_img.ptr());
-    image = new vil_image_view<T>(base_img->ni(), base_img->nj());
-    vil_convert_cast<double,T>(*img, *image);
-  }
-  else {
-    vcl_cout << "icam_register_image_process -- image type " << base_img->pixel_format() << " is not supported!" << vcl_endl;
-    return false;
-  }
-  return true;
 }
 
 template <class T>
@@ -104,9 +80,27 @@ bool icam_register_image_process(bprb_func_process& pro)
   icam_view_sphere_sptr view_sphere= pro.get_input<icam_view_sphere_sptr>(i++);
   vil_image_view_base_sptr dest_image = pro.get_input<vil_image_view_base_sptr>(i++);
 
+  // get the parameters
+  double local_min_thresh,smooth_sigma, 
+    axis_search_cone_multiplier, polar_range_multiplier;
+  unsigned nbins, min_pyramid_image_size, box_reduction_k;
+  vcl_string base_path="";
+  pro.parameters()->get_value("nbins", nbins);
+  pro.parameters()->get_value("min_pyramid_image_size", min_pyramid_image_size);
+  pro.parameters()->get_value("box_reduction_k", box_reduction_k);
+  pro.parameters()->get_value("local_min_thresh", local_min_thresh);
+  pro.parameters()->get_value("smooth_sigma", smooth_sigma);
+  pro.parameters()->get_value("axis_search_cone_multiplier", axis_search_cone_multiplier);
+  pro.parameters()->get_value("polar_range_multiplier", polar_range_multiplier);
+  pro.parameters()->get_value("base_path", base_path);
+
+  // create the parameters object
+  icam_minimizer_params params(nbins,min_pyramid_image_size,box_reduction_k,axis_search_cone_multiplier,
+    polar_range_multiplier,local_min_thresh,smooth_sigma,base_path);
+
   // set the images to view points
-  vcl_map<unsigned, vil_image_view<float>* > images;
-  vcl_map<unsigned, vil_image_view<double>* > depth_images;
+  vcl_map<unsigned, vcl_string> images;
+  vcl_map<unsigned, vcl_string> depth_images;
 
   // read the image list from text files
   vcl_ifstream ifs1(exp_path.c_str());
@@ -115,34 +109,30 @@ bool icam_register_image_process(bprb_func_process& pro)
     return false;
   }
 
+  // load the view point image paths
   while (ifs1) {
     unsigned id;
     vcl_string path;
     ifs1 >> id >> path;
-    vcl_cout << id << ' ' << path << vcl_endl;
-    vil_image_view<float>* image;
-    if (load_image<float>(path, image))
-      images[id] = image;
+    images[id]=path;
   }
   ifs1.close();
 
-  // load the depth images
+  // load the depth image path
   vcl_ifstream ifs2(depth_path.c_str());
   while (ifs2) {
     unsigned id;
     vcl_string path;
     ifs2 >> id >> path;
-    vil_image_view<double>* image;
-    if (load_image<double>(path, image))
-      depth_images[id] = image;
+    depth_images[id]=path;
   }
   ifs2.close();
 
   view_sphere->set_images(images, depth_images);
 
-  vil_image_view<float>* dest_img;
+  vil_image_view<float> *dest_img;
   if (load_image<float>(dest_image, dest_img)) {
-    view_sphere->register_image(*dest_img);
+    view_sphere->register_image(*dest_img,params);
 
     vpgl_camera_double_sptr cam = new vpgl_perspective_camera<double>();
     pro.set_output_val<vpgl_camera_double_sptr>(0, cam);
