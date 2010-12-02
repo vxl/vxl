@@ -33,6 +33,7 @@
 #include <icam/icam_depth_transform.h>
 #include <icam/icam_depth_trans_pyramid.h>
 #include <icam/icam_cost_func.h>
+#include <icam/icam_minimizer_params.h>
 
 //: Minimize registration error at multiple scales
 class icam_minimizer
@@ -42,27 +43,13 @@ class icam_minimizer
   icam_minimizer( const vil_image_view<float>& source_img,
                   const vil_image_view<float>& dest_img,
                   const icam_depth_transform& dt,
-                  unsigned min_level_size = 16,
-                  unsigned box_reduction_k = 2,
-                  double axis_search_cone_multiplier = 10.0,
-                  double polar_range_multiplier = 2.0,
-                  double local_min_thresh = 0.05,
-                  double smooth_sigma = 1.0,
-                  unsigned nbins = 16,
-                  vcl_string const& base_path = "",
+                  icam_minimizer_params const& params,
                   bool verbose=false);
 
   //: Constructor, when source image is not known yet
   icam_minimizer(const vil_image_view<float>& dest_img,
                  const icam_depth_transform& dt,
-                 unsigned min_level_size = 16,
-                 unsigned box_reduction_k = 2,
-                 double axis_search_cone_multiplier = 10.0,
-                 double polar_range_multiplier = 2.0,
-                 double local_min_thresh = 0.05,
-                 double smooth_sigma = 1.0,
-                 unsigned nbins = 16,
-                 vcl_string const& base_path = "",
+                 icam_minimizer_params const& params,
                  bool verbose=false);
 
   //: number of pyramid levels
@@ -266,12 +253,14 @@ bool  pyramid_camera_search(vgl_vector_3d<double> const&
   // |< --initial step delta --->|
   void reduce_search_box(vgl_vector_3d<double> const& center_trans,
                          vgl_vector_3d<double> const& initial_step_delta);
-  unsigned box_reduction_k_;//defined above
-  double axis_search_cone_multiplier_;
-  double polar_range_multiplier_;
+
+  icam_minimizer_params params_;
+  //unsigned box_reduction_k_;//defined above
+  //double axis_search_cone_multiplier_;
+  //double polar_range_multiplier_;
   bool cam_search_valid_;
-  double local_min_thresh_;
-  double smooth_sigma_;
+  //double local_min_thresh_;
+  //double smooth_sigma_;
   vgl_vector_3d<double> box_origin_;
   vgl_vector_3d<double> step_delta_;
   vbl_array_3d<double> box_scores_;
@@ -279,13 +268,13 @@ bool  pyramid_camera_search(vgl_vector_3d<double> const&
   vil_pyramid_image_view<float> source_pyramid_;
   vil_pyramid_image_view<float> dest_pyramid_;
   icam_depth_trans_pyramid dt_pyramid_;
-  unsigned min_level_size_;
+  //unsigned min_level_size_;
   double end_error_;
   vcl_string base_path_;
   bool verbose_;
   vgl_vector_3d<double> actual_trans_;
   vgl_rotation_3d<double> actual_rot_;
-  unsigned nbins_;
+  //unsigned nbins_;
 };
 
 #endif // icam_minimizer_h_

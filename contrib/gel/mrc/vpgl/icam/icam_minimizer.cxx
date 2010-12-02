@@ -58,30 +58,13 @@ static bool smallest_local_minima(vbl_array_3d<double> const& in,
 icam_minimizer::icam_minimizer( const vil_image_view<float>& source_img,
                                 const vil_image_view<float>& dest_img,
                                 const icam_depth_transform& dt,
-                                unsigned min_level_size,
-                                unsigned box_reduction_k,
-                                double axis_search_cone_multiplier,
-                                double polar_range_multiplier,
-                                double local_min_thresh,
-                                double smooth_sigma,
-                                unsigned nbins,
-                                vcl_string const& base_path,
+                                icam_minimizer_params const& params,
                                 bool verbose)
-  : box_reduction_k_(box_reduction_k),
-    axis_search_cone_multiplier_(axis_search_cone_multiplier),
-    polar_range_multiplier_(polar_range_multiplier),
-    cam_search_valid_(false),
-    local_min_thresh_(local_min_thresh),
-    smooth_sigma_(smooth_sigma),
-    min_level_size_(min_level_size),
-    end_error_(0.0),
-    base_path_(base_path),
-    verbose_(verbose),
-    nbins_(nbins)
+  : params_(params), cam_search_valid_(false), end_error_(0.0), verbose_(verbose)
 {
   unsigned n_levels =
     icam_depth_trans_pyramid::required_levels(dest_img.ni(), dest_img.nj(),
-                                              min_level_size);
+                                              params_.min_level_size_);
 
   vil_image_view_base_sptr source_sptr =
     new vil_image_view<float>(source_img);
@@ -93,30 +76,13 @@ icam_minimizer::icam_minimizer( const vil_image_view<float>& source_img,
 
 icam_minimizer::icam_minimizer(const vil_image_view<float>& dest_img,
                                const icam_depth_transform& dt,
-                               unsigned min_level_size,
-                               unsigned box_reduction_k,
-                               double axis_search_cone_multiplier,
-                               double polar_range_multiplier,
-                               double local_min_thresh,
-                               double smooth_sigma,
-                               unsigned nbins,
-                               vcl_string const& base_path,
+                               icam_minimizer_params const& params,
                                bool verbose)
-  : box_reduction_k_(box_reduction_k),
-    axis_search_cone_multiplier_(axis_search_cone_multiplier),
-    polar_range_multiplier_(polar_range_multiplier),
-    cam_search_valid_(false),
-    local_min_thresh_(local_min_thresh),
-    smooth_sigma_(smooth_sigma),
-    min_level_size_(min_level_size),
-    end_error_(0.0),
-    base_path_(base_path),
-    verbose_(verbose),
-    nbins_(nbins)
+ : params_(params), cam_search_valid_(false), end_error_(0.0), verbose_(verbose)
 {
   unsigned n_levels =
     icam_depth_trans_pyramid::required_levels(dest_img.ni(), dest_img.nj(),
-                                              min_level_size);
+                                              params_.min_level_size_);
   vil_image_view_base_sptr dest_sptr = new vil_image_view<float>(dest_img);
   dest_pyramid_=vil_pyramid_image_view<float>(dest_sptr,n_levels);
   dt_pyramid_ =
@@ -125,15 +91,7 @@ icam_minimizer::icam_minimizer(const vil_image_view<float>& dest_img,
 
 void icam_minimizer::print_params()
 {
-  vcl_cout << "====== Minimizer Parameters =======\n"
-           << "min pyramid dimension " << min_level_size_ << '\n'
-           << "trans box reduction "   << box_reduction_k_ << '\n'
-           << "axis_search_mulitplier " << axis_search_cone_multiplier_ << '\n'
-           << "polar_searh_multiplier " << polar_range_multiplier_ << '\n'
-           << "local_min_thresh " << local_min_thresh_ << '\n'
-           << "smooth sigma " << smooth_sigma_ << '\n'
-           << "histogram bins " << nbins_ << '\n'
-           << "===================================\n";
+  params_.print();
 }
 
 void icam_minimizer::set_source_img(const vil_image_view<float>& source_img)
@@ -151,14 +109,14 @@ icam_cost_func icam_minimizer::cost_fn(unsigned level)
   vil_image_view<float> dest_sm(dest.ni(), dest.nj());
 #if 1
   vil_gauss_filter_5tap(source,source_sm,
-                        vil_gauss_filter_5tap_params(smooth_sigma_));
+                        vil_gauss_filter_5tap_params(params_.smooth_sigma_));
   vil_gauss_filter_5tap(dest,dest_sm,
-                        vil_gauss_filter_5tap_params(smooth_sigma_));
+                        vil_gauss_filter_5tap_params(params_.smooth_sigma_));
 
   return icam_cost_func(source_sm,
                         dest_sm,dt_pyramid_.depth_trans(level,
-                                                        true, smooth_sigma_),
-                        nbins_);
+                                                        true, params_.smooth_sigma_),
+                        params_.nbins_);
 #endif
 }
 
@@ -183,7 +141,7 @@ icam_minimizer:: minimize(vgl_rotation_3d<double>& rot,
     vil_gauss_filter_5tap(source,source_sm,vil_gauss_filter_5tap_params(2));
     vil_gauss_filter_5tap(dest,dest_sm,vil_gauss_filter_5tap_params(2));
     icam_cost_func cost(source_sm, dest_sm, dt_pyramid_.depth_trans(L),
-                        nbins_);
+                        params_.nbins_);
 #endif
     // no masks
     icam_cost_func cost = cost_fn(L);
@@ -241,9 +199,9 @@ exhaustive_rotation_search(vgl_vector_3d<double> const& trans,
   principal_ray_scan prs = this->pray_scan(level, n_rays);
   double polar_range = vnl_math::pi;
   double plar_inc = this->polar_inc(level, npsteps, polar_range);
-  vcl_cout << "Searching over "
+ /* vcl_cout << "Searching over "
            << static_cast<unsigned>(n_rays*npsteps)
-           << " rotations\n" << vcl_flush;
+           << " rotations\n" << vcl_flush;*/
 
   vnl_vector_fixed<double,3> min_rod;
   icam_cost_func cost = this->cost_fn(level);
@@ -295,7 +253,7 @@ initialized_pray_scan(unsigned initial_level, unsigned search_level,
     pixel_solid_angle(sdcam, search_pixel_cone_ang,
                       search_pixel_solid_ang);
 
-  double search_space_cone_ang = axis_search_cone_multiplier_*initial_pixel_cone_ang;
+  double search_space_cone_ang = params_.axis_search_cone_multiplier_*initial_pixel_cone_ang;
 
   double search_space_solid_ang =
     vpgl_camera_bounds::solid_angle(search_space_cone_ang);
@@ -318,7 +276,7 @@ void icam_minimizer::initialized_polar_inc(unsigned initial_level,
   double initial_polar_inc = vpgl_camera_bounds::rotation_angle_interval(idcam);
   polar_inc =
     vpgl_camera_bounds::rotation_angle_interval(sdcam);
-  polar_range = polar_range_multiplier_*initial_polar_inc;
+  polar_range = params_.polar_range_multiplier_*initial_polar_inc;
   nsteps = static_cast<unsigned>(polar_range/polar_inc);
   // nsteps must be even to include ang = 0.0
   if (nsteps%2) nsteps++;
@@ -346,10 +304,10 @@ initialized_rot_search(vgl_vector_3d<double> const& trans,
     this->initialized_pray_scan(initial_level, search_level, naxis_steps);
   this->initialized_polar_inc(initial_level, search_level,
                               npolar_steps, polar_range, polar_inc);
-  if (verbose_)
+  /*if (verbose_)
     vcl_cout << "Searching over "
              << static_cast<unsigned>(naxis_steps*npolar_steps)
-             << " rotations\n" << vcl_flush;
+             << " rotations\n" << vcl_flush;*/
   unsigned n_succ = 0;
   min_overlap_fraction = 0.0;
   min_cost = vnl_numeric_traits<double>::maxval;
@@ -545,11 +503,11 @@ reduce_search_box(vgl_vector_3d<double> const& center_trans,
   double xc = center_trans.x(),
          yc = center_trans.y(),
          zc = center_trans.z();
-  unsigned m = 2*box_reduction_k_;
+  unsigned m = 2*params_.box_reduction_k_;
   unsigned n = m+1;//total number of search steps
   double dx = exf*initial_step_delta.x()/m,
          dy = exf*initial_step_delta.y()/m, dz = exf*initial_step_delta.z()/m;
-  double off = box_reduction_k_;
+  double off = params_.box_reduction_k_;
   // center the input translation
   box_origin_.set(xc-off*dx, yc-off*dy, zc-off*dz);
   step_delta_.set(dx, dy, dz);
@@ -647,7 +605,7 @@ pyramid_camera_search(vgl_vector_3d<double> const&
 #endif
 
     int mx = -1, my = -1, mz = -1;
-    if (this->smallest_local_minimum(local_min_thresh_, smallest_min,
+    if (this->smallest_local_minimum(params_.local_min_thresh_, smallest_min,
                                      smallest_min_trans,
                                      smallest_min_rot,
                                      mx, my, mz)) {
@@ -747,7 +705,7 @@ camera_search( vgl_box_3d<double> const& trans_box,
   vgl_vector_3d<double> smallest_min_trans;
   vgl_rotation_3d<double> smallest_min_rot;
   int mx=-1, my=-1, mz=-1;
-  if (this->smallest_local_minimum(local_min_thresh_, smallest_min,
+  if (this->smallest_local_minimum(params_.local_min_thresh_, smallest_min,
                                    smallest_min_trans,
                                    smallest_min_rot,
                                    mx, my, mz))
@@ -842,7 +800,7 @@ vcl_vector<vil_image_view<float> > icam_minimizer::views(vgl_rotation_3d<double>
   {
     params[param_index] = p;
     dt_pyramid_.set_params(params);
-    icam_depth_transform dt = dt_pyramid_.depth_trans(level,true,smooth_sigma_);
+    icam_depth_transform dt = dt_pyramid_.depth_trans(level,true,params_.smooth_sigma_);
     vil_image_view<float> trans_view, mask;
     icam_sample::resample(source.ni(), source.nj(), source,
                           dt, trans_view, mask, n_samples);
@@ -857,7 +815,7 @@ vil_image_view<float> icam_minimizer::view(vgl_rotation_3d<double>& rot,
 {
   dt_pyramid_.set_rotation(rot);
   dt_pyramid_.set_translation(trans);
-  icam_depth_transform dt = dt_pyramid_.depth_trans(level, true, smooth_sigma_);
+  icam_depth_transform dt = dt_pyramid_.depth_trans(level, true, params_.smooth_sigma_);
   vil_image_view<float>& source = source_pyramid_(level);
   vil_image_view<float> trans_view, mask;
   unsigned n_samples;
@@ -873,7 +831,7 @@ vil_image_view<float> icam_minimizer::mask(vgl_rotation_3d<double>& rot,
 {
   dt_pyramid_.set_rotation(rot);
   dt_pyramid_.set_translation(trans);
-  icam_depth_transform dt = dt_pyramid_.depth_trans(level, true, smooth_sigma_);
+  icam_depth_transform dt = dt_pyramid_.depth_trans(level, true, params_.smooth_sigma_);
   vil_image_view<float>& source = source_pyramid_(level);
   vil_image_view<float> trans_view, mask;
   unsigned n_samples;
@@ -981,7 +939,7 @@ bool icam_minimizer::box_search_vrml(vcl_string const& vrml_file,
         else
           s = 0.5;
         // map s using a more rapid scale, e.g. 0.05
-        double den = 1.0 + vcl_exp(-0.5*s/local_min_thresh_);
+        double den = 1.0 + vcl_exp(-0.5*s/params_.local_min_thresh_);
         double ss = 2.0/den -1.0;
         vgl_point_3d<double> pt(x, y, z);
         double r = radius*(0.1 + 0.9*ss);
@@ -996,7 +954,7 @@ bool icam_minimizer::box_search_vrml(vcl_string const& vrml_file,
   write_vrml_sphere(str, act, radius, 1.0, 0.0, 1.0, 0.0f);
   double min_cost;
   int ix_min = 0, iy_min =0, iz_min = 0;
-  bool found = smallest_local_minima(box_scores_, local_min_thresh_,
+  bool found = smallest_local_minima(box_scores_, params_.local_min_thresh_,
                                      ix_min, iy_min, iz_min, min_cost);
   if (found) {
     // convert to translation
@@ -1082,7 +1040,7 @@ void icam_minimizer::print_axis_search_info(unsigned level,
                       pixel_solid_ang);
   double search_cone_ang = image_cone_ang;
   if (!top_level)
-    search_cone_ang = pixel_cone_ang*axis_search_cone_multiplier_;
+    search_cone_ang = pixel_cone_ang*params_.axis_search_cone_multiplier_;
   double act_ang = vpgl_camera_bounds::angle_between_rays(init, actual);
   vcl_cout << " axis cone search space angle " << search_cone_ang
            << " angle between actual and initial axes " << act_ang << " >\n";
@@ -1095,7 +1053,7 @@ void icam_minimizer::print_polar_search_info(unsigned level, vgl_rotation_3d<dou
   vpgl_perspective_camera<double> idcam =
     this->dest_cam(level);
   double polar_inc = vpgl_camera_bounds::rotation_angle_interval(idcam);
-  double polar_range = polar_range_multiplier_*polar_inc/2.0;
+  double polar_range = params_.polar_range_multiplier_*polar_inc/2.0;
   // if top level
   if (top_level)
     polar_range = vnl_math::pi;

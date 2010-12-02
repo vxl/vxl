@@ -5,6 +5,7 @@ INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc/vpgl ${BRL_INCLUDE_DIR}/bbas )
 SET(icam_sources
     icam_cost_func.cxx         icam_cost_func.h
     icam_minimizer.cxx         icam_minimizer.h
+    icam_minimizer_params.h
     icam_utils.h               icam_utils.cxx
     icam_depth_transform.h     icam_depth_transform.cxx
     icam_depth_trans_pyramid.h icam_depth_trans_pyramid.cxx

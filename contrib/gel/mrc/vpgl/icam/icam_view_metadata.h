@@ -15,8 +15,10 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_least_squares_function.h>
 #include <vil/vil_image_view.h>
+#include <vil/vil_convert.h>
 #include "icam_depth_transform.h"
 #include "icam_minimizer.h"
+#include "icam_minimizer_params.h"
 #include <vcl_iostream.h>
 
 //: A class to hold image information of a viewpoint
@@ -27,24 +29,27 @@ class icam_view_metadata
    //: default constructor
    icam_view_metadata(){}
 
-   icam_view_metadata(vil_image_view<float> const& exp_img,
-                      vil_image_view<double> const& depth_img,
-                      icam_depth_transform const& dt);
+   icam_view_metadata(vcl_string const& exp_img,
+                      vcl_string const& dt_path);
 
-   ~icam_view_metadata() { if (minimizer_) delete minimizer_; }
+   ~icam_view_metadata(){}
 
-   virtual void register_image(vil_image_view<float> const& source_img);
+   virtual void register_image(vil_image_view<float> const& source_img, 
+     vpgl_camera_double_sptr camera, icam_minimizer_params const& params);
 
-   virtual void refine_camera();
+   virtual void refine_camera(vil_image_view<float> const& source_img, 
+     vpgl_camera_double_sptr camera, 
+     icam_minimizer_params const& params);
 
    double cost() { return cost_; }
 
    //: for debug purposes
-   void mapped_image(vil_image_view<float> const& source_img,
+   /*void mapped_image(vil_image_view<float> const& source_img,
                      vgl_rotation_3d<double>& rot,
                      vgl_vector_3d<double>& trans, unsigned level,
                      vil_image_view<float>& act_dest,
-                     vil_image_view<float>& mapped_dest);
+                     vil_image_view<float>& mapped_dest,
+                     icam_minimizer_params const& params);*/
 
    void print(vcl_ostream& os) const { os << "icam_view_metadata:" << vcl_endl; }
 
@@ -54,21 +59,48 @@ class icam_view_metadata
 
    inline short version() const { return 1; }
 
-   icam_minimizer* minimizer() {return minimizer_;}
-
  private:
-   //: solver for the registration
-   icam_minimizer* minimizer_;
+   vcl_string exp_img_path_;
+   vcl_string depth_img_path_;
    vgl_vector_3d<double> min_trans_;
    vgl_rotation_3d<double> min_rot_;
    double cost_;
    unsigned final_level_;
+
+   void create_minimizer(vil_image_view<float>*& exp_img, vil_image_view<double>*& depth_img,
+                         vpgl_camera_double_sptr camera, icam_minimizer_params const& params,
+                         icam_minimizer*& minimizer);
 };
 
 
 vcl_ostream& operator<<(vcl_ostream& os, icam_view_metadata const& p);
 void vsl_b_read(vsl_b_istream& is, icam_view_metadata& p);
 void vsl_b_write(vsl_b_ostream& os, icam_view_metadata const& p);
+
+template <class T>
+bool load_image(vil_image_view_base_sptr const& base_img, vil_image_view<T>*& image)
+{
+  if (base_img->pixel_format() == VIL_PIXEL_FORMAT_FLOAT) {
+    vil_image_view<float>* fimage = static_cast<vil_image_view<float>*> (base_img.ptr());
+    image = new vil_image_view<T>(base_img->ni(), base_img->nj());
+    vil_convert_cast<float,T>(*fimage, *image);
+  }
+  else if (base_img->pixel_format() == VIL_PIXEL_FORMAT_BYTE) {
+    vil_image_view<vxl_byte>* byte_image = static_cast<vil_image_view<vxl_byte>*> (base_img.ptr());
+    image = new vil_image_view<T>(base_img->ni(), base_img->nj());
+    vil_convert_cast<vxl_byte,T>(*byte_image, *image);
+  }
+  else if (base_img->pixel_format() == VIL_PIXEL_FORMAT_DOUBLE) {
+    vil_image_view<double>* img = static_cast<vil_image_view<double>*> (base_img.ptr());
+    image = new vil_image_view<T>(base_img->ni(), base_img->nj());
+    vil_convert_cast<double,T>(*img, *image);
+  }
+  else {
+    vcl_cout << "icam_register_image_process -- image type " << base_img->pixel_format() << " is not supported!" << vcl_endl;
+    return false;
+  }
+  return true;
+}
 
 #endif // icam_view_metadata_h_
 

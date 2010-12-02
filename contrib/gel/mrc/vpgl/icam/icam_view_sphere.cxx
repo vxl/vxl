@@ -49,14 +49,14 @@ void icam_view_sphere::set_cameras(vcl_map<unsigned, vpgl_camera_double_sptr> co
 }
 
 //: sets the images and depth images, associated with the view point id
-void icam_view_sphere::set_images(vcl_map<unsigned, vil_image_view<float>*>& images,
-                                  vcl_map<unsigned,vil_image_view<double>*>& depth_images)
+void icam_view_sphere::set_images(vcl_map<unsigned, vcl_string>& images,
+                                  vcl_map<unsigned, vcl_string>& depth_images)
 {
-  vcl_map<unsigned, vil_image_view<float>*>::iterator it_imgs=images.begin();
-  vcl_map<unsigned, vil_image_view<double>*>::iterator it_depths=depth_images.begin();
+  vcl_map<unsigned, vcl_string>::iterator it_imgs=images.begin();
+  vcl_map<unsigned, vcl_string>::iterator it_depths=depth_images.begin();
   while (it_imgs != images.end()) {
     unsigned uid = it_imgs->first;
-    if (images[uid]) {
+    if (images[uid].size()>0) {
       // make sure that there is a corresponding depth image
       if (depth_images.find(uid) != depth_images.end()) {
         vsph_view_point<icam_view_metadata>* vp;
@@ -65,11 +65,7 @@ void icam_view_sphere::set_images(vcl_map<unsigned, vil_image_view<float>*>& ima
           vpgl_camera_double_sptr camera=vp->camera();
           vpgl_perspective_camera<double>* cam = dynamic_cast<vpgl_perspective_camera<double>*> (camera.as_pointer());
           if (cam) {
-            vnl_matrix_fixed<double, 3, 3> K = cam->get_calibration().get_matrix();
-            vgl_rotation_3d<double> rot=cam->get_rotation();
-            vgl_vector_3d<double> t=cam->get_translation();
-            icam_depth_transform dt(K, *depth_images[uid], rot, t);
-            icam_view_metadata* data = new icam_view_metadata(*images[uid],*depth_images[uid],dt);
+            icam_view_metadata* data = new icam_view_metadata(images[uid],depth_images[uid]);
             vp->set_metadata(data);
           }
         }
@@ -81,7 +77,8 @@ void icam_view_sphere::set_images(vcl_map<unsigned, vil_image_view<float>*>& ima
   }
 }
 
-void icam_view_sphere::register_image(vil_image_view<float> const& dest_img)
+void icam_view_sphere::register_image(vil_image_view<float> const& dest_img,
+                                      icam_minimizer_params const& params)
 {
   // try to find the best camera at each view point and at the end we will
   // have errors to compare on the view sphere
@@ -91,8 +88,9 @@ void icam_view_sphere::register_image(vil_image_view<float> const& dest_img)
     vsph_view_point<icam_view_metadata> vp = it->second;
     icam_view_metadata* data=vp.metadata();
     if (data){
+      vpgl_camera_double_sptr camera=vp.camera();
       vcl_cout << "Evaluating viewpoint " << index << '\n';
-      data->register_image(dest_img);
+      data->register_image(dest_img, camera, params);
     }
     it++; index++;
   }
@@ -114,16 +112,16 @@ void icam_view_sphere::register_image(vil_image_view<float> const& dest_img)
       dynamic_cast<vpgl_perspective_camera<double>* >(ground_truth_cam_.as_pointer());
     if(gt_cam){
       vpgl_perspective_camera<double>* cam = (vpgl_perspective_camera<double>*)local_min[i].camera().as_pointer();
-    vgl_rotation_3d<double> rel_rot;
-    vgl_vector_3d<double> rel_trans;
-    vpgl_camera_bounds::relative_transf(*gt_cam, *cam,rel_rot,rel_trans);
-    vcl_cout <<"***************************************" << vcl_endl;
-    vcl_cout << "Rel Rot=" << rel_rot << vcl_endl;
-    vcl_cout << "Rel trans=" << rel_trans << vcl_endl;
-    vcl_cout <<"***************************************" << vcl_endl;
+      vgl_rotation_3d<double> rel_rot;
+      vgl_vector_3d<double> rel_trans;
+      vpgl_camera_bounds::relative_transf(*gt_cam, *cam,rel_rot,rel_trans);
+      vcl_cout <<"***************************************" << vcl_endl;
+      vcl_cout << "Rel Rot=" << rel_rot << vcl_endl;
+      vcl_cout << "Rel trans=" << rel_trans << vcl_endl;
+      vcl_cout <<"***************************************" << vcl_endl;
     }
     icam_view_metadata* md = local_min[i].metadata();
-    md->refine_camera();
+    md->refine_camera(dest_img, local_min[i].camera(),params);
     if (md->cost() < cam_cost) {
       cam_cost = md->cost();
       idx = i;
@@ -196,21 +194,22 @@ void icam_view_sphere::camera_transf(vpgl_perspective_camera<double> const& cam)
 }
 
   //: the mapped source image and actual destination image at a level
-void icam_view_sphere::mapped_image(unsigned viewpoint_id, 
+/*void icam_view_sphere::mapped_image(unsigned viewpoint_id, 
                                     vil_image_view<float> const& source_img,
                                     vgl_rotation_3d<double>& rot,
                                     vgl_vector_3d<double>& trans, 
                                     unsigned level,
                                     vil_image_view<float>& act_dest,
-                                    vil_image_view<float>& mapped_dest)
+                                    vil_image_view<float>& mapped_dest,
+                                    icam_minimizer_params const& params)
 {
   vsph_view_point<icam_view_metadata>* vp;
   if(view_sphere_->view_point(viewpoint_id, vp)){ 
   icam_view_metadata* data=vp->metadata();
   if (data)
-    data->mapped_image(source_img, rot, trans, level, act_dest, mapped_dest);
+    data->mapped_image(source_img, rot, trans, level, act_dest, mapped_dest, params);
   }
-}
+}*/
 
 void icam_view_sphere::b_read(vsl_b_istream &is)
 {

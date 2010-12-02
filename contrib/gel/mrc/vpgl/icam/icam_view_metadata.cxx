@@ -1,65 +1,86 @@
 #include "icam_view_metadata.h"
 
 #include <vgl/vgl_box_3d.h>
-#include <vil/vil_save.h>
+#include <vil/vil_load.h>
 
-icam_view_metadata::icam_view_metadata(vil_image_view<float> const& exp_img,
-                                       vil_image_view<double> const& depth_img,
-                                       icam_depth_transform const& dt)
+
+icam_view_metadata::icam_view_metadata(vcl_string const& exp_img,
+                                       vcl_string const& dt)
+                                       : exp_img_path_(exp_img),depth_img_path_(dt)                              
 { 
-  
-  unsigned nbins = 16;
-  unsigned min_pyramid_image_size = 16;
-  unsigned box_reduction_k = 2;
-  double local_min_thresh = 0.005;
-  double smooth_sigma = 1.0;
-  double axis_search_cone_multiplier = 10.0;
-  double polar_range_multiplier = 2.0;
-  bool verbose = true;
-  vcl_string base_path = "";
-
-  minimizer_=new icam_minimizer(exp_img, dt, min_pyramid_image_size, 
-                                box_reduction_k, axis_search_cone_multiplier, 
-                                polar_range_multiplier, local_min_thresh, 
-                                smooth_sigma, nbins,
-                                base_path, verbose); 
-  final_level_ = minimizer_->n_levels() - 3;
 }
 
-void icam_view_metadata::register_image(vil_image_view<float> const& source_img)
+void icam_view_metadata::create_minimizer(vil_image_view<float>*& exp_img, vil_image_view<double>*& depth_img,
+                                          vpgl_camera_double_sptr camera, icam_minimizer_params const& params,
+                                          icam_minimizer*& minimizer)
 {
-  // set the source to the minimizer
-  minimizer_->set_source_img(source_img);
+  vil_image_view_base_sptr exp=vil_load(exp_img_path_.c_str());
+  vil_image_view_base_sptr depth=vil_load(depth_img_path_.c_str());
+  if (load_image<float>(exp, exp_img) && load_image(depth, depth_img))  {
+    vpgl_perspective_camera<double>* cam = dynamic_cast<vpgl_perspective_camera<double>*> (camera.as_pointer());
+    if (cam) {
+      vnl_matrix_fixed<double, 3, 3> K = cam->get_calibration().get_matrix();
+      vgl_rotation_3d<double> rot=cam->get_rotation();
+      vgl_vector_3d<double> t=cam->get_translation();
+      icam_depth_transform dt(K, *depth_img, rot, t);
+      minimizer=new icam_minimizer (*exp_img, dt, params, false); 
+    }
+  }
+}
 
-  // take the coarsest level
-  unsigned level = minimizer_->n_levels()-1;
+void icam_view_metadata::register_image(vil_image_view<float> const& source_img,
+                                        vpgl_camera_double_sptr camera, 
+                                        icam_minimizer_params const& params)
+{ 
+  // create the images
+  vil_image_view<float> *exp_img=0;
+  vil_image_view<double> *depth_img=0;
+  icam_minimizer* minimizer;
+  create_minimizer(exp_img,depth_img,camera,params,minimizer);
+  if (minimizer) {
+    final_level_ = minimizer->n_levels() - 4;
 
-  // return params
-  vgl_box_3d<double> trans_box;
-  trans_box.add(vgl_point_3d<double>(-.5, -.5, -.5));
-  trans_box.add(vgl_point_3d<double>(.5, .5, .5));
-  vgl_vector_3d<double> trans_steps(0.5, 0.5, 0.5);
-  double min_allowed_overlap = 0.5, min_overlap;
-  minimizer_->exhaustive_camera_search(trans_box,trans_steps,level,
+    // set the source to the minimizer
+    minimizer->set_source_img(source_img);
+
+    // take the coarsest level
+    unsigned level = minimizer->n_levels()-1;
+        
+    // return params
+    vgl_box_3d<double> trans_box;
+    trans_box.add(vgl_point_3d<double>(-.5, -.5, -.5));
+    trans_box.add(vgl_point_3d<double>(.5, .5, .5));
+    vgl_vector_3d<double> trans_steps(0.5, 0.5, 0.5);
+    double min_allowed_overlap = 0.5, min_overlap;
+    minimizer->exhaustive_camera_search(trans_box,trans_steps,level,
                                        min_allowed_overlap,min_trans_,
                                        min_rot_, cost_,min_overlap);
 
-  vcl_cout << " min translation " << min_trans_ << '\n';
-  vcl_cout << " min rotation " << min_rot_.as_rodrigues() << '\n';
-  vcl_cout << " registration cost " << cost_ << '\n'<< '\n';
+    vcl_cout << " min translation " << min_trans_ << '\n';
+    vcl_cout << " min rotation " << min_rot_.as_rodrigues() << '\n';
+    vcl_cout << " registration cost " << cost_ << '\n'<< '\n';
+    delete minimizer;
+  }
+  if (exp_img) delete exp_img;
+  if (depth_img) delete depth_img;
 }
 
-void icam_view_metadata::refine_camera()
+void icam_view_metadata::refine_camera(vil_image_view<float> const& source_img,
+                                       vpgl_camera_double_sptr camera,
+                                       icam_minimizer_params const& params)
 {
-
-#if 0
-  vil_image_view<float> image=this->minimizer_->dest(0);
-  vil_save(image,"F:/tests/mundy-downtown/view_sphere/test/myimg.tiff");
-#endif
-  unsigned start_level = minimizer_->n_levels()-1;
-  vgl_vector_3d<double> trans_steps(0.5, 0.5, 0.5);
-  double min_overlap = 0.5, act_overlap;
-  minimizer_->pyramid_camera_search(min_trans_, min_rot_,
+  vil_image_view<float> *exp_img;
+  vil_image_view<double> *depth_img;
+  icam_minimizer* minimizer;
+  create_minimizer(exp_img,depth_img,camera,params,minimizer);
+  if (minimizer) {
+    final_level_ = minimizer->n_levels() - 4;
+    unsigned start_level = minimizer->n_levels()-1;
+    vgl_vector_3d<double> trans_steps(0.5, 0.5, 0.5);
+    double min_overlap = 0.5, act_overlap;
+   // set the source to the minimizer
+    minimizer->set_source_img(source_img);
+    minimizer->pyramid_camera_search(min_trans_, min_rot_,
                                     trans_steps,
                                     start_level,
                                     final_level_,
@@ -70,11 +91,14 @@ void icam_view_metadata::refine_camera()
                                     cost_,
                                     act_overlap);
 
-  vcl_cout << " Pyramid search result \n";
-  vcl_cout << " min translation " << min_trans_ << '\n';
-  vcl_cout << " min rotation " << min_rot_.as_rodrigues() << '\n';
-  vcl_cout << " registration cost " << cost_ << '\n'<< '\n';
-
+     vcl_cout << " Pyramid search result \n";
+     vcl_cout << " min translation " << min_trans_ << '\n';
+     vcl_cout << " min rotation " << min_rot_.as_rodrigues() << '\n';
+     vcl_cout << " registration cost " << cost_ << '\n'<< '\n';
+     delete minimizer;
+  }
+  if (exp_img) delete exp_img;
+  if (depth_img) delete depth_img;
 
 #if 0
   vil_image_view<float> img = minimizer_->view(min_rot,min_trans,0);
@@ -85,18 +109,29 @@ void icam_view_metadata::refine_camera()
 #endif
 }
 
-void icam_view_metadata::mapped_image(vil_image_view<float> const& source_img,
+/*void icam_view_metadata::mapped_image(vil_image_view<float> const& source_img,
                                       vgl_rotation_3d<double>& rot,
                                       vgl_vector_3d<double>& trans, 
                                       unsigned level,
                                       vil_image_view<float>& act_dest,
-                                      vil_image_view<float>& mapped_dest)
+                                      vil_image_view<float>& mapped_dest,
+                                      icam_minimizer_params const& params)
 {
   // set the source to the minimizer
-  minimizer_->set_source_img(source_img);
-  act_dest = minimizer_->dest(level);
-  mapped_dest = minimizer_->view(rot, trans, level);
-}
+  icam_minimizer minimizer;
+  icam_depth_transform dt(K, *depth_img, rot, t);
+      minimizer=new icam_minimizer (*exp_img, dt, params.min_level_size_, 
+                                    params.box_reduction_k_, params.axis_search_cone_multiplier_, 
+                                    params.polar_range_multiplier_, params.local_min_thresh_, 
+                                    params.smooth_sigma_, params.nbins_, params.base_path_, false); 
+  create_minimizer(exp_img,depth_img,camera,params,minimizer);
+  if (minimizer) {
+    minimizer->set_source_img(source_img);
+    act_dest = minimizer_->dest(level);
+    mapped_dest = minimizer_->view(rot, trans, level);
+    delete minimizer;
+  }
+}*/
 
 void icam_view_metadata::b_read(vsl_b_istream& is)
 {

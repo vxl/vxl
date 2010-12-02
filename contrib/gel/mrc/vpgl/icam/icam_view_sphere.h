@@ -29,11 +29,11 @@ class icam_view_sphere : public vbl_ref_count
   void set_cameras(vcl_map<unsigned, vpgl_camera_double_sptr> const &cameras);
 
   //: sets the images and depth images, associated with the view point id
-  virtual void set_images(vcl_map<unsigned, vil_image_view<float>*>& images,
-                          vcl_map<unsigned,vil_image_view<double>*>& depth_images);
+  virtual void set_images(vcl_map<unsigned, /*vil_image_view<float>**/vcl_string>& images,
+                          vcl_map<unsigned, /*vil_image_view<double>**/vcl_string>& depth_images);
 
   //: computes the camera registration errors for a given image
-  virtual void register_image(vil_image_view<float> const& source_img);
+  virtual void register_image(vil_image_view<float> const& source_img, icam_minimizer_params const& params);
 
   //: computes the camera registration errors local minima for a given image
   void find_local_minima(vcl_vector<vsph_view_point<icam_view_metadata> >& local_minima);
@@ -46,12 +46,12 @@ class icam_view_sphere : public vbl_ref_count
     {ground_truth_cam_ = gt_cam;}
 
   //: the mapped source image and actual destination image at a level
-  void mapped_image(unsigned viewpoint_id, 
+  /*void mapped_image(unsigned viewpoint_id, 
                     vil_image_view<float> const& source_img,
                     vgl_rotation_3d<double>& rot,
                     vgl_vector_3d<double>& trans, unsigned level,
                     vil_image_view<float>& act_dest,
-                    vil_image_view<float>& mapped_dest);
+                    vil_image_view<float>& mapped_dest);*/
 
 
   //: binary I/O
