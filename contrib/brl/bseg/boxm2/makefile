@@ -5,14 +5,16 @@ LIBRARY := boxm2
 SOURCES += boxm2_block.cxx
 SOURCES += boxm2_scene_parser.cxx
 SOURCES += boxm2_scene.cxx
-SOURCES += boxm2_cache.cxx
 SOURCES += boxm2_block_id.cxx
-SOURCES += boxm2_dumb_cache.cxx
-SOURCES += boxm2_asio_mgr.cxx
-SOURCES += boxm2_sio_mgr.cxx
-SOURCES += boxm2_nn_cache.cxx
+SOURCES += boxm2_opencl_processor.cxx
+SOURCES += boxm2_cpp_processor.cxx
 MANPAGE_SOURCES += boxm2_data.txx
 MANPAGE_SOURCES += boxm2_data_traits.h
+MANPAGE_SOURCES += boxm2_process.h
+MANPAGE_SOURCES += boxm2_processor.h
+MANPAGE_SOURCES += boxm2_opencl_render_process.h
+MANPAGE_SOURCES += boxm2_cpp_process_base.h
+MANPAGE_SOURCES += boxm2_opencl_process_base.h
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
