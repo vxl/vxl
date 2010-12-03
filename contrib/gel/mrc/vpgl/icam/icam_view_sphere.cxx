@@ -85,22 +85,34 @@ void icam_view_sphere::register_image(vil_image_view<float> const& dest_img,
   vsph_view_sphere<vsph_view_point<icam_view_metadata> >::iterator it=view_sphere_->begin();
   unsigned index = 0;
   while (it != view_sphere_->end()) {
+    if (index >78 && index < 91) {
     vsph_view_point<icam_view_metadata> vp = it->second;
     icam_view_metadata* data=vp.metadata();
     if (data){
       vpgl_camera_double_sptr camera=vp.camera();
       vcl_cout << "Evaluating viewpoint " << index << '\n';
       data->register_image(dest_img, camera, params);
-    }
+    }}
     it++; index++;
   }
 
   vcl_vector<vsph_view_point<icam_view_metadata> > local_min;
   find_local_minima(local_min);
 #if 0
+  vcl_vector<vsph_view_point<icam_view_metadata> > local_min;
   vsph_view_point<icam_view_metadata>* vp;
-  view_sphere_->view_point(2,vp);
+  view_sphere_->view_point(85,vp);
   vpgl_perspective_camera<double>* cam = (vpgl_perspective_camera<double>*)vp->camera().as_pointer();
+  vcl_cout << *cam;
+  local_min.push_back(*vp);
+  //vsph_view_point<icam_view_metadata>* vp;
+  view_sphere_->view_point(87,vp);
+  cam = (vpgl_perspective_camera<double>*)vp->camera().as_pointer();
+  vcl_cout << *cam;
+  local_min.push_back(*vp);
+  //vsph_view_point<icam_view_metadata>* vp;
+  view_sphere_->view_point(88,vp);
+  cam = (vpgl_perspective_camera<double>*)vp->camera().as_pointer();
   vcl_cout << *cam;
   local_min.push_back(*vp);
 #endif
@@ -193,8 +205,8 @@ void icam_view_sphere::camera_transf(vpgl_perspective_camera<double> const& cam)
   }
 }
 
-  //: the mapped source image and actual destination image at a level
-/*void icam_view_sphere::mapped_image(unsigned viewpoint_id, 
+//: the mapped source image and actual destination image at a level
+void icam_view_sphere::mapped_image(unsigned viewpoint_id, 
                                     vil_image_view<float> const& source_img,
                                     vgl_rotation_3d<double>& rot,
                                     vgl_vector_3d<double>& trans, 
@@ -205,11 +217,13 @@ void icam_view_sphere::camera_transf(vpgl_perspective_camera<double> const& cam)
 {
   vsph_view_point<icam_view_metadata>* vp;
   if(view_sphere_->view_point(viewpoint_id, vp)){ 
-  icam_view_metadata* data=vp->metadata();
-  if (data)
-    data->mapped_image(source_img, rot, trans, level, act_dest, mapped_dest, params);
+    icam_view_metadata* data=vp->metadata();
+    if (data) {
+      vpgl_perspective_camera<double>* vp_cam = static_cast<vpgl_perspective_camera<double>*>(vp->camera().as_pointer());
+      data->mapped_image(source_img, vp_cam, rot, trans, level, params, act_dest, mapped_dest);
+    }
   }
-}*/
+}
 
 void icam_view_sphere::b_read(vsl_b_istream &is)
 {

@@ -44,12 +44,13 @@ class icam_view_metadata
    double cost() { return cost_; }
 
    //: for debug purposes
-   /*void mapped_image(vil_image_view<float> const& source_img,
+   void mapped_image(vil_image_view<float> const& source_img,
+                     vpgl_camera_double_sptr camera,
                      vgl_rotation_3d<double>& rot,
                      vgl_vector_3d<double>& trans, unsigned level,
+                     icam_minimizer_params const& params,
                      vil_image_view<float>& act_dest,
-                     vil_image_view<float>& mapped_dest,
-                     icam_minimizer_params const& params);*/
+                     vil_image_view<float>& mapped_dest);
 
    void print(vcl_ostream& os) const { os << "icam_view_metadata:" << vcl_endl; }
 

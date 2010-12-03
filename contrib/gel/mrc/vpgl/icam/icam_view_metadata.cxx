@@ -109,29 +109,29 @@ void icam_view_metadata::refine_camera(vil_image_view<float> const& source_img,
 #endif
 }
 
-/*void icam_view_metadata::mapped_image(vil_image_view<float> const& source_img,
+void icam_view_metadata::mapped_image(vil_image_view<float> const& source_img,
+                                      vpgl_camera_double_sptr camera,
                                       vgl_rotation_3d<double>& rot,
                                       vgl_vector_3d<double>& trans, 
                                       unsigned level,
+                                      icam_minimizer_params const& params,
                                       vil_image_view<float>& act_dest,
-                                      vil_image_view<float>& mapped_dest,
-                                      icam_minimizer_params const& params)
+                                      vil_image_view<float>& mapped_dest)
 {
   // set the source to the minimizer
-  icam_minimizer minimizer;
-  icam_depth_transform dt(K, *depth_img, rot, t);
-      minimizer=new icam_minimizer (*exp_img, dt, params.min_level_size_, 
-                                    params.box_reduction_k_, params.axis_search_cone_multiplier_, 
-                                    params.polar_range_multiplier_, params.local_min_thresh_, 
-                                    params.smooth_sigma_, params.nbins_, params.base_path_, false); 
+  vil_image_view<float> *exp_img;
+  vil_image_view<double> *depth_img;
+  icam_minimizer* minimizer;
   create_minimizer(exp_img,depth_img,camera,params,minimizer);
   if (minimizer) {
     minimizer->set_source_img(source_img);
-    act_dest = minimizer_->dest(level);
-    mapped_dest = minimizer_->view(rot, trans, level);
+    act_dest = minimizer->dest(level);
+    mapped_dest = minimizer->view(rot, trans, level);
     delete minimizer;
   }
-}*/
+  if (exp_img) delete exp_img;
+  if (depth_img) delete depth_img;
+}
 
 void icam_view_metadata::b_read(vsl_b_istream& is)
 {

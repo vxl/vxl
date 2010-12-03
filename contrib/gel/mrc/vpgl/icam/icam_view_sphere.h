@@ -46,12 +46,13 @@ class icam_view_sphere : public vbl_ref_count
     {ground_truth_cam_ = gt_cam;}
 
   //: the mapped source image and actual destination image at a level
-  /*void mapped_image(unsigned viewpoint_id, 
+  void mapped_image(unsigned viewpoint_id, 
                     vil_image_view<float> const& source_img,
                     vgl_rotation_3d<double>& rot,
                     vgl_vector_3d<double>& trans, unsigned level,
                     vil_image_view<float>& act_dest,
-                    vil_image_view<float>& mapped_dest);*/
+                    vil_image_view<float>& mapped_dest,
+                    icam_minimizer_params const& params);
 
 
   //: binary I/O
