@@ -6,7 +6,7 @@ DECLARE( test_minimizer );
 void
 register_tests()
 {
-  REGISTER( test_depth_trans );
+ // REGISTER( test_depth_trans );
   REGISTER( test_minimizer );
 }
 

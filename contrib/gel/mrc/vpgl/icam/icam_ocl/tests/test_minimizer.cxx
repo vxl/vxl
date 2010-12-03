@@ -39,7 +39,7 @@
 #define radius 4.9
 #define image_ni 1870
 #define image_nj 720
-
+/*
 template <class T>
 bool load_image(vil_image_view_base_sptr const& base_img, vil_image_view<T>*& image)
 {
@@ -64,7 +64,7 @@ bool load_image(vil_image_view_base_sptr const& base_img, vil_image_view<T>*& im
   }
   return true;
 }
-
+*/
 template <class T>
 bool load_image(vcl_string const& path, vil_image_view<T>*& image)
 {
@@ -91,9 +91,10 @@ static void test_minimizer()
   vcl_vector<vcl_string> image_f, depth_f, camera_f;
 
   // view 0 
-  image_f.push_back("C:/images/Calibration/expected142.tiff");
-  depth_f.push_back("C:/images/Calibration/depth_142.tif");
-  camera_f.push_back("C:/images/Calibration/camera_00142.txt");
+  // view 0 
+  image_f.push_back("C:/images/Calibration/expected88.tiff");
+  depth_f.push_back("C:/images/Calibration/depth88.tiff");
+  camera_f.push_back("C:/images/Calibration/camera_00088.txt");
 
   // view 1
   image_f.push_back("C:/images/Calibration/frame_142.png");
@@ -111,7 +112,7 @@ static void test_minimizer()
   camera_f.push_back("C:/images/Calibration/camera_00142.txt");
 
   // source image
-  vcl_string source_file = "C:/images/Calibration/frame_145.png";
+  vcl_string source_file = "C:/images/Calibration/gray00089.png";
 
   // set the images to view points
   vcl_map<unsigned, vil_image_view<float>* > images;

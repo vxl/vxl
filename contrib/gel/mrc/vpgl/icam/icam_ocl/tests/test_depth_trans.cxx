@@ -78,11 +78,8 @@ bool test_image_parallel_search()
   vcl_string base_path = "";
   double sigma=1.0;
   unsigned int nbins=16;
-  icam_minimizer minimizer(source_img_flt, dest_img_flt, dt,
-                           min_pyramid_image_size, box_reduction_k,
-                           axis_search_cone_multiplier,
-                           polar_range_multiplier,
-                           local_min_thresh, sigma, nbins, base_path);
+  icam_minimizer_params params;
+  icam_minimizer minimizer(source_img_flt, dest_img_flt, dt, params);
 
   unsigned nl = minimizer.n_levels();
   unsigned lev = nl-1;
@@ -240,7 +237,7 @@ bool test_icam_ocl_minimizer()
   double local_min_thresh = 0.005;
   double axis_search_cone_multiplier = 10.0;
   double polar_range_multiplier = 2.0;
-  //vcl_string base_path = "C:/images/Calibration";
+  
   vcl_string base_path = "";
   bool verbose = false;
   double sigma=1.0;
@@ -250,7 +247,7 @@ bool test_icam_ocl_minimizer()
                                axis_search_cone_multiplier,
                                polar_range_multiplier,
                                local_min_thresh, sigma, nbins, base_path, verbose);
-  //c:/vxl/vxl/contrib/gel/mrc/vpgl/icam/icam_ocl/
+
   minimizer.set_rot_kernel_path("trans_parallel_transf_search.cl");
   if (verbose) {
     minimizer.set_actual_translation(tr);
@@ -275,11 +272,9 @@ bool test_icam_ocl_minimizer()
                                        min_rot, minfo, min_overlap,
                                        setup, finish);
 
+  icam_minimizer_params params;
   icam_minimizer non_gpu_minmzr(source_img_flt, dest_img_flt, dt,
-                               min_pyramid_image_size, box_reduction_k,
-                               axis_search_cone_multiplier,
-                               polar_range_multiplier,
-                               local_min_thresh, sigma, nbins, base_path, verbose);
+                               params, verbose);
   if (verbose) {
     non_gpu_minmzr.set_actual_translation(tr);
     non_gpu_minmzr.set_actual_rotation(Rr);
