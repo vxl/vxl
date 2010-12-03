@@ -93,12 +93,35 @@ class F_test_powell : public vnl_cost_function
     { g[0]=2*x[0]-2*x[1]*x[1]; g[1]=4*x[1]*x[1]*x[1]-4*x[0]*x[1]+2*x[1]-2; }
 };
 
+
+class F_broken : public vnl_cost_function
+{
+public:
+    F_broken() : vnl_cost_function(1) {}
+    double f(vnl_vector<double> const& x)
+    {
+        return 0;
+    }
+    void gradf(vnl_vector<double> const& x, vnl_vector<double>& gradient)
+    {
+        gradient[0] = 1;
+    }
+};
+
+
 static void test_powell()
 {
   F_test_powell f; // local minimum is 1 in (1,1).
   vnl_vector<double> x(2); x[0]=x[1]=0.0;
   vnl_conjugate_gradient cg(f); cg.minimize(x);
   TEST_NEAR("vnl_conjugate_gradient", x[0], 1.0, 1e-5);
+
+  F_broken fb;
+  vnl_vector<double> x2(1, 0);
+  vnl_conjugate_gradient cg2(f);
+  bool rv=cg2.minimize(x2);
+  TEST("vnl_conjugate_gradient on broken function", rv, false);
+
 
   vnl_lbfgs lbfgs(f); x[0]=x[1]=0.0; lbfgs.minimize(x);
   TEST_NEAR("vnl_lbfgs", x[1], 1.0, 1e-6);
