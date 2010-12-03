@@ -24,11 +24,8 @@ class icam_ocl_view_sphere : public icam_view_sphere
   virtual void set_images(vcl_map<unsigned, vil_image_view<float>*>& images,
                           vcl_map<unsigned,vil_image_view<double>*>& depth_images);
   virtual void register_image(vil_image_view<float> const& source_img)
-    {icam_view_sphere::register_image(source_img);}
-
+  { icam_view_sphere::register_image(source_img, icam_minimizer_params()); }
 };
-
-
 
 typedef vbl_smart_ptr<icam_ocl_view_sphere> icam_ocl_view_sphere_sptr;
 

@@ -1,4 +1,4 @@
-// This is icam_ocl_minimizer.h
+// This is gel/mrc/vpgl/icam/icam_ocl/icam_ocl_minimizer.h
 #ifndef icam_ocl_minimizer_h
 #define icam_ocl_minimizer_h
 //:
@@ -33,14 +33,14 @@ class icam_ocl_minimizer : public icam_minimizer
     : icam_minimizer(source_img,
                      dest_img,
                      dt,
-                     min_level_size,
-                     box_reduction_k,
-                     axis_search_cone_multiplier,
-                     polar_range_multiplier,
-                     local_min_thresh,
-                     smooth_sigma,
-                     nbins,
-                     base_path,
+                     icam_minimizer_params(nbins,
+                                           min_level_size,
+                                           box_reduction_k,
+                                           axis_search_cone_multiplier,
+                                           polar_range_multiplier,
+                                           local_min_thresh,
+                                           smooth_sigma,
+                                           base_path),
                      verbose)
     {search_mgr_ = icam_ocl_search_manager::instance();}
 
@@ -58,14 +58,14 @@ class icam_ocl_minimizer : public icam_minimizer
                      bool verbose=false)
     : icam_minimizer(dest_img,
                      dt,
-                     min_level_size,
-                     box_reduction_k,
-                     axis_search_cone_multiplier,
-                     polar_range_multiplier,
-                     local_min_thresh,
-                     smooth_sigma,
-                     nbins,
-                     base_path,
+                     icam_minimizer_params(nbins,
+                                           min_level_size,
+                                           box_reduction_k,
+                                           axis_search_cone_multiplier,
+                                           polar_range_multiplier,
+                                           local_min_thresh,
+                                           smooth_sigma,
+                                           base_path),
                      verbose)
     {search_mgr_ = icam_ocl_search_manager::instance();}
 

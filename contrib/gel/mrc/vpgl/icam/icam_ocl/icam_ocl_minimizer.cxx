@@ -57,7 +57,7 @@ initialized_rot_search(vgl_vector_3d<double> const& trans,
 bool icam_ocl_minimizer::init_opencl_rotation(unsigned level)
 {
   search_mgr_->set_workgrp_ni(wgsize_);   search_mgr_->set_workgrp_nj(0);
-  search_mgr_->set_nbins(nbins_);
+  //search_mgr_->set_nbins(nbins_);
   search_mgr_->encode_image_data(*this, level);
   search_mgr_->set_nbins_buffer();
   search_mgr_->copy_to_image_buffers();
@@ -85,7 +85,7 @@ init_opencl_rotation(vgl_rotation_3d<double> const& initial_rot,
                      unsigned search_level)
 {
   search_mgr_->set_workgrp_ni(wgsize_);   search_mgr_->set_workgrp_nj(0);
-  search_mgr_->set_nbins(nbins_);
+  //search_mgr_->set_nbins(nbins_);
   search_mgr_->encode_image_data(*this, search_level);
   search_mgr_->set_nbins_buffer();
   search_mgr_->copy_to_image_buffers();
@@ -114,7 +114,7 @@ bool icam_ocl_minimizer::run_rotation_kernel()
   vul_timer t;
   if (search_mgr_->run_rot_parallel_kernel()!=SDK_SUCCESS)
     return false;
-  if(verbose_)
+  if (verbose_)
     vcl_cout << "OpenCL search time " << t.real()/1000.0 << " seconds\n" << vcl_flush;
   return true;
 }
