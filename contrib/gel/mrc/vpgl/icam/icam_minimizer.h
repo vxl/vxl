@@ -255,12 +255,7 @@ bool  pyramid_camera_search(vgl_vector_3d<double> const&
                          vgl_vector_3d<double> const& initial_step_delta);
 
   icam_minimizer_params params_;
-  //unsigned box_reduction_k_;//defined above
-  //double axis_search_cone_multiplier_;
-  //double polar_range_multiplier_;
   bool cam_search_valid_;
-  //double local_min_thresh_;
-  //double smooth_sigma_;
   vgl_vector_3d<double> box_origin_;
   vgl_vector_3d<double> step_delta_;
   vbl_array_3d<double> box_scores_;
@@ -268,13 +263,11 @@ bool  pyramid_camera_search(vgl_vector_3d<double> const&
   vil_pyramid_image_view<float> source_pyramid_;
   vil_pyramid_image_view<float> dest_pyramid_;
   icam_depth_trans_pyramid dt_pyramid_;
-  //unsigned min_level_size_;
   double end_error_;
   vcl_string base_path_;
   bool verbose_;
   vgl_vector_3d<double> actual_trans_;
   vgl_rotation_3d<double> actual_rot_;
-  //unsigned nbins_;
 };
 
 #endif // icam_minimizer_h_
