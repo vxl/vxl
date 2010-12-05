@@ -1,5 +1,10 @@
 // This is an extensive test suite for vgl_conic,
 // written by Peter Vanroose, ESAT, K.U.Leuven, Belgium, 30 August 2001.
+//
+// Dec.2010 - PVr - added specific test for a bug in conic intersection,
+//                  when two intersection points have equal y value.
+//                  (This bug detected by Patrick Pol, 29 Nov. 2010.)
+//
 #include <testlib/testlib_test.h>
 #include <vgl/vgl_conic.h>
 #include <vgl/vgl_box_2d.h>
@@ -82,12 +87,43 @@ testlib_test_assert_far(const vcl_string& msg, vgl_conic<double> const& c2,
   testlib_test_assert_far(msg, conic_distance(c1,c2), 0.0, tol);
 }
 
+static void
+check_points_on_conics(vgl_conic<double> const& c1, vgl_conic<double> const& c2,
+                       vcl_list<vgl_homg_point_2d<double> > const& pts)
+{
+  // verify whether each of the intersection points (in pts) really lie on the conics
+  vcl_list<vgl_homg_point_2d<double> >::const_iterator it = pts.begin();
+  for (; it != pts.end(); ++it) {
+    vgl_homg_point_2d<double> p = *it;
+    double fval1, fval2, x, y;
+    if (p.w() == 0) { // point at infinity
+      x = p.x(); y = p.y();
+      fval1 = x*x*c1.a()+x*y*c1.b()+y*y*c1.c();
+      fval2 = x*x*c2.a()+x*y*c2.b()+y*y*c2.c();
+    }
+    else {
+      x = p.x()/p.w(); y = p.y()/p.w();
+      fval1 = x*x*c1.a()+x*y*c1.b()+y*y*c1.c()+x*c1.d()+y*c1.e()+c1.f();
+      fval2 = x*x*c2.a()+x*y*c2.b()+y*y*c2.c()+x*c2.d()+y*c2.e()+c2.f();
+    }
+    if (fval1 < -1e-4 || fval1 > 1e-4) {
+      vcl_cout <<"Intersection "<<(p.w()==0 ? "direction" : "point")<<" ("<< x<<','<<y<<")\n";
+      TEST(" not on conic 1", true, false);
+    }
+    if (fval2 < -1e-4 || fval2 > 1e-4) {
+      vcl_cout <<"Intersection "<<(p.w()==0 ? "direction" : "point")<<" ("<< x<<','<<y<<")\n";
+      TEST(" not on conic 2", true, false);
+    }
+  }
+  vcl_cout << "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n";
+}
+
 static void test_conic()
 {
   // "global" variables, actually constants
   vgl_homg_point_2d<double> const centre(1,2,1);
   vgl_homg_point_2d<double> const direction(4,-3,0);
-  double const halfpi = vcl_atan2(1.0,0.0);
+  double const halfpi = vnl_math::pi_over_2;
   double const pythagoras = vcl_atan2(4.0,3.0); // = 0.9273 radians (53.13 degrees)
 
   // 1. Test constructors
@@ -209,7 +245,7 @@ static void test_conic()
   TEST_NEAR("ellipse geometry: centre y", yc, 2, 1e-5);
   TEST_NEAR("ellipse geometry: maj axis", major_axis, 2, 1e-3);
   TEST_NEAR("ellipse geometry: min axis", minor_axis, 1, 1e-3);
-  TEST_NEAR("ellipse geometry: angle", angle, 0.785398, 1e-6);
+  TEST_NEAR("ellipse geometry: angle", angle, vnl_math::pi_over_4, 1e-6);
 
   //End ellipse geometry test
 
@@ -226,7 +262,7 @@ static void test_conic()
   TEST_NEAR("ellipse geometry: centre y", yc, 2, 1e-5);
   TEST_NEAR("ellipse geometry: maj axis", major_axis, 2, 1e-3);
   TEST_NEAR("ellipse geometry: min axis", minor_axis, 1, 1e-3);
-  TEST_NEAR("ellipse geometry: angle", angle, -0.785398, 1e-6);
+  TEST_NEAR("ellipse geometry: angle", angle, -vnl_math::pi_over_4, 1e-6);
 
   //End ellipse geometry test
 
@@ -572,32 +608,37 @@ static void test_conic()
   TEST("intersection count of concentric circles = 0", pts.size(), 0);
   for (it = pts.begin(); it != pts.end(); ++it)
     vcl_cout << (*it) << '\n';
+  check_points_on_conics(c, cc, pts);
 
   cc = vgl_conic<double>(vgl_homg_point_2d<double>(1,1,1), 1,1, 0.0); // non-concentric circle
   pts = vgl_homg_operators_2d<double>::intersection(c,cc);
   TEST("intersection count of non-concentric circles = 0", pts.size(), 0);
   for (it = pts.begin(); it != pts.end(); ++it)
     vcl_cout << (*it) << '\n';
+  check_points_on_conics(c, cc, pts);
 
   cc = vgl_conic<double>(vgl_homg_point_2d<double>(1,5,1), 1,1, 0.0); // intersecting circle
   pts = vgl_homg_operators_2d<double>::intersection(c,cc);
   TEST("intersection count of intersecting circles = 2", pts.size(), 2);
   for (it = pts.begin(); it != pts.end(); ++it)
     vcl_cout << (*it) << '\n';
+  check_points_on_conics(c, cc, pts);
 
   cc = vgl_conic<double>(vgl_homg_point_2d<double>(1,5,1), 3,3, 0.0); // intersecting circle
   pts = vgl_homg_operators_2d<double>::intersection(c,cc);
   TEST("intersection count of intersecting circles = 2", pts.size(), 2);
   for (it = pts.begin(); it != pts.end(); ++it)
     vcl_cout << (*it) << '\n';
+  check_points_on_conics(c, cc, pts);
 
   cc = vgl_conic<double>(vgl_homg_point_2d<double>(1,1,1), 2,2, 0.0); // tangent circle
   pts = vgl_homg_operators_2d<double>::intersection(c,cc);
-  TEST("intersection of touching circles = 2 coincident pts", pts.size(), 2);
+  TEST("intersection count of touching circles = 2", pts.size(), 2);
   for (it = pts.begin(); it != pts.end(); ++it)
     vcl_cout << (*it) << '\n';
   TEST("1st intersection point = (1,-1)", pts.front(), vgl_homg_point_2d<double>(1,-1,1));
-  TEST("2nd intersection point = (1,-1)", pts.back(), vgl_homg_point_2d<double>(1,-1,1));
+  TEST("2nd intersection point coincides", pts.back(), pts.front());
+  check_points_on_conics(c, cc, pts);
 
   cc = vgl_conic<double>(centre, 3,1, 0.0); // concentric touching ellipse
   pts = vgl_homg_operators_2d<double>::intersection(c,cc);
@@ -606,12 +647,14 @@ static void test_conic()
     vcl_cout << (*it) << '\n';
   TEST("1st  intersection point = (4,2)", pts.front(), vgl_homg_point_2d<double>(4,2,1));
   TEST("last intersection point = (-2,2)", pts.back(), vgl_homg_point_2d<double>(-2,2,1));
+  check_points_on_conics(c, cc, pts);
 
   cc = vgl_conic<double>(centre, 4,2, 0.0); // concentric intersecting ellipse
   pts = vgl_homg_operators_2d<double>::intersection(c,cc);
   TEST("intersection of intersecting ellipses = 4 points", pts.size(), 4);
   for (it = pts.begin(); it != pts.end(); ++it)
     vcl_cout << (*it) << '\n';
+  check_points_on_conics(c, cc, pts);
 
   c = vgl_conic<double>(centre, 1,2, 1.5); // arbitrary, concentric ellipses
   cc = vgl_conic<double>(centre, 1,3, 3.0);
@@ -619,6 +662,17 @@ static void test_conic()
   TEST("intersection of intersecting ellipses = 4 points", pts.size(), 4);
   for (it = pts.begin(); it != pts.end(); ++it)
     vcl_cout << (*it) << '\n';
+  check_points_on_conics(c, cc, pts);
+
+  // concentric ellipses with intersection points having same y value
+  c.set(.64, -2, 4, 0, 0, -1); c.translate_by(-1,-2);
+  cc.set(.64, 2, 4, 0, 0, -1); cc.translate_by(-1,-2);
+  pts = vgl_homg_operators_2d<double>::intersection(c,cc);
+  // intersection points should be: (1, 1.5), (1, 2.5), (2.25, 2), and (-0.25, 2).
+  TEST("intersection of mirrored ellipses = 4 different, but symmetrically positioned points", pts.size(), 4);
+  for (it = pts.begin(); it != pts.end(); ++it)
+    vcl_cout << (*it) << '\n';
+  check_points_on_conics(c, cc, pts);
 
   c = vgl_conic<double>(centre, 3,-3, 0.0); // orthogonal hyperbola
   cc = vgl_conic<double>(centre, 1,-1, 0.0); // concentric hyperbola with same asymptotes
@@ -628,6 +682,7 @@ static void test_conic()
     vcl_cout << (*it) << '\n';
   TEST("1st  intersection point is on asymptote x+y=0", pts.front(), vgl_homg_point_2d<double>(1,-1,0));
   TEST("last intersection point is at other asymptote x=y", pts.back(), vgl_homg_point_2d<double>(1,1,0));
+  check_points_on_conics(c, cc, pts);
 
   cc = vgl_conic<double>(vgl_homg_point_2d<double>(1,5,1), 1,-1, 0.0); // intersecting hyperbola
   pts = vgl_homg_operators_2d<double>::intersection(c,cc);
@@ -635,6 +690,7 @@ static void test_conic()
   for (it = pts.begin(); it != pts.end(); ++it)
     vcl_cout << (*it) << '\n';
   TEST("1st intersection point is on asymptote x+y=0", pts.front(), vgl_homg_point_2d<double>(1,-1,0));
+  check_points_on_conics(c, cc, pts);
 
   cc = vgl_conic<double>(vgl_homg_point_2d<double>(1,5,1), 3,-1, 0.0); // intersecting hyperbola
   pts = vgl_homg_operators_2d<double>::intersection(c,cc);
@@ -643,6 +699,7 @@ static void test_conic()
   for (it = pts.begin(); it != pts.end(); ++it)
   { vcl_cout << (*it) << '\n'; if ((*it).w() == 0) infi = true; }
   TEST("intersection points are not at infinity", infi, false);
+  check_points_on_conics(c, cc, pts);
 
   cc = vgl_conic<double>(centre, 3,3, 0.0); // concentric touching circle
   pts = vgl_homg_operators_2d<double>::intersection(c,cc);
@@ -651,18 +708,21 @@ static void test_conic()
     vcl_cout << (*it) << '\n';
   TEST("1st  intersection point = (-2,2)", pts.front(), vgl_homg_point_2d<double>(-2,2,1));
   TEST("last intersection point = (4,2)", pts.back(), vgl_homg_point_2d<double>(4,2,1));
+  check_points_on_conics(c, cc, pts);
 
   cc = vgl_conic<double>(centre, 2,2, 0.0); // concentric smaller circle
   pts = vgl_homg_operators_2d<double>::intersection(c,cc);
   TEST("intersection of hyperbola with concentric smaller circle = empty", pts.size(), 0);
   for (it = pts.begin(); it != pts.end(); ++it)
     vcl_cout << (*it) << '\n';
+  check_points_on_conics(c, cc, pts);
 
   cc = vgl_conic<double>(centre, 4,4, 0.0); // concentric larger circle
   pts = vgl_homg_operators_2d<double>::intersection(c,cc);
   TEST("intersection of hyperbola with concentric larger circle = 4 points", pts.size(), 4);
   for (it = pts.begin(); it != pts.end(); ++it)
     vcl_cout << (*it) << '\n';
+  check_points_on_conics(c, cc, pts);
 }
 
 TESTMAIN(test_conic);
