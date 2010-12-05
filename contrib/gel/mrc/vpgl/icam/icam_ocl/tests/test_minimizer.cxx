@@ -39,7 +39,8 @@
 #define radius 4.9
 #define image_ni 1870
 #define image_nj 720
-/*
+
+#if 0
 template <class T>
 bool load_image(vil_image_view_base_sptr const& base_img, vil_image_view<T>*& image)
 {
@@ -64,7 +65,8 @@ bool load_image(vil_image_view_base_sptr const& base_img, vil_image_view<T>*& im
   }
   return true;
 }
-*/
+#endif // 0
+
 template <class T>
 bool load_image(vcl_string const& path, vil_image_view<T>*& image)
 {
@@ -90,8 +92,8 @@ static void test_minimizer()
   vcl_string root_dir = testlib_root_dir();
   vcl_vector<vcl_string> image_f, depth_f, camera_f;
 
-  // view 0 
-  // view 0 
+  // view 0
+  // view 0
   image_f.push_back("C:/images/Calibration/expected88.tiff");
   depth_f.push_back("C:/images/Calibration/depth88.tiff");
   camera_f.push_back("C:/images/Calibration/camera_00088.txt");
@@ -123,18 +125,20 @@ static void test_minimizer()
     vil_image_view<float> *image;
     if (load_image<float>(image_f[i], image)) {
       images[i] = image;
-    } else {
+    }
+    else {
       vcl_cerr << "error loading image.\n";
       return;
     }
   }
-  
+
   //load depth images
-  for (unsigned i=0; i<depth_f.size(); i++) {    
+  for (unsigned i=0; i<depth_f.size(); i++) {
     vil_image_view<double> *image;
     if (load_image<double>(depth_f[i], image)) {
       depth_images[i] = image;
-    } else {
+    }
+    else {
       vcl_cerr << "error loading image.\n";
       return;
     }
@@ -144,7 +148,7 @@ static void test_minimizer()
   create_view_sphere(view_sphere);
   // set cameras
   vcl_map<unsigned, vpgl_camera_double_sptr> cam_map;
-  for (unsigned i=0; i<camera_f.size(); i++) { 
+  for (unsigned i=0; i<camera_f.size(); i++) {
     vcl_ifstream ifs(camera_f[i].c_str());
     vpgl_perspective_camera<double>* cam=new vpgl_perspective_camera<double>();
     ifs >> *cam;
@@ -162,4 +166,3 @@ static void test_minimizer()
 
 
 TESTMAIN( test_minimizer );
-
