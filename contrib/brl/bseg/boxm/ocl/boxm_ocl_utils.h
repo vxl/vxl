@@ -37,7 +37,7 @@ class boxm_ocl_convert
   static void convert_scene(boxm_scene<boct_tree<short, T> >* scene, boxm_ocl_scene &ocl_scene, int max_mb);
   
   
-  static void convert_bit_scene(boxm_scene<boct_tree<short, T> >* scene, boxm_ocl_bit_scene &ocl_scene, int max_mb);
+  static void convert_bit_scene(boxm_scene<boct_tree<short, T> >* scene, boxm_ocl_bit_scene &ocl_scene, int max_mb, int buff_length);
 
 };
 

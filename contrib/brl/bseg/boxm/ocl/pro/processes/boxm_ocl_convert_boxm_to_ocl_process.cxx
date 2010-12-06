@@ -21,7 +21,7 @@
 
 namespace boxm_ocl_convert_boxm_to_ocl_process_globals
 {
-  const unsigned n_inputs_ = 4;
+  const unsigned n_inputs_ = 5;
   const unsigned n_outputs_ = 0;
 }
 
@@ -33,12 +33,14 @@ bool boxm_ocl_convert_boxm_to_ocl_process_cons(bprb_func_process& pro)
   // input[1]: output scene dir
   // input[2]: max megabytes for OCL_Scene
   // input[3]: boolean (true = bit tree, false = ocl_scene)
+  // input[4]: int (data buffer length (default/max should be 65536 = max_short)
   vcl_vector<vcl_string> input_types_(n_inputs_);
   vcl_vector<vcl_string> output_types_(n_outputs_);
-  input_types_[0] = "boxm_scene_base_sptr";
-  input_types_[1] = "vcl_string";
-  input_types_[2] = "int";
-  input_types_[3] = "bool";
+  input_types_[0] = "boxm_scene_base_sptr";   //scene
+  input_types_[1] = "vcl_string";             //output
+  input_types_[2] = "int";                    //max mb
+  input_types_[3] = "bool";                   //1 = bit, 0 = ocl
+  input_types_[4] = "int";                    //Data Buffer Length
 
   return pro.set_input_types(input_types_)
       && pro.set_output_types(output_types_);
@@ -59,6 +61,7 @@ bool boxm_ocl_convert_boxm_to_ocl_process(bprb_func_process& pro)
   vcl_string output_dir = pro.get_input<vcl_string>(i++);
   int max_mb = pro.get_input<int>(i++);
   bool bit_tree = pro.get_input<bool>(i++);
+  int data_len = pro.get_input<int>(i++);
 
   // check the scene's appearance model
   switch (scene_ptr->appearence_model())
@@ -71,7 +74,7 @@ bool boxm_ocl_convert_boxm_to_ocl_process(bprb_func_process& pro)
       //convert
       if(bit_tree) {
         boxm_ocl_bit_scene bit_scene;
-        boxm_ocl_convert<boxm_sample<BOXM_APM_MOG_GREY> >::convert_bit_scene(scene, bit_scene, max_mb);
+        boxm_ocl_convert<boxm_sample<BOXM_APM_MOG_GREY> >::convert_bit_scene(scene, bit_scene, max_mb, data_len);
         vcl_cout<<bit_scene<<vcl_endl;
         bit_scene.save_scene(output_dir);
       }
@@ -90,7 +93,7 @@ bool boxm_ocl_convert_boxm_to_ocl_process(bprb_func_process& pro)
 
       if(bit_tree) {
         boxm_ocl_bit_scene bit_scene;
-        boxm_ocl_convert<boxm_sample<BOXM_APM_SIMPLE_GREY> >::convert_bit_scene(scene, bit_scene, max_mb);
+        boxm_ocl_convert<boxm_sample<BOXM_APM_SIMPLE_GREY> >::convert_bit_scene(scene, bit_scene, max_mb, data_len);
         vcl_cout<<bit_scene<<vcl_endl;
         bit_scene.save_scene(output_dir);
       }

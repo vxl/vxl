@@ -2392,6 +2392,7 @@ bool boxm_update_bit_scene_manager::refine()
 
   vcl_cout<<"Kernel OUTPUT:"<<vcl_endl;
   this->read_scene();   //DEBUG PRINTER - can be deleted when fully working.
+  int totalRefined = 0;
   for (int i=0; i<scene_info_->num_buffer; i++) {
     int startPtr = mem_ptrs_[2*i];
     int endPtr   = mem_ptrs_[2*i+1];
@@ -2435,11 +2436,21 @@ bool boxm_update_bit_scene_manager::refine()
               <<"  mem_ptrs = "<<startPtr<<','<<endPtr<<vcl_endl;
     }
     else if (output_debug_[i] > 0.0f) {
-      vcl_cout<<"buffer @ "<<i<<" refined: "<<output_debug_[i]<<" cells. "<<vcl_endl;
+      //vcl_cout<<"buffer @ "<<i<<" refined: "<<output_debug_[i]<<" cells. "
+      //        <<":: freeSpace: "<<freeSpace<<vcl_endl;
+      totalRefined += output_debug_[i]; 
     }
   }
-  vcl_cout<<vcl_endl;
+  vcl_cout<<'\n'<<"Total number refined: "<<totalRefined<<vcl_endl;
   /****************************************************************/
+  
+  this->read_scene();
+  scene_->set_blocks(block_ptrs_);
+  scene_->set_tree_buffers(cells_);
+  scene_->set_mem_ptrs(mem_ptrs_);
+  scene_->set_alpha_values(cell_alpha_);
+  scene_->set_mixture_values(cell_mixture_);
+  scene_->set_num_obs_values(cell_num_obs_);
 #endif // 1
 
   return true;

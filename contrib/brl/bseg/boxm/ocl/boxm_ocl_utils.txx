@@ -413,7 +413,7 @@ void boxm_ocl_convert<T>::convert_scene(boxm_scene<boct_tree<short, T> >* scene,
 template<class T>
 void boxm_ocl_convert<T>::convert_bit_scene(boxm_scene<boct_tree<short, T> >* scene,
                                             boxm_ocl_bit_scene &bit_scene,
-                                            int max_mb)
+                                            int max_mb, int buff_length)
 {
   typedef boct_tree<short, T> tree_type;
   typedef boxm_scene<tree_type> scene_type;
@@ -424,7 +424,9 @@ void boxm_ocl_convert<T>::convert_bit_scene(boxm_scene<boct_tree<short, T> >* sc
   typedef vnl_vector_fixed<int,4> int4;                 //used for conversion
   const int SMALL_BLK_INIT_LEVEL = 1, SMALL_BLK_MAX_LEVEL = 4;
   const int MAX_BYTES = max_mb*1024*1024;
-  const int BUFF_LENGTH = vcl_pow((float)2,(float)16);
+  const int BUFF_LENGTH = buff_length;
+  
+  vcl_cout<<"Buffer LENGTH::::::: "<<buff_length<<vcl_endl;
 
   // report some current scene stats
   vgl_point_3d<double> origin = scene->origin();
@@ -547,6 +549,7 @@ void boxm_ocl_convert<T>::convert_bit_scene(boxm_scene<boct_tree<short, T> >* sc
     vcl_vector<boct_tree_cell<short,T>*> blk_roots = tree->cells_at_level(small_blk_root_level);
     vcl_cout<<"  number small blocks: "<<blk_roots.size()<<vcl_endl;
     int tot_alloc = 0;
+    
     for (unsigned int blk_i=0; blk_i<blk_roots.size(); ++blk_i)
     {
       //figure out which small_block i,j,k this root corresponds to
