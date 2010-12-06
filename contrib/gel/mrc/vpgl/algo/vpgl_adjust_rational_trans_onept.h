@@ -86,7 +86,7 @@ class vpgl_cam_trans_search_lsqr : public vnl_least_squares_function
   //  Given the parameter vector x, compute the vector of residuals fx.
   //  fx has been sized appropriately before the call.
   virtual void f(vnl_vector<double> const& translation,   // size is 2*cams.size()
-                 vnl_vector<double>& projection_errors);  // size is image_pts.size() --> compute a residual for each 3D corr point
+                 vnl_vector<double>& projection_errors);  // size is cams.size()*image_pts.size() --> compute a residual for each 3D corr point in each image
   
   void get_finals(vcl_vector<vgl_point_3d<double> >& finals);
 
