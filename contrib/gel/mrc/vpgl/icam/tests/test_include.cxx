@@ -3,6 +3,7 @@
 #include <vpgl/icam/icam_depth_transform.h>
 #include <vpgl/icam/icam_image.h>
 #include <vpgl/icam/icam_minimizer.h>
+#include <vpgl/icam/icam_minimizer_params.h>
 #include <vpgl/icam/icam_sample.h>
 #include <vpgl/icam/icam_transform_2d.h>
 #include <vpgl/icam/icam_utils.h>
