@@ -7,26 +7,12 @@ icam_ocl_view_metadata::icam_ocl_view_metadata(vil_image_view<float> const& exp_
                                        vil_image_view<double> const& depth_img,
                                        icam_depth_transform const& dt)
 { 
-  
-  unsigned nbins = 16;
+  // will use the defaulst params
+  icam_minimizer_params params;
   unsigned wgsize = 16;
-  unsigned min_pyramid_image_size = 16;
-  unsigned box_reduction_k = 2;
-  double local_min_thresh = 0.005;
-  double smooth_sigma = 1.0;
-  double axis_search_cone_multiplier = 10.0;
-  double polar_range_multiplier = 2.0;
-  bool verbose = true;
-  vcl_string base_path = "";
-
-  minimizer_=new icam_ocl_minimizer(exp_img, dt, min_pyramid_image_size, 
-                                    box_reduction_k, axis_search_cone_multiplier, 
-                                    polar_range_multiplier, local_min_thresh,
-                                    smooth_sigma,
-                                    nbins,
-                                    base_path, verbose); 
+  minimizer_=new icam_ocl_minimizer(exp_img, dt, params, true); 
   static_cast<icam_ocl_minimizer*>(minimizer_)->set_workgroup_size(wgsize);
-  static_cast<icam_ocl_minimizer*>(minimizer_)->set_rot_kernel_path("c:/vxl/vxl/contrib/gel/mrc/vpgl/icam/icam_ocl/trans_parallel_transf_search.cl");
+  static_cast<icam_ocl_minimizer*>(minimizer_)->set_rot_kernel_path("C:/vxl_gamze/vxl/contrib/gel/mrc/vpgl/icam/icam_ocl/trans_parallel_transf_search.cl");
   final_level_ = minimizer_->n_levels() - 3;
 }
 

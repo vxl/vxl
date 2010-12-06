@@ -19,54 +19,19 @@ class icam_ocl_minimizer : public icam_minimizer
  public:
   //: Constructor with all the parameters
   icam_ocl_minimizer( const vil_image_view<float>& source_img,
-                      const vil_image_view<float>& dest_img,
-                      const icam_depth_transform& dt,
-                      unsigned min_level_size = 16,
-                      unsigned box_reduction_k = 2,
-                      double axis_search_cone_multiplier = 10.0,
-                      double polar_range_multiplier = 2.0,
-                      double local_min_thresh = 0.05,
-                      double smooth_sigma = 1.0,
-                      unsigned nbins = 16,
-                      vcl_string const& base_path = "",
-                      bool verbose=false)
-    : icam_minimizer(source_img,
-                     dest_img,
-                     dt,
-                     icam_minimizer_params(nbins,
-                                           min_level_size,
-                                           box_reduction_k,
-                                           axis_search_cone_multiplier,
-                                           polar_range_multiplier,
-                                           local_min_thresh,
-                                           smooth_sigma,
-                                           base_path),
-                     verbose)
+                  const vil_image_view<float>& dest_img,
+                  const icam_depth_transform& dt,
+                  icam_minimizer_params const& params,
+                  bool verbose=false)
+    : icam_minimizer(source_img,dest_img,dt,params,verbose)
     {search_mgr_ = icam_ocl_search_manager::instance();}
 
   //: Constructor, when source image is not known yet
   icam_ocl_minimizer(const vil_image_view<float>& dest_img,
-                     const icam_depth_transform& dt,
-                     unsigned min_level_size = 16,
-                     unsigned box_reduction_k = 2,
-                     double axis_search_cone_multiplier = 10.0,
-                     double polar_range_multiplier = 2.0,
-                     double local_min_thresh = 0.05,
-                     double smooth_sigma = 1.0,
-                     unsigned nbins = 16,
-                     vcl_string const& base_path = "",
-                     bool verbose=false)
-    : icam_minimizer(dest_img,
-                     dt,
-                     icam_minimizer_params(nbins,
-                                           min_level_size,
-                                           box_reduction_k,
-                                           axis_search_cone_multiplier,
-                                           polar_range_multiplier,
-                                           local_min_thresh,
-                                           smooth_sigma,
-                                           base_path),
-                     verbose)
+                    const icam_depth_transform& dt,
+                    icam_minimizer_params const& params,
+                    bool verbose=false)
+    : icam_minimizer(dest_img,dt,params,verbose)
     {search_mgr_ = icam_ocl_search_manager::instance();}
 
   //: set rotation search kernel source code path.
