@@ -34,9 +34,12 @@ class icam_ocl_view_metadata : public icam_view_metadata
 
    ~icam_ocl_view_metadata() { if (minimizer_) delete minimizer_; }
 
-   virtual void register_image(vil_image_view<float> const& source_img);
+   virtual void register_image(vil_image_view<float> const& source_img, 
+     vpgl_camera_double_sptr camera, icam_minimizer_params const& params);
 
-   virtual void refine_camera();
+   virtual void refine_camera(vil_image_view<float> const& source_img, 
+     vpgl_camera_double_sptr camera, 
+     icam_minimizer_params const& params);
 
    void print(vcl_ostream& os) const { os << "icam_ocl_view_metadata:" << vcl_endl; }
 

@@ -30,7 +30,9 @@ icam_ocl_view_metadata::icam_ocl_view_metadata(vil_image_view<float> const& exp_
   final_level_ = minimizer_->n_levels() - 3;
 }
 
-void icam_ocl_view_metadata::register_image(vil_image_view<float> const& source_img)
+void icam_ocl_view_metadata::register_image(vil_image_view<float> const& source_img, 
+     vpgl_camera_double_sptr camera, 
+     icam_minimizer_params const& params)
 {
   if(minimizer_->verbose())
         minimizer_->print_params();
@@ -55,7 +57,9 @@ void icam_ocl_view_metadata::register_image(vil_image_view<float> const& source_
   vcl_cout << " registration cost " << cost_ << '\n'<< '\n';
 }
 
-void icam_ocl_view_metadata::refine_camera()
+void icam_ocl_view_metadata::refine_camera(vil_image_view<float> const& source_img, 
+     vpgl_camera_double_sptr camera, 
+     icam_minimizer_params const& params)
 {
 #if 0
   vil_image_view<float> image=this->minimizer_->dest(0);
