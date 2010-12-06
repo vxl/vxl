@@ -1,8 +1,8 @@
 // This is brl/bseg/bapl/bapl_connectivity.cxx
+#include "bapl_connectivity.h"
 //:
 // \file
 
-#include "bapl_connectivity.h"
 #include <bapl/bapl_keypoint_set.h>
 #include <bapl/bapl_keypoint.h>
 #include <bapl/bapl_lowe_keypoint_sptr.h>
@@ -204,7 +204,8 @@ bool bapl_conn_table::compute_tracks(vcl_vector<bapl_track_data>& tracks, int ne
       img_touched.push_back(i);
 
       int num_rounds = 0;
-      while (!features_queue.empty()) {
+      while (!features_queue.empty())
+      {
         num_rounds++;
 
         bapl_image_key feature = features_queue.front();
@@ -213,16 +214,10 @@ bool bapl_conn_table::compute_tracks(vcl_vector<bapl_track_data>& tracks, int ne
         int img_id = feature.first;
         unsigned int feature_id = feature.second->id();
 
-		    bapl_keypoint_sptr dummy_sptr;
+        bapl_keypoint_sptr dummy_sptr;
         bapl_key_match dummy(feature.second, dummy_sptr);
-		
-        int start_idx;
-        if (img_id >= new_image_start) {
-          start_idx = new_image_start;
-        }
-        else {
-          start_idx = 0;
-        }
+
+        int start_idx = (img_id >= new_image_start) ?  new_image_start : 0;
 
         bapl_conn &nbrs = this->get_neighbors(img_id);
 
