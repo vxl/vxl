@@ -161,6 +161,9 @@ SOURCE=.\icam_image.h
 # Begin Source File
 SOURCE=.\icam_transform_2d.h
 # End Source File
+# Begin Source File
+SOURCE=.\icam_minimizer_params.h
+# End Source File
 # End Group
 # End Target
 # End Project
