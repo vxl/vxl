@@ -10,6 +10,9 @@ SET(vgl_xio_sources
 AUX_SOURCE_DIRECTORY(Templates vgl_xio_sources)
 
 ADD_LIBRARY(vgl_xio ${vgl_xio_sources})
+IF(NOT WIN32)
+  SET_TARGET_PROPERTIES(vgl_xio PROPERTIES COMPILE_FLAGS "-fPIC")
+ENDIF(NOT WIN32)
 TARGET_LINK_LIBRARIES( vgl_xio vgl vsl )
 
 INSTALL_TARGETS(/lib vgl_xio)
