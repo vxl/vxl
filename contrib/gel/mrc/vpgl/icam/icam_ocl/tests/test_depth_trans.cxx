@@ -68,16 +68,6 @@ bool test_image_parallel_search()
   bool adjust_to_fl = false;
   icam_depth_transform dt(K, depth_img_dbl, Rr, tr, adjust_to_fl);
 
-  // Typical parameters
-  unsigned min_pyramid_image_size = 16;
-  unsigned box_reduction_k = 2;
-  double local_min_thresh = 0.005;
-  double axis_search_cone_multiplier = 10.0;
-  double polar_range_multiplier = 2.0;
-  //vcl_string base_path = "C:/images/Calibration";
-  vcl_string base_path = "";
-  double sigma=1.0;
-  unsigned int nbins=16;
   icam_minimizer_params params;
   icam_minimizer minimizer(source_img_flt, dest_img_flt, dt, params);
 
@@ -237,7 +227,7 @@ bool test_icam_ocl_minimizer()
   double local_min_thresh = 0.005;
   double axis_search_cone_multiplier = 10.0;
   double polar_range_multiplier = 2.0;
-  
+
   vcl_string base_path = "";
   bool verbose = false;
   double sigma=1.0;
@@ -254,7 +244,7 @@ bool test_icam_ocl_minimizer()
     minimizer.set_actual_translation(tr);
     minimizer.set_actual_rotation(Rr);
   }
-  
+
   minimizer.set_workgroup_size(16);
   unsigned nl = minimizer.n_levels();
   unsigned lev = nl-1;
@@ -274,19 +264,19 @@ bool test_icam_ocl_minimizer()
                                        setup, finish);
 
   icam_minimizer non_gpu_minmzr(source_img_flt, dest_img_flt, dt,
-                               params, verbose);
+                                params, verbose);
   if (verbose) {
     non_gpu_minmzr.set_actual_translation(tr);
     non_gpu_minmzr.set_actual_rotation(Rr);
   }
-  
+
   t.mark();
   vgl_rotation_3d<double> cpu_min_rot;
   double cpu_min_cost;
   setup = false;
   finish = false;
   non_gpu_minmzr.exhaustive_rotation_search(tr, lev, min_allowed_overlap,
-                                            cpu_min_rot, cpu_min_cost, 
+                                            cpu_min_rot, cpu_min_cost,
                                             min_overlap,
                                             setup, finish);
   vcl_cout << "CPU search time " << t.real()/1000.0 << " seconds\n";
@@ -325,6 +315,7 @@ bool test_icam_ocl_minimizer()
 #endif
   return true;
 }
+
 static void test_depth_trans()
 {
   // test_image_parallel_search();
