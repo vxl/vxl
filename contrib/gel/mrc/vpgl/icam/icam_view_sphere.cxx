@@ -85,14 +85,13 @@ void icam_view_sphere::register_image(vil_image_view<float> const& dest_img,
   vsph_view_sphere<vsph_view_point<icam_view_metadata> >::iterator it=view_sphere_->begin();
   unsigned index = 0;
   while (it != view_sphere_->end()) {
-    if (index >78 && index < 91) {
     vsph_view_point<icam_view_metadata> vp = it->second;
     icam_view_metadata* data=vp.metadata();
     if (data){
       vpgl_camera_double_sptr camera=vp.camera();
       vcl_cout << "Evaluating viewpoint " << index << '\n';
       data->register_image(dest_img, camera, params);
-    }}
+    }
     it++; index++;
   }
 
