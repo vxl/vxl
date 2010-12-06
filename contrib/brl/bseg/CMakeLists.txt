@@ -75,4 +75,5 @@ SUBDIRS(bvpl_octree_batch)
 
 SUBDIRS(bvpgl)
 
+# Brown affine patch library, SIFT keypoint & descriptor
 SUBDIRS(bapl)
