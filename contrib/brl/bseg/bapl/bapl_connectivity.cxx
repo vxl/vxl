@@ -213,9 +213,9 @@ bool bapl_conn_table::compute_tracks(vcl_vector<bapl_track_data>& tracks, int ne
         int img_id = feature.first;
         unsigned int feature_id = feature.second->id();
 
-        bapl_keypoint_sptr dummy_sptr;
+		    bapl_keypoint_sptr dummy_sptr;
         bapl_key_match dummy(feature.second, dummy_sptr);
-
+		
         int start_idx;
         if (img_id >= new_image_start) {
           start_idx = new_image_start;
