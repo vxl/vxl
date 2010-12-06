@@ -242,11 +242,12 @@ bool test_icam_ocl_minimizer()
   bool verbose = false;
   double sigma=1.0;
   unsigned int nbins=16;
-  icam_ocl_minimizer minimizer(source_img_flt, dest_img_flt, dt,
-                               min_pyramid_image_size, box_reduction_k,
+  icam_minimizer_params params(min_pyramid_image_size, box_reduction_k,
                                axis_search_cone_multiplier,
                                polar_range_multiplier,
-                               local_min_thresh, sigma, nbins, base_path, verbose);
+                               local_min_thresh, sigma, nbins, base_path);
+  icam_ocl_minimizer minimizer(source_img_flt, dest_img_flt, dt,
+                               params, verbose);
 
   minimizer.set_rot_kernel_path("trans_parallel_transf_search.cl");
   if (verbose) {
@@ -272,7 +273,6 @@ bool test_icam_ocl_minimizer()
                                        min_rot, minfo, min_overlap,
                                        setup, finish);
 
-  icam_minimizer_params params;
   icam_minimizer non_gpu_minmzr(source_img_flt, dest_img_flt, dt,
                                params, verbose);
   if (verbose) {
