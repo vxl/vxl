@@ -27,7 +27,7 @@
 // global variables
 namespace icam_create_view_sphere_process_globals
 {
-  // this process takes 10 inputs and 2 outputs
+  // this process takes 0 inputs and 2 outputs
   const unsigned n_inputs_ = 0;
   const unsigned n_outputs_ = 2;
 }
@@ -36,7 +36,6 @@ namespace icam_create_view_sphere_process_globals
 bool icam_create_view_sphere_process_cons(bprb_func_process& pro)
 {
   using namespace icam_create_view_sphere_process_globals;
-  unsigned i=0;
   vcl_vector<vcl_string> input_types_(n_inputs_);
 
   vcl_vector<vcl_string> output_types_(n_outputs_);
@@ -55,7 +54,6 @@ bool icam_create_view_sphere_process(bprb_func_process& pro)
   }
   using namespace icam_create_view_sphere_process_globals;
 
-  int i=0;
   double elevation,view_angle,orig_x, orig_y, orig_z, radius;
   double dim_x, dim_y, dim_z;
   unsigned ni,nj;
@@ -104,7 +102,7 @@ bool icam_create_view_sphere_process(bprb_func_process& pro)
     ofs << *pers_cam;
     ofs.close();
 
-    file << uid << " " << cam_path.str() << vcl_endl;
+    file << uid << ' ' << cam_path.str() << vcl_endl;
     it++;
   }
   file.close();
