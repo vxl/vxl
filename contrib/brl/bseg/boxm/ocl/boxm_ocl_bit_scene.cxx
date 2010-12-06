@@ -736,6 +736,8 @@ void boxm_ocl_bit_scene::set_block_data(int x, int y, int z, float /*intensity*/
     data_buffers_(buffIndex,buffOffset)[10] = 1.0f;
 }
 
+
+
 //---------------------------------------------------------------------
 // NON CLASS FUNCTIONS
 //---------------------------------------------------------------------
@@ -862,9 +864,11 @@ vcl_ostream& operator <<(vcl_ostream &s, boxm_ocl_bit_scene& scene)
       //<<"blks in buff: "<<numPer[i]<<vcl_endl;
     totalFreeCells+=freeSpace;
   }
-  long freeSpace = (5*sizeof(float)+8*sizeof(char)+4*sizeof(short))*totalFreeCells;
+  long freeModelSpace = (sizeof(float) + 8*sizeof(char))*totalFreeCells;
+  long freeAuxSpace =  4*sizeof(int)*totalFreeCells; 
   s << "total free cells: " << totalFreeCells
-    << " (size: "<< freeSpace/1024.0f/1024.0f <<"MB )\n"
+    << " (size: "<< freeModelSpace/1024.0f/1024.0f <<"MB (model) + "
+    << freeAuxSpace/1024.0f/1024.0f << " (aux) )\n"
     << " total number occupied cells: "<<num*data_len - totalFreeCells
     <<"\n--------------------------------------------" << vcl_endl;
 
