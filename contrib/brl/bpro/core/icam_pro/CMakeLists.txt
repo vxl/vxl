@@ -18,5 +18,5 @@ AUX_SOURCE_DIRECTORY(processes icam_pro_sources)
 
 ADD_LIBRARY(icam_pro ${icam_pro_sources})
 
-TARGET_LINK_LIBRARIES(icam_pro bprb icam vpgl vpgl_algo vnl vil)
+TARGET_LINK_LIBRARIES(icam_pro bprb icam vpgl vpgl_algo vnl vil vbl)
 
