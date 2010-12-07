@@ -19,9 +19,7 @@ SET(icam_sources
 AUX_SOURCE_DIRECTORY(Templates icam_sources)
 
 ADD_LIBRARY(icam  ${icam_sources})
-IF(NOT WIN32)
-  SET_TARGET_PROPERTIES(icam PROPERTIES COMPILE_FLAGS "-fPIC")
-ENDIF(NOT WIN32)
+
 TARGET_LINK_LIBRARIES(icam vsph vcl vnl vil vbl vgl_io vgl_algo vil_algo vsl vul vpgl vpgl_algo vsl vbl)
 
 IF(BUILD_TESTING)
