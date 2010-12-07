@@ -12,7 +12,7 @@ icam_ocl_view_metadata::icam_ocl_view_metadata(vil_image_view<float> const& exp_
   unsigned wgsize = 16;
   minimizer_=new icam_ocl_minimizer(exp_img, dt, params, true); 
   static_cast<icam_ocl_minimizer*>(minimizer_)->set_workgroup_size(wgsize);
-  static_cast<icam_ocl_minimizer*>(minimizer_)->set_rot_kernel_path("C:/vxl_gamze/vxl/contrib/gel/mrc/vpgl/icam/icam_ocl/trans_parallel_transf_search.cl");
+  static_cast<icam_ocl_minimizer*>(minimizer_)->set_rot_kernel_path("trans_parallel_transf_search.cl");
   final_level_ = minimizer_->n_levels() - 3;
 }
 
