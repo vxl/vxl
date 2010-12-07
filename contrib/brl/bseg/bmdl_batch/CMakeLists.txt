@@ -36,9 +36,7 @@ IF( PYTHON_FOUND )
           SET_TARGET_PROPERTIES(bmdl_batch PROPERTIES OUTPUT_NAME bmdl_batch DEBUG_POSTFIX _d SUFFIX .pyd)
         ENDIF(WIN32)
         SET_TARGET_PROPERTIES(bmdl_batch PROPERTIES PREFIX "")
-        IF(NOT WIN32)
-          SET_TARGET_PROPERTIES(bmdl_batch PROPERTIES COMPILE_FLAGS "-fPIC")
-        ENDIF(NOT WIN32)
+      
         TARGET_LINK_LIBRARIES(bmdl_batch bprb brdb bpro_batch bmdl_pro vbl vpgl_io vpgl_pro vil_io vil_pro)
 
         IF (PYTHON_DEBUG_LIBRARIES)
