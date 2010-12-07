@@ -71,10 +71,10 @@ class icam_view_sphere : public vbl_ref_count
 
 typedef vbl_smart_ptr<icam_view_sphere> icam_view_sphere_sptr;
 
-void vsl_b_read(vsl_b_istream const& is, icam_view_sphere &sp);
+void vsl_b_read(vsl_b_istream &is, icam_view_sphere &sp);
 void vsl_b_write(vsl_b_ostream &os, icam_view_sphere const& sp);
-void vsl_b_read(vsl_b_istream const& is, icam_view_sphere_sptr &sp);
-void vsl_b_write(vsl_b_ostream &os, icam_view_sphere_sptr const& sp);
+void vsl_b_read(vsl_b_istream &is, icam_view_sphere* sp);
+void vsl_b_write(vsl_b_ostream &os, const icam_view_sphere* sp);
 
 
 #endif

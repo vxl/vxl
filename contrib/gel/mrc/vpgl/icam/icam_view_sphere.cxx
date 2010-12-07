@@ -265,12 +265,13 @@ void vsl_b_write(vsl_b_ostream &os, icam_view_sphere const& sp)
   sp.b_write(os);
 }
 
-void vsl_b_read(vsl_b_istream &is, icam_view_sphere_sptr &sp)
+void vsl_b_read(vsl_b_istream &is, icam_view_sphere* sp)
 {
   sp->b_read(is);
 }
 
-void vsl_b_write(vsl_b_ostream &os, icam_view_sphere_sptr const& sp)
+void vsl_b_write(vsl_b_ostream &os, const icam_view_sphere* sp)
 {
   sp->b_write(os);
 }
+
