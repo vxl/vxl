@@ -34,7 +34,7 @@ static void test_read()
   char* tester = new char[buffSize];
   int charCount = 0;
   vcl_string line;
-  vcl_ifstream myfile(test_file.c_str());
+  vcl_ifstream myfile(test_file.c_str(),vcl_ios::binary);
   if (myfile.is_open()) {
     while ( myfile.good() ) {
       getline (myfile,line);
