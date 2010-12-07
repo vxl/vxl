@@ -160,6 +160,10 @@ bool bsta_beta<T>::bsta_beta_from_moments(T mean, T var, T& alpha, T& beta)
 template <class T>
 T bsta_beta<T>::prob_density(T x) const
 {
+  if(x==0.0)
+      x+=1e-10;
+  if(x==1.0)
+      x-=1e-10;
   if (x<T(0)||x>T(1))
       return 0;
   else
