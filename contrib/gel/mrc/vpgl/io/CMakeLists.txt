@@ -10,7 +10,5 @@ SET(vpgl_io_sources
 AUX_SOURCE_DIRECTORY(Templates vpgl_io_sources)
 
 ADD_LIBRARY(vpgl_io ${vpgl_io_sources})
-IF(NOT WIN32)
-  SET_TARGET_PROPERTIES(vpgl_io PROPERTIES COMPILE_FLAGS "-fPIC")
-ENDIF(NOT WIN32)
+
 TARGET_LINK_LIBRARIES(vpgl_io vsl vpgl vnl vnl_io vbl_io)
