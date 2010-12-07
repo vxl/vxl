@@ -53,10 +53,6 @@ IF( PYTHON_FOUND )
           TARGET_LINK_LIBRARIES( bbgm_batch optimized ${PYTHON_LIBRARY})
         ENDIF(PYTHON_LIBRARIES)
 
-        IF( BUILD_TESTING )
-          SUBDIRS(tests)
-        ENDIF( BUILD_TESTING )
-
       ENDIF(GEOTIFF_FOUND )
     ENDIF(TIFF_FOUND )
   ENDIF( EXPAT_FOUND )
