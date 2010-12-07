@@ -18,7 +18,7 @@
 #include <vcl_vector.h>
 
 static const unsigned int test_num=10;
-static const unsigned int test_set=20;
+static const unsigned int test_set=10;
 
 static void test_boxm_plane_ransac()
 {
@@ -30,8 +30,8 @@ static void test_boxm_plane_ransac()
   vcl_vector<boxm_edge_tangent_sample<float> > planes;
   vnl_random rand;
   // get two points from the line, and create a random 3rd point to define a plane
-  unsigned i;
-  for (i=0; i<test_num; ++i) {
+
+  for (unsigned i=0; i<test_num; ++i) {
     float x=float(rand.drand32()*100);
     float y=float(rand.drand32()*100);
     float z=float(rand.drand32()*100);
@@ -44,7 +44,7 @@ static void test_boxm_plane_ransac()
   }
 
   // add the random planes
-  for (; i<test_set; ++i) {
+  for (unsigned i=0; i<test_set; ++i) {
     float a=float(rand.drand32()*100);
     float b=float(rand.drand32()*100);
     float c=float(rand.drand32()*100);
