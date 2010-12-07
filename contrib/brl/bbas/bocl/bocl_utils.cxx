@@ -1,4 +1,5 @@
 #include "bocl_utils.h"
+#include <vcl_iostream.h>
 
 vcl_size_t RoundUp(int global_size,int group_size)
 {
@@ -70,3 +71,12 @@ vcl_string error_to_string(cl_int  status )
     return output;
 }
 
+int check_val(cl_int status, cl_int result, std::string message)
+{
+  if (status != result) {
+    vcl_cout << message << '\n';
+    return 0;
+  }
+  else
+    return 1;
+}

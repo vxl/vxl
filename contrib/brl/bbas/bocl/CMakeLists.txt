@@ -12,6 +12,8 @@ IF(OPENCL_FOUND)
       bocl_cl_gl.h
       bocl_global_memory_bandwidth_manager.h bocl_global_memory_bandwidth_manager.cxx
       bocl_utils.h      bocl_utils.cxx
+      bocl_mem.h        bocl_mem.cxx
+      bocl_kernel.h     bocl_kernel.cxx
   )
   AUX_SOURCE_DIRECTORY(Templates bocl_sources)
   ADD_LIBRARY(bocl ${bocl_sources} )

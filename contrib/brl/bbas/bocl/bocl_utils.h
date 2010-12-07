@@ -15,10 +15,26 @@
 #include "bocl/bocl_cl.h"
 #include <vcl_string.h>
 #include <vcl_cstddef.h>
+
+#define SDK_SUCCESS 0
+#define SDK_FAILURE 1
+
 //: function to pad the global threads if it is not exact multiple of the workgroup size
 vcl_size_t RoundUp(int global_size,int group_size);
 //: function to display decoded error message.
 vcl_string error_to_string(cl_int  status );
 
+int check_val(cl_int status, cl_int result, std::string message);
+
+/*
+class bocl_utils
+{
+  public:
+  
+    //: functions to append 
+    static
+  
+}
+*/
 
 #endif
