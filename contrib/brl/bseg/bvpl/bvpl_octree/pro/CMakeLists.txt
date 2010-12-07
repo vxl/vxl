@@ -17,7 +17,7 @@ AUX_SOURCE_DIRECTORY(processes bvpl_octree_pro_sources)
 
 ADD_LIBRARY(bvpl_octree_pro ${bvpl_octree_pro_sources})
 
-TARGET_LINK_LIBRARIES(bvpl_octree_pro bvpl_octree boxm boct boxm_algo_pro bprb bvpl_io brdb vbl_io)
+TARGET_LINK_LIBRARIES(bvpl_octree_pro bvpl_octree boxm boct boxm_algo_pro boxm_sample boxm_util bprb bvpl_io brdb vbl_io)
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)
