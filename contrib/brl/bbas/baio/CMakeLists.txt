@@ -23,7 +23,6 @@ ENDIF(WIN32)
 ADD_LIBRARY(baio ${baio_sources})
 
 IF(APPLE)
-    MESSAGE("HEY HEY")
     TARGET_LINK_LIBRARIES(baio c)
 ELSEIF(UNIX)
     TARGET_LINK_LIBRARIES(baio rt)
