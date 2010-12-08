@@ -4,54 +4,33 @@
 #include <vcl_iostream.h> //for vcl_cout
 #include <vcl_fstream.h>  //for file open
 #include <vcl_cstdlib.h>  //includes malloc
+#include <vnl/vnl_random.h>
+#include <vpl/vpl.h>
 
-static int test_read_helper(char* buffer)
-{
-  //tests to see if char* persists
-  //load from file asynch
-  int buffSize = 1024;
-  vcl_string root_dir = testlib_root_dir();
-  vcl_string test_file = root_dir + "/contrib/brl/bbas/baio/tests/test_file.txt";
-  baio aio;
-  aio.read(test_file, buffer, buffSize);
-  int numFlops = 0;
-  while (aio.status() == BAIO_IN_PROGRESS) {
-    numFlops += 4;
-  }
-  buffer = aio.buffer();
-
-  aio.close_file();
-  return numFlops;
-}
 
 static void test_read()
 {
-  const int buffSize = 1024;
+  //create file to read
+  const unsigned int buffSize = 1024*1024;
   vcl_string root_dir = testlib_root_dir();
-  vcl_string test_file = root_dir + "/contrib/brl/bbas/baio/tests/test_file.txt";
-
-  //load from file with blocking
+  vcl_string test_file = root_dir + "/contrib/brl/bbas/baio/tests/test_file_r.txt";
   char* tester = new char[buffSize];
-  int charCount = 0;
-  vcl_string line;
-  vcl_ifstream myfile(test_file.c_str(),vcl_ios::binary);
-  if (myfile.is_open()) {
-    while ( myfile.good() ) {
-      getline (myfile,line);
-      line += "\n";
-      for (unsigned int i=0 ; i<line.length(); ++i) {
-        if (charCount > buffSize-1)
-          break;
-        tester[charCount] = line[i];
-        charCount++;
-      }
-    }
-    myfile.close();
-  }
+  vnl_random rand;
+  for (unsigned i=0;i<buffSize;++i)
+    tester[i]=(char)rand.lrand32(-127,127);
+  
+  //write to file with blocking
+  vcl_ofstream outFile(test_file.c_str(), vcl_ios::out | vcl_ios::binary);
+  outFile.write(tester, buffSize);
+  outFile.close();
 
   //load from file asynch
   char* aio_buff = new char[buffSize];
-  int numFlops = test_read_helper(aio_buff);
+  baio aio;
+  aio.read(test_file, aio_buff, buffSize);
+  int numFlops = 0;
+  while (aio.status() == BAIO_IN_PROGRESS) numFlops += 4;
+  aio.close_file();
   vcl_cout<<"Number of flops performed during ASYNC read: "<<numFlops<<vcl_endl;
 
   //test asynchros-ness
@@ -66,9 +45,11 @@ static void test_read()
     }
   }
   TEST("data read matches synchronous data ", true, good);
+  
   //cleanup
   delete[] tester;
   delete[] aio_buff;
+  vpl_unlink(test_file.c_str());
 }
 
 TESTMAIN(test_read);

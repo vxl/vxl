@@ -7,25 +7,6 @@
 #include <vnl/vnl_random.h>
 #include <vpl/vpl.h>
 
-#if 0 // currently unused static function
-static int test_write_helper(char* buffer)
-{
-  //tests to see if char* persists
-  //load from file asynch
-  int buffSize = 1024;
-  vcl_string root_dir = testlib_root_dir();
-  vcl_string test_file = root_dir + "/contrib/brl/bbas/baio/tests/test_file.txt";
-  baio aio;
-  aio.read(test_file, buffer, buffSize);
-  int numFlops = 0;
-  while (aio.status() == BAIO_IN_PROGRESS) {
-    numFlops += 4;
-  }
-  buffer = aio.buffer();
-  return numFlops;
-}
-#endif // 0
-
 static void test_write()
 {
   const unsigned int buffSize = 1024*1024;
@@ -39,7 +20,6 @@ static void test_write()
   for (unsigned i=0;i<buffSize;++i)
     in_tester[i]=(char)rand.lrand32(-127,127);
 
-
   baio aio;
   aio.write(test_file,in_tester,buffSize);
   int num_flops = 0;
@@ -48,7 +28,6 @@ static void test_write()
   }
   aio.close_file();
   vcl_cout<<"Number of flops performed during ASYNC write: "<<num_flops<<vcl_endl;
-
 
   unsigned int charCount = 0;
   vcl_string line;
@@ -79,6 +58,7 @@ static void test_write()
     }
   }
   TEST("data read matches data", good, true);
+  
   //cleanup
   delete[] in_tester;
   delete[] out_tester;
