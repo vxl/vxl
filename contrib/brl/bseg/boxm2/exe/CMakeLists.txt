@@ -1,0 +1,38 @@
+# this is an executable to run a process for profiling purposes
+ADD_EXECUTABLE( boxm2_render_expected_exe
+  boxm2_render_expected_exe.cxx
+)
+TARGET_LINK_LIBRARIES( boxm2_render_expected_exe boxm2 bocl vil_pro vpgl_pro vul )
+
+
+#INCLUDE( ${BRL_MODULE_PATH}/FindGLEW.cmake )
+
+#IF(GLEW_FOUND)
+ #IF(VGUI_FOUND)
+  #INCLUDE_DIRECTORIES(${GLEW_INCLUDE_DIR} )
+  #LINK_DIRECTORIES(${OPENGL_LIBRARY_DIR})
+
+  #ADD_EXECUTABLE( boxm_ocl_render_view boxm_ocl_render_view.cxx)
+  #TARGET_LINK_LIBRARIES( boxm_ocl_render_view boxm_ocl  boxm_ocl_view vul vgui ${GLEW_LIBRARY} )
+
+  #ADD_EXECUTABLE( boxm_ocl_update_view boxm_ocl_update_view.cxx)
+  #TARGET_LINK_LIBRARIES( boxm_ocl_update_view boxm_ocl  boxm_ocl_view vul vgui ${GLEW_LIBRARY} )
+
+  #ADD_EXECUTABLE( boxm_opencl_change_detection_view boxm_opencl_change_detection_view.cxx)
+  #TARGET_LINK_LIBRARIES( boxm_opencl_change_detection_view boxm_ocl  boxm_ocl_view vul vgui ${GLEW_LIBRARY} )
+
+  #ADD_EXECUTABLE( boxm_ocl_rerender_view boxm_ocl_rerender_view.cxx)
+  #TARGET_LINK_LIBRARIES( boxm_ocl_rerender_view boxm_ocl  boxm_ocl_view vul vgui ${GLEW_LIBRARY} )
+
+  #ADD_EXECUTABLE( boxm_ocl_render_bit_view boxm_ocl_render_bit_view.cxx)
+  #TARGET_LINK_LIBRARIES( boxm_ocl_render_bit_view boxm_ocl  boxm_ocl_view vul vgui ${GLEW_LIBRARY} )
+
+  #ADD_EXECUTABLE( boxm_ocl_update_bit_view boxm_ocl_update_bit_view.cxx)
+  #TARGET_LINK_LIBRARIES( boxm_ocl_update_bit_view boxm_ocl  boxm_ocl_view vul vgui ${GLEW_LIBRARY} )
+
+  #ADD_EXECUTABLE( boxm_ocl_change_detection_bit_view boxm_ocl_change_detection_bit_view.cxx)
+  #TARGET_LINK_LIBRARIES( boxm_ocl_change_detection_bit_view boxm_ocl_view vul vgui ${GLEW_LIBRARY} )
+
+ #ENDIF(VGUI_FOUND)
+#ENDIF(GLEW_FOUND)
+

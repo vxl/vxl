@@ -31,11 +31,10 @@ void test_data_sio()
     boxm2_sio_mgr::save_block_data<BOXM2_ALPHA>("", id, test_data);
     delete test_data;  
 
-    vcl_ostringstream ns;  // Declare an output string stream.
-    ns << "" << boxm2_data_traits<BOXM2_ALPHA>::prefix() << id << ".bin";
-    vcl_string filename = ns.str();
+    ////file name
+    vcl_string filename = boxm2_data_traits<BOXM2_ALPHA>::prefix() + "_" + id.to_string() + ".bin";
 
-    unsigned long bytecount=vul_file::size(filename);
+    unsigned long bytecount = vul_file::size(filename.c_str());
     TEST("Successful Synchronous Write ",bytecount,array_size*sizeof(float));
 
     boxm2_data_base * read_data = boxm2_sio_mgr::load_block_data<BOXM2_ALPHA>("",id);

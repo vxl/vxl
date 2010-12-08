@@ -14,4 +14,4 @@ SET(boxm2_io_sources
    )
 
 ADD_LIBRARY(boxm2_io  ${boxm2_io_sources})
-TARGET_LINK_LIBRARIES(boxm2_io expatpp vpgl baio vgl_xio vgl vbl vul vsl vcl)
+TARGET_LINK_LIBRARIES(boxm2_io boxm2 expatpp vpgl baio vgl_xio vgl vbl vul vsl vcl)

@@ -132,11 +132,15 @@ vcl_ostream& operator <<(vcl_ostream &s, boxm2_block& scene);
 void x_write(vcl_ostream &os, boxm2_block& scene, vcl_string name);
 
 //: Binary write boxm_update_bit_scene_manager scene to stream
-void vsl_b_write(vsl_b_ostream & os, boxm2_block const& scene);
+void vsl_b_write(vsl_b_ostream& os, boxm2_block const& scene);
 void vsl_b_write(vsl_b_ostream& os, const boxm2_block* &p);
+void vsl_b_write(vsl_b_ostream& os, boxm2_block_sptr& sptr); 
+void vsl_b_write(vsl_b_ostream& os, boxm2_block_sptr const& sptr);
 
 //: Binary load boxm_update_bit_scene_manager scene from stream.
-void vsl_b_read(vsl_b_istream & is, boxm2_block &scene);
+void vsl_b_read(vsl_b_istream& is, boxm2_block &scene);
 void vsl_b_read(vsl_b_istream& is, boxm2_block* p);
+void vsl_b_read(vsl_b_istream& is, boxm2_block_sptr& sptr); 
+void vsl_b_read(vsl_b_istream& is, boxm2_block_sptr const& sptr);
 
 #endif // boxm2_block_h_
