@@ -80,3 +80,4 @@ int check_val(cl_int status, cl_int result, std::string message)
   else
     return 1;
 }
+

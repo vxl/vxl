@@ -93,6 +93,10 @@ class bocl_manager
   //: Constructor
   bocl_manager() : max_work_item_sizes_(0), devices_(0) {}
 
+  bool free_buffer(void* buffer);
+
+  bool create_buffer(void** buffer,vcl_string type,int elm_size,int length);
+
   static T* instance_;
 
   vcl_string prog_;

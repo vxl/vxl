@@ -19,22 +19,16 @@
 #define SDK_SUCCESS 0
 #define SDK_FAILURE 1
 
+#define ARRAY_BUFFER_NAME "array_buf"
+#define RESULT_ARRAY_BUFFER_NAME "result_array_buf"
+#define CL_LEN_BUFFER_NAME "cl_len_buf"
+#define RESULT_FLAG_BUFFER_NAME "result_flag_buf"
+
 //: function to pad the global threads if it is not exact multiple of the workgroup size
 vcl_size_t RoundUp(int global_size,int group_size);
 //: function to display decoded error message.
 vcl_string error_to_string(cl_int  status );
-
+//: Check for error returns
 int check_val(cl_int status, cl_int result, std::string message);
-
-/*
-class bocl_utils
-{
-  public:
-  
-    //: functions to append 
-    static
-  
-}
-*/
 
 #endif
