@@ -19,6 +19,9 @@
 #include <boxm2/boxm2_block_id.h>
 #include <boxm2/boxm2_opencl_processor.h>
 #include <boxm2/boxm2_opencl_render_process.h>
+#include <boxm2/boxm2_cpp_processor.h>
+#include <boxm2/boxm2_cpp_render_process.h>
+
 
 //brdb stuff
 #include <brdb/brdb_value.h>
@@ -45,44 +48,88 @@ int main(int argc,  char** argv)
   else  {
       ifs >> *pcam;
   }
+  vpgl_camera_double_sptr cam = pcam; 
+  brdb_value_sptr brdb_cam = new brdb_value_t<vpgl_camera_double_sptr>(cam); 
   
-  //create scene from xml file 
-  boxm2_scene scene(scene_file());
-  vcl_cout<<"Scene Initialized... "<<vcl_endl
-          <<scene<<vcl_endl;
+  //create output image buffer
+  vil_image_view_base_sptr expimg = new vil_image_view<vxl_byte>(ni(), nj()); 
+  brdb_value_sptr brdb_expimg = new brdb_value_t<vil_image_view_base_sptr>(expimg); 
 
-  ////get relevant blocks id 0,0,0 and push em in a vector
+  //This is how you get the cam back...
+  //brdb_value_t<vpgl_camera_double_sptr>* t = static_cast<brdb_value_t<vpgl_camera_double_sptr>* >(brdb_cam.ptr() ); 
+  //vpgl_camera_double_sptr test = t->value(); 
+  //vpgl_perspective_camera<double>* recast = static_cast<vpgl_perspective_camera<double>* >(test.ptr());
+
+  
+  //----------------------------------------------------------------------------
+  //--- BEGIN BOXM2 API EXAMPLE ------------------------------------------------
+  //----------------------------------------------------------------------------
+  
+  //start out rendering with the CPU
+  boxm2_scene_sptr scene = new boxm2_scene(scene_file()); 
+  brdb_value_sptr brdb_scene = new brdb_value_t<boxm2_scene_sptr>(scene); 
+  
+  //get relevant blocks
   boxm2_block_id id(0,0,0); 
-  boxm2_dumb_cache dcache(scene.data_path());
-  boxm2_data<BOXM2_ALPHA>* alph = dcache.get_data<BOXM2_ALPHA>(id);
-  boxm2_data<BOXM2_MOG3_GREY>* mog = dcache.get_data<BOXM2_MOG3_GREY>(id);
-  
-  
+  boxm2_dumb_cache dcache(scene->data_path());
   boxm2_block_sptr blk = dcache.get_block(id); 
+  boxm2_data_base_sptr alph = dcache.get_data<BOXM2_ALPHA>(id); 
+  boxm2_data_base_sptr mog  = dcache.get_data<BOXM2_MOG3_GREY>(id); 
   brdb_value_sptr brdb_block = new brdb_value_t<boxm2_block_sptr>(blk);
+  brdb_value_sptr brdb_alph  = new brdb_value_t<boxm2_data_base_sptr>(alph);
+  brdb_value_sptr brdb_mog   = new brdb_value_t<boxm2_data_base_sptr>(mog); 
   
-
+  //set inputs
   vcl_vector<brdb_value_sptr> input; 
+  input.push_back(brdb_scene); 
   input.push_back(brdb_block); 
-  ////input.push_back(alph);
-  ////input.push_back(mog); 
+  input.push_back(brdb_alph);
+  input.push_back(brdb_mog); 
+  input.push_back(brdb_cam);
+  input.push_back(brdb_expimg); 
   
   //initoutput vector
-  vcl_vector<brdb_value_sptr> output;  
-  
-  //initialize a GPU processor
-  boxm2_opencl_processor gpu_pro; 
-  gpu_pro.init();
-  
-  //initialize the GPU render process
-  boxm2_opencl_render_process gpu_render; 
-  gpu_pro.run(&gpu_render, input, output); 
-  gpu_pro.finish(); 
+  vcl_vector<brdb_value_sptr> output; 
 
-  //grab the output from teh gpu_pro class
+  boxm2_cpp_processor cpp_pro;
+  cpp_pro.init(); 
+  boxm2_cpp_render_process cpp_render; 
+  cpp_pro.run(&cpp_render, input, output); 
+  cpp_pro.finish(); 
+  
+  //create scene from xml file 
+  //boxm2_scene_sptr scene = new boxm2_scene(scene_file());
+  //vcl_cout<<"Scene Initialized... "<<vcl_endl
+          //<<scene<<vcl_endl;
 
-  //save to disk
-  vil_image_view<vxl_byte> expimg(ni(), nj()); 
-  vil_save(expimg,img().c_str());
+  //////get relevant blocks id 0,0,0 and push em in a vector
+  //boxm2_block_id id(0,0,0); 
+  //boxm2_dumb_cache dcache(scene->data_path());
+  //boxm2_block_sptr blk = dcache.get_block(id); 
+  //boxm2_data_base_sptr alph = dcache.get_data<BOXM2_ALPHA>(id); 
+  //boxm2_data_base_sptr mog  = dcache.get_data<BOXM2_MOG3_GREY>(id); 
+  //brdb_value_sptr brdb_block = new brdb_value_t<boxm2_block_sptr>(blk);
+  //brdb_value_sptr brdb_alph  = new brdb_value_t<boxm2_data_base_sptr>(alph);
+  //brdb_value_sptr brdb_mog   = new brdb_value_t<boxm2_data_base_sptr>(mog); 
+  //vcl_vector<brdb_value_sptr> input; 
+  //input.push_back(brdb_block); 
+  //input.push_back(brdb_alph);
+  //input.push_back(brdb_mog); 
+  //input.push_back(brdb_cam);
+  
+  ////initialize a GPU processor
+  //boxm2_opencl_processor gpu_pro; 
+  //gpu_pro.init();
+  
+  ////initialize the GPU render process
+  //boxm2_opencl_render_process gpu_render; 
+  //gpu_pro.run(&gpu_render, input, output); 
+  //gpu_pro.finish(); 
+
+  ////grab the output from teh gpu_pro class
+
+  ////save to disk
+  //vil_image_view<vxl_byte> expimg(ni(), nj()); 
+  //vil_save(expimg,img().c_str());
   return 0;
 }

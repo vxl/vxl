@@ -6,13 +6,13 @@
 boxm2_dumb_cache::~boxm2_dumb_cache()
 {
   // clean up block
-  if(cached_block_) delete cached_block_; 
+  //if(cached_block_) delete cached_block_; 
   
   // clean up loaded data
   vcl_map<vcl_string, boxm2_data_base* >::iterator iter; 
   for(iter=cached_data_.begin(); iter!=cached_data_.end(); ++iter) {
     boxm2_data_base* dat = (*iter).second; 
-    if(dat) delete dat; 
+    //if(dat) delete dat; 
   } 
 }
 

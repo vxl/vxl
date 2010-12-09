@@ -43,11 +43,20 @@ boxm2_scene::boxm2_scene(vcl_string filename)
     block_num_    = parser.block_nums();
 }
 
+
+//: save scene (xml file)
+void boxm2_scene::save_scene()
+{
+  //write out to XML file
+  vcl_ofstream xmlstrm(xml_path_.c_str());
+  x_write(xmlstrm, (*this), "scene");
+}
+
 //---------------------------------------------------------------------
 // NON CLASS FUNCTIONS
 //---------------------------------------------------------------------
 //------------XML WRITE------------------------------------------------
-void x_write(vcl_ostream &os, boxm2_scene scene, vcl_string name)
+void x_write(vcl_ostream &os, boxm2_scene& scene, vcl_string name)
 {
     //open root tag
     vsl_basic_xml_element scene_elm(name);
@@ -116,8 +125,11 @@ vcl_ostream& operator <<(vcl_ostream &s, boxm2_scene& scene)
 //: Binary write boxm2_scene to stream obj/pointer
 void vsl_b_write(vsl_b_ostream& /*os*/, boxm2_scene const& /*bit_scene*/) {}
 void vsl_b_write(vsl_b_ostream& /*os*/, boxm2_scene* const& /*ph*/) {}
+void vsl_b_write(vsl_b_ostream& os, boxm2_scene_sptr& sptr) {}
+void vsl_b_write(vsl_b_ostream& os, boxm2_scene_sptr const& sptr) {}
 
 //: Binary load boxm scene from stream.
 void vsl_b_read(vsl_b_istream& /*is*/, boxm2_scene& /*bit_scene*/) {}
 void vsl_b_read(vsl_b_istream& /*is*/, boxm2_scene* /*ph*/) {}
-
+void vsl_b_read(vsl_b_istream& is, boxm2_scene_sptr& sptr) {}
+void vsl_b_read(vsl_b_istream& is, boxm2_scene_sptr const& sptr) {}

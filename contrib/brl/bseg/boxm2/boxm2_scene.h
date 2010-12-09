@@ -26,11 +26,17 @@ class boxm2_scene : public vbl_ref_count
 {
   public:
 
+    //: empty scene, needs to be initialized manually
+    boxm2_scene() {}
+    
     //: initializes scene from xmlFile
     boxm2_scene(vcl_string filename);
 
     //: destructor
     ~boxm2_scene() { }
+    
+    //: save scene xml file
+    void save_scene(); 
 
     //: scene dimensions accessors
     vgl_vector_3d<double>   block_dim()   const { return block_dim_; }
@@ -42,9 +48,20 @@ class boxm2_scene : public vbl_ref_count
     //: scene path accessors
     vcl_string              xml_path()    const { return xml_path_; }
     vcl_string              data_path()   const { return data_path_; }
-
+    
     //: scene version number
     static short version_no() { return 1; }
+
+    //: scene mutators 
+    void set_block_dim(vgl_vector_3d<double> dim)   { block_dim_ = dim; }
+    void set_block_num(vgl_vector_3d<unsigned> num) { block_num_ = num; }
+    void set_local_origin(vgl_point_3d<double> org) { local_origin_ = org; }
+    void set_rpc_origin(vgl_point_3d<double> rpc)   { rpc_origin_ = rpc; }
+    void set_lvcs(bgeo_lvcs lvcs)                   { lvcs_ = lvcs; }
+    
+    //: scene path mutators
+    void set_xml_path(vcl_string path)              { xml_path_ = path; }
+    void set_data_path(vcl_string path)             { data_path_ = path; }
 
   private:
 
@@ -70,14 +87,18 @@ typedef vbl_smart_ptr<boxm2_scene> boxm2_scene_sptr;
 vcl_ostream& operator<<(vcl_ostream &s, boxm2_scene& scene);
 
 //: scene xml write function
-void x_write(vcl_ostream &os, boxm2_scene scene, vcl_string name);
+void x_write(vcl_ostream &os, boxm2_scene& scene, vcl_string name);
 
 //: Binary write boxm2_scene scene to stream
-void vsl_b_write(vsl_b_ostream & os, boxm2_scene const& scene);
+void vsl_b_write(vsl_b_ostream& os, boxm2_scene const& scene);
 void vsl_b_write(vsl_b_ostream& os, const boxm2_scene* &p);
+void vsl_b_write(vsl_b_ostream& os, boxm2_scene_sptr& sptr); 
+void vsl_b_write(vsl_b_ostream& os, boxm2_scene_sptr const& sptr);
 
 //: Binary load boxm2_scene scene from stream.
-void vsl_b_read(vsl_b_istream & is, boxm2_scene &scene);
+void vsl_b_read(vsl_b_istream& is, boxm2_scene &scene);
 void vsl_b_read(vsl_b_istream& is, boxm2_scene* p);
+void vsl_b_read(vsl_b_istream& is, boxm2_scene_sptr& sptr);
+void vsl_b_read(vsl_b_istream& is, boxm2_scene_sptr const& sptr);
 
 #endif // boxm2_scene_h_

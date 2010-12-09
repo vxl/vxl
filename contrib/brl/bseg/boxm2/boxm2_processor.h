@@ -5,6 +5,7 @@
 #include <boxm2/boxm2_process.h>
 #include <brdb/brdb_value_sptr.h>
 #include <vcl_vector.h>
+#include <vcl_iostream.h>
 
 //: base class implementation for cpp and opencl processors
 class boxm2_processor

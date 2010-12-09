@@ -4,6 +4,10 @@ ADD_EXECUTABLE( boxm2_render_expected_exe
 )
 TARGET_LINK_LIBRARIES( boxm2_render_expected_exe boxm2 bocl vil_pro vpgl_pro vul )
 
+ADD_EXECUTABLE( boxm2_convert_bit_scene_exe
+  boxm2_convert_bit_scene.cxx
+)
+TARGET_LINK_LIBRARIES( boxm2_convert_bit_scene_exe boxm2 boxm_ocl vbl vnl vcl)
 
 #INCLUDE( ${BRL_MODULE_PATH}/FindGLEW.cmake )
 

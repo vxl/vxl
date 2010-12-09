@@ -14,20 +14,21 @@ IF(EXPAT_FOUND)
     INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
 
     SET(boxm2_sources
-        boxm2_scene.h             boxm2_scene.cxx
-        boxm2_block.h             boxm2_block.cxx
-        boxm2_data_base.h         boxm2_data_base.cxx
-        boxm2_data.h              boxm2_data.txx
+        boxm2_scene.h                 boxm2_scene.cxx
+        boxm2_block.h                 boxm2_block.cxx
+        boxm2_data_base.h             boxm2_data_base.cxx
+        boxm2_data.h                  boxm2_data.txx
         boxm2_data_traits.h
-        boxm2_scene_parser.h      boxm2_scene_parser.cxx
-        boxm2_block_id.h          boxm2_block_id.cxx
-        boxm2_opencl_processor.h  boxm2_opencl_processor.cxx
-        boxm2_cpp_processor.h     boxm2_cpp_processor.cxx
+        boxm2_scene_parser.h          boxm2_scene_parser.cxx
+        boxm2_block_id.h              boxm2_block_id.cxx
         boxm2_processor.h
         boxm2_process.h
+        boxm2_opencl_processor.h      boxm2_opencl_processor.cxx
+        boxm2_cpp_processor.h         boxm2_cpp_processor.cxx
         boxm2_opencl_process_base.h
         boxm2_cpp_process_base.h
-        boxm2_opencl_render_process.h
+        boxm2_opencl_render_process.h boxm2_opencl_render_process.cxx
+        boxm2_cpp_render_process.h    boxm2_cpp_render_process.cxx
        )
 
     AUX_SOURCE_DIRECTORY(Templates boxm2_sources)
