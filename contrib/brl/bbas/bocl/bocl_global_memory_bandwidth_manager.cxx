@@ -1,4 +1,5 @@
-#include <bocl/bocl_global_memory_bandwidth_manager.h>
+#include "bocl_global_memory_bandwidth_manager.h"
+//
 #include <bocl/bocl_buffer_mgr.h>
 #include <vcl_cstdio.h>
 
@@ -67,7 +68,7 @@ bool bocl_global_memory_bandwidth_manager::run_kernel()
 
   if (!BOCL_BUFFER_MGR->create_write_buffer(this->context_,RESULT_ARRAY_BUFFER_NAME, result_array_ ,len_*sizeof(cl_float)))
     return SDK_FAILURE;
-  
+
   if (!BOCL_BUFFER_MGR->create_read_buffer(this->context_,CL_LEN_BUFFER_NAME, cl_len_ ,sizeof(cl_uint)))
     return SDK_FAILURE;
 
@@ -75,16 +76,16 @@ bool bocl_global_memory_bandwidth_manager::run_kernel()
     return SDK_FAILURE;
 
   // -- Set appropriate arguments to the kernel --
-  if (!kernel_.set_arg(0,CL_LEN_BUFFER_NAME)) 
+  if (!kernel_.set_arg(0,CL_LEN_BUFFER_NAME))
     return SDK_FAILURE;
 
-  if (!kernel_.set_arg(1,ARRAY_BUFFER_NAME)) 
+  if (!kernel_.set_arg(1,ARRAY_BUFFER_NAME))
     return SDK_FAILURE;
 
   if (!kernel_.set_arg(2,RESULT_ARRAY_BUFFER_NAME))
     return SDK_FAILURE;
-  
-  if (!kernel_.set_arg(3,RESULT_FLAG_BUFFER_NAME)) 
+
+  if (!kernel_.set_arg(3,RESULT_FLAG_BUFFER_NAME))
     return SDK_FAILURE;
 
   if (!kernel_.set_local_arg(4,sizeof(cl_float)*this->group_size()))
@@ -139,11 +140,11 @@ bool bocl_global_memory_bandwidth_manager::run_kernel()
   status = clWaitForEvents(1, &events[0]);
   if (!this->check_val(status,CL_SUCCESS,"clWaitForEvents failed."))
     return SDK_FAILURE;
- 
+
   if (!BOCL_BUFFER_MGR->enqueue_read_buffer(command_queue_,RESULT_FLAG_BUFFER_NAME,CL_TRUE,0,sizeof(cl_int),
                                             result_flag_,0,NULL,&events[0]))
     return SDK_FAILURE;
- 
+
 
   // Wait for the read buffer to finish execution
   status = clWaitForEvents(1, &events[0]);
@@ -176,7 +177,7 @@ bool bocl_global_memory_bandwidth_manager::run_kernel_prefetch()
 
   if (!BOCL_BUFFER_MGR->create_write_buffer(this->context_,RESULT_ARRAY_BUFFER_NAME, result_array_ ,len_*sizeof(cl_float)))
     return SDK_FAILURE;
-  
+
   if (!BOCL_BUFFER_MGR->create_read_buffer(this->context_,CL_LEN_BUFFER_NAME, cl_len_ ,sizeof(cl_uint)))
     return SDK_FAILURE;
 
@@ -184,16 +185,16 @@ bool bocl_global_memory_bandwidth_manager::run_kernel_prefetch()
     return SDK_FAILURE;
 
   // -- Set appropriate arguments to the kernel --
-  if (!kernel_.set_arg(0,CL_LEN_BUFFER_NAME)) 
+  if (!kernel_.set_arg(0,CL_LEN_BUFFER_NAME))
     return SDK_FAILURE;
 
-  if (!kernel_.set_arg(1,ARRAY_BUFFER_NAME)) 
+  if (!kernel_.set_arg(1,ARRAY_BUFFER_NAME))
     return SDK_FAILURE;
 
   if (!kernel_.set_arg(2,RESULT_ARRAY_BUFFER_NAME))
     return SDK_FAILURE;
-  
-  if (!kernel_.set_arg(3,RESULT_FLAG_BUFFER_NAME)) 
+
+  if (!kernel_.set_arg(3,RESULT_FLAG_BUFFER_NAME))
     return SDK_FAILURE;
 
   if (!kernel_.set_local_arg(4,sizeof(cl_float4)*this->group_size()))
@@ -245,7 +246,7 @@ bool bocl_global_memory_bandwidth_manager::run_kernel_prefetch()
   cl_event events[1];
 
   if (!BOCL_BUFFER_MGR->enqueue_read_buffer(command_queue_,RESULT_ARRAY_BUFFER_NAME,CL_TRUE,0,len_*sizeof(cl_float),
-                                           result_array_,0,NULL,&events[0]))                               
+                                           result_array_,0,NULL,&events[0]))
     return SDK_FAILURE;
 
   status = clWaitForEvents(1, &events[0]);
@@ -285,15 +286,17 @@ bool bocl_global_memory_bandwidth_manager::run_kernel_using_image()
   inputformat.image_channel_order = CL_RGBA;
   inputformat.image_channel_data_type = CL_FLOAT;
 
+#if 0
   // Create and initialize memory objects
-  /*cl_mem array_buf = clCreateImage2D(this->context_,
-                               CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,&inputformat,image2d_max_width_,len_/image2d_max_width_,
-                               image2d_max_width_ * sizeof(cl_float4),array_,&status);
+  cl_mem array_buf = clCreateImage2D(this->context_,
+                                     CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,&inputformat,image2d_max_width_,len_/image2d_max_width_,
+                                     image2d_max_width_ * sizeof(cl_float4),array_,&status);
 
   if (!this->check_val(status,
                        CL_SUCCESS,
                        "clCreateBuffer (input array) failed."))
-    return SDK_FAILURE;*/
+    return SDK_FAILURE;
+#endif
 
   if (!BOCL_BUFFER_MGR->create_image2D(this->context_,ARRAY_BUFFER_NAME,CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,&inputformat,image2d_max_width_,len_/image2d_max_width_,
                                image2d_max_width_ * sizeof(cl_float4),array_))
@@ -301,7 +304,7 @@ bool bocl_global_memory_bandwidth_manager::run_kernel_using_image()
 
   if (!BOCL_BUFFER_MGR->create_write_buffer(this->context_,RESULT_ARRAY_BUFFER_NAME, result_array_ ,len_*sizeof(cl_float)))
     return SDK_FAILURE;
-  
+
   if (!BOCL_BUFFER_MGR->create_read_buffer(this->context_,CL_LEN_BUFFER_NAME, cl_len_ ,sizeof(cl_uint)))
     return SDK_FAILURE;
 
@@ -309,16 +312,16 @@ bool bocl_global_memory_bandwidth_manager::run_kernel_using_image()
     return SDK_FAILURE;
 
   // -- Set appropriate arguments to the kernel --
-  if (!kernel_.set_arg(0,CL_LEN_BUFFER_NAME)) 
+  if (!kernel_.set_arg(0,CL_LEN_BUFFER_NAME))
     return SDK_FAILURE;
 
-  if (!kernel_.set_arg(1,ARRAY_BUFFER_NAME)) 
+  if (!kernel_.set_arg(1,ARRAY_BUFFER_NAME))
     return SDK_FAILURE;
 
   if (!kernel_.set_arg(2,RESULT_ARRAY_BUFFER_NAME))
     return SDK_FAILURE;
-  
-  if (!kernel_.set_arg(3,RESULT_FLAG_BUFFER_NAME)) 
+
+  if (!kernel_.set_arg(3,RESULT_FLAG_BUFFER_NAME))
     return SDK_FAILURE;
 
   if (!kernel_.set_local_arg(4,sizeof(cl_float)*this->group_size()))
@@ -396,10 +399,11 @@ bool bocl_global_memory_bandwidth_manager::run_kernel_using_image()
     return SDK_FAILURE;
 
   if (!BOCL_BUFFER_MGR->release_buffer(ARRAY_BUFFER_NAME) ||
-       BOCL_BUFFER_MGR->release_buffer(RESULT_ARRAY_BUFFER_NAME) ||
-       BOCL_BUFFER_MGR->release_buffer(RESULT_FLAG_BUFFER_NAME) ||
-       BOCL_BUFFER_MGR->release_buffer(CL_LEN_BUFFER_NAME))
+      !BOCL_BUFFER_MGR->release_buffer(RESULT_ARRAY_BUFFER_NAME) ||
+      !BOCL_BUFFER_MGR->release_buffer(RESULT_FLAG_BUFFER_NAME) ||
+      !BOCL_BUFFER_MGR->release_buffer(CL_LEN_BUFFER_NAME))
     return SDK_FAILURE;
+
   return SDK_SUCCESS;
 }
 
@@ -412,8 +416,8 @@ int bocl_global_memory_bandwidth_manager::build_kernel_program(bool useimage)
     status = clReleaseProgram(program_);
     program_ = 0;
     if (!this->check_val(status,
-      CL_SUCCESS,
-      "clReleaseProgram failed."))
+                         CL_SUCCESS,
+                         "clReleaseProgram failed."))
       return SDK_FAILURE;
   }
   const char * source = prog_.c_str();
