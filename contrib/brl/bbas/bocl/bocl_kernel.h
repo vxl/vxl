@@ -1,6 +1,7 @@
 #ifndef bocl_kernel_h_
 #define bocl_kernel_h_
-
+//:
+// \file
 #include <vcl_string.h>
 #include <vcl_vector.h>
 #include <vcl_cstddef.h> // for std::size_t
