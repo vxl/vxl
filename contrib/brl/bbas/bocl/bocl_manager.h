@@ -73,7 +73,7 @@ class bocl_manager
 
   vcl_size_t group_size() const {return max_work_group_size_;}
   cl_ulong total_local_memory() const {return total_local_memory_;}
-  cl_context context() {return context_;}
+  cl_context& context() {return context_;}
   cl_device_id * devices() {return devices_;}
 
   //: Allocate host memory for use with clCreateBuffer (aligned if necessary)

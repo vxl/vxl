@@ -37,7 +37,7 @@ class bocl_kernel
 {
   public:
   
-    bocl_kernel(); 
+    bocl_kernel() : kernel_(0) {}; 
     ~bocl_kernel();
     
     //: create kernel from a list of sources, and a kernel name, and an ID
@@ -49,7 +49,7 @@ class bocl_kernel
                         vcl_string id); 
     
     //: execute this kernel on given command queue with given workspace size
-    bool execute(cl_command_queue cmdQueue, vcl_size_t* localThreads, vcl_size_t* globalThreads); 
+    bool execute(cl_command_queue& cmdQueue, vcl_size_t* localThreads, vcl_size_t* globalThreads); 
 
     //: set a bocl_mem buffer arg (pushes it onthe back 
     bool set_arg(bocl_mem* buffer);

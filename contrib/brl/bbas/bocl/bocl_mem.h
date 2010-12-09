@@ -37,10 +37,10 @@ class bocl_mem
     bool release_memory();
     
     //: write to buffer (copies memory from cpu_buf to gpu buf)
-    bool write_to_buffer(const cl_command_queue cmdQueue);
+    bool write_to_buffer(const cl_command_queue& cmdQueue);
     
     //; wread from buffer (copies mem from gpu buf to cpu buf)
-    bool read_to_buffer(const cl_command_queue cmdQueue);
+    bool read_to_buffer(const cl_command_queue& cmdQueue);
 
     //: returns a reference to the buffer
     cl_mem& buffer()        { return buffer_; }

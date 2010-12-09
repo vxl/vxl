@@ -29,7 +29,7 @@ bool bocl_mem::release_memory()
 }
 
 //: write to command queue
-bool bocl_mem::write_to_buffer(const cl_command_queue cmdQueue)
+bool bocl_mem::write_to_buffer(const cl_command_queue& cmdQueue)
 {
   cl_int status = MEM_FAILURE;
   status = clEnqueueWriteBuffer(cmdQueue,
@@ -47,7 +47,7 @@ bool bocl_mem::write_to_buffer(const cl_command_queue cmdQueue)
 }
 
 //: read from command queue buffer...
-bool bocl_mem::read_to_buffer(const cl_command_queue cmdQueue)
+bool bocl_mem::read_to_buffer(const cl_command_queue& cmdQueue)
 {
   cl_event event;
   int status = MEM_FAILURE;

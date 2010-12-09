@@ -12,9 +12,10 @@ bool bocl_kernel::create_kernel(  cl_context* context,
                                   vcl_string options,
                                   vcl_string id) 
 {
-  context_ = context;
-  device_ = device; 
-  id_ = id; 
+  vcl_cout<<"Kernel created "<<vcl_endl;
+  context_  = context;
+  device_   = device; 
+  id_       = id; 
   
   //make sure paths exist
   if(src_paths.empty()) {
@@ -35,7 +36,7 @@ bool bocl_kernel::create_kernel(  cl_context* context,
   }
 
   //build cl_program object
-  cl_program program;
+  cl_program program = 0;
   if( !this->build_kernel_program(program, options) ) {
     vcl_cerr<<"bocl_kernel::couldn't build program "<<id_<<vcl_endl;
     return false;
@@ -43,9 +44,11 @@ bool bocl_kernel::create_kernel(  cl_context* context,
   
   //create cl_kernel object
   cl_int status = SDK_FAILURE;
-  cl_kernel kernel = clCreateKernel(program, kernel_name.c_str(), &status);
-  if ( !check_val(status,CL_SUCCESS,error_to_string(status)) )
+  kernel_ = clCreateKernel(program, kernel_name.c_str(), &status);
+  if ( !check_val(status,CL_SUCCESS,error_to_string(status)) ) {
+    vcl_cerr<<"bocl_kernel:: couldn't build program "<<id_<<vcl_endl;
     return false; 
+  }
     
   return true; 
 }
@@ -61,7 +64,7 @@ bocl_kernel::~bocl_kernel()
     vcl_cout<<" release failed in bocl_kernel destructor "<<vcl_endl;
 }
 
-bool bocl_kernel::execute(cl_command_queue cmdQueue, vcl_size_t* localThreads, vcl_size_t* globalThreads)
+bool bocl_kernel::execute(cl_command_queue& cmdQueue, vcl_size_t* localThreads, vcl_size_t* globalThreads)
 {
   //set kernel args
   const int CHECK_SUCCESS = 1;
@@ -89,12 +92,14 @@ bool bocl_kernel::execute(cl_command_queue cmdQueue, vcl_size_t* localThreads, v
   if ( !check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed. "+error_to_string(status)) )
     return false;
     
-  //Finish execution (may not be necessary or desirable)
-  status = clFinish(cmdQueue);
-  status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
-  status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
-  vcl_cout<<"kernel "<<id_<<" execution time: "
-          <<1.0e-6f*float(tend - tstart)<<vcl_endl; // convert nanoseconds to milliseconds
+  ////Finish execution (may not be necessary or desirable)
+  //status = clFinish(cmdQueue);
+  //status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
+  //status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
+  //vcl_cout<<"kernel "<<id_<<" execution time: "
+          //<<1.0e-6f*float(tend - tstart)<<vcl_endl; // convert nanoseconds to milliseconds
+  
+  return true; 
 }
 
 bool bocl_kernel::set_local_arg(vcl_size_t size)
