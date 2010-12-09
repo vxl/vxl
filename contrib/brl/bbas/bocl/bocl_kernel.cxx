@@ -48,7 +48,7 @@ bool bocl_kernel::set_arg(int arg_id, vcl_string name)
 bool bocl_kernel::set_local_arg(int arg_id, vcl_size_t arg_size)
 {
   //  set local variable
-  
+
   cl_int status = clSetKernelArg(kernel_,arg_id,arg_size,0);
   vcl_string str_status=error_to_string(status);
   //vcl_cout << "Setting local arg " << arg_id << "-->" << error_to_string(status) << vcl_endl;
