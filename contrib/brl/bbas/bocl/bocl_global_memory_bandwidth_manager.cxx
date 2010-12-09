@@ -286,18 +286,6 @@ bool bocl_global_memory_bandwidth_manager::run_kernel_using_image()
   inputformat.image_channel_order = CL_RGBA;
   inputformat.image_channel_data_type = CL_FLOAT;
 
-#if 0
-  // Create and initialize memory objects
-  cl_mem array_buf = clCreateImage2D(this->context_,
-                                     CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,&inputformat,image2d_max_width_,len_/image2d_max_width_,
-                                     image2d_max_width_ * sizeof(cl_float4),array_,&status);
-
-  if (!this->check_val(status,
-                       CL_SUCCESS,
-                       "clCreateBuffer (input array) failed."))
-    return SDK_FAILURE;
-#endif
-
   if (!BOCL_BUFFER_MGR->create_image2D(this->context_,ARRAY_BUFFER_NAME,CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,&inputformat,image2d_max_width_,len_/image2d_max_width_,
                                image2d_max_width_ * sizeof(cl_float4),array_))
     return SDK_FAILURE;
