@@ -4,7 +4,7 @@
 // \file
 // \brief  A wrapper class for cl_mem buffers for OpenCL
 // \author Gamze Tunali gtunali@brown.edu
-// \date  October 20, 2010
+// \date   October 20, 2010
 //
 // \verbatim
 //  Modifications
@@ -28,10 +28,10 @@ class bocl_buffer
   bool create_buffer(const cl_mem_flags& flags,  vcl_size_t size,  void *host_ptr);
 
   bool create_image2D(const cl_mem_flags& flags, const cl_image_format *format,
-                     size_t width,size_t height,size_t row_pitch, void *host_ptr);
-
- // bool set_mem(cl_mem* buffer) { buffer_=&buffer; return true;}
-
+                      vcl_size_t width, vcl_size_t height, vcl_size_t row_pitch, void *host_ptr);
+#if 0
+  bool set_mem(cl_mem* buffer) { buffer_=&buffer; return true; }
+#endif
   //: releases buffer memory
   bool release_memory();
 

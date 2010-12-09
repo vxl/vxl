@@ -15,7 +15,6 @@ bool bocl_buffer_mgr::create_read_buffer(const cl_context& context,
                                          void* data,
                                          unsigned size)
 {
-
   bocl_buffer* buf = new bocl_buffer(context);
   if (!buf->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, size, data)) {
     vcl_cout << "bocl_buffer_mgr::create_read_buffer -- clCreateBuffer failed for " << name << vcl_endl;
@@ -40,8 +39,8 @@ bool bocl_buffer_mgr::create_write_buffer(const cl_context& context,
 }
 
 bool bocl_buffer_mgr::create_image2D(cl_context context, vcl_string name, cl_mem_flags flags,
-                                     const cl_image_format * format,size_t width,
-                                     size_t height, size_t row_pitch, void * data) 
+                                     const cl_image_format * format, vcl_size_t width,
+                                     vcl_size_t height, vcl_size_t row_pitch, void * data)
 {
   bocl_buffer* buf = new bocl_buffer(context);
   if (!buf->create_image2D(flags,format,width,height,row_pitch,data)){
@@ -52,18 +51,18 @@ bool bocl_buffer_mgr::create_image2D(cl_context context, vcl_string name, cl_mem
   return true;
 }
 
-bocl_buffer* bocl_buffer_mgr::get_buffer(vcl_string name) 
-{ 
+bocl_buffer* bocl_buffer_mgr::get_buffer(vcl_string name)
+{
   if (buffers_.find(name) != buffers_.end())
     return buffers_[name];
-  return 0;
+  else
+    return 0;
 }
 
 bool bocl_buffer_mgr::set_buffer(const cl_context& context, vcl_string name, cl_mem buffer)
 {
   bocl_buffer* buf = new bocl_buffer(context);
-  //return (buf->set_mem(buffer));
-  return true;
+  return true; // was: return buf->set_mem(buffer);
 }
 
 bool bocl_buffer_mgr::enqueue_read_buffer(const cl_command_queue& queue, vcl_string name, cl_bool block_read,
@@ -73,9 +72,7 @@ bool bocl_buffer_mgr::enqueue_read_buffer(const cl_command_queue& queue, vcl_str
   cl_int status = clEnqueueReadBuffer(queue,buffers_[name]->mem(), block_read,
                                       offset, cnb, data, num_events, ev1, ev2);
 
-  if (!check_val(status,CL_SUCCESS,"clCreateBuffer failed for "+ name))
-    return false;
-  return true;
+  return check_val(status,CL_SUCCESS,"clCreateBuffer failed for "+ name);
 }
 
 bool bocl_buffer_mgr::enqueue_write_buffer(const cl_command_queue& queue, vcl_string name,
@@ -90,9 +87,7 @@ bool bocl_buffer_mgr::enqueue_write_buffer(const cl_command_queue& queue, vcl_st
   cl_int status = clEnqueueWriteBuffer(queue,buffers_[name]->mem(),block_write,
                                        offset,cnb,data,num_events,ev1,ev2);
 
-  if (!check_val(status,CL_SUCCESS,"enqueue_write_buffer failed."))
-    return false;
-  return true;
+  return check_val(status,CL_SUCCESS,"enqueue_write_buffer failed.");
 }
 
 bool bocl_buffer_mgr::release_buffer(vcl_string name)
@@ -100,7 +95,7 @@ bool bocl_buffer_mgr::release_buffer(vcl_string name)
   if (buffers_.find(name) != buffers_.end()) {
     buffers_[name]->release_memory();
     return true;
-  } 
+  }
   vcl_cout << "clReleaseMemObject failed for " << name << vcl_endl;
   return false;
 }
@@ -111,7 +106,7 @@ bool bocl_buffer_mgr::release_buffers()
   while (it != buffers_.end()) {
     if (!it->second->release_memory())
       return false;
-    it++;
+    ++it;
   }
   return true;
 }
