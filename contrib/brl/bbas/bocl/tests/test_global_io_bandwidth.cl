@@ -1,18 +1,100 @@
 #pragma OPENCL EXTENSION cl_khr_global_int32_base_atomics : enable
 __kernel
 void
-test_locking_mechanism(__global uint * len, __global float4* input_array,
-                                  __global float* result_array, 
-                                  __global int * result_flag,
-                                  __local float* local_mem)
+test_locking_mechanism( __global  uint *  len, 
+                        __global  float4* input_array,
+                        __global  float*  result_array, 
+                        __global  int *   result_flag,
+                        __local   float*  local_mem)
 {
-  int gid=get_global_id(0);
-  int llid=get_local_id(0);
+  int gid   = get_global_id(0);
+  int llid  = get_local_id(0);
+  int lsize = get_local_size(0);
   bool flag=true;
   int cnt=0;
   int cnt2=0;
   int isactive=1;
+  float loc_total = 0; 
+  
+  //atom_add(result_flag, convert_int(input_array[gid].x)); 
+  
+  //locally add up the array 
+  if(llid == 0) {
+    for(int i=0; i<lsize; i++) {
+      loc_total += input_array[gid+i].x;
+    }
+  }
+  
+  if(llid == 0) {
+    while(true)
+    {
+      if(atom_cmpxchg(result_flag,0,1)==0)
+      {
+        float buff = result_array[0];
+        loc_total += buff;
+        result_array[0] = loc_total; 
+        atom_xchg(result_flag,0);
+        break;
+      }
+    }
+  }
 
+
+/*
+  if(llid == 0) {
+    while(atom_cmpxchg(result_flag, 0, 1) == 0); 
+    result_array[0] += loc_total;
+    atom_xchg(result_flag,0);
+  }
+  barrier(CLK_GLOBAL_MEM_FENCE);
+
+  if(llid == 0) {
+    while(atom_cmpxchg(result_flag, 0, 1) == 0); 
+    result_array[0] += loc_total;
+    atom_xchg(result_flag,0);
+  }
+  barrier(CLK_GLOBAL_MEM_FENCE);
+*/
+
+  
+/*
+  result_array[]
+
+  
+  if(llid == 0) {
+    
+    while(true && cnt < 2)
+    {
+      if(atom_cmpxchg(&lock_array[data_ptr],0,1)==0)
+      {
+            float2 cl_beta  = cum_len_beta[data_ptr];
+            float2 mean_vis = convert_float2(mean_obs_cum_vis[data_ptr])/255.0f;  
+            cached_aux_data[llid].x=cached_aux_data[llid].x+cl_beta.x;
+            if(cached_aux_data[llid].x>1e-10f)
+            {
+                mean_vis.x=(mean_vis.x*cl_beta.x+cached_aux_data[llid].y)/(cached_aux_data[llid].x);
+                mean_vis.y=(mean_vis.y*cl_beta.x+cached_aux_data[llid].z)/(cached_aux_data[llid].x);
+            }
+            cum_len_beta[data_ptr] = (float2) (cached_aux_data[llid].x, 0.0f);
+            mean_obs_cum_vis[data_ptr] = convert_uchar2_sat_rte(mean_vis*255.0f);
+            
+            //DEBUG ASSIGNMENT
+            alpha_array[data_ptr] = cached_aux_data[llid].x;
+            
+            atom_xchg(&lock_array[data_ptr],0);
+            cnt=2000;
+        }
+        //if(cnt=-1)
+        //    break;
+      }
+      cnt++;
+
+  }
+
+*/
+
+
+/*
   while(isactive==1)
   {
       if(llid>0)
@@ -38,6 +120,10 @@ test_locking_mechanism(__global uint * len, __global float4* input_array,
       cnt=cnt+1;
   }
   result_array[gid+1]=cnt2;
+*/
+  
+  
+  
 }
 __kernel
 void

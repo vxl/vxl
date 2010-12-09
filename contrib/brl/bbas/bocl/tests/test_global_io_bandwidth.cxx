@@ -27,10 +27,9 @@ bool test_atom_cmpxchg(unsigned len, float & bandwidth)
   bandwidth=(float)4/* image reads float4 */ *(len*4)/mgr->time_taken()/(1024*1024);
 
   cl_int * result_array=(cl_int*)mgr->result_array();
-#if 0
   for (unsigned i=0;i<len;++i)
     vcl_cout<<result_array[i]<<' ';
-#endif
+
   mgr->clean_array();
   mgr->clean_result_array();
 
@@ -62,10 +61,9 @@ bool test_locking_mechanism(unsigned len, float & bandwidth)
   bandwidth=(float)4/* image reads float4 */ *(len*4)/mgr->time_taken()/(1024*1024);
 
   cl_float * result_array=mgr->result_array();
-#if 0
   for (unsigned i=0;i<128;++i)
     vcl_cout<<result_array[i]<<' ';
-#endif
+
   mgr->clean_array();
   mgr->clean_result_array();
   return false;
@@ -99,6 +97,7 @@ bool test_single_thread_read_bandwidth_image(unsigned len, float & bandwidth)
   cl_float * result_array=mgr->result_array();
   for (unsigned i=0;i<len;++i)
     sum+=result_array[i];
+
   mgr->clean_array();
   mgr->clean_result_array();
   if (sum==(float)len)
@@ -138,6 +137,7 @@ bool test_workgroup_coalesced_read_bandwidth_image(unsigned len, float & bandwid
   cl_float * result_array=mgr->result_array();
   for (unsigned i=0;i<len;++i)
     sum+=result_array[i];
+
   mgr->clean_array();
   mgr->clean_result_array();
   if (sum==(float)len)
@@ -175,6 +175,7 @@ bool test_single_thread_read_bandwidth(unsigned len, float & bandwidth)
   cl_float * result_array=mgr->result_array();
   for (unsigned i=0;i<len;++i)
     sum+=result_array[i];
+
   mgr->clean_array();
   mgr->clean_result_array();
   if (sum==(float)len)

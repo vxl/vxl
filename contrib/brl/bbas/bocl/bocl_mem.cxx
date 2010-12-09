@@ -8,8 +8,7 @@ bocl_mem::bocl_mem(const cl_context& context, void* buffer, unsigned num_bytes, 
   cpu_buf_(buffer),
   num_bytes_(num_bytes),
   id_(id)
-{
-}
+{}
 
 bool bocl_mem::create_buffer(const cl_mem_flags& flags)
 {

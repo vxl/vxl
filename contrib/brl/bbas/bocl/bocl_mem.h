@@ -19,6 +19,10 @@
 #define MEM_SUCCESS 1
 #define MEM_FAILURE 0
 
+
+//: High level wrapper of a cl_mem object (which always corresponds to some 
+//  void* cpp buffer).  a bocl_mem object is responsible for freeing the 
+//  cl_mem buffer but NOT THE CPU buffer.  
 class bocl_mem
 {
   public:

@@ -7,14 +7,11 @@ IF(OPENCL_FOUND)
   INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
 
   SET(bocl_sources
-      bocl_manager.h      bocl_manager.txx
+      bocl_manager.h    bocl_manager.txx
       bocl_cl.h
       bocl_cl_gl.h
       bocl_global_memory_bandwidth_manager.h bocl_global_memory_bandwidth_manager.cxx
-      bocl_utils.h         bocl_utils.cxx
-      bocl_buffer.h        bocl_buffer.cxx
-      bocl_buffer_mgr.h    bocl_buffer_mgr.cxx
-      bocl_kernel.h        bocl_kernel.cxx
+      bocl_utils.h      bocl_utils.cxx
       bocl_mem.h        bocl_mem.cxx
       bocl_kernel.h     bocl_kernel.cxx
   )

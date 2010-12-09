@@ -9,8 +9,6 @@
 #include <vbl/vbl_array_2d.h>
 #include <bocl/bocl_manager.h>
 #include <bocl/bocl_utils.h>
-#include <bocl/bocl_kernel.h>
-
 class bocl_global_memory_bandwidth_manager : public bocl_manager<bocl_global_memory_bandwidth_manager> 
 {
  public:
@@ -24,7 +22,7 @@ class bocl_global_memory_bandwidth_manager : public bocl_manager<bocl_global_mem
 
 
   unsigned array_size() const {return len_;}
-  //bocl_buffer array_buf() {return array_buf_;}
+  cl_mem array_buf() {return array_buf_;}
 
   vcl_string program_source() const {return prog_;}
   cl_program program() {return program_;}
@@ -50,7 +48,7 @@ class bocl_global_memory_bandwidth_manager : public bocl_manager<bocl_global_mem
   int release_kernel();
 
   float time_taken(){return time_in_secs_;}
-  bocl_kernel kernel() {return kernel_;}
+  cl_kernel kernel() {return kernel_;}
 
   cl_int * result_flag(){return result_flag_;}
   cl_float * result_array(){return result_array_;}
@@ -60,16 +58,15 @@ class bocl_global_memory_bandwidth_manager : public bocl_manager<bocl_global_mem
   cl_program program_;
 
   cl_command_queue command_queue_;
-  bocl_kernel kernel_;
+  cl_kernel kernel_;
   cl_float* array_;
   cl_float* result_array_;
   cl_uint * cl_len_;
   cl_int * result_flag_;
-  /*
   cl_mem   array_buf_;
   cl_mem   result_array_buf_;
   cl_mem   cl_len_buf_;
-  cl_mem   result_flag_buf_;*/
+  cl_mem   result_flag_buf_;
   float time_in_secs_;
   cl_image_format inputformat;
   unsigned len_;
