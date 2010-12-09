@@ -6,7 +6,8 @@
 
 class boxm2_opencl_process_base:public boxm2_process
 {
-  virtual bool init_kernel(cl_context& context, cl_device_id& device);
+  public: 
+    virtual bool init_kernel(cl_context& context, cl_device_id& device)=0;
 };
 
 #endif

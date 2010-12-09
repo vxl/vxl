@@ -28,7 +28,7 @@
 
 int main(int argc,  char** argv)
 {
-  vcl_cout<<"RENDER BIT SCENE"<<vcl_endl;
+  vcl_cout<<"Boxm2 RENDER BIT SCENE"<<vcl_endl;
   vul_arg<vcl_string> camfile("-cam", "camera filename", "");
   vul_arg<vcl_string> scene_file("-scene", "scene filename", "");
   vul_arg<unsigned> ni("-ni", "Width of image", 640);
@@ -54,12 +54,6 @@ int main(int argc,  char** argv)
   //create output image buffer
   vil_image_view_base_sptr expimg = new vil_image_view<vxl_byte>(ni(), nj()); 
   brdb_value_sptr brdb_expimg = new brdb_value_t<vil_image_view_base_sptr>(expimg); 
-
-  //This is how you get the cam back...
-  //brdb_value_t<vpgl_camera_double_sptr>* t = static_cast<brdb_value_t<vpgl_camera_double_sptr>* >(brdb_cam.ptr() ); 
-  //vpgl_camera_double_sptr test = t->value(); 
-  //vpgl_perspective_camera<double>* recast = static_cast<vpgl_perspective_camera<double>* >(test.ptr());
-
   
   //----------------------------------------------------------------------------
   //--- BEGIN BOXM2 API EXAMPLE ------------------------------------------------
@@ -91,40 +85,21 @@ int main(int argc,  char** argv)
   //initoutput vector
   vcl_vector<brdb_value_sptr> output; 
 
-  boxm2_cpp_processor cpp_pro;
-  cpp_pro.init(); 
-  boxm2_cpp_render_process cpp_render; 
-  cpp_pro.run(&cpp_render, input, output); 
-  cpp_pro.finish(); 
+  //boxm2_cpp_processor cpp_pro;
+  //cpp_pro.init(); 
+  //boxm2_cpp_render_process cpp_render; 
+  //cpp_pro.run(&cpp_render, input, output); 
+  //cpp_pro.finish(); 
   
-  //create scene from xml file 
-  //boxm2_scene_sptr scene = new boxm2_scene(scene_file());
-  //vcl_cout<<"Scene Initialized... "<<vcl_endl
-          //<<scene<<vcl_endl;
 
-  //////get relevant blocks id 0,0,0 and push em in a vector
-  //boxm2_block_id id(0,0,0); 
-  //boxm2_dumb_cache dcache(scene->data_path());
-  //boxm2_block_sptr blk = dcache.get_block(id); 
-  //boxm2_data_base_sptr alph = dcache.get_data<BOXM2_ALPHA>(id); 
-  //boxm2_data_base_sptr mog  = dcache.get_data<BOXM2_MOG3_GREY>(id); 
-  //brdb_value_sptr brdb_block = new brdb_value_t<boxm2_block_sptr>(blk);
-  //brdb_value_sptr brdb_alph  = new brdb_value_t<boxm2_data_base_sptr>(alph);
-  //brdb_value_sptr brdb_mog   = new brdb_value_t<boxm2_data_base_sptr>(mog); 
-  //vcl_vector<brdb_value_sptr> input; 
-  //input.push_back(brdb_block); 
-  //input.push_back(brdb_alph);
-  //input.push_back(brdb_mog); 
-  //input.push_back(brdb_cam);
-  
   ////initialize a GPU processor
-  //boxm2_opencl_processor gpu_pro; 
-  //gpu_pro.init();
+    //4.  initialize update manager
+  boxm2_opencl_processor* gpu_pro = boxm2_opencl_processor::instance();
   
   ////initialize the GPU render process
-  //boxm2_opencl_render_process gpu_render; 
-  //gpu_pro.run(&gpu_render, input, output); 
-  //gpu_pro.finish(); 
+  boxm2_opencl_render_process gpu_render; 
+  gpu_pro->run(&gpu_render, input, output); 
+  gpu_pro->finish(); 
 
   ////grab the output from teh gpu_pro class
 

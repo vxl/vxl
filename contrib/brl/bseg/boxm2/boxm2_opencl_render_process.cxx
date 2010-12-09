@@ -22,6 +22,8 @@ bool boxm2_opencl_render_process::init(){}
 bool boxm2_opencl_render_process::init_kernel(cl_context& context, 
                                               cl_device_id& device)
 {
+  context_ = &context; 
+  
   //gather all render sources... seems like a lot for rendering...
   vcl_vector<vcl_string> src_paths; 
   vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/cl/";
@@ -39,12 +41,22 @@ bool boxm2_opencl_render_process::init_kernel(cl_context& context,
   options += "-D NVIDIA ";
   options += "-D RENDER ";
   
-  return render_kernel_.create_kernel(  &context, 
-                                        &device, 
-                                        src_paths, 
-                                        "render_bit_scene", 
-                                        options, 
-                                        "boxm2 opencl render");
+  bool created =  render_kernel_.create_kernel(  &context, 
+                                                  &device, 
+                                                  src_paths, 
+                                                  "render_bit_scene", 
+                                                  options, 
+                                                  "boxm2 opencl render");
+                              
+  //TODO FIGURE OUT A GOOD PLACE FOR THE COMMAND QUEUE TO LIVE - 
+  //seems like it should be above process (processor should have a list of command queues)
+  // set up a command queue
+  int status; 
+  command_queue_ = clCreateCommandQueue(context, device, CL_QUEUE_PROFILING_ENABLE, &status);
+  if (!check_val(status,CL_SUCCESS,"Failed in command queue creation" + error_to_string(status)))
+    return false;
+  
+  return created; 
 }
 
 
@@ -52,33 +64,24 @@ bool boxm2_opencl_render_process::init_kernel(cl_context& context,
 // the scene level stuff needs to live on the processer, other 
 bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vcl_vector<brdb_value_sptr>& output)
 {
-  vcl_cout<<"CPP RENDER!!"<<vcl_endl;
+  vcl_cout<<"GPu RENDER!!"<<vcl_endl;
   
-  int i = 0;
-  //get the blocks/camera/img etc from the input vector
-  //scene
-  brdb_value_t<boxm2_scene_sptr>* brdb_scene = static_cast<brdb_value_t<boxm2_scene_sptr>* >( input[i++].ptr() ); 
-  boxm2_scene_sptr scene = brdb_scene->value(); 
+  int* test_buffer = new int[200]; 
+  for(int i=0; i<200; i++) test_buffer[i] = 200-i;
+  bocl_mem test_mem( (*context_), test_buffer, sizeof(int)*200, "test buffer"); 
+  test_mem.create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
   
-  //tree structure
-  brdb_value_t<boxm2_block_sptr>* brdb_blk = static_cast<brdb_value_t<boxm2_block_sptr>* >( input[i++].ptr() ); 
-  boxm2_block_sptr blk = brdb_blk->value(); 
+  render_kernel_.set_arg( &test_mem ); 
+  vcl_size_t lThreads[] = {8, 1}; 
+  vcl_size_t gThreads[] = {16, 1}; 
+  render_kernel_.execute(command_queue_, lThreads, gThreads); 
   
-  //alpha
-  brdb_value_t<boxm2_data_base_sptr>* brdb_alpha = static_cast<brdb_value_t<boxm2_data_base_sptr>* >( input[i++].ptr() ); 
-  boxm2_data_base_sptr alpha = brdb_alpha->value(); 
+  test_mem.read_to_buffer(command_queue_); 
   
-  //mog
-  brdb_value_t<boxm2_data_base_sptr>* brdb_mog = static_cast<brdb_value_t<boxm2_data_base_sptr>* >( input[i++].ptr() ); 
-  boxm2_data_base_sptr mog = brdb_mog->value(); 
-  
-  //camera
-  brdb_value_t<vpgl_camera_double_sptr>* brdb_cam = static_cast<brdb_value_t<vpgl_camera_double_sptr>* >( input[i++].ptr() ); 
-  vpgl_camera_double_sptr cam = brdb_cam->value(); 
-  
-  //exp image buffer
-  brdb_value_t<vil_image_view_base_sptr>* brdb_expimg = static_cast<brdb_value_t<vil_image_view_base_sptr>* >( input[i++].ptr() ); 
-  vil_image_view_base_sptr expimg = brdb_expimg->value(); 
+  for(int i=0; i<10; i++) 
+    vcl_cout<<"i "<<test_buffer[i]<<vcl_endl;
 
+
+  return true; 
 }
 
