@@ -15,67 +15,67 @@
 //vnl and vbl array stuff
 #include <vnl/vnl_vector_fixed.h>
 #include <vbl/vbl_array_1d.h>
-#include <vbl/vbl_array_2d.h>
-#include <vbl/vbl_array_2d.h>
+#include <vbl/sbl_array_2d.h>
+#include <vbl/vbl_array_3d.h>
 
 //brdb stuff
 #include <brdb/brdb_value.h>
 
 
-//: Converts a bit_scene to a boxm2 scene.  
-//  NOTES: currently will only create one block with id 0,0,0
+//  Converts a bit_scene to a boxm2 scene.
+//  NOTE: currently will only create one block with id 0,0,0
 
 int main(int argc,  char** argv)
 {
   vcl_cout<<"Converting Bit scene to Boxm2 Scene"<<vcl_endl;
   vul_arg<vcl_string> bit_file("-scene", "scene filename", "");
-  vul_arg<vcl_string> new_dir("-out", "output directory", ""); 
+  vul_arg<vcl_string> new_dir("-out", "output directory", "");
 
   // need this on some toolkit implementations to get the window up.
   vul_arg_parse(argc, argv);
 
   //set up some types
-  typedef unsigned short ushort; 
-  typedef unsigned char  uchar; 
-  typedef vnl_vector_fixed<ushort,2>  ushort2; 
-  typedef vnl_vector_fixed<uchar, 8>  uchar8; 
-  typedef vnl_vector_fixed<uchar, 16> uchar16; 
-  typedef vnl_vector_fixed<float, 16> float16; 
+  typedef unsigned short ushort;
+  typedef unsigned char  uchar;
+  typedef vnl_vector_fixed<ushort,2>  ushort2;
+  typedef vnl_vector_fixed<uchar, 8>  uchar8;
+  typedef vnl_vector_fixed<uchar, 16> uchar16;
+  typedef vnl_vector_fixed<float, 16> float16;
 
 
-  //1.  create bit_scene from xml file 
+  //1.  create bit_scene from xml file
   boxm_ocl_bit_scene bit_scene(bit_file());
   vcl_cout<<"Scene Initialized... "<<vcl_endl
           <<bit_scene<<vcl_endl;
 
   //2. create empty boxm2_scene
-  boxm2_scene new_scene; 
-  
+  boxm2_scene new_scene;
+
   //3. set scene metadata
-  new_scene.set_block_dim(bit_scene.block_dim()); 
+  new_scene.set_block_dim(bit_scene.block_dim());
   int nx,ny,nz; bit_scene.block_num(nx, ny, nz);
   new_scene.set_block_num(vgl_vector_3d<unsigned>(nx,ny,nz));
-  new_scene.set_local_origin(bit_scene.origin()); 
+  new_scene.set_local_origin(bit_scene.origin());
   new_scene.set_rpc_origin(bit_scene.origin());
-  new_scene.set_lvcs(bit_scene.lvcs()); 
-  new_scene.set_xml_path(new_dir() + "/scene.xml"); 
-  new_scene.set_data_path(new_dir()); 
+  new_scene.set_lvcs(bit_scene.lvcs());
+  new_scene.set_xml_path(new_dir() + "/scene.xml");
+  new_scene.set_data_path(new_dir());
   new_scene.save_scene();
 
-  //2.  Get the relevant arrays 
-  vbl_array_1d<ushort2> mem_ptrs = bit_scene.mem_ptrs(); 
+  //2.  Get the relevant arrays
+  vbl_array_1d<ushort2> mem_ptrs = bit_scene.mem_ptrs();
   vbl_array_1d<ushort>  blocks_in_buffers = bit_scene.blocks_in_buffers();
   vbl_array_3d<ushort2> blocks = bit_scene.blocks();
   vbl_array_2d<uchar16> tree_buffers = bit_scene.tree_buffers();
-  vbl_array_2d<float16> data_buffers = bit_scene.data_buffers(); 
-    
+  vbl_array_2d<float16> data_buffers = bit_scene.data_buffers();
+
   //get some block metadata
-  int init_level = bit_scene.init_level(); 
+  int init_level = bit_scene.init_level();
   int max_level = bit_scene.max_level();
-  int max_mb   = bit_scene.max_mb(); 
-  int num_buffers, tree_len, data_len; 
-  bit_scene.tree_buffer_shape(num_buffers, tree_len); 
-  bit_scene.data_buffer_shape(num_buffers, data_len); 
+  int max_mb   = bit_scene.max_mb();
+  int num_buffers, tree_len, data_len;
+  bit_scene.tree_buffer_shape(num_buffers, tree_len);
+  bit_scene.data_buffer_shape(num_buffers, data_len);
 
   //----------------------------------------------------------------------------
   //3. construct a fat bit stream for the block
@@ -107,9 +107,9 @@ int main(int argc,  char** argv)
   curr_byte += sizeof(int);
 
   //3.b write dimension and buffer shape
-  double dims[] = { bit_scene.block_dim().x(), 
-                  bit_scene.block_dim().y(), 
-                  bit_scene.block_dim().z(), 0.0 }; 
+  double dims[] = { bit_scene.block_dim().x(),
+                  bit_scene.block_dim().y(),
+                  bit_scene.block_dim().z(), 0.0 };
   int nums[] = {nx, ny, nz, 0}; //from above
   vcl_memcpy(bsize+curr_byte, dims, 4 * sizeof(double));
   curr_byte += 4 * sizeof(double);
@@ -126,25 +126,25 @@ int main(int argc,  char** argv)
 
   //3.e copy in trees to 3d buffer
   int blkIndex = 0;
-  vbl_array_3d<ushort2>::iterator iter; 
-  for(iter = blocks.begin(); iter != blocks.end(); iter++) {
+  vbl_array_3d<ushort2>::iterator iter;
+  for (iter = blocks.begin(); iter != blocks.end(); iter++) {
     ushort buff   = (*iter)[0];
-    ushort offset = (*iter)[1]; 
-    uchar16 tree = tree_buffers[buff][offset]; 
-    
-    //store data buffer and offset in tree    
+    ushort offset = (*iter)[1];
+    uchar16 tree = tree_buffers[buff][offset];
+
+    //store data buffer and offset in tree
     uchar data_hi  = tree[10];
     uchar data_lo  = tree[11];
     uchar buff_hi   = (uchar)(buff >> 8);
     uchar buff_lo   = (uchar)(buff & 255);
-    tree[10] = buff_hi; 
+    tree[10] = buff_hi;
     tree[11] = buff_lo;
     tree[12] = data_hi;
-    tree[13] = data_lo; 
-    
+    tree[13] = data_lo;
+
     //copy into stream
     vcl_memcpy(bsize+curr_byte, &tree, sizeof(tree));
-    curr_byte += sizeof(uchar16); 
+    curr_byte += sizeof(uchar16);
     blkIndex++;
   }
 
@@ -152,7 +152,7 @@ int main(int argc,  char** argv)
   int* treePtrsBuff = (int*) (bsize+curr_byte);
   for (int i = 0; i < num_buffers*tree_len; i++)
     treePtrsBuff[i] = i;
-  curr_byte += num_buffers*tree_len * sizeof(int); 
+  curr_byte += num_buffers*tree_len * sizeof(int);
 
   //6. fill in some blocks in buffers numbers
   ushort* treeCountBuff = (ushort*) (bsize + curr_byte);
@@ -179,20 +179,20 @@ int main(int argc,  char** argv)
   //----------------------------------------------------------------------------
   //Construct data blocks (MOG and ALPHA)
   //----------------------------------------------------------------------------
-  int     numData = num_buffers * data_len; 
+  int     numData = num_buffers * data_len;
   float * alphas  = new float[numData];
-  uchar8* mogs    = new uchar8[numData]; 
-  bit_scene.get_alphas(alphas); 
-  bit_scene.get_mixture( (uchar*) mogs); 
+  uchar8* mogs    = new uchar8[numData];
+  bit_scene.get_alphas(alphas);
+  bit_scene.get_mixture( (uchar*) mogs);
 
   ////create new block from farray, save it and delete it
   boxm2_block_id id(0,0,0);
   char * alpha_stream = reinterpret_cast<char *>(alphas);
   boxm2_data<BOXM2_ALPHA> alpha_data(alpha_stream, numData*sizeof(float), id);
   boxm2_sio_mgr::save_block_data<BOXM2_ALPHA>(new_scene.data_path(), id, &alpha_data);
-  
-  char* mog_stream = reinterpret_cast<char *>(mogs); 
-  boxm2_data<BOXM2_MOG3_GREY> mog_data(mog_stream, numData*sizeof(uchar8), id); 
+
+  char* mog_stream = reinterpret_cast<char *>(mogs);
+  boxm2_data<BOXM2_MOG3_GREY> mog_data(mog_stream, numData*sizeof(uchar8), id);
   boxm2_sio_mgr::save_block_data<BOXM2_MOG3_GREY>(new_scene.data_path(), id, &mog_data);
 
   return 0;

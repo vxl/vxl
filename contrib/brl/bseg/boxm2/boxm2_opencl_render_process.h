@@ -1,6 +1,7 @@
 #ifndef boxm2_opencl_render_process_h
 #define boxm2_opencl_render_process_h
-
+//:
+// \file
 #include <boxm2/boxm2_opencl_process_base.h>
 #include <vcl_vector.h>
 
@@ -11,21 +12,21 @@
 
 class boxm2_opencl_render_process : public boxm2_opencl_process_base
 {
-  public: 
+  public:
     boxm2_opencl_render_process() : context_(0) {}
-  
+
     bool init();
-    bool execute(vcl_vector<brdb_value_sptr> & input, vcl_vector<brdb_value_sptr> & output); 
-    
+    bool execute(vcl_vector<brdb_value_sptr> & input, vcl_vector<brdb_value_sptr> & output);
+
     //: opencl specific methods
     virtual bool init_kernel(cl_context& context, cl_device_id& device);
-  
-  private: 
-  
+
+  private:
+
     //: cl context
-    cl_context* context_; 
-    
-    //: command queue for thsi process. 
+    cl_context* context_;
+
+    //: command queue for thsi process.
     cl_command_queue command_queue_;
 
     //: render kernel (other processes may have many kernels

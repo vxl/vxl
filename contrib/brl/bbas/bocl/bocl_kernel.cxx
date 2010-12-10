@@ -1,56 +1,57 @@
 #include "bocl_kernel.h"
+//:
+// \file
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vcl_sstream.h>
 #include <vcl_cstdio.h>
 
-
-bool bocl_kernel::create_kernel(  cl_context* context,
-                                  cl_device_id* device,
-                                  vcl_vector<vcl_string> src_paths, 
-                                  vcl_string const& kernel_name, 
-                                  vcl_string options,
-                                  vcl_string id) 
+bool bocl_kernel::create_kernel(cl_context* context,
+                                cl_device_id* device,
+                                vcl_vector<vcl_string> src_paths,
+                                vcl_string const& kernel_name,
+                                vcl_string options,
+                                vcl_string id)
 {
-  vcl_cout<<"Kernel created "<<vcl_endl;
+  vcl_cout<<"Kernel created"<<vcl_endl;
   context_  = context;
-  device_   = device; 
-  id_       = id; 
-  
+  device_   = device;
+  id_       = id;
+
   //make sure paths exist
-  if(src_paths.empty()) {
-    vcl_cerr<<"bocl_kernel::create_kernel passed empty sources"<<vcl_endl;
+  if (src_paths.empty()) {
+    vcl_cerr<<"bocl_kernel::create_kernel passed empty sources\n";
     return false;
   }
-  
+
   //load source into single string
-  if(!this->load_kernel_source(src_paths[0])) {
-    vcl_cerr<<"bocl_kernel::couldn't load source from "<<src_paths[0]<<vcl_endl;
+  if (!this->load_kernel_source(src_paths[0])) {
+    vcl_cerr<<"bocl_kernel::couldn't load source from "<<src_paths[0]<<'\n';
     return false;
   }
-  for(int i=1; i<src_paths.size(); i++) {
-    if(!this->append_process_kernels(src_paths[i])) {
-      vcl_cerr<<"bocl_kernel::couldn't load source from "<<src_paths[i]<<vcl_endl;
+  for (int i=1; i<src_paths.size(); i++) {
+    if (!this->append_process_kernels(src_paths[i])) {
+      vcl_cerr<<"bocl_kernel::couldn't load source from "<<src_paths[i]<<'\n';
       return false;
     }
   }
 
   //build cl_program object
   cl_program program = 0;
-  if( !this->build_kernel_program(program, options) ) {
-    vcl_cerr<<"bocl_kernel::couldn't build program "<<id_<<vcl_endl;
+  if ( !this->build_kernel_program(program, options) ) {
+    vcl_cerr<<"bocl_kernel::couldn't build program "<<id_<<'\n';
     return false;
   }
-  
+
   //create cl_kernel object
   cl_int status = SDK_FAILURE;
   kernel_ = clCreateKernel(program, kernel_name.c_str(), &status);
   if ( !check_val(status,CL_SUCCESS,error_to_string(status)) ) {
-    vcl_cerr<<"bocl_kernel:: couldn't build program "<<id_<<vcl_endl;
-    return false; 
+    vcl_cerr<<"bocl_kernel:: couldn't build program "<<id_<<'\n';
+    return false;
   }
-    
-  return true; 
+
+  return true;
 }
 
 bocl_kernel::~bocl_kernel()
@@ -69,15 +70,15 @@ bool bocl_kernel::execute(cl_command_queue& cmdQueue, vcl_size_t* localThreads, 
   //set kernel args
   const int CHECK_SUCCESS = 1;
   cl_int status = CL_SUCCESS;
-  for(int i=0; i<args_.size(); i++) {
+  for (int i=0; i<args_.size(); i++) {
     cl_mem buff = args_[i]->buffer();
     status = clSetKernelArg(kernel_, i, sizeof(cl_mem), (void *)&buff);
     if ( !check_val(status,CL_SUCCESS,"clSetKernelArg failed: " + args_[i]->id()))
       return false;
   }
-  
+
   //set local args
-  for(int i=0; i<local_args_.size(); i++) {
+  for (int i=0; i<local_args_.size(); i++) {
     cl_int status = clSetKernelArg(kernel_,args_.size() + i, local_args_[i], 0);
     if ( !check_val(status,CL_SUCCESS,"clSetLocal Arg Failed") ) {
       vcl_cout<<"Local argument "<<i<<" failed"<<vcl_endl;
@@ -91,26 +92,26 @@ bool bocl_kernel::execute(cl_command_queue& cmdQueue, vcl_size_t* localThreads, 
   status = clEnqueueNDRangeKernel(cmdQueue, kernel_, 2, NULL, globalThreads, localThreads, 0, NULL, &ceEvent);
   if ( !check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed. "+error_to_string(status)) )
     return false;
-    
+
   ////Finish execution (may not be necessary or desirable)
   //status = clFinish(cmdQueue);
   //status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
   //status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
   //vcl_cout<<"kernel "<<id_<<" execution time: "
           //<<1.0e-6f*float(tend - tstart)<<vcl_endl; // convert nanoseconds to milliseconds
-  
-  return true; 
+
+  return true;
 }
 
 bool bocl_kernel::set_local_arg(vcl_size_t size)
 {
-  local_args_.push_back(size); 
+  local_args_.push_back(size);
 }
 
 bool bocl_kernel::set_arg(bocl_mem* buffer)
 {
   //push arg to the back
-  args_.push_back(buffer); 
+  args_.push_back(buffer);
 }
 
 
@@ -134,6 +135,7 @@ bool bocl_kernel::load_kernel_source(vcl_string const& path)
   prog_ =  ostr.str();
   return prog_.size() > 0;
 }
+
 bool bocl_kernel::append_process_kernels(vcl_string const& path)
 {
   vcl_ifstream is(path.c_str());
@@ -155,7 +157,7 @@ bool bocl_kernel::build_kernel_program(cl_program &program, vcl_string options)
 {
   cl_int status = CL_SUCCESS;
   vcl_size_t sourceSize[] = { this->prog_.size() };
-  if (!sourceSize[0]) 
+  if (!sourceSize[0])
     return false;
   if (program) {
     status = clReleaseProgram(program);
