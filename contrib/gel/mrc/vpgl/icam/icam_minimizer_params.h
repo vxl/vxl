@@ -1,11 +1,13 @@
 #ifndef icam_minimizer_params_h_
 #define icam_minimizer_params_h_
-
+//:
+// \file
 #include <vcl_string.h>
+#include <vcl_iostream.h>
 
-class icam_minimizer_params 
+class icam_minimizer_params
 {
-public:
+ public:
   //: constructor, default in case no parameters given
   icam_minimizer_params(unsigned nbins=16,
                         unsigned min_level_size=16,
@@ -22,14 +24,14 @@ public:
                          base_path_(base_path) {}
 
   //: copy constructor
-  icam_minimizer_params(const icam_minimizer_params& p) 
+  icam_minimizer_params(const icam_minimizer_params& p)
     : nbins_(p.nbins_), min_level_size_(p.min_level_size_),box_reduction_k_(p.box_reduction_k_),
       local_min_thresh_(p.local_min_thresh_), smooth_sigma_(p.smooth_sigma_),
       axis_search_cone_multiplier_(p.axis_search_cone_multiplier_),
       polar_range_multiplier_(p.polar_range_multiplier_),
        base_path_(p.base_path_) {}
 
-  icam_minimizer_params& operator=(const icam_minimizer_params& p) 
+  icam_minimizer_params& operator=(const icam_minimizer_params& p)
   {
     nbins_=p.nbins_;
     min_level_size_=p.min_level_size_;
@@ -44,18 +46,18 @@ public:
 
   void print() {
     vcl_cout << "====== Minimizer Parameters =======\n"
-           << "min pyramid dimension " << min_level_size_ << '\n'
-           << "trans box reduction "   << box_reduction_k_ << '\n'
-           << "axis_search_mulitplier " << axis_search_cone_multiplier_ << '\n'
-           << "polar_searh_multiplier " << polar_range_multiplier_ << '\n'
-           << "local_min_thresh " << local_min_thresh_ << '\n'
-           << "smooth sigma " << smooth_sigma_ << '\n'
-           << "histogram bins " << nbins_ << '\n'
-           << "===================================\n";
+             << "min pyramid dimension " << min_level_size_ << '\n'
+             << "trans box reduction "   << box_reduction_k_ << '\n'
+             << "axis_search_mulitplier " << axis_search_cone_multiplier_ << '\n'
+             << "polar_searh_multiplier " << polar_range_multiplier_ << '\n'
+             << "local_min_thresh " << local_min_thresh_ << '\n'
+             << "smooth sigma " << smooth_sigma_ << '\n'
+             << "histogram bins " << nbins_ << '\n'
+             << "===================================\n";
   }
 
   //public parameters
-  unsigned nbins_; 
+  unsigned nbins_;
   unsigned min_level_size_;
   unsigned box_reduction_k_;
   double local_min_thresh_;
