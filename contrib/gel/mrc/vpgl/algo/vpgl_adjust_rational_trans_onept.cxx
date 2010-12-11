@@ -241,14 +241,14 @@ void re_projection_error(vcl_vector<vpgl_rational_camera<double> > const& cams,
     finals.push_back(final);
   }
 
-  unsigned k = 0; 
-  //: return an error value for each cam for each corr
+  unsigned k = 0;
+  // return an error value for each cam for each corr
   for (unsigned int i = 0; i < corrs.size(); ++i) {
     for (unsigned int j = 0; j < cams.size(); ++j) {
       errors[k] = error_corr(cams[j], corrs[i][j], intersections[i]);
       k++;
     }
-  }  
+  }
 }
 
 
@@ -259,7 +259,7 @@ void print_perm(vcl_vector<unsigned>& params_indices)
   vcl_cout << vcl_endl;
 }
 
-//: to generate the permutations, always increment the one at the very end by one, if it exceeds max, then increment the one before as well, etc.
+//: to generate the permutations, always increment the one at the very end by one; if it exceeds max, then increment the one before as well, etc.
 bool increment_perm(vcl_vector<unsigned>& params_indices, unsigned size)
 {
   if (!params_indices.size())  // no need to permute!!
@@ -409,7 +409,7 @@ void vpgl_cam_trans_search_lsqr::f(vnl_vector<double> const& translation,   // s
     current_cams[i].image_offset(u_off, v_off);
     current_cams[i].set_image_offset(u_off + translation[i*2], v_off + translation[i*2+1]);
   }
-  //: compute the projection error for each cam for each corr
+  // compute the projection error for each cam for each corr
   // use the initial estimates to compute re-projection errors
   re_projection_error(current_cams, corrs_, initial_pts_, finals_, projection_errors);
 }
@@ -422,8 +422,8 @@ void vpgl_cam_trans_search_lsqr::get_finals(vcl_vector<vgl_point_3d<double> >& f
 //: run Lev-Marq optimization to search the param space to find the best parameter setting
 bool vpgl_adjust_rational_trans_multiple_pts::
   adjust_lev_marq(vcl_vector<vpgl_rational_camera<double> > const& cams,
-                  vcl_vector<vcl_vector< vgl_point_2d<double> > > const& corrs,  // a vector of correspondences for each cam
-                  vcl_vector<vgl_vector_2d<double> >& cam_translations,          // output translations for each cam
+                  vcl_vector<vcl_vector< vgl_point_2d<double> > > const& corrs, // a vector of correspondences for each cam
+                  vcl_vector<vgl_vector_2d<double> >& cam_translations,         // output translations for each cam
                   vcl_vector<vgl_point_3d<double> >& intersections)             // output 3d locations for each correspondence
 {
   cam_translations.clear();

@@ -199,10 +199,11 @@ exhaustive_rotation_search(vgl_vector_3d<double> const& trans,
   principal_ray_scan prs = this->pray_scan(level, n_rays);
   double polar_range = vnl_math::pi;
   double plar_inc = this->polar_inc(level, npsteps, polar_range);
- /* vcl_cout << "Searching over "
+#if 0
+  vcl_cout << "Searching over "
            << static_cast<unsigned>(n_rays*npsteps)
            << " rotations\n" << vcl_flush;*/
-
+#endif
   vnl_vector_fixed<double,3> min_rod;
   icam_cost_func cost = this->cost_fn(level);
   vul_timer tim;
@@ -304,10 +305,12 @@ initialized_rot_search(vgl_vector_3d<double> const& trans,
     this->initialized_pray_scan(initial_level, search_level, naxis_steps);
   this->initialized_polar_inc(initial_level, search_level,
                               npolar_steps, polar_range, polar_inc);
-  /*if (verbose_)
+#if 0
+  if (verbose_)
     vcl_cout << "Searching over "
              << static_cast<unsigned>(naxis_steps*npolar_steps)
              << " rotations\n" << vcl_flush;*/
+#endif
   unsigned n_succ = 0;
   min_overlap_fraction = 0.0;
   min_cost = vnl_numeric_traits<double>::maxval;
