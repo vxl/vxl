@@ -16,9 +16,9 @@ static void test_read()
   vcl_string test_file = root_dir + "/contrib/brl/bbas/baio/tests/test_file_r.txt";
   char* tester = new char[buffSize];
   vnl_random rand;
-  for (unsigned i=0;i<buffSize;++i)
+  for (unsigned int i=0;i<buffSize;++i)
     tester[i]=(char)rand.lrand32(-127,127);
-  
+
   //write to file with blocking
   vcl_ofstream outFile(test_file.c_str(), vcl_ios::out | vcl_ios::binary);
   outFile.write(tester, buffSize);
@@ -38,14 +38,14 @@ static void test_read()
 
   //Test same data read
   bool good = true;
-  for (int i=0; i<buffSize; i++) {
+  for (unsigned int i=0; i<buffSize; ++i) {
     if (aio_buff[i] != tester[i]) {
       good = false;
       vcl_cout<<(int) aio_buff[i]<<"... "<<(int) tester[i]<<vcl_endl;
     }
   }
   TEST("data read matches synchronous data ", true, good);
-  
+
   //cleanup
   delete[] tester;
   delete[] aio_buff;
