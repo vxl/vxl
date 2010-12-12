@@ -12,7 +12,7 @@
 #include <vcl_vector.h>
 #include <vcl_utility.h>
 
-#include <vgui/vgui_easy2d_tableau.h>
+#include <vgui/vgui_easy2D_tableau.h>
 #include <vgui/vgui_style.h>
 #include <bgui/bgui_image_tableau.h>
 

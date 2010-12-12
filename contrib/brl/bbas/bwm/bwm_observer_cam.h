@@ -8,7 +8,7 @@
 
 #include <vcl_iostream.h>
 
-#include <vgui/vgui_easy2d_tableau.h>
+#include <vgui/vgui_easy2D_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>
 
 #include <vgl/vgl_point_2d.h>
