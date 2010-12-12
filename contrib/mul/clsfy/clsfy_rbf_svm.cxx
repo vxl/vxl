@@ -58,7 +58,7 @@ unsigned clsfy_rbf_svm::classify(const vnl_vector<double> &input) const
     else if (sum < lower_target) return 0u;
   }
   vcl_cerr << "ERROR: clsfy_rbf_svm::classify"
-           << " Should not have reached here" <<vcl_endl;
+           << " Should not have reached here\n";
   vcl_abort();
   return 0u;
 }
@@ -170,10 +170,10 @@ clsfy_classifier_base* clsfy_rbf_svm::clone() const
 
 void clsfy_rbf_svm::print_summary(vcl_ostream& os) const
 {
-  os << vsl_indent() << "bias=" << bias_ << "  sigma=" << rbf_width();
-  os << "  nSupportVectors=" << n_support_vectors() << '\n';
-  os << vsl_indent() <<"  Starting targets are  " << upper_target_;
-  os << ", " << lower_target_ << '\n';
+  os << vsl_indent() << "bias=" << bias_ << "  sigma=" << rbf_width()
+     << "  nSupportVectors=" << n_support_vectors() << '\n'
+     << vsl_indent() <<"  Starting targets are  " << upper_target_
+     << ", " << lower_target_ << vcl_endl;
 }
 
 //=======================================================================
@@ -193,14 +193,14 @@ void clsfy_rbf_svm::b_read(vsl_b_istream& bfs)
 {
   if (!bfs) return;
 
+  double dummy;
   short version;
   vsl_b_read(bfs,version);
   switch (version)
   {
-  case (1):
-    double dummy;
-    vcl_cerr << "WARNING: clsfy_rbf_svm::b_read().\nVersion" <<
-      "1 shouldn't really be loaded into this class." << vcl_endl;
+   case 1:
+    vcl_cerr << "WARNING: clsfy_rbf_svm::b_read().\n"
+             << "Version 1 shouldn't really be loaded into this class.\n";
 
     vsl_b_read(bfs,bias_);
     vsl_b_read(bfs,gamma_);
@@ -210,16 +210,16 @@ void clsfy_rbf_svm::b_read(vsl_b_istream& bfs)
     vsl_b_read(bfs,dummy);
     calculate_targets();
     break;
-  case (2):
+   case 2:
     vsl_b_read(bfs,bias_);
     vsl_b_read(bfs,gamma_);
     vsl_b_read(bfs,lagrangians_);
     vsl_b_read(bfs,supports_);
     calculate_targets();
     break;
-  default:
-    vcl_cerr << "I/O ERROR: clsfy_rbf_svm::b_read(vsl_b_istream&) \n";
-    vcl_cerr << "           Unknown version number "<< version << "\n";
+   default:
+    vcl_cerr << "I/O ERROR: clsfy_rbf_svm::b_read(vsl_b_istream&)\n"
+             << "           Unknown version number "<< version << '\n';
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }

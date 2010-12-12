@@ -94,9 +94,9 @@ void test_read_multi_props_ws()
     TEST("Case 6a: props[ \"a\" ].1 == \"a\"",
          props.lower_bound("a")->second == "a" && !ss.fail(), true);
     TEST("Case 6b: props[ \"a\" ].2 == \"b\"",
-         (--props.upper_bound("a"))->second == "b" && !ss.fail(), true); 
+         (--props.upper_bound("a"))->second == "b" && !ss.fail(), true);
     TEST("Case 6c: props[ \"a\" ].count == 2",
-        vcl_distance(props.lower_bound("a"), props.upper_bound("a")), 2);
+         vcl_distance(props.lower_bound("a"), props.upper_bound("a")), 2);
   }
 
   {
@@ -144,7 +144,7 @@ void test_read_multi_props_ws()
 
     mbl_read_multi_props_print(vcl_cout, props);
     TEST("Case 8.5a: props[ \"a\" ] == \"a\"",
-      props.lower_bound("a")->second == "a" && !ss.fail(), true);
+         props.lower_bound("a")->second == "a" && !ss.fail(), true);
     TEST("Case 8.5b: props[ \"b\" ] == b_ans",
          strip_ws(props.lower_bound("b")->second) == strip_ws(b_ans) && !ss.fail(), true);
   }
@@ -158,7 +158,7 @@ void test_read_multi_props_ws()
 
     mbl_read_multi_props_print(vcl_cout, props);
     TEST("Case 8.6a: props[ \"a\" ] == \"a\"",
-      props.lower_bound("a")->second == "a" && !ss.fail(), true);
+         props.lower_bound("a")->second == "a" && !ss.fail(), true);
     TEST("Case 8.6b: props[ \"b\" ] == b_ans",
          strip_ws(props.lower_bound("b")->second) == strip_ws(b_ans) && !ss.fail(), true);
   }
@@ -172,7 +172,7 @@ void test_read_multi_props_ws()
 
     mbl_read_multi_props_print(vcl_cout, props);
     TEST("Case 9a: props[ \"a\" ] == \"a\"",
-      props.lower_bound("a")->second == "a" && !ss.fail(), true);
+         props.lower_bound("a")->second == "a" && !ss.fail(), true);
     TEST("Case 9b: props[ \"b\" ] == b_ans",
          strip_ws(props.lower_bound("b")->second) == strip_ws(b_ans) && !ss.fail(), true);
     TEST("Case 9c: props[ \"c\" ] == \"c\"", props.lower_bound("c")->second , "c");
@@ -276,7 +276,7 @@ void test_read_multi_props_ws()
          strip_ws(props.lower_bound("a1")->second) == strip_ws(b_ans) && !ss.fail(), true);
   }
   {
-    vcl_cout << "\nCase 14: get_required_properties() \n";
+    vcl_cout << "\nCase 14: get_required_properties()\n";
     {
       vcl_istringstream ss("{\n  a: a1\n  a: a2\n a: a3\n \n}");
       mbl_read_multi_props_type props = mbl_read_multi_props_ws( ss );
@@ -339,7 +339,7 @@ void test_read_multi_props_ws()
     }
   }
   {
-    vcl_cout << "\nCase 14: get_required_property() \n";
+    vcl_cout << "\nCase 14: get_required_property()\n";
     {
       vcl_istringstream ss("{\n  a: a1\n  a: a2\n a: a3\n \n}");
       mbl_read_multi_props_type props = mbl_read_multi_props_ws( ss );
@@ -402,7 +402,7 @@ void test_read_multi_props_ws()
     }
   }
   {
-    vcl_cout << "\nCase 15: get_optional_properties() \n";
+    vcl_cout << "\nCase 15: get_optional_properties()\n";
     {
       vcl_istringstream ss("{\n  a: a1\n  a: a2\n a: a3\n \n}");
       mbl_read_multi_props_type props = mbl_read_multi_props_ws( ss );
@@ -442,7 +442,7 @@ void test_read_multi_props_ws()
     }
   }
   {
-    vcl_cout << "\nCase 16: get_required_property() \n";
+    vcl_cout << "\nCase 16: get_required_property()\n";
     {
       vcl_istringstream ss("{\n  a: a1\n  b: b1\n}");
       mbl_read_multi_props_type props = mbl_read_multi_props_ws( ss );

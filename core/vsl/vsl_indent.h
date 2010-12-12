@@ -37,43 +37,43 @@
 // \code
 // class Fred
 // {
-// public:
-//  void print(vcl_ostream& os) const { os<<vsl_indent()<<"Fred's data"; }
+//  public:
+//   void print(vcl_ostream& os) const { os<<vsl_indent()<<"Fred's data"; }
 // };
 //
 // vcl_ostream& operator<<(vcl_ostream& os, const Fred& fred)
 // {
-//  os<<"Fred: \n";
-//  vsl_indent_inc(os);
-//  fred.print(os);
-//  vsl_indent_dec(os);
-//  return os;
+//   os<<"Fred:\n";
+//   vsl_indent_inc(os);
+//   fred.print(os);
+//   vsl_indent_dec(os);
+//   return os;
 // }
 //
 // class Jim
 // {
-// private:
-//  Fred fred_;
-// public:
-//  void print(vcl_ostream& os) const
-//  {
-//    os<<vsl_indent(os)<<fred_<<'\n';
-//    os<<vsl_indent(os)<<"Jim's other data"; }
-//  };
+//  private:
+//   Fred fred_;
+//  public:
+//   void print(vcl_ostream& os) const
+//   {
+//     os<<vsl_indent(os)<<fred_<<'\n';
+//     os<<vsl_indent(os)<<"Jim's other data"; }
+//   };
 //
 // vcl_ostream& operator<<(vcl_ostream& os, const Jim& jim)
 // {
-//  os<<"Jim: \n";
-//  vsl_indent_inc(os);
-//  jim.print(os);
-//  vsl_indent_dec(os);
-//  return os;
+//   os<<"Jim:\n";
+//   vsl_indent_inc(os);
+//   jim.print(os);
+//   vsl_indent_dec(os);
+//   return os;
 // }
 //
 // main()
 // {
-//  Jim jim;
-//  vcl_cout<<jim<<vcl_endl;
+//   Jim jim;
+//   vcl_cout<<jim<<vcl_endl;
 // }
 // \endcode
 //

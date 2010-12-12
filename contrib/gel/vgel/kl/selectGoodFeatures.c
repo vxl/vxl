@@ -303,22 +303,22 @@ void _KLTSelectGoodFeatures(
   /* Check window size (and correct if necessary) */
   if (tc->window_width % 2 != 1) {
     tc->window_width = tc->window_width+1;
-    KLTWarning("Tracking context's window width must be odd.  "
+    KLTWarning("Tracking context's window width must be odd.\n"
                "Changing to %d.\n", tc->window_width);
   }
   if (tc->window_height % 2 != 1) {
     tc->window_height = tc->window_height+1;
-    KLTWarning("Tracking context's window height must be odd.  "
+    KLTWarning("Tracking context's window height must be odd.\n"
                "Changing to %d.\n", tc->window_height);
   }
   if (tc->window_width < 3) {
     tc->window_width = 3;
-    KLTWarning("Tracking context's window width must be at least three.  \n"
+    KLTWarning("Tracking context's window width must be at least three.\n"
                "Changing to %d.\n", tc->window_width);
   }
   if (tc->window_height < 3) {
     tc->window_height = 3;
-    KLTWarning("Tracking context's window height must be at least three.  \n"
+    KLTWarning("Tracking context's window height must be at least three.\n"
                "Changing to %d.\n", tc->window_height);
   }
   window_hw = tc->window_width/2;
@@ -336,7 +336,8 @@ void _KLTSelectGoodFeatures(
     grady = ((_KLT_Pyramid) tc->pyramid_last_grady)->img[0];
     assert(gradx != NULL);
     assert(grady != NULL);
-  } else  {
+  }
+  else  {
     floatimages_created = TRUE;
     floatimg = _KLTCreateFloatImage(ncols, nrows);
     gradx    = _KLTCreateFloatImage(ncols, nrows);
@@ -347,7 +348,9 @@ void _KLTSelectGoodFeatures(
       _KLTToFloatImage(img, ncols, nrows, tmpimg);
       _KLTComputeSmoothedImage(tmpimg, _KLTComputeSmoothSigma(tc), floatimg);
       _KLTFreeFloatImage(tmpimg);
-    } else _KLTToFloatImage(img, ncols, nrows, floatimg);
+    }
+    else
+      _KLTToFloatImage(img, ncols, nrows, floatimg);
 
     /* Compute gradient of image in x and y direction */
     _KLTComputeGradients(floatimg, tc->grad_sigma, gradx, grady);

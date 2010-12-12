@@ -225,7 +225,7 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
   assert ( d == (int)wrapper.size() );
 
 
-   // initialize weights
+  // initialize weights
   unsigned n0=0;
   unsigned n1=0;
   for (unsigned int i=0;i<n;++i)
@@ -342,11 +342,8 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
 
     // update the wts using the best weak classifier
     for (unsigned int j=0;j<n;++j)
-      if ( best_c1d-> classify( vec[j].first )
-            ==
-           (unsigned) vec[j].second
-         )
-      wts[vec[j].third]*=beta;
+      if ( best_c1d-> classify( vec[j].first ) == (unsigned) vec[j].second)
+        wts[vec[j].third]*=beta;
 
     double w_sum= wts.mean()*n;
     wts/=w_sum;
@@ -457,13 +454,13 @@ void clsfy_adaboost_sorted_builder::b_read(vsl_b_istream& /*bfs*/)
   vsl_b_read(bfs,version);
   switch (version)
   {
-  case (1):
+   case 1:
     //clsfy_builder_base::b_read(bfs);  // Needed if base has any data
     vsl_b_read(bfs,data_);
     break;
-  default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_adaboost_sorted_builder&) \n"
-             << "           Unknown version number "<< version << "\n";
+   default:
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_adaboost_sorted_builder&)\n"
+             << "           Unknown version number "<< version << '\n';
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }

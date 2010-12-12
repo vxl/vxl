@@ -404,7 +404,6 @@ double clsfy_direct_boost_builder::build(clsfy_classifier_base& model,
   }
   for (unsigned i =0; i< classifiers.size(); ++i)
     delete classifiers[i];
- 
 
   // calculating response from classifier so far
   // and using this to calc min_error threshold
@@ -506,12 +505,12 @@ void clsfy_direct_boost_builder::b_read(vsl_b_istream& /*bfs*/)
   vsl_b_read(bfs,version);
   switch (version)
   {
-  case (1):
+   case 1:
     //clsfy_builder_base::b_read(bfs);  // Needed if base has any data
     vsl_b_read(bfs,data_);
     break;
-  default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_direct_boost_builder&) \n"
+   default:
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_direct_boost_builder&)\n"
              << "           Unknown version number "<< version << '\n';
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;

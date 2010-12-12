@@ -25,25 +25,25 @@ int main(int argc,  char** argv)
   //// need this on some toolkit implementations to get the window up.
   vul_arg_parse(argc, argv);
 
-  //1.  create ocl_scene from xml file 
+  //1.  create ocl_scene from xml file
   boxm_ocl_bit_scene ocl_scene(scene_file());
-  vcl_cout<<"Scene Initialized... "<<vcl_endl
+  vcl_cout<<"Scene Initialized...\n"
           <<ocl_scene<<vcl_endl;
-          
+
   //2.  build the camera from file
   vcl_ifstream ifs(camfile().c_str());
   vpgl_perspective_camera<double>* pcam = new vpgl_perspective_camera<double>;
   if (!ifs.is_open()) {
-      vcl_cerr << "Failed to open file " << camfile() << vcl_endl;
-      return -1;
+    vcl_cerr << "Failed to open file " << camfile() << '\n';
+    return -1;
   }
   ifs >> *pcam;
 
   vil_image_view<float> expimg(ni(),nj(),1);
   vil_image_view<float> maskimg(ni(),nj(),1);
-  
+
   //4.  initialize update manager
-  boxm_update_bit_scene_manager* updt_mgr 
+  boxm_update_bit_scene_manager* updt_mgr
     = boxm_update_bit_scene_manager::instance();
 
   vil_image_view<float> expected(ni(),nj());
@@ -55,17 +55,17 @@ int main(int argc,  char** argv)
     return -1;
   updt_mgr->setup_online_processing();
 
-  //5.  write cam, in_image and call update 
+  //5.  write cam, in_image and call update
   updt_mgr->set_input_image(expimg);
   updt_mgr->write_image_buffer();
   updt_mgr->set_persp_camera(pcam);
   updt_mgr->write_persp_camera_buffers();
   updt_mgr->refine();
-  
-  vcl_cout<<"Refined scene... \n"<<ocl_scene<<vcl_endl;
-  
+
+  vcl_cout<<"Refined scene...\n"<<ocl_scene<<vcl_endl;
+
   //7.  cleanup
   updt_mgr->uninit_scene();
-  
+
   return 0;
 }

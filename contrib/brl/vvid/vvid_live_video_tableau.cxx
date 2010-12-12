@@ -47,11 +47,11 @@ bool vvid_live_video_tableau::handle(vgui_event const &e)
 void vvid_live_video_tableau::set_camera_params(const cmu_1394_camera_params& cp)
 {
   if (!cam_.get_camera_present())
-    {
-      vcl_cout << "In vvid_live_video_tableau::set_camera_params() - warning, "
-               << "no camera present, but param values were reassigned\n";
-      return;
-    }
+  {
+    vcl_cout << "In vvid_live_video_tableau::set_camera_params() - warning, "
+             << "no camera present, but param values were reassigned\n";
+    return;
+  }
   bool live =live_;
   if (live)
     this->stop_live_video();
@@ -65,54 +65,54 @@ void vvid_live_video_tableau::set_camera_params(const cmu_1394_camera_params& cp
 bool vvid_live_video_tableau::attach_live_video()
 {
   if (!cam_.get_camera_present())
-    {
-      vcl_cout << "In vvid_live_video_tableau::attach_live_video() - "
-               << "no camera present\n";
-      return false;
-    }
+  {
+    vcl_cout << "In vvid_live_video_tableau::attach_live_video() - "
+             << "no camera present" << vcl_endl;
+    return false;
+  }
   cam_.m_cameraInitialized = false;
   cam_.init(node_);
-  vcl_cout << "The Camera Attributes: \n" << cam_ << " \n";
+  vcl_cout << "The Camera Attributes:\n" << cam_ << vcl_endl;
   return true;
 }
 
 bool vvid_live_video_tableau::start_live_video()
 {
   if (!cam_.get_camera_present())
-    {
-      vcl_cout << "In vvid_live_video_tableau::startlive_video() - "
-               << "no camera present\n";
-      live_ = false;
-      return false;
-    }
-  if(!cam_.start())
-    {
-      vcl_cout << "In vvid_live_video_tableau::startlive_video() - "
-               << "failed to start camera\n";
-      live_ = false;
-      return false;
-    }
-    
+  {
+    vcl_cout << "In vvid_live_video_tableau::startlive_video() - "
+             << "no camera present" << vcl_endl;
+    live_ = false;
+    return false;
+  }
+  if (!cam_.start())
+  {
+    vcl_cout << "In vvid_live_video_tableau::startlive_video() - "
+             << "failed to start camera\n";
+    live_ = false;
+    return false;
+  }
+
   live_ = true;
 
   if (cam_.rgb_)
-    {
+  {
     cam_.get_rgb_image(rgb_frame_, pixel_sample_interval_, true);
     this->set_image(rgb_frame_);
-    }
+  }
   else
-    {
-      vcl_cout << "get image\n";
-      cam_.get_monochrome_image(mono_frame_, pixel_sample_interval_, true);
-      vcl_cout << "got image\n";
-      this->set_image(mono_frame_);
-    }
+  {
+    vcl_cout << "get image\n";
+    cam_.get_monochrome_image(mono_frame_, pixel_sample_interval_, true);
+    vcl_cout << "got image\n";
+    this->set_image(mono_frame_);
+  }
   return true;
 }
 
 void vvid_live_video_tableau::update_frame()
 {
-  if(!live_)
+  if (!live_)
     return;
   if (cam_.rgb_)
     cam_.get_rgb_image(rgb_frame_, pixel_sample_interval_, true);
@@ -125,11 +125,11 @@ void vvid_live_video_tableau::update_frame()
 void vvid_live_video_tableau::stop_live_video()
 {
   if (!cam_.get_camera_present())
-    {
-      vcl_cout << "In vvid_live_video_tableau::stop_live_video() - "
-               << "no camera present\n";
-      return;
-    }
+  {
+    vcl_cout << "In vvid_live_video_tableau::stop_live_video() - "
+             << "no camera present\n";
+    return;
+  }
   cam_.stop();
   live_=false;
 }
@@ -153,7 +153,7 @@ bool vvid_live_video_tableau::
 get_current_rgb_image(int pix_sample_interval,
                       vil1_memory_image_of< vil1_rgb<unsigned char> >& im)
 {
- return  cam_.get_rgb_image(im, pix_sample_interval, false);
+  return  cam_.get_rgb_image(im, pix_sample_interval, false);
 }
 
 vil1_memory_image_of<unsigned char>

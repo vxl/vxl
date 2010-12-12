@@ -8,7 +8,7 @@
 static void test_algo_exp_distance_transform_float()
 {
   vcl_cout << "**************************************\n"
-           << " Testing vil3d_exp_distance_transform \n"
+           << " Testing vil3d_exp_distance_transform\n"
            << "*********************************** **\n";
 
   vil3d_image_view<float> image(11,11,11);
@@ -42,7 +42,6 @@ static void test_algo_exp_distance_transform_float()
             100.0f*vcl_pow(0.5,1.25),0.01f);
   TEST_NEAR("image(5,5,10)",image(5,5,10),
             100.0f*vcl_pow(0.5,1.25),0.01f);
-
 }
 
 static void test_algo_exp_distance_transform()

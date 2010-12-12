@@ -56,7 +56,7 @@ void change_file_date(filename,dosdate,tmu_date)
   FILETIME ftm,ftLocal,ftCreate,ftLastAcc,ftLastWrite;
 
   hFile = CreateFile(filename,GENERIC_READ | GENERIC_WRITE,
-                      0,NULL,OPEN_EXISTING,0,NULL);
+                     0,NULL,OPEN_EXISTING,0,NULL);
   GetFileTime(hFile,&ftCreate,&ftLastAcc,&ftLastWrite);
   DosDateTimeToFileTime((WORD)(dosdate>>16),(WORD)dosdate,&ftLocal);
   LocalFileTimeToFileTime(&ftLocal,&ftm);
@@ -117,11 +117,10 @@ int makedir (newdir)
   if (buffer[len-1] == '/') {
     buffer[len-1] = '\0';
   }
-  if (mymkdir(buffer) == 0)
-    {
-      free(buffer);
-      return 1;
-    }
+  if (mymkdir(buffer) == 0) {
+    free(buffer);
+    return 1;
+  }
 
   p = buffer+1;
   while (1)
@@ -174,7 +173,7 @@ int do_list(uf)
 
     err = unzGetGlobalInfo (uf,&gi);
     if (err!=UNZ_OK)
-        printf("error %d with zipfile in unzGetGlobalInfo \n",err);
+        printf("error %d with zipfile in unzGetGlobalInfo\n",err);
     printf(" Length  Method   Size  Ratio   Date    Time   CRC-32     Name\n");
     printf(" ------  ------   ----  -----   ----    ----   ------     ----\n");
     for (i=0;i<gi.number_entry;i++)
@@ -214,15 +213,15 @@ int do_list(uf)
             string_method="Unkn. ";
 
         printf("%7lu  %6s%c%7lu %3lu%%  %2.2lu-%2.2lu-%2.2lu  %2.2lu:%2.2lu  %8.8lx   %s\n",
-                file_info.uncompressed_size,string_method,
-                charCrypt,
-                file_info.compressed_size,
-                ratio,
-                (uLong)file_info.tmu_date.tm_mon + 1,
-                (uLong)file_info.tmu_date.tm_mday,
-                (uLong)file_info.tmu_date.tm_year % 100,
-                (uLong)file_info.tmu_date.tm_hour,(uLong)file_info.tmu_date.tm_min,
-                (uLong)file_info.crc,filename_inzip);
+               file_info.uncompressed_size,string_method,
+               charCrypt,
+               file_info.compressed_size,
+               ratio,
+               (uLong)file_info.tmu_date.tm_mon + 1,
+               (uLong)file_info.tmu_date.tm_mday,
+               (uLong)file_info.tmu_date.tm_year % 100,
+               (uLong)file_info.tmu_date.tm_hour,(uLong)file_info.tmu_date.tm_min,
+               (uLong)file_info.crc,filename_inzip);
         if ((i+1)<gi.number_entry)
         {
             err = unzGoToNextFile(uf);
@@ -233,7 +232,6 @@ int do_list(uf)
             }
         }
     }
-
     return 0;
 }
 
@@ -317,7 +315,7 @@ int do_extract_currentfile(uf,popt_extract_without_path,popt_overwrite,password)
 
                     printf("The file %s exists. Overwrite ? [y]es, [n]o, [A]ll: ",write_filename);
                     ret = scanf("%1s",answer);
-                    if (ret != 1) 
+                    if (ret != 1)
                     {
                        exit(EXIT_FAILURE);
                     }
@@ -415,7 +413,7 @@ int do_extract(uf,opt_extract_without_path,opt_overwrite,password)
 
     err = unzGetGlobalInfo (uf,&gi);
     if (err!=UNZ_OK)
-        printf("error %d with zipfile in unzGetGlobalInfo \n",err);
+        printf("error %d with zipfile in unzGetGlobalInfo\n",err);
 
     for (i=0;i<gi.number_entry;i++)
     {
@@ -434,7 +432,6 @@ int do_extract(uf,opt_extract_without_path,opt_overwrite,password)
             }
         }
     }
-
     return 0;
 }
 
@@ -453,8 +450,8 @@ int do_extract_onefile(uf,filename,opt_extract_without_path,opt_overwrite,passwo
     }
 
     if (do_extract_currentfile(uf,&opt_extract_without_path,
-                                      &opt_overwrite,
-                                      password) == UNZ_OK)
+                               &opt_overwrite,
+                               password) == UNZ_OK)
         return 0;
     else
         return 1;
@@ -523,14 +520,13 @@ int main(argc,argv)
                 if (zipfilename == NULL)
                     zipfilename = argv[i];
                 else if ((filename_to_extract==NULL) && (!opt_extractdir))
-                        filename_to_extract = argv[i] ;
+                    filename_to_extract = argv[i] ;
             }
         }
     }
 
     if (zipfilename!=NULL)
     {
-
 #        ifdef USEWIN32IOAPI
         zlib_filefunc_def ffunc;
 #        endif
@@ -567,7 +563,7 @@ int main(argc,argv)
         return do_list(uf);
     else if (opt_do_extract==1)
     {
-        if (opt_extractdir && chdir(dirname)) 
+        if (opt_extractdir && chdir(dirname))
         {
           printf("Error changing into %s, aborting\n", dirname);
           exit(-1);

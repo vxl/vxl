@@ -99,8 +99,8 @@ double vpdfl_pdf_base::log_prob_thresh(double pass_proportion) const
       lP = log_p(x);
       if (lP > pq.top())  // pq.top() should be the smallest value in the queue.
       {
-         pq.pop();
-         pq.push(lP);
+        pq.pop();
+        pq.push(lP);
       }
     }
     // get two values either side of boundary;
@@ -125,7 +125,7 @@ double vpdfl_pdf_base::log_prob_thresh(double pass_proportion) const
 //  Computes gradient df/dx of f(x)=log(p(x)) at x.
 //  Default baseclass implementation uses gradient() to compute grad/p
 void vpdfl_pdf_base::gradient_logp(vnl_vector<double>& g,
-                      const vnl_vector<double>& x) const
+                                   const vnl_vector<double>& x) const
 {
   double p;
   gradient(g,x,p);
@@ -179,10 +179,10 @@ static void ShowStartVec(vcl_ostream& os, const vnl_vector<double>& v)
 {
   unsigned int n = 3;
   if (n>v.size()) n=v.size();
-  os<<"(";
-  for (unsigned int i=0;i<n;++i) os<<v(i)<<" ";
+  os<<'(';
+  for (unsigned int i=0;i<n;++i) os<<v(i)<<' ';
   if (v.size()>n) os<<"...";
-  os<<")";
+  os<<')';
 }
 
 
@@ -215,13 +215,13 @@ void vpdfl_pdf_base::b_read(vsl_b_istream& bfs)
   vsl_b_read(bfs,version);
   switch (version)
   {
-    case (1):
+    case 1:
       vsl_b_read(bfs,mean_);
       vsl_b_read(bfs,var_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_pdf_base &) \n";
-      vcl_cerr << "           Unknown version number "<< version << vcl_endl;
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_pdf_base &)\n"
+               << "           Unknown version number "<< version << '\n';
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }

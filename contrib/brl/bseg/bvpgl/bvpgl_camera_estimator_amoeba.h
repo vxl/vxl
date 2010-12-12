@@ -86,7 +86,7 @@ class bvpgl_camera_estimator_amoeba : public vnl_cost_function
       brip_vil_float_ops::normalize_to_interval<float,vxl_byte>(img_eei,img_eei_vb,0.0f,255.0f);
       vcl_stringstream name; name << "./current_eei_" << curr_score << ".png";
       vil_save(img_eei_vb, name.str().c_str());
-      vcl_cout << "x[0]: " << x[0] << " x[1]: " << x[1] << " ctr: " << curr_center << " score: " << curr_score << " best_score: " << best_score << " \n";
+      vcl_cout << "x[0]: " << x[0] << " x[1]: " << x[1] << " ctr: " << curr_center << " score: " << curr_score << " best_score: " << best_score << '\n';
       vcl_cout.flush();
 #endif
       if (curr_score > best_score) {

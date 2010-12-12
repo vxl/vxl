@@ -17,11 +17,11 @@ static void test_image_view_maths_float()
 
   double sum0 = 0,sum_sq0=0;
   for (unsigned int k=0;k<imA.nk();++k)
-   for (unsigned int j=0;j<imA.nj();++j)
-    for (unsigned int i=0;i<imA.ni();++i)
-    {
-      imA(i,j,k) = 1.f+i+j*ni+3*k; sum0+=imA(i,j,k); sum_sq0+= imA(i,j,k)*imA(i,j,k);
-    }
+    for (unsigned int j=0;j<imA.nj();++j)
+      for (unsigned int i=0;i<imA.ni();++i)
+      {
+        imA(i,j,k) = 1.f+i+j*ni+3*k; sum0+=imA(i,j,k); sum_sq0+= imA(i,j,k)*imA(i,j,k);
+      }
 
   double sum;
   vil3d_math_sum(sum,imA,0);
@@ -115,9 +115,9 @@ static void test_math_value_range()
 static void test_math_integral_image()
 {
   vcl_cout << "***********************************\n"
-           << " Testing vil3d_math_integral_image \n"
+           << " Testing vil3d_math_integral_image\n"
            << "***********************************\n";
-  // create a 3x3x3 image 
+  // create a 3x3x3 image
   unsigned n = 3;
   vil3d_image_view<vxl_byte> im(n,n,n,1);
   im(0,0,0)=3 ; im(1,0,0)=5 ; im(2,0,0)=2 ;
@@ -143,44 +143,43 @@ static void test_math_integral_image()
   im_sum1(1,1,3)=10 ; im_sum1(2,1,3)=30 ; im_sum1(3,1,3)=42 ;
   im_sum1(1,2,3)=22 ; im_sum1(2,2,3)=62 ; im_sum1(3,2,3)=89 ;
   im_sum1(1,3,3)=45 ; im_sum1(2,3,3)=94 ; im_sum1(3,3,3)=144;
-  
+
   // do voxel-wise comparison with value returned from integral_image fn
   vil3d_image_view<vxl_int_16> im_sum2;
   vil3d_math_integral_image(im,im_sum2);
   bool all_correct = true;
-  for(unsigned k=0; k<n1; k++)
-    for(unsigned j=0; j<n1; j++)
-      for(unsigned i=0; i<n1; i++)
-        if(im_sum1(i,j,k) != im_sum2(i,j,k))
+  for (unsigned k=0; k<n1; k++)
+    for (unsigned j=0; j<n1; j++)
+      for (unsigned i=0; i<n1; i++)
+        if (im_sum1(i,j,k) != im_sum2(i,j,k))
           all_correct = false;
-  TEST("vil3d_math_integral_image(): all correct", all_correct, true);     
-  
+  TEST("vil3d_math_integral_image(): all correct", all_correct, true);
+
   // print out values if test failed
-  if(!all_correct)
+  if (!all_correct)
   {
     vcl_cout << "Expected and obtained values for integral image\n";
-    for(unsigned k=0; k<n1; k++)
+    for (unsigned k=0; k<n1; k++)
     {
-      for(unsigned j=0; j<n1; j++)
+      for (unsigned j=0; j<n1; j++)
       {
-        for(unsigned i=0; i<n1; i++)
-          vcl_cout << im_sum1(i,j,k) << " ";
+        for (unsigned i=0; i<n1; i++)
+          vcl_cout << im_sum1(i,j,k) << ' ';
         vcl_cout << "\t\t";
-        for(unsigned i=0; i<n1; i++)
-          vcl_cout << im_sum2(i,j,k) << " ";
+        for (unsigned i=0; i<n1; i++)
+          vcl_cout << im_sum2(i,j,k) << ' ';
         vcl_cout << vcl_endl;
       }
     }
   }
-
 }
 
 static void test_math_integral_image_sqr()
 {
   vcl_cout << "***************************************\n"
-           << " Testing vil3d_math_integral_image_sqr \n"
+           << " Testing vil3d_math_integral_image_sqr\n"
            << "***************************************\n";
-  // create a 3x3x3 image 
+  // create a 3x3x3 image
   unsigned n = 3;
   vil3d_image_view<vxl_byte> im(n,n,n,1);
   im(0,0,0)=3 ; im(1,0,0)=5 ; im(2,0,0)=2 ;
@@ -206,7 +205,7 @@ static void test_math_integral_image_sqr()
   im_sum1(1,1,3)=10 ; im_sum1(2,1,3)=30 ; im_sum1(3,1,3)=42 ;
   im_sum1(1,2,3)=22 ; im_sum1(2,2,3)=62 ; im_sum1(3,2,3)=89 ;
   im_sum1(1,3,3)=45 ; im_sum1(2,3,3)=94 ; im_sum1(3,3,3)=144;
- 
+
   // explicitly define the integral square image
   vil3d_image_view<vxl_int_16> im_sum1_sq(n1,n1,n1,1);
   im_sum1_sq.fill(0);
@@ -226,27 +225,27 @@ static void test_math_integral_image_sqr()
 
   // do voxel-wise comparison with value returned from integral_image fn
   bool all_correct = true;
-  for(unsigned k=0; k<n1; k++)
-    for(unsigned j=0; j<n1; j++)
-      for(unsigned i=0; i<n1; i++)
-        if(im_sum1(i,j,k) != im_sum2(i,j,k))
+  for (unsigned k=0; k<n1; k++)
+    for (unsigned j=0; j<n1; j++)
+      for (unsigned i=0; i<n1; i++)
+        if (im_sum1(i,j,k) != im_sum2(i,j,k))
           all_correct = false;
   TEST("vil3d_math_integral_image_sqr(): all correct for sum",
-       all_correct, true);     
-  
+       all_correct, true);
+
   // print out values if test failed
   if (!all_correct)
   {
     vcl_cout << "Expected and obtained values for sum integral image\n";
-    for(unsigned k=0; k<n1; k++)
+    for (unsigned k=0; k<n1; k++)
     {
-      for(unsigned j=0; j<n1; j++)
+      for (unsigned j=0; j<n1; j++)
       {
-        for(unsigned i=0; i<n1; i++)
-          vcl_cout << im_sum1(i,j,k) << " ";
+        for (unsigned i=0; i<n1; i++)
+          vcl_cout << im_sum1(i,j,k) << ' ';
         vcl_cout << "\t\t";
-        for(unsigned i=0; i<n1; i++)
-          vcl_cout << im_sum2(i,j,k) << " ";
+        for (unsigned i=0; i<n1; i++)
+          vcl_cout << im_sum2(i,j,k) << ' ';
         vcl_cout << vcl_endl;
       }
     }
@@ -254,32 +253,31 @@ static void test_math_integral_image_sqr()
 
   // ditto for sum_sq
   all_correct = true;
-  for(unsigned k=0; k<n1; k++)
-    for(unsigned j=0; j<n1; j++)
-      for(unsigned i=0; i<n1; i++)
-        if(im_sum1_sq(i,j,k) != im_sum2_sq(i,j,k))
+  for (unsigned k=0; k<n1; k++)
+    for (unsigned j=0; j<n1; j++)
+      for (unsigned i=0; i<n1; i++)
+        if (im_sum1_sq(i,j,k) != im_sum2_sq(i,j,k))
           all_correct = false;
   TEST("vil3d_math_integral_image_sqr(): all correct for sqr",
-       all_correct, true);     
-  
+       all_correct, true);
+
   // print out values if test failed
   if (!all_correct)
   {
     vcl_cout << "Expected and obtained values for sum_sq integral image\n";
-    for(unsigned k=0; k<n1; k++)
+    for (unsigned k=0; k<n1; k++)
     {
-      for(unsigned j=0; j<n1; j++)
+      for (unsigned j=0; j<n1; j++)
       {
-        for(unsigned i=0; i<n1; i++)
-          vcl_cout << im_sum1_sq(i,j,k) << " ";
+        for (unsigned i=0; i<n1; i++)
+          vcl_cout << im_sum1_sq(i,j,k) << ' ';
         vcl_cout << "\t\t";
-        for(unsigned i=0; i<n1; i++)
-          vcl_cout << im_sum2_sq(i,j,k) << " ";
+        for (unsigned i=0; i<n1; i++)
+          vcl_cout << im_sum2_sq(i,j,k) << ' ';
         vcl_cout << vcl_endl;
       }
     }
   }
-
 }
 
 static void test_math()

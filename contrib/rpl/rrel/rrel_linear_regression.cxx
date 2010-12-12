@@ -48,8 +48,8 @@ rrel_linear_regression::rrel_linear_regression( const vcl_vector< vnl_vector<dou
   }
   if ( param_dof() > num_pts ) {
     vcl_cerr << "\nrrel_linear_regression::rrel_linear_regression  WARNING:  DoF is greater than\n"
-         << "the number of data points.  An infinite set of equally valid\n"
-         << "solutions exists.\n";
+             << "the number of data points.  An infinite set of equally valid\n"
+             << "solutions exists.\n";
   }
   set_num_samples_for_fit( param_dof() );
 }
@@ -62,7 +62,7 @@ rrel_linear_regression::rrel_linear_regression( const vcl_vector< vnl_vector<dou
   set_param_dof( ind_vars_[0].size() );
   if ( param_dof() > ind_vars.size() ) {
     vcl_cerr << "rrel_linear_regression::rrel_linear_regression  WARNING:  DoF is greater than\n"
-         << "the number of data points.  An infinite set of solutions exists.\n";
+             << "the number of data points.  An infinite set of solutions exists.\n";
   }
   set_num_samples_for_fit( param_dof() );
 }
@@ -90,7 +90,7 @@ rrel_linear_regression::fit_from_minimal_set( const vcl_vector<int>& point_indic
 {
   if ( point_indices.size() != param_dof() ) {
     vcl_cerr << "rrel_linear_regression::fit_from_minimal_sample  The number of point "
-         << "indices must agree with the fit degrees of freedom.\n";
+             << "indices must agree with the fit degrees of freedom.\n";
     return false;
   }
   vnl_matrix<double> A(param_dof(), param_dof());
@@ -151,7 +151,8 @@ rrel_linear_regression::weighted_least_squares_fit( vnl_vector<double>& params,
         sumDists(j,0) += ind_vars_[i][j] * rand_vars_[i] * (*weights)[i];
       }
     }
-  } else {
+  }
+  else {
     for ( unsigned int i=0; i<rand_vars_.size(); ++i ) {
       for ( unsigned int j=0; j<param_dof(); ++j ) {
         for ( unsigned int k=j; k<param_dof(); k++ )
@@ -184,11 +185,11 @@ void
 rrel_linear_regression::print_points() const
 {
   vcl_cout << "\nrrel_linear_regression::print_points:\n"
-           << "  param_dof() = " << param_dof() << "\n"
+           << "  param_dof() = " << param_dof() << '\n'
            << "  num_pts = " << rand_vars_.size() << "\n\n"
-           << " i   rand_vars_   ind_vars_ \n"
-           << " =   ==========   ========= \n";
+           << " i   rand_vars_   ind_vars_\n"
+           << " =   ==========   =========\n";
   for ( unsigned int i=0; i<rand_vars_.size(); ++i ) {
-    vcl_cout << " " << i << "   " << rand_vars_[i] << "    " << ind_vars_[i] << "\n";
+    vcl_cout << ' ' << i << "   " << rand_vars_[i] << "    " << ind_vars_[i] << '\n';
   }
 }

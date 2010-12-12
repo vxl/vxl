@@ -5,7 +5,7 @@ char vtol_dtd0[] = "\
 \n\
 <!DOCTYPE vxl [\n\
 \n\
-<!-- vxl \n\
+<!-- vxl\n\
   -->\n\
 \n\
 <!ELEMENT vxl ANY>\n\
@@ -68,8 +68,8 @@ char vtol_dtd0[] = "\
          </vxl_zero_chain_2d>\n\
   -->\n\
 \n\
-<!ELEMENT vxl_zero_chain_2d ( ( ( vxl_vertex_2d, vxl_flip? ) | \n\
-                               ( vxl_vertex_2d_sptr, vxl_flip? ) )+ )> \n\
+<!ELEMENT vxl_zero_chain_2d ( ( ( vxl_vertex_2d, vxl_flip? ) |\n\
+                               ( vxl_vertex_2d_sptr, vxl_flip? ) )+ )>\n\
   <!ATTLIST vxl_zero_chain_2d id ID #IMPLIED>\n\
 \n\
 <!ELEMENT vxl_zero_chain_2d_sptr EMPTY>\n\
@@ -100,8 +100,8 @@ char vtol_dtd0[] = "\
           Pointer (_sptr) exists.\n\
   -->\n\
 \n\
-<!ELEMENT vxl_one_chain_2d ( ( ( vxl_edge_2d, vxl_flip? ) | \n\
-                              ( vxl_edge_2d_sptr, vxl_flip? ) | \n\
+<!ELEMENT vxl_one_chain_2d ( ( ( vxl_edge_2d, vxl_flip? ) |\n\
+                              ( vxl_edge_2d_sptr, vxl_flip? ) |\n\
                               vxl_one_chain_2d )+ )>\n\
   <!ATTLIST vxl_one_chain_2d id ID #IMPLIED>\n\
 \n\
@@ -118,8 +118,8 @@ char vtol_dtd0[] = "\
         Pointer (_sptr) exists.\n\
   -->\n\
 \n\
-<!ELEMENT vxl_triangle_2d ( ( vxl_vertex_2d | vxl_vertex_2d_sptr ), \n\
-                            ( vxl_vertex_2d | vxl_vertex_2d_sptr ), \n\
+<!ELEMENT vxl_triangle_2d ( ( vxl_vertex_2d | vxl_vertex_2d_sptr ),\n\
+                            ( vxl_vertex_2d | vxl_vertex_2d_sptr ),\n\
                             ( vxl_vertex_2d | vxl_vertex_2d_sptr ))>\n\
   <!ATTLIST vxl_triangle_2d id ID #IMPLIED>\n\
 \n\

@@ -78,11 +78,11 @@ bool bvpl_compute_gauss_gradients(bprb_func_process& pro)
     boxm_scene_base_sptr scene_ptr=new boxm_scene_base();
     scene_ptr = scene_out;
     pro.set_output_val<boxm_scene_base_sptr>(0, scene_ptr);
-    
+
     bsta_histogram<float> magnitude_hist;
     compute_scene_statistics(*scene_out, magnitude_hist);
-    vcl_cout << "Histogram: \n" << magnitude_hist << vcl_endl;
+    vcl_cout << "Histogram:\n" << magnitude_hist << vcl_endl;
   }
-  
+
   return true;
 }

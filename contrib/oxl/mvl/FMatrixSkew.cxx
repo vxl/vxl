@@ -62,14 +62,14 @@ bool
 FMatrixSkew::get_epipoles(vgl_homg_point_2d<double>& epipole1,
                           vgl_homg_point_2d<double>& epipole2) const
 {
-     // fm_compute_epipoles
-     epipole1.set( f_matrix_.get(1,2),
-                  -f_matrix_.get(0,2),
-                   f_matrix_.get(0,1));
-     epipole2.set( f_matrix_.get(1,2),
-                  -f_matrix_.get(0,2),
-                   f_matrix_.get(0,1));
-     return true;
+  // fm_compute_epipoles
+  epipole1.set( f_matrix_.get(1,2),
+               -f_matrix_.get(0,2),
+                f_matrix_.get(0,1));
+  epipole2.set( f_matrix_.get(1,2),
+               -f_matrix_.get(0,2),
+                f_matrix_.get(0,1));
+  return true;
 }
 
 
@@ -81,14 +81,14 @@ FMatrixSkew::get_epipoles(vgl_homg_point_2d<double>& epipole1,
 bool
 FMatrixSkew::get_epipoles(HomgPoint2D *epipole1_ptr, HomgPoint2D *epipole2_ptr) const
 {
-     // fm_compute_epipoles
-     epipole1_ptr->set( f_matrix_.get(1,2),
-                       -f_matrix_.get(0,2),
-                        f_matrix_.get(0,1));
-     epipole2_ptr->set( f_matrix_.get(1,2),
-                       -f_matrix_.get(0,2),
-                        f_matrix_.get(0,1));
-     return true;
+  // fm_compute_epipoles
+  epipole1_ptr->set( f_matrix_.get(1,2),
+                    -f_matrix_.get(0,2),
+                     f_matrix_.get(0,1));
+  epipole2_ptr->set( f_matrix_.get(1,2),
+                    -f_matrix_.get(0,2),
+                     f_matrix_.get(0,1));
+  return true;
 }
 
 
@@ -101,9 +101,9 @@ void
 FMatrixSkew::decompose_to_skew_rank3(vnl_matrix<double> *skew_matrix_ptr,
                                      vnl_matrix<double> *rank3_matrix_ptr) const
 {
-     *skew_matrix_ptr = this->get_matrix().as_ref();
-     rank3_matrix_ptr->fill(0.0);
-     rank3_matrix_ptr->fill_diagonal(1.0);
+  *skew_matrix_ptr = this->get_matrix().as_ref();
+  rank3_matrix_ptr->fill(0.0);
+  rank3_matrix_ptr->fill_diagonal(1.0);
 }
 
 //-------------------------------------------------------------------
@@ -122,7 +122,7 @@ FMatrixSkew::set_rank2_using_svd (void)
 inline FMatrixSkew
 FMatrixSkew::get_rank2_truncated()
 {
-     return *this;
+  return *this;
 }
 
 
@@ -141,60 +141,60 @@ FMatrixSkew::find_nearest_perfect_match(vgl_homg_point_2d<double> const& point1,
                                         vgl_homg_point_2d<double>& perfect_point1,
                                         vgl_homg_point_2d<double>& perfect_point2) const
 {
-     // get the epipole
-     vgl_homg_point_2d<double> e1,e2;
-     get_epipoles(e1,e2);
+  // get the epipole
+  vgl_homg_point_2d<double> e1,e2;
+  get_epipoles(e1,e2);
 
-     // scale points if not already done and transform such that  e1->(0,0)
-     double u1 = point1.x()/point1.w() - e1.x()/e1.w();
-     double v1 = point1.y()/point1.w() - e1.y()/e1.w();
-     double u2 = point2.x()/point2.w() - e2.x()/e2.w();
-     double v2 = point2.y()/point2.w() - e2.y()/e2.w();
+  // scale points if not already done and transform such that  e1->(0,0)
+  double u1 = point1.x()/point1.w() - e1.x()/e1.w();
+  double v1 = point1.y()/point1.w() - e1.y()/e1.w();
+  double u2 = point2.x()/point2.w() - e2.x()/e2.w();
+  double v2 = point2.y()/point2.w() - e2.y()/e2.w();
 
-     // form quadratic equation
-     double a_qd = (u1*v1 + u2*v2);
-     double b_qd = u1*u1 + u2*u2 - v1*v1 - v2*v2;
-     double c_qd = -(u1*v1 + u2*v2);
+  // form quadratic equation
+  double a_qd = (u1*v1 + u2*v2);
+  double b_qd = u1*u1 + u2*u2 - v1*v1 - v2*v2;
+  double c_qd = -(u1*v1 + u2*v2);
 
-     // solve quadratic for two solutions
-     double temp = b_qd * b_qd - 4 * a_qd * c_qd;
+  // solve quadratic for two solutions
+  double temp = b_qd * b_qd - 4 * a_qd * c_qd;
 
-     if (temp < 0)
-     {
-          vcl_cerr << "Error in FMatrixSkew::find_nearest_perfect_match \n"
-                   << "Imaginary solution obtained\n"
-                   << "No solution returned\n";
-          return;
-     }
+  if (temp < 0)
+  {
+    vcl_cerr << "Error in FMatrixSkew::find_nearest_perfect_match\n"
+             << "Imaginary solution obtained\n"
+             << "No solution returned\n";
+    return;
+  }
 
-     double ttheta1 = (-b_qd + vcl_sqrt(temp))/(2*a_qd);
-     double ttheta2 = (-b_qd - vcl_sqrt(temp))/(2*a_qd);
+  double ttheta1 = (-b_qd + vcl_sqrt(temp))/(2*a_qd);
+  double ttheta2 = (-b_qd - vcl_sqrt(temp))/(2*a_qd);
 
-     double theta1 = vcl_atan(ttheta1);
-     double theta2 = vcl_atan(ttheta2);
+  double theta1 = vcl_atan(ttheta1);
+  double theta2 = vcl_atan(ttheta2);
 
-     double ctheta1 = vcl_cos(theta1), stheta1 = vcl_sin(theta1);
-     double ctheta2 = vcl_cos(theta2), stheta2 = vcl_sin(theta2);
+  double ctheta1 = vcl_cos(theta1), stheta1 = vcl_sin(theta1);
+  double ctheta2 = vcl_cos(theta2), stheta2 = vcl_sin(theta2);
 
-     double dist11 = stheta1*u1 - ctheta1*v1;
-     double dist12 = stheta1*u2 - ctheta1*v2;
-     double dist21 = stheta2*u1 - ctheta2*v1;
-     double dist22 = stheta2*u2 - ctheta2*v2;
+  double dist11 = stheta1*u1 - ctheta1*v1;
+  double dist12 = stheta1*u2 - ctheta1*v2;
+  double dist21 = stheta2*u1 - ctheta2*v1;
+  double dist22 = stheta2*u2 - ctheta2*v2;
 
-     // find correct solution with minimum distance - set to theta1
-     if (vcl_fabs(dist11) + vcl_fabs(dist12) > vcl_fabs(dist21) + vcl_fabs(dist22))
-     {
-          stheta1 = stheta2;
-          ctheta1 = ctheta2;
-          dist11   = dist21;
-          dist12   = dist22;
-     }
+  // find correct solution with minimum distance - set to theta1
+  if (vcl_fabs(dist11) + vcl_fabs(dist12) > vcl_fabs(dist21) + vcl_fabs(dist22))
+  {
+    stheta1 = stheta2;
+    ctheta1 = ctheta2;
+    dist11   = dist21;
+    dist12   = dist22;
+  }
 
-     // do with per_proj... in HomgOp2D::
-     perfect_point1.set(u1-dist11*stheta1+e1.x()/e1.w(),
-                        v1+dist11*ctheta1+e1.y()/e1.w(),1);
-     perfect_point2.set(u2-dist12*stheta1+e2.x()/e2.w(),
-                        v2+dist12*ctheta1+e2.y()/e2.w(),1);
+  // do with per_proj... in HomgOp2D::
+  perfect_point1.set(u1-dist11*stheta1+e1.x()/e1.w(),
+                     v1+dist11*ctheta1+e1.y()/e1.w(),1);
+  perfect_point2.set(u2-dist12*stheta1+e2.x()/e2.w(),
+                     v2+dist12*ctheta1+e2.y()/e2.w(),1);
 }
 
 //-----------------------------------------------------------------------------
@@ -208,64 +208,64 @@ FMatrixSkew::find_nearest_perfect_match(vgl_homg_point_2d<double> const& point1,
 
 void
 FMatrixSkew::find_nearest_perfect_match(const HomgPoint2D& point1,
-                                            const HomgPoint2D& point2,
-                                            HomgPoint2D *perfect_point1_ptr,
-                                            HomgPoint2D *perfect_point2_ptr) const
+                                        const HomgPoint2D& point2,
+                                        HomgPoint2D *perfect_point1_ptr,
+                                        HomgPoint2D *perfect_point2_ptr) const
 {
-     // get the epipole
-     HomgPoint2D e1,e2;
-     get_epipoles(&e1,&e2);
+  // get the epipole
+  HomgPoint2D e1,e2;
+  get_epipoles(&e1,&e2);
 
-     // scale points if not already done and transform such that  e1->(0,0)
-     double u1 = point1.x()/point1.w() - e1.x()/e1.w();
-     double v1 = point1.y()/point1.w() - e1.y()/e1.w();
-     double u2 = point2.x()/point2.w() - e2.x()/e2.w();
-     double v2 = point2.y()/point2.w() - e2.y()/e2.w();
+  // scale points if not already done and transform such that  e1->(0,0)
+  double u1 = point1.x()/point1.w() - e1.x()/e1.w();
+  double v1 = point1.y()/point1.w() - e1.y()/e1.w();
+  double u2 = point2.x()/point2.w() - e2.x()/e2.w();
+  double v2 = point2.y()/point2.w() - e2.y()/e2.w();
 
-     // form quadratic equation
-     double a_qd = (u1*v1 + u2*v2);
-     double b_qd = u1*u1 + u2*u2 - v1*v1 - v2*v2;
-     double c_qd = -(u1*v1 + u2*v2);
+  // form quadratic equation
+  double a_qd = (u1*v1 + u2*v2);
+  double b_qd = u1*u1 + u2*u2 - v1*v1 - v2*v2;
+  double c_qd = -(u1*v1 + u2*v2);
 
-     // solve quadratic for two solutions
-     double temp = b_qd * b_qd - 4 * a_qd * c_qd;
+  // solve quadratic for two solutions
+  double temp = b_qd * b_qd - 4 * a_qd * c_qd;
 
-     if (temp < 0)
-     {
-          vcl_cerr << "Error in FMatrixSkew::find_nearest_perfect_match \n"
-                   << "Imaginary solution obtained\n"
-                   << "No solution returned\n";
-          return;
-     }
+  if (temp < 0)
+  {
+    vcl_cerr << "Error in FMatrixSkew::find_nearest_perfect_match\n"
+             << "Imaginary solution obtained\n"
+             << "No solution returned\n";
+    return;
+  }
 
-     double ttheta1 = (-b_qd + vcl_sqrt(temp))/(2*a_qd);
-     double ttheta2 = (-b_qd - vcl_sqrt(temp))/(2*a_qd);
+  double ttheta1 = (-b_qd + vcl_sqrt(temp))/(2*a_qd);
+  double ttheta2 = (-b_qd - vcl_sqrt(temp))/(2*a_qd);
 
-     double theta1 = vcl_atan(ttheta1);
-     double theta2 = vcl_atan(ttheta2);
+  double theta1 = vcl_atan(ttheta1);
+  double theta2 = vcl_atan(ttheta2);
 
-     double ctheta1 = vcl_cos(theta1), stheta1 = vcl_sin(theta1);
-     double ctheta2 = vcl_cos(theta2), stheta2 = vcl_sin(theta2);
+  double ctheta1 = vcl_cos(theta1), stheta1 = vcl_sin(theta1);
+  double ctheta2 = vcl_cos(theta2), stheta2 = vcl_sin(theta2);
 
-     double dist11 = stheta1*u1 - ctheta1*v1;
-     double dist12 = stheta1*u2 - ctheta1*v2;
-     double dist21 = stheta2*u1 - ctheta2*v1;
-     double dist22 = stheta2*u2 - ctheta2*v2;
+  double dist11 = stheta1*u1 - ctheta1*v1;
+  double dist12 = stheta1*u2 - ctheta1*v2;
+  double dist21 = stheta2*u1 - ctheta2*v1;
+  double dist22 = stheta2*u2 - ctheta2*v2;
 
-     // find correct solution with minimum distance - set to theta1
-     if (vcl_fabs(dist11) + vcl_fabs(dist12) > vcl_fabs(dist21) + vcl_fabs(dist22))
-     {
-          stheta1 = stheta2;
-          ctheta1 = ctheta2;
-          dist11   = dist21;
-          dist12   = dist22;
-     }
+  // find correct solution with minimum distance - set to theta1
+  if (vcl_fabs(dist11) + vcl_fabs(dist12) > vcl_fabs(dist21) + vcl_fabs(dist22))
+  {
+    stheta1 = stheta2;
+    ctheta1 = ctheta2;
+    dist11   = dist21;
+    dist12   = dist22;
+  }
 
-     // do with per_proj... in HomgOp2D::
-     perfect_point1_ptr->set(u1-dist11*stheta1+e1.x()/e1.w(),
-                             v1+dist11*ctheta1+e1.y()/e1.w(),1);
-     perfect_point2_ptr->set(u2-dist12*stheta1+e2.x()/e2.w(),
-                             v2+dist12*ctheta1+e2.y()/e2.w(),1);
+  // do with per_proj... in HomgOp2D::
+  perfect_point1_ptr->set(u1-dist11*stheta1+e1.x()/e1.w(),
+                          v1+dist11*ctheta1+e1.y()/e1.w(),1);
+  perfect_point2_ptr->set(u2-dist12*stheta1+e2.x()/e2.w(),
+                          v2+dist12*ctheta1+e2.y()/e2.w(),1);
 }
 
 
@@ -279,37 +279,37 @@ FMatrixSkew::find_nearest_perfect_match(const HomgPoint2D& point1,
 
 bool FMatrixSkew::set (const double* f_matrix )
 {
-     int row_index, col_index;
+  int row_index, col_index;
 
-     // should be set to 0.0
-     const double tolerance=0.0;
+  // should be set to 0.0
+  const double tolerance=0.0;
 
-     // CRUDE test for skewness with tolerance 0
-     // test diagonal is zero and asymmetric
-     if ((f_matrix[1] + f_matrix[3] > tolerance) |
-         (f_matrix[2] + f_matrix[6] > tolerance) |
-         (f_matrix[5] + f_matrix[7] > tolerance) |
-         (f_matrix[0] > tolerance) |
-         (f_matrix[4] > tolerance) |
-         (f_matrix[8] > tolerance) )
-     {
-          vcl_cerr << "WARNING: F matrix not skew symmetric so cannot allocate to FMatrixSkew\n" ;
-          return false;
-     }
+  // CRUDE test for skewness with tolerance 0
+  // test diagonal is zero and asymmetric
+  if ((f_matrix[1] + f_matrix[3] > tolerance) |
+      (f_matrix[2] + f_matrix[6] > tolerance) |
+      (f_matrix[5] + f_matrix[7] > tolerance) |
+      (f_matrix[0] > tolerance) |
+      (f_matrix[4] > tolerance) |
+      (f_matrix[8] > tolerance) )
+  {
+    vcl_cerr << "WARNING: F matrix not skew symmetric so cannot allocate to FMatrixSkew\n" ;
+    return false;
+  }
 
-     for (row_index = 0; row_index < 3; row_index++)
-          for (col_index = 0; col_index < 3; col_index++)
-          {
-               double v = *f_matrix++;
-               f_matrix_. put (row_index, col_index,v);
-               ft_matrix_. put (col_index, row_index,v);
-          }
+  for (row_index = 0; row_index < 3; row_index++)
+    for (col_index = 0; col_index < 3; col_index++)
+    {
+      double v = *f_matrix++;
+      f_matrix_. put (row_index, col_index,v);
+      ft_matrix_. put (col_index, row_index,v);
+    }
 
-     // set rank flag true
+  // set rank flag true
 
-     FMatrix::set_rank2_flag(true);
+  FMatrix::set_rank2_flag(true);
 
-     return true;
+  return true;
 }
 
 
@@ -324,7 +324,7 @@ bool FMatrixSkew::set (const double* f_matrix )
 inline bool
 FMatrixSkew::set (const vnl_matrix<double>& f_matrix )
 {
-   return set(f_matrix.data_block());
+  return set(f_matrix.data_block());
 }
 
 
@@ -335,7 +335,7 @@ FMatrixSkew::set (const vnl_matrix<double>& f_matrix )
 inline bool
 FMatrixSkew::get_rank2_flag (void) const
 {
-     return true;
+  return true;
 }
 
 //----------------------------------------------------------------

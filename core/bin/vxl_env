@@ -28,7 +28,8 @@ sub setenv {
     local($var, $val) = @_;
     if ($csh) {
         print "setenv $var $val $nl";
-    } else {
+    }
+    else {
         print "$var=$val $nl export $var $nl";
     }
 }
@@ -42,22 +43,22 @@ while ($_ = shift) {
             print STDERR "tj-env: Warning:  Old IUELOCALROOT = $had_iupackagehome.\n";
             print STDERR "tj-env: Warning:  New '-local' one  = $IUELOCALROOT.\n";
         }
-
-    } elsif (m/^-sys$/) {
+    }
+    elsif (m/^-sys$/) {
         $IUEROOT = shift;
-
-    } elsif (m/^-nl$/) {
+    }
+    elsif (m/^-nl$/) {
         $nl = "\n";
-
-    } elsif (m/^-bash/) {
+    }
+    elsif (m/^-bash/) {
         $csh = 0;
         $forced_shell = 1;
-
-    } elsif (/^-csh/) {
+    }
+    elsif (/^-csh/) {
         $csh = 1;
         $forced_shell = 1;
-
-    } else {
+    }
+    else {
         print STDERR "tj-env: Warning: Unknown argument [$_]\n";
     }
 }
@@ -97,15 +98,16 @@ $IUEROOT = $`;
 &setenv ("IUEROOT", $IUEROOT);
 
 if ($had_iupackagehome && !$had_local && ($IUEROOT ne $had_iupackagehome)) {
-    print STDERR "tj-env: Warning: You have an IUELOCALROOT, but have not specified -local \n";
-    print STDERR "tj-env: Warning: Ignoring the enviroment variable \n";
+    print STDERR "tj-env: Warning: You have an IUELOCALROOT, but have not specified -local\n";
+    print STDERR "tj-env: Warning: Ignoring the enviroment variable\n";
     $IUELOCALROOT = $IUEROOT;
 }
 
 ## Set IUELOCALROOT
 if ($IUELOCALROOT) {
     &setenv ("IUELOCALROOT", $IUELOCALROOT);
-} else {
+}
+else {
     &setenv("IUELOCALROOT", $IUEROOT);
 }
 
@@ -116,6 +118,7 @@ if (! $IUEOSTYPE) {
     $IUEOSTYPE =~ s/IRIX64/IRIX/;
     $IUEOSTYPE =~ s/CYGWIN.*/win32/;
 }
+
 &setenv ("IUEOSTYPE", $IUEOSTYPE);
 
 ## Locate Scripts directory.  If it is in IUELOCALROOT, use that, otherwise use
@@ -123,7 +126,8 @@ if (! $IUEOSTYPE) {
 
 if ($IUELOCALROOT && -d "$IUELOCALROOT/Scripts/Shell" ) {
     $pathbase = $IUELOCALROOT;
-} else {
+}
+else {
     $pathbase = $IUEROOT;
 }
 
@@ -142,10 +146,11 @@ if ($csh) {
 
 if (defined $BASEPATH && defined $PREFIXPATH) {
     &setenv ("PATH", "${PREFIXPATH}:${TARGETPATH}:${BASEPATH}");
-} else {
+}
+else {
     if (defined $BASEPATH || defined $PREFIXPATH) {
-        print STDERR 
-"tj-env: Won't deal with PREFIXPATH and BASEPATH 
+        print STDERR
+"tj-env: Won't deal with PREFIXPATH and BASEPATH
 tj-env: when one is defined and the other isn't.  Ignoring.
 ";
     }

@@ -25,9 +25,9 @@ void test_patch_data()
   vcl_istringstream ss1(
           " { name: Test1 min_width: 8 max_width: 10\n"
           " region: mfpf_region_about_lineseg { i0: 5 i1: 31 rel_wi: 0.5 rel_wj: 0.2 form: box }\n"
-          " builder: mfpf_norm_corr2d_builder { \n"
+          " builder: mfpf_norm_corr2d_builder {\n"
           "  search_nA: 5 search_dA: 0.06\n"
-          "  search_ns: 3 search_ds: 1.1 overlap_f: 0.75 } } \n");
+          "  search_ns: 3 search_ds: 1.1 overlap_f: 0.75 } }\n");
 
   mfpf_patch_data patch_data1;
   patch_data1.set_from_stream(ss1);
@@ -36,11 +36,8 @@ void test_patch_data()
   TEST("name",patch_data1.name(),"Test1");
   TEST("min_width",patch_data1.min_width(),8);
   TEST("max_width",patch_data1.max_width(),10);
-  TEST("region",patch_data1.definer().is_a(),
-                "mfpf_region_about_lineseg");
-  TEST("builder",patch_data1.builder().is_a(),
-                "mfpf_norm_corr2d_builder");
- 
+  TEST("region",patch_data1.definer().is_a(), "mfpf_region_about_lineseg");
+  TEST("builder",patch_data1.builder().is_a(), "mfpf_norm_corr2d_builder");
 
   vcl_istringstream ss2(
           " { region: { name: Region1 min_width: 8 max_width: 10\n"
@@ -49,7 +46,6 @@ void test_patch_data()
           "   region: { name: Region2 min_width: 8 max_width: 10\n"
           "             region: mfpf_region_about_lineseg { i0: 5 i1: 31 rel_wi: 0.5 rel_wj: 0.2 form: box }\n"
           "   builder: mfpf_norm_corr2d_builder { } } }\n");
-
 
   vcl_vector<mfpf_patch_data> patch_list;
   mfpf_read_from_stream(ss2,patch_list);

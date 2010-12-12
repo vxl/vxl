@@ -34,7 +34,7 @@ rgrl_data_manager::
 }
 
 //: For multi-stage
-void 
+void
 rgrl_data_manager::
 add_data( unsigned stage,
           rgrl_feature_set_sptr                    from_set,
@@ -54,16 +54,16 @@ add_data( unsigned stage,
   generate_defaults( matcher, weighter, unwgted_scale_est );
 
   // Add the data to the data manager
-  data_[stage].push_back( rgrl_data_manager_data_item( from_set, to_set, 
+  data_[stage].push_back( rgrl_data_manager_data_item( from_set, to_set,
                                                        matcher, weighter,
-                                                       unwgted_scale_est, 
-                                                       wgted_scale_est, 
+                                                       unwgted_scale_est,
+                                                       wgted_scale_est,
                                                        label ) );
   data_.set_dimension_increase_for_next_stage(stage, 1);
 }
 
-//: For single-stage 
-void 
+//: For single-stage
+void
 rgrl_data_manager::
 add_data( rgrl_feature_set_sptr                    from_set,
           rgrl_feature_set_sptr                    to_set,
@@ -74,23 +74,23 @@ add_data( rgrl_feature_set_sptr                    from_set,
           const vcl_string&                        label )
 {
   assert( !multi_stage_ );
-  
+
   unsigned stage = 0;
 
   add_data( stage, from_set, to_set, matcher, weighter,
             unwgted_scale_est, wgted_scale_est, label );
 }
 
-void 
+void
 rgrl_data_manager::
-add_estimator( unsigned                           stage, 
+add_estimator( unsigned                           stage,
                rgrl_estimator_sptr                estimator)
 {
   data_.add_estimator(stage, estimator);
 }
 
 //: For single-stage
-void 
+void
 rgrl_data_manager::
 add_estimator( rgrl_estimator_sptr                estimator)
 {
@@ -101,14 +101,14 @@ add_estimator( rgrl_estimator_sptr                estimator)
 }
 
 //: Operations for dim_increase_for_next_stage for multi-stage
-void 
+void
 rgrl_data_manager::
 set_dimension_increase_for_next_stage( unsigned stage, double rate)
 {
   data_.set_dimension_increase_for_next_stage(stage, rate);
 }
-  
-double 
+
+double
 rgrl_data_manager::
 dimension_increase_for_next_stage(unsigned stage) const
 {
@@ -116,7 +116,7 @@ dimension_increase_for_next_stage(unsigned stage) const
 }
 
 //: Check if any stage contains multi-type
-bool 
+bool
 rgrl_data_manager::
 is_multi_feature() const
 {
@@ -143,11 +143,11 @@ get_data_at_stage( unsigned stage,
   wgted_scale_ests.clear();
   estimators.clear();
 
-  if( data_.has( stage ) ) {
+  if ( data_.has( stage ) ) {
     typedef rgrl_data_manager_data_storage::data_vector::const_iterator iter_type;
     iter_type itr = data_[stage].begin();
     iter_type end = data_[stage].end();
-    for( ; itr != end; ++itr ) {
+    for ( ; itr != end; ++itr ) {
       from_sets.push_back( itr->from_set );
       to_sets.push_back( itr->to_set );
       matchers.push_back( itr->matcher );
@@ -157,7 +157,7 @@ get_data_at_stage( unsigned stage,
     }
 
     if ( data_.has_estimator_hierarchy( stage ) )
-      estimators = data_.estimator_hierarchy( stage ); 
+      estimators = data_.estimator_hierarchy( stage );
   }
 }
 
@@ -171,7 +171,7 @@ get_data_at_stage( unsigned stage,
                    rgrl_weighter_sptr                & weighter,
                    rgrl_scale_estimator_unwgted_sptr & unwgted_scale_est,
                    rgrl_scale_estimator_wgted_sptr   & wgted_scale_est,
-                   vcl_vector<rgrl_estimator_sptr>   & estimators ) const 
+                   vcl_vector<rgrl_estimator_sptr>   & estimators ) const
 {
   assert( !multi_feature_ );
 
@@ -190,7 +190,7 @@ get_data_at_stage( unsigned stage,
                                         unwgted_scale_ests,
                                         wgted_scale_ests,
                                         estimators );
-  
+
   from_set = from_sets[0];
   to_set   = to_sets[0];
   matcher  = matchers[0];
@@ -236,7 +236,7 @@ get_data( rgrl_feature_set_sptr             & from_set,
 }
 
 //: Check if certain stage exists with data
-bool 
+bool
 rgrl_data_manager::
 has_stage(unsigned stage ) const
 {
@@ -252,7 +252,7 @@ generate_defaults(  rgrl_matcher_sptr                  &matcher,
   // If matcher not set, set matcher to ICP
   if ( !matcher ) {
     matcher = new rgrl_matcher_k_nearest( 1 );
-    DebugMacro( 1, "Default matcher set to rgrl_matcher_k_nearest( 1 ) \n"); 
+    DebugMacro( 1, "Default matcher set to rgrl_matcher_k_nearest( 1 )\n");
   }
 
   // If robust_registration, set missing components to default
@@ -261,14 +261,14 @@ generate_defaults(  rgrl_matcher_sptr                  &matcher,
   if ( !weighter ) {
     vcl_auto_ptr<rrel_m_est_obj>  m_est_obj( new rrel_tukey_obj(4) );
     weighter = new rgrl_weighter_m_est(m_est_obj, false, false);
-    DebugMacro( 1, "Default weighter set to rgrl_weighter_m_est \n"); 
+    DebugMacro( 1, "Default weighter set to rgrl_weighter_m_est\n");
   }
 
   // unweighted scale estimator:
   if ( !unwgted_scale_est ) {
     vcl_auto_ptr<rrel_objective> lms_obj( new rrel_lms_obj(1) );
     unwgted_scale_est = new rgrl_scale_est_closest( lms_obj );
-    DebugMacro( 1, "Default unwgted scale estimator set to rgrl_scale_est_closest \n"); 
+    DebugMacro( 1, "Default unwgted scale estimator set to rgrl_scale_est_closest\n");
   }
 }
 
@@ -281,11 +281,11 @@ get_label( unsigned stage,
   labels.clear();
   labels.reserve(10);
 
-  if( data_.has( stage ) ) {
+  if ( data_.has( stage ) ) {
     typedef rgrl_data_manager_data_storage::data_vector::const_iterator iter_type;
     iter_type itr = data_[stage].begin();
     iter_type end = data_[stage].end();
-    for( ; itr != end; ++itr ) {
+    for ( ; itr != end; ++itr ) {
       labels.push_back( itr->label );
     }
   }

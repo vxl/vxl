@@ -136,10 +136,10 @@ void pdf1d_compare_to_pdf_ks::b_read(vsl_b_istream& bfs)
   vsl_b_read(bfs,version);
   switch (version)
   {
-    case (1):
+    case 1:
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_compare_to_pdf_ks &) \n"
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_compare_to_pdf_ks &)\n"
                << "           Unknown version number "<< version << '\n';
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;

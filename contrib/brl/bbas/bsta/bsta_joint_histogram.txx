@@ -220,20 +220,20 @@ template <class T>
 T bsta_joint_histogram<T>::mutual_information() const
 {
     T mutual_information = T(0);
-    
+
     //calculate marginal distributions
     vcl_vector<T> pa(nbins_a_,T(0)),pb(nbins_b_,T(0));
-    for(unsigned a = 0; a < nbins_a_; ++a)
-        for(unsigned b = 0; b < nbins_b_; ++b)
+    for (unsigned a = 0; a < nbins_a_; ++a)
+        for (unsigned b = 0; b < nbins_b_; ++b)
         {
             pa[a] += this->p(a,b);
             pb[b] += this->p(a,b);
         }
 
     //calculate mutual information in base 10
-    for(unsigned a = 0; a < nbins_a_; ++a)
-        for(unsigned b = 0; b < nbins_b_; ++b)
-            if(p(a,b) != 0 && pa[a] != 0 && pb[b] != 0)
+    for (unsigned a = 0; a < nbins_a_; ++a)
+        for (unsigned b = 0; b < nbins_b_; ++b)
+            if (p(a,b) != 0 && pa[a] != 0 && pb[b] != 0)
                 mutual_information+=this->p(a,b)*(vcl_log(this->p(a,b)) - (vcl_log(pa[a]) + vcl_log(pb[b])) );
 
     //convert mutual information to base 2
@@ -269,7 +269,7 @@ T bsta_joint_histogram<T>::entropy_marginal_a() const
       counts_a[i] += this->get_count(i,j);
       count_a_sum += this->get_count(i,j);
     }
-    
+
   for (unsigned int i = 0; i <nbins_a_; ++i) {
     T pi = counts_a[i]/count_a_sum;
     if (pi>min_prob_)
@@ -309,9 +309,9 @@ T bsta_joint_histogram<T>::get_count(T a, T b) const
 template <class T>
 void bsta_joint_histogram<T>::clear()
 {
-     volume_valid_ = false;
-     volume_ = 0;
-     counts_.fill(T(0));
+  volume_valid_ = false;
+  volume_ = 0;
+  counts_.fill(T(0));
 }
 
 template <class T>
@@ -342,7 +342,7 @@ void bsta_joint_histogram<T>::print_to_vrml(vcl_ostream& os) const
     {
       float height = (max > 0) ? float((p(a,b)/max)*avg) : 0.0f;
       os << "Transform {\n"
-         << "  translation " << a << ' ' << b << ' ' << height << vcl_endl
+         << "  translation " << a << ' ' << b << ' ' << height << '\n'
          << "  children Shape {\n"
          << "    geometry Sphere { radius 0.2 }\n"
          << "    appearance DEF A1 Appearance {"
@@ -410,25 +410,24 @@ void bsta_joint_histogram<T>::print_to_m(vcl_ostream& os) const
 template <class T>
 void bsta_joint_histogram<T>::print_to_text(vcl_ostream& os) const
 {
-  os << nbins_a_ << "\t" << nbins_b_ << "\n";
-  for (unsigned int a = 0; a<nbins_a_; a++) 
+  os << nbins_a_ << '\t' << nbins_b_ << '\n';
+  for (unsigned int a = 0; a<nbins_a_; a++)
   {
-    for (unsigned int b = 0; b<nbins_b_; b++) 
+    for (unsigned int b = 0; b<nbins_b_; b++)
     {
       os << get_count(a,b) << '\t';
     }
-    os << "\n";
+    os << '\n';
   }
-  os << "\n probs: \n";
-  for (unsigned int a = 0; a<nbins_a_; a++) 
+  os << "\n probs:\n";
+  for (unsigned int a = 0; a<nbins_a_; a++)
   {
-    for (unsigned int b = 0; b<nbins_b_; b++) 
+    for (unsigned int b = 0; b<nbins_b_; b++)
     {
       os << p(a,b) << '\t';
     }
-    os << "\n";
+    os << '\n';
   }
-  
 }
 
 #undef BSTA_JOINT_HISTOGRAM_INSTANTIATE

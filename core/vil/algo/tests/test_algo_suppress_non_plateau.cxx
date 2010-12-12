@@ -6,7 +6,7 @@
 static void test_algo_suppress_non_plateau_byte()
 {
   vcl_cout << "***************************************\n"
-           << " Testing vil_algo_suppress_non_plateau \n"
+           << " Testing vil_algo_suppress_non_plateau\n"
            << "***************************************\n";
 
   vil_image_view<vxl_byte> image0,dest_im;

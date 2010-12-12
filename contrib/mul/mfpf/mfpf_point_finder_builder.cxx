@@ -118,7 +118,6 @@ void mfpf_point_finder_builder::parse_base_props(mbl_read_props_type& props)
     search_ds_=vul_string_atof(props["search_ds"]);
     props.erase("search_ds");
   }
-
 }
 
 
@@ -204,11 +203,11 @@ bool mfpf_point_finder_builder::base_equality(const mfpf_point_finder_builder& p
 
 void mfpf_point_finder_builder::print_summary(vcl_ostream& os) const
 {
-  os<<" step_size: "<<step_size_;
-  os<<" search: { ni: "<<search_ni_;
-  os<<" nj: "<<search_nj_;
-  os<<" nA: "<<search_nA_<<" dA: "<<search_dA_;
-  os<<" ns: "<<search_ns_<<" ds: "<<search_ds_<<" } ";
+  os<<" step_size: "<<step_size_
+    <<" search: { ni: "<<search_ni_
+    <<" nj: "<<search_nj_
+    <<" nA: "<<search_nA_<<" dA: "<<search_dA_
+    <<" ns: "<<search_ns_<<" ds: "<<search_ds_<<" } ";
 }
 
 //=======================================================================
@@ -218,13 +217,13 @@ void mfpf_point_finder_builder::print_summary(vcl_ostream& os) const
 void mfpf_point_finder_builder::b_write(vsl_b_ostream& bfs) const
 {
   vsl_b_write(bfs,version_no());
-  vsl_b_write(bfs,step_size_); 
-  vsl_b_write(bfs,search_ni_); 
-  vsl_b_write(bfs,search_nj_); 
-  vsl_b_write(bfs,search_nA_); 
-  vsl_b_write(bfs,search_dA_); 
-  vsl_b_write(bfs,search_ns_); 
-  vsl_b_write(bfs,search_ds_); 
+  vsl_b_write(bfs,step_size_);
+  vsl_b_write(bfs,search_ni_);
+  vsl_b_write(bfs,search_nj_);
+  vsl_b_write(bfs,search_nA_);
+  vsl_b_write(bfs,search_dA_);
+  vsl_b_write(bfs,search_ns_);
+  vsl_b_write(bfs,search_ds_);
 }
 
 //=======================================================================
@@ -238,18 +237,18 @@ void mfpf_point_finder_builder::b_read(vsl_b_istream& bfs)
   vsl_b_read(bfs,version);
   switch (version)
   {
-    case (1):
+    case 1:
       vsl_b_read(bfs,step_size_);
       vsl_b_read(bfs,search_ni_);
       vsl_b_read(bfs,search_nj_);
-      vsl_b_read(bfs,search_nA_); 
-      vsl_b_read(bfs,search_dA_); 
-      vsl_b_read(bfs,search_ns_); 
-      vsl_b_read(bfs,search_ds_); 
+      vsl_b_read(bfs,search_nA_);
+      vsl_b_read(bfs,search_dA_);
+      vsl_b_read(bfs,search_ns_);
+      vsl_b_read(bfs,search_ds_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&) \n";
-      vcl_cerr << "           Unknown version number "<< version << vcl_endl;
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
+               << "           Unknown version number "<< version << '\n';
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }

@@ -7,7 +7,7 @@
 static void test_find_plateaus_byte()
 {
   vcl_cout << "***************************\n"
-           << " Testing vil_find_plateaus \n"
+           << " Testing vil_find_plateaus\n"
            << "***************************\n";
 
   vil_image_view<vxl_byte> image0;
