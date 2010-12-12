@@ -5,28 +5,26 @@ INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
 IF(NOT VXL_USING_NATIVE_EXPAT)
 
 SET(expat_sources
-  xmlparse.c
-  xmltok.c        xmltok.h
-  xmlrole.c       xmlrole.h
-  xmltok_impl.h
-  ascii.h
-  asciitab.h
-  iasciitab.h
-  nametab.h
-  latin1tab.h
-  utf8tab.h
-  expat.h
-  cm_expat_mangle.h
-  expatConfig.h.in
-  expatDllConfig.h.in
-)
+    xmlparse.c
+    xmltok.c        xmltok.h
+    xmlrole.c       xmlrole.h
+    xmltok_impl.h
+    ascii.h
+    asciitab.h
+    iasciitab.h
+    nametab.h
+    latin1tab.h
+    utf8tab.h
+    expat.h
+    cm_expat_mangle.h
+    expatConfig.h.in
+    expatDllConfig.h.in
+   )
 
 INCLUDE(${CMAKE_ROOT}/Modules/TestBigEndian.cmake)
 TEST_BIG_ENDIAN(expat_BIGENDIAN)
 
-INCLUDE_DIRECTORIES(
-  "${expat_BINARY_DIR}"
-  )
+INCLUDE_DIRECTORIES(${expat_BINARY_DIR})
 
 IF(WIN32)
   IF(NOT BUILD_SHARED_LIBS)
