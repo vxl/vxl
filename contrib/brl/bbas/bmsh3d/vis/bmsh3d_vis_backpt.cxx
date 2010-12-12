@@ -26,7 +26,7 @@ bmsh3dvis_vertex_SoPointSet::bmsh3dvis_vertex_SoPointSet (const bmsh3d_vertex* p
   SO_NODE_CONSTRUCTOR (bmsh3dvis_vertex_SoPointSet);
   this->isBuiltIn = true;
 
-  _element = (vispt_elm*) point;
+  _element = (vispt_elm*) point; // casting away const !!!
   _element->set_vis_pointer ((void*)this);
 }
 
@@ -35,7 +35,7 @@ bmsh3dvis_vertex_SoCube::bmsh3dvis_vertex_SoCube (const bmsh3d_vertex* point)
   SO_NODE_CONSTRUCTOR (bmsh3dvis_vertex_SoCube);
   this->isBuiltIn = true;
 
-  _element = (vispt_elm*) point;
+  _element = (vispt_elm*) point; // casting away const !!!
   _element->set_vis_pointer ((void*)this);
 }
 
@@ -44,7 +44,7 @@ bmsh3dvis_edge_SoLineSet::bmsh3dvis_edge_SoLineSet (const bmsh3d_edge* edge)
   SO_NODE_CONSTRUCTOR (bmsh3dvis_edge_SoLineSet);
   this->isBuiltIn = true;
 
-  _element = (bmsh3d_edge*) edge; // casting away const !!!
+  _element = (vispt_elm*) edge; // casting away const !!!
   _element->set_vis_pointer ((void*)this);
 }
 
@@ -53,8 +53,7 @@ bmsh3dvis_face_SoFaceSet::bmsh3dvis_face_SoFaceSet (const bmsh3d_face* face)
   SO_NODE_CONSTRUCTOR (bmsh3dvis_face_SoFaceSet);
   this->isBuiltIn = true;
 
-  _element = (vispt_elm*) face;
+  _element = (vispt_elm*) face; // casting away const !!!
   _element->set_vis_pointer ((void*)this);
 }
-
 
