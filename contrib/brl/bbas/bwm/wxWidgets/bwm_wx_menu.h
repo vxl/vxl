@@ -1,9 +1,9 @@
 #ifndef bwm_wx_menu_h_
 #define bwm_wx_menu_h_
 
-#include "bwm_tableau_mgr.h"
-#include "bwm_site_mgr.h"
-#include "bwm_world.h"
+#include <bwm/bwm_tableau_mgr.h>
+#include <bwm/bwm_site_mgr.h>
+#include <bwm/bwm_world.h>
 
 #include <vgui/vgui_menu.h>
 #include <vgui/vgui_dialog.h>
