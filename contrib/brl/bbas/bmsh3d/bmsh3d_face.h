@@ -25,7 +25,7 @@
 
 #include "bmsh3d_utils.h"
 #include "bmsh3d_vertex.h"
-#include "bmsh3d_edge.h"
+class bmsh3d_edge;
 
 //Color code to visualize several mesh objects.
 typedef enum
