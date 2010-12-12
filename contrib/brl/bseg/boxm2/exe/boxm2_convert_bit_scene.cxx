@@ -15,7 +15,7 @@
 //vnl and vbl array stuff
 #include <vnl/vnl_vector_fixed.h>
 #include <vbl/vbl_array_1d.h>
-#include <vbl/sbl_array_2d.h>
+#include <vbl/vbl_array_2d.h>
 #include <vbl/vbl_array_3d.h>
 
 //brdb stuff
