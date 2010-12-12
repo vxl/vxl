@@ -19,6 +19,7 @@
 
 #include "bmsh3d_face.h"
 #include "bmsh3d_halfedge.h"
+class bmsh3d_edge;
 
 class bmsh3d_face_mc : public bmsh3d_face
 {

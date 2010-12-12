@@ -20,6 +20,7 @@
 
 #include "bmsh3d_mesh.h"
 #include "bmsh3d_face_mc.h"
+class bmsh3d_edge;
 
 //: The mesh class that handles indexed face set.
 class bmsh3d_mesh_mc : public bmsh3d_mesh

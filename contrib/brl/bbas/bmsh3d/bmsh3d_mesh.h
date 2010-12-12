@@ -24,6 +24,7 @@
 #include <vgl/vgl_point_3d.h>
 
 #include "bmsh3d_pt_set.h"
+#include "bmsh3d_edge.h"
 #include "bmsh3d_face.h"
 #include "bmsh3d_face_mc.h"
 
