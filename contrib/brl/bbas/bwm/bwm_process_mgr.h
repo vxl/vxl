@@ -11,7 +11,7 @@ class bwm_process_mgr
 {
  public:
   ~bwm_process_mgr();
-  static bwm_process_mgr* bwm_process_mgr::instance();
+  static bwm_process_mgr* instance();
   void register_process(bwm_command_sptr process);
   bwm_command_sptr load_process(vcl_string name);
   bwm_command_sptr load_tab_process(vcl_string name, vgui_tableau_sptr tab);

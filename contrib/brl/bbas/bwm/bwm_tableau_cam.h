@@ -30,7 +30,7 @@ class bwm_tableau_cam : public bwm_tableau_img
 
   virtual vcl_string type_name() const { return "bwm_tableau_cam"; }
 
-  bool bwm_tableau_cam::handle(const vgui_event& e);
+  bool handle(const vgui_event& e);
 
   void set_observer(bwm_observer_cam* obs) { my_observer_ = obs;}
 

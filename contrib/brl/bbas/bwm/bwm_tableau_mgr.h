@@ -28,7 +28,7 @@ class bwm_tableau_mgr
 
   ~bwm_tableau_mgr();
 
-  static bwm_tableau_mgr* bwm_tableau_mgr::instance();
+  static bwm_tableau_mgr* instance();
 
   void add_tableau(bwm_tableau_img* tab, vcl_string name);
 
@@ -62,7 +62,7 @@ class bwm_tableau_mgr
   void set_draw_mode_edge();
   void set_draw_mode_face();
   void set_draw_mode_mesh();
-  
+
   void zoom_to_fit();
   void scroll_to_point();
 
