@@ -2,7 +2,9 @@
 #include <boxm2/boxm2_block_id.h>
 #include <boxm2/boxm2_cpp_process_base.h>
 #include <boxm2/boxm2_cpp_processor.h>
+#include <boxm2/boxm2_cpp_render_process.h>
 #include <boxm2/boxm2_data.h>
+#include <boxm2/boxm2_data_base.h>
 #include <boxm2/boxm2_data_traits.h>
 #include <boxm2/boxm2_opencl_process_base.h>
 #include <boxm2/boxm2_opencl_processor.h>
