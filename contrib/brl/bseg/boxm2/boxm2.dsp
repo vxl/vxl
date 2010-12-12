@@ -113,6 +113,15 @@ SOURCE=.\boxm2_opencl_processor.cxx
 SOURCE=.\boxm2_cpp_processor.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\boxm2_data_base.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_cpp_render_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_opencl_render_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vbl_array_3d+vnl_vector_fixed+ushort.2--.cxx
 # End Source File
 # Begin Source File
@@ -120,6 +129,27 @@ SOURCE=.\Templates/boxm2_data+BOXM2_ALPHA-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/boxm2_data+BOXM2_MOG3_GREY-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+boxm2_data_base-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/brdb_value_t+boxm2_block_sptr-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+boxm2_scene-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/brdb_value_t+boxm2_scene_sptr-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bocl_manager+boxm2_opencl_processor-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/brdb_value_t+boxm2_data_base_sptr-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+boxm2_block-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -165,6 +195,12 @@ SOURCE=.\boxm2_opencl_process_base.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_opencl_processor.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_data_base.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_cpp_render_process.h
 # End Source File
 # End Group
 # End Target

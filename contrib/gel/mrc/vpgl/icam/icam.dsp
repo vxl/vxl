@@ -128,6 +128,9 @@ SOURCE=.\Templates/vsph_view_sphere+vsph_view_point+icam_view_metadata--.cxx
 # Begin Source File
 SOURCE=.\Templates/vbl_array_3d+vgl_rotation_3d+double--.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_io_smart_ptr+icam_view_sphere-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

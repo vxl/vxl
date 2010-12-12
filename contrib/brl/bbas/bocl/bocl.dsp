@@ -99,6 +99,12 @@ SOURCE=.\bocl_utils.cxx
 SOURCE=.\bocl_global_memory_bandwidth_manager.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\bocl_kernel.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bocl_mem.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/bocl_manager+bocl_global_memory_bandwidth_manager-.cxx
 # End Source File
 # End Group
@@ -121,6 +127,18 @@ SOURCE=.\bocl_global_memory_bandwidth_manager.h
 # End Source File
 # Begin Source File
 SOURCE=.\bocl_utils.h
+# End Source File
+# Begin Source File
+SOURCE=.\bocl_kernel.h
+# End Source File
+# Begin Source File
+SOURCE=.\bocl_mem.h
+# End Source File
+# Begin Source File
+SOURCE=.\bocl_buffer.h
+# End Source File
+# Begin Source File
+SOURCE=.\bocl_buffer_mgr.h
 # End Source File
 # End Group
 # End Target
