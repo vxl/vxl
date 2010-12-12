@@ -96,16 +96,16 @@ class F_test_powell : public vnl_cost_function
 
 class F_broken : public vnl_cost_function
 {
-public:
-    F_broken() : vnl_cost_function(1) {}
-    double f(vnl_vector<double> const& x)
-    {
-        return 0;
-    }
-    void gradf(vnl_vector<double> const& x, vnl_vector<double>& gradient)
-    {
-        gradient[0] = 1;
-    }
+ public:
+  F_broken() : vnl_cost_function(1) {}
+  double f(vnl_vector<double> const& )
+  {
+    return 0;
+  }
+  void gradf(vnl_vector<double> const& , vnl_vector<double>& gradient)
+  {
+    gradient[0] = 1;
+  }
 };
 
 
