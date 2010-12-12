@@ -83,7 +83,7 @@ void boxm_update_pass1(boxm_scene<boct_tree<T_loc, T_data > > &scene,
           // get vertices of cell in the form of a bounding box (cells are always axis-aligned))
           vgl_box_3d<double> cell_bb = tree->cell_bounding_box(*cell_it);
           vcl_vector<vgl_point_3d<double> > corners=boxm_utils::corners_of_box_3d(cell_bb);
-          if (vpgl_perspective_camera<double>* pcam = dynamic_cast<vpgl_perspective_camera<double>*>(cam.as_pointer()))
+          if (vpgl_camera_double_sptr pcam = dynamic_cast<vpgl_perspective_camera<double>*>(cam.as_pointer()))
           {
             boxm_utils::project_corners(corners,pcam,xverts,yverts,vertdists);
           }
