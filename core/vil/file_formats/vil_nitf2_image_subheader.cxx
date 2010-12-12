@@ -24,21 +24,22 @@ vil_nitf2_image_subheader::vil_nitf2_image_subheader(vil_nitf2_classification::f
                      *get_field_definitions_21()),
     m_data_mask_table(0),
     m_version(version)
-{ 
-    add_rpc_definitions(); 
-    add_USE_definitions();
-    add_ICHIPB_definitions();
-    add_MPD26A_definitions();
-    add_STDIDB_definitions();
-    add_STDIDC_definitions();              
- }
+{
+  add_rpc_definitions();
+  add_USE_definitions();
+  add_ICHIPB_definitions();
+  add_MPD26A_definitions();
+  add_STDIDB_definitions();
+  add_STDIDC_definitions();
+}
 
 vil_nitf2_image_subheader::~vil_nitf2_image_subheader()
 {
   if (m_data_mask_table) delete m_data_mask_table;//jlm
-  if(vil_nitf2_tagged_record_definition::all_definitions().size()){
-  vil_nitf2_tagged_record_definition::undefine("RPC00A");
-  vil_nitf2_tagged_record_definition::undefine("RPC00B");}
+  if (vil_nitf2_tagged_record_definition::all_definitions().size()) {
+    vil_nitf2_tagged_record_definition::undefine("RPC00A");
+    vil_nitf2_tagged_record_definition::undefine("RPC00B");
+  }
 }
 
 bool vil_nitf2_image_subheader::read(vil_stream* stream)
@@ -215,13 +216,11 @@ void vil_nitf2_image_subheader::add_geo_field_defs(vil_nitf2_field_definitions* 
     {
       (*defs)
         .field("ICORDS", "Image Coordinate Representation",
-
                NITF_ENUM(1, vil_nitf2_enum_values()
                          .value("U", "UTM")
                          .value("G", "Geodetic/Geographic")
                          .value("N", "None")
                          .value("C", "Geocentric")),
-
                false, 0, 0);
 
       vcl_vector<vcl_string> igeolo_icords;
@@ -238,14 +237,12 @@ void vil_nitf2_image_subheader::add_geo_field_defs(vil_nitf2_field_definitions* 
     {
       (*defs)
         .field("ICORDS", "Image Coordinate Representation",
-
                NITF_ENUM(1, vil_nitf2_enum_values()
                          .value("U", "UTM expressed in MGRS form")
                          .value("G", "Geographic")
                          .value("N", "UTM/UPS (Northern hemisphere)") // actually means None for Nitf 2.0
                          .value("S", "UTM/UPS (Southern hemisphere)") // NITF 2.1 only
                          .value("D", "Decimal degrees")),             // NITF 2.1 only
-
                true, 0, 0)
 
         .field("IGEOLO", "Image Geographic Location", NITF_STR_BCSA(60), false, 0,
@@ -410,19 +407,20 @@ bool vil_nitf2_image_subheader::get_lut_info(unsigned int band,
   if (!m_field_sequence.get_value("NLUTS", vil_nitf2_index_vector(band), n_luts) ||
       !m_field_sequence.get_value("NELUT", vil_nitf2_index_vector(band), ne_lut)) {
     return false;
-  } 
+  }
   lut_d.clear();
   lut_d.resize(n_luts);
-  void* raw_lut_data; 
+  void* raw_lut_data;
   for (int lut_index = 0 ; lut_index < n_luts ; lut_index++) {
     lut_d[lut_index].resize(ne_lut);
     //get the lut_index'th lut for the given image band
     vil_nitf2_index_vector index( band, lut_index );
     if (m_field_sequence.get_value("LUTDnm", index, raw_lut_data )) {
-      for( int el_index = 0 ; el_index < ne_lut ; el_index++ ) {
+      for ( int el_index = 0 ; el_index < ne_lut ; el_index++ ) {
         lut_d[lut_index][el_index] = static_cast<unsigned char*>(raw_lut_data)[el_index];
       }
-    } else {
+    }
+    else {
       break;
     }
   }
@@ -523,6 +521,7 @@ void vil_nitf2_image_subheader::add_rpc_definitions()
     .end();  // of RPCA TRE
   }
 }
+
 void vil_nitf2_image_subheader::add_USE_definitions()
 {
   vil_nitf2_tagged_record_definition* tr =vil_nitf2_tagged_record_definition::find("USE00A");
@@ -550,11 +549,11 @@ void vil_nitf2_image_subheader::add_USE_definitions()
     .end();  // of USE00A TRE
   }
 }
+
 // Collect the Sun angles
-  bool vil_nitf2_image_subheader::
+bool vil_nitf2_image_subheader::
 get_sun_params( double& sun_el, double& sun_az)
 {
-
   // Now get the sub-header TRE parameters
   vil_nitf2_tagged_record_sequence isxhd_tres;
   vil_nitf2_tagged_record_sequence::iterator tres_itr;
@@ -565,28 +564,29 @@ get_sun_params( double& sun_el, double& sun_az)
   // Check through the TREs to find "RPC"
   for (tres_itr = isxhd_tres.begin(); tres_itr != isxhd_tres.end(); ++tres_itr)
   {
-      vcl_string type = (*tres_itr)->name();
-      if( type == "USE00A")
-      {
-          success = (*tres_itr)->get_value("SUN_EL", sun_el);
-          success = success && (*tres_itr)->get_value("SUN_AZ", sun_az);
-          if(!success)
-              vcl_cout<<"\n Error reading USE00A \n";
-          else
-              return success;
-      }
-      else if( type == "MPD26A")
-      {
-          success = (*tres_itr)->get_value("SUN_EL", sun_el);
-          success = success && (*tres_itr)->get_value("SUN_AZ", sun_az);
-          if(!success)
-              vcl_cout<<"\n Error reading MPD26A \n";
-          else
-              return success;
-      }
-}
+    vcl_string type = (*tres_itr)->name();
+    if ( type == "USE00A")
+    {
+      success = (*tres_itr)->get_value("SUN_EL", sun_el);
+      success = success && (*tres_itr)->get_value("SUN_AZ", sun_az);
+      if (!success)
+        vcl_cout<<"\n Error reading USE00A\n";
+      else
+        return success;
+    }
+    else if ( type == "MPD26A")
+    {
+      success = (*tres_itr)->get_value("SUN_EL", sun_el);
+      success = success && (*tres_itr)->get_value("SUN_AZ", sun_az);
+      if (!success)
+        vcl_cout<<"\n Error reading MPD26A\n";
+      else
+        return success;
+    }
+  }
   return success;
 }
+
 void vil_nitf2_image_subheader::add_ICHIPB_definitions()
 {
   vil_nitf2_tagged_record_definition* tr =vil_nitf2_tagged_record_definition::find("ICHIPB");
@@ -627,7 +627,6 @@ void vil_nitf2_image_subheader::add_ICHIPB_definitions()
     .field("FI_ROW",      "Full Image Number of Rows",     NITF_LONG(8,false), false)
     .field("FI_COL",      "Full Image Number of COlumns",     NITF_LONG(8,false), false)
 
-
     .end();  // of ICHIPB TRE
   }
 }
@@ -659,13 +658,8 @@ void vil_nitf2_image_subheader::add_STDIDC_definitions()
     .field("RESERVED1", "",NITF_STR(5), true)
     .field("RESERVED2", "",NITF_STR(8), true)
 
-
-
     .end();  // of STDIDC TRE
   }
-
-
-
 }
 
 
@@ -683,11 +677,11 @@ void vil_nitf2_image_subheader::add_STDIDB_definitions()
     .field("unk5",    "",  NITF_STR(2),false)                 // not used, but must read
     .field("unk6",    "",  NITF_INT(3,false),false)                 // not used, but must read
     .field("unk7",    "",  NITF_STR(2),false)                 // not used, but must read
-    .field("unk8",    "",  NITF_INT(2,false),false) 
+    .field("unk8",    "",  NITF_INT(2,false),false)
     .field("unk9",    "",  NITF_STR(3),false)    // not used, but must read
-    .field("unk10",    "",  NITF_STR(1),false) 
-    .field("START_COLUMN",    "",  NITF_STR(2),false) 
-    .field("START_ROW",    "",  NITF_INT(5,false),false) 
+    .field("unk10",    "",  NITF_STR(1),false)
+    .field("START_COLUMN",    "",  NITF_STR(2),false)
+    .field("START_ROW",    "",  NITF_INT(5,false),false)
     .field("unk11",    "",  NITF_STR(2),false)                 // not used, but must read
     .field("unk12",    "",  NITF_STR(2),false)                 // not used, but must read
     .field("unk13",    "",  NITF_INT(5,false),false)                 // not used, but must read
@@ -695,23 +689,14 @@ void vil_nitf2_image_subheader::add_STDIDB_definitions()
     .field("unk15",    "",  NITF_INT(4,false),false)                 // not used, but must read
     .field("unk16",    "",  NITF_STR(4),false)                 // not used, but must read
     .field("unk17",    "",  NITF_STR(1),false)                 // not used, but must read
-    .field("unk18",    "",  NITF_STR(5),false) 
+    .field("unk18",    "",  NITF_STR(5),false)
     .field("unk19",    "",  NITF_STR(1),false)    // not used, but must read
-    .field("unk20",    "",  NITF_STR(5),false) 
-    .field("unk21",    "",  NITF_STR(7),false) 
-
-
-
-
-
+    .field("unk20",    "",  NITF_STR(5),false)
+    .field("unk21",    "",  NITF_STR(7),false)
 
     .end();  // of STDIDC TRE
   }
-
-
-
 }
-
 
 
 void vil_nitf2_image_subheader::add_MPD26A_definitions()
@@ -721,51 +706,51 @@ void vil_nitf2_image_subheader::add_MPD26A_definitions()
   {
     vil_nitf2_tagged_record_definition::define("MPD26A", "MPD26A SUPPORT DATA EXTENSION" )
 
-        .field("UNK1",    "Unknown ",  NITF_DBL(11,1,false), false) // not used, but must read
-        .field("UNK2",    "Unknown ",  NITF_STR(2), false) // not used, but must read
-        .field("UNK3",    "Unknown ",  NITF_INT(7,false),false)                 // not used, but must read
-        .field("UNK31",    "Unknown ", NITF_STR(10),false)                 // not used, but must read
-        .field("UNK4",    "Unknown ",  NITF_DBL(6,1,false), true) // not used, but must read
-        .field("UNK5",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
-        .field("UNK6",    "Unknown ",  NITF_STR(3), false) // not used, but must read
-        .field("UNK7",    "Unknown ",  NITF_STR(1), false) // not used, but must read
-        .field("UNK8",    "Unknown ",  NITF_STR(1), false) // not used, but must read
-        .field("SUN_EL", "Sun Elevation angle", NITF_DBL(5,1,true),false)
-        .field("SUN_AZ", "Sun Azimuthal angle", NITF_DBL(5,1,false),false)
-        .field("UNK9",    "Unknown ",  NITF_INT(1,false), false) // not used, but must read
-        .field("UNK10",    "Unknown ",  NITF_INT(1,false), false) // not used, but must read
-        .field("UNK11",    "Unknown ",  NITF_INT(4,false), false) // not used, but must read
-        .field("UNK12",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
-        .field("UNK13",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
-        .field("UNK14",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
-        .field("UNK15",    "Unknown ",  NITF_STR(10), false) // not used, but must read
-        .field("UNK16",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
-        .field("UNK17",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
-        .field("UNK18",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
-        .field("UNK19",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
-        .field("UNK20",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
-        .field("UNK21",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
-        .field("UNK22",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
-        .field("UNK23",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
-        .field("UNK24",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
-        .field("UNK16",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
-        .field("UNK17",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
-        .field("UNK18",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
-        .field("UNK19",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
-        .field("UNK20",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
-        .field("UNK21",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
-        .field("UNK22",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
-        .field("UNK23",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
-        .field("UNK24",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
-        .field("UNK16",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
-        .field("UNK17",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
-        .field("UNK18",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
-        .field("UNK19",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
-        .field("UNK20",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
-        .field("UNK21",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
-        .field("UNK22",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
-        .field("UNK23",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
-        .field("UNK24",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+    .field("UNK1",    "Unknown ",  NITF_DBL(11,1,false), false) // not used, but must read
+    .field("UNK2",    "Unknown ",  NITF_STR(2), false) // not used, but must read
+    .field("UNK3",    "Unknown ",  NITF_INT(7,false),false)                 // not used, but must read
+    .field("UNK31",    "Unknown ", NITF_STR(10),false)                 // not used, but must read
+    .field("UNK4",    "Unknown ",  NITF_DBL(6,1,false), true) // not used, but must read
+    .field("UNK5",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+    .field("UNK6",    "Unknown ",  NITF_STR(3), false) // not used, but must read
+    .field("UNK7",    "Unknown ",  NITF_STR(1), false) // not used, but must read
+    .field("UNK8",    "Unknown ",  NITF_STR(1), false) // not used, but must read
+    .field("SUN_EL", "Sun Elevation angle", NITF_DBL(5,1,true),false)
+    .field("SUN_AZ", "Sun Azimuthal angle", NITF_DBL(5,1,false),false)
+    .field("UNK9",    "Unknown ",  NITF_INT(1,false), false) // not used, but must read
+    .field("UNK10",    "Unknown ",  NITF_INT(1,false), false) // not used, but must read
+    .field("UNK11",    "Unknown ",  NITF_INT(4,false), false) // not used, but must read
+    .field("UNK12",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+    .field("UNK13",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+    .field("UNK14",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+    .field("UNK15",    "Unknown ",  NITF_STR(10), false) // not used, but must read
+    .field("UNK16",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+    .field("UNK17",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+    .field("UNK18",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+    .field("UNK19",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+    .field("UNK20",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+    .field("UNK21",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+    .field("UNK22",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+    .field("UNK23",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+    .field("UNK24",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+    .field("UNK16",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+    .field("UNK17",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+    .field("UNK18",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+    .field("UNK19",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+    .field("UNK20",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+    .field("UNK21",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+    .field("UNK22",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+    .field("UNK23",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+    .field("UNK24",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+    .field("UNK16",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+    .field("UNK17",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+    .field("UNK18",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+    .field("UNK19",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+    .field("UNK20",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+    .field("UNK21",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+    .field("UNK22",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+    .field("UNK23",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+    .field("UNK24",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
 
     .end();  // of MPD26A TRE
   }
@@ -788,60 +773,58 @@ get_correction_offset(double & u_off, double & v_off)
   // Check through the TREs to find "RPC"
   for (tres_itr = isxhd_tres.begin(); tres_itr != isxhd_tres.end(); ++tres_itr)
   {
-      vcl_string type = (*tres_itr)->name();
-      if ( type == "ICHIPB" )
+    vcl_string type = (*tres_itr)->name();
+    if ( type == "ICHIPB" )
+    {
+      double r_off;
+      double c_off;
+      success = (*tres_itr)->get_value("FI_ROW_11", r_off);
+      success = success && (*tres_itr)->get_value("FI_COL_11", c_off);
+      if (success)
       {
-          double r_off;
-          double c_off;
-          success = (*tres_itr)->get_value("FI_ROW_11", r_off); 
-          success = success && (*tres_itr)->get_value("FI_COL_11", c_off); 
-          if(success)
-          {
-              ulr+=r_off;
-              ulc+=c_off;
-          }
-
+        ulr+=r_off;
+        ulc+=c_off;
       }
-      if ( type == "STDIDC" )
+    }
+    if ( type == "STDIDC" )
+    {
+      int r_off=1;
+      int c_off=1;
+      success = (*tres_itr)->get_value("START_ROW", r_off);
+      success = success && (*tres_itr)->get_value("START_COLUMN", c_off);
+
+      if (success)
       {
-          int r_off=1;
-          int c_off=1;
-          success = (*tres_itr)->get_value("START_ROW", r_off); 
-          success = success && (*tres_itr)->get_value("START_COLUMN", c_off); 
-
-          if(success)
-          {
-              ulr+=(double)((r_off-1)*get_pixels_per_block_y());
-              ulc+=(double)((c_off-1)*get_pixels_per_block_x());
-          }
+        ulr+=(double)((r_off-1)*get_pixels_per_block_y());
+        ulc+=(double)((c_off-1)*get_pixels_per_block_x());
       }
-      else if ( type == "STDIDB" )
+    }
+    else if ( type == "STDIDB" )
+    {
+      int r_off=1;
+      int c_off=1;
+
+      success = (*tres_itr)->get_value("START_ROW", r_off);
+      vcl_string temp_off;
+      success = success && (*tres_itr)->get_value("START_COLUMN", temp_off);
+      if ((int)temp_off[0]>=65)
+        c_off=((int)temp_off[0]-55)*10;
+      else
+        c_off=((int)temp_off[0]-48)*10;
+
+      c_off+=(int)temp_off[1]-48;
+      if (success)
       {
-          int r_off=1;
-          int c_off=1;
-
-          success = (*tres_itr)->get_value("START_ROW", r_off); 
-          vcl_string temp_off;
-          success = success && (*tres_itr)->get_value("START_COLUMN", temp_off); 
-          if((int)temp_off[0]>=65)
-              c_off=((int)temp_off[0]-55)*10;
-          else
-              c_off=((int)temp_off[0]-48)*10;
-
-          c_off+=(int)temp_off[1]-48;
-          if(success)
-          {
-              ulr+=(r_off-1)*get_pixels_per_block_y();
-              ulc+=(c_off-1)*get_pixels_per_block_x();
-          }
+        ulr+=(r_off-1)*get_pixels_per_block_y();
+        ulc+=(c_off-1)*get_pixels_per_block_x();
       }
-
-
+    }
   }
   u_off=ulc;
   v_off=ulr;
   return success;
 }
+
 // Collect the RPC parameters for the current image. Image corners are reported
 // as a string of geographic coordinates,one for each image corner.
   bool vil_nitf2_image_subheader::
