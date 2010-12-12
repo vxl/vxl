@@ -2,7 +2,7 @@
 #ifndef vidl1_win_avicodec_h
 #define vidl1_win_avicodec_h
 //:
-// \file 
+// \file
 // \author Andy Molnar
 // \date October 1998
 //
@@ -40,11 +40,11 @@ class vidl1_avicodec : public vidl1_codec
 
   //-----------------------------------------------------
 
-  virtual vil_image_view_base_sptr  get_view(int position, 
-                                             int x0, int xs, 
+  virtual vil_image_view_base_sptr  get_view(int position,
+                                             int x0, int xs,
                                              int y0, int ys ) const;
-  virtual bool put_view(int position, 
-                        const vil_image_view_base &im, 
+  virtual bool put_view(int position,
+                        const vil_image_view_base &im,
                         int x0, int y0 );
 
   //-----------------------------------------------------
@@ -52,7 +52,7 @@ class vidl1_avicodec : public vidl1_codec
   virtual vidl1_codec_sptr load(vcl_string const& fname, char mode = 'r' );
   virtual bool save(vidl1_movie* movie, vcl_string const& fname);
   virtual vcl_string type() const { return "AVI"; }
-  virtual vidl1_avicodec* castto_vidl1_avicodec(){return this;}
+  virtual vidl1_avicodec* castto_vidl1_avicodec() { return this; }
 
   // Set of encoders that this class knows how to configure by itself,
   // without having to open a windows dialog in which the user
@@ -70,7 +70,7 @@ class vidl1_avicodec : public vidl1_codec
   // This function sets the encoder that is internally used to create the
   // AVI. Using this function avoids the windows dialog asking
   // the user for the compressor.
-  // Depending on the choosen encoder, the parameters of opts are set by this
+  // Depending on the chosen encoder, the parameters of opts are set by this
   // function.
   void choose_encoder(AVIEncoderType encoder);
 

@@ -88,8 +88,8 @@ bool vidl1_avicodec::read_header()
 //-----------------------------------------------------------------------------
 bool vidl1_avicodec::write_header()
 {
-   vcl_fprintf(stderr, "vidl1_avicodec::write_header Not implemented.\n");
-   return false;
+  vcl_fprintf(stderr, "vidl1_avicodec::write_header Not implemented.\n");
+  return false;
 }
 
 //-----------------------------------------------------------------------------
@@ -387,8 +387,8 @@ bool vidl1_avicodec::save(vidl1_movie* movie, vcl_string const& fname)
 
   vcl_cout << "Compressor options:\n"
            << "fccHandler       = " << fcc[0] << "','" << fcc[1] << "','" << fcc[2] << "','" << fcc[3] << "'\n"
-           << "key frame every  = " << opts.dwKeyFrameEvery << vcl_endl
-           << "quality          = " << opts.dwQuality << vcl_endl
+           << "key frame every  = " << opts.dwKeyFrameEvery << '\n'
+           << "quality          = " << opts.dwQuality << '\n'
            << "flags            = " << opts.dwFlags  << vcl_endl;
   if (opts.dwFlags & AVICOMPRESSF_DATARATE)
     vcl_cout << "                   AVICOMPRESSF_DATARATE\n";
@@ -398,10 +398,10 @@ bool vidl1_avicodec::save(vidl1_movie* movie, vcl_string const& fname)
     vcl_cout << "                   AVICOMPRESSF_KEYFRAMES\n";
   if (opts.dwFlags & AVICOMPRESSF_VALID)
     vcl_cout << "                   AVICOMPRESSF_VALID\n";
-  vcl_cout << "lpFormat         = " << opts.lpFormat << vcl_endl
-           << "cbFormat         = " << opts.cbFormat << vcl_endl
-           << "lpParms          = " << opts.lpParms << vcl_endl
-           << "cbParms          = " << opts.cbParms << vcl_endl
+  vcl_cout << "lpFormat         = " << opts.lpFormat << '\n'
+           << "cbFormat         = " << opts.cbFormat << '\n'
+           << "lpParms          = " << opts.lpParms << '\n'
+           << "cbParms          = " << opts.cbParms << '\n'
            << "dwInterleaveEvery= " << opts.dwInterleaveEvery << vcl_endl;
 
   PAVISTREAM avi_stream_compressed = NULL;
@@ -436,8 +436,7 @@ bool vidl1_avicodec::save(vidl1_movie* movie, vcl_string const& fname)
        pframe <= movie->last();
        ++pframe, ++i)
   {
-    LPBITMAPINFOHEADER lpbi =
-      (LPBITMAPINFOHEADER)GlobalLock(make_dib(pframe, 24));
+    LPBITMAPINFOHEADER lpbi=(LPBITMAPINFOHEADER)GlobalLock(make_dib(pframe,24));
     if (!lpbi)
     {
       vcl_cerr << "vidl1_avicodec : DIB (Device Independent Bitmap) creation failed.\n"
@@ -494,7 +493,7 @@ unsigned int vidl1_avicodec::fccHandlerCoder(char c0, char c1, char c2, char c3)
 //: This function sets the encoder that is internally used to create the
 //  AVI. Using this function avoids the windows dialog asking
 //  the user for the compressor.
-//  Depending on the choosen encoder, the parameters of opts are set by this
+//  Depending on the chosen encoder, the parameters of opts are set by this
 //  function.
 //
 //  @param encoder
@@ -666,7 +665,7 @@ HANDLE  vidl1_avicodec::make_dib(vidl1_frame_sptr frame, UINT bits)
 
   hdc = CreateCompatibleDC(NULL); // Create Device Context
 
-   // Put the bits in the bitmap
+  // Put the bits in the bitmap
   int error_code = SetDIBits(hdc,hbitmap,0,bitmap.bmHeight,newbits,(LPBITMAPINFO)lpbi, DIB_RGB_COLORS);
   if (!error_code)
   {

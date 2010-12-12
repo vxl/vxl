@@ -1,7 +1,7 @@
 #ifndef vidl_vil1_avicodec_h
 #define vidl_vil1_avicodec_h
 //:
-// \file 
+// \file
 // \author Andy Molnar
 // \date October 1998
 //
@@ -46,7 +46,7 @@ class vidl_vil1_avicodec : public vidl_vil1_codec
   virtual vidl_vil1_codec_sptr load(vcl_string const& fname, char mode = 'r' );
   virtual bool save(vidl_vil1_movie* movie, vcl_string const& fname);
   virtual vcl_string type() const { return "AVI"; }
-  virtual vidl_vil1_avicodec* castto_vidl_vil1_avicodec(){return this;}
+  virtual vidl_vil1_avicodec* castto_vidl_vil1_avicodec() { return this; }
 
   // Set of encoders that this class knows how to configure by itself,
   // without having to open a windows dialog in which the user
@@ -64,24 +64,24 @@ class vidl_vil1_avicodec : public vidl_vil1_codec
   // This function sets the encoder that is internally used to create the
   // AVI. Using this function avoids the windows dialog asking
   // the user for the compressor.
-  // Depending on the choosen encoder, the parameters of opts are set by this
+  // Depending on the chosen encoder, the parameters of opts are set by this
   // function.
   void choose_encoder(AVIEncoderType encoder);
 
  private:
-   PAVIFILE avi_file_;
-   PAVISTREAM avi_stream_;
-   PGETFRAME avi_get_frame_;
+  PAVIFILE avi_file_;
+  PAVISTREAM avi_stream_;
+  PGETFRAME avi_get_frame_;
 
-   AVIFILEINFO avi_file_info_;
-   AVISTREAMINFO avi_stream_info_;
+  AVIFILEINFO avi_file_info_;
+  AVISTREAMINFO avi_stream_info_;
 
   // Helpers
   HANDLE  make_dib(vidl_vil1_frame_sptr frame, UINT bits);
 
  protected:
-   bool read_header();
-   bool write_header();
+  bool read_header();
+  bool write_header();
 };
 
 
