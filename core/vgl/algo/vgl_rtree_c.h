@@ -19,6 +19,7 @@
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_intersection.h>
+template <class V, class B, class C> class vgl_rtree_probe;
 
 //: vgl_rtree Class C for V=vgl_point_2d<T>, B = vgl_box_2d<T>
 template <class T>
