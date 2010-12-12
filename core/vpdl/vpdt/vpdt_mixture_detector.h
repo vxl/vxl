@@ -12,6 +12,7 @@
 //   <None yet>
 // \endverbatim
 
+#include <vpdl/vpdt/vpdt_field_traits.h>
 
 //: Apply a detector to each component to see if ANY match
 //  Return true if any component matches

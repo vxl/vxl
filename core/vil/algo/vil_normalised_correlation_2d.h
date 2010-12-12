@@ -6,9 +6,11 @@
 // \brief 2D normalised correlation
 // \author Tim Cootes
 
+#include <vil/vil_image_view.h>
 #include <vcl_compiler.h>
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>  // for vcl_sqrt()
+#include <vcl_cmath.h>    // for std::sqrt()
+#include <vcl_cstddef.h>  // for std::ptrdiff_t
 
 //: Evaluate dot product between kernel and src_im
 // Assumes that the kernel has been normalised to have zero mean

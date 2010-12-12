@@ -1,6 +1,7 @@
 #ifndef vdtop_set_8_veinerization_structure_txx_
 #define vdtop_set_8_veinerization_structure_txx_
 
+#include "vdtop_set_8_veinerization_structure.h"
 #include <vcl_limits.h>
 
 template <class T>

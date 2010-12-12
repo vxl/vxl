@@ -12,13 +12,13 @@
 //   (none yet)
 // \endverbatim
 
-#include <vcl_cassert.h>
+#include <vpdl/vpdt/vpdt_field_traits.h>
+#include <vil/algo/vil_structuring_element.h>
 #include <vil/vil_image_view.h>
 #include "bbgm_image_of.h"
 #include "bbgm_planes_to_sample.h"
 #include <bsta/bsta_detector_mixture.h>
-#include <vil/algo/vil_structuring_element.h>
-
+#include <vcl_cassert.h>
 
 //: For each pixel, detect at all \a se neighbors in bbgm_image
 //  \returns true if detection succeeds at any neighbor
@@ -63,7 +63,7 @@ void detect(bbgm_image_of<dist_>& dimg,
       for (unsigned int k=0; k<size_se; ++k){
         int ri = static_cast<int>(i)+se.p_i()[k];
         int rj = static_cast<int>(j)+se.p_j()[k];
-        if (ri < 0 || ri >= static_cast<int>(ni) || 
+        if (ri < 0 || ri >= static_cast<int>(ni) ||
             rj < 0 || rj >= static_cast<int>(nj) )
           continue;
         if (detector(dimg(ri,rj), sample, temp_val) && temp_val){

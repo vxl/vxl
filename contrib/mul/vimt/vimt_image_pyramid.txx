@@ -5,8 +5,11 @@
 // \file
 
 #include "vimt_image_pyramid.h"
+#include <vimt/vimt_image.h>
+#include <vimt/vimt_image_2d.h>
 
 #include <vcl_cstdlib.h> // for abort()
+#include <vcl_iostream.h>
 #include <vcl_cassert.h>
 
 //------------------------------------------------------------------------

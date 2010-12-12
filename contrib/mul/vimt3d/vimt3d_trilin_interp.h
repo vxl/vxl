@@ -6,6 +6,7 @@
 // \brief Bilinear interpolation functions for 2D images
 // \author Tim Cootes
 
+#include <vimt3d/vimt3d_image_3d_of.h>
 #include <vgl/vgl_point_3d.h>
 #include <vil3d/vil3d_trilin_interp.h>
 #include <vil3d/vil3d_image_view.h>

@@ -3,6 +3,7 @@
 //:
 // \file
 
+#include "vdtop_set_4_veinerization_structure.h"
 #include <vcl_limits.h>
 
 //: The 3 in 1 function.

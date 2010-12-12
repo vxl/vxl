@@ -1,6 +1,7 @@
 // This is core/vil1/vil1_ip_traits.h
 #ifndef vil1_ip_traits_h_
 #define vil1_ip_traits_h_
+#include <vcl_config_compiler.h>
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif

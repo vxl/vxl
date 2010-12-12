@@ -5,6 +5,7 @@
 //  \file
 
 #include "mil_image_pyramid.h"
+#include <mil/mil_image.h>
 
 #include <vcl_cstdlib.h> // for abort()
 #include <vcl_cassert.h>
@@ -45,11 +46,10 @@ template <class T> void mil_image_pyramid_flatten(T& out, const mil_image_pyrami
       offset += nx;
     }
   }
-  else 
+  else
   {
     vcl_cerr << "ERROR: mil_image_pyramid_flatten(const mil_image_pyramid &)\n"
-             << "Don't know how to deal with image type " << in(0).is_a()
-             << vcl_endl;
+             << "Don't know how to deal with image type " << in(0).is_a() << '\n';
     vcl_abort();
   }
 }

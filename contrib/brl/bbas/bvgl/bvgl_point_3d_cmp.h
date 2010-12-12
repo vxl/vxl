@@ -12,6 +12,8 @@
 //   <none yet>
 // \endverbatim
 
+#include <vgl/vgl_point_3d.h>
+#include <vcl_functional.h>
 
 //: A comparison functor for vgl_point_3d's. Needed to create a vcl_set of vgl_point_3d<int>'s.
 template <class T>

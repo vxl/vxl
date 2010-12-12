@@ -12,6 +12,7 @@
 //   (none yet)
 // \endverbatim
 
+#include <vcl_cstddef.h>
 
 template <class T1, class T2, unsigned n>
 struct bbgm_planes_to_sample

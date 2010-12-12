@@ -15,7 +15,8 @@
 //
 //-------------------------------------------------------------------------
 
-#include "bmsh3d_vertex.h"
+#include <bmsh3d/bmsh3d_vertex.h>
+#include <bmsh3d/bmsh3d_edge.h>
 #include <vgl/vgl_point_2d.h>
 
 #include <vcl_iostream.h>

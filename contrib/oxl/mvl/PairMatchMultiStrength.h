@@ -10,8 +10,9 @@
 //     Andrew W. Fitzgibbon, Oxford RRG, 16 Sep 96
 //-----------------------------------------------------------------------------
 
-//: not implemented
+#include "PairMatchMulti.h"
 
+//: not implemented
 class PairMatchMultiStrength : public PairMatchMulti
 {
  public:

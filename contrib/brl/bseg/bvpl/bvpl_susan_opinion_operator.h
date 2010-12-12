@@ -17,6 +17,7 @@
 #include "bvpl_kernel_iterator.h"
 #include "bvpl_voxel_subgrid.h"
 #include <bvpl/bvpl_kernel.h>
+#include <bvxm/grid/bvxm_opinion.h>
 
 #include <vgl/vgl_point_3d.h>
 #include <vcl_iostream.h>

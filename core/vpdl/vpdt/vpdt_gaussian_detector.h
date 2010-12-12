@@ -12,6 +12,8 @@
 //   <None yet>
 // \endverbatim
 
+#include <vpdl/vpdt/vpdt_field_traits.h>
+
 //: A simple Mahalanobis distance detector for a Gaussian
 //  Detects samples that lie within some Mahalanobis distance
 template <class gaussian_type>

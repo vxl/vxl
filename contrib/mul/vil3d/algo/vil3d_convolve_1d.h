@@ -14,6 +14,7 @@
 
 #include <vcl_cassert.h>
 #include <vil/algo/vil_convolve_1d.h>
+#include <vil3d/vil3d_image_view.h>
 
 //: Convolve kernel[i] (i in [k_lo,k_hi]) with srcT in i-direction
 // On exit dest_im(i,j) = sum src_m(i-x,j)*kernel(x)  (x=k_lo..k_hi)

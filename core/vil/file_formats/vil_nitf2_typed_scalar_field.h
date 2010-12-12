@@ -6,6 +6,7 @@
 #define VIL_NITF2_TYPED_SCALAR_FIELD_H
 
 #include "vil_nitf2_scalar_field.h"
+#include "vil_nitf2_tagged_record.h"
 #include "vil_nitf2.h"
 #include <vcl_iosfwd.h>
 

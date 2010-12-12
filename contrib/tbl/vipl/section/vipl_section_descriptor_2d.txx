@@ -1,11 +1,11 @@
 #ifndef vipl_section_descriptor_2d_txx_
 #define vipl_section_descriptor_2d_txx_
-
 //:
 //  \file
 
 #include "vipl_section_descriptor_2d.h"
 #include <vipl/section/vipl_section_container.h>
+#include <vcl_iostream.h>
 
 //: Ctor useful to define 2D section descriptors for ROA's. If you.
 // Once constructed there is no way to change the data in the section descriptor.

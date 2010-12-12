@@ -16,6 +16,7 @@
 //=========================================================================
 
 #include <vidl/vidl_exception.h>
+#include <vidl/vidl_pixel_format.h>
 
 #include <vcl_string.h>
 #include <vcl_vector.h>
@@ -24,8 +25,6 @@
 #include <atlbase.h>
 #include <dshow.h>
 #include <qedit.h>
-
-enum vidl_pixel_format;
 
 struct vidl_dshow
 {
@@ -92,16 +91,16 @@ struct vidl_dshow
 #define DSHOW_WARN_IF_FAILED(stm) {                                       \
   HRESULT hr = (stm);                                                     \
   if FAILED(hr) {                                                         \
-    vcl_cerr << vidl_dshow_exception(                                    \
-                vidl_dshow::get_error_text(__FILE__,__LINE__,hr)).what() \
-             << vcl_endl;                                                 \
+    vcl_cerr << vidl_dshow_exception(                                     \
+                  vidl_dshow::get_error_text(__FILE__,__LINE__,hr)).what()\
+             << '\n';                                                     \
   }}
 
-#define DSHOW_ERROR_IF_FAILED(stm) {                         \
-  HRESULT hr = (stm);                                        \
-  if FAILED(hr) {                                            \
-    vidl_exception_error(vidl_dshow_exception(             \
-      vidl_dshow::get_error_text(__FILE__,__LINE__,hr)));   \
+#define DSHOW_ERROR_IF_FAILED(stm) {                     \
+  HRESULT hr = (stm);                                    \
+  if FAILED(hr) {                                        \
+    vidl_exception_error(vidl_dshow_exception(           \
+      vidl_dshow::get_error_text(__FILE__,__LINE__,hr)));\
   }}
 
 #endif // vidl_dshow_h_

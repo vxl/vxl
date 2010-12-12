@@ -13,6 +13,7 @@
 // the same change.
 
 #include <vcl_cassert.h>
+#include <vcl_cstddef.h>
 #include <vil/vil_fwd.h>
 
 //: Compute nearest neighbour interpolation at (x,y), no bound checks. Requires -0.5<x<ni-0.5, -0.5<y<nj-0.5

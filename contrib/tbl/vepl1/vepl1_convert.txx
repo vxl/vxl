@@ -7,6 +7,7 @@
 #include <vipl/vipl_convert.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vxl_config.h> // for vxl_byte
+#include <vcl_iostream.h>
 
 template <class D>
 vil1_image vepl1_convert(vil1_image const& image, D /*dummy*/)

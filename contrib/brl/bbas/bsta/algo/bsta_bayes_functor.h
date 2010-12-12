@@ -13,7 +13,8 @@
 // \endverbatim
 
 #include <vcl_limits.h>
-
+#include <bsta/bsta_attributes.h> // for bsta_num_obs<T>
+#include <bsta/bsta_mixture.h>
 
 //: A functor that classifies a sample as one of the components of the mixture
 template <class comp_dist_>
