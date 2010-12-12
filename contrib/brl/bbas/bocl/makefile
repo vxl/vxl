@@ -8,6 +8,10 @@ MANPAGE_SOURCES += bocl_manager.h
 MANPAGE_SOURCES += bocl_manager.txx
 SOURCES += bocl_utils.cxx
 SOURCES += bocl_global_memory_bandwidth_manager.cxx
+SOURCES += bocl_kernel.cxx
+SOURCES += bocl_mem.cxx
+MANPAGE_SOURCES += bocl_buffer.h
+MANPAGE_SOURCES += bocl_buffer_mgr.h
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

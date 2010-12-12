@@ -15,6 +15,9 @@ MANPAGE_SOURCES += boxm2_processor.h
 MANPAGE_SOURCES += boxm2_opencl_render_process.h
 MANPAGE_SOURCES += boxm2_cpp_process_base.h
 MANPAGE_SOURCES += boxm2_opencl_process_base.h
+SOURCES += boxm2_data_base.cxx
+SOURCES += boxm2_cpp_render_process.cxx
+SOURCES += boxm2_opencl_render_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
