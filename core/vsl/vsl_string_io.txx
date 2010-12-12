@@ -25,22 +25,22 @@ void vsl_b_write(vsl_b_ostream& s, const vcl_basic_string<T>& v)
 //====================================================================================
 //: Read basic_string from binary stream
 template <class T>
-void vsl_b_read(vsl_b_istream& s, vcl_basic_string<T>& v)
+void vsl_b_read(vsl_b_istream& is, vcl_basic_string<T>& v)
 {
   if (!is) return;
 
   unsigned n;
   short ver;
-  vsl_b_read(s, ver);
+  vsl_b_read(is, ver);
   switch (ver)
   {
-  case 1:
-    vsl_b_read(s,n);
+   case 1:
+    vsl_b_read(is,n);
     v.resize(n);
     for (int i=0;i<n;++i)
-      vsl_b_read(s,v[i]);
+      vsl_b_read(is,v[i]);
     break;
-  default:
+   default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vcl_basic_string<T>&)\n"
              << "           Unknown version number "<< ver << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
