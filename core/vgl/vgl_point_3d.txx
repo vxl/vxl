@@ -8,6 +8,7 @@
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_homg_plane_3d.h>
+#include <vgl/vgl_tolerance.h>
 
 #include <vcl_iostream.h>
 #include <vcl_iomanip.h>
@@ -30,6 +31,35 @@ vgl_point_3d<Type>::vgl_point_3d(vgl_plane_3d<Type> const& pl1,
   vgl_homg_plane_3d<Type> h3(pl3.nx(), pl3.ny(), pl3.nz(), pl3.d());
   vgl_homg_point_3d<Type> p(h1, h2, h3); // do homogeneous intersection
   set(p.x()/p.w(), p.y()/p.w(), p.z()/p.w()); // could be infinite!
+}
+
+template <class Type>
+bool vgl_point_3d<Type>::operator==(const vgl_point_3d<Type> &p) const
+{
+  return this==&p || (x_>=p.x()-vgl_tolerance<Type>::position && x_<=p.x()+vgl_tolerance<Type>::position &&
+                      y_>=p.y()-vgl_tolerance<Type>::position && y_<=p.y()+vgl_tolerance<Type>::position &&
+                      z_>=p.z()-vgl_tolerance<Type>::position && z_<=p.z()+vgl_tolerance<Type>::position );
+}
+
+template <class Type>
+bool coplanar(vgl_point_3d<Type> const& p1,
+              vgl_point_3d<Type> const& p2,
+              vgl_point_3d<Type> const& p3,
+              vgl_point_3d<Type> const& p4)
+{
+  Type r = ( (p1.x()*p2.y()-p1.y()*p2.x())*p3.z()
+            +(p3.x()*p1.y()-p3.y()*p1.x())*p2.z()
+            +(p2.x()*p3.y()-p2.y()*p3.x())*p1.z()
+            +(p1.x()*p4.y()-p1.y()*p4.x())*p2.z()
+            +(p4.x()*p2.y()-p4.y()*p2.x())*p1.z()
+            +(p2.x()*p1.y()-p2.y()*p1.x())*p4.z()
+            +(p3.x()*p4.y()-p3.y()*p4.x())*p1.z()
+            +(p1.x()*p3.y()-p1.y()*p3.x())*p4.z()
+            +(p4.x()*p1.y()-p4.y()*p1.x())*p3.z()
+            +(p3.x()*p2.y()-p3.y()*p2.x())*p4.z()
+            +(p2.x()*p4.y()-p2.y()*p4.x())*p3.z()
+            +(p4.x()*p3.y()-p4.y()*p3.x())*p2.z() );
+  return r <= vgl_tolerance<Type>::point_3d_coplanarity && r >= -vgl_tolerance<Type>::point_3d_coplanarity;
 }
 
 template <class T>
@@ -100,6 +130,8 @@ vcl_istream&  operator>>(vcl_istream& is, vgl_point_3d<Type>& p)
 template class vgl_point_3d<T >; \
 template double cross_ratio(vgl_point_3d<T >const&, vgl_point_3d<T >const&, \
                             vgl_point_3d<T >const&, vgl_point_3d<T >const&); \
+template bool coplanar(vgl_point_3d<T > const&, vgl_point_3d<T > const&, \
+                       vgl_point_3d<T > const&, vgl_point_3d<T > const&); \
 template vcl_ostream& operator<<(vcl_ostream&, const vgl_point_3d<T >&); \
 template vcl_istream& operator>>(vcl_istream&, vgl_point_3d<T >&)
 

@@ -22,8 +22,6 @@
 #include <vcl_cassert.h>
 #include <vcl_vector.h>
 
-#include <vgl/vgl_tolerance.h>
-
 //: Represents a cartesian 3D point
 template <class Type>
 class vgl_point_3d
@@ -65,12 +63,8 @@ class vgl_point_3d
 #endif
 
   //: Test for equality
-  inline bool operator==(const vgl_point_3d<Type> &p) const
-  { return this==&p || (x_>=p.x()-vgl_tolerance<Type>::position && x_<=p.x()+vgl_tolerance<Type>::position &&
-                        y_>=p.y()-vgl_tolerance<Type>::position && y_<=p.y()+vgl_tolerance<Type>::position &&
-                        z_>=p.z()-vgl_tolerance<Type>::position && z_<=p.z()+vgl_tolerance<Type>::position ); }
-  inline bool operator!=(vgl_point_3d<Type>const& p)const
-  { return !operator==(p); }
+  bool operator==(const vgl_point_3d<Type> &p) const;
+  inline bool operator!=(vgl_point_3d<Type>const& p) const { return !operator==(p); }
 
   // Data Access-------------------------------------------------------------
 
@@ -270,26 +264,11 @@ vgl_point_3d<Type> centre(vcl_vector<vgl_point_3d<Type> > const& v)
 
 //: Return true iff the 4 points are coplanar, i.e., they belong to a common plane
 // \relatesalso vgl_point_3d
-template <class Type> inline
+template <class Type>
 bool coplanar(vgl_point_3d<Type> const& p1,
               vgl_point_3d<Type> const& p2,
               vgl_point_3d<Type> const& p3,
-              vgl_point_3d<Type> const& p4)
-{
-  Type r = ( (p1.x()*p2.y()-p1.y()*p2.x())*p3.z()
-            +(p3.x()*p1.y()-p3.y()*p1.x())*p2.z()
-            +(p2.x()*p3.y()-p2.y()*p3.x())*p1.z()
-            +(p1.x()*p4.y()-p1.y()*p4.x())*p2.z()
-            +(p4.x()*p2.y()-p4.y()*p2.x())*p1.z()
-            +(p2.x()*p1.y()-p2.y()*p1.x())*p4.z()
-            +(p3.x()*p4.y()-p3.y()*p4.x())*p1.z()
-            +(p1.x()*p3.y()-p1.y()*p3.x())*p4.z()
-            +(p4.x()*p1.y()-p4.y()*p1.x())*p3.z()
-            +(p3.x()*p2.y()-p3.y()*p2.x())*p4.z()
-            +(p2.x()*p4.y()-p2.y()*p4.x())*p3.z()
-            +(p4.x()*p3.y()-p4.y()*p3.x())*p2.z() );
-  return r <= vgl_tolerance<Type>::point_3d_coplanarity && r >= -vgl_tolerance<Type>::point_3d_coplanarity;
-}
+              vgl_point_3d<Type> const& p4);
 
 #define VGL_POINT_3D_INSTANTIATE(T) extern "please include vgl/vgl_point_3d.txx first"
 
