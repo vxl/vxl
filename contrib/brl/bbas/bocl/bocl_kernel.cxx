@@ -88,30 +88,33 @@ bool bocl_kernel::execute(cl_command_queue& cmdQueue, vcl_size_t* localThreads, 
 
   //enqueue the kernel on the command queue
   cl_event ceEvent =0;
-  cl_ulong tstart,tend;
   status = clEnqueueNDRangeKernel(cmdQueue, kernel_, 2, NULL, globalThreads, localThreads, 0, NULL, &ceEvent);
   if ( !check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed. "+error_to_string(status)) )
     return false;
 
-  ////Finish execution (may not be necessary or desirable)
-  //status = clFinish(cmdQueue);
-  //status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
-  //status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
-  //vcl_cout<<"kernel "<<id_<<" execution time: "
-          //<<1.0e-6f*float(tend - tstart)<<vcl_endl; // convert nanoseconds to milliseconds
-
+#if 0
+  //Finish execution (may not be necessary or desirable)
+  cl_ulong tstart,tend;
+  status = clFinish(cmdQueue);
+  status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
+  status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
+  vcl_cout<<"kernel "<<id_<<" execution time: "
+          <<1.0e-6f*float(tend - tstart)<<vcl_endl; // convert nanoseconds to milliseconds
+#endif
   return true;
 }
 
 bool bocl_kernel::set_local_arg(vcl_size_t size)
 {
   local_args_.push_back(size);
+  return true;
 }
 
 bool bocl_kernel::set_arg(bocl_mem* buffer)
 {
   //push arg to the back
   args_.push_back(buffer);
+  return true;
 }
 
 
