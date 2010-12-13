@@ -17,7 +17,7 @@
 #include <vcl_where_root_dir.h>
 
 //  probably don't need this...
-bool boxm2_opencl_render_process::init(){}
+bool boxm2_opencl_render_process::init() { return true; }
 
 bool boxm2_opencl_render_process::init_kernel(cl_context& context,
                                               cl_device_id& device)
