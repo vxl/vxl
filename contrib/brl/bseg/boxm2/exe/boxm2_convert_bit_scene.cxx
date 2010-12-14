@@ -137,11 +137,11 @@ int main(int argc,  char** argv)
     uchar data_lo  = tree[11];
     uchar buff_hi   = (uchar)(buff >> 8);
     uchar buff_lo   = (uchar)(buff & 255);
-    tree[10] = buff_hi;
-    tree[11] = buff_lo;
-    tree[12] = data_hi;
-    tree[13] = data_lo;
-
+    tree[10] = data_hi;  
+    tree[11] = data_lo; 
+    tree[12] = buff_hi;
+    tree[13] = buff_lo; 
+    
     //copy into stream
     vcl_memcpy(bsize+curr_byte, &tree, sizeof(tree));
     curr_byte += sizeof(uchar16);
@@ -179,7 +179,8 @@ int main(int argc,  char** argv)
   //----------------------------------------------------------------------------
   //Construct data blocks (MOG and ALPHA)
   //----------------------------------------------------------------------------
-  int     numData = num_buffers * data_len;
+  vcl_cout<<"DATA LENGTH IS: "<<data_len<<vcl_endl;
+  int     numData = num_buffers * data_len; 
   float * alphas  = new float[numData];
   uchar8* mogs    = new uchar8[numData];
   bit_scene.get_alphas(alphas);

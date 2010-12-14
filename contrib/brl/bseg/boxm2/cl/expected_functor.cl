@@ -140,3 +140,21 @@ void step_cell_visibility(__global float* cell_data, int data_ptr,
   alpha_integral += alpha*d;
   (*data_return) = alpha_integral;
 }
+
+
+void step_cell_render_depth2(float depth, 
+                      __global float  * alpha_data, 
+                               int      data_ptr, 
+                               float    d, 
+                               float  * vis,
+                               float  * expected_depth)
+{
+  float alpha = alpha_data[data_ptr];
+  float diff_omega=exp(-alpha*d);
+  float omega=(*vis) * (1.0f - diff_omega);
+  (*vis) *= diff_omega;
+  (*expected_depth)+=depth*omega;
+}
+
+
+

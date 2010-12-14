@@ -34,7 +34,7 @@ boxm2_block* boxm2_dumb_cache::get_block(boxm2_block_id id)
 
 void boxm2_dumb_cache::update_block_cache(boxm2_block* blk)
 {
-  delete cached_block_;
+  //delete cached_block_;
   cached_block_ = blk;
 }
 

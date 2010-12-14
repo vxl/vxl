@@ -49,11 +49,12 @@ void boxm2_array_3d<T>::construct(size_type n1, size_type n2, size_type n3, T* b
   T* array_ptr = buffer_;
 
   // set the second level pointers.
-  for (size_type row1_index = 0; row1_index < n1; row1_index++)
+  for (size_type row1_index = 0; row1_index < n1; row1_index++) {
     for (size_type row2_index = 0; row2_index < n2; row2_index++) {
       element_ [row1_index][row2_index] = array_ptr;
       array_ptr += n3;
     }
+  }
 }
 
 template <class T>

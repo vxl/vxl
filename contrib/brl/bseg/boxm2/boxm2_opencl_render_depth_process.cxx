@@ -1,4 +1,4 @@
-#include <boxm2/boxm2_opencl_render_process.h>
+#include <boxm2/boxm2_opencl_render_depth_process.h>
 
 //boxm2 data structures
 #include <boxm2/boxm2_scene.h>
@@ -11,16 +11,16 @@
 //directory utility
 #include <vcl_where_root_dir.h>
 
-//  probably don't need this...
-bool boxm2_opencl_render_process::init() { return true; }
+//: probably don't need this... 
+bool boxm2_opencl_render_depth_process::init(){}
 
-bool boxm2_opencl_render_process::init_kernel(cl_context& context,
+bool boxm2_opencl_render_depth_process::init_kernel(cl_context& context, 
                                               cl_device_id& device)
 {
-  context_ = &context;
-
+  context_ = &context; 
+  
   //gather all render sources... seems like a lot for rendering...
-  vcl_vector<vcl_string> src_paths;
+  vcl_vector<vcl_string> src_paths; 
   vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/cl/";
   src_paths.push_back(source_dir + "scene_info.cl"); 
   src_paths.push_back(source_dir + "cell_utils.cl"); 
@@ -34,7 +34,7 @@ bool boxm2_opencl_render_process::init_kernel(cl_context& context,
   //set kernel options 
   vcl_string options = "-D INTENSITY ";
   options += "-D NVIDIA ";
-  options += "-D RENDER ";
+  options += "-D DEPTH ";
   
   //have kernel construct itself using the context and device
   bool created =  render_kernel_.create_kernel( &context,             
@@ -42,19 +42,18 @@ bool boxm2_opencl_render_process::init_kernel(cl_context& context,
                                                 src_paths,            
                                                 "render_bit_scene",   //kernel name
                                                 options,              //options
-                                                "boxm2 opencl render"); //kernel identifier (for error checking)
+                                                "boxm2 opencl render depth"); //kernel identifier (for error checking)
                               
   //TODO FIGURE OUT A GOOD PLACE FOR THE COMMAND QUEUE TO LIVE - 
   //seems like it should be above process (processor should have a list of command queues)
   // set up a command queue
-  int status;
+  int status; 
   command_queue_ = clCreateCommandQueue(context, device, CL_QUEUE_PROFILING_ENABLE, &status);
   if (!check_val(status,CL_SUCCESS,"Failed in command queue creation" + error_to_string(status)))
     return false;
-
-  return created;
+  
+  return created; 
 }
-
 
 //  NEED TO FIGURE OUT HOW TO differentiate between SCENE/BLOCK/DATA arguments and Camera/Image arguments
 // the scene level stuff needs to live on the processor, other
@@ -69,7 +68,7 @@ bool boxm2_opencl_render_process::init_kernel(cl_context& context,
 //  7) ocl_mem_sptr exp_img_dim //produced here
 //  8) ocl_mem_sptr cl_output;  //produced here
 //  9) ocl_mem_sptr bit_lookup  //produced here
-bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vcl_vector<brdb_value_sptr>& output)
+bool boxm2_opencl_render_depth_process::execute(vcl_vector<brdb_value_sptr>& input, vcl_vector<brdb_value_sptr>& output)
 {
   vcl_cout<<"GPu RENDER!!"<<vcl_endl;
 
@@ -155,7 +154,7 @@ bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vc
   return true; 
 }
 
-cl_float* boxm2_opencl_render_process::set_persp_camera(vpgl_camera_double_sptr cam)
+cl_float* boxm2_opencl_render_depth_process::set_persp_camera(vpgl_camera_double_sptr cam)
 {
   if (vpgl_proj_camera<double>* pcam =
       dynamic_cast<vpgl_proj_camera<double>*>(cam.ptr()))
@@ -197,7 +196,7 @@ cl_float* boxm2_opencl_render_process::set_persp_camera(vpgl_camera_double_sptr 
   }
 }
 
-cl_uchar* boxm2_opencl_render_process::set_bit_lookup()
+cl_uchar* boxm2_opencl_render_depth_process::set_bit_lookup()
 {
   unsigned char bits[] = { 0,   1,   1,   2,   1,   2,   2,   3,   1,   2,   2,   3,   2,   3,   3,   4,
                            1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5 ,

@@ -52,6 +52,33 @@ void boxm2_scene::save_scene()
   x_write(xmlstrm, (*this), "scene");
 }
 
+//: return a heap pointer to a scene info 
+boxm2_scene_info* boxm2_scene::get_scene_info()
+{
+  boxm2_scene_info* info = new boxm2_scene_info(); 
+  
+  //world information
+  info->scene_origin[0] = (cl_float) (local_origin_.x()); 
+  info->scene_origin[1] = (cl_float) (local_origin_.y()); 
+  info->scene_origin[2] = (cl_float) (local_origin_.z());  
+  info->scene_origin[3] = 0.0f;
+  
+  info->scene_dims[0] = (cl_int) (block_num_.x());  // number of blocks in each dimension
+  info->scene_dims[1] = (cl_int) (block_num_.y());            
+  info->scene_dims[2] = (cl_int) (block_num_.z());            
+  info->scene_dims[3] = 0;
+
+  info->block_len = (cl_float) (block_dim_.x()); 
+  info->epsilon   = (cl_float) (info->block_len / 100.0f); 
+  
+  info->root_level = 3; 
+  info->num_buffer = 0; 
+  info->tree_buffer_length = 0; 
+  info->data_buffer_length = 0; 
+  
+  return info; 
+}
+
 //---------------------------------------------------------------------
 // NON CLASS FUNCTIONS
 //---------------------------------------------------------------------

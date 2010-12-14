@@ -1,7 +1,6 @@
-#ifndef boxm2_opencl_render_process_h
-#define boxm2_opencl_render_process_h
-//:
-// \file
+#ifndef boxm2_opencl_render_depth_process_h
+#define boxm2_opencl_render_depth_process_h
+
 #include <boxm2/boxm2_opencl_process_base.h>
 #include <vcl_vector.h>
 
@@ -15,19 +14,19 @@
 #include <bocl/bocl_kernel.h>
 #include <bocl/bocl_mem.h>
 
-class boxm2_opencl_render_process : public boxm2_opencl_process_base
+class boxm2_opencl_render_depth_process : public boxm2_opencl_process_base
 {
-  public:
-    boxm2_opencl_render_process() : context_(0) {}
-
+  public: 
+    boxm2_opencl_render_depth_process() : context_(0) {}
+  
     bool init();
-    bool execute(vcl_vector<brdb_value_sptr> & input, vcl_vector<brdb_value_sptr> & output);
-
+    bool execute(vcl_vector<brdb_value_sptr> & input, vcl_vector<brdb_value_sptr> & output); 
+    
     //: opencl specific methods
     virtual bool init_kernel(cl_context& context, cl_device_id& device);
-
-  private:
-
+  
+  private: 
+  
     //: cl context
     cl_context* context_; 
     
@@ -44,6 +43,13 @@ class boxm2_opencl_render_process : public boxm2_opencl_process_base
     //: get lookup table
     cl_uchar* set_bit_lookup();
     
+     //: the OpenCL processor needs a sort of "cache" to make sure blocks are loaded efficiently
+    //: list of buffers that can be accessed by the GPU (figure out a better way to do this...)
+    bocl_mem* scene_info_; 
+    bocl_mem* trees_; 
+    bocl_mem* alphas_;
+    bocl_mem* mogs_; 
+
 };
 
 #endif

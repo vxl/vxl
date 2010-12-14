@@ -19,7 +19,7 @@ class boxm2_cache
   public:
 
     //: returns block pointer to block specified by ID
-    virtual boxm2_block*  get_block(boxm2_block_id id) = 0;
+    virtual boxm2_block* get_block(boxm2_block_id id) = 0;
 
     //: returns data pointer to data specified by ID and data_type
     template <boxm2_data_type T>

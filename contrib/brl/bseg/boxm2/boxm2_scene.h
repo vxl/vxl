@@ -15,6 +15,26 @@
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
 
+//cl include for boxm2_scene_info
+#include <bocl/bocl_cl.h>
+
+//: block info that can be easily made into a buffer and sent to gpu
+struct boxm2_scene_info
+{
+  //world information
+  cl_float    scene_origin[4];          // scene origin (point)
+  cl_int      scene_dims[4];            // number of blocks in each dimension
+  cl_float    block_len;                // size of each block (can only be 1 number now that we've established blocks are cubes)
+  cl_float    epsilon;                  // block_len/100.0 (placed here to avoid using a register)
+
+  //tree meta information
+  cl_int      root_level;               // root_level of trees
+  cl_int      num_buffer;               // number of buffers (both data and tree)
+  cl_int      tree_buffer_length;       // length of tree buffer (number of cells/trees)
+  cl_int      data_buffer_length;       // length of data buffer (number of cells)
+};
+
+
 //: boxm2_scene: simple scene model that maintains (in world coordinates)
 //      - scene origin
 //      - number of blocks in each dimension
@@ -37,6 +57,9 @@ class boxm2_scene : public vbl_ref_count
     
     //: save scene xml file
     void save_scene(); 
+    
+    //: return a heap pointer to a scene info 
+    boxm2_scene_info* get_scene_info(); 
 
     //: scene dimensions accessors
     vgl_vector_3d<double>   block_dim()   const { return block_dim_; }

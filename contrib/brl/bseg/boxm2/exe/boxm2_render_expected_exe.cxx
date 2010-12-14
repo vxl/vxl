@@ -4,6 +4,7 @@
 #include <vil/vil_convert.h>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_image_view.h>
+#include <vil/vil_math.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 
@@ -19,6 +20,7 @@
 #include <boxm2/boxm2_block_id.h>
 #include <boxm2/boxm2_opencl_processor.h>
 #include <boxm2/boxm2_opencl_render_process.h>
+#include <boxm2/boxm2_opencl_render_depth_process.h>
 #include <boxm2/boxm2_cpp_processor.h>
 #include <boxm2/boxm2_cpp_render_process.h>
 
@@ -52,7 +54,7 @@ int main(int argc,  char** argv)
   brdb_value_sptr brdb_cam = new brdb_value_t<vpgl_camera_double_sptr>(cam); 
   
   //create output image buffer
-  vil_image_view_base_sptr expimg = new vil_image_view<vxl_byte>(ni(), nj()); 
+  vil_image_view_base_sptr expimg = new vil_image_view<float>(ni(), nj()); 
   brdb_value_sptr brdb_expimg = new brdb_value_t<vil_image_view_base_sptr>(expimg); 
   
   //----------------------------------------------------------------------------
@@ -61,50 +63,74 @@ int main(int argc,  char** argv)
   
   //start out rendering with the CPU
   boxm2_scene_sptr scene = new boxm2_scene(scene_file()); 
-  brdb_value_sptr brdb_scene = new brdb_value_t<boxm2_scene_sptr>(scene); 
   
   //get relevant blocks
   boxm2_block_id id(0,0,0); 
   boxm2_dumb_cache dcache(scene->data_path());
-  boxm2_block_sptr blk = dcache.get_block(id); 
+  boxm2_block_sptr blk      = dcache.get_block(id); 
   boxm2_data_base_sptr alph = dcache.get_data<BOXM2_ALPHA>(id); 
   boxm2_data_base_sptr mog  = dcache.get_data<BOXM2_MOG3_GREY>(id); 
-  brdb_value_sptr brdb_block = new brdb_value_t<boxm2_block_sptr>(blk);
-  brdb_value_sptr brdb_alph  = new brdb_value_t<boxm2_data_base_sptr>(alph);
-  brdb_value_sptr brdb_mog   = new brdb_value_t<boxm2_data_base_sptr>(mog); 
   
   //set inputs
   vcl_vector<brdb_value_sptr> input; 
-  input.push_back(brdb_scene); 
-  input.push_back(brdb_block); 
-  input.push_back(brdb_alph);
-  input.push_back(brdb_mog); 
   input.push_back(brdb_cam);
   input.push_back(brdb_expimg); 
   
   //initoutput vector
   vcl_vector<brdb_value_sptr> output; 
 
-  //boxm2_cpp_processor cpp_pro;
-  //cpp_pro.init(); 
-  //boxm2_cpp_render_process cpp_render; 
-  //cpp_pro.run(&cpp_render, input, output); 
-  //cpp_pro.finish(); 
-  
-
-  ////initialize a GPU processor
-    //4.  initialize update manager
+  //initialize gpu pro / manager
   boxm2_opencl_processor* gpu_pro = boxm2_opencl_processor::instance();
+  gpu_pro->set_data(scene, blk, alph, mog);
   
-  ////initialize the GPU render process
+  //////initialize the GPU render process
   boxm2_opencl_render_process gpu_render; 
   gpu_pro->run(&gpu_render, input, output); 
   gpu_pro->finish(); 
 
-  ////grab the output from teh gpu_pro class
 
-  ////save to disk
-  //vil_image_view<vxl_byte> expimg(ni(), nj()); 
-  //vil_save(expimg,img().c_str());
+
+  //----------------------------------------------------------------------------
+  //------- END API EXAMPLE ----------------------------------------------------
+  //----------------------------------------------------------------------------
+  ///save to disk
+  vil_image_view<float>* expimg_view = static_cast<vil_image_view<float>* >(expimg.ptr()); 
+  float min_val, max_val;
+  vil_math_value_range( *expimg_view, min_val, max_val); 
+  
+  vil_image_view<vxl_byte> byte_img(ni(), nj()); 
+  for(int i=0; i<ni(); i++) {
+    for(int j=0; j<nj(); j++) {
+      float norm = ((*expimg_view)(i,j) - min_val) / (max_val-min_val); 
+      byte_img(i,j) = (vxl_byte) (255 * norm); 
+    }
+  }
+  vil_save( byte_img, img().c_str());
+  
+  
+  //render depth image
+  vcl_vector<brdb_value_sptr> input2;
+  input2.push_back(brdb_cam);
+  input2.push_back(brdb_expimg); 
+  
+  
+  //////initialize the GPU render process
+  //boxm2_opencl_render_depth_process gpu_depth; 
+  gpu_pro->run(&gpu_render, input2, output); 
+  gpu_pro->finish(); 
+  
+  ///save to disk
+  expimg_view = static_cast<vil_image_view<float>* >(expimg.ptr()); 
+  vil_math_value_range( *expimg_view, min_val, max_val); 
+  for(int i=0; i<ni(); i++) {
+    for(int j=0; j<nj(); j++) {
+      float norm = ((*expimg_view)(i,j) - min_val) / (max_val-min_val); 
+      byte_img(i,j) = (vxl_byte) (255 * norm); 
+    }
+  }
+  vcl_string img2 = "depth_" + img(); 
+  vil_save( byte_img, img2.c_str());
+  
+  
   return 0;
 }
