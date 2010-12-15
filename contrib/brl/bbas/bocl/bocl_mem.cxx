@@ -10,6 +10,11 @@ bocl_mem::bocl_mem(const cl_context& context, void* buffer, unsigned num_bytes, 
   id_(id)
 {}
 
+bocl_mem::~bocl_mem()
+{
+  this->release_memory(); 
+}
+
 bool bocl_mem::create_buffer(const cl_mem_flags& flags)
 {
   cl_int status = MEM_FAILURE;
@@ -65,4 +70,19 @@ bool bocl_mem::read_to_buffer(const cl_command_queue& cmdQueue)
     return MEM_FAILURE;
   return MEM_SUCCESS;
 }
+
+
+
+//---I/O------------------------------------------------------------------------
+//: Binary write boxm_update_bit_scene_manager scene to stream
+void vsl_b_write(vsl_b_ostream& os, bocl_mem const& scene) {}
+void vsl_b_write(vsl_b_ostream& os, const bocl_mem* &p) {}
+void vsl_b_write(vsl_b_ostream& os, bocl_mem_sptr& sptr) {}
+void vsl_b_write(vsl_b_ostream& os, bocl_mem_sptr const& sptr) {}
+
+//: Binary load boxm_update_bit_scene_manager scene from stream.
+void vsl_b_read(vsl_b_istream& is, bocl_mem &scene) {}
+void vsl_b_read(vsl_b_istream& is, bocl_mem* p) {}
+void vsl_b_read(vsl_b_istream& is, bocl_mem_sptr& sptr) {} 
+void vsl_b_read(vsl_b_istream& is, bocl_mem_sptr const& sptr) {}
 

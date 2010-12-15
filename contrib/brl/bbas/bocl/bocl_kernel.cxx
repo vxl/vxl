@@ -71,9 +71,9 @@ bool bocl_kernel::execute(cl_command_queue& cmdQueue, vcl_size_t* localThreads, 
   const int CHECK_SUCCESS = 1;
   cl_int status = CL_SUCCESS;
   for (int i=0; i<args_.size(); i++) {
-    cl_mem buff = args_[i]->buffer();
+    cl_mem& buff = args_[i]->buffer();
     status = clSetKernelArg(kernel_, i, sizeof(cl_mem), (void *)&buff);
-    if ( !check_val(status,CL_SUCCESS,"clSetKernelArg failed: " + args_[i]->id()))
+    if ( !check_val(status,CL_SUCCESS,error_to_string(status) + "::clSetKernelArg failed: " + args_[i]->id()))
       return false;
   }
 
@@ -89,19 +89,26 @@ bool bocl_kernel::execute(cl_command_queue& cmdQueue, vcl_size_t* localThreads, 
   //enqueue the kernel on the command queue
   cl_event ceEvent =0;
   status = clEnqueueNDRangeKernel(cmdQueue, kernel_, 2, NULL, globalThreads, localThreads, 0, NULL, &ceEvent);
-  if ( !check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed. "+error_to_string(status)) )
+  if ( !check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed (" + id_ + ") " +error_to_string(status)) )
     return false;
-
-#if 0
+    
   //Finish execution (may not be necessary or desirable)
-  cl_ulong tstart,tend;
+  long tend, tstart; 
   status = clFinish(cmdQueue);
   status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
   status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
-  vcl_cout<<"kernel "<<id_<<" execution time: "
-          <<1.0e-6f*float(tend - tstart)<<vcl_endl; // convert nanoseconds to milliseconds
-#endif
-  return true;
+  if ( !check_val(status,CL_SUCCESS,"clFinish/ProfilingInfo failed (" + id_ + ") " +error_to_string(status)) )
+    return false;
+  
+  //report execution time
+  vcl_cout<<"kernel::"<<id_<<" execution time: "
+          <<1.0e-6f*float(tend - tstart)<<" ms"<<vcl_endl; // convert nanoseconds to milliseconds
+  
+  //clear arg lists
+  args_.clear(); 
+  local_args_.clear(); 
+  
+  return true; 
 }
 
 bool bocl_kernel::set_local_arg(vcl_size_t size)
