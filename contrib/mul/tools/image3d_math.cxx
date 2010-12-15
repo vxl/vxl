@@ -30,6 +30,7 @@
 #include <mbl/mbl_exception.h>
 #include <vil3d/file_formats/vil3d_gen_synthetic.h>
 #include <vil3d/algo/vil3d_distance_transform.h>
+#include <vil3d/algo/vil3d_smooth_121.h>
 #include <vil3d/vil3d_convert.h>
 #include <vil3d/vil3d_clamp.h>
 #include <vil3d/vil3d_math.h>
@@ -1807,6 +1808,20 @@ void clamp_below__image_3d_of_int__double__double(opstack_t& s)
   s.push_front(operand(o1));
 }
 
+void smooth__image_3d_of_float__double(opstack_t& s)
+{
+  assert(s.size() >= 1);
+  vimt3d_image_3d_of<float> o1(s[1].as_image_3d_of_float());
+  int o2 = static_cast<int>(s[0].as_double());
+
+  for(unsigned i=0;i<o2;++i)
+    vil3d_smooth_121( o1.image(), o1.image());
+
+  s.pop(2);
+  s.push_front(operand(o1));
+}
+
+
 //-------------------------------------------------------------------------------------
 // Execution infrastructure
 
@@ -1916,7 +1931,7 @@ class operations
                   "image v", "image", "Fill all voxels with value v");
     add_operation("--fill", &fill__image_3d_of_int__double,
                   function_type_t() << operand::e_image_3d_of_int << operand::e_double,
-                  "image n", "image", "Fill all voxels with value v");
+                  "image v", "image", "Fill all voxels with value v");
     add_operation("--help", &help,
                   no_operands,
                   "", "", "Display help");
@@ -2031,6 +2046,9 @@ class operations
     add_operation("--signed-distance-transform", &signed_distance_transform__image_3d_of_int,
                   function_type_t() << operand::e_image_3d_of_int,
                   "image", "image", "Calculate SDT from zero/non-zero boundary in image");
+    add_operation("--smooth", &smooth__image_3d_of_float__double,
+                  function_type_t() << operand::e_image_3d_of_float << operand::e_double,
+                  "image n_iter", "image", "Smooth image ; n_iter being the number of iterations ");
     add_operation("--store", &store__poly__string,
                   function_type_t() << operand::e_double << operand::e_string,
                   "value name", "", "Store value locally as variable \"name\"");
