@@ -18,13 +18,16 @@
 class boxm2_opencl_render_process : public boxm2_opencl_process_base
 {
   public:
-    boxm2_opencl_render_process() : context_(0) {}
+    boxm2_opencl_render_process() : context_(0), image_(0) {}
 
     bool init();
     bool execute(vcl_vector<brdb_value_sptr> & input, vcl_vector<brdb_value_sptr> & output);
 
     //: opencl specific methods
     virtual bool init_kernel(cl_context& context, cl_device_id& device);
+    
+    //: render specific method
+    bool set_image( bocl_mem* img ) { image_ = img; }
 
   private:
 
@@ -33,6 +36,9 @@ class boxm2_opencl_render_process : public boxm2_opencl_process_base
     
     //: render kernel (other processes may have many kernels
     bocl_kernel render_kernel_;
+
+    //: image (so it isn't created over and over)
+    bocl_mem* image_; 
 
     //0----- HACK STUFF TO GO SOMEWEHRE ELSE ----------------------------------
     //: command queue for thsi process. 

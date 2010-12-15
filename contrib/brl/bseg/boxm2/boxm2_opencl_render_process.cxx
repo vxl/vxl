@@ -73,7 +73,6 @@ bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vc
 {
   vcl_cout<<"GPu RENDER!!"<<vcl_endl;
 
-  //FOR NOW DO IT MANUALLY  
   //1. get the arguments blocks/camera/img etc from the input vector
   int i = 0;
   brdb_value_t<bocl_mem_sptr>* info  = static_cast<brdb_value_t<bocl_mem_sptr>* >( input[i++].ptr() ); 
@@ -96,10 +95,12 @@ bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vc
   brdb_value_t<vil_image_view_base_sptr>* brdb_expimg = static_cast<brdb_value_t<vil_image_view_base_sptr>* >( input[i++].ptr() ); 
   vil_image_view_base_sptr expimg = brdb_expimg->value(); 
   vil_image_view<float>* exp_img_view = static_cast<vil_image_view<float>* >(expimg.ptr()); 
-  float* exp_buff = exp_img_view->begin(); 
-  bocl_mem exp_img((*context_), exp_buff, exp_img_view->size() * sizeof(float), "exp image buffer"); 
-  exp_img.create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR); 
-  
+  if(!image_) {
+    float* exp_buff = exp_img_view->begin(); 
+    image_ = new bocl_mem((*context_), exp_buff, exp_img_view->size() * sizeof(float), "exp image buffer"); 
+    image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR); 
+  }
+ 
   //exp image dimensions
   int* img_dim_buff = new int[4]; 
   img_dim_buff[0] = exp_img_view->ni(); 
@@ -130,7 +131,7 @@ bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vc
   render_kernel_.set_arg( alpha_sptr.ptr() );  
   render_kernel_.set_arg( mogs_sptr.ptr() );  
   render_kernel_.set_arg( &persp_cam ); 
-  render_kernel_.set_arg( &exp_img ); 
+  render_kernel_.set_arg( image_ ); 
   render_kernel_.set_arg( &exp_img_dim); 
   render_kernel_.set_arg( &cl_output ); 
   render_kernel_.set_arg( &lookup );
@@ -145,7 +146,7 @@ bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vc
   
   //read output, do something, blah blah
   cl_output.read_to_buffer(command_queue_); 
-  exp_img.read_to_buffer(command_queue_); 
+  image_->read_to_buffer(command_queue_); 
   
   //clean up camera, lookup_arr, img_dim_buff
   delete[] output_arr; 

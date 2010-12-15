@@ -48,6 +48,9 @@ IF(EXPAT_FOUND)
     
     #exes
     subdirs(exe)
+    
+    #tableaus
+    subdirs(view)
 
   ENDIF(OPENCL_FOUND)
 ENDIF(EXPAT_FOUND)

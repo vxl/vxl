@@ -28,11 +28,8 @@ bool boxm2_opencl_processor::run(boxm2_process * process, vcl_vector<brdb_value_
 { 
   //0. cast the process to a boxm2_opencl_process 
   boxm2_opencl_process_base* pro = (boxm2_opencl_process_base*) process; 
-
-  //1. initialize the process (pass it a context and a device so it can compile the kernel)
-  pro->init_kernel(this->context(), this->devices()[0]); 
   
-  //2. execute kernel 
+  //1. execute kernel 
   vcl_vector<brdb_value_sptr> pro_input; 
   pro_input.push_back( new brdb_value_t<bocl_mem_sptr>(scene_info_) ); 
   pro_input.push_back( new brdb_value_t<bocl_mem_sptr>(trees_) ); 

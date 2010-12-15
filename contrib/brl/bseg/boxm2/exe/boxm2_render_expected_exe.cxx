@@ -85,6 +85,7 @@ int main(int argc,  char** argv)
   
   //////initialize the GPU render process
   boxm2_opencl_render_process gpu_render; 
+  gpu_render.init_kernel(gpu_pro->context(), gpu_pro->devices()[0]); 
   gpu_pro->run(&gpu_render, input, output); 
   gpu_pro->finish(); 
 
@@ -113,9 +114,7 @@ int main(int argc,  char** argv)
   input2.push_back(brdb_cam);
   input2.push_back(brdb_expimg); 
   
-  
   //////initialize the GPU render process
-  //boxm2_opencl_render_depth_process gpu_depth; 
   gpu_pro->run(&gpu_render, input2, output); 
   gpu_pro->finish(); 
   
