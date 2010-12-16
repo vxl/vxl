@@ -23,7 +23,7 @@ void cast_ray(
           __local     int                * imIndex,         //image index
 
           //---- OUTPUT ARGUMENTS-----------------------------------------------
-          __global    float              * exp_image,       //input image and store vis_inf and pre_inf
+          __global    uint               * exp_image,       //input image and store vis_inf and pre_inf
           //__global    uint               * gl_image,      //gl_image automatically rendered to the screen
           __global    float              * output)          //debug output buffer
 {
@@ -48,7 +48,7 @@ void cast_ray(
   if (tfar <= tblock) {
 #ifdef RENDER
     //gl_image[imIndex[llid]] = rgbaFloatToInt((float4)(0.0f,0.0f,0.0f,0.0f));
-    exp_image[imIndex[llid]] = (float) 0.0f;
+    exp_image[imIndex[llid]] = rgbaFloatToInt((float4)(0.0f,0.0f,0.0f,0.0f));
 #endif
     //exp_image[j*get_global_size(0)+i].x = 0.0f; 
     return; 
@@ -166,12 +166,12 @@ void cast_ray(
 #ifdef RENDER
   expected_int += vis*0.5f;
   //gl_image[imIndex[llid]] = rgbaFloatToInt((float4) expected_int);
-  exp_image[imIndex[llid]] = expected_int;
+  exp_image[imIndex[llid]] =  rgbaFloatToInt((float4) expected_int); //expected_int;
 #endif
 #ifdef DEPTH
   expected_int += vis*tfar*linfo->block_len;
   //gl_image[imIndex[llid]] = rgbaFloatToInt((float4) depth/20);
-  exp_image[imIndex[llid]] =  expected_int;
+  exp_image[imIndex[llid]] =  rgbaFloatToInt((float4) expected_int);
 #endif
 
 }

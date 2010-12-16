@@ -27,6 +27,8 @@
 #include <boxm2/boxm2_opencl_render_process.h>
 #include <boxm2/io/boxm2_dumb_cache.h>
 
+//brdb stuff
+#include <brdb/brdb_value.h>
 
 
 class boxm2_render_tableau : public boxm2_cam_tableau

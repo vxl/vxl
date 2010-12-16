@@ -29,6 +29,12 @@ class boxm2_opencl_render_process : public boxm2_opencl_process_base
     //: render specific method
     bool set_image( bocl_mem* img ) { image_ = img; }
 
+    //: get commandqueue
+    cl_command_queue& command_queue() { return command_queue_; }
+    
+    //: get image
+    bocl_mem* image() { return image_; }
+
   private:
 
     //: cl context

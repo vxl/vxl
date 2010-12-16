@@ -31,18 +31,7 @@ bool boxm2_render_tableau::init(vcl_string scene_file,
   default_cam_ = (*cam);
   do_init_ocl = true;
   
-  //vpgl_camera_double_sptr cam = pcam; 
-  //brdb_value_sptr brdb_cam = new brdb_value_t<vpgl_camera_double_sptr>(cam); 
-  
-  //create output image buffer
-  //vil_image_view_base_sptr expimg = new vil_image_view<float>(ni(), nj()); 
-  //brdb_value_sptr brdb_expimg = new brdb_value_t<vil_image_view_base_sptr>(expimg); 
-  
-  //----------------------------------------------------------------------------
-  //--- BEGIN BOXM2 API EXAMPLE ------------------------------------------------
-  //----------------------------------------------------------------------------
-  
-  //start out rendering with the CPU
+  //create the scene
   scene_ = new boxm2_scene(scene_file); 
   
   return true;
@@ -66,15 +55,15 @@ bool boxm2_render_tableau::handle(vgui_event const &e)
     //        <<"stare point: "<<stare_point_<<vcl_endl;
     //vcl_cout<<cam_<<vcl_endl;
     float gpu_time = this->render_frame();
-    //this->setup_gl_matrices();
-    //glClear(GL_COLOR_BUFFER_BIT);
-    //glDisable(GL_DEPTH_TEST);
-    //glRasterPos2i(0, 1);
-    //glPixelZoom(1,-1);
-    //glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, pbuffer_);
-    //glDrawPixels(ni_, nj_, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-    //glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
-#if 1
+    this->setup_gl_matrices();
+    glClear(GL_COLOR_BUFFER_BIT);
+    glDisable(GL_DEPTH_TEST);
+    glRasterPos2i(0, 1);
+    glPixelZoom(1,-1);
+    glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, pbuffer_);
+    glDrawPixels(ni_, nj_, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+    glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
+#if 0
     glPushMatrix();
     vnl_random rand;
     for (unsigned i=0;i<100000;i++)
@@ -105,18 +94,33 @@ bool boxm2_render_tableau::handle(vgui_event const &e)
 //: calls on ray manager to render frame into the pbuffer_
 float boxm2_render_tableau::render_frame()
 {
-  boxm_render_bit_scene_manager* ray_mgr = boxm_render_bit_scene_manager::instance();
-  cl_int status = clEnqueueAcquireGLObjects(ray_mgr->command_queue_, 1,
-                                            //&ray_mgr->image_gl_buf_ , 0, 0, 0);
-  //if (!ray_mgr->check_val(status,CL_SUCCESS,"clEnqueueAcquireGLObjects failed. (gl_image)"+error_to_string(status)))
-    //return false;
+  //boxm_render_bit_scene_manager* ray_mgr = boxm_render_bit_scene_manager::instance();
+  cl_int status = clEnqueueAcquireGLObjects(render_.command_queue(), 1,
+                                            &render_.image()->buffer() , 0, 0, 0);
+  if (!check_val(status,CL_SUCCESS,"clEnqueueAcquireGLObjects failed. (gl_image)"+error_to_string(status)))
+    return false;
 
-  //ray_mgr->set_persp_camera(&cam_);
-  //ray_mgr->write_persp_camera_buffers();
-  //ray_mgr->run();
-  //status = clEnqueueReleaseGLObjects(ray_mgr->command_queue_, 1, &ray_mgr->image_gl_buf_ , 0, 0, 0);
-  //clFinish( ray_mgr->command_queue_ );
-  //return ray_mgr->gpu_time();
+  //set inputs
+  vpgl_camera_double_sptr cam = new vpgl_perspective_camera<double>(cam_); 
+  brdb_value_sptr brdb_cam = new brdb_value_t<vpgl_camera_double_sptr>(cam); 
+  
+  //create output image buffer
+  vil_image_view_base_sptr expimg = new vil_image_view<float>(ni_, nj_); 
+  brdb_value_sptr brdb_expimg = new brdb_value_t<vil_image_view_base_sptr>(expimg); 
+  
+  vcl_vector<brdb_value_sptr> input; 
+  input.push_back(brdb_cam);
+  input.push_back(brdb_expimg); 
+  
+  //initoutput vector
+  vcl_vector<brdb_value_sptr> output; 
+
+  //initialize the GPU render process
+  gpu_pro_->run(&render_, input, output); 
+  gpu_pro_->finish(); 
+
+  status = clEnqueueReleaseGLObjects(render_.command_queue(), 1, &render_.image()->buffer(), 0, 0, 0);
+  clFinish( render_.command_queue() );
   return 0.0f;
 }
 
@@ -155,9 +159,8 @@ bool boxm2_render_tableau::init_clgl()
                                       CL_MEM_WRITE_ONLY,
                                       pbuffer_,
                                       &status);
-                                      
   bocl_mem* exp_img = new bocl_mem(gpu_pro_->context(), (void*) pbuffer_, ni_*nj_*sizeof(GLubyte)*4, "exp image (gl) buffer");
-  exp_img->set_buffer(clgl_buffer_);  
+  exp_img->set_gl_buffer(clgl_buffer_);  
                                       
   //initialize the GPU render process
   render_.init_kernel(gpu_pro_->context(), gpu_pro_->devices()[0]); 

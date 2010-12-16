@@ -54,7 +54,7 @@ int main(int argc,  char** argv)
   brdb_value_sptr brdb_cam = new brdb_value_t<vpgl_camera_double_sptr>(cam); 
   
   //create output image buffer
-  vil_image_view_base_sptr expimg = new vil_image_view<float>(ni(), nj()); 
+  vil_image_view_base_sptr expimg = new vil_image_view<unsigned int>(ni(), nj()); 
   brdb_value_sptr brdb_expimg = new brdb_value_t<vil_image_view_base_sptr>(expimg); 
   
   //----------------------------------------------------------------------------
@@ -95,19 +95,15 @@ int main(int argc,  char** argv)
   //------- END API EXAMPLE ----------------------------------------------------
   //----------------------------------------------------------------------------
   ///save to disk
-  vil_image_view<float>* expimg_view = static_cast<vil_image_view<float>* >(expimg.ptr()); 
-  float min_val, max_val;
+  vil_image_view<unsigned int>* expimg_view = static_cast<vil_image_view<unsigned int>* >(expimg.ptr()); 
+  unsigned int min_val, max_val;
   vil_math_value_range( *expimg_view, min_val, max_val); 
   
   vil_image_view<vxl_byte> byte_img(ni(), nj()); 
-  for(int i=0; i<ni(); i++) {
-    for(int j=0; j<nj(); j++) {
-      float norm = ((*expimg_view)(i,j) - min_val) / (max_val-min_val); 
-      byte_img(i,j) = (vxl_byte) (255 * norm); 
-    }
-  }
+  for(int i=0; i<ni(); i++) 
+    for(int j=0; j<nj(); j++) 
+      byte_img(i,j) = (*expimg_view)(i,j) & 0xFF;   //just grab the first byte (all foura r the same)
   vil_save( byte_img, img().c_str());
-  
   
   //render depth image
   vcl_vector<brdb_value_sptr> input2;
@@ -119,17 +115,14 @@ int main(int argc,  char** argv)
   gpu_pro->finish(); 
   
   ///save to disk
-  expimg_view = static_cast<vil_image_view<float>* >(expimg.ptr()); 
+  expimg_view = static_cast<vil_image_view<unsigned int>* >(expimg.ptr()); 
   vil_math_value_range( *expimg_view, min_val, max_val); 
-  for(int i=0; i<ni(); i++) {
-    for(int j=0; j<nj(); j++) {
-      float norm = ((*expimg_view)(i,j) - min_val) / (max_val-min_val); 
-      byte_img(i,j) = (vxl_byte) (255 * norm); 
-    }
-  }
+  vcl_cout<<"min_val: "<<min_val<<"   max val: "<<max_val<<vcl_endl;
+  for(int i=0; i<ni(); i++) 
+    for(int j=0; j<nj(); j++) 
+       byte_img(i,j) = (*expimg_view)(i,j) & 0xFF;   //just grab the first byte (all foura r the same)
   vcl_string img2 = "depth_" + img(); 
   vil_save( byte_img, img2.c_str());
-  
   
   return 0;
 }

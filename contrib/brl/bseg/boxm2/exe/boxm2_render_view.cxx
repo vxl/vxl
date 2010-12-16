@@ -68,15 +68,10 @@ int main(int argc, char ** argv)
     else  {
         ifs >> *pcam;
     }
-    vpgl_camera_double_sptr cam = pcam; 
-    brdb_value_sptr brdb_cam = new brdb_value_t<vpgl_camera_double_sptr>(cam); 
-    
-    //create scene
   
     //create a new ocl_draw_glbuffer_tableau, window, and initialize it
     boxm2_render_tableau_new bit_tableau;  
     bit_tableau->init(scene_file(),ni(),nj(),pcam);
-
 
     //create window, attach the new tableau and status bar
     vgui_window* win = vgui::produce_window(ni(), nj(), "OpenCl Volume Visualizer");
