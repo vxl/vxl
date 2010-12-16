@@ -21,7 +21,6 @@
 #include <vbl/vbl_smart_ptr.h>
 #include <vsl/vsl_binary_io.h>
 
-
 #define MEM_SUCCESS 1
 #define MEM_FAILURE 0
 
@@ -42,10 +41,8 @@ class bocl_mem : public vbl_ref_count
     //: releases buffer memory
     bool release_memory();
 
-    //: write to buffer (copies memory from cpu_buf to gpu buf)
+    //: read/write to buffer (copies memory from cpu_buf to gpu buf)
     bool write_to_buffer(const cl_command_queue& cmdQueue);
-
-    //; wread from buffer (copies mem from gpu buf to cpu buf)
     bool read_to_buffer(const cl_command_queue& cmdQueue);
 
     //: returns a reference to the buffer
@@ -61,7 +58,7 @@ class bocl_mem : public vbl_ref_count
     vcl_string id()         { return id_; }
     
     //: set buffer used when a clCreateGLBuffer is called..
-    bool set_buffer(cl_mem buff) { buffer_ = buff; }
+    bool set_gl_buffer(cl_mem buff) { buffer_ = buff; is_gl_=true; }
     
   private:
 
@@ -79,6 +76,9 @@ class bocl_mem : public vbl_ref_count
 
     //: string identifier for error messages
     vcl_string id_;
+    
+    //: signifies if this object wraps a GL object
+    bool is_gl_; 
 };
 
 //: Smart_Pointer typedef for boxm2_block
