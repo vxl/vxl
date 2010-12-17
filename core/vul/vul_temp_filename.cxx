@@ -8,12 +8,9 @@
 #include <vcl_ctime.h>
 #include <vcl_cstdlib.h> // for rand/srand
 
-#if defined(VCL_BORLAND) || defined (VCL_VC)
+#if defined(VCL_BORLAND) || defined (VCL_VC) || defined(__MINGW32__)
 # include <vcl_cstdio.h> // for _tempnam on borland (and stlport5 with VC8)
-#endif
-
-#if defined(VCL_VC) || defined(VCL_BORLAND) || defined(__MINGW32__)
-  #include <Windows.h>
+# include <Windows.h>
 #else
 #if defined(unix) || defined(__unix) || defined(__unix__) || defined(__APPLE__)
   // Helper functions for Unix
