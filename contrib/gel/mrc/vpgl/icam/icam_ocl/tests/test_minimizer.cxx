@@ -90,65 +90,37 @@ void create_view_sphere(icam_ocl_view_sphere_sptr& view_sphere)
 static void test_minimizer()
 {
   vcl_string root_dir = testlib_root_dir();
-  vcl_vector<vcl_string> image_f, depth_f, camera_f;
+  vcl_map<unsigned int, vcl_string> images, depth_images;
+  vcl_vector<vcl_string> camera_f;
 
-  // view 0
-  // view 0
-  image_f.push_back("C:/images/Calibration/expected88.tiff");
-  depth_f.push_back("C:/images/Calibration/depth88.tiff");
+  // view 0 
+  images[0]="C:/images/Calibration/expected88.tiff";
+  depth_images[0]="C:/images/Calibration/depth88.tiff";
   camera_f.push_back("C:/images/Calibration/camera_00088.txt");
 
   // view 1
-  image_f.push_back("C:/images/Calibration/frame_142.png");
-  depth_f.push_back("C:/images/Calibration/depth_142.tif");
+  images[1]="C:/images/Calibration/frame_142.png";
+  depth_images[1]="C:/images/Calibration/depth_142.tif";
   camera_f.push_back("C:/images/Calibration/camera_00142.txt");
 
   // view 2(the closest one)
-  image_f.push_back("C:/images/Calibration/expected142.tiff");
-  depth_f.push_back("C:/images/Calibration/depth_142.tif");
+  images[2]="C:/images/Calibration/expected142.tiff";
+  depth_images[2]="C:/images/Calibration/depth_142.tif";
   camera_f.push_back("C:/images/Calibration/camera_00142.txt");
 
   //view 3
-  image_f.push_back("C:/images/Calibration/frame_142.png");
-  depth_f.push_back("C:/images/Calibration/depth_142.tif");
+  images[3]="C:/images/Calibration/frame_142.png";
+  depth_images[3]="C:/images/Calibration/depth_142.tif";
   camera_f.push_back("C:/images/Calibration/camera_00142.txt");
 
   // source image
   vcl_string source_file = "C:/images/Calibration/gray00089.png";
 
-  // set the images to view points
-  vcl_map<unsigned, vil_image_view<float>* > images;
-  vcl_map<unsigned, vil_image_view<double>* > depth_images;
-
-  // load dest images
-  for (unsigned i=0; i<image_f.size(); i++) {
-    vil_image_view<float> *image;
-    if (load_image<float>(image_f[i], image)) {
-      images[i] = image;
-    }
-    else {
-      vcl_cerr << "error loading image.\n";
-      return;
-    }
-  }
-
-  //load depth images
-  for (unsigned i=0; i<depth_f.size(); i++) {
-    vil_image_view<double> *image;
-    if (load_image<double>(depth_f[i], image)) {
-      depth_images[i] = image;
-    }
-    else {
-      vcl_cerr << "error loading image.\n";
-      return;
-    }
-  }
-
   icam_ocl_view_sphere_sptr view_sphere;
   create_view_sphere(view_sphere);
   // set cameras
   vcl_map<unsigned, vpgl_camera_double_sptr> cam_map;
-  for (unsigned i=0; i<camera_f.size(); i++) {
+  for (unsigned i=0; i<camera_f.size(); i++) { 
     vcl_ifstream ifs(camera_f[i].c_str());
     vpgl_perspective_camera<double>* cam=new vpgl_perspective_camera<double>();
     ifs >> *cam;
@@ -157,10 +129,10 @@ static void test_minimizer()
   view_sphere->set_cameras(cam_map);
 
   view_sphere->set_images(images, depth_images);
-
+  icam_minimizer_params params;
   vil_image_view<float> *source_img;
   if (load_image<float>(source_file, source_img)) {
-    view_sphere->register_image(*source_img);
+    view_sphere->register_image(*source_img, params);
   }
 }
 

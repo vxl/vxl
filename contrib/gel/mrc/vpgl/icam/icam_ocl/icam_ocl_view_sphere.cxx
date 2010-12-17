@@ -8,14 +8,14 @@
 
 
 //: sets the images and depth images, associated with the view point id
-void icam_ocl_view_sphere::set_images(vcl_map<unsigned, vil_image_view<float>*>& images,
-                                  vcl_map<unsigned,vil_image_view<double>*>& depth_images)
+void icam_ocl_view_sphere::set_images(vcl_map<unsigned, vcl_string>& images,
+                                      vcl_map<unsigned, vcl_string>& depth_images)
 {
-  vcl_map<unsigned, vil_image_view<float>*>::iterator it_imgs=images.begin();
-  vcl_map<unsigned, vil_image_view<double>*>::iterator it_depths=depth_images.begin();
+  vcl_map<unsigned, vcl_string>::iterator it_imgs=images.begin();
+  vcl_map<unsigned, vcl_string>::iterator it_depths=depth_images.begin();
   while (it_imgs != images.end()) {
     unsigned uid = it_imgs->first;
-    if (images[uid]) {
+    if (images[uid].size()>0) {
       // make sure that there is a corresponding depth image
       if (depth_images.find(uid) != depth_images.end()) {
         vsph_view_point<icam_view_metadata>* vp;
@@ -24,12 +24,7 @@ void icam_ocl_view_sphere::set_images(vcl_map<unsigned, vil_image_view<float>*>&
           vpgl_camera_double_sptr camera=vp->camera();
           vpgl_perspective_camera<double>* cam = dynamic_cast<vpgl_perspective_camera<double>*> (camera.as_pointer());
           if (cam) {
-            vnl_matrix_fixed<double, 3, 3> K = cam->get_calibration().get_matrix();
-            vgl_rotation_3d<double> rot=cam->get_rotation();
-            vgl_vector_3d<double> t=cam->get_translation();
-            icam_depth_transform dt(K, *depth_images[uid], rot, t);
-            icam_view_metadata* data = new icam_ocl_view_metadata(*images[uid],*depth_images[uid],dt);
-
+            icam_view_metadata* data = new icam_ocl_view_metadata(images[uid],depth_images[uid]);
             vp->set_metadata(data);
           }
         }
@@ -41,5 +36,23 @@ void icam_ocl_view_sphere::set_images(vcl_map<unsigned, vil_image_view<float>*>&
   }
 }
 
+void vsl_b_read(vsl_b_istream &is, icam_ocl_view_sphere &sp)
+{
+  sp.b_read(is);
+}
 
+void vsl_b_write(vsl_b_ostream &os, icam_ocl_view_sphere const& sp)
+{
+  sp.b_write(os);
+}
+
+void vsl_b_read(vsl_b_istream &is, icam_ocl_view_sphere* sp)
+{
+  sp->b_read(is);
+}
+
+void vsl_b_write(vsl_b_ostream &os, const icam_ocl_view_sphere* sp)
+{
+  sp->b_write(os);
+}
 

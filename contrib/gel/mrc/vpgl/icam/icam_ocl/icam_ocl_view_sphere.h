@@ -21,12 +21,18 @@ class icam_ocl_view_sphere : public icam_view_sphere
   ~icam_ocl_view_sphere(){}
 
   //: sets the images and depth images, associated with the view point id
-  virtual void set_images(vcl_map<unsigned, vil_image_view<float>*>& images,
-                          vcl_map<unsigned,vil_image_view<double>*>& depth_images);
-  virtual void register_image(vil_image_view<float> const& source_img)
-  { icam_view_sphere::register_image(source_img, icam_minimizer_params()); }
+  virtual void set_images(vcl_map<unsigned, vcl_string>& images,
+                          vcl_map<unsigned, vcl_string>& depth_images);
+
+  virtual void register_image(vil_image_view<float> const& source_img, icam_minimizer_params const& params)
+  { icam_view_sphere::register_image(source_img, params); }
 };
 
 typedef vbl_smart_ptr<icam_ocl_view_sphere> icam_ocl_view_sphere_sptr;
+
+void vsl_b_read(vsl_b_istream &is, icam_view_sphere &sp);
+void vsl_b_write(vsl_b_ostream &os, icam_view_sphere const& sp);
+void vsl_b_read(vsl_b_istream &is, icam_view_sphere* sp);
+void vsl_b_write(vsl_b_ostream &os, const icam_view_sphere* sp);
 
 #endif

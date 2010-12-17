@@ -57,7 +57,7 @@ initialized_rot_search(vgl_vector_3d<double> const& trans,
 bool icam_ocl_minimizer::init_opencl_rotation(unsigned level)
 {
   search_mgr_->set_workgrp_ni(wgsize_);   search_mgr_->set_workgrp_nj(0);
-  //search_mgr_->set_nbins(nbins_);
+  search_mgr_->set_nbins(params_.nbins_);
   search_mgr_->encode_image_data(*this, level);
   search_mgr_->set_nbins_buffer();
   search_mgr_->copy_to_image_buffers();

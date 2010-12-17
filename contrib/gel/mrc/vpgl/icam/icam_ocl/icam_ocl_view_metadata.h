@@ -28,11 +28,10 @@ class icam_ocl_view_metadata : public icam_view_metadata
    //: default constructor
    icam_ocl_view_metadata(){}
 
-   icam_ocl_view_metadata(vil_image_view<float> const& exp_img,
-                          vil_image_view<double> const& depth_img,
-                          icam_depth_transform const& dt);
+   icam_ocl_view_metadata(vcl_string const& exp_img,
+                          vcl_string const& dt_path);
 
-   ~icam_ocl_view_metadata() { if (minimizer_) delete minimizer_; }
+  // ~icam_ocl_view_metadata() { if (minimizer_) delete minimizer_; }
 
    virtual void register_image(vil_image_view<float> const& source_img, 
      vpgl_camera_double_sptr camera, icam_minimizer_params const& params);
@@ -49,11 +48,14 @@ class icam_ocl_view_metadata : public icam_view_metadata
 
  private:
    //: solver for the registration
-   icam_minimizer* minimizer_;
+  // icam_minimizer* minimizer_;
    vgl_vector_3d<double> min_trans_;
    vgl_rotation_3d<double> min_rot_;
    double cost_;
    unsigned final_level_;
+   void create_minimizer(vil_image_view<float>*& exp_img, vil_image_view<double>*& depth_img,
+                         vpgl_camera_double_sptr camera, icam_minimizer_params const& params,
+                         icam_minimizer*& minimizer);
 };
 
 vcl_ostream& operator<<(vcl_ostream& os, icam_ocl_view_metadata const& p);

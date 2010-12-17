@@ -695,7 +695,7 @@ bool icam_ocl_search_manager::run_rot_parallel_kernel()
   vcl_size_t globalThreads[]= {num_rot*this->workgrp_ni()};
   vcl_size_t localThreads[] = {this->workgrp_ni()};
   cl_int status = CL_SUCCESS;
-  cl_event ceEvent;
+  cl_event ceEvent=0;
 
   status = clEnqueueNDRangeKernel(command_queue_,kernel_->kernel(), 1,NULL,globalThreads,localThreads,0,NULL,&ceEvent);
 

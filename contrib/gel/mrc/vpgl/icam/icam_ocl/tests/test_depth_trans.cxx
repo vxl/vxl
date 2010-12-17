@@ -232,10 +232,10 @@ bool test_icam_ocl_minimizer()
   bool verbose = false;
   double sigma=1.0;
   unsigned int nbins=16;
-  icam_minimizer_params params(min_pyramid_image_size, box_reduction_k,
+  icam_minimizer_params params(nbins, min_pyramid_image_size, box_reduction_k,
                                axis_search_cone_multiplier,
                                polar_range_multiplier,
-                               local_min_thresh, sigma, nbins, base_path);
+                               local_min_thresh, sigma, base_path);
   icam_ocl_minimizer minimizer(source_img_flt, dest_img_flt, dt,
                                params, verbose);
 
@@ -318,7 +318,7 @@ bool test_icam_ocl_minimizer()
 
 static void test_depth_trans()
 {
-  // test_image_parallel_search();
+  //test_image_parallel_search();
   test_icam_ocl_minimizer();
 }
 
