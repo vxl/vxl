@@ -464,7 +464,7 @@ void close_brace__brace(opstack_t& s)
   if (s.last_pop() > s.size())
   {
     vcl_cerr << "\nERROR: A closing brace must be preceeded by an operation.\n"
-             << "At \"" << args_so_far << "\"<-- HERE";
+             << "At \"" << args_so_far << "\"<-- HERE\n";
     vcl_exit(1);
   }
   if (s.size() < 1 || s.last_pop() > s.size() ||
@@ -478,7 +478,7 @@ void close_brace__brace(opstack_t& s)
       vcl_cerr << "      You cannot have two closing braces next to each other, since closing\n"
                   "      braces check the behaviour of the immediately preceeding operation.\n";
     vcl_cerr << "At \"" << args_so_far << "\"<-- HERE\n"
-      "Stack is:\n" << vsl_stream_summary(s);
+             << "Stack is:\n" << vsl_stream_summary(s);
     vcl_exit(1);
   }
   s.erase(s.end() - s.last_pop());
@@ -1310,22 +1310,22 @@ void del_stack__double(opstack_t& s)
   if (o1 != index || o1 < 0)
   {
     vcl_cerr << "\nERROR: --del_stack Must give positive integer value.\n"
-      "At \"" << args_so_far << "\"<-- HERE\n"
-      "Stack is:\n" << vsl_stream_summary(s);
+             << "At \"" << args_so_far << "\"<-- HERE\n"
+             << "Stack is:\n" << vsl_stream_summary(s);
     vcl_exit(1);
   }
   if (index==0)
   {
     vcl_cerr << "\nERROR: --del_stack Cannot delete top entry (index 0) on stack.\n"
-      "At \"" << args_so_far << "\"<-- HERE\n"
-      "Stack is:\n" << vsl_stream_summary(s);
+             << "At \"" << args_so_far << "\"<-- HERE\n"
+             << "Stack is:\n" << vsl_stream_summary(s);
     vcl_exit(1);
   }
   if (index+1>s.size())
   {
     vcl_cerr << "\nERROR: --del_stack Stack too short to delete entry " << o1 << ".\n"
-      "At \"" << args_so_far << "\"<-- HERE\n"
-      "Stack is:\n" << vsl_stream_summary(s);
+             << "At \"" << args_so_far << "\"<-- HERE\n"
+             << "Stack is:\n" << vsl_stream_summary(s);
     vcl_exit(1);
   }
 
@@ -1412,8 +1412,8 @@ void decimate__image_3d_of_float__double__double__double(opstack_t& s)
   if (si<=0 || sj<=0 || sk<=0)
   {
     vcl_cerr << "\nERROR: --decimate Spacings must be >= 1.\n"
-      "At \"" << args_so_far << "\"<-- HERE\n"
-      "Stack is:\n" << vsl_stream_summary(s);
+             << "At \"" << args_so_far << "\"<-- HERE\n"
+             << "Stack is:\n" << vsl_stream_summary(s);
     vcl_exit(1);
   }
 
@@ -1440,8 +1440,8 @@ void decimate__image_3d_of_int__double__double__double(opstack_t& s)
   if (si <0 || sj < 0 || sk < 0)
   {
     vcl_cerr << "\nERROR: --decimate Cannot handle negative decimatino spacing.\n"
-      "At \"" << args_so_far << "\"<-- HERE\n"
-      "Stack is:\n" << vsl_stream_summary(s);
+             << "At \"" << args_so_far << "\"<-- HERE\n"
+             << "Stack is:\n" << vsl_stream_summary(s);
     vcl_exit(1);
   }
 
@@ -1814,7 +1814,7 @@ void smooth__image_3d_of_float__double(opstack_t& s)
   vimt3d_image_3d_of<float> o1(s[1].as_image_3d_of_float());
   int o2 = static_cast<int>(s[0].as_double());
 
-  for(unsigned i=0;i<o2;++i)
+  for (int i=0;i<o2;++i)
     vil3d_smooth_121( o1.image(), o1.image());
 
   s.pop(2);

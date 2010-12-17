@@ -29,7 +29,7 @@ bool bocl_kernel::create_kernel(cl_context* context,
     vcl_cerr<<"bocl_kernel::couldn't load source from "<<src_paths[0]<<'\n';
     return false;
   }
-  for (int i=1; i<src_paths.size(); i++) {
+  for (unsigned int i=1; i<src_paths.size(); ++i) {
     if (!this->append_process_kernels(src_paths[i])) {
       vcl_cerr<<"bocl_kernel::couldn't load source from "<<src_paths[i]<<'\n';
       return false;
@@ -68,9 +68,8 @@ bocl_kernel::~bocl_kernel()
 bool bocl_kernel::execute(cl_command_queue& cmdQueue, vcl_size_t* localThreads, vcl_size_t* globalThreads)
 {
   //set kernel args
-  const int CHECK_SUCCESS = 1;
   cl_int status = CL_SUCCESS;
-  for (int i=0; i<args_.size(); i++) {
+  for (unsigned int i=0; i<args_.size(); ++i) {
     cl_mem& buff = args_[i]->buffer();
     status = clSetKernelArg(kernel_, i, sizeof(cl_mem), (void *)&buff);
     if ( !check_val(status,CL_SUCCESS,error_to_string(status) + "::clSetKernelArg failed: " + args_[i]->id()))
@@ -78,7 +77,7 @@ bool bocl_kernel::execute(cl_command_queue& cmdQueue, vcl_size_t* localThreads, 
   }
 
   //set local args
-  for (int i=0; i<local_args_.size(); i++) {
+  for (unsigned int i=0; i<local_args_.size(); ++i) {
     cl_int status = clSetKernelArg(kernel_,args_.size() + i, local_args_[i], 0);
     if ( !check_val(status,CL_SUCCESS,"clSetLocal Arg Failed") ) {
       vcl_cout<<"Local argument "<<i<<" failed"<<vcl_endl;
@@ -91,24 +90,24 @@ bool bocl_kernel::execute(cl_command_queue& cmdQueue, vcl_size_t* localThreads, 
   status = clEnqueueNDRangeKernel(cmdQueue, kernel_, 2, NULL, globalThreads, localThreads, 0, NULL, &ceEvent);
   if ( !check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed (" + id_ + ") " +error_to_string(status)) )
     return false;
-    
+
   //Finish execution (may not be necessary or desirable)
-  long tend, tstart; 
+  long tend, tstart;
   status = clFinish(cmdQueue);
   status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
   status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
   if ( !check_val(status,CL_SUCCESS,"clFinish/ProfilingInfo failed (" + id_ + ") " +error_to_string(status)) )
     return false;
-  
+
   //report execution time
   vcl_cout<<"kernel::"<<id_<<" execution time: "
           <<1.0e-6f*float(tend - tstart)<<" ms"<<vcl_endl; // convert nanoseconds to milliseconds
-  
+
   //clear arg lists
-  args_.clear(); 
-  local_args_.clear(); 
-  
-  return true; 
+  args_.clear();
+  local_args_.clear();
+
+  return true;
 }
 
 bool bocl_kernel::set_local_arg(vcl_size_t size)
