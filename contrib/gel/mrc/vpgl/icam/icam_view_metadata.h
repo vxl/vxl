@@ -60,7 +60,7 @@ class icam_view_metadata
 
    inline short version() const { return 1; }
 
- private:
+ protected:
    vcl_string exp_img_path_;
    vcl_string depth_img_path_;
    vgl_vector_3d<double> min_trans_;
