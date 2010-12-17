@@ -4,16 +4,16 @@
 #include <vcl_iostream.h>
 
 bocl_mem::bocl_mem(const cl_context& context, void* buffer, unsigned num_bytes, vcl_string id)
-: context_(context),
-  cpu_buf_(buffer),
+: cpu_buf_(buffer),
   num_bytes_(num_bytes),
-  id_(id), 
+  context_(context),
+  id_(id),
   is_gl_(false)
 {}
 
 bocl_mem::~bocl_mem()
 {
-  this->release_memory(); 
+  this->release_memory();
 }
 
 bool bocl_mem::create_buffer(const cl_mem_flags& flags)
@@ -37,7 +37,7 @@ bool bocl_mem::release_memory()
 //: write to command queue
 bool bocl_mem::write_to_buffer(const cl_command_queue& cmdQueue)
 {
-  if(!is_gl_) {
+  if (!is_gl_) {
     cl_int status = MEM_FAILURE;
     status = clEnqueueWriteBuffer(cmdQueue,
                                   this->buffer_,
@@ -58,7 +58,7 @@ bool bocl_mem::write_to_buffer(const cl_command_queue& cmdQueue)
 //: read from command queue buffer...
 bool bocl_mem::read_to_buffer(const cl_command_queue& cmdQueue)
 {
-  if(!is_gl_) {
+  if (!is_gl_) {
     cl_event event;
     int status = MEM_FAILURE;
     // Enqueue readBuffers
@@ -79,17 +79,16 @@ bool bocl_mem::read_to_buffer(const cl_command_queue& cmdQueue)
 }
 
 
-
 //---I/O------------------------------------------------------------------------
-//: Binary write boxm_update_bit_scene_manager scene to stream
-void vsl_b_write(vsl_b_ostream& os, bocl_mem const& scene) {}
-void vsl_b_write(vsl_b_ostream& os, const bocl_mem* &p) {}
-void vsl_b_write(vsl_b_ostream& os, bocl_mem_sptr& sptr) {}
-void vsl_b_write(vsl_b_ostream& os, bocl_mem_sptr const& sptr) {}
+// Binary write boxm_update_bit_scene_manager scene to stream
+void vsl_b_write(vsl_b_ostream& /*os*/, bocl_mem const& /*scene*/) {}
+void vsl_b_write(vsl_b_ostream& /*os*/, const bocl_mem* & /*p*/) {}
+void vsl_b_write(vsl_b_ostream& /*os*/, bocl_mem_sptr& /*sptr*/) {}
+void vsl_b_write(vsl_b_ostream& /*os*/, bocl_mem_sptr const& /*sptr*/) {}
 
-//: Binary load boxm_update_bit_scene_manager scene from stream.
-void vsl_b_read(vsl_b_istream& is, bocl_mem &scene) {}
-void vsl_b_read(vsl_b_istream& is, bocl_mem* p) {}
-void vsl_b_read(vsl_b_istream& is, bocl_mem_sptr& sptr) {} 
-void vsl_b_read(vsl_b_istream& is, bocl_mem_sptr const& sptr) {}
+// Binary load boxm_update_bit_scene_manager scene from stream.
+void vsl_b_read(vsl_b_istream& /*is*/, bocl_mem & /*scene*/) {}
+void vsl_b_read(vsl_b_istream& /*is*/, bocl_mem* /*p*/) {}
+void vsl_b_read(vsl_b_istream& /*is*/, bocl_mem_sptr& /*sptr*/) {}
+void vsl_b_read(vsl_b_istream& /*is*/, bocl_mem_sptr const& /*sptr*/) {}
 
