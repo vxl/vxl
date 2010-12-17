@@ -6,6 +6,8 @@
 // \author Andrew Miller
 // \date   26 Oct 2010
 //
+#include <boxm2/boxm2_block_id.h>
+#include <boxm2/boxm2_block_metadata.h>
 #include <vpgl/bgeo/bgeo_lvcs.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
@@ -34,14 +36,12 @@ struct boxm2_scene_info
   cl_int      data_buffer_length;       // length of data buffer (number of cells)
 };
 
-
 //: boxm2_scene: simple scene model that maintains (in world coordinates)
 //      - scene origin
 //      - number of blocks in each dimension
 //      - size of each block in each dimension
 //      - lvcs information
 //      - xml path on disk and data path (directory) on disk
-
 class boxm2_scene : public vbl_ref_count
 {
   public:
@@ -59,11 +59,12 @@ class boxm2_scene : public vbl_ref_count
     void save_scene(); 
     
     //: return a heap pointer to a scene info 
-    boxm2_scene_info* get_scene_info(); 
+    boxm2_scene_info* get_blk_metadata(boxm2_block_id id); 
+
+    //: a list of block metadata...
+    vcl_map<boxm2_block_id, boxm2_block_metadata> blocks() { return blocks_; }
 
     //: scene dimensions accessors
-    vgl_vector_3d<double>   block_dim()   const { return block_dim_; }
-    vgl_vector_3d<unsigned> block_num()   const { return block_num_; }
     vgl_point_3d<double>    local_origin()const { return local_origin_; }
     vgl_point_3d<double>    rpc_origin()  const { return rpc_origin_; }
     bgeo_lvcs               lvcs()        const { return lvcs_; }
@@ -76,11 +77,11 @@ class boxm2_scene : public vbl_ref_count
     static short version_no() { return 1; }
 
     //: scene mutators 
-    void set_block_dim(vgl_vector_3d<double> dim)   { block_dim_ = dim; }
-    void set_block_num(vgl_vector_3d<unsigned> num) { block_num_ = num; }
     void set_local_origin(vgl_point_3d<double> org) { local_origin_ = org; }
     void set_rpc_origin(vgl_point_3d<double> rpc)   { rpc_origin_ = rpc; }
     void set_lvcs(bgeo_lvcs lvcs)                   { lvcs_ = lvcs; }
+    void set_blocks(vcl_map<boxm2_block_id, boxm2_block_metadata> blocks) { blocks_ = blocks; }
+    void add_block_metadata(boxm2_block_metadata data); 
     
     //: scene path mutators
     void set_xml_path(vcl_string path)              { xml_path_ = path; }
@@ -93,14 +94,12 @@ class boxm2_scene : public vbl_ref_count
     vgl_point_3d<double>    local_origin_;
     vgl_point_3d<double>    rpc_origin_;
 
-    //: World dimensions of a block .e.g 1 meter x 1 meter x 1 meter
-    vgl_vector_3d<double>   block_dim_;
-
-    //: number of blocks in each dimension
-    vgl_vector_3d<unsigned> block_num_;
-
     //: location on disk of xml file and data/block files
     vcl_string data_path_, xml_path_;
+    
+    //: list of block meta data available to this scene
+    vcl_map<boxm2_block_id, boxm2_block_metadata> blocks_; 
+
 };
 
 //Smart_Pointer typedef for boxm2_scene

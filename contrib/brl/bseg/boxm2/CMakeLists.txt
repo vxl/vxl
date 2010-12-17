@@ -16,6 +16,7 @@ IF(EXPAT_FOUND)
     SET(boxm2_sources
         boxm2_scene.h                 boxm2_scene.cxx
         boxm2_block.h                 boxm2_block.cxx
+        boxm2_block_metadata.h
         boxm2_data_base.h             boxm2_data_base.cxx
         boxm2_data.h                  boxm2_data.txx
         boxm2_data_traits.h

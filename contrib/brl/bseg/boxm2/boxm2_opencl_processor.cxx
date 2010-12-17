@@ -79,14 +79,12 @@ bool boxm2_opencl_processor::set_data(boxm2_scene_sptr& scene,
 
     //LEAK EXISTS HERE FOR SCENE INFO
     //get scene info (hacky location, fix this)
-    boxm2_scene_info* info_buffer = scene->get_scene_info();
-    info_buffer->num_buffer = blk->num_buffers();
-    info_buffer->tree_buffer_length = blk->tree_buff_length();
-    info_buffer->data_buffer_length = 65536;
-#if 0
-    delete scene_info_;
-#endif
-    scene_info_ = new bocl_mem(this->context(), info_buffer, sizeof(boxm2_scene_info), "scene info buffer");
+    boxm2_scene_info* info_buffer = scene->get_blk_metadata(blk->block_id());  
+    info_buffer->num_buffer = blk->num_buffers(); 
+    info_buffer->tree_buffer_length = blk->tree_buff_length(); 
+    info_buffer->data_buffer_length = 65536; 
+    //if(scene_info_) delete scene_info_; 
+    scene_info_ = new bocl_mem(this->context(), info_buffer, sizeof(boxm2_scene_info), "scene info buffer"); 
     scene_info_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
     return true;

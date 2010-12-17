@@ -4,48 +4,43 @@
 #include <expatpplib.h>
 #include <vcl_string.h>
 
+#include <boxm2/boxm2_block_id.h>
+#include <boxm2/boxm2_block_metadata.h>
 #include <vpgl/bgeo/bgeo_lvcs.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
+#include <vcl_map.h>
 
+//scene level metadata
 #define LVCS_TAG "lvcs"
 #define LOCAL_ORIGIN_TAG "local_origin"
-#define BLOCK_DIMENSIONS_TAG "block_dimensions"
-#define BLOCK_NUM_TAG "blocks"
 #define SCENE_PATHS_TAG "scene_paths"
-#define APP_MODEL_TAG "appearence_model"
-#define MULTI_BIN_TAG "multi_bin"
-#define SAVE_INTERNAL_NODES_TAG "save_internal_nodes"
-#define SAVE_PLATFORM_INDEPENDENT_TAG "save_platform_independent"
-#define LOAD_ALL_BLOCKS_TAG "load_all_blocks"
-#define OCTREE_LEVELS_TAG "octree_level"
+
+//block level metadata
+#define BLOCK_TAG "block"
+#define BLOCK_ID_TAG "block_id"
+#define BLOCK_ORIGIN_TAG "block_origin"
+#define SUB_BLOCK_NUMS_TAG "sub_block_nums"
+#define SUB_BLOCK_DIMENSIONS_TAG "sub_block_dimensions"
+#define TREE_INIT_LEVEL_TAG "tree_init_level"
+#define TREE_MAX_LEVEL_TAG "tree_max_level"
 #define P_INIT_TAG "p_init"
-#define TREE_INIT_TAG "tree_init"
 #define MAX_MB_TAG "max_mb"
+
 
 class boxm2_scene_parser : public expatpp
 {
  public:
   boxm2_scene_parser();
-
   ~boxm2_scene_parser(void) {}
 
+   // ACCESSORS for parser info
    bool lvcs(bgeo_lvcs& lvcs);
-   vgl_point_3d<double> origin() const { return vgl_point_3d<double>(local_orig_x_,local_orig_y_,local_orig_z_);}
-   vgl_vector_3d<double> block_dim() const { return vgl_vector_3d<double>(block_dim_x_,block_dim_y_,block_dim_z_);}
-   vgl_vector_3d<unsigned> block_nums() const { return vgl_vector_3d<unsigned>(block_num_x_,block_num_y_,block_num_z_);}
-   void paths(vcl_string& scene_path, vcl_string& block_pref) {scene_path=path_; block_pref=block_pref_;}
-   vcl_string app_model() const { return app_model_; }
-   bool multi_bin() const { return multi_bin_; }
-   void levels(unsigned& max, unsigned& init) { max = max_tree_level_; init=init_tree_level_; }
-   bool save_internal_nodes() {return save_internal_nodes_;}
-   bool save_platform_independent() {return save_platform_independent_;}
-   bool load_all_blocks() {return load_all_blocks_;}
-   void tree_buffer_shape(int &num_buffers, int &buff_size) {num_buffers = num_buffers_init_; buff_size = size_buffer_init_;}
-   int max_mb() { return max_mb_; }
-
-   float p_init(){return p_init_;}
-
+   vgl_point_3d<double> origin() { return origin_; }
+   vcl_string path() { return path_; }
+   vcl_string name() { return name_; }
+   vcl_map<boxm2_block_id, boxm2_block_metadata> blocks() { return blocks_; }
+   
  private:
   virtual void startElement(const XML_Char* name, const XML_Char** atts);
   virtual void endElement(const XML_Char* /*name*/) {}
@@ -53,8 +48,7 @@ class boxm2_scene_parser : public expatpp
 
   void init_params();
 
-  // temporary values
-  //lvcs
+  //lvcs temp values
   vcl_string lvcs_cs_name_;
   double lvcs_origin_lon_;
   double lvcs_origin_lat_;
@@ -68,32 +62,17 @@ class boxm2_scene_parser : public expatpp
   double lvcs_theta_;
 
   // world origin
-  double local_orig_x_;
-  double local_orig_y_;
-  double local_orig_z_;
+  vgl_point_3d<double> origin_; 
 
-  // block dimensions
-  double block_dim_x_;
-  double block_dim_y_;
-  double block_dim_z_;
+  // scene directory (path)
+  vcl_string path_; 
+  
+  // scene name (string)
+  vcl_string name_; 
+  
+  // block list
+  vcl_map<boxm2_block_id, boxm2_block_metadata> blocks_; 
 
-  // block numbers
-  unsigned block_num_x_;
-  unsigned block_num_y_;
-  unsigned block_num_z_;
-
-  vcl_string path_;
-  vcl_string block_pref_;
-  vcl_string app_model_;
-  bool multi_bin_;
-  unsigned max_tree_level_;
-  unsigned init_tree_level_;
-  bool save_internal_nodes_;
-  bool save_platform_independent_;
-  bool load_all_blocks_;
-  float p_init_;
-  int num_buffers_init_, size_buffer_init_;
-  int max_mb_;
 };
 
 #endif

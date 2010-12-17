@@ -31,17 +31,29 @@ boxm2_scene::boxm2_scene(vcl_string filename)
     }
     
     //store data path 
-    vcl_string dir, pref;
-    parser.paths(dir, pref);
-    data_path_ = dir;
+    data_path_ = parser.path(); 
+    xml_path_  = data_path_ + "scene.xml"; 
     
     //lvcs, origin, block dimension
     parser.lvcs(lvcs_);
     local_origin_ = parser.origin();
     rpc_origin_   = parser.origin();
-    block_dim_    = parser.block_dim();
-    block_num_    = parser.block_nums();
+    
+    //store BLOCKS
+    blocks_ = parser.blocks();
 }
+
+
+//: add a block meta data...
+void boxm2_scene::add_block_metadata(boxm2_block_metadata data)
+{
+  if ( blocks_.find(data.id_) != blocks_.end() )
+  {
+    vcl_cout<<"Boxm2 SCENE: Overwriting block metadata for id: "<<data.id_<<vcl_endl;
+  }
+  blocks_[data.id_] = data; 
+}
+
 
 
 //: save scene (xml file)
@@ -53,29 +65,35 @@ void boxm2_scene::save_scene()
 }
 
 //: return a heap pointer to a scene info 
-boxm2_scene_info* boxm2_scene::get_scene_info()
+boxm2_scene_info* boxm2_scene::get_blk_metadata(boxm2_block_id id)
 {
+  if ( blocks_.find(id) == blocks_.end() )
+  {
+    vcl_cerr<<"\nboxm2_scene::get_blk_metadata: Block doesn't exist: "<<id<<'\n'<<vcl_endl;
+    return 0;
+  }
+
+  boxm2_block_metadata data = blocks_[id]; 
   boxm2_scene_info* info = new boxm2_scene_info(); 
   
-  //world information
-  info->scene_origin[0] = (cl_float) (local_origin_.x()); 
-  info->scene_origin[1] = (cl_float) (local_origin_.y()); 
-  info->scene_origin[2] = (cl_float) (local_origin_.z());  
-  info->scene_origin[3] = 0.0f;
-  
-  info->scene_dims[0] = (cl_int) (block_num_.x());  // number of blocks in each dimension
-  info->scene_dims[1] = (cl_int) (block_num_.y());            
-  info->scene_dims[2] = (cl_int) (block_num_.z());            
-  info->scene_dims[3] = 0;
+  info->scene_origin[0] = (cl_float) data.local_origin_.x();
+  info->scene_origin[1] = (cl_float) data.local_origin_.y();
+  info->scene_origin[2] = (cl_float) data.local_origin_.z();
+  info->scene_origin[3] = (cl_float) 0.0f;
 
-  info->block_len = (cl_float) (block_dim_.x()); 
+  info->scene_dims[0] = (cl_int) data.sub_block_num_.x();  // number of blocks in each dimension
+  info->scene_dims[1] = (cl_int) data.sub_block_num_.y();  
+  info->scene_dims[2] = (cl_int) data.sub_block_num_.z();  
+  info->scene_dims[3] = (cl_int) 0; 
+
+  info->block_len = (cl_float) data.sub_block_dim_.x(); 
   info->epsilon   = (cl_float) (info->block_len / 100.0f); 
   
-  info->root_level = 3; 
+  info->root_level = data.max_level_-1; 
+  vcl_cout<<"ROOT LEVEL: "<<info->root_level<<vcl_endl;
   info->num_buffer = 0; 
   info->tree_buffer_length = 0; 
   info->data_buffer_length = 0; 
-  
   return info; 
 }
 
@@ -94,46 +112,57 @@ void x_write(vcl_ostream &os, boxm2_scene& scene, vcl_string name)
     lvcs.x_write(os, LVCS_TAG);
     x_write(os, scene.local_origin(), LOCAL_ORIGIN_TAG);
 
-    //write block numbers for x,y,z
-    vsl_basic_xml_element blocks(BLOCK_NUM_TAG);
-    vgl_vector_3d<unsigned> nums = scene.block_num();
-    blocks.add_attribute("x_dimension", (int) (nums.x()));
-    blocks.add_attribute("y_dimension", (int) (nums.y()));
-    blocks.add_attribute("z_dimension", (int) (nums.z()));
-    blocks.x_write(os);
-
-    //write block dimensions for each
-    vsl_basic_xml_element bnum(BLOCK_DIMENSIONS_TAG);
-    vgl_vector_3d<double> dims = scene.block_dim();
-    bnum.add_attribute("x", dims.x());
-    bnum.add_attribute("y", dims.y());
-    bnum.add_attribute("z", dims.z());
-    bnum.x_write(os);
-
     //write scene path for (needs to know where blocks are)
     vcl_string path = scene.data_path();
     vsl_basic_xml_element paths(SCENE_PATHS_TAG);
     paths.add_attribute("path", path);
     paths.x_write(os);
+    
+    //write block informaiton for each block
+    vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene.blocks(); 
+    vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter; 
+    for(iter = blocks.begin(); iter != blocks.end(); iter++) {
+      boxm2_block_id id = iter->first; 
+      boxm2_block_metadata data = iter->second; 
+      vsl_basic_xml_element block(BLOCK_TAG);
+      
+      //add block id attribute
+      block.add_attribute("id_i", id.i());
+      block.add_attribute("id_j", id.j()); 
+      block.add_attribute("id_k", id.k()); 
+      
+      //block local origin
+      block.add_attribute("origin_x", data.local_origin_.x()); 
+      block.add_attribute("origin_y", data.local_origin_.y()); 
+      block.add_attribute("origin_z", data.local_origin_.z()); 
 
-    //Not specifying octree levels here - octree levels should be specified
-    //at the block level... 
-    //write octree levels tag
-    //vsl_basic_xml_element tree(OCTREE_LEVELS_TAG);
-    //tree.add_attribute("max", (int) scene.max_level());
-    //tree.add_attribute("init", (int) scene.init_level());
-    //tree.x_write(os);
+      //sub block dimensions
+      block.add_attribute("dim_x", data.sub_block_dim_.x()); 
+      block.add_attribute("dim_y", data.sub_block_dim_.y()); 
+      block.add_attribute("dim_z", data.sub_block_dim_.z()); 
 
-    //write max MB for scene
-    //vsl_basic_xml_element max_mb(MAX_MB_TAG);
-    //max_mb.add_attribute("mb", (int) scene.max_mb());
-    //max_mb.x_write(os);
+      //sub block numbers
+      block.add_attribute("num_x", (int) data.sub_block_num_.x()); 
+      block.add_attribute("num_y", (int) data.sub_block_num_.y()); 
+      block.add_attribute("num_z", (int) data.sub_block_num_.z()); 
+      
+      //block init level
+      block.add_attribute("init_level", data.init_level_); 
+      
+      //block max level
+      block.add_attribute("max_level", data.max_level_); 
+      
+      //block max_mb
+      block.add_attribute("max_mb", data.max_mb_);
+      
+      //block prob init
+      block.add_attribute("p_init", data.p_init_); 
 
-    //write p_init for scene
-    //vsl_basic_xml_element pinit(P_INIT_TAG);
-    //pinit.add_attribute("val", (float) scene.pinit());
-    //pinit.x_write(os);
-
+      //write tag to stream
+      block.x_write(os); 
+    }
+    
+    //clse up tag
     scene_elm.x_write_close(os);
 }
 
@@ -143,9 +172,9 @@ vcl_ostream& operator <<(vcl_ostream &s, boxm2_scene& scene)
     s <<"--- BOXM2_SCENE -----------------------------\n"
       <<"xml_path:         "<<scene.xml_path()<<'\n'
       <<"data_path:        "<<scene.data_path()<<'\n'
-      <<"world origin:     "<<scene.rpc_origin()<<'\n'
-      <<"number of blocks: "<<scene.block_num()<<'\n'
-      <<"block dimensions: "<<scene.block_dim()<<'\n'; 
+      <<"world origin:     "<<scene.rpc_origin()<<'\n';
+      //<<"number of blocks: "<<scene.block_num()<<'\n'
+      //<<"block dimensions: "<<scene.block_dim()<<'\n'; 
     return s;
 }
 

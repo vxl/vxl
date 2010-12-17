@@ -67,42 +67,39 @@ void boxm2_scene_parser::init_params()
   lvcs_theta_=0;
 
   // world origin
-  local_orig_x_=0;
-  local_orig_y_=0;
-  local_orig_z_=0;
-
-  // block dimensions
-  block_dim_x_=0;
-  block_dim_y_=0;
-  block_dim_z_=0;
-
-  // block numbers
-  block_num_x_=0;
-  block_num_y_=0;
-  block_num_z_=0;
-
+  origin_ = vgl_point_3d<double>(0,0,0); 
   path_="";
-  block_pref_="";
-  save_internal_nodes_ = false;
-  save_platform_independent_ = true;
-  load_all_blocks_=false;
-  p_init_=0.01f;
-  num_buffers_init_ = 0; 
-  size_buffer_init_ = 0;
+  name_="";
 }
 
+
+//-----------------------------------------------------------------------------
+//: Start Element needs to parse the following tags
+//scene level metadata
+// LVCS_TAG "lvcs"
+// LOCAL_ORIGIN_TAG "local_origin"
+// SCENE_PATHS_TAG "scene_paths"
+//block level metadata
+// BLOCK_TAG "block"
+// BLOCK_ID_TAG "block_id"
+// BLOCK_ORIGIN_TAG "block_origin"
+// SUB_BLOCK_DIMENSIONS_TAG "sub_block_dimensions"
+// TREE_INIT_LEVEL_TAG "tree_init_level"
+// TREE_MAX_LEVEL_TAG "tree_max_level"
+// P_INIT_TAG "p_init"
+// MAX_MB_TAG "max_mb"
 void
 boxm2_scene_parser::startElement(const char* name, const char** atts)
 {
 #if 0
   vcl_cout<< "element=" << name << vcl_endl;
+  //vcl_cout << "  Attr=" << atts[i] << "->" << atts[i+1] << vcl_endl;
 #endif
+
+  //LVCS tag
   if (vcl_strcmp(name, LVCS_TAG) == 0) {
     for (int i=0; atts[i]; i+=2) {
-#if 0
-        vcl_cout << "  Attr=" << atts[i] << "->" << atts[i+1] << vcl_endl;
-#endif
-        if (vcl_strcmp(atts[i], "cs_name") == 0)
+      if (vcl_strcmp(atts[i], "cs_name") == 0)
         convert(atts[i+1], lvcs_cs_name_);
       else if (vcl_strcmp(atts[i], "origin_lon") == 0)
         convert(atts[i+1], lvcs_origin_lon_);
@@ -126,145 +123,78 @@ boxm2_scene_parser::startElement(const char* name, const char** atts)
         convert(atts[i+1], lvcs_theta_);
     }
   }
+  
+  //Local Origin Tag
   else if (vcl_strcmp(name,LOCAL_ORIGIN_TAG)== 0) {
+    double x,y,z; 
     for (int i=0; atts[i]; i+=2) {
-#if 0
-        vcl_cout << "  Attr=" << atts[i] << "->" << atts[i+1] << vcl_endl;
-#endif
-        if (vcl_strcmp(atts[i], "x") == 0)
-        convert(atts[i+1], local_orig_x_);
+      if (vcl_strcmp(atts[i], "x") == 0)
+        convert(atts[i+1], x);
       else if (vcl_strcmp(atts[i], "y") == 0)
-        convert(atts[i+1], local_orig_y_);
+        convert(atts[i+1], y);
       else if (vcl_strcmp(atts[i], "z") == 0)
-        convert(atts[i+1], local_orig_z_);
+        convert(atts[i+1], z);
     }
+    origin_ = vgl_point_3d<double>(x,y,z); 
   }
-  else if (vcl_strcmp(name,BLOCK_DIMENSIONS_TAG)== 0) {
-    for (int i=0; atts[i]; i+=2) {
-#if 0
-        vcl_cout << "  Attr=" << atts[i] << "->" << atts[i+1] << vcl_endl;
-#endif 
-        if (vcl_strcmp(atts[i], "x") == 0)
-        convert(atts[i+1], block_dim_x_);
-      else if (vcl_strcmp(atts[i], "y") == 0)
-        convert(atts[i+1], block_dim_y_);
-      else if (vcl_strcmp(atts[i], "z") == 0)
-        convert(atts[i+1], block_dim_z_);
-    }
-  }
-  else if (vcl_strcmp(name,BLOCK_NUM_TAG)== 0) {
-    for (int i=0; atts[i]; i+=2) {
-#if 0
-        vcl_cout << "  Attr=" << atts[i] << "->" << atts[i+1] << vcl_endl;
-#endif 
-      if (vcl_strcmp(atts[i], "x_dimension") == 0)
-        convert(atts[i+1], block_num_x_);
-      else if (vcl_strcmp(atts[i], "y_dimension") == 0)
-        convert(atts[i+1], block_num_y_);
-      else if (vcl_strcmp(atts[i], "z_dimension") == 0)
-        convert(atts[i+1], block_num_z_);
-    }
-  }
+  
+  //SCENE PATHS TAG
   else if (vcl_strcmp(name,SCENE_PATHS_TAG)== 0) {
     for (int i=0; atts[i]; i+=2) {
-#if 0
-      vcl_cout << "  Attr=" << atts[i] << "->" << atts[i+1] << vcl_endl;
-#endif
       if (vcl_strcmp(atts[i], "path") == 0)
         convert(atts[i+1], path_);
-      else if (vcl_strcmp(atts[i], "block_prefix") == 0)
-        convert(atts[i+1], block_pref_);
-    }
-  }
-  else if (vcl_strcmp(name,APP_MODEL_TAG)== 0) {
-    for (int i=0; atts[i]; i+=2) {
-#if 0 
-        vcl_cout << "  Attr=" << atts[i] << "->" << atts[i+1] << vcl_endl;
-#endif
-      if (vcl_strcmp(atts[i], "type") == 0)
-        convert(atts[i+1], app_model_);
-    }
-  }
-  else if (vcl_strcmp(name,MULTI_BIN_TAG)== 0) {
-    for (int i=0; atts[i]; i+=2) {
-#if 0
-        vcl_cout << "  Attr=" << atts[i] << "->" << atts[i+1] << vcl_endl;
-#endif
-      if (vcl_strcmp(atts[i], "value") == 0)
-        convert(atts[i+1], multi_bin_);
-    }
-  }
-  else if (vcl_strcmp(name,SAVE_INTERNAL_NODES_TAG)== 0) {
-    for (int i=0; atts[i]; i+=2) {
-#if 0
-      vcl_cout << "  Attr=" << atts[i] << "->" << atts[i+1] << vcl_endl;
-#endif
-      if (vcl_strcmp(atts[i], "value") == 0)
-        convert(atts[i+1], save_internal_nodes_);
-    }
-  }
-  else if (vcl_strcmp(name,SAVE_PLATFORM_INDEPENDENT_TAG)== 0) {
-    for (int i=0; atts[i]; i+=2) {
-#if 0
-        vcl_cout << "  Attr=" << atts[i] << "->" << atts[i+1] << vcl_endl;
-#endif
-      if (vcl_strcmp(atts[i], "value") == 0)
-        convert(atts[i+1], save_platform_independent_);
-    }
-    //vcl_cout << "parser: save_platform_independent_ = " << save_platform_independent_ << vcl_endl;
-  }
-  else if (vcl_strcmp(name,LOAD_ALL_BLOCKS_TAG)== 0) {
-    for (int i=0; atts[i]; i+=2) {
-#if 0
-        vcl_cout << "  Attr=" << atts[i] << "->" << atts[i+1] << vcl_endl;
-#endif
-      if (vcl_strcmp(atts[i], "value") == 0)
-        convert(atts[i+1], load_all_blocks_);
-    }
-    //vcl_cout << "parser: load_all_blocks_ = " << load_all_blocks_ << vcl_endl;
-  }
-
-  else if (vcl_strcmp(name, "octree_level")==0) {
-    for (int i=0; atts[i]; i+=2) {
-#if 0
-        vcl_cout << "  Attr=" << atts[i] << "->" << atts[i+1] << vcl_endl;
-#endif
-      if (vcl_strcmp(atts[i], "max") == 0)
-        convert(atts[i+1], max_tree_level_);
-      else if (vcl_strcmp(atts[i], "init") == 0)
-        convert(atts[i+1], init_tree_level_);
-    }
-  } 
-  else if (vcl_strcmp(name, "p_init")==0) {
-    for (int i=0; atts[i]; i+=2) {
-#if 0 
-        vcl_cout << "  Attr=" << atts[i] << "->" << atts[i+1] << vcl_endl;
-#endif
-    if (vcl_strcmp(atts[i], "val") == 0)
-        convert(atts[i+1], p_init_); 
     }
   }
   
-  else if (vcl_strcmp(name, "tree_init") == 0) {
+  //---------- BLOCK TAG -------------------------------------------------------
+  else if (vcl_strcmp(name, BLOCK_TAG) == 0) {
+    boxm2_block_metadata metadata; 
+    int idi, idj, idk; 
+    double ox, oy, oz; 
+    double dim_x, dim_y, dim_z;
+    unsigned num_x, num_y, num_z;  
+    
+    //iterate over attributes... 
     for (int i=0; atts[i]; i+=2) {
-#if 0
-        vcl_cout << "  Attr=" << atts[i] << "->" << atts[i+1] << vcl_endl;
-#endif 
-      if (vcl_strcmp(atts[i], "num_buffers")==0)
-        convert(atts[i+1], num_buffers_init_);    
-      if (vcl_strcmp(atts[i], "buff_size")==0)
-        convert(atts[i+1], size_buffer_init_);
+      
+      if (vcl_strcmp(atts[i], "id_i") == 0)
+        convert(atts[i+1], idi);
+      else if (vcl_strcmp(atts[i], "id_j") == 0)
+        convert(atts[i+1], idj);      
+      else if (vcl_strcmp(atts[i], "id_k") == 0)
+        convert(atts[i+1], idk);
+      else if (vcl_strcmp(atts[i], "origin_x") == 0)
+        convert(atts[i+1], ox);
+      else if (vcl_strcmp(atts[i], "origin_y") == 0)
+        convert(atts[i+1], oy);
+      else if (vcl_strcmp(atts[i], "origin_z") == 0)
+        convert(atts[i+1], oz);
+      else if (vcl_strcmp(atts[i], "dim_x") == 0)
+        convert(atts[i+1], dim_x);
+      else if (vcl_strcmp(atts[i], "dim_y") == 0)
+        convert(atts[i+1], dim_y);
+      else if (vcl_strcmp(atts[i], "dim_z") == 0)
+        convert(atts[i+1], dim_z);
+      else if (vcl_strcmp(atts[i], "num_x") == 0)
+        convert(atts[i+1], num_x);
+      else if (vcl_strcmp(atts[i], "num_y") == 0)
+        convert(atts[i+1], num_y);
+      else if (vcl_strcmp(atts[i], "num_z") == 0)
+        convert(atts[i+1], num_z);
+      else if (vcl_strcmp(atts[i], "init_level")==0)
+        convert(atts[i+1], metadata.init_level_); 
+      else if (vcl_strcmp(atts[i], "max_level")==0)
+        convert(atts[i+1], metadata.max_level_); 
+      else if (vcl_strcmp(atts[i], "max_mb")==0)
+        convert(atts[i+1], metadata.max_mb_); 
+      else if (vcl_strcmp(atts[i], "p_init")==0)
+        convert(atts[i+1], metadata.p_init_);       
     }
-  }
-  
-  else if (vcl_strcmp(name, "max_mb") == 0) {
-    for (int i=0; atts[i]; i+=2) {
-#if 0
-        vcl_cout << "  Attr=" << atts[i] << "->" << atts[i+1] << vcl_endl;
-#endif       
-      if (vcl_strcmp(atts[i], "mb") == 0) 
-        convert(atts[i+1], max_mb_);
-    }
+    metadata.id_ = boxm2_block_id(idi, idj, idk);
+    metadata.local_origin_ = vgl_point_3d<double>(ox, oy, oz); 
+    metadata.sub_block_dim_ = vgl_vector_3d<double>(dim_x, dim_y, dim_z);
+    metadata.sub_block_num_ = vgl_vector_3d<unsigned>(num_x, num_y, num_z); 
+    blocks_[metadata.id_] = metadata; 
   }
   
 }

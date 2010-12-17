@@ -6,6 +6,7 @@
 
 //boxm2 scene stuff
 #include <boxm2/boxm2_scene.h>
+#include <boxm2/boxm2_block_metadata.h>
 #include <boxm2/boxm2_block_id.h>
 #include <boxm2/io/boxm2_sio_mgr.h>
 
@@ -30,8 +31,6 @@ int main(int argc,  char** argv)
   vcl_cout<<"Converting Bit scene to Boxm2 Scene"<<vcl_endl;
   vul_arg<vcl_string> bit_file("-scene", "scene filename", "");
   vul_arg<vcl_string> new_dir("-out", "output directory", "");
-
-  // need this on some toolkit implementations to get the window up.
   vul_arg_parse(argc, argv);
 
   //set up some types
@@ -42,40 +41,49 @@ int main(int argc,  char** argv)
   typedef vnl_vector_fixed<uchar, 16> uchar16;
   typedef vnl_vector_fixed<float, 16> float16;
 
-
   //1.  create bit_scene from xml file
   boxm_ocl_bit_scene bit_scene(bit_file());
   vcl_cout<<"Scene Initialized... "<<vcl_endl
-          <<bit_scene<<vcl_endl;
-
+          <<bit_scene<<vcl_endl; 
+  
+  //get some block metadata
+  int init_level  = bit_scene.init_level();
+  int max_level   = bit_scene.max_level();
+  int max_mb      = bit_scene.max_mb();
+  int num_buffers, tree_len, data_len;
+  bit_scene.tree_buffer_shape(num_buffers, tree_len);
+  bit_scene.data_buffer_shape(num_buffers, data_len);
+  
   //2. create empty boxm2_scene
   boxm2_scene new_scene;
+  
+  //2.5 create new block metadata
+  boxm2_block_metadata data;
+  data.id_ = boxm2_block_id(0,0,0); 
+  data.local_origin_  = bit_scene.origin(); 
+  data.sub_block_dim_ = bit_scene.block_dim();  
+  int nx,ny,nz; bit_scene.block_num(nx, ny, nz);
+  data.sub_block_num_ = vgl_vector_3d<unsigned>(nx,ny,nz); 
+  data.init_level_    = init_level; 
+  data.max_level_     = max_level; 
+  data.max_mb_        = (max_mb > 0)? max_mb : 400.0; 
+  data.p_init_        = .001; 
 
   //3. set scene metadata
-  new_scene.set_block_dim(bit_scene.block_dim());
-  int nx,ny,nz; bit_scene.block_num(nx, ny, nz);
-  new_scene.set_block_num(vgl_vector_3d<unsigned>(nx,ny,nz));
+  new_scene.add_block_metadata(data); 
   new_scene.set_local_origin(bit_scene.origin());
   new_scene.set_rpc_origin(bit_scene.origin());
   new_scene.set_lvcs(bit_scene.lvcs());
   new_scene.set_xml_path(new_dir() + "/scene.xml");
   new_scene.set_data_path(new_dir());
   new_scene.save_scene();
-
+ 
   //2.  Get the relevant arrays
   vbl_array_1d<ushort2> mem_ptrs = bit_scene.mem_ptrs();
   vbl_array_1d<ushort>  blocks_in_buffers = bit_scene.blocks_in_buffers();
   vbl_array_3d<ushort2> blocks = bit_scene.blocks();
   vbl_array_2d<uchar16> tree_buffers = bit_scene.tree_buffers();
   vbl_array_2d<float16> data_buffers = bit_scene.data_buffers();
-
-  //get some block metadata
-  int init_level = bit_scene.init_level();
-  int max_level = bit_scene.max_level();
-  int max_mb   = bit_scene.max_mb();
-  int num_buffers, tree_len, data_len;
-  bit_scene.tree_buffer_shape(num_buffers, tree_len);
-  bit_scene.data_buffer_shape(num_buffers, data_len);
 
   //----------------------------------------------------------------------------
   //3. construct a fat bit stream for the block
@@ -86,10 +94,10 @@ int main(int argc,  char** argv)
   long size = numTrees * sizeof(uchar16) + //3d block pointers
               num_buffers*tree_len * sizeof(int) + //tree pointers
               num_buffers*(sizeof(ushort) + sizeof(ushort2)) + //blocks in buffers and mem ptrs
-              sizeof(long) +                     //this number
+              sizeof(long) +                      //this number
               3*sizeof(int) +                     //init level, max level, max_mb
-              4*sizeof(double) +                //dims
-              6*sizeof(int);                    //nums + numBuffers, treeLen
+              4*sizeof(double) +                  //dims
+              6*sizeof(int);                      //nums + numBuffers, treeLen
 
   //3.a construct a block byte stream manually
   uchar* bsize = new uchar[size];

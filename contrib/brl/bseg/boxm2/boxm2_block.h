@@ -30,23 +30,6 @@
 //ocl include
 #include <bocl/bocl_cl.h>
 
-//: block info that can be easily made into a buffer and sent to gpu
-struct BlockInfo
-{
-  //world information
-  cl_float    scene_origin[4];          // scene origin (point)
-  cl_int      scene_dims[4];            // number of blocks in each dimension
-  cl_float    block_len;                // size of each block (can only be 1 number now that we've established blocks are cubes)
-  cl_float    epsilon;                  // block_len/100.0 (placed here to avoid using a register)
-
-  //tree meta information
-  cl_int      root_level;               // root_level of trees
-  cl_int      num_buffer;               // number of buffers (both data and tree)
-  cl_int      tree_buffer_length;       // length of tree buffer (number of cells/trees)
-  cl_int      data_buffer_length;       // length of data buffer (number of cells)
-};
-
-
 class boxm2_block : public vbl_ref_count
 {
   typedef vnl_vector_fixed<unsigned short, 2> ushort2;    //defines a block pointer
@@ -105,15 +88,15 @@ class boxm2_block : public vbl_ref_count
   //: number of bytes this block takes up (on disk and ram)
   long                    byte_count_;
 
-  //: World dimensions of a block .e.g 1 meter x 1 meter x 1 meter
-  vgl_vector_3d<double>   sub_block_dim_;
-  vgl_vector_3d<int>      sub_block_num_;
-
   //: high level arrays store sub block information
   boxm2_array_3d<uchar16> trees_;
   boxm2_array_2d<int>     tree_ptrs_;
   boxm2_array_1d<ushort>  trees_in_buffers_;
   boxm2_array_1d<ushort2> mem_ptrs_;
+
+  //: World dimensions of a block .e.g 1 meter x 1 meter x 1 meter
+  vgl_vector_3d<double>   sub_block_dim_;
+  vgl_vector_3d<int>      sub_block_num_;
 
   //: info about block's trees
   int init_level_;   //each sub_blocks's init level (default 1)

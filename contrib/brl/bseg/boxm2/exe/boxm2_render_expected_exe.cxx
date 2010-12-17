@@ -44,83 +44,82 @@ int main(int argc,  char** argv)
   vcl_ifstream ifs(camfile().c_str());
   vpgl_perspective_camera<double>* pcam =new vpgl_perspective_camera<double>;
   if (!ifs.is_open()) {
-    vcl_cerr << "Failed to open file " << camfile() << '\n';
-    return -1;
+      vcl_cerr << "Failed to open file " << camfile() << vcl_endl;
+      return -1;
   }
   else  {
-    ifs >> *pcam;
+      ifs >> *pcam;
   }
-  vpgl_camera_double_sptr cam = pcam;
-  brdb_value_sptr brdb_cam = new brdb_value_t<vpgl_camera_double_sptr>(cam);
-
+  vpgl_camera_double_sptr cam = pcam; 
+  brdb_value_sptr brdb_cam = new brdb_value_t<vpgl_camera_double_sptr>(cam); 
+  
   //create output image buffer
-  vil_image_view_base_sptr expimg = new vil_image_view<unsigned int>(ni(), nj());
-  brdb_value_sptr brdb_expimg = new brdb_value_t<vil_image_view_base_sptr>(expimg);
-
+  vil_image_view_base_sptr expimg = new vil_image_view<unsigned int>(ni(), nj()); 
+  brdb_value_sptr brdb_expimg = new brdb_value_t<vil_image_view_base_sptr>(expimg); 
+  
   //----------------------------------------------------------------------------
   //--- BEGIN BOXM2 API EXAMPLE ------------------------------------------------
   //----------------------------------------------------------------------------
-
   //start out rendering with the CPU
-  boxm2_scene_sptr scene = new boxm2_scene(scene_file());
-
+  boxm2_scene_sptr scene = new boxm2_scene(scene_file()); 
+  
   //get relevant blocks
-  boxm2_block_id id(0,0,0);
+  boxm2_block_id id(0,0,0); 
   boxm2_dumb_cache dcache(scene->data_path());
-  boxm2_block_sptr blk      = dcache.get_block(id);
-  boxm2_data_base_sptr alph = dcache.get_data<BOXM2_ALPHA>(id);
-  boxm2_data_base_sptr mog  = dcache.get_data<BOXM2_MOG3_GREY>(id);
-
+  boxm2_block_sptr blk      = dcache.get_block(id); 
+  boxm2_data_base_sptr alph = dcache.get_data<BOXM2_ALPHA>(id); 
+  boxm2_data_base_sptr mog  = dcache.get_data<BOXM2_MOG3_GREY>(id); 
+  
   //set inputs
-  vcl_vector<brdb_value_sptr> input;
+  vcl_vector<brdb_value_sptr> input; 
   input.push_back(brdb_cam);
-  input.push_back(brdb_expimg);
-
+  input.push_back(brdb_expimg); 
+  
   //initoutput vector
-  vcl_vector<brdb_value_sptr> output;
+  vcl_vector<brdb_value_sptr> output; 
 
   //initialize gpu pro / manager
   boxm2_opencl_processor* gpu_pro = boxm2_opencl_processor::instance();
   gpu_pro->set_data(scene, blk, alph, mog);
-
+  
   //////initialize the GPU render process
-  boxm2_opencl_render_process gpu_render;
-  gpu_render.init_kernel(gpu_pro->context(), gpu_pro->devices()[0]);
-  gpu_pro->run(&gpu_render, input, output);
-  gpu_pro->finish();
+  boxm2_opencl_render_process gpu_render; 
+  gpu_render.init_kernel(gpu_pro->context(), gpu_pro->devices()[0]); 
+  gpu_pro->run(&gpu_render, input, output); 
+  gpu_pro->finish(); 
 
   //----------------------------------------------------------------------------
   //------- END API EXAMPLE ----------------------------------------------------
   //----------------------------------------------------------------------------
   ///save to disk
-  vil_image_view<unsigned int>* expimg_view = static_cast<vil_image_view<unsigned int>* >(expimg.ptr());
+  vil_image_view<unsigned int>* expimg_view = static_cast<vil_image_view<unsigned int>* >(expimg.ptr()); 
   unsigned int min_val, max_val;
-  vil_math_value_range( *expimg_view, min_val, max_val);
-
-  vil_image_view<vxl_byte> byte_img(ni(), nj());
-  for (unsigned int i=0; i<ni(); ++i)
-    for (unsigned int j=0; j<nj(); ++j)
+  vil_math_value_range( *expimg_view, min_val, max_val); 
+  
+  vil_image_view<vxl_byte> byte_img(ni(), nj()); 
+  for(int i=0; i<ni(); i++) 
+    for(int j=0; j<nj(); j++) 
       byte_img(i,j) = (*expimg_view)(i,j) & 0xFF;   //just grab the first byte (all foura r the same)
   vil_save( byte_img, img().c_str());
-
+  
   //render depth image
   vcl_vector<brdb_value_sptr> input2;
   input2.push_back(brdb_cam);
-  input2.push_back(brdb_expimg);
-
+  input2.push_back(brdb_expimg); 
+  
   //////initialize the GPU render process
-  gpu_pro->run(&gpu_render, input2, output);
-  gpu_pro->finish();
-
+  gpu_pro->run(&gpu_render, input2, output); 
+  gpu_pro->finish(); 
+  
   ///save to disk
-  expimg_view = static_cast<vil_image_view<unsigned int>* >(expimg.ptr());
-  vil_math_value_range( *expimg_view, min_val, max_val);
+  expimg_view = static_cast<vil_image_view<unsigned int>* >(expimg.ptr()); 
+  vil_math_value_range( *expimg_view, min_val, max_val); 
   vcl_cout<<"min_val: "<<min_val<<"   max val: "<<max_val<<vcl_endl;
-  for (unsigned int i=0; i<ni(); ++i)
-    for (unsigned int j=0; j<nj(); ++j)
+  for(int i=0; i<ni(); i++) 
+    for(int j=0; j<nj(); j++) 
        byte_img(i,j) = (*expimg_view)(i,j) & 0xFF;   //just grab the first byte (all foura r the same)
-  vcl_string img2 = "depth_" + img();
+  vcl_string img2 = "depth_" + img(); 
   vil_save( byte_img, img2.c_str());
-
+  
   return 0;
 }
