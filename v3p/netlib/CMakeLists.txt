@@ -193,6 +193,25 @@ SET(V3P_NETLIB_laso_SOURCES
      laso/dvsort.c laso/dvsort.h
      laso/urand.c laso/urand.h
    )
+SET(V3P_NETLIB_arpack_SOURCES
+     arpack/debug_com.c arpack/debug.h
+     arpack/dgetv0.c arpack/dgetv0.h
+     arpack/dsaitr.c arpack/dsaitr.h
+     arpack/dsapps.c arpack/dsapps.h
+     arpack/dsaup2.c arpack/dsaup2.h
+     arpack/dsaupd.c arpack/dsaupd.h
+     arpack/dsconv.c arpack/dsconv.h
+     arpack/dseigt.c arpack/dseigt.h
+     arpack/dsesrt.c arpack/dsesrt.h
+     arpack/dseupd.c arpack/dseupd.h
+     arpack/dsgets.c arpack/dsgets.h
+     arpack/dsortr.c arpack/dsortr.h
+     arpack/dstats.c arpack/dstats.h
+     arpack/dstqrb.c arpack/dstqrb.h
+     arpack/second.c arpack/second.h
+     arpack/timing_com.c
+     arpack/stat.h
+   )
 SET(V3P_NETLIB_lapack_SOURCES
      lapack/complex16/zgebak.c lapack/complex16/zgebak.h
      lapack/complex16/zgebal.c lapack/complex16/zgebal.h
@@ -269,6 +288,13 @@ SET(V3P_NETLIB_lapack_SOURCES
      lapack/double/dtgsen.c lapack/double/dtgsen.h
      lapack/double/dtgsy2.c lapack/double/dtgsy2.h
      lapack/double/dtgsyl.c lapack/double/dtgsyl.h
+     lapack/double/dlae2.c lapack/double/dlae2.h
+     lapack/double/dlanst.c lapack/double/dlanst.h
+     lapack/double/dlarnv.c lapack/double/dlarnv.h
+     lapack/double/dlaruv.c lapack/double/dlaruv.h
+     lapack/double/dlasr.c lapack/double/dlasr.h
+     lapack/double/dlasrt.c lapack/double/dlasrt.h
+     lapack/double/dsteqr.c lapack/double/dsteqr.h
      lapack/single/sgeqpf.c lapack/single/sgeqpf.h
      lapack/single/sgeqr2.c lapack/single/sgeqr2.h
      lapack/single/sgerq2.c lapack/single/sgerq2.h
@@ -344,6 +370,7 @@ SET(v3p_netlib_sources
      ${V3P_NETLIB_base_SOURCES}
      ${V3P_NETLIB_libf2c_SOURCES}
      ${V3P_NETLIB_blas_SOURCES}
+     ${V3P_NETLIB_arpack_SOURCES}
      ${V3P_NETLIB_linpack_SOURCES}
      ${V3P_NETLIB_temperton_SOURCES}
      ${V3P_NETLIB_eispack_SOURCES}

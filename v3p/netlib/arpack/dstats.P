@@ -1,0 +1,2 @@
+extern int dstats_();
+/* comlen timing_ 124 */

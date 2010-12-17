@@ -1,0 +1,1 @@
+extern int second_(real *t);

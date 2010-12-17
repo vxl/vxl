@@ -6,6 +6,13 @@ effect.  If you change something in VXL, please document it here.
 
 ---------------------------------------------------------------------------
 ******************************
+VXL 1.16.0    - December 2010
+******************************
+
+      - generalized sparse symmetric eigensystem solver (A*x = lambda*B*x)
+        added to vnl/algo/vnl_sparse_symmetric_eigensystem
+
+******************************
 VXL 1.15.0    - September 2010
 ******************************
 
