@@ -33,7 +33,7 @@ class bocl_mem : public vbl_ref_count
 
     //: constructor that takes the context to start with
     bocl_mem(const cl_context& context, void* buffer, unsigned num_bytes, vcl_string id);
-    ~bocl_mem(); 
+    ~bocl_mem();
 
     //: creates the memory for buffer
     bool create_buffer(const cl_mem_flags& flags);
@@ -56,10 +56,10 @@ class bocl_mem : public vbl_ref_count
 
     //: returns id
     vcl_string id()         { return id_; }
-    
+
     //: set buffer used when a clCreateGLBuffer is called..
-    bool set_gl_buffer(cl_mem buff) { buffer_ = buff; is_gl_=true; }
-    
+    bool set_gl_buffer(cl_mem buff) { buffer_ = buff; is_gl_=true; return true; }
+
   private:
 
     //: OpenCL buffer
@@ -76,27 +76,27 @@ class bocl_mem : public vbl_ref_count
 
     //: string identifier for error messages
     vcl_string id_;
-    
+
     //: signifies if this object wraps a GL object
-    bool is_gl_; 
+    bool is_gl_;
 };
 
 //: Smart_Pointer typedef for boxm2_block
 typedef vbl_smart_ptr<bocl_mem> bocl_mem_sptr;
 
-//: output stream 
+//: output stream
 vcl_ostream& operator <<(vcl_ostream &s, bocl_mem& scene);
 
 //: Binary write boxm_update_bit_scene_manager scene to stream
 void vsl_b_write(vsl_b_ostream& os, bocl_mem const& scene);
 void vsl_b_write(vsl_b_ostream& os, const bocl_mem* &p);
-void vsl_b_write(vsl_b_ostream& os, bocl_mem_sptr& sptr); 
+void vsl_b_write(vsl_b_ostream& os, bocl_mem_sptr& sptr);
 void vsl_b_write(vsl_b_ostream& os, bocl_mem_sptr const& sptr);
 
 //: Binary load boxm_update_bit_scene_manager scene from stream.
 void vsl_b_read(vsl_b_istream& is, bocl_mem &scene);
 void vsl_b_read(vsl_b_istream& is, bocl_mem* p);
-void vsl_b_read(vsl_b_istream& is, bocl_mem_sptr& sptr); 
+void vsl_b_read(vsl_b_istream& is, bocl_mem_sptr& sptr);
 void vsl_b_read(vsl_b_istream& is, bocl_mem_sptr const& sptr);
 
 #endif

@@ -25,37 +25,36 @@ class boxm2_opencl_render_process : public boxm2_opencl_process_base
 
     //: opencl specific methods
     virtual bool init_kernel(cl_context& context, cl_device_id& device);
-    
+
     //: render specific method
-    bool set_image( bocl_mem* img ) { image_ = img; }
+    bool set_image( bocl_mem* img ) { image_ = img; return true; }
 
     //: get commandqueue
     cl_command_queue& command_queue() { return command_queue_; }
-    
+
     //: get image
     bocl_mem* image() { return image_; }
 
   private:
 
     //: cl context
-    cl_context* context_; 
-    
+    cl_context* context_;
+
     //: render kernel (other processes may have many kernels
     bocl_kernel render_kernel_;
 
     //: image (so it isn't created over and over)
-    bocl_mem* image_; 
+    bocl_mem* image_;
 
     //0----- HACK STUFF TO GO SOMEWEHRE ELSE ----------------------------------
-    //: command queue for thsi process. 
+    //: command queue for thsi process.
     cl_command_queue command_queue_;
-    
+
     //: cam method should go somwehre else, here for now
     cl_float* set_persp_camera(vpgl_camera_double_sptr cam);
-    
+
     //: get lookup table
     cl_uchar* set_bit_lookup();
-    
 };
 
 #endif
