@@ -8,6 +8,7 @@
 #include <boxm2/boxm2_data_traits.h>
 #include <boxm2/boxm2_opencl_process_base.h>
 #include <boxm2/boxm2_opencl_processor.h>
+#include <boxm2/boxm2_opencl_render_depth_process.h>
 #include <boxm2/boxm2_opencl_render_process.h>
 #include <boxm2/boxm2_process.h>
 #include <boxm2/boxm2_processor.h>
