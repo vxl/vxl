@@ -107,6 +107,12 @@ SOURCE=.\bocl_mem.cxx
 # Begin Source File
 SOURCE=.\Templates/bocl_manager+bocl_global_memory_bandwidth_manager-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/brdb_value_t+bocl_mem_sptr-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+bocl_mem-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

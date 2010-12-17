@@ -122,6 +122,9 @@ SOURCE=.\boxm2_cpp_render_process.cxx
 SOURCE=.\boxm2_opencl_render_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\boxm2_opencl_render_depth_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vbl_array_3d+vnl_vector_fixed+ushort.2--.cxx
 # End Source File
 # Begin Source File
@@ -201,6 +204,9 @@ SOURCE=.\boxm2_data_base.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_cpp_render_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_opencl_render_depth_process.h
 # End Source File
 # End Group
 # End Target
