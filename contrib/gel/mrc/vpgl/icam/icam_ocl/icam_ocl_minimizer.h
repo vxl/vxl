@@ -11,6 +11,7 @@
 //  Modifications
 //   <none yet>
 // \endverbatim
+
 #include <icam/icam_minimizer.h>
 #include <icam_ocl/icam_ocl_search_manager.h>
 
@@ -19,18 +20,18 @@ class icam_ocl_minimizer : public icam_minimizer
  public:
   //: Constructor with all the parameters
   icam_ocl_minimizer( const vil_image_view<float>& source_img,
-                  const vil_image_view<float>& dest_img,
-                  const icam_depth_transform& dt,
-                  icam_minimizer_params const& params,
-                  bool verbose=false)
+                      const vil_image_view<float>& dest_img,
+                      const icam_depth_transform& dt,
+                      icam_minimizer_params const& params,
+                      bool verbose=false)
     : icam_minimizer(source_img,dest_img,dt,params,verbose), n_repeats_(1)
     {search_mgr_ = icam_ocl_search_manager::instance();}
 
   //: Constructor, when source image is not known yet
   icam_ocl_minimizer(const vil_image_view<float>& dest_img,
-                    const icam_depth_transform& dt,
-                    icam_minimizer_params const& params,
-                    bool verbose=false)
+                     const icam_depth_transform& dt,
+                     icam_minimizer_params const& params,
+                     bool verbose=false)
     : icam_minimizer(dest_img,dt,params,verbose), n_repeats_(1)
     {search_mgr_ = icam_ocl_search_manager::instance();}
 
@@ -86,18 +87,16 @@ class icam_ocl_minimizer : public icam_minimizer
   //: this function is called once when finished
   bool finish_opencl();
 
-  //: Debug methods
+  // Debug methods
+
   //: Set the number of times to repeat the rotation search kernel. No data is transferred in or out of the GPU.
   void set_n_repeats(unsigned n_repeats){n_repeats_ = n_repeats;}
+
  private:
-  // 
   unsigned n_repeats_;//!< for testing GPU timing
-
-  unsigned wgsize_;//!< workgroup size 
-
+  unsigned wgsize_;//!< workgroup size
   vcl_string rot_kernel_path_;//!< path to rotation search opencl kernel source code
   bool run_rotation_kernel();//!< execute the kernel
-  
   icam_ocl_search_manager* search_mgr_;//!< companion opencl manager
 };
 
