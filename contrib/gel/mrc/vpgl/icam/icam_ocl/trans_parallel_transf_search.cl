@@ -1,4 +1,4 @@
- #pragma OPENCL EXTENSION cl_khr_local_int32_base_atomics : enable
+#pragma OPENCL EXTENSION cl_khr_local_int32_base_atomics : enable
 void clear_array(uint n_bins, __local uint* array)
 {
   uint lid = get_local_id(0);

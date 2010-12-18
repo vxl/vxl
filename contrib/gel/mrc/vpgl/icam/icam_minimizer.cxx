@@ -107,7 +107,7 @@ icam_cost_func icam_minimizer::cost_fn(unsigned level)
   vil_image_view<float>& dest = dest_pyramid_(level);
   vil_image_view<float> source_sm(source.ni(), source.nj());
   vil_image_view<float> dest_sm(dest.ni(), dest.nj());
-#if 1
+#if 0
   vil_gauss_filter_5tap(source,source_sm,
                         vil_gauss_filter_5tap_params(params_.smooth_sigma_));
   vil_gauss_filter_5tap(dest,dest_sm,
@@ -116,6 +116,9 @@ icam_cost_func icam_minimizer::cost_fn(unsigned level)
   return icam_cost_func(source_sm,
                         dest_sm,dt_pyramid_.depth_trans(level,
                                                         true, params_.smooth_sigma_),
+                        params_.nbins_);
+#else
+  return icam_cost_func(source, dest,dt_pyramid_.depth_trans(level),
                         params_.nbins_);
 #endif
 }
