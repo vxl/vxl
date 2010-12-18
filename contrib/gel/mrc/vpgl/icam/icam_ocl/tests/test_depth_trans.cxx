@@ -229,15 +229,17 @@ bool test_icam_ocl_minimizer()
   double polar_range_multiplier = 2.0;
 
   vcl_string base_path = "";
-  bool verbose = false;
+  bool verbose = true;
   double sigma=1.0;
   unsigned int nbins=16;
+  unsigned n_rot_repeats = 20; //execute kernel repeatedly
   //use default params
   icam_minimizer_params params;
   icam_ocl_minimizer minimizer(source_img_flt, dest_img_flt, dt,
                                params, verbose);
 
   minimizer.set_rot_kernel_path("trans_parallel_transf_search.cl");
+  minimizer.set_n_repeats(n_rot_repeats);
   if (verbose) {
     minimizer.set_actual_translation(tr);
     minimizer.set_actual_rotation(Rr);

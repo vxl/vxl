@@ -112,10 +112,11 @@ init_opencl_rotation(vgl_rotation_3d<double> const& initial_rot,
 bool icam_ocl_minimizer::run_rotation_kernel()
 {
   vul_timer t;
-  if (search_mgr_->run_rot_parallel_kernel()!=SDK_SUCCESS)
-    return false;
+  for(unsigned i = 0; i<n_repeats_; ++i)
+    if (search_mgr_->run_rot_parallel_kernel()!=SDK_SUCCESS)
+      return false;
   if (verbose_)
-    vcl_cout << "OpenCL search time " << t.real()/1000.0 << " seconds\n" << vcl_flush;
+    vcl_cout << "OpenCL search time per kernel execution " << t.real()/(n_repeats_*1000.0) << " seconds ( with "<< n_repeats_ <<" repeats ) \n" << vcl_flush;
   return true;
 }
 

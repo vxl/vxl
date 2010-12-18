@@ -23,7 +23,7 @@ class icam_ocl_minimizer : public icam_minimizer
                   const icam_depth_transform& dt,
                   icam_minimizer_params const& params,
                   bool verbose=false)
-    : icam_minimizer(source_img,dest_img,dt,params,verbose)
+    : icam_minimizer(source_img,dest_img,dt,params,verbose), n_repeats_(1)
     {search_mgr_ = icam_ocl_search_manager::instance();}
 
   //: Constructor, when source image is not known yet
@@ -31,7 +31,7 @@ class icam_ocl_minimizer : public icam_minimizer
                     const icam_depth_transform& dt,
                     icam_minimizer_params const& params,
                     bool verbose=false)
-    : icam_minimizer(dest_img,dt,params,verbose)
+    : icam_minimizer(dest_img,dt,params,verbose), n_repeats_(1)
     {search_mgr_ = icam_ocl_search_manager::instance();}
 
   //: set rotation search kernel source code path.
@@ -85,11 +85,20 @@ class icam_ocl_minimizer : public icam_minimizer
 
   //: this function is called once when finished
   bool finish_opencl();
+
+  //: Debug methods
+  //: Set the number of times to repeat the rotation search kernel. No data is transferred in or out of the GPU.
+  void set_n_repeats(unsigned n_repeats){n_repeats_ = n_repeats;}
  private:
-  unsigned wgsize_;
-  vcl_string rot_kernel_path_;
-  bool run_rotation_kernel();
-  icam_ocl_search_manager* search_mgr_;
+  // 
+  unsigned n_repeats_;//!< for testing GPU timing
+
+  unsigned wgsize_;//!< workgroup size 
+
+  vcl_string rot_kernel_path_;//!< path to rotation search opencl kernel source code
+  bool run_rotation_kernel();//!< execute the kernel
+  
+  icam_ocl_search_manager* search_mgr_;//!< companion opencl manager
 };
 
 #endif
