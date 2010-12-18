@@ -221,7 +221,7 @@ bool test_icam_ocl_minimizer()
   bool adjust_to_fl = false;
   icam_depth_transform dt(K, depth_img_dbl, Rr, tr, adjust_to_fl);
 
-  // Typical parameters
+  // Typical parameters (not used)
   unsigned min_pyramid_image_size = 16;
   unsigned box_reduction_k = 2;
   double local_min_thresh = 0.005;
@@ -232,10 +232,8 @@ bool test_icam_ocl_minimizer()
   bool verbose = false;
   double sigma=1.0;
   unsigned int nbins=16;
-  icam_minimizer_params params(nbins, min_pyramid_image_size, box_reduction_k,
-                               axis_search_cone_multiplier,
-                               polar_range_multiplier,
-                               local_min_thresh, sigma, base_path);
+  //use default params
+  icam_minimizer_params params;
   icam_ocl_minimizer minimizer(source_img_flt, dest_img_flt, dt,
                                params, verbose);
 
@@ -269,7 +267,6 @@ bool test_icam_ocl_minimizer()
     non_gpu_minmzr.set_actual_translation(tr);
     non_gpu_minmzr.set_actual_rotation(Rr);
   }
-
   t.mark();
   vgl_rotation_3d<double> cpu_min_rot;
   double cpu_min_cost;
