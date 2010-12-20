@@ -110,7 +110,7 @@ class vgl_plane_3d
   { return normalized(vgl_vector_3d<T>(a(),b(),c())); }
 
   //: Return true if p is on the plane
-  bool contains(vgl_point_3d<T> const& p, T tol = (T)0);
+  bool contains(vgl_point_3d<T> const& p, T tol = (T)0) const;
 };
 
 //: Return true iff p is the plane at infinity

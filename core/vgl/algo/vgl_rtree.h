@@ -289,7 +289,7 @@ class vgl_rtree
   }
 
   //: return true iff the rtree contains an element equal to v.
-  bool contains(V const &v) {
+  bool contains(V const &v) const {
     node *n;
     int i;
     return root ? root->find(v, &n, &i) : false;

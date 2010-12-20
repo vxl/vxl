@@ -47,7 +47,7 @@ vgl_plane_3d<T>::vgl_plane_3d(vgl_vector_3d<T> const& n,
 
 //: Return true if p is on the plane
 template <class T>
-bool vgl_plane_3d<T>::contains(vgl_point_3d<T> const& p, T tol)
+bool vgl_plane_3d<T>::contains(vgl_point_3d<T> const& p, T tol) const
 {
   //to maintain a consistent distance metric the plane should be normalized
   vgl_vector_3d<T> n(a_, b_, c_), pv(p.x(), p.y(), p.z());
