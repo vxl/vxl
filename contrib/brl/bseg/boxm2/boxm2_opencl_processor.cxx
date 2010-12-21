@@ -30,12 +30,12 @@ bool boxm2_opencl_processor::run(boxm2_process * process, vcl_vector<brdb_value_
   boxm2_opencl_process_base* pro = (boxm2_opencl_process_base*) process;
 
   //1. set process args and execute process (for each block in the queue)
-  for(int i=0; i<blocks_to_process_.size(); i++) {
+  for (int i=0; i<blocks_to_process_.size(); i++) {
     vcl_vector<brdb_value_sptr> pro_input;
-    this->set_data(scene_, 
-                   blocks_to_process_[i], 
-                   alphas_to_process_[i], 
-                   mogs_to_process_[i]); 
+    this->set_data(scene_,
+                   blocks_to_process_[i],
+                   alphas_to_process_[i],
+                   mogs_to_process_[i]);
     pro_input.push_back( new brdb_value_t<bocl_mem_sptr>(scene_info_) );
     pro_input.push_back( new brdb_value_t<bocl_mem_sptr>(trees_) );
     pro_input.push_back( new brdb_value_t<bocl_mem_sptr>(alphas_) );
@@ -54,14 +54,14 @@ bool boxm2_opencl_processor::finish()
 }
 
 
-//: sets scene pointers (in their correct order)
-bool boxm2_opencl_processor::push_scene_data( boxm2_block* blk, 
-                                              boxm2_data_base* alph, 
+// sets scene pointers (in their correct order)
+bool boxm2_opencl_processor::push_scene_data( boxm2_block* blk,
+                                              boxm2_data_base* alph,
                                               boxm2_data_base* mog )
 {
-  blocks_to_process_.push_back(blk); 
+  blocks_to_process_.push_back(blk);
   alphas_to_process_.push_back(alph);
-  mogs_to_process_.push_back(mog); 
+  mogs_to_process_.push_back(mog);
 }
 
 // set scene data for the processor
@@ -71,35 +71,35 @@ bool boxm2_opencl_processor::set_data(boxm2_scene* scene,
                                       boxm2_data_base* mog)
 {
   vcl_cout<<"Loaded : "<<loaded_<<"   blk id: "<<blk->block_id()<<vcl_endl;
-    if( loaded_ != blk->block_id() ) {
-      vcl_cout<<"SET DATA EXECUTED"<<vcl_endl;
-      loaded_ = blk->block_id(); 
-  
-      //set the processor's block pointer
-      typedef vnl_vector_fixed<unsigned char, 16> uchar16;
-      boxm2_array_3d<uchar16>& trees = blk->trees();
-      trees_ = new bocl_mem(this->context(), trees.data_block(), trees.size() * sizeof(uchar16), "3d trees buffer");
-      trees_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+  if ( loaded_ != blk->block_id() ) {
+    vcl_cout<<"SET DATA EXECUTED"<<vcl_endl;
+    loaded_ = blk->block_id();
 
-      //set the processor's alpha block
-      alphas_ = new bocl_mem(this->context(), alpha->data_buffer(), alpha->buffer_length(), "alpha buffer");
-      alphas_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+    //set the processor's block pointer
+    typedef vnl_vector_fixed<unsigned char, 16> uchar16;
+    boxm2_array_3d<uchar16>& trees = blk->trees();
+    trees_ = new bocl_mem(this->context(), trees.data_block(), trees.size() * sizeof(uchar16), "3d trees buffer");
+    trees_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-      //set the processor's MOG block
-      mogs_ = new bocl_mem(this->context(), mog->data_buffer(), mog->buffer_length(), "mog buffer" );
-      mogs_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+    //set the processor's alpha block
+    alphas_ = new bocl_mem(this->context(), alpha->data_buffer(), alpha->buffer_length(), "alpha buffer");
+    alphas_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-      //LEAK EXISTS HERE FOR SCENE INFO
-      //get scene info (hacky location, fix this)
-      boxm2_scene_info* info_buffer = scene->get_blk_metadata(blk->block_id());  
-      info_buffer->num_buffer = blk->num_buffers(); 
-      info_buffer->tree_buffer_length = blk->tree_buff_length(); 
-      info_buffer->data_buffer_length = 65536; 
-      
-      //if(scene_info_) delete scene_info_; 
-      scene_info_ = new bocl_mem(this->context(), info_buffer, sizeof(boxm2_scene_info), "scene info buffer"); 
-      scene_info_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
-    }
-    return true;
+    //set the processor's MOG block
+    mogs_ = new bocl_mem(this->context(), mog->data_buffer(), mog->buffer_length(), "mog buffer" );
+    mogs_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+
+    //LEAK EXISTS HERE FOR SCENE INFO
+    //get scene info (hacky location, fix this)
+    boxm2_scene_info* info_buffer = scene->get_blk_metadata(blk->block_id());
+    info_buffer->num_buffer = blk->num_buffers();
+    info_buffer->tree_buffer_length = blk->tree_buff_length();
+    info_buffer->data_buffer_length = 65536;
+
+    //if (scene_info_) delete scene_info_;
+    scene_info_ = new bocl_mem(this->context(), info_buffer, sizeof(boxm2_scene_info), "scene info buffer");
+    scene_info_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+  }
+  return true;
 }
 
