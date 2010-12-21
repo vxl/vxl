@@ -16,7 +16,7 @@
 // \author Andrew Miller
 // \date   16 Dec 2010
 //
-#include <boxm2/boxm2_block_id.h>
+#include <boxm2/basic/boxm2_block_id.h>
 #include <vpgl/bgeo/bgeo_lvcs.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
@@ -25,6 +25,34 @@
 class boxm2_block_metadata
 {
   public: 
+    boxm2_block_metadata() {}
+    boxm2_block_metadata( boxm2_block_id id, 
+                          vgl_point_3d<double> local_origin,
+                          vgl_vector_3d<double> sub_block_dim,
+                          vgl_vector_3d<unsigned> sub_block_num,
+                          int init_level,
+                          int max_level,
+                          double max_mb,
+                          double p_init ) : id_(id), 
+                                            local_origin_(local_origin),
+                                            sub_block_dim_(sub_block_dim),
+                                            sub_block_num_(sub_block_num),
+                                            init_level_(init_level),
+                                            max_level_(max_level),
+                                            max_mb_(max_mb),
+                                            p_init_(p_init) {}
+                                            
+    boxm2_block_metadata( const boxm2_block_metadata& that) {
+      id_ = that.id_; 
+      local_origin_  = that.local_origin_;
+      sub_block_dim_ = that.sub_block_dim_;
+      sub_block_num_ = that.sub_block_num_;
+      init_level_    = that.init_level_; 
+      max_level_     = that.max_level_;
+      max_mb_        = that.max_mb_;
+      p_init_        = that.p_init_;
+    }
+  
     boxm2_block_id          id_;
     vgl_point_3d<double>    local_origin_;
 

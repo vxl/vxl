@@ -9,6 +9,7 @@ SET(boxm2_basic_sources
     boxm2_array_1d.h                boxm2_array_1d.txx
     boxm2_array_2d.h                boxm2_array_2d.txx
     boxm2_array_3d.h                boxm2_array_3d.txx
+    boxm2_block_id.h                boxm2_block_id.cxx
    )
 
 AUX_SOURCE_DIRECTORY(Templates boxm2_basic_sources)

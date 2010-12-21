@@ -9,6 +9,11 @@ ADD_EXECUTABLE( boxm2_convert_bit_scene_exe
 )
 TARGET_LINK_LIBRARIES( boxm2_convert_bit_scene_exe boxm2 boxm2_io boxm_ocl vbl vnl vcl)
 
+ADD_EXECUTABLE( boxm2_rep_scene
+  boxm2_rep_scene.cxx
+)
+TARGET_LINK_LIBRARIES( boxm2_rep_scene boxm2 boxm2_io boxm_ocl vbl vnl vcl)
+
 INCLUDE( ${BRL_MODULE_PATH}/FindGLEW.cmake )
 
 IF(GLEW_FOUND)

@@ -5,7 +5,7 @@
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_traits.h>
 #include <boxm2/boxm2_data.h>
-#include <boxm2/boxm2_block_id.h>
+#include <boxm2/basic/boxm2_block_id.h>
 #include <vcl_iostream.h>
 #include <vcl_sstream.h>
 #include <vcl_vector.h>

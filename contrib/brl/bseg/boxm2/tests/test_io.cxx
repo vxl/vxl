@@ -2,7 +2,7 @@
 // \file
 // \author Andy Miller
 // \date 26-Oct-2010
-#include <boxm2/boxm2_block_id.h>
+#include <boxm2/basic/boxm2_block_id.h>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/io/boxm2_sio_mgr.h>
 #include <boxm2/io/boxm2_asio_mgr.h>
@@ -133,6 +133,9 @@ void test_io()
   // run some aio tests on blocks
   test_asio_blocks();
   test_asio_data();
+  
+  //delete those blocks
+  boxm2_test_utils::delete_test_scene_from_disk(); 
 }
 
 

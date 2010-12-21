@@ -7,7 +7,7 @@
 //boxm2 scene stuff
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block_metadata.h>
-#include <boxm2/boxm2_block_id.h>
+#include <boxm2/basic/boxm2_block_id.h>
 #include <boxm2/io/boxm2_sio_mgr.h>
 
 //boxm bit scene stuff

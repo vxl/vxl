@@ -19,8 +19,8 @@ class boxm2_block_id
     inline int j() const { return j_; }
     inline int k() const { return k_; }
 
-    //: Creates 0,0,0 block.
-    inline boxm2_block_id () : i_(0) , j_(0), k_(0) {}
+    //: Creates "uninitialized" block - should never exist
+    inline boxm2_block_id () : i_(-65536) , j_(-65536), k_(-65536) {}
 
     //: Creates boxm2_block_id(i,j,k)
     inline boxm2_block_id (int i, int j, int k) : i_(i) , j_(j), k_(k) {}

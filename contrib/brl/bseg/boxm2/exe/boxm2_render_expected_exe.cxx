@@ -15,9 +15,9 @@
 #include <vul/vul_timer.h>
 
 //boxm2 scene stuff
-#include <boxm2/io/boxm2_dumb_cache.h>
+#include <boxm2/io/boxm2_nn_cache.h>
 #include <boxm2/boxm2_scene.h>
-#include <boxm2/boxm2_block_id.h>
+#include <boxm2/basic/boxm2_block_id.h>
 #include <boxm2/boxm2_opencl_processor.h>
 #include <boxm2/boxm2_opencl_render_process.h>
 #include <boxm2/boxm2_opencl_render_depth_process.h>
@@ -57,6 +57,11 @@ int main(int argc,  char** argv)
   vil_image_view_base_sptr expimg = new vil_image_view<unsigned int>(ni(), nj()); 
   brdb_value_sptr brdb_expimg = new brdb_value_t<vil_image_view_base_sptr>(expimg); 
   
+  //create vis image buffer
+  vil_image_view<float>* vis_img = new vil_image_view<float>(ni(), nj()); 
+  vis_img->fill(1.0f); 
+  brdb_value_sptr brdb_vis = new brdb_value_t<vil_image_view_base_sptr>(vis_img); 
+  
   //----------------------------------------------------------------------------
   //--- BEGIN BOXM2 API EXAMPLE ------------------------------------------------
   //----------------------------------------------------------------------------
@@ -64,23 +69,33 @@ int main(int argc,  char** argv)
   boxm2_scene_sptr scene = new boxm2_scene(scene_file()); 
   
   //get relevant blocks
-  boxm2_block_id id(0,0,0); 
-  boxm2_dumb_cache dcache(scene->data_path());
-  boxm2_block_sptr blk      = dcache.get_block(id); 
-  boxm2_data_base_sptr alph = dcache.get_data<BOXM2_ALPHA>(id); 
-  boxm2_data_base_sptr mog  = dcache.get_data<BOXM2_MOG3_GREY>(id); 
+  boxm2_nn_cache cache( scene->data_path(), vgl_vector_3d<int>(2,2,1) );
   
+  //initialize gpu pro / manager
+  boxm2_opencl_processor* gpu_pro = boxm2_opencl_processor::instance();
+  gpu_pro->set_scene(scene.ptr()); 
+  
+  vcl_vector<boxm2_block_id> vis_order; 
+  vis_order.push_back(boxm2_block_id(0,0,0));
+  vis_order.push_back(boxm2_block_id(0,1,0)); 
+  vis_order.push_back(boxm2_block_id(1,0,0)); 
+  vis_order.push_back(boxm2_block_id(1,1,0)); 
+  for(int i=0; i<vis_order.size(); i++) {
+      boxm2_block_id    id   = vis_order[i]; 
+      boxm2_block*      blk  = cache.get_block(id); 
+      boxm2_data_base*  alph = cache.get_data<BOXM2_ALPHA>(id); 
+      boxm2_data_base*  mog  = cache.get_data<BOXM2_MOG3_GREY>(id);  
+      gpu_pro->push_scene_data(blk, alph, mog);  
+  }
+
   //set inputs
   vcl_vector<brdb_value_sptr> input; 
   input.push_back(brdb_cam);
   input.push_back(brdb_expimg); 
+  input.push_back(brdb_vis); 
   
   //initoutput vector
   vcl_vector<brdb_value_sptr> output; 
-
-  //initialize gpu pro / manager
-  boxm2_opencl_processor* gpu_pro = boxm2_opencl_processor::instance();
-  gpu_pro->set_data(scene, blk, alph, mog);
   
   //////initialize the GPU render process
   boxm2_opencl_render_process gpu_render; 
@@ -102,24 +117,11 @@ int main(int argc,  char** argv)
       byte_img(i,j) = (*expimg_view)(i,j) & 0xFF;   //just grab the first byte (all foura r the same)
   vil_save( byte_img, img().c_str());
   
-  //render depth image
-  vcl_vector<brdb_value_sptr> input2;
-  input2.push_back(brdb_cam);
-  input2.push_back(brdb_expimg); 
-  
-  //////initialize the GPU render process
-  gpu_pro->run(&gpu_render, input2, output); 
-  gpu_pro->finish(); 
-  
-  ///save to disk
-  expimg_view = static_cast<vil_image_view<unsigned int>* >(expimg.ptr()); 
-  vil_math_value_range( *expimg_view, min_val, max_val); 
-  vcl_cout<<"min_val: "<<min_val<<"   max val: "<<max_val<<vcl_endl;
+  vil_image_view<vxl_byte> vis_byte(ni(), nj()); 
   for(int i=0; i<ni(); i++) 
     for(int j=0; j<nj(); j++) 
-       byte_img(i,j) = (*expimg_view)(i,j) & 0xFF;   //just grab the first byte (all foura r the same)
-  vcl_string img2 = "depth_" + img(); 
-  vil_save( byte_img, img2.c_str());
+      vis_byte(i,j) = (*vis_img)(i,j)*255;   //just grab the first byte (all foura r the same)
+  vil_save( vis_byte, "vis_img.png");
   
   return 0;
 }

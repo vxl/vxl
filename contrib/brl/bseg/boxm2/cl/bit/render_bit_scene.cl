@@ -24,15 +24,22 @@ void cast_ray(
 
           //---- OUTPUT ARGUMENTS-----------------------------------------------
           __global    uint               * exp_image,       //input image and store vis_inf and pre_inf
-          //__global    uint               * gl_image,      //gl_image automatically rendered to the screen
+          __global    float              * vis_image,       //gl_image automatically rendered to the screen
           __global    float              * output)          //debug output buffer
 {
   
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
 
   // pixel values/depth map to be returned
+#ifdef USE_GL
   float vis = 1.0f;
   float expected_int = 0.0f;
+#else  
+  float vis = vis_image[imIndex[llid]]; 
+  uint  eint = as_uint(exp_image[imIndex[llid]]); 
+  uchar echar = (uchar) (0xFF && eint); 
+  float expected_int = convert_float(echar)/255.0f;
+#endif
 
   //determine the minimum face:
   //get parameters tnear and tfar for the scene
@@ -47,8 +54,7 @@ void cast_ray(
 
   if (tfar <= tblock) {
 #ifdef RENDER
-    //gl_image[imIndex[llid]] = rgbaFloatToInt((float4)(0.0f,0.0f,0.0f,0.0f));
-    exp_image[imIndex[llid]] = rgbaFloatToInt((float4)(0.0f,0.0f,0.0f,0.0f));
+    //exp_image[imIndex[llid]] = rgbaFloatToInt((float4)(0.0f,0.0f,0.0f,0.0f));
 #endif
     //exp_image[j*get_global_size(0)+i].x = 0.0f; 
     return; 
@@ -85,10 +91,6 @@ void cast_ray(
     int blkIndex = convert_int(cell_minz + (cell_miny + cell_minx*linfo->dims.y)*linfo->dims.z); 
     local_tree[llid] = as_uchar16(tree_array[blkIndex]); 
     ushort buff_index = as_ushort((uchar2) (local_tree[llid].sd, local_tree[llid].sc));
-    
-    //ushort2 block = block_ptrs[blkIndex];                       
-    //int root_ptr = block.x * linfo->tree_len + block.y;         
-    //local_tree[llid] = as_uchar16(tree_array[root_ptr]);        
     
     //initialize cumsum buffer and cumIndex
     cumsum[llid*10] = local_tree[llid].s0;                     
@@ -164,16 +166,16 @@ void cast_ray(
   }
   
 #ifdef RENDER
-  expected_int += vis*0.5f;
-  //gl_image[imIndex[llid]] = rgbaFloatToInt((float4) expected_int);
+  //expected_int += vis;
   exp_image[imIndex[llid]] =  rgbaFloatToInt((float4) expected_int); //expected_int;
 #endif
 #ifdef DEPTH
   expected_int += vis*tfar*linfo->block_len;
-  //gl_image[imIndex[llid]] = rgbaFloatToInt((float4) depth/20);
   exp_image[imIndex[llid]] =  rgbaFloatToInt((float4) expected_int);
 #endif
 
+  //store visibility at teh end of this block
+  vis_image[imIndex[llid]] = vis; 
 }
 
 __kernel
@@ -187,6 +189,7 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
                   __global    uint4              * exp_image_dims,
                   __global    float              * output, 
                   __constant  uchar              * bit_lookup, 
+                  __global    float              * vis_image,
                   __local     uchar16            * local_tree,
                   __local     uchar              * cumsum,        //cumulative sum helper for data pointer
                   __local     int                * imIndex) 
@@ -201,12 +204,10 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
   j=get_global_id(1);
   imIndex[llid] = j*get_global_size(0)+i;
 
-
   // check to see if the thread corresponds to an actual pixel as in some 
   // cases #of threads will be more than the pixels.
   if (i>=(*exp_image_dims).x || j>=(*exp_image_dims).y) {
-    //gl_image[imIndex[llid]] = rgbaFloatToInt((float4)(0.0f,0.0f,0.0f,0.0f));
-    exp_image[imIndex[llid]] = 0.0f;
+    //exp_image[imIndex[llid]] = 0.0f;
     return;
   }
  
@@ -250,7 +251,7 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
             
             //io info
             exp_image, 
-            //gl_image, 
+            vis_image,
             output);
 
 }

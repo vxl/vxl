@@ -4,7 +4,7 @@
 // \date May 17, 2010
 #include <boxm2/boxm2_data.h>
 #include <boxm2/boxm2_data_traits.h>
-#include <boxm2/boxm2_block_id.h>
+#include <boxm2/basic/boxm2_block_id.h>
 #include <boxm2/io/boxm2_sio_mgr.h>
 #include <boxm2/io/boxm2_asio_mgr.h>
 #include <testlib/testlib_test.h>

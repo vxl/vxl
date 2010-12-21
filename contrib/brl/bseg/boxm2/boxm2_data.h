@@ -7,7 +7,6 @@
 // \author Vishal Jain
 // \date nov 17, 2010
 #include <boxm2/boxm2_data_base.h>
-#include <boxm2/boxm2_block_id.h>
 #include <boxm2/basic/boxm2_array_1d.h>
 #include <boxm2/boxm2_data_traits.h>
 #include <vcl_cstring.h>

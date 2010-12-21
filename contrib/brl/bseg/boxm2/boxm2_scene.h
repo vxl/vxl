@@ -6,7 +6,7 @@
 // \author Andrew Miller
 // \date   26 Oct 2010
 //
-#include <boxm2/boxm2_block_id.h>
+#include <boxm2/basic/boxm2_block_id.h>
 #include <boxm2/boxm2_block_metadata.h>
 #include <vpgl/bgeo/bgeo_lvcs.h>
 #include <vgl/vgl_point_3d.h>
@@ -16,6 +16,9 @@
 //smart pointer stuff
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
+
+//vpgl camera
+#include <vpgl/vpgl_perspective_camera.h>
 
 //cl include for boxm2_scene_info
 #include <bocl/bocl_cl.h>
@@ -58,11 +61,15 @@ class boxm2_scene : public vbl_ref_count
     //: save scene xml file
     void save_scene(); 
     
+    //: return a vector of block ids in visibility order
+    vcl_vector<boxm2_block_id> get_vis_blocks(vpgl_perspective_camera<double>* cam) ; 
+    
     //: return a heap pointer to a scene info 
     boxm2_scene_info* get_blk_metadata(boxm2_block_id id); 
 
     //: a list of block metadata...
     vcl_map<boxm2_block_id, boxm2_block_metadata> blocks() { return blocks_; }
+    unsigned num_blocks() { return blocks_.size(); }
 
     //: scene dimensions accessors
     vgl_point_3d<double>    local_origin()const { return local_origin_; }

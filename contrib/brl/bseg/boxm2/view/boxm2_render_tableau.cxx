@@ -101,6 +101,7 @@ float boxm2_render_tableau::render_frame()
     return false;
 
   //set inputs
+  vcl_cout<<cam_<<vcl_endl;
   vpgl_camera_double_sptr cam = new vpgl_perspective_camera<double>(cam_); 
   brdb_value_sptr brdb_cam = new brdb_value_t<vpgl_camera_double_sptr>(cam); 
   
@@ -108,9 +109,15 @@ float boxm2_render_tableau::render_frame()
   vil_image_view_base_sptr expimg = new vil_image_view<float>(ni_, nj_); 
   brdb_value_sptr brdb_expimg = new brdb_value_t<vil_image_view_base_sptr>(expimg); 
   
+  //create vis image buffer
+  vil_image_view<float>* visimg = new vil_image_view<float>(ni_, nj_); 
+  visimg->fill(1.0f); 
+  brdb_value_sptr brdb_visimg = new brdb_value_t<vil_image_view_base_sptr>(visimg); 
+  
   vcl_vector<brdb_value_sptr> input; 
   input.push_back(brdb_cam);
   input.push_back(brdb_expimg); 
+  input.push_back(brdb_visimg);
   
   //initoutput vector
   vcl_vector<brdb_value_sptr> output; 
@@ -132,15 +139,15 @@ bool boxm2_render_tableau::init_clgl()
   boxm2_block_id id(0,0,0); 
   vcl_cout<<"Data Path: "<<scene_->data_path()<<vcl_endl; 
   boxm2_dumb_cache dcache(scene_->data_path());
-  boxm2_block_sptr blk      = dcache.get_block(id); 
-  boxm2_data_base_sptr alph = dcache.get_data<BOXM2_ALPHA>(id); 
-  boxm2_data_base_sptr mog  = dcache.get_data<BOXM2_MOG3_GREY>(id); 
+  boxm2_block* blk      = dcache.get_block(id); 
+  boxm2_data_base* alph = dcache.get_data<BOXM2_ALPHA>(id); 
+  boxm2_data_base* mog  = dcache.get_data<BOXM2_MOG3_GREY>(id); 
 
   //initialize gpu pro / manager
   gpu_pro_ = boxm2_opencl_processor::instance();
-  cl_context clgl = create_clgl_context(); 
-  gpu_pro_->context_ = clgl; 
-  gpu_pro_->set_data(scene_, blk, alph, mog);
+  gpu_pro_->context_ = create_clgl_context(); 
+  gpu_pro_->set_scene(scene_.ptr()); 
+  gpu_pro_->push_scene_data(blk, alph, mog);  
  
   // delete old buffer
   if (pbuffer_) {
@@ -164,7 +171,7 @@ bool boxm2_render_tableau::init_clgl()
   exp_img->set_gl_buffer(clgl_buffer_);  
                                       
   //initialize the GPU render process
-  render_.init_kernel(gpu_pro_->context(), gpu_pro_->devices()[0]); 
+  render_.init_kernel(gpu_pro_->context(), gpu_pro_->devices()[0], "-D USE_GL "); 
   render_.set_image(exp_img); 
                                     
   return true;

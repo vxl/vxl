@@ -4,6 +4,8 @@
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>
+#include <vil/vil_save.h>
+
 
 //brdb stuff
 #include <brdb/brdb_value.h>
@@ -15,7 +17,8 @@
 bool boxm2_opencl_render_process::init() { return true; }
 
 bool boxm2_opencl_render_process::init_kernel(cl_context& context,
-                                              cl_device_id& device)
+                                              cl_device_id& device, 
+                                              vcl_string opts)
 {
   context_ = &context;
 
@@ -35,6 +38,7 @@ bool boxm2_opencl_render_process::init_kernel(cl_context& context,
   vcl_string options = "-D INTENSITY ";
   options += "-D NVIDIA ";
   options += "-D RENDER ";
+  options += opts; 
   
   //have kernel construct itself using the context and device
   bool created =  render_kernel_.create_kernel( &context,             
@@ -69,6 +73,7 @@ bool boxm2_opencl_render_process::init_kernel(cl_context& context,
 //  7) ocl_mem_sptr exp_img_dim //produced here
 //  8) ocl_mem_sptr cl_output;  //produced here
 //  9) ocl_mem_sptr bit_lookup  //produced here
+//  10) ocl_mem_sptr ray_vis    //produced here
 bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vcl_vector<brdb_value_sptr>& output)
 {
   vcl_cout<<"GPu RENDER!!"<<vcl_endl;
@@ -100,6 +105,16 @@ bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vc
     image_ = new bocl_mem((*context_), exp_buff, exp_img_view->size() * sizeof(float), "exp image buffer"); 
     image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR); 
   }
+  
+  //vis image buffer
+  brdb_value_t<vil_image_view_base_sptr>* brdb_vis = static_cast<brdb_value_t<vil_image_view_base_sptr>* >( input[i++].ptr() ); 
+  vil_image_view_base_sptr visimg = brdb_vis->value(); 
+  vil_image_view<float>* vis_img_view = static_cast<vil_image_view<float>* >(visimg.ptr()); 
+  if(!vis_img_) {
+    float* vis_buff = vis_img_view->begin(); 
+    vis_img_ = new bocl_mem((*context_), vis_buff, vis_img_view->size() * sizeof(float), "visibility image buffer"); 
+    vis_img_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR); 
+  }
  
   //exp image dimensions
   int* img_dim_buff = new int[4]; 
@@ -120,7 +135,7 @@ bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vc
   cl_uchar* lookup_arr = set_bit_lookup(); 
   bocl_mem lookup((*context_), lookup_arr, sizeof(cl_uchar)*256, "bit lookup buffer"); 
   lookup.create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR); 
-
+  
   //2. set workgroup size
   vcl_size_t lThreads[] = {8, 8}; 
   vcl_size_t gThreads[] = {exp_img_view->ni(), exp_img_view->nj()}; 
@@ -135,6 +150,7 @@ bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vc
   render_kernel_.set_arg( &exp_img_dim); 
   render_kernel_.set_arg( &cl_output ); 
   render_kernel_.set_arg( &lookup );
+  render_kernel_.set_arg( vis_img_ );
   
   //local tree , cumsum buffer, imindex buffer
   render_kernel_.set_local_arg( lThreads[0]*lThreads[1]*sizeof(cl_uchar16) ); 
@@ -146,7 +162,8 @@ bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vc
   
   //read output, do something, blah blah
   cl_output.read_to_buffer(command_queue_); 
-  image_->read_to_buffer(command_queue_); 
+  image_->read_to_buffer(command_queue_);
+  //vis_img_->read_to_buffer(command_queue_);
   
   //clean up camera, lookup_arr, img_dim_buff
   delete[] output_arr; 

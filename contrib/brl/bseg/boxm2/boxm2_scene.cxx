@@ -8,7 +8,7 @@
 #include <vsl/vsl_basic_xml_element.h>
 #include <vgl/xio/vgl_xio_point_3d.h>
 #include <vgl/xio/vgl_xio_vector_3d.h>
-#include <boxm2/boxm2_scene_parser.h>    
+#include <boxm2/io/boxm2_scene_parser.h>    
 
 
 //: initializes Scene from XML file
@@ -52,6 +52,17 @@ void boxm2_scene::add_block_metadata(boxm2_block_metadata data)
     vcl_cout<<"Boxm2 SCENE: Overwriting block metadata for id: "<<data.id_<<vcl_endl;
   }
   blocks_[data.id_] = data; 
+}
+
+
+vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks(vpgl_perspective_camera<double>* cam)
+{
+  vcl_vector<boxm2_block_id> blks; 
+  vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter; 
+  for(iter = blocks_.begin(); iter != blocks_.end(); ++iter) {
+    blks.push_back(iter->first); 
+  }
+  return blks;
 }
 
 

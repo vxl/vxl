@@ -7,7 +7,7 @@
 #include "test_utils.h"
 
 #include <boxm2/boxm2_block.h>
-#include <boxm2/boxm2_block_id.h>
+#include <boxm2/basic/boxm2_block_id.h>
 #include <boxm2/io/boxm2_sio_mgr.h>
 #include <vnl/vnl_vector_fixed.h>
 

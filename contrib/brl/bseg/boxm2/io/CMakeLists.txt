@@ -11,7 +11,8 @@ SET(boxm2_io_sources
     boxm2_cache.h          boxm2_cache.cxx
     boxm2_dumb_cache.h     boxm2_dumb_cache.cxx
     boxm2_nn_cache.h       boxm2_nn_cache.cxx
+    boxm2_scene_parser.h   boxm2_scene_parser.cxx
    )
 
 ADD_LIBRARY(boxm2_io  ${boxm2_io_sources})
-TARGET_LINK_LIBRARIES(boxm2_io boxm2 expatpp vpgl baio vgl_xio vgl vbl vul vsl vcl)
+TARGET_LINK_LIBRARIES(boxm2_io boxm2 expatpp vpgl baio vpgl vgl_xio vgl vbl vul vsl vcl)

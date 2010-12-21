@@ -3,11 +3,12 @@
 
 #include <boxm2/boxm2_process.h>
 #include <bocl/bocl_cl.h>
+#include <vcl_string.h>
 
 class boxm2_opencl_process_base:public boxm2_process
 {
   public: 
-    virtual bool init_kernel(cl_context& context, cl_device_id& device)=0;
+    virtual bool init_kernel(cl_context& context, cl_device_id& device, vcl_string opts="")=0;
 };
 
 #endif

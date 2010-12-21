@@ -7,31 +7,31 @@ boxm2_nn_cache::~boxm2_nn_cache()
 {
   this->finish_async_blocks();
 
-  // clean up block
-  vcl_map<boxm2_block_id, boxm2_block* >::iterator blk_i;
-  for (blk_i=cached_blocks_.begin(); blk_i!=cached_blocks_.end(); ++blk_i) {
-    boxm2_block* blk = (*blk_i).second;
-    if (blk) {
-        vcl_cout<<"Deleting block: "<<blk->block_id()<<vcl_endl;
-      delete blk;
-    }
-  }
+  //// clean up block
+  //vcl_map<boxm2_block_id, boxm2_block* >::iterator blk_i;
+  //for (blk_i=cached_blocks_.begin(); blk_i!=cached_blocks_.end(); ++blk_i) {
+    //boxm2_block* blk = (*blk_i).second;
+    //if (blk) {
+        //vcl_cout<<"Deleting block: "<<blk->block_id()<<vcl_endl;
+      //delete blk;
+    //}
+  //}
 
-  // clean up loaded data
-  vcl_map<vcl_string, vcl_map<boxm2_block_id, boxm2_data_base*> >::iterator dat_i;
-  for (dat_i=cached_data_.begin(); dat_i!=cached_data_.end(); ++dat_i) {
-    vcl_map<boxm2_block_id, boxm2_data_base*>& dmap = (*dat_i).second;
-    vcl_map<boxm2_block_id, boxm2_data_base*>::iterator db_i;
+  //// clean up loaded data
+  //vcl_map<vcl_string, vcl_map<boxm2_block_id, boxm2_data_base*> >::iterator dat_i;
+  //for (dat_i=cached_data_.begin(); dat_i!=cached_data_.end(); ++dat_i) {
+    //vcl_map<boxm2_block_id, boxm2_data_base*>& dmap = (*dat_i).second;
+    //vcl_map<boxm2_block_id, boxm2_data_base*>::iterator db_i;
 
-    //go through individual map and delete
-    for (db_i = dmap.begin(); db_i != dmap.end(); ++db_i) {
-      boxm2_data_base* dat = (*db_i).second;
-      if (dat) {
-         vcl_cout<<"Deleting data: "<<dat->block_id()<<vcl_endl;
-         delete dat;
-      }
-    }
-  }
+    ////go through individual map and delete
+    //for (db_i = dmap.begin(); db_i != dmap.end(); ++db_i) {
+      //boxm2_data_base* dat = (*db_i).second;
+      //if (dat) {
+         //vcl_cout<<"Deleting data: "<<dat->block_id()<<vcl_endl;
+         //delete dat;
+      //}
+    //}
+  //}
 }
 
 //: realization of abstract "get_block(block_id)"
