@@ -4,44 +4,46 @@
 
 boxm2_asio_mgr::~boxm2_asio_mgr()
 {
-  //flush unfinished block requests
-  //vcl_vector<boxm2_block*> flush_list;
-  //typedef vcl_map<boxm2_block_id, boxm2_block*> maptype;
-  //while (load_list_.size() > 0)  {
-    //maptype lmap = this->get_loaded_blocks();
-    //maptype::iterator iter;
-    //for (iter = lmap.begin(); iter != lmap.end(); ++iter)
-      //flush_list.push_back(iter->second);
-  //}
-  //for (unsigned int i=0; i<flush_list.size(); ++i) {
-    //if (flush_list[i]){
-        //vcl_cout<<"deleting "<<flush_list[i]->block_id()<<vcl_endl;
-       //delete flush_list[i];
-    //}
-  //}
+#if 0
+  // flush unfinished block requests
+  vcl_vector<boxm2_block*> flush_list;
+  typedef vcl_map<boxm2_block_id, boxm2_block*> maptype;
+  while (load_list_.size() > 0)  {
+    maptype lmap = this->get_loaded_blocks();
+    maptype::iterator iter;
+    for (iter = lmap.begin(); iter != lmap.end(); ++iter)
+      flush_list.push_back(iter->second);
+  }
+  for (unsigned int i=0; i<flush_list.size(); ++i) {
+    if (flush_list[i]){
+        vcl_cout<<"deleting "<<flush_list[i]->block_id()<<vcl_endl;
+       delete flush_list[i];
+    }
+  }
 
-  //////flush unfinished data requests
-  //vcl_vector<boxm2_data_base*> flush_data_list;
-  //typedef vcl_map<vcl_string, vcl_map<boxm2_block_id, baio*> > data_table_t;
-  //data_table_t::iterator map_i;
-  //for (map_i = load_data_list_.begin(); map_i != load_data_list_.end(); ++map_i)
-  //{
-    //vcl_string prefix = map_i->first;
-    //vcl_map<boxm2_block_id, baio*>& data_map = map_i->second;
-    //while (data_map.size() > 0)  {
-      //typedef vcl_map<boxm2_block_id, boxm2_data_base*> data_map_t;
-      //data_map_t lmap = this->get_loaded_data_generic(prefix);
-      //data_map_t::iterator iter;
-      //for (iter = lmap.begin(); iter != lmap.end(); ++iter)
-        //flush_data_list.push_back(iter->second);
-    //}
-    //for (unsigned int i=0; i<flush_data_list.size(); ++i) {
-      //if (flush_data_list[i]) {
-        //vcl_cout<<"deleting "<<flush_data_list[i]->block_id()<<vcl_endl;
-        //delete flush_data_list[i];
-      //}
-    //}
-  //}
+  //flush unfinished data requests
+  vcl_vector<boxm2_data_base*> flush_data_list;
+  typedef vcl_map<vcl_string, vcl_map<boxm2_block_id, baio*> > data_table_t;
+  data_table_t::iterator map_i;
+  for (map_i = load_data_list_.begin(); map_i != load_data_list_.end(); ++map_i)
+  {
+    vcl_string prefix = map_i->first;
+    vcl_map<boxm2_block_id, baio*>& data_map = map_i->second;
+    while (data_map.size() > 0)  {
+      typedef vcl_map<boxm2_block_id, boxm2_data_base*> data_map_t;
+      data_map_t lmap = this->get_loaded_data_generic(prefix);
+      data_map_t::iterator iter;
+      for (iter = lmap.begin(); iter != lmap.end(); ++iter)
+        flush_data_list.push_back(iter->second);
+    }
+    for (unsigned int i=0; i<flush_data_list.size(); ++i) {
+      if (flush_data_list[i]) {
+        vcl_cout<<"deleting "<<flush_data_list[i]->block_id()<<vcl_endl;
+        delete flush_data_list[i];
+      }
+    }
+  }
+#endif // 0
 }
 
 

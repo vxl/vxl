@@ -7,31 +7,33 @@ boxm2_nn_cache::~boxm2_nn_cache()
 {
   this->finish_async_blocks();
 
-  //// clean up block
-  //vcl_map<boxm2_block_id, boxm2_block* >::iterator blk_i;
-  //for (blk_i=cached_blocks_.begin(); blk_i!=cached_blocks_.end(); ++blk_i) {
-    //boxm2_block* blk = (*blk_i).second;
-    //if (blk) {
-        //vcl_cout<<"Deleting block: "<<blk->block_id()<<vcl_endl;
-      //delete blk;
-    //}
-  //}
+#if 0
+  // clean up block
+  vcl_map<boxm2_block_id, boxm2_block* >::iterator blk_i;
+  for (blk_i=cached_blocks_.begin(); blk_i!=cached_blocks_.end(); ++blk_i) {
+    boxm2_block* blk = (*blk_i).second;
+    if (blk) {
+      vcl_cout<<"Deleting block: "<<blk->block_id()<<vcl_endl;
+      delete blk;
+    }
+  }
 
-  //// clean up loaded data
-  //vcl_map<vcl_string, vcl_map<boxm2_block_id, boxm2_data_base*> >::iterator dat_i;
-  //for (dat_i=cached_data_.begin(); dat_i!=cached_data_.end(); ++dat_i) {
-    //vcl_map<boxm2_block_id, boxm2_data_base*>& dmap = (*dat_i).second;
-    //vcl_map<boxm2_block_id, boxm2_data_base*>::iterator db_i;
+  // clean up loaded data
+  vcl_map<vcl_string, vcl_map<boxm2_block_id, boxm2_data_base*> >::iterator dat_i;
+  for (dat_i=cached_data_.begin(); dat_i!=cached_data_.end(); ++dat_i) {
+    vcl_map<boxm2_block_id, boxm2_data_base*>& dmap = (*dat_i).second;
+    vcl_map<boxm2_block_id, boxm2_data_base*>::iterator db_i;
 
-    ////go through individual map and delete
-    //for (db_i = dmap.begin(); db_i != dmap.end(); ++db_i) {
-      //boxm2_data_base* dat = (*db_i).second;
-      //if (dat) {
-         //vcl_cout<<"Deleting data: "<<dat->block_id()<<vcl_endl;
-         //delete dat;
-      //}
-    //}
-  //}
+    //go through individual map and delete
+    for (db_i = dmap.begin(); db_i != dmap.end(); ++db_i) {
+      boxm2_data_base* dat = (*db_i).second;
+      if (dat) {
+        vcl_cout<<"Deleting data: "<<dat->block_id()<<vcl_endl;
+        delete dat;
+      }
+    }
+  }
+#endif // 0
 }
 
 //: realization of abstract "get_block(block_id)"
@@ -68,7 +70,7 @@ void boxm2_nn_cache::update_block_cache(boxm2_block* blk)
   vcl_cout<<"update block cache around: "<<center<<vcl_endl;
 
   //find neighbors in x,y plane (i,j)
-  vcl_vector<boxm2_block_id> neighbor_list = this->get_neighbor_list(center); 
+  vcl_vector<boxm2_block_id> neighbor_list = this->get_neighbor_list(center);
 
   // initialize new cache with existing neighbor ptrs
   vcl_map<boxm2_block_id, boxm2_block*> new_cache;
@@ -135,17 +137,17 @@ vcl_map<boxm2_block_id, boxm2_data_base*>& boxm2_nn_cache::cached_data_map(vcl_s
   {
     vcl_map<boxm2_block_id, boxm2_data_base*> dmap;
     cached_data_[prefix] = dmap;
-  }  
-  
+  }
+
   //grab a reference to the map of cached_data_ and return it
-  vcl_map<boxm2_block_id, boxm2_data_base*>& data_map = cached_data_[prefix]; 
-  return data_map; 
+  vcl_map<boxm2_block_id, boxm2_data_base*>& data_map = cached_data_[prefix];
+  return data_map;
 }
 
 //: returns a list of neighbors to center
 vcl_vector<boxm2_block_id> boxm2_nn_cache::get_neighbor_list(boxm2_block_id center)
 {
-  vcl_vector<boxm2_block_id> neighbor_list;  
+  vcl_vector<boxm2_block_id> neighbor_list;
   for (int i=-1; i<=1; ++i) {
     for (int j=-1; j<=1; ++j) {
       boxm2_block_id id(center.i() + i, center.j() + j, center.k());
