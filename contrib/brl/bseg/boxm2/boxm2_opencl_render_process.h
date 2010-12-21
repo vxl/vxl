@@ -20,18 +20,19 @@ class boxm2_opencl_render_process : public boxm2_opencl_process_base
   public:
     boxm2_opencl_render_process() : context_(0), image_(0), vis_img_(0) {}
 
+    //: process init and execute
     bool init();
     bool execute(vcl_vector<brdb_value_sptr> & input, vcl_vector<brdb_value_sptr> & output);
 
-    //: opencl specific methods
+    //: opencl specific init - compiles kernels associated with this process
     virtual bool init_kernel(cl_context& context, cl_device_id& device, vcl_string opts="");
-
-    //: render specific method
-    bool set_image( bocl_mem* img ) { image_ = img; return true; }
 
     //: get commandqueue
     cl_command_queue& command_queue() { return command_queue_; }
 
+    //: render specific method
+    bool set_image( bocl_mem* img ) { image_ = img; return true; }
+    
     //: get image
     bocl_mem* image() { return image_; }
 
@@ -53,11 +54,6 @@ class boxm2_opencl_render_process : public boxm2_opencl_process_base
     //: command queue for thsi process.
     cl_command_queue command_queue_;
 
-    //: cam method should go somwehre else, here for now
-    cl_float* set_persp_camera(vpgl_camera_double_sptr cam);
-
-    //: get lookup table
-    cl_uchar* set_bit_lookup();
 };
 
 #endif

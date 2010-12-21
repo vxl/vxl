@@ -5,7 +5,7 @@
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>
 #include <vil/vil_save.h>
-
+#include <boxm2/boxm2_util.h>
 
 //brdb stuff
 #include <brdb/brdb_value.h>
@@ -92,7 +92,8 @@ bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vc
   //camera
   brdb_value_t<vpgl_camera_double_sptr>* brdb_cam = static_cast<brdb_value_t<vpgl_camera_double_sptr>* >( input[i++].ptr() ); 
   vpgl_camera_double_sptr cam = brdb_cam->value(); 
-  cl_float* cam_buffer = set_persp_camera(cam); 
+  cl_float* cam_buffer = new cl_float[16*3]; 
+  boxm2_util::set_persp_camera(cam, cam_buffer); 
   bocl_mem persp_cam((*context_), cam_buffer, 3*sizeof(cl_float16), "persp cam buffer"); 
   persp_cam.create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR); 
    
@@ -132,7 +133,8 @@ bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vc
   cl_output.create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR); 
   
   //bit lookup buffer
-  cl_uchar* lookup_arr = set_bit_lookup(); 
+  cl_uchar* lookup_arr = new cl_uchar[256]; 
+  boxm2_util::set_bit_lookup(lookup_arr); 
   bocl_mem lookup((*context_), lookup_arr, sizeof(cl_uchar)*256, "bit lookup buffer"); 
   lookup.create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR); 
   
@@ -171,70 +173,4 @@ bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vc
   delete[] lookup_arr;
   delete[] cam_buffer; 
   return true; 
-}
-
-cl_float* boxm2_opencl_render_process::set_persp_camera(vpgl_camera_double_sptr cam)
-{
-  if (vpgl_proj_camera<double>* pcam =
-      dynamic_cast<vpgl_proj_camera<double>*>(cam.ptr()))
-  {
-    vcl_cout<<"CAM: "<<(*pcam)<<vcl_endl;
-    vnl_svd<double>* svd=pcam->svd();
-    vnl_matrix<double> Ut=svd->U().conjugate_transpose();
-    vnl_matrix<double> V=svd->V();
-    vnl_vector<double> Winv=svd->Winverse().diagonal();
-
-    //cl_float* persp_cam_ = (cl_float *)boxm_ocl_utils::alloc_aligned(3,sizeof(cl_float16),16);
-    cl_float* persp_cam_ = new cl_float[16*3]; 
-
-    int cnt=0;
-    for (unsigned i=0;i<Ut.rows();i++)
-    {
-      for (unsigned j=0;j<Ut.cols();j++)
-        persp_cam_[cnt++]=(cl_float)Ut(i,j);
-
-      persp_cam_[cnt++]=0;
-    }
-
-    for (unsigned i=0;i<V.rows();i++)
-      for (unsigned j=0;j<V.cols();j++)
-        persp_cam_[cnt++]=(cl_float)V(i,j);
-
-    for (unsigned i=0;i<Winv.size();i++)
-      persp_cam_[cnt++]=(cl_float)Winv(i);
-
-    vgl_point_3d<double> cam_center=pcam->camera_center();
-    persp_cam_[cnt++]=(cl_float)cam_center.x();
-    persp_cam_[cnt++]=(cl_float)cam_center.y();
-    persp_cam_[cnt++]=(cl_float)cam_center.z();
-    return persp_cam_;
-  }
-  else {
-    vcl_cerr << "Error set_persp_camera() : unsupported camera type\n";
-    return false;
-  }
-}
-
-cl_uchar* boxm2_opencl_render_process::set_bit_lookup()
-{
-  unsigned char bits[] = { 0,   1,   1,   2,   1,   2,   2,   3,   1,   2,   2,   3,   2,   3,   3,   4,
-                           1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5 ,
-                           1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5  ,
-                           2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
-                           1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5  ,
-                           2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
-                           2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
-                           3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7  ,
-                           1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5  ,
-                           2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
-                           2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
-                           3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7  ,
-                           2,   3,   3,   4,   3,   4,   4,   5,   3,   4,   4,   5,   4,   5,   5,   6  ,
-                           3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7  ,
-                           3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7  ,
-                           4,   5,   5,   6,   5,   6,   6,   7,   5,   6,   6,   7,   6,   7,   7,   8 };
-                            
-  cl_uchar* lookup = new cl_uchar[256]; 
-  for(int i=0; i<256; i++) lookup[i] = bits[i]; 
-  return lookup;
 }

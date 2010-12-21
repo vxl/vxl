@@ -45,16 +45,17 @@ class boxm2_opencl_processor: public boxm2_processor, public bocl_manager<boxm2_
     //: sets the scene this processor will work on
     bool set_scene(boxm2_scene* scene) { scene_ = scene; }
 
+    //: sets scene pointers to process (hopefully in their correct order)
+    bool push_scene_data( boxm2_block* blk, 
+                          boxm2_data_base* alph, 
+                          boxm2_data_base* mog ); 
+    
     //: sets data on the GPU (creates CL mems)
     bool set_data(boxm2_scene* scene,
                   boxm2_block* blk,
                   boxm2_data_base* alpha,
                   boxm2_data_base* mog);
 
-    //: sets scene pointers to process (hopefully in their correct order)
-    bool push_scene_data( boxm2_block* blk,
-                          boxm2_data_base* alph,
-                          boxm2_data_base* mog );
  protected:
 
     //: boxm2 command queues, two, one for in and one for out

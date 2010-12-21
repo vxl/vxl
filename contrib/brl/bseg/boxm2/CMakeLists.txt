@@ -29,6 +29,7 @@ IF(EXPAT_FOUND)
         boxm2_opencl_render_process.h boxm2_opencl_render_process.cxx
         boxm2_cpp_render_process.h    boxm2_cpp_render_process.cxx
         boxm2_opencl_render_depth_process.h boxm2_opencl_render_depth_process.cxx
+        boxm2_util.h                  boxm2_util.cxx
        )
 
     AUX_SOURCE_DIRECTORY(Templates boxm2_sources)
