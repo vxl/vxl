@@ -86,22 +86,10 @@ bool bocl_kernel::execute(cl_command_queue& cmdQueue, vcl_size_t* localThreads, 
   }
 
   //enqueue the kernel on the command queue
-  cl_event ceEvent =0;
-  status = clEnqueueNDRangeKernel(cmdQueue, kernel_, 2, NULL, globalThreads, localThreads, 0, NULL, &ceEvent);
+  ceEvent_ = 0;
+  status = clEnqueueNDRangeKernel(cmdQueue, kernel_, 2, NULL, globalThreads, localThreads, 0, NULL, &ceEvent_);
   if ( !check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed (" + id_ + ") " +error_to_string(status)) )
     return false;
-
-  //Finish execution (may not be necessary or desirable)
-  long tend, tstart;
-  status = clFinish(cmdQueue);
-  status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
-  status = clGetEventProfilingInfo(ceEvent,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
-  if ( !check_val(status,CL_SUCCESS,"clFinish/ProfilingInfo failed (" + id_ + ") " +error_to_string(status)) )
-    return false;
-
-  //report execution time
-  vcl_cout<<"kernel::"<<id_<<" execution time: "
-          <<1.0e-6f*float(tend - tstart)<<" ms"<<vcl_endl; // convert nanoseconds to milliseconds
 
   //clear arg lists
   args_.clear();
@@ -121,6 +109,20 @@ bool bocl_kernel::set_arg(bocl_mem* buffer)
   //push arg to the back
   args_.push_back(buffer);
   return true;
+}
+
+
+//: THIS REQUIRES the queue to be finished
+float bocl_kernel::exec_time()
+{
+  long tend, tstart;
+  int status = clGetEventProfilingInfo(ceEvent_,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
+  status = clGetEventProfilingInfo(ceEvent_,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
+  if ( !check_val(status,CL_SUCCESS,"clFinish/ProfilingInfo failed (" + id_ + ") " +error_to_string(status)) )
+    return false;
+
+  //store execution time
+  return 1.0e-6f*float(tend - tstart);   
 }
 
 

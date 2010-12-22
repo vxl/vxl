@@ -54,6 +54,7 @@ class bocl_mem : public vbl_ref_count
 
     //: returns a reference to the cpu buffer
     void* cpu_buffer()      { return cpu_buf_; }
+    void set_cpu_buffer(void* buff) { cpu_buf_ = buff; } 
 
     //: returns number of bytes in buffer
     vcl_size_t num_bytes()  { return num_bytes_; }
@@ -63,6 +64,9 @@ class bocl_mem : public vbl_ref_count
 
     //: set buffer used when a clCreateGLBuffer is called..
     bool set_gl_buffer(cl_mem buff) { buffer_ = buff; is_gl_=true; return true; }
+    
+    //: time spend writing or reading
+    float exec_time(); 
 
   private:
 
@@ -83,6 +87,9 @@ class bocl_mem : public vbl_ref_count
 
     //: string identifier for error messages
     vcl_string id_;
+
+    //: event for profiling info
+    cl_event ceEvent_;
 
     //: signifies if this object wraps a GL object
     bool is_gl_;

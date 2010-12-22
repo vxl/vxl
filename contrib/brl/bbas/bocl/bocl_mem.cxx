@@ -38,6 +38,7 @@ bool bocl_mem::release_memory()
 bool bocl_mem::write_to_buffer(const cl_command_queue& cmdQueue)
 {
   if (!is_gl_) {
+    ceEvent_ = 0; 
     cl_int status = MEM_FAILURE;
     status = clEnqueueWriteBuffer(cmdQueue,
                                   this->buffer_,
@@ -47,8 +48,8 @@ bool bocl_mem::write_to_buffer(const cl_command_queue& cmdQueue)
                                   this->cpu_buf_,
                                   0,                //cl_uint num_events_in_wait_list
                                   0,
-                                  0);
-    if (!check_val(status,MEM_FAILURE,"clEnqueueWriteBuffer failed: " + this->id_))
+                                  &ceEvent_);
+    if (!check_val(status,MEM_FAILURE,"clEnqueueWriteBuffer failed: " + this->id_ + error_to_string(status)))
       return MEM_FAILURE;
     return MEM_SUCCESS;
   }
@@ -59,7 +60,6 @@ bool bocl_mem::write_to_buffer(const cl_command_queue& cmdQueue)
 bool bocl_mem::read_to_buffer(const cl_command_queue& cmdQueue)
 {
   if (!is_gl_) {
-    cl_event event;
     int status = MEM_FAILURE;
     // Enqueue readBuffers
     status= clEnqueueReadBuffer(cmdQueue,
@@ -70,7 +70,7 @@ bool bocl_mem::read_to_buffer(const cl_command_queue& cmdQueue)
                                 this->cpu_buf_,
                                 0,
                                 NULL,
-                                &event);
+                                &ceEvent_);
     if (!check_val(status,MEM_FAILURE,"clEnqueueReadBuffer failed: " + this->id_))
       return MEM_FAILURE;
     return MEM_SUCCESS;
@@ -91,7 +91,7 @@ bool bocl_mem::write_to_buffer_async(const cl_command_queue& cmdQueue)
                                   this->cpu_buf_,
                                   0,                //cl_uint num_events_in_wait_list
                                   0,
-                                  &event_);
+                                  &ceEvent_);
     if (!check_val(status,MEM_FAILURE,"clEnqueueWriteBuffer (async) failed: " + this->id_))
       return MEM_FAILURE;
     return MEM_SUCCESS;
@@ -110,6 +110,19 @@ bool bocl_mem::finish_write_to_buffer(const cl_command_queue& cmdQueue)
       return MEM_SUCCESS;
     }
   
+}
+
+//: THIS REQUIRES the queue to be finished
+float bocl_mem::exec_time()
+{
+  long tend, tstart;
+  int status = clGetEventProfilingInfo(ceEvent_,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,0);
+  status = clGetEventProfilingInfo(ceEvent_,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,0);
+  if ( !check_val(status,CL_SUCCESS,"clFinish/ProfilingInfo failed (" + id_ + ") " +error_to_string(status)) )
+    return false;
+
+  //store execution time
+  return 1.0e-6f*float(tend - tstart);   
 }
 
 //---I/O------------------------------------------------------------------------

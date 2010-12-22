@@ -59,11 +59,17 @@ class bocl_kernel
 
     //: returns the number of arguments that you've given this kernel
     int arg_cnt() { return args_.size() + local_args_.size(); }
+    
+    //: returns GPU time
+    float exec_time(); 
 
   private:
 
     //: cl kernel object
     cl_kernel kernel_;
+    
+    //: kernels event object
+    cl_event  ceEvent_; 
 
     //: pointers to bocl_mem buffers that this kernel was most recently passed
     vcl_vector<bocl_mem*> args_;
@@ -82,7 +88,7 @@ class bocl_kernel
 
     //: OpenCL device (reference)
     cl_device_id* device_;
-
+    
     //: for creating kernels from a list of sources
     bool load_kernel_source(vcl_string const& path);
     bool append_process_kernels(vcl_string const& path);
