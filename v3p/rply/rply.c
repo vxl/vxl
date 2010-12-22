@@ -21,7 +21,7 @@
 /* ----------------------------------------------------------------------
  * Make sure we get our integer types right
  * ---------------------------------------------------------------------- */
-#if defined(_MSC_VER) || defined(__BORLANDC__)
+#if defined(_MSC_VER) || defined(__BORLANDC__) || defined(__sgi)
 /* We are in 2006, and some compilers still fail to define C99 types! */
 typedef __int8 t_ply_int8;
 typedef __int16 t_ply_int16;
@@ -37,7 +37,7 @@ typedef unsigned __int32 t_ply_uint32;
 #define PLY_INT32_MIN (-PLY_INT32_MAX-1)
 #define PLY_UINT8_MAX (255)
 #define PLY_UINT16_MAX (65535)
-#define PLY_UINT32_MAX  (4294967295)
+#define PLY_UINT32_MAX (4294967295)
 #else
 #include <stdint.h>
 typedef int8_t t_ply_int8;
