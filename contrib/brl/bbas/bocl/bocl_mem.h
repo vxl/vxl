@@ -45,6 +45,10 @@ class bocl_mem : public vbl_ref_count
     bool write_to_buffer(const cl_command_queue& cmdQueue);
     bool read_to_buffer(const cl_command_queue& cmdQueue);
 
+    //: write to buffer asynchronously
+    bool write_to_buffer_async(const cl_command_queue& cmdQueue); 
+    bool finish_write_to_buffer(const cl_command_queue& cmdQueue); 
+
     //: returns a reference to the buffer
     cl_mem& buffer()        { return buffer_; }
 
@@ -73,6 +77,9 @@ class bocl_mem : public vbl_ref_count
 
     //: OpenCL context (reference)
     const cl_context& context_;
+
+    //: cl event object identifies read/write with this particular buffer
+    cl_event event_; 
 
     //: string identifier for error messages
     vcl_string id_;

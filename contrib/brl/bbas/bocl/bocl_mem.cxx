@@ -78,6 +78,39 @@ bool bocl_mem::read_to_buffer(const cl_command_queue& cmdQueue)
   return true;
 }
 
+//: write to command queue
+bool bocl_mem::write_to_buffer_async(const cl_command_queue& cmdQueue)
+{
+  if (!is_gl_) {
+    cl_int status = MEM_FAILURE;
+    status = clEnqueueWriteBuffer(cmdQueue,
+                                  this->buffer_,
+                                  CL_FALSE,          //True=BLocking, False=NonBlocking
+                                  0,
+                                  this->num_bytes_,
+                                  this->cpu_buf_,
+                                  0,                //cl_uint num_events_in_wait_list
+                                  0,
+                                  &event_);
+    if (!check_val(status,MEM_FAILURE,"clEnqueueWriteBuffer (async) failed: " + this->id_))
+      return MEM_FAILURE;
+    return MEM_SUCCESS;
+  }
+  return true;
+}
+
+//: finish write to buffer using clWaitForEvent
+bool bocl_mem::finish_write_to_buffer(const cl_command_queue& cmdQueue)
+{
+    if(!is_gl_) {
+      cl_int status = MEM_FAILURE; 
+      status = clWaitForEvents(1, &event_); 
+      if (!check_val(status,MEM_FAILURE,"clWaitForEvents failed: " + this->id_))
+        return MEM_FAILURE;
+      return MEM_SUCCESS;
+    }
+  
+}
 
 //---I/O------------------------------------------------------------------------
 // Binary write boxm_update_bit_scene_manager scene to stream
