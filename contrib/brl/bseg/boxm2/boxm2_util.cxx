@@ -4,7 +4,7 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_svd.h>
 
-//: fills a float buffer (should be 16*3 floats) with a perspective cam to be sent
+// fills a float buffer (should be 16*3 floats) with a perspective cam to be sent
 void boxm2_util::set_persp_camera(vpgl_camera_double_sptr cam, cl_float* persp_cam)
 {
   if (vpgl_proj_camera<double>* pcam =
@@ -42,7 +42,7 @@ void boxm2_util::set_persp_camera(vpgl_camera_double_sptr cam, cl_float* persp_c
   }
 }
 
-//: fills in a 256 char array with number of BITS for each value (255 = 8, 254 = 7 etc)
+// fills in a 256 char array with number of BITS for each value (255 = 8, 254 = 7 etc)
 void boxm2_util::set_bit_lookup(cl_uchar* lookup)
 {
   unsigned char bits[] = { 0,   1,   1,   2,   1,   2,   2,   3,   1,   2,   2,   3,   2,   3,   3,   4,
@@ -61,6 +61,6 @@ void boxm2_util::set_bit_lookup(cl_uchar* lookup)
                            3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7  ,
                            3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7  ,
                            4,   5,   5,   6,   5,   6,   6,   7,   5,   6,   6,   7,   6,   7,   7,   8 };
-  vcl_memcpy(lookup, bits, 256); 
-  //for(int i=0; i<256; i++) lookup[i] = bits[i]; 
+  vcl_memcpy(lookup, bits, 256);
+  //for (int i=0; i<256; i++) lookup[i] = bits[i];
 }

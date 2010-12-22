@@ -64,15 +64,15 @@ bool boxm2_opencl_processor::push_scene_data( boxm2_block* blk,
   mogs_to_process_.push_back(mog);
 }
 
-//: pushes block and data into a BOCL_mem, will only do so if the loaded block is new
+// pushes block and data into a BOCL_mem, will only do so if the loaded block is new
 bool boxm2_opencl_processor::set_data(boxm2_scene* scene,
                                       boxm2_block* blk,
                                       boxm2_data_base* alpha,
                                       boxm2_data_base* mog)
 {
-  if( loaded_ != blk->block_id() ) {
-    loaded_ = blk->block_id(); 
-  
+  if ( loaded_ != blk->block_id() ) {
+    loaded_ = blk->block_id();
+
     //set the processor's block pointer
     typedef vnl_vector_fixed<unsigned char, 16> uchar16;
     boxm2_array_3d<uchar16>& trees = blk->trees();
