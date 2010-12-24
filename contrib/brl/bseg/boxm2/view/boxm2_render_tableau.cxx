@@ -95,7 +95,7 @@ bool boxm2_render_tableau::handle(vgui_event const &e)
 float boxm2_render_tableau::render_frame()
 {
   //boxm_render_bit_scene_manager* ray_mgr = boxm_render_bit_scene_manager::instance();
-  cl_int status = clEnqueueAcquireGLObjects(render_.command_queue(), 1,
+  cl_int status = clEnqueueAcquireGLObjects(*render_.command_queue(), 1,
                                             &render_.image()->buffer() , 0, 0, 0);
   if (!check_val(status,CL_SUCCESS,"clEnqueueAcquireGLObjects failed. (gl_image)"+error_to_string(status)))
     return false;
@@ -126,8 +126,8 @@ float boxm2_render_tableau::render_frame()
   gpu_pro_->run(&render_, input, output); 
   gpu_pro_->finish(); 
 
-  status = clEnqueueReleaseGLObjects(render_.command_queue(), 1, &render_.image()->buffer(), 0, 0, 0);
-  clFinish( render_.command_queue() );
+  status = clEnqueueReleaseGLObjects( *render_.command_queue(), 1, &render_.image()->buffer(), 0, 0, 0);
+  clFinish( *render_.command_queue() );
   return 0.0f;
 }
 

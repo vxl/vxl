@@ -73,6 +73,7 @@ int main(int argc,  char** argv)
   
   //initialize gpu pro / manager
   boxm2_opencl_processor* gpu_pro = boxm2_opencl_processor::instance();
+  gpu_pro->init();
   gpu_pro->set_scene(scene.ptr()); 
   
   vcl_vector<boxm2_block_id> vis_order; 
@@ -80,12 +81,12 @@ int main(int argc,  char** argv)
   vis_order.push_back(boxm2_block_id(0,1,0)); 
   vis_order.push_back(boxm2_block_id(1,0,0)); 
   vis_order.push_back(boxm2_block_id(1,1,0)); 
-  for(int i=0; i<vis_order.size(); i++) {
+  for(int i=0; i<vis_order.size(); i++) {    
       boxm2_block_id    id   = vis_order[i]; 
       boxm2_block*      blk  = cache.get_block(id); 
       boxm2_data_base*  alph = cache.get_data<BOXM2_ALPHA>(id); 
       boxm2_data_base*  mog  = cache.get_data<BOXM2_MOG3_GREY>(id);  
-      gpu_pro->push_scene_data(blk, alph, mog);  
+      gpu_pro->push_scene_data(blk, alph, mog);        
   }
 
   //set inputs
@@ -103,6 +104,9 @@ int main(int argc,  char** argv)
   gpu_pro->run(&gpu_render, input, output); 
   gpu_pro->finish(); 
 
+  //clean up
+  gpu_render.clean(); 
+  
   //----------------------------------------------------------------------------
   //------- END API EXAMPLE ----------------------------------------------------
   //----------------------------------------------------------------------------

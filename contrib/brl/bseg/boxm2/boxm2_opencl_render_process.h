@@ -19,22 +19,24 @@ class boxm2_opencl_render_process : public boxm2_opencl_process_base
 {
   public:
     boxm2_opencl_render_process() : context_(0), image_(0), vis_img_(0) {}
-
+    
     //: process init and execute
-    bool init();
+    bool init() { return true; }
     bool execute(vcl_vector<brdb_value_sptr> & input, vcl_vector<brdb_value_sptr> & output);
+    bool clean(); 
 
     //: opencl specific init - compiles kernels associated with this process
     virtual bool init_kernel(cl_context& context, cl_device_id& device, vcl_string opts="");
-
-    //: get commandqueue
-    cl_command_queue& command_queue() { return command_queue_; }
 
     //: render specific method
     bool set_image( bocl_mem* img ) { image_ = img; return true; }
     
     //: get image
     bocl_mem* image() { return image_; }
+    
+    //: set/get command queue
+    virtual void set_command_queue(cl_command_queue* queue) { command_queue_ = queue; }
+    cl_command_queue* command_queue() { return command_queue_; }
 
   private:
 
@@ -52,7 +54,7 @@ class boxm2_opencl_render_process : public boxm2_opencl_process_base
 
     //0----- HACK STUFF TO GO SOMEWEHRE ELSE ----------------------------------
     //: command queue for thsi process.
-    cl_command_queue command_queue_;
+    cl_command_queue* command_queue_;
 
 };
 

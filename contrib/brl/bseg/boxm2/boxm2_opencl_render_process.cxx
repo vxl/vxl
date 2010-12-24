@@ -13,9 +13,6 @@
 //directory utility
 #include <vcl_where_root_dir.h>
 
-//  probably don't need this...
-bool boxm2_opencl_render_process::init() { return true; }
-
 bool boxm2_opencl_render_process::init_kernel(cl_context& context,
                                               cl_device_id& device, 
                                               vcl_string opts)
@@ -47,14 +44,6 @@ bool boxm2_opencl_render_process::init_kernel(cl_context& context,
                                                 "render_bit_scene",   //kernel name
                                                 options,              //options
                                                 "boxm2 opencl render"); //kernel identifier (for error checking)
-                              
-  //TODO FIGURE OUT A GOOD PLACE FOR THE COMMAND QUEUE TO LIVE - 
-  //seems like it should be above process (processor should have a list of command queues)
-  // set up a command queue
-  int status;
-  command_queue_ = clCreateCommandQueue(context, device, CL_QUEUE_PROFILING_ENABLE, &status);
-  if (!check_val(status,CL_SUCCESS,"Failed in command queue creation" + error_to_string(status)))
-    return false;
 
   return created;
 }
@@ -76,7 +65,7 @@ bool boxm2_opencl_render_process::init_kernel(cl_context& context,
 //  10) ocl_mem_sptr ray_vis    //produced here
 bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vcl_vector<brdb_value_sptr>& output)
 {
-  vcl_cout<<"GPu RENDER!!"<<vcl_endl;
+  vcl_cout<<"GPu RENDER argcounts:"<<input.size()<<vcl_endl;
 
   //1. get the arguments blocks/camera/img etc from the input vector
   int i = 0;
@@ -160,12 +149,16 @@ bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vc
   render_kernel_.set_local_arg( lThreads[0]*lThreads[1]*sizeof(cl_int) ); 
   
   //execute kernel 
-  render_kernel_.execute(command_queue_, lThreads, gThreads); 
+  render_kernel_.execute( (*command_queue_), lThreads, gThreads); 
   
   //read output, do something, blah blah
-  cl_output.read_to_buffer(command_queue_); 
-  image_->read_to_buffer(command_queue_);
+  cl_output.read_to_buffer(*command_queue_); 
+  image_->read_to_buffer(*command_queue_);
   //vis_img_->read_to_buffer(command_queue_);
+
+  vcl_cout<<"Execution time: "<<render_kernel_.exec_time()<<" ms"<<vcl_endl;
+  
+  render_kernel_.clear_args();
   
   //clean up camera, lookup_arr, img_dim_buff
   delete[] output_arr; 
@@ -174,3 +167,13 @@ bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vc
   delete[] cam_buffer; 
   return true; 
 }
+
+
+bool boxm2_opencl_render_process::clean()
+{
+  if(image_) delete image_; 
+  if(vis_img_) delete vis_img_;
+  image_ = 0;
+  vis_img_ = 0;
+}
+

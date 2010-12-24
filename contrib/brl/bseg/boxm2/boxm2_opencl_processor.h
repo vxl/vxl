@@ -27,15 +27,18 @@
 #include <bocl/bocl_manager.h>
 #include <bocl/bocl_mem.h>
 
+//Number of queues can be tweaked
+#define NUM_QUEUES 2
+
 //: boxm2_opencl_processor is a singleton bocl_manager as well.
 class boxm2_opencl_processor: public boxm2_processor, public bocl_manager<boxm2_opencl_processor>
 {
  public:
-    boxm2_opencl_processor() :
-      scene_info_(0),
-      trees_(0),
-      alphas_(0),
-      mogs_(0) { loaded_ = boxm2_block_id(-999, -999, -999);  }
+    boxm2_opencl_processor() { 
+      exec_queue_ = 0; 
+      loaded_[0] = boxm2_block_id(-999, -999, -999);  
+      loaded_[1] = boxm2_block_id(-999, -999, -999);  
+    }
     ~boxm2_opencl_processor(){}
 
     virtual bool  init();
@@ -49,17 +52,16 @@ class boxm2_opencl_processor: public boxm2_processor, public bocl_manager<boxm2_
     bool push_scene_data( boxm2_block* blk, 
                           boxm2_data_base* alph, 
                           boxm2_data_base* mog ); 
-    
-    //: sets data on the GPU (creates CL mems)
-    bool set_data(boxm2_scene* scene,
-                  boxm2_block* blk,
-                  boxm2_data_base* alpha,
-                  boxm2_data_base* mog);
+                         
+    bool setup_pinned_buffers( boxm2_scene* scene, 
+                               boxm2_block* blk, 
+                               boxm2_data_base* alpha,
+                               boxm2_data_base* mog ); 
 
  protected:
 
-    //: boxm2 command queues, two, one for in and one for out
-    cl_command_queue command_queue_[2];
+    //: execution queue
+    int exec_queue_; 
 
     //: scene that this processor is operating on
     boxm2_scene* scene_;
@@ -71,12 +73,25 @@ class boxm2_opencl_processor: public boxm2_processor, public bocl_manager<boxm2_
 
     // === the OpenCL processor needs a sort of "cache" to make sure blocks are loaded efficiently ===
 
-    //: list of buffers that can be accessed by the GPU (figure out a better way to do this...)
-    boxm2_block_id loaded_;
-    bocl_mem_sptr scene_info_;
-    bocl_mem_sptr trees_;
-    bocl_mem_sptr alphas_;
-    bocl_mem_sptr mogs_;
+    //: list of buffers that can be accessed by the GPU 
+    // ALL OF THE BOCL_MEM pointers will create Pinned host memory, which allows
+    // the gpu to overlap a kernel execution 
+    boxm2_block_id loaded_[NUM_QUEUES];
+    bocl_mem*  scene_info_[NUM_QUEUES];
+    bocl_mem*  trees_[NUM_QUEUES];
+    bocl_mem*  alphas_[NUM_QUEUES];
+    bocl_mem*  mogs_[NUM_QUEUES];
+    
+    //: boxm2 command queues, two, one for in and one for out
+    cl_command_queue queues_[NUM_QUEUES];
+    
+    
+    //: Helper method to push scene information onto the gpu
+    bool enqueue_write_scene( boxm2_scene* scene,
+                              boxm2_block* blk,
+                              boxm2_data_base* alpha,
+                              boxm2_data_base* mog,
+                              int queue_index ); 
 };
 
 #endif
