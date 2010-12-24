@@ -13,7 +13,6 @@ bool bocl_kernel::create_kernel(cl_context* context,
                                 vcl_string options,
                                 vcl_string id)
 {
-  vcl_cout<<"Kernel created"<<vcl_endl;
   context_  = context;
   device_   = device;
   id_       = id;

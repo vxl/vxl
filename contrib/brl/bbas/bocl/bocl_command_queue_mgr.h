@@ -21,6 +21,8 @@
 #include <bocl/bocl_mem.h>
 #include <bocl/bocl_kernel.h>
 
+#define NUM_QUEUES 2
+
 
 //: boxm2_opencl_processor is a singleton bocl_manager as well.
 class bocl_command_queue_mgr: public bocl_manager<bocl_command_queue_mgr>
@@ -31,15 +33,29 @@ class bocl_command_queue_mgr: public bocl_manager<bocl_command_queue_mgr>
 
     bool init_kernel(); 
     bool test_async_command_queue();
+    bool test_dual_command_queue(); 
 
  protected:
 
-    bocl_mem*  buffer_; 
-    bocl_mem*  write_buffer_;
-
+    int memLength_; 
+    int memHalf_;
+    
+    bocl_mem*  pinned_in_;
+    bocl_mem*  input_; 
+    
+    bocl_mem*  pinned_out_;
+    bocl_mem*  output_; 
+    
     //: boxm2 command queues, two, one for in and one for out
-    cl_command_queue command_queue_;
-    bocl_kernel test_kernel_; 
+    cl_command_queue queue_a_;
+    cl_command_queue queue_b_; 
+    bocl_kernel kernel_a_;
+    bocl_kernel kernel_b_; 
+    
+    bocl_mem*  offsets_[NUM_QUEUES]; 
+    cl_command_queue queues_[NUM_QUEUES]; 
+    bocl_kernel kernels_[NUM_QUEUES]; 
+    
     
 };
 

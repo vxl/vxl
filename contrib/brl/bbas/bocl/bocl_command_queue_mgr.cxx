@@ -3,42 +3,88 @@
 #include <vul/vul_timer.h>
 
 bool bocl_command_queue_mgr::init_kernel()
-{   
+{  
+  memLength_ = 1024*1024*50; 
+  memHalf_ = memLength_/2; 
   
-  //set up buffers
-  float* buffer = new float[1024*1024*50]; 
-  buffer_ = new bocl_mem(this->context(), buffer, 1024*1024*50*sizeof(float), "test buffer");
-  buffer_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-
-  float* wbuffer = new float[1024*1024*50];
-  for(int i=0; i<1024*1024*50; i++) wbuffer[i] = (float) i;
-  write_buffer_ = new bocl_mem(this->context(), wbuffer, 1024*1024*50*sizeof(float), "test write buffer"); 
-  write_buffer_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-
-  //set up kernel
+  //set up kernels
   vcl_vector<vcl_string> src_paths;
   vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bbas/bocl/tests/";
   src_paths.push_back(source_dir + "test_command_queue.cl"); 
-  
-  //have kernel construct itself using the context and device
-  bool created =  test_kernel_.create_kernel(  &this->context(),             
+  bool created =  kernel_a_.create_kernel(  &this->context(),             
                                                &this->devices()[0], 
                                                 src_paths,            
                                                 "test_command_queue",   //kernel name
                                                 "",                     //options
-                                                "test command queue");  //kernel identifier (for error checking)
+                                                "test command queue a");  //kernel identifier (for error checking)
+  created =  kernel_b_.create_kernel(  &this->context(),             
+                                               &this->devices()[0], 
+                                                src_paths,            
+                                                "test_command_queue",   //kernel name
+                                                "",                     //options
+                                                "test command queue b");  //kernel identifier (for error checking)
+  for(int i=0; i<NUM_QUEUES; i++) {
+    created = kernels_[i].create_kernel(&this->context(),             
+                                        &this->devices()[0], 
+                                        src_paths,            
+                                        "test_command_queue",   //kernel name
+                                        "",                     //options
+                                        "test command queue");  //kernel identifier (for error checking)
+  }            
+  
 
-
-  // set up cmd queue
+  // set up both cmd queue
   int status;
-  command_queue_ = clCreateCommandQueue(this->context(), 
-                                        this->devices()[0], 
-                                        CL_QUEUE_PROFILING_ENABLE|CL_QUEUE_OUT_OF_ORDER_EXEC_MODE_ENABLE, 
-                                        &status);
-  if (!check_val(status,CL_SUCCESS,"Failed in command queue [0] creation" + error_to_string(status)))
+  queue_a_ = clCreateCommandQueue(this->context(), 
+                                  this->devices()[0], 
+                                  CL_QUEUE_PROFILING_ENABLE, 
+                                  &status);
+  if (!check_val(status,CL_SUCCESS,"Failed in command queue a creation" + error_to_string(status)))
     return false;
-    
 
+  queue_b_ = clCreateCommandQueue(this->context(), 
+                                  this->devices()[0], 
+                                  CL_QUEUE_PROFILING_ENABLE, 
+                                  &status);
+  if (!check_val(status,CL_SUCCESS,"Failed in command queue b creation" + error_to_string(status)))
+    return false;
+
+  for(int i=0; i<NUM_QUEUES; i++) {
+    queues_[i] = clCreateCommandQueue(this->context(), 
+                                      this->devices()[0], 
+                                      CL_QUEUE_PROFILING_ENABLE, 
+                                      &status);
+    if (!check_val(status,CL_SUCCESS,"Failed in command queue creation" + error_to_string(status)))
+      return false;
+  }
+
+  //set up pinned memory
+  //float* in = new float[memLength_]; 
+  //float* out = new float[memLength_];
+  pinned_in_ = new bocl_mem(this->context(), NULL, memLength_*sizeof(float), "pinned in buffer"); 
+  pinned_in_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR); 
+  pinned_out_ = new bocl_mem(this->context(), NULL, memLength_*sizeof(float), "pinned out buffer"); 
+  pinned_out_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR); 
+  
+  //set up device buffers
+  //input_ = new bocl_mem(this->context(), NULL, memLength_*sizeof(float), "buffer a ");
+  ///input_->create_buffer(CL_MEM_READ_ONLY);
+  //output_ = new bocl_mem(this->context(), NULL, memLength_*sizeof(float), "buffer b"); 
+  //output_->create_buffer(CL_MEM_READ_ONLY);
+
+  //map standard pointers to pinned memory
+  float* in = (float*) clEnqueueMapBuffer(queue_a_, pinned_in_->buffer(), CL_TRUE, 
+                                            CL_MAP_WRITE, 0, memLength_*sizeof(float), 0, 
+                                            NULL, NULL, NULL); 
+  float* out = (float*) clEnqueueMapBuffer(queue_a_, pinned_out_->buffer(), CL_TRUE, 
+                                            CL_MAP_READ, 0, memLength_*sizeof(float), 0, 
+                                            NULL, NULL, NULL); 
+  
+  for(int i=0; i<memLength_; i++) 
+    in[i] = (float) i;
+  pinned_in_->set_cpu_buffer(in); 
+  pinned_out_->set_cpu_buffer(out);
+  
   return true;
 }
 
@@ -46,33 +92,118 @@ bool bocl_command_queue_mgr::init_kernel()
 // the scene level stuff needs to live on the processor, other
 bool bocl_command_queue_mgr::test_async_command_queue()
 {
+  //create start boclmem
+  int* start = new int[1]; start[0] = 0; 
+  bocl_mem* offset = new bocl_mem(this->context(), start, sizeof(int), "offset zero buffer"); 
+  offset->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR); 
+  
   //2. set workgroup size
   vcl_size_t lThreads[] = {8, 8}; 
   vcl_size_t gThreads[] = {1024, 1024}; 
 
   //3. EXECUTE once because opencl overhead tacks on a few milliseconds
-  test_kernel_.set_arg( buffer_ );  
-  test_kernel_.execute( command_queue_, lThreads, gThreads); 
-  write_buffer_->write_to_buffer_async( command_queue_ );
-  clFinish(command_queue_);
+  pinned_in_->write_to_buffer( queue_a_ ); 
+  kernel_a_.set_arg( pinned_in_ );  
+  kernel_a_.set_arg( pinned_out_); 
+  kernel_a_.set_arg( offset );
+  kernel_a_.execute( queue_a_, lThreads, gThreads); 
+  pinned_out_->read_to_buffer( queue_a_ );
+  clFinish(queue_a_);
   
-  //execute kernel and TIME
-  test_kernel_.set_arg( buffer_ );  
+  bool good = true;
+  float* pout = (float*) pinned_out_->cpu_buffer(); 
+  for(int i=0; i<100; i++) {
+    if(i*i != pout[i]) {
+      good = false;
+      break;
+    }
+  }
+  vcl_cout<<"kernel calculated squres: "<<good<<vcl_endl;
+  //////////////////////////////////////////////////////////////////////////////
+  //4. execute 50 trials (warm up GPU)
+  //////////////////////////////////////////////////////////////////////////////
+  vcl_cout<<"--------------------------------------\n"
+          <<"EXECUTING SERIAL KERNEL/WRITE\n"        
+          <<"--------------------------------------"<<vcl_endl;
+  pinned_in_->write_to_buffer( queue_a_ ); 
   vul_timer t;
-  test_kernel_.execute( command_queue_, lThreads, gThreads); 
-  write_buffer_->write_to_buffer( command_queue_ );
-  clFinish(command_queue_);
-  vcl_cout<<"WALL CLOCK TIME: "<<t.all()<<" ms"<<vcl_endl;
-  vcl_cout<<"Test kernel time: "<<test_kernel_.exec_time()<<" ms"<<vcl_endl;
-  vcl_cout<<"Test write buffer time: "<<write_buffer_->exec_time()<<" ms"<<vcl_endl;
+  int numTrials = 50; 
+  for(int i=0; i<numTrials; i++)
+  {
+    //execute kernel and TIME\
+    vcl_cout<<"KERNEL A ARG COUNT: "<<kernel_a_.arg_cnt()<<vcl_endl;
+    kernel_a_.execute( queue_a_, lThreads, gThreads); 
+    pinned_in_->write_to_buffer( queue_a_ );
+    clFinish(queue_a_);
+  }
+  vcl_cout<<"One Queue WALL CLOCK TIME: "<<t.all()/numTrials<<" ms"<<vcl_endl;
+  vcl_cout<<"Test kernel time: "<<kernel_a_.exec_time()<<" ms"<<vcl_endl;
+  vcl_cout<<"Test write buffer time: "<<pinned_in_->exec_time()<<" ms"<<vcl_endl;  
+  pinned_out_->read_to_buffer( queue_a_ );
+  clFinish(queue_a_);
+
+  //store result to verify
+  float* control = new float[memLength_]; 
+  float* out = (float*) pinned_out_->cpu_buffer(); 
+  for(int i=0; i<memLength_; i++)
+    control[i] = out[i];
   
-  //read output, do something, blah blah
-  buffer_->read_to_buffer( command_queue_); 
-  float* cpu_buff = (float*) buffer_->cpu_buffer(); 
-  //for(int i=0; i<110; i++) vcl_cout<<cpu_buff[i]<<vcl_endl;
+  //////////////////////////////////////////////////////////////////////////////
+  //do 100 trials overlapping
+  ////////////////////////////////////////////////////////////////////////////// 
+  vcl_cout<<"--------------------------------------\n"
+          <<"EXECUTING OVERLAPPING KERNEL/WRITE\n"        
+          <<"--------------------------------------"<<vcl_endl;
+  //create start boclmem
+  int incr = memLength_/NUM_QUEUES; 
+  for(int i=0; i<NUM_QUEUES; i++)
+  {
+    int* off = new int[1]; off[0] = i*incr; 
+    offsets_[i] = new bocl_mem(this->context(), off, sizeof(int), "offset buffer, i");
+    offsets_[i]->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR); 
+  }
   
-  delete buffer_;
-  delete write_buffer_;
+  lThreads[0] = 8; lThreads[1] = 8; 
+  gThreads[0] = 1024; gThreads[1] = 1024/NUM_QUEUES; 
+  t.mark();
+  for(int i=0; i<numTrials; i++)
+  {
+    for(int k=0; k<NUM_QUEUES; k++)  
+    {
+      int next = (k+1) % NUM_QUEUES; 
+      
+      //launch kernel computation queue A (on buffer A)
+      kernels_[k].set_arg( pinned_in_ );
+      kernels_[k].set_arg( pinned_out_ );
+      kernels_[k].set_arg( offsets_[k] );
+      kernels_[k].execute( queues_[k], lThreads, gThreads); 
+      
+      // non blocking write of buffer B (on Queue B)
+      int off = next * incr * sizeof(float);
+      float* buff = (float*) pinned_in_->cpu_buffer(); 
+      clEnqueueWriteBuffer( queues_[next], pinned_in_->buffer(),
+                            CL_FALSE, off, incr*sizeof(float),
+                            (void*) &buff[memHalf_], 0, NULL, NULL);
+      
+    }
+  }
+  for(int i=0; i<NUM_QUEUES; i++) clFinish(queues_[i]);
+  vcl_cout<<"WALL CLOCK TIME: "<<t.all()/numTrials<<" ms"<<vcl_endl;
+  vcl_cout<<"Test kernel time: "<<kernel_a_.exec_time()<<" ms"<<vcl_endl;
+  vcl_cout<<"Test write buffer time: "<<pinned_in_->exec_time()<<" ms"<<vcl_endl;  
+ 
+  
+  //VERIFY OUTPUT
+  out = (float*) pinned_out_->cpu_buffer(); 
+  for(int i=0; i<memLength_; i++) {
+    if(control[i] != out[i]) {
+      vcl_cout<<"CONTROL: "<<control[i]<<" != OUT: "<<out[i]<<vcl_endl;
+      break;
+    }
+  }
+  
+  //delete buffer_a_;
+  //delete buffer_b_;
   
   return true;
 }
