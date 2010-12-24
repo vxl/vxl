@@ -34,7 +34,7 @@ class bocl_kernel
 {
   public:
 
-    bocl_kernel() : kernel_(0) {}
+    bocl_kernel() : kernel_(0), program_(0) {}
     ~bocl_kernel();
 
     //: create kernel from a list of sources, and a kernel name, and an ID
@@ -53,6 +53,11 @@ class bocl_kernel
 
     //: sets a local arg of size "size"
     bool set_local_arg(vcl_size_t size);
+    
+    bool clear_args() {  
+      args_.clear();
+      local_args_.clear();
+    }
 
     //: will return a reference to the cl_kernel this class wraps
     cl_kernel& kernel() { return kernel_; }
@@ -67,6 +72,9 @@ class bocl_kernel
 
     //: cl kernel object
     cl_kernel kernel_;
+    
+    //: cl program object
+    cl_program program_; 
     
     //: kernels event object
     cl_event  ceEvent_; 

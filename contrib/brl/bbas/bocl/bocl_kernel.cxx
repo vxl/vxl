@@ -36,15 +36,14 @@ bool bocl_kernel::create_kernel(cl_context* context,
   }
 
   //build cl_program object
-  cl_program program = 0;
-  if ( !this->build_kernel_program(program, options) ) {
+  if ( !this->build_kernel_program(program_, options) ) {
     vcl_cerr<<"bocl_kernel::couldn't build program "<<id_<<'\n';
     return false;
   }
 
   //create cl_kernel object
   cl_int status = SDK_FAILURE;
-  kernel_ = clCreateKernel(program, kernel_name.c_str(), &status);
+  kernel_ = clCreateKernel(program_, kernel_name.c_str(), &status);
   if ( !check_val(status,CL_SUCCESS,error_to_string(status)) ) {
     vcl_cerr<<"bocl_kernel:: couldn't build program "<<id_<<'\n';
     return false;
@@ -59,8 +58,15 @@ bocl_kernel::~bocl_kernel()
   if (kernel_)  {
     status = clReleaseKernel(kernel_);
   }
-  kernel_ = NULL;
+  kernel_ = 0;
   if ( !check_val(status,CL_SUCCESS,"clReleaseKernel failed: " + this->id_) )
+    vcl_cout<<" release failed in bocl_kernel destructor "<<vcl_endl;
+    
+  if(program_) {
+    status = clReleaseProgram(program_);
+  }
+  program_ = 0;
+  if ( !check_val(status,CL_SUCCESS,"clReleaseProgram failed: " + this->id_) )
     vcl_cout<<" release failed in bocl_kernel destructor "<<vcl_endl;
 }
 
@@ -71,8 +77,10 @@ bool bocl_kernel::execute(cl_command_queue& cmdQueue, vcl_size_t* localThreads, 
   for (unsigned int i=0; i<args_.size(); ++i) {
     cl_mem& buff = args_[i]->buffer();
     status = clSetKernelArg(kernel_, i, sizeof(cl_mem), (void *)&buff);
-    if ( !check_val(status,CL_SUCCESS,error_to_string(status) + "::clSetKernelArg failed: " + args_[i]->id()))
+    if ( !check_val(status,CL_SUCCESS,error_to_string(status) + "::clSetKernelArg failed: " + args_[i]->id())) {
+      vcl_cout<<"ARG number "<<i<<vcl_endl;
       return false;
+    }
   }
 
   //set local args
@@ -90,9 +98,6 @@ bool bocl_kernel::execute(cl_command_queue& cmdQueue, vcl_size_t* localThreads, 
   if ( !check_val(status,CL_SUCCESS,"clEnqueueNDRangeKernel failed (" + id_ + ") " +error_to_string(status)) )
     return false;
 
-  //clear arg lists
-  args_.clear();
-  local_args_.clear();
 
   return true;
 }

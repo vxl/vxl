@@ -59,31 +59,25 @@ bool bocl_command_queue_mgr::init_kernel()
   }
 
   //set up pinned memory
-  //float* in = new float[memLength_]; 
-  //float* out = new float[memLength_];
-  pinned_in_ = new bocl_mem(this->context(), NULL, memLength_*sizeof(float), "pinned in buffer"); 
-  pinned_in_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR); 
-  pinned_out_ = new bocl_mem(this->context(), NULL, memLength_*sizeof(float), "pinned out buffer"); 
-  pinned_out_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR); 
-  
-  //set up device buffers
-  //input_ = new bocl_mem(this->context(), NULL, memLength_*sizeof(float), "buffer a ");
-  ///input_->create_buffer(CL_MEM_READ_ONLY);
-  //output_ = new bocl_mem(this->context(), NULL, memLength_*sizeof(float), "buffer b"); 
-  //output_->create_buffer(CL_MEM_READ_ONLY);
-
-  //map standard pointers to pinned memory
-  float* in = (float*) clEnqueueMapBuffer(queue_a_, pinned_in_->buffer(), CL_TRUE, 
-                                            CL_MAP_WRITE, 0, memLength_*sizeof(float), 0, 
-                                            NULL, NULL, NULL); 
-  float* out = (float*) clEnqueueMapBuffer(queue_a_, pinned_out_->buffer(), CL_TRUE, 
-                                            CL_MAP_READ, 0, memLength_*sizeof(float), 0, 
-                                            NULL, NULL, NULL); 
-  
+  float* in = new float[memLength_]; 
+  float* out = new float[memLength_];
   for(int i=0; i<memLength_; i++) 
     in[i] = (float) i;
-  pinned_in_->set_cpu_buffer(in); 
-  pinned_out_->set_cpu_buffer(out);
+  
+  pinned_in_ = new bocl_mem(this->context(), in, memLength_*sizeof(float), "pinned in buffer"); 
+  pinned_in_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR | CL_MEM_COPY_HOST_PTR); 
+  pinned_out_ = new bocl_mem(this->context(), out, memLength_*sizeof(float), "pinned out buffer"); 
+  pinned_out_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR); 
+  
+  //map standard pointers to pinned memory
+  float* pinned_in = (float*) clEnqueueMapBuffer(queue_a_, pinned_in_->buffer(), CL_TRUE, 
+                                            CL_MAP_WRITE, 0, memLength_*sizeof(float), 0, 
+                                            NULL, NULL, NULL); 
+  float* pinned_out = (float*) clEnqueueMapBuffer(queue_a_, pinned_out_->buffer(), CL_TRUE, 
+                                            CL_MAP_READ, 0, memLength_*sizeof(float), 0, 
+                                            NULL, NULL, NULL); 
+  pinned_in_->set_cpu_buffer(pinned_in); 
+  pinned_out_->set_cpu_buffer(pinned_out);
   
   return true;
 }
@@ -200,6 +194,7 @@ bool bocl_command_queue_mgr::test_async_command_queue()
       vcl_cout<<"CONTROL: "<<control[i]<<" != OUT: "<<out[i]<<vcl_endl;
       break;
     }
+    vcl_cout<<"out: "<<out[i]<<" for i:"<<i<<vcl_endl;
   }
   
   //delete buffer_a_;
