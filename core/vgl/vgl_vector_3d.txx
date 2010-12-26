@@ -5,7 +5,7 @@
 // \file
 
 #include "vgl_vector_3d.h"
-#include "vgl_tolerance.h"
+#include "vgl_tolerance.txx"
 
 #include <vcl_cmath.h> // sqrt() , acos()
 #include <vcl_iostream.h>
@@ -40,7 +40,7 @@ double angle(vgl_vector_3d<T> const& a, vgl_vector_3d<T> const& b)
       return 0;
   }
   else
-    return 3.14159265358979323846;
+    return vcl_acos(-1.0); // pi
 }
 
 template <class T>
@@ -74,7 +74,7 @@ vgl_vector_3d<T> orthogonal_vectors(vgl_vector_3d<T> const& a, double s)
   double nx = static_cast<double>(a.x_);
   double ny = static_cast<double>(a.y_);
   double nz = static_cast<double>(a.z_);
-  double two_pi = 2*3.14159265358979323846;
+  double two_pi = 2*vcl_acos(-1.0);
   double co = vcl_cos(two_pi*s);
   double si = vcl_sin(two_pi*s);
 

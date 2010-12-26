@@ -8,7 +8,7 @@
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_homg_plane_3d.h>
-#include <vgl/vgl_tolerance.h>
+#include <vgl/vgl_tolerance.txx>
 
 #include <vcl_iostream.h>
 #include <vcl_iomanip.h>
