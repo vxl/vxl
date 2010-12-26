@@ -28,7 +28,6 @@ bool inbetween(T x1, T y1, T x2, T y2, T x3, T y3)
   return (x1-x3)*(x2-x3)<=0 && (y1-y3)*(y2-y3)<=0;
 }
 
-
 template <class T>
 bool vgl_lineseg_test_lineseg(T x1, T y1, T x2, T y2, T x3, T y3, T x4, T y4)
 {
@@ -36,7 +35,7 @@ bool vgl_lineseg_test_lineseg(T x1, T y1, T x2, T y2, T x3, T y3, T x4, T y4)
   // `a', `b', `c', and `d' are more stable when they are very close to zero.
 
   double px1 = x1;
-  double py1 = y1; 
+  double py1 = y1;
   double px2 = x2;
   double py2 = y2;
   double px3 = x3;
@@ -79,6 +78,26 @@ bool vgl_lineseg_test_lineseg(T x1, T y1, T x2, T y2, T x3, T y3, T x4, T y4)
         inbetween(px3, py3, px4, py4, px1, py1) ||
         inbetween(px3, py3, px4, py4, px2, py2) )
     );
+}
+
+//: true if the point lies on the line segment and is between the endpoints
+// \relatesalso vgl_point_2d
+// \relatesalso vgl_line_segment_2d
+template <class T>
+bool vgl_lineseg_test_point(vgl_point_2d<T> const& p,
+                            vgl_line_segment_2d<T> const& lseg)
+{
+  vgl_point_2d<T> p1 = lseg.point1(), p2 = lseg.point2();
+  T x1 = p1.x(), y1 = p1.y(),
+    x2 = p2.x(), y2 = p2.y(),
+    xp = p.x(),  yp = p.y();
+  // compute squared distances
+  T d1p = (xp-x1)*(xp-x1) + (yp-y1)*(yp-y1);
+  T d2p = (xp-x2)*(xp-x2) + (yp-y2)*(yp-y2);
+  T d12 = (x2-x1)*(x2-x1) + (y2-y1)*(y2-y1);
+  double diff = vcl_sqrt(d1p) + vcl_sqrt(d2p) - vcl_sqrt(d12);
+  // diff is always >= 0 (triangle inequality)
+  return diff <= vgl_tolerance<double>::position;
 }
 
 //--------------------------------------------------------------------------------
