@@ -4,9 +4,7 @@
 // \file
 
 
-
 #include <vgl/vgl_ray_3d.h>
-
 
 #include <vul/vul_timer.h>
 
@@ -57,19 +55,19 @@ void boxm2_cast_ray_function(vgl_ray_3d<float> & ray,
   float tblock = vcl_max(vcl_max( (min_facex-ray_ox)*(1.0f/ray_dx), (min_facey-ray_oy)*(1.0f/ray_dy)), (min_facez-ray_oz)*(1.0f/ray_dz));
 
   if (tfar <= tblock) {
-    return; 
+    return;
   }
   //make sure tnear is at least 0...
   tblock = (tblock > 0.0f) ? tblock : 0.0f;
-  
+
   //make sure tfar is within the last block so texit surpasses it (and breaks from the outer loop)
-  tfar -= BLOCK_EPSILON;  
-  
+  tfar -= BLOCK_EPSILON;
+
   //----------------------------------------------------------------------------
   // Begin traversing the blocks, break when any curr_block_index value is
   // illegal (not between 0 and scenedims)
   //----------------------------------------------------------------------------
-  while(tblock < tfar ) 
+  while (tblock < tfar)
   {
     //-------------------------------------------------------------------------
     // get small block and necessary information
@@ -80,17 +78,16 @@ void boxm2_cast_ray_function(vgl_ray_3d<float> & ray,
     float posx = (ray_ox + (tblock + TREE_EPSILON)*ray_dx);
     float posy = (ray_oy + (tblock + TREE_EPSILON)*ray_dy);
     float posz = (ray_oz + (tblock + TREE_EPSILON)*ray_dz);
-    
-    //curr block index (var later used as cell_min), check to make sure block index isn't 192 or -1
-    float cell_minx = clamp(floor(posx), 0.0f, linfo->scene_dims[0]-1.0f);
-    float cell_miny = clamp(floor(posy), 0.0f, linfo->scene_dims[1]-1.0f);
-    float cell_minz = clamp(floor(posz), 0.0f, linfo->scene_dims[2]-1.0f);
 
-    //load current block/tree 
+    //curr block index (var later used as cell_min), check to make sure block index isn't 192 or -1
+    float cell_minx = clamp(vcl_floor(posx), 0.0f, linfo->scene_dims[0]-1.0f);
+    float cell_miny = clamp(vcl_floor(posy), 0.0f, linfo->scene_dims[1]-1.0f);
+    float cell_minz = clamp(vcl_floor(posz), 0.0f, linfo->scene_dims[2]-1.0f);
+
+    //load current block/tree
     uchar16 tree=blk_sptr->trees()(cell_minx,cell_miny,cell_minz);
 
     boct_bit_tree bit_tree((char*)tree.data_block());
-
 
     unsigned short buff_index=tree[12];
     buff_index=(buff_index<<8)+tree[13];
@@ -99,73 +96,70 @@ void boxm2_cast_ray_function(vgl_ray_3d<float> & ray,
     sub_index=(sub_index<<8)+tree[11];
 
     int data_index=(int)buff_index*(int)4/* FOR NOW FIX ME linfo->tree_buffer_length*/+(int)sub_index;
-                           
+
 //
-//    //local ray origin is entry point (point should be in [0,1]) 
+//    //local ray origin is entry point (point should be in [0,1])
 //    //(note that cell_min is the current block index at this point)
 //    //setting local_ray_o to block_pos allows ttree to start at 0
     float lrayx = (posx - cell_minx);
     float lrayy = (posy - cell_miny);
     float lrayz = (posz - cell_minz);
-//    
-    //get scene level t exit value.  check to make sure that the ray is progressing. 
+//
+    //get scene level t exit value.  check to make sure that the ray is progressing.
     //When rays are close to axis aligned, t values found for intersection become ill-defined, causing an infinite block loop
-    cell_minx = (ray_dx > 0) ? cell_minx+1.0f : cell_minx; 
-    cell_miny = (ray_dy > 0) ? cell_miny+1.0f : cell_miny; 
-    cell_minz = (ray_dz > 0) ? cell_minz+1.0f : cell_minz; 
+    cell_minx = (ray_dx > 0) ? cell_minx+1.0f : cell_minx;
+    cell_miny = (ray_dy > 0) ? cell_miny+1.0f : cell_miny;
+    cell_minz = (ray_dz > 0) ? cell_minz+1.0f : cell_minz;
     float texit = vcl_min(vcl_min( (cell_minx-ray_ox)*(1.0f/ray_dx), (cell_miny-ray_oy)*(1.0f/ray_dy)), (cell_minz-ray_oz)*(1.0f/ray_dz));
-    if(texit <= tblock) break; //need this check to make sure the ray is progressing
-        
+    if (texit <= tblock) break; //need this check to make sure the ray is progressing
+
     //ttree starts at 0, ttree_exit is t exit value in the tree level (scaled from scene level)
-    texit = (texit - tblock - BLOCK_EPSILON);  
-    float ttree = 0.0f;                 
-    while (ttree < texit)              
+    texit = (texit - tblock - BLOCK_EPSILON);
+    float ttree = 0.0f;
+    while (ttree < texit)
     {
       // point in tree coordinates
-      posx = (lrayx + (ttree + TREE_EPSILON)*ray_dx);  
-      posy = (lrayy + (ttree + TREE_EPSILON)*ray_dy);   
-      posz = (lrayz + (ttree + TREE_EPSILON)*ray_dz);   
-//      
+      posx = (lrayx + (ttree + TREE_EPSILON)*ray_dx);
+      posy = (lrayy + (ttree + TREE_EPSILON)*ray_dy);
+      posz = (lrayz + (ttree + TREE_EPSILON)*ray_dz);
+//
 //      // traverse to leaf cell that contains the entry point, set bounding box
 //      ////data offset is ushort pointed to by tree + bit offset
 
       int bit_index=bit_tree.traverse(vgl_point_3d<double>(posx,posy,posz));
       int depth =bit_tree.depth_at(bit_index);
       float cell_len=vcl_pow((float)2,(float)-depth);
-      
+
       cell_minx=vcl_floor(posx/cell_len)* cell_len;
       cell_miny=vcl_floor(posy/cell_len)* cell_len;
       cell_minz=vcl_floor(posz/cell_len)* cell_len;
 
       int data_offset=data_index+bit_tree.get_data_index(bit_index);
 
-     
       // check to see how close tnear and tfar are
-      cell_minx = (ray_dx > 0.0f) ? cell_minx+cell_len : cell_minx; 
-      cell_miny = (ray_dy > 0.0f) ? cell_miny+cell_len : cell_miny; 
+      cell_minx = (ray_dx > 0.0f) ? cell_minx+cell_len : cell_minx;
+      cell_miny = (ray_dy > 0.0f) ? cell_miny+cell_len : cell_miny;
       cell_minz = (ray_dz > 0.0f) ? cell_minz+cell_len : cell_minz;
       float t1 = vcl_min(vcl_min( (cell_minx-lrayx)*(1.0f/ray_dx), (cell_miny-lrayy)*(1.0f/ray_dy)), (cell_minz-lrayz)*(1.0f/ray_dz));
-  
+
       //make sure ray goes through the cell with positive seg length
-      if(t1 <= ttree) break;
+      if (t1 <= ttree) break;
 
       //// distance must be multiplied by the dimension of the bounding box
       float d = (t1-ttree) * linfo->block_len;
       ttree = t1;
-      vcl_cout<<data_offset<<" ";
+      vcl_cout<<data_offset<<' ';
 
       functor.step_cell(d,data_index,vals);
-    
     }
-//    //--------------------------------------------------------------------------
-//    // finding the next block (using exit point already found before tree loop)
-//    //--------------------------------------------------------------------------
-//    //scale texit back up
+    //--------------------------------------------------------------------------
+    // finding the next block (using exit point already found before tree loop)
+    //--------------------------------------------------------------------------
+    //scale texit back up
     texit = texit + tblock + BLOCK_EPSILON;
     tblock = texit;
   }
 }
-
 
 
 #endif // boxm2_cast_ray_function_h_
