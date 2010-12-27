@@ -9,15 +9,17 @@ class boxm2_render_exp_image_functor
 {
  public:
   //: "default" constructor
-     boxm2_render_exp_image_functor(){}
+  boxm2_render_exp_image_functor() {}
+
   bool init_data(vcl_vector<boxm2_data_base_sptr> & datas)
   {
-    if((alpha_data_=dynamic_cast<boxm2_data<BOXM2_ALPHA> *>(datas[0].ptr())) && 
-       (mog3_data_ =dynamic_cast<boxm2_data<BOXM2_MOG3_GREY> *>(datas[1].ptr())) )
+    if ((alpha_data_=dynamic_cast<boxm2_data<BOXM2_ALPHA> *>(datas[0].ptr())) &&
+        (mog3_data_ =dynamic_cast<boxm2_data<BOXM2_MOG3_GREY> *>(datas[1].ptr())) )
        return true;
-    return false;
-
+    else
+      return false;
   }
+
   inline bool step_cell(float seg_len,int index,vcl_vector<float> & vals)
   {
     boxm2_data<BOXM2_ALPHA>::datatype alpha=alpha_data_->data()[index];
@@ -33,29 +35,28 @@ class boxm2_render_exp_image_functor
 
     return true;
   }
-private:
-    boxm2_data<BOXM2_ALPHA> * alpha_data_;
-    boxm2_data<BOXM2_MOG3_GREY> * mog3_data_;
-
+ private:
+  boxm2_data<BOXM2_ALPHA> * alpha_data_;
+  boxm2_data<BOXM2_MOG3_GREY> * mog3_data_;
 };
 
+#if 0
+//: Functor class to normalize expected image
+template<class T_data>
+class normalize_expected_functor_rt
+{
+ public:
+  normalize_expected_functor_rt(bool use_black_background) : use_black_background_(use_black_background) {}
 
-////: Functor class to normalize expected image
-//template<class T_data>
-//class normalize_expected_functor_rt
-//{
-// public:
-//  normalize_expected_functor_rt(bool use_black_background) : use_black_background_(use_black_background) {}
-//
-//  void operator()(float mask, typename T_data::obs_datatype &pix) const
-//  {
-//    if (!use_black_background_) {
-//      pix += mask*1.0f;
-//    }
-//  }
-//  bool use_black_background_;
-//};
-
+  void operator()(float mask, typename T_data::obs_datatype &pix) const
+  {
+    if (!use_black_background_) {
+      pix += mask*1.0f;
+    }
+  }
+  bool use_black_background_;
+};
+#endif // 0
 
 void boxm2_render_exp_image(boxm2_scene_info_sptr linfo,
                             boxm2_block_sptr blk_sptr,
@@ -68,15 +69,14 @@ void boxm2_render_exp_image(boxm2_scene_info_sptr linfo,
                             unsigned int roi_ni0=0,
                             unsigned int roi_nj0=0)
 {
-
     boxm2_render_exp_image_functor render_functor;
     render_functor.init_data(datas);
     vcl_vector<float> vals(2,0.0);
-    if(vpgl_perspective_camera<double> * pcam=dynamic_cast<vpgl_perspective_camera<double> *>(cam.ptr()))
+    if (vpgl_perspective_camera<double> * pcam=dynamic_cast<vpgl_perspective_camera<double> *>(cam.ptr()))
     {
-        for(unsigned i=roi_ni0;i<roi_ni;i++)
+        for (unsigned i=roi_ni0;i<roi_ni;++i)
         {
-            for(unsigned j=roi_nj0;j<roi_nj;j++)
+            for (unsigned j=roi_nj0;j<roi_nj;++j)
             {
                 vgl_ray_3d<double> ray_ij=pcam->backproject_ray(i,j);
 
@@ -86,11 +86,9 @@ void boxm2_render_exp_image(boxm2_scene_info_sptr linfo,
 
                 float dray_ij_x=ray_ij.direction().x(),dray_ij_y=ray_ij.direction().y(),dray_ij_z=ray_ij.direction().z();
 
-                
-
-                //thresh ray direction components - too small a treshhold causes axis aligned 
+                //thresh ray direction components - too small a treshhold causes axis aligned
                 //viewpoints to hang in infinite loop (block loop)
-                float thresh = vcl_exp(-12.0f); 
+                float thresh = vcl_exp(-12.0f);
                 if (vcl_fabs(dray_ij_x)  < thresh) dray_ij_x = thresh;
                 if (vcl_fabs(dray_ij_y)  < thresh) dray_ij_y = thresh;
                 if (vcl_fabs(dray_ij_z)  < thresh) dray_ij_z = thresh;
@@ -103,10 +101,8 @@ void boxm2_render_exp_image(boxm2_scene_info_sptr linfo,
                 (*expected)(i,j)=vals[0];
                 (*vis)(i,j)=vals[1];
             }
-            vcl_cout<<vcl_endl;
         }
     }
-
 }
 
 #endif
