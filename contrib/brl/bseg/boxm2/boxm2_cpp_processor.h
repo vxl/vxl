@@ -1,6 +1,7 @@
 #ifndef bomx2_cpp_processor_h
 #define bomx2_cpp_processor_h
-
+//:
+// \file
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_processor.h>
 #include <brdb/brdb_value_sptr.h>
@@ -19,15 +20,9 @@ class boxm2_cpp_processor: public boxm2_processor
     //: sets the scene this processor will work on
     bool set_scene(boxm2_scene* scene) { scene_ = scene; return true; }
 
-
  protected:
-
     //: scene that this processor is operating on
     boxm2_scene* scene_;
-
-
-
-
 };
 
 #endif
