@@ -67,7 +67,7 @@ char* boxm2_test_utils::construct_block_test_stream(int numBuffers,
       bsize[curr_byte + 16*i+13]=(unsigned char)(buff_index&255);
 
       data_index++;
-      if(data_index>=treeLen)
+      if (data_index>=treeLen)
       {
           data_index=0;
           buff_index++;
@@ -123,9 +123,9 @@ void boxm2_test_utils::save_test_scene_to_disk()
                                                                       init_level,
                                                                       max_level,
                                                                       max_mb );
-        boxm2_block_id id(i,j,k);                                                               
+        boxm2_block_id id(i,j,k);
         boxm2_block b(id, stream);
-        
+
         vcl_cout<<"saving test block for "<<id<<vcl_endl;
         boxm2_sio_mgr::save_block("", &b);
       }
@@ -149,7 +149,7 @@ void boxm2_test_utils::save_test_scene_to_disk()
   for (int i=0; i<2; i++) {
     for (int j=0; j<2; j++) {
       for (int k=0; k<2; k++) {
-        boxm2_block_id id(boxm2_block_id(i,j,k)); 
+        boxm2_block_id id(boxm2_block_id(i,j,k));
         vcl_cout<<"saving alpha and mog3 test data for "<<id<<vcl_endl;
         boxm2_sio_mgr::save_block_data<BOXM2_ALPHA>("", id, &test_data);
         boxm2_sio_mgr::save_block_data<BOXM2_MOG3_GREY>("", id, &test_mog);
@@ -160,8 +160,8 @@ void boxm2_test_utils::save_test_scene_to_disk()
 
 void boxm2_test_utils::delete_test_scene_from_disk(vcl_string dir)
 {
-  //use vul_file to 
-  vul_file::delete_file_glob(dir+"/"+"*id_*.bin"); 
+  //use vul_file to
+  vul_file::delete_file_glob(dir+"/"+"*id_*.bin");
 }
 
 
@@ -255,43 +255,42 @@ void boxm2_test_utils::test_block_equivalence(boxm2_block& a, boxm2_block& b)
 }
 
 
-
 vcl_string boxm2_test_utils::save_test_simple_scene()
 {
     vcl_string test_dir  = testlib_root_dir()+ "/contrib/brl/bseg/boxm2/tests/";
-    vcl_string test_file = test_dir + "test.xml"; 
+    vcl_string test_file = test_dir + "test.xml";
 
-    vcl_map<boxm2_block_id, boxm2_block_metadata> blocks; 
-    for(int i=0; i<1; i++) {
-        for(int j=0; j<1; j++) {
-            double big_block_side = 1; 
-            boxm2_block_id id(i,j,0); 
-            boxm2_block_metadata data; 
-            data.id_ = id; 
-            data.local_origin_ = vgl_point_3d<double>(big_block_side*i, big_block_side*j, 0.0); 
-            data.sub_block_dim_ = vgl_vector_3d<double>(0.5, 0.5, 0.5); 
-            data.sub_block_num_ = vgl_vector_3d<unsigned>(2, 2, 2); 
-            data.init_level_ = 1; 
-            data.max_level_ = 4; 
-            data.max_mb_ = 400; 
-            data.p_init_ = .001;  
+    vcl_map<boxm2_block_id, boxm2_block_metadata> blocks;
+    for (int i=0; i<1; i++) {
+        for (int j=0; j<1; j++) {
+            double big_block_side = 1;
+            boxm2_block_id id(i,j,0);
+            boxm2_block_metadata data;
+            data.id_ = id;
+            data.local_origin_ = vgl_point_3d<double>(big_block_side*i, big_block_side*j, 0.0);
+            data.sub_block_dim_ = vgl_vector_3d<double>(0.5, 0.5, 0.5);
+            data.sub_block_num_ = vgl_vector_3d<unsigned>(2, 2, 2);
+            data.init_level_ = 1;
+            data.max_level_ = 4;
+            data.max_mb_ = 400;
+            data.p_init_ = .001;
 
             //push it into the map
-            blocks[id] = data; 
+            blocks[id] = data;
         }
     }
-  
+
   //create scene
-  boxm2_scene scene; 
-  scene.set_local_origin(vgl_point_3d<double>(0.0, 0.0, 0.0)); 
-  scene.set_rpc_origin(vgl_point_3d<double>(0.0, 0.0, 0.0));  
-  bgeo_lvcs lvcs; 
-  scene.set_lvcs(lvcs); 
-  scene.set_xml_path(test_file); 
-  scene.set_data_path(test_dir); 
-  scene.set_blocks(blocks); 
-  scene.save_scene(); 
-  
+  boxm2_scene scene;
+  scene.set_local_origin(vgl_point_3d<double>(0.0, 0.0, 0.0));
+  scene.set_rpc_origin(vgl_point_3d<double>(0.0, 0.0, 0.0));
+  bgeo_lvcs lvcs;
+  scene.set_lvcs(lvcs);
+  scene.set_xml_path(test_file);
+  scene.set_data_path(test_dir);
+  scene.set_blocks(blocks);
+  scene.save_scene();
+
   // ensure 8 test blocks and 8 data blocks are saved to disk
   vnl_random rand;
   int nums[4] = { 2, 2, 2, 0 };
@@ -311,9 +310,9 @@ vcl_string boxm2_test_utils::save_test_simple_scene()
                                                                       init_level,
                                                                       max_level,
                                                                       max_mb );
-        boxm2_block_id id(i,j,k);                                                               
+        boxm2_block_id id(i,j,k);
         boxm2_block b(id, stream);
-        
+
         vcl_cout<<"saving test block for "<<id<<vcl_endl;
         boxm2_sio_mgr::save_block(test_dir+"/", &b);
       }
@@ -337,7 +336,7 @@ vcl_string boxm2_test_utils::save_test_simple_scene()
   for (int i=0; i<1; i++) {
     for (int j=0; j<1; j++) {
       for (int k=0; k<1; k++) {
-        boxm2_block_id id(boxm2_block_id(i,j,k)); 
+        boxm2_block_id id(boxm2_block_id(i,j,k));
         vcl_cout<<"saving alpha and mog3 test data for "<<id<<vcl_endl;
         boxm2_sio_mgr::save_block_data<BOXM2_ALPHA>(test_dir+"/", id, &test_data);
         boxm2_sio_mgr::save_block_data<BOXM2_MOG3_GREY>(test_dir+"/", id, &test_mog);
@@ -347,3 +346,4 @@ vcl_string boxm2_test_utils::save_test_simple_scene()
 
   return test_file;
 }
+
