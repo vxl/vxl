@@ -3,7 +3,9 @@
 #include <vnl/vnl_random.h>
 #include <boxm2/io/boxm2_sio_mgr.h>
 #include <vul/vul_file.h>
-
+#include <boxm2/boxm2_scene.h>
+#include <testlib/testlib_test.h>
+#include <testlib/testlib_root_dir.h>
 
 char* boxm2_test_utils::construct_block_test_stream(int numBuffers,
                                                     int treeLen,
@@ -54,8 +56,23 @@ char* boxm2_test_utils::construct_block_test_stream(int numBuffers,
 
     //4. put some tree values in there
     //write in the buffer some values for the trees (each tree gets a 1 as the root)
+    short buff_index=0;
+    short data_index=0;
     for (int i=0; i<numTrees; i++)
-      bsize[curr_byte + 16*i] = (unsigned char) 1;
+    {
+      bsize[curr_byte + 16*i] = (unsigned char) 0;
+      bsize[curr_byte + 16*i+10]=(unsigned char)(data_index>>8);
+      bsize[curr_byte + 16*i+11]=(unsigned char)(data_index&255);
+      bsize[curr_byte + 16*i+12]=(unsigned char)(buff_index>>8);
+      bsize[curr_byte + 16*i+13]=(unsigned char)(buff_index&255);
+
+      data_index++;
+      if(data_index>=treeLen)
+      {
+          data_index=0;
+          buff_index++;
+      }
+    }
     curr_byte += sizeof(uchar16)*numTrees;
 
     //5. 2d array of tree pointers
@@ -141,11 +158,12 @@ void boxm2_test_utils::save_test_scene_to_disk()
   }
 }
 
-void boxm2_test_utils::delete_test_scene_from_disk()
+void boxm2_test_utils::delete_test_scene_from_disk(vcl_string dir)
 {
   //use vul_file to 
-  vul_file::delete_file_glob("*id_*.bin"); 
+  vul_file::delete_file_glob(dir+"/"+"*id_*.bin"); 
 }
+
 
 void boxm2_test_utils::test_block_equivalence(boxm2_block& a, boxm2_block& b)
 {
@@ -236,3 +254,96 @@ void boxm2_test_utils::test_block_equivalence(boxm2_block& a, boxm2_block& b)
     TEST("boxm2_block: mem_ptrs initialized properly", true, true);
 }
 
+
+
+vcl_string boxm2_test_utils::save_test_simple_scene()
+{
+    vcl_string test_dir  = testlib_root_dir()+ "/contrib/brl/bseg/boxm2/tests/";
+    vcl_string test_file = test_dir + "test.xml"; 
+
+    vcl_map<boxm2_block_id, boxm2_block_metadata> blocks; 
+    for(int i=0; i<1; i++) {
+        for(int j=0; j<1; j++) {
+            double big_block_side = 1; 
+            boxm2_block_id id(i,j,0); 
+            boxm2_block_metadata data; 
+            data.id_ = id; 
+            data.local_origin_ = vgl_point_3d<double>(big_block_side*i, big_block_side*j, 0.0); 
+            data.sub_block_dim_ = vgl_vector_3d<double>(0.5, 0.5, 0.5); 
+            data.sub_block_num_ = vgl_vector_3d<unsigned>(2, 2, 2); 
+            data.init_level_ = 1; 
+            data.max_level_ = 4; 
+            data.max_mb_ = 400; 
+            data.p_init_ = .001;  
+
+            //push it into the map
+            blocks[id] = data; 
+        }
+    }
+  
+  //create scene
+  boxm2_scene scene; 
+  scene.set_local_origin(vgl_point_3d<double>(0.0, 0.0, 0.0)); 
+  scene.set_rpc_origin(vgl_point_3d<double>(0.0, 0.0, 0.0));  
+  bgeo_lvcs lvcs; 
+  scene.set_lvcs(lvcs); 
+  scene.set_xml_path(test_file); 
+  scene.set_data_path(test_dir); 
+  scene.set_blocks(blocks); 
+  scene.save_scene(); 
+  
+  // ensure 8 test blocks and 8 data blocks are saved to disk
+  vnl_random rand;
+  int nums[4] = { 2, 2, 2, 0 };
+  double dims[4] = { 0.5, 0.5, 0.5, 0.0 };
+  int numBuffers = 2;
+  int treeLen    = 2*2;
+  int init_level = 1;
+  int max_level  = 4;
+  int max_mb     = 400;
+  for (int i=0; i<1; i++) {
+    for (int j=0; j<1; j++) {
+      for (int k=0; k<1; k++) {
+        char* stream = boxm2_test_utils::construct_block_test_stream( numBuffers,
+                                                                      treeLen,
+                                                                      nums,
+                                                                      dims,
+                                                                      init_level,
+                                                                      max_level,
+                                                                      max_mb );
+        boxm2_block_id id(i,j,k);                                                               
+        boxm2_block b(id, stream);
+        
+        vcl_cout<<"saving test block for "<<id<<vcl_endl;
+        boxm2_sio_mgr::save_block(test_dir+"/", &b);
+      }
+    }
+  }
+
+  // save the same random data block 8 times
+  typedef vnl_vector_fixed<unsigned char, 8> uchar8;
+  const unsigned int array_size = 8; //roughly 20 megs for alpha
+  float * farray = new float[array_size];
+  uchar8* carray = new uchar8[array_size];
+  for (unsigned c=0; c<array_size; ++c) {
+    float rnd = (float) rand.drand32(0,100);
+    farray[c] = rnd;
+    carray[c] = uchar8((unsigned char) rnd);
+  }
+  char * buffer = reinterpret_cast<char *>(farray);
+  char * cbuffer = reinterpret_cast<char *>(carray);
+  boxm2_data<BOXM2_ALPHA> test_data(buffer, array_size*sizeof(float), boxm2_block_id(0,0,0));
+  boxm2_data<BOXM2_MOG3_GREY> test_mog(cbuffer, array_size*sizeof(uchar8), boxm2_block_id(0,0,0));
+  for (int i=0; i<1; i++) {
+    for (int j=0; j<1; j++) {
+      for (int k=0; k<1; k++) {
+        boxm2_block_id id(boxm2_block_id(i,j,k)); 
+        vcl_cout<<"saving alpha and mog3 test data for "<<id<<vcl_endl;
+        boxm2_sio_mgr::save_block_data<BOXM2_ALPHA>(test_dir+"/", id, &test_data);
+        boxm2_sio_mgr::save_block_data<BOXM2_MOG3_GREY>(test_dir+"/", id, &test_mog);
+      }
+    }
+  }
+
+  return test_file;
+}

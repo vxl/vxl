@@ -30,12 +30,14 @@ IF(EXPAT_FOUND)
         boxm2_cpp_render_process.h    boxm2_cpp_render_process.cxx
         boxm2_opencl_render_depth_process.h boxm2_opencl_render_depth_process.cxx
         boxm2_util.h                  boxm2_util.cxx
+        boxm2_cast_ray_function.h 
+        boxm2_render_exp_image_functor.h
        )
 
     AUX_SOURCE_DIRECTORY(Templates boxm2_sources)
 
     ADD_LIBRARY(boxm2  ${boxm2_sources})
-    TARGET_LINK_LIBRARIES(boxm2 boxm2_basic bocl brdb vbl_io expatpp vpgl vgl vgl_xio vbl vsl vcl)
+    TARGET_LINK_LIBRARIES(boxm2 boxm2_basic bocl boct brdb vbl_io expatpp vpgl vgl vgl_xio vbl vsl vcl)
 
     #basic
     subdirs(basic)

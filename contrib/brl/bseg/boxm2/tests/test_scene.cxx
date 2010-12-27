@@ -47,8 +47,8 @@ void test_scene()
   scene.save_scene(); 
   
   //create test scene
-  boxm2_scene test_scene(test_file); 
-  vcl_cout<<scene<<vcl_endl;
+  boxm2_scene test_scene_data(test_file); 
+  vcl_cout<<test_scene_data<<vcl_endl;
   
   //delete file created
   vpl_unlink(test_file.c_str());
