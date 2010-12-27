@@ -233,9 +233,10 @@ inline static int int_pow(int a, unsigned int b)
 
 int boct_bit_tree::traverse(const vgl_point_3d<double> p)
 {
+#if 0
   vcl_cout<<"Traverse to point "<<p
           <<" through "<<num_levels_<<" levels"<<vcl_endl;
-
+#endif
   //find location code for point
   boct_loc_code<short> target_code = boct_loc_code<short>(p, num_levels_-1);
   int target_level = target_code.level;
