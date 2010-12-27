@@ -13,22 +13,22 @@
 #include <vcl_iostream.h>
 #include <vcl_sstream.h>
 
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_line_2d.h>
-#include <vgl/vgl_line_segment_2d.h>
-#include <vgl/vgl_line_3d_2_points.h>
-#include <vgl/vgl_line_segment_3d.h>
-#include <vgl/vgl_plane_3d.h>
-#include <vgl/vgl_vector_2d.h>
-#include <vgl/vgl_vector_3d.h>
+#include <vgl/vgl_point_2d.txx>
+#include <vgl/vgl_point_3d.txx>
+#include <vgl/vgl_line_2d.txx>
+#include <vgl/vgl_line_segment_2d.txx>
+#include <vgl/vgl_line_3d_2_points.txx>
+#include <vgl/vgl_line_segment_3d.txx>
+#include <vgl/vgl_plane_3d.txx>
+#include <vgl/vgl_vector_2d.txx>
+#include <vgl/vgl_vector_3d.txx>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_box_3d.h>
-#include <vgl/vgl_clip.h>
-#include <vgl/vgl_distance.h>
-#include <vgl/vgl_lineseg_test.h>
+#include <vgl/vgl_clip.txx>
+#include <vgl/vgl_distance.txx>
+#include <vgl/vgl_lineseg_test.txx>
 #include <vgl/vgl_1d_basis.h>
-#include <vgl/vgl_intersection.h>
+#include <vgl/vgl_intersection.txx>
 
 static void test_vector_2d()
 {
