@@ -1,4 +1,4 @@
-// This is brl/bseg/boxm/sample/algo/boxm2_mog3_grey_processor.h
+// This is brl/bseg/boxm2/boxm2_mog3_grey_processor.h
 #ifndef boxm2_mog3_grey_processor_h_
 #define boxm2_mog3_grey_processor_h_
 //:
@@ -20,10 +20,8 @@
 
 class  boxm2_mog3_grey_processor
 {
-
  public:
   static float expected_color( vnl_vector_fixed<unsigned char, 8> mog3);
-    
 };
 
-#endif // boxm2_mog3_grey_processorr_h_
+#endif // boxm2_mog3_grey_processor_h_
