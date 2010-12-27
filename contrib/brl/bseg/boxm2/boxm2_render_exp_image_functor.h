@@ -3,6 +3,7 @@
 //:
 // \file
 #include <boxm2/boxm2_cast_ray_function.h>
+#include <boxm2/boxm2_mog3_grey_processor.h>
 
 class boxm2_render_exp_image_functor
 {
@@ -21,8 +22,14 @@ class boxm2_render_exp_image_functor
   {
     boxm2_data<BOXM2_ALPHA>::datatype alpha=alpha_data_->data()[index];
     float vis=vals[1];
+    float exp_exp_int=vals[0];
+    float curr_p=(1-vcl_exp(-alpha*seg_len))*vis;
+
+    exp_exp_int+=curr_p*boxm2_data_traits<BOXM2_MOG3_GREY>::processor::expected_color(mog3_data_->data()[index]);
     vis*=vcl_exp(-alpha*seg_len);
+
     vals[1]=vis;
+    vals[0]=exp_exp_int;
 
     return true;
   }
