@@ -9,16 +9,17 @@
 // \brief 2D homogeneous operations
 // \author Don Hamilton, Peter Tu
 // \date   Feb 16 2000
-//
 // \verbatim
-// Modifications
+//  Modifications
 //   31-Oct-00 Peter Vanroose - signatures fixed, and vcl_list iterator used
-//   16-Mar-01 Tim Cootes - added documentation
+//   16-Mar-01 Tim Cootes     - added documentation
 //   29-Aug-01 Peter Vanroose - added vgl_conic functions (ported from TargetJr)
 //    5-Oct-01 Peter Vanroose - added compute_bounding_box functions
 //   15-May-03 Peter Vanroose - added implementation for closest_point()
 //   22-Jun-03 Peter Vanroose - vcl_list replaced by vcl_vector in lines_to_point
 //    3-Feb-07 Peter Vanroose - changed vnl_vector to vnl_vector_fixed
+//   20-Dec-10 Peter Vanroose - bug fix in conic intersection
+//                              (when 2 intersection pts have same y coordinate)
 // \endverbatim
 
 #include <vcl_list.h>
@@ -160,11 +161,11 @@ class vgl_homg_operators_2d
   static vnl_matrix_fixed<T,3,3> matrix_from_conic(vgl_conic<T> const&);
   static vnl_matrix_fixed<T,3,3> matrix_from_dual_conic(vgl_conic<T> const&);
 
-  //: Find all real intersection points of a conic and a line (between 0 and 2)
+  //: Find all real intersection points of a conic and a line (between 0 and 2, including points at infinity)
   static vcl_list<vgl_homg_point_2d<T> > intersection(vgl_conic<T> const& c,
                                                       vgl_homg_line_2d<T> const& l);
 
-  //: Find all real intersection points of two conics (between 0 and 4)
+  //: Find all real intersection points of two conics (between 0 and 4, including points at infinity)
   static vcl_list<vgl_homg_point_2d<T> > intersection(vgl_conic<T> const& c1,
                                                       vgl_conic<T> const& c2);
 

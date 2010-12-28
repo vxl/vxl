@@ -144,7 +144,6 @@ vgl_homg_operators_2d<T>::perp_dist_squared(const vgl_homg_point_2d<T>& point,
   return numerator / denominator;
 }
 
-
 //  ANGLES
 
 //-----------------------------------------------------------------------------
@@ -338,7 +337,6 @@ vgl_homg_operators_2d<T>::lines_to_point(const vcl_vector<vgl_homg_line_2d<T> >&
 
 //  MISCELLANEOUS
 
-
 //-----------------------------------------------------------------------------
 //: Calculates the crossratio of four collinear points p1, p2, p3 and p4.
 // This number is projectively invariant, and it is the coordinate of p4
@@ -429,7 +427,6 @@ vgl_homg_operators_2d<T>::matrix_from_conic(vgl_conic<T> const& c)
   return mat;
 }
 
-
 //-------------------------------------------------------------------------
 //: returns 3x3 matrix containing conic coefficients of dual conic.
 // I.e., the inverse matrix (up to a scale factor) of the conic matrix.
@@ -448,6 +445,7 @@ vgl_homg_operators_2d<T>::matrix_from_dual_conic(vgl_conic<T> const& c)
   return mat;
 }
 
+//:
 // This function is called from within intersection(vgl_conic<T>,vgl_conic<T>).
 // The two conics passed to this function MUST NOT be degenerate!
 template <class T>
@@ -478,9 +476,16 @@ vgl_homg_operators_2d<T>::do_intersect(vgl_conic<T> const& c1,
   if (ab==0 && ad==0)
     return intersection(c1,vgl_conic<T>(0,0,ac,0,ae,af));
 
-  // And of course idem for y:
+  // And of course similarly for y:
   if (ab==0 && ae==0)
     return intersection(c1,vgl_conic<T>(0,0,ac,ad,0,af));
+
+  // The following fix by Peter Vanroose, 28 december 2010:
+  // The general idea *does not* work (at least: not easily) if two intersection points have the same y coordinate.
+  // So make that a special case. It is easily detected, since in that case there is a scale factor lambda
+  // such that c1-lamda*c2 decomposes into (y-y0)(x+my+n)=0. Which means that lambda=A/a, and the equation satisfies:
+  if (ac*ad*ad+af*ab*ab == ab*ad*ae)
+    return intersection(c1,vgl_conic<T>(0,ab,ac,ad,ae,af));
 
   vnl_vector_fixed<T,5> coef;
   coef(0) = ac*ac-ab*(b*C-B*c);
@@ -498,7 +503,7 @@ vgl_homg_operators_2d<T>::do_intersect(vgl_conic<T> const& c1,
   // [  0    1    0    0 ]
   // [  0    0    1    0 ]
 
-  if (coef(0) == 0 && coef(1) == 0) {
+  if (coef(0) == 0 && coef(1) == 0) { // The equation is actually of 2nd degree
     if (coef(2) == 0 && coef(3) == 0) return vcl_list<vgl_homg_point_2d<T> >(); // no real solutions.
     T dis = coef(3)*coef(3)-4*coef(2)*coef(4); // discriminant
     if (dis < 0) return vcl_list<vgl_homg_point_2d<T> >(); // no real solutions.
@@ -519,14 +524,14 @@ vgl_homg_operators_2d<T>::do_intersect(vgl_conic<T> const& c1,
     solutions.push_back(vgl_homg_point_2d<T>(x,y*w,w));
     return solutions;
   }
-  if (coef(0) == 0) {
+  if (coef(0) == 0) { // The equation is actually of 3rd degree
     coef /= -coef(1);
     double data[]={coef(2),coef(3),coef(4), 1,0,0, 0,1,0};
     vnl_matrix<double> M(data,3,3);
     vnl_real_eigensystem eig(M);
     vnl_diag_matrix<vcl_complex<double> >  polysolutions = eig.D;
     vcl_list<vgl_homg_point_2d<T> > solutions;
-    for (int i=0;i<3;i++)
+    for (int i=0;i<3;++i)
       if (vcl_abs(vcl_imag(polysolutions(i))) < 1e-3) {// only want the real solutions
         T y = (T)vcl_real(polysolutions(i));
         T w = y*ab+ad;
@@ -544,22 +549,36 @@ vgl_homg_operators_2d<T>::do_intersect(vgl_conic<T> const& c1,
 
   vnl_diag_matrix<vcl_complex<double> >  polysolutions = eig.D;
 
+  // Ignore imaginary solutions: place just the real solutions in yvals:
+  vcl_list<T> yvals;
+  for (int i=0;i<4;++i)
+    if (vcl_abs(vcl_imag(polysolutions(i))) < 1e-7)
+      yvals.push_back((T)vcl_real(polysolutions(i)));
+
   // These are only the solutions of the fourth order equation.
   // The solutions of the intersection of the two conics are:
 
   vcl_list<vgl_homg_point_2d<T> > solutions;
 
-  for (int i=0;i<4;i++)
-    if (vcl_abs(vcl_imag(polysolutions(i))) < 1e-7) { // only want the real solutions
-      T y = (T)vcl_real(polysolutions(i));
-      T w = y*ab+ad;
-      T x = -(y*y*ac+y*ae+af);
-      if (x == 0 && w == 0) x = w = 1;
-      solutions.push_back(vgl_homg_point_2d<T>(x,y*w,w));
-    }
+  // Special case: two or more y values of intersection points are identical:
+  typename vcl_list<T>::const_iterator it = yvals.begin();
+#if 0
+  if (yvals(0) == yvals(1) || yvals(1) == yvals(2) || yvals(2) == yvals(3))
+  {
+  }
+#endif
+
+  for (it = yvals.begin(); it != yvals.end(); ++it) {
+    T y = *it;
+    T w = y*ab+ad;
+    T x = -(y*y*ac+y*ae+af);
+    if (x == 0 && w == 0) x = w = 1;
+    solutions.push_back(vgl_homg_point_2d<T>(x,y*w,w));
+  }
   return solutions;
 }
 
+//:
 // This function is called from within intersection(vgl_conic<T>,vgl_homg_line_2d<T>).
 // The conic passed to this function MUST NOT be degenerate!
 template <class T>
@@ -649,8 +668,6 @@ vgl_homg_operators_2d<T>::intersection(vgl_conic<T> const& c,
   return do_intersect(c, l);
 }
 
-//: Return the (real, finite) intersection points of two conics.
-// The returned points have protection level 0.
 template <class T>
 vcl_list<vgl_homg_point_2d<T> >
 vgl_homg_operators_2d<T>::intersection(vgl_conic<T> const& c1, vgl_conic<T> const& c2)
