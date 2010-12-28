@@ -284,10 +284,18 @@ vcl_list<vgl_homg_line_2d<T> > vgl_conic<T>::components() const
   }
   // If not, the two component lines are determined by cntr and their direction,
   // i.e., they pass through one of the two pts satisfying w=0 && Axx+2Bxy+Cyy=0:
-  vgl_homg_line_2d<T> l1(cntr, vgl_homg_point_2d<T>(-B+vcl_sqrt(B*B-A*C),A,0)),
-                      l2(cntr, vgl_homg_point_2d<T>(-B-vcl_sqrt(B*B-A*C),A,0));
-  vcl_list<vgl_homg_line_2d<T> > v(1,l1); v.push_back(l2);
-  return v;
+  if (A==0 && C==0) { // components are vertical and horizontal, resp.
+    vgl_homg_line_2d<T> l1(cntr, vgl_homg_point_2d<T>(0,1,0)),
+                        l2(cntr, vgl_homg_point_2d<T>(1,0,0));
+    vcl_list<vgl_homg_line_2d<T> > v(1,l1); v.push_back(l2);
+    return v;
+  }
+  else {
+    vgl_homg_line_2d<T> l1(cntr, vgl_homg_point_2d<T>(-B+vcl_sqrt(B*B-A*C),A,0)),
+                        l2(cntr, vgl_homg_point_2d<T>(-B-vcl_sqrt(B*B-A*C),A,0));
+    vcl_list<vgl_homg_line_2d<T> > v(1,l1); v.push_back(l2);
+    return v;
+  }
 }
 
 //: Return true if a central conic

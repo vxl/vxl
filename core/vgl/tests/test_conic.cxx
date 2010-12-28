@@ -560,6 +560,30 @@ static void test_conic()
   lines = vgl_homg_operators_2d<double>::tangent_from(c, npt);
   TEST("tangent lines count from other point = 0", lines.size(), 0);
 
+  // e'. finite, real intersecting lines, parallel to X and Y axis:
+  vcl_cout << "\n\t=== test horizontal & vertical intersecting lines ===\n";
+  l1 = vgl_homg_line_2d<double>(1,0,-1);
+  l2 = vgl_homg_line_2d<double>(0,1,-2);
+  c = vgl_conic<double>(0,1,0,-2,-1,2);
+  vcl_cout << c << '\n';
+  TEST("conic is 2 intersecting lines", c.real_type(), "real intersecting lines");
+  TEST("centre is intersection point", c.centre(), vgl_homg_point_2d<double>(1,2,1));
+  lines = c.components();
+  TEST("2 components", lines.size(), 2);
+  TEST("first component is x-w=0", lines.front(), l1);
+  TEST("second component is y-2w=0", lines.back(), l2); // or vice versa
+  lines = vgl_homg_operators_2d<double>::tangent_from(c, c.centre());
+  TEST("tangent lines count from centre = 2", lines.size(), 2);
+  npt = vgl_homg_point_2d<double>(0,2,1);
+  TEST("contains (0,2)", c.contains(npt), true);
+  lines = vgl_homg_operators_2d<double>::tangent_from(c, npt);
+  TEST("tangent lines count from point on degenerate conic = 1", lines.size(), 1);
+  TEST("tangent line", lines.front(), l2);
+  npt = vgl_homg_point_2d<double>(2,1,0);
+  TEST("!contains (2,1,0)", c.contains(npt), false);
+  lines = vgl_homg_operators_2d<double>::tangent_from(c, npt);
+  TEST("tangent lines count from other point = 0", lines.size(), 0);
+
   // f. imaginary intersecting lines:
   vcl_cout << "\n\t=== test 2 imaginary intersecting lines ===\n";
   c = vgl_conic<double>(4,0,1,12,0,9); // lines 2x+/-iy+3w=0
