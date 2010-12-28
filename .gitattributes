@@ -14,9 +14,11 @@
 check_consistency  crlf=input
 check_dependencies  crlf=input
 check_dsp        crlf=input
+check_malindentation  crlf=input
 configure        crlf=input
 extract_all_doxygen_docs  crlf=input
 install-sh       crlf=input
+makein           crlf=input
 script           crlf=input
 vxl_demangle     crlf=input
 vxl_env          crlf=input

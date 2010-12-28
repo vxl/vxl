@@ -3,6 +3,10 @@ exec perl -n -w -x $0 ${1+"$@"}
 #! perl -n
 #line 5
 
+# Purpose: list all files (from the list given on the command line) with
+# inconsistent or wrong indentation (which would harm readability and hence
+# maintainability of that file).
+
 if (eof) { close ARGV; $in_paren=$in_cout=''; }
 next if (m/^#/ || m/^\s*$/);
 s+\\.+X+g;

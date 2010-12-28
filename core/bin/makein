@@ -1,0 +1,32 @@
+#! /bin/sh
+#
+# This script runs a CMake "make" in the (build dir of the) directory/ies given on the command line.
+
+# Assumptions:
+# - The source tree is either $HOME/vxl or $HOME/vxl-svn
+# - The build tree is $HOME/Linux-i386
+# Modify the following three lines if this is not the case:
+sourcetree=$HOME/vxl
+altsourcetree=$HOME/vxl-svn
+buildtree=$HOME/Linux-i386
+
+oldpwd=`pwd|sed -e s!^$altsourcetree!.! -e s!^$sourcetree!.! -e s!^$buildtree!.! -e 's!^/.*!!'`
+# at this point, $oldpwd is either the relative path (from the build dir) from where to interpret the command line arguments, or it's empty
+test "$oldpwd" = '' && echo 'Warning: your current directory is not within the source tree nor the build tree -- results could be unpredictible' >&2
+oldpwd=`echo $oldpwd|sed -e 's!^\./!!'`
+test "$oldpwd" && oldpwd="$oldpwd/"
+cd $buildtree
+for dir in "$@"
+do
+  dir=`echo $dir|sed -e 's/\/\/*/\//g' -e 's/\/*$//'`
+  absdir=`echo $dir|sed -e 's/^\(.\).*/\1/'`
+  test "$absdir" = '/' && dir=`echo $dir|sed -e s!^$altsourcetree!.! -e s!^$sourcetree!.! -e s!^$buildtree!.!`
+  test "$absdir" = '/' || dir="$oldpwd$dir" # relative build directory, as seen from $sourcetree
+  dir=`echo $dir|sed -e 's!/\./!\/!g' -e 's!^\./!!' -e 's!/\.$!!'`
+  test -d "$dir" || dir=`echo $dir | sed -e 's/\/[^\/][^\/]*\.[a-z][a-z]*$//'` # "dirname"
+  test -d "$dir/CMakeFiles" && echo "Making in $dir ..." >&2
+  for build in `echo "$dir"/CMakeFiles/*.dir`
+  do
+    test -d "$build" && make -f "$build"/build.make "$build"/build
+  done
+done
