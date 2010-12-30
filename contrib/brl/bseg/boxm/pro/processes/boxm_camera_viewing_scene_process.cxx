@@ -30,7 +30,7 @@
 namespace boxm_camera_viewing_scene_process_globals
 {
   //this process takes no inputs
-  const unsigned n_inputs_ = 6;
+  const unsigned n_inputs_ = 7;
   const unsigned n_outputs_ = 1;
 }
 
@@ -44,8 +44,10 @@ bool boxm_camera_viewing_scene_process_cons(bprb_func_process& pro)
   input_types_[1] = "vcl_string";//the camera type, e.g. perspective
   input_types_[2] = "double";//camera elevation degrees
   input_types_[3] = "double";//camera azimuth degrees
-  input_types_[4] = "unsigned";//image ni
-  input_types_[5] = "unsigned";//image nj
+  input_types_[4] = "double";//radius
+
+  input_types_[5] = "unsigned";//image ni
+  input_types_[6] = "unsigned";//image nj
 
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "vpgl_camera_double_sptr";
@@ -62,7 +64,9 @@ bool boxm_camera_viewing_scene_process(bprb_func_process& pro)
   }
   using namespace boxm_camera_viewing_scene_process_globals;
   boxm_scene_base_sptr scene_ptr = pro.get_input<boxm_scene_base_sptr>(0);
+  vcl_cout<<"h";
   if (!scene_ptr) return false;
+  vcl_cout<<"hi";
   vgl_box_3d<double> bb =  scene_ptr->get_world_bbox();
 
   vcl_string cam_type = pro.get_input<vcl_string>(1);
@@ -70,8 +74,10 @@ bool boxm_camera_viewing_scene_process(bprb_func_process& pro)
     return false; //later other camera types
   double elevation = pro.get_input<double>(2);
   double azimuth = pro.get_input<double>(3);
-  unsigned ni = pro.get_input<unsigned>(4);
-  unsigned nj = pro.get_input<unsigned>(5);
+  double radius = pro.get_input<double>(4);
+
+  unsigned ni = pro.get_input<unsigned>(5);
+  unsigned nj = pro.get_input<unsigned>(6);
   double dni = static_cast<double>(ni), dnj = static_cast<double>(nj);
   //
   //find a camera that will project the scene bounding box
@@ -84,8 +90,8 @@ bool boxm_camera_viewing_scene_process(bprb_func_process& pro)
   // 2) determine camera center
   // the viewsphere radius is set to 10x the bounding box diameter
   double w = bb.width(), h = bb.height(), d = bb.depth();
-  double r = vcl_sqrt(w*w + h*h + d*d);
-  r *=10;
+  double r = radius;//vcl_sqrt(w*w + h*h + d*d);
+  //r *=10;
   double deg_to_rad = vnl_math::pi/180.0;
   double el = elevation*deg_to_rad, az = azimuth*deg_to_rad;
   double cx = r*vcl_sin(el)*vcl_cos(az);
@@ -118,6 +124,7 @@ bool boxm_camera_viewing_scene_process(bprb_func_process& pro)
   K.set_focal_length(f);
   cam->set_calibration(K);
 
+  vcl_cout<<"Camera  :" <<*cam<<vcl_endl;
   pro.set_output_val<vpgl_camera_double_sptr>(0, cam);
   return true;
 }
