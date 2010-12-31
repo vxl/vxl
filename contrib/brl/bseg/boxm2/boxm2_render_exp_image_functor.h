@@ -58,7 +58,7 @@ class normalize_expected_functor_rt
 };
 #endif // 0
 
-void boxm2_render_exp_image(boxm2_scene_info_sptr linfo,
+void boxm2_render_exp_image(boxm2_scene_info * linfo,
                             boxm2_block_sptr blk_sptr,
                             vcl_vector<boxm2_data_base_sptr> & datas,
                             vpgl_camera_double_sptr cam ,
