@@ -54,8 +54,9 @@ int main(int argc,  char** argv)
   brdb_value_sptr brdb_cam = new brdb_value_t<vpgl_camera_double_sptr>(cam); 
   
   //create output image buffer
-  vil_image_view_base_sptr expimg = new vil_image_view<unsigned int>(ni(), nj()); 
-  brdb_value_sptr brdb_expimg = new brdb_value_t<vil_image_view_base_sptr>(expimg); 
+  vil_image_view<unsigned int> expimg(ni(),nj());expimg.fill(0);
+  vil_image_view_base_sptr expimg_sptr(&expimg);// = new vil_image_view<unsigned int>(ni(), nj()); 
+  brdb_value_sptr brdb_expimg = new brdb_value_t<vil_image_view_base_sptr>(expimg_sptr); 
   
   //create vis image buffer
   vil_image_view<float>* vis_img = new vil_image_view<float>(ni(), nj()); 
@@ -111,7 +112,7 @@ int main(int argc,  char** argv)
   //------- END API EXAMPLE ----------------------------------------------------
   //----------------------------------------------------------------------------
   ///save to disk
-  vil_image_view<unsigned int>* expimg_view = static_cast<vil_image_view<unsigned int>* >(expimg.ptr()); 
+  vil_image_view<unsigned int>* expimg_view = static_cast<vil_image_view<unsigned int>* >(expimg_sptr.ptr()); 
   unsigned int min_val, max_val;
   vil_math_value_range( *expimg_view, min_val, max_val); 
   
@@ -129,3 +130,4 @@ int main(int argc,  char** argv)
   
   return 0;
 }
+    
