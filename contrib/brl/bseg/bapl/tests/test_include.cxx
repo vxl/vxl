@@ -3,6 +3,7 @@
 #include <bapl/bapl_affine_transform.h>
 #include <bapl/bapl_bbf_tree.h>
 #include <bapl/bapl_connectivity.h>
+#include <bapl/bapl_dense_sift.h>
 #include <bapl/bapl_keypoint.h>
 #include <bapl/bapl_keypoint_extractor.h>
 #include <bapl/bapl_keypoint_set.h>
@@ -14,6 +15,7 @@
 #include <bapl/bapl_mi_matcher_params.h>
 
 #include <bapl/bapl_connectivity_sptr.h>
+#include <bapl/bapl_dense_sift_sptr.h>
 #include <bapl/bapl_keypoint_sptr.h>
 #include <bapl/bapl_keypoint_set_sptr.h>
 #include <bapl/bapl_lowe_keypoint_sptr.h>
