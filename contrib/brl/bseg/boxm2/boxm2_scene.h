@@ -24,7 +24,7 @@
 #include <bocl/bocl_cl.h>
 
 //: block info that can be easily made into a buffer and sent to gpu
-struct boxm2_scene_info: public vbl_ref_count
+struct boxm2_scene_info
 {
   //world information
   cl_float    scene_origin[4];          // scene origin (point)
@@ -37,6 +37,14 @@ struct boxm2_scene_info: public vbl_ref_count
   cl_int      num_buffer;               // number of buffers (both data and tree)
   cl_int      tree_buffer_length;       // length of tree buffer (number of cells/trees)
   cl_int      data_buffer_length;       // length of data buffer (number of cells)
+};
+
+class boxm2_scene_info_wrapper:public vbl_ref_count
+{
+
+public:
+    boxm2_scene_info * info;
+
 };
 
 //: boxm2_scene: simple scene model that maintains (in world coordinates)
@@ -111,8 +119,7 @@ class boxm2_scene : public vbl_ref_count
 
 //Smart_Pointer typedef for boxm2_scene
 typedef vbl_smart_ptr<boxm2_scene> boxm2_scene_sptr;
-typedef vbl_smart_ptr<boxm2_scene_info> boxm2_scene_info_sptr;
-
+typedef vbl_smart_ptr<boxm2_scene_info_wrapper> boxm2_scene_info_wrapper_sptr;
 //: scene output stream operator
 vcl_ostream& operator<<(vcl_ostream &s, boxm2_scene& scene);
 
@@ -131,17 +138,17 @@ void vsl_b_read(vsl_b_istream& is, boxm2_scene* p);
 void vsl_b_read(vsl_b_istream& is, boxm2_scene_sptr& sptr);
 void vsl_b_read(vsl_b_istream& is, boxm2_scene_sptr const& sptr);
 
-
 //: Binary write boxm2_scene scene to stream
-void vsl_b_write(vsl_b_ostream& os, boxm2_scene_info const& scene_info);
-void vsl_b_write(vsl_b_ostream& os, const boxm2_scene_info* &p);
-void vsl_b_write(vsl_b_ostream& os, boxm2_scene_info_sptr& sptr); 
-void vsl_b_write(vsl_b_ostream& os, boxm2_scene_info_sptr const& sptr);
+void vsl_b_write(vsl_b_ostream& os, boxm2_scene_info_wrapper const& scene);
+void vsl_b_write(vsl_b_ostream& os, const boxm2_scene_info_wrapper* &p);
+void vsl_b_write(vsl_b_ostream& os, boxm2_scene_info_wrapper_sptr& sptr); 
+void vsl_b_write(vsl_b_ostream& os, boxm2_scene_info_wrapper_sptr const& sptr);
 
 //: Binary load boxm2_scene scene from stream.
-void vsl_b_read(vsl_b_istream& is, boxm2_scene_info &scene_info);
-void vsl_b_read(vsl_b_istream& is, boxm2_scene_info* p);
-void vsl_b_read(vsl_b_istream& is, boxm2_scene_info_sptr& sptr);
-void vsl_b_read(vsl_b_istream& is, boxm2_scene_info_sptr const& sptr);
+void vsl_b_read(vsl_b_istream& is, boxm2_scene_info_wrapper &scene);
+void vsl_b_read(vsl_b_istream& is, boxm2_scene_info_wrapper* p);
+void vsl_b_read(vsl_b_istream& is, boxm2_scene_info_wrapper_sptr& sptr);
+void vsl_b_read(vsl_b_istream& is, boxm2_scene_info_wrapper_sptr const& sptr);
+
 
 #endif // boxm2_scene_h_

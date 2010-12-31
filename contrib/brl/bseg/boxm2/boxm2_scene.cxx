@@ -200,14 +200,16 @@ void vsl_b_read(vsl_b_istream& /*is*/, boxm2_scene& /*bit_scene*/) {}
 void vsl_b_read(vsl_b_istream& /*is*/, boxm2_scene* /*ph*/) {}
 void vsl_b_read(vsl_b_istream& is, boxm2_scene_sptr& sptr) {}
 void vsl_b_read(vsl_b_istream& is, boxm2_scene_sptr const& sptr) {}
+//: Binary write boxm2_scene scene to stream
+void vsl_b_write(vsl_b_ostream& os, boxm2_scene_info_wrapper const& scene){}
+void vsl_b_write(vsl_b_ostream& os, const boxm2_scene_info_wrapper* &p){}
+void vsl_b_write(vsl_b_ostream& os, boxm2_scene_info_wrapper_sptr& sptr){} 
+void vsl_b_write(vsl_b_ostream& os, boxm2_scene_info_wrapper_sptr const& sptr){}
+
+//: Binary load boxm2_scene scene from stream.
+void vsl_b_read(vsl_b_istream& is, boxm2_scene_info_wrapper &scene){}
+void vsl_b_read(vsl_b_istream& is, boxm2_scene_info_wrapper* p){}
+void vsl_b_read(vsl_b_istream& is, boxm2_scene_info_wrapper_sptr& sptr){}
+void vsl_b_read(vsl_b_istream& is, boxm2_scene_info_wrapper_sptr const& sptr){}
 
 
-void vsl_b_write(vsl_b_ostream& /*os*/, boxm2_scene_info const& /*bit_scene*/) {}
-void vsl_b_write(vsl_b_ostream& /*os*/, boxm2_scene_info* const& /*ph*/) {}
-void vsl_b_write(vsl_b_ostream& os, boxm2_scene_info_sptr& sptr) {}
-void vsl_b_write(vsl_b_ostream& os, boxm2_scene_info_sptr const& sptr) {}
-//: Binary load boxm scene from stream.
-void vsl_b_read(vsl_b_istream& /*is*/, boxm2_scene_info& /*bit_scene*/) {}
-void vsl_b_read(vsl_b_istream& /*is*/, boxm2_scene_info* /*ph*/) {}
-void vsl_b_read(vsl_b_istream& is, boxm2_scene_info_sptr& sptr) {}
-void vsl_b_read(vsl_b_istream& is, boxm2_scene_info_sptr const& sptr) {}
