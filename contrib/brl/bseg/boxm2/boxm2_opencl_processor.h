@@ -19,6 +19,7 @@
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>
 #include <boxm2/basic/boxm2_block_id.h>
+#include <boxm2/basic/boxm2_array_3d.h>
 #include <brdb/brdb_value_sptr.h>
 #include <vcl_vector.h>
 
@@ -77,10 +78,16 @@ class boxm2_opencl_processor: public boxm2_processor, public bocl_manager<boxm2_
     // ALL OF THE BOCL_MEM pointers will create Pinned host memory, which allows
     // the gpu to overlap a kernel execution
     boxm2_block_id loaded_[NUM_QUEUES];
-    bocl_mem*  scene_info_[NUM_QUEUES];
-    bocl_mem*  trees_[NUM_QUEUES];
-    bocl_mem*  alphas_[NUM_QUEUES];
-    bocl_mem*  mogs_[NUM_QUEUES];
+    bocl_mem_sptr  scene_info_[NUM_QUEUES];
+    bocl_mem_sptr  trees_[NUM_QUEUES];
+    bocl_mem_sptr  alphas_[NUM_QUEUES];
+    bocl_mem_sptr  mogs_[NUM_QUEUES];
+
+    vnl_vector_fixed<unsigned char, 16> * trees_pin[2];
+    float*   alphas_pin[2];
+    char*    mogs_pin[2]; 
+    char*    info_pin[2];  
+
 
     //: boxm2 command queues, two, one for in and one for out
     cl_command_queue queues_[NUM_QUEUES];
@@ -91,7 +98,7 @@ class boxm2_opencl_processor: public boxm2_processor, public bocl_manager<boxm2_
                               boxm2_block* blk,
                               boxm2_data_base* alpha,
                               boxm2_data_base* mog,
-                              int queue_index );
+                              int queue_index, int buffer_index );
 };
 
 #endif

@@ -150,14 +150,16 @@ bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vc
 
   //execute kernel
   render_kernel_.execute( (*command_queue_), lThreads, gThreads);
+  vcl_cout<<"Before "<<(reinterpret_cast<float*>(vis_img_->cpu_buffer()))[0]<<vcl_endl;
 
   //read output, do something, blah blah
   cl_output.read_to_buffer(*command_queue_);
   image_->read_to_buffer(*command_queue_);
-  //vis_img_->read_to_buffer(command_queue_);
+  vis_img_->read_to_buffer(*command_queue_);
 
   vcl_cout<<"Execution time: "<<render_kernel_.exec_time()<<" ms"<<vcl_endl;
 
+  vcl_cout<<"After "<<(reinterpret_cast<float*>(vis_img_->cpu_buffer()))[0]<<vcl_endl;
   render_kernel_.clear_args();
 
   //clean up camera, lookup_arr, img_dim_buff
