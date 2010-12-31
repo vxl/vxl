@@ -77,14 +77,19 @@ void test_cpp_render_process()
     boxm2_data_base_sptr  alph = cache.get_data<BOXM2_ALPHA>(id);
     boxm2_data_base_sptr  mog  = cache.get_data<BOXM2_MOG3_GREY>(id);
 
-    brdb_value_sptr brdb_scene_info = new brdb_value_t<boxm2_scene_info_sptr>(scene->get_blk_metadata(id));
-    input.push_back(brdb_scene_info);
-    brdb_value_sptr brdb_blk = new brdb_value_t<boxm2_block_sptr>(blk);
-    input.push_back(brdb_blk);
-    brdb_value_sptr brdb_alpha = new brdb_value_t<boxm2_data_base_sptr>(alph);
-    input.push_back(brdb_alpha);
-    brdb_value_sptr brdb_mog = new brdb_value_t<boxm2_data_base_sptr>(mog);
-    input.push_back(brdb_mog);
+      boxm2_scene_info_wrapper *scene_info_wrapper=new boxm2_scene_info_wrapper();
+      scene_info_wrapper->info=scene->get_blk_metadata(id);
+
+      brdb_value_sptr brdb_scene_info_wrapper = new brdb_value_t<boxm2_scene_info_wrapper_sptr>(scene_info_wrapper); 
+      input.push_back(brdb_scene_info_wrapper);
+      brdb_value_sptr brdb_blk = new brdb_value_t<boxm2_block_sptr>(blk);    
+      input.push_back(brdb_blk);
+      brdb_value_sptr brdb_alpha = new brdb_value_t<boxm2_data_base_sptr>(alph); 
+      input.push_back(brdb_alpha);
+      brdb_value_sptr brdb_mog = new brdb_value_t<boxm2_data_base_sptr>(mog);
+      input.push_back(brdb_mog);
+
+
   }
 
   input.push_back(brdb_cam);
