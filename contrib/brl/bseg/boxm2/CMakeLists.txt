@@ -38,7 +38,7 @@ IF(EXPAT_FOUND)
     AUX_SOURCE_DIRECTORY(Templates boxm2_sources)
 
     ADD_LIBRARY(boxm2  ${boxm2_sources})
-    TARGET_LINK_LIBRARIES(boxm2 boxm2_basic bocl boct brdb vbl_io expatpp vpgl vgl vgl_xio vbl vsl vcl)
+    TARGET_LINK_LIBRARIES(boxm2 boxm2_basic boxm2_io bocl boct brdb vbl_io expatpp vpgl vgl vgl_xio vbl vsl vcl)
 
     #basic
     subdirs(basic)

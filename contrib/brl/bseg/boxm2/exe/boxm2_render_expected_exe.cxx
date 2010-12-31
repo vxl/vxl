@@ -54,8 +54,9 @@ int main(int argc,  char** argv)
   brdb_value_sptr brdb_cam = new brdb_value_t<vpgl_camera_double_sptr>(cam); 
   
   //create output image buffer
-  vil_image_view<unsigned int> expimg(ni(),nj());expimg.fill(0);
-  vil_image_view_base_sptr expimg_sptr(&expimg);// = new vil_image_view<unsigned int>(ni(), nj()); 
+  vil_image_view<unsigned int>* expimg = new vil_image_view<unsigned int>(ni(), nj()); 
+  expimg->fill(0);
+  vil_image_view_base_sptr expimg_sptr(expimg);// = new vil_image_view<unsigned int>(ni(), nj()); 
   brdb_value_sptr brdb_expimg = new brdb_value_t<vil_image_view_base_sptr>(expimg_sptr); 
   
   //create vis image buffer
@@ -87,7 +88,8 @@ int main(int argc,  char** argv)
       boxm2_block*      blk  = cache.get_block(id); 
       boxm2_data_base*  alph = cache.get_data<BOXM2_ALPHA>(id); 
       boxm2_data_base*  mog  = cache.get_data<BOXM2_MOG3_GREY>(id);  
-      gpu_pro->push_scene_data(blk, alph, mog);        
+      gpu_pro->push_scene_data(blk, alph, mog);
+      if(i==0) gpu_pro->setup_pinned_buffers(scene.ptr(), blk, alph, mog);
   }
 
   //set inputs
@@ -99,19 +101,31 @@ int main(int argc,  char** argv)
   //initoutput vector
   vcl_vector<brdb_value_sptr> output; 
   
-  //////initialize the GPU render process
+  //initialize the GPU render process
   boxm2_opencl_render_process gpu_render; 
   gpu_render.init_kernel(gpu_pro->context(), gpu_pro->devices()[0]); 
-  gpu_pro->run(&gpu_render, input, output); 
-  gpu_pro->finish(); 
+
+  //run expected image like 10 times and get average
+  int numTrials = 1;
+  vul_timer t; 
+  for(int i=0; i<numTrials; i++) {
+    expimg->fill(0);
+    vis_img->fill(1.0f); 
+    gpu_pro->run(&gpu_render, input, output); 
+    gpu_pro->finish(); 
+  }
+  float time = t.all() / (float) numTrials;  
+  vcl_cout<<"average render time: "<<time<<" ms"<<vcl_endl;
 
   //clean up
   gpu_render.clean(); 
+  gpu_pro->finish(); 
+
   
   //----------------------------------------------------------------------------
   //------- END API EXAMPLE ----------------------------------------------------
   //----------------------------------------------------------------------------
-  ///save to disk
+  //save to disk
   vil_image_view<unsigned int>* expimg_view = static_cast<vil_image_view<unsigned int>* >(expimg_sptr.ptr()); 
   unsigned int min_val, max_val;
   vil_math_value_range( *expimg_view, min_val, max_val); 

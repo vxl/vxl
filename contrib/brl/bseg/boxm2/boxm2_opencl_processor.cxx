@@ -48,69 +48,58 @@ bool boxm2_opencl_processor::run(boxm2_process * process, vcl_vector<brdb_value_
   //1. set process args and execute process (for each block in the queue)
   int curr = 0;   //refers to current queue index
   vul_timer t;
-  this->setup_pinned_buffers(scene_,
-                             blocks_to_process_[0],
-                             alphas_to_process_[0],
-                             mogs_to_process_[0]);
+  
+  //This call moved 
+  //this->setup_pinned_buffers(scene_,
+                             //blocks_to_process_[0],
+                             //alphas_to_process_[0],
+                             //mogs_to_process_[0]);
 
   //debugging for number of blocks (currently 2 works without issue)
-  int NUM_BLOCKS = 2;
+  int NUM_BLOCKS = blocks_to_process_.size();
   vul_timer t1;
   for (int i=0; i<=NUM_BLOCKS; ++i) { // was: i<blocks_to_process_.size()
 
     t1.mark();
     if(i<NUM_BLOCKS)
     {
-    this->enqueue_write_scene(scene_,blocks_to_process_[i],
-                              alphas_to_process_[i],mogs_to_process_[i],
-                                0,i%2);
-
+      this->enqueue_write_scene(scene_,
+                                blocks_to_process_[i],
+                                alphas_to_process_[i],
+                                mogs_to_process_[i],
+                                0,                      //always writing with queue 0
+                                i%NUM_QUEUES);          //using buffers 0 and 1
     }
-
-    //vcl_cout<<"T1 :"<<t1.all()<<vcl_endl;
-    //
-    //t1.mark();
+    
     //set up argument vector, execute kernel
     if(i>0)
     {
+        int blkIndex = (i+1)%NUM_QUEUES;
         vcl_vector<brdb_value_sptr> pro_input;
-        pro_input.push_back( new brdb_value_t<bocl_mem_sptr>(scene_info_[(i+1)%2]) );
-        pro_input.push_back( new brdb_value_t<bocl_mem_sptr>(trees_[(i+1)%2]) );
-        pro_input.push_back( new brdb_value_t<bocl_mem_sptr>(alphas_[(i+1)%2]) );
-        pro_input.push_back( new brdb_value_t<bocl_mem_sptr>(mogs_[(i+1)%2]) );
+        pro_input.push_back( new brdb_value_t<bocl_mem_sptr>(scene_info_[blkIndex]) );
+        pro_input.push_back( new brdb_value_t<bocl_mem_sptr>(trees_[blkIndex]) );
+        pro_input.push_back( new brdb_value_t<bocl_mem_sptr>(alphas_[blkIndex]) );
+        pro_input.push_back( new brdb_value_t<bocl_mem_sptr>(mogs_[blkIndex]) );
         for (unsigned int j=0; j<input.size(); ++j)
             pro_input.push_back(input[j]);
-        pro->set_command_queue(&queues_[1]);
+        pro->set_command_queue(&queues_[1]);          //always executing with queue 1
         pro->execute(pro_input, output);
     }
     clFinish(queues_[0]);
     clFinish(queues_[1]);
-   // clFinish(queues_[0]);
 
     vcl_cout<<"T2 :"<<t1.all()<<vcl_endl;
-    //calculate the next kernel index
-    //if (i+1 < NUM_BLOCKS) // < blocks_to_process_.size()
-    //{
-    //  int next = (curr + 1) % NUM_QUEUES;
-    //  vcl_cout<<"NEXT QUEUE INDEX: "<<next<<vcl_endl;
-
-    //  this->enqueue_write_scene(scene_,
-    //                            blocks_to_process_[i+1],
-    //                            alphas_to_process_[i+1],
-    //                            mogs_to_process_[i+1],
-    //                            next);
-    //  curr = next;
-    //}
-
   }
   vcl_cout<<"Wall Clock Execution: "<<t.all()<<" ms"<<vcl_endl;
 
   return true;
 }
 
+//: clean up allocated buffers
+//FIGURE OUT WHY RELEASE COMMAND QUEUE SEGFAULTS
 bool boxm2_opencl_processor::finish()
 {
-  return true;
+   return true;
 }
 
 // pushes block and data into a BOCL_mem, using QUEUE index

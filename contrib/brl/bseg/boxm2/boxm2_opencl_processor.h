@@ -83,10 +83,10 @@ class boxm2_opencl_processor: public boxm2_processor, public bocl_manager<boxm2_
     bocl_mem_sptr  alphas_[NUM_QUEUES];
     bocl_mem_sptr  mogs_[NUM_QUEUES];
 
-    vnl_vector_fixed<unsigned char, 16> * trees_pin[2];
-    float*   alphas_pin[2];
-    char*    mogs_pin[2]; 
-    char*    info_pin[2];  
+    vnl_vector_fixed<unsigned char, 16> * trees_pin[NUM_QUEUES];
+    float*   alphas_pin[NUM_QUEUES];
+    char*    mogs_pin[NUM_QUEUES]; 
+    char*    info_pin[NUM_QUEUES];  
 
 
     //: boxm2 command queues, two, one for in and one for out
