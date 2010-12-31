@@ -28,7 +28,7 @@ inline float clamp(float x, float a, float b)
 
 template<class F>
 void boxm2_cast_ray_function(vgl_ray_3d<float> & ray,
-                             boxm2_scene_info_sptr linfo,
+                             boxm2_scene_info * linfo,
                              boxm2_block_sptr blk_sptr,
                              vcl_vector<float> & vals,
                              F functor)
