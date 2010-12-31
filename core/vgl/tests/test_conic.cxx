@@ -655,12 +655,21 @@ static void test_conic()
     vcl_cout << (*it) << '\n';
   check_points_on_conics(c, cc, pts);
 
-  cc = vgl_conic<double>(vgl_homg_point_2d<double>(1,1,1), 2,2, 0.0); // tangent circle
+  cc = vgl_conic<double>(vgl_homg_point_2d<double>(1,1,1), 2,2, 0.0); // internal tangent circle
   pts = vgl_homg_operators_2d<double>::intersection(c,cc);
   TEST("intersection count of touching circles = 2", pts.size(), 2);
   for (it = pts.begin(); it != pts.end(); ++it)
     vcl_cout << (*it) << '\n';
   TEST("1st intersection point = (1,-1)", pts.front(), vgl_homg_point_2d<double>(1,-1,1));
+  TEST("2nd intersection point coincides", pts.back(), pts.front());
+  check_points_on_conics(c, cc, pts);
+
+  cc = vgl_conic<double>(vgl_homg_point_2d<double>(-3,2,1), 1,1, 0.0); // external tangent circle
+  pts = vgl_homg_operators_2d<double>::intersection(c,cc);
+  TEST("intersection count of touching circles = 2", pts.size(), 2);
+  for (it = pts.begin(); it != pts.end(); ++it)
+    vcl_cout << (*it) << '\n';
+  TEST("1st intersection point = (-2,2)", pts.front(), vgl_homg_point_2d<double>(-2,2,1));
   TEST("2nd intersection point coincides", pts.back(), pts.front());
   check_points_on_conics(c, cc, pts);
 
@@ -696,6 +705,15 @@ static void test_conic()
   TEST("intersection of mirrored ellipses = 4 different, but symmetrically positioned points", pts.size(), 4);
   for (it = pts.begin(); it != pts.end(); ++it)
     vcl_cout << (*it) << '\n';
+  check_points_on_conics(c, cc, pts);
+
+  // circles with intersection points having same y value
+  c = vgl_conic<double>(vgl_homg_point_2d<double>(4,4,1), 5,5, 0.0);
+  cc = vgl_conic<double>(vgl_homg_point_2d<double>(4,0,1), 3,3, 0.0);
+  pts = vgl_homg_operators_2d<double>::intersection(c,cc);
+  // intersection points should be: (1, 0) and (7, 0).
+  TEST("intersection of circles = 2 points with same y coordinate", pts.size(), 2);
+  TEST("intersection points are different", pts.front() == pts.back(), false);
   check_points_on_conics(c, cc, pts);
 
   c = vgl_conic<double>(centre, 3,-3, 0.0); // orthogonal hyperbola
