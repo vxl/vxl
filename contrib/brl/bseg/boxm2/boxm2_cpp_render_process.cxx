@@ -21,8 +21,8 @@ bool boxm2_cpp_render_process::execute(vcl_vector<brdb_value_sptr>& input, vcl_v
 
   //1. get the arguments blocks/camera/img etc from the input vector
   int i = 0;
-  brdb_value_t<boxm2_scene_info_sptr>* info      = static_cast<brdb_value_t<boxm2_scene_info_sptr>* >( input[i++].ptr() );
-  boxm2_scene_info_sptr info_sptr                = info->value();
+  brdb_value_t<boxm2_scene_info_wrapper_sptr>* info      = static_cast<brdb_value_t<boxm2_scene_info_wrapper_sptr>* >( input[i++].ptr() );
+  boxm2_scene_info_wrapper_sptr  info_sptr                = info->value();
   brdb_value_t<boxm2_block_sptr>* blk                = static_cast<brdb_value_t<boxm2_block_sptr>* >( input[i++].ptr() );
   boxm2_block_sptr blk_sptr                          = blk->value();
 
@@ -50,7 +50,7 @@ bool boxm2_cpp_render_process::execute(vcl_vector<brdb_value_sptr>& input, vcl_v
   vil_image_view<float>* vis_img_ = static_cast<vil_image_view<float>* >(visimg.ptr());
 
 
-  boxm2_render_exp_image(info_sptr,blk_sptr,datas,cam,image_,vis_img_,image_->ni(),image_->nj());
+  boxm2_render_exp_image(info_sptr->info,blk_sptr,datas,cam,image_,vis_img_,image_->ni(),image_->nj());
 
 
 
