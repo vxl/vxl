@@ -98,13 +98,7 @@ LIB32=link.exe -lib
 SOURCE=.\boxm2_block.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\boxm2_scene_parser.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\boxm2_scene.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\boxm2_block_id.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_opencl_processor.cxx
@@ -123,6 +117,12 @@ SOURCE=.\boxm2_opencl_render_process.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_opencl_render_depth_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_util.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_mog3_grey_processor.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_array_3d+vnl_vector_fixed+ushort.2--.cxx
@@ -158,16 +158,10 @@ SOURCE=.\Templates/vbl_smart_ptr+boxm2_block-.cxx
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
-SOURCE=.\boxm2_scene_parser.h
-# End Source File
-# Begin Source File
 SOURCE=.\boxm2_scene.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_block.h
-# End Source File
-# Begin Source File
-SOURCE=.\boxm2_block_id.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_data.h
@@ -207,6 +201,21 @@ SOURCE=.\boxm2_cpp_render_process.h
 # End Source File
 # Begin Source File
 SOURCE=.\boxm2_opencl_render_depth_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_block_metadata.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_render_exp_image_functor.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_mog3_grey_processor.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_cast_ray_function.h
+# End Source File
+# Begin Source File
+SOURCE=.\boxm2_util.h
 # End Source File
 # End Group
 # End Target

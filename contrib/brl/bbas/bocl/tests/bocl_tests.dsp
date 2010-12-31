@@ -149,6 +149,9 @@ SOURCE=.\test_driver.cxx
 SOURCE=.\test_global_io_bandwidth.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_command_queue.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

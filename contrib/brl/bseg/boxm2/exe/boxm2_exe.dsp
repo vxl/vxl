@@ -103,6 +103,9 @@ SOURCE=.\boxm2_convert_bit_scene.cxx
 # Begin Source File
 SOURCE=.\boxm2_render_view.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\boxm2_rep_scene.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

@@ -114,6 +114,9 @@ SOURCE=.\test_matcher.cxx
 SOURCE=.\test_compute_tracks.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_dense_sift.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

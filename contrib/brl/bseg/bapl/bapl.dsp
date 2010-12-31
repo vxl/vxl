@@ -132,6 +132,9 @@ SOURCE=.\bapl_bbf_tree.cxx
 SOURCE=.\bapl_keypoint_extractor.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\bapl_dense_sift.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+bapl_bbf_node-.cxx
 # End Source File
 # Begin Source File
@@ -157,6 +160,9 @@ SOURCE=.\Templates/vbl_io_smart_ptr+bapl_conn_table-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+bapl_conn_table-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+bapl_dense_sift-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -219,6 +225,12 @@ SOURCE=.\bapl_keypoint.h
 # End Source File
 # Begin Source File
 SOURCE=.\bapl_lowe_pyramid_set.h
+# End Source File
+# Begin Source File
+SOURCE=.\bapl_dense_sift.h
+# End Source File
+# Begin Source File
+SOURCE=.\bapl_dense_sift_sptr.h
 # End Source File
 # End Group
 # End Target
