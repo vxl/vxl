@@ -467,26 +467,21 @@ vgl_homg_operators_2d<T>::do_intersect(vgl_conic<T> const& c1,
 
   // If the quadratic parts of the two conics are identical (up to scale factor),
   // the intersection is the same as with a degenerate conic where one part is the line at infinity,
-  // viz. the conic with as equation the (weighted) difference of the two equations:
-  if (ab==0 && ac==0)
-    return intersection(c1,vgl_conic<T>(0,0,0,ad,ae,af));
-
+  // viz. the conic with as equation the (weighted) difference of the two equations;
+  if ((ab==0 && ac==0)
   // If the parts without x of the two conics are identical (up to scale factor),
-  // the intersection is the same as with a degenerate conic consisting of two vertical lines:
-  if (ab==0 && ad==0)
-    return intersection(c1,vgl_conic<T>(0,0,ac,0,ae,af));
-
+  // the intersection is the same as with a degenerate conic consisting of two vertical lines;
+      || (ab==0 && ad==0)
   // And of course similarly for y:
-  if (ab==0 && ae==0)
-    return intersection(c1,vgl_conic<T>(0,0,ac,ad,0,af));
-
+      || (ab==0 && ae==0)
   // The following fix by Peter Vanroose, 28 december 2010:
   // The general idea *does not* work (at least: not easily) if two intersection points have the same y coordinate.
   // So make that a special case. It is easily detected, since in that case there is a scale factor lambda
   // such that c1-lamda*c2 decomposes into (y-y0)(x+my+n)=0. Which means that lambda=A/a, and the equation satisfies:
-  if (ac*ad*ad+af*ab*ab == ab*ad*ae)
-    return intersection(c1,vgl_conic<T>(0,ab,ac,ad,ae,af));
+      || (ac*ad*ad+af*ab*ab == ab*ad*ae))
+    return intersection(vgl_conic<T>(0,ab,ac,ad,ae,af),c1);
 
+  // Back to the "general" case:
   vnl_vector_fixed<T,5> coef;
   coef(0) = ac*ac-ab*(b*C-B*c);
   coef(1) = 2*ac*ae-ab*(b*E-B*e)-BD*(a*C+A*c)+2*A*b*C*d+2*a*B*c*D;
