@@ -7,6 +7,7 @@ SOURCES += boxm2_dumb_cache.cxx
 SOURCES += boxm2_asio_mgr.cxx
 SOURCES += boxm2_sio_mgr.cxx
 SOURCES += boxm2_nn_cache.cxx
+SOURCES += boxm2_scene_parser.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk

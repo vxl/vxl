@@ -16,12 +16,14 @@ SOURCES += bapl_mi_matcher_params.cxx
 SOURCES += bapl_bbf_tree.cxx
 SOURCES += bapl_keypoint_extractor.cxx
 MANPAGE_SOURCES += bapl_lowe_pyramid.txx
+SOURCES += bapl_dense_sift.cxx
 
 MANPAGE_SOURCES += bapl_lowe_pyramid_set_sptr.h
 MANPAGE_SOURCES += bapl_keypoint_set_sptr.h
 MANPAGE_SOURCES += bapl_keypoint_sptr.h
 MANPAGE_SOURCES += bapl_lowe_keypoint_sptr.h
 MANPAGE_SOURCES += bapl_connectivity_sptr.h
+MANPAGE_SOURCES += bapl_dense_sift_sptr.h
 
 SUBDIRS += pro
 

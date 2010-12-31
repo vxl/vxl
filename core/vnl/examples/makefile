@@ -13,6 +13,7 @@ MINI_PROG_SOURCES += vnl_lsqr_test.cxx
 MINI_PROG_SOURCES += vnl_svd_economy.cxx
 MINI_PROG_SOURCES += vnl_sample_beta.cxx
 MINI_PROG_SOURCES += vnl_sparse_matrix_example.cxx
+MINI_PROG_SOURCES += vnl_complex_squareroot.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk

@@ -12,6 +12,7 @@ SOURCES += bocl_kernel.cxx
 SOURCES += bocl_mem.cxx
 MANPAGE_SOURCES += bocl_buffer.h
 MANPAGE_SOURCES += bocl_buffer_mgr.h
+SOURCES += bocl_command_queue_mgr.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
