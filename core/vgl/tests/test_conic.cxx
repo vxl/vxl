@@ -698,8 +698,8 @@ static void test_conic()
   check_points_on_conics(c, cc, pts);
 
   // concentric ellipses with intersection points having same y value
-  c.set(.64, -2, 4, 0, 0, -1); c.translate_by(-1,-2);
-  cc.set(.64, 2, 4, 0, 0, -1); cc.translate_by(-1,-2);
+  c.set(16, -50, 100, 0, 0, -25); c.translate_by(-1,-2);
+  cc.set(16, 50, 100, 0, 0, -25); cc.translate_by(-1,-2);
   pts = vgl_homg_operators_2d<double>::intersection(c,cc);
   // intersection points should be: (1, 1.5), (1, 2.5), (2.25, 2), and (-0.25, 2).
   TEST("intersection of mirrored ellipses = 4 different, but symmetrically positioned points", pts.size(), 4);
