@@ -57,7 +57,7 @@ class bapl_dense_sift:public vbl_ref_count
 
   vcl_vector<bapl_lowe_keypoint_sptr> make_keypoint( vcl_vector<vgl_point_2d<unsigned> > const& pts );
 
-  bapl_lowe_pyramid_set_sptr pyramid_sptr(){return this->pyramid_sptr;}
+  bapl_lowe_pyramid_set_sptr pyramid_sptr(){return this->pyramid_sptr_;}
 
  private:
   bapl_lowe_pyramid_set_sptr pyramid_sptr_;
