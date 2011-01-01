@@ -9,12 +9,12 @@ use strict;
 #  those which would never be accessed on a certain platform or installation.
 #
 #  Note: run this script from the VXL root directory.
-#  Note: set the vxl build directory appropriately:
+#  Note: set the vxl build directory (absolute path) appropriately: e.g.:
 my $builddir = $ENV{'HOME'}.'/Linux-i386';
 
-my @include_path = qw(vcl $builddir/vcl core contrib v3p $builddir/v3p/mpeg2/include $builddir/v3p/dcmtk $builddir/core $builddir/core/tests $builddir/core/vnl $builddir/core/vil $builddir/core/vgui $builddir/core/vidl $builddir/contrib/mul/mbl $builddir/contrib/brl/b3p/expat v3p/bzlib v3p/dcmtk v3p/geotiff v3p/jpeg v3p/mpeg2/include v3p/netlib v3p/png v3p/Qv v3p/rply v3p/tiff v3p/zlib contrib/brl contrib/brl/b3p contrib/brl/b3p/expatpp contrib/brl/b3p/shapelib contrib/brl/bbas contrib/brl/bbas/bsta contrib/brl/bmvl contrib/brl/bpro contrib/brl/bpro/bprb contrib/brl/bpro/core contrib/brl/bseg contrib/brl/bseg/bbgm contrib/brl/bseg/bmdl contrib/brl/bseg/boct contrib/brl/bseg/boxm contrib/brl/bseg/boxm/algo contrib/brl/bseg/brec contrib/brl/bseg/bvpl contrib/brl/bseg/bvpl/bvpl_octree contrib/brl/bseg/bvpl/bvpl_octree/pro contrib/brl/bseg/bvxm contrib/brl/bseg/bvxm/pro contrib/brl/expatpp/expat/lib contrib/brl/expatpp/src_pp contrib/gel contrib/gel/mrc contrib/gel/mrc/vpgl contrib/gel/mrc/vpgl/icam contrib/gel/mrc/vpgl/vsph contrib/mul contrib/mul/vpgl contrib/oxl contrib/prip contrib/conversions contrib/oul contrib/rpl contrib/tbl /usr/include/nvidia-current);
+my @include_path = qw(vcl $B/vcl core contrib v3p $B/v3p/mpeg2/include $B/v3p/dcmtk $B/core $B/core/tests $B/core/vnl $B/core/vil $B/core/vgui $B/core/vidl $B/contrib/mul/mbl $B/contrib/brl/b3p/expat v3p/bzlib v3p/dcmtk v3p/geotiff v3p/jpeg v3p/mpeg2/include v3p/netlib v3p/png v3p/Qv v3p/rply v3p/tiff v3p/zlib contrib/brl contrib/brl/b3p contrib/brl/b3p/expatpp contrib/brl/b3p/shapelib contrib/brl/bbas contrib/brl/bbas/bsta contrib/brl/bmvl contrib/brl/bpro contrib/brl/bpro/bprb contrib/brl/bpro/core contrib/brl/bseg contrib/brl/bseg/bbgm contrib/brl/bseg/bmdl contrib/brl/bseg/boct contrib/brl/bseg/boxm contrib/brl/bseg/boxm/algo contrib/brl/bseg/brec contrib/brl/bseg/bvpl contrib/brl/bseg/bvpl/bvpl_octree contrib/brl/bseg/bvpl/bvpl_octree/pro contrib/brl/bseg/bvxm contrib/brl/bseg/bvxm/pro contrib/brl/expatpp/expat/lib contrib/brl/expatpp/src_pp contrib/gel contrib/gel/mrc contrib/gel/mrc/vpgl contrib/gel/mrc/vpgl/icam contrib/gel/mrc/vpgl/vsph contrib/mul contrib/mul/vpgl contrib/oxl contrib/prip contrib/conversions contrib/oul contrib/rpl contrib/tbl /usr/include/nvidia-current);
 
-my $INC = join ' ',map { "-I$_" } @include_path;
+my $INC = join ' ',map { s/\$B/$builddir/; "-I$_" } @include_path;
 
 my @FILES;
 if (@ARGV) { @FILES = @ARGV; }
