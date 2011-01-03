@@ -2,7 +2,7 @@
 #define boxm2_cpp_render_process_h
 //:
 // \file
-#include <boxm2/boxm2_cpp_process_base.h>
+#include "boxm2_cpp_process_base.h"
 #include <vil/vil_image_view.h>
 
 class boxm2_cpp_render_process : public boxm2_cpp_process_base

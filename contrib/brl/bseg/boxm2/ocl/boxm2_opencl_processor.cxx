@@ -1,5 +1,5 @@
-#include <boxm2/boxm2_opencl_processor.h>
-#include <boxm2/boxm2_opencl_process_base.h>
+#include "boxm2_opencl_processor.h"
+#include "boxm2_opencl_process_base.h"
 
 //boxm2 data structures
 
@@ -49,7 +49,7 @@ bool boxm2_opencl_processor::run(boxm2_process * process, vcl_vector<brdb_value_
   int curr = 0;   //refers to current queue index
   vul_timer t;
   
-  //This call moved 
+  //This call moved to exe file
   //this->setup_pinned_buffers(scene_,
                              //blocks_to_process_[0],
                              //alphas_to_process_[0],
@@ -70,6 +70,9 @@ bool boxm2_opencl_processor::run(boxm2_process * process, vcl_vector<brdb_value_
                                 0,                      //always writing with queue 0
                                 i%NUM_QUEUES);          //using buffers 0 and 1
     }
+    
+    //clFinish(queues_[0]);
+    //clFinish(queues_[1]);
     
     //set up argument vector, execute kernel
     if(i>0)
@@ -197,6 +200,11 @@ bool boxm2_opencl_processor::setup_pinned_buffers( boxm2_scene*     scene,
     info_pin[i]   = (char*)  clEnqueueMapBuffer( queues_[i], scene_info_[i]->buffer(), CL_TRUE,
                                                         CL_MAP_WRITE, 0, sizeof(boxm2_scene_info), 0,
                                                         NULL, NULL, NULL);
+
+    //copy over for first time
+    vcl_memcpy(trees_pin[i], trees.data_block(), trees.size()*sizeof(uchar16));
+    vcl_memcpy(alphas_pin[i], alpha->data_buffer(), alpha->buffer_length());
+    vcl_memcpy(mogs_pin[i], mog->data_buffer(), mog->buffer_length());
 
     //now set each BOCL_MEM to point to the above, pinned C++ pointer (for the future)
     //trees_[i]->set_cpu_buffer(trees_pin);

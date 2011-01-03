@@ -1,4 +1,4 @@
-#include <boxm2/boxm2_cpp_render_process.h>
+#include "boxm2_cpp_render_process.h"
 
 //boxm2 data structures
 #include <boxm2/boxm2_scene.h>
@@ -7,7 +7,7 @@
 #include <boxm2/boxm2_data_base.h>
 #include <vil/vil_save.h>
 #include <boxm2/boxm2_util.h>
-#include <boxm2/boxm2_render_exp_image_functor.h>
+#include <boxm2/cpp/boxm2_render_exp_image_functor.h>
 //brdb stuff
 #include <brdb/brdb_value.h>
 

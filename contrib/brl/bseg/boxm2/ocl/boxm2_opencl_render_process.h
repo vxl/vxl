@@ -2,7 +2,7 @@
 #define boxm2_opencl_render_process_h
 //:
 // \file
-#include <boxm2/boxm2_opencl_process_base.h>
+#include "boxm2_opencl_process_base.h"
 #include <vcl_vector.h>
 
 //cameras/images

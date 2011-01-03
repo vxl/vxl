@@ -1,4 +1,4 @@
-#include <boxm2/boxm2_opencl_render_process.h>
+#include "boxm2_opencl_render_process.h"
 
 //boxm2 data structures
 #include <boxm2/boxm2_scene.h>

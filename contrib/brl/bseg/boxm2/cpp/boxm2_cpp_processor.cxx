@@ -1,4 +1,4 @@
-#include <boxm2/boxm2_cpp_processor.h>
+#include "boxm2_cpp_processor.h"
 
 bool boxm2_cpp_processor::init()
 {

@@ -2,8 +2,8 @@
 #define boxm2_render_exp_image_functor_h
 //:
 // \file
-#include <boxm2/boxm2_cast_ray_function.h>
-#include <boxm2/boxm2_mog3_grey_processor.h>
+#include <boxm2/cpp/boxm2_cast_ray_function.h>
+#include <boxm2/cpp/boxm2_mog3_grey_processor.h>
 
 class boxm2_render_exp_image_functor
 {

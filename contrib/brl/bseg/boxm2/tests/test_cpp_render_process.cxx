@@ -18,8 +18,8 @@
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/io/boxm2_nn_cache.h>
 #include <boxm2/basic/boxm2_block_id.h>
-#include <boxm2/boxm2_cpp_processor.h>
-#include <boxm2/boxm2_cpp_render_process.h>
+#include <boxm2/cpp/boxm2_cpp_processor.h>
+#include <boxm2/cpp/boxm2_cpp_render_process.h>
 
 vpgl_camera_double_sptr test_camera()
 {

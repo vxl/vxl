@@ -4,11 +4,13 @@ ADD_EXECUTABLE( boxm2_render_expected_exe
 )
 TARGET_LINK_LIBRARIES( boxm2_render_expected_exe boxm2 boxm2_io bocl vil_pro vpgl_pro vul )
 
+# executable to convert a bit scene to a boxm2_scene
 ADD_EXECUTABLE( boxm2_convert_bit_scene_exe
   boxm2_convert_bit_scene.cxx
 )
 TARGET_LINK_LIBRARIES( boxm2_convert_bit_scene_exe boxm2 boxm2_io boxm_ocl vbl vnl vcl)
 
+#executable to replicate a scene (four times for tests)
 ADD_EXECUTABLE( boxm2_rep_scene
   boxm2_rep_scene.cxx
 )
@@ -24,23 +26,6 @@ IF(GLEW_FOUND)
   ADD_EXECUTABLE( boxm2_render_view boxm2_render_view.cxx)
   TARGET_LINK_LIBRARIES( boxm2_render_view boxm2 boxm2_view vul vgui vil_pro vpgl_pro ${GLEW_LIBRARY} )
 
-  #ADD_EXECUTABLE( boxm_ocl_update_view boxm_ocl_update_view.cxx)
-  #TARGET_LINK_LIBRARIES( boxm_ocl_update_view boxm_ocl  boxm_ocl_view vul vgui ${GLEW_LIBRARY} )
-
-  #ADD_EXECUTABLE( boxm_opencl_change_detection_view boxm_opencl_change_detection_view.cxx)
-  #TARGET_LINK_LIBRARIES( boxm_opencl_change_detection_view boxm_ocl  boxm_ocl_view vul vgui ${GLEW_LIBRARY} )
-
-  #ADD_EXECUTABLE( boxm_ocl_rerender_view boxm_ocl_rerender_view.cxx)
-  #TARGET_LINK_LIBRARIES( boxm_ocl_rerender_view boxm_ocl  boxm_ocl_view vul vgui ${GLEW_LIBRARY} )
-
-  #ADD_EXECUTABLE( boxm_ocl_render_bit_view boxm_ocl_render_bit_view.cxx)
-  #TARGET_LINK_LIBRARIES( boxm_ocl_render_bit_view boxm_ocl  boxm_ocl_view vul vgui ${GLEW_LIBRARY} )
-
-  #ADD_EXECUTABLE( boxm_ocl_update_bit_view boxm_ocl_update_bit_view.cxx)
-  #TARGET_LINK_LIBRARIES( boxm_ocl_update_bit_view boxm_ocl  boxm_ocl_view vul vgui ${GLEW_LIBRARY} )
-
-  #ADD_EXECUTABLE( boxm_ocl_change_detection_bit_view boxm_ocl_change_detection_bit_view.cxx)
-  #TARGET_LINK_LIBRARIES( boxm_ocl_change_detection_bit_view boxm_ocl_view vul vgui ${GLEW_LIBRARY} )
 
  ENDIF(VGUI_FOUND)
 ENDIF(GLEW_FOUND)

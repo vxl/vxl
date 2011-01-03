@@ -23,8 +23,8 @@
 
 //boxm2 includes
 #include <boxm2/boxm2_scene.h>
-#include <boxm2/boxm2_opencl_processor.h>
-#include <boxm2/boxm2_opencl_render_process.h>
+#include <boxm2/ocl/boxm2_opencl_processor.h>
+#include <boxm2/ocl/boxm2_opencl_render_process.h>
 #include <boxm2/io/boxm2_dumb_cache.h>
 
 //brdb stuff

@@ -1,7 +1,7 @@
 #ifndef boxm2_opencl_render_depth_process_h
 #define boxm2_opencl_render_depth_process_h
 
-#include <boxm2/boxm2_opencl_process_base.h>
+#include "boxm2_opencl_process_base.h"
 #include <vcl_vector.h>
 
 //cameras/images

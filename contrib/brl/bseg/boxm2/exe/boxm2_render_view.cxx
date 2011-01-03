@@ -24,11 +24,11 @@
 #include <boxm2/io/boxm2_dumb_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/basic/boxm2_block_id.h>
-#include <boxm2/boxm2_opencl_processor.h>
-#include <boxm2/boxm2_opencl_render_process.h>
-#include <boxm2/boxm2_opencl_render_depth_process.h>
-#include <boxm2/boxm2_cpp_processor.h>
-#include <boxm2/boxm2_cpp_render_process.h>
+#include <boxm2/ocl/boxm2_opencl_processor.h>
+#include <boxm2/ocl/boxm2_opencl_render_process.h>
+#include <boxm2/ocl/boxm2_opencl_render_depth_process.h>
+#include <boxm2/cpp/boxm2_cpp_processor.h>
+#include <boxm2/cpp/boxm2_cpp_render_process.h>
 
 //brdb stuff
 #include <brdb/brdb_value.h>
