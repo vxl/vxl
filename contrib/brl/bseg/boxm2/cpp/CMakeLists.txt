@@ -1,0 +1,12 @@
+
+SET(boxm2_cpp_sources
+    boxm2_cpp_processor.h         boxm2_cpp_processor.cxx
+    boxm2_cpp_process_base.h
+    boxm2_cpp_render_process.h    boxm2_cpp_render_process.cxx
+    boxm2_cast_ray_function.h 
+    boxm2_render_exp_image_functor.h
+    boxm2_mog3_grey_processor.h boxm2_mog3_grey_processor.cxx
+   )
+
+ADD_LIBRARY(boxm2_cpp  ${boxm2_cpp_sources})
+TARGET_LINK_LIBRARIES(boxm2_cpp boxm2 boxm2_basic boxm2_io bocl boct brdb vbl_io expatpp vpgl vgl vgl_xio vbl vsl vcl)
