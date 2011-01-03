@@ -63,6 +63,7 @@ void boxm2_cast_ray_function(vgl_ray_3d<float> & ray,
   //make sure tfar is within the last block so texit surpasses it (and breaks from the outer loop)
   tfar -= BLOCK_EPSILON;
 
+  int cnt=0;
   //----------------------------------------------------------------------------
   // Begin traversing the blocks, break when any curr_block_index value is
   // illegal (not between 0 and scenedims)
@@ -92,10 +93,10 @@ void boxm2_cast_ray_function(vgl_ray_3d<float> & ray,
     unsigned short buff_index=tree[12];
     buff_index=(buff_index<<8)+tree[13];
 
-    unsigned short sub_index=tree[10];
-    sub_index=(sub_index<<8)+tree[11];
+    unsigned short sub_index=(short)tree[10];
+    sub_index=(sub_index<<8)+(short)tree[11];
 
-    int data_index=(int)buff_index*(int)4/* FOR NOW FIX ME linfo->tree_buffer_length*/+(int)sub_index;
+    int data_index=(int)buff_index*(int)linfo->tree_buffer_length+(int)sub_index;
 
 //
 //    //local ray origin is entry point (point should be in [0,1])
@@ -148,7 +149,6 @@ void boxm2_cast_ray_function(vgl_ray_3d<float> & ray,
       //// distance must be multiplied by the dimension of the bounding box
       float d = (t1-ttree) * linfo->block_len;
       ttree = t1;
-      vcl_cout<<data_offset<<' ';
 
       functor.step_cell(d,data_index,vals);
     }
@@ -159,6 +159,7 @@ void boxm2_cast_ray_function(vgl_ray_3d<float> & ray,
     texit = texit + tblock + BLOCK_EPSILON;
     tblock = texit;
   }
+
 }
 
 

@@ -1,4 +1,4 @@
-#include "boxm2_cpp_render_process.h"
+#include <boxm2/cpp/boxm2_cpp_render_process.h>
 
 //boxm2 data structures
 #include <boxm2/boxm2_scene.h>
@@ -48,12 +48,10 @@ bool boxm2_cpp_render_process::execute(vcl_vector<brdb_value_sptr>& input, vcl_v
   brdb_value_t<vil_image_view_base_sptr>* brdb_vis = static_cast<brdb_value_t<vil_image_view_base_sptr>* >( input[i++].ptr() );
   vil_image_view_base_sptr visimg = brdb_vis->value();
   vil_image_view<float>* vis_img_ = static_cast<vil_image_view<float>* >(visimg.ptr());
-
-
+  for(unsigned i=0;i<image_->ni();i++)
+      for(unsigned j=0;j<image_->nj();j++)
+          (*image_)(i,j)=0.0f;
   boxm2_render_exp_image(info_sptr->info,blk_sptr,datas,cam,image_,vis_img_,image_->ni(),image_->nj());
-
-
-
   vcl_cout<<"Execution time: "<<" ms"<<vcl_endl;
 
   return true;
