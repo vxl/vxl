@@ -95,8 +95,10 @@ bool boxm2_render_tableau::handle(vgui_event const &e)
 float boxm2_render_tableau::render_frame()
 {
   //boxm_render_bit_scene_manager* ray_mgr = boxm_render_bit_scene_manager::instance();
-  cl_int status = clEnqueueAcquireGLObjects(*render_.command_queue(), 1,
-                                            &render_.image()->buffer() , 0, 0, 0);
+  cl_int status = clEnqueueAcquireGLObjects( *gpu_pro_->get_queue(), 1,
+                                             &render_.image()->buffer() , 0, 0, 0);
+  exp_img_->zero_gpu_buffer( *gpu_pro_->get_queue() );
+
   if (!check_val(status,CL_SUCCESS,"clEnqueueAcquireGLObjects failed. (gl_image)"+error_to_string(status)))
     return false;
 
@@ -123,13 +125,15 @@ float boxm2_render_tableau::render_frame()
   vcl_vector<brdb_value_sptr> output; 
 
   //initialize the GPU render process
-  vcl_vector<boxm2_block_id> vis_order; vis_order.push_back(boxm2_block_id(0,0,0)); 
+  vcl_vector<boxm2_block_id> vis_order; 
+  vis_order.push_back(boxm2_block_id(0,0,0)); 
+  vis_order.push_back(boxm2_block_id(1,0,0));
   gpu_pro_->sequencing(vis_order, &render_, input, output);
   gpu_pro_->finish(); 
 
-  status = clEnqueueReleaseGLObjects( *render_.command_queue(), 1, &render_.image()->buffer(), 0, 0, 0);
+  status = clEnqueueReleaseGLObjects( *gpu_pro_->get_queue(), 1, &render_.image()->buffer(), 0, 0, 0);
   clFinish( *render_.command_queue() );
-  return 0.0f;
+  return gpu_pro_->exec_time();
 }
 
 
@@ -137,18 +141,14 @@ float boxm2_render_tableau::render_frame()
 bool boxm2_render_tableau::init_clgl()
 {
   //get relevant blocks
-  boxm2_block_id id(0,0,0); 
   vcl_cout<<"Data Path: "<<scene_->data_path()<<vcl_endl; 
-  boxm2_dumb_cache dcache(scene_->data_path());
-  boxm2_block* blk      = dcache.get_block(id); 
-  boxm2_data_base* alph = dcache.get_data<BOXM2_ALPHA>(id); 
-  boxm2_data_base* mog  = dcache.get_data<BOXM2_MOG3_GREY>(id); 
+  boxm2_nn_cache* dcache = new boxm2_nn_cache(scene_->data_path(), vgl_vector_3d<int>(2,2,1));
 
   //initialize gpu pro / manager
   gpu_pro_ = boxm2_opencl_processor::instance();
   gpu_pro_->context_ = create_clgl_context(); 
   gpu_pro_->set_scene(scene_.ptr()); 
-  gpu_pro_->set_cpu_cache(&dcache); 
+  gpu_pro_->set_cpu_cache(dcache); 
   gpu_pro_->init();
  
   // delete old buffer
@@ -169,12 +169,13 @@ bool boxm2_render_tableau::init_clgl()
                                       CL_MEM_WRITE_ONLY,
                                       pbuffer_,
                                       &status);
-  bocl_mem* exp_img = new bocl_mem(gpu_pro_->context(), (void*) pbuffer_, ni_*nj_*sizeof(GLubyte)*4, "exp image (gl) buffer");
-  exp_img->set_gl_buffer(clgl_buffer_);  
+  exp_img_ = new bocl_mem(gpu_pro_->context(), /*(void*) pbuffer_*/ NULL, ni_*nj_*sizeof(GLubyte)*4, "exp image (gl) buffer");
+  exp_img_->set_gl_buffer(clgl_buffer_);  
                                       
   //initialize the GPU render process
-  render_.init_kernel(gpu_pro_->context(), gpu_pro_->devices()[0], "-D USE_GL "); 
-  render_.set_image(exp_img); 
+  render_.init_kernel(gpu_pro_->context(), gpu_pro_->devices()[0]); 
+  render_.set_image(exp_img_); 
+  vcl_cout<<"RENDER IMAGE SET"<<vcl_endl;
                                     
   return true;
 }

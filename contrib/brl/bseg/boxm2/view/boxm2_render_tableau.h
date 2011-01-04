@@ -26,6 +26,7 @@
 #include <boxm2/ocl/boxm2_opencl_processor.h>
 #include <boxm2/ocl/boxm2_opencl_render_process.h>
 #include <boxm2/io/boxm2_dumb_cache.h>
+#include <boxm2/io/boxm2_nn_cache.h>
 
 //brdb stuff
 #include <brdb/brdb_value.h>
@@ -60,6 +61,7 @@ class boxm2_render_tableau : public boxm2_cam_tableau
   //shared GL_CL image buffer
   GLuint pbuffer_;
   cl_mem clgl_buffer_;
+  bocl_mem* exp_img_; 
 
   //gpu processor and render_process
   boxm2_opencl_processor* gpu_pro_;

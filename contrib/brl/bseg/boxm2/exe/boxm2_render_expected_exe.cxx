@@ -100,7 +100,7 @@ int main(int argc,  char** argv)
   gpu_render.init_kernel(gpu_pro->context(), gpu_pro->devices()[0]); 
 
   //run expected image like 10 times and get average
-  int numTrials = 2;
+  int numTrials = 10;
   vul_timer t; 
   for(int i=0; i<numTrials; i++) {
     

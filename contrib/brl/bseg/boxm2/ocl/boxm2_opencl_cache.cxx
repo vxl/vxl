@@ -37,7 +37,6 @@ boxm2_opencl_cache::~boxm2_opencl_cache()
 //: realization of abstract "get_block(block_id)"
 bocl_mem* boxm2_opencl_cache::get_block(boxm2_block_id id)
 {
-  vcl_cout<<"opencl_cache get block"<<vcl_endl;
   if (cached_block_ && loaded_ == id)
     return cached_block_;
 
@@ -47,7 +46,6 @@ bocl_mem* boxm2_opencl_cache::get_block(boxm2_block_id id)
   //otherwise load it from disk with blocking
   loaded_ = id; 
   boxm2_block* loaded = cpu_cache_->get_block(id);
-  vcl_cout<<"GPU LOADED ID: "<<loaded->block_id()<<vcl_endl;
   typedef vnl_vector_fixed<unsigned char, 16> uchar16;
   boxm2_array_3d<uchar16>& trees = loaded->trees(); 
   cached_block_ = new bocl_mem(*context_, trees.data_block(), trees.size()*sizeof(uchar16), "3d trees buffer");

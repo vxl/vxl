@@ -101,7 +101,7 @@ void boxm2_asio_mgr::load_block_data(vcl_string dir, boxm2_block_id block_id)
   {
     // construct filename
     vcl_string filename = dir + boxm2_data_traits<data_type>::prefix() + "_" + block_id.to_string() + ".bin";
-    vcl_cout<<"boxm2_asio_mgr:: data load requested from file:"<<filename<<vcl_endl;
+    //vcl_cout<<"boxm2_asio_mgr:: data load requested from file:"<<filename<<vcl_endl;
 
     // get file size
     unsigned long buflength = vul_file::size(filename);

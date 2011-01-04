@@ -16,6 +16,8 @@
 
 bool boxm2_opencl_processor::init()
 {
+  vcl_cout<<"PROCESSOR INIT CALLED?"<<vcl_endl;
+  
   // set up 2 command queues
   int status;
   for (int i=0; i<NUM_QUEUES; ++i) {
@@ -50,6 +52,7 @@ bool boxm2_opencl_processor::sequencing(vcl_vector<boxm2_block_id> ids,
                                         vcl_vector<brdb_value_sptr>& input,
                                         vcl_vector<brdb_value_sptr>& output)
 {
+  vul_timer t; 
   boxm2_opencl_process_base* pro = (boxm2_opencl_process_base*) process;
   pro->set_gpu_cache(gpu_cache_); 
   
@@ -63,7 +66,8 @@ bool boxm2_opencl_processor::sequencing(vcl_vector<boxm2_block_id> ids,
     pro->set_command_queue(&queues_[1]);          //always executing with queue 1
     pro->execute(pro_input, output);
   }
-  
+  exec_time_ = (float) t.all(); 
+  return true;
 }
 
 bool boxm2_opencl_processor::run(boxm2_process * process, vcl_vector<brdb_value_sptr> & input, vcl_vector<brdb_value_sptr> & output)

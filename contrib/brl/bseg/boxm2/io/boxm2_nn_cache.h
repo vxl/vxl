@@ -79,13 +79,13 @@ boxm2_data<T>* boxm2_nn_cache::get_data(boxm2_block_id id)
   if ( data_map.find(id) != data_map.end() )
   {
     //congrats you've found the data block in cache, update cache and return block
-    vcl_cout<<"DATA CACHE HIT! for "<<boxm2_data_traits<T>::prefix()<<vcl_endl;
+    //vcl_cout<<"DATA CACHE HIT! for "<<boxm2_data_traits<T>::prefix()<<vcl_endl;
     this->update_data_cache<T>(data_map[id]);
     return (boxm2_data<T>*) data_map[id];
   }
 
   //otherwise it's a miss, load sync from disk, update cache
-  vcl_cout<<"Cache miss :( for "<<boxm2_data_traits<T>::prefix()<<vcl_endl;
+  //vcl_cout<<"Cache miss :( for "<<boxm2_data_traits<T>::prefix()<<vcl_endl;
   boxm2_data<T>* loaded = boxm2_sio_mgr::load_block_data<T>(scene_dir_, id);
   this->update_data_cache<T>(loaded);
   return loaded;
@@ -102,7 +102,7 @@ void boxm2_nn_cache::update_data_cache(boxm2_data_base* dat)
 
   //determine the center
   boxm2_block_id center = dat->block_id();
-  vcl_cout<<"update block cache around: "<<center<<vcl_endl;
+  //vcl_cout<<"update block cache around: "<<center<<vcl_endl;
 
   //find neighbors in x,y plane (i,j)
   vcl_vector<boxm2_block_id> neighbor_list = this->get_neighbor_list(center);
@@ -134,7 +134,7 @@ void boxm2_nn_cache::update_data_cache(boxm2_data_base* dat)
     boxm2_block_id   bid = blk_i->first;
     boxm2_data_base* blk = blk_i->second;
     if (bid != center && blk) {
-       vcl_cout<<"deleting "<<bid<<" from cache"<<vcl_endl;
+      // vcl_cout<<"deleting "<<bid<<" from cache"<<vcl_endl;
        delete blk;
     }
   }

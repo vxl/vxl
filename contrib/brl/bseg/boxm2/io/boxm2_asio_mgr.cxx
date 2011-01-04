@@ -55,7 +55,7 @@ void boxm2_asio_mgr::load_block(vcl_string dir, boxm2_block_id block_id)
   if ( load_list_.find(block_id) == load_list_.end())
   {
     vcl_string filepath = dir + block_id.to_string() + ".bin";
-    vcl_cout<<"boxm2_asio_mgr:: load requested from file:"<<filepath<<vcl_endl;
+    //vcl_cout<<"boxm2_asio_mgr:: load requested from file:"<<filepath<<vcl_endl;
 
     //get file size
     unsigned long numBytes = vul_file::size(filepath);
@@ -188,7 +188,7 @@ void boxm2_asio_mgr::load_block_data_generic(vcl_string dir, boxm2_block_id bloc
   {
     // construct filename
     vcl_string filename = dir + type + "_" + block_id.to_string() + ".bin";
-    vcl_cout<<"boxm2_asio_mgr:: data load requested from file:"<<filename<<vcl_endl;
+    //vcl_cout<<"boxm2_asio_mgr:: data load requested from file:"<<filename<<vcl_endl;
 
     // get file size
     unsigned long buflength = vul_file::size(filename);

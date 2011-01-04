@@ -6,9 +6,11 @@
 #include <bocl/bocl_cl.h>
 #include <vcl_string.h>
 
-class boxm2_opencl_process_base:public boxm2_process
+class boxm2_opencl_process_base : public boxm2_process
 {
   public: 
+  
+    boxm2_opencl_process_base() : command_queue_(0), cache_(0) {}
   
     //: init_kernel compiles the process' kernels (MUST IMPLEMENT in subclasses)
     virtual bool init_kernel(cl_context& context, cl_device_id& device, vcl_string opts="")=0;

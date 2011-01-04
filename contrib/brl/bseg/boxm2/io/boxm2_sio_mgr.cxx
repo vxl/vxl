@@ -5,7 +5,7 @@
 boxm2_block* boxm2_sio_mgr::load_block(vcl_string dir, boxm2_block_id block_id)
 {
   vcl_string filepath = dir + block_id.to_string() + ".bin";
-  vcl_cout<<"boxm2_sio_mgr:: load from file:"<<filepath<<vcl_endl;
+  //vcl_cout<<"boxm2_sio_mgr:: load from file:"<<filepath<<vcl_endl;
 
   //get file size
   unsigned long numBytes = vul_file::size(filepath);

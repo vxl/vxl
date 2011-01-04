@@ -46,12 +46,12 @@ boxm2_block* boxm2_nn_cache::get_block(boxm2_block_id id)
   if ( cached_blocks_.find(id) != cached_blocks_.end() )
   {
     //congrats you've found the block in cache, now update cache and return block
-    vcl_cout<<"CACHE HIT!"<<vcl_endl;
+    //vcl_cout<<"CACHE HIT!"<<vcl_endl;
     this->update_block_cache(cached_blocks_[id]);
     return cached_blocks_[id];
   }
 
-  vcl_cout<<"Cache miss :("<<vcl_endl;
+  //vcl_cout<<"Cache miss :("<<vcl_endl;
   //other wise load it from disk with blocking and update cache
   boxm2_block* loaded = boxm2_sio_mgr::load_block(scene_dir_, id);
   this->update_block_cache(loaded);
@@ -67,7 +67,7 @@ boxm2_block* boxm2_nn_cache::get_block(boxm2_block_id id)
 void boxm2_nn_cache::update_block_cache(boxm2_block* blk)
 {
   boxm2_block_id center = blk->block_id();
-  vcl_cout<<"update block cache around: "<<center<<vcl_endl;
+  //vcl_cout<<"update block cache around: "<<center<<vcl_endl;
 
   //find neighbors in x,y plane (i,j)
   vcl_vector<boxm2_block_id> neighbor_list = this->get_neighbor_list(center);
@@ -99,7 +99,7 @@ void boxm2_nn_cache::update_block_cache(boxm2_block* blk)
     boxm2_block_id bid = blk_i->first;
     boxm2_block* d_blk = blk_i->second;
     if (bid != center && d_blk) {
-       vcl_cout<<"deleting "<<bid<<" from cache"<<vcl_endl;
+       //vcl_cout<<"deleting "<<bid<<" from cache"<<vcl_endl;
        delete d_blk;
     }
   }
@@ -127,13 +127,13 @@ boxm2_data_base* boxm2_nn_cache::get_data_base(boxm2_block_id id, vcl_string typ
   if ( data_map.find(id) != data_map.end() )
   {
     //congrats you've found the data block in cache, update cache and return block
-    vcl_cout<<"DATA CACHE HIT! for "<<type<<vcl_endl;
+    //vcl_cout<<"DATA CACHE HIT! for "<<type<<vcl_endl;
     this->update_data_base_cache(data_map[id], type);
     return data_map[id];
   }
 
   //otherwise it's a miss, load sync from disk, update cache
-  vcl_cout<<"Cache miss :( for "<<type<<vcl_endl;
+  //vcl_cout<<"Cache miss :( for "<<type<<vcl_endl;
   boxm2_data_base* loaded = boxm2_sio_mgr::load_block_data_generic(scene_dir_, id, type);
   this->update_data_base_cache(loaded, type);
   return loaded;
@@ -148,7 +148,7 @@ void boxm2_nn_cache::update_data_base_cache(boxm2_data_base* dat, vcl_string dat
 
   //determine the center
   boxm2_block_id center = dat->block_id();
-  vcl_cout<<"update block cache around: "<<center<<vcl_endl;
+  //vcl_cout<<"update block cache around: "<<center<<vcl_endl;
 
   //find neighbors in x,y plane (i,j)
   vcl_vector<boxm2_block_id> neighbor_list = this->get_neighbor_list(center);
@@ -180,7 +180,7 @@ void boxm2_nn_cache::update_data_base_cache(boxm2_data_base* dat, vcl_string dat
     boxm2_block_id   bid = blk_i->first;
     boxm2_data_base* blk = blk_i->second;
     if (bid != center && blk) {
-       vcl_cout<<"deleting "<<bid<<" from cache"<<vcl_endl;
+       //vcl_cout<<"deleting "<<bid<<" from cache"<<vcl_endl;
        delete blk;
     }
   }

@@ -67,7 +67,6 @@ bool boxm2_opencl_render_process::init_kernel(cl_context& context,
 //  10) ocl_mem_sptr ray_vis    //produced here
 bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vcl_vector<brdb_value_sptr>& output)
 {
-  vcl_cout<<"GPu RENDER argcounts:"<<input.size()<<vcl_endl;
   int i = 0;
 
   //grab some bocl_mems from teh GPU cache
@@ -104,7 +103,14 @@ bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vc
     float* vis_buff = vis_img_view->begin();
     vis_img_ = new bocl_mem((*context_), vis_buff, vis_img_view->size() * sizeof(float), "visibility image buffer");
     vis_img_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+  } 
+  else {
+    vis_img_->set_cpu_buffer(vis_img_view->begin()); 
   }
+  
+  //write the image values to the buffer
+  image_->write_to_buffer(*command_queue_);
+  vis_img_->write_to_buffer(*command_queue_);
 
   //exp image dimensions
   int* img_dim_buff = new int[4];
@@ -150,7 +156,7 @@ bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vc
 
   //execute kernel
   render_kernel_.execute( (*command_queue_), lThreads, gThreads);
-  vcl_cout<<"Before "<<(reinterpret_cast<float*>(vis_img_->cpu_buffer()))[0]<<vcl_endl;
+  //vcl_cout<<"Before "<<(reinterpret_cast<float*>(vis_img_->cpu_buffer()))[0]<<vcl_endl;
 
   //read output, do something, blah blah
   cl_output.read_to_buffer(*command_queue_);

@@ -37,11 +37,7 @@
 class boxm2_opencl_processor: public boxm2_processor, public bocl_manager<boxm2_opencl_processor>
 {
  public:
-    boxm2_opencl_processor() {
-      //exec_queue_ = 0;
-      //loaded_[0] = boxm2_block_id(-999, -999, -999);
-      //loaded_[1] = boxm2_block_id(-999, -999, -999);
-    }
+    boxm2_opencl_processor() {}
     ~boxm2_opencl_processor() {}
 
     virtual bool  init();
@@ -54,15 +50,22 @@ class boxm2_opencl_processor: public boxm2_processor, public bocl_manager<boxm2_
                     vcl_vector<brdb_value_sptr>& input,
                     vcl_vector<brdb_value_sptr>& output);
 
+    float exec_time() { return exec_time_; }
+
     //: sets the scene this processor will work on
     bool set_scene(boxm2_scene* scene) { scene_ = scene; return true; }
     void set_cpu_cache(boxm2_cache* cache) { cpu_cache_ = cache; }
+    
+    cl_command_queue* get_queue() { return &queues_[0]; } 
 
  protected:
   
     //:opencl cache to keep track of scene stuff (ensure only 1 copy)
     boxm2_cache*        cpu_cache_;
     boxm2_opencl_cache* gpu_cache_;     
+ 
+    //: execution time (in ms)
+    float exec_time_; 
  
     //: execution queue
     int exec_queue_;
