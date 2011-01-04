@@ -51,6 +51,14 @@ public:
 
 	bapl_lowe_pyramid_set_sptr pyramid_sptr(){return this->pyramid_sptr_;}
 
+	unsigned ni() const {return this->ni_;}
+
+	unsigned nj() const {return this->nj_;}
+
+	unsigned octave_size() const {return this->octave_size_;}
+
+	unsigned num_octave() const {return this->num_octaves_;}
+
 private:
 	bapl_lowe_pyramid_set_sptr pyramid_sptr_;
 	unsigned ni_;
@@ -59,8 +67,6 @@ private:
 	unsigned num_octaves_;
 	bool pyramid_valid_;
 	static unsigned keypoint_id_;
-
-
 };
 
 #endif//bapl_dense_sift_h_
