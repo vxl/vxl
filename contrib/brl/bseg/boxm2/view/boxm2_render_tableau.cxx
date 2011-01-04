@@ -123,7 +123,8 @@ float boxm2_render_tableau::render_frame()
   vcl_vector<brdb_value_sptr> output; 
 
   //initialize the GPU render process
-  gpu_pro_->run(&render_, input, output); 
+  vcl_vector<boxm2_block_id> vis_order; vis_order.push_back(boxm2_block_id(0,0,0)); 
+  gpu_pro_->sequencing(vis_order, &render_, input, output);
   gpu_pro_->finish(); 
 
   status = clEnqueueReleaseGLObjects( *render_.command_queue(), 1, &render_.image()->buffer(), 0, 0, 0);
@@ -147,7 +148,8 @@ bool boxm2_render_tableau::init_clgl()
   gpu_pro_ = boxm2_opencl_processor::instance();
   gpu_pro_->context_ = create_clgl_context(); 
   gpu_pro_->set_scene(scene_.ptr()); 
-  gpu_pro_->push_scene_data(blk, alph, mog);  
+  gpu_pro_->set_cpu_cache(&dcache); 
+  gpu_pro_->init();
  
   // delete old buffer
   if (pbuffer_) {

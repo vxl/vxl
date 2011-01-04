@@ -2,7 +2,7 @@
 ADD_EXECUTABLE( boxm2_render_expected_exe
   boxm2_render_expected_exe.cxx
 )
-TARGET_LINK_LIBRARIES( boxm2_render_expected_exe boxm2 boxm2_io bocl vil_pro vpgl_pro vul )
+TARGET_LINK_LIBRARIES( boxm2_render_expected_exe boxm2 boxm2_basic boxm2_io boxm2_ocl bocl vil_pro vpgl_pro vul )
 
 # executable to convert a bit scene to a boxm2_scene
 ADD_EXECUTABLE( boxm2_convert_bit_scene_exe

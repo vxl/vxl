@@ -5,10 +5,15 @@
 #include <vcl_iostream.h>
 #include <vcl_sstream.h>
 #include <vcl_string.h>
+#include <vsl/vsl_binary_io.h>
+
+//smart pointer stuff
+#include <vbl/vbl_ref_count.h>
+#include <vbl/vbl_smart_ptr.h>
 
 //: boxm2_cache: top level storage (abstract) class
 // - handles all block io, from both the cache/marshaller and the disk
-class boxm2_block_id
+class boxm2_block_id : public vbl_ref_count
 {
   public:
     //indices are public
@@ -24,6 +29,9 @@ class boxm2_block_id
 
     //: Creates boxm2_block_id(i,j,k)
     inline boxm2_block_id (int i, int j, int k) : i_(i) , j_(j), k_(k) {}
+
+    //: copy constructor
+    inline boxm2_block_id (const boxm2_block_id& that) { i_=that.i(); j_=that.j(); k_=that.k(); }
 
     //: assignment
     inline boxm2_block_id& operator=(boxm2_block_id const& v) {
@@ -47,7 +55,21 @@ class boxm2_block_id
     vcl_string to_string(); 
 };
 
+typedef vbl_smart_ptr<boxm2_block_id> boxm2_block_id_sptr;
+
 //: scene output stream operator
 vcl_ostream& operator <<(vcl_ostream &s, boxm2_block_id& id);
+
+
+//------IO Necessary for smart pointer linking ---------------------------------
+//: Binary write boxm2_block to stream.
+void vsl_b_write(vsl_b_ostream& os, boxm2_block_id_sptr const& sptr);
+
+//: Binary load boxm2_block from stream.
+void vsl_b_read(vsl_b_istream& is, boxm2_block_id_sptr& sptr);
+
+//: Binary load boxm2_block from stream.
+void vsl_b_read(vsl_b_istream& is, boxm2_block_id_sptr const& sptr);
+
 
 #endif //boxm2_block_id_h_

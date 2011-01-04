@@ -23,6 +23,8 @@
 #include <brdb/brdb_value_sptr.h>
 #include <vcl_vector.h>
 
+#include "boxm2_opencl_cache.h"
+
 //open cl includes
 #include <bocl/bocl_cl.h>
 #include <bocl/bocl_manager.h>
@@ -36,9 +38,9 @@ class boxm2_opencl_processor: public boxm2_processor, public bocl_manager<boxm2_
 {
  public:
     boxm2_opencl_processor() {
-      exec_queue_ = 0;
-      loaded_[0] = boxm2_block_id(-999, -999, -999);
-      loaded_[1] = boxm2_block_id(-999, -999, -999);
+      //exec_queue_ = 0;
+      //loaded_[0] = boxm2_block_id(-999, -999, -999);
+      //loaded_[1] = boxm2_block_id(-999, -999, -999);
     }
     ~boxm2_opencl_processor() {}
 
@@ -46,59 +48,31 @@ class boxm2_opencl_processor: public boxm2_processor, public bocl_manager<boxm2_
     virtual bool  run(boxm2_process * process, vcl_vector<brdb_value_sptr> & input, vcl_vector<brdb_value_sptr> & output);
     virtual bool  finish();
 
+    //: handles the sequencing of blocks
+    bool sequencing(vcl_vector<boxm2_block_id> ids,
+                    boxm2_process* process,
+                    vcl_vector<brdb_value_sptr>& input,
+                    vcl_vector<brdb_value_sptr>& output);
+
     //: sets the scene this processor will work on
     bool set_scene(boxm2_scene* scene) { scene_ = scene; return true; }
-
-    //: sets scene pointers to process (hopefully in their correct order)
-    bool push_scene_data( boxm2_block* blk,
-                          boxm2_data_base* alph,
-                          boxm2_data_base* mog );
-
-    //: initializes scene buffers (Both of em)
-    bool setup_pinned_buffers( boxm2_scene* scene,
-                               boxm2_block* blk,
-                               boxm2_data_base* alpha,
-                               boxm2_data_base* mog );
+    void set_cpu_cache(boxm2_cache* cache) { cpu_cache_ = cache; }
 
  protected:
+  
+    //:opencl cache to keep track of scene stuff (ensure only 1 copy)
+    boxm2_cache*        cpu_cache_;
+    boxm2_opencl_cache* gpu_cache_;     
+ 
     //: execution queue
     int exec_queue_;
 
     //: scene that this processor is operating on
     boxm2_scene* scene_;
-
-    //: list of blocks to process
-    vcl_vector<boxm2_block*>     blocks_to_process_;
-    vcl_vector<boxm2_data_base*> alphas_to_process_;
-    vcl_vector<boxm2_data_base*> mogs_to_process_;
-
-    // === the OpenCL processor needs a sort of "cache" to make sure blocks are loaded efficiently ===
-
-    //: list of buffers that can be accessed by the GPU
-    // ALL OF THE BOCL_MEM pointers will create Pinned host memory, which allows
-    // the gpu to overlap a kernel execution
-    boxm2_block_id loaded_[NUM_QUEUES];
-    bocl_mem_sptr  scene_info_[NUM_QUEUES];
-    bocl_mem_sptr  trees_[NUM_QUEUES];
-    bocl_mem_sptr  alphas_[NUM_QUEUES];
-    bocl_mem_sptr  mogs_[NUM_QUEUES];
-
-    vnl_vector_fixed<unsigned char, 16> * trees_pin[NUM_QUEUES];
-    float*   alphas_pin[NUM_QUEUES];
-    char*    mogs_pin[NUM_QUEUES]; 
-    char*    info_pin[NUM_QUEUES];  
-
-
+    
     //: boxm2 command queues, two, one for in and one for out
     cl_command_queue queues_[NUM_QUEUES];
 
-    //: Helper method to push scene information onto the gpu
-    // Pushes block and data into a BOCL_mem, using \p queue_index
-    bool enqueue_write_scene( boxm2_scene* scene,
-                              boxm2_block* blk,
-                              boxm2_data_base* alpha,
-                              boxm2_data_base* mog,
-                              int queue_index, int buffer_index );
 };
 
 #endif

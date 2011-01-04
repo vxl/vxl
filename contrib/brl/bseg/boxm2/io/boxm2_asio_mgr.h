@@ -43,6 +43,7 @@ class boxm2_asio_mgr
     //: creates a BAIO object that loads data from disk
     template <boxm2_data_type data_type>
     void load_block_data(vcl_string dir, boxm2_block_id block_id);
+    void load_block_data_generic(vcl_string dir, boxm2_block_id block_id, vcl_string type); 
 
     //: creates a BAIO object that saves data to disk
     template <boxm2_data_type data_type>

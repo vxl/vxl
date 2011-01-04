@@ -75,22 +75,16 @@ int main(int argc,  char** argv)
   
   //initialize gpu pro / manager
   boxm2_opencl_processor* gpu_pro = boxm2_opencl_processor::instance();
-  gpu_pro->init();
   gpu_pro->set_scene(scene.ptr()); 
+  gpu_pro->set_cpu_cache(&cache); 
+  gpu_pro->init();
   
+  //pass in a vector of vis_orders to sequencing
   vcl_vector<boxm2_block_id> vis_order; 
   vis_order.push_back(boxm2_block_id(0,0,0));
   vis_order.push_back(boxm2_block_id(0,1,0)); 
   vis_order.push_back(boxm2_block_id(1,0,0)); 
   vis_order.push_back(boxm2_block_id(1,1,0)); 
-  for(int i=0; i<vis_order.size(); i++) {    
-      boxm2_block_id    id   = vis_order[i]; 
-      boxm2_block*      blk  = cache.get_block(id); 
-      boxm2_data_base*  alph = cache.get_data<BOXM2_ALPHA>(id); 
-      boxm2_data_base*  mog  = cache.get_data<BOXM2_MOG3_GREY>(id);  
-      gpu_pro->push_scene_data(blk, alph, mog);
-      if(i==0) gpu_pro->setup_pinned_buffers(scene.ptr(), blk, alph, mog);
-  }
 
   //set inputs
   vcl_vector<brdb_value_sptr> input; 
@@ -106,13 +100,17 @@ int main(int argc,  char** argv)
   gpu_render.init_kernel(gpu_pro->context(), gpu_pro->devices()[0]); 
 
   //run expected image like 10 times and get average
-  int numTrials = 1;
+  int numTrials = 2;
   vul_timer t; 
   for(int i=0; i<numTrials; i++) {
+    
+    //execute process ////////////////////////////////////////////////////
     expimg->fill(0);
     vis_img->fill(1.0f); 
-    gpu_pro->run(&gpu_render, input, output); 
+    gpu_pro->sequencing(vis_order, &gpu_render, input, output);
     gpu_pro->finish(); 
+    //////////////////////////////////////////////////////////////////////
+    
   }
   float time = t.all() / (float) numTrials;  
   vcl_cout<<"average render time: "<<time<<" ms"<<vcl_endl;
@@ -121,7 +119,6 @@ int main(int argc,  char** argv)
   gpu_render.clean(); 
   gpu_pro->finish(); 
 
-  
   //----------------------------------------------------------------------------
   //------- END API EXAMPLE ----------------------------------------------------
   //----------------------------------------------------------------------------

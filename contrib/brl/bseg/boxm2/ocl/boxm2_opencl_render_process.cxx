@@ -13,6 +13,8 @@
 //directory utility
 #include <vcl_where_root_dir.h>
 
+//TODO IN THIS INIT METHOD: Need to pass in a ref to the OPENCL_CACHE so this
+//class can easily access BOCL_MEMs
 bool boxm2_opencl_render_process::init_kernel(cl_context& context,
                                               cl_device_id& device,
                                               vcl_string opts)
@@ -66,17 +68,15 @@ bool boxm2_opencl_render_process::init_kernel(cl_context& context,
 bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vcl_vector<brdb_value_sptr>& output)
 {
   vcl_cout<<"GPu RENDER argcounts:"<<input.size()<<vcl_endl;
-
-  //1. get the arguments blocks/camera/img etc from the input vector
   int i = 0;
-  brdb_value_t<bocl_mem_sptr>* info  = static_cast<brdb_value_t<bocl_mem_sptr>* >( input[i++].ptr() );
-  bocl_mem_sptr info_sptr            = info->value();
-  brdb_value_t<bocl_mem_sptr>* blk   = static_cast<brdb_value_t<bocl_mem_sptr>* >( input[i++].ptr() );
-  bocl_mem_sptr blk_sptr             = blk->value();
-  brdb_value_t<bocl_mem_sptr>* alpha = static_cast<brdb_value_t<bocl_mem_sptr>* >( input[i++].ptr() );
-  bocl_mem_sptr alpha_sptr           = alpha->value();
-  brdb_value_t<bocl_mem_sptr>* mogs  = static_cast<brdb_value_t<bocl_mem_sptr>* >( input[i++].ptr() );
-  bocl_mem_sptr mogs_sptr            = mogs->value();
+
+  //grab some bocl_mems from teh GPU cache
+  brdb_value_t<boxm2_block_id_sptr>* id_brdb = static_cast<brdb_value_t<boxm2_block_id_sptr>* >( input[i++].ptr() );
+  boxm2_block_id_sptr id = id_brdb->value();
+  bocl_mem* blk = cache_->get_block(*id);
+  bocl_mem* alpha = cache_->get_data<BOXM2_ALPHA>(*id);
+  bocl_mem* mog   = cache_->get_data<BOXM2_MOG3_GREY>(*id);
+  bocl_mem* blk_info = cache_->loaded_block_info(); 
 
   //camera
   brdb_value_t<vpgl_camera_double_sptr>* brdb_cam = static_cast<brdb_value_t<vpgl_camera_double_sptr>* >( input[i++].ptr() );
@@ -131,11 +131,11 @@ bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vc
   vcl_size_t lThreads[] = {8, 8};
   vcl_size_t gThreads[] = {exp_img_view->ni(), exp_img_view->nj()};
 
-  //3. SET args
-  render_kernel_.set_arg( info_sptr.ptr() );
-  render_kernel_.set_arg( blk_sptr.ptr() );
-  render_kernel_.set_arg( alpha_sptr.ptr() );
-  render_kernel_.set_arg( mogs_sptr.ptr() );
+  ////3. SET args
+  render_kernel_.set_arg( blk_info );
+  render_kernel_.set_arg( blk );
+  render_kernel_.set_arg( alpha );
+  render_kernel_.set_arg( mog );
   render_kernel_.set_arg( &persp_cam );
   render_kernel_.set_arg( image_ );
   render_kernel_.set_arg( &exp_img_dim);

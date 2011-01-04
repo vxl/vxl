@@ -112,6 +112,87 @@ void boxm2_nn_cache::update_block_cache(boxm2_block* blk)
   cached_blocks_ = new_cache;
 }
 
+
+//: get data by type and id
+boxm2_data_base* boxm2_nn_cache::get_data_base(boxm2_block_id id, vcl_string type)
+{
+  //first thing to do is to load all async requests into the cache
+  this->finish_async_data(type);
+
+  //grab a reference to the map of cached_data_
+  vcl_map<boxm2_block_id, boxm2_data_base*>& data_map =
+    this->cached_data_map(type);
+
+  //then look for the block you're requesting
+  if ( data_map.find(id) != data_map.end() )
+  {
+    //congrats you've found the data block in cache, update cache and return block
+    vcl_cout<<"DATA CACHE HIT! for "<<type<<vcl_endl;
+    this->update_data_base_cache(data_map[id], type);
+    return data_map[id];
+  }
+
+  //otherwise it's a miss, load sync from disk, update cache
+  vcl_cout<<"Cache miss :( for "<<type<<vcl_endl;
+  boxm2_data_base* loaded = boxm2_sio_mgr::load_block_data_generic(scene_dir_, id, type);
+  this->update_data_base_cache(loaded, type);
+  return loaded;
+}
+
+//: update data cache by type
+void boxm2_nn_cache::update_data_base_cache(boxm2_data_base* dat, vcl_string data_type)
+{
+  //grab a reference to the map of cached_data
+  vcl_map<boxm2_block_id, boxm2_data_base*>& data_map =
+    this->cached_data_map(data_type);
+
+  //determine the center
+  boxm2_block_id center = dat->block_id();
+  vcl_cout<<"update block cache around: "<<center<<vcl_endl;
+
+  //find neighbors in x,y plane (i,j)
+  vcl_vector<boxm2_block_id> neighbor_list = this->get_neighbor_list(center);
+
+  // initialize new cache with existing neighbor ptrs
+  vcl_map<boxm2_block_id, boxm2_data_base*> new_cache;
+
+  //find neighbors in the cache already, store em
+  for (unsigned int i=0; i<neighbor_list.size(); ++i)
+  {
+    boxm2_block_id id = neighbor_list[i];
+
+    //if cached_blocks_ has this neighbor, add it to new cache (delete from old)
+    if ( data_map.find(id) != data_map.end() )
+    {
+      new_cache[id] = data_map[id];
+      data_map.erase(id);
+    }
+    else //send an async request for this block
+    {
+      io_mgr_.load_block_data_generic(scene_dir_, id, data_type);
+    }
+  }
+
+  //only non-neighbors remain in existing cache, delete em
+  vcl_map<boxm2_block_id, boxm2_data_base*>::iterator blk_i;
+  for (blk_i = data_map.begin(); blk_i != data_map.end(); ++blk_i)
+  {
+    boxm2_block_id   bid = blk_i->first;
+    boxm2_data_base* blk = blk_i->second;
+    if (bid != center && blk) {
+       vcl_cout<<"deleting "<<bid<<" from cache"<<vcl_endl;
+       delete blk;
+    }
+  }
+  data_map.clear();
+
+  //store block passed in
+  new_cache[dat->block_id()] = dat;
+
+  //swap out cache
+  data_map = new_cache;
+}
+
 void boxm2_nn_cache::finish_async_blocks()
 {
   // get async block list and push it into the cache
@@ -128,6 +209,26 @@ void boxm2_nn_cache::finish_async_blocks()
   }
 }
 
+
+//: finish async data
+void boxm2_nn_cache::finish_async_data(vcl_string data_type)
+{
+  //grab a reference to the map of cached_data_
+  vcl_map<boxm2_block_id, boxm2_data_base*>& data_map =
+    this->cached_data_map(data_type);
+
+  // get async block list and push it into the cache
+  vcl_map<boxm2_block_id, boxm2_data_base*> lmap = io_mgr_.get_loaded_data_generic(data_type);
+  vcl_map<boxm2_block_id, boxm2_data_base*>::iterator iter;
+  for (iter = lmap.begin(); iter != lmap.end(); ++iter)
+  {
+    //if this block doesn't exist in the cache put it in (otherwise delete it)
+    if ( data_map.find(iter->first) == data_map.end() )
+      data_map[iter->first] = iter->second;
+    else
+      if (iter->second) delete iter->second;
+  }
+}
 
 //: helper method returns a reference to correct data map (ensures one exists)
 vcl_map<boxm2_block_id, boxm2_data_base*>& boxm2_nn_cache::cached_data_map(vcl_string prefix)

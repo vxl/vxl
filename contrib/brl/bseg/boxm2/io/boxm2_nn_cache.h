@@ -6,7 +6,7 @@
 #include <vcl_iostream.h>
 
 //: an example cache that loads in the nearest neighbors of the requested block (asynchronously)
-class boxm2_nn_cache : boxm2_cache
+class boxm2_nn_cache : public boxm2_cache
 {
   public:
     //: construct with directory and scene dimensions (blocknum)
@@ -14,8 +14,11 @@ class boxm2_nn_cache : boxm2_cache
     ~boxm2_nn_cache();
 
     //: returns block pointer to block specified by ID
-    boxm2_block* get_block(boxm2_block_id id);
+    virtual boxm2_block* get_block(boxm2_block_id id);
 
+    //: returns data_base pointer (THIS IS NECESSARY BECAUSE TEMPLATED FUNCTIONS CANNOT BE VIRTUAL)
+    virtual boxm2_data_base* get_data_base(boxm2_block_id, vcl_string type);
+    
     //: returns data pointer to data block specified by ID
     template <boxm2_data_type T>
     boxm2_data<T>* get_data(boxm2_block_id id);
@@ -24,6 +27,9 @@ class boxm2_nn_cache : boxm2_cache
 
     //: private update cache method (very simple)
     void update_block_cache(boxm2_block* blk);
+    
+    //: private update data generic
+    void update_data_base_cache(boxm2_data_base*, vcl_string type);
 
     //: private update block cache method
     template <boxm2_data_type T>
@@ -33,8 +39,7 @@ class boxm2_nn_cache : boxm2_cache
     void finish_async_blocks();
 
     //: finish async data
-    template<boxm2_data_type T>
-    void finish_async_data();
+    void finish_async_data(vcl_string data_type);
 
     //: helper method returns a reference to correct data map (ensures one exists)
     vcl_map<boxm2_block_id, boxm2_data_base*>& cached_data_map(vcl_string prefix);
@@ -64,7 +69,7 @@ template<boxm2_data_type T>
 boxm2_data<T>* boxm2_nn_cache::get_data(boxm2_block_id id)
 {
   //first thing to do is to load all async requests into the cache
-  this->finish_async_data<T>();
+  this->finish_async_data(boxm2_data_traits<T>::prefix());
 
   //grab a reference to the map of cached_data_
   vcl_map<boxm2_block_id, boxm2_data_base*>& data_map =
@@ -140,27 +145,6 @@ void boxm2_nn_cache::update_data_cache(boxm2_data_base* dat)
 
   //swap out cache
   data_map = new_cache;
-}
-
-//: finish async data
-template<boxm2_data_type T>
-void boxm2_nn_cache::finish_async_data()
-{
-  //grab a reference to the map of cached_data_
-  vcl_map<boxm2_block_id, boxm2_data_base*>& data_map =
-    this->cached_data_map(boxm2_data_traits<T>::prefix());
-
-  // get async block list and push it into the cache
-  vcl_map<boxm2_block_id, boxm2_data_base*> lmap = io_mgr_.get_loaded_data_generic(boxm2_data_traits<T>::prefix());
-  vcl_map<boxm2_block_id, boxm2_data_base*>::iterator iter;
-  for (iter = lmap.begin(); iter != lmap.end(); ++iter)
-  {
-    //if this block doesn't exist in the cache put it in (otherwise delete it)
-    if ( data_map.find(iter->first) == data_map.end() )
-      data_map[iter->first] = iter->second;
-    else
-      if (iter->second) delete iter->second;
-  }
 }
 
 #endif // boxm2_nn_cache_h_

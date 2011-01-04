@@ -5,14 +5,17 @@
 #include <boxm2/io/boxm2_cache.h>
 
 //: boxm2_dumb_cache - example realization of abstract cache class
-class boxm2_dumb_cache : boxm2_cache
+class boxm2_dumb_cache : public boxm2_cache
 {
   public:
     boxm2_dumb_cache(vcl_string dir) : cached_block_(0), scene_dir_(dir) {}
     ~boxm2_dumb_cache(); 
 
     //: returns block poitner to block specified by ID
-    boxm2_block* get_block(boxm2_block_id id);
+    virtual boxm2_block* get_block(boxm2_block_id id);
+    
+    //: returns data_base pointer (THIS IS NECESSARY BECAUSE TEMPLATED FUNCTIONS CANNOT BE VIRTUAL)
+    virtual boxm2_data_base* get_data_base(boxm2_block_id, vcl_string type);
 
     //: returns data pointer to data block specified by ID
     template <boxm2_data_type T>
@@ -22,6 +25,9 @@ class boxm2_dumb_cache : boxm2_cache
     
     //: private update cache method (very simple)
     void update_block_cache(boxm2_block* blk); 
+    
+    //: private update method (very simple)
+    void update_data_base_cache(boxm2_data_base* dat, vcl_string type); 
     
     //: private update block cache method
     template <boxm2_data_type T>

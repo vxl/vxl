@@ -25,6 +25,9 @@ class boxm2_sio_mgr
     template <boxm2_data_type data_type> 
     static boxm2_data<data_type> *  load_block_data(vcl_string dir, boxm2_block_id block_id); 
     
+    //: load data generically
+    static boxm2_data_base*  load_block_data_generic(vcl_string dir, boxm2_block_id id, vcl_string data_type); 
+    
     //: saves data to disk
     template <boxm2_data_type data_type> 
     static void save_block_data(vcl_string dir, boxm2_block_id block_id, boxm2_data<data_type> * block_data );

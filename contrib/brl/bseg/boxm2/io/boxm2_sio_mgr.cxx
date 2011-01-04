@@ -36,3 +36,23 @@ void boxm2_sio_mgr::save_block(vcl_string dir, boxm2_block* block)
   myFile.write(bytes, block->byte_count());
   myFile.close();
 }
+
+
+boxm2_data_base* boxm2_sio_mgr::load_block_data_generic(vcl_string dir, boxm2_block_id id, vcl_string data_type)
+{
+  // file name
+  vcl_string filename = dir + data_type + "_" + id.to_string() + ".bin";
+
+  //get file size
+  unsigned long numBytes=vul_file::size(filename);
+
+  //Read bytes into stream
+  char * bytes = new char[numBytes]; 
+  vcl_ifstream myFile (filename.c_str(), vcl_ios::in | vcl_ios::binary);
+  myFile.read(bytes, numBytes);
+  if (!myFile)
+      vcl_cerr<<"boxm2_sio_mgr:: cannot read file "<<dir<<vcl_endl;
+
+  //instantiate new block
+  return new boxm2_data_base(bytes,numBytes,id); 
+}

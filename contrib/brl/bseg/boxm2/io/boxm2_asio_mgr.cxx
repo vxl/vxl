@@ -167,3 +167,38 @@ vcl_map<boxm2_block_id, boxm2_data_base*> boxm2_asio_mgr::get_loaded_data_generi
   }
   return toReturn;
 }
+
+
+
+//: load_block_data creates and stores async request for data of data_type with block_id
+void boxm2_asio_mgr::load_block_data_generic(vcl_string dir, boxm2_block_id block_id, vcl_string type)
+{
+  // if map for this particular data type doesn't exist, initialize it
+  if ( load_data_list_.find(type) == load_data_list_.end() )
+  {
+    vcl_map<boxm2_block_id, baio*> bmap;
+    load_data_list_[type] = bmap;
+  }
+
+  //get reference to specific data map
+  vcl_map<boxm2_block_id, baio*>& data_map = load_data_list_[type];
+
+  //create BAIO object only if this data block is not already loading
+  if ( data_map.find(block_id) == data_map.end())
+  {
+    // construct filename
+    vcl_string filename = dir + type + "_" + block_id.to_string() + ".bin";
+    vcl_cout<<"boxm2_asio_mgr:: data load requested from file:"<<filename<<vcl_endl;
+
+    // get file size
+    unsigned long buflength = vul_file::size(filename);
+
+    // allocate buffer and read to it, store aio object in list
+    char * buffer = new char[buflength];
+    baio* aio = new baio();
+    aio->read(filename, buffer, buflength);
+
+    //store the async request
+    data_map[block_id] = aio;
+  }
+}

@@ -3,7 +3,9 @@
 //:
 // \file
 #include "boxm2_opencl_process_base.h"
+#include "boxm2_opencl_cache.h"
 #include <vcl_vector.h>
+#include <boxm2/boxm2_data_traits.h>
 
 //cameras/images
 #include <vpgl/vpgl_perspective_camera.h>
@@ -28,15 +30,13 @@ class boxm2_opencl_render_process : public boxm2_opencl_process_base
     //: opencl specific init - compiles kernels associated with this process
     virtual bool init_kernel(cl_context& context, cl_device_id& device, vcl_string opts="");
 
-    //: render specific method
+    ////////////////////////////////////////////////////////////////////////////
+    //: render specific methods
     bool set_image( bocl_mem* img ) { image_ = img; return true; }
     
     //: get image
     bocl_mem* image() { return image_; }
-    
-    //: set/get command queue
-    virtual void set_command_queue(cl_command_queue* queue) { command_queue_ = queue; }
-    cl_command_queue* command_queue() { return command_queue_; }
+    ////////////////////////////////////////////////////////////////////////////
 
   private:
 
@@ -51,10 +51,6 @@ class boxm2_opencl_render_process : public boxm2_opencl_process_base
     
     //: visibility image
     bocl_mem* vis_img_; 
-
-    //0----- HACK STUFF TO GO SOMEWEHRE ELSE ----------------------------------
-    //: command queue for thsi process.
-    cl_command_queue* command_queue_;
 
 };
 
