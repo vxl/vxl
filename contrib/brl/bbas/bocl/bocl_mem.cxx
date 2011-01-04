@@ -2,6 +2,7 @@
 //:
 // \file
 #include <vcl_iostream.h>
+#include <vcl_cstring.h>
 
 bocl_mem::bocl_mem(const cl_context& context, void* buffer, unsigned num_bytes, vcl_string id)
 : cpu_buf_(buffer),
@@ -30,6 +31,28 @@ bool bocl_mem::release_memory()
 {
   cl_int status = clReleaseMemObject(buffer_);
   if (!check_val(status,MEM_FAILURE,"clReleaseMemObject failed: " + this->id_))
+    return MEM_FAILURE;
+  return MEM_SUCCESS;
+}
+
+//: helper method to zero out gpu buffer 
+bool bocl_mem::zero_gpu_buffer(const cl_command_queue& cmdQueue)
+{
+  unsigned char* zeros = new unsigned char[this->num_bytes_]; // All 1000 values initialized to zero.
+  vcl_memset(zeros, 0, this->num_bytes_); 
+  ceEvent_ = 0; 
+  cl_int status = MEM_FAILURE;
+  status = clEnqueueWriteBuffer(cmdQueue,
+                                this->buffer_,
+                                CL_TRUE,          //True=BLocking, False=NonBlocking
+                                0,
+                                this->num_bytes_,
+                                zeros,
+                                0,                //cl_uint num_events_in_wait_list
+                                0,
+                                &ceEvent_);
+  delete[] zeros;
+  if (!check_val(status,MEM_FAILURE,"clEnqueueWriteBuffer (ZERO BUFFER) failed: " + this->id_ + error_to_string(status)))
     return MEM_FAILURE;
   return MEM_SUCCESS;
 }

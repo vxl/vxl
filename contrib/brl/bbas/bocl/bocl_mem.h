@@ -49,6 +49,9 @@ class bocl_mem : public vbl_ref_count
     bool write_to_buffer_async(const cl_command_queue& cmdQueue); 
     bool finish_write_to_buffer(const cl_command_queue& cmdQueue); 
 
+    //: zeros out GPU buffer
+    bool zero_gpu_buffer(const cl_command_queue& cmdQueue); 
+
     //: returns a reference to the buffer
     cl_mem& buffer()        { return buffer_; }
 
