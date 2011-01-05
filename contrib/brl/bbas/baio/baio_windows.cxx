@@ -24,6 +24,7 @@ struct baio_info {
   char* buffer;
   HANDLE fhandle;
   bool status;
+  long buffer_length_;
 };
 
 baio::baio()
@@ -56,6 +57,7 @@ bool baio::read(vcl_string filename, char* buffer, long BUFSIZE)
     vcl_cerr<<"baio (Windows)::read could not allocate buffer of size "<<BUFSIZE<<'\n';
     vcl_perror("malloc");
   }
+  info_->buffer_length_=BUFSIZE;
   //
   DWORD bytesRead = 0;
 
@@ -110,3 +112,7 @@ char* baio::buffer()
   return info_->buffer;
 }
 
+long baio::buffer_size()
+{
+  return (long) info_->buffer_length_;
+}
