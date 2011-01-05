@@ -41,7 +41,7 @@ unsigned vsph_view_sphere<T>::add_view(T view, unsigned ni, unsigned nj)
   vgl_point_3d<double> camera_center = coord_sys_->cart_coord(p);
   cam->set_camera_center(camera_center);
   vgl_point_2d<double> pp(ni/2., nj/2.);
-  vpgl_calibration_matrix<double> K(1.0,pp);
+  vpgl_calibration_matrix<double> K(1871.0,pp);
   cam->set_calibration(K);
   vgl_vector_3d<double> up(0.0, 1.0, 0.0);
   if (vcl_fabs(p.theta_)<1.0e-3)
@@ -208,24 +208,24 @@ void vsph_view_sphere<T>::add_uniform_views(double cap_angle, double point_angle
     for (int j=0; j<3; j++) {
       vsph_sph_point_3d sv;
       coord_sys_->spherical_coord(verts[triangles[i][j]], sv);
-      if ((sv.theta_ < cap_angle) && (sv.theta_ > 3.0*cap_angle/4.0))
-        if (sv.theta_ < cap_angle) {
-          int uid;
-          double dist;
-          T neighb = find_closest(verts[triangles[i][j]],uid,dist);
-          if (uid >-1) {
-            // add if not already added
-            if (dist > 0.0001) {
-              T view(sv);
-              add_view(view,ni,nj);
-            }
-            // no views yet, add the first one..
-          }
-          else {
+      if ((sv.theta_ < cap_angle) && (sv.theta_ > 3.0*cap_angle/4.0)) {
+      //if (sv.theta_ < cap_angle) {
+        int uid;
+        double dist;
+        T neighb = find_closest(verts[triangles[i][j]],uid,dist);
+        if (uid >-1) {
+          // add if not already added
+          if (dist > 0.0001) {
             T view(sv);
             add_view(view,ni,nj);
           }
+          // no views yet, add the first one..
         }
+        else {
+          T view(sv);
+          add_view(view,ni,nj);
+        }
+      }
     }
   }
 }
