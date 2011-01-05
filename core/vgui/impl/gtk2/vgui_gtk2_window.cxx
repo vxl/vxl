@@ -59,6 +59,7 @@ vgui_gtk2_window::vgui_gtk2_window(int w, int h, const char* title)
   gtk_signal_connect(GTK_OBJECT(window), "delete_event",
                      GTK_SIGNAL_FUNC(delete_event_callback),
                      static_cast<vgui_gtk2_adaptor*>(adaptor));
+  init();
 }
 
 
@@ -86,6 +87,7 @@ vgui_gtk2_window::vgui_gtk2_window(int w, int h, const vgui_menu& menu, const ch
   gtk_signal_connect(GTK_OBJECT(window), "delete_event",
                      GTK_SIGNAL_FUNC(delete_event_callback),
                      static_cast<vgui_gtk2_adaptor*>(adaptor));
+  init();
 }
 
 
@@ -159,7 +161,6 @@ void vgui_gtk2_window::set_menubar(const vgui_menu &menu)
 
 void vgui_gtk2_window::show()
 {
-  init();
 
   if (debug) vcl_cerr << "vgui_gtk2_window::show\n";
   gtk_widget_show(window);

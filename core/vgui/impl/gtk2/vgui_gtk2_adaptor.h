@@ -66,7 +66,13 @@ class vgui_gtk2_adaptor : public vgui_adaptor, public vgui_adaptor_mixin
 
  private:
   // main GDK-to-vgui event dispatcher
-  static gint handle(GtkWidget *, GdkEvent *, gpointer);
+  static gint handle(const vgui_event&, GtkWidget*, GdkEvent*, gpointer);
+  static gint handle_configure(GtkWidget*, GdkEvent*, gpointer);
+  static gint handle_draw(GtkWidget*, GdkEvent*, gpointer);
+  static gint handle_motion_notify(GtkWidget*, GdkEvent*, gpointer);
+  static gint handle_button(GtkWidget*, GdkEvent*, gpointer);
+  static gint handle_key(GtkWidget*, GdkEvent*, gpointer);
+  static gint handle_enter_leave(GtkWidget*, GdkEvent*, gpointer);
 
   // idle callbacks which service pending redraw/destroy posts
   static gint idle_callback_for_redraw(gpointer data);

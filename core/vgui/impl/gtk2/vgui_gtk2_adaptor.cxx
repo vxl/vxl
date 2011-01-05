@@ -104,8 +104,20 @@ vgui_gtk2_adaptor::vgui_gtk2_adaptor(vgui_gtk2_window* win)
                         GDK_ENTER_NOTIFY_MASK |
                         GDK_LEAVE_NOTIFY_MASK);
 
+#if 0
   gtk_signal_connect(GTK_OBJECT(widget), "event", GTK_SIGNAL_FUNC(handle), this);
-
+#else
+  gtk_signal_connect(GTK_OBJECT(widget), "configure_event", GTK_SIGNAL_FUNC(handle_configure), this);
+  gtk_signal_connect(GTK_OBJECT(widget), "expose_event", GTK_SIGNAL_FUNC(handle_draw), this);
+  gtk_signal_connect(GTK_OBJECT(widget), "map_event", GTK_SIGNAL_FUNC(handle_draw), this);
+  gtk_signal_connect(GTK_OBJECT(widget), "motion_notify_event", GTK_SIGNAL_FUNC(handle_motion_notify), this);
+  gtk_signal_connect(GTK_OBJECT(widget), "button_press_event", GTK_SIGNAL_FUNC(handle_button), this);
+  gtk_signal_connect(GTK_OBJECT(widget), "button_release_event", GTK_SIGNAL_FUNC(handle_button), this);
+  gtk_signal_connect(GTK_OBJECT(widget), "key_press_event", GTK_SIGNAL_FUNC(handle_key), this);
+  gtk_signal_connect(GTK_OBJECT(widget), "key_release_event", GTK_SIGNAL_FUNC(handle_key), this);
+  gtk_signal_connect(GTK_OBJECT(widget), "enter_notify_event", GTK_SIGNAL_FUNC(handle_enter_leave), this);
+  gtk_signal_connect(GTK_OBJECT(widget), "leave_notify_event", GTK_SIGNAL_FUNC(handle_enter_leave), this);
+#endif
   GTK_WIDGET_SET_FLAGS(widget, GTK_CAN_FOCUS);
 
   redraw_requested = false;
@@ -234,103 +246,84 @@ vgui_menu vgui_gtk2_adaptor::get_popup()
   return vgui_menu();
 }
 
-gint vgui_gtk2_adaptor::handle(GtkWidget *widget,
+gint vgui_gtk2_adaptor::handle_configure(
+                               GtkWidget *widget,
                                GdkEvent *gev,
                                gpointer context)
 {
   vgui_gtk2_adaptor* adaptor = (vgui_gtk2_adaptor*) context;
 
-  bool ret_value = TRUE;
-  if (vgui_gtk2_utils::is_modifier(gev))
-    ret_value = FALSE;
+  // The following 5 lines are required to make GL context available
+  // so that some GL functions (such as glGenLists()) can succeed.
+  GdkGLContext *glcontext = gtk_widget_get_gl_context (widget);
+  GdkGLDrawable *gldrawable = gtk_widget_get_gl_drawable (widget);
+  if (!gdk_gl_drawable_gl_begin (gldrawable, glcontext)) 
+    return FALSE;
+  gdk_gl_drawable_gl_end (gldrawable);
 
+  adaptor->reshape();
+  return TRUE;
+}
+
+gint vgui_gtk2_adaptor::handle_draw(
+                               GtkWidget *widget,
+                               GdkEvent *gev,
+                               gpointer context)
+{
+  vgui_gtk2_adaptor* adaptor = (vgui_gtk2_adaptor*) context;
+  adaptor->draw();
+  return TRUE;
+}
+
+gint vgui_gtk2_adaptor::handle_motion_notify(
+                               GtkWidget *widget,
+                               GdkEvent *gev,
+                               gpointer context)
+{
+  vgui_gtk2_adaptor* adaptor = (vgui_gtk2_adaptor*) context;
   vgui_event event;
 
-  GdkEventType type = gev->type;
-
-  if (type==GDK_EXPOSE || type==GDK_MAP)
+  event.type = vgui_MOTION;
+  GdkEventMotion *e = (GdkEventMotion*)gev;
+  if (e->is_hint)
   {
-    adaptor->draw();
-    return TRUE;
-  }
-  else if (type==GDK_CONFIGURE)
-  {
-    adaptor->reshape();
-    return TRUE;
-  }
-  else if (type==GDK_MOTION_NOTIFY)
-  {
-    event.type = vgui_MOTION;
-    GdkEventMotion *e = (GdkEventMotion*)gev;
-    if (e->is_hint)
-    {
-      int x,y;
-      GdkModifierType state;
-      gdk_window_get_pointer(e->window, &x, &y, &state);
-      vgui_gtk2_utils::set_modifiers(event, state);
-      vgui_gtk2_utils::set_coordinates(event, x, y);
-    }
-    else
-    {
-      vgui_gtk2_utils::set_modifiers(event,e->state);
-      vgui_gtk2_utils::set_coordinates(event,e->x, e->y);
-    }
-    adaptor->last_mouse_x = event.wx;
-    adaptor->last_mouse_y = event.wy;
-  }
-  else if (type==GDK_BUTTON_PRESS)
-  {
-    event.type = vgui_BUTTON_DOWN;
-    GdkEventButton *e = (GdkEventButton*)gev;
-    event.button = vgui_gtk2_utils::translate_button(e->button);
-    vgui_gtk2_utils::set_modifiers(event,e->state);
-    vgui_gtk2_utils::set_coordinates(event,e->x, e->y);
-    adaptor->last_mouse_x = event.wx;
-    adaptor->last_mouse_y = event.wy;
-  }
-  else if (type==GDK_BUTTON_RELEASE)
-  {
-    event.type = vgui_BUTTON_UP;
-    GdkEventButton *e = (GdkEventButton*)gev;
-    event.button = vgui_gtk2_utils::translate_button(e->button);
-    vgui_gtk2_utils::set_modifiers(event,e->state);
-    vgui_gtk2_utils::set_coordinates(event,e->x, e->y);
-    adaptor->last_mouse_x = event.wx;
-    adaptor->last_mouse_y = event.wy;
-  }
-  else if (type==GDK_KEY_PRESS)
-  {
-    event.type = vgui_KEY_PRESS;
-    GdkEventKey *e = (GdkEventKey*)gev;
-    event.set_key( vgui_gtk2_utils::translate_key(e));
-    event.ascii_char = vgui_gtk2_utils::translate_key(e);
-    vgui_gtk2_utils::set_modifiers(event,e->state);
-    event.wx = adaptor->last_mouse_x;
-    event.wy = adaptor->last_mouse_y;
-  }
-  else if (type==GDK_KEY_RELEASE)
-  {
-    event.type = vgui_KEY_RELEASE;
-    GdkEventKey *e = (GdkEventKey*)gev;
-    event.set_key( vgui_gtk2_utils::translate_key(e));
-    event.ascii_char = vgui_gtk2_utils::translate_key(e);
-    vgui_gtk2_utils::set_modifiers(event,e->state);
-    event.wx = adaptor->last_mouse_x;
-    event.wy = adaptor->last_mouse_y;
-  }
-  else if (type==GDK_ENTER_NOTIFY)
-  {
-    event.type = vgui_ENTER;
-    gtk_widget_grab_focus(GTK_WIDGET(widget));
-  }
-  else if (type==GDK_LEAVE_NOTIFY)
-  {
-    event.type = vgui_LEAVE;
+    int x,y;
+    GdkModifierType state;
+    gdk_window_get_pointer(e->window, &x, &y, &state);
+    vgui_gtk2_utils::set_modifiers(event, state);
+    vgui_gtk2_utils::set_coordinates(event, x, y);
   }
   else
   {
-    event.type = vgui_OTHER;
+    vgui_gtk2_utils::set_modifiers(event,e->state);
+    vgui_gtk2_utils::set_coordinates(event,e->x, e->y);
   }
+  adaptor->last_mouse_x = event.wx;
+  adaptor->last_mouse_y = event.wy;
+
+  return handle(event, widget, gev, context);
+}
+
+
+gint vgui_gtk2_adaptor::handle_button(
+                               GtkWidget *widget,
+                               GdkEvent *gev,
+                               gpointer context)
+{
+  vgui_gtk2_adaptor* adaptor = (vgui_gtk2_adaptor*) context;
+  vgui_event event;
+  GdkEventType type = gev->type;
+
+  if (type==GDK_BUTTON_PRESS)
+    event.type = vgui_BUTTON_DOWN;
+  else if (type==GDK_BUTTON_RELEASE)
+    event.type = vgui_BUTTON_UP;
+  GdkEventButton *e = (GdkEventButton*)gev;
+  event.button = vgui_gtk2_utils::translate_button(e->button);
+  vgui_gtk2_utils::set_modifiers(event,e->state);
+  vgui_gtk2_utils::set_coordinates(event,e->x, e->y);
+  adaptor->last_mouse_x = event.wx;
+  adaptor->last_mouse_y = event.wy;
 
   if (event.type == vgui_BUTTON_DOWN &&
       event.button == adaptor->popup_button &&
@@ -353,6 +346,65 @@ gint vgui_gtk2_adaptor::handle(GtkWidget *widget,
                    bevent->button, bevent->time);
     return TRUE;
   }
+
+  return handle(event, widget, gev, context);
+}
+
+gint vgui_gtk2_adaptor::handle_key(
+                               GtkWidget *widget,
+                               GdkEvent *gev,
+                               gpointer context)
+{
+  vgui_gtk2_adaptor* adaptor = (vgui_gtk2_adaptor*) context;
+  vgui_event event;
+  GdkEventType type = gev->type;
+
+  if (type==GDK_KEY_PRESS)
+    event.type = vgui_KEY_PRESS;
+  else if (type==GDK_KEY_RELEASE)
+    event.type = vgui_KEY_RELEASE;
+  GdkEventKey *e = (GdkEventKey*)gev;
+  event.set_key( vgui_gtk2_utils::translate_key(e));
+  event.ascii_char = vgui_gtk2_utils::translate_key(e);
+  vgui_gtk2_utils::set_modifiers(event,e->state);
+  event.wx = adaptor->last_mouse_x;
+  event.wy = adaptor->last_mouse_y;
+
+  return handle(event, widget, gev, context);
+}
+
+gint vgui_gtk2_adaptor::handle_enter_leave(
+                               GtkWidget *widget,
+                               GdkEvent *gev,
+                               gpointer context)
+{
+  vgui_gtk2_adaptor* adaptor = (vgui_gtk2_adaptor*) context;
+  vgui_event event;
+  GdkEventType type = gev->type;
+
+  if (type==GDK_ENTER_NOTIFY)
+  {
+    event.type = vgui_ENTER;
+    gtk_widget_grab_focus(GTK_WIDGET(widget));
+  }
+  else if (type==GDK_LEAVE_NOTIFY)
+  {
+    event.type = vgui_LEAVE;
+  }
+
+  return handle(event, widget, gev, context);
+}
+
+gint vgui_gtk2_adaptor::handle(const vgui_event &event,
+                               GtkWidget *widget,
+                               GdkEvent *gev,
+                               gpointer context)
+{
+  vgui_gtk2_adaptor* adaptor = (vgui_gtk2_adaptor*) context;
+
+  bool ret_value = TRUE;
+  if (vgui_gtk2_utils::is_modifier(gev))
+    ret_value = FALSE;
 
 #ifdef DEBUG
   vcl_cerr << "vgui_event " << event << vcl_endl;

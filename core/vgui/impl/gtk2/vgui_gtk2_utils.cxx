@@ -75,6 +75,61 @@ vgui_key vgui_gtk2_utils::translate_key(GdkEventKey const *gev)
   }
 }
 
+guint vgui_gtk2_utils::translate_key_reverse(vgui_key key)
+{
+  guint gdk_key;
+
+  if ( key >= 'A' && key <= 'Z' )
+    return char(key);
+
+  if ( key >= 'a' && key <= 'z' )
+    return char(key+'A'-'a'); 
+
+  switch ( key ) 
+  {
+    // Function keys
+    case vgui_F1:
+    case vgui_F2:
+    case vgui_F3:
+    case vgui_F4:
+    case vgui_F5:
+    case vgui_F6:
+    case vgui_F7:
+    case vgui_F8:
+    case vgui_F9:
+    case vgui_F10:
+    case vgui_F11:
+    case vgui_F12:
+      gdk_key = GDK_F1+key-vgui_F1;
+      break;
+    case vgui_CURSOR_LEFT:
+    case vgui_CURSOR_UP:
+    case vgui_CURSOR_RIGHT:
+    case vgui_CURSOR_DOWN:
+    case vgui_PAGE_UP:
+    case vgui_PAGE_DOWN:
+      gdk_key = GDK_Left+key-vgui_CURSOR_LEFT;
+      break;
+    case vgui_HOME:
+      gdk_key = GDK_Home;
+      break;
+    case vgui_END:
+      gdk_key = GDK_End;
+      break;
+    case vgui_DELETE:
+      gdk_key = GDK_Delete;
+      break;
+    case vgui_INSERT:
+      gdk_key = GDK_Insert;
+      break;
+    default: // undefined
+      gdk_key = GDK_VoidSymbol; 
+      break;
+  }
+
+  return gdk_key;
+}
+
 void vgui_gtk2_utils::set_coordinates(vgui_event &e, const gdouble x, const gdouble y)
 {
   GLint vp[4];
@@ -168,11 +223,11 @@ void vgui_gtk2_utils::add_submenu(GtkWidget *widget, const vgui_menu& menu)
         if (menu[i].short_cut.mod & vgui_SHIFT)
           mask = GdkModifierType(mask | GDK_SHIFT_MASK);
         if (menu[i].short_cut.mod & vgui_ALT)
-          mask = GdkModifierType(mask | GDK_MOD2_MASK);
+          mask = GdkModifierType(mask | GDK_MOD1_MASK);
         gtk_widget_add_accelerator (item,
                                     "activate",
                                     accel_group,
-                                    char(menu[i].short_cut.key),
+                                    translate_key_reverse(menu[i].short_cut.key),
                                     mask,
                                     GtkAccelFlags(GTK_ACCEL_VISIBLE|GTK_ACCEL_LOCKED));
       }
@@ -230,11 +285,11 @@ void vgui_gtk2_utils::set_menu(GtkWidget *widget, const vgui_menu& menu, bool is
           if (menu[i].short_cut.mod & vgui_SHIFT)
             mask = GdkModifierType(mask | GDK_SHIFT_MASK);
           if (menu[i].short_cut.mod & vgui_ALT)
-            mask = GdkModifierType(mask | GDK_MOD2_MASK);
+            mask = GdkModifierType(mask | GDK_MOD1_MASK);
           gtk_widget_add_accelerator (item,
                                       "activate",
                                       accel_group,
-                                      char(menu[i].short_cut.key),
+                                      translate_key_reverse(menu[i].short_cut.key),
                                       mask,
                                       GtkAccelFlags(GTK_ACCEL_VISIBLE|GTK_ACCEL_LOCKED));
         }
