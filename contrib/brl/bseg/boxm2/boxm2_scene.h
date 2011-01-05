@@ -41,10 +41,8 @@ struct boxm2_scene_info
 
 class boxm2_scene_info_wrapper:public vbl_ref_count
 {
-
-public:
+  public:
     boxm2_scene_info * info;
-
 };
 
 //: boxm2_scene: simple scene model that maintains (in world coordinates)
@@ -70,7 +68,7 @@ class boxm2_scene : public vbl_ref_count
     void save_scene(); 
     
     //: return a vector of block ids in visibility order
-    vcl_vector<boxm2_block_id> get_vis_blocks(vpgl_perspective_camera<double>* cam) ; 
+    vcl_vector<boxm2_block_id> get_vis_blocks(vpgl_perspective_camera<double>* cam); 
     
     //: return a heap pointer to a scene info 
     boxm2_scene_info* get_blk_metadata(boxm2_block_id id); 
@@ -126,6 +124,8 @@ vcl_ostream& operator<<(vcl_ostream &s, boxm2_scene& scene);
 //: scene xml write function
 void x_write(vcl_ostream &os, boxm2_scene& scene, vcl_string name);
 
+
+//--- IO read/write for sptrs--------------------------------------------------
 //: Binary write boxm2_scene scene to stream
 void vsl_b_write(vsl_b_ostream& os, boxm2_scene const& scene);
 void vsl_b_write(vsl_b_ostream& os, const boxm2_scene* &p);

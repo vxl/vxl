@@ -125,9 +125,10 @@ float boxm2_render_tableau::render_frame()
   vcl_vector<brdb_value_sptr> output; 
 
   //initialize the GPU render process
-  vcl_vector<boxm2_block_id> vis_order; 
-  vis_order.push_back(boxm2_block_id(0,0,0)); 
-  vis_order.push_back(boxm2_block_id(1,0,0));
+  vcl_vector<boxm2_block_id> vis_order = scene_->get_vis_blocks(&cam_); 
+  //vis_order.push_back(boxm2_block_id(0,0,0)); 
+  //vis_order.push_back(boxm2_block_id(1,0,0));
+
   gpu_pro_->sequencing(vis_order, &render_, input, output);
   gpu_pro_->finish(); 
 

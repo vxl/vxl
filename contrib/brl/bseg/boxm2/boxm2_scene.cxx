@@ -10,6 +10,9 @@
 #include <vgl/xio/vgl_xio_vector_3d.h>
 #include <boxm2/io/boxm2_scene_parser.h>    
 
+//vgl includes
+#include <vgl/vgl_distance.h>
+
 
 //: initializes Scene from XML file
 boxm2_scene::boxm2_scene(vcl_string filename)
@@ -57,12 +60,37 @@ void boxm2_scene::add_block_metadata(boxm2_block_metadata data)
 
 vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks(vpgl_perspective_camera<double>* cam)
 {
-  vcl_vector<boxm2_block_id> blks; 
+  //get camera center and order blocks distance from the cam center
+  vgl_homg_point_3d<double> cam_center = cam->camera_center(); 
+
+  //Map of distance, id
+  vcl_map<double, boxm2_block_id> distances; 
+  
+  //iterate through each block
   vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter; 
   for(iter = blocks_.begin(); iter != blocks_.end(); ++iter) {
-    blks.push_back(iter->first); 
+    
+    vgl_point_3d<double>    blk_o   = (iter->second).local_origin_; 
+    vgl_vector_3d<double>   blk_dim = (iter->second).sub_block_dim_; 
+    vgl_vector_3d<unsigned> blk_num = (iter->second).sub_block_num_;
+    vgl_vector_3d<double>   length(blk_dim.x()*blk_num.x(), 
+                                   blk_dim.y()*blk_num.y(),
+                                   blk_dim.z()*blk_num.z()); 
+    vgl_point_3d<double> blk_center = blk_o + length/2.0; 
+    double dist = vgl_distance( vgl_homg_point_3d<double>(blk_center), cam_center); 
+    distances[dist] = iter->first; 
   }
-  return blks;
+    
+  //put blocks in "vis_order"
+  vcl_cout<<"CAM ORDER----------------------------------------"<<vcl_endl;
+  vcl_vector<boxm2_block_id> vis_order; 
+  vcl_map<double, boxm2_block_id>::iterator di; 
+  for(di = distances.begin(); di != distances.end(); ++di) {
+    vis_order.push_back(di->second); 
+    vcl_cout<<di->second<<"    ";
+  }
+  vcl_cout<<vcl_endl<<"-----------------------------------------------"<<vcl_endl;
+  return vis_order;
 }
 
 
@@ -101,7 +129,6 @@ boxm2_scene_info* boxm2_scene::get_blk_metadata(boxm2_block_id id)
   info->epsilon   = (cl_float) (info->block_len / 100.0f); 
   
   info->root_level = data.max_level_-1; 
-  vcl_cout<<"ROOT LEVEL: "<<info->root_level<<vcl_endl;
   info->num_buffer = 0; 
   info->tree_buffer_length = 0; 
   info->data_buffer_length = 0; 

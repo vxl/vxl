@@ -10,7 +10,7 @@ void boxm2_util::set_persp_camera(vpgl_camera_double_sptr cam, cl_float* persp_c
   if (vpgl_proj_camera<double>* pcam =
       dynamic_cast<vpgl_proj_camera<double>*>(cam.ptr()))
   {
-    vcl_cout<<"CAM: "<<(*pcam)<<vcl_endl;
+    //vcl_cout<<"CAM: "<<(*pcam)<<vcl_endl;
     vnl_svd<double>* svd=pcam->svd();
     vnl_matrix<double> Ut=svd->U().conjugate_transpose();
     vnl_matrix<double> V=svd->V();
