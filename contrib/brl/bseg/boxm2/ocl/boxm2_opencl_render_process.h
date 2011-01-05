@@ -20,7 +20,7 @@
 class boxm2_opencl_render_process : public boxm2_opencl_process_base
 {
   public:
-    boxm2_opencl_render_process() : context_(0), image_(0), vis_img_(0) {}
+    boxm2_opencl_render_process() : image_(0), vis_img_(0) {}
     
     //: process init and execute
     bool init() { return true; }
@@ -28,7 +28,7 @@ class boxm2_opencl_render_process : public boxm2_opencl_process_base
     bool clean(); 
 
     //: opencl specific init - compiles kernels associated with this process
-    virtual bool init_kernel(cl_context& context, cl_device_id& device, vcl_string opts="");
+    virtual bool init_kernel(cl_context* context, cl_device_id* device, vcl_string opts="");
 
     ////////////////////////////////////////////////////////////////////////////
     //: render specific methods
@@ -39,9 +39,6 @@ class boxm2_opencl_render_process : public boxm2_opencl_process_base
     ////////////////////////////////////////////////////////////////////////////
 
   private:
-
-    //: cl context
-    cl_context* context_;
 
     //: render kernel (other processes may have many kernels
     bocl_kernel render_kernel_;

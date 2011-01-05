@@ -31,15 +31,10 @@ void cast_ray(
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
 
   // pixel values/depth map to be returned
-#ifdef USE_GL
-  float vis = 1.0f;
-  float expected_int = 0.0f;
-#else  
   float vis = vis_image[imIndex[llid]]; 
   uint  eint = as_uint(exp_image[imIndex[llid]]); 
   uchar echar = (uchar) (0xFF && eint); 
   float expected_int = convert_float(echar)/255.0f;
-#endif
 
   //determine the minimum face:
   //get parameters tnear and tfar for the scene

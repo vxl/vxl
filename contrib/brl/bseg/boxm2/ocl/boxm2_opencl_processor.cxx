@@ -52,21 +52,30 @@ bool boxm2_opencl_processor::sequencing(vcl_vector<boxm2_block_id> ids,
                                         vcl_vector<brdb_value_sptr>& input,
                                         vcl_vector<brdb_value_sptr>& output)
 {
-  vul_timer t; 
+  float total_time=0, transfer_time=0, gpu_time=0; 
+  
   boxm2_opencl_process_base* pro = (boxm2_opencl_process_base*) process;
   pro->set_gpu_cache(gpu_cache_); 
   
   // for each BLOCK id execute
   for(int i=0; i<ids.size(); i++)
   {
+   
+    // execute process on 
     vcl_vector<brdb_value_sptr> pro_input;
     pro_input.push_back( new brdb_value_t<boxm2_block_id_sptr>( new boxm2_block_id(ids[i]) ) ); 
     for (unsigned int j=0; j<input.size(); ++j)
         pro_input.push_back(input[j]);
-    pro->set_command_queue(&queues_[1]);          //always executing with queue 1
+    pro->set_command_queue(&queues_[0]);          //always executing with queue 1
     pro->execute(pro_input, output);
+    
+    //get times
+    total_time += pro->total_time(); 
+    transfer_time += pro->transfer_time(); 
+    gpu_time += pro->gpu_time(); 
   }
-  exec_time_ = (float) t.all(); 
+  exec_time_ = total_time; 
+  vcl_cout<<" Time: total ("<<total_time<<"ms), transfer("<<transfer_time<<"ms), gpu("<<gpu_time<<"ms)"<<vcl_endl;
   return true;
 }
 

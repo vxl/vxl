@@ -97,7 +97,7 @@ int main(int argc,  char** argv)
   
   //initialize the GPU render process
   boxm2_opencl_render_process gpu_render; 
-  gpu_render.init_kernel(gpu_pro->context(), gpu_pro->devices()[0]); 
+  gpu_render.init_kernel(&gpu_pro->context(), &gpu_pro->devices()[0]); 
 
   //run expected image like 10 times and get average
   int numTrials = 10;

@@ -67,15 +67,11 @@ class boxm2_opencl_processor: public boxm2_processor, public bocl_manager<boxm2_
     //: execution time (in ms)
     float exec_time_; 
  
-    //: execution queue
-    int exec_queue_;
-
     //: scene that this processor is operating on
     boxm2_scene* scene_;
     
     //: boxm2 command queues, two, one for in and one for out
     cl_command_queue queues_[NUM_QUEUES];
-
 };
 
 #endif

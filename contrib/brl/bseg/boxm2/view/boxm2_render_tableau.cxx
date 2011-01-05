@@ -174,7 +174,7 @@ bool boxm2_render_tableau::init_clgl()
   exp_img_->set_gl_buffer(clgl_buffer_);  
                                       
   //initialize the GPU render process
-  render_.init_kernel(gpu_pro_->context(), gpu_pro_->devices()[0]); 
+  render_.init_kernel(&gpu_pro_->context(), &gpu_pro_->devices()[0]); 
   render_.set_image(exp_img_); 
   vcl_cout<<"RENDER IMAGE SET"<<vcl_endl;
                                     

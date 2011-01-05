@@ -11,15 +11,16 @@
 #include <brdb/brdb_value.h>
 
 //directory utility
+#include <vul/vul_timer.h>
 #include <vcl_where_root_dir.h>
 
 //TODO IN THIS INIT METHOD: Need to pass in a ref to the OPENCL_CACHE so this
 //class can easily access BOCL_MEMs
-bool boxm2_opencl_render_process::init_kernel(cl_context& context,
-                                              cl_device_id& device,
+bool boxm2_opencl_render_process::init_kernel(cl_context* context,
+                                              cl_device_id* device,
                                               vcl_string opts)
 {
-  context_ = &context;
+  context_ = context;
 
   //gather all render sources... seems like a lot for rendering...
   vcl_vector<vcl_string> src_paths;
@@ -40,8 +41,8 @@ bool boxm2_opencl_render_process::init_kernel(cl_context& context,
   options += opts;
 
   //have kernel construct itself using the context and device
-  bool created =  render_kernel_.create_kernel( &context,
-                                                &device,
+  bool created =  render_kernel_.create_kernel( context_,
+                                                device,
                                                 src_paths,
                                                 "render_bit_scene",   //kernel name
                                                 options,              //options
@@ -67,15 +68,18 @@ bool boxm2_opencl_render_process::init_kernel(cl_context& context,
 //  10) ocl_mem_sptr ray_vis    //produced here
 bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vcl_vector<brdb_value_sptr>& output)
 {
+  vul_timer total; 
   int i = 0;
 
   //grab some bocl_mems from teh GPU cache
+  vul_timer transfer; 
   brdb_value_t<boxm2_block_id_sptr>* id_brdb = static_cast<brdb_value_t<boxm2_block_id_sptr>* >( input[i++].ptr() );
   boxm2_block_id_sptr id = id_brdb->value();
-  bocl_mem* blk = cache_->get_block(*id);
+  bocl_mem* blk   = cache_->get_block(*id);
   bocl_mem* alpha = cache_->get_data<BOXM2_ALPHA>(*id);
   bocl_mem* mog   = cache_->get_data<BOXM2_MOG3_GREY>(*id);
   bocl_mem* blk_info = cache_->loaded_block_info(); 
+  transfer_time_ = (float) transfer.all(); 
 
   //camera
   brdb_value_t<vpgl_camera_double_sptr>* brdb_cam = static_cast<brdb_value_t<vpgl_camera_double_sptr>* >( input[i++].ptr() );
@@ -156,12 +160,13 @@ bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vc
 
   //execute kernel
   render_kernel_.execute( (*command_queue_), lThreads, gThreads);
-  //vcl_cout<<"Before "<<(reinterpret_cast<float*>(vis_img_->cpu_buffer()))[0]<<vcl_endl;
+  clFinish(*command_queue_); 
+  gpu_time_ = render_kernel_.exec_time(); 
 
   //read output, do something, blah blah
-  cl_output.read_to_buffer(*command_queue_);
-  image_->read_to_buffer(*command_queue_);
-  vis_img_->read_to_buffer(*command_queue_);
+  //cl_output.read_to_buffer(*command_queue_);
+  //image_->read_to_buffer(*command_queue_);
+  //vis_img_->read_to_buffer(*command_queue_);
 
   //clear render kernel args so it can reset em on next execution
   render_kernel_.clear_args();
@@ -171,6 +176,10 @@ bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vc
   delete[] img_dim_buff;
   delete[] lookup_arr;
   delete[] cam_buffer;
+  
+  //record total time
+  total_time_ = (float) total.all(); 
+  
   return true;
 }
 
