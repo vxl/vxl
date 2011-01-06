@@ -305,6 +305,16 @@ vgl_box_3d<double> boxm_scene<T>::get_world_bbox()
 }
 
 template <class T>
+void boxm_scene<T>::axes_length(double &x_length,double &y_length, double &z_length)
+{
+  x_length = block_dim_.x()*blocks_.get_row1_count();
+  y_length = block_dim_.y()*blocks_.get_row2_count();
+  z_length = block_dim_.z()*blocks_.get_row3_count();
+
+}
+
+
+template <class T>
 vgl_box_3d<double> boxm_scene<T>::get_block_bbox(int x, int y, int z)
 {
   vgl_point_3d<double> min_p(block_dim_.x()*x+origin_.x(), block_dim_.y()*y+origin_.y(), block_dim_.z()*z+origin_.z());
@@ -440,6 +450,9 @@ bool boxm_scene<T>::load_block_and_neighbors(unsigned i, unsigned j, unsigned k)
         return false;
       }
       blocks_(block_i,block_j,block_k)->b_read(os);
+      assert(blocks_(block_i,block_j,block_k)!=NULL);
+      assert(blocks_(block_i,block_j,block_k)->get_tree()!=NULL);
+
       os.close();
     }
   }
@@ -467,7 +480,6 @@ short boxm_scene<T>::finest_level()
   short finest_level = this->max_tree_level_;
   while (!iter.end()) {
     if (this->load_block(iter.index().x(),iter.index().y(),iter.index().z())) {
-      vcl_cout << "Printing Block : " <<  iter.index() << vcl_endl;
       short this_level = get_active_block()->get_tree()->finest_level();
       if(this_level < finest_level)
         finest_level = this_level;
@@ -492,6 +504,26 @@ double  boxm_scene<T>::finest_cell_length()
   
 }
 
+//: Return the number of leaf nodes in the scene
+template <class T>
+unsigned long boxm_scene<T>::size()
+{
+  //iterate through the blocks requesting the finest level
+  boxm_block_iterator<T > iter=this->iterator();
+  iter.begin();
+  unsigned long size = 0;
+  while (!iter.end()) {
+    if (this->load_block(iter.index().x(),iter.index().y(),iter.index().z())) 
+    {
+      size += get_active_block()->get_tree()->size();
+    }
+    
+    iter++;
+  }
+  
+  return size;
+  
+}
 
 template <class T>
 void boxm_scene<T>::b_read(vsl_b_istream & is)
@@ -1010,28 +1042,14 @@ boxm_cell_iterator<T>& boxm_cell_iterator<T>::begin()
 
   //load active block using function pointer, retrieve pointer to all cells
   (block_iterator_.scene_->*block_loading_func_)(block_iterator_.index().x(),block_iterator_.index().y(),block_iterator_.index().z());
-  cells_ = (*block_iterator_)->get_tree()->leaf_cells();
+  T *tree = (*block_iterator_)->get_tree();
+  assert(tree != NULL);
+  cells_ = tree->leaf_cells();
   cells_iterator_ = cells_.begin();
   
   vcl_cout << "Cell iterator: # of cells: " << cells_.size() << vcl_endl;
 
-#if 0
-  vcl_set<vgl_point_3d<int>, bvgl_point_3d_cmp<int> > active_blocks = block_iterator_.scene_->active_blocks();
-  
-  //iterate through the active blocks and check that their trees are in memory
-  vcl_set<vgl_point_3d<int>, bvgl_point_3d_cmp<int>  >::iterator it = active_blocks.begin();
-  
-  for (; it!=active_blocks.end(); it++){
-    vcl_cout << " Active Block idx: " << *it << vcl_endl;
-    boxm_block< T > *block = block_iterator_.scene_->get_block(*it);
-    if(!block) 
-      vcl_cerr << " NULL block" << vcl_endl;
-    T *tree = block->get_tree();
-    if(!tree)
-      vcl_cerr << " NULL tree" << vcl_endl;  
-  }
-  
-#endif
+
   return *this;
 }
 
@@ -1064,40 +1082,38 @@ bool boxm_cell_iterator<T>::operator!=(const boxm_cell_iterator<T>& that)
   return (this->block_iterator_ != that.block_iterator_) && (this->cells_iterator_ != that.cells_iterator_);
 }
 
-//: Prefix operator. When the end of the block is reached, it writes the block to disk and loads the next one
+//: Prefix operator. 
+//  When the end of the block is reached, it writes the block to disk and loads the next one, unless the read_nly flag was set
 template <class T>
 boxm_cell_iterator<T>& boxm_cell_iterator<T>::operator++()
 {
   if (++cells_iterator_ == cells_.end())
   {
-    block_iterator_.scene_->write_active_block();
+    if(!read_only_) 
+      block_iterator_.scene_->write_active_block();
+    
     ++block_iterator_;
+    
     if (!block_iterator_.end())
     {
       //load active block using function pointer, retrieve pointer to all cells
       (block_iterator_.scene_->*block_loading_func_)(block_iterator_.index().x(),block_iterator_.index().y(),block_iterator_.index().z());
-      cells_ = (*block_iterator_)->get_tree()->leaf_cells();
+      T *tree = (*block_iterator_)->get_tree();
+      assert(tree != NULL);
+      cells_ = tree->leaf_cells();
       cells_iterator_ = cells_.begin();
-      
-#if 0
-      vcl_set<vgl_point_3d<int>, bvgl_point_3d_cmp<int> > active_blocks = block_iterator_.scene_->active_blocks();
-      
-      //iterate through the active blocks and check that their trees are in memory
-      vcl_set<vgl_point_3d<int>, bvgl_point_3d_cmp<int>  >::iterator it = active_blocks.begin();
-      
-      for (; it!=active_blocks.end(); it++){
-        vcl_cout << " Active Block idx: " << *it << vcl_endl;
-        boxm_block< T > *block = block_iterator_.scene_->get_block(*it);
-        if(!block) 
-          vcl_cerr << " NULL block" << vcl_endl;
-        T *tree = block->get_tree();
-        if(!tree)
-          vcl_cerr << " NULL tree" << vcl_endl;  
-      }
-      
-#endif
     }
   }
+  return *this;
+}
+
+template <class T>
+boxm_cell_iterator<T> boxm_cell_iterator<T>::operator+=(unsigned const &rhs)
+{
+  //is there a more efficient way to do this whitout messing all the iterator up?
+  for(unsigned i =0; i<rhs; ++i)
+    ++(*this);
+
   return *this;
 }
 
@@ -1120,6 +1136,18 @@ vgl_point_3d<double> boxm_cell_iterator<T>::global_origin()
   return (*block_iterator_)->get_tree()->global_origin(*cells_iterator_);
 }
 
+template<class T>
+vgl_point_3d<double> boxm_cell_iterator<T>::global_centroid()
+{
+  return (*block_iterator_)->get_tree()->global_centroid(*cells_iterator_);
+}
+
+//: Return the global length of this cell
+template<class T>
+double boxm_cell_iterator<T>::length()
+{
+  return (*block_iterator_)->get_tree()->cell_length(*cells_iterator_);
+}
 /******************************************* I/ O *******************************************************/
 
 

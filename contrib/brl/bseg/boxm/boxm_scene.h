@@ -90,6 +90,9 @@ class boxm_scene :public boxm_scene_base
   //: Loads a block and all its neighboring(adjacent) blocks
   bool load_block_and_neighbors(unsigned i, unsigned j, unsigned k);
 
+  //: Loads a block and all its neighboring(adjacent) blocks
+  bool load_block_and_neighbors(vgl_point_3d<int> i){ return load_block_and_neighbors(i.x(), i.y(), i.z()); }
+  
   //: Write the active block to disk
   void write_active_block();
 
@@ -173,9 +176,16 @@ class boxm_scene :public boxm_scene_base
 
   boxm_block_iterator<T> const_iterator() { const boxm_block_iterator<T> iter(this); return iter; }
 
-  boxm_cell_iterator<T> cell_iterator(bool (boxm_scene<T>::*block_loading_func)(unsigned,unsigned, unsigned)){ boxm_cell_iterator<T> cell_iter(this->iterator(), block_loading_func); return cell_iter; }
+  boxm_cell_iterator<T> cell_iterator(bool (boxm_scene<T>::*block_loading_func)(unsigned,unsigned, unsigned) , bool read_only = false)
+  {
+    boxm_cell_iterator<T> cell_iter(this->iterator(), block_loading_func, read_only);
+    return cell_iter; 
+  }
 
   virtual vgl_box_3d<double> get_world_bbox();
+  
+  //: Return the dimensions of the scene along each axis - this are equivalent to bbox width, length and depth
+  void axes_length(double &x_length,double &y_length, double &z_length);
 
   bool valid_index(vgl_point_3d<int> idx);
 
@@ -229,6 +239,9 @@ class boxm_scene :public boxm_scene_base
 
   //: Return the length of finest-level cell in the scene
   double finest_cell_length();
+  
+  //: Return the number of leaf nodes in the scene
+  unsigned long size(); 
 
   vgl_point_3d<double> rpc_origin() const { return rpc_origin_; }
 
@@ -362,12 +375,11 @@ class boxm_cell_iterator
   typedef typename T::datatype datatype;
 
   //: Copy constructor
-  boxm_cell_iterator(const boxm_cell_iterator<T>& other): block_iterator_(other.block_iterator_), cells_(other.cells_), block_loading_func_(other.block_loading_func_){}
+  boxm_cell_iterator(const boxm_cell_iterator<T>& other): block_iterator_(other.block_iterator_), cells_(other.cells_), 
+  block_loading_func_(other.block_loading_func_), read_only_(other.read_only_){}
 
   //: Constructor from a block iterator and function pointer to loading mechanism i.e load_block() or load_block_and_neighbors()
-  boxm_cell_iterator(boxm_block_iterator<T> iter, ptr2func block_loading_func):
-
-  block_iterator_(iter), block_loading_func_(block_loading_func){}
+  boxm_cell_iterator(boxm_block_iterator<T> iter, ptr2func block_loading_func, bool read_only = false): block_iterator_(iter), block_loading_func_(block_loading_func), read_only_(read_only){}
 
   //: Destructor
   ~boxm_cell_iterator() {}
@@ -388,6 +400,9 @@ class boxm_cell_iterator
 
   //: Prefix increment. When the end of the block is reached, it writes the block to disk and loads the next one
   boxm_cell_iterator<T>& operator++();
+  
+  //: Increment. When the end of the block is reached, it writes the block to disk and loads the next one
+  boxm_cell_iterator<T> operator+=(unsigned const &rhs);
 
   boct_tree_cell<loc_type, datatype>* operator*();
 
@@ -397,6 +412,12 @@ class boxm_cell_iterator
   //: Return the global origin of the current cell
   vgl_point_3d<double> global_origin();
 
+  //: Return the global centroid of the current cell - use only if cells are cubical
+  vgl_point_3d<double> global_centroid();
+  
+  //: Return the global length of this cell
+  double length();
+  
  private:
 
   boxm_block_iterator<T> block_iterator_;
@@ -406,6 +427,8 @@ class boxm_cell_iterator
   typename vcl_vector< boct_tree_cell<loc_type , datatype >* >::const_iterator cells_iterator_;
 
   ptr2func block_loading_func_;
+  
+  bool read_only_;
 };
 
 
