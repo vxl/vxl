@@ -265,7 +265,9 @@ bool boct_tree_cell<T_loc,T_data>::split()
 
     // make sure that it does not go below level 0, which is the min possible level
     if (child_level < 0) {
+#ifdef DEBUG
       vcl_cout << "boct_tree_cell: Cannot split the cell, already at the min level" << vcl_endl;
+#endif
       return false;
     }
     for (unsigned i=0; i<8; i++) {
