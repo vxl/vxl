@@ -399,6 +399,22 @@ void bsta_histogram<T>::print(vcl_ostream& os) const
       os << "p[" << i << "]=" << p(i) << '\n';
 }
 
+template <class T>
+void bsta_histogram<T>::pretty_print(vcl_ostream& os) const
+{
+  os << "area valid: " << area_valid_ << "\n"
+  << "area: " << area_ << "\n"
+  << "number of bins: " <<  nbins_ << "\n"
+  << "range: " << range_ << "\n"
+  << "delta: " << delta_ << "\n"
+  << "min_prob: " << min_prob_ << "\n"
+  << "min: " << min_ << "\n"
+  << "max: " << max_ << "\n" 
+  << "counts: ";
+  for (unsigned i = 0; i < counts_.size() ; i++)
+  os << counts_[i] << ' ';
+
+}
 //: print as a matlab plot command
 template <class T>
 void bsta_histogram<T>::print_to_m(vcl_ostream& os) const

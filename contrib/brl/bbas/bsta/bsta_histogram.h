@@ -147,6 +147,8 @@ template <class T> class bsta_histogram : public bsta_histogram_base
   //: Read from stream
   vcl_istream& read(vcl_istream&);
 
+  void pretty_print(vcl_ostream& os = vcl_cout) const;
+  
   void print(vcl_ostream& os = vcl_cout) const;
 
   //: print as a matlab plot command
