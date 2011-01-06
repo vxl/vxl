@@ -13,7 +13,6 @@ SET(boxm_test_all_sources
 
 ADD_LIBRARY(boxm_tests  ${boxm_test_all_sources})
 
-
 TARGET_LINK_LIBRARIES( boxm_test_all boxm_tests boxm boct testlib vnl vpgl vgl_xio vgl_algo vil vgl vpl vul)
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/camera0.txt ${CMAKE_CURRENT_BINARY_DIR}/camera0.txt COPYONLY )
 

@@ -21,11 +21,7 @@ boxm_scene<boct_tree<short, float> >* create_scene(unsigned world_dimx,unsigned 
 
   vgl_vector_3d<double> block_dim(10, 10, 10); //world coordinate dimensions of a block
 
-  //number of blocks in a scene
-  //  unsigned world_dimx = 2;
-  //  unsigned world_dimy = 2;
-  //  unsigned world_dimz = 2;
-  vgl_vector_3d<unsigned> world_dim(world_dimx,world_dimy,world_dimz);
+    vgl_vector_3d<unsigned> world_dim(world_dimx,world_dimy,world_dimz); //number of blocks in a scene
 
   boxm_scene<boct_tree<short, float> > *scene = new boxm_scene<boct_tree<short, float> >(lvcs, origin, block_dim, world_dim);
   vcl_string scene_path("./");
