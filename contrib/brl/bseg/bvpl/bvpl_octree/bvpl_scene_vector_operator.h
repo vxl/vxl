@@ -124,7 +124,6 @@ void bvpl_scene_vector_operator::operate(boxm_scene<boct_tree<short, T_data_in> 
       }
 
       responses.push_back(functor.result());
-        //do something to either choose max or send all responses to vector
     }
 
     T_data_out data_out;

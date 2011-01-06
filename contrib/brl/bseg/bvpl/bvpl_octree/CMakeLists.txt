@@ -22,13 +22,14 @@ SET(bvpl_octree_sources
     bvpl_octree_neighbors.h
     bvpl_scene_neighborhood_operator.h bvpl_scene_neighborhood_operator.cxx
     bvpl_scene_statistics.h           bvpl_scene_statistics.cxx
+    bvpl_discover_pca_kernels.h       bvpl_discover_pca_kernels.cxx
    )
 
 AUX_SOURCE_DIRECTORY(Templates bvpl_octree_sources)
 
 ADD_LIBRARY(bvpl_octree ${bvpl_octree_sources})
 
-TARGET_LINK_LIBRARIES(bvpl_octree bvpl bvrml boxm boct vgl vbl)
+TARGET_LINK_LIBRARIES(bvpl_octree bvpl bvrml boxm boct vbl)
 
 #Directory with python/c++ processes
 SUBDIRS(pro)
