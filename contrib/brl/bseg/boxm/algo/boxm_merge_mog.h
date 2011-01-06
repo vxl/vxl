@@ -17,6 +17,7 @@
 #include <bsta/bsta_attributes.h>
 #include <bsta/bsta_mixture_fixed.h>
 #include <bsta/bsta_gaussian_indep.h>
+#include <boxm/sample/algo/boxm_mob_grey_processor.h>
 
 #include <boxm/boxm_scene.h>
 
@@ -55,4 +56,10 @@ class boxm_merge_mog
   static void kl_merge(mix_gauss_type const& mixture,bsta_gauss_f1 &gaussian);
 };
 
+
+//: Computes the differential entropy of a gaussian scene- only for leave cells
+bool compute_differential_entropy(boxm_scene<boct_tree<short, bsta_num_obs<bsta_gauss_f1> > >& scene,boxm_scene<boct_tree<short, float > >& scene_out);
+
+//: Computes expected color of a voxel as mean/occupancy
+bool compute_expected_color(boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > >& scene, boxm_scene<boct_tree<short, float > >& scene_out);
 #endif
