@@ -16,7 +16,7 @@ class boxm2_opencl_process_base : public boxm2_process
     virtual bool init_kernel(cl_context* context, cl_device_id* device, vcl_string opts="")=0;
 
     //: set this gpu cache (so you can grab bocl_mem's of scene data) 
-    virtual bool set_gpu_cache(boxm2_opencl_cache* cache)   { cache_ = cache; } 
+    virtual bool set_gpu_cache(boxm2_opencl_cache* cache)   { cache_ = cache;  return true;} 
     
     //: set/get command queue (needed for executing the kernel
     virtual void set_command_queue(cl_command_queue* queue) { command_queue_ = queue; }
