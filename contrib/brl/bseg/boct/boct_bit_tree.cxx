@@ -301,16 +301,52 @@ int boct_bit_tree::traverse_opt(const vgl_point_3d<double> p)
   //    i = 2i+1 + c_index;
   // endwhile
 
+  //int bit_index = 0;
+  //vnl_vector_fixed<double,3> point;
+  //point[0] = p.x(), point[1] = p.y(), point[2] = p.z();
+  //while (bit_at(bit_index) == 1) {
+  //  point += point;
+  //  unsigned c_x = ((unsigned) point[0]) & 1;
+  //  unsigned c_y = ((unsigned) point[1]) & 1;
+  //  unsigned c_z = ((unsigned) point[2]) & 1;
+  //  int c_index = c_x + (c_y<<1) + (c_z<<2);
+  //  bit_index = (8*bit_index + 1) + c_index;
+  //}
+  //return bit_index;
+
+
+    // vars to replace "tree_bit_at"
+  //force 1 register: curr = (bit, child_offset, depth, c_offset)
+  int curr_bit = (int)(bits_[0]);
+  int child_offset = 0;
+  int depth = 0;  
+  
+  //bit index to be returned
   int bit_index = 0;
-  vnl_vector_fixed<double,3> point;
-  point[0] = p.x(), point[1] = p.y(), point[2] = p.z();
-  while (bit_at(bit_index) == 1) {
-    point += point;
-    unsigned c_x = ((unsigned) point[0]) & 1;
-    unsigned c_y = ((unsigned) point[1]) & 1;
-    unsigned c_z = ((unsigned) point[2]) & 1;
-    int c_index = c_x + (c_y<<1) + (c_z<<2);
-    bit_index = (8*bit_index + 1) + c_index;
+  
+  //clamp point
+  double pointx = p.x();//clamp(p.x(), 0.0001f, 0.9999f);
+  double pointy = p.y();//clamp(p.y(), 0.0001f, 0.9999f);
+  double pointz = p.z();//clamp(p.z(), 0.0001f, 0.9999f);
+  
+  // while the curr node has children
+  while(curr_bit && depth < 3) {
+    //determine child offset and bit index for given point
+    pointx += pointx;                                             //point = point*2
+    pointy += pointy;
+    pointz += pointz; 
+    int codex=((int)vcl_floor(pointx)) & 1;
+    int codey=((int)vcl_floor(pointy)) & 1;
+    int codez=((int)vcl_floor(pointz)) & 1;
+
+    int c_index = codex + (codey<<1) + (codez<<2);             //c_index = binary(zyx)    
+    bit_index = (8*bit_index + 1) + c_index;                      //i = 8i + 1 + c_index
+    
+    //update value of curr_bit and level
+    curr_bit = (1<<c_index) & bits_[(depth+1 + child_offset)];      //int curr_byte = (curr.z + 1) + curr.y; 
+    child_offset = c_index;
+    depth++;
+    
   }
   return bit_index;
 }
@@ -372,29 +408,18 @@ int boct_bit_tree::loc_code_to_index(boct_loc_code<short> loc_code, int root_lev
 //: Return cell with a particular locational code
 int boct_bit_tree::get_data_index(int bit_index)
 {
-  //root is special case - if bit_index is root, then return 0;
-  if (bit_index == 0)
-    return 0;
 
-  //data index starts at 1
-  int di = 1;
 
-  int pi = (bit_index-1)/8; // automatically rounding downwards
-
-  //check to make sure that the parent of this index is one, otherwise return failure;
-  if (bit_at(pi) != 1) {
-    vcl_cout<<"This bit_index is invalid, no data cell exists for "<<bit_index<<vcl_endl;
-    return -1;
+    //count bits for each byte
+  int count = 0 ;
+  for (int i=0; i<10; i++) {
+    unsigned char n = bits_[i];
+    while (n)  {
+      count++ ;
+      n &= (n - 1) ;
+    }
   }
-
-  //add up bits that occur before the parent index
-  for (int i=0; i<pi; i++)
-    di += 8*bit_at(i);
-
-  //offset for child...
-  di += (bit_index+8-1)%8;
-
-  return di*16;   //times 16 because data is stored as 16 floats
+  return 8*count+1;
 }
 
 //: return number of cells in this tree (size of data chunk)
