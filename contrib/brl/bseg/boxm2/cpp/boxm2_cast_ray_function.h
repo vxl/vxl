@@ -15,7 +15,7 @@
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data.h>
 
-#include <boct/boct_bit_tree.h>
+#include <boct/boct_bit_tree2.h>
 
 #include <vcl_algorithm.h>
 #define BLOCK_EPSILON .006125f
@@ -29,7 +29,7 @@ inline float clamp(float x, float a, float b)
 template<class F>
 void boxm2_cast_ray_function(vgl_ray_3d<float> & ray,
                              boxm2_scene_info * linfo,
-                             boxm2_block_sptr blk_sptr,
+                             boxm2_block * blk_sptr,
                              vcl_vector<float> & vals,
                              F functor)
 {
@@ -63,7 +63,7 @@ void boxm2_cast_ray_function(vgl_ray_3d<float> & ray,
   //make sure tfar is within the last block so texit surpasses it (and breaks from the outer loop)
   tfar -= BLOCK_EPSILON;
 
-  int cnt=0;
+  float count=0;
   //----------------------------------------------------------------------------
   // Begin traversing the blocks, break when any curr_block_index value is
   // illegal (not between 0 and scenedims)
@@ -88,15 +88,13 @@ void boxm2_cast_ray_function(vgl_ray_3d<float> & ray,
     //load current block/tree
     uchar16 tree=blk_sptr->trees()(cell_minx,cell_miny,cell_minz);
 
-    boct_bit_tree bit_tree((char*)tree.data_block());
+    boct_bit_tree2 bit_tree((unsigned char*)tree.data_block(),linfo->root_level+1);
 
     unsigned short buff_index=tree[12];
     buff_index=(buff_index<<8)+tree[13];
 
-    unsigned short sub_index=(short)tree[10];
-    sub_index=(sub_index<<8)+(short)tree[11];
 
-    int data_index=(int)buff_index*(int)linfo->tree_buffer_length+(int)sub_index;
+    int data_index=(int)buff_index*(int)linfo->data_buffer_length;
 
 //
 //    //local ray origin is entry point (point should be in [0,1])
@@ -123,9 +121,9 @@ void boxm2_cast_ray_function(vgl_ray_3d<float> & ray,
       posx = (lrayx + (ttree + TREE_EPSILON)*ray_dx);
       posy = (lrayy + (ttree + TREE_EPSILON)*ray_dy);
       posz = (lrayz + (ttree + TREE_EPSILON)*ray_dz);
-//
-//      // traverse to leaf cell that contains the entry point, set bounding box
-//      ////data offset is ushort pointed to by tree + bit offset
+
+      // traverse to leaf cell that contains the entry point, set bounding box
+      //data offset is ushort pointed to by tree + bit offset
 
       int bit_index=bit_tree.traverse(vgl_point_3d<double>(posx,posy,posz));
       int depth =bit_tree.depth_at(bit_index);
@@ -136,6 +134,8 @@ void boxm2_cast_ray_function(vgl_ray_3d<float> & ray,
       cell_minz=vcl_floor(posz/cell_len)* cell_len;
 
       int data_offset=data_index+bit_tree.get_data_index(bit_index);
+
+
 
       // check to see how close tnear and tfar are
       cell_minx = (ray_dx > 0.0f) ? cell_minx+cell_len : cell_minx;
@@ -150,7 +150,8 @@ void boxm2_cast_ray_function(vgl_ray_3d<float> & ray,
       float d = (t1-ttree) * linfo->block_len;
       ttree = t1;
 
-      functor.step_cell(d,data_index,vals);
+      functor.step_cell(d,data_offset,vals);
+
     }
     //--------------------------------------------------------------------------
     // finding the next block (using exit point already found before tree loop)

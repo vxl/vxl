@@ -21,20 +21,8 @@ bool boxm2_cpp_render_process::execute(vcl_vector<brdb_value_sptr>& input, vcl_v
 
   //1. get the arguments blocks/camera/img etc from the input vector
   int i = 0;
-  brdb_value_t<boxm2_scene_info_wrapper_sptr>* info      = static_cast<brdb_value_t<boxm2_scene_info_wrapper_sptr>* >( input[i++].ptr() );
-  boxm2_scene_info_wrapper_sptr  info_sptr                = info->value();
-  brdb_value_t<boxm2_block_sptr>* blk                = static_cast<brdb_value_t<boxm2_block_sptr>* >( input[i++].ptr() );
-  boxm2_block_sptr blk_sptr                          = blk->value();
-
-  vcl_vector<boxm2_data_base_sptr> datas;
-  brdb_value_t<boxm2_data_base_sptr>* alpha          = static_cast<brdb_value_t<boxm2_data_base_sptr>* >( input[i++].ptr() );
-  boxm2_data_base_sptr alpha_sptr                    = alpha->value();
-  brdb_value_t<boxm2_data_base_sptr>* mogs           = static_cast<brdb_value_t<boxm2_data_base_sptr>* >( input[i++].ptr() );
-  boxm2_data_base_sptr mogs_sptr                     = mogs->value();
-
-  datas.push_back(alpha_sptr);
-  datas.push_back(mogs_sptr);
-
+  brdb_value_t<boxm2_scene_sptr>* brdb_scene      = static_cast<brdb_value_t<boxm2_scene_sptr>* >( input[i++].ptr() );
+  boxm2_scene_sptr  scene                         = brdb_scene->value();
   //camera
   brdb_value_t<vpgl_camera_double_sptr>* brdb_cam = static_cast<brdb_value_t<vpgl_camera_double_sptr>* >( input[i++].ptr() );
   vpgl_camera_double_sptr cam = brdb_cam->value();
@@ -48,10 +36,39 @@ bool boxm2_cpp_render_process::execute(vcl_vector<brdb_value_sptr>& input, vcl_v
   brdb_value_t<vil_image_view_base_sptr>* brdb_vis = static_cast<brdb_value_t<vil_image_view_base_sptr>* >( input[i++].ptr() );
   vil_image_view_base_sptr visimg = brdb_vis->value();
   vil_image_view<float>* vis_img_ = static_cast<vil_image_view<float>* >(visimg.ptr());
+
+
+  vcl_vector<boxm2_block_id> vis_order=scene->get_vis_blocks(reinterpret_cast<vpgl_perspective_camera<double>*>(cam.ptr()));
+
   for(unsigned i=0;i<image_->ni();i++)
       for(unsigned j=0;j<image_->nj();j++)
           (*image_)(i,j)=0.0f;
-  boxm2_render_exp_image(info_sptr->info,blk_sptr,datas,cam,image_,vis_img_,image_->ni(),image_->nj());
+  for(unsigned i=0;i<vis_img_->ni();i++)
+      for(unsigned j=0;j<vis_img_->nj();j++)
+          (*vis_img_)(i,j)=1.0f;
+
+  vcl_vector<boxm2_block_id>::iterator id; 
+  for(id = vis_order.begin(); id != vis_order.end(); ++id) 
+  {
+
+      boxm2_block *     blk  = this->cache_->get_block(*id);
+      boxm2_data_base *  alph = this->cache_->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+      boxm2_data_base *  mog  = this->cache_->get_data_base(*id,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
+      vcl_vector<boxm2_data_base*> datas;
+      datas.push_back(alph);
+      datas.push_back(mog);
+
+      boxm2_scene_info_wrapper *scene_info_wrapper=new boxm2_scene_info_wrapper();
+      scene_info_wrapper->info=scene->get_blk_metadata(*id);
+      scene_info_wrapper->info->tree_buffer_length = blk->tree_buff_length();
+      scene_info_wrapper->info->data_buffer_length = 65536;
+      scene_info_wrapper->info->num_buffer = blk->num_buffers();
+
+      boxm2_render_exp_image(scene_info_wrapper->info,blk,datas,cam,image_,vis_img_,image_->ni(),image_->nj());
+  }
+
+  output.push_back(new brdb_value_t<vil_image_view_base_sptr>(expimg));
+
   vcl_cout<<"Execution time: "<<" ms"<<vcl_endl;
 
   return true;
