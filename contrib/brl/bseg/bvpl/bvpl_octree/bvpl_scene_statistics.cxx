@@ -5,14 +5,14 @@
 
 #include "bvpl_scene_statistics.h"
 
-bool compute_scene_statistics(boxm_scene< boct_tree<short, vnl_vector_fixed<float,3> > > &scene, bsta_histogram<float> &response_hist )
+bool compute_scene_statistics(boxm_scene< boct_tree<short, vnl_vector_fixed<float,3> > > *scene, bsta_histogram<float> &response_hist )
 {
   typedef boct_tree<short, vnl_vector_fixed<float,3> > f3_tree_type;
   typedef boct_tree_cell<short,vnl_vector_fixed<float,3> > cell_type;
 
 
   //(1) Traverse the leaves of the scene
-  boxm_cell_iterator<f3_tree_type > iterator = scene.cell_iterator(&boxm_scene<f3_tree_type>::load_block);
+  boxm_cell_iterator<f3_tree_type > iterator = scene->cell_iterator(&boxm_scene<f3_tree_type>::load_block, true);
 
   iterator.begin();
   float cell_count = 0;
@@ -37,5 +37,7 @@ bool compute_scene_statistics(boxm_scene< boct_tree<short, vnl_vector_fixed<floa
     ++iterator;
   }
 
+  scene->unload_active_blocks();
+  
   return true;
 }

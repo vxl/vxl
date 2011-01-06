@@ -15,11 +15,11 @@
 #include <bsta/bsta_histogram.h>
 #include <boxm/boxm_scene.h>
 
-bool compute_scene_statistics(boxm_scene< boct_tree<short, vnl_vector_fixed<float,3> > > &scene, bsta_histogram<float> &response_hist );
+bool compute_scene_statistics(boxm_scene< boct_tree<short, vnl_vector_fixed<float,3> > > *scene, bsta_histogram<float> &response_hist );
 
 
 template <class T_loc, class T_data>
-bool compute_scene_statistics(boxm_scene<boct_tree<T_loc, T_data > >& scene, bsta_histogram<float>& response_hist )//, bsta_histogram<float>& level_hist, unsigned& n_leaves)
+bool compute_scene_statistics(boxm_scene<boct_tree<T_loc, T_data > >* scene, bsta_histogram<float>& response_hist )//, bsta_histogram<float>& level_hist, unsigned& n_leaves)
 {
   typedef boct_tree<T_loc, T_data> tree_type;
   typedef boct_tree_cell<T_loc,T_data> cell_type;
@@ -27,16 +27,16 @@ bool compute_scene_statistics(boxm_scene<boct_tree<T_loc, T_data > >& scene, bst
 
   //(1) Traverse the leaves of the scene
   boxm_cell_iterator<boct_tree<short, T_data > > iterator =
-  scene.cell_iterator(&boxm_scene<boct_tree<short, T_data> >::load_block);
+  scene->cell_iterator(&boxm_scene<boct_tree<short, T_data> >::load_block, true);
 
   iterator.begin();
-  float cell_count = 0;
+  unsigned int cell_count = 0;
   while (!iterator.end()) {
     cell_count++;
     ++iterator;
   }
 
-  float nbins = vcl_sqrt(cell_count);
+  unsigned nbins = vcl_sqrt(cell_count);
   response_hist = bsta_histogram<float>(0.0f, 1.0f, nbins);
   //level_hist = bsta_histogram<float>(0.0f, 10.0f, 10);
 
@@ -45,11 +45,13 @@ bool compute_scene_statistics(boxm_scene<boct_tree<T_loc, T_data > >& scene, bst
   while (!iterator.end()) {
     boct_tree_cell<short,T_data> *cell = *iterator;
     //level_hist.upcount(static_cast<float>(level));
-    response_hist.upcount(static_cast<float>(cell->data().mean()), 1.0f);
+    response_hist.upcount(static_cast<float>(cell->data()), 1.0f);
     ++iterator;
 
   }
 
+  scene->unload_active_blocks();
+  
   return true;
 }
 
