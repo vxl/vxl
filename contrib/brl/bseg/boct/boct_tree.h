@@ -219,6 +219,14 @@ class boct_tree
                                 global_bbox_.min_y()+ (cell->code_.y_loc_/max_val_)*global_bbox_.height(),
                                 global_bbox_.min_z()+ (cell->code_.z_loc_/max_val_)*global_bbox_.depth());
   }
+  
+  //: Return cell's global origin. Only valid if cells x,y,z dimensions are equal
+  vgl_point_3d<double> global_centroid(boct_tree_cell<T_loc,T_data>* const cell) const
+  {
+    return vgl_point_3d<double>(global_bbox_.min_x()+ (cell->code_.x_loc_/max_val_)*global_bbox_.width() + cell_length(cell)/2.0,
+                                global_bbox_.min_y()+ (cell->code_.y_loc_/max_val_)*global_bbox_.height() + cell_length(cell)/2.0,
+                                global_bbox_.min_z()+ (cell->code_.z_loc_/max_val_)*global_bbox_.depth() + cell_length(cell)/2.0);
+  }
 
 #if 0
   //: prunes the tree by deleting the nodes outside of the bounding box
