@@ -19,4 +19,5 @@ void bvpl_octree_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_plane_propagate_process, "bvplPlanePropagateProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_nonmax_supp_process, "bvplNonmaxSuppProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_compute_gauss_gradients, "bvplComputeGaussGradients");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_discover_pca_features_process, "bvplDiscoverPCAFeaturesProcess");
 }
