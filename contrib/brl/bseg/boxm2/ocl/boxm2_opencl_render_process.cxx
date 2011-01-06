@@ -93,6 +93,9 @@ bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vc
     image_ = new bocl_mem((*context_), exp_buff, exp_img_view->size() * sizeof(float), "exp image buffer");
     image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
   }
+  else {
+    image_->write_to_buffer(*command_queue_);
+  }
 
   //vis image buffer
   brdb_value_t<vil_image_view_base_sptr>* brdb_vis = static_cast<brdb_value_t<vil_image_view_base_sptr>* >( input[i++].ptr() );
@@ -135,14 +138,13 @@ bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vc
   
   //For each ID in the visibility order, grab that block
   vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks( (vpgl_perspective_camera<double>*) cam.ptr()); 
+  
   vcl_vector<boxm2_block_id>::iterator id; 
   for(id = vis_order.begin(); id != vis_order.end(); ++id) 
   {
-    vul_timer transfer; 
     
     //write the image values to the buffer
-    //image_->write_to_buffer(*command_queue_);
-    vis_img_->write_to_buffer(*command_queue_);
+    vul_timer transfer; 
     bocl_mem* blk       = cache_->get_block(*id);
     bocl_mem* alpha     = cache_->get_data<BOXM2_ALPHA>(*id);
     bocl_mem* mog       = cache_->get_data<BOXM2_MOG3_GREY>(*id);
@@ -171,16 +173,15 @@ bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vc
     clFinish(*command_queue_); 
     gpu_time_ += render_kernel_.exec_time(); 
     
-
-    //read output, do something, blah blah
-    //cl_output.read_to_buffer(*command_queue_);
-    //image_->read_to_buffer(*command_queue_);
-    //vis_img_->read_to_buffer(*command_queue_);
-    
     //clear render kernel args so it can reset em on next execution
     render_kernel_.clear_args();
-    
   }
+  
+  
+  //read image out to buffer (from gpu)
+  image_->read_to_buffer(*command_queue_);
+  vis_img_->read_to_buffer(*command_queue_);
+  //cl_output.read_to_buffer(*command_queue_);
 
   //clean up camera, lookup_arr, img_dim_buff
   delete[] output_arr;

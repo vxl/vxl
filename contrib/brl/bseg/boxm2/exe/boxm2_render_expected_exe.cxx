@@ -69,6 +69,7 @@ int main(int argc,  char** argv)
   //----------------------------------------------------------------------------
   //start out rendering with the CPU
   boxm2_scene_sptr scene = new boxm2_scene(scene_file()); 
+  brdb_value_sptr brdb_scene = new brdb_value_t<boxm2_scene_sptr>(scene); 
   
   //get relevant blocks
   boxm2_nn_cache cache( scene->data_path(), vgl_vector_3d<int>(2,2,1) );
@@ -79,15 +80,9 @@ int main(int argc,  char** argv)
   gpu_pro->set_cpu_cache(&cache); 
   gpu_pro->init();
   
-  //pass in a vector of vis_orders to sequencing
-  vcl_vector<boxm2_block_id> vis_order; 
-  vis_order.push_back(boxm2_block_id(0,0,0));
-  vis_order.push_back(boxm2_block_id(0,1,0)); 
-  vis_order.push_back(boxm2_block_id(1,0,0)); 
-  vis_order.push_back(boxm2_block_id(1,1,0)); 
-
   //set inputs
-  vcl_vector<brdb_value_sptr> input; 
+  vcl_vector<brdb_value_sptr> input;
+  input.push_back(brdb_scene);  
   input.push_back(brdb_cam);
   input.push_back(brdb_expimg); 
   input.push_back(brdb_vis); 
@@ -107,7 +102,7 @@ int main(int argc,  char** argv)
     //execute process ////////////////////////////////////////////////////
     expimg->fill(0);
     vis_img->fill(1.0f); 
-    gpu_pro->sequencing(vis_order, &gpu_render, input, output);
+    gpu_pro->run(&gpu_render, input, output);
     gpu_pro->finish(); 
     //////////////////////////////////////////////////////////////////////
     
@@ -124,13 +119,13 @@ int main(int argc,  char** argv)
   //----------------------------------------------------------------------------
   //save to disk
   vil_image_view<unsigned int>* expimg_view = static_cast<vil_image_view<unsigned int>* >(expimg_sptr.ptr()); 
-  unsigned int min_val, max_val;
-  vil_math_value_range( *expimg_view, min_val, max_val); 
+  //unsigned int min_val, max_val;
+  //vil_math_value_range( *expimg_view, min_val, max_val); 
   
   vil_image_view<vxl_byte> byte_img(ni(), nj()); 
   for(int i=0; i<ni(); i++) 
     for(int j=0; j<nj(); j++) 
-      byte_img(i,j) = (*expimg_view)(i,j) & 0xFF;   //just grab the first byte (all foura r the same)
+      byte_img(i,j) =  static_cast<vxl_byte>( (*expimg_view)(i,j) );   //just grab the first byte (all foura r the same)
   vil_save( byte_img, img().c_str());
   
   vil_image_view<vxl_byte> vis_byte(ni(), nj()); 

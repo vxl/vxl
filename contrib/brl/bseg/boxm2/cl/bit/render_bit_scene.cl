@@ -31,9 +31,9 @@ void cast_ray(
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
 
   // pixel values/depth map to be returned
-  float vis = vis_image[imIndex[llid]]; 
-  uint  eint = as_uint(exp_image[imIndex[llid]]); 
-  uchar echar = (uchar) (0xFF && eint); 
+  float vis   = vis_image[imIndex[llid]]; 
+  uint  eint  = as_uint(exp_image[imIndex[llid]]); 
+  uchar echar = convert_uchar(eint); 
   float expected_int = convert_float(echar)/255.0f;
 
   //determine the minimum face:

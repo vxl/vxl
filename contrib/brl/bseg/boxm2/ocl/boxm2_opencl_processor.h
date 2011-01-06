@@ -45,11 +45,6 @@ class boxm2_opencl_processor: public boxm2_processor, public bocl_manager<boxm2_
     virtual bool  finish();
 
     //: handles the sequencing of blocks
-    bool sequencing(vcl_vector<boxm2_block_id> ids,
-                    boxm2_process* process,
-                    vcl_vector<brdb_value_sptr>& input,
-                    vcl_vector<brdb_value_sptr>& output);
-
     float exec_time() { return exec_time_; }
 
     //: sets the scene this processor will work on
