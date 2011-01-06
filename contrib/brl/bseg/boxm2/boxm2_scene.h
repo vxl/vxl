@@ -115,6 +115,20 @@ class boxm2_scene : public vbl_ref_count
 
 };
 
+
+//: utility class for sorting id's by their distance
+class boxm2_dist_id_pair
+{
+  public:
+    boxm2_dist_id_pair(double dist, boxm2_block_id id) : dist_(dist), id_(id) {}
+    double dist_; 
+    boxm2_block_id id_;
+  
+    inline bool operator < (boxm2_dist_id_pair const& v) const {
+      return dist_ > v.dist_; 
+    } 
+};
+
 //Smart_Pointer typedef for boxm2_scene
 typedef vbl_smart_ptr<boxm2_scene> boxm2_scene_sptr;
 typedef vbl_smart_ptr<boxm2_scene_info_wrapper> boxm2_scene_info_wrapper_sptr;

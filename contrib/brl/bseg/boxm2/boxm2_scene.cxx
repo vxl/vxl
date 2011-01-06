@@ -3,6 +3,7 @@
 // \file
 #include <vcl_iostream.h>
 #include <vcl_string.h>
+#include <vcl_algorithm.h>
 
 /* xml includes */
 #include <vsl/vsl_basic_xml_element.h>
@@ -61,10 +62,10 @@ void boxm2_scene::add_block_metadata(boxm2_block_metadata data)
 vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks(vpgl_perspective_camera<double>* cam)
 {
   //get camera center and order blocks distance from the cam center
-  vgl_homg_point_3d<double> cam_center = cam->camera_center(); 
+  vgl_point_3d<double> cam_center = cam->camera_center(); 
 
   //Map of distance, id
-  vcl_map<double, boxm2_block_id> distances; 
+  vcl_vector<boxm2_dist_id_pair> distances; 
   
   //iterate through each block
   vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter; 
@@ -77,23 +78,26 @@ vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks(vpgl_perspective_camera<d
                                    blk_dim.y()*blk_num.y(),
                                    blk_dim.z()*blk_num.z()); 
     vgl_point_3d<double> blk_center = blk_o + length/2.0; 
-    double dist = vgl_distance( vgl_homg_point_3d<double>(blk_center), cam_center); 
-    distances[dist] = iter->first; 
+    double dist = vgl_distance( blk_center, cam_center); 
+    
+    
+    distances.push_back( boxm2_dist_id_pair(dist, iter->first) ); 
   }
+    
+  //sort distances
+  vcl_sort(distances.begin(), distances.end()); 
     
   //put blocks in "vis_order"
   vcl_cout<<"CAM ORDER----------------------------------------"<<vcl_endl;
   vcl_vector<boxm2_block_id> vis_order; 
-  vcl_map<double, boxm2_block_id>::iterator di; 
+  vcl_vector<boxm2_dist_id_pair>::iterator di; 
   for(di = distances.begin(); di != distances.end(); ++di) {
-    vis_order.push_back(di->second); 
-    vcl_cout<<di->second<<"    ";
+    vis_order.push_back(di->id_); 
+    vcl_cout<<di->id_<<"    ";
   }
   vcl_cout<<vcl_endl<<"-----------------------------------------------"<<vcl_endl;
   return vis_order;
 }
-
-
 
 //: save scene (xml file)
 void boxm2_scene::save_scene()

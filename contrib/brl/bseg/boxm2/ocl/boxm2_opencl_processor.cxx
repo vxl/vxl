@@ -81,6 +81,15 @@ bool boxm2_opencl_processor::sequencing(vcl_vector<boxm2_block_id> ids,
 
 bool boxm2_opencl_processor::run(boxm2_process * process, vcl_vector<brdb_value_sptr> & input, vcl_vector<brdb_value_sptr> & output)
 {
+  boxm2_opencl_process_base* pro = (boxm2_opencl_process_base*) process;
+  pro->set_gpu_cache(gpu_cache_); 
+  pro->set_command_queue(&queues_[0]);
+  pro->execute(input, output);
+  
+  vcl_cout<<" Time: total ("<<pro->total_time()<<"ms), "
+          <<" transfer("<<pro->transfer_time()<<"ms), "
+          <<" gpu("<<pro->gpu_time()<<"ms)"<<vcl_endl;
+
   return true;
 }
 

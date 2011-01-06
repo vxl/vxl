@@ -116,7 +116,11 @@ float boxm2_render_tableau::render_frame()
   visimg->fill(1.0f); 
   brdb_value_sptr brdb_visimg = new brdb_value_t<vil_image_view_base_sptr>(visimg); 
   
+  //create scene brdbvalue pointer
+  brdb_value_sptr brdb_scene = new brdb_value_t<boxm2_scene_sptr>(scene_);
+  
   vcl_vector<brdb_value_sptr> input; 
+  input.push_back(brdb_scene);
   input.push_back(brdb_cam);
   input.push_back(brdb_expimg); 
   input.push_back(brdb_visimg);
@@ -125,11 +129,7 @@ float boxm2_render_tableau::render_frame()
   vcl_vector<brdb_value_sptr> output; 
 
   //initialize the GPU render process
-  vcl_vector<boxm2_block_id> vis_order = scene_->get_vis_blocks(&cam_); 
-  //vis_order.push_back(boxm2_block_id(0,0,0)); 
-  //vis_order.push_back(boxm2_block_id(1,0,0));
-
-  gpu_pro_->sequencing(vis_order, &render_, input, output);
+  gpu_pro_->run(&render_, input, output);
   gpu_pro_->finish(); 
 
   status = clEnqueueReleaseGLObjects( *gpu_pro_->get_queue(), 1, &render_.image()->buffer(), 0, 0, 0);

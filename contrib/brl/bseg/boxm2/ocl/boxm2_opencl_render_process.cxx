@@ -68,18 +68,13 @@ bool boxm2_opencl_render_process::init_kernel(cl_context* context,
 //  10) ocl_mem_sptr ray_vis    //produced here
 bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vcl_vector<brdb_value_sptr>& output)
 {
+  transfer_time_ = 0.0f; gpu_time_ = 0.0f; total_time_ = 0.0f;
   vul_timer total; 
   int i = 0;
 
-  //grab some bocl_mems from teh GPU cache
-  vul_timer transfer; 
-  brdb_value_t<boxm2_block_id_sptr>* id_brdb = static_cast<brdb_value_t<boxm2_block_id_sptr>* >( input[i++].ptr() );
-  boxm2_block_id_sptr id = id_brdb->value();
-  bocl_mem* blk   = cache_->get_block(*id);
-  bocl_mem* alpha = cache_->get_data<BOXM2_ALPHA>(*id);
-  bocl_mem* mog   = cache_->get_data<BOXM2_MOG3_GREY>(*id);
-  bocl_mem* blk_info = cache_->loaded_block_info(); 
-  transfer_time_ = (float) transfer.all(); 
+  //scene argument
+  brdb_value_t<boxm2_scene_sptr>* scene_brdb = static_cast<brdb_value_t<boxm2_scene_sptr>* >( input[i++].ptr() );
+  boxm2_scene_sptr scene = scene_brdb->value(); 
 
   //camera
   brdb_value_t<vpgl_camera_double_sptr>* brdb_cam = static_cast<brdb_value_t<vpgl_camera_double_sptr>* >( input[i++].ptr() );
@@ -88,7 +83,7 @@ bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vc
   boxm2_util::set_persp_camera(cam, cam_buffer);
   bocl_mem persp_cam((*context_), cam_buffer, 3*sizeof(cl_float16), "persp cam buffer");
   persp_cam.create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-
+  
   //exp image buffer
   brdb_value_t<vil_image_view_base_sptr>* brdb_expimg = static_cast<brdb_value_t<vil_image_view_base_sptr>* >( input[i++].ptr() );
   vil_image_view_base_sptr expimg = brdb_expimg->value();
@@ -110,12 +105,9 @@ bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vc
   } 
   else {
     vis_img_->set_cpu_buffer(vis_img_view->begin()); 
+    vis_img_->write_to_buffer(*command_queue_);
   }
-  
-  //write the image values to the buffer
-  image_->write_to_buffer(*command_queue_);
-  vis_img_->write_to_buffer(*command_queue_);
-
+      
   //exp image dimensions
   int* img_dim_buff = new int[4];
   img_dim_buff[0] = exp_img_view->ni();
@@ -124,7 +116,7 @@ bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vc
   img_dim_buff[3] = exp_img_view->nj();
   bocl_mem exp_img_dim((*context_), img_dim_buff, sizeof(int)*4, "image dims");
   exp_img_dim.create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-
+  
   //output buffer
   float* output_arr = new float[100];
   for (int i=0; i<100; ++i) output_arr[i] = 0.0f;
@@ -140,36 +132,55 @@ bool boxm2_opencl_render_process::execute(vcl_vector<brdb_value_sptr>& input, vc
   //2. set workgroup size
   vcl_size_t lThreads[] = {8, 8};
   vcl_size_t gThreads[] = {exp_img_view->ni(), exp_img_view->nj()};
+  
+  //For each ID in the visibility order, grab that block
+  vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks( (vpgl_perspective_camera<double>*) cam.ptr()); 
+  vcl_vector<boxm2_block_id>::iterator id; 
+  for(id = vis_order.begin(); id != vis_order.end(); ++id) 
+  {
+    vul_timer transfer; 
+    
+    //write the image values to the buffer
+    //image_->write_to_buffer(*command_queue_);
+    vis_img_->write_to_buffer(*command_queue_);
+    bocl_mem* blk       = cache_->get_block(*id);
+    bocl_mem* alpha     = cache_->get_data<BOXM2_ALPHA>(*id);
+    bocl_mem* mog       = cache_->get_data<BOXM2_MOG3_GREY>(*id);
+    bocl_mem* blk_info  = cache_->loaded_block_info(); 
+    transfer_time_ += (float) transfer.all(); 
 
-  ////3. SET args
-  render_kernel_.set_arg( blk_info );
-  render_kernel_.set_arg( blk );
-  render_kernel_.set_arg( alpha );
-  render_kernel_.set_arg( mog );
-  render_kernel_.set_arg( &persp_cam );
-  render_kernel_.set_arg( image_ );
-  render_kernel_.set_arg( &exp_img_dim);
-  render_kernel_.set_arg( &cl_output );
-  render_kernel_.set_arg( &lookup );
-  render_kernel_.set_arg( vis_img_ );
+    ////3. SET args
+    render_kernel_.set_arg( blk_info );
+    render_kernel_.set_arg( blk );
+    render_kernel_.set_arg( alpha );
+    render_kernel_.set_arg( mog );
+    render_kernel_.set_arg( &persp_cam );
+    render_kernel_.set_arg( image_ );
+    render_kernel_.set_arg( &exp_img_dim);
+    render_kernel_.set_arg( &cl_output );
+    render_kernel_.set_arg( &lookup );
+    render_kernel_.set_arg( vis_img_ );
 
-  //local tree , cumsum buffer, imindex buffer
-  render_kernel_.set_local_arg( lThreads[0]*lThreads[1]*sizeof(cl_uchar16) );
-  render_kernel_.set_local_arg( lThreads[0]*lThreads[1]*10*sizeof(cl_uchar) );
-  render_kernel_.set_local_arg( lThreads[0]*lThreads[1]*sizeof(cl_int) );
+    //local tree , cumsum buffer, imindex buffer
+    render_kernel_.set_local_arg( lThreads[0]*lThreads[1]*sizeof(cl_uchar16) );
+    render_kernel_.set_local_arg( lThreads[0]*lThreads[1]*10*sizeof(cl_uchar) );
+    render_kernel_.set_local_arg( lThreads[0]*lThreads[1]*sizeof(cl_int) );
 
-  //execute kernel
-  render_kernel_.execute( (*command_queue_), lThreads, gThreads);
-  clFinish(*command_queue_); 
-  gpu_time_ = render_kernel_.exec_time(); 
+    //execute kernel
+    render_kernel_.execute( (*command_queue_), lThreads, gThreads);
+    clFinish(*command_queue_); 
+    gpu_time_ += render_kernel_.exec_time(); 
+    
 
-  //read output, do something, blah blah
-  //cl_output.read_to_buffer(*command_queue_);
-  //image_->read_to_buffer(*command_queue_);
-  //vis_img_->read_to_buffer(*command_queue_);
-
-  //clear render kernel args so it can reset em on next execution
-  render_kernel_.clear_args();
+    //read output, do something, blah blah
+    //cl_output.read_to_buffer(*command_queue_);
+    //image_->read_to_buffer(*command_queue_);
+    //vis_img_->read_to_buffer(*command_queue_);
+    
+    //clear render kernel args so it can reset em on next execution
+    render_kernel_.clear_args();
+    
+  }
 
   //clean up camera, lookup_arr, img_dim_buff
   delete[] output_arr;
