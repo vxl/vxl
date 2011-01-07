@@ -93,7 +93,7 @@ static void test_minimizer()
   vcl_map<unsigned int, vcl_string> images, depth_images;
   vcl_vector<vcl_string> camera_f;
 
-  // view 0 
+  // view 0 (the closest one)
   images[0]="C:/images/Calibration/expected88.tiff";
   depth_images[0]="C:/images/Calibration/depth88.tiff";
   camera_f.push_back("C:/images/Calibration/camera_00088.txt");
@@ -103,7 +103,7 @@ static void test_minimizer()
   depth_images[1]="C:/images/Calibration/depth_142.tif";
   camera_f.push_back("C:/images/Calibration/camera_00142.txt");
 
-  // view 2(the closest one)
+  // view 2
   images[2]="C:/images/Calibration/expected142.tiff";
   depth_images[2]="C:/images/Calibration/depth_142.tif";
   camera_f.push_back("C:/images/Calibration/camera_00142.txt");
