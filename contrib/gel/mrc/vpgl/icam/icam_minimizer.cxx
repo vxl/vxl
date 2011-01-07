@@ -622,6 +622,9 @@ pyramid_camera_search(vgl_vector_3d<double> const&
     }
     else {
       vcl_cout << " no local minimum found in pyramid search\n";
+      initialized_rot_search(t, init_rot, init_level, lev,
+                             min_allowed_overlap, rot, cost,
+                             overlap, setup, true);
       return false;
     }
     if (refine) {
@@ -648,6 +651,9 @@ pyramid_camera_search(vgl_vector_3d<double> const&
       }
       else {
         vcl_cout << " refinement failed at level " << lev << '\n';
+        initialized_rot_search(t, init_rot, init_level, lev,
+                               min_allowed_overlap, rot, cost,
+                               overlap, setup, true);
         return false;
       }
     }

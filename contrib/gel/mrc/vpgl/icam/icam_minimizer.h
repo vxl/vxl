@@ -52,6 +52,8 @@ class icam_minimizer
                  icam_minimizer_params const& params,
                  bool verbose=false);
 
+  virtual ~icam_minimizer() {}
+
   //: number of pyramid levels
   unsigned n_levels() const {return dt_pyramid_.n_levels();}
 
