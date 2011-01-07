@@ -16,6 +16,12 @@
 //  Modifications
 //   13-JUL-2000 Marko Bacic, Oxford RRG -- Added support for menu accelerators
 //   13-SEP-2002
+//   05-JAN-2011 Lianqing Yu -- Add member function translate_key_reverse to
+//                              fix the bug that menu accelerator text 
+//                              including non-alphabet keys such as F5, Home
+//                              are shown incorrectly.
+//   05-JAN-2011 Lianqing Yu -- Change GDK_MOD2_MASK to GDK_MOD1_MASK for 
+//                              modifier Alt.
 // \endverbatim
 
 

@@ -18,6 +18,12 @@
 //   21-SEP-00   capes@robots -- Changed destructor to actually destroy the widgets
 //                              Facilitates the post_destroy() adaptor method.
 //   13-SEP-2002 K.Y.McGaul - Changed to Doxygen style comments.
+//   07-JAN-2011 Lianqing Yu - Move member function init() from show() to the
+//                             constructors so that client may call show() 
+//                             multiple times without triggering GTK+ warning
+//                             that a child widget (indeed it's member box) is
+//                             inserted into a GtkBin widget (actually it's
+//                             member window) that already has a child.
 // \endverbatim
 
 

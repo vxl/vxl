@@ -9,6 +9,18 @@
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   19 Dec 99
 // \brief  The GTK implementation of vgui_adaptor.
+//
+// \verbatim
+//  Modifications
+//   07-JAN-2011 Lianqing Yu 
+//   Change the way of connecting GDK events to the callback functions.
+//   In original code, all GDK events are connected to a single callback 
+//   function. This results in the unavailability of GL context after
+//   adaptor initialization, and thus failure of OpenGL function calls.
+//   The new method fixes this bug.
+//   Run the vgui example example_gllist_tableau.cxx to see the result of
+//   generating OpenGL display list during initialization of tableau tree.
+// \endverbatim
 
 #include <vgui/vgui_adaptor.h>
 #include <vgui/internals/vgui_adaptor_mixin.h>

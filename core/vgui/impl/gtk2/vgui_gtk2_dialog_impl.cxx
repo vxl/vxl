@@ -18,6 +18,7 @@
 #include <vgui/vgui_gl.h>
 #include <vgui/internals/vgui_dialog_field.h>
 #include <vgui/internals/vgui_simple_field.h>
+#include <vgui/internals/vgui_button_field.h>
 #include <gtk/gtkfilesel.h>
 
 #include "vgui_gtk2_adaptor.h"
@@ -45,12 +46,40 @@ vgui_gtk2_dialog_impl::~vgui_gtk2_dialog_impl()
 }
 
 
+//--------------------------------------------------------------------------------
+//: Make a push button widget
+void* vgui_gtk2_dialog_impl::pushbutton_field_widget(const char *text, const void *filename)
+{
+  GtkWidget *button, *box, *image, *label; 
+
+  // show the image and text side by side horizontally in a box
+  box = gtk_hbox_new(FALSE, 0);
+
+  if (filename) { // this button has an image on it
+    image = gtk_image_new_from_file((const gchar *)filename);
+    gtk_box_pack_start(GTK_BOX(box), image, FALSE, FALSE, 3);
+    gtk_widget_show(image);
+  }
+  if (text) { // this button also has text on it
+    label = gtk_label_new(text);
+    gtk_box_pack_start(GTK_BOX(box), label, FALSE, FALSE, 3);
+    gtk_widget_show(label);
+  }
+  gtk_widget_show(box);
+
+  // Create a new button 
+  button = gtk_button_new();
+  gtk_container_add(GTK_CONTAINER(button), box);
+
+  return (void*)button;
+}
+
+
 struct vgui_gtk2_dialog_impl_choice
 {
   vcl_vector<vcl_string> names;
   int index;
 };
-
 
 //--------------------------------------------------------------------------------
 //: Make a choice widget
@@ -266,7 +295,8 @@ void choose_color(GtkWidget* /*w*/, GtkEntry* color_entry)
 
 //-------------------------------------------------------------------------------
 //: Display the dialog box.
-bool vgui_gtk2_dialog_impl::ask() {
+bool vgui_gtk2_dialog_impl::ask() 
+{
   GtkWidget* dialog = gtk_dialog_new();
 
   gtk_window_set_title(GTK_WINDOW(dialog), title.c_str());
@@ -309,6 +339,22 @@ bool vgui_gtk2_dialog_impl::ask() {
   // to delete the file selection dialog for the inline selection
   vcl_vector<GtkWidget*> delete_wlist;
 
+  // true if there is "line_break" element in the dialog.
+  bool has_line_break = false;
+  GtkWidget* current_hbox;
+
+  // traverse the dialog elements to see if there is a line_break.
+  for (vcl_vector<element>::iterator e_iter = elements.begin();
+       e_iter != elements.end(); ++e_iter) {
+    element l = *e_iter;
+    if ( l.type == line_br ) {
+      if (debug) vcl_cerr << "The dialog has line_br" << vcl_endl;
+      has_line_break = true;
+      current_hbox = gtk_hbox_new(FALSE, 6);
+      break;
+    }
+  }
+      
   for (vcl_vector<element>::iterator e_iter = elements.begin();
        e_iter != elements.end(); ++e_iter) {
 
@@ -332,7 +378,11 @@ bool vgui_gtk2_dialog_impl::ask() {
 
       gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 5);
       gtk_box_pack_end(GTK_BOX(hbox), entry, FALSE, FALSE, 5);
-      gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), hbox, TRUE, TRUE, 0);
+
+      if ( has_line_break )
+        gtk_box_pack_start(GTK_BOX(current_hbox), hbox, TRUE, TRUE, 0);
+      else 
+        gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), hbox, TRUE, TRUE, 0);
 
       gtk_widget_show(label);
       gtk_widget_show(entry);
@@ -343,7 +393,10 @@ bool vgui_gtk2_dialog_impl::ask() {
       vgui_bool_field *field = static_cast<vgui_bool_field*>(l.field);
       entry = gtk_check_button_new_with_label(field->label.c_str());
       gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(entry), field->var);
-      gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), entry, TRUE, TRUE, 0);
+      if ( has_line_break )
+        gtk_box_pack_start(GTK_BOX(current_hbox), entry, TRUE, TRUE, 0);
+      else 
+        gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), entry, TRUE, TRUE, 0);
       gtk_widget_show(entry);
       wlist.push_back(entry);
     }
@@ -381,7 +434,10 @@ bool vgui_gtk2_dialog_impl::ask() {
 
       gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 5);
       gtk_box_pack_start(GTK_BOX(hbox), entry, FALSE, FALSE, 5);
-      gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), hbox, TRUE, TRUE, 0);
+      if ( has_line_break )
+        gtk_box_pack_start(GTK_BOX(current_hbox), hbox, TRUE, TRUE, 0);
+      else 
+        gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), hbox, TRUE, TRUE, 0);
 
       gtk_widget_show(label);
       gtk_widget_show(entry);
@@ -390,7 +446,10 @@ bool vgui_gtk2_dialog_impl::ask() {
     }
     else if (l.type == text_msg) {
       GtkWidget* label = gtk_label_new(field->label.c_str());
-      gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), label, TRUE, TRUE, 0);
+      if ( has_line_break )
+        gtk_box_pack_start(GTK_BOX(current_hbox), label, TRUE, TRUE, 0);
+      else 
+        gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), label, TRUE, TRUE, 0);
       gtk_widget_show(label);
       wlist.push_back(entry);
     }
@@ -408,7 +467,10 @@ bool vgui_gtk2_dialog_impl::ask() {
       gtk_box_pack_start(GTK_BOX(hbox), entry, TRUE, TRUE, 0);
       gtk_box_pack_start(GTK_BOX(hbox), button,TRUE,TRUE, 0);
 
-      gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), hbox, TRUE, TRUE, 0);
+      if ( has_line_break )
+        gtk_box_pack_start(GTK_BOX(current_hbox), hbox, TRUE, TRUE, 0);
+      else 
+        gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), hbox, TRUE, TRUE, 0);
       gtk_widget_show(label);
       gtk_widget_show(entry);
       gtk_widget_show(button);
@@ -440,7 +502,10 @@ bool vgui_gtk2_dialog_impl::ask() {
 
       gtk_widget_ref( file_main_vbox );
       gtk_container_remove( GTK_CONTAINER(filew), file_main_vbox);
-      gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), file_main_vbox, TRUE, TRUE, 0);
+      if ( has_line_break )
+        gtk_box_pack_start(GTK_BOX(current_hbox), file_main_vbox, TRUE, TRUE, 0);
+      else 
+        gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), file_main_vbox, TRUE, TRUE, 0);
       gtk_widget_unref( file_main_vbox );
 
       gtk_widget_show( file_main_vbox );
@@ -460,7 +525,10 @@ bool vgui_gtk2_dialog_impl::ask() {
       gtk_box_pack_start(GTK_BOX(hbox), label, TRUE, TRUE, 0);
       gtk_box_pack_start(GTK_BOX(hbox), entry, TRUE, TRUE, 0);
       gtk_box_pack_start(GTK_BOX(hbox), button, TRUE, TRUE, 0);
-      gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), hbox, TRUE, TRUE, 0);
+      if ( has_line_break )
+        gtk_box_pack_start(GTK_BOX(current_hbox), hbox, TRUE, TRUE, 0);
+      else 
+        gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), hbox, TRUE, TRUE, 0);
 
       gtk_widget_show(label);
       gtk_widget_show(entry);
@@ -483,7 +551,10 @@ bool vgui_gtk2_dialog_impl::ask() {
 
       // Connect the color entry text field to the dialog so that the
       // widget will be automatically destroyed.
-      gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), color_entry, TRUE,
+      if ( has_line_break )
+        gtk_box_pack_start(GTK_BOX(current_hbox), color_entry, TRUE, TRUE, 0);
+      else 
+        gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), color_entry, TRUE,
                          TRUE, 0);
       gtk_widget_hide(color_entry);
       wlist.push_back(color_entry);
@@ -494,10 +565,33 @@ bool vgui_gtk2_dialog_impl::ask() {
       GtkWidget* hbox = gtk_hbox_new(FALSE, 10);
 
       gtk_box_pack_start(GTK_BOX(hbox), widg, TRUE, TRUE, 0);
-      gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), hbox, TRUE, TRUE, 0);
+      if ( has_line_break )
+        gtk_box_pack_start(GTK_BOX(current_hbox), hbox, TRUE, TRUE, 0);
+      else 
+        gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), hbox, TRUE, TRUE, 0);
       gtk_widget_show(hbox);
       wlist.push_back(widg);
       adaptor_list.push_back( adapt );
+    }
+    else if (l.type == line_br ) {
+      gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), current_hbox, TRUE, TRUE, 0);
+      gtk_widget_show(current_hbox);
+      current_hbox = gtk_hbox_new(FALSE, 6);
+    }
+    else if (l.type == button_elem) {
+      GtkWidget *hbox, *button; 
+      vgui_button_field *field = static_cast<vgui_button_field*>(l.field); 
+      button = static_cast<GtkWidget*>(l.widget);
+      gtk_widget_show(button);
+
+      // Connect the "clicked" signal to the callback function
+      vgui_command_cfunc *cmndc = static_cast<vgui_command_cfunc*>((field->cmnd).ptr());
+      g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(cmndc->fn), NULL);
+
+      if ( has_line_break )
+        gtk_box_pack_start(GTK_BOX(current_hbox), button, TRUE, TRUE, 0);
+      else 
+        gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), button, TRUE, TRUE, 0);
     }
     else
       vcl_cerr << "Unknown type = " << int(l.type) << vcl_endl;

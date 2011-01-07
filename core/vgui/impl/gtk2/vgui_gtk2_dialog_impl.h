@@ -22,6 +22,9 @@
 //   Marko Bacic 20-JUL-00  Fixed bug in inline file dialog box. Now returns
 //                          the full pathname
 //   K.Y.McGaul  31-MAY-01  Added set_ok/cancel_button.
+//   Lianqing Yu 07-JAN-11  Added line break and push button. A line break
+//                          is a format descriptor that indicates multiple
+//                          controls should be put in one row.
 // \endverbatim
 
 #include <vgui/internals/vgui_dialog_impl.h>
@@ -35,6 +38,7 @@ class vgui_gtk2_dialog_impl : public vgui_dialog_impl
   vgui_gtk2_dialog_impl(const char* name);
   ~vgui_gtk2_dialog_impl();
 
+  void* pushbutton_field_widget(const char*, const void*);
   void* choice_field_widget(const char*, const vcl_vector<vcl_string>&, int&);
   void* inline_tableau_widget(const vgui_tableau_sptr tab, unsigned width, unsigned height);
 
