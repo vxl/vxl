@@ -124,7 +124,7 @@ bool bocl_command_queue_mgr::test_async_command_queue()
   int numTrials = 50; 
   for(int i=0; i<numTrials; i++)
   {
-    //execute kernel and TIME\
+    //execute kernel and TIME
     vcl_cout<<"KERNEL A ARG COUNT: "<<kernel_a_.arg_cnt()<<vcl_endl;
     kernel_a_.execute( queue_a_, lThreads, gThreads); 
     pinned_in_->write_to_buffer( queue_a_ );
