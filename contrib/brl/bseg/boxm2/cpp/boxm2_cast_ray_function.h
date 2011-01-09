@@ -3,7 +3,6 @@
 //:
 // \file
 
-
 #include <vgl/vgl_ray_3d.h>
 
 #include <vul/vul_timer.h>
@@ -20,6 +19,7 @@
 #include <vcl_algorithm.h>
 #define BLOCK_EPSILON .006125f
 #define TREE_EPSILON  .005f
+
 inline float clamp(float x, float a, float b)
 {
     return x < a ? a : (x > b ? b : x);
@@ -33,7 +33,7 @@ void boxm2_cast_ray_function(vgl_ray_3d<float> & ray,
                              vcl_vector<float> & vals,
                              F functor)
 {
-   typedef vnl_vector_fixed<unsigned char, 16> uchar16;    //defines a bit tree
+  typedef vnl_vector_fixed<unsigned char, 16> uchar16;    //defines a bit tree
 
   float ray_dx=ray.direction().x();
   float ray_dy=ray.direction().y();
@@ -63,7 +63,6 @@ void boxm2_cast_ray_function(vgl_ray_3d<float> & ray,
   //make sure tfar is within the last block so texit surpasses it (and breaks from the outer loop)
   tfar -= BLOCK_EPSILON;
 
-  float count=0;
   //----------------------------------------------------------------------------
   // Begin traversing the blocks, break when any curr_block_index value is
   // illegal (not between 0 and scenedims)
@@ -93,10 +92,8 @@ void boxm2_cast_ray_function(vgl_ray_3d<float> & ray,
     unsigned short buff_index=tree[12];
     buff_index=(buff_index<<8)+tree[13];
 
-
     int data_index=(int)buff_index*(int)linfo->data_buffer_length;
 
-//
 //    //local ray origin is entry point (point should be in [0,1])
 //    //(note that cell_min is the current block index at this point)
 //    //setting local_ray_o to block_pos allows ttree to start at 0
@@ -135,8 +132,6 @@ void boxm2_cast_ray_function(vgl_ray_3d<float> & ray,
 
       int data_offset=data_index+bit_tree.get_data_index(bit_index);
 
-
-
       // check to see how close tnear and tfar are
       cell_minx = (ray_dx > 0.0f) ? cell_minx+cell_len : cell_minx;
       cell_miny = (ray_dy > 0.0f) ? cell_miny+cell_len : cell_miny;
@@ -151,8 +146,8 @@ void boxm2_cast_ray_function(vgl_ray_3d<float> & ray,
       ttree = t1;
 
       functor.step_cell(d,data_offset,vals);
-
     }
+
     //--------------------------------------------------------------------------
     // finding the next block (using exit point already found before tree loop)
     //--------------------------------------------------------------------------
@@ -160,7 +155,6 @@ void boxm2_cast_ray_function(vgl_ray_3d<float> & ray,
     texit = texit + tblock + BLOCK_EPSILON;
     tblock = texit;
   }
-
 }
 
 

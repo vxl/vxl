@@ -221,6 +221,7 @@ bool test_icam_ocl_minimizer()
   bool adjust_to_fl = false;
   icam_depth_transform dt(K, depth_img_dbl, Rr, tr, adjust_to_fl);
 
+#if 0
   // Typical parameters (not used)
   unsigned min_pyramid_image_size = 16;
   unsigned box_reduction_k = 2;
@@ -229,9 +230,11 @@ bool test_icam_ocl_minimizer()
   double polar_range_multiplier = 2.0;
 
   vcl_string base_path = "";
-  bool verbose = true;
   double sigma=1.0;
   unsigned int nbins=16;
+#endif // 0
+
+  bool verbose = true;
   unsigned n_rot_repeats = 20; //execute kernel repeatedly
   //use default params
   icam_minimizer_params params;

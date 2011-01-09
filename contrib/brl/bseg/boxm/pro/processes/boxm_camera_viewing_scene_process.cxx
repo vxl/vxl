@@ -89,7 +89,7 @@ bool boxm_camera_viewing_scene_process(bprb_func_process& pro)
 
   // 2) determine camera center
   // the viewsphere radius is set to 10x the bounding box diameter
-  double w = bb.width(), h = bb.height(), d = bb.depth();
+  //double w = bb.width(), h = bb.height(), d = bb.depth();
   double r = radius;//vcl_sqrt(w*w + h*h + d*d);
   //r *=10;
   double deg_to_rad = vnl_math::pi/180.0;
