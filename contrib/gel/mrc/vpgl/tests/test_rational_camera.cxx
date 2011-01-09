@@ -156,9 +156,9 @@ static void test_rational_camera()
   good = good && sv == rcam.scale(vpgl_rational_camera<double>::V_INDX);
   good = good && ov == rcam.offset(vpgl_rational_camera<double>::V_INDX);
   TEST("test getting scale and offset values", good, true);
-  //add tests for comp_rational_camera  
+  //add tests for comp_rational_camera
   vpgl_comp_rational_camera<double> crcam(1.0, 2.0, rcam);
-  double tu, tv; 
+  double tu, tv;
   crcam.translation(tu, tv);
   good = tu==1.0&&tv==2.0;
   TEST("test composite rational camera get translation", good, true);
@@ -173,7 +173,7 @@ static void test_rational_camera()
   TEST_NEAR("test composite rational camera2 get rotation", angle,0.05,0.0001);
   double isu = 0, isv = 0;
   crcam2.image_scale(isu, isv);
-  TEST_NEAR("test composite rational camera2 get scale", 
+  TEST_NEAR("test composite rational camera2 get scale",
             vcl_fabs((isu-0.15)*(isv-3.0)),0.0,0.0001);
 
   //test print
@@ -195,9 +195,10 @@ static void test_rational_camera()
     vnl_double_3 vact, cvact;
     vact[0]=act_u[i]; vact[1]=act_v[i]; vact[2]=1.0;
     cvact = M*vact;
-    vcl_cout << "Actual comp projection (" << cvact[0] << ' ' 
+    vcl_cout << "Actual comp projection (" << cvact[0] << ' '
              << cvact[1] << '\n';
-    double eu = vcl_fabs(ucr-cvact[0]), ev = vcl_fabs(vcr-cvact[1]);
+    double eu = vcl_fabs(ucr-cvact[0]+M[0][2]),
+           ev = vcl_fabs(vcr-cvact[1]+M[1][2]);
     vcl_cout << "error = (" << eu << ' ' << ev << ")\n";
     good = good && eu<0.01 && ev < 0.01;
   }
