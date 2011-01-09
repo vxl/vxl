@@ -8,7 +8,7 @@ ADD_EXECUTABLE( bbgm_pro_test_all
 #  test_neighborhood_ops.cxx
 )
 
-TARGET_LINK_LIBRARIES( bbgm_pro_test_all bbgm_pro bbgm bsta_algo bsta vil_pro brdb vnl vil vpl testlib )
+TARGET_LINK_LIBRARIES( bbgm_pro_test_all bbgm_pro bbgm bsta_algo bsta sdet vil_pro brdb vnl vil vpl testlib )
 
 ADD_TEST( bbgm_pro_test_io                 ${EXECUTABLE_OUTPUT_PATH}/bbgm_pro_test_all test_io )
 ADD_TEST( bbgm_pro_test_update_dist_image  ${EXECUTABLE_OUTPUT_PATH}/bbgm_pro_test_all test_update_dist_image )
