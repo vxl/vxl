@@ -31,7 +31,7 @@ class boxm2_block_id : public vbl_ref_count
     inline boxm2_block_id (int i, int j, int k) : i_(i) , j_(j), k_(k) {}
 
     //: copy constructor
-    inline boxm2_block_id (const boxm2_block_id& that) { i_=that.i(); j_=that.j(); k_=that.k(); }
+    inline boxm2_block_id (const boxm2_block_id& that) : vbl_ref_count(), i_(that.i()), j_(that.j()), k_(that.k()) {}
 
     //: assignment
     inline boxm2_block_id& operator=(boxm2_block_id const& v) {
@@ -42,17 +42,20 @@ class boxm2_block_id : public vbl_ref_count
     inline bool operator==(boxm2_block_id const& v) const { return i_==v.i()&&j_==v.j()&&k_==v.k(); }
     inline bool operator!=(boxm2_block_id const& v) const { return !operator==(v); }
     inline bool operator< (boxm2_block_id const& v) const {
-      if(i_<v.i()) return true;
-      if(i_==v.i() && j_<v.j()) return true;
-      if(i_==v.i() && j_==v.j() && k_<v.k()) return true;
-      return false;
-    } 
-    inline bool operator<=(boxm2_block_id const& v) const { return (operator<(v) || operator==(v)); }
+      return i_<v.i()
+         ||  (i_==v.i() && j_<v.j())
+         ||  (i_==v.i() && j_==v.j() && k_<v.k());
+    }
+    inline bool operator<=(boxm2_block_id const& v) const {
+      return i_<=v.i()
+         ||  (i_==v.i() && j_<=v.j())
+         ||  (i_==v.i() && j_==v.j() && k_<=v.k());
+    }
     inline bool operator> (boxm2_block_id const& v) const { return !operator<=(v); }
-    inline bool operator>=(boxm2_block_id const& v) const { return (operator>(v) || operator==(v)); }
-    
+    inline bool operator>=(boxm2_block_id const& v) const { return !operator<(v); }
+
     //: to string
-    vcl_string to_string(); 
+    vcl_string to_string();
 };
 
 typedef vbl_smart_ptr<boxm2_block_id> boxm2_block_id_sptr;
