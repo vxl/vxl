@@ -217,7 +217,7 @@ bool bapl_conn_table::compute_tracks(vcl_vector<bapl_track_data>& tracks, int ne
         bapl_keypoint_sptr dummy_sptr;
         bapl_key_match dummy(feature.second, dummy_sptr);
 
-        int start_idx = (img_id >= new_image_start) ?  new_image_start : 0;
+        //int start_idx = (img_id >= new_image_start) ?  new_image_start : 0;
 
         bapl_conn &nbrs = this->get_neighbors(img_id);
 
