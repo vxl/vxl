@@ -1,4 +1,4 @@
-// This is brl/bseg/boxm2/boxm2_mog3_grey_processor.h
+// This is brl/bseg/boxm2/cpp/boxm2_mog3_grey_processor.h
 #ifndef boxm2_mog3_grey_processor_h_
 #define boxm2_mog3_grey_processor_h_
 //:
@@ -12,11 +12,8 @@
 //   <none yet>
 // \endverbatim
 
-
 #include <vnl/vnl_random.h>
-
 #include <boxm2/boxm2_data_traits.h>
-
 
 class  boxm2_mog3_grey_processor
 {

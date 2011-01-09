@@ -1,4 +1,4 @@
-// This is brl/bseg/boxm/ocl/view/boxm2_render_tableau.h
+// This is brl/bseg/boxm2/view/boxm2_render_tableau.h
 #ifndef boxm2_render_tableau_h
 #define boxm2_render_tableau_h
 //:
@@ -31,7 +31,6 @@
 //brdb stuff
 #include <brdb/brdb_value.h>
 
-
 class boxm2_render_tableau : public boxm2_cam_tableau
 {
  public:
@@ -41,18 +40,18 @@ class boxm2_render_tableau : public boxm2_cam_tableau
   virtual bool handle( vgui_event const& e );
 
   bool init(vcl_string scene_file,
-            unsigned ni, 
-            unsigned nj, 
+            unsigned ni,
+            unsigned nj,
             vpgl_perspective_camera<double>* cam);
 
   //;  set the GL buffer which needs to be displayed.
-  void set_glbuffer(GLuint  pbuffer){ pbuffer_ = pbuffer; }
+  void set_glbuffer(GLuint  pbuffer) { pbuffer_ = pbuffer; }
   void set_statusbar(vgui_statusbar* status) { status_ = status; }
 
  protected:
- 
+
   //: create cl_gl_context
-  cl_context create_clgl_context(); 
+  cl_context create_clgl_context();
   bool init_clgl();
 
   //func to render frame on GPU (returns gpu time)
@@ -61,7 +60,7 @@ class boxm2_render_tableau : public boxm2_cam_tableau
   //shared GL_CL image buffer
   GLuint pbuffer_;
   cl_mem clgl_buffer_;
-  bocl_mem* exp_img_; 
+  bocl_mem* exp_img_;
 
   //gpu processor and render_process
   boxm2_opencl_processor* gpu_pro_;
@@ -72,7 +71,7 @@ class boxm2_render_tableau : public boxm2_cam_tableau
   unsigned nj_;
 
   vgui_statusbar* status_;
-  
+
   bool do_init_ocl;
 };
 
