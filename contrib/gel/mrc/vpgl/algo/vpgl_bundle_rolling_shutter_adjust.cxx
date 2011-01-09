@@ -16,51 +16,49 @@
 #include <vcl_cassert.h>
 #include <vnl/vnl_double_4.h>
 
-vnl_double_4x4 
+vnl_double_4x4
 vpgl_bundle_rolling_shutter_adj_lsqr::param_to_motion_matrix(int i, const double* data, double r, double v) const
+{
+  double t=v/r;
+
+  double omegas[6]={0};
+  omegas[0]=data[6];omegas[1]=data[7];omegas[2]=data[8];
+  double omegasnorm=vcl_sqrt(omegas[0]*omegas[0]+omegas[1]*omegas[1]+omegas[2]*omegas[2]);
+
+  vnl_double_3x3 I;
+  I.set_identity();
+  I(0,0)=I(1,1)=I(2,2)=1.0;
+
+  vnl_double_3x3 wx=vector_to_skewmatrix(omegas);
+  vnl_double_3 d;
+  d[0]=data[9];
+  d[1]=data[10];
+  d[2]=data[11];
+
+  vnl_double_3x3 Mtopleft;
+  vnl_double_3   Mtopright;
+
+  if (omegasnorm==0.0)
   {
-    double t=v/r;
-
-    double omegas[6]={0};
-    omegas[0]=data[6];omegas[1]=data[7];omegas[2]=data[8];
-    double omegasnorm=vcl_sqrt(omegas[0]*omegas[0]+omegas[1]*omegas[1]+omegas[2]*omegas[2]);
-
-    vnl_double_3x3 I;
-    I.set_identity();
-    I(0,0)=I(1,1)=I(2,2)=1.0;
-
-    vnl_double_3x3 wx=vector_to_skewmatrix(omegas);
-    vnl_double_3 d;
-    d[0]=data[9];
-    d[1]=data[10];
-    d[2]=data[11];
-
-    vnl_double_3x3 Mtopleft; 
-    vnl_double_3   Mtopright;
-                        
-
-    if(omegasnorm==0.0)
-    {
-        Mtopleft =I;
-        Mtopright=d*t;
-    }
-    else
-    {
-    Mtopleft =I+wx*vcl_sin(omegasnorm*t)/omegasnorm + wx*wx*(1-cos(omegasnorm*t))/(omegasnorm*omegasnorm);
-    Mtopright=wx*wx*d*(vcl_sin(omegasnorm*t)+omegasnorm*t)/(omegasnorm*omegasnorm*omegasnorm)-
-                             wx*d*(1-cos(omegasnorm*t))/(omegasnorm*omegasnorm) + 
-                             d*t;
-    }                      
-
-    vnl_double_4x4 M;
-    M.set_identity();
-    M(0,0)=Mtopleft(0,0);M(0,1)=Mtopleft(0,1);M(0,2)=Mtopleft(0,2);M(0,3)=Mtopright(0);
-    M(1,0)=Mtopleft(1,0);M(1,1)=Mtopleft(1,1);M(1,2)=Mtopleft(1,2);M(1,3)=Mtopright(1);
-    M(2,0)=Mtopleft(2,0);M(2,1)=Mtopleft(2,1);M(2,2)=Mtopleft(2,2);M(2,3)=Mtopright(2);
-    M(3,0)=0;            M(3,1)=0;            M(3,2)=0;            M(3,3)=1;
-    
-    return M;
+    Mtopleft =I;
+    Mtopright=d*t;
   }
+  else
+  {
+    Mtopleft =I+wx*vcl_sin(omegasnorm*t)/omegasnorm + wx*wx*(1-vcl_cos(omegasnorm*t))/(omegasnorm*omegasnorm);
+    Mtopright=wx*wx*d*(vcl_sin(omegasnorm*t)+omegasnorm*t)/(omegasnorm*omegasnorm*omegasnorm)
+             -wx*d*(1.0-vcl_cos(omegasnorm*t))/(omegasnorm*omegasnorm) + d*t;
+  }
+
+  vnl_double_4x4 M;
+  M.set_identity();
+  M(0,0)=Mtopleft(0,0);M(0,1)=Mtopleft(0,1);M(0,2)=Mtopleft(0,2);M(0,3)=Mtopright(0);
+  M(1,0)=Mtopleft(1,0);M(1,1)=Mtopleft(1,1);M(1,2)=Mtopleft(1,2);M(1,3)=Mtopright(1);
+  M(2,0)=Mtopleft(2,0);M(2,1)=Mtopleft(2,1);M(2,2)=Mtopleft(2,2);M(2,3)=Mtopright(2);
+  M(3,0)=0;            M(3,1)=0;            M(3,2)=0;            M(3,3)=1;
+
+  return M;
+}
 //: Constructor
 vpgl_bundle_rolling_shutter_adj_lsqr::
   vpgl_bundle_rolling_shutter_adj_lsqr(const vcl_vector<vpgl_calibration_matrix<double> >& K,
@@ -87,10 +85,10 @@ vpgl_bundle_rolling_shutter_adj_lsqr::
 // \note image points are not homogeneous because they require finite points to measure projection error
 vpgl_bundle_rolling_shutter_adj_lsqr::
 vpgl_bundle_rolling_shutter_adj_lsqr(const vcl_vector<vpgl_calibration_matrix<double> >& K,
-                     const vcl_vector<vgl_point_2d<double> >& image_points,
-                     const vcl_vector<vnl_matrix<double> >& inv_covars,
-                     const vcl_vector<vcl_vector<bool> >& mask,
-                     bool use_confidence_weights)
+                                     const vcl_vector<vgl_point_2d<double> >& image_points,
+                                     const vcl_vector<vnl_matrix<double> >& inv_covars,
+                                     const vcl_vector<vcl_vector<bool> >& mask,
+                                     bool use_confidence_weights)
  : vnl_sparse_lst_sqr_function(K.size(),6,mask[0].size(),3,mask,2,use_gradient),
    K_(K),
    image_points_(image_points),
@@ -146,7 +144,6 @@ vpgl_bundle_rolling_shutter_adj_lsqr::f(vnl_vector<double> const& a,
     //: Construct the ith camera
     vnl_double_3x4 Pi = param_to_cam_matrix(i,a);
 
-
     vnl_crs_index::sparse_vector row = residual_indices_.sparse_row(i);
     for (sv_itr r_itr=row.begin(); r_itr!=row.end(); ++r_itr)
     {
@@ -168,7 +165,6 @@ vpgl_bundle_rolling_shutter_adj_lsqr::f(vnl_vector<double> const& a,
       vnl_double_3 KRd=KR*d;
       vnl_double_3 KRP=KR*P3;
 
-
       double b=(KRP[2]-KRd[1]/rolling_rate_+KT(2,0));
       double a1=KRd[2]/rolling_rate_;
       double c=-(KRP[1]+KT(1,0));
@@ -176,19 +172,19 @@ vpgl_bundle_rolling_shutter_adj_lsqr::f(vnl_vector<double> const& a,
       double v_s2=(-b-vcl_sqrt(b*b-4*a1*c))/(2*a1);
 
       double v_k=image_points_[k].y();
-      if(v_s1>0 && v_s1<1400)
-          v_k=v_s1;
-      if(v_s2>0 && v_s2<1400)
-          v_k=v_s2;
+      if (v_s1>0 && v_s1<1400)
+        v_k=v_s1;
+      if (v_s2>0 && v_s2<1400)
+        v_k=v_s2;
       Mi=param_to_motion_matrix(i,a,rolling_rate_,v_k);
-     
+
       // Project jth point with the ith camera
       vnl_vector_fixed<double,3> xij = Pi*Mi*Xj;
 
       double* eij = e.data_block()+index_e(k);
       eij[0] = xij[0]/xij[2] - image_points_[k].x();
       eij[1] = xij[1]/xij[2] - image_points_[k].y();
-      if (use_covars_){
+      if (use_covars_) {
         // multiple this error by upper triangular Sij
         vnl_matrix<double>& Sij = factored_inv_covars_[k];
         eij[0] *= Sij(0,0);
@@ -198,15 +194,15 @@ vpgl_bundle_rolling_shutter_adj_lsqr::f(vnl_vector<double> const& a,
     }
   }
 
-  if (use_weights_){
+  if (use_weights_) {
     vnl_vector<double> unweighted(e);
-    for (unsigned int k=0; k<weights_.size(); ++k){
+    for (unsigned int k=0; k<weights_.size(); ++k) {
       e[2*k]   *= weights_[k];
       e[2*k+1] *= weights_[k];
     }
     // weighted average error
     double avg_error = e.rms();
-    for (unsigned int k=0; k<weights_.size(); ++k){
+    for (unsigned int k=0; k<weights_.size(); ++k) {
       vnl_vector_ref<double> uw(2,unweighted.data_block()+2*k);
       double update = 2.0*avg_error/uw.rms();
       if (update < 1.0)
@@ -227,7 +223,7 @@ vpgl_bundle_rolling_shutter_adj_lsqr::f(vnl_vector<double> const& a,
 //  It is used for finite-differencing if the gradient is marked as unavailable
 void
 vpgl_bundle_rolling_shutter_adj_lsqr::fij(int i, int j, vnl_vector<double> const& ai,
-                          vnl_vector<double> const& bj, vnl_vector<double>& fij)
+                                          vnl_vector<double> const& bj, vnl_vector<double>& fij)
 {
   //: Construct the ith camera
   vnl_double_3x4 Pi = param_to_cam_matrix(i,ai.data_block());
@@ -241,14 +237,14 @@ vpgl_bundle_rolling_shutter_adj_lsqr::fij(int i, int j, vnl_vector<double> const
   int k = residual_indices_(i,j);
   fij[0] = xij[0]/xij[2] - image_points_[k].x();
   fij[1] = xij[1]/xij[2] - image_points_[k].y();
-  if (use_covars_){
+  if (use_covars_) {
     // multiple this error by upper triangular Sij
     vnl_matrix<double>& Sij = factored_inv_covars_[k];
     fij[0] *= Sij(0,0);
     fij[0] += fij[1]*Sij(0,1);
     fij[1] *= Sij(1,1);
   }
-  if (use_weights_){
+  if (use_weights_) {
     fij[0] *= weights_[k];
     fij[1] *= weights_[k];
   }
@@ -258,8 +254,8 @@ vpgl_bundle_rolling_shutter_adj_lsqr::fij(int i, int j, vnl_vector<double> const
 //: Compute the sparse Jacobian in block form.
 void
 vpgl_bundle_rolling_shutter_adj_lsqr::jac_blocks(vnl_vector<double> const& a, vnl_vector<double> const& b,
-                                 vcl_vector<vnl_matrix<double> >& A,
-                                 vcl_vector<vnl_matrix<double> >& B)
+                                                 vcl_vector<vnl_matrix<double> >& A,
+                                                 vcl_vector<vnl_matrix<double> >& B)
 {
   typedef vnl_crs_index::sparse_vector::iterator sv_itr;
   for (unsigned int i=0; i<number_of_a(); ++i)
@@ -283,14 +279,12 @@ vpgl_bundle_rolling_shutter_adj_lsqr::jac_blocks(vnl_vector<double> const& a, vn
       jac_Bij(Pi,ai,bj,v_k,B[k]);   // compute Jacobian B_ij
       jac_Aij(Pi,Km_[i],ai,bj,v_k,A[k]); // compute Jacobian A_ij
 
-
-
-      if (use_covars_){
+      if (use_covars_) {
         const vnl_matrix<double>& Sij = factored_inv_covars_[k];
         A[k] = Sij*A[k];
         B[k] = Sij*B[k];
       }
-      if (use_weights_){
+      if (use_weights_) {
         A[k] *= weights_[k];
         B[k] *= weights_[k];
       }
@@ -302,22 +296,20 @@ vpgl_bundle_rolling_shutter_adj_lsqr::jac_blocks(vnl_vector<double> const& a, vn
 //: compute the Jacobian Aij
 void
 vpgl_bundle_rolling_shutter_adj_lsqr::jac_Aij(vnl_double_3x4 const& Pi,
-                              vnl_double_3x3 const& K,
-                              vnl_vector<double> const& ai,
-                              vnl_vector<double> const& bj, 
-                              double v_k,
-                              vnl_matrix<double>& Aij)
+                                              vnl_double_3x3 const& K,
+                                              vnl_vector<double> const& ai,
+                                              vnl_vector<double> const& bj,
+                                              double v_k,
+                                              vnl_matrix<double>& Aij)
 {
   // The translation part.
   //=====================
   // compute by swapping the role of the translation and point position
   // then reused the jac_Bij code
-    double t=v_k/rolling_rate_;
-
-    vnl_double_4x4 M=param_to_motion_matrix(0,ai,rolling_rate_,v_k);
-    vnl_double_4 P;
-    P[0]=bj[0];P[1]=bj[1];P[2]=bj[2];P[3]=1.0;
-    vnl_double_3 p=Pi*M*P;
+  vnl_double_4x4 M=param_to_motion_matrix(0,ai,rolling_rate_,v_k);
+  vnl_double_4 P;
+  P[0]=bj[0];P[1]=bj[1];P[2]=bj[2];P[3]=1.0;
+  vnl_double_3 p=Pi*M*P;
 
   {
     vnl_double_3x4 sPi(Pi);
@@ -430,195 +422,188 @@ vpgl_bundle_rolling_shutter_adj_lsqr::jac_Aij(vnl_double_3x4 const& Pi,
   }
   //Aij.fill(0.0);
   {
+    // The angular velocity part.
+    double ox=ai[6],oy=ai[7],oz=ai[8];
+    double dx=ai[9],dy=ai[10],dz=ai[11];
 
-      // The angular velocity part.
-      double ox=ai[6],oy=ai[7],oz=ai[8];
-      double dx=ai[9],dy=ai[10],dz=ai[11];
+    vnl_double_3 d;
+    d[0]=dx;
+    d[1]=dy;
+    d[2]=dz;
 
-      double om=vcl_sqrt(ox*ox+oy*oy+oz*oz);
-      vnl_double_3 d;
-      d[0]=dx;
-      d[1]=dy;
-      d[2]=dz;
+    vnl_double_3 P3=P.extract(3);
 
-      vnl_double_3 P3=P.extract(3);
+    vnl_double_3x3 KR=Pi.extract(3,3);
+    vnl_double_3x1 KT=Pi.extract(3,1,0,3);
+    vnl_double_3 KRd=KR*d;
+    vnl_double_3 KRP=KR*P3;
 
-      vnl_double_3x3 KR=Pi.extract(3,3);
-      vnl_double_3x1 KT=Pi.extract(3,1,0,3);
-      vnl_double_3 KRd=KR*d;
-      vnl_double_3 KRP=KR*P3;
+    double b=(KRP[2]-KRd[1]/rolling_rate_+KT(2,0));
+    double a=KRd[2]/rolling_rate_;
+    double c=-(KRP[1]+KT(1,0));
+    double v_s1=(-b+vcl_sqrt(b*b-4*a*c))/(2*a);
+    double v_s2=(-b-vcl_sqrt(b*b-4*a*c))/(2*a);
 
-      double b=(KRP[2]-KRd[1]/rolling_rate_+KT(2,0));
-      double a=KRd[2]/rolling_rate_;
-      double c=-(KRP[1]+KT(1,0));
-      double v_s1=(-b+vcl_sqrt(b*b-4*a*c))/(2*a);
-      double v_s2=(-b-vcl_sqrt(b*b-4*a*c))/(2*a);
+    if (v_s1>0 && v_s1<1400)
+        v_k=v_s1;
+    if (v_s2>0 && v_s2<1400)
+        v_k=v_s2;
+    M=param_to_motion_matrix(0,ai,rolling_rate_,v_k);
+    p=Pi*M*P;
 
-      if(v_s1>0 && v_s1<1400)
-          v_k=v_s1;
-      if(v_s2>0 && v_s2<1400)
-          v_k=v_s2;
-      M=param_to_motion_matrix(0,ai,rolling_rate_,v_k);
-      p=Pi*M*P;
+    double dvddx=(p[2]*KR(1,0)-p[1]*KR(2,0))*v_k/rolling_rate_/(p[2]*p[2]-p[2]*KRd[1]/rolling_rate_+p[1]*KRd[2]/rolling_rate_);
+    double dupddx=KR(0,0)*v_k/rolling_rate_+KRd[0]/rolling_rate_*dvddx;
+    double dwpddx=KR(2,0)*v_k/rolling_rate_+KRd[2]/rolling_rate_*dvddx;
+    double duddx=(p[2]*dupddx-p[0]*dwpddx)/(p[2]*p[2]);
 
-      double dvddx=(p[2]*KR(1,0)-p[1]*KR(2,0))*v_k/rolling_rate_/(p[2]*p[2]-p[2]*KRd[1]/rolling_rate_+p[1]*KRd[2]/rolling_rate_);
-      double dupddx=KR(0,0)*v_k/rolling_rate_+KRd[0]/rolling_rate_*dvddx;
-      double dwpddx=KR(2,0)*v_k/rolling_rate_+KRd[2]/rolling_rate_*dvddx;
-      double duddx=(p[2]*dupddx-p[0]*dwpddx)/(p[2]*p[2]);
+    double dvddy=(p[2]*KR(1,1)-p[1]*KR(2,1))*v_k/rolling_rate_/(p[2]*p[2]-p[2]*KRd[1]/rolling_rate_+p[1]*KRd[2]/rolling_rate_);
+    double dupddy=KR(0,1)*v_k/rolling_rate_+KRd[0]/rolling_rate_*dvddy;
+    double dwpddy=KR(2,1)*v_k/rolling_rate_+KRd[2]/rolling_rate_*dvddy;
+    double duddy=(p[2]*dupddy-p[0]*dwpddy)/(p[2]*p[2]);
 
+    double dvddz=(p[2]*KR(1,2)-p[1]*KR(2,2))*v_k/rolling_rate_/(p[2]*p[2]-p[2]*KRd[1]/rolling_rate_+p[1]*KRd[2]/rolling_rate_);
+    double dupddz=KR(0,2)*v_k/rolling_rate_+KRd[0]/rolling_rate_*dvddz;
+    double dwpddz=KR(2,2)*v_k/rolling_rate_+KRd[2]/rolling_rate_*dvddz;
+    double duddz=(p[2]*dupddz-p[0]*dwpddz)/(p[2]*p[2]);
 
-      double dvddy=(p[2]*KR(1,1)-p[1]*KR(2,1))*v_k/rolling_rate_/(p[2]*p[2]-p[2]*KRd[1]/rolling_rate_+p[1]*KRd[2]/rolling_rate_);
-      double dupddy=KR(0,1)*v_k/rolling_rate_+KRd[0]/rolling_rate_*dvddy;
-      double dwpddy=KR(2,1)*v_k/rolling_rate_+KRd[2]/rolling_rate_*dvddy;
-      double duddy=(p[2]*dupddy-p[0]*dwpddy)/(p[2]*p[2]);
+#if 0
+    double om=vcl_sqrt(ox*ox+oy*oy+oz*oz);
+    vnl_double_3x3 drdox(0.0),drdoy(0.0),drdoz(0.0);
+    vnl_double_3x1 dddox(0.0),dddoy(0.0),dddoz(0.0);
 
-      double dvddz=(p[2]*KR(1,2)-p[1]*KR(2,2))*v_k/rolling_rate_/(p[2]*p[2]-p[2]*KRd[1]/rolling_rate_+p[1]*KRd[2]/rolling_rate_);
-      double dupddz=KR(0,2)*v_k/rolling_rate_+KRd[0]/rolling_rate_*dvddz;
-      double dwpddz=KR(2,2)*v_k/rolling_rate_+KRd[2]/rolling_rate_*dvddz;
-      double duddz=(p[2]*dupddz-p[0]*dwpddz)/(p[2]*p[2]);
+    vnl_double_3x3 oc(0.0);
+    oc(0,1)=-oz;oc(0,2)=oy;
+    oc(1,0)=oz;oc(1,2)=-ox;
+    oc(2,0)=oy;oc(2,1)=ox;
 
-      //vnl_double_3x3 drdox(0.0),drdoy(0.0),drdoz(0.0);
-      //vnl_double_3x1 dddox(0.0),dddoy(0.0),dddoz(0.0);
+    vnl_double_3x3 oc2=oc*oc;
 
-      //vnl_double_3x3 oc(0.0);
-      //oc(0,1)=-oz;oc(0,2)=oy;
-      //oc(1,0)=oz;oc(1,2)=-ox;
-      //oc(2,0)=oy;oc(2,1)=ox;
+    vnl_double_3x3 docdox(0.0);
+    docdox(1,2)=-1;docdox(2,1)=1;
+    vnl_double_3x3 docdoy(0.0);
+    docdoy(0,2)=1;docdoy(2,0)=-1;
+    vnl_double_3x3 docdoz(0.0);
+    docdoz(0,1)=-1;docdoz(1,0)=1;
 
-      //vnl_double_3x3 oc2=oc*oc;
+    vnl_double_3x3 doc2dox(0.0);
+    doc2dox(0,1)=oy;doc2dox(0,2)=oz;
+    doc2dox(1,0)=oy;doc2dox(1,1)=-2*ox;
+    doc2dox(2,0)=oz;doc2dox(2,2)=-2*ox;
 
-      //vnl_double_3x3 docdox(0.0);
-      //docdox(1,2)=-1;docdox(2,1)=1;
-      //vnl_double_3x3 docdoy(0.0);
-      //docdoy(0,2)=1;docdoy(2,0)=-1;
-      //vnl_double_3x3 docdoz(0.0);
-      //docdoz(0,1)=-1;docdoz(1,0)=1;
+    vnl_double_3x3 doc2doy(0.0);
+    doc2doy(0,0)=-2*oy;doc2doy(0,1)=ox;
+    doc2doy(1,0)=ox;doc2doy(1,2)=oz;
+    doc2doy(2,1)=oz;doc2doy(2,2)=-2*oy;
 
-      //vnl_double_3x3 doc2dox(0.0);
-      //doc2dox(0,1)=oy;doc2dox(0,2)=oz;
-      //doc2dox(1,0)=oy;doc2dox(1,1)=-2*ox;
-      //doc2dox(2,0)=oz;doc2dox(2,2)=-2*ox;
+    vnl_double_3x3 doc2doz(0.0);
+    doc2doz(0,0)=-2*oz;doc2doz(0,2)=ox;
+    doc2doz(1,1)=-2*oz;doc2doz(1,2)=oy;
+    doc2doz(2,0)=ox;doc2doz(2,1)=oy;
+    if (om!=0.0)
+    {
+      double domdox=ox/om, domdoy=oy/om, domdoz=oz/om;
+      drdox =domdox*t*vcl_sin(om*t)/(om*om)*oc2 -   domdox*vcl_sin(om*t)/(om*om)*oc         + vcl_sin(om*t)/om*docdox
+            +domdox*t*vcl_cos(om*t)/om*oc       - 2*domdox*(1-vcl_cos(om*t))/(om*om*om)*oc2 +(1-vcl_cos(om*t))/(om*om)*doc2dox;
 
-      //vnl_double_3x3 doc2doy(0.0);
-      //doc2doy(0,0)=-2*oy;doc2doy(0,1)=ox;
-      //doc2doy(1,0)=ox;doc2doy(1,2)=oz;
-      //doc2doy(2,1)=oz;doc2doy(2,2)=-2*oy;
+      drdoy =domdoy*t*vcl_sin(om*t)/(om*om)*oc2 -   domdoy*vcl_sin(om*t)/(om*om)*oc + vcl_sin(om*t)/om*docdoy
+            +domdoy*t*vcl_cos(om*t)/om*oc       - 2*domdoy*(1-vcl_cos(om*t))/(om*om*om)*oc2+(1-vcl_cos(om*t))/(om*om)*doc2doy;
 
-      //vnl_double_3x3 doc2doz(0.0);
-      //doc2doz(0,0)=-2*oz;doc2doz(0,2)=ox;
-      //doc2doz(1,1)=-2*oz;doc2doz(1,2)=oy;
-      //doc2doz(2,0)=ox;doc2doz(2,1)=oy;
-      //if(om!=0.0)
-      //{
-      //    double domdox=ox/om, domdoy=oy/om, domdoz=oz/om;
-      //    drdox =domdox*t*sin(om*t)/(om*om)*oc2 -  domdox*sin(om*t)/(om*om)*oc         + sin(om*t)/om*docdox 
-      //        +domdox*t*cos(om*t)/om*oc      -2*domdox*(1-cos(om*t))/(om*om*om)*oc2 +(1-cos(om*t))/(om*om)*doc2dox;
+      drdoz =domdoz*t*vcl_sin(om*t)/(om*om)*oc2 -   domdoz*vcl_sin(om*t)/(om*om)*oc + vcl_sin(om*t)/om*docdoz
+            +domdoz*t*vcl_cos(om*t)/om*oc       - 2*domdoz*(1-vcl_cos(om*t))/(om*om*om)*oc2+(1-vcl_cos(om*t))/(om*om)*doc2doz;
 
-      //    drdoy =domdoy*t*sin(om*t)/(om*om)*oc2  -  domdoy*sin(om*t)/(om*om)*oc + sin(om*t)/om*docdoy 
-      //        +domdoy*t*cos(om*t)/om*oc - 2*domdoy*(1-cos(om*t))/(om*om*om)*oc2+(1-cos(om*t))/(om*om)*doc2doy;
+      dddox =-3*domdox*(vcl_sin(om*t)+om*t)/(om*om*om*om)*(oc2*d) + (vcl_sin(om*t)+om*t)/(om*om*om)*(doc2dox*d)
+            -domdox*t*(vcl_sin(om*t))/(om*om)*oc*d + (domdox*t*vcl_cos(om*t)+domdox*t)*(oc2*d)/(om*om*om)
+            +2*domdox*(1-vcl_cos(om*t))/(om*om*om)*(oc*d)- (1-vcl_cos(om*t))/(om*om)*docdox*d;
 
-      //    drdoz =domdoz*t*sin(om*t)/(om*om)*oc2  -  domdoz*sin(om*t)/(om*om)*oc + sin(om*t)/om*docdoz 
-      //        +domdoz*t*cos(om*t)/om*oc - 2*domdoz*(1-cos(om*t))/(om*om*om)*oc2+(1-cos(om*t))/(om*om)*doc2doz;
+      dddoy =-3*domdoy*(vcl_sin(om*t)+om*t)/(om*om*om*om)*(oc2*d) + (vcl_sin(om*t)+om*t)/(om*om*om)*(doc2doy*d)
+            -domdoy*t*(vcl_sin(om*t))/(om*om)*oc*d + (domdoy*t*vcl_cos(om*t)+domdoy*t)*(oc2*d)/(om*om*om)
+            +2*domdoy*(1-vcl_cos(om*t))/(om*om*om)*(oc*d)- (1-vcl_cos(om*t))/(om*om)*docdoy*d;
 
-      //    dddox =-3*domdox*(vcl_sin(om*t)+om*t)/(om*om*om*om)*(oc2*d) + (vcl_sin(om*t)+om*t)/(om*om*om)*(doc2dox*d)
-      //        -domdox*t*(vcl_sin(om*t))/(om*om)*oc*d + (domdox*t*vcl_cos(om*t)+domdox*t)*(oc2*d)/(om*om*om)
-      //        +2*domdox*(1-vcl_cos(om*t))/(om*om*om)*(oc*d)- (1-vcl_cos(om*t))/(om*om)*docdox*d;
+      dddoz =-3*domdoz*(vcl_sin(om*t)+om*t)/(om*om*om*om)*(oc2*d) + (vcl_sin(om*t)+om*t)/(om*om*om)*(doc2doz*d)
+            -domdoz*t*(vcl_sin(om*t))/(om*om)*oc*d + (domdoz*t*vcl_cos(om*t)+domdoz*t)*(oc2*d)/(om*om*om)
+            +2*domdoz*(1-vcl_cos(om*t))/(om*om*om)*(oc*d)- (1-vcl_cos(om*t))/(om*om)*docdoz*d;
+    }
 
-      //    dddoy =-3*domdoy*(vcl_sin(om*t)+om*t)/(om*om*om*om)*(oc2*d) + (vcl_sin(om*t)+om*t)/(om*om*om)*(doc2doy*d)
-      //        -domdoy*t*(vcl_sin(om*t))/(om*om)*oc*d + (domdoy*t*vcl_cos(om*t)+domdoy*t)*(oc2*d)/(om*om*om)
-      //        +2*domdoy*(1-vcl_cos(om*t))/(om*om*om)*(oc*d)- (1-vcl_cos(om*t))/(om*om)*docdoy*d;
+    vnl_double_4x4 dmdox(0.0);
+    dmdox.update(drdox,0,0);
+    dmdox.update(dddox,0,3);
 
-      //    dddoz =-3*domdoz*(vcl_sin(om*t)+om*t)/(om*om*om*om)*(oc2*d) + (vcl_sin(om*t)+om*t)/(om*om*om)*(doc2doz*d)
-      //        -domdoz*t*(vcl_sin(om*t))/(om*om)*oc*d + (domdoz*t*vcl_cos(om*t)+domdoz*t)*(oc2*d)/(om*om*om)
-      //        +2*domdoz*(1-vcl_cos(om*t))/(om*om*om)*(oc*d)- (1-vcl_cos(om*t))/(om*om)*docdoz*d;
-      //}
+    vnl_double_4x4 dmdoy(0.0);
+    dmdoy.update(drdoy,0,0);
+    dmdoy.update(dddoy,0,3);
 
-      //vnl_double_4x4 dmdox(0.0);
-      //dmdox.update(drdox,0,0);
-      //dmdox.update(dddox,0,3);
+    vnl_double_4x4 dmdoz(0.0);
+    dmdoz.update(drdoz,0,0);
+    dmdoz.update(dddoz,0,3);
 
-      //vnl_double_4x4 dmdoy(0.0);
-      //dmdoy.update(drdoy,0,0);
-      //dmdoy.update(dddoy,0,3);
+    vnl_double_3x3 drdd(0.0);
 
-      //vnl_double_4x4 dmdoz(0.0);
-      //dmdoz.update(drdoz,0,0);
-      //dmdoz.update(dddoz,0,3);
+    vnl_double_3x3 KR=Pi.extract(3,3);
+    vnl_double_3x1 KRd=KR*d;
 
-      //vnl_double_3x3 drdd(0.0);
+    double dvddx=KR(1,0)*v_k/(rolling_rate_-KRd(1,0));
+    double duddx=(1/rolling_rate_)*(KR(0,0)*v_k+KRd(0,0)*dvddx);
+    double dwddx=(1/rolling_rate_)*(KR(2,0)*v_k+KRd(2,0)*dvddx);
 
+    double dvddy=KR(1,1)*v_k/(rolling_rate_-KRd(1,0));
+    double duddy=(1/rolling_rate_)*(KR(0,1)*v_k+KRd(0,0)*dvddy);
+    double dwddy=(1/rolling_rate_)*(KR(2,1)*v_k+KRd(2,0)*dvddy);
 
-      //vnl_double_3x3 KR=Pi.extract(3,3);
-      //vnl_double_3x1 KRd=KR*d;
+    double dvddz=KR(1,2)*v_k/(rolling_rate_-KRd(1,0));
+    double duddz=(1/rolling_rate_)*(KR(0,2)*v_k+KRd(0,0)*dvddz);
+    double dwddz=(1/rolling_rate_)*(KR(2,2)*v_k+KRd(2,0)*dvddz);
 
+    if (om==0.0)
+    {
+      dtddx= ddddx*t;
+      dtddy= ddddy*t;
+      dtddz= ddddz*t;
+    }
+    else
+    {
+      dtddx= (vcl_sin(om*t)+om*t)/(om*om*om)*oc2*ddddx- (1-vcl_cos(om*t))/(om*om)*(oc*ddddx)+ddddx*t;
+      dtddy= (vcl_sin(om*t)+om*t)/(om*om*om)*oc2*ddddy- (1-vcl_cos(om*t))/(om*om)*(oc*ddddy)+ddddy*t;
+      dtddz= (vcl_sin(om*t)+om*t)/(om*om*om)*oc2*ddddz- (1-vcl_cos(om*t))/(om*om)*(oc*ddddz)+ddddz*t;
+    }
+    vnl_double_4x4 dmddx(0.0);dmddx.update(dtddx,0,3);
+    vnl_double_4x4 dmddy(0.0);dmddy.update(dtddy,0,3);
+    vnl_double_4x4 dmddz(0.0);dmddz.update(dtddz,0,3);
 
+    double u=p[0];
+    double v=p[1];
+    double w=p[2];
 
-      //double dvddx=KR(1,0)*v_k/(rolling_rate_-KRd(1,0));
-      //double duddx=(1/rolling_rate_)*(KR(0,0)*v_k+KRd(0,0)*dvddx);
-      //double dwddx=(1/rolling_rate_)*(KR(2,0)*v_k+KRd(2,0)*dvddx);
+    double dudi,dvdi,dvwdi;
+    vnl_double_3 dpdi;
+    // 6 motion parameters.
+#endif // 0
 
-      //double dvddy=KR(1,1)*v_k/(rolling_rate_-KRd(1,0));
-      //double duddy=(1/rolling_rate_)*(KR(0,1)*v_k+KRd(0,0)*dvddy);
-      //double dwddy=(1/rolling_rate_)*(KR(2,1)*v_k+KRd(2,0)*dvddy);
+    //dpdi=Pi*dmdox*P;
+    Aij(0,6)=0.0;
+    Aij(1,6)=0;
+    //dpdi=Pi*dmdoy*P;
+    Aij(0,7)=0;
+    Aij(1,7)=0;
+    //dpdi=Pi*dmdoz*P;
+    Aij(0,8)=0;
+    Aij(1,8)=0;
 
-      //double dvddz=KR(1,2)*v_k/(rolling_rate_-KRd(1,0));
-      //double duddz=(1/rolling_rate_)*(KR(0,2)*v_k+KRd(0,0)*dvddz);
-      //double dwddz=(1/rolling_rate_)*(KR(2,2)*v_k+KRd(2,0)*dvddz);
-
-
-      //if(om==0.0)
-      //{
-      //    dtddx= ddddx*t;
-      //    dtddy= ddddy*t;
-      //    dtddz= ddddz*t;
-      //}
-      //else
-      //{
-      //    //dtddx= (vcl_sin(om*t)+om*t)/(om*om*om)*oc2*ddddx- (1-vcl_cos(om*t))/(om*om)*(oc*ddddx)+ddddx*t;
-      //    //dtddy= (vcl_sin(om*t)+om*t)/(om*om*om)*oc2*ddddy- (1-vcl_cos(om*t))/(om*om)*(oc*ddddy)+ddddy*t;
-      //    //dtddz= (vcl_sin(om*t)+om*t)/(om*om*om)*oc2*ddddz- (1-vcl_cos(om*t))/(om*om)*(oc*ddddz)+ddddz*t;
-      //}
-      //vnl_double_4x4 dmddx(0.0);dmddx.update(dtddx,0,3);
-      //vnl_double_4x4 dmddy(0.0);dmddy.update(dtddy,0,3);
-      //vnl_double_4x4 dmddz(0.0);dmddz.update(dtddz,0,3);
-
-
-      //double u=p[0];
-      //double v=p[1];
-      //double w=p[2];
-
-
-      //double dudi,dvdi,dvwdi;
-      //vnl_double_3 dpdi;
-      //// 6 motion parameters.
-      //dpdi=Pi*dmdox*P;    
-      Aij(0,6)=0.0;          
-      Aij(1,6)=0;            
-      //dpdi=Pi*dmdoy*P;    
-      Aij(0,7)=0;            
-      Aij(1,7)=0;            
-      //dpdi=Pi*dmdoz*P;    
-      Aij(0,8)=0;            
-      Aij(1,8)=0;            
-
-      ////dpdi=Pi*dmddx*P;
-      Aij(0,9)= duddx;
-      Aij(1,9)= dvddx;
-      Aij(0,10)=duddy;
-      Aij(1,10)=dvddy;
-      Aij(0,11)=duddz;
-      Aij(1,11)=dvddz;
-
+    ////dpdi=Pi*dmddx*P;
+    Aij(0,9)= duddx;
+    Aij(1,9)= dvddx;
+    Aij(0,10)=duddy;
+    Aij(1,10)=dvddy;
+    Aij(0,11)=duddz;
+    Aij(1,11)=dvddz;
   }
-
 }
 
 
 //: compute the Jacobian Bij
 void
-vpgl_bundle_rolling_shutter_adj_lsqr::jac_Bij(vnl_double_3x4  Pi,                     
+vpgl_bundle_rolling_shutter_adj_lsqr::jac_Bij(vnl_double_3x4  Pi,
                                               vnl_vector<double> const& ai,
-                                              vnl_vector<double> const& bj, 
+                                              vnl_vector<double> const& bj,
                                               double v_k,
                                               vnl_matrix<double>& Bij)
 {
@@ -686,6 +671,7 @@ vpgl_bundle_rolling_shutter_adj_lsqr::rod_to_matrix(const double* r) const
 
   return R;
 }
+
 vnl_matrix_fixed<double,3,3>
 vpgl_bundle_rolling_shutter_adj_lsqr::vector_to_skewmatrix(const double* r) const
 {
@@ -694,10 +680,8 @@ vpgl_bundle_rolling_shutter_adj_lsqr::vector_to_skewmatrix(const double* r) cons
   w(0,0)=0.0;w(0,1)=-r[2];w(0,2)=r[1];
   w(1,0)=r[2];w(1,1)=0.0;w(1,2)=-r[0];
   w(2,0)=-r[1];w(2,1)=r[0];w(2,2)=0.0;
-  
+
   return w;
-
-
 }
 
 //: Create the parameter vector \p a from a vector of cameras
@@ -719,9 +703,8 @@ vpgl_bundle_rolling_shutter_adj_lsqr::create_param_vector(const vcl_vector<vpgl_
     ai[0]=w[0];   ai[1]=w[1];   ai[2]=w[2];
     ai[3]=c.x();  ai[4]=c.y();  ai[5]=c.z();
 
-    for(unsigned j=0;j<6;j++)
-        ai[j+6]=motion[i][j];
-
+    for (unsigned j=0;j<6;j++)
+      ai[j+6]=motion[i][j];
   }
   return a;
 }
@@ -732,7 +715,7 @@ vnl_vector<double>
 vpgl_bundle_rolling_shutter_adj_lsqr::create_param_vector(const vcl_vector<vgl_point_3d<double> >& world_points)
 {
   vnl_vector<double> b(3*world_points.size(),0.0);
-  for (unsigned int j=0; j<world_points.size(); ++j){
+  for (unsigned int j=0; j<world_points.size(); ++j) {
     const vgl_point_3d<double>& point = world_points[j];
     double* bj = b.data_block() + j*3;
     bj[0]=point.x();  bj[1]=point.y();  bj[2]=point.z();
@@ -772,7 +755,7 @@ vpgl_bundle_rolling_shutter_adjust::optimize(vcl_vector<vpgl_perspective_camera<
   vcl_vector<vpgl_calibration_matrix<double> > K;
   a_ = vpgl_bundle_rolling_shutter_adj_lsqr::create_param_vector(cameras,motion);
   b_ = vpgl_bundle_rolling_shutter_adj_lsqr::create_param_vector(world_points);
-  for (unsigned int i=0; i<cameras.size(); ++i){
+  for (unsigned int i=0; i<cameras.size(); ++i) {
     K.push_back(cameras[i].get_calibration());
   }
 
@@ -795,7 +778,6 @@ vpgl_bundle_rolling_shutter_adjust::optimize(vcl_vector<vpgl_perspective_camera<
     cameras[i] = ba_func_->param_to_cam(i,a_);
   for (unsigned int i=0; i<cameras.size(); ++i)
     motion[i]=ba_func_->param_to_motion(i,a_);
-   
 
   // Update the point locations
   for (unsigned int j=0; j<world_points.size(); ++j)
@@ -808,13 +790,13 @@ vpgl_bundle_rolling_shutter_adjust::optimize(vcl_vector<vpgl_perspective_camera<
 //: Write cameras and points to a file in VRML 2.0 for debugging
 void
 vpgl_bundle_rolling_shutter_adjust::write_vrml(const vcl_string& filename,
-                               vcl_vector<vpgl_perspective_camera<double> >& cameras,
-                               vcl_vector<vgl_point_3d<double> >& world_points)
+                                               vcl_vector<vpgl_perspective_camera<double> >& cameras,
+                                               vcl_vector<vgl_point_3d<double> >& world_points)
 {
   vcl_ofstream os(filename.c_str());
   os << "#VRML V2.0 utf8\n\n";
 
-  for (unsigned int i=0; i<cameras.size(); ++i){
+  for (unsigned int i=0; i<cameras.size(); ++i) {
     vnl_double_3x3 K = cameras[i].get_calibration().get_matrix();
 
     const vgl_rotation_3d<double>& R = cameras[i].get_rotation();
@@ -833,7 +815,7 @@ vpgl_bundle_rolling_shutter_adjust::write_vrml(const vcl_string& filename,
      << "      color Color { color [1 0 0] }\n      coord Coordinate{\n"
      << "       point[\n";
 
-  for (unsigned int j=0; j<world_points.size(); ++j){
+  for (unsigned int j=0; j<world_points.size(); ++j) {
     os  << world_points[j].x() << ' '
         << world_points[j].y() << ' '
         << world_points[j].z() << '\n';
