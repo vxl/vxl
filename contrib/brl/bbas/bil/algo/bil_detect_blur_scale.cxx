@@ -10,15 +10,13 @@
 
 bool inbounds(int x,int y,vil_image_resource_sptr & img)
 {
-    if(x>=0 && y>=0 && x<img->ni() && y<img->nj())
-        return true;
-    return false;
+    return x>=0 && y>=0 && x<int(img->ni()) && y<int(img->nj());
 }
+
 void bil_detect_blur_scale(vil_image_resource_sptr  & img,
-                           int len_of_curves, 
+                           int len_of_curves,
                            float & est_sigma)
 {
-
     float sigma=2.0f;
     vcl_vector<vsol_digital_curve_2d_sptr> edges;
 
@@ -34,12 +32,12 @@ void bil_detect_blur_scale(vil_image_resource_sptr  & img,
     vil_convert_stretch_range_limited<unsigned char>(uimg,fimg,0,255,0.0f,1.0f);
     float hist[8]={0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0};
 
-    for(unsigned i=0;i<edges.size();i++)
+    for (unsigned i=0;i<edges.size();i++)
     {
         float prevx=0.0f, prevy=0.0f;
-        for(unsigned j=0;j<edges[i]->size();j++)
+        for (unsigned j=0;j<edges[i]->size();j++)
         {
-            if(j==0)
+            if (j==0)
             {
                 prevx=edges[i]->point(j)->x();
                 prevy=edges[i]->point(j)->y();
@@ -49,17 +47,17 @@ void bil_detect_blur_scale(vil_image_resource_sptr  & img,
             float nx=-(prevy-y);float ny=(prevx-x);
             float len=vcl_sqrt(nx*nx+ny*ny);
 
-            if(len<=0.0) continue;
+            if (len<=0.0) continue;
             nx/=len;ny/=len;
 
             int cx=(int)vcl_floor(x+0.5);      int cy=(int)vcl_floor(y+0.5);
-            if(!inbounds(cx,cy,img))continue;
+            if (!inbounds(cx,cy,img)) continue;
 
             int lcx=(int)vcl_floor(x-4*nx+0.5);int lcy=(int)vcl_floor(y-4*ny+0.5);
-            if(!inbounds(lcx,lcy,img))continue;
+            if (!inbounds(lcx,lcy,img)) continue;
 
             int rcx=(int)vcl_floor(x+4*nx+0.5);int rcy=(int)vcl_floor(y+4*ny+0.5);
-            if(!inbounds(rcx,rcy,img))continue;
+            if (!inbounds(rcx,rcy,img)) continue;
 
             float lval=fimg(lcx,lcy);
             float rval=fimg(rcx,rcy);
@@ -67,43 +65,41 @@ void bil_detect_blur_scale(vil_image_resource_sptr  & img,
             float r=vcl_fabs(rval-lval)/2;
 
             float minerr=1e5; float minsig=-1;
-            for(float sig=1;sig<5;)
+            for (float sig=1;sig<5;)
             {
                 float err=0.0;
-                for(int t=-5;t<=5;t++)
+                for (int t=-5;t<=5;t++)
                 {
                     int xt=(int)vcl_floor(x+t*nx+0.5);
                     int yt=(int)vcl_floor(y+t*ny+0.5);
 
-                    if(inbounds(xt,yt,img))
+                    if (inbounds(xt,yt,img))
                     {
                         float obs=fimg(xt,yt)-val;
                         float erf=r*vnl_erf((double)t/(double)sig/vcl_sqrt(2.0));
                         err+=(erf-obs)*(erf-obs);
                     }
-
                 }
-                if(err<minerr)
+                if (err<minerr)
                 {
                     minerr=err;
                     minsig=sig;
                 }
-                //: reverse side
+                // reverse side
                 err=0.0;
-                for(int t=-4;t<=4;t++)
+                for (int t=-4;t<=4;t++)
                 {
                     int xt=(int)vcl_floor(x+t*nx+0.5);
                     int yt=(int)vcl_floor(y+t*ny+0.5);
 
-                    if(inbounds(xt,yt,img))
+                    if (inbounds(xt,yt,img))
                     {
                         float obs=fimg(xt,yt)-val;
                         float erf=r*vnl_erf((double)-t/(double)sig/vcl_sqrt(2.0));
                         err+=(erf-obs)*(erf-obs);
                     }
-
                 }
-                if(err<minerr)
+                if (err<minerr)
                 {
                     minerr=err;
                     minsig=sig;
@@ -119,9 +115,9 @@ void bil_detect_blur_scale(vil_image_resource_sptr  & img,
         }
     }
     float maxval=-1.0;
-    for(unsigned cnt=0;cnt<8;cnt++)
+    for (unsigned cnt=0;cnt<8;cnt++)
     {
-        if(hist[cnt]>maxval)
+        if (hist[cnt]>maxval)
         {
             maxval=hist[cnt];
             est_sigma=(float)(cnt+2)/2;
