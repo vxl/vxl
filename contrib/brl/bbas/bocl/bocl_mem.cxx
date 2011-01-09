@@ -35,12 +35,12 @@ bool bocl_mem::release_memory()
   return MEM_SUCCESS;
 }
 
-//: helper method to zero out gpu buffer 
+//: helper method to zero out gpu buffer
 bool bocl_mem::zero_gpu_buffer(const cl_command_queue& cmdQueue)
 {
   unsigned char* zeros = new unsigned char[this->num_bytes_]; // All 1000 values initialized to zero.
-  vcl_memset(zeros, 0, this->num_bytes_); 
-  ceEvent_ = 0; 
+  vcl_memset(zeros, 0, this->num_bytes_);
+  ceEvent_ = 0;
   cl_int status = MEM_FAILURE;
   status = clEnqueueWriteBuffer(cmdQueue,
                                 this->buffer_,
@@ -61,7 +61,7 @@ bool bocl_mem::zero_gpu_buffer(const cl_command_queue& cmdQueue)
 bool bocl_mem::write_to_buffer(const cl_command_queue& cmdQueue)
 {
   if (!is_gl_) {
-    ceEvent_ = 0; 
+    ceEvent_ = 0;
     cl_int status = MEM_FAILURE;
     status = clEnqueueWriteBuffer(cmdQueue,
                                   this->buffer_,
@@ -125,14 +125,14 @@ bool bocl_mem::write_to_buffer_async(const cl_command_queue& cmdQueue)
 //: finish write to buffer using clWaitForEvent
 bool bocl_mem::finish_write_to_buffer(const cl_command_queue& cmdQueue)
 {
-    if(!is_gl_) {
-      cl_int status = MEM_FAILURE; 
-      status = clWaitForEvents(1, &event_); 
-      if (!check_val(status,MEM_FAILURE,"clWaitForEvents failed: " + this->id_))
-        return MEM_FAILURE;
-      return MEM_SUCCESS;
-    }
-  
+  if (!is_gl_) {
+    cl_int status = MEM_FAILURE;
+    status = clWaitForEvents(1, &event_);
+    if (!check_val(status,MEM_FAILURE,"clWaitForEvents failed: " + this->id_))
+      return MEM_FAILURE;
+    return MEM_SUCCESS;
+  }
+  return true;
 }
 
 //: THIS REQUIRES the queue to be finished
@@ -145,7 +145,7 @@ float bocl_mem::exec_time()
     return false;
 
   //store execution time
-  return 1.0e-6f*float(tend - tstart);   
+  return 1e-6f*float(tend - tstart);
 }
 
 //---I/O------------------------------------------------------------------------
