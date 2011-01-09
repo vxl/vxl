@@ -12,4 +12,4 @@ ADD_TEST( bpro_vil_test_convert_to_n_planes_process ${EXECUTABLE_OUTPUT_PATH}/vi
 ADD_TEST( bpro_vil_test_crop_image_process          ${EXECUTABLE_OUTPUT_PATH}/vil_pro_test_all test_vil_crop_image_process )
 
 ADD_EXECUTABLE( vil_pro_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( vil_pro_test_include vil_pro )
+TARGET_LINK_LIBRARIES( vil_pro_test_include vil_pro sdet )
