@@ -18,7 +18,7 @@
 #include <vcl_cstdio.h>
 #include <vcl_algorithm.h>
 #include <vcl_iterator.h>
-
+#include <vcl_cassert.h>
 
 template <class T>
 boxm_scene<T>::boxm_scene(const bgeo_lvcs& lvcs,
@@ -157,8 +157,7 @@ void boxm_scene<T>::clone_blocks(boxm_scene<T> &scene_out, datatype data)
     scene_out.write_active_block();
     ++iter;
     ++iter_out;
-  }    
-  
+  }
 }
 
 //: Returns a scene with the same structure and data
@@ -177,7 +176,7 @@ void boxm_scene<T>::clone_blocks(boxm_scene<T> &scene_out)
     scene_out.write_active_block();
     ++iter;
     ++iter_out;
-  }    
+  }
 }
 
 template <class T>
@@ -189,11 +188,11 @@ void boxm_scene<T>::write_active_block()
     vcl_string path = gen_block_path(x,y,z);
     vsl_b_ofstream os(path);
 #ifdef DEBUG
-    vcl_cout<<"Load All blocks "<<load_all_blocks_<<vcl_endl;
-    vcl_cout << "Internal Nodes 2: " << save_internal_nodes_ << " save_platform_independent_ " << save_platform_independent_ << vcl_endl;
+    vcl_cout<<"Load All blocks "<<load_all_blocks_<<vcl_endl
+            <<"Internal Nodes 2: " << save_internal_nodes_ << " save_platform_independent_ " << save_platform_independent_ << vcl_endl;
 #endif
     blocks_(x,y,z)->b_write(os, save_internal_nodes_, save_platform_independent_);
-    
+
     // delete the block's data
 #if 0 //Is this necessary? If so, let Isa know
     boxm_block<T>* block = blocks_(x,y,z);
@@ -203,7 +202,6 @@ void boxm_scene<T>::write_active_block()
     lock_.set(-1,-1,-1);
 #endif
     os.close();
-
   }
 }
 
@@ -310,7 +308,6 @@ void boxm_scene<T>::axes_length(double &x_length,double &y_length, double &z_len
   x_length = block_dim_.x()*blocks_.get_row1_count();
   y_length = block_dim_.y()*blocks_.get_row2_count();
   z_length = block_dim_.z()*blocks_.get_row3_count();
-
 }
 
 
@@ -415,7 +412,7 @@ bool boxm_scene<T>::load_block_and_neighbors(unsigned i, unsigned j, unsigned k)
                      active_blocks_.begin(), active_blocks_.end(),
                      vcl_insert_iterator<vcl_set<vgl_point_3d<int> , bvgl_point_3d_cmp<int> > > (blocks_to_load, blocks_to_load.begin()),
                      cmp);
-  
+
   active_blocks_.clear();
   active_blocks_ = new_active_blocks;
 
@@ -481,14 +478,13 @@ short boxm_scene<T>::finest_level()
   while (!iter.end()) {
     if (this->load_block(iter.index().x(),iter.index().y(),iter.index().z())) {
       short this_level = get_active_block()->get_tree()->finest_level();
-      if(this_level < finest_level)
+      if (this_level < finest_level)
         finest_level = this_level;
     }
     iter++;
   }
-  
+
   return finest_level;
-  
 }
 
 //: Return the length of finest-level cell in the scene
@@ -496,12 +492,11 @@ template <class T>
 double  boxm_scene<T>::finest_cell_length()
 {
   double local_cell_length = 1.0/(double)(1<<((this->max_tree_level_ -1) - finest_level()));
-  
+
   if ((vcl_abs(block_dim_.x() - block_dim_.y()) > 1.0e-7)   || (vcl_abs(block_dim_.x() - block_dim_.z()) > 1.0e-7))
-    vcl_cerr << "Warning: In boxm_scene::finest_cell_lenght, cells aren't cubical, returning lenght along x direction " << vcl_endl;
-  
+    vcl_cerr << "Warning: In boxm_scene::finest_cell_length, cells aren't cubical, returning length along x direction\n";
+
   return local_cell_length * block_dim_.x();
-  
 }
 
 //: Return the number of leaf nodes in the scene
@@ -513,16 +508,15 @@ unsigned long boxm_scene<T>::size()
   iter.begin();
   unsigned long size = 0;
   while (!iter.end()) {
-    if (this->load_block(iter.index().x(),iter.index().y(),iter.index().z())) 
+    if (this->load_block(iter.index().x(),iter.index().y(),iter.index().z()))
     {
       size += get_active_block()->get_tree()->size();
     }
-    
+
     iter++;
   }
-  
+
   return size;
-  
 }
 
 template <class T>
@@ -729,20 +723,20 @@ void boxm_scene<T>::print()
   }
 }
 
-//: Load all blocks in between min-max indeces.
+//: Load all blocks in between min-max indices.
 template <class T>
 bool boxm_scene<T>::load_blocks(vgl_point_3d<int> min_idx, vgl_point_3d<int> max_idx)
 {
   if (!valid_index(min_idx) || !valid_index(max_idx))
     return false;
-  
+
   vcl_set<vgl_point_3d<int>, bvgl_point_3d_cmp<int> >  new_active_blocks;
-  
+
   for (int i = min_idx.x(); i <= max_idx.x(); i++)
     for (int j = min_idx.y(); j <= max_idx.y(); j++)
       for (int k = min_idx.z(); k <= max_idx.z(); k++)
         new_active_blocks.insert(vgl_point_3d<int>(i,j,k));
-  
+
   // Set unused blocks to null and load new blocks
   // this is to avoid rereading blocks that are already in memory
   vcl_set<vgl_point_3d<int>, bvgl_point_3d_cmp<int> >  blocks_to_unload;
@@ -752,37 +746,37 @@ bool boxm_scene<T>::load_blocks(vgl_point_3d<int> min_idx, vgl_point_3d<int> max
                      new_active_blocks.begin(), new_active_blocks.end(),
                      vcl_insert_iterator<vcl_set<vgl_point_3d<int>, bvgl_point_3d_cmp<int> > >(blocks_to_unload, blocks_to_unload.begin()),
                      cmp);
-  
+
   vcl_set_difference(new_active_blocks.begin(), new_active_blocks.end(),
                      active_blocks_.begin(), active_blocks_.end(),
                      vcl_insert_iterator<vcl_set<vgl_point_3d<int> , bvgl_point_3d_cmp<int> > > (blocks_to_load, blocks_to_load.begin()),
                      cmp);
-  
+
   active_blocks_.clear();
   active_blocks_ = new_active_blocks;
-  
+
   vcl_set<vgl_point_3d<int>, bvgl_point_3d_cmp<int> >::iterator unload_it = blocks_to_unload.begin();
-  
+
   for (; unload_it!=blocks_to_unload.end(); unload_it++)
   {
     boxm_block<T>* block = blocks_((*unload_it).x(),(*unload_it).y(),(*unload_it).z());
     block->delete_tree();
     block->set_tree(0);
   }
-  
+
   vcl_set<vgl_point_3d<int>, bvgl_point_3d_cmp<int> >::iterator load_it = blocks_to_load.begin();
-  
+
   for (; load_it!=blocks_to_load.end(); load_it++)
   {
     int block_i = (*load_it).x();
     int block_j = (*load_it).y();
     int block_k = (*load_it).z();
-    
+
     if (blocks_(block_i,block_j,block_k)->get_tree() == NULL)// read it from file
     {
       vcl_string block_path = gen_block_path(block_i,block_j,block_k);
       vsl_b_ifstream os(block_path);
-      
+
       //if the binary block file is not found
       if (!os) {
         if (blocks_(block_i,block_j,block_k)->get_tree()==NULL) {
@@ -795,11 +789,11 @@ bool boxm_scene<T>::load_blocks(vgl_point_3d<int> min_idx, vgl_point_3d<int> max
       os.close();
     }
   }
-  
+
   return true;
 }
 
-//: Unload all blocks in between min-max indeces.
+//: Unload all blocks in between min-max indices.
 template <class T>
 bool boxm_scene<T>::unload_blocks(vgl_point_3d<int> min_idx, vgl_point_3d<int> max_idx)
 {
@@ -821,37 +815,30 @@ bool boxm_scene<T>::unload_blocks(vgl_point_3d<int> min_idx, vgl_point_3d<int> m
 template <class T>
 void boxm_scene<T>::unload_active_blocks()
 {
-  if(active_blocks_.size()==0)
+  if (active_blocks_.size()==0)
     return;
-  
+
   vcl_set<vgl_point_3d<int>, bvgl_point_3d_cmp<int> >::iterator unload_it = active_blocks_.begin();
-  
+
   for (; unload_it!=active_blocks_.end(); unload_it++)
   {
     boxm_block<T>* block = blocks_((*unload_it).x(),(*unload_it).y(),(*unload_it).z());
     block->delete_tree();
     block->set_tree(0);
-    
   }
   active_blocks_.clear();
 
-  
-  if(valid_index(active_block_))
+  if (valid_index(active_block_))
   {
     boxm_block<T>* block = blocks_(active_block_.x(), active_block_.y(),active_block_.z());
     block->delete_tree();
     block->set_tree(0);
     active_block_ = vgl_point_3d<int>(-1,-1,-1);
-    
   }
-    
-    
-  
+
   //unload active block
-  
-  
+
   return;
-  
 }
 
 
@@ -863,7 +850,6 @@ void boxm_scene<T>::leaves_in_region(vgl_box_3d<double> box, vcl_vector<boct_tre
   vgl_point_3d<double> min_point = box.min_point();
   vgl_point_3d<int> min_idx;
   get_block_index(min_point, min_idx);
-
 
   vgl_point_3d<double> max_point = box.max_point();
   vgl_point_3d<int> max_idx;
@@ -887,7 +873,7 @@ void boxm_scene<T>::leaves_in_region(vgl_box_3d<double> box, vcl_vector<boct_tre
         vgl_box_3d<double> local_box_exclusive(local_box.min_point().x(), local_box.min_point().y(), local_box.min_point().z(),
                                                local_box.max_point().x()- 1e-7, local_box.max_point().y()- 1e-7,local_box.max_point().z()- 1e-7);
         T *tree = block->get_tree();
-        if(!tree)
+        if (!tree)
           continue;
         vcl_vector<boct_tree_cell<loc_type, datatype>* > temp_cells;
         temp_cells.clear();
@@ -905,39 +891,37 @@ void boxm_scene<T>::leaves_in_region(vgl_box_3d<double> box, vcl_vector<boct_tre
 template <class T>
 boct_tree_cell<typename T::loc_type, typename T::datatype>* boxm_scene<T>::locate_point_in_memory(vgl_point_3d<double> &p)
 {
-  //get the indeces for the block containing this point
+  //get the indices for the block containing this point
   vgl_point_3d<int> block_idx;
-  if(!get_block_index(p, block_idx))
+  if (!get_block_index(p, block_idx))
     return NULL;
-  
-#if 0
-  vcl_cout << "Requesting blocks : "<< block_idx<< vcl_endl;
-  vcl_cout << "Active blocks : " << vcl_endl;
+
+#ifdef DEBUG
+  vcl_cout << "Requesting blocks : "<< block_idx<< '\n'
+           << "Active blocks :" << vcl_endl;
   vcl_set<vgl_point_3d<int>, bvgl_point_3d_cmp<int> >::iterator it = active_blocks_.begin();
-  for (; it!=active_blocks_.end(); it++){
+  for (; it!=active_blocks_.end(); it++) {
     vcl_cout << *it << vcl_endl;
     boxm_block<T > *block = get_block(*it);
-    if(!block) 
-      vcl_cerr << " NULL block" << vcl_endl;
+    if (!block)
+      vcl_cerr << " NULL block\n";
     T *tree = block->get_tree();
-    if(!tree)
-      vcl_cerr << " NULL tree" << vcl_endl;  
+    if (!tree)
+      vcl_cerr << " NULL tree\n";
   }
 #endif
-  
+
   //get the block, if block is not already in memory, return null
   boxm_block<T>* block = blocks_(block_idx.x(), block_idx.y(), block_idx.z());
   T *tree = block->get_tree();
-  if(!block || !tree){
-    vcl_cerr << " Cannot locate point, because block is not loaded in the  memory" << vcl_endl;
+  if (!block || !tree) {
+    vcl_cerr << " Cannot locate point, because block is not loaded in the memory\n";
     return NULL;
   }
   return tree->locate_point_global(p);
-  
-  
 }
-/************************************************ BOXM_BLOCK_ITERATOR *******************************************/
 
+/************************************************ BOXM_BLOCK_ITERATOR *******************************************/
 
 template <class T>
 boxm_block_iterator<T>& boxm_block_iterator<T>::begin()
@@ -1046,9 +1030,8 @@ boxm_cell_iterator<T>& boxm_cell_iterator<T>::begin()
   assert(tree != NULL);
   cells_ = tree->leaf_cells();
   cells_iterator_ = cells_.begin();
-  
-  vcl_cout << "Cell iterator: # of cells: " << cells_.size() << vcl_endl;
 
+  vcl_cout << "Cell iterator: # of cells: " << cells_.size() << vcl_endl;
 
   return *this;
 }
@@ -1056,11 +1039,10 @@ boxm_cell_iterator<T>& boxm_cell_iterator<T>::begin()
 template <class T>
 bool boxm_cell_iterator<T>::end()
 {
-  if(cells_.empty())
+  if (cells_.empty())
     return true;
   else
     return (block_iterator_.end() && (cells_iterator_ == cells_.end()));
-
 }
 
 template <class T>
@@ -1082,18 +1064,18 @@ bool boxm_cell_iterator<T>::operator!=(const boxm_cell_iterator<T>& that)
   return (this->block_iterator_ != that.block_iterator_) && (this->cells_iterator_ != that.cells_iterator_);
 }
 
-//: Prefix operator. 
+//: Prefix operator.
 //  When the end of the block is reached, it writes the block to disk and loads the next one, unless the read_nly flag was set
 template <class T>
 boxm_cell_iterator<T>& boxm_cell_iterator<T>::operator++()
 {
   if (++cells_iterator_ == cells_.end())
   {
-    if(!read_only_) 
+    if (!read_only_)
       block_iterator_.scene_->write_active_block();
-    
+
     ++block_iterator_;
-    
+
     if (!block_iterator_.end())
     {
       //load active block using function pointer, retrieve pointer to all cells
@@ -1111,7 +1093,7 @@ template <class T>
 boxm_cell_iterator<T> boxm_cell_iterator<T>::operator+=(unsigned const &rhs)
 {
   //is there a more efficient way to do this whitout messing all the iterator up?
-  for(unsigned i =0; i<rhs; ++i)
+  for (unsigned i =0; i<rhs; ++i)
     ++(*this);
 
   return *this;
@@ -1148,8 +1130,8 @@ double boxm_cell_iterator<T>::length()
 {
   return (*block_iterator_)->get_tree()->cell_length(*cells_iterator_);
 }
-/******************************************* I/ O *******************************************************/
 
+/******************************************* I/ O *******************************************************/
 
 template <class T>
 void vsl_b_write(vsl_b_ostream & os, boxm_scene<T> const &scene)
