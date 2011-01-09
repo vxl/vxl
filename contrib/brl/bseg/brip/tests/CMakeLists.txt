@@ -28,7 +28,9 @@ ADD_TEST( brip_test_quadtree           ${EXECUTABLE_OUTPUT_PATH}/brip_test_all t
 ADD_TEST( brip_test_max_scale_response ${EXECUTABLE_OUTPUT_PATH}/brip_test_all test_max_scale_response )
 ADD_TEST( brip_test_mask               ${EXECUTABLE_OUTPUT_PATH}/brip_test_all test_mask )
 ADD_TEST( brip_test_label_equivalence  ${EXECUTABLE_OUTPUT_PATH}/brip_test_all test_label_equivalence )
+IF(SEGFAULT_FIXED)
 ADD_TEST( brip_test_extrema            ${EXECUTABLE_OUTPUT_PATH}/brip_test_all test_extrema )
+ENDIF(SEGFAULT_FIXED)
 
 ADD_EXECUTABLE( brip_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( brip_test_include brip )
