@@ -4,7 +4,7 @@
 // \file
 #include <vcl_iostream.h> //for vcl_cout
 #include <vcl_cstdio.h>   //for vcl_perror
-#include <vcl_cstring.h>   //for vcl_memset
+#include <vcl_cstring.h>  //for vcl_memset
 //windows specific includes
 #include <windows.h>
 
@@ -47,7 +47,7 @@ bool baio::read(vcl_string filename, char* buffer, long BUFSIZE)
                               NULL, OPEN_EXISTING,
                               FILE_FLAG_NO_BUFFERING|FILE_FLAG_OVERLAPPED, NULL);
   if (info_->fhandle== INVALID_HANDLE_VALUE) {
-    vcl_cerr<<"baio (Windows)::read could not open file"<<filename<<'\n';
+    vcl_cerr<<"baio (Windows)::read could not open file "<<filename<<'\n';
     vcl_perror("open");
   }
 
@@ -75,13 +75,13 @@ bool baio::write(vcl_string filename, char* buffer, long BUFSIZE)
                               NULL, CREATE_ALWAYS,
                               FILE_FLAG_WRITE_THROUGH|FILE_FLAG_OVERLAPPED, NULL);
   if (info_->fhandle== INVALID_HANDLE_VALUE) {
-    vcl_cerr<<"baio (Windows)::read could not open file"<<filename<<'\n';
+    vcl_cerr<<"baio (Windows)::read could not open file "<<filename<<'\n';
     vcl_perror("open");
   }
 
   info_->buffer=buffer;
   if (!info_->buffer) {
-    vcl_cerr<<"baio (Windows)::the buffer does not exist "<<BUFSIZE<<'\n';
+    vcl_cerr<<"baio (Windows)::the buffer does not exist, BUFSIZE = "<<BUFSIZE<<'\n';
   }
   //
   DWORD byteswritten = 0;

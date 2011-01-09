@@ -4,7 +4,6 @@
 // \author Isabel Restrepo
 // \date 15-Aug-2010
 
-
 void init_tree(boct_tree<short,float> *tree, unsigned i)
 {
   tree-> split(); //now we have 8 cells
@@ -64,7 +63,7 @@ void clean_up()
 void clean_up(vcl_string dir, vcl_string ext)
 {
   //clean temporary files
-   vul_file_iterator file_it(dir+"/"+ext);
+  vul_file_iterator file_it(dir+"/"+ext);
   for (; file_it; ++file_it)
   {
     vpl_unlink(file_it());

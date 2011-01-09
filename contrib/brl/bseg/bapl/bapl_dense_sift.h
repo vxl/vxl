@@ -1,72 +1,70 @@
-// This is bapl/bapl_dense_sift.h
+// This is brl/bseg/bapl/bapl_dense_sift.h
 #ifndef bapl_dense_sift_h_
 #define bapl_dense_sift_h_
 //:
 // \file
 // \brief Extract SIFT features from every pixel in an Image or a specific region.
 // \author Brandon Mayer (b.mayer1@gmail.com)
-// \date 12/10/2010
+// \date Dec 10, 2010
 //
 // \verbatim
 //  Modifications
 // \endverbatim
 
-#include<bapl/bapl_keypoint_extractor.h>
-#include<bapl/bapl_keypoint_sptr.h>
-#include<bapl/bapl_lowe_pyramid_set.h>
-#include<bapl/bapl_lowe_pyramid_set_sptr.h>
+#include <bapl/bapl_keypoint_extractor.h>
+#include <bapl/bapl_keypoint_sptr.h>
+#include <bapl/bapl_lowe_pyramid_set.h>
+#include <bapl/bapl_lowe_pyramid_set_sptr.h>
 
-#include<vbl/vbl_ref_count.h>
+#include <vgl/vgl_point_2d.h>
+#include <vil/vil_image_resource_sptr.h>
+#include <vbl/vbl_ref_count.h>
 
-#include<vcl_cmath.h>
-#include<vcl_map.h>
-#include<vcl_vector.h>
-
-#include<vgl/vgl_point_2d.h>
-
-#include<vil/vil_image_resource_sptr.h>
+#include <vcl_cmath.h>
+#include <vcl_map.h>
+#include <vcl_vector.h>
 
 class bapl_dense_sift:public vbl_ref_count
 {
-public:
-	bapl_dense_sift():pyramid_valid_(false){}
+ public:
+  bapl_dense_sift():pyramid_valid_(false) {}
 
-	bapl_dense_sift( const vil_image_resource_sptr& image, unsigned octave_size = 6, unsigned num_octaves = 1 );
+  bapl_dense_sift( const vil_image_resource_sptr& image, unsigned octave_size = 6, unsigned num_octaves = 1 );
 
-	~bapl_dense_sift(){}
+  ~bapl_dense_sift() {}
 
-	void create_pyramid(const vil_image_resource_sptr& image, unsigned octave_size = 6, unsigned num_octaves = 1);
+  void create_pyramid(const vil_image_resource_sptr& image, unsigned octave_size = 6, unsigned num_octaves = 1);
 
-	//output := keypoint
-	//parameters := (sub)pixel location (i,j)
-	bool make_keypoint( bapl_lowe_keypoint_sptr& keypoint, double const& i, double const& j);
+  //output := keypoint
+  //parameters := (sub)pixel location (i,j)
+  bool make_keypoint( bapl_lowe_keypoint_sptr& keypoint, double const& i, double const& j);
 
-	//output := keypoints
-	//parameters := istep,jstep
-	bool make_keypoints(vcl_vector<bapl_lowe_keypoint_sptr>& keypoints, unsigned const istep = 1, unsigned const jstep = 1 );
+  //output := keypoints
+  //parameters := istep,jstep
+  bool make_keypoints(vcl_vector<bapl_lowe_keypoint_sptr>& keypoints, unsigned const istep = 1, unsigned const jstep = 1 );
 
-	//output := keypoints
-	//parameters := target image locations (vgl_point_2d<unsigned> > pts)
-	bool make_keypoints( vcl_vector<bapl_lowe_keypoint_sptr>& keypoints, vcl_vector<vgl_point_2d<unsigned> > const& pts );
+  //output := keypoints
+  //parameters := target image locations (vgl_point_2d<unsigned> > pts)
+  bool make_keypoints( vcl_vector<bapl_lowe_keypoint_sptr>& keypoints, vcl_vector<vgl_point_2d<unsigned> > const& pts );
 
-	bapl_lowe_pyramid_set_sptr pyramid_sptr(){return this->pyramid_sptr_;}
+  bapl_lowe_pyramid_set_sptr pyramid_sptr() {return this->pyramid_sptr_;}
 
-	unsigned ni() const {return this->ni_;}
+  unsigned ni() const {return this->ni_;}
 
-	unsigned nj() const {return this->nj_;}
+  unsigned nj() const {return this->nj_;}
 
-	unsigned octave_size() const {return this->octave_size_;}
+  unsigned octave_size() const {return this->octave_size_;}
 
-	unsigned num_octave() const {return this->num_octaves_;}
+  unsigned num_octave() const {return this->num_octaves_;}
 
-private:
-	bapl_lowe_pyramid_set_sptr pyramid_sptr_;
-	unsigned ni_;
-	unsigned nj_;
-	unsigned octave_size_;
-	unsigned num_octaves_;
-	bool pyramid_valid_;
-	static unsigned keypoint_id_;
+ private:
+  bapl_lowe_pyramid_set_sptr pyramid_sptr_;
+  unsigned ni_;
+  unsigned nj_;
+  unsigned octave_size_;
+  unsigned num_octaves_;
+  bool pyramid_valid_;
+  static unsigned keypoint_id_;
 };
 
 #endif//bapl_dense_sift_h_
