@@ -28,26 +28,26 @@ IF(EXPAT_FOUND)
     AUX_SOURCE_DIRECTORY(Templates boxm2_sources)
 
     ADD_LIBRARY(boxm2  ${boxm2_sources})
-    TARGET_LINK_LIBRARIES(boxm2 boxm2_basic boxm2_io boxm2_cpp boxm2_ocl bocl boct brdb vbl_io expatpp vpgl vgl vgl_xio vbl vsl vcl)
+    TARGET_LINK_LIBRARIES(boxm2 boxm2_basic bocl boct brdb vbl_io expatpp vpgl vgl vgl_xio vbl vsl vcl)
 
     #basic
     subdirs(basic)
 
     #io
     subdirs(io)
-    
+
     #c plus plus library
     subdirs(cpp)
-    
+
     #opencl accelerated library
     subdirs(ocl)
-    
+
     #exes
     subdirs(exe)
-    
+
     #tableaus
     subdirs(view)
-    
+
     #tests
     SUBDIRS(tests)
 
