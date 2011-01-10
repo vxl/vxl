@@ -10,7 +10,7 @@ MANPAGE_SOURCES += boxm2_process.h
 MANPAGE_SOURCES += boxm2_processor.h
 SOURCES += boxm2_data_base.cxx
 SOURCES += boxm2_util.cxx
-MANPAGE_SOURCES += boxm2_block_metadata.h
+SOURCES += boxm2_block_metadata.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
