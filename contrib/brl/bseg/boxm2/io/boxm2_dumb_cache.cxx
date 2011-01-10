@@ -3,8 +3,9 @@
 // \file
 
 //: constructor from scene poitner
-boxm2_dumb_cache::boxm2_dumb_cache(boxm2_scene* scene) : cached_block_(0), boxm2_cache(scene) {
-  scene_dir_ = scene->data_path(); 
+boxm2_dumb_cache::boxm2_dumb_cache(boxm2_scene* scene) : boxm2_cache(scene), cached_block_(0)
+{
+  scene_dir_ = scene->data_path();
 }
 
 
@@ -34,10 +35,10 @@ boxm2_block* boxm2_dumb_cache::get_block(boxm2_block_id id)
   boxm2_block* loaded = boxm2_sio_mgr::load_block(scene_dir_, id);
 
   //check to make sure it's loaded
-  if(!loaded && scene_->block_exists(id)) {
+  if (!loaded && scene_->block_exists(id)) {
     vcl_cout<<"boxm2_nn_cache::initializing empty block "<<id<<vcl_endl;
-    boxm2_block_metadata data = scene_->get_block_metadata(id); 
-    loaded = new boxm2_block(data); 
+    boxm2_block_metadata data = scene_->get_block_metadata(id);
+    loaded = new boxm2_block(data);
   }
 
   //update cache
@@ -54,36 +55,36 @@ void boxm2_dumb_cache::update_block_cache(boxm2_block* blk)
 //: get data by type and id
 boxm2_data_base* boxm2_dumb_cache::get_data_base(boxm2_block_id id, vcl_string type)
 {
-  if( cached_data_.find(type) != cached_data_.end() )
+  if ( cached_data_.find(type) != cached_data_.end() )
   {
-    if(cached_data_[type]->block_id() == id)
-      return cached_data_[type]; 
+    if (cached_data_[type]->block_id() == id)
+      return cached_data_[type];
   }
-  
+
   //otherwise load it from disk
   boxm2_data_base* loaded = boxm2_sio_mgr::load_block_data_generic(scene_dir_,id,type);
- 
+
   //make sure it loaded
-  if(!loaded && scene_->block_exists(id)) {
+  if (!loaded && scene_->block_exists(id)) {
     vcl_cout<<"boxm2_nn_cache::initializing empty data "<<id<<" type: "<<type<<vcl_endl;
-    boxm2_block_metadata data = scene_->get_block_metadata(id); 
-    loaded = new boxm2_data_base(data, type); 
+    boxm2_block_metadata data = scene_->get_block_metadata(id);
+    loaded = new boxm2_data_base(data, type);
   }
-  
-  this->update_data_base_cache(loaded, type); 
-  return loaded; 
+
+  this->update_data_base_cache(loaded, type);
+  return loaded;
 }
 
 //: update data cache by type
 void boxm2_dumb_cache::update_data_base_cache(boxm2_data_base* dat, vcl_string type)
 {
-  vcl_map<vcl_string, boxm2_data_base* >::iterator iter; 
+  vcl_map<vcl_string, boxm2_data_base* >::iterator iter;
   iter = cached_data_.find(type);
-  if( iter != cached_data_.end() )
+  if ( iter != cached_data_.end() )
   {
     boxm2_data_base* old = (*iter).second;
-    if(old) delete old; 
+    if (old) delete old;
   }
-  cached_data_[type] = dat; 
+  cached_data_[type] = dat;
 }
 
