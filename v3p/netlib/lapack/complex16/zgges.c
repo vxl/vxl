@@ -1,13 +1,13 @@
 /* lapack/complex16/zgges.f -- translated by f2c (version 20090411).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+    on Microsoft Windows system, link with libf2c.lib;
+    on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+    or, if you install libf2c.a in a standard place, with -lf2c -lm
+    -- in that order, at the end of the command line, as in
+        cc *.o -lf2c -lm
+    Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+        http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -24,17 +24,18 @@ static integer c__0 = 0;
 static integer c_n1 = -1;
 
 /*<    >*/
-/* Subroutine */ int zgges_(char *jobvsl, char *jobvsr, char *sort, L_fp 
-	selctg, integer *n, doublecomplex *a, integer *lda, doublecomplex *b, 
-	integer *ldb, integer *sdim, doublecomplex *alpha, doublecomplex *
-	beta, doublecomplex *vsl, integer *ldvsl, doublecomplex *vsr, integer 
-	*ldvsr, doublecomplex *work, integer *lwork, doublereal *rwork, 
-	logical *bwork, integer *info, ftnlen jobvsl_len, ftnlen jobvsr_len, 
-	ftnlen sort_len)
+/* Subroutine */ int zgges_(char *jobvsl, char *jobvsr, char *sort,
+        logical (*selctg)(doublecomplex*,doublecomplex*),
+        integer *n, doublecomplex *a, integer *lda, doublecomplex *b,
+        integer *ldb, integer *sdim, doublecomplex *alpha, doublecomplex *
+        beta, doublecomplex *vsl, integer *ldvsl, doublecomplex *vsr, integer
+        *ldvsr, doublecomplex *work, integer *lwork, doublereal *rwork,
+        logical *bwork, integer *info, ftnlen jobvsl_len, ftnlen jobvsr_len,
+        ftnlen sort_len)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, vsl_dim1, vsl_offset, 
-	    vsr_dim1, vsr_offset, i__1, i__2;
+    integer a_dim1, a_offset, b_dim1, b_offset, vsl_dim1, vsl_offset,
+            vsr_dim1, vsr_offset, i__1, i__2;
 
     /* Builtin functions */
     double sqrt(doublereal);
@@ -52,57 +53,57 @@ static integer c_n1 = -1;
     integer irwrk, irows;
     extern /* Subroutine */ int dlabad_(doublereal *, doublereal *);
     extern doublereal dlamch_(char *, ftnlen);
-    extern /* Subroutine */ int zggbak_(char *, char *, integer *, integer *, 
-	    integer *, doublereal *, doublereal *, integer *, doublecomplex *,
-	     integer *, integer *, ftnlen, ftnlen), zggbal_(char *, integer *,
-	     doublecomplex *, integer *, doublecomplex *, integer *, integer *
-	    , integer *, doublereal *, doublereal *, doublereal *, integer *, 
-	    ftnlen);
+    extern /* Subroutine */ int zggbak_(char *, char *, integer *, integer *,
+            integer *, doublereal *, doublereal *, integer *, doublecomplex *,
+             integer *, integer *, ftnlen, ftnlen), zggbal_(char *, integer *,
+             doublecomplex *, integer *, doublecomplex *, integer *, integer *
+            , integer *, doublereal *, doublereal *, doublereal *, integer *,
+            ftnlen);
     logical ilascl, ilbscl;
     extern /* Subroutine */ int xerbla_(char *, integer *, ftnlen);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, 
-	    integer *, integer *, ftnlen, ftnlen);
-    extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, 
-	    integer *, doublereal *, ftnlen);
+    extern integer ilaenv_(integer *, char *, char *, integer *, integer *,
+            integer *, integer *, ftnlen, ftnlen);
+    extern doublereal zlange_(char *, integer *, integer *, doublecomplex *,
+            integer *, doublereal *, ftnlen);
     doublereal bignum;
     integer ijobvl, iright;
-    extern /* Subroutine */ int zgghrd_(char *, char *, integer *, integer *, 
-	    integer *, doublecomplex *, integer *, doublecomplex *, integer *,
-	     doublecomplex *, integer *, doublecomplex *, integer *, integer *
-	    , ftnlen, ftnlen), zlascl_(char *, integer *, integer *, 
-	    doublereal *, doublereal *, integer *, integer *, doublecomplex *,
-	     integer *, integer *, ftnlen);
+    extern /* Subroutine */ int zgghrd_(char *, char *, integer *, integer *,
+            integer *, doublecomplex *, integer *, doublecomplex *, integer *,
+             doublecomplex *, integer *, doublecomplex *, integer *, integer *
+            , ftnlen, ftnlen), zlascl_(char *, integer *, integer *,
+            doublereal *, doublereal *, integer *, integer *, doublecomplex *,
+             integer *, integer *, ftnlen);
     integer ijobvr;
     extern /* Subroutine */ int zgeqrf_(integer *, integer *, doublecomplex *,
-	     integer *, doublecomplex *, doublecomplex *, integer *, integer *
-	    );
+             integer *, doublecomplex *, doublecomplex *, integer *, integer *
+            );
     doublereal anrmto;
     integer lwkmin;
     logical lastsl;
     doublereal bnrmto;
-    extern /* Subroutine */ int zlacpy_(char *, integer *, integer *, 
-	    doublecomplex *, integer *, doublecomplex *, integer *, ftnlen), 
-	    zlaset_(char *, integer *, integer *, doublecomplex *, 
-	    doublecomplex *, doublecomplex *, integer *, ftnlen), zhgeqz_(
-	    char *, char *, char *, integer *, integer *, integer *, 
-	    doublecomplex *, integer *, doublecomplex *, integer *, 
-	    doublecomplex *, doublecomplex *, doublecomplex *, integer *, 
-	    doublecomplex *, integer *, doublecomplex *, integer *, 
-	    doublereal *, integer *, ftnlen, ftnlen, ftnlen), ztgsen_(integer 
-	    *, logical *, logical *, logical *, integer *, doublecomplex *, 
-	    integer *, doublecomplex *, integer *, doublecomplex *, 
-	    doublecomplex *, doublecomplex *, integer *, doublecomplex *, 
-	    integer *, integer *, doublereal *, doublereal *, doublereal *, 
-	    doublecomplex *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int zlacpy_(char *, integer *, integer *,
+            doublecomplex *, integer *, doublecomplex *, integer *, ftnlen),
+            zlaset_(char *, integer *, integer *, doublecomplex *,
+            doublecomplex *, doublecomplex *, integer *, ftnlen), zhgeqz_(
+            char *, char *, char *, integer *, integer *, integer *,
+            doublecomplex *, integer *, doublecomplex *, integer *,
+            doublecomplex *, doublecomplex *, doublecomplex *, integer *,
+            doublecomplex *, integer *, doublecomplex *, integer *,
+            doublereal *, integer *, ftnlen, ftnlen, ftnlen), ztgsen_(integer
+            *, logical *, logical *, logical *, integer *, doublecomplex *,
+            integer *, doublecomplex *, integer *, doublecomplex *,
+            doublecomplex *, doublecomplex *, integer *, doublecomplex *,
+            integer *, integer *, doublereal *, doublereal *, doublereal *,
+            doublecomplex *, integer *, integer *, integer *, integer *);
     doublereal smlnum;
     logical wantst, lquery;
     integer lwkopt;
-    extern /* Subroutine */ int zungqr_(integer *, integer *, integer *, 
-	    doublecomplex *, integer *, doublecomplex *, doublecomplex *, 
-	    integer *, integer *), zunmqr_(char *, char *, integer *, integer 
-	    *, integer *, doublecomplex *, integer *, doublecomplex *, 
-	    doublecomplex *, integer *, doublecomplex *, integer *, integer *,
-	     ftnlen, ftnlen);
+    extern /* Subroutine */ int zungqr_(integer *, integer *, integer *,
+            doublecomplex *, integer *, doublecomplex *, doublecomplex *,
+            integer *, integer *), zunmqr_(char *, char *, integer *, integer
+            *, integer *, doublecomplex *, integer *, doublecomplex *,
+            doublecomplex *, integer *, doublecomplex *, integer *, integer *,
+             ftnlen, ftnlen);
 
 
 /*  -- LAPACK driver routine (version 3.2) -- */
@@ -327,42 +328,42 @@ static integer c_n1 = -1;
     /* Function Body */
     if (lsame_(jobvsl, "N", (ftnlen)1, (ftnlen)1)) {
 /*<          IJOBVL = 1 >*/
-	ijobvl = 1;
+        ijobvl = 1;
 /*<          ILVSL = .FALSE. >*/
-	ilvsl = FALSE_;
+        ilvsl = FALSE_;
 /*<       ELSE IF( LSAME( JOBVSL, 'V' ) ) THEN >*/
     } else if (lsame_(jobvsl, "V", (ftnlen)1, (ftnlen)1)) {
 /*<          IJOBVL = 2 >*/
-	ijobvl = 2;
+        ijobvl = 2;
 /*<          ILVSL = .TRUE. >*/
-	ilvsl = TRUE_;
+        ilvsl = TRUE_;
 /*<       ELSE >*/
     } else {
 /*<          IJOBVL = -1 >*/
-	ijobvl = -1;
+        ijobvl = -1;
 /*<          ILVSL = .FALSE. >*/
-	ilvsl = FALSE_;
+        ilvsl = FALSE_;
 /*<       END IF >*/
     }
 
 /*<       IF( LSAME( JOBVSR, 'N' ) ) THEN >*/
     if (lsame_(jobvsr, "N", (ftnlen)1, (ftnlen)1)) {
 /*<          IJOBVR = 1 >*/
-	ijobvr = 1;
+        ijobvr = 1;
 /*<          ILVSR = .FALSE. >*/
-	ilvsr = FALSE_;
+        ilvsr = FALSE_;
 /*<       ELSE IF( LSAME( JOBVSR, 'V' ) ) THEN >*/
     } else if (lsame_(jobvsr, "V", (ftnlen)1, (ftnlen)1)) {
 /*<          IJOBVR = 2 >*/
-	ijobvr = 2;
+        ijobvr = 2;
 /*<          ILVSR = .TRUE. >*/
-	ilvsr = TRUE_;
+        ilvsr = TRUE_;
 /*<       ELSE >*/
     } else {
 /*<          IJOBVR = -1 >*/
-	ijobvr = -1;
+        ijobvr = -1;
 /*<          ILVSR = .FALSE. >*/
-	ilvsr = FALSE_;
+        ilvsr = FALSE_;
 /*<       END IF >*/
     }
 
@@ -378,35 +379,35 @@ static integer c_n1 = -1;
 /*<       IF( IJOBVL.LE.0 ) THEN >*/
     if (ijobvl <= 0) {
 /*<          INFO = -1 >*/
-	*info = -1;
+        *info = -1;
 /*<       ELSE IF( IJOBVR.LE.0 ) THEN >*/
     } else if (ijobvr <= 0) {
 /*<          INFO = -2 >*/
-	*info = -2;
+        *info = -2;
 /*<       ELSE IF( ( .NOT.WANTST ) .AND. ( .NOT.LSAME( SORT, 'N' ) ) ) THEN >*/
     } else if (! wantst && ! lsame_(sort, "N", (ftnlen)1, (ftnlen)1)) {
 /*<          INFO = -3 >*/
-	*info = -3;
+        *info = -3;
 /*<       ELSE IF( N.LT.0 ) THEN >*/
     } else if (*n < 0) {
 /*<          INFO = -5 >*/
-	*info = -5;
+        *info = -5;
 /*<       ELSE IF( LDA.LT.MAX( 1, N ) ) THEN >*/
     } else if (*lda < max(1,*n)) {
 /*<          INFO = -7 >*/
-	*info = -7;
+        *info = -7;
 /*<       ELSE IF( LDB.LT.MAX( 1, N ) ) THEN >*/
     } else if (*ldb < max(1,*n)) {
 /*<          INFO = -9 >*/
-	*info = -9;
+        *info = -9;
 /*<       ELSE IF( LDVSL.LT.1 .OR. ( ILVSL .AND. LDVSL.LT.N ) ) THEN >*/
     } else if (*ldvsl < 1 || ilvsl && *ldvsl < *n) {
 /*<          INFO = -14 >*/
-	*info = -14;
+        *info = -14;
 /*<       ELSE IF( LDVSR.LT.1 .OR. ( ILVSR .AND. LDVSR.LT.N ) ) THEN >*/
     } else if (*ldvsr < 1 || ilvsr && *ldvsr < *n) {
 /*<          INFO = -16 >*/
-	*info = -16;
+        *info = -16;
 /*<       END IF >*/
     }
 
@@ -421,48 +422,48 @@ static integer c_n1 = -1;
     if (*info == 0) {
 /*<          LWKMIN = MAX( 1, 2*N ) >*/
 /* Computing MAX */
-	i__1 = 1, i__2 = *n << 1;
-	lwkmin = max(i__1,i__2);
+        i__1 = 1, i__2 = *n << 1;
+        lwkmin = max(i__1,i__2);
 /*<          LWKOPT = MAX( 1, N + N*ILAENV( 1, 'ZGEQRF', ' ', N, 1, N, 0 ) ) >*/
 /* Computing MAX */
-	i__1 = 1, i__2 = *n + *n * ilaenv_(&c__1, "ZGEQRF", " ", n, &c__1, n, 
-		&c__0, (ftnlen)6, (ftnlen)1);
-	lwkopt = max(i__1,i__2);
+        i__1 = 1, i__2 = *n + *n * ilaenv_(&c__1, "ZGEQRF", " ", n, &c__1, n,
+                &c__0, (ftnlen)6, (ftnlen)1);
+        lwkopt = max(i__1,i__2);
 /*<    >*/
 /* Computing MAX */
-	i__1 = lwkopt, i__2 = *n + *n * ilaenv_(&c__1, "ZUNMQR", " ", n, &
-		c__1, n, &c_n1, (ftnlen)6, (ftnlen)1);
-	lwkopt = max(i__1,i__2);
+        i__1 = lwkopt, i__2 = *n + *n * ilaenv_(&c__1, "ZUNMQR", " ", n, &
+                c__1, n, &c_n1, (ftnlen)6, (ftnlen)1);
+        lwkopt = max(i__1,i__2);
 /*<          IF( ILVSL ) THEN >*/
-	if (ilvsl) {
+        if (ilvsl) {
 /*<    >*/
 /* Computing MAX */
-	    i__1 = lwkopt, i__2 = *n + *n * ilaenv_(&c__1, "ZUNGQR", " ", n, &
-		    c__1, n, &c_n1, (ftnlen)6, (ftnlen)1);
-	    lwkopt = max(i__1,i__2);
+            i__1 = lwkopt, i__2 = *n + *n * ilaenv_(&c__1, "ZUNGQR", " ", n, &
+                    c__1, n, &c_n1, (ftnlen)6, (ftnlen)1);
+            lwkopt = max(i__1,i__2);
 /*<          END IF >*/
-	}
+        }
 /*<          WORK( 1 ) = LWKOPT >*/
-	work[1].r = (doublereal) lwkopt, work[1].i = 0.;
+        work[1].r = (doublereal) lwkopt, work[1].i = 0.;
 
 /*<    >*/
-	if (*lwork < lwkmin && ! lquery) {
-	    *info = -18;
-	}
+        if (*lwork < lwkmin && ! lquery) {
+            *info = -18;
+        }
 /*<       END IF >*/
     }
 
 /*<       IF( INFO.NE.0 ) THEN >*/
     if (*info != 0) {
 /*<          CALL XERBLA( 'ZGGES ', -INFO ) >*/
-	i__1 = -(*info);
-	xerbla_("ZGGES ", &i__1, (ftnlen)6);
+        i__1 = -(*info);
+        xerbla_("ZGGES ", &i__1, (ftnlen)6);
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       ELSE IF( LQUERY ) THEN >*/
     } else if (lquery) {
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
@@ -471,9 +472,9 @@ static integer c_n1 = -1;
 /*<       IF( N.EQ.0 ) THEN >*/
     if (*n == 0) {
 /*<          SDIM = 0 >*/
-	*sdim = 0;
+        *sdim = 0;
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
@@ -501,22 +502,22 @@ static integer c_n1 = -1;
 /*<       IF( ANRM.GT.ZERO .AND. ANRM.LT.SMLNUM ) THEN >*/
     if (anrm > 0. && anrm < smlnum) {
 /*<          ANRMTO = SMLNUM >*/
-	anrmto = smlnum;
+        anrmto = smlnum;
 /*<          ILASCL = .TRUE. >*/
-	ilascl = TRUE_;
+        ilascl = TRUE_;
 /*<       ELSE IF( ANRM.GT.BIGNUM ) THEN >*/
     } else if (anrm > bignum) {
 /*<          ANRMTO = BIGNUM >*/
-	anrmto = bignum;
+        anrmto = bignum;
 /*<          ILASCL = .TRUE. >*/
-	ilascl = TRUE_;
+        ilascl = TRUE_;
 /*<       END IF >*/
     }
 
 /*<    >*/
     if (ilascl) {
-	zlascl_("G", &c__0, &c__0, &anrm, &anrmto, n, n, &a[a_offset], lda, &
-		ierr, (ftnlen)1);
+        zlascl_("G", &c__0, &c__0, &anrm, &anrmto, n, n, &a[a_offset], lda, &
+                ierr, (ftnlen)1);
     }
 
 /*     Scale B if max element outside range [SMLNUM,BIGNUM] */
@@ -528,22 +529,22 @@ static integer c_n1 = -1;
 /*<       IF( BNRM.GT.ZERO .AND. BNRM.LT.SMLNUM ) THEN >*/
     if (bnrm > 0. && bnrm < smlnum) {
 /*<          BNRMTO = SMLNUM >*/
-	bnrmto = smlnum;
+        bnrmto = smlnum;
 /*<          ILBSCL = .TRUE. >*/
-	ilbscl = TRUE_;
+        ilbscl = TRUE_;
 /*<       ELSE IF( BNRM.GT.BIGNUM ) THEN >*/
     } else if (bnrm > bignum) {
 /*<          BNRMTO = BIGNUM >*/
-	bnrmto = bignum;
+        bnrmto = bignum;
 /*<          ILBSCL = .TRUE. >*/
-	ilbscl = TRUE_;
+        ilbscl = TRUE_;
 /*<       END IF >*/
     }
 
 /*<    >*/
     if (ilbscl) {
-	zlascl_("G", &c__0, &c__0, &bnrm, &bnrmto, n, n, &b[b_offset], ldb, &
-		ierr, (ftnlen)1);
+        zlascl_("G", &c__0, &c__0, &bnrm, &bnrmto, n, n, &b[b_offset], ldb, &
+                ierr, (ftnlen)1);
     }
 
 /*     Permute the matrix to make it more nearly triangular */
@@ -557,7 +558,7 @@ static integer c_n1 = -1;
     irwrk = iright + *n;
 /*<    >*/
     zggbal_("P", n, &a[a_offset], lda, &b[b_offset], ldb, &ilo, &ihi, &rwork[
-	    ileft], &rwork[iright], &rwork[irwrk], &ierr, (ftnlen)1);
+            ileft], &rwork[iright], &rwork[irwrk], &ierr, (ftnlen)1);
 
 /*     Reduce B to triangular form (QR decomposition of B) */
 /*     (Complex Workspace: need N, prefer N*NB) */
@@ -573,7 +574,7 @@ static integer c_n1 = -1;
 /*<    >*/
     i__1 = *lwork + 1 - iwrk;
     zgeqrf_(&irows, &icols, &b[ilo + ilo * b_dim1], ldb, &work[itau], &work[
-	    iwrk], &i__1, &ierr);
+            iwrk], &i__1, &ierr);
 
 /*     Apply the orthogonal transformation to matrix A */
 /*     (Complex Workspace: need N, prefer N*NB) */
@@ -581,8 +582,8 @@ static integer c_n1 = -1;
 /*<    >*/
     i__1 = *lwork + 1 - iwrk;
     zunmqr_("L", "C", &irows, &icols, &irows, &b[ilo + ilo * b_dim1], ldb, &
-	    work[itau], &a[ilo + ilo * a_dim1], lda, &work[iwrk], &i__1, &
-	    ierr, (ftnlen)1, (ftnlen)1);
+            work[itau], &a[ilo + ilo * a_dim1], lda, &work[iwrk], &i__1, &
+            ierr, (ftnlen)1, (ftnlen)1);
 
 /*     Initialize VSL */
 /*     (Complex Workspace: need N, prefer N*NB) */
@@ -590,21 +591,21 @@ static integer c_n1 = -1;
 /*<       IF( ILVSL ) THEN >*/
     if (ilvsl) {
 /*<          CALL ZLASET( 'Full', N, N, CZERO, CONE, VSL, LDVSL ) >*/
-	zlaset_("Full", n, n, &c_b1, &c_b2, &vsl[vsl_offset], ldvsl, (ftnlen)
-		4);
+        zlaset_("Full", n, n, &c_b1, &c_b2, &vsl[vsl_offset], ldvsl, (ftnlen)
+                4);
 /*<          IF( IROWS.GT.1 ) THEN >*/
-	if (irows > 1) {
+        if (irows > 1) {
 /*<    >*/
-	    i__1 = irows - 1;
-	    i__2 = irows - 1;
-	    zlacpy_("L", &i__1, &i__2, &b[ilo + 1 + ilo * b_dim1], ldb, &vsl[
-		    ilo + 1 + ilo * vsl_dim1], ldvsl, (ftnlen)1);
+            i__1 = irows - 1;
+            i__2 = irows - 1;
+            zlacpy_("L", &i__1, &i__2, &b[ilo + 1 + ilo * b_dim1], ldb, &vsl[
+                    ilo + 1 + ilo * vsl_dim1], ldvsl, (ftnlen)1);
 /*<          END IF >*/
-	}
+        }
 /*<    >*/
-	i__1 = *lwork + 1 - iwrk;
-	zungqr_(&irows, &irows, &irows, &vsl[ilo + ilo * vsl_dim1], ldvsl, &
-		work[itau], &work[iwrk], &i__1, &ierr);
+        i__1 = *lwork + 1 - iwrk;
+        zungqr_(&irows, &irows, &irows, &vsl[ilo + ilo * vsl_dim1], ldvsl, &
+                work[itau], &work[iwrk], &i__1, &ierr);
 /*<       END IF >*/
     }
 
@@ -612,17 +613,17 @@ static integer c_n1 = -1;
 
 /*<    >*/
     if (ilvsr) {
-	zlaset_("Full", n, n, &c_b1, &c_b2, &vsr[vsr_offset], ldvsr, (ftnlen)
-		4);
+        zlaset_("Full", n, n, &c_b1, &c_b2, &vsr[vsr_offset], ldvsr, (ftnlen)
+                4);
     }
 
 /*     Reduce to generalized Hessenberg form */
 /*     (Workspace: none needed) */
 
 /*<    >*/
-    zgghrd_(jobvsl, jobvsr, n, &ilo, &ihi, &a[a_offset], lda, &b[b_offset], 
-	    ldb, &vsl[vsl_offset], ldvsl, &vsr[vsr_offset], ldvsr, &ierr, (
-	    ftnlen)1, (ftnlen)1);
+    zgghrd_(jobvsl, jobvsr, n, &ilo, &ihi, &a[a_offset], lda, &b[b_offset],
+            ldb, &vsl[vsl_offset], ldvsl, &vsr[vsr_offset], ldvsr, &ierr, (
+            ftnlen)1, (ftnlen)1);
 
 /*<       SDIM = 0 >*/
     *sdim = 0;
@@ -636,27 +637,27 @@ static integer c_n1 = -1;
 /*<    >*/
     i__1 = *lwork + 1 - iwrk;
     zhgeqz_("S", jobvsl, jobvsr, n, &ilo, &ihi, &a[a_offset], lda, &b[
-	    b_offset], ldb, &alpha[1], &beta[1], &vsl[vsl_offset], ldvsl, &
-	    vsr[vsr_offset], ldvsr, &work[iwrk], &i__1, &rwork[irwrk], &ierr, 
-	    (ftnlen)1, (ftnlen)1, (ftnlen)1);
+            b_offset], ldb, &alpha[1], &beta[1], &vsl[vsl_offset], ldvsl, &
+            vsr[vsr_offset], ldvsr, &work[iwrk], &i__1, &rwork[irwrk], &ierr,
+            (ftnlen)1, (ftnlen)1, (ftnlen)1);
 /*<       IF( IERR.NE.0 ) THEN >*/
     if (ierr != 0) {
 /*<          IF( IERR.GT.0 .AND. IERR.LE.N ) THEN >*/
-	if (ierr > 0 && ierr <= *n) {
+        if (ierr > 0 && ierr <= *n) {
 /*<             INFO = IERR >*/
-	    *info = ierr;
+            *info = ierr;
 /*<          ELSE IF( IERR.GT.N .AND. IERR.LE.2*N ) THEN >*/
-	} else if (ierr > *n && ierr <= *n << 1) {
+        } else if (ierr > *n && ierr <= *n << 1) {
 /*<             INFO = IERR - N >*/
-	    *info = ierr - *n;
+            *info = ierr - *n;
 /*<          ELSE >*/
-	} else {
+        } else {
 /*<             INFO = N + 1 >*/
-	    *info = *n + 1;
+            *info = *n + 1;
 /*<          END IF >*/
-	}
+        }
 /*<          GO TO 30 >*/
-	goto L30;
+        goto L30;
 /*<       END IF >*/
     }
 
@@ -669,37 +670,37 @@ static integer c_n1 = -1;
 /*        Undo scaling on eigenvalues before selecting */
 
 /*<    >*/
-	if (ilascl) {
-	    zlascl_("G", &c__0, &c__0, &anrm, &anrmto, n, &c__1, &alpha[1], n,
-		     &ierr, (ftnlen)1);
-	}
+        if (ilascl) {
+            zlascl_("G", &c__0, &c__0, &anrm, &anrmto, n, &c__1, &alpha[1], n,
+                     &ierr, (ftnlen)1);
+        }
 /*<    >*/
-	if (ilbscl) {
-	    zlascl_("G", &c__0, &c__0, &bnrm, &bnrmto, n, &c__1, &beta[1], n, 
-		    &ierr, (ftnlen)1);
-	}
+        if (ilbscl) {
+            zlascl_("G", &c__0, &c__0, &bnrm, &bnrmto, n, &c__1, &beta[1], n,
+                    &ierr, (ftnlen)1);
+        }
 
 /*        Select eigenvalues */
 
 /*<          DO 10 I = 1, N >*/
-	i__1 = *n;
-	for (i__ = 1; i__ <= i__1; ++i__) {
+        i__1 = *n;
+        for (i__ = 1; i__ <= i__1; ++i__) {
 /*<             BWORK( I ) = SELCTG( ALPHA( I ), BETA( I ) ) >*/
-	    bwork[i__] = (*selctg)(&alpha[i__], &beta[i__]);
+            bwork[i__] = (*selctg)(&alpha[i__], &beta[i__]);
 /*<    10    CONTINUE >*/
 /* L10: */
-	}
+        }
 
 /*<    >*/
-	i__1 = *lwork - iwrk + 1;
-	ztgsen_(&c__0, &ilvsl, &ilvsr, &bwork[1], n, &a[a_offset], lda, &b[
-		b_offset], ldb, &alpha[1], &beta[1], &vsl[vsl_offset], ldvsl, 
-		&vsr[vsr_offset], ldvsr, sdim, &pvsl, &pvsr, dif, &work[iwrk],
-		 &i__1, idum, &c__1, &ierr);
+        i__1 = *lwork - iwrk + 1;
+        ztgsen_(&c__0, &ilvsl, &ilvsr, &bwork[1], n, &a[a_offset], lda, &b[
+                b_offset], ldb, &alpha[1], &beta[1], &vsl[vsl_offset], ldvsl,
+                &vsr[vsr_offset], ldvsr, sdim, &pvsl, &pvsr, dif, &work[iwrk],
+                &i__1, idum, &c__1, &ierr);
 /*<    >*/
-	if (ierr == 1) {
-	    *info = *n + 3;
-	}
+        if (ierr == 1) {
+            *info = *n + 3;
+        }
 
 /*<       END IF >*/
     }
@@ -709,13 +710,13 @@ static integer c_n1 = -1;
 
 /*<    >*/
     if (ilvsl) {
-	zggbak_("P", "L", n, &ilo, &ihi, &rwork[ileft], &rwork[iright], n, &
-		vsl[vsl_offset], ldvsl, &ierr, (ftnlen)1, (ftnlen)1);
+        zggbak_("P", "L", n, &ilo, &ihi, &rwork[ileft], &rwork[iright], n, &
+                vsl[vsl_offset], ldvsl, &ierr, (ftnlen)1, (ftnlen)1);
     }
 /*<    >*/
     if (ilvsr) {
-	zggbak_("P", "R", n, &ilo, &ihi, &rwork[ileft], &rwork[iright], n, &
-		vsr[vsr_offset], ldvsr, &ierr, (ftnlen)1, (ftnlen)1);
+        zggbak_("P", "R", n, &ilo, &ihi, &rwork[ileft], &rwork[iright], n, &
+                vsr[vsr_offset], ldvsr, &ierr, (ftnlen)1, (ftnlen)1);
     }
 
 /*     Undo scaling */
@@ -723,22 +724,22 @@ static integer c_n1 = -1;
 /*<       IF( ILASCL ) THEN >*/
     if (ilascl) {
 /*<          CALL ZLASCL( 'U', 0, 0, ANRMTO, ANRM, N, N, A, LDA, IERR ) >*/
-	zlascl_("U", &c__0, &c__0, &anrmto, &anrm, n, n, &a[a_offset], lda, &
-		ierr, (ftnlen)1);
+        zlascl_("U", &c__0, &c__0, &anrmto, &anrm, n, n, &a[a_offset], lda, &
+                ierr, (ftnlen)1);
 /*<          CALL ZLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHA, N, IERR ) >*/
-	zlascl_("G", &c__0, &c__0, &anrmto, &anrm, n, &c__1, &alpha[1], n, &
-		ierr, (ftnlen)1);
+        zlascl_("G", &c__0, &c__0, &anrmto, &anrm, n, &c__1, &alpha[1], n, &
+                ierr, (ftnlen)1);
 /*<       END IF >*/
     }
 
 /*<       IF( ILBSCL ) THEN >*/
     if (ilbscl) {
 /*<          CALL ZLASCL( 'U', 0, 0, BNRMTO, BNRM, N, N, B, LDB, IERR ) >*/
-	zlascl_("U", &c__0, &c__0, &bnrmto, &bnrm, n, n, &b[b_offset], ldb, &
-		ierr, (ftnlen)1);
+        zlascl_("U", &c__0, &c__0, &bnrmto, &bnrm, n, n, &b[b_offset], ldb, &
+                ierr, (ftnlen)1);
 /*<          CALL ZLASCL( 'G', 0, 0, BNRMTO, BNRM, N, 1, BETA, N, IERR ) >*/
-	zlascl_("G", &c__0, &c__0, &bnrmto, &bnrm, n, &c__1, &beta[1], n, &
-		ierr, (ftnlen)1);
+        zlascl_("G", &c__0, &c__0, &bnrmto, &bnrm, n, &c__1, &beta[1], n, &
+                ierr, (ftnlen)1);
 /*<       END IF >*/
     }
 
@@ -748,27 +749,27 @@ static integer c_n1 = -1;
 /*        Check if reordering is correct */
 
 /*<          LASTSL = .TRUE. >*/
-	lastsl = TRUE_;
+        lastsl = TRUE_;
 /*<          SDIM = 0 >*/
-	*sdim = 0;
+        *sdim = 0;
 /*<          DO 20 I = 1, N >*/
-	i__1 = *n;
-	for (i__ = 1; i__ <= i__1; ++i__) {
+        i__1 = *n;
+        for (i__ = 1; i__ <= i__1; ++i__) {
 /*<             CURSL = SELCTG( ALPHA( I ), BETA( I ) ) >*/
-	    cursl = (*selctg)(&alpha[i__], &beta[i__]);
+            cursl = (*selctg)(&alpha[i__], &beta[i__]);
 /*<    >*/
-	    if (cursl) {
-		++(*sdim);
-	    }
+            if (cursl) {
+                ++(*sdim);
+            }
 /*<    >*/
-	    if (cursl && ! lastsl) {
-		*info = *n + 2;
-	    }
+            if (cursl && ! lastsl) {
+                *info = *n + 2;
+            }
 /*<             LASTSL = CURSL >*/
-	    lastsl = cursl;
+            lastsl = cursl;
 /*<    20    CONTINUE >*/
 /* L20: */
-	}
+        }
 
 /*<       END IF >*/
     }
@@ -788,5 +789,5 @@ L30:
 } /* zgges_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif
