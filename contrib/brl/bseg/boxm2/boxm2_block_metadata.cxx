@@ -1,4 +1,6 @@
 #include "boxm2_block_metadata.h"
+//:
+// \file
 #include <boxm2/boxm2_data_traits.h>
 
 //: Calculates the number of data cells alloctaed given max_mb
@@ -30,6 +32,6 @@ long boxm2_block_metadata::num_data_cells()
             <<"**************************************************\n";
     return 0;
   }
-  return num_buffers * BUFF_LENGTH; 
+  return num_buffers * BUFF_LENGTH;
 }
 
