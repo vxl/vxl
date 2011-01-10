@@ -177,6 +177,9 @@ SOURCE=.\vnl_lbfgsb.cxx
 SOURCE=.\vnl_sparse_lm.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vnl_complex_generalized_schur.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vnl_adjugate+double-.cxx
 # End Source File
 # Begin Source File
@@ -532,6 +535,9 @@ SOURCE=.\vnl_svd_fixed.h
 # End Source File
 # Begin Source File
 SOURCE=.\vnl_svd_fixed.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_complex_generalized_schur.h
 # End Source File
 # End Group
 # End Target

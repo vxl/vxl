@@ -192,6 +192,9 @@ SOURCE=.\test_sparse_lm.cxx
 # Begin Source File
 SOURCE=.\test_svd_fixed.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_complex_algo.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
