@@ -41,7 +41,7 @@ class boxm2_opencl_update_process : public boxm2_opencl_process_base
   private:
 
     //: render kernel (other processes may have many kernels
-    vcl_vector<bocl_kernel> update_kernels_;
+    vcl_vector<bocl_kernel*> update_kernels_;
 
     //: INPUT IMAGE: 
     bocl_mem* image_;
