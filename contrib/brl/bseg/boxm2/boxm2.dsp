@@ -107,6 +107,9 @@ SOURCE=.\boxm2_data_base.cxx
 SOURCE=.\boxm2_util.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\boxm2_block_metadata.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vbl_array_3d+vnl_vector_fixed+ushort.2--.cxx
 # End Source File
 # Begin Source File

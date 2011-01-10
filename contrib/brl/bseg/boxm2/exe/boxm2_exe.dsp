@@ -106,6 +106,9 @@ SOURCE=.\boxm2_render_view.cxx
 # Begin Source File
 SOURCE=.\boxm2_rep_scene.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\boxm2_update_exe.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
