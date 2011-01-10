@@ -161,7 +161,7 @@ allows the f2c-converted code to compile without manual conversion to
 const-correctness.  The macro is defined to "const" when compiling
 other sources which enforces const-correctness for code calling the
 routines.  Since the interface is extern "C" code, the symbol names
-are not changed by the precense or absence of const.
+are not changed by the presence or absence of const.
 
 svn -q commit -m "Manually documented prototype and added v3p_netlib_const to appropriate arguments."
 
