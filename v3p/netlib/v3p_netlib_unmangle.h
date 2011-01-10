@@ -1,4 +1,4 @@
-/* This header undefines mangled names defined by v3p_netlib_mangle.h.
+/* This header undefines mangled names defined by v3p_
    There are purposely no include blockers so translation units can
    mangle/unmangle repeatedly. */
 
@@ -338,3 +338,29 @@
 #undef zung2r_
 #undef zunghr_
 #undef zungqr_
+#undef ztgsyl_
+#undef zrot_
+#undef zlatdf_
+#undef zlacn2_
+#undef ztgsy2_
+#undef ztgexc_
+#undef zggbak_
+#undef zgetc2_
+#undef zhgeqz_
+#undef zgges_
+#undef zlaswp_
+#undef zdrscl_
+#undef zlartg_
+#undef zggbal_
+#undef zgeqr2_
+#undef zgecon_
+#undef zunmqr_
+#undef zunm2r_
+#undef zgeqrf_
+#undef ztgex2_
+#undef zgesc2_
+#undef ztgsen_
+#undef zgghrd_
+#undef zgeru_
+#undef izmax1_
+#undef dzsum1_
