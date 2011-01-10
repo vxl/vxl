@@ -15,6 +15,7 @@ MANPAGE_SOURCES += dll.h
 # vnl_fft                          dgpfa_ dsetgpfa_ gpfa_ setgpfa_
 # vnl_generalized_eigensystem      rsg_
 # vnl_generalized_schur            dgges_
+# vnl_complex_generalized_schur    zgges_
 # vnl_lbfgs                        lbfgs_ lb3_
 # vnl_levenberg_marquardt          lmder1_ lmdif_
 # vnl_lsqr                         lsqr_
@@ -43,7 +44,7 @@ MANPAGE_SOURCES += vnl_symmetric_eigensystem.txx
 SOURCES += vnl_generalized_eigensystem.cxx
 SOURCES += vnl_sparse_symmetric_eigensystem.cxx
 SOURCES += vnl_generalized_schur.cxx
-#SOURCES += $(wildcard vnl_jordan_normal_form.cxx)
+SOURCES += vnl_complex_generalized_schur.cxx
 MANPAGE_SOURCES += vnl_svd_economy.txx
 MANPAGE_SOURCES += vnl_svd_fixed.txx
 
