@@ -364,3 +364,7 @@
 #undef zgeru_
 #undef izmax1_
 #undef dzsum1_
+#undef zgees_
+#undef ztrexc_
+#undef ztrsen_
+#undef ztrsyl_

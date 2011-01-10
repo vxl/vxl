@@ -373,3 +373,7 @@ nm libv3p_netlib.a |grep " [TR] "
 #define zgeru_ v3p_netlib_zgeru_
 #define izmax1_ v3p_netlib_izmax1_
 #define dzsum1_ v3p_netlib_dzsum1_
+#define zgees_ v3p_netlib_zgees_
+#define ztrexc_ v3p_netlib_ztrexc_
+#define ztrsen_ v3p_netlib_ztrsen_
+#define ztrsyl_ v3p_netlib_ztrsyl_

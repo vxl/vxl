@@ -264,6 +264,10 @@ SET(V3P_NETLIB_lapack_SOURCES
      lapack/complex16/zgesc2.c lapack/complex16/zgesc2.h
      lapack/complex16/ztgsen.c lapack/complex16/ztgsen.h
      lapack/complex16/zgghrd.c lapack/complex16/zgghrd.h
+     lapack/complex16/zgees.c lapack/complex16/zgees.h
+     lapack/complex16/ztrexc.c lapack/complex16/ztrexc.h
+     lapack/complex16/ztrsen.c lapack/complex16/ztrsen.h
+     lapack/complex16/ztrsyl.c lapack/complex16/ztrsyl.h
      lapack/double/dgecon.c lapack/double/dgecon.h
      lapack/double/dgeqr2.c lapack/double/dgeqr2.h
      lapack/double/dgeqrf.c lapack/double/dgeqrf.h
