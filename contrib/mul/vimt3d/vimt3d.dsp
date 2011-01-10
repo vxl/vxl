@@ -144,6 +144,9 @@ SOURCE=.\Templates/vimt3d_gaussian_pyramid_builder_3d+double-.cxx
 SOURCE=.\Templates/vimt3d_reconstruct_from_grid+double.double-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vimt3d_image_3d_of+uint-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vimt3d_transform_3d.cxx
 # End Source File
 # Begin Source File

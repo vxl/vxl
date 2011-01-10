@@ -115,6 +115,12 @@ SOURCE=.\Templates/boxm2_array_2d+int-.cxx
 # Begin Source File
 SOURCE=.\Templates/boxm2_array_2d+vnl_vector_fixed+ushort.2--.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/brdb_value_t+boxm2_block_id_sptr-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+boxm2_block_id-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

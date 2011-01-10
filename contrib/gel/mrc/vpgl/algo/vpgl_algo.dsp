@@ -165,6 +165,9 @@ SOURCE=.\vpgl_camera_from_box.cxx
 SOURCE=.\vpgl_camera_bounds.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vpgl_bundle_rolling_shutter_adjust.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vpgl_list+vgl_h_matrix_2d+double--.cxx
 # End Source File
 # Begin Source File
@@ -253,6 +256,9 @@ SOURCE=.\vpgl_camera_from_box.h
 # End Source File
 # Begin Source File
 SOURCE=.\vpgl_camera_bounds.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_bundle_rolling_shutter_adjust.h
 # End Source File
 # End Group
 # End Target

@@ -99,6 +99,9 @@ SOURCE=.\bvpl_scene_neighborhood_operator.cxx
 SOURCE=.\bvpl_scene_statistics.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\bvpl_discover_pca_kernels.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/bvpl_octree_sample+float-.cxx
 # End Source File
 # Begin Source File
@@ -160,6 +163,9 @@ SOURCE=.\bvpl_scene_neighborhood_operator.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvpl_scene_statistics.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvpl_discover_pca_kernels.h
 # End Source File
 # End Group
 # End Target

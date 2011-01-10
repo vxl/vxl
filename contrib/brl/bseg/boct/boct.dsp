@@ -99,6 +99,9 @@ SOURCE=.\boct_tree_cell.cxx
 SOURCE=.\boct_bit_tree.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\boct_bit_tree2.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/boct_loc_code+short-.cxx
 # End Source File
 # Begin Source File
@@ -166,6 +169,9 @@ SOURCE=.\boct_tree_cell_reader.txx
 # End Source File
 # Begin Source File
 SOURCE=.\boct_bit_tree.h
+# End Source File
+# Begin Source File
+SOURCE=.\boct_bit_tree2.h
 # End Source File
 # End Group
 # End Target

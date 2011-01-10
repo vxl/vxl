@@ -114,6 +114,9 @@ SOURCE=.\bil_compass_edge_detector.cxx
 SOURCE=.\bil_nms.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\bil_detect_blur_scale.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/bil_detect_ridges+float-.cxx
 # End Source File
 # Begin Source File
@@ -205,6 +208,9 @@ SOURCE=.\bil_nms.h
 # End Source File
 # Begin Source File
 SOURCE=.\bil_compass_edge_detector.h
+# End Source File
+# Begin Source File
+SOURCE=.\bil_detect_blur_scale.h
 # End Source File
 # End Group
 # End Target
