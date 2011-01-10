@@ -259,7 +259,6 @@ void boxm2_nn_cache::finish_async_data(vcl_string data_type)
     //if this block doesn't exist in the cache put it in (otherwise delete it)
     if ( data_map.find(iter->first) == data_map.end() ) {
       boxm2_block_id asid = iter->first;
-      vcl_cout<<"async data: "<<asid<<vcl_endl;
       data_map[iter->first] = iter->second;
     }
     else
@@ -310,24 +309,24 @@ vcl_string boxm2_nn_cache::to_string()
 {
   vcl_stringstream stream;
   stream << "boxm2_nn_cache:: scene dir="<<scene_dir_<<'\n'; 
-  stream << "    blocks: "; 
+  stream << "  blocks: "; 
   vcl_map<boxm2_block_id, boxm2_block*>::iterator blk_iter;
   for(blk_iter = cached_blocks_.begin(); blk_iter != cached_blocks_.end(); ++blk_iter) {
     boxm2_block_id id = blk_iter->first; 
-    stream << "(" << id << "," << blk_iter->second << ")";
+    stream << "(" << id /* << "," << blk_iter->second */ << ")  ";
   }
 
   vcl_map<vcl_string, vcl_map<boxm2_block_id, boxm2_data_base*> >::iterator dat_iter;
   for(dat_iter = cached_data_.begin(); dat_iter != cached_data_.end(); ++dat_iter)
   {
     vcl_string data_type = dat_iter->first; 
-    stream<< "\n" << "    data: "<<data_type<<" ";
+    stream<< "\n" << "  data: "<<data_type<<" ";
     vcl_map<boxm2_block_id, boxm2_data_base*> dmap = dat_iter->second;
     vcl_map<boxm2_block_id, boxm2_data_base*>::iterator it; 
     for(it = dmap.begin(); it != dmap.end(); ++it)
     {
       boxm2_block_id id = it->first;
-      stream<< "(" << id << "," <<it->second << ")"; 
+      stream<< "(" << id /*<< "," <<it->second */<< ")  "; 
     }
   }
   return stream.str(); 
