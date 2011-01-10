@@ -15,4 +15,4 @@ ADD_TEST( bbgm_pro_test_update_dist_image  ${EXECUTABLE_OUTPUT_PATH}/bbgm_pro_te
 #ADD_TEST( bbgm_pro_test_neighborhood_ops   ${EXECUTABLE_OUTPUT_PATH}/bbgm_pro_test_all test_neighborhood_ops )
 
 ADD_EXECUTABLE( bbgm_pro_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( bbgm_pro_test_include bbgm_pro bbgm)
+TARGET_LINK_LIBRARIES( bbgm_pro_test_include bbgm_pro bbgm sdet)

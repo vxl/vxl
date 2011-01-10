@@ -6,7 +6,7 @@ ADD_EXECUTABLE( vil_pro_test_all
   test_vil_crop_image_process.cxx
 )
 
-TARGET_LINK_LIBRARIES(vil_pro_test_all testlib vil vil_pro bprb)
+TARGET_LINK_LIBRARIES(vil_pro_test_all testlib vil_pro bprb sdet vil)
 
 ADD_TEST( bpro_vil_test_convert_to_n_planes_process ${EXECUTABLE_OUTPUT_PATH}/vil_pro_test_all test_vil_convert_to_n_planes_process )
 ADD_TEST( bpro_vil_test_crop_image_process          ${EXECUTABLE_OUTPUT_PATH}/vil_pro_test_all test_vil_crop_image_process )

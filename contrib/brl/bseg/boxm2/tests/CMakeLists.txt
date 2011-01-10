@@ -10,7 +10,8 @@ ADD_EXECUTABLE( boxm2_test_all
   test_utils.h  test_utils.cxx
  )
 
-TARGET_LINK_LIBRARIES( boxm2_test_all testlib boxm2 boxm2_io boxm2_basic vul vpl brdb vpgl_algo vpgl_pro vil_pro)
+TARGET_LINK_LIBRARIES( boxm2_test_all testlib boxm2 boxm2_io boxm2_basic boxm2_cpp brdb vpgl_algo vpgl_pro vil_pro sdet vul vpl )
+
 ADD_TEST( boxm2_test_scene               ${EXECUTABLE_OUTPUT_PATH}/boxm2_test_all  test_scene  )
 ADD_TEST( boxm2_test_cache               ${EXECUTABLE_OUTPUT_PATH}/boxm2_test_all  test_cache  )
 ADD_TEST( boxm2_test_io                  ${EXECUTABLE_OUTPUT_PATH}/boxm2_test_all  test_io  )
@@ -20,4 +21,4 @@ ADD_TEST( test_block                     ${EXECUTABLE_OUTPUT_PATH}/boxm2_test_al
 ADD_TEST( boxm2_test_cpp_render_process  ${EXECUTABLE_OUTPUT_PATH}/boxm2_test_all  test_cpp_render_process  )
 
 ADD_EXECUTABLE( boxm2_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( boxm2_test_include boxm2 )
+TARGET_LINK_LIBRARIES( boxm2_test_include boxm2 boxm2_io boxm2_cpp )
