@@ -12,8 +12,7 @@
 //   <none yet>
 // \endverbatim
 
-#include <vnl/vnl_random.h>
-#include <boxm2/boxm2_data_traits.h>
+#include <vnl/vnl_vector_fixed.h>
 
 class  boxm2_mog3_grey_processor
 {
