@@ -12,6 +12,7 @@ TESTS += test_binary_io.cxx
 TESTS += test_clone_tree.cxx
 TESTS += test_tree_cell_reader.cxx
 TESTS += test_bit_tree.cxx
+TESTS += test_bit_tree2.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 

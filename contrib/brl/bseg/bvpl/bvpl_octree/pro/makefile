@@ -13,6 +13,7 @@ SOURCES += processes/bvpl_scene_kernel_operator_process.cxx
 SOURCES += processes/bvpl_plane_propagate_process.cxx
 SOURCES += processes/bvpl_nonmax_supp_process.cxx
 SOURCES += processes/bvpl_compute_gauss_gradients.cxx
+SOURCES += processes/bvpl_discover_pca_features_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

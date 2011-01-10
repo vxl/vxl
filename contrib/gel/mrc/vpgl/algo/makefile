@@ -29,6 +29,7 @@ SOURCES += vpgl_ray_intersect.cxx
 SOURCES += vpgl_nitf_camera_coverage.cxx
 SOURCES += vpgl_camera_from_box.cxx
 SOURCES += vpgl_camera_bounds.cxx
+SOURCES += vpgl_bundle_rolling_shutter_adjust.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

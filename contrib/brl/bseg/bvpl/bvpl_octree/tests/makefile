@@ -3,8 +3,11 @@ include ../config.mk
 include $(VXLROOT)/core/testlib/config.mk
 
 TESTMAIN := test_driver.cxx
+SOURCES += test_utils.cxx
+
 TESTS += test_octree_kernel_operator.cxx
 TESTS += test_octree_neighbors.cxx
+TESTS += test_pca_kernels.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 

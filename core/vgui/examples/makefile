@@ -37,6 +37,7 @@ MINI_PROG_SOURCES += example_idle_processing.cxx
 MINI_PROG_SOURCES += example_text_windows.cxx
 MINI_PROG_SOURCES += example_slider.cxx
 MINI_PROG_SOURCES += click_points.cxx
+MINI_PROG_SOURCES += example_gllist_tableau.cxx
 
 PROGRAM := basic_app
 SOURCES += basic_app.cxx

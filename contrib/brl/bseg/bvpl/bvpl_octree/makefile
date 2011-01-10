@@ -4,6 +4,7 @@ LIBRARY := bvpl_octree
 
 SOURCES += bvpl_scene_neighborhood_operator.cxx
 SOURCES += bvpl_scene_statistics.cxx
+SOURCES += bvpl_discover_pca_kernels.cxx
 MANPAGE_SOURCES += bvpl_octree_vector_operator.h
 MANPAGE_SOURCES += bvpl_octree_vector_operator_impl.h
 MANPAGE_SOURCES += bvpl_octree_kernel_operator.h
