@@ -177,8 +177,8 @@ static void test_generalized_schur()
 {
   vnl_matrix<float> A(4,4,0.0f), B(4,4,0.0f), L(4,4,1.0f), R(4,4,1.0f);
   vnl_vector<float> ar(4,0.0f), ai(4,0.0f), b(4,0.0f);
-  vnl_generalized_schur(&A, &B, &ar, &ai, &b, &L, &R);
-  TEST("vnl_generalized_schur", true, true);
+  bool r = vnl_generalized_schur(&A, &B, &ar, &ai, &b, &L, &R);
+  TEST("vnl_generalized_schur", r, true);
 }
 
 void test_algo()
