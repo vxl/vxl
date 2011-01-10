@@ -19,7 +19,7 @@ IF(OPENCL_FOUND)
   AUX_SOURCE_DIRECTORY(Templates bocl_sources)
   ADD_LIBRARY(bocl ${bocl_sources} )
 
-  TARGET_LINK_LIBRARIES(bocl vnl vnl_algo vbl_io vpgl vgl vil vbl vul ${OPENCL_LIBRARIES})
+  TARGET_LINK_LIBRARIES(bocl brdb vnl vnl_algo vbl_io vpgl vgl vil vbl vul ${OPENCL_LIBRARIES})
 
 #tests
 SUBDIRS(tests)
