@@ -203,14 +203,14 @@ bool boxm2_block::init_empty_block(boxm2_block_metadata data)
   //6. 1d aray of trees_in_buffers
   ushort* treesCountBuff = (ushort*) (buffer_+bytes_read);
   trees_in_buffers_ = boxm2_array_1d<ushort>(num_buffers, treesCountBuff);
-  for (int i=0; i<trees_in_buffers_.size(); ++i)
+  for (unsigned int i=0; i<trees_in_buffers_.size(); ++i)
     trees_in_buffers_[i] = 0;
   bytes_read += sizeof(ushort) * num_buffers;
 
   //7. 1d array of mem pointers
   ushort2* memPtrsBuff = (ushort2*) (buffer_+bytes_read);
   mem_ptrs_ = boxm2_array_1d<ushort2>(num_buffers, memPtrsBuff);
-  for (int i=0; i<mem_ptrs_.size(); ++i) {
+  for (unsigned int i=0; i<mem_ptrs_.size(); ++i) {
     mem_ptrs_[i][0] = 0;
     mem_ptrs_[i][1] = 0;
   }
