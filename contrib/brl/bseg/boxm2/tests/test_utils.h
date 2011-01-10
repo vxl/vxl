@@ -42,6 +42,8 @@ void boxm2_test_utils::test_data_equivalence(boxm2_data<data_type>& a, boxm2_dat
   typedef typename boxm2_data<data_type>::datatype dtype;
   boxm2_array_1d<dtype> adat = a.data();
   boxm2_array_1d<dtype> bdat = b.data();
+  vcl_cout<<"Adat size: "<<adat.size()<<vcl_endl;
+  vcl_cout<<"Bdat size: "<<bdat.size()<<vcl_endl;
   TEST("Data array size matches", adat.size(), bdat.size());
 
   // make sure buffers match

@@ -2,6 +2,12 @@
 //:
 // \file
 
+//: constructor from scene poitner
+boxm2_dumb_cache::boxm2_dumb_cache(boxm2_scene* scene) : cached_block_(0), boxm2_cache(scene) {
+  scene_dir_ = scene->data_path(); 
+}
+
+
 //: destructor
 boxm2_dumb_cache::~boxm2_dumb_cache()
 {
@@ -27,6 +33,13 @@ boxm2_block* boxm2_dumb_cache::get_block(boxm2_block_id id)
   //otherwise load it from disk with blocking
   boxm2_block* loaded = boxm2_sio_mgr::load_block(scene_dir_, id);
 
+  //check to make sure it's loaded
+  if(!loaded && scene_->block_exists(id)) {
+    vcl_cout<<"boxm2_nn_cache::initializing empty block "<<id<<vcl_endl;
+    boxm2_block_metadata data = scene_->get_block_metadata(id); 
+    loaded = new boxm2_block(data); 
+  }
+
   //update cache
   this->update_block_cache(loaded);
   return loaded;
@@ -49,6 +62,14 @@ boxm2_data_base* boxm2_dumb_cache::get_data_base(boxm2_block_id id, vcl_string t
   
   //otherwise load it from disk
   boxm2_data_base* loaded = boxm2_sio_mgr::load_block_data_generic(scene_dir_,id,type);
+ 
+  //make sure it loaded
+  if(!loaded && scene_->block_exists(id)) {
+    vcl_cout<<"boxm2_nn_cache::initializing empty data "<<id<<" type: "<<type<<vcl_endl;
+    boxm2_block_metadata data = scene_->get_block_metadata(id); 
+    loaded = new boxm2_data_base(data, type); 
+  }
+  
   this->update_data_base_cache(loaded, type); 
   return loaded; 
 }

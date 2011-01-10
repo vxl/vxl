@@ -119,7 +119,7 @@ void test_block()
         TEST("boxm2_block: sub_block_dim failed", true, false);
         return;
     }
-    if (test_block.sub_block_num() != vgl_vector_3d<int>(nums[0], nums[1], nums[2])) {
+    if (test_block.sub_block_num() != vgl_vector_3d<unsigned>(nums[0], nums[1], nums[2])) {
         TEST("boxm2_block: sub_block_num failed", true, false);
         return;
     }

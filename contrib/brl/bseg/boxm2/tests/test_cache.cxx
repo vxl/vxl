@@ -2,6 +2,7 @@
 // \file
 // \author Andy Miller
 // \date 26-Oct-2010
+#include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/basic/boxm2_block_id.h>
 #include <boxm2/io/boxm2_dumb_cache.h>
@@ -25,7 +26,9 @@
 void test_nn_cache()
 {
   //init cache
-  boxm2_nn_cache cache("", vgl_vector_3d<int>(2,2,2));
+  vcl_string scene_file=boxm2_test_utils::save_test_simple_scene();
+  boxm2_scene scene(scene_file);
+  boxm2_nn_cache cache(&scene);
 
   //simulate a render
   vcl_cout<<"loading initial BLOCK and ALPHA"<<vcl_endl;
@@ -57,19 +60,20 @@ void test_nn_cache()
 void test_dumb_cache()
 {
   // init cache
-  boxm2_dumb_cache dcache("");
+  vcl_string scene_file=boxm2_test_utils::save_test_simple_scene();
+  boxm2_scene scene(scene_file);
+  boxm2_dumb_cache dcache(&scene);
 
   // check a few block values
-  vgl_vector_3d<int> nums;
-  boxm2_block_sptr blk(dcache.get_block(boxm2_block_id(0,0,1)) );
+  vgl_vector_3d<unsigned> nums;
+  boxm2_block_sptr blk(dcache.get_block(boxm2_block_id(0,0,0)) );
  
-  /*boxm2_data<BOXM2_ALPHA>*/  boxm2_data_base_sptr alph = dcache.get_data<BOXM2_ALPHA>(boxm2_block_id(0,0,1));
-  boxm2_data_base_sptr mog = dcache.get_data<BOXM2_MOG3_GREY>(boxm2_block_id(0,0,1));
+  /*boxm2_data<BOXM2_ALPHA>*/  boxm2_data_base_sptr alph = dcache.get_data<BOXM2_ALPHA>(boxm2_block_id(0,0,0));
+  boxm2_data_base_sptr mog = dcache.get_data<BOXM2_MOG3_GREY>(boxm2_block_id(0,0,0));
   nums = blk->sub_block_num();
 
   // get another
-  blk = dcache.get_block(boxm2_block_id(0,1,0));
-  //alph = dcache.get_data<BOXM2_ALPHA>(boxm2_block_id(0,1,0));
+  blk = dcache.get_block(boxm2_block_id(0,0,0));
   //mog = dcache.get_data<BOXM2_MOG3_GREY>(boxm2_block_id(0,1,0));
   //TEST("block carries same meta data:", nums==blk->sub_block_num(), true);
 }

@@ -72,7 +72,7 @@ int main(int argc,  char** argv)
   brdb_value_sptr brdb_scene = new brdb_value_t<boxm2_scene_sptr>(scene);
 
   //get relevant blocks
-  boxm2_nn_cache cache( scene->data_path(), vgl_vector_3d<int>(2,2,1) );
+  boxm2_nn_cache cache( scene.ptr() );
 
   //initialize gpu pro / manager
   boxm2_opencl_processor* gpu_pro = boxm2_opencl_processor::instance();
@@ -95,7 +95,7 @@ int main(int argc,  char** argv)
   gpu_render.init_kernel(&gpu_pro->context(), &gpu_pro->devices()[0]);
 
   //run expected image like 10 times and get average
-  int numTrials = 10;
+  int numTrials = 1;
   vul_timer t;
   for (int i=0; i<numTrials; i++) {
     //execute process ////////////////////////////////////////////////////
@@ -107,6 +107,9 @@ int main(int argc,  char** argv)
   }
   float time = t.all() / (float) numTrials;
   vcl_cout<<"average render time: "<<time<<" ms"<<vcl_endl;
+
+
+  vcl_cout<<cache<<vcl_endl;
 
   //clean up
   gpu_render.clean();

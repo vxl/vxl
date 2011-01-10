@@ -82,7 +82,7 @@ int main(int argc,  char** argv)
 
   //4. GET SINGLE BLOCK
   boxm2_block_id id(0,0,0);
-  boxm2_dumb_cache dcache(scene->data_path());
+  boxm2_dumb_cache dcache(scene.ptr());
   boxm2_block_sptr blk      = dcache.get_block(id);
   boxm2_data_base_sptr alph = dcache.get_data<BOXM2_ALPHA>(id);
   boxm2_data_base_sptr mog  = dcache.get_data<BOXM2_MOG3_GREY>(id);

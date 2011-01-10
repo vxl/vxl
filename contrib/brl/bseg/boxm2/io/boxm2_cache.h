@@ -2,6 +2,7 @@
 #define boxm2_cache_h_
 //:
 // \file
+#include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data.h>
 #include <boxm2/basic/boxm2_block_id.h>
@@ -18,6 +19,8 @@
 class boxm2_cache
 {
   public:
+  
+    boxm2_cache(boxm2_scene* scene) : scene_(scene) {}
 
     //: returns block pointer to block specified by ID
     virtual boxm2_block* get_block(boxm2_block_id id) = 0;
@@ -30,6 +33,9 @@ class boxm2_cache
     boxm2_data<T>* get_data(boxm2_block_id id);
     
   protected:
+
+    //: boxm2_scene needs to be around to initialized uninitalized blocks
+    boxm2_scene* scene_; 
 
     //: boxm2_asio_manager handles asio requests
     boxm2_asio_mgr io_mgr_;

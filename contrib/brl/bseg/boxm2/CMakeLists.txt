@@ -16,7 +16,7 @@ IF(EXPAT_FOUND)
     SET(boxm2_sources
         boxm2_scene.h                 boxm2_scene.cxx
         boxm2_block.h                 boxm2_block.cxx
-        boxm2_block_metadata.h
+        boxm2_block_metadata.h        boxm2_block_metadata.cxx
         boxm2_data_base.h             boxm2_data_base.cxx
         boxm2_data.h                  boxm2_data.txx
         boxm2_data_traits.h
@@ -28,7 +28,7 @@ IF(EXPAT_FOUND)
     AUX_SOURCE_DIRECTORY(Templates boxm2_sources)
 
     ADD_LIBRARY(boxm2  ${boxm2_sources})
-    TARGET_LINK_LIBRARIES(boxm2 boxm2_basic bocl boct brdb vbl_io expatpp vpgl vgl vgl_xio vbl vsl vcl)
+    TARGET_LINK_LIBRARIES(boxm2 boxm2_basic boxm2_io bocl boct brdb vbl_io expatpp vpgl vgl vgl_xio vbl vsl vcl)
 
     #basic
     subdirs(basic)

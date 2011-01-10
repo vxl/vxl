@@ -8,7 +8,7 @@
 class boxm2_dumb_cache : public boxm2_cache
 {
   public:
-    boxm2_dumb_cache(vcl_string dir) : cached_block_(0), scene_dir_(dir) {}
+    boxm2_dumb_cache(boxm2_scene* scene);
     ~boxm2_dumb_cache(); 
 
     //: returns block poitner to block specified by ID

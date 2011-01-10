@@ -59,7 +59,6 @@ bocl_mem* boxm2_opencl_cache::get_block(boxm2_block_id id)
   info_buffer->data_buffer_length = 65536;
   block_info_ = new bocl_mem(*context_, info_buffer, sizeof(boxm2_scene_info), "scene info buffer");
   block_info_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
-  
 
   return cached_block_;
 }

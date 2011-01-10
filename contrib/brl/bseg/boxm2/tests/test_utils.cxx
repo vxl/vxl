@@ -134,7 +134,7 @@ void boxm2_test_utils::save_test_scene_to_disk()
 
   // save the same random data block 8 times
   typedef vnl_vector_fixed<unsigned char, 8> uchar8;
-  const unsigned int array_size = 15*1024*1024; //roughly 20 megs for alpha
+  const unsigned int array_size = 5*1024*1024; //roughly 20 megs for alpha
   float * farray = new float[array_size];
   uchar8* carray = new uchar8[array_size];
   for (unsigned c=0; c<array_size; ++c) {

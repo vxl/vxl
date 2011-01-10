@@ -57,7 +57,7 @@ void test_cpp_render_process()
   boxm2_scene_sptr scene = new boxm2_scene(scene_file);
 
   // get relevant blocks
-  boxm2_nn_cache cache( scene->data_path(), vgl_vector_3d<int>(1,1,1) );
+  boxm2_nn_cache cache( scene.ptr() );
 
   // initialize gpu pro / manager
   boxm2_cpp_processor cpp_pro;

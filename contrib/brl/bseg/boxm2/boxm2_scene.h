@@ -12,6 +12,7 @@
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vcl_iosfwd.h>
+#include <vul/vul_file.h>
 
 //smart pointer stuff
 #include <vbl/vbl_ref_count.h>
@@ -72,10 +73,16 @@ class boxm2_scene : public vbl_ref_count
     
     //: return a heap pointer to a scene info 
     boxm2_scene_info* get_blk_metadata(boxm2_block_id id); 
+    bool block_exists(boxm2_block_id id) { return blocks_.find(id) != blocks_.end(); }
+    bool block_on_disk(boxm2_block_id id) { return vul_file::exists( data_path_ + id.to_string() + ".bin"); }
+    bool data_on_disk(boxm2_block_id id, vcl_string data_type) { 
+      return vul_file::exists(data_path_ + data_type + "_" + id.to_string() + ".bin"); 
+    } 
 
     //: a list of block metadata...
     vcl_map<boxm2_block_id, boxm2_block_metadata> blocks() { return blocks_; }
     unsigned num_blocks() { return (unsigned) blocks_.size(); }
+    boxm2_block_metadata get_block_metadata(boxm2_block_id id) { return blocks_[id]; }
 
     //: scene dimensions accessors
     vgl_point_3d<double>    local_origin()const { return local_origin_; }
@@ -112,7 +119,7 @@ class boxm2_scene : public vbl_ref_count
     
     //: list of block meta data available to this scene
     vcl_map<boxm2_block_id, boxm2_block_metadata> blocks_; 
-
+    
 };
 
 

@@ -14,6 +14,10 @@ class boxm2_util
     static void set_persp_camera(vpgl_camera_double_sptr cam, cl_float* persp_cam);
     //: fills in a 256 char array with number of BITS for each value (255 = 8, 254 = 7 etc)
     static void set_bit_lookup(cl_uchar* lookup);
+    
+    //: given a buffer and a length, randomly permutes the members of buffer
+    static void random_permutation(int* buffer, int size); 
+
 };
 
 #endif // boxm2_util_h

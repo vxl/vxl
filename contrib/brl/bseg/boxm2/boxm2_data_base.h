@@ -9,6 +9,7 @@
 #include <boxm2/basic/boxm2_block_id.h>
 #include <boxm2/basic/boxm2_array_1d.h>
 #include <boxm2/boxm2_data_traits.h>
+#include <boxm2/boxm2_block_metadata.h>
 #include <vcl_cstring.h>
 
 //smart ptr includes
@@ -26,6 +27,9 @@ class boxm2_data_base : public vbl_ref_count
     //: Constructor - beware that the data_buffer becomes OWNED (and will be deleted) by this class!
     boxm2_data_base(char * data_buffer, vcl_size_t length, boxm2_block_id id)
      : id_(id), data_buffer_(data_buffer),  buffer_length_(length) {}
+     
+    //: intiializes empty data buffer
+    boxm2_data_base(boxm2_block_metadata data, vcl_string type); 
 
     //: This destructor is correct - by our design the original data_buffer becomes OWNED by the data_base class
     virtual ~boxm2_data_base() { if (data_buffer_) delete [] data_buffer_; }

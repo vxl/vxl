@@ -30,7 +30,7 @@ class boxm2_data_traits<BOXM2_ALPHA>
 {
  public:
   typedef float datatype;
-  vcl_size_t datasize(){return sizeof(datatype);}
+  static vcl_size_t datasize(){return sizeof(datatype);}
   static vcl_string prefix(){ return "alpha";}
 };
 
@@ -40,7 +40,7 @@ class boxm2_data_traits<BOXM2_MOG3_GREY>
  public:
   typedef boxm2_mog3_grey_processor processor;
   typedef vnl_vector_fixed<unsigned char, 8> datatype;
-  vcl_size_t datasize(){return sizeof(datatype);}
+  static vcl_size_t datasize(){return sizeof(datatype);}
   static vcl_string prefix(){ return "boxm2_mog3_grey";}
 };
 
@@ -49,7 +49,24 @@ class boxm2_data_traits<BOXM2_AUX>
 {
  public:
   typedef vnl_vector_fixed<int, 4> datatype;
-  vcl_size_t datasize(){return sizeof(datatype);}
+  static vcl_size_t datasize(){return sizeof(datatype);}
   static vcl_string prefix(){ return "aux";}
 };
+//: HACKY WAY TO GENERICALLY GET DATASIZES -
+class boxm2_data_info
+{
+  public: 
+    static vcl_size_t datasize(vcl_string prefix) {
+      if(prefix == boxm2_data_traits<BOXM2_ALPHA>::prefix()) 
+        return boxm2_data_traits<BOXM2_ALPHA>::datasize(); 
+      if(prefix == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix())
+        return boxm2_data_traits<BOXM2_MOG3_GREY>::datasize(); 
+      if(prefix == boxm2_data_traits<BOXM2_AUX>::prefix())
+        return boxm2_data_traits<BOXM2_AUX>::datasize();
+      
+      return 0;
+    }
+};
+
+
 #endif

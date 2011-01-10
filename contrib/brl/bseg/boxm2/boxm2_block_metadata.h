@@ -56,7 +56,12 @@ class boxm2_block_metadata: public vbl_ref_count
     , max_mb_       (that.max_mb_)
     , p_init_       (that.p_init_)
     {}
-
+    
+    
+    //: method to calculate the number of cells allocated by a block of this size
+    long num_data_cells(); 
+    
+    //: id and local origin of the block
     boxm2_block_id          id_;
     vgl_point_3d<double>    local_origin_;
 

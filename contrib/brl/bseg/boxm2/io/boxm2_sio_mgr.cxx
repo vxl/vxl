@@ -5,7 +5,6 @@
 boxm2_block* boxm2_sio_mgr::load_block(vcl_string dir, boxm2_block_id block_id)
 {
   vcl_string filepath = dir + block_id.to_string() + ".bin";
-  //vcl_cout<<"boxm2_sio_mgr:: load from file:"<<filepath<<vcl_endl;
 
   //get file size
   unsigned long numBytes = vul_file::size(filepath);
@@ -15,7 +14,7 @@ boxm2_block* boxm2_sio_mgr::load_block(vcl_string dir, boxm2_block_id block_id)
   vcl_ifstream myFile (filepath.c_str(), vcl_ios::in | vcl_ios::binary);
   myFile.read(bytes, numBytes);
   if (!myFile) {
-    vcl_cerr<<"boxm2_sio_mgr:: cannot read file "<<filepath<<vcl_endl;
+    vcl_cerr<<"boxm2_sio_mgr::load_block cannot read file "<<filepath<<vcl_endl;
     return NULL; 
   }
 
@@ -50,8 +49,10 @@ boxm2_data_base* boxm2_sio_mgr::load_block_data_generic(vcl_string dir, boxm2_bl
   char * bytes = new char[numBytes]; 
   vcl_ifstream myFile (filename.c_str(), vcl_ios::in | vcl_ios::binary);
   myFile.read(bytes, numBytes);
-  if (!myFile)
-      vcl_cerr<<"boxm2_sio_mgr:: cannot read file "<<dir<<vcl_endl;
+  if (!myFile) {
+      vcl_cerr<<"boxm2_sio_mgr::load_data cannot read file "<<filename<<vcl_endl;
+      return NULL;
+  }
 
   //instantiate new block
   return new boxm2_data_base(bytes,numBytes,id); 

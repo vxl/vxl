@@ -13,6 +13,7 @@
 // \author Andrew Miller
 // \date   26 Oct 2010
 //
+#include <boxm2/boxm2_block_metadata.h>
 #include <boxm2/basic/boxm2_block_id.h>
 #include <boxm2/basic/boxm2_array_1d.h>
 #include <boxm2/basic/boxm2_array_2d.h>
@@ -40,12 +41,16 @@ class boxm2_block : public vbl_ref_count
 
   //: only available constructor - from directory and block_id
   boxm2_block(boxm2_block_id id, char* buffer);
+  
+  //: creates empty block from metadata
+  boxm2_block(boxm2_block_metadata data); 
   boxm2_block();
 
+  //: initializes empty block from metadata
+  bool init_empty_block(boxm2_block_metadata data);
+
   //: default destructor
-  virtual ~boxm2_block() { 
-    if(buffer_) delete[] buffer_;
-  }
+  virtual ~boxm2_block() { if(buffer_) delete[] buffer_; }
 
   //: all IO manipulates char buffers
   bool b_read(char* buffer);
@@ -62,20 +67,23 @@ class boxm2_block : public vbl_ref_count
   boxm2_array_1d<ushort>&   trees_in_buffers()  { return trees_in_buffers_; }
   boxm2_array_1d<ushort2>&  mem_ptrs()          { return mem_ptrs_; }
   vgl_vector_3d<double>&    sub_block_dim()     { return sub_block_dim_; }
-  vgl_vector_3d<int>&       sub_block_num()     { return sub_block_num_; }
+  vgl_vector_3d<unsigned>&  sub_block_num()     { return sub_block_num_; }
   int                       num_buffers()       { return tree_ptrs_.rows(); }
   int                       tree_buff_length()  { return tree_ptrs_.cols(); }
   int                       init_level()        { return init_level_; }
   int                       max_level()         { return max_level_; }
   int                       max_mb()            { return max_mb_; }
   long                      byte_count()        { return byte_count_; }
-
+  
   //: mutators
   void set_block_id(boxm2_block_id id)  { block_id_ = id; }
   void set_init_level(int level)        { init_level_ = level; }
   void set_max_level(int level)         { max_level_ = level; }
   void set_max_mb(int mb)               { max_mb_ = mb; }
   void set_byte_count(long bc)          { byte_count_ = bc; }
+
+  //: calculate the number of bytes a block will be given three parameters
+  long calc_byte_count(int num_buffers, int trees_per_buffer, int num_trees); 
 
  private:
 
@@ -96,7 +104,7 @@ class boxm2_block : public vbl_ref_count
 
   //: World dimensions of a block .e.g 1 meter x 1 meter x 1 meter
   vgl_vector_3d<double>   sub_block_dim_;
-  vgl_vector_3d<int>      sub_block_num_;
+  vgl_vector_3d<unsigned> sub_block_num_;
 
   //: info about block's trees
   int init_level_;   //each sub_blocks's init level (default 1)
@@ -112,7 +120,7 @@ typedef vbl_smart_ptr<boxm2_block> boxm2_block_sptr;
 vcl_ostream& operator <<(vcl_ostream &s, boxm2_block& scene);
 
 //: write to xml file
-void x_write(vcl_ostream &os, boxm2_block& scene, vcl_string name);
+//void x_write(vcl_ostream &os, boxm2_block& scene, vcl_string name);
 
 //: Binary write boxm_update_bit_scene_manager scene to stream
 void vsl_b_write(vsl_b_ostream& os, boxm2_block const& scene);

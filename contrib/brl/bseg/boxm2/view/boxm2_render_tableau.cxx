@@ -143,7 +143,7 @@ bool boxm2_render_tableau::init_clgl()
 {
   //get relevant blocks
   vcl_cout<<"Data Path: "<<scene_->data_path()<<vcl_endl; 
-  boxm2_nn_cache* dcache = new boxm2_nn_cache(scene_->data_path(), vgl_vector_3d<int>(2,2,1));
+  boxm2_nn_cache* dcache = new boxm2_nn_cache(scene_.ptr());
 
   //initialize gpu pro / manager
   gpu_pro_ = boxm2_opencl_processor::instance();

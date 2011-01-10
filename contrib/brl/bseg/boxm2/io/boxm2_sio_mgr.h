@@ -9,6 +9,9 @@
 #include <vul/vul_file.h>
 #include <vcl_iostream.h>
 
+//: Loads blocks and data from ID's and data_types with blocking.  If file is 
+//  not available, will return null. 
+
 //: disk level storage class.
 //  handles all of the synchronous IO read and write requests
 class boxm2_sio_mgr
@@ -37,6 +40,10 @@ class boxm2_sio_mgr
 template <boxm2_data_type data_type> 
 boxm2_data<data_type> *  boxm2_sio_mgr::load_block_data(vcl_string dir, boxm2_block_id block_id)
 {
+  return (boxm2_data<data_type>*) 
+    boxm2_sio_mgr::load_block_data_generic(dir, block_id, boxm2_data_traits<data_type>::prefix()); 
+  
+/*
     // file name
     vcl_string filename = dir + boxm2_data_traits<data_type>::prefix() + "_" + block_id.to_string() + ".bin";
 
@@ -47,11 +54,14 @@ boxm2_data<data_type> *  boxm2_sio_mgr::load_block_data(vcl_string dir, boxm2_bl
     char * bytes = new char[numBytes]; 
     vcl_ifstream myFile (filename.c_str(), vcl_ios::in | vcl_ios::binary);
     myFile.read(bytes, numBytes);
-    if (!myFile)
-        vcl_cerr<<"boxm2_sio_mgr:: cannot read file "<<dir<<vcl_endl;
+    if (!myFile) {
+        vcl_cerr<<"boxm2_sio_mgr::load_data cannot read file "<<filename<<vcl_endl;
+        return NULL;
+    }
 
     //instantiate new block
     return new boxm2_data<data_type>(bytes,numBytes,block_id); 
+*/
 }
 
 //: saves block to disk

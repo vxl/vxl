@@ -2,6 +2,7 @@
 
 #include <vgl/vgl_point_3d.h>
 #include <vnl/vnl_vector.h>
+#include <vnl/vnl_random.h>
 #include <vnl/algo/vnl_svd.h>
 
 // fills a float buffer (should be 16*3 floats) with a perspective cam to be sent
@@ -63,4 +64,22 @@ void boxm2_util::set_bit_lookup(cl_uchar* lookup)
                            4,   5,   5,   6,   5,   6,   6,   7,   5,   6,   6,   7,   6,   7,   7,   8 };
   vcl_memcpy(lookup, bits, 256);
   //for (int i=0; i<256; i++) lookup[i] = bits[i];
+}
+
+
+
+void boxm2_util::random_permutation(int* buffer, int size)
+{
+  vnl_random random(9667566);
+  
+  //shuffle the buffer
+  for(int i=0; i<size; i++) 
+  {
+    //swap current value with random one after it
+    int curr = buffer[i]; 
+    int rInd = random.lrand32(i, size-1); 
+    buffer[i] = buffer[rInd];
+    buffer[rInd] = curr; 
+  }
+
 }

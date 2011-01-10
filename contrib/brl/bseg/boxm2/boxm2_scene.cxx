@@ -58,7 +58,6 @@ void boxm2_scene::add_block_metadata(boxm2_block_metadata data)
   blocks_[data.id_] = data; 
 }
 
-
 vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks(vpgl_perspective_camera<double>* cam)
 {
   //get camera center and order blocks distance from the cam center

@@ -1,6 +1,14 @@
 #include "boxm2_nn_cache.h"
+#include <boxm2/boxm2_block_metadata.h>
+#include <vcl_sstream.h>
 //:
 // \file
+
+//: constructor, set the directory path
+boxm2_nn_cache::boxm2_nn_cache(boxm2_scene* scene) : boxm2_cache(scene)
+{
+  scene_dir_ = scene->data_path(); 
+}
 
 //: destructor flushes the memory for currently ongoing asynchronous requests
 boxm2_nn_cache::~boxm2_nn_cache()
@@ -54,6 +62,14 @@ boxm2_block* boxm2_nn_cache::get_block(boxm2_block_id id)
   //vcl_cout<<"Cache miss :("<<vcl_endl;
   //other wise load it from disk with blocking and update cache
   boxm2_block* loaded = boxm2_sio_mgr::load_block(scene_dir_, id);
+  
+  //if the block is null then initialize an empty one
+  if(!loaded && scene_->block_exists(id)) {
+    vcl_cout<<"boxm2_nn_cache::initializing empty block "<<id<<vcl_endl;
+    boxm2_block_metadata data = scene_->get_block_metadata(id); 
+    loaded = new boxm2_block(data);
+  }
+  
   this->update_block_cache(loaded);
   return loaded;
 }
@@ -86,8 +102,14 @@ void boxm2_nn_cache::update_block_cache(boxm2_block* blk)
       new_cache[id] = cached_blocks_[id];
       cached_blocks_.erase(id);
     }
-    else //send an async request for this block
-    {
+    else if( !scene_->block_on_disk(id) ) //otherwise initialize it right here
+    {    
+      vcl_cout<<"boxm2_nn_cache::initializing empty block "<<id<<vcl_endl;
+      boxm2_block_metadata data = scene_->get_block_metadata(id); 
+      boxm2_block* loaded = new boxm2_block(data);
+      new_cache[id] = loaded; 
+    }
+    else { //send an async request for this block (if it's on disk) 
       io_mgr_.load_block(scene_dir_, id);
     }
   }
@@ -135,6 +157,11 @@ boxm2_data_base* boxm2_nn_cache::get_data_base(boxm2_block_id id, vcl_string typ
   //otherwise it's a miss, load sync from disk, update cache
   //vcl_cout<<"Cache miss :( for "<<type<<vcl_endl;
   boxm2_data_base* loaded = boxm2_sio_mgr::load_block_data_generic(scene_dir_, id, type);
+  if(!loaded && scene_->block_exists(id)) {
+    vcl_cout<<"boxm2_nn_cache::initializing empty data "<<id<<" type: "<<type<<vcl_endl;
+    boxm2_block_metadata data = scene_->get_block_metadata(id); 
+    loaded = new boxm2_data_base(data, type); 
+  }
   this->update_data_base_cache(loaded, type);
   return loaded;
 }
@@ -167,7 +194,14 @@ void boxm2_nn_cache::update_data_base_cache(boxm2_data_base* dat, vcl_string dat
       new_cache[id] = data_map[id];
       data_map.erase(id);
     }
-    else //send an async request for this block
+    else if ( !scene_->data_on_disk(id, data_type) ) //send an async request for this block
+    {
+      vcl_cout<<"boxm2_nn_cache::initializing empty data "<<id<<" type: "<<data_type<<vcl_endl;
+      boxm2_block_metadata data = scene_->get_block_metadata(id); 
+      boxm2_data_base* loaded = new boxm2_data_base(data, data_type); 
+      new_cache[id] = loaded;
+    }
+    else 
     {
       io_mgr_.load_block_data_generic(scene_dir_, id, data_type);
     }
@@ -223,8 +257,11 @@ void boxm2_nn_cache::finish_async_data(vcl_string data_type)
   for (iter = lmap.begin(); iter != lmap.end(); ++iter)
   {
     //if this block doesn't exist in the cache put it in (otherwise delete it)
-    if ( data_map.find(iter->first) == data_map.end() )
+    if ( data_map.find(iter->first) == data_map.end() ) {
+      boxm2_block_id asid = iter->first;
+      vcl_cout<<"async data: "<<asid<<vcl_endl;
       data_map[iter->first] = iter->second;
+    }
     else
       if (iter->second) delete iter->second;
   }
@@ -263,11 +300,43 @@ vcl_vector<boxm2_block_id> boxm2_nn_cache::get_neighbor_list(boxm2_block_id cent
 //: helper method says whether or not block id is valid
 bool boxm2_nn_cache::is_valid_id(boxm2_block_id id)
 {
-  return  id.i() >= 0 &&
-          id.j() >= 0 &&
-          id.k() >= 0 &&
-          id.i() < block_num_.x() &&
-          id.j() < block_num_.y() &&
-          id.k() < block_num_.z();
+  //use scene here to determine if this id is valid
+  return scene_->block_exists(id); 
+}
+
+
+//: Summarizes this cache's data 
+vcl_string boxm2_nn_cache::to_string()
+{
+  vcl_stringstream stream;
+  stream << "boxm2_nn_cache:: scene dir="<<scene_dir_<<'\n'; 
+  stream << "    blocks: "; 
+  vcl_map<boxm2_block_id, boxm2_block*>::iterator blk_iter;
+  for(blk_iter = cached_blocks_.begin(); blk_iter != cached_blocks_.end(); ++blk_iter) {
+    boxm2_block_id id = blk_iter->first; 
+    stream << "(" << id << "," << blk_iter->second << ")";
+  }
+
+  vcl_map<vcl_string, vcl_map<boxm2_block_id, boxm2_data_base*> >::iterator dat_iter;
+  for(dat_iter = cached_data_.begin(); dat_iter != cached_data_.end(); ++dat_iter)
+  {
+    vcl_string data_type = dat_iter->first; 
+    stream<< "\n" << "    data: "<<data_type<<" ";
+    vcl_map<boxm2_block_id, boxm2_data_base*> dmap = dat_iter->second;
+    vcl_map<boxm2_block_id, boxm2_data_base*>::iterator it; 
+    for(it = dmap.begin(); it != dmap.end(); ++it)
+    {
+      boxm2_block_id id = it->first;
+      stream<< "(" << id << "," <<it->second << ")"; 
+    }
+  }
+  return stream.str(); 
+}
+
+//: shows elements in cache
+vcl_ostream& operator<<(vcl_ostream &s, boxm2_nn_cache& scene)
+{
+    s << scene.to_string(); 
+    return s;
 }
 
