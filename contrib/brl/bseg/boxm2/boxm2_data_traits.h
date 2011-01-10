@@ -16,6 +16,7 @@ enum boxm2_data_type
 {
   BOXM2_ALPHA=0,
   BOXM2_MOG3_GREY,
+  BOXM2_AUX,    
   BOXM2_UNKNOWN
 };
 
@@ -43,5 +44,12 @@ class boxm2_data_traits<BOXM2_MOG3_GREY>
   static vcl_string prefix(){ return "boxm2_mog3_grey";}
 };
 
-
+template<>
+class boxm2_data_traits<BOXM2_AUX>
+{
+ public:
+  typedef vnl_vector_fixed<int, 4> datatype;
+  vcl_size_t datasize(){return sizeof(datatype);}
+  static vcl_string prefix(){ return "aux";}
+};
 #endif
