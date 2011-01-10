@@ -21,9 +21,9 @@ bool boxm2_opencl_update_process::init_kernel(cl_context* context,
                                               vcl_string opts)
 {
   context_ = context;
-  
+
   vcl_vector<vcl_string> src_paths;
-  vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/cl/";  
+  vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/cl/";
   src_paths.push_back(source_dir + "scene_info.cl");
   src_paths.push_back(source_dir + "cell_utils.cl");
   src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
@@ -39,27 +39,27 @@ bool boxm2_opencl_update_process::init_kernel(cl_context* context,
   options += opts;
 
   //create all passes
-  bocl_kernel* seg_len = new bocl_kernel(); 
-  seg_len->create_kernel(context_, device, src_paths, "seg_len_main", options+" -D SEGLEN", "update::seg_len"); 
-  update_kernels_.push_back(seg_len); 
-  
+  bocl_kernel* seg_len = new bocl_kernel();
+  seg_len->create_kernel(context_, device, src_paths, "seg_len_main", options+" -D SEGLEN", "update::seg_len");
+  update_kernels_.push_back(seg_len);
+
   bocl_kernel* pre_inf = new bocl_kernel();
   pre_inf->create_kernel(context_, device, src_paths, "pre_inf_main", options+" -D PREINF", "update::pre_inf");
-  update_kernels_.push_back(pre_inf); 
+  update_kernels_.push_back(pre_inf);
 
   //may need DIFF LIST OF SOURCES FOR THIS GUY
-  bocl_kernel* proc_img = new bocl_kernel();  
+  bocl_kernel* proc_img = new bocl_kernel();
   proc_img->create_kernel(context_, device, src_paths, "proc_norm_image", options, "update::proc_norm_image");
-  update_kernels_.push_back(proc_img); 
+  update_kernels_.push_back(proc_img);
 
-  bocl_kernel* bayes_main = new bocl_kernel(); 
+  bocl_kernel* bayes_main = new bocl_kernel();
   bayes_main->create_kernel(context_, device, src_paths, "bayes_main", options+" -D BAYES", "update::bayes_main");
-  update_kernels_.push_back(bayes_main); 
+  update_kernels_.push_back(bayes_main);
 
   //may need DIFF LIST OF SOURCES FOR THSI GUY TOO
   bocl_kernel* update = new bocl_kernel();
-  update->create_kernel(context_, device, src_paths, "update_bit_scene_main", options, "update::update_main"); 
-  update_kernels_.push_back(update); 
+  update->create_kernel(context_, device, src_paths, "update_bit_scene_main", options, "update::update_main");
+  update_kernels_.push_back(update);
 
   return true;
 }
@@ -82,12 +82,12 @@ bool boxm2_opencl_update_process::init_kernel(cl_context* context,
 bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vcl_vector<brdb_value_sptr>& output)
 {
   transfer_time_ = 0.0f; gpu_time_ = 0.0f; total_time_ = 0.0f;
-  vul_timer total; 
+  vul_timer total;
   int i = 0;
 
   //scene argument
   brdb_value_t<boxm2_scene_sptr>* scene_brdb = static_cast<brdb_value_t<boxm2_scene_sptr>* >( input[i++].ptr() );
-  boxm2_scene_sptr scene = scene_brdb->value(); 
+  boxm2_scene_sptr scene = scene_brdb->value();
 
   //camera
   brdb_value_t<vpgl_camera_double_sptr>* brdb_cam = static_cast<brdb_value_t<vpgl_camera_double_sptr>* >( input[i++].ptr() );
@@ -96,7 +96,7 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
   boxm2_util::set_persp_camera(cam, cam_buffer);
   bocl_mem persp_cam((*context_), cam_buffer, 3*sizeof(cl_float16), "persp cam buffer");
   persp_cam.create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-  
+
   //exp image buffer
   brdb_value_t<vil_image_view_base_sptr>* brdb_expimg = static_cast<brdb_value_t<vil_image_view_base_sptr>* >( input[i++].ptr() );
   vil_image_view_base_sptr expimg = brdb_expimg->value();
@@ -107,7 +107,7 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
     image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
   }
   else {
-    image_->set_cpu_buffer(exp_img_view->begin()); 
+    image_->set_cpu_buffer(exp_img_view->begin());
     image_->write_to_buffer(*command_queue_);
   }
 
@@ -119,12 +119,12 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
     float* vis_buff = vis_img_view->begin();
     vis_img_ = new bocl_mem((*context_), vis_buff, vis_img_view->size() * sizeof(float), "visibility image buffer");
     vis_img_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-  } 
+  }
   else {
-    vis_img_->set_cpu_buffer(vis_img_view->begin()); 
+    vis_img_->set_cpu_buffer(vis_img_view->begin());
     vis_img_->write_to_buffer(*command_queue_);
   }
-      
+
   //exp image dimensions
   int* img_dim_buff = new int[4];
   img_dim_buff[0] = exp_img_view->ni();
@@ -133,7 +133,7 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
   img_dim_buff[3] = exp_img_view->nj();
   bocl_mem exp_img_dim((*context_), img_dim_buff, sizeof(int)*4, "image dims");
   exp_img_dim.create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-  
+
   //output buffer
   float* output_arr = new float[100];
   for (int i=0; i<100; ++i) output_arr[i] = 0.0f;
@@ -149,32 +149,31 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
   //2. set workgroup size
   vcl_size_t lThreads[] = {8, 8};
   vcl_size_t gThreads[] = {exp_img_view->ni(), exp_img_view->nj()};
-  
+
   //For each ID in the visibility order, grab that block
-  vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks( (vpgl_perspective_camera<double>*) cam.ptr()); 
-  vcl_vector<boxm2_block_id>::iterator id; 
+  vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks( (vpgl_perspective_camera<double>*) cam.ptr());
+  vcl_vector<boxm2_block_id>::iterator id;
 
   //Create the auxiliary data blocks here
-  for(id = vis_order.begin(); id != vis_order.end(); ++id) 
+  for (id = vis_order.begin(); id != vis_order.end(); ++id)
   {
-    bocl_mem* aux_dat = cache_->get_data<BOXM2_AUX>(*id); 
+    bocl_mem* aux_dat = cache_->get_data<BOXM2_AUX>(*id);
   }
-  
+
   //Go through each kernel, execute on each block
-  for(int i=0; i<update_kernels_.size(); i++)
+  for (unsigned int i=0; i<update_kernels_.size(); ++i)
   {
     //zip through visible blocks, and execute this pass's kernel
-    for(id = vis_order.begin(); id != vis_order.end(); ++id) 
+    for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
-      
       //write the image values to the buffer
-      vul_timer transfer; 
+      vul_timer transfer;
       bocl_mem* blk       = cache_->get_block(*id);
       bocl_mem* alpha     = cache_->get_data<BOXM2_ALPHA>(*id);
       bocl_mem* mog       = cache_->get_data<BOXM2_MOG3_GREY>(*id);
-      bocl_mem* blk_info  = cache_->loaded_block_info(); 
-      transfer_time_ += (float) transfer.all(); 
-      
+      bocl_mem* blk_info  = cache_->loaded_block_info();
+      transfer_time_ += (float) transfer.all();
+
       //set kernel args for this pass
       update_kernels_[i]->set_arg( blk_info );
       update_kernels_[i]->set_arg( blk );
@@ -191,17 +190,17 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
       update_kernels_[i]->set_local_arg( lThreads[0]*lThreads[1]*sizeof(cl_uchar16) );
       update_kernels_[i]->set_local_arg( lThreads[0]*lThreads[1]*10*sizeof(cl_uchar) );
       update_kernels_[i]->set_local_arg( lThreads[0]*lThreads[1]*sizeof(cl_int) );
-        
+
       //execute kernel
       update_kernels_[i]->execute( (*command_queue_), lThreads, gThreads);
-      clFinish(*command_queue_); 
-      gpu_time_ += update_kernels_[i]->exec_time(); 
-    
+      clFinish(*command_queue_);
+      gpu_time_ += update_kernels_[i]->exec_time();
+
       //clear render kernel args so it can reset em on next execution
       update_kernels_[i]->clear_args();
     }
   }
-  
+
   //read image out to buffer (from gpu)
   image_->read_to_buffer(*command_queue_);
   vis_img_->read_to_buffer(*command_queue_);
@@ -211,10 +210,10 @@ bool boxm2_opencl_update_process::execute(vcl_vector<brdb_value_sptr>& input, vc
   delete[] img_dim_buff;
   delete[] lookup_arr;
   delete[] cam_buffer;
-  
+
   //record total time
-  total_time_ = (float) total.all(); 
-  
+  total_time_ = (float) total.all();
+
   return true;
 }
 
