@@ -1,6 +1,7 @@
 #include <bil/algo/bil_cedt.h>
 #include <bil/algo/bil_compass_edge_detector.h>
 #include <bil/algo/bil_color_conversions.h>
+#include <bil/algo/bil_detect_blur_scale.h>
 #include <bil/algo/bil_detect_ridges.h>
 #include <bil/algo/bil_edge_indicator.h>
 #include <bil/algo/bil_edt.h>
