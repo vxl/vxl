@@ -18,6 +18,8 @@ class  boxm2_mog3_grey_processor
 {
  public:
   static float expected_color( vnl_vector_fixed<unsigned char, 8> mog3);
+  static float prob_density( const vnl_vector_fixed<unsigned char, 8> & mog3, float x);
+  static float gauss_prob_density(float x, float mu, float sigma);
 };
 
 #endif // boxm2_mog3_grey_processor_h_

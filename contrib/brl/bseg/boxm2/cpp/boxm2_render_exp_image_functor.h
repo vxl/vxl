@@ -13,31 +13,32 @@ class boxm2_render_exp_image_functor
   //: "default" constructor
   boxm2_render_exp_image_functor() {}
 
-  bool init_data(vcl_vector<boxm2_data_base*> & datas)
+  bool init_data(vcl_vector<boxm2_data_base*> & datas, vil_image_view<float> * expected, vil_image_view<float>* vis_img)
   {
       alpha_data_=new boxm2_data<BOXM2_ALPHA>(datas[0]->data_buffer(),datas[0]->buffer_length(),datas[0]->block_id());
       mog3_data_=new boxm2_data<BOXM2_MOG3_GREY>(datas[1]->data_buffer(),datas[1]->buffer_length(),datas[1]->block_id());
+      expected_img_=expected;
+      vis_img_     =vis_img;
       return true;
   }
 
-  inline bool step_cell(float seg_len,int index,vcl_vector<float> & vals)
+  inline bool step_cell(float seg_len,int index,unsigned i, unsigned j)
   {
     boxm2_data<BOXM2_ALPHA>::datatype alpha=alpha_data_->data()[index];
-    float vis=vals[1];
-    //float exp_exp_int=vals[0];
+    float vis=(*vis_img_)(i,j);
+    float exp_int=(*expected_img_)(i,j);
     float curr_p=(1-vcl_exp(-alpha*seg_len))*vis;
-
-    vals[0]+=curr_p*boxm2_data_traits<BOXM2_MOG3_GREY>::processor::expected_color(mog3_data_->data()[index]);
+    exp_int+=curr_p*boxm2_data_traits<BOXM2_MOG3_GREY>::processor::expected_color(mog3_data_->data()[index]);
+    (*expected_img_)(i,j)=exp_int;
     vis*=vcl_exp(-alpha*seg_len);
-
-    vals[1]=vis;
-
-
+    (*vis_img_)(i,j)=vis;
     return true;
   }
  private:
   boxm2_data<BOXM2_ALPHA> * alpha_data_;
   boxm2_data<BOXM2_MOG3_GREY> * mog3_data_;
+  vil_image_view<float> *expected_img_;
+  vil_image_view<float> *vis_img_;
 };
 
 #if 0
@@ -70,39 +71,10 @@ void boxm2_render_exp_image(boxm2_scene_info * linfo,
                             unsigned int roi_nj0=0)
 {
     boxm2_render_exp_image_functor render_functor;
-    render_functor.init_data(datas);
-    vcl_vector<float> vals(2,0.0);
-    if (vpgl_perspective_camera<double> * pcam=dynamic_cast<vpgl_perspective_camera<double> *>(cam.ptr()))
-    {
-        for (unsigned i=roi_ni0;i<roi_ni;++i)
-        {
-            for (unsigned j=roi_nj0;j<roi_nj;++j)
-            {
-                vgl_ray_3d<double> ray_ij=pcam->backproject_ray(i,j);
+    render_functor.init_data(datas,expected,vis);
+    cast_ray_per_block<boxm2_render_exp_image_functor>(render_functor,linfo,blk_sptr,cam,roi_ni,roi_nj,roi_ni0,roi_nj0);
 
-                vgl_point_3d<float> block_origin((ray_ij.origin().x()-linfo->scene_origin[0])/linfo->block_len,
-                                                 (ray_ij.origin().y()-linfo->scene_origin[1])/linfo->block_len,
-                                                 (ray_ij.origin().z()-linfo->scene_origin[2])/linfo->block_len);
 
-                float dray_ij_x=ray_ij.direction().x(),dray_ij_y=ray_ij.direction().y(),dray_ij_z=ray_ij.direction().z();
-
-                //thresh ray direction components - too small a treshhold causes axis aligned
-                //viewpoints to hang in infinite loop (block loop)
-                float thresh = vcl_exp(-12.0f);
-                if (vcl_fabs(dray_ij_x)  < thresh) dray_ij_x = (dray_ij_x>0)?thresh:-thresh;
-                if (vcl_fabs(dray_ij_y)  < thresh) dray_ij_y = (dray_ij_y>0)?thresh:-thresh;
-                if (vcl_fabs(dray_ij_z)  < thresh) dray_ij_z = (dray_ij_z>0)?thresh:-thresh;
-
-                vgl_vector_3d<float> direction(dray_ij_x,dray_ij_y,dray_ij_z);
-                vgl_ray_3d<float> norm_ray_ij(block_origin,direction);
-                vals[0]=(*expected)(i,j);
-                vals[1]=(*vis)(i,j);
-                boxm2_cast_ray_function<boxm2_render_exp_image_functor>(norm_ray_ij,linfo,blk_sptr,vals,render_functor);
-                (*expected)(i,j)=vals[0];
-                (*vis)(i,j)=vals[1];
-            }
-        }
-    }
 }
 
 #endif

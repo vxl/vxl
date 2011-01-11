@@ -30,7 +30,7 @@ template<class F>
 void boxm2_cast_ray_function(vgl_ray_3d<float> & ray,
                              boxm2_scene_info * linfo,
                              boxm2_block * blk_sptr,
-                             vcl_vector<float> & vals,
+                             unsigned i, unsigned j,
                              F functor)
 {
   typedef vnl_vector_fixed<unsigned char, 16> uchar16;    //defines a bit tree
@@ -145,7 +145,7 @@ void boxm2_cast_ray_function(vgl_ray_3d<float> & ray,
       float d = (t1-ttree) * linfo->block_len;
       ttree = t1;
 
-      functor.step_cell(d,data_offset,vals);
+      functor.step_cell(d,data_offset,i,j);
     }
 
     //--------------------------------------------------------------------------
@@ -155,6 +155,47 @@ void boxm2_cast_ray_function(vgl_ray_3d<float> & ray,
     texit = texit + tblock + BLOCK_EPSILON;
     tblock = texit;
   }
+}
+
+template <class fucntor_type>
+bool cast_ray_per_block(fucntor_type functor,
+                        boxm2_scene_info * linfo,
+                        boxm2_block * blk_sptr,
+                        vpgl_camera_double_sptr cam ,
+                        unsigned int roi_ni,
+                        unsigned int roi_nj,
+                        unsigned int roi_ni0=0,
+                        unsigned int roi_nj0=0)
+{
+    if (vpgl_perspective_camera<double> * pcam=dynamic_cast<vpgl_perspective_camera<double> *>(cam.ptr()))
+    {
+        for (unsigned i=roi_ni0;i<roi_ni;++i)
+        {
+            for (unsigned j=roi_nj0;j<roi_nj;++j)
+            {
+                vgl_ray_3d<double> ray_ij=pcam->backproject_ray(i,j);
+
+                vgl_point_3d<float> block_origin((ray_ij.origin().x()-linfo->scene_origin[0])/linfo->block_len,
+                                                 (ray_ij.origin().y()-linfo->scene_origin[1])/linfo->block_len,
+                                                 (ray_ij.origin().z()-linfo->scene_origin[2])/linfo->block_len);
+
+                float dray_ij_x=ray_ij.direction().x(),dray_ij_y=ray_ij.direction().y(),dray_ij_z=ray_ij.direction().z();
+
+                //thresh ray direction components - too small a treshhold causes axis aligned
+                //viewpoints to hang in infinite loop (block loop)
+                float thresh = vcl_exp(-12.0f);
+                if (vcl_fabs(dray_ij_x)  < thresh) dray_ij_x = (dray_ij_x>0)?thresh:-thresh;
+                if (vcl_fabs(dray_ij_y)  < thresh) dray_ij_y = (dray_ij_y>0)?thresh:-thresh;
+                if (vcl_fabs(dray_ij_z)  < thresh) dray_ij_z = (dray_ij_z>0)?thresh:-thresh;
+
+                vgl_vector_3d<float> direction(dray_ij_x,dray_ij_y,dray_ij_z);
+                vgl_ray_3d<float> norm_ray_ij(block_origin,direction);
+                boxm2_cast_ray_function<fucntor_type>(norm_ray_ij,linfo,blk_sptr,i,j,functor);
+            }
+        }
+        return true;
+    }
+    return false;
 }
 
 
