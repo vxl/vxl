@@ -1,7 +1,7 @@
 extern int v3p_netlib_zgees_(
   char *jobvs,
   char *sort,
-  L_fp select,
+  v3p_netlib_logical (*select)(v3p_netlib_doublecomplex*),
   v3p_netlib_integer *n,
   v3p_netlib_doublecomplex *a,
   v3p_netlib_integer *lda,
