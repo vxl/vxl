@@ -48,7 +48,7 @@ template<>
 class boxm2_data_traits<BOXM2_AUX>
 {
  public:
-  typedef vnl_vector_fixed<int, 4> datatype;
+  typedef vnl_vector_fixed<float, 4> datatype;
   static vcl_size_t datasize(){return sizeof(datatype);}
   static vcl_string prefix(){ return "aux";}
 };

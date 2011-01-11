@@ -22,7 +22,7 @@ boxm2_data_base::boxm2_data_base(boxm2_block_metadata data, vcl_string data_type
     for(int i=0; i<buffer_length; ++i) alphas[i] = ALPHA_INIT;  
   }
   else {
-    vcl_memset(data_buffer_, 128, buffer_length_); 
+    vcl_memset(data_buffer_, 0, buffer_length_); 
   }
 }
 
