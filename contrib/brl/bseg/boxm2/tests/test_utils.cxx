@@ -259,15 +259,15 @@ vcl_string boxm2_test_utils::save_test_empty_scene()
     vcl_string test_file = test_dir + "test.xml";
 
     vcl_map<boxm2_block_id, boxm2_block_metadata> blocks;
-    for (int i=0; i<1; i++) {
-        for (int j=0; j<1; j++) {
-            double big_block_side = 1;
+    for (int i=0; i<2; i++) {
+        for (int j=0; j<2; j++) {
+            double big_block_side = 0.5;
             boxm2_block_id id(i,j,0);
             boxm2_block_metadata data;
             data.id_ = id;
             data.local_origin_ = vgl_point_3d<double>(big_block_side*i, big_block_side*j, 0.0);
-            data.sub_block_dim_ = vgl_vector_3d<double>(0.5, 0.5, 0.5);
-            data.sub_block_num_ = vgl_vector_3d<unsigned>(2, 2, 1);
+            data.sub_block_dim_ = vgl_vector_3d<double>(0.25, 0.25, 0.25);
+            data.sub_block_num_ = vgl_vector_3d<unsigned>(2, 2, 2);
             data.init_level_ = 1;
             data.max_level_ = 4;
             data.max_mb_ = 400;

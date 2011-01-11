@@ -43,14 +43,12 @@ void test_cpp_update_process()
   brdb_value_sptr brdb_cam = new brdb_value_t<vpgl_camera_double_sptr>(cam);
 
   // create output image buffer
-  vil_image_view_base_sptr expimg = new vil_image_view<float>(640,480);
-  brdb_value_sptr brdb_expimg = new brdb_value_t<vil_image_view_base_sptr>(expimg);
+  vil_image_view<float> * inimg=new  vil_image_view<float>(8,8);
+  brdb_value_sptr brdb_inimg = new brdb_value_t<vil_image_view_base_sptr>(inimg);
 
-  // create vis image buffer
-  vil_image_view<float>* vis_img = new vil_image_view<float>(640, 480);
-  vis_img->fill(1.0f);
-  brdb_value_sptr brdb_vis = new brdb_value_t<vil_image_view_base_sptr>(vis_img);
-
+  for(unsigned i=0;i<inimg->ni();i++)
+      for(unsigned j=0;j<inimg->nj();j++)
+        (*inimg)(i,j)=(float)i/(float)inimg->ni();
   // start out updating with the CPU
   boxm2_scene_sptr scene = new boxm2_scene(scene_file);
 
@@ -70,8 +68,7 @@ void test_cpp_update_process()
   input.push_back(brdb_scene_sptr);
 
   input.push_back(brdb_cam);
-  input.push_back(brdb_expimg);
-  input.push_back(brdb_vis);
+  input.push_back(brdb_inimg);
 
   //init output vector
   vcl_vector<brdb_value_sptr> output;
@@ -86,7 +83,6 @@ void test_cpp_update_process()
   cpp_pro.finish();
 
   vcl_cout<<"Time taken is :" <<t.all()<<vcl_endl;
-  vil_save(*(expimg.ptr()),"f:/test.tiff");
 
   vpl_unlink(scene_file.c_str());
   vcl_string test_dir  = testlib_root_dir()+ "/contrib/brl/bseg/boxm2/tests/";
