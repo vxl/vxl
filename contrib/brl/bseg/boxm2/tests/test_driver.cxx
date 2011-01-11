@@ -6,7 +6,9 @@ DECLARE( test_io );
 DECLARE( test_wrappers );
 DECLARE( test_data );
 DECLARE( test_block );
+
 DECLARE( test_cpp_render_process );
+DECLARE( test_cpp_update_process );
 
 void register_tests()
 {
@@ -17,6 +19,8 @@ void register_tests()
   REGISTER( test_data );
   REGISTER( test_block );
   REGISTER( test_cpp_render_process );
+  REGISTER( test_cpp_update_process );
+  
 }
 
 

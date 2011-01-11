@@ -7,6 +7,7 @@
 #include <boxm2/boxm2_data.h>
 #include <testlib/testlib_test.h>
 #include <vnl/vnl_vector_fixed.h>
+#include <vpgl/vpgl_camera.h>
 
 
 class boxm2_test_utils
@@ -23,12 +24,16 @@ class boxm2_test_utils
 
     static void   save_test_scene_to_disk();
     static void   delete_test_scene_from_disk(vcl_string dir=""); 
+
     static vcl_string   save_test_simple_scene();
+    static vcl_string   save_test_empty_scene();
 
     static void  test_block_equivalence(boxm2_block& a, boxm2_block& b);
 
     template <boxm2_data_type data_type>
     static void test_data_equivalence(boxm2_data<data_type>& a, boxm2_data<data_type>& b);
+    static vpgl_camera_double_sptr test_camera();
+
 };
 
 

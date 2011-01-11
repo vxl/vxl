@@ -20,41 +20,26 @@
 #include <boxm2/io/boxm2_nn_cache.h>
 #include <boxm2/basic/boxm2_block_id.h>
 #include <boxm2/cpp/boxm2_cpp_processor.h>
-#include <boxm2/cpp/boxm2_cpp_render_process.h>
+#include <boxm2/cpp/boxm2_cpp_update_process.h>
 
-vpgl_camera_double_sptr test_camera()
+
+void test_cpp_update_process()
 {
-  vnl_matrix_fixed<double, 3, 3> mk(0.0);
-  mk[0][0]=990.0; mk[0][2]=4.0;
-  mk[1][1]=990.0; mk[1][2]=4.0; mk[2][2]=8.0/7.0;
-  vpgl_calibration_matrix<double> K(mk);
-  vnl_matrix_fixed<double, 3, 3> mr(0.0);
-  mr[0][0]=1.0; mr[1][1]=-1.0; mr[2][2]=-1.0;
-  vgl_rotation_3d<double> R(mr);
-  vgl_point_3d<double> t(0.5,0.5,100);
+    vcl_string scene_file=boxm2_test_utils::save_test_empty_scene();
+    //vcl_string scene_file="F:/APL/boxm2_rep_scene/scene.xml";
 
-  vcl_cout<<mk<<mr<<t;
-  vpgl_camera_double_sptr cam = new vpgl_perspective_camera<double>(K,t,R);
-  return cam;
-}
+    //vcl_string camfile="f:/APL/cams/camera00001.txt";
+    //vcl_ifstream ifs(camfile.c_str());
+    //vpgl_perspective_camera<double>* cam =new vpgl_perspective_camera<double>;
+    //if (!ifs.is_open()) {
+    //    vcl_cerr << "Failed to open file " << camfile << vcl_endl;
+    //    return ;
+    //}
+    //else  {
+    //    ifs >> *cam;
+    //}
 
-void test_cpp_render_process()
-{
-    //vcl_string scene_file=boxm2_test_utils::save_test_simple_scene();
-    vcl_string scene_file="F:/APL/boxm2_rep_scene/scene.xml";
-
-    vcl_string camfile="f:/APL/cams/camera00001.txt";
-    vcl_ifstream ifs(camfile.c_str());
-    vpgl_perspective_camera<double>* cam =new vpgl_perspective_camera<double>;
-    if (!ifs.is_open()) {
-        vcl_cerr << "Failed to open file " << camfile << vcl_endl;
-        return ;
-    }
-    else  {
-        ifs >> *cam;
-    }
-
-  //vpgl_camera_double_sptr cam=test_camera();
+    vpgl_camera_double_sptr cam=boxm2_test_utils::test_camera();
   brdb_value_sptr brdb_cam = new brdb_value_t<vpgl_camera_double_sptr>(cam);
 
   // create output image buffer
@@ -66,7 +51,7 @@ void test_cpp_render_process()
   vis_img->fill(1.0f);
   brdb_value_sptr brdb_vis = new brdb_value_t<vil_image_view_base_sptr>(vis_img);
 
-  // start out rendering with the CPU
+  // start out updateing with the CPU
   boxm2_scene_sptr scene = new boxm2_scene(scene_file);
 
   // get relevant blocks
@@ -94,11 +79,11 @@ void test_cpp_render_process()
 
   vul_timer t;
   t.mark();
-  //////initialize the GPU render process
-  boxm2_cpp_render_process cpp_render;
-  cpp_render.init();
-  cpp_render.set_cache(&cache);
-  cpp_pro.run(&cpp_render, input, output);
+  //////initialize the GPU update process
+  boxm2_cpp_update_process cpp_update;
+  cpp_update.init();
+  cpp_update.set_cache(&cache);
+  cpp_pro.run(&cpp_update, input, output);
   cpp_pro.finish();
 
   vcl_cout<<"Time taken is :" <<t.all()<<vcl_endl;
@@ -111,4 +96,4 @@ void test_cpp_render_process()
 }
 
 
-TESTMAIN(test_cpp_render_process);
+TESTMAIN(test_cpp_update_process);
