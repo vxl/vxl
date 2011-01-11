@@ -14,29 +14,21 @@
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>
 
+#include <vcl_complex.h>
+
 //:
-// For a *complex* scalar type T, this function uses orthogonal
-// matrices L, R to reduce the (square) matrices A, B to generalized
-// (complex) Schur form. This means that B is upper triangular and A is
-// block upper triangular with blocks of size at most 2x2 such that
-// the 2x2 blocks B corresponding to 2x2 blocks of A are diagonal.
-// E.g.:
-// \verbatim
-//                [ * * * * * ]
-//                [   * * * * ]
-// A <- L^* A R = [   * * * * ]
-//                [       * * ]
-//                [       * * ]
+// For a scalar type T, this function uses orthogonal matrices L, R
+// over complex<T> to reduce the (square) matrices A, B to generalized
+// (complex) Schur form. This means that A and B become upper triangular,
+// A <-- L^* A R, and B <-- L^* B R.
+// Of course, A and B should be of the same size.
 //
-//                [ * * * * * ]
-//                [   *   * * ]
-// B <- L^* B R = [     * * * ]
-//                [       *   ]
-//                [         * ]
-// \endverbatim
-//
-// In addition, the function computes the generalized eigenvalues
+// In addition, the function computes the (complex) generalized eigenvalues
 // alpha(k) : beta(k) for k = 0, 1, 2,...
+//
+// To pass in scalar type T matrices A and B, you'll have to first convert them
+// to complex matrices since they will be overwritten by they (complex) upper
+// triangular decomposition.
 template <class T>
 bool vnl_generalized_schur(vnl_matrix<vcl_complex<T> > *A,
                            vnl_matrix<vcl_complex<T> > *B,
@@ -44,8 +36,6 @@ bool vnl_generalized_schur(vnl_matrix<vcl_complex<T> > *A,
                            vnl_vector<vcl_complex<T> > *beta,
                            vnl_matrix<vcl_complex<T> > *L,
                            vnl_matrix<vcl_complex<T> > *R);
-
-#include <vcl_complex.h>
 
 VCL_DEFINE_SPECIALIZATION
 bool vnl_generalized_schur(vnl_matrix<vcl_complex<double> > *A,
