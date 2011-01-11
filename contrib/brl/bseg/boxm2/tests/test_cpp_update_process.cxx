@@ -25,21 +25,21 @@
 
 void test_cpp_update_process()
 {
-    vcl_string scene_file=boxm2_test_utils::save_test_empty_scene();
-    //vcl_string scene_file="F:/APL/boxm2_rep_scene/scene.xml";
-
-    //vcl_string camfile="f:/APL/cams/camera00001.txt";
-    //vcl_ifstream ifs(camfile.c_str());
-    //vpgl_perspective_camera<double>* cam =new vpgl_perspective_camera<double>;
-    //if (!ifs.is_open()) {
-    //    vcl_cerr << "Failed to open file " << camfile << vcl_endl;
-    //    return ;
-    //}
-    //else  {
-    //    ifs >> *cam;
-    //}
-
-    vpgl_camera_double_sptr cam=boxm2_test_utils::test_camera();
+  vcl_string scene_file=boxm2_test_utils::save_test_empty_scene();
+#if 0
+  vcl_string scene_file="F:/APL/boxm2_rep_scene/scene.xml";
+  vcl_string camfile="F:/APL/cams/camera00001.txt";
+  vcl_ifstream ifs(camfile.c_str());
+  vpgl_perspective_camera<double>* cam =new vpgl_perspective_camera<double>;
+  if (!ifs.is_open()) {
+    vcl_cerr << "Failed to open file " << camfile << vcl_endl;
+    return ;
+  }
+  else  {
+    ifs >> *cam;
+  }
+#endif // 0
+  vpgl_camera_double_sptr cam=boxm2_test_utils::test_camera();
   brdb_value_sptr brdb_cam = new brdb_value_t<vpgl_camera_double_sptr>(cam);
 
   // create output image buffer
@@ -51,7 +51,7 @@ void test_cpp_update_process()
   vis_img->fill(1.0f);
   brdb_value_sptr brdb_vis = new brdb_value_t<vil_image_view_base_sptr>(vis_img);
 
-  // start out updateing with the CPU
+  // start out updating with the CPU
   boxm2_scene_sptr scene = new boxm2_scene(scene_file);
 
   // get relevant blocks
@@ -69,7 +69,6 @@ void test_cpp_update_process()
   brdb_value_sptr brdb_scene_sptr = new brdb_value_t<boxm2_scene_sptr>(scene);
   input.push_back(brdb_scene_sptr);
 
- 
   input.push_back(brdb_cam);
   input.push_back(brdb_expimg);
   input.push_back(brdb_vis);
