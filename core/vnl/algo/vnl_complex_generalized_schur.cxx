@@ -23,9 +23,10 @@ bool vnl_generalized_schur(vnl_matrix<vcl_complex<double> > *A,
                            vnl_matrix<vcl_complex<double> > *L,
                            vnl_matrix<vcl_complex<double> > *R)
 {
-  assert(A->cols() == A->cols());
+  // Both input matrices should be square and of the same size:
+  assert(A->rows() == A->cols());
   assert(A->cols() == B->rows());
-  assert(A->cols() == B->cols());
+  assert(B->rows() == B->cols());
 
   long n = A->rows();
   assert(alpha!=0); alpha->set_size(n);    alpha->fill(0);
