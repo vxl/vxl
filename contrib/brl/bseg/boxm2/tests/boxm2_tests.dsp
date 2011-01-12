@@ -239,6 +239,9 @@ SOURCE=.\test_utils.cxx
 SOURCE=.\test_cpp_render_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_cpp_update_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group
