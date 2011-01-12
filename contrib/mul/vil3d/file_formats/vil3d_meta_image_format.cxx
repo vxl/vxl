@@ -450,6 +450,11 @@ vcl_string vil3d_meta_image_header::get_header_value(const vcl_string &nxt_line)
 
   pos = nxt_line.find_first_not_of(" ", pos+1);
   epos = nxt_line.find_last_not_of(" ");
+  if (pos == vcl_string::npos || epos == vcl_string::npos)
+  {
+    return "";
+  }
+
   return nxt_line.substr(pos, (epos-pos)+1);
 }
 
