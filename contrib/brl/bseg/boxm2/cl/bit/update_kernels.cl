@@ -362,32 +362,24 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
     float  alpha    = alpha_array[gid];
     float  cell_min = info->block_len/(float)(1<<info->root_level);
 
+    //get cell cumulative length and make sure it isn't 0
+    int len_int = aux_array[gid]; 
+    float cum_len  = convert_float(len_int)/SEGLEN_FACTOR; 
+
     //minimum alpha value, don't let blocks get below this
     float  alphamin = -log(1.0-0.0001)/cell_min;
-
-    if (alpha > 0.0)
+    
+    //update cell if alpha and cum_len are greater than 0
+    if (alpha > 0.0f && cum_len > 1e-10f)
     {
-      int len_int = aux_array[gid]; 
-      int obs_int = aux_array[gid]; 
-      int vis_int = aux_array[gid]; 
-      int beta_int= aux_array[gid];
-      
-      if(gid == 0) {
-        output[0] = (float) len_int;
-        output[1] = (float) obs_int; 
-        output[2] = (float) vis_int; 
-        output[3] = (float) beta_int;
-      }
-/*
-      float cum_len  = convert_float(len_int)/SEGLEN_FACTOR; 
+      int obs_int = aux_array[datasize + gid]; 
+      int vis_int = aux_array[2*datasize + gid]; 
+      int beta_int= aux_array[3*datasize + gid];
       float mean_obs = convert_float(obs_int)/SEGLEN_FACTOR;
       mean_obs = mean_obs / cum_len;  
       float cell_vis  = convert_float(vis_int)/SEGLEN_FACTOR;
-      float cell_beta = convert_float(aux_array[gid])/SEGLEN_FACTOR;
+      float cell_beta = convert_float(beta_int)/SEGLEN_FACTOR;
       float4 aux_data = (float4) (cum_len, mean_obs, cell_beta, cell_vis/cum_len);
-*/
-      float4 aux_data = (float4) (1.0f, 1.0f, 1.0f, 1.0f); 
-/*
       float4 nobs     = convert_float4(nobs_array[gid]);
       float8 mixture  = convert_float8(mixture_array[gid]);
       float16 data = (float16) (alpha,
@@ -397,25 +389,22 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
                      0.0, 0.0, 0.0);
 
       //use aux data to update cells
-      if (aux_data.x>1e-10f)
-        update_cell(&data, aux_data, 2.5f, 0.09f, 0.03f);
+      update_cell(&data, aux_data, 2.5f, 0.09f, 0.03f);
 
-*/
-
-/*
       //reset the cells in memory
       alpha_array[gid]      = max(alphamin,data.s0);
       float8 post_mix       = (float8) (data.s1, data.s2, data.s3,
                                         data.s5, data.s6, data.s7,
                                         data.s9, data.sa)*255.0;
       float4 post_nobs      = (float4) (data.s4, data.s8, data.sb, data.sc*100.0);
-*/
-
-      float8 post_mix       = (float8) (220.0f);
-      float4 post_nobs      = aux_data;
       mixture_array[gid]    = convert_uchar8_sat_rte(post_mix);
       nobs_array[gid]       = convert_ushort4_sat_rte(post_nobs);
 
     }
+    aux_array[gid] = 0; 
+    aux_array[gid + datasize] = 0; 
+    aux_array[gid + 2*datasize] = 0;
+    aux_array[gid + 3*datasize] = 0;
   }
+  
 }

@@ -317,12 +317,11 @@ bool boxm2_opencl_update_process::write_input_image(vil_image_view<float>* input
   vil_image_view<float>::iterator iter; 
  
   //write to buffer (or create it)
-  float* buff; 
-  buff = (image_) ? (float*) image_->cpu_buffer() : new float[4 * input_image->size()]; 
+  float* buff = (image_) ? (float*) image_->cpu_buffer() : new float[4 * input_image->size()]; 
   int i=0;  
   for(iter = input_image->begin(); iter != input_image->end(); ++iter, ++i) {
     buff[4*i] = (*iter); 
-    buff[4*i + 1] = (*iter);  
+    buff[4*i + 1] = 0.0f;  
     buff[4*i + 2] = 1.0f; 
     buff[4*i + 3] = 0.0f; 
   }

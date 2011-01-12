@@ -99,7 +99,7 @@ int main(int argc,  char** argv)
   boxm2_opencl_update_process gpu_update;
   gpu_update.init_kernel(&gpu_pro->context(), &gpu_pro->devices()[0]); 
   
-  for(int i=0; i<2; i++) 
+  for(int i=0; i<1; i++) 
     gpu_pro->run(&gpu_update, input, output); 
   //gpu_pro->finish(); 
   //gpu_update.clean();
